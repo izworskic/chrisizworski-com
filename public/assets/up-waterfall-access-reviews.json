@@ -2531,6 +2531,486 @@
           }
         ]
       }
+    },
+    {
+      "gisObjectId": 121,
+      "name": "West Branch Falls",
+      "county": "BARAGA",
+      "status": "research-only-geography-verified-public-arrival-unknown",
+      "publicAccess": "not-established-continuously",
+      "publicationEligible": false,
+      "title": "West Branch Falls: waterfall and access evidence",
+      "summary": "Michigan GIS #121 at 46.838861,-88.090452 and independent West Branch Falls at 46.83868,-88.09081 agree within approximately 34m. The historic Baraga County brochure's unnamed West Branch bridge falls is a separate named/approach claim; do not assign that bridge parking or easy difficulty to #121. The independent field route describes a remote two-track by a ford, multiple river fords and a private camp on one riverbank. This does not certify present motorized road use, visitor parking, a dry public corridor, or authority to cross private property.",
+      "guidance": "The waterfall is a mapped natural feature, not a road or parking destination. Use the source research only; no directions to gates, off-trail shortcuts, private riverbanks, creek fords or unsurveyed forest roads are authorized.",
+      "reviewLimitations": "Empty DNR state property/easement point intersection is not a county title opinion or federal parcel overlay. Historic or regionally promoted visiting accounts do not certify motorized legal road status, permission on every land parcel, or a signed final visitor trail.",
+      "nextEvidence": "Identify present Baraga parcel title for each riverbank and Black Creek two-track; prove a complete lawful safe approach and specific public vehicle turnout independently of the river ford. Check seasonal road and stream restrictions. Do not substitute county brochure's different bridge falls.",
+      "researchPage": "/upper-peninsula-waterfalls/research/west-branch-falls/",
+      "sourceLinks": [
+        {
+          "label": "Michigan GIS natural waterfall position",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "Independent field geolocation and historic route account",
+          "url": "https://www.waterfallsofthekeweenaw.com/west-branch-huron-river/west-branch-falls/"
+        },
+        {
+          "label": "Regional source / visitor context",
+          "url": "https://www.visitbaragacounty.com/wp-content/uploads/2022/07/Baraga-County-Waterfalls-Map.pdf"
+        },
+        {
+          "label": "Additional waterfall evidence",
+          "url": "https://upper-michigan.com/guide/waterfalls/west-branch-falls.html"
+        },
+        {
+          "label": "County property viewers",
+          "url": "https://www.wuppdr.org/gis"
+        },
+        {
+          "label": "US Forest Service map and MVUM guidance",
+          "url": "https://www.fs.usda.gov/visit/maps"
+        },
+        {
+          "label": "Official national MVUM road dataset",
+          "url": "https://apps.fs.usda.gov/fsgisx05/rest/services/wo_nfs_gtac/IVMQuery/MapServer/0"
+        },
+        {
+          "label": "Michigan DNR state parcels point query",
+          "url": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-88.090452%2C46.838861&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson"
+        },
+        {
+          "label": "Michigan DNR conservation easement point query",
+          "url": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/9/query?geometry=-88.090452%2C46.838861&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-11-01",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Geographic identity",
+            "status": "verified-geography",
+            "finding": "Michigan GIS #121 at 46.838861,-88.090452 and independent West Branch Falls at 46.83868,-88.09081 agree within approximately 34m. The historic Baraga County brochure's unnamed West Branch bridge falls is a separate named/approach claim; do not assign that bridge parking or easy difficulty to #121.",
+            "source": "https://www.waterfallsofthekeweenaw.com/west-branch-huron-river/west-branch-falls/"
+          },
+          {
+            "label": "Land tenure at waterfall",
+            "status": "not-cleared",
+            "finding": "Michigan DNR LOTS state parcel and easement point intersects at the natural waterfall returned no records; that is not proof of private ownership or absence of federal/county land. County parcel and responsible manager are not verified.",
+            "source": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-88.090452%2C46.838861&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson"
+          },
+          {
+            "label": "Historic approach versus current road rights",
+            "status": "documented-not-live",
+            "finding": "The independent field route describes a remote two-track by a ford, multiple river fords and a private camp on one riverbank. This does not certify present motorized road use, visitor parking, a dry public corridor, or authority to cross private property.",
+            "source": "https://www.waterfallsofthekeweenaw.com/west-branch-huron-river/west-branch-falls/"
+          },
+          {
+            "label": "Legal signed parking",
+            "status": "not-cleared",
+            "finding": "No official signed public waterfall arrival area or current authorized turnout established. Historical logging-road parking advice does not establish right-of-way, vehicle legality or seasonal availability.",
+            "source": "https://www.wuppdr.org/gis"
+          },
+          {
+            "label": "Continuous lawful walking trail",
+            "status": "not-cleared",
+            "finding": "No currently documented continuous approved trail or legal walking easement connects verified visitor parking to a safe viewpoint; do not turn the falls GPS into a navigation destination.",
+            "source": "https://www.wuppdr.org/gis"
+          },
+          {
+            "label": "2026 seasonal restrictions and water safety",
+            "status": "not-cleared",
+            "finding": "No current site-specific public notice establishes all approach gates, bridges, fall hiking surfaces and water levels safe or open. Forest service MVUM controls motor vehicle access where applicable.",
+            "source": "https://www.fs.usda.gov/visit/maps"
+          }
+        ]
+      }
+    },
+    {
+      "gisObjectId": 123,
+      "name": "East Branch Falls",
+      "county": "BARAGA",
+      "status": "research-only-geography-verified-public-arrival-unknown",
+      "publicAccess": "not-established-continuously",
+      "publicationEligible": false,
+      "title": "East Branch Falls: waterfall and access evidence",
+      "summary": "Michigan GIS #123 at 46.848917,-88.063472 is about 5m from the independent field-mapped East Branch Falls reference at 46.84896,-88.06349. Big Erick's campground/bridge and Big Falls farther upstream are separate waterfalls, not substitute destinations. Historic reports describe crossing a narrow bridge, stopping at a blocked logging road, and walking an unmaintained creek and riverbank to a small drop. The specialist warns of private parcels near the river. No signed public trail or verified complete visitor easement follows from the Big Erick's campground road.",
+      "guidance": "The waterfall is a mapped natural feature, not a road or parking destination. Use the source research only; no directions to gates, off-trail shortcuts, private riverbanks, creek fords or unsurveyed forest roads are authorized.",
+      "reviewLimitations": "Empty DNR state property/easement point intersection is not a county title opinion or federal parcel overlay. Historic or regionally promoted visiting accounts do not certify motorized legal road status, permission on every land parcel, or a signed final visitor trail.",
+      "nextEvidence": "Confirm actual falls parcel, blocked logging-road title and any public easement; identify a lawful signed pull-off and continuous safe legal bank trail, plus 2026 road and stream status. Do not route via private camps or extrapolate Big Erick's county visitor guidance.",
+      "researchPage": "/upper-peninsula-waterfalls/research/east-branch-falls/",
+      "sourceLinks": [
+        {
+          "label": "Michigan GIS natural waterfall position",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "Independent field geolocation and historic route account",
+          "url": "https://www.waterfallsofthekeweenaw.com/east-branch-huron-river/east-branch-falls/"
+        },
+        {
+          "label": "Regional source / visitor context",
+          "url": "https://www.visitbaragacounty.com/wp-content/uploads/2022/07/Baraga-County-Waterfalls-Map.pdf"
+        },
+        {
+          "label": "Additional waterfall evidence",
+          "url": "https://upper-michigan.com/guide/waterfalls/east-branch-falls.html"
+        },
+        {
+          "label": "County property viewers",
+          "url": "https://www.wuppdr.org/gis"
+        },
+        {
+          "label": "US Forest Service map and MVUM guidance",
+          "url": "https://www.fs.usda.gov/visit/maps"
+        },
+        {
+          "label": "Official national MVUM road dataset",
+          "url": "https://apps.fs.usda.gov/fsgisx05/rest/services/wo_nfs_gtac/IVMQuery/MapServer/0"
+        },
+        {
+          "label": "Michigan DNR state parcels point query",
+          "url": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-88.063472%2C46.848917&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson"
+        },
+        {
+          "label": "Michigan DNR conservation easement point query",
+          "url": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/9/query?geometry=-88.063472%2C46.848917&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-11-01",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Geographic identity",
+            "status": "verified-geography",
+            "finding": "Michigan GIS #123 at 46.848917,-88.063472 is about 5m from the independent field-mapped East Branch Falls reference at 46.84896,-88.06349. Big Erick's campground/bridge and Big Falls farther upstream are separate waterfalls, not substitute destinations.",
+            "source": "https://www.waterfallsofthekeweenaw.com/east-branch-huron-river/east-branch-falls/"
+          },
+          {
+            "label": "Land tenure at waterfall",
+            "status": "not-cleared",
+            "finding": "Michigan DNR LOTS state parcel and easement point intersects at the natural waterfall returned no records; that is not proof of private ownership or absence of federal/county land. County parcel and responsible manager are not verified.",
+            "source": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-88.063472%2C46.848917&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson"
+          },
+          {
+            "label": "Historic approach versus current road rights",
+            "status": "documented-not-live",
+            "finding": "Historic reports describe crossing a narrow bridge, stopping at a blocked logging road, and walking an unmaintained creek and riverbank to a small drop. The specialist warns of private parcels near the river. No signed public trail or verified complete visitor easement follows from the Big Erick's campground road.",
+            "source": "https://www.waterfallsofthekeweenaw.com/east-branch-huron-river/east-branch-falls/"
+          },
+          {
+            "label": "Legal signed parking",
+            "status": "not-cleared",
+            "finding": "No official signed public waterfall arrival area or current authorized turnout established. Historical logging-road parking advice does not establish right-of-way, vehicle legality or seasonal availability.",
+            "source": "https://www.wuppdr.org/gis"
+          },
+          {
+            "label": "Continuous lawful walking trail",
+            "status": "not-cleared",
+            "finding": "No currently documented continuous approved trail or legal walking easement connects verified visitor parking to a safe viewpoint; do not turn the falls GPS into a navigation destination.",
+            "source": "https://www.wuppdr.org/gis"
+          },
+          {
+            "label": "2026 seasonal restrictions and water safety",
+            "status": "not-cleared",
+            "finding": "No current site-specific public notice establishes all approach gates, bridges, fall hiking surfaces and water levels safe or open. Forest service MVUM controls motor vehicle access where applicable.",
+            "source": "https://www.fs.usda.gov/visit/maps"
+          }
+        ]
+      }
+    },
+    {
+      "gisObjectId": 20,
+      "name": "Ajibikoka Falls",
+      "county": "GOGEBIC",
+      "status": "research-only-geography-verified-public-arrival-unknown",
+      "publicAccess": "not-established-continuously",
+      "publicationEligible": false,
+      "title": "Ajibikoka Falls: waterfall and access evidence",
+      "summary": "Michigan GIS #20 at 46.329847,-89.237160 lies roughly 41m from the 2015 field point 46.329862,-89.237695. GIS river attribute calls this BRUSH LAKE; field accounts identify the outlet as Sucker Creek. This is the same natural cascade, but waterway names should be displayed carefully. Upper Peninsula Travel acknowledges Ajibikoka as an Ottawa National Forest waterfall requiring compass/GPS orienteering; independent field sources explicitly describe gated FR5120, a rough old road that fades into swamp, and no official trail for the final approach. Forest status is not a signed parking permit, a public motorized right through the gate, or a safe trail.",
+      "guidance": "The waterfall is a mapped natural feature, not a road or parking destination. Use the source research only; no directions to gates, off-trail shortcuts, private riverbanks, creek fords or unsurveyed forest roads are authorized.",
+      "reviewLimitations": "Empty DNR state property/easement point intersection is not a county title opinion or federal parcel overlay. Historic or regionally promoted visiting accounts do not certify motorized legal road status, permission on every land parcel, or a signed final visitor trail.",
+      "nextEvidence": "Use the latest Ottawa National Forest published MVUM to establish legal FR5120 vehicle approach and seasonal restrictions, Forest Service lands/property boundary, signed safe parking and an approved complete final foot route. A gated road and off-trail swamp are insufficient for a standard public visitor guide.",
+      "researchPage": "/upper-peninsula-waterfalls/research/ajibikoka-falls/",
+      "sourceLinks": [
+        {
+          "label": "Michigan GIS natural waterfall position",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "Independent field geolocation and historic route account",
+          "url": "https://www.waterfallsofthekeweenaw.com/sucker-creek/ajibikoka-falls/"
+        },
+        {
+          "label": "Regional source / visitor context",
+          "url": "https://www.uptravel.com/outdoors-recreation/national-forests/ottawa-national-forest/"
+        },
+        {
+          "label": "Additional waterfall evidence",
+          "url": "https://www.gowaterfalling.com/waterfalls/ajibikoka.shtml"
+        },
+        {
+          "label": "County property viewers",
+          "url": "https://www.wuppdr.org/gis"
+        },
+        {
+          "label": "US Forest Service map and MVUM guidance",
+          "url": "https://www.fs.usda.gov/visit/maps"
+        },
+        {
+          "label": "Official national MVUM road dataset",
+          "url": "https://apps.fs.usda.gov/fsgisx05/rest/services/wo_nfs_gtac/IVMQuery/MapServer/0"
+        },
+        {
+          "label": "Michigan DNR state parcels point query",
+          "url": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-89.23716%2C46.329847&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson"
+        },
+        {
+          "label": "Michigan DNR conservation easement point query",
+          "url": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/9/query?geometry=-89.23716%2C46.329847&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-11-01",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Geographic identity",
+            "status": "verified-geography",
+            "finding": "Michigan GIS #20 at 46.329847,-89.237160 lies roughly 41m from the 2015 field point 46.329862,-89.237695. GIS river attribute calls this BRUSH LAKE; field accounts identify the outlet as Sucker Creek. This is the same natural cascade, but waterway names should be displayed carefully.",
+            "source": "https://www.waterfallsofthekeweenaw.com/sucker-creek/ajibikoka-falls/"
+          },
+          {
+            "label": "Land tenure at waterfall",
+            "status": "not-cleared",
+            "finding": "Michigan DNR LOTS state parcel and easement point intersects at the natural waterfall returned no records; that is not proof of private ownership or absence of federal/county land. County parcel and responsible manager are not verified.",
+            "source": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-89.23716%2C46.329847&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson"
+          },
+          {
+            "label": "Historic approach versus current road rights",
+            "status": "documented-not-live",
+            "finding": "Upper Peninsula Travel acknowledges Ajibikoka as an Ottawa National Forest waterfall requiring compass/GPS orienteering; independent field sources explicitly describe gated FR5120, a rough old road that fades into swamp, and no official trail for the final approach. Forest status is not a signed parking permit, a public motorized right through the gate, or a safe trail.",
+            "source": "https://www.waterfallsofthekeweenaw.com/sucker-creek/ajibikoka-falls/"
+          },
+          {
+            "label": "Legal signed parking",
+            "status": "not-cleared",
+            "finding": "No official signed public waterfall arrival area or current authorized turnout established. Historical logging-road parking advice does not establish right-of-way, vehicle legality or seasonal availability.",
+            "source": "https://www.fs.usda.gov/visit/maps"
+          },
+          {
+            "label": "Continuous lawful walking trail",
+            "status": "not-cleared",
+            "finding": "No currently documented continuous approved trail or legal walking easement connects verified visitor parking to a safe viewpoint; do not turn the falls GPS into a navigation destination.",
+            "source": "https://www.fs.usda.gov/visit/maps"
+          },
+          {
+            "label": "2026 seasonal restrictions and water safety",
+            "status": "not-cleared",
+            "finding": "No current site-specific public notice establishes all approach gates, bridges, fall hiking surfaces and water levels safe or open. Forest service MVUM controls motor vehicle access where applicable.",
+            "source": "https://www.fs.usda.gov/visit/maps"
+          }
+        ]
+      }
+    },
+    {
+      "gisObjectId": 24,
+      "name": "Judson Falls",
+      "county": "GOGEBIC",
+      "status": "research-only-geography-verified-public-arrival-unknown",
+      "publicAccess": "not-established-continuously",
+      "publicationEligible": false,
+      "title": "Judson Falls: waterfall and access evidence",
+      "summary": "Michigan GIS #24 at 46.389566,-89.561062 is about 64m from the independent Judson Falls field point 46.38927,-89.56034. The local Lake Gogebic recreation map labels Judson Falls in the correct vicinity; that map is location context, not trail or parking evidence. The independent description follows Stage Coach Road, a series of forestry-road forks and a gated branch before an almost-mile overgrown walk. A 2023 visitor note describes logging disturbance. No public parcel/right-of-way statement, current legal vehicle access or signed trailhead can be established from that account.",
+      "guidance": "The waterfall is a mapped natural feature, not a road or parking destination. Use the source research only; no directions to gates, off-trail shortcuts, private riverbanks, creek fords or unsurveyed forest roads are authorized.",
+      "reviewLimitations": "Empty DNR state property/easement point intersection is not a county title opinion or federal parcel overlay. Historic or regionally promoted visiting accounts do not certify motorized legal road status, permission on every land parcel, or a signed final visitor trail.",
+      "nextEvidence": "Verify Gogebic parcel and any USFS ownership at exact falls/approach, Stage Coach Road two-track and gate jurisdiction, present legal parking, complete foot-route permission and any active closures. Do not direct visitors down an unnamed logging spur or past a gate.",
+      "researchPage": "/upper-peninsula-waterfalls/research/judson-falls/",
+      "sourceLinks": [
+        {
+          "label": "Michigan GIS natural waterfall position",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "Independent field geolocation and historic route account",
+          "url": "https://www.waterfallsofthekeweenaw.com/gogebic-slate-river/judson-falls/"
+        },
+        {
+          "label": "Regional source / visitor context",
+          "url": "https://www.lakegogebicarea.com/wp-content/uploads/2020/02/LakeGogebicTimes2019.pdf"
+        },
+        {
+          "label": "Additional waterfall evidence",
+          "url": "https://upper-michigan.com/guide/waterfalls/county-gogebic.html"
+        },
+        {
+          "label": "County property viewers",
+          "url": "https://www.wuppdr.org/gis"
+        },
+        {
+          "label": "US Forest Service map and MVUM guidance",
+          "url": "https://www.fs.usda.gov/visit/maps"
+        },
+        {
+          "label": "Official national MVUM road dataset",
+          "url": "https://apps.fs.usda.gov/fsgisx05/rest/services/wo_nfs_gtac/IVMQuery/MapServer/0"
+        },
+        {
+          "label": "Michigan DNR state parcels point query",
+          "url": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-89.561062%2C46.389566&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson"
+        },
+        {
+          "label": "Michigan DNR conservation easement point query",
+          "url": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/9/query?geometry=-89.561062%2C46.389566&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-11-01",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Geographic identity",
+            "status": "verified-geography",
+            "finding": "Michigan GIS #24 at 46.389566,-89.561062 is about 64m from the independent Judson Falls field point 46.38927,-89.56034. The local Lake Gogebic recreation map labels Judson Falls in the correct vicinity; that map is location context, not trail or parking evidence.",
+            "source": "https://www.waterfallsofthekeweenaw.com/gogebic-slate-river/judson-falls/"
+          },
+          {
+            "label": "Land tenure at waterfall",
+            "status": "not-cleared",
+            "finding": "Michigan DNR LOTS state parcel and easement point intersects at the natural waterfall returned no records; that is not proof of private ownership or absence of federal/county land. County parcel and responsible manager are not verified.",
+            "source": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-89.561062%2C46.389566&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson"
+          },
+          {
+            "label": "Historic approach versus current road rights",
+            "status": "documented-not-live",
+            "finding": "The independent description follows Stage Coach Road, a series of forestry-road forks and a gated branch before an almost-mile overgrown walk. A 2023 visitor note describes logging disturbance. No public parcel/right-of-way statement, current legal vehicle access or signed trailhead can be established from that account.",
+            "source": "https://www.waterfallsofthekeweenaw.com/gogebic-slate-river/judson-falls/"
+          },
+          {
+            "label": "Legal signed parking",
+            "status": "not-cleared",
+            "finding": "No official signed public waterfall arrival area or current authorized turnout established. Historical logging-road parking advice does not establish right-of-way, vehicle legality or seasonal availability.",
+            "source": "https://www.fs.usda.gov/visit/maps"
+          },
+          {
+            "label": "Continuous lawful walking trail",
+            "status": "not-cleared",
+            "finding": "No currently documented continuous approved trail or legal walking easement connects verified visitor parking to a safe viewpoint; do not turn the falls GPS into a navigation destination.",
+            "source": "https://www.fs.usda.gov/visit/maps"
+          },
+          {
+            "label": "2026 seasonal restrictions and water safety",
+            "status": "not-cleared",
+            "finding": "No current site-specific public notice establishes all approach gates, bridges, fall hiking surfaces and water levels safe or open. Forest service MVUM controls motor vehicle access where applicable.",
+            "source": "https://www.fs.usda.gov/visit/maps"
+          }
+        ]
+      }
+    },
+    {
+      "gisObjectId": 25,
+      "name": "Nelson Canyon Falls",
+      "county": "GOGEBIC",
+      "status": "research-only-geography-verified-public-arrival-unknown",
+      "publicAccess": "not-established-continuously",
+      "publicationEligible": false,
+      "title": "Nelson Canyon Falls: waterfall and access evidence",
+      "summary": "Michigan GIS #25 at 46.391819,-89.579675 agrees within roughly 3m with independent Nelson Canyon Falls field point 46.39180,-89.57971; USGS GNIS #1620996 is also nearby. The named waterfall itself is strongly corroborated. Regional tourism provides historic C Camp Road/two-track walking suggestions; independent 2015 and 2026 field comments describe severely overgrown tracks, a vanishing trail and a final rocky descent. Another derivative website asserts a developed Forest Service NFST 7418-D segment, but no independent official Forest Service route listing, signed trailhead and lawful parking for this exact falls was verified. Do not repeat its 'easy developed trail' claim.",
+      "guidance": "The waterfall is a mapped natural feature, not a road or parking destination. Use the source research only; no directions to gates, off-trail shortcuts, private riverbanks, creek fords or unsurveyed forest roads are authorized.",
+      "reviewLimitations": "Empty DNR state property/easement point intersection is not a county title opinion or federal parcel overlay. Historic or regionally promoted visiting accounts do not certify motorized legal road status, permission on every land parcel, or a signed final visitor trail.",
+      "nextEvidence": "Verify the claimed NFST 7418-D against authoritative Forest Service GIS and that it actually reaches Nelson Canyon Falls, not an unrelated forest trail. Match parcel title along the C Camp Road route, official signed parking and a safe continuous walk; check current closures before publication.",
+      "researchPage": "/upper-peninsula-waterfalls/research/nelson-canyon-falls/",
+      "sourceLinks": [
+        {
+          "label": "Michigan GIS natural waterfall position",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "Independent field geolocation and historic route account",
+          "url": "https://www.waterfallsofthekeweenaw.com/nelson-creek/nelson-canyon-falls/"
+        },
+        {
+          "label": "Regional source / visitor context",
+          "url": "https://travelironwood.com/western-upper-peninsula-waterfalls/"
+        },
+        {
+          "label": "Additional waterfall evidence",
+          "url": "https://waterfallhikes.com/waterfalls/nelson-canyon-falls-near-marenisco-in-mi"
+        },
+        {
+          "label": "County property viewers",
+          "url": "https://www.wuppdr.org/gis"
+        },
+        {
+          "label": "US Forest Service map and MVUM guidance",
+          "url": "https://www.fs.usda.gov/visit/maps"
+        },
+        {
+          "label": "Official national MVUM road dataset",
+          "url": "https://apps.fs.usda.gov/fsgisx05/rest/services/wo_nfs_gtac/IVMQuery/MapServer/0"
+        },
+        {
+          "label": "Michigan DNR state parcels point query",
+          "url": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-89.579675%2C46.391819&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson"
+        },
+        {
+          "label": "Michigan DNR conservation easement point query",
+          "url": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/9/query?geometry=-89.579675%2C46.391819&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-11-01",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Geographic identity",
+            "status": "verified-geography",
+            "finding": "Michigan GIS #25 at 46.391819,-89.579675 agrees within roughly 3m with independent Nelson Canyon Falls field point 46.39180,-89.57971; USGS GNIS #1620996 is also nearby. The named waterfall itself is strongly corroborated.",
+            "source": "https://www.waterfallsofthekeweenaw.com/nelson-creek/nelson-canyon-falls/"
+          },
+          {
+            "label": "Land tenure at waterfall",
+            "status": "not-cleared",
+            "finding": "Michigan DNR LOTS state parcel and easement point intersects at the natural waterfall returned no records; that is not proof of private ownership or absence of federal/county land. County parcel and responsible manager are not verified.",
+            "source": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-89.579675%2C46.391819&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson"
+          },
+          {
+            "label": "Historic approach versus current road rights",
+            "status": "documented-not-live",
+            "finding": "Regional tourism provides historic C Camp Road/two-track walking suggestions; independent 2015 and 2026 field comments describe severely overgrown tracks, a vanishing trail and a final rocky descent. Another derivative website asserts a developed Forest Service NFST 7418-D segment, but no independent official Forest Service route listing, signed trailhead and lawful parking for this exact falls was verified. Do not repeat its 'easy developed trail' claim.",
+            "source": "https://www.waterfallsofthekeweenaw.com/nelson-creek/nelson-canyon-falls/"
+          },
+          {
+            "label": "Legal signed parking",
+            "status": "not-cleared",
+            "finding": "No official signed public waterfall arrival area or current authorized turnout established. Historical logging-road parking advice does not establish right-of-way, vehicle legality or seasonal availability.",
+            "source": "https://www.fs.usda.gov/visit/maps"
+          },
+          {
+            "label": "Continuous lawful walking trail",
+            "status": "not-cleared",
+            "finding": "No currently documented continuous approved trail or legal walking easement connects verified visitor parking to a safe viewpoint; do not turn the falls GPS into a navigation destination.",
+            "source": "https://www.fs.usda.gov/visit/maps"
+          },
+          {
+            "label": "2026 seasonal restrictions and water safety",
+            "status": "not-cleared",
+            "finding": "No current site-specific public notice establishes all approach gates, bridges, fall hiking surfaces and water levels safe or open. Forest service MVUM controls motor vehicle access where applicable.",
+            "source": "https://www.fs.usda.gov/visit/maps"
+          }
+        ]
+      }
     }
   ]
 }

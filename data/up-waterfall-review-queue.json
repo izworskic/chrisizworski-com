@@ -13,152 +13,152 @@
     {
       "batchNumber": 1,
       "candidates": [
-        121,
-        123,
-        20,
-        24,
-        25,
         37,
         39,
-        40
+        40,
+        48,
+        58,
+        63,
+        65,
+        69
       ]
     },
     {
       "batchNumber": 2,
       "candidates": [
-        48,
-        58,
-        63,
-        65,
-        69,
         70,
         74,
-        75
+        75,
+        42,
+        80,
+        85,
+        129,
+        15
       ]
     },
     {
       "batchNumber": 3,
       "candidates": [
-        42,
-        80,
-        85,
-        129,
-        15,
         17,
         144,
-        18
+        18,
+        116,
+        127,
+        148,
+        153,
+        162
       ]
     },
     {
       "batchNumber": 4,
       "candidates": [
-        116,
-        127,
-        148,
-        153,
-        162,
         163,
         169,
-        170
+        170,
+        173,
+        175,
+        180,
+        181,
+        183
       ]
     },
     {
       "batchNumber": 5,
       "candidates": [
-        173,
-        175,
-        180,
-        181,
-        183,
         184,
         185,
-        186
+        186,
+        187,
+        22,
+        28,
+        54,
+        57
       ]
     },
     {
       "batchNumber": 6,
       "candidates": [
-        187,
-        22,
-        28,
-        54,
-        57,
         60,
         61,
-        62
+        62,
+        72,
+        84,
+        106,
+        122,
+        51
       ]
     },
     {
       "batchNumber": 7,
       "candidates": [
-        72,
-        84,
-        106,
-        122,
-        51,
         120,
         136,
-        137
+        137,
+        139,
+        140,
+        152,
+        176,
+        177
       ]
     },
     {
       "batchNumber": 8,
       "candidates": [
-        139,
-        140,
-        152,
-        176,
-        177,
         23,
         213,
-        68
+        68,
+        8,
+        38,
+        12,
+        4,
+        9
       ]
     },
     {
       "batchNumber": 9,
       "candidates": [
-        8,
-        38,
-        12,
-        4,
-        9,
         191,
         192,
-        46
+        46,
+        91,
+        119,
+        190,
+        45,
+        150
       ]
     },
     {
       "batchNumber": 10,
       "candidates": [
-        91,
-        119,
-        190,
-        45,
-        150,
         151,
         154,
-        160
+        160,
+        215,
+        195,
+        205,
+        52,
+        59
       ]
     },
     {
       "batchNumber": 11,
       "candidates": [
-        215,
-        195,
-        205,
-        52,
-        59,
         83,
         99,
-        103
+        103,
+        105,
+        107,
+        114,
+        121,
+        123
       ]
     },
     {
       "batchNumber": 12,
       "candidates": [
-        105,
-        107,
-        114,
+        20,
+        24,
+        25,
         86,
         112,
         29,
@@ -168,86 +168,6 @@
     }
   ],
   "candidates": [
-    {
-      "gisObjectId": 121,
-      "name": "West Branch Falls",
-      "county": "BARAGA",
-      "river": "WEST BRANCH HURON",
-      "lat": 46.838861,
-      "lng": -88.090452,
-      "cluster": "BARAGA / WEST BRANCH HURON",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 123,
-      "name": "East Branch Falls",
-      "county": "BARAGA",
-      "river": "EAST BRANCH HURON",
-      "lat": 46.848917,
-      "lng": -88.063472,
-      "cluster": "BARAGA / EAST BRANCH HURON",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 20,
-      "name": "Ajibikoka Falls",
-      "county": "GOGEBIC",
-      "river": "BRUSH LAKE",
-      "lat": 46.329847,
-      "lng": -89.23716,
-      "cluster": "GOGEBIC / BRUSH LAKE",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 24,
-      "name": "Judson Falls",
-      "county": "GOGEBIC",
-      "river": "SLATE RIVER",
-      "lat": 46.389566,
-      "lng": -89.561062,
-      "cluster": "GOGEBIC / SLATE RIVER",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 25,
-      "name": "Nelson Canyon Falls",
-      "county": "GOGEBIC",
-      "river": "NELSON CREEK",
-      "lat": 46.391819,
-      "lng": -89.579675,
-      "cluster": "GOGEBIC / NELSON CREEK",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
     {
       "gisObjectId": 37,
       "name": "Neepikon Falls",
@@ -1623,6 +1543,86 @@
       "reviewStatus": "previous-research-needs-public-access-review",
       "sourceCount": 4,
       "blockingGate": "Verify public Black Creek Road seasonal access, approved bridge-area parking, current parcel title/easement for both banks, signed foot corridor and visitor safety. Do not transfer Big Eric's DNR campground route."
+    },
+    {
+      "gisObjectId": 121,
+      "name": "West Branch Falls",
+      "county": "BARAGA",
+      "river": "WEST BRANCH HURON",
+      "lat": 46.838861,
+      "lng": -88.090452,
+      "cluster": "BARAGA / WEST BRANCH HURON",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 9,
+      "blockingGate": "Identify present Baraga parcel title for each riverbank and Black Creek two-track; prove a complete lawful safe approach and specific public vehicle turnout independently of the river ford. Check seasonal road and stream restrictions. Do not substitute county brochure's different bridge falls."
+    },
+    {
+      "gisObjectId": 123,
+      "name": "East Branch Falls",
+      "county": "BARAGA",
+      "river": "EAST BRANCH HURON",
+      "lat": 46.848917,
+      "lng": -88.063472,
+      "cluster": "BARAGA / EAST BRANCH HURON",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 9,
+      "blockingGate": "Confirm actual falls parcel, blocked logging-road title and any public easement; identify a lawful signed pull-off and continuous safe legal bank trail, plus 2026 road and stream status. Do not route via private camps or extrapolate Big Erick's county visitor guidance."
+    },
+    {
+      "gisObjectId": 20,
+      "name": "Ajibikoka Falls",
+      "county": "GOGEBIC",
+      "river": "BRUSH LAKE",
+      "lat": 46.329847,
+      "lng": -89.23716,
+      "cluster": "GOGEBIC / BRUSH LAKE",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 9,
+      "blockingGate": "Use the latest Ottawa National Forest published MVUM to establish legal FR5120 vehicle approach and seasonal restrictions, Forest Service lands/property boundary, signed safe parking and an approved complete final foot route. A gated road and off-trail swamp are insufficient for a standard public visitor guide."
+    },
+    {
+      "gisObjectId": 24,
+      "name": "Judson Falls",
+      "county": "GOGEBIC",
+      "river": "SLATE RIVER",
+      "lat": 46.389566,
+      "lng": -89.561062,
+      "cluster": "GOGEBIC / SLATE RIVER",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 9,
+      "blockingGate": "Verify Gogebic parcel and any USFS ownership at exact falls/approach, Stage Coach Road two-track and gate jurisdiction, present legal parking, complete foot-route permission and any active closures. Do not direct visitors down an unnamed logging spur or past a gate."
+    },
+    {
+      "gisObjectId": 25,
+      "name": "Nelson Canyon Falls",
+      "county": "GOGEBIC",
+      "river": "NELSON CREEK",
+      "lat": 46.391819,
+      "lng": -89.579675,
+      "cluster": "GOGEBIC / NELSON CREEK",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 9,
+      "blockingGate": "Verify the claimed NFST 7418-D against authoritative Forest Service GIS and that it actually reaches Nelson Canyon Falls, not an unrelated forest trail. Match parcel title along the C Camp Road route, official signed parking and a safe continuous walk; check current closures before publication."
     },
     {
       "gisObjectId": 86,
