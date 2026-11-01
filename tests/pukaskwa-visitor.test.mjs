@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import {createRequire} from 'node:module';
+const require=createRequire(import.meta.url);
 import { recordSuccess, recordFailure } from '../lib/pukaskwa/condition-monitor.mjs';
 import { projectPukaskwaFeed, unavailablePukaskwa, torontoDate } from '../lib/pukaskwa/public-status.mjs';
 import { suitableOutings, decisionMessage, statusLabel } from '../public/assets/pukaskwa-choice.mjs';
