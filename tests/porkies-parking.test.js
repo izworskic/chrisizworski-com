@@ -104,7 +104,7 @@ test('DNR camper and trailer parking cautions prevent unsafe upper-scenic-area d
  assert.match(html,/id="vehicle"/);
  assert.match(html,/value="trailer"/);
  assert.match(html,/value="rv"/);
- assert.match(html,/DNR visitor guide \/ scenic-area parking instructions/);
+ assert.match(html,/Contact the park about scenic-area parking/);
 });
 test('date and arrival changes refresh map directions without first submitting the planner',()=>{
  assert.match(js,/\["travel-date","arrival","vehicle"\]/);
