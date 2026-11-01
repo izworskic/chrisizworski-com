@@ -218,3 +218,52 @@
 .geo-source-note{font-size:12px;color:#586e61;line-height:1.7;margin:15px 0 0}
 @media(max-width:900px){.geo-layout{grid-template-columns:1fr}.geo-choice-list{max-height:none;overflow:visible;grid-template-columns:repeat(2,minmax(0,1fr))}.geo-unlocated{grid-column:1/-1}}
 @media(max-width:650px){.geo-engine{padding:15px 12px;border-radius:15px}.geo-engine-intro{grid-template-columns:1fr;gap:13px}.geo-map{height:380px}.geo-choice-list{grid-template-columns:1fr}.geo-intent-options{gap:6px}.geo-intent-options span{padding:10px 12px;font-size:12px}.geo-pad-card{padding:14px}.geo-choice{padding:13px}.geo-map-legend{gap:9px;font-size:10px}}
+
+
+/* Official NPS GIS Playalinda district: separate from the general public viewing atlas. */
+.geo-map .geo-pin-lot{background:#1a6651;border-radius:9px 9px 9px 2px;font-size:13px;font-family:system-ui,sans-serif;font-weight:900;width:28px;height:28px}
+.geo-map .geo-pin-lot.geo-pin-restricted{background:#a0493b}
+.geo-map-legend .geo-lot{background:#1a6651;border-radius:3px}
+.geo-playalinda{margin:24px 0 18px;padding:clamp(16px,2.5vw,26px);background:#edf4ee;border:1px solid #b0c7b6;border-radius:18px}
+.geo-playalinda-heading{display:flex;justify-content:space-between;align-items:start;gap:24px;margin-bottom:14px}
+.geo-playalinda-heading .eyebrow{font-size:11px;letter-spacing:.11em;text-transform:uppercase;font-weight:800;color:#406a4e;margin:0}
+.geo-playalinda-heading h4{font-family:Georgia,serif;color:#1e5038;font-size:clamp(24px,3.1vw,32px);margin:5px 0 9px}
+.geo-playalinda-heading p:last-child{font-size:14px;line-height:1.65;color:#496452;max-width:840px;margin:0}
+.geo-playalinda-heading .launch-link{flex:0 0 auto}
+.geo-lot-filter{border:0;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.geo-lot-filter legend{font-size:13px;font-weight:850;color:#234d34;margin-bottom:9px}
+.geo-lot-filter label{cursor:pointer}
+.geo-lot-filter input{position:absolute;width:1px;height:1px;clip-path:inset(50%);overflow:hidden}
+.geo-lot-filter label span{display:block;padding:10px 13px;background:#fff;border:1px solid #9ab6a2;color:#285640;font-size:12px;line-height:1.3;font-weight:800;border-radius:30px}
+.geo-lot-filter input:checked+span{background:#25583e;color:#fff;border-color:#25583e}
+.geo-lot-filter input:focus-visible+span{outline:3px solid #a8763a;outline-offset:3px}
+.geo-accessibility-explain{color:#415f4c;line-height:1.6;font-size:12px;margin:11px 0 18px}
+.geo-lot-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}
+.geo-lot-card{display:flex;flex-direction:column;background:#fff;border:1px solid #bfd1c3;border-radius:13px;padding:14px 15px;min-width:0;gap:7px}
+.geo-lot-card[data-active="true"]{border-color:#2a8054;box-shadow:inset 3px 0 #2a8054}
+.geo-lot-card[data-state="closed"]{border-color:#ddaea5;background:#fff7f5}
+.geo-lot-top{display:flex;align-items:center;gap:11px}
+.geo-lot-number{display:grid;place-items:center;background:#275b43;color:#fff;border-radius:9px;width:37px;height:37px;flex:0 0 auto;font-weight:900;font-size:15px}
+.geo-lot-top strong{font-family:Georgia,serif;color:#254832;font-size:18px;line-height:1.2}
+.geo-lot-access{font-weight:780;font-size:11px;color:#765c2d;background:#fdf7e6;border-radius:7px;border:1px solid #e7d5b9;padding:5px 7px;align-self:flex-start;margin:0}
+.geo-lot-access[data-state="closed"]{color:#884334;border-color:#e2b7ad;background:#ffede8}
+.geo-lot-ramp,.geo-lot-dune,.geo-lot-geometry{font-size:12px;line-height:1.55;color:#42594b;margin:0}
+.geo-lot-ramp{font-weight:650}
+.geo-lot-geometry{font-weight:800;color:#2b5942}
+.geo-lot-alert{font-size:12px;color:#91442f;line-height:1.5;font-weight:700;margin:0}
+.geo-weather{font-size:12px;line-height:1.55;color:#3d5848;background:#eef5ed;border-left:3px solid #78a184;border-radius:5px;padding:8px 10px;margin:9px 0}
+.geo-weather[data-state="unknown"]{background:#f4f2ec;border-left-color:#aaa38d;color:#5c594e}
+.geo-weather[data-state="poor"]{background:#fff2ee;border-left-color:#c77c62;color:#694b3d}
+.geo-weather strong{font-weight:800}
+.geo-lot-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto;padding-top:9px}
+.geo-lot-actions .geo-link,.geo-lot-actions .geo-map-focus{font-size:12px;font-weight:750;padding:8px 9px;border-radius:8px;min-height:36px}
+.geo-lot-actions .geo-link{display:inline-flex;align-items:center;text-decoration:none;color:#275a41;border:1px solid #a3bead;background:#fff}
+.geo-lot-source{font-size:12px;line-height:1.6;color:#526954;margin:15px 0 0}
+.geo-lot-source a{font-weight:750;color:#245b41}
+.geo-road-control{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 20px;align-items:center;padding:11px 14px;border-radius:12px;background:#fff2de;border:1px solid #dac7a6;margin:16px 0 9px;color:#654c2e;font-size:12px}
+.geo-road-control label{font-weight:800;display:inline-flex;align-items:center;gap:8px;cursor:pointer}
+.geo-road-control label input{width:17px;height:17px;accent-color:#89592a}
+.geo-road-control span{font-size:11px}
+.geo-policy-desk[data-level="attention"]{background:#fff1e8;border-left-color:#a65132}
+@media(max-width:1040px){.geo-lot-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:680px){.geo-playalinda{padding:16px 13px}.geo-playalinda-heading{display:block}.geo-playalinda-heading .launch-link{margin-top:13px}.geo-lot-grid{grid-template-columns:1fr}.geo-lot-card{padding:13px}.geo-lot-filter{gap:6px}.geo-lot-filter label span{padding:9px 10px;font-size:11px}}

@@ -50,7 +50,7 @@
     'low-walk': 'Highlight published parking and on-site facilities, but the accessible route and exact spectator position still require operator confirmation.'
   };
   let current = null, profile = 'family', selected = null;
-  let map = null, padMarker = null, connectors = null;
+  let map = null, padMarker = null, connectors = null, lotBoundaries = null, policyLine = null, lotFilter = 'all';
   let markers = new Map(), leafletPromise = null, mapPromise = null, lastMissionId = null;
   const options = document.querySelectorAll('input[name="geo-intent"]');
   function updateExplanation() { say('geo-intent-explainer', profileDescription[profile]); }
@@ -83,27 +83,28 @@
     return blocked + category + fit;
   }
   function validViewGeometry(p) {
-    return p.category === 'public-viewpoint' &&
-      p.coordinateRole === 'site-reference' && !!p.geometry &&
+    return (p.category === 'public-viewpoint' || p.category === 'beach-parking') &&
+      ['site-reference','nps-verified-parking-footprint'].includes(p.coordinateRole) && !!p.geometry &&
       valid(p.geometry.miles) && p.geometry.miles >= 0 && p.geometry.miles < 80 &&
       valid(p.geometry.bearingDegrees);
   }
-  function iconHtml(kind, selectedPoint, unavailable) {
-    const glyph = kind === 'pad' ? '🚀' : kind === 'entry' ? '↳' : '•';
+  function iconHtml(kind, selectedPoint, unavailable, number) {
+    const glyph = kind === 'lot' ? String(Number.isInteger(number) && number>=1 && number<=13?number:'?') :
+      kind === 'pad' ? '🚀' : kind === 'entry' ? '↳' : '•';
     const klass = 'geo-pin geo-pin-' + kind + (selectedPoint ? ' geo-pin-active' : '') +
       (unavailable ? ' geo-pin-restricted' : '');
     return '<span class="' + klass + '" aria-hidden="true">' + glyph + '</span>';
   }
-  function leafletIcon(kind, active, blocked) {
+  function leafletIcon(kind, active, blocked, number) {
     return window.L.divIcon({
-      className: 'geo-pin-shell', html: iconHtml(kind, active, blocked),
+      className: 'geo-pin-shell', html: iconHtml(kind, active, blocked, number),
       iconSize: [34, 38], iconAnchor: [17, 34], popupAnchor: [0, -26]
     });
   }
   function showOnMap(p, fit = false) {
     if (!map || !geoPointValid(p)) return;
     const L = window.L;
-    if (fit) map.setView([p.lat,p.lon], 12, { animate: true });
+    if (fit) map.setView([p.lat,p.lon], p.category==='beach-parking'?14:12, { animate: true });
     if (connectors) { map.removeLayer(connectors); connectors = null; }
     if (validViewGeometry(p) && geoPointValid(current?.pad)) {
       connectors = L.polyline([
@@ -112,20 +113,107 @@
         interactive: false }).addTo(map);
     }
     markers.forEach(({ marker, point }) => {
-      const kind = point.category === 'public-viewpoint' ? 'view' : 'entry';
-      marker.setIcon(leafletIcon(kind, point.id === p.id, ['closed','ineligible'].includes(point.level)));
+      const kind = point.category === 'beach-parking' ? 'lot' :
+        point.category === 'public-viewpoint' ? 'view' : 'entry';
+      marker.setIcon(leafletIcon(kind, point.id === p.id,
+        ['closed','ineligible'].includes(point.level),point.number));
     });
     const selectedMarker = markers.get(p.id)?.marker;
     if (selectedMarker) selectedMarker.openPopup();
   }
   function focusPoint(id, move = true) {
     selected = id;
-    panel.querySelectorAll('.geo-choice').forEach(el => {
+    document.querySelectorAll('[data-geo-id]').forEach(el => {
       el.dataset.active = el.dataset.geoId === id ? 'true' : 'false';
     });
     const target = current?.points?.find(p => p.id === id);
     if (target) showOnMap(target, move);
   }
+
+  function weatherEvidence(p) {
+    const w=p?.weather;
+    const row=node('p','geo-weather');
+    if (!w || w.status!=='ok' || w.cloudStatus!=='ok' ||
+        !Number.isInteger(w.cloudCoverPercent)) {
+      row.textContent='NWS site-specific sky comparison: ' +
+        (w?.status==='not-in-forecast-window'?'awaiting a precise launch time within seven days':'not verified for the selected launch window') + '.';
+      row.dataset.state='unknown';
+      return row;
+    }
+    row.dataset.state=w.assessmentLevel==='poor'?'poor':'observed-forecast';
+    row.appendChild(node('strong','','NWS '+w.cloudCoverPercent+'% total sky cover'));
+    row.appendChild(node('span','',
+      ' · '+(w.forecastShortDescription||'local sky forecast')+
+      (p.category==='beach-parking'?' · same representative Lot 8 grid for all beach lots.':
+       ' · not a rocket flight-path or sightline forecast.')));
+    return row;
+  }
+  const lotFilterNodes=document.querySelectorAll('input[name="geo-lot-filter"]');
+  lotFilterNodes.forEach(input=>input.addEventListener('change',()=>{
+    if (!input.checked)return;
+    lotFilter=input.value;
+    renderPlayalindaLots();
+  }));
+  function renderPlayalindaLots() {
+    const grid=$('geo-lot-grid');
+    if(!grid)return;
+    const lots=(current?.points||[])
+      .filter(p=>p.category==='beach-parking' && geoPointValid(p));
+    grid.replaceChildren();
+    if(lots.length===0) {
+      grid.appendChild(node('p','geo-choice-empty',
+        'Official NPS numbered lot geography is temporarily unavailable. Use the park source links and the mapped entrance only.'));
+      return;
+    }
+    let ordered=lots.slice();
+    if(lotFilter==='ramps')ordered=ordered.filter(p=>p.accessibility?.beachRampInOfficialFaq);
+    if(lotFilter==='close')ordered.sort((a,b)=>(a.geometry?.miles ?? 100)-(b.geometry?.miles ?? 100));
+    else ordered.sort((a,b)=>a.number-b.number);
+    for(const p of ordered) {
+      const card=node('article','geo-lot-card');
+      card.dataset.geoId=p.id;
+      card.dataset.state=p.level||'unknown';
+      card.dataset.active=p.id===selected?'true':'false';
+      const top=node('div','geo-lot-top');
+      top.append(node('span','geo-lot-number',String(p.number)),
+        node('strong','','Beach parking #'+p.number));
+      card.appendChild(top);
+      const badge=node('p','geo-lot-access',verdict(p));
+      badge.dataset.state=p.level||'unknown';
+      card.appendChild(badge);
+      if(p.accessibility?.beachRampInOfficialFaq)
+        card.appendChild(node('p','geo-lot-ramp',
+          'NPS FAQ lists an accessible beach ramp. Condition not verified.'));
+      else card.appendChild(node('p','geo-lot-ramp',
+        'Accessible parking is documented, but an accessible beach ramp is not confirmed in the NPS FAQ.'));
+      if(p.accessibility?.coastalDuneNote)
+        card.appendChild(node('p','geo-lot-dune',p.accessibility.coastalDuneNote+'.'));
+      if(validViewGeometry(p))card.appendChild(node('p','geo-lot-geometry',
+        '~'+p.geometry.miles.toFixed(1)+' mi to assigned pad · '+p.geometry.bearingDegrees+
+        '° '+p.geometry.bearingCardinal+' (ground only)'));
+      if(p.level==='closed')card.appendChild(node('p','geo-lot-alert',
+        'Current checked NPS source reports a closure. Do not travel to this lot without confirmation.'));
+      card.appendChild(weatherEvidence(p));
+      const actions=node('div','geo-lot-actions');
+      const zoom=node('button','geo-map-focus','Inspect official footprint');
+      zoom.type='button';zoom.setAttribute('aria-label','Locate Playalinda lot '+p.number+' on the NPS GIS map');
+      zoom.addEventListener('click',()=>{
+        focusPoint(p.id);
+        if(window.innerWidth<850)screen.scrollIntoView({behavior:'smooth',block:'center'});
+      });
+      actions.appendChild(zoom);
+      if(isOfficialSource(p.accessSource))actions.appendChild(link(p.accessSource,'NPS restrictions','geo-link'));
+      card.appendChild(actions);
+      grid.appendChild(card);
+    }
+    const explained=$('geo-lot-explain');
+    if(explained)explained.textContent=
+      (lotFilter==='ramps'?'Showing '+ordered.length+' lots with accessible beach ramps specifically named in the NPS FAQ. ':
+       lotFilter==='close'?'Sorted by straight-line pad distance from official parking centroids, NOT predicted visibility, route time or parking access. ':
+       'All '+lots.length+' numbered lots come from NPS public GIS polygons, not crowdsourced coordinates. ')+
+      'NPS describes accessible parking, but lot opening, ramp condition and NASA launch security must be verified independently.';
+  }
+
   function row(p, idx) {
     const card = node('article', 'geo-choice');
     card.dataset.geoId = p.id;
@@ -156,6 +244,7 @@
     const chips = node('div','geo-facility-tags');
     (p.visitorFeatures || []).slice(0,4).forEach(f => chips.appendChild(node('span','',f)));
     card.appendChild(chips);
+    if(p.weather)card.appendChild(weatherEvidence(p));
     const actions = node('div','geo-choice-actions');
     const focus = node('button','geo-map-focus','See on map');
     focus.type = 'button';
@@ -190,18 +279,19 @@
     say('geo-pad-detail', pad ?
       'LL2 pad coordinates are matched to the selected mission, but this launch facility is restricted. Do not navigate there.' :
       'No trusted Florida pad coordinate for this mission. Pad-distance comparisons are withheld.');
-    const sorted = geo.points.slice().filter(geoPointValid)
+    const sorted = geo.points.slice().filter(p=>geoPointValid(p) && p.category!=='beach-parking')
       .sort((a,b)=>scoring(a)-scoring(b) || a.name.localeCompare(b.name));
     panel.replaceChildren();
     say('geo-site-count', geo.points.filter(p=>p.category==='public-viewpoint').length+
       ' public park references · '+
-      geo.points.filter(p=>p.category!=='public-viewpoint').length+' entry points');
+      geo.points.filter(p=>p.category==='beach-parking').length+' NPS mapped lots · '+
+      geo.points.filter(p=>['ticketed-entry','access-checkpoint'].includes(p.category)).length+' entrance points');
     sorted.forEach((p,i) => panel.appendChild(row(p,i)));
     const unlocated = Array.isArray(geo.unlocated) ? geo.unlocated : [];
     if (unlocated.length) {
       const note = node('div','geo-unlocated');
       note.appendChild(node('strong','','Not pinned until we verify a precise visitor position'));
-      note.appendChild(node('p','','Some Playalinda parking groups and restricted ticketed viewing areas have official access rules but no sufficiently verified public GPS point in this inventory.'));
+      note.appendChild(node('p','','Restricted ticketed launch-viewing sites and any unverified park position retain official access descriptions but no visitor GPS marker. All 13 numbered Playalinda lots now have NPS map polygons.'));
       const names = unlocated.map(x=>x.name).slice(0,6).join(' · ');
       note.appendChild(node('p','geo-unlocated-names',names));
       panel.appendChild(note);
@@ -214,12 +304,23 @@
       const meta = checked ? checked.toLocaleString('en-US',{timeZone:'America/New_York',
         month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'}) : null;
       const p = policy.querySelector('p');
+      const road=geo.roadDecision || {};
+      const cutoff=Date.parse(road.estimatedRoadRestrictionAt || '');
+      const threshold=Number.isFinite(cutoff) ?
+        new Date(cutoff).toLocaleString('en-US',{timeZone:'America/New_York',
+          month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'}) : null;
+      const heading=policy.querySelector('strong');
+      if(heading)heading.textContent=road.label || 'Published NPS road-entry policy (not live status)';
       if (p) p.textContent = (geo.npsAlertsVerified ?
         'NPS official park alerts last checked ' + (meta || 'recently') + '. ' :
         'Current NPS alerts are unverified. ') +
-        (geo.policy?.detail || 'Launch-specific gate access is never guaranteed.');
+        (threshold?'Schedule-based T−30 estimate: '+threshold+'. ':'No reliable exact T−30 deadline for this mission. ')+
+        (road.detail || geo.policy?.detail || 'Launch-specific gate access is never guaranteed.') +
+        ' The map overlays an NPS road centerline, NOT live gate status or a current closure order.';
+      policy.dataset.level=road.level||'unknown';
     }
-    if (!selected || !sorted.some(p=>p.id===selected)) selected = sorted.find(p=>p.category==='public-viewpoint')?.id || sorted[0]?.id;
+    renderPlayalindaLots();
+    if (!selected || !geo.points.some(p=>p.id===selected)) selected = sorted.find(p=>p.category==='public-viewpoint')?.id || sorted[0]?.id;
     focusPoint(selected, false);
     void drawMap();
   }
@@ -303,6 +404,15 @@
       mapPromise=null; map=null;
     }
   }
+  const roadToggle=$('geo-road-toggle');
+  function updateRoadDisplay() {
+    if(!map || !policyLine)return;
+    if(roadToggle?.checked) {
+      if(!map.hasLayer(policyLine))policyLine.addTo(map);
+    } else if(map.hasLayer(policyLine))map.removeLayer(policyLine);
+  }
+  if(roadToggle)roadToggle.addEventListener('change',updateRoadDisplay);
+
   function renderMapMarkers() {
     if (!map || !current) return;
     const L=window.L;
@@ -310,6 +420,8 @@
     markers.clear();
     if (padMarker) {map.removeLayer(padMarker);padMarker=null;}
     if (connectors) {map.removeLayer(connectors);connectors=null;}
+    if (lotBoundaries) {map.removeLayer(lotBoundaries);lotBoundaries=null;}
+    if (policyLine) {map.removeLayer(policyLine);policyLine=null;}
     const points=(current.points||[]).filter(geoPointValid);
     const bounds=[];
     if (geoPointValid(current.pad)) {
@@ -323,10 +435,10 @@
       bounds.push([pad.lat,pad.lon]);
     }
     points.forEach(p=>{
-      const kind=p.category==='public-viewpoint'?'view':'entry';
+      const kind=p.category==='beach-parking'?'lot':p.category==='public-viewpoint'?'view':'entry';
       const marker=L.marker([p.lat,p.lon],{
         title:p.name,keyboard:true,
-        icon:leafletIcon(kind,p.id===selected,['closed','ineligible'].includes(p.level))
+        icon:leafletIcon(kind,p.id===selected,['closed','ineligible'].includes(p.level),p.number)
       }).addTo(map);
       const popup=node('div','geo-popup');
       popup.appendChild(node('strong','',p.name));
@@ -340,6 +452,43 @@
       markers.set(p.id,{marker,point:p});
       bounds.push([p.lat,p.lon]);
     });
+    // These are the actual *NPS public parking polygons*, not NASA safety
+    // exclusion areas or dynamic geofences. Only verified active park notices
+    // may change their status styling; unknown is not painted as open.
+    lotBoundaries=L.layerGroup().addTo(map);
+    for (const p of points.filter(x=>x.category==='beach-parking')) {
+      if(!Array.isArray(p.polygons) || !p.polygons.length)continue;
+      const paths=p.polygons.filter(r=>Array.isArray(r)&&r.length>=3)
+        .map(r=>r.filter(c=>Array.isArray(c)&&c.length>=2&&
+          geoPointValid({lon:c[0],lat:c[1]}))
+          .map(c=>[c[1],c[0]])).filter(r=>r.length>=3);
+      if(!paths.length)continue;
+      const closed=p.level==='closed';
+      const boundary=L.polygon(paths,{
+        color:closed?'#a24b39':'#3b7f57',
+        weight:2,opacity:.9,fillColor:closed?'#a24b39':'#7bad8a',
+        fillOpacity:closed?.19:.12,
+        interactive:true
+      }).addTo(lotBoundaries);
+      boundary.bindTooltip('NPS parking #'+p.number+
+        (closed?' · NPS closure reported':' · live opening unverified'),
+        {direction:'top'});
+      boundary.on('click',()=>focusPoint(p.id,false));
+    }
+    const road=current.roadCorridor;
+    if(Array.isArray(road?.coordinates) && road.coordinates.length>4 &&
+       road.coordinates.every(c=>Array.isArray(c)&&c.length===2&&
+         geoPointValid({lat:c[1],lon:c[0]}))) {
+      policyLine=L.polyline(road.coordinates.map(c=>[c[1],c[0]]),{
+        color:'#a86b38',weight:5,dashArray:'10 8',opacity:.72,
+        interactive:true
+      });
+      policyLine.bindPopup(
+        'Published NPS launch-day inbound restriction corridor (T−30 policy). '+
+        'This is historical official road geometry, NOT a live closure, traffic or driving route.'
+      );
+      updateRoadDisplay();
+    }
     if(bounds.length)map.fitBounds(bounds,{padding:[28,28],maxZoom:12});
     const chosen=points.find(p=>p.id===selected);
     if(chosen)showOnMap(chosen,false);
@@ -347,9 +496,9 @@
       (current.pad ? 'Mapped the selected mission’s launch pad with ' :
         'Launch-pad GPS unavailable; mapped ') +
       points.filter(p=>p.category==='public-viewpoint').length+
-      ' public park references and '+
-      points.filter(p=>p.category!=='public-viewpoint').length+
-      ' official entrance points. No assumed hazard polygons.');
+      ' public park references, '+
+      points.filter(p=>p.category==='beach-parking').length+
+      ' actual NPS lot footprints and 2 official entrances. No inferred live closures.');
   }
   updateExplanation();
   document.addEventListener('space-coast:launch-loaded',event=>{

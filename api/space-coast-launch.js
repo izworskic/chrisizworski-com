@@ -85,9 +85,15 @@ async function nwsFor(lat, lon, iso) {
 }
 
 async function weatherForLocations(next, now) {
+  // Bounded site-reference grids. A park's NWS forecast grid is NOT a view
+  // toward the pad, rocket ascent cloud profile, or launch-weather approval.
+  // All Playalinda lot cards share the Lot 8 representative NWS grid.
   const locations = [
-    { id: 'titusville', name: 'Titusville waterfront', lat: 28.6100, lon: -80.8060 },
-    { id: 'port-canaveral', name: 'Port Canaveral coast', lat: 28.4046, lon: -80.5984 }
+    { id: 'titusville', name: 'Space View Park (Titusville)', lat: 28.6139417, lon: -80.8037278 },
+    { id: 'port-canaveral', name: 'Jetty Park (Port Canaveral)', lat: 28.407304, lon: -80.591899 },
+    { id: 'rotary', name: 'Rotary Riverfront Park', lat: 28.566364, lon: -80.798183 },
+    { id: 'parrish', name: 'Parrish Park', lat: 28.624745, lon: -80.792944 },
+    { id: 'playalinda', name: 'Playalinda Beach (Lot 8 reference)', lat: 28.678293, lon: -80.648803 }
   ];
   const exact = next && ['minute', 'second'].includes(next.netPrecision);
   const withinHorizon = exact && Date.parse(next.net) >= now &&
@@ -169,8 +175,17 @@ module.exports = async function handler(req, res) {
       ...a, description: a.description.slice(0, 600)
     }));
     const viewpoints = VIEWPOINTS.map(v => viewAccess(v, next, nps.alerts, nps.verified, { now }));
-    const geographicViewing = buildGeographicViewing(next, viewpoints, nps, now);
+    const geographicViewing = buildGeographicViewing(next, viewpoints, nps, now, forecasts);
     const arrivalGuidance = launchArrivalGuidance(next, nps.alerts, nps.verified, now);
+    geographicViewing.roadDecision = {
+      level:arrivalGuidance.level,label:arrivalGuidance.label,
+      detail:arrivalGuidance.detail,
+      estimatedRoadRestrictionAt:arrivalGuidance.estimatedRoadRestrictionAt,
+      calendarTimePrecision:next?.netPrecision || 'unknown',
+      source:arrivalGuidance.source,
+      evidenceCheckedAt:nps.checkedAt,
+      actualGateStatus:'not-verified'
+    };
     const skyComparisonDecision = skyComparison(forecasts);
     const schedule = next?.scheduleConfidence || {
       level: 'none', label: 'No future Florida launch in current feed',
