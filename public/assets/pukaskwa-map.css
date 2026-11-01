@@ -56,3 +56,14 @@
 #pk-interactive-map .leaflet-control-attribution{font-size:11px;color:#294c41;background:rgba(255,255,250,.95)}
 #pk-interactive-map .leaflet-control-attribution a{color:#155b4d;text-decoration:underline}
 @media(max-width:650px){.pk-trail-toggle-row{display:block}.pk-trail-toggle-row label{font-size:.9rem;min-height:44px}#pk-trail-lines-status{display:block;font-size:.88rem;margin:2px 0 7px}.pk-map-choice-actions{display:grid;grid-template-columns:1fr;gap:8px}.pk-map-choice-actions button{width:100%;min-height:44px}.pk-map-choice-caveat{font-size:.9rem!important}}
+
+/* Parks Canada starting-reference contract, not a trail navigation service. */
+.pk-start-path{border:1px solid rgba(236,241,224,.25);background:rgba(10,49,40,.35);border-radius:9px;padding:13px 15px;margin-top:14px;color:#f2f2e7}
+.pk-start-path h4{font:750 .98rem/1.4 system-ui,sans-serif;letter-spacing:0;margin:0 0 5px;color:#f3e2c0}
+.pk-start-path p{font-size:.82rem!important;line-height:1.52;margin:7px 0!important;color:#ebf1e8}
+.pk-start-path .pk-start-origin{color:#fff4dc}
+.pk-start-path ol{padding-left:20px;margin:9px 0 11px;display:flex;flex-wrap:wrap;gap:4px 21px;font-size:.81rem;line-height:1.55}
+.pk-start-path li{padding-left:0;flex:1 0 150px}
+.pk-start-path .pk-start-warning{background:rgba(255,230,185,.13);border-left:3px solid #edc395;padding:8px 10px;margin-top:12px!important}
+.pk-start-path a{color:#f8e7b8;text-underline-offset:3px}
+@media(max-width:650px){.pk-start-path{padding:12px}.pk-start-path ol{display:block}.pk-start-path li{margin-bottom:3px}}
