@@ -85,3 +85,10 @@
 .pk-junction-evidence .pk-junction-credit{border-top:1px solid rgba(245,237,216,.18);padding:9px 12px 11px;color:#d4e4d5!important;font-size:.72rem!important}
 .pk-junction-evidence .pk-junction-warning{border-left:3px solid #e7b67e;background:rgba(255,218,155,.11);padding:8px 11px;color:#f7e9d4!important;margin:10px 0 0!important}
 @media(max-width:650px){.pk-junction-evidence ul{padding-left:25px}.pk-junction-evidence li{margin:11px 0}}
+
+/* Independently sourced walking-access rule, deliberately not navigation. */
+.pk-access-proof{margin:13px 0 11px;padding:11px 13px;border-radius:7px;border:1px solid rgba(230,222,200,.4);background:rgba(250,247,232,.08)}
+.pk-access-proof h5{font:750 .91rem/1.36 system-ui,sans-serif;color:#f5e4c3;margin:0 0 7px}
+.pk-access-proof p{font-size:.81rem!important;line-height:1.55!important;margin:8px 0!important;color:#f2f1e9!important}
+.pk-access-proof .pk-access-proof-sources{font-size:.76rem!important;margin:9px 0 0!important}
+.pk-access-proof a{color:#ffe5ae;text-decoration:underline;text-underline-offset:3px}
