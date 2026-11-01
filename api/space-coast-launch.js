@@ -10,6 +10,7 @@ const {
 } = require('../lib/space-coast-visibility');
 const { inspectKscLaunch, CALENDAR: KSC_CALENDAR } =
   require('../lib/space-coast-ksc-viewing');
+const { storeTrustedLaunches } = require('../lib/space-coast-ksc-snapshot');
 
 const LAUNCHES = 'https://ll.thespacedevs.com/2.3.0/launches/upcoming/?location__ids=12%2C27&limit=20&format=json&ordering=net&hide_recent_previous=true';
 const KSC = 'https://www.kennedyspacecenter.com/launches-and-events/';
@@ -157,7 +158,10 @@ module.exports = async function handler(req, res) {
         sourceUrl: null, venues: [], checked: 0,
         reason: 'source-unavailable', calendarUrl: KSC_CALENDAR,
         note: 'Official KSC mission-viewing details could not be verified. Check the operator calendar.'
-      }))
+      })),
+      // Save a trusted LL2 snapshot once with the ordinary cached schedule.
+      // The faster official KSC checker reads it without polling LL2 again.
+      storeTrustedLaunches(launches, now)
     ]);
     const primary = forecasts[0] || null;
     const parkAlerts = nps.alerts.map(a => ({
