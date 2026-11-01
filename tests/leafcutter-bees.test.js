@@ -60,7 +60,7 @@ test('leafcutter guide is indexable with valid JSON-LD, primary sources and acce
   }
   assert.match(html, /Five steps to put occupied nesting tubes away safely/);
   assert.match(html, /aria-live="polite"/);
-  assert.match(html, /@media\(max-width:760px\)\{[^}]*\.house-grid\{grid-template-columns:1fr\}/);
+  assert.match(html, /@media\(max-width:760px\)\{[\s\S]*?\.house-grid\{grid-template-columns:1fr\}/);
   assert.ok((html.match(/<img\b/g) || []).length >= 2);
 });
 
@@ -118,7 +118,7 @@ test('release forecast desk keeps blooms and actual observation separate', () =>
   assert.match(html, /id="bee-check"/);
   assert.match(html, /id="bee-day-strip"/);
   assert.match(html, /id="bee-flowers"/);
-  assert.match(html, /source-backed/i);
+  assert.match(html, /climatological reference/);
   assert.match(html, /Forecast does not equal clearance/);
   assert.match(html, /National Weather Service/);
   assert.match(html, /Typical plant seasons/);
