@@ -1,0 +1,156 @@
+{
+  "schemaVersion": "1.2",
+  "recordStatus": "draft",
+  "project": {
+    "slug": "michigan-garden-living-notebook-20261101",
+    "ownerRepo": "izworskic/chrisizworski-com",
+    "canonical": "https://chrisizworski.com/michigan-gardening/",
+    "pageFile": "public/michigan-gardening/index.html",
+    "visitorDecision": "What can I do in my Michigan garden in this season and where can I find the right tool?",
+    "primaryAction": "Choose a season, optionally enter a town, or follow a garden object to its tool."
+  },
+  "claims": [
+    {
+      "id": "michigan-frost-reference",
+      "kind": "official-reference",
+      "subject": "other",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://www.canr.msu.edu/resources/frost-free-dates",
+      "checkedDate": "2026-11-01",
+      "limitation": "Historical station probabilities do not predict a future frost or a garden soil temperature."
+    },
+    {
+      "id": "fall-crop-planning",
+      "kind": "official-reference",
+      "subject": "other",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://www.canr.msu.edu/uploads/files/E3172_-_Fall_Vegetable_Crops_for_your_Garden.pdf",
+      "checkedDate": "2026-11-01",
+      "limitation": "Packet conventions, weather and slower fall growth vary; calculation is not a safe deadline."
+    }
+  ],
+  "decisionState": {
+    "selectedIdField": "season ID and Michigan place",
+    "sourceOfTruth": "GardenWelcome uses Michigan local date, the shared PlantNow place and frost station, and explicitly editorial seasonal notes.",
+    "linkedSurfaces": [
+      "answer",
+      "selected season",
+      "photo and caption",
+      "station reference",
+      "seasonal and soil links",
+      "existing planner town"
+    ],
+    "unavailableBehavior": "Leave the last valid town in place; show missing fall reference rather than a guess."
+  },
+  "scenarios": [
+    {
+      "kind": "initial",
+      "input": "Open in Bay City during November.",
+      "expectedVisibleAnswer": "Fall editorial note and typical station fall frost appear.",
+      "sourceAndSafety": "Historical station dates and editorial seasonal notes are not live forecasts."
+    },
+    {
+      "kind": "alternative",
+      "input": "Choose spring then change to Adrian.",
+      "expectedVisibleAnswer": "Spring note, photo and source-backed spring reference match the choice and town.",
+      "sourceAndSafety": "Historical station dates and editorial seasonal notes are not live forecasts."
+    },
+    {
+      "kind": "reverse",
+      "input": "Choose spring, summer, then spring.",
+      "expectedVisibleAnswer": "The original spring note, image and selected state return.",
+      "sourceAndSafety": "Historical station dates and editorial seasonal notes are not live forecasts."
+    },
+    {
+      "kind": "no-js",
+      "input": "Disable JavaScript.",
+      "expectedVisibleAnswer": "Static garden image and direct tool links remain, with an explanation.",
+      "sourceAndSafety": "Historical station dates and editorial seasonal notes are not live forecasts."
+    },
+    {
+      "kind": "no-tiles",
+      "input": "Load without mapping services.",
+      "expectedVisibleAnswer": "No map dependency; garden links and station information remain.",
+      "sourceAndSafety": "Historical station dates and editorial seasonal notes are not live forecasts."
+    },
+    {
+      "kind": "stale-data",
+      "input": "Choose Adrian and fall.",
+      "expectedVisibleAnswer": "The page states that a sourced fall reference is unavailable.",
+      "sourceAndSafety": "Historical station dates and editorial seasonal notes are not live forecasts."
+    }
+  ],
+  "failures": {
+    "no-js": "Static links and the complete tool directory remain; seasonal controls and town lookup explain JavaScript is required.",
+    "no-tiles": "No maps or tile service required.",
+    "no-image": "Text, controls and tools work even when an image is blocked.",
+    "stale-data": "A station without a published fall date displays unavailable."
+  },
+  "qa": {
+    "viewports": [
+      360,
+      390,
+      768,
+      1440
+    ],
+    "browserStatus": "PENDING",
+    "browserRun": null,
+    "screenshotEvidence": []
+  },
+  "photos": [
+    {
+      "depictedSubject": "Seed packets",
+      "author": "Chris Izworski",
+      "license": "Owner-attributed image from Chris Izworski site collection; reused on owner site",
+      "sourceUrl": "https://chrisizworski.com/assets/garden/chris-izworski-saginaw-bay-garden-november-2024-bay-city.jpg",
+      "creditUrl": "https://chrisizworski.com/chris-izworski-photos/",
+      "subjectMatch": "contextual",
+      "disclosure": "From Chris\u2019s garden notebook; image describes the actual subject, not current conditions."
+    },
+    {
+      "depictedSubject": "Vegetable seedlings under grow lights",
+      "author": "Chris Izworski",
+      "license": "Owner-attributed image from Chris Izworski site collection; reused on owner site",
+      "sourceUrl": "https://chrisizworski.com/assets/garden/chris-izworski-vegetable-seedlings-under-grow-lights-bay-city.jpg",
+      "creditUrl": "https://chrisizworski.com/chris-izworski-photos/",
+      "subjectMatch": "contextual",
+      "disclosure": "From Chris\u2019s garden notebook; image describes the actual subject, not current conditions."
+    },
+    {
+      "depictedSubject": "Raised beds with flowers and vegetables",
+      "author": "Chris Izworski",
+      "license": "Owner-attributed image from Chris Izworski site collection; reused on owner site",
+      "sourceUrl": "https://chrisizworski.com/assets/garden/chris-izworski-backyard-garden-flowers-summer-saginaw-bay.jpg",
+      "creditUrl": "https://chrisizworski.com/chris-izworski-photos/",
+      "subjectMatch": "contextual",
+      "disclosure": "From Chris\u2019s garden notebook; image describes the actual subject, not current conditions."
+    },
+    {
+      "depictedSubject": "Flower bulbs in garden soil",
+      "author": "Chris Izworski",
+      "license": "Owner-attributed image from Chris Izworski site collection; reused on owner site",
+      "sourceUrl": "https://chrisizworski.com/assets/garden/chris-izworski-garden-produce-october-2024-saginaw-bay-shoreline-2.jpg",
+      "creditUrl": "https://chrisizworski.com/chris-izworski-photos/",
+      "subjectMatch": "contextual",
+      "disclosure": "From Chris\u2019s garden notebook; image describes the actual subject, not current conditions."
+    }
+  ],
+  "release": {
+    "implemented": {
+      "status": "PENDING"
+    },
+    "verified": {
+      "status": "PENDING"
+    },
+    "deployed": {
+      "status": "PENDING"
+    },
+    "live": {
+      "status": "PENDING"
+    },
+    "measured": {
+      "status": "NOT_MEASURED"
+    }
+  },
+  "note": "Draft evidence: browser, exact-head CI, deployment and live verification pending."
+}
