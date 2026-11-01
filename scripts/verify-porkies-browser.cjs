@@ -41,6 +41,17 @@ async function main(){
    need(await page.locator('h1').count()===1,device.name+' missing H1');
    need((await page.locator('h1').innerText()).includes('Porkies'),device.name+' missing identity');
    need(await page.locator('#planner select').count()===5,device.name+' expected travel, vehicle and walking inputs');
+   // Quick-start is an actual first-screen choice, not a decorative jump.
+   need(await page.locator('.hero-quickstart [data-porkies-start]').count()===3,device.name+' three meaningful first-screen choices missing');
+   if(device.width<=390){
+     const first=await page.locator('.hero-quickstart [data-porkies-start="views"]').evaluate(x=>x.getBoundingClientRect().top);
+     need(first<device.height-30,device.name+' first live planner choice is below the initial viewport ('+first+'px)');
+   }
+   await page.locator('.hero-quickstart [data-porkies-start="falls"]').click();
+   await page.waitForFunction(()=>document.activeElement?.id==='travel-date',null,{timeout:4000});
+   need((await page.locator('#interest').inputValue())==='falls',device.name+' hero interest did not propagate to planner');
+   await page.locator('#interest').selectOption('mix');
+
    need(await page.locator('article.story').count()===3,device.name+' static destination stories missing');
    need(await page.locator('#crossings .crossing-card').count()===4,device.name+' evidence-supported river crossing desk missing');
    await page.locator('.crossing-inventory summary').click();
@@ -124,6 +135,66 @@ async function main(){
    await page.locator('#read-landscape').screenshot({path:path.join(out,device.name+'-field-journal.png')});
    report.screenshots.push(device.name+'-field-journal.png');
    report.screenshots.push(device.name+'-experience-compare.png');
+   // Regression from 2026-11-01 real-production sixteen-persona study.
+   await page.locator('#travel-date').fill('2027-08-12');
+   await page.locator('#arrival').selectOption('east');
+   await page.locator('#vehicle').selectOption('rv');
+   await page.locator('#hours').selectOption('4');
+   await page.locator('#ability').selectOption('moderate');
+   await page.locator('#interest').selectOption('views');
+   await page.locator('#planner button[type="submit"]').click();
+   need(await page.locator('#results .vehicle-check li').count()>=2,device.name+' main plan RV warning missing');
+   need((await page.locator('#results .vehicle-check').innerText()).includes('middle ski hill parking area off M-107'),device.name+' DNR lower camper staging not in first answer');
+   await page.locator('#vehicle').selectOption('trailer');
+   await page.locator('#arrival').selectOption('west');
+   await page.locator('#hours').selectOption('8');
+   await page.locator('#interest').selectOption('falls');
+   await page.locator('#planner button[type="submit"]').click();
+   const trailer=await page.locator('#results .vehicle-check').innerText();
+   need(trailer.includes('Summit Peak:')&&trailer.includes('Presque Isle:')&&trailer.includes('cross-park itinerary is not verified'),device.name+' trailer cross-park safety inconsistencies');
+   await page.locator('#travel-date').fill('2027-02-17');
+   await page.locator('#hours').selectOption('4');
+   await page.locator('#ability').selectOption('low');
+   await page.locator('#planner button[type="submit"]').click();
+   need((await page.locator('#results .vehicle-check').innerText()).includes('County Road 519 work-zone reopening'),device.name+' winter motorhome west access not qualified');
+   await page.locator('#vehicle').selectOption('car');
+   await page.locator('#travel-date').fill('2027-08-12');
+   await page.locator('#arrival').selectOption('east');
+   await page.locator('#hours').selectOption('2');
+   await page.locator('#ability').selectOption('moderate');
+   await page.locator('#interest').selectOption('falls');
+   await page.locator('#planner button[type="submit"]').click();
+   need(await page.locator('#results .vehicle-check').count()===0,device.name+' normal car wrongly receives camper warning');
+   need(await page.locator('#results .plan-fork-choice').count()===2,device.name+' two short-visit paths not visible');
+   need((await page.locator('#results .recommendations').innerText()).includes('Lake of the Clouds'),device.name+' nearby result missing');
+   need((await page.locator('#results .plan-fork-explainer').innerText()).includes('No verified cross-park driving time'),device.name+' inaccurate short transfer implication');
+   await page.locator('#results [data-plan-path="desired"]').click();
+   need((await page.locator('#results .recommendations').innerText()).includes('Presque Isle'),device.name+' desired waterfall did not replace substitute');
+   need((await page.locator('#results .result-intro').innerText()).includes('NOT confirmed within your 2-hour window'),device.name+' desired path promises a two-hour drive');
+   need((await page.locator('#experience-a h3').innerText()).includes('Presque Isle'),device.name+' selected destination did not synchronize comparison');
+   need(new URL(page.url()).searchParams.get('path')==='desired',device.name+' destination path share state missing');
+   await page.locator('#results [data-plan-path="local"]').click();
+   need((await page.locator('#results .recommendations').innerText()).includes('Lake of the Clouds'),device.name+' local alternative did not reverse');
+   need((await page.locator('#experience-a h3').innerText()).includes('Lake of the Clouds'),device.name+' reverse choice not reflected in comparison');
+   await page.locator('#arrival').selectOption('west');
+   await page.locator('#interest').selectOption('views');
+   await page.locator('#planner button[type="submit"]').click();
+   need((await page.locator('#results .recommendations').innerText()).includes('Presque Isle'),device.name+' west-local path missing');
+   await page.locator('#results [data-plan-path="desired"]').click();
+   need((await page.locator('#results .recommendations').innerText()).includes('Lake of the Clouds'),device.name+' west-side panorama desire still ignored');
+   need((await page.locator('#experience-a h3').innerText()).includes('Lake of the Clouds'),device.name+' west target did not focus lake source panel');
+   if(device.width<=390){
+     await page.locator('#results .plan-fork').screenshot({path:path.join(out,device.name+'-short-trip-decision.png')});
+     report.screenshots.push(device.name+'-short-trip-decision.png');
+   }
+   await page.locator('#vehicle').selectOption('car');
+   await page.locator('#travel-date').fill('2026-10-28');
+   await page.locator('#arrival').selectOption('east');
+   await page.locator('#hours').selectOption('4');
+   await page.locator('#ability').selectOption('moderate');
+   await page.locator('#interest').selectOption('mix');
+   await page.locator('#planner button[type="submit"]').click();
+
    need(await page.locator('.parking-card').count()===6,device.name+' six static DNR crosschecked parking cards missing');
    need(await page.locator('#park-access-evidence').count()===1,device.name+' official source status desk missing');
    await page.waitForFunction(()=>document.querySelector('#park-gis-panel')?.dataset.check==='queried',null,{timeout:10000});
@@ -337,6 +408,10 @@ async function main(){
   need((await page.locator('#experience-a').innerText()).includes('100 yards'),'no JS lake-of-clouds walking proof missing');
   need((await page.locator('#experience-b').innerText()).includes('half a mile'),'no JS Summit Peak walking proof missing');
   need(await page.locator('#experience-choice-a option').count()===6,'no JS six available comparison choices missing');
+  need(await page.locator('.hero-quickstart a[href="#decision"]').count()===3,'no JS first-screen choosing links missing');
+  need((await page.locator('.plan-vehicle-source').innerText()).includes('DNR recommends different staging'),'no JS DNR camper staging reminder missing');
+  need((await page.locator('.plan-choice-static').innerText()).includes('separate trip'),'no JS separate attraction tradeoff not described');
+
   need((await page.locator('#experience-a .experience-entry-static').innerText()).includes('asset #1409'),'no JS lake source starting point missing');
   need((await page.locator('#experience-b .experience-entry-static').innerText()).includes('asset #72'),'no JS Summit Peak signed entry uncertainty missing');
   need(await page.locator('#read-landscape .journal-entry').count()===4,'no JS field journal stories missing');
