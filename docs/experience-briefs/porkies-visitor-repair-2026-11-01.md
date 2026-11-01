@@ -31,3 +31,19 @@ Choose approach 1. Unlike the Gooseberry time-budget waterfall walk and Tahquame
 
 ## Initial audit and work
 Reviewed Nov 1: six former Michigan DNR individual trail URLs returned HTTP 404. DNR's [trail descriptions](https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf), [park map](https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/porcupine_mountains_map.pdf) and [park page](https://www.michigan.gov/recsearch/parks/porkies) were retrievable. Replace visitor-facing dead links with relevant available sources; preserve historical evidence URLs as historical references, not as proof of current availability. Move the existing embedded map before detailed GIS discussion and remove unnecessary tile CORS mode, pending live tile testing. This is a first repair, not completion of the full brief.
+
+## Research and state contract, November 1
+- [Minnesota DNR Gooseberry Falls waterfall walk](https://www.dnr.state.mn.us/state-parks/gooseberry-falls/self-tour-waterfalls-walk.html) distinguishes short and long walks, time and step-free alternatives. Apply its specificity to walking effort; do not transfer its route, season or accessibility claims to the Porkies.
+- [NPS Pictured Rocks maps](https://www.nps.gov/piro/planyourvisit/maps.htm) separates seasonal road closures, official maps and trails; its weak fit for this visitor is that maps and destination descriptions are separate documents. Keep the official map link but put Porkies places and their geography together.
+- [Michigan DNR Porkies park information](https://www.michigan.gov/recsearch/parks/porkies), [DNR trail descriptions](https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf) and [Wakefield Township notice](https://wakefieldtownship.com/north-county-road-519-will-be-closed/) are the official references for the corresponding area, trail descriptions and dated roadwork. The 2025 visitor guide URL and individual trail-detail pages are no longer available; historical references in evidence files are not presented as working current links.
+
+| State | Visitor sees | Boundary |
+| --- | --- | --- |
+| Initial | Six places, mapped points and static descriptions | Not a live open-status or navigable route map |
+| Lake → river → lake | Selected place, highlighted point and matching detail change together | Same source-backed points, not a connecting route |
+| No script or data | Native links, static cards and official park map | Do not imply live or filtered status |
+| Missing tiles | Place details and official map remain available | Empty background does not become route guidance |
+| Winter or large vehicle | Date/vehicle specific warnings in optional planner | Do not certify gate, lot, or staging clearance |
+| Comparison or plan | Map returns to full set or relevant points | Avoid leaving a stale selected-place label |
+
+Actual browser, visual distinctiveness review, loaded tiles, no-JS interaction and release remain pending until observed. Internal tests are not visitor research or evidence of increased usage.
