@@ -106,7 +106,7 @@ test('the printed-park-map visitor experience is responsive, change-aware and ne
  assert.match(html,/black dotted lines are walking trails/);
  assert.match(js,/officialMapOrientation\(selectedTrail,\{blocked\}\)/);
  assert.match(js,/parkDiagramRing\.setAttribute\('cx'/);
- assert.match(js,/parkDiagramRing\.hidden=!parkEvidence\.label/);
+ assert.match(js,/parkDiagramRing\.toggleAttribute\('hidden',!parkEvidence\.label\)/);
  assert.match(css,/aspect-ratio:1000 \/ 761/);
  assert.doesNotMatch(js,/coordinatesFromImage|navigateFromParkImage|createRouteFromImage/);
 });
