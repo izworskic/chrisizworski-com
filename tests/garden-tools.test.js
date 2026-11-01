@@ -93,3 +93,56 @@ test('hub soil link carries the place', () => {
   const hub = loadTool(f('michigan-gardening'), { today: '2026-04-20', search: '?place=49783' });
   assert.equal(hub.document.querySelector('.pn-soil-link').href, '/michigan-soil-temperature/?place=49783');
 });
+
+
+test('Michigan Growing Season Explorer: crop and soil decisions tell the same story', () => {
+  const p = loadTool(f('michigan-gardening'), { today: '2026-05-12' });
+  assert.match(p.text('pnSeasonTitle'), /^Tomatoes: from seed tray/);
+  assert.match(p.text('pnSeasonLocation'), /Bay City frost station/);
+  assert.match(p.text('pnSeasonStepBody'), /one spring out of four/);
+  assert.match(p.text('pnSeasonLandmarks'), /May 2/);
+  assert.match(p.text('pnSeasonLandmarks'), /May 9/);
+  assert.match(p.text('pnSeasonLandmarks'), /May 26/);
+  assert.equal(p.$('pnRows').children.filter(x => x.classList.contains('pn-row-selected')).length, 1);
+
+  p.set('pnCrop', 'beans');
+  assert.match(p.text('pnSeasonTitle'), /^Snap beans: two gates/);
+  p.set('pnSoil', '55', 'input');
+  assert.match(p.text('pnSeasonStatus'), /Wait for the soil/);
+  p.set('pnSoil', '64', 'input');
+  assert.match(p.text('pnSeasonStatus'), /Plant now/);
+  assert.match(p.text('pnSeasonSteps'), /Above 60°F/);
+
+  const first = p.$('pnSeasonSteps').children[0];
+  first.dispatch('click');
+  assert.match(p.text('pnSeasonStepTitle'), /Watch the frost odds/);
+  p.$('pnSeasonSteps').children[2].dispatch('click');
+  assert.match(p.text('pnSeasonStepTitle'), /Sow in the bed/);
+
+  p.set('pnCrop', 'peas');
+  assert.match(p.text('pnSeasonTitle'), /ground make the call/);
+  assert.match(p.text('pnSeasonSteps'), /No fixed calendar date/);
+  p.choose('pnWork', 'yes');
+  assert.match(p.text('pnSeasonStatus'), /Plant now/);
+
+  p.set('pnCrop', 'garlic');
+  assert.match(p.text('pnSeasonStepDate'), /Not reported/);
+  assert.match(p.text('pnSeasonStatus'), /Not reported/);
+  assert.equal(p.$('pnSeasonMissing').hidden, false);
+
+  p.set('pnCrop', 'beans');
+  p.set('pnPlace', '49783');
+  assert.match(p.text('pnSeasonLocation'), /Sault Ste. Marie/);
+  p.click('pnShare');
+  const url = new URL(p.$('pnShareOut').value);
+  assert.equal(url.searchParams.get('crop'), 'beans');
+  const restored = loadTool(f('michigan-gardening'), { today: '2026-05-12', search: url.search });
+  assert.match(restored.text('pnSeasonTitle'), /^Snap beans:/);
+  assert.match(restored.text('pnSeasonLocation'), /Sault Ste. Marie/);
+
+  p.set('pnPlace', 'Bay City');
+  p.set('pnCrop', 'tomatoes');
+  assert.match(p.text('pnSeasonTitle'), /^Tomatoes:/);
+  assert.match(p.text('pnSeasonLandmarks'), /May 2/);
+  assert.equal(p.$('pnRows').children.filter(x => x.classList.contains('pn-row-selected')).length, 1);
+});
