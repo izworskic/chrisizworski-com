@@ -303,12 +303,14 @@ async function main(){
    await page.screenshot({path:path.join(out,device.name+'-hero.png')});
    report.screenshots.push(device.name+'-hero.png');
    await page.locator('#arrival').selectOption('west');
+   await page.locator('#interest').selectOption('views');
    await page.locator('#hours').selectOption('2');
    await page.locator('#travel-date').fill('2026-10-28');
    await page.locator('#planner button[type=submit]').click();
    let content=await page.locator('#results').innerText();
-   need(content.includes('Presque Isle River waterfalls'),device.name+' west 2h did not select waterfall district');
-   need(content.includes('Lake of the Clouds is in a different area'),device.name+' did not disclose far-detour tradeoff');
+   need(content.includes('Presque Isle River waterfalls'),device.name+' west 2h did not select nearby river district');
+   need(content.includes('different park districts')&&content.includes('Lake of the Clouds'),
+    device.name+' visitor requested view but no honest two-path detour explanation');
 
    await page.locator('#parking-focus').click();
    need(await page.locator('.parking-card:visible').count()===1,device.name+' focused itinerary should show one west-side parking match');
