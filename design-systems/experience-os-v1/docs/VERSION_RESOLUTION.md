@@ -1,6 +1,8 @@
 # Experience OS: canonical name and release selection
 
-**Package ID:** `EXPERIENCE_OS_V1`. **Owning repository:** `izworskic/chrisizworski-com`. **Canonical path:** `design-systems/experience-os-v1/`. **Source of truth:** `manifest.json` at that path on the repository's default `main` branch. As reviewed November 1, 2026, that manifest reports **1.2.1**. Check `main` on each new task; the number in this note can become outdated.
+**Package ID:** `EXPERIENCE_OS_V1`. **Owning repository:** `izworskic/chrisizworski-com`. **Canonical path:** `design-systems/experience-os-v1/`. **Default rule:** use the latest released 1.2.x for any unqualified “Experience OS v1.2” request.
+
+**Source of truth:** `manifest.json` at that path on the repository's default `main` branch. As reviewed November 1, 2026, that manifest reports **1.2.1**. Check `main` on each new task; the number in this note can become outdated.
 
 ## One framework; multiple historical names
 
