@@ -20,12 +20,13 @@ function planner() {
     };
   }
   for (const k of ['zone','month','flowers','temp','nest','region','result-title','result-text',
-    'result-actions','result-caveat','season-label','season-head','season-intro','season-actions','season-foot']) element(k);
+    'result-actions','result-caveat','season-label','season-head','season-intro','season-actions','season-foot', 'brood-stage','brood-stage-wrap']) element(k);
   Object.assign(nodes.zone, { value: '6a' });
   Object.assign(nodes.flowers, { value: 'unknown' });
   Object.assign(nodes.temp, { value: 'unknown' });
   Object.assign(nodes.nest, { value: 'none' });
   Object.assign(nodes.region, { value: 'michigan' });
+  Object.assign(nodes['brood-stage'], {value: 'planning'});
   const paths = ['wild','managed'].map(v => ({
     ...element('path-' + v),
     getAttribute(k) { return k === 'data-path' ? v : this.attrs[k]; }
@@ -75,4 +76,37 @@ test('leafcutter planner separates winter care and safe summer merchant conditio
   p.set('zone', '3a'); assert.match(p.caveat(), /colder northern zone/);
   p.set('zone', '9b'); assert.match(p.caveat(), /warmer zone/);
   p.seasons[1].handlers.click(); assert.match(p.nodes['season-head'].textContent, /mothers/);
+});
+
+
+test('leafcutter stage control never mislabels dormant prepupae as release-ready', () => {
+  const p = planner();
+  p.set('month', '6');
+  p.set('flowers', 'yes');
+  p.set('temp', 'warm');
+  p.paths[1].handlers.click();
+  assert.equal(p.nodes['brood-stage-wrap'].hidden, false);
+  p.set('brood-stage', 'dormant');
+  assert.match(p.title(), /Protect dormant prepupae/);
+  assert.doesNotMatch(p.title(), /Conditions match/);
+  p.set('brood-stage', 'unknown');
+  assert.match(p.title(), /confirm what stage/);
+  p.set('brood-stage', 'ready');
+  p.set('flowers', 'no');
+  assert.match(p.title(), /poor for arriving ready-to-emerge/);
+  p.set('month', '10');
+  assert.match(p.title(), /cannot be put back to sleep/);
+  p.paths[0].handlers.click();
+  assert.equal(p.nodes['brood-stage-wrap'].hidden, true);
+});
+
+test('three-stage winter and incubation guide distinguishes wild nests and managed cocoons', () => {
+  assert.match(html, /id="release-and-dormancy"/);
+  assert.match(html, /cannot be placed back into winter dormancy/i);
+  assert.match(html, /roughly 39–50°F/);
+  assert.match(html, /do not mean putting damp wild nesting tubes in a household refrigerator/i);
+  assert.match(html, /Do not offer one exact countdown/);
+  assert.match(html, /Around 60°F daytime temperatures is a/);
+  assert.match(html, /Crown Bees incubation explanation/);
+  assert.match(html, /Kemp &amp; Bosch, 2001/);
 });
