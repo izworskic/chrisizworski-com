@@ -6,61 +6,84 @@
     "ownerRepo": "izworskic/chrisizworski-com",
     "canonical": "https://chrisizworski.com/porcupine-mountains/",
     "pageFile": "public/porcupine-mountains/index.html",
-    "visitorDecision": "PENDING: describe the real visitor decision",
-    "primaryAction": "PENDING: describe the concrete visitor action"
+    "visitorDecision": "Choose a place in the Porkies and understand the walking effort, location and relevant access checks.",
+    "primaryAction": "Select an outing and check official roads and trail information before travel."
   },
-  "claims": [],
+  "claims": [
+    {
+      "id": "official-trails",
+      "kind": "official-reference",
+      "subject": "route-guidance",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf",
+      "checkedDate": "2026-11-01",
+      "limitation": "Published descriptions are not evidence of current trail openings or safe crossings."
+    },
+    {
+      "id": "access-unknown",
+      "kind": "unverified",
+      "subject": "park-access",
+      "state": "UNVERIFIED",
+      "sourceUrl": "https://www.michigan.gov/recsearch/parks/porkies",
+      "checkedDate": "2026-11-01",
+      "limitation": "Mapped parking points and seasonal restrictions do not establish current gate status or signed walking entrances."
+    }
+  ],
   "decisionState": {
-    "selectedIdField": "PENDING: stable selected item ID",
-    "sourceOfTruth": "PENDING: owning engine and evidence",
+    "selectedIdField": "chosenId",
+    "sourceOfTruth": "DNR cross-checked parking points with conservative date and vehicle eligibility in porkies-access-map.js.",
     "linkedSurfaces": [
-      "answer"
+      "answer",
+      "choice-controls",
+      "experience-cards",
+      "map-or-unavailable",
+      "source-panel"
     ],
-    "unavailableBehavior": "PENDING: source-linked fallback when selected item is unavailable"
+    "unavailableBehavior": "Static place descriptions and official DNR map remain available if scripts, records or tiles fail."
   },
   "scenarios": [
     {
       "kind": "initial",
-      "input": "PENDING: what visitor does",
-      "expectedVisibleAnswer": "PENDING: changed user-visible answer",
-      "sourceAndSafety": "PENDING: status and official-source boundaries"
+      "input": "Open map",
+      "expectedVisibleAnswer": "Six mapped places and descriptions",
+      "sourceAndSafety": "Map is orientation; access is not live"
     },
     {
       "kind": "alternative",
-      "input": "PENDING: what visitor does",
-      "expectedVisibleAnswer": "PENDING: changed user-visible answer",
-      "sourceAndSafety": "PENDING: status and official-source boundaries"
+      "input": "Select Presque Isle",
+      "expectedVisibleAnswer": "River detail and mapped parking point",
+      "sourceAndSafety": "Check western approach and dated township notice"
     },
     {
       "kind": "reverse",
-      "input": "PENDING: what visitor does",
-      "expectedVisibleAnswer": "PENDING: changed user-visible answer",
-      "sourceAndSafety": "PENDING: status and official-source boundaries"
+      "input": "Select Lake, river, then Lake",
+      "expectedVisibleAnswer": "Lake detail and point return together",
+      "sourceAndSafety": "No road or walking route inferred"
     },
     {
       "kind": "no-js",
-      "input": "PENDING: what visitor does",
-      "expectedVisibleAnswer": "PENDING: changed user-visible answer",
-      "sourceAndSafety": "PENDING: status and official-source boundaries"
+      "input": "Disable scripts",
+      "expectedVisibleAnswer": "Native place anchors and static details remain",
+      "sourceAndSafety": "Use official map and park information"
     },
     {
       "kind": "no-tiles",
-      "input": "PENDING: what visitor does",
-      "expectedVisibleAnswer": "PENDING: changed user-visible answer",
-      "sourceAndSafety": "PENDING: status and official-source boundaries"
+      "input": "Block tile provider",
+      "expectedVisibleAnswer": "Place detail and official map fallback remain",
+      "sourceAndSafety": "No empty basemap should imply a navigable route"
     },
     {
       "kind": "stale-data",
-      "input": "PENDING: what visitor does",
-      "expectedVisibleAnswer": "PENDING: changed user-visible answer",
-      "sourceAndSafety": "PENDING: status and official-source boundaries"
+      "input": "Use winter date or an RV",
+      "expectedVisibleAnswer": "Seasonal and vehicle cautions remain visible",
+      "sourceAndSafety": "Gates and staging are not certified"
     }
   ],
   "failures": {
-    "no-js": "PENDING: useful HTML answer",
-    "no-tiles": "PENDING: official map and readable options",
-    "no-image": "PENDING: text and truthful credits",
-    "stale-data": "PENDING: unknown state and source link"
+    "no-js": "Native anchors, place cards and official map remain available.",
+    "no-tiles": "Place descriptions and linked official DNR map remain available.",
+    "no-image": "Text and source links remain useful; credited images do not imply current conditions.",
+    "stale-data": "Park access is unverified and official sources remain linked."
   },
   "qa": {
     "viewports": [
@@ -76,7 +99,9 @@
   "photos": [],
   "release": {
     "implemented": {
-      "status": "PENDING"
+      "status": "CONFIRMED",
+      "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/pull/1376",
+      "checkedDate": "2026-11-01"
     },
     "verified": {
       "status": "PENDING"
@@ -91,5 +116,5 @@
       "status": "NOT_MEASURED"
     }
   },
-  "note": "Do not change recordStatus to released without exact CI, deployment and independent public verification. This starter intentionally lacks required source evidence and will fail the evidence checker until completed."
+  "note": "Draft pending browser, map rendering, scorecard, exact-head verification and independent live checks."
 }
