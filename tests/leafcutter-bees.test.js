@@ -20,7 +20,7 @@ function planner(options={}) {
     };
   }
   for (const k of ['zone','month','flowers','temp','nest','region','result-title','result-text',
-    'result-actions','result-caveat','season-label','season-head','season-intro','season-actions','season-foot', 'brood-stage','brood-stage-wrap', 'bee-location', 'bee-check', 'bee-weather-status','bee-day-strip','bee-issued','bee-flower-guide','bee-flower-list','bee-forecast-desk']) element(k);
+    'result-actions','result-caveat','season-label','season-head','season-intro','season-actions','season-foot', 'brood-stage','brood-stage-wrap', 'bee-location', 'bee-check', 'bee-weather-status','bee-day-strip','bee-issued','bee-flower-guide','bee-flower-list','bee-forecast-desk','bee-zip','bee-geo-note']) element(k);
   Object.assign(nodes.zone, { value: '6a' });
   Object.assign(nodes.flowers, { value: 'unknown' });
   Object.assign(nodes.temp, { value: 'unknown' });
@@ -43,7 +43,7 @@ function planner(options={}) {
     createTextNode(t) { return {textContent:t}; }
   };
   vm.runInNewContext(script, { document, Date: options.Date || Date, fetch: options.fetch });
-  function set(k, v) { nodes[k].value = v; nodes[k].handlers.change(); }
+  function set(k, v) { nodes[k].value = v; const event=nodes[k].handlers.change||nodes[k].handlers.input; if(event)event(); else throw new Error('No handler for '+k); }
   return { nodes, paths, seasons, set,
     title: () => nodes['result-title'].textContent,
     caveat: () => nodes['result-caveat'].textContent };
@@ -135,7 +135,7 @@ test('forecasts never override flowers, nest, stage or fail-closed behavior', as
     scope:'forecast-planning-only',provider:'National Weather Service',forecastOnly:true,
     issuedAt:'2026-07-14T12:00:00Z',checkedAt:'2026-07-14T14:00:00Z',
     sourceUrl:'https://api.weather.gov/gridpoints/DTX/99,99/forecast/hourly',
-    site:{id:'bay-city'},status:'WARM_STRETCH',fresh:true,
+    site:{id:'bay-city',kind:'named-city',name:'Bay City'},status:'WARM_STRETCH',fresh:true,
     firstWarmStretch:{startDate:'2026-07-15',endDate:'2026-07-16'},
     daily:[{date:'2026-07-15',highF:78,precipPeakPct:20,signal:'WARM_DAY'},
            {date:'2026-07-16',highF:79,precipPeakPct:20,signal:'WARM_DAY'}]
@@ -158,4 +158,42 @@ test('forecasts never override flowers, nest, stage or fail-closed behavior', as
   await p.nodes['bee-check'].handlers.click();
   assert.match(p.title(),/Forecast unavailable/);
   assert.doesNotMatch(p.title(),/possible release-planning window/);
+});
+
+test('ZIP lookup is dominant over city and invalidates stale city forecast on change',async()=>{
+ class SummerDate extends Date{
+  constructor(...a){if(a.length)super(...a);else super('2026-07-14T14:00:00Z')}
+  static now(){return Date.parse('2026-07-14T14:00:00Z')}
+ }
+ const requests=[];
+ const weather={
+   scope:'forecast-planning-only',provider:'National Weather Service',forecastOnly:true,
+   issuedAt:'2026-07-14T12:00:00Z',checkedAt:'2026-07-14T14:00:00Z',
+   sourceUrl:'https://api.weather.gov/gridpoints/DTX/77,88/forecast/hourly',fresh:true,status:'WARM_STRETCH',
+   firstWarmStretch:{startDate:'2026-07-15',endDate:'2026-07-16'},daily:[{date:'2026-07-15',highF:78,signal:'WARM_DAY',precipPeakPct:10}]};
+ const fetch=async url=>{
+  requests.push(String(url));
+  if(url.includes('mode=locations'))return{ok:true,json:async()=>({locations:[{id:'bay-city',name:'Bay City',region:'Central Lower'}]})};
+  if(url.includes('zip=48706'))return{ok:true,json:async()=>({...weather,site:{id:'zip:48706',kind:'zcta-interior-point',zip:'48706',name:'ZIP 48706 area',latitude:43.62,longitude:-83.92}})};
+  return{ok:true,json:async()=>({...weather,site:{id:'bay-city',kind:'named-city',name:'Bay City'}})};
+ };
+ const p=planner({Date:SummerDate,fetch});
+ p.set('month','6');p.set('nest','empty');p.set('flowers','yes');p.paths[1].handlers.click();
+ await p.nodes['bee-check'].handlers.click();
+ assert.match(p.title(),/possible release-planning window/);
+ p.set('bee-zip','48706');
+ assert.doesNotMatch(p.title(),/possible release-planning window/);
+ await p.nodes['bee-check'].handlers.click();
+ assert.match(p.title(),/possible release-planning window/);
+ assert.ok(requests.some(x=>x.includes('zip=48706')));
+ assert.match(p.nodes['bee-geo-note'].textContent,/2020 statistical ZIP-area/);
+ assert.equal(p.nodes['bee-zip'].value,'48706');
+ p.set('bee-zip','90210');
+ assert.doesNotMatch(p.title(),/possible release-planning window/);
+ await p.nodes['bee-check'].handlers.click();
+ assert.match(p.nodes['bee-weather-status'].children.map(x=>x.textContent).join(' '),/valid Michigan ZIP/);
+ assert.ok(!requests.some(x=>x.includes('90210')),'invalid ZIP must not cause a network request');
+ p.set('bee-zip','');
+ await p.nodes['bee-check'].handlers.click();
+ assert.match(p.title(),/possible release-planning window/);
 });
