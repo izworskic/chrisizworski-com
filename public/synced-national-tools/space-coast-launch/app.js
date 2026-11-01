@@ -2,6 +2,7 @@
 (function () {
   const API = '/api/space-coast-launch';
   const KSC_API = '/api/space-coast-ksc';
+  const KSC_HISTORY_API = '/api/space-coast-ksc-watch';
   const KSC_REFRESH_MS = 5 * 60 * 1000;
   const SCHEDULE_REFRESH_MS = 45 * 60 * 1000;
   const $ = id => document.getElementById(id);
@@ -290,6 +291,84 @@
     if (v.winner) panel.appendChild(element('p', 'small',
       'This is a relative cloud forecast, not a recommendation that a rocket will be visible from that location.'));
   };
+  const kscStoryTime = iso => {
+    const date = new Date(iso || '');
+    if (Number.isNaN(date.valueOf())) return 'Detection time unavailable';
+    return date.toLocaleString('en-US', {
+      timeZone: 'America/New_York', month: 'short', day: 'numeric',
+      year: 'numeric', hour: 'numeric', minute: '2-digit', timeZoneName: 'short'
+    });
+  };
+  const validKscEventUrl = url => typeof url === 'string' &&
+    /^https:\/\/www\.kennedyspacecenter\.com\/event\/[a-z0-9-]+\/?$/.test(url);
+  const renderKscChronicle = result => {
+    const healthPanel = $('ksc-watch-health');
+    const target = $('ksc-chronicle-entries');
+    if (!target || !healthPanel) return;
+    const health = result?.health || {};
+    target.replaceChildren();
+    const checked = health.lastCalendarCheckedAt;
+    const online = health.status === 'checked' || health.status === 'partial';
+    healthPanel.dataset.status = health.status || 'not-initialized';
+    healthPanel.textContent = online ?
+      'Latest official KSC calendar check: ' + kscStoryTime(checked) +
+      (health.status === 'partial' ?
+        '. Some mission pages could not be verified during that check.' :
+        '. Scheduled checks target every 15 minutes, including overnight.') :
+      health.status === 'overdue' ?
+        'The scheduled monitor has not completed a fresh check recently. Last confirmed KSC calendar check: ' +
+          kscStoryTime(checked) + '. Verify directly with KSC before traveling.' :
+        'The independent watcher has not yet established its first successful official calendar check.';
+    const timeline = result?.timeline || {};
+    const events = Array.isArray(timeline.events) ? timeline.events.slice(0, 20) : [];
+    if (!events.length) {
+      const empty = element('div', 'ksc-chronicle-empty');
+      empty.appendChild(element('strong', '', 'No verified viewing changes recorded for this mission yet.'));
+      empty.appendChild(element('p', '', 'That is not evidence of no launch viewing. Official KSC instructions may not yet be published, or the monitor may still be establishing a history.'));
+      empty.appendChild(link('https://www.kennedyspacecenter.com/launches-and-events/events-calendar/',
+        'Read KSC’s official events calendar', 'launch-link'));
+      target.appendChild(empty);
+      return;
+    }
+    for (const event of events) {
+      if (!validKscEventUrl(event.officialUrl)) continue;
+      const item = element('article', 'ksc-chronicle-event');
+      const date = element('time', '', 'First detected ' + kscStoryTime(event.detectedAt));
+      date.dateTime = event.detectedAt;
+      item.appendChild(date);
+      item.appendChild(element('h4', '', event.headline || 'Official KSC page updated'));
+      item.appendChild(element('p', '', event.detail || 'Inspect the official notice for current instructions.'));
+      item.appendChild(link(event.officialUrl, 'See KSC’s source notice', 'launch-link official'));
+      target.appendChild(item);
+    }
+    if (!timeline.verifiedPageIsRecent) healthPanel.textContent +=
+      ' The stored mission-page evidence is older than 45 minutes; treat this as a historical timeline, not current ticket inventory.';
+  };
+  let chronicleController = null;
+  async function loadKscChronicle(sequence, missionId) {
+    if (chronicleController) chronicleController.abort();
+    const controller = new AbortController();
+    chronicleController = controller;
+    try {
+      const r = await fetch(KSC_HISTORY_API + '?launchId=' + encodeURIComponent(missionId), {
+        headers: { Accept: 'application/json' }, signal: controller.signal
+      });
+      const data = await r.json();
+      if (controller.signal.aborted || sequence !== loadSequence ||
+          missionId !== activeMissionId) return;
+      if (r.ok && data.ok && data.selectedLaunchId === missionId) renderKscChronicle(data);
+      else if (data.health) renderKscChronicle({ health: data.health, timeline: { events: [] } });
+    } catch {
+      const node = $('ksc-watch-health');
+      if (node && sequence === loadSequence && activeMissionId === missionId) {
+        node.dataset.status = 'overdue';
+        node.textContent = 'The stored official announcement timeline is temporarily unavailable. Check KSC directly for current instructions.';
+      }
+    } finally {
+      if (chronicleController === controller) chronicleController = null;
+    }
+  }
+
   let loadSequence = 0;
   let activeMissionId = null;
   let lastKscAttemptAt = 0;
@@ -311,6 +390,7 @@
       if (sequence !== loadSequence || activeMissionId !== launchId || controller.signal.aborted) return;
       if (!response.ok || !result.ok || result.selectedLaunchId !== launchId || !result.kscViewing) return;
       renderKsc({ kscViewing: result.kscViewing });
+      void loadKscChronicle(sequence, launchId);
     } catch {
       // Preserve the previously displayed, dated evidence if only the
       // independent announcement refresh fails.
@@ -337,6 +417,7 @@
     const sequence = ++loadSequence;
     const previousMissionId = activeMissionId;
     if (kscController) kscController.abort();
+    if (chronicleController) chronicleController.abort();
     activeMissionId = null;
     try {
       const endpoint = selectedId ? API + '?launchId=' + encodeURIComponent(selectedId) : API;
@@ -374,6 +455,7 @@
       renderSkyComparison(d);
       lastScheduleLoadedAt = Date.now();
       activeMissionId = d.selectedLaunchId || null;
+      if (activeMissionId) void loadKscChronicle(sequence, activeMissionId);
       lastKscAttemptAt = 0;
       checkForKscUpdate();
     } catch (err) {
