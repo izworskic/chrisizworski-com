@@ -65,6 +65,13 @@ Stable selected ID; preference versus explicit choice; every linked answer surfa
 
 Existing architecture first. Dependency justification, license, budget, map-provider key and environment verification, JS-disabled HTML, source caching/TTL and non-tracking policy. Preserve ads/SEO/canonical/Person/Redis restrictions.
 
+### Purposeful motion review (when proposed)
+
+- Which exact verified selection/evidence changes does movement clarify? Why not static HTML/CSS?
+- What does the visitor learn, and why is the interaction distinct from two existing tools?
+- Data timestamps/unknown state, playback controls, reduced motion, keyboard, A→B→A, rapid async races and no-JS fallback:
+- Added dependency/transfer size, device/lab test results, site integrity check (or N/A: no motion):
+
 ## 8. Acceptance and release
 
 Three visitor scenarios, screenshot refs, actual test commands/results, QA scores (or NOT MEASURED), owning-repo full CI, PR/deploy/live state. No fictional metrics. Planned reusable lesson after pilot.
