@@ -39,6 +39,8 @@ For a new central-site canonical verify the actual **visible Tools card ↔ JSON
 14. **Release evidence (v1.2):** distinguish passing PR checks, merged commit, READY deploy matching the SHA, independently observed canonical HTML and later visitor outcome measurements. Mark unknown stages NOT VERIFIED rather than calling them green.
 15. **Distinctiveness veto (v1.2):** attach a short side-by-side comparison to the two closest existing site tools, identifying purposeful shared pieces and at least two substantive visitor-serving differences in decision, hierarchy, interaction or editorial/visual identity. Generic clones fail regardless of other grades; unreviewed or missing comparison is NOT MEASURED and not mergeable.
 
+15. **Purposeful motion (v1.2):** when motion is used, it communicates a genuine source-backed state change, not a generic decorative effect; the selected time/place and verified evidence remain synchronized. Reduced-motion, manual controls, rapid scrub/race, unknown data, keyboard, mobile and no-JS fallbacks must pass. No extra dependency without measured justification. See [motion contract](PURPOSEFUL_MOTION.md). Absence of motion is **not** a defect.
+
 ## Three mandatory scenario examples
 
 - **Destination explorer:** choose two real trailheads; map/cards/featured detail all reflect the same place, with directions **only when independently verified**; unavailable route geometry explicitly says so. Tiles fail → source-linked alternative remains. A→B→A and a slow/failed photo must not show the wrong place.
