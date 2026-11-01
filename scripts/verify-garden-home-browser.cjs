@@ -64,7 +64,8 @@ const assert=require('node:assert/strict');
    assert.doesNotMatch(await ahead.innerText(),/Tomatoes/);
    await ctx.close();
   }
-  const nojs=await browser.newContext({javaScriptEnabled:false,viewport:{width:390,height:844}});
+  // Smooth-scroll motion can keep Playwright's off-screen summary outside the viewport for 30 seconds; test the user-facing no-JS interaction with reduced motion.
+  const nojs=await browser.newContext({javaScriptEnabled:false,reducedMotion:'reduce',viewport:{width:390,height:844}});
   const fallback=await nojs.newPage();await fallback.goto('http://127.0.0.1:8765/michigan-gardening/',{waitUntil:'domcontentloaded'});
   assert.equal(await fallback.getByRole('link',{name:/When is frost likely/}).count(),1);
   await fallback.locator('#plant-now > summary').click();
