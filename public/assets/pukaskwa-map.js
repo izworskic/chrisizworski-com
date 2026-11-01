@@ -18,6 +18,8 @@ const trailNote=doc.getElementById('pk-map-choice-trail-note');
 const startText=doc.getElementById('pk-map-start-text');
 const startSequence=doc.getElementById('pk-map-start-sequence');
 const startWarning=doc.getElementById('pk-map-start-warning');
+const accessProofHead=doc.getElementById('pk-access-proof-heading');
+const accessProofDetail=doc.getElementById('pk-access-proof-detail');
 const junctionHead=doc.getElementById('pk-junction-heading');
 const junctionSummary=doc.getElementById('pk-junction-summary');
 const junctionList=doc.getElementById('pk-junction-list');
@@ -102,6 +104,8 @@ function renderJunctionEvidence(trailId,status){
   }
 }
 
+const isBlockedStatus=status=>['closed','out-of-season','last-known-closed'].includes(status);
+
 function updateTrailSelection() {
   renderJunctionEvidence(selectedTrail,selectedStatus);
   if(!catalog)return;
@@ -110,17 +114,25 @@ function updateTrailSelection() {
     doc.getElementById('pk-result-heading')?.textContent?.trim()||'Your selected hike';
   text(explanationTitle,title);
   text(explanationBody,placeInterpretation(point,selectedTrail)+
-    (selectedStatus==='closed'?' This trail has a documented closure; do not plan to enter.':' The pin does not establish present access.'));
+    (isBlockedStatus(selectedStatus)?' This trail has a documented closure or season restriction; do not plan to enter.':' The pin does not establish present access.'));
   focusChoice.dataset.mapTarget=point?.id||'';
   focusChoice.disabled=!point;
   focusChoice.textContent=point?'Locate the related mapped place':'Route location is intentionally withheld';
   if(point)selectFromList(point.id,{moveMap:Boolean(map)});
   const hasTrail=Object.hasOwn(APPROVED_WAYS,selectedTrail);
-  const blocked=selectedStatus==='closed'||selectedStatus==='out-of-season';
+  const blocked=isBlockedStatus(selectedStatus);
   const orientation=startAdvice(selectedTrail,{closed:blocked,hasApprovedGeometry:hasTrail});
   if(orientation&&startText&&startSequence&&startWarning) {
     startText.textContent=orientation.guidance;
     startWarning.textContent=orientation.closureNote+' '+orientation.geometryNote;
+    if(accessProofHead&&accessProofDetail){
+      accessProofHead.textContent=orientation.accessEvidenceClass==='closed-no-route'
+        ? 'Closed trail: no walking approach recommended'
+        : orientation.accessEvidenceClass==='official-named-circuit-no-gps'
+          ? 'Park-described walking circuit · no verified GPS connection'
+          : 'Official Visitor Centre origin · signed GPS entrance not verified';
+      accessProofDetail.textContent=orientation.pedestrianAccessEvidence;
+    }
     const steps=orientation.sequence.map(value=>{const li=doc.createElement('li');li.textContent=value;return li;});
     startSequence.replaceChildren(...steps);
   }
@@ -140,7 +152,7 @@ function trailStatusFor(id){
   return doc.getElementById('pk-'+id)?.dataset.status||'source-unverified';
 }
 function styleForTrail(id){
-  const closed=trailStatusFor(id)==='closed'||trailStatusFor(id)==='out-of-season';
+  const closed=isBlockedStatus(trailStatusFor(id));
   const selected=id===selectedTrail&&!closed;
   return {
     className:'pk-community-trail',
@@ -166,7 +178,7 @@ function popupForTrail(feature) {
       ' ways. Parks Canada full hike: '+summary.officialEntireOutingKm+' km. These are different measurements, not interchangeable.'
     : 'Only part of this walking path may be mapped.';
   holder.append(p);
-  if(state==='closed'||state==='out-of-season'){
+  if(isBlockedStatus(state)){
     const warning=doc.createElement('p');warning.textContent='Parks Canada has reported this trail closed or out of season. Do not enter based on this line.';
     warning.style.fontWeight='800';warning.style.color='#a03f2a';holder.append(warning);
   } else {
@@ -248,7 +260,7 @@ function setTraceVisibility(){
 function focusSelectedTrace(){
   if(!map||!communityLayer||!communityLines||!trailToggle.checked)return;
   const layers=trailLayers.get(selectedTrail)||[];
-  if(!layers.length||trailStatusFor(selectedTrail)==='closed'||trailStatusFor(selectedTrail)==='out-of-season')return;
+  if(!layers.length||isBlockedStatus(trailStatusFor(selectedTrail)))return;
   const L=window.L;
   const points=layers.flatMap(layer=>layer.feature.geometry.coordinates.map(p=>[p[1],p[0]]));
   if(!points.length)return;
