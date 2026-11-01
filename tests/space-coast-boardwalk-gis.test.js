@@ -137,7 +137,8 @@ test('visitor GIS renders verified boardwalk lines as historical evidence, not a
   const css=fs.readFileSync(path.join(root,'viewing.css'),'utf8');
   assert.match(html,/id="geo-boardwalk-detail"/);
   assert.match(html,/id="geo-boardwalk-toggle"/);
-  assert.match(html,/geo-map\.js\?v=20261101-geo3/);
+  assert.match(html,/geo-map\.js\?v=20261101-geo3-hotfix1/);
+  assert.doesNotThrow(()=>new Function(js),'Interactive GIS script must parse in the browser');
   assert.match(js,/boardwalkSegments/);
   assert.match(js,/NPS mapped boardwalk/);
   assert.match(js,/boardwalkLayer=L\.layerGroup\(\)/);
