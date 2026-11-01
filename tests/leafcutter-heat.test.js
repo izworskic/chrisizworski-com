@@ -43,3 +43,14 @@ test('DST spring skip and fall repeated hour count as full local days',()=>{
  assert.equal(f.daily[0].coverage,'complete');
  assert.equal(f.daily[0].hours,25);
 });
+
+test('future NWS heat uses daily high-low GDD50 definition, not hourly positive excess',()=>{
+ const periods=[...day('2026-07-11',40),...day('2026-07-12',60)];
+ for(let i=0;i<24;i++){periods[i].temperature=i<12?40:80;}
+ const out=E.summarizeHeat(periods,true,new Date('2026-07-11T03:00:00Z'));
+ assert.equal(out.status,'AVAILABLE');
+ assert.equal(out.daily[0].gdd50F,10); // (40+80)/2 - 50 = 10, hourly-excess would be 15.
+ assert.equal(out.daily[1].gdd50F,10);
+ assert.equal(out.totalDegreeDaysF,20);
+ assert.match(out.method,/daily high\/low approximation/);
+});
