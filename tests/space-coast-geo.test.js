@@ -87,7 +87,10 @@ test('GIS result joins only a selected mission’s already evaluated access', ()
   const result=geo();
   assert.equal(result.coordinateSystem,'WGS84');
   assert.equal(result.geojson.type,'FeatureCollection');
-  assert.equal(result.geojson.features.length,34);
+  assert.equal(result.geojson.features.length,48);
+  assert.equal(result.boardwalkInventory.count,14);
+  assert.equal(result.boardwalkInventory.numberedLotAssociations,13);
+  assert.equal(result.geojson.features.filter(x=>x.geometry.type==='MultiLineString').length,14);
   assert.equal(result.playalindaInventory.count,13);
   assert.equal(result.geojson.features.filter(f=>f.geometry.type==='Polygon').length,13);
   assert.equal(result.geojson.features.filter(f=>f.geometry.type==='LineString').length,1);
@@ -150,7 +153,7 @@ test('visitor page wires matching selected mission to safe CARTO map, but never 
   assert.match(html,/id="launch-geo-map"/);
   assert.match(html,/id="geo-choice-list"/);
   assert.match(html,/name="geo-intent" value="photo"/);
-  assert.match(html,/geo-map\.js\?v=20261101-geo2/);
+  assert.match(html,/geo-map\.js\?v=20261101-geo3/);
   assert.match(html,/id="geo-lot-grid"/);
   assert.match(html,/id="geo-road-toggle"/);
   assert.match(app,/space-coast:launch-loaded/);
