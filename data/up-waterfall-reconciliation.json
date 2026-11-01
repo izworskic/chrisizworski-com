@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-10-31",
+  "reviewed": "2026-11-01",
   "issue": 1258,
   "method": "Exact gisObjectId only. No name-only joins, inferred public access, or indexable candidate generation.",
   "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
@@ -3993,62 +3993,60 @@
       "reconciliation": "pending-identity-and-access-research",
       "curatedId": null,
       "publicGuide": null,
-      "landManager": null,
-      "parkingVerified": null,
+      "landManager": "UPPCO McClure P-10855 historically; private falls trail, current permissions unverified",
+      "parkingVerified": false,
       "publicAccessVerified": null,
-      "reviewed": null,
+      "reviewed": "2026-11-01",
       "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
-      "evidenceReviewed": "2026-10-30",
-      "disposition": "municipal-hydro-operator-MBLP-identified-current-gorge-trail-easement-unverified",
+      "evidenceReviewed": "2026-11-01",
+      "disposition": "source-backed-research-only-visitor-access-blocked",
       "publicationEligible": false,
-      "sourceNotes": "The Marquette Board of Light & Power identifies itself as a City of Marquette municipal electric utility operating hydroelectric generation on the Dead River. Its December 2023 board minutes separately approve federal safety inspection work at Forestville and Tourist Park hydro sites. Neither is a site-specific public parking or trail access grant. Marquette Township documents a State-owned *Forestville Access Site* for boating, which cannot be substituted for the powerhouse-side visitor lot or the falls trail. Regional waterfall guides document the common Forestville Road powerhouse-side signed hike, but do not establish current utility gate permissions or posted rules.",
-      "outstandingGate": "Verify with published FERC Forestville recreation plan, official MBLP visitor access policy, or current signed public route map that the old powerhouse parking, route past service gate, and rugged falls-side walking approach are permitted. Operator/hydro identity alone is not an easement.",
+      "sourceNotes": "FERC 2002 final environmental assessment pp.151-152: UPPCO P-10855 McClure powerhouse on Forestville Road had a gravel lot for about 10 cars then open to the public. The following paragraph explicitly says the 0.5-mile upstream informal path to the waterfalls EXTENDS INTO PRIVATE PROPERTY. McClure's P-10855 and municipal MBLP Forestville P-2589 are different hydropower projects. Recent travel descriptions of a powerhouse trail do not establish a present legal easement or 2026 parking rights. UPPCO publishes McClure hydropower flow and water level data approximately every 10 minutes, but this is NOT measured water flow over each waterfall and NOT a safety/closure signal.",
+      "outstandingGate": "Current UPPCO/landowner public visitor access map, exact route easement across private banks, legal signed lot at McClure and current release/closure conditions. Do not use NTN Forestville trailhead, state boat launch or MBLP ownership as substitute.",
       "sourceLinks": [
-        "https://mblp.org/",
-        "https://mblp.org/wp-content/uploads/2024/01/2023-12-19-Board-Meeting-Minutes-Signed.pdf",
-        "https://www.marquettetownship.org/sites/g/files/vyhlif6666/f/news/marquette_township_recreation_plan_2022-2026_dnr_approved.pdf",
-        "https://www.waterfallsofthekeweenaw.com/dead-river/dead-river-falls/",
-        "https://www.noquetrails.org/north-trails",
-        "https://lakesuperiorcircletour.info/location/dead-river-falls-trail/"
+        "https://archives.nmu.edu/govdocs/local/Dead_River/2002_Final_Environmental_Assessment_Dead_River_Hydroelectric_Project_FERC%20Project_No_10855-002_and_Marquette_Hydroelectric_Project_FERC_Project_No_2589-024.pdf",
+        "https://www.uppco.com/about-uppco/hydro-levels/",
+        "https://hydroreform.org/hydro-project/mcclure-p-10855/",
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
       ],
       "accessRouteAudit": {
         "outcome": "not-cleared",
         "segments": [
           {
-            "label": "Waterfall geography",
+            "label": "Identity",
             "status": "verified-geography",
-            "finding": "Named Dead River Falls natural GIS #160; not car parking or an asserted maintained route.",
-            "source": "Michigan state GIS Waterfalls MapServer/7"
+            "finding": "Natural named GIS #160 is not a parking point",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
           },
           {
-            "label": "Utility/manager",
-            "status": "verified-geography",
-            "finding": "MBLP operates hydro facilities on Dead River; Forestville FERC Part 12D safety review documented in 2023 meeting, but no visitor policy found.",
-            "source": "https://mblp.org/wp-content/uploads/2024/01/2023-12-19-Board-Meeting-Minutes-Signed.pdf"
-          },
-          {
-            "label": "Road approach",
+            "label": "Manager / geography",
             "status": "documented-not-live",
-            "finding": "Regional guides and Marquette township describe Forestville Road and falls visitor interest, not current utility gate/road permissions.",
-            "source": "https://lakesuperiorcircletour.info/location/dead-river-falls-trail/"
+            "finding": "Federal 2002 report identifies UPPCO McClure P-10855, different from MBLP Forestville P-2589",
+            "source": "https://archives.nmu.edu/govdocs/local/Dead_River/2002_Final_Environmental_Assessment_Dead_River_Hydroelectric_Project_FERC%20Project_No_10855-002_and_Marquette_Hydroelectric_Project_FERC_Project_No_2589-024.pdf"
           },
           {
-            "label": "Visitor parking",
-            "status": "not-cleared",
-            "finding": "Specialist guide describes parking beside old power station. Distinct state-owned Forestville boat access and NTN trailheads DO NOT establish power-station lot rights.",
-            "source": "https://www.marquettetownship.org/sites/g/files/vyhlif6666/f/news/marquette_township_recreation_plan_2022-2026_dnr_approved.pdf"
+            "label": "Road / historic access",
+            "status": "documented-not-live",
+            "finding": "FERC recorded McClure gravel lot then public, not current visitor authorization",
+            "source": "https://archives.nmu.edu/govdocs/local/Dead_River/2002_Final_Environmental_Assessment_Dead_River_Hydroelectric_Project_FERC%20Project_No_10855-002_and_Marquette_Hydroelectric_Project_FERC_Project_No_2589-024.pdf"
           },
           {
-            "label": "Walking path",
+            "label": "Legal parking",
             "status": "not-cleared",
-            "finding": "Signed historic gorge trail and service road described by independent guides; current power-operator trail authorization, maintenance and closures not established.",
-            "source": "https://www.waterfallsofthekeweenaw.com/dead-river/dead-river-falls/"
+            "finding": "FERC explicitly describes half-mile gorge path extending onto PRIVATE PROPERTY",
+            "source": "https://archives.nmu.edu/govdocs/local/Dead_River/2002_Final_Environmental_Assessment_Dead_River_Hydroelectric_Project_FERC%20Project_No_10855-002_and_Marquette_Hydroelectric_Project_FERC_Project_No_2589-024.pdf"
           },
           {
-            "label": "Live conditions",
+            "label": "Full walking route",
             "status": "not-cleared",
-            "finding": "2026 gate, water release, terrain, station works and trail closure status unknown; no winter or river-crossing directions.",
-            "source": "https://mblp.org/"
+            "finding": "No present-day owner-approved continuous falls-side path and safe viewpoint established",
+            "source": "https://hydroreform.org/hydro-project/mcclure-p-10855/"
+          },
+          {
+            "label": "Current restrictions",
+            "status": "not-cleared",
+            "finding": "UPPCO live hydro plant flows are not actual waterfall flow or current walking access",
+            "source": "https://www.uppco.com/about-uppco/hydro-levels/"
           }
         ]
       }
@@ -4808,10 +4806,61 @@
       "curatedId": null,
       "publicGuide": null,
       "landManager": null,
-      "parkingVerified": null,
+      "parkingVerified": false,
       "publicAccessVerified": null,
-      "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "reviewed": "2026-11-01",
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "evidenceReviewed": "2026-11-01",
+      "disposition": "source-backed-research-only-visitor-access-blocked",
+      "publicationEligible": false,
+      "sourceNotes": "State GIS Silver Bell Falls #195 on Nelson Creek at 46.450945,-86.970673 matches a 2016 field report at 46.45117,-86.97035, about 35m away. Field account places it within Hiawatha National Forest, with badly deteriorated FR2276, potentially closed gate and an additional mile to a short approximately quarter-mile fall footpath. Historic field driving access is not current USFS MVUM motorized permission, visitor parking, an authorized walk or guaranteed open gate. Do not conflate with Upper/Lower Silver Falls on Baraga's Silver River.",
+      "outstandingGate": "Current USFS Hiawatha parcel and motor vehicle use map, lawful seasonal FR2276 gate and parking status, signed complete trail and stream crossing safety.",
+      "sourceLinks": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://gowaterfalling.com/waterfalls/silverbell.shtml",
+        "https://www.fs.usda.gov/r09/hiawatha"
+      ],
+      "accessRouteAudit": {
+        "outcome": "not-cleared",
+        "segments": [
+          {
+            "label": "Identity",
+            "status": "verified-geography",
+            "finding": "Michigan GIS geography and independent Nelson Creek feature agree closely",
+            "source": "https://gowaterfalling.com/waterfalls/silverbell.shtml"
+          },
+          {
+            "label": "Manager / geography",
+            "status": "documented-not-live",
+            "finding": "Forest land identification relies on 2016 field account, not current intersected USFS parcel",
+            "source": "https://gowaterfalling.com/waterfalls/silverbell.shtml"
+          },
+          {
+            "label": "Road / historic access",
+            "status": "documented-not-live",
+            "finding": "FR2276 reported degraded and gated, current public driving authorization unknown",
+            "source": "https://gowaterfalling.com/waterfalls/silverbell.shtml"
+          },
+          {
+            "label": "Legal parking",
+            "status": "not-cleared",
+            "finding": "No official public visitor parking signed and currently documented",
+            "source": "https://www.fs.usda.gov/r09/hiawatha"
+          },
+          {
+            "label": "Full walking route",
+            "status": "not-cleared",
+            "finding": "No authoritative continuous quarter-mile trail permit or bridge status",
+            "source": "https://gowaterfalling.com/waterfalls/silverbell.shtml"
+          },
+          {
+            "label": "Current restrictions",
+            "status": "not-cleared",
+            "finding": "No 2026 road closure, ice, logging or water conditions confirmed",
+            "source": "https://www.fs.usda.gov/r09/hiawatha"
+          }
+        ]
+      }
     },
     {
       "gisObjectId": 196,
@@ -5071,10 +5120,63 @@
       "curatedId": null,
       "publicGuide": null,
       "landManager": null,
-      "parkingVerified": null,
+      "parkingVerified": false,
       "publicAccessVerified": null,
-      "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "reviewed": "2026-11-01",
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "evidenceReviewed": "2026-11-01",
+      "disposition": "source-backed-research-only-visitor-access-blocked",
+      "publicationEligible": false,
+      "sourceNotes": "Alger County Michigan GIS Chipmunk Falls #205 at 46.669583,-85.955765 matches USGS GNIS #623209 at 46.6697032,-85.9557194 within about 14m. UPtravel calls a different IRON COUNTY site Chipmunk Falls - Amasa near Net River Road and warns no direct trail. Another statewide catalog falsely suggests Wetmore/FR2262 at about 46.2917,-86.5983, more than 40km from Grand Marais natural point. Grand Marais Chamber public waterfall guide does not document this Chipmunk visitor approach. Nothing establishes exact current parcel owner, legal parking or foot route. Do not inherit another Chipmunk's roads.",
+      "outstandingGate": "Current Alger parcel owner/manager, lawful public arrival and marked continuous walking route to GIS #205; confirm Iron County and Wetmore names are separate.",
+      "sourceLinks": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://geo.mytopo.com/feature/michigan/alger/falls/623209/chipmunk-falls/",
+        "https://www.uptravel.com/listing/chipmunk-falls-amasa/723/",
+        "https://michiganupperpeninsula.com/places-to-visit/waterfalls/",
+        "https://grandmaraismichigan.com/visit-us/attractions/waterfalls/"
+      ],
+      "accessRouteAudit": {
+        "outcome": "not-cleared",
+        "segments": [
+          {
+            "label": "Identity",
+            "status": "verified-geography",
+            "finding": "GIS #205 and USGS GNIS #623209 agree ~14m near Grand Marais",
+            "source": "https://geo.mytopo.com/feature/michigan/alger/falls/623209/chipmunk-falls/"
+          },
+          {
+            "label": "Manager / geography",
+            "status": "documented-not-live",
+            "finding": "Amasa Chipmunk is an Iron County name collision not this falls",
+            "source": "https://www.uptravel.com/listing/chipmunk-falls-amasa/723/"
+          },
+          {
+            "label": "Road / historic access",
+            "status": "documented-not-live",
+            "finding": "Wetmore FR2262 coordinates are a separate, nonmatching site",
+            "source": "https://michiganupperpeninsula.com/places-to-visit/waterfalls/"
+          },
+          {
+            "label": "Legal parking",
+            "status": "not-cleared",
+            "finding": "No official land manager/parcel source at Grand Marais point",
+            "source": "https://grandmaraismichigan.com/visit-us/attractions/waterfalls/"
+          },
+          {
+            "label": "Full walking route",
+            "status": "not-cleared",
+            "finding": "No named public parking or complete visitor trail in official town material",
+            "source": "https://grandmaraismichigan.com/visit-us/attractions/waterfalls/"
+          },
+          {
+            "label": "Current restrictions",
+            "status": "not-cleared",
+            "finding": "No current owner consent, crossing condition or seasonal status verified",
+            "source": "https://grandmaraismichigan.com/visit-us/attractions/waterfalls/"
+          }
+        ]
+      }
     },
     {
       "gisObjectId": 207,
@@ -5629,6 +5731,17 @@
       ],
       "publicGuidesAdded": 0,
       "outcome": "Previously indexed Lower Silver guide had explicit landManager.verified=false; retain curated geographic research and full provenance, but noindex/remove sitemap and suppress public parking directions until manager title and legal route are confirmed."
+    },
+    {
+      "batch": "38-mcclure-ferc-private-path-silver-bell-chipmunk",
+      "date": "2026-11-01",
+      "reviewedIds": [
+        160,
+        195,
+        205
+      ],
+      "publicGuidesAdded": 0,
+      "outcome": "FERC 2002 confirms UPPCO McClure visitor lot THEN and private upstream gorge path; MBLP Forestville is different P2589 site. Silver Bell old Hiawatha gate/road not verified. Chipmunk Grand Marais distinct from Amasa and Wetmore. Research-only."
     }
   ]
 }
