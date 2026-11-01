@@ -138,3 +138,83 @@
 .ksc-chronicle-empty{background:#fff;border:1px dashed #bbcdbd;border-radius:12px;padding:20px;color:#405948;line-height:1.6;font-size:14px}
 .ksc-chronicle-footnote{font-size:12px;line-height:1.65;color:#53665a;margin:17px 0 0}
 @media(max-width:700px){.ksc-chronicle{padding:17px 15px}.ksc-chronicle-heading{grid-template-columns:1fr;gap:10px}.ksc-chronicle-event{padding:14px 14px 14px 20px}}
+
+
+/* Space Coast mission-based GIS explorer: a purpose-built geographic decision desk. */
+.geo-engine{margin:20px 0 28px;padding:clamp(16px,2.9vw,32px);background:#f5f8f5;border:1px solid #bfcfc6;border-radius:22px;overflow:hidden}
+.geo-engine-intro{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(235px,.64fr);align-items:center;gap:26px;margin-bottom:20px}
+.geo-engine-intro h3{font-family:Georgia,serif;line-height:1.08;font-size:clamp(26px,3.5vw,39px);margin:6px 0 10px;color:#193e32}
+.geo-engine-intro .eyebrow{font-size:11px;letter-spacing:.13em;font-weight:800;color:#456b54;text-transform:uppercase;margin:0}
+.geo-intro-copy{font-size:14px;line-height:1.65;color:#3d5a4a;max-width:680px;margin:0}
+.geo-pad-card{background:#183c31;color:#fff;border-radius:16px;padding:18px 20px;box-shadow:0 12px 25px rgba(10,50,32,.12)}
+.geo-pad-card .kicker{display:block;color:#b8d3c4;font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+.geo-pad-card strong{font-family:Georgia,serif;display:block;font-size:clamp(19px,2vw,24px);line-height:1.2;margin:8px 0}
+.geo-pad-card p{font-size:12px;line-height:1.5;color:#d8e8e0;margin:0}
+.geo-intent{border:0;padding:0;margin:0}
+.geo-intent legend{font-weight:800;font-size:13px;letter-spacing:.015em;color:#284735;margin-bottom:10px}
+.geo-intent-options{display:flex;gap:8px;flex-wrap:wrap}
+.geo-intent-options label{cursor:pointer}
+.geo-intent-options input{position:absolute;width:1px;height:1px;clip-path:inset(50%);overflow:hidden;white-space:nowrap}
+.geo-intent-options span{display:block;padding:11px 15px;border:1px solid #bdcec3;border-radius:99px;color:#28503b;background:#fff;font-size:13px;font-weight:750;transition:background .2s,border .2s;line-height:1.25}
+.geo-intent-options input:checked+span{background:#244e3d;color:#fff;border-color:#244e3d}
+.geo-intent-options input:focus-visible+span{outline:3px solid #bf8849;outline-offset:3px}
+.geo-intent-explainer{font-size:13px;color:#50655a;line-height:1.6;margin:11px 0 20px}
+.geo-layout{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(330px,.85fr);gap:21px;align-items:start}
+.geo-map-col{min-width:0}
+.geo-map{position:relative;height:clamp(360px,43vw,570px);border:1px solid #bbccc0;border-radius:16px;overflow:hidden;background:linear-gradient(135deg,#dbe8e3,#c4d7d3);isolation:isolate}
+.geo-map .leaflet-control-attribution{font-size:10px!important;background:rgba(255,255,255,.93)!important}
+.geo-map-placeholder{display:grid;place-content:center;height:100%;padding:26px;color:#335f50;text-align:center;font-size:15px;line-height:1.6}
+.geo-map .geo-pin-shell{background:transparent;border:0}
+.geo-map .geo-pin{display:grid;place-content:center;width:34px;height:34px;border:2px solid #fff;border-radius:50% 50% 50% 12px;transform:rotate(-45deg);box-shadow:0 2px 11px #24423355;color:#fff;font-size:17px;font-weight:800;line-height:1}
+.geo-map .geo-pin-view{background:#2f7554}
+.geo-map .geo-pin-entry{background:#48779b}
+.geo-map .geo-pin-pad{background:#c76c36}
+.geo-map .geo-pin-restricted{background:#87544b}
+.geo-map .geo-pin-active{outline:3px solid #eab66d;outline-offset:2px}
+.geo-map .geo-popup strong{font-size:15px;color:#1b3a2b}
+.geo-map .geo-popup p{margin:7px 0;font-size:12px;line-height:1.45;color:#384e40}
+.geo-map-legend{display:flex;gap:12px;align-items:center;flex-wrap:wrap;font-size:11px;font-weight:700;color:#3d5649;padding:14px 2px 6px}
+.geo-map-legend span{display:inline-flex;align-items:center;gap:6px}
+.geo-legend-dot{display:inline-block;border-radius:50%;width:10px;height:10px}
+.geo-legend-dot.geo-view{background:#2f7554}
+.geo-legend-dot.geo-entry{background:#48779b}
+.geo-legend-dot.geo-pad{background:#c76c36}
+.geo-map-status{margin:4px 0 6px;font-weight:750;font-size:12px;line-height:1.55;color:#3e5f4c}
+.geo-map-disclaimer{font-size:12px;line-height:1.65;color:#627166;margin:6px 0 0}
+.geo-choice-heading{display:flex;align-items:start;justify-content:space-between;gap:10px;border-bottom:1px solid #c7d7ca;padding-bottom:12px}
+.geo-choice-heading h4{font-family:Georgia,serif;color:#1f4833;font-size:22px;margin:0}
+.geo-choice-heading span{font-size:11px;color:#526b5a;text-align:right;line-height:1.45;max-width:150px}
+.geo-choice-list{display:grid;gap:11px;padding-top:13px;max-height:clamp(390px,54vw,750px);overflow-y:auto;scrollbar-color:#a7bea9 transparent;overscroll-behavior:contain}
+.geo-choice{background:#fff;border:1px solid #ccdbcf;border-radius:14px;padding:15px 16px}
+.geo-choice[data-active="true"]{border-color:#397950;box-shadow:inset 4px 0 #397950}
+.geo-choice-top{display:flex;gap:10px;align-items:center;font-size:11px;color:#57705d}
+.geo-choice-index{font-weight:850;letter-spacing:.04em;color:#527d63}
+.geo-choice-type{text-transform:uppercase;letter-spacing:.07em;font-weight:750}
+.geo-choice h5{font-family:Georgia,serif;color:#173d2d;font-size:clamp(19px,2.1vw,23px);line-height:1.2;margin:6px 0 9px}
+.geo-choice-state{display:inline-flex;border:1px solid #decfae;color:#735825;background:#fdf8e9;border-radius:7px;padding:5px 9px;font-size:11px;font-weight:750;margin:0 0 10px}
+.geo-choice-state[data-state="candidate"]{color:#285c3e;border-color:#b9d6bd;background:#f0f8ef}
+.geo-choice-state[data-state="closed"],.geo-choice-state[data-state="ineligible"]{color:#824639;border-color:#e3bcb3;background:#fff5f3}
+.geo-choice-measure{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.geo-choice-measure strong{font-size:17px;color:#244f3a}
+.geo-choice-measure span{font-size:12px;font-weight:700;color:#6b6651}
+.geo-choice-summary{font-size:12px;line-height:1.55;color:#566c5d;margin:8px 0}
+.geo-facility-tags{display:flex;gap:5px;flex-wrap:wrap;margin:9px 0}
+.geo-facility-tags span{font-size:10px;font-weight:650;color:#3d6550;background:#edf3ed;padding:4px 7px;border-radius:6px}
+.geo-choice-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}
+.geo-choice-actions .geo-link,.geo-map-focus{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border:1px solid #91b4a0;background:#fff;border-radius:8px;color:#285540;font-size:12px;font-weight:800;line-height:1.35;padding:8px 10px;cursor:pointer}
+.geo-choice-actions .geo-link:hover,.geo-map-focus:hover{background:#e5f0e6}
+.geo-map-focus:focus-visible,.geo-choice-actions .geo-link:focus-visible{outline:3px solid #a77c3b;outline-offset:2px}
+.geo-choice-actions .geo-map-focus{background:#285843;color:#fff;border-color:#285843}
+.geo-choice-actions .geo-map-focus:hover{background:#1b3e30}
+.geo-navigation-caveat{font-size:11px;color:#666f61;line-height:1.55;margin:9px 0 0}
+.geo-unlocated{border:1px dashed #9fb6a5;padding:13px;border-radius:10px;font-size:12px;color:#4f6255;line-height:1.55}
+.geo-unlocated p{margin:7px 0 0}
+.geo-unlocated-names{font-style:italic}
+.geo-policy-desk{display:grid;gap:7px;margin-top:20px;padding:17px 19px;border-left:5px solid #b57b46;background:#fff9ed;border-radius:12px}
+.geo-policy-desk[data-verified="false"]{border-left-color:#96543c;background:#fff5f2}
+.geo-policy-desk strong{font-family:Georgia,serif;font-size:17px;color:#65462c}
+.geo-policy-desk p{font-size:13px;line-height:1.65;color:#5b4e3b;margin:0}
+.geo-policy-desk a{font-size:13px;color:#245d42;font-weight:800}
+.geo-source-note{font-size:12px;color:#586e61;line-height:1.7;margin:15px 0 0}
+@media(max-width:900px){.geo-layout{grid-template-columns:1fr}.geo-choice-list{max-height:none;overflow:visible;grid-template-columns:repeat(2,minmax(0,1fr))}.geo-unlocated{grid-column:1/-1}}
+@media(max-width:650px){.geo-engine{padding:15px 12px;border-radius:15px}.geo-engine-intro{grid-template-columns:1fr;gap:13px}.geo-map{height:380px}.geo-choice-list{grid-template-columns:1fr}.geo-intent-options{gap:6px}.geo-intent-options span{padding:10px 12px;font-size:12px}.geo-pad-card{padding:14px}.geo-choice{padding:13px}.geo-map-legend{gap:9px;font-size:10px}}
