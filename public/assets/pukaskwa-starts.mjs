@@ -85,3 +85,39 @@ export function startAdvice(id,{closed=false,hasApprovedGeometry=false}={}) {
 }
 
 export const EIGHT_DAY_HIKE_IDS = Object.freeze(Object.keys(starts));
+
+
+// Interpretive wayfinding labels on Parks Canada's Hattie Cove campground map.
+// Coordinates are *image pixels* of the printed 1000×761 diagram, NOT geographic
+// positions, signed trailheads or GPS track vertices. The full official park
+// illustration still governs trail choice in the field.
+export const OFFICIAL_CAMPGROUND_MAP = 'https://pcweb2.azureedge.net/-/media/pn-np/on/pukaskwa/activ/2020/Campground_Map_FOR_PRINT_OTENTIKS-ADDITION.jpg';
+export const OFFICIAL_CAMPGROUND_PAGE = 'https://parks.canada.ca/pn-np/on/pukaskwa/activ/camping/avant-front';
+export const OFFICIAL_MAP_LABELS = Object.freeze({
+ 'southern-headland':Object.freeze({x:516,y:730,caption:'Southern Headland name on park campground map'}),
+ 'boardwalk-beach':Object.freeze({x:296,y:728,caption:'Boardwalk Beach name on park campground map'}),
+ 'beach':Object.freeze({x:80,y:205,caption:'Beach Trail name on park campground map'}),
+ 'bimose-kinoomagewnan':Object.freeze({x:494,y:252,caption:'Bimose name on park campground map'}),
+ 'hattie-cove-fire-walk':Object.freeze({x:925,y:371,caption:'Fire Walk / Coastal Hiking Trail name on park campground map'}),
+ 'combination-hike':Object.freeze({x:516,y:730,caption:'Start with Southern Headland name; combination circuit follows park-described sequence'}),
+});
+const closeUpNotes=Object.freeze({
+ 'southern-headland':'At the Visitor Centre day-use area on the southeast edge of the campground drawing, identify the dotted walking path toward the Southern Headland. The labelled name is near the bottom of the map, not a surveyed trailhead pin.',
+ 'boardwalk-beach':'From the Visitor Centre/day-use area, use the established dotted walking paths shown across the south side of the campground toward Horseshoe Bay. Boardwalk Beach is named near the lower edge of this map.',
+ 'beach':'Use the mapped campground walking paths and roadways toward the North Loop and the marked Beach Trail. The Beach Trail label is near the upper left of this close-up; Middle Beach is shown on the larger day-hiking map.',
+ 'bimose-kinoomagewnan':'The Bimose name is printed near the upper campground road and the Halfway Lake area. Follow established park roads and the signed hiking route, not a shortcut through a campsite.',
+ 'hattie-cove-fire-walk':'The Fire Walk via Coastal Hiking Trail is labelled on the east (right) side of the campground map. Begin your visit at the Visitor Centre and use posted path signs; do not infer a footpath across the shoreline.',
+ 'manito-miikana':'Manito Miikana is outside the detailed campground inset. Find it on the larger official Hattie Cove day-hiking map, southwest of Horseshoe Bay.',
+ 'combination-hike':'Parks Canada publishes the order: Visitor Centre → Southern Headland → Horseshoe Beach → Beach Trail → North Loop Campground → Halfway Lake → road back to Visitor Centre. This is an official named itinerary, not a coordinate trace.',
+ 'white-river-bridge':'The Fire Walk/Coastal Trail name on the campground drawing must never be treated as permission to approach the White River bridge while it is reported closed.',
+});
+export function officialMapOrientation(id,{blocked=false}={}){
+ if(!Object.hasOwn(closeUpNotes,id))return null;
+ const label=blocked||id==='white-river-bridge'?null:OFFICIAL_MAP_LABELS[id]||null;
+ return {id,label,description:blocked
+  ? 'This trail is reported closed or season-restricted; the park drawing is historical orientation only. Do not enter based on this map.'
+  : closeUpNotes[id], 
+  imageSource:OFFICIAL_CAMPGROUND_MAP,sourcePage:OFFICIAL_CAMPGROUND_PAGE,
+  signedTrailheadCoordinatesVerified:false,gpsNavigation:false,
+  mappingMeaning:'The highlight marks a printed trail NAME on the official campground diagram, not a confirmed entrance, road crossing, or GPS location.'};
+}
