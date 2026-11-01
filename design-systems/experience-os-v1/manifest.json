@@ -27,7 +27,8 @@
     "docs/CONNECTED_EXPERIENCE_CONTRACT.md",
     "docs/PILOT_LESSONS_V1_2.md",
     "docs/V1_2_OPERATING_KIT.md",
-    "docs/GOOSEBERRY_PILOT_20261031.md"
+    "docs/GOOSEBERRY_PILOT_20261031.md",
+    "docs/PURPOSEFUL_MOTION.md"
   ],
   "templates": [
     "templates/EXPERIENCE_BRIEF.md",
@@ -48,5 +49,6 @@
     "validator": "design-systems/experience-os-v1/lib/release-evidence.mjs",
     "example": "design-systems/experience-os-v1/examples/gooseberry-release-record.json",
     "notes": "Strictly source-only; do not equate passing record checks with browser/production/live or visitor outcome verification"
-  }
+  },
+  "purposefulMotion": "Optional verified-data-bound interaction; see docs/PURPOSEFUL_MOTION.md; requires reduced-motion/manual/data-failure tests"
 }
