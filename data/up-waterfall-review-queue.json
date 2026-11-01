@@ -13,152 +13,152 @@
     {
       "batchNumber": 1,
       "candidates": [
-        37,
-        39,
-        40,
-        48,
-        58,
         63,
         65,
-        69
+        69,
+        70,
+        74,
+        75,
+        42,
+        80
       ]
     },
     {
       "batchNumber": 2,
       "candidates": [
-        70,
-        74,
-        75,
-        42,
-        80,
         85,
         129,
-        15
+        15,
+        17,
+        144,
+        18,
+        116,
+        127
       ]
     },
     {
       "batchNumber": 3,
       "candidates": [
-        17,
-        144,
-        18,
-        116,
-        127,
         148,
         153,
-        162
+        162,
+        163,
+        169,
+        170,
+        173,
+        175
       ]
     },
     {
       "batchNumber": 4,
       "candidates": [
-        163,
-        169,
-        170,
-        173,
-        175,
         180,
         181,
-        183
+        183,
+        184,
+        185,
+        186,
+        187,
+        22
       ]
     },
     {
       "batchNumber": 5,
       "candidates": [
-        184,
-        185,
-        186,
-        187,
-        22,
         28,
         54,
-        57
+        57,
+        60,
+        61,
+        62,
+        72,
+        84
       ]
     },
     {
       "batchNumber": 6,
       "candidates": [
-        60,
-        61,
-        62,
-        72,
-        84,
         106,
         122,
-        51
+        51,
+        120,
+        136,
+        137,
+        139,
+        140
       ]
     },
     {
       "batchNumber": 7,
       "candidates": [
-        120,
-        136,
-        137,
-        139,
-        140,
         152,
         176,
-        177
+        177,
+        23,
+        213,
+        68,
+        8,
+        38
       ]
     },
     {
       "batchNumber": 8,
       "candidates": [
-        23,
-        213,
-        68,
-        8,
-        38,
         12,
         4,
-        9
+        9,
+        191,
+        192,
+        46,
+        91,
+        119
       ]
     },
     {
       "batchNumber": 9,
       "candidates": [
-        191,
-        192,
-        46,
-        91,
-        119,
         190,
         45,
-        150
+        150,
+        151,
+        154,
+        160,
+        215,
+        195
       ]
     },
     {
       "batchNumber": 10,
       "candidates": [
-        151,
-        154,
-        160,
-        215,
-        195,
         205,
         52,
-        59
+        59,
+        83,
+        99,
+        103,
+        105,
+        107
       ]
     },
     {
       "batchNumber": 11,
       "candidates": [
-        83,
-        99,
-        103,
-        105,
-        107,
         114,
         121,
-        123
+        123,
+        20,
+        24,
+        25,
+        37,
+        39
       ]
     },
     {
       "batchNumber": 12,
       "candidates": [
-        20,
-        24,
-        25,
+        40,
+        48,
+        58,
         86,
         112,
         29,
@@ -168,86 +168,6 @@
     }
   ],
   "candidates": [
-    {
-      "gisObjectId": 37,
-      "name": "Neepikon Falls",
-      "county": "GOGEBIC",
-      "river": "BLACK RIVER",
-      "lat": 46.490065,
-      "lng": -89.995318,
-      "cluster": "GOGEBIC / BLACK RIVER",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 39,
-      "name": "Powder Horn Falls",
-      "county": "GOGEBIC",
-      "river": "POWDER MILL CREEK",
-      "lat": 46.505974,
-      "lng": -90.081969,
-      "cluster": "GOGEBIC / POWDER MILL CREEK",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 40,
-      "name": "Rocky Forty Falls",
-      "county": "GOGEBIC",
-      "river": "SIEMENS CREEK",
-      "lat": 46.508451,
-      "lng": -90.119916,
-      "cluster": "GOGEBIC / SIEMENS CREEK",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 48,
-      "name": "Narrow Falls",
-      "county": "GOGEBIC",
-      "river": "BLACK RIVER",
-      "lat": 46.562534,
-      "lng": -90.081582,
-      "cluster": "GOGEBIC / BLACK RIVER",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 58,
-      "name": "Chippewa Falls",
-      "county": "GOGEBIC",
-      "river": "BLACK RIVER",
-      "lat": 46.598393,
-      "lng": -90.083372,
-      "cluster": "GOGEBIC / BLACK RIVER",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
     {
       "gisObjectId": 63,
       "name": "Algonquin Falls",
@@ -1623,6 +1543,86 @@
       "reviewStatus": "previous-research-needs-public-access-review",
       "sourceCount": 10,
       "blockingGate": "Obtain independently official public visitor trail/lot evidence; current USFS EDW published-trails layer within 1,000m returned no listed trails. Reconcile the claimed NFST 7418-D with authoritative geometry, parcel/land title, public parking and continuous permitted route before promoting."
+    },
+    {
+      "gisObjectId": 37,
+      "name": "Neepikon Falls",
+      "county": "GOGEBIC",
+      "river": "BLACK RIVER",
+      "lat": 46.490065,
+      "lng": -89.995318,
+      "cluster": "GOGEBIC / BLACK RIVER",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 10,
+      "blockingGate": "First resolve natural point #37 versus historic Neepikon naming and whether to classify as a sub-waterfall rapid. Verify actual county/federal ownership and an official parking-to-view public footpath. If absent, retain as geographic research rather than issue a visitor guide."
+    },
+    {
+      "gisObjectId": 39,
+      "name": "Powder Horn Falls",
+      "county": "GOGEBIC",
+      "river": "POWDER MILL CREEK",
+      "lat": 46.505974,
+      "lng": -90.081969,
+      "cluster": "GOGEBIC / POWDER MILL CREEK",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 10,
+      "blockingGate": "Obtain Gogebic Equalization title at the natural falls, old-lodge parking parcel and every portion of footpath; verify signed public lot and permitted upper-only viewpoint, property access and gorge hazard restrictions. Do not recommend rope-assisted descent or a private driveway."
+    },
+    {
+      "gisObjectId": 40,
+      "name": "Rocky Forty Falls",
+      "county": "GOGEBIC",
+      "river": "SIEMENS CREEK",
+      "lat": 46.508451,
+      "lng": -90.119916,
+      "cluster": "GOGEBIC / SIEMENS CREEK",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 10,
+      "blockingGate": "Resolve exact Siemens Creek waterfall and GNIS name, get parcel ownership and any federally mapped trail, legal public roadway/parking and verifiable complete footpath; reject County Road 527 near-Watersmeet directions unless independently proven to correspond to this natural feature."
+    },
+    {
+      "gisObjectId": 48,
+      "name": "Narrow Falls",
+      "county": "GOGEBIC",
+      "river": "BLACK RIVER",
+      "lat": 46.562534,
+      "lng": -90.081582,
+      "cluster": "GOGEBIC / BLACK RIVER",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 10,
+      "blockingGate": "Reconcile Narrow/Narrows identity, class as a low-relief river rapid, confirm actual county/USFS land and signed parking/trail before ever considering a public visitor entry. Do not attach the seven-kilometer-off generic location and 10-foot height claim."
+    },
+    {
+      "gisObjectId": 58,
+      "name": "Chippewa Falls",
+      "county": "GOGEBIC",
+      "river": "BLACK RIVER",
+      "lat": 46.598393,
+      "lng": -90.083372,
+      "cluster": "GOGEBIC / BLACK RIVER",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 10,
+      "blockingGate": "Obtain parcel-level ownership and a legal signed trailhead/parking for the exact riverbank, verify whether NFST-128-B has a continuous official pedestrian connection and safe viewpoint, and check current Copper Peak access restrictions. No powerline shortcut or private parking guidance."
     },
     {
       "gisObjectId": 86,

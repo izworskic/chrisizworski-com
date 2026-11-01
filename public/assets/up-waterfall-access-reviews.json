@@ -3015,6 +3015,506 @@
           }
         ]
       }
+    },
+    {
+      "gisObjectId": 37,
+      "name": "Neepikon Falls",
+      "county": "GOGEBIC",
+      "status": "research-only-insignificant-rapid-or-name-location-conflict",
+      "publicAccess": "not-established-continuously",
+      "publicationEligible": false,
+      "title": "Neepikon Falls: geographic identity and access research",
+      "summary": "Michigan state GIS #37 (46.490065,-89.995318) is approximately 477m south of the independent field-mapped Neepikon rapids (46.49433,-89.99471). World Waterfall Database specifically disqualifies it as a significant waterfall and notes a historical topographic-name/location mismatch. Preserve both source identities without automatically reconciling to one tourist stop. Field account describes a half-foot riffle and a difficult, overgrown, unmarked approach off Blackjack Road, not an official tourist trail. USFS published-trails spatial query within 1km returns a named snowmobile trail (Bergland Snowmobile #11 N), not an identified walking route to Neepikon; it does not justify using its track or a gas utility road as a waterfall approach.",
+      "guidance": "This is a named geographic feature, not a verified public waterfall stop. Do not use its natural GPS point as a car destination; do not assume an old lodge, utility corridor, logging road, forest trail or riverbank crossing is open to the public.",
+      "reviewLimitations": "DNR state ownership/easement point queries are not county title, Forest Service tract or walking-easement searches. A national forest trail near a feature does not prove a legal park-to-falls route. Historic waterfall and online tourism claims conflict, especially for the Neepikon and Rocky Forty features.",
+      "nextEvidence": "First resolve natural point #37 versus historic Neepikon naming and whether to classify as a sub-waterfall rapid. Verify actual county/federal ownership and an official parking-to-view public footpath. If absent, retain as geographic research rather than issue a visitor guide.",
+      "researchPage": "/upper-peninsula-waterfalls/research/neepikon-falls/",
+      "sourceLinks": [
+        {
+          "label": "Michigan named waterfalls GIS",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "Independent feature source",
+          "url": "https://www.waterfallsofthekeweenaw.com/gogebic-black-river/neepikon-falls/"
+        },
+        {
+          "label": "Secondary field/tourism source",
+          "url": "https://www.worldwaterfalldatabase.com/index.php/waterfall/Neepikon-Falls-13235"
+        },
+        {
+          "label": "Additional context",
+          "url": "https://waterfallsamerica.com/waterfalls/neepikon-falls-mi-1620993/"
+        },
+        {
+          "label": "USDA published National Forest trails radius check",
+          "url": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_TrailNFSPublish_01/MapServer/0/query?geometry=-89.995318%2C46.490065&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=1000&units=esriSRUnit_Meter&outFields=TRAIL_NO,TRAIL_NAME,TRAIL_CLASS,ADMIN_ORG,MANAGING_ORG&returnGeometry=false&f=pjson"
+        },
+        {
+          "label": "Michigan DNR state parcel intersects",
+          "url": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-89.995318%2C46.490065&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson"
+        },
+        {
+          "label": "Michigan DNR conservation-easement intersects",
+          "url": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/9/query?geometry=-89.995318%2C46.490065&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson"
+        },
+        {
+          "label": "Official Ottawa National Forest overview",
+          "url": "https://www.fs.usda.gov/r09/ottawa"
+        },
+        {
+          "label": "Western U.P. county GIS",
+          "url": "https://www.wuppdr.org/gis"
+        },
+        {
+          "label": "USFS PADUS managed-ownership parcel intersection at natural GIS point",
+          "url": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_PADUS_01/MapServer/3/query?geometry=-89.995318%2C46.490065&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=OBJECTID,OWN_NAME,LOC_OWN,MANG_NAME,LOC_MANG,UNIT_NM,STATE_NM,SRC_DATE,OWN_TYPE&returnGeometry=false&f=pjson"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-11-01",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Geography and meaningful waterfall identity",
+            "status": "identity-location-conflict",
+            "finding": "Michigan state GIS #37 (46.490065,-89.995318) is approximately 477m south of the independent field-mapped Neepikon rapids (46.49433,-89.99471). World Waterfall Database specifically disqualifies it as a significant waterfall and notes a historical topographic-name/location mismatch. Preserve both source identities without automatically reconciling to one tourist stop.",
+            "source": "https://www.waterfallsofthekeweenaw.com/gogebic-black-river/neepikon-falls/"
+          },
+          {
+            "label": "Parcel title and responsible manager",
+            "status": "not-cleared",
+            "finding": "DNR state parcel/easement GIS point queries returned no intersecting state record; this is neither a public-title nor a private-title determination. Present Black River riverbank parcels are not mapped. USFS PADUS managed surface ownership point query returned NO intersecting federal polygon at the exact GIS natural feature. Combined with empty Michigan DNR LOTS checks, parcel ownership is still unknown; this does not prove private ownership.",
+            "source": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-89.995318%2C46.490065&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson"
+          },
+          {
+            "label": "Historic visitor approach",
+            "status": "documented-not-live",
+            "finding": "Field account describes a half-foot riffle and a difficult, overgrown, unmarked approach off Blackjack Road, not an official tourist trail. USFS published-trails spatial query within 1km returns a named snowmobile trail (Bergland Snowmobile #11 N), not an identified walking route to Neepikon; it does not justify using its track or a gas utility road as a waterfall approach.",
+            "source": "https://www.waterfallsofthekeweenaw.com/gogebic-black-river/neepikon-falls/"
+          },
+          {
+            "label": "Authorized parking",
+            "status": "not-cleared",
+            "finding": "No signed parking/easement at a precise legal visitor entrance is established. Historical lodge lots, utility clearings, shoulder camps, or informal two-tracks are not parking approvals.",
+            "source": "https://www.wuppdr.org/gis"
+          },
+          {
+            "label": "Full lawful walking trail and viewpoint",
+            "status": "not-cleared",
+            "finding": "USDA FS EDW query within 1 km returned BERGLAND SNOWMOBILE #11 N (trail #60033), which does not establish a legal waterfall pedestrian route. No legal, continuous visitor route from proven parking to a safe viewpoint has been independently verified.",
+            "source": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_TrailNFSPublish_01/MapServer/0/query?geometry=-89.995318%2C46.490065&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=1000&units=esriSRUnit_Meter&outFields=TRAIL_NO,TRAIL_NAME,TRAIL_CLASS,ADMIN_ORG,MANAGING_ORG&returnGeometry=false&f=pjson"
+          },
+          {
+            "label": "Current site restrictions",
+            "status": "not-cleared",
+            "finding": "No current November 2026 closure, road maintenance, parcel consent or viewpoint condition independently confirms a safe visit. Ottawa Forest's developed Black River waterfall routes are separate destinations.",
+            "source": "https://www.fs.usda.gov/r09/ottawa"
+          }
+        ]
+      }
+    },
+    {
+      "gisObjectId": 39,
+      "name": "Powder Horn Falls",
+      "county": "GOGEBIC",
+      "status": "research-only-geography-verified-public-route-unknown",
+      "publicAccess": "not-established-continuously",
+      "publicationEligible": false,
+      "title": "Powder Horn Falls: geographic identity and access research",
+      "summary": "Michigan GIS #39 at 46.505974,-90.081969 is approximately 3m from the field documented Powderhorn Falls at 46.50595,-90.08195. UP Travel names and describes it. Other mass-generated lists place their 'Powder Horn' parking point about 1.4km away, so the location is a falls location only, never a navigation lot. Older field directions suggest parking at a former lodge and following a barely marked path past private driveways, then a rope-assisted lower gorge descent. A current October 2026 MLS #50224628 describes privately owned Powdermill Creek frontage adjoining a neighboring waterfall property; it does NOT independently establish ownership of GIS #39, but reinforces the need for parcel-specific and parking consent. UP Travel's generic road address is not a signed trailhead.",
+      "guidance": "This is a named geographic feature, not a verified public waterfall stop. Do not use its natural GPS point as a car destination; do not assume an old lodge, utility corridor, logging road, forest trail or riverbank crossing is open to the public.",
+      "reviewLimitations": "DNR state ownership/easement point queries are not county title, Forest Service tract or walking-easement searches. A national forest trail near a feature does not prove a legal park-to-falls route. Historic waterfall and online tourism claims conflict, especially for the Neepikon and Rocky Forty features.",
+      "nextEvidence": "Obtain Gogebic Equalization title at the natural falls, old-lodge parking parcel and every portion of footpath; verify signed public lot and permitted upper-only viewpoint, property access and gorge hazard restrictions. Do not recommend rope-assisted descent or a private driveway.",
+      "researchPage": "/upper-peninsula-waterfalls/research/powder-horn-falls/",
+      "sourceLinks": [
+        {
+          "label": "Michigan named waterfalls GIS",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "Independent feature source",
+          "url": "https://www.waterfallsofthekeweenaw.com/powder-mill-creek/powerdorn-horn-falls/"
+        },
+        {
+          "label": "Secondary field/tourism source",
+          "url": "https://www.uptravel.com/listing/powderhorn-falls/5815/"
+        },
+        {
+          "label": "Additional context",
+          "url": "https://www.remaxnorthcountrymi.com/property/138-50224628-tbd-powderhorn-road-bessemer-MI-49911"
+        },
+        {
+          "label": "USDA published National Forest trails radius check",
+          "url": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_TrailNFSPublish_01/MapServer/0/query?geometry=-90.081969%2C46.505974&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=1000&units=esriSRUnit_Meter&outFields=TRAIL_NO,TRAIL_NAME,TRAIL_CLASS,ADMIN_ORG,MANAGING_ORG&returnGeometry=false&f=pjson"
+        },
+        {
+          "label": "Michigan DNR state parcel intersects",
+          "url": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-90.081969%2C46.505974&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson"
+        },
+        {
+          "label": "Michigan DNR conservation-easement intersects",
+          "url": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/9/query?geometry=-90.081969%2C46.505974&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson"
+        },
+        {
+          "label": "Official Ottawa National Forest overview",
+          "url": "https://www.fs.usda.gov/r09/ottawa"
+        },
+        {
+          "label": "Western U.P. county GIS",
+          "url": "https://www.wuppdr.org/gis"
+        },
+        {
+          "label": "USFS PADUS managed-ownership parcel intersection at natural GIS point",
+          "url": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_PADUS_01/MapServer/3/query?geometry=-90.081969%2C46.505974&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=OBJECTID,OWN_NAME,LOC_OWN,MANG_NAME,LOC_MANG,UNIT_NM,STATE_NM,SRC_DATE,OWN_TYPE&returnGeometry=false&f=pjson"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-11-01",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Geography and meaningful waterfall identity",
+            "status": "documented-geography",
+            "finding": "Michigan GIS #39 at 46.505974,-90.081969 is approximately 3m from the field documented Powderhorn Falls at 46.50595,-90.08195. UP Travel names and describes it. Other mass-generated lists place their 'Powder Horn' parking point about 1.4km away, so the location is a falls location only, never a navigation lot.",
+            "source": "https://www.waterfallsofthekeweenaw.com/powder-mill-creek/powerdorn-horn-falls/"
+          },
+          {
+            "label": "Parcel title and responsible manager",
+            "status": "not-cleared",
+            "finding": "DNR public state-owned parcel/easement point query returned no record; actual Bessemer Township title, current lodge/neighbor access and right-of-way remain unknown. USFS PADUS managed surface ownership point query returned NO intersecting federal polygon at the exact GIS natural feature. Combined with empty Michigan DNR LOTS checks, parcel ownership is still unknown; this does not prove private ownership.",
+            "source": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-90.081969%2C46.505974&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson"
+          },
+          {
+            "label": "Historic visitor approach",
+            "status": "documented-not-live",
+            "finding": "Older field directions suggest parking at a former lodge and following a barely marked path past private driveways, then a rope-assisted lower gorge descent. A current October 2026 MLS #50224628 describes privately owned Powdermill Creek frontage adjoining a neighboring waterfall property; it does NOT independently establish ownership of GIS #39, but reinforces the need for parcel-specific and parking consent. UP Travel's generic road address is not a signed trailhead.",
+            "source": "https://www.waterfallsofthekeweenaw.com/powder-mill-creek/powerdorn-horn-falls/"
+          },
+          {
+            "label": "Authorized parking",
+            "status": "not-cleared",
+            "finding": "No signed parking/easement at a precise legal visitor entrance is established. Historical lodge lots, utility clearings, shoulder camps, or informal two-tracks are not parking approvals.",
+            "source": "https://www.wuppdr.org/gis"
+          },
+          {
+            "label": "Full lawful walking trail and viewpoint",
+            "status": "not-cleared",
+            "finding": "USDA FS EDW official published trails search within 1km found no trail segment for this waterfall. This does not prove no path or that every land parcel is non-federal. No legal, continuous visitor route from proven parking to a safe viewpoint has been independently verified.",
+            "source": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_TrailNFSPublish_01/MapServer/0/query?geometry=-90.081969%2C46.505974&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=1000&units=esriSRUnit_Meter&outFields=TRAIL_NO,TRAIL_NAME,TRAIL_CLASS,ADMIN_ORG,MANAGING_ORG&returnGeometry=false&f=pjson"
+          },
+          {
+            "label": "Current site restrictions",
+            "status": "not-cleared",
+            "finding": "No current November 2026 closure, road maintenance, parcel consent or viewpoint condition independently confirms a safe visit. Ottawa Forest's developed Black River waterfall routes are separate destinations.",
+            "source": "https://www.fs.usda.gov/r09/ottawa"
+          }
+        ]
+      }
+    },
+    {
+      "gisObjectId": 40,
+      "name": "Rocky Forty Falls",
+      "county": "GOGEBIC",
+      "status": "research-only-geography-verified-public-route-unknown",
+      "publicAccess": "not-established-continuously",
+      "publicationEligible": false,
+      "title": "Rocky Forty Falls: geographic identity and access research",
+      "summary": "Michigan GIS #40 at 46.508451,-90.119916 is approximately 145m from a GNIS-derived reference 46.507222,-90.120556. A highly confident online 'easy' guide instead sends users to County Road 527 near Watersmeet at 46.3142,-89.2625, about 69.2km away. Its road, walk and 'Upper Rocky Forty' claim must NOT be attached to source #40. One recent research guide explicitly cannot confirm a public approach and suspects private surrounding land. A contradictory mass-generated source claims an easy 0.6-mile walk and roadside parking but locates the falls nearly 70km away. No reliable official trailhead, county access rights or maintained walking path is established.",
+      "guidance": "This is a named geographic feature, not a verified public waterfall stop. Do not use its natural GPS point as a car destination; do not assume an old lodge, utility corridor, logging road, forest trail or riverbank crossing is open to the public.",
+      "reviewLimitations": "DNR state ownership/easement point queries are not county title, Forest Service tract or walking-easement searches. A national forest trail near a feature does not prove a legal park-to-falls route. Historic waterfall and online tourism claims conflict, especially for the Neepikon and Rocky Forty features.",
+      "nextEvidence": "Resolve exact Siemens Creek waterfall and GNIS name, get parcel ownership and any federally mapped trail, legal public roadway/parking and verifiable complete footpath; reject County Road 527 near-Watersmeet directions unless independently proven to correspond to this natural feature.",
+      "researchPage": "/upper-peninsula-waterfalls/research/rocky-forty-falls/",
+      "sourceLinks": [
+        {
+          "label": "Michigan named waterfalls GIS",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "Independent feature source",
+          "url": "https://waterfallhikes.com/waterfalls/rocky-forty-falls-near-ironwood-in-mi"
+        },
+        {
+          "label": "Secondary field/tourism source",
+          "url": "https://upper-michigan.com/guide/waterfalls/rocky-forty-falls.html"
+        },
+        {
+          "label": "Additional context",
+          "url": "https://waterfallsamerica.com/waterfalls/rocky-forty-falls-mi-2126320/"
+        },
+        {
+          "label": "USDA published National Forest trails radius check",
+          "url": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_TrailNFSPublish_01/MapServer/0/query?geometry=-90.119916%2C46.508451&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=1000&units=esriSRUnit_Meter&outFields=TRAIL_NO,TRAIL_NAME,TRAIL_CLASS,ADMIN_ORG,MANAGING_ORG&returnGeometry=false&f=pjson"
+        },
+        {
+          "label": "Michigan DNR state parcel intersects",
+          "url": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-90.119916%2C46.508451&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson"
+        },
+        {
+          "label": "Michigan DNR conservation-easement intersects",
+          "url": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/9/query?geometry=-90.119916%2C46.508451&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson"
+        },
+        {
+          "label": "Official Ottawa National Forest overview",
+          "url": "https://www.fs.usda.gov/r09/ottawa"
+        },
+        {
+          "label": "Western U.P. county GIS",
+          "url": "https://www.wuppdr.org/gis"
+        },
+        {
+          "label": "USFS PADUS managed-ownership parcel intersection at natural GIS point",
+          "url": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_PADUS_01/MapServer/3/query?geometry=-90.119916%2C46.508451&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=OBJECTID,OWN_NAME,LOC_OWN,MANG_NAME,LOC_MANG,UNIT_NM,STATE_NM,SRC_DATE,OWN_TYPE&returnGeometry=false&f=pjson"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-11-01",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Geography and meaningful waterfall identity",
+            "status": "documented-geography",
+            "finding": "Michigan GIS #40 at 46.508451,-90.119916 is approximately 145m from a GNIS-derived reference 46.507222,-90.120556. A highly confident online 'easy' guide instead sends users to County Road 527 near Watersmeet at 46.3142,-89.2625, about 69.2km away. Its road, walk and 'Upper Rocky Forty' claim must NOT be attached to source #40.",
+            "source": "https://waterfallhikes.com/waterfalls/rocky-forty-falls-near-ironwood-in-mi"
+          },
+          {
+            "label": "Parcel title and responsible manager",
+            "status": "not-cleared",
+            "finding": "State DNR parcels/easements query has no intersect. This cannot determine owner, Forest Service parcel or public easement on Siemens Creek. USFS PADUS managed surface ownership point query returned NO intersecting federal polygon at the exact GIS natural feature. Combined with empty Michigan DNR LOTS checks, parcel ownership is still unknown; this does not prove private ownership.",
+            "source": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-90.119916%2C46.508451&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson"
+          },
+          {
+            "label": "Historic visitor approach",
+            "status": "documented-not-live",
+            "finding": "One recent research guide explicitly cannot confirm a public approach and suspects private surrounding land. A contradictory mass-generated source claims an easy 0.6-mile walk and roadside parking but locates the falls nearly 70km away. No reliable official trailhead, county access rights or maintained walking path is established.",
+            "source": "https://waterfallhikes.com/waterfalls/rocky-forty-falls-near-ironwood-in-mi"
+          },
+          {
+            "label": "Authorized parking",
+            "status": "not-cleared",
+            "finding": "No signed parking/easement at a precise legal visitor entrance is established. Historical lodge lots, utility clearings, shoulder camps, or informal two-tracks are not parking approvals.",
+            "source": "https://www.wuppdr.org/gis"
+          },
+          {
+            "label": "Full lawful walking trail and viewpoint",
+            "status": "not-cleared",
+            "finding": "USDA FS EDW official published trails query within 1km returned zero trails. No certified maintained walking route shown. No legal, continuous visitor route from proven parking to a safe viewpoint has been independently verified.",
+            "source": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_TrailNFSPublish_01/MapServer/0/query?geometry=-90.119916%2C46.508451&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=1000&units=esriSRUnit_Meter&outFields=TRAIL_NO,TRAIL_NAME,TRAIL_CLASS,ADMIN_ORG,MANAGING_ORG&returnGeometry=false&f=pjson"
+          },
+          {
+            "label": "Current site restrictions",
+            "status": "not-cleared",
+            "finding": "No current November 2026 closure, road maintenance, parcel consent or viewpoint condition independently confirms a safe visit. Ottawa Forest's developed Black River waterfall routes are separate destinations.",
+            "source": "https://www.fs.usda.gov/r09/ottawa"
+          }
+        ]
+      }
+    },
+    {
+      "gisObjectId": 48,
+      "name": "Narrow Falls",
+      "county": "GOGEBIC",
+      "status": "research-only-insignificant-rapid-or-name-location-conflict",
+      "publicAccess": "not-established-continuously",
+      "publicationEligible": false,
+      "title": "Narrow Falls: geographic identity and access research",
+      "summary": "State GIS #48 'Narrow Falls' at 46.562534,-90.081582 is approximately 63m from independent 'Narrows Falls' point 46.56304,-90.08122. Field survey calls it a submerged-rock ripple of around 3 inches, while generalized tourism lists repeatedly ascribe a 10-foot waterfall/steep scramble to a point around 46.6264,-90.0483, about 7.5km farther north. These cannot be treated as identical visitor destinations. Historical account mentions an informal roadside campsite, unsurveyed small clearing and muddy fishing path, but gives no agency permission to park or a designated public route. Official Ottawa visitor materials describe five maintained Black River Scenic Byway waterfalls, not this tiny rapids feature. USFS PADUS managed surface ownership polygon OBJECTID 120 intersects the exact Michigan GIS waterfall point. The October 30, 2026 source attributes the land to USDA Forest Service, Ottawa National Forest. This establishes ownership at the natural point only, not a legal public parking site, shoreline crossing or continuous footpath.",
+      "guidance": "This is a named geographic feature, not a verified public waterfall stop. Do not use its natural GPS point as a car destination; do not assume an old lodge, utility corridor, logging road, forest trail or riverbank crossing is open to the public.",
+      "reviewLimitations": "DNR state ownership/easement point queries are not county title, Forest Service tract or walking-easement searches. A national forest trail near a feature does not prove a legal park-to-falls route. Historic waterfall and online tourism claims conflict, especially for the Neepikon and Rocky Forty features. Federal title at the natural point does not establish signed parking or passage from a road to the waterfall.",
+      "nextEvidence": "Reconcile Narrow/Narrows identity, class as a low-relief river rapid, confirm actual county/USFS land and signed parking/trail before ever considering a public visitor entry. Do not attach the seven-kilometer-off generic location and 10-foot height claim.",
+      "researchPage": "/upper-peninsula-waterfalls/research/narrow-falls/",
+      "sourceLinks": [
+        {
+          "label": "Michigan named waterfalls GIS",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "Independent feature source",
+          "url": "https://www.waterfallsofthekeweenaw.com/gogebic-black-river/narrows-falls/"
+        },
+        {
+          "label": "Secondary field/tourism source",
+          "url": "https://michiganupperpeninsula.com/places-to-visit/waterfalls/"
+        },
+        {
+          "label": "Official Ottawa National Forest overview",
+          "url": "https://www.fs.usda.gov/r09/ottawa"
+        },
+        {
+          "label": "USDA published National Forest trails radius check",
+          "url": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_TrailNFSPublish_01/MapServer/0/query?geometry=-90.081582%2C46.562534&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=1000&units=esriSRUnit_Meter&outFields=TRAIL_NO,TRAIL_NAME,TRAIL_CLASS,ADMIN_ORG,MANAGING_ORG&returnGeometry=false&f=pjson"
+        },
+        {
+          "label": "Michigan DNR state parcel intersects",
+          "url": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-90.081582%2C46.562534&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson"
+        },
+        {
+          "label": "Michigan DNR conservation-easement intersects",
+          "url": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/9/query?geometry=-90.081582%2C46.562534&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson"
+        },
+        {
+          "label": "Official Ottawa National Forest overview",
+          "url": "https://www.fs.usda.gov/r09/ottawa"
+        },
+        {
+          "label": "Western U.P. county GIS",
+          "url": "https://www.wuppdr.org/gis"
+        },
+        {
+          "label": "USFS PADUS managed-ownership parcel intersection at natural GIS point",
+          "url": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_PADUS_01/MapServer/3/query?geometry=-90.081582%2C46.562534&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=OBJECTID,OWN_NAME,LOC_OWN,MANG_NAME,LOC_MANG,UNIT_NM,STATE_NM,SRC_DATE,OWN_TYPE&returnGeometry=false&f=pjson"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-11-01",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Geography and meaningful waterfall identity",
+            "status": "documented-geography",
+            "finding": "State GIS #48 'Narrow Falls' at 46.562534,-90.081582 is approximately 63m from independent 'Narrows Falls' point 46.56304,-90.08122. Field survey calls it a submerged-rock ripple of around 3 inches, while generalized tourism lists repeatedly ascribe a 10-foot waterfall/steep scramble to a point around 46.6264,-90.0483, about 7.5km farther north. These cannot be treated as identical visitor destinations.",
+            "source": "https://www.waterfallsofthekeweenaw.com/gogebic-black-river/narrows-falls/"
+          },
+          {
+            "label": "Official federal land at natural falls",
+            "status": "verified-geography",
+            "finding": "USFS PADUS managed surface ownership polygon OBJECTID 120 intersects the exact Michigan GIS waterfall point. The October 30, 2026 source attributes the land to USDA Forest Service, Ottawa National Forest. This establishes ownership at the natural point only, not a legal public parking site, shoreline crossing or continuous footpath.",
+            "source": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_PADUS_01/MapServer/3/query?geometry=-90.081582%2C46.562534&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=OBJECTID,OWN_NAME,LOC_OWN,MANG_NAME,LOC_MANG,UNIT_NM,STATE_NM,SRC_DATE,OWN_TYPE&returnGeometry=false&f=pjson"
+          },
+          {
+            "label": "Historic visitor approach",
+            "status": "documented-not-live",
+            "finding": "Historical account mentions an informal roadside campsite, unsurveyed small clearing and muddy fishing path, but gives no agency permission to park or a designated public route. Official Ottawa visitor materials describe five maintained Black River Scenic Byway waterfalls, not this tiny rapids feature.",
+            "source": "https://www.waterfallsofthekeweenaw.com/gogebic-black-river/narrows-falls/"
+          },
+          {
+            "label": "Authorized parking",
+            "status": "not-cleared",
+            "finding": "No signed parking/easement at a precise legal visitor entrance is established. Historical lodge lots, utility clearings, shoulder camps, or informal two-tracks are not parking approvals.",
+            "source": "https://www.wuppdr.org/gis"
+          },
+          {
+            "label": "Full lawful walking trail and viewpoint",
+            "status": "not-cleared",
+            "finding": "USDA FS EDW published-trails query within 1km found no official trail line, though informal fishing paths may exist. No legal, continuous visitor route from proven parking to a safe viewpoint has been independently verified.",
+            "source": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_TrailNFSPublish_01/MapServer/0/query?geometry=-90.081582%2C46.562534&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=1000&units=esriSRUnit_Meter&outFields=TRAIL_NO,TRAIL_NAME,TRAIL_CLASS,ADMIN_ORG,MANAGING_ORG&returnGeometry=false&f=pjson"
+          },
+          {
+            "label": "Current site restrictions",
+            "status": "not-cleared",
+            "finding": "No current November 2026 closure, road maintenance, parcel consent or viewpoint condition independently confirms a safe visit. Ottawa Forest's developed Black River waterfall routes are separate destinations.",
+            "source": "https://www.fs.usda.gov/r09/ottawa"
+          }
+        ]
+      }
+    },
+    {
+      "gisObjectId": 58,
+      "name": "Chippewa Falls",
+      "county": "GOGEBIC",
+      "status": "research-only-geography-verified-public-route-unknown",
+      "publicAccess": "not-established-continuously",
+      "publicationEligible": false,
+      "title": "Chippewa Falls: geographic identity and access research",
+      "summary": "Michigan GIS #58 at 46.598393,-90.083372 is ~15m from the field specialist's Chippewa Falls at 46.59853,-90.08335. It is described there as ~2-foot rapids; another visitor aggregation calls it a much taller drop. Keep measured significance conservative, do not inherit an unverified advertised height. Historic report leads from the Copper Peak tourist road, a dilapidated building and powerline corridor, then informal descent to the river. Another research source describes west-bank Copper Peak private land and east-bank Ottawa National Forest, but the exact intersect/approach parcel boundary has not been independently confirmed. The official FS published trails layer contains NFST-128-B within 1km, which does NOT prove a signed complete route to this waterfall or permit crossing Copper Peak property. USFS PADUS managed surface ownership polygon OBJECTID 120 intersects the exact Michigan GIS waterfall point. The October 30, 2026 source attributes the land to USDA Forest Service, Ottawa National Forest. This establishes ownership at the natural point only, not a legal public parking site, shoreline crossing or continuous footpath.",
+      "guidance": "This is a named geographic feature, not a verified public waterfall stop. Do not use its natural GPS point as a car destination; do not assume an old lodge, utility corridor, logging road, forest trail or riverbank crossing is open to the public.",
+      "reviewLimitations": "DNR state ownership/easement point queries are not county title, Forest Service tract or walking-easement searches. A national forest trail near a feature does not prove a legal park-to-falls route. Historic waterfall and online tourism claims conflict, especially for the Neepikon and Rocky Forty features. Federal title at the natural point does not establish signed parking or passage from a road to the waterfall.",
+      "nextEvidence": "Obtain parcel-level ownership and a legal signed trailhead/parking for the exact riverbank, verify whether NFST-128-B has a continuous official pedestrian connection and safe viewpoint, and check current Copper Peak access restrictions. No powerline shortcut or private parking guidance.",
+      "researchPage": "/upper-peninsula-waterfalls/research/chippewa-falls/",
+      "sourceLinks": [
+        {
+          "label": "Michigan named waterfalls GIS",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "Independent feature source",
+          "url": "https://www.waterfallsofthekeweenaw.com/gogebic-black-river/chippewa-falls/"
+        },
+        {
+          "label": "Secondary field/tourism source",
+          "url": "https://waterfallsamerica.com/waterfalls/chippewa-falls-mi-623218/"
+        },
+        {
+          "label": "Additional context",
+          "url": "https://www.tpl.org/our-work/chippewa-falls-black-river"
+        },
+        {
+          "label": "USDA published National Forest trails radius check",
+          "url": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_TrailNFSPublish_01/MapServer/0/query?geometry=-90.083372%2C46.598393&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=1000&units=esriSRUnit_Meter&outFields=TRAIL_NO,TRAIL_NAME,TRAIL_CLASS,ADMIN_ORG,MANAGING_ORG&returnGeometry=false&f=pjson"
+        },
+        {
+          "label": "Michigan DNR state parcel intersects",
+          "url": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-90.083372%2C46.598393&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson"
+        },
+        {
+          "label": "Michigan DNR conservation-easement intersects",
+          "url": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/9/query?geometry=-90.083372%2C46.598393&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson"
+        },
+        {
+          "label": "Official Ottawa National Forest overview",
+          "url": "https://www.fs.usda.gov/r09/ottawa"
+        },
+        {
+          "label": "Western U.P. county GIS",
+          "url": "https://www.wuppdr.org/gis"
+        },
+        {
+          "label": "USFS PADUS managed-ownership parcel intersection at natural GIS point",
+          "url": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_PADUS_01/MapServer/3/query?geometry=-90.083372%2C46.598393&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=OBJECTID,OWN_NAME,LOC_OWN,MANG_NAME,LOC_MANG,UNIT_NM,STATE_NM,SRC_DATE,OWN_TYPE&returnGeometry=false&f=pjson"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-11-01",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Geography and meaningful waterfall identity",
+            "status": "documented-geography",
+            "finding": "Michigan GIS #58 at 46.598393,-90.083372 is ~15m from the field specialist's Chippewa Falls at 46.59853,-90.08335. It is described there as ~2-foot rapids; another visitor aggregation calls it a much taller drop. Keep measured significance conservative, do not inherit an unverified advertised height.",
+            "source": "https://www.waterfallsofthekeweenaw.com/gogebic-black-river/chippewa-falls/"
+          },
+          {
+            "label": "Official federal land at natural falls",
+            "status": "verified-geography",
+            "finding": "USFS PADUS managed surface ownership polygon OBJECTID 120 intersects the exact Michigan GIS waterfall point. The October 30, 2026 source attributes the land to USDA Forest Service, Ottawa National Forest. This establishes ownership at the natural point only, not a legal public parking site, shoreline crossing or continuous footpath.",
+            "source": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_PADUS_01/MapServer/3/query?geometry=-90.083372%2C46.598393&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=OBJECTID,OWN_NAME,LOC_OWN,MANG_NAME,LOC_MANG,UNIT_NM,STATE_NM,SRC_DATE,OWN_TYPE&returnGeometry=false&f=pjson"
+          },
+          {
+            "label": "Historic visitor approach",
+            "status": "documented-not-live",
+            "finding": "Historic report leads from the Copper Peak tourist road, a dilapidated building and powerline corridor, then informal descent to the river. Another research source describes west-bank Copper Peak private land and east-bank Ottawa National Forest, but the exact intersect/approach parcel boundary has not been independently confirmed. The official FS published trails layer contains NFST-128-B within 1km, which does NOT prove a signed complete route to this waterfall or permit crossing Copper Peak property.",
+            "source": "https://www.waterfallsofthekeweenaw.com/gogebic-black-river/chippewa-falls/"
+          },
+          {
+            "label": "Authorized parking",
+            "status": "not-cleared",
+            "finding": "No signed parking/easement at a precise legal visitor entrance is established. Historical lodge lots, utility clearings, shoulder camps, or informal two-tracks are not parking approvals.",
+            "source": "https://www.wuppdr.org/gis"
+          },
+          {
+            "label": "Full lawful walking trail and viewpoint",
+            "status": "not-cleared",
+            "finding": "USDA FS EDW published trails query within 1km returned NFST-128-B (trail class 3); proximity alone is not a signed route or property permission. No legal, continuous visitor route from proven parking to a safe viewpoint has been independently verified.",
+            "source": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_TrailNFSPublish_01/MapServer/0/query?geometry=-90.083372%2C46.598393&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=1000&units=esriSRUnit_Meter&outFields=TRAIL_NO,TRAIL_NAME,TRAIL_CLASS,ADMIN_ORG,MANAGING_ORG&returnGeometry=false&f=pjson"
+          },
+          {
+            "label": "Current site restrictions",
+            "status": "not-cleared",
+            "finding": "No current November 2026 closure, road maintenance, parcel consent or viewpoint condition independently confirms a safe visit. Ottawa Forest's developed Black River waterfall routes are separate destinations.",
+            "source": "https://www.fs.usda.gov/r09/ottawa"
+          }
+        ]
+      }
     }
   ]
 }
