@@ -126,7 +126,7 @@
       kids.push(s('line', { x1: X(d), y1: top - 8, x2: X(d), y2: top + rows.length * rowH + 2, class: cls }));
       if (label) kids.push(s('text', { x: Math.min(R - 4, Math.max(L + 4, X(d))), y: anchorY, 'text-anchor': X(d) > R - 60 ? 'end' : X(d) < L + 60 ? 'start' : 'middle', class: cls + '-label' }, label));
     }
-    if (opts.spring !== undefined) mark(opts.spring, 'tl-frost', narrow && !zoomed ? null : 'Last frost ' + fmt(opts.spring), top + rows.length * rowH + 16);
+    if (opts.spring !== undefined) mark(opts.spring, 'tl-frost', narrow && !zoomed ? null : (opts.springLabel || 'Last frost ' + fmt(opts.spring)), top + rows.length * rowH + 16);
     if (opts.fall !== undefined) mark(opts.fall, 'tl-frost', narrow && !zoomed ? null : 'First fall frost ' + fmt(opts.fall), top + rows.length * rowH + 16);
     if (opts.today !== undefined) mark(opts.today, 'tl-today', 'Today', 10);
     svg.replaceChildren.apply(svg, kids);

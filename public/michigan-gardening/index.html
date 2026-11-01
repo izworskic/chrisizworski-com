@@ -44,7 +44,7 @@
         "@id": "https://chrisizworski.com/#person"
       },
       "description": "A curated set of Michigan Zone 6a gardening guides covering planting calendars, frost dates, heirloom tomatoes, seed saving, and companion planting.",
-      "dateModified": "2026-10-29",
+      "dateModified": "2026-11-01",
       "hasPart": [
         {
           "@type": "Article",
@@ -529,6 +529,14 @@ a:hover { text-decoration: underline; }
     <div class="gk-field"><label for="pnPlace">Your town or ZIP</label><input type="text" id="pnPlace" list="pnTowns" autocomplete="off" value="Bay City" placeholder="for example Traverse City or 48706"><datalist id="pnTowns"></datalist></div>
   </div>
   <p class="gk-note" id="pnWhere">Nearest frost station: Bay City.</p>
+  <section class="my-garden" aria-labelledby="gardenPlanTitle">
+    <p class="gy-kicker">Your garden · your season</p><h3 id="gardenPlanTitle">What are you growing?</h3>
+    <p>Make a list of the plants you want in your garden. We’ll bring their next steps together for your town, from seed starting to fall planning.</p>
+    <div class="garden-add"><label for="gardenPick">Choose a plant<select id="gardenPick"><option value="">Choose a plant</option></select></label><label for="gardenDays">Days to maturity <small>(optional, from your packet)</small><input type="number" id="gardenDays" min="1" max="365" inputmode="numeric" placeholder="e.g. 55"></label><button type="button" id="gardenAdd">Add to my garden</button></div>
+    <p id="gardenError" aria-live="polite"></p><p id="gardenCount" role="status" aria-live="polite">Your garden is empty</p><div class="garden-plants" id="gardenPlan"></div>
+    <p class="garden-privacy">Your list stays in this browser. Dates are planning references, not frost forecasts; check your seed packet, soil and local forecast. Some plants still need more research, and we say so.</p>
+    <noscript><p>Enable JavaScript to build a list. You can still use the gardening guides below.</p></noscript>
+  </section>
   <div class="gk-answer" id="pnCard">
     <span class="gk-badge" id="pnBadge">This week</span>
     <h2 id="pnTitle">What to plant this week near Bay City.</h2>
@@ -590,7 +598,7 @@ a:hover { text-decoration: underline; }
   </section>
   <div class="gk-chart" id="pnTableCard">
     <h3>Every crop, for your station</h3>
-    <p class="gk-note" id="pnTableNote">Status today, the dates that set it, and the MSU rule behind it. The bars show the crops with dated windows. MSU gives no last date for planting out or sowing, so those bars stop at July 31, where this tool's spring rules end. That is a display limit, not a deadline.</p>
+    <p class="gk-note" id="pnTableNote">Status today, the dates that set it, and the extension guidance behind it. The bars show the crops with dated windows. MSU gives no last date for planting out or sowing, so those bars stop at July 31, where this tool's spring rules end. That is a display limit, not a deadline.</p>
     <details class="pn-chart-details" id="pnChartDetails">
       <summary>Compare the dated windows for every crop<small>Reference chart, not a harvest forecast. Select a row to follow that crop's story.</small></summary>
       <div id="pnLegend"></div>
@@ -632,7 +640,7 @@ a:hover { text-decoration: underline; }
     <h2 id="garden-start-title">Interactive Gardening, Frost &amp; Seed Tools</h2>
     <p>Every interactive calculator, frost probability lookup, heirloom seed tool, and yard planner built from Freighter View Farms and Michigan State Climatologist records lives here.</p>
     <div class="start-grid">
-      <a class="start-card" href="/zone-6a-planting-calendar/"><strong>Zone 6a Planting Calculator</strong><span>Compute indoor seed-starting, transplant, direct-sow and fall-sow windows for 47 crops from 78 Michigan frost stations.</span></a>
+      <a class="start-card" href="/zone-6a-planting-calendar/"><strong>Zone 6a Planting Calculator</strong><span>Explore seasonal guidance for 47 plants, with frost references from 78 Michigan stations.</span></a>
       <a class="start-card" href="/michigan-frost-dates/"><strong>Michigan Frost Dates by City</strong><span>Explore spring freeze probabilities at 78 Michigan stations and published typical fall frost dates where available.</span></a>
       <a class="start-card" href="/michigan-soil-temperature/"><strong>Michigan Soil Temperature Live</strong><span>Check today's 4-inch soil temperature at your nearest station against 40&deg;F cool-crop and 60&deg;F tomato thresholds.</span></a>
       <a class="start-card" href="/heirloom-variety-matchmaker/"><strong>Heirloom Variety Matchmaker</strong><span>Answer five questions about your sun, space, and season to get three heirloom varieties calibrated to finish before frost.</span></a>
@@ -659,7 +667,7 @@ a:hover { text-decoration: underline; }
           <h3><a href="/zone-6a-planting-calendar/">Zone 6a Michigan Planting Calendar</a></h3>
         </div>
         <div class="card-body">
-          <p>Seed-starting, transplant, direct-sow and fall-sow windows for 47 crops at your nearest of 78 Michigan frost stations, with this week's jobs, a season timeline and a calendar file to save.</p>
+          <p>Seasonal guidance for 47 crops at your choice of 78 Michigan frost stations, with a timeline and a calendar file for available date references.</p>
           <a class="card-link" href="/zone-6a-planting-calendar/">Open the calendar</a>
         </div>
       </article>
@@ -902,7 +910,7 @@ a:hover { text-decoration: underline; }
 
 <footer class="site-footer">
   <div class="hm-shell hm-footer__inner">
-    <p style="margin:0">Updated October 2026 &nbsp;&middot;&nbsp; <a href="/">Chris Izworski</a> &nbsp;&middot;&nbsp; <a href="https://freighterviewfarms.com" target="_blank" rel="noopener">Freighter View Farms</a> &nbsp;&middot;&nbsp; Bay City, Michigan</p>
+    <p style="margin:0">Updated November 2026 &nbsp;&middot;&nbsp; <a href="/">Chris Izworski</a> &nbsp;&middot;&nbsp; <a href="https://freighterviewfarms.com" target="_blank" rel="noopener">Freighter View Farms</a> &nbsp;&middot;&nbsp; Bay City, Michigan</p>
     <nav class="hm-footer__links" aria-label="Site information">
       <a href="/chris-izworski/">About Chris</a>
       <a href="/tools/">Michigan &amp; Great Lakes</a>
@@ -921,6 +929,7 @@ a:hover { text-decoration: underline; }
 <script src="/assets/garden-tools/michigan-places.js"></script>
 <script src="/assets/garden-tools/plant-now.js"></script>
 <script src="/assets/garden-tools/garden-year.js"></script>
+<script src="/assets/garden-tools/my-garden.js"></script>
 <script src="/assets/garden-tools/season-story.js?v=20261101a"></script>
 <script>
 /* What to Plant Now in Michigan: the page. The engine (plant-now.js) decides; this only shows it. */
@@ -930,6 +939,7 @@ a:hover { text-decoration: underline; }
   var q=new URLSearchParams(location.search),today=E.detroitToday(q.get('date'));
   var place=null,KEY='plantNowPlace';
   var Year=window.GardenYear.mount({engine:E,kit:K,today:today});
+  var Garden=window.MyGarden.mount({engine:E,kit:K});
   var Story=window.GardenStory.mount({engine:E,kit:K,crop:q.get('crop'),onChange:function(){render()}});
   function load(){try{return localStorage.getItem(KEY)}catch(e){return null}}
   function save(v){try{localStorage.setItem(KEY,v)}catch(e){}}
@@ -943,13 +953,14 @@ a:hover { text-decoration: underline; }
     return r.windows.map(function(w){
       if(w.condition==='workable')return 'As soon as the ground can be worked';
       if(w.condition==='soil40')return 'Once soil is 40°F';
+      if(w.condition==='soil45')return 'Spring, once soil is 45°F';
       var name={indoor:'Start indoors',harden:'Harden off',transplant:'Plant out',sow:'Sow outside'}[w.kind];
       return name+' '+(w.to===null?'from '+K.fmt(w.from):K.range(w.from,w.to));
     }).join(' · ')||'Not reported';
   }
   function render(){
     if(!place)return;
-    var st=place.station,p=E.plan(st,today.day,cond()),fr=p.frost,week=p.week;Year.render(st);
+    var st=place.station,p=E.plan(st,today.day,cond()),fr=p.frost,week=p.week;Year.render(st);Garden.render(st,today.day,cond(),today.iso);
     var sl=document.querySelector('.pn-soil-link');if(sl)sl.href='/michigan-soil-temperature/?place='+encodeURIComponent(place.zip||place.label);
     el('pnWhere').textContent=(place.label===st.n?'':place.label+': ')+'nearest frost station '+st.n+(place.miles>=1?', about '+Math.round(place.miles)+' miles away':'')+'. Today in Michigan: '+K.fmtLong(today.day)+'.';
     var acts=week.filter(function(r){return ['START_INDOORS','HARDEN_OFF','TRANSPLANT','PLANT'].indexOf(r.code)>=0});
@@ -982,7 +993,7 @@ a:hover { text-decoration: underline; }
       return h('div',{class:'pn-group'},h('h3',null,g[1]),body);
     }).filter(Boolean));
     el('pnRows').replaceChildren.apply(el('pnRows'),p.crops.map(function(r){
-      return h('tr',{'data-crop':r.crop.id},h('td',null,h('b',null,r.crop.name)),h('td',null,h('span',{class:'pn-pill '+CLS[r.code]},r.status)),h('td',null,r.windows.length?dates(r):r.detail,r.notes.length?h('div',{class:'pn-rule'},r.notes.join(' ')):null),h('td',{class:'pn-rule'},r.rules.length?r.rules.map(function(k){return {indoor:'6 to 8 weeks indoors',harden:'7 to 10 days hardening',afterFrost:'after the danger of frost',soil60:'soil above 60°F',soil40:'soil 40°F or warmer',hardy:'as soon as the ground can be worked',succession:'sow every 2 weeks',memorial:'Memorial Day custom',fallGarden:'Fall crops: count back from frost',garlicFall:'3 to 5 weeks before hard freeze'}[k]}).join('; ')+' (MSU)':'No Michigan rule found'));
+      return h('tr',{'data-crop':r.crop.id},h('td',null,h('b',null,r.crop.name)),h('td',null,h('span',{class:'pn-pill '+CLS[r.code]},r.status)),h('td',null,r.windows.length?dates(r):r.detail,r.notes.length?h('div',{class:'pn-rule'},r.notes.join(' ')):null),h('td',{class:'pn-rule'},r.rules.length?r.rules.map(function(k){return {indoor:'6 to 8 weeks indoors',harden:'7 to 10 days hardening',afterFrost:'after the danger of frost',soil60:'soil above 60°F',soil40:'soil 40°F or warmer',hardy:'as soon as the ground can be worked',potato45:'spring soil at least 45°F',basilFrost:'after frost danger has passed',dillFrost:'around the last expected frost',cilantroCool:'early spring or fall',cornGuide:'direct sow May to July',regionalHerbs:'regional herb guide',regionalFlowers:'regional direct-sowing guide',regionalCutFlowers:'regional cool-season flower guide',regionalWarmFlowers:'regional warm-season flower guide',regionalPetunia:'regional petunia guide',succession:'sow every 2 weeks',memorial:'Memorial Day custom',fallGarden:'Fall crops: count back from frost',garlicFall:'3 to 5 weeks before hard freeze'}[k]}).join('; ')+' (see sources)':'No Michigan rule found'));
     }));
     Story.render(p);
     var fx=function(k,v){return [h('dt',null,k),h('dd',null,v)]};
@@ -1007,7 +1018,7 @@ a:hover { text-decoration: underline; }
     K.ics(ev,'what-to-plant-'+st.s+'.ics')});
   el('pnShare').addEventListener('click',function(){K.copyLink(location.origin+location.pathname+query()+'#plant-now',el('pnShare'),el('pnShareOut'))});
   // Sources, quoted.
-  var S=E.SOURCES;el('pnSources').replaceChildren.apply(el('pnSources'),[h('p',null,'Each status applies a published Michigan rule to your nearest frost station. Nothing is averaged between stations or borrowed from another state. One reading is this tool\'s own: MSU says to wait until "the danger of frost is past," and this tool takes that as the date after which only 1 spring in 4 still freezes at your station. Spring windows are shown as spring guidance; the fall guide and garlic have separate seasonal advice. The fall planner uses the days you enter, not a predicted harvest date.')].concat(Object.keys(E.RULES).map(function(k){var r=E.RULES[k],src=S[r.source];return h('blockquote',null,'“'+r.quote+'” ',h('a',{href:src.url,rel:'noopener'},src.who+', '+src.title+' ('+src.date+')'))}),[h('p',null,'Frost dates: ',h('a',{href:S.msuFrost.url,rel:'noopener'},S.msuFrost.who),'. First fall frost: ',h('a',{href:'/michigan-frost-dates/'},'typical dates for 42 places'),'; the other stations show it as not reported. Places: town and ZIP centres from public Census data, matched to the nearest station.')]));
+  var S=E.SOURCES;el('pnSources').replaceChildren.apply(el('pnSources'),[h('p',null,'Guidance uses Michigan sources where available and identifies regional sources where used. Nothing is averaged between stations. Regional extension advice is labeled by its source and is not a Michigan station-specific date. One reading is this tool\'s own: MSU says to wait until "the danger of frost is past," and this tool takes that as the date after which only 1 spring in 4 still freezes at your station. Spring windows are shown as spring guidance; the fall guide and garlic have separate seasonal advice. The fall planner uses the days you enter, not a predicted harvest date.')].concat(Object.keys(E.RULES).map(function(k){var r=E.RULES[k],src=S[r.source];return h('blockquote',null,'“'+r.quote+'” ',h('a',{href:src.url,rel:'noopener'},src.who+', '+src.title+' ('+src.date+')'))}),[h('p',null,'Frost dates: ',h('a',{href:S.msuFrost.url,rel:'noopener'},S.msuFrost.who),'. First fall frost: ',h('a',{href:'/michigan-frost-dates/'},'typical dates for 42 places'),'; the other stations show it as not reported. Places: town and ZIP centres from public Census data, matched to the nearest station.')]));
   if(q.get('work')==='yes'||q.get('work')==='no')document.querySelectorAll('input[name="pnWork"]').forEach(function(r){r.checked=r.value===q.get('work')});
   if(/^-?\d{1,3}$/.test(q.get('soil')||''))el('pnSoil').value=q.get('soil');
   // Seasonal garden jobs: the ones whose season includes this month go first, marked.

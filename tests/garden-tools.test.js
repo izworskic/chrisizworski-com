@@ -17,7 +17,7 @@ test('planting calendar: this week, crop lookup and old links', () => {
   assert.match(old.text('frostFacts'), /Cautious date/);
   const quiet = loadTool(f('zone-6a-planting-calendar'), { today: '2026-01-05' });
   assert.equal(quiet.text('weekBadge'), 'A quiet week');
-  assert.match(quiet.text('weekWhy'), /Next up: start onions from seed indoors/);
+  assert.match(quiet.text('weekWhy'), /Tend what is growing/);
 });
 
 test('frost dates: plain odds for a planting day, past-frost and fall answers', () => {
@@ -129,9 +129,11 @@ test('Michigan Growing Season Explorer: crop and soil decisions tell the same st
   assert.match(p.text('pnSeasonTitle'), /fall planting for next summer/i);
   assert.match(p.text('pnSeasonStatus'), /hard freeze/);
   assert.equal(p.$('pnSeasonMissing').hidden, true);
-  p.set('pnCrop', 'basil');
-  assert.match(p.text('pnSeasonStatus'), /Not reported/);
-  assert.equal(p.$('pnSeasonMissing').hidden, false);
+  p.set('pnCrop', 'cilantro');
+  assert.match(p.text('pnSeasonStatus'), /early spring or fall/);
+  p.set('pnCrop', 'zinnias');
+  assert.match(p.text('pnSeasonStatus'), /Minnesota Extension/);
+  assert.equal(p.$('pnSeasonMissing').hidden, true);
 
   p.set('pnCrop', 'beans');
   p.set('pnPlace', '49783');
@@ -165,4 +167,45 @@ test('all-season notebook changes season and follows frost reference without inv
   assert.match(p.text('gyHeading'), /soil/);
   buttons.find(b=>b.getAttribute('data-garden-season')==='fall').click();
   assert.match(p.text('gyHeading'), /next garden/);
+});
+
+test('my garden assembles selected plants and updates with location', () => {
+ const p=loadTool(f('michigan-gardening'), {today:'2026-03-20',search:'?place=Bay%20City'});
+ p.set('gardenPick','tomatoes');p.click('gardenAdd');
+ p.set('gardenPick','peas');p.click('gardenAdd');
+ assert.match(p.text('gardenPlan'),/Tomatoes/);assert.match(p.text('gardenPlan'),/Peas/);
+ assert.match(p.text('gardenCount'),/2 plants/);
+ const a=p.text('gardenPlan');p.set('pnPlace','49783');assert.notEqual(p.text('gardenPlan'),a);
+ p.set('gardenPick','tomatoes');p.click('gardenAdd');assert.match(p.text('gardenCount'),/2 plants/);
+});
+
+test('my garden packet values use the shared fall planner', () => {
+ const p=loadTool(f('michigan-gardening'),{today:'2026-04-15',search:'?place=Bay%20City'});
+ p.set('gardenPick','lettuce');p.set('gardenDays','48','input');p.click('gardenAdd');
+ assert.match(p.text('gardenPlan'),/packet 48 days plus 14-day buffer/);
+ p.set('pnPlace','Adrian');assert.match(p.text('gardenPlan'),/No sourced fall frost date/);
+});
+
+test('garden packet days can be changed and cleared without removing the plant', () => {
+ const p=loadTool(f('michigan-gardening'),{today:'2026-04-15',search:'?place=Bay%20City'});
+ p.set('gardenPick','lettuce');p.set('gardenDays','48','input');p.click('gardenAdd');
+ const card=p.$('gardenPlan').querySelector('.garden-plant');
+ const input=card.querySelector('input');input.value='60';card.querySelector('.garden-save').click();
+ assert.match(p.text('gardenPlan'),/packet 60 days plus 14-day buffer/);
+ const updated=p.$('gardenPlan').querySelector('.garden-plant');
+ updated.querySelector('input').value='';updated.querySelector('.garden-save').click();
+ assert.match(p.text('gardenPlan'),/Leaf lettuce/);assert.doesNotMatch(p.text('gardenPlan'),/packet 60 days/);
+});
+
+
+test('planting calendar uses the shared engine and refuses unsourced fall station dates',()=>{
+ const p=loadTool(f('zone-6a-planting-calendar'),{today:'2026-04-15',search:'?city=adrian&crop=garlic'});
+ assert.match(p.text('frostFacts'),/Not reported for this station/);
+ assert.match(p.text('cropNow'),/hard freeze/);
+ assert.doesNotMatch(p.text('cropSteps'),/Oct/);
+ p.set('cropSel','Zinnias');assert.match(p.text('cropNow'),/Minnesota Extension/);
+ p.set('cropSel','Tomatoes');
+ const before=p.text('cropSteps');p.choose('mode','cautious');assert.notEqual(p.text('cropSteps'),before);
+ p.set('customLF','2026-05-20');assert.match(p.text('cropSteps'),/Mar 25/);
+ p.click('icsBtn');assert.match(p.doc.downloads.at(-1),/BEGIN:VCALENDAR/);
 });

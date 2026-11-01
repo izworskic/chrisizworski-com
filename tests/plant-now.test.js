@@ -20,6 +20,8 @@ test('statuses follow the MSU rules at stations in zones 4b, 5a and 6a', () => {
     // Warm-season seed: after the danger of frost, and not in soil under 60 F.
     assert.equal(status('beans', s, K.toISO(open - 1, 2026)).code, 'WAIT', s);
     assert.equal(status('beans', s, K.toISO(open, 2026), { soilF: 55 }).code, 'WAIT_SOIL', s);
+    assert.equal(status('beans', s, K.toISO(open, 2026), { soilF: 60 }).code, 'WAIT_SOIL', s);
+    assert.match(status('beans', s, K.toISO(open, 2026), { soilF: 62 }).detail, /frost is still possible/);
     assert.equal(status('beans', s, K.toISO(open, 2026), { soilF: 62 }).code, 'PLANT', s);
     // Root crops at 40 F soil; hardy crops when the ground can be worked.
     assert.equal(status('carrots', s, '2026-04-15', { soilF: 38 }).code, 'WAIT_SOIL', s);
@@ -39,10 +41,11 @@ test('a test date flips tomatoes from START INDOORS to TRANSPLANT on schedule', 
 
 // (c) No source, no date.
 test('crops and stations without a Michigan source say NOT REPORTED, never a guessed date', () => {
-  for (const c of ['basil', 'cilantro', 'potatoes']) {
+  for (const c of ['zinnias','sweet-peas','rosemary']) {
     const r = status(c, 'bay-city', '2026-05-15');
-    assert.equal(r.code, 'NOT_REPORTED', c);
+    assert.equal(r.code, 'GUIDE', c);
     assert.equal(r.windows.length, 0, c);
+    assert.match(r.detail, /regional growing advice/);
     assert.doesNotMatch(r.detail, /\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d/, c);
   }
   // Adrian's first fall frost is not published, so no DONE date is claimed there.
@@ -87,4 +90,82 @@ test('fall crop planning is a conditional prompt, not a made-up deadline', () =>
  assert.equal(r.code,'PLAN_FALL'); assert.equal(r.windows.length,0);
  assert.match(r.detail,/not a forecast/);
  assert.match(status('kale','adrian','2026-08-01').detail,/unavailable/);
+});
+
+test('structured fall planner preserves source and date uncertainty', () => {
+ const bay=F.station('bay-city'), adrian=F.station('adrian');
+ const a=E.fallPlan(bay,{year:2028,maturityDays:50,bufferDays:14});
+ assert.equal(a.planningDate,'2028-07-31');assert.equal(a.referenceBasis,'station_typical');assert.equal(a.source,'msuFall');
+ assert.equal(E.fallPlan(adrian,{year:2028,maturityDays:50,bufferDays:14}).reason,'fall_frost_unavailable');
+ const custom=E.fallPlan(adrian,{year:2028,maturityDays:50,bufferDays:14,frostISO:'2028-10-10'});
+ assert.equal(custom.referenceBasis,'visitor_supplied');assert.equal(custom.planningDate,'2028-08-07');
+ assert.equal(E.fallPlan(bay,{year:2028,maturityDays:50,bufferDays:14,frostISO:'2028-02-30'}).reason,'invalid_frost_date');
+ assert.equal(E.fallPlan(bay,{year:2028,maturityDays:0,bufferDays:14}).reason,'invalid_input');
+ assert.equal(E.fallReference('lettuce').basis,'days after germination');assert.equal(E.fallReference('tomatoes'),null);
+});
+test('spring soil rules do not issue a winter plant-now instruction', () => {
+ assert.equal(status('peas','bay-city','2026-01-15',{workable:true}).code,'NEXT_SPRING');
+ assert.equal(status('carrots','bay-city','2026-01-15',{soilF:45}).code,'NEXT_SPRING');
+});
+
+test('potato guidance requires spring soil at 45°F', () => {
+ assert.equal(status('potatoes','bay-city','2026-04-15',{soilF:44}).code,'WAIT_SOIL');
+ assert.equal(status('potatoes','bay-city','2026-04-15',{soilF:45}).code,'READY_WHEN');
+ assert.equal(status('potatoes','bay-city','2026-04-15',{soilF:45,workable:true}).code,'PLANT');
+ assert.equal(status('potatoes','bay-city','2026-04-15',{soilF:45,workable:false}).code,'WAIT_SOIL');
+ assert.equal(status('potatoes','bay-city','2026-01-15',{soilF:55}).code,'NEXT_SPRING');
+ assert.equal(status('potatoes','bay-city','2026-04-15').code,'READY_WHEN');
+});
+
+test('multi-crop plans retain packet inputs, source uncertainty, and reject invalid choices', () => {
+ const st=F.station('bay-city');
+ const r=E.gardenPlan(st,[{cropId:'tomatoes'}, {cropId:'lettuce',maturityDays:48,bufferDays:14},'potatoes','potatoes','unknown'],{dateISO:'2028-04-15',conditions:{soilF:44}});
+ assert.equal(r.ok,true);assert.equal(r.crops.length,3);assert.equal(r.errors.length,2);
+ assert.equal(r.crops[1].fallPlan.referenceBasis,'station_typical');assert.equal(r.crops[1].fallPlan.maturityDays,48);
+ assert.equal(E.gardenPlan(st,[{cropId:'zinnias',maturityDays:60}],{dateISO:'2028-04-15'}).crops[0].fallPlan.reason,'fall_sowing_unverified');
+ assert.equal(E.gardenPlan(st,[{cropId:'garlic',maturityDays:180}],{dateISO:'2028-04-15'}).crops[0].fallPlan.reason,'overwinter_crop');
+ assert.equal(r.crops[2].current.code,'WAIT_SOIL');assert.equal(r.crops[0].fallPlan,null);
+ assert.equal(E.gardenPlan(st,['peas'],{dateISO:'2028-02-30'}).reason,'invalid_date');
+ assert.equal(E.gardenPlan(null,['peas'],{dateISO:'2028-04-15'}).reason,'station_required');
+ const missing=E.gardenPlan(F.station('adrian'),[{cropId:'lettuce',maturityDays:48}],{dateISO:'2028-04-15'});
+ assert.equal(missing.crops[0].fallPlan.reason,'fall_frost_unavailable');
+});
+
+test('basil guidance keeps frost risk conditional and turnips use the MSU soil threshold', () => {
+ assert.equal(status('basil','bay-city','2026-05-15').code,'GUIDE');
+ assert.match(status('basil','bay-city','2026-05-15').detail,/check the forecast/i);
+ assert.equal(status('turnips','bay-city','2026-04-15',{soilF:39}).code,'WAIT_SOIL');
+ assert.equal(status('turnips','bay-city','2026-04-15',{soilF:40}).code,'PLANT');
+});
+
+
+test('new crop guidance stays source-specific and seasonal', () => {
+ for (const c of ['zucchini','winter-squash','watermelon']) {
+  assert.equal(status(c,'bay-city','2026-05-01').code,'WAIT');
+  assert.equal(status(c,'bay-city','2026-05-15',{soilF:55}).code,'WAIT_SOIL');
+ }
+ assert.match(status('cilantro','bay-city','2026-11-01').detail,/early spring or fall/);
+ assert.match(status('dill','bay-city','2026-04-15').detail,/last expected spring frost/);
+ assert.match(status('sweet-corn','bay-city','2026-06-01').detail,/variety/);
+});
+
+test('garden timeline carries real calendar years and leap-year arithmetic', () => {
+ const st=F.station('bay-city');
+ const plan=E.gardenPlan(st,['tomatoes','zucchini'],{dateISO:'2027-11-01'});
+ const indoor=plan.timeline.find(x=>x.cropId==='tomatoes'&&x.kind==='indoor');
+ assert.equal(indoor.fromISO,'2028-03-14');
+ assert.equal(indoor.toISO,'2028-03-28');
+ assert.equal(plan.timeline.find(x=>x.cropId==='zucchini').fromISO,'2028-05-09');
+ assert.equal(plan.timeline[0].source,'indoor');
+});
+
+
+test('calendar adapter maps names, uses selected spring reference and does not invent onion seed or fall dates',()=>{
+ const st=F.station('bay-city'), day=K.parse('Apr 1');
+ const r=E.calendarEntry(st,'Green beans',day,{springDay:K.parse('May 20')});
+ assert.equal(r.cropId,'beans');assert.equal(K.fmt(r.windows[0].from),'May 20');
+ assert.equal(E.calendarEntry(st,'Onion sets',day).cropId,'onions');
+ assert.equal(E.calendarEntry(st,'Onions from seed',day).windows.length,0);
+ assert.equal(E.calendarEntry(st,'Garlic',day).windows.length,0);
+ for(const c of F.CROPS) assert.notEqual(E.calendarEntry(st,c.n,day).code,'NOT_REPORTED',c.n);
 });

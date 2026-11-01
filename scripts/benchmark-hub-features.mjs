@@ -79,7 +79,7 @@ section('Crop table', 'Every crop, its status, its dates and the rule behind it'
   const p = load({ today: '2026-05-12' }); const rows = p.$('pnRows').children; const plan = E.plan(F.station('bay-city'), K.fromISO('2026-05-12'), {});
   crit(30, 'One row per crop, status matching the engine', () => rows.length === E.CROPS.length && rows.every((r, i) => r.textContent.includes(plan.crops[i].crop.name) && r.textContent.includes(plan.crops[i].status)));
   crit(30, 'Not reported rows give the reason and no dates', () => rows.filter(r => /Not reported/.test(r.textContent)).every(r => /No Michigan rule found/.test(r.textContent) && !/\b(Mar|Apr|May|Jun) \d/.test(r.textContent)));
-  crit(25, 'Every other row cites its MSU rule', () => rows.filter(r => !/Not reported/.test(r.textContent)).every(r => /\(MSU\)/.test(r.textContent)));
+  crit(25, 'Every sourced row points to its rule and sources', () => rows.filter(r => !/Not reported/.test(r.textContent)).every(r => /\(see sources\)/.test(r.textContent)));
   crit(15, 'Readable on a phone (scrolls inside its box)', () => /\.pn-table-wrap\{overflow-x:auto\}/.test(html));
 });
 
@@ -92,7 +92,7 @@ section('Sources and honesty', 'Every rule quoted and linked; every choice of re
   const p = load(); const t = p.text('pnSources');
   crit(35, 'Each rule is quoted with its source', () => Object.keys(E.RULES).length >= 7 && p.$('pnSources').querySelectorAll('blockquote').length === Object.keys(E.RULES).length);
   crit(25, 'MSU sources linked on the page itself', () => (html.match(/href="https:\/\/www\.canr\.msu\.edu\//g) || []).length >= 2);
-  crit(25, 'The frost-risk interpretation, seasonal separation and no borrowing are disclosed', () => /1 spring in 4/.test(t) && /spring windows/i.test(t) && /borrowed from another state/.test(t));
+  crit(25, 'Frost risk and the limits of regional guidance are disclosed', () => /1 spring in 4/.test(t) && /spring windows/i.test(t) && /regional extension advice/i.test(t) && /not a Michigan station-specific date/.test(t));
   crit(15, 'The packet-based estimate is not a predicted harvest date', () => /not a predicted harvest date/.test(t));
 });
 

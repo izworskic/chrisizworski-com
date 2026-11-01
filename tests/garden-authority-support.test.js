@@ -13,7 +13,7 @@ const cfg=JSON.parse(fs.readFileSync(path.join(root,'benchmarks/garden-page-one-
 test('gardening hub strengthens authority without rewriting protected page-one treatments',()=>{
   assert.match(hub,/id="garden-start-title"/);
   for(const href of cfg.authoritySupport.requiredLinks) assert.match(hub,new RegExp('href="'+href.replace(/[.*+?^$()|[\]\\]/g,'\\$&')+'"'));
-  assert.match(hub,/47 crops from 78 Michigan frost stations/);
+  assert.match(hub,/47 crops at your choice of 78 Michigan frost stations/);
   assert.match(hub,/When to plant tomatoes in Michigan/i);
   assert.match(hub,/Best heirloom tomatoes for Michigan/i);
 
