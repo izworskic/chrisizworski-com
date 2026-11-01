@@ -130,7 +130,7 @@
    const detail=elt(doc,"p","", "DNR parking asset #"+entry.dnrParkingAssetId+
     " is "+entry.parkingToNamedRecreationPointMeters+" m in a straight line from DNR named recreation point #"+
     entry.dnrRecreationPointId+". This is a GIS point-to-point separation, NOT a walk, mapped signed entrance, passable trail, or open parking lot.");
-   const source=elt(doc,"a","", "DNR recreation point source");source.href=entry.parkingRecordSource;source.target="_blank";source.rel="noopener noreferrer";
+   const source=elt(doc,"a","", "Review parking evidence");source.href="/porcupine-mountains/experience-entry-evidence.json";source.target="_blank";source.rel="noopener noreferrer";
    proof.append(trigger,detail,source);begin.appendChild(proof);
    const locate=elt(doc,"button","experience-locate-parking","Locate this DNR parking point");locate.type="button";
    locate.addEventListener("click",()=>{
@@ -151,7 +151,7 @@
   body.appendChild(why);
   const actions=elt(doc,"div","experience-actions");
   const source=elt(doc,"a","experience-source","Read official DNR evidence");
-  source.href=option.source;source.target="_blank";source.rel="noopener noreferrer";actions.appendChild(source);
+  source.href=option.source.includes("PMWSP-Visitor-2025.pdf") ? "https://www.michigan.gov/recsearch/parks/porkies" : option.source; if(option.source.includes("PMWSP-Visitor-2025.pdf"))source.textContent="Check official park information";source.target="_blank";source.rel="noopener noreferrer";actions.appendChild(source);
   if(option.trailId){
    const jump=elt(doc,"button","experience-trail-link","Inspect named trail evidence");jump.type="button";
    jump.addEventListener("click",()=>{
