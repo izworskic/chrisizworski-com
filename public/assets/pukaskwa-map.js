@@ -18,6 +18,8 @@ const trailNote=doc.getElementById('pk-map-choice-trail-note');
 const startText=doc.getElementById('pk-map-start-text');
 const startSequence=doc.getElementById('pk-map-start-sequence');
 const startWarning=doc.getElementById('pk-map-start-warning');
+const accessProofHead=doc.getElementById('pk-access-proof-heading');
+const accessProofDetail=doc.getElementById('pk-access-proof-detail');
 const junctionHead=doc.getElementById('pk-junction-heading');
 const junctionSummary=doc.getElementById('pk-junction-summary');
 const junctionList=doc.getElementById('pk-junction-list');
@@ -116,11 +118,19 @@ function updateTrailSelection() {
   focusChoice.textContent=point?'Locate the related mapped place':'Route location is intentionally withheld';
   if(point)selectFromList(point.id,{moveMap:Boolean(map)});
   const hasTrail=Object.hasOwn(APPROVED_WAYS,selectedTrail);
-  const blocked=selectedStatus==='closed'||selectedStatus==='out-of-season';
+  const blocked=['closed','out-of-season','last-known-closed'].includes(selectedStatus);
   const orientation=startAdvice(selectedTrail,{closed:blocked,hasApprovedGeometry:hasTrail});
   if(orientation&&startText&&startSequence&&startWarning) {
     startText.textContent=orientation.guidance;
     startWarning.textContent=orientation.closureNote+' '+orientation.geometryNote;
+    if(accessProofHead&&accessProofDetail){
+      accessProofHead.textContent=orientation.accessEvidenceClass==='closed-no-route'
+        ? 'Closed trail: no walking approach recommended'
+        : orientation.accessEvidenceClass==='official-named-circuit-no-gps'
+          ? 'Park-described walking circuit · no verified GPS connection'
+          : 'Official Visitor Centre origin · signed GPS entrance not verified';
+      accessProofDetail.textContent=orientation.pedestrianAccessEvidence;
+    }
     const steps=orientation.sequence.map(value=>{const li=doc.createElement('li');li.textContent=value;return li;});
     startSequence.replaceChildren(...steps);
   }
