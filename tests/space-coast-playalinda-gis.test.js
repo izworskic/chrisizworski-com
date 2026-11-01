@@ -144,7 +144,7 @@ test('site map actually includes NPS parking footprints and policy controls, nev
   assert.match(html,/id="geo-road-toggle"/);
   assert.match(map,/L\.polygon\(paths/);
   assert.match(map,/road\.coordinates\.map/);
-  assert.match(map,/documented accessible beach ramps/i);
+  assert.match(map,/accessible beach ramps specifically named in the NPS FAQ/i);
   assert.match(map,/policyLine\.bindPopup/);
   assert.match(map,/NOT live gate status/i);
   assert.doesNotMatch(map,/window\.navigator\.geolocation\.watchPosition/);
