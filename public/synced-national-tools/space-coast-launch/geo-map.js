@@ -489,6 +489,14 @@
       mapPromise=null; map=null;
     }
   }
+  const boardwalkToggle=$('geo-boardwalk-toggle');
+  function updateBoardwalkDisplay() {
+    if(!map || !boardwalkLayer)return;
+    if(boardwalkToggle?.checked){
+      if(!map.hasLayer(boardwalkLayer))boardwalkLayer.addTo(map);
+    }else if(map.hasLayer(boardwalkLayer))map.removeLayer(boardwalkLayer);
+  }
+  if(boardwalkToggle)boardwalkToggle.addEventListener('change',updateBoardwalkDisplay);
   const roadToggle=$('geo-road-toggle');
   function updateRoadDisplay() {
     if(!map || !policyLine)return;
@@ -506,6 +514,8 @@
     if (padMarker) {map.removeLayer(padMarker);padMarker=null;}
     if (connectors) {map.removeLayer(connectors);connectors=null;}
     if (lotBoundaries) {map.removeLayer(lotBoundaries);lotBoundaries=null;}
+    if (boardwalkLayer) {map.removeLayer(boardwalkLayer);boardwalkLayer=null;}
+    boardwalkSegments.clear();
     if (policyLine) {map.removeLayer(policyLine);policyLine=null;}
     const points=(current.points||[]).filter(geoPointValid);
     const bounds=[];
@@ -560,6 +570,47 @@
         {direction:'top'});
       boundary.on('click',()=>focusPoint(p.id,false));
     }
+    // Boardwalk alignments come from the official NPS Trails Geographic
+    // FeatureServer; they are 2025 mapped assets, not verified walkable paths.
+    // Never draw a synthetic connector between a lot and boardwalk.
+    boardwalkLayer=L.layerGroup();
+    for(const route of current.boardwalks||[]) {
+      if(route?.geometry?.type!=='MultiLineString' ||
+         !Array.isArray(route.geometry.coordinates))continue;
+      const lines=route.geometry.coordinates.map(path=>
+        Array.isArray(path)?path.filter(c=>Array.isArray(c)&&c.length===2&&
+          geoPointValid({lon:c[0],lat:c[1]})).map(c=>[c[1],c[0]]):[])
+        .filter(path=>path.length>=2);
+      if(!lines.length)continue;
+      const restricted=['official-closure','parking-restricted'].includes(route.access?.status);
+      const unpaired=route.matchingParkingLot===null;
+      const color=restricted?'#b64f40':unpaired?'#806c8b':'#2e826b';
+      const line=L.polyline(lines,{
+        color,weight:3,dashArray:'6 5',opacity:.8,interactive:true
+      }).addTo(boardwalkLayer);
+      line.bindTooltip('NPS mapped boardwalk '+route.number+
+        ' · edited 2025 · current walkability not verified',{sticky:true});
+      const popup=node('div','geo-popup');
+      popup.appendChild(node('strong','','NPS mapped boardwalk #'+route.number));
+      popup.appendChild(node('p','','Historic GIS centerline ~'+
+        Math.round(route.segmentMeters*3.28084)+
+        ' ft. Not total walking distance or current route approval.'));
+      popup.appendChild(node('p','',route.access?.detail ||
+        'No present-day pedestrian access verification.'));
+      if(route.matchingParkingLot) {
+        const b=node('button','geo-map-focus','Inspect matching lot');
+        b.type='button';
+        b.addEventListener('click',()=>focusPoint('playalinda-lot-'+route.number,true));
+        popup.appendChild(b);
+        line.on('click',()=>focusPoint('playalinda-lot-'+route.number,false));
+      }else {
+        popup.appendChild(node('p','',
+          'No numbered public parking lot #14 exists in the NPS parking GIS. Do not construct a walking connection.'));
+      }
+      line.bindPopup(popup);
+      boardwalkSegments.set(route.number,line);
+    }
+    updateBoardwalkDisplay();
     const road=current.roadCorridor;
     if(Array.isArray(road?.coordinates) && road.coordinates.length>4 &&
        road.coordinates.every(c=>Array.isArray(c)&&c.length===2&&
@@ -583,7 +634,8 @@
       points.filter(p=>p.category==='public-viewpoint').length+
       ' public park references, '+
       points.filter(p=>p.category==='beach-parking').length+
-      ' actual NPS lot footprints and 2 official entrances. No inferred live closures.');
+      ' NPS parking footprints, '+boardwalkSegments.size+
+      ' historically mapped boardwalks and 2 official entrances. No inferred live walkability or closures.');
   }
   updateExplanation();
   document.addEventListener('space-coast:launch-loaded',event=>{
