@@ -13,257 +13,161 @@
     {
       "batchNumber": 1,
       "candidates": [
+        153,
+        162,
+        163,
+        169,
+        170,
+        173,
+        175,
+        180
+      ]
+    },
+    {
+      "batchNumber": 2,
+      "candidates": [
+        181,
+        183,
+        184,
+        185,
+        186,
+        187,
+        22,
+        28
+      ]
+    },
+    {
+      "batchNumber": 3,
+      "candidates": [
+        54,
+        57,
+        60,
+        61,
+        62,
+        72,
+        84,
+        106
+      ]
+    },
+    {
+      "batchNumber": 4,
+      "candidates": [
+        122,
+        51,
+        120,
+        136,
+        137,
+        139,
+        140,
+        152
+      ]
+    },
+    {
+      "batchNumber": 5,
+      "candidates": [
+        176,
+        177,
+        23,
+        213,
+        68,
+        8,
+        38,
+        12
+      ]
+    },
+    {
+      "batchNumber": 6,
+      "candidates": [
+        4,
+        9,
+        191,
+        192,
+        46,
+        91,
+        119,
+        190
+      ]
+    },
+    {
+      "batchNumber": 7,
+      "candidates": [
+        45,
+        150,
+        151,
+        154,
+        160,
+        215,
+        195,
+        205
+      ]
+    },
+    {
+      "batchNumber": 8,
+      "candidates": [
+        52,
+        59,
+        83,
+        99,
+        103,
+        105,
+        107,
+        114
+      ]
+    },
+    {
+      "batchNumber": 9,
+      "candidates": [
+        121,
+        123,
+        20,
+        24,
+        25,
+        37,
+        39,
+        40
+      ]
+    },
+    {
+      "batchNumber": 10,
+      "candidates": [
+        48,
+        58,
+        63,
+        65,
+        69,
+        70,
+        74,
+        75
+      ]
+    },
+    {
+      "batchNumber": 11,
+      "candidates": [
+        86,
+        112,
+        29,
+        42,
+        80,
+        85,
+        129,
+        15
+      ]
+    },
+    {
+      "batchNumber": 12,
+      "candidates": [
         17,
         144,
         18,
         116,
         127,
         148,
-        153,
-        162
-      ]
-    },
-    {
-      "batchNumber": 2,
-      "candidates": [
-        163,
-        169,
-        170,
-        173,
-        175,
-        180,
-        181,
-        183
-      ]
-    },
-    {
-      "batchNumber": 3,
-      "candidates": [
-        184,
-        185,
-        186,
-        187,
-        22,
-        28,
-        54,
-        57
-      ]
-    },
-    {
-      "batchNumber": 4,
-      "candidates": [
-        60,
-        61,
-        62,
-        72,
-        84,
-        106,
-        122,
-        51
-      ]
-    },
-    {
-      "batchNumber": 5,
-      "candidates": [
-        120,
-        136,
-        137,
-        139,
-        140,
-        152,
-        176,
-        177
-      ]
-    },
-    {
-      "batchNumber": 6,
-      "candidates": [
-        23,
-        213,
-        68,
-        8,
-        38,
-        12,
-        4,
-        9
-      ]
-    },
-    {
-      "batchNumber": 7,
-      "candidates": [
-        191,
-        192,
-        46,
-        91,
-        119,
-        190,
-        45,
-        150
-      ]
-    },
-    {
-      "batchNumber": 8,
-      "candidates": [
-        151,
-        154,
-        160,
-        215,
-        195,
-        205,
-        52,
-        59
-      ]
-    },
-    {
-      "batchNumber": 9,
-      "candidates": [
-        83,
-        99,
-        103,
-        105,
-        107,
-        114,
-        121,
-        123
-      ]
-    },
-    {
-      "batchNumber": 10,
-      "candidates": [
-        20,
-        24,
-        25,
-        37,
-        39,
-        40,
-        48,
-        58
-      ]
-    },
-    {
-      "batchNumber": 11,
-      "candidates": [
-        63,
-        65,
-        69,
-        70,
-        74,
-        75,
-        86,
-        112
-      ]
-    },
-    {
-      "batchNumber": 12,
-      "candidates": [
-        29,
-        42,
-        80,
-        85,
-        129,
-        15,
         149,
         172
       ]
     }
   ],
   "candidates": [
-    {
-      "gisObjectId": 17,
-      "name": "Chipmunk Falls",
-      "county": "IRON",
-      "river": "NET RIVER",
-      "lat": 46.291541,
-      "lng": -88.563432,
-      "cluster": "IRON / NET RIVER",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 144,
-      "name": "Copper Falls",
-      "county": "KEWEENAW",
-      "river": "OWL CREEK",
-      "lat": 47.429511,
-      "lng": -88.196008,
-      "cluster": "KEWEENAW / OWL CREEK",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 18,
-      "name": "Cataract Escanaba Falls",
-      "county": "MARQUETTE",
-      "river": null,
-      "lat": 46.315759,
-      "lng": -87.512907,
-      "cluster": "MARQUETTE / UNKNOWN",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 116,
-      "name": "Cliff Falls",
-      "county": "MARQUETTE",
-      "river": "CLIFF RIVER",
-      "lat": 46.833031,
-      "lng": -87.978937,
-      "cluster": "MARQUETTE / CLIFF RIVER",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 127,
-      "name": "Mountain Stream Falls",
-      "county": "MARQUETTE",
-      "river": "MOUNTAIN STREAM",
-      "lat": 46.869297,
-      "lng": -87.893378,
-      "cluster": "MARQUETTE / MOUNTAIN STREAM",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 148,
-      "name": "80-Foot Falls",
-      "county": "MARQUETTE",
-      "river": "STYX RIVER",
-      "lat": 46.853891,
-      "lng": -87.842101,
-      "cluster": "MARQUETTE / STYX RIVER",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
     {
       "gisObjectId": 153,
       "name": "Alder Falls",
@@ -1671,6 +1575,102 @@
       "reviewStatus": "previous-research-needs-public-access-review",
       "sourceCount": 8,
       "blockingGate": "Use Iron County/Gogebic parcel/right-of-way and Michigan DNR maps to find any continuous state-land approach from public road without private crossings; verify signed legal parking and a safe footpath. If only a private approach exists, leave research-only until documented public easement/permission. No landowner outreach."
+    },
+    {
+      "gisObjectId": 17,
+      "name": "Chipmunk Falls",
+      "county": "IRON",
+      "river": "NET RIVER",
+      "lat": 46.291541,
+      "lng": -88.563432,
+      "cluster": "IRON / NET RIVER",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 4,
+      "blockingGate": "Reconcile reported river rapid against GIS and independent field evidence, then identify land tenure, legal public roadside stopping and a safe public riverbank approach, if any."
+    },
+    {
+      "gisObjectId": 144,
+      "name": "Copper Falls",
+      "county": "KEWEENAW",
+      "river": "OWL CREEK",
+      "lat": 47.429511,
+      "lng": -88.196008,
+      "cluster": "KEWEENAW / OWL CREEK",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 5,
+      "blockingGate": "Obtain authoritative present parcel ownership, legal public road stopping, property-specific permission and safe walk to a named drop. Differentiate Copper Falls from Upper Copper and Copper Adit Falls."
+    },
+    {
+      "gisObjectId": 18,
+      "name": "Cataract Escanaba Falls",
+      "county": "MARQUETTE",
+      "river": null,
+      "lat": 46.315759,
+      "lng": -87.512907,
+      "cluster": "MARQUETTE / UNKNOWN",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 5,
+      "blockingGate": "Confirm present operator public-recreation rules at Cataract, the exact approved public parking location, marked walk below dam, current safety exclusion zones and 2026 gate status."
+    },
+    {
+      "gisObjectId": 116,
+      "name": "Cliff Falls",
+      "county": "MARQUETTE",
+      "river": "CLIFF RIVER",
+      "lat": 46.833031,
+      "lng": -87.978937,
+      "cluster": "MARQUETTE / CLIFF RIVER",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 4,
+      "blockingGate": "Resolve parcel title and public forest road status on the Cliff River, inspect road/parking status from an authoritative manager and verify the complete lawful walking access before offering a driving pin."
+    },
+    {
+      "gisObjectId": 127,
+      "name": "Mountain Stream Falls",
+      "county": "MARQUETTE",
+      "river": "MOUNTAIN STREAM",
+      "lat": 46.869297,
+      "lng": -87.893378,
+      "cluster": "MARQUETTE / MOUNTAIN STREAM",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 4,
+      "blockingGate": "Keep as restricted geographic research. Reconsider only if the relevant owner or land manager publishes a specific lawful public access corridor and clear visitor rules."
+    },
+    {
+      "gisObjectId": 148,
+      "name": "80-Foot Falls",
+      "county": "MARQUETTE",
+      "river": "STYX RIVER",
+      "lat": 46.853891,
+      "lng": -87.842101,
+      "cluster": "MARQUETTE / STYX RIVER",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 4,
+      "blockingGate": "Obtain reliable field confirmation of the actual flume, reconcile its GIS/GNIS position and independently establish parcel ownership, authorized public viewpoint and safe signed parking, if any."
     },
     {
       "gisObjectId": 149,
