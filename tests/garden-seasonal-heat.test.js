@@ -60,3 +60,32 @@ test('Census unmapped, upstream errors never pass a made-up seasonal total',asyn
   assert.equal(fail.statusCode,503);assert.ok(!('totalGdd50F' in fail.body));
  }finally{global.fetch=old;}
 });
+
+test('valid northern heat survives missing reference anomaly without fake comparison',async()=>{
+ const old=global.fetch;
+ try{
+  global.fetch=async url=>{
+   const u=new URL(url);assert.equal(u.hostname,'phenology.chrisizworski.com');
+   const lat=Number(u.searchParams.get('lat')),lon=Number(u.searchParams.get('lon'));
+   return {ok:true,json:async()=>({...provider({lat,lon}),status:'PARTIAL',comparison:null,
+      reason:'Reference anomaly not mapped at this point.'})};
+  };
+  const r=response();await handler({method:'GET',query:{site:'bay-city'}},r);
+  assert.equal(r.statusCode,200);
+  assert.equal(r.body.status,'PARTIAL');
+  assert.ok(Number.isFinite(r.body.totalGdd50F));
+  assert.equal(r.body.comparison,null);
+  assert.equal(r.body.consumerScope,'seasonal-context-only');
+ }finally{global.fetch=old;}
+});
+test('reject missing base-temperature warmth even if source says PARTIAL',async()=>{
+ const old=global.fetch;
+ try{
+  global.fetch=async url=>{
+   const u=new URL(url),lat=Number(u.searchParams.get('lat')),lon=Number(u.searchParams.get('lon'));
+   return {ok:true,json:async()=>({...provider({lat,lon}),status:'PARTIAL',totalGdd50F:null,comparison:null})};
+  };
+  const r=response();await handler({method:'GET',query:{site:'bay-city'}},r);
+  assert.equal(r.statusCode,503);assert.equal(r.body.scope,'no-seasonal-claim');
+ }finally{global.fetch=old;}
+});
