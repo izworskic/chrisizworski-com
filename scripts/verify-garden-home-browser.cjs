@@ -23,7 +23,7 @@ const assert=require('node:assert/strict');
    await page.locator('#gardenPlanTitle').scrollIntoViewIfNeeded();
    await page.screenshot({path:`artifacts/garden-home-browser/garden-${width}.png`,fullPage:true,animations:'disabled'});
    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1),'horizontal page overflow at '+width);
-   await page.locator('#pnPlace').fill('Adrian');await page.locator('#pnPlace').dispatchEvent('change');
+   await page.locator('#pnPlace').fill('Adrian');await page.locator('#pnPlace').press('Tab');
    assert.match(await page.locator('#gardenPlan').innerText(),/No sourced fall frost date/);
    await page.locator('.garden-plant').filter({hasText:'Tomatoes'}).getByRole('button',{name:/Remove/}).click();
    await page.waitForFunction(()=>!document.querySelector('#gardenAhead').textContent.includes('Tomatoes'),null,{timeout:5000});
