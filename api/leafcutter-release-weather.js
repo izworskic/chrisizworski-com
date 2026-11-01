@@ -7,7 +7,7 @@ function validHourlyUrl(raw){
  && /^\/gridpoints\/[A-Za-z]{3}\/\d+,\d+\/forecast\/hourly\/?$/.test(u.pathname)&&!u.search&&!u.hash?u.href:null;}catch{return null;}
 }
 async function getNws(url){
- const r=await fetch(url,{headers:HEADERS,signal:AbortSignal.timeout(7500)});
+ const r=await fetch(url,{headers:HEADERS,signal:AbortSignal.timeout(7500),redirect:'error'});
  if(!r.ok)throw Error('NWS_UNAVAILABLE');
  return r.json();
 }
@@ -28,7 +28,7 @@ module.exports=async function handler(req,res){
   const p=forecast?.properties||{};
   const issuedAt=p.generatedAt||p.updateTime||p.updated||null;
   const timeZone=String(p.timeZone||point?.properties?.timeZone||site.tz||'America/Detroit');
-  if(!['America/Detroit','America/Chicago','US/Eastern','US/Central'].includes(timeZone))throw Error('INVALID_NWS_TIMEZONE');
+  if(!['America/Detroit','America/Chicago','America/New_York','US/Eastern','US/Central'].includes(timeZone))throw Error('INVALID_NWS_TIMEZONE');
   const summary=E.reducePeriods(p.periods,issuedAt,new Date(),timeZone);
   if(!summary.daily.length)throw Error('NO_USABLE_FORECAST');
   res.setHeader('Cache-Control','public, s-maxage=900, stale-while-revalidate=300');
