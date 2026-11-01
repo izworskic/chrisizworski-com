@@ -15,6 +15,18 @@ const assert=require('node:assert/strict');
    page.on('pageerror',error=>console.error('Browser error:',error));
    await page.route('**/*',route=>route.request().url().startsWith('http://127.0.0.1:8765/')?route.continue():route.abort());
    await page.goto('http://127.0.0.1:8765/michigan-gardening/?place=Bay+City&date=2026-11-01',{waitUntil:'domcontentloaded'});
+   // Read the computed colors: shared site link styles must not override guide button text.
+   const guideButtons=page.locator('a.card-link');
+   assert.ok(await guideButtons.count()>=10,'guide buttons should be present');
+   const checkContrast=async()=>{
+    const low=await page.locator('a.card-link').evaluateAll(links=>{
+     function lum(color){const rgb=color.match(/[\d.]+/g).slice(0,3).map(Number).map(v=>{v/=255;return v<=.04045?v/12.92:Math.pow((v+.055)/1.055,2.4)});return .2126*rgb[0]+.7152*rgb[1]+.0722*rgb[2]}
+     return links.map(link=>{const css=getComputedStyle(link),a=lum(css.color),b=lum(css.backgroundColor);return {label:link.textContent.trim(),ratio:(Math.max(a,b)+.05)/(Math.min(a,b)+.05)}}).filter(x=>x.ratio<4.5);
+    });
+    assert.deepEqual(low,[],'guide button text must have at least 4.5:1 contrast');
+   };
+   await checkContrast();await guideButtons.first().hover();await checkContrast();
+   await guideButtons.first().focus();await checkContrast();
    assert.equal(await page.locator('#plant-now').getAttribute('open'),null);
    assert.equal(await page.locator('[data-garden-result]').count(),12);
    await page.screenshot({path:`artifacts/garden-home-browser/hub-${width}.png`,fullPage:true,animations:'disabled'});
