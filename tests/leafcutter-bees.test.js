@@ -20,13 +20,14 @@ function planner() {
     };
   }
   for (const k of ['zone','month','flowers','temp','nest','region','result-title','result-text',
-    'result-actions','result-caveat','season-label','season-head','season-intro','season-actions','season-foot', 'brood-stage','brood-stage-wrap']) element(k);
+    'result-actions','result-caveat','season-label','season-head','season-intro','season-actions','season-foot', 'brood-stage','brood-stage-wrap', 'bee-location', 'bee-check', 'bee-weather-status','bee-day-strip','bee-issued','bee-flower-guide','bee-flower-list','bee-forecast-desk']) element(k);
   Object.assign(nodes.zone, { value: '6a' });
   Object.assign(nodes.flowers, { value: 'unknown' });
   Object.assign(nodes.temp, { value: 'unknown' });
   Object.assign(nodes.nest, { value: 'none' });
   Object.assign(nodes.region, { value: 'michigan' });
   Object.assign(nodes['brood-stage'], {value: 'planning'});
+  Object.assign(nodes['bee-location'], {value: 'bay-city'});
   const paths = ['wild','managed'].map(v => ({
     ...element('path-' + v),
     getAttribute(k) { return k === 'data-path' ? v : this.attrs[k]; }
@@ -38,7 +39,8 @@ function planner() {
   const document = {
     getElementById: element,
     querySelectorAll(q) { return q === '[data-path]' ? paths : q === '[data-season]' ? seasons : []; },
-    createElement(tag) { return { textContent: '', tag }; }
+    createElement(tag) { return { textContent: '', tag, appendChild() {}, className: '', attrs: {} }; },
+    createTextNode(t) { return {textContent:t}; }
   };
   vm.runInNewContext(script, { document, Date });
   function set(k, v) { nodes[k].value = v; nodes[k].handlers.change(); }
@@ -58,7 +60,7 @@ test('leafcutter guide is indexable with valid JSON-LD, primary sources and acce
   }
   assert.match(html, /Five steps to put occupied nesting tubes away safely/);
   assert.match(html, /aria-live="polite"/);
-  assert.match(html, /@media\(max-width:760px\)\{\.house-grid\{grid-template-columns:1fr\}/);
+  assert.match(html, /@media\(max-width:760px\)\{[^}]*\.house-grid\{grid-template-columns:1fr\}/);
   assert.ok((html.match(/<img\b/g) || []).length >= 2);
 });
 
@@ -109,4 +111,15 @@ test('three-stage winter and incubation guide distinguishes wild nests and manag
   assert.match(html, /Around 60°F daytime temperatures is a/);
   assert.match(html, /Crown Bees incubation explanation/);
   assert.match(html, /Kemp &amp; Bosch, 2001/);
+});
+
+test('release forecast desk keeps blooms and actual observation separate', () => {
+  assert.match(html, /id="bee-location"/);
+  assert.match(html, /id="bee-check"/);
+  assert.match(html, /id="bee-day-strip"/);
+  assert.match(html, /id="bee-flowers"/);
+  assert.match(html, /source-backed/i);
+  assert.match(html, /Forecast does not equal clearance/);
+  assert.match(html, /National Weather Service/);
+  assert.match(html, /Typical plant seasons/);
 });
