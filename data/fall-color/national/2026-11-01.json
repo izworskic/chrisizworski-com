@@ -1,0 +1,39 @@
+{
+  "date": "2026-11-01",
+  "updated": "2026-11-01T17:10:37.296Z",
+  "briefings": {
+    "new-england": "Season has largely passed; expect minimal foliage on Kancamagus Highway and Smugglers' Notch with 67% rain chance this weekend.",
+    "great-smoky-mountains": "Newfound Gap Road and Cades Cove Loop remain within prime viewing window with partly sunny conditions and only 8% rain chance.",
+    "colorado-aspens": "Aspen color season has ended; Maroon Creek Road and Kebler Pass show minimal remaining color with possible snow showers.",
+    "adirondacks": "Season well past peak; Whiteface Veterans' Memorial Highway offers limited foliage with 55% rain likelihood this weekend.",
+    "north-shore-superior": "Season has ended on North Shore Scenic Drive and Gunflint Trail; live weather data unavailable for this region.",
+    "ozarks": "Arkansas Scenic Byway 7 and Pig Trail remain within traditional window with mostly sunny skies and 12% rain chance.",
+    "eastern-sierra": "Bishop Creek Canyon and June Lake Loop show minimal remaining aspen color; sunny conditions expected with no rain.",
+    "wasatch": "Alpine Loop and Guardsman Pass have passed peak season; mostly sunny weekend with 10% rain chance.",
+    "columbia-river-gorge": "Historic Columbia River Highway remains within prime viewing window despite 51% rain chance this weekend.",
+    "door-county": "WI-42 and Peninsula State Park show lingering color past peak; mostly cloudy with low rain risk.",
+    "poconos": "Delaware Water Gap and Lake Wallenpaupack corridor retain color past traditional peak; 46% rain chance this weekend.",
+    "texas-hill-country": "FM-337 and Lost Maples approach remain within traditional window with mostly clear skies and 24% rain chance.",
+    "west-virginia-highlands": "Highland Scenic Highway and US-48 overlooks show moderate remaining color; 44% rain chance this weekend.",
+    "catskills": "Catskill Mountains Scenic Byway and Kaaterskill Clove past peak season; 61% rain likelihood this weekend.",
+    "shenandoah": "Skyline Drive North and Central Districts retain strong color near peak with only 24% rain chance this weekend."
+  },
+  "method": "AI-generated model summary",
+  "evidenceRegions": [
+    "new-england",
+    "great-smoky-mountains",
+    "colorado-aspens",
+    "adirondacks",
+    "north-shore-superior",
+    "ozarks",
+    "eastern-sierra",
+    "wasatch",
+    "columbia-river-gorge",
+    "door-county",
+    "poconos",
+    "texas-hill-country",
+    "west-virginia-highlands",
+    "catskills",
+    "shenandoah"
+  ]
+}
