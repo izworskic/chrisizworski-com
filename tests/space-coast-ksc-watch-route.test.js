@@ -71,6 +71,9 @@ test('OIDC claims are tied to only the intended repository, workflow and main br
     job_workflow_ref:_internal.JOB_WORKFLOW_REF,
     runner_environment:'github-hosted',event_name:'schedule',sha:'a'.repeat(40)};
   assert.equal(_internal.claimsMatch(claims,now),true);
+  const {job_workflow_ref:unusedJobRef,...ordinaryJob} = claims;
+  assert.equal(_internal.claimsMatch({...ordinaryJob,workflow_ref:_internal.JOB_WORKFLOW_REF},now),true);
+  assert.equal(_internal.claimsMatch({...ordinaryJob,workflow_ref:'other/repo/.github/workflows/unknown.yml@refs/heads/main'},now),false);
   assert.equal(_internal.claimsMatch({...claims,event_name:'push'},now),true);
   for (const override of [
     {repository:'attacker/repo'},{ref:'refs/heads/feature'},
