@@ -129,7 +129,7 @@
       link.hidden=!calendar;
       if(calendar)link.href='/zone-6a-planting-calendar/?city='+encodeURIComponent(st.s)+'&crop='+encodeURIComponent(name);
       var rows = get('pnRows').children;
-      rows.forEach(function (tr) {
+      Array.prototype.forEach.call(rows, function (tr) {
         var id = tr.getAttribute('data-crop');
         tr.classList.toggle('pn-row-selected', id === selected);
       });
