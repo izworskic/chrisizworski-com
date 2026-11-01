@@ -4595,6 +4595,506 @@
         "saferAlternative": "Canyon Falls and other signed public trail waterfalls are more reliable visitor choices.",
         "confidence": "strong-identity-limited-access"
       }
+    },
+    {
+      "gisObjectId": 17,
+      "name": "Chipmunk Falls",
+      "county": "IRON",
+      "status": "research-only-minor-rapid-disqualified-no-route",
+      "publicAccess": "not-established-continuously",
+      "publicationEligible": false,
+      "title": "Chipmunk Falls: evidence and visitor-access decision",
+      "summary": "Michigan GIS #17 is Iron County's Net River feature. WWD describes a sub-three-foot rapid and warns USGS place-label positioning can differ from its feature; do not confuse with Alger County Chipmunk Falls. No parcel-level ownership or public corridor for this exact Net River feature was established in this review; names and map labels are not title evidence. UPtravel lists the Amasa/Net River attraction but explicitly cautions there is no direct trail and signage may be absent; a generic third-party 0.5-mile dirt-trail description does not authorize a logging-road trip. No land-manager-signed visitor lot or lawful public road turnout to the actual Net River feature was verified; do not publish an automotive destination. No verified signed foot trail or accessible public bank viewpoint is documented; claims of an easy riverside stroll remain unsupported. No current riverbank, gate, seasonal trail or safe-stopping status verified for November 2026.",
+      "guidance": "Do not plan a dedicated waterfall visit or follow a generic logging-road or map-pin route.",
+      "reviewLimitations": "Named source point, historic permission and online visitor directions do not establish a legal continuous walk or present safe parking.",
+      "nextEvidence": "Reconcile reported river rapid against GIS and independent field evidence, then identify land tenure, legal public roadside stopping and a safe public riverbank approach, if any.",
+      "researchPage": "/upper-peninsula-waterfalls/research/chipmunk-falls-net-river/",
+      "sourceLinks": [
+        {
+          "label": "Michigan waterfall GIS natural source",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "World Waterfall Database: tiny Net River rapid",
+          "url": "https://www.worldwaterfalldatabase.com/waterfall/Chipmunk-Falls-13118"
+        },
+        {
+          "label": "UPtravel Chipmunk Falls near Amasa",
+          "url": "https://www.uptravel.com/listing/chipmunk-falls-amasa/723/"
+        },
+        {
+          "label": "Competing Iron County listing",
+          "url": "https://michiganupperpeninsula.com/places-to-visit/waterfalls/"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-11-01",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Geographic identity and waterfall stature",
+            "status": "documented-contradiction",
+            "finding": "Michigan GIS #17 is Iron County's Net River feature. WWD describes a sub-three-foot rapid and warns USGS place-label positioning can differ from its feature; do not confuse with Alger County Chipmunk Falls.",
+            "source": "https://www.worldwaterfalldatabase.com/waterfall/Chipmunk-Falls-13118"
+          },
+          {
+            "label": "Land ownership at the river feature",
+            "status": "not-cleared",
+            "finding": "No parcel-level ownership or public corridor for this exact Net River feature was established in this review; names and map labels are not title evidence.",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Tourism or historic approach versus permission",
+            "status": "documented-not-live",
+            "finding": "UPtravel lists the Amasa/Net River attraction but explicitly cautions there is no direct trail and signage may be absent; a generic third-party 0.5-mile dirt-trail description does not authorize a logging-road trip.",
+            "source": "https://www.uptravel.com/listing/chipmunk-falls-amasa/723/"
+          },
+          {
+            "label": "Authorized road and visitor parking",
+            "status": "not-cleared",
+            "finding": "No land-manager-signed visitor lot or lawful public road turnout to the actual Net River feature was verified; do not publish an automotive destination.",
+            "source": "https://www.uptravel.com/listing/chipmunk-falls-amasa/723/"
+          },
+          {
+            "label": "Continuous lawful walking route",
+            "status": "not-cleared",
+            "finding": "No verified signed foot trail or accessible public bank viewpoint is documented; claims of an easy riverside stroll remain unsupported.",
+            "source": "https://www.uptravel.com/listing/chipmunk-falls-amasa/723/"
+          },
+          {
+            "label": "Current conditions and seasonal restrictions",
+            "status": "not-cleared",
+            "finding": "No current riverbank, gate, seasonal trail or safe-stopping status verified for November 2026.",
+            "source": "https://www.uptravel.com/listing/chipmunk-falls-amasa/723/"
+          }
+        ]
+      },
+      "visitorDecision": {
+        "decision": "Do not plan a waterfall trip from this record",
+        "context": "A named rapid, not a proven destination waterfall.",
+        "saferAlternative": "Choose a signed waterfall visitor site rather than treating a Net River logging road as public parking.",
+        "confidence": "high-name-evidence-low-visitor-access"
+      }
+    },
+    {
+      "gisObjectId": 144,
+      "name": "Copper Falls",
+      "county": "KEWEENAW",
+      "status": "research-only-real-waterfalls-private-approaches-permission-unverified",
+      "publicAccess": "not-established-continuously",
+      "publicationEligible": false,
+      "title": "Copper Falls: evidence and visitor-access decision",
+      "summary": "Michigan GIS #144 names Copper Falls along Owl Creek; the independently mapped specialist point covers the extended creek cascade. Upper Copper Falls and Copper Adit Falls are separate features associated with mine workings. Public discussion on the field guide identifies private Copper Falls Loop road and nearby parcels. No current official parcel survey or continuous public land corridor was verified; do not infer a right of passage from a waterfall map. Older guide directions use Copper Falls Loop. Public reader reports call the route private; a 2021 comment representing an owner tolerates some polite hikers but discourages driving. Neither proves broad present permission for visitors. No independently certified lawful public parking, shoulder clearance or vehicle permission for the private loop. No map-navigation pin to a private track. No verified signed all-public walking corridor for any specific Copper Falls drop. Mine openings, steep gorge terrain and confusing cascades increase the cost of false directions. No November 2026 landowner permission, gate status, mine hazard inspection or safe waterfall foot-route confirmation.",
+      "guidance": "Do not route drivers down Copper Falls Loop, into an old pit or to mine shafts. Treat the older private-land comment as context, not permission.",
+      "reviewLimitations": "Named source point, historic permission and online visitor directions do not establish a legal continuous walk or present safe parking.",
+      "nextEvidence": "Obtain authoritative present parcel ownership, legal public road stopping, property-specific permission and safe walk to a named drop. Differentiate Copper Falls from Upper Copper and Copper Adit Falls.",
+      "researchPage": "/upper-peninsula-waterfalls/research/copper-falls-owl-creek/",
+      "sourceLinks": [
+        {
+          "label": "Michigan waterfall GIS natural source",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "Owl Creek Copper Falls field report and access discussion",
+          "url": "https://www.waterfallsofthekeweenaw.com/owl-creek/copper-falls/"
+        },
+        {
+          "label": "Upper Copper Falls mine-adit distinction",
+          "url": "https://www.waterfallsofthekeweenaw.com/owl-creek/upper-copper-falls/"
+        },
+        {
+          "label": "Copper Adit Falls separate feature",
+          "url": "https://www.waterfallsofthekeweenaw.com/owl-creek/copper-adit-falls/"
+        },
+        {
+          "label": "Copper Country historic visitor directions",
+          "url": "https://www.coppercountry.com/destinations/waterfalls/copper-falls/"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-11-01",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Geographic identity and feature distinction",
+            "status": "documented-geography",
+            "finding": "Michigan GIS #144 names Copper Falls along Owl Creek; the independently mapped specialist point covers the extended creek cascade. Upper Copper Falls and Copper Adit Falls are separate features associated with mine workings.",
+            "source": "https://www.waterfallsofthekeweenaw.com/owl-creek/copper-falls/"
+          },
+          {
+            "label": "Land ownership at falls and road",
+            "status": "not-cleared",
+            "finding": "Public discussion on the field guide identifies private Copper Falls Loop road and nearby parcels. No current official parcel survey or continuous public land corridor was verified; do not infer a right of passage from a waterfall map.",
+            "source": "https://www.waterfallsofthekeweenaw.com/owl-creek/copper-falls/"
+          },
+          {
+            "label": "Historic directions versus current permission",
+            "status": "documented-contradiction",
+            "finding": "Older guide directions use Copper Falls Loop. Public reader reports call the route private; a 2021 comment representing an owner tolerates some polite hikers but discourages driving. Neither proves broad present permission for visitors.",
+            "source": "https://www.waterfallsofthekeweenaw.com/owl-creek/copper-falls/"
+          },
+          {
+            "label": "Authorized road approach and parking",
+            "status": "not-cleared",
+            "finding": "No independently certified lawful public parking, shoulder clearance or vehicle permission for the private loop. No map-navigation pin to a private track.",
+            "source": "https://www.waterfallsofthekeweenaw.com/owl-creek/copper-falls/"
+          },
+          {
+            "label": "Public lawful trail and viewpoint",
+            "status": "not-cleared",
+            "finding": "No verified signed all-public walking corridor for any specific Copper Falls drop. Mine openings, steep gorge terrain and confusing cascades increase the cost of false directions.",
+            "source": "https://www.waterfallsofthekeweenaw.com/owl-creek/upper-copper-falls/"
+          },
+          {
+            "label": "Current permission and seasonal conditions",
+            "status": "not-cleared",
+            "finding": "No November 2026 landowner permission, gate status, mine hazard inspection or safe waterfall foot-route confirmation.",
+            "source": "https://www.waterfallsofthekeweenaw.com/owl-creek/copper-falls/"
+          }
+        ]
+      },
+      "visitorDecision": {
+        "decision": "Access not cleared; do not use the old private-road directions",
+        "context": "A beautiful historic creek, but private approaches are not visitor trailheads.",
+        "saferAlternative": "For an ordinary visitor, choose an independently verified public Keweenaw waterfall approach.",
+        "confidence": "waterfall-confirmed-private-route-contested"
+      }
+    },
+    {
+      "gisObjectId": 18,
+      "name": "Cataract Escanaba Falls",
+      "county": "MARQUETTE",
+      "status": "research-only-real-dam-adjacent-cascade-general-public-land-only",
+      "publicAccess": "not-established-continuously",
+      "publicationEligible": false,
+      "title": "Cataract Escanaba Falls: evidence and visitor-access decision",
+      "summary": "Michigan GIS #18 locates Cataract Escanaba Falls directly by the Cataract hydro facility. Independent waterfall records call this Cataract Dam Falls; the gorge's dam spill and lower natural cascades should not be conflated. Michigan DNR's 2024 Gwinn compartment report states adjacent UPPCO lands at Cataract Impoundment/Middle Branch were open for public river-area access. This is a 2024 management statement, not a site-specific legal or current 2026 dam-area route permit. Travel Marquette describes Cataract Dam Falls as an easy outing but also says the trail is difficult to find. Independent field notes place lower drops past a river gauge, where the informal footpath becomes indistinct. No current signed visitor parking coordinates, hydro-service exclusions or safe legal lot-to-falls connection have been independently verified; general river access cannot substitute. No verified foot alignment across the dam vicinity and downriver bank to a safe lower-waterfall viewpoint; do not draw route lines or suggest dam/spillway access. No current operator public-access status, dam safety restrictions, downstream discharge, seasonal road or ice condition has been established.",
+      "guidance": "Do not use dam-service roads, spillways or river-edge shortcuts as a default map route. General access in an older management report is not a safe, signed waterfall trail.",
+      "reviewLimitations": "Named source point, historic permission and online visitor directions do not establish a legal continuous walk or present safe parking.",
+      "nextEvidence": "Confirm present operator public-recreation rules at Cataract, the exact approved public parking location, marked walk below dam, current safety exclusion zones and 2026 gate status.",
+      "researchPage": "/upper-peninsula-waterfalls/research/cataract-escanaba-falls/",
+      "sourceLinks": [
+        {
+          "label": "Michigan waterfall GIS natural source",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "Michigan DNR 2024 Gwinn Compartment 32032, pages 1–2",
+          "url": "https://www.dnr.state.mi.us/publications/pdfs/ForestsLandWater/Cmpt_Reviews/Gwinn/2024/gwi032_comp_info.pdf"
+        },
+        {
+          "label": "Travel Marquette official regional visitor guide",
+          "url": "https://www.travelmarquette.com/outdoor-adventure/waterfalls/"
+        },
+        {
+          "label": "Cataract Dam Falls independent natural feature account",
+          "url": "https://www.waterfallsofthekeweenaw.com/middle-branch-escanaba-river/cataract-dam-falls/"
+        },
+        {
+          "label": "Cataract plant ownership reference",
+          "url": "https://hydro.org/map/hydro/existing-hydropower/?state=MI"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-11-01",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Geographic identity and dam-related falls",
+            "status": "documented-geography",
+            "finding": "Michigan GIS #18 locates Cataract Escanaba Falls directly by the Cataract hydro facility. Independent waterfall records call this Cataract Dam Falls; the gorge's dam spill and lower natural cascades should not be conflated.",
+            "source": "https://www.waterfallsofthekeweenaw.com/middle-branch-escanaba-river/cataract-dam-falls/"
+          },
+          {
+            "label": "Land manager and general public river access",
+            "status": "documented-not-live",
+            "finding": "Michigan DNR's 2024 Gwinn compartment report states adjacent UPPCO lands at Cataract Impoundment/Middle Branch were open for public river-area access. This is a 2024 management statement, not a site-specific legal or current 2026 dam-area route permit.",
+            "source": "https://www.dnr.state.mi.us/publications/pdfs/ForestsLandWater/Cmpt_Reviews/Gwinn/2024/gwi032_comp_info.pdf"
+          },
+          {
+            "label": "Visitor description versus verified route",
+            "status": "documented-not-live",
+            "finding": "Travel Marquette describes Cataract Dam Falls as an easy outing but also says the trail is difficult to find. Independent field notes place lower drops past a river gauge, where the informal footpath becomes indistinct.",
+            "source": "https://www.travelmarquette.com/outdoor-adventure/waterfalls/"
+          },
+          {
+            "label": "Present legal public parking and dam boundary",
+            "status": "not-cleared",
+            "finding": "No current signed visitor parking coordinates, hydro-service exclusions or safe legal lot-to-falls connection have been independently verified; general river access cannot substitute.",
+            "source": "https://www.dnr.state.mi.us/publications/pdfs/ForestsLandWater/Cmpt_Reviews/Gwinn/2024/gwi032_comp_info.pdf"
+          },
+          {
+            "label": "Complete safe route to specific viewpoint",
+            "status": "not-cleared",
+            "finding": "No verified foot alignment across the dam vicinity and downriver bank to a safe lower-waterfall viewpoint; do not draw route lines or suggest dam/spillway access.",
+            "source": "https://www.waterfallsofthekeweenaw.com/middle-branch-escanaba-river/cataract-dam-falls/"
+          },
+          {
+            "label": "November 2026 conditions and operator rules",
+            "status": "not-cleared",
+            "finding": "No current operator public-access status, dam safety restrictions, downstream discharge, seasonal road or ice condition has been established.",
+            "source": "https://hydro.org/map/hydro/existing-hydropower/?state=MI"
+          }
+        ]
+      },
+      "visitorDecision": {
+        "decision": "Promising for future visitor guide; dam-area parking and safe route unverified",
+        "context": "General public river access is documented; the dam-side waterfall route still is not.",
+        "saferAlternative": "Travel Marquette also describes Wright Street Falls as a signed, easier outing near Marquette.",
+        "confidence": "documented-general-access-not-site-specific"
+      }
+    },
+    {
+      "gisObjectId": 116,
+      "name": "Cliff Falls",
+      "county": "MARQUETTE",
+      "status": "research-only-real-falls-remote-road-current-legal-route-unverified",
+      "publicAccess": "not-established-continuously",
+      "publicationEligible": false,
+      "title": "Cliff Falls: evidence and visitor-access decision",
+      "summary": "Michigan GIS #116 locates Cliff Falls on Cliff River in Marquette County; independent Cliff Falls account maps the same river area. A separate roundup's Cliff Drive/Phoenix Keweenaw coordinates are a different place and cannot navigate to this feature. An independent waterfall account has historically described privately owned land with informal visits; no current official legal parcel or written public-access right at waterfall and access road has been established. Third-party sources mention Erick/Northwestern unsigned forestry roads and a primitive campsite; neither a decades-old welcome nor a campsite proves current public driving or visitor permission. No officially designated lot, accessible signed legal turnout or continuous permitted drive on the exact approach has been verified; do not publish coordinates of an informal pull-off as visitor parking. No present surveyed public footpath and safe river viewpoint is established; a river coordinate does not establish permission to pass through working forest property. No current road maintenance, bridge/gate, weather, landowner entry or remote-forest rescue conditions verified.",
+      "guidance": "Do not use the unrelated Keweenaw coordinates or assume that an unsigned campsite/pull-off is legal public parking.",
+      "reviewLimitations": "Named source point, historic permission and online visitor directions do not establish a legal continuous walk or present safe parking.",
+      "nextEvidence": "Resolve parcel title and public forest road status on the Cliff River, inspect road/parking status from an authoritative manager and verify the complete lawful walking access before offering a driving pin.",
+      "researchPage": "/upper-peninsula-waterfalls/research/cliff-falls-cliff-river/",
+      "sourceLinks": [
+        {
+          "label": "Michigan waterfall GIS natural source",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "Cliff Falls field and visitorship account",
+          "url": "https://upper-michigan.com/guide/waterfalls/cliff-falls.html"
+        },
+        {
+          "label": "Forty Foot Falls independent waterfall photography and account",
+          "url": "https://gowaterfalling.com/waterfalls/fortyfoot.shtml"
+        },
+        {
+          "label": "Conflicting Keweenaw Cliff Drive waterfall list",
+          "url": "https://michiganupperpeninsula.com/places-to-visit/waterfalls/"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-11-01",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Geographic identity and map conflict",
+            "status": "documented-contradiction",
+            "finding": "Michigan GIS #116 locates Cliff Falls on Cliff River in Marquette County; independent Cliff Falls account maps the same river area. A separate roundup's Cliff Drive/Phoenix Keweenaw coordinates are a different place and cannot navigate to this feature.",
+            "source": "https://upper-michigan.com/guide/waterfalls/cliff-falls.html"
+          },
+          {
+            "label": "Land ownership at the feature",
+            "status": "not-cleared",
+            "finding": "An independent waterfall account has historically described privately owned land with informal visits; no current official legal parcel or written public-access right at waterfall and access road has been established.",
+            "source": "https://gowaterfalling.com/waterfalls/fortyfoot.shtml"
+          },
+          {
+            "label": "Historic roads versus authorized entry",
+            "status": "documented-not-live",
+            "finding": "Third-party sources mention Erick/Northwestern unsigned forestry roads and a primitive campsite; neither a decades-old welcome nor a campsite proves current public driving or visitor permission.",
+            "source": "https://upper-michigan.com/guide/waterfalls/cliff-falls.html"
+          },
+          {
+            "label": "Current signed legal parking",
+            "status": "not-cleared",
+            "finding": "No officially designated lot, accessible signed legal turnout or continuous permitted drive on the exact approach has been verified; do not publish coordinates of an informal pull-off as visitor parking.",
+            "source": "https://upper-michigan.com/guide/waterfalls/cliff-falls.html"
+          },
+          {
+            "label": "Complete lawful walking route",
+            "status": "not-cleared",
+            "finding": "No present surveyed public footpath and safe river viewpoint is established; a river coordinate does not establish permission to pass through working forest property.",
+            "source": "https://gowaterfalling.com/waterfalls/fortyfoot.shtml"
+          },
+          {
+            "label": "2026 seasonal access and roads",
+            "status": "not-cleared",
+            "finding": "No current road maintenance, bridge/gate, weather, landowner entry or remote-forest rescue conditions verified.",
+            "source": "https://upper-michigan.com/guide/waterfalls/cliff-falls.html"
+          }
+        ]
+      },
+      "visitorDecision": {
+        "decision": "Real waterfall, but no independently cleared visitor arrival",
+        "context": "The waterfall is real; several maps would send you to the wrong place.",
+        "saferAlternative": "Use an established public Marquette-area waterfall with signed parking instead.",
+        "confidence": "high-feature-location-low-public-route"
+      }
+    },
+    {
+      "gisObjectId": 127,
+      "name": "Mountain Stream Falls",
+      "county": "MARQUETTE",
+      "status": "research-only-private-posted-public-entry-prohibited",
+      "publicAccess": "not-established-continuously",
+      "publicationEligible": false,
+      "title": "Mountain Stream Falls: evidence and visitor-access decision",
+      "summary": "Michigan GIS #127 names Mountain Stream; the independent USGS-derived hydro crosswalk agrees within about 47 metres. World Waterfall Database describes an approximately 25-foot lidar-indicated drop, not a surveyed public viewpoint. World Waterfall Database explicitly marks the feature Posted/private, closed to general public. A regional source assigns it to Huron Mountain Club lands; this is strong restrictive visitor evidence but is not a new 2026 parcel survey. A generic roundup presents a Sugarloaf Mountain trail and unrelated Marquette coordinates; that is not a route into private Huron Mountain territory and conflicts with private-access sources. There is no public parking/permission for this feature documented; do not offer mine/club/service roads, alternate coordinates or trailhead maps. No publicly authorized waterfall walking trail or vista. Posted/private restrictions defeat visitor publication even if the natural location is correct. No 2026 public access opening exists in reviewed evidence. Do not interpret general seasonal hiking conditions as a change in property access.",
+      "guidance": "Do not attempt to hike to Mountain Stream Falls or adopt the inaccurate Sugarloaf/M-550 directions.",
+      "reviewLimitations": "Named source point, historic permission and online visitor directions do not establish a legal continuous walk or present safe parking.",
+      "nextEvidence": "Keep as restricted geographic research. Reconsider only if the relevant owner or land manager publishes a specific lawful public access corridor and clear visitor rules.",
+      "researchPage": "/upper-peninsula-waterfalls/research/mountain-stream-falls/",
+      "sourceLinks": [
+        {
+          "label": "Michigan waterfall GIS natural source",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "World Waterfall Database: Posted/private access",
+          "url": "https://www.worldwaterfalldatabase.com/waterfall/Mountain-Stream-Falls-13230"
+        },
+        {
+          "label": "Regional Mountain Stream Falls private land description",
+          "url": "https://upper-michigan.com/guide/waterfalls/mountain-stream-falls.html"
+        },
+        {
+          "label": "Conflicting Sugarloaf Mountain directions",
+          "url": "https://michiganupperpeninsula.com/places-to-visit/waterfalls/"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-11-01",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Geographic identity and waterfall character",
+            "status": "documented-geography",
+            "finding": "Michigan GIS #127 names Mountain Stream; the independent USGS-derived hydro crosswalk agrees within about 47 metres. World Waterfall Database describes an approximately 25-foot lidar-indicated drop, not a surveyed public viewpoint.",
+            "source": "https://www.worldwaterfalldatabase.com/waterfall/Mountain-Stream-Falls-13230"
+          },
+          {
+            "label": "Land ownership and visitor restriction",
+            "status": "documented-not-live",
+            "finding": "World Waterfall Database explicitly marks the feature Posted/private, closed to general public. A regional source assigns it to Huron Mountain Club lands; this is strong restrictive visitor evidence but is not a new 2026 parcel survey.",
+            "source": "https://www.worldwaterfalldatabase.com/waterfall/Mountain-Stream-Falls-13230"
+          },
+          {
+            "label": "Competing route credibility",
+            "status": "documented-contradiction",
+            "finding": "A generic roundup presents a Sugarloaf Mountain trail and unrelated Marquette coordinates; that is not a route into private Huron Mountain territory and conflicts with private-access sources.",
+            "source": "https://michiganupperpeninsula.com/places-to-visit/waterfalls/"
+          },
+          {
+            "label": "Authorized public parking",
+            "status": "not-cleared",
+            "finding": "There is no public parking/permission for this feature documented; do not offer mine/club/service roads, alternate coordinates or trailhead maps.",
+            "source": "https://upper-michigan.com/guide/waterfalls/mountain-stream-falls.html"
+          },
+          {
+            "label": "Continuous lawful foot route",
+            "status": "not-cleared",
+            "finding": "No publicly authorized waterfall walking trail or vista. Posted/private restrictions defeat visitor publication even if the natural location is correct.",
+            "source": "https://www.worldwaterfalldatabase.com/waterfall/Mountain-Stream-Falls-13230"
+          },
+          {
+            "label": "Current restrictions and seasonal status",
+            "status": "not-cleared",
+            "finding": "No 2026 public access opening exists in reviewed evidence. Do not interpret general seasonal hiking conditions as a change in property access.",
+            "source": "https://www.worldwaterfalldatabase.com/waterfall/Mountain-Stream-Falls-13230"
+          }
+        ]
+      },
+      "visitorDecision": {
+        "decision": "No general public visitor access; do not attempt this outing",
+        "context": "An exceptional geologic setting behind a private-property boundary.",
+        "saferAlternative": "Choose a Michigan DNR or other established public waterfall rather than entering Huron Mountain Club property.",
+        "confidence": "high-private-restriction-reported"
+      }
+    },
+    {
+      "gisObjectId": 148,
+      "name": "80-Foot Falls",
+      "county": "MARQUETTE",
+      "status": "research-only-natural-waterfall-unconfirmed-restricted-area",
+      "publicAccess": "not-established-continuously",
+      "publicationEligible": false,
+      "title": "80-Foot Falls: evidence and visitor-access decision",
+      "summary": "Michigan GIS #148 records 80-Foot Falls on the Styx River. World Waterfall Database calls Eighty Foot/Ives Falls an Unconfirmed named feature: lidar suggests about 105 feet, but a photographed, surveyed public waterfall is not established. Regional research reports Huron Mountain Club private-land context; exact current parcel ownership and any lawful public viewpoint at this specific flume have not been surveyed in this review. A commercial roundup advertises a legal roadside view, whereas other sources report no public trail and private-area restrictions. Neither provides authoritative legal road/shoulder evidence. No current legal public roadside turnout, signed viewpoint or vehicle route to this remote Styx River location was verified. No public waterfall route. A raw USGS/GIS natural-feature coordinate is not a public parking point, private-road authorization or invitation to scramble down a flume. No site-specific November 2026 public authorization, road condition or safe overlook information established.",
+      "guidance": "Do not drive to a supposed Ives Lake roadside overlook or cross club land to search for an unverified flume.",
+      "reviewLimitations": "Named source point, historic permission and online visitor directions do not establish a legal continuous walk or present safe parking.",
+      "nextEvidence": "Obtain reliable field confirmation of the actual flume, reconcile its GIS/GNIS position and independently establish parcel ownership, authorized public viewpoint and safe signed parking, if any.",
+      "researchPage": "/upper-peninsula-waterfalls/research/eighty-foot-falls-styx-river/",
+      "sourceLinks": [
+        {
+          "label": "Michigan waterfall GIS natural source",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "World Waterfall Database: Eighty Foot/Ives Unconfirmed",
+          "url": "https://www.worldwaterfalldatabase.com/waterfall/Ives-Falls-13171"
+        },
+        {
+          "label": "Private-land and historic-name research",
+          "url": "https://upper-michigan.com/guide/waterfalls/private-land-falls-marquette-alger.html"
+        },
+        {
+          "label": "Conflicting roadside-view claim",
+          "url": "https://michiganupperpeninsula.com/places-to-visit/waterfalls/"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-11-01",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Geographic identity and actual waterfall existence",
+            "status": "documented-not-field-verified",
+            "finding": "Michigan GIS #148 records 80-Foot Falls on the Styx River. World Waterfall Database calls Eighty Foot/Ives Falls an Unconfirmed named feature: lidar suggests about 105 feet, but a photographed, surveyed public waterfall is not established.",
+            "source": "https://www.worldwaterfalldatabase.com/waterfall/Ives-Falls-13171"
+          },
+          {
+            "label": "Land ownership and area restrictions",
+            "status": "not-cleared",
+            "finding": "Regional research reports Huron Mountain Club private-land context; exact current parcel ownership and any lawful public viewpoint at this specific flume have not been surveyed in this review.",
+            "source": "https://upper-michigan.com/guide/waterfalls/private-land-falls-marquette-alger.html"
+          },
+          {
+            "label": "Historic name and competing route claim",
+            "status": "documented-contradiction",
+            "finding": "A commercial roundup advertises a legal roadside view, whereas other sources report no public trail and private-area restrictions. Neither provides authoritative legal road/shoulder evidence.",
+            "source": "https://michiganupperpeninsula.com/places-to-visit/waterfalls/"
+          },
+          {
+            "label": "Authorized visitor parking",
+            "status": "not-cleared",
+            "finding": "No current legal public roadside turnout, signed viewpoint or vehicle route to this remote Styx River location was verified.",
+            "source": "https://upper-michigan.com/guide/waterfalls/private-land-falls-marquette-alger.html"
+          },
+          {
+            "label": "Complete public walking path",
+            "status": "not-cleared",
+            "finding": "No public waterfall route. A raw USGS/GIS natural-feature coordinate is not a public parking point, private-road authorization or invitation to scramble down a flume.",
+            "source": "https://www.worldwaterfalldatabase.com/waterfall/Ives-Falls-13171"
+          },
+          {
+            "label": "Current conditions and land restrictions",
+            "status": "not-cleared",
+            "finding": "No site-specific November 2026 public authorization, road condition or safe overlook information established.",
+            "source": "https://upper-michigan.com/guide/waterfalls/private-land-falls-marquette-alger.html"
+          }
+        ]
+      },
+      "visitorDecision": {
+        "decision": "No verified public waterfall trip; do not navigate from a map pin",
+        "context": "A named place on the map, not a verified roadside waterfall.",
+        "saferAlternative": "Plan a waterfall visit with signed public access rather than a lidar-only named feature.",
+        "confidence": "named-gis-lidar-only-access-unverified"
+      }
     }
   ]
 }
