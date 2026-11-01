@@ -31,7 +31,7 @@ test('each public location is a DNR parking asset corroborated by independent na
  for(const p of published.points){
    assert.equal(p.status,'dnr-mapped-crosschecked-not-current');
    assert.ok(Number.isInteger(p.parkingAssetId)&&Number.isInteger(p.recPointId));
-   assert.ok(p.pageUrl.startsWith('https://www.michigan.gov/recsearch/data/locations/trails-l-p/'));
+   assert.ok(['https://www.michigan.gov/recsearch/parks/porkies','https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf'].includes(p.pageUrl));
    const m=approxMeters({lat:p.lat,lon:p.lon},{lat:p.namedRecreationLat,lon:p.namedRecreationLon});
    assert.ok(m<=100,p.id+' source features too far apart '+m);
    assert.ok(Math.abs(m-p.separationMeters)<3,p.id+' stated distance differs from geographic calculation '+m);
