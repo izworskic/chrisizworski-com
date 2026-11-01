@@ -28,6 +28,15 @@
       ].includes(u.hostname);
     } catch { return false; }
   };
+  const isCoordinateSource = url => {
+    try {
+      const u = new URL(url);
+      return u.protocol === 'https:' && [
+        'www.saltchef.com', 'floridahikes.com',
+        'www.nps.gov', 'www.kennedyspacecenter.com'
+      ].includes(u.hostname);
+    } catch { return false; }
+  };
   const directionsUrl = nav => {
     if (!nav || !['address','coordinates'].includes(nav.type) ||
         typeof nav.value !== 'string' || nav.value.length > 160) return null;
@@ -161,8 +170,11 @@
       actions.appendChild(link(destination,
         p.category === 'public-viewpoint' ? 'Navigate to listed address' : 'Find official entrance'));
     }
-    if (isOfficialSource(p.accessSource)) actions.appendChild(link(p.accessSource, 'Official rules'));
+    if (isOfficialSource(p.accessSource)) actions.appendChild(link(p.accessSource, 'Official access rules'));
+    if (isCoordinateSource(p.geographicSource)) actions.appendChild(link(p.geographicSource, 'GPS provenance'));
     card.appendChild(actions);
+    if (p.sourceChecked) card.appendChild(node('p','geo-navigation-caveat',
+      'Geographic source audit: ' + p.sourceChecked + '. Map points are not live parking updates.'));
     if (p.navigation?.caveat) card.appendChild(node('p','geo-navigation-caveat',p.navigation.caveat));
     return card;
   }
