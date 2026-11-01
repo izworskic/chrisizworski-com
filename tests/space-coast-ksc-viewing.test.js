@@ -129,3 +129,93 @@ test('missing or unpublished event cannot imply no viewing, sold out, or availab
   assert.equal(generic.checked,0);
   assert.equal(generic.state,'unverified');
 });
+
+
+function calendarPage(events) {
+  // KSC's live calendar embeds JSON data serialized as a JavaScript string.
+  return '<!doctype html><html><body><script>(function(){const eventsDataString = ' +
+    JSON.stringify(JSON.stringify(events)) +
+    ';window.eventsDataVars=JSON.parse(eventsDataString)})();</script></body></html>';
+}
+
+test('new official calendar events discover non-predictable mission URLs, but never arbitrary links', () => {
+  const published = 'https://www.kennedyspacecenter.com/event/special-spacex-falcon-9-starlink-10-54-watch/';
+  const events = [
+    { title: 'SpaceX Falcon 9 Starlink 10-54', event_type_key: 'rocket-launch',
+      url: '/event/special-spacex-falcon-9-starlink-10-54-watch/' },
+    { title: 'SpaceX Falcon 9 Starlink 10-55', url: '/event/spacex-falcon-9-starlink-10-55/' },
+    { title: 'SpaceX Falcon 9 Starlink 10-54', url: 'https://evil.example/event/starlink-10-54/' },
+    { title: 'SpaceX Falcon 9 Starlink 10-54', url: '/event/starlink-10-54/?tracking=1' },
+    { title: 'SpaceX Falcon 9 Starlink 10-54', url: '//www.kennedyspacecenter.com.evil.example/event/starlink-10-54/' },
+    { title: 'SpaceX Falcon 9 Starlink 10-54', url: '/event/special-spacex-falcon-9-starlink-10-54-watch/' }
+  ];
+  assert.deepEqual(ksc.calendarEventCandidates(launch(), calendarPage(events)), [published]);
+  assert.deepEqual(ksc.calendarEventCandidates(launch({ name: 'Falcon 9 | Starlink Group 10-56' }),
+    calendarPage(events)), []);
+  assert.throws(() => ksc.calendarEventCandidates(launch(), '<div>Loading calendar…</div>'), /records-missing/);
+  assert.throws(() => ksc.calendarEventCandidates(launch(), calendarPage({ events })), /list-invalid/);
+});
+
+test('operator calendar discovery finds a new launch announcement whose slug cannot be guessed', async () => {
+  const official = 'https://www.kennedyspacecenter.com/event/special-spacex-falcon-9-starlink-10-54-watch/';
+  const requested = [];
+  const fetcher = async (url) => {
+    requested.push(url);
+    if (url === ksc.CALENDAR) return response(calendarPage([{
+      event_type_key: 'rocket-launch', title: 'SpaceX Falcon 9 Starlink 10-54',
+      url: '/event/special-spacex-falcon-9-starlink-10-54-watch/'
+    }]));
+    if (url.endsWith('/sitemap.xml')) return response('<urlset/>');
+    if (url === official) return response(page('SpaceX Falcon 9 Starlink 10-54'));
+    return response('not published', 404);
+  };
+  const found = await ksc.inspectKscLaunch(launch(), fetcher, NOW);
+  assert.equal(found.state, 'matched');
+  assert.equal(found.sourceUrl, official);
+  assert.equal(found.venues[0].ticket, 'included-with-admission-listed');
+  assert.ok(requested.includes(ksc.CALENDAR));
+  assert.ok(requested.length <= 7); // two discovery feeds, at most five event pages
+});
+
+test('calendar publication is discovery only, not evidence of tickets or a valid venue', async () => {
+  const official = 'https://www.kennedyspacecenter.com/event/special-spacex-falcon-9-starlink-10-54-watch/';
+  const fetcher = async (url) => {
+    if (url === ksc.CALENDAR) return response(calendarPage([{
+      title: 'SpaceX Falcon 9 Starlink 10-54', url: official
+    }]));
+    if (url.endsWith('/sitemap.xml')) return response('<urlset/>');
+    if (url === official) return response(page('SpaceX Falcon 9 Starlink 10-54',
+      'November 5, 2026', 'Launch Complex 39A')); // incompatible pad
+    return response('', 404);
+  };
+  const result = await ksc.inspectKscLaunch(launch(), fetcher, NOW);
+  assert.equal(result.state, 'unverified');
+  assert.equal(result.sourceUrl, null);
+  assert.deepEqual(result.venues, []);
+  assert.match(result.note, /does not mean/);
+});
+
+test('calendar outage leaves the existing verified direct-probe fallback usable', async () => {
+  const fetcher = async url => {
+    if (url === ksc.CALENDAR) return response('temporarily unavailable', 503);
+    if (url.endsWith('/sitemap.xml')) return response('<urlset/>');
+    if (url.endsWith('/spacex-falcon-9-starlink-10-54/'))
+      return response(page('SpaceX Falcon 9 Starlink 10-54'));
+    return response('not found', 404);
+  };
+  const found = await ksc.inspectKscLaunch(launch(), fetcher, NOW);
+  assert.equal(found.state, 'matched');
+  assert.equal(found.sourceUrl, 'https://www.kennedyspacecenter.com/event/spacex-falcon-9-starlink-10-54/');
+});
+
+test('calendar responses enforce size and official-path constraints', async () => {
+  const fetcher = async url => {
+    assert.equal(url, ksc.CALENDAR);
+    return { ...response('x'), headers: { get: name => name === 'content-length' ? '9000000' : null } };
+  };
+  await assert.rejects(ksc.calendarCandidates(launch(), fetcher), /calendar-too-large/);
+  assert.deepEqual(ksc.calendarEventCandidates(launch(), calendarPage([
+    { title: 'Starlink 10-54', url: 'http://www.kennedyspacecenter.com/event/starlink-10-54/' },
+    { title: 'Starlink 10-54', url: '/es/event/starlink-10-54/' }
+  ])), []);
+});
