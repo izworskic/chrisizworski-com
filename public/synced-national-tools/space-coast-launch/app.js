@@ -455,6 +455,12 @@
       renderSkyComparison(d);
       lastScheduleLoadedAt = Date.now();
       activeMissionId = d.selectedLaunchId || null;
+      // Same trusted, cached launch response powers the GIS layer; its listener
+      // cannot fetch another LL2 schedule or infer mission-specific closures.
+      document.dispatchEvent(new CustomEvent('space-coast:launch-loaded', {
+        detail: { selectedLaunchId: activeMissionId,
+          geographicViewing: d.geographicViewing || null }
+      }));
       if (activeMissionId) void loadKscChronicle(sequence, activeMissionId);
       lastKscAttemptAt = 0;
       checkForKscUpdate();

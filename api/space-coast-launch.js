@@ -11,6 +11,7 @@ const {
 const { inspectKscLaunch, CALENDAR: KSC_CALENDAR } =
   require('../lib/space-coast-ksc-viewing');
 const { storeTrustedLaunches } = require('../lib/space-coast-ksc-snapshot');
+const { buildGeographicViewing } = require('../lib/space-coast-geo');
 
 const LAUNCHES = 'https://ll.thespacedevs.com/2.3.0/launches/upcoming/?location__ids=12%2C27&limit=20&format=json&ordering=net&hide_recent_previous=true';
 const KSC = 'https://www.kennedyspacecenter.com/launches-and-events/';
@@ -168,6 +169,7 @@ module.exports = async function handler(req, res) {
       ...a, description: a.description.slice(0, 600)
     }));
     const viewpoints = VIEWPOINTS.map(v => viewAccess(v, next, nps.alerts, nps.verified, { now }));
+    const geographicViewing = buildGeographicViewing(next, viewpoints, nps, now);
     const arrivalGuidance = launchArrivalGuidance(next, nps.alerts, nps.verified, now);
     const skyComparisonDecision = skyComparison(forecasts);
     const schedule = next?.scheduleConfidence || {
@@ -188,7 +190,7 @@ module.exports = async function handler(req, res) {
           detail: 'A local spectator forecast cannot establish range approval or a weather launch commit.'
         }
       },
-      viewpoints, parkAlerts,
+      viewpoints, parkAlerts, geographicViewing,
       arrivalGuidance, skyComparison: skyComparisonDecision,
       kscViewing,
       accessSource: {
