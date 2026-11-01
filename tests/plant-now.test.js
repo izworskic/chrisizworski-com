@@ -169,3 +169,11 @@ test('calendar adapter maps names, uses selected spring reference and does not i
  assert.equal(E.calendarEntry(st,'Garlic',day).windows.length,0);
  for(const c of F.CROPS) assert.notEqual(E.calendarEntry(st,c.n,day).code,'NOT_REPORTED',c.n);
 });
+
+test('saved fall planning rolls after the station reference but honors a visitor date',()=>{
+ const st=F.station('bay-city'),item={cropId:'lettuce',maturityDays:48};
+ assert.equal(E.gardenPlan(st,[item],{dateISO:'2026-11-01'}).crops[0].fallPlan.referenceDate,'2027-10-03');
+ assert.equal(E.gardenPlan(st,[item],{dateISO:'2026-08-01'}).crops[0].fallPlan.referenceDate,'2026-10-03');
+ const own=E.gardenPlan(st,[item],{dateISO:'2026-11-01',frostISO:'2026-10-10'}).crops[0].fallPlan;
+ assert.equal(own.referenceDate,'2026-10-10');assert.equal(own.referenceBasis,'visitor_supplied');
+});

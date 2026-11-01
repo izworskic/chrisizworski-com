@@ -496,9 +496,6 @@ a:hover { text-decoration: underline; }
 <header class="hm-masthead">
   <div class="hm-shell hm-masthead__inner">
     <div class="hm-brand-group">
-      <a href="/" aria-label="Chris Izworski Home">
-        <img class="hm-brand-avatar" src="/chris-izworski-portrait.jpg" alt="Chris Izworski" width="42" height="42">
-      </a>
       <div class="hm-brand-copy">
         <p class="hm-brand-title"><a href="/">Chris Izworski</a></p>
         <p class="hm-brand-sub">Great Lakes Almanac, Live Decision Engines &amp; Field Guides</p>
@@ -533,7 +530,7 @@ a:hover { text-decoration: underline; }
     <p class="gy-kicker">Your garden · your season</p><h3 id="gardenPlanTitle">What are you growing?</h3>
     <p>Make a list of the plants you want in your garden. We’ll bring their next steps together for your town, from seed starting to fall planning.</p>
     <div class="garden-add"><label for="gardenPick">Choose a plant<select id="gardenPick"><option value="">Choose a plant</option></select></label><label for="gardenDays">Days to maturity <small>(optional, from your packet)</small><input type="number" id="gardenDays" min="1" max="365" inputmode="numeric" placeholder="e.g. 55"></label><button type="button" id="gardenAdd">Add to my garden</button></div>
-    <p id="gardenError" aria-live="polite"></p><p id="gardenCount" role="status" aria-live="polite">Your garden is empty</p><div class="garden-plants" id="gardenPlan"></div>
+    <p id="gardenError" aria-live="polite"></p><p id="gardenCount" role="status" aria-live="polite">Your garden is empty</p><div id="gardenAhead" class="garden-ahead" hidden></div><div class="garden-plants" id="gardenPlan"></div>
     <p class="garden-privacy">Your list stays in this browser. Dates are planning references, not frost forecasts; check your seed packet, soil and local forecast. Some plants still need more research, and we say so.</p>
     <noscript><p>Enable JavaScript to build a list. You can still use the gardening guides below.</p></noscript>
   </section>

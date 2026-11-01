@@ -209,3 +209,31 @@ test('planting calendar uses the shared engine and refuses unsourced fall statio
  p.set('customLF','2026-05-20');assert.match(p.text('cropSteps'),/Mar 25/);
  p.click('icsBtn');assert.match(p.doc.downloads.at(-1),/BEGIN:VCALENDAR/);
 });
+
+test('saved garden shows upcoming, year-qualified references and updates when a plant is removed',()=>{
+ const p=loadTool(f('michigan-gardening'),{today:'2026-11-01',search:'?place=Bay%20City'});
+ p.set('gardenPick','tomatoes');p.click('gardenAdd');
+ assert.equal(p.$('gardenAhead').hidden,false);assert.match(p.text('gardenAhead'),/Start indoors: Tomatoes/);
+ assert.match(p.text('gardenAhead'),/2027/);assert.match(p.text('gardenAhead'),/forecast/);
+ const card=p.$('gardenPlan').querySelector('.garden-plant');card.querySelector('.garden-remove').click();
+ assert.equal(p.$('gardenAhead').hidden,true);
+});
+
+test('fall notebook rolls next year after the typical fall frost and respects missing station data',()=>{
+ const p=loadTool(f('michigan-gardening'),{today:'2026-11-01',search:'?place=Bay%20City'});
+ p.set('gardenPick','lettuce');p.set('gardenDays','48','input');p.click('gardenAdd');
+ assert.match(p.text('gardenAhead'),/Fall planning reference: Leaf lettuce/);assert.match(p.text('gardenAhead'),/2027/);
+ p.set('pnPlace','Adrian');assert.equal(p.$('gardenAhead').hidden,true);assert.match(p.text('gardenPlan'),/No sourced fall frost date/);
+});
+
+
+test('garden homepage does not show a portrait or broken portrait placeholder',()=>{
+ const p=loadTool(f('michigan-gardening'));
+ assert.doesNotMatch(p.html,/chris-izworski-portrait|hm-brand-avatar/);
+});
+
+test('a past fall planning reference is identified as having passed',()=>{
+ const p=loadTool(f('michigan-gardening'),{today:'2026-09-01',search:'?place=Bay%20City'});
+ p.set('gardenPick','lettuce');p.set('gardenDays','48','input');p.click('gardenAdd');
+ assert.match(p.text('gardenPlan'),/planning reference has already passed/i);
+});

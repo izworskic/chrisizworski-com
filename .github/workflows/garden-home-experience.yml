@@ -1,0 +1,35 @@
+name: Garden homepage browser verification
+on:
+  pull_request:
+    paths:
+      - 'public/michigan-gardening/**'
+      - 'public/assets/garden-tools/**'
+      - 'scripts/verify-garden-home-browser.cjs'
+      - '.github/workflows/garden-home-experience.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install isolated browser harness
+        run: |
+          npm install --prefix /tmp/garden-playwright --no-save --ignore-scripts playwright@1.58.2
+          echo "NODE_PATH=/tmp/garden-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium-browser)" >> "$GITHUB_ENV"
+      - name: Check selections and layout at phone, tablet and desktop widths
+        run: node scripts/verify-garden-home-browser.cjs
+      - name: Save screenshots for inspection
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: garden-home-browser-evidence
+          path: artifacts/garden-home-browser/
+          if-no-files-found: warn
+          retention-days: 14
