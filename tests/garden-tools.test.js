@@ -17,7 +17,7 @@ test('planting calendar: this week, crop lookup and old links', () => {
   assert.match(old.text('frostFacts'), /Cautious date/);
   const quiet = loadTool(f('zone-6a-planting-calendar'), { today: '2026-01-05' });
   assert.equal(quiet.text('weekBadge'), 'A quiet week');
-  assert.match(quiet.text('weekWhy'), /Next up: start onions from seed indoors/);
+  assert.match(quiet.text('weekWhy'), /Tend what is growing/);
 });
 
 test('frost dates: plain odds for a planting day, past-frost and fall answers', () => {
@@ -132,8 +132,8 @@ test('Michigan Growing Season Explorer: crop and soil decisions tell the same st
   p.set('pnCrop', 'cilantro');
   assert.match(p.text('pnSeasonStatus'), /early spring or fall/);
   p.set('pnCrop', 'zinnias');
-  assert.match(p.text('pnSeasonStatus'), /Not reported/);
-  assert.equal(p.$('pnSeasonMissing').hidden, false);
+  assert.match(p.text('pnSeasonStatus'), /Minnesota Extension/);
+  assert.equal(p.$('pnSeasonMissing').hidden, true);
 
   p.set('pnCrop', 'beans');
   p.set('pnPlace', '49783');
@@ -195,4 +195,17 @@ test('garden packet days can be changed and cleared without removing the plant',
  const updated=p.$('gardenPlan').querySelector('.garden-plant');
  updated.querySelector('input').value='';updated.querySelector('.garden-save').click();
  assert.match(p.text('gardenPlan'),/Leaf lettuce/);assert.doesNotMatch(p.text('gardenPlan'),/packet 60 days/);
+});
+
+
+test('planting calendar uses the shared engine and refuses unsourced fall station dates',()=>{
+ const p=loadTool(f('zone-6a-planting-calendar'),{today:'2026-04-15',search:'?city=adrian&crop=garlic'});
+ assert.match(p.text('frostFacts'),/Not reported for this station/);
+ assert.match(p.text('cropNow'),/hard freeze/);
+ assert.doesNotMatch(p.text('cropSteps'),/Oct/);
+ p.set('cropSel','Zinnias');assert.match(p.text('cropNow'),/Minnesota Extension/);
+ p.set('cropSel','Tomatoes');
+ const before=p.text('cropSteps');p.choose('mode','cautious');assert.notEqual(p.text('cropSteps'),before);
+ p.set('customLF','2026-05-20');assert.match(p.text('cropSteps'),/Mar 25/);
+ p.click('icsBtn');assert.match(p.doc.downloads.at(-1),/BEGIN:VCALENDAR/);
 });

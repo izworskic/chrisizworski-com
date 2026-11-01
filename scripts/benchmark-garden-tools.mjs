@@ -118,7 +118,7 @@ const tools = [
       const p = load({ today: '2026-03-20' }); const E = p.ctx.PlantNow, F = p.ctx.MIFrost, K = p.ctx.GardenKit;
       const st = F.station('bay-city'), open = K.parse(st.p25), c = id => E.CROPS.find(x => x.id === id);
       const flips = ['WAIT', 'START_INDOORS', 'HARDEN_OFF', 'TRANSPLANT'].join() === [open - 60, open - 50, open - 3, open].map(d => E.cropStatus(c('tomatoes'), st, d, {}).code).join();
-      const nr = ['zinnias'].every(id => { const r = E.cropStatus(c(id), st, open, {}); return r.code === 'NOT_REPORTED' && !r.windows.length; });
+      const nr = ['zinnias'].every(id => { const r = E.cropStatus(c(id), st, open, {}); return r.code === 'GUIDE' && !r.windows.length && /regional/.test(r.detail); });
       const noFall = E.frostOf(F.station('adrian')).fall === null;
       const garlic = E.cropStatus(c('garlic'), st, K.parse('Nov 1'), {});
       const fall = E.cropStatus(c('kale'), st, K.parse('Aug 1'), {});
@@ -132,13 +132,14 @@ const tools = [
     personalize: p => p.set('citySel', 'vanderbilt'),
     refine: p => p.choose('mode', 'cautious'),
     samples: load => dates.flatMap(d => { const p = load({ today: d }); return [p.text('weekTitle') + ' ' + p.text('weekWhy'), p.text('cropTitle') + '. ' + p.text('cropNow')]; }),
-    correctName: 'Every window equals frost date plus the published offset, for every station and crop',
+    correctName: 'Calendar shares source-qualified engine results and does not invent missing fall dates',
     correct: load => {
-      const p = load(); const F = p.ctx.MIFrost, K = p.ctx.GardenKit; let bad = 0;
-      for (const st of F.STATIONS) { const a = F.anchors(st, 'typical'); for (const c of F.CROPS) for (const w of F.windows(c, a)) { const off = { indoor: c.i, transplant: c.t, sow: c.d, fall: c.f }[w.kind]; const base = w.kind === 'fall' ? K.parse(st.ff) : K.parse(st.p50); if (K.wrapDay(base + off[0]) !== w.from || K.wrapDay(base + off[1]) !== w.to) bad++; } }
-      p.set('citySel', 'alpena-wso'); const row = p.$('tb-veg').children[0].children.map(n => n.textContent);
-      const a = F.anchors(F.station('alpena-wso'), 'typical'); const tom = F.windows(F.crop('Tomatoes'), a);
-      return bad === 0 && row[1] === K.range(tom[0].from, tom[0].to) && F.STATIONS.length === 78 && F.CROPS.length === 47;
+      const p=load(), E=p.ctx.PlantNow, F=p.ctx.MIFrost, K=p.ctx.GardenKit;
+      const st=F.station('alpena-wso'), day=K.parse('Apr 15'), reference=K.parse(st.p50);
+      const r=E.calendarEntry(st,'Tomatoes',day,{springDay:reference});
+      p.set('citySel','alpena-wso');const row=p.$('tb-veg').children[0].children.map(n=>n.textContent);
+      p.set('citySel','adrian');
+      return row[1]===K.range(r.windows[0].from,r.windows[0].to) && /Not reported/.test(p.text('frostFacts')) && F.CROPS.every(c=>E.calendarEntry(st,c.n,day).code!=='NOT_REPORTED');
     }
   }),
   shared('michigan-frost-dates', {

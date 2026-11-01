@@ -24,7 +24,7 @@ const failures = [];
 const check = (name, pass) => { if (!pass) failures.push(name); };
 check("zone title", zone.includes('<title>Michigan Zone 6a Planting Calendar by City | Chris Izworski</title>'));
 check("zone H1", zone.includes('<h1>Michigan Zone 6a Planting Calendar by City</h1>'));
-check("zone direct answer", zone.includes('Pick your nearest Michigan city and this calendar computes indoor seed-starting'));
+check("zone direct answer", zone.includes('Pick a Michigan station for seasonal guidance for 47 crops'));
 check("zone canonical", zone.includes('<link rel="canonical" href="https://chrisizworski.com/zone-6a-planting-calendar/">'));
 check("zone freshness matches sitemap", freshnessAgrees(zone, "/zone-6a-planting-calendar/"));
 check("heirloom title", heirloom.includes('<title>Best Heirloom Tomatoes for Michigan | Chris Izworski</title>'));

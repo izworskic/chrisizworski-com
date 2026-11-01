@@ -41,10 +41,11 @@ test('a test date flips tomatoes from START INDOORS to TRANSPLANT on schedule', 
 
 // (c) No source, no date.
 test('crops and stations without a Michigan source say NOT REPORTED, never a guessed date', () => {
-  for (const c of ['zinnias']) {
+  for (const c of ['zinnias','sweet-peas','rosemary']) {
     const r = status(c, 'bay-city', '2026-05-15');
-    assert.equal(r.code, 'NOT_REPORTED', c);
+    assert.equal(r.code, 'GUIDE', c);
     assert.equal(r.windows.length, 0, c);
+    assert.match(r.detail, /regional growing advice/);
     assert.doesNotMatch(r.detail, /\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d/, c);
   }
   // Adrian's first fall frost is not published, so no DONE date is claimed there.
@@ -156,4 +157,15 @@ test('garden timeline carries real calendar years and leap-year arithmetic', () 
  assert.equal(indoor.toISO,'2028-03-28');
  assert.equal(plan.timeline.find(x=>x.cropId==='zucchini').fromISO,'2028-05-09');
  assert.equal(plan.timeline[0].source,'indoor');
+});
+
+
+test('calendar adapter maps names, uses selected spring reference and does not invent onion seed or fall dates',()=>{
+ const st=F.station('bay-city'), day=K.parse('Apr 1');
+ const r=E.calendarEntry(st,'Green beans',day,{springDay:K.parse('May 20')});
+ assert.equal(r.cropId,'beans');assert.equal(K.fmt(r.windows[0].from),'May 20');
+ assert.equal(E.calendarEntry(st,'Onion sets',day).cropId,'onions');
+ assert.equal(E.calendarEntry(st,'Onions from seed',day).windows.length,0);
+ assert.equal(E.calendarEntry(st,'Garlic',day).windows.length,0);
+ for(const c of F.CROPS) assert.notEqual(E.calendarEntry(st,c.n,day).code,'NOT_REPORTED',c.n);
 });

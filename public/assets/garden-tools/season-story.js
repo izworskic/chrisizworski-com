@@ -31,7 +31,7 @@
     }
     function stagesFor(r, frost, st) {
       var c = r.crop, w = r.windows;
-      if (c.kind === 'cilantro' || c.kind === 'dill' || c.kind === 'corn') {
+      if (c.kind === 'regionalGuide' || c.kind === 'cilantro' || c.kind === 'dill' || c.kind === 'corn') {
         return [item('plan','Make a little room','Before planting',r.detail),item('grow','Keep an eye on the garden','Through the season','Check the seed packet, your soil and the forecast. Local conditions and the variety you choose can change the timing.')];
       }
       if (c.kind === 'basil') {
@@ -97,7 +97,7 @@
       if (!stage && r.code === 'PLAN_FALL') stage = 'fall';
       if (!stage || !steps.some(function (x) { return x.id === stage; })) stage = suggestedStep(r, p, steps);
       var active = steps.filter(function (x) { return x.id === stage; })[0];
-      var label = ['cilantro','dill','corn'].indexOf(r.crop.kind) >= 0 ? 'Make a little room in the garden' : r.crop.kind === 'basil' ? 'A tender herb for warm days' : r.crop.kind === 'potato' ? 'From seed potato to harvest' : r.crop.kind === 'coolGuide' ? 'A place in the cool-season garden' : r.crop.kind === 'garlic' ? 'A fall planting for next summer' : r.crop.kind === 'transplant' ? 'From seed tray to garden bed' :
+      var label = ['regionalGuide','cilantro','dill','corn'].indexOf(r.crop.kind) >= 0 ? 'Make a little room in the garden' : r.crop.kind === 'basil' ? 'A tender herb for warm days' : r.crop.kind === 'potato' ? 'From seed potato to harvest' : r.crop.kind === 'coolGuide' ? 'A place in the cool-season garden' : r.crop.kind === 'garlic' ? 'A fall planting for next summer' : r.crop.kind === 'transplant' ? 'From seed tray to garden bed' :
         r.crop.kind === 'warmSow' ? 'Two gates before the first seed' :
         r.crop.kind === 'hardy' ? 'Let the ground make the call' :
         r.crop.kind === 'soil40' ? 'A thermometer, not a calendar' : 'What the Michigan sources do not say';

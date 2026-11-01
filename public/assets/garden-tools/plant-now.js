@@ -2,7 +2,7 @@
  *
  * Every status comes from a cited Michigan rule applied to the visitor's nearest frost station.
  * Where no Michigan source gives a rule, the field is NOT REPORTED and the crop says so. Nothing is
- * interpolated between stations, borrowed from another state, or smoothed. One reading is the
+ * interpolated between stations or smoothed. Regional university guidance is labeled by source and never presented as Michigan station data. One reading is the
  * site's own and is disclosed wherever it is used: MSU's "after the danger of frost is past" is
  * taken as the station's cautious date, after which only 1 spring in 4 still freezes.
  *
@@ -14,6 +14,10 @@
   var K = root.GardenKit, F = root.MIFrost, P = root.MIPlaces;
 
   var SOURCES = {
+    umnHerbs: { title: 'Growing herbs in home gardens', who: 'University of Minnesota Extension', date: 'regional growing guide', url: 'https://extension.umn.edu/garden-and-home/yard-and-garden/gardening-in-minnesota/growing-herbs' },
+    iowaFlowers: { title: 'Direct Seeding Vegetables and Annuals', who: 'Iowa State University Extension', date: 'regional growing guide', url: 'https://yardandgarden.extension.iastate.edu/how-to/direct-seeding-vegetables-and-annuals-preparation-and-care' },
+    umnFlowers: { title: 'Where bouquets begin: growing a cutting garden from seed', who: 'University of Minnesota Extension', date: 'regional growing guide', url: 'https://extension.umn.edu/news/where-bouquets-begin-growing-cutting-garden-seed' },
+    iowaPetunia: { title: 'How to Start Petunias from Seed Indoors', who: 'Iowa State University Extension', date: 'regional growing guide', url: 'https://yardandgarden.extension.iastate.edu/how-to/how-start-petunias-seed-indoors' },
     msuDill: { title: 'Native Plant Facts: Dill', who: 'MSU Extension', date: 'plant facts', url: 'https://www.canr.msu.edu/nativeplants/uploads/files/Dill2013.pdf' },
     msuCorn: { title: 'How to grow sweet corn', who: 'MSU Extension', date: 'home garden guide', url: 'https://www.canr.msu.edu/uploads/resources/pdfs/sweetcorn2011.pdf' },
     msuBasil: { title: 'Herbs, Michigan Organic Vegetable Production Guide', who: 'Michigan State University', date: 'production guide', url: 'https://www.canr.msu.edu/foodsystems/uploads/files/full-pdf.pdf' },
@@ -27,6 +31,11 @@
   };
   // The MSU sentences each rule rests on, quoted so the page can show them.
   var RULES = {
+    regionalHerbs: { source: 'umnHerbs', quote: 'Start seeds indoors under fluorescent lights in late winter, about 6 to 8 weeks before transplanting outdoors.' },
+    regionalFlowers: { source: 'iowaFlowers', quote: 'Direct-seed most annual flowers after the threat of frost is past in the spring and when the soil warms ups.' },
+    regionalWarmFlowers: { source: 'umnFlowers', quote: 'Once frost danger has passed, sunflowers, zinnias, cosmos, and gomphrena take center stage.' },
+    regionalCutFlowers: { source: 'umnFlowers', quote: 'Snapdragons and stock ... thrive in cool weather and benefit from an early indoor start' },
+    regionalPetunia: { source: 'iowaPetunia', quote: 'Sow petunia seeds indoors about 10 weeks before the intended outdoor planting date.' },
     dillFrost: { source: 'msuDill', quote: 'Sow dill seeds where they will be grown about the time of the last expected frost.' },
     cilantroCool: { source: 'msuBasil', quote: 'This annual plant does best in cool weather and should be planted in the early spring or in the fall.' },
     cornGuide: { source: 'msuCorn', quote: 'Direct sow: May to July' },
@@ -86,23 +95,23 @@
     { id: 'zucchini', name: 'Zucchini', kind: 'warmSow', tender: true },
     { id: 'winter-squash', name: 'Winter squash', kind: 'warmSow', tender: true },
     { id: 'watermelon', name: 'Watermelon', kind: 'warmSow', tender: true },
-    { id: 'parsley', name: 'Parsley', kind: 'none', why: 'No verified local planting window is available here; consult your seed packet.' },
+    { id: 'parsley', name: 'Parsley', kind: 'regionalGuide', guideRule: 'regionalHerbs', guide: 'Minnesota Extension groups parsley with herbs that tolerate cooler soil. Keep the bed evenly moist, and check your packet for the variety and germination time.' },
     { id: 'dill', name: 'Dill', kind: 'dill' },
-    { id: 'chives', name: 'Chives', kind: 'none', why: 'No verified local planting window is available here; consult your seed packet.' },
-    { id: 'oregano', name: 'Oregano', kind: 'none', why: 'No verified local planting window is available here; consult your seed packet.' },
-    { id: 'thyme', name: 'Thyme', kind: 'none', why: 'No verified local planting window is available here; consult your seed packet.' },
-    { id: 'sage', name: 'Sage', kind: 'none', why: 'No verified local planting window is available here; consult your seed packet.' },
-    { id: 'rosemary', name: 'Rosemary', kind: 'none', why: 'No verified local planting window is available here; consult your seed packet.' },
-    { id: 'zinnias', name: 'Zinnias', kind: 'none', why: 'No verified local planting window is available here; consult your seed packet.' },
-    { id: 'marigolds', name: 'Marigolds', kind: 'none', why: 'No verified local planting window is available here; consult your seed packet.' },
-    { id: 'sunflowers', name: 'Sunflowers', kind: 'none', why: 'No verified local planting window is available here; consult your seed packet.' },
-    { id: 'cosmos', name: 'Cosmos', kind: 'none', why: 'No verified local planting window is available here; consult your seed packet.' },
-    { id: 'nasturtiums', name: 'Nasturtiums', kind: 'none', why: 'No verified local planting window is available here; consult your seed packet.' },
-    { id: 'sweet-peas', name: 'Sweet peas', kind: 'none', why: 'No verified local planting window is available here; consult your seed packet.' },
-    { id: 'snapdragons', name: 'Snapdragons', kind: 'none', why: 'No verified local planting window is available here; consult your seed packet.' },
-    { id: 'petunias', name: 'Petunias', kind: 'none', why: 'No verified local planting window is available here; consult your seed packet.' },
-    { id: 'calendula', name: 'Calendula', kind: 'none', why: 'No verified local planting window is available here; consult your seed packet.' },
-    { id: 'morning-glories', name: 'Morning glories', kind: 'none', why: 'No verified local planting window is available here; consult your seed packet.' }
+    { id: 'chives', name: 'Chives', kind: 'regionalGuide', guideRule: 'regionalHerbs', guide: 'Minnesota Extension groups chives with herbs that tolerate cooler soil. Start seeds indoors or choose a plant, then follow your packet and local conditions.' },
+    { id: 'oregano', name: 'Oregano', kind: 'regionalGuide', guideRule: 'regionalHerbs', guide: 'Minnesota Extension groups oregano with herbs that prefer warm soil. Give it a sunny, well-drained place and check your variety for winter hardiness.' },
+    { id: 'thyme', name: 'Thyme', kind: 'regionalGuide', guideRule: 'regionalHerbs', guide: 'Minnesota Extension groups thyme with herbs that tolerate cooler soil. Give it a sunny spot with good drainage; check your variety for winter hardiness.' },
+    { id: 'sage', name: 'Sage', kind: 'regionalGuide', guideRule: 'regionalHerbs', guide: 'Minnesota Extension groups sage with herbs that tolerate cooler soil. Choose a sunny, well-drained spot and check your variety for winter hardiness.' },
+    { id: 'rosemary', name: 'Rosemary', kind: 'regionalGuide', guideRule: 'regionalHerbs', guide: 'Minnesota Extension groups rosemary with herbs that prefer warm soil. Give it sun and drainage; plan for winter protection because cold tolerance depends on the variety and your garden.' },
+    { id: 'zinnias', name: 'Zinnias', kind: 'regionalGuide', guideRule: 'regionalWarmFlowers', guide: 'Minnesota Extension recommends direct sowing zinnias in warm soil after frost danger has passed, or starting them indoors for an earlier bloom. Check your packet and local forecast.' },
+    { id: 'marigolds', name: 'Marigolds', kind: 'regionalGuide', guideRule: 'regionalFlowers', guide: 'Iowa State Extension lists marigolds among flowers suitable for direct sowing. It recommends waiting for warmer soil and frost danger to pass for most annuals; check your packet and forecast.' },
+    { id: 'sunflowers', name: 'Sunflowers', kind: 'regionalGuide', guideRule: 'regionalWarmFlowers', guide: 'Minnesota Extension recommends direct sowing sunflowers in warm soil after frost danger has passed. Check your packet for height, spacing and time to bloom.' },
+    { id: 'cosmos', name: 'Cosmos', kind: 'regionalGuide', guideRule: 'regionalWarmFlowers', guide: 'Minnesota Extension recommends direct sowing cosmos in warm soil after frost danger has passed, or starting them indoors. Check your packet and local forecast.' },
+    { id: 'nasturtiums', name: 'Nasturtiums', kind: 'regionalGuide', guideRule: 'regionalFlowers', guide: 'Iowa State Extension lists nasturtiums for direct sowing and describes them as cool-season annuals. Check your seed packet and local conditions before sowing.' },
+    { id: 'sweet-peas', name: 'Sweet peas', kind: 'regionalGuide', guideRule: 'regionalFlowers', guide: 'Iowa State Extension lists ornamental sweet peas for direct sowing and suggests nicking the seed coat before soaking. Follow your packet and local conditions; ornamental sweet peas are not edible garden peas.' },
+    { id: 'snapdragons', name: 'Snapdragons', kind: 'regionalGuide', guideRule: 'regionalCutFlowers', guide: 'Minnesota Extension describes snapdragons as cool-weather flowers and suggests an early indoor start. Follow your packet and harden young plants off gradually.' },
+    { id: 'petunias', name: 'Petunias', kind: 'regionalGuide', guideRule: 'regionalPetunia', guide: 'Iowa State Extension suggests starting petunias indoors about 10 weeks before planting out, then waiting until frost danger has passed. Check your packet and local forecast.' },
+    { id: 'calendula', name: 'Calendula', kind: 'regionalGuide', guideRule: 'regionalFlowers', guide: 'Iowa State Extension lists calendula, also called pot marigold, among flowers suitable for direct sowing. Check your packet for conditions and timing.' },
+    { id: 'morning-glories', name: 'Morning glories', kind: 'regionalGuide', guideRule: 'regionalFlowers', guide: 'Iowa State Extension lists morning glories for direct sowing and notes that nicking the seed coat can improve germination. Follow your packet and wait for suitable local conditions.' }
   ];
 
   var STATUS = {
@@ -158,6 +167,10 @@
     if (fallCrops.indexOf(crop.id) >= 0 && d >= K.parse('Jul 15') && d <= K.parse('Sep 30')) {
       out.rules = ['fallGarden'];
       return set('PLAN_FALL', 'Consider ' + crop.name.toLowerCase() + ' for fall', 'Check the days to maturity on your seed packet, allow for germination and slower autumn growth, and count back from your local frost reference. ' + (fr.fallText ? 'The typical first fall frost at this station is ' + fr.fallText + ', not a forecast.' : 'A sourced fall frost reference is unavailable for this station.')); 
+    }
+    if (crop.kind === 'regionalGuide') {
+      out.rules=[crop.guideRule];
+      return set('GUIDE',crop.name+': a regional growing guide',crop.guide+' This is regional growing advice, not a Michigan station-specific planting date.');
     }
     if (crop.kind === 'cilantro') {
       out.rules=['cilantroCool'];
@@ -318,13 +331,33 @@
     return {ok:true,station:st.s,dateISO:iso,crops:out,timeline:timeline,errors:errors,limitation:'Station frost dates are historical references. Soil, weather, variety and packet instructions matter.'};
   }
 
+  // The legacy calendar keeps its established names/URLs, while this adapter supplies every decision.
+  // An onion seed-starting date is not interchangeable with planting onion sets.
+  function calendarEntry(st, name, day, options) {
+    options=options||{};
+    var aliases={'Lettuce':'lettuce','Green beans':'beans','Onion sets':'onions','Swiss chard':'chard','Pumpkins':'pumpkin','Melons':'melon'};
+    var id=aliases[name] || String(name||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+    if(name==='Onions from seed') return {cropId:null,code:'GUIDE',status:'Growing guide',title:name,detail:'Start onion seed according to the variety packet; the verified spring rule here applies to onion sets, not an invented seed-start date.',rules:[],windows:[]};
+    var crop=CROPS.filter(function(c){return c.id===id})[0];
+    if(!crop) return {cropId:null,code:'NOT_REPORTED',status:'Not reported',title:name,detail:'No source-qualified guidance is available for this plant.',rules:[],windows:[]};
+    var reference=options.springDay;
+    var stForCalc=Object.assign({},st);
+    if(typeof reference==='number'&&isFinite(reference)) stForCalc.p25=K.fmt(reference);
+    var result=cropStatus(crop,stForCalc,day,options.conditions||{});
+    result.cropId=crop.id;
+    if(crop.kind==='transplant'||crop.kind==='warmSow') {
+      result.detail='The selected spring date is a planning reference, not a frost-free guarantee. Check your forecast, soil and packet; this guide does not establish a last planting date.';
+    }
+    return result;
+  }
+
   // When nothing is current, the next dated window anywhere in the year.
   function nextUp(st, d) {
     var fr = frostOf(st), best = null;
     CROPS.forEach(function (c) { if (c.kind !== 'transplant' && c.kind !== 'warmSow') return; var from = c.kind === 'transplant' ? fr.cautious - 56 : fr.cautious; var n = ((from - d) % 365 + 365) % 365; if (!best || n < best.inDays) best = { crop: c, from: from, inDays: n, what: c.kind === 'transplant' ? 'start ' + c.name.toLowerCase() + ' indoors' : 'sow ' + c.name.toLowerCase() + ' outside' }; });
     return best;
   }
-  var api = { SOURCES: SOURCES, RULES: RULES, CROPS: CROPS, STATUS: STATUS, FALL_PUBLISHED: FALL_PUBLISHED, locate: locate, towns: towns, nearestStation: nearestStation, detroitToday: detroitToday, cropStatus: cropStatus, plan: plan, nextUp: nextUp, frostOf: frostOf, miles: miles, fallReference: fallReference, fallPlan: fallPlan, gardenPlan: gardenPlan };
+  var api = { SOURCES: SOURCES, RULES: RULES, CROPS: CROPS, STATUS: STATUS, FALL_PUBLISHED: FALL_PUBLISHED, locate: locate, towns: towns, nearestStation: nearestStation, detroitToday: detroitToday, cropStatus: cropStatus, plan: plan, nextUp: nextUp, frostOf: frostOf, miles: miles, fallReference: fallReference, fallPlan: fallPlan, gardenPlan: gardenPlan, calendarEntry: calendarEntry };
   root.PlantNow = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
 })(typeof window !== 'undefined' ? window : globalThis);
