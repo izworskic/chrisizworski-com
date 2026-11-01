@@ -25,7 +25,7 @@ async function main(){
  let browser;
  try{
   browser=await chromium.launch({executablePath:process.env.CHROME_PATH||'/usr/bin/google-chrome',headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});
-  for(const device of [{name:'mobile',width:390,height:844},{name:'tablet',width:768,height:1024},{name:'desktop',width:1366,height:900},{name:'narrow',width:340,height:750}]){
+  for(const device of [{name:'mobile',width:390,height:844},{name:'tablet',width:768,height:1024},{name:'desktop',width:1366,height:900},{name:'narrow',width:340,height:750},{name:'compact',width:360,height:780},{name:'wide',width:1440,height:900}]){
    const ctx=await browser.newContext({viewport:{width:device.width,height:device.height},deviceScaleFactor:1,ignoreHTTPSErrors:false});
    const page=await ctx.newPage(),errors=[];
    page.on('pageerror',e=>errors.push(e.message));
