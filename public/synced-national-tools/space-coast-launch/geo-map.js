@@ -50,7 +50,7 @@
     'low-walk': 'Highlight published parking and on-site facilities, but the accessible route and exact spectator position still require operator confirmation.'
   };
   let current = null, profile = 'family', selected = null;
-  let map = null, padMarker = null, connectors = null;
+  let map = null, padMarker = null, connectors = null, lotBoundaries = null, policyLine = null, lotFilter = 'all';
   let markers = new Map(), leafletPromise = null, mapPromise = null, lastMissionId = null;
   const options = document.querySelectorAll('input[name="geo-intent"]');
   function updateExplanation() { say('geo-intent-explainer', profileDescription[profile]); }
@@ -83,27 +83,28 @@
     return blocked + category + fit;
   }
   function validViewGeometry(p) {
-    return p.category === 'public-viewpoint' &&
-      p.coordinateRole === 'site-reference' && !!p.geometry &&
+    return (p.category === 'public-viewpoint' || p.category === 'beach-parking') &&
+      ['site-reference','nps-verified-parking-footprint'].includes(p.coordinateRole) && !!p.geometry &&
       valid(p.geometry.miles) && p.geometry.miles >= 0 && p.geometry.miles < 80 &&
       valid(p.geometry.bearingDegrees);
   }
-  function iconHtml(kind, selectedPoint, unavailable) {
-    const glyph = kind === 'pad' ? '🚀' : kind === 'entry' ? '↳' : '•';
+  function iconHtml(kind, selectedPoint, unavailable, number) {
+    const glyph = kind === 'lot' ? String(Number.isInteger(number) && number>=1 && number<=13?number:'?') :
+      kind === 'pad' ? '🚀' : kind === 'entry' ? '↳' : '•';
     const klass = 'geo-pin geo-pin-' + kind + (selectedPoint ? ' geo-pin-active' : '') +
       (unavailable ? ' geo-pin-restricted' : '');
     return '<span class="' + klass + '" aria-hidden="true">' + glyph + '</span>';
   }
-  function leafletIcon(kind, active, blocked) {
+  function leafletIcon(kind, active, blocked, number) {
     return window.L.divIcon({
-      className: 'geo-pin-shell', html: iconHtml(kind, active, blocked),
+      className: 'geo-pin-shell', html: iconHtml(kind, active, blocked, number),
       iconSize: [34, 38], iconAnchor: [17, 34], popupAnchor: [0, -26]
     });
   }
   function showOnMap(p, fit = false) {
     if (!map || !geoPointValid(p)) return;
     const L = window.L;
-    if (fit) map.setView([p.lat,p.lon], 12, { animate: true });
+    if (fit) map.setView([p.lat,p.lon], p.category==='beach-parking'?14:12, { animate: true });
     if (connectors) { map.removeLayer(connectors); connectors = null; }
     if (validViewGeometry(p) && geoPointValid(current?.pad)) {
       connectors = L.polyline([
@@ -112,15 +113,17 @@
         interactive: false }).addTo(map);
     }
     markers.forEach(({ marker, point }) => {
-      const kind = point.category === 'public-viewpoint' ? 'view' : 'entry';
-      marker.setIcon(leafletIcon(kind, point.id === p.id, ['closed','ineligible'].includes(point.level)));
+      const kind = point.category === 'beach-parking' ? 'lot' :
+        point.category === 'public-viewpoint' ? 'view' : 'entry';
+      marker.setIcon(leafletIcon(kind, point.id === p.id,
+        ['closed','ineligible'].includes(point.level),point.number));
     });
     const selectedMarker = markers.get(p.id)?.marker;
     if (selectedMarker) selectedMarker.openPopup();
   }
   function focusPoint(id, move = true) {
     selected = id;
-    panel.querySelectorAll('.geo-choice').forEach(el => {
+    document.querySelectorAll('[data-geo-id]').forEach(el => {
       el.dataset.active = el.dataset.geoId === id ? 'true' : 'false';
     });
     const target = current?.points?.find(p => p.id === id);
@@ -190,12 +193,13 @@
     say('geo-pad-detail', pad ?
       'LL2 pad coordinates are matched to the selected mission, but this launch facility is restricted. Do not navigate there.' :
       'No trusted Florida pad coordinate for this mission. Pad-distance comparisons are withheld.');
-    const sorted = geo.points.slice().filter(geoPointValid)
+    const sorted = geo.points.slice().filter(p=>geoPointValid(p) && p.category!=='beach-parking')
       .sort((a,b)=>scoring(a)-scoring(b) || a.name.localeCompare(b.name));
     panel.replaceChildren();
     say('geo-site-count', geo.points.filter(p=>p.category==='public-viewpoint').length+
       ' public park references · '+
-      geo.points.filter(p=>p.category!=='public-viewpoint').length+' entry points');
+      geo.points.filter(p=>p.category==='beach-parking').length+' NPS mapped lots · '+
+      geo.points.filter(p=>['ticketed-entry','access-checkpoint'].includes(p.category)).length+' entrance points');
     sorted.forEach((p,i) => panel.appendChild(row(p,i)));
     const unlocated = Array.isArray(geo.unlocated) ? geo.unlocated : [];
     if (unlocated.length) {
@@ -219,7 +223,8 @@
         'Current NPS alerts are unverified. ') +
         (geo.policy?.detail || 'Launch-specific gate access is never guaranteed.');
     }
-    if (!selected || !sorted.some(p=>p.id===selected)) selected = sorted.find(p=>p.category==='public-viewpoint')?.id || sorted[0]?.id;
+    renderPlayalindaLots();
+    if (!selected || !geo.points.some(p=>p.id===selected)) selected = sorted.find(p=>p.category==='public-viewpoint')?.id || sorted[0]?.id;
     focusPoint(selected, false);
     void drawMap();
   }
@@ -310,6 +315,8 @@
     markers.clear();
     if (padMarker) {map.removeLayer(padMarker);padMarker=null;}
     if (connectors) {map.removeLayer(connectors);connectors=null;}
+    if (lotBoundaries) {map.removeLayer(lotBoundaries);lotBoundaries=null;}
+    if (policyLine) {map.removeLayer(policyLine);policyLine=null;}
     const points=(current.points||[]).filter(geoPointValid);
     const bounds=[];
     if (geoPointValid(current.pad)) {
@@ -323,10 +330,10 @@
       bounds.push([pad.lat,pad.lon]);
     }
     points.forEach(p=>{
-      const kind=p.category==='public-viewpoint'?'view':'entry';
+      const kind=p.category==='beach-parking'?'lot':p.category==='public-viewpoint'?'view':'entry';
       const marker=L.marker([p.lat,p.lon],{
         title:p.name,keyboard:true,
-        icon:leafletIcon(kind,p.id===selected,['closed','ineligible'].includes(p.level))
+        icon:leafletIcon(kind,p.id===selected,['closed','ineligible'].includes(p.level),p.number)
       }).addTo(map);
       const popup=node('div','geo-popup');
       popup.appendChild(node('strong','',p.name));
@@ -347,9 +354,9 @@
       (current.pad ? 'Mapped the selected mission’s launch pad with ' :
         'Launch-pad GPS unavailable; mapped ') +
       points.filter(p=>p.category==='public-viewpoint').length+
-      ' public park references and '+
-      points.filter(p=>p.category!=='public-viewpoint').length+
-      ' official entrance points. No assumed hazard polygons.');
+      ' public park references, '+
+      points.filter(p=>p.category==='beach-parking').length+
+      ' actual NPS lot footprints and 2 official entrances. No inferred live closures.');
   }
   updateExplanation();
   document.addEventListener('space-coast:launch-loaded',event=>{
