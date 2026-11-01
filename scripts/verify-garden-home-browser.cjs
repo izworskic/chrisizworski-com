@@ -15,6 +15,17 @@ const assert=require('node:assert/strict');
    page.on('pageerror',error=>console.error('Browser error:',error));
    await page.route('**/*',route=>route.request().url().startsWith('http://127.0.0.1:8765/')?route.continue():route.abort());
    await page.goto('http://127.0.0.1:8765/michigan-gardening/?place=Bay+City&date=2026-11-01',{waitUntil:'domcontentloaded'});
+   assert.equal(await page.locator('#plant-now').getAttribute('open'),null);
+   assert.equal(await page.locator('[data-garden-result]').count(),12);
+   await page.screenshot({path:`artifacts/garden-home-browser/hub-${width}.png`,fullPage:true,animations:'disabled'});
+   await page.locator('#garden-find').fill('tomatoes');
+   assert.match(await page.locator('#garden-find-status').innerText(),/featured tools found/);
+   assert.equal(await page.locator('[data-garden-result]:visible').count(),2);
+   await page.locator('#garden-find').fill('nonexistent vegetable');
+   assert.match(await page.locator('#garden-find-status').innerText(),/0 featured tools/);
+   await page.locator('#garden-find').fill('');
+   await page.getByRole('link',{name:/Plan my Michigan garden/}).click();
+   assert.notEqual(await page.locator('#plant-now').getAttribute('open'),null);
    await page.locator('#gardenPick').selectOption('tomatoes');await page.locator('#gardenAdd').click();
    const ahead=page.locator('#gardenAhead');await ahead.waitFor({state:'visible'});
    assert.match(await ahead.innerText(),/Start indoors: Tomatoes/);assert.match(await ahead.innerText(),/2027/);
@@ -43,6 +54,8 @@ const assert=require('node:assert/strict');
   }
   const nojs=await browser.newContext({javaScriptEnabled:false,viewport:{width:390,height:844}});
   const fallback=await nojs.newPage();await fallback.goto('http://127.0.0.1:8765/michigan-gardening/',{waitUntil:'domcontentloaded'});
+  assert.equal(await fallback.getByRole('link',{name:/When is frost likely/}).count(),1);
+  await fallback.locator('#plant-now > summary').click();
   assert.match(await fallback.locator('body').innerText(),/Enable JavaScript to build a list/);await nojs.close();
   console.log('Garden home browser scenarios passed at 360, 390, 768 and 1440 pixels.');
  }finally{if(browser)await browser.close();server.kill('SIGTERM')}
