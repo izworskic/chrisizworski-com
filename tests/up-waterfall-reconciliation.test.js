@@ -645,7 +645,7 @@ test('remaining Batch 14 three source-reviewed GIS records stay unindexed with d
   assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/'+r.name.toLowerCase().replace(/[^a-z0-9]+/g,'-')+'/'));
  }
  const douglass=curated.waterfalls.find(x=>x.gisObjectId===135);assert.ok(douglass?.verification?.landManager?.verified,'Houghton Douglass now promoted to public guide');assert.match(douglass.further,/Phase 1|2027|overlook|accessible/i);
- assert.match(refs.find(x=>x.gisObjectId===160).reviewLimitations,/municipal operator|utility/i);
+ assert.match(refs.find(x=>x.gisObjectId===160).reviewLimitations,/UPPCO|McClure|private.*banks/i);
  assert.match(refs.find(x=>x.gisObjectId===46).guidance,/Do not.*gate/i);
  assert.match(refs.find(x=>x.gisObjectId===91).summary,/private/i);
  const mapJS=fs.readFileSync('public/assets/up-waterfalls-research.js','utf8');
@@ -785,7 +785,7 @@ test('Batch 18 Houghton Phase-1 and Power House public visitor paths preserve di
  for(const oid of [160,91]){const row=ledger.candidates.find(x=>x.gisObjectId===oid);assert.equal(row.curatedId,null);assert.equal(row.publicationEligible,false);assert.ok(queue.candidates.some(x=>x.gisObjectId===oid));}
 });
 
-test('Dead River operator evidence must never imply a powerhouse visitor lot or dam gate access',()=>{
+test('Dead River FERC historic public parking cannot imply public access across private gorge trail',()=>{
  const g=ledger.candidates.find(x=>x.gisObjectId===160);
  const review=JSON.parse(fs.readFileSync('public/assets/up-waterfall-access-reviews.json','utf8')).records.find(x=>x.gisObjectId===160);
  const source=JSON.parse(fs.readFileSync('data/up-waterfall-inventory-ledger.json','utf8')).entries.find(x=>x.source==='mi-state-gis'&&x.sourceId===160);
@@ -795,11 +795,11 @@ test('Dead River operator evidence must never imply a powerhouse visitor lot or 
  assert.equal(review.publicationEligible,false);
  assert.equal(g.accessRouteAudit.outcome,'not-cleared');
  assert.equal(review.routeAudit.segments.length,6);
- assert.ok(review.routeAudit.segments.some(x=>x.label==='Visitor parking'&&x.status==='not-cleared'));
- assert.match(review.summary,/Marquette Board of Light & Power/i);
- assert.match(review.summary,/Neither is a site-specific public parking/i);
- assert.match(review.guidance,/NOT a verified signed falls route/);
- assert.ok(source.nextAction.includes('FERC Forestville'));
+ assert.ok(review.routeAudit.segments.some(x=>/parking/i.test(x.label)&&x.status==='not-cleared'));
+ assert.match(review.summary,/UPPCO McClure/i);
+ assert.match(review.summary,/private property/i);
+ assert.match(review.guidance,/historic route is currently lawful|drive through a gate/i);
+ assert.match(source.nextAction,/UPPCO|McClure|private banks/i);
  assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/dead-river-falls/'));
 });
 

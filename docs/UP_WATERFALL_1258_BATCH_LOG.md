@@ -362,3 +362,21 @@ The U.P. waterfall Chromium workflow previously checked only HTML/assets on PR. 
 ## Batch 39 — Lower Silver Falls owner/permission source gate enforced (2026-10-31)
 
 Automated Node QA exposed public indexed Silver River lower picnic falls with landManager.verified=false. Baraga County tourism guides document historical picnic use, but no verified owner/managing agency nor current legal signed parking. Kept curated geographical research source #110 and provenance (not conflated with Upper Silver GIS #68), but downgraded publication to research-only, set noindex, removed TouristAttraction schema and public sitemap ItemList entry, redacted hub arrival and route and marked research pending. Static page retains source-history context without turn-by-turn hiking directions. Maintains **71 curated records including research, 65 linked GIS, 96 pending; 69 public sitemap locations including hub**. Source verification must be real before promoting. Browser/index and batch20 tests updated.
+
+## Batch 38 — FERC McClure/private Dead River Falls path and Silver Bell/Chipmunk identity (2026-11-01)
+
+Updated GIS #160: 2002 FERC environmental assessment identifies UPPCO McClure P-10855 public gravel lot HISTORICALLY and private upstream half-mile gorge trail. Do not confuse with MBLP Forestville P-2589. UPPCO hydro live flow is not instantaneous gorge waterfall or safety data. Silver Bell #195 historic FR2276 rough road/gate; Chipmunk #205 Grand Marais GNIS matches GIS, not Amasa/Wetmore namesakes. Source-ledgers, six-route gate audits, 3 nonindexed HTML research pages. No visitor guide, no emails. 71 curated / 65 linked / 96 pending unchanged.
+
+## Waterfall research queue v2 (2026-11-01)
+
+Stopped returning to the same unresolved private/utility/gated waterfall reports without new source evidence. Generator now ranks first-source candidates above incomplete reviews above verified six-axis access blockers. Every source candidate remains nonpublic until legal visitor route verified. Reconciled the source-first queue, preserved 71 curated / 65 GIS links / 96 pending and added focused Node gates. Batch 38 audited Dead River/Silver Bell/Chipmunk separately.
+
+## Batch 39 — Plumbago, Ogemaw, Daults first-source Baraga audit (2026-11-01)
+
+Plumbago GIS #52 materially different from remote real gorge (~6km); old overgrown/gated >2mi two-track, not a US-41 roadside stop. Ogemaw #59 GIS and specialist ~0.5km apart with potential multiple creek drops; informal Baraga Plains Road pond pull-off but no official parking/parcel approval. Daults #83 mapped fall near a residential house/driveway, historically confused with roadside rapids, not authorized public foot route. Three noindex research pages, full six source gate checks, regenerated queue v2. **71 curated / 65 GIS links / 96 pending unchanged**.
+
+**Batch 39 CI reconciliation (2026-11-01):** Updated two legacy Dead River assertions to current FERC-correct source facts: UPPCO McClure P-10855 is not MBLP Forestville P-2589; 2002 public McClure gravel lot did NOT authorize a gorge path through private property. Existing hard safety checks remain: no approved public route, parking checkpoint not-cleared, source noindex, no sitemap promotion. Github workflow 41303237880 initially failed only outdated expectations; recheck exact new commit before any merge.
+
+## Batch 40: Letherby and Black Slate / Quartzite source gate (2026-11-01)
+
+GIS #99, #103, #105 and #107 moved from source-discovery to explicitly access-blocked research. Field-mapped upper/main/lower Letherby points conflict with GIS labels; county tourism supports a historic Black Slate/Quartzite short trail but not current landowner parking or legal full route. DNR LOTS parcel + conservation easement point queries found zero matching features at these four natural points; absence from that inventory does **not** imply private title. Four distinct noindex research pages and opt-in source checks added. No curated/sitemap/parking/trail publication. See `docs/UP_WATERFALL_1258_BATCH_40_LETHERBY_SLATE.md`. Counts unchanged 71/65/96; draft PR #1352 remains unmerged; full CI/Chromium not yet run.

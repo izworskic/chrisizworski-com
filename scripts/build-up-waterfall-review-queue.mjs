@@ -9,11 +9,14 @@ function score(c){
   const generic=/^(upper|lower|middle|first|second|little|big) falls$/i.test(c.name);
   const risk=/dam|peavy|quinnesec|power house|hydro/i.test(c.name);
   const started=Boolean(c.evidenceReviewed||c.sourceLinks?.length||c.accessRouteAudit);
-  return {points:(pin>=0?100-pin:0)+(started?12:0)-(generic?15:0)-(risk?8:0),reason:pin>=0?'Named priority for authoritative source review':started?'Previously sourced, access review incomplete':generic?'Generic name; disambiguate river and physical waterfall':'Requires independent land-manager and visitor-approach evidence'};
+  const blocked=c.accessRouteAudit?.outcome==='not-cleared' && (c.sourceLinks?.length||0)>0;
+  if(blocked)return {points:-30+(pin>=0?1:0)-(risk?8:0),reason:'Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes',stage:'awaiting-new-authoritative-evidence'};
+  if(started)return {points:35+(pin>=0?5:0)-(generic?10:0)-(risk?8:0),reason:'Partial evidence already exists: finish owner, legal route and current parking verification',stage:'incomplete-source-audit'};
+  return {points:60+(pin>=0?7:0)-(generic?15:0)-(risk?8:0),reason:'New source discovery: identify waterfall, land manager and credible visitor approach before any publication',stage:'first-source-discovery'};
 }
 export function buildQueue(){
   const pending=ledger.candidates.filter(x=>!x.curatedId);
-  const rows=pending.map(x=>{const p=score(x);return {gisObjectId:x.gisObjectId,name:x.name,county:x.county,river:x.river||null,lat:x.lat,lng:x.lng,cluster:[String(x.county).toUpperCase(),String(x.river||'UNKNOWN').toUpperCase()].join(' / '),priorityScore:p.points,priorityReason:p.reason,publicationEligible:false,reviewStatus:x.evidenceReviewed?'previous-research-needs-public-access-review':'needs-source-discovery',sourceCount:x.sourceLinks?.length||0,blockingGate:x.outstandingGate||'Verify identity, land manager, public parking, legal approach, and current conditions before indexing'};});
+  const rows=pending.map(x=>{const p=score(x);return {gisObjectId:x.gisObjectId,name:x.name,county:x.county,river:x.river||null,lat:x.lat,lng:x.lng,cluster:[String(x.county).toUpperCase(),String(x.river||'UNKNOWN').toUpperCase()].join(' / '),priorityScore:p.points,priorityReason:p.reason,reviewStage:p.stage,publicationEligible:false,reviewStatus:x.evidenceReviewed?'previous-research-needs-public-access-review':'needs-source-discovery',sourceCount:x.sourceLinks?.length||0,blockingGate:x.outstandingGate||'Verify identity, land manager, public parking, legal approach, and current conditions before indexing'};});
   rows.sort((a,b)=>b.priorityScore-a.priorityScore||a.county.localeCompare(b.county)||a.gisObjectId-b.gisObjectId);
   const batches=[];for(let i=0;i<rows.length;i+=8){batches.push({batchNumber:Math.floor(i/8)+1,candidates:rows.slice(i,i+8).map(x=>x.gisObjectId)});}
   if(new Set(rows.map(x=>x.gisObjectId)).size!==rows.length)throw Error('Duplicate GIS candidate');

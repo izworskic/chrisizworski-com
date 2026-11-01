@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "issue": 1258,
-  "reviewed": "2026-10-31",
+  "reviewed": "2026-11-01",
   "policy": "All 161 named source candidates retained even when public access is unknown. GIS locations are waterfall positions, never visitor parking. Do not auto-index.",
   "sourceCount": 197,
   "sourceCandidateCount": 161,
@@ -1017,14 +1017,23 @@
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unverified",
+      "access": "research-only",
       "landManager": null,
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-baraga"
+      "checked": "2026-11-01",
+      "nextAction": "Determine exact source feature identity on proper Plumbago Creek hydrography and published 2026 USFS/owner land parcel, lawful Preacher Park access, gate/MVUM road travel, safe footpath and seasonal closures.",
+      "batch": "county-baraga",
+      "reviewed": "2026-11-01",
+      "reviewBatch": "39",
+      "classification": "unverified-natural-point-and-public-parking",
+      "accessAssessment": "State GIS #52 at 46.621751,-88.503255 versus specialist real Plumbago Falls at 46.64970,-88.43816 differ by about 5830 metres. Historical 2008-2009 trips describe >2mi route from Preacher Park / Lake Plumbago on a gated, branching, overgrown two-track, with dead-end footpaths, swamps and possible stream wading. No official parking/trail or current land-title and motorized access records established. Unverified online catalogue claiming easy US-41 roadside Plumbago Falls at 46.5814,-88.3411 conflicts even more with both field and GIS positions. Avoid giving impossible vehicle route or invented short scenic stop. Exact state-specialist distance 5862 metres. Reviewed Nov 1 2026. All traffic, property and seasonal rights subject to current land manager confirmation.",
+      "evidence": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.waterfallsofthekeweenaw.com/plumbago-creek/plumbago-falls/",
+        "https://www.fs.usda.gov/r09/ottawa"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -1132,14 +1141,25 @@
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unverified",
+      "access": "research-only",
       "landManager": null,
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-baraga"
+      "checked": "2026-11-01",
+      "nextAction": "Verify current road commission legal pull-off/parking and signage at Baraga Plains Road, exact public parcel and authorized dry creek-side viewpoint, reconcile both falls coordinates/features, inspect seasonal road conditions and creek safety.",
+      "batch": "county-baraga",
+      "reviewed": "2026-11-01",
+      "reviewBatch": "39",
+      "classification": "unverified-natural-point-and-public-parking",
+      "accessAssessment": "GIS Ogemaw #59 at 46.648930,-88.512220 differs about 537 metres from specialist Ogemaw Creek falls at 46.645410,-88.507430, while a second 2006 visitor lists 46.6473,-88.5110 nearer the GIS point. The same creek may contain multiple smaller drops; waterfall identity and exact point not reconciled. Historical visitors describe a small brown sign opposite a Baraga Plains Road pond and informal pull-off near culvert, with undergrowth, eroded creek-bank paths and scattered fallen trees; no county road commission designated parking or current manager approved public trail. Independent 2026 photo exists but cannot serve as county roadside approval. Exact state-specialist distance 536 metres. Reviewed Nov 1 2026. All traffic, property and seasonal rights subject to current land manager confirmation.",
+      "evidence": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.waterfallsofthekeweenaw.com/ogemaw-creek/ogemaw-falls/",
+        "https://gowaterfalling.com/~gowaterf/waterfalls/minorfallsM-O.shtml",
+        "https://upperpeninsulawaterfalls.com/baraga-county-waterfalls/ogemaw-falls.html",
+        "https://www.baragacountytourism.org/attractions"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -1648,14 +1668,23 @@
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unverified",
+      "access": "research-only",
       "landManager": null,
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-baraga"
+      "checked": "2026-11-01",
+      "nextAction": "Current Baraga parcel ownership for both point candidates, road commission lawful visitor parking, owner-authorized waterfall bank viewpoint and complete signed dry footpath avoiding nearby house and driveway.",
+      "batch": "county-baraga",
+      "reviewed": "2026-11-01",
+      "reviewBatch": "39",
+      "classification": "unverified-natural-point-and-public-parking",
+      "accessAssessment": "State GIS Daults Falls #83 at 46.710114,-88.422161 is about 285m from specialist 46.711930,-88.424790. Specialist confirms he initially photographed an upstream roadside drop, later found real falls downstream near/behind an occupied house and private driveway, and records repeated private property concerns. Old advice to stop on Herman-Nestoria Road and follow the creek behind the house is not authorized public visitation. Neither legal road parking nor continuous public bank easement was established; avoid creating a drive-to-falls line or neighbor trespass instructions. Exact state-specialist distance 285 metres. Reviewed Nov 1 2026. All traffic, property and seasonal rights subject to current land manager confirmation.",
+      "evidence": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.waterfallsofthekeweenaw.com/daults-creek/daults-falls/",
+        "https://www.baragacountytourism.org/attractions"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -2010,14 +2039,26 @@
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unverified",
+      "access": "research-only",
       "landManager": null,
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-baraga"
+      "checked": "2026-11-01",
+      "nextAction": "Reconcile official #99 to independent upper and main falls with map evidence; obtain county parcel title, legal motorized road status, approved parking, permitted continuous walking route and current restrictions.",
+      "batch": "county-baraga",
+      "reviewed": "2026-11-01",
+      "reviewBatch": "40",
+      "classification": "source-backed-access-blocked",
+      "accessAssessment": "Michigan GIS #99 at 46.769094,-88.109011 is about 568 m north of the independently reported Upper Leatherby falls (46.76402,-88.10811), but only about 186 m north of the specialist main Leatherby falls (46.76748,-88.10836). The labels cannot be automatically reconciled. A field report describes a long and confusing unmarked Leatherby Road two-track and a short riverbank scramble, but it does not certify current vehicle rights, a designated legal parking area, a continuous public foot corridor, or land ownership.",
+      "evidence": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.waterfallsofthekeweenaw.com/west-branch-huron-river/upper-leatherby-falls/",
+        "https://www.waterfallsofthekeweenaw.com/west-branch-huron-river/leatherby-falls/",
+        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-88.109011%2C46.769094&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson",
+        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/9/query?geometry=-88.109011%2C46.769094&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson",
+        "https://www.baragacounty.org/government/departments/equalization/"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -2068,14 +2109,26 @@
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unverified",
+      "access": "research-only",
       "landManager": null,
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-baraga"
+      "checked": "2026-11-01",
+      "nextAction": "Locate a credible independent observation precisely at source GIS #103; distinguish main/upper/lower Leatherby features, then confirm parcel owner, public roadway and parking, authorized trail and present restrictions.",
+      "batch": "county-baraga",
+      "reviewed": "2026-11-01",
+      "reviewBatch": "40",
+      "classification": "source-backed-access-blocked",
+      "accessAssessment": "Michigan GIS #103 at 46.781725,-88.102977 lies about 1,636 m from the independent main Leatherby falls (46.76748,-88.10836) and about 998 m from the independent LOWER Leatherby cascades (46.77376,-88.10902). A historical field account says a map label downstream of main falls represents weak rapids/swamp, not the photographed main waterfall. Neither alias nor visitor destination is confirmed. Rough historic Black Creek/Leatherby-road narratives apply to a different field-mapped falls site; using those directions for GIS #103 risks taking visitors to the wrong natural feature or an unauthorized track.",
+      "evidence": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.waterfallsofthekeweenaw.com/west-branch-huron-river/leatherby-falls/",
+        "https://www.waterfallsofthekeweenaw.com/west-branch-huron-river/lower-leatherby-falls/",
+        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-88.102977%2C46.781725&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson",
+        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/9/query?geometry=-88.102977%2C46.781725&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson",
+        "https://www.baragacounty.org/government/departments/equalization/"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -2126,14 +2179,28 @@
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unverified",
+      "access": "research-only",
       "landManager": null,
       "parkingEvidence": null,
-      "trailEvidence": null,
+      "trailEvidence": "https://www.baragacountytourism.org/wp-content/uploads/2012/09/Travel-Guide.pdf",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-baraga"
+      "checked": "2026-11-01",
+      "nextAction": "Match county parcel/land manager for both falls and the logging bridge, verify Arvon/All Wood road easement and legal turnout, and limit any future guide to a clearly documented safe short view rather than inventing a continuous upstream trail.",
+      "batch": "county-baraga",
+      "reviewed": "2026-11-01",
+      "reviewBatch": "40",
+      "classification": "source-backed-access-blocked",
+      "accessAssessment": "Michigan GIS #105 at 46.784430,-88.241702 is about 385 m from the field-mapped Black Slate Falls reference (46.78754,-88.23947); the independent account describes a dispersed half-mile run of small upstream drops, so the point mismatch may represent a different section, not necessarily an error. It is distinct from Quartzite #107. Baraga County's original visitor brochure and its later hosted waterfall map explicitly describe a short forest trail off Arvon Road and this upper series above Quartzite, but neither identifies the actual trail/bridge parcel owner or grants 2026 public parking at an unmarked logging-road bridge. An independent account reports the longer upstream bank has no established trail.",
+      "evidence": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.waterfallsofthekeweenaw.com/slate-river/black-slate-falls/",
+        "https://www.keweenawguide.com/single-post/2018/08/05/black-slate-quartzite-falls",
+        "https://www.baragacountytourism.org/wp-content/uploads/2012/09/Travel-Guide.pdf",
+        "https://www.visitbaragacounty.com/wp-content/uploads/2022/07/Baraga-County-Waterfalls-Map.pdf",
+        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-88.241702%2C46.78443&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson",
+        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/9/query?geometry=-88.241702%2C46.78443&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson",
+        "https://www.baragacounty.org/government/departments/equalization/"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -2172,14 +2239,28 @@
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unverified",
+      "access": "research-only",
       "landManager": null,
       "parkingEvidence": null,
-      "trailEvidence": null,
+      "trailEvidence": "https://www.baragacountytourism.org/wp-content/uploads/2012/09/Travel-Guide.pdf",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-baraga"
+      "checked": "2026-11-01",
+      "nextAction": "Determine parcel owner at natural falls and the bridge turnout, confirm road/right-of-way and designated parking, documented legal short path and current restrictions. Only then promote the short-view visitor guide.",
+      "batch": "county-baraga",
+      "reviewed": "2026-11-01",
+      "reviewBatch": "40",
+      "classification": "source-backed-access-blocked",
+      "accessAssessment": "Michigan GIS #107 at 46.789247,-88.242098 lies about 50 m from independently mapped Quartzite (46.78882,-88.24191), strong geographic agreement. This is the small downstream cascade, not the separate Slate River Falls #119 far north at the Skanee Road bridge. County visitor brochure, Upper Peninsula Travel and field observations agree a short walk descends from the Arvon Road/wooden logging-bridge vicinity. These historical descriptions do not establish who owns the bridge turnout, the intervening footpath, or a current signed parking right. Do not copy unverified riverbed scrambling/swimming instructions.",
+      "evidence": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.waterfallsofthekeweenaw.com/slate-river/quartzite-falls/",
+        "https://www.uptravel.com/listing/quartzite-falls/5735/",
+        "https://www.baragacountytourism.org/wp-content/uploads/2012/09/Travel-Guide.pdf",
+        "https://www.visitbaragacounty.com/wp-content/uploads/2022/07/Baraga-County-Waterfalls-Map.pdf",
+        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-88.242098%2C46.789247&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson",
+        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/9/query?geometry=-88.242098%2C46.789247&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson",
+        "https://www.baragacounty.org/government/departments/equalization/"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -3345,25 +3426,23 @@
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "route-or-permission-not-cleared",
-      "landManager": "MBLP Dead River hydro operator identified; falls-trail property/permission not verified",
+      "access": "research-only",
+      "landManager": "UPPCO McClure P-10855 historically; private falls trail, current permissions unverified",
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-30",
-      "nextAction": "Verify with published FERC Forestville recreation plan, official MBLP visitor access policy, or current signed public route map that the old powerhouse parking, route past service gate, and rugged falls-side walking approach are permitted. Operator/hydro identity alone is not an easement.",
+      "checked": "2026-11-01",
+      "nextAction": "Current UPPCO/landowner public visitor access map, exact route easement across private banks, legal signed lot at McClure and current release/closure conditions. Do not use NTN Forestville trailhead, state boat launch or MBLP ownership as substitute.",
       "batch": "county-marquette",
-      "reviewed": "2026-10-30",
-      "reviewBatch": "19",
-      "classification": "municipal-hydro-operator-MBLP-identified-current-gorge-trail-easement-unverified",
-      "accessAssessment": "The Marquette Board of Light & Power identifies itself as a City of Marquette municipal electric utility operating hydroelectric generation on the Dead River. Its December 2023 board minutes separately approve federal safety inspection work at Forestville and Tourist Park hydro sites. Neither is a site-specific public parking or trail access grant. Marquette Township documents a State-owned *Forestville Access Site* for boating, which cannot be substituted for the powerhouse-side visitor lot or the falls trail. Regional waterfall guides document the common Forestville Road powerhouse-side signed hike, but do not establish current utility gate permissions or posted rules.",
+      "reviewed": "2026-11-01",
+      "reviewBatch": "38",
+      "classification": "source-backed-access-blocked",
+      "accessAssessment": "FERC 2002 final environmental assessment pp.151-152: UPPCO P-10855 McClure powerhouse on Forestville Road had a gravel lot for about 10 cars then open to the public. The following paragraph explicitly says the 0.5-mile upstream informal path to the waterfalls EXTENDS INTO PRIVATE PROPERTY. McClure's P-10855 and municipal MBLP Forestville P-2589 are different hydropower projects. Recent travel descriptions of a powerhouse trail do not establish a present legal easement or 2026 parking rights. UPPCO publishes McClure hydropower flow and water level data approximately every 10 minutes, but this is NOT measured water flow over each waterfall and NOT a safety/closure signal.",
       "evidence": [
-        "https://mblp.org/",
-        "https://mblp.org/wp-content/uploads/2024/01/2023-12-19-Board-Meeting-Minutes-Signed.pdf",
-        "https://www.marquettetownship.org/sites/g/files/vyhlif6666/f/news/marquette_township_recreation_plan_2022-2026_dnr_approved.pdf",
-        "https://www.waterfallsofthekeweenaw.com/dead-river/dead-river-falls/",
-        "https://www.noquetrails.org/north-trails",
-        "https://lakesuperiorcircletour.info/location/dead-river-falls-trail/"
+        "https://archives.nmu.edu/govdocs/local/Dead_River/2002_Final_Environmental_Assessment_Dead_River_Hydroelectric_Project_FERC%20Project_No_10855-002_and_Marquette_Hydroelectric_Project_FERC_Project_No_2589-024.pdf",
+        "https://www.uppco.com/about-uppco/hydro-levels/",
+        "https://hydroreform.org/hydro-project/mcclure-p-10855/",
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
       ]
     },
     {
@@ -4012,14 +4091,23 @@
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unverified",
+      "access": "research-only",
       "landManager": null,
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-alger"
+      "checked": "2026-11-01",
+      "nextAction": "Current USFS Hiawatha parcel and motor vehicle use map, lawful seasonal FR2276 gate and parking status, signed complete trail and stream crossing safety.",
+      "batch": "county-alger",
+      "reviewed": "2026-11-01",
+      "reviewBatch": "38",
+      "classification": "source-backed-access-blocked",
+      "accessAssessment": "State GIS Silver Bell Falls #195 on Nelson Creek at 46.450945,-86.970673 matches a 2016 field report at 46.45117,-86.97035, about 35m away. Field account places it within Hiawatha National Forest, with badly deteriorated FR2276, potentially closed gate and an additional mile to a short approximately quarter-mile fall footpath. Historic field driving access is not current USFS MVUM motorized permission, visitor parking, an authorized walk or guaranteed open gate. Do not conflate with Upper/Lower Silver Falls on Baraga's Silver River.",
+      "evidence": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://gowaterfalling.com/waterfalls/silverbell.shtml",
+        "https://www.fs.usda.gov/r09/hiawatha"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -4250,14 +4338,25 @@
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unverified",
+      "access": "research-only",
       "landManager": null,
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-alger"
+      "checked": "2026-11-01",
+      "nextAction": "Current Alger parcel owner/manager, lawful public arrival and marked continuous walking route to GIS #205; confirm Iron County and Wetmore names are separate.",
+      "batch": "county-alger",
+      "reviewed": "2026-11-01",
+      "reviewBatch": "38",
+      "classification": "source-backed-access-blocked",
+      "accessAssessment": "Alger County Michigan GIS Chipmunk Falls #205 at 46.669583,-85.955765 matches USGS GNIS #623209 at 46.6697032,-85.9557194 within about 14m. UPtravel calls a different IRON COUNTY site Chipmunk Falls - Amasa near Net River Road and warns no direct trail. Another statewide catalog falsely suggests Wetmore/FR2262 at about 46.2917,-86.5983, more than 40km from Grand Marais natural point. Grand Marais Chamber public waterfall guide does not document this Chipmunk visitor approach. Nothing establishes exact current parcel owner, legal parking or foot route. Do not inherit another Chipmunk's roads.",
+      "evidence": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://geo.mytopo.com/feature/michigan/alger/falls/623209/chipmunk-falls/",
+        "https://www.uptravel.com/listing/chipmunk-falls-amasa/723/",
+        "https://michiganupperpeninsula.com/places-to-visit/waterfalls/",
+        "https://grandmaraismichigan.com/visit-us/attractions/waterfalls/"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -4575,5 +4674,5 @@
       ]
     }
   ],
-  "lastBatch": "39"
+  "lastBatch": "40"
 }
