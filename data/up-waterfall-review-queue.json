@@ -13,152 +13,152 @@
     {
       "batchNumber": 1,
       "candidates": [
-        63,
-        65,
-        69,
-        70,
-        74,
         75,
         42,
-        80
+        80,
+        85,
+        129,
+        15,
+        17,
+        144
       ]
     },
     {
       "batchNumber": 2,
       "candidates": [
-        85,
-        129,
-        15,
-        17,
-        144,
         18,
         116,
-        127
+        127,
+        148,
+        153,
+        162,
+        163,
+        169
       ]
     },
     {
       "batchNumber": 3,
       "candidates": [
-        148,
-        153,
-        162,
-        163,
-        169,
         170,
         173,
-        175
+        175,
+        180,
+        181,
+        183,
+        184,
+        185
       ]
     },
     {
       "batchNumber": 4,
       "candidates": [
-        180,
-        181,
-        183,
-        184,
-        185,
         186,
         187,
-        22
+        22,
+        28,
+        54,
+        57,
+        60,
+        61
       ]
     },
     {
       "batchNumber": 5,
       "candidates": [
-        28,
-        54,
-        57,
-        60,
-        61,
         62,
         72,
-        84
+        84,
+        106,
+        122,
+        51,
+        120,
+        136
       ]
     },
     {
       "batchNumber": 6,
       "candidates": [
-        106,
-        122,
-        51,
-        120,
-        136,
         137,
         139,
-        140
+        140,
+        152,
+        176,
+        177,
+        23,
+        213
       ]
     },
     {
       "batchNumber": 7,
       "candidates": [
-        152,
-        176,
-        177,
-        23,
-        213,
         68,
         8,
-        38
+        38,
+        12,
+        4,
+        9,
+        191,
+        192
       ]
     },
     {
       "batchNumber": 8,
       "candidates": [
-        12,
-        4,
-        9,
-        191,
-        192,
         46,
         91,
-        119
+        119,
+        190,
+        45,
+        150,
+        151,
+        154
       ]
     },
     {
       "batchNumber": 9,
       "candidates": [
-        190,
-        45,
-        150,
-        151,
-        154,
         160,
         215,
-        195
+        195,
+        205,
+        52,
+        59,
+        83,
+        99
       ]
     },
     {
       "batchNumber": 10,
       "candidates": [
-        205,
-        52,
-        59,
-        83,
-        99,
         103,
         105,
-        107
+        107,
+        114,
+        121,
+        123,
+        20,
+        24
       ]
     },
     {
       "batchNumber": 11,
       "candidates": [
-        114,
-        121,
-        123,
-        20,
-        24,
         25,
         37,
-        39
+        39,
+        40,
+        48,
+        58,
+        63,
+        65
       ]
     },
     {
       "batchNumber": 12,
       "candidates": [
-        40,
-        48,
-        58,
+        69,
+        70,
+        74,
         86,
         112,
         29,
@@ -168,86 +168,6 @@
     }
   ],
   "candidates": [
-    {
-      "gisObjectId": 63,
-      "name": "Algonquin Falls",
-      "county": "GOGEBIC",
-      "river": "BLACK RIVER",
-      "lat": 46.618863,
-      "lng": -90.07407,
-      "cluster": "GOGEBIC / BLACK RIVER",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 65,
-      "name": "Ogima Falls",
-      "county": "GOGEBIC",
-      "river": "COPPER CREEK",
-      "lat": 46.634234,
-      "lng": -89.929,
-      "cluster": "GOGEBIC / COPPER CREEK",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 69,
-      "name": "Ogimakwe Falls",
-      "county": "GOGEBIC",
-      "river": "COPPER CREEK",
-      "lat": 46.640546,
-      "lng": -89.926674,
-      "cluster": "GOGEBIC / COPPER CREEK",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 70,
-      "name": "Abinodji Falls",
-      "county": "GOGEBIC",
-      "river": "COPPER CREEK",
-      "lat": 46.64222,
-      "lng": -89.926691,
-      "cluster": "GOGEBIC / COPPER CREEK",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 74,
-      "name": "Nokomis Falls",
-      "county": "GOGEBIC",
-      "river": "PRESQUE ISLE RIVER",
-      "lat": 46.646225,
-      "lng": -89.911055,
-      "cluster": "GOGEBIC / PRESQUE ISLE RIVER",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
     {
       "gisObjectId": 75,
       "name": "Manakiki Falls",
@@ -1623,6 +1543,86 @@
       "reviewStatus": "previous-research-needs-public-access-review",
       "sourceCount": 10,
       "blockingGate": "Obtain parcel-level ownership and a legal signed trailhead/parking for the exact riverbank, verify whether NFST-128-B has a continuous official pedestrian connection and safe viewpoint, and check current Copper Peak access restrictions. No powerline shortcut or private parking guidance."
+    },
+    {
+      "gisObjectId": 63,
+      "name": "Algonquin Falls",
+      "county": "GOGEBIC",
+      "river": "BLACK RIVER",
+      "lat": 46.618863,
+      "lng": -90.07407,
+      "cluster": "GOGEBIC / BLACK RIVER",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 9,
+      "blockingGate": "Verify current parcel title, legal signed public visitor parking, road access and a continuous authorized footpath to a safe viewpoint. Do not adopt old logging-road, paddler put-in or unofficial riverbank shortcuts."
+    },
+    {
+      "gisObjectId": 65,
+      "name": "Ogima Falls",
+      "county": "GOGEBIC",
+      "river": "COPPER CREEK",
+      "lat": 46.634234,
+      "lng": -89.929,
+      "cluster": "GOGEBIC / COPPER CREEK",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 9,
+      "blockingGate": "Verify current parcel title, legal signed public visitor parking, road access and a continuous authorized footpath to a safe viewpoint. Do not adopt old logging-road, paddler put-in or unofficial riverbank shortcuts."
+    },
+    {
+      "gisObjectId": 69,
+      "name": "Ogimakwe Falls",
+      "county": "GOGEBIC",
+      "river": "COPPER CREEK",
+      "lat": 46.640546,
+      "lng": -89.926674,
+      "cluster": "GOGEBIC / COPPER CREEK",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 9,
+      "blockingGate": "Verify current parcel title, legal signed public visitor parking, road access and a continuous authorized footpath to a safe viewpoint. Do not adopt old logging-road, paddler put-in or unofficial riverbank shortcuts."
+    },
+    {
+      "gisObjectId": 70,
+      "name": "Abinodji Falls",
+      "county": "GOGEBIC",
+      "river": "COPPER CREEK",
+      "lat": 46.64222,
+      "lng": -89.926691,
+      "cluster": "GOGEBIC / COPPER CREEK",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 9,
+      "blockingGate": "Verify current parcel title, legal signed public visitor parking, road access and a continuous authorized footpath to a safe viewpoint. Do not adopt old logging-road, paddler put-in or unofficial riverbank shortcuts."
+    },
+    {
+      "gisObjectId": 74,
+      "name": "Nokomis Falls",
+      "county": "GOGEBIC",
+      "river": "PRESQUE ISLE RIVER",
+      "lat": 46.646225,
+      "lng": -89.911055,
+      "cluster": "GOGEBIC / PRESQUE ISLE RIVER",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 9,
+      "blockingGate": "Verify current parcel title, legal signed public visitor parking, road access and a continuous authorized footpath to a safe viewpoint. Do not adopt old logging-road, paddler put-in or unofficial riverbank shortcuts."
     },
     {
       "gisObjectId": 86,
