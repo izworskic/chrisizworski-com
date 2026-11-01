@@ -51,9 +51,21 @@ jobs:
         env:
           KSC_MONITOR_TOKEN: ${{ steps.oidc.outputs.token }}
         run: |
-          curl --fail-with-body --silent --show-error \
+          result="$(curl --fail-with-body --silent --show-error \
             --retry 1 --retry-all-errors --max-time 65 \
             -X POST \
             -H "Authorization: Bearer ${KSC_MONITOR_TOKEN}" \
             -H "Content-Type: application/json" \
-            "https://chrisizworski.com/api/space-coast-ksc-watch"
+            "https://chrisizworski.com/api/space-coast-ksc-watch")"
+          # An HTTP 200 from the KSC collector is insufficient if the
+          # independent LL2 schedule observation failed. Surface a failed
+          # scheduled run instead of silently claiming 24/7 coverage.
+          if ! printf '%s' "$result" | jq -e '
+            .ok == true and
+            (.scheduleMonitor.ok == true or
+             .scheduleMonitor.skipped == "another-launch-schedule-check-active")
+          ' >/dev/null; then
+            echo "Official KSC and/or launch-day schedule monitoring was incomplete."
+            exit 1
+          fi
+          echo "KSC and launch-day schedule monitor checks completed."
