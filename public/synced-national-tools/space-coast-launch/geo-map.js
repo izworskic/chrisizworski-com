@@ -211,7 +211,7 @@
     stage('03','Beach viewing position','unverified',
       'No verified walkable beach-viewing endpoint',
       (lot.accessibility?.beachRampInOfficialFaq?
-        'The NPS FAQ lists an accessible beach ramp here, but today's condition, gradients and continuity remain unknown. ':
+        'The NPS FAQ lists an accessible beach ramp here, but today’s condition, gradients and continuity remain unknown. ':
         'The NPS FAQ does not specifically identify this lot as having an accessible beach ramp. ')+
       'Neither the boardwalk map nor its length establishes a legal, unobstructed rocket-viewing spot.');
     target.appendChild(stages);
