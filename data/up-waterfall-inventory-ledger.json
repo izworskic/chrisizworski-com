@@ -487,12 +487,12 @@
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-11-01",
-      "nextAction": "Verify the claimed NFST 7418-D against authoritative Forest Service GIS and that it actually reaches Nelson Canyon Falls, not an unrelated forest trail. Match parcel title along the C Camp Road route, official signed parking and a safe continuous walk; check current closures before publication.",
+      "nextAction": "Obtain independently official public visitor trail/lot evidence; current USFS EDW published-trails layer within 1,000m returned no listed trails. Reconcile the claimed NFST 7418-D with authoritative geometry, parcel/land title, public parking and continuous permitted route before promoting.",
       "batch": "county-gogebic",
       "reviewed": "2026-11-01",
       "reviewBatch": "41",
       "classification": "natural-feature-corroborated-access-blocked",
-      "accessAssessment": "Michigan GIS #25 at 46.391819,-89.579675 agrees within roughly 3m with independent Nelson Canyon Falls field point 46.39180,-89.57971; USGS GNIS #1620996 is also nearby. The named waterfall itself is strongly corroborated. Regional tourism provides historic C Camp Road/two-track walking suggestions; independent 2015 and 2026 field comments describe severely overgrown tracks, a vanishing trail and a final rocky descent. Another derivative website asserts a developed Forest Service NFST 7418-D segment, but no independent official Forest Service route listing, signed trailhead and lawful parking for this exact falls was verified. Do not repeat its 'easy developed trail' claim.",
+      "accessAssessment": "Michigan GIS #25 at 46.391819,-89.579675 agrees within roughly 3m with independent Nelson Canyon Falls field point 46.39180,-89.57971; USGS GNIS #1620996 is also nearby. The named waterfall itself is strongly corroborated. Regional tourism provides historic C Camp Road/two-track walking suggestions; independent 2015 and 2026 field comments describe severely overgrown tracks, a vanishing trail and a final rocky descent. Another derivative website asserts a developed Forest Service NFST 7418-D segment, but no independent official Forest Service route listing, signed trailhead and lawful parking for this exact falls was verified. Do not repeat its 'easy developed trail' claim. On November 1, 2026, a direct query of the official USDA Forest Service EDW published-trails line layer found ZERO published trail features within 1,000 meters of the mapped falls. This does not prove no informal paths exist or that every forest's trail data is complete; it does not substantiate the derivative website's claimed developed NFST 7418-D approach.",
       "evidence": [
         "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
         "https://www.waterfallsofthekeweenaw.com/nelson-creek/nelson-canyon-falls/",
@@ -502,7 +502,8 @@
         "https://www.fs.usda.gov/visit/maps",
         "https://apps.fs.usda.gov/fsgisx05/rest/services/wo_nfs_gtac/IVMQuery/MapServer/0",
         "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-89.579675%2C46.391819&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson",
-        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/9/query?geometry=-89.579675%2C46.391819&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson"
+        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/9/query?geometry=-89.579675%2C46.391819&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson",
+        "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_TrailNFSPublish_01/MapServer/0/query?geometry=-89.579675%2C46.391819&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=1000&units=esriSRUnit_Meter&outFields=TRAIL_NO,TRAIL_NAME,TRAIL_CLASS,ADMIN_ORG,MANAGING_ORG,SEGMENT_LENGTH&returnGeometry=false&f=pjson"
       ]
     },
     {

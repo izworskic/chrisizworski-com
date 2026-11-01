@@ -2924,10 +2924,10 @@
       "publicAccess": "not-established-continuously",
       "publicationEligible": false,
       "title": "Nelson Canyon Falls: waterfall and access evidence",
-      "summary": "Michigan GIS #25 at 46.391819,-89.579675 agrees within roughly 3m with independent Nelson Canyon Falls field point 46.39180,-89.57971; USGS GNIS #1620996 is also nearby. The named waterfall itself is strongly corroborated. Regional tourism provides historic C Camp Road/two-track walking suggestions; independent 2015 and 2026 field comments describe severely overgrown tracks, a vanishing trail and a final rocky descent. Another derivative website asserts a developed Forest Service NFST 7418-D segment, but no independent official Forest Service route listing, signed trailhead and lawful parking for this exact falls was verified. Do not repeat its 'easy developed trail' claim.",
+      "summary": "Michigan GIS #25 at 46.391819,-89.579675 agrees within roughly 3m with independent Nelson Canyon Falls field point 46.39180,-89.57971; USGS GNIS #1620996 is also nearby. The named waterfall itself is strongly corroborated. Regional tourism provides historic C Camp Road/two-track walking suggestions; independent 2015 and 2026 field comments describe severely overgrown tracks, a vanishing trail and a final rocky descent. Another derivative website asserts a developed Forest Service NFST 7418-D segment, but no independent official Forest Service route listing, signed trailhead and lawful parking for this exact falls was verified. Do not repeat its 'easy developed trail' claim. On November 1, 2026, a direct query of the official USDA Forest Service EDW published-trails line layer found ZERO published trail features within 1,000 meters of the mapped falls. This does not prove no informal paths exist or that every forest's trail data is complete; it does not substantiate the derivative website's claimed developed NFST 7418-D approach.",
       "guidance": "The waterfall is a mapped natural feature, not a road or parking destination. Use the source research only; no directions to gates, off-trail shortcuts, private riverbanks, creek fords or unsurveyed forest roads are authorized.",
       "reviewLimitations": "Empty DNR state property/easement point intersection is not a county title opinion or federal parcel overlay. Historic or regionally promoted visiting accounts do not certify motorized legal road status, permission on every land parcel, or a signed final visitor trail.",
-      "nextEvidence": "Verify the claimed NFST 7418-D against authoritative Forest Service GIS and that it actually reaches Nelson Canyon Falls, not an unrelated forest trail. Match parcel title along the C Camp Road route, official signed parking and a safe continuous walk; check current closures before publication.",
+      "nextEvidence": "Obtain independently official public visitor trail/lot evidence; current USFS EDW published-trails layer within 1,000m returned no listed trails. Reconcile the claimed NFST 7418-D with authoritative geometry, parcel/land title, public parking and continuous permitted route before promoting.",
       "researchPage": "/upper-peninsula-waterfalls/research/nelson-canyon-falls/",
       "sourceLinks": [
         {
@@ -2965,6 +2965,10 @@
         {
           "label": "Michigan DNR conservation easement point query",
           "url": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/9/query?geometry=-89.579675%2C46.391819&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson"
+        },
+        {
+          "label": "USDA Forest Service published trail query within 1km (0 results)",
+          "url": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_TrailNFSPublish_01/MapServer/0/query?geometry=-89.579675%2C46.391819&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=1000&units=esriSRUnit_Meter&outFields=TRAIL_NO,TRAIL_NAME,TRAIL_CLASS,ADMIN_ORG,MANAGING_ORG,SEGMENT_LENGTH&returnGeometry=false&f=pjson"
         }
       ],
       "routeAudit": {
@@ -3000,8 +3004,8 @@
           {
             "label": "Continuous lawful walking trail",
             "status": "not-cleared",
-            "finding": "No currently documented continuous approved trail or legal walking easement connects verified visitor parking to a safe viewpoint; do not turn the falls GPS into a navigation destination.",
-            "source": "https://www.fs.usda.gov/visit/maps"
+            "finding": "On November 1, 2026, a direct query of the official USDA Forest Service EDW published-trails line layer found ZERO published trail features within 1,000 meters of the mapped falls. This does not prove no informal paths exist or that every forest's trail data is complete; it does not substantiate the derivative website's claimed developed NFST 7418-D approach. No complete legal, publicly navigable path or designated parking demonstrated.",
+            "source": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_TrailNFSPublish_01/MapServer/0/query?geometry=-89.579675%2C46.391819&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=1000&units=esriSRUnit_Meter&outFields=TRAIL_NO,TRAIL_NAME,TRAIL_CLASS,ADMIN_ORG,MANAGING_ORG,SEGMENT_LENGTH&returnGeometry=false&f=pjson"
           },
           {
             "label": "2026 seasonal restrictions and water safety",

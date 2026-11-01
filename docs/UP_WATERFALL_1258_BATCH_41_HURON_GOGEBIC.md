@@ -32,3 +32,9 @@ Five distinct `noindex,follow` research pages, visible only from opt-in research
 Counts unchanged: 71 curated, 65 exact GIS matches, 96 pending from the 161 source candidates. The next unreviewed candidates are automatically chosen by the queue generator; previously blocked records return to review only with new authoritative evidence.
 
 Release rule: exact-head Node tests, queue generator --check, waterfall browser smoke, full site verification and production check before any merge.
+
+### New source check: Nelson Canyon official USFS trail layer
+
+November 1, 2026 direct request to USDA FS Enterprise Data Warehouse published National Forest System Trails (layer 0) returned **zero features within 1,000 meters** of Michigan GIS #25 natural falls at 46.391819,-89.579675. URL: https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_TrailNFSPublish_01/MapServer/0/query?geometry=-89.579675%2C46.391819&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=1000&units=esriSRUnit_Meter&outFields=TRAIL_NO,TRAIL_NAME,TRAIL_CLASS,ADMIN_ORG,MANAGING_ORG,SEGMENT_LENGTH&returnGeometry=false&f=pjson
+
+This **does not prove absence of informal trails or 100% NFS data coverage**, but there is now affirmative negative-search evidence against substituting the third-party claimed developed `NFST-7418-D` route. Do not auto-publish or change route/parking gates.
