@@ -92,8 +92,8 @@ section('Sources and honesty', 'Every rule quoted and linked; every choice of re
   const p = load(); const t = p.text('pnSources');
   crit(35, 'Each rule is quoted with its source', () => Object.keys(E.RULES).length >= 7 && p.$('pnSources').querySelectorAll('blockquote').length === Object.keys(E.RULES).length);
   crit(25, 'MSU sources linked on the page itself', () => (html.match(/href="https:\/\/www\.canr\.msu\.edu\//g) || []).length >= 2);
-  crit(25, 'The 1-in-4 reading, the July boundary and no borrowing are disclosed', () => /1 spring in 4/.test(t) && /July/.test(t) && /borrowed from another state/.test(t));
-  crit(15, 'Harvest timing said to be not reported', () => /Harvest timing is not reported/.test(t));
+  crit(25, 'The frost-risk interpretation, seasonal separation and no borrowing are disclosed', () => /1 spring in 4/.test(t) && /spring windows/i.test(t) && /borrowed from another state/.test(t));
+  crit(15, 'The packet-based estimate is not a predicted harvest date', () => /not a predicted harvest date/.test(t));
 });
 
 section('Take it with you', 'Share, save to a calendar, or go national', () => {

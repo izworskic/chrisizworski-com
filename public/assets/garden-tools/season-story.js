@@ -9,7 +9,10 @@
     var crops = E.CROPS, selected = crops.some(function (c) { return c.id === options.crop; }) ? options.crop : 'tomatoes';
     var stage = null, last = null;
     var sel = get('pnCrop');
-    sel.replaceChildren.apply(sel, crops.map(function (c) { return K.h('option', { value: c.id }, c.name); }));
+    var herbs=['basil','cilantro','parsley','dill','chives','oregano','thyme','sage','rosemary'];
+    var flowers=['zinnias','marigolds','sunflowers','cosmos','nasturtiums','sweet-peas','snapdragons','petunias','calendula','morning-glories'];
+    var groups=[['Vegetables',crops.filter(function(c){return herbs.indexOf(c.id)<0&&flowers.indexOf(c.id)<0})],['Herbs',crops.filter(function(c){return herbs.indexOf(c.id)>=0})],['Flowers',crops.filter(function(c){return flowers.indexOf(c.id)>=0})]];
+    sel.replaceChildren.apply(sel,groups.map(function(g){return K.h('optgroup',{label:g[0]},g[1].slice().sort(function(a,b){return a.name.localeCompare(b.name)}).map(function(c){return K.h('option',{value:c.id},c.name)}))}));
     sel.value = selected;
 
     function getChoice() { return selected; }
@@ -28,9 +31,15 @@
     }
     function stagesFor(r, frost, st) {
       var c = r.crop, w = r.windows;
+      if (c.kind === 'coolGuide') {
+        return [item('spring', 'Give cool weather a try', 'Spring', 'Cool-season crops have a place in the spring garden. Check your seed packet and the condition of your own soil before planting; this guide does not invent a station-specific sowing date.'), item('fall', 'Make room for a second season', 'Late summer into fall', 'MSU includes this crop in its fall garden guide. Look at the days to maturity on your packet, allow for germination and slower growth, then work backward from the typical first frost.'), item('observe', 'Let the garden have a say', 'Throughout the season', 'Variety, soil, weather and the time needed to germinate all matter. Treat a frost date as a planning reference and watch the forecast as the season changes.')];
+      }
+      if (c.kind === 'garlic') {
+        return [item('plan', 'Set aside a sunny bed', 'Before fall planting', 'Choose healthy seed garlic and make room for a crop that will remain in the ground through winter.'), item('plant', 'Tuck cloves in for winter', 'Usually October–November', 'MSU recommends planting three to five weeks before a hard freeze settles in. That is a seasonal guide, not a prediction of when the ground will freeze in your garden.'), item('harvest', 'Watch the leaves next summer', 'Usually mid-June to mid-July', 'MSU says garlic is usually ready when 40–60% of its leaves have yellowed. Check a sample bulb; the calendar alone cannot tell you when yours is ready.')];
+      }
       if (c.kind === 'transplant') {
         return [
-          item('indoor', 'Begin under lights', K.range(w[0].from, w[0].to), 'A tomato or pepper season starts before the garden is ready. MSU recommends starting these transplants indoors six to eight weeks before setting them outside. The dates here count back from this station’s cautious spring planting reference.'),
+          item('indoor', 'Begin under lights', K.range(w[0].from, w[0].to), 'Some of our favorite garden crops need a head start before the beds are ready. MSU recommends starting these transplants indoors six to eight weeks before setting them outside. The dates here count back from this station’s cautious spring planting reference.'),
           item('harden', 'Meet the outside air', K.range(w[1].from, w[1].to), 'Give young plants seven to ten days to adjust to the outdoors. Start with brief, sheltered periods, then gradually increase exposure. This stage helps bridge the gap between a warm windowsill and the garden.'),
           item('transplant', 'Set into the garden', 'From ' + K.fmt(w[2].from), 'The chosen reference is ' + st.p25 + ': a 32°F freeze still occurs on or after that date in about one spring out of four. That is not a guarantee. Keep a way to protect young plants, and check the actual forecast and conditions. MSU gives no last transplant date.')
         ];
@@ -57,6 +66,7 @@
       return [item('unknown', 'A timing rule is missing', 'Not reported', c.why || 'No currently verified Michigan planting-start rule is available for this crop. This is a research gap, not proof that it cannot be grown.')];
     }
     function suggestedStep(r, p, stages) {
+      if (r.crop.kind === 'coolGuide' && p.day >= K.parse('Jul 15') && p.day <= K.parse('Sep 30')) return 'fall';
       if (r.crop.kind !== 'transplant' || p.day > K.parse('Jul 31')) return stages[0].id;
       var w = r.windows;
       return p.day <= w[0].to ? 'indoor' : p.day < w[1].from ? 'harden' : p.day < w[2].from ? 'harden' : 'transplant';
@@ -72,9 +82,13 @@
       var r = p.crops.filter(function (x) { return x.crop.id === selected; })[0];
       if (!r) return;
       var steps = stagesFor(r, frost, st);
+      if (['beets','carrots','peas','radishes','spinach'].indexOf(r.crop.id) >= 0) {
+        steps.push(item('fall', 'Make room for a fall crop', 'Late summer', 'MSU includes this crop in its fall garden guide. Check your packet and allow time for germination and slower growth, then work backward from the local frost reference. Your garden and the forecast get the final say.'));
+      }
+      if (!stage && r.code === 'PLAN_FALL') stage = 'fall';
       if (!stage || !steps.some(function (x) { return x.id === stage; })) stage = suggestedStep(r, p, steps);
       var active = steps.filter(function (x) { return x.id === stage; })[0];
-      var label = r.crop.kind === 'transplant' ? 'From seed tray to garden bed' :
+      var label = r.crop.kind === 'coolGuide' ? 'A place in the cool-season garden' : r.crop.kind === 'garlic' ? 'A fall planting for next summer' : r.crop.kind === 'transplant' ? 'From seed tray to garden bed' :
         r.crop.kind === 'warmSow' ? 'Two gates before the first seed' :
         r.crop.kind === 'hardy' ? 'Let the ground make the call' :
         r.crop.kind === 'soil40' ? 'A thermometer, not a calendar' : 'What the Michigan sources do not say';
@@ -101,6 +115,10 @@
         'The typical first fall frost here is ' + frost.fallText + '. That is a seasonal reference, not a harvest forecast; check your variety’s days to maturity.' :
         'A sourced typical first fall frost date is not available for this station. Harvest dates are not estimated.';
       get('pnSeasonMissing').hidden = r.code !== 'NOT_REPORTED';
+      var aliases={'Leaf lettuce':'Lettuce','Snap beans':'Green beans','Melons':'Melons'};
+      var name=aliases[r.crop.name]||r.crop.name, calendar=root.MIFrost.crop(name), link=get('pnCalendarCrop');
+      link.hidden=!calendar;
+      if(calendar)link.href='/zone-6a-planting-calendar/?city='+encodeURIComponent(st.s)+'&crop='+encodeURIComponent(name);
       var rows = get('pnRows').children;
       rows.forEach(function (tr) {
         var id = tr.getAttribute('data-crop');
