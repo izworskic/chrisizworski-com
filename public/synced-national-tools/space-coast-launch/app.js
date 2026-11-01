@@ -335,6 +335,7 @@
 
   async function load(selectedId) {
     const sequence = ++loadSequence;
+    const previousMissionId = activeMissionId;
     if (kscController) kscController.abort();
     activeMissionId = null;
     try {
@@ -376,6 +377,11 @@
       lastKscAttemptAt = 0;
       checkForKscUpdate();
     } catch (err) {
+      if (sequence !== loadSequence) return;
+      activeMissionId = previousMissionId;
+      // Retry the ordinary schedule after five minutes rather than making a
+      // failed 45-minute refresh permanently stop official KSC monitoring.
+      lastScheduleLoadedAt = Date.now() - SCHEDULE_REFRESH_MS + KSC_REFRESH_MS;
       set('loading', err.message);
       $('schedule-card').dataset.level = 'unknown';
       $('weather-card').dataset.level = 'unknown';
