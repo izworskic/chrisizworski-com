@@ -2,6 +2,10 @@
 
 This package is **research and quality governance, not a public-page template**.
 
+## Version resolution — one active framework
+
+For “Experience OS”, “EXPERIENCE_OS_V1”, “use v1.2” or “Experience OS v1.2”, use the canonical `main` manifest's latest released **1.2.x** (currently **1.2.1**), not an old feature branch or an alternative `v1.2` folder. Before editing, check current PRs and the tool's authoritative owning-repo instructions. Read [VERSION_RESOLUTION.md](docs/VERSION_RESOLUTION.md) for exact version/historic requests and cross-repository limits.
+
 ## Trigger automatically
 
 When a task in an adopting repository creates a visitor-facing tool, materially changes user interaction, or redesigns an existing tool, **consult EXPERIENCE_OS_V1 without requiring the owner to name it**. For a tiny defect fix, use only directly relevant guardrails. Apply the owning repository's `AGENTS.md`, release gates, and canonical ownership first.
