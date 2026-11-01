@@ -116,6 +116,16 @@
       return;
     }
     target.appendChild(element('h4', '', ksc.eventTitle || 'Official KSC launch event'));
+    const officialClock = ksc.officialTiming || {};
+    if (officialClock.state === 'different-time' || officialClock.state === 'different-day') {
+      const warning = element('div', 'ksc-source-conflict');
+      warning.setAttribute('role', 'status');
+      warning.appendChild(element('strong', '', officialClock.label || 'Schedule sources disagree'));
+      warning.appendChild(element('p', '', officialClock.detail || 'Verify the current launch time with the operator.'));
+      if (officialClock.sourceDate) warning.appendChild(element('p', 'small',
+        'KSC event listing: ' + officialClock.sourceDate + (officialClock.sourceTime ? ' · ' + officialClock.sourceTime : '')));
+      target.appendChild(warning);
+    }
     target.appendChild(element('p', 'ksc-event-explanation',
       'The operator lists these locations for this mission, with different entry and ticket conditions. The listing is not real-time ticket inventory, and the launch can still move.'));
     const list = element('div', 'ksc-venue-grid');
@@ -142,6 +152,11 @@
         'Published viewing cutoff: ' + venue.closesAt));
       if (venue.checkInAt) v.appendChild(element('p', 'ksc-venue-time', 'Check-in: ' + venue.checkInAt));
       if (venue.busBoardingAt) v.appendChild(element('p', 'ksc-venue-time', 'Bus boarding: ' + venue.busBoardingAt));
+      if (venue.transport === 'ksc-controlled-bus') {
+        v.appendChild(element('p', 'ksc-venue-transport', 'Behind NASA’s gates: use the assigned KSC bus. Do not drive to this viewing area.'));
+      } else if (venue.transport === 'ksc-bus-tour') {
+        v.appendChild(element('p', 'ksc-venue-transport', 'Access via the Kennedy Space Center Bus Tour; confirm operating hours and first-come availability.'));
+      }
       v.appendChild(element('p', 'ksc-venue-note', venue.note || 'Confirm current rules with Kennedy Space Center.'));
       list.appendChild(v);
     }

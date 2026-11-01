@@ -108,3 +108,12 @@
 .ksc-venue-note{font-size:13px;line-height:1.55;color:#536057;margin:10px 0 0}
 .ksc-evidence-content>.launch-link{margin:2px 0 8px;max-width:100%;white-space:normal}
 @media(max-width:760px){.ksc-evidence{padding:14px}.ksc-evidence-content{padding:13px}.ksc-venue-grid{grid-template-columns:1fr}.ksc-evidence-intro h3{font-size:24px}}
+
+/* Only shown when a mission's official KSC event page verifies the transport mode. */
+.ksc-venue-transport{font-size:13px;font-weight:700;line-height:1.5;color:#214a34;background:#edf4ed;border-left:3px solid #4a8660;border-radius:5px;padding:9px 10px;margin:11px 0}
+
+/* Mission-specific operator versus schedule disagreement: never bury it in a ticket card. */
+.ksc-source-conflict{border:1px solid #e2b4a5;border-left:5px solid #ac563d;background:#fff6f1;border-radius:11px;padding:13px 15px;margin:9px 0 14px}
+.ksc-source-conflict strong{display:block;color:#773528;font-size:16px}
+.ksc-source-conflict p{font-size:14px;line-height:1.5;color:#613f34;margin:7px 0 0}
+.ksc-source-conflict .small{font-size:12px}
