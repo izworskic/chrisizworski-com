@@ -66,7 +66,7 @@ test('official map image, seven static GIS links and visit instructions are visi
   assert.equal((html.match(/www\.google\.com\/maps\/search\/\?api=1&amp;query=/g)||[]).length,7);
   assert.ok(html.includes('Parks Canada public GIS'));
   assert.ok(html.includes('Missing links from the Visitor Centre'));
-  assert.ok(html.includes('/assets/pukaskwa-map.js?v=2'));
+  assert.ok(html.includes('/assets/pukaskwa-map.js?v=3'));
   assert.ok(html.includes('/assets/pukaskwa-map.css?v=2'));
   assert.equal((html.match(/<link rel="canonical"/g)||[]).length,1);
   assert.equal((html.match(/google-adsense-account/g)||[]).length,1);
