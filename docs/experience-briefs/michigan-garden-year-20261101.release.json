@@ -1,0 +1,118 @@
+{
+  "schemaVersion": "1.2",
+  "recordStatus": "draft",
+  "project": {
+    "slug": "michigan-garden-year-20261101",
+    "ownerRepo": "izworskic/chrisizworski-com",
+    "canonical": "https://chrisizworski.com/michigan-gardening/",
+    "pageFile": "public/michigan-gardening/index.html",
+    "visitorDecision": "What is ahead for my chosen plants near my Michigan town, month by month?",
+    "primaryAction": "Choose plants, then select a month to explore engine-backed planning notes."
+  },
+  "claims": [
+    {
+      "id": "michigan-frost-reference",
+      "kind": "official-reference",
+      "subject": "other",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://www.canr.msu.edu/resources/frost-free-dates",
+      "checkedDate": "2026-11-01",
+      "limitation": "Historical station probabilities do not predict a future frost or a garden soil temperature."
+    },
+    {
+      "id": "fall-crop-planning",
+      "kind": "official-reference",
+      "subject": "other",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://www.canr.msu.edu/uploads/files/E3172_-_Fall_Vegetable_Crops_for_your_Garden.pdf",
+      "checkedDate": "2026-11-01",
+      "limitation": "Packet conventions, weather and slower fall growth vary; calculation is not a safe deadline."
+    }
+  ],
+  "decisionState": {
+    "selectedIdField": "selected month YYYY-MM or all, and chosen crop IDs",
+    "sourceOfTruth": "PlantNow.gardenPlan reads station, conditions and the selected crops.",
+    "linkedSurfaces": [
+      "answer",
+      "pressed month",
+      "month count",
+      "matching engine references",
+      "saved crop list"
+    ],
+    "unavailableBehavior": "Show plant guidance without fabricating missing fall or soil dates."
+  },
+  "scenarios": [
+    {
+      "kind": "initial",
+      "input": "Choose tomatoes in Bay City.",
+      "expectedVisibleAnswer": "The current next-up view lists upcoming crop references with full years.",
+      "sourceAndSafety": "Climate and packet references are conditional, not live weather or a guaranteed harvest."
+    },
+    {
+      "kind": "alternative",
+      "input": "Select a month with no dated notes.",
+      "expectedVisibleAnswer": "No dated notes are shown without implying there is no garden work.",
+      "sourceAndSafety": "Climate and packet references are conditional, not live weather or a guaranteed harvest."
+    },
+    {
+      "kind": "reverse",
+      "input": "Select March, July, then March again with the keyboard.",
+      "expectedVisibleAnswer": "March notes and focus return, with the matching month pressed.",
+      "sourceAndSafety": "Climate and packet references are conditional, not live weather or a guaranteed harvest."
+    },
+    {
+      "kind": "no-js",
+      "input": "Open the page with JavaScript disabled.",
+      "expectedVisibleAnswer": "Garden guides and an explanation of the list remain available.",
+      "sourceAndSafety": "Climate and packet references are conditional, not live weather or a guaranteed harvest."
+    },
+    {
+      "kind": "no-tiles",
+      "input": "Open the notebook without a map or external tile service.",
+      "expectedVisibleAnswer": "The text notebook remains usable; no map is required.",
+      "sourceAndSafety": "Climate and packet references are conditional, not live weather or a guaranteed harvest."
+    },
+    {
+      "kind": "stale-data",
+      "input": "Choose a station without a sourced fall frost date.",
+      "expectedVisibleAnswer": "The plant remains visible and no fall date is generated.",
+      "sourceAndSafety": "Climate and packet references are conditional, not live weather or a guaranteed harvest."
+    }
+  ],
+  "failures": {
+    "no-js": "Guides and plain-language gardening notes remain available.",
+    "no-tiles": "No map or external tile service is required for this notebook.",
+    "no-image": "No new photograph is required for the planner.",
+    "stale-data": "Unknown fall frost remains unavailable, with source links in the existing guide."
+  },
+  "qa": {
+    "viewports": [
+      360,
+      390,
+      768,
+      1440
+    ],
+    "browserStatus": "PENDING",
+    "browserRun": null,
+    "screenshotEvidence": []
+  },
+  "photos": [],
+  "release": {
+    "implemented": {
+      "status": "PENDING"
+    },
+    "verified": {
+      "status": "PENDING"
+    },
+    "deployed": {
+      "status": "PENDING"
+    },
+    "live": {
+      "status": "PENDING"
+    },
+    "measured": {
+      "status": "NOT_MEASURED"
+    }
+  },
+  "note": "Draft: exact-head browser runs, CI and production verification still required."
+}

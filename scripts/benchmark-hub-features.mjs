@@ -35,7 +35,7 @@ const graph = ld.flatMap(x => x['@graph'] || [x]);
 
 section('Search surface', 'The page says what it answers, in the title, heading and first lines', () => {
   const title = (html.match(/<title>([^<]+)/) || [])[1].replace(/&amp;/g, '&');
-  crit(25, 'Query-first title, 60 characters or fewer, matching the H1', () => title.length <= 60 && /^What to Plant Now in Michigan/.test(title) && /<h1>What to Plant Now in Michigan<\/h1>/.test(html));
+  crit(25, 'Michigan gardening title matches the H1 and retains planting intent', () => title.length <= 60 && /^Michigan Gardening Tools/.test(title) && /What to Plant Now/.test(title) && /<h1>Michigan Gardening Tools<\/h1>/.test(html));
   crit(20, 'Description 158 characters or fewer and about this week\'s planting', () => { const d = (html.match(/<meta name="description" content="([^"]+)"/) || [])[1]; return d.length <= 158 && /plant/i.test(d); });
   crit(20, 'Canonical and the Person node', () => /<link rel="canonical" href="https:\/\/chrisizworski\.com\/michigan-gardening\/">/.test(html) && graph.some(n => n['@id'] === 'https://chrisizworski.com/#person' && n['@type'] === 'Person'));
   crit(20, 'The lede says how the answer is made', () => /78 Michigan frost stations/.test(visible) && /MSU Extension/.test(visible));

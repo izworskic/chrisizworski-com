@@ -2,7 +2,7 @@
 (function(root){
 'use strict';
 function mount(o){
- var K=o.kit,E=o.engine, get=function(id){return document.getElementById(id)}, key='michiganGardenCropsV1', packetKey='michiganGardenPacketV1', packets={}, chosen=[], station=null, day=null, conditions={}, dateISO=null;
+ var K=o.kit,E=o.engine, get=function(id){return document.getElementById(id)}, key='michiganGardenCropsV1', packetKey='michiganGardenPacketV1', packets={}, chosen=[], station=null, day=null, conditions={}, dateISO=null, selectedMonth='all';
  try{var raw=JSON.parse(localStorage.getItem(key)||'[]');if(Array.isArray(raw)) chosen=raw.filter(function(id,i){return typeof id==='string'&&raw.indexOf(id)===i&&E.CROPS.some(function(c){return c.id===id})})}catch(e){}
  try{var saved=JSON.parse(localStorage.getItem(packetKey)||'{}');if(saved&&typeof saved==='object'&&!Array.isArray(saved)) packets=saved}catch(e){}
  var picker=get('gardenPick');
@@ -21,14 +21,31 @@ function mount(o){
   if(future.length){
    var labels={indoor:'Start indoors',harden:'Harden off',transplant:'Consider planting out',sow:'Consider sowing',fall_reference:'Fall planning reference'};
    var names={};rows.forEach(function(x){names[x.cropId]=x.crop.name});
-   var list=K.h('ol',{class:'garden-ahead-list'},future.slice(0,8).map(function(w){
-    var start=dateText(w.fromISO),when=w.toISO?start+' – '+dateText(w.toISO):start;
-    var condition=w.kind==='fall_reference'?'Packet-based estimate, not a last safe date.':w.kind==='sow'?'Check the forecast and soil at planting depth.':w.kind==='transplant'?'Check the forecast; frost is still possible.':'A planning window based on the station’s spring reference.';
-    return K.h('li',null,K.h('span',{class:'garden-ahead-date'},when),K.h('span',{class:'garden-ahead-action'},K.h('strong',null,labels[w.kind]+': '+names[w.cropId]),K.h('small',null,condition)));
-   }));
-   var aheadContent=[K.h('p',{class:'gy-kicker'},'Your garden, looking ahead'),K.h('h4',null,'A few dates for your notebook'),K.h('p',null,'Use these as a place to start. Your garden and the forecast get the final say.'),list];
-   if(future.length>8)aheadContent.push(K.h('p',{class:'garden-ahead-more'},'Showing the next 8 of '+future.length+' planning references.'));
-   ahead.replaceChildren.apply(ahead,aheadContent);
+   function renderAhead(focusId){
+    var base=new Date(dateISO.slice(0,7)+'-01T12:00:00Z'), months=[];
+    for(var m=0;m<12;m++){
+     var d=new Date(Date.UTC(base.getUTCFullYear(),base.getUTCMonth()+m,1,12)),id=d.toISOString().slice(0,7);
+     var label=new Intl.DateTimeFormat('en-US',{month:'short',year:'numeric',timeZone:'UTC'}).format(d);
+     months.push({id:id,label:label,count:future.filter(function(w){return w.fromISO.slice(0,7)<=id&&(w.toISO||w.fromISO).slice(0,7)>=id}).length});
+    }
+    if(selectedMonth!=='all'&&!months.some(function(m){return m.id===selectedMonth}))selectedMonth='all';
+    var filtered=selectedMonth==='all'?future:future.filter(function(w){return w.fromISO.slice(0,7)<=selectedMonth&&(w.toISO||w.fromISO).slice(0,7)>=selectedMonth});
+    function choose(id){selectedMonth=id;renderAhead('garden-month-'+id)}
+    var all=K.h('button',{type:'button',id:'garden-month-all','aria-pressed':selectedMonth==='all'?'true':'false'},'Next up');
+    all.addEventListener('click',function(){choose('all')});
+    var buttons=months.map(function(m){var b=K.h('button',{type:'button',id:'garden-month-'+m.id,'aria-pressed':selectedMonth===m.id?'true':'false','aria-label':m.label+', '+m.count+' planning reference'+(m.count===1?'':'s')},K.h('span',null,m.label),K.h('small',null,m.count?m.count+' '+(m.count===1?'note':'notes'):'No dates'));b.addEventListener('click',function(){choose(m.id)});return b});
+    var label=selectedMonth==='all'?'Next up':months.filter(function(m){return m.id===selectedMonth})[0].label;
+    var list=K.h('ol',{class:'garden-ahead-list'},filtered.slice(0,8).map(function(w){
+     var start=dateText(w.fromISO),when=w.toISO?start+' – '+dateText(w.toISO):start;
+     var condition=w.kind==='fall_reference'?'Packet-based estimate, not a last safe date.':w.kind==='sow'?'Check the forecast and soil at planting depth.':w.kind==='transplant'?'Check the forecast; frost is still possible.':'A planning window based on the station’s spring reference.';
+     return K.h('li',null,K.h('span',{class:'garden-ahead-date'},when),K.h('span',{class:'garden-ahead-action'},K.h('strong',null,labels[w.kind]+': '+names[w.cropId]),K.h('small',null,condition)));
+    }));
+    var aheadContent=[K.h('p',{class:'gy-kicker'},'Your garden, looking ahead'),K.h('h4',null,'Your year in the garden'),K.h('p',null,'Pick a month to see the notes for your plants. Dates are starting points; your garden and the forecast get the final say.'),K.h('div',{class:'garden-months',role:'group','aria-label':'Explore your garden by month'},all,buttons),K.h('p',{class:'garden-month-result',role:'status','aria-live':'polite'},label+': '+filtered.length+' planning reference'+(filtered.length===1?'':'s')+(filtered.length?'':'. No dated notes here yet; check your plants and the season guide below.')),list];
+    if(filtered.length>8)aheadContent.push(K.h('p',{class:'garden-ahead-more'},'Showing the first 8 of '+filtered.length+' planning references.'));
+    ahead.replaceChildren.apply(ahead,aheadContent);
+    if(focusId&&get(focusId)&&get(focusId).focus)get(focusId).focus();
+   }
+   renderAhead();
    ahead.hidden=false;
   }
   container.replaceChildren.apply(container,rows.map(function(entry){
