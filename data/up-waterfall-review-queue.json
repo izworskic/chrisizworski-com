@@ -13,151 +13,151 @@
     {
       "batchNumber": 1,
       "candidates": [
-        52,
-        59,
-        83,
         99,
         103,
         105,
         107,
-        121
+        121,
+        123,
+        20,
+        24
       ]
     },
     {
       "batchNumber": 2,
       "candidates": [
-        123,
-        20,
-        24,
         25,
         37,
         39,
         40,
-        48
+        48,
+        58,
+        63,
+        65
       ]
     },
     {
       "batchNumber": 3,
       "candidates": [
-        58,
-        63,
-        65,
         69,
         70,
         74,
         75,
-        42
+        42,
+        80,
+        85,
+        129
       ]
     },
     {
       "batchNumber": 4,
       "candidates": [
-        80,
-        85,
-        129,
         15,
         17,
         144,
         18,
-        116
+        116,
+        127,
+        148,
+        153
       ]
     },
     {
       "batchNumber": 5,
       "candidates": [
-        127,
-        148,
-        153,
         162,
         163,
         169,
         170,
-        173
+        173,
+        175,
+        180,
+        181
       ]
     },
     {
       "batchNumber": 6,
       "candidates": [
-        175,
-        180,
-        181,
         183,
         184,
         185,
         186,
-        187
+        187,
+        22,
+        28,
+        54
       ]
     },
     {
       "batchNumber": 7,
       "candidates": [
-        22,
-        28,
-        54,
         57,
         60,
         61,
         62,
-        72
+        72,
+        84,
+        106,
+        122
       ]
     },
     {
       "batchNumber": 8,
       "candidates": [
-        84,
-        106,
-        122,
         51,
         120,
         136,
         137,
-        139
+        139,
+        140,
+        152,
+        176
       ]
     },
     {
       "batchNumber": 9,
       "candidates": [
-        140,
-        152,
-        176,
         177,
         23,
         213,
         68,
-        8
+        8,
+        38,
+        12,
+        4
       ]
     },
     {
       "batchNumber": 10,
       "candidates": [
-        38,
-        12,
-        4,
         9,
         191,
         192,
         46,
-        91
+        91,
+        119,
+        190,
+        45
       ]
     },
     {
       "batchNumber": 11,
       "candidates": [
-        119,
-        190,
-        45,
         150,
         151,
         154,
         160,
-        215
+        215,
+        195,
+        205,
+        52
       ]
     },
     {
       "batchNumber": 12,
       "candidates": [
-        195,
-        205,
+        59,
+        83,
         114,
         86,
         112,
@@ -168,54 +168,6 @@
     }
   ],
   "candidates": [
-    {
-      "gisObjectId": 52,
-      "name": "Plumbago Falls",
-      "county": "BARAGA",
-      "river": "PLUMBAGO CREEK",
-      "lat": 46.621751,
-      "lng": -88.503255,
-      "cluster": "BARAGA / PLUMBAGO CREEK",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 59,
-      "name": "Ogemaw Falls",
-      "county": "BARAGA",
-      "river": "OGEMAW CREEK",
-      "lat": 46.64893,
-      "lng": -88.51222,
-      "cluster": "BARAGA / OGEMAW CREEK",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 83,
-      "name": "Daults Falls",
-      "county": "BARAGA",
-      "river": "DAULTS CREEK",
-      "lat": 46.710114,
-      "lng": -88.422161,
-      "cluster": "BARAGA / DAULTS CREEK",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
     {
       "gisObjectId": 99,
       "name": "Upper Letherby Falls",
@@ -1607,6 +1559,54 @@
       "reviewStatus": "previous-research-needs-public-access-review",
       "sourceCount": 5,
       "blockingGate": "Current Alger parcel owner/manager, lawful public arrival and marked continuous walking route to GIS #205; confirm Iron County and Wetmore names are separate."
+    },
+    {
+      "gisObjectId": 52,
+      "name": "Plumbago Falls",
+      "county": "BARAGA",
+      "river": "PLUMBAGO CREEK",
+      "lat": 46.621751,
+      "lng": -88.503255,
+      "cluster": "BARAGA / PLUMBAGO CREEK",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 3,
+      "blockingGate": "Determine exact source feature identity on proper Plumbago Creek hydrography and published 2026 USFS/owner land parcel, lawful Preacher Park access, gate/MVUM road travel, safe footpath and seasonal closures."
+    },
+    {
+      "gisObjectId": 59,
+      "name": "Ogemaw Falls",
+      "county": "BARAGA",
+      "river": "OGEMAW CREEK",
+      "lat": 46.64893,
+      "lng": -88.51222,
+      "cluster": "BARAGA / OGEMAW CREEK",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 5,
+      "blockingGate": "Verify current road commission legal pull-off/parking and signage at Baraga Plains Road, exact public parcel and authorized dry creek-side viewpoint, reconcile both falls coordinates/features, inspect seasonal road conditions and creek safety."
+    },
+    {
+      "gisObjectId": 83,
+      "name": "Daults Falls",
+      "county": "BARAGA",
+      "river": "DAULTS CREEK",
+      "lat": 46.710114,
+      "lng": -88.422161,
+      "cluster": "BARAGA / DAULTS CREEK",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 3,
+      "blockingGate": "Current Baraga parcel ownership for both point candidates, road commission lawful visitor parking, owner-authorized waterfall bank viewpoint and complete signed dry footpath avoiding nearby house and driveway."
     },
     {
       "gisObjectId": 114,

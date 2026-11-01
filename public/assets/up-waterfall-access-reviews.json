@@ -435,6 +435,158 @@
       }
     },
     {
+      "gisObjectId": 52,
+      "name": "Plumbago Falls",
+      "county": "BARAGA",
+      "status": "geo-identity-or-private-road-uncleared",
+      "publicAccess": "no-authorized-end-to-end-tourist-route",
+      "publicationEligible": false,
+      "title": "Plumbago Falls visitor access audit",
+      "summary": "State GIS #52 at 46.621751,-88.503255 versus specialist real Plumbago Falls at 46.64970,-88.43816 differ by about 5830 metres. Historical 2008-2009 trips describe >2mi route from Preacher Park / Lake Plumbago on a gated, branching, overgrown two-track, with dead-end footpaths, swamps and possible stream wading. No official parking/trail or current land-title and motorized access records established. Unverified online catalogue claiming easy US-41 roadside Plumbago Falls at 46.5814,-88.3411 conflicts even more with both field and GIS positions. Avoid giving impossible vehicle route or invented short scenic stop. Exact state-specialist distance 5862 metres. Reviewed Nov 1 2026. All traffic, property and seasonal rights subject to current land manager confirmation.",
+      "guidance": "Historic field trip parking and raw waterfall coordinates do not establish legal visitor arrival, current path condition or permission to cross private land.",
+      "reviewLimitations": "Determine exact source feature identity on proper Plumbago Creek hydrography and published 2026 USFS/owner land parcel, lawful Preacher Park access, gate/MVUM road travel, safe footpath and seasonal closures.",
+      "nextEvidence": "Determine exact source feature identity on proper Plumbago Creek hydrography and published 2026 USFS/owner land parcel, lawful Preacher Park access, gate/MVUM road travel, safe footpath and seasonal closures.",
+      "researchPage": "/upper-peninsula-waterfalls/research/plumbago-falls/",
+      "sourceLinks": [
+        {
+          "label": "Source 1",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "Source 2",
+          "url": "https://www.waterfallsofthekeweenaw.com/plumbago-creek/plumbago-falls/"
+        },
+        {
+          "label": "Source 3",
+          "url": "https://www.fs.usda.gov/r09/ottawa"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-11-01",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Falls geographic identity",
+            "status": "conflicting",
+            "finding": "GIS and specialist positions disagree by several kilometres",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Independent historical evidence",
+            "status": "documented-not-live",
+            "finding": "Specialist documents remote steep gorge on Plumbago Creek, not a verified roadside site",
+            "source": "https://www.waterfallsofthekeweenaw.com/plumbago-creek/plumbago-falls/"
+          },
+          {
+            "label": "Public arrival",
+            "status": "not-cleared",
+            "finding": "Historic trail includes overgrown gated two-track and branching paths",
+            "source": "https://www.fs.usda.gov/r09/ottawa"
+          },
+          {
+            "label": "Legal parking",
+            "status": "not-cleared",
+            "finding": "Preacher Park/forest road historic arrival not confirmed for current legal parking",
+            "source": "https://www.fs.usda.gov/r09/ottawa"
+          },
+          {
+            "label": "Complete footpath",
+            "status": "not-cleared",
+            "finding": "Complete dry public route into gorge and creek crossing rights unverified",
+            "source": "https://www.fs.usda.gov/r09/ottawa"
+          },
+          {
+            "label": "Current restrictions",
+            "status": "not-cleared",
+            "finding": "No current USFS road gate and seasonal flow/closure verification",
+            "source": "https://www.fs.usda.gov/r09/ottawa"
+          }
+        ]
+      }
+    },
+    {
+      "gisObjectId": 59,
+      "name": "Ogemaw Falls",
+      "county": "BARAGA",
+      "status": "geo-identity-or-private-road-uncleared",
+      "publicAccess": "no-authorized-end-to-end-tourist-route",
+      "publicationEligible": false,
+      "title": "Ogemaw Falls visitor access audit",
+      "summary": "GIS Ogemaw #59 at 46.648930,-88.512220 differs about 537 metres from specialist Ogemaw Creek falls at 46.645410,-88.507430, while a second 2006 visitor lists 46.6473,-88.5110 nearer the GIS point. The same creek may contain multiple smaller drops; waterfall identity and exact point not reconciled. Historical visitors describe a small brown sign opposite a Baraga Plains Road pond and informal pull-off near culvert, with undergrowth, eroded creek-bank paths and scattered fallen trees; no county road commission designated parking or current manager approved public trail. Independent 2026 photo exists but cannot serve as county roadside approval. Exact state-specialist distance 536 metres. Reviewed Nov 1 2026. All traffic, property and seasonal rights subject to current land manager confirmation.",
+      "guidance": "Historic field trip parking and raw waterfall coordinates do not establish legal visitor arrival, current path condition or permission to cross private land.",
+      "reviewLimitations": "Verify current road commission legal pull-off/parking and signage at Baraga Plains Road, exact public parcel and authorized dry creek-side viewpoint, reconcile both falls coordinates/features, inspect seasonal road conditions and creek safety.",
+      "nextEvidence": "Verify current road commission legal pull-off/parking and signage at Baraga Plains Road, exact public parcel and authorized dry creek-side viewpoint, reconcile both falls coordinates/features, inspect seasonal road conditions and creek safety.",
+      "researchPage": "/upper-peninsula-waterfalls/research/ogemaw-falls/",
+      "sourceLinks": [
+        {
+          "label": "Source 1",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "Source 2",
+          "url": "https://www.waterfallsofthekeweenaw.com/ogemaw-creek/ogemaw-falls/"
+        },
+        {
+          "label": "Source 3",
+          "url": "https://gowaterfalling.com/~gowaterf/waterfalls/minorfallsM-O.shtml"
+        },
+        {
+          "label": "Source 4",
+          "url": "https://upperpeninsulawaterfalls.com/baraga-county-waterfalls/ogemaw-falls.html"
+        },
+        {
+          "label": "Source 5",
+          "url": "https://www.baragacountytourism.org/attractions"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-11-01",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Falls geographic identity",
+            "status": "conflicting",
+            "finding": "State and independent waterfall point coordinates are about 537 metres apart",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Independent historical evidence",
+            "status": "documented-not-live",
+            "finding": "2006 second visitor position closer to GIS may refer to a different cascade",
+            "source": "https://www.waterfallsofthekeweenaw.com/ogemaw-creek/ogemaw-falls/"
+          },
+          {
+            "label": "Public arrival",
+            "status": "not-cleared",
+            "finding": "Roadside brown sign/pull-off reported by 2015 traveler, not present manager confirmed",
+            "source": "https://gowaterfalling.com/~gowaterf/waterfalls/minorfallsM-O.shtml"
+          },
+          {
+            "label": "Legal parking",
+            "status": "not-cleared",
+            "finding": "Baraga Plains Road shoulder/culvert parking authority and sight distance unknown",
+            "source": "https://upperpeninsulawaterfalls.com/baraga-county-waterfalls/ogemaw-falls.html"
+          },
+          {
+            "label": "Complete footpath",
+            "status": "not-cleared",
+            "finding": "Creekside primitive path land title/easement and dry safe lookout unverified",
+            "source": "https://www.baragacountytourism.org/attractions"
+          },
+          {
+            "label": "Current restrictions",
+            "status": "not-cleared",
+            "finding": "No official 2026 road and trail closures or creek conditions",
+            "source": "https://www.baragacountytourism.org/attractions"
+          }
+        ]
+      }
+    },
+    {
       "gisObjectId": 68,
       "name": "Upper Silver Falls",
       "county": "BARAGA",
@@ -498,6 +650,78 @@
             "status": "not-cleared",
             "finding": "No current access status",
             "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          }
+        ]
+      }
+    },
+    {
+      "gisObjectId": 83,
+      "name": "Daults Falls",
+      "county": "BARAGA",
+      "status": "geo-identity-or-private-road-uncleared",
+      "publicAccess": "no-authorized-end-to-end-tourist-route",
+      "publicationEligible": false,
+      "title": "Daults Falls visitor access audit",
+      "summary": "State GIS Daults Falls #83 at 46.710114,-88.422161 is about 285m from specialist 46.711930,-88.424790. Specialist confirms he initially photographed an upstream roadside drop, later found real falls downstream near/behind an occupied house and private driveway, and records repeated private property concerns. Old advice to stop on Herman-Nestoria Road and follow the creek behind the house is not authorized public visitation. Neither legal road parking nor continuous public bank easement was established; avoid creating a drive-to-falls line or neighbor trespass instructions. Exact state-specialist distance 285 metres. Reviewed Nov 1 2026. All traffic, property and seasonal rights subject to current land manager confirmation.",
+      "guidance": "Historic field trip parking and raw waterfall coordinates do not establish legal visitor arrival, current path condition or permission to cross private land.",
+      "reviewLimitations": "Current Baraga parcel ownership for both point candidates, road commission lawful visitor parking, owner-authorized waterfall bank viewpoint and complete signed dry footpath avoiding nearby house and driveway.",
+      "nextEvidence": "Current Baraga parcel ownership for both point candidates, road commission lawful visitor parking, owner-authorized waterfall bank viewpoint and complete signed dry footpath avoiding nearby house and driveway.",
+      "researchPage": "/upper-peninsula-waterfalls/research/daults-falls/",
+      "sourceLinks": [
+        {
+          "label": "Source 1",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "Source 2",
+          "url": "https://www.waterfallsofthekeweenaw.com/daults-creek/daults-falls/"
+        },
+        {
+          "label": "Source 3",
+          "url": "https://www.baragacountytourism.org/attractions"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-11-01",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Falls geographic identity",
+            "status": "conflicting",
+            "finding": "GIS and specialist field waterfall positions differ about 285m",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Independent historical evidence",
+            "status": "documented-not-live",
+            "finding": "Specialist warns of multiple upstream/downstream drops and initial wrong waterfall",
+            "source": "https://www.waterfallsofthekeweenaw.com/daults-creek/daults-falls/"
+          },
+          {
+            "label": "Public arrival",
+            "status": "not-cleared",
+            "finding": "Field account locates target behind house near private driveway",
+            "source": "https://www.baragacountytourism.org/attractions"
+          },
+          {
+            "label": "Legal parking",
+            "status": "not-cleared",
+            "finding": "No official road commission signed visitor turnout for Herman-Nestoria Road",
+            "source": "https://www.baragacountytourism.org/attractions"
+          },
+          {
+            "label": "Complete footpath",
+            "status": "not-cleared",
+            "finding": "No current owner-sanctioned creek bank path passing home/driveway",
+            "source": "https://www.baragacountytourism.org/attractions"
+          },
+          {
+            "label": "Current restrictions",
+            "status": "not-cleared",
+            "finding": "2026 property posting and creek conditions not verified",
+            "source": "https://www.baragacountytourism.org/attractions"
           }
         ]
       }

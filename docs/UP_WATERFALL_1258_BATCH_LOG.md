@@ -370,3 +370,7 @@ Updated GIS #160: 2002 FERC environmental assessment identifies UPPCO McClure P-
 ## Waterfall research queue v2 (2026-11-01)
 
 Stopped returning to the same unresolved private/utility/gated waterfall reports without new source evidence. Generator now ranks first-source candidates above incomplete reviews above verified six-axis access blockers. Every source candidate remains nonpublic until legal visitor route verified. Reconciled the source-first queue, preserved 71 curated / 65 GIS links / 96 pending and added focused Node gates. Batch 38 audited Dead River/Silver Bell/Chipmunk separately.
+
+## Batch 39 — Plumbago, Ogemaw, Daults first-source Baraga audit (2026-11-01)
+
+Plumbago GIS #52 materially different from remote real gorge (~6km); old overgrown/gated >2mi two-track, not a US-41 roadside stop. Ogemaw #59 GIS and specialist ~0.5km apart with potential multiple creek drops; informal Baraga Plains Road pond pull-off but no official parking/parcel approval. Daults #83 mapped fall near a residential house/driveway, historically confused with roadside rapids, not authorized public foot route. Three noindex research pages, full six source gate checks, regenerated queue v2. **71 curated / 65 GIS links / 96 pending unchanged**.
