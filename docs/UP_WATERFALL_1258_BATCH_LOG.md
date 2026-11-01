@@ -366,3 +366,7 @@ Automated Node QA exposed public indexed Silver River lower picnic falls with la
 ## Batch 38 — FERC McClure/private Dead River Falls path and Silver Bell/Chipmunk identity (2026-11-01)
 
 Updated GIS #160: 2002 FERC environmental assessment identifies UPPCO McClure P-10855 public gravel lot HISTORICALLY and private upstream half-mile gorge trail. Do not confuse with MBLP Forestville P-2589. UPPCO hydro live flow is not instantaneous gorge waterfall or safety data. Silver Bell #195 historic FR2276 rough road/gate; Chipmunk #205 Grand Marais GNIS matches GIS, not Amasa/Wetmore namesakes. Source-ledgers, six-route gate audits, 3 nonindexed HTML research pages. No visitor guide, no emails. 71 curated / 65 linked / 96 pending unchanged.
+
+## Waterfall research queue v2 (2026-11-01)
+
+Stopped returning to the same unresolved private/utility/gated waterfall reports without new source evidence. Generator now ranks first-source candidates above incomplete reviews above verified six-axis access blockers. Every source candidate remains nonpublic until legal visitor route verified. Reconciled the source-first queue, preserved 71 curated / 65 GIS links / 96 pending and added focused Node gates. Batch 38 audited Dead River/Silver Bell/Chipmunk separately.
