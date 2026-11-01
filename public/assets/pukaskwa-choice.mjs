@@ -30,7 +30,7 @@ export function suitableOutings(trails, { minutes = 120, effort = 'moderate', vi
   for (const trail of trails) {
     if (!trail?.id || !WEIGHTS[trail.id] || !Number.isFinite(trail.hikingMinutes)) continue;
     const duration = trail.hikingMinutes;
-    if (CLOSED.has(trail.status)) { blocked.push(trail); continue; }
+    if (CLOSED.has(trail.status) || (trail.id === 'white-river-bridge' && trail.status !== 'recently-reported-open')) { blocked.push(trail); continue; }
     if (EFFORT[trail.difficulty] > EFFORT[effort]) { harder.push(trail); continue; }
     if (duration > +minutes) { beyond.push(trail); continue; }
     const specificity = WEIGHTS[trail.id][vibe] || 0;
