@@ -8,7 +8,7 @@ const vm = require('node:vm');
 const html = fs.readFileSync(path.join(__dirname, '..', 'public/leafcutter-bees/index.html'), 'utf8');
 const script = html.match(/<script>([\s\S]*?)<\/script>/)?.[1];
 
-function planner() {
+function planner(options={}) {
   const nodes = {};
   function element(id) {
     return nodes[id] ||= {
@@ -42,7 +42,7 @@ function planner() {
     createElement(tag) { return { textContent: '', tag, appendChild() {}, className: '', attrs: {} }; },
     createTextNode(t) { return {textContent:t}; }
   };
-  vm.runInNewContext(script, { document, Date });
+  vm.runInNewContext(script, { document, Date: options.Date || Date, fetch: options.fetch });
   function set(k, v) { nodes[k].value = v; nodes[k].handlers.change(); }
   return { nodes, paths, seasons, set,
     title: () => nodes['result-title'].textContent,
@@ -122,4 +122,40 @@ test('release forecast desk keeps blooms and actual observation separate', () =>
   assert.match(html, /Forecast does not equal clearance/);
   assert.match(html, /National Weather Service/);
   assert.match(html, /Typical plant seasons/);
+});
+
+
+test('forecasts never override flowers, nest, stage or fail-closed behavior', async () => {
+  class SummerDate extends Date {
+    constructor(...args) { if (args.length) super(...args); else super('2026-07-14T14:00:00Z'); }
+    static now() { return Date.parse('2026-07-14T14:00:00Z'); }
+  }
+  let unavailable=false;
+  const forecast={
+    scope:'forecast-planning-only',provider:'National Weather Service',forecastOnly:true,
+    issuedAt:'2026-07-14T12:00:00Z',checkedAt:'2026-07-14T14:00:00Z',
+    sourceUrl:'https://api.weather.gov/gridpoints/DTX/99,99/forecast/hourly',
+    site:{id:'bay-city'},status:'WARM_STRETCH',fresh:true,
+    firstWarmStretch:{startDate:'2026-07-15',endDate:'2026-07-16'},
+    daily:[{date:'2026-07-15',highF:78,precipPeakPct:20,signal:'WARM_DAY'},
+           {date:'2026-07-16',highF:79,precipPeakPct:20,signal:'WARM_DAY'}]
+  };
+  const fetch=async url=>{
+    if (url.includes('mode=locations')) return {ok:true,json:async()=>({locations:[{id:'bay-city',name:'Bay City',region:'Central Lower'}]})};
+    if (unavailable) return {ok:false,status:503};
+    return {ok:true,json:async()=>forecast};
+  };
+  const p=planner({Date:SummerDate,fetch});
+  p.set('month','6');p.set('nest','empty');p.set('flowers','yes');
+  p.paths[1].handlers.click();
+  await p.nodes['bee-check'].handlers.click();
+  assert.match(p.title(),/possible release-planning window/);
+  assert.doesNotMatch(p.title(),/release today/i);
+  p.set('flowers','no');assert.match(p.title(),/not release-ready/);
+  p.set('flowers','yes');p.set('nest','none');assert.match(p.title(),/not release-ready/);
+  p.set('nest','empty');p.set('month','10');assert.match(p.title(),/Plan your bee habitat/);
+  p.set('month','6');unavailable=true;
+  await p.nodes['bee-check'].handlers.click();
+  assert.match(p.title(),/Forecast unavailable/);
+  assert.doesNotMatch(p.title(),/possible release-planning window/);
 });
