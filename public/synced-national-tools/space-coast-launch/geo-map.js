@@ -65,10 +65,13 @@
     const blocked = ['closed','ineligible'].includes(p.level) ? 100 : 0;
     const category = p.category === 'public-viewpoint' ? 0 :
       p.category === 'ticketed-entry' ? 18 : 35;
+    if (profile === 'close') {
+      // True GIS ordering within the category. Do not let editorial tags
+      // override the actual measured reference-point distance.
+      return blocked + category + (validViewGeometry(p) ? p.geometry.miles : 60);
+    }
     const fit = (p.profiles || []).includes(profile) ? -20 : 0;
-    const distance = profile === 'close' && p.geometry ?
-      p.geometry.miles / 4 : 0;
-    return blocked + category + fit + distance;
+    return blocked + category + fit;
   }
   function validViewGeometry(p) {
     return p.category === 'public-viewpoint' &&
@@ -274,7 +277,7 @@
       screen.replaceChildren();
       map=L.map(screen,{scrollWheelZoom:false,zoomControl:true,preferCanvas:true});
       map.setView([28.56,-80.68],10);
-      await loadTiles(L,map);
+      void loadTiles(L,map); // Draw markers immediately; basemap configuration can arrive afterward.
       const resize=()=>map?.invalidateSize({pan:false});
       if (typeof ResizeObserver !== 'undefined') new ResizeObserver(resize).observe(screen);
       window.addEventListener('load',resize,{once:true});
