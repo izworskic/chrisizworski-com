@@ -73,3 +73,41 @@ A nervous or curious gardener should finish one visit knowing: (1) why leafcutte
 - Region-specific local native species inventories from MSU and USGS with confidence labels, and validated cross-state bee transport guidance.
 - More original photographs with clear licenses from Michigan/Great Lakes.
 - Purchase product stock monitor only after reliable merchant API, not webpage scraping assumptions.
+
+## Release-and-dormancy deep research addendum — November 1, 2026
+### Biological states — do not conflate
+1. **Young larvae in fresh occupied nesting tubes.** They are still feeding and building the cocoon. Being leaf-capped does not prove maturity. Moving tubes too early can interrupt growth and food access. USU recommends late-autumn removal after flights end and gentle capped-end-up storage.
+2. **Fully developed dormant prepupae (diapause).** For `Megachile rotundata`, the 5th instar spins a leaf-lined cocoon and enters prepupal diapause, often for the winter. This is the state producers cold store, sometimes under highly controlled refrigeration. Other local Megachile species can overwinter at different stages and some are bivoltine. A user's ZIP/USDA zone cannot reveal state.
+3. **Pre-incubated almost-emerging adults.** Crown Bees explicitly ships `M. rotundata` near emergence. They cannot be treated as still dormant, returned to a refrigerator, or delayed until arbitrary later flower dates. Delivery week should align with dependable warmth, open flowers and ready nest.
+### Summer release criteria
+- Crown Bees: consistent daytime ~75°F (24°C) and abundant blossoms; choose same delivery week target crop is flowering; immediately place ready shipments. This is **manufacturer advice** not universal native bee biology. If heat >90°F (32°C) during incubation, avoid hot enclosures; seek seller guidance on emergers in breathable bag and early-morning release.
+- MSU: set out bee hotel late March–mid April in Michigan, keep through late October; most summer leafcutters finish nesting July–August. This is **nest setup timing**, not a Michigan calendar-based date for releasing purchased cocoon shipments.
+- Scientific commercial field guide: over-wintered prepupae typically incubated ~21–25 days at 28–30°C before peak bloom; cited Kemp/Bosch 2001 suggests 27–32 days at 29°C for male/female diapausing bees, whereas vendor calendar gives ~20 days at 84°F/30°C or ~42 days at 70°F/21°C. Different protocols produce different figures, so no universal countdown for household users.
+- Zone provides only winter climate context. Release advisory is a **conditional**, not date forecast: sustained suitable local daytime warmth, adequate pollen/nectar and compatible dry nesting cavity all verified by the gardener.
+### End of season and winter protection
+- With home wild nest tubes, maintain the house through nesting. When female activity has ceased in late autumn/after first frosts and larvae have had adequate development, move gently capped-end up to dry unheated shed/garage, well-ventilated and pest-protected, or protect in place if truly dry, as USU and MSU recommend. Do not treat one night at 60°F as a switch. Crown Bees uses ~60°F as an autumn activity clue; prioritize observations over a single reading. A fall mesh bag keeps out pests; avoid airtight sealed plastic.
+- Spring: rotate used tubes into a shaded/dark emergence box with exit opening and fresh nearby tubes, let prior-year residents emerge at their natural time, then discard/clean original tubes after emergence. Unknown species are **not** to be opened, warmed, or harvested via commercial procedures.
+- **Why sources seem to disagree about refrigeration:** Utah State Extension and Crown Bees discourage putting intact leafy **home bee-hotel tubes** in a household refrigerator (mould/moisture risk). By contrast, Canadian Food Inspection Agency recommends a commercial `M. rotundata` facility store mature isolated brood at **4–10°C = 39–50°F** with controlled airflow, humidity and hygiene. UF/IFAS describes professionally extracted brood at **5–8°C**. SARE discusses 35°F for ~150–210 days under professional management. These are context-specific, not contradictory biological facts.
+- **Pre-cooling development hazard:** 2024 Alberta research guidance says young nests need to complete larval feeding and cocoon formation before full winter cold storage; one industrial protocol suggests about **three weeks near 20°C / 68°F**, subject to developmental stage, or less at higher temperatures. Do NOT apply as a simple 'keep all wild nests at 68°F in your heated house for 3 weeks' rule.
+- Mature commercial prepupae do not need to be 'put to sleep' each fall by a gardener; diapause is a naturally occurring developmental state. Never offer instructions to force already-emerged adult bees back into dormancy.
+### Additional peer-reviewed / extension / government references
+| Authority | Publication and URL | Applicability |
+|---|---|---|
+| MSU Extension E-3337 | https://ncipmhort.cfans.umn.edu/sites/ncipmhort.cfans.umn.edu/files/2020-05/bee%20hotels%20michigan.pdf | Native/mixed hotel bees, seasonal placement and nesting |
+| Utah State Extension (2022) | https://extension.usu.edu/planthealth/research/making-and-managing-wild-bee-hotels | Native/wild nest storage, autumn timing, emergence box; explicit household refrigerator avoidance |
+| Crown Bees shipping calendar | https://crownbees.zohodesk.com/portal/en/kb/articles/how-to-select-bee-ship-date | **Seller-specific** preincubated `M. rotundata` shipping week and summer ~75°F |
+| Crown Bees Fall Care | https://crownbees.com/pages/fall-care-for-leafcutter-bees | **Seller-specific** autumn ~60°F cue, breathable bag, unheated protection |
+| Crown Bees Harvesting | https://crownbees.com/pages/harvesting-leafcutter-bee-cocoons | **Seller-specific** incubation temperature vs elapsed days (not a guaranteed countdown) |
+| Kemp & Bosch 2001 (Annals Ent Soc America) | https://academic.oup.com/aesa/article-abstract/94/2/244/187157 | Commercial `M. rotundata` prepupal incubation 27–32 days at 29°C; non-diapause generations |
+| Environmental Entomology (2013) | https://academic.oup.com/ee/article/42/6/1166/468756 | 4°C long-storage and ~21d at 28–30°C in alfalfa industry |
+| CFIA | https://inspection.canada.ca/en/animal-health/terrestrial-animals/biosecurity/standards-and-principles/alfalfa-leaf-cutting-bee | Professional facility humidity, ventilation, hygiene and 4–10°C storage |
+| UF/IFAS | https://ask.ifas.ufl.edu/publication/IN1452 | 5–8°C commercial prepupa storage, incubation at ~30°C |
+| Alberta alfalfa seed research 2024 | https://alfalfaseedab.com/wp-content/uploads/2025/02/Fall-and-winter-management-of-alfalfa-leafcutting-bees-November-2024.pdf | Brood *pre-storage development* and farm-scale harvest timing |
+| SARE | https://www.sare.org/publications/managing-alternative-pollinators/chapter-seven-the-alfalfa-leafcutter-bee/storage-incubation-and-emergence/ | Commercial storage research and caveats |
+| USDA ARS study | https://www.ars.usda.gov/research/publications/publication/?seqNo115=289133 | Experimental fluctuating-temperature storage, **not** recommended home method |
+### Release gates added
+- Test that choosing dormant managed brood never yields 'release now', even if 75°F/bloom are marked yes.
+- Test that ready-to-emerge managed bees do not get told to 'hibernate' or return to a fridge in winter.
+- Check that unknown stage forces uncertainty and vendor/species identification.
+- Check that wild bees do not display commercial stage dropdown.
+- Verify original evergreen source links and that weather and bloom values are user reports, not live observations.
