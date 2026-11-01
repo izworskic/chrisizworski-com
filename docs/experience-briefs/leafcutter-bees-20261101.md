@@ -111,3 +111,35 @@ A nervous or curious gardener should finish one visit knowing: (1) why leafcutte
 - Check that unknown stage forces uncertainty and vendor/species identification.
 - Check that wild bees do not display commercial stage dropdown.
 - Verify original evergreen source links and that weather and bloom values are user reports, not live observations.
+
+## November 1, 2026 — Location-specific release-weather investment
+### Public question
+"Should I plan to release commercially bought summer leafcutter cocoons at my garden this coming week?"
+
+### Data providers and architecture
+- New official NWS forecast endpoint `/api/leafcutter-release-weather?site=bay-city`; `?mode=locations` supplies 31 Michigan city references already defined in `lib/maple-sap-engine.cjs`. These are CITY REFERENCE FORECASTS, **not GPS or property-level measurements**. Zero location permission requests or user-account data.
+- Same `https://api.weather.gov/points/{lat},{lon}` to `properties.forecastHourly` workflow already used by site boat-launch weather and maple sap tools. No API credentials, new datastore, Redis, scheduled tasks or scraping. Only whitelisted NWS hourly URL host/patterns accepted, with timeout, public 15-minute edge cache, noindex and error fallback.
+- New `lib/leafcutter-release.cjs` converts official hourly `isDaytime` readings 09:00–18:00 at the provider's local timezone into 7-day forecast **daytime-high approximations**; a day needs six available daytime hours. Two consecutive adequately covered days with high ≥75°F is a *planning signal only*, inspired by Crown Bees seller shipping threshold, never a validated native-bee emergence rule.
+- Source issuance time from NWS `generatedAt` or `updateTime`; issued >18 hours earlier, unparseable or incomplete cannot make a favorable readiness judgment. Every result labels source, issue time, check time and optional maximum daytime chance of precipitation.
+- The daily card is real forecast data, not observed flight or live local temperature. The browser explicitly requests a forecast after the user selects a location, rather than doing unlimited weather reads for every page visitor. NWS outages yield a no-claim status; the planner avoids any positive forecast recommendation after a failed attempt.
+- Forecast can influence the personal decision ONLY for currently selected Michigan month; no inserting a current November forecast into a user-selected July planning scenario. Selecting another city invalidates the old forecast. Wild/nonnative bee distinction and commercial-brood-stage guards remain stronger than any weather signal.
+- The candidate release decision also requires user-reported flowers and clean nest occupancy/material readiness; without flowers or available nest, a favorable forecast is NOT green-light clearance. Actual purchase/species and shipment window still require supplier approval.
+- Forecaster station and gardener's lakeshore property can diverge. Map pin / GPS coordinates are not claimed to represent an exact garden. NWS status has an evidentiary qualifier: official forecast; gardener bloom/nest report is user observation; no current verified bee activity.
+
+### Local bloom assessment
+- The USA-NPN Spring Bloom Index (https://www.usanpn.org/data/maps/spring) is a synthetic early-spring lilac/honeysuckle index and cannot establish current summer forage for `M. rotundata`. USA-NPN citizen observations may be sparse, at variable distances and days old. We deliberately did NOT connect them as if they established a garden in bloom.
+- Instead the page contains a month-conditional Midwest/Great Lakes flower-possibility guide sourced from **USDA NRCS / Xerces Great Lakes Native Plants** (https://www.nrcs.usda.gov/sites/default/files/2024-10/Great%20Lakes%20Native%20Plants%20for%20Pollinators%20-%20Xerces%20Society.pdf) and Michigan/Xerces pollinator lists. Specific examples include wild bergamot (Jun–Sep), blazing star (Jul–Oct), smooth oxeye (Jun–Aug) and late-summer goldenrods and asters. It is climatological, not current bloom measurement.
+- Users must personally set `flowers=yes` to assert pollen/nectar availability; plant phenology and microclimate still affect dates. No fake bloom score or claim a garden flower was observed.
+- No yield multipliers, release countdown or guarantees.
+
+### Tests and failure states
+- `tests/leafcutter-release-weather.test.js` covers hourly temperature parsing, C/F conversion, two warm consecutive days, incomplete forecast, old issuance suppression, source SSRF validation, allowlisted locations, upstream error status and explicit unknown bloom status.
+- `tests/leafcutter-bees.test.js` retains native seasonal planner checks and includes forecast desk/source/flower UI discovery.
+- Interactive scenarios manually simulated with a fixed July clock: with real modeled two-day warmth + user-confirmed flower and nest → `possible release-planning window`; if flower missing or no nest → `not release-ready`; a November month selection bypasses July NWS forecast; failed NWS lookup → `unverified`.
+- No image changes to avoid unverified photo updates. Existing site canonical, JSON-LD and ad firewall remain untouched.
+- **Remaining release gates:** full PR CI, Vercel preview network and mobile visual smoke, merge status and production HTTP 200. Do not call it live before all are verified.
+
+### Next iteration (explicitly not shipping)
+- Expand 31 named forecast sites to secure ZIP/city geocoding with measured nearest forecast-grid distance and authoritative city attribution; avoid open proxy and rate-limit bypass.
+- Ask for optional ZIP only when a validated geographic source is available. DO NOT infer precise property from a city reference.
+- Integrate native bloom observations only where a recent, geographically proximate, taxon-relevant report exists, accompanied by distance/age/data confidence and never as a substitute for actual garden blooms.
