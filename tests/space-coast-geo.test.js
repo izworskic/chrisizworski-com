@@ -86,6 +86,12 @@ test('mission pad coordinates must be finite in Florida and explicitly present',
 test('GIS result joins only a selected mission’s already evaluated access', () => {
   const result=geo();
   assert.equal(result.coordinateSystem,'WGS84');
+  assert.equal(result.geojson.type,'FeatureCollection');
+  assert.equal(result.geojson.features.length,7);
+  const f=result.geojson.features.find(f=>f.properties.id==='playalinda-gate');
+  assert.deepEqual(f.geometry.coordinates,[-80.6834,28.645]);
+  assert.equal(f.properties.coordinateRole,'verified-public-entrance');
+  assert.equal(result.geojson.features[0].properties.access,'restricted');
   assert.equal(result.version,1);
   assert.equal(result.pad.name,launch.pad);
   assert.equal(result.points.filter(x=>x.geometry).length,4);
@@ -112,6 +118,9 @@ test('source outages and pad-unknown records withhold access inference and geome
   const closureViews=views.map(v=>v.id==='space-view'?{...v,level:'closed',label:'County closure'}:v);
   const closed=geo(launch,closureViews,access);
   assert.equal(closed.points.find(x=>x.id==='space-view').level,'closed');
+  const npsClosed=views.map(v=>v.class?.startsWith('nps-')?
+    {...v,level:'closed',label:'NPS closure'}:v);
+  assert.equal(geo(launch,npsClosed,access).points.find(x=>x.id==='playalinda-gate').level,'closed');
 });
 
 test('county Rotary launch site and Jetty after-hours controls are independently sourced', () => {
