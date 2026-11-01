@@ -446,6 +446,7 @@ a:hover { text-decoration: underline; }
 @media(max-width:680px){.pn-top{padding:22px 20px}.pn-lede{font-size:.98rem}.pn-more ul{columns:1}}
 </style>
 <link rel="stylesheet" href="/assets/garden-tools/garden-kit.css">
+<link rel="stylesheet" href="/assets/garden-tools/season-story.css?v=20261101a">
 
 
 
@@ -540,11 +541,52 @@ a:hover { text-decoration: underline; }
     <fieldset class="gk-seg"><legend>Can you work the soil? (it crumbles, not sticky or frozen)</legend><label><input type="radio" name="pnWork" value="unknown" checked><span>Not sure</span></label><label><input type="radio" name="pnWork" value="yes"><span>Yes</span></label><label><input type="radio" name="pnWork" value="no"><span>Not yet</span></label></fieldset>
     <div class="gk-field"><label for="pnSoil">Soil temperature at planting depth, &deg;F</label><input type="number" id="pnSoil" inputmode="numeric" min="20" max="100" placeholder="optional"><a class="pn-soil-link" href="/michigan-soil-temperature/">No thermometer? Today's reading at your nearest MSU station</a></div>
   </div>
+  <section class="pn-season" id="pnSeason" aria-labelledby="pnSeasonTitle">
+    <div class="pn-season-head">
+      <div>
+        <p class="pn-season-eyebrow">Freighter View Farms field notes / Michigan growing year</p>
+        <h3 id="pnSeasonTitle">Tomatoes: from seed tray to garden bed</h3>
+        <p class="pn-season-deck" id="pnSeasonIntro">Follow one crop from its first decision to the garden bed. The Bay City reference is shown until you choose your town.</p>
+      </div>
+      <label class="pn-crop-picker" for="pnCrop">Follow a crop
+        <select id="pnCrop"><option value="tomatoes">Tomatoes</option></select>
+      </label>
+    </div>
+    <p class="pn-season-location" id="pnSeasonLocation">Bay City station · historical frost records, not a current forecast</p>
+    <div class="pn-landmarks" id="pnSeasonLandmarks" aria-label="Spring freeze probabilities for your selected station">
+      <div class="pn-landmark"><span>50% spring threshold</span><strong>May 2</strong><small>About half of Bay City springs freeze on or after this date</small></div>
+      <div class="pn-landmark pn-landmark-main"><span>25% spring threshold</span><strong>May 9</strong><small>About one spring in four still freezes later</small></div>
+      <div class="pn-landmark"><span>Latest recorded spring freeze</span><strong>May 26</strong><small>Historical extreme, not a forecast</small></div>
+    </div>
+    <div class="pn-season-path-head"><h4>The journey from seed to bed</h4><span>Choose a chapter</span></div>
+    <div class="pn-season-steps" id="pnSeasonSteps" role="group" aria-label="Growing-season chapters">
+      <p>In Bay City, start tomatoes indoors March 14 to 28, harden them off April 29 to May 8, and consider transplanting from May 9 with frost protection ready.</p>
+    </div>
+    <div class="pn-season-reading">
+      <div class="pn-reading-main">
+        <span class="pn-reading-eyebrow">The reasoning behind the date</span>
+        <h4 class="pn-reading-title" id="pnSeasonStepTitle">Begin under lights</h4>
+        <span class="pn-reading-date" id="pnSeasonStepDate">March 14 to 28 near Bay City</span>
+        <p id="pnSeasonStepBody" aria-live="polite">Michigan State University Extension recommends starting transplants indoors six to eight weeks before setting them outside. The Bay City dates count backward from the station's May 9 spring reference.</p>
+        <p class="pn-story-missing" id="pnSeasonMissing" hidden>Research gap: a current Michigan planting rule has not been verified for this crop.</p>
+      </div>
+      <div class="pn-reading-side">
+        <strong>What this means today</strong>
+        <p id="pnSeasonStatus" role="status" aria-live="polite">The season changes with your town, soil condition, and crop choice.</p>
+        <p id="pnSeasonFall">Bay City's typical first fall frost is October 3. That is not a predicted harvest day.</p>
+      </div>
+    </div>
+    <p class="pn-season-bottom">The dates are climate-history guides, not weather forecasts. Soil-dependent crops deliberately have no invented calendar bars. <a href="/michigan-frost-dates/">Explore the frost odds</a> or <a href="/michigan-soil-temperature/">check a nearby MSU soil station</a> before making the call.</p>
+    <noscript><p class="pn-season-bottom">To explore another crop or town, enable JavaScript. The Bay City tomato reference and its MSU-based explanation remain readable above.</p></noscript>
+  </section>
   <div class="gk-chart" id="pnTableCard">
     <h3>Every crop, for your station</h3>
     <p class="gk-note" id="pnTableNote">Status today, the dates that set it, and the MSU rule behind it. The bars show the crops with dated windows. MSU gives no last date for planting out or sowing, so those bars stop at July 31, where this tool's spring rules end. That is a display limit, not a deadline.</p>
-    <div id="pnLegend"></div>
-    <svg id="pnTimeline" role="group" aria-label="Dated planting windows for your station; the same dates are in the table"></svg>
+    <details class="pn-chart-details" id="pnChartDetails">
+      <summary>Compare the dated windows for every crop<small>Reference chart, not a harvest forecast. Select a row to follow that crop's story.</small></summary>
+      <div id="pnLegend"></div>
+      <svg id="pnTimeline" role="group" aria-label="Dated planting windows for your station; the same dates are in the table"></svg>
+    </details>
     <div class="pn-table-wrap"><table class="pn-table"><thead><tr><th scope="col">Crop</th><th scope="col">Status</th><th scope="col">For your station</th><th scope="col">Rule</th></tr></thead><tbody id="pnRows"></tbody></table></div>
   </div>
   <dl class="gk-facts" id="pnFacts"></dl>
@@ -868,6 +910,7 @@ a:hover { text-decoration: underline; }
 <script src="/assets/garden-tools/michigan-frost.js"></script>
 <script src="/assets/garden-tools/michigan-places.js"></script>
 <script src="/assets/garden-tools/plant-now.js"></script>
+<script src="/assets/garden-tools/season-story.js?v=20261101a"></script>
 <script>
 /* What to Plant Now in Michigan: the page. The engine (plant-now.js) decides; this only shows it. */
 (function(){
@@ -875,6 +918,7 @@ a:hover { text-decoration: underline; }
   var K=window.GardenKit,E=window.PlantNow,h=K.h,el=function(id){return document.getElementById(id)};
   var q=new URLSearchParams(location.search),today=E.detroitToday(q.get('date'));
   var place=null,KEY='plantNowPlace';
+  var Story=window.GardenStory.mount({engine:E,kit:K,crop:q.get('crop'),onChange:function(){render()}});
   function load(){try{return localStorage.getItem(KEY)}catch(e){return null}}
   function save(v){try{localStorage.setItem(KEY,v)}catch(e){}}
   el('pnTowns').replaceChildren.apply(el('pnTowns'),E.towns().map(function(t){return h('option',{value:t})}));
@@ -925,23 +969,25 @@ a:hover { text-decoration: underline; }
       return h('div',{class:'pn-group'},h('h3',null,g[1]),body);
     }).filter(Boolean));
     el('pnRows').replaceChildren.apply(el('pnRows'),p.crops.map(function(r){
-      return h('tr',null,h('td',null,h('b',null,r.crop.name)),h('td',null,h('span',{class:'pn-pill '+CLS[r.code]},r.status)),h('td',null,r.code==='NOT_REPORTED'?r.detail:dates(r),r.notes.length?h('div',{class:'pn-rule'},r.notes.join(' ')):null),h('td',{class:'pn-rule'},r.rules.length?r.rules.map(function(k){return {indoor:'6 to 8 weeks indoors',harden:'7 to 10 days hardening',afterFrost:'after the danger of frost',soil60:'soil above 60°F',soil40:'soil 40°F or warmer',hardy:'as soon as the ground can be worked',succession:'sow every 2 weeks',memorial:'Memorial Day custom'}[k]}).join('; ')+' (MSU)':'No Michigan rule found'));
+      return h('tr',{'data-crop':r.crop.id},h('td',null,h('b',null,r.crop.name)),h('td',null,h('span',{class:'pn-pill '+CLS[r.code]},r.status)),h('td',null,r.code==='NOT_REPORTED'?r.detail:dates(r),r.notes.length?h('div',{class:'pn-rule'},r.notes.join(' ')):null),h('td',{class:'pn-rule'},r.rules.length?r.rules.map(function(k){return {indoor:'6 to 8 weeks indoors',harden:'7 to 10 days hardening',afterFrost:'after the danger of frost',soil60:'soil above 60°F',soil40:'soil 40°F or warmer',hardy:'as soon as the ground can be worked',succession:'sow every 2 weeks',memorial:'Memorial Day custom'}[k]}).join('; ')+' (MSU)':'No Michigan rule found'));
     }));
+    Story.render(p);
     var fx=function(k,v){return [h('dt',null,k),h('dd',null,v)]};
     el('pnFacts').replaceChildren.apply(el('pnFacts'),[].concat(fx('Station',st.n+' ('+st.r+')'),fx('Half of springs freeze after',st.p50),fx('Danger of frost past (1 spring in 4 later)',st.p25),fx('Latest freeze on record',st.lx),fx('First fall frost',fr.fallText?fr.fallText+' (typical)':'Not reported for this station')));
     // Dated windows only. MSU gives no closing date for plant-out and sowing, so those bars stop at July 31,
     // where this tool's spring rules end; that is a display limit, not a deadline.
     var endOf=function(w){return w.to!==null?w.to:K.parse('Jul 31')};
-    K.timeline(el('pnTimeline'),p.crops.filter(function(r){return r.windows.some(function(w){return typeof w.from==='number'})}).map(function(r){return {id:r.crop.id,label:r.crop.name,bars:r.windows.filter(function(w){return typeof w.from==='number'}).map(function(w){return {kind:w.kind,from:w.from,to:endOf(w)}})}}),{spring:fr.median,fall:fr.fall!==null?fr.fall:undefined,today:today.day,from:K.parse('Feb 15'),to:K.parse('Oct 31')});
+    K.timeline(el('pnTimeline'),p.crops.filter(function(r){return r.windows.some(function(w){return typeof w.from==='number'})}).map(function(r){return {id:r.crop.id,label:r.crop.name,bars:r.windows.filter(function(w){return typeof w.from==='number'}).map(function(w){return {kind:w.kind,from:w.from,to:endOf(w)}})}}),{spring:fr.median,fall:fr.fall!==null?fr.fall:undefined,today:today.day,from:K.parse('Feb 15'),to:K.parse('Oct 31'),active:Story.selected(),onRow:function(id){Story.select(id,true)}});
     el('pnLive').textContent=el('pnTitle').textContent;
     save(place.zip||place.label);
     if(window.history&&history.replaceState)history.replaceState(null,'',query()+location.hash);
   }
-  function query(){var u=new URLSearchParams(),c=cond();if(place)u.set('place',place.zip||place.label);if(q.get('date'))u.set('date',q.get('date'));if(c.workable!==null)u.set('work',c.workable?'yes':'no');if(c.soilF!==null&&isFinite(c.soilF))u.set('soil',String(c.soilF));return '?'+u.toString()}
+  function query(){var u=new URLSearchParams(),c=cond();if(place)u.set('place',place.zip||place.label);if(Story.selected()!=='tomatoes')u.set('crop',Story.selected());if(q.get('date'))u.set('date',q.get('date'));if(c.workable!==null)u.set('work',c.workable?'yes':'no');if(c.soilF!==null&&isFinite(c.soilF))u.set('soil',String(c.soilF));return '?'+u.toString()}
   function setPlace(v){var loc=E.locate(v);if(!loc){el('pnWhere').textContent='No Michigan town or ZIP called "'+v+'" was found. Try a nearby town, or a five-digit ZIP.';return false}place=loc;render();return true}
   el('pnPlace').addEventListener('change',function(){setPlace(el('pnPlace').value)});
   document.querySelectorAll('input[name="pnWork"]').forEach(function(r){r.addEventListener('change',render)});
   el('pnSoil').addEventListener('input',render);
+  el('pnChartDetails').addEventListener('toggle',function(){if(this.open&&place)render()});
   el('pnLegend').append(K.legend(['indoor','harden','transplant','sow']));
   el('pnIcs').addEventListener('click',function(){if(!place)return;var st=place.station,p=E.plan(st,today.day,{}),ev=[];
     p.crops.forEach(function(r){r.windows.forEach(function(w){if(typeof w.from!=='number')return;var t={indoor:'Start '+r.crop.name.toLowerCase()+' indoors',harden:'Harden off '+r.crop.name.toLowerCase(),transplant:'Plant '+r.crop.name.toLowerCase()+' out',sow:'Sow '+r.crop.name.toLowerCase()+' outside'}[w.kind];ev.push({from:w.from,to:w.to===null?w.from+6:w.to,title:t,note:(w.to===null?'Window opens; MSU gives no last date. ':'')+'Near '+st.n+'. chrisizworski.com/michigan-gardening/'})})});

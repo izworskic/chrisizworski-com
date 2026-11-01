@@ -1,0 +1,54 @@
+/* A field-journal-style seasonal journey, intentionally distinct from the garden kit's
+   all-crop spreadsheet and other site's map/card experiences. No external media/assets. */
+.pn-season{position:relative;isolation:isolate;margin:24px 0 26px;padding:clamp(18px,3vw,32px);border-radius:18px;background:#faf7ee;border:1px solid #d7cbb5;box-shadow:0 12px 35px -24px rgba(35,48,39,.32);color:#26392f;overflow:hidden}
+.pn-season::before{content:"";position:absolute;right:-85px;top:-95px;width:290px;height:290px;border:1px solid rgba(120,129,96,.17);border-radius:50%;pointer-events:none;box-shadow:0 0 0 42px rgba(120,129,96,.045),0 0 0 86px rgba(120,129,96,.03);z-index:-1}
+.pn-season-head{display:flex;justify-content:space-between;align-items:end;gap:22px;flex-wrap:wrap}
+.pn-season-eyebrow{font-size:.68rem;font-weight:800;letter-spacing:.17em;text-transform:uppercase;color:#8b5c36}
+.pn-season h3{font-family:var(--hm-display,'Fraunces',Georgia,serif);font-weight:500;font-size:clamp(1.6rem,2.8vw,2.4rem);line-height:1.15;letter-spacing:-.025em;margin:8px 0;color:#1f3d32}
+.pn-season-deck{max-width:61ch;font-size:.94rem;line-height:1.6;color:#49584d}
+.pn-crop-picker{display:grid;gap:7px;min-width:min(100%,255px);font-size:.73rem;text-transform:uppercase;letter-spacing:.1em;font-weight:800;color:#375345}
+.pn-crop-picker select{width:100%;min-height:48px;border:1.5px solid #849f8c;background:#fffdf6;border-radius:9px;padding:10px 14px;font:600 1rem/1.35 system-ui,sans-serif;color:#233e32}
+.pn-season-location{margin:12px 0 18px;color:#5e665a;font-size:.76rem}
+.pn-landmarks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px;background:#aab9a8;border:1px solid #aab9a8;border-radius:13px;overflow:hidden}
+.pn-landmark{display:flex;flex-direction:column;gap:4px;padding:16px 18px;background:#e6ebe0;min-width:0}
+.pn-landmark-main{background:#244d3b;color:#fff}
+.pn-landmark span{font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;font-weight:800}
+.pn-landmark strong{font:500 clamp(1.3rem,2vw,1.9rem)/1.08 var(--hm-display,Georgia,serif);letter-spacing:-.015em}
+.pn-landmark small{font-size:.75rem;line-height:1.45;opacity:.88}
+.pn-season-path-head{display:flex;justify-content:space-between;gap:12px;align-items:center;margin:24px 0 13px}
+.pn-season-path-head h4{font:500 1.2rem/1.25 var(--hm-display,Georgia,serif);color:#274536}
+.pn-season-path-head span{font-size:.72rem;color:#657366;text-transform:uppercase;letter-spacing:.06em}
+.pn-season-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;position:relative}
+.pn-stage{display:flex;align-items:flex-start;gap:12px;min-width:0;text-align:left;border:1px solid #b9c6b6;background:#fffefa;border-radius:11px;cursor:pointer;padding:15px 12px;min-height:96px;color:#2c493a;transition:border-color .12s ease,background-color .12s ease,box-shadow .12s ease}
+.pn-stage:hover{background:#f0f5ec;border-color:#5d826b}
+.pn-stage.is-active{background:#deeadb;border-color:#315c43;box-shadow:inset 0 0 0 1px #315c43}
+.pn-stage-number{display:grid;place-items:center;border:1px solid #8ea88f;border-radius:50%;flex:none;width:32px;height:32px;color:#3b694e;font-weight:750;font-size:.7rem}
+.pn-stage.is-active .pn-stage-number{background:#315c43;color:#fff}
+.pn-stage-copy{display:block;min-width:0}
+.pn-stage-copy strong{display:block;font-size:.87rem;line-height:1.3}
+.pn-stage-copy small{display:block;margin-top:6px;font-size:.77rem;color:#5a6d5b;line-height:1.35}
+.pn-season-reading{display:grid;grid-template-columns:minmax(0,1fr) minmax(230px,.48fr);gap:22px;margin-top:12px;background:#fffdf7;border:1px solid #d7cbb5;border-radius:12px;overflow:hidden}
+.pn-reading-main{padding:22px 24px}
+.pn-reading-eyebrow{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.13em;color:#8b5c36}
+.pn-season h4.pn-reading-title{font:500 clamp(1.32rem,2.1vw,1.8rem)/1.2 var(--hm-display,Georgia,serif);margin:8px 0;color:#284739}
+.pn-reading-date{display:inline-block;margin:0 0 10px;background:#f0e9da;border-radius:5px;padding:4px 9px;font-weight:700;font-size:.81rem;color:#6e4c2e}
+.pn-reading-main p{line-height:1.63;font-size:.91rem}
+.pn-reading-side{padding:21px 22px;background:#e9eee7;border-left:1px solid #d1dccf}
+.pn-reading-side strong{display:block;margin-bottom:8px;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:#2c5740}
+.pn-reading-side p{font-size:.85rem;line-height:1.57}
+.pn-reading-side p+p{margin-top:13px;padding-top:12px;border-top:1px solid #b8c9b8}
+.pn-season-bottom{font-size:.77rem;line-height:1.58;color:#5a685c;margin:14px 0 0}
+.pn-season-bottom a{color:#305c40;font-weight:750;text-decoration:underline;text-underline-offset:3px}
+.pn-story-missing[hidden]{display:none}
+.pn-story-missing{margin:10px 0 0;font-size:.81rem;color:#8b4b25}
+.pn-row-selected{background:#ecf3e9}
+.pn-row-selected td:first-child{box-shadow:inset 4px 0 #3e7754}
+.pn-chart-details{border-top:1px solid #e2ddcf;margin:18px 0 8px;padding-top:12px}
+.pn-chart-details summary{cursor:pointer;list-style:auto;padding:9px 4px;font-size:.93rem;font-weight:750;color:#305b43}
+.pn-chart-details summary small{display:block;margin-left:20px;font-size:.78rem;color:#616f64;font-weight:400}
+.pn-chart-details svg{max-width:100%;height:auto}
+#pnSeason :focus-visible,.pn-chart-details summary:focus-visible{outline:3px solid #bf8045;outline-offset:4px}
+@media(max-width:800px){.pn-season-reading{grid-template-columns:1fr}.pn-reading-side{border-left:0;border-top:1px solid #d1dccf}}
+@media(max-width:620px){.pn-season{padding:17px 14px;border-radius:13px}.pn-season::before{opacity:.4}.pn-crop-picker{width:100%}.pn-landmarks{grid-template-columns:1fr}.pn-landmark{padding:13px 15px}.pn-landmark strong{font-size:1.35rem}.pn-season-steps{grid-template-columns:1fr;gap:7px}.pn-stage{min-height:0;padding:12px 14px}.pn-season-path-head{align-items:start}.pn-season-path-head span{max-width:100px;text-align:right}.pn-reading-main,.pn-reading-side{padding:17px 16px}}
+@media(prefers-reduced-motion:reduce){.pn-stage{transition:none}}
+@media print{.pn-season{box-shadow:none;break-inside:avoid}.pn-season-steps{display:none}.pn-landmarks{print-color-adjust:exact;-webkit-print-color-adjust:exact}}
