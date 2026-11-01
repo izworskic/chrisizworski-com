@@ -1,6 +1,6 @@
 import { verifyMapCatalog, MAP_DATA_ROUTE, relatedPlace, mapLink, placeInterpretation } from './pukaskwa-map-contract.mjs';
 import {verifyCommunityCenterlines, TRAIL_GEOJSON_URL, APPROVED_WAYS, summaryForTrail, OSM_COPYRIGHT_URL, ODBL_URL} from './pukaskwa-trail-geometry.mjs';
-import {startAdvice} from './pukaskwa-starts.mjs';
+import {startAdvice,officialMapOrientation} from './pukaskwa-starts.mjs';
 import {mappedJunctionEvidence,osmNodeUrl,osmWayUrl} from './pukaskwa-junction-evidence.mjs';
 
 const doc=document;
@@ -20,6 +20,10 @@ const startSequence=doc.getElementById('pk-map-start-sequence');
 const startWarning=doc.getElementById('pk-map-start-warning');
 const accessProofHead=doc.getElementById('pk-access-proof-heading');
 const accessProofDetail=doc.getElementById('pk-access-proof-detail');
+const parkDiagramRing=doc.getElementById('pk-official-label-ring');
+const parkDiagramTitle=doc.getElementById('pk-official-wayfinding-title');
+const parkDiagramText=doc.getElementById('pk-official-wayfinding-text');
+const findParkLabel=doc.getElementById('pk-find-park-map-label');
 const junctionHead=doc.getElementById('pk-junction-heading');
 const junctionSummary=doc.getElementById('pk-junction-summary');
 const junctionList=doc.getElementById('pk-junction-list');
@@ -105,9 +109,34 @@ function renderJunctionEvidence(trailId,status){
 }
 
 const isBlockedStatus=status=>['closed','out-of-season','last-known-closed'].includes(status);
+findParkLabel?.addEventListener('click',()=>{
+  if(isBlockedStatus(selectedStatus))return;
+  officialButton.click();
+  const target=officialMapOrientation(selectedTrail)?.label
+    ? doc.getElementById('pk-campground-detail') : doc.getElementById('pk-map-official-panel');
+  target?.scrollIntoView({behavior:'smooth',block:'start'});
+});
 
 function updateTrailSelection() {
   renderJunctionEvidence(selectedTrail,selectedStatus);
+  const blocked=isBlockedStatus(selectedStatus);
+  const parkEvidence=officialMapOrientation(selectedTrail,{blocked});
+  if(parkEvidence&&parkDiagramTitle&&parkDiagramText&&parkDiagramRing){
+    parkDiagramTitle.textContent=blocked?'Closed: no approach suggested':
+      (parkEvidence.label?'Find the printed trail label':'Refer to the full park trail map');
+    parkDiagramText.textContent=parkEvidence.description+' '+parkEvidence.mappingMeaning;
+    parkDiagramRing.toggleAttribute('hidden',!parkEvidence.label);
+    if(parkEvidence.label){
+      parkDiagramRing.setAttribute('cx',String(parkEvidence.label.x));
+      parkDiagramRing.setAttribute('cy',String(parkEvidence.label.y));
+      parkDiagramRing.setAttribute('aria-label',parkEvidence.label.caption);
+    }
+    if(findParkLabel){
+      findParkLabel.disabled=blocked;
+      findParkLabel.textContent=blocked?'Trail reported closed · no approach':
+        parkEvidence.label?'Show name on park campground map':'Show on full official park map';
+    }
+  }
   if(!catalog)return;
   const point=relatedPlace(catalog,selectedTrail);
   const title=doc.querySelector('#pk-'+selectedTrail+' h3')?.textContent?.trim()||
@@ -120,7 +149,6 @@ function updateTrailSelection() {
   focusChoice.textContent=point?'Locate the related mapped place':'Route location is intentionally withheld';
   if(point)selectFromList(point.id,{moveMap:Boolean(map)});
   const hasTrail=Object.hasOwn(APPROVED_WAYS,selectedTrail);
-  const blocked=isBlockedStatus(selectedStatus);
   const orientation=startAdvice(selectedTrail,{closed:blocked,hasApprovedGeometry:hasTrail});
   if(orientation&&startText&&startSequence&&startWarning) {
     startText.textContent=orientation.guidance;

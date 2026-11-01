@@ -92,3 +92,23 @@
 .pk-access-proof p{font-size:.81rem!important;line-height:1.55!important;margin:8px 0!important;color:#f2f1e9!important}
 .pk-access-proof .pk-access-proof-sources{font-size:.76rem!important;margin:9px 0 0!important}
 .pk-access-proof a{color:#ffe5ae;text-decoration:underline;text-underline-offset:3px}
+
+/* Image-anchored park wayfinding: official printed name locations, not GPS. */
+.pk-campground-detail{padding:16px;background:#f1f4ea;border-top:1px solid #d5e0d0;scroll-margin-top:16px}
+.pk-campground-head{display:flex;gap:10px;justify-content:space-between;align-items:start;flex-wrap:wrap}
+.pk-map-eyebrow{margin:0 0 4px;color:#336656;font-size:.68rem;letter-spacing:.09em;text-transform:uppercase;font-weight:800}
+.pk-campground-head h3{font:500 1.28rem/1.2 Georgia,serif;color:#245344;margin:0}
+.pk-campground-head a{color:#165e51;text-decoration:underline;font-size:.79rem;font-weight:750}
+.pk-campground-explainer{font-size:.83rem;line-height:1.56;color:#34584c;max-width:72ch}
+.pk-campground-picture{position:relative;width:100%;margin:9px 0;border-radius:7px;overflow:hidden;aspect-ratio:1000 / 761;background:#e2e8dc}
+.pk-campground-picture img{display:block;width:100%;height:100%;object-fit:fill}
+.pk-official-diagram-overlay{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+#pk-official-label-ring{stroke:#ffcc51;stroke-width:9;fill:rgba(20,74,55,.08);paint-order:stroke;filter:drop-shadow(0 1px 3px #143a31)}
+#pk-official-label-ring[hidden]{display:none}
+.pk-official-wayfinding{background:#fff;border-left:4px solid #ad782d;padding:12px 15px;border-radius:4px}
+.pk-official-wayfinding strong{font-size:.9rem;color:#204d3f}
+.pk-official-wayfinding p{font-size:.81rem;line-height:1.56;color:#405e52;margin:5px 0}
+.pk-official-wayfinding a{color:#125b4d}
+.pk-start-path .pk-wayfinding-jump{background:#f0d9aa;color:#193d34;border:1px solid #e4ca97;font-weight:800;padding:9px 12px;min-height:44px;border-radius:5px;cursor:pointer;margin:4px 0 7px}
+.pk-wayfinding-jump:disabled{opacity:.65;cursor:not-allowed}
+@media(max-width:650px){.pk-campground-detail{padding:11px}.pk-campground-head h3{font-size:1.16rem}.pk-campground-explainer{font-size:.86rem}.pk-official-wayfinding p{font-size:.84rem}}
