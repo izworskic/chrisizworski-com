@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {EIGHT_DAY_HIKE_IDS, startAdvice, OFFICIAL_HIKES, OFFICIAL_VISITOR_CENTRE} from '../public/assets/pukaskwa-starts.mjs';
+import {EIGHT_DAY_HIKE_IDS, startAdvice, OFFICIAL_HIKES, OFFICIAL_VISITOR_CENTRE, OFFICIAL_PARK_RULES, OFFICIAL_RESPONSIBLE_VISIT} from '../public/assets/pukaskwa-starts.mjs';
 import {DAY_HIKES} from '../lib/pukaskwa/trail-registry.mjs';
 
 test('all eight official trails have Visitor Centre start evidence without invented trailhead coordinates',()=>{
@@ -43,4 +43,29 @@ test('published HTML starts with a source-based orientation and map module updat
   assert.match(js,/startSequence\.replaceChildren/);
   assert.match(js,/closed:blocked/);
   assert.doesNotMatch(js,/calculateParkingRoute|routeToParking|routeToStart/);
+});
+test('Parks Canada walking-rule gate never promotes OSM junctions or destination pins to signed entrances',()=>{
+  for(const id of EIGHT_DAY_HIKE_IDS){
+    const a=startAdvice(id,{hasApprovedGeometry:true});
+    assert.equal(a.parkingToSignedEntranceVerified,false,id);
+    assert.equal(a.routeNavigationCertified,false,id);
+    assert.match(a.pedestrianAccessEvidence,/Visitor Centre|bridge closure/i);
+    assert.match(a.establishedPathRule,/established hiking or walking trails and park roadways/);
+    assert.match(a.establishedPathRule,/do not cut across campsites/i);
+    assert.deepEqual(a.pathRuleSources,[OFFICIAL_PARK_RULES,OFFICIAL_RESPONSIBLE_VISIT]);
+    assert.ok(!('gps' in a)&&!('geometry' in a));
+  }
+  assert.equal(startAdvice('combination-hike').accessEvidenceClass,'official-named-circuit-no-gps');
+  assert.match(startAdvice('combination-hike').pedestrianAccessEvidence,/road return/);
+  assert.equal(startAdvice('southern-headland').accessEvidenceClass,'official-origin-no-gps');
+  assert.equal(startAdvice('white-river-bridge',{closed:true}).accessEvidenceClass,'closed-no-route');
+  const html=readFileSync('public/pukaskwa-national-park/index.html','utf8');
+  const js=readFileSync('public/assets/pukaskwa-map.js','utf8');
+  assert.match(html,/id="pk-access-proof-heading"/);
+  assert.match(html,/id="pk-access-proof-detail"/);
+  assert.match(html,/reglement-rules-and-regulations/);
+  assert.match(html,/Do not cut through campsites/);
+  assert.match(js,/accessProofDetail.textContent=orientation.pedestrianAccessEvidence/);
+  assert.match(js,/last-known-closed/);
+  assert.doesNotMatch(js,/routing\.control|GPXDownload|routeToParking/);
 });
