@@ -449,6 +449,7 @@ a:hover { text-decoration: underline; }
 <link rel="stylesheet" href="/assets/garden-tools/garden-kit.css">
 <link rel="stylesheet" href="/assets/garden-tools/season-story.css?v=20261101c">
 <link rel="stylesheet" href="/assets/garden-tools/garden-hub.css?v=20261101a">
+<link rel="stylesheet" href="/assets/garden-tools/garden-welcome.css?v=20261101a">
 
 
 
@@ -522,6 +523,14 @@ a:hover { text-decoration: underline; }
   <h1>Michigan Gardening Tools</h1>
   <p class="pn-lede">A little help for the questions that come up between the seed packet and the harvest basket.</p>
 </div>
+<section class="garden-welcome" aria-labelledby="welcomeTitle">
+ <div class="welcome-top"><div><p class="welcome-kicker">Freighter View Farms · A Michigan garden notebook</p><h2 id="welcomeTitle">Come see what’s growing.</h2><p>Every season has its own kind of garden work. Pick a season and wander a little, or go straight to the question on your mind.</p><a class="welcome-skip" href="#garden-questions">Find a tool now ↓</a></div>
+ <div id="welcomePlaceForm" class="welcome-place" hidden><label for="welcomePlace">Your Michigan town or ZIP</label><div><input id="welcomePlace" list="pnTowns" autocomplete="off" placeholder="Bay City or 48706"><button id="welcomeApply" type="button">Set town</button></div><p id="welcomePlaceStatus" role="status" aria-live="polite"></p></div></div>
+ <div class="welcome-seasons" id="welcomeSeasons" aria-label="Explore the gardening year" role="group" hidden><button type="button" data-welcome-season="winter" aria-pressed="false">Winter</button><button type="button" data-welcome-season="spring" aria-pressed="false">Spring</button><button type="button" data-welcome-season="summer" aria-pressed="false">Summer</button><button type="button" data-welcome-season="fall" aria-pressed="false">Fall</button></div>
+ <div class="welcome-feature"><figure><img id="welcomeImage" src="/assets/garden-notebook/garden-harvest.webp" alt="Flower bulbs set into garden soil" width="900" height="600" decoding="async"><figcaption>From Chris’s garden notebook</figcaption></figure><div class="welcome-reading" aria-live="polite"><p class="welcome-kicker" id="welcomeSeasonLabel">A garden note</p><h3 id="welcomeSeasonTitle">The garden keeps a story in every season.</h3><p id="welcomeSeasonCopy">There is always something worth noticing, from the first seed trays to the last harvest.</p><p id="welcomeLocal" class="welcome-local">Choose a Michigan town in the planner for your local frost station.</p><div id="welcomeLinks" class="welcome-links"><a href="/michigan-frost-dates/">Explore Michigan frost dates →</a><a href="#plant-now">Open your garden planner →</a></div><p class="welcome-context">Seasonal ideas and historical frost references, not a live weather report. Your soil and forecast have the final say.</p></div></div>
+ <div class="welcome-explore"><p>Take a closer look</p><nav aria-label="Explore the garden"><a href="/seed-starting-guide/"><span aria-hidden="true">✳</span> Seed trays</a><a id="welcomeSoil" href="/michigan-soil-temperature/"><span aria-hidden="true">◒</span> Soil</a><a href="/when-to-plant-tomatoes-michigan/"><span aria-hidden="true">●</span> Tomatoes</a><a href="/seed-saving-lab/"><span aria-hidden="true">✿</span> Flowers &amp; seeds</a></nav></div>
+ <noscript><p class="welcome-context">Season choices and town lookup need JavaScript. The garden links and guides below still work.</p></noscript>
+</section>
 <section class="garden-door" id="garden-questions" aria-labelledby="garden-door-title">
  <div class="garden-door-head"><div><p class="garden-door-kicker">From Freighter View Farms</p><h2 id="garden-door-title">What brings you to the garden today?</h2><p>Start with a question. We’ll help you find the right tool or guide.</p></div><a class="garden-all-guides" href="#gardening-tools-suite">Browse all garden guides ↓</a></div>
  <div id="garden-find-wrap" class="garden-find" hidden><label for="garden-find">Search featured tools</label><input id="garden-find" type="search" placeholder="Try tomatoes, frost, soil or seeds" autocomplete="off"><p id="garden-find-status" role="status" aria-live="polite"></p></div>
@@ -960,6 +969,7 @@ a:hover { text-decoration: underline; }
 <script src="/assets/garden-tools/michigan-places.js"></script>
 <script src="/assets/garden-tools/plant-now.js?v=20261101b"></script>
 <script src="/assets/garden-tools/garden-year.js"></script>
+<script src="/assets/garden-tools/garden-welcome.js?v=20261101a"></script>
 <script src="/assets/garden-tools/my-garden.js?v=20261101c"></script>
 <script src="/assets/garden-tools/season-story.js?v=20261101b"></script>
 <script>
@@ -972,6 +982,7 @@ a:hover { text-decoration: underline; }
   var Year=window.GardenYear.mount({engine:E,kit:K,today:today});
   var Garden=window.MyGarden.mount({engine:E,kit:K});
   var Story=window.GardenStory.mount({engine:E,kit:K,crop:q.get('crop'),onChange:function(){render()}});
+  var Welcome=window.GardenWelcome?window.GardenWelcome.mount({engine:E,today:today,onPlace:function(v){var old=el('pnPlace').value;el('pnPlace').value=v;if(!setPlace(v)){el('pnPlace').value=old;return false}return true}}):{render:function(){}};
   function load(){try{return localStorage.getItem(KEY)}catch(e){return null}}
   function save(v){try{localStorage.setItem(KEY,v)}catch(e){}}
   el('pnTowns').replaceChildren.apply(el('pnTowns'),E.towns().map(function(t){return h('option',{value:t})}));
@@ -991,7 +1002,7 @@ a:hover { text-decoration: underline; }
   }
   function render(){
     if(!place)return;
-    var st=place.station,p=E.plan(st,today.day,cond()),fr=p.frost,week=p.week;Year.render(st);Garden.render(st,today.day,cond(),today.iso);
+    var st=place.station,p=E.plan(st,today.day,cond()),fr=p.frost,week=p.week;Year.render(st);Garden.render(st,today.day,cond(),today.iso);Welcome.render(place);
     var sl=document.querySelector('.pn-soil-link');if(sl)sl.href='/michigan-soil-temperature/?place='+encodeURIComponent(place.zip||place.label);
     el('pnWhere').textContent=(place.label===st.n?'':place.label+': ')+'nearest frost station '+st.n+(place.miles>=1?', about '+Math.round(place.miles)+' miles away':'')+'. Today in Michigan: '+K.fmtLong(today.day)+'.';
     var acts=week.filter(function(r){return ['START_INDOORS','HARDEN_OFF','TRANSPLANT','PLANT'].indexOf(r.code)>=0});
