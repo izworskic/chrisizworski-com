@@ -1,6 +1,9 @@
 'use strict';
 (function () {
   const API = '/api/space-coast-launch';
+  const KSC_API = '/api/space-coast-ksc';
+  const KSC_REFRESH_MS = 5 * 60 * 1000;
+  const SCHEDULE_REFRESH_MS = 45 * 60 * 1000;
   const $ = id => document.getElementById(id);
   const set = (id, text) => { const node = $(id); if (node) node.textContent = text == null ? '—' : String(text); };
   const element = (tag, className, value) => {
@@ -106,6 +109,8 @@
       meta.appendChild(element('span', 'small',
         'Source checked ' + new Date(ksc.checkedAt).toLocaleString('en-US')));
     }
+    meta.appendChild(element('span', 'small',
+      'Official KSC announcement checks refresh separately while this page is open.'));
     target.appendChild(meta);
     if (!confirmed) {
       target.appendChild(element('h4', '', 'Do not buy a viewing ticket based on this schedule alone.'));
@@ -286,8 +291,52 @@
       'This is a relative cloud forecast, not a recommendation that a rocket will be visible from that location.'));
   };
   let loadSequence = 0;
+  let activeMissionId = null;
+  let lastKscAttemptAt = 0;
+  let lastScheduleLoadedAt = 0;
+  let kscController = null;
+
+  // Read KSC on its own cached endpoint, never re-fetching Launch Library
+  // just to see whether the operator published a new viewing notice.
+  async function refreshKsc(sequence, launchId) {
+    if (kscController) kscController.abort();
+    const controller = new AbortController();
+    kscController = controller;
+    try {
+      const response = await fetch(KSC_API + '?launchId=' + encodeURIComponent(launchId), {
+        headers: { Accept: 'application/json' },
+        signal: controller.signal
+      });
+      const result = await response.json();
+      if (sequence !== loadSequence || activeMissionId !== launchId || controller.signal.aborted) return;
+      if (!response.ok || !result.ok || result.selectedLaunchId !== launchId || !result.kscViewing) return;
+      renderKsc({ kscViewing: result.kscViewing });
+    } catch {
+      // Preserve the previously displayed, dated evidence if only the
+      // independent announcement refresh fails.
+    } finally {
+      if (kscController === controller) kscController = null;
+    }
+  }
+  function checkForKscUpdate() {
+    if (document.hidden || !activeMissionId ||
+        Date.now() - lastKscAttemptAt < KSC_REFRESH_MS) return;
+    lastKscAttemptAt = Date.now();
+    void refreshKsc(loadSequence, activeMissionId);
+  }
+  function checkForPageUpdates() {
+    if (document.hidden || !activeMissionId) return;
+    // An open tab must occasionally refresh its ordinary schedule too; the
+    // official KSC checker itself never calls the schedule provider.
+    if (Date.now() - lastScheduleLoadedAt >= SCHEDULE_REFRESH_MS) {
+      void load(activeMissionId);
+    } else checkForKscUpdate();
+  }
+
   async function load(selectedId) {
     const sequence = ++loadSequence;
+    if (kscController) kscController.abort();
+    activeMissionId = null;
     try {
       const endpoint = selectedId ? API + '?launchId=' + encodeURIComponent(selectedId) : API;
       const r = await fetch(endpoint, { headers: { Accept: 'application/json' } });
@@ -322,6 +371,10 @@
       renderKsc(d);
       renderArrival(d);
       renderSkyComparison(d);
+      lastScheduleLoadedAt = Date.now();
+      activeMissionId = d.selectedLaunchId || null;
+      lastKscAttemptAt = 0;
+      checkForKscUpdate();
     } catch (err) {
       set('loading', err.message);
       $('schedule-card').dataset.level = 'unknown';
@@ -341,5 +394,7 @@
       if (kscPanel) kscPanel.textContent = 'KSC mission viewing could not be verified. Check the official KSC calendar before purchasing admission.';
     }
   }
+  document.addEventListener('visibilitychange', checkForPageUpdates);
+  window.setInterval(checkForPageUpdates, 60 * 1000);
   load();
 })();
