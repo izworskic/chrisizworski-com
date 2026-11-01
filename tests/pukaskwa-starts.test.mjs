@@ -39,7 +39,7 @@ test('published HTML starts with a source-based orientation and map module updat
   assert.match(html,/id="pk-map-start-warning"/);
   assert.match(html,/pukaskwa-map\.js\?v=4/);
   assert.match(html,/Day-use parking is documented at the centre/);
-  assert.match(js,/import \{startAdvice\} from '\.\/pukaskwa-starts\.mjs'/);
+  assert.match(js,/import \{startAdvice,officialMapOrientation\} from '\.\/pukaskwa-starts\.mjs'/);
   assert.match(js,/startSequence\.replaceChildren/);
   assert.match(js,/closed:blocked/);
   assert.doesNotMatch(js,/calculateParkingRoute|routeToParking|routeToStart/);
