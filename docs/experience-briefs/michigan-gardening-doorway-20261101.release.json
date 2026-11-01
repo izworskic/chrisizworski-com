@@ -1,0 +1,117 @@
+{
+  "schemaVersion": "1.2",
+  "recordStatus": "draft",
+  "project": {
+    "slug": "michigan-gardening-doorway-20261101",
+    "ownerRepo": "izworskic/chrisizworski-com",
+    "canonical": "https://chrisizworski.com/michigan-gardening/",
+    "pageFile": "public/michigan-gardening/index.html",
+    "visitorDecision": "Which existing tool or guide answers my Michigan gardening question?",
+    "primaryAction": "Choose a question or search featured tools, then open its relevant tool or guide."
+  },
+  "claims": [
+    {
+      "id": "michigan-frost-reference",
+      "kind": "official-reference",
+      "subject": "other",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://www.canr.msu.edu/resources/frost-free-dates",
+      "checkedDate": "2026-11-01",
+      "limitation": "Historical station probabilities do not predict a future frost or a garden soil temperature."
+    },
+    {
+      "id": "fall-crop-planning",
+      "kind": "official-reference",
+      "subject": "other",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://www.canr.msu.edu/uploads/files/E3172_-_Fall_Vegetable_Crops_for_your_Garden.pdf",
+      "checkedDate": "2026-11-01",
+      "limitation": "Packet conventions, weather and slower fall growth vary; calculation is not a safe deadline."
+    }
+  ],
+  "decisionState": {
+    "selectedIdField": "featured search terms and the planner disclosure state",
+    "sourceOfTruth": "Twelve visible curated links point to existing canonical tools and guides; the existing PlantNow engine remains authoritative for planner calculations.",
+    "linkedSurfaces": [
+      "answer",
+      "featured search results",
+      "gardener question groups",
+      "planner disclosure"
+    ],
+    "unavailableBehavior": "No matches show a plain message and the complete guide catalogue remains available."
+  },
+  "scenarios": [
+    {
+      "kind": "initial",
+      "input": "Open the hub with or without a town.",
+      "expectedVisibleAnswer": "Four question groups and twelve real tools appear before the closed planner.",
+      "sourceAndSafety": "Links identify each tool; the destination reports its own source and freshness limitations."
+    },
+    {
+      "kind": "alternative",
+      "input": "Search tomatoes.",
+      "expectedVisibleAnswer": "Matching featured tomato and variety tools remain, with a result count.",
+      "sourceAndSafety": "Links identify each tool; the destination reports its own source and freshness limitations."
+    },
+    {
+      "kind": "reverse",
+      "input": "Search an impossible term, then clear it.",
+      "expectedVisibleAnswer": "The empty state gives a path to the full catalogue; clearing restores all tools.",
+      "sourceAndSafety": "Links identify each tool; the destination reports its own source and freshness limitations."
+    },
+    {
+      "kind": "no-js",
+      "input": "Disable JavaScript.",
+      "expectedVisibleAnswer": "Direct tool links and the native planner disclosure remain usable.",
+      "sourceAndSafety": "Links identify each tool; the destination reports its own source and freshness limitations."
+    },
+    {
+      "kind": "no-tiles",
+      "input": "Load without map tiles.",
+      "expectedVisibleAnswer": "The hub has no map dependency; direct tools and guides remain available.",
+      "sourceAndSafety": "Links identify each tool; the destination reports its own source and freshness limitations."
+    },
+    {
+      "kind": "stale-data",
+      "input": "Open a forecast tool without a usable feed.",
+      "expectedVisibleAnswer": "The destination distinguishes unavailable forecast from safe conditions.",
+      "sourceAndSafety": "Links identify each tool; the destination reports its own source and freshness limitations."
+    }
+  ],
+  "failures": {
+    "no-js": "Curated links and native planner disclosure remain available; dynamic calculations explain JavaScript is required.",
+    "no-tiles": "The hub needs no map tiles.",
+    "no-image": "The hub does not depend on new imagery.",
+    "stale-data": "Destination tools retain their established source and forecast failure states."
+  },
+  "qa": {
+    "viewports": [
+      360,
+      390,
+      768,
+      1440
+    ],
+    "browserStatus": "PENDING",
+    "browserRun": null,
+    "screenshotEvidence": []
+  },
+  "photos": [],
+  "release": {
+    "implemented": {
+      "status": "PENDING"
+    },
+    "verified": {
+      "status": "PENDING"
+    },
+    "deployed": {
+      "status": "PENDING"
+    },
+    "live": {
+      "status": "PENDING"
+    },
+    "measured": {
+      "status": "NOT_MEASURED"
+    }
+  },
+  "note": "Draft. Exact-head browser, CI and live production verification remain pending."
+}
