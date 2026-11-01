@@ -290,10 +290,42 @@ function setWeatherStatus(head,detail,level){
  var p=document.createElement('p');p.textContent=detail;
  e.appendChild(h);e.appendChild(p);
 }
+function renderHeat(heat){
+ var meter=document.getElementById('bee-heat-meter');
+ if(!meter)return;
+ if(!heat){meter.hidden=true;return;}
+ meter.hidden=false;
+ var total=document.getElementById('bee-gdd-total'),days=document.getElementById('bee-gdd-days'),hours=document.getElementById('bee-gdd-hours');
+ var note=document.getElementById('bee-gdd-note'),bars=document.getElementById('bee-gdd-bars');
+ bars.textContent='';
+ var available=heat.status==='AVAILABLE'&&liveWeather&&liveWeather.fresh===true&&heat.totalDegreeDaysF!==null&&Number.isFinite(Number(heat.totalDegreeDaysF));
+ total.textContent=available?Number(heat.totalDegreeDaysF).toFixed(1)+' °F·days':'Unavailable';
+ days.textContent=available?String(heat.completeDays):'—';
+ hours.textContent=available?String(heat.warmDaytimeHours):'—';
+ if(!available){
+  note.textContent=heat.status==='STALE'?'The source forecast is stale. No current heat accumulation is shown.':'There are not enough complete local forecast days to calculate a trustworthy heat total.';
+  return;
+ }
+ var rows=Array.isArray(heat.daily)?heat.daily:[],full=rows.filter(function(d){return d.coverage==='complete'&&Number.isFinite(d.gdd50F)});
+ var max=Math.max(5,...full.map(function(d){return d.gdd50F}));
+ rows.forEach(function(day){
+  var col=document.createElement('div');col.className='bee-gdd-col'+(day.coverage!=='complete'?' partial':'');
+  var holder=document.createElement('div');holder.className='bee-gdd-bar-outer';
+  var fill=document.createElement('div');fill.className='bee-gdd-bar-fill';
+  if(day.coverage==='complete')fill.style.height=(Math.max(0,day.gdd50F)/max*100).toFixed(0)+'%';
+  holder.appendChild(fill);col.appendChild(holder);
+  var label=document.createElement('strong');label.textContent=new Date(day.date+'T12:00:00Z').toLocaleDateString('en-US',{timeZone:'UTC',weekday:'short'});
+  col.appendChild(label);
+  var value=document.createElement('span');value.textContent=day.coverage==='complete'?'+'+Number(day.gdd50F).toFixed(1):'partial';
+  col.appendChild(value);bars.appendChild(col);
+ });
+ note.textContent='Forecast warmth: '+Number(heat.totalDegreeDaysF).toFixed(1)+' growing degree-days (base 50°F) across '+heat.completeDays+' complete local forecast days. This is NOT a season-to-date total or a leafcutter emergence prediction.';
+}
 function showForecast(){
  var strip=document.getElementById('bee-day-strip'),issued=document.getElementById('bee-issued');
  strip.textContent='';issued.textContent='';
  if(!liveWeather)return;
+ renderHeat(liveWeather.heat);
  var geo=document.getElementById('bee-geo-note'),site=liveWeather.site||{};
  if(geo){
   if(site.kind==='zcta-interior-point'){
@@ -334,7 +366,7 @@ async function checkBeeForecast(){
  if(typeof fetch!=='function'){setWeatherStatus('Forecast lookup unavailable.','Use the source link and your local garden observations.', 'warning');return;}
  var raw=beeZip.value.trim(),city=beeCity.value,key=beeLocationKey(),sequence=++weatherRequest;
  weatherCheckState='loading';liveWeather=null;liveWeatherCity=null;
- document.getElementById('bee-day-strip').textContent='';document.getElementById('bee-issued').textContent='';
+ document.getElementById('bee-day-strip').textContent='';document.getElementById('bee-issued').textContent='';renderHeat(null);
  document.getElementById('bee-geo-note').textContent='';
  if(raw&&!/^(?:48|49)[0-9]{3}$/.test(raw)){
    weatherCheckState='unavailable';
@@ -367,7 +399,7 @@ async function checkBeeForecast(){
 }
 function invalidateBeeForecast(message){
  ++weatherRequest;weatherCheckState='not-checked';beeWeatherButton.disabled=false;liveWeather=null;liveWeatherCity=null;
- document.getElementById('bee-day-strip').textContent='';document.getElementById('bee-issued').textContent='';
+ document.getElementById('bee-day-strip').textContent='';document.getElementById('bee-issued').textContent='';renderHeat(null);
  document.getElementById('bee-geo-note').textContent='No current forecast applied. '+(beeZip.value.trim()?'Enter a valid mapped Michigan ZIP.':'Using a city requires a new check.');
  setWeatherStatus('Location changed. Check the forecast again.',message||'Previous weather is not applied to a new ZIP or city.');
  render();
