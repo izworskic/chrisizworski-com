@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.2",
-  "recordStatus": "draft",
+  "recordStatus": "released",
   "project": {
     "slug": "pukaskwa-national-park",
     "ownerRepo": "izworskic/chrisizworski-com",
@@ -128,10 +128,12 @@
       768,
       1440
     ],
-    "browserStatus": "PENDING",
-    "browserRun": null,
-    "screenshotEvidence": [],
-    "scopeNote": "Substantial regression and real Chromium map checks are required before any verified release claim; no new photos or map shapes were introduced."
+    "browserStatus": "PASSED",
+    "browserRun": "https://github.com/izworskic/chrisizworski-com/actions/runs/41305653868",
+    "screenshotEvidence": [
+      "https://github.com/izworskic/chrisizworski-com/actions/runs/41305653868/artifacts"
+    ],
+    "scopeNote": "Exact-head Chromium actually loaded raster tiles and 7 agency GIS pins plus 14 OSM trail segments at 360/390/768/1366/1440 px. Checked A-B-A selection, native details, source failure, both tile providers failing, and no-JavaScript. Inspected phone390 and desktop1440 screenshot evidence from run artifact 13082649265. No separate production interactive click test or visitor-outcome measurement is claimed."
   },
   "photos": [],
   "release": {
@@ -141,17 +143,25 @@
       "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/tree/feat/pukaskwa-mapped-junction-evidence-20261101"
     },
     "verified": {
-      "status": "PENDING"
+      "status": "CONFIRMED",
+      "checkedDate": "2026-11-01",
+      "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/actions/runs/41305653788"
     },
     "deployed": {
-      "status": "PENDING"
+      "status": "CONFIRMED",
+      "checkedDate": "2026-11-01",
+      "evidenceUrl": "https://vercel.com/izworski-gmailcoms-projects/chrisizworski-com/eJrrwFT4eyjXiWVDqUgP46pe2XAm",
+      "commitSha": "1cf0d90cbfeb418dd08a9339466df03cfaa29bf4"
     },
     "live": {
-      "status": "PENDING"
+      "status": "CONFIRMED",
+      "checkedDate": "2026-11-01",
+      "evidenceUrl": "https://chrisizworski.com/pukaskwa-national-park/",
+      "publicUrl": "https://chrisizworski.com/pukaskwa-national-park/"
     },
     "measured": {
       "status": "NOT_MEASURED"
     }
   },
-  "verificationLimit": "This source-only structural release ledger cannot certify signed trail access, park routes, Vercel deployment, live map tiles or visitor outcomes. Original credited photographs are unchanged."
+  "verificationLimit": "Source-only structural check does not certify signed trailheads, park access or route navigation. Browser QA was exact-head Chromium, and independent public smoke verified heading, default OSM way records, route warning, original park map, canonical and v4 module. No production interaction or engagement measurement."
 }
