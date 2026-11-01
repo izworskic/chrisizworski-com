@@ -529,6 +529,14 @@ a:hover { text-decoration: underline; }
     <div class="gk-field"><label for="pnPlace">Your town or ZIP</label><input type="text" id="pnPlace" list="pnTowns" autocomplete="off" value="Bay City" placeholder="for example Traverse City or 48706"><datalist id="pnTowns"></datalist></div>
   </div>
   <p class="gk-note" id="pnWhere">Nearest frost station: Bay City.</p>
+  <section class="my-garden" aria-labelledby="gardenPlanTitle">
+    <p class="gy-kicker">Your garden · your season</p><h3 id="gardenPlanTitle">What are you growing?</h3>
+    <p>Make a list of the plants you want in your garden. We’ll bring their next steps together for your town, from seed starting to fall planning.</p>
+    <div class="garden-add"><label for="gardenPick">Choose a plant<select id="gardenPick"><option value="">Choose a plant</option></select></label><button type="button" id="gardenAdd">Add to my garden</button></div>
+    <p id="gardenCount" aria-live="polite">Your garden is empty</p><div class="garden-plants" id="gardenPlan"></div>
+    <p class="garden-privacy">Your list stays in this browser. Dates are planning references, not frost forecasts; check your seed packet, soil and local forecast. Some plants still need more research, and we say so.</p>
+    <noscript><p>Enable JavaScript to build a list. You can still use the gardening guides below.</p></noscript>
+  </section>
   <div class="gk-answer" id="pnCard">
     <span class="gk-badge" id="pnBadge">This week</span>
     <h2 id="pnTitle">What to plant this week near Bay City.</h2>
@@ -921,6 +929,7 @@ a:hover { text-decoration: underline; }
 <script src="/assets/garden-tools/michigan-places.js"></script>
 <script src="/assets/garden-tools/plant-now.js"></script>
 <script src="/assets/garden-tools/garden-year.js"></script>
+<script src="/assets/garden-tools/my-garden.js"></script>
 <script src="/assets/garden-tools/season-story.js?v=20261101a"></script>
 <script>
 /* What to Plant Now in Michigan: the page. The engine (plant-now.js) decides; this only shows it. */
@@ -930,6 +939,7 @@ a:hover { text-decoration: underline; }
   var q=new URLSearchParams(location.search),today=E.detroitToday(q.get('date'));
   var place=null,KEY='plantNowPlace';
   var Year=window.GardenYear.mount({engine:E,kit:K,today:today});
+  var Garden=window.MyGarden.mount({engine:E,kit:K});
   var Story=window.GardenStory.mount({engine:E,kit:K,crop:q.get('crop'),onChange:function(){render()}});
   function load(){try{return localStorage.getItem(KEY)}catch(e){return null}}
   function save(v){try{localStorage.setItem(KEY,v)}catch(e){}}
@@ -949,7 +959,7 @@ a:hover { text-decoration: underline; }
   }
   function render(){
     if(!place)return;
-    var st=place.station,p=E.plan(st,today.day,cond()),fr=p.frost,week=p.week;Year.render(st);
+    var st=place.station,p=E.plan(st,today.day,cond()),fr=p.frost,week=p.week;Year.render(st);Garden.render(st,today.day,cond());
     var sl=document.querySelector('.pn-soil-link');if(sl)sl.href='/michigan-soil-temperature/?place='+encodeURIComponent(place.zip||place.label);
     el('pnWhere').textContent=(place.label===st.n?'':place.label+': ')+'nearest frost station '+st.n+(place.miles>=1?', about '+Math.round(place.miles)+' miles away':'')+'. Today in Michigan: '+K.fmtLong(today.day)+'.';
     var acts=week.filter(function(r){return ['START_INDOORS','HARDEN_OFF','TRANSPLANT','PLANT'].indexOf(r.code)>=0});

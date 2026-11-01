@@ -166,3 +166,13 @@ test('all-season notebook changes season and follows frost reference without inv
   buttons.find(b=>b.getAttribute('data-garden-season')==='fall').click();
   assert.match(p.text('gyHeading'), /next garden/);
 });
+
+test('my garden assembles selected plants and updates with location', () => {
+ const p=loadTool(f('michigan-gardening'), {today:'2026-03-20',search:'?place=Bay%20City'});
+ p.set('gardenPick','tomatoes');p.click('gardenAdd');
+ p.set('gardenPick','peas');p.click('gardenAdd');
+ assert.match(p.text('gardenPlan'),/Tomatoes/);assert.match(p.text('gardenPlan'),/Peas/);
+ assert.match(p.text('gardenCount'),/2 plants/);
+ const a=p.text('gardenPlan');p.set('pnPlace','49783');assert.notEqual(p.text('gardenPlan'),a);
+ p.set('gardenPick','tomatoes');p.click('gardenAdd');assert.match(p.text('gardenCount'),/2 plants/);
+});
