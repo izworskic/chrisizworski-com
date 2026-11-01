@@ -397,3 +397,34 @@ main>.porkies-journal{max-width:1450px;margin:auto;padding-top:clamp(45px,6vw,80
 .experience-locate-parking:hover{background:#e7efe6}
 .experience-entry-static{border-left:3px solid #966c41;background:#f5f2e5;padding:9px 12px;font-size:.85rem;line-height:1.6}
 @media(max-width:680px){.experience-entry{padding:12px}.experience-photo figcaption .experience-photo-scope{font-size:.69rem}.experience-locate-parking{width:100%}}
+
+/* Porkies persona improvements: a field-guide choice, not a cloned app shell. */
+.hero-quickstart{margin:17px 0 5px;padding:13px 0 14px;border-top:1px solid #c0cabe;border-bottom:1px solid #c0cabe}
+.hero-quickstart-label{font-size:.72rem;line-height:1.2;font-weight:850;letter-spacing:.12em;text-transform:uppercase;color:#556c60;margin:0 0 10px}
+.hero-quickstart-choices{display:flex;flex-wrap:wrap;gap:7px 15px}
+.hero-quickstart-choices a{display:inline-flex;align-items:center;gap:8px;color:#184d3d;font-weight:750;font-size:.8rem;line-height:1.4;min-height:41px;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px}
+.hero-quickstart-choices a span{color:#9b623b;font:italic 1.2rem Fraunces,Georgia,serif;text-decoration:none}
+.hero-quickstart-choices a:focus-visible,.plan-fork-choice:focus-visible,.plan-button:focus-visible{outline:3px solid #a7673b;outline-offset:3px}
+.hero-quickstart-hint{font-size:.75rem;line-height:1.5;color:#526d5d;margin:8px 0 0}
+.plan-vehicle-source,.plan-choice-static{font-size:.79rem;color:#485e50;line-height:1.65;margin:8px 0;max-width:100ch;grid-column:1/-1}
+.plan-choice-static{margin-top:0}
+.vehicle-check{background:#fff4df;border-left:4px solid #96633b;padding:13px 18px;margin:18px 0;color:#4b3b2b}
+.vehicle-check h4{margin-bottom:9px!important;color:#623c28!important}
+.vehicle-check li{font-size:.89rem;line-height:1.55}
+.plan-fork{background:#f7f5e9;border:1px solid #c6c6b3;border-left:4px solid #8b6141;border-radius:4px;padding:17px 18px;margin:19px 0}
+.result .plan-fork-title{font-size:1.2rem;letter-spacing:0;text-transform:none;color:#24463b;margin:3px 0 8px}
+.plan-fork-explainer{line-height:1.58;font-size:.9rem;color:#42584b;margin:6px 0 12px;max-width:80ch}
+.plan-fork-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.plan-fork-choice{background:#fffef7;color:#26513f;border:1px solid #96a99b;border-radius:5px;min-height:48px;font-weight:750;font-size:.87rem;line-height:1.43;text-align:left;padding:10px 13px;cursor:pointer}
+.plan-fork-choice[aria-pressed=true]{background:#234d40;color:#fff;border-color:#234d40;box-shadow:inset 3px 0 #d4a66e}
+.plan-fork-choice:hover:not([aria-pressed=true]){background:#e7eddd}
+@media(max-width:720px){
+ .hero-quickstart{margin-top:10px}
+ .hero-quickstart-choices{flex-direction:column;gap:0}
+ .hero-quickstart-choices a{font-size:.88rem;min-height:42px}
+ .hero-quickstart-hint{font-size:.76rem}
+ .plan-fork-actions{grid-template-columns:1fr}
+ .plan-fork{padding:14px}
+ .plan-vehicle-source,.plan-choice-static{font-size:.8rem}
+}
+@media(prefers-reduced-motion:reduce){.hero-quickstart *, .plan-fork *{scroll-behavior:auto!important;transition:none!important}}

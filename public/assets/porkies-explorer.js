@@ -26,6 +26,20 @@
     if (month === 11) return "prewinter";
     return "ordinary";
   }
+  // 2025 DNR scenic-area guidance distinguishes lower camper/trailer staging
+  // from upper scenic lots. No clearance, turn radius or available parking is certified.
+  function vehicleCautions(vehicle,stops,season){
+    if(vehicle!=="rv"&&vehicle!=="trailer")return [];
+    var names=(stops||[]).map(function(x){return String(x.name||"").toLowerCase();}).join(" ");
+    var notes=["RV, camper or trailer: turning room, parking capacity and the signed approach for your vehicle are NOT verified by this planner. Check Michigan DNR instructions before committing to a drive."];
+    if(/lake of the clouds/.test(names))notes.push("Lake of the Clouds: the DNR recommends leaving campers and trailers at the middle ski hill parking area off M-107 during summer and fall. This is a staging recommendation, NOT a verified RV route, space or modern entrance coordinate.");
+    if(/summit peak/.test(names))notes.push("Summit Peak: the DNR recommends leaving campers and trailers at the designated lot near the South Boundary Road turn-off before ascending the scenic-area entrance road. Its exact staging point and vehicle suitability are NOT independently mapped here.");
+    if(/presque isle/.test(names))notes.push("Presque Isle: the day-use entry, contact booth, County Road 519 work-zone reopening and suitable RV/trailer turns remain unverified; the DNR river-trail parking point #841 is not a confirmed large-vehicle arrival point.");
+    if(/winter sports/.test(names))notes.push("Winter Sports Complex: operating access and large-vehicle snow/parking clearance must be checked with the official winter-sports source, not inferred from the ski-trail GIS pin.");
+    if((stops||[]).some(function(x){return x.zone==="west";})&&(stops||[]).some(function(x){return x.zone==="east"||x.zone==="central";}))notes.push("An RV or trailer cross-park itinerary is not verified. Treat east and west as separate approaches; do not use South Boundary Road as an assumed through-route.");
+    if(season==="winter"||season==="reopening")notes.push("Seasonal M-107 and South Boundary restrictions still apply; no available winter parking or spring gate opening is claimed.");
+    return notes;
+  }
   function entryZone(arrival) { return arrival === "west" ? "west" : arrival === "east" ? "east" : "unknown"; }
   function recommend(input) {
     input = input || {};
@@ -33,14 +47,21 @@
     var arrival = ["west", "east", "inpark"].includes(input.arrival) ? input.arrival : "inpark";
     var ability = ["low", "moderate", "high"].includes(input.ability) ? input.ability : "moderate";
     var interest = ["views", "falls", "forest", "mix"].includes(input.interest) ? input.interest : "mix";
+    var vehicle = ["car","rv","trailer"].includes(input.vehicle) ? input.vehicle : "car";
+    var chosenPath = input.path==="desired" ? "desired" : "local";
     var season = seasonFor(input.date);
     var note = "No driving ETA, actual road opening, parking vacancy or same-day trail conditions have been verified. Consult DNR road and trail notices before leaving.";
     var output = { mode: season, time: hours, stops: [], excluded: [], warnings: [note], sources: [{ name: "Official park information", url: DNR }, { name: "Official park & trail map", url: MAP }] };
+    function finalize(){
+      output.vehicleWarnings=vehicleCautions(vehicle,output.stops,season);
+      if(output.vehicleWarnings.length)output.sources.push({name:"DNR 2025 scenic-area vehicle staging guidance",url:"https://www.michigan.gov/dnr/-/media/Project/Websites/dnr/Documents/Education/visitorcenters/PMWSP-paper-23/PMWSP-Visitor-2025.pdf"});
+      return output;
+    }
     if (season === "unknown") {
       output.title = "Choose a valid travel date";
       output.intro = "The mountains wear a different face in every season. Choose a real travel date so we can separate ordinary scenic-road visits from winter restrictions.";
       output.excluded.push("All specific route recommendations until a valid travel date is entered.");
-      return output;
+      return finalize();
     }
     if (season === "winter" || season === "reopening") {
       output.title = season === "winter" ? "Winter opens a different side of the Porkies" : "The forest is waking, but the scenic roads may still be closed";
@@ -58,7 +79,7 @@
         output.stops.push({ name: "Visitor Center Nature Trail area (eastern approach)", zone: "east", url: DNR, detail: "The eastern visitor-center area is a place to begin looking for spring forest walks, while the higher scenic roads await reopening. Confirm trail access, parking and visitor-center hours with the park." });
       }
       output.warnings.push("Do not use the closed sections of M-107 or South Boundary Road as a through-park vehicle shortcut. Check DNR/county notices and follow posted signs.");
-      return output;
+      return finalize();
     }
     if (season === "prewinter") output.warnings.push("November can bring ice and early snow to the high roads. Enjoy the quieter season, but confirm current park and county road notices before following a scenic route.");
     if (hours <= 4) {
@@ -70,8 +91,28 @@
       if (hours === 4 && primary === "clouds") output.stops.push(REFERENCES.visitor);
       output.title = hours === 2 ? "A little time can still hold a great view" : "Let one corner of the park be your day";
       output.intro = "The best short visit is often the one you do not rush. Stay close to the side of the park where you arrive, settle into a river walk or a high overlook, and leave the distant corners for a return trip. These suggestions are not measured driving-time routes.";
-      if (zone === "west" && interest === "views") output.excluded.push("Lake of the Clouds is in a different area: no verified cross-park driving time to justify squeezing it into this visit.");
-      if (zone === "east" && interest === "falls") output.excluded.push("Presque Isle falls require a separate west-side approach; no cross-park driving time has been verified.");
+      // A short visit should never silently replace the experience a visitor asked for.
+      // Offer two *different* paths, not an invented fast cross-park drive.
+      if ((zone==="west"&&interest==="views")||(zone==="east"&&interest==="falls")){
+        var desiredKey=interest==="views"?"clouds":"falls";
+        var localRef=REFERENCES[primary],wantedRef=REFERENCES[desiredKey];
+        output.tradeoff={
+          active:chosenPath,local:localRef,desired:wantedRef,
+          localId:primary==="falls"?"river":primary==="clouds"?"clouds":"summit",
+          desiredId:desiredKey==="falls"?"river":"clouds",
+          explanation:"Your arrival side and the "+(interest==="views"?"Lake of the Clouds view":"Presque Isle waterfalls")+" are in different park districts. No verified cross-park driving time, vehicle route or open gate is available. A two-hour visit cannot be guaranteed to reach the farther district.",
+          source:DNR
+        };
+        output.warnings.push("Your requested attraction is in a different park district. Neither driving route nor a two-hour total visit is verified; choose whether to explore nearby or separately plan the experience you wanted.");
+        if(chosenPath==="desired"){
+          output.stops=[wantedRef];
+          output.title=interest==="views"?"Make a separate trip for the mountain view":"Make a separate trip for the river falls";
+          output.intro="The "+wantedRef.name+" is what drew you here. Keep it as your destination, but make this a separate trip whose road access and actual driving time must be checked; it is NOT confirmed within your "+hours+"-hour window.";
+          output.excluded.push("Nearby alternative: "+localRef.name+". It matches the arrival side more closely, but is not the place you originally requested.");
+        }else{
+          output.excluded.push(wantedRef.name+" is on the other side of the park. Treat it as a separate trip, not a short-visit add-on.");
+        }
+      }
       output.excluded.push("Summit Peak plus both river and lake districts cannot be assumed feasible on this time budget.");
       if (ability === "low" && primary === "falls") output.warnings.push("Only the Nawadaha observation platform is specifically identified as accessible; the full waterfalls walking circuit is not.");
     } else if (hours === 8) {
@@ -107,10 +148,10 @@
     if (output.stops.some(function (s) { return s.zone === "west"; }) && output.stops.some(function (s) { return s.zone === "east"; })) {
       output.warnings.push("This plan crosses distinct western/eastern districts; validate driving route, vehicle-access rules and local-time arrangements before using it.");
     }
-    return output;
+    return finalize();
   }
-  if (typeof module !== "undefined" && module.exports) module.exports = { recommend: recommend, seasonFor: seasonFor };
-  if (root.document) root.PorkiesEngine = { recommend: recommend, seasonFor: seasonFor };
+  if (typeof module !== "undefined" && module.exports) module.exports = { recommend: recommend, seasonFor: seasonFor, vehicleCautions: vehicleCautions };
+  if (root.document) root.PorkiesEngine = { recommend: recommend, seasonFor: seasonFor, vehicleCautions: vehicleCautions };
   if (!root.document) return;
   var doc = root.document, form = doc.getElementById("planner"), results = doc.getElementById("results");
   if (!form || !results) return;
@@ -138,10 +179,41 @@
     section.appendChild(ul);
     return section;
   }
+  var pathChoice=paramsNotYet(); 
+  function paramsNotYet(){try{return new URLSearchParams(root.location.search).get("path")==="desired"?"desired":"local";}catch(e){return "local";}}
   function render() {
-    var input = { date: doc.getElementById("travel-date").value, arrival: doc.getElementById("arrival").value, hours: Number(doc.getElementById("hours").value), ability: doc.getElementById("ability").value, interest: doc.getElementById("interest").value };
+    var input = { date: doc.getElementById("travel-date").value, arrival: doc.getElementById("arrival").value, vehicle:doc.getElementById("vehicle").value, hours: Number(doc.getElementById("hours").value), ability: doc.getElementById("ability").value, interest: doc.getElementById("interest").value, path:pathChoice };
     var r = recommend(input);
     results.replaceChildren(elt("p", "eyebrow", "Your day in the Porkies · confirm access"), elt("h3", "", r.title), elt("p", "result-intro", r.intro));
+    if(r.vehicleWarnings&&r.vehicleWarnings.length){
+      results.appendChild(listBlock("Before driving a camper or trailer",r.vehicleWarnings,"vehicle-check"));
+    }
+    if(r.tradeoff){
+      var fork=elt("section","plan-fork");
+      fork.appendChild(elt("p","eyebrow","Your arrival and your chosen experience point in different directions"));
+      fork.appendChild(elt("h4","plan-fork-title","Choose what matters most for this visit"));
+      fork.appendChild(elt("p","plan-fork-explainer",r.tradeoff.explanation));
+      var pair=elt("div","plan-fork-actions");
+      [["local","Stay near my arrival · "+r.tradeoff.local.name],
+       ["desired","Keep my chosen destination · "+r.tradeoff.desired.name]].forEach(function(choice){
+        var button=elt("button","plan-fork-choice",choice[1]);
+        button.type="button";button.dataset.planPath=choice[0];
+        button.setAttribute("aria-pressed",r.tradeoff.active===choice[0]?"true":"false");
+        button.addEventListener("click",function(){
+          if(pathChoice===choice[0])return;
+          pathChoice=choice[0];render();
+          var current=results.querySelector('[data-plan-path="'+choice[0]+'"]');
+          current?.focus({preventScroll:true});
+          root.dispatchEvent(new CustomEvent("porkies:plan-picked",{detail:{
+            primaryId:pathChoice==="desired"?r.tradeoff.desiredId:r.tradeoff.localId,
+            alternativeId:pathChoice==="desired"?r.tradeoff.localId:r.tradeoff.desiredId,
+            path:pathChoice
+          }}));
+        });
+        pair.appendChild(button);
+      });
+      fork.appendChild(pair);results.appendChild(fork);
+    }
     if (r.stops.length) results.appendChild(listBlock("Places worth exploring", r.stops, "recommendations"));
     if (r.excluded.length) results.appendChild(listBlock("Save these for another visit", r.excluded, "excluded"));
     results.appendChild(listBlock("Before you put on your walking shoes", r.warnings, "warnings"));
@@ -150,7 +222,7 @@
     var share = elt("button", "copy", "Copy my park plan");
     share.type = "button";
     share.addEventListener("click", function () {
-      var text = "Porcupine Mountains preliminary plan\n" + r.title + "\n" + r.stops.map(function (s) { return "- " + s.name + ": " + s.detail; }).join("\n") + "\nCheck DNR access and the official park map: " + DNR + "\n" + MAP + "\nRoad and parking status are not checked live.";
+      var text = "Porcupine Mountains preliminary plan\n" + r.title + "\n" + (r.vehicleWarnings||[]).join("\n") + "\n" + (r.tradeoff?r.tradeoff.explanation+"\n":"") + r.stops.map(function (s) { return "- " + s.name + ": " + s.detail; }).join("\n") + "\nCheck DNR access and the official park map: " + DNR + "\n" + MAP + "\nRoad and parking status are not checked live.";
       if (root.navigator && root.navigator.clipboard && root.navigator.clipboard.writeText) {
         root.navigator.clipboard.writeText(text).then(function () { share.textContent = "Summary copied"; }).catch(function () { fallback(text); });
       } else fallback(text);
@@ -161,7 +233,8 @@
     actions.appendChild(share); actions.appendChild(map);
     results.appendChild(actions);
     var u = new URL(root.location.href);
-    ["arrival","hours","ability","interest"].forEach(function (id) { u.searchParams.set(id, String(input[id])); });
+    ["arrival","vehicle","hours","ability","interest"].forEach(function (id) { u.searchParams.set(id, String(input[id])); });
+    if(r.tradeoff)u.searchParams.set("path",r.tradeoff.active);else u.searchParams.delete("path");
     u.searchParams.set("date", input.date);
     root.history.replaceState(null, "", u.pathname + u.search + u.hash);
     if (typeof root.va === "function") root.va("event", { name: "Porkies field planner", data: { hours: String(input.hours), mode: r.mode, arrival: input.arrival, interest: input.interest } });
@@ -171,12 +244,24 @@
   var getPart = function (type) { var p = todayParts.find(function (x) { return x.type === type; }); return p ? p.value : ""; };
   var today = getPart("year") + "-" + getPart("month") + "-" + getPart("day");
   doc.getElementById("travel-date").value = params.get("date") && /^\d{4}-\d{2}-\d{2}$/.test(params.get("date")) ? params.get("date") : today;
-  ["arrival","hours","ability","interest"].forEach(function (id) {
+  ["arrival","vehicle","hours","ability","interest"].forEach(function (id) {
     var x = params.get(id), select = doc.getElementById(id);
     if (x && Array.from(select.options).some(function (opt) { return opt.value === x; })) select.value = x;
   });
+  // Native anchors remain functional with JavaScript disabled; with JS they
+  // preselect the visitor's intended experience and focus the date input.
+  doc.querySelectorAll(".hero-quickstart [data-porkies-start]").forEach(function(link){
+    link.addEventListener("click",function(){
+      var choice=link.getAttribute("data-porkies-start");
+      var control=doc.getElementById("interest");
+      if(!["views","falls","forest"].includes(choice)||!control)return;
+      control.value=choice;pathChoice="local";
+      root.setTimeout(function(){doc.getElementById("travel-date")?.focus({preventScroll:true});},0);
+    });
+  });
   form.addEventListener("submit", function (event) {
     event.preventDefault();
+    pathChoice="local";
     render();
     results.scrollIntoView({ behavior: root.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
   });

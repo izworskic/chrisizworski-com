@@ -39,8 +39,11 @@
    const md=iso.slice(5);
    if(md>="10-15"||md<"05-15")reasons.push("The visitor-center building is seasonally closed Oct 15–May 14. Outdoor trail access is a separate unknown.");
   }
-  if((vehicle==="rv"||vehicle==="trailer")){
-   if(["clouds","summit"].includes(id))reasons.push("DNR recommends a different lower staging area for campers/trailers; its exact navigation point is not verified here.");
+  if(vehicle==="rv"||vehicle==="trailer"){
+   const policy=root.PorkiesEngine?.vehicleCautions;
+   const fromPolicy=typeof policy==="function"?policy(vehicle,[{name:option.name,zone:option.zone}],mode):null;
+   if(fromPolicy?.length)reasons.push(...fromPolicy);
+   else if(["clouds","summit"].includes(id))reasons.push("DNR recommends a different lower staging area for campers/trailers; its exact navigation point is not verified here.");
    else reasons.push("RV/trailer turning and designated staging at this mapped lot have not been verified.");
   }
   if(zone!=="interior"&&arr!=="inpark"&&arr!==zone)reasons.push("This is a separate park district from the side where you arrive; cross-park driving time is not verified.");
@@ -208,6 +211,14 @@
     if(first)root.dispatchEvent(new CustomEvent("porkies:experience-compared",{detail:{ids:selected.map(o=>o.id)}}));
     first=true;
    }
+   // One shared visitor decision: a nearby-vs-requested planner selection
+   // updates the same source-backed DNR cards without inventing a route.
+   root.addEventListener("porkies:plan-picked",event=>{
+    const d=event?.detail||{};
+    if(!validId(d.primaryId)||!validId(d.alternativeId)||d.primaryId===d.alternativeId)return;
+    sels[0].value=d.primaryId;sels[1].value=d.alternativeId;
+    render();
+   });
    sels.forEach(s=>s.addEventListener("change",render));
    ["travel-date","arrival","vehicle","hours","ability"].forEach(id=>{
     const e=doc.getElementById(id);
