@@ -155,11 +155,17 @@ test('selecting a mission recalculates its own NPS access and dual-area NWS grid
     if (url.includes('park-alerts-cana.json')) return response([
       { ...ALERT, is_active: 1 }, { ...NPS_HOURS, is_active: 1 }
     ]);
-    if (url.includes('/points/28.6100')) return response(point('48,74'));
-    if (url.includes('/points/28.4046')) return response(point('55,65'));
-    if (url.endsWith('/48,74/forecast/hourly') || url.endsWith('/55,65/forecast/hourly')) return response(hourly);
+    if (url.includes('/points/28.6139')) return response(point('48,74'));
+    if (url.includes('/points/28.5664')) return response(point('47,73'));
+    if (url.includes('/points/28.6247')) return response(point('49,75'));
+    if (url.includes('/points/28.6783')) return response(point('50,76'));
+    if (url.includes('/points/28.4073')) return response(point('55,65'));
+    if (/\/gridpoints\/MLB\/(48,74|55,65|47,73|49,75|50,76)\/forecast\/hourly$/.test(url)) return response(hourly);
     if (url.endsWith('/gridpoints/MLB/48,74')) return response(grid(20));
     if (url.endsWith('/gridpoints/MLB/55,65')) return response(grid(70));
+    if (url.endsWith('/gridpoints/MLB/47,73')) return response(grid(35));
+    if (url.endsWith('/gridpoints/MLB/49,75')) return response(grid(26));
+    if (url.endsWith('/gridpoints/MLB/50,76')) return response(grid(45));
     throw new Error('Unmocked URL: ' + url);
   };
   try {
@@ -170,6 +176,9 @@ test('selecting a mission recalculates its own NPS access and dual-area NWS grid
     assert.equal(first.body.skyComparison.winner, 'titusville');
     assert.equal(first.body.viewingWeatherByArea[0].cloudCoverPercent, 20);
     assert.equal(first.body.viewingWeatherByArea[1].cloudCoverPercent, 70);
+    assert.equal(first.body.viewingWeatherByArea.length,5);
+    assert.equal(first.body.geographicViewing.points.find(p=>p.id==='playalinda-lot-8').weather.cloudCoverPercent,45);
+    assert.equal(first.body.geographicViewing.points.find(p=>p.id==='space-view').weather.cloudCoverPercent,20);
     assert.equal(first.body.arrivalGuidance.estimatedRoadRestrictionAt, new Date(target - 1800000).toISOString());
     assert.equal(first.body.viewpoints.find(v => v.id === 'playalinda-north').level, 'closed');
     const selected = mockRes();
