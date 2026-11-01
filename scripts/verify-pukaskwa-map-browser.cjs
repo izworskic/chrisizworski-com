@@ -109,7 +109,7 @@ const check=(ok,message)=>{if(!ok)throw Error(message)};
     check((await page.locator('#pk-map-choice-body').innerText()).includes('not a starting point'),view.name+' shoreline pin caveat');
     await page.locator('#pk-map-focus-trail').click();
     check((await page.locator('#pk-interactive-map').getAttribute('data-active-trail'))==='boardwalk-beach',view.name+' chooser-highlighted boardwalk route');
-    await page.locator('#pk-interactive-map .leaflet-popup').waitFor({state:'detached',timeout:2500});
+    await page.waitForFunction(() => document.querySelectorAll('#pk-interactive-map .leaflet-popup').length === 0, null, {timeout:4000});
     check(await page.locator('#pk-interactive-map .leaflet-popup').count()===0,view.name+' place popup no longer obscures requested trail line');
     await page.locator('#pk-show-trail-lines').uncheck();
     check(await page.locator('#pk-interactive-map path.pk-community-trail').count()===0,view.name+' community trail toggle off');
