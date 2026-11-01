@@ -2,6 +2,10 @@
 
 **Version:** 1.2.1 (V1.2 operational kit) · **Research reviewed:** 2026-10-31 · **Status:** source-only governance; no public route, production component, or deployment change.
 
+## Which version is “Experience OS v1.2”?
+
+**One canonical system:** `EXPERIENCE_OS_V1` at `design-systems/experience-os-v1/`. A request for “Experience OS v1.2” means the **latest released 1.2.x on `main`**, presently **1.2.1**. The older 1.2.0 and operating-kit development branches are historical, not parallel frameworks. The package identifier and folder retain `v1` for compatibility. See [VERSION_RESOLUTION.md](docs/VERSION_RESOLUTION.md), including how to pin an exact historical commit and how to apply this in separately owned tool repositories.
+
 ## Why this exists
 
 The site already has `FIELD_GUIDE_V1` (photo-led editorial quality) and `JOURNEY_ATLAS_V1` (trip-aware choices). They are reusable systems, but requiring the owner to recall and invoke them loses ideas between sessions. **EXPERIENCE_OS_V1 is the default design-research and experience-review process** for every new user-facing tool, major interaction feature, and substantial redesign. It makes useful research durable without forcing every tool into a common design or framework.
