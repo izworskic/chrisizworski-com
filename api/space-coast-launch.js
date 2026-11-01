@@ -177,6 +177,15 @@ module.exports = async function handler(req, res) {
     const viewpoints = VIEWPOINTS.map(v => viewAccess(v, next, nps.alerts, nps.verified, { now }));
     const geographicViewing = buildGeographicViewing(next, viewpoints, nps, now, forecasts);
     const arrivalGuidance = launchArrivalGuidance(next, nps.alerts, nps.verified, now);
+    geographicViewing.roadDecision = {
+      level:arrivalGuidance.level,label:arrivalGuidance.label,
+      detail:arrivalGuidance.detail,
+      estimatedRoadRestrictionAt:arrivalGuidance.estimatedRoadRestrictionAt,
+      calendarTimePrecision:next?.netPrecision || 'unknown',
+      source:arrivalGuidance.source,
+      evidenceCheckedAt:nps.checkedAt,
+      actualGateStatus:'not-verified'
+    };
     const skyComparisonDecision = skyComparison(forecasts);
     const schedule = next?.scheduleConfidence || {
       level: 'none', label: 'No future Florida launch in current feed',
