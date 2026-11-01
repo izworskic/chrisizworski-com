@@ -54,6 +54,7 @@
 <select id="bee-location" name="bee-location"><option value="bay-city" selected>Bay City</option><option value="detroit">Detroit</option><option value="grand-rapids">Grand Rapids</option><option value="lansing">Lansing</option><option value="traverse-city">Traverse City</option><option value="marquette">Marquette</option></select></label>
 <button type="button" id="bee-check" class="btn">Check the 7-day forecast</button>
 </div>
+<noscript><p class="note">This optional forecast requires JavaScript. Use the <a href="https://www.weather.gov/" target="_blank" rel="noopener">National Weather Service</a> forecast for your nearest city and check garden flowers yourself.</p></noscript>
 <div id="bee-weather-status" class="live-bee-status" role="status" aria-live="polite"><strong>Choose your city, then check the forecast.</strong><p>No forecast has been checked yet. This tool never guesses the current conditions.</p></div>
 <div id="bee-day-strip" class="bee-day-strip" aria-label="Forecast daytime high temperatures by date"></div>
 <p id="bee-issued" class="tiny muted">Current forecast evidence will include the NWS issue time and source link.</p>
@@ -288,7 +289,7 @@ function showForecast(){
   strip.appendChild(card)
  });
  var link=document.createElement('a');link.href=liveWeather.sourceUrl;link.target='_blank';link.rel='noopener noreferrer';link.textContent='View original NWS hourly forecast';
- issued.appendChild(document.createTextNode('Issued '+new Date(liveWeather.issuedAt).toLocaleString('en-US',{dateStyle:'medium',timeStyle:'short'})+' · Checked '+new Date(liveWeather.checkedAt).toLocaleString('en-US',{dateStyle:'medium',timeStyle:'short'})+' · '));
+ issued.appendChild(document.createTextNode('Issued '+(liveWeather.issuedAt&&Number.isFinite(+new Date(liveWeather.issuedAt))?new Date(liveWeather.issuedAt).toLocaleString('en-US',{dateStyle:'medium',timeStyle:'short'}):'time unavailable')+' · Checked '+(liveWeather.checkedAt&&Number.isFinite(+new Date(liveWeather.checkedAt))?new Date(liveWeather.checkedAt).toLocaleString('en-US',{dateStyle:'medium',timeStyle:'short'}):'time unavailable')+' · '));
  issued.appendChild(link);
  if(!liveWeather.fresh){setWeatherStatus('Forecast too old for a release assessment.','The source issuance is stale. Do not use cached warmth as evidence for a shipment.', 'warning');return;}
  if(liveWeather.status==='WARM_STRETCH'){
