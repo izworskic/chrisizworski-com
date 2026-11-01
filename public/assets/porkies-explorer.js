@@ -54,7 +54,7 @@
     var output = { mode: season, time: hours, stops: [], excluded: [], warnings: [note], sources: [{ name: "Official park information", url: DNR }, { name: "Official park & trail map", url: MAP }] };
     function finalize(){
       output.vehicleWarnings=vehicleCautions(vehicle,output.stops,season);
-      if(output.vehicleWarnings.length)output.sources.push({name:"DNR 2025 scenic-area vehicle staging guidance",url:"https://www.michigan.gov/dnr/-/media/Project/Websites/dnr/Documents/Education/visitorcenters/PMWSP-paper-23/PMWSP-Visitor-2025.pdf"});
+      if(output.vehicleWarnings.length)output.sources.push({name:"DNR park information — confirm vehicle staging",url:"https://www.michigan.gov/recsearch/parks/porkies"});
       return output;
     }
     if (season === "unknown") {
@@ -247,17 +247,6 @@
   ["arrival","vehicle","hours","ability","interest"].forEach(function (id) {
     var x = params.get(id), select = doc.getElementById(id);
     if (x && Array.from(select.options).some(function (opt) { return opt.value === x; })) select.value = x;
-  });
-  // Native anchors remain functional with JavaScript disabled; with JS they
-  // preselect the visitor's intended experience and focus the date input.
-  doc.querySelectorAll(".hero-quickstart [data-porkies-start]").forEach(function(link){
-    link.addEventListener("click",function(){
-      var choice=link.getAttribute("data-porkies-start");
-      var control=doc.getElementById("interest");
-      if(!["views","falls","forest"].includes(choice)||!control)return;
-      control.value=choice;pathChoice="local";
-      root.setTimeout(function(){doc.getElementById("travel-date")?.focus({preventScroll:true});},0);
-    });
   });
   form.addEventListener("submit", function (event) {
     event.preventDefault();

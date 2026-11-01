@@ -428,3 +428,18 @@ main>.porkies-journal{max-width:1450px;margin:auto;padding-top:clamp(45px,6vw,80
  .plan-vehicle-source,.plan-choice-static{font-size:.8rem}
 }
 @media(prefers-reduced-motion:reduce){.hero-quickstart *, .plan-fork *{scroll-behavior:auto!important;transition:none!important}}
+
+/* Place-first field map: native links remain useful when scripts fail. */
+.park-map-first{background:#e8eee5;scroll-margin-top:1rem}
+.park-place-choices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0 0 12px}
+.park-place-choices a{display:flex;flex-direction:column;min-height:66px;padding:10px 14px;border:1px solid #aabcb0;border-radius:6px;background:#fffdf7;color:#173e36;text-decoration:none;font-weight:700;line-height:1.25}
+.park-place-choices a span{font-size:.82rem;font-weight:400;margin-top:4px;color:#4d6258}
+.park-place-choices a[aria-current=true]{background:#19483c;color:#fff;border-color:#19483c}
+.park-place-choices a[aria-current=true] span{color:#eef6ed}
+.park-map-instruction{font-size:.95rem;color:#3b5148}
+.park-map-first .parking-card p{font-size:.92rem}
+.park-map-first .parking-provenance{font-size:.78rem}
+@media(max-width:680px){.park-place-choices{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+.optional-comparison>summary,.parking-source-detail>summary{cursor:pointer;color:#245549;font-weight:700;padding:10px 0}
+.optional-comparison>summary{font-size:1.1rem}

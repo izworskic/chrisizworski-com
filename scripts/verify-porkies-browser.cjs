@@ -25,7 +25,7 @@ async function main(){
  let browser;
  try{
   browser=await chromium.launch({executablePath:process.env.CHROME_PATH||'/usr/bin/google-chrome',headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});
-  for(const device of [{name:'mobile',width:390,height:844},{name:'tablet',width:768,height:1024},{name:'desktop',width:1366,height:900},{name:'narrow',width:340,height:750}]){
+  for(const device of [{name:'mobile',width:390,height:844},{name:'tablet',width:768,height:1024},{name:'desktop',width:1366,height:900},{name:'narrow',width:340,height:750},{name:'compact',width:360,height:780},{name:'wide',width:1440,height:900}]){
    const ctx=await browser.newContext({viewport:{width:device.width,height:device.height},deviceScaleFactor:1,ignoreHTTPSErrors:false});
    const page=await ctx.newPage(),errors=[];
    page.on('pageerror',e=>errors.push(e.message));
@@ -42,14 +42,14 @@ async function main(){
    need((await page.locator('h1').innerText()).includes('Porkies'),device.name+' missing identity');
    need(await page.locator('#planner select').count()===5,device.name+' expected travel, vehicle and walking inputs');
    // Quick-start is an actual first-screen choice, not a decorative jump.
-   need(await page.locator('.hero-quickstart [data-porkies-start]').count()===3,device.name+' three meaningful first-screen choices missing');
+   need(await page.locator('.hero-quickstart [data-map-place]').count()===3,device.name+' three meaningful first-screen choices missing');
    if(device.width<=390){
-     const first=await page.locator('.hero-quickstart [data-porkies-start="views"]').evaluate(x=>x.getBoundingClientRect().top);
+     const first=await page.locator('.hero-quickstart [data-map-place="lake"]').evaluate(x=>x.getBoundingClientRect().top);
      need(first<device.height-30,device.name+' first live planner choice is below the initial viewport ('+first+'px)');
    }
-   await page.locator('.hero-quickstart [data-porkies-start="falls"]').click();
-   await page.waitForFunction(()=>document.activeElement?.id==='travel-date',null,{timeout:4000});
-   need((await page.locator('#interest').inputValue())==='falls',device.name+' hero interest did not propagate to planner');
+   await page.waitForFunction(()=>!!document.querySelector('#parking-lake .parking-locate'),null,{timeout:15000});
+   await page.locator('.hero-quickstart [data-map-place="presque"]').click();
+   need(await page.locator('#parking-presque').isVisible(),device.name+' hero choice did not reveal the river outing');
    await page.locator('#interest').selectOption('mix');
 
    need(await page.locator('article.story').count()===3,device.name+' static destination stories missing');
@@ -60,6 +60,18 @@ async function main(){
    need((await page.locator('.crossing-inventory').innerText()).includes('No currently verified route'),device.name+' current bridge conditions incorrectly cleared');
    need((await page.locator('#crossings').innerText()).includes('No automated through-route'),device.name+' safety blocker not visible');
 
+   // The map-first selection must change both the visitor card and map and reverse cleanly.
+   await page.locator('.park-place-choices [data-map-place="lake"]').click();
+   need(await page.locator('#parking-lake').isVisible(),device.name+' lake selection missing');
+   need(!(await page.locator('#parking-presque').isVisible()),device.name+' unrelated card not filtered');
+   await page.locator('.park-place-choices [data-map-place="presque"]').click();
+   need(await page.locator('#parking-presque').isVisible(),device.name+' river selection missing');
+   need((await page.locator('.park-place-choices [data-map-place="presque"]').getAttribute('aria-current'))==='true',device.name+' current place not announced');
+   await page.locator('.park-place-choices [data-map-place="lake"]').click();
+   need(await page.locator('#parking-lake').isVisible(),device.name+' selection reversal failed');
+   await page.locator('#parking-all').click();
+   need(await page.locator('#parking-presque').isVisible(),device.name+' show all did not reset');
+   await page.locator('.optional-comparison > summary').click();
    need(await page.locator('#experience-choice-a option').count()===6,device.name+' six compared choices missing');
    await page.waitForFunction(()=>document.querySelector('#experience-compare')?.dataset.loaded==='yes',null,{timeout:15000});
    need((await page.locator('#experience-a h3').innerText())==='Lake of the Clouds overlook',device.name+' initial lake comparison missing');
@@ -393,6 +405,7 @@ async function main(){
   await fallbackPage.route('**/experience-entry-evidence.json',route=>route.fulfill({status:503,body:'Unavailable'}));
   await fallbackPage.goto(url,{waitUntil:'domcontentloaded'});
   await fallbackPage.waitForFunction(()=>document.querySelector('#experience-compare')?.dataset.loaded==='unavailable',null,{timeout:12000});
+  await fallbackPage.locator('.optional-comparison > summary').click();
   need(await fallbackPage.locator('#experience-choice-a').isDisabled(),'missing entry evidence did not disable unsupported comparison controls');
   need((await fallbackPage.locator('#experience-a').innerText()).includes('DNR parking asset #1409')===false,'static fallback overpromised unknown source');
   need((await fallbackPage.locator('#experience-a .experience-entry-static').innerText()).includes('asset #1409'),'static source-backed Lake overview vanished on source outage');
@@ -407,10 +420,11 @@ async function main(){
   need(await page.locator('.crossing-alternative-grid>div').count()===3,'no JS crossing-safe itinerary alternatives missing');
   need(await page.locator('#sources a').count()>=5,'no JS official sources missing');
   need(await page.locator('.parking-card').count()===6,'no JS six DNR parking source cards missing');
+  await page.locator('.optional-comparison > summary').click();
   need((await page.locator('#experience-a').innerText()).includes('100 yards'),'no JS lake-of-clouds walking proof missing');
   need((await page.locator('#experience-b').innerText()).includes('half a mile'),'no JS Summit Peak walking proof missing');
   need(await page.locator('#experience-choice-a option').count()===6,'no JS six available comparison choices missing');
-  need(await page.locator('.hero-quickstart a[href="#decision"]').count()===3,'no JS first-screen choosing links missing');
+  need(await page.locator('.hero-quickstart a[href^="#parking-"]').count()===3,'no JS first-screen choosing links missing');
   need((await page.locator('.plan-vehicle-source').innerText()).includes('DNR recommends different staging'),'no JS DNR camper staging reminder missing');
   need((await page.locator('.plan-choice-static').innerText()).includes('separate trip'),'no JS separate attraction tradeoff not described');
 
