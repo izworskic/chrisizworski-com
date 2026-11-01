@@ -3,6 +3,10 @@ on:
   pull_request:
     paths:
       - 'public/michigan-gardening/**'
+      - 'public/leafcutter-bees/**'
+      - 'api/leafcutter-release-weather.js'
+      - 'lib/leafcutter-release.cjs'
+      - 'scripts/verify-leafcutter-browser.cjs'
       - 'public/assets/garden-tools/**'
       - 'scripts/verify-garden-home-browser.cjs'
       - '.github/workflows/garden-home-experience.yml'
@@ -25,11 +29,15 @@ jobs:
           echo "CHROME_PATH=$(command -v google-chrome || command -v chromium-browser)" >> "$GITHUB_ENV"
       - name: Check selections and layout at phone, tablet and desktop widths
         run: node scripts/verify-garden-home-browser.cjs
+      - name: Check leafcutter release forecast and mobile states
+        run: node scripts/verify-leafcutter-browser.cjs
       - name: Save screenshots for inspection
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: garden-home-browser-evidence
-          path: artifacts/garden-home-browser/
+          path: |
+            artifacts/garden-home-browser/
+            artifacts/leafcutter-browser/
           if-no-files-found: warn
           retention-days: 14
