@@ -50,7 +50,7 @@
     'low-walk': 'Highlight published parking and on-site facilities, but the accessible route and exact spectator position still require operator confirmation.'
   };
   let current = null, profile = 'family', selected = null;
-  let map = null, padMarker = null, connectors = null, lotBoundaries = null, policyLine = null, boardwalkLayer = null, lotFilter = 'all';
+  let map = null, padMarker = null, connectors = null, lotBoundaries = null, policyLine = null, boardwalkLayer = null, activeClosureLayer = null, lotFilter = 'all';
   const boardwalkSegments = new Map();
   let markers = new Map(), leafletPromise = null, mapPromise = null, lastMissionId = null;
   const options = document.querySelectorAll('input[name="geo-intent"]');
@@ -162,6 +162,82 @@
     renderPlayalindaLots();
   }));
 
+  function officialDate(iso) {
+    const ts=Date.parse(iso||'');
+    return Number.isFinite(ts)?new Date(ts).toLocaleString('en-US',{
+      timeZone:'America/New_York',
+      month:'short',day:'numeric',year:'numeric',
+      hour:'numeric',minute:'2-digit',timeZoneName:'short'
+    }):'time not verified';
+  }
+  function renderLiveAccess() {
+    const container=$('geo-live-access');
+    const desk=$('geo-live-evidence');
+    const data=current?.liveAccess;
+    if(!container||!desk)return;
+    desk.replaceChildren();
+    if(!data || data.sourceStatus!=='fresh') {
+      container.dataset.state='unknown';
+      say('geo-live-checked',data?.sourceStatus==='stale'?
+        'NPS alert evidence is older than 90 minutes':'NPS alert feed could not be verified');
+      say('geo-live-verdict',
+        'Do not assume Playalinda parking, road or beach access. Please check the National Park Service directly.');
+      desk.appendChild(node('p','geo-live-item',
+        'The official park alerts are not sufficiently fresh for a current closure comparison. Historical boardwalk lines remain visible as references only.'));
+      return;
+    }
+    say('geo-live-checked','NPS alert feed checked '+officialDate(data.checkedAt));
+    const closed=data.summary?.closedParkingLots||[];
+    const road=Boolean(data.roadClosure);
+    const beach=Boolean(data.beachRestriction);
+    const any=closed.length||road||beach;
+    container.dataset.state=any?'warning':'unconfirmed';
+    say('geo-live-verdict',any?
+      'Current NPS closure notice: plan around restricted areas, not just launch timing.' :
+      'No matching numbered-lot or Eddy Creek closure in the checked NPS feed. This does NOT confirm access is open.');
+    if(closed.length){
+      const item=node('div','geo-live-item');
+      item.dataset.state='closed';
+      item.appendChild(node('strong','','Parking lots '+closed.join(', ')+' · NPS reports closed'));
+      item.appendChild(node('p','',
+        'The red outlines on the map use actual NPS lot footprints. These are named closed parking facilities, not surveyed emergency barricades.'));
+      desk.appendChild(item);
+    }
+    if(road){
+      const item=node('div','geo-live-item');
+      item.dataset.state='closed';
+      item.appendChild(node('strong','','Road north of Eddy Creek · NPS reports closed'));
+      item.appendChild(node('p','',
+        'The map traces an official road centerline from the historic Eddy Creek boardwalk reference northward. The exact roadblock location is NOT established.'));
+      desk.appendChild(item);
+    }
+    if(beach){
+      const item=node('div','geo-live-item');
+      item.dataset.state='closed';
+      item.appendChild(node('strong','','Beach north of Eddy Creek boardwalk · NPS reports closed'));
+      item.appendChild(node('p','',
+        'The named boardwalk is an official GIS landmark, not a precise beach exclusion polygon. Do not walk into closed beach areas.'));
+      desk.appendChild(item);
+    }
+    if(!any)desk.appendChild(node('p','geo-live-item',
+      'No explicit matching parking, road or shoreline closure was returned during this check. Capacity limits, storm damage, NASA restrictions and additional posted closures remain possible.'));
+    const refs=node('div','geo-live-links');
+    const seen=new Set();
+    for(const n of data.evidenceNotices||[]) {
+      const url=isOfficialSource(n.sourceUrl)?n.sourceUrl:data.conditionsUrl;
+      if(!url||seen.has(url))continue;
+      seen.add(url);
+      refs.appendChild(link(url,'Official NPS notice: '+n.title,'geo-link'));
+    }
+    if(!seen.size&&isOfficialSource(data.conditionsUrl))
+      refs.appendChild(link(data.conditionsUrl,'NPS current conditions','geo-link'));
+    desk.appendChild(refs);
+    const confidence=node('p','geo-live-confidence',
+      'NPS check '+officialDate(data.checkedAt)+
+      '. Mapped infrastructure was last edited in 2025. No boardwalk physical inspection, continuous pedestrian access or NASA mission-specific land exclusion polygon is verified.');
+    desk.appendChild(confidence);
+  }
+
   function renderWalkDetails() {
     const target=$('geo-boardwalk-detail');
     if(!target)return;
@@ -196,6 +272,16 @@
       el.appendChild(copy);
       stages.appendChild(el);
     };
+    const topology=boardwalk?.spatialConnectionAudit;
+    if(topology) {
+      const audit=node('p','geo-topology-audit',
+        topology.endpointFallsWithinMappedLot ?
+          'NPS GIS topology: a mapped boardwalk endpoint falls inside the matching parking footprint. This does not certify an open or accessible connection.' :
+          'NPS GIS topology: a mapped boardwalk endpoint is approximately '+
+          Math.round(topology.nearestLotFootprintBoundaryMeters*3.28084)+
+          ' ft from the parking footprint edge. That gap is NOT a mapped walkway or safe walking distance.');
+      target.appendChild(audit);
+    }
     stage('01','Parking footprint',lot.level==='closed'?'warning':'unverified',
       lot.level==='closed'?'NPS closure reported for this parking area':
         'Official location mapped · current entry not confirmed',
@@ -267,7 +353,18 @@
         '~'+p.geometry.miles.toFixed(1)+' mi to assigned pad · '+p.geometry.bearingDegrees+
         '° '+p.geometry.bearingCardinal+' (ground only)'));
       if(p.level==='closed')card.appendChild(node('p','geo-lot-alert',
+        p.activeNpsClosure ?
+        'NPS current closure identifies this lot. Last checked '+
+          officialDate(p.activeNpsClosure.notice?.checkedAt)+'.':
         'Current checked NPS source reports a closure. Do not travel to this lot without confirmation.'));
+      if(p.boardwalk?.spatialConnectionAudit){
+        const topology=p.boardwalk.spatialConnectionAudit;
+        card.appendChild(node('p','geo-lot-topology',
+          topology.endpointFallsWithinMappedLot ?
+            'Historic NPS boardwalk endpoint intersects the parking footprint. Route condition not inspected.' :
+            'Historic mapped endpoint ~'+Math.round(topology.nearestLotFootprintBoundaryMeters*3.28084)+
+            ' ft from the parking edge. No legal walking connector is confirmed.'));
+      }
       if(p.boardwalk){
         const b=node('p','geo-lot-boardwalk',
           'NPS boardwalk #'+p.number+' mapped · ~'+Math.round(p.boardwalk.segmentMeters*3.28084)+
@@ -405,6 +502,7 @@
       policy.dataset.level=road.level||'unknown';
     }
     renderPlayalindaLots();
+    renderLiveAccess();
     if (!selected || !geo.points.some(p=>p.id===selected)) selected = sorted.find(p=>p.category==='public-viewpoint')?.id || sorted[0]?.id;
     focusPoint(selected, false);
     void drawMap();
@@ -489,6 +587,15 @@
       mapPromise=null; map=null;
     }
   }
+  const activeClosureToggle=$('geo-current-closure-toggle');
+  function updateActiveClosureDisplay(){
+    if(!map||!activeClosureLayer)return;
+    if(activeClosureToggle?.checked){
+      if(!map.hasLayer(activeClosureLayer))activeClosureLayer.addTo(map);
+    }else if(map.hasLayer(activeClosureLayer))map.removeLayer(activeClosureLayer);
+  }
+  if(activeClosureToggle)
+    activeClosureToggle.addEventListener('change',updateActiveClosureDisplay);
   const boardwalkToggle=$('geo-boardwalk-toggle');
   function updateBoardwalkDisplay() {
     if(!map || !boardwalkLayer)return;
@@ -517,6 +624,7 @@
     if (boardwalkLayer) {map.removeLayer(boardwalkLayer);boardwalkLayer=null;}
     boardwalkSegments.clear();
     if (policyLine) {map.removeLayer(policyLine);policyLine=null;}
+    if (activeClosureLayer) {map.removeLayer(activeClosureLayer);activeClosureLayer=null;}
     const points=(current.points||[]).filter(geoPointValid);
     const bounds=[];
     if (geoPointValid(current.pad)) {
@@ -625,6 +733,66 @@
       );
       updateRoadDisplay();
     }
+    // Only source-fresh official NPS alert records create a restriction
+    // overlay. The polygons are the actual named parking facilities, while
+    // Eddy Creek & road lines are historical LANDMARK REFERENCES, NOT current
+    // barricades, beach exclusion polygons or turn-by-turn route geometry.
+    activeClosureLayer=L.layerGroup();
+    const active=current.liveAccess;
+    if(active?.sourceStatus==='fresh'){
+      for(const feature of active.features?.features||[]) {
+        const type=feature?.geometry?.type;
+        const category=feature?.properties?.category;
+        const raw=feature?.geometry?.coordinates;
+        let layer=null;
+        if(type==='Polygon' && category==='official-alert-on-mapped-parking-footprint') {
+          const paths=Array.isArray(raw)?raw.map(ring=>
+            Array.isArray(ring)?ring.filter(c=>Array.isArray(c)&&c.length===2&&
+              geoPointValid({lon:c[0],lat:c[1]})).map(c=>[c[1],c[0]]):[])
+            .filter(ring=>ring.length>=3):[];
+          if(paths.length)layer=L.polygon(paths,{
+            color:'#ab3334',weight:4,fillColor:'#cf5948',
+            fillOpacity:.27,opacity:.97,interactive:true
+          });
+        }else if(type==='LineString' &&
+            category==='interpreted-nps-road-closure-reference') {
+          if(Array.isArray(raw)&&raw.length>=2&&raw.every(c=>
+            Array.isArray(c)&&c.length===2&&geoPointValid({lon:c[0],lat:c[1]}))){
+            layer=L.polyline(raw.map(c=>[c[1],c[0]]),{
+              color:'#c43937',weight:6,dashArray:'9 5',opacity:.91,interactive:true
+            });
+          }
+        }else if(type==='MultiLineString' &&
+            category==='historic-nps-named-beach-closure-reference'){
+          const paths=Array.isArray(raw)?raw.map(path=>
+            Array.isArray(path)?path.filter(c=>Array.isArray(c)&&c.length===2&&
+              geoPointValid({lon:c[0],lat:c[1]})).map(c=>[c[1],c[0]]):[])
+            .filter(path=>path.length>=2):[];
+          if(paths.length)layer=L.polyline(paths,{
+            color:'#a44b7f',weight:7,dashArray:'3 6',opacity:.95,interactive:true
+          });
+        }
+        if(!layer)continue;
+        const pop=node('div','geo-popup');
+        pop.appendChild(node('strong','',
+          category==='official-alert-on-mapped-parking-footprint'?
+            'NPS current notice · lot '+String(feature.properties.lotNumber) :
+          category==='interpreted-nps-road-closure-reference'?
+            'NPS closure notice · road north of Eddy Creek' :
+            'NPS notice · beach north of Eddy Creek boardwalk'));
+        pop.appendChild(node('p','',
+          category==='official-alert-on-mapped-parking-footprint'?
+            'The named parking lot is under an active NPS reported closure. Map shape is the verified NPS lot footprint, NOT the barricade line.' :
+          category==='interpreted-nps-road-closure-reference'?
+            'This is a historic NPS road centerline north of the named Eddy Creek reference, not a verified barricade position or road navigation route.' :
+            'Historic Eddy Creek boardwalk line identifies a named reference in the current NPS beach closure. NO beach exclusion polygon or safe path is implied.'));
+        if(isOfficialSource(feature.properties?.source))
+          pop.appendChild(link(feature.properties.source,'Check official NPS conditions','geo-link'));
+        layer.bindPopup(pop);
+        layer.addTo(activeClosureLayer);
+      }
+    }
+    updateActiveClosureDisplay();
     if(bounds.length)map.fitBounds(bounds,{padding:[28,28],maxZoom:12});
     const chosen=points.find(p=>p.id===selected);
     if(chosen)showOnMap(chosen,false);
@@ -635,7 +803,11 @@
       ' public park references, '+
       points.filter(p=>p.category==='beach-parking').length+
       ' NPS parking footprints, '+boardwalkSegments.size+
-      ' historically mapped boardwalks and 2 official entrances. No inferred live walkability or closures.');
+      ' historically mapped boardwalks and 2 official entrances. '+
+      ((active?.sourceStatus==='fresh'&&activeClosureLayer.getLayers().length)?
+      'NPS active notice references: '+activeClosureLayer.getLayers().length+
+        ' mapped land features; exact barricades and beach polygons unknown.' :
+      'No source-verified new closure boundaries; walkability unverified.'));
   }
   updateExplanation();
   document.addEventListener('space-coast:launch-loaded',event=>{

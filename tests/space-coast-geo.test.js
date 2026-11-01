@@ -153,7 +153,7 @@ test('visitor page wires matching selected mission to safe CARTO map, but never 
   assert.match(html,/id="launch-geo-map"/);
   assert.match(html,/id="geo-choice-list"/);
   assert.match(html,/name="geo-intent" value="photo"/);
-  assert.match(html,/geo-map\.js\?v=20261101-geo3-hotfix1/);
+  assert.match(html,/geo-map\.js\?v=20261101-access1/);
   assert.match(html,/id="geo-lot-grid"/);
   assert.match(html,/id="geo-road-toggle"/);
   assert.match(app,/space-coast:launch-loaded/);

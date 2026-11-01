@@ -1,0 +1,291 @@
+{
+  "version": 1,
+  "sourceCheckedAt": "2026-11-01",
+  "coordinateSystem": "WGS84",
+  "roadSource": "https://mapservices.nps.gov/arcgis/rest/services/NationalDatasets/NPS_Public_Roads/FeatureServer/0",
+  "boundarySource": "https://mapservices.nps.gov/arcgis/rest/services/NationalDatasets/NPS_Public_Trails_Geographic/FeatureServer/0",
+  "officialAccessRules": "https://www.nps.gov/cana/planyourvisit/rocket-launch-viewing.htm",
+  "official2026Compendium": "https://www.nps.gov/cana/learn/management/superintendent-s-compendium.htm",
+  "npsAlertFeed": "https://www.nps.gov/cana/park-alerts-cana.json",
+  "geographicMeaning": "historical-nps-centerline-proximity-to-named-eddy-creek-boardwalk-not-current-barricade-line",
+  "road": {
+    "facilityId": "60814",
+    "objectId": 19954,
+    "sourceEditedAt": "2025-10-09T19:32:24.000Z",
+    "geometry": {
+      "type": "LineString",
+      "coordinates": [
+        [
+          -80.6296739,
+          28.6512239
+        ],
+        [
+          -80.629647,
+          28.6513672
+        ],
+        [
+          -80.6297324,
+          28.6516047
+        ],
+        [
+          -80.6303073,
+          28.6524462
+        ],
+        [
+          -80.6315893,
+          28.6539432
+        ],
+        [
+          -80.6336543,
+          28.6568982
+        ],
+        [
+          -80.6344903,
+          28.6579702
+        ],
+        [
+          -80.6366933,
+          28.6610152
+        ],
+        [
+          -80.6370943,
+          28.6616442
+        ],
+        [
+          -80.6378743,
+          28.6630802
+        ],
+        [
+          -80.6385603,
+          28.6640632
+        ],
+        [
+          -80.6393673,
+          28.6651522
+        ],
+        [
+          -80.6410113,
+          28.6669562
+        ],
+        [
+          -80.6449803,
+          28.6724382
+        ],
+        [
+          -80.6453793,
+          28.6730682
+        ],
+        [
+          -80.6464243,
+          28.6750332
+        ],
+        [
+          -80.6470373,
+          28.6758892
+        ],
+        [
+          -80.6482773,
+          28.6772332
+        ],
+        [
+          -80.6488324,
+          28.6779492
+        ],
+        [
+          -80.6496934,
+          28.6791762
+        ],
+        [
+          -80.6502973,
+          28.6803642
+        ],
+        [
+          -80.6507003,
+          28.6809942
+        ],
+        [
+          -80.6512733,
+          28.6817002
+        ],
+        [
+          -80.6531163,
+          28.6837362
+        ],
+        [
+          -80.6545073,
+          28.6849602
+        ],
+        [
+          -80.6550523,
+          28.6854992
+        ],
+        [
+          -80.6574223,
+          28.6884502
+        ],
+        [
+          -80.6581343,
+          28.6894192
+        ],
+        [
+          -80.6589063,
+          28.6906932
+        ],
+        [
+          -80.6594193,
+          28.6914352
+        ],
+        [
+          -80.6676383,
+          28.7025952
+        ],
+        [
+          -80.667702,
+          28.7026443
+        ],
+        [
+          -80.6677996,
+          28.7026479
+        ],
+        [
+          -80.6678565,
+          28.7025659
+        ],
+        [
+          -80.6678443,
+          28.7024589
+        ],
+        [
+          -80.6676776,
+          28.7023912
+        ],
+        [
+          -80.66749,
+          28.7023938
+        ]
+      ]
+    },
+    "northOfEddyReference": {
+      "type": "LineString",
+      "coordinates": [
+        [
+          -80.6470509,
+          28.6759039
+        ],
+        [
+          -80.6482773,
+          28.6772332
+        ],
+        [
+          -80.6488324,
+          28.6779492
+        ],
+        [
+          -80.6496934,
+          28.6791762
+        ],
+        [
+          -80.6502973,
+          28.6803642
+        ],
+        [
+          -80.6507003,
+          28.6809942
+        ],
+        [
+          -80.6512733,
+          28.6817002
+        ],
+        [
+          -80.6531163,
+          28.6837362
+        ],
+        [
+          -80.6545073,
+          28.6849602
+        ],
+        [
+          -80.6550523,
+          28.6854992
+        ],
+        [
+          -80.6574223,
+          28.6884502
+        ],
+        [
+          -80.6581343,
+          28.6894192
+        ],
+        [
+          -80.6589063,
+          28.6906932
+        ],
+        [
+          -80.6594193,
+          28.6914352
+        ],
+        [
+          -80.6676383,
+          28.7025952
+        ],
+        [
+          -80.667702,
+          28.7026443
+        ],
+        [
+          -80.6677996,
+          28.7026479
+        ],
+        [
+          -80.6678565,
+          28.7025659
+        ],
+        [
+          -80.6678443,
+          28.7024589
+        ],
+        [
+          -80.6676776,
+          28.7023912
+        ],
+        [
+          -80.66749,
+          28.7023938
+        ]
+      ]
+    }
+  },
+  "eddyCreekBoardwalk": {
+    "facilityId": "60932",
+    "objectId": 25516,
+    "name": "PD Boardwalk Eddy Creek/Pavillion",
+    "sourceEditedAt": "2025-08-12T16:17:12.000Z",
+    "geometry": {
+      "type": "MultiLineString",
+      "coordinates": [
+        [
+          [
+            -80.6470304,
+            28.6759741
+          ],
+          [
+            -80.646517,
+            28.6762274
+          ]
+        ]
+      ]
+    }
+  },
+  "spatialAudit": {
+    "closestNpsRoadMeters": 35,
+    "roadVertexCount": 37,
+    "northRoadVertexCount": 21,
+    "accuracyNotice": "Eddy Creek boardwalk is a named physical reference in NPS alerts; the approximate north-of-Eddy road centerline begins at the nearest road position to its GIS center. The exact current traffic barricade location is NOT verified."
+  },
+  "confidence": [
+    "Road and boardwalk alignments: historical NPS national GIS.",
+    "Whether a closure is active: current NPS park-alert JSON checked within existing 15-minute launch API cache.",
+    "Scope: only exact NPS alert terms matching Eddy Creek, road north, and named lots.",
+    "No live vehicular routing, permit, accessible trail path or NASA mission-specific hazard polygons."
+  ]
+}
