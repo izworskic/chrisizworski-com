@@ -99,7 +99,7 @@ export const OFFICIAL_MAP_LABELS = Object.freeze({
  'beach':Object.freeze({x:80,y:205,caption:'Beach Trail name on park campground map'}),
  'bimose-kinoomagewnan':Object.freeze({x:494,y:252,caption:'Bimose name on park campground map'}),
  'hattie-cove-fire-walk':Object.freeze({x:925,y:371,caption:'Fire Walk / Coastal Hiking Trail name on park campground map'}),
- 'combination-hike':Object.freeze({x:516,y:730,caption:'Start with Southern Headland name; combination circuit follows park-described sequence'}),
+ 'combination-hike':Object.freeze({x:516,y:730,caption:'Start with Southern Headland name on park campground map; combination circuit follows park-described sequence'}),
 });
 const closeUpNotes=Object.freeze({
  'southern-headland':'At the Visitor Centre day-use area on the southeast edge of the campground drawing, identify the dotted walking path toward the Southern Headland. The labelled name is near the bottom of the map, not a surveyed trailhead pin.',
