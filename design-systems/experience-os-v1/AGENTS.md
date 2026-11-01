@@ -18,6 +18,8 @@ For every new visitor-facing tool or substantial redesign, compare the proposed 
 
 When a task in an adopting repository creates a visitor-facing tool, materially changes user interaction, or redesigns an existing tool, **consult EXPERIENCE_OS_V1 without requiring the owner to name it**. For a tiny defect fix, use only directly relevant guardrails. Apply the owning repository's `AGENTS.md`, release gates, and canonical ownership first.
 
+**Purposeful motion rule (v1.2):** Read [PURPOSEFUL_MOTION.md](docs/PURPOSEFUL_MOTION.md) for any animation, time-progression or new connected interaction. Motion is optional, never standardized across tools, must be tied to verified data and disabled as animation for reduced-motion users, and must preserve native manual controls and no-JS fallbacks. Test rapid state changes and A→B→A, without inventing a continuous forecast from discrete samples.
+
 ## Mandatory work order
 
 1. **Locate:** current production URL, owning repo, generated versus source files, visitor journeys, current baseline, sources, and SEO/ads contracts. Read existing `FIELD_GUIDE_V1` / `JOURNEY_ATLAS_V1` where relevant.
