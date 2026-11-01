@@ -118,7 +118,7 @@ const tools = [
       const p = load({ today: '2026-03-20' }); const E = p.ctx.PlantNow, F = p.ctx.MIFrost, K = p.ctx.GardenKit;
       const st = F.station('bay-city'), open = K.parse(st.p25), c = id => E.CROPS.find(x => x.id === id);
       const flips = ['WAIT', 'START_INDOORS', 'HARDEN_OFF', 'TRANSPLANT'].join() === [open - 60, open - 50, open - 3, open].map(d => E.cropStatus(c('tomatoes'), st, d, {}).code).join();
-      const nr = ['cilantro'].every(id => { const r = E.cropStatus(c(id), st, open, {}); return r.code === 'NOT_REPORTED' && !r.windows.length; });
+      const nr = ['zinnias'].every(id => { const r = E.cropStatus(c(id), st, open, {}); return r.code === 'NOT_REPORTED' && !r.windows.length; });
       const noFall = E.frostOf(F.station('adrian')).fall === null;
       const garlic = E.cropStatus(c('garlic'), st, K.parse('Nov 1'), {});
       const fall = E.cropStatus(c('kale'), st, K.parse('Aug 1'), {});

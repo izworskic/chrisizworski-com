@@ -41,7 +41,7 @@ test('a test date flips tomatoes from START INDOORS to TRANSPLANT on schedule', 
 
 // (c) No source, no date.
 test('crops and stations without a Michigan source say NOT REPORTED, never a guessed date', () => {
-  for (const c of ['cilantro']) {
+  for (const c of ['zinnias']) {
     const r = status(c, 'bay-city', '2026-05-15');
     assert.equal(r.code, 'NOT_REPORTED', c);
     assert.equal(r.windows.length, 0, c);
@@ -135,4 +135,25 @@ test('basil guidance keeps frost risk conditional and turnips use the MSU soil t
  assert.match(status('basil','bay-city','2026-05-15').detail,/check the forecast/i);
  assert.equal(status('turnips','bay-city','2026-04-15',{soilF:39}).code,'WAIT_SOIL');
  assert.equal(status('turnips','bay-city','2026-04-15',{soilF:40}).code,'PLANT');
+});
+
+
+test('new crop guidance stays source-specific and seasonal', () => {
+ for (const c of ['zucchini','winter-squash','watermelon']) {
+  assert.equal(status(c,'bay-city','2026-05-01').code,'WAIT');
+  assert.equal(status(c,'bay-city','2026-05-15',{soilF:55}).code,'WAIT_SOIL');
+ }
+ assert.match(status('cilantro','bay-city','2026-11-01').detail,/early spring or fall/);
+ assert.match(status('dill','bay-city','2026-04-15').detail,/last expected spring frost/);
+ assert.match(status('sweet-corn','bay-city','2026-06-01').detail,/variety/);
+});
+
+test('garden timeline carries real calendar years and leap-year arithmetic', () => {
+ const st=F.station('bay-city');
+ const plan=E.gardenPlan(st,['tomatoes','zucchini'],{dateISO:'2027-11-01'});
+ const indoor=plan.timeline.find(x=>x.cropId==='tomatoes'&&x.kind==='indoor');
+ assert.equal(indoor.fromISO,'2028-03-14');
+ assert.equal(indoor.toISO,'2028-03-28');
+ assert.equal(plan.timeline.find(x=>x.cropId==='zucchini').fromISO,'2028-05-09');
+ assert.equal(plan.timeline[0].source,'indoor');
 });

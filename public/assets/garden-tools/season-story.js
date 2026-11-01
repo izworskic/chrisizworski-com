@@ -31,6 +31,9 @@
     }
     function stagesFor(r, frost, st) {
       var c = r.crop, w = r.windows;
+      if (c.kind === 'cilantro' || c.kind === 'dill' || c.kind === 'corn') {
+        return [item('plan','Make a little room','Before planting',r.detail),item('grow','Keep an eye on the garden','Through the season','Check the seed packet, your soil and the forecast. Local conditions and the variety you choose can change the timing.')];
+      }
       if (c.kind === 'basil') {
         return [item('plan','Make room for basil','Spring','Basil is tender. Choose a sunny, well-drained place and use your seed packet to plan the variety you want.'),item('plant','Wait for settled warmth','After frost danger has passed','MSU says basil can be direct-seeded or transplanted once frost danger is over. Historical dates do not guarantee that a cold night is finished; check the forecast.'),item('enjoy','Pick for the kitchen','During growth','Harvest depends on growth and weather, not a fixed date. Check your plants and follow your variety instructions.')];
       }
@@ -53,7 +56,7 @@
       if (c.kind === 'warmSow') {
         return [
           item('frost', 'Watch the frost odds', st.p50 + ' to ' + st.p25, 'At ' + st.p50 + ', about half of springs still record a freeze on or after that date. By ' + st.p25 + ', the odds have fallen to one spring in four. This tool uses the latter as its cautious reference, not as a promise of frost-free weather.'),
-          item('soil', 'Feel the spring soil', 'Above 60°F', 'Even after the spring frost reference, MSU advises that warm-season seeds germinate poorly unless the soil at planting depth exceeds 60°F. An air temperature or a nearby station’s 4-inch reading is not a measurement in your own seed bed.'),
+          item('soil', 'Feel the spring soil', 'Above 60°F', 'Even after the spring frost reference, Warm-season seeds germinate poorly in cool soil. This tool uses above 60°F as a conservative check, not an ideal temperature for every crop; your variety may need warmer soil. An air temperature or a nearby station’s 4-inch reading is not a measurement in your own seed bed.'),
           item('sow', 'Sow in the bed', 'From ' + K.fmt(w[0].from) + ', if soil is warm', 'The date is only the frost side of the decision. Sow when that date has arrived AND your bed is warm enough. MSU does not provide a closing sow date in this rule; the chart’s July 31 cutoff is not a planting deadline.')
         ];
       }
@@ -94,7 +97,7 @@
       if (!stage && r.code === 'PLAN_FALL') stage = 'fall';
       if (!stage || !steps.some(function (x) { return x.id === stage; })) stage = suggestedStep(r, p, steps);
       var active = steps.filter(function (x) { return x.id === stage; })[0];
-      var label = r.crop.kind === 'basil' ? 'A tender herb for warm days' : r.crop.kind === 'potato' ? 'From seed potato to harvest' : r.crop.kind === 'coolGuide' ? 'A place in the cool-season garden' : r.crop.kind === 'garlic' ? 'A fall planting for next summer' : r.crop.kind === 'transplant' ? 'From seed tray to garden bed' :
+      var label = ['cilantro','dill','corn'].indexOf(r.crop.kind) >= 0 ? 'Make a little room in the garden' : r.crop.kind === 'basil' ? 'A tender herb for warm days' : r.crop.kind === 'potato' ? 'From seed potato to harvest' : r.crop.kind === 'coolGuide' ? 'A place in the cool-season garden' : r.crop.kind === 'garlic' ? 'A fall planting for next summer' : r.crop.kind === 'transplant' ? 'From seed tray to garden bed' :
         r.crop.kind === 'warmSow' ? 'Two gates before the first seed' :
         r.crop.kind === 'hardy' ? 'Let the ground make the call' :
         r.crop.kind === 'soil40' ? 'A thermometer, not a calendar' : 'What the Michigan sources do not say';

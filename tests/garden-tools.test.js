@@ -130,6 +130,8 @@ test('Michigan Growing Season Explorer: crop and soil decisions tell the same st
   assert.match(p.text('pnSeasonStatus'), /hard freeze/);
   assert.equal(p.$('pnSeasonMissing').hidden, true);
   p.set('pnCrop', 'cilantro');
+  assert.match(p.text('pnSeasonStatus'), /early spring or fall/);
+  p.set('pnCrop', 'zinnias');
   assert.match(p.text('pnSeasonStatus'), /Not reported/);
   assert.equal(p.$('pnSeasonMissing').hidden, false);
 
@@ -182,4 +184,15 @@ test('my garden packet values use the shared fall planner', () => {
  p.set('gardenPick','lettuce');p.set('gardenDays','48','input');p.click('gardenAdd');
  assert.match(p.text('gardenPlan'),/packet 48 days plus 14-day buffer/);
  p.set('pnPlace','Adrian');assert.match(p.text('gardenPlan'),/No sourced fall frost date/);
+});
+
+test('garden packet days can be changed and cleared without removing the plant', () => {
+ const p=loadTool(f('michigan-gardening'),{today:'2026-04-15',search:'?place=Bay%20City'});
+ p.set('gardenPick','lettuce');p.set('gardenDays','48','input');p.click('gardenAdd');
+ const card=p.$('gardenPlan').querySelector('.garden-plant');
+ const input=card.querySelector('input');input.value='60';card.querySelector('.garden-save').click();
+ assert.match(p.text('gardenPlan'),/packet 60 days plus 14-day buffer/);
+ const updated=p.$('gardenPlan').querySelector('.garden-plant');
+ updated.querySelector('input').value='';updated.querySelector('.garden-save').click();
+ assert.match(p.text('gardenPlan'),/Leaf lettuce/);assert.doesNotMatch(p.text('gardenPlan'),/packet 60 days/);
 });

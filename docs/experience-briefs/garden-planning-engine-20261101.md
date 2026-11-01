@@ -8,7 +8,7 @@ November 1, 2026. Engine owner: `public/assets/garden-tools/plant-now.js`; Node 
 
 Spring-only soil rules no longer give plant-now status before March 1. This boundary is a conservative display choice, not an MSU-specified local planting date or proof that the ground is frozen. The July 31 boundary remains a display limit. Warm-seed soil must exceed 60°F, and passing a station's 25% freeze reference does not mean frost risk is gone.
 
-Still needed for a complete garden engine: crop-specific current MSU source verification for the plants labeled not reported; variety-specific starting, transplant, sowing and fall harvest distinctions; a real multi-crop planning model and persistence contract; regional validation and user testing. A neighboring state's rules or the existing 47-crop calendar offsets must not be silently promoted to verified Michigan data. No visitor outcome is claimed.
+Still needed for a complete garden engine: crop-specific current MSU source verification for the plants labeled not reported; variety-specific starting, transplant, sowing and fall harvest distinctions; more complete crop-specific multi-season rules; regional validation and user testing. A neighboring state's rules or the existing 47-crop calendar offsets must not be silently promoted to verified Michigan data. No visitor outcome is claimed.
 
 ## Multi-crop contract and potatoes
 
@@ -19,3 +19,10 @@ Potatoes: [MSU Potato Breeding and Genetics, home gardening](https://www.canr.ms
 Remaining work: this release does not fully source every listed herb or flower, does not build bed layout or predict harvest, and does not merge the separate national or 47-crop calendar engines. A full source-by-source inventory is needed before expanding verified rules.
 
 Basil: [Michigan State organic vegetable production guide, Herbs chapter](https://www.canr.msu.edu/foodsystems/uploads/files/full-pdf.pdf) describes basil as tender and recommends direct seeding or transplanting after frost danger has passed. This is advisory guidance, not a false guarantee based on the station's 25% date. Turnips: MSU's [How to Plant Vegetables](https://www.canr.msu.edu/ingham/uploads/files/VegetablePlantingGuide.pdf) names a 40°F minimum germination temperature. The engine keeps the seasonal display boundary explicit.
+
+
+## Expanded coverage and calendar years
+
+MSU's [squash guide](https://www.canr.msu.edu/uploads/resources/pdfs/pumpkinsquash2011.pdf) includes zucchini and winter squash; its [planting guide](https://www.canr.msu.edu/ingham/uploads/files/VegetablePlantingGuide.pdf) covers warm-season melons and squash. The tool's above-60°F check is a conservative threshold, not an ideal germination temperature for every variety. Without a soil reading, the engine now asks the gardener to check instead of declaring the bed ready. [Sweet corn](https://www.canr.msu.edu/uploads/resources/pdfs/sweetcorn2011.pdf), [dill](https://www.canr.msu.edu/nativeplants/uploads/files/Dill2013.pdf) and [cilantro](https://www.canr.msu.edu/foodsystems/uploads/files/full-pdf.pdf) get qualitative source-specific guidance without a fabricated station-specific planting deadline.
+
+The multi-crop result now includes structured spring events with explicit ISO years and sources. Dates are calculated from the station's month-and-day reference in the actual year, including leap years; after the spring display season, events refer to the following spring. Fall events remain explicitly labeled planning estimates. Packet days can be edited or cleared within each saved plant.
