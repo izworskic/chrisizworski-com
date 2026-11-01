@@ -2,6 +2,14 @@ name: Space Coast KSC official announcement watch
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/space-coast-ksc-watch.yml'
+      - 'api/space-coast-ksc-watch.js'
+      - 'lib/space-coast-ksc-watch.js'
+      - 'lib/space-coast-ksc-watch-auth.js'
+      - 'lib/space-coast-ksc-viewing.js'
   schedule:
     # UTC, staggered off the top of the hour. Nominal 15-minute cadence.
     - cron: '7,22,37,52 * * * *'
@@ -19,6 +27,18 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
+      - name: Verify production is serving the monitoring endpoint on initial release
+        if: github.event_name == 'push'
+        run: |
+          for attempt in $(seq 1 20); do
+            if curl --fail --silent --show-error --max-time 8 \
+              "https://chrisizworski.com/api/space-coast-ksc-watch" >/dev/null; then
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "The KSC watch API has not reached production."
+          exit 1
       - name: Mint short-lived repository-scoped GitHub OIDC token
         uses: actions/github-script@v7
         id: oidc
