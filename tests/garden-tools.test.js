@@ -97,7 +97,7 @@ test('hub soil link carries the place', () => {
 
 test('Michigan Growing Season Explorer: crop and soil decisions tell the same story', () => {
   const p = loadTool(f('michigan-gardening'), { today: '2026-05-12' });
-  assert.match(p.text('pnSeasonTitle'), /^Tomatoes: from seed tray/);
+  assert.match(p.text('pnSeasonTitle'), /^Tomatoes: From seed tray/);
   assert.match(p.text('pnSeasonLocation'), /Bay City frost station/);
   assert.match(p.text('pnSeasonStepBody'), /one spring out of four/);
   assert.match(p.text('pnSeasonLandmarks'), /May 2/);
@@ -106,7 +106,7 @@ test('Michigan Growing Season Explorer: crop and soil decisions tell the same st
   assert.equal(p.$('pnRows').children.filter(x => x.classList.contains('pn-row-selected')).length, 1);
 
   p.set('pnCrop', 'beans');
-  assert.match(p.text('pnSeasonTitle'), /^Snap beans: two gates/);
+  assert.match(p.text('pnSeasonTitle'), /^Snap beans: Two gates/);
   p.set('pnSoil', '55', 'input');
   assert.match(p.text('pnSeasonStatus'), /Wait for the soil/);
   p.set('pnSoil', '64', 'input');
