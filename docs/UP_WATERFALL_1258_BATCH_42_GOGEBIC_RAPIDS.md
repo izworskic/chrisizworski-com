@@ -27,3 +27,13 @@
 **Publication:** Five `noindex,follow` research-only source reviews linked from the opt-in geographic research layer; no new curated visitor cards, parking pins, routes, TouristAttraction JSON-LD or sitemap pages. Exact GIS/161-identity ledger remains complete, 71 curated / 65 exact matched / 96 pending unchanged. Each has six source-linked facts and explicit blockers. Previous source review was zero for these IDs.
 
 **Next gate:** exact-head queue generator --check, focused Node regression, mobile waterfall browser smoke, full 59-stage site verification and production audit before merge. Preserve source gates and avoid expanding the general public waterfall count from minor rapids.
+
+## Official USFS surface-ownership overlay and source URL correction (2026-11-01)
+
+Queried the weekly USDA Forest Service **PADUS FS Managed Surface Ownership Parcels** feature layer 3 at all five Michigan GIS natural locations (source date October 30, 2026): `https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_PADUS_01/MapServer/3`. Each JSON evidence record contains the exact reproducible ArcGIS point query.
+
+- **#37 Neepikon, #39 Powder Horn and #40 Rocky Forty:** no FS-managed parcel intersection at the GIS natural points. This is **not proof of private ownership**; county owner and legal travel still unresolved.
+- **#48 Narrow and #58 Chippewa:** a **direct intersection to federal surface-ownership polygon OBJECTID 120**, identified as USDA Forest Service, Ottawa National Forest. This is **verified title at the falls coordinate only**, not proof of signed parking, legal walk-in, bank crossing or viewpoint infrastructure. At Chippewa, illustrative east/west analytic points showed an east-side FS hit and a west-side non-hit; this is not a surveyed private-property determination.
+- Corrected an invalid historical FS URL `https://www.fs.usda.gov/r09/ottawa/recreation/waterfalls` (HTTP 404) to verified current forest homepage `https://www.fs.usda.gov/r09/ottawa`. This homepage alone is forest context, not a trail or waterfall navigation source.
+
+All five remain research-only, noindex. Curated inventory and sitemap unchanged.

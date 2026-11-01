@@ -18,4 +18,7 @@ test('batch42: named minor rapids and waterfall features are not unsafely promot
  assert.match(r.candidates.find(x=>x.gisObjectId===37).sourceNotes,/477m/);
  assert.match(r.candidates.find(x=>x.gisObjectId===40).sourceNotes,/69.2km/);
  assert.match(r.candidates.find(x=>x.gisObjectId===58).sourceNotes,/NFST-128-B/);
+ for(const id of [48,58]){const c=r.candidates.find(x=>x.gisObjectId===id),rev=v.records.find(x=>x.gisObjectId===id);assert.match(c.landManager,/Ottawa National Forest/);assert.match(rev.routeAudit.segments[1].finding,/OBJECTID 120/);assert.equal(rev.routeAudit.segments[1].status,'verified-geography');assert.equal(rev.publicationEligible,false);}
+ for(const id of [37,39,40]){const c=r.candidates.find(x=>x.gisObjectId===id);assert.equal(c.landManager,null);assert.match(c.accessRouteAudit.segments[1].finding,/NO intersecting federal polygon/);}
+ assert.ok(!v.records.filter(x=>[37,39,40,48,58].includes(x.gisObjectId)).some(x=>x.sourceLinks.some(s=>s.url.includes('/recreation/waterfalls'))));
 });
