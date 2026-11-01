@@ -31,6 +31,15 @@
 <main>
 <section class="hero">
  <div class="hero-text"><p class="eyebrow">Lake Superior Circle Tour / Michigan's western U.P.</p><h1>Find your way into <em>the Porkies.</em></h1>
+ <nav class="hero-quickstart" aria-label="Start planning by what you want to experience">
+  <p class="hero-quickstart-label">What would you come to see?</p>
+  <div class="hero-quickstart-choices">
+   <a href="#decision" data-porkies-start="views"><span aria-hidden="true">01</span> A view above the forest</a>
+   <a href="#decision" data-porkies-start="falls"><span aria-hidden="true">02</span> A wild river and waterfalls</a>
+   <a href="#decision" data-porkies-start="forest"><span aria-hidden="true">03</span> The ancient woods</a>
+  </div>
+  <p class="hero-quickstart-hint">Choose what calls to you, then tell the planner when and how you're arriving. Nothing here assumes an open road.</p>
+ </nav>
  <p class="dek">Above Lake Superior, the Porcupine Mountains rise in waves of hardwood forest. An old hemlock grove can hush the afternoon. The Presque Isle River thunders over dark bedrock. High above it all, Lake of the Clouds rests beneath a long, wooded ridge. This is a place to wander slowly. Tell us how you are arriving, and we’ll help you find the part of the wilderness that belongs in your day.</p>
  <div class="hero-actions"><a class="primary" href="#decision">Find my way into the park <span aria-hidden="true">↓</span></a><a class="secondary" href="https://www.michigan.gov/recsearch/parks/porkies">Official park information</a></div>
  <p class="data-note">Park approach and trail sources reviewed October 28, 2026 · Check current roads and trails before your visit · <a href="#sources">Read the evidence</a></p></div>
@@ -54,6 +63,8 @@
   <label>Time to explore <select id="hours" name="hours"><option value="2">About 2 hours</option><option value="4" selected>Half day / 4 hours</option><option value="8">Full day / 8 hours</option><option value="16">Two days</option></select></label>
   <label>Your walking comfort <select id="ability" name="ability"><option value="low">Prefer short or accessible approaches</option><option value="moderate" selected>Comfortable with uneven paths</option><option value="high">Ready for strenuous wilderness hiking</option></select></label>
   <label>What calls to you? <select id="interest" name="interest"><option value="views">A view across the mountains</option><option value="falls">The sound of falling water</option><option value="forest">Ancient forests and footpaths</option><option value="mix">A little of everything</option></select></label>
+  <p class="plan-vehicle-source">With a camper or trailer? The DNR recommends different staging for Lake of the Clouds and Summit Peak. The planner will call out these limits, but cannot certify vehicle routes or parking. <a href="https://www.michigan.gov/dnr/-/media/Project/Websites/dnr/Documents/Education/visitorcenters/PMWSP-paper-23/PMWSP-Visitor-2025.pdf">DNR 2025 visitor guidance</a>.</p>
+  <p class="plan-choice-static">On a short visit, the attraction you want may be on the other side of the park from where you arrive. Your plan will offer a nearby option or the choice to make a separate trip, without inventing driving times.</p>
   <button class="plan-button" type="submit">Show me where to explore <span aria-hidden="true">→</span></button>
  </form>
  <div class="result" id="results" role="status" aria-live="polite" aria-atomic="true">
