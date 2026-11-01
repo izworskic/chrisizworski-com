@@ -104,6 +104,8 @@ function renderJunctionEvidence(trailId,status){
   }
 }
 
+const isBlockedStatus=status=>['closed','out-of-season','last-known-closed'].includes(status);
+
 function updateTrailSelection() {
   renderJunctionEvidence(selectedTrail,selectedStatus);
   if(!catalog)return;
@@ -112,13 +114,13 @@ function updateTrailSelection() {
     doc.getElementById('pk-result-heading')?.textContent?.trim()||'Your selected hike';
   text(explanationTitle,title);
   text(explanationBody,placeInterpretation(point,selectedTrail)+
-    (selectedStatus==='closed'?' This trail has a documented closure; do not plan to enter.':' The pin does not establish present access.'));
+    (isBlockedStatus(selectedStatus)?' This trail has a documented closure or season restriction; do not plan to enter.':' The pin does not establish present access.'));
   focusChoice.dataset.mapTarget=point?.id||'';
   focusChoice.disabled=!point;
   focusChoice.textContent=point?'Locate the related mapped place':'Route location is intentionally withheld';
   if(point)selectFromList(point.id,{moveMap:Boolean(map)});
   const hasTrail=Object.hasOwn(APPROVED_WAYS,selectedTrail);
-  const blocked=['closed','out-of-season','last-known-closed'].includes(selectedStatus);
+  const blocked=isBlockedStatus(selectedStatus);
   const orientation=startAdvice(selectedTrail,{closed:blocked,hasApprovedGeometry:hasTrail});
   if(orientation&&startText&&startSequence&&startWarning) {
     startText.textContent=orientation.guidance;
@@ -150,7 +152,7 @@ function trailStatusFor(id){
   return doc.getElementById('pk-'+id)?.dataset.status||'source-unverified';
 }
 function styleForTrail(id){
-  const closed=trailStatusFor(id)==='closed'||trailStatusFor(id)==='out-of-season';
+  const closed=isBlockedStatus(trailStatusFor(id));
   const selected=id===selectedTrail&&!closed;
   return {
     className:'pk-community-trail',
@@ -176,7 +178,7 @@ function popupForTrail(feature) {
       ' ways. Parks Canada full hike: '+summary.officialEntireOutingKm+' km. These are different measurements, not interchangeable.'
     : 'Only part of this walking path may be mapped.';
   holder.append(p);
-  if(state==='closed'||state==='out-of-season'){
+  if(isBlockedStatus(state)){
     const warning=doc.createElement('p');warning.textContent='Parks Canada has reported this trail closed or out of season. Do not enter based on this line.';
     warning.style.fontWeight='800';warning.style.color='#a03f2a';holder.append(warning);
   } else {
@@ -258,7 +260,7 @@ function setTraceVisibility(){
 function focusSelectedTrace(){
   if(!map||!communityLayer||!communityLines||!trailToggle.checked)return;
   const layers=trailLayers.get(selectedTrail)||[];
-  if(!layers.length||trailStatusFor(selectedTrail)==='closed'||trailStatusFor(selectedTrail)==='out-of-season')return;
+  if(!layers.length||isBlockedStatus(trailStatusFor(selectedTrail)))return;
   const L=window.L;
   const points=layers.flatMap(layer=>layer.feature.geometry.coordinates.map(p=>[p[1],p[0]]));
   if(!points.length)return;
