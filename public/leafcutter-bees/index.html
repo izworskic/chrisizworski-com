@@ -174,7 +174,7 @@
 'use strict';
 var zone=document.getElementById('zone'),month=document.getElementById('month'),flowers=document.getElementById('flowers'),temp=document.getElementById('temp'),nest=document.getElementById('nest'),region=document.getElementById('region');
 if(!zone||!month)return;month.value=String(Number(new Intl.DateTimeFormat('en-US',{timeZone:'America/Detroit',month:'numeric'}).format(new Date()))-1);
-var path='wild',liveWeather=null,liveWeatherCity=null,weatherRequest=0;
+var path='wild',liveWeather=null,liveWeatherCity=null,weatherRequest=0,weatherCheckState='not-checked';
 var beeCity=document.getElementById('bee-location'),beeWeatherButton=document.getElementById('bee-check');
 var spring=['Inspect last year\u2019s occupied tubes without opening unknown brood. Rotate in fresh clean tubes, or use a sheltered emergence box for old occupied tubes.','Put out clean dry nest houses before the nesting season; MSU suggests late March to mid-April for Michigan.','Plant or maintain a continuous sequence of flowering plants. Never spray occupied nests.'];
 var summer=['Watch for bees carrying pollen under the abdomen and circles of leaves into tunnels. Don\u2019t block the entrance.','Keep nests dry and secure, with plentiful pollen and nectar flowers nearby.','Check for ants, wasps, moisture and nesting debris without shaking or opening active cells.'];
@@ -200,7 +200,7 @@ else if(s==='winter'||s==='fall'){
  else{t='Plan your bee habitat for next season.';sub='There is no useful fall or winter release window for ready-to-emerge commercial cocoons.';items=['Choose a small house with smooth, replaceable closed-back tunnels.','Plan summer flowers and a pesticide-safe area.','Install clean houses before local summer nesting; in Michigan the general hotel window begins in early spring.'];}
 }else if(path==='managed'){
  if(stage==='ready'&&(!hasFlowers||!warm)){t='Conditions are poor for arriving ready-to-emerge bees.';sub='Once incubated, shipped leafcutters cannot be returned to dormancy or safely parked in a refrigerator. Reschedule before shipment if possible; if already delivered, contact the vendor immediately.';items=['Check both flowering abundance and daytime conditions around the expected arrival.','Do not buy bees for a garden without adequate summer flowers.','If bees have already arrived, follow species- and supplier-specific immediate instructions.'];}
- else if(!hasFlowers||!warm){t='Do not schedule a purchased cocoon release yet.';sub='Commercially prepared alfalfa leafcutters should be placed when summer flowers are open and daytime temperatures are consistently about 75°F or higher. Conditions entered here are not ready.';items=['Check your garden\u2019s actual flowers and local weather, not hardiness zone alone.','Ask the seller which species, origin and screening protocol applies; prefer habitat for wild bees.','If ready-to-emerge cocoons have already arrived, follow the vendor\u2019s immediate handling instructions; do not refrigerate them.'];}
+ else if(!hasFlowers||!warm||n==='none'){t='Do not schedule a purchased cocoon release yet.';sub='Commercially prepared alfalfa leafcutters should be placed when summer flowers are open and daytime temperatures are consistently about 75°F or higher. Conditions entered here are not ready.';items=['Check your garden\u2019s actual flowers and local weather, not hardiness zone alone.','Ask the seller which species, origin and screening protocol applies; prefer habitat for wild bees.','If ready-to-emerge cocoons have already arrived, follow the vendor\u2019s immediate handling instructions; do not refrigerate them.'];}
  else{t='Conditions match the seller\u2019s summer-release guidance.';sub='Open flowers and sustained warm days are present, based on what you entered. This is a vendor-specific screen, not an ecological endorsement or verified local legal clearance.';items=['Confirm species identity, origin, disease screening and local suitability before purchase.','Put out clean compatible nesting materials and a rain-sheltered house.','If already purchased, follow the specific supplier\u2019s arrival and release instructions immediately.'];}
 }else if(n==='full'){t='You have occupied nesting tunnels. Protect them.';sub='Leave occupied cells intact during active nesting. A sealed leaf cap is evidence of nesting, not proof of successful emergence.';items=summer;}
 else if(n==='none'){t='Build habitat first. You do not need to buy bees.';sub='A small roofed nest, replaceable tubes and abundant flowers are your best starting steps. Wild bees may arrive naturally.';items=['Provide an east/southeast-facing, rigidly mounted house sheltered from rain, about 4–5 feet high.','Offer clean closed-back varied-diameter cavities and nearby pollen- and nectar-rich flowers.','Avoid pesticides around blooms and bee nesting areas.'];}
@@ -228,6 +228,11 @@ if(liveActive&&path==='managed'&&(s==='summer'||s==='spring')&&(stage==='plannin
   sub='NWS forecasts two consecutive warm days beginning '+start+'. Your reported flowering and nest conditions are positive, but this is still a forecast-based planning signal, NOT confirmation that bees should be released today.';
   items=['Confirm the exact shipping/arrival week lines up with the warm forecast and plentiful blooms.','Recheck local conditions nearer arrival; cooler or rainier updates can change suitability.','Verify species identity, transport suitability and ready-to-emerge handling with your supplier.'];
  }
+}
+if(weatherCheckState==='unavailable'&&mid&&m===currentMonth&&path==='managed'&&(stage==='planning'||stage==='ready')&&(s==='summer'||s==='spring')){
+ t='Forecast unavailable: release timing is unverified.';
+ sub='The official hourly forecast could not be retrieved. No forecast warmth or safe shipping week is established; your own observations alone cannot substitute for missing official forecast evidence in this live mode.';
+ items=['Check the National Weather Service forecast independently.','Confirm open garden blooms and installed clean nesting tubes.','For already incubated bees, contact the seller about immediate species-specific handling rather than refrigerating them.'];
 }
 if(liveWeather&&mid&&!liveActive)extra+='The checked NWS forecast covers only the current week; it does not apply to your selected future or historical month. ';
 if(liveActive)extra+='Weather evidence: NWS issued '+(liveWeather.issuedAt||'unknown')+', '+liveWeather.status+'. This is a forecast, not an observation. ';
@@ -305,7 +310,7 @@ async function loadBeeCities(){
 async function checkBeeForecast(){
  if(typeof fetch!=='function'){setWeatherStatus('Forecast lookup unavailable.','Use the source link and your local garden observations.', 'warning');return;}
  var id=beeCity.value,sequence=++weatherRequest;
- liveWeather=null;liveWeatherCity=null;
+ weatherCheckState='loading';liveWeather=null;liveWeatherCity=null;
  document.getElementById('bee-day-strip').textContent='';document.getElementById('bee-issued').textContent='';
  setWeatherStatus('Checking the National Weather Service…','This forecast is for a Michigan reference city, not a measurement in your garden.');
  beeWeatherButton.disabled=true;render();
@@ -315,14 +320,14 @@ async function checkBeeForecast(){
   var data=await r.json();
   if(sequence!==weatherRequest||beeCity.value!==id)return;
   if(!data||!data.forecastOnly||data.provider!=='National Weather Service'||!Array.isArray(data.daily)||!data.sourceUrl||data.site.id!==id)throw Error('INVALID_FORECAST');
-  liveWeather=data;liveWeatherCity=id;showForecast();
+  liveWeather=data;liveWeatherCity=id;weatherCheckState='available';showForecast();
  }catch(e){
-  if(sequence===weatherRequest){liveWeather=null;liveWeatherCity=null;setWeatherStatus('Official forecast unavailable.','No release recommendation can be made from this lookup. Recheck the NWS source and local flowers; nothing has been assumed.','warning');}
+  if(sequence===weatherRequest){liveWeather=null;liveWeatherCity=null;weatherCheckState='unavailable';setWeatherStatus('Official forecast unavailable.','No release recommendation can be made from this lookup. Recheck the NWS source and local flowers; nothing has been assumed.','warning');}
  }finally{if(sequence===weatherRequest){beeWeatherButton.disabled=false;render();}}
 }
 beeWeatherButton.addEventListener('click',checkBeeForecast);
 beeCity.addEventListener('change',function(){
- ++weatherRequest;liveWeather=null;liveWeatherCity=null;
+ ++weatherRequest;weatherCheckState='not-checked';beeWeatherButton.disabled=false;liveWeather=null;liveWeatherCity=null;
  document.getElementById('bee-day-strip').textContent='';document.getElementById('bee-issued').textContent='';
  setWeatherStatus('City changed. Check the forecast again.','Previous weather is not applied to the newly selected location.');
  render();
