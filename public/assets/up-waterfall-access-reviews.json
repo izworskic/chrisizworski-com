@@ -2179,6 +2179,358 @@
           }
         ]
       }
+    },
+    {
+      "gisObjectId": 99,
+      "name": "Upper Letherby Falls",
+      "county": "BARAGA",
+      "status": "research-only-identity-title-and-route-not-cleared",
+      "publicAccess": "not-established-continuously",
+      "publicationEligible": false,
+      "title": "Upper Letherby Falls: visitor access research",
+      "summary": "Michigan GIS #99 at 46.769094,-88.109011 is about 568 m north of the independently reported Upper Leatherby falls (46.76402,-88.10811), but only about 186 m north of the specialist main Leatherby falls (46.76748,-88.10836). The labels cannot be automatically reconciled. A field report describes a long and confusing unmarked Leatherby Road two-track and a short riverbank scramble, but it does not certify current vehicle rights, a designated legal parking area, a continuous public foot corridor, or land ownership.",
+      "guidance": "Research-only geographic reference. Do not navigate to the falls coordinate or infer permission to drive an unmarked logging two-track, park at a bridge, cross a stream or walk on an unknown parcel.",
+      "reviewLimitations": "Michigan DNR LOTS parcel and conservation-easement spatial services query DNR-tracked records only; empty intersecting results do not prove a parcel is privately owned. Historic tourism descriptions do not certify 2026 land rights or roads.",
+      "nextEvidence": "Reconcile official #99 to independent upper and main falls with map evidence; obtain county parcel title, legal motorized road status, approved parking, permitted continuous walking route and current restrictions.",
+      "researchPage": "/upper-peninsula-waterfalls/research/upper-letherby-falls/",
+      "sourceLinks": [
+        {
+          "label": "Michigan state GIS natural falls point",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "Independent specialist location and field account",
+          "url": "https://www.waterfallsofthekeweenaw.com/west-branch-huron-river/upper-leatherby-falls/"
+        },
+        {
+          "label": "Additional site or tourism evidence",
+          "url": "https://www.waterfallsofthekeweenaw.com/west-branch-huron-river/leatherby-falls/"
+        },
+        {
+          "label": "Michigan DNR ownership parcel query (no intersect)",
+          "url": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-88.109011%2C46.769094&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson"
+        },
+        {
+          "label": "Michigan DNR conservation easement query (no intersect)",
+          "url": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/9/query?geometry=-88.109011%2C46.769094&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson"
+        },
+        {
+          "label": "Baraga County Equalization property mapping",
+          "url": "https://www.baragacounty.org/government/departments/equalization/"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-11-01",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Geographic identity",
+            "status": "documented-not-live",
+            "finding": "Michigan GIS #99 at 46.769094,-88.109011 is about 568 m north of the independently reported Upper Leatherby falls (46.76402,-88.10811), but only about 186 m north of the specialist main Leatherby falls (46.76748,-88.10836). The labels cannot be automatically reconciled.",
+            "source": "https://www.waterfallsofthekeweenaw.com/west-branch-huron-river/upper-leatherby-falls/"
+          },
+          {
+            "label": "Land title / land manager",
+            "status": "not-cleared",
+            "finding": "Michigan DNR LOTS statewide ownership and conservation-easement point queries returned no intersecting features. This is NOT proof of private ownership or proof of public access. County property and road right-of-way records remain necessary.",
+            "source": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-88.109011%2C46.769094&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson"
+          },
+          {
+            "label": "Road and historical approach",
+            "status": "documented-not-live",
+            "finding": "A field report describes a long and confusing unmarked Leatherby Road two-track and a short riverbank scramble, but it does not certify current vehicle rights, a designated legal parking area, a continuous public foot corridor, or land ownership.",
+            "source": "https://www.waterfallsofthekeweenaw.com/west-branch-huron-river/upper-leatherby-falls/"
+          },
+          {
+            "label": "Authorized visitor parking",
+            "status": "not-cleared",
+            "finding": "No current land-manager or county road authority evidence establishes a signed/legal visitor parking area at the mapped approach. Historic logging-road or two-track stopping places are not certified parking.",
+            "source": "https://www.baragacounty.org/government/departments/equalization/"
+          },
+          {
+            "label": "Full legal and safe walking corridor",
+            "status": "not-cleared",
+            "finding": "A complete public approach from lawful arrival to safe viewing has not been verified across every parcel/streambank. No river crossing, steep scramble or cross-private-land route is authorized.",
+            "source": "https://www.waterfallsofthekeweenaw.com/west-branch-huron-river/upper-leatherby-falls/"
+          },
+          {
+            "label": "Current restrictions and seasonal conditions",
+            "status": "not-cleared",
+            "finding": "No dated November 2026 public notice confirms motorized road maintenance, permitted trail passage, bridge integrity, posted restrictions or safe flow. Do not imply live opening.",
+            "source": "https://www.baragacounty.org/government/departments/equalization/"
+          }
+        ]
+      }
+    },
+    {
+      "gisObjectId": 103,
+      "name": "Letherby Falls",
+      "county": "BARAGA",
+      "status": "research-only-identity-title-and-route-not-cleared",
+      "publicAccess": "not-established-continuously",
+      "publicationEligible": false,
+      "title": "Letherby Falls: visitor access research",
+      "summary": "Michigan GIS #103 at 46.781725,-88.102977 lies about 1,636 m from the independent main Leatherby falls (46.76748,-88.10836) and about 998 m from the independent LOWER Leatherby cascades (46.77376,-88.10902). A historical field account says a map label downstream of main falls represents weak rapids/swamp, not the photographed main waterfall. Neither alias nor visitor destination is confirmed. Rough historic Black Creek/Leatherby-road narratives apply to a different field-mapped falls site; using those directions for GIS #103 risks taking visitors to the wrong natural feature or an unauthorized track.",
+      "guidance": "Research-only geographic reference. Do not navigate to the falls coordinate or infer permission to drive an unmarked logging two-track, park at a bridge, cross a stream or walk on an unknown parcel.",
+      "reviewLimitations": "Michigan DNR LOTS parcel and conservation-easement spatial services query DNR-tracked records only; empty intersecting results do not prove a parcel is privately owned. Historic tourism descriptions do not certify 2026 land rights or roads.",
+      "nextEvidence": "Locate a credible independent observation precisely at source GIS #103; distinguish main/upper/lower Leatherby features, then confirm parcel owner, public roadway and parking, authorized trail and present restrictions.",
+      "researchPage": "/upper-peninsula-waterfalls/research/letherby-falls/",
+      "sourceLinks": [
+        {
+          "label": "Michigan state GIS natural falls point",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "Independent specialist location and field account",
+          "url": "https://www.waterfallsofthekeweenaw.com/west-branch-huron-river/leatherby-falls/"
+        },
+        {
+          "label": "Additional site or tourism evidence",
+          "url": "https://www.waterfallsofthekeweenaw.com/west-branch-huron-river/lower-leatherby-falls/"
+        },
+        {
+          "label": "Michigan DNR ownership parcel query (no intersect)",
+          "url": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-88.102977%2C46.781725&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson"
+        },
+        {
+          "label": "Michigan DNR conservation easement query (no intersect)",
+          "url": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/9/query?geometry=-88.102977%2C46.781725&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson"
+        },
+        {
+          "label": "Baraga County Equalization property mapping",
+          "url": "https://www.baragacounty.org/government/departments/equalization/"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-11-01",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Geographic identity",
+            "status": "documented-not-live",
+            "finding": "Michigan GIS #103 at 46.781725,-88.102977 lies about 1,636 m from the independent main Leatherby falls (46.76748,-88.10836) and about 998 m from the independent LOWER Leatherby cascades (46.77376,-88.10902). A historical field account says a map label downstream of main falls represents weak rapids/swamp, not the photographed main waterfall. Neither alias nor visitor destination is confirmed.",
+            "source": "https://www.waterfallsofthekeweenaw.com/west-branch-huron-river/leatherby-falls/"
+          },
+          {
+            "label": "Land title / land manager",
+            "status": "not-cleared",
+            "finding": "Michigan DNR LOTS statewide ownership and conservation-easement point queries returned no intersecting features. This is NOT proof of private ownership or proof of public access. County property and road right-of-way records remain necessary.",
+            "source": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-88.102977%2C46.781725&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson"
+          },
+          {
+            "label": "Road and historical approach",
+            "status": "documented-not-live",
+            "finding": "Rough historic Black Creek/Leatherby-road narratives apply to a different field-mapped falls site; using those directions for GIS #103 risks taking visitors to the wrong natural feature or an unauthorized track.",
+            "source": "https://www.waterfallsofthekeweenaw.com/west-branch-huron-river/leatherby-falls/"
+          },
+          {
+            "label": "Authorized visitor parking",
+            "status": "not-cleared",
+            "finding": "No current land-manager or county road authority evidence establishes a signed/legal visitor parking area at the mapped approach. Historic logging-road or two-track stopping places are not certified parking.",
+            "source": "https://www.baragacounty.org/government/departments/equalization/"
+          },
+          {
+            "label": "Full legal and safe walking corridor",
+            "status": "not-cleared",
+            "finding": "A complete public approach from lawful arrival to safe viewing has not been verified across every parcel/streambank. No river crossing, steep scramble or cross-private-land route is authorized.",
+            "source": "https://www.waterfallsofthekeweenaw.com/west-branch-huron-river/leatherby-falls/"
+          },
+          {
+            "label": "Current restrictions and seasonal conditions",
+            "status": "not-cleared",
+            "finding": "No dated November 2026 public notice confirms motorized road maintenance, permitted trail passage, bridge integrity, posted restrictions or safe flow. Do not imply live opening.",
+            "source": "https://www.baragacounty.org/government/departments/equalization/"
+          }
+        ]
+      }
+    },
+    {
+      "gisObjectId": 105,
+      "name": "Black Slate Falls",
+      "county": "BARAGA",
+      "status": "research-only-identity-title-and-route-not-cleared",
+      "publicAccess": "not-established-continuously",
+      "publicationEligible": false,
+      "title": "Black Slate Falls: visitor access research",
+      "summary": "Michigan GIS #105 at 46.784430,-88.241702 is about 385 m from the field-mapped Black Slate Falls reference (46.78754,-88.23947); the independent account describes a dispersed half-mile run of small upstream drops, so the point mismatch may represent a different section, not necessarily an error. It is distinct from Quartzite #107. Baraga County's original visitor brochure and its later hosted waterfall map explicitly describe a short forest trail off Arvon Road and this upper series above Quartzite, but neither identifies the actual trail/bridge parcel owner or grants 2026 public parking at an unmarked logging-road bridge. An independent account reports the longer upstream bank has no established trail.",
+      "guidance": "Research-only geographic reference. Do not navigate to the falls coordinate or infer permission to drive an unmarked logging two-track, park at a bridge, cross a stream or walk on an unknown parcel.",
+      "reviewLimitations": "Michigan DNR LOTS parcel and conservation-easement spatial services query DNR-tracked records only; empty intersecting results do not prove a parcel is privately owned. Historic tourism descriptions do not certify 2026 land rights or roads.",
+      "nextEvidence": "Match county parcel/land manager for both falls and the logging bridge, verify Arvon/All Wood road easement and legal turnout, and limit any future guide to a clearly documented safe short view rather than inventing a continuous upstream trail.",
+      "researchPage": "/upper-peninsula-waterfalls/research/black-slate-falls/",
+      "sourceLinks": [
+        {
+          "label": "Michigan state GIS natural falls point",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "Independent specialist location and field account",
+          "url": "https://www.waterfallsofthekeweenaw.com/slate-river/black-slate-falls/"
+        },
+        {
+          "label": "Additional site or tourism evidence",
+          "url": "https://www.keweenawguide.com/single-post/2018/08/05/black-slate-quartzite-falls"
+        },
+        {
+          "label": "County tourism original brochure",
+          "url": "https://www.baragacountytourism.org/wp-content/uploads/2012/09/Travel-Guide.pdf"
+        },
+        {
+          "label": "County tourism waterfall map",
+          "url": "https://www.visitbaragacounty.com/wp-content/uploads/2022/07/Baraga-County-Waterfalls-Map.pdf"
+        },
+        {
+          "label": "Michigan DNR ownership parcel query (no intersect)",
+          "url": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-88.241702%2C46.78443&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson"
+        },
+        {
+          "label": "Michigan DNR conservation easement query (no intersect)",
+          "url": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/9/query?geometry=-88.241702%2C46.78443&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson"
+        },
+        {
+          "label": "Baraga County Equalization property mapping",
+          "url": "https://www.baragacounty.org/government/departments/equalization/"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-11-01",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Geographic identity",
+            "status": "documented-not-live",
+            "finding": "Michigan GIS #105 at 46.784430,-88.241702 is about 385 m from the field-mapped Black Slate Falls reference (46.78754,-88.23947); the independent account describes a dispersed half-mile run of small upstream drops, so the point mismatch may represent a different section, not necessarily an error. It is distinct from Quartzite #107.",
+            "source": "https://www.waterfallsofthekeweenaw.com/slate-river/black-slate-falls/"
+          },
+          {
+            "label": "Land title / land manager",
+            "status": "not-cleared",
+            "finding": "Michigan DNR LOTS statewide ownership and conservation-easement point queries returned no intersecting features. This is NOT proof of private ownership or proof of public access. County property and road right-of-way records remain necessary.",
+            "source": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-88.241702%2C46.78443&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson"
+          },
+          {
+            "label": "Road and historical approach",
+            "status": "documented-not-live",
+            "finding": "Baraga County's original visitor brochure and its later hosted waterfall map explicitly describe a short forest trail off Arvon Road and this upper series above Quartzite, but neither identifies the actual trail/bridge parcel owner or grants 2026 public parking at an unmarked logging-road bridge. An independent account reports the longer upstream bank has no established trail.",
+            "source": "https://www.baragacountytourism.org/wp-content/uploads/2012/09/Travel-Guide.pdf"
+          },
+          {
+            "label": "Authorized visitor parking",
+            "status": "not-cleared",
+            "finding": "No current land-manager or county road authority evidence establishes a signed/legal visitor parking area at the mapped approach. Historic logging-road or two-track stopping places are not certified parking.",
+            "source": "https://www.visitbaragacounty.com/wp-content/uploads/2022/07/Baraga-County-Waterfalls-Map.pdf"
+          },
+          {
+            "label": "Full legal and safe walking corridor",
+            "status": "not-cleared",
+            "finding": "A complete public approach from lawful arrival to safe viewing has not been verified across every parcel/streambank. No river crossing, steep scramble or cross-private-land route is authorized.",
+            "source": "https://www.waterfallsofthekeweenaw.com/slate-river/black-slate-falls/"
+          },
+          {
+            "label": "Current restrictions and seasonal conditions",
+            "status": "not-cleared",
+            "finding": "No dated November 2026 public notice confirms motorized road maintenance, permitted trail passage, bridge integrity, posted restrictions or safe flow. Do not imply live opening.",
+            "source": "https://www.visitbaragacounty.com/wp-content/uploads/2022/07/Baraga-County-Waterfalls-Map.pdf"
+          }
+        ]
+      }
+    },
+    {
+      "gisObjectId": 107,
+      "name": "Quartzite Falls",
+      "county": "BARAGA",
+      "status": "research-only-identity-title-and-route-not-cleared",
+      "publicAccess": "not-established-continuously",
+      "publicationEligible": false,
+      "title": "Quartzite Falls: visitor access research",
+      "summary": "Michigan GIS #107 at 46.789247,-88.242098 lies about 50 m from independently mapped Quartzite (46.78882,-88.24191), strong geographic agreement. This is the small downstream cascade, not the separate Slate River Falls #119 far north at the Skanee Road bridge. County visitor brochure, Upper Peninsula Travel and field observations agree a short walk descends from the Arvon Road/wooden logging-bridge vicinity. These historical descriptions do not establish who owns the bridge turnout, the intervening footpath, or a current signed parking right. Do not copy unverified riverbed scrambling/swimming instructions.",
+      "guidance": "Research-only geographic reference. Do not navigate to the falls coordinate or infer permission to drive an unmarked logging two-track, park at a bridge, cross a stream or walk on an unknown parcel.",
+      "reviewLimitations": "Michigan DNR LOTS parcel and conservation-easement spatial services query DNR-tracked records only; empty intersecting results do not prove a parcel is privately owned. Historic tourism descriptions do not certify 2026 land rights or roads.",
+      "nextEvidence": "Determine parcel owner at natural falls and the bridge turnout, confirm road/right-of-way and designated parking, documented legal short path and current restrictions. Only then promote the short-view visitor guide.",
+      "researchPage": "/upper-peninsula-waterfalls/research/quartzite-falls/",
+      "sourceLinks": [
+        {
+          "label": "Michigan state GIS natural falls point",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "Independent specialist location and field account",
+          "url": "https://www.waterfallsofthekeweenaw.com/slate-river/quartzite-falls/"
+        },
+        {
+          "label": "Additional site or tourism evidence",
+          "url": "https://www.uptravel.com/listing/quartzite-falls/5735/"
+        },
+        {
+          "label": "County tourism original brochure",
+          "url": "https://www.baragacountytourism.org/wp-content/uploads/2012/09/Travel-Guide.pdf"
+        },
+        {
+          "label": "County tourism waterfall map",
+          "url": "https://www.visitbaragacounty.com/wp-content/uploads/2022/07/Baraga-County-Waterfalls-Map.pdf"
+        },
+        {
+          "label": "Michigan DNR ownership parcel query (no intersect)",
+          "url": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-88.242098%2C46.789247&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson"
+        },
+        {
+          "label": "Michigan DNR conservation easement query (no intersect)",
+          "url": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/9/query?geometry=-88.242098%2C46.789247&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson"
+        },
+        {
+          "label": "Baraga County Equalization property mapping",
+          "url": "https://www.baragacounty.org/government/departments/equalization/"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-11-01",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Geographic identity",
+            "status": "verified-geography",
+            "finding": "Michigan GIS #107 at 46.789247,-88.242098 lies about 50 m from independently mapped Quartzite (46.78882,-88.24191), strong geographic agreement. This is the small downstream cascade, not the separate Slate River Falls #119 far north at the Skanee Road bridge.",
+            "source": "https://www.waterfallsofthekeweenaw.com/slate-river/quartzite-falls/"
+          },
+          {
+            "label": "Land title / land manager",
+            "status": "not-cleared",
+            "finding": "Michigan DNR LOTS statewide ownership and conservation-easement point queries returned no intersecting features. This is NOT proof of private ownership or proof of public access. County property and road right-of-way records remain necessary.",
+            "source": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-88.242098%2C46.789247&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson"
+          },
+          {
+            "label": "Road and historical approach",
+            "status": "documented-not-live",
+            "finding": "County visitor brochure, Upper Peninsula Travel and field observations agree a short walk descends from the Arvon Road/wooden logging-bridge vicinity. These historical descriptions do not establish who owns the bridge turnout, the intervening footpath, or a current signed parking right. Do not copy unverified riverbed scrambling/swimming instructions.",
+            "source": "https://www.baragacountytourism.org/wp-content/uploads/2012/09/Travel-Guide.pdf"
+          },
+          {
+            "label": "Authorized visitor parking",
+            "status": "not-cleared",
+            "finding": "No current land-manager or county road authority evidence establishes a signed/legal visitor parking area at the mapped approach. Historic logging-road or two-track stopping places are not certified parking.",
+            "source": "https://www.visitbaragacounty.com/wp-content/uploads/2022/07/Baraga-County-Waterfalls-Map.pdf"
+          },
+          {
+            "label": "Full legal and safe walking corridor",
+            "status": "not-cleared",
+            "finding": "A complete public approach from lawful arrival to safe viewing has not been verified across every parcel/streambank. No river crossing, steep scramble or cross-private-land route is authorized.",
+            "source": "https://www.waterfallsofthekeweenaw.com/slate-river/quartzite-falls/"
+          },
+          {
+            "label": "Current restrictions and seasonal conditions",
+            "status": "not-cleared",
+            "finding": "No dated November 2026 public notice confirms motorized road maintenance, permitted trail passage, bridge integrity, posted restrictions or safe flow. Do not imply live opening.",
+            "source": "https://www.visitbaragacounty.com/wp-content/uploads/2022/07/Baraga-County-Waterfalls-Map.pdf"
+          }
+        ]
+      }
     }
   ]
 }

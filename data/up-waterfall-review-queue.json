@@ -13,151 +13,151 @@
     {
       "batchNumber": 1,
       "candidates": [
-        99,
-        103,
-        105,
-        107,
         121,
         123,
         20,
-        24
+        24,
+        25,
+        37,
+        39,
+        40
       ]
     },
     {
       "batchNumber": 2,
       "candidates": [
-        25,
-        37,
-        39,
-        40,
         48,
         58,
         63,
-        65
+        65,
+        69,
+        70,
+        74,
+        75
       ]
     },
     {
       "batchNumber": 3,
       "candidates": [
-        69,
-        70,
-        74,
-        75,
         42,
         80,
         85,
-        129
+        129,
+        15,
+        17,
+        144,
+        18
       ]
     },
     {
       "batchNumber": 4,
       "candidates": [
-        15,
-        17,
-        144,
-        18,
         116,
         127,
         148,
-        153
+        153,
+        162,
+        163,
+        169,
+        170
       ]
     },
     {
       "batchNumber": 5,
       "candidates": [
-        162,
-        163,
-        169,
-        170,
         173,
         175,
         180,
-        181
+        181,
+        183,
+        184,
+        185,
+        186
       ]
     },
     {
       "batchNumber": 6,
       "candidates": [
-        183,
-        184,
-        185,
-        186,
         187,
         22,
         28,
-        54
+        54,
+        57,
+        60,
+        61,
+        62
       ]
     },
     {
       "batchNumber": 7,
       "candidates": [
-        57,
-        60,
-        61,
-        62,
         72,
         84,
         106,
-        122
+        122,
+        51,
+        120,
+        136,
+        137
       ]
     },
     {
       "batchNumber": 8,
       "candidates": [
-        51,
-        120,
-        136,
-        137,
         139,
         140,
         152,
-        176
+        176,
+        177,
+        23,
+        213,
+        68
       ]
     },
     {
       "batchNumber": 9,
       "candidates": [
-        177,
-        23,
-        213,
-        68,
         8,
         38,
         12,
-        4
+        4,
+        9,
+        191,
+        192,
+        46
       ]
     },
     {
       "batchNumber": 10,
       "candidates": [
-        9,
-        191,
-        192,
-        46,
         91,
         119,
         190,
-        45
+        45,
+        150,
+        151,
+        154,
+        160
       ]
     },
     {
       "batchNumber": 11,
       "candidates": [
-        150,
-        151,
-        154,
-        160,
         215,
         195,
         205,
-        52
+        52,
+        59,
+        83,
+        99,
+        103
       ]
     },
     {
       "batchNumber": 12,
       "candidates": [
-        59,
-        83,
+        105,
+        107,
         114,
         86,
         112,
@@ -168,70 +168,6 @@
     }
   ],
   "candidates": [
-    {
-      "gisObjectId": 99,
-      "name": "Upper Letherby Falls",
-      "county": "BARAGA",
-      "river": "WEST BRANCH HURON",
-      "lat": 46.769094,
-      "lng": -88.109011,
-      "cluster": "BARAGA / WEST BRANCH HURON",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 103,
-      "name": "Letherby Falls",
-      "county": "BARAGA",
-      "river": "WEST BRANCH HURON",
-      "lat": 46.781725,
-      "lng": -88.102977,
-      "cluster": "BARAGA / WEST BRANCH HURON",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 105,
-      "name": "Black Slate Falls",
-      "county": "BARAGA",
-      "river": "SLATE RIVER",
-      "lat": 46.78443,
-      "lng": -88.241702,
-      "cluster": "BARAGA / SLATE RIVER",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 107,
-      "name": "Quartzite Falls",
-      "county": "BARAGA",
-      "river": "SLATE RIVER",
-      "lat": 46.789247,
-      "lng": -88.242098,
-      "cluster": "BARAGA / SLATE RIVER",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
     {
       "gisObjectId": 121,
       "name": "West Branch Falls",
@@ -1607,6 +1543,70 @@
       "reviewStatus": "previous-research-needs-public-access-review",
       "sourceCount": 3,
       "blockingGate": "Current Baraga parcel ownership for both point candidates, road commission lawful visitor parking, owner-authorized waterfall bank viewpoint and complete signed dry footpath avoiding nearby house and driveway."
+    },
+    {
+      "gisObjectId": 99,
+      "name": "Upper Letherby Falls",
+      "county": "BARAGA",
+      "river": "WEST BRANCH HURON",
+      "lat": 46.769094,
+      "lng": -88.109011,
+      "cluster": "BARAGA / WEST BRANCH HURON",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 6,
+      "blockingGate": "Reconcile official #99 to independent upper and main falls with map evidence; obtain county parcel title, legal motorized road status, approved parking, permitted continuous walking route and current restrictions."
+    },
+    {
+      "gisObjectId": 103,
+      "name": "Letherby Falls",
+      "county": "BARAGA",
+      "river": "WEST BRANCH HURON",
+      "lat": 46.781725,
+      "lng": -88.102977,
+      "cluster": "BARAGA / WEST BRANCH HURON",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 6,
+      "blockingGate": "Locate a credible independent observation precisely at source GIS #103; distinguish main/upper/lower Leatherby features, then confirm parcel owner, public roadway and parking, authorized trail and present restrictions."
+    },
+    {
+      "gisObjectId": 105,
+      "name": "Black Slate Falls",
+      "county": "BARAGA",
+      "river": "SLATE RIVER",
+      "lat": 46.78443,
+      "lng": -88.241702,
+      "cluster": "BARAGA / SLATE RIVER",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 8,
+      "blockingGate": "Match county parcel/land manager for both falls and the logging bridge, verify Arvon/All Wood road easement and legal turnout, and limit any future guide to a clearly documented safe short view rather than inventing a continuous upstream trail."
+    },
+    {
+      "gisObjectId": 107,
+      "name": "Quartzite Falls",
+      "county": "BARAGA",
+      "river": "SLATE RIVER",
+      "lat": 46.789247,
+      "lng": -88.242098,
+      "cluster": "BARAGA / SLATE RIVER",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 8,
+      "blockingGate": "Determine parcel owner at natural falls and the bridge turnout, confirm road/right-of-way and designated parking, documented legal short path and current restrictions. Only then promote the short-view visitor guide."
     },
     {
       "gisObjectId": 114,
