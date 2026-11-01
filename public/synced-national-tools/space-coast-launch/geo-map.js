@@ -50,6 +50,7 @@
     'low-walk': 'Highlight published parking and on-site facilities, but the accessible route and exact spectator position still require operator confirmation.'
   };
   let current = null, profile = 'family', selected = null;
+  let repairIntel = null, repairRequested = false, repairLoadError = false;
   let map = null, padMarker = null, connectors = null, lotBoundaries = null, policyLine = null, boardwalkLayer = null, activeClosureLayer = null, lotFilter = 'all';
   const boardwalkSegments = new Map();
   let markers = new Map(), leafletPromise = null, mapPromise = null, lastMissionId = null;
@@ -238,6 +239,108 @@
     desk.appendChild(confidence);
   }
 
+  const repairLabels={
+    planning:'Proposed, not built',
+    contract:'Construction contract, not completion',
+    'historic-access':'Past access announcement',
+    'historic-work':'Dated work announcement',
+    'historical-restriction':'Past storm or closure report',
+    'official-announcement':'NPS release'
+  };
+  function shortDate(date){
+    const value=typeof date==='string'?Date.parse(date+'T12:00:00Z'):NaN;
+    return Number.isFinite(value)?new Date(value).toLocaleDateString('en-US',{
+      timeZone:'UTC',month:'short',day:'numeric',year:'numeric'
+    }):'Date unverified';
+  }
+  function renderRepairHistory(){
+    const status=$('geo-repair-status'),list=$('geo-repair-events');
+    if(!status||!list)return;
+    list.replaceChildren();
+    if(repairLoadError||!repairIntel||!Array.isArray(repairIntel.history)){
+      status.textContent='Official NPS publication feed unavailable';
+      const p=node('p','geo-repair-error',
+        'The repair-history feed could not be checked. A missing announcement does not mean a boardwalk is open or safe.');
+      list.appendChild(p);
+      if(isOfficialSource('https://www.nps.gov/cana/learn/news/'))
+        list.appendChild(link('https://www.nps.gov/cana/learn/news/',
+          'Read NPS Canaveral news directly','geo-repair-link'));
+      return;
+    }
+    const live=repairIntel.newsApiStatus==='verified';
+    status.dataset.status=live?'verified':'archive';
+    status.textContent=live?
+      'Official NPS news metadata checked '+officialDate(repairIntel.generatedAt)+
+      '. NPS publications may lag; current boardwalk inspections are not verified.':
+      'Reviewed NPS historical releases only · live publication metadata unavailable. Current physical condition remains unknown.';
+    if(!repairIntel.history.length){
+      list.appendChild(node('p','geo-repair-error',
+        'No applicable NPS publication records were available. Current boardwalk inspections and openings remain unverified.'));
+      return;
+    }
+    for(const item of repairIntel.history.slice(0,4)){
+      const card=node('article','geo-repair-item');
+      card.dataset.category=item.category||'official-announcement';
+      const header=node('div','geo-repair-item-date');
+      header.appendChild(node('span','',shortDate(item.publishedOn)));
+      header.appendChild(node('span','',repairLabels[item.category]||'NPS historical publication'));
+      card.appendChild(header);
+      card.appendChild(node('h6','',String(item.title||'NPS publication').slice(0,180)));
+      card.appendChild(node('p','',String(item.description||'Historical NPS news article.').slice(0,420)));
+      if(Array.isArray(item.boardwalkNumbers)&&item.boardwalkNumbers.length){
+        card.appendChild(node('p','geo-repair-facility',
+          'Named facility: boardwalk '+item.boardwalkNumbers.join(', ')+
+          ' · historical documentation only'));
+      }
+      if(isOfficialSource(item.url))
+        card.appendChild(link(item.url,'Read original NPS record','geo-repair-link'));
+      list.appendChild(card);
+    }
+  }
+  function showLotRepairEvidence(lotNumber,parent) {
+    const panel=node('section','geo-walk-repair');
+    panel.appendChild(node('h6','','NPS repair and inspection record'));
+    const record=repairIntel?.facilityEvidence?.find(x=>x.number===lotNumber);
+    if(!record){
+      panel.appendChild(node('p','','Boardwalk-specific publication checks are unavailable. The mapped structure has no verified current inspection or opening status.'));
+    }else{
+      panel.appendChild(node('p','geo-repair-unknown',
+        'Physical condition: NOT VERIFIED · Current opening: NOT VERIFIED · Accessible passage: NOT VERIFIED'));
+      panel.appendChild(node('p','',
+        record.conclusion||
+        'No current official inspection or repair-completion certificate was verified for this numbered boardwalk.'));
+      for(const update of (record.historicalSpecificEvidence||[]).slice(0,3)){
+        const item=node('p','geo-repair-specific',
+          shortDate(update.publishedOn)+' · '+update.title+
+          '. This dated record is not a current clearance.');
+        panel.appendChild(item);
+        if(isOfficialSource(update.url))
+          panel.appendChild(link(update.url,'Original NPS evidence','geo-repair-link'));
+      }
+    }
+    panel.appendChild(link('https://www.nps.gov/cana/planyourvisit/conditions.htm',
+      'Check today’s NPS closures and posted signs','geo-repair-link'));
+    parent.appendChild(panel);
+  }
+  function loadRepairHistoryOnce(){
+    if(repairRequested)return;
+    repairRequested=true;
+    fetch('/api/space-coast-boardwalk-repairs',{credentials:'same-origin'})
+      .then(r=>r.ok?r.json():Promise.reject(new Error('NPS publications unavailable')))
+      .then(data=>{
+        if(!data?.ok||!Array.isArray(data?.history)||
+           !Array.isArray(data?.facilityEvidence))throw new Error('Malformed news data');
+        repairIntel=data;repairLoadError=false;
+        renderRepairHistory();
+        renderWalkDetails();
+      })
+      .catch(()=>{
+        repairLoadError=true;
+        renderRepairHistory();
+        renderWalkDetails();
+      });
+  }
+
   function renderWalkDetails() {
     const target=$('geo-boardwalk-detail');
     if(!target)return;
@@ -301,6 +404,7 @@
         'The NPS FAQ does not specifically identify this lot as having an accessible beach ramp. ')+
       'Neither the boardwalk map nor its length establishes a legal, unobstructed rocket-viewing spot.');
     target.appendChild(stages);
+    showLotRepairEvidence(lot.number,target);
     const footer=node('div','geo-walk-footer');
     footer.appendChild(node('p','',
       'No route or directions are drawn between the parking polygon, boardwalk and shoreline unless NPS supplies a verified connected public path. Follow on-site closures and accessible-route signs.'));
@@ -819,5 +923,6 @@
     lastMissionId=d.selectedLaunchId;
     current=d.geographicViewing;
     render();
+    loadRepairHistoryOnce();
   });
 }());
