@@ -12,6 +12,7 @@ const { inspectKscLaunch, CALENDAR: KSC_CALENDAR } =
   require('../lib/space-coast-ksc-viewing');
 const { storeTrustedLaunches } = require('../lib/space-coast-ksc-snapshot');
 const { buildGeographicViewing } = require('../lib/space-coast-geo');
+const { readFreshLaunchList } = require('../lib/space-coast-launch-day');
 
 const LAUNCHES = 'https://ll.thespacedevs.com/2.3.0/launches/upcoming/?location__ids=12%2C27&limit=20&format=json&ordering=net&hide_recent_previous=true';
 const KSC = 'https://www.kennedyspacecenter.com/launches-and-events/';
@@ -146,14 +147,23 @@ module.exports = async function handler(req, res) {
   )) return res.status(400).json({ ok: false, error: 'Invalid launch selection.' });
   try {
     const now = Date.now();
-    const [feed, nps] = await Promise.all([fetchJson(LAUNCHES, {}, 12000), loadNpsAlerts(now)]);
+    const [feed, nps] = await Promise.all([
+      readFreshLaunchList(now).then(shared => shared ?
+        {results:shared.results,sharedScheduleCheckedAt:shared.checkedAt,
+          sharedScheduleSource:shared.source,preNormalized:true} :
+        fetchJson(LAUNCHES, {}, 12000)),
+      loadNpsAlerts(now)
+    ]);
     if (!Array.isArray(feed?.results)) throw new Error('Launch Library results are missing');
-    const launches = feed.results
-      .filter(isSpaceCoast)
-      .filter(l => isFutureLaunch(l, now))
-      .sort((a, b) => Date.parse(a.net) - Date.parse(b.net))
-      .slice(0, 8)
-      .map(normalizeLaunch);
+    const launches = (feed.preNormalized ?
+      feed.results.filter(l=>isFutureLaunch({
+        net:l.net,net_precision:{name:l.netPrecision},
+        status:{name:l.status||''}
+      },now)) :
+      feed.results.filter(isSpaceCoast).filter(l=>isFutureLaunch(l,now))
+        .map(normalizeLaunch))
+      .sort((a,b)=>Date.parse(a.net)-Date.parse(b.net))
+      .slice(0,8);
     const next = requestedId ? launches.find(x => x.id === requestedId) : launches[0] || null;
     if (requestedId && !next) return res.status(404).json({
       ok: false, error: 'This mission is no longer in the current Florida launch list.'
@@ -193,6 +203,10 @@ module.exports = async function handler(req, res) {
     };
     return res.status(200).json({
       ok: true, generatedAt: new Date().toISOString(),
+      scheduleCheckedAt:feed.sharedScheduleCheckedAt||new Date().toISOString(),
+      scheduleSource:feed.preNormalized ?
+        'shared-postgres-scheduled-ll2-observation' :
+        'fallback-direct-ll2-cached-15m',
       selectedLaunchId: next?.id || null,
       next, upcoming: launches,
       weather: primary ? { period: primary.period, assessment: primary.assessment } : null,
@@ -216,7 +230,9 @@ module.exports = async function handler(req, res) {
         errors: nps.errors
       },
       sources: [
-        { name: 'Launch Library 2', url: 'https://ll.thespacedevs.com/', checkedAt: new Date().toISOString(), note: 'Florida launch schedule and stated timing precision; third-party, not final launch authority.' },
+        { name: 'Launch Library 2', url: 'https://ll.thespacedevs.com/',
+          checkedAt:feed.sharedScheduleCheckedAt||new Date().toISOString(),
+          note:'Shared scheduled observation where available, otherwise 15-minute cached fallback. Third-party schedule, not final launch authority.' },
         { name: 'NPS Canaveral alerts', url: nps.url, checkedAt: nps.checkedAt, note: nps.verified ? 'Official park alerts checked.' : 'Current closure feed unavailable; Playalinda access unverified.' },
         { name: 'National Weather Service', url: 'https://www.weather.gov/mlb/', note: 'Hourly spectator conditions and gridded sky-cover percentage near the viewing areas; not trajectory visibility.' },
         { name: 'NPS launch entry policy', url: 'https://www.nps.gov/cana/planyourvisit/rocket-launch-viewing.htm', note: 'Playalinda Beach Road normally closes to incoming visitors beginning T–30; mission security can alter access.' },
