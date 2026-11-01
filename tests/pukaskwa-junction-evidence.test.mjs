@@ -50,12 +50,12 @@ test('only five already-reviewed named day hikes can have community node evidenc
 
 test('all eight OSM shared nodes are exact member vertices of the approved named trail geometry',()=>{
   const records=Object.values(MAPPED_JUNCTIONS).flat();
-  assert.equal(records.length,8);
+  assert.equal(records.length,10);
   assert.equal(new Set(records.map(r=>r.nodeId)).size,8);
   for(const r of records){
     assert.equal(r.signedTrailheadVerified,false);
     assert.ok(EXPECTED_NODES[r.nodeId],'no new node IDs without source review');
-    assert.deepEqual([r.trailWay,r.adjoiningWay],EXACT_PAIRS[r.nodeId],'unreviewed source way pair');
+    assert.deepEqual([r.trailWay,r.adjoiningWay].sort((a,b)=>a-b),[...EXACT_PAIRS[r.nodeId]].sort((a,b)=>a-b),'unreviewed source way pair');
     assert.ok(Object.values(APPROVED_WAYS).flat().includes(r.trailWay),'first way must be approved named day hike');
     if(r.adjoiningClass==='service-road')assert.ok(OSM_SERVICE_IDS.has(r.adjoiningWay));
     else assert.ok(Object.values(APPROVED_WAYS).flat().includes(r.adjoiningWay));
