@@ -34,10 +34,11 @@ These are **design risks and previously reported complaints**, not claims each i
 | A28 | Source kilometre values get overwritten during a miles-first change, or bike/foot versus round-trip semantics blur | Keep source data and calculation units stable; convert only display with explicit rounding | Unit tests on small/large routes; assert public text distinguishes return and permitted bike/walk segments |
 | A29 | Green PR, merge or Vercel READY described as independently inspected live page | Record implementation, verified head, deployed matching merged SHA and public fetched HTML as separate facts | Check exact SHA and canonical public response; mark missing independent smoke NOT VERIFIED |
 | A30 | Updated planner and map have different selected trail, photo or decision evidence | One selected ID with a causal matrix; photo request tokens must ignore old async results | Browser A→B→A via all input paths and blocked/slow photos, with matched card/map/answer |
+| A31 | Different tools become the same hero/cards/map layout with only names, colors or photographs changed | Share evidence, accessibility and source contracts, not generic page scaffolds; design for each unique decision | Compare first screen and interaction with two closest existing tools; document two material purpose-driven differences; block release if indistinguishable |
 
 ## Severity and repair
 
-- **Block release:** fabricated safety/access/live status, no useful fallback, broken map, invalid image rights, red owning-repo CI, unauthorized ads/canonical changes.
+- **Block release:** fabricated safety/access/live status, no useful fallback, broken map, invalid image rights, red owning-repo CI, unauthorized ads/canonical changes, or generic cloned visitor experiences that fail the distinctiveness review (A31).
 - **Design debt:** oversized hero, repetitive cards, poor contrasts, stale visual pattern. Fix as part of the next measured experience improvement; avoid broad unrelated changes.
 - **Technical debt:** library migration, redundant packages, overactive animation. Only fix after evidence of visitor benefit/real regression.
 
