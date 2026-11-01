@@ -67,3 +67,21 @@
 .pk-start-path .pk-start-warning{background:rgba(255,230,185,.13);border-left:3px solid #edc395;padding:8px 10px;margin-top:12px!important}
 .pk-start-path a{color:#f8e7b8;text-underline-offset:3px}
 @media(max-width:650px){.pk-start-path{padding:12px}.pk-start-path ol{display:block}.pk-start-path li{margin-bottom:3px}}
+
+/* Community topology is a source evidence ledger, NOT an entrance / route UI. */
+.pk-junction-evidence{border-top:1px solid rgba(241,230,206,.30);margin-top:15px;padding-top:13px;max-width:100%}
+.pk-junction-eyebrow{font-size:.67rem!important;letter-spacing:.08em;text-transform:uppercase;font-weight:800;color:#f0dcb6!important;margin:0 0 5px!important}
+.pk-junction-evidence h5{font:750 .92rem/1.35 system-ui,sans-serif;color:#f6f2e7;letter-spacing:0;margin:4px 0 8px}
+.pk-junction-evidence p{font-size:.80rem!important;line-height:1.52!important}
+.pk-junction-evidence details{border:1px solid rgba(237,226,206,.33);border-radius:6px;overflow:hidden;margin:11px 0;background:rgba(7,34,29,.22)}
+.pk-junction-evidence details[hidden]{display:none!important}
+.pk-junction-evidence summary{font-size:.82rem;font-weight:750;cursor:pointer;padding:10px 12px;min-height:43px;color:#fff0d4}
+.pk-junction-evidence summary:hover{background:rgba(246,235,209,.09)}
+.pk-junction-evidence summary:focus-visible{outline:3px solid #e9bd7a;outline-offset:-3px}
+.pk-junction-evidence ul{margin:0;padding:2px 14px 12px 30px;font-size:.76rem;line-height:1.6}
+.pk-junction-evidence li{margin:7px 0;color:#e4eee7;list-style:disc}
+.pk-junction-evidence li strong{display:block;font-weight:750;color:white}
+.pk-junction-evidence a{color:#fce6b5!important;text-decoration:underline}
+.pk-junction-evidence .pk-junction-credit{border-top:1px solid rgba(245,237,216,.18);padding:9px 12px 11px;color:#d4e4d5!important;font-size:.72rem!important}
+.pk-junction-evidence .pk-junction-warning{border-left:3px solid #e7b67e;background:rgba(255,218,155,.11);padding:8px 11px;color:#f7e9d4!important;margin:10px 0 0!important}
+@media(max-width:650px){.pk-junction-evidence ul{padding-left:25px}.pk-junction-evidence li{margin:11px 0}}
