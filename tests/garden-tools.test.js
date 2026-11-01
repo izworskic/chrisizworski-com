@@ -129,7 +129,7 @@ test('Michigan Growing Season Explorer: crop and soil decisions tell the same st
   assert.match(p.text('pnSeasonTitle'), /fall planting for next summer/i);
   assert.match(p.text('pnSeasonStatus'), /hard freeze/);
   assert.equal(p.$('pnSeasonMissing').hidden, true);
-  p.set('pnCrop', 'basil');
+  p.set('pnCrop', 'cilantro');
   assert.match(p.text('pnSeasonStatus'), /Not reported/);
   assert.equal(p.$('pnSeasonMissing').hidden, false);
 
@@ -175,4 +175,11 @@ test('my garden assembles selected plants and updates with location', () => {
  assert.match(p.text('gardenCount'),/2 plants/);
  const a=p.text('gardenPlan');p.set('pnPlace','49783');assert.notEqual(p.text('gardenPlan'),a);
  p.set('gardenPick','tomatoes');p.click('gardenAdd');assert.match(p.text('gardenCount'),/2 plants/);
+});
+
+test('my garden packet values use the shared fall planner', () => {
+ const p=loadTool(f('michigan-gardening'),{today:'2026-04-15',search:'?place=Bay%20City'});
+ p.set('gardenPick','lettuce');p.set('gardenDays','48','input');p.click('gardenAdd');
+ assert.match(p.text('gardenPlan'),/packet 48 days plus 14-day buffer/);
+ p.set('pnPlace','Adrian');assert.match(p.text('gardenPlan'),/No sourced fall frost date/);
 });

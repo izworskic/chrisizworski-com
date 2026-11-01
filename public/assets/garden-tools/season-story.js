@@ -31,6 +31,12 @@
     }
     function stagesFor(r, frost, st) {
       var c = r.crop, w = r.windows;
+      if (c.kind === 'basil') {
+        return [item('plan','Make room for basil','Spring','Basil is tender. Choose a sunny, well-drained place and use your seed packet to plan the variety you want.'),item('plant','Wait for settled warmth','After frost danger has passed','MSU says basil can be direct-seeded or transplanted once frost danger is over. Historical dates do not guarantee that a cold night is finished; check the forecast.'),item('enjoy','Pick for the kitchen','During growth','Harvest depends on growth and weather, not a fixed date. Check your plants and follow your variety instructions.')];
+      }
+      if (c.kind === 'potato') {
+        return [item('bed','Prepare a bed','Spring','Give potatoes a sunny, well-drained spot. Wait until the ground is workable and check soil temperature at planting depth.'),item('plant','Plant seed potatoes','Soil at least 45°F','MSU recommends planting certified disease-free seed potatoes in spring once soil reaches 45°F. Soil temperature and weather vary from one garden to another.'),item('harvest','Watch the plants','Variety dependent','Potato varieties mature at different rates. MSU suggests watching for vine dieback and checking whether the tuber skins have set; the calendar is not a harvest forecast.')];
+      }
       if (c.kind === 'coolGuide') {
         return [item('spring', 'Give cool weather a try', 'Spring', 'Cool-season crops have a place in the spring garden. Check your seed packet and the condition of your own soil before planting; this guide does not invent a station-specific sowing date.'), item('fall', 'Make room for a second season', 'Late summer into fall', 'MSU includes this crop in its fall garden guide. Look at the days to maturity on your packet, allow for germination and slower growth, then work backward from the typical first frost.'), item('observe', 'Let the garden have a say', 'Throughout the season', 'Variety, soil, weather and the time needed to germinate all matter. Treat a frost date as a planning reference and watch the forecast as the season changes.')];
       }
@@ -82,13 +88,13 @@
       var r = p.crops.filter(function (x) { return x.crop.id === selected; })[0];
       if (!r) return;
       var steps = stagesFor(r, frost, st);
-      if (['beets','carrots','peas','radishes','spinach'].indexOf(r.crop.id) >= 0) {
+      if (['beets','carrots','peas','radishes','spinach','turnips'].indexOf(r.crop.id) >= 0) {
         steps.push(item('fall', 'Make room for a fall crop', 'Late summer', 'MSU includes this crop in its fall garden guide. Check your packet and allow time for germination and slower growth, then work backward from the local frost reference. Your garden and the forecast get the final say.'));
       }
       if (!stage && r.code === 'PLAN_FALL') stage = 'fall';
       if (!stage || !steps.some(function (x) { return x.id === stage; })) stage = suggestedStep(r, p, steps);
       var active = steps.filter(function (x) { return x.id === stage; })[0];
-      var label = r.crop.kind === 'coolGuide' ? 'A place in the cool-season garden' : r.crop.kind === 'garlic' ? 'A fall planting for next summer' : r.crop.kind === 'transplant' ? 'From seed tray to garden bed' :
+      var label = r.crop.kind === 'basil' ? 'A tender herb for warm days' : r.crop.kind === 'potato' ? 'From seed potato to harvest' : r.crop.kind === 'coolGuide' ? 'A place in the cool-season garden' : r.crop.kind === 'garlic' ? 'A fall planting for next summer' : r.crop.kind === 'transplant' ? 'From seed tray to garden bed' :
         r.crop.kind === 'warmSow' ? 'Two gates before the first seed' :
         r.crop.kind === 'hardy' ? 'Let the ground make the call' :
         r.crop.kind === 'soil40' ? 'A thermometer, not a calendar' : 'What the Michigan sources do not say';

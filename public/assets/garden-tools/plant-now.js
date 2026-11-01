@@ -14,6 +14,8 @@
   var K = root.GardenKit, F = root.MIFrost, P = root.MIPlaces;
 
   var SOURCES = {
+    msuBasil: { title: 'Herbs, Michigan Organic Vegetable Production Guide', who: 'Michigan State University', date: 'production guide', url: 'https://www.canr.msu.edu/foodsystems/uploads/files/full-pdf.pdf' },
+    msuPotato: { title: 'Planting and Harvesting of Potatoes in Your Garden', who: 'MSU Potato Breeding and Genetics Program', date: 'home garden guide', url: 'https://www.canr.msu.edu/potatobg/Files/Potato-Home-Gardening/Grow%20Potato%20MSU_2pager.pdf' },
     msuPlant: { title: 'How to Plant Vegetables', who: 'MSU Extension (L. Taylor; adapted G. Voyle; revised K. Hahn, L. Whitlock, M. Wilson)', date: 'updated April 29, 2009', url: 'https://www.canr.msu.edu/uploads/resources/pdfs/plantingveg.pdf' },
     msuFall: { title: 'Fall Vegetable Crops for Your Garden', who: 'MSU Extension', date: 'May 2012', url: 'https://www.canr.msu.edu/uploads/files/E3172_-_Fall_Vegetable_Crops_for_your_Garden.pdf' },
     msuGarlic: { title: 'Organic Garlic Production', who: 'MSU Extension', date: '2018', url: 'https://www.canr.msu.edu/uploads/resources/pdfs/e3371_wcag_2.08.pdf' },
@@ -25,6 +27,8 @@
   var RULES = {
     fallGarden: { source: 'msuFall', quote: 'When to plant depends on when the first frost generally occurs. ... You must consider how many days it takes for your particular vegetable to mature.' },
     garlicFall: { source: 'msuGarlic', quote: 'Plant 3 to 5 weeks before a hard freeze settles in, providing enough time for root development in the fall. In Michigan, this is typically in October–November.' },
+    basilFrost: { source: 'msuBasil', quote: 'Basil can be direct-seeded or transplanted to the field in late spring after all danger of frost is over.' },
+    potato45: { source: 'msuPotato', quote: 'Plant seed pieces in spring when the soil temp. is 45F or above.' },
     hardy: { source: 'msuPlant', quote: 'Some cool season vegetables such as onions, peas and spinach, are very hardy and can be planted as soon as the ground can be worked in the spring. This is usually late March or early April in southern Michigan and one to three weeks later further north.' },
     afterFrost: { source: 'msuPlant', quote: 'Warm season vegetables ... will be killed by frost. They cannot be safely planted outdoors until the danger of frost is past.' },
     soil60: { source: 'msuPlant', quote: 'Seeds of warm season crops germinate poorly in cool soil ... will not germinate well unless the soil temperature at planting depth exceeds 60°F.' },
@@ -65,13 +69,13 @@
     { id: 'mustard', name: 'Mustard greens', kind: 'coolGuide' },
     { id: 'rutabaga', name: 'Rutabaga', kind: 'coolGuide' },
     { id: 'chard', name: 'Swiss chard', kind: 'coolGuide' },
-    { id: 'turnips', name: 'Turnips', kind: 'coolGuide' },
+    { id: 'turnips', name: 'Turnips', kind: 'soil40' },
     { id: 'eggplant', name: 'Eggplant', kind: 'transplant', tender: true },
     { id: 'melon', name: 'Melons', kind: 'warmSow', tender: true },
     { id: 'pumpkin', name: 'Pumpkins', kind: 'warmSow', tender: true },
-    { id: 'potatoes', name: 'Potatoes', kind: 'none', why: 'A local station-specific planting window for potatoes has not been verified here. Check your seed potato instructions and local conditions.' },
+    { id: 'potatoes', name: 'Potatoes', kind: 'potato' },
     { id: 'garlic', name: 'Garlic', kind: 'garlic' },
-    { id: 'basil', name: 'Basil', kind: 'none', why: 'A local station-specific basil planting window has not been verified here. Check your seed packet and local conditions.' },
+    { id: 'basil', name: 'Basil', kind: 'basil' },
     { id: 'cilantro', name: 'Cilantro', kind: 'none', why: 'No Michigan extension source with cilantro timing was found.' },
     { id: 'sweet-corn', name: 'Sweet corn', kind: 'none', why: 'Varieties differ; use your packet and local conditions to plan this crop.' },
     { id: 'zucchini', name: 'Zucchini', kind: 'none', why: 'A local variety-specific timing rule is not yet verified; follow your packet and local conditions.' },
@@ -150,6 +154,19 @@
       out.rules = ['fallGarden'];
       return set('PLAN_FALL', 'Consider ' + crop.name.toLowerCase() + ' for fall', 'Check the days to maturity on your seed packet, allow for germination and slower autumn growth, and count back from your local frost reference. ' + (fr.fallText ? 'The typical first fall frost at this station is ' + fr.fallText + ', not a forecast.' : 'A sourced fall frost reference is unavailable for this station.')); 
     }
+    if (crop.kind === 'basil') {
+      out.rules=['basilFrost'];
+      return set('GUIDE','Basil: wait for settled warmth','MSU describes basil as tender and says to direct-seed or transplant after frost danger has passed. The station date is only a climate reference; check the forecast and your own garden before planting.');
+    }
+    if (crop.kind === 'potato') {
+      out.rules=['potato45'];out.windows=[{kind:'sow',condition:'soil45'}];
+      if (d < K.parse('Mar 1') || d > SPRING_END) return set('NEXT_SPRING','Potatoes: plan for spring','MSU recommends planting seed potatoes in spring when the soil is at least 45°F. Check soil at planting depth and use certified disease-free seed potatoes.');
+      if (soil !== null && soil < 45) return set('WAIT_SOIL','Wait for warmer soil for potatoes',soil+'°F is below the 45°F soil temperature in MSU’s spring guidance.');
+      if (soil !== null && cond.workable === false) return set('WAIT_SOIL','Wait until the bed can be worked','The soil temperature meets the 45°F minimum, but your bed is not workable yet.');
+      if (soil !== null && cond.workable === true) return set('PLANT','Plant seed potatoes','Your soil reading meets MSU’s 45°F minimum and you reported that the bed is workable. Follow your seed potato instructions.');
+      if (soil !== null) return set('READY_WHEN','Check whether the bed is workable','Your '+soil+'°F reading meets MSU’s 45°F minimum. Check the bed before planting.');
+      return set('READY_WHEN','Check your soil before planting potatoes','In spring, MSU recommends planting seed potatoes when soil is at least 45°F. Check the bed at planting depth.');
+    }
     if (crop.kind === 'coolGuide') {
       out.rules = ['fallGarden'];
       return set('GUIDE', crop.name + ': a cool-season crop', 'MSU includes this crop in its fall garden guide. For spring and fall, check your seed packet, growing conditions and days to maturity; this tool does not have a verified local sowing date.');
@@ -214,7 +231,7 @@
     var week = all.filter(function (r) {
       if (r.code === 'PLAN_FALL' || r.code === 'PLAN_GARLIC') return true;
       if (r.code === 'START_INDOORS' || r.code === 'HARDEN_OFF') return true;
-      if (r.code === 'TRANSPLANT' || r.code === 'PLANT') return age(r) <= 28 || r.crop.kind === 'hardy' || r.crop.kind === 'soil40';
+      if (r.code === 'TRANSPLANT' || r.code === 'PLANT') return age(r) <= 28 || r.crop.kind === 'hardy' || r.crop.kind === 'soil40' || r.crop.kind === 'potato';
       if (r.code === 'READY_WHEN' || r.code === 'WAIT_SOIL') return true;
       if (r.code === 'WAIT') { var w = r.windows.filter(function (x) { return typeof x.from === 'number' && x.from >= d; })[0]; return w && w.from - d <= 21; }
       return false;
@@ -249,13 +266,36 @@
     return {ok:true,referenceDate:iso,referenceBasis:basis,planningDate:dt.toISOString().slice(0,10),maturityDays:maturity,bufferDays:buffer,source:'msuFall',limitation:'Planning estimate, not a last safe planting date or harvest forecast; packet conventions, germination, frost tolerance and weather vary.'};
   }
 
+  // Reusable multi-crop contract: caller supplies crop IDs, optional packet data, place and date.
+  // Never substitute a generic research table value for a gardener's own packet.
+  function gardenPlan(st, items, options) {
+    options=options||{};var iso=options.dateISO;
+    if (!st) return {ok:false,reason:'station_required'};
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(String(iso||''))) return {ok:false,reason:'invalid_date'};
+    var dt=new Date(iso+'T00:00:00Z');
+    if (!isFinite(dt.getTime())||dt.toISOString().slice(0,10)!==iso) return {ok:false,reason:'invalid_date'};
+    if (!Array.isArray(items)||items.length>100) return {ok:false,reason:'invalid_items'};
+    var seen={},out=[],errors=[];
+    items.forEach(function(item,index){
+      if (typeof item==='string') item={cropId:item};
+      if (!item||typeof item.cropId!=='string') {errors.push({index:index,reason:'invalid_item'});return;}
+      var c=CROPS.filter(function(x){return x.id===item.cropId})[0];
+      if (!c) {errors.push({index:index,reason:'unknown_crop',cropId:item.cropId});return;}
+      if (seen[c.id]) {errors.push({index:index,reason:'duplicate_crop',cropId:c.id});return;} seen[c.id]=true;
+      var current=cropStatus(c,st,K.fromISO(iso),options.conditions||{}), packet=null;
+      if (item.maturityDays!==undefined) packet=c.kind==='garlic'?{ok:false,reason:'overwinter_crop'}:(!fallReference(c.id)&&c.id!=='beans')?{ok:false,reason:'fall_sowing_unverified'}:fallPlan(st,{year:Number(iso.slice(0,4)),maturityDays:item.maturityDays,bufferDays:item.bufferDays===undefined?14:item.bufferDays,frostISO:options.frostISO});
+      out.push({cropId:c.id,crop:c,current:current,fallReference:fallReference(c.id),fallPlan:packet});
+    });
+    return {ok:true,station:st.s,dateISO:iso,crops:out,errors:errors,limitation:'Station frost dates are historical references. Soil, weather, variety and packet instructions matter.'};
+  }
+
   // When nothing is current, the next dated window anywhere in the year.
   function nextUp(st, d) {
     var fr = frostOf(st), best = null;
     CROPS.forEach(function (c) { if (c.kind !== 'transplant' && c.kind !== 'warmSow') return; var from = c.kind === 'transplant' ? fr.cautious - 56 : fr.cautious; var n = ((from - d) % 365 + 365) % 365; if (!best || n < best.inDays) best = { crop: c, from: from, inDays: n, what: c.kind === 'transplant' ? 'start ' + c.name.toLowerCase() + ' indoors' : 'sow ' + c.name.toLowerCase() + ' outside' }; });
     return best;
   }
-  var api = { SOURCES: SOURCES, RULES: RULES, CROPS: CROPS, STATUS: STATUS, FALL_PUBLISHED: FALL_PUBLISHED, locate: locate, towns: towns, nearestStation: nearestStation, detroitToday: detroitToday, cropStatus: cropStatus, plan: plan, nextUp: nextUp, frostOf: frostOf, miles: miles, fallReference: fallReference, fallPlan: fallPlan };
+  var api = { SOURCES: SOURCES, RULES: RULES, CROPS: CROPS, STATUS: STATUS, FALL_PUBLISHED: FALL_PUBLISHED, locate: locate, towns: towns, nearestStation: nearestStation, detroitToday: detroitToday, cropStatus: cropStatus, plan: plan, nextUp: nextUp, frostOf: frostOf, miles: miles, fallReference: fallReference, fallPlan: fallPlan, gardenPlan: gardenPlan };
   root.PlantNow = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
 })(typeof window !== 'undefined' ? window : globalThis);
