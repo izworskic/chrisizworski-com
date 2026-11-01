@@ -56,7 +56,7 @@ const check=(ok,message)=>{if(!ok)throw Error(message)};
   await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
   const url='http://127.0.0.1:'+server.address().port+'/pukaskwa-national-park/';
   browser=await chromium.launch({executablePath:process.env.CHROME_PATH||undefined,headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});
-  for(const view of [{name:'phone360',width:360,height:760},{name:'phone390',width:390,height:844},{name:'tablet768',width:768,height:1024},{name:'desktop1366',width:1366,height:900}]){
+  for(const view of [{name:'phone360',width:360,height:760},{name:'phone390',width:390,height:844},{name:'tablet768',width:768,height:1024},{name:'desktop1366',width:1366,height:900},{name:'desktop1440',width:1440,height:900}]){
     const context=await browser.newContext({viewport:{width:view.width,height:view.height},reducedMotion:'reduce'});
     const page=await context.newPage();
     const errors=[];
@@ -94,6 +94,8 @@ const check=(ok,message)=>{if(!ok)throw Error(message)};
     check((await page.locator('#pk-map-place-southern-headland-chair').getAttribute('data-picked'))==='true',view.name+' default trail-chair synchronization');
     await page.locator('#pk-map-focus-trail').click();
     check((await page.locator('#pk-interactive-map').getAttribute('data-active-trail'))==='southern-headland',view.name+' default mapped line selected');
+    check((await page.locator('#pk-junction-heading').innerText()).includes('trail-to-road'),view.name+' default headland map evidence');
+    check(await page.locator('#pk-junction-list li').count()===2,view.name+' default verified headland source relations');
     check(await page.locator('#pk-interactive-map path.pk-community-trail').count()===14,view.name+' actual vector line shapes retained');
 
     await page.locator('input[name="pk-time"][value="30"]').check();
@@ -104,6 +106,21 @@ const check=(ok,message)=>{if(!ok)throw Error(message)};
     check((await page.locator('#pk-map-start-text').innerText()).includes('Horseshoe Bay'),view.name+' Boardwalk starting guidance tracks selected hike');
     check((await page.locator('#pk-map-start-sequence li').first().innerText())==='Visitor Centre',view.name+' signed origin remains official Visitor Centre');
     check((await page.locator('#pk-map-start-warning').innerText()).includes('incomplete'),view.name+' missing parking connectors not concealed');
+    check((await page.locator('#pk-junction-list li').count())===2,view.name+' two verified Boardwalk OSM relationships');
+    check((await page.locator('#pk-junction-list a[href="https://www.openstreetmap.org/node/4411571772"]').count())===1,view.name+' boardwalk shared OSM road node');
+    check((await page.locator('#pk-junction-warning').innerText()).includes('None of these'),view.name+' no inferred navigation from OSM adjacency');
+    await page.locator('#pk-junction-sources summary').click();
+    check(await page.locator('#pk-junction-list a[href^="https://www.openstreetmap.org/node/"]').first().isVisible(),view.name+' inspect original node source opens');
+    // A→B→A re-selection must restore both the chosen hike and its source evidence.
+    await page.locator('input[name="pk-time"][value="120"]').check();
+    await page.locator('#pk-effort').selectOption('moderate');
+    await page.locator('#pk-vibe').selectOption('coast');
+    check((await page.locator('#pk-result-heading').innerText())==='Southern Headland Trail',view.name+' A-B-A reverse chooses headland');
+    check((await page.locator('#pk-junction-list a[href="https://www.openstreetmap.org/node/6949507750"]').count())===1,view.name+' headland mapping evidence restored');
+    await page.locator('input[name="pk-time"][value="30"]').check();
+    await page.locator('#pk-effort').selectOption('easy');
+    await page.locator('#pk-vibe').selectOption('beach');
+    check((await page.locator('#pk-junction-list a[href="https://www.openstreetmap.org/node/4411571772"]').count())===1,view.name+' Boardwalk evidence restored without stale trail ID');
     await page.locator('#pk-map-focus-choice').click();
     check((await page.locator('#pk-map-place-horseshoe-beach').getAttribute('data-picked'))==='true',view.name+' beach destination highlighted');
     check((await page.locator('#pk-map-choice-body').innerText()).includes('not a starting point'),view.name+' shoreline pin caveat');
@@ -167,6 +184,9 @@ const check=(ok,message)=>{if(!ok)throw Error(message)};
     check(await page.locator('.pk-map-place-actions a[href^="https://www.google.com/maps/search/"]').count()===7,'noJS native map links');
     check((await page.locator('.pk-map-evidence').innerText()).includes('OpenStreetMap contributors'),'no-JS license and path disclaimer visible');
     check((await page.locator('#pk-map-start-sequence li').first().innerText())==='Visitor Centre','noJS gives official starting point');
+    check((await page.locator('#pk-junction-heading').innerText()).includes('trail-to-road'),'noJS retains map-evidence heading');
+    check(await page.locator('#pk-junction-list li').count()===2,'noJS source-backed headland relationship links remain in HTML');
+    check((await page.locator('#pk-junction-warning').innerText()).includes('None of these'),'noJS still warns against routing assumptions');
     report.views.push({name:'no-JS',officialDiagram:true,placeLinks:7});
     await context.close();
   }
