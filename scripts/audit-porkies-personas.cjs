@@ -34,12 +34,32 @@ async function scenario(browser,c,r){
   const stops=await p.locator("#results .recommendations li").allInnerTexts();
   const warnings=await p.locator("#results .warnings li").allInnerTexts();
   const excluded=await p.locator("#results .excluded li").allInnerTexts();
-  const result=title+" "+joined(stops)+" "+joined(warnings)+" "+joined(excluded);
-  one.observations={...one.observations,title,stops,warnings,excluded};
+  const vehicleCheck=await p.locator("#results .vehicle-check").allInnerTexts();
+  const forkText=await p.locator("#results .plan-fork").allInnerTexts();
+  const result=title+" "+joined(stops)+" "+joined(warnings)+" "+joined(excluded)+" "+joined(vehicleCheck)+" "+joined(forkText);
+  one.observations={...one.observations,title,stops,warnings,excluded,vehicleCheck,choiceOffered:forkText.length>0};
   if(title&&warnings.length)one.passed.push("planner provided advice and caveats");
   else one.flags.push("main plan incomplete");
-  const intent=joined(stops).toLowerCase().includes(c.desired.toLowerCase());
+  const directIntent=joined(stops).toLowerCase().includes(c.desired.toLowerCase());
+  const canChooseIntent=!directIntent&&joined(forkText).toLowerCase().includes(c.desired.toLowerCase())&&forkText.length>0;
+  let chosenGoalConfirmed=false;
+  if(canChooseIntent){
+   await p.locator('#results [data-plan-path="desired"]').click();
+   const wanted=await p.locator("#results .recommendations").innerText();
+   const selected=await p.locator("#experience-a h3").innerText();
+   const caveat=await p.locator("#results .result-intro").innerText();
+   chosenGoalConfirmed=wanted.toLowerCase().includes(c.desired.toLowerCase()) &&
+    selected.toLowerCase().includes(c.desired.toLowerCase()) &&
+    /NOT confirmed within your/.test(caveat);
+   if(chosenGoalConfirmed){
+    await p.locator('#results [data-plan-path="local"]').click();
+    const localResult=await p.locator("#results .recommendations").innerText();
+    if(localResult.toLowerCase().includes(c.desired.toLowerCase()))chosenGoalConfirmed=false;
+   }
+  }
+  const intent=directIntent||chosenGoalConfirmed;
   one.observations.requestedExperienceRepresented=intent;
+  one.observations.destinationTradeoffReversible=chosenGoalConfirmed;
   if(intent)one.passed.push("stated experience represented");
   else{
    one.flags.push("stated destination absent from recommended stops");
@@ -104,8 +124,11 @@ async function failureJourneys(browser,r){
  try{
   await p.goto(URL,{waitUntil:"domcontentloaded",timeout:40000});
   const baseline=await p.evaluate(()=>{
-   const el=document.getElementById("decision");return{
+   const el=document.getElementById("decision");
+   const first=document.querySelector('.hero-quickstart [data-porkies-start="views"]');
+   return{
     date:document.getElementById("travel-date")?.value,
+    quickStartTop:first?Math.round(first.getBoundingClientRect().top+scrollY):-1,
     decisionY:Math.round(el?.getBoundingClientRect().top+scrollY||0),
     viewportHeight:innerHeight,pageHeight:document.documentElement.scrollHeight,
     hasCompare:!!document.getElementById("experience-compare"),
@@ -114,8 +137,10 @@ async function failureJourneys(browser,r){
   });
   r.baseline=baseline;
   if(baseline.date&&baseline.date<"2026-11-01")issue(r,"P-PAST-DATE","P1","Past date pre-filled in trip planner","As of 2026-11-01 the control defaults to "+baseline.date,"Hydrate local current date or require explicit future trip date.");
-  if(baseline.decisionY>baseline.viewportHeight*1.6)issue(r,"P-BURIED-DECISION","P2","Mobile plan controls sit far below first screen",
-    "First planner begins "+baseline.decisionY+"px ("+(baseline.decisionY/baseline.viewportHeight).toFixed(1)+" viewports) below top.","Consider an earlier compact answer/action.");
+  if(baseline.quickStartTop<0||baseline.quickStartTop>baseline.viewportHeight-20)
+   issue(r,"P-BURIED-DECISION","P2","First actionable visitor choice remains below the phone screen",
+    "First purposeful visit choice is "+baseline.quickStartTop+"px down; main form is at "+baseline.decisionY+"px.",
+    "Move accessible personalized first-screen entry above the fold.");
   if(baseline.noindex==="noindex,follow")issue(r,"P-NOINDEX","P1","Intentionally noindexed live tool","Public canonical still has noindex,follow.","Only change after route/access release safeguards and SEO checks.");
   const proof=p.locator("#porkies-access-proof");
   if(await proof.count()){await proof.locator("summary").focus();await p.keyboard.press("Enter");r.failureModes.push({id:"keyboard-proof",state:await proof.evaluate(e=>e.open)?"passed":"failed"});}
