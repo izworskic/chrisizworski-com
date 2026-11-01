@@ -1,0 +1,44 @@
+name: Porkies production persona audit
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/audit-porkies-personas.cjs'
+      - '.github/workflows/porkies-persona-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: porkies-persona-audit-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  read-only-production-simulation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate persona harness JavaScript syntax
+        run: node --check scripts/audit-porkies-personas.cjs
+      - name: Install isolated pinned Playwright (no application dependency change)
+        run: |
+          mkdir -p /tmp/porkies-persona-playwright
+          npm install --prefix /tmp/porkies-persona-playwright --no-save --ignore-scripts playwright@1.58.2
+          echo "NODE_PATH=/tmp/porkies-persona-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium-browser)" >> "$GITHUB_ENV"
+      - name: Simulate sixteen visitor goals in the public production tool
+        env:
+          PORKIES_URL: https://chrisizworski.com/porcupine-mountains/
+        run: node scripts/audit-porkies-personas.cjs
+      - name: Preserve issue register, scenario results and screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: porkies-persona-research-20261101
+          path: artifacts/porkies-personas/
+          retention-days: 30
+          if-no-files-found: warn
