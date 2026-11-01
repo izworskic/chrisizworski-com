@@ -37,7 +37,12 @@ test("winter network keeps future snow, observed depth and trail readiness separ
  const xc=read("public/michigan-cross-country-skiing/index.html");
  const downhill=read("public/michigan-ski-hills/index.html");
  const sled=read("public/snowmobile/index.html");
- assert.match(snowbelt,/lake-effect\.js\?v=20261101-2/);
+ assert.match(snowbelt,/lake-effect\.js\?v=20261101-3/);
+ assert.match(snowbelt,/id="forecast-story-heading"/);
+ assert.match(snowbelt,/id="forecast-story-lead"/);
+ assert.match(snowbelt,/id="forecast-story-why"/);
+ assert.match(snowbelt,/id="forecast-story-next"/);
+ assert.match(snowbelt,/not a forecast issued by a meteorologist/);
  assert.match(snowbelt,/id="forecast-coverage"/);
  assert.match(snowbelt,/id="snow-signal"/);
  assert.match(snowbelt,/id="evidence-freshness"/);
