@@ -142,6 +142,11 @@
         'Published viewing cutoff: ' + venue.closesAt));
       if (venue.checkInAt) v.appendChild(element('p', 'ksc-venue-time', 'Check-in: ' + venue.checkInAt));
       if (venue.busBoardingAt) v.appendChild(element('p', 'ksc-venue-time', 'Bus boarding: ' + venue.busBoardingAt));
+      if (venue.transport === 'ksc-controlled-bus') {
+        v.appendChild(element('p', 'ksc-venue-transport', 'Behind NASA’s gates: use the assigned KSC bus. Do not drive to this viewing area.'));
+      } else if (venue.transport === 'ksc-bus-tour') {
+        v.appendChild(element('p', 'ksc-venue-transport', 'Access via the Kennedy Space Center Bus Tour; confirm operating hours and first-come availability.'));
+      }
       v.appendChild(element('p', 'ksc-venue-note', venue.note || 'Confirm current rules with Kennedy Space Center.'));
       list.appendChild(v);
     }
