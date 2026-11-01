@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {EIGHT_DAY_HIKE_IDS, startAdvice, OFFICIAL_HIKES, OFFICIAL_VISITOR_CENTRE, OFFICIAL_PARK_RULES, OFFICIAL_RESPONSIBLE_VISIT} from '../public/assets/pukaskwa-starts.mjs';
+import {EIGHT_DAY_HIKE_IDS, startAdvice, OFFICIAL_HIKES, OFFICIAL_VISITOR_CENTRE, OFFICIAL_PARK_RULES, OFFICIAL_RESPONSIBLE_VISIT, OFFICIAL_CAMPGROUND_MAP, OFFICIAL_CAMPGROUND_PAGE, OFFICIAL_MAP_LABELS, officialMapOrientation} from '../public/assets/pukaskwa-starts.mjs';
 import {DAY_HIKES} from '../lib/pukaskwa/trail-registry.mjs';
 
 test('all eight official trails have Visitor Centre start evidence without invented trailhead coordinates',()=>{
@@ -68,4 +68,45 @@ test('Parks Canada walking-rule gate never promotes OSM junctions or destination
   assert.match(js,/accessProofDetail.textContent=orientation.pedestrianAccessEvidence/);
   assert.match(js,/last-known-closed/);
   assert.doesNotMatch(js,/routing\.control|GPXDownload|routeToParking/);
+});
+
+test('official published campground trail labels are image positions, never GPS starts',()=>{
+  assert.match(OFFICIAL_CAMPGROUND_MAP,/Campground_Map_FOR_PRINT_OTENTIKS-ADDITION\.jpg/);
+  assert.match(OFFICIAL_CAMPGROUND_PAGE,/parks\.canada\.ca/);
+  for(const id of EIGHT_DAY_HIKE_IDS){
+    const result=officialMapOrientation(id);
+    assert.equal(result.imageSource,OFFICIAL_CAMPGROUND_MAP);
+    assert.equal(result.signedTrailheadCoordinatesVerified,false,id);
+    assert.equal(result.gpsNavigation,false,id);
+    assert.match(result.mappingMeaning,/printed trail NAME/i);
+    assert.ok(!('latitude' in result)&&!('longitude' in result),id);
+    if(result.label){
+      assert.ok(Number.isInteger(result.label.x)&&result.label.x>=0&&result.label.x<=1000);
+      assert.ok(Number.isInteger(result.label.y)&&result.label.y>=0&&result.label.y<=761);
+      assert.match(result.label.caption,/park campground map/);
+    }
+  }
+  assert.equal(officialMapOrientation('manito-miikana').label,null);
+  assert.equal(officialMapOrientation('white-river-bridge',{blocked:true}).label,null);
+  assert.equal(officialMapOrientation('southern-headland',{blocked:true}).label,null);
+  assert.equal(Object.keys(OFFICIAL_MAP_LABELS).length,6);
+  assert.match(officialMapOrientation('combination-hike').description,/North Loop Campground/);
+  assert.equal(officialMapOrientation('unknown'),null);
+});
+test('the printed-park-map visitor experience is responsive, change-aware and never routes from image pixels',()=>{
+ const html=readFileSync('public/pukaskwa-national-park/index.html','utf8');
+ const js=readFileSync('public/assets/pukaskwa-map.js','utf8');
+ const css=readFileSync('public/assets/pukaskwa-map.css','utf8');
+ assert.match(html,/id="pk-campground-detail"/);
+ assert.match(html,/id="pk-campground-orientation-image"/);
+ assert.match(html,/id="pk-official-label-ring"/);
+ assert.match(html,/id="pk-official-wayfinding-text"/);
+ assert.match(html,/id="pk-find-park-map-label"/);
+ assert.match(html,/solid black lines are campground roads/);
+ assert.match(html,/black dotted lines are walking trails/);
+ assert.match(js,/officialMapOrientation\(selectedTrail,\{blocked\}\)/);
+ assert.match(js,/parkDiagramRing\.setAttribute\('cx'/);
+ assert.match(js,/parkDiagramRing\.hidden=!parkEvidence\.label/);
+ assert.match(css,/aspect-ratio:1000 \/ 761/);
+ assert.doesNotMatch(js,/coordinatesFromImage|navigateFromParkImage|createRouteFromImage/);
 });
