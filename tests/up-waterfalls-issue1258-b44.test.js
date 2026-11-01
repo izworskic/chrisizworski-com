@@ -1,0 +1,14 @@
+import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';
+const R=JSON.parse(fs.readFileSync('data/up-waterfall-reconciliation.json','utf8')),L=JSON.parse(fs.readFileSync('data/up-waterfall-inventory-ledger.json','utf8')),Q=JSON.parse(fs.readFileSync('data/up-waterfall-review-queue.json','utf8')),V=JSON.parse(fs.readFileSync('public/assets/up-waterfall-access-reviews.json','utf8')),map=fs.readFileSync('public/sitemap-up-waterfalls.xml','utf8');
+test('batch44: waterfall names, ownership, and visitor routes do not get conflated',()=>{
+for(const [id,slug] of [[75,'manakiki-falls'],[42,'onion-falls'],[80,'vista-falls'],[85,'west-branch-sturgeon-falls'],[129,'ripley-falls'],[15,'margeson-falls']]){
+const c=R.candidates.find(x=>x.gisObjectId===id),l=L.entries.find(x=>x.sourceId===id),v=V.records.find(x=>x.gisObjectId===id);assert.ok(c&&l&&v);assert.equal(c.curatedId,null);assert.equal(c.publicationEligible,false);assert.equal(l.publication,'research-only');assert.equal(v.routeAudit.outcome,'not-cleared');assert.equal(v.routeAudit.routePolylineAuthorized,false);assert.equal(v.routeAudit.destinationCoordinatesForDriving,false);assert.equal(v.routeAudit.segments.length,6);assert.ok(v.visitorDecision?.decision);assert.equal(Q.candidates.find(x=>x.gisObjectId===id).reviewStage,'awaiting-new-authoritative-evidence');
+const url='/upper-peninsula-waterfalls/research/'+slug+'/';const html=fs.readFileSync('public'+url+'index.html','utf8');assert.match(html,/noindex,follow/);assert.equal(v.researchPage,url);assert.ok(!map.includes(url));const schema=JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)?.[1]||'{}');assert.equal(schema['@type'],'WebPage');assert.doesNotMatch(html,/\"@type\":\"TouristAttraction\"/);
+}
+assert.equal(R.counts.curatedTotal,71);assert.equal(R.counts.pending,96);assert.equal(L.unresolvedCandidates,96);assert.equal(Q.candidates.length,96);assert.equal(V.records.length,53);
+const vista=R.candidates.find(x=>x.gisObjectId===80);assert.match(vista.disposition,/historic-map-feature-waterfall-unconfirmed/);assert.match(V.records.find(x=>x.gisObjectId===80).visitorDecision.decision,/not confirmed/i);
+const margeson=R.candidates.find(x=>x.gisObjectId===15);assert.match(margeson.landManager,/Michigan DNR/);assert.match(margeson.sourceNotes,/108172/);assert.match(V.records.find(x=>x.gisObjectId===15).visitorDecision.decision,/private-land/i);
+const west=R.candidates.find(x=>x.gisObjectId===85);assert.match(west.landManager,/Ottawa National Forest/);assert.match(west.sourceNotes,/526m/);
+const manakiki=R.candidates.find(x=>x.gisObjectId===75);assert.match(manakiki.sourceNotes,/356m/);
+const overlay=fs.readFileSync('public/assets/up-waterfalls-research.js','utf8');assert.match(overlay,/visitorDecision/);assert.match(overlay,/Waterfall not confirmed/);
+});
