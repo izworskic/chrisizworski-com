@@ -12,6 +12,7 @@ const assert=require('node:assert/strict');
   for(const width of [360,390,768,1440]){
    const ctx=await browser.newContext({viewport:{width,height:900},deviceScaleFactor:1});
    const page=await ctx.newPage();
+   page.on('pageerror',error=>console.error('Browser error:',error));
    await page.route('**/*',route=>route.request().url().startsWith('http://127.0.0.1:8765/')?route.continue():route.abort());
    await page.goto('http://127.0.0.1:8765/michigan-gardening/?place=Bay+City&date=2026-11-01',{waitUntil:'domcontentloaded'});
    await page.locator('#gardenPick').selectOption('tomatoes');await page.locator('#gardenAdd').click();
@@ -25,6 +26,7 @@ const assert=require('node:assert/strict');
    await page.locator('#pnPlace').fill('Adrian');await page.locator('#pnPlace').dispatchEvent('change');
    assert.match(await page.locator('#gardenPlan').innerText(),/No sourced fall frost date/);
    await page.locator('.garden-plant').filter({hasText:'Tomatoes'}).getByRole('button',{name:/Remove/}).click();
+   await page.waitForFunction(()=>!document.querySelector('#gardenAhead').textContent.includes('Tomatoes'),null,{timeout:5000});
    assert.doesNotMatch(await ahead.innerText(),/Tomatoes/);
    await ctx.close();
   }

@@ -26,7 +26,9 @@ function mount(o){
     var condition=w.kind==='fall_reference'?'Packet-based estimate, not a last safe date.':w.kind==='sow'?'Check the forecast and soil at planting depth.':w.kind==='transplant'?'Check the forecast; frost is still possible.':'A planning window based on the station’s spring reference.';
     return K.h('li',null,K.h('span',{class:'garden-ahead-date'},when),K.h('span',{class:'garden-ahead-action'},K.h('strong',null,labels[w.kind]+': '+names[w.cropId]),K.h('small',null,condition)));
    }));
-   ahead.replaceChildren(K.h('p',{class:'gy-kicker'},'Your garden, looking ahead'),K.h('h4',null,'A few dates for your notebook'),K.h('p',null,'Use these as a place to start. Your garden and the forecast get the final say.'),list,future.length>8?K.h('p',{class:'garden-ahead-more'},'Showing the next 8 of '+future.length+' planning references.'):null);
+   var aheadContent=[K.h('p',{class:'gy-kicker'},'Your garden, looking ahead'),K.h('h4',null,'A few dates for your notebook'),K.h('p',null,'Use these as a place to start. Your garden and the forecast get the final say.'),list];
+   if(future.length>8)aheadContent.push(K.h('p',{class:'garden-ahead-more'},'Showing the next 8 of '+future.length+' planning references.'));
+   ahead.replaceChildren.apply(ahead,aheadContent);
    ahead.hidden=false;
   }
   container.replaceChildren.apply(container,rows.map(function(entry){
