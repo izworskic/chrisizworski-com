@@ -23,7 +23,7 @@
     try {
       const u = new URL(url);
       return u.protocol === 'https:' && [
-        'www.brevardfl.gov','www.nps.gov','www.kennedyspacecenter.com',
+        'www.brevardfl.gov','www.nps.gov','home.nps.gov','www.kennedyspacecenter.com',
         'www.portcanaveral.com','www.cityofcocoabeach.com'
       ].includes(u.hostname);
     } catch { return false; }
