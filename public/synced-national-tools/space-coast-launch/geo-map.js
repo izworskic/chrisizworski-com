@@ -404,6 +404,15 @@
       mapPromise=null; map=null;
     }
   }
+  const roadToggle=$('geo-road-toggle');
+  function updateRoadDisplay() {
+    if(!map || !policyLine)return;
+    if(roadToggle?.checked) {
+      if(!map.hasLayer(policyLine))policyLine.addTo(map);
+    } else if(map.hasLayer(policyLine))map.removeLayer(policyLine);
+  }
+  if(roadToggle)roadToggle.addEventListener('change',updateRoadDisplay);
+
   function renderMapMarkers() {
     if (!map || !current) return;
     const L=window.L;
@@ -443,6 +452,43 @@
       markers.set(p.id,{marker,point:p});
       bounds.push([p.lat,p.lon]);
     });
+    // These are the actual *NPS public parking polygons*, not NASA safety
+    // exclusion areas or dynamic geofences. Only verified active park notices
+    // may change their status styling; unknown is not painted as open.
+    lotBoundaries=L.layerGroup().addTo(map);
+    for (const p of points.filter(x=>x.category==='beach-parking')) {
+      if(!Array.isArray(p.polygons) || !p.polygons.length)continue;
+      const paths=p.polygons.filter(r=>Array.isArray(r)&&r.length>=3)
+        .map(r=>r.filter(c=>Array.isArray(c)&&c.length>=2&&
+          geoPointValid({lon:c[0],lat:c[1]}))
+          .map(c=>[c[1],c[0]])).filter(r=>r.length>=3);
+      if(!paths.length)continue;
+      const closed=p.level==='closed';
+      const boundary=L.polygon(paths,{
+        color:closed?'#a24b39':'#3b7f57',
+        weight:2,opacity:.9,fillColor:closed?'#a24b39':'#7bad8a',
+        fillOpacity:closed?.19:.12,
+        interactive:true
+      }).addTo(lotBoundaries);
+      boundary.bindTooltip('NPS parking #'+p.number+
+        (closed?' · NPS closure reported':' · live opening unverified'),
+        {direction:'top'});
+      boundary.on('click',()=>focusPoint(p.id,false));
+    }
+    const road=current.roadCorridor;
+    if(Array.isArray(road?.coordinates) && road.coordinates.length>4 &&
+       road.coordinates.every(c=>Array.isArray(c)&&c.length===2&&
+         geoPointValid({lat:c[1],lon:c[0]}))) {
+      policyLine=L.polyline(road.coordinates.map(c=>[c[1],c[0]]),{
+        color:'#a86b38',weight:5,dashArray:'10 8',opacity:.72,
+        interactive:true
+      });
+      policyLine.bindPopup(
+        'Published NPS launch-day inbound restriction corridor (T−30 policy). '+
+        'This is historical official road geometry, NOT a live closure, traffic or driving route.'
+      );
+      updateRoadDisplay();
+    }
     if(bounds.length)map.fitBounds(bounds,{padding:[28,28],maxZoom:12});
     const chosen=points.find(p=>p.id===selected);
     if(chosen)showOnMap(chosen,false);
