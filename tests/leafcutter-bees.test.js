@@ -43,7 +43,7 @@ function planner(options={}) {
     createTextNode(t) { return {textContent:t}; }
   };
   vm.runInNewContext(script, { document, Date: options.Date || Date, fetch: options.fetch });
-  function set(k, v) { nodes[k].value = v; nodes[k].handlers.change(); }
+  function set(k, v) { nodes[k].value = v; const event=nodes[k].handlers.change||nodes[k].handlers.input; if(event)event(); else throw new Error('No handler for '+k); }
   return { nodes, paths, seasons, set,
     title: () => nodes['result-title'].textContent,
     caveat: () => nodes['result-caveat'].textContent };
