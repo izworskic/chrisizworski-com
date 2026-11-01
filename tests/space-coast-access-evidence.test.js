@@ -162,7 +162,7 @@ test('visitor map shows labeled, source-dated active NPS closure references with
   const css=fs.readFileSync(path.join(root,'viewing.css'),'utf8');
   assert.match(html,/id="geo-live-access"/);
   assert.match(html,/id="geo-current-closure-toggle"/);
-  assert.match(html,/geo-map\.js\?v=20261101-access1/);
+  assert.match(html,/geo-map\.js\?v=20261101-repair1/);
   assert.match(js,/function renderLiveAccess\(/);
   assert.match(js,/function updateActiveClosureDisplay\(/);
   assert.match(js,/activeClosureLayer=L\.layerGroup/);
