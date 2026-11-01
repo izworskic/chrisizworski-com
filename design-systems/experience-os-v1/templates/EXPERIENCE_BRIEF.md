@@ -34,6 +34,14 @@ Relevant EXPERIENCE_OS_V1 pattern IDs: [P02, P06]; local system: [FIELD_GUIDE_V1
 - Concept B: [different layout and interaction model, advantages/tradeoffs]
 - Selection and reason: [visitor value, testability, cost, evidence]
 
+### Non-negotiable originality review — "Standardize the quality. Never standardize away the imagination."
+
+- Two closest existing site tools and the first-screen/primary-interaction evidence used for comparison: [links/screenshots]
+- Purposefully reused infrastructure/patterns (quality, truth, navigation, accessibility): [what and why]
+- Material differences that serve *this* visitor: [at least two across decision/answer, information hierarchy, interaction/navigation, editorial/visual identity]
+- Why this is not a swapped-photo/color/title version of a generic template: [observable reasons]
+- Gate result: [PASS with evidence / FAIL, redesign required / NOT MEASURED, do not release]
+
 ## 5. Interaction contract
 
 | User action and keyboard equivalent | What meaningful answer/data changes | Shared state/URL behavior | Empty/error/reduced-motion fallback | Test |
