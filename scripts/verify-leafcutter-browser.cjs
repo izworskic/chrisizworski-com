@@ -53,6 +53,7 @@ async function ready(){
    assert.equal(await page.locator('.bee-day').count(),2);
    await page.locator('#bee-zip').fill('48707');
    await page.locator('#bee-check').click();
+   await page.waitForFunction(()=>document.querySelector('#bee-weather-status')?.textContent.includes('no mapped Census area'),null,{timeout:6000});
    assert.match(await page.locator('#bee-weather-status').innerText(),/no mapped Census area/);
    assert.equal(await page.locator('.bee-day').count(),0,'Unmapped ZIP must not retain prior forecast cards');
    await page.locator('#bee-zip').fill('');
