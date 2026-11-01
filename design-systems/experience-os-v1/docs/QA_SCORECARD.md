@@ -13,7 +13,7 @@ Grade each category from 0–5 only after observing real behavior. Weighted cont
 | Performance and resilience | 5 | Measured versus baseline; no heavy first-answer dependency, live/API/map failure fallback |
 | Integration and site integrity | 5 | No unexpected ad, person schema, canonical, internal-nav or owning-repo regression |
 
-**Release expectation:** >=90/100 **AND** every category >=4/5 **AND** all hard gates passed. No assumed grade: unrun browser checks = **NOT MEASURED**, not a pass. In v1.2 a green syntax test or screenshot alone cannot prove interaction, live-public deployment or real user benefit.
+**Release expectation:** >=90/100 **AND** every category >=4/5 **AND** all hard gates passed. **Distinctiveness is a separate veto, not compensable by a high score:** compare the proposed first screen and primary interaction to the two closest existing tools; record evidence of at least two meaningful, user-justified differences in decision, hierarchy, interaction or editorial/visual character. A reused shell with merely different photos, colors, headings or topic is a **FAIL**; do not merge until reworked. Reuse shared QA, accessibility, data/source, map and SEO conventions freely. No assumed grade: unrun browser checks = **NOT MEASURED**, not a pass. In v1.2 a green syntax test or screenshot alone cannot prove interaction, live-public deployment or real user benefit.
 
 ## V1.2.1 machine-checkable review supplement
 
@@ -37,6 +37,7 @@ For a new central-site canonical verify the actual **visible Tools card ↔ JSON
 12. **Media resilience (v1.2):** slow/error/no-photo states preserve meaningful answer; prior async image loads cannot replace the new selection. Inspect actual crops and credit links at four viewport widths.
 13. **Units and narrative truth (v1.2):** conversion changes display only; authoritative values/ranking stay fixed. Descriptive labels can include legitimate safety caveats; tests do not demand their removal.
 14. **Release evidence (v1.2):** distinguish passing PR checks, merged commit, READY deploy matching the SHA, independently observed canonical HTML and later visitor outcome measurements. Mark unknown stages NOT VERIFIED rather than calling them green.
+15. **Distinctiveness veto (v1.2):** attach a short side-by-side comparison to the two closest existing site tools, identifying purposeful shared pieces and at least two substantive visitor-serving differences in decision, hierarchy, interaction or editorial/visual identity. Generic clones fail regardless of other grades; unreviewed or missing comparison is NOT MEASURED and not mergeable.
 
 ## Three mandatory scenario examples
 
