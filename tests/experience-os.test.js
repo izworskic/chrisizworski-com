@@ -130,3 +130,25 @@ test('v1.2.1 keeps one backward-compatible operational source of truth and worki
  for(const id of ['P19','P20','P21','P22','P23'])assert.match(caseStudy,new RegExp(id));
  assert.match(caseStudy,/live Gooseberry flow sensor|continuous discharge/);
 });
+
+
+test('v1.2 name resolves to one canonical mainline package for compatible agents', () => {
+  const manifest=JSON.parse(read('design-systems/experience-os-v1/manifest.json'));
+  assert.match(manifest.version,/^1\.2\./);
+  assert.equal(manifest.id,'EXPERIENCE_OS_V1');
+  const version=read('design-systems/experience-os-v1/docs/VERSION_RESOLUTION.md');
+  const agents=read('AGENTS.md');
+  const packageAgents=read('design-systems/experience-os-v1/AGENTS.md');
+  const readme=read('design-systems/experience-os-v1/README.md');
+  const adopt=read('design-systems/experience-os-v1/docs/MULTI_REPO_ADOPTION.md');
+  for(const text of [version,agents,packageAgents,readme,adopt]){
+    assert.match(text,/1\.2\.1/);
+    assert.match(text,/main/);
+    assert.match(text,/1\.2/);
+  }
+  assert.match(version,/latest released 1\.2\.x/i);
+  assert.match(version,/owning repository/i);
+  assert.match(version,/in-flight/i);
+  assert.match(version,/not automatically injected/i);
+  for(const text of [agents,packageAgents,readme,adopt]) assert.match(text,/VERSION_RESOLUTION\.md/);
+});
