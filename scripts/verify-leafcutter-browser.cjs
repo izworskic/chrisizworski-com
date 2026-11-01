@@ -41,7 +41,8 @@ async function ready(){
    await page.waitForFunction(()=>document.querySelectorAll('.bee-day').length===2,null,{timeout:6000});
    assert.match(await page.locator('#bee-weather-status').innerText(),/No sustained 75°F warm stretch/);
    assert.equal(await page.locator('.bee-day').count(),2);
-   const overflow=await page.evaluate(()=>({content:document.documentElement.scrollWidth,window:window.innerWidth}));
+   const overflow=await page.evaluate(()=>({content:document.documentElement.scrollWidth,window:window.innerWidth,
+    offenders:[...document.body.querySelectorAll('*')].filter(el=>{const b=el.getBoundingClientRect();const st=getComputedStyle(el);return b.right>window.innerWidth+2&&b.width>0&&st.position!=='fixed';}).slice(0,10).map(el=>({tag:el.tagName,class:el.className,id:el.id,right:Math.round(el.getBoundingClientRect().right),width:Math.round(el.getBoundingClientRect().width)}))}));
    assert.ok(overflow.content<=overflow.window+1,'Horizontal overflow at '+width+': '+JSON.stringify(overflow));
    assert.deepEqual(errors,[],'No browser JavaScript errors expected');
    await page.screenshot({path:'artifacts/leafcutter-browser/leafcutter-'+width+'.png',fullPage:true,animations:'disabled'});
