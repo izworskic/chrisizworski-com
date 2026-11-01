@@ -248,6 +248,17 @@
     var x = params.get(id), select = doc.getElementById(id);
     if (x && Array.from(select.options).some(function (opt) { return opt.value === x; })) select.value = x;
   });
+  // Native anchors remain functional with JavaScript disabled; with JS they
+  // preselect the visitor's intended experience and focus the date input.
+  doc.querySelectorAll(".hero-quickstart [data-porkies-start]").forEach(function(link){
+    link.addEventListener("click",function(){
+      var choice=link.getAttribute("data-porkies-start");
+      var control=doc.getElementById("interest");
+      if(!["views","falls","forest"].includes(choice)||!control)return;
+      control.value=choice;pathChoice="local";
+      root.setTimeout(function(){doc.getElementById("travel-date")?.focus({preventScroll:true});},0);
+    });
+  });
   form.addEventListener("submit", function (event) {
     event.preventDefault();
     pathChoice="local";
