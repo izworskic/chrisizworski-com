@@ -29,6 +29,8 @@ A pattern is accepted only when **a visitor action changes meaningful informatio
 | P22 | **Atomic discovery handoff** — new canonical tools | From the regional entry, visitors find the tool; Tools directory and sitemap reveal the same canonical without cannibalizing an existing page | Keep source page, Tools card, ItemList, source registry, relations, canonical and sitemap in the same reviewed release; test actual published HTML |
 | P23 | **Catalog/JSON-LD ordering parity** — tool hubs and collections | Visible cards and structured ItemList enumerate the same identity in the same order | Verify unique URLs, correct count, position, entity @id/type and visible card order; don't append a new schema entry arbitrarily |
 
+| P24 | **Evidence-bound motion** — verified time progression, comparisons and explanatory sequences | A user-chosen time or place moves a discrete visible cursor/highlight while source-backed map, cards and explanation follow the same state; no invented intermediate data | Motion is optional and interruptible; exact forecast valid time and source remain visible, reduced-motion/manual equivalent, async race, A→B→A, mobile and no-JS tested; see [motion contract](PURPOSEFUL_MOTION.md) |
+
 ## Pattern recipe (required in a design brief)
 
 For each selected pattern, document:

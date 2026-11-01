@@ -30,6 +30,9 @@ interactions, CONNECTED_EXPERIENCE_CONTRACT.md
 and templates/STATE_MATRIX.md. Apply this repository's own safety, CI,
 canonical, map/data and ad rules first. Read the current default-branch release
 or pin a reviewed commit if stable reproducibility is required.
+Non-negotiable: standardize quality, never standardize away imagination.
+For substantial tool work, QA_SCORECARD's distinctiveness veto requires a
+purpose-built experience, not a swapped-photo generic template.
 Tiny bug fixes need only relevant guardrails.
 ```
 

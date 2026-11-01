@@ -6,9 +6,19 @@ This package is **research and quality governance, not a public-page template**.
 
 For “Experience OS”, “EXPERIENCE_OS_V1”, “use v1.2” or “Experience OS v1.2”, use the canonical `main` manifest's latest released **1.2.x** (currently **1.2.1**), not an old feature branch or an alternative `v1.2` folder. Before editing, check current PRs and the tool's authoritative owning-repo instructions. Read [VERSION_RESOLUTION.md](docs/VERSION_RESOLUTION.md) for exact version/historic requests and cross-repository limits.
 
+## Non-negotiable design invariant: consistency without sameness
+
+**Standardize the quality. Never standardize away the imagination.** Experience OS is shared research, interaction truth, accessibility, evidence, SEO/ad safety, and release discipline; it is **not** a common page skin, card grid, hero layout, map placement, or mandatory interaction pattern.
+
+For every new visitor-facing tool or substantial redesign, compare the proposed first-screen experience with the two closest existing site tools in the experience brief. Record purposeful reuse and demonstrate material differentiation in at least two of: (1) the visitor decision/answer, (2) composition and information hierarchy, (3) interaction and navigation model, (4) editorial voice, verified imagery and visual identity. Distinction must serve the task, not novelty for its own sake. Replacing photos, titles, colors, or subject labels in the same generic scaffold does **not** qualify. Use source-backed screenshots or wireframes to show the comparison and record evidence in the release review.
+
+**Hard stop:** if a substantive tool is a lookalike of existing tools without a justified, purpose-built visitor experience, the design fails acceptance regardless of total QA score, attractive styling, passing code tests, or reused components. Redesign and re-review before merge. Legitimate shared controls, data contracts, accessibility patterns and consistent navigation remain encouraged.
+
 ## Trigger automatically
 
 When a task in an adopting repository creates a visitor-facing tool, materially changes user interaction, or redesigns an existing tool, **consult EXPERIENCE_OS_V1 without requiring the owner to name it**. For a tiny defect fix, use only directly relevant guardrails. Apply the owning repository's `AGENTS.md`, release gates, and canonical ownership first.
+
+**Purposeful motion rule (v1.2):** Read [PURPOSEFUL_MOTION.md](docs/PURPOSEFUL_MOTION.md) for any animation, time-progression or new connected interaction. Motion is optional, never standardized across tools, must be tied to verified data and disabled as animation for reduced-motion users, and must preserve native manual controls and no-JS fallbacks. Test rapid state changes and A→B→A, without inventing a continuous forecast from discrete samples.
 
 ## Mandatory work order
 
