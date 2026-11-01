@@ -5,6 +5,8 @@
  */
 export const OFFICIAL_HIKES = 'https://parks.canada.ca/pn-np/on/pukaskwa/activ/experience/randonnees-hiking';
 export const OFFICIAL_VISITOR_CENTRE = 'https://parks.canada.ca/pn-np/on/pukaskwa/visit/services/boutique';
+export const OFFICIAL_PARK_RULES = 'https://parks.canada.ca/pn-np/on/pukaskwa/visit/reglement-rules-and-regulations';
+export const OFFICIAL_RESPONSIBLE_VISIT = 'https://parks.canada.ca/voyage-travel/conseils-tips/guide';
 
 const caveat = 'Signed trail starts and junction coordinates are not independently verified. Use the official illustrated trail map and on-site signs; the optional community-mapped line is incomplete.';
 const starts = Object.freeze({
@@ -70,6 +72,15 @@ export function startAdvice(id,{closed=false,hasApprovedGeometry=false}={}) {
     evidence:[OFFICIAL_HIKES,OFFICIAL_VISITOR_CENTRE],
     signedCoordinatesVerified:false,
     routeNavigationCertified:false,
+    parkingToSignedEntranceVerified:false,
+    pedestrianAccessEvidence: id==='combination-hike'
+      ? 'Parks Canada expressly describes the named hiking circuit and the road return to the Visitor Centre. The exact signed entrances, road junctions and coordinate-by-coordinate parking connection remain unverified.'
+      : id==='white-river-bridge'
+        ? 'A published Visitor Centre origin does not override the documented White River Suspension Bridge trail closure. No approach directions are authorized.'
+        : 'Parks Canada publishes this outing from the Visitor Centre, but no authoritative coordinate-by-coordinate walk from parking to its signed trail entrance has been verified.',
+    accessEvidenceClass: id==='white-river-bridge' ? 'closed-no-route' : id==='combination-hike' ? 'official-named-circuit-no-gps' : 'official-origin-no-gps',
+    establishedPathRule:'Follow established hiking or walking trails and park roadways. Stay off unmarked shortcuts; do not cut across campsites or enter protected areas.',
+    pathRuleSources:[OFFICIAL_PARK_RULES,OFFICIAL_RESPONSIBLE_VISIT],
   };
 }
 
