@@ -1,0 +1,471 @@
+{
+  "version": 1,
+  "sourceCheckedAt": "2026-11-01",
+  "coordinateSystem": "WGS84",
+  "layer": "https://mapservices.nps.gov/arcgis/rest/services/NationalDatasets/NPS_Public_Trails_Geographic/FeatureServer/0",
+  "officialVisitorRules": "https://www.nps.gov/cana/planyourvisit/rocket-launch-viewing.htm",
+  "officialAccessibleRampFAQ": "https://www.nps.gov/cana/faqs.htm",
+  "stormManagementNotice": "https://www.nps.gov/cana/learn/news/canaveral-national-seashore-invites-public-feedback-on-plans-to-strengthen-storm-resilience-in-playalinda-district.htm",
+  "classification": "historic-nps-mapped-boardwalk-centerline-not-current-walkable-route",
+  "notes": [
+    "NPS GIS identifies each boardwalk as Existing, last edited August 12, 2025; this is not a current infrastructure inspection.",
+    "NPS OPENTOPUBLIC is null; there is no verified opening status, walkable connection, route accessibility, tide/flood condition, or viewing permission.",
+    "13 matching-numbered boardwalks are geographically near numbered parking lot polygons but exact legal parking-to-boardwalk connectors have not been established.",
+    "Boardwalk 14 has no matching numbered public parking lot; never show it as a walkable access route or connect it by straight line.",
+    "Current NPS closures and NASA security directives override these historical GIS positions."
+  ],
+  "boardwalks": [
+    {
+      "number": 1,
+      "id": "playalinda-boardwalk-1",
+      "name": "PD Boardwalk 1",
+      "facilityId": "60925",
+      "objectId": 25890,
+      "recordedStatus": "Existing",
+      "openToPublicField": null,
+      "sourceEditedAt": "2025-08-12T16:17:12.000Z",
+      "pathSource": "NPS_Public_Trails_Geographic/FeatureServer/0",
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              -80.6322261,
+              28.6552972
+            ],
+            [
+              -80.6318189,
+              28.6555205
+            ]
+          ]
+        ]
+      },
+      "mappedCenterlineMeters": 47,
+      "matchingNumberedParkingLot": 1,
+      "nearestParkingCentroidMeters": 43,
+      "note": "Official mapped boardwalk centerline near numbered parking lot; exact parking-to-ramp path connectivity, surface condition, accessibility and launch-day access are not confirmed."
+    },
+    {
+      "number": 2,
+      "id": "playalinda-boardwalk-2",
+      "name": "PD Boardwalk 2",
+      "facilityId": "60926",
+      "objectId": 26030,
+      "recordedStatus": "Existing",
+      "openToPublicField": null,
+      "sourceEditedAt": "2025-08-12T16:17:12.000Z",
+      "pathSource": "NPS_Public_Trails_Geographic/FeatureServer/0",
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              -80.6334547,
+              28.6571587
+            ],
+            [
+              -80.6330797,
+              28.6573555
+            ]
+          ]
+        ]
+      },
+      "mappedCenterlineMeters": 43,
+      "matchingNumberedParkingLot": 2,
+      "nearestParkingCentroidMeters": 28,
+      "note": "Official mapped boardwalk centerline near numbered parking lot; exact parking-to-ramp path connectivity, surface condition, accessibility and launch-day access are not confirmed."
+    },
+    {
+      "number": 3,
+      "id": "playalinda-boardwalk-3",
+      "name": "PD Boardwalk 3",
+      "facilityId": "60927",
+      "objectId": 25157,
+      "recordedStatus": "Existing",
+      "openToPublicField": null,
+      "sourceEditedAt": "2025-08-12T16:17:12.000Z",
+      "pathSource": "NPS_Public_Trails_Geographic/FeatureServer/0",
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              -80.6347256,
+              28.6588554
+            ],
+            [
+              -80.6343382,
+              28.6590707
+            ]
+          ]
+        ]
+      },
+      "mappedCenterlineMeters": 45,
+      "matchingNumberedParkingLot": 3,
+      "nearestParkingCentroidMeters": 38,
+      "note": "Official mapped boardwalk centerline near numbered parking lot; exact parking-to-ramp path connectivity, surface condition, accessibility and launch-day access are not confirmed."
+    },
+    {
+      "number": 4,
+      "id": "playalinda-boardwalk-4",
+      "name": "PD Boardwalk 4",
+      "facilityId": "60928",
+      "objectId": 24253,
+      "recordedStatus": "Existing",
+      "openToPublicField": null,
+      "sourceEditedAt": "2025-08-12T16:17:12.000Z",
+      "pathSource": "NPS_Public_Trails_Geographic/FeatureServer/0",
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              -80.6362796,
+              28.661016
+            ],
+            [
+              -80.6362501,
+              28.6610328
+            ],
+            [
+              -80.6359029,
+              28.6610564
+            ],
+            [
+              -80.6357793,
+              28.6611085
+            ]
+          ]
+        ]
+      },
+      "mappedCenterlineMeters": 51,
+      "matchingNumberedParkingLot": 4,
+      "nearestParkingCentroidMeters": 19,
+      "note": "Official mapped boardwalk centerline near numbered parking lot; exact parking-to-ramp path connectivity, surface condition, accessibility and launch-day access are not confirmed."
+    },
+    {
+      "number": 5,
+      "id": "playalinda-boardwalk-5",
+      "name": "PD Boardwalk 5",
+      "facilityId": "60929",
+      "objectId": 26317,
+      "recordedStatus": "Existing",
+      "openToPublicField": null,
+      "sourceEditedAt": "2025-08-12T16:17:12.000Z",
+      "pathSource": "NPS_Public_Trails_Geographic/FeatureServer/0",
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              -80.6408693,
+              28.6673367
+            ],
+            [
+              -80.6404815,
+              28.6675504
+            ]
+          ]
+        ]
+      },
+      "mappedCenterlineMeters": 45,
+      "matchingNumberedParkingLot": 5,
+      "nearestParkingCentroidMeters": 50,
+      "note": "Official mapped boardwalk centerline near numbered parking lot; exact parking-to-ramp path connectivity, surface condition, accessibility and launch-day access are not confirmed."
+    },
+    {
+      "number": 6,
+      "id": "playalinda-boardwalk-6",
+      "name": "PD Boardwalk 6",
+      "facilityId": "60930",
+      "objectId": 24163,
+      "recordedStatus": "Existing",
+      "openToPublicField": null,
+      "sourceEditedAt": "2025-08-12T16:17:12.000Z",
+      "pathSource": "NPS_Public_Trails_Geographic/FeatureServer/0",
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              -80.6425595,
+              28.6696909
+            ],
+            [
+              -80.6420799,
+              28.6699569
+            ]
+          ]
+        ]
+      },
+      "mappedCenterlineMeters": 55,
+      "matchingNumberedParkingLot": 6,
+      "nearestParkingCentroidMeters": 55,
+      "note": "Official mapped boardwalk centerline near numbered parking lot; exact parking-to-ramp path connectivity, surface condition, accessibility and launch-day access are not confirmed."
+    },
+    {
+      "number": 7,
+      "id": "playalinda-boardwalk-7",
+      "name": "PD Boardwalk 7",
+      "facilityId": "60931",
+      "objectId": 25013,
+      "recordedStatus": "Existing",
+      "openToPublicField": null,
+      "sourceEditedAt": "2025-08-12T16:17:12.000Z",
+      "pathSource": "NPS_Public_Trails_Geographic/FeatureServer/0",
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              -80.6439233,
+              28.6715814
+            ],
+            [
+              -80.6433629,
+              28.6718884
+            ]
+          ]
+        ]
+      },
+      "mappedCenterlineMeters": 64,
+      "matchingNumberedParkingLot": 7,
+      "nearestParkingCentroidMeters": 48,
+      "note": "Official mapped boardwalk centerline near numbered parking lot; exact parking-to-ramp path connectivity, surface condition, accessibility and launch-day access are not confirmed."
+    },
+    {
+      "number": 8,
+      "id": "playalinda-boardwalk-8",
+      "name": "PD Boardwalk 8",
+      "facilityId": "60933",
+      "objectId": 25936,
+      "recordedStatus": "Existing",
+      "openToPublicField": null,
+      "sourceEditedAt": "2025-08-12T16:17:12.000Z",
+      "pathSource": "NPS_Public_Trails_Geographic/FeatureServer/0",
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              -80.6486001,
+              28.6782207
+            ],
+            [
+              -80.6482905,
+              28.6784258
+            ],
+            [
+              -80.6482757,
+              28.6784043
+            ]
+          ]
+        ]
+      },
+      "mappedCenterlineMeters": 41,
+      "matchingNumberedParkingLot": 8,
+      "nearestParkingCentroidMeters": 21,
+      "note": "Official mapped boardwalk centerline near numbered parking lot; exact parking-to-ramp path connectivity, surface condition, accessibility and launch-day access are not confirmed."
+    },
+    {
+      "number": 9,
+      "id": "playalinda-boardwalk-9",
+      "name": "PD Boardwalk 9",
+      "facilityId": "60934",
+      "objectId": 23144,
+      "recordedStatus": "Existing",
+      "openToPublicField": null,
+      "sourceEditedAt": "2025-08-12T16:17:12.000Z",
+      "pathSource": "NPS_Public_Trails_Geographic/FeatureServer/0",
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              -80.6547089,
+              28.6855996
+            ],
+            [
+              -80.6544241,
+              28.6857772
+            ],
+            [
+              -80.6544112,
+              28.6857566
+            ]
+          ]
+        ]
+      },
+      "mappedCenterlineMeters": 37,
+      "matchingNumberedParkingLot": 9,
+      "nearestParkingCentroidMeters": 20,
+      "note": "Official mapped boardwalk centerline near numbered parking lot; exact parking-to-ramp path connectivity, surface condition, accessibility and launch-day access are not confirmed."
+    },
+    {
+      "number": 10,
+      "id": "playalinda-boardwalk-10",
+      "name": "PD Boardwalk 10",
+      "facilityId": "60935",
+      "objectId": 25116,
+      "recordedStatus": "Existing",
+      "openToPublicField": null,
+      "sourceEditedAt": "2025-08-12T16:17:12.000Z",
+      "pathSource": "NPS_Public_Trails_Geographic/FeatureServer/0",
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              -80.6568905,
+              28.6883123
+            ],
+            [
+              -80.6565937,
+              28.688495
+            ],
+            [
+              -80.6565714,
+              28.6884641
+            ]
+          ]
+        ]
+      },
+      "mappedCenterlineMeters": 39,
+      "matchingNumberedParkingLot": 10,
+      "nearestParkingCentroidMeters": 14,
+      "note": "Official mapped boardwalk centerline near numbered parking lot; exact parking-to-ramp path connectivity, surface condition, accessibility and launch-day access are not confirmed."
+    },
+    {
+      "number": 11,
+      "id": "playalinda-boardwalk-11",
+      "name": "PD Boardwalk 11",
+      "facilityId": "60936",
+      "objectId": 24731,
+      "recordedStatus": "Existing",
+      "openToPublicField": null,
+      "sourceEditedAt": "2025-08-12T16:17:12.000Z",
+      "pathSource": "NPS_Public_Trails_Geographic/FeatureServer/0",
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              -80.6612781,
+              28.6940495
+            ],
+            [
+              -80.6609283,
+              28.6942071
+            ],
+            [
+              -80.6609508,
+              28.694234
+            ]
+          ]
+        ]
+      },
+      "mappedCenterlineMeters": 42,
+      "matchingNumberedParkingLot": 11,
+      "nearestParkingCentroidMeters": 62,
+      "note": "Official mapped boardwalk centerline near numbered parking lot; exact parking-to-ramp path connectivity, surface condition, accessibility and launch-day access are not confirmed."
+    },
+    {
+      "number": 12,
+      "id": "playalinda-boardwalk-12",
+      "name": "PD Boardwalk 12",
+      "facilityId": "60937",
+      "objectId": 25353,
+      "recordedStatus": "Existing",
+      "openToPublicField": null,
+      "sourceEditedAt": "2025-08-12T16:17:12.000Z",
+      "pathSource": "NPS_Public_Trails_Geographic/FeatureServer/0",
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              -80.6637674,
+              28.6974402
+            ],
+            [
+              -80.6634095,
+              28.6975488
+            ],
+            [
+              -80.663565,
+              28.6977633
+            ]
+          ]
+        ]
+      },
+      "mappedCenterlineMeters": 65,
+      "matchingNumberedParkingLot": 12,
+      "nearestParkingCentroidMeters": 54,
+      "note": "Official mapped boardwalk centerline near numbered parking lot; exact parking-to-ramp path connectivity, surface condition, accessibility and launch-day access are not confirmed."
+    },
+    {
+      "number": 13,
+      "id": "playalinda-boardwalk-13",
+      "name": "PD Boardwalk 13",
+      "facilityId": "60938",
+      "objectId": 25336,
+      "recordedStatus": "Existing",
+      "openToPublicField": null,
+      "sourceEditedAt": "2025-08-12T16:17:12.000Z",
+      "pathSource": "NPS_Public_Trails_Geographic/FeatureServer/0",
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              -80.6672281,
+              28.7021441
+            ],
+            [
+              -80.6669828,
+              28.7022822
+            ]
+          ]
+        ]
+      },
+      "mappedCenterlineMeters": 28,
+      "matchingNumberedParkingLot": 13,
+      "nearestParkingCentroidMeters": 62,
+      "note": "Official mapped boardwalk centerline near numbered parking lot; exact parking-to-ramp path connectivity, surface condition, accessibility and launch-day access are not confirmed."
+    },
+    {
+      "number": 14,
+      "id": "playalinda-boardwalk-14",
+      "name": "PD Boardwalk 14",
+      "facilityId": "60939",
+      "objectId": 26105,
+      "recordedStatus": "Existing",
+      "openToPublicField": null,
+      "sourceEditedAt": "2025-08-12T16:17:12.000Z",
+      "pathSource": "NPS_Public_Trails_Geographic/FeatureServer/0",
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              -80.6682205,
+              28.7034281
+            ],
+            [
+              -80.6681923,
+              28.7037511
+            ],
+            [
+              -80.6682044,
+              28.7038061
+            ]
+          ]
+        ]
+      },
+      "mappedCenterlineMeters": 42,
+      "matchingNumberedParkingLot": null,
+      "nearestParkingCentroidMeters": null,
+      "note": "NPS named boardwalk 14 is mapped but there is no numbered public parking lot 14. No parking connection, entry authorization or visitor route is established."
+    }
+  ]
+}

@@ -267,3 +267,32 @@
 .geo-policy-desk[data-level="attention"]{background:#fff1e8;border-left-color:#a65132}
 @media(max-width:1040px){.geo-lot-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:680px){.geo-playalinda{padding:16px 13px}.geo-playalinda-heading{display:block}.geo-playalinda-heading .launch-link{margin-top:13px}.geo-lot-grid{grid-template-columns:1fr}.geo-lot-card{padding:13px}.geo-lot-filter{gap:6px}.geo-lot-filter label span{padding:9px 10px;font-size:11px}}
+
+
+/* Historic NPS boardwalk access evidence desk. A map line is NOT a walkability promise. */
+.geo-map-legend .geo-boardwalk{background:#2e826b;border-radius:2px;width:19px;height:4px}
+.geo-lot-boardwalk{margin:7px 0 0;padding:8px 10px;border-radius:8px;background:#eaf3ee;border-left:3px solid #438268;color:#27573f;line-height:1.48;font-size:12px;font-weight:750}
+.geo-boardwalk-detail{border:1px solid #a8c5b7;background:linear-gradient(120deg,#ffffff 0%,#f3f8f3 100%);border-radius:15px;padding:clamp(14px,2vw,22px);margin:0 0 19px}
+.geo-boardwalk-heading{margin-bottom:14px}
+.geo-boardwalk-heading .eyebrow{color:#56836b;font-size:10px;font-weight:850;letter-spacing:.12em;text-transform:uppercase;margin:0 0 5px}
+.geo-boardwalk-heading h5{font-family:Georgia,serif;font-size:clamp(20px,2.7vw,28px);color:#204a35;line-height:1.22;margin:0 0 8px}
+.geo-boardwalk-heading p:last-child{color:#52665a;font-size:13px;line-height:1.62;margin:0;max-width:880px}
+.geo-walk-stages{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}
+.geo-walk-stage{display:flex;gap:11px;border:1px solid #ccdad0;border-radius:11px;padding:13px;min-width:0;background:#fff}
+.geo-walk-stage[data-state="warning"]{background:#fff6f0;border-color:#e0b6a5}
+.geo-walk-step{display:grid;place-items:center;flex:0 0 auto;width:31px;height:31px;border-radius:50%;color:#fff;background:#2b684d;font-size:12px;font-weight:900}
+.geo-walk-stage[data-state="warning"] .geo-walk-step{background:#a35a42}
+.geo-walk-copy{min-width:0}
+.geo-walk-copy h6{font-family:Georgia,serif;color:#244f3b;font-size:16px;line-height:1.25;margin:0 0 8px}
+.geo-walk-verdict{display:block;font-size:12px;color:#465c42;line-height:1.5;font-weight:780;margin-bottom:7px}
+.geo-walk-stage[data-state="warning"] .geo-walk-verdict{color:#85452f}
+.geo-walk-copy p{font-size:12px;line-height:1.58;color:#5a685b;margin:0}
+.geo-walk-footer{margin-top:14px;border-top:1px solid #d4e1d6;padding-top:11px}
+.geo-walk-footer>p{font-size:12px;color:#4a624f;line-height:1.65;margin:0 0 10px;font-weight:650}
+.geo-walk-sources{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.geo-walk-sources a{font-size:11px;line-height:1.4;font-weight:800;color:#275e45;text-decoration:underline;text-underline-offset:2px}
+.geo-walk-sources a:hover{color:#163b28}
+.geo-road-control{justify-content:flex-start;column-gap:18px}
+.geo-road-control label:has(#geo-boardwalk-toggle){color:#225a44}
+@media(max-width:1100px){.geo-walk-stages{grid-template-columns:1fr}.geo-walk-stage{padding:11px 13px}.geo-walk-stage .geo-walk-copy{flex:1}}
+@media(max-width:650px){.geo-boardwalk-detail{padding:13px}.geo-walk-stages{gap:8px}.geo-walk-stage{gap:9px}.geo-walk-copy h6{font-size:16px}.geo-walk-copy p{font-size:12px}}
