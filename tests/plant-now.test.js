@@ -20,6 +20,8 @@ test('statuses follow the MSU rules at stations in zones 4b, 5a and 6a', () => {
     // Warm-season seed: after the danger of frost, and not in soil under 60 F.
     assert.equal(status('beans', s, K.toISO(open - 1, 2026)).code, 'WAIT', s);
     assert.equal(status('beans', s, K.toISO(open, 2026), { soilF: 55 }).code, 'WAIT_SOIL', s);
+    assert.equal(status('beans', s, K.toISO(open, 2026), { soilF: 60 }).code, 'WAIT_SOIL', s);
+    assert.match(status('beans', s, K.toISO(open, 2026), { soilF: 62 }).detail, /frost is still possible/);
     assert.equal(status('beans', s, K.toISO(open, 2026), { soilF: 62 }).code, 'PLANT', s);
     // Root crops at 40 F soil; hardy crops when the ground can be worked.
     assert.equal(status('carrots', s, '2026-04-15', { soilF: 38 }).code, 'WAIT_SOIL', s);

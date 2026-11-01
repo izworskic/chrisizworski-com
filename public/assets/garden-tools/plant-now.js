@@ -181,8 +181,8 @@
       if (afterFall) return set('DONE', crop.name + ': watch for fall frost', 'Tender plants can be killed by frost. The typical first fall frost is ' + fr.fallText + '; check what has actually happened in your garden.');
       if (d > SPRING_END) return set('NEXT_SPRING', crop.name + ': next spring', 'Sow outside from ' + K.fmt(o) + ', once the soil is above 60°F.' + (fr.fall !== null ? ' Plants already growing keep going until the first fall frost, around ' + fr.fallText + '.' : ''));
       if (d < o) return set('WAIT', 'Sow ' + crop.name.toLowerCase() + ' outside from ' + K.fmt(o), 'After the spring reference, ' + soonWords(o - d) + ', once the soil at planting depth is above 60°F.');
-      if (soil !== null && soil < 60) return set('WAIT_SOIL', 'Wait for warmer soil for ' + crop.name.toLowerCase(), soil + '°F is too cold: the seed germinates poorly below 60°F and can rot.');
-      return set('PLANT', 'Sow ' + crop.name.toLowerCase() + ' outside', (soil !== null ? 'Soil at ' + soil + '°F and past the danger of frost (' + K.fmt(o) + '). ' : 'The spring reference has passed (' + K.fmt(o) + '), but frost is still possible. Check that the soil at planting depth is above 60°F. ') + 'MSU gives no last sowing date' + (fr.fall !== null ? '; frost usually arrives around ' + fr.fallText + '.' : '.'));
+      if (soil !== null && soil <= 60) return set('WAIT_SOIL', 'Wait for warmer soil for ' + crop.name.toLowerCase(), soil + '°F does not exceed the 60°F soil threshold. Wait for warmer soil and check the forecast.');
+      return set('PLANT', 'Sow ' + crop.name.toLowerCase() + ' outside', (soil !== null ? 'Soil is ' + soil + '°F and the spring reference (' + K.fmt(o) + ') has passed, but frost is still possible. Check the forecast. ' : 'The spring reference has passed (' + K.fmt(o) + '), but frost is still possible. Check that the soil at planting depth is above 60°F. ') + 'MSU gives no last sowing date' + (fr.fall !== null ? '; frost usually arrives around ' + fr.fallText + '.' : '.'));
     }
     if (crop.kind === 'hardy') {
       out.rules = ['hardy'];
