@@ -50,7 +50,8 @@
     'low-walk': 'Highlight published parking and on-site facilities, but the accessible route and exact spectator position still require operator confirmation.'
   };
   let current = null, profile = 'family', selected = null;
-  let map = null, padMarker = null, connectors = null, lotBoundaries = null, policyLine = null, lotFilter = 'all';
+  let map = null, padMarker = null, connectors = null, lotBoundaries = null, policyLine = null, boardwalkLayer = null, lotFilter = 'all';
+  const boardwalkSegments = new Map();
   let markers = new Map(), leafletPromise = null, mapPromise = null, lastMissionId = null;
   const options = document.querySelectorAll('input[name="geo-intent"]');
   function updateExplanation() { say('geo-intent-explainer', profileDescription[profile]); }
@@ -119,6 +120,11 @@
         ['closed','ineligible'].includes(point.level),point.number));
     });
     const selectedMarker = markers.get(p.id)?.marker;
+    boardwalkSegments.forEach((line,number)=>{
+      const picked=p.category==='beach-parking' && number===p.number;
+      line.setStyle({weight:picked?6:3,opacity:picked?1:.75});
+      if(picked&&boardwalkToggle?.checked)line.bringToFront();
+    });
     if (selectedMarker) selectedMarker.openPopup();
   }
   function focusPoint(id, move = true) {
@@ -128,6 +134,7 @@
     });
     const target = current?.points?.find(p => p.id === id);
     if (target) showOnMap(target, move);
+    renderWalkDetails();
   }
 
   function weatherEvidence(p) {
@@ -154,6 +161,74 @@
     lotFilter=input.value;
     renderPlayalindaLots();
   }));
+
+  function renderWalkDetails() {
+    const target=$('geo-boardwalk-detail');
+    if(!target)return;
+    target.replaceChildren();
+    const lot=(current?.points||[]).find(p=>p.id===selected &&
+      p.category==='beach-parking');
+    const head=node('div','geo-boardwalk-heading');
+    head.appendChild(node('p','eyebrow','Lot-to-beach evidence · NPS GIS'));
+    if(!lot) {
+      head.appendChild(node('h5','','Pick a numbered Playalinda lot'));
+      head.appendChild(node('p','',
+        'Select any parking area to inspect its actual NPS mapped boardwalk. A geographic line is not a guarantee of an open or accessible pedestrian route.'));
+      target.appendChild(head);
+      return;
+    }
+    const boardwalk=(current?.boardwalks||[]).find(b=>b.matchingParkingLot===lot.number);
+    head.appendChild(node('h5','','Lot '+lot.number+' · Follow the evidence, not an invented trail'));
+    head.appendChild(node('p','',
+      boardwalk ? 'NPS GIS identifies a boardwalk with the same number near this parking area. We can show the historic centerline without inventing any connector between your car and the start of that line.' :
+      'No official matching boardwalk line is available for this numbered lot.'));
+    target.appendChild(head);
+    const stages=node('div','geo-walk-stages');
+    const stage=(number,title,level,headline,description)=>{
+      const el=node('div','geo-walk-stage');
+      el.dataset.state=level;
+      el.appendChild(node('div','geo-walk-step',number));
+      const copy=node('div','geo-walk-copy');
+      copy.appendChild(node('h6','',title));
+      const status=node('strong','geo-walk-verdict',headline);
+      copy.appendChild(status);
+      copy.appendChild(node('p','',description));
+      el.appendChild(copy);
+      stages.appendChild(el);
+    };
+    stage('01','Parking footprint',lot.level==='closed'?'warning':'unverified',
+      lot.level==='closed'?'NPS closure reported for this parking area':
+        'Official location mapped · current entry not confirmed',
+      'NPS public GIS maps the lot polygon, but reports its open-to-public attribute as unknown. The official park closure notice and NASA launch security can override normal access.');
+    stage('02','Boardwalk over the dunes',
+      ['official-closure','parking-restricted'].includes(boardwalk?.access?.status)?'warning':'unverified',
+      boardwalk?('NPS mapped segment: approximately '+Math.round(boardwalk.segmentMeters*3.28084)+' ft'):
+        'No numbered boardwalk centerline verified',
+      boardwalk?
+        ('This is the GIS centerline length ONLY, not the complete walk from a parked car. '+boardwalk.access.detail+
+        ' The NPS trail record was last edited '+new Date(boardwalk.sourceEditedAt).toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'})+'.'):
+        'Do not infer where to walk. Look for current park signs and instructions.');
+    stage('03','Beach viewing position','unverified',
+      'No verified walkable beach-viewing endpoint',
+      (lot.accessibility?.beachRampInOfficialFaq?
+        'The NPS FAQ lists an accessible beach ramp here, but today's condition, gradients and continuity remain unknown. ':
+        'The NPS FAQ does not specifically identify this lot as having an accessible beach ramp. ')+
+      'Neither the boardwalk map nor its length establishes a legal, unobstructed rocket-viewing spot.');
+    target.appendChild(stages);
+    const footer=node('div','geo-walk-footer');
+    footer.appendChild(node('p','',
+      'No route or directions are drawn between the parking polygon, boardwalk and shoreline unless NPS supplies a verified connected public path. Follow on-site closures and accessible-route signs.'));
+    const sources=node('div','geo-walk-sources');
+    if(boardwalk?.geographicSource) sources.appendChild(link(boardwalk.geographicSource,
+      'NPS historic boardwalk GIS','geo-link'));
+    sources.appendChild(link('https://www.nps.gov/cana/planyourvisit/rocket-launch-viewing.htm',
+      'NPS current launch restrictions','geo-link'));
+    sources.appendChild(link('https://www.nps.gov/cana/faqs.htm',
+      'Official ramp guidance','geo-link'));
+    footer.appendChild(sources);
+    target.appendChild(footer);
+  }
+
   function renderPlayalindaLots() {
     const grid=$('geo-lot-grid');
     if(!grid)return;
@@ -193,9 +268,19 @@
         '° '+p.geometry.bearingCardinal+' (ground only)'));
       if(p.level==='closed')card.appendChild(node('p','geo-lot-alert',
         'Current checked NPS source reports a closure. Do not travel to this lot without confirmation.'));
+      if(p.boardwalk){
+        const b=node('p','geo-lot-boardwalk',
+          'NPS boardwalk #'+p.number+' mapped · ~'+Math.round(p.boardwalk.segmentMeters*3.28084)+
+          ' ft of historic boardwalk centerline (not full walking distance)');
+        card.appendChild(b);
+        if(['official-closure','parking-restricted'].includes(p.boardwalk.access?.status)){
+          const warn=node('p','geo-lot-alert',p.boardwalk.access.label);
+          card.appendChild(warn);
+        }
+      }
       card.appendChild(weatherEvidence(p));
       const actions=node('div','geo-lot-actions');
-      const zoom=node('button','geo-map-focus','Inspect official footprint');
+      const zoom=node('button','geo-map-focus','Inspect lot and boardwalk');
       zoom.type='button';zoom.setAttribute('aria-label','Locate Playalinda lot '+p.number+' on the NPS GIS map');
       zoom.addEventListener('click',()=>{
         focusPoint(p.id);
