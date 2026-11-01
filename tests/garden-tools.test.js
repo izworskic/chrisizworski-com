@@ -126,7 +126,10 @@ test('Michigan Growing Season Explorer: crop and soil decisions tell the same st
   assert.match(p.text('pnSeasonStatus'), /Plant now/);
 
   p.set('pnCrop', 'garlic');
-  assert.match(p.text('pnSeasonStepDate'), /Not reported/);
+  assert.match(p.text('pnSeasonTitle'), /fall planting for next summer/i);
+  assert.match(p.text('pnSeasonStatus'), /hard freeze/);
+  assert.equal(p.$('pnSeasonMissing').hidden, true);
+  p.set('pnCrop', 'basil');
   assert.match(p.text('pnSeasonStatus'), /Not reported/);
   assert.equal(p.$('pnSeasonMissing').hidden, false);
 
@@ -145,4 +148,21 @@ test('Michigan Growing Season Explorer: crop and soil decisions tell the same st
   assert.match(p.text('pnSeasonTitle'), /^Tomatoes:/);
   assert.match(p.text('pnSeasonLandmarks'), /May 2/);
   assert.equal(p.$('pnRows').children.filter(x => x.classList.contains('pn-row-selected')).length, 1);
+});
+
+test('all-season notebook changes season and follows frost reference without inventing missing data', () => {
+  const p=loadTool(f('michigan-gardening'), {today:'2026-11-01',search:'?place=Bay%20City'});
+  assert.match(p.text('gyHeading'), /next garden/);
+  p.set('gyMaturity','50','input');
+  assert.match(p.text('gyResult'), /July 31, 2026/);
+  assert.match(p.text('gyResult'), /has passed/);
+  p.set('pnPlace','Adrian');
+  assert.match(p.text('gyResult'), /not available/);
+  p.set('pnPlace','Bay City');
+  assert.match(p.text('gyResult'), /July 31, 2026/);
+  const buttons=p.document.querySelectorAll('[data-garden-season]');
+  buttons.find(b=>b.getAttribute('data-garden-season')==='spring').click();
+  assert.match(p.text('gyHeading'), /soil/);
+  buttons.find(b=>b.getAttribute('data-garden-season')==='fall').click();
+  assert.match(p.text('gyHeading'), /next garden/);
 });

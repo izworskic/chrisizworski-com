@@ -15,12 +15,16 @@
 
   var SOURCES = {
     msuPlant: { title: 'How to Plant Vegetables', who: 'MSU Extension (L. Taylor; adapted G. Voyle; revised K. Hahn, L. Whitlock, M. Wilson)', date: 'updated April 29, 2009', url: 'https://www.canr.msu.edu/uploads/resources/pdfs/plantingveg.pdf' },
+    msuFall: { title: 'Fall Vegetable Crops for Your Garden', who: 'MSU Extension', date: 'May 2012', url: 'https://www.canr.msu.edu/uploads/files/E3172_-_Fall_Vegetable_Crops_for_your_Garden.pdf' },
+    msuGarlic: { title: 'Organic Garlic Production', who: 'MSU Extension', date: '2018', url: 'https://www.canr.msu.edu/uploads/resources/pdfs/e3371_wcag_2.08.pdf' },
     msuTomato: { title: 'Tips for growing tomatoes in your home garden', who: 'Kendra Wills, MSU Extension', date: 'May 17, 2022', url: 'https://www.canr.msu.edu/news/tips_for_growing_tomatoes_in_your_home_garden' },
     msuFrost: { title: 'Freeze probabilities for 78 Michigan stations', who: 'Michigan State Climatologist Office, via MSU Extension', date: 'as published on /michigan-frost-dates/', url: 'https://www.canr.msu.edu/resources/frost-free-dates' },
     noaaFall: { title: 'Typical first fall frost, 1991 to 2020 climate normals', who: 'NOAA, as published on /michigan-frost-dates/ for 42 places', date: '1991 to 2020', url: 'https://chrisizworski.com/michigan-frost-dates/' }
   };
   // The MSU sentences each rule rests on, quoted so the page can show them.
   var RULES = {
+    fallGarden: { source: 'msuFall', quote: 'When to plant depends on when the first frost generally occurs. ... You must consider how many days it takes for your particular vegetable to mature.' },
+    garlicFall: { source: 'msuGarlic', quote: 'Plant 3 to 5 weeks before a hard freeze settles in, providing enough time for root development in the fall. In Michigan, this is typically in October–November.' },
     hardy: { source: 'msuPlant', quote: 'Some cool season vegetables such as onions, peas and spinach, are very hardy and can be planted as soon as the ground can be worked in the spring. This is usually late March or early April in southern Michigan and one to three weeks later further north.' },
     afterFrost: { source: 'msuPlant', quote: 'Warm season vegetables ... will be killed by frost. They cannot be safely planted outdoors until the danger of frost is past.' },
     soil60: { source: 'msuPlant', quote: 'Seeds of warm season crops germinate poorly in cool soil ... will not germinate well unless the soil temperature at planting depth exceeds 60°F.' },
@@ -49,17 +53,53 @@
     { id: 'carrots', name: 'Carrots', kind: 'soil40' },
     { id: 'beets', name: 'Beets', kind: 'soil40' },
     { id: 'radishes', name: 'Radishes', kind: 'soil40' },
-    { id: 'lettuce', name: 'Lettuce and greens', kind: 'none', succession: true, why: 'MSU names lettuce a cool-season crop and says to sow it in plantings two weeks apart, but gives no spring starting rule for it.' },
-    { id: 'potatoes', name: 'Potatoes', kind: 'none', why: 'No current MSU planting rule for potatoes was found. The only dated one is a 1985 bulletin marked not for current use.' },
-    { id: 'garlic', name: 'Garlic', kind: 'none', why: 'MSU publishes fall garlic articles, but they could not be read for this tool yet, and the 1985 bulletin disagrees with them.' },
-    { id: 'basil', name: 'Basil', kind: 'none', why: 'No Michigan extension source with basil timing was found.' },
-    { id: 'cilantro', name: 'Cilantro', kind: 'none', why: 'No Michigan extension source with cilantro timing was found.' }
+    { id: 'lettuce', name: 'Leaf lettuce', kind: 'coolGuide' },
+    { id: 'broccoli', name: 'Broccoli', kind: 'coolGuide' },
+    { id: 'brussels-sprouts', name: 'Brussels sprouts', kind: 'coolGuide' },
+    { id: 'cabbage', name: 'Cabbage', kind: 'coolGuide' },
+    { id: 'chinese-cabbage', name: 'Chinese cabbage', kind: 'coolGuide' },
+    { id: 'cauliflower', name: 'Cauliflower', kind: 'coolGuide' },
+    { id: 'collards', name: 'Collards', kind: 'coolGuide' },
+    { id: 'kale', name: 'Kale', kind: 'coolGuide' },
+    { id: 'kohlrabi', name: 'Kohlrabi', kind: 'coolGuide' },
+    { id: 'mustard', name: 'Mustard greens', kind: 'coolGuide' },
+    { id: 'rutabaga', name: 'Rutabaga', kind: 'coolGuide' },
+    { id: 'chard', name: 'Swiss chard', kind: 'coolGuide' },
+    { id: 'turnips', name: 'Turnips', kind: 'coolGuide' },
+    { id: 'eggplant', name: 'Eggplant', kind: 'transplant', tender: true },
+    { id: 'melon', name: 'Melons', kind: 'warmSow', tender: true },
+    { id: 'pumpkin', name: 'Pumpkins', kind: 'warmSow', tender: true },
+    { id: 'potatoes', name: 'Potatoes', kind: 'none', why: 'A local station-specific planting window for potatoes has not been verified here. Check your seed potato instructions and local conditions.' },
+    { id: 'garlic', name: 'Garlic', kind: 'garlic' },
+    { id: 'basil', name: 'Basil', kind: 'none', why: 'A local station-specific basil planting window has not been verified here. Check your seed packet and local conditions.' },
+    { id: 'cilantro', name: 'Cilantro', kind: 'none', why: 'No Michigan extension source with cilantro timing was found.' },
+    { id: 'sweet-corn', name: 'Sweet corn', kind: 'none', why: 'Varieties differ; use your packet and local conditions to plan this crop.' },
+    { id: 'zucchini', name: 'Zucchini', kind: 'none', why: 'A local variety-specific timing rule is not yet verified; follow your packet and local conditions.' },
+    { id: 'winter-squash', name: 'Winter squash', kind: 'none', why: 'Varieties need different amounts of time. Check your packet before planning the bed.' },
+    { id: 'watermelon', name: 'Watermelon', kind: 'none', why: 'A local variety-specific timing rule is not yet verified; follow your packet and local conditions.' },
+    { id: 'parsley', name: 'Parsley', kind: 'none', why: 'No verified local planting window is available here; consult your seed packet.' },
+    { id: 'dill', name: 'Dill', kind: 'none', why: 'No verified local planting window is available here; consult your seed packet.' },
+    { id: 'chives', name: 'Chives', kind: 'none', why: 'No verified local planting window is available here; consult your seed packet.' },
+    { id: 'oregano', name: 'Oregano', kind: 'none', why: 'No verified local planting window is available here; consult your seed packet.' },
+    { id: 'thyme', name: 'Thyme', kind: 'none', why: 'No verified local planting window is available here; consult your seed packet.' },
+    { id: 'sage', name: 'Sage', kind: 'none', why: 'No verified local planting window is available here; consult your seed packet.' },
+    { id: 'rosemary', name: 'Rosemary', kind: 'none', why: 'No verified local planting window is available here; consult your seed packet.' },
+    { id: 'zinnias', name: 'Zinnias', kind: 'none', why: 'No verified local planting window is available here; consult your seed packet.' },
+    { id: 'marigolds', name: 'Marigolds', kind: 'none', why: 'No verified local planting window is available here; consult your seed packet.' },
+    { id: 'sunflowers', name: 'Sunflowers', kind: 'none', why: 'No verified local planting window is available here; consult your seed packet.' },
+    { id: 'cosmos', name: 'Cosmos', kind: 'none', why: 'No verified local planting window is available here; consult your seed packet.' },
+    { id: 'nasturtiums', name: 'Nasturtiums', kind: 'none', why: 'No verified local planting window is available here; consult your seed packet.' },
+    { id: 'sweet-peas', name: 'Sweet peas', kind: 'none', why: 'No verified local planting window is available here; consult your seed packet.' },
+    { id: 'snapdragons', name: 'Snapdragons', kind: 'none', why: 'No verified local planting window is available here; consult your seed packet.' },
+    { id: 'petunias', name: 'Petunias', kind: 'none', why: 'No verified local planting window is available here; consult your seed packet.' },
+    { id: 'calendula', name: 'Calendula', kind: 'none', why: 'No verified local planting window is available here; consult your seed packet.' },
+    { id: 'morning-glories', name: 'Morning glories', kind: 'none', why: 'No verified local planting window is available here; consult your seed packet.' }
   ];
 
   var STATUS = {
     START_INDOORS: 'Start indoors now', HARDEN_OFF: 'Harden off now', TRANSPLANT: 'Transplant now', PLANT: 'Plant now',
-    READY_WHEN: 'Plant when the soil is ready', WAIT: 'Wait', WAIT_SOIL: 'Wait for the soil', DONE: 'Done for the season',
-    NEXT_SPRING: 'Next spring', NOT_REPORTED: 'Not reported'
+    READY_WHEN: 'Plant when the soil is ready', WAIT: 'Wait', WAIT_SOIL: 'Wait for the soil', DONE: 'Typical fall frost season',
+    NEXT_SPRING: 'Next spring', PLAN_GARLIC: 'Check fall garlic timing', PLAN_FALL: 'Plan a fall crop', GUIDE: 'Growing guide', NOT_REPORTED: 'Not reported'
   };
 
   // ---------- place and date ----------
@@ -104,30 +144,45 @@
     var fr = frostOf(st), soil = typeof cond.soilF === 'number' && isFinite(cond.soilF) ? cond.soilF : null, out = { crop: crop, rules: [], windows: [], notes: [] };
     var afterFall = fr.fall !== null && d > fr.fall;
     function set(code, title, detail) { out.code = code; out.status = STATUS[code]; out.title = title; out.detail = detail; return out; }
+    // E3172 names these fall crops. This is a planning prompt, not a local sowing deadline.
+    var fallCrops = ['beets','broccoli','brussels-sprouts','cabbage','chinese-cabbage','carrots','cauliflower','collards','kale','kohlrabi','lettuce','mustard','peas','radishes','rutabaga','spinach','chard','turnips'];
+    if (fallCrops.indexOf(crop.id) >= 0 && d >= K.parse('Jul 15') && d <= K.parse('Sep 30')) {
+      out.rules = ['fallGarden'];
+      return set('PLAN_FALL', 'Consider ' + crop.name.toLowerCase() + ' for fall', 'Check the days to maturity on your seed packet, allow for germination and slower autumn growth, and count back from your local frost reference. ' + (fr.fallText ? 'The typical first fall frost at this station is ' + fr.fallText + ', not a forecast.' : 'A sourced fall frost reference is unavailable for this station.')); 
+    }
+    if (crop.kind === 'coolGuide') {
+      out.rules = ['fallGarden'];
+      return set('GUIDE', crop.name + ': a cool-season crop', 'MSU includes this crop in its fall garden guide. For spring and fall, check your seed packet, growing conditions and days to maturity; this tool does not have a verified local sowing date.');
+    }
+    if (crop.kind === 'garlic') {
+      out.rules = ['garlicFall'];
+      if (d >= K.parse('Oct 1') && d <= K.parse('Nov 30')) return set('PLAN_GARLIC', 'Plan your garlic planting', 'MSU says to plant 3 to 5 weeks before a hard freeze settles in, typically October or November in Michigan. Check your soil and local conditions; the first fall frost is not the date the ground freezes.');
+      return set('WAIT', 'Save a bed for fall garlic', 'MSU recommends planting 3 to 5 weeks before a hard freeze settles in, typically October or November in Michigan. Your local ground-freeze date is not predicted here.');
+    }
     if (crop.kind === 'none') { out.rules = []; return set('NOT_REPORTED', crop.name + ': not reported', crop.why); }
     if (crop.kind === 'transplant') {
       var open = fr.cautious, inF = open - 56, inT = open - 42, hF = open - 10, hT = open - 1;
       out.rules = ['indoor', 'harden', 'afterFrost'].concat(crop.extra || []);
       out.windows = [{ kind: 'indoor', from: inF, to: inT }, { kind: 'harden', from: hF, to: hT }, { kind: 'transplant', from: open, to: null }];
       if (crop.extra && crop.extra.indexOf('memorial') >= 0) out.notes.push('MSU Extension notes many Michigan gardeners set tomatoes out around Memorial Day.');
-      if (afterFall) return set('DONE', crop.name + ': done for the season', 'Frost kills them, and the typical first fall frost here is ' + fr.fallText + '.');
+      if (afterFall) return set('DONE', crop.name + ': watch for fall frost', 'Tender plants can be killed by frost. The typical first fall frost is ' + fr.fallText + '; check what has actually happened in your garden.');
       if (d > SPRING_END) return set('NEXT_SPRING', crop.name + ': next spring', 'Start seeds indoors ' + K.range(inF, inT) + ' and plant out from ' + K.fmt(open) + '.' + (fr.fall !== null ? ' Plants already in the ground keep going until the first fall frost, around ' + fr.fallText + '.' : ''));
       if (d < inF) return set('WAIT', 'Start ' + crop.name.toLowerCase() + ' indoors ' + K.range(inF, inT), 'Six to eight weeks before they go out on ' + K.fmt(open) + '. Seed starting opens ' + soonWords(inF - d) + '.');
       if (d <= inT) return set('START_INDOORS', 'Start ' + crop.name.toLowerCase() + ' indoors now', 'Window ' + K.range(inF, inT) + ', six to eight weeks before planting out on ' + K.fmt(open) + '.');
       if (d < hF) return set('WAIT', 'Grow ' + crop.name.toLowerCase() + ' on under lights', 'Harden them off from ' + K.fmt(hF) + ' (' + soonWords(hF - d) + ') and plant out from ' + K.fmt(open) + '.');
       if (d < open) return set('HARDEN_OFF', 'Harden off ' + crop.name.toLowerCase() + ' now', 'Seven to ten days outside before planting out on ' + K.fmt(open) + '.');
-      return set('TRANSPLANT', 'Plant ' + crop.name.toLowerCase() + ' out' + (d - open > 28 ? ' (window open since ' + K.fmt(open) + ')' : ''), 'The danger of frost is past here from ' + K.fmt(open) + ' (only 1 spring in 4 freezes later; the latest on record was ' + st.lx + '). MSU gives no last planting date' + (fr.fall !== null ? '; count the days to maturity on your packet back from the first fall frost, ' + fr.fallText + '.' : '.'));
+      return set('TRANSPLANT', 'Plant ' + crop.name.toLowerCase() + ' out' + (d - open > 28 ? ' (window open since ' + K.fmt(open) + ')' : ''), 'The cautious spring reference is ' + K.fmt(open) + ' (about 1 spring in 4 still freezes on or after that date; the latest on record was ' + st.lx + '). MSU gives no last planting date' + (fr.fall !== null ? '; count the days to maturity on your packet back from the first fall frost, ' + fr.fallText + '.' : '.'));
     }
     if (crop.kind === 'warmSow') {
       var o = fr.cautious;
       out.rules = ['afterFrost', 'soil60'].concat(crop.succession ? ['succession'] : []);
       out.windows = [{ kind: 'sow', from: o, to: null }];
       if (crop.succession) out.notes.push('Sow again every two weeks for a longer harvest.');
-      if (afterFall) return set('DONE', crop.name + ': done for the season', 'Frost kills them, and the typical first fall frost here is ' + fr.fallText + '.');
+      if (afterFall) return set('DONE', crop.name + ': watch for fall frost', 'Tender plants can be killed by frost. The typical first fall frost is ' + fr.fallText + '; check what has actually happened in your garden.');
       if (d > SPRING_END) return set('NEXT_SPRING', crop.name + ': next spring', 'Sow outside from ' + K.fmt(o) + ', once the soil is above 60°F.' + (fr.fall !== null ? ' Plants already growing keep going until the first fall frost, around ' + fr.fallText + '.' : ''));
-      if (d < o) return set('WAIT', 'Sow ' + crop.name.toLowerCase() + ' outside from ' + K.fmt(o), 'After the danger of frost, ' + soonWords(o - d) + ', once the soil at planting depth is above 60°F.');
+      if (d < o) return set('WAIT', 'Sow ' + crop.name.toLowerCase() + ' outside from ' + K.fmt(o), 'After the spring reference, ' + soonWords(o - d) + ', once the soil at planting depth is above 60°F.');
       if (soil !== null && soil < 60) return set('WAIT_SOIL', 'Wait for warmer soil for ' + crop.name.toLowerCase(), soil + '°F is too cold: the seed germinates poorly below 60°F and can rot.');
-      return set('PLANT', 'Sow ' + crop.name.toLowerCase() + ' outside', (soil !== null ? 'Soil at ' + soil + '°F and past the danger of frost (' + K.fmt(o) + '). ' : 'Past the danger of frost (' + K.fmt(o) + '). Check that the soil at planting depth is above 60°F. ') + 'MSU gives no last sowing date' + (fr.fall !== null ? '; frost usually arrives around ' + fr.fallText + '.' : '.'));
+      return set('PLANT', 'Sow ' + crop.name.toLowerCase() + ' outside', (soil !== null ? 'Soil at ' + soil + '°F and past the danger of frost (' + K.fmt(o) + '). ' : 'The spring reference has passed (' + K.fmt(o) + '), but frost is still possible. Check that the soil at planting depth is above 60°F. ') + 'MSU gives no last sowing date' + (fr.fall !== null ? '; frost usually arrives around ' + fr.fallText + '.' : '.'));
     }
     if (crop.kind === 'hardy') {
       out.rules = ['hardy'];
@@ -148,7 +203,7 @@
     return set('NOT_REPORTED', crop.name + ': not reported', 'No rule.');
   }
 
-  var RANK = { START_INDOORS: 0, HARDEN_OFF: 1, TRANSPLANT: 2, PLANT: 2, READY_WHEN: 4, WAIT_SOIL: 5, WAIT: 6, DONE: 8, NEXT_SPRING: 8, NOT_REPORTED: 9 };
+  var RANK = { START_INDOORS: 0, HARDEN_OFF: 1, TRANSPLANT: 2, PLANT: 2, READY_WHEN: 4, WAIT_SOIL: 5, WAIT: 6, DONE: 8, NEXT_SPRING: 8, PLAN_FALL: 3, PLAN_GARLIC: 3, GUIDE: 7, NOT_REPORTED: 9 };
   /* The whole answer: a ranked "do this week" list, then every crop. Windows that opened more than
    * four weeks ago stay in the table but drop off the weekly list, so it shows what is new. */
   function plan(st, d, cond) {
@@ -156,6 +211,7 @@
     var fr = frostOf(st);
     function age(r) { var w = r.windows.filter(function (x) { return x.kind === 'transplant' || x.kind === 'sow'; })[0]; return w && typeof w.from === 'number' ? d - w.from : 0; }
     var week = all.filter(function (r) {
+      if (r.code === 'PLAN_FALL' || r.code === 'PLAN_GARLIC') return true;
       if (r.code === 'START_INDOORS' || r.code === 'HARDEN_OFF') return true;
       if (r.code === 'TRANSPLANT' || r.code === 'PLANT') return age(r) <= 28 || r.crop.kind === 'hardy' || r.crop.kind === 'soil40';
       if (r.code === 'READY_WHEN' || r.code === 'WAIT_SOIL') return true;

@@ -39,7 +39,7 @@ test('a test date flips tomatoes from START INDOORS to TRANSPLANT on schedule', 
 
 // (c) No source, no date.
 test('crops and stations without a Michigan source say NOT REPORTED, never a guessed date', () => {
-  for (const c of ['basil', 'cilantro', 'garlic', 'potatoes', 'lettuce']) {
+  for (const c of ['basil', 'cilantro', 'potatoes']) {
     const r = status(c, 'bay-city', '2026-05-15');
     assert.equal(r.code, 'NOT_REPORTED', c);
     assert.equal(r.windows.length, 0, c);
@@ -64,4 +64,27 @@ test('places: ZIPs and towns resolve to the nearest station', () => {
   assert.equal(E.locate('Traverse City').station.s, 'traverse-city');
   assert.equal(E.locate('Atlantis'), null);
   assert.ok(E.locate('49855').miles < 30, 'Marquette ZIP near the Marquette station');
+});
+
+test('garlic guidance distinguishes hard freeze from first frost', () => {
+  const r = status('garlic', 'bay-city', '2026-11-01');
+  assert.equal(r.code, 'PLAN_GARLIC');
+  assert.match(r.detail, /3 to 5 weeks before a hard freeze/);
+  assert.equal(r.windows.length, 0);
+});
+
+const GY = require('../public/assets/garden-tools/garden-year.js');
+test('fall planner uses the supplied year, packet value, buffer, and never invents a missing frost', () => {
+ assert.equal(GY.fallTarget(2028, 'Oct 3', 50, 14), '2028-07-31');
+ assert.equal(GY.fallTarget(2027, 'Oct 3', 50, 14), '2027-07-31');
+ assert.equal(GY.fallTarget(2026, null, 50, 14), null);
+ assert.equal(GY.fallTarget(2026, 'Oct 3', 0, 14), null);
+ assert.equal(GY.seasonForMonth(12), 'winter');
+ assert.equal(GY.seasonForMonth(8), 'summer');
+});
+test('fall crop planning is a conditional prompt, not a made-up deadline', () => {
+ const r=status('kale','bay-city','2026-08-01');
+ assert.equal(r.code,'PLAN_FALL'); assert.equal(r.windows.length,0);
+ assert.match(r.detail,/not a forecast/);
+ assert.match(status('kale','adrian','2026-08-01').detail,/unavailable/);
 });
