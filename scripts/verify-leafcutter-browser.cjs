@@ -24,10 +24,15 @@ async function ready(){
    await page.route('**/*',route=>route.request().url().startsWith(ORIGIN)?route.continue():route.abort());
    await page.route('**/api/leafcutter-release-weather*',async route=>{
     const url=new URL(route.request().url());
+    const zip=url.searchParams.get('zip');
+    if(zip==='48707'){
+      await route.fulfill({status:404,contentType:'application/json',body:JSON.stringify({code:'ZIP_NOT_MAPPED',scope:'no-weather-claim'})});return;
+    }
     const data=url.searchParams.get('mode')==='locations'
      ?{locations:[{id:'bay-city',name:'Bay City',region:'Central Lower'},{id:'marquette',name:'Marquette',region:'Upper Peninsula'}]}
      :{scope:'forecast-planning-only',provider:'National Weather Service',forecastOnly:true,
-       site:{id:'bay-city'},issuedAt:'2026-11-01T11:00:00-05:00',checkedAt:'2026-11-01T13:00:00-05:00',
+       site:zip?{id:'zip:'+zip,name:'ZIP '+zip+' area',kind:'zcta-interior-point',zip,latitude:43.6234,longitude:-83.9251}:{id:'bay-city',name:'Bay City',kind:'named-city'},
+       issuedAt:'2026-11-01T11:00:00-05:00',checkedAt:'2026-11-01T13:00:00-05:00',
        sourceUrl:'https://api.weather.gov/gridpoints/DTX/88,88/forecast/hourly',
        status:'NO_STRETCH',fresh:true,firstWarmStretch:null,
        daily:[{date:'2026-11-02',highF:53,precipPeakPct:30,signal:'COOL_DAY'},{date:'2026-11-03',highF:56,precipPeakPct:25,signal:'COOL_DAY'}]};
@@ -41,6 +46,18 @@ async function ready(){
    await page.waitForFunction(()=>document.querySelectorAll('.bee-day').length===2,null,{timeout:6000});
    assert.match(await page.locator('#bee-weather-status').innerText(),/No sustained 75°F warm stretch/);
    assert.equal(await page.locator('.bee-day').count(),2);
+   await page.locator('#bee-zip').fill('48706');
+   await page.locator('#bee-check').click();
+   await page.waitForFunction(()=>document.querySelector('#bee-geo-note').textContent.includes('ZIP 48706'),null,{timeout:6000});
+   assert.match(await page.locator('#bee-geo-note').innerText(),/not a USPS boundary/);
+   assert.equal(await page.locator('.bee-day').count(),2);
+   await page.locator('#bee-zip').fill('48707');
+   await page.locator('#bee-check').click();
+   assert.match(await page.locator('#bee-weather-status').innerText(),/no mapped Census area/);
+   assert.equal(await page.locator('.bee-day').count(),0,'Unmapped ZIP must not retain prior forecast cards');
+   await page.locator('#bee-zip').fill('');
+   await page.locator('#bee-check').click();
+   await page.waitForFunction(()=>document.querySelectorAll('.bee-day').length===2,null,{timeout:6000});
    const overflow=await page.evaluate(()=>({content:document.documentElement.scrollWidth,window:window.innerWidth,
     offenders:[...document.body.querySelectorAll('*')].filter(el=>{const b=el.getBoundingClientRect();const st=getComputedStyle(el);return b.right>window.innerWidth+2&&b.width>0&&st.position!=='fixed';}).slice(0,10).map(el=>({tag:el.tagName,class:el.className,id:el.id,right:Math.round(el.getBoundingClientRect().right),width:Math.round(el.getBoundingClientRect().width)}))}));
    assert.ok(overflow.content<=overflow.window+1,'Horizontal overflow at '+width+': '+JSON.stringify(overflow));
