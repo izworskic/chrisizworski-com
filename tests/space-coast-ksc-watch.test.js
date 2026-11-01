@@ -158,6 +158,18 @@ test('calendar failures preserve verified history and do not invent cancellation
   assert.equal((await store.get(KEY)).history['starlink-10-54'].length,1);
 });
 
+test('unattended production invocation works when no injected clock is supplied', async()=>{
+  const store=fakeState();
+  const feed={calendar:calendar([]),page:listing(),calls:[]};
+  // This matches the actual scheduled endpoint; tests with an explicitly
+  // injected now() would not catch a timestamp-vs-function default bug.
+  const result=await runKscWatch({state:store,fetcher:source(feed)});
+  assert.equal(result.ok,true);
+  assert.ok(Number.isFinite(Date.parse(result.checkedAt)));
+  assert.equal(result.inspected,0);
+  assert.equal(store.values.has(LEASE_KEY),false);
+});
+
 test('Postgres lease prevents overlapping writes',async()=>{
   const store=fakeState();
   store.values.set(LEASE_KEY,'other-worker');
