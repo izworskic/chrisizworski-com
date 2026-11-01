@@ -90,3 +90,19 @@ test('fall crop planning is a conditional prompt, not a made-up deadline', () =>
  assert.match(r.detail,/not a forecast/);
  assert.match(status('kale','adrian','2026-08-01').detail,/unavailable/);
 });
+
+test('structured fall planner preserves source and date uncertainty', () => {
+ const bay=F.station('bay-city'), adrian=F.station('adrian');
+ const a=E.fallPlan(bay,{year:2028,maturityDays:50,bufferDays:14});
+ assert.equal(a.planningDate,'2028-07-31');assert.equal(a.referenceBasis,'station_typical');assert.equal(a.source,'msuFall');
+ assert.equal(E.fallPlan(adrian,{year:2028,maturityDays:50,bufferDays:14}).reason,'fall_frost_unavailable');
+ const custom=E.fallPlan(adrian,{year:2028,maturityDays:50,bufferDays:14,frostISO:'2028-10-10'});
+ assert.equal(custom.referenceBasis,'visitor_supplied');assert.equal(custom.planningDate,'2028-08-07');
+ assert.equal(E.fallPlan(bay,{year:2028,maturityDays:50,bufferDays:14,frostISO:'2028-02-30'}).reason,'invalid_frost_date');
+ assert.equal(E.fallPlan(bay,{year:2028,maturityDays:0,bufferDays:14}).reason,'invalid_input');
+ assert.equal(E.fallReference('lettuce').basis,'days after germination');assert.equal(E.fallReference('tomatoes'),null);
+});
+test('spring soil rules do not issue a winter plant-now instruction', () => {
+ assert.equal(status('peas','bay-city','2026-01-15',{workable:true}).code,'NEXT_SPRING');
+ assert.equal(status('carrots','bay-city','2026-01-15',{soilF:45}).code,'NEXT_SPRING');
+});

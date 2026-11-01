@@ -184,10 +184,11 @@
       if (soil !== null && soil <= 60) return set('WAIT_SOIL', 'Wait for warmer soil for ' + crop.name.toLowerCase(), soil + '°F does not exceed the 60°F soil threshold. Wait for warmer soil and check the forecast.');
       return set('PLANT', 'Sow ' + crop.name.toLowerCase() + ' outside', (soil !== null ? 'Soil is ' + soil + '°F and the spring reference (' + K.fmt(o) + ') has passed, but frost is still possible. Check the forecast. ' : 'The spring reference has passed (' + K.fmt(o) + '), but frost is still possible. Check that the soil at planting depth is above 60°F. ') + 'MSU gives no last sowing date' + (fr.fall !== null ? '; frost usually arrives around ' + fr.fallText + '.' : '.'));
     }
+    // March 1 is a conservative display boundary for spring-only soil advice, not a regional planting deadline.
     if (crop.kind === 'hardy') {
       out.rules = ['hardy'];
       out.windows = [{ kind: 'sow', condition: 'workable' }];
-      if (d > SPRING_END) return set('NEXT_SPRING', crop.name + ': next spring', 'Plant as soon as the ground can be worked in spring: usually late March or early April in southern Michigan, one to three weeks later farther north.');
+      if (d < K.parse('Mar 1') || d > SPRING_END) return set('NEXT_SPRING', crop.name + ': next spring', 'Plant as soon as the ground can be worked in spring: usually late March or early April in southern Michigan, one to three weeks later farther north.');
       if (cond.workable === true) return set('PLANT', 'Plant ' + crop.name.toLowerCase(), 'You can work the soil, and ' + crop.name.toLowerCase() + ' are very hardy.');
       if (cond.workable === false) return set('WAIT_SOIL', 'Wait until the ground can be worked', 'Wet or frozen soil first has to crumble in your hand.');
       return set('READY_WHEN', 'Plant ' + crop.name.toLowerCase() + ' as soon as the ground can be worked', 'Usually late March or early April in southern Michigan, one to three weeks later farther north.');
@@ -195,7 +196,7 @@
     if (crop.kind === 'soil40') {
       out.rules = ['soil40'];
       out.windows = [{ kind: 'sow', condition: 'soil40' }];
-      if (afterFall || d > SPRING_END) return set('NEXT_SPRING', crop.name + ': next spring', 'Sow once the soil at planting depth reaches 40°F.');
+      if (d < K.parse('Mar 1') || afterFall || d > SPRING_END) return set('NEXT_SPRING', crop.name + ': next spring', 'Sow once the soil at planting depth reaches 40°F.');
       if (soil !== null && soil < 40) return set('WAIT_SOIL', 'Wait for 40°F soil', soil + '°F is below the 40°F the seed needs to germinate.');
       if (soil !== null) return set('PLANT', 'Sow ' + crop.name.toLowerCase(), 'Soil at ' + soil + '°F; the seed germinates from 40°F.');
       return set('READY_WHEN', 'Sow ' + crop.name.toLowerCase() + ' once the soil is 40°F', 'The seed germinates at a minimum of 40°F at planting depth.');
@@ -221,13 +222,40 @@
     return { station: st, day: d, frost: fr, week: week, crops: all.slice().sort(function (a, b) { return RANK[a.code] - RANK[b.code] || CROPS.indexOf(a.crop) - CROPS.indexOf(b.crop); }) };
   }
 
+  // MSU E3172, p. 2: approximate days from germination, not sowing. Variety and weather vary.
+  var FALL_REFERENCE_DAYS = {beets:60,broccoli:60,'brussels-sprouts':100,cabbage:80,'chinese-cabbage':80,carrots:60,cauliflower:65,collards:100,kale:60,kohlrabi:60,lettuce:50,mustard:60,peas:60,radishes:30,rutabaga:80,spinach:60,chard:60,turnips:60};
+  function fallReference(id) {
+    if (!Object.prototype.hasOwnProperty.call(FALL_REFERENCE_DAYS,id)) return null;
+    return {days:FALL_REFERENCE_DAYS[id],basis:'days after germination',source:'msuFall',referenceCrop:id==='peas'?'sugar peas':id==='lettuce'?'leaf lettuce':id==='cabbage'?'head cabbage':id==='radishes'?'radish (not daikon)':id,limitation:'Approximate; variety and cool weather change the timing. Allow separately for germination. Head cabbage: MSU recommends transplants.'};
+  }
+  // Packet-based arithmetic is a planning aid, not a latest-safe planting date.
+  // A visitor-supplied frost date is explicitly distinct from a historical station median.
+  function fallPlan(st, options) {
+    options=options||{};
+    var year=options.year, maturity=options.maturityDays, buffer=options.bufferDays;
+    if (!Number.isInteger(year)||year<1900||year>2200||!Number.isInteger(maturity)||maturity<1||maturity>365||!Number.isInteger(buffer)||buffer<0||buffer>120) return {ok:false,reason:'invalid_input'};
+    var custom=options.frostISO, iso=null, basis;
+    if (custom !== undefined && custom !== null && custom !== '') {
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(custom)||Number(custom.slice(0,4))!==year) return {ok:false,reason:'invalid_frost_date'};
+      var check=new Date(custom+'T00:00:00Z');
+      if (!isFinite(check.getTime())||check.toISOString().slice(0,10)!==custom) return {ok:false,reason:'invalid_frost_date'};
+      iso=custom;basis='visitor_supplied';
+    } else {
+      if (!st) return {ok:false,reason:'station_required'};
+      var frost=frostOf(st);if(frost.fall===null) return {ok:false,reason:'fall_frost_unavailable'};
+      iso=K.toISO(frost.fall,year);basis='station_typical';
+    }
+    var dt=new Date(iso+'T00:00:00Z');dt.setUTCDate(dt.getUTCDate()-maturity-buffer);
+    return {ok:true,referenceDate:iso,referenceBasis:basis,planningDate:dt.toISOString().slice(0,10),maturityDays:maturity,bufferDays:buffer,source:'msuFall',limitation:'Planning estimate, not a last safe planting date or harvest forecast; packet conventions, germination, frost tolerance and weather vary.'};
+  }
+
   // When nothing is current, the next dated window anywhere in the year.
   function nextUp(st, d) {
     var fr = frostOf(st), best = null;
     CROPS.forEach(function (c) { if (c.kind !== 'transplant' && c.kind !== 'warmSow') return; var from = c.kind === 'transplant' ? fr.cautious - 56 : fr.cautious; var n = ((from - d) % 365 + 365) % 365; if (!best || n < best.inDays) best = { crop: c, from: from, inDays: n, what: c.kind === 'transplant' ? 'start ' + c.name.toLowerCase() + ' indoors' : 'sow ' + c.name.toLowerCase() + ' outside' }; });
     return best;
   }
-  var api = { SOURCES: SOURCES, RULES: RULES, CROPS: CROPS, STATUS: STATUS, FALL_PUBLISHED: FALL_PUBLISHED, locate: locate, towns: towns, nearestStation: nearestStation, detroitToday: detroitToday, cropStatus: cropStatus, plan: plan, nextUp: nextUp, frostOf: frostOf, miles: miles };
+  var api = { SOURCES: SOURCES, RULES: RULES, CROPS: CROPS, STATUS: STATUS, FALL_PUBLISHED: FALL_PUBLISHED, locate: locate, towns: towns, nearestStation: nearestStation, detroitToday: detroitToday, cropStatus: cropStatus, plan: plan, nextUp: nextUp, frostOf: frostOf, miles: miles, fallReference: fallReference, fallPlan: fallPlan };
   root.PlantNow = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
 })(typeof window !== 'undefined' ? window : globalThis);

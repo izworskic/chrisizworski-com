@@ -22,8 +22,8 @@ function mount(opts){
   if(!station){out.textContent='Choose a Michigan town above to use a frost station.';return;}
   var f=opts.engine.frostOf(station);if(!f.fallText){out.textContent='A sourced typical fall frost date is not available for the '+station.n+' station. Use a locally sourced frost date and count back from that instead.';return;}
   if(raw===''||b===''){out.textContent='Enter your packet’s days to maturity and a buffer to make a planning estimate.';return;}
-  var yr=Number(opts.today.iso.slice(0,4)), date=fallTarget(yr,f.fallText,Number(raw),Number(b));
-  if(!date){out.textContent='Use 1–365 days to maturity and a buffer from 0–60 days.';return;}
+  var yr=Number(opts.today.iso.slice(0,4)), result=opts.engine.fallPlan(station,{year:yr,maturityDays:Number(raw),bufferDays:Number(b)}), date=result.ok?result.planningDate:null;
+  if(!date || Number(b)>60){out.textContent='Use 1–365 days to maturity and a buffer from 0–60 days.';return;}
   var d=new Date(date+'T12:00:00Z');var human=new Intl.DateTimeFormat('en-US',{month:'long',day:'numeric',year:'numeric',timeZone:'UTC'}).format(d);
   out.textContent='Working backward from '+station.n+'’s typical first fall frost of '+f.fallText+', your planning date is '+human+'. '+(date < opts.today.iso ? 'That date has passed this year; check your crop and local conditions before deciding what still fits. ' : 'Use it as a starting point for your plan. ')+'This is an estimate, not a last safe planting date or harvest forecast. Packet timing, germination, weather and frost tolerance vary; your '+b+'-day buffer is your choice.';
  }

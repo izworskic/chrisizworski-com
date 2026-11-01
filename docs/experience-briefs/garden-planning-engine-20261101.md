@@ -1,0 +1,11 @@
+# Michigan garden engine: source-qualified fall planning
+
+November 1, 2026. Engine owner: `public/assets/garden-tools/plant-now.js`; Node adapter `lib/plant-now/index.js`. Consumers: Michigan gardening hub and Michigan soil-temperature page (location handoff). The older zone-6a planting calendar and national planting tools use separate engines; this change does not silently replace their data or improve their calculations.
+
+`fallReference(id)` reports the MSU E3172 table as approximate days **after germination**, not days from sowing. Head cabbage requires transplants per the bulletin. Values are generic examples, not the user's packet, nor guaranteed harvest dates. Reference: https://www.canr.msu.edu/uploads/files/E3172_-_Fall_Vegetable_Crops_for_your_Garden.pdf, page 2. Existing engine decisions remain source-qualified and do not borrow unsupported dates.
+
+`fallPlan(station,{year,maturityDays,bufferDays,frostISO?})` returns a structured result. `referenceBasis` distinguishes visitor input from a station's published typical frost. Missing station data is an explicit failure; an invalid calendar date is rejected; UTC date arithmetic handles leap years and year rollover. The caller controls the buffer; no source claims that a chosen buffer guarantees success. The calculation is not a last safe sowing date, a live observation or a harvest prediction. The homepage's fall calculator now uses this common calculation.
+
+Spring-only soil rules no longer give plant-now status before March 1. This boundary is a conservative display choice, not an MSU-specified local planting date or proof that the ground is frozen. The July 31 boundary remains a display limit. Warm-seed soil must exceed 60°F, and passing a station's 25% freeze reference does not mean frost risk is gone.
+
+Still needed for a complete garden engine: crop-specific current MSU source verification for the plants labeled not reported; variety-specific starting, transplant, sowing and fall harvest distinctions; a real multi-crop planning model and persistence contract; regional validation and user testing. A neighboring state's rules or the existing 47-crop calendar offsets must not be silently promoted to verified Michigan data. No visitor outcome is claimed.
