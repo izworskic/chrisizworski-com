@@ -6,7 +6,7 @@
  var PARK="/porcupine-mountains/access-points.json";
  var GEO="https://www.michigan.gov/recsearch/parks/porkies";
  var SOURCE="https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/Porcupine-Mountains-State-Park-Map-GPS.pdf";
- var markerById={}, siteById={}, map=null, focusSelected=false, planIds=[];
+ var markerById={}, siteById={}, map=null, focusSelected=false, planIds=[], chosenId=null;
  function nameFor(stop) {
    var s=(stop && stop.name || "").toLowerCase();
    if(s.includes("winter sports")) return "ski";
@@ -112,18 +112,18 @@
    }
    var caveat=node.querySelector(".access-date-note");
    if(caveat)caveat.textContent=state.notice;
-   node.classList.toggle("selected-plan",planIds.includes(point.id));
-   node.hidden=focusSelected && planIds.length>0 && !planIds.includes(point.id);
+   node.classList.toggle("selected-plan",chosenId ? point.id===chosenId : planIds.includes(point.id));
+   node.hidden=chosenId ? point.id!==chosenId : focusSelected && planIds.length>0 && !planIds.includes(point.id);
  }
  function updateFilter(){
    Object.values(siteById).forEach(renderCard);
    var status=root.document.getElementById("parking-status");
-   if(status)status.textContent=focusSelected&&planIds.length ? "Showing "+planIds.length+" DNR mapped access points relevant to your preliminary plan. Other areas remain on the full map." : "Explore six DNR-mapped places where a visit might begin. A pin never confirms that its parking or trail is open.";
+   if(status)status.textContent=chosenId && siteById[chosenId] ? "Showing "+siteById[chosenId].title+". Check current road and trail conditions before visiting." : focusSelected&&planIds.length ? "Showing "+planIds.length+" DNR mapped access points relevant to your preliminary plan. Other areas remain on the full map." : "Explore six DNR-mapped places where a visit might begin. A pin never confirms that its parking or trail is open.";
    var selected=root.document.getElementById("parking-focus");
    if(selected)selected.setAttribute("aria-pressed",focusSelected?"true":"false");
    if(map) {
      Object.entries(markerById).forEach(function ([id,marker]){
-       var strong=planIds.includes(id);
+       var strong=chosenId ? id===chosenId : planIds.includes(id);
        marker.setStyle({radius:strong?10:7,weight:strong?3:1.5,fillOpacity:strong?.95:.6,color:strong?"#d89551":"#173e36",fillColor:strong?"#d89551":"#276452"});
      });
      if(focusSelected&&planIds.length){
@@ -133,6 +133,8 @@
    }
  }
  function onPlan(result) {
+   chosenId=null;
+   root.document.querySelectorAll("[data-map-place]").forEach(a=>a.removeAttribute("aria-current"));
    planIds=Array.from(new Set((result?.stops||[]).map(nameFor).filter(id=>id && siteById[id])));
    if(planIds.length===0)focusSelected=false;
    updateFilter();
@@ -182,11 +184,28 @@
      if(!Array.isArray(body.points)||body.points.length!==6||body.points.some(x=>x.status!=="dnr-mapped-crosschecked-not-current"))throw Error("Invalid parking source data");
      body.points.forEach(p=>{siteById[p.id]=p;});
      initMap(body.points);
+     // One place controls its detail and mapped point. Anchors still work without JS.
+     function choosePlace(id, reveal) {
+       var point=siteById[id]; if(!point)return;
+       chosenId=id; focusSelected=false; updateFilter();
+       root.document.querySelectorAll('[data-map-place]').forEach(a=>{
+         if(a.dataset.mapPlace===id)a.setAttribute('aria-current','true');
+         else a.removeAttribute('aria-current');
+       });
+       var status=root.document.getElementById('parking-status');
+       if(status)status.textContent='Showing '+point.title+'. Check current road and trail conditions before visiting.';
+       if(map && markerById[id]){map.setView([point.lat,point.lon],12,{animate:false});markerById[id].openPopup();}
+       if(reveal)root.document.getElementById('parking-'+id)?.scrollIntoView({block:'nearest',behavior:'auto'});
+     }
+     root.document.querySelectorAll('[data-map-place]').forEach(a=>a.addEventListener('click',function(e){e.preventDefault();choosePlace(a.dataset.mapPlace,true);}));
+     Object.entries(markerById).forEach(([id,marker])=>marker.on('click',()=>choosePlace(id,false)));
+
      // Two verified DNR parking asset pins, without drawing a drive or hiking route.
      root.addEventListener("porkies:compare-parking",event=>{
        const ids=event?.detail?.ids;
        if(!map||!Array.isArray(ids)||ids.length!==2)return;
        if(!ids.every(id=>typeof id==="string"&&siteById[id]&&markerById[id]))return;
+       chosenId=null; focusSelected=false; root.document.querySelectorAll("[data-map-place]").forEach(a=>a.removeAttribute("aria-current")); updateFilter();
        const selected=Array.from(new Set(ids)).map(id=>markerById[id].getLatLng());
        if(selected.length===1)map.setView(selected[0],12,{animate:false});
        else map.fitBounds(root.L.latLngBounds(selected).pad(.3),{maxZoom:11,animate:false});
@@ -203,9 +222,9 @@
        planner.addEventListener("submit",()=>root.setTimeout(()=>{var eng=root.PorkiesEngine?.recommend;if(typeof eng==="function"){onPlan(eng({date:root.document.getElementById("travel-date").value,arrival:root.document.getElementById("arrival").value,hours:+root.document.getElementById("hours").value,ability:root.document.getElementById("ability").value,interest:root.document.getElementById("interest").value}));}},0));
      }
      var focus=root.document.getElementById("parking-focus");
-     if(focus)focus.addEventListener("click",function(){focusSelected=!focusSelected;updateFilter();});
+     if(focus)focus.addEventListener("click",function(){chosenId=null;root.document.querySelectorAll("[data-map-place]").forEach(a=>a.removeAttribute("aria-current"));focusSelected=!focusSelected;updateFilter();});
      var all=root.document.getElementById("parking-all");
-     if(all)all.addEventListener("click",function(){focusSelected=false;updateFilter();if(map)map.fitBounds(root.L.latLngBounds(body.points.map(p=>[p.lat,p.lon])).pad(.12));});
+     if(all)all.addEventListener("click",function(){chosenId=null;focusSelected=false;root.document.querySelectorAll("[data-map-place]").forEach(a=>a.removeAttribute("aria-current"));updateFilter();if(map)map.fitBounds(root.L.latLngBounds(body.points.map(p=>[p.lat,p.lon])).pad(.12));});
      // Selected itinerary state must be coherent even when JS modules load at different times.
      var eng=root.PorkiesEngine?.recommend;
      if(typeof eng==="function"){
