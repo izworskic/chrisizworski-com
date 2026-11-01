@@ -16,6 +16,10 @@
 | Expensive geographic, numerical or ETL compute | Existing build-time JS/Python and cached API feeds | Rust/WASM/server computation only after profiled bottleneck or genuine safety/precision advantage |
 | Component workshop | Existing manual fixture/browser tests | Storybook when enough shared interactive components justify tooling and CI cost |
 
+### Purposeful motion, not an animation mandate
+
+Before adding transitions, evidence overlays, scroll-linked storytelling, Motion, GSAP, Rive or WebGL, follow [Purposeful motion & interactive storytelling](PURPOSEFUL_MOTION.md). The visitor's selected time/place and source truth are authoritative; visual transitions only explain discrete, verified state changes. No automatic parallax or promotional animation. Compare CSS/vanilla JS before any third-party dependency. Test reduced motion, fast scrubbing/async races, keyboard, no-JS and failure states.
+
 ### React, not dogma
 
 React officially supports gradual adoption in an existing app. Use a scoped component mounted into static HTML if state complexity justifies it. **Do not** add a giant React bundle to every tool, mandate Next.js, or force React where a small browser module suffices. Source: https://react.dev/learn/installation
