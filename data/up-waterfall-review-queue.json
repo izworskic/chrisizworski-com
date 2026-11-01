@@ -13,257 +13,161 @@
     {
       "batchNumber": 1,
       "candidates": [
-        75,
-        42,
-        80,
-        85,
-        129,
-        15,
         17,
-        144
-      ]
-    },
-    {
-      "batchNumber": 2,
-      "candidates": [
+        144,
         18,
         116,
         127,
         148,
         153,
-        162,
-        163,
-        169
+        162
       ]
     },
     {
-      "batchNumber": 3,
+      "batchNumber": 2,
       "candidates": [
+        163,
+        169,
         170,
         173,
         175,
         180,
         181,
-        183,
-        184,
-        185
+        183
       ]
     },
     {
-      "batchNumber": 4,
+      "batchNumber": 3,
       "candidates": [
+        184,
+        185,
         186,
         187,
         22,
         28,
         54,
-        57,
-        60,
-        61
+        57
       ]
     },
     {
-      "batchNumber": 5,
+      "batchNumber": 4,
       "candidates": [
+        60,
+        61,
         62,
         72,
         84,
         106,
         122,
-        51,
-        120,
-        136
+        51
       ]
     },
     {
-      "batchNumber": 6,
+      "batchNumber": 5,
       "candidates": [
+        120,
+        136,
         137,
         139,
         140,
         152,
         176,
-        177,
-        23,
-        213
+        177
       ]
     },
     {
-      "batchNumber": 7,
+      "batchNumber": 6,
       "candidates": [
+        23,
+        213,
         68,
         8,
         38,
         12,
         4,
-        9,
-        191,
-        192
+        9
       ]
     },
     {
-      "batchNumber": 8,
+      "batchNumber": 7,
       "candidates": [
+        191,
+        192,
         46,
         91,
         119,
         190,
         45,
-        150,
-        151,
-        154
+        150
       ]
     },
     {
-      "batchNumber": 9,
+      "batchNumber": 8,
       "candidates": [
+        151,
+        154,
         160,
         215,
         195,
         205,
         52,
-        59,
-        83,
-        99
+        59
       ]
     },
     {
-      "batchNumber": 10,
+      "batchNumber": 9,
       "candidates": [
+        83,
+        99,
         103,
         105,
         107,
         114,
         121,
-        123,
-        20,
-        24
+        123
       ]
     },
     {
-      "batchNumber": 11,
+      "batchNumber": 10,
       "candidates": [
+        20,
+        24,
         25,
         37,
         39,
         40,
         48,
-        58,
+        58
+      ]
+    },
+    {
+      "batchNumber": 11,
+      "candidates": [
         63,
-        65
+        65,
+        69,
+        70,
+        74,
+        75,
+        86,
+        112
       ]
     },
     {
       "batchNumber": 12,
       "candidates": [
-        69,
-        70,
-        74,
-        86,
-        112,
         29,
+        42,
+        80,
+        85,
+        129,
+        15,
         149,
         172
       ]
     }
   ],
   "candidates": [
-    {
-      "gisObjectId": 75,
-      "name": "Manakiki Falls",
-      "county": "GOGEBIC",
-      "river": "MAPLE CREEK",
-      "lat": 46.640813,
-      "lng": -90.111839,
-      "cluster": "GOGEBIC / MAPLE CREEK",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 42,
-      "name": "Onion Falls",
-      "county": "HOUGHTON",
-      "river": "ONION CREEK",
-      "lat": 46.569883,
-      "lng": -88.986815,
-      "cluster": "HOUGHTON / ONION CREEK",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 80,
-      "name": "Vista Falls",
-      "county": "HOUGHTON",
-      "river": "STURGEON RIVER",
-      "lat": 46.694735,
-      "lng": -88.861986,
-      "cluster": "HOUGHTON / STURGEON RIVER",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 85,
-      "name": "West Branch Sturgeon Falls",
-      "county": "HOUGHTON",
-      "river": "STURGEON RIVER",
-      "lat": 46.722406,
-      "lng": -88.79218,
-      "cluster": "HOUGHTON / STURGEON RIVER",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 129,
-      "name": "Ripley Falls",
-      "county": "HOUGHTON",
-      "river": "RIPLEY CREEK",
-      "lat": 47.129238,
-      "lng": -88.555885,
-      "cluster": "HOUGHTON / RIPLEY CREEK",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 15,
-      "name": "Margeson Falls",
-      "county": "IRON",
-      "river": "MARGESON CREEK",
-      "lat": 46.220319,
-      "lng": -88.246589,
-      "cluster": "IRON / MARGESON CREEK",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
     {
       "gisObjectId": 17,
       "name": "Chipmunk Falls",
@@ -1625,6 +1529,22 @@
       "blockingGate": "Verify current parcel title, legal signed public visitor parking, road access and a continuous authorized footpath to a safe viewpoint. Do not adopt old logging-road, paddler put-in or unofficial riverbank shortcuts."
     },
     {
+      "gisObjectId": 75,
+      "name": "Manakiki Falls",
+      "county": "GOGEBIC",
+      "river": "MAPLE CREEK",
+      "lat": 46.640813,
+      "lng": -90.111839,
+      "cluster": "GOGEBIC / MAPLE CREEK",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 9,
+      "blockingGate": "Reconcile the two tourism waterfall points with GNIS and field evidence, identify Maple Creek Road gate and bridge as legal current public arrival points, verify actual parcels and walking rights to the safe upper waterfall viewpoint. Do not use the GNIS natural point or either brochure waterfall pin as a car destination."
+    },
+    {
       "gisObjectId": 86,
       "name": "Iagoo Falls",
       "county": "GOGEBIC",
@@ -1671,6 +1591,86 @@
       "reviewStatus": "previous-research-needs-public-access-review",
       "sourceCount": 6,
       "blockingGate": "Obtain current U.S. Forest Service GIS trailhead and Jumbo Falls geomarker/route polyline or other reliable surveyed source distinguishing the 2015 agency coordinates from the specialist falls point, establish certified designated visitor parking and the ~0.1-mile trail's correct physical destination, plus present FR4589-B road/trail restrictions. Do not route to any of the three coordinates before reconciling."
+    },
+    {
+      "gisObjectId": 42,
+      "name": "Onion Falls",
+      "county": "HOUGHTON",
+      "river": "ONION CREEK",
+      "lat": 46.569883,
+      "lng": -88.986815,
+      "cluster": "HOUGHTON / ONION CREEK",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 8,
+      "blockingGate": "Match Onion Creek natural drop with county parcel/road status and authoritative Forest Service MVUM/route line. Establish a signed and legal turnout and a complete sanctioned path/viewpoint with no unverified unstable gorge descent. Avoid presenting the historic meadow as a public parking lot."
+    },
+    {
+      "gisObjectId": 80,
+      "name": "Vista Falls",
+      "county": "HOUGHTON",
+      "river": "STURGEON RIVER",
+      "lat": 46.694735,
+      "lng": -88.861986,
+      "cluster": "HOUGHTON / STURGEON RIVER",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 8,
+      "blockingGate": "Keep the named historical point as a research annotation only. Require contemporary authoritative hydrology/terrain evidence and independently dated photographic or surveyed observation of an actual drop before reviewing visitor access or publication. Do not direct visitors toward this location."
+    },
+    {
+      "gisObjectId": 85,
+      "name": "West Branch Sturgeon Falls",
+      "county": "HOUGHTON",
+      "river": "STURGEON RIVER",
+      "lat": 46.722406,
+      "lng": -88.79218,
+      "cluster": "HOUGHTON / STURGEON RIVER",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 9,
+      "blockingGate": "Verify current Forest Service MVUM and authority for Newberry Road/FR1755, official public signed parking placement and whether a sanctioned 2026 foot corridor exists to a safe viewpoint. Reconcile the 526m site-offset so any visitor planning uses a river-feature location, never a navigable trailhead pin. Until then, link to the published Visit Keweenaw field narrative but withhold an auto-guided visitor route."
+    },
+    {
+      "gisObjectId": 129,
+      "name": "Ripley Falls",
+      "county": "HOUGHTON",
+      "river": "RIPLEY CREEK",
+      "lat": 47.129238,
+      "lng": -88.555885,
+      "cluster": "HOUGHTON / RIPLEY CREEK",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 9,
+      "blockingGate": "Confirm the exact ski-hill/neighbor parcel boundaries, official MTU permission for out-of-season pedestrian access, authorized visitor parking and a signed foot route. Withhold all street/old-school parking and ski slope off-season walking directions until the owner publishes guidance."
+    },
+    {
+      "gisObjectId": 15,
+      "name": "Margeson Falls",
+      "county": "IRON",
+      "river": "MARGESON CREEK",
+      "lat": 46.220319,
+      "lng": -88.246589,
+      "cluster": "IRON / MARGESON CREEK",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 8,
+      "blockingGate": "Use Iron County/Gogebic parcel/right-of-way and Michigan DNR maps to find any continuous state-land approach from public road without private crossings; verify signed legal parking and a safe footpath. If only a private approach exists, leave research-only until documented public easement/permission. No landowner outreach."
     },
     {
       "gisObjectId": 149,

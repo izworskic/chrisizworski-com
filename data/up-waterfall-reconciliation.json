@@ -308,11 +308,70 @@
       "reconciliation": "pending-identity-and-access-research",
       "curatedId": null,
       "publicGuide": null,
-      "landManager": null,
-      "parkingVerified": null,
-      "publicAccessVerified": null,
-      "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "landManager": "Michigan DNR — Forest Resources Division (40-acre parcel at falls only)",
+      "parkingVerified": false,
+      "publicAccessVerified": false,
+      "reviewed": "2026-11-01",
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "evidenceReviewed": "2026-11-01",
+      "publicationEligible": false,
+      "disposition": "public-falls-point-private-entry-block",
+      "sourceNotes": "Michigan GIS feature #15 locates Margeson Falls at 46.220319,-88.246589 on Margeson Creek northeast of Crystal Falls. Historic Iron County visitor descriptions recognize the named remote cascade but do not establish a signed maintained waterfall trail or safe arrival. Michigan DNR LOTS current state-owned parcel layer directly intersects the natural waterfall point, reporting state-managed Parcel ObjectID 108172, 40 acres, Forest Resources Division, Iron County (parcel description SE1/4 SE1/4; status active). USFS managed parcel and DNR conservation easement point layers have no intersect. This verifies state-managed ownership AT THE WATERFALL, not a public entrance or a lawful corridor through privately owned approach land. An Iron County area visitor description reports roughly a one-mile approach that starts across private land. No legal public route from a road to the DNR parcel, permission for the private initial segment, signed trailhead, visitor parking or maintained trail could be verified. Do not instruct visitors to drive a private road or cross private parcels based on state ownership of the waterfall alone.",
+      "outstandingGate": "Use Iron County/Gogebic parcel/right-of-way and Michigan DNR maps to find any continuous state-land approach from public road without private crossings; verify signed legal parking and a safe footpath. If only a private approach exists, leave research-only until documented public easement/permission. No landowner outreach.",
+      "sourceLinks": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://upper-michigan.com/guide/waterfalls/margeson-falls.html",
+        "https://www.iron.org/outdoors/waterfalls/",
+        "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_PADUS_01/MapServer/3/query?geometry=-88.246589%2C46.220319&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=OBJECTID,OWN_NAME,LOC_OWN,MANG_NAME,UNIT_NM,SRC_DATE,OWN_TYPE&returnGeometry=false&f=pjson",
+        "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_TrailNFSPublish_01/MapServer/0/query?geometry=-88.246589%2C46.220319&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=1000&units=esriSRUnit_Meter&outFields=TRAIL_NO,TRAIL_NAME,TRAIL_CLASS,ADMIN_ORG&returnGeometry=false&f=pjson",
+        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-88.246589%2C46.220319&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson",
+        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/9/query?geometry=-88.246589%2C46.220319&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson",
+        "https://www.wuppdr.org/gis"
+      ],
+      "accessRouteAudit": {
+        "reviewed": "2026-11-01",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Geographic identity and meaningful waterfall status",
+            "status": "documented-geography",
+            "finding": "Michigan GIS feature #15 locates Margeson Falls at 46.220319,-88.246589 on Margeson Creek northeast of Crystal Falls. Historic Iron County visitor descriptions recognize the named remote cascade but do not establish a signed maintained waterfall trail or safe arrival.",
+            "source": "https://upper-michigan.com/guide/waterfalls/margeson-falls.html"
+          },
+          {
+            "label": "Land ownership at the natural point (not visitor route)",
+            "status": "verified-geography",
+            "finding": "Michigan DNR LOTS current state-owned parcel layer directly intersects the natural waterfall point, reporting state-managed Parcel ObjectID 108172, 40 acres, Forest Resources Division, Iron County (parcel description SE1/4 SE1/4; status active). USFS managed parcel and DNR conservation easement point layers have no intersect. This verifies state-managed ownership AT THE WATERFALL, not a public entrance or a lawful corridor through privately owned approach land.",
+            "source": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-88.246589%2C46.220319&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson"
+          },
+          {
+            "label": "Historic or tourism approach versus current public permission",
+            "status": "documented-not-live",
+            "finding": "An Iron County area visitor description reports roughly a one-mile approach that starts across private land. No legal public route from a road to the DNR parcel, permission for the private initial segment, signed trailhead, visitor parking or maintained trail could be verified. Do not instruct visitors to drive a private road or cross private parcels based on state ownership of the waterfall alone.",
+            "source": "https://upper-michigan.com/guide/waterfalls/margeson-falls.html"
+          },
+          {
+            "label": "Legally signed road approach and waterfall parking",
+            "status": "not-cleared",
+            "finding": "No present verified official signed waterfall visitor lot/turnout and continuous vehicle access to that arrival. Old gated routes, gravel-road shoulders, apartment parking and private entrances do not qualify.",
+            "source": "https://www.wuppdr.org/gis"
+          },
+          {
+            "label": "Complete lawful walking trail and safe viewpoint",
+            "status": "not-cleared",
+            "finding": "No USDA NFS published trail was found within 1km of the mapped feature. No current complete legal public foot corridor to the natural point was established.",
+            "source": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_TrailNFSPublish_01/MapServer/0/query?geometry=-88.246589%2C46.220319&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=1000&units=esriSRUnit_Meter&outFields=TRAIL_NO,TRAIL_NAME,TRAIL_CLASS,ADMIN_ORG&returnGeometry=false&f=pjson"
+          },
+          {
+            "label": "2026 season, stream, ice and closure conditions",
+            "status": "not-cleared",
+            "finding": "No verified current site-specific public road/gate/footing/crossing condition or signed authorization for November 1, 2026. Older trip directions must not be treated as live opening information.",
+            "source": "https://www.fs.usda.gov/r09/ottawa"
+          }
+        ]
+      }
     },
     {
       "gisObjectId": 17,
@@ -1278,10 +1337,69 @@
       "curatedId": null,
       "publicGuide": null,
       "landManager": null,
-      "parkingVerified": null,
-      "publicAccessVerified": null,
-      "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "parkingVerified": false,
+      "publicAccessVerified": false,
+      "reviewed": "2026-11-01",
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "evidenceReviewed": "2026-11-01",
+      "publicationEligible": false,
+      "disposition": "minor-rapid-remote-gorge",
+      "sourceNotes": "Michigan GIS #42 is about 194m from the independently field-mapped Onion Falls 46.56974,-88.98429. The original visitor account measures a roughly 2ft sandstone ledge slide across a ~7ft creek, and cautions that the downstream ravine—not the height of the fall—is the striking landscape. Do not inflate to a large waterfall. The exact GIS point returned no USDA FS surface parcel and no Michigan DNR LOTS state parcel or easement intersect; this is NOT proof of private title. Three published Forest Service trail segments NFST-1137, -1129 and -835 lie within 1km, but none is verified as a trail to this drop, and nearby trail coverage does not certify creek-bank rights. Historic waterfall-hunting directions lead past forest roads to an informal grassy opening, then across meadows and down to Onion Creek. The route is an old bushwhack through an unstable gorge, not a signed maintained trail. Current legal parking, motor-vehicle road status and continuous public right-of-way are unverified.",
+      "outstandingGate": "Match Onion Creek natural drop with county parcel/road status and authoritative Forest Service MVUM/route line. Establish a signed and legal turnout and a complete sanctioned path/viewpoint with no unverified unstable gorge descent. Avoid presenting the historic meadow as a public parking lot.",
+      "sourceLinks": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.waterfallsofthekeweenaw.com/onion-creek/onion-falls/",
+        "https://upper-michigan.com/guide/waterfalls/onion-falls.html",
+        "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_PADUS_01/MapServer/3/query?geometry=-88.986815%2C46.569883&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=OBJECTID,OWN_NAME,LOC_OWN,MANG_NAME,UNIT_NM,SRC_DATE,OWN_TYPE&returnGeometry=false&f=pjson",
+        "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_TrailNFSPublish_01/MapServer/0/query?geometry=-88.986815%2C46.569883&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=1000&units=esriSRUnit_Meter&outFields=TRAIL_NO,TRAIL_NAME,TRAIL_CLASS,ADMIN_ORG&returnGeometry=false&f=pjson",
+        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-88.986815%2C46.569883&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson",
+        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/9/query?geometry=-88.986815%2C46.569883&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson",
+        "https://www.wuppdr.org/gis"
+      ],
+      "accessRouteAudit": {
+        "reviewed": "2026-11-01",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Geographic identity and meaningful waterfall status",
+            "status": "documented-geography",
+            "finding": "Michigan GIS #42 is about 194m from the independently field-mapped Onion Falls 46.56974,-88.98429. The original visitor account measures a roughly 2ft sandstone ledge slide across a ~7ft creek, and cautions that the downstream ravine—not the height of the fall—is the striking landscape. Do not inflate to a large waterfall.",
+            "source": "https://www.waterfallsofthekeweenaw.com/onion-creek/onion-falls/"
+          },
+          {
+            "label": "Land ownership at the natural point (not visitor route)",
+            "status": "not-cleared",
+            "finding": "The exact GIS point returned no USDA FS surface parcel and no Michigan DNR LOTS state parcel or easement intersect; this is NOT proof of private title. Three published Forest Service trail segments NFST-1137, -1129 and -835 lie within 1km, but none is verified as a trail to this drop, and nearby trail coverage does not certify creek-bank rights.",
+            "source": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_PADUS_01/MapServer/3/query?geometry=-88.986815%2C46.569883&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=OBJECTID,OWN_NAME,LOC_OWN,MANG_NAME,UNIT_NM,SRC_DATE,OWN_TYPE&returnGeometry=false&f=pjson"
+          },
+          {
+            "label": "Historic or tourism approach versus current public permission",
+            "status": "documented-not-live",
+            "finding": "Historic waterfall-hunting directions lead past forest roads to an informal grassy opening, then across meadows and down to Onion Creek. The route is an old bushwhack through an unstable gorge, not a signed maintained trail. Current legal parking, motor-vehicle road status and continuous public right-of-way are unverified.",
+            "source": "https://www.waterfallsofthekeweenaw.com/onion-creek/onion-falls/"
+          },
+          {
+            "label": "Legally signed road approach and waterfall parking",
+            "status": "not-cleared",
+            "finding": "No present verified official signed waterfall visitor lot/turnout and continuous vehicle access to that arrival. Old gated routes, gravel-road shoulders, apartment parking and private entrances do not qualify.",
+            "source": "https://www.wuppdr.org/gis"
+          },
+          {
+            "label": "Complete lawful walking trail and safe viewpoint",
+            "status": "not-cleared",
+            "finding": "USFS trails in 1km: NFST-1137, NFST-1129, NFST-835. This is proximity, not a lawful final trail. No current complete legal public foot corridor to the natural point was established.",
+            "source": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_TrailNFSPublish_01/MapServer/0/query?geometry=-88.986815%2C46.569883&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=1000&units=esriSRUnit_Meter&outFields=TRAIL_NO,TRAIL_NAME,TRAIL_CLASS,ADMIN_ORG&returnGeometry=false&f=pjson"
+          },
+          {
+            "label": "2026 season, stream, ice and closure conditions",
+            "status": "not-cleared",
+            "finding": "No verified current site-specific public road/gate/footing/crossing condition or signed authorization for November 1, 2026. Older trip directions must not be treated as live opening information.",
+            "source": "https://www.fs.usda.gov/r09/ottawa"
+          }
+        ]
+      }
     },
     {
       "gisObjectId": 44,
@@ -2499,10 +2617,70 @@
       "curatedId": null,
       "publicGuide": null,
       "landManager": null,
-      "parkingVerified": null,
-      "publicAccessVerified": null,
-      "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "parkingVerified": false,
+      "publicAccessVerified": false,
+      "reviewed": "2026-11-01",
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "evidenceReviewed": "2026-11-01",
+      "publicationEligible": false,
+      "disposition": "location-confirmed-route-conflicted",
+      "sourceNotes": "Michigan GIS #75 matches the USGS/GNIS-derived Manakiki location 46.6408351,-90.1119938 within about 12m. The Western Upper Peninsula regional waterfall brochure instead lists Manakiki at 46.643023,-90.113405, 273m away. The same brochure places nearby Maple Creek Falls 356m north of its Manakiki point while describing Manakiki as only 150ft upstream. Preserve all three source points independently: none is certified parking. No federal FS-managed polygon, Michigan DNR state-owned parcel or state conservation easement intersects the original Manakiki GIS waterfall point. Empty results are NOT proof of private ownership; legal parcel and corridor status remain unverified. Regional Western U.P. tourism describes a gate on Maple Creek Road, a bridge and a creekside path. Its brochure and coordinates disagree, so it does not establish current signed public gate parking or a continuous lawful footpath. USFS published-trail layer finds no mapped trail segment within 1km of the original natural point.",
+      "outstandingGate": "Reconcile the two tourism waterfall points with GNIS and field evidence, identify Maple Creek Road gate and bridge as legal current public arrival points, verify actual parcels and walking rights to the safe upper waterfall viewpoint. Do not use the GNIS natural point or either brochure waterfall pin as a car destination.",
+      "sourceLinks": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.anyplaceamerica.com/directory/mi/gogebic-county-26053/falls/manakiki-falls-631372/",
+        "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf",
+        "https://explorewesternup.com/things-to-do/waterfalls/",
+        "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_PADUS_01/MapServer/3/query?geometry=-90.111839%2C46.640813&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=OBJECTID,OWN_NAME,LOC_OWN,MANG_NAME,UNIT_NM,SRC_DATE,OWN_TYPE&returnGeometry=false&f=pjson",
+        "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_TrailNFSPublish_01/MapServer/0/query?geometry=-90.111839%2C46.640813&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=1000&units=esriSRUnit_Meter&outFields=TRAIL_NO,TRAIL_NAME,TRAIL_CLASS,ADMIN_ORG&returnGeometry=false&f=pjson",
+        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-90.111839%2C46.640813&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson",
+        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/9/query?geometry=-90.111839%2C46.640813&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson",
+        "https://www.wuppdr.org/gis"
+      ],
+      "accessRouteAudit": {
+        "reviewed": "2026-11-01",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Geographic identity and meaningful waterfall status",
+            "status": "documented-geography",
+            "finding": "Michigan GIS #75 matches the USGS/GNIS-derived Manakiki location 46.6408351,-90.1119938 within about 12m. The Western Upper Peninsula regional waterfall brochure instead lists Manakiki at 46.643023,-90.113405, 273m away. The same brochure places nearby Maple Creek Falls 356m north of its Manakiki point while describing Manakiki as only 150ft upstream. Preserve all three source points independently: none is certified parking.",
+            "source": "https://www.anyplaceamerica.com/directory/mi/gogebic-county-26053/falls/manakiki-falls-631372/"
+          },
+          {
+            "label": "Land ownership at the natural point (not visitor route)",
+            "status": "not-cleared",
+            "finding": "No federal FS-managed polygon, Michigan DNR state-owned parcel or state conservation easement intersects the original Manakiki GIS waterfall point. Empty results are NOT proof of private ownership; legal parcel and corridor status remain unverified.",
+            "source": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_PADUS_01/MapServer/3/query?geometry=-90.111839%2C46.640813&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=OBJECTID,OWN_NAME,LOC_OWN,MANG_NAME,UNIT_NM,SRC_DATE,OWN_TYPE&returnGeometry=false&f=pjson"
+          },
+          {
+            "label": "Historic or tourism approach versus current public permission",
+            "status": "documented-not-live",
+            "finding": "Regional Western U.P. tourism describes a gate on Maple Creek Road, a bridge and a creekside path. Its brochure and coordinates disagree, so it does not establish current signed public gate parking or a continuous lawful footpath. USFS published-trail layer finds no mapped trail segment within 1km of the original natural point.",
+            "source": "https://www.anyplaceamerica.com/directory/mi/gogebic-county-26053/falls/manakiki-falls-631372/"
+          },
+          {
+            "label": "Legally signed road approach and waterfall parking",
+            "status": "not-cleared",
+            "finding": "No present verified official signed waterfall visitor lot/turnout and continuous vehicle access to that arrival. Old gated routes, gravel-road shoulders, apartment parking and private entrances do not qualify.",
+            "source": "https://www.wuppdr.org/gis"
+          },
+          {
+            "label": "Complete lawful walking trail and safe viewpoint",
+            "status": "not-cleared",
+            "finding": "No USDA NFS published trail was found within 1km of the mapped feature. No current complete legal public foot corridor to the natural point was established.",
+            "source": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_TrailNFSPublish_01/MapServer/0/query?geometry=-90.111839%2C46.640813&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=1000&units=esriSRUnit_Meter&outFields=TRAIL_NO,TRAIL_NAME,TRAIL_CLASS,ADMIN_ORG&returnGeometry=false&f=pjson"
+          },
+          {
+            "label": "2026 season, stream, ice and closure conditions",
+            "status": "not-cleared",
+            "finding": "No verified current site-specific public road/gate/footing/crossing condition or signed authorization for November 1, 2026. Older trip directions must not be treated as live opening information.",
+            "source": "https://www.fs.usda.gov/r09/ottawa"
+          }
+        ]
+      }
     },
     {
       "gisObjectId": 78,
@@ -2602,11 +2780,70 @@
       "reconciliation": "pending-identity-and-access-research",
       "curatedId": null,
       "publicGuide": null,
-      "landManager": null,
-      "parkingVerified": null,
-      "publicAccessVerified": null,
-      "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "landManager": "USDA Forest Service — Ottawa National Forest (natural point only; arrival not verified)",
+      "parkingVerified": false,
+      "publicAccessVerified": false,
+      "reviewed": "2026-11-01",
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "evidenceReviewed": "2026-11-01",
+      "publicationEligible": false,
+      "disposition": "historic-map-feature-waterfall-unconfirmed",
+      "sourceNotes": "Michigan GIS #80 preserves the historic Vista Falls name and location. A specialist conducted repeated separate ground searches around the old mapped site and reported only stagnant headwater swamps and beaver wetlands, without finding a waterfall. A regional waterfalls guide likewise says the falls probably does not exist. This is **not a confirmed waterfall** and should never appear as a real visitor attraction without new direct source evidence. The exact state GIS point falls inside USDA Forest Service PADUS surface ownership polygon OBJECTID 120, Ottawa National Forest (source date 2026-10-30). NFS trails NFST-1664 and NFST-1708 occur within 1km. A federal parcel and nearby trails do not make a waterfall exist. Historic field searches followed disused tracks into boggy headwaters, with no waterfall or safe turnaround/parking. No verified signed Vista Falls trail, developed viewpoint, water drop or visitor arrival exists. Do not recommend a swamp hike or imply nearby USFS trails terminate at the fictional mapped falls.",
+      "outstandingGate": "Keep the named historical point as a research annotation only. Require contemporary authoritative hydrology/terrain evidence and independently dated photographic or surveyed observation of an actual drop before reviewing visitor access or publication. Do not direct visitors toward this location.",
+      "sourceLinks": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.waterfallsofthekeweenaw.com/journal/third-failure-at-vista-falls/",
+        "https://upper-michigan.com/guide/waterfalls/vista-falls.html",
+        "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_PADUS_01/MapServer/3/query?geometry=-88.861986%2C46.694735&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=OBJECTID,OWN_NAME,LOC_OWN,MANG_NAME,UNIT_NM,SRC_DATE,OWN_TYPE&returnGeometry=false&f=pjson",
+        "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_TrailNFSPublish_01/MapServer/0/query?geometry=-88.861986%2C46.694735&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=1000&units=esriSRUnit_Meter&outFields=TRAIL_NO,TRAIL_NAME,TRAIL_CLASS,ADMIN_ORG&returnGeometry=false&f=pjson",
+        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-88.861986%2C46.694735&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson",
+        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/9/query?geometry=-88.861986%2C46.694735&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson",
+        "https://www.wuppdr.org/gis"
+      ],
+      "accessRouteAudit": {
+        "reviewed": "2026-11-01",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Geographic identity and meaningful waterfall status",
+            "status": "identity-unconfirmed",
+            "finding": "Michigan GIS #80 preserves the historic Vista Falls name and location. A specialist conducted repeated separate ground searches around the old mapped site and reported only stagnant headwater swamps and beaver wetlands, without finding a waterfall. A regional waterfalls guide likewise says the falls probably does not exist. This is **not a confirmed waterfall** and should never appear as a real visitor attraction without new direct source evidence.",
+            "source": "https://www.waterfallsofthekeweenaw.com/journal/third-failure-at-vista-falls/"
+          },
+          {
+            "label": "Land ownership at the natural point (not visitor route)",
+            "status": "verified-geography",
+            "finding": "The exact state GIS point falls inside USDA Forest Service PADUS surface ownership polygon OBJECTID 120, Ottawa National Forest (source date 2026-10-30). NFS trails NFST-1664 and NFST-1708 occur within 1km. A federal parcel and nearby trails do not make a waterfall exist.",
+            "source": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_PADUS_01/MapServer/3/query?geometry=-88.861986%2C46.694735&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=OBJECTID,OWN_NAME,LOC_OWN,MANG_NAME,UNIT_NM,SRC_DATE,OWN_TYPE&returnGeometry=false&f=pjson"
+          },
+          {
+            "label": "Historic or tourism approach versus current public permission",
+            "status": "documented-not-live",
+            "finding": "Historic field searches followed disused tracks into boggy headwaters, with no waterfall or safe turnaround/parking. No verified signed Vista Falls trail, developed viewpoint, water drop or visitor arrival exists. Do not recommend a swamp hike or imply nearby USFS trails terminate at the fictional mapped falls.",
+            "source": "https://www.waterfallsofthekeweenaw.com/journal/third-failure-at-vista-falls/"
+          },
+          {
+            "label": "Legally signed road approach and waterfall parking",
+            "status": "not-cleared",
+            "finding": "No present verified official signed waterfall visitor lot/turnout and continuous vehicle access to that arrival. Old gated routes, gravel-road shoulders, apartment parking and private entrances do not qualify.",
+            "source": "https://www.wuppdr.org/gis"
+          },
+          {
+            "label": "Complete lawful walking trail and safe viewpoint",
+            "status": "not-cleared",
+            "finding": "USFS trails in 1km: NFST-1664, NFST-1708. This is proximity, not a lawful final trail. No current complete legal public foot corridor to the natural point was established.",
+            "source": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_TrailNFSPublish_01/MapServer/0/query?geometry=-88.861986%2C46.694735&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=1000&units=esriSRUnit_Meter&outFields=TRAIL_NO,TRAIL_NAME,TRAIL_CLASS,ADMIN_ORG&returnGeometry=false&f=pjson"
+          },
+          {
+            "label": "2026 season, stream, ice and closure conditions",
+            "status": "not-cleared",
+            "finding": "Identity is not established, so visitor opening/closing claims are not applicable. Do not recommend an unverified swamp destination.",
+            "source": "https://www.fs.usda.gov/r09/ottawa"
+          }
+        ]
+      }
     },
     {
       "gisObjectId": 81,
@@ -2727,11 +2964,71 @@
       "reconciliation": "pending-identity-and-access-research",
       "curatedId": null,
       "publicGuide": null,
-      "landManager": null,
-      "parkingVerified": null,
-      "publicAccessVerified": null,
-      "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "landManager": "USDA Forest Service — Ottawa National Forest (natural point only; arrival not verified)",
+      "parkingVerified": false,
+      "publicAccessVerified": false,
+      "reviewed": "2026-11-01",
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "evidenceReviewed": "2026-11-01",
+      "publicationEligible": false,
+      "disposition": "real-waterfall-advanced-offtrail-approach",
+      "sourceNotes": "Michigan GIS #85 lies roughly 526m east of Visit Keweenaw's independently documented falls near 46.7217,-88.7990. An independent 2008 field guide also puts the cascades at 46.72165,-88.799. A GNIS-derived coordinate 46.7224356,-88.7884695 sits about 283m east of the Michigan GIS point. These are substantially different points in a chain of drops; treat the tourism/field waterfall coordinates as field descriptions, not a validated drive-to trailhead. USDA FS PADUS polygon OBJECTID 120 (2026-10-30) intersects BOTH the Michigan GIS point and Visit Keweenaw's independent waterfall coordinate. The natural falls are within Ottawa National Forest; no land-title proof yet covers every road, gate, parking area or riverbank connection used to reach them. Visit Keweenaw publishes an advanced backcountry route from Newberry Road via gated Forest Road 1755 (roughly 0.8mi along the old track) before an unmarked descent, and cautions that winter plowing may stop early and private driveways must not be blocked. The official published NFS trails layer finds NO trail within 1km of the Michigan GIS feature, consistent with an unsigned off-trail river approach. Visiting the forest is not equivalent to a safely navigable signed waterfall trail; parking, vehicle and final route status still need authoritative current confirmation.",
+      "outstandingGate": "Verify current Forest Service MVUM and authority for Newberry Road/FR1755, official public signed parking placement and whether a sanctioned 2026 foot corridor exists to a safe viewpoint. Reconcile the 526m site-offset so any visitor planning uses a river-feature location, never a navigable trailhead pin. Until then, link to the published Visit Keweenaw field narrative but withhold an auto-guided visitor route.",
+      "sourceLinks": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.visitkeweenaw.com/blog/post/a-guide-to-exploring-hogger-falls-west-branch-sturgeon-falls/",
+        "https://www.waterfallsofthekeweenaw.com/west-branch-sturgeon-river/west-branch-sturgeon-falls/",
+        "https://www.anyplaceamerica.com/directory/mi/houghton-county-26061/falls/west-branch-sturgeon-falls-1622530/",
+        "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_PADUS_01/MapServer/3/query?geometry=-88.79218%2C46.722406&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=OBJECTID,OWN_NAME,LOC_OWN,MANG_NAME,UNIT_NM,SRC_DATE,OWN_TYPE&returnGeometry=false&f=pjson",
+        "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_TrailNFSPublish_01/MapServer/0/query?geometry=-88.79218%2C46.722406&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=1000&units=esriSRUnit_Meter&outFields=TRAIL_NO,TRAIL_NAME,TRAIL_CLASS,ADMIN_ORG&returnGeometry=false&f=pjson",
+        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-88.79218%2C46.722406&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson",
+        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/9/query?geometry=-88.79218%2C46.722406&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson",
+        "https://www.wuppdr.org/gis"
+      ],
+      "accessRouteAudit": {
+        "reviewed": "2026-11-01",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Geographic identity and meaningful waterfall status",
+            "status": "documented-geography",
+            "finding": "Michigan GIS #85 lies roughly 526m east of Visit Keweenaw's independently documented falls near 46.7217,-88.7990. An independent 2008 field guide also puts the cascades at 46.72165,-88.799. A GNIS-derived coordinate 46.7224356,-88.7884695 sits about 283m east of the Michigan GIS point. These are substantially different points in a chain of drops; treat the tourism/field waterfall coordinates as field descriptions, not a validated drive-to trailhead.",
+            "source": "https://www.visitkeweenaw.com/blog/post/a-guide-to-exploring-hogger-falls-west-branch-sturgeon-falls/"
+          },
+          {
+            "label": "Land ownership at the natural point (not visitor route)",
+            "status": "verified-geography",
+            "finding": "USDA FS PADUS polygon OBJECTID 120 (2026-10-30) intersects BOTH the Michigan GIS point and Visit Keweenaw's independent waterfall coordinate. The natural falls are within Ottawa National Forest; no land-title proof yet covers every road, gate, parking area or riverbank connection used to reach them.",
+            "source": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_PADUS_01/MapServer/3/query?geometry=-88.79218%2C46.722406&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=OBJECTID,OWN_NAME,LOC_OWN,MANG_NAME,UNIT_NM,SRC_DATE,OWN_TYPE&returnGeometry=false&f=pjson"
+          },
+          {
+            "label": "Historic or tourism approach versus current public permission",
+            "status": "documented-not-live",
+            "finding": "Visit Keweenaw publishes an advanced backcountry route from Newberry Road via gated Forest Road 1755 (roughly 0.8mi along the old track) before an unmarked descent, and cautions that winter plowing may stop early and private driveways must not be blocked. The official published NFS trails layer finds NO trail within 1km of the Michigan GIS feature, consistent with an unsigned off-trail river approach. Visiting the forest is not equivalent to a safely navigable signed waterfall trail; parking, vehicle and final route status still need authoritative current confirmation.",
+            "source": "https://www.visitkeweenaw.com/blog/post/a-guide-to-exploring-hogger-falls-west-branch-sturgeon-falls/"
+          },
+          {
+            "label": "Legally signed road approach and waterfall parking",
+            "status": "not-cleared",
+            "finding": "No present verified official signed waterfall visitor lot/turnout and continuous vehicle access to that arrival. Old gated routes, gravel-road shoulders, apartment parking and private entrances do not qualify.",
+            "source": "https://www.wuppdr.org/gis"
+          },
+          {
+            "label": "Complete lawful walking trail and safe viewpoint",
+            "status": "not-cleared",
+            "finding": "No USDA NFS published trail was found within 1km of the mapped feature. No current complete legal public foot corridor to the natural point was established.",
+            "source": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_TrailNFSPublish_01/MapServer/0/query?geometry=-88.79218%2C46.722406&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=1000&units=esriSRUnit_Meter&outFields=TRAIL_NO,TRAIL_NAME,TRAIL_CLASS,ADMIN_ORG&returnGeometry=false&f=pjson"
+          },
+          {
+            "label": "2026 season, stream, ice and closure conditions",
+            "status": "not-cleared",
+            "finding": "No verified current site-specific public road/gate/footing/crossing condition or signed authorization for November 1, 2026. Older trip directions must not be treated as live opening information.",
+            "source": "https://www.fs.usda.gov/r09/ottawa"
+          }
+        ]
+      }
     },
     {
       "gisObjectId": 86,
@@ -4527,10 +4824,70 @@
       "curatedId": null,
       "publicGuide": null,
       "landManager": null,
-      "parkingVerified": null,
-      "publicAccessVerified": null,
-      "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "parkingVerified": false,
+      "publicAccessVerified": false,
+      "reviewed": "2026-11-01",
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "evidenceReviewed": "2026-11-01",
+      "publicationEligible": false,
+      "disposition": "seasonal-waterfall-residential-ski-property",
+      "sourceNotes": "Michigan GIS #129 is about 117m from the independently located 47.13019,-88.55523 rippling cascade on Ripley Creek near Hancock. Field observers describe multiple seasonal short drops on the side of Mont Ripley ski hill; flow can disappear outside snowmelt. Official Michigan Technological University records establish that Mont Ripley ski area is owned and operated by Michigan Tech for paid winter recreation, not that the exact waterfall location or the old Ripley School apartment lot is open to casual public hiking. Federal and state parcel point queries do not resolve the exact private/university boundary. An old 2008 field report directs drivers to the old Ripley School, now private apartments, and then past neighboring yards to informal ski-hill access tracks, explicitly warning against trespass. The university promotes ski lifts and skiing/snowboarding tickets; no official Mont Ripley public waterfall hiking permit, parking lot or creekside public trail was found. Do not send waterfall visitors to the residential lot or along residential property.",
+      "outstandingGate": "Confirm the exact ski-hill/neighbor parcel boundaries, official MTU permission for out-of-season pedestrian access, authorized visitor parking and a signed foot route. Withhold all street/old-school parking and ski slope off-season walking directions until the owner publishes guidance.",
+      "sourceLinks": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.waterfallsofthekeweenaw.com/ripley-creek/ripley-falls/",
+        "https://www.mtu.edu/mont-ripley/",
+        "https://www.mtu.edu/faculty-handbook/faculty/chapter9/s9-7/974/",
+        "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_PADUS_01/MapServer/3/query?geometry=-88.555885%2C47.129238&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=OBJECTID,OWN_NAME,LOC_OWN,MANG_NAME,UNIT_NM,SRC_DATE,OWN_TYPE&returnGeometry=false&f=pjson",
+        "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_TrailNFSPublish_01/MapServer/0/query?geometry=-88.555885%2C47.129238&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=1000&units=esriSRUnit_Meter&outFields=TRAIL_NO,TRAIL_NAME,TRAIL_CLASS,ADMIN_ORG&returnGeometry=false&f=pjson",
+        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/0/query?geometry=-88.555885%2C47.129238&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson",
+        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/9/query?geometry=-88.555885%2C47.129238&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=pjson",
+        "https://www.wuppdr.org/gis"
+      ],
+      "accessRouteAudit": {
+        "reviewed": "2026-11-01",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Geographic identity and meaningful waterfall status",
+            "status": "documented-geography",
+            "finding": "Michigan GIS #129 is about 117m from the independently located 47.13019,-88.55523 rippling cascade on Ripley Creek near Hancock. Field observers describe multiple seasonal short drops on the side of Mont Ripley ski hill; flow can disappear outside snowmelt.",
+            "source": "https://www.waterfallsofthekeweenaw.com/ripley-creek/ripley-falls/"
+          },
+          {
+            "label": "Land ownership at the natural point (not visitor route)",
+            "status": "not-cleared",
+            "finding": "Official Michigan Technological University records establish that Mont Ripley ski area is owned and operated by Michigan Tech for paid winter recreation, not that the exact waterfall location or the old Ripley School apartment lot is open to casual public hiking. Federal and state parcel point queries do not resolve the exact private/university boundary.",
+            "source": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_PADUS_01/MapServer/3/query?geometry=-88.555885%2C47.129238&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=OBJECTID,OWN_NAME,LOC_OWN,MANG_NAME,UNIT_NM,SRC_DATE,OWN_TYPE&returnGeometry=false&f=pjson"
+          },
+          {
+            "label": "Historic or tourism approach versus current public permission",
+            "status": "documented-not-live",
+            "finding": "An old 2008 field report directs drivers to the old Ripley School, now private apartments, and then past neighboring yards to informal ski-hill access tracks, explicitly warning against trespass. The university promotes ski lifts and skiing/snowboarding tickets; no official Mont Ripley public waterfall hiking permit, parking lot or creekside public trail was found. Do not send waterfall visitors to the residential lot or along residential property.",
+            "source": "https://www.waterfallsofthekeweenaw.com/ripley-creek/ripley-falls/"
+          },
+          {
+            "label": "Legally signed road approach and waterfall parking",
+            "status": "not-cleared",
+            "finding": "No present verified official signed waterfall visitor lot/turnout and continuous vehicle access to that arrival. Old gated routes, gravel-road shoulders, apartment parking and private entrances do not qualify.",
+            "source": "https://www.wuppdr.org/gis"
+          },
+          {
+            "label": "Complete lawful walking trail and safe viewpoint",
+            "status": "not-cleared",
+            "finding": "No USDA NFS published trail was found within 1km of the mapped feature. No current complete legal public foot corridor to the natural point was established.",
+            "source": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_TrailNFSPublish_01/MapServer/0/query?geometry=-88.555885%2C47.129238&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=1000&units=esriSRUnit_Meter&outFields=TRAIL_NO,TRAIL_NAME,TRAIL_CLASS,ADMIN_ORG&returnGeometry=false&f=pjson"
+          },
+          {
+            "label": "2026 season, stream, ice and closure conditions",
+            "status": "not-cleared",
+            "finding": "No verified current site-specific public road/gate/footing/crossing condition or signed authorization for November 1, 2026. Older trip directions must not be treated as live opening information.",
+            "source": "https://www.mtu.edu/mont-ripley/"
+          }
+        ]
+      }
     },
     {
       "gisObjectId": 130,
@@ -7097,6 +7454,20 @@
       ],
       "publicGuidesAdded": 0,
       "outcome": "Algonquin one-foot rapid on FS ownership with NCT nearby but no verified signed final route; Copper Creek Ogima, Ogimakwe, Abinodji named technical paddler slides with historic logging-road/gate, absent FS and DNR parcel point matches and no NFS mapped foot trail; Nokomis 2007 photo commercial forest conflicts with tourist park/USFS ownership assertions. Five research-only pages and six source gates each; no visitor promotion."
+    },
+    {
+      "batch": "44-manakiki-onion-vista-west-sturgeon-ripley-margeson",
+      "date": "2026-11-01",
+      "reviewedIds": [
+        75,
+        42,
+        80,
+        85,
+        129,
+        15
+      ],
+      "publicGuidesAdded": 0,
+      "outcome": "Manakiki tourism brochure inconsistent feature pins vs GNIS, 150ft claim vs 356m map spacing; Onion 2ft drop remote and 3 nearby NFS trails not legal spur; Vista probable historic phantom despite FS-owned point and 2 NFS trail segments; West Branch Sturgeon tourism visit corroborates real falls but 526m GIS vs visitor point, signed parking/last 0.8mi unguided; Ripley MTU seasonal ski creek, old private apartment parking; Margeson current DNR 40-acre parcel at falls but private entry corridor. Six distinct noindex research pages; no visitor promotion."
     }
   ]
 }
