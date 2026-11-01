@@ -125,7 +125,7 @@ function updateTrailSelection() {
     parkDiagramTitle.textContent=blocked?'Closed: no approach suggested':
       (parkEvidence.label?'Find the printed trail label':'Refer to the full park trail map');
     parkDiagramText.textContent=parkEvidence.description+' '+parkEvidence.mappingMeaning;
-    parkDiagramRing.hidden=!parkEvidence.label;
+    parkDiagramRing.toggleAttribute('hidden',!parkEvidence.label);
     if(parkEvidence.label){
       parkDiagramRing.setAttribute('cx',String(parkEvidence.label.x));
       parkDiagramRing.setAttribute('cy',String(parkEvidence.label.y));
