@@ -1,0 +1,95 @@
+{
+  "schemaVersion": "1.2",
+  "recordStatus": "draft",
+  "project": {
+    "slug": "porkies-visitor-repair",
+    "ownerRepo": "izworskic/chrisizworski-com",
+    "canonical": "https://chrisizworski.com/porcupine-mountains/",
+    "pageFile": "public/porcupine-mountains/index.html",
+    "visitorDecision": "PENDING: describe the real visitor decision",
+    "primaryAction": "PENDING: describe the concrete visitor action"
+  },
+  "claims": [],
+  "decisionState": {
+    "selectedIdField": "PENDING: stable selected item ID",
+    "sourceOfTruth": "PENDING: owning engine and evidence",
+    "linkedSurfaces": [
+      "answer"
+    ],
+    "unavailableBehavior": "PENDING: source-linked fallback when selected item is unavailable"
+  },
+  "scenarios": [
+    {
+      "kind": "initial",
+      "input": "PENDING: what visitor does",
+      "expectedVisibleAnswer": "PENDING: changed user-visible answer",
+      "sourceAndSafety": "PENDING: status and official-source boundaries"
+    },
+    {
+      "kind": "alternative",
+      "input": "PENDING: what visitor does",
+      "expectedVisibleAnswer": "PENDING: changed user-visible answer",
+      "sourceAndSafety": "PENDING: status and official-source boundaries"
+    },
+    {
+      "kind": "reverse",
+      "input": "PENDING: what visitor does",
+      "expectedVisibleAnswer": "PENDING: changed user-visible answer",
+      "sourceAndSafety": "PENDING: status and official-source boundaries"
+    },
+    {
+      "kind": "no-js",
+      "input": "PENDING: what visitor does",
+      "expectedVisibleAnswer": "PENDING: changed user-visible answer",
+      "sourceAndSafety": "PENDING: status and official-source boundaries"
+    },
+    {
+      "kind": "no-tiles",
+      "input": "PENDING: what visitor does",
+      "expectedVisibleAnswer": "PENDING: changed user-visible answer",
+      "sourceAndSafety": "PENDING: status and official-source boundaries"
+    },
+    {
+      "kind": "stale-data",
+      "input": "PENDING: what visitor does",
+      "expectedVisibleAnswer": "PENDING: changed user-visible answer",
+      "sourceAndSafety": "PENDING: status and official-source boundaries"
+    }
+  ],
+  "failures": {
+    "no-js": "PENDING: useful HTML answer",
+    "no-tiles": "PENDING: official map and readable options",
+    "no-image": "PENDING: text and truthful credits",
+    "stale-data": "PENDING: unknown state and source link"
+  },
+  "qa": {
+    "viewports": [
+      360,
+      390,
+      768,
+      1440
+    ],
+    "browserStatus": "PENDING",
+    "browserRun": null,
+    "screenshotEvidence": []
+  },
+  "photos": [],
+  "release": {
+    "implemented": {
+      "status": "PENDING"
+    },
+    "verified": {
+      "status": "PENDING"
+    },
+    "deployed": {
+      "status": "PENDING"
+    },
+    "live": {
+      "status": "PENDING"
+    },
+    "measured": {
+      "status": "NOT_MEASURED"
+    }
+  },
+  "note": "Do not change recordStatus to released without exact CI, deployment and independent public verification. This starter intentionally lacks required source evidence and will fail the evidence checker until completed."
+}
