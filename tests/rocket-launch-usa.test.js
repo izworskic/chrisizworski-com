@@ -160,6 +160,12 @@ test('national API provides all coasts, exact launch selection, partial feed hea
   const grid={properties:{updateTime:new Date(Date.now()-3600000).toISOString(),
     skyCover:{uom:'wmoUnit:percent',values:[{
       validTime:new Date(Date.now()-3600000).toISOString()+'/PT5H',value:40
+    }]},
+    probabilityOfPrecipitation:{uom:'wmoUnit:percent',values:[{
+      validTime:new Date(Date.now()-3600000).toISOString()+'/PT5H',value:12
+    }]},
+    windSpeed:{uom:'wmoUnit:m_s-1',values:[{
+      validTime:new Date(Date.now()-3600000).toISOString()+'/PT5H',value:4
     }]}}};
   global.fetch=async url=>{
     url=String(url);
@@ -194,6 +200,9 @@ test('national API provides all coasts, exact launch selection, partial feed hea
     assert.equal(res.body.weather.places.length,2);
     assert.equal(res.body.weather.places[0].cloudCoverPercent,40);
     assert.equal(res.body.weather.comparison.state,'similar');
+    assert.equal(res.body.launchWeather.status, 'forecast');
+    assert.equal(res.body.launchWeather.officialApproval, 'not-verified');
+    assert.ok(res.body.launchWeather.timeline.length > 0);
     assert.equal(res.headers['X-Robots-Tag'],'noindex, nofollow');
     assert.match(res.headers['Cache-Control'],/s-maxage=1800/);
     const wallops=mockRes();
@@ -265,5 +274,5 @@ test('national launch atlas requests keyed CARTO tile URLs and retains functiona
   assert.match(endpoint,/CARTO_BASEMAP_PUBLIC_KEY/);
   const page=fs.readFileSync(path.resolve(__dirname,'../public/synced-national-tools/rocket-launch-live/index.html'),'utf8');
   assert.match(page,/Senior Airman Kadielle Shaw/);
-  assert.match(page,/rocket-launch-live\/app\.js\?v=20261031-2/);
+  assert.match(page,/rocket-launch-live\/app\.js\?v=20261101-1/);
 });

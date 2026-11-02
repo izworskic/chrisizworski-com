@@ -14,6 +14,7 @@ const { storeTrustedLaunches } = require('../lib/space-coast-ksc-snapshot');
 const { buildGeographicViewing } = require('../lib/space-coast-geo');
 const { readFreshLaunchList } = require('../lib/space-coast-launch-day');
 const { buildMediaDesk } = require('../lib/space-coast-media');
+const { launchWeatherFor } = require('../lib/launch-weather-intelligence');
 
 const LAUNCHES = 'https://ll.thespacedevs.com/2.3.0/launches/upcoming/?location__ids=12%2C27&limit=20&format=json&ordering=net&hide_recent_previous=true';
 const KSC = 'https://www.kennedyspacecenter.com/launches-and-events/';
@@ -169,7 +170,7 @@ module.exports = async function handler(req, res) {
     if (requestedId && !next) return res.status(404).json({
       ok: false, error: 'This mission is no longer in the current Florida launch list.'
     });
-    const [forecasts, kscViewing] = await Promise.all([
+    const [forecasts, kscViewing, launchWeatherIntelligence] = await Promise.all([
       weatherForLocations(next, now),
       inspectKscLaunch(next).catch(() => ({
         state: 'unverified', checkedAt: new Date().toISOString(),
@@ -179,7 +180,8 @@ module.exports = async function handler(req, res) {
       })),
       // Save a trusted LL2 snapshot once with the ordinary cached schedule.
       // The faster official KSC checker reads it without polling LL2 again.
-      storeTrustedLaunches(launches, now)
+      storeTrustedLaunches(launches, now),
+      launchWeatherFor({ id: 'florida' }, next, fetchJson, now)
     ]);
     const primary = forecasts[0] || null;
     const parkAlerts = nps.alerts.map(a => ({
@@ -214,10 +216,12 @@ module.exports = async function handler(req, res) {
       }) : null,
       next, upcoming: launches,
       weather: primary ? { period: primary.period, assessment: primary.assessment } : null,
+      launchWeatherIntelligence,
       viewingWeatherByArea: forecasts,
       nextDecision: {
         schedule,
         viewingWeather: primary?.assessment || weatherGrade(null),
+        launchWeatherIntelligence,
         launchWeather: {
           level: 'unknown', label: 'Official launch-weather approval not verified',
           detail: 'A local spectator forecast cannot establish range approval or a weather launch commit.'
@@ -239,6 +243,10 @@ module.exports = async function handler(req, res) {
           note:'Shared scheduled observation where available, otherwise 15-minute cached fallback. Third-party schedule, not final launch authority.' },
         { name: 'NPS Canaveral alerts', url: nps.url, checkedAt: nps.checkedAt, note: nps.verified ? 'Official park alerts checked.' : 'Current closure feed unavailable; Playalinda access unverified.' },
         { name: 'National Weather Service', url: 'https://www.weather.gov/mlb/', note: 'Hourly spectator conditions and gridded sky-cover percentage near the viewing areas; not trajectory visibility.' },
+        { name: 'NWS launch-range forecast intelligence', url: launchWeatherIntelligence.sourceUrl || 'https://www.weather.gov/mlb/',
+          checkedAt: launchWeatherIntelligence.checkedAt, note: 'Near-range weather proxy; not official launch-weather approval or scrub probability.' },
+        { name: '45th Weather Squadron', url: 'https://www.patrick.spaceforce.mil/About-Us/Weather/',
+          note: 'Official launch-weather forecasts and mission-specific weather-rule criteria are distinct from NWS surface data.' },
         { name: 'NPS launch entry policy', url: 'https://www.nps.gov/cana/planyourvisit/rocket-launch-viewing.htm', note: 'Playalinda Beach Road normally closes to incoming visitors beginning T–30; mission security can alter access.' },
         { name: 'Kennedy Space Center Visitor Complex', url: KSC, note: 'Check exact launch viewing venue, tickets and mission access.' },
         { name: 'KSC mission-specific viewing', url: kscViewing.sourceUrl || KSC_CALENDAR,

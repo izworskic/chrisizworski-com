@@ -16,12 +16,12 @@
 <link rel="preconnect" href="https://basemaps.cartocdn.com">
 <link rel="preconnect" href="https://unpkg.com">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<link rel="stylesheet" href="/national-tools/rocket-launch-live/styles.css?v=20261031-1">
+<link rel="stylesheet" href="/national-tools/rocket-launch-live/styles.css?v=20261101-1">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5D2V2W7HN"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-Y5D2V2W7HN');</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://chrisizworski.com/national-tools/rocket-launch-live/#webpage","url":"https://chrisizworski.com/national-tools/rocket-launch-live/","name":"Rocket Launch Live USA: When and Where to Watch","description":"Coastal U.S. launch calendar with region-specific legal access, launch timing uncertainty and public NWS weather evidence.","dateModified":"2026-10-31","author":{"@id":"https://chrisizworski.com/#person"},"about":[{"@type":"Thing","name":"Rocket launch viewing"},{"@type":"Thing","name":"U.S. coastal spaceports"}]},{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"U.S. Tools","item":"https://chrisizworski.com/national-tools/"},{"@type":"ListItem","position":3,"name":"Rocket Launch Live USA","item":"https://chrisizworski.com/national-tools/rocket-launch-live/"}]}]}</script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
-<script src="/national-tools/rocket-launch-live/app.js?v=20261031-2" defer></script>
+<script src="/national-tools/rocket-launch-live/app.js?v=20261101-1" defer></script>
 </head>
 <body>
 <a class="rl-skip" href="#main-content">Skip to launch decisions</a>
@@ -118,15 +118,39 @@
   </div>
  </section>
 
+ <section class="rl-section rl-range-weather" id="launch-weather" aria-labelledby="rl-range-title">
+  <div class="rl-section-head">
+    <div><p class="rl-eyebrow">03 / The launch-side forecast</p><h2 id="rl-range-title">What could the weather mean for liftoff?</h2></div>
+    <p>Weather at the launch range is a different question from visibility where you stand. This forecast explains the signals without inventing a scrub probability or declaring a rocket safe to fly.</p>
+  </div>
+  <div class="rl-range-panel" aria-live="polite">
+    <div class="rl-range-intro">
+      <div><span class="rl-site-kicker">NWS range-area forecast / not flight approval</span>
+        <h3 id="rl-range-headline">Checking the forecast evidence</h3>
+        <p id="rl-range-summary">An exact mission time inside the seven-day horizon is required to evaluate local range-area conditions.</p>
+      </div>
+      <span class="rl-status" id="rl-range-grade" data-state="unknown">Not yet assessed</span>
+    </div>
+    <div class="rl-range-readings" id="rl-range-readings"></div>
+    <div class="rl-range-detail">
+      <div><h4>Signals worth watching</h4><div id="rl-range-signals"><p>No reliable mission-specific weather signals yet.</p></div></div>
+      <div><h4>How the forecast changes near launch</h4><div id="rl-range-timeline"><p>Timeline appears only for valid NWS forecast hours.</p></div></div>
+    </div>
+    <div class="rl-range-source"><p id="rl-range-provenance">A regional NWS forecast does not measure triggered lightning, upper-air winds, rocket-specific limits, or range approval.</p>
+      <div id="rl-range-links"></div>
+    </div>
+  </div>
+ </section>
+
  <section class="rl-section" id="rl-viewing" aria-labelledby="rl-viewing-title">
-  <div class="rl-section-head"><div><p class="rl-eyebrow">03 / Where to stand</p><h2 id="rl-viewing-title">The places, and the restrictions.</h2></div>
+  <div class="rl-section-head"><div><p class="rl-eyebrow">04 / Where to stand</p><h2 id="rl-viewing-title">The places, and the restrictions.</h2></div>
    <p>These are source-backed visitor candidates or explicit restrictions, not live occupancy reports. Directions disappear when a location is outside permitted hours or within a restricted range.</p></div>
   <div id="rl-sites" class="rl-site-grid" aria-live="polite"><p>Loading official viewing guidance…</p></div>
   <div id="rl-regional-sky" class="rl-sky" aria-live="polite"></div>
  </section>
 
  <section class="rl-section rl-schedule-all" id="all-coasts" aria-labelledby="rl-calendar-title">
-  <div class="rl-section-head"><div><p class="rl-eyebrow">04 / Around the country</p><h2 id="rl-calendar-title">The coastal launch board.</h2></div><p>The next launches returned by the schedule provider, organized by range. Missing listings are not proof that no launch is planned, particularly for sounding and military test rockets.</p></div>
+  <div class="rl-section-head"><div><p class="rl-eyebrow">05 / Around the country</p><h2 id="rl-calendar-title">The coastal launch board.</h2></div><p>The next launches returned by the schedule provider, organized by range. Missing listings are not proof that no launch is planned, particularly for sounding and military test rockets.</p></div>
   <div id="rl-national-board" class="rl-board" aria-live="polite">
     <p>Checking California, Florida, Texas, Virginia, Alaska and Hawaiʻi…</p>
   </div>

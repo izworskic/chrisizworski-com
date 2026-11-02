@@ -97,6 +97,80 @@
       target.appendChild(card);
     });
   };
+  const renderRangeWeather = forecast => {
+    const d = forecast || {};
+    const good = d.status === 'forecast';
+    set('fl-range-label', d.label || 'Launch-side conditions unavailable');
+    set('fl-range-explain', d.detail || 'No verified near-range forecast was returned for this mission.');
+    const chip = $('fl-range-chip');
+    chip.textContent = good ? 'NWS forecast checked' : 'Launch-side forecast unverified';
+    chip.dataset.state = good && d.level === 'elevated' ? 'poor' : 'unknown';
+    const metrics = $('fl-range-metrics');
+    metrics.replaceChildren();
+    for (const [name, value, unit] of [
+      ['Thunder chance', d.readings?.thunderPercent, '%'],
+      ['Precipitation', d.readings?.precipitationPercent, '%'],
+      ['Wind gust', d.readings?.gustMph, ' mph'],
+      ['Cloud cover', d.readings?.cloudCoverPercent, '%']
+    ]) {
+      const card = element('div', 'fl-range-metric');
+      card.appendChild(element('span', 'kicker', name));
+      card.appendChild(element('strong', '', Number.isFinite(value) ? value + unit : 'Not provided'));
+      metrics.appendChild(card);
+    }
+    const signals = $('fl-range-signals');
+    signals.replaceChildren();
+    if (d.signals?.length) {
+      for (const x of d.signals) {
+        const card = element('div', 'fl-range-signal');
+        card.dataset.level = x.level;
+        card.appendChild(element('strong', '', x.label + (x.value ? ' · ' + x.value : '')));
+        card.appendChild(element('p', '', x.detail));
+        signals.appendChild(card);
+      }
+    } else signals.appendChild(element('p', 'small', good ?
+      'No major local surface signals passed screening thresholds. Flight weather remains unverified.' :
+      'The tool cannot verify sufficient current launch-side evidence.'));
+    const timeline = $('fl-range-timeline');
+    timeline.replaceChildren();
+    const rows = (d.timeline || []).filter(r => r.level !== 'unknown');
+    if (rows.length) {
+      const list = element('ol', 'fl-range-rail');
+      for (const r of rows) {
+        const item = element('li', 'fl-range-hour');
+        item.dataset.level = r.level;
+        const offset = r.hoursFromTarget === 0 ? 'Target' :
+          r.hoursFromTarget < 0 ? 'T−' + Math.abs(r.hoursFromTarget) + 'h' : 'T+' + r.hoursFromTarget + 'h';
+        item.appendChild(element('span', 'kicker', offset));
+        const time = new Date(r.at);
+        item.appendChild(element('strong', '', Number.isNaN(+time) ? 'Time unavailable' :
+          time.toLocaleString('en-US', { timeZone: 'America/New_York',
+            month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })));
+        const v = r.readings || {};
+        item.appendChild(element('small', '', [
+          Number.isFinite(v.thunderPercent) ? v.thunderPercent + '% thunder' : null,
+          Number.isFinite(v.precipitationPercent) ? v.precipitationPercent + '% precipitation' : null,
+          Number.isFinite(v.gustMph) ? v.gustMph + ' mph gust' : null
+        ].filter(Boolean).join(' · ') || v.shortForecast || 'Limited data'));
+        list.appendChild(item);
+      }
+      timeline.appendChild(list);
+    } else timeline.appendChild(element('p', 'small', 'No sufficiently verified forecast progression for the selected time.'));
+    set('fl-range-provenance', (d.site?.name || 'Florida Space Coast') +
+      ' · regional NWS reference, not an individual pad. ' +
+      (d.forecastUpdatedAt ? 'Grid updated ' + new Date(d.forecastUpdatedAt).toLocaleString('en-US') + '. ' :
+        'Current source age unavailable. ') +
+      'Only the official launch weather team can determine flight-rule violations and authorize launch.');
+    const sources = $('fl-range-sources');
+    sources.replaceChildren();
+    sources.appendChild(link('https://www.patrick.spaceforce.mil/About-Us/Weather/',
+      '45th Weather Squadron forecasts'));
+    if (typeof d.sourceUrl === 'string' &&
+      /^https:\/\/api\.weather\.gov\/gridpoints\//.test(d.sourceUrl)) {
+      sources.appendChild(link(d.sourceUrl, 'NWS source grid'));
+    }
+  };
+
   const renderKsc = (data) => {
     const target = $('ksc-mission-viewing');
     if (!target) return;
@@ -759,6 +833,7 @@
       set('provider', next?.provider || 'Not announced');
       renderList(d.upcoming || []);
       renderWeather(d.viewingWeatherByArea || []);
+      renderRangeWeather(d.launchWeatherIntelligence);
       renderAccess(d);
       renderKsc(d);
       renderArrival(d);
@@ -796,6 +871,7 @@
       renderMissionMedia(null);
       set('weather-label', 'Visibility not assessed');
       set('weather-detail', 'This page is not displaying verified live forecast conditions.');
+      renderRangeWeather(null);
       set('launch-access-checked', 'Live access data could not be checked.');
       const arrival = $('launch-arrival');
       if (arrival) arrival.textContent = 'Launch-day Playalinda entrance policy could not be evaluated. Check the official NPS page before travel.';
