@@ -117,10 +117,14 @@ def parse_official_pdf(content, source_url, mission):
         section = day_section.group(1)
         heading = re.search(r"Probability\s+of\s+Violating\s+Weather\s+Constraints", section, re.I)
         if heading:
-            after = section[heading.end():heading.end()+180]
-            percentages = re.findall(r"(?<![<≤>\d])\b(\d{1,3})\s*%", after)
-            if percentages and int(percentages[0]) <= 100:
-                pov = int(percentages[0])
+            after = section[heading.end():heading.end()+450]
+            # A figure must occur before the separate primary-concerns cell;
+            # refuse ambiguous multi-percent text or backup/humidity values.
+            if re.search(r"Primary\s+Concerns:", after, re.I):
+                cell = re.split(r"Primary\s+Concerns:", after, maxsplit=1, flags=re.I)[0][:150]
+                percentages = re.findall(r"(?<![<≤>\d])\b(\d{1,3})\s*%", cell)
+                if len(percentages) == 1 and int(percentages[0]) <= 100:
+                    pov = int(percentages[0])
         # Prefer a reliable bounded vocabulary to an invented interpretation.
         concern_match = re.search(r"Primary\s+Concerns:\s*(.{0,260})", section, re.I)
         concern_text = concern_match.group(1) if concern_match else ""
@@ -194,7 +198,7 @@ def collect(now):
             urls = list(dict.fromkeys(filter(None, (
                 official_pdf_url(item.get("info_url")) for item in updates
                 if isinstance(item, dict)
-            ))))[:3]
+            ))))[:2]
             for link in reversed(urls):
                 try:
                     pdf = download(link, MAX_PDF_BYTES)
