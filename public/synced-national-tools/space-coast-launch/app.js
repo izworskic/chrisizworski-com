@@ -200,6 +200,18 @@
       ' · ' + (monitor.status || 'status unknown')));
     else links.appendChild(element('span','small',
       'Official document monitor has no confirmed observation yet.'));
+    const horizon = monitor.forecastWindow || {};
+    if(horizon.candidates7Days===0 &&
+      ['before-forecast-window','no-launches-in-21-days'].includes(horizon.status))
+      links.appendChild(element('span','small',
+        horizon.candidates21Days>0 ?
+        'No Florida launch is inside this monitor’s seven-day near-launch PDF check window; ' +
+          horizon.candidates21Days + ' scheduled mission(s) are within the 21-day lookahead.' :
+        'The launch schedule currently shows no Florida mission inside this monitor’s 21-day lookahead.'));
+    const agencySources = monitor.nasaSourceChecks || [];
+    if(agencySources.some(x=>x.status==='unavailable'))
+      links.appendChild(element('span','small',
+        'A NASA mission-blog source check was unavailable; NASA weather-report coverage may be incomplete.'));
     const direct = (monitor.sourceChecks || []).filter(x =>
       ['45ws-home','45ws-forecast-support','45ws-sitemap','45ws-parent-weather'].includes(x.id));
     const blocked = direct.filter(x => x.status === 'unavailable').length;
