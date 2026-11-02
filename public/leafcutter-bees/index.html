@@ -314,6 +314,51 @@ var fall=['When flights and nest building stop, protect filled tubes from rain, 
 var winter=['Keep occupied nesting materials sheltered, cool and breathable; do not bring them into a warm room.','Inspect the exterior for water, mold and pests without opening or warming unknown species.','Plan fresh nesting tubes for spring. With mixed wild bees, use tube rotation / an emergence box next season.'];
 var seasons={spring:{head:'Get the home ready.',intro:'Before the summer leafcutters arrive, a small clean nest and flowers make a difference.',list:spring,foot:'MSU recommends setting out bee hotels in Michigan in late March to mid-April; wild leafcutters nest later.'},summer:{head:'Let the mothers work.',intro:'The reward is watching a quiet assembly line of leaf pieces and pollen.',list:summer,foot:'Summer activity and species differ by place; observations outrank hardiness zones.'},fall:{head:'Protect the nursery.',intro:'The adults are finishing, but the next generation is inside the sealed cells.',list:fall,foot:'Wait for flights to end; preserve intact wild brood, not a forced universal cocoon harvest.'},winter:{head:'Keep their winter quiet.',intro:'The work is largely done. Your job is protection, not warmth.',list:winter,foot:'Stored commercial brood has separate protocols. Never refrigerate ready-to-emerge shipped cocoons.'}};
 function seasonFor(m){return m<=1||m===11?'winter':m<=4?'spring':m<=7?'summer':'fall'}
+var journalChapters={
+ spring:{label:'CHAPTER ONE · SPRING',title:'Make a little room for what returns.',
+  copy:'Old stems and occupied tunnels may still shelter developing insects. Make fresh nesting space available without opening or discarding unknown wild brood.',
+  action:'Leave last year’s occupied stems intact; prepare clean, sheltered cavities before summer nesting.',
+  diagram:'A protected cavity, with space for new nests · conceptual illustration'},
+ summer:{label:'CHAPTER TWO · SUMMER',title:'A small bee, carrying home a garden.',
+  copy:'An active female may carry leaf pieces into an existing cavity, lining one chamber after another with leaves and pollen. Watch for new cuts without blocking her entrance.',
+  action:'Keep a succession of pesticide-safe flowers nearby and let active nest entrances stay undisturbed.',
+  diagram:'Leaf-lined cells being constructed · simplified illustration, not an activity report'},
+ fall:{label:'CHAPTER THREE · AUTUMN',title:'The adults grow quiet; the nursery stays.',
+  copy:'After nesting activity ends, sealed cells can hold developing young. That curved leaf cap is not an invitation to inspect or open the tube.',
+  action:'After flights have ceased, shelter intact occupied material from moisture and leave the cells undisturbed.',
+  diagram:'Sealed leaf-lined chambers · conceptual example'},
+ winter:{label:'CHAPTER FOUR · WINTER',title:'Sometimes the best garden work is leaving it alone.',
+  copy:'Different wild species survive winter at different developmental stages. The safest general habitat habit is cool, dry, undisturbed protection, not warmth indoors.',
+  action:'Keep intact occupied nests dry and sheltered; save stems and plan clean replacements for spring.',
+  diagram:'Protected chambers at rest · not a view of actual living stages'}
+};
+var journalMonthFor={spring:3,summer:6,fall:9,winter:0};
+function renderNestJournal(s,m){
+ var d=journalChapters[s],display=document.getElementById('bee-year-display');
+ if(!d||!display)return;
+ display.setAttribute('data-phase',s);
+ var monthName=new Intl.DateTimeFormat('en-US',{month:'long'}).format(new Date(2026,m,1));
+ document.getElementById('bee-story-chapter').textContent=d.label+' · '+monthName.toUpperCase()+' SCENARIO';
+ document.getElementById('bee-story-title').textContent=d.title;
+ document.getElementById('bee-story-copy').textContent=d.copy;
+ document.getElementById('bee-story-action').textContent=d.action;
+ document.getElementById('bee-nest-art-caption').textContent=d.diagram;
+ document.getElementById('bee-story-context').textContent='Typical wild cavity-nester field note for '+monthName.toLowerCase()+'. It is not a live nest inspection or a managed-cocoon handling protocol. Species may develop and overwinter differently.';
+ document.querySelectorAll('[data-journey-phase]').forEach(function(b){
+  b.setAttribute('aria-pressed',String(b.getAttribute('data-journey-phase')===s));
+ });
+}
+function renderEvidenceObserved(mid){
+ var observed=document.getElementById('bee-evidence-observed');
+ if(!observed)return;
+ var bloom=flowers.value==='yes'?'You reported plentiful open flowers.':flowers.value==='no'?'You reported few or no open flowers.':'Flowering has not been confirmed.';
+ var nesting=nest.value==='full'?' Occupied nesting tubes reported.':nest.value==='empty'?' Clean empty tubes reported.':' No installed nest reported.';
+ observed.textContent=bloom+nesting+' These are your reports, not independently observed.';
+ if(!mid){
+  document.getElementById('bee-evidence-accumulated').textContent='Michigan seasonal grid not applicable to the selected U.S. region.';
+  document.getElementById('bee-evidence-forecast').textContent='Michigan NWS forecast desk hidden for this region.';
+ }
+}
 function renderSeason(s){var d=seasons[s];document.getElementById('season-label').textContent=s.charAt(0).toUpperCase()+s.slice(1);document.getElementById('season-head').textContent=d.head;document.getElementById('season-intro').textContent=d.intro;document.getElementById('season-foot').textContent=d.foot;var list=document.getElementById('season-actions');list.textContent='';d.list.forEach(function(t){var li=document.createElement('li');li.textContent=t;list.appendChild(li)});document.querySelectorAll('[data-season]').forEach(function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-season')===s))})}
 function render(){
 var m=Number(month.value),s=seasonFor(m),warm=temp.value==='warm',hasFlowers=flowers.value==='yes',n=nest.value,z=zone.value,mid=region.value==='michigan',stage=document.getElementById('brood-stage').value;
@@ -378,7 +423,11 @@ if(s==='summer'&&temp.value==='unknown')extra+='You have not supplied temperatur
 if(s==='spring'&&path==='managed')extra+='Do not confuse mason bees\u2019 spring release temperature with leafcutters\u2019 summer seller guidance. ';
 document.getElementById('result-title').textContent=t;document.getElementById('result-text').textContent=sub;document.getElementById('result-caveat').textContent=extra+' No occupancy, pollination or harvest yield is guaranteed.';
 var ol=document.getElementById('result-actions');ol.textContent='';items.forEach(function(x){var li=document.createElement('li');li.textContent=x;ol.appendChild(li)});
-renderSeason(s)
+renderSeason(s);
+renderNestJournal(s,m);
+renderEvidenceObserved(mid);
+var first=document.getElementById('bee-first-title'),step=document.getElementById('bee-first-action'),meta=document.getElementById('bee-first-meta');
+if(first&&step&&meta){first.textContent=t;step.textContent=items[0]||sub;meta.textContent=m===currentMonth?'Current Michigan-month scenario · local observations still required.':'Selected '+new Intl.DateTimeFormat('en-US',{month:'long'}).format(new Date(2026,m,1))+' planning scenario · not a live weather observation.';}
 }
 var FORAGE=[
  {name:'Wild bergamot',months:[5,6,7,8]},
@@ -407,11 +456,11 @@ function setWeatherStatus(head,detail,level){
 }
 function setSeasonalEvidence(data,kind){
  var panel=document.getElementById('bee-seasonal-panel');if(!panel)return;
- if(kind==='reset'){panel.hidden=true;return;}
+ if(kind==='reset'){panel.hidden=true;var reset=document.getElementById('bee-evidence-accumulated');if(reset)reset.textContent='No season-to-date thermal evidence checked for this location.';return;}
  panel.hidden=false;
  var total=document.getElementById('bee-seasonal-total'),anom=document.getElementById('bee-seasonal-anomaly'),week=document.getElementById('bee-seasonal-week'),note=document.getElementById('bee-seasonal-note');
- if(kind==='loading'){total.textContent=anom.textContent=week.textContent='…';note.textContent='Reading official accumulated heat for this location…';return;}
- if(!data||kind!=='ready'){total.textContent=anom.textContent=week.textContent='—';note.textContent='Seasonal heat data are currently unavailable for this area. No comparison is assumed.';return;}
+ if(kind==='loading'){total.textContent=anom.textContent=week.textContent='…';note.textContent='Reading official accumulated heat for this location…';var e=document.getElementById('bee-evidence-accumulated');if(e)e.textContent='Checking the official USA-NPN heat grid…';return;}
+ if(!data||kind!=='ready'){total.textContent=anom.textContent=week.textContent='—';note.textContent='Seasonal heat data are currently unavailable for this area. No comparison is assumed.';var e=document.getElementById('bee-evidence-accumulated');if(e)e.textContent='USA-NPN heat evidence unavailable. No warm-season status inferred.';return;}
  total.textContent=Number(data.totalGdd50F).toFixed(1)+' °F·days';
  var hasComparison=data.status==='AVAILABLE'&&Number.isFinite(data.comparison?.anomalyGdd50F);
  var delta=hasComparison?data.comparison.anomalyGdd50F:null;
@@ -419,6 +468,7 @@ function setSeasonalEvidence(data,kind){
  week.textContent=data.weekChangeGdd50F===null?'Not available':'+'+Number(data.weekChangeGdd50F).toFixed(1)+' °F·days';
  var compare=hasComparison?(delta>5?'More base-50 warmth than the reference average.':delta< -5?'Less base-50 warmth than the reference average.':'Near the reference average.'):'The 1991–2020 anomaly has no published data for this grid cell; no average-year comparison is available.';
  note.textContent='USA-NPN reference date: '+data.asOfDate+'. '+compare+' Seasonal weather context does not confirm bee activity or open flowers.';
+ var evidence=document.getElementById('bee-evidence-accumulated');if(evidence)evidence.textContent=Number(data.totalGdd50F).toFixed(1)+' °F·days modeled since January 1 (as of '+data.asOfDate+'). '+(hasComparison?'Reference anomaly '+(delta>0?'+':'')+Number(delta).toFixed(1)+' °F·days.':'Historical anomaly not mapped here.')+' Not a bloom observation.';
 }
 async function loadBeeSeasonal(key,raw,city,sequence){
  setSeasonalEvidence(null,'loading');
@@ -469,6 +519,8 @@ function showForecast(){
  var strip=document.getElementById('bee-day-strip'),issued=document.getElementById('bee-issued');
  strip.textContent='';issued.textContent='';
  if(!liveWeather)return;
+ var evidence=document.getElementById('bee-evidence-forecast');
+ if(evidence)evidence.textContent=liveWeather.fresh===true?(liveWeather.status==='WARM_STRETCH'?'NWS reports a possible two-day 75°F+ warm stretch, for planning only.':liveWeather.status==='NO_STRETCH'?'No two-day 75°F+ stretch in the checked forecast.':'Hourly coverage is insufficient for a warm-window determination.')+' Forecast issued '+(liveWeather.issuedAt||'time unknown')+'.':'NWS forecast is stale; do not use it for release timing.';
  renderHeat(liveWeather.heat);
  var geo=document.getElementById('bee-geo-note'),site=liveWeather.site||{};
  if(geo){
@@ -509,6 +561,7 @@ async function loadBeeCities(){
 async function checkBeeForecast(){
  if(typeof fetch!=='function'){setWeatherStatus('Forecast lookup unavailable.','Use the source link and your local garden observations.', 'warning');return;}
  var raw=beeZip.value.trim(),city=beeCity.value,key=beeLocationKey(),sequence=++weatherRequest;
+ var evidenceForecast=document.getElementById('bee-evidence-forecast');if(evidenceForecast)evidenceForecast.textContent='Checking the NWS forecast for this location…';
  weatherCheckState='loading';liveWeather=null;liveWeatherCity=null;
  document.getElementById('bee-day-strip').textContent='';document.getElementById('bee-issued').textContent='';renderHeat(null);setSeasonalEvidence(null,'reset');
  document.getElementById('bee-geo-note').textContent='';
@@ -533,19 +586,20 @@ async function checkBeeForecast(){
    }else if(code==='CENSUS_UNAVAILABLE'){
     setWeatherStatus('Census ZIP lookup temporarily unavailable.','The ZIP could not be located reliably. Clear it and choose a reference city to try the city forecast, or check again.', 'warning');
    }else setWeatherStatus('Official forecast unavailable.','No location or weather claim was made. Check the ZIP or NWS source, or clear the ZIP to use a city.', 'warning');
-   weatherCheckState='unavailable';render();return;
+   weatherCheckState='unavailable';if(evidenceForecast)evidenceForecast.textContent='No verified forecast for this selected area.';render();return;
   }
   if(!data||!data.forecastOnly||data.provider!=='National Weather Service'||!Array.isArray(data.daily)||!data.sourceUrl||!data.site)throw Error('INVALID_FORECAST');
   if(raw?(data.site.zip!==raw||data.site.kind!=='zcta-interior-point'):(data.site.id!==city||data.site.kind!=='named-city'))throw Error('MISMATCHED_LOCATION');
   liveWeather=data;liveWeatherCity=key;weatherCheckState='available';showForecast();
  }catch(e){
-  if(sequence===weatherRequest){liveWeather=null;liveWeatherCity=null;weatherCheckState='unavailable';setWeatherStatus('Official forecast unavailable.','No release recommendation can be made from this lookup. Verify local conditions and try again.','warning');}
+  if(sequence===weatherRequest){liveWeather=null;liveWeatherCity=null;weatherCheckState='unavailable';if(evidenceForecast)evidenceForecast.textContent='Official NWS forecast unavailable. No release timing inferred.';setWeatherStatus('Official forecast unavailable.','No release recommendation can be made from this lookup. Verify local conditions and try again.','warning');}
  }finally{if(sequence===weatherRequest){beeWeatherButton.disabled=false;render();}}
 }
 function invalidateBeeForecast(message){
  ++weatherRequest;weatherCheckState='not-checked';beeWeatherButton.disabled=false;liveWeather=null;liveWeatherCity=null;
  document.getElementById('bee-day-strip').textContent='';document.getElementById('bee-issued').textContent='';renderHeat(null);setSeasonalEvidence(null,'reset');
  document.getElementById('bee-geo-note').textContent='No current forecast applied. '+(beeZip.value.trim()?'Enter a valid mapped Michigan ZIP.':'Using a city requires a new check.');
+ var forecastNote=document.getElementById('bee-evidence-forecast');if(forecastNote)forecastNote.textContent='Location changed. No new NWS forecast checked.';
  setWeatherStatus('Location changed. Check the forecast again.',message||'Previous weather is not applied to a new ZIP or city.');
  render();
 }
@@ -562,7 +616,13 @@ loadBeeCities();
 
 [zone,month,flowers,temp,nest,region,document.getElementById('brood-stage')].forEach(function(el){el.addEventListener('change',render)});
 document.querySelectorAll('[data-path]').forEach(function(b){b.addEventListener('click',function(){path=b.getAttribute('data-path');document.querySelectorAll('[data-path]').forEach(function(q){q.setAttribute('aria-pressed',String(q===b))});render()})});
-document.querySelectorAll('[data-season]').forEach(function(b){b.addEventListener('click',function(){renderSeason(b.getAttribute('data-season'))})});
+document.querySelectorAll('[data-season]').forEach(function(b){b.addEventListener('click',function(){var phase=b.getAttribute('data-season');if(phase in journalMonthFor){month.value=String(journalMonthFor[phase]);render()}})});
+document.querySelectorAll('[data-journey-phase]').forEach(function(b){b.addEventListener('click',function(){
+ var phase=b.getAttribute('data-journey-phase');
+ if(!(phase in journalMonthFor))return;
+ if(seasonFor(Number(month.value))!==phase)month.value=String(journalMonthFor[phase]);
+ render();
+})});
 render();
 })();
 </script></body></html>
