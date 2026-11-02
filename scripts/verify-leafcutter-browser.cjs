@@ -63,13 +63,14 @@ async function ready(){
    assert.match(await page.locator('#bee-story-title').innerText(),/Make a little room/);
    assert.equal(await page.locator('#bee-year-display').getAttribute('data-phase'),'spring');
    assert.equal(await page.locator('#bee-first-title').innerText(),await page.locator('#result-title').innerText());
-   const springAnswer=await page.locator('#bee-first-action').innerText();
+   const springAnswer=await page.locator('#bee-story-action').innerText();
    await page.locator('[data-journey-phase="summer"]').click();
    assert.equal(await page.locator('#month').inputValue(),'6');
    assert.match(await page.locator('#bee-story-title').innerText(),/A small bee/);
-   assert.notEqual(await page.locator('#bee-first-action').innerText(),springAnswer,'The season must change the practical next action');
+   assert.notEqual(await page.locator('#bee-story-action').innerText(),springAnswer,'The season changes the field-journal action, not necessarily the safe habitat-first verdict');
+   assert.equal(await page.locator('#bee-first-title').innerText(),await page.locator('#result-title').innerText(),'The first-screen answer follows the safeguarded decision engine');
    await page.locator('[data-journey-phase="spring"]').click();
-   assert.equal(await page.locator('#bee-first-action').innerText(),springAnswer,'A to B to A restores the same action');
+   assert.equal(await page.locator('#bee-story-action').innerText(),springAnswer,'A to B to A restores the same field-journal action');
    await page.locator('#month').selectOption(originalMonth);
    assert.equal(await page.locator('#bee-first-title').innerText(),originalAnswer,'The original season restores the original answer');
    await page.locator('#flowers').selectOption('yes');
@@ -120,8 +121,12 @@ async function ready(){
    assert.ok(overflow.content<=overflow.window+1,'Horizontal overflow at '+width+': '+JSON.stringify(overflow));
    assert.deepEqual(errors,[],'No browser JavaScript errors expected');
    await page.screenshot({path:'artifacts/leafcutter-browser/leafcutter-'+width+'.png',fullPage:true,animations:'disabled'});
+   await page.waitForFunction(()=>document.querySelector('#bee-evidence-accumulated')?.textContent.includes('2805.3'),null,{timeout:6000});
    await page.locator('#region').selectOption('elsewhere');
    assert.ok(!(await page.locator('#bee-forecast-desk').isVisible()),'Michigan forecast must hide for other locations');
+   assert.match(await page.locator('#bee-evidence-accumulated').innerText(),/not applicable/);
+   await page.locator('#region').selectOption('michigan');
+   assert.match(await page.locator('#bee-evidence-accumulated').innerText(),/2805.3/,'Restores correctly attributed Michigan seasonal evidence without refetching other-region data');
    await ctx.close();
   }
   // Missing third-party bee photo: the original next step must survive as a readable first-screen answer.
