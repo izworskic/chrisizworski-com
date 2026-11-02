@@ -186,7 +186,7 @@ try{
     assert.ok((await page.locator('iframe.cr-trail-embed').getAttribute('src')).includes('trailid=766002'));
     assert.equal(embeds.length,1,'map request should follow exactly one click');
     const networkEmbeds=[];
-    await page.route(url=>url.includes('trailforks.com/widgets/region_map/'),async route=>{
+    await page.route(url=>String(url).includes('trailforks.com/widgets/region_map/'),async route=>{
       networkEmbeds.push(route.request().url());
       await route.fulfill({status:200,contentType:'text/html',body:'<!doctype html><html><body>NTN South Trails 11149 published network test fixture</body></html>'});
     });
