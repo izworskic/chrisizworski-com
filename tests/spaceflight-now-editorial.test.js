@@ -57,7 +57,7 @@ test('RSS only yields dated, attributed metadata and discards article bodies',()
   const records=parseRss(rss,now);
   assert.equal(records.length,4);
   assert.equal(records[0].title,entries[0][0]);
-  assert.match(records[1].matchingExcerpt,/Amazon Leo/);
+  assert.match(records.find(x=>x.title.includes('Vulcan')).matchingExcerpt,/Amazon Leo/);
   assert.equal(Object.prototype.hasOwnProperty.call(records[1],'body'),false);
   assert.equal(Object.prototype.hasOwnProperty.call(records[1],'content'),false);
   assert.equal(records[0].publishedAt,'2026-11-01T14:00:00.000Z');
