@@ -527,12 +527,24 @@
     }
   }
 
-  document.addEventListener('DOMContentLoaded', function () {
-    initTimeline();
-    initMap();
-    setInitialMonth();
-    updateIntelBanner();
-  });
+  // Defensive boot: some integrations load this script after DOMContentLoaded.
+  // Keep the map independent of slower advertising and external tile requests.
+  var initialized=false;
+  function bootAtlas() {
+    if (!initialized) {
+      initialized=true;
+      initTimeline();
+      setInitialMonth();
+      updateIntelBanner();
+    }
+    if (!state.map) initMap();
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bootAtlas, {once:true});
+  } else {
+    bootAtlas();
+  }
+  window.addEventListener('load', bootAtlas, {once:true});
 
   // Export for testing
   window.NP_PHENOMENA_DATA = {
