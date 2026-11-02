@@ -162,6 +162,37 @@ try{
       if(id==='bond-falls')await page.screenshot({path:screenshots+'/bond-falls-mobile.png',fullPage:true,animations:'disabled'});
     });
   }
+
+  await run('Carp River segment map loads only after explicit visitor action',async()=>{
+    const embeds=[];
+    await page.route('https://www.trailforks.com/widgets/trail/**',async route=>{
+      embeds.push(route.request().url());
+      await route.fulfill({status:200,contentType:'text/html',body:'<!doctype html><html><head><title>NTN mapped trail test</title></head><body>Trailforks widget test fixture</body></html>'});
+    });
+    await page.goto(base+'/upper-peninsula-waterfalls/carp-river-falls/',{waitUntil:'domcontentloaded',timeout:30000});
+    await page.locator('#cr-show-falls').waitFor();
+    assert.equal(await page.locator('iframe.cr-trail-embed').count(),0);
+    assert.equal(embeds.length,0,'no third-party trail map should preload');
+    assert.equal(await page.locator('#cr-show-falls').getAttribute('aria-pressed'),'true');
+    await page.locator('#cr-show-trail').click();
+    assert.equal(await page.locator('#cr-show-trail').getAttribute('aria-pressed'),'true');
+    assert.equal(await page.locator('#cr-trail-panel').isVisible(),true);
+    assert.equal(await page.locator('iframe.cr-trail-embed').count(),0);
+    assert.match(await page.locator('#cr-trail-panel').innerText(),/3,363 feet/);
+    assert.match(await page.locator('#cr-trail-panel').innerText(),/not.*parking-to-overlook|not.*complete|not a verified continuous/i);
+    await page.locator('#cr-load-trail-map').click();
+    await page.locator('iframe.cr-trail-embed').waitFor();
+    assert.equal(await page.locator('iframe.cr-trail-embed').count(),1);
+    assert.ok((await page.locator('iframe.cr-trail-embed').getAttribute('src')).includes('trailid=766002'));
+    assert.equal(embeds.length,1,'map request should follow exactly one click');
+    await page.locator('#cr-show-falls').click();
+    assert.equal(await page.locator('#cr-trail-panel').isVisible(),false);
+    assert.equal(await page.locator('#cr-falls-panel').isVisible(),true);
+    assert.ok(await page.locator('#cr-geo-map.leaflet-container').count()>0,'native CARTO map should remain operable');
+    const widths=await page.evaluate(()=>({viewport:window.innerWidth,scroll:document.documentElement.scrollWidth}));
+    assert.ok(widths.scroll<=widths.viewport+2,'Carp map controls horizontally overflow mobile');
+    await page.screenshot({path:screenshots+'/carp-mapped-trail-mobile.png',fullPage:true,animations:'disabled'});
+  });
 }finally{await browser.close()}
 if(failures.length){console.error('\n'+failures.length+' browser smoke failures:\n'+failures.join('\n'));process.exitCode=1}
 else console.log('\nWaterfall Chromium smoke passed.');

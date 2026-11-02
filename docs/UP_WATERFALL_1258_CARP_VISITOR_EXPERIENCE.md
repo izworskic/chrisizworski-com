@@ -42,3 +42,21 @@ After: **72 curated, 66 exact GIS links, 95 pending**. Research overlay automati
 - Name search-surface protection and Vercel preview verification
 - Production verification after merge
 - Current NTN signage and authoritative georeferenced trail alignment remain future evidence needed before introducing a trail path on the map
+
+
+## November 1, 2026: NTN trail alignment, without an invented parking connection
+
+A new source investigation found the individual **Carp River Falls Trail #766002** in Trailforks. **NTN's current South Trails page embeds Trailforks** as the network's own map viewer, and an NTN-affiliated map record describes this exact trail. The single trail segment is **3,363 feet (about 0.64 miles)**, intermediate/blue, opened in 2024, and connects **Carp Eh Diem Trail west end** to the **Raging River bridge**. Hiking is listed as an activity. The NTN director's 2024 statement independently confirms waterfall viewing along the route. This is a real mapped trail, not a generated line between arbitrary waterfall pins.
+
+Evidence:
+- [NTN current public South Trails map](https://www.noquetrails.org/south-trails/)
+- [Carp River Falls Trail #766002 — exact mapped segment on Trailforks](https://www.trailforks.com/trails/carp-river-falls/)
+- [Trailforks published single-trail widget API](https://www.trailforks.com/widgets/config/trail/)
+- [NTN director's 2024 completion statement](https://www.uppermichiganssource.com/2024/08/15/ntn-hosts-business-after-hours-cuts-ribbon-updated-pavilion/)
+- [Travel Marquette official public trailhead, designated crossing and historic route](https://www.travelmarquette.com/outdoor-adventure/waterfalls/)
+
+**Decision:** Avoid copying Trailforks's proprietary GPS vertices into our own map without an appropriate license. Instead, include its **working single-trail map widget**, verified by direct browser scrape from the official `/widgets/trail/?trailid=766002...` endpoint. Load the iframe only upon the visitor's explicit click so visitors can use the mapped trail without being sent offsite or exposing every page view to a third-party map service. Keep a linked source fallback if the provider blocks embedding or is unavailable. The existing CARTO/Leaflet map retains the distinct falls locations.
+
+**Do not overstate the geometry.** The 0.64 miles is only the published segment, **not** South Trailhead-to-viewpoint round-trip mileage. We have not independently verified the specific current trail connections from NTN South Trailhead, georeferenced M-553 crossing or exact railing/overlook coordinates. No extra parking points, no waterfall driving directions, no lines joining disconnected endpoints, no ADA claim, no live opening. `routePolylineAuthorized=false` and `destinationCoordinatesForDriving=false` remain unchanged.
+
+The new page includes a visible **Waterfall locations / Mapped NTN trail** control with native map preservation and a consent-on-click trail geometry viewer. The visitor answer and hub card distinguish source segment distance from actual walking effort. Node regressions and Chromium/mobile smoke test this behavior.

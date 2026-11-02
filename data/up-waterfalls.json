@@ -4005,9 +4005,9 @@
       "gisObjectId": 169,
       "level": "hard",
       "minutes": "Plan a long outing; new overlook mileage not independently surveyed",
-      "walk": "From Noquemanon South Trailhead on CR 553 use the designated M-553 pedestrian crossing. The older Travel Marquette route follows motor-vehicle-restricted Mount Marquette Road toward Morgan Falls and continues about half a mile farther along the rough Carp River bank. NTN's newer Carp River Falls Trail (completed 2024) has a documented waterfall overlook. Use current NTN signs to the managed viewpoint rather than combining old and new routes into an invented path. Do not scramble into the gorge.",
+      "walk": "From Noquemanon South Trailhead on CR 553 use the designated M-553 pedestrian crossing. The older Travel Marquette route follows motor-vehicle-restricted Mount Marquette Road toward Morgan Falls and continues about half a mile farther along the rough Carp River bank. NTN's newer Carp River Falls Trail (completed 2024) has a documented waterfall overlook. Use current NTN signs to the managed viewpoint rather than combining old and new routes into an invented path. Do not scramble into the gorge. Trailforks separately maps the Carp River Falls Trail itself as 3,363 feet (approximately 0.64 mile); this segment is NOT the measured full hike from NTN South Trailhead and does not identify the precise railing or road crossing.",
       "best": "Snow-free dry trail use if NTN has no current closures; rain and snowmelt make creek cliffs hazardous.",
-      "access": "Public NTN South trailhead and documented Carp River Falls Trail overlook; exact 2026 trail geometry and live opening not confirmed.",
+      "access": "Public NTN South trailhead, approved nonmotorized network and separately mapped NTN Carp River Falls Trail segment (0.64 mile) with documented overlook. Complete parking-to-overlook GPS geometry, exact pedestrian crossing and live opening not confirmed.",
       "status": "verify",
       "source": "https://www.travelmarquette.com/outdoor-adventure/waterfalls/",
       "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
@@ -4019,7 +4019,7 @@
       "accessConfidence": "NTN-public-arrival-and-2024-managed-overlook-documentation-no-surveyed-route-polyline",
       "sourceReviewed": "2026-11-01",
       "manager": "Noquemanon Trail Network · South Trails",
-      "further": "Michigan GIS #169 matches Travel Marquette Carp River Falls within roughly 18 metres despite mislabeled MORGAN CREEK waterway. It is distinct from Morgan Falls #166 and posted Upper Carp #163 near Ishpeming. Public NTN South Trailhead and safe road crossing documented; 2024 NTN director describes completed Carp River Falls Trail waterfall viewpoint and Raging River connection; Travel Marquette 2025 describes older rough route from Morgan Falls. Exact new-overlook trail geometry and current seasonal access cannot be confirmed; no route polyline, waterfall-coordinate car directions, cliff scramble or live-opening claim.",
+      "further": "Michigan GIS #169 matches Travel Marquette Carp River Falls within roughly 18 metres despite mislabeled MORGAN CREEK waterway. It is distinct from Morgan Falls #166 and posted Upper Carp #163 near Ishpeming. Public NTN South Trailhead and safe road crossing documented; 2024 NTN director describes completed Carp River Falls Trail waterfall viewpoint and Raging River connection; Travel Marquette 2025 describes older rough route from Morgan Falls. Exact new-overlook trail geometry and current seasonal access cannot be confirmed; no route polyline, waterfall-coordinate car directions, cliff scramble or live-opening claim. NTN's own South Trails site embeds Trailforks maps, and Trailforks trail #766002 identifies the 2024 Carp River Falls segment (3,363 feet) between Carp Eh Diem and the Raging River bridge, with hiking allowed. Its official embeddable map is shown on explicit visitor request, rather than copying its proprietary geometry or manufacturing the remainder of the arrival route.",
       "winterRoad": "NTN winter grooming does not guarantee the waterfall approach; verify posted restrictions, do not walk near icy cliff edges or use the closed-to-cars road for driving.",
       "verification": {
         "landManager": {
@@ -4047,6 +4047,30 @@
           "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
           "description": "Michigan GIS #169 natural falls point matches Travel Marquette Carp River waterfall, not a parking coordinate."
         }
+      },
+      "trailGeometryReference": {
+        "trailName": "Carp River Falls",
+        "trailforksTrailId": 766002,
+        "trailLengthFeet": 3363,
+        "trailLengthMilesApprox": 0.64,
+        "trailOpened": 2024,
+        "difficulty": "Blue / intermediate",
+        "allowedActivities": [
+          "hike",
+          "mountain bike",
+          "trail running"
+        ],
+        "mappedSegmentFrom": "Carp Eh Diem Trail",
+        "mappedSegmentTo": "Raging River Bridge",
+        "segmentIsCompleteTrailheadRoute": false,
+        "overlookCoordinatesVerified": false,
+        "trafficCrossingCoordinatesVerified": false,
+        "parkingCoordinatesVerified": false,
+        "independentRoutePolylineAuthorized": false,
+        "presentation": "Visitor opt-in Trailforks embedded segment map; no local copy of proprietary geometry",
+        "source": "https://www.trailforks.com/trails/carp-river-falls/",
+        "managerMap": "https://www.noquetrails.org/south-trails/",
+        "reviewed": "2026-11-01"
       }
     }
   ]
