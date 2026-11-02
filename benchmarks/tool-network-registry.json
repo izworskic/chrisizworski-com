@@ -1,6 +1,6 @@
 {
   "version": "1.4.0",
-  "updated": "2026-11-01",
+  "updated": "2026-11-02",
   "objective": "Maintain one source of truth for how Chris Izworski tools own search intent, connect into visitor journeys, avoid cannibalization, and qualify future builds.",
   "rules": {
     "catalogCoverage": "Every first-party tool card on /tools/ must have a registry node.",
@@ -2454,6 +2454,43 @@
       "searchEvidence": {
         "status": "unknown",
         "note": "Experience OS v1.2.1 and Freighter View Farms photo story published November 2026. No measured search or engagement uplift."
+      }
+    },
+    {
+      "id": "michigan-garden-pest-watch",
+      "name": "Michigan Garden Pest Watch",
+      "canonical": "https://chrisizworski.com/michigan-garden-pest-watch/",
+      "aliases": [],
+      "kind": "seasonal-decision-engine",
+      "cluster": "gardening",
+      "primaryIntent": "What should I inspect for pests in my Michigan home garden now by crop, plant stage and location?",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "michigan-statewide"
+      ],
+      "personas": [
+        "gardener",
+        "pollinator-watcher"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "launch"
+      },
+      "searchEvidence": {
+        "status": "new"
       }
     },
     {
@@ -6585,6 +6622,30 @@
       "strength": "optional",
       "surface": "tools-directory",
       "reason": "Seasonal flower context can help explain potential forage, but regional bloom predictions are not confirmed flowers at a visitor's address."
+    },
+    {
+      "from": "phenology",
+      "to": "michigan-garden-pest-watch",
+      "type": "seasonal-router",
+      "strength": "optional",
+      "surface": "gardening-nature-network",
+      "reason": "Weather and phenology context can introduce the separate crop-specific pest scouting decision. Generic AGDD does not assert any pest emergence event."
+    },
+    {
+      "from": "michigan-garden-pest-watch",
+      "to": "leafcutter-bees",
+      "type": "related-tool",
+      "strength": "optional",
+      "surface": "gardening-tool-network",
+      "reason": "Beneficial-insect and pollinator care is a distinct companion after identifying a targeted garden problem."
+    },
+    {
+      "from": "michigan-garden-pest-watch",
+      "to": "national-garden-water",
+      "type": "related-tool",
+      "strength": "optional",
+      "surface": "gardening-tool-network",
+      "reason": "If dry weather stresses plants, the dedicated irrigation decision is distinct from pest identification or phenology."
     }
   ],
   "cannibalizationGroups": [
