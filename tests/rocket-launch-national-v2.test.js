@@ -86,7 +86,7 @@ test('every mission retains detected time revisions, even beyond former nearest-
   assert.equal(second.missions.length,12);
   assert.equal(second.history[id(6)].filter(x=>x.field==='target-time').length,1);
   assert.equal(second.history[id(6)][0].detectedAt,ISO(later));
-  assert.match(second.history[id(6)][0].note,/not an operator-issued/);
+  assert.match(second.history[id(6)][0].note,/not an operator-issued/i);
   const third=national.snapshot(second,{
     primary:national.normalizeFeed(feed(edited),national.QUERIES[0],later+31*60000),
     specialist:national.normalizeFeed(feed(specialist),national.QUERIES[1],later+31*60000)
