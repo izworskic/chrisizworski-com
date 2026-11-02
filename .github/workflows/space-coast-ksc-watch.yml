@@ -38,7 +38,7 @@ jobs:
           for attempt in $(seq 1 20); do
             if curl --fail --silent --show-error --max-time 8 \
               "https://chrisizworski.com/api/rocket-launch-truth?launchId=54d471e8-695c-4fa7-a3cf-dbd8b389e8ae" |
-              jq -e '.ok == true and (.provenance | contains("RocketLaunch.Live"))' >/dev/null; then
+              jq -e '.ok == true and .engineVersion == 2 and (.provenance | contains("RocketLaunch.Live"))' >/dev/null; then
               exit 0
             fi
             sleep 10
