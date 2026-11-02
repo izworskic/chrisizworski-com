@@ -17,6 +17,7 @@ import urllib.parse
 import urllib.request
 
 from pypdf import PdfReader
+from space_coast_weather_discovery import inspect_sources
 
 LL2 = "https://ll.thespacedevs.com"
 OFFICIAL = "45thweathersquadron.nebula.spaceforce.mil"
@@ -39,9 +40,9 @@ class SafeRedirect(urllib.request.HTTPRedirectHandler):
 OPENER = urllib.request.build_opener(SafeRedirect())
 
 
-def download(url, limit):
+def download(url, limit, accept="application/pdf,application/json;q=0.9"):
     request = urllib.request.Request(url, headers={
-        "Accept": "application/pdf,application/json;q=0.9",
+        "Accept": accept,
         "User-Agent": UA,
     })
     with OPENER.open(request, timeout=12) as response:
@@ -161,7 +162,7 @@ def parse_official_pdf(content, source_url, mission):
 
 def collect(now):
     out = {"discoveryStatus": "ok", "inspected": 0, "verified": 0,
-           "failed": 0, "reports": []}
+           "failed": 0, "reports": [], "sourceHealth": []}
     url = LL2 + "/2.3.0/launches/upcoming/?location__ids=12%2C27&limit=12&format=json&ordering=net&hide_recent_previous=true"
     try:
         listing = get_json(url)
@@ -170,6 +171,7 @@ def collect(now):
     except Exception:
         out["discoveryStatus"] = "unavailable"
         out["failed"] = 1
+        out["sourceHealth"] = [{"id":"ll2-schedule", "status":"unavailable", "links":0}]
         return out
     candidates = []
     for mission in listing["results"]:
@@ -187,6 +189,13 @@ def collect(now):
         if not isinstance(mission.get("name"), str):
             continue
         candidates.append(mission)
+    # Official first-party links are discovered independently of LL2 updates.
+    # This still uses LL2's current mission identities for strict pairing.
+    direct, direct_health = inspect_sources(candidates, download, official_pdf_url)
+    out["sourceHealth"] = direct_health
+    ll2_failed = 0
+    ll2_link_count = 0
+    remaining_pdf_budget = 8
     for mission in candidates:
         out["inspected"] += 1
         mid = mission["id"]
@@ -195,23 +204,48 @@ def collect(now):
             updates = detail.get("updates") or []
             if not isinstance(updates, list):
                 updates = []
-            # An update comment is untrusted. Read only allowlisted official
-            # forecast document links, newest first. Never extract PoV from it.
-            urls = list(dict.fromkeys(filter(None, (
+            # LL2 links remain candidate discovery only, never verified PoV.
+            ll2_urls = list(dict.fromkeys(filter(None, (
                 official_pdf_url(item.get("info_url")) for item in updates
                 if isinstance(item, dict)
             ))))[:2]
-            for link in reversed(urls):
-                try:
-                    pdf = download(link, MAX_PDF_BYTES)
-                    report = parse_official_pdf(pdf, link, mission)
-                    out["reports"].append(report)
-                    out["verified"] += 1
-                except Exception:
-                    out["failed"] += 1
+            ll2_link_count += len(ll2_urls)
         except Exception:
+            ll2_failed += 1
             out["failed"] += 1
-    if out["failed"]:
+            ll2_urls = []
+        # Deduplicate first-party + LL2 nominations before requesting PDF bytes.
+        # A single official PDF never counts twice, even across discovery routes.
+        choices = []
+        for link, route in [
+            *((u, "45ws-public-page") for u in direct.get(mid, [])),
+            *((u, "ll2-update-link") for u in ll2_urls),
+        ]:
+            if link not in [item[0] for item in choices]:
+                choices.append((link, route))
+        for link, route in choices[:3]:
+            if remaining_pdf_budget <= 0:
+                break
+            remaining_pdf_budget -= 1
+            try:
+                pdf = download(link, MAX_PDF_BYTES)
+                report = parse_official_pdf(pdf, link, mission)
+                report["discoveredVia"] = route
+                out["reports"].append(report)
+                out["verified"] += 1
+            except Exception:
+                out["failed"] += 1
+    out["sourceHealth"].append({
+        "id":"ll2-updates",
+        "status":"partial" if ll2_failed else "checked",
+        "links":ll2_link_count,
+    })
+    out["sourceHealth"].append({
+        "id":"official-pdf-retrieval",
+        "status":"partial" if out["failed"] else "checked",
+        "links":out["verified"],
+    })
+    if out["failed"] or any(x["status"] == "unavailable" for x in direct_health):
         out["discoveryStatus"] = "partial"
     return out
 
