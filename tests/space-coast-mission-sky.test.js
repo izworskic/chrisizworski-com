@@ -129,6 +129,20 @@ test('selecting a mission recalculates its own NPS access and dual-area NWS grid
   const idDay = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
   const idExact = 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb';
   const exactTime = new Date(Date.now() + 3 * 3600000).toISOString();
+  // The v2 visitor handler must use a shared Postgres schedule snapshot.
+  // NWS and official park sources remain individually fetched as needed.
+  const cachedApi=handler._test.createHandler({
+    getSchedule:async()=>({
+      launches:[
+        {...decision.normalizeLaunch(launch(idDay,
+          new Date(Date.now() + 86400000).toISOString(),'Day')),region:'florida'},
+        {...decision.normalizeLaunch(launch(idExact,exactTime)),region:'florida'}
+      ],
+      checkedAt:new Date().toISOString(),
+      source:'shared-postgres-ll2-national-v2',freshness:'recent',
+      complete:true,warning:null,health:[]
+    })
+  });
   const target = Date.parse(exactTime);
   const validTime = new Date(target - 3600000).toISOString() + '/PT4H';
   const hourly = { properties: { periods: [{
@@ -148,10 +162,8 @@ test('selecting a mission recalculates its own NPS access and dual-area NWS grid
   } });
   global.fetch = async url => {
     url = String(url);
-    if (url.includes('ll.thespacedevs.com')) return response({ results: [
-      launch(idDay, new Date(Date.now() + 86400000).toISOString(), 'Day'),
-      launch(idExact, exactTime)
-    ] });
+    if (url.includes('ll.thespacedevs.com'))
+      throw new Error('Visitor attempted a forbidden upstream LL2 fetch');
     if (url.includes('park-alerts-cana.json')) return response([
       { ...ALERT, is_active: 1 }, { ...NPS_HOURS, is_active: 1 }
     ]);
@@ -170,7 +182,7 @@ test('selecting a mission recalculates its own NPS access and dual-area NWS grid
   };
   try {
     const first = mockRes();
-    await handler({ method: 'GET', query: {} }, first);
+    await cachedApi({ method: 'GET', query: {} }, first);
     assert.equal(first.statusCode, 200);
     assert.equal(first.body.next.id, idExact, 'earliest by net should be exact at +3h');
     assert.equal(first.body.skyComparison.winner, 'titusville');
@@ -182,17 +194,17 @@ test('selecting a mission recalculates its own NPS access and dual-area NWS grid
     assert.equal(first.body.arrivalGuidance.estimatedRoadRestrictionAt, new Date(target - 1800000).toISOString());
     assert.equal(first.body.viewpoints.find(v => v.id === 'playalinda-north').level, 'closed');
     const selected = mockRes();
-    await handler({ method: 'GET', query: { launchId: idDay } }, selected);
+    await cachedApi({ method: 'GET', query: { launchId: idDay } }, selected);
     assert.equal(selected.statusCode, 200);
     assert.equal(selected.body.selectedLaunchId, idDay);
     assert.equal(selected.body.next.netPrecision, 'day');
     assert.equal(selected.body.skyComparison.level, 'unknown');
     assert.equal(selected.body.arrivalGuidance.estimatedRoadRestrictionAt, null);
     const notFound = mockRes();
-    await handler({ method: 'GET', query: { launchId: 'cccccccc-cccc-4ccc-8ccc-cccccccccccc' } }, notFound);
+    await cachedApi({ method: 'GET', query: { launchId: 'cccccccc-cccc-4ccc-8ccc-cccccccccccc' } }, notFound);
     assert.equal(notFound.statusCode, 404);
     const invalid = mockRes();
-    await handler({ method: 'GET', query: { launchId: '../unsafe' } }, invalid);
+    await cachedApi({ method: 'GET', query: { launchId: '../unsafe' } }, invalid);
     assert.equal(invalid.statusCode, 400);
   } finally {
     global.fetch = orig;
