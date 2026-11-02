@@ -112,7 +112,7 @@ function showData(d){
  setInfo('answer-heading',off?'Your next-season field assignment':'Your first scouting assignment');
  answer.textContent=d.firstAction;
  reason.textContent=off?'Off-season planning reference; warm-season pest activity is not implied.':
-    'Current season and selected crop stage shape this advice. No local pest infestation has been confirmed.';
+    'Current season and selected crop stage shape this advice. This tool has no garden-level pest confirmation.';
  const monthName=new Intl.DateTimeFormat('en-US',{month:'long',timeZone:'America/Detroit'}).format(new Date(Date.UTC(2026,d.month-1,15,12)));
  setInfo('season-evidence',monthName+' / '+d.stage+' stage. This is approximate Michigan seasonal timing, not observed emergence.');
  const w=d.weather||{};
@@ -133,7 +133,7 @@ function showData(d){
  setInfo('watch-count',n+' crop-related pest and disease topics. '+d.featured.length+' selected for this watch.');
  const year=Number(d.asOfDate?.slice(0,4))||new Date().getFullYear();
  const nextSeason=year+(d.month>=11?1:0);
- source.textContent=off?'Michigan off-season: prepare for '+nextSeason+'. No summer pest is reported active.':
+ source.textContent=off?'Michigan off-season: prepare for '+nextSeason+'. We make no claim about current regional outbreaks because field reports are not connected.':
    'Scouting guidance, not an observed outbreak.'+(w.status==='AVAILABLE'?' A checked NWS forecast adds broad weather context.':w.status==='PARTIAL'?' NWS weather coverage is incomplete.':' Weather source unavailable.');
 }
 async function update(){
