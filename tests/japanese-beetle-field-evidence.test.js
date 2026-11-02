@@ -61,6 +61,7 @@ test('fetch evidence retains data lineage and refuses failed iNaturalist source'
  assert.equal(d.schema,E.SCHEMA);assert.equal(d.status,'DOCUMENTED_PRESENCE');
  assert.equal(d.observationalEvidence.firstObservationDate,'2026-07-05');
  assert.equal(d.modelComparison,'UNAVAILABLE_UNLESS_MATCHED_TO_SAME_YEAR_OFFICIAL_LAYER');
+ assert.equal(d.adultLifeStage,'NOT_VERIFIED_BY_SPECIES_IDENTIFICATION');
  assert.equal(d.observationalEvidence.limitedSearch,true);
  await assert.rejects(E.fetchEvidence(site,2026,{fetcher:async()=>({ok:false}),now:new Date('2026-11-02T18:00:00Z')}));
 });
