@@ -129,7 +129,7 @@ test('verified provider lag shortens the near-term adult and egg windows',()=>{
  const delayed=engine.decision({...base,sourceLagDays:2});
  assert.equal(delayed.status,'PREPARE');
  assert.match(delayed.action,/only 4 day\(s\)/);
- const near={nowDate:'2026-06-30',crop:'roses',sourceDate:'2026-06-28',adult,egg};
+ const near={nowDate:'2026-07-01',crop:'roses',sourceDate:'2026-06-29',adult,egg};
  assert.equal(engine.decision({...near,sourceLagDays:2}).status,'SCOUT');
  // Egg threshold at day 217 is 6 days out on day 211.
  const eggApproach={nowDate:'2026-07-30',crop:'roses',sourceDate:'2026-07-28',adult,egg};
