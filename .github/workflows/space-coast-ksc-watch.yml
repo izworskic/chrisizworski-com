@@ -10,6 +10,10 @@ on:
       - 'lib/space-coast-ksc-watch.js'
       - 'lib/space-coast-ksc-watch-auth.js'
       - 'lib/space-coast-ksc-viewing.js'
+      - 'lib/rocket-launch-truth.js'
+      - 'api/rocket-launch-truth.js'
+      - 'public/synced-national-tools/assets/launch-truth-desk.js'
+      - 'tests/rocket-launch-truth.test.js'
   schedule:
     # UTC, staggered off the top of the hour. Nominal 15-minute cadence.
     - cron: '7,22,37,52 * * * *'
@@ -68,4 +72,15 @@ jobs:
             echo "Official KSC and/or launch-day schedule monitoring was incomplete."
             exit 1
           fi
-          echo "KSC and launch-day schedule monitor checks completed."
+          if ! printf '%s' "$result" | jq -e '
+            (.truthMonitor.ok == true or
+             .truthMonitor.skipped == "hourly-evidence-cadence" or
+             .truthMonitor.skipped == "newer-evidence-already-recorded" or
+             .truthMonitor.skipped == "another-evidence-run-active")
+          ' >/dev/null; then
+            echo "The Launch Truth collector failed; scheduled coverage is not established."
+            printf '%s' "$result" | jq '{truthMonitor}'
+            exit 1
+          fi
+          printf '%s' "$result" | jq '{scheduleMonitor,truthMonitor}'
+          echo "KSC, schedule, and Launch Truth monitoring verified."
