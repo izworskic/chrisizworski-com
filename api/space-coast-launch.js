@@ -283,7 +283,8 @@ return async function handler(req, res) {
         { name: 'NASA launch schedule', url: NASA_SCHEDULE, note: 'Official NASA missions only, not an exhaustive commercial launch calendar.' }
       ],
       limits: [
-        'A time listed only to the day, month or year is not an exact local launch time.',
+        'Only missions within the 120-day national schedule horizon are included; a missing far-future launch is not necessarily canceled.',
+        'A time listed only to the day, month or year is not an exact local launch time.'
         'Public NPS park alerts do not establish NASA security or launch-specific Playalinda access.',
         'Viewpoint candidates are not guarantees of parking, admission or a clear line of sight.',
         'NWS surface forecasts do not predict orbital trajectory, upper-level cloud interception or launch approval.',
