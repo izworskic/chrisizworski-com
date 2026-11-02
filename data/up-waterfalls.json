@@ -1,5 +1,5 @@
 {
-  "reviewed": "2026-10-31",
+  "reviewed": "2026-11-02",
   "purpose": "Curated planning destinations; not live access or real-time water flow",
   "waterfalls": [
     {
@@ -3147,6 +3147,60 @@
           "verified": true,
           "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
           "description": "Michigan GIS feature #166 locates Morgan Falls natural feature on Morgan Creek, not the public parking lot."
+        }
+      }
+    },
+    {
+      "id": "wright-street-falls",
+      "name": "Wright Street Falls",
+      "region": "Central U.P.",
+      "place": "Marquette · Wright Street / Dead River",
+      "lat": 46.56588,
+      "lng": -87.44576,
+      "level": "easy",
+      "minutes": "15–30 min",
+      "walk": "From a public dirt parking area off Wright Street near the Board of Light and Power, follow the short river trail/boardwalk and signed approach to the falls beneath the hydropower penstock. Travel Marquette describes about 450 feet from the nearer lot; use the existing public path and never climb on the industrial pipe or water-control structures.",
+      "best": "A short Marquette waterfall stop in spring, summer or fall; flow is influenced by upstream hydropower diversions and is not predictable from the calendar.",
+      "access": "Travel Marquette describes publicly used Wright Street parking and a short walking path connected to Noquemanon North Trails. Current parking limits, snow/ice maintenance, hydropower operations and trail closures are not independently confirmed.",
+      "status": "verify",
+      "note": "This 10-foot Dead River cascade is a different visitor experience from Dead River Falls on the rugged McClure gorge farther upstream; do not interchange their pins, routes or land-access rights.",
+      "source": "https://www.travelmarquette.com/outdoor-adventure/waterfalls/",
+      "locationSource": "https://www.waterfallsofthekeweenaw.com/dead-river/wright-street-falls/",
+      "kind": "Public river trail / hydro-influenced urban waterfall",
+      "parking": "Use the signed dirt parking area off Wright Street west of Marquette, near the Board of Light and Power; Travel Marquette also describes a smaller lot closer to the falls. No independently surveyed parking GPS is published here; do not navigate to the waterfall point.",
+      "feature": "The Dead River folds over bedrock beneath a prominent industrial penstock, where a short wooded walk reveals the meeting of Marquette's river landscape and working hydroelectric history.",
+      "decision": "Choose Wright Street Falls for a short, comparatively easy public river-path visit. Choose the remote Dead River gorge only after its separate landowner-access and steep-trail conditions have been resolved.",
+      "publication": "verified-access-guide",
+      "accessConfidence": "public-tourism-parking-and-NTN-north-trails-route-current-status-not-live",
+      "sourceReviewed": "2026-11-02",
+      "manager": "Noquemanon Trail Network (adjacent North Trails); Marquette municipal hydro infrastructure nearby; precise falls-side parcel title not asserted.",
+      "further": "Travel Marquette supplies the correct Wright Street approach, public dirt parking and short river/boardwalk access. Noquemanon Trail Network identifies Wright Street/Board of Light and Power access to public North Trails. The falls point is the natural cascade (Travel Marquette 46.56588,-87.44576), not a driveway entrance; exact parking geometry and penstock ownership boundary are not independently surveyed. A major McClure Dead River Falls farther upstream has a documented 2002 FERC private-property trail warning and is NOT covered by this entry. This small hydro-influenced fall may have low flow at times. Current access and winter conditions unverified.",
+      "winterRoad": "Do not assume the small dirt lot, wooden boardwalk or nearby path is plowed, maintained or ice-free. Follow posted NTN closures; no waterfall access beyond hydro structures.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.noquetrails.org/north-trails",
+          "description": "Noquemanon Trail Network lists public North Trails and BLP Wright Street trail access. This does not establish title of adjoining hydro structures."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.travelmarquette.com/outdoor-adventure/waterfalls/",
+          "description": "Travel Marquette identifies the publicly visited river trail and Wright Street access, separate from the privately constrained upstream Dead River gorge."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.travelmarquette.com/outdoor-adventure/waterfalls/",
+          "description": "Travel Marquette explicitly describes a public dirt lot off Wright Street by BLP and an optional smaller closer lot; no fabricated lot GPS is supplied."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.travelmarquette.com/blog/post/waterfalls-you-need-to-see-in-fall/",
+          "description": "Travel Marquette describes a short boardwalk crossing and approximately 450-foot footpath from public lot to the cascade beneath the aqueduct."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://www.travelmarquette.com/blog/post/waterfalls-you-need-to-see-in-fall/",
+          "description": "Travel Marquette publishes 46.56588,-87.44576 as Wright Street Falls on Dead River, distinct from state GIS Dead River Falls #160 upstream."
         }
       }
     },
