@@ -76,7 +76,7 @@ function gather(){
  const searched=(document.getElementById('q')?.value||'').trim().toLowerCase();
  const explicitOnly=new Set(['scott-falls','houghton-douglass-falls']);
  const qualifying=active.map(c=>({c,effort:duration(c),access:guidance(c,when)})).filter(x=>
-  (!explicitOnly.has(x.c.dataset.id)||searched.includes(x.c.dataset.name.toLowerCase()))&&!x.access.excluded&&
+  (!explicitOnly.has(x.c.dataset.id)||(searched&&x.c.dataset.name.toLowerCase().includes(searched)))&&!x.access.excluded&&
  (Number.isFinite(limit)?x.effort.max!==null&&x.effort.max<=limit:true));
  qualifying.sort((x,y)=>{
   const rank=x=>x.access.level==='check'?0:1;
