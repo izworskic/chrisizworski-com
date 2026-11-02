@@ -16,8 +16,9 @@ on:
       - 'public/synced-national-tools/assets/launch-truth-desk.js'
       - 'tests/rocket-launch-truth.test.js'
   schedule:
-    # UTC, staggered off the top of the hour. Nominal 15-minute cadence.
-    - cron: '7,22,37,52 * * * *'
+    # UTC, re-registered after observing 3h without a cron-triggered refresh.
+    # GitHub's scheduled runs are best effort; the public API reports stale data.
+    - cron: '11,26,41,56 * * * *'
 
 permissions:
   contents: read
