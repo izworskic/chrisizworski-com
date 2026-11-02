@@ -1,0 +1,39 @@
+{
+  "date": "2026-11-02",
+  "updated": "2026-11-02T20:49:18.619Z",
+  "briefings": {
+    "new-england": "Well past peak; light rain expected (78% chance) makes weekend driving challenging on Kancamagus Highway and Smugglers' Notch.",
+    "great-smoky-mountains": "Currently within traditional window with partly sunny conditions; Newfound Gap Road and Cades Cove Loop offer favorable viewing this weekend.",
+    "colorado-aspens": "Season has ended; aspens have dropped. Maroon Creek Road and Kebler Pass unlikely to show significant color despite sunny forecast.",
+    "adirondacks": "Season concluded; light rain likely (66% chance) further limits any remaining foliage viewing on Whiteface and NY-86.",
+    "north-shore-superior": "Season ended; live weather data unavailable for MN-61 and Gunflint Trail this weekend.",
+    "ozarks": "Within traditional window with mostly sunny conditions; Arkansas Scenic Byway 7 and Pig Trail offer promising weekend viewing.",
+    "eastern-sierra": "Season finished; Bishop Creek Canyon and June Lake Loop unlikely to display aspen color despite sunny skies.",
+    "wasatch": "Season complete; Alpine Loop and Guardsman Pass show minimal foliage despite sunny, dry conditions.",
+    "columbia-river-gorge": "Within traditional window; partly sunny conditions with 55% rain chance affect Historic Columbia River Highway and WA-14 viewing.",
+    "door-county": "Past peak but lingering color remains; partly sunny weekend on WI-42 and Peninsula State Park drive offers conditional viewing.",
+    "poconos": "Past peak with some color remaining; 36% rain chance may impact Delaware Water Gap and PA-402 corridor drives.",
+    "texas-hill-country": "Within traditional window; 36% rain chance on FM-337 and Lost Maples approach doesn't eliminate weekend viewing potential.",
+    "west-virginia-highlands": "Past peak; 38% rain chance affects Highland Scenic Highway and US-48 overlooks this weekend.",
+    "catskills": "Past peak with scattered color; 51% rain chance impacts Catskill Mountains Scenic Byway and Kaaterskill Clove viewing.",
+    "shenandoah": "Past peak but notable color remains; mostly sunny then slight rain chance (15%) makes Skyline Drive districts conditionally favorable."
+  },
+  "method": "AI-generated model summary",
+  "evidenceRegions": [
+    "new-england",
+    "great-smoky-mountains",
+    "colorado-aspens",
+    "adirondacks",
+    "north-shore-superior",
+    "ozarks",
+    "eastern-sierra",
+    "wasatch",
+    "columbia-river-gorge",
+    "door-county",
+    "poconos",
+    "texas-hill-country",
+    "west-virginia-highlands",
+    "catskills",
+    "shenandoah"
+  ]
+}
