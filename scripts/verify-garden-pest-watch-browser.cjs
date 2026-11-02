@@ -56,7 +56,7 @@ async function routeFixtures(page,month=7){
   if(zip==='48707')return route.fulfill({status:503,contentType:'application/json',body:JSON.stringify({status:'UNAVAILABLE'})});
   const year=Number(u.searchParams.get('year')),date=zip?'2026-07-06':'2026-07-05';
   const recordUrl='https://www.inaturalist.org/observations/'+(zip?'379100595':'378482973');
-  const data={schema:'japanese-beetle-field-evidence-v1',status:'DOCUMENTED_PRESENCE',year,checkedAt:'2026-11-02T20:00:00Z',
+  const data={schema:'japanese-beetle-field-evidence-v1',status:'DOCUMENTED_PRESENCE',adultLifeStage:'NOT_VERIFIED_BY_SPECIES_IDENTIFICATION',year,checkedAt:'2026-11-02T20:00:00Z',
    observationalEvidence:{status:'DOCUMENTED_PRESENCE',firstObservationDate:date,inspectedResults:11,qualifyingRecords:8,limitedSearch:false,
     examples:[{date,url:recordUrl,distanceKm:1.8,positionAccuracyMeters:162}]}};
   return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(data)});
@@ -136,7 +136,7 @@ async function waitForAnswer(page,pest){await page.waitForFunction(name=>documen
    await page.waitForFunction(()=>document.querySelector('#beetle-location')?.textContent?.includes('ZIP 48706 area'),null,{timeout:6000});
    assert.match(await page.locator('#beetle-source-note').innerText(),/2026-11-02/);
    await page.waitForFunction(()=>document.querySelector('#beetle-field-comparison')?.textContent?.includes('1 days after'),null,{timeout:7000});
-   assert.match(await page.locator('#beetle-field-caveat').innerText(),/Neither observed first emergence/i);
+   assert.match(await page.locator('#beetle-field-caveat').innerText(),/not independently verify adult life stage/i);
    await page.locator('#zip').fill('');
    await page.locator('#crop').selectOption('squash');
    assert.match(await page.locator('#beetle-adult-date').innerText(),/Not verified/);
