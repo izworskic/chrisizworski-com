@@ -131,6 +131,8 @@ test('live API preserves existing response contract while including NPS and site
     assert.equal(res.body.accessSource.verified, true);
     assert.equal(res.body.viewpoints.find(v => v.id === 'playalinda-north').level, 'closed');
     assert.equal(res.body.nextDecision.launchWeather.level, 'unknown');
+    assert.equal(res.body.launchWeatherIntelligence.status, 'unknown');
+    assert.equal(res.body.launchWeatherIntelligence.officialApproval, 'not-verified');
     assert.equal(res.body.viewingWeatherByArea.length, 5);
     assert.match(llUrl, /2\.3\.0\/launches\/upcoming/);
     assert.match(llUrl, /location__ids=12%2C27/);
