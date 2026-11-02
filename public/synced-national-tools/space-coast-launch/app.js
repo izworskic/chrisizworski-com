@@ -163,6 +163,19 @@
       ' · ' + (monitor.status || 'status unknown')));
     else links.appendChild(element('span','small',
       'Official document monitor has no confirmed observation yet.'));
+    const direct = (monitor.sourceChecks || []).filter(x =>
+      ['45ws-forecast-support','45ws-sitemap','45ws-parent-weather'].includes(x.id));
+    const blocked = direct.filter(x => x.status === 'unavailable').length;
+    const linked = direct.reduce((n,x) => n + (x.links || 0),0);
+    if (blocked) links.appendChild(element('span','small',
+      'Direct official-source checks unavailable: ' + blocked + ' of ' + direct.length +
+      '. Forecast coverage may be incomplete.'));
+    else if (direct.length && linked === 0) links.appendChild(element('span','small',
+      'Checked official pages supplied no forecast PDF links; Launch Library links remain a fallback.'));
+    if (valid) links.appendChild(element('span','small',
+      d.discoveredVia === '45ws-public-page' ? 'PDF discovered on a first-party weather page.' :
+      d.discoveredVia === 'll2-update-link' ? 'PDF link discovered through Launch Library; document verified against official PDF bytes.' :
+      'Official PDF verified.'));
   };
 
   const renderRangeWeather = forecast => {
