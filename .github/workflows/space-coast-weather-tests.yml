@@ -1,0 +1,38 @@
+name: Space Coast official weather regression gate
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/monitor-space-coast-official-weather.py'
+      - 'scripts/space_coast_weather_discovery.py'
+      - 'tests/test_space_coast_official_weather_pdf.py'
+      - 'tests/test_space_coast_weather_discovery.py'
+      - 'lib/space-coast-official-weather.js'
+      - 'tests/space-coast-official-weather.test.js'
+      - '.github/workflows/space-coast-weather-tests.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout source without persisting credentials
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: '3.11'
+      - name: Install bounded PDF parser
+        run: python -m pip install --disable-pip-version-check 'pypdf==5.9.0'
+      - name: Run official PDF and discovery tests without network
+        run: |
+          python -m unittest discover -s tests -p 'test_space_coast_official_weather_pdf.py' -v
+          python -m unittest discover -s tests -p 'test_space_coast_weather_discovery.py' -v
+      - name: Verify JS source ledger and route
+        run: node --test tests/space-coast-official-weather.test.js
