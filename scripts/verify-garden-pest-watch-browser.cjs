@@ -18,8 +18,27 @@ function mockPayload(url,month=7){
  const decisionData=decision({crop,stage,month,observed,weather});
  return {...decisionData,location:{name:url.searchParams.get('zip')?'ZIP '+url.searchParams.get('zip')+' area':'Bay City',kind:url.searchParams.get('zip')?'zcta-interior-point':'named-city',coordinateMeaning:'2020 Census ZCTA interior point, not a property'},weather,regionalObservation:{status:'UNAVAILABLE'},biologicalForecast:{status:'UNAVAILABLE'}};
 }
+function historyFixture(zip){
+ const years=[2021,2022,2023,2024,2025];
+ return {
+  schema:'garden-pest-historical-lab-v1',status:'HISTORIC_MODELLED_RESEARCH_ONLY',
+  publishedUse:'HISTORIC_RESEARCH_ONLY',realTimeForecast:'UNAVAILABLE',
+  years,location:{name:zip?'ZIP '+zip+' area':'Bay City'},
+  source:{url:'https://daymet.ornl.gov/single-pixel/api/data?lat=43.5945&lon=-83.8889&vars=tmax,tmin&years=2021,2022,2023,2024,2025'},
+  events:[
+   {id:'adults',stage:'Adult emergence heat threshold',status:'HISTORIC_MODELLED',yearsCrossed:5,medianYday:183,
+    samples:years.map(year=>({year,date:year+'-07-02',yday:183}))},
+   {id:'eggs',stage:'Egg hatch heat threshold',status:'HISTORIC_MODELLED',yearsCrossed:5,medianYday:222,
+    samples:years.map(year=>({year,date:year+'-08-10',yday:222}))}
+  ]
+ };
+}
 async function routeFixtures(page,month=7){
  await page.route('**/*',route=>route.request().url().startsWith(ORIGIN)?route.continue():route.abort());
+ await page.route('**/api/garden-pest-timing-lab?*',route=>{
+  const u=new URL(route.request().url());
+  route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(historyFixture(u.searchParams.get('zip')))});
+ });
  await page.route('**/api/michigan-garden-pest-watch?*',async route=>{
   const url=new URL(route.request().url());
   if(url.searchParams.get('zip')==='48707'){
@@ -73,6 +92,18 @@ async function waitForAnswer(page,pest){await page.waitForFunction(name=>documen
    await page.locator('#observed').selectOption('');
    await page.locator('#use-observation').click();
    await page.waitForFunction(()=>!document.querySelector('.watch-card .pest-status')?.textContent?.includes('You reported'),null,{timeout:6000});
+   assert.ok(await page.locator('#history-load').isVisible());
+   await page.locator('#history-load').click();
+   await page.waitForFunction(()=>document.querySelector('#history-results')?.textContent?.includes('Jul 2'),null,{timeout:7000});
+   assert.equal(await page.locator('#history-results .history-row').count(),5);
+   assert.equal(await page.locator('#history-results tbody tr').count(),5);
+   assert.match(await page.locator('#history-results').innerText(),/not beetle observations/i);
+   assert.match(await page.locator('#history-status').innerText(),/not a forecast/i);
+   await page.locator('#zip').fill('48706');
+   assert.equal(await page.locator('#history-results .history-row').count(),0,'Changing geography must clear old dates');
+   await page.locator('#history-load').click();
+   await page.waitForFunction(()=>document.querySelector('#history-status')?.textContent?.includes('ZIP 48706'),null,{timeout:7000});
+   assert.equal(await page.locator('#history-results tbody tr').count(),5);
    const geometry=await page.evaluate(()=>({pageWidth:document.documentElement.scrollWidth,innerWidth:window.innerWidth,buttonHeight:document.querySelector('.update-button').getBoundingClientRect().height}));
    assert.ok(geometry.pageWidth<=geometry.innerWidth+1,'Horizontal overflow at '+width+': '+JSON.stringify(geometry));
    assert.ok(geometry.buttonHeight>=44,'Mobile/desktop action target minimum 44px');
@@ -114,6 +145,8 @@ async function waitForAnswer(page,pest){await page.waitForFunction(name=>documen
   const n=await noJS.newPage();await n.goto(ORIGIN+'/michigan-garden-pest-watch/',{waitUntil:'domcontentloaded'});
   assert.match(await n.locator('#primary-answer').innerText(),/squash stems/i);
   assert.ok(await n.locator('.nojs-guides').isVisible());
+  assert.ok(await n.locator('#history-heading').isVisible());
+  assert.ok(await n.locator('#history-load').isHidden());
   assert.ok(await n.locator('.primary-sources a').count()>=3);
   await noJS.close();
   console.log('Garden Pest Watch browser QA PASS: 360/390/768/1440px, crop A-B-A, self-report, evidence, mobile overflow, 503 and no-JS. These checks use deterministic fixtures, not live pest/meteorology validation.');
