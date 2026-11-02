@@ -80,6 +80,25 @@ async function waitForAnswer(page,pest){await page.waitForFunction(name=>documen
    await page.screenshot({path:'artifacts/garden-pest-watch-browser/watch-'+width+'.png',fullPage:true,animations:'disabled'});
    await ctx.close();
   }
+  // An unavailable update must remove cards for the *previous* crop, not
+  // leave stale live-looking recommendations on a new selection.
+  const recovery=await browser.newContext({viewport:{width:390,height:820}});
+  const rp=await recovery.newPage();
+  await routeFixtures(rp);
+  await rp.goto(ORIGIN+'/michigan-garden-pest-watch/',{waitUntil:'domcontentloaded'});
+  await waitForAnswer(rp,'Squash vine borer');
+  await rp.route('**/api/michigan-garden-pest-watch?*',route=>route.fulfill({status:503,contentType:'application/json',body:'{"code":"ZIP_LOOKUP_UNAVAILABLE","status":"UNAVAILABLE"}'}));
+  await rp.locator('#crop').selectOption('tomatoes');
+  await rp.locator('#zip').fill('48707');
+  await rp.locator('#watch-form button[type=submit]').click();
+  await rp.waitForFunction(()=>document.querySelector('#watch-source-label')?.textContent.includes('ZIP'),null,{timeout:6000});
+  assert.doesNotMatch(await rp.locator('#watch-cards').innerText(),/Squash vine borer/);
+  assert.match(await rp.locator('#primary-answer').innerText(),/tomato/i);
+  assert.match(await rp.locator('#answer-reason').innerText(),/Census ZIP-area reference could not be verified/);
+  assert.ok(await rp.locator('#observed').isDisabled(),'Do not offer stale suspect choices while API unavailable');
+  await rp.screenshot({path:'artifacts/garden-pest-watch-browser/outage-after-change.png',fullPage:true,animations:'disabled'});
+  await recovery.close();
+
   // Missing API must not claim zero risk, and the HTML field guide survives.
   const broken=await browser.newContext({viewport:{width:390,height:820}});
   const p=await broken.newPage();
