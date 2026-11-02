@@ -4019,7 +4019,7 @@
       "accessConfidence": "NTN-public-arrival-and-2024-managed-overlook-documentation-no-surveyed-route-polyline",
       "sourceReviewed": "2026-11-01",
       "manager": "Noquemanon Trail Network · South Trails",
-      "further": "Michigan GIS #169 matches Travel Marquette Carp River Falls within roughly 18 metres despite mislabeled MORGAN CREEK waterway. It is distinct from Morgan Falls #166 and posted Upper Carp #163 near Ishpeming. Public NTN South Trailhead and safe road crossing documented; 2024 NTN director describes completed Carp River Falls Trail waterfall viewpoint and Raging River connection; Travel Marquette 2025 describes older rough route from Morgan Falls. Exact new-overlook trail geometry and current seasonal access cannot be confirmed; no route polyline, waterfall-coordinate car directions, cliff scramble or live-opening claim. NTN's own South Trails site embeds Trailforks maps, and Trailforks trail #766002 identifies the 2024 Carp River Falls segment (3,363 feet) between Carp Eh Diem and the Raging River bridge, with hiking allowed. Its official embeddable map is shown on explicit visitor request, rather than copying its proprietary geometry or manufacturing the remainder of the arrival route.",
+      "further": "Michigan GIS #169 matches Travel Marquette Carp River Falls within roughly 18 metres despite mislabeled MORGAN CREEK waterway. It is distinct from Morgan Falls #166 and posted Upper Carp #163 near Ishpeming. Public NTN South Trailhead and safe road crossing documented; 2024 NTN director describes completed Carp River Falls Trail waterfall viewpoint and Raging River connection; Travel Marquette 2025 describes older rough route from Morgan Falls. Exact new-overlook trail geometry and current seasonal access cannot be confirmed; no route polyline, waterfall-coordinate car directions, cliff scramble or live-opening claim. NTN's own South Trails site embeds Trailforks maps, and Trailforks trail #766002 identifies the 2024 Carp River Falls segment (3,363 feet) between Carp Eh Diem and the Raging River bridge, with hiking allowed. Its official embeddable map is shown on explicit visitor request, rather than copying its proprietary geometry or manufacturing the remainder of the arrival route. November 1 route-chain follow-up: independent sources establish named steps NTN South Trailhead -> designated M-553 crossing -> Carp Eh Diem -> NTN Carp River Falls Trail #766002 -> waterfall views. NTN's own website embeds Trailforks South Trails region 11149, now offered as an opt-in full-network map. A single Carp Eh Diem full-length 3.0-mile figure and single falls-trail 0.64-mile segment do not establish the complete walk or exact fence location. No road crossing coordinate, driving pin or unverified line is promoted.",
       "winterRoad": "NTN winter grooming does not guarantee the waterfall approach; verify posted restrictions, do not walk near icy cliff edges or use the closed-to-cars road for driving.",
       "verification": {
         "landManager": {
@@ -4070,7 +4070,49 @@
         "presentation": "Visitor opt-in Trailforks embedded segment map; no local copy of proprietary geometry",
         "source": "https://www.trailforks.com/trails/carp-river-falls/",
         "managerMap": "https://www.noquetrails.org/south-trails/",
-        "reviewed": "2026-11-01"
+        "reviewed": "2026-11-01",
+        "networkWayfinding": {
+          "sourceReviewDate": "2026-11-01",
+          "confidence": "named-network-connection-not-complete-routable-walk",
+          "managerNetworkMap": "https://www.noquetrails.org/south-trails/",
+          "managerNetworkRegionId": 11149,
+          "networkMapPresentation": "visitor-initiated original NTN-embedded Trailforks map, no copied provider geometry",
+          "trailheadNamed": "NTN South Trailhead on CR 553",
+          "highwayCrossingPublished": true,
+          "highwayCrossingCoordinateCertified": false,
+          "primaryTrail": {
+            "name": "Carp Eh Diem",
+            "trailforksUrl": "https://www.trailforks.com/trails/carp-eh-diem/",
+            "fullLengthMiles": 3,
+            "fullLengthIsTripDistance": false,
+            "publicStartSource": "https://www.hikingproject.com/trail/7037827/carp-eh-diem",
+            "parkingToTrailConnectionAuthority": "Travel Marquette signed crossing plus source-described west-side trail start"
+          },
+          "fallsConnection": {
+            "name": "Carp River Falls Trail",
+            "trailforksTrailId": 766002,
+            "source": "https://www.trailforks.com/trails/carp-river-falls/",
+            "connectionFrom": "Carp Eh Diem",
+            "destinationAfterSegment": "Raging River bridge",
+            "segmentDistanceMilesApprox": 0.64,
+            "segmentIsEntireVisitorRoute": false
+          },
+          "viewpoint": {
+            "mentionedByNTN": true,
+            "photoPublishedByTourism": true,
+            "preciseRailingPointVerified": false,
+            "source": "https://www.travelmarquette.com/listing/carp-river-ntn-south-trails/514/"
+          },
+          "missing": {
+            "parkingGpsCoordinate": true,
+            "signedCrossingGpsCoordinate": true,
+            "continuousCertifiedParkingToRailingLine": true,
+            "oneWayAndRoundTripDistance": true,
+            "liveWaterfallTrailOpening": true
+          },
+          "noDrivingToWaterfallCoordinate": true,
+          "routePolylineAuthorized": false
+        }
       }
     }
   ]
