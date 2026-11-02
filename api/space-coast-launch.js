@@ -170,7 +170,7 @@ module.exports = async function handler(req, res) {
     if (requestedId && !next) return res.status(404).json({
       ok: false, error: 'This mission is no longer in the current Florida launch list.'
     });
-    const [forecasts, kscViewing, launchWeatherIntelligence] = await Promise.all([
+    const [forecasts, kscViewing, , launchWeatherIntelligence] = await Promise.all([
       weatherForLocations(next, now),
       inspectKscLaunch(next).catch(() => ({
         state: 'unverified', checkedAt: new Date().toISOString(),
