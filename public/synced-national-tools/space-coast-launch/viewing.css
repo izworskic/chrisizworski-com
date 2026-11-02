@@ -523,3 +523,22 @@
 .fl-weather-story[data-stage="monitor-overdue"]{background:linear-gradient(145deg,#563e34,#795c49)}
 .fl-weather-story[data-stage="nasa-reported"]{background:linear-gradient(145deg,#163c56,#285b79)}
 @media(max-width:650px){.fl-weather-story-grid,.fl-weather-story-rules{grid-template-columns:1fr}.fl-weather-story-rules h6{grid-column:1}}
+
+
+/* Spaceflight Now editorial evidence is visually separate from weather GO states. */
+.sfn-reporting-desk{border-radius:15px;background:#f4f8f7;border:1px solid #c9dbd5;padding:clamp(18px,3vw,28px);margin:22px 0 32px}
+.sfn-reporting-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(145px,210px);gap:20px;align-items:start}
+.sfn-reporting-head h2{font-size:clamp(23px,2.9vw,33px);line-height:1.25;margin:7px 0;color:#194957}
+.sfn-reporting-head p{font-size:13px;line-height:1.65;color:#3d6667}
+#sfn-reporting-status{background:#dfece7;border-radius:10px;padding:12px;font-size:11px;line-height:1.55;color:#275557;margin:0}
+.sfn-reporting-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:20px 0}
+.sfn-reporting-item{background:#fff;border:1px solid #d2e2de;border-radius:11px;padding:17px}
+.sfn-reporting-item .sfn-reporting-date{font-size:11px;color:#597373;line-height:1.5;margin:0 0 8px;font-weight:750}
+.sfn-reporting-item a{font-size:15px;font-weight:850;line-height:1.45;color:#1c5362;text-decoration:underline;text-underline-offset:3px}
+.sfn-reporting-item p{font-size:12px;line-height:1.65;color:#496c68;margin:10px 0 0}
+.sfn-reporting-list>.sfn-reporting-empty{grid-column:1/-1;font-size:14px;line-height:1.75;padding:16px;background:#e6f0ec;border-radius:10px;color:#31595b}
+.sfn-reporting-bottom{border-top:1px solid #c6d9d2;padding-top:14px}
+.sfn-reporting-actions{display:flex;flex-wrap:wrap;gap:9px}
+.sfn-reporting-actions a{display:inline-flex;padding:10px 12px;background:#235e67;color:#fff!important;border-radius:8px;font-size:12px;font-weight:800;text-decoration:none}
+#sfn-reporting-note{font-size:11px;line-height:1.7;color:#466763;margin:12px 0 0}
+@media(max-width:650px){.sfn-reporting-head,.sfn-reporting-list{grid-template-columns:1fr}.sfn-reporting-actions a{flex:1 1 160px;text-align:center;justify-content:center}}

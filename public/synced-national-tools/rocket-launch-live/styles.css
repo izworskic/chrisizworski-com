@@ -253,3 +253,19 @@ button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid #dc7
 .rl-official-briefing strong{display:block;color:#163f40;font-size:16px;line-height:1.4}
 .rl-official-briefing p{font-size:13px!important;line-height:1.65!important;color:#355c54!important;margin:7px 0!important}
 #rl-story-when{font-weight:700;color:#295748!important}
+
+
+/* Spaceflight Now evidence desk: journalism, not range-approval UX. */
+.rl-news-desk{border-top:1px solid #cfdfe0}
+.rl-news-layout{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(200px,.65fr);gap:22px;align-items:start}
+.rl-news-eyebrow{text-transform:uppercase;letter-spacing:.07em;font-size:11px;font-weight:800;color:#3e6869}
+.rl-news-stories{display:grid;gap:11px}
+.rl-news-article{background:#f3f7f7;border:1px solid #cedfdd;border-radius:11px;padding:16px 18px;color:#24484b}
+.rl-news-article .rl-news-meta{font-size:11px;font-weight:750;color:#4d7370;margin:0 0 8px}
+.rl-news-article a{color:#194d59;font-weight:850;line-height:1.4;font-size:16px;text-decoration:underline;text-underline-offset:3px}
+.rl-news-note{font-size:12px;line-height:1.65;color:#4e6c69;margin-top:13px}
+.rl-news-sources{display:flex;flex-direction:column;gap:11px;padding:21px;border-radius:12px;background:#153a46;color:#f5faf8}
+.rl-news-sources strong{font-size:17px}
+.rl-news-sources a{font-weight:750;color:#d6f4e5;text-decoration:underline;text-underline-offset:3px;font-size:13px}
+.rl-news-sources small{font-size:11px;color:#c6dcd8;line-height:1.65}
+@media(max-width:700px){.rl-news-layout{grid-template-columns:1fr}.rl-news-sources{padding:17px}}

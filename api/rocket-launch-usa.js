@@ -6,6 +6,7 @@ const { weatherGrade } = require('../lib/space-coast-decision');
 const { skyCoverAt, surfaceSkyAssessment } = require('../lib/space-coast-visibility');
 const { launchWeatherFor } = require('../lib/launch-weather-intelligence');
 const { readWeatherState, missionForecast } = require('../lib/space-coast-official-weather');
+const { editorialDesk } = require('../lib/spaceflight-now-editorial');
 
 const LL2 = 'https://ll.thespacedevs.com/2.3.0/launches/upcoming/';
 const LAUNCH_QUERIES = [
@@ -198,11 +199,12 @@ module.exports = async function handler(req, res) {
     if (selected && selected.region !== region.id) return res.status(400).json({
       ok: false, error: 'This mission belongs to another launch region.'
     });
-    const [weather, launchWeather, texas, officialState] = await Promise.all([
+    const [weather, launchWeather, texas, officialState, independentReporting] = await Promise.all([
       weatherFor(region, selected, now),
       launchWeatherFor(region, selected, (url, headers, timeout) => fetchJson(url, timeout, headers), now),
       region.id === 'texas' ? loadTexasNotice() : Promise.resolve(null),
-      region.id === 'florida' ? readWeatherState() : Promise.resolve(null)
+      region.id === 'florida' ? readWeatherState() : Promise.resolve(null),
+      editorialDesk(selected, schedule.launches, { now })
     ]);
     const access = regionalAccess(region, selected, { starbase: texas });
     return res.status(200).json({
@@ -218,6 +220,7 @@ module.exports = async function handler(req, res) {
       },
       regions,
       access, weather, launchWeather,
+      independentReporting,
       officialLaunchWeather: region.id === 'florida' ? missionForecast(selected, officialState, now) : null,
       coverage: {
         feed: 'Launch Library 2 v2.3 (third-party launch calendar, not range authority)',
@@ -240,6 +243,9 @@ module.exports = async function handler(req, res) {
           checkedAt: launchWeather.checkedAt, note: 'Regional weather proxy, not official launch weather or flight approval.' },
         { name: 'Official range weather and mission notices', url: launchWeather.officialUrl || region.authority,
           note: 'Official flight-weather criteria and weather-rule violation probability must be verified separately.' },
+        { name: 'Spaceflight Now independent reporting', url: independentReporting.scheduleUrl,
+          checkedAt: independentReporting.checkedAt,
+          note: 'Editorial schedule and mission stories; not launch control or confirmation of LL2 target times.' },
         ...(region.id === 'virginia' ? [{ name: 'NASA Wallops sounding rocket schedule',
           url: 'https://www.nasa.gov/wallops-launch-schedule/' }] : []),
         ...(region.id === 'texas' ? [{ name: 'Starbase beach and road status', url: STARBASE,

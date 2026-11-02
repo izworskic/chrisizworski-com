@@ -221,6 +221,35 @@
     select.disabled = !launches.length;
     if (data.selectedLaunchId) select.value = data.selectedLaunchId;
   }
+  function renderIndependentReporting(data) {
+    const desk=data?.independentReporting || {};
+    const current=desk.status==='ok';
+    set('rl-news-checked', current ?
+      'Spaceflight Now RSS checked ' + stamp(desk.checkedAt) :
+      'Spaceflight Now reporting could not be checked just now');
+    const list=$('rl-news-stories');
+    if(!list)return;
+    list.replaceChildren();
+    const articles=Array.isArray(desk.stories)?desk.stories.slice(0,3):[];
+    const trusted=u=>typeof u==='string' &&
+      /^https:\/\/(?:www\.)?spaceflightnow\.com\/20\d\d\/(?:0[1-9]|1[0-2])\/(?:0[1-9]|[12]\d|3[01])\/[a-z0-9-]+\/$/i.test(u);
+    if(current && articles.length)for(const item of articles){
+      if(!trusted(item.url) || typeof item.title!=='string')continue;
+      const card=el('article','rl-news-article');
+      card.appendChild(el('p','rl-news-meta',
+        (item.match==='mission-identifier' ? 'Identified mission' :
+          'Related provider / payload context') +
+        ' · published ' + stamp(item.publishedAt)));
+      const a=anchor(item.url,item.title.slice(0,170));
+      if(a)card.appendChild(a);
+      list.appendChild(card);
+    }
+    if(!list.children.length)list.appendChild(el('p','rl-news-note',
+      current ? 'No distinct, safely matched recent story in the bounded RSS feed. You can still read the full Spaceflight Now schedule.' :
+        'The independent news feed is unavailable. This does not mean there is no reporting or that the launch schedule has changed.'));
+    set('rl-news-note',desk.note || 'Editorial reporting does not confirm the operator’s current launch target or weather approval.');
+  }
+
   function renderAccess(data) {
     const access = data.access || {};
     const sites = $('rl-sites');
@@ -478,6 +507,7 @@
     initMap();
     showRegion(data.region);
     renderMission(data);
+    renderIndependentReporting(data);
     renderSelector(data);
     renderAccess(data);
     renderWeather(data);
