@@ -111,7 +111,7 @@ async function ready(){
    assert.notEqual(await page.locator('#bee-seasonal-total').innerText(),'2805.3 °F·days','Unmapped ZIP must clear previous seasonal heat');
    assert.ok(!(await page.locator('#bee-heat-meter').isVisible()),'Unmapped ZIP must clear old warmth numbers');
    assert.doesNotMatch(await page.locator('#bee-evidence-accumulated').innerText(),/2805.3/,'Unmapped ZIP must not retain last location');
-   assert.match(await page.locator('#bee-evidence-forecast').innerText(),/No verified forecast/);
+   assert.match(await page.locator('#bee-evidence-forecast').innerText(),/forecast could not be verified|No verified forecast/);
    await page.locator('#bee-zip').fill('');
    await page.locator('#bee-check').click();
    await page.waitForFunction(()=>document.querySelectorAll('.bee-day').length===2,null,{timeout:6000});
