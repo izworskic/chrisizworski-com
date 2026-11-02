@@ -12,7 +12,7 @@ const { inspectKscLaunch, CALENDAR: KSC_CALENDAR } =
   require('../lib/space-coast-ksc-viewing');
 const { storeTrustedLaunches } = require('../lib/space-coast-ksc-snapshot');
 const { buildGeographicViewing } = require('../lib/space-coast-geo');
-const { readFreshLaunchList } = require('../lib/space-coast-launch-day');
+const { readNationalSchedule } = require('../lib/rocket-launch-national');
 const { buildMediaDesk } = require('../lib/space-coast-media');
 const { launchWeatherFor } = require('../lib/launch-weather-intelligence');
 const { readWeatherState, missionForecast } = require('../lib/space-coast-official-weather');
@@ -134,7 +134,8 @@ async function weatherForLocations(next, now) {
   }));
 }
 
-module.exports = async function handler(req, res) {
+function createHandler({getSchedule=readNationalSchedule}={}) {
+return async function handler(req, res) {
   if (req.method && req.method !== 'GET') {
     res.setHeader('Allow', 'GET');
     return res.status(405).json({ ok: false, error: 'Method not allowed' });
@@ -151,13 +152,28 @@ module.exports = async function handler(req, res) {
   )) return res.status(400).json({ ok: false, error: 'Invalid launch selection.' });
   try {
     const now = Date.now();
-    const [feed, nps] = await Promise.all([
-      readFreshLaunchList(now).then(shared => shared ?
-        {results:shared.results,sharedScheduleCheckedAt:shared.checkedAt,
-          sharedScheduleSource:shared.source,preNormalized:true} :
-        fetchJson(LAUNCHES, {}, 12000)),
+    const [shared, nps] = await Promise.all([
+      // No direct LL2 fallback: users see the latest bounded source
+      // observation, with its age, or an explicit unavailable state.
+      getSchedule(now),
       loadNpsAlerts(now)
     ]);
+    if(!shared||!Array.isArray(shared.launches))
+      throw new Error('Shared national launch observation unavailable');
+    const floridaGroup=shared.health?.find(h=>h.id==='primary');
+    const floridaFresh=shared.freshness==='recent'&&
+      ['ok','truncated'].includes(floridaGroup?.status);
+    const feed={
+      results:shared.launches.filter(l=>l.region==='florida'),
+      sharedScheduleCheckedAt:floridaGroup?.checkedAt||shared.checkedAt,
+      sharedScheduleSource:shared.source,
+      freshness:floridaFresh?'recent':'stale',
+      complete:floridaFresh&&floridaGroup?.status==='ok',
+      warning:!floridaFresh?
+        'The Florida launch-source group has not been verified recently. Recheck the operator before traveling.':
+        shared.warning,
+      health:shared.health,preNormalized:true
+    };
     if (!Array.isArray(feed?.results)) throw new Error('Launch Library results are missing');
     const launches = (feed.preNormalized ?
       feed.results.filter(l=>isFutureLaunch({
@@ -167,7 +183,7 @@ module.exports = async function handler(req, res) {
       feed.results.filter(isSpaceCoast).filter(l=>isFutureLaunch(l,now))
         .map(normalizeLaunch))
       .sort((a,b)=>Date.parse(a.net)-Date.parse(b.net))
-      .slice(0,8);
+      .slice(0,100);
     const next = requestedId ? launches.find(x => x.id === requestedId) : launches[0] || null;
     if (requestedId && !next) return res.status(404).json({
       ok: false, error: 'This mission is no longer in the current Florida launch list.'
@@ -211,9 +227,10 @@ module.exports = async function handler(req, res) {
     return res.status(200).json({
       ok: true, generatedAt: new Date().toISOString(),
       scheduleCheckedAt:feed.sharedScheduleCheckedAt||new Date().toISOString(),
-      scheduleSource:feed.preNormalized ?
-        'shared-postgres-scheduled-ll2-observation' :
-        'fallback-direct-ll2-cached-15m',
+      scheduleSource:'shared-postgres-national-ll2-v2',
+      scheduleFreshness:feed.freshness||'unknown',
+      scheduleComplete:feed.complete===true,
+      scheduleWarning:feed.warning||null,
       selectedLaunchId: next?.id || null,
       mediaDesk: next ? buildMediaDesk(next, {
         checkedAt: feed.sharedScheduleCheckedAt||new Date().toISOString(),now
@@ -247,7 +264,7 @@ module.exports = async function handler(req, res) {
       sources: [
         { name: 'Launch Library 2', url: 'https://ll.thespacedevs.com/',
           checkedAt:feed.sharedScheduleCheckedAt||new Date().toISOString(),
-          note:'Shared scheduled observation where available, otherwise 15-minute cached fallback. Third-party schedule, not final launch authority.' },
+          note:'Shared 30-minute national collection, never a visitor-triggered LL2 fallback. Third-party schedule, not final launch authority.' },
         { name: 'NPS Canaveral alerts', url: nps.url, checkedAt: nps.checkedAt, note: nps.verified ? 'Official park alerts checked.' : 'Current closure feed unavailable; Playalinda access unverified.' },
         { name: 'National Weather Service', url: 'https://www.weather.gov/mlb/', note: 'Hourly spectator conditions and gridded sky-cover percentage near the viewing areas; not trajectory visibility.' },
         { name: 'NWS launch-range forecast intelligence', url: launchWeatherIntelligence.sourceUrl || 'https://www.weather.gov/mlb/',
@@ -282,5 +299,6 @@ module.exports = async function handler(req, res) {
     });
   }
 };
-
-module.exports._test = { isSpaceCoast, isFutureLaunch, scheduleConfidence, weatherGrade, windMax, loadNpsAlerts, weatherForLocations, nwsFor, nwsSnapshot, fetchJson };
+}
+module.exports=createHandler();
+module.exports._test = { createHandler, isSpaceCoast, isFutureLaunch, scheduleConfidence, weatherGrade, windMax, loadNpsAlerts, weatherForLocations, nwsFor, nwsSnapshot, fetchJson };

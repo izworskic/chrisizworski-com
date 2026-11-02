@@ -204,6 +204,10 @@ test('public API returns checked mission, caches read-only; unobserved mission n
 test('existing signed KSC job can run KSC and LL2 collectors without a new public write endpoint',async()=>{
   let authorized=0,ksc=0,launch=0;
   const run=createKscHandler({
+    nationalReady:()=>true,
+    runNational:async()=>({ok:true,snapshot:{version:2,checkedAt:new Date(NOW).toISOString(),
+      activeCount:2,complete:true,health:[{id:'primary',status:'ok'},{id:'specialist',status:'ok'}],
+      missions:[]}}),
     authorized:async()=>{authorized++;return true;},
     run:async()=>{ksc++;return {ok:true,verifiedPages:2};},
     scheduleReady:()=>true,
@@ -228,7 +232,7 @@ test('browser pulse is source-attributed, accessible, and cannot synthesize laun
   assert.match(html,/id="launch-pulse-countdown"/);
   assert.match(html,/id="launch-pulse-refresh"/);
   assert.match(html,/id="launch-pulse-changes-list"/);
-  assert.match(html,/app\.js\?v=20261102-truth1/);
+  assert.match(html,/app\.js\?v=20261102-truth-v2/);
   assert.match(js,/fetch\(LAUNCH_DAY_API\+/);
   assert.match(js,/const PULSE_REFRESH_MS = 2 \* 60 \* 1000/);
   assert.match(js,/LAUNCH_DAY_SCHEDULE_REFRESH_MS = 5 \* 60 \* 1000/);

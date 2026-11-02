@@ -7,6 +7,7 @@ const { skyCoverAt, surfaceSkyAssessment } = require('../lib/space-coast-visibil
 const { launchWeatherFor } = require('../lib/launch-weather-intelligence');
 const { readWeatherState, missionForecast } = require('../lib/space-coast-official-weather');
 const { editorialDesk } = require('../lib/spaceflight-now-editorial');
+const { readNationalSchedule } = require('../lib/rocket-launch-national');
 
 const LL2 = 'https://ll.thespacedevs.com/2.3.0/launches/upcoming/';
 const LAUNCH_QUERIES = [
@@ -157,7 +158,8 @@ async function weatherFor(region, launch, now = Date.now()) {
     places, comparison: skyCompare(places) };
 }
 
-module.exports = async function handler(req, res) {
+function createHandler({getSchedule=readNationalSchedule}={}) {
+return async function handler(req, res) {
   if (req.method && req.method !== 'GET') {
     res.setHeader('Allow', 'GET');
     return res.status(405).json({ ok: false, error: 'Method not allowed' });
@@ -176,9 +178,13 @@ module.exports = async function handler(req, res) {
   }
   try {
     const now = Date.now();
-    const schedule = await loadSchedule(now);
+    // v2: schedule reads ONLY the signed shared Postgres snapshot.
+    // Never issue public-visitor LL2 requests, including during an outage.
+    const schedule = await getSchedule(now);
+    if(!schedule||!Array.isArray(schedule.launches))
+      throw new Error('Scheduled national launch snapshot unavailable');
     const regions = groupedSchedule(schedule.launches).map(x => ({
-      ...x, launches: x.launches.slice(0, 14),
+      ...x, launches: x.launches.slice(0, 100),
       feedState: x.id === 'florida' || x.id === 'california' ?
         schedule.health.find(h => h.id === 'primary')?.status :
         schedule.health.find(h => h.id === 'specialist')?.status,
@@ -209,6 +215,11 @@ module.exports = async function handler(req, res) {
     const access = regionalAccess(region, selected, { starbase: texas });
     return res.status(200).json({
       ok: true, generatedAt: new Date().toISOString(),
+      scheduleCheckedAt:schedule.checkedAt||null,
+      scheduleSource:schedule.source||'unverified-shared-postgres',
+      scheduleFreshness:schedule.freshness||'unknown',
+      scheduleComplete:schedule.complete===true,
+      scheduleWarning:schedule.warning||null,
       selectedRegion: region.id, selectedLaunchId: selected?.id || null,
       selectedLaunch: selected,
       nationalNext: schedule.launches[0] || null,
@@ -233,10 +244,15 @@ module.exports = async function handler(req, res) {
           'Launch-time precision and official admission, closures and public-weather forecasts are separate evidence layers.',
           'NWS launch-range weather signals are not rocket-specific flight commit rules, a scrub prediction, or official weather approval.'
         ],
-        feedHealth: schedule.health, partial: schedule.isPartial
+        feedHealth: schedule.health, partial: schedule.isPartial,
+        checkedAt:schedule.checkedAt||null,
+        freshness:schedule.freshness||'unknown',
+        complete:schedule.complete===true
       },
       sources: [
-        { name: 'Launch Library 2', url: 'https://ll.thespacedevs.com/', checkedAt: new Date().toISOString() },
+        { name: 'Launch Library 2 (shared national snapshot)', url: 'https://ll.thespacedevs.com/',
+          checkedAt: schedule.checkedAt||null,
+          note:'Nominal 30-minute authenticated collector. Freshness and source pagination are reported separately.' },
         { name: 'Official range / launch notices', url: region.authority },
         { name: 'Official visitor / access conditions', url: region.access },
         { name: 'NWS launch-range area forecast', url: launchWeather.sourceUrl || 'https://www.weather.gov/',
@@ -259,5 +275,7 @@ module.exports = async function handler(req, res) {
     });
   }
 };
-module.exports._test = { LAUNCH_QUERIES, queryUrl, loadSchedule, skyCompare,
+}
+module.exports=createHandler();
+module.exports._test = { LAUNCH_QUERIES, queryUrl, loadSchedule, createHandler, skyCompare,
   weatherFor, loadTexasNotice, emptyWeather };

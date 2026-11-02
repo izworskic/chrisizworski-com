@@ -74,6 +74,7 @@
       case 'snapshot-mismatch':return 'New target not yet reconciled';
       case 'stale':return 'Last cross-check is now stale';
       case 'historical-only':return 'Earlier source snapshot only';
+      case 'awaiting-reconciliation':return 'Next independent check pending';
       case 'source-unavailable':return 'Other calendar unavailable';
       default:return 'Cross-calendar comparison not verified';
     }
@@ -152,17 +153,24 @@
           story.sourceUrl,'Read article'));
       }
       if(!sources.children.length)addEmpty(sources,
-        data?.status==='not-monitored'?
-          'The scheduled source ledger has not sampled this exact mission. Check Spaceflight Now and the launch operator.':
-          'No qualifying LL2 contributor update or launch-ID-indexed news is available from the most recent bounded source check.');
+        data?.status==='not-monitored'||data?.status==='not-returned'?
+          'No current mission-linked source record. Check Spaceflight Now and the launch operator.':
+          data?.updatesStatus==='not-prioritized'||data?.newsStatus==='not-prioritized'?
+          'This mission is in the full schedule ledger, but detailed news and contributor history have not been refreshed this cycle. This is not evidence that no reporting exists.':
+          'No qualifying update or launch-ID-indexed news was returned by the checked feeds.');
     }
     const health=data?.sourceHealth||{};
     const schedule=Array.isArray(health.schedule)?health.schedule:[];
     const failed=schedule.filter(row=>row.status!=='ok').length;
-    const words=['Monitor covers up to four representative upcoming U.S. missions per hourly check.'];
+    const words=[data?.coverage ||
+      'The national observer records every returned coastal launch; in-depth reporting checks rotate across priority missions.'];
     if(failed)words.push(failed+' of '+schedule.length+' LL2 schedule source checks unavailable.');
     if(data?.updatesStatus==='unavailable')words.push('LL2 update history unavailable.');
+    if(data?.updatesStatus==='not-prioritized')words.push('Contributor updates not checked for this mission in this cycle.');
     if(data?.newsStatus==='unavailable')words.push('News matching unavailable.');
+    if(data?.newsStatus==='not-prioritized')words.push('Exact-ID news enrichment pending.');
+    if(data?.sourceGroupComplete===false)
+      words.push('The mission’s LL2 provider group is incomplete or truncated; more launches may exist.');
     if(health.rll?.status==='unavailable')words.push('RocketLaunch.Live check unavailable.');
     words.push('No agreement, absence, or reporting claims establish a launch GO, scrub, entry permission or favorable weather.');
     set('lt-source-health',words.join(' '));

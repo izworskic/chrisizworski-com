@@ -982,12 +982,20 @@
       if (sequence !== loadSequence) return;
       if (!r.ok || !d.ok) throw new Error(d.error || 'Launch data unavailable');
       renderSelector(d);
-      set('loading', 'Latest checked ' + new Date(d.generatedAt).toLocaleString('en-US') + '. Times displayed in Eastern Time.');
+      set('loading',
+        (d.scheduleCheckedAt?
+          'Launch schedule observed '+new Date(d.scheduleCheckedAt).toLocaleString('en-US') :
+          'Launch schedule observation unavailable')+
+        ' · Eastern time. '+(d.scheduleWarning||''));
       const next = d.next;
       const decision = d.nextDecision || {};
-      $('schedule-card').dataset.level = decision.schedule?.level || 'unknown';
-      set('schedule-label', decision.schedule?.label || 'Schedule unavailable');
-      set('schedule-detail', decision.schedule?.detail || '');
+      $('schedule-card').dataset.level = d.scheduleFreshness==='stale'?'unknown':
+        decision.schedule?.level || 'unknown';
+      set('schedule-label', d.scheduleFreshness==='stale'?
+        'Published schedule check overdue — confirm with operator':
+        decision.schedule?.label || 'Schedule unavailable');
+      set('schedule-detail',(d.scheduleWarning?d.scheduleWarning+' ':'')+
+        (decision.schedule?.detail||''));
       $('weather-card').dataset.level = decision.viewingWeather?.level || 'unknown';
       set('weather-label', decision.viewingWeather?.label || 'Weather unavailable');
       set('weather-detail', decision.viewingWeather?.detail || '');
