@@ -74,6 +74,7 @@
       case 'snapshot-mismatch':return 'New target not yet reconciled';
       case 'stale':return 'Last cross-check is now stale';
       case 'historical-only':return 'Earlier source snapshot only';
+      case 'awaiting-reconciliation':return 'Next independent check pending';
       case 'source-unavailable':return 'Other calendar unavailable';
       default:return 'Cross-calendar comparison not verified';
     }
