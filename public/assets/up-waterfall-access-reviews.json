@@ -1739,6 +1739,176 @@
       }
     },
     {
+      "gisObjectId": 54,
+      "name": "Minnewawa Falls",
+      "county": "ONTONAGON",
+      "status": "research-only-federally-named-low-rapids-unverified-access",
+      "publicAccess": "not-established-continuously",
+      "publicationEligible": false,
+      "title": "Minnewawa Falls: access evidence review",
+      "summary": "undefined Federal river designation does not establish a signed waterfall trail. No land-manager-authorized parking area, current road opening, permitted bank approach or safe continuous visitor route was found. A generic tourism listing proposes distant South Boundary Road coordinates that do not match the GIS feature.",
+      "guidance": "Research-only named rapids. Do not use its waterfall point for directions.",
+      "reviewLimitations": "No officially approved parking, continuous legal public route or present-day opening is verified.",
+      "nextEvidence": "Verify land tenure, named river feature and current Ottawa National Forest or other manager permission; locate signed public parking and a complete authorized walking route before ever promoting.",
+      "researchPage": "/upper-peninsula-waterfalls/research/minnewawa-falls-presque-isle/",
+      "sourceLinks": [
+        {
+          "label": "State named waterfall GIS",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "USGS-derived GNIS falls listing",
+          "url": "https://geo.mytopo.com/feature-class/michigan/ontonagon/falls/"
+        },
+        {
+          "label": "Federal Wild and Scenic Rivers Presque Isle River",
+          "url": "https://www.fws.gov/rivers/guidance/river/presque-isle"
+        },
+        {
+          "label": "World Waterfall Database low-rapids classification",
+          "url": "https://www.worldwaterfalldatabase.com/waterfall/Minnewawa-Falls-13223"
+        },
+        {
+          "label": "Conflicting unsourced general waterfall listing",
+          "url": "https://michiganupperpeninsula.com/places-to-visit/waterfalls/"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-11-02",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Feature identity and duplicate names",
+            "status": "documented-geography",
+            "finding": "The Michigan GIS point (46.597361,-89.848944) lies about 55 metres from a GNIS-derived feature at 46.597169,-89.849610. Federal Wild and Scenic River documentation names Minnewawa Falls as a designated river-reach boundary. World Waterfall Database instead describes two low rapids chutes with roughly five feet of total drop, not an established large single-plunge waterfall.",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Land tenure and right-of-way",
+            "status": "not-cleared",
+            "finding": "No current authoritative parcel-specific public permission, surface management, easement or verified pedestrian right-of-way was found.",
+            "source": "https://michiganupperpeninsula.com/places-to-visit/waterfalls/"
+          },
+          {
+            "label": "Historical descriptions versus current access",
+            "status": "documented-not-live",
+            "finding": "Federal river designation does not establish a signed waterfall trail. No land-manager-authorized parking area, current road opening, permitted bank approach or safe continuous visitor route was found. A generic tourism listing proposes distant South Boundary Road coordinates that do not match the GIS feature.",
+            "source": "https://www.fws.gov/rivers/guidance/river/presque-isle"
+          },
+          {
+            "label": "Legal driving and visitor parking",
+            "status": "not-cleared",
+            "finding": "A GIS waterfall coordinate, old county route, forest track or paddling put-in is not a certified public parking place. No lawful signed visitor lot is established.",
+            "source": "https://michiganupperpeninsula.com/places-to-visit/waterfalls/"
+          },
+          {
+            "label": "Continuous public walking path",
+            "status": "not-cleared",
+            "finding": "No verified complete walking corridor to a safe viewpoint; no route polyline may be generated.",
+            "source": "https://geo.mytopo.com/feature-class/michigan/ontonagon/falls/"
+          },
+          {
+            "label": "Current conditions, safety and evidence age",
+            "status": "not-cleared",
+            "finding": "No November 2026 road, trail, gate, seasonal flow or on-site safety inspection. Historical reports do not establish today's opening.",
+            "source": "https://michiganupperpeninsula.com/places-to-visit/waterfalls/"
+          }
+        ]
+      },
+      "visitorDecision": {
+        "decision": "Research-only named rapids. Do not use its waterfall point for directions.",
+        "saferAlternative": "Choose an existing sourced public waterfall such as Bond Falls or the Porcupine Mountains managed Presque Isle River falls.",
+        "confidence": "geographic-feature-source-supported-visitor-access-unverified"
+      }
+    },
+    {
+      "gisObjectId": 57,
+      "name": "Nimikon Falls",
+      "county": "ONTONAGON",
+      "status": "research-only-segmented-rapids-no-certified-walking-route",
+      "publicAccess": "not-established-continuously",
+      "publicationEligible": false,
+      "title": "Nimikon Falls: access evidence review",
+      "summary": "undefined Regional lists identify the name but no signed, maintained hiking route or manager-approved lot. Distant generic Firesteel Road coordinates contradict the GIS and GNIS point. Backcountry land rights, trail status, approach and safe viewpoint remain unverified.",
+      "guidance": "Retain as river-geography research, not an established public waterfall hike.",
+      "reviewLimitations": "No officially approved parking, continuous legal public route or present-day opening is verified.",
+      "nextEvidence": "Confirm watercourse identity and land manager; require signed parking and a continuous legally authorized riverbank walk before promotion.",
+      "researchPage": "/upper-peninsula-waterfalls/research/nimikon-falls-presque-isle/",
+      "sourceLinks": [
+        {
+          "label": "State GIS geographic feature",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "GNIS-derived Nimikon point",
+          "url": "https://waterfallsamerica.com/waterfalls/nimikon-falls-mi-633415/"
+        },
+        {
+          "label": "World Waterfall Database unconfirmed rapids",
+          "url": "https://www.worldwaterfalldatabase.com/waterfall/Nimikon-Falls-13237"
+        },
+        {
+          "label": "Lake Gogebic regional inventory",
+          "url": "https://lakegogebicarea.com/things-to-do/waterfalls/"
+        },
+        {
+          "label": "Conflicting directory location",
+          "url": "https://michiganupperpeninsula.com/places-to-visit/waterfalls/"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-11-02",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Feature identity and duplicate names",
+            "status": "documented-geography",
+            "finding": "Michigan GIS #57 at 46.605242,-89.853424 is about 42 metres from the GNIS-derived 46.604947,-89.853777 record. World Waterfall Database classifies Nimikon as unconfirmed segmented rapids, with an estimated 15-foot drop accumulated around an island rather than a proven 15-foot vertical plunge.",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Land tenure and right-of-way",
+            "status": "not-cleared",
+            "finding": "No current authoritative parcel-specific public permission, surface management, easement or verified pedestrian right-of-way was found.",
+            "source": "https://michiganupperpeninsula.com/places-to-visit/waterfalls/"
+          },
+          {
+            "label": "Historical descriptions versus current access",
+            "status": "documented-not-live",
+            "finding": "Regional lists identify the name but no signed, maintained hiking route or manager-approved lot. Distant generic Firesteel Road coordinates contradict the GIS and GNIS point. Backcountry land rights, trail status, approach and safe viewpoint remain unverified.",
+            "source": "https://www.worldwaterfalldatabase.com/waterfall/Nimikon-Falls-13237"
+          },
+          {
+            "label": "Legal driving and visitor parking",
+            "status": "not-cleared",
+            "finding": "A GIS waterfall coordinate, old county route, forest track or paddling put-in is not a certified public parking place. No lawful signed visitor lot is established.",
+            "source": "https://michiganupperpeninsula.com/places-to-visit/waterfalls/"
+          },
+          {
+            "label": "Continuous public walking path",
+            "status": "not-cleared",
+            "finding": "No verified complete walking corridor to a safe viewpoint; no route polyline may be generated.",
+            "source": "https://waterfallsamerica.com/waterfalls/nimikon-falls-mi-633415/"
+          },
+          {
+            "label": "Current conditions, safety and evidence age",
+            "status": "not-cleared",
+            "finding": "No November 2026 road, trail, gate, seasonal flow or on-site safety inspection. Historical reports do not establish today's opening.",
+            "source": "https://michiganupperpeninsula.com/places-to-visit/waterfalls/"
+          }
+        ]
+      },
+      "visitorDecision": {
+        "decision": "Retain as river-geography research, not an established public waterfall hike.",
+        "saferAlternative": "Choose an existing sourced public waterfall such as Bond Falls or the Porcupine Mountains managed Presque Isle River falls.",
+        "confidence": "geographic-feature-source-supported-visitor-access-unverified"
+      }
+    },
+    {
       "gisObjectId": 58,
       "name": "Chippewa Falls",
       "county": "GOGEBIC",
@@ -1916,6 +2086,253 @@
             "source": "https://www.baragacountytourism.org/attractions"
           }
         ]
+      }
+    },
+    {
+      "gisObjectId": 60,
+      "name": "Rapid River Falls (Ontonagon)",
+      "county": "ONTONAGON",
+      "status": "research-only-rapid-river-versus-deer-creek-waterway-conflict",
+      "publicAccess": "not-established-continuously",
+      "publicationEligible": false,
+      "title": "Rapid River Falls (Ontonagon): access evidence review",
+      "summary": "undefined No authoritative parking, public land approach or designated hiking trail is identified. GNIS locations describe natural features, not legal vehicle stops. A directory's twelve-foot height estimate is not an independently measured fall.",
+      "guidance": "Geographic name supported; stream identity and legal visit unresolved. No driving route.",
+      "reviewLimitations": "No officially approved parking, continuous legal public route or present-day opening is verified.",
+      "nextEvidence": "Resolve DEER CREEK versus RAPID RIVER attribute with authoritative hydrography and land manager, then certify current road status, public parking and a safe continuous footpath; protect the separate Delta County guide.",
+      "researchPage": "/upper-peninsula-waterfalls/research/rapid-river-falls-ontonagon/",
+      "sourceLinks": [
+        {
+          "label": "State GIS source stream field",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "GNIS-derived Rapid River Falls #635651",
+          "url": "https://geo.mytopo.com/feature/michigan/ontonagon/falls/635651/rapid-river-falls/"
+        },
+        {
+          "label": "Lake Gogebic Chamber Rapid River attribution",
+          "url": "https://lakegogebicarea.com/things-to-do/waterfalls/"
+        },
+        {
+          "label": "GNIS-derived Rapid River stream",
+          "url": "https://geo.mytopo.com/feature/michigan/ontonagon/stream/1621343/rapid-river/"
+        },
+        {
+          "label": "Secondary unverified walking and height claims",
+          "url": "https://upper-michigan.com/guide/waterfalls/rapid-river-falls-bergland.html"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-11-02",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Feature identity and duplicate names",
+            "status": "documented-geography",
+            "finding": "The Michigan GIS #60 feature at 46.627099,-89.668576 is about 11 metres from GNIS-derived Rapid River Falls #635651 (46.627152,-89.668691). Despite that near match, the GIS river attribute says DEER CREEK, whereas the Lake Gogebic Chamber puts the falls on RAPID RIVER. Name/location agreement does not settle the waterway conflict. This is not the Rapid River Falls County Park in Delta County.",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Land tenure and right-of-way",
+            "status": "not-cleared",
+            "finding": "No current authoritative parcel-specific public permission, surface management, easement or verified pedestrian right-of-way was found.",
+            "source": "https://upper-michigan.com/guide/waterfalls/rapid-river-falls-bergland.html"
+          },
+          {
+            "label": "Historical descriptions versus current access",
+            "status": "documented-not-live",
+            "finding": "No authoritative parking, public land approach or designated hiking trail is identified. GNIS locations describe natural features, not legal vehicle stops. A directory's twelve-foot height estimate is not an independently measured fall.",
+            "source": "https://lakegogebicarea.com/things-to-do/waterfalls/"
+          },
+          {
+            "label": "Legal driving and visitor parking",
+            "status": "not-cleared",
+            "finding": "A GIS waterfall coordinate, old county route, forest track or paddling put-in is not a certified public parking place. No lawful signed visitor lot is established.",
+            "source": "https://upper-michigan.com/guide/waterfalls/rapid-river-falls-bergland.html"
+          },
+          {
+            "label": "Continuous public walking path",
+            "status": "not-cleared",
+            "finding": "No verified complete walking corridor to a safe viewpoint; no route polyline may be generated.",
+            "source": "https://geo.mytopo.com/feature/michigan/ontonagon/falls/635651/rapid-river-falls/"
+          },
+          {
+            "label": "Current conditions, safety and evidence age",
+            "status": "not-cleared",
+            "finding": "No November 2026 road, trail, gate, seasonal flow or on-site safety inspection. Historical reports do not establish today's opening.",
+            "source": "https://upper-michigan.com/guide/waterfalls/rapid-river-falls-bergland.html"
+          }
+        ]
+      },
+      "visitorDecision": {
+        "decision": "Geographic name supported; stream identity and legal visit unresolved. No driving route.",
+        "saferAlternative": "Choose an existing sourced public waterfall such as Bond Falls or the Porcupine Mountains managed Presque Isle River falls.",
+        "confidence": "geographic-feature-source-supported-visitor-access-unverified"
+      }
+    },
+    {
+      "gisObjectId": 61,
+      "name": "Hidden Falls (Derby Creek)",
+      "county": "ONTONAGON",
+      "status": "research-only-hidden-falls-three-site-location-collision",
+      "publicAccess": "not-established-continuously",
+      "publicationEligible": false,
+      "title": "Hidden Falls (Derby Creek): access evidence review",
+      "summary": "undefined A 2009 Weidman field account mentions a muddy creek crossing and an M-64-area trail start; it is not a documented approach to this Derby Creek GIS location. Generic South Boundary Road directions are for a third site. Public route, parking, title and accurate physical drop identity for #61 remain unverified.",
+      "guidance": "Multiple Hidden Falls locations conflict; no borrowed directions or parking pins permitted.",
+      "reviewLimitations": "No officially approved parking, continuous legal public route or present-day opening is verified.",
+      "nextEvidence": "Reconcile GIS Hidden #61 versus Derby #62 and both other Hidden namesakes using hydrography, owner boundaries and field evidence. Verify signed parking and a lawful continuous trail before giving directions.",
+      "researchPage": "/upper-peninsula-waterfalls/research/hidden-falls-derby-creek/",
+      "sourceLinks": [
+        {
+          "label": "Michigan GIS Hidden Falls Derby Creek",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "Firsthand Weidman Outlet Creek Hidden Falls (distinct site)",
+          "url": "https://www.waterfallsofthekeweenaw.com/weidman-outlet-creek/hidden-falls/"
+        },
+        {
+          "label": "Generic Cascade Creek Hidden location (conflicting)",
+          "url": "https://michiganupperpeninsula.com/places-to-visit/waterfalls/"
+        },
+        {
+          "label": "DNR developed Bond Falls alternative",
+          "url": "https://www.michigan.gov/recsearch/parks/bondfalls"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-11-02",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Feature identity and duplicate names",
+            "status": "documented-geography",
+            "finding": "Michigan GIS #61 locates Hidden Falls on DERBY CREEK at 46.631427,-89.579969. A firsthand Hidden Falls account on WEIDMAN OUTLET CREEK lies about 1.58 kilometres away at 46.64478,-89.57298. A generic CASCADE CREEK Hidden Falls listing is about 33 kilometres away. Derby Falls GIS #62 is about 407 metres from this Hidden GIS point. None of these entries has been proved an alias for another.",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Land tenure and right-of-way",
+            "status": "not-cleared",
+            "finding": "No current authoritative parcel-specific public permission, surface management, easement or verified pedestrian right-of-way was found.",
+            "source": "https://www.michigan.gov/recsearch/parks/bondfalls"
+          },
+          {
+            "label": "Historical descriptions versus current access",
+            "status": "documented-not-live",
+            "finding": "A 2009 Weidman field account mentions a muddy creek crossing and an M-64-area trail start; it is not a documented approach to this Derby Creek GIS location. Generic South Boundary Road directions are for a third site. Public route, parking, title and accurate physical drop identity for #61 remain unverified.",
+            "source": "https://michiganupperpeninsula.com/places-to-visit/waterfalls/"
+          },
+          {
+            "label": "Legal driving and visitor parking",
+            "status": "not-cleared",
+            "finding": "A GIS waterfall coordinate, old county route, forest track or paddling put-in is not a certified public parking place. No lawful signed visitor lot is established.",
+            "source": "https://www.michigan.gov/recsearch/parks/bondfalls"
+          },
+          {
+            "label": "Continuous public walking path",
+            "status": "not-cleared",
+            "finding": "No verified complete walking corridor to a safe viewpoint; no route polyline may be generated.",
+            "source": "https://www.waterfallsofthekeweenaw.com/weidman-outlet-creek/hidden-falls/"
+          },
+          {
+            "label": "Current conditions, safety and evidence age",
+            "status": "not-cleared",
+            "finding": "No November 2026 road, trail, gate, seasonal flow or on-site safety inspection. Historical reports do not establish today's opening.",
+            "source": "https://www.michigan.gov/recsearch/parks/bondfalls"
+          }
+        ]
+      },
+      "visitorDecision": {
+        "decision": "Multiple Hidden Falls locations conflict; no borrowed directions or parking pins permitted.",
+        "saferAlternative": "Choose an existing sourced public waterfall such as Bond Falls or the Porcupine Mountains managed Presque Isle River falls.",
+        "confidence": "geographic-feature-source-supported-visitor-access-unverified"
+      }
+    },
+    {
+      "gisObjectId": 62,
+      "name": "Derby Falls",
+      "county": "ONTONAGON",
+      "status": "research-only-physical-existence-unconfirmed-nearby-hidden-falls",
+      "publicAccess": "not-established-continuously",
+      "publicationEligible": false,
+      "title": "Derby Falls: access evidence review",
+      "summary": "undefined No authoritative photos tied to the precise feature, land title, safe public parking, signed walking route or independent verified physical drop. Nearby Weidman Creek Hidden Falls hiking directions cannot be transferred to Derby Creek.",
+      "guidance": "Unknown physical waterfall and public access status. Research only; no navigation.",
+      "reviewLimitations": "No officially approved parking, continuous legal public route or present-day opening is verified.",
+      "nextEvidence": "Confirm real drop and source-stream naming against field/land-manager evidence; reconcile Hidden #61, parcel boundaries, lawful road stopping and complete public footpath before promotion.",
+      "researchPage": "/upper-peninsula-waterfalls/research/derby-falls-bergland/",
+      "sourceLinks": [
+        {
+          "label": "Michigan GIS Derby Falls",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "Lake Gogebic Chamber Derby Creek listing",
+          "url": "https://lakegogebicarea.com/things-to-do/waterfalls/"
+        },
+        {
+          "label": "World Waterfall Database existence-unknown classification",
+          "url": "https://www.worldwaterfalldatabase.com/waterfall/Derby-Falls-13130"
+        },
+        {
+          "label": "Separate Weidman Outlet Hidden Falls",
+          "url": "https://www.waterfallsofthekeweenaw.com/weidman-outlet-creek/hidden-falls/"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-11-02",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Feature identity and duplicate names",
+            "status": "documented-geography",
+            "finding": "Michigan GIS #62 puts Derby Falls at 46.633606,-89.575682 on Derby Creek. The Lake Gogebic Chamber lists the name northeast of Bergland. World Waterfall Database calls its existence unknown and describes possible seasonal small drops in a different drainage. Hidden Falls GIS #61 is about 407 metres away. A mapped name is not an independent proof of a distinct visible waterfall.",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Land tenure and right-of-way",
+            "status": "not-cleared",
+            "finding": "No current authoritative parcel-specific public permission, surface management, easement or verified pedestrian right-of-way was found.",
+            "source": "https://www.waterfallsofthekeweenaw.com/weidman-outlet-creek/hidden-falls/"
+          },
+          {
+            "label": "Historical descriptions versus current access",
+            "status": "documented-not-live",
+            "finding": "No authoritative photos tied to the precise feature, land title, safe public parking, signed walking route or independent verified physical drop. Nearby Weidman Creek Hidden Falls hiking directions cannot be transferred to Derby Creek.",
+            "source": "https://www.worldwaterfalldatabase.com/waterfall/Derby-Falls-13130"
+          },
+          {
+            "label": "Legal driving and visitor parking",
+            "status": "not-cleared",
+            "finding": "A GIS waterfall coordinate, old county route, forest track or paddling put-in is not a certified public parking place. No lawful signed visitor lot is established.",
+            "source": "https://www.waterfallsofthekeweenaw.com/weidman-outlet-creek/hidden-falls/"
+          },
+          {
+            "label": "Continuous public walking path",
+            "status": "not-cleared",
+            "finding": "No verified complete walking corridor to a safe viewpoint; no route polyline may be generated.",
+            "source": "https://lakegogebicarea.com/things-to-do/waterfalls/"
+          },
+          {
+            "label": "Current conditions, safety and evidence age",
+            "status": "not-cleared",
+            "finding": "No November 2026 road, trail, gate, seasonal flow or on-site safety inspection. Historical reports do not establish today's opening.",
+            "source": "https://www.waterfallsofthekeweenaw.com/weidman-outlet-creek/hidden-falls/"
+          }
+        ]
+      },
+      "visitorDecision": {
+        "decision": "Unknown physical waterfall and public access status. Research only; no navigation.",
+        "saferAlternative": "Choose an existing sourced public waterfall such as Bond Falls or the Porcupine Mountains managed Presque Isle River falls.",
+        "confidence": "geographic-feature-source-supported-visitor-access-unverified"
       }
     },
     {
@@ -2368,6 +2785,91 @@
             "source": "https://www.fs.usda.gov/r09/ottawa"
           }
         ]
+      }
+    },
+    {
+      "gisObjectId": 72,
+      "name": "Deer Creek Falls",
+      "county": "ONTONAGON",
+      "status": "research-only-small-headwater-possibly-intermittent-flow-no-trail",
+      "publicAccess": "not-established-continuously",
+      "publicationEligible": false,
+      "title": "Deer Creek Falls: access evidence review",
+      "summary": "undefined The American Whitewater listing describes speculative paddling put-ins and has no trip reports; the drainage above the falls is only about two square miles. These do not prove a signed, lawful walk, legal parking, actual 30-foot plunge or reliable current flow.",
+      "guidance": "Named headwater drop, but visitor approach and reliable flow unverified; no driving route.",
+      "reviewLimitations": "No officially approved parking, continuous legal public route or present-day opening is verified.",
+      "nextEvidence": "Confirm Deer versus White Deer stream labels, exact land manager, public right-of-way, approved road stopping and continuous safe trail; independently check fall height and seasonality before promoting.",
+      "researchPage": "/upper-peninsula-waterfalls/research/deer-creek-falls-bergland/",
+      "sourceLinks": [
+        {
+          "label": "Michigan GIS named Deer Creek Falls",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "GNIS-derived Deer Creek Falls #1622343",
+          "url": "https://www.anyplaceamerica.com/directory/mi/ontonagon-county-26131/falls/deer-creek-falls-1622343/"
+        },
+        {
+          "label": "Lake Gogebic Chamber location",
+          "url": "https://lakegogebicarea.com/things-to-do/waterfalls/"
+        },
+        {
+          "label": "American Whitewater limitations and small watershed",
+          "url": "https://www.americanwhitewater.org/content/River/view/river-detail/6657/main"
+        },
+        {
+          "label": "Conflicting distant generic waterfall pin",
+          "url": "https://michiganupperpeninsula.com/places-to-visit/waterfalls/"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-11-02",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Feature identity and duplicate names",
+            "status": "documented-geography",
+            "finding": "Michigan GIS #72 at 46.652344,-89.697161 matches GNIS-derived Deer Creek Falls #1622343 (46.652425,-89.697208) within roughly 10 metres. Lake Gogebic Chamber lists the falls northwest of Bergland. American Whitewater recognizes a named drop on White Deer Creek but infers a roughly 30-foot drop from contour intervals, not a measured survey. A generic waterfall-directory pin is around 50 km to the east and must not drive navigation.",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Land tenure and right-of-way",
+            "status": "not-cleared",
+            "finding": "No current authoritative parcel-specific public permission, surface management, easement or verified pedestrian right-of-way was found.",
+            "source": "https://michiganupperpeninsula.com/places-to-visit/waterfalls/"
+          },
+          {
+            "label": "Historical descriptions versus current access",
+            "status": "documented-not-live",
+            "finding": "The American Whitewater listing describes speculative paddling put-ins and has no trip reports; the drainage above the falls is only about two square miles. These do not prove a signed, lawful walk, legal parking, actual 30-foot plunge or reliable current flow.",
+            "source": "https://lakegogebicarea.com/things-to-do/waterfalls/"
+          },
+          {
+            "label": "Legal driving and visitor parking",
+            "status": "not-cleared",
+            "finding": "A GIS waterfall coordinate, old county route, forest track or paddling put-in is not a certified public parking place. No lawful signed visitor lot is established.",
+            "source": "https://michiganupperpeninsula.com/places-to-visit/waterfalls/"
+          },
+          {
+            "label": "Continuous public walking path",
+            "status": "not-cleared",
+            "finding": "No verified complete walking corridor to a safe viewpoint; no route polyline may be generated.",
+            "source": "https://www.anyplaceamerica.com/directory/mi/ontonagon-county-26131/falls/deer-creek-falls-1622343/"
+          },
+          {
+            "label": "Current conditions, safety and evidence age",
+            "status": "not-cleared",
+            "finding": "No November 2026 road, trail, gate, seasonal flow or on-site safety inspection. Historical reports do not establish today's opening.",
+            "source": "https://michiganupperpeninsula.com/places-to-visit/waterfalls/"
+          }
+        ]
+      },
+      "visitorDecision": {
+        "decision": "Named headwater drop, but visitor approach and reliable flow unverified; no driving route.",
+        "saferAlternative": "Choose an existing sourced public waterfall such as Bond Falls or the Porcupine Mountains managed Presque Isle River falls.",
+        "confidence": "geographic-feature-source-supported-visitor-access-unverified"
       }
     },
     {
