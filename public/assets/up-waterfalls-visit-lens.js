@@ -71,7 +71,12 @@ function gather(){
  const when=valid?parsed:new Date();
  const limit=budget.value==='all'?Infinity:Number(budget.value);
  const active=cards.filter(c=>!c.hidden);
- const qualifying=active.map(c=>({c,effort:duration(c),access:guidance(c,when)})).filter(x=>!x.access.excluded&&
+ // An M-28 park-side view and an unfinished falls overlook should not be unsolicited hiking recommendations.
+ // Visitors specifically searching those names may inspect them with the explicit limitations intact.
+ const searched=(document.getElementById('q')?.value||'').trim().toLowerCase();
+ const explicitOnly=new Set(['scott-falls','houghton-douglass-falls']);
+ const qualifying=active.map(c=>({c,effort:duration(c),access:guidance(c,when)})).filter(x=>
+  (!explicitOnly.has(x.c.dataset.id)||searched.includes(x.c.dataset.name.toLowerCase()))&&!x.access.excluded&&
  (Number.isFinite(limit)?x.effort.max!==null&&x.effort.max<=limit:true));
  qualifying.sort((x,y)=>{
   const rank=x=>x.access.level==='check'?0:1;
