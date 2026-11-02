@@ -402,22 +402,13 @@
   if (!dial && statusEl) { var ph0 = phaseFor(new Date()), nx0 = nextMilestone(new Date()); statusEl.textContent = ph0.label + (nx0 ? ': ' + nx0.days + ' days until ' + nx0.ms.label : ''); }
 
   // The explorer script mounts the dated live ledger; the hero reflects what it says, and only that.
-  var fleetLine = document.querySelector('[data-fleet-line]'), lastFleet = null;
+  // Counts live in the map summary and arrivals ledger, not a second hero tally.
+  // Preserve the source-ledger driven harbor illustration without repeating numbers.
+  var lastFleet = null;
   function applyFleet(d) {
     if (!d) return;
     lastFleet = d;
     if (scene) scene.setFleet(d.ships);
-    if (!fleetLine) return;
-    var n = d.ships.length, harbors = {};
-    d.ships.forEach(function (v) { harbors[v.harborId] = 1; });
-    var hc = Object.keys(harbors).length, confirmed = d.ships.filter(function (v) { return v.confirmed; }).length;
-    var label = 'Winter ' + d.season.replace('-', '\u201320');
-    if (!n) { fleetLine.textContent = label + ': no arrivals reported yet' + (d.departed ? '; ' + d.departed + ' departed' : '') + '. The ship above is an illustration.'; }
-    else {
-      var names = d.ships.slice(0, 3).map(function (v) { return v.name; }).join(', ') + (n > 3 ? ' and ' + (n - 3) + ' more' : '');
-      fleetLine.textContent = label + ': ' + n + (n === 1 ? ' ship' : ' ships') + ' reported in winter berths across ' + hc + (hc === 1 ? ' harbor' : ' harbors') + (confirmed ? ' (' + confirmed + ' confirmed)' : '') + ': ' + names + '. Drawn small along the far shore.';
-    }
-    fleetLine.hidden = false;
   }
   document.addEventListener('layup:fleet', function (e) { applyFleet(e.detail); });
   document.addEventListener('fleetspecs:ready', function () { if (lastFleet && scene) scene.setFleet(lastFleet.ships); });
