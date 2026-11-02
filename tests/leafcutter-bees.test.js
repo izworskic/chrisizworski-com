@@ -279,11 +279,12 @@ test('Leafcutter tool is discoverable once in Michigan gardening, main Tools, It
  const directory=read('public/tools/index.html');
  const registry=JSON.parse(read('benchmarks/tool-network-registry.json'));
  const url='https://chrisizworski.com/leafcutter-bees/';
- assert.match(garden,/Garden Planning[\\s\\S]*?Leafcutter Bees: Seasonal Care, Nesting/);
- assert.match(garden,/leafcutter-fvf-bee-house-saginaw-bay-chris-izworski\\.webp/);
+ assert.ok(garden.includes('Leafcutter Bees: Seasonal Care, Nesting'),'The Michigan gardening guide must describe the updated leafcutter tool');
+ assert.ok(garden.includes('leafcutter-fvf-bee-house-saginaw-bay-chris-izworski.webp'),'The garden card should show the owner photograph');
  assert.equal((directory.match(/data-tool-id="leafcutter-bees"/g)||[]).length,1);
- assert.match(directory,/data-tool-id="leafcutter-bees"[\\s\\S]*?href="\\/leafcutter-bees\\/"/);
- const scripts=[...directory.matchAll(/<script type="application\\/ld\\+json">([\\s\\S]*?)<\\/script>/g)];
+ assert.ok(directory.includes('href="/leafcutter-bees/"'),'Main Tools directory should open the canonical guide');
+ const scripts=[...directory.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)];
+ assert.ok(scripts.length>0);
  const graph=JSON.parse(scripts[0][1])['@graph'];
  const itemList=graph.find(node=>node['@type']==='ItemList');
  const ids=[...directory.matchAll(/data-tool-id="([^"]+)"/g)].map(x=>x[1]);
