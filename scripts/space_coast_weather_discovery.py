@@ -13,12 +13,13 @@ from zoneinfo import ZoneInfo
 
 OFFICIAL = "45thweathersquadron.nebula.spaceforce.mil"
 PUBLIC_SOURCES = (
+    ("45ws-home", "https://45thweathersquadron.nebula.spaceforce.mil/", "html"),
     ("45ws-forecast-support", "https://45thweathersquadron.nebula.spaceforce.mil/pages/launchForecastSupport.html", "html"),
     ("45ws-sitemap", "https://45thweathersquadron.nebula.spaceforce.mil/sitemap.xml", "xml"),
     ("45ws-parent-weather", "https://www.patrick.spaceforce.mil/About-Us/Weather/", "html"),
 )
 MAX_LINKS_PER_PAGE = 1000
-MAX_PAGES = 3
+MAX_PAGES = 4
 MAX_SOURCE_BYTES = 650_000
 LOCAL_ZONE = ZoneInfo("America/New_York")
 MONTHS = {dt.date(2000, n, 1).strftime("%b").lower(): n for n in range(1, 13)}
