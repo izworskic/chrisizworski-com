@@ -21,7 +21,7 @@ Provider documentation: 15 unauthenticated calls/hour. A nominal 30-minute two-g
 The separate detailed contributor updates are capped to four missions per 55-minute enrichment cycle; the national schedule is no longer re-fetched for that job, eliminating two previously duplicated calls/hour. Weather and other independent LL2 source reads elsewhere in the repository must be audited and preferably migrated before promising that the *whole site* fits under 15 calls/hour. The shared module does not guarantee every outside workload's total requests.
 
 ## Scope and honesty
-Coverage target is 100% of the **valid returned** orbital launches from the configured source groups. This is NOT every launch in the country. A group exceeding 100 results is explicitly truncated, and short-notice sounding rockets and military range tests may be absent from LL2 entirely. A group that returns all records but has an unexpected provider error remains incomplete.
+Coverage target is 100% of the **valid returned upcoming launches within the next 120 days** from the configured source groups. The horizon moves with each successful check. This is NOT every launch in the country. A group exceeding 100 results is explicitly truncated, and short-notice sounding rockets and military range tests may be absent from LL2 entirely. A group that returns all records but has an unexpected provider error remains incomplete.
 
 Detailed mission-specific contributor updates and news remain prioritized on up to four representative launches per hourly enrichment interval; other missions have complete *calendar change history*, but may not yet have a fresh editorial story. The public API labels non-enriched missions as `not-prioritized` instead of implying no news exists.
 
