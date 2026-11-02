@@ -72,6 +72,22 @@ test('revised launch date invalidates old official percentage but retains dated 
   assert.equal(outcome.povPercent,null);
   assert.equal(outcome.officialUrl,null);
 });
+test('a one-day launch slip never inherits the previous primary-window PoV',()=>{
+  const first=model.ingest(state(),{discoveryStatus:'ok',inspected:1,verified:1,reports:[report()],failed:0},[mission],NOW);
+  const rescheduled={...mission,net:'2026-11-04T12:30:00Z'};
+  assert.equal(model.floridaCalendarDay(rescheduled.net),'2026-11-04');
+  const p=model.missionForecast(rescheduled,first.state,NOW);
+  assert.equal(p.povPercent,null);
+  assert.notEqual(p.status,'mission-matched-current');
+  assert.equal(p.officialUrl,null);
+});
+test('an overdue monitor cannot continue presenting an old official PoV as current',()=>{
+  const first=model.ingest(state(),{discoveryStatus:'ok',inspected:1,verified:1,reports:[report()],failed:0},[mission],NOW);
+  const p=model.missionForecast(mission,first.state,NOW+3*3600000);
+  assert.equal(p.health.status,'overdue');
+  assert.equal(p.povPercent,null);
+  assert.notEqual(p.status,'mission-matched-current');
+});
 test('old and incorrect monitoring sources cannot publish a probability',()=>{
   const first=model.ingest(state(),{discoveryStatus:'partial',inspected:1,verified:0,failed:1,reports:[
     report(90,{sourceMission:'Starlink 10-99'})]},[mission],NOW);
