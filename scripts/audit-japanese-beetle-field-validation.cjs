@@ -2,7 +2,7 @@
 // Exploratory retrospective cross-check across 10 Michigan reference areas and
 // two archived USA-NPN raster seasons. This is NOT a biological accuracy study.
 // The October raster includes retrospective weather; iNaturalist records are
-// opportunistic, not effort-controlled first-emergence field surveys.
+// opportunistic species-level photos, not confirmed-adult, effort-controlled first-emergence field surveys.
 const fs=require('node:fs'),path=require('node:path');
 const E=require('../lib/japanese-beetle-field-evidence.cjs');
 const F=require('../lib/japanese-beetle-forecast.cjs');
@@ -44,7 +44,7 @@ async function evaluate({fetcher=fetch,now=new Date(),sleep=pause}={}){
     base.firstQualifyingSighting=ev.firstObservationDate;
     base.exampleUrls=ev.examples.map(x=>x.url).slice(0,3);
     const comparison=ev.firstObservationDate?E.comparison(ev.firstObservationDate,base.modelAdultDate):null;
-    base.status=ev.firstObservationDate?'OPPORTUNISTIC_PRESENCE_CROSS_CHECK':'NO_COMPARABLE_SIGHTINGS';
+    base.status=ev.firstObservationDate?'OPPORTUNISTIC_SPECIES_PRESENCE_CROSS_CHECK':'NO_COMPARABLE_SIGHTINGS';
     base.dayOffset=comparison?.dayOffset??null;
     base.relation=comparison?.status||'NOT_COMPARABLE';
    }catch(err){base.issue='OBSERVATION_SOURCE_UNAVAILABLE';base.status='UNAVAILABLE'}
@@ -60,7 +60,7 @@ async function evaluate({fetcher=fetch,now=new Date(),sleep=pause}={}){
    earlierDatedRecords:rows.filter(x=>x.relation==='SIGHTING_BEFORE_MODEL').length,
    laterDatedRecords:rows.filter(x=>x.relation==='SIGHTING_AFTER_MODEL').length,
    sameDateRecords:rows.filter(x=>x.relation==='SAME_CALENDAR_DAY').length},
-  methodology:'October 15 archived USA-NPN Japanese beetle adult gridded modeled day-of-year compared with earliest eligible dated, georeferenced iNaturalist research-grade adult photo record within 25 km in the same calendar year. No source-independent absence records, sampling effort, model forecast-issuance backtests, or biological onset ground truth; not a statistical accuracy measure.',
+  methodology:'October 15 archived USA-NPN Japanese beetle adult gridded modeled day-of-year compared with earliest eligible dated, georeferenced iNaturalist research-grade species-level photo record within 25 km in the same calendar year. Adult life stage NOT independently verified. No source-independent absence records, sampling effort, model forecast-issuance backtests, or biological onset ground truth; not a statistical accuracy measure.',
   sourceIds:{official:'https://www.usanpn.org/data/maps/forecasts/Japanese_beetle',observed:'https://www.inaturalist.org/observations?taxon_id=67760&place_id=29'},
   benchmark:{referenceSites:10,seasonsWithVerifiedArchivedSource:2,targetSeasons:3,empiricalForecastAccuracyEstablished:false,
    gate:'FAIL: no systematic non-detection and repeated trap/phenophase series. Model forecast skill cannot be inferred from opportunistic iNaturalist records.'},
