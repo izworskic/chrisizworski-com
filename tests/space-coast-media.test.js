@@ -136,7 +136,7 @@ test('hostile video metadata never injects raw HTML or is accepted as arbitrary 
     ]
   }),NOW);
   assert.equal(m.videos.length,1);
-  assert.equal(m.videos[0].title.includes('<script>'),true);
+  assert.equal(m.videos[0].title.includes('<script>'),false);
   // textContent is used exclusively by UI, never interpolated HTML.
   assert.ok(m.videos[0].url.startsWith('https://www.youtube.com/watch?v='));
   assert.equal(sanitizeVideo({url:'https://not-youtube.com/watch?v=abcdefghijk'}),null);
