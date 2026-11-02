@@ -83,3 +83,12 @@ Minimum 90/100 in each function and weighted >=92, **plus zero critical vetoes**
 - Preserve the existing `#person`, canonical, site discovery, SEO/ad loader and no permanent state infrastructure.
 
 **Prepared:** 2026-11-02. **Release status:** feature branch; unverified until exact-head GitHub workflow and independent production smoke are recorded.
+
+
+## 2026-11-02 source-age correction to operational window
+
+**Issue identified after production verification:** USA-NPN documents **six future days from its source forecast**, not necessarily six future days from a visitor's current date. Our reader already permits exact dated provider layers up to two days old. Therefore a six-day-from-*visitor-now* threshold could overstate the supported near-term guidance by up to two days. This is a scientific reliability bug even when the underlying spatial data are authentic.
+
+**Invariant:** `remainingNearTermForecastDays = 6 - sourceDateLagDays`. The only allowed lag values are integer 0, 1, 2, from the independently checked WCS coverage date. For example with July 1 source viewed July 3, an event on July 9 is eight days from the source, so it must be `PREPARE`, **not** `SCOUT`. Egg-hatch monitoring uses the same remaining window; a past adult threshold does not transform a later egg threshold into a verified short-range forecast.
+
+The source response includes `source.remainingNearTermForecastDays`; the proof desk shows that horizon when displaying active-season forecasts. The original 2026 off-season output is unchanged. Regression tests cover adult and egg boundary differences, source lag 1/2, out-of-range lag, and intact no-observation safeguards. Official USA-NPN source: https://www.usanpn.org/data/maps/forecasts . This correction does **not** assert model error against field observations or any verified pest population.
