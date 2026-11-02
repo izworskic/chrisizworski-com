@@ -121,7 +121,7 @@ test('unrelated mission and absent video stay absent; camera layer is separate a
   assert.deepEqual(CAMERA_CATALOG.map(x=>x.youtubeId),['thfYPsRqxmw','Jm8wRjD3xVA']);
 });
 test('publisher directory links to supported operators only, without inventing official coverage',()=>{
-  assert.match(operatorDirectory('United Launch Alliance').url,/ul a/i.test('no')?'impossible':'ulalaunch.com');
+  assert.match(operatorDirectory('United Launch Alliance').url,/ulalaunch\.com/);
   assert.equal(operatorDirectory('SpaceX').label,'SpaceX launch mission pages');
   assert.equal(operatorDirectory('Blue Origin').url,'https://www.blueorigin.com/missions');
   assert.equal(operatorDirectory('unverified custom startup'),null);
