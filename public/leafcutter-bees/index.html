@@ -74,7 +74,7 @@
 .bee-evidence-truth{font-size:.74rem;color:#546853;line-height:1.5;margin:12px 0 0}
 #bee-result{margin-top:13px}
 #bee-forecast-desk{margin-top:24px}
-#bee-planner .decision-body>.fields{margin-top:5px}
+#bee-planner .decision-body>.fields{margin-top:5px}.hero-grid.no-hero-photo{grid-template-columns:minmax(0,1fr)}
 @media(max-width:760px){.hero h1{font-size:2.5rem}.hero-figure img{max-height:220px;aspect-ratio:16/10}.hero-grid{gap:14px}.bee-nest-year{padding:19px 14px}.bee-nest-year-heading{display:block}.bee-nest-year-heading>a{display:inline-block;margin-top:7px}.bee-nest-year-layout{grid-template-columns:1fr}.bee-year-controls{grid-template-columns:repeat(2,minmax(0,1fr));border-right:0}.bee-year-controls button{min-height:66px;border-right:1px solid #bdc6ae;padding:10px;gap:7px}.bee-year-controls button[aria-pressed="true"]{box-shadow:inset 0 4px 0 #dcb778}.bee-year-controls small{font-size:.68rem}.bee-year-story{padding:17px 13px}.bee-nest-illustration{padding:20px 8px 9px}.bee-nest-tunnel{min-height:56px;border-width:6px}.bee-nest-cell{height:37px;border-width:3px}.bee-evidence-list{grid-template-columns:1fr}.bee-evidence-list>div,.bee-evidence-list>div:first-child{padding:11px 0;border-right:0;border-bottom:1px solid #d3dfcf}.bee-evidence-list>div:last-child{border-bottom:0}.bee-evidence-list p{margin:4px 0}.bee-first-answer{padding:12px 14px}}
 @media(max-width:390px){.bee-year-story-top{display:block}.bee-story-model{display:block;text-align:left;margin-top:2px}.bee-year-controls button{gap:5px;padding:8px}.bee-year-no{font-size:1rem}}
 @media(prefers-reduced-motion:no-preference){.bee-year-controls button{transition:background-color .12s ease}.bee-nest-cell{transition:background-color .16s ease,opacity .16s ease}}
@@ -348,15 +348,25 @@ function renderNestJournal(s,m){
   b.setAttribute('aria-pressed',String(b.getAttribute('data-journey-phase')===s));
  });
 }
-function renderEvidenceObserved(mid){
+function renderEvidenceObserved(mid,m,currentMonth){
  var observed=document.getElementById('bee-evidence-observed');
  if(!observed)return;
  var bloom=flowers.value==='yes'?'You reported plentiful open flowers.':flowers.value==='no'?'You reported few or no open flowers.':'Flowering has not been confirmed.';
  var nesting=nest.value==='full'?' Occupied nesting tubes reported.':nest.value==='empty'?' Clean empty tubes reported.':' No installed nest reported.';
  observed.textContent=bloom+nesting+' These are your reports, not independently observed.';
+ var forecastNote=document.getElementById('bee-evidence-forecast');
  if(!mid){
   document.getElementById('bee-evidence-accumulated').textContent='Michigan seasonal grid not applicable to the selected U.S. region.';
-  document.getElementById('bee-evidence-forecast').textContent='Michigan NWS forecast desk hidden for this region.';
+  forecastNote.textContent='Michigan NWS forecast desk hidden for this region.';
+ }else if(m!==currentMonth){
+  var chosen=new Intl.DateTimeFormat('en-US',{month:'long'}).format(new Date(2026,m,1));
+  forecastNote.textContent='The checked NWS outlook covers the current week, not your '+chosen+' planning scenario. No future-season forecast is inferred.';
+ }else if(liveWeather&&liveWeatherCity===beeLocationKey()&&weatherCheckState==='available'){
+  forecastNote.textContent=liveWeather.fresh===true?(liveWeather.status==='WARM_STRETCH'?'NWS predicts a two-day warm stretch; timing still needs garden evidence.':liveWeather.status==='NO_STRETCH'?'No two-day 75°F+ stretch forecast at this point.':'NWS hourly coverage is insufficient to determine a warm stretch.')+' Issued '+(liveWeather.issuedAt||'time unknown')+'.':'NWS source stale; release timing unverified.';
+ }else if(weatherCheckState==='unavailable'){
+  forecastNote.textContent='The NWS forecast could not be verified for this location.';
+ }else if(weatherCheckState==='not-checked'){
+  forecastNote.textContent='No NWS forecast has been checked for this location.';
  }
 }
 function renderSeason(s){var d=seasons[s];document.getElementById('season-label').textContent=s.charAt(0).toUpperCase()+s.slice(1);document.getElementById('season-head').textContent=d.head;document.getElementById('season-intro').textContent=d.intro;document.getElementById('season-foot').textContent=d.foot;var list=document.getElementById('season-actions');list.textContent='';d.list.forEach(function(t){var li=document.createElement('li');li.textContent=t;list.appendChild(li)});document.querySelectorAll('[data-season]').forEach(function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-season')===s))})}
@@ -425,7 +435,7 @@ document.getElementById('result-title').textContent=t;document.getElementById('r
 var ol=document.getElementById('result-actions');ol.textContent='';items.forEach(function(x){var li=document.createElement('li');li.textContent=x;ol.appendChild(li)});
 renderSeason(s);
 renderNestJournal(s,m);
-renderEvidenceObserved(mid);
+renderEvidenceObserved(mid,m,currentMonth);
 var first=document.getElementById('bee-first-title'),step=document.getElementById('bee-first-action'),meta=document.getElementById('bee-first-meta');
 if(first&&step&&meta){first.textContent=t;step.textContent=items[0]||sub;meta.textContent=m===currentMonth?'Current Michigan-month scenario · local observations still required.':'Selected '+new Intl.DateTimeFormat('en-US',{month:'long'}).format(new Date(2026,m,1))+' planning scenario · not a live weather observation.';}
 }
@@ -613,6 +623,14 @@ beeZip.addEventListener('input',function(){
  invalidateBeeForecast('A ZIP code overrides the city reference. No weather is reused from the previous selection.');
 });
 loadBeeCities();
+// An image error must not leave a blank half-hero; the answer and sources still work.
+if(typeof document.querySelector==='function'){
+ var heroImage=document.querySelector('.hero-figure img');
+ if(heroImage)heroImage.addEventListener('error',function(){
+  var fig=heroImage.closest('figure');if(fig)fig.hidden=true;
+  var grid=document.querySelector('.hero-grid');if(grid)grid.classList.add('no-hero-photo');
+ });
+}
 
 [zone,month,flowers,temp,nest,region,document.getElementById('brood-stage')].forEach(function(el){el.addEventListener('change',render)});
 document.querySelectorAll('[data-path]').forEach(function(b){b.addEventListener('click',function(){path=b.getAttribute('data-path');document.querySelectorAll('[data-path]').forEach(function(q){q.setAttribute('aria-pressed',String(q===b))});render()})});
