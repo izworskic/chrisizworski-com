@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'lib/rocket-launch-truth.js'
+      - 'lib/rocket-launch-national.js'
       - 'api/rocket-launch-truth.js'
       - 'api/space-coast-ksc-watch.js'
       - '.github/workflows/space-coast-ksc-watch.yml'
@@ -12,6 +13,9 @@ on:
       - 'public/synced-national-tools/rocket-launch-live/**'
       - 'public/synced-national-tools/space-coast-launch/**'
       - 'tests/rocket-launch-truth.test.js'
+      - 'tests/rocket-launch-national-v2.test.js'
+      - 'api/rocket-launch-usa.js'
+      - 'api/space-coast-launch.js'
       - 'vercel.json'
   workflow_dispatch:
 
@@ -27,6 +31,8 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           persist-credentials: false
+      - name: Verify full national mission coverage, collector budget and viewer safety
+        run: node --test tests/rocket-launch-national-v2.test.js
       - name: Verify publisher source boundaries and launch truth state machine
         run: node --test tests/rocket-launch-truth.test.js
       - name: Verify existing Florida launch and KSC watch are preserved
