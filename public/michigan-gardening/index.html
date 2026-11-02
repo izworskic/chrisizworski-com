@@ -284,6 +284,11 @@ a:hover { text-decoration: underline; }
   box-shadow: 0 4px 14px -8px rgba(24,46,42,.07);
   transition: box-shadow .16s ease, border-color .16s ease, transform .16s ease;
 }
+.leafcutter-card-photo { display:block; overflow:hidden; border-bottom:1px solid var(--border); }
+.leafcutter-card-photo img { display:block; width:100%; height:148px; object-fit:cover; object-position:center 40%; }
+.leafcutter-card-photo:focus-visible { outline:3px solid #245d4d; outline-offset:-3px; }
+@media(max-width:520px){.leafcutter-card-photo img{height:176px}}
+
 .guide-card:hover {
   border-color: var(--hm-line-strong, #c5d0c7);
   box-shadow: var(--hm-shadow-hover, 0 16px 36px -12px rgba(24,46,42,.2));
@@ -915,13 +920,16 @@ a:hover { text-decoration: underline; }
       </article>
 
       <article class="guide-card">
+        <a class="leafcutter-card-photo" href="/leafcutter-bees/" aria-label="Explore the leafcutter bee seasonal care planner and photo field guide">
+          <img src="/images/leafcutter-fvf-bee-house-saginaw-bay-chris-izworski.webp" width="680" height="470" loading="lazy" decoding="async" alt="Chris Izworski's real leafcutter bee house and nesting block, overlooking Saginaw Bay, Michigan">
+        </a>
         <div class="card-top">
-          <div class="card-badge">Pollinator Field Guide &amp; Tool</div>
-          <h3><a href="/leafcutter-bees/">Leafcutter Bees: Care, Seasons &amp; Bee Houses</a></h3>
+          <div class="card-badge">Interactive Pollinator Planner &amp; Photo Field Guide</div>
+          <h3><a href="/leafcutter-bees/">Leafcutter Bees: Seasonal Care, Nesting &amp; Bee Houses</a></h3>
         </div>
         <div class="card-body">
-          <p>Meet the gentle summer pollinator, try the seasonal care planner, choose safe nesting houses, and learn how to protect occupied tubes through winter. Sources and responsible buying guidance included.</p>
-          <a class="card-link" href="/leafcutter-bees/">Explore leafcutter bees</a>
+          <p>Follow a year inside the nest. Check Michigan ZIP-based NWS forecast warmth and USA-NPN growing-degree-day context, then plan habitat, cocoons and overwintering safely. Includes four real Freighter View Farms bee-house photos and a source-led buying guide.</p>
+          <a class="card-link" href="/leafcutter-bees/">Explore the bee planner</a>
         </div>
       </article>
 
