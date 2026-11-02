@@ -9,17 +9,20 @@ test("Michigan aurora primary query and answer are meaningful before JavaScript"
   const description = html.match(/<meta name="description" content="([^"]+)"/)?.[1];
   const lead = html.match(/<p class="sub">([^<]+)<\/p>/)?.[1];
   const h1 = html.match(/<h1 class="page-title">([^<]+)<\/h1>/)?.[1];
-  assert.equal(title, "Northern Lights Michigan Tonight: Can You See Them?");
+  assert.equal(title, "Northern Lights Michigan Tonight: Verdict | Chris Izworski");
   assert.equal(h1, "Northern Lights Michigan Tonight");
   assert.ok(description && description.length <= 158, "Snippet length must satisfy current governance");
-  assert.match(description, /^Can you see the northern lights in Michigan tonight\?/i);
-  assert.match(description, /NOAA.*NWS.*best viewing hours/);
+  assert.match(description, /^Northern lights Michigan tonight:/i);
+  assert.match(description, /verdict.*best viewing hours.*Upper and Lower Peninsula.*NOAA/i);
   assert.match(lead || "", /^Can you see the northern lights in Michigan tonight\?/i);
   assert.match(lead || "", /Choose your region/);
   assert.match(lead || "", /forecast cannot guarantee visibility/i);
   assert.ok(html.indexOf('<p class="sub">') < html.indexOf('id="aurora-decision"'), "Lead must precede live region verdict");
   assert.match(html, /id="aurora-static-answer"/);
   assert.match(html, /id="regionSelect"/);
+  assert.match(html, /id="tonightsVerdict"[^>]*data-verdict="unavailable"/);
+  assert.match(html, /data-verdict-best/);
+  assert.match(html, /data-verdict-asof/);
 });
 
 test("Aurora intent update preserves canonical, Person entity and data-first controls", () => {

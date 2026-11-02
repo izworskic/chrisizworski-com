@@ -17,7 +17,7 @@ const locations = new Map([
 ]);
 
 test('existing winning statewide intent, title, author and canonical remain protected', () => {
-  assert.match(page, /<title>Northern Lights Michigan Tonight: Can You See Them\?<\/title>/);
+  assert.match(page, /<title>Northern Lights Michigan Tonight: Verdict \| Chris Izworski<\/title>/);
   assert.match(page, /<link rel="canonical" href="https:\/\/chrisizworski\.com\/northern-lights-michigan\/">/);
   assert.match(page, /https:\/\/chrisizworski\.com\/#person/);
   assert.match(page, /<h1 class="page-title">Northern Lights Michigan Tonight<\/h1>/);

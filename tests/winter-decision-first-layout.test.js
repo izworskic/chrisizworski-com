@@ -23,7 +23,7 @@ test("Aurora groups the user's immediate region selection and forecast into one 
  assert.match(zone, /id="localHeadline"/);
  assert.match(zone, /Northern Lights Michigan Tonight/);
  assert.ok(!zone.includes("adsbygoogle"), "No injected ad markup in decision wrapper");
- assert.match(aurora, /<title>Northern Lights Michigan Tonight: Can You See Them\?<\/title>/);
+ assert.match(aurora, /<title>Northern Lights Michigan Tonight: Verdict \| Chris Izworski<\/title>/);
  assert.match(aurora, /<link rel="canonical" href="https:\/\/chrisizworski\.com\/northern-lights-michigan\/">/);
 });
 test("Bridge groups primary question and actual Authority card before Gazette feature",()=>{

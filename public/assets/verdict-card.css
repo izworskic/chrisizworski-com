@@ -1,0 +1,19 @@
+/* Reusable verdict presentation; individual tools own their decisions and visual surroundings. */
+.verdict-card{--verdict-accent:#a6bacb;margin:0 0 20px;padding:20px clamp(17px,3vw,28px);border:1px solid #33516a;border-left:5px solid var(--verdict-accent);border-radius:12px;background:radial-gradient(ellipse at 90% 0%,#1d3b53 0%,#0d2235 62%,#0b1b2d 100%);color:#eef6fc;font:15px/1.55 system-ui,-apple-system,sans-serif;box-shadow:0 8px 22px rgba(8,29,44,.09)}
+.verdict-card[data-verdict="go"]{--verdict-accent:#8ee3b6}
+.verdict-card[data-verdict="worth-a-look"]{--verdict-accent:#f7d08a}
+.verdict-card[data-verdict="no-go"]{--verdict-accent:#d6a5a5}
+.verdict-card[data-verdict="uncertain"]{--verdict-accent:#adc8ea}
+.verdict-card[data-verdict="unavailable"]{--verdict-accent:#a6bacb}
+.verdict-card__eyebrow{font:750 11px/1.5 system-ui,sans-serif;text-transform:uppercase;letter-spacing:.12em;color:#c6d9e6}
+.verdict-card__state{font:650 clamp(23px,4vw,35px)/1.18 Georgia,serif;color:#fff;margin:4px 0 13px}
+.verdict-card__main{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:14px 24px;align-items:start}
+.verdict-card__group{margin:0}
+.verdict-card__label{font:750 11px/1.4 system-ui,sans-serif;color:#c0d8e7;text-transform:uppercase;letter-spacing:.06em}
+.verdict-card__value{display:block;font:600 16px/1.5 system-ui,sans-serif;color:#fff;margin-top:4px}
+.verdict-card__drivers{padding-left:19px;margin:11px 0 4px;color:#e0eef6;font-size:13px;line-height:1.55}
+.verdict-card__drivers li{margin:5px 0}
+.verdict-card__drivers strong{color:#fff}
+.verdict-card__reason{margin:10px 0 0;color:#daebf4;font-size:13px}
+.verdict-card__asof{border-top:1px solid #466073;margin:14px 0 0;padding-top:10px;color:#c2d6e5;font-size:12px}
+@media(max-width:610px){.verdict-card__main{grid-template-columns:1fr}.verdict-card{padding:18px 16px}.verdict-card__state{margin-bottom:12px}}
