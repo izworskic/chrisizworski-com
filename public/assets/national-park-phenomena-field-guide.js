@@ -176,10 +176,10 @@
       permitType: 'lottery',
       permitName: 'Recreation.gov Timed Entry + Bear Lake Corridor',
       permitLead: '2026 park 9 AM–2 PM through Oct 12; Bear Lake 5 AM–6 PM through Oct 18. Sep permits Aug 1; Oct permits Sep 1; last-minute 7 PM MDT prior night.',
-      accessRules: {season: 2026, generalEnd: '2026-10-12', bearLakeEnd: '2026-10-18', future:'UNCONFIRMED', official:'https://www.nps.gov/romo/planyourvisit/timed-entry-permit-system.htm'},
+      accessRules: {season: 2026, generalEnd: '2026-10-12', bearLakeEnd: '2026-10-18', future:'UNCONFIRMED', elkMeadowFootClosure:{start:'2026-09-01',end:'2026-10-31',from:'17:00',to:'10:00',appliesTo:'named meadows only'}, official:'https://www.nps.gov/romo/planyourvisit/timed-entry-permit-system.htm'},
       category: 'wildlife',
       activeIntel: 'Diminishing autumn photoperiod triggers harem-gathering, antler battles, and piercing bugles echoing across Moraine Park and Horseshoe Park meadows.',
-      leadAlert: '2026: September reservations released August 1, October reservations September 1; next-day releases 7 PM MDT. General entry ended October 12; Bear Lake ended October 18. 2027 unconfirmed.',
+      leadAlert: '2026: September reservations released August 1, October reservations September 1; next-day releases 7 PM MDT. General entry ended October 12; Bear Lake ended October 18. Named elk meadows prohibit foot travel 5 PM–10 AM Sep 1–Oct 31; roadside viewing differs. 2027 rules unconfirmed.',
       toolUrl: '/national-tools/elk-rut/',
       toolLabel: 'Rocky Mountain Elk Rut Live Meadow & Bugling Engine'
     },
