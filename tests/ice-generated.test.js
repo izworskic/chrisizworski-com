@@ -17,7 +17,7 @@ function htmlFiles(dir, prefix = "") {
   for (const entry of readdirSync(dir)) {
     const full = path.join(dir, entry);
     if (statSync(full).isDirectory()) found.push(...htmlFiles(full, path.join(prefix, entry)));
-    else if (entry.endsWith(".html")) found.push(path.join(prefix, entry));
+    else if (entry.endsWith(".html")) found.push(path.join(prefix, entry).replace(/\\/g, "/"));
   }
   return found;
 }
