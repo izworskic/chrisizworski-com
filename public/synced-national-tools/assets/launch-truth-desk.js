@@ -169,6 +169,8 @@
     if(data?.updatesStatus==='not-prioritized')words.push('Contributor updates not checked for this mission in this cycle.');
     if(data?.newsStatus==='unavailable')words.push('News matching unavailable.');
     if(data?.newsStatus==='not-prioritized')words.push('Exact-ID news enrichment pending.');
+    if(data?.sourceGroupComplete===false)
+      words.push('The mission’s LL2 provider group is incomplete or truncated; more launches may exist.');
     if(health.rll?.status==='unavailable')words.push('RocketLaunch.Live check unavailable.');
     words.push('No agreement, absence, or reporting claims establish a launch GO, scrub, entry permission or favorable weather.');
     set('lt-source-health',words.join(' '));
