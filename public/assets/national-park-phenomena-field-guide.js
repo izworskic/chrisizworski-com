@@ -172,10 +172,11 @@
       peakLabel: 'Sep 15–Oct 25 (Peak Dusk Bugling Sep 20–Oct 10)',
       permitType: 'lottery',
       permitName: 'Recreation.gov Timed Entry + Bear Lake Corridor',
-      permitLead: 'Timed Entry releases on 1st of prior month at 8 AM MT + next-day release daily at 5 PM MT.',
+      permitLead: '2026 park 9 AM–2 PM through Oct 12; Bear Lake 5 AM–6 PM through Oct 18. Sep permits Aug 1; Oct permits Sep 1; last-minute 7 PM MDT prior night.',
+      accessRules: {season: 2026, generalEnd: '2026-10-12', bearLakeEnd: '2026-10-18', future:'UNCONFIRMED', official:'https://www.nps.gov/romo/planyourvisit/timed-entry-permit-system.htm'},
       category: 'wildlife',
       activeIntel: 'Diminishing autumn photoperiod triggers harem-gathering, antler battles, and piercing bugles echoing across Moraine Park and Horseshoe Park meadows.',
-      leadAlert: '⚠️ Reserve September/October Bear Lake Road timed entry permits on August 1 at 8 AM MT via Recreation.gov.',
+      leadAlert: '2026: September reservations released August 1, October reservations September 1; next-day releases 7 PM MDT. General entry ended October 12; Bear Lake ended October 18. 2027 unconfirmed.',
       toolUrl: '/national-tools/elk-rut/',
       toolLabel: 'Rocky Mountain Elk Rut Live Meadow & Bugling Engine'
     },
@@ -189,10 +190,11 @@
       peakLabel: 'Oct 7–Mar 6 (Astronomical First Solar Beam in U.S.)',
       permitType: 'lottery',
       permitName: 'Recreation.gov Cadillac Summit Vehicle Reservation',
-      permitLead: 'May–Oct vehicle sunrise reservation required (90-day rolling + 2-day rolling). Winter road closed to vehicles (walk/ski only).',
+      permitLead: '2026 Cadillac Summit Road vehicle reservation May 20–Oct 25; sunrise and daytime, 30% released 90 days and 70% two days in advance at 10 AM ET. Other park areas do not require vehicle reservations.',
+      accessRules: {season: 2026, summitStart:'2026-05-20', summitEnd:'2026-10-25', otherParkVehicleReservation:'NOT_REQUIRED', future:'UNCONFIRMED', official:'https://www.nps.gov/acad/planyourvisit/vehicle_reservations.htm'},
       category: 'optical',
       activeIntel: 'Earth axial tilt aligns solar declination so Cadillac Mountain 1,530-ft granite summit catches morning sunlight before any other point in the United States from October to March.',
-      leadAlert: 'Cadillac Summit Road sunrise reservations release 90 days rolling at 10 AM ET on Recreation.gov.',
+      leadAlert: '2026: Cadillac Summit Road vehicle reservations applied May 20–Oct 25, including sunrise and daytime (30% released 90 days ahead, 70% two days ahead). 2027 unconfirmed.',
       toolUrl: '/synced-national-tools/cadillac-mountain-sunrise/',
       toolLabel: 'Cadillac Mountain Solar Alignment & First Sunrise Engine'
     },
@@ -291,7 +293,7 @@
       badge: 'Monsoon Caution & Stable Trade Winds',
       title: 'August: Peak Geyser Cycles & Haleakalā Crater Clear Skies',
       details: 'Yellowstone geysers experience optimal daylight viewing. Haleakalā summit inversions feature crisp 35°F pre-dawn temperatures with sea-of-clouds below.',
-      leadAlert: '⚠️ Watch for afternoon Southwest monsoon flash-flood warnings in Zion Narrows. Book September/October Rocky Mountain Elk Rut permits on August 1 at 8 AM MT.'
+      leadAlert: 'Watch afternoon Zion Narrows flash-flood warnings. For 2026 RMNP, September access reservations released August 1; October released September 1. Confirm any 2027 booking rules with NPS.'
     },
     9: {
       badge: 'Bull Elk Bugling & Fall Chinook Runs',
@@ -313,7 +315,7 @@
     },
     12: {
       badge: 'Winter Solstice Light & Firefall Booking Window',
-      title: 'December: Deep Winter Manatee Herds & Firefall Reservation Drops',
+      title: 'December: Deep Winter Manatees & Future Firefall Planning',
       details: 'Over 500+ manatees gather in Blue Spring transparent waters. Cadillac Mountain greets the earliest sunrise in the nation on the winter solstice.',
       leadAlert: '2027 Yosemite Firefall entrance and viewing rules have not been announced in the cited 2026 NPS guidance. Do not purchase an assumed Firefall vehicle reservation.'
     }
