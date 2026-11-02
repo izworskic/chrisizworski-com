@@ -3,11 +3,13 @@
 // Read-only public mission ledger. No visitor-triggered LL2/SNAPI/RLL calls.
 const { UUID }=require('../lib/space-coast-ksc-snapshot');
 const { ToolState,stateReady }=require('../lib/tool-state');
-const { KEY,publicTruth }=require('../lib/rocket-launch-truth');
+const { KEY,publicTruthV2 }=require('../lib/rocket-launch-truth');
+const { KEY:NATIONAL_KEY }=require('../lib/rocket-launch-national');
 
 function createHandler({
   now=Date.now,
-  getState=async()=>stateReady()?new ToolState().get(KEY):null
+  getState=async()=>stateReady()?new ToolState().get(KEY):null,
+  getNationalState=async()=>stateReady()?new ToolState().get(NATIONAL_KEY):null
 }={}){
   return async function handler(req,res){
     res.setHeader('X-Robots-Tag','noindex, nofollow');
@@ -23,8 +25,10 @@ function createHandler({
     }
     res.setHeader('Cache-Control','public, s-maxage=60, stale-while-revalidate=60');
     try{
-      const state=await getState();
-      const report=publicTruth(state,id,null,now());
+      const [enriched,national]=await Promise.all([
+        getState().catch(()=>null),getNationalState().catch(()=>null)
+      ]);
+      const report=publicTruthV2(enriched,id,null,now(),national);
       return res.status(200).json({
         ok:true,selectedLaunchId:id,...report,
         provenance:'LL2 updates, Spaceflight News API and RocketLaunch.Live next-five, via signed scheduled monitor',
@@ -32,7 +36,7 @@ function createHandler({
       });
     }catch(_){
       return res.status(200).json({
-        ok:true,selectedLaunchId:id,...publicTruth(null,id,null,now()),
+        ok:true,selectedLaunchId:id,...publicTruthV2(null,id,null,now(),null),
         provenance:'Scheduled evidence ledger unavailable',
         caveat:'No external evidence could be read; consult the launch operator. This is not a scrub or cancellation.'
       });
