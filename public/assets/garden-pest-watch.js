@@ -316,9 +316,9 @@ function fieldComparison(observed,modeled){
  const ms=Date.parse(observed+'T12:00:00Z')-Date.parse(modeled+'T12:00:00Z');
  if(!Number.isFinite(ms))return 'Source dates are not comparable.';
  const days=Math.round(ms/86400000);
- if(days<0)return 'The earliest qualifying public sighting is '+Math.abs(days)+' days before the model threshold at the reference point. Nearby observations may differ from the model pixel; this warrants further review, not an accuracy verdict.';
- if(days>0)return 'The earliest qualifying public sighting is '+days+' days after the model threshold. That does not prove the model was on time: earlier beetles could have gone unreported.';
- return 'The earliest qualifying public sighting and modeled stage share a calendar date. A match does not establish forecast accuracy.';
+ if(days<0)return 'The earliest qualifying species-level photo is '+Math.abs(days)+' days before the adult-model threshold at the reference point. The photo record alone does not certify adult life stage. This warrants investigation, not an accuracy verdict.';
+ if(days>0)return 'The earliest qualifying species-level photo is '+days+' days after the adult-model threshold. This is not proof of model timing: adult stage is unverified and earlier beetles could have gone unreported.';
+ return 'The earliest qualifying species photo and modeled adult stage share a calendar date. The photo record does not independently certify adult stage, and this match does not establish forecast accuracy.';
 }
 async function loadFieldEvidence(model,ref){
  const ticket=++fieldSeq,year=model.year;
@@ -332,7 +332,7 @@ async function loadFieldEvidence(model,ref){
   if(!response.ok)throw Error('FIELD_SOURCE_UNAVAILABLE');
   const d=await response.json();
   if(ticket!==fieldSeq)return;
-  if(d?.schema!=='japanese-beetle-field-evidence-v1'||d.year!==year||
+  if(d?.schema!=='japanese-beetle-field-evidence-v1'||d.adultLifeStage!=='NOT_VERIFIED_BY_SPECIES_IDENTIFICATION'||d.year!==year||
   !['DOCUMENTED_PRESENCE','NO_QUALIFYING_RECORDS_IN_SAMPLE'].includes(d.status)||
   !d.observationalEvidence||!Number.isInteger(d.observationalEvidence.inspectedResults)||
   !Array.isArray(d.observationalEvidence.examples))throw Error('FIELD_SOURCE_SCHEMA_INVALID');
@@ -347,7 +347,7 @@ async function loadFieldEvidence(model,ref){
   fieldCaveat.textContent='Independent iNaturalist research-grade photos within 25 km (15.5 miles) of the reference point. '+
     e.inspectedResults+' source record(s) inspected; '+e.qualifyingRecords+' met the conservative public-location filters. '+
     (e.limitedSearch?'More source records exist than this bounded sample; it is not exhaustive. ':'')+
-    'Neither observed first emergence nor egg hatch is established. Checked '+fieldDate(d.checkedAt.slice(0,10))+'.';
+    'The species-level records do not independently verify adult life stage, first emergence or egg hatch. Checked '+fieldDate(d.checkedAt.slice(0,10))+'.';
   const a=el('a','', 'Explore the original records');
   a.href='https://www.inaturalist.org/observations?taxon_id=67760&place_id=29';
   const children=[a];
