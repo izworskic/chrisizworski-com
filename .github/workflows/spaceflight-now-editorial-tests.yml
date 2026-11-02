@@ -1,0 +1,31 @@
+name: Spaceflight Now editorial source regression
+
+on:
+  pull_request:
+    paths:
+      - 'lib/spaceflight-now-editorial.js'
+      - 'api/rocket-launch-usa.js'
+      - 'api/space-coast-launch.js'
+      - 'public/synced-national-tools/rocket-launch-live/**'
+      - 'public/synced-national-tools/space-coast-launch/**'
+      - 'tests/spaceflight-now-editorial.test.js'
+      - '.github/workflows/spaceflight-now-editorial-tests.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - name: Checkout reviewed source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Run source identity and integration regression tests
+        run: |
+          node --test tests/spaceflight-now-editorial.test.js
+          node --test tests/rocket-launch-usa.test.js tests/space-coast-live.test.js tests/space-coast-media.test.js
+          node --test tests/space-coast-launch-day.test.js tests/space-coast-official-weather.test.js
