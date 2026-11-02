@@ -60,7 +60,7 @@
 .visit-proof>div{margin-top:9px;padding:4px 0;line-height:1.55}
 .visit-proof a{color:#1d5263;font-weight:750;text-decoration:underline}
 .visit-lens :is(button,input,select,a,summary):focus-visible{outline:3px solid #b56716;outline-offset:3px}
-@media(max-width:980px){.visit-head{grid-template-columns:1fr}.visit-controls{grid-template-columns:repeat(3,minmax(0,1fr));gap:4px 9px;align-items:center}.visit-controls label,.visit-controls select,.visit-controls input,.visit-controls small{grid-column:auto}.visit-controls label{align-self:end}.visit-controls small{grid-column:3}}
+@media(max-width:980px){.visit-head{grid-template-columns:1fr}.visit-controls{grid-template-columns:minmax(120px,175px) minmax(0,1fr);gap:7px 12px;align-items:center}.visit-controls label,.visit-controls select,.visit-controls input{grid-column:auto}.visit-controls small{grid-column:2}}
 @media(max-width:740px){.visit-picks{grid-template-columns:1fr}.visit-summary{display:block}.visit-summary p{margin-top:8px}.visit-controls{display:grid;grid-template-columns:1fr;gap:6px}.visit-controls label,.visit-controls select,.visit-controls input,.visit-controls small{grid-column:1}.visit-lens{margin:10px 0 20px}.visit-pick{padding:13px}.visit-pick h3{font-size:1.25rem}.visit-intro h2{font-size:1.75rem}}
 @media(prefers-reduced-motion:reduce){.visit-lens *, .visit-lens *::before,.visit-lens *::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 
