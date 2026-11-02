@@ -22,3 +22,36 @@
 .cr-trail-fallback{padding:10px 17px;margin:0;font-size:.81rem;background:#fffdf8;color:#44645f}
 .cr-trail-fallback a{font-weight:750}
 @media(max-width:540px){.cr-map-tabs{padding:0 11px 11px}.cr-map-tabs button{font-size:.8rem;padding:10px 5px}.cr-trail-explainer{padding:12px}.cr-trail-embed{height:405px}}
+
+
+/* Route-evidence walkthrough: verified named network is not a fabricated line to the railing. */
+.cr-map-tabs{grid-template-columns:repeat(3,minmax(0,1fr))}
+.cr-map-tabs button{font-size:.8rem}
+#cr-network-panel[hidden]{display:none!important}
+.cr-approach{margin:30px 0;padding:28px 25px;border-radius:12px;background:linear-gradient(160deg,#eff6ed,#f9f7ed 70%);border:1px solid #c6d7cb;box-shadow:0 8px 22px #142f2d0b}
+.cr-approach-head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:15px;align-items:center;justify-content:space-between}
+.cr-approach-head h2{font:normal clamp(1.8rem,3vw,2.7rem)/1.12 Georgia,serif;margin:6px 0 12px;max-width:770px;color:#193d3f}
+.cr-approach-head p{color:#42625e;max-width:790px;line-height:1.55}
+.cr-approach-head .cr-link{max-width:245px;text-align:center}
+.cr-route-chain{counter-reset:route;display:grid;grid-template-columns:1fr;list-style:none;margin:19px 0 15px;padding:0;gap:0}
+.cr-route-chain li{list-style:none;margin:0;padding:0;position:relative}
+.cr-route-chain li+li:before{content:'';position:absolute;left:25px;top:-5px;height:13px;border-left:2px dashed #8aacaa;z-index:1}
+.cr-route-chain details{border:1px solid #cbdcd3;background:#fffef9;border-radius:7px;overflow:hidden}
+.cr-route-chain li+li{margin-top:9px}
+.cr-route-chain summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:40px minmax(0,1fr) auto;align-items:center;gap:13px;padding:13px 16px}
+.cr-route-chain summary::-webkit-details-marker{display:none}
+.cr-route-chain summary:hover{background:#eef7f1}
+.cr-route-chain summary:focus-visible{outline:3px solid #c98540;outline-offset:-3px}
+.cr-route-chain summary strong{display:block;font-weight:800;color:#194347;font-size:1rem}
+.cr-route-chain summary small{display:block;font-size:.81rem;color:#516f68;margin-top:2px;line-height:1.4}
+.cr-route-index{background:#164c52;color:#fff;display:grid;place-items:center;border-radius:50%;width:36px;height:36px;font-weight:850;font-size:.85rem}
+.cr-route-state{color:#1b5955;font-size:.69rem;letter-spacing:.015em;font-weight:800;border-radius:20px;background:#e3f2e8;padding:7px 9px;max-width:140px;text-align:center}
+.cr-route-limited{background:#f7ead6;color:#7b521f}
+.cr-route-chain details[open]{border-color:#83b9aa}
+.cr-route-chain details[open] summary{background:#edf5ef}
+.cr-route-body{padding:2px 17px 16px 70px;border-top:1px solid #e0ebe4}
+.cr-route-body p{color:#355954;font-size:.89rem;margin:9px 0;line-height:1.58}
+.cr-route-body a{font-weight:750;overflow-wrap:anywhere}
+.cr-route-bottom{border-left:4px solid #bc823c;padding:13px 17px;margin:15px 0 0;background:#fff8e8;color:#4c5e58;font-size:.9rem;line-height:1.55}
+@media(max-width:760px){.cr-approach-head{grid-template-columns:1fr}.cr-approach-head .cr-link{max-width:none;justify-self:start}.cr-approach{padding:19px 15px}}
+@media(max-width:540px){.cr-map-tabs{gap:4px}.cr-map-tabs button{font-size:.73rem;padding:10px 3px;line-height:1.3}.cr-route-chain summary{grid-template-columns:34px minmax(0,1fr);padding:12px 10px;gap:8px}.cr-route-index{width:30px;height:30px;font-size:.78rem}.cr-route-state{grid-column:2;justify-self:start;padding:5px 8px}.cr-route-chain li+li:before{left:24px}.cr-route-body{padding:4px 13px 13px}.cr-approach-head h2{font-size:1.75rem}}
