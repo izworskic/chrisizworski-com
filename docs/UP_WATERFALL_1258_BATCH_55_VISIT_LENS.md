@@ -33,3 +33,6 @@ Run full repository gate, waterfall smoke, name SERP protection, Vercel preview 
 
 ## Next investment after release
 Meaningful expansion should focus on land-manager official route/access records or routinely refreshed closure observations for the most visited locations, not auto-promoting raw waterfall GIS. Avoid unobserved river-to-waterfall flow claims.
+
+## Screenshot-derived critical map repair
+The November 2 desktop screenshot of the pre-fix hub showed literal `API KEY REQUIRED` watermark tiles although the old Chromium test passed solely by finding CARTO tile `src` URLs. The previous waterfall map called CARTO `light_all` without the 2026-required public key. B55 now reuses the **existing** same-origin public `/api/carto-basemap-config` endpoint, which reads `CARTO_BASEMAP_PUBLIC_KEY` from Vercel, then builds keyed CARTO tile URLs at runtime. Browser test does not print or bundle the key. If config cannot be fetched in the static Chromium server or the tiles error, it renders an OpenStreetMap raster fallback with attribution and explicit status. The browser now requires **loaded** image content (`naturalWidth>=200`) rather than a tile `src` alone. This fixes a real base-map readability defect; the waterfall point remains a natural-feature locator, never parking. No key or token was added to source control.
