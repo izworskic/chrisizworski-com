@@ -78,12 +78,15 @@ test('Experience OS field journal follows the same month, decision and seasonal 
  assert.equal(p.nodes['bee-year-display'].attrs['data-phase'],'spring');
  assert.equal(p.nodes['bee-first-title'].textContent,p.title());
  const spring=p.title();
+ const springChapterAction=p.nodes['bee-story-action'].textContent;
  p.journeys[1].handlers.click();
  assert.equal(p.nodes.month.value,'6');
  assert.match(p.nodes['bee-story-title'].textContent,/A small bee/);
- assert.notEqual(p.title(),spring);
+ assert.equal(p.title(),spring,'Habitat-first verdict remains correct without a nest in either season');
+ assert.notEqual(p.nodes['bee-story-action'].textContent,springChapterAction,'Season-specific garden work should change');
  p.journeys[0].handlers.click();
  assert.equal(p.title(),spring);
+ assert.equal(p.nodes['bee-story-action'].textContent,springChapterAction,'A-B-A restores first field-note action');
  p.set('flowers','yes');
  assert.match(p.nodes['bee-evidence-observed'].textContent,/You reported plentiful open flowers/);
  p.set('flowers','unknown');
@@ -92,6 +95,11 @@ test('Experience OS field journal follows the same month, decision and seasonal 
  assert.equal(p.nodes['bee-year-display'].attrs['data-phase'],'fall');
  assert.match(p.nodes['bee-first-meta'].textContent,/scenario/);
  assert.equal(p.nodes['bee-first-title'].textContent,p.title());
+ const previous=p.nodes['bee-evidence-accumulated'].textContent;
+ p.set('region','elsewhere');
+ assert.match(p.nodes['bee-evidence-accumulated'].textContent,/not applicable/);
+ p.set('region','michigan');
+ assert.equal(p.nodes['bee-evidence-accumulated'].textContent,previous,'Returning to Michigan restores the current evidence state');
 });
 test('Experience OS journal has a static, credible no-JavaScript answer and photo credits',()=>{
  assert.match(html,/id="bee-nest-year"/);
