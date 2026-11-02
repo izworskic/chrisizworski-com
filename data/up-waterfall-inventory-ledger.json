@@ -5,7 +5,7 @@
   "policy": "All 161 named source candidates retained even when public access is unknown. GIS locations are waterfall positions, never visitor parking. Do not auto-index.",
   "sourceCount": 197,
   "sourceCandidateCount": 161,
-  "curatedCount": 72,
+  "curatedCount": 73,
   "linkedByExactOid": 66,
   "unresolvedCandidates": 95,
   "entries": [
@@ -5440,7 +5440,30 @@
         "https://www.recreation.gov/camping/poi/238242",
         "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
       ]
+    },
+    {
+      "source": "curated-non-gis",
+      "sourceId": null,
+      "sourceName": "Wright Street Falls",
+      "county": "MARQUETTE",
+      "coordinates": [
+        46.56588,
+        -87.44576
+      ],
+      "river": "DEAD RIVER",
+      "identity": "curated-without-source-oid",
+      "curatedId": "wright-street-falls",
+      "possibleCuratedIds": [],
+      "publication": "verified-access-guide",
+      "access": "public-tourism-NTN-footpath-present-seasonal-status-unverified",
+      "landManager": "Noquemanon Trail Network North Trails; river-hydro property boundaries not assumed",
+      "parkingEvidence": "Travel Marquette describes a public Wright Street dirt lot and smaller closer lot; no GPS lot assigned",
+      "trailEvidence": "Travel Marquette published river-boardwalk/walk near BLP hydro penstock",
+      "sourceUrl": "https://www.travelmarquette.com/outdoor-adventure/waterfalls/",
+      "checked": "2026-11-02",
+      "nextAction": "Check current NTN/BLP closures before travel; do not match McClure Dead River Falls #160 or use this short river trail as proof of upstream private access",
+      "batch": "56-public-access-gap"
     }
   ],
-  "lastBatch": "54"
+  "lastBatch": "56"
 }
