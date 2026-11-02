@@ -315,13 +315,13 @@ function validBeetle(data,crop){
  Number.isFinite(a.dayOfYear)&&Number.isFinite(e.dayOfYear)&&a.dayOfYear>=1&&a.dayOfYear<=366&&
  e.dayOfYear>=a.dayOfYear&&e.dayOfYear<=366&&
  /^\d{4}-\d\d-\d\d$/.test(a.approximateDate||'')&&/^\d{4}-\d\d-\d\d$/.test(e.approximateDate||'')&&
- ['OFF_SEASON','SCOUT','THRESHOLD_PASSED','PREPARE','NOT_APPLICABLE'].includes(data.verdict.status);
+ ['OFF_SEASON','SCOUT','EGG_WINDOW','THRESHOLD_PASSED','PREPARE','NOT_APPLICABLE'].includes(data.verdict.status);
 }
 function renderBeetle(data){
  const mode=data.verdict.status,year=data.year;
  const label={OFF_SEASON:'SOURCE CHECKED · PAST SEASON',SCOUT:'OFFICIAL MODEL · SCOUTING WINDOW',
- THRESHOLD_PASSED:'OFFICIAL MODEL · THRESHOLD EARLIER',PREPARE:'OFFICIAL MODEL · PREPARATION',NOT_APPLICABLE:'NOT A PILOT HOST'};
- beetleState.className='beetle-state'+(mode==='SCOUT'?' is-active':'');
+ EGG_WINDOW:'OFFICIAL MODEL · EGG STAGE NEAR',THRESHOLD_PASSED:'OFFICIAL MODEL · THRESHOLD EARLIER',PREPARE:'OFFICIAL MODEL · PREPARATION',NOT_APPLICABLE:'NOT A PILOT HOST'};
+ beetleState.className='beetle-state'+(mode==='SCOUT'||mode==='EGG_WINDOW'?' is-active':'');
  beetleState.textContent=label[mode]||'OFFICIAL SPECIES MODEL';
  beetleAnswer.textContent=data.verdict.verdict;
  beetleAction.textContent=data.verdict.action;
