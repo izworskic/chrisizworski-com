@@ -284,7 +284,7 @@ return async function handler(req, res) {
       ],
       limits: [
         'Only missions within the 120-day national schedule horizon are included; a missing far-future launch is not necessarily canceled.',
-        'A time listed only to the day, month or year is not an exact local launch time.'
+        'A time listed only to the day, month or year is not an exact local launch time.',
         'Public NPS park alerts do not establish NASA security or launch-specific Playalinda access.',
         'Viewpoint candidates are not guarantees of parking, admission or a clear line of sight.',
         'NWS surface forecasts do not predict orbital trajectory, upper-level cloud interception or launch approval.',
