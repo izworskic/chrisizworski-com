@@ -15,7 +15,7 @@
 .house-grid{grid-template-columns:repeat(2,1fr)}@media(max-width:760px){.bee-seasonal-panel{margin-left:12px;margin-right:12px;padding:15px}.bee-seasonal-metrics{grid-template-columns:1fr}.bee-heat-heading{display:block}.bee-heat-lab{display:block;text-align:left;margin-top:9px}.bee-heat-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.bee-heat-metrics>div:first-child{grid-column:span 2}.bee-heat-meter{padding:16px;margin-left:12px;margin-right:12px}.bee-gdd-bars{gap:4px}.bee-gdd-col span{font-size:.64rem}.menu .container{flex-direction:column;align-items:flex-start;gap:8px;padding:12px 0}.menu nav{max-width:100%;flex-wrap:wrap;justify-content:flex-start;gap:8px 12px}.menu nav a{white-space:normal}.bee-day-strip{grid-template-columns:repeat(4,minmax(0,1fr))}.live-bee-head{display:block}.live-bee-source{text-align:left;margin-top:11px}.live-bee-controls{display:block}.live-bee-controls button{margin-top:10px;width:100%}.research-timeline,.winter-comparison{grid-template-columns:1fr}.house-grid{grid-template-columns:1fr}.hero-grid,.split,.month-details,.compare{grid-template-columns:minmax(0,1fr)}.opening,.triple,.garden-grid,.fields{grid-template-columns:1fr}.buy-grid{grid-template-columns:1fr}.hero{padding-top:25px}.hero-figure{order:-1}.hero-figure img{aspect-ratio:16/10;max-height:280px}.section{margin:43px auto}.month-details{gap:5px}.source-list{columns:1}.menu nav{gap:8px}.decision-head,.decision-body{padding:19px}.month-row button{font-size:.74rem;padding:10px 3px}.choicebar{flex-wrap:wrap}.choicebar button{min-width:140px}}
 /* LEAFCUTTER NEST-YEAR EXPERIENCE: journal, not a weather dashboard clone */
 .hero{padding:27px 0 20px}
-.hero-grid{grid-template-columns:minmax(0,1.16fr) minmax(0,.84fr);gap:27px}
+@media(min-width:761px){.hero-grid{grid-template-columns:minmax(0,1.16fr) minmax(0,.84fr);gap:27px}}
 .hero h1{font-size:clamp(2.15rem,4.7vw,3.85rem);line-height:1.07;letter-spacing:-.038em;max-width:700px}
 .hero .intro{font-size:1.05rem;line-height:1.62}
 .hero-figure img{aspect-ratio:1.05;max-height:430px;border-radius:10px 90px 10px 10px}
@@ -318,7 +318,7 @@
 'use strict';
 var zone=document.getElementById('zone'),month=document.getElementById('month'),flowers=document.getElementById('flowers'),temp=document.getElementById('temp'),nest=document.getElementById('nest'),region=document.getElementById('region');
 if(!zone||!month)return;month.value=String(Number(new Intl.DateTimeFormat('en-US',{timeZone:'America/Detroit',month:'numeric'}).format(new Date()))-1);
-var path='wild',liveWeather=null,liveWeatherCity=null,weatherRequest=0,weatherCheckState='not-checked';
+var path='wild',liveWeather=null,liveWeatherCity=null,weatherRequest=0,weatherCheckState='not-checked',seasonalEvidenceText='No season-to-date thermal evidence checked for this location.';
 var beeCity=document.getElementById('bee-location'),beeZip=document.getElementById('bee-zip'),beeWeatherButton=document.getElementById('bee-check');
 function beeLocationKey(){var zip=beeZip.value.trim();return zip?'zip:'+zip:'city:'+beeCity.value;}
 var spring=['Inspect last year\u2019s occupied tubes without opening unknown brood. Rotate in fresh clean tubes, or use a sheltered emergence box for old occupied tubes.','Put out clean dry nest houses before the nesting season; MSU suggests late March to mid-April for Michigan.','Plant or maintain a continuous sequence of flowering plants. Never spray occupied nests.'];
@@ -368,6 +368,7 @@ function renderEvidenceObserved(mid,m,currentMonth){
  var nesting=nest.value==='full'?' Occupied nesting tubes reported.':nest.value==='empty'?' Clean empty tubes reported.':' No installed nest reported.';
  observed.textContent=bloom+nesting+' These are your reports, not independently observed.';
  var forecastNote=document.getElementById('bee-evidence-forecast');
+ if(mid)document.getElementById('bee-evidence-accumulated').textContent=seasonalEvidenceText;
  if(!mid){
   document.getElementById('bee-evidence-accumulated').textContent='Michigan seasonal grid not applicable to the selected U.S. region.';
   forecastNote.textContent='Michigan NWS forecast desk hidden for this region.';
@@ -477,13 +478,18 @@ function setWeatherStatus(head,detail,level){
  var p=document.createElement('p');p.textContent=detail;
  e.appendChild(h);e.appendChild(p);
 }
+function updateSeasonalNarrative(message){
+ seasonalEvidenceText=message;
+ var lane=document.getElementById('bee-evidence-accumulated');
+ if(lane&&region.value==='michigan')lane.textContent=message;
+}
 function setSeasonalEvidence(data,kind){
  var panel=document.getElementById('bee-seasonal-panel');if(!panel)return;
- if(kind==='reset'){panel.hidden=true;var reset=document.getElementById('bee-evidence-accumulated');if(reset)reset.textContent='No season-to-date thermal evidence checked for this location.';return;}
+ if(kind==='reset'){panel.hidden=true;updateSeasonalNarrative('No season-to-date thermal evidence checked for this location.');return;}
  panel.hidden=false;
  var total=document.getElementById('bee-seasonal-total'),anom=document.getElementById('bee-seasonal-anomaly'),week=document.getElementById('bee-seasonal-week'),note=document.getElementById('bee-seasonal-note');
- if(kind==='loading'){total.textContent=anom.textContent=week.textContent='…';note.textContent='Reading official accumulated heat for this location…';var e=document.getElementById('bee-evidence-accumulated');if(e)e.textContent='Checking the official USA-NPN heat grid…';return;}
- if(!data||kind!=='ready'){total.textContent=anom.textContent=week.textContent='—';note.textContent='Seasonal heat data are currently unavailable for this area. No comparison is assumed.';var e=document.getElementById('bee-evidence-accumulated');if(e)e.textContent='USA-NPN heat evidence unavailable. No warm-season status inferred.';return;}
+ if(kind==='loading'){total.textContent=anom.textContent=week.textContent='…';note.textContent='Reading official accumulated heat for this location…';updateSeasonalNarrative('Checking the official USA-NPN heat grid…');return;}
+ if(!data||kind!=='ready'){total.textContent=anom.textContent=week.textContent='—';note.textContent='Seasonal heat data are currently unavailable for this area. No comparison is assumed.';updateSeasonalNarrative('USA-NPN heat evidence unavailable. No warm-season status inferred.');return;}
  total.textContent=Number(data.totalGdd50F).toFixed(1)+' °F·days';
  var hasComparison=data.status==='AVAILABLE'&&Number.isFinite(data.comparison?.anomalyGdd50F);
  var delta=hasComparison?data.comparison.anomalyGdd50F:null;
@@ -491,7 +497,7 @@ function setSeasonalEvidence(data,kind){
  week.textContent=data.weekChangeGdd50F===null?'Not available':'+'+Number(data.weekChangeGdd50F).toFixed(1)+' °F·days';
  var compare=hasComparison?(delta>5?'More base-50 warmth than the reference average.':delta< -5?'Less base-50 warmth than the reference average.':'Near the reference average.'):'The 1991–2020 anomaly has no published data for this grid cell; no average-year comparison is available.';
  note.textContent='USA-NPN reference date: '+data.asOfDate+'. '+compare+' Seasonal weather context does not confirm bee activity or open flowers.';
- var evidence=document.getElementById('bee-evidence-accumulated');if(evidence)evidence.textContent=Number(data.totalGdd50F).toFixed(1)+' °F·days modeled since January 1 (as of '+data.asOfDate+'). '+(hasComparison?'Reference anomaly '+(delta>0?'+':'')+Number(delta).toFixed(1)+' °F·days.':'Historical anomaly not mapped here.')+' Not a bloom observation.';
+ updateSeasonalNarrative(Number(data.totalGdd50F).toFixed(1)+' °F·days modeled since January 1 (as of '+data.asOfDate+'). '+(hasComparison?'Reference anomaly '+(delta>0?'+':'')+Number(delta).toFixed(1)+' °F·days.':'Historical anomaly not mapped here.')+' Not a bloom observation.');
 }
 async function loadBeeSeasonal(key,raw,city,sequence){
  setSeasonalEvidence(null,'loading');
