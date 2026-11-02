@@ -758,7 +758,6 @@
       set('pad', next?.pad || 'Not announced');
       set('provider', next?.provider || 'Not announced');
       renderList(d.upcoming || []);
-      renderMissionMedia(d.mediaDesk || null);
       renderWeather(d.viewingWeatherByArea || []);
       renderAccess(d);
       renderKsc(d);
@@ -769,6 +768,7 @@
       selectedTargetAt=next&&['minute','second'].includes(next.netPrecision)?
         Date.parse(next.net):null;
       activeMissionId = d.selectedLaunchId || null;
+      renderMissionMedia(d.mediaDesk || null);
       // Same trusted, cached launch response powers the GIS layer; its listener
       // cannot fetch another LL2 schedule or infer mission-specific closures.
       document.dispatchEvent(new CustomEvent('space-coast:launch-loaded', {
