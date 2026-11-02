@@ -18,11 +18,11 @@ test('batch54: source identity and hydropower telemetry never masquerade as an o
   const path='/upper-peninsula-waterfalls/research/'+slug+'/';assert.equal(v.researchPage,path);assert.ok(!sitemap.includes(path));
   const page=fs.readFileSync('public'+path+'index.html','utf8');assert.match(page,/noindex,follow/);assert.match(page,/NOT CLEARED FOR AUTOMATED VISITOR NAVIGATION/);assert.match(page,/Built by Chris Izworski/);
   const desc=(page.match(/<meta name="description" content="([^"]*)">/)||[])[1];assert.ok(desc&&desc.length<=158,'meta length '+id);
-  const title=(page.match(/<title>([^<]*)<\\/title>/)||[])[1];assert.ok(title&&title.length<=60,'title length '+id);
+  const title=page.split('<title>')[1]?.split('</title>')[0];assert.ok(title&&title.length<=60,'title length '+id);
   const tag='<script type="application/ld+json">',at=page.indexOf(tag);assert.ok(at>=0);
   const schema=JSON.parse(page.slice(at+tag.length,page.indexOf('</script>',at)));assert.equal(schema['@type'],'WebPage');
   assert.equal(schema.author['@id'],'https://chrisizworski.com/#person');assert.equal(schema.publisher['@id'],'https://chrisizworski.com/#person');
-  assert.doesNotMatch(page,/"@type":"TouristAttraction"/);assert.doesNotMatch(page,/href="https:\/\/www.google.com\/maps\/dir/);
+  assert.doesNotMatch(page,/"@type":"TouristAttraction"/);assert.ok(!page.includes('https://www.google.com/maps/dir/'));
  }
  assert.equal(V.records.length,97);assert.equal(R.counts.curatedTotal,72);assert.equal(R.counts.exactIdMatched,66);assert.equal(R.counts.pending,95);assert.equal(L.unresolvedCandidates,95);assert.equal(Q.candidates.length,95);
  assert.match(R.candidates.find(x=>x.gisObjectId===8).sourceNotes,/496 metres/);assert.match(R.candidates.find(x=>x.gisObjectId===8).sourceNotes,/884 metres/);
