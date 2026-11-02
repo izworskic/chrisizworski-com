@@ -70,6 +70,28 @@ try{
     await page.locator('#visit-date').fill('2026-11-02');
     assert.ok(await page.locator('.visit-pick').count()>0);
   });
+  await run('visit lens: park-side-only and unfinished viewing do not masquerade as cleared routes',async()=>{
+    await page.locator('#visit-region').selectOption('Pictured Rocks / Munising');
+    await page.locator('#visit-budget').selectOption('30');
+    await page.locator('#q').fill('Scott Falls');
+    assert.equal(await page.locator('[data-visit-pick="scott-falls"]').count(),1);
+    assert.match(await page.locator('#visit-picks').innerText(),/Do not cross the highway|park side of busy M-28/i);
+    await page.locator('#q').fill('');
+    await page.locator('#visit-region').selectOption('all');
+    assert.equal(await page.locator('[data-visit-pick="scott-falls"]').count(),0,'other safer 30-minute options should rank ahead');
+    await page.locator('#visit-region').selectOption('Western U.P.');
+    await page.locator('#visit-budget').selectOption('90');
+    await page.locator('#q').fill('Houghton-Douglass');
+    assert.match(await page.locator('#visit-picks').innerText(),/phased development|accessible falls overlook is not verified/i);
+    await page.locator('#q').fill('');
+    await page.locator('#visit-region').selectOption('all');
+    await page.locator('#visit-budget').selectOption('60');
+  });
+  await run('visit lens: future dates identify superseded historic source window',async()=>{
+    await page.locator('#visit-date').fill('2028-02-10');
+    assert.match(await page.locator('#visit-verdict').innerText(),/beyond this source review period|historical/i);
+    await page.locator('#visit-date').fill('2026-11-02');
+  });
   await run('visit lens: 360px and 1440px layout has no horizontal overflow',async()=>{
     for(const width of [360,768,1440]){
       await page.setViewportSize({width,height:880});
