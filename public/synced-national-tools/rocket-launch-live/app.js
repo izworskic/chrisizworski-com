@@ -431,6 +431,17 @@
     if (portal) target.appendChild(portal);
     if (d.health?.checkedAt) target.appendChild(el('small', '',
       'Discovery checked ' + stamp(d.health.checkedAt) + ' · ' + d.health.status));
+    const upstream = (d.health?.sourceChecks || []).filter(x =>
+      ['45ws-forecast-support','45ws-sitemap','45ws-parent-weather'].includes(x.id));
+    const unavailable = upstream.filter(x => x.status === 'unavailable').length;
+    if (unavailable) target.appendChild(el('small','',
+      'Direct official-page checks unavailable: ' + unavailable + ' of ' + upstream.length +
+      '. Coverage is incomplete.'));
+    else if (upstream.length && !upstream.some(x => x.links > 0))
+      target.appendChild(el('small','','Official pages listed no forecast PDFs during the last check.'));
+    if (matched) target.appendChild(el('small','',
+      d.discoveredVia === '45ws-public-page' ? 'Discovered on a first-party weather page.' :
+      'Official PDF verified; link discovery does not establish forecast coverage.'));
   }
 
   function syncUrl(r, l) {
