@@ -42,7 +42,7 @@ const experimentLedger = JSON.parse(await read("benchmarks/growth-experiments.js
 check("Historical high-priority cohort retained; experiments are retired", frozen.length >= 5 && experimentLedger.status === "retired" && experimentLedger.operatingMode === "ship-and-observe" && experimentLedger.activeExperiments.length === 0, 10, `${frozen.length} historical pages`);
 
 const exactTitles = {
-  "/northern-lights-michigan/": ["public/northern-lights-michigan/index.html", "Northern Lights Michigan Tonight: Can You See Them?"],
+  "/northern-lights-michigan/": ["public/northern-lights-michigan/index.html", "Northern Lights Michigan Tonight: Verdict | Chris Izworski"],
   "/soo-locks/": ["public/soo-locks/index.html", "Soo Locks Schedule Today: Ships &amp; Map | Chris Izworski"],
   "/when-to-plant-tomatoes-michigan/": ["public/when-to-plant-tomatoes-michigan/index.html", "When to Plant Tomatoes in Michigan: 2026 Dates by Region"],
   "/michigan-frost-dates/": ["public/michigan-frost-dates/index.html", "Michigan Last Frost Dates by City: 2026 Planting Calendar"],
