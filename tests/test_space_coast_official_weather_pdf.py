@@ -1,7 +1,13 @@
 """Offline official-source parser regression tests; no network access required."""
 import importlib.util
+import os
+import sys
 import unittest
 from unittest.mock import patch
+
+SCRIPTS=os.path.abspath('scripts')
+if SCRIPTS not in sys.path:
+    sys.path.insert(0,SCRIPTS)
 
 SPEC = importlib.util.spec_from_file_location(
     "official_weather_worker", "scripts/monitor-space-coast-official-weather.py"

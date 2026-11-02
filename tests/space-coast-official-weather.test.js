@@ -108,6 +108,40 @@ test('old and incorrect monitoring sources cannot publish a probability',()=>{
   assert.equal(model.missionForecast(mission,first.state,NOW).povPercent,null);
   assert.equal(model.publicHealth(first.state,NOW+2*3600000).status,'overdue');
 });
+test('discovery route and source-health status cannot be injected through the API',()=>{
+  const clean = model.cleanSourceHealth([
+    {id:'45ws-forecast-support',status:'unavailable',links:0},
+    {id:'evil-host',status:'links-found',links:500},
+    {id:'45ws-sitemap',status:'links-found',links:3},
+    {id:'45ws-sitemap',status:'unavailable',links:5},
+    {id:'ll2-updates',status:'checked',links:-99}
+  ]);
+  assert.deepEqual(clean,[
+    {id:'45ws-forecast-support',status:'unavailable',links:0},
+    {id:'45ws-sitemap',status:'links-found',links:3},
+    {id:'ll2-updates',status:'checked',links:0}
+  ]);
+  const first=model.ingest(state(),{
+    discoveryStatus:'partial',inspected:1,verified:1,failed:0,
+    sourceHealth:clean,reports:[report(60,{discoveredVia:'45ws-public-page'})]
+  },[mission],NOW);
+  assert.equal(first.state.sourceHealth.length,3);
+  const p=model.missionForecast(mission,first.state,NOW);
+  assert.equal(p.discoveredVia,'45ws-public-page');
+  assert.equal(p.health.sourceChecks[0].status,'unavailable');
+  assert.equal(p.health.status,'partial');
+  assert.equal(model.normalizeReport(report(60,{discoveredVia:'untrusted-html'}),mission,NOW).discoveredVia,'unspecified');
+});
+test('rediscovery through an official first-party page refreshes evidence without inventing a revision',()=>{
+  const first=model.ingest(state(),{discoveryStatus:'ok',inspected:1,verified:1,failed:0,
+    reports:[report(60,{discoveredVia:'ll2-update-link'})]},[mission],NOW);
+  const later=model.ingest(first.state,{discoveryStatus:'ok',inspected:1,verified:1,failed:0,
+    reports:[report(60,{discoveredVia:'45ws-public-page'})]},[mission],NOW+3600000);
+  assert.equal(later.changes,0);
+  const p=model.missionForecast(mission,later.state,NOW+3600000);
+  assert.equal(p.discoveredVia,'45ws-public-page');
+  assert.equal(p.timeline.length,1);
+});
 test('GET route never writes, POST requires a valid signed workflow token',async()=>{
   let writes=0,stored=null;
   const db={get:async()=>stored,set:async(k,v)=>{writes++;stored=v}};
