@@ -57,10 +57,10 @@ test('Public guide is discoverable with valid schema and does not remove histori
  assert.ok(page.includes('https://chrisizworski.com'+url));
  assert.ok(page.includes('https://chrisizworski.com/#person'));
  assert.ok(sitemap.includes('<loc>https://chrisizworski.com'+url+'</loc>'));
- assert.equal((sitemap.match(/<loc>/g)||[]).length,71);
+ assert.equal((sitemap.match(/<loc>/g)||[]).length,72);
  assert.ok(hub.includes('data-id="carp-river-falls"'));
  assert.ok(hub.includes('data-gis-oid="169"'));
- assert.equal((hub.match(/<article class="waterfall-card"/g)||[]).length,73);
+ assert.equal((hub.match(/<article class="waterfall-card"/g)||[]).length,74);
  assert.ok(morganPage.includes('href="'+url+'"'));
  const ldMatch=page.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
  assert.ok(ldMatch);const ld=JSON.parse(ldMatch[1]);
@@ -70,7 +70,7 @@ test('Public guide is discoverable with valid schema and does not remove histori
  assert.match(research,/noindex,follow/);
  assert.ok(!sitemap.includes('/research/'));
  const list=JSON.parse(hub.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1])['@graph'].find(x=>x['@type']==='ItemList');
- assert.equal(list.numberOfItems,71);
+ assert.equal(list.numberOfItems,72);
  assert.equal(list.itemListElement.filter(x=>x.url==='https://chrisizworski.com'+url).length,1);
 });
 
@@ -97,11 +97,11 @@ test('Accessible decision atlas keeps unsafe routes unavailable and no invented 
 });
 
 test('Inventory, geographic crosswalk and priority queue update together without publishing unmatched falls',()=>{
- assert.equal(curated.length,73);assert.equal(rec.counts.curatedTotal,73);
- assert.equal(rec.counts.exactIdMatched,66);assert.equal(rec.counts.pending,95);
- assert.equal(ledger.curatedCount,73);assert.equal(ledger.linkedByExactOid,66);
- assert.equal(ledger.unresolvedCandidates,95);assert.equal(queue.candidates.length,95);
- assert.equal(queue.counts.curatedDestinations,73);assert.equal(queue.counts.matchedGisFeatures,66);
+ assert.equal(curated.length,74);assert.equal(rec.counts.curatedTotal,74);
+ assert.equal(rec.counts.exactIdMatched,67);assert.equal(rec.counts.pending,94);
+ assert.equal(ledger.curatedCount,74);assert.equal(ledger.linkedByExactOid,67);
+ assert.equal(ledger.unresolvedCandidates,94);assert.equal(queue.candidates.length,94);
+ assert.equal(queue.counts.curatedDestinations,74);assert.equal(queue.counts.matchedGisFeatures,67);
  assert.ok(!queue.candidates.some(x=>x.gisObjectId===169));
  assert.ok(queue.candidates.some(x=>x.gisObjectId===163 && !x.publicationEligible));
 });
