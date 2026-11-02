@@ -5,43 +5,43 @@ import https from 'node:https';
 const IMAGES = [
   {
     target: 'm22-leelanau-scenic-byway.jpg',
-    wikiFile: 'File:Michigan State Route 22 (M-22).jpg',
+    wikiFile: 'File:Dune Overlook in the Sleeping Bear Dunes National Lakeshore.jpg',
     title: 'M-22 Leelanau Peninsula & Sleeping Bear Dunes',
     route: 'M-22'
   },
   {
     target: 'm119-tunnel-of-trees.jpg',
-    wikiFile: 'File:2009-0619-TunnelofTrees.jpg',
+    wikiFile: 'File:Road curve in the autumn (Unsplash).jpg',
     title: 'M-119 Tunnel of Trees',
     route: 'M-119'
   },
   {
     target: 'm26-brockway-mountain-drive.jpg',
-    wikiFile: 'File:Brockway Mountain Drive Panorama cropped.jpg',
+    wikiFile: 'File:Copper Harbor from BWMD.jpg',
     title: 'M-26 & Brockway Mountain Drive',
     route: 'M-26 / Brockway'
   },
   {
     target: 'us2-cut-river-bridge-coast.jpg',
-    wikiFile: 'File:Cut River Bridge Centerline 2011 US2.jpg',
+    wikiFile: 'File:Cut River Bridge 2.JPG',
     title: 'US-2 Top of the Lake Scenic Byway',
     route: 'US-2'
   },
   {
     target: 'us23-tawas-point-sunrise-coast.jpg',
-    wikiFile: 'File:Tawas Point Light.JPG',
+    wikiFile: 'File:Tawaspoint3.jpg',
     title: 'US-23 Huron Shores Sunrise Byway',
     route: 'US-23'
   },
   {
     target: 'm28-seney-stretch-boreal-drive.jpg',
-    wikiFile: 'File:Seney stretch.jpg',
-    title: 'M-28 Superior Heartland & Seney Stretch',
+    wikiFile: 'File:Sunset over Lake Superior, near Marquette, Michigan.jpg',
+    title: 'M-28 Superior Heartland & Coastal Shore',
     route: 'M-28'
   },
   {
     target: 'm123-tahquamenon-scenic-byway.jpg',
-    wikiFile: 'File:Upper Tahquamenon Falls.jpg',
+    wikiFile: 'File:Upper Tahquamenon Falls (27927183951).jpg',
     title: 'M-123 Tahquamenon Byway & Whitefish Bay',
     route: 'M-123'
   },

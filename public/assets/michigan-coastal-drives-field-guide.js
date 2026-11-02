@@ -22,7 +22,53 @@
   ];
 
   let mapInstance = null;
+  let currentTiles = null;
   const markerMap = {};
+
+  function showTiles(url, provider) {
+    if (!mapInstance) return;
+    if (currentTiles) mapInstance.removeLayer(currentTiles);
+
+    const layer = L.tileLayer(url, {
+      subdomains: provider === 'CARTO' ? 'abcd' : 'abc',
+      maxZoom: 18,
+      attribution: provider === 'CARTO'
+        ? '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+        : '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+
+    currentTiles = layer;
+    let failed = 0;
+
+    layer.on('tileerror', function () {
+      if (currentTiles !== layer) return;
+      if (++failed >= 2 && provider === 'CARTO') {
+        showTiles('https://tile.openstreetmap.org/{z}/{x}/{y}.png', 'OSM');
+      }
+    });
+
+    layer.addTo(mapInstance);
+  }
+
+  function connectTiles() {
+    const ac = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    const timer = ac ? setTimeout(function () { ac.abort(); }, 6500) : null;
+    fetch('/api/carto-basemap-config', { credentials: 'same-origin', signal: ac ? ac.signal : undefined })
+      .then(function (r) {
+        if (!r.ok) throw new Error('config');
+        return r.json();
+      })
+      .then(function (c) {
+        if (!c || c.provider !== 'CARTO' || typeof c.key !== 'string' || !c.key.trim()) throw new Error('config');
+        showTiles('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=' + encodeURIComponent(c.key.trim()), 'CARTO');
+      })
+      .catch(function () {
+        showTiles('https://tile.openstreetmap.org/{z}/{x}/{y}.png', 'OSM');
+      })
+      .finally(function () {
+        if (timer) clearTimeout(timer);
+      });
+  }
 
   function initMap() {
     const mapEl = document.getElementById('coastal-drives-map');
@@ -34,25 +80,7 @@
       scrollWheelZoom: false
     });
 
-    const cartoVoyager = L.tileLayer(
-      'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
-      {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
-        subdomains: 'abcd',
-        maxZoom: 19
-      }
-    );
-
-    const osmFallback = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors'
-    });
-
-    cartoVoyager.addTo(mapInstance);
-    cartoVoyager.on('tileerror', function () {
-      if (!mapInstance.hasLayer(osmFallback)) {
-        osmFallback.addTo(mapInstance);
-      }
-    });
+    connectTiles();
 
     ROUTES_DATA.forEach(r => {
       const icon = L.divIcon({
