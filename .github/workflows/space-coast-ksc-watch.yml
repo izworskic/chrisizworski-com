@@ -11,6 +11,7 @@ on:
       - 'lib/space-coast-ksc-watch-auth.js'
       - 'lib/space-coast-ksc-viewing.js'
       - 'lib/rocket-launch-truth.js'
+      - 'lib/rocket-launch-national.js'
       - 'api/rocket-launch-truth.js'
       - 'public/synced-national-tools/assets/launch-truth-desk.js'
       - 'tests/rocket-launch-truth.test.js'
@@ -74,6 +75,15 @@ jobs:
             exit 1
           fi
           if ! printf '%s' "$result" | jq -e '
+            (.nationalMonitor.ok == true and
+             (.nationalMonitor.checkedAt | type == "string") and
+             (.nationalMonitor.providerGroups | length == 2))
+          ' >/dev/null; then
+            echo "Shared national LL2 snapshot was not confirmed in the signed watch."
+            printf '%s' "$result" | jq '{nationalMonitor}'
+            exit 1
+          fi
+          if ! printf '%s' "$result" | jq -e '
             (.truthMonitor.ok == true or
              .truthMonitor.skipped == "hourly-evidence-cadence" or
              .truthMonitor.skipped == "newer-evidence-already-recorded" or
@@ -83,5 +93,5 @@ jobs:
             printf '%s' "$result" | jq '{truthMonitor}'
             exit 1
           fi
-          printf '%s' "$result" | jq '{scheduleMonitor,truthMonitor}'
-          echo "KSC, schedule, and Launch Truth monitoring verified."
+          printf '%s' "$result" | jq '{nationalMonitor,scheduleMonitor,truthMonitor}'
+          echo "KSC, shared national schedule, Florida history and Launch Truth v2 verified."
