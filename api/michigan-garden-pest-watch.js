@@ -11,7 +11,8 @@ const UNKNOWN=Object.freeze({status:'UNAVAILABLE',source:'National Weather Servi
 const dateOk=s=>typeof s==='string'&&Number.isFinite(Date.parse(s));
 const validPercent=v=>typeof v==='number'&&Number.isFinite(v)&&v>=0&&v<=100;
 function parseForecast(data,nowMs=Date.now()){
- const p=data?.properties, periods=p?.periods,issuedAt=p?.updated;
+ // NWS hourly gridpoints expose properties.updateTime (not the older updated field).
+ const p=data?.properties, periods=p?.periods,issuedAt=p?.updateTime||p?.updated;
  if(!dateOk(issuedAt)||nowMs-Date.parse(issuedAt)>24*3600000||Date.parse(issuedAt)>nowMs+3600000)throw Error('NWS_FORECAST_STALE');
  if(!Array.isArray(periods)||periods.length<24)throw Error('NWS_FORECAST_INCOMPLETE');
  const hrs=periods.filter(h=>dateOk(h.startTime)&&Date.parse(h.startTime)>=nowMs-3600000&&Date.parse(h.startTime)<nowMs+72*3600000
