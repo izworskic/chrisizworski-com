@@ -9,8 +9,8 @@
     "gisCandidates": 161,
     "exactIdMatched": 66,
     "pending": 95,
-    "curatedTotal": 72,
-    "curatedNoMatchingGIS": 10
+    "curatedTotal": 73,
+    "curatedNoMatchingGIS": 11
   },
   "candidates": [
     {
@@ -9541,6 +9541,13 @@
       "gisObjectId": null,
       "publication": "verified-access-guide",
       "reason": "Visitor waterfall at 46.64242,-88.69346 verified by NCTA GPS and Visit Keweenaw; same-name Michigan state GIS #45 is 6.74 km away, quarantined until spatial identity is established. Do not attach GIS #45 to this visitor guide."
+    },
+    {
+      "id": "wright-street-falls",
+      "name": "Wright Street Falls",
+      "gisObjectId": null,
+      "publication": "verified-access-guide",
+      "reason": "Travel Marquette verifies 46.56588,-87.44576 and a public Wright Street/NTN walking approach; this is distinct from GIS #160 Dead River Falls on the privately constrained McClure gorge. No exact Michigan GIS waterfall ID assigned."
     }
   ],
   "batchCheckpoints": [
