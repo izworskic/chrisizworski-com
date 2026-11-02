@@ -118,6 +118,34 @@ test('six-day forecast window is actionable scouting, not a treatment instructio
  assert.equal(past.status,'THRESHOLD_PASSED');
  assert.match(past.action,/does not prove/i);
 });
+test('verified provider lag shortens the near-term adult and egg windows',()=>{
+ const adult={dayOfYear:186},egg={dayOfYear:217};
+ // On day 180, day 186 is six days out, but a source dated two days
+ // earlier cannot truthfully claim it is within six days of its model issue.
+ const base={nowDate:'2026-06-29',crop:'roses',sourceDate:'2026-06-27',adult,egg};
+ assert.equal(engine.dayOfYear(base.nowDate),180);
+ const fresh=engine.decision({...base,sourceLagDays:0});
+ assert.equal(fresh.status,'SCOUT');
+ const delayed=engine.decision({...base,sourceLagDays:2});
+ assert.equal(delayed.status,'PREPARE');
+ assert.match(delayed.action,/only 4 day\(s\)/);
+ const near={nowDate:'2026-06-30',crop:'roses',sourceDate:'2026-06-28',adult,egg};
+ assert.equal(engine.decision({...near,sourceLagDays:2}).status,'SCOUT');
+ // Egg threshold at day 217 is 6 days out on day 211.
+ const eggApproach={nowDate:'2026-07-30',crop:'roses',sourceDate:'2026-07-28',adult,egg};
+ assert.equal(engine.dayOfYear(eggApproach.nowDate),211);
+ assert.equal(engine.decision({...eggApproach,sourceLagDays:0}).status,'EGG_WINDOW');
+ assert.equal(engine.decision({...eggApproach,sourceLagDays:2}).status,'THRESHOLD_PASSED');
+ for(const lag of [-1,1.5,3,NaN])assert.throws(()=>engine.decision({...base,sourceLagDays:lag}),/SOURCE_LAG/);
+});
+test('live provider data carries a bounded remaining forecast horizon, not six days unconditionally',async()=>{
+ const src=fakeFetch({dates:['2026-10-31','2026-11-01']});
+ const result=await engine.fetchPilot(bay,'roses',src,new Date('2026-11-02T18:00:00Z'));
+ assert.equal(result.source.timeDimensionAgeDays,1);
+ assert.equal(result.source.remainingNearTermForecastDays,5);
+ assert.equal(result.verdict.status,'OFF_SEASON');
+});
+
 test('host specificity is crop-driven and prevents a universal garden beetle warning',()=>{
  for(const crop of ['beans','berries','grapes','roses']){
   assert.equal(engine.decision({nowDate:'2026-07-03',crop,sourceDate:'2026-07-03',adult:{dayOfYear:186},egg:{dayOfYear:217}}).status,'SCOUT');
