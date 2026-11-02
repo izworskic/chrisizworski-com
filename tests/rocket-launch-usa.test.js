@@ -6,6 +6,7 @@ const path = require('node:path');
 
 const model = require('../lib/rocket-launch-usa');
 const api = require('../api/rocket-launch-usa');
+const testApi=api._test.createHandler({getSchedule:api._test.loadSchedule});
 
 const FIXED = Date.parse('2026-10-31T18:00:00Z');
 function raw(id, locationId, net, precision = 'Minute', status = 'Go for Launch') {
@@ -55,7 +56,8 @@ test('provider queries are region-limited, bounded and cached at CDN', () => {
   const queries=api._test.LAUNCH_QUERIES;
   assert.equal(queries.length,2);
   assert.deepEqual(queries.map(x=>x.ids),[[11,12,27],[1,21,25,143]]);
-  assert.ok(queries.every(x=>x.limit<=36));
+  assert.ok(queries.every(x=>x.limit<=36),
+    'The legacy query builder is retained only for isolated fixtures; production reads the v2 state');
   for(const q of queries) {
     const parsed=new URL(api._test.queryUrl(q));
     assert.equal(parsed.host,'ll.thespacedevs.com');
@@ -187,7 +189,7 @@ test('national API provides all coasts, exact launch selection, partial feed hea
   };
   try{
     const res=mockRes();
-    await api({method:'GET',query:{region:'texas',launchId:idTx}},res);
+    await testApi({method:'GET',query:{region:'texas',launchId:idTx}},res);
     assert.equal(res.statusCode,200);
     assert.equal(res.body.ok,true);
     assert.equal(res.body.regions.length,6);
@@ -205,16 +207,17 @@ test('national API provides all coasts, exact launch selection, partial feed hea
     assert.ok(res.body.launchWeather.timeline.length > 0);
     assert.equal(res.headers['X-Robots-Tag'],'noindex, nofollow');
     assert.match(res.headers['Cache-Control'],/s-maxage=1800/);
+    assert.equal(res.body.scheduleSource,'unverified-shared-postgres');
     const wallops=mockRes();
-    await api({method:'GET',query:{region:'virginia'}},wallops);
+    await testApi({method:'GET',query:{region:'virginia'}},wallops);
     assert.equal(wallops.statusCode,200);
     assert.equal(wallops.body.selectedRegion,'virginia');
     assert.equal(wallops.body.weather.level,'unknown');
     const invalid=mockRes();
-    await api({method:'GET',query:{region:'antarctica'}},invalid);
+    await testApi({method:'GET',query:{region:'antarctica'}},invalid);
     assert.equal(invalid.statusCode,400);
     const fake=mockRes();
-    await api({method:'GET',query:{region:'texas',launchId:'../../etc/passwd'}},fake);
+    await testApi({method:'GET',query:{region:'texas',launchId:'../../etc/passwd'}},fake);
     assert.equal(fake.statusCode,400);
   }finally{global.fetch=original;}
 });
@@ -234,7 +237,7 @@ test('failure of a provider group degrades to partial rather than an invented na
   };
   try{
     const res=mockRes();
-    await api({method:'GET',query:{region:'texas'}},res);
+    await testApi({method:'GET',query:{region:'texas'}},res);
     assert.equal(res.statusCode,200);
     assert.equal(res.body.coverage.partial,true);
     assert.equal(res.body.regions.find(r=>r.id==='california').feedState,'unavailable');
