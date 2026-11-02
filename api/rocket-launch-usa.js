@@ -239,7 +239,7 @@ return async function handler(req, res) {
         limitations: [
           'The engine covers scheduled launches in six coastal U.S. regions, not every test-range firing or unannounced mission.',
           'Some NASA Wallops sounding rockets, Pacific missile-range tests and short-notice operations may not appear in Launch Library.',
-          'The forward calendar is a bounded sample of provider records. Dates far beyond the current window may not be included.',
+          'The national collector requests launches within the next 120 days; launches beyond this horizon are not displayed. Provider groups can still be truncated.',
           'No mission is guaranteed to launch and no public viewing spot is guaranteed available.',
           'Launch-time precision and official admission, closures and public-weather forecasts are separate evidence layers.',
           'NWS launch-range weather signals are not rocket-specific flight commit rules, a scrub prediction, or official weather approval.'
