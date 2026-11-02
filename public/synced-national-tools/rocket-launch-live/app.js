@@ -318,6 +318,87 @@
     set('rl-weather-summary', compare?.detail || weather.detail ||
       'A precise launch time inside the forecast horizon is required.');
   }
+
+  function renderLaunchWeather(data) {
+    const forecast = data.launchWeather || {};
+    const verified = forecast.status === 'forecast';
+    chip($('rl-range-grade'), verified ? 'NWS grid checked' : 'Launch-side conditions unverified',
+      verified ? (forecast.level === 'elevated' ? 'poor' : forecast.level === 'watch' ? 'medium' : 'unknown') : 'unknown');
+    set('rl-range-headline', forecast.label || 'Launch-side weather not established');
+    set('rl-range-summary', forecast.detail ||
+      'No reliable range-area launch forecast is currently available.');
+    const readings = $('rl-range-readings');
+    readings.replaceChildren();
+    const metrics = [
+      ['Thunder chance', forecast.readings?.thunderPercent, '%'],
+      ['Precipitation chance', forecast.readings?.precipitationPercent, '%'],
+      ['Wind gust', forecast.readings?.gustMph, ' mph'],
+      ['Forecast sky cover', forecast.readings?.cloudCoverPercent, '%']
+    ];
+    for (const [name, value, unit] of metrics) {
+      const card = el('div', 'rl-range-metric');
+      card.appendChild(el('span', '', name));
+      card.appendChild(el('strong', '', Number.isFinite(value) ? value + unit : 'Not provided'));
+      readings.appendChild(card);
+    }
+    const signals = $('rl-range-signals');
+    signals.replaceChildren();
+    if (forecast.signals?.length) {
+      for (const signal of forecast.signals) {
+        const item = el('article', 'rl-range-signal');
+        item.dataset.level = signal.level;
+        item.appendChild(el('strong', '', signal.label + (signal.value ? ' · ' + signal.value : '')));
+        item.appendChild(el('p', '', signal.detail));
+        signals.appendChild(item);
+      }
+    } else {
+      signals.appendChild(el('p', '', verified ?
+        'No notable local surface signals crossed this tool’s screening thresholds. That does not mean favorable launch weather has been verified.' :
+        'No complete current range-area assessment. Missing forecasts never become a favorable launch verdict.'));
+    }
+    const timeline = $('rl-range-timeline');
+    timeline.replaceChildren();
+    const rows = (forecast.timeline || []).filter(v => v.level !== 'unknown');
+    if (rows.length) {
+      const rail = el('ol', 'rl-range-timeline-list');
+      const timeZone = data.region?.timezone || 'UTC';
+      for (const row of rows) {
+        const item = el('li', 'rl-range-timepoint');
+        item.dataset.level = row.level;
+        item.appendChild(el('span', 'rl-range-offset', row.hoursFromTarget === 0 ?
+          'Target time' : row.hoursFromTarget < 0 ? 'T−' + Math.abs(row.hoursFromTarget) + 'h' :
+            'T+' + row.hoursFromTarget + 'h'));
+        const d = new Date(row.at);
+        const local = Number.isNaN(+d) ? 'Time unavailable' :
+          d.toLocaleString('en-US', { timeZone, month: 'short', day: 'numeric',
+            hour: 'numeric', minute: '2-digit' });
+        item.appendChild(el('strong', '', local));
+        const vals = row.readings || {};
+        const pieces = [
+          Number.isFinite(vals.thunderPercent) ? vals.thunderPercent + '% thunder' : null,
+          Number.isFinite(vals.precipitationPercent) ? vals.precipitationPercent + '% rain' : null,
+          Number.isFinite(vals.gustMph) ? vals.gustMph + ' mph gust' : null
+        ].filter(Boolean);
+        item.appendChild(el('small', '', pieces.join(' · ') || vals.shortForecast || 'Limited hourly fields'));
+        rail.appendChild(item);
+      }
+      timeline.appendChild(rail);
+    } else timeline.appendChild(el('p', '', 'The NWS forecast does not cover enough verified hours for a launch-time progression.'));
+    set('rl-range-provenance', (forecast.site?.name || 'Launch site') +
+      ' · ' + (forecast.site?.approximation || 'Regional reference only') + '. ' +
+      (forecast.forecastUpdatedAt ? 'NWS grid updated ' + stamp(forecast.forecastUpdatedAt) + '. ' :
+        'Current NWS grid not verified. ') +
+      'The official range and operator decide flight-weather criteria. ' +
+      'We do not estimate weather-rule violation probability from these public surface forecasts.');
+    const links = $('rl-range-links');
+    links.replaceChildren();
+    const official = anchor(forecast.officialUrl || data.region?.authority,
+      data.region?.id === 'florida' ? '45th Weather Squadron forecasts' : 'Official range / mission notices');
+    const nws = anchor(forecast.sourceUrl || 'https://www.weather.gov/', 'NWS forecast source');
+    if (official) links.appendChild(official);
+    if (nws) links.appendChild(nws);
+  }
+
   function syncUrl(r, l) {
     const url = new URL(location.href);
     if (r && validRegions.has(r)) url.searchParams.set('region', r);
@@ -335,6 +416,7 @@
     renderSelector(data);
     renderAccess(data);
     renderWeather(data);
+    renderLaunchWeather(data);
     board();
     const coverage = data.coverage || {};
     set('rl-schedule-coverage',
@@ -362,6 +444,12 @@
       chip($('rl-schedule-grade'), 'Schedule temporarily unavailable', 'unknown');
       chip($('rl-access-grade'), 'Official access must be checked', 'unknown');
       chip($('rl-weather-grade'), 'No current forecast', 'unknown');
+      chip($('rl-range-grade'), 'Launch-side forecast unavailable', 'unknown');
+      set('rl-range-headline', 'Current launch-side evidence unavailable');
+      set('rl-range-summary', 'The launch schedule or forecast request failed. Consult official launch weather and range notices.');
+      $('rl-range-readings')?.replaceChildren();
+      $('rl-range-signals')?.replaceChildren();
+      $('rl-range-timeline')?.replaceChildren();
       set('rl-schedule-detail', 'The national launch feed could not be verified right now. Check the launch operator and range authorities before planning travel.');
       set('rl-national-next', 'Live schedule unavailable');
       set('rl-feed-health', 'Source check failed');
