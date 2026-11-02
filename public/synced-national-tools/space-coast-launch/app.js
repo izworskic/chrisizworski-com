@@ -97,6 +97,48 @@
       target.appendChild(card);
     });
   };
+  const renderIndependentReporting = desk => {
+    const d=desk || {};
+    const active=d.status==='ok';
+    set('sfn-reporting-status',active ?
+      'Independent feed checked ' + (d.checkedAt ?
+        new Date(d.checkedAt).toLocaleString('en-US',{timeZone:'America/New_York',
+          dateStyle:'medium',timeStyle:'short'}) : 'recently') +
+      ' · reporting is not launch control' :
+      'Spaceflight Now reporting source unavailable; launch schedule remains separate');
+    const list=$('sfn-reporting-list');
+    if(!list)return;
+    list.replaceChildren();
+    const stories=Array.isArray(d.stories)?d.stories.slice(0,3):[];
+    for(const story of active?stories:[]){
+      if(!/^https:\/\/(?:www\.)?spaceflightnow\.com\/20\d\d\/(?:0[1-9]|1[0-2])\/(?:0[1-9]|[12]\d|3[01])\/[a-z0-9-]+\/$/i.test(story?.url||''))
+        continue;
+      if(typeof story.title!=='string')continue;
+      const card=element('article','sfn-reporting-item');
+      const date=new Date(story.publishedAt||'');
+      const when=Number.isFinite(+date)?date.toLocaleDateString('en-US',
+        {month:'short',day:'numeric',year:'numeric'}):'Date unavailable';
+      card.appendChild(element('p','sfn-reporting-date',
+        (story.match==='mission-identifier'?'Mission identified in reporting':
+          'Related rocket / payload reporting, not a mission confirmation') +
+        ' · published ' + when));
+      card.appendChild(link(story.url,story.title.slice(0,170)));
+      card.appendChild(element('p','',
+        story.match==='mission-identifier'?
+          'Read the original report for launch context and any developing details.':
+          'This article covers the provider and payload family; it may not describe the selected flight.'));
+      list.appendChild(card);
+    }
+    if(!list.children.length){
+      list.appendChild(element('p','sfn-reporting-empty',
+        active?
+          'No safely matched article appears in the recent editorial feed. Check the full Spaceflight Now schedule and mission archive for broader coverage.':
+          'The independent reporting source could not be checked. This is not evidence of a missing mission, delay, or scrub.'));
+    }
+    set('sfn-reporting-note',d.note ||
+      'Editorial reporting is a different evidence tier from Launch Library schedules, 45WS weather and official visitor access.');
+  };
+
   const renderOfficialWeather = forecast => {
     const d = forecast || {};
     const briefing = d.weatherStory || {};
@@ -965,6 +1007,7 @@
       renderWeather(d.viewingWeatherByArea || []);
       renderRangeWeather(d.launchWeatherIntelligence);
       renderOfficialWeather(d.officialLaunchWeather);
+      renderIndependentReporting(d.independentReporting);
       renderAccess(d);
       renderKsc(d);
       renderArrival(d);
@@ -1004,6 +1047,7 @@
       set('weather-detail', 'This page is not displaying verified live forecast conditions.');
       renderRangeWeather(null);
       renderOfficialWeather(null);
+      renderIndependentReporting(null);
       set('launch-access-checked', 'Live access data could not be checked.');
       const arrival = $('launch-arrival');
       if (arrival) arrival.textContent = 'Launch-day Playalinda entrance policy could not be evaluated. Check the official NPS page before travel.';
