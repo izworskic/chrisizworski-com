@@ -124,6 +124,16 @@ async function ready(){
    assert.ok(!(await page.locator('#bee-forecast-desk').isVisible()),'Michigan forecast must hide for other locations');
    await ctx.close();
   }
+  // Missing third-party bee photo: the original next step must survive as a readable first-screen answer.
+  const noPhotoCtx=await browser.newContext({viewport:{width:390,height:850},reducedMotion:'reduce'});
+  const noPhoto=await noPhotoCtx.newPage();
+  await noPhoto.route('**/*',route=>route.request().url().startsWith(ORIGIN)?route.continue():route.abort());
+  await noPhoto.goto(ORIGIN+'/leafcutter-bees/',{waitUntil:'domcontentloaded'});
+  await noPhoto.waitForFunction(()=>document.querySelector('.hero-figure img')?.complete,null,{timeout:6000});
+  await noPhoto.waitForFunction(()=>document.querySelector('.hero-figure')?.hidden===true,null,{timeout:6000});
+  assert.ok(await noPhoto.locator('#bee-first-title').isVisible(),'A broken external bee photo cannot hide the primary action');
+  assert.match(await noPhoto.locator('#bee-nest-year').innerText(),/whole year/i);
+  await noPhotoCtx.close();
   const noJs=await browser.newContext({viewport:{width:390,height:850},javaScriptEnabled:false});
   const page=await noJs.newPage();await page.goto(ORIGIN+'/leafcutter-bees/',{waitUntil:'domcontentloaded'});
   assert.match(await page.locator('body').innerText(),/This optional forecast requires JavaScript/);
