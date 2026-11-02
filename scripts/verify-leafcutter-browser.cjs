@@ -116,6 +116,19 @@ async function ready(){
    await page.locator('#bee-zip').fill('');
    await page.locator('#bee-check').click();
    await page.waitForFunction(()=>document.querySelectorAll('.bee-day').length===2,null,{timeout:6000});
+   // Photographed field notes stay usable on all widths and are served locally, including with third-party requests blocked.
+   const photoEssay=page.locator('#from-my-garden');
+   assert.ok(await photoEssay.isVisible(),'From My Garden photo essay must be present');
+   const photoItems=photoEssay.locator('img');
+   assert.equal(await photoItems.count(),4);
+   for(let i=0;i<4;i++){
+    await photoItems.nth(i).scrollIntoViewIfNeeded();
+    await page.waitForFunction(index=>{
+     const el=document.querySelectorAll('#from-my-garden img')[index];
+     return !!el&&el.complete&&el.naturalWidth>0&&el.currentSrc.includes('/images/leafcutter-fvf-');
+    },i,{timeout:8000});
+   }
+   await photoEssay.screenshot({path:'artifacts/leafcutter-browser/fvf-field-notes-'+width+'.png',animations:'disabled'});
    const overflow=await page.evaluate(()=>({content:document.documentElement.scrollWidth,window:window.innerWidth,
     offenders:[...document.body.querySelectorAll('*')].filter(el=>{const b=el.getBoundingClientRect();const st=getComputedStyle(el);return b.right>window.innerWidth+2&&b.width>0&&st.position!=='fixed';}).slice(0,10).map(el=>({tag:el.tagName,class:el.className,id:el.id,right:Math.round(el.getBoundingClientRect().right),width:Math.round(el.getBoundingClientRect().width)}))}));
    assert.ok(overflow.content<=overflow.window+1,'Horizontal overflow at '+width+': '+JSON.stringify(overflow));
