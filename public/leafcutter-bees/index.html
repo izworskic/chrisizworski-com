@@ -136,7 +136,7 @@
 <div class="bee-year-task"><span>YOUR BEST NEXT MOVE</span><strong id="bee-story-action">Shelter intact occupied tubes from moisture, and leave the cells undisturbed.</strong></div>
 <p class="bee-story-context" id="bee-story-context">This is an editorial guide to a typical wild-bee nesting year. Different species overwinter at different stages.</p>
 </div></div>
-<p class="bee-year-footnote">Source-led seasonal habitat guidance: <a href="https://www.xerces.org/bring-back-the-pollinators/provide-nest-sites" rel="noopener" target="_blank">Xerces Society · nest sites</a> and <a href="https://extension.usu.edu/planthealth/research/making-and-managing-wild-bee-hotels" rel="noopener" target="_blank">Utah State Extension · bee hotel management</a>. Not a live developmental-stage model. Commercially incubated cocoons require different handling.</p>
+<p class="bee-year-footnote">Source-led seasonal habitat guidance: <a href="https://xerces.org/pollinator-conservation/nesting-resources" rel="noopener" target="_blank">Xerces Society · nest sites</a> and <a href="https://extension.usu.edu/planthealth/research/making-and-managing-wild-bee-hotels" rel="noopener" target="_blank">Utah State Extension · bee hotel management</a>. Not a live developmental-stage model. Commercially incubated cocoons require different handling.</p>
 </section>
 <div class="container opening" aria-label="Three things worth knowing">
 <article><strong>They don't defend a colony.</strong><p>Each female makes her own nest. Stings are uncommon unless a bee is caught or squeezed. A serious allergy still requires care.</p></article>
@@ -639,10 +639,14 @@ loadBeeCities();
 // An image error must not leave a blank half-hero; the answer and sources still work.
 if(typeof document.querySelector==='function'){
  var heroImage=document.querySelector('.hero-figure img');
- if(heroImage)heroImage.addEventListener('error',function(){
-  var fig=heroImage.closest('figure');if(fig)fig.hidden=true;
-  var grid=document.querySelector('.hero-grid');if(grid)grid.classList.add('no-hero-photo');
- });
+ if(heroImage){
+  function hideBrokenHeroPhoto(){
+   var fig=heroImage.closest('figure');if(fig)fig.hidden=true;
+   var grid=document.querySelector('.hero-grid');if(grid)grid.classList.add('no-hero-photo');
+  }
+  heroImage.addEventListener('error',hideBrokenHeroPhoto);
+  if(heroImage.complete&&heroImage.naturalWidth===0)hideBrokenHeroPhoto();
+ }
 }
 
 [zone,month,flowers,temp,nest,region,document.getElementById('brood-stage')].forEach(function(el){el.addEventListener('change',render)});
