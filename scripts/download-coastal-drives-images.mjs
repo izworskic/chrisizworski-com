@@ -23,14 +23,14 @@ const IMAGES = [
   },
   {
     target: 'us2-cut-river-bridge-coast.jpg',
-    wikiFile: 'File:Cut River Bridge 2.JPG',
-    title: 'US-2 Top of the Lake Scenic Byway',
+    wikiFile: 'File:Cut River Bridge 4.JPG',
+    title: 'US-2 Top of the Lake Scenic Byway & Cut River Bridge',
     route: 'US-2'
   },
   {
     target: 'us23-tawas-point-sunrise-coast.jpg',
-    wikiFile: 'File:Tawaspoint3.jpg',
-    title: 'US-23 Huron Shores Sunrise Byway',
+    wikiFile: 'File:Sturgeon Point Light (2018).jpg',
+    title: 'US-23 Huron Shores Sunrise Byway & Sturgeon Point Lighthouse',
     route: 'US-23'
   },
   {
