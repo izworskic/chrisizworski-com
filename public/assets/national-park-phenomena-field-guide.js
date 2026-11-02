@@ -84,12 +84,13 @@
       lng: -112.9475,
       months: [5, 6, 7, 8, 9, 10],
       peakLabel: 'Late May–Oct (Goldilocks: Sep–Oct Post-Monsoon)',
-      permitType: 'lottery',
-      permitName: 'Bottom-Up Open / Top-Down Wilderness Permit',
-      permitLead: 'Bottom-Up day hike requires no permit; Top-Down 16-mi permit opens 5th of prior month on Recreation.gov.',
+      permitType: 'open',
+      permitName: 'Bottom-up: no permit / top-down: wilderness permit',
+      permitLead: 'NPS: bottom-up as far as Big Spring needs no wilderness permit; top-down 16-mile day/overnight trips require route-specific Wilderness permits. Permit availability and release rules must be checked for the visit year.',
+      accessRules: {season:2026, bottomUp:'NO_WILDERNESS_PERMIT', topDown:'WILDERNESS_PERMIT_REQUIRED', currentStatus:'CHECK_CURRENT_CONDITIONS', future:'UNCONFIRMED', official:'https://www.nps.gov/zion/planyourvisit/narrowspermits.htm'},
       category: 'optical',
-      activeIntel: 'Virgin River North Fork wades between 1,000-ft Navajo sandstone walls. Closed immediately whenever USGS flow exceeds 150 CFS or flash-flood watch is active.',
-      leadAlert: 'Top-Down wilderness calendar reservations release on the 5th of every month at 10 AM MT for the following month.',
+      activeIntel: 'Virgin River North Fork wades between 1,000-ft Navajo sandstone walls. NPS closes the Narrows above 150 CFS and during NWS Flash Flood Warnings; closures continue at least two hours after warnings end.',
+      leadAlert: 'Bottom-up to Big Spring: no permit. Top-down from Chamberlain’s Ranch: Wilderness permit required. Check NPS current conditions and official future-season permit releases; do not assume a fixed calendar.'
       toolUrl: '/synced-national-tools/zion-narrows-conditions/',
       toolLabel: 'Zion Narrows Live USGS Flow & Flash-Flood Engine'
     },
@@ -119,12 +120,13 @@
       lng: -155.7797,
       months: [7],
       peakLabel: 'July 1–31 (Peak Migration July 5–25)',
-      permitType: 'lottery',
-      permitName: 'Brooks Camp Campground & Floatplane Charter',
-      permitLead: 'Campground opens on Recreation.gov January 5 at 8 AM AKST (books in 3 minutes). Air taxis book 6–9 months ahead.',
+      permitType: 'open',
+      permitName: 'Brooks Falls platform: no advance viewing reservation',
+      permitLead: 'NPS: Brooks Falls viewing platform requires no advance reservation. Separate Brooks Camp campground stays require reservations: 2026 releases Jan 7 (May–Jun), Feb 7 (Jul–Aug), Mar 7 (Sep–Oct), at 8 AM AKST.',
+      accessRules: {season:2026, bearViewing:'NO_ADVANCE_RESERVATION', platform:'CAPACITY_MANAGED', campground:'RESERVATION_REQUIRED', campgroundReleases:['2026-01-07','2026-02-07','2026-03-07'], riverCorridor:'SEPARATE_ACTIVITY_PERMIT', future:'UNCONFIRMED', official:'https://www.nps.gov/katm/planyourvisit/campingbcdv.htm'},
       category: 'wildlife',
       activeIntel: 'Millions of sockeye salmon battle up the Brooks River; up to 40+ coastal brown bears line the falls and lip to snatch leaping 6-pound fish mid-air.',
-      leadAlert: '⚠️ Brooks Camp campground reservation opens January 5 at 8 AM AKST on Recreation.gov and sells out in under 3 minutes.',
+      leadAlert: 'Bear viewing at Brooks Falls needs no advance platform reservation. For 2026 campground stays, July/Aug nights released February 7 at 8 AM AKST; 2027 campground booking dates are unconfirmed.'
       toolUrl: '/synced-national-tools/',
       toolLabel: 'National Park Decision Tools Hub'
     },
@@ -248,10 +250,10 @@
       leadAlert: 'Select a month for natural windows. Reservation details are historical 2026 examples, not confirmed future booking instructions; check the responsible agency.'
     },
     1: {
-      badge: 'Winter Aggregations & Permits',
+      badge: 'Winter Aggregations & Separate Campground Bookings',
       title: 'January: Cold-Water Manatees & Critical Summer Lotteries',
       details: 'Blue Spring manatee numbers peak during January Arctic cold fronts. Acadia Cadillac Mountain continues its astronomical run as the first point in the United States to greet the sunrise.',
-      leadAlert: '2026 reference: check Katmai campground booking with NPS. Yosemite required no February 2026 Firefall entry reservation; 2027 rules are unconfirmed.'
+      leadAlert: '2026 Katmai campground: Jan 7 release for May/Jun, Feb 7 for Jul/Aug, Mar 7 for Sep/Oct; not a bear viewing reservation. Yosemite required no February 2026 Firefall entrance reservation. 2027 dates unconfirmed.'
     },
     2: {
       badge: 'Peak Firefall & Manatee Surge',
