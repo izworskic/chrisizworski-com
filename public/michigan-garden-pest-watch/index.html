@@ -5,12 +5,12 @@
 <meta name="description" content="Michigan garden pest scouting by crop and season. Learn where to inspect, how to prevent damage, and when weather warrants a closer look.">
 <link rel="canonical" href="https://chrisizworski.com/michigan-garden-pest-watch/">
 <meta name="theme-color" content="#1f392f">
-<link rel="stylesheet" href="/assets/garden-pest-watch.css?v=20261102a">
+<link rel="stylesheet" href="/assets/garden-pest-watch.css?v=20261102b">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,700&display=swap" rel="stylesheet">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Michigan Garden Pest Watch","url":"https://chrisizworski.com/michigan-garden-pest-watch/","applicationCategory":"EducationalApplication","operatingSystem":"Web","description":"A Michigan home-garden pest scouting and prevention decision tool with seasonal and weather evidence.","@id":"https://chrisizworski.com/michigan-garden-pest-watch/#app","creator":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"}},{"@type":"WebPage","@id":"https://chrisizworski.com/michigan-garden-pest-watch/#page","url":"https://chrisizworski.com/michigan-garden-pest-watch/","dateModified":"2026-11-02","name":"Michigan Garden Pest Watch: What to Scout This Week","inLanguage":"en-US","author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Michigan Gardening","item":"https://chrisizworski.com/michigan-gardening/"},{"@type":"ListItem","position":2,"name":"Garden Pest Watch","item":"https://chrisizworski.com/michigan-garden-pest-watch/"}]},{"@type":"Person","@id":"https://chrisizworski.com/#person","url":"https://chrisizworski.com/","name":"Chris Izworski","mainEntityOfPage":"https://chrisizworski.com/chris-izworski/"}]}</script>
-<script defer src="/assets/garden-pest-watch.js?v=20261102a"></script>
+<script defer src="/assets/garden-pest-watch.js?v=20261102b"></script>
 </head>
 <body>
 <a class="skip" href="#watchdesk">Skip to garden watch</a>
@@ -59,7 +59,7 @@
      <div class="lane"><span class="lane-number">01</span><div><strong>Season &amp; plant stage</strong><p id="season-evidence">Michigan crop-stage scouting reference. Not a local observation.</p></div><span class="lane-dot reference" aria-label="Reference only"></span></div>
      <div class="lane"><span class="lane-number">02</span><div><strong>Official weather outlook</strong><p id="weather-evidence">Retrieving the NWS outlook. If unavailable, the seasonal guidance still works.</p></div><span id="weather-dot" class="lane-dot unknown" aria-label="Not verified"></span></div>
      <div class="lane"><span class="lane-number">03</span><div><strong>Field reports &amp; detections</strong><p>Current verified regional trap and field reports are not connected yet. No report never means no pest.</p></div><span class="lane-dot unknown" aria-label="Not available"></span></div>
-     <div class="lane"><span class="lane-number">04</span><div><strong>Biological forecasts</strong><p>Species-specific heat models require validated calculations and weather histories. No event date is computed by this tool. Check the <a href="https://www.usanpn.org/data/maps/forecasts/Japanese_beetle">official Japanese beetle forecast</a> or <a href="https://enviroweather.msu.edu/crops/coleCrops/cabbagemaggot">MSU cabbage maggot model</a> for their separately published evidence.</p></div><span class="lane-dot unknown" aria-label="Not available"></span></div>
+     <div class="lane"><span class="lane-number">04</span><div><strong>Biological forecasts</strong><p>For Japanese beetles on host crops, a dedicated USA-NPN species model can now be checked at a Michigan reference location. No beetle presence is confirmed. Other species models still require validation. See the <a href="#beetle-forecast">forecast wire below</a> or <a href="https://enviroweather.msu.edu/crops/coleCrops/cabbagemaggot">MSU cabbage maggot guidance</a>.</p></div><span class="lane-dot unknown" aria-label="Not available"></span></div>
     </div>
     <p class="aside-caveat">A forecast can tell you when to scout. Only an observation can establish that an insect is present. <a href="#method">Our evidence rules</a></p>
   </aside>
@@ -69,8 +69,36 @@
    <p class="source-label" id="watch-source-label" role="status" aria-live="polite">This is a seasonal scouting list, not a real-time pest detection service.</p>
    <div id="watch-cards" class="watch-cards"><article class="watch-card"><span class="pest-index">FIELD NOTE</span><h3>Squash stem scouting</h3><p>Inspect squash stems for entry frass, eggs and wilting. Check at-risk plants through summer; in November, focus on next season's crop protection.</p><a href="https://enviroweather.msu.edu/crops/cucurbits/squashvineborer">MSU source and further identification</a></article></div>
  </section>
+ <section class="beetle-desk" id="beetle-forecast" aria-labelledby="beetle-heading">
+   <div class="beetle-desk-rule"><span>05 / THE FORECAST WIRE</span><span>JAPANESE BEETLE · OPERATIONAL PILOT</span></div>
+   <div class="beetle-desk-top">
+     <div><p class="beetle-tag">An official model, not a garden sighting</p>
+       <h2 id="beetle-heading">When should I start checking for Japanese beetles?</h2>
+       <p>For <strong>beans, grapes, berries, and roses</strong>, we read the <em>actual USA National Phenology Network</em> species-specific forecast grid for your Michigan reference location, not a generic warmth calendar. The model tracks heat thresholds for first adults and egg hatch. Neither stage proves beetles are present on your plants.</p>
+     </div>
+     <div class="beetle-status-panel" aria-live="polite">
+       <span id="beetle-evidence-type" class="beetle-state">PILOT · SOURCE CHECK REQUIRED</span>
+       <h3 id="beetle-answer">Choose a Japanese beetle host crop.</h3>
+       <p id="beetle-action">Select beans, grapes, berries or roses above, then update your watch. We will check the source for the chosen Michigan location.</p>
+       <p id="beetle-location">Reference point: Bay City unless a valid Michigan ZIP is entered.</p>
+     </div>
+   </div>
+   <div class="beetle-milestones" id="beetle-milestones">
+     <div><span class="beetle-milestone-title">01 / FIRST ADULTS</span><strong id="beetle-adult-date">Not verified</strong><small>873°F degree-days · predicted thermal stage, not an observation</small></div>
+     <div><span class="beetle-milestone-title">02 / EGG HATCH</span><strong id="beetle-egg-date">Not verified</strong><small>1,543°F degree-days · modeled egg-stage threshold, not an egg sighting</small></div>
+   </div>
+   <div class="beetle-proof">
+     <p id="beetle-source-note" role="status" aria-live="polite">No forecast has been verified for the currently selected garden. An unavailable feed never means no beetles.</p>
+     <details><summary>Inspect the model and evidence rules</summary>
+       <p>USA-NPN publishes Japanese beetle adult and egg-hatch rasters from the DDRP single-triangle method (50°F base, 92°F upper threshold; January 1 start). We read only exact dated layers and sample the gridded pixel at the Census ZCTA interior point or selected reference city. A raster day-of-year value is model output, not an observation.</p>
+       <p>In-season scouting prompts apply only near the official six-day forecast window. Farther-out modeled dates are provisional. In winter we show the completed season’s model timing rather than predicting next summer from last summer. Our independent NASA Daymet historical comparison remains separate.</p>
+       <div class="beetle-source-links"><a href="https://www.usanpn.org/data/maps/forecasts/Japanese_beetle">USA-NPN Japanese beetle model and thresholds</a><a href="https://data.usanpn.org/vis-tool/#/">Explore official USA-NPN forecast maps</a><a id="beetle-raster-source" href="https://geoserver.usanpn.org/geoserver/wcs?service=WCS&amp;version=1.0.0&amp;request=DescribeCoverage&amp;coverage=gdd%3Ajapanese_beetle_adult">Inspect model coverage metadata</a></div>
+       <p>Source temporal coverage dates confirm that the requested layer exists; they do not independently prove when the provider issued it. No confirmed sightings, pesticide thresholds or treatment products are supplied by this desk.</p>
+     </details>
+   </div>
+ </section>
  <section class="history-lab" id="history-lab" aria-labelledby="history-heading">
-  <div class="history-eyebrow"><span class="section-kicker">05 / THE SCIENCE LAB</span><span>FIVE HISTORIC SEASONS · NOT A LIVE PEST FORECAST</span></div>
+  <div class="history-eyebrow"><span class="section-kicker">06 / THE SCIENCE LAB</span><span>FIVE HISTORIC SEASONS · NOT A LIVE PEST FORECAST</span></div>
   <div class="history-layout">
     <div class="history-intro">
       <h2 id="history-heading">What did five real seasons of weather tell us?</h2>
@@ -95,7 +123,7 @@
   </div>
  </section>
  <section class="garden-check" aria-labelledby="report-heading">
-  <div class="check-copy"><span class="section-kicker">06 / HAVE YOU SEEN SOMETHING?</span><h2 id="report-heading">A clue in the garden changes the job.</h2><p>If you've spotted an insect or symptom, tell the desk which suspect you're investigating. We'll show the specific signs and what to do if the identification is confirmed.</p><p class="guardrail">Your selection appears in the shareable URL and may appear in browser or server request logs. We do not publish it as a verified sighting or submit a report to state authorities. Use the official reporting link for a suspected invasive insect.</p></div>
+  <div class="check-copy"><span class="section-kicker">07 / HAVE YOU SEEN SOMETHING?</span><h2 id="report-heading">A clue in the garden changes the job.</h2><p>If you've spotted an insect or symptom, tell the desk which suspect you're investigating. We'll show the specific signs and what to do if the identification is confirmed.</p><p class="guardrail">Your selection appears in the shareable URL and may appear in browser or server request logs. We do not publish it as a verified sighting or submit a report to state authorities. Use the official reporting link for a suspected invasive insect.</p></div>
   <div class="check-form"><label for="observed">A suspected pest from your crop list</label><select id="observed" name="observed"><option value="">I haven't observed a suspect</option></select><button id="use-observation" class="outline-button" type="button">Update my investigation</button></div>
  </section>
  <section class="method" id="method" aria-labelledby="method-heading">

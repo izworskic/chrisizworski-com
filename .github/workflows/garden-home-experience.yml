@@ -7,6 +7,9 @@ on:
       - 'public/assets/garden-pest-watch.*'
       - 'lib/garden-pest-watch.cjs'
       - 'lib/garden-pest-science.cjs'
+      - 'lib/japanese-beetle-forecast.cjs'
+      - 'api/japanese-beetle-forecast.js'
+      - 'tests/japanese-beetle-forecast.test.js'
       - 'api/garden-pest-timing-lab.js'
       - 'tests/garden-pest-science.test.js'
       - 'api/michigan-garden-pest-watch.js'
@@ -41,6 +44,8 @@ jobs:
         run: node scripts/verify-leafcutter-browser.cjs
       - name: Check historical NASA model math, Daymet data QC and scientific vetoes
         run: node --test tests/garden-pest-science.test.js
+      - name: Verify official Japanese beetle layers, calendar rollover, model states and evidence vetoes
+        run: node --test tests/japanese-beetle-forecast.test.js
       - name: Check Garden Pest Watch crop, evidence, failure and responsive browser behavior
         run: node scripts/verify-garden-pest-watch-browser.cjs
       - name: Save screenshots for inspection

@@ -51,3 +51,35 @@
 .history-warning{font-size:.74rem;line-height:1.6;border-left:3px solid #ab623d;background:#fff6e8;padding:10px 12px;color:#5b4336}
 @media(max-width:900px){.history-layout{grid-template-columns:1fr;gap:16px}}
 @media(max-width:600px){.history-lab{padding:20px 17px 18px;margin:4px 0 34px}.history-eyebrow{font-size:.59rem}.history-layout{padding:18px 0}.history-intro h2{font-size:1.83rem}.history-graphic{padding:16px 13px}.history-kpis{gap:7px}.history-kpis strong{font-size:1.12rem}.history-citations{gap:11px}.history-plot-key{font-size:.66rem}}
+
+
+/* Official beetle forecast wire: distinct working evidence panel, not copied from seasonal cards. */
+.beetle-desk{margin:14px 0 46px;padding:0 0 20px;border:2px solid #314638;background:#ebece0;color:#203a2e;border-radius:3px;overflow:hidden}
+.beetle-desk-rule{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;padding:13px 24px;background:#344d3b;color:#fff3d6;font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
+.beetle-desk-top{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.12fr);gap:26px;padding:28px 26px 21px}
+.beetle-tag{font-size:.68rem!important;color:#9a572b!important;font-weight:800;letter-spacing:.1em;text-transform:uppercase;margin:0 0 12px!important}
+.beetle-desk-top h2{margin:0 0 13px;font:500 clamp(1.75rem,2.85vw,2.45rem)/1.14 'Fraunces',Georgia,serif;letter-spacing:-.035em}
+.beetle-desk-top p{font-size:.86rem;line-height:1.58;color:#46594c}
+.beetle-desk-top strong{font-weight:800;color:#244330}
+.beetle-status-panel{background:#fffdf6;padding:23px 25px;border:1px solid #cbd0bc;box-shadow:5px 6px 0 #d4dac9;min-width:0;align-self:stretch}
+.beetle-state{display:inline-block;background:#e8dcc4;color:#72512e;border:1px solid #c7ac86;font-size:.62rem;font-weight:800;letter-spacing:.08em;padding:6px 8px;border-radius:2px}
+.beetle-state.is-active{background:#dbead9;color:#285338;border-color:#86a886}
+.beetle-state.is-unknown{background:#ebe9e2;color:#5b594f;border-color:#b6b4a9}
+.beetle-status-panel h3{margin:17px 0 12px;font:500 clamp(1.35rem,2.4vw,1.9rem)/1.14 'Fraunces',Georgia,serif;color:#254332}
+.beetle-status-panel p{font-size:.84rem;line-height:1.58;margin:9px 0}
+#beetle-location{font-size:.71rem;color:#626f63;border-top:1px solid #d9decf;padding-top:12px;margin-top:15px}
+.beetle-milestones{display:grid;grid-template-columns:1fr 1fr;gap:1px;margin:0 26px;background:#acbca7;border:1px solid #a2b39e}
+.beetle-milestones>div{background:#f5f6ed;padding:18px 20px;min-width:0}
+.beetle-milestone-title{font-size:.65rem;letter-spacing:.08em;font-weight:800;color:#56715b}
+.beetle-milestones strong{display:block;font:500 clamp(1.3rem,2.6vw,1.9rem)/1.2 'Fraunces',Georgia,serif;color:#2b4532;margin:9px 0 6px}
+.beetle-milestones small{display:block;line-height:1.5;color:#546453;font-size:.72rem}
+.beetle-proof{margin:16px 26px 0;border-top:1px solid #bdc8b8;padding-top:12px}
+.beetle-proof>p{font-size:.74rem;line-height:1.6;color:#485c4c;margin:4px 0 12px}
+.beetle-proof details{border-top:1px solid #bdc8b8;padding-top:11px}
+.beetle-proof summary{cursor:pointer;font-size:.83rem;font-weight:800;min-height:42px;padding:6px 0;color:#244b33}
+.beetle-proof details p{font-size:.8rem;line-height:1.65;color:#425e49}
+.beetle-source-links{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:.8rem}
+.beetle-source-links a{color:#255d39;text-decoration:underline;overflow-wrap:anywhere}
+.beetle-desk a:focus-visible,.beetle-proof summary:focus-visible{outline:3px solid #ad713d;outline-offset:3px}
+@media(max-width:800px){.beetle-desk-top{grid-template-columns:1fr;padding:20px 18px;gap:12px}.beetle-desk-rule{padding:12px 17px}.beetle-milestones{margin:0 18px}.beetle-proof{margin:12px 18px 0}}
+@media(max-width:540px){.beetle-desk{margin:8px 0 30px}.beetle-desk-top h2{font-size:1.83rem}.beetle-status-panel{padding:19px 17px;box-shadow:3px 3px 0 #d4dac9}.beetle-milestones{grid-template-columns:1fr}.beetle-milestones>div{padding:15px 17px}}

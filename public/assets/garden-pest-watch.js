@@ -43,6 +43,7 @@ function persist(){
  history.replaceState(null,'',u.pathname+'?'+u.searchParams.toString()+u.hash);
 }
 function showUnavailable(errorCode='SOURCE_UNAVAILABLE'){
+ resetBeetle('Main crop/ZIP source unavailable. The official beetle model is not being linked to an unverified reference area.');
  const month=Number(new Intl.DateTimeFormat('en-US',{timeZone:'America/Detroit',month:'numeric'}).format(new Date()));
  const winter=month>=11||month<=2;
  const locationProblem=errorCode==='ZIP_NOT_MAPPED'||errorCode==='ZIP_LOOKUP_UNAVAILABLE';
@@ -135,6 +136,7 @@ function showData(d){
  const nextSeason=year+(d.month>=11?1:0);
  source.textContent=off?'Michigan off-season: prepare for '+nextSeason+'. We make no claim about current regional outbreaks because field reports are not connected.':
    'Scouting guidance, not an observed outbreak.'+(w.status==='AVAILABLE'?' A checked NWS forecast adds broad weather context.':w.status==='PARTIAL'?' NWS weather coverage is incomplete.':' Weather source unavailable.');
+ void updateBeetle(d);
 }
 async function update(){
  if(zip.value&&!/^(?:48|49)\d{3}$/.test(zip.value)){
@@ -160,8 +162,8 @@ async function update(){
 }
 form.addEventListener('submit',ev=>{ev.preventDefault();update();});
 confirm.addEventListener('click',update);
-crop.addEventListener('change',()=>{suspect.value='';});
-zip.addEventListener('input',()=>zip.setCustomValidity(''));
+crop.addEventListener('change',()=>{suspect.value='';resetBeetle('Crop changed. Update your watch to check the appropriate model and location.');});
+zip.addEventListener('input',()=>{zip.setCustomValidity('');resetBeetle('ZIP reference changed. Update your watch to request an exact matching forecast pixel.');});
 share.addEventListener('click',async()=>{
  const url=location.href;
  try{if(!navigator.clipboard?.writeText)throw Error('NO_CLIPBOARD');
@@ -283,6 +285,84 @@ async function loadHistorical(){
 historyBtn.hidden=false;
 historyBtn.addEventListener('click',loadHistorical);
 zip.addEventListener('input',clearHistorical);
+
+
+/* USA-NPN official species-specific Japanese beetle pilot.
+ * This output is independent from the historical NASA Daymet research and from
+ * the primary Michigan seasonal/pest evidence decision. Model =/= detection. */
+const beetleHosts=new Set(['beans','berries','grapes','roses']);
+const beetleState=$('beetle-evidence-type'),beetleAnswer=$('beetle-answer'),beetleAction=$('beetle-action'),
+ beetleLocation=$('beetle-location'),beetleAdult=$('beetle-adult-date'),beetleEgg=$('beetle-egg-date'),
+ beetleSource=$('beetle-source-note'),beetleRaster=$('beetle-raster-source'),biologyEvidence=$('biology-evidence');
+let beetleSeq=0;
+function resetBeetle(message,mode='unknown'){
+ beetleSeq++;
+ beetleState.className='beetle-state'+(mode==='unknown'?' is-unknown':'');
+ beetleState.textContent=mode==='not-applicable'?'NOT A PILOT HOST':'OFFICIAL MODEL · NOT VERIFIED';
+ beetleAnswer.textContent=mode==='not-applicable'?'Choose a Japanese beetle host crop.':'No current official beetle timing verified.';
+ beetleAction.textContent=message||'Select beans, grapes, berries or roses to request the official USA-NPN point forecast.';
+ beetleLocation.textContent='Reference point: '+(zip.value?'ZIP '+zip.value+' (not yet checked)':'Bay City')+'.';
+ beetleAdult.textContent='Not verified';beetleEgg.textContent='Not verified';
+ beetleSource.textContent='No official species-specific model data verified for this selection. Unknown does not mean no beetles.';
+ if(biologyEvidence)biologyEvidence.textContent='Japanese beetle official model not verified for this garden selection. Other species models remain unavailable.';
+}
+function validBeetle(data,crop){
+ if(!data||data.schema!=='japanese-beetle-forecast-truth-v1'||data.status!=='OFFICIAL_MODEL_AVAILABLE'||
+ data.sourceKind!=='OFFICIAL_SPECIES_SPECIFIC_GRIDDED_MODEL'||data.crop!==crop||
+ !/^\d{4}-\d\d-\d\d$/.test(data.sourceDate)||!data.stages||!data.verdict||typeof data.verdict.status!=='string')return false;
+ const a=data.stages.adult,e=data.stages.egg;
+ return a&&e&&typeof a.dayOfYear==='number'&&typeof e.dayOfYear==='number'&&
+ Number.isFinite(a.dayOfYear)&&Number.isFinite(e.dayOfYear)&&a.dayOfYear>=1&&a.dayOfYear<=366&&
+ e.dayOfYear>=a.dayOfYear&&e.dayOfYear<=366&&
+ /^\d{4}-\d\d-\d\d$/.test(a.approximateDate||'')&&/^\d{4}-\d\d-\d\d$/.test(e.approximateDate||'')&&
+ ['OFF_SEASON','SCOUT','EGG_WINDOW','THRESHOLD_PASSED','PREPARE','NOT_APPLICABLE'].includes(data.verdict.status);
+}
+function renderBeetle(data){
+ const mode=data.verdict.status,year=data.year;
+ const label={OFF_SEASON:'SOURCE CHECKED · PAST SEASON',SCOUT:'OFFICIAL MODEL · SCOUTING WINDOW',
+ EGG_WINDOW:'OFFICIAL MODEL · EGG STAGE NEAR',THRESHOLD_PASSED:'OFFICIAL MODEL · THRESHOLD EARLIER',PREPARE:'OFFICIAL MODEL · PREPARATION',NOT_APPLICABLE:'NOT A PILOT HOST'};
+ beetleState.className='beetle-state'+(mode==='SCOUT'||mode==='EGG_WINDOW'?' is-active':'');
+ beetleState.textContent=label[mode]||'OFFICIAL SPECIES MODEL';
+ beetleAnswer.textContent=data.verdict.verdict;
+ beetleAction.textContent=data.verdict.action;
+ beetleLocation.textContent='Reference: '+(data.location?.name||'Michigan location')+
+  '. Census-area or named-city gridded point, not a garden inspection.';
+ const eventText=(stage)=>new Date(stage.approximateDate+'T12:00:00Z').toLocaleDateString('en-US',{timeZone:'UTC',month:'short',day:'numeric',year:'numeric'});
+ beetleAdult.textContent=(mode==='PREPARE'?'Provisional · ':'Modeled · ')+eventText(data.stages.adult);
+ beetleEgg.textContent=(mode==='PREPARE'?'Provisional · ':'Modeled · ')+eventText(data.stages.egg);
+ beetleSource.textContent='USA-NPN model layer date '+data.sourceDate+'. Verified exact raster time dimension and adult/egg point values. '+
+ (mode==='OFF_SEASON'?'This is a completed season, not a forecast of the next summer. ':
+  'Modeled threshold dates are not detections. ')+'Provider coverage date is not a measured publication timestamp.';
+ const modelLink=data.source?.coverageUrl;
+ if(typeof modelLink==='string'&&modelLink.startsWith('https://geoserver.usanpn.org/geoserver/'))beetleRaster.href=modelLink;
+ if(biologyEvidence)biologyEvidence.textContent='USA-NPN official Japanese beetle model: '+data.sourceDate+
+  ', '+(data.location?.name||'Michigan reference area')+'. Model timing only. No beetle sighting has been confirmed.';
+}
+async function updateBeetle(d){
+ const selected=crop.value,hasValidMain=d&&d.crop===selected;
+ if(!beetleHosts.has(selected)){
+  resetBeetle('This pilot is specific to beetles on beans, grapes, berries and roses. Use the crop scout notes for '+crop.options[crop.selectedIndex].text+'.','not-applicable');return;
+ }
+ if(!hasValidMain){resetBeetle('The selected crop and Michigan reference location have not been verified.');return;}
+ const ref=zip.value;
+ if(ref&&!/^(?:48|49)\d{3}$/.test(ref)){resetBeetle('Enter a complete Michigan ZIP before requesting model data.');return;}
+ const req=++beetleSeq;
+ beetleState.className='beetle-state is-unknown';beetleState.textContent='CHECKING OFFICIAL USA-NPN LAYERS';
+ beetleAnswer.textContent='Reading Japanese beetle heat-stage model…';
+ beetleAction.textContent='Checking two species-specific raster layers and their exact source dates for '+selected+'.';
+ beetleAdult.textContent='Checking source…';beetleEgg.textContent='Checking source…';
+ beetleSource.textContent='This does not use the generic 50°F accumulated heat map.';
+ const p=new URLSearchParams({crop:selected});
+ if(ref)p.set('zip',ref);else p.set('site','bay-city');
+ try{
+  const response=await fetch('/api/japanese-beetle-forecast?'+p.toString(),{headers:{accept:'application/json'},signal:AbortSignal.timeout(24000)});
+  if(!response.ok)throw Error('OFFICIAL_SOURCE_UNAVAILABLE');
+  const payload=await response.json();
+  if(req!==beetleSeq)return;
+  if(!validBeetle(payload,selected))throw Error('INVALID_FORECAST_EVIDENCE');
+  renderBeetle(payload);
+ }catch(_error){if(req===beetleSeq)resetBeetle('The official species-specific forecast, time dimension or reference pixel is unavailable. Continue plant inspection and consult the linked USA-NPN map; an unknown model result is never low risk.');}
+}
 
 restore();
 update();

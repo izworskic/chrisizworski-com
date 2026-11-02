@@ -33,8 +33,24 @@ function historyFixture(zip){
   ]
  };
 }
+function beetleFixture(url){
+ const crop=url.searchParams.get('crop')||'roses',zip=url.searchParams.get('zip'),name=zip?'ZIP '+zip+' area':'Bay City';
+ return {schema:'japanese-beetle-forecast-truth-v1',status:'OFFICIAL_MODEL_AVAILABLE',sourceKind:'OFFICIAL_SPECIES_SPECIFIC_GRIDDED_MODEL',
+  sourceDate:'2026-11-02',year:2026,crop,
+  location:{name,kind:zip?'zcta-interior-point':'named-city'},
+  stages:{adult:{dayOfYear:186,approximateDate:'2026-07-05'},egg:{dayOfYear:217.1929,approximateDate:'2026-08-05'}},
+  verdict:{status:'OFF_SEASON',verdict:'Past-season model record',action:'No current adult-emergence claim. Review past model stages and plan next summer’s leaf checks.'},
+  source:{coverageUrl:'https://geoserver.usanpn.org/geoserver/wcs?service=WCS&request=DescribeCoverage&coverage=gdd%3Ajapanese_beetle_adult'}};
+}
 async function routeFixtures(page,month=7){
  await page.route('**/*',route=>route.request().url().startsWith(ORIGIN)?route.continue():route.abort());
+ await page.route('**/api/japanese-beetle-forecast?*',route=>{
+  const u=new URL(route.request().url());
+  if(u.searchParams.get('zip')==='48707'){
+   return route.fulfill({status:503,contentType:'application/json',body:JSON.stringify({status:'UNAVAILABLE',code:'CENSUS_ZIP_UNAVAILABLE'})});
+  }
+  return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(beetleFixture(u))});
+ });
  await page.route('**/api/garden-pest-timing-lab?*',route=>{
   const u=new URL(route.request().url());
   route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(historyFixture(u.searchParams.get('zip')))});
@@ -92,6 +108,24 @@ async function waitForAnswer(page,pest){await page.waitForFunction(name=>documen
    await page.locator('#observed').selectOption('');
    await page.locator('#use-observation').click();
    await page.waitForFunction(()=>!document.querySelector('.watch-card .pest-status')?.textContent?.includes('You reported'),null,{timeout:6000});
+   assert.match(await page.locator('#beetle-answer').innerText(),/Choose a Japanese beetle host crop/i);
+   await page.locator('#crop').selectOption('roses');
+   await page.locator('#watch-form button[type=submit]').click();
+   await page.waitForFunction(()=>document.querySelector('#beetle-evidence-type')?.textContent?.includes('PAST SEASON'),null,{timeout:6000});
+   assert.match(await page.locator('#beetle-action').innerText(),/No current adult-emergence claim/);
+   assert.match(await page.locator('#beetle-adult-date').innerText(),/Jul 5, 2026/);
+   assert.match(await page.locator('#beetle-egg-date').innerText(),/Aug 5, 2026/);
+   assert.match(await page.locator('#beetle-source-note').innerText(),/2026-11-02/);
+   await page.locator('#zip').fill('48706');
+   assert.match(await page.locator('#beetle-adult-date').innerText(),/Not verified/);
+   await page.locator('#watch-form button[type=submit]').click();
+   await page.waitForFunction(()=>document.querySelector('#beetle-location')?.textContent?.includes('ZIP 48706 area'),null,{timeout:6000});
+   assert.match(await page.locator('#beetle-source-note').innerText(),/2026-11-02/);
+   await page.locator('#zip').fill('');
+   await page.locator('#crop').selectOption('squash');
+   assert.match(await page.locator('#beetle-adult-date').innerText(),/Not verified/);
+   await page.locator('#watch-form button[type=submit]').click();
+   await page.waitForFunction(()=>document.querySelector('#beetle-evidence-type')?.textContent?.includes('NOT A PILOT HOST'),null,{timeout:6000});
    assert.ok(await page.locator('#history-load').isVisible());
    await page.locator('#history-load').click();
    await page.waitForFunction(()=>document.querySelector('#history-results')?.textContent?.includes('Jul 2'),null,{timeout:7000});
@@ -130,6 +164,22 @@ async function waitForAnswer(page,pest){await page.waitForFunction(name=>documen
   await rp.screenshot({path:'artifacts/garden-pest-watch-browser/outage-after-change.png',fullPage:true,animations:'disabled'});
   await recovery.close();
 
+  // Independent official beetle raster failure does not erase the crop field
+  // notes and cannot leave a dated, once-successful beetle prediction behind.
+  const modelOutage=await browser.newContext({viewport:{width:390,height:820}});
+  const mp=await modelOutage.newPage();
+  await routeFixtures(mp);
+  await mp.route('**/api/japanese-beetle-forecast?*',route=>route.fulfill({status:503,contentType:'application/json',body:'{"status":"UNAVAILABLE"}'}));
+  await mp.goto(ORIGIN+'/michigan-garden-pest-watch/',{waitUntil:'domcontentloaded'});
+  await mp.locator('#crop').selectOption('roses');
+  await mp.locator('#watch-form button[type=submit]').click();
+  await mp.waitForFunction(()=>document.querySelector('#beetle-action')?.textContent?.includes('official species-specific forecast'),null,{timeout:7000});
+  assert.match(await mp.locator('#beetle-adult-date').innerText(),/Not verified/);
+  assert.match(await mp.locator('#beetle-source-note').innerText(),/Unknown does not mean no beetles/i);
+  assert.ok(await mp.locator('#watch-cards .watch-card').count()>0);
+  await mp.screenshot({path:'artifacts/garden-pest-watch-browser/beetle-official-source-unavailable.png',fullPage:true,animations:'disabled'});
+  await modelOutage.close();
+
   // Missing API must not claim zero risk, and the HTML field guide survives.
   const broken=await browser.newContext({viewport:{width:390,height:820}});
   const p=await broken.newPage();
@@ -146,6 +196,8 @@ async function waitForAnswer(page,pest){await page.waitForFunction(name=>documen
   assert.match(await n.locator('#primary-answer').innerText(),/squash stems/i);
   assert.ok(await n.locator('.nojs-guides').isVisible());
   assert.ok(await n.locator('#history-heading').isVisible());
+  assert.ok(await n.locator('#beetle-heading').isVisible());
+  assert.match(await n.locator('#beetle-source-note').innerText(),/never means no beetles/i);
   assert.ok(await n.locator('#history-load').isHidden());
   assert.ok(await n.locator('.primary-sources a').count()>=3);
   await noJS.close();
