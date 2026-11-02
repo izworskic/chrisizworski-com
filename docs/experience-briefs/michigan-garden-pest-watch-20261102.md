@@ -38,4 +38,4 @@ https://enviroweather.msu.edu/crops/coleCrops/cabbagemaggot
 https://enviroweather.msu.edu/crops/cucurbits/squashvineborer
 https://www.usanpn.org/data/maps/forecasts/Japanese_beetle
 https://www.weather.gov/documentation/services-web-api
-https://www.canr.msu.edu/uploads/resources/pdfs/pest_scouting_in_vegetables.pdf
+https://msu-prod.dotcmscloud.com/resources/ipm_smart_pest_management_for_the_vegetable_garden
