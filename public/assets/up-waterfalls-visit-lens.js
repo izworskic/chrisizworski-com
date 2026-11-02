@@ -39,6 +39,15 @@ function guidance(c,when){
  if(status==='research'||c.dataset.arrivalVerified!=='verified')return {excluded:true,notice:['Complete legal waterfall approach is not verified.'],level:'unverified'};
  if(status==='restricted')notice.push('Partial restrictions in the source record; check exactly which viewpoint is affected.');
  if(status==='seasonal')notice.push('Vehicle or foot access is seasonal. Opening today is not established.');
+ if(name==='scott-falls'){
+  notice.push('The documented view is from the MDOT park side of busy M-28 ONLY. Do not cross the highway to the falls or use a shoulder turnout.');
+ }
+ if(name==='houghton-douglass-falls'){
+  notice.push('DNR visitor infrastructure is still in phased development; the completed accessible falls overlook is not verified. Follow only currently permitted portions.');
+ }
+ if(name==='mex-i-min-e-falls'&&(month>=10||month<=5)){
+  notice.push('Forest Road 4500 and Burned Dam Campground are not maintained for all-season vehicle access; snow and gates may prevent arrival.');
+ }
  if(name==='bond-falls'&&(month>=11||month<=4)){
   notice.push('Bond Falls vehicle access is usually mid-May through mid-October; check the scenic-site approach.');
  }
