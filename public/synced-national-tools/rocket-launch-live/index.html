@@ -16,12 +16,12 @@
 <link rel="preconnect" href="https://basemaps.cartocdn.com">
 <link rel="preconnect" href="https://unpkg.com">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<link rel="stylesheet" href="/national-tools/rocket-launch-live/styles.css?v=20261101-1">
+<link rel="stylesheet" href="/national-tools/rocket-launch-live/styles.css?v=20261101-official1">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5D2V2W7HN"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-Y5D2V2W7HN');</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://chrisizworski.com/national-tools/rocket-launch-live/#webpage","url":"https://chrisizworski.com/national-tools/rocket-launch-live/","name":"Rocket Launch Live USA: When and Where to Watch","description":"Coastal U.S. launch calendar with region-specific legal access, launch timing uncertainty and public NWS weather evidence.","dateModified":"2026-10-31","author":{"@id":"https://chrisizworski.com/#person"},"about":[{"@type":"Thing","name":"Rocket launch viewing"},{"@type":"Thing","name":"U.S. coastal spaceports"}]},{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"U.S. Tools","item":"https://chrisizworski.com/national-tools/"},{"@type":"ListItem","position":3,"name":"Rocket Launch Live USA","item":"https://chrisizworski.com/national-tools/rocket-launch-live/"}]}]}</script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
-<script src="/national-tools/rocket-launch-live/app.js?v=20261101-1" defer></script>
+<script src="/national-tools/rocket-launch-live/app.js?v=20261101-official1" defer></script>
 </head>
 <body>
 <a class="rl-skip" href="#main-content">Skip to launch decisions</a>
@@ -131,6 +131,15 @@
       </div>
       <span class="rl-status" id="rl-range-grade" data-state="unknown">Not yet assessed</span>
     </div>
+    <section id="rl-official-wrap" class="rl-official-45ws" hidden>
+      <div><span class="rl-site-kicker">45th Weather Squadron · official mission forecast</span>
+        <h4 id="rl-official-title">Checking exact mission evidence</h4>
+        <p id="rl-official-detail">Only a mission-matched, dated official PDF can establish a weather-rule violation probability.</p>
+        <p id="rl-official-trend"></p>
+      </div>
+      <div class="rl-official-value"><strong id="rl-official-value">Unverified</strong><span>Probability of violating covered launch weather rules</span>
+        <div id="rl-official-source"></div></div>
+    </section>
     <div class="rl-range-readings" id="rl-range-readings"></div>
     <div class="rl-range-detail">
       <div><h4>Signals worth watching</h4><div id="rl-range-signals"><p>No reliable mission-specific weather signals yet.</p></div></div>
