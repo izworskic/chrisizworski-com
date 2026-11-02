@@ -29,7 +29,7 @@ test('Crawlable National Park Phenomenon Atlas with 12 source-backed events', ()
   assert.equal(storyCount, 12, 'Must feature exactly 12 audited phenomena');
 
   // Verify persona voice & schema
-  assert.match(html, /Chief National Park Service Interpretive Ranger/);
+  assert.match(html, /Independent national park field guide/);
 
   // Verify valid Schema.org graph
   const jsonLdMatch = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
@@ -57,12 +57,12 @@ test('Crawlable National Park Phenomenon Atlas with 12 source-backed events', ()
 test('Exact 12 national park phenomena are present with correct IDs, parks, and data attributes', () => {
   const html = read('public/national-park-phenomena-field-guide/index.html');
   const expectedPhenomena = [
-    { id: 'yosemite-horsetail-firefall', months: '2', permit: 'lottery' },
+    { id: 'yosemite-horsetail-firefall', months: '2', permit: 'open' },
     { id: 'blue-spring-manatees', months: '11,12,1,2,3', permit: 'open' },
     { id: 'death-valley-superbloom', months: '2,3,4', permit: 'open' },
     { id: 'elkmont-synchronous-fireflies', months: '5,6', permit: 'lottery' },
     { id: 'zion-narrows-flash-window', months: '5,6,7,8,9,10', permit: 'lottery' },
-    { id: 'glacier-going-to-the-sun-opening', months: '6,7,8,9,10', permit: 'lottery' },
+    { id: 'glacier-going-to-the-sun-opening', months: '6,7,8,9,10', permit: 'open' },
     { id: 'katmai-brooks-falls-bears', months: '7', permit: 'lottery' },
     { id: 'columbia-salmon-leap', months: '6,7,8,9,10', permit: 'open' },
     { id: 'yellowstone-geysers', months: '5,6,7,8,9,10', permit: 'open' },
