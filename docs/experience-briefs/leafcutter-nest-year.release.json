@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.2",
-  "recordStatus": "draft",
+  "recordStatus": "released",
   "project": {
     "slug": "leafcutter-bees",
     "ownerRepo": "izworskic/chrisizworski-com",
@@ -144,9 +144,11 @@
       768,
       1440
     ],
-    "browserStatus": "PENDING",
-    "browserRun": null,
-    "screenshotEvidence": []
+    "browserStatus": "PASSED",
+    "browserRun": "https://github.com/izworskic/chrisizworski-com/actions/runs/41368768221",
+    "screenshotEvidence": [
+      "https://github.com/izworskic/chrisizworski-com/actions/runs/41368768221/artifacts/13108331111"
+    ]
   },
   "photos": [
     {
@@ -166,17 +168,25 @@
       "checkedDate": "2026-11-01"
     },
     "verified": {
-      "status": "PENDING"
+      "status": "CONFIRMED",
+      "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/actions/runs/41368768221",
+      "checkedDate": "2026-11-01"
     },
     "deployed": {
-      "status": "PENDING"
+      "status": "CONFIRMED",
+      "evidenceUrl": "https://vercel.com/izworski-gmailcoms-projects/chrisizworski-com/E4nkKXKaBptMQ5oftkW61FyhUodC",
+      "checkedDate": "2026-11-01",
+      "commitSha": "15a9b61845345a1587a6c678ff1b4e3c5c023d64"
     },
     "live": {
-      "status": "PENDING"
+      "status": "CONFIRMED",
+      "evidenceUrl": "https://chrisizworski.com/leafcutter-bees/",
+      "checkedDate": "2026-11-01",
+      "publicUrl": "https://chrisizworski.com/leafcutter-bees/"
     },
     "measured": {
       "status": "NOT_MEASURED"
     }
   },
-  "note": "Existing canonical routed from Michigan Gardening and present in sitemap. Release checker --check-site is for new global Tools catalog additions, not this already indexed Michigan-gardening guide. Browser run and public evidence pending."
+  "note": "Experience OS 1.2.1 original redesign passed full repository gate, real 360/390/768/1440 browser QA, Vercel production deployment and independent public HTML/mobile checks on November 1, 2026. Follow-up self-hosts the credited bee hero to avoid external-image failures. Measured visitor outcomes remain NOT_MEASURED."
 }
