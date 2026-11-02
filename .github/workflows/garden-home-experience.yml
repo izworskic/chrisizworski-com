@@ -10,6 +10,10 @@ on:
       - 'lib/japanese-beetle-forecast.cjs'
       - 'api/japanese-beetle-forecast.js'
       - 'tests/japanese-beetle-forecast.test.js'
+      - 'tests/japanese-beetle-field-evidence.test.js'
+      - 'lib/japanese-beetle-field-evidence.cjs'
+      - 'api/japanese-beetle-field-evidence.js'
+      - 'scripts/audit-japanese-beetle-field-validation.cjs'
       - 'api/garden-pest-timing-lab.js'
       - 'tests/garden-pest-science.test.js'
       - 'api/michigan-garden-pest-watch.js'
@@ -42,6 +46,8 @@ jobs:
         run: node scripts/verify-garden-home-browser.cjs
       - name: Check leafcutter release forecast and mobile states
         run: node scripts/verify-leafcutter-browser.cjs
+      - name: Validate georeferenced research-grade beetle evidence filters and historic comparability
+        run: node --test tests/japanese-beetle-field-evidence.test.js
       - name: Check historical NASA model math, Daymet data QC and scientific vetoes
         run: node --test tests/garden-pest-science.test.js
       - name: Verify official Japanese beetle layers, calendar rollover, model states and evidence vetoes
