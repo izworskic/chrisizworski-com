@@ -88,6 +88,18 @@ test('an overdue monitor cannot continue presenting an old official PoV as curre
   assert.equal(p.povPercent,null);
   assert.notEqual(p.status,'mission-matched-current');
 });
+test('a healthy monitor cannot reuse an unrefreshed mission PDF',()=>{
+  const first=model.ingest(state(),{discoveryStatus:'ok',inspected:1,verified:1,failed:0,reports:[report()]},[mission],NOW);
+  const after=model.ingest(first.state,{discoveryStatus:'ok',inspected:1,verified:0,failed:0,reports:[]},[mission],NOW+2*3600000);
+  assert.equal(after.state.monitorStatus,'ok');
+  const stale=model.missionForecast(mission,after.state,NOW+2*3600000);
+  assert.equal(stale.health.status,'ok');
+  assert.equal(stale.povPercent,null);
+  const checked=model.ingest(after.state,{discoveryStatus:'ok',inspected:1,verified:1,failed:0,reports:[report()]},[mission],NOW+2*3600000);
+  assert.equal(checked.changes,0);
+  const current=model.missionForecast(mission,checked.state,NOW+2*3600000);
+  assert.equal(current.povPercent,60);
+});
 test('old and incorrect monitoring sources cannot publish a probability',()=>{
   const first=model.ingest(state(),{discoveryStatus:'partial',inspected:1,verified:0,failed:1,reports:[
     report(90,{sourceMission:'Starlink 10-99'})]},[mission],NOW);
