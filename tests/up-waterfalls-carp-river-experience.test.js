@@ -105,3 +105,37 @@ test('Inventory, geographic crosswalk and priority queue update together without
  assert.ok(!queue.candidates.some(x=>x.gisObjectId===169));
  assert.ok(queue.candidates.some(x=>x.gisObjectId===163 && !x.publicationEligible));
 });
+
+
+test('NTN-authored Trailforks geometry is displayed only on request and never mistaken for an arrival route',()=>{
+ const g=curated.find(x=>x.id==='carp-river-falls');
+ assert.ok(g?.trailGeometryReference);
+ const t=g.trailGeometryReference;
+ assert.equal(t.trailforksTrailId,766002);
+ assert.equal(t.trailLengthFeet,3363);
+ assert.equal(t.trailLengthMilesApprox,0.64);
+ assert.equal(t.segmentIsCompleteTrailheadRoute,false);
+ assert.equal(t.overlookCoordinatesVerified,false);
+ assert.equal(t.trafficCrossingCoordinatesVerified,false);
+ assert.equal(t.parkingCoordinatesVerified,false);
+ assert.equal(t.independentRoutePolylineAuthorized,false);
+ assert.equal(t.source,'https://www.trailforks.com/trails/carp-river-falls/');
+ for(const id of ['cr-show-falls','cr-show-trail','cr-falls-panel','cr-trail-panel','cr-load-trail-map','cr-embed-shell'])assert.ok(page.includes('id="'+id+'"'),id);
+ assert.match(page,/id="cr-trail-panel" hidden/);
+ assert.match(page,/3,363 feet/);
+ assert.match(page,/not the measured full hike from NTN South Trailhead|not a verified continuous walking itinerary|not the complete parking-to-overlook/i);
+ assert.ok(!page.includes('<iframe'), 'Third-party tracking map must not preload in HTML');
+ assert.ok(js.includes('loadTrailButton?.addEventListener'));
+ assert.ok(js.includes("trailEmbedShell.dataset.loaded='true'"));
+ assert.ok(js.includes('trailid=766002'));
+ assert.ok(js.includes("iframe.referrerPolicy='strict-origin-when-cross-origin'"));
+ assert.ok(js.includes("iframe.title='Trailforks map of Carp River Falls Trail"));
+ assert.ok(js.includes("showEvidence('falls')"));
+ assert.ok(css.includes('#cr-trail-panel[hidden]'));
+ assert.ok(css.includes('.cr-trail-embed'));
+ assert.doesNotMatch(js,/L\\.polyline\\s*\\(/);
+ assert.doesNotMatch(page,/data-parking-lat=/);
+ assert.ok(!page.includes('maps/dir/?api=1&destination=46.503807'));
+ assert.match(g.walk,/NOT the measured full hike/);
+ assert.ok(hub.includes('Mapped NTN trail segment'));
+});
