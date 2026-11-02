@@ -160,11 +160,19 @@ return async function handler(req, res) {
     ]);
     if(!shared||!Array.isArray(shared.launches))
       throw new Error('Shared national launch observation unavailable');
+    const floridaGroup=shared.health?.find(h=>h.id==='primary');
+    const floridaFresh=shared.freshness==='recent'&&
+      ['ok','truncated'].includes(floridaGroup?.status);
     const feed={
       results:shared.launches.filter(l=>l.region==='florida'),
-      sharedScheduleCheckedAt:shared.checkedAt,sharedScheduleSource:shared.source,
-      freshness:shared.freshness,complete:shared.complete,
-      warning:shared.warning,health:shared.health,preNormalized:true
+      sharedScheduleCheckedAt:floridaGroup?.checkedAt||shared.checkedAt,
+      sharedScheduleSource:shared.source,
+      freshness:floridaFresh?'recent':'stale',
+      complete:floridaFresh&&floridaGroup?.status==='ok',
+      warning:!floridaFresh?
+        'The Florida launch-source group has not been verified recently. Recheck the operator before traveling.':
+        shared.warning,
+      health:shared.health,preNormalized:true
     };
     if (!Array.isArray(feed?.results)) throw new Error('Launch Library results are missing');
     const launches = (feed.preNormalized ?
