@@ -13,192 +13,160 @@
     {
       "batchNumber": 1,
       "candidates": [
-        22,
-        28,
         54,
         57,
         60,
         61,
         62,
-        72
+        72,
+        84,
+        106
       ]
     },
     {
       "batchNumber": 2,
       "candidates": [
-        84,
-        106,
         122,
         51,
         120,
         136,
         137,
-        139
+        139,
+        140,
+        152
       ]
     },
     {
       "batchNumber": 3,
       "candidates": [
-        140,
-        152,
         176,
         177,
         23,
         213,
         68,
-        8
+        8,
+        38,
+        12
       ]
     },
     {
       "batchNumber": 4,
       "candidates": [
-        38,
-        12,
         4,
         9,
         191,
         192,
         46,
-        91
+        91,
+        119,
+        190
       ]
     },
     {
       "batchNumber": 5,
       "candidates": [
-        119,
-        190,
         45,
         150,
         151,
         154,
         160,
-        215
+        215,
+        195,
+        205
       ]
     },
     {
       "batchNumber": 6,
       "candidates": [
-        195,
-        205,
         52,
         59,
         83,
         99,
         103,
-        105
+        105,
+        107,
+        114
       ]
     },
     {
       "batchNumber": 7,
       "candidates": [
-        107,
-        114,
         121,
         123,
         20,
         24,
         25,
-        37
+        37,
+        39,
+        40
       ]
     },
     {
       "batchNumber": 8,
       "candidates": [
-        39,
-        40,
         48,
         58,
         63,
         65,
         69,
-        70
+        70,
+        74,
+        75
       ]
     },
     {
       "batchNumber": 9,
       "candidates": [
-        74,
-        75,
         86,
         112,
         29,
         42,
         80,
-        85
+        85,
+        129,
+        15
       ]
     },
     {
       "batchNumber": 10,
       "candidates": [
-        129,
-        15,
         17,
         144,
         18,
         116,
         127,
-        148
+        148,
+        149,
+        153
       ]
     },
     {
       "batchNumber": 11,
       "candidates": [
-        149,
-        153,
         162,
         163,
         170,
         172,
         173,
-        175
+        175,
+        180,
+        181
       ]
     },
     {
       "batchNumber": 12,
       "candidates": [
-        180,
-        181,
         183,
         184,
         185,
         186,
-        187
+        187,
+        22,
+        28
       ]
     }
   ],
   "candidates": [
-    {
-      "gisObjectId": 22,
-      "name": "Rock Bluff Falls",
-      "county": "ONTONAGON",
-      "river": "BLUFF CREEK",
-      "lat": 46.370607,
-      "lng": -89.183436,
-      "cluster": "ONTONAGON / BLUFF CREEK",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 28,
-      "name": "Wolverine Falls",
-      "county": "ONTONAGON",
-      "river": "N/A",
-      "lat": 46.405577,
-      "lng": -89.348732,
-      "cluster": "ONTONAGON / N/A",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
     {
       "gisObjectId": 54,
       "name": "Minnewawa Falls",
@@ -1686,6 +1654,38 @@
       "reviewStatus": "previous-research-needs-public-access-review",
       "sourceCount": 3,
       "blockingGate": "Obtain dependable imagery or first-hand fall evidence, reconcile the discrepant locations, verify ownership and any legal public road/foot access and certified parking before suggesting a trip."
+    },
+    {
+      "gisObjectId": 22,
+      "name": "Rock Bluff Falls",
+      "county": "ONTONAGON",
+      "river": "BLUFF CREEK",
+      "lat": 46.370607,
+      "lng": -89.183436,
+      "cluster": "ONTONAGON / BLUFF CREEK",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 5,
+      "blockingGate": "Reconcile Rock Bluff, Upper Rock Bluff and the Mateson Creek report with independently surveyed or official geographic identity; verify parcels, road jurisdiction, signed public parking and a continuous authorized walking corridor to the correct drops."
+    },
+    {
+      "gisObjectId": 28,
+      "name": "Wolverine Falls",
+      "county": "ONTONAGON",
+      "river": "N/A",
+      "lat": 46.405577,
+      "lng": -89.348732,
+      "cluster": "ONTONAGON / N/A",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 6,
+      "blockingGate": "Resolve the correct fall location against GPS-tracked and authoritative river maps; verify Ottawa National Forest/other land ownership, current MVUM road status, parking and a continuous public walking route to a safe viewpoint if one exists. Keep skilled paddling conditions separate from sightseeing guidance."
     }
   ]
 }
