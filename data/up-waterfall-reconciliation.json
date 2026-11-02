@@ -5796,10 +5796,66 @@
       "curatedId": null,
       "publicGuide": null,
       "landManager": null,
-      "parkingVerified": null,
-      "publicAccessVerified": null,
-      "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "parkingVerified": false,
+      "publicAccessVerified": false,
+      "reviewed": "2026-11-01",
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "evidenceReviewed": "2026-11-01",
+      "publicationEligible": false,
+      "disposition": "verified-waterfall-current-road-parcel-gate",
+      "sourceNotes": "State GIS point 46.780948,-87.708440 and USGS-derived hydro feature are about 114m apart. An independent field record maps the lower main cascade near 46.78188,-87.70739 and identifies three smaller upstream drops. A regional tourism listing describes a 30ft cascade, but the larger total is not one vertical 30ft plunge. Older field guides use the rough Alder Creek Truck Trail off CR550 and describe a No Motorized Vehicles sign at the steep final path. No current authorized forest-road vehicle status, public signed parking lot, property corridor, or bridge status established. Private home driveways occur near the truck trail.",
+      "outstandingGate": "Confirm present road authority, land title and walking easement, legally signed stopping point and the complete public trail at the lower falls, keeping upper cascades distinct.",
+      "sourceLinks": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://github.com/izworskic/chrisizworski-com/blob/main/data/up-waterfall-usgs-v2-crosswalk.json",
+        "https://www.uptravel.com/listing/alder-falls/65/",
+        "https://www.waterfallsofthekeweenaw.com/alder-creek/alder-falls/",
+        "https://www.gowaterfalling.com/waterfalls/alder.shtml"
+      ],
+      "accessRouteAudit": {
+        "reviewed": "2026-11-01",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Feature identity vs same-name locations",
+            "status": "documented-geography",
+            "finding": "State GIS point 46.780948,-87.708440 and USGS-derived hydro feature are about 114m apart. An independent field record maps the lower main cascade near 46.78188,-87.70739 and identifies three smaller upstream drops. A regional tourism listing describes a 30ft cascade, but the larger total is not one vertical 30ft plunge.",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Land tenure and private entry risk",
+            "status": "not-cleared",
+            "finding": "No fresh parcel survey or legal walking corridor has been established by this batch. GIS coordinates alone do not prove public title or access rights.",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Historic/tourism directions and access status",
+            "status": "documented-not-live",
+            "finding": "Older field guides use the rough Alder Creek Truck Trail off CR550 and describe a No Motorized Vehicles sign at the steep final path. No current authorized forest-road vehicle status, public signed parking lot, property corridor, or bridge status established. Private home driveways occur near the truck trail.",
+            "source": "https://github.com/izworskic/chrisizworski-com/blob/main/data/up-waterfall-usgs-v2-crosswalk.json"
+          },
+          {
+            "label": "Road jurisdiction and lawful parking",
+            "status": "not-cleared",
+            "finding": "No independently certified present-day signed visitor parking or legal road shoulder is documented here. ",
+            "source": "https://github.com/izworskic/chrisizworski-com/blob/main/data/up-waterfall-usgs-v2-crosswalk.json"
+          },
+          {
+            "label": "Continuous legal footpath and safe waterfall view",
+            "status": "not-cleared",
+            "finding": "No current signed, continuous public visitor approach to a verified safe viewpoint. Further upstream drops include steep rock and pools.",
+            "source": "https://www.uptravel.com/listing/alder-falls/65/"
+          },
+          {
+            "label": "Current conditions, restrictions and uncertainty",
+            "status": "not-cleared",
+            "finding": "No current November 2026 road, gate, trail, footing or land-manager permission report. Do not present old hiking text as live access.",
+            "source": "https://github.com/izworskic/chrisizworski-com/blob/main/data/up-waterfall-usgs-v2-crosswalk.json"
+          }
+        ]
+      }
     },
     {
       "gisObjectId": 154,
@@ -6045,10 +6101,67 @@
       "curatedId": null,
       "publicGuide": null,
       "landManager": null,
-      "parkingVerified": null,
-      "publicAccessVerified": null,
-      "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "parkingVerified": false,
+      "publicAccessVerified": false,
+      "reviewed": "2026-11-01",
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "evidenceReviewed": "2026-11-01",
+      "publicationEligible": false,
+      "disposition": "bridge-visible-falls-unconfirmed-visitor-lot",
+      "sourceNotes": "GIS #162 on Reany Creek is near USGS-derived 46.573626,-87.478228 (~73m apart), and independent 2022 field trip pin 46.57355,-87.47692 and GNIS references agree this is the Forestville Road waterfall, not a similarly named feature along Reany Street in downtown Marquette. The drops appear from the road bridge. Michigan tourism and UPtravel recommend parking by an old power station then walking back to the bridge; the current site-specific utility/land manager's legal visitor parking, any gate rules, bridge pedestrian facilities and safe road shoulder have not been established. Do not substitute Dead River Falls private route rights.",
+      "outstandingGate": "Confirm Forestville Road bridge pedestrian safety and present lawful visitor parking at the specific powerhouse lot; preserve bridge view without creek scramble or implying Dead River upstream access.",
+      "sourceLinks": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.michigan.org/property/reany-falls",
+        "https://www.uptravel.com/listing/reany-falls/3406/",
+        "https://geo.mytopo.com/feature/michigan/marquette/falls/2336608/reany-falls/",
+        "https://camphikeexplore.com/2022/05/09/a-marquette-waterfall-tour/",
+        "https://www.gowaterfalling.com/waterfalls/minorfallsP-S.shtml"
+      ],
+      "accessRouteAudit": {
+        "reviewed": "2026-11-01",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Feature identity vs same-name locations",
+            "status": "documented-geography",
+            "finding": "GIS #162 on Reany Creek is near USGS-derived 46.573626,-87.478228 (~73m apart), and independent 2022 field trip pin 46.57355,-87.47692 and GNIS references agree this is the Forestville Road waterfall, not a similarly named feature along Reany Street in downtown Marquette. The drops appear from the road bridge.",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Land tenure and private entry risk",
+            "status": "not-cleared",
+            "finding": "No fresh parcel survey or legal walking corridor has been established by this batch. GIS coordinates alone do not prove public title or access rights.",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Historic/tourism directions and access status",
+            "status": "documented-not-live",
+            "finding": "Michigan tourism and UPtravel recommend parking by an old power station then walking back to the bridge; the current site-specific utility/land manager's legal visitor parking, any gate rules, bridge pedestrian facilities and safe road shoulder have not been established. Do not substitute Dead River Falls private route rights.",
+            "source": "https://www.michigan.org/property/reany-falls"
+          },
+          {
+            "label": "Road jurisdiction and lawful parking",
+            "status": "not-cleared",
+            "finding": "No independently certified present-day signed visitor parking or legal road shoulder is documented here. Bridge visitor safety and powerhouse property remain open questions.",
+            "source": "https://www.michigan.org/property/reany-falls"
+          },
+          {
+            "label": "Continuous legal footpath and safe waterfall view",
+            "status": "not-cleared",
+            "finding": "No current signed, continuous public visitor approach to a verified safe viewpoint. ",
+            "source": "https://www.uptravel.com/listing/reany-falls/3406/"
+          },
+          {
+            "label": "Current conditions, restrictions and uncertainty",
+            "status": "not-cleared",
+            "finding": "No current November 2026 road, gate, trail, footing or land-manager permission report. Do not present old hiking text as live access.",
+            "source": "https://www.michigan.org/property/reany-falls"
+          }
+        ]
+      }
     },
     {
       "gisObjectId": 163,
@@ -6062,10 +6175,65 @@
       "curatedId": null,
       "publicGuide": null,
       "landManager": null,
-      "parkingVerified": null,
-      "publicAccessVerified": null,
-      "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "parkingVerified": false,
+      "publicAccessVerified": false,
+      "reviewed": "2026-11-01",
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "evidenceReviewed": "2026-11-01",
+      "publicationEligible": false,
+      "disposition": "upper-carp-feature-posted-access-conflict",
+      "sourceNotes": "Michigan GIS #163 locates a feature near 46.521504,-87.572418, consistent with independent Upper Carp River Falls at 46.52167,-87.57631, two small ledges outside Ishpeming. This is far west of the major Marquette gorge falls found in state GIS #169 near 46.503807,-87.44655. An old field report instructs parking at a SEMCO Energy facility; a 2019 first-hand visitor comment reports its trail posted No Trespassing. No later permission, approved parking, easement or complete legal route was verified. Roadside/utility grounds are not public lots.",
+      "outstandingGate": "Confirm actual owner and posted trail status; reconcile whether GIS marks the lower/upper drop of the small Ishpeming feature and locate a current independent lawful public approach before visitor publication.",
+      "sourceLinks": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.waterfallsofthekeweenaw.com/carp-river/upper-carp-river-falls/",
+        "https://www.travelmarquette.com/outdoor-adventure/waterfalls/",
+        "https://www.travelmarquette.com/blog/post/waterfalls-you-need-to-see-in-fall/"
+      ],
+      "accessRouteAudit": {
+        "reviewed": "2026-11-01",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Feature identity vs same-name locations",
+            "status": "documented-geography",
+            "finding": "Michigan GIS #163 locates a feature near 46.521504,-87.572418, consistent with independent Upper Carp River Falls at 46.52167,-87.57631, two small ledges outside Ishpeming. This is far west of the major Marquette gorge falls found in state GIS #169 near 46.503807,-87.44655.",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Land tenure and private entry risk",
+            "status": "not-cleared",
+            "finding": "No fresh parcel survey or legal walking corridor has been established by this batch. A 2019 visitor reported a posted no-trespassing footpath.",
+            "source": "https://www.waterfallsofthekeweenaw.com/carp-river/upper-carp-river-falls/"
+          },
+          {
+            "label": "Historic/tourism directions and access status",
+            "status": "documented-not-live",
+            "finding": "An old field report instructs parking at a SEMCO Energy facility; a 2019 first-hand visitor comment reports its trail posted No Trespassing. No later permission, approved parking, easement or complete legal route was verified. Roadside/utility grounds are not public lots.",
+            "source": "https://www.waterfallsofthekeweenaw.com/carp-river/upper-carp-river-falls/"
+          },
+          {
+            "label": "Road jurisdiction and lawful parking",
+            "status": "not-cleared",
+            "finding": "No independently certified present-day signed visitor parking or legal road shoulder is documented here. ",
+            "source": "https://www.waterfallsofthekeweenaw.com/carp-river/upper-carp-river-falls/"
+          },
+          {
+            "label": "Continuous legal footpath and safe waterfall view",
+            "status": "not-cleared",
+            "finding": "No current signed, continuous public visitor approach to a verified safe viewpoint. ",
+            "source": "https://www.travelmarquette.com/outdoor-adventure/waterfalls/"
+          },
+          {
+            "label": "Current conditions, restrictions and uncertainty",
+            "status": "not-cleared",
+            "finding": "No current November 2026 road, gate, trail, footing or land-manager permission report. Historic posted warning must be retained pending official current authorization.",
+            "source": "https://www.waterfallsofthekeweenaw.com/carp-river/upper-carp-river-falls/"
+          }
+        ]
+      }
     },
     {
       "gisObjectId": 166,
@@ -6115,10 +6283,66 @@
       "curatedId": null,
       "publicGuide": null,
       "landManager": null,
-      "parkingVerified": null,
-      "publicAccessVerified": null,
-      "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "parkingVerified": false,
+      "publicAccessVerified": false,
+      "reviewed": "2026-11-01",
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "evidenceReviewed": "2026-11-01",
+      "publicationEligible": false,
+      "disposition": "marquette-carp-gorge-official-walking-recommendation-final-approach-risk",
+      "sourceNotes": "State GIS #169 names Carp River Falls II but incorrectly lists MORGAN CREEK as waterway. The natural point 46.503807,-87.446550 is about 18m from Travel Marquette's Carp River Falls 46.50367,-87.44668. Morgan Falls at 46.50737,-87.44516 is a different waterfall on Morgan Creek, with a separate published card. Travel Marquette specifies parking at NTN South Trails, walking/biking a motor-vehicle-closed Mt. Marquette Road, reaching Morgan Falls, then continuing about half a mile on an increasingly rough Carp River trail. Independent visits say the high rim offers poor views and getting near the base involves precarious climb. Do not generate a safe trail line, permit vehicle traffic on closed road or imply official parking at the natural falls point.",
+      "outstandingGate": "Georeference verified legal NTN trailhead to the walk/bike route; reconcile actual Carp River channel and distinct Morgan Creek confluence; establish the approved final vista and hazard wording before indexable expert guide.",
+      "sourceLinks": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.travelmarquette.com/outdoor-adventure/waterfalls/",
+        "https://www.travelmarquette.com/blog/post/waterfalls-you-need-to-see-in-fall/",
+        "https://gowaterfalling.com/waterfalls/carpriver.shtml",
+        "https://chrisizworski.com/upper-peninsula-waterfalls/morgan-falls/"
+      ],
+      "accessRouteAudit": {
+        "reviewed": "2026-11-01",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Feature identity vs same-name locations",
+            "status": "documented-geography",
+            "finding": "State GIS #169 names Carp River Falls II but incorrectly lists MORGAN CREEK as waterway. The natural point 46.503807,-87.446550 is about 18m from Travel Marquette's Carp River Falls 46.50367,-87.44668. Morgan Falls at 46.50737,-87.44516 is a different waterfall on Morgan Creek, with a separate published card.",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Land tenure and private entry risk",
+            "status": "not-cleared",
+            "finding": "No fresh parcel survey or legal walking corridor has been established by this batch. GIS coordinates alone do not prove public title or access rights.",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Historic/tourism directions and access status",
+            "status": "documented-not-live",
+            "finding": "Travel Marquette specifies parking at NTN South Trails, walking/biking a motor-vehicle-closed Mt. Marquette Road, reaching Morgan Falls, then continuing about half a mile on an increasingly rough Carp River trail. Independent visits say the high rim offers poor views and getting near the base involves precarious climb. Do not generate a safe trail line, permit vehicle traffic on closed road or imply official parking at the natural falls point.",
+            "source": "https://www.travelmarquette.com/outdoor-adventure/waterfalls/"
+          },
+          {
+            "label": "Road jurisdiction and lawful parking",
+            "status": "not-cleared",
+            "finding": "NTN South Trails is named in the Travel Marquette visitor route, but this does not make Mt. Marquette Road vehicle-accessible or certify parking at the waterfall.",
+            "source": "https://www.travelmarquette.com/blog/post/waterfalls-you-need-to-see-in-fall/"
+          },
+          {
+            "label": "Continuous legal footpath and safe waterfall view",
+            "status": "not-cleared",
+            "finding": "Travel Marquette's hiking progression exists, but the final steep gorge descent is unmarked and cannot be rendered as a safe approved polyline.",
+            "source": "https://www.travelmarquette.com/blog/post/waterfalls-you-need-to-see-in-fall/"
+          },
+          {
+            "label": "Current conditions, restrictions and uncertainty",
+            "status": "not-cleared",
+            "finding": "No current November 2026 road, gate, trail, footing or land-manager permission report. Do not present old hiking text as live access.",
+            "source": "https://www.travelmarquette.com/outdoor-adventure/waterfalls/"
+          }
+        ]
+      }
     },
     {
       "gisObjectId": 170,
@@ -6132,10 +6356,64 @@
       "curatedId": null,
       "publicGuide": null,
       "landManager": null,
-      "parkingVerified": null,
-      "publicAccessVerified": null,
-      "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "parkingVerified": false,
+      "publicAccessVerified": false,
+      "reviewed": "2026-11-01",
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "evidenceReviewed": "2026-11-01",
+      "publicationEligible": false,
+      "disposition": "tiny-falls-no-signed-trail-near-active-mining",
+      "sourceNotes": "Michigan GIS #170 and independently mapped Ely Creek feature agree within ~32m. Field account records two rocky drops, tallest roughly 3ft, near mine-affected tributary and cliffs. 2025 SEC filing documents the large active Tilden mining operation in the area but does not prove title at the waterfall. Historic directions suggest pulling off County Road 476 and wandering through an overgrown swamp route; field visitor says no consistent trail. The right to park and cross this terrain, private mining surface boundaries and any restrictions have not been established.",
+      "outstandingGate": "Identify exact public or privately managed parcel at GIS point, current road shoulder legality, any posted mining buffers and signed continuous public pathway; otherwise retain minor-waterfall research.",
+      "sourceLinks": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.waterfallsofthekeweenaw.com/ely-creek/ely-falls/",
+        "https://www.sec.gov/Archives/edgar/data/764065/000076406526000025/clf-20251231.htm"
+      ],
+      "accessRouteAudit": {
+        "reviewed": "2026-11-01",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Feature identity vs same-name locations",
+            "status": "documented-geography",
+            "finding": "Michigan GIS #170 and independently mapped Ely Creek feature agree within ~32m. Field account records two rocky drops, tallest roughly 3ft, near mine-affected tributary and cliffs. 2025 SEC filing documents the large active Tilden mining operation in the area but does not prove title at the waterfall.",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Land tenure and private entry risk",
+            "status": "not-cleared",
+            "finding": "No fresh parcel survey or legal walking corridor has been established by this batch. GIS coordinates alone do not prove public title or access rights.",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Historic/tourism directions and access status",
+            "status": "documented-not-live",
+            "finding": "Historic directions suggest pulling off County Road 476 and wandering through an overgrown swamp route; field visitor says no consistent trail. The right to park and cross this terrain, private mining surface boundaries and any restrictions have not been established.",
+            "source": "https://www.waterfallsofthekeweenaw.com/ely-creek/ely-falls/"
+          },
+          {
+            "label": "Road jurisdiction and lawful parking",
+            "status": "not-cleared",
+            "finding": "No independently certified present-day signed visitor parking or legal road shoulder is documented here. ",
+            "source": "https://www.waterfallsofthekeweenaw.com/ely-creek/ely-falls/"
+          },
+          {
+            "label": "Continuous legal footpath and safe waterfall view",
+            "status": "not-cleared",
+            "finding": "No current signed, continuous public visitor approach to a verified safe viewpoint. Minor waterfall amid overgrown swamp and mining land.",
+            "source": "https://www.sec.gov/Archives/edgar/data/764065/000076406526000025/clf-20251231.htm"
+          },
+          {
+            "label": "Current conditions, restrictions and uncertainty",
+            "status": "not-cleared",
+            "finding": "No current November 2026 road, gate, trail, footing or land-manager permission report. Do not present old hiking text as live access.",
+            "source": "https://www.waterfallsofthekeweenaw.com/ely-creek/ely-falls/"
+          }
+        ]
+      }
     },
     {
       "gisObjectId": 172,
@@ -6218,10 +6496,64 @@
       "curatedId": null,
       "publicGuide": null,
       "landManager": null,
-      "parkingVerified": null,
-      "publicAccessVerified": null,
-      "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "parkingVerified": false,
+      "publicAccessVerified": false,
+      "reviewed": "2026-11-01",
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "evidenceReviewed": "2026-11-01",
+      "publicationEligible": false,
+      "disposition": "wild-falls-bushwhack-and-parking-unverified",
+      "sourceNotes": "GIS #173 places Schweitzer Falls at 46.407401,-87.596355, close to independently visited coordinates 46.40778,-87.5975 and 2022 field guide coordinates 46.40739,-87.59637. Waterfall described as two-tiered ~20ft, not an invented easy public park. 2012 field description uses an unnamed two-track beyond Schweitzer Creek bridge and a faint bushwhack; the author specifically could not find an obvious safe approach to upper tier. No present land ownership, public trail designation, signed road parking, permissions or safe pool-crossing established.",
+      "outstandingGate": "Verify public road/lot and parcel boundaries on both creek banks, establish signed safe visitor foot corridor and clearly restrict upper-tier scrambling before promotion.",
+      "sourceLinks": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://gowaterfalling.com/waterfalls/schweitzer.shtml",
+        "https://camphikeexplore.com/2022/05/09/a-marquette-waterfall-tour/"
+      ],
+      "accessRouteAudit": {
+        "reviewed": "2026-11-01",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Feature identity vs same-name locations",
+            "status": "documented-geography",
+            "finding": "GIS #173 places Schweitzer Falls at 46.407401,-87.596355, close to independently visited coordinates 46.40778,-87.5975 and 2022 field guide coordinates 46.40739,-87.59637. Waterfall described as two-tiered ~20ft, not an invented easy public park.",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Land tenure and private entry risk",
+            "status": "not-cleared",
+            "finding": "No fresh parcel survey or legal walking corridor has been established by this batch. GIS coordinates alone do not prove public title or access rights.",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Historic/tourism directions and access status",
+            "status": "documented-not-live",
+            "finding": "2012 field description uses an unnamed two-track beyond Schweitzer Creek bridge and a faint bushwhack; the author specifically could not find an obvious safe approach to upper tier. No present land ownership, public trail designation, signed road parking, permissions or safe pool-crossing established.",
+            "source": "https://gowaterfalling.com/waterfalls/schweitzer.shtml"
+          },
+          {
+            "label": "Road jurisdiction and lawful parking",
+            "status": "not-cleared",
+            "finding": "No independently certified present-day signed visitor parking or legal road shoulder is documented here. ",
+            "source": "https://gowaterfalling.com/waterfalls/schweitzer.shtml"
+          },
+          {
+            "label": "Continuous legal footpath and safe waterfall view",
+            "status": "not-cleared",
+            "finding": "No current signed, continuous public visitor approach to a verified safe viewpoint. ",
+            "source": "https://camphikeexplore.com/2022/05/09/a-marquette-waterfall-tour/"
+          },
+          {
+            "label": "Current conditions, restrictions and uncertainty",
+            "status": "not-cleared",
+            "finding": "No current November 2026 road, gate, trail, footing or land-manager permission report. Do not present old hiking text as live access.",
+            "source": "https://gowaterfalling.com/waterfalls/schweitzer.shtml"
+          }
+        ]
+      }
     },
     {
       "gisObjectId": 175,
@@ -6235,10 +6567,65 @@
       "curatedId": null,
       "publicGuide": null,
       "landManager": null,
-      "parkingVerified": null,
-      "publicAccessVerified": null,
-      "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "parkingVerified": false,
+      "publicAccessVerified": false,
+      "reviewed": "2026-11-01",
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "evidenceReviewed": "2026-11-01",
+      "publicationEligible": false,
+      "disposition": "minor-rapid-coordinate-disagreement-private-cabins",
+      "sourceNotes": "GIS #175 (46.402068,-87.564648) is ~779m from the independent USGS-v2 crosswalk point (46.403279,-87.574656). A first-hand field survey describes two loose 6-inch-to-1ft ledges and a field position 46.40336,-87.57497; a broad generic directory instead calls it 12ft with far-away Marquette directions. Old unmarked route descriptions use a meadow, marginal tracks and cross near creekside cabins. Present private title, public parking and a continuous right-of-way have not been verified; a tiny rapid is not a reason to lead visitors near cabins.",
+      "outstandingGate": "Resolve GIS-vs-field position to the exact low drops and verify all parcels if keeping in natural-feature map; do not promote, index or navigate without new authoritative evidence.",
+      "sourceLinks": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://github.com/izworskic/chrisizworski-com/blob/main/data/up-waterfall-usgs-v2-crosswalk.json",
+        "https://www.waterfallsofthekeweenaw.com/schweitzer-creek/tiger-falls/",
+        "https://michiganupperpeninsula.com/places-to-visit/waterfalls/"
+      ],
+      "accessRouteAudit": {
+        "reviewed": "2026-11-01",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Feature identity vs same-name locations",
+            "status": "documented-geography",
+            "finding": "GIS #175 (46.402068,-87.564648) is ~779m from the independent USGS-v2 crosswalk point (46.403279,-87.574656). A first-hand field survey describes two loose 6-inch-to-1ft ledges and a field position 46.40336,-87.57497; a broad generic directory instead calls it 12ft with far-away Marquette directions.",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Land tenure and private entry risk",
+            "status": "not-cleared",
+            "finding": "No fresh parcel survey or legal walking corridor has been established by this batch. Neighboring cabins are a property-boundary concern.",
+            "source": "https://www.waterfallsofthekeweenaw.com/schweitzer-creek/tiger-falls/"
+          },
+          {
+            "label": "Historic/tourism directions and access status",
+            "status": "documented-not-live",
+            "finding": "Old unmarked route descriptions use a meadow, marginal tracks and cross near creekside cabins. Present private title, public parking and a continuous right-of-way have not been verified; a tiny rapid is not a reason to lead visitors near cabins.",
+            "source": "https://github.com/izworskic/chrisizworski-com/blob/main/data/up-waterfall-usgs-v2-crosswalk.json"
+          },
+          {
+            "label": "Road jurisdiction and lawful parking",
+            "status": "not-cleared",
+            "finding": "No independently certified present-day signed visitor parking or legal road shoulder is documented here. ",
+            "source": "https://github.com/izworskic/chrisizworski-com/blob/main/data/up-waterfall-usgs-v2-crosswalk.json"
+          },
+          {
+            "label": "Continuous legal footpath and safe waterfall view",
+            "status": "not-cleared",
+            "finding": "No current signed, continuous public visitor approach to a verified safe viewpoint. Only a tiny creek rapid and private cabins near old routes.",
+            "source": "https://www.waterfallsofthekeweenaw.com/schweitzer-creek/tiger-falls/"
+          },
+          {
+            "label": "Current conditions, restrictions and uncertainty",
+            "status": "not-cleared",
+            "finding": "No current November 2026 road, gate, trail, footing or land-manager permission report. Do not present old hiking text as live access.",
+            "source": "https://github.com/izworskic/chrisizworski-com/blob/main/data/up-waterfall-usgs-v2-crosswalk.json"
+          }
+        ]
+      }
     },
     {
       "gisObjectId": 176,
@@ -6286,10 +6673,65 @@
       "curatedId": null,
       "publicGuide": null,
       "landManager": null,
-      "parkingVerified": null,
-      "publicAccessVerified": null,
-      "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point."
+      "parkingVerified": false,
+      "publicAccessVerified": false,
+      "reviewed": "2026-11-01",
+      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
+      "evidenceReviewed": "2026-11-01",
+      "publicationEligible": false,
+      "disposition": "impressive-falls-private-north-approach-unverified-south-access",
+      "sourceNotes": "GIS #180 and USGS-derived hydro site agree within roughly 64m; independent field site 46.36069,-87.32913 places the true plunge/chutes on West Branch Chocolay. Tourism estimates 30ft while field report describes up to 50ft combined tiered falls: figures refer to differing drop definitions. Regional tourism explicitly says no official maintained trail. Independent 2018 field comments identify Sporley Lake Road north approach as posted No Trespassing; other old routes start from M-94 shoulder and follow unmarked logging tracks. No proof of legal shoulder parking, safe road traffic, parcel ownership or public trail permission. Tourist use does not override posting.",
+      "outstandingGate": "Document land manager and road jurisdiction at a potential lawful southern entrance, current signed parking and a continuous public land corridor to safe bank; reject all posted north tracks.",
+      "sourceLinks": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.uptravel.com/listing/frohling-falls/1514/",
+        "https://www.waterfallsofthekeweenaw.com/west-branch-chocolay-river/frohling-falls/",
+        "https://chocolay.gov/wp-content/uploads/2023/11/2021-Chocolay-Township-Master-Plan-adopted-03.28.22.pdf"
+      ],
+      "accessRouteAudit": {
+        "reviewed": "2026-11-01",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Feature identity vs same-name locations",
+            "status": "documented-geography",
+            "finding": "GIS #180 and USGS-derived hydro site agree within roughly 64m; independent field site 46.36069,-87.32913 places the true plunge/chutes on West Branch Chocolay. Tourism estimates 30ft while field report describes up to 50ft combined tiered falls: figures refer to differing drop definitions.",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Land tenure and private entry risk",
+            "status": "not-cleared",
+            "finding": "No fresh parcel survey or legal walking corridor has been established by this batch. The historic north approach has posted No Trespassing reports.",
+            "source": "https://www.waterfallsofthekeweenaw.com/west-branch-chocolay-river/frohling-falls/"
+          },
+          {
+            "label": "Historic/tourism directions and access status",
+            "status": "documented-not-live",
+            "finding": "Regional tourism explicitly says no official maintained trail. Independent 2018 field comments identify Sporley Lake Road north approach as posted No Trespassing; other old routes start from M-94 shoulder and follow unmarked logging tracks. No proof of legal shoulder parking, safe road traffic, parcel ownership or public trail permission. Tourist use does not override posting.",
+            "source": "https://www.uptravel.com/listing/frohling-falls/1514/"
+          },
+          {
+            "label": "Road jurisdiction and lawful parking",
+            "status": "not-cleared",
+            "finding": "No independently certified present-day signed visitor parking or legal road shoulder is documented here. ",
+            "source": "https://www.uptravel.com/listing/frohling-falls/1514/"
+          },
+          {
+            "label": "Continuous legal footpath and safe waterfall view",
+            "status": "not-cleared",
+            "finding": "No current signed, continuous public visitor approach to a verified safe viewpoint. ",
+            "source": "https://www.waterfallsofthekeweenaw.com/west-branch-chocolay-river/frohling-falls/"
+          },
+          {
+            "label": "Current conditions, restrictions and uncertainty",
+            "status": "not-cleared",
+            "finding": "No current November 2026 road, gate, trail, footing or land-manager permission report. Never override historical no-trespassing reports with informal visitor comments.",
+            "source": "https://www.uptravel.com/listing/frohling-falls/1514/"
+          }
+        ]
+      }
     },
     {
       "gisObjectId": 181,
@@ -7814,6 +8256,22 @@
       ],
       "publicGuidesAdded": 0,
       "outcome": "Chipmunk Net River disqualified as sub-three-foot rapid; Copper Owl Creek mine-adit geography and disputed private-road visitor permission; Cataract DNR 2024 public river-area evidence is not a signed dam-side lot and path; Cliff/40-Foot GIS vs misleading Keweenaw locator; Mountain Stream documented posted private closure; Eighty Foot/Ives lidar-only unconfirmed and restricted land context. Six new noindex research-only pages, no automatic public routes."
+    },
+    {
+      "batch": "46-marquette-alder-reany-carp-ely-schweitzer-tiger-frohling",
+      "date": "2026-11-01",
+      "reviewedIds": [
+        153,
+        162,
+        163,
+        169,
+        170,
+        173,
+        175,
+        180
+      ],
+      "publicGuidesAdded": 0,
+      "outcome": "Eight researched Marquette source features; separate #163 Ishpeming Upper Carp (2019 posted trail) from #169 Travel Marquette gorge Carp (actual feature within ~18m, distinct Morgan Falls). Reany bridge location verified but utility-lot parking not current; Tiger tiny drop and GIS/USGS displacement; Frohling northern posted private route; Alder and Schweitzer old unsigned forest parking; Ely small mine-adjacent creek. Eight nonindex research pages, no visitor routes."
     }
   ]
 }
