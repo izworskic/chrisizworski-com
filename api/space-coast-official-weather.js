@@ -36,7 +36,10 @@ function createHandler({
         return res.status(200).json({ok:true,checkedAt:outcome.state.lastCheckedAt,
           monitorStatus:outcome.state.monitorStatus,accepted:outcome.accepted,
           changes:outcome.changes,rejected:outcome.rejected,
-          parsedPovRecords:body.reports.filter(r=>Number.isInteger(r.povPercent)).length});
+          nasaAccepted:outcome.nasaAccepted,nasaChanges:outcome.nasaChanges,
+          nasaRejected:outcome.nasaRejected,
+          forecastWindow:outcome.state.forecastWindow,
+          submittedPovCandidates:body.reports.filter(r=>Number.isInteger(r?.povPercent)).length});
       } catch (e) {
         console.error('official_weather_monitor_error',String(e.message||e).slice(0,120));
         return res.status(503).json({ok:false,error:'official-weather-observation-rejected'});
