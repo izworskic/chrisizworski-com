@@ -36,6 +36,8 @@ async function main(){
    });
    need(await page.locator('.wf-story').count()===12,d.name+': 12 stories not rendered');
    need(await page.locator('#phenomenon-leaflet-map .np-ranger-marker').count()===12,d.name+': map markers missing');
+   await page.locator('.np-month-btn[data-month="0"]').click();
+   need(await page.locator('#glacier-going-to-the-sun-opening').isVisible(),d.name+': all-months selection hid Glacier card');
    need((await page.locator('#glacier-going-to-the-sun-opening').innerText()).includes('No 2026 Vehicle Reservation'),d.name+': Glacier false vehicle permit');
    need((await page.locator('#yosemite-horsetail-firefall').innerText()).includes('No 2026 Entry Reservation'),d.name+': Yosemite false vehicle permit');
    need((await page.locator('#rocky-mountain-elk-rut').innerText()).includes('7 PM MDT'),d.name+': RMNP incorrect release clock');
