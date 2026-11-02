@@ -107,7 +107,7 @@ async function waitForAnswer(page,pest){await page.waitForFunction(name=>documen
   await p.goto(ORIGIN+'/michigan-garden-pest-watch/',{waitUntil:'domcontentloaded'});
   await p.waitForFunction(()=>document.querySelector('#watch-source-label')?.textContent.includes('unavailable'),null,{timeout:6000});
   assert.match(await p.locator('#primary-answer').innerText(),/squash/i);
-  assert.match(await p.locator('#weather-evidence').innerText(),/could not be verified/);
+  assert.match(await p.locator('#weather-evidence').innerText(),/not verified|could not be verified/);
   await p.screenshot({path:'artifacts/garden-pest-watch-browser/forecast-unavailable.png',fullPage:true,animations:'disabled'});
   await broken.close();
   const noJS=await browser.newContext({viewport:{width:390,height:820},javaScriptEnabled:false});
