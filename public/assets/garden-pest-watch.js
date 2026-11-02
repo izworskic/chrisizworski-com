@@ -99,7 +99,7 @@ function showData(d){
  answer.textContent=d.firstAction;
  reason.textContent=off?'Off-season planning reference; warm-season pest activity is not implied.':
     'Current season and selected crop stage shape this advice. No local pest infestation has been confirmed.';
- const monthName=new Intl.DateTimeFormat('en-US',{month:'long',timeZone:'America/Detroit'}).format(new Date(Date.UTC(2026,d.month-1,1)));
+ const monthName=new Intl.DateTimeFormat('en-US',{month:'long',timeZone:'America/Detroit'}).format(new Date(Date.UTC(2026,d.month-1,15,12)));
  setInfo('season-evidence',monthName+' / '+d.stage+' stage. This is approximate Michigan seasonal timing, not observed emergence.');
  const w=d.weather||{};
  if(w.status==='AVAILABLE'){
