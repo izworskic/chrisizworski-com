@@ -441,6 +441,16 @@
     if (portal) target.appendChild(portal);
     if (d.health?.checkedAt) target.appendChild(el('small', '',
       'Discovery checked ' + stamp(d.health.checkedAt) + ' · ' + d.health.status));
+    const horizon = d.health?.forecastWindow || {};
+    if(horizon.candidates7Days===0 &&
+       ['before-forecast-window','no-launches-in-21-days'].includes(horizon.status))
+      target.appendChild(el('small','',
+        horizon.candidates21Days>0 ?
+        'No Florida mission inside the seven-day PDF check window; ' +
+        horizon.candidates21Days + ' within the 21-day lookahead.' :
+        'No Florida mission currently inside the 21-day lookahead.'));
+    if((d.health?.nasaSourceChecks || []).some(x=>x.status==='unavailable'))
+      target.appendChild(el('small','','NASA weather-report source checks were partly unavailable.'));
     const upstream = (d.health?.sourceChecks || []).filter(x =>
       ['45ws-home','45ws-forecast-support','45ws-sitemap','45ws-parent-weather'].includes(x.id));
     const unavailable = upstream.filter(x => x.status === 'unavailable').length;
