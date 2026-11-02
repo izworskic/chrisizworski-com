@@ -4,6 +4,7 @@ const { REGIONS, normalizeUsLaunch, groupedSchedule, regionalAccess,
   isTrustedCode, parseStarbaseAccess } = require('../lib/rocket-launch-usa');
 const { weatherGrade } = require('../lib/space-coast-decision');
 const { skyCoverAt, surfaceSkyAssessment } = require('../lib/space-coast-visibility');
+const { launchWeatherFor } = require('../lib/launch-weather-intelligence');
 
 const LL2 = 'https://ll.thespacedevs.com/2.3.0/launches/upcoming/';
 const LAUNCH_QUERIES = [
@@ -196,8 +197,9 @@ module.exports = async function handler(req, res) {
     if (selected && selected.region !== region.id) return res.status(400).json({
       ok: false, error: 'This mission belongs to another launch region.'
     });
-    const [weather, texas] = await Promise.all([
+    const [weather, launchWeather, texas] = await Promise.all([
       weatherFor(region, selected, now),
+      launchWeatherFor(region, selected, (url, headers, timeout) => fetchJson(url, timeout, headers), now),
       region.id === 'texas' ? loadTexasNotice() : Promise.resolve(null)
     ]);
     const access = regionalAccess(region, selected, { starbase: texas });
@@ -213,7 +215,7 @@ module.exports = async function handler(req, res) {
         context: region.context
       },
       regions,
-      access, weather,
+      access, weather, launchWeather,
       coverage: {
         feed: 'Launch Library 2 v2.3 (third-party launch calendar, not range authority)',
         regions: 6, locationIds: [1, 11, 12, 21, 25, 27, 143],
@@ -222,7 +224,8 @@ module.exports = async function handler(req, res) {
           'Some NASA Wallops sounding rockets, Pacific missile-range tests and short-notice operations may not appear in Launch Library.',
           'The forward calendar is a bounded sample of provider records. Dates far beyond the current window may not be included.',
           'No mission is guaranteed to launch and no public viewing spot is guaranteed available.',
-          'Launch-time precision and official admission, closures and public-weather forecasts are separate evidence layers.'
+          'Launch-time precision and official admission, closures and public-weather forecasts are separate evidence layers.',
+          'NWS launch-range weather signals are not rocket-specific flight commit rules, a scrub prediction, or official weather approval.'
         ],
         feedHealth: schedule.health, partial: schedule.isPartial
       },
@@ -230,6 +233,10 @@ module.exports = async function handler(req, res) {
         { name: 'Launch Library 2', url: 'https://ll.thespacedevs.com/', checkedAt: new Date().toISOString() },
         { name: 'Official range / launch notices', url: region.authority },
         { name: 'Official visitor / access conditions', url: region.access },
+        { name: 'NWS launch-range area forecast', url: launchWeather.sourceUrl || 'https://www.weather.gov/',
+          checkedAt: launchWeather.checkedAt, note: 'Regional weather proxy, not official launch weather or flight approval.' },
+        { name: 'Official range weather and mission notices', url: launchWeather.officialUrl || region.authority,
+          note: 'Official flight-weather criteria and weather-rule violation probability must be verified separately.' },
         ...(region.id === 'virginia' ? [{ name: 'NASA Wallops sounding rocket schedule',
           url: 'https://www.nasa.gov/wallops-launch-schedule/' }] : []),
         ...(region.id === 'texas' ? [{ name: 'Starbase beach and road status', url: STARBASE,
