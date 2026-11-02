@@ -19,6 +19,7 @@ function mockPayload(url,month=7){
  return {...decisionData,location:{name:url.searchParams.get('zip')?'ZIP '+url.searchParams.get('zip')+' area':'Bay City',kind:url.searchParams.get('zip')?'zcta-interior-point':'named-city',coordinateMeaning:'2020 Census ZCTA interior point, not a property'},weather,regionalObservation:{status:'UNAVAILABLE'},biologicalForecast:{status:'UNAVAILABLE'}};
 }
 async function routeFixtures(page,month=7){
+ await page.route('**/*',route=>route.request().url().startsWith(ORIGIN)?route.continue():route.abort());
  await page.route('**/api/michigan-garden-pest-watch?*',async route=>{
   const url=new URL(route.request().url());
   if(url.searchParams.get('zip')==='48707'){
@@ -30,7 +31,6 @@ async function routeFixtures(page,month=7){
   const body=JSON.stringify(mockPayload(url,month));
   await route.fulfill({status:200,contentType:'application/json',body});
  });
- await page.route('**/*',route=>route.request().url().startsWith(ORIGIN)?route.continue():route.abort());
 }
 async function waitForAnswer(page,pest){await page.waitForFunction(name=>document.querySelector('#watch-cards')?.textContent?.includes(name),pest,{timeout:6000});}
 (async()=>{
@@ -83,8 +83,8 @@ async function waitForAnswer(page,pest){await page.waitForFunction(name=>documen
   // Missing API must not claim zero risk, and the HTML field guide survives.
   const broken=await browser.newContext({viewport:{width:390,height:820}});
   const p=await broken.newPage();
-  await p.route('**/api/michigan-garden-pest-watch?*',route=>route.fulfill({status:503,contentType:'application/json',body:'{"status":"UNAVAILABLE"}'}));
   await p.route('**/*',route=>route.request().url().startsWith(ORIGIN)?route.continue():route.abort());
+  await p.route('**/api/michigan-garden-pest-watch?*',route=>route.fulfill({status:503,contentType:'application/json',body:'{"status":"UNAVAILABLE"}'}));
   await p.goto(ORIGIN+'/michigan-garden-pest-watch/',{waitUntil:'domcontentloaded'});
   await p.waitForFunction(()=>document.querySelector('#watch-source-label')?.textContent.includes('unavailable'),null,{timeout:6000});
   assert.match(await p.locator('#primary-answer').innerText(),/squash/i);
