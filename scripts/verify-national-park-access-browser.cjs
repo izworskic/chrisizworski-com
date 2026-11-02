@@ -38,10 +38,10 @@ async function main(){
    need(await page.locator('#phenomenon-leaflet-map .np-ranger-marker').count()===12,d.name+': map markers missing');
    await page.locator('.np-month-btn[data-month="0"]').click();
    need(await page.locator('#glacier-going-to-the-sun-opening').isVisible(),d.name+': all-months selection hid Glacier card');
-   need((await page.locator('#glacier-going-to-the-sun-opening').innerText()).includes('No 2026 Vehicle Reservation'),d.name+': Glacier false vehicle permit');
-   need((await page.locator('#yosemite-horsetail-firefall').innerText()).includes('No 2026 Entry Reservation'),d.name+': Yosemite false vehicle permit');
-   need((await page.locator('#rocky-mountain-elk-rut').innerText()).includes('7 PM MDT'),d.name+': RMNP incorrect release clock');
-   need((await page.locator('#acadia-cadillac-first-sunrise').innerText()).includes('May 20–October 25'),d.name+': Acadia season gap');
+   need((await page.locator('#glacier-going-to-the-sun-opening').textContent()).includes('No 2026 Vehicle Reservation'),d.name+': Glacier false vehicle permit');
+   need((await page.locator('#yosemite-horsetail-firefall').textContent()).includes('No 2026 Entry Reservation'),d.name+': Yosemite false vehicle permit');
+   need((await page.locator('#rocky-mountain-elk-rut').textContent()).includes('7 PM MDT'),d.name+': RMNP incorrect release clock');
+   need((await page.locator('#acadia-cadillac-first-sunrise').textContent()).includes('May 20–October 25'),d.name+': Acadia season gap');
    await page.locator('.np-filter-pill[data-filter="lottery"]').click();
    need(await page.locator('#yosemite-horsetail-firefall').evaluate(el=>getComputedStyle(el).display==='none'),d.name+': Yosemite incorrectly classified as lottery');
    need(await page.locator('#glacier-going-to-the-sun-opening').evaluate(el=>getComputedStyle(el).display==='none'),d.name+': Glacier incorrectly classified as lottery');
