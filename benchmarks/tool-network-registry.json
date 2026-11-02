@@ -1,6 +1,6 @@
 {
   "version": "1.4.0",
-  "updated": "2026-10-31",
+  "updated": "2026-11-01",
   "objective": "Maintain one source of truth for how Chris Izworski tools own search intent, connect into visitor journeys, avoid cannibalization, and qualify future builds.",
   "rules": {
     "catalogCoverage": "Every first-party tool card on /tools/ must have a registry node.",
@@ -2413,6 +2413,47 @@
       },
       "searchEvidence": {
         "status": "new"
+      }
+    },
+    {
+      "id": "leafcutter-bees",
+      "name": "Leafcutter Bee Seasonal Care and Nesting Planner",
+      "canonical": "https://chrisizworski.com/leafcutter-bees/",
+      "aliases": [],
+      "kind": "seasonal-decision-engine",
+      "cluster": "gardening",
+      "primaryIntent": "Leafcutter bee garden care, safe nesting house and managed-cocoon release and overwintering decisions",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "michigan-statewide",
+        "united-states"
+      ],
+      "personas": [
+        "gardener",
+        "pollinator-watcher",
+        "managed-bee-owner"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active",
+        "intentSeparation": "Owns leafcutter nesting, seasonal management and cocoon decisions; general flower-bloom timing belongs to bloom-tracker and broad natural-year heat context belongs to phenology."
+      },
+      "searchEvidence": {
+        "status": "unknown",
+        "note": "Experience OS v1.2.1 and Freighter View Farms photo story published November 2026. No measured search or engagement uplift."
       }
     },
     {
@@ -6528,6 +6569,22 @@
       "strength": "optional",
       "surface": "north-shore-road-trip",
       "reason": "Split Rock Lighthouse is a separate nearby North Shore outing to combine with Gooseberry Falls on a longer Circle Tour day."
+    },
+    {
+      "from": "phenology",
+      "to": "leafcutter-bees",
+      "type": "seasonal-router",
+      "strength": "optional",
+      "surface": "gardening-nature-network",
+      "reason": "A gardener can take modeled accumulated-heat context into a specific bee nesting and cocoon-care decision without treating heat as observed emergence."
+    },
+    {
+      "from": "leafcutter-bees",
+      "to": "bloom-tracker",
+      "type": "related-tool",
+      "strength": "optional",
+      "surface": "tools-directory",
+      "reason": "Seasonal flower context can help explain potential forage, but regional bloom predictions are not confirmed flowers at a visitor's address."
     }
   ],
   "cannibalizationGroups": [

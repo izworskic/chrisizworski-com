@@ -271,3 +271,29 @@ test('Freighter View Farms photo notes show four self-hosted authentic garden ph
  assert.ok(html.indexOf('id="bee-first-title"')<html.indexOf('id="from-my-garden"'),'The visitor decision must precede the optional photo essay');
  assert.ok(html.includes('src="/images/leafcutter-bee-carrying-leaf-bob-peterson.jpg"'),'Retain the identified existing hero photo');
 });
+
+
+test('Leafcutter tool is discoverable once in Michigan gardening, main Tools, ItemList and registry',()=>{
+ const read=rel=>fs.readFileSync(path.join(__dirname,'..',rel),'utf8');
+ const garden=read('public/michigan-gardening/index.html');
+ const directory=read('public/tools/index.html');
+ const registry=JSON.parse(read('benchmarks/tool-network-registry.json'));
+ const url='https://chrisizworski.com/leafcutter-bees/';
+ assert.ok(garden.includes('Leafcutter Bees: Seasonal Care, Nesting'),'The Michigan gardening guide must describe the updated leafcutter tool');
+ assert.ok(garden.includes('leafcutter-fvf-bee-house-saginaw-bay-chris-izworski.webp'),'The garden card should show the owner photograph');
+ assert.equal((directory.match(/data-tool-id="leafcutter-bees"/g)||[]).length,1);
+ assert.ok(directory.includes('href="/leafcutter-bees/"'),'Main Tools directory should open the canonical guide');
+ const scripts=[...directory.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)];
+ assert.ok(scripts.length>0);
+ const graph=JSON.parse(scripts[0][1])['@graph'];
+ const itemList=graph.find(node=>node['@type']==='ItemList');
+ const ids=[...directory.matchAll(/data-tool-id="([^"]+)"/g)].map(x=>x[1]);
+ assert.equal(ids.length,itemList.numberOfItems);
+ assert.equal(itemList.itemListElement.filter(x=>x.item?.url===url).length,1);
+ const index=itemList.itemListElement.findIndex(x=>x.item?.url===url);
+ assert.equal(index,ids.indexOf('leafcutter-bees'),'Machine-readable and visible order should agree');
+ assert.ok(itemList.itemListElement.every((x,i)=>x.position===i+1));
+ assert.equal(registry.tools.filter(t=>t.id==='leafcutter-bees'&&t.canonical===url).length,1);
+ assert.ok(registry.relationships.some(r=>r.from==='phenology'&&r.to==='leafcutter-bees'));
+ assert.ok(registry.relationships.some(r=>r.from==='leafcutter-bees'&&r.to==='bloom-tracker'));
+});
