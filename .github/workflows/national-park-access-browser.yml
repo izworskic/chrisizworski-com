@@ -1,0 +1,39 @@
+name: National park access visitor browser QA
+on:
+  pull_request:
+    paths:
+      - 'public/national-park-phenomena-field-guide/**'
+      - 'public/assets/national-park-phenomena-field-guide.js'
+      - 'tests/national-park-access-2026.test.js'
+      - 'scripts/verify-national-park-access-browser.cjs'
+      - '.github/workflows/national-park-access-browser.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  desktop-and-mobile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check 2026 rules and future-year unknowns
+        run: node --test tests/national-park-access-2026.test.js
+      - name: Install isolated browser harness
+        run: |
+          mkdir -p /tmp/park-access-playwright
+          npm install --prefix /tmp/park-access-playwright --no-save --ignore-scripts playwright@1.58.2
+          echo "NODE_PATH=/tmp/park-access-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium-browser)" >> "$GITHUB_ENV"
+      - name: Test real browser interactions at mobile and desktop widths
+        run: node scripts/verify-national-park-access-browser.cjs
+      - name: Preserve viewport screenshots and results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: national-park-access-browser-qa
+          path: artifacts/national-park-access-browser/
+          if-no-files-found: warn
+          retention-days: 14

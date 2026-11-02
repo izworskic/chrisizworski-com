@@ -1,0 +1,63 @@
+name: National park access production verification
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'public/national-park-phenomena-field-guide/**'
+      - 'public/assets/national-park-phenomena-field-guide.js'
+      - '.github/workflows/national-park-access-production.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  real-public-visitor-rules:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Verify deployed public HTML, interactive rules and current-source links
+        shell: bash
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const base='https://chrisizworski.com';
+          const expected={
+            atlas:[
+              'NPS did not require a vehicle reservation anywhere in Glacier in 2026',
+              'For February 2026, NPS required no reservation to enter Yosemite or visit Horsetail Fall',
+              'Bottom-up hiking from Temple of Sinawava as far as Big Spring requires no Wilderness permit',
+              'Brooks Falls viewing does not require an advance reservation',
+              'February 7 for July–August',
+              '2026 Elkmont viewing event ran May 20–27',
+              'general-park timed entry was required May 22–October 12',
+              'Cadillac Summit Road required a vehicle reservation May 20–October 25',
+              '2027 campground release dates are unconfirmed',
+              '2026 Featured Activity Requires Booking (4)'
+            ],
+            js:["getSeasonPolicy","bottomUp:'NO_WILDERNESS_PERMIT'","bearViewing:'NO_ADVANCE_RESERVATION'","generalEnd: '2026-10-12'","future:'UNCONFIRMED'"]
+          };
+          const wait=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+          let verified=false,last=[];
+          for(let attempt=1;attempt<=32;attempt++){
+            try{
+              const cache='?nps-audit-20261102-'+attempt;
+              const [h,j]=await Promise.all([
+                fetch(base+'/national-park-phenomena-field-guide/'+cache,{headers:{'Cache-Control':'no-cache'},signal:AbortSignal.timeout(13000)}),
+                fetch(base+'/assets/national-park-phenomena-field-guide.js'+cache,{headers:{'Cache-Control':'no-cache'},signal:AbortSignal.timeout(13000)})
+              ]);
+              if(!h.ok||!j.ok)throw Error('HTTP: page '+h.status+' js '+j.status);
+              const [html,js]=await Promise.all([h.text(),j.text()]);
+              const missing=[...expected.atlas.filter(v=>!html.includes(v)).map(v=>'html: '+v),
+                ...expected.js.filter(v=>!js.includes(v)).map(v=>'js: '+v)];
+              const cards=(html.match(/<article class="wf-story"/g)||[]).length;
+              if(cards!==12)missing.push('expected 12 destination cards; got '+cards);
+              if(!html.includes('<link rel="canonical" href="https://chrisizworski.com/national-park-phenomena-field-guide/"'))missing.push('canonical');
+              const schema=html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
+              if(!schema)missing.push('JSON-LD');else try{const ld=JSON.parse(schema[1]);const faq=ld['@graph'].find(x=>x['@type']==='FAQPage');if(!faq)missing.push('FAQ structured data');}catch{missing.push('invalid JSON-LD');}
+              if(missing.length===0){verified=true;console.log('VERIFIED production 2026 NPS access rules, 12 cards, 2027 unknown policy, canonical and structured data');break;}
+              last=missing;
+            }catch(e){last=[String(e.message||e)];}
+            if(attempt===1||attempt%5===0)console.log('Release not yet verified (attempt '+attempt+'): '+last.slice(0,3).join('; '));
+            await wait(7000);
+          }
+          if(!verified){console.error('PRODUCTION VERIFICATION FAILED; live site is not proven corrected: '+last.join('; '));process.exit(1);}
+          NODE
