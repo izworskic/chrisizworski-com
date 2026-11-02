@@ -63,6 +63,28 @@ test('summer squash directs to vine borer and squash bugs',()=>{
  assert.ok(d.featured.some(p=>p.id==='squash-bug'));
  assert.ok(!d.featured.some(p=>p.id==='cabbage-maggot'));
 });
+test('every multi-host watch uses the selected crop, not another host’s inspection site',()=>{
+ const squash=select('squash',7).all.find(p=>p.id==='cucumber-beetles');
+ assert.match(squash.where,/squash/i);assert.doesNotMatch(squash.where,/melon seedlings/i);
+ const cucumber=select('cucumbers',7).all.find(p=>p.id==='downy-mildew');
+ const squashMildew=select('squash',7).all.find(p=>p.id==='downy-mildew');
+ assert.match(cucumber.where,/cucumber/i);assert.match(squashMildew.where,/squash/i);
+ const roseBeetle=select('roses',7).all.find(p=>p.id==='japanese-beetle');
+ const grapeBeetle=select('grapes',7).all.find(p=>p.id==='japanese-beetle');
+ assert.match(roseBeetle.where,/rose/i);assert.match(grapeBeetle.where,/grape/i);
+ const eggplant=select('eggplant',7).all.find(p=>p.id==='colorado-potato-beetle');
+ assert.match(eggplant.where,/eggplant/i);assert.match(eggplant.prevent,/eggplant/i);
+ const tomatoWorm=select('tomatoes',8,'fruiting').all.find(p=>p.id==='corn-earworm');
+ const cornWorm=select('corn',8,'fruiting').all.find(p=>p.id==='corn-earworm');
+ assert.match(tomatoWorm.where,/tomato fruit/i);
+ assert.doesNotMatch(tomatoWorm.found,/damaged ear tips/i);
+ assert.match(cornWorm.where,/corn silks/i);
+ assert.match(cornWorm.source,/corn\/kernalschewingdamage/);
+ assert.match(tomatoWorm.source,/tomato\/fruitholes/);
+ assert.equal(tomatoWorm.evidence[0].source,tomatoWorm.source);
+ const tomatoDisease=select('tomatoes',8,'growing').all.find(p=>p.id==='tomato-leaf-spot');
+ assert.match(tomatoDisease.source,/E3170_Tomato_Diseases/);
+});
 test('plant-stage changes are causal and reversed state is deterministic',()=>{
  const a=select('beans',5,'seedling'),b=select('beans',5,'fruiting'),c=select('beans',5,'seedling');
  assert.notDeepEqual(a.featured.map(p=>p.id),b.featured.map(p=>p.id));
