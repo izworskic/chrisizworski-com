@@ -160,6 +160,12 @@ test('national API provides all coasts, exact launch selection, partial feed hea
   const grid={properties:{updateTime:new Date(Date.now()-3600000).toISOString(),
     skyCover:{uom:'wmoUnit:percent',values:[{
       validTime:new Date(Date.now()-3600000).toISOString()+'/PT5H',value:40
+    }]},
+    probabilityOfPrecipitation:{uom:'wmoUnit:percent',values:[{
+      validTime:new Date(Date.now()-3600000).toISOString()+'/PT5H',value:12
+    }]},
+    windSpeed:{uom:'wmoUnit:m_s-1',values:[{
+      validTime:new Date(Date.now()-3600000).toISOString()+'/PT5H',value:4
     }]}}};
   global.fetch=async url=>{
     url=String(url);
