@@ -116,6 +116,12 @@ async function waitForAnswer(page,pest){await page.waitForFunction(name=>documen
    assert.match(await page.locator('#beetle-adult-date').innerText(),/Jul 5, 2026/);
    assert.match(await page.locator('#beetle-egg-date').innerText(),/Aug 5, 2026/);
    assert.match(await page.locator('#beetle-source-note').innerText(),/2026-11-02/);
+   await page.locator('#zip').fill('48706');
+   assert.match(await page.locator('#beetle-adult-date').innerText(),/Not verified/);
+   await page.locator('#watch-form button[type=submit]').click();
+   await page.waitForFunction(()=>document.querySelector('#beetle-location')?.textContent?.includes('ZIP 48706 area'),null,{timeout:6000});
+   assert.match(await page.locator('#beetle-source-note').innerText(),/2026-11-02/);
+   await page.locator('#zip').fill('');
    await page.locator('#crop').selectOption('squash');
    assert.match(await page.locator('#beetle-adult-date').innerText(),/Not verified/);
    await page.locator('#watch-form button[type=submit]').click();
@@ -157,6 +163,22 @@ async function waitForAnswer(page,pest){await page.waitForFunction(name=>documen
   assert.ok(await rp.locator('#observed').isDisabled(),'Do not offer stale suspect choices while API unavailable');
   await rp.screenshot({path:'artifacts/garden-pest-watch-browser/outage-after-change.png',fullPage:true,animations:'disabled'});
   await recovery.close();
+
+  // Independent official beetle raster failure does not erase the crop field
+  // notes and cannot leave a dated, once-successful beetle prediction behind.
+  const modelOutage=await browser.newContext({viewport:{width:390,height:820}});
+  const mp=await modelOutage.newPage();
+  await routeFixtures(mp);
+  await mp.route('**/api/japanese-beetle-forecast?*',route=>route.fulfill({status:503,contentType:'application/json',body:'{"status":"UNAVAILABLE"}'}));
+  await mp.goto(ORIGIN+'/michigan-garden-pest-watch/',{waitUntil:'domcontentloaded'});
+  await mp.locator('#crop').selectOption('roses');
+  await mp.locator('#watch-form button[type=submit]').click();
+  await mp.waitForFunction(()=>document.querySelector('#beetle-action')?.textContent?.includes('official species-specific forecast'),null,{timeout:7000});
+  assert.match(await mp.locator('#beetle-adult-date').innerText(),/Not verified/);
+  assert.match(await mp.locator('#beetle-source-note').innerText(),/Unknown does not mean no beetles/i);
+  assert.ok(await mp.locator('#watch-cards .watch-card').count()>0);
+  await mp.screenshot({path:'artifacts/garden-pest-watch-browser/beetle-official-source-unavailable.png',fullPage:true,animations:'disabled'});
+  await modelOutage.close();
 
   // Missing API must not claim zero risk, and the HTML field guide survives.
   const broken=await browser.newContext({viewport:{width:390,height:820}});
