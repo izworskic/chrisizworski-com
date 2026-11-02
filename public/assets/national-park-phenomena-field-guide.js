@@ -91,7 +91,7 @@
       accessRules: {season:2026, bottomUp:'NO_WILDERNESS_PERMIT', topDown:'WILDERNESS_PERMIT_REQUIRED', currentStatus:'CHECK_CURRENT_CONDITIONS', future:'UNCONFIRMED', official:'https://www.nps.gov/zion/planyourvisit/narrowspermits.htm'},
       category: 'optical',
       activeIntel: 'Virgin River North Fork wades between 1,000-ft Navajo sandstone walls. NPS closes the Narrows above 150 CFS and during NWS Flash Flood Warnings; closures continue at least two hours after warnings end.',
-      leadAlert: 'Bottom-up to Big Spring: no permit. Top-down from Chamberlain’s Ranch: Wilderness permit required. Check NPS current conditions and official future-season permit releases; do not assume a fixed calendar.'
+      leadAlert: 'Bottom-up to Big Spring: no permit. Top-down from Chamberlain’s Ranch: Wilderness permit required. Check NPS current conditions and official future-season permit releases; do not assume a fixed calendar.',
       toolUrl: '/synced-national-tools/zion-narrows-conditions/',
       toolLabel: 'Zion Narrows Live USGS Flow & Flash-Flood Engine'
     },
@@ -127,7 +127,7 @@
       accessRules: {season:2026, bearViewing:'NO_ADVANCE_RESERVATION', platform:'CAPACITY_MANAGED', campground:'RESERVATION_REQUIRED', campgroundReleases:['2026-01-07','2026-02-07','2026-03-07'], riverCorridor:'SEPARATE_ACTIVITY_PERMIT', future:'UNCONFIRMED', official:'https://www.nps.gov/katm/planyourvisit/campingbcdv.htm'},
       category: 'wildlife',
       activeIntel: 'Millions of sockeye salmon battle up the Brooks River; up to 40+ coastal brown bears line the falls and lip to snatch leaping 6-pound fish mid-air.',
-      leadAlert: 'Bear viewing at Brooks Falls needs no advance platform reservation. For 2026 campground stays, July/Aug nights released February 7 at 8 AM AKST; 2027 campground booking dates are unconfirmed.'
+      leadAlert: 'Bear viewing at Brooks Falls needs no advance platform reservation. For 2026 campground stays, July/Aug nights released February 7 at 8 AM AKST; 2027 campground booking dates are unconfirmed.',
       toolUrl: '/synced-national-tools/',
       toolLabel: 'National Park Decision Tools Hub'
     },
