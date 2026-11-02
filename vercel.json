@@ -6,6 +6,7 @@
   "functions": {
     "api/garden-seasonal-heat.js": {"maxDuration":25},
     "api/michigan-garden-pest-watch.js": {"maxDuration":25},
+    "api/garden-pest-timing-lab.js": {"maxDuration":25},
     "api/leafcutter-release-weather.js": {
       "maxDuration": 25
     },
