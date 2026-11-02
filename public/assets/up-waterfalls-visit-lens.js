@@ -132,5 +132,7 @@ region.addEventListener('change',()=>{lensRegion.value=region.value;render();});
 for(const id of ['visit-budget','visit-date','effort','access'])document.getElementById(id)?.addEventListener('change',render);
 document.getElementById('q')?.addEventListener('input',render);
 document.addEventListener('upfall:selected',e=>{const id=e.detail?.id;if(!id||!picks.querySelector('[data-visit-pick="'+id+'"]'))return;selectedId=id;render();});
+window.UPWaterfallVisitLens={review(id){const card=cards.find(c=>c.dataset.id===id);const when=new Date((date.value||localISO())+'T12:00:00');return card?guidance(card,Number.isFinite(when.valueOf())?when:new Date()):null;},travelDate(){return date.value;}};
+date.addEventListener('change',()=>document.dispatchEvent(new Event('upfall:review-updated')));
 render();
 })();
