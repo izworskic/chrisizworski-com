@@ -42,18 +42,32 @@ function persist(){
  if(suspect.value)u.searchParams.set('observed',suspect.value);else u.searchParams.delete('observed');
  history.replaceState(null,'',u.pathname+'?'+u.searchParams.toString()+u.hash);
 }
-function showUnavailable(){
- setInfo('answer-heading','A seasonal scouting reference for '+crop.options[crop.selectedIndex].text);
- answer.textContent=fallback[crop.value]||fallback.squash;
- reason.textContent='Live NWS / tailored watch is unavailable right now. This is general crop guidance, not a current local observation.';
- setInfo('weather-evidence','Current NWS weather could not be verified. No weather-based pest claim is made.');
+function showUnavailable(errorCode='SOURCE_UNAVAILABLE'){
+ const month=Number(new Intl.DateTimeFormat('en-US',{timeZone:'America/Detroit',month:'numeric'}).format(new Date()));
+ const winter=month>=11||month<=2;
+ const locationProblem=errorCode==='ZIP_NOT_MAPPED'||errorCode==='ZIP_LOOKUP_UNAVAILABLE';
+ const clearOption=el('option','','Identification list unavailable until the source reconnects');clearOption.value='';
+ suspect.replaceChildren(clearOption);suspect.disabled=true;
+ setInfo('answer-heading',winter?'Plan a safe next-season check':'A seasonal scouting reference for '+crop.options[crop.selectedIndex].text);
+ answer.textContent=(winter?'This is off-season planning, not an active pest warning. ':'')+(fallback[crop.value]||fallback.squash);
+ reason.textContent=locationProblem?'The Census ZIP-area reference could not be verified; no substitute area was used. Clear the ZIP for the Bay City reference.':
+  'The tailored source is unavailable. These are general crop reference instructions, not a local pest detection.';
+ setInfo('weather-evidence','Official weather not verified. No weather-based pest or disease inference.');
  $('weather-dot').className='lane-dot unknown';
- setInfo('season-evidence','Static seasonal crop reference; no pest emergence or nearby observation is confirmed.');
- setInfo('location-label',zip.value?'ZIP '+zip.value+' REQUESTED':'BAY CITY REFERENCE AREA');
- setInfo('watch-count','General field references below');
- source.textContent='Source data unavailable. Keep using the crop-specific fallback and linked official field guidance.';
+ setInfo('season-evidence','Static seasonal crop reference; no local emergence or sighting is confirmed.');
+ setInfo('location-label',zip.value?'ZIP '+zip.value+' NOT VERIFIED':'BAY CITY REFERENCE AREA');
+ setInfo('watch-count','One fallback reference. Live crop-specific watch unavailable.');
+ const cardNode=el('article','watch-card');
+ cardNode.append(el('span','pest-index','SOURCE OUTAGE / REFERENCE'));
+ cardNode.append(el('h3','','Scout by plant symptoms'));
+ cardNode.append(el('p','',fallback[crop.value]||fallback.squash));
+ const link=el('a','','Michigan State University Extension: garden IPM reference');
+ link.href='https://msu-prod.dotcmscloud.com/resources/ipm_smart_pest_management_for_the_vegetable_garden';link.target='_blank';link.rel='noopener noreferrer';
+ cardNode.append(link);grid.replaceChildren(cardNode);
+ source.textContent=locationProblem?'No mapped weather reference for that ZIP. Clear ZIP for a named city.':'Tailored source unavailable; a general crop guide remains. Unknown weather does not mean low risk.';
 }
 function renderCatalogOptions(items){
+ suspect.disabled=false;
  const previous=suspect.value||suspect.dataset.initial||'';
  suspect.textContent='';
  suspect.append(el('option','',"I haven't observed a suspect"));
@@ -106,6 +120,10 @@ function showData(d){
   setInfo('weather-evidence',w.summary+' NWS issued '+new Date(w.issuedAt).toLocaleString('en-US',{timeZone:'America/Detroit',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})+
     '. Outlook: '+w.forecastLowF+'–'+w.forecastHighF+'°F. Weather does not establish an infestation.');
   $('weather-dot').className='lane-dot available';
+ }else if(w.status==='PARTIAL'){
+  setInfo('weather-evidence',w.summary+' NWS issued '+new Date(w.issuedAt).toLocaleString('en-US',{timeZone:'America/Detroit',month:'short',day:'numeric'})+
+    '. A temperature outlook exists but pest-weather cues are unknown, not zero.');
+  $('weather-dot').className='lane-dot unknown';
  }else{
   setInfo('weather-evidence','Current NWS weather not verified. No weather-based pest or disease inference. Seasonal guidance still applies.');
   $('weather-dot').className='lane-dot unknown';
@@ -113,8 +131,10 @@ function showData(d){
  grid.replaceChildren(...d.featured.map(card));
  const n=d.counts?.pestsForCrop??d.all.length;
  setInfo('watch-count',n+' crop-related pest and disease topics. '+d.featured.length+' selected for this watch.');
- source.textContent=off?'Michigan off-season: prepare for 2027. No summer pest is reported active.':
-   'Scouting guidance, not an observed outbreak.'+(w.status==='AVAILABLE'?' A checked NWS forecast adds broad weather context.':' Weather source unavailable.');
+ const year=Number(d.asOfDate?.slice(0,4))||new Date().getFullYear();
+ const nextSeason=year+(d.month>=11?1:0);
+ source.textContent=off?'Michigan off-season: prepare for '+nextSeason+'. No summer pest is reported active.':
+   'Scouting guidance, not an observed outbreak.'+(w.status==='AVAILABLE'?' A checked NWS forecast adds broad weather context.':w.status==='PARTIAL'?' NWS weather coverage is incomplete.':' Weather source unavailable.');
 }
 async function update(){
  if(zip.value&&!/^(?:48|49)\d{3}$/.test(zip.value)){
@@ -129,10 +149,14 @@ async function update(){
  if(suspect.value)params.set('observed',suspect.value);
  try{
   const response=await fetch('/api/michigan-garden-pest-watch?'+params.toString(),{headers:{accept:'application/json'},signal:AbortSignal.timeout(16000)});
-  if(!response.ok)throw Error('API_'+response.status);
+  if(!response.ok){
+   let code='SOURCE_UNAVAILABLE';
+   try{const errorData=await response.json();code=typeof errorData.code==='string'?errorData.code:code;}catch(_ignored){}
+   throw Error(code);
+  }
   const d=await response.json();
   if(thisRequest!==requestNumber)return;showData(d);
- }catch(err){if(thisRequest!==requestNumber)return;showUnavailable();}
+ }catch(err){if(thisRequest!==requestNumber)return;showUnavailable(err?.message);}
 }
 form.addEventListener('submit',ev=>{ev.preventDefault();update();});
 confirm.addEventListener('click',update);
