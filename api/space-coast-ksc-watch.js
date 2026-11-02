@@ -8,6 +8,7 @@ const { KEY, runKscWatch, missionTimeline, publicWatchHealth } =
   require('../lib/space-coast-ksc-watch');
 const { runLaunchDayWatch } = require('../lib/space-coast-launch-day');
 const { runLaunchTruthWatch } = require('../lib/rocket-launch-truth');
+const { runNationalWatch } = require('../lib/rocket-launch-national');
 
 function createHandler({
   now = Date.now,
@@ -17,8 +18,10 @@ function createHandler({
   readSnapshot = readTrustedLaunches,
   runSchedule = runLaunchDayWatch,
   runTruth = runLaunchTruthWatch,
+  runNational = runNationalWatch,
   scheduleReady = stateReady,
-  truthReady = stateReady
+  truthReady = stateReady,
+  nationalReady = stateReady
 } = {}) {
   return async function handler(req, res) {
     res.setHeader('X-Robots-Tag', 'noindex, nofollow');
@@ -29,21 +32,37 @@ function createHandler({
       });
       if (!allowed) return res.status(401).json({ ok: false, error: 'unauthorized' });
       try {
-        // The existing signed runner hosts three isolated bounded collectors.
-        // Launch Truth polls no more often than hourly; never let a news
-        // provider outage disable KSC alerts or Florida schedule observations.
-        const [kscResult,scheduleResult,truthResult]=await Promise.allSettled([
+        // One signed process refreshes the national LL2 snapshot, then
+        // BOTH the existing Florida event history and all-coasts evidence
+        // consume the same result. No repeated schedule pulls.
+        const [kscResult,nationalResult]=await Promise.allSettled([
           run(),
-          scheduleReady() ? runSchedule() : Promise.resolve({skipped:'storage-unavailable'}),
-          truthReady() ? runTruth() : Promise.resolve({skipped:'storage-unavailable'})
+          nationalReady()?runNational():Promise.reject(new Error('national-store-unavailable'))
         ]);
         if(kscResult.status==='rejected')throw kscResult.reason;
+        const national=nationalResult.status==='fulfilled'?
+          nationalResult.value:{ok:false,error:'national-schedule-refresh-failed'};
+        const shared=national?.snapshot?.version===2?national.snapshot:null;
+        const [scheduleResult,truthResult]=await Promise.allSettled([
+          shared&&scheduleReady()?runSchedule({nationalSnapshot:shared}):
+            Promise.reject(new Error('no-shared-national-snapshot')),
+          shared&&truthReady()?runTruth({nationalSnapshot:shared}):
+            Promise.reject(new Error('no-shared-national-snapshot'))
+        ]);
         const schedule=scheduleResult.status==='fulfilled'?
-          scheduleResult.value:{ok:false,error:'schedule-check-failed'};
+          scheduleResult.value:{ok:false,error:'florida-derived-snapshot-failed'};
         const truth=truthResult.status==='fulfilled'?
           truthResult.value:{ok:false,error:'truth-check-failed'};
-        return res.status(200).json({...kscResult.value,scheduleMonitor:schedule,
-          truthMonitor:truth});
+        // Do not expose the full national cache or internal mission metadata
+        // in an authenticated workflow job's terminal output.
+        const nationalSummary={
+          ok:national?.ok===true,checkedAt:national?.checkedAt||shared?.checkedAt||null,
+          skipped:national?.skipped||null,coveredCount:shared?.activeCount??null,
+          complete:shared?.complete??false,providerGroups:shared?.health||[],
+          source:'shared-national-postgres-v2'
+        };
+        return res.status(200).json({...kscResult.value,
+          nationalMonitor:nationalSummary,scheduleMonitor:schedule,truthMonitor:truth});
       } catch (e) {
         const detail = String(e?.message || e).slice(0, 150);
         console.error('ksc_monitor_run_failed', detail);
