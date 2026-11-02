@@ -161,7 +161,16 @@ def nasa_report(article, html, mission, now):
     ):
         candidates.append(int(m.group(1)))
     unique = set(candidates)
-    if len(unique) != 1:
+    # The same article may also quote an earlier weather outlook. Reject
+    # conflicting favorable percentages rather than picking the one closest
+    # to the squadron name and accidentally describing an old edition.
+    all_favorable = {
+        int(m.group(1)) for m in re.finditer(
+            r"\b(\d{1,3})\s*%\s+chance\s+of\s+favorable\b", body, re.I
+        )
+    }
+    if len(unique) != 1 or (all_favorable and
+                                (len(all_favorable) != 1 or all_favorable != unique)):
         return None
     p = next(iter(unique))
     if p < 0 or p > 100:
