@@ -83,7 +83,7 @@ test('every multi-host watch uses the selected crop, not another host’s inspec
  assert.match(tomatoWorm.source,/tomato\/fruitholes/);
  assert.equal(tomatoWorm.evidence[0].source,tomatoWorm.source);
  const tomatoDisease=select('tomatoes',8,'growing').all.find(p=>p.id==='tomato-leaf-spot');
- assert.match(tomatoDisease.source,/E3170_Tomato_Diseases/);
+ assert.match(tomatoDisease.source,/michigan_fresh_tomato_diseases_in_the_home_garden/);
 });
 test('plant-stage changes are causal and reversed state is deterministic',()=>{
  const a=select('beans',5,'seedling'),b=select('beans',5,'fruiting'),c=select('beans',5,'seedling');
