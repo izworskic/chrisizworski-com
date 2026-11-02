@@ -142,6 +142,67 @@ test('rediscovery through an official first-party page refreshes evidence withou
   assert.equal(p.discoveredVia,'45ws-public-page');
   assert.equal(p.timeline.length,1);
 });
+test('NASA report percentages require exact NASA article, launch identity and launch date',()=>{
+  const crew={id:'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',
+    name:'Falcon 9 Block 5 | NASA Crew-13',net:'2026-11-03T15:10:00Z',netPrecision:'minute',presentInUpcoming:true};
+  const nasa={missionId:crew.id,sourceMission:'Weather 55% Favorable for Thursday Crew-13 Mission Launch',
+    sourceUrl:'https://www.nasa.gov/blogs/commercialcrew/2026/11/02/weather-55-favorable-for-crew-13/',
+    sourceSha256:'d'.repeat(64),publishedAt:'2026-11-02T15:00:00Z',
+    reportedTargetDate:'2026-11-03',
+    reportedFavorablePercent:55,primaryConcerns:['Cumulus Cloud Rule','Unknown rule']};
+  const at=Date.parse('2026-11-02T17:00:00Z');
+  assert.equal(model.normalizeNasaReport(nasa,crew,at).reportedFavorablePercent,55);
+  assert.deepEqual(model.normalizeNasaReport(nasa,crew,at).primaryConcerns,['Cumulus Cloud Rule']);
+  assert.equal(model.normalizeNasaReport({...nasa,reportedFavorablePercent:101},crew,at),null);
+  assert.equal(model.normalizeNasaReport({...nasa,sourceMission:'NASA Crew-12 forecast'},crew,at),null);
+  assert.equal(model.normalizeNasaReport({...nasa,reportedTargetDate:'2026-11-04'},crew,at),null);
+  assert.equal(model.normalizeNasaReport({...nasa,sourceUrl:'https://www.nasa.gov.evil.test/blogs/weather'},crew,at),null);
+  assert.equal(model.normalizeNasaReport({...nasa,sourceSha256:'bad'},crew,at),null);
+});
+test('NASA favorable weather is not confused with official PDF PoV',()=>{
+  const crew={id:'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',
+    name:'Falcon 9 Block 5 | NASA Crew-13',net:'2026-11-03T15:10:00Z',
+    netPrecision:'minute',presentInUpcoming:true};
+  const at=Date.parse('2026-11-02T17:00:00Z');
+  const nasa={missionId:crew.id,sourceMission:'Weather 55% Favorable for Thursday Crew-13 Mission Launch',
+    sourceUrl:'https://www.nasa.gov/blogs/commercialcrew/2026/11/02/weather-55-favorable-for-crew-13/',
+    sourceSha256:'d'.repeat(64),publishedAt:'2026-11-02T15:00:00Z',
+    reportedTargetDate:'2026-11-03',reportedFavorablePercent:55,
+    primaryConcerns:['Cumulus Cloud Rule']};
+  const incoming={discoveryStatus:'ok',inspected:1,verified:0,failed:0,
+    reports:[],nasaReports:[nasa],nasaSourceHealth:[
+      {id:'nasa-commercialcrew',status:'checked',entries:10,candidates:1}],
+    forecastWindow:{status:'active-window',nearestAt:crew.net,candidates21Days:1,candidates7Days:1}};
+  const first=model.ingest(model.initially(),incoming,[crew],at);
+  assert.equal(first.nasaAccepted,1);
+  const d=model.missionForecast(crew,first.state,at);
+  assert.equal(d.status,'not-verified');
+  assert.equal(d.povPercent,null);
+  assert.equal(d.agencyWeather.reportedFavorablePercent,55);
+  assert.equal(d.weatherStory.stage,'nasa-reported');
+  assert.match(d.weatherStory.explanation,/not been verified/);
+  assert.equal(d.health.forecastWindow.status,'active-window');
+  assert.equal(d.health.nasaSourceChecks[0].entries,10);
+  const slipped=model.missionForecast({...crew,net:'2026-11-04T15:10:00Z'},first.state,at);
+  assert.equal(slipped.agencyWeather.reportedFavorablePercent,null);
+  const second=model.ingest(first.state,incoming,[crew],at+3600000);
+  assert.equal(second.nasaChanges,0);
+  assert.equal(second.state.nasaHistory[crew.id].length,1);
+});
+test('no launch in forecast horizon is explicit monitoring context, not a failed observation',()=>{
+  const at=Date.parse('2026-11-02T10:00:00Z');
+  const report=model.ingest(model.initially(),{
+    discoveryStatus:'partial',inspected:0,verified:0,failed:0,reports:[],
+    forecastWindow:{status:'before-forecast-window',
+      nearestAt:'2026-11-13T00:00:00Z',candidates21Days:1,candidates7Days:0},
+    nasaSourceHealth:[{id:'nasa-all-blogs',status:'unavailable',entries:0,candidates:0}]
+  },[],at);
+  const h=model.publicHealth(report.state,at);
+  assert.equal(h.forecastWindow.status,'before-forecast-window');
+  assert.equal(h.forecastWindow.candidates7Days,0);
+  assert.equal(h.inspected,0);
+  assert.equal(h.nasaSourceChecks[0].status,'unavailable');
+});
 test('GET route never writes, POST requires a valid signed workflow token',async()=>{
   let writes=0,stored=null;
   const db={get:async()=>stored,set:async(k,v)=>{writes++;stored=v}};
