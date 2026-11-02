@@ -93,6 +93,36 @@
  .table td:nth-child(3)::before{content:'Your practical move'}
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* Freighter View Farms photo field notes: a place-based essay, not a generic product/gallery grid */
+.fvf-photo-story{padding:31px;background:#f3f0e6;border:1px solid #d9d6c7;border-radius:16px}
+.fvf-photo-story *{min-width:0}
+.fvf-story-intro{display:grid;grid-template-columns:minmax(0,1fr) minmax(225px,280px);gap:30px;align-items:end;margin-bottom:20px}
+.fvf-story-intro h2{font-size:clamp(1.7rem,3.3vw,2.7rem);max-width:740px;color:#234b3b;margin:4px 0 13px}
+.fvf-story-intro p:not(.eyebrow){font-size:.98rem;max-width:770px;color:#405b4e}
+.fvf-story-side{border-left:3px solid #b38550;padding:10px 0 10px 16px;font-size:.82rem;color:#496153}
+.fvf-story-side strong{font-family:Georgia,serif;font-size:1.13rem;display:block;color:#244b3d;margin-bottom:5px}
+.fvf-story-side a{display:inline-block;margin-top:7px;font-weight:750}
+.fvf-story-layout{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);gap:17px;align-items:stretch}
+.fvf-story-layout figure{margin:0;background:#fffefa;border:1px solid #d8d6c9;border-radius:12px;overflow:hidden}
+.fvf-story-layout img{width:100%;display:block;object-fit:cover;background:#b9bca9}
+.fvf-story-lead img{aspect-ratio:1.22;object-position:center}
+.fvf-story-lead figcaption{padding:20px 21px 22px}
+.fvf-story-sequence{display:grid;grid-template-rows:repeat(3,minmax(0,1fr));gap:12px}
+.fvf-story-sequence figure{display:grid;grid-template-columns:minmax(125px,.43fr) minmax(0,.57fr)}
+.fvf-story-sequence img{height:100%;aspect-ratio:1.25;min-height:148px}
+.fvf-story-sequence figcaption{padding:14px 15px 13px;align-self:center}
+.fvf-story-tag{display:block;font:800 .63rem/1.5 system-ui,sans-serif;text-transform:uppercase;letter-spacing:.1em;color:#8a5c32;margin-bottom:6px}
+.fvf-story-layout figcaption strong{font:600 1.23rem/1.23 Georgia,serif;color:#254c3d;display:block;margin-bottom:9px}
+.fvf-story-sequence figcaption strong{font-size:1.04rem;margin-bottom:6px}
+.fvf-story-layout figcaption p{font-size:.85rem;line-height:1.5;color:#41584a;margin:0 0 9px}
+.fvf-story-layout figcaption small{display:block;font-size:.69rem;line-height:1.45;color:#5d7062}
+.fvf-story-footer{font-size:.84rem;line-height:1.6;color:#3e584c;border-top:1px solid #d0d1c4;margin:18px 0 0;padding-top:16px}
+.fvf-story-footer a{font-weight:750}
+@media(max-width:1000px){.fvf-story-intro{grid-template-columns:1fr}.fvf-story-side{max-width:750px}.fvf-story-layout{grid-template-columns:1fr}.fvf-story-lead{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr)}.fvf-story-lead img{height:100%;aspect-ratio:1.25}.fvf-story-lead figcaption{align-self:center}.fvf-story-sequence{grid-template-rows:none;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}.fvf-story-sequence figure{display:block}.fvf-story-sequence img{height:auto;aspect-ratio:1.5;min-height:0}.fvf-story-sequence figcaption{padding:13px}}
+@media(max-width:680px){.fvf-photo-story{padding:19px 13px;border-radius:12px}.fvf-story-intro{gap:9px}.fvf-story-lead{display:block}.fvf-story-lead img{height:auto;aspect-ratio:1.35}.fvf-story-lead figcaption{padding:17px}.fvf-story-sequence{grid-template-columns:1fr}.fvf-story-sequence figure{display:grid;grid-template-columns:minmax(112px,.41fr) minmax(0,.59fr)}.fvf-story-sequence img{height:100%;aspect-ratio:1;min-height:145px}.fvf-story-sequence figcaption{padding:12px}.fvf-story-sequence figcaption p{font-size:.8rem}.fvf-story-sequence figcaption strong{font-size:1.05rem}}
+@media(max-width:375px){.fvf-story-sequence figure{grid-template-columns:105px minmax(0,1fr)}.fvf-story-sequence figcaption{padding:10px}.fvf-story-sequence figcaption p{font-size:.76rem}}
+
 </style>
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Article","@id":"https://chrisizworski.com/leafcutter-bees/#article","headline":"Leafcutter Bees: The Complete Garden Guide & Seasonal Care Planner","description":"An evidence-led guide to leafcutter bees, nesting habitat, seasonal management, pollination, species differences and responsible buying.","mainEntityOfPage":"https://chrisizworski.com/leafcutter-bees/","author":{"@id":"https://chrisizworski.com/#person"},"datePublished":"2026-11-01","dateModified":"2026-11-01"},{"@type":"WebApplication","name":"Leafcutter Bee Seasonal Decision Planner","url":"https://chrisizworski.com/leafcutter-bees/#bee-planner","applicationCategory":"LifestyleApplication","operatingSystem":"Any modern browser","isAccessibleForFree":true},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Michigan Gardening Tools","item":"https://chrisizworski.com/michigan-gardening/"},{"@type":"ListItem","position":3,"name":"Leafcutter Bees","item":"https://chrisizworski.com/leafcutter-bees/"}]}]}</script>
 </head><body>
@@ -224,6 +254,39 @@
 <div class="note" style="margin-top:17px"><strong>Pollination without inflated promises:</strong> leafcutter bees can be important visitors to summer flowers and some crops, notably alfalfa. They are <em>not</em> a substitute for every pollinator. Tomatoes rely substantially on self-pollination and buzz-pollination; bumblebees are better known for that job. No unsupported “100 times better” or “triple your harvest” claims here. <a href="https://www.sare.org/publications/managing-alternative-pollinators/chapter-four-pollination-botany/diverse-bees-diverse-flowers/">SARE pollination biology</a> · <a href="https://extension.umn.edu/agriculture/specialty-crops/pollination/requirements">UMN crop-specific guidance</a>.</div>
 </section>
 <section class="contrast"><div class="container split"><div><div class="eyebrow">Fear, gently corrected</div><h2>There is no hive to defend.</h2><p>Leafcutter bees are solitary. There are no worker bees guarding a shared store of honey or a queen. Females can sting, but they are not aggressive around their nests; incidents usually involve handling or trapping a bee.</p><p>Watch from a respectful distance. Don't squeeze bees, put your face in the nest or obstruct entrances. Anyone with a serious sting allergy should use appropriate personal precautions. <a href="https://extension.usu.edu/planthealth/ipm/ornamental-pest-guide/arthopods/leafcutter-bees">Utah State Extension</a>.</p></div><div><div class="eyebrow">Garden mystery</div><h2>Who's making crescents in my roses?</h2><p>Not a caterpillar eating its lunch. The neatly clipped leaf edge often means a mother leafcutter is collecting construction material. She doesn't eat those sections.</p><p>Leave them alone when possible; the leaf is still doing its job. UC IPM considers the loss cosmetic on otherwise healthy plants. <a href="https://ipm.ucanr.edu/home-and-landscape/leafcutting-bees/">UC IPM</a>.</p></div></div></section>
+
+<section id="from-my-garden" class="fvf-photo-story container section" aria-labelledby="fvf-story-title">
+ <div class="fvf-story-intro">
+  <div><p class="eyebrow">From Freighter View Farms · Saginaw Bay, Michigan</p>
+   <h2 id="fvf-story-title">From my garden on Saginaw Bay.</h2>
+   <p>Before there was a forecast desk or a garden planner, there was a little bee house at the edge of my garden. These are four photographs I took while learning to keep leafcutter bees, from the warm light on an early house to the practical details of a summer shipment.</p>
+   <p>They show <em>my experience with commercially supplied bees</em>, not a live report from your garden and not instructions for every wild leafcutter species.</p>
+  </div>
+  <aside class="fvf-story-side"><strong>A real place, real photographs.</strong>Four moments from the garden in Bay City, photographed by Chris Izworski. Start with habitat for wild bees; use stage-specific supplier guidance for purchased cocoons.<div><a href="#bee-planner">Check the seasonal care planner</a></div></aside>
+ </div>
+ <div class="fvf-story-layout">
+  <figure class="fvf-story-lead">
+   <img loading="lazy" decoding="async" src="/images/leafcutter-fvf-house-sunset-chris-izworski.webp" width="1100" height="720" alt="A small white leafcutter bee house and nesting block glow in the low sunset over Saginaw Bay">
+   <figcaption><span class="fvf-story-tag">01 · The beginning · 2024</span><strong>A house at the edge of the bay.</strong><p>This original bee house caught the last light of a Michigan evening. Its purpose was simple: offer dry nesting cavities near summer flowers. The photograph documents my setup, not an inspection of occupied brood.</p><small>Photograph by Chris Izworski · Freighter View Farms, Bay City, Michigan</small></figcaption>
+  </figure>
+  <div class="fvf-story-sequence">
+   <figure>
+    <img loading="lazy" decoding="async" src="/images/leafcutter-fvf-bee-house-saginaw-bay-chris-izworski.webp" width="680" height="470" alt="The real peaked-roof bee house with nesting block and orange release box, Saginaw Bay behind it">
+    <figcaption><span class="fvf-story-tag">02 · The habitat · June 2026</span><strong>The house, up close.</strong><p>Roof, nesting block and release box in one view. Choose clean, protected tunnels suited to the bees; this is an example, not a universal design standard.</p><small>Photograph by Chris Izworski</small></figcaption>
+   </figure>
+   <figure>
+    <img loading="lazy" decoding="async" src="/images/leafcutter-fvf-cocoon-delivery-chris-izworski.webp" width="680" height="470" alt="Kind Bee Farms shipping carton and orange commercial leafcutter bee cocoon release tray on a countertop">
+    <figcaption><span class="fvf-story-tag">03 · Arrival · June 2026</span><strong>What a shipment looks like.</strong><p>This was my purchased cocoon delivery. Stage, species and seller instructions matter; bees already nearing emergence cannot simply be put back to sleep.</p><small>Photograph by Chris Izworski</small></figcaption>
+   </figure>
+   <figure>
+    <img loading="lazy" decoding="async" src="/images/leafcutter-fvf-nesting-trays-chris-izworski.webp" width="680" height="470" alt="Close-up of rows of rounded cavities in leafcutter bee nesting trays photographed without opening the brood">
+    <figcaption><span class="fvf-story-tag">04 · The cavities · 2024</span><strong>Watch the entrances, not the cells.</strong><p>Real nesting trays, seen from the outside. Their appearance alone cannot confirm occupants or successful emergence. Leave unknown sealed brood intact.</p><small>Photograph by Chris Izworski</small></figcaption>
+   </figure>
+  </div>
+ </div>
+ <p class="fvf-story-footer">Read the original field notes: <a href="https://freighterviewfarms.com/2024/10/11/leafcutter-bees-garden/">Keeping Leafcutter Bees (2024)</a> and <a href="https://freighterviewfarms.com/2026/06/28/leafcutter-bees-arrive-summer/">The Bees Have Arrived (2026)</a>. These photographs are not a species-identification test, a measure of pollination yield, or evidence that another garden is ready for commercial cocoons. For decisions, use the <a href="#bee-planner">garden planner</a> and <a href="#release-and-dormancy">brood-stage guidance</a>.</p>
+</section>
+
 <section id="bee-houses" class="container section"><div class="eyebrow">Build a home that actually works</div><h2>A little less bee hotel. A little more bee habitat.</h2>
 <div class="split"><div><p>The best first investment is flowers, pesticide protection and natural stems. For a nesting house, avoid a giant decorative hotel that cannot be cleaned. Small, replaceable tubes reduce the accumulation of disease and parasites.</p>
 <div class="garden-grid house-grid"><article><h3>Dry and secure</h3><p>Mount firmly 4–5 feet above ground, facing roughly southeast for morning sun. Add a roof overhang and protect from driving rain.</p></article><article><h3>Right-sized tunnels</h3><p>Use clean, closed-back cavities 5–8 inches long with varied diameters. A 6 mm inner diameter is for commercially managed alfalfa leafcutters, not every wild species.</p></article><article><h3>Easy to replace</h3><p>Removable reeds, cardboard inserts, or opening trays allow annual rotation. Do not keep reusing permanently drilled, dirty tubes.</p></article><article><h3>Flower-rich surroundings</h3><p>Keep summer flowers close. MSU highlights bee balm, black-eyed Susan and purple coneflower. Avoid pesticide exposure and drift.</p></article></div></div>
