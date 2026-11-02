@@ -170,7 +170,7 @@ module.exports = async function handler(req, res) {
     if (requestedId && !next) return res.status(404).json({
       ok: false, error: 'This mission is no longer in the current Florida launch list.'
     });
-    const [forecasts, kscViewing, launchWeatherIntelligence] = await Promise.all([
+    const [forecasts, kscViewing, , launchWeatherIntelligence] = await Promise.all([
       weatherForLocations(next, now),
       inspectKscLaunch(next).catch(() => ({
         state: 'unverified', checkedAt: new Date().toISOString(),
@@ -178,12 +178,10 @@ module.exports = async function handler(req, res) {
         reason: 'source-unavailable', calendarUrl: KSC_CALENDAR,
         note: 'Official KSC mission-viewing details could not be verified. Check the operator calendar.'
       })),
-      // The third Promise result is the launch-side forecast; keep any
-      // schedule-store side effect after it so response field alignment is stable.
-      launchWeatherFor({ id: 'florida' }, next, fetchJson, now),
       // Save a trusted LL2 snapshot once with the ordinary cached schedule.
       // The faster official KSC checker reads it without polling LL2 again.
-      storeTrustedLaunches(launches, now)
+      storeTrustedLaunches(launches, now),
+      launchWeatherFor({ id: 'florida' }, next, fetchJson, now)
     ]);
     const primary = forecasts[0] || null;
     const parkAlerts = nps.alerts.map(a => ({
