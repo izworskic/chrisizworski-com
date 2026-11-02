@@ -169,6 +169,121 @@ share.addEventListener('click',async()=>{
  }catch(_error){share.textContent='Copy the URL from your browser';}
  setTimeout(()=>{share.textContent='Copy this garden watch link ↗';},2600);
 });
+
+/* Opt-in NASA Daymet historical weather/USA-NPN research model.
+ * Never changes biologicalForecast, the primary pest verdict or any
+ * gardener-confirmed state. Static 2021-2025, not a current-year alert. */
+const historyBtn=$('history-load'),historyState=$('history-status'),historyOutput=$('history-results');
+let historicalRequest=0,historicalReference='';
+function clearHistorical(){
+ historicalRequest++;
+ historicalReference='';
+ historyBtn.disabled=false;
+ historyBtn.textContent='Explore five seasons at my location ↗';
+ historyState.textContent='Location changed. Run a new historical comparison to avoid mixing reference points.';
+ historyOutput.replaceChildren();
+ const wrapper=el('div','history-placeholder');
+ wrapper.append(el('p','', 'Five complete historical years are required before a timing range is shown.'));
+ historyOutput.append(wrapper);
+}
+function monthDay(iso){
+ if(!/^\d{4}-\d{2}-\d{2}$/.test(iso||''))return 'Unavailable';
+ return new Date(iso+'T12:00:00Z').toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'UTC'});
+}
+function yearDate(stage,year){
+ const p=stage.samples.find(s=>s.year===year);
+ return p?monthDay(p.date):'Not reached';
+}
+function drawHistory(payload){
+ if(payload?.status!=='HISTORIC_MODELLED_RESEARCH_ONLY'||payload?.publishedUse!=='HISTORIC_RESEARCH_ONLY'||payload?.realTimeForecast!=='UNAVAILABLE'||
+ !Array.isArray(payload.events)||payload.events.length!==2||!Array.isArray(payload.years)||payload.years.length!==5)throw Error('HISTORICAL_EVIDENCE_NOT_VERIFIED');
+ const adult=payload.events.find(x=>x.id==='adults'),egg=payload.events.find(x=>x.id==='eggs');
+ if(!adult||!egg||adult.status!=='HISTORIC_MODELLED'||egg.status!=='HISTORIC_MODELLED')throw Error('INCOMPLETE_HISTORICAL_THRESHOLDS');
+ if(payload.events.some(x=>x.yearsCrossed!==5||x.medianYday===null))throw Error('INSUFFICIENT_YEAR_COVERAGE');
+ const location=payload.location?.name||'Michigan reference area';
+ historyOutput.replaceChildren();
+ const kpis=el('div','history-kpis');
+ for(const event of [adult,egg]){
+  const block=el('div');
+  const label=el('small','',event.id==='adults'?'EARLIEST ADULT HEAT THRESHOLD':'EGG-HATCH HEAT THRESHOLD');
+  const median=event.samples.find(x=>x.yday===event.medianYday);
+  block.append(label,el('strong','',median?monthDay(median.date):'Unverified'),
+    el('small','','Five-season middle threshold date (historical only)'));
+  kpis.append(block);
+ }
+ historyOutput.append(kpis);
+ const intro=el('p','history-warning','These dates are reconstructed from NASA historical temperature records, not beetle observations. The published 873/1,543°F degree-day thresholds were applied using an independent single-triangle calculation; operational USA-NPN parity has not been verified.');
+ historyOutput.append(intro);
+ const plot=el('div','history-plot');
+ const key=el('div','history-plot-key');
+ key.append(el('span','history-key-adult','Adult threshold'),el('span','history-key-egg','Egg-hatch threshold'));
+ plot.append(key);
+ for(const year of payload.years){
+  const row=el('div','history-row'),track=el('div','history-track');
+  row.append(el('span','history-row-label',String(year)));
+  for(const stage of [adult,egg]){
+   const sample=stage.samples.find(x=>x.year===year);
+   if(!sample)continue;
+   const dot=el('span','history-mark '+(stage.id==='adults'?'adult':'egg'));
+   dot.style.left=Math.max(0,Math.min(100,sample.yday/365*100))+'%';
+   dot.title=year+': '+stage.stage+' reached model threshold '+monthDay(sample.date);
+   dot.setAttribute('aria-label',dot.title);
+   track.append(dot);
+  }
+  row.append(track);plot.append(row);
+ }
+ const axis=el('div','history-axis');
+ for(const label of ['Jan','May','Sep','Dec'])axis.append(el('span','',label));
+ plot.append(axis);historyOutput.append(plot);
+ const table=el('table','history-detail-table');
+ table.append(el('caption','','Historical heat-threshold dates for '+location+' (NOT sightings)'));
+ const head=el('thead'),thr=el('tr');
+ for(const label of ['Year','Adult heat stage','Egg-hatch heat stage'])thr.append(el('th','',label));
+ head.append(thr);table.append(head);
+ const body=el('tbody');
+ for(const year of payload.years){
+  const tr=el('tr');
+  for(const val of [String(year),yearDate(adult,year),yearDate(egg,year)])tr.append(el('td','',val));
+  body.append(tr);
+ }
+ table.append(body);historyOutput.append(table);
+ const details=el('p','history-note','Data: NASA Daymet V4 R1, 1 km reference pixel. 2021–2025. Minimum and maximum daily temperatures used; no incomplete year accepted. The chart locates past degree-day crossings, not verified field dates.');
+ historyOutput.append(details);
+ if(typeof payload.source?.url==='string'&&payload.source.url.startsWith('https://daymet.ornl.gov/')){
+  const link=el('a','', 'View the actual NASA Daymet source data used');
+  link.href=payload.source.url;link.rel='noopener noreferrer';link.target='_blank';
+  historyOutput.append(link);
+ }
+ historyState.textContent='Five complete seasons reconstructed for '+location+'. These modeled dates are historical research, not a forecast for this year or next year.';
+}
+async function loadHistorical(){
+ if(zip.value&&!/^(?:48|49)\d{3}$/.test(zip.value)){
+  zip.setCustomValidity('Enter a five-digit Michigan ZIP beginning with 48 or 49.');
+  zip.reportValidity();return;
+ }
+ const requestId=++historicalRequest;
+ const params=new URLSearchParams();
+ if(zip.value)params.set('zip',zip.value);else params.set('site','bay-city');
+ historicalReference=zip.value?'zip:'+zip.value:'site:bay-city';
+ historyBtn.disabled=true;historyState.textContent='Checking NASA Daymet for five complete calendar years; only verified historical data will be displayed.';
+ historyOutput.replaceChildren(el('p','history-warning','Reading 2021–2025 daily gridded temperature records. This is not a live insect detection.'));
+ try{
+  const res=await fetch('/api/garden-pest-timing-lab?'+params.toString(),{headers:{accept:'application/json'},signal:AbortSignal.timeout(21000)});
+  if(!res.ok)throw Error('DAYMET_SOURCE_UNAVAILABLE');
+  const payload=await res.json();
+  if(requestId!==historicalRequest)return;
+  drawHistory(payload);
+  historyBtn.textContent='Refresh the historical comparison ↗';
+ }catch(_error){
+  if(requestId!==historicalRequest)return;
+  historyOutput.replaceChildren(el('p','history-warning','Complete NASA Daymet historical data or reproducible model timings could not be verified for this reference area. No dates or estimated pest stages are shown.'));
+  historyState.textContent='Historical source unavailable. Follow the official NASA and USA-NPN references below; no missing dates have been estimated.';
+ }finally{if(requestId===historicalRequest)historyBtn.disabled=false;}
+}
+historyBtn.hidden=false;
+historyBtn.addEventListener('click',loadHistorical);
+zip.addEventListener('input',clearHistorical);
+
 restore();
 update();
 })();
