@@ -277,7 +277,7 @@ test('both launch experiences have source ledger, valid local assets and safe mi
   assert.match(nationalJS,/rocket-truth:mission-selected/);
   assert.match(floridaJS,/rocket-truth:mission-selected/);
   assert.match(shared,/api\/rocket-launch-truth/);
-  assert.doesNotMatch(shared,/thespacedevs\.com.*fetch\(/s);
+  assert.doesNotMatch(shared,/fetch\s*\(\s*['\"]https?:\/\//);
   assert.match(css,/\.lt-desk/);
   assert.doesNotThrow(()=>new Function(shared));
   const vercel=JSON.parse(fs.readFileSync(path.join(root,'vercel.json'),'utf8'));
