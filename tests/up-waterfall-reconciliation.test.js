@@ -40,7 +40,12 @@ test('exact GIS reconciliation cannot silently create or alter public guides', (
       assert.equal(row.curatedId, null);
       assert.equal(row.reconciliation, 'pending-identity-and-access-research');
       const proposedSlug = row.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-      if (row.gisObjectId===45) {
+      if(row.gisObjectId===163) {
+        const namesake=curated.waterfalls.find(x=>x.id==='carp-river-falls');
+        assert.ok(namesake && namesake.gisObjectId===169,'same-name public Carp River guide must map to Marquette falls, not Upper Carp');
+        assert.ok(Math.abs(namesake.lng-row.lng)>0.1,'separate Carp River falls identities');
+        assert.match(row.sourceNotes,/No Trespassing/i,'unpublished Ishpeming Upper Carp remains access-blocked');
+      } else if (row.gisObjectId===45) {
         const visitor=curated.waterfalls.find(x=>x.id==='sturgeon-falls');
         assert.ok(visitor && !Number.isInteger(visitor.gisObjectId));
         assert.ok(Math.abs(visitor.lat-row.lat)>0.04);

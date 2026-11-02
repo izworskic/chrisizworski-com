@@ -5358,87 +5358,96 @@
       "gisObjectId": 169,
       "name": "Carp River Falls (Marquette gorge)",
       "county": "MARQUETTE",
-      "status": "research-only-marquette-carp-gorge-official-walking-recommendation-final-approach-risk",
-      "publicAccess": "not-established-continuously",
-      "publicationEligible": false,
-      "title": "Carp River Falls (Marquette gorge): access source review",
-      "summary": "State GIS #169 names Carp River Falls II but incorrectly lists MORGAN CREEK as waterway. The natural point 46.503807,-87.446550 is about 18m from Travel Marquette's Carp River Falls 46.50367,-87.44668. Morgan Falls at 46.50737,-87.44516 is a different waterfall on Morgan Creek, with a separate published card. Travel Marquette specifies parking at NTN South Trails, walking/biking a motor-vehicle-closed Mt. Marquette Road, reaching Morgan Falls, then continuing about half a mile on an increasingly rough Carp River trail. Independent visits say the high rim offers poor views and getting near the base involves precarious climb. Do not generate a safe trail line, permit vehicle traffic on closed road or imply official parking at the natural falls point.",
-      "guidance": "Official walk/bike approach documented; do not promise a safe signed gorge descent",
+      "status": "published-curated-managed-NTN-overlook",
+      "publicAccess": "public-managed-network-not-live",
+      "publicationEligible": true,
+      "title": "Carp River Falls: public NTN overlook visitor guide",
+      "summary": "Michigan GIS #169 matches Travel Marquette Carp River Falls within roughly 18 metres despite mislabeled MORGAN CREEK waterway. It is distinct from Morgan Falls #166 and posted Upper Carp #163 near Ishpeming. Public NTN South Trailhead and safe road crossing documented; 2024 NTN director describes completed Carp River Falls Trail waterfall viewpoint and Raging River connection; Travel Marquette 2025 describes older rough route from Morgan Falls. Exact new-overlook trail geometry and current seasonal access cannot be confirmed; no route polyline, waterfall-coordinate car directions, cliff scramble or live-opening claim.",
+      "guidance": "Choose the signed managed Carp River Falls overlook if trails are open. Morgan Falls is a different, better documented walk. Never follow the posted Ishpeming upper falls track or try the gorge bottom.",
       "reviewLimitations": "This source review did not establish title, a live opening, a safe public parking lot or a complete signed public walking connection.",
-      "nextEvidence": "Georeference verified legal NTN trailhead to the walk/bike route; reconcile actual Carp River channel and distinct Morgan Creek confluence; establish the approved final vista and hazard wording before indexable expert guide.",
+      "nextEvidence": "Complete official georeferenced track and live conditions needed for a turn-by-turn route.",
       "researchPage": "/upper-peninsula-waterfalls/research/carp-river-falls-marquette-gorge/",
       "sourceLinks": [
         {
-          "label": "Michigan named waterfall feature",
+          "label": "gis",
           "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
         },
         {
-          "label": "Travel Marquette official waterfall visitor guide",
+          "label": "ntn",
+          "url": "https://www.noquetrails.org/south-trails/"
+        },
+        {
+          "label": "tourism",
           "url": "https://www.travelmarquette.com/outdoor-adventure/waterfalls/"
         },
         {
-          "label": "Travel Marquette Carp and Morgan distinct coordinates",
+          "label": "blog",
           "url": "https://www.travelmarquette.com/blog/post/waterfalls-you-need-to-see-in-fall/"
         },
         {
-          "label": "Historic Carp River gorge and scrambling",
-          "url": "https://gowaterfalling.com/waterfalls/carpriver.shtml"
+          "label": "trail",
+          "url": "https://www.uppermichiganssource.com/2024/08/15/ntn-hosts-business-after-hours-cuts-ribbon-updated-pavilion/"
         },
         {
-          "label": "Existing Morgan Falls visitor guide",
-          "url": "https://chrisizworski.com/upper-peninsula-waterfalls/morgan-falls/"
+          "label": "photo",
+          "url": "https://www.travelmarquette.com/listing/carp-river-ntn-south-trails/514/"
+        },
+        {
+          "label": "brochure",
+          "url": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/marquettemi/waterfalls10_2025sheetA_eb3543b3-af0c-44a9-9a3b-140f872272db.pdf"
         }
       ],
       "routeAudit": {
         "reviewed": "2026-11-01",
-        "outcome": "not-cleared",
+        "outcome": "public-managed-overlook-exact-line-unverified",
         "destinationCoordinatesForDriving": false,
         "routePolylineAuthorized": false,
         "segments": [
           {
-            "label": "Feature identity vs same-name locations",
-            "status": "documented-geography",
-            "finding": "State GIS #169 names Carp River Falls II but incorrectly lists MORGAN CREEK as waterway. The natural point 46.503807,-87.446550 is about 18m from Travel Marquette's Carp River Falls 46.50367,-87.44668. Morgan Falls at 46.50737,-87.44516 is a different waterfall on Morgan Creek, with a separate published card.",
+            "label": "Separate GIS names",
+            "status": "verified-geography",
+            "finding": "Michigan GIS #169 matches Travel Marquette Carp River Falls within roughly 18 metres despite mislabeled MORGAN CREEK waterway. It is distinct from Morgan Falls #166 and posted Upper Carp #163 near Ishpeming. Public NTN South Trailhead and safe road crossing documented; 2024 NTN director describes completed Carp River Falls Trail waterfall viewpoint and Raging River connection; Travel Marquette 2025 describes older rough route from Morgan Falls. Exact new-overlook trail geometry and current seasonal access cannot be confirmed; no route polyline, waterfall-coordinate car directions, cliff scramble or live-opening claim.",
             "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
           },
           {
-            "label": "Land tenure and private entry risk",
-            "status": "not-cleared",
-            "finding": "No fresh parcel survey or legal walking corridor has been established by this batch. GIS coordinates alone do not prove public title or access rights.",
-            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+            "label": "NTN public managed network",
+            "status": "documented-public-network",
+            "finding": "Public NTN South Trails and reported 2024 Carp River Falls managed waterfall overlook; parcel access off trail not implied.",
+            "source": "https://www.uppermichiganssource.com/2024/08/15/ntn-hosts-business-after-hours-cuts-ribbon-updated-pavilion/"
           },
           {
-            "label": "Historic/tourism directions and access status",
-            "status": "documented-not-live",
-            "finding": "Travel Marquette specifies parking at NTN South Trails, walking/biking a motor-vehicle-closed Mt. Marquette Road, reaching Morgan Falls, then continuing about half a mile on an increasingly rough Carp River trail. Independent visits say the high rim offers poor views and getting near the base involves precarious climb. Do not generate a safe trail line, permit vehicle traffic on closed road or imply official parking at the natural falls point.",
+            "label": "Legitimate visitor parking",
+            "status": "verified-visitor-arrival",
+            "finding": "Use NTN South Trailhead on County Road 553, not the dirt highway shoulder across M-553. Follow its marked crossing and current NTN trail signs. Do not drive the restricted Mount Marquette Road or navigate a vehicle to the falls GPS point.",
             "source": "https://www.travelmarquette.com/outdoor-adventure/waterfalls/"
           },
           {
-            "label": "Road jurisdiction and lawful parking",
-            "status": "not-cleared",
-            "finding": "NTN South Trails is named in the Travel Marquette visitor route, but this does not make Mt. Marquette Road vehicle-accessible or certify parking at the waterfall.",
-            "source": "https://www.travelmarquette.com/blog/post/waterfalls-you-need-to-see-in-fall/"
+            "label": "Nonmotorized walking approach",
+            "status": "published-visitor-approach",
+            "finding": "From Noquemanon South Trailhead on CR 553 use the designated M-553 pedestrian crossing. The older Travel Marquette route follows motor-vehicle-restricted Mount Marquette Road toward Morgan Falls and continues about half a mile farther along the rough Carp River bank. NTN's newer Carp River Falls Trail (completed 2024) has a documented waterfall overlook. Use current NTN signs to the managed viewpoint rather than combining old and new routes into an invented path. Do not scramble into the gorge.",
+            "source": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/marquettemi/waterfalls10_2025sheetA_eb3543b3-af0c-44a9-9a3b-140f872272db.pdf"
           },
           {
-            "label": "Continuous legal footpath and safe waterfall view",
-            "status": "not-cleared",
-            "finding": "Travel Marquette's hiking progression exists, but the final steep gorge descent is unmarked and cannot be rendered as a safe approved polyline.",
-            "source": "https://www.travelmarquette.com/blog/post/waterfalls-you-need-to-see-in-fall/"
+            "label": "Overlook versus unsafe base descent",
+            "status": "signed-overlook-not-georeferenced",
+            "finding": "NTN built waterfall viewing trail; no exact signed track and no safe cliff-base walking line established.",
+            "source": "https://www.uppermichiganssource.com/2024/08/15/ntn-hosts-business-after-hours-cuts-ribbon-updated-pavilion/"
           },
           {
-            "label": "Current conditions, restrictions and uncertainty",
-            "status": "not-cleared",
-            "finding": "No current November 2026 road, gate, trail, footing or land-manager permission report. Do not present old hiking text as live access.",
-            "source": "https://www.travelmarquette.com/outdoor-adventure/waterfalls/"
+            "label": "Current trail and ice",
+            "status": "not-live",
+            "finding": "No live 2026 site-specific opening, grooming or footing data; current trail signs override old guide.",
+            "source": "https://www.noquetrails.org/south-trails/"
           }
         ]
       },
       "visitorDecision": {
-        "decision": "Official walk/bike approach documented; do not promise a safe signed gorge descent",
-        "context": "Travel Marquette's real gorge waterfall, but the final steep river descent is not a signed safe viewpoint.",
-        "saferAlternative": "Morgan Falls has a separately curated, more approachable visitor guide.",
-        "confidence": "official-trip-evidence-high-final-viewpoint-unverified"
-      }
+        "decision": "NTN-managed waterfall overlook: signed public arrival, current route not mapped",
+        "context": "Not an invitation to descend the river gorge or drive to the GIS falls pin",
+        "saferAlternative": "Morgan Falls via NTN South Trailhead",
+        "confidence": "documented-public-overlook-no-route-line"
+      },
+      "publicGuide": "/upper-peninsula-waterfalls/carp-river-falls/"
     },
     {
       "gisObjectId": 170,

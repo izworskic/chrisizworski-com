@@ -4,9 +4,9 @@
   "policy": "RESEARCH ONLY. Priority is a review-effort heuristic, not evidence of legal visitor access, permission, parking, or live opening. Do not auto-index.",
   "counts": {
     "gisFeatures": 161,
-    "curatedDestinations": 71,
-    "matchedGisFeatures": 65,
-    "pendingGisFeatures": 96
+    "curatedDestinations": 72,
+    "matchedGisFeatures": 66,
+    "pendingGisFeatures": 95
   },
   "batchSize": 8,
   "batches": [
@@ -158,7 +158,6 @@
       "candidates": [
         162,
         163,
-        169,
         170,
         172,
         173,
@@ -1607,22 +1606,6 @@
       "reviewStatus": "previous-research-needs-public-access-review",
       "sourceCount": 4,
       "blockingGate": "Confirm actual owner and posted trail status; reconcile whether GIS marks the lower/upper drop of the small Ishpeming feature and locate a current independent lawful public approach before visitor publication."
-    },
-    {
-      "gisObjectId": 169,
-      "name": "Carp River Falls Ii",
-      "county": "MARQUETTE",
-      "river": "MORGAN CREEK",
-      "lat": 46.503807,
-      "lng": -87.44655,
-      "cluster": "MARQUETTE / MORGAN CREEK",
-      "priorityScore": -30,
-      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
-      "reviewStage": "awaiting-new-authoritative-evidence",
-      "publicationEligible": false,
-      "reviewStatus": "previous-research-needs-public-access-review",
-      "sourceCount": 5,
-      "blockingGate": "Georeference verified legal NTN trailhead to the walk/bike route; reconcile actual Carp River channel and distinct Morgan Creek confluence; establish the approved final vista and hazard wording before indexable expert guide."
     },
     {
       "gisObjectId": 170,
