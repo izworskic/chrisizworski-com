@@ -4,9 +4,9 @@
   "policy": "RESEARCH ONLY. Priority is a review-effort heuristic, not evidence of legal visitor access, permission, parking, or live opening. Do not auto-index.",
   "counts": {
     "gisFeatures": 161,
-    "curatedDestinations": 73,
-    "matchedGisFeatures": 66,
-    "pendingGisFeatures": 95
+    "curatedDestinations": 74,
+    "matchedGisFeatures": 67,
+    "pendingGisFeatures": 94
   },
   "batchSize": 8,
   "batches": [
@@ -15,148 +15,147 @@
       "candidates": [
         213,
         68,
-        38,
         12,
         191,
         192,
         46,
-        91
+        91,
+        119
       ]
     },
     {
       "batchNumber": 2,
       "candidates": [
-        119,
         190,
         45,
         150,
         151,
         154,
         160,
-        215
+        215,
+        195
       ]
     },
     {
       "batchNumber": 3,
       "candidates": [
-        195,
         205,
         51,
         52,
         59,
         83,
         99,
-        103
+        103,
+        105
       ]
     },
     {
       "batchNumber": 4,
       "candidates": [
-        105,
         107,
         114,
         120,
         121,
         123,
         8,
-        20
+        20,
+        24
       ]
     },
     {
       "batchNumber": 5,
       "candidates": [
-        24,
         25,
         37,
         39,
         40,
         48,
         58,
-        63
+        63,
+        65
       ]
     },
     {
       "batchNumber": 6,
       "candidates": [
-        65,
         69,
         70,
         74,
         75,
         86,
         112,
-        29
+        29,
+        42
       ]
     },
     {
       "batchNumber": 7,
       "candidates": [
-        42,
         80,
         85,
         129,
         15,
         17,
         136,
-        137
+        137,
+        139
       ]
     },
     {
       "batchNumber": 8,
       "candidates": [
-        139,
         140,
         144,
         18,
         116,
         127,
         148,
-        149
+        149,
+        152
       ]
     },
     {
       "batchNumber": 9,
       "candidates": [
-        152,
         153,
         162,
         163,
         170,
         172,
         173,
-        175
+        175,
+        176
       ]
     },
     {
       "batchNumber": 10,
       "candidates": [
-        176,
         177,
         180,
         181,
         183,
         184,
         185,
-        186
+        186,
+        187
       ]
     },
     {
       "batchNumber": 11,
       "candidates": [
-        187,
         22,
         23,
         28,
         54,
         57,
         60,
-        61
+        61,
+        62
       ]
     },
     {
       "batchNumber": 12,
       "candidates": [
-        62,
         72,
         84,
         106,
@@ -198,22 +197,6 @@
       "reviewStatus": "previous-research-needs-public-access-review",
       "sourceCount": 3,
       "blockingGate": "Determine actual GIS #68 watercourse location and whether separate upstream feature, duplicate/misplaced point or unrelated named falls. No name-only parent-child matching."
-    },
-    {
-      "gisObjectId": 38,
-      "name": "Gabbro Falls",
-      "county": "GOGEBIC",
-      "river": "BLACK RIVER",
-      "lat": 46.502079,
-      "lng": -89.992485,
-      "cluster": "GOGEBIC / BLACK RIVER",
-      "priorityScore": 35,
-      "priorityReason": "Partial evidence already exists: finish owner, legal route and current parking verification",
-      "reviewStage": "incomplete-source-audit",
-      "publicationEligible": false,
-      "reviewStatus": "previous-research-needs-public-access-review",
-      "sourceCount": 5,
-      "blockingGate": "City tourist recommendation and independent hiking accounts support name and informal route but not legal bridge/upper ski-hill parking, public trail easement, full connected visitor walking line or current conditions. Do not index or route to GIS point."
     },
     {
       "gisObjectId": 12,
