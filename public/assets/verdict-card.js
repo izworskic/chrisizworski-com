@@ -56,9 +56,9 @@
       locationNote: unavailable ? 'Michigan: check the official forecast before making a trip' : String(value.locationNote),
       drivers: unavailable ? [] : drivers,
       asOf: Number.isFinite(stamp) ? new Date(stamp).toISOString() : null,
-      reason: unavailable ? (value.reason || (stale || value.availability === 'stale'
+      reason: unavailable ? (stale || value.availability === 'stale'
         ? 'The last assessment has expired. A current forecast is required.'
-        : 'One or more required forecast inputs are missing.')) : (value.reason || ''),
+        : (value.reason || 'One or more required forecast inputs are missing.')) : (value.reason || ''),
     };
   }
 
