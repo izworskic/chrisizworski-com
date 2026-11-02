@@ -37,6 +37,25 @@ const db=()=>{
       return 1;}
   }};
 };
+test('bounded 120-day national source request avoids far-future truncation without extra calls',()=>{
+  assert.equal(national.HORIZON_DAYS,120);
+  const date=Date.parse('2026-11-02T15:00:00Z');
+  const u=new URL(national.queryUrl(national.QUERIES[0],date));
+  assert.equal(u.searchParams.get('location__ids'),'11,12,27');
+  assert.equal(u.searchParams.get('limit'),'100');
+  assert.equal(u.searchParams.get('net__lte'),new Date(date+120*86400000).toISOString());
+  const checked=national.normalizeFeed({
+    count:73,results:[raw(1,11),raw(2,12)]
+  },national.QUERIES[0],date);
+  assert.equal(checked.health.status,'truncated',
+    'When the upstream count exceeds received rows, do not imply completeness');
+  const complete=national.normalizeFeed({count:2,results:[raw(1,11),raw(2,12)]},
+    national.QUERIES[0],date);
+  assert.equal(complete.health.status,'ok');
+  assert.equal(complete.health.horizonDays,120);
+  assert.equal(complete.health.horizonUntil,new Date(date+120*86400000).toISOString());
+});
+
 test('one scheduled collector observes every returned coastal mission and only two LL2 queries',async()=>{
   const store=db(),urls=[];
   const fetcher=async url=>{
