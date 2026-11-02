@@ -49,3 +49,22 @@ test('structured data FAQ and visible FAQ agree, canonical unaffected',()=>{
  assert.match(page,/phenomenon-leaflet-map/);
  assert.match(client,/carto-basemap-config/);
 });
+
+test('Rocky Mountain 2026 separates general from Bear Lake timed-entry schedules',()=>{
+ const park=get('rocky-mountain-elk-rut');
+ assert.equal(park.accessRules.generalEnd,'2026-10-12');
+ assert.equal(park.accessRules.bearLakeEnd,'2026-10-18');
+ assert.match(sections(park.id),/7 PM MDT/);
+ assert.match(sections(park.id),/October permits September 1/);
+ assert.match(sections(park.id),/2027 rules unconfirmed/);
+ assert.doesNotMatch(sections(park.id),/required through late October|5:00 PM MT/);
+});
+test('Acadia 2026 vehicle booking applies only to Cadillac Summit Road and specific dates',()=>{
+ const park=get('acadia-cadillac-first-sunrise');
+ assert.equal(park.accessRules.summitStart,'2026-05-20');
+ assert.equal(park.accessRules.summitEnd,'2026-10-25');
+ assert.equal(park.accessRules.otherParkVehicleReservation,'NOT_REQUIRED');
+ assert.match(sections(park.id),/30%.*90 days.*70%.*two days/);
+ assert.match(sections(park.id),/Other areas of Acadia did not require vehicle reservations/);
+ assert.match(sections(park.id),/2027 policy unconfirmed/);
+});
