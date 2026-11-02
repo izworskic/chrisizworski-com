@@ -180,13 +180,15 @@
     const zone = data.region.timezone;
     set('rl-mission-name', launch?.name || 'No upcoming launch in this regional feed');
     const c = launch?.scheduleConfidence;
+    const sourceStale=data.scheduleFreshness==='stale'||launch?.sourceStale===true;
     chip($('rl-schedule-grade'),
-      data.scheduleFreshness==='stale'?'Launch schedule check overdue':
+      sourceStale?'Launch schedule check overdue':
         c?.label || (data.coverage.partial ? 'Schedule partly unavailable' : 'Timing unverified'),
-      data.scheduleFreshness==='stale'?'unknown':c?.level || 'unknown');
+      sourceStale?'unknown':c?.level || 'unknown');
     set('rl-date', launch ? formattedDate(launch, zone) : 'No confirmed date');
     set('rl-time', launch ? formattedTime(launch, zone) : 'Time not announced');
     set('rl-schedule-detail',
+      (sourceStale?'This launch record has not been verified in a recent source observation. ':'')+
       (data.scheduleWarning?data.scheduleWarning+' ':'')+
       (c?.detail || (data.coverage.partial ?
         'One or more provider groups are incomplete; an absent mission is not a confirmed zero.' :
