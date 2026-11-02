@@ -7716,7 +7716,7 @@
       "publicGuide": null,
       "landManager": "Forsyth Township (day-use park only; specific fall route unverified)",
       "parkingVerified": false,
-      "publicAccessVerified": "park-only-fall-route-unverified",
+      "publicAccessVerified": false,
       "reviewed": "2026-11-02",
       "notes": "This is a tiny river ripple, not a dramatic plunge. The meaningful experience is the public riverside day-use park and its rustic path.",
       "evidenceReviewed": "2026-11-02",
@@ -7774,6 +7774,14 @@
             "source": "https://forsythtownship.org/wp-content/uploads/2024/11/Recreation-Plan-25-29.pdf"
           }
         ]
+      },
+      "parkAccessEvidence": {
+        "scope": "municipal-day-use-park-only",
+        "status": "official-plan-documents-day-use-and-rustic-river-trail",
+        "source": "https://forsythtownship.org/wp-content/uploads/2024/11/Recreation-Plan-25-29.pdf",
+        "waterfallSpecificRouteVerified": false,
+        "currentOpeningVerified": false,
+        "parkingWaypointVerified": false
       }
     },
     {
@@ -7789,7 +7797,7 @@
       "publicGuide": null,
       "landManager": "Forsyth Township (day-use park only; specific fall route unverified)",
       "parkingVerified": false,
-      "publicAccessVerified": "park-only-fall-route-unverified",
+      "publicAccessVerified": false,
       "reviewed": "2026-11-02",
       "notes": "The upstream sibling of First Falls is another tiny river ripple, not a separate major waterfall outing. Its mapped position needs correction before it becomes a precise visitor stop.",
       "evidenceReviewed": "2026-11-02",
@@ -7847,6 +7855,14 @@
             "source": "https://forsythtownship.org/wp-content/uploads/2024/11/Recreation-Plan-25-29.pdf"
           }
         ]
+      },
+      "parkAccessEvidence": {
+        "scope": "municipal-day-use-park-only",
+        "status": "official-plan-documents-day-use-and-rustic-river-trail",
+        "source": "https://forsythtownship.org/wp-content/uploads/2024/11/Recreation-Plan-25-29.pdf",
+        "waterfallSpecificRouteVerified": false,
+        "currentOpeningVerified": false,
+        "parkingWaypointVerified": false
       }
     },
     {
