@@ -2050,14 +2050,26 @@
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unverified",
+      "access": "research-only",
       "landManager": null,
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-ontonagon"
+      "checked": "2026-11-02",
+      "nextAction": "Obtain authoritative road-jurisdiction/MVUM or county verification for Old M-64, legal parking or road shoulder use, parcel/land-manager right of passage and a complete public walking corridor to a safe viewpoint. Resolve the 13 km directory mismatch before displaying any location to visitors.",
+      "batch": "county-ontonagon",
+      "reviewed": "2026-11-02",
+      "reviewBatch": "51",
+      "classification": "field-confirmed-gorge-but-2009-shoulder-bushwhack-route-not-permission",
+      "accessAssessment": "Michigan state GIS #84 places Little Trap Falls at 46.690280,-89.556962 on Anderson Creek. Jacob Emerick's documented April 6, 2009 visit gives 46.68963,-89.55619, approximately 93 metres from the GIS point. The Lake Gogebic Chamber independently lists the falls on Anderson Creek north of Bergland. However, a generic directory places a namesake at 46.6025,-89.4414, approximately 13.16 km away and calls its road Anderson Canyon Road. That coordinate and road are not accepted as this waterfall's verified arrival. The visitor bureau describes a difficult off-trail route from Old M-64, with shoulder parking and walking up a narrow gorge. A firsthand field account from 2009 describes streambed travel, steep rock walls and heavily seasonal flow. Neither establishes legal shoulder parking, a currently open road designation, public land rights over the entire route, a signed public trail or safe year-round passage. A secondary site asserts Ottawa National Forest ownership without parcel-level verification. Do not copy its blanket permit/access language as site-specific authorization.",
+      "evidence": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.waterfallsofthekeweenaw.com/anderson-creek/little-trap-falls/",
+        "https://explorewesternup.com/things-to-do/waterfalls/",
+        "https://lakegogebicarea.com/things-to-do/waterfalls/",
+        "https://waterfallsamerica.com/waterfalls/little-trap-falls-mi-630797/",
+        "https://michiganupperpeninsula.com/places-to-visit/waterfalls/"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -2581,14 +2593,25 @@
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unverified",
+      "access": "research-only",
       "landManager": null,
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-ontonagon"
+      "checked": "2026-11-02",
+      "nextAction": "Reconcile the 1956 provisional entry to a specific map position, resolve whether the generic point mistakenly references Pewabeck #122, confirm current park/property manager, public road access and signed parking, then source an uninterrupted trail to the actual falls before promotion.",
+      "batch": "county-ontonagon",
+      "reviewed": "2026-11-02",
+      "reviewBatch": "51",
+      "classification": "historical-state-catalog-no-current-visitor-gate-and-13km-directory-error",
+      "accessAssessment": "Michigan GIS #106 locates Little Iron Falls at 46.749606,-89.730367 on the Little Iron River. A provisional 1956 Michigan Department of Conservation waterfall working inventory lists 'Little Iron (Little Iron River) Falls' under Porcupine Mountain State Park, but explicitly warns that names and exact locations are sometimes uncertain and its asterisk marks only probable State/Federal ownership. That provisional entry is historical naming evidence, not verification of today's park boundary or trail. A modern generic directory places Little Iron Falls at 46.8106,-89.5847, approximately 13.00 km northeast of the GIS record and only 0.47 km from state-mapped Pewabeck Falls #122. These are not interchangeable locations. The generic directory promises a ten-foot fall after an easy 0.1-mile path from an 'Iron River Access Track'. No corresponding manager-approved named access track, public parking, maintained footpath or current opening for this mapped GIS #106 feature was established. The Michigan DNR park overview confirms the park has public trails and many waterfalls but does not identify Little Iron Falls as a signed visit. Nearby Nonesuch Mine trails are separate routes and may not be applied to Little Iron Falls without verified continuous connections.",
+      "evidence": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.michigan.gov/-/media/Project/Websites/egle/Documents/Programs/GRMD/Catalog/05/GIMDL-GGWOM.PDF?rev=c2a86fc2674c4cdf888512aec85a22e5",
+        "https://www.michigan.gov/recsearch/parks/porkies",
+        "https://michiganupperpeninsula.com/places-to-visit/waterfalls/",
+        "https://chrisizworski.com/upper-peninsula-waterfalls/nonesuch-falls/"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -3030,14 +3053,26 @@
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unverified",
+      "access": "research-only",
       "landManager": null,
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-ontonagon"
+      "checked": "2026-11-02",
+      "nextAction": "Resolve U.P. Travel estimated route against a current signed trail and lot, confirm complete owner/public walking corridor on the Little Iron River, and verify river feature/height through current field/agency evidence. Keep the 30 km false map point excluded from visitor navigation.",
+      "batch": "county-ontonagon",
+      "reviewed": "2026-11-02",
+      "reviewBatch": "51",
+      "classification": "gis-gnis-position-agreement-but-paddling-not-public-hike-and-false-directory-pin",
+      "accessAssessment": "Michigan GIS #122 locates Pewabeck Falls at 46.806756,-89.587140; the GNIS-derived USGS location 46.807446,-89.587097 is approximately 77 metres away. The Lake Gogebic Chamber places Pewabeck on the Little Iron River north of White Pine. American Whitewater describes a four-foot ledge about six river miles downstream from Nonesuch Falls; the U.P. Travel Association describes a little-over-five-foot waterfall with a rugged 30–45 minute walk. These are source-dependent estimates, not a certified vertical measurement or official trail. A generic directory's Pewabeck point at 46.7242,-89.2056 is approximately 30.48 km away, and its 25-foot/highly accessible portrayal is unsuitable for a visitor guide. The U.P. Travel Association explicitly says there is little to no trail access, despite estimating a hiking time. American Whitewater describes experienced paddler put-in/take-out options along the Little Iron River; paddling access does not prove safe riverbank foot access. No current site-manager-signed trailhead, approved public parking, legal shoreline corridor or verified walking route to GIS #122 was found. The generic directory's 'Pewabeck Road' coordinates are too far away and cannot be used for directions.",
+      "evidence": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://topoquest.com/map/usgs-24k/michigan/white-pine/48730",
+        "https://www.uptravel.com/listing/pewabeck-falls/3210/",
+        "https://www.americanwhitewater.org/content/River/view/river-detail/3711/main",
+        "https://lakegogebicarea.com/things-to-do/waterfalls/",
+        "https://michiganupperpeninsula.com/places-to-visit/waterfalls/"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -5264,5 +5299,5 @@
       ]
     }
   ],
-  "lastBatch": "50"
+  "lastBatch": "51"
 }

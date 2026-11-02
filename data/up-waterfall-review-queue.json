@@ -13,208 +13,160 @@
     {
       "batchNumber": 1,
       "candidates": [
-        84,
-        106,
-        122,
         51,
         120,
         136,
         137,
-        139
+        139,
+        140,
+        152,
+        176
       ]
     },
     {
       "batchNumber": 2,
       "candidates": [
-        140,
-        152,
-        176,
         177,
         23,
         213,
         68,
-        8
+        8,
+        38,
+        12,
+        4
       ]
     },
     {
       "batchNumber": 3,
       "candidates": [
-        38,
-        12,
-        4,
         9,
         191,
         192,
         46,
-        91
+        91,
+        119,
+        190,
+        45
       ]
     },
     {
       "batchNumber": 4,
       "candidates": [
-        119,
-        190,
-        45,
         150,
         151,
         154,
         160,
-        215
+        215,
+        195,
+        205,
+        52
       ]
     },
     {
       "batchNumber": 5,
       "candidates": [
-        195,
-        205,
-        52,
         59,
         83,
         99,
         103,
-        105
+        105,
+        107,
+        114,
+        121
       ]
     },
     {
       "batchNumber": 6,
       "candidates": [
-        107,
-        114,
-        121,
         123,
         20,
         24,
         25,
-        37
+        37,
+        39,
+        40,
+        48
       ]
     },
     {
       "batchNumber": 7,
       "candidates": [
-        39,
-        40,
-        48,
         58,
         63,
         65,
         69,
-        70
+        70,
+        74,
+        75,
+        86
       ]
     },
     {
       "batchNumber": 8,
       "candidates": [
-        74,
-        75,
-        86,
         112,
         29,
         42,
         80,
-        85
+        85,
+        129,
+        15,
+        17
       ]
     },
     {
       "batchNumber": 9,
       "candidates": [
-        129,
-        15,
-        17,
         144,
         18,
         116,
         127,
-        148
+        148,
+        149,
+        153,
+        162
       ]
     },
     {
       "batchNumber": 10,
       "candidates": [
-        149,
-        153,
-        162,
         163,
         170,
         172,
         173,
-        175
+        175,
+        180,
+        181,
+        183
       ]
     },
     {
       "batchNumber": 11,
       "candidates": [
-        180,
-        181,
-        183,
         184,
         185,
         186,
         187,
-        22
+        22,
+        28,
+        54,
+        57
       ]
     },
     {
       "batchNumber": 12,
       "candidates": [
-        28,
-        54,
-        57,
         60,
         61,
         62,
-        72
+        72,
+        84,
+        106,
+        122
       ]
     }
   ],
   "candidates": [
-    {
-      "gisObjectId": 84,
-      "name": "Little Trap Falls",
-      "county": "ONTONAGON",
-      "river": "ANDERSON CREEK",
-      "lat": 46.69028,
-      "lng": -89.556962,
-      "cluster": "ONTONAGON / ANDERSON CREEK",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 106,
-      "name": "Little Iron Falls",
-      "county": "ONTONAGON",
-      "river": "LITTLE IRON RIVER",
-      "lat": 46.749606,
-      "lng": -89.730367,
-      "cluster": "ONTONAGON / LITTLE IRON RIVER",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 122,
-      "name": "Pewabeck Falls",
-      "county": "ONTONAGON",
-      "river": "LITTLE IRON RIVER",
-      "lat": 46.806756,
-      "lng": -89.58714,
-      "cluster": "ONTONAGON / LITTLE IRON RIVER",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
     {
       "gisObjectId": 51,
       "name": "Upper Falls",
@@ -1686,6 +1638,54 @@
       "reviewStatus": "previous-research-needs-public-access-review",
       "sourceCount": 5,
       "blockingGate": "Confirm Deer versus White Deer stream labels, exact land manager, public right-of-way, approved road stopping and continuous safe trail; independently check fall height and seasonality before promoting."
+    },
+    {
+      "gisObjectId": 84,
+      "name": "Little Trap Falls",
+      "county": "ONTONAGON",
+      "river": "ANDERSON CREEK",
+      "lat": 46.69028,
+      "lng": -89.556962,
+      "cluster": "ONTONAGON / ANDERSON CREEK",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 6,
+      "blockingGate": "Obtain authoritative road-jurisdiction/MVUM or county verification for Old M-64, legal parking or road shoulder use, parcel/land-manager right of passage and a complete public walking corridor to a safe viewpoint. Resolve the 13 km directory mismatch before displaying any location to visitors."
+    },
+    {
+      "gisObjectId": 106,
+      "name": "Little Iron Falls",
+      "county": "ONTONAGON",
+      "river": "LITTLE IRON RIVER",
+      "lat": 46.749606,
+      "lng": -89.730367,
+      "cluster": "ONTONAGON / LITTLE IRON RIVER",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 5,
+      "blockingGate": "Reconcile the 1956 provisional entry to a specific map position, resolve whether the generic point mistakenly references Pewabeck #122, confirm current park/property manager, public road access and signed parking, then source an uninterrupted trail to the actual falls before promotion."
+    },
+    {
+      "gisObjectId": 122,
+      "name": "Pewabeck Falls",
+      "county": "ONTONAGON",
+      "river": "LITTLE IRON RIVER",
+      "lat": 46.806756,
+      "lng": -89.58714,
+      "cluster": "ONTONAGON / LITTLE IRON RIVER",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 6,
+      "blockingGate": "Resolve U.P. Travel estimated route against a current signed trail and lot, confirm complete owner/public walking corridor on the Little Iron River, and verify river feature/height through current field/agency evidence. Keep the 30 km false map point excluded from visitor navigation."
     }
   ]
 }
