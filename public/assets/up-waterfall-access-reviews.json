@@ -475,6 +475,92 @@
       }
     },
     {
+      "gisObjectId": 22,
+      "name": "Rock Bluff Falls",
+      "county": "ONTONAGON",
+      "status": "research-only-bluff-creek-location-discrepancy-old-us45-unsigned-access",
+      "publicAccess": "not-established-continuously",
+      "publicationEligible": false,
+      "title": "Rock Bluff Falls: access source review",
+      "summary": "There is a real named Rock Bluff Falls on Bluff Creek, but old maps and field reports do not agree on which nearby drops deserve that name. No lawful, signed parking-to-falls walk has been verified. The regional tourism brochure suggests stopping near Old US-45 and walking alongside Bluff Creek; an independent field account describes steep forest, brush, an informal two-track and an ATV track. Neither confirms signed authorized parking, current vehicle access on Old US-45, ownership/right-of-way across the creek valley or a maintained footpath. A tourism direction is not a verified legal parking or public approach authorization.",
+      "guidance": "Research only. Do not navigate to either historical falls point as parking or assume Old US-45 provides legal public visitor access.",
+      "reviewLimitations": "A named natural feature or designated river corridor is not a signed public trail, parking right, safe viewpoint or live opening status.",
+      "nextEvidence": "Reconcile Rock Bluff, Upper Rock Bluff and the Mateson Creek report with independently surveyed or official geographic identity; verify parcels, road jurisdiction, signed public parking and a continuous authorized walking corridor to the correct drops.",
+      "researchPage": "/upper-peninsula-waterfalls/research/rock-bluff-falls-bluff-creek/",
+      "sourceLinks": [
+        {
+          "label": "Michigan GIS named Rock Bluff Falls",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "Western U.P. Visitors Bureau waterfall map (older route and three-drop location)",
+          "url": "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf"
+        },
+        {
+          "label": "Firsthand Upper Rock Bluff field notes and 2023 name conflict",
+          "url": "https://www.waterfallsofthekeweenaw.com/bluff-creek/upper-rock-bluff-falls/"
+        },
+        {
+          "label": "Lake Gogebic Chamber named Rock Bluff on Bluff Creek",
+          "url": "https://lakegogebicarea.com/things-to-do/waterfalls/"
+        },
+        {
+          "label": "US Forest Service MVUM route designations (not specific access approval)",
+          "url": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_MVUM_02/MapServer"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-11-02",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Feature identity, names and geographic disagreement",
+            "status": "documented-geography",
+            "finding": "Michigan GIS #22 maps Rock Bluff Falls at 46.370607,-89.183436. A Western U.P. Visitors Bureau brochure places its three-drop falls at 46.373742,-89.185312, about 377 metres from the GIS point. A distinct field entry called Upper Rock Bluff Falls is roughly 1.37 kilometres from the state point; a 2023 reader comment suggests further possible confusion with Mateson Creek. These sources cannot be silently combined into a single exact visitor waypoint.",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Land manager, public tenure and private entry",
+            "status": "not-cleared",
+            "finding": "No verified parcel/right-of-way map connects Old US-45 to all three named or nearby drop locations.",
+            "source": "https://www.waterfallsofthekeweenaw.com/bluff-creek/upper-rock-bluff-falls/"
+          },
+          {
+            "label": "Tourism or paddling account is not a public approach",
+            "status": "documented-not-live",
+            "finding": "The regional tourism brochure suggests stopping near Old US-45 and walking alongside Bluff Creek; an independent field account describes steep forest, brush, an informal two-track and an ATV track. Neither confirms signed authorized parking, current vehicle access on Old US-45, ownership/right-of-way across the creek valley or a maintained footpath. A tourism direction is not a verified legal parking or public approach authorization.",
+            "source": "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf"
+          },
+          {
+            "label": "Current road jurisdiction and lawful visitor parking",
+            "status": "not-cleared",
+            "finding": "The USFS Motor Vehicle Use Map must be checked for any national-forest road. A road shown on a tourism brochure, on a base map or as a historical two-track does not establish legal parking here. No official lot or approved vehicle stopping point was independently verified.",
+            "source": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_MVUM_02/MapServer"
+          },
+          {
+            "label": "Complete safe walking trail and viewpoint",
+            "status": "not-cleared",
+            "finding": "No signed public visitor lot, official trailhead or maintained route; old tracks have uncertain current designation. Steep creek valley, brush and wet ground are described in firsthand field material, and travel in November can be hazardous.",
+            "source": "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf"
+          },
+          {
+            "label": "Current conditions, restrictions and evidence age",
+            "status": "not-cleared",
+            "finding": "No current road, track, gate, private posting, winter maintenance or site-manager permission inspection was located on November 2, 2026. General Forest Service motorized-route mapping is a policy context, not proof that this specific two-track is open.",
+            "source": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_MVUM_02/MapServer"
+          }
+        ]
+      },
+      "visitorDecision": {
+        "decision": "Research only. Do not navigate to either historical falls point as parking or assume Old US-45 provides legal public visitor access.",
+        "context": "There is a real named Rock Bluff Falls on Bluff Creek, but old maps and field reports do not agree on which nearby drops deserve that name. No lawful, signed parking-to-falls walk has been verified.",
+        "saferAlternative": "Choose a source-verified public waterfall outing such as Bond Falls from the main U.P. Waterfall Explorer.",
+        "confidence": "waterfall-geography-supported-public-arrival-unverified"
+      }
+    },
+    {
       "gisObjectId": 24,
       "name": "Judson Falls",
       "county": "GOGEBIC",
@@ -668,6 +754,96 @@
             "source": "https://www.fs.usda.gov/visit/maps"
           }
         ]
+      }
+    },
+    {
+      "gisObjectId": 28,
+      "name": "Wolverine Falls",
+      "county": "ONTONAGON",
+      "status": "research-only-cisco-branch-upstream-displacement-paddling-hazard-no-hike",
+      "publicAccess": "not-established-continuously",
+      "publicationEligible": false,
+      "title": "Wolverine Falls: access source review",
+      "summary": "Wolverine Falls is an authentic part of the remote Cisco Branch, but finding a mapped river feature is not the same as establishing a safe destination for a casual visitor. The river is a federally designated Wild and Scenic corridor, but designation does not validate every bank parcel, forest spur, roadside stop, take-out or walking path. American Whitewater's Forest Road 6930 references describe expert paddling put-ins and take-outs, not a certified public waterfall hike. No manager-approved parking-to-viewpoint trail, safe river-bank lookout or fully verified right-of-way has been established.",
+      "guidance": "Research-only river feature, not a signed walk-to waterfall. Do not use the GIS point or a whitewater take-out as a driving destination.",
+      "reviewLimitations": "A named natural feature or designated river corridor is not a signed public trail, parking right, safe viewpoint or live opening status.",
+      "nextEvidence": "Resolve the correct fall location against GPS-tracked and authoritative river maps; verify Ottawa National Forest/other land ownership, current MVUM road status, parking and a continuous public walking route to a safe viewpoint if one exists. Keep skilled paddling conditions separate from sightseeing guidance.",
+      "researchPage": "/upper-peninsula-waterfalls/research/wolverine-falls-cisco-branch/",
+      "sourceLinks": [
+        {
+          "label": "Michigan state GIS Wolverine Falls feature",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "Michigan DNR Ontonagon River watershed falls table and profile",
+          "url": "https://www2.dnr.state.mi.us/publications/pdfs/ifr/ifrlibra/Special/Reports/sr46/SR46.pdf"
+        },
+        {
+          "label": "Federal Wild and Scenic Rivers: Cisco Branch and Wolverine Falls",
+          "url": "https://rivers.gov/river/ontonagon"
+        },
+        {
+          "label": "American Whitewater: disputed position and May 9, 2026 firsthand update",
+          "url": "https://www.americanwhitewater.org/content/River/view/river-detail/2745/main"
+        },
+        {
+          "label": "September 2025 firsthand river run and Wolverine rapid",
+          "url": "https://www.nathaninvincible.com/rivers/cisco-branch"
+        },
+        {
+          "label": "USFS official MVUM map service (general, no route clearance)",
+          "url": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_MVUM_02/MapServer"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-11-02",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Feature identity, names and geographic disagreement",
+            "status": "documented-geography",
+            "finding": "Michigan GIS #28 records Wolverine Falls at 46.405577,-89.348732 without a river label. Michigan DNR's Ontonagon River assessment identifies the falls on the Cisco Branch, and the federal Wild and Scenic Rivers description independently recognizes Wolverine Falls as a notable feature on that branch. American Whitewater includes a 2026 first-hand report placing Wolverine farther upstream than the traditional marked position; a September 2025 solo paddling account describes a substantial Class III drop along the Cisco Branch. Exact contemporary drop-point alignment remains unresolved.",
+            "source": "https://www2.dnr.state.mi.us/publications/pdfs/ifr/ifrlibra/Special/Reports/sr46/SR46.pdf"
+          },
+          {
+            "label": "Land manager, public tenure and private entry",
+            "status": "not-cleared",
+            "finding": "Older maps and newer firsthand paddling accounts disagree about the proper location of the main drop.",
+            "source": "https://rivers.gov/river/ontonagon"
+          },
+          {
+            "label": "Tourism or paddling account is not a public approach",
+            "status": "documented-not-live",
+            "finding": "The river is a federally designated Wild and Scenic corridor, but designation does not validate every bank parcel, forest spur, roadside stop, take-out or walking path. American Whitewater's Forest Road 6930 references describe expert paddling put-ins and take-outs, not a certified public waterfall hike. No manager-approved parking-to-viewpoint trail, safe river-bank lookout or fully verified right-of-way has been established.",
+            "source": "https://www.americanwhitewater.org/content/River/view/river-detail/2745/main"
+          },
+          {
+            "label": "Current road jurisdiction and lawful visitor parking",
+            "status": "not-cleared",
+            "finding": "The USFS Motor Vehicle Use Map must be checked for any national-forest road. A road shown on a tourism brochure, on a base map or as a historical two-track does not establish legal parking here. No official lot or approved vehicle stopping point was independently verified.",
+            "source": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_MVUM_02/MapServer"
+          },
+          {
+            "label": "Complete safe walking trail and viewpoint",
+            "status": "not-cleared",
+            "finding": "Experienced paddlers describe consequential rapids and changing river conditions, not a family hiking attraction. Forest road names and take-outs do not prove a lawful visitor parking place, maintained path, or year-round accessibility.",
+            "source": "https://www.americanwhitewater.org/content/River/view/river-detail/2745/main"
+          },
+          {
+            "label": "Current conditions, restrictions and evidence age",
+            "status": "not-cleared",
+            "finding": "No present November 2026 Forest Service trail-opening confirmation, signed access route, site-specific road/gate report or current water safety assessment has been established. A gauge at Cisco Lake outlet measures upstream water, not a live waterfall accessibility verdict.",
+            "source": "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_MVUM_02/MapServer"
+          }
+        ]
+      },
+      "visitorDecision": {
+        "decision": "Research-only river feature, not a signed walk-to waterfall. Do not use the GIS point or a whitewater take-out as a driving destination.",
+        "context": "Wolverine Falls is an authentic part of the remote Cisco Branch, but finding a mapped river feature is not the same as establishing a safe destination for a casual visitor.",
+        "saferAlternative": "For an established waterfall viewing trip, use Bond Falls or another source-verified destination from the U.P. explorer.",
+        "confidence": "waterfall-geography-supported-public-arrival-unverified"
       }
     },
     {
