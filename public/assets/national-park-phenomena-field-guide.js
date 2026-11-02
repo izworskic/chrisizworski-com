@@ -539,12 +539,12 @@
     }
     if (!state.map) initMap();
   }
-  if (document.readyState === 'loading') {
+  if (document.readyState === 'loading' || !document.readyState) {
     document.addEventListener('DOMContentLoaded', bootAtlas, {once:true});
   } else {
     bootAtlas();
   }
-  window.addEventListener('load', bootAtlas, {once:true});
+  if (typeof window.addEventListener === 'function') window.addEventListener('load', bootAtlas, {once:true});
 
   // Export for testing
   window.NP_PHENOMENA_DATA = {
