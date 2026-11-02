@@ -8,7 +8,7 @@ const windowStub = {};
 vm.runInNewContext(client,{window:windowStub,document:{addEventListener(){}}});
 const atlas = windowStub.NP_PHENOMENA_DATA;
 const get = id => atlas.phenomena.find(x=>x.id===id);
-const sections = id => page.split('id="'+id+'"')[1].split('</article>')[0];
+const sections = id => { const start = page.indexOf('<article class="wf-story" id="'+id+'"'); assert.ok(start >= 0); return page.slice(start, page.indexOf('</article>', start)); };
 test('Glacier 2026: no vehicle permit, Logan Pass shuttle and parking separated',()=>{
  const glacier=get('glacier-going-to-the-sun-opening');
  assert.equal(glacier.permitType,'open');
