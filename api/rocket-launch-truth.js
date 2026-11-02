@@ -30,13 +30,13 @@ function createHandler({
       ]);
       const report=publicTruthV2(enriched,id,null,now(),national);
       return res.status(200).json({
-        ok:true,selectedLaunchId:id,...report,
+        ok:true,engineVersion:2,selectedLaunchId:id,...report,
         provenance:'LL2 updates, Spaceflight News API and RocketLaunch.Live next-five, via signed scheduled monitor',
         caveat:'No flight outcome, pad access, webcast status or official launch weather approval is inferred by this ledger.'
       });
     }catch(_){
       return res.status(200).json({
-        ok:true,selectedLaunchId:id,...publicTruthV2(null,id,null,now(),null),
+        ok:true,engineVersion:2,selectedLaunchId:id,...publicTruthV2(null,id,null,now(),null),
         provenance:'Scheduled evidence ledger unavailable',
         caveat:'No external evidence could be read; consult the launch operator. This is not a scrub or cancellation.'
       });
