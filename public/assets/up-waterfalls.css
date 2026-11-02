@@ -71,19 +71,19 @@
 /* Screenshot QA B55: bring the decision into the first mobile viewport.
    Preserve all four primary/secondary navigation links, just use two concise rows. */
 @media(max-width:740px){
- .mast{padding:9px 0}
- .mast .wrap{gap:5px}
- .mast nav{gap:10px;font-size:.78rem}
- .hero{padding:18px 0 14px}
- .hero .eyebrow{font-size:.66rem;letter-spacing:.13em}
- .hero h1{font-size:clamp(1.95rem,8.7vw,2.35rem);line-height:1.04;margin:7px 0 10px;letter-spacing:-.035em}
- .hero p{font-size:.88rem;line-height:1.43;margin:8px 0}
- .hero .quicknav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:12px}
- .hero .quicknav .pill-link{font-size:.76rem;line-height:1.25;padding:7px 8px;min-height:37px;justify-content:center;text-align:center;overflow-wrap:anywhere}
- .truth{padding:9px 0;font-size:.78rem;line-height:1.44}
- .map-zone{padding:15px 0}
- .map-zone .intro h2{font-size:1.55rem;line-height:1.12;margin:0 0 4px}
- .map-zone .intro p{font-size:.8rem;line-height:1.36;margin-bottom:7px}
- .visit-intro h2{font-size:1.58rem}
- .visit-intro p{font-size:.88rem;line-height:1.45}
+ .up-waterfall-hub .mast{padding:9px 0}
+ .up-waterfall-hub .mast .wrap{gap:5px}
+ .up-waterfall-hub .mast nav{gap:10px;font-size:.78rem}
+ .up-waterfall-hub .hero{padding:18px 0 14px}
+ .up-waterfall-hub .hero .eyebrow{font-size:.66rem;letter-spacing:.13em}
+ .up-waterfall-hub .hero h1{font-size:clamp(1.95rem,8.7vw,2.35rem);line-height:1.04;margin:7px 0 10px;letter-spacing:-.035em}
+ .up-waterfall-hub .hero p{font-size:.88rem;line-height:1.43;margin:8px 0}
+ .up-waterfall-hub .hero .quicknav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:12px}
+ .up-waterfall-hub .hero .quicknav .pill-link{font-size:.76rem;line-height:1.25;padding:7px 8px;min-height:37px;justify-content:center;text-align:center;overflow-wrap:anywhere}
+ .up-waterfall-hub .truth{padding:9px 0;font-size:.78rem;line-height:1.44}
+ .up-waterfall-hub .map-zone{padding:15px 0}
+ .up-waterfall-hub .map-zone .intro h2{font-size:1.55rem;line-height:1.12;margin:0 0 4px}
+ .up-waterfall-hub .map-zone .intro p{font-size:.8rem;line-height:1.36;margin-bottom:7px}
+ .up-waterfall-hub .visit-intro h2{font-size:1.58rem}
+ .up-waterfall-hub .visit-intro p{font-size:.88rem;line-height:1.45}
 }
