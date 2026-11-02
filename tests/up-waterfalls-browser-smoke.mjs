@@ -71,7 +71,7 @@ try{
     assert.ok(await page.locator('.visit-pick').count()>0);
   });
   await run('visit lens: 360px and 1440px layout has no horizontal overflow',async()=>{
-    for(const width of [360,1440]){
+    for(const width of [360,768,1440]){
       await page.setViewportSize({width,height:880});
       const metrics=await page.evaluate(()=>({width:innerWidth,scroll:document.documentElement.scrollWidth}));
       assert.ok(metrics.scroll<=width+2,'visit lens '+width+' horizontal overflow: '+metrics.scroll);
