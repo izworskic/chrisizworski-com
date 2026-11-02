@@ -51,6 +51,16 @@ async function routeFixtures(page,month=7){
   }
   return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(beetleFixture(u))});
  });
+ await page.route('**/api/japanese-beetle-field-evidence?*',route=>{
+  const u=new URL(route.request().url()),zip=u.searchParams.get('zip');
+  if(zip==='48707')return route.fulfill({status:503,contentType:'application/json',body:JSON.stringify({status:'UNAVAILABLE'})});
+  const year=Number(u.searchParams.get('year')),date=zip?'2026-07-06':'2026-07-05';
+  const recordUrl='https://www.inaturalist.org/observations/'+(zip?'379100595':'378482973');
+  const data={schema:'japanese-beetle-field-evidence-v1',status:'DOCUMENTED_PRESENCE',year,checkedAt:'2026-11-02T20:00:00Z',
+   observationalEvidence:{status:'DOCUMENTED_PRESENCE',firstObservationDate:date,inspectedResults:11,qualifyingRecords:8,limitedSearch:false,
+    examples:[{date,url:recordUrl,distanceKm:1.8,positionAccuracyMeters:162}]}};
+  return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(data)});
+ });
  await page.route('**/api/garden-pest-timing-lab?*',route=>{
   const u=new URL(route.request().url());
   route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(historyFixture(u.searchParams.get('zip')))});
@@ -116,14 +126,21 @@ async function waitForAnswer(page,pest){await page.waitForFunction(name=>documen
    assert.match(await page.locator('#beetle-adult-date').innerText(),/Jul 5, 2026/);
    assert.match(await page.locator('#beetle-egg-date').innerText(),/Aug 5, 2026/);
    assert.match(await page.locator('#beetle-source-note').innerText(),/2026-11-02/);
+   await page.waitForFunction(()=>document.querySelector('#beetle-field-status')?.textContent?.includes('PHOTOGRAPHED PRESENCE'),null,{timeout:7000});
+   assert.match(await page.locator('#beetle-field-comparison').innerText(),/share a calendar date/);
+   assert.ok(await page.locator('#beetle-field-links a').count()>=2);
    await page.locator('#zip').fill('48706');
+   assert.match(await page.locator('#beetle-field-first').innerText(),/No verified field date/);
    assert.match(await page.locator('#beetle-adult-date').innerText(),/Not verified/);
    await page.locator('#watch-form button[type=submit]').click();
    await page.waitForFunction(()=>document.querySelector('#beetle-location')?.textContent?.includes('ZIP 48706 area'),null,{timeout:6000});
    assert.match(await page.locator('#beetle-source-note').innerText(),/2026-11-02/);
+   await page.waitForFunction(()=>document.querySelector('#beetle-field-comparison')?.textContent?.includes('1 days after'),null,{timeout:7000});
+   assert.match(await page.locator('#beetle-field-caveat').innerText(),/not.*first/i);
    await page.locator('#zip').fill('');
    await page.locator('#crop').selectOption('squash');
    assert.match(await page.locator('#beetle-adult-date').innerText(),/Not verified/);
+   assert.match(await page.locator('#beetle-field-status').innerText(),/NOT VERIFIED/);
    await page.locator('#watch-form button[type=submit]').click();
    await page.waitForFunction(()=>document.querySelector('#beetle-evidence-type')?.textContent?.includes('NOT A PILOT HOST'),null,{timeout:6000});
    assert.ok(await page.locator('#history-load').isVisible());
