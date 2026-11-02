@@ -55,15 +55,27 @@ test('historical roster ships have photographic media, with a shared missing-ima
   assert.ok(js.includes('fallback-ship'));
 });
 
-test('winter layup has regular bottom-only AdSense anchor and other pages retain standard code', () => {
+test('winter layup disables persistent Auto ads on this route only', () => {
   const html = read('public/great-lakes-freighter-winter-layup/index.html');
   const layup = applyAdSettings(html, canonical);
-  assert.match(layup, /adsbygoogle\.js\?client=ca-pub-\d+" crossorigin="anonymous" data-overlays="collapsed-bottom"/);
-  assert.equal((layup.match(/pagead\/js\/adsbygoogle\.js/g) || []).length, 1);
+  assert.doesNotMatch(layup, /pagead\/js\/adsbygoogle\.js|in-article-ads\.js/);
+  const config = JSON.parse(read('config/in-article-ads.json'));
+  assert.equal(config.pageExceptions.filter((x) => x.host === 'chrisizworski.com' && x.path === '/great-lakes-freighter-winter-layup' && x.match === 'exact').length, 1);
   const elsewhere = applyAdSettings('<html><head></head><body><main>Page</main></body></html>', 'https://chrisizworski.com/soo-locks/');
-  assert.doesNotMatch(elsewhere, /data-overlays=/);
+  assert.match(elsewhere, /pagead\/js\/adsbygoogle\.js/);
+});
+
+test('layup navigation spans the page and scrolls away; harbor panel is not sticky', () => {
   const css = read('public/assets/freighter-winter-home.css');
-  assert.match(css, /--layup-anchor-reserve:calc\(158px/);
+  assert.match(css, /\.layup-home \.topbar\{position:static;/);
+  assert.match(css, /\.layup-home \.top-inner\{[^}]*flex-direction:column/);
+  assert.match(css, /\.layup-home \.topbar nav\{[^}]*flex-wrap:wrap/);
+  assert.match(css, /\.layup-home \.topbar nav\{[^}]*overflow:visible/);
+  assert.match(css, /\.layup-home \.atlas-harbor-column\{[^}]*position:static/);
+  assert.doesNotMatch(css, /--layup-anchor-reserve:calc\(158px/);
+  const html = read('public/great-lakes-freighter-winter-layup/index.html');
+  const nav = html.match(/<nav aria-label="Maritime tools">([\s\S]*?)<\/nav>/)?.[1] || '';
+  assert.equal((nav.match(/<a href=/g) || []).length, 7);
 });
 
 test('layup title, H1 and linked creator credit remain unchanged', () => {

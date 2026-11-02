@@ -83,7 +83,8 @@ test('evidence-focused map and clean harbor interaction are not a duplicated set
  assert.ok(!js.includes("text('button','View harbor vessels')"));
  assert.ok(!html.includes('<p class="ais-caveat">'));
  assert.ok(!html.includes('12 sourced vessel records in five harbors'));
- assert.ok(css.includes('--layup-anchor-reserve:calc(144px'));
+ assert.ok(css.includes('--layup-anchor-reserve:0px'), 'no fixed-ad spacing');
+ assert.ok(css.includes('.layup-home .topbar{position:static;'), 'navigation scrolls away');
 });
 
 test('AdSense auto slots remain mounted but cannot precede the tool visually',()=>{

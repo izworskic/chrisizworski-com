@@ -4,7 +4,7 @@
 :root{--night:#050d16;--deep:#081624;--water:#0b1f30;--panel:#0f2435;--panel-2:#13304a;--line:rgba(170,205,225,.14);--line-strong:rgba(170,205,225,.3);
  --ice:#e4eef4;--fog:#a9c0cc;--sub:#7f98a7;--lamp:#f2b24a;--lamp-soft:rgba(242,178,74,.18);--rust:#c2563b;--aurora:#4fcf95;--white:#fff;
  --display:"Bricolage Grotesque",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;--body:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
- --radius:18px;--layup-anchor-reserve:calc(144px + env(safe-area-inset-bottom,0px))}
+ --radius:18px;--layup-anchor-reserve:0px}
 .layup-home{margin:0;background:var(--night);color:var(--ice);font-family:var(--body);line-height:1.55;-webkit-font-smoothing:antialiased;font-size:16px}
 .layup-home *,.layup-home *::before,.layup-home *::after{box-sizing:border-box}
 .layup-home a{color:var(--lamp);text-decoration:none}
@@ -27,13 +27,13 @@
 .layup-home .wrapper{width:min(1240px,100% - 32px);margin:0 auto;padding:0 0 60px}
 
 /* Top bar */
-.layup-home .topbar{position:sticky;top:0;z-index:40;background:rgba(5,13,22,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
-.layup-home .top-inner{width:min(1240px,100% - 32px);margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:58px}
-.layup-home .logo{font-family:var(--display);font-weight:700;color:var(--ice);letter-spacing:.01em;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.layup-home .topbar{position:static;background:rgba(5,13,22,.92);border-bottom:1px solid var(--line)}
+.layup-home .top-inner{width:min(1240px,100% - 32px);margin:0 auto;display:flex;flex-direction:column;align-items:stretch;gap:8px;padding:12px 0 10px}
+.layup-home .logo{font-family:var(--display);font-weight:700;color:var(--ice);letter-spacing:.01em;display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;white-space:normal}
 .layup-home .logo span:last-child{color:var(--sub);font-weight:500;font-size:.8rem;letter-spacing:.14em}
 .layup-home .brand-emblem{color:var(--lamp)}
-.layup-home .topbar nav{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
-.layup-home .topbar nav a{color:var(--fog);font-size:.88rem;padding:.4rem .7rem;border-radius:999px;white-space:nowrap}
+.layup-home .topbar nav{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 10px;width:100%;overflow:visible}
+.layup-home .topbar nav a{color:var(--fog);font-size:.88rem;padding:.4rem .45rem;border-radius:999px;white-space:normal;display:inline-flex;align-items:center;min-height:36px}
 .layup-home .topbar nav a:hover{background:rgba(255,255,255,.06);text-decoration:none;color:var(--ice)}
 
 /* Hero: the living harbor */
@@ -137,7 +137,7 @@
 .layup-home .layup-pin .pin-glow{position:absolute;left:50%;bottom:4px;width:40px;height:10px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(ellipse,rgba(242,178,74,.5),rgba(242,178,74,0) 70%);animation:pinbreathe 3.2s ease-in-out infinite}
 .layup-home .layup-pin.is-selected .pin-body{filter:drop-shadow(0 0 16px rgba(255,220,140,.95)) drop-shadow(0 6px 10px rgba(0,0,0,.6));transform:scale(1.12)}
 @keyframes pinbreathe{0%,100%{opacity:.55;transform:translateX(-50%) scaleX(1)}50%{opacity:1;transform:translateX(-50%) scaleX(1.35)}}
-.layup-home .atlas-harbor-column{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px;position:sticky;top:calc(var(--layup-anchor-reserve) - 70px)}
+.layup-home .atlas-harbor-column{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px;position:static}
 .layup-home .atlas-harbor-column[hidden]{display:none}
 .layup-home .harbor-panel-heading{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center;margin-bottom:12px}
 .layup-home .harbor-panel-heading h3{font-size:1.5rem;font-weight:750;letter-spacing:-.02em}
@@ -345,7 +345,7 @@
 .layup-home .method{border-top:1px solid var(--line);font-size:.9rem;color:var(--fog)}
 .layup-home .method h3{margin-bottom:8px}
 
-/* Footer and the space reserved for a sticky bottom ad anchor (layout only; no ad code here). */
+/* Footer and native anchor spacing; this page has no fixed ad reserve. */
 .layup-home{padding-bottom:var(--layup-anchor-reserve)}
 html:has(.layup-home){scroll-padding-bottom:var(--layup-anchor-reserve)}
 .layup-home #layup-map,.layup-home .map-tools,.layup-home #ship-grid,.layup-home #ship-detail,.layup-home .filter-row,.layup-home #winter-ais,.layup-home .footer{scroll-margin-block-end:var(--layup-anchor-reserve)}
@@ -368,7 +368,6 @@ html:has(.layup-home){scroll-padding-bottom:var(--layup-anchor-reserve)}
  .layup-home .atlas-heading{flex-direction:column;align-items:flex-start}
  .layup-home .detail-grid,.layup-home .season-panel-grid,.layup-home .port-guide-grid{grid-template-columns:1fr}
 }
-@media(max-width:620px){.layup-home{--layup-anchor-reserve:calc(158px + env(safe-area-inset-bottom,0px))}}
 @media(max-width:580px){
  .layup-home .wrapper,.layup-home .hero-inner,.layup-home .hero-bottom,.layup-home .top-inner{width:min(1240px,100% - 24px)}
  .layup-home .hero-stage{height:230px}

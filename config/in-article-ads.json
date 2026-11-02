@@ -28,6 +28,12 @@
       "path": "/nyc-bridges",
       "match": "exact",
       "reason": "New photo-led NYC Bridges field guide had a 320px empty AdSense-reserved block above its first-screen hero on desktop and mobile. Keep this guide's first-screen content visible; do not change ad behavior on any other route."
+    },
+    {
+      "host": "chrisizworski.com",
+      "path": "/great-lakes-freighter-winter-layup",
+      "match": "exact",
+      "reason": "Owner-requested UX repair: a large Google anchor/dynamic overlay stayed fixed over the winter layup experience. Turn off Auto ads for this page only, retaining normal ad behavior everywhere else."
     }
   ]
 }

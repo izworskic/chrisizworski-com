@@ -268,32 +268,30 @@ async function run(){
       check(await page.locator('a.skip').count()===1,size.name+': keyboard skip link');
       const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
       check(overflow<=3,size.name+': horizontal overflow '+overflow+'px');
-      // Ad layout verification: a simulated sticky anchor sits in the reserved bottom
-      // area and side-rail placement is removed only below desktop width.
-      const adChecks=await page.evaluate(()=>{
-        const ad=document.createElement('div');ad.className='ad-side-rail';ad.textContent='side rail QA';document.body.append(ad);
-        const sideDisplay=getComputedStyle(ad).display;ad.remove();
-        const footer=document.querySelector('.footer');
-        window.scrollTo(0,document.documentElement.scrollHeight);
-        return {rail:sideDisplay,bodyPadding:parseFloat(getComputedStyle(document.body).paddingBottom),
-          footerBottom:footer.getBoundingClientRect().bottom,viewport:innerHeight};
+      // Navigation and harbor details now flow with the document; no fixed ad reserve.
+      const flow=await page.evaluate(()=>{
+        const header=document.querySelector('.topbar'),nav=header.querySelector('nav');
+        const links=[...nav.querySelectorAll('a')];
+        window.scrollTo(0,0);
+        const rects=links.map(a=>a.getBoundingClientRect()),navWidth=nav.getBoundingClientRect().width;
+        const bodyPadding=parseFloat(getComputedStyle(document.body).paddingBottom);
+        const headerPosition=getComputedStyle(header).position;
+        const panelPosition=getComputedStyle(document.querySelector('.atlas-harbor-column')).position;
+        window.scrollTo(0,Math.min(500,document.documentElement.scrollHeight-innerHeight));
+        return {links:links.length,allVisible:rects.every(r=>r.left>=-1&&r.right<=innerWidth+1),
+          navWidth,viewport:innerWidth,bodyPadding,headerPosition,panelPosition,
+          headerAfterScroll:header.getBoundingClientRect().top};
       });
-      check(adChecks.bodyPadding>=95,size.name+': reserved bottom sticky-anchor space');
-      if(size.name==='mobile')check(adChecks.rail==='none',size.name+': narrow side rail suppressed');
-      const actualAd=await page.evaluate(()=>{
-        const fake=document.createElement('div');fake.className='qa-sticky-ad';
-        Object.assign(fake.style,{position:'fixed',left:'0',right:'0',bottom:'0',height:'105px',zIndex:'999999',background:'#fff'});
-        fake.setAttribute('aria-hidden','true');document.body.append(fake);
-        window.scrollTo(0,document.documentElement.scrollHeight);
-        const adBox=fake.getBoundingClientRect(),footer=document.querySelector('.footer').getBoundingClientRect();
-        fake.remove();
-        return {noFooterOverlap:footer.bottom<=adBox.top,footerBottom:footer.bottom,adTop:adBox.top};
-      });
-      check(actualAd.noFooterOverlap,size.name+': simulated fixed anchor cannot cover footer '+JSON.stringify(actualAd));
+      check(flow.links===7&&flow.allVisible,size.name+': all seven maritime links visible without horizontal scrolling '+JSON.stringify(flow));
+      check(flow.navWidth>=flow.viewport*.75,size.name+': navigation spans page width');
+      check(flow.headerPosition==='static'&&flow.headerAfterScroll< -20,size.name+': header scrolls with content');
+      check(flow.panelPosition==='static',size.name+': harbor notebook does not stick');
+      check(flow.bodyPadding<20,size.name+': no artificial fixed ad reserve');
+      check(await page.locator('script[src*="pagead/js/adsbygoogle.js"]').count()===0,size.name+': layup page excludes AdSense');
+
       const hero=await page.locator('.hero').boundingBox();
       const map=await page.locator('#explorer').boundingBox();
       check(hero&&map&&map.y>=hero.y+hero.height-3,size.name+': first tool is map directly after hero');
-      check(adChecks.footerBottom<=adChecks.viewport-90,size.name+': sticky bottom ad cannot cover footer at page end');
 
       check(pageErrors.length===0,size.name+': unhandled browser exceptions: '+pageErrors.join('; '));
       fs.mkdirSync(path.resolve(__dirname,'..','artifacts/layup-qa'),{recursive:true});
