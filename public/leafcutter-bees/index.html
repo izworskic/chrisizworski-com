@@ -437,7 +437,7 @@ renderSeason(s);
 renderNestJournal(s,m);
 renderEvidenceObserved(mid,m,currentMonth);
 var first=document.getElementById('bee-first-title'),step=document.getElementById('bee-first-action'),meta=document.getElementById('bee-first-meta');
-if(first&&step&&meta){first.textContent=t;step.textContent=items[0]||sub;meta.textContent=m===currentMonth?'Current Michigan-month scenario · local observations still required.':'Selected '+new Intl.DateTimeFormat('en-US',{month:'long'}).format(new Date(2026,m,1))+' planning scenario · not a live weather observation.';}
+if(first&&step&&meta){first.textContent=t;step.textContent=(items[0]||sub)+(path==='wild'?' For this season: '+journalChapters[s].action:'');meta.textContent=m===currentMonth?'Current Michigan-month scenario · local observations still required.':'Selected '+new Intl.DateTimeFormat('en-US',{month:'long'}).format(new Date(2026,m,1))+' planning scenario · not a live weather observation.';}
 }
 var FORAGE=[
  {name:'Wild bergamot',months:[5,6,7,8]},
