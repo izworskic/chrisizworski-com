@@ -7,7 +7,7 @@ const { KEY, UUID, TTL, ingest, missionForecast, publicHealth } =
 
 function createHandler({
   authorized = authorizeWeatherWatchRequest, ready = stateReady,
-  state = new ToolState(), loadSchedule = readWatch, now = Date.now
+  state = new ToolState(), loadSchedule = (_time, store) => readWatch(store), now = Date.now
 } = {}) {
   return async function handler(req,res) {
     res.setHeader('X-Robots-Tag','noindex, nofollow');
