@@ -2328,6 +2328,74 @@
       }
     },
     {
+      "id": "gabbro-falls",
+      "name": "Gabbro Falls (Baker’s Falls)",
+      "region": "Western U.P.",
+      "place": "Black River Basin · Snowriver · Gogebic County",
+      "lat": 46.502079,
+      "lng": -89.992485,
+      "gisObjectId": 38,
+      "level": "moderate",
+      "minutes": "45–90 min",
+      "walk": "Snowriver describes roughly a 0.3-mile hike from the Black River bridge to Gabbro Falls. The City of Bessemer places that trailhead near the bridge by Blackjack/Black River Basin parking. Follow the owner- and city-described bridge-side trail and posted signs; muddy ground, uneven footing, and unprotected rock ledges require caution. Do not take the upper resort service road or utility/pipeline clearing as a substitute for a signed public approach.",
+      "best": "Late spring and autumn for seasonal scenery; actual flow and slippery conditions change. No current opening or water volume is verified.",
+      "access": "Snowriver explicitly promotes visiting Gabbro Falls on its Black River Basin resort property, and the City of Bessemer independently identifies an approach by the Black River bridge near the Blackjack parking lot. This is a published visitor walk, not a surveyed route or permission to use arbitrary service roads, ski slopes or riverbanks.",
+      "status": "verify",
+      "note": "Gabbro/Baker's Falls is a separate Black River cascade upstream from the five federally maintained Black River Scenic Byway waterfall stops. The natural falls GIS pin is NOT a parking or trailhead coordinate.",
+      "source": "https://www.snowriver.com/things-to-do/waterfall-fun",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "Resort-property Black River gorge / owner-described visitor waterfall",
+      "parking": "Use only a currently designated permitted visitor space at Snowriver Black River Basin/Blackjack, near the Black River bridge identified by the City of Bessemer. Snowriver's official winter map shows Black River Basin parking, but neither source establishes a surveyed waterfall-specific lot coordinate, free non-guest parking or permitted bridge shoulder. Confirm waterfall-visitor parking and any resort restrictions with guest services before travel; do not use unmarked shoulder, service road or ski terrain as a shortcut.",
+      "feature": "Several powerful chutes cut between dark volcanic rock walls; the lower, bridge-side perspective is different from the short upper-road viewpoint Snowriver also describes.",
+      "decision": "For an owner-described visit, investigate the bridge trail near the resort's main parking and confirm permission on site. Skip any unsigned service-road, pipe-clearing or cliff-bottom scramble. No safe swim, fishing entitlement or paddling passage is certified here.",
+      "publication": "verified-access-guide",
+      "accessConfidence": "snowriver-owner-visitor-invitation-and-city-bridge-trailhead; named resort-parking-location-not-guaranteed-non-guest-permission",
+      "sourceReviewed": "2026-11-02",
+      "manager": "Snowriver Mountain Resort · Black River Basin (Gabbro Falls property and visitor guidance); City of Bessemer supplies bridge approach",
+      "further": "November 2 source reconciliation: Michigan GIS feature #38 at 46.502079,-89.992485 is Gabbro/Baker's Falls, not a parking pin. Snowriver owner explicitly states falls are on Black River Basin property, welcomes waterfall viewing and describes a trail no more than 20 yards from an unnamed upper road and a roughly 0.3-mile bridge-to-falls walk; Snowriver summer page confirms property ownership. City of Bessemer independently places the lower trailhead near Black River bridge by Blackjack parking area, and a higher shorter view farther up the hill. The resort winter ski map shows a Black River Basin public-facing parking area but not the waterfall trail itself. Exact resort parking entitlement for non-guests, bridge turnout rules, continuation of the footpath on the parcel, upper service-road access, ice/snow operations and current signage are not survey-verified. The 20-yard upper road option must NOT be interpreted as authorization to drive a service road. No fabricated parking coordinate, resort service-road driving link, route polyline or open-now claim. American Whitewater classifies the immediate river drop as extremely dangerous for recreational paddling; a promotional swim mention is not a safety determination.",
+      "winterRoad": "Snowriver operates an active ski resort with seasonally managed slopes, parking and roads. Its promotional statement that falls look beautiful in winter does NOT guarantee pedestrian access, groomed trail, plowed bridge parking or winter waterfall permissions. Verify directly with Snowriver guest services and stay off ski runs and service roads.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.snowriver.com/things-to-do/waterfall-fun",
+          "description": "Snowriver Mountain Resort states Gabbro Falls is on its Black River Basin property and describes it as a visitor attraction."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.snowriver.com/discover/summer-at-snowriver-0",
+          "description": "The landowner publicly invites visits to Gabbro Falls on resort property as a summer activity. Does not override posted seasonal exclusions."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.cityofbessemer.org/visit/scenic-drives/",
+          "description": "City of Bessemer identifies the bridge trailhead near Blackjack parking; Snowriver's own official trail map labels Black River Basin parking. Non-guest/free access to a specific space is not independently established."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.snowriver.com/things-to-do/waterfall-fun",
+          "description": "Owner describes a 0.3-mile walking approach from the bridge; City independently places trailhead near Black River bridge. No complete surveyed route geometry or guaranteed day-of passage."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "Michigan state GIS #38 marks the named natural Gabbro Falls on Black River, not a parking lot or legally routable arrival."
+        }
+      },
+      "visitorAccessEvidence": {
+        "ownerWaterfallPage": "https://www.snowriver.com/things-to-do/waterfall-fun",
+        "ownerSummerInvitation": "https://www.snowriver.com/discover/summer-at-snowriver-0",
+        "cityBridgeTrailhead": "https://www.cityofbessemer.org/visit/scenic-drives/",
+        "ownerParkingMap": "https://www.snowriver.com/mountain-info/trail-map-mountain-stats",
+        "reviewDate": "2026-11-02",
+        "roadsideOptionAuthorized": false,
+        "upperServiceRoadAuthorized": false,
+        "riverSwimmingSafe": false,
+        "nonGuestParkingRulesConfirmed": false,
+        "fullTrailPolylineAuthorized": false,
+        "waterfallAsDrivingDestination": false
+      }
+    },
+    {
       "region": "Western U.P.",
       "kind": "State park",
       "status": "verify",
