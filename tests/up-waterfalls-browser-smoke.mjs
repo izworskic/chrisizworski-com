@@ -185,6 +185,27 @@ try{
     assert.equal(await page.locator('iframe.cr-trail-embed').count(),1);
     assert.ok((await page.locator('iframe.cr-trail-embed').getAttribute('src')).includes('trailid=766002'));
     assert.equal(embeds.length,1,'map request should follow exactly one click');
+    const networkEmbeds=[];
+    await page.route(url=>String(url).includes('trailforks.com/widgets/region_map/'),async route=>{
+      networkEmbeds.push(route.request().url());
+      await route.fulfill({status:200,contentType:'text/html',body:'<!doctype html><html><body>NTN South Trails 11149 published network test fixture</body></html>'});
+    });
+    assert.equal(networkEmbeds.length,0);
+    assert.equal(await page.locator('#cr-network-panel').isVisible(),false);
+    await page.locator('#cr-show-network').click();
+    assert.equal(await page.locator('#cr-network-panel').isVisible(),true);
+    assert.equal(await page.locator('iframe[src*="region_map"]').count(),0,'never preload third-party region map');
+    assert.match(await page.locator('#cr-network-panel').innerText(),/connecting trails|South Trails/i);
+    await page.locator('#cr-load-network-map').click();
+    await page.locator('iframe[src*="region_map"]').waitFor();
+    assert.equal(networkEmbeds.length,1,'one consented network widget request');
+    assert.ok((await page.locator('iframe[src*="region_map"]').getAttribute('src')).includes('rid=11149'));
+    await page.locator('#cr-open-network').click();
+    assert.equal(await page.locator('#cr-show-network').getAttribute('aria-pressed'),'true');
+    assert.equal(networkEmbeds.length,1,'do not reload a consented widget');
+    for(const item of await page.locator('.cr-route-chain details').all()){await item.locator('summary').click();assert.equal(await item.getAttribute('open'),'');}
+    assert.equal(await page.locator('.cr-route-chain details').count(),5);
+    assert.match(await page.locator('#cr-approach').innerText(),/not.*verified lot-to-railing|not.*measured|not.*certified|Distance is still an open question/i);
     await page.locator('#cr-show-falls').click();
     assert.equal(await page.locator('#cr-trail-panel').isVisible(),false);
     assert.equal(await page.locator('#cr-falls-panel').isVisible(),true);

@@ -60,3 +60,29 @@ Evidence:
 **Do not overstate the geometry.** The 0.64 miles is only the published segment, **not** South Trailhead-to-viewpoint round-trip mileage. We have not independently verified the specific current trail connections from NTN South Trailhead, georeferenced M-553 crossing or exact railing/overlook coordinates. No extra parking points, no waterfall driving directions, no lines joining disconnected endpoints, no ADA claim, no live opening. `routePolylineAuthorized=false` and `destinationCoordinatesForDriving=false` remain unchanged.
 
 The new page includes a visible **Waterfall locations / Mapped NTN trail** control with native map preservation and a consent-on-click trail geometry viewer. The visitor answer and hub card distinguish source segment distance from actual walking effort. Node regressions and Chromium/mobile smoke test this behavior.
+
+
+## November 1, 2026: NTN named access graph and full network map
+
+The missing visitor question was not simply where the **0.64-mile Carp River Falls Trail** lies, but *how the public South Trailhead connects to it*. Continued research establishes a source-backed **named sequence**, without establishing an exact continuous georeferenced walk:
+
+1. **Park:** NTN's current South Trails page names **South Trailhead on County Road 553**; Travel Marquette directs waterfall visitors to that lot, rather than across the highway on the shoulder.
+2. **Cross:** Travel Marquette instructs visitors to use a designated pedestrian crossing of **M-553**. Hiking Project independently describes **Carp Eh Diem** as beginning on the west side of the highway, opposite the main South Trails lot.
+3. **Carp Eh Diem:** Trailforks' NTN-association trail record maps the named **3.0-mile full trail**, allowing hiking, and identifies its river setting. That is **not** an asserted required walk length to the falls junction.
+4. **Carp River Falls Trail:** Trailforks #766002 directly describes its link from the **west end of Carp Eh Diem** toward the **Raging River bridge**, a **3,363-foot (approx. 0.64-mile)** segment. The NTN executive director's August 2024 account corroborates the named connection and waterfall viewing.
+5. **Overlook:** Travel Marquette shows the fenced waterfall lookout and NTN reports waterfall views on the trail, but neither source in our audit provides a surveyed railing waypoint tied to a fully verified parking-to-rail route.
+
+Authoritative link origins:
+- NTN full regional map: https://www.noquetrails.org/south-trails/ (embeds Trailforks region **11149**)
+- Hiking Project Carp Eh Diem west-of-highway access: https://www.hikingproject.com/trail/7037827/carp-eh-diem
+- Trailforks Carp Eh Diem full named trail: https://www.trailforks.com/trails/carp-eh-diem/
+- Trailforks Carp River Falls segment: https://www.trailforks.com/trails/carp-river-falls/
+- Travel Marquette safety/arrival: https://www.travelmarquette.com/outdoor-adventure/waterfalls/
+- Trail completion announcement with named connection: https://www.uppermichiganssource.com/2024/08/15/ntn-hosts-business-after-hours-cuts-ribbon-updated-pavilion/
+- Travel Marquette real fenced viewpoint photo: https://www.travelmarquette.com/listing/carp-river-ntn-south-trails/514/
+
+**Implementation:** Five source-attributed disclosure stages appear on the Carp River visitor page with an explicit "distance still an open question" outcome. A third map tab embeds the actual **NTN-used Trailforks full-region network map**, solely after an explicit visitor "Load NTN network map" action, in addition to the existing CARTO natural-features map and the individual Trailforks mapped falls segment. Third-party geographical data is not scraped or rehosted; the network-map source is preserved.
+
+**Nonnegotiable missing evidence:** Exact signed crossing latitude-longitude, continuous verified trailhead-to-viewpoint route, complete one-way/round-trip distance and elevation, precise railing coordinates, and live current access. The 3-mile Carp Eh Diem number and 0.64-mile waterfall segment **must never be summed** into a supposedly verified trip. No navigation to a GIS waterfall pin; no new local Leaflet polyline. Nearby 18-mile MTB loops are contextual trail evidence, **not** substitutes for a dedicated waterfall walking itinerary.
+
+The regression suite asserts source identities, measured segment boundaries, no preload of either third-party viewer, network map's correct region identity, and browser accessibility/mobile layout. No unrelated site or sitemap changes are required.
