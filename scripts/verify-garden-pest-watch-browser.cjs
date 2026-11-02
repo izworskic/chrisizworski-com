@@ -136,7 +136,7 @@ async function waitForAnswer(page,pest){await page.waitForFunction(name=>documen
    await page.waitForFunction(()=>document.querySelector('#beetle-location')?.textContent?.includes('ZIP 48706 area'),null,{timeout:6000});
    assert.match(await page.locator('#beetle-source-note').innerText(),/2026-11-02/);
    await page.waitForFunction(()=>document.querySelector('#beetle-field-comparison')?.textContent?.includes('1 days after'),null,{timeout:7000});
-   assert.match(await page.locator('#beetle-field-caveat').innerText(),/not.*first/i);
+   assert.match(await page.locator('#beetle-field-caveat').innerText(),/Neither observed first emergence/i);
    await page.locator('#zip').fill('');
    await page.locator('#crop').selectOption('squash');
    assert.match(await page.locator('#beetle-adult-date').innerText(),/Not verified/);
