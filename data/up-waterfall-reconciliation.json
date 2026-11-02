@@ -115,16 +115,79 @@
       "reconciliation": "pending-identity-and-access-research",
       "curatedId": null,
       "publicGuide": null,
-      "landManager": null,
-      "parkingVerified": null,
-      "publicAccessVerified": null,
-      "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
-      "disposition": "research-only-hydropower-access-unverified",
-      "sourceNotes": "Hydropower context; no verified public trail to GIS feature. No route recommendation.",
-      "sourceLinks": [],
-      "evidenceReviewed": "2026-10-28",
-      "publicationEligible": false
+      "landManager": "Eagle Creek Renewable Energy — project operator, not certified waterfall visitor path",
+      "parkingVerified": false,
+      "publicAccessVerified": false,
+      "reviewed": "2026-11-02",
+      "notes": "Little Quinnesec is a real place, but its strongest current identity is an operating hydroelectric station rather than a signed waterfall-hiking destination.",
+      "disposition": "little-quinnesec-operating-hydro-amenities-not-waterfall-trail",
+      "sourceNotes": "Michigan GIS #4 locates Little Quinnesec Falls on the Menominee River at 45.773089,-87.989459. A secondary federal plant-location listing places the Little Quinnesec hydro facility at 45.7736,-87.9894, about 57 metres from that geographic point; this supports geographic vicinity, not surveyed identity of the natural ledge. Eagle Creek Renewable Energy identifies Little Quinnesec as active FERC Project P-2536, licensed through April 2037, with an approximately 9.1-megawatt generating station in Niagara, Wisconsin. Eagle Creek's operator-level recreation table lists parking, picnic area, canoe portage, fishing access, boat launch and camping for the Little Quinnesec project, but lists no hiking trail and identifies no waterfall overlook, specific legal entry road, certified parking waypoint or permitted visitor bank-to-falls route. Project-level recreational opportunities are not a permit to enter power facilities or a verified riverbank walking corridor. The operator publishes Menominee River streamflow context for the Little Quinnesec facility, but upstream or downstream gauge flow is not a direct measurement of water over an original waterfall ledge. The public operator pages do not supply a live visitor-access condition for a named falls overlook.",
+      "sourceLinks": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.eaglecreekre.com/facilities/operating-facilities/menominee-river-hydro-facilities",
+        "https://www.eaglecreekre.com/community/recreation",
+        "https://www.eaglecreekre.com/facilities/operating-facilities/menominee-river-hydro-facilities/menominee-river-streamflow-gage",
+        "https://www.gridinfo.com/plant/little-quinnesec-falls-hydro-project/57190",
+        "https://www.michigan.gov/recsearch/parks/Menominee"
+      ],
+      "evidenceReviewed": "2026-11-02",
+      "publicationEligible": false,
+      "outstandingGate": "Obtain an Eagle Creek site-specific recreation map or written confirmation of exact public parking and boundaries, and independently verify any official waterfall overlook or continuous lawful walking route. Separate plant/tailrace fishing and portage facilities from falls access.",
+      "accessRouteAudit": {
+        "reviewed": "2026-11-02",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Natural feature, identity and source geography",
+            "status": "hydro-project-feature-identity-supported-but-natural-falls-unconfirmed",
+            "finding": "Michigan GIS #4 locates Little Quinnesec Falls on the Menominee River at 45.773089,-87.989459. A secondary federal plant-location listing places the Little Quinnesec hydro facility at 45.7736,-87.9894, about 57 metres from that geographic point; this supports geographic vicinity, not surveyed identity of the natural ledge. Eagle Creek Renewable Energy identifies Little Quinnesec as active FERC Project P-2536, licensed through April 2037, with an approximately 9.1-megawatt generating station in Niagara, Wisconsin.",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Land manager, property and authorized public use",
+            "status": "project-or-region-context-only",
+            "finding": "Eagle Creek is the named operating hydro project licensee. Its recreational facility list does not identify land boundaries or authorize entry to the works.",
+            "source": "https://www.eaglecreekre.com/facilities/operating-facilities/menominee-river-hydro-facilities"
+          },
+          {
+            "label": "Official recreation versus a specific falls visitor experience",
+            "status": "waterfall-specific-access-unverified",
+            "finding": "Eagle Creek's operator-level recreation table lists parking, picnic area, canoe portage, fishing access, boat launch and camping for the Little Quinnesec project, but lists no hiking trail and identifies no waterfall overlook, specific legal entry road, certified parking waypoint or permitted visitor bank-to-falls route. Project-level recreational opportunities are not a permit to enter power facilities or a verified riverbank walking corridor.",
+            "source": "https://www.eaglecreekre.com/community/recreation"
+          },
+          {
+            "label": "Public road, signed arrival and authorized parking",
+            "status": "not-cleared",
+            "finding": "A named public parking waypoint with legal open road access to the actual natural waterfall viewing destination has not been verified. Do not use the raw GIS coordinates as driving directions.",
+            "source": "https://www.eaglecreekre.com/facilities/operating-facilities/menominee-river-hydro-facilities"
+          },
+          {
+            "label": "Unbroken lawful walking path and safe viewpoint",
+            "status": "not-cleared",
+            "finding": "No land-manager-published full parking-to-waterfall trail or verified public overlook for this exact mapped waterfall has been confirmed.",
+            "source": "https://www.eaglecreekre.com/community/recreation"
+          },
+          {
+            "label": "Current water, seasonal conditions and freshness",
+            "status": "no-waterfall-specific-live-claim",
+            "finding": "The operator publishes Menominee River streamflow context for the Little Quinnesec facility, but upstream or downstream gauge flow is not a direct measurement of water over an original waterfall ledge. The public operator pages do not supply a live visitor-access condition for a named falls overlook. Research reviewed November 2, 2026; no field visit or live gate/trail inspection.",
+            "source": "https://www.eaglecreekre.com/facilities/operating-facilities/menominee-river-hydro-facilities/menominee-river-streamflow-gage"
+          }
+        ]
+      },
+      "projectRecreationEvidence": {
+        "scope": "operator-project-wide-amenities-only",
+        "source": "https://www.eaglecreekre.com/community/recreation",
+        "parking": true,
+        "fishing": true,
+        "portage": true,
+        "hikingTrailListed": false,
+        "waterfallSpecificViewpointVerified": false,
+        "exactPublicParkingWaypointVerified": false,
+        "accessPathVerified": false
+      }
     },
     {
       "gisObjectId": 6,
@@ -163,15 +226,66 @@
       "curatedId": null,
       "publicGuide": null,
       "landManager": null,
-      "parkingVerified": null,
-      "publicAccessVerified": null,
-      "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
-      "disposition": "research-only-public-access-unverified",
-      "sourceNotes": "No official named lot/trail verified.",
-      "sourceLinks": [],
-      "evidenceReviewed": "2026-10-28",
-      "publicationEligible": false
+      "parkingVerified": false,
+      "publicAccessVerified": false,
+      "reviewed": "2026-11-02",
+      "notes": "A mapped name is not yet a place to send a hiker. Michigan GIS lists Mill Pond Falls on Sundholm Creek, while federal-name-derived lists show Upper and Lower Mill Pond Falls nearby at different points.",
+      "disposition": "mill-pond-sundholm-versus-gnis-upper-lower-coordinate-conflict",
+      "sourceNotes": "Michigan GIS #8 gives Mill Pond Falls on Sundholm Creek at 45.988890,-87.854767. USGS GNIS-derived Upper Mill Pond Falls in the Felch quadrangle is at 45.9863889,-87.8494444, roughly 496 metres from the state point; GNIS-derived Lower Mill Pond Falls is at 45.9844444,-87.8452778, about 884 metres from the state point. The GNIS upper and lower records are about 388 metres apart. These are source-coordinate comparisons, not evidence that all three names refer to one waterfall or that any location is exact. No authoritative land-manager map, designated public visitor parking, signed waterfall trailhead or continuous lawful walk to the state GIS #8 feature was established. Secondary geographic listings suggest backcountry setting but cannot certify that a two-track, woodland or private timber parcel is publicly traversable. No official current condition, flow gauge assigned to this exact minor feature, road opening or season-specific trail condition has been verified. The state GIS and GNIS-related names describe geography, not live water or visitor permissions.",
+      "sourceLinks": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.anyplaceamerica.com/directory/mi/dickinson-county-26043/falls/upper-mill-pond-falls-2128902/",
+        "https://www.anyplaceamerica.com/directory/mi/dickinson-county-26043/falls/lower-mill-pond-falls-2128901/",
+        "https://www.topozone.com/michigan/dickinson-mi/falls/lower-mill-pond-falls/",
+        "https://upper-michigan.com/guide/waterfalls/upper-mill-pond-falls.html"
+      ],
+      "evidenceReviewed": "2026-11-02",
+      "publicationEligible": false,
+      "outstandingGate": "Use original GNIS and state hydrography/parcel mapping to reconcile all three coordinates and actual Sundholm Creek channel; then obtain a current land-manager/public road, legal parking and continuous authorized foot-route record.",
+      "accessRouteAudit": {
+        "reviewed": "2026-11-02",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Natural feature, identity and source geography",
+            "status": "unreconciled-coordinate-collision",
+            "finding": "Michigan GIS #8 gives Mill Pond Falls on Sundholm Creek at 45.988890,-87.854767. USGS GNIS-derived Upper Mill Pond Falls in the Felch quadrangle is at 45.9863889,-87.8494444, roughly 496 metres from the state point; GNIS-derived Lower Mill Pond Falls is at 45.9844444,-87.8452778, about 884 metres from the state point. The GNIS upper and lower records are about 388 metres apart. These are source-coordinate comparisons, not evidence that all three names refer to one waterfall or that any location is exact.",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Land manager, property and authorized public use",
+            "status": "project-or-region-context-only",
+            "finding": "The state waterfall layer is geographic only; ownership, property boundaries and public route permission are not established.",
+            "source": "https://www.anyplaceamerica.com/directory/mi/dickinson-county-26043/falls/upper-mill-pond-falls-2128902/"
+          },
+          {
+            "label": "Official recreation versus a specific falls visitor experience",
+            "status": "waterfall-specific-access-unverified",
+            "finding": "No authoritative land-manager map, designated public visitor parking, signed waterfall trailhead or continuous lawful walk to the state GIS #8 feature was established. Secondary geographic listings suggest backcountry setting but cannot certify that a two-track, woodland or private timber parcel is publicly traversable.",
+            "source": "https://www.anyplaceamerica.com/directory/mi/dickinson-county-26043/falls/lower-mill-pond-falls-2128901/"
+          },
+          {
+            "label": "Public road, signed arrival and authorized parking",
+            "status": "not-cleared",
+            "finding": "A named public parking waypoint with legal open road access to the actual natural waterfall viewing destination has not been verified. Do not use the raw GIS coordinates as driving directions.",
+            "source": "https://www.anyplaceamerica.com/directory/mi/dickinson-county-26043/falls/upper-mill-pond-falls-2128902/"
+          },
+          {
+            "label": "Unbroken lawful walking path and safe viewpoint",
+            "status": "not-cleared",
+            "finding": "No land-manager-published full parking-to-waterfall trail or verified public overlook for this exact mapped waterfall has been confirmed.",
+            "source": "https://www.anyplaceamerica.com/directory/mi/dickinson-county-26043/falls/lower-mill-pond-falls-2128901/"
+          },
+          {
+            "label": "Current water, seasonal conditions and freshness",
+            "status": "no-waterfall-specific-live-claim",
+            "finding": "No official current condition, flow gauge assigned to this exact minor feature, road opening or season-specific trail condition has been verified. The state GIS and GNIS-related names describe geography, not live water or visitor permissions. Research reviewed November 2, 2026; no field visit or live gate/trail inspection.",
+            "source": "https://www.topozone.com/michigan/dickinson-mi/falls/lower-mill-pond-falls/"
+          }
+        ]
+      }
     },
     {
       "gisObjectId": 9,
@@ -184,19 +298,75 @@
       "reconciliation": "pending-identity-and-access-research",
       "curatedId": null,
       "publicGuide": null,
-      "landManager": null,
-      "parkingVerified": null,
-      "publicAccessVerified": null,
-      "reviewed": null,
-      "notes": "Research candidate only; no verified legal public approach, parking or trail. Do not infer accessibility from geographic point.",
-      "disposition": "hydropower-dam-context-not-falls-guide",
-      "sourceNotes": "Dickinson County tourism describes Peavy Falls Dam as a scenic drive/fishing point, not independently verified waterfall visitor trail. Do not transform dam access into natural waterfall directions.",
+      "landManager": "We Energies — hydro project operator, not certified natural falls access",
+      "parkingVerified": false,
+      "publicAccessVerified": false,
+      "reviewed": "2026-11-02",
+      "notes": "The name survives, but hydroelectric engineering changed what a visitor might see. Neither a nearby fishing area nor a power-station flow number guarantees a visible natural waterfall.",
+      "disposition": "peavy-historic-falls-hydro-diversion-total-flow-not-falls-flow",
+      "sourceNotes": "Michigan GIS #9 locates Peavy Falls on the Michigamme River at 45.990797,-88.209553. We Energies identifies a Peavy Falls hydroelectric plant built in 1943. The World Waterfall Database rates the natural feature unconfirmed, and explains that the original upper drop is diverted by the dam while water can reach a lower ledge through a spillway only when operations allow. This is specialist interpretation, not a verified present-day spill schedule or height survey. Dickinson County tourism describes a scenic driving/fishing trip to Peavy Falls Dam, and We Energies' Wilderness Shores system includes distinct public recreation sites in the region. Neither source certifies that visitors can park at the dam, enter the utility perimeter, view a natural falls ledge from a legal public overlook or walk from a public lot to the exact GIS falls point. Fishing access somewhere along Peavy Pond is not waterfall-specific visitor clearance. We Energies/Wisconsin Public Service publishes Peavy Falls headwater level, tailwater level and project 'Total Flow' with approximately ten-minute updates. Those numbers describe hydro project operations and do NOT establish spillway discharge over the former natural falls. In particular, a station 'Total Flow' of zero cannot automatically be called 'dry waterfall,' nor can positive flow be labeled water visibly plunging over an accessible falls.",
       "sourceLinks": [
-        "https://www.ironmountain.org/pages/fall-colors/"
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.we-energies.com/company/hydroelectric-power-plants",
+        "https://www.wisconsinpublicservice.com/environment/hydrodata",
+        "https://www.worldwaterfalldatabase.com/waterfall/Peavy-Falls-13251",
+        "https://www.ironmountain.org/pages/fall-colors/",
+        "https://www.we-energies.com/environment/pdf/wilderness_shores-complete-area-map.pdf"
       ],
-      "outstandingGate": "Reconcile GIS falls versus Peavy hydropower dam and determine whether a separate legally accessible falls exists.",
-      "evidenceReviewed": "2026-10-28",
-      "publicationEligible": false
+      "outstandingGate": "Acquire the current FERC/project recreation site map and precise legally accessible Peavy Falls viewing areas, if any; separate powerhouse/turbine total discharge, spillway release and bypassed natural ledges. Confirm road and shore permissions before any guide promotion.",
+      "evidenceReviewed": "2026-11-02",
+      "publicationEligible": false,
+      "accessRouteAudit": {
+        "reviewed": "2026-11-02",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Natural feature, identity and source geography",
+            "status": "hydro-project-feature-identity-supported-but-natural-falls-unconfirmed",
+            "finding": "Michigan GIS #9 locates Peavy Falls on the Michigamme River at 45.990797,-88.209553. We Energies identifies a Peavy Falls hydroelectric plant built in 1943. The World Waterfall Database rates the natural feature unconfirmed, and explains that the original upper drop is diverted by the dam while water can reach a lower ledge through a spillway only when operations allow. This is specialist interpretation, not a verified present-day spill schedule or height survey.",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Land manager, property and authorized public use",
+            "status": "project-or-region-context-only",
+            "finding": "We Energies is the hydropower operator; regional recreation listings do not establish a public trail to the exact natural drops.",
+            "source": "https://www.we-energies.com/company/hydroelectric-power-plants"
+          },
+          {
+            "label": "Official recreation versus a specific falls visitor experience",
+            "status": "waterfall-specific-access-unverified",
+            "finding": "Dickinson County tourism describes a scenic driving/fishing trip to Peavy Falls Dam, and We Energies' Wilderness Shores system includes distinct public recreation sites in the region. Neither source certifies that visitors can park at the dam, enter the utility perimeter, view a natural falls ledge from a legal public overlook or walk from a public lot to the exact GIS falls point. Fishing access somewhere along Peavy Pond is not waterfall-specific visitor clearance.",
+            "source": "https://www.wisconsinpublicservice.com/environment/hydrodata"
+          },
+          {
+            "label": "Public road, signed arrival and authorized parking",
+            "status": "not-cleared",
+            "finding": "A named public parking waypoint with legal open road access to the actual natural waterfall viewing destination has not been verified. Do not use the raw GIS coordinates as driving directions.",
+            "source": "https://www.we-energies.com/company/hydroelectric-power-plants"
+          },
+          {
+            "label": "Unbroken lawful walking path and safe viewpoint",
+            "status": "not-cleared",
+            "finding": "No land-manager-published full parking-to-waterfall trail or verified public overlook for this exact mapped waterfall has been confirmed.",
+            "source": "https://www.wisconsinpublicservice.com/environment/hydrodata"
+          },
+          {
+            "label": "Current water, seasonal conditions and freshness",
+            "status": "no-waterfall-specific-live-claim",
+            "finding": "We Energies/Wisconsin Public Service publishes Peavy Falls headwater level, tailwater level and project 'Total Flow' with approximately ten-minute updates. Those numbers describe hydro project operations and do NOT establish spillway discharge over the former natural falls. In particular, a station 'Total Flow' of zero cannot automatically be called 'dry waterfall,' nor can positive flow be labeled water visibly plunging over an accessible falls. Research reviewed November 2, 2026; no field visit or live gate/trail inspection.",
+            "source": "https://www.wisconsinpublicservice.com/environment/hydrodata"
+          }
+        ]
+      },
+      "flowTelemetryEvidence": {
+        "source": "https://www.wisconsinpublicservice.com/environment/hydrodata",
+        "subject": "hydropower-head-tail-total-flow",
+        "directNaturalFallsDischarge": false,
+        "spillwayRouteKnown": false,
+        "flowAsAccessVerdictAllowed": false
+      }
     },
     {
       "gisObjectId": 12,

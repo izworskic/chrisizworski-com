@@ -15,154 +15,154 @@
       "candidates": [
         213,
         68,
-        8,
         38,
         12,
-        4,
-        9,
-        191
+        191,
+        192,
+        46,
+        91
       ]
     },
     {
       "batchNumber": 2,
       "candidates": [
-        192,
-        46,
-        91,
         119,
         190,
         45,
         150,
-        151
+        151,
+        154,
+        160,
+        215
       ]
     },
     {
       "batchNumber": 3,
       "candidates": [
-        154,
-        160,
-        215,
         195,
         205,
         51,
         52,
-        59
+        59,
+        83,
+        99,
+        103
       ]
     },
     {
       "batchNumber": 4,
       "candidates": [
-        83,
-        99,
-        103,
         105,
         107,
         114,
         120,
-        121
+        121,
+        123,
+        8,
+        20
       ]
     },
     {
       "batchNumber": 5,
       "candidates": [
-        123,
-        20,
         24,
         25,
         37,
         39,
         40,
-        48
+        48,
+        58,
+        63
       ]
     },
     {
       "batchNumber": 6,
       "candidates": [
-        58,
-        63,
         65,
         69,
         70,
         74,
         75,
-        86
+        86,
+        112,
+        29
       ]
     },
     {
       "batchNumber": 7,
       "candidates": [
-        112,
-        29,
         42,
         80,
         85,
         129,
         15,
-        17
+        17,
+        136,
+        137
       ]
     },
     {
       "batchNumber": 8,
       "candidates": [
-        136,
-        137,
         139,
         140,
         144,
         18,
         116,
-        127
+        127,
+        148,
+        149
       ]
     },
     {
       "batchNumber": 9,
       "candidates": [
-        148,
-        149,
         152,
         153,
         162,
         163,
         170,
-        172
+        172,
+        173,
+        175
       ]
     },
     {
       "batchNumber": 10,
       "candidates": [
-        173,
-        175,
         176,
         177,
         180,
         181,
         183,
-        184
+        184,
+        185,
+        186
       ]
     },
     {
       "batchNumber": 11,
       "candidates": [
-        185,
-        186,
         187,
         22,
         23,
         28,
         54,
-        57
+        57,
+        60,
+        61
       ]
     },
     {
       "batchNumber": 12,
       "candidates": [
-        60,
-        61,
         62,
         72,
         84,
         106,
-        122
+        122,
+        4,
+        9
       ]
     }
   ],
@@ -200,22 +200,6 @@
       "blockingGate": "Determine actual GIS #68 watercourse location and whether separate upstream feature, duplicate/misplaced point or unrelated named falls. No name-only parent-child matching."
     },
     {
-      "gisObjectId": 8,
-      "name": "Mill Pond Falls",
-      "county": "DICKINSON",
-      "river": "SUNDHOLM CREEK",
-      "lat": 45.98889,
-      "lng": -87.854767,
-      "cluster": "DICKINSON / SUNDHOLM CREEK",
-      "priorityScore": 35,
-      "priorityReason": "Partial evidence already exists: finish owner, legal route and current parking verification",
-      "reviewStage": "incomplete-source-audit",
-      "publicationEligible": false,
-      "reviewStatus": "previous-research-needs-public-access-review",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
       "gisObjectId": 38,
       "name": "Gabbro Falls",
       "county": "GOGEBIC",
@@ -246,38 +230,6 @@
       "reviewStatus": "previous-research-needs-public-access-review",
       "sourceCount": 9,
       "blockingGate": "Natural falls on state parcel verified. Official DNR compartment review of nearby Chicagon Creek area records private owners controlling much of vehicle access; neither older county road list nor general state road viewer proves public legal Raymer/Dave's Camp route. Require ROW, designated turnout and full walking trail verification before index."
-    },
-    {
-      "gisObjectId": 4,
-      "name": "Little Quinnesec Falls",
-      "county": "DICKINSON",
-      "river": "MENOMINEE RIVER",
-      "lat": 45.773089,
-      "lng": -87.989459,
-      "cluster": "DICKINSON / MENOMINEE RIVER",
-      "priorityScore": 27,
-      "priorityReason": "Partial evidence already exists: finish owner, legal route and current parking verification",
-      "reviewStage": "incomplete-source-audit",
-      "publicationEligible": false,
-      "reviewStatus": "previous-research-needs-public-access-review",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 9,
-      "name": "Peavy Falls",
-      "county": "IRON",
-      "river": "MICHIGAMME RIVER",
-      "lat": 45.990797,
-      "lng": -88.209553,
-      "cluster": "IRON / MICHIGAMME RIVER",
-      "priorityScore": 27,
-      "priorityReason": "Partial evidence already exists: finish owner, legal route and current parking verification",
-      "reviewStage": "incomplete-source-audit",
-      "publicationEligible": false,
-      "reviewStatus": "previous-research-needs-public-access-review",
-      "sourceCount": 1,
-      "blockingGate": "Reconcile GIS falls versus Peavy hydropower dam and determine whether a separate legally accessible falls exists."
     },
     {
       "gisObjectId": 191,
@@ -694,6 +646,22 @@
       "reviewStatus": "previous-research-needs-public-access-review",
       "sourceCount": 9,
       "blockingGate": "Confirm actual falls parcel, blocked logging-road title and any public easement; identify a lawful signed pull-off and continuous safe legal bank trail, plus 2026 road and stream status. Do not route via private camps or extrapolate Big Erick's county visitor guidance."
+    },
+    {
+      "gisObjectId": 8,
+      "name": "Mill Pond Falls",
+      "county": "DICKINSON",
+      "river": "SUNDHOLM CREEK",
+      "lat": 45.98889,
+      "lng": -87.854767,
+      "cluster": "DICKINSON / SUNDHOLM CREEK",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 5,
+      "blockingGate": "Use original GNIS and state hydrography/parcel mapping to reconcile all three coordinates and actual Sundholm Creek channel; then obtain a current land-manager/public road, legal parking and continuous authorized foot-route record."
     },
     {
       "gisObjectId": 20,
@@ -1686,6 +1654,38 @@
       "reviewStatus": "previous-research-needs-public-access-review",
       "sourceCount": 6,
       "blockingGate": "Resolve U.P. Travel estimated route against a current signed trail and lot, confirm complete owner/public walking corridor on the Little Iron River, and verify river feature/height through current field/agency evidence. Keep the 30 km false map point excluded from visitor navigation."
+    },
+    {
+      "gisObjectId": 4,
+      "name": "Little Quinnesec Falls",
+      "county": "DICKINSON",
+      "river": "MENOMINEE RIVER",
+      "lat": 45.773089,
+      "lng": -87.989459,
+      "cluster": "DICKINSON / MENOMINEE RIVER",
+      "priorityScore": -38,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 6,
+      "blockingGate": "Obtain an Eagle Creek site-specific recreation map or written confirmation of exact public parking and boundaries, and independently verify any official waterfall overlook or continuous lawful walking route. Separate plant/tailrace fishing and portage facilities from falls access."
+    },
+    {
+      "gisObjectId": 9,
+      "name": "Peavy Falls",
+      "county": "IRON",
+      "river": "MICHIGAMME RIVER",
+      "lat": 45.990797,
+      "lng": -88.209553,
+      "cluster": "IRON / MICHIGAMME RIVER",
+      "priorityScore": -38,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 6,
+      "blockingGate": "Acquire the current FERC/project recreation site map and precise legally accessible Peavy Falls viewing areas, if any; separate powerhouse/turbine total discharge, spillway release and bypassed natural ledges. Confirm road and shore permissions before any guide promotion."
     }
   ]
 }
