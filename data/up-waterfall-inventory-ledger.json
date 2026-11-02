@@ -5,9 +5,9 @@
   "policy": "All 161 named source candidates retained even when public access is unknown. GIS locations are waterfall positions, never visitor parking. Do not auto-index.",
   "sourceCount": 197,
   "sourceCandidateCount": 161,
-  "curatedCount": 71,
-  "linkedByExactOid": 65,
-  "unresolvedCandidates": 96,
+  "curatedCount": 72,
+  "linkedByExactOid": 66,
+  "unresolvedCandidates": 95,
   "entries": [
     {
       "source": "mi-state-gis",
@@ -3937,28 +3937,30 @@
         -87.44655
       ],
       "river": "MORGAN CREEK",
-      "identity": "unreconciled",
-      "curatedId": null,
+      "identity": "linked",
+      "curatedId": "carp-river-falls",
       "possibleCuratedIds": [],
-      "publication": "research-only",
-      "access": "research-only",
-      "landManager": null,
-      "parkingEvidence": null,
-      "trailEvidence": null,
+      "publication": "verified-access-guide",
+      "access": "NTN-managed-public-overlook-not-live-verified",
+      "landManager": "Noquemanon Trail Network · South Trails",
+      "parkingEvidence": "https://www.travelmarquette.com/outdoor-adventure/waterfalls/",
+      "trailEvidence": "https://www.uppermichiganssource.com/2024/08/15/ntn-hosts-business-after-hours-cuts-ribbon-updated-pavilion/",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-11-01",
-      "nextAction": "Georeference verified legal NTN trailhead to the walk/bike route; reconcile actual Carp River channel and distinct Morgan Creek confluence; establish the approved final vista and hazard wording before indexable expert guide.",
+      "nextAction": "Check trail signs, current NTN conditions, and accurate trail geometry before showing a walking polyline.",
       "batch": "county-marquette",
       "reviewed": "2026-11-01",
-      "reviewBatch": "46",
-      "classification": "marquette-carp-gorge-official-walking-recommendation-final-approach-risk",
-      "accessAssessment": "State GIS #169 names Carp River Falls II but incorrectly lists MORGAN CREEK as waterway. The natural point 46.503807,-87.446550 is about 18m from Travel Marquette's Carp River Falls 46.50367,-87.44668. Morgan Falls at 46.50737,-87.44516 is a different waterfall on Morgan Creek, with a separate published card. Travel Marquette specifies parking at NTN South Trails, walking/biking a motor-vehicle-closed Mt. Marquette Road, reaching Morgan Falls, then continuing about half a mile on an increasingly rough Carp River trail. Independent visits say the high rim offers poor views and getting near the base involves precarious climb. Do not generate a safe trail line, permit vehicle traffic on closed road or imply official parking at the natural falls point.",
+      "reviewBatch": "47",
+      "classification": "public-NTN-waterfall-viewing-trail",
+      "accessAssessment": "Michigan GIS #169 matches Travel Marquette Carp River Falls within roughly 18 metres despite mislabeled MORGAN CREEK waterway. It is distinct from Morgan Falls #166 and posted Upper Carp #163 near Ishpeming. Public NTN South Trailhead and safe road crossing documented; 2024 NTN director describes completed Carp River Falls Trail waterfall viewpoint and Raging River connection; Travel Marquette 2025 describes older rough route from Morgan Falls. Exact new-overlook trail geometry and current seasonal access cannot be confirmed; no route polyline, waterfall-coordinate car directions, cliff scramble or live-opening claim.",
       "evidence": [
         "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.noquetrails.org/south-trails/",
         "https://www.travelmarquette.com/outdoor-adventure/waterfalls/",
         "https://www.travelmarquette.com/blog/post/waterfalls-you-need-to-see-in-fall/",
-        "https://gowaterfalling.com/waterfalls/carpriver.shtml",
-        "https://chrisizworski.com/upper-peninsula-waterfalls/morgan-falls/"
+        "https://www.uppermichiganssource.com/2024/08/15/ntn-hosts-business-after-hours-cuts-ribbon-updated-pavilion/",
+        "https://www.travelmarquette.com/listing/carp-river-ntn-south-trails/514/",
+        "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/marquettemi/waterfalls10_2025sheetA_eb3543b3-af0c-44a9-9a3b-140f872272db.pdf"
       ]
     },
     {
@@ -5128,5 +5130,5 @@
       ]
     }
   ],
-  "lastBatch": "46"
+  "lastBatch": "47"
 }
