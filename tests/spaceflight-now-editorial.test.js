@@ -86,6 +86,15 @@ test('Vulcan and Amazon Leo story can be useful contextual reporting but not cur
   // the article cannot safely be attributed to a particular flight.
   assert.equal(selectCoverage(vulcan,[vulcan,vulcan_other],records,now).length,0);
 });
+test('a different explicit Amazon Leo flight cannot be attached by generic rocket context',()=>{
+  const misleading={
+    title:'Vulcan prepares to launch Amazon Leo LV-02',
+    matchingExcerpt:'The Vulcan rocket will carry Amazon Leo satellites.',
+    url:'https://spaceflightnow.com/2026/11/01/vulcan-to-launch-amazon-leo-lv-02/',
+    publishedAt:'2026-11-01T13:00:00.000Z'
+  };
+  assert.equal(matchArticle(misleading,vulcan,[vulcan],now),null);
+});
 test('articles older than freshness window or about past launches are not current evidence',()=>{
   const news={...parseRss(rss,now)[0],publishedAt:'2026-07-01T10:00:00Z'};
   assert.equal(matchArticle(news,ussf,[ussf],now),null);
