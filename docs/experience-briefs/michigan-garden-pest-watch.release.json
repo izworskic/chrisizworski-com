@@ -42,7 +42,7 @@
       "kind": "official-reference",
       "subject": "scouting-guidance",
       "state": "SUPPORTED",
-      "sourceUrl": "https://www.canr.msu.edu/uploads/resources/pdfs/pest_scouting_in_vegetables.pdf",
+      "sourceUrl": "https://msu-prod.dotcmscloud.com/resources/ipm_smart_pest_management_for_the_vegetable_garden",
       "checkedDate": "2026-11-02",
       "limitation": "Michigan extension scouting recommendations are season- and host-conditioned; not proof of any specific garden occurrence."
     },
@@ -61,7 +61,7 @@
       "kind": "official-reference",
       "subject": "invasive-state-detection",
       "state": "SUPPORTED",
-      "sourceUrl": "https://www.michigan.gov/en/invasives/id-report/insects/spotted-lanternfly",
+      "sourceUrl": "https://www.michigan.gov/invasives/id-report/insects/spotted-lanternfly",
       "checkedDate": "2026-11-02",
       "limitation": "No live county confirmation feed is connected. State guidance is linked; Bay County or home garden status is not inferred."
     }
