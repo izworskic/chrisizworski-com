@@ -7,6 +7,8 @@ on:
       - 'lib/rocket-launch-national.js'
       - 'api/rocket-launch-truth.js'
       - 'api/space-coast-ksc-watch.js'
+      - 'api/rocket-launch-refresh.js'
+      - 'tests/rocket-launch-refresh-cron.test.js'
       - '.github/workflows/space-coast-ksc-watch.yml'
       - '.github/workflows/rocket-launch-truth-tests.yml'
       - 'public/synced-national-tools/assets/launch-truth-desk.*'
@@ -33,6 +35,8 @@ jobs:
           persist-credentials: false
       - name: Verify full national mission coverage, collector budget and viewer safety
         run: node --test tests/rocket-launch-national-v2.test.js
+      - name: Verify source horizon and independent Vercel Cron authorization
+        run: node --test tests/rocket-launch-refresh-cron.test.js
       - name: Verify publisher source boundaries and launch truth state machine
         run: node --test tests/rocket-launch-truth.test.js
       - name: Verify existing Florida launch and KSC watch are preserved
