@@ -1873,3 +1873,10 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - Site-shell PR #1287 merged as `6ca4a4a02741651c85a44d6cb2816edb172f0e63`; all 59 repository checks, the production build and the emitted public-output audit passed. The matching production Vercel deployment reported READY. Browser checks confirmed all seven requested items in the U.S. directory, their absence as Michigan cards, the gardening hub links, and working Everyday & developer and Skyway-search filters.
 - No advertising configuration or loader logic was changed. GSC and AdSense outcome data were not available; no traffic or revenue effect is claimed.
 - **Single next action:** Review directory navigation and search use in GA4 when comparable post-release data is available.
+
+### 2026-11-02 — Winter layup sitemap and mobile map repair
+
+- PR #1425: the canonical `/great-lakes-freighter-winter-layup/` was omitted from page sitemaps; registered exactly once in `sitemap-winter.xml` with `lastmod=2026-10-29`, matching the existing page `dateModified` and last recorded HTML change. The existing sitemap index already links to the winter sitemap. No title, H1, URL, canonical, schema or creator credit changed.
+- Verify-first audit: historical photo records already cover all 12 ships in 2025–26 and both ships in 2024–25; existing map initialization fit the Great Lakes at 360px and 390px. Retained both. Removed duplicate hero counts while preserving dated source events, map statistics and harbor scene.
+- Observed a Google top anchor over the winter map at 360px and 390px; scoped Google's documented `data-overlays="collapsed-bottom"` regular bottom-only anchor option to this page. All other pages' ad loader stays unchanged. Regression test `tests/freighter-winter-layup-discovery.test.js` guards uniqueness and the scoped UI/metadata contracts.
+- Measurement: no fresh Search Console or AdSense performance data retrieved, and no CTR/ranking/revenue change claimed. **Single next action:** confirm deployed winter sitemap and Google bottom-only anchor at 360px and 390px and watch Search Console sitemap retrieval.
