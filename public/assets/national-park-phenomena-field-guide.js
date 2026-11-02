@@ -69,10 +69,11 @@
       peakLabel: 'Late May–Early Jun (~May 25–Jun 6 · 10–14 Day Display)',
       permitType: 'lottery',
       permitName: 'Recreation.gov Vehicle Lottery',
-      permitLead: 'Lottery opens late April for 4–5 days only. Strict red-light headlamp etiquette enforced.',
+      permitLead: '2026 Elkmont event May 20–27; vehicle reservation lottery Apr 24 at 10 AM EDT through Apr 27 at 11:59 PM EDT. Registered Elkmont campers had separate pedestrian access. Park entry outside the restricted Elkmont event is a different question.',
+      accessRules: {season:2026, eventStart:'2026-05-20',eventEnd:'2026-05-27',lotteryStart:'2026-04-24',lotteryEnd:'2026-04-27', eventVehicle:'LOTTERY_RESERVATION_REQUIRED', registeredElkmontCamping:'PEDESTRIAN_ACCESS', future:'UNCONFIRMED',official:'https://www.nps.gov/grsm/learn/news/great-smoky-mountains-national-park-announces-dates-for-2026-annual-firefly-viewing-event.htm'},
       category: 'wildlife',
       activeIntel: 'Thousands of male Photinus carolinus beetles flash in simultaneous concert: 5–8 rapid flashes followed by 6–8 seconds of total darkness echoing across forested hillsides.',
-      leadAlert: '⚠️ Enter the Recreation.gov Elkmont firefly vehicle lottery in late April (typically April 24–28).',
+      leadAlert: '2026 Elkmont vehicle lottery was April 24 at 10 AM EDT to April 27 at 11:59 PM EDT; viewing dates May 20–27. Registered Elkmont campers had different access. 2027 dates unconfirmed.',
       toolUrl: '/synced-national-tools/appalachia/',
       toolLabel: 'Smoky Mountains & Appalachia Outdoor Engine'
     },
@@ -271,7 +272,7 @@
       badge: 'Spring Lotteries & Higher Elevations',
       title: 'April: Canyon Blooms & Smoky Mountains Firefly Lottery',
       details: 'Higher elevations in Death Valley showcase evening primrose and phacelia. Haleakalā trade-wind cloud inversions establish dry, stable atmospheric conditions above 10,000 feet.',
-      leadAlert: '🚨 CRITICAL DEADLINE: Great Smoky Mountains Elkmont synchronous firefly vehicle lottery opens in late April on Recreation.gov (typically April 24–28).'
+      leadAlert: 'For 2026 Elkmont, NPS lottery opened April 24 at 10 AM EDT and closed April 27 at 11:59 PM EDT; event May 20–27. These are historical, not a 2027 schedule.'
     },
     5: {
       badge: 'Synchronous Flashes & Slot Canyon Openings',
