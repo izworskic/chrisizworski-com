@@ -3,6 +3,9 @@
   const API = '/api/space-coast-launch';
   const KSC_API = '/api/space-coast-ksc';
   const KSC_HISTORY_API = '/api/space-coast-ksc-watch';
+  const LAUNCH_DAY_API = '/api/space-coast-launch-day';
+  const PULSE_REFRESH_MS = 2 * 60 * 1000;
+  const LAUNCH_DAY_SCHEDULE_REFRESH_MS = 5 * 60 * 1000;
   const KSC_REFRESH_MS = 5 * 60 * 1000;
   const SCHEDULE_REFRESH_MS = 45 * 60 * 1000;
   const $ = id => document.getElementById(id);
@@ -369,6 +372,155 @@
     }
   }
 
+  // Every on-screen status is a dated LL2 observation, never mission-control
+  // telemetry. The status endpoint ONLY reads the shared monitoring state.
+  let pulseData=null,pulseLastAttemptAt=0,pulseController=null;
+  let scheduleSourceObservedAt=0,selectedTargetAt=null;
+  function pulseEt(iso){
+    const t=Date.parse(iso||'');
+    if(!Number.isFinite(t))return 'unverified time';
+    return new Date(t).toLocaleString('en-US',{
+      timeZone:'America/New_York',month:'short',day:'numeric',
+      hour:'numeric',minute:'2-digit',timeZoneName:'short'
+    });
+  }
+  function renderPulseCountdown(){
+    const mission=pulseData?.mission;
+    const target=Date.parse(mission?.targetAt||'');
+    if(!mission || !mission.exactTarget || mission.freshness!=='recent' ||
+        !Number.isFinite(target)||target<=Date.now()){
+      set('launch-pulse-countdown','Not verified');
+      set('launch-pulse-time-note',mission?.level==='overdue'?
+        'The published target has passed; no launch outcome has been verified.':
+        'No verified exact upcoming target from a recent shared observation.');
+      return;
+    }
+    const m=Math.ceil((target-Date.now())/60000);
+    const d=Math.floor(m/1440),h=Math.floor((m%1440)/60),mins=m%60;
+    set('launch-pulse-countdown',(d?d+'d ':'')+(h?h+'h ':'')+mins+'m');
+    set('launch-pulse-time-note','Target: '+pulseEt(mission.targetAt)+
+      ' · Countdown to LL2 target, NOT an approved launch.');
+  }
+  function pulseChangeCopy(e){
+    if(e.type==='target-time')return 'Target time changed from '+
+      pulseEt(e.before)+' to '+pulseEt(e.after)+'.';
+    if(e.type==='time-precision')return 'Time precision changed from '+
+      (e.before||'unverified')+' to '+(e.after||'unverified')+'.';
+    if(e.type==='provider-status')return 'LL2 status changed from '+
+      (e.before||'unverified')+' to '+(e.after||'unverified')+'.';
+    if(e.type==='launch-pad')return 'Listed launch pad changed from '+
+      (e.before||'unverified')+' to '+(e.after||'unverified')+'.';
+    if(e.type==='window-start'||e.type==='window-end')return 'Published launch window changed; check current operator timing.';
+    if(e.type==='left-upcoming-list')return 'Mission disappeared from LL2 upcoming list. Scrub or launch outcome is NOT established.';
+    return 'A schedule field was revised. Recheck the operator.';
+  }
+  function renderPulse(body){
+    const root=$('launch-day-pulse'),list=$('launch-pulse-changes-list');
+    if(!root||!list)return;
+    const mission=body?.mission;
+    pulseData=body;
+    list.replaceChildren();
+    if(!body?.ok||!mission){
+      root.dataset.level='unknown';
+      set('launch-pulse-headline','Current mission observation unavailable');
+      set('launch-pulse-advice','The shared monitor has not verified this mission yet. Use the primary schedule and official launch operator; do not assume no change.');
+      set('launch-pulse-checked',body?.monitorCheckedAt?
+        'Shared monitor last checked '+pulseEt(body.monitorCheckedAt)+
+        '; this mission was not verified.' :
+        'No verified scheduled observation available.');
+      list.appendChild(element('p','launch-pulse-empty',
+        'No validated change history is available for this selected mission.'));
+      renderPulseCountdown();
+      return;
+    }
+    root.dataset.level=mission.level||'unknown';
+    set('launch-pulse-headline',mission.label||'Check the schedule');
+    const explanations={
+      stale:'Observation is overdue. We cannot confirm whether the scheduled time or status has changed.',
+      scrub:'LL2 explicitly reports a scrub. Do not plan to view the previous attempt; confirm any new date with the operator.',
+      hold:'LL2 explicitly reports a hold. The published target may no longer apply. Check the mission operator before leaving.',
+      terminal:'LL2 shows a result, but this site does not independently verify launch outcome or flight telemetry.',
+      unknown:'This mission is no longer in the upcoming list. Do NOT assume a scrub, liftoff or success.',
+      overdue:'The target time passed without a verified outcome. Check the operator; do not assume a launch occurred.',
+      uncertain:'The date or hour is too coarse for a reliable departure decision.',
+      planning:'A target time is published, but technical holds, weather or range decisions can change it without warning.',
+      check:'Confirm official launch and viewing information before traveling.'
+    };
+    set('launch-pulse-advice',explanations[mission.level]||explanations.check);
+    set('launch-pulse-checked',
+      'LL2 last observed '+pulseEt(mission.checkedAt)+
+      ' · '+(mission.freshness==='recent'?
+        'Scheduled check recent (not real-time)' :
+        'Scheduled check overdue')+
+      ' · independent of KSC ticket and access information.');
+    const events=Array.isArray(mission.events)?mission.events.slice(0,8):[];
+    if(!events.length){
+      list.appendChild(element('p','launch-pulse-empty',
+        'No verified schedule field changes have been recorded for this mission yet. This is not proof the schedule will hold.'));
+    }else{
+      for(const event of events){
+        const card=element('article','launch-pulse-event');
+        const heading=element('strong','',
+          event.type==='target-time'?'Target revised':
+          event.type==='provider-status'?'Status updated':
+          event.type==='left-upcoming-list'?'Upcoming-list change':
+          event.type==='launch-pad'?'Launch pad revised':
+          'Schedule information updated');
+        card.appendChild(heading);
+        card.appendChild(element('time','',
+          'First detected '+pulseEt(event.firstDetectedAt)));
+        card.appendChild(element('p','',pulseChangeCopy(event)));
+        list.appendChild(card);
+      }
+    }
+    // A cached general schedule card can be older than the shared monitor.
+    // When that is demonstrable, update its timing/status consistently.
+    const checked=Date.parse(mission.checkedAt||'');
+    if(mission.freshness==='recent'&&Number.isFinite(checked)&&
+       checked>scheduleSourceObservedAt &&
+       mission.presentInUpcoming===true){
+      if(mission.targetAt&&
+        ['second','minute','hour'].includes(mission.netPrecision)){
+        set('launch-time',timeFormat(mission.targetAt,mission.netPrecision));
+        set('launch-date',dateFormat(mission.targetAt,mission.netPrecision));
+      }
+      if(['hold','scrub','overdue'].includes(mission.level)){
+        $('schedule-card').dataset.level='hold';
+        set('schedule-label',mission.label);
+        set('schedule-detail','More recent shared LL2 observation at '+
+          pulseEt(mission.checkedAt)+'. Confirm this status with the operator.');
+      }
+    }
+    renderPulseCountdown();
+  }
+  async function loadPulse(id,force=false){
+    if(!id)return;
+    if(!force&&Date.now()-pulseLastAttemptAt<PULSE_REFRESH_MS)return;
+    pulseLastAttemptAt=Date.now();
+    if(pulseController)pulseController.abort();
+    const controller=new AbortController();
+    pulseController=controller;
+    try{
+      const response=await fetch(LAUNCH_DAY_API+'?launchId='+encodeURIComponent(id),{
+        headers:{Accept:'application/json'},signal:controller.signal
+      });
+      const data=await response.json();
+      if(controller.signal.aborted||activeMissionId!==id)return;
+      renderPulse(response.ok?data:{ok:false,monitorCheckedAt:null});
+    }catch{
+      if(!controller.signal.aborted&&activeMissionId===id)
+        renderPulse({ok:false,monitorCheckedAt:null});
+    }finally{
+      if(pulseController===controller)pulseController=null;
+    }
+  }
+  const pulseRefreshButton=$('launch-pulse-refresh');
+  if(pulseRefreshButton)pulseRefreshButton.addEventListener('click',()=>{
+    if(!activeMissionId)return;
+    set('launch-pulse-checked','Checking the latest stored source observation…');
+    void loadPulse(activeMissionId,true);
+  });
+
   let loadSequence = 0;
   let activeMissionId = null;
   let lastKscAttemptAt = 0;
@@ -408,9 +560,14 @@
     if (document.hidden || !activeMissionId) return;
     // An open tab must occasionally refresh its ordinary schedule too; the
     // official KSC checker itself never calls the schedule provider.
-    if (Date.now() - lastScheduleLoadedAt >= SCHEDULE_REFRESH_MS) {
+    const withinDay=Number.isFinite(selectedTargetAt)&&
+      Math.abs(selectedTargetAt-Date.now())<=24*3600000;
+    const cadence=withinDay?LAUNCH_DAY_SCHEDULE_REFRESH_MS:SCHEDULE_REFRESH_MS;
+    if (Date.now()-lastScheduleLoadedAt>=cadence)
       void load(activeMissionId);
-    } else checkForKscUpdate();
+    else checkForKscUpdate();
+    void loadPulse(activeMissionId);
+    renderPulseCountdown();
   }
 
   async function load(selectedId) {
@@ -454,6 +611,9 @@
       renderArrival(d);
       renderSkyComparison(d);
       lastScheduleLoadedAt = Date.now();
+      scheduleSourceObservedAt=Date.parse(d.scheduleCheckedAt||d.generatedAt)||0;
+      selectedTargetAt=next&&['minute','second'].includes(next.netPrecision)?
+        Date.parse(next.net):null;
       activeMissionId = d.selectedLaunchId || null;
       // Same trusted, cached launch response powers the GIS layer; its listener
       // cannot fetch another LL2 schedule or infer mission-specific closures.
@@ -461,15 +621,19 @@
         detail: { selectedLaunchId: activeMissionId,
           geographicViewing: d.geographicViewing || null }
       }));
-      if (activeMissionId) void loadKscChronicle(sequence, activeMissionId);
+      if (activeMissionId) {
+        void loadKscChronicle(sequence, activeMissionId);
+        void loadPulse(activeMissionId,true);
+      }else renderPulse({ok:false,monitorCheckedAt:null});
       lastKscAttemptAt = 0;
       checkForKscUpdate();
     } catch (err) {
       if (sequence !== loadSequence) return;
       activeMissionId = previousMissionId;
-      // Retry the ordinary schedule after five minutes rather than making a
-      // failed 45-minute refresh permanently stop official KSC monitoring.
-      lastScheduleLoadedAt = Date.now() - SCHEDULE_REFRESH_MS + KSC_REFRESH_MS;
+      // Retry failed standard schedule after five minutes, without turning
+      // the independent monitor into per-visitor LL2 polling.
+      lastScheduleLoadedAt=Date.now()-SCHEDULE_REFRESH_MS+KSC_REFRESH_MS;
+      if(activeMissionId)void loadPulse(activeMissionId,true);
       set('loading', err.message);
       $('schedule-card').dataset.level = 'unknown';
       $('weather-card').dataset.level = 'unknown';
