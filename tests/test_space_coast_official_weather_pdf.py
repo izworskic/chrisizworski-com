@@ -36,6 +36,7 @@ Probability of Violating Weather Constraints
 Primary Concerns: Liftoff Winds
 Weather Conditions
 Temp/Humidity: 72 F / 90%
+Next Forecast Will Be Issued 2 Nov 2026
 """
 
 
@@ -67,6 +68,7 @@ class OfficialWeatherParserTest(unittest.TestCase):
         self.assertEqual(out["povPercent"], 60)
         self.assertEqual(out["validDate"], "2026-11-03")
         self.assertEqual(out["issuedAt"], "2026-11-01T18:30:00Z")
+        self.assertEqual(out["nextForecastDate"], "2026-11-02")
         self.assertEqual(out["sourceMission"], "Falcon 9 Starlink 10-43")
         self.assertIn("Cumulus Cloud Rule", out["primaryConcerns"])
         self.assertEqual(out["additionalRisks"]["boosterRecovery"], "Moderate")
