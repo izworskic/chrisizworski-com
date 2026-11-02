@@ -86,6 +86,39 @@ def news_items(xml):
     return articles
 
 
+def cited_launch_day(body, mission):
+    """Require a textual month/day next to a launch/liftoff statement.
+
+    Match only the *current* mission day. Do not borrow a date from a story
+    header or treat a publication date as the launch target.
+    """
+    try:
+        launch=dt.datetime.fromisoformat(mission["net"].replace("Z","+00:00"))
+        from zoneinfo import ZoneInfo
+        intended=launch.astimezone(ZoneInfo("America/New_York")).date()
+    except (KeyError, TypeError, ValueError):
+        return None
+    names=("January","February","March","April","May","June","July",
+           "August","September","October","November","December")
+    shortened=[name[:3] for name in names]
+    rex=r"\b("+"|".join(names+tuple(shortened))+r")\.?\s+(\d{1,2})(?:,\s*(20\d{2}))?\b"
+    for launch_word in re.finditer(r"\b(?:launch|liftoff|lift[- ]off|targeted)\b",body,re.I):
+        relevant=body[launch_word.end():launch_word.end()+180]
+        for m in re.finditer(rex,relevant,re.I):
+            month_token=m.group(1).lower()
+            number=next((i+1 for i,n in enumerate(names)
+                         if n.lower().startswith(month_token[:3])),None)
+            if not number:continue
+            year=int(m.group(3)) if m.group(3) else intended.year
+            try:
+                day=dt.date(year,number,int(m.group(2)))
+            except ValueError:
+                continue
+            if day==intended:
+                return day.isoformat()
+    return None
+
+
 def nasa_report(article, html, mission, now):
     source = official_article_url(article.get("sourceUrl"))
     if not source or len(html) > MAX_ARTICLE_BYTES:
@@ -104,6 +137,9 @@ def nasa_report(article, html, mission, now):
         return None
     body = plain_text(html)
     if len(body) < 140 or not re.search(r"\b45th\s+Weather\s+Squadron\b|\b45WS\b", body, re.I):
+        return None
+    reported_day=cited_launch_day(body,mission)
+    if not reported_day:
         return None
     # The NASA article must explicitly attribute its favorable-weather
     # percentage to the squadron; don't scrape arbitrary percentages from
@@ -149,6 +185,7 @@ def nasa_report(article, html, mission, now):
         "sourceUrl":source,
         "publishedAt":article["publishedAt"],
         "reportedFavorablePercent":p,
+        "reportedTargetDate":reported_day,
         "primaryConcerns":concerns[:6],
         "sourceSha256":hashlib.sha256(html).hexdigest(),
     }
