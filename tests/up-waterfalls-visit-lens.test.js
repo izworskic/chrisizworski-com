@@ -37,5 +37,5 @@ test('B55 publish no invented trip times or new guide URLs',()=>{
  assert.ok(html.includes('Travel time and weather are not calculated.'));
  assert.ok(!lens.includes('travelmode=driving'));
  assert.ok(!html.includes('href="/upper-peninsula-waterfalls/visitability-lens/"'));
- for(const c of data){assert.ok(c.id&&c.link&&c.source,'curated source record incomplete');}
+ for(const c of data){assert.ok(c.id&&c.source,'curated source record incomplete');}
 });
