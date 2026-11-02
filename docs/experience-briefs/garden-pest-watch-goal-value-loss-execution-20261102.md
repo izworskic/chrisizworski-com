@@ -61,8 +61,8 @@ MSU squash vine borer, incomplete public model method: https://enviroweather.msu
 USA-NPN Japanese beetle: https://www.usanpn.org/data/maps/forecasts/Japanese_beetle
 USA-NPN forecast algorithm matrix: https://www.usanpn.org/data/maps/forecasts
 NWS API: https://www.weather.gov/documentation/services-web-api
-MSU pest scouting: https://www.canr.msu.edu/uploads/resources/pdfs/pest_scouting_in_vegetables.pdf
+MSU pest scouting: https://msu-prod.dotcmscloud.com/resources/ipm_smart_pest_management_for_the_vegetable_garden
 UMN home garden insects: https://extension.umn.edu/yard-and-garden-insects
-MDARD state detection: https://www.michigan.gov/en/invasives/id-report/insects/spotted-lanternfly
+MDARD state detection: https://www.michigan.gov/invasives/id-report/insects/spotted-lanternfly
 MDARD product registration: https://www.michigan.gov/mdard/licensing/pesticide/pestregistration
 Additional original sources, permissions and unknowns: https://github.com/izworskic/chrisizworski-com/issues/1416
