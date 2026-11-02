@@ -17,7 +17,7 @@ async function ready(){
   await ready();
   browser=await chromium.launch({executablePath:process.env.CHROME_PATH||'/usr/bin/google-chrome',headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});
   fs.mkdirSync('artifacts/leafcutter-browser',{recursive:true});
-  for(const width of [390,1440]){
+  for(const width of [360,390,768,1440]){
    const ctx=await browser.newContext({viewport:{width,height:850},deviceScaleFactor:1,reducedMotion:'reduce'});
    const page=await ctx.newPage();
    const errors=[];page.on('pageerror',e=>errors.push(String(e)));
@@ -54,7 +54,28 @@ async function ready(){
     await route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(data)});
    });
    await page.goto(ORIGIN+'/leafcutter-bees/',{waitUntil:'domcontentloaded'});
-   assert.equal(await page.locator('h1').innerText(),'Meet the leafcutter bee.');
+   assert.match(await page.locator('h1').innerText(),/Leafcutter bees: the leaf is only the beginning/);
+   assert.ok(await page.locator('#bee-nest-year').isVisible(),'Seasonal nest journal is a prominent usable tool');
+   const originalMonth=await page.locator('#month').inputValue();
+   const originalAnswer=await page.locator('#bee-first-title').innerText();
+   await page.locator('[data-journey-phase="spring"]').click();
+   assert.equal(await page.locator('#month').inputValue(),'3');
+   assert.match(await page.locator('#bee-story-title').innerText(),/Make a little room/);
+   assert.equal(await page.locator('#bee-year-display').getAttribute('data-phase'),'spring');
+   assert.equal(await page.locator('#bee-first-title').innerText(),await page.locator('#result-title').innerText());
+   const springAnswer=await page.locator('#bee-first-title').innerText();
+   await page.locator('[data-journey-phase="summer"]').click();
+   assert.equal(await page.locator('#month').inputValue(),'6');
+   assert.match(await page.locator('#bee-story-title').innerText(),/A small bee/);
+   assert.notEqual(await page.locator('#bee-first-title').innerText(),springAnswer);
+   await page.locator('[data-journey-phase="spring"]').click();
+   assert.equal(await page.locator('#bee-first-title').innerText(),springAnswer,'A to B to A restores the same answer');
+   await page.locator('#month').selectOption(originalMonth);
+   assert.equal(await page.locator('#bee-first-title').innerText(),originalAnswer,'The original season restores the original answer');
+   await page.locator('#flowers').selectOption('yes');
+   assert.match(await page.locator('#bee-evidence-observed').innerText(),/You reported plentiful open flowers/);
+   await page.locator('#flowers').selectOption('unknown');
+   assert.match(await page.locator('#bee-evidence-observed').innerText(),/Flowering has not been confirmed/);
    assert.ok(await page.locator('#bee-forecast-desk').isVisible());
    assert.match(await page.locator('#bee-flower-guide').innerText(),/typical flowering month|climatological/i);
    await page.locator('#bee-check').click();
@@ -64,6 +85,8 @@ async function ready(){
    await page.waitForFunction(()=>document.querySelector('#bee-seasonal-total')?.textContent.includes('2805.3'),null,{timeout:6000});
    assert.equal(await page.locator('#bee-seasonal-anomaly').innerText(),'+237.4 °F·days');
    assert.equal(await page.locator('#bee-seasonal-week').innerText(),'+87.4 °F·days');
+   assert.match(await page.locator('#bee-evidence-accumulated').innerText(),/2805.3/);
+   assert.match(await page.locator('#bee-evidence-forecast').innerText(),/No two-day 75°F/);
    assert.equal(await page.locator('#bee-gdd-total').innerText(),'32.5 °F·days');
    assert.equal(await page.locator('#bee-gdd-days').innerText(),'2');
    assert.equal(await page.locator('#bee-gdd-hours').innerText(),'0');
@@ -79,6 +102,7 @@ async function ready(){
    await page.waitForFunction(()=>document.querySelector('#bee-seasonal-anomaly')?.textContent==='Not mapped',null,{timeout:6000});
    assert.equal(await page.locator('#bee-seasonal-total').innerText(),'2805.3 °F·days');
    assert.match(await page.locator('#bee-seasonal-note').innerText(),/no published data/);
+   assert.match(await page.locator('#bee-evidence-accumulated').innerText(),/Historical anomaly not mapped/);
       await page.locator('#bee-zip').fill('48707');
    await page.locator('#bee-check').click();
    await page.waitForFunction(()=>document.querySelector('#bee-weather-status')?.textContent.includes('no mapped Census area'),null,{timeout:6000});
@@ -86,6 +110,8 @@ async function ready(){
    assert.equal(await page.locator('.bee-day').count(),0,'Unmapped ZIP must not retain prior forecast cards');
    assert.notEqual(await page.locator('#bee-seasonal-total').innerText(),'2805.3 °F·days','Unmapped ZIP must clear previous seasonal heat');
    assert.ok(!(await page.locator('#bee-heat-meter').isVisible()),'Unmapped ZIP must clear old warmth numbers');
+   assert.doesNotMatch(await page.locator('#bee-evidence-accumulated').innerText(),/2805.3/,'Unmapped ZIP must not retain last location');
+   assert.match(await page.locator('#bee-evidence-forecast').innerText(),/No verified forecast/);
    await page.locator('#bee-zip').fill('');
    await page.locator('#bee-check').click();
    await page.waitForFunction(()=>document.querySelectorAll('.bee-day').length===2,null,{timeout:6000});
@@ -102,7 +128,10 @@ async function ready(){
   const page=await noJs.newPage();await page.goto(ORIGIN+'/leafcutter-bees/',{waitUntil:'domcontentloaded'});
   assert.match(await page.locator('body').innerText(),/This optional forecast requires JavaScript/);
   assert.ok(await page.locator('#research').isVisible());
+  assert.match(await page.locator('.bee-first-answer').innerText(),/Start with the habitat/);
+  assert.match(await page.locator('#bee-nest-year').innerText(),/LEAVE|Autumn|AUTUMN/i);
+  assert.ok(await page.locator('[data-journey-phase="fall"]').isVisible());
   await noJs.close();
-  console.log('Leafcutter weather desk browser QA passed at 390/1440 px, including no-JS fallback.');
+  console.log('Leafcutter nest-year Experience OS browser QA passed at 360/390/768/1440 px, including A-B-A seasons, source lanes and no-JS.');
  }finally{if(browser)await browser.close();server.kill('SIGTERM');}
 })().catch(e=>{console.error(e);process.exitCode=1});
