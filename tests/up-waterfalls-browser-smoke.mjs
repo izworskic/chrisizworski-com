@@ -30,7 +30,11 @@ try{
   });
   await run('mobile map initializes from local Leaflet JS and CARTO tiles',async()=>{
     await page.waitForFunction(()=>!!window.UPWaterfallMap,{timeout:15000});
-    assert.ok(await page.locator('img.leaflet-tile[src*="cartocdn.com"]').count()>0);
+    await page.waitForFunction(()=>[...document.querySelectorAll('img.leaflet-tile')].some(x=>x.complete&&x.naturalWidth>=200&&(x.src.includes('tile.openstreetmap.org')||x.src.includes('cartocdn.com')&&x.src.includes('?key='))),{timeout:15000});
+    assert.ok(await page.locator('img.leaflet-tile[src*="tile.openstreetmap.org"],img.leaflet-tile[src*="cartocdn.com"][src*="?key="]').count()>0,'only licensed OSM or keyed CARTO tiles may render');
+    assert.ok(await page.locator('#falls-basemap-status').count()>0);
+    const sources=await page.locator('img.leaflet-tile').evaluateAll(imgs=>imgs.map(x=>x.src));
+    assert.ok(!sources.some(src=>src.includes('cartocdn.com')&&!src.includes('?key=')),'keyless CARTO renders watermark');
     assert.ok(await page.locator('script[src="/assets/leaflet-1.9.4.js"]').count()>0);
   });
   await run('390px mobile document fits viewport',async()=>{
