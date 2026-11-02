@@ -134,36 +134,30 @@ try{
     assert.match(await page.locator('#geo-candidate-status').innerText(),/research points displayed/i);
   });
 
-  await run('Chicagon and Gabbro geographic pins expose audited road gates, not directions',async()=>{
-    const results=await page.evaluate(()=>{
+  await run('Chicagon research pin remains blocked while Gabbro is promoted to a single curated marker',async()=>{
+    const data=await page.evaluate(()=>{
       const map=window.UPWaterfallMap;
-      if(!map)throw Error('Waterfall map absent');
-      const targets=[{name:'Chicagon',lat:46.134032,lng:-88.452985},{name:'Gabbro',lat:46.502079,lng:-89.992485}];
-      return targets.map(t=>{
-        let found=null;
-        map.eachLayer(layer=>{
-          if(typeof layer.getLayers!=='function')return;
-          for(const marker of layer.getLayers()){
-            if(typeof marker.getLatLng!=='function')continue;
-            const point=marker.getLatLng();
-            if(Math.abs(point.lat-t.lat)<0.00006&&Math.abs(point.lng-t.lng)<0.00006)found=marker;
-          }
-        });
-        if(!found||!found.getPopup())throw Error(t.name+' GIS research marker missing');
-        const body=found.getPopup().getContent();
-        return {name:t.name,text:body.textContent,rows:body.querySelectorAll('ol.route-evidence-list li').length,links:body.querySelectorAll('ol.route-evidence-list a[href^="https://"]').length};
+      const target={lat:46.134032,lng:-88.452985};
+      let found=null;
+      map.eachLayer(layer=>{
+        if(typeof layer.getLayers!=='function')return;
+        for(const marker of layer.getLayers()){
+          if(typeof marker.getLatLng!=='function')continue;
+          const p=marker.getLatLng();
+          if(Math.abs(p.lat-target.lat)<0.00006&&Math.abs(p.lng-target.lng)<0.00006)found=marker;
+        }
       });
+      if(!found||!found.getPopup())throw Error('Chicagon geographic research point missing');
+      const body=found.getPopup().getContent();
+      return {text:body.textContent,rows:body.querySelectorAll('ol.route-evidence-list li').length,links:body.querySelectorAll('ol.route-evidence-list a[href^="https://"]').length};
     });
-    for(const v of results){
-      assert.ok(v.rows>=6,v.name+' missing access route steps');
-      assert.equal(v.links,v.rows,v.name+' must source each segment');
-      assert.match(v.text,/Road-to-waterfall access evidence/);
-      assert.match(v.text,/Public access not established/);
-      assert.match(v.text,/Do not drive|Do NOT navigate|do NOT navigate/i);
-      assert.doesNotMatch(v.text,/Google Maps driving directions/);
-    }
-    assert.match(results.find(x=>x.name==='Chicagon').text,/DNR.*forest parcel|state forest parcel|47\.8-acre/);
-    assert.match(results.find(x=>x.name==='Gabbro').text,/Blackjack|ski hill/i);
+    assert.ok(data.rows>=6);assert.equal(data.links,data.rows);
+    assert.match(data.text,/Public access not established/);
+    assert.match(data.text,/Do not drive|Do NOT navigate|do NOT navigate/i);
+    assert.doesNotMatch(data.text,/Google Maps driving directions/);
+    assert.equal(await page.locator('[data-fall][data-gis-oid="38"][data-id="gabbro-falls"]').count(),1);
+    assert.ok(!await page.evaluate(()=>[...document.querySelectorAll('[data-fall]')].some(x=>x.dataset.id==='gabbro-falls'&&x.dataset.arrivalVerified!=='verified')));
+    assert.equal(await page.locator('[data-id="gabbro-falls"] a[href="/upper-peninsula-waterfalls/gabbro-falls/"]').count()>0,true);
   });
   await run('desktop layout and map usable',async()=>{
     await page.setViewportSize({width:1280,height:850});
@@ -193,7 +187,7 @@ try{
     assert.ok(scroll<=width+2,'Bonanza page horizontal overflow '+scroll+' > '+width);
     await page.screenshot({path:screenshots+'/bonanza-township-park-mobile.png',fullPage:true,animations:'disabled'});
   });
-  for(const [id,expectedIndex] of [['wright-street-falls',true],['bond-falls',true],['munising-falls',true],['canyon-falls',true],['scott-falls',true],['o-kun-de-kun-falls',true],['upper-hungarian-falls',true],['lower-hungarian-falls',true],['fumee-falls',true],['sand-portage-falls',true],['quiver-falls',true],['pemene-falls',true],['misicot-falls',true],['duppy-falls',true],['mex-i-min-e-falls',true],['jacobs-falls',true],['manganese-falls',true],['wyandotte-falls',true],['rock-river-falls',true],['morgan-falls',true],['falls-river-trail',true],['sturgeon-falls',true],['twin-waterfalls-memorial-preserve',true],['houghton-douglass-falls',true],['power-house-falls',true],['lower-silver-falls',false],['tibbets-falls',true],['bridalveil-falls',true],['lepisto-falls',true],['trappers-falls',true],['explorers-falls',true],['shining-cloud-falls',true],['big-erics-falls',true],['tioga-park-falls',true],['yondota-falls',true]]){
+  for(const [id,expectedIndex] of [['gabbro-falls',true],['wright-street-falls',true],['bond-falls',true],['munising-falls',true],['canyon-falls',true],['scott-falls',true],['o-kun-de-kun-falls',true],['upper-hungarian-falls',true],['lower-hungarian-falls',true],['fumee-falls',true],['sand-portage-falls',true],['quiver-falls',true],['pemene-falls',true],['misicot-falls',true],['duppy-falls',true],['mex-i-min-e-falls',true],['jacobs-falls',true],['manganese-falls',true],['wyandotte-falls',true],['rock-river-falls',true],['morgan-falls',true],['falls-river-trail',true],['sturgeon-falls',true],['twin-waterfalls-memorial-preserve',true],['houghton-douglass-falls',true],['power-house-falls',true],['lower-silver-falls',false],['tibbets-falls',true],['bridalveil-falls',true],['lepisto-falls',true],['trappers-falls',true],['explorers-falls',true],['shining-cloud-falls',true],['big-erics-falls',true],['tioga-park-falls',true],['yondota-falls',true]]){
     await run(id+' visitor page routes, sources, and indexing',async()=>{
       await page.setViewportSize({width:390,height:844});
       await page.goto(base+'/upper-peninsula-waterfalls/'+id+'/',{waitUntil:'domcontentloaded'});
@@ -205,6 +199,19 @@ try{
       await page.waitForFunction(()=>!!document.querySelector('.detail-map .leaflet-pane'),{timeout:10000});
       const metrics=await page.evaluate(()=>({width:innerWidth,scroll:document.documentElement.scrollWidth}));
       assert.ok(metrics.scroll<=metrics.width+2,id+' mobile horizontal overflow');
+      if(id==='gabbro-falls'){
+        const text=await page.locator('body').innerText();
+        assert.match(text,/Snowriver/);
+        assert.match(text,/City of Bessemer/);
+        assert.match(text,/0\.3.mile/i);
+        assert.match(text,/non.guest|not.*guest/i);
+        assert.match(text,/service road/i);
+        assert.match(text,/winter.*not.*open|winter.*not.*guarantee|Winter: not an open-now/i);
+        assert.equal(await page.locator('#mini-map[data-lat="46.502079"][data-lng="-89.992485"]').count(),1);
+        assert.ok(!await page.locator('#mini-map').getAttribute('data-parking-lat'),'Gabbro has no surveyed parking point');
+        await page.waitForFunction(()=>[...document.querySelectorAll('#mini-map img.leaflet-tile')].some(x=>x.complete&&x.naturalWidth>=180),{timeout:18000});
+        await page.screenshot({path:screenshots+'/gabbro-falls-mobile.png',fullPage:true,animations:'disabled'});
+      }
       if(id==='wright-street-falls'){
         const body=await page.locator('body').innerText();
         assert.match(body,/Wright Street/);
