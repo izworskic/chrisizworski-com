@@ -2,6 +2,7 @@
 const test=require('node:test'),assert=require('node:assert/strict');
 const engine=require('../lib/japanese-beetle-forecast.cjs');
 const api=require('../api/japanese-beetle-forecast.js');
+const monitor=require('../scripts/audit-japanese-beetle-source.cjs');
 function coverage(layer,dates=['2026-10-31','2026-11-01','2026-11-02']){
  return '<?xml version="1.0"?><wcs:CoverageDescription><wcs:CoverageOffering>'+
  '<wcs:name>'+layer+'</wcs:name><wcs:domainSet><wcs:temporalDomain>'+
@@ -144,4 +145,27 @@ test('ten source point values from Nov 2 2026 research are recorded as evidence,
   assert.equal(engine.modelDate(2026,day).slice(0,4),'2026');
  }
  assert.equal(engine.POINT_FALLBACK,undefined,'Historic numeric examples must never replace missing real raster data');
+});
+
+test('operator audit counts technical successes without interpreting model coverage as biological presence',async()=>{
+ const response=await monitor.audit(new Date('2026-11-02T18:00:00Z'),async site=>({
+  status:'OFFICIAL_MODEL_AVAILABLE',sourceDate:'2026-11-02',sourceKind:'OFFICIAL_SPECIES_SPECIFIC_GRIDDED_MODEL',
+  stages:{adult:{dayOfYear:site.lat>46?213:186},egg:{dayOfYear:site.lat>46?260:217}},
+  verdict:{status:'OFF_SEASON'}
+ }));
+ assert.equal(response.status,'HEALTHY');
+ assert.equal(response.successful,3);
+ assert.equal(response.attempted,3);
+ assert.ok(response.checks.every(x=>x.verdict==='OFF_SEASON'));
+ assert.ok(response.note.includes('not pest population'));
+});
+test('April source cold-start is tracked as not published; in-season provider failure is not hidden',async()=>{
+ const err=async()=>{throw Error('COVERAGE_STALE_SEASON');};
+ const april=await monitor.audit(new Date('2027-04-02T18:00:00Z'),err);
+ assert.equal(april.status,'MODEL_NOT_YET_PUBLISHED');
+ assert.equal(april.successful,0);
+ const may=await monitor.audit(new Date('2027-05-02T18:00:00Z'),err);
+ assert.equal(may.status,'PROVIDER_DEGRADED');
+ const outage=await monitor.audit(new Date('2027-04-02T18:00:00Z'),async()=>{throw Error('COVERAGE_PROVIDER_UNAVAILABLE');});
+ assert.equal(outage.status,'PROVIDER_DEGRADED');
 });
