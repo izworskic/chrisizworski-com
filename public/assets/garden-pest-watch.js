@@ -295,8 +295,78 @@ const beetleState=$('beetle-evidence-type'),beetleAnswer=$('beetle-answer'),beet
  beetleLocation=$('beetle-location'),beetleAdult=$('beetle-adult-date'),beetleEgg=$('beetle-egg-date'),
  beetleSource=$('beetle-source-note'),beetleRaster=$('beetle-raster-source'),biologyEvidence=$('biology-evidence');
 let beetleSeq=0;
+const fieldPanel=$('beetle-field-check'),fieldEvidence=fieldPanel?.querySelector('.beetle-field-evidence'),
+ fieldStatus=$('beetle-field-status'),fieldFirst=$('beetle-field-first'),
+ fieldCompare=$('beetle-field-comparison'),fieldCaveat=$('beetle-field-caveat'),fieldLinks=$('beetle-field-links');
+let fieldSeq=0;
+function fieldReset(message){
+ fieldSeq++;
+ if(!fieldStatus)return;
+ fieldStatus.textContent='FIELD SOURCE · NOT VERIFIED';
+ fieldFirst.textContent='No verified field date yet';
+ fieldCompare.textContent=message||'The independent observation source has not been checked for this crop and location.';
+ fieldCaveat.textContent='Unknown or missing sightings never mean no beetles. Voluntary observations cannot determine forecast accuracy.';
+ fieldEvidence.className='beetle-field-evidence is-missing';
+ const a=el('a','', 'See Michigan Japanese beetle records on iNaturalist');
+ a.href='https://www.inaturalist.org/observations?taxon_id=67760&place_id=29';
+ fieldLinks.replaceChildren(a);
+}
+function fieldDate(date){return new Date(date+'T12:00:00Z').toLocaleDateString('en-US',{timeZone:'UTC',month:'short',day:'numeric',year:'numeric'});}
+function fieldComparison(observed,modeled){
+ const ms=Date.parse(observed+'T12:00:00Z')-Date.parse(modeled+'T12:00:00Z');
+ if(!Number.isFinite(ms))return 'Source dates are not comparable.';
+ const days=Math.round(ms/86400000);
+ if(days<0)return 'The earliest qualifying public sighting is '+Math.abs(days)+' days before the model threshold at the reference point. Nearby observations may differ from the model pixel; this warrants further review, not an accuracy verdict.';
+ if(days>0)return 'The earliest qualifying public sighting is '+days+' days after the model threshold. That does not prove the model was on time: earlier beetles could have gone unreported.';
+ return 'The earliest qualifying public sighting and modeled stage share a calendar date. A match does not establish forecast accuracy.';
+}
+async function loadFieldEvidence(model,ref){
+ const ticket=++fieldSeq,year=model.year;
+ fieldStatus.textContent='CHECKING RESEARCH-GRADE FIELD RECORDS';
+ fieldFirst.textContent='Reading dated public sightings…';
+ fieldCompare.textContent='Independent iNaturalist photo records, not a source of modelled weather or non-detections.';
+ const p=new URLSearchParams({year:String(year)});
+ if(ref)p.set('zip',ref);else p.set('site','bay-city');
+ try{
+  const response=await fetch('/api/japanese-beetle-field-evidence?'+p.toString(),{headers:{accept:'application/json'},signal:AbortSignal.timeout(13000)});
+  if(!response.ok)throw Error('FIELD_SOURCE_UNAVAILABLE');
+  const d=await response.json();
+  if(ticket!==fieldSeq)return;
+  if(d?.schema!=='japanese-beetle-field-evidence-v1'||d.year!==year||
+  !['DOCUMENTED_PRESENCE','NO_QUALIFYING_RECORDS_IN_SAMPLE'].includes(d.status)||
+  !d.observationalEvidence||!Number.isInteger(d.observationalEvidence.inspectedResults)||
+  !Array.isArray(d.observationalEvidence.examples))throw Error('FIELD_SOURCE_SCHEMA_INVALID');
+  const e=d.observationalEvidence;
+  fieldEvidence.className='beetle-field-evidence '+(d.status==='DOCUMENTED_PRESENCE'?'is-present':'is-missing');
+  fieldStatus.textContent=d.status==='DOCUMENTED_PRESENCE'?'PHOTOGRAPHED PRESENCE · INDEPENDENT SOURCE':'NO QUALIFYING PUBLIC PHOTO IN SAMPLE';
+  const dated=typeof e.firstObservationDate==='string'&&/^\d{4}-\d\d-\d\d$/.test(e.firstObservationDate)&&e.firstObservationDate.startsWith(String(year));
+  if(d.status==='DOCUMENTED_PRESENCE'&&!dated)throw Error('FIELD_DATE_INVALID');
+  fieldFirst.textContent=dated?'First eligible record: '+fieldDate(e.firstObservationDate):'No qualifying date in checked records';
+  fieldCompare.textContent=dated?fieldComparison(e.firstObservationDate,model.stages.adult.approximateDate):
+   'No qualifying record was found in the inspected source sample. This cannot rule out beetles at any Michigan location.';
+  fieldCaveat.textContent='Independent iNaturalist research-grade photos within 25 km (15.5 miles) of the reference point. '+
+    e.inspectedResults+' source record(s) inspected; '+e.qualifyingRecords+' met the conservative public-location filters. '+
+    (e.limitedSearch?'More source records exist than this bounded sample; it is not exhaustive. ':'')+
+    'Neither observed first emergence nor egg hatch is established. Checked '+fieldDate(d.checkedAt.slice(0,10))+'.';
+  const a=el('a','', 'Explore the original records');
+  a.href='https://www.inaturalist.org/observations?taxon_id=67760&place_id=29';
+  const children=[a];
+  for(const rec of e.examples.slice(0,3)){
+   if(typeof rec.url==='string'&&/^https:\/\/www\.inaturalist\.org\/observations\/\d+$/.test(rec.url)&&
+    typeof rec.date==='string'&&/^\d{4}-\d\d-\d\d$/.test(rec.date)){
+    const link=el('a','', 'View '+fieldDate(rec.date)+' photo record');
+    link.href=rec.url;link.target='_blank';link.rel='noopener noreferrer';children.push(link);
+   }
+  }
+  fieldLinks.replaceChildren(...children);
+ }catch(_error){
+  if(ticket===fieldSeq)fieldReset('Field observation data could not be checked. We are not showing zero sightings or using historical model output as an observation.');
+ }
+}
+
 function resetBeetle(message,mode='unknown'){
  beetleSeq++;
+ fieldReset('Update the watch to examine dated observations for the same location as the verified model.');
  beetleState.className='beetle-state'+(mode==='unknown'?' is-unknown':'');
  beetleState.textContent=mode==='not-applicable'?'NOT A PILOT HOST':'OFFICIAL MODEL · NOT VERIFIED';
  beetleAnswer.textContent=mode==='not-applicable'?'Choose a Japanese beetle host crop.':'No current official beetle timing verified.';
@@ -364,6 +434,7 @@ async function updateBeetle(d){
   if(req!==beetleSeq)return;
   if(!validBeetle(payload,selected))throw Error('INVALID_FORECAST_EVIDENCE');
   renderBeetle(payload);
+  loadFieldEvidence(payload,ref);
  }catch(_error){if(req===beetleSeq)resetBeetle('The official species-specific forecast, time dimension or reference pixel is unavailable. Continue plant inspection and consult the linked USA-NPN map; an unknown model result is never low risk.');}
 }
 
