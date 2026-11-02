@@ -19,11 +19,17 @@ test('batch 38: source-backed private, gated and ambiguous waterfalls retain res
 test('queue v2 rotates fresh source discovery ahead of fully blocked routes without publishing unsafe sites',()=>{
  assert.equal(q.candidates.length,r.counts.pending);
  assert.equal(q.batches.length,Math.ceil(q.candidates.length/q.batchSize));
- assert.equal(q.candidates[0].reviewStage,'first-source-discovery');
+ // Exhaust the fresh pool legitimately: once every named candidate has at least a first source review,
+ // the highest priority moves to incomplete source audits, then to blocked records.
+ const fresh=q.candidates.filter(x=>x.reviewStage==='first-source-discovery');
+ const incomplete=q.candidates.filter(x=>x.reviewStage==='incomplete-source-audit');
+ const expectedStage=fresh.length?'first-source-discovery':incomplete.length?'incomplete-source-audit':'awaiting-new-authoritative-evidence';
+ assert.equal(q.candidates[0].reviewStage,expectedStage);
+ assert.ok(q.candidates.every((x,i)=>i===0||q.candidates[i-1].priorityScore>=x.priorityScore),'review queue sorted by priority');
  for(const id of [160,195,205]){
   const row=q.candidates.find(x=>x.gisObjectId===id);
   assert.equal(row.reviewStage,'awaiting-new-authoritative-evidence');
-  assert.ok(row.priorityScore<q.candidates[0].priorityScore);
+  if(expectedStage!=='awaiting-new-authoritative-evidence')assert.ok(row.priorityScore<q.candidates[0].priorityScore);
   assert.equal(row.publicationEligible,false);
  }
  assert.ok(q.candidates.every(x=>x.publicationEligible===false));

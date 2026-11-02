@@ -13,141 +13,141 @@
     {
       "batchNumber": 1,
       "candidates": [
-        152,
-        176,
-        177,
-        23,
         213,
         68,
         8,
-        38
+        38,
+        12,
+        4,
+        9,
+        191
       ]
     },
     {
       "batchNumber": 2,
       "candidates": [
-        12,
-        4,
-        9,
-        191,
         192,
         46,
         91,
-        119
+        119,
+        190,
+        45,
+        150,
+        151
       ]
     },
     {
       "batchNumber": 3,
       "candidates": [
-        190,
-        45,
-        150,
-        151,
         154,
         160,
         215,
-        195
+        195,
+        205,
+        51,
+        52,
+        59
       ]
     },
     {
       "batchNumber": 4,
       "candidates": [
-        205,
-        51,
-        52,
-        59,
         83,
         99,
         103,
-        105
+        105,
+        107,
+        114,
+        120,
+        121
       ]
     },
     {
       "batchNumber": 5,
       "candidates": [
-        107,
-        114,
-        120,
-        121,
         123,
         20,
         24,
-        25
+        25,
+        37,
+        39,
+        40,
+        48
       ]
     },
     {
       "batchNumber": 6,
       "candidates": [
-        37,
-        39,
-        40,
-        48,
         58,
         63,
         65,
-        69
+        69,
+        70,
+        74,
+        75,
+        86
       ]
     },
     {
       "batchNumber": 7,
       "candidates": [
-        70,
-        74,
-        75,
-        86,
         112,
         29,
         42,
-        80
+        80,
+        85,
+        129,
+        15,
+        17
       ]
     },
     {
       "batchNumber": 8,
       "candidates": [
-        85,
-        129,
-        15,
-        17,
         136,
         137,
         139,
-        140
+        140,
+        144,
+        18,
+        116,
+        127
       ]
     },
     {
       "batchNumber": 9,
       "candidates": [
-        144,
-        18,
-        116,
-        127,
         148,
         149,
+        152,
         153,
-        162
+        162,
+        163,
+        170,
+        172
       ]
     },
     {
       "batchNumber": 10,
       "candidates": [
-        163,
-        170,
-        172,
         173,
         175,
+        176,
+        177,
         180,
         181,
-        183
+        183,
+        184
       ]
     },
     {
       "batchNumber": 11,
       "candidates": [
-        184,
         185,
         186,
         187,
         22,
+        23,
         28,
         54,
         57
@@ -167,70 +167,6 @@
     }
   ],
   "candidates": [
-    {
-      "gisObjectId": 152,
-      "name": "Lower Falls",
-      "county": "MARQUETTE",
-      "river": "SNAKE CREEK",
-      "lat": 46.815112,
-      "lng": -87.804203,
-      "cluster": "MARQUETTE / SNAKE CREEK",
-      "priorityScore": 45,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 176,
-      "name": "First Falls",
-      "county": "MARQUETTE",
-      "river": "EAST BRANCH ESCANABA",
-      "lat": 46.285073,
-      "lng": -87.43462,
-      "cluster": "MARQUETTE / EAST BRANCH ESCANABA",
-      "priorityScore": 45,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 177,
-      "name": "Second Falls",
-      "county": "MARQUETTE",
-      "river": "EAST BRANCH ESCANABA",
-      "lat": 46.285692,
-      "lng": -87.43413,
-      "cluster": "MARQUETTE / EAST BRANCH ESCANABA",
-      "priorityScore": 45,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 23,
-      "name": "Little Falls",
-      "county": "ONTONAGON",
-      "river": "MID ONTONAGON RIVER",
-      "lat": 46.377188,
-      "lng": -89.099486,
-      "cluster": "ONTONAGON / MID ONTONAGON RIVER",
-      "priorityScore": 45,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
     {
       "gisObjectId": 213,
       "name": "Alger Falls",
@@ -1288,6 +1224,22 @@
       "blockingGate": "Current exact land parcel and owner, express tourist sightseeing permission, approved parking/road, fully legal footpath and current restrictions."
     },
     {
+      "gisObjectId": 152,
+      "name": "Lower Falls",
+      "county": "MARQUETTE",
+      "river": "SNAKE CREEK",
+      "lat": 46.815112,
+      "lng": -87.804203,
+      "cluster": "MARQUETTE / SNAKE CREEK",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 6,
+      "blockingGate": "Verify official hydrography and the 49-m GIS/GNIS probable mainstem Lower Falls alias, confirm exact present owner and public access permission, and obtain current legal parking and a continuous public trail before any promotion. Until then do not imply any club entry is permitted."
+    },
+    {
       "gisObjectId": 153,
       "name": "Alder Falls",
       "county": "MARQUETTE",
@@ -1398,6 +1350,38 @@
       "reviewStatus": "previous-research-needs-public-access-review",
       "sourceCount": 4,
       "blockingGate": "Resolve GIS-vs-field position to the exact low drops and verify all parcels if keeping in natural-feature map; do not promote, index or navigate without new authoritative evidence."
+    },
+    {
+      "gisObjectId": 176,
+      "name": "First Falls",
+      "county": "MARQUETTE",
+      "river": "EAST BRANCH ESCANABA",
+      "lat": 46.285073,
+      "lng": -87.43462,
+      "cluster": "MARQUETTE / EAST BRANCH ESCANABA",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 5,
+      "blockingGate": "Confirm actual day-use parking and current season opening with Forsyth Township and identify the maintained or accepted river-trail endpoint for the approximately 10-matched First Falls feature. If promoting, present primarily as an honest municipal riverside walk and minor drop, not a major waterfall attraction."
+    },
+    {
+      "gisObjectId": 177,
+      "name": "Second Falls",
+      "county": "MARQUETTE",
+      "river": "EAST BRANCH ESCANABA",
+      "lat": 46.285692,
+      "lng": -87.43413,
+      "cluster": "MARQUETTE / EAST BRANCH ESCANABA",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 5,
+      "blockingGate": "Reconcile GIS #177 against firsthand 357-m-upstream coordinate with township/hydrographic field evidence, confirm whether First/Second are separately signed named drops, and map only a municipally approved parking-to-viewpoint trail if one is confirmed."
     },
     {
       "gisObjectId": 180,
@@ -1526,6 +1510,22 @@
       "reviewStatus": "previous-research-needs-public-access-review",
       "sourceCount": 5,
       "blockingGate": "Reconcile Rock Bluff, Upper Rock Bluff and the Mateson Creek report with independently surveyed or official geographic identity; verify parcels, road jurisdiction, signed public parking and a continuous authorized walking corridor to the correct drops."
+    },
+    {
+      "gisObjectId": 23,
+      "name": "Little Falls",
+      "county": "ONTONAGON",
+      "river": "MID ONTONAGON RIVER",
+      "lat": 46.377188,
+      "lng": -89.099486,
+      "cluster": "ONTONAGON / MID ONTONAGON RIVER",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 7,
+      "blockingGate": "Resolve state GIS Middle Branch versus firsthand Interior Creek label, establish current regulated flowage pool level and appearance, prove road ownership and legal vehicle/shoreline access, and obtain a signed or otherwise verified complete visitor foot corridor before public routing."
     },
     {
       "gisObjectId": 28,
