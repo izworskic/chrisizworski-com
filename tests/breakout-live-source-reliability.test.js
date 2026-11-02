@@ -57,3 +57,10 @@ test('upstream outage yields an explicit fail-closed visitor state',async()=>{
     assert.match(res.body.detail,/official source/i);
   }finally{global.fetch=original;}
 });
+
+test('Vercel serves local breakout handler rather than bypassing it with a remote rewrite',()=>{
+  const fs=require('node:fs');
+  const vercel=JSON.parse(fs.readFileSync('vercel.json','utf8'));
+  assert.equal((vercel.rewrites||[]).filter(x=>x.source==='/api/breakout-live').length,0);
+  assert.equal(fs.existsSync('api/breakout-live.js'),true);
+});
