@@ -36,15 +36,19 @@ function planner(options={}) {
     ...element('season-' + v),
     getAttribute(k) { return k === 'data-season' ? v : this.attrs[k]; }
   }));
+  const journeys = ['spring','summer','fall','winter'].map(v => ({
+    ...element('journey-' + v),
+    getAttribute(k) { return k === 'data-journey-phase' ? v : this.attrs[k]; }
+  }));
   const document = {
     getElementById: element,
-    querySelectorAll(q) { return q === '[data-path]' ? paths : q === '[data-season]' ? seasons : []; },
+    querySelectorAll(q) { return q === '[data-path]' ? paths : q === '[data-season]' ? seasons : q === '[data-journey-phase]' ? journeys : []; },
     createElement(tag) { return { textContent: '', tag, appendChild() {}, className: '', attrs: {} }; },
     createTextNode(t) { return {textContent:t}; }
   };
   vm.runInNewContext(script, { document, Date: options.Date || Date, fetch: options.fetch });
   function set(k, v) { nodes[k].value = v; const event=nodes[k].handlers.change||nodes[k].handlers.input; if(event)event(); else throw new Error('No handler for '+k); }
-  return { nodes, paths, seasons, set,
+  return { nodes, paths, seasons, journeys, set,
     title: () => nodes['result-title'].textContent,
     caveat: () => nodes['result-caveat'].textContent };
 }
@@ -64,6 +68,51 @@ test('leafcutter guide is indexable with valid JSON-LD, primary sources and acce
   assert.ok((html.match(/<img\b/g) || []).length >= 2);
 });
 
+test('Experience OS field journal follows the same month, decision and seasonal nest chapter',()=>{
+ const p=planner();
+ const base=p.nodes['result-title'].textContent;
+ assert.equal(p.nodes['bee-first-title'].textContent,base);
+ p.journeys[0].handlers.click();
+ assert.equal(p.nodes.month.value,'3');
+ assert.match(p.nodes['bee-story-title'].textContent,/Make a little room/);
+ assert.equal(p.nodes['bee-year-display'].attrs['data-phase'],'spring');
+ assert.equal(p.nodes['bee-first-title'].textContent,p.title());
+ const spring=p.title();
+ const springChapterAction=p.nodes['bee-story-action'].textContent;
+ p.journeys[1].handlers.click();
+ assert.equal(p.nodes.month.value,'6');
+ assert.match(p.nodes['bee-story-title'].textContent,/A small bee/);
+ assert.equal(p.title(),spring,'Habitat-first verdict remains correct without a nest in either season');
+ assert.notEqual(p.nodes['bee-story-action'].textContent,springChapterAction,'Season-specific garden work should change');
+ p.journeys[0].handlers.click();
+ assert.equal(p.title(),spring);
+ assert.equal(p.nodes['bee-story-action'].textContent,springChapterAction,'A-B-A restores first field-note action');
+ p.set('flowers','yes');
+ assert.match(p.nodes['bee-evidence-observed'].textContent,/You reported plentiful open flowers/);
+ p.set('flowers','unknown');
+ assert.match(p.nodes['bee-evidence-observed'].textContent,/Flowering has not been confirmed/);
+ p.set('month','10');
+ assert.equal(p.nodes['bee-year-display'].attrs['data-phase'],'fall');
+ assert.match(p.nodes['bee-first-meta'].textContent,/scenario/);
+ assert.equal(p.nodes['bee-first-title'].textContent,p.title());
+ const previous=p.nodes['bee-evidence-accumulated'].textContent;
+ p.set('region','elsewhere');
+ assert.match(p.nodes['bee-evidence-accumulated'].textContent,/not applicable/);
+ p.set('region','michigan');
+ assert.equal(p.nodes['bee-evidence-accumulated'].textContent,previous,'Returning to Michigan restores the current evidence state');
+});
+test('Experience OS journal has a static, credible no-JavaScript answer and photo credits',()=>{
+ assert.match(html,/id="bee-nest-year"/);
+ assert.match(html,/id="bee-story-action"/);
+ assert.match(html,/id="bee-first-title"/);
+ assert.match(html,/id="bee-evidence-observed"/);
+ assert.match(html,/id="bee-evidence-accumulated"/);
+ assert.match(html,/id="bee-evidence-forecast"/);
+ assert.match(html,/not a nest inspection/i);
+ assert.match(html,/Bob Peterson/);
+ assert.match(html,/CC BY-SA 2.0/);
+ assert.ok(html.indexOf('id="bee-result"')<html.indexOf('id="bee-forecast-desk"'),'Decisive answer precedes optional forecast detail');
+});
 test('leafcutter planner separates winter care and safe summer merchant conditions', () => {
   const p = planner();
   p.set('month', '10'); p.set('nest', 'full');
