@@ -197,4 +197,38 @@ button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid #dc7
 .rl-explain-grid>div{padding-left:12px}
 .rl-footer{padding:23px 16px}
 }
+
+/* Launch-side weather: a distinct decision story, not another spectator card. */
+.rl-range-weather .rl-section-head{align-items:end}
+.rl-range-panel{background:#122f3b;color:#eef6f1;border:1px solid #31505a;border-radius:18px;padding:clamp(18px,3vw,32px);overflow:hidden}
+.rl-range-intro{display:flex;align-items:flex-start;justify-content:space-between;gap:22px;margin-bottom:20px}
+.rl-range-intro .rl-site-kicker{color:#c9dbcb}
+.rl-range-intro h3{font-family:var(--serif);font-size:clamp(22px,2.4vw,33px);line-height:1.2;margin:10px 0}
+.rl-range-intro p{font-size:13px;line-height:1.7;max-width:780px;color:#c7d9da;margin:0}
+.rl-range-intro .rl-status{flex-shrink:0}
+.rl-range-readings{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-bottom:24px}
+.rl-range-metric{padding:17px 14px;background:#e8f1ea;color:#1d3c39;border-radius:10px;min-width:0;min-height:92px}
+.rl-range-metric span{display:block;min-height:29px;text-transform:uppercase;letter-spacing:.1em;font-size:10px;color:#466760;font-weight:800}
+.rl-range-metric strong{display:block;font-family:var(--serif);font-size:clamp(17px,1.7vw,26px);line-height:1.25;overflow-wrap:anywhere}
+.rl-range-detail{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:25px}
+.rl-range-detail h4{margin:0 0 13px;color:#f8e2cc;font-size:15px}
+.rl-range-detail p{font-size:13px;line-height:1.6;color:#c9dada}
+.rl-range-signal{margin-bottom:9px;background:#244552;border-left:3px solid #e7a56d;border-radius:7px;padding:12px}
+.rl-range-signal[data-level="elevated"]{border-left-color:#ed806b}
+.rl-range-signal strong{display:block;font-size:13px;line-height:1.4;color:white}
+.rl-range-signal p{margin:5px 0 0;font-size:12px}
+.rl-range-timeline-list{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(113px,1fr));gap:7px;padding:0;margin:0}
+.rl-range-timepoint{min-width:0;background:#214451;border:1px solid #456874;border-top:3px solid #aac7bc;border-radius:7px;padding:12px 9px;display:flex;flex-direction:column;gap:6px}
+.rl-range-timepoint[data-level="watch"]{border-top-color:#e6b06c}
+.rl-range-timepoint[data-level="elevated"]{border-top-color:#eb7f6b}
+.rl-range-offset{font-size:11px;color:#f5ceaa;text-transform:uppercase;letter-spacing:.08em;font-weight:800}
+.rl-range-timepoint strong{font-size:12px;color:#fff}
+.rl-range-timepoint small{font-size:11px;color:#c9d9db;line-height:1.55}
+.rl-range-source{border-top:1px solid #52707a;margin-top:22px;padding-top:15px;display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap}
+.rl-range-source p{font-size:12px;color:#bdd2d2;line-height:1.65;margin:0;max-width:780px}
+#rl-range-links{display:flex;flex-wrap:wrap;gap:16px}
+#rl-range-links a{color:#f7d8b7;font-size:12px;font-weight:800;text-underline-offset:4px}
+@media(max-width:900px){.rl-range-readings{grid-template-columns:repeat(2,minmax(0,1fr))}.rl-range-detail{grid-template-columns:1fr}}
+@media(max-width:600px){.rl-range-intro{flex-direction:column;gap:12px}.rl-range-readings{gap:7px}.rl-range-metric{padding:12px}.rl-range-metric strong{font-size:19px}.rl-range-timeline-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
