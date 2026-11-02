@@ -69,8 +69,33 @@
    <p class="source-label" id="watch-source-label" role="status" aria-live="polite">This is a seasonal scouting list, not a real-time pest detection service.</p>
    <div id="watch-cards" class="watch-cards"><article class="watch-card"><span class="pest-index">FIELD NOTE</span><h3>Squash stem scouting</h3><p>Inspect squash stems for entry frass, eggs and wilting. Check at-risk plants through summer; in November, focus on next season's crop protection.</p><a href="https://enviroweather.msu.edu/crops/cucurbits/squashvineborer">MSU source and further identification</a></article></div>
  </section>
+ <section class="history-lab" id="history-lab" aria-labelledby="history-heading">
+  <div class="history-eyebrow"><span class="section-kicker">05 / THE SCIENCE LAB</span><span>FIVE HISTORIC SEASONS · NOT A LIVE PEST FORECAST</span></div>
+  <div class="history-layout">
+    <div class="history-intro">
+      <h2 id="history-heading">What did five real seasons of weather tell us?</h2>
+      <p>For Japanese beetles, researchers have published heat thresholds for first adults and average egg hatch. We can reconstruct when those thresholds <em>would have been reached</em> in 2021–2025 using NASA’s daily temperature history near your selected Michigan location.</p>
+      <p>This example applies particularly to Japanese beetle host plants such as beans, grapes, berries, and roses, not automatically to every crop in the selector. These are <strong>temperature-model milestones, not actual beetle sightings</strong>. Local emergence also depends on habitat, soil, and the species' presence. The calculation is an independent research reconstruction and has not been validated to match USA-NPN’s operational forecast.</p>
+      <button type="button" id="history-load" class="history-button" hidden>Explore five seasons at my location <span aria-hidden="true">↗</span></button>
+      <p class="history-status" id="history-status" role="status" aria-live="polite">Available on request. Five complete historical years are required or no timing estimate is displayed.</p>
+    </div>
+    <div class="history-graphic">
+      <div class="history-graphic-heading"><span>HISTORICAL TEMPERATURE LAB</span><span>2021—2025</span></div>
+      <div id="history-results" aria-live="off">
+        <div class="history-placeholder"><span class="history-ring" aria-hidden="true"></span><p>Select “Explore five seasons” to load a documented NASA Daymet series for your reference location.</p></div>
+      </div>
+      <p class="history-note">No future emergence dates, local pest counts, numerical risk percentages, or pesticide schedules are generated from this research.</p>
+    </div>
+  </div>
+  <div class="history-citations">
+    <strong>Scientific provenance</strong>
+    <a href="https://www.usanpn.org/data/maps/forecasts/Japanese_beetle">USA-NPN: Japanese beetle adult / egg hatch method</a>
+    <a href="https://daymet.ornl.gov/web_services">NASA ORNL Daymet: temperature data and API</a>
+    <a href="https://doi.org/10.3334/ORNLDAAC/2129">Daymet V4 R1 dataset citation</a>
+  </div>
+ </section>
  <section class="garden-check" aria-labelledby="report-heading">
-  <div class="check-copy"><span class="section-kicker">05 / HAVE YOU SEEN SOMETHING?</span><h2 id="report-heading">A clue in the garden changes the job.</h2><p>If you've spotted an insect or symptom, tell the desk which suspect you're investigating. We'll show the specific signs and what to do if the identification is confirmed.</p><p class="guardrail">Your selection appears in the shareable URL and may appear in browser or server request logs. We do not publish it as a verified sighting or submit a report to state authorities. Use the official reporting link for a suspected invasive insect.</p></div>
+  <div class="check-copy"><span class="section-kicker">06 / HAVE YOU SEEN SOMETHING?</span><h2 id="report-heading">A clue in the garden changes the job.</h2><p>If you've spotted an insect or symptom, tell the desk which suspect you're investigating. We'll show the specific signs and what to do if the identification is confirmed.</p><p class="guardrail">Your selection appears in the shareable URL and may appear in browser or server request logs. We do not publish it as a verified sighting or submit a report to state authorities. Use the official reporting link for a suspected invasive insect.</p></div>
   <div class="check-form"><label for="observed">A suspected pest from your crop list</label><select id="observed" name="observed"><option value="">I haven't observed a suspect</option></select><button id="use-observation" class="outline-button" type="button">Update my investigation</button></div>
  </section>
  <section class="method" id="method" aria-labelledby="method-heading">
