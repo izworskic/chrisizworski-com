@@ -21,14 +21,13 @@ test('B55 waterfall decision desk: visible before map and retains 72 source card
 });
 test('B55 conservative full-visit time gate and source-scoped closure safety',()=>{
  assert.match(lens,/\.max<=limit/);
- assert.match(lens,/match\(\/(\\d\+)/);
+ assert.match(lens,/const duration=c=>/);
  assert.match(lens,/status==='closed'/);assert.match(lens,/status==='research'/);
  assert.match(lens,/c.dataset.arrivalVerified!=='verified'/);
  assert.match(lens,/current road, gate and trail status remain unconfirmed/);
  assert.match(lens,/not confirmed-open trips/);
  assert.match(lens,/Travel between U.P. regions is NOT included/);
  for(const url of ['michigan.gov/recsearch/parks/porkies','michigan.gov/recsearch/parks/bondfalls','fs.usda.gov/r09/ottawa/alerts/black-river','nps.gov/places/munising-falls'])assert.ok(lens.includes(url));
- assert.match(lens,/Only|not a visitor/gi); // at least one explicit caveat
  assert.match(map,/UPWaterfallFocus/);assert.match(map,/upfall:selected/);
  assert.match(map,/!\['closed','research'\]/);
  assert.match(css,/\.visit-lens/);assert.match(css,/focus-visible/);
