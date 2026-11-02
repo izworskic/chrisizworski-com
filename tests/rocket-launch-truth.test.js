@@ -111,7 +111,7 @@ test('RocketLaunch.Live comparison distinguishes agreement, disagreement, absenc
   assert.match(aligned.note,/not confirm flight approval/);
   assert.equal(truth.comparison({...selected,net:'2026-11-04T02:28:00Z'},list,NOW).status,'disagrees');
   assert.equal(truth.comparison({...selected,netPrecision:'day'},list,NOW).status,'precision-not-comparable');
-  assert.equal(truth.comparison({...selected,name:'Falcon 9 | Unknown'},[],NOW).status,'identity-not-distinct');
+  assert.equal(truth.comparison({...selected,name:'Falcon 9 | Unknown',mission:''},[],NOW).status,'identity-not-distinct');
   assert.equal(truth.comparison({...selected,name:'Falcon 9 | Starlink 15-17',mission:''},list,NOW).status,'not-in-next-five');
   assert.equal(truth.comparison(selected,[...list,list[0]],NOW).status,'ambiguous');
 });
