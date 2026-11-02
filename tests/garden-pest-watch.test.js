@@ -156,6 +156,22 @@ test('NWS parser classifies 72h hot/dry cue and preserves scientific disclaimer'
  assert.ok(w.tags.includes('hot_dry'));assert.ok(!w.tags.includes('wet'));
  assert.ok(w.method.includes('not observed local pest'));
 });
+test('NWS production hourly API uses updateTime rather than updated',()=>{
+ const now=Date.UTC(2026,10,2,12);
+ const forecast=hourlyFixture(now,{wet:true});
+ forecast.properties.updateTime=forecast.properties.updated;
+ delete forecast.properties.updated;
+ const actual=api._test.parseForecast(forecast,now);
+ assert.equal(actual.status,'AVAILABLE');
+ assert.equal(actual.issuedAt,forecast.properties.updateTime);
+ assert.ok(actual.tags.includes('wet'));
+});
+test('NWS updateTime takes precedence over a conflicting deprecated updated field',()=>{
+ const now=Date.UTC(2026,10,2,12);
+ const forecast=hourlyFixture(now);
+ forecast.properties.updateTime=new Date(now-48*3600000).toISOString();
+ assert.throws(()=>api._test.parseForecast(forecast,now),/STALE/);
+});
 test('NWS parser identifies wet weather, not disease confirmation',()=>{
  const now=Date.UTC(2026,6,12,12);
  const w=api._test.parseForecast(hourlyFixture(now,{wet:true}),now);
