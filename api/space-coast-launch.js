@@ -13,6 +13,7 @@ const { inspectKscLaunch, CALENDAR: KSC_CALENDAR } =
 const { storeTrustedLaunches } = require('../lib/space-coast-ksc-snapshot');
 const { buildGeographicViewing } = require('../lib/space-coast-geo');
 const { readFreshLaunchList } = require('../lib/space-coast-launch-day');
+const { buildMediaDesk } = require('../lib/space-coast-media');
 
 const LAUNCHES = 'https://ll.thespacedevs.com/2.3.0/launches/upcoming/?location__ids=12%2C27&limit=20&format=json&ordering=net&hide_recent_previous=true';
 const KSC = 'https://www.kennedyspacecenter.com/launches-and-events/';
@@ -208,6 +209,9 @@ module.exports = async function handler(req, res) {
         'shared-postgres-scheduled-ll2-observation' :
         'fallback-direct-ll2-cached-15m',
       selectedLaunchId: next?.id || null,
+      mediaDesk: next ? buildMediaDesk(next, {
+        checkedAt: feed.sharedScheduleCheckedAt||new Date().toISOString(),now
+      }) : null,
       next, upcoming: launches,
       weather: primary ? { period: primary.period, assessment: primary.assessment } : null,
       viewingWeatherByArea: forecasts,
