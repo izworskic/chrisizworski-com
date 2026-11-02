@@ -114,3 +114,18 @@ test('Smokies Elkmont 2026 vehicle lottery dates and registered camper exception
  assert.match(sections(fireflies.id),/2027 event and lottery dates are unconfirmed/);
  assert.doesNotMatch(sections(fireflies.id),/shuttle buses into Elkmont|April 24–28/);
 });
+
+test('RMNP 2026 elk meadow foot travel closed 5 PM to 10 AM, not 7 AM; designated roadside viewing remains distinct',()=>{
+ const elk=get('rocky-mountain-elk-rut');
+ assert.equal(elk.accessRules.elkMeadowFootClosure.from,'17:00');
+ assert.equal(elk.accessRules.elkMeadowFootClosure.to,'10:00');
+ assert.equal(elk.accessRules.elkMeadowFootClosure.start,'2026-09-01');
+ assert.equal(elk.accessRules.elkMeadowFootClosure.end,'2026-10-31');
+ assert.match(sections(elk.id),/No Foot Travel 5 PM–10 AM/);
+ assert.match(sections(elk.id),/area-specific restrictions are not a park-wide road closure/);
+ assert.doesNotMatch(sections(elk.id),/5:00 PM and 7:00 AM/);
+});
+test('brooks camp NPS 50-yard bear separation, not a fictitious 300-foot rule',()=>{
+ assert.match(page,/At Katmai Brooks Camp maintain at least 50 yards from bears/);
+ assert.doesNotMatch(page,/300 feet from coastal brown bears/);
+});
