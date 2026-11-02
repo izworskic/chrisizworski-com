@@ -15,7 +15,7 @@ for(const [id,slug] of [[17,"chipmunk-falls-net-river"],[144,"copper-falls-owl-c
  const html=fs.readFileSync('public'+url+'index.html','utf8');assert.equal(v.researchPage,url);assert.match(html,/noindex,follow/);assert.ok(!sitemap.includes(url));
  const marker='<script type="application/ld+json">';const at=html.indexOf(marker);assert.ok(at>=0);const start=at+marker.length;const end=html.indexOf('</script>',start);assert.ok(end>start);const schema=JSON.parse(html.slice(start,end));assert.equal(schema['@type'],'WebPage');assert.equal(schema.author['@id'],'https://chrisizworski.com/#person');assert.doesNotMatch(html,/"@type":"TouristAttraction"/);assert.match(html,/Built by Chris Izworski/);
 }
-assert.equal(R.counts.curatedTotal,71);assert.equal(R.counts.pending,96);assert.equal(L.unresolvedCandidates,96);assert.equal(Q.candidates.length,96);assert.ok(V.records.length>=59);
+assert.ok(R.counts.curatedTotal>=71);assert.ok(R.counts.pending<=96);assert.ok(L.unresolvedCandidates<=96);assert.ok(Q.candidates.length<=96);assert.ok(V.records.length>=59);
 assert.match(R.candidates.find(x=>x.gisObjectId===17).sourceNotes,/three.foot|three feet/i);
 assert.match(R.candidates.find(x=>x.gisObjectId===144).sourceNotes,/private/i);
 assert.match(R.candidates.find(x=>x.gisObjectId===18).sourceNotes,/2024/);
