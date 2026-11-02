@@ -13,19 +13,6 @@
     {
       "batchNumber": 1,
       "candidates": [
-        153,
-        162,
-        163,
-        169,
-        170,
-        173,
-        175,
-        180
-      ]
-    },
-    {
-      "batchNumber": 2,
-      "candidates": [
         181,
         183,
         184,
@@ -37,7 +24,7 @@
       ]
     },
     {
-      "batchNumber": 3,
+      "batchNumber": 2,
       "candidates": [
         54,
         57,
@@ -50,7 +37,7 @@
       ]
     },
     {
-      "batchNumber": 4,
+      "batchNumber": 3,
       "candidates": [
         122,
         51,
@@ -63,7 +50,7 @@
       ]
     },
     {
-      "batchNumber": 5,
+      "batchNumber": 4,
       "candidates": [
         176,
         177,
@@ -76,7 +63,7 @@
       ]
     },
     {
-      "batchNumber": 6,
+      "batchNumber": 5,
       "candidates": [
         4,
         9,
@@ -89,7 +76,7 @@
       ]
     },
     {
-      "batchNumber": 7,
+      "batchNumber": 6,
       "candidates": [
         45,
         150,
@@ -102,7 +89,7 @@
       ]
     },
     {
-      "batchNumber": 8,
+      "batchNumber": 7,
       "candidates": [
         52,
         59,
@@ -115,7 +102,7 @@
       ]
     },
     {
-      "batchNumber": 9,
+      "batchNumber": 8,
       "candidates": [
         121,
         123,
@@ -128,7 +115,7 @@
       ]
     },
     {
-      "batchNumber": 10,
+      "batchNumber": 9,
       "candidates": [
         48,
         58,
@@ -141,7 +128,7 @@
       ]
     },
     {
-      "batchNumber": 11,
+      "batchNumber": 10,
       "candidates": [
         86,
         112,
@@ -154,7 +141,7 @@
       ]
     },
     {
-      "batchNumber": 12,
+      "batchNumber": 11,
       "candidates": [
         17,
         144,
@@ -163,139 +150,24 @@
         127,
         148,
         149,
-        172
+        153
+      ]
+    },
+    {
+      "batchNumber": 12,
+      "candidates": [
+        162,
+        163,
+        169,
+        170,
+        172,
+        173,
+        175,
+        180
       ]
     }
   ],
   "candidates": [
-    {
-      "gisObjectId": 153,
-      "name": "Alder Falls",
-      "county": "MARQUETTE",
-      "river": "ALDER CREEK",
-      "lat": 46.780948,
-      "lng": -87.70844,
-      "cluster": "MARQUETTE / ALDER CREEK",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 162,
-      "name": "Reany Falls",
-      "county": "MARQUETTE",
-      "river": "REANY CREEK",
-      "lat": 46.57363,
-      "lng": -87.477268,
-      "cluster": "MARQUETTE / REANY CREEK",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 163,
-      "name": "Carp River Falls",
-      "county": "MARQUETTE",
-      "river": "CARP RIVER",
-      "lat": 46.521504,
-      "lng": -87.572418,
-      "cluster": "MARQUETTE / CARP RIVER",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 169,
-      "name": "Carp River Falls Ii",
-      "county": "MARQUETTE",
-      "river": "MORGAN CREEK",
-      "lat": 46.503807,
-      "lng": -87.44655,
-      "cluster": "MARQUETTE / MORGAN CREEK",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 170,
-      "name": "Ely Falls",
-      "county": "MARQUETTE",
-      "river": "ELY CREEK",
-      "lat": 46.438804,
-      "lng": -87.687002,
-      "cluster": "MARQUETTE / ELY CREEK",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 173,
-      "name": "Schweitzer Falls",
-      "county": "MARQUETTE",
-      "river": "SCHWEITZER CREEK",
-      "lat": 46.407401,
-      "lng": -87.596355,
-      "cluster": "MARQUETTE / SCHWEITZER CREEK",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 175,
-      "name": "Tiger Falls",
-      "county": "MARQUETTE",
-      "river": "SCHWEITZER CREEK",
-      "lat": 46.402068,
-      "lng": -87.564648,
-      "cluster": "MARQUETTE / SCHWEITZER CREEK",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 180,
-      "name": "Frohling Falls",
-      "county": "MARQUETTE",
-      "river": "WEST CHOCOLAY RIVER",
-      "lat": 46.359908,
-      "lng": -87.329955,
-      "cluster": "MARQUETTE / WEST CHOCOLAY RIVER",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
     {
       "gisObjectId": 181,
       "name": "Upper Chocolay Falls",
@@ -1689,6 +1561,86 @@
       "blockingGate": "Current exact land parcel and owner, express tourist sightseeing permission, approved parking/road, fully legal footpath and current restrictions."
     },
     {
+      "gisObjectId": 153,
+      "name": "Alder Falls",
+      "county": "MARQUETTE",
+      "river": "ALDER CREEK",
+      "lat": 46.780948,
+      "lng": -87.70844,
+      "cluster": "MARQUETTE / ALDER CREEK",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 5,
+      "blockingGate": "Confirm present road authority, land title and walking easement, legally signed stopping point and the complete public trail at the lower falls, keeping upper cascades distinct."
+    },
+    {
+      "gisObjectId": 162,
+      "name": "Reany Falls",
+      "county": "MARQUETTE",
+      "river": "REANY CREEK",
+      "lat": 46.57363,
+      "lng": -87.477268,
+      "cluster": "MARQUETTE / REANY CREEK",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 6,
+      "blockingGate": "Confirm Forestville Road bridge pedestrian safety and present lawful visitor parking at the specific powerhouse lot; preserve bridge view without creek scramble or implying Dead River upstream access."
+    },
+    {
+      "gisObjectId": 163,
+      "name": "Carp River Falls",
+      "county": "MARQUETTE",
+      "river": "CARP RIVER",
+      "lat": 46.521504,
+      "lng": -87.572418,
+      "cluster": "MARQUETTE / CARP RIVER",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 4,
+      "blockingGate": "Confirm actual owner and posted trail status; reconcile whether GIS marks the lower/upper drop of the small Ishpeming feature and locate a current independent lawful public approach before visitor publication."
+    },
+    {
+      "gisObjectId": 169,
+      "name": "Carp River Falls Ii",
+      "county": "MARQUETTE",
+      "river": "MORGAN CREEK",
+      "lat": 46.503807,
+      "lng": -87.44655,
+      "cluster": "MARQUETTE / MORGAN CREEK",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 5,
+      "blockingGate": "Georeference verified legal NTN trailhead to the walk/bike route; reconcile actual Carp River channel and distinct Morgan Creek confluence; establish the approved final vista and hazard wording before indexable expert guide."
+    },
+    {
+      "gisObjectId": 170,
+      "name": "Ely Falls",
+      "county": "MARQUETTE",
+      "river": "ELY CREEK",
+      "lat": 46.438804,
+      "lng": -87.687002,
+      "cluster": "MARQUETTE / ELY CREEK",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 3,
+      "blockingGate": "Identify exact public or privately managed parcel at GIS point, current road shoulder legality, any posted mining buffers and signed continuous public pathway; otherwise retain minor-waterfall research."
+    },
+    {
       "gisObjectId": 172,
       "name": "Warner Falls",
       "county": "MARQUETTE",
@@ -1703,6 +1655,54 @@
       "reviewStatus": "previous-research-needs-public-access-review",
       "sourceCount": 4,
       "blockingGate": "Obtain current MDOT postconstruction parking permissions and safe signed viewpoint/footpath, verify lane/opening status, prohibited shoulder conditions and walk from legal visitor parking."
+    },
+    {
+      "gisObjectId": 173,
+      "name": "Schweitzer Falls",
+      "county": "MARQUETTE",
+      "river": "SCHWEITZER CREEK",
+      "lat": 46.407401,
+      "lng": -87.596355,
+      "cluster": "MARQUETTE / SCHWEITZER CREEK",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 3,
+      "blockingGate": "Verify public road/lot and parcel boundaries on both creek banks, establish signed safe visitor foot corridor and clearly restrict upper-tier scrambling before promotion."
+    },
+    {
+      "gisObjectId": 175,
+      "name": "Tiger Falls",
+      "county": "MARQUETTE",
+      "river": "SCHWEITZER CREEK",
+      "lat": 46.402068,
+      "lng": -87.564648,
+      "cluster": "MARQUETTE / SCHWEITZER CREEK",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 4,
+      "blockingGate": "Resolve GIS-vs-field position to the exact low drops and verify all parcels if keeping in natural-feature map; do not promote, index or navigate without new authoritative evidence."
+    },
+    {
+      "gisObjectId": 180,
+      "name": "Frohling Falls",
+      "county": "MARQUETTE",
+      "river": "WEST CHOCOLAY RIVER",
+      "lat": 46.359908,
+      "lng": -87.329955,
+      "cluster": "MARQUETTE / WEST CHOCOLAY RIVER",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 4,
+      "blockingGate": "Document land manager and road jurisdiction at a potential lawful southern entrance, current signed parking and a continuous public land corridor to safe bank; reject all posted north tracks."
     }
   ]
 }
