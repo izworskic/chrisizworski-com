@@ -110,7 +110,10 @@ test('six-day forecast window is actionable scouting, not a treatment instructio
  assert.doesNotMatch(near.action,/spray|pesticide|infestation/i);
  const far=engine.decision({nowDate:'2026-06-04',...sample});
  assert.equal(far.status,'PREPARE');
- const past=engine.decision({nowDate:'2026-07-27',...sample});
+ const eggNear=engine.decision({nowDate:'2026-08-02',...sample});
+ assert.equal(eggNear.status,'EGG_WINDOW');
+ assert.match(eggNear.action,/model alone does not justify treatment/);
+ const past=engine.decision({nowDate:'2026-08-12',...sample});
  assert.equal(past.status,'THRESHOLD_PASSED');
  assert.match(past.action,/does not prove/i);
 });
