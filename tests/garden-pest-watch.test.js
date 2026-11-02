@@ -24,6 +24,12 @@ test('source-specific quantitative models are reference-only, not active forecas
  assert.equal(core.MODELS.find(m=>m.pest==='squash-vine-borer').status,'RESEARCH_BLOCKED');
  assert.ok(core.MODELS.every(m=>m.status!=='PRODUCTION_VALIDATED'));
 });
+test('Michigan local day and month follow Detroit date across UTC midnight',()=>{
+ const lateUTC=new Date('2027-03-01T02:00:00Z');
+ assert.deepEqual(core.michiganDateParts(lateUTC),{month:2,date:'2027-02-28'});
+ const earlyMI=new Date('2027-03-01T06:00:00Z');
+ assert.deepEqual(core.michiganDateParts(earlyMI),{month:3,date:'2027-03-01'});
+});
 test('November Michigan garden never claims active summer pests',()=>{
  for(const crop of core.CROPS){
   const d=select(crop,11);
