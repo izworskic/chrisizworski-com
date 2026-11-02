@@ -72,10 +72,12 @@ def official_pdf_url(value):
 
 
 def source_day(value):
-    try:
-        return dt.datetime.strptime(value, "%d %b %Y").date()
-    except ValueError:
-        return None
+    for fmt in ("%d %b %Y", "%d %B %Y"):
+        try:
+            return dt.datetime.strptime(value, fmt).date()
+        except ValueError:
+            continue
+    return None
 
 
 def parse_official_pdf(content, source_url, mission):
