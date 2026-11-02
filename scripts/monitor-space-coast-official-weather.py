@@ -148,6 +148,15 @@ def parse_official_pdf(content, source_url, mission):
             m = re.search(re.escape(label) + r":\s*(Low-Mod|Mod-High|Moderate|High|Low)", section, re.I)
             if m:
                 risks[key] = m.group(1)
+    following = re.search(
+        r"Next\s+Forecast\s+Will\s+Be\s+Issued\s+(\d{1,2}\s+[A-Za-z]{3,9}\s+\d{4})",
+        txt, re.I
+    )
+    follow_day = source_day(following.group(1)) if following else None
+    if follow_day is not None and not (
+        issue_day <= follow_day <= valid_day + dt.timedelta(days=3)
+    ):
+        follow_day = None
     return {
         "missionId": mission["id"],
         "sourceMission": name.group(1).strip()[:120],
@@ -155,6 +164,7 @@ def parse_official_pdf(content, source_url, mission):
         "sourceSha256": hashlib.sha256(content).hexdigest(),
         "issuedAt": issued_at.isoformat().replace("+00:00", "Z"),
         "validDate": valid_day.isoformat(),
+        "nextForecastDate": follow_day.isoformat() if follow_day else None,
         "povPercent": pov,
         "primaryConcerns": concerns,
         "additionalRisks": risks,
