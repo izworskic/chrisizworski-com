@@ -13,256 +13,160 @@
     {
       "batchNumber": 1,
       "candidates": [
-        54,
-        57,
-        60,
-        61,
-        62,
-        72,
         84,
-        106
-      ]
-    },
-    {
-      "batchNumber": 2,
-      "candidates": [
+        106,
         122,
         51,
         120,
         136,
         137,
-        139,
-        140,
-        152
+        139
       ]
     },
     {
-      "batchNumber": 3,
+      "batchNumber": 2,
       "candidates": [
+        140,
+        152,
         176,
         177,
         23,
         213,
         68,
-        8,
-        38,
-        12
+        8
       ]
     },
     {
-      "batchNumber": 4,
+      "batchNumber": 3,
       "candidates": [
+        38,
+        12,
         4,
         9,
         191,
         192,
         46,
-        91,
-        119,
-        190
+        91
       ]
     },
     {
-      "batchNumber": 5,
+      "batchNumber": 4,
       "candidates": [
+        119,
+        190,
         45,
         150,
         151,
         154,
         160,
-        215,
-        195,
-        205
+        215
       ]
     },
     {
-      "batchNumber": 6,
+      "batchNumber": 5,
       "candidates": [
+        195,
+        205,
         52,
         59,
         83,
         99,
         103,
-        105,
-        107,
-        114
+        105
       ]
     },
     {
-      "batchNumber": 7,
+      "batchNumber": 6,
       "candidates": [
+        107,
+        114,
         121,
         123,
         20,
         24,
         25,
-        37,
-        39,
-        40
+        37
       ]
     },
     {
-      "batchNumber": 8,
+      "batchNumber": 7,
       "candidates": [
+        39,
+        40,
         48,
         58,
         63,
         65,
         69,
-        70,
-        74,
-        75
+        70
       ]
     },
     {
-      "batchNumber": 9,
+      "batchNumber": 8,
       "candidates": [
+        74,
+        75,
         86,
         112,
         29,
         42,
         80,
-        85,
-        129,
-        15
+        85
       ]
     },
     {
-      "batchNumber": 10,
+      "batchNumber": 9,
       "candidates": [
+        129,
+        15,
         17,
         144,
         18,
         116,
         127,
-        148,
-        149,
-        153
+        148
       ]
     },
     {
-      "batchNumber": 11,
+      "batchNumber": 10,
       "candidates": [
+        149,
+        153,
         162,
         163,
         170,
         172,
         173,
-        175,
-        180,
-        181
+        175
       ]
     },
     {
-      "batchNumber": 12,
+      "batchNumber": 11,
       "candidates": [
+        180,
+        181,
         183,
         184,
         185,
         186,
         187,
-        22,
-        28
+        22
+      ]
+    },
+    {
+      "batchNumber": 12,
+      "candidates": [
+        28,
+        54,
+        57,
+        60,
+        61,
+        62,
+        72
       ]
     }
   ],
   "candidates": [
-    {
-      "gisObjectId": 54,
-      "name": "Minnewawa Falls",
-      "county": "ONTONAGON",
-      "river": "PRESQUE ISLE RIVER",
-      "lat": 46.597361,
-      "lng": -89.848944,
-      "cluster": "ONTONAGON / PRESQUE ISLE RIVER",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 57,
-      "name": "Nimikon Falls",
-      "county": "ONTONAGON",
-      "river": "PRESQUE ISLE RIVER",
-      "lat": 46.605242,
-      "lng": -89.853424,
-      "cluster": "ONTONAGON / PRESQUE ISLE RIVER",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 60,
-      "name": "Rapid River Falls",
-      "county": "ONTONAGON",
-      "river": "DEER CREEK",
-      "lat": 46.627099,
-      "lng": -89.668576,
-      "cluster": "ONTONAGON / DEER CREEK",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 61,
-      "name": "Hidden Falls",
-      "county": "ONTONAGON",
-      "river": "DERBY CREEK",
-      "lat": 46.631427,
-      "lng": -89.579969,
-      "cluster": "ONTONAGON / DERBY CREEK",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 62,
-      "name": "Derby Falls",
-      "county": "ONTONAGON",
-      "river": "DERBY CREEK",
-      "lat": 46.633606,
-      "lng": -89.575682,
-      "cluster": "ONTONAGON / DERBY CREEK",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 72,
-      "name": "Deer Creek Falls",
-      "county": "ONTONAGON",
-      "river": "DEER CREEK",
-      "lat": 46.652344,
-      "lng": -89.697161,
-      "cluster": "ONTONAGON / DEER CREEK",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
     {
       "gisObjectId": 84,
       "name": "Little Trap Falls",
@@ -1686,6 +1590,102 @@
       "reviewStatus": "previous-research-needs-public-access-review",
       "sourceCount": 6,
       "blockingGate": "Resolve the correct fall location against GPS-tracked and authoritative river maps; verify Ottawa National Forest/other land ownership, current MVUM road status, parking and a continuous public walking route to a safe viewpoint if one exists. Keep skilled paddling conditions separate from sightseeing guidance."
+    },
+    {
+      "gisObjectId": 54,
+      "name": "Minnewawa Falls",
+      "county": "ONTONAGON",
+      "river": "PRESQUE ISLE RIVER",
+      "lat": 46.597361,
+      "lng": -89.848944,
+      "cluster": "ONTONAGON / PRESQUE ISLE RIVER",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 5,
+      "blockingGate": "Verify land tenure, named river feature and current Ottawa National Forest or other manager permission; locate signed public parking and a complete authorized walking route before ever promoting."
+    },
+    {
+      "gisObjectId": 57,
+      "name": "Nimikon Falls",
+      "county": "ONTONAGON",
+      "river": "PRESQUE ISLE RIVER",
+      "lat": 46.605242,
+      "lng": -89.853424,
+      "cluster": "ONTONAGON / PRESQUE ISLE RIVER",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 5,
+      "blockingGate": "Confirm watercourse identity and land manager; require signed parking and a continuous legally authorized riverbank walk before promotion."
+    },
+    {
+      "gisObjectId": 60,
+      "name": "Rapid River Falls",
+      "county": "ONTONAGON",
+      "river": "DEER CREEK",
+      "lat": 46.627099,
+      "lng": -89.668576,
+      "cluster": "ONTONAGON / DEER CREEK",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 5,
+      "blockingGate": "Resolve DEER CREEK versus RAPID RIVER attribute with authoritative hydrography and land manager, then certify current road status, public parking and a safe continuous footpath; protect the separate Delta County guide."
+    },
+    {
+      "gisObjectId": 61,
+      "name": "Hidden Falls",
+      "county": "ONTONAGON",
+      "river": "DERBY CREEK",
+      "lat": 46.631427,
+      "lng": -89.579969,
+      "cluster": "ONTONAGON / DERBY CREEK",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 4,
+      "blockingGate": "Reconcile GIS Hidden #61 versus Derby #62 and both other Hidden namesakes using hydrography, owner boundaries and field evidence. Verify signed parking and a lawful continuous trail before giving directions."
+    },
+    {
+      "gisObjectId": 62,
+      "name": "Derby Falls",
+      "county": "ONTONAGON",
+      "river": "DERBY CREEK",
+      "lat": 46.633606,
+      "lng": -89.575682,
+      "cluster": "ONTONAGON / DERBY CREEK",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 4,
+      "blockingGate": "Confirm real drop and source-stream naming against field/land-manager evidence; reconcile Hidden #61, parcel boundaries, lawful road stopping and complete public footpath before promotion."
+    },
+    {
+      "gisObjectId": 72,
+      "name": "Deer Creek Falls",
+      "county": "ONTONAGON",
+      "river": "DEER CREEK",
+      "lat": 46.652344,
+      "lng": -89.697161,
+      "cluster": "ONTONAGON / DEER CREEK",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 5,
+      "blockingGate": "Confirm Deer versus White Deer stream labels, exact land manager, public right-of-way, approved road stopping and continuous safe trail; independently check fall height and seasonality before promoting."
     }
   ]
 }
