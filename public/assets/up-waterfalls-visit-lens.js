@@ -63,7 +63,8 @@ function guidance(c,when){
   notice.push('Black River trail/platform construction has location-specific restrictions through the agency notice.');
  }
  if(!notice.length)notice.push('No closure encoded for this stop, but current road, gate and trail status remain unconfirmed.');
- return {excluded:false,level:notice.length>1||status==='seasonal'||status==='restricted'?'extra-check':'check',notice};
+ const materialCaution=notice.some(text=>!text.startsWith('No closure encoded for this stop'));
+ return {excluded:false,level:materialCaution||status==='seasonal'||status==='restricted'?'extra-check':'check',notice};
 }
 function gather(){
  const parsed=date.value?new Date(date.value+'T12:00:00'):new Date(NaN);
