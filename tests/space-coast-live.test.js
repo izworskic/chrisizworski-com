@@ -111,6 +111,15 @@ test('live API preserves existing response contract while including NPS and site
   const original = global.fetch;
   let llUrl = '';
   const l = launch({ net: new Date(Date.now() + 2 * 86400000).toISOString(), net_precision: { name: 'Day' } });
+  const cachedLaunch=decision.normalizeLaunch(l);
+  const cachedApi=handler._test.createHandler({
+    getSchedule:async()=>({
+      launches:[{...cachedLaunch,region:'florida'}],
+      checkedAt:new Date().toISOString(),
+      source:'shared-postgres-ll2-national-v2',
+      freshness:'recent',complete:true,warning:null,health:[]
+    })
+  });
   global.fetch = async url => {
     url = String(url);
     if (url.includes('ll.thespacedevs.com')) {
@@ -122,7 +131,7 @@ test('live API preserves existing response contract while including NPS and site
   };
   try {
     const res = mockRes();
-    await handler({ method: 'GET' }, res);
+    await cachedApi({ method: 'GET' }, res);
     assert.equal(res.statusCode, 200);
     assert.equal(res.body.ok, true);
     assert.equal(res.body.upcoming.length, 1);
@@ -134,8 +143,8 @@ test('live API preserves existing response contract while including NPS and site
     assert.equal(res.body.launchWeatherIntelligence.status, 'unknown');
     assert.equal(res.body.launchWeatherIntelligence.officialApproval, 'not-verified');
     assert.equal(res.body.viewingWeatherByArea.length, 5);
-    assert.match(llUrl, /2\.3\.0\/launches\/upcoming/);
-    assert.match(llUrl, /location__ids=12%2C27/);
+    assert.equal(llUrl,'', 'visitor may not poll LL2');
+    assert.equal(res.body.scheduleSource,'shared-postgres-national-ll2-v2');
     assert.equal(res.headers['X-Robots-Tag'], 'noindex, nofollow');
   } finally {
     global.fetch = original;
