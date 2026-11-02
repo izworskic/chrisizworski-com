@@ -30,8 +30,8 @@ async function main(){
    await page.route(/basemaps\.cartocdn\.com|tile\.openstreetmap\.org/,route=>route.fulfill({status:200,contentType:'image/png',body:Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScL4GAAAAABJRU5ErkJggg==','base64')}));
    const response=await page.goto(address,{waitUntil:'domcontentloaded',timeout:30000});
    need(response?.status()===200,d.name+': page failed');
-   await page.waitForFunction(()=>!!window.NP_PHENOMENA_DATA?.markers?.['glacier-going-to-the-sun-opening'],null,{timeout:9000}).catch(async error=>{
-    const diag=await page.evaluate(()=>({ready:document.readyState,leaflet:typeof window.L,data:!!window.NP_PHENOMENA_DATA,markerCount:Object.keys(window.NP_PHENOMENA_DATA?.markers||{}).length,mapNode:!!document.querySelector('#phenomenon-leaflet-map'),scriptSrc:[...document.scripts].map(x=>x.src).filter(Boolean)}));
+   await page.waitForFunction(()=>!!window.NP_PHENOMENA_DATA?.state?.markers?.['glacier-going-to-the-sun-opening'],null,{timeout:9000}).catch(async error=>{
+    const diag=await page.evaluate(()=>({ready:document.readyState,leaflet:typeof window.L,data:!!window.NP_PHENOMENA_DATA,markerCount:Object.keys(window.NP_PHENOMENA_DATA?.state?.markers||{}).length,mapNode:!!document.querySelector('#phenomenon-leaflet-map'),scriptSrc:[...document.scripts].map(x=>x.src).filter(Boolean)}));
     throw Error(d.name+': map init failed '+JSON.stringify({diag,pageErrors:errors,message:error.message}));
    });
    need(await page.locator('.wf-story').count()===12,d.name+': 12 stories not rendered');
