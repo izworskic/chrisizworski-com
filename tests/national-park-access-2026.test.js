@@ -68,3 +68,36 @@ test('Acadia 2026 vehicle booking applies only to Cadillac Summit Road and speci
  assert.match(sections(park.id),/Other areas of Acadia did not require vehicle reservations/);
  assert.match(sections(park.id),/2027 policy unconfirmed/);
 });
+
+test('Zion bottom-up is a no-permit featured hike, top-down retains route-specific permit and warning gates',()=>{
+ const zion=get('zion-narrows-flash-window');
+ assert.equal(zion.permitType,'open');
+ assert.equal(zion.accessRules.bottomUp,'NO_WILDERNESS_PERMIT');
+ assert.equal(zion.accessRules.topDown,'WILDERNESS_PERMIT_REQUIRED');
+ assert.match(zion.permitLead,/top-down 16-mile day\/overnight trips require/i);
+ assert.match(sections(zion.id),/Bottom-Up: No Permit/);
+ assert.match(sections(zion.id),/16-mile top-down through-hike/);
+ assert.match(sections(zion.id),/at least two hours afterward/);
+ assert.match(sections(zion.id),/NPS Narrows permits by route/);
+ assert.doesNotMatch(sections(zion.id),/Top-Down Opens 5th of Prior Month/);
+});
+test('Katmai viewing needs no reservation; separate overnight campground release dates are correct for 2026',()=>{
+ const katmai=get('katmai-brooks-falls-bears');
+ assert.equal(katmai.permitType,'open');
+ assert.equal(katmai.accessRules.bearViewing,'NO_ADVANCE_RESERVATION');
+ assert.equal(katmai.accessRules.platform,'CAPACITY_MANAGED');
+ assert.equal(katmai.accessRules.campground,'RESERVATION_REQUIRED');
+ assert.deepEqual(Array.from(katmai.accessRules.campgroundReleases),['2026-01-07','2026-02-07','2026-03-07']);
+ assert.match(sections(katmai.id),/Brooks Falls viewing does not require an advance reservation/);
+ assert.match(sections(katmai.id),/February 7 for July–August/);
+ assert.match(sections(katmai.id),/Brooks River Corridor activity permits/);
+ assert.match(sections(katmai.id),/2027 campground release dates are unconfirmed/);
+ assert.doesNotMatch(sections(katmai.id),/January 5|three minutes|Campground Lottery/);
+});
+test('2026 atlas featured-activity filters classify all 12 destinations consistently',()=>{
+ const counts=atlas.phenomena.reduce((a,p)=>(a[p.permitType]++,a),{lottery:0,open:0});
+ assert.equal(counts.lottery,4);
+ assert.equal(counts.open,8);
+ assert.match(page,/2026 Featured Activity Requires Booking \(4\)/);
+ assert.match(page,/2026 Featured Activity: No Advance Permit \(8\)/);
+});
