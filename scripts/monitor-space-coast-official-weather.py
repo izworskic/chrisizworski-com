@@ -18,6 +18,7 @@ import urllib.request
 
 from pypdf import PdfReader
 from space_coast_weather_discovery import inspect_sources
+from space_coast_nasa_weather import collect_nasa_reports
 
 LL2 = "https://ll.thespacedevs.com"
 OFFICIAL = "45thweathersquadron.nebula.spaceforce.mil"
@@ -162,7 +163,9 @@ def parse_official_pdf(content, source_url, mission):
 
 def collect(now):
     out = {"discoveryStatus": "ok", "inspected": 0, "verified": 0,
-           "failed": 0, "reports": [], "sourceHealth": []}
+           "failed": 0, "reports": [], "sourceHealth": [],
+           "nasaReports": [], "nasaSourceHealth": [],
+           "forecastWindow": {"status":"unknown", "nearestAt":None,"candidates21Days":0,"candidates7Days":0}}
     url = LL2 + "/2.3.0/launches/upcoming/?location__ids=12%2C27&limit=12&format=json&ordering=net&hide_recent_previous=true"
     try:
         listing = get_json(url)
@@ -182,13 +185,30 @@ def collect(now):
             net_date = dt.datetime.fromisoformat(net.replace("Z", "+00:00"))
         except (TypeError, ValueError):
             continue
-        if not 0 <= (net_date - now).total_seconds() <= 6*86400:
+        if not 0 <= (net_date - now).total_seconds() <= 21*86400:
             continue
         if not re.fullmatch(r"[a-fA-F0-9-]{36}", str(mission.get("id", ""))):
             continue
         if not isinstance(mission.get("name"), str):
             continue
         candidates.append(mission)
+    # The first production audit revealed a six-day blind spot when the next
+    # Florida target was eleven days away. A longer lookahead distinguishes
+    # no *near-term* forecast from an inaccessible source.
+    near = [m for m in candidates if
+            (dt.datetime.fromisoformat(m["net"].replace("Z","+00:00"))-now).total_seconds() <= 7*86400]
+    out["forecastWindow"] = {
+        "status":"active-window" if near else "before-forecast-window" if candidates
+                 else "no-launches-in-21-days",
+        "nearestAt":candidates[0]["net"] if candidates else None,
+        "candidates21Days":len(candidates),
+        "candidates7Days":len(near),
+    }
+    # NASA-authored mission updates are a distinct evidence tier: a reported
+    # favorable-weather percentage, never an official forecast PDF PoV.
+    nasa, nasa_health = collect_nasa_reports(near, download, now)
+    out["nasaReports"] = nasa[:3]
+    out["nasaSourceHealth"] = nasa_health
     # Official first-party links are discovered independently of LL2 updates.
     # This still uses LL2's current mission identities for strict pairing.
     direct, direct_health = inspect_sources(candidates, download, official_pdf_url)
@@ -197,6 +217,10 @@ def collect(now):
     ll2_link_count = 0
     remaining_pdf_budget = 8
     for mission in candidates:
+        if mission not in near:
+            # Official forecasts are generally near launch; don't burn
+            # detail/PDF calls on distant day-only placeholders.
+            continue
         out["inspected"] += 1
         mid = mission["id"]
         try:
@@ -259,7 +283,10 @@ def main():
         json.dump(result, file, ensure_ascii=False, separators=(",", ":"))
     print(f"Official weather discovery: {result['discoveryStatus']}; "
           f"missions {result['inspected']}, documents {result['verified']}, "
-          f"unverified sources {result['failed']}")
+          f"unverified sources {result['failed']}; "
+        f"lookahead {result['forecastWindow']['status']} "
+        f"({result['forecastWindow']['candidates21Days']} within 21 days); "
+        f"NASA reports {len(result['nasaReports'])}")
     # A source outage must not erase prior data. The receiver can store health.
     return 0
 
