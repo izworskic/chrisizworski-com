@@ -101,3 +101,7 @@ A firsthand report describes unmarked logging two-tracks, forks, wet and potenti
 - Four source-linked `noindex,follow` WebPage research pages (Person ID author) and six-step access audit records; no TouristAttraction schema, public parking destinations, route polylines or additions to public sitemap. Municipal park access status is accurately separate from fall-specific route confidence.
 - Curated waterfall visitor destinations remain **72**; Michigan GIS named candidates **161**, exact matches **66**, unmatched/unpromoted **95**; source-reviewed public research records **90 → 94**. Source-reviewed does not mean 94 approved hikes.
 - Regenerate deterministic review queue, new B53 route/coordinate regression test, B52 cumulative count guard and full CI browser/HTML/deployment release tests before merging.
+
+## Queue transition after Batch 53
+
+All formerly first-source-discovery GIS candidates now have at least a source audit. The deterministic review queue consequently starts with **incomplete-source-audit** entries (currently Alger Falls #213, Upper Silver Falls #68, Mill Pond Falls #8, Gabbro Falls #38 and Chicagon Falls #12) rather than a new-source-discovery item. This is a milestone, not a reduction of the **95 still-unpromoted GIS** count. The Batch 38 queue regression assertion has been updated to accept legitimately exhausted fresh queues while continuing to enforce priority ordering and no automatic publication of access-blocked falls.
