@@ -4,3 +4,50 @@
 @media(max-width:600px){.masthead{min-height:0;align-items:flex-start;flex-direction:column;gap:8px}.masthead nav{gap:12px}.masthead a{font-size:.7rem}.intro{margin-top:20px}.issue{font-size:.59rem}.issue-right{display:none}.hero-row{display:block}.hero-copy h1{font-size:clamp(2.3rem,9vw,3.3rem);letter-spacing:-.045em}.hero-copy .lede{font-size:.95rem;margin-bottom:19px}.field-figure{display:none}.desktop-layout{gap:14px}.answer-sheet{padding:24px 22px}.primary-answer{font-size:1.65rem}.watch-controls{margin-top:14px;padding:23px 18px}.watch-controls form{grid-template-columns:1fr}.watch-controls label[for=stage],.watch-controls #stage,.watch-controls label[for=crop],.watch-controls #crop{grid-column:1/-1}.evidence-lanes{grid-template-columns:1fr}.desk-right{padding:20px 17px}.section-heading{display:block}.section-heading p{text-align:left;margin-top:6px}.watch-section{padding:38px 0}.watch-cards{grid-template-columns:1fr}.watch-card{padding:20px}.garden-check{margin-bottom:34px;grid-template-columns:1fr;gap:17px;padding:27px 22px}.check-form{padding:18px}.method-grid{grid-template-columns:1fr 1fr;gap:9px}.method-grid article{padding:12px 5px}.method-grid p{font-size:.77rem}.primary-sources{flex-direction:column;gap:12px}.wordmark{letter-spacing:.09em}}
 @media(max-width:360px){main{padding:0 15px}.answer-sheet{padding:20px 18px}.hero-copy h1{font-size:2.24rem}.watch-card h3{font-size:1.4rem}.method-grid{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+
+/* Purpose-built historical science: a measured season plot, not a generic card. */
+.history-lab{margin:22px 0 52px;padding:30px 34px 25px;background:#233b34;color:#f5f0e4;border-radius:7px;border:1px solid #254333}
+.history-eyebrow{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;border-bottom:1px solid #62756b;padding-bottom:13px;color:#d9c7aa;font-size:.68rem;letter-spacing:.1em;font-weight:800}
+.history-eyebrow .section-kicker{color:#e8bc89}
+.history-layout{display:grid;grid-template-columns:1fr 1.06fr;gap:32px;padding:25px 0}
+.history-intro h2{font:500 clamp(1.72rem,3.1vw,2.47rem)/1.16 'Fraunces',Georgia,serif;letter-spacing:-.035em;margin:0 0 16px}
+.history-intro p{font-size:.89rem;line-height:1.65;color:#d6e0d7}
+.history-intro strong{color:#fff3df}
+.history-intro em{font-style:italic;color:#f0cf9d}
+.history-button{padding:14px 17px;border-radius:4px;border:0;background:#e4bc8f;color:#183329;font-weight:800;font-size:.86rem;min-height:46px;margin:10px 0 0;width:100%;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.history-button[hidden]{display:none}
+.history-button:hover{background:#f3d4ab}
+.history-status{font-size:.75rem!important;color:#e0c5a1!important}
+.history-graphic{background:#f5f2e7;color:#234138;padding:20px 22px;border:1px solid #b4c2ad;min-height:285px}
+.history-graphic-heading{font-size:.66rem;letter-spacing:.1em;font-weight:800;display:flex;justify-content:space-between;gap:8px;border-bottom:2px solid #244238;padding-bottom:12px}
+.history-placeholder{display:flex;align-items:center;gap:21px;min-height:170px;padding:15px 0;color:#526554;font:500 .9rem/1.65 'DM Sans',sans-serif}
+.history-ring{border:3px solid #cbd9c7;border-top-color:#a15e3e;border-radius:50%;height:63px;width:63px;flex:none}
+.history-note{border-top:1px solid #d0d8c9;padding-top:14px;color:#53675a;font-size:.73rem;line-height:1.55}
+.history-citations{border-top:1px solid #718176;padding-top:16px;display:flex;flex-wrap:wrap;gap:10px 19px;font-size:.75rem}
+.history-citations strong{width:100%;color:#e9bc87;text-transform:uppercase;letter-spacing:.1em;font-size:.68rem}
+.history-citations a{color:#faf0cf}
+.history-kpis{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:15px 0}
+.history-kpis>div{border:1px solid #c6cfc1;padding:12px;min-width:0}
+.history-kpis strong{display:block;font:500 1.4rem/1.3 'Fraunces',Georgia,serif;margin:5px 0;color:#244238}
+.history-kpis small{display:block;color:#5a705c;font-size:.74rem}
+.history-plot{margin-top:17px;border-top:1px solid #d0d9cc;padding-top:11px}
+.history-plot-key{display:flex;flex-wrap:wrap;gap:8px 14px;font-size:.71rem;color:#4a5e51;margin:0 0 10px}
+.history-key-egg:before,.history-key-adult:before{content:"";display:inline-block;height:9px;width:9px;border-radius:50%;vertical-align:-1px;margin-right:5px}
+.history-key-adult:before{background:#a85b36}
+.history-key-egg:before{background:#36664a}
+.history-row{display:grid;grid-template-columns:36px 1fr;gap:7px;align-items:center;margin:7px 0}
+.history-row-label{font-weight:800;font-size:.7rem}
+.history-track{position:relative;height:20px;background:repeating-linear-gradient(90deg,transparent,transparent calc(20% - 1px),#c9d1c7 calc(20% - 1px),#c9d1c7 20%);border-bottom:1px solid #bcc5ba}
+.history-mark{position:absolute;width:10px;height:10px;border-radius:50%;top:4px;transform:translateX(-50%);box-shadow:0 0 0 2px #faf9f2}
+.history-mark.adult{background:#a85b36}
+.history-mark.egg{background:#36664a}
+.history-mark[title]{cursor:help}
+.history-axis{display:flex;justify-content:space-between;padding-left:44px;color:#728374;font-size:.62rem}
+.history-detail-table{width:100%;border-collapse:collapse;font-size:.74rem;margin:16px 0}
+.history-detail-table caption{text-align:left;font-weight:800;margin-bottom:8px}
+.history-detail-table th,.history-detail-table td{border-bottom:1px solid #ccd3c5;padding:7px 3px;text-align:left;vertical-align:top}
+.history-detail-table th{font-weight:800}
+.history-warning{font-size:.74rem;line-height:1.6;border-left:3px solid #ab623d;background:#fff6e8;padding:10px 12px;color:#5b4336}
+@media(max-width:900px){.history-layout{grid-template-columns:1fr;gap:16px}}
+@media(max-width:600px){.history-lab{padding:20px 17px 18px;margin:4px 0 34px}.history-eyebrow{font-size:.59rem}.history-layout{padding:18px 0}.history-intro h2{font-size:1.83rem}.history-graphic{padding:16px 13px}.history-kpis{gap:7px}.history-kpis strong{font-size:1.12rem}.history-citations{gap:11px}.history-plot-key{font-size:.66rem}}
