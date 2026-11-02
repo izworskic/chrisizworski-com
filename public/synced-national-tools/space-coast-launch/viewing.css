@@ -400,3 +400,52 @@
 .launch-pulse-source-note{border-top:1px solid #dbe7dc;margin:13px 0 0;padding-top:12px;font-size:11px;line-height:1.65;color:#5b6c5e}
 @media(max-width:780px){.launch-day-pulse-main{grid-template-columns:1fr minmax(135px,190px)}}
 @media(max-width:620px){.launch-day-pulse{padding:15px 12px}.launch-day-pulse-header{display:block}.launch-pulse-refresh{margin-top:13px}.launch-day-pulse-main{grid-template-columns:1fr}.launch-pulse-clock{min-height:90px;padding:13px 15px}#launch-pulse-changes-list{grid-template-columns:1fr}.launch-pulse-verdict{padding:14px}}
+
+
+/* Mission Broadcast Router: distinctly cinematic and source-first, not a
+   generic UI card. Provider video is never loaded without user consent. */
+.mission-media{margin:22px 0 28px;padding:clamp(16px,2.6vw,27px);border-radius:19px;color:#f0f5f2;background:linear-gradient(145deg,#111f29 0%,#173240 52%,#142e32 100%);border:1px solid #375361;box-shadow:0 14px 30px rgba(9,29,38,.13)}
+.mission-media-intro{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:17px}
+.mission-media-intro .eyebrow{font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:800;color:#b4d3c4;margin:0 0 8px}
+.mission-media-intro h2{font-family:Georgia,serif;font-size:clamp(24px,3.3vw,34px);color:#fff;margin:0 0 8px;line-height:1.16}
+.mission-media-intro p:not(.eyebrow){font-size:13px;line-height:1.65;color:#d3e4df;margin:0;max-width:705px}
+.mission-media-source{min-width:200px;max-width:260px;font-size:11px;line-height:1.45;color:#d0e2da;border-left:2px solid #80a99d;padding-left:12px}
+.mission-media-source strong{display:block;color:#e9fcf4;margin-bottom:5px}
+.mission-media-source span{display:block;color:#bcd1c7}
+.mission-media-layout{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(275px,.83fr);gap:18px;align-items:start}
+.mission-media-theater{min-width:0}
+.mission-media-stage{position:relative;aspect-ratio:16/9;max-height:370px;overflow:hidden;border:1px solid #53747b;border-radius:13px;background:radial-gradient(ellipse at 62% 24%,#284a50 0,#152c39 55%,#071922 100%)}
+.mission-media-stage-screen{width:100%;height:100%;display:grid;place-items:center;overflow:hidden}
+.mission-media-stage-screen>p{max-width:300px;padding:20px;color:#d7e8e4;font-family:Georgia,serif;text-align:center;font-size:19px;line-height:1.4}
+.mission-media-poster{position:relative;width:100%;height:100%}
+.mission-media-poster img{display:block;width:100%;height:100%;object-fit:cover;filter:brightness(.75) saturate(.87)}
+.mission-media-poster-label{position:absolute;bottom:11px;left:11px;right:11px;width:fit-content;max-width:calc(100% - 22px);padding:6px 9px;background:rgba(9,24,32,.88);border-radius:5px;color:#f3f8f6;font-size:10px;line-height:1.3;font-weight:800;letter-spacing:.03em}
+.mission-media-player{width:100%;height:100%;border:0}
+.mission-media-stage-info{padding:15px 3px 1px}
+.mission-media-tag{display:inline-block;background:#294e53;border:1px solid #507878;border-radius:5px;font-size:10px;font-weight:850;color:#d4f2de;padding:5px 8px;letter-spacing:.025em}
+.mission-media-stage-info h3{font-family:Georgia,serif;color:#fff;font-size:22px;line-height:1.25;margin:10px 0 7px}
+.mission-media-stage-info p{color:#d0e0db;font-size:12px;line-height:1.65;margin:0 0 11px}
+.mission-media-stage-actions{display:flex;flex-wrap:wrap;gap:9px}
+.mission-media-play{background:#d9ecd5;color:#193d34;border:1px solid #d9ecd5;border-radius:8px;appearance:none;padding:10px 13px;font-size:12px;font-weight:850;cursor:pointer;line-height:1.4}
+.mission-media-play:hover{background:#fff;color:#0b2d21}
+.mission-media-play:focus-visible,.mission-media-source-button:focus-visible{outline:3px solid #e7ba6b;outline-offset:3px}
+.mission-media-outbound{display:inline-flex;color:#e5f4e8;border:1px solid #698e91;border-radius:8px;padding:9px 12px;font-size:12px;font-weight:750;text-decoration:underline;text-underline-offset:2px;line-height:1.5}
+.mission-media-outbound:hover{background:#35535b;color:#fff}
+.mission-media-group+.mission-media-group{border-top:1px solid #47626b;padding-top:16px;margin-top:17px}
+.mission-media-group-head{margin-bottom:11px}
+.mission-media-group-head h3{font-family:Georgia,serif;color:#fff;font-weight:700;font-size:18px;margin:0 0 4px}
+.mission-media-group-head span{font-size:11px;color:#b9d3cc;line-height:1.5}
+.mission-media-source-list{display:grid;gap:8px}
+.mission-media-source-button{text-align:left;display:flex;flex-direction:column;gap:3px;align-items:flex-start;appearance:none;padding:12px 13px;width:100%;border:1px solid #496972;border-radius:9px;cursor:pointer;background:#223e49;color:#f6fcf8;box-shadow:none}
+.mission-media-source-button[data-active=true]{background:#31524e;border-color:#bbdbb7;box-shadow:inset 3px 0 0 #c1e5ae}
+.mission-media-source-button:hover{background:#2e515d;color:#fff}
+.mission-media-source-name{color:#fff;font-size:13px;font-weight:850;line-height:1.3}
+.mission-media-source-by{font-size:11px;color:#d1e6dd;line-height:1.5}
+.mission-media-source-flag{font-size:10px;color:#eadbac;font-weight:800;line-height:1.5}
+.mission-media-empty{margin:0;padding:12px;border:1px dashed #618282;border-radius:8px;color:#d9e9df;font-size:12px;line-height:1.65}
+.mission-media-operator{font-size:11px;line-height:1.65;color:#d2e4db;margin:15px 0 0}
+.mission-media-operator .mission-media-outbound{padding:4px 0;border:0}
+.mission-media-footer{font-size:11px;color:#bad2c7;border-top:1px solid #486267;padding-top:12px;margin:20px 0 0;line-height:1.65}
+@media(max-width:900px){.mission-media-layout{grid-template-columns:minmax(0,1fr) minmax(235px,.75fr)}.mission-media-intro{align-items:start}.mission-media-source{min-width:155px}}
+@media(max-width:680px){.mission-media{padding:17px 12px}.mission-media-intro{display:block}.mission-media-source{border-left:0;border-top:1px solid #547076;margin-top:13px;padding:10px 0 0;max-width:none}.mission-media-layout{grid-template-columns:1fr}.mission-media-stage{max-height:290px}.mission-media-stage-info{padding:12px 2px}.mission-media-source-list{grid-template-columns:1fr 1fr;gap:7px}.mission-media-group+.mission-media-group{margin-top:14px;padding-top:14px}.mission-media-source-button{padding:12px 9px}.mission-media-source-name{font-size:12px}}
+@media(max-width:390px){.mission-media-source-list{grid-template-columns:1fr}.mission-media-stage{max-height:230px}.mission-media-intro h2{font-size:25px}}
