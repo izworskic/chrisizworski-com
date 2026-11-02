@@ -9,6 +9,10 @@ on:
       - 'api/space-coast-official-weather.js'
       - 'lib/space-coast-official-weather.js'
       - 'scripts/monitor-space-coast-official-weather.py'
+      - 'scripts/space_coast_nasa_weather.py'
+      - 'lib/space-coast-weather-story.js'
+      - 'tests/test_space_coast_nasa_weather.py'
+      - 'tests/space-coast-weather-story.test.js'
       - 'scripts/space_coast_weather_discovery.py'
       - 'tests/test_space_coast_weather_discovery.py'
   schedule:
@@ -55,6 +59,10 @@ jobs:
         run: python -m unittest discover -s tests -p 'test_space_coast_official_weather_pdf.py' -v
       - name: Test bounded first-party discovery, source failures and LL2 fallback
         run: python -m unittest discover -s tests -p 'test_space_coast_weather_discovery.py' -v
+      - name: Verify NASA evidence and source-linked weather interpretation
+        run: |
+          python -m unittest discover -s tests -p 'test_space_coast_nasa_weather.py' -v
+          node --test tests/space-coast-official-weather.test.js tests/space-coast-weather-story.test.js
       - name: Discover official 45WS mission PDFs
         run: python scripts/monitor-space-coast-official-weather.py --output /tmp/space-coast-weather.json
       - name: Mint narrow GitHub OIDC token
@@ -66,6 +74,7 @@ jobs:
             core.setSecret(token);
             core.setOutput('token', token);
       - name: Store verified document observations in private Postgres
+        id: persist
         env:
           WEATHER_MONITOR_TOKEN: ${{ steps.oidc.outputs.token }}
         run: |
@@ -80,4 +89,28 @@ jobs:
             echo "Weather observations not accepted; previous evidence preserved."
             exit 1
           fi
+          checked_at="$(printf '%s' "$result" | jq -r '.checkedAt')"
+          test -n "$checked_at"
+          echo "checked_at=$checked_at" >> "$GITHUB_OUTPUT"
+          printf '%s' "$result" | jq '{monitorStatus,accepted,changes,nasaAccepted,nasaChanges,forecastWindow}'
           echo "Official forecast monitor observation accepted."
+      - name: Verify the actual production read-back after private Postgres write
+        env:
+          EXPECTED_CHECKED_AT: ${{ steps.persist.outputs.checked_at }}
+        run: |
+          set -euo pipefail
+          # Unique cache key ensures a current health read after this signed
+          # POST, not a stale CDN response from an earlier monitor run.
+          health="$(curl --fail --silent --show-error --retry 1 --max-time 16 \
+            "https://chrisizworski.com/api/space-coast-official-weather?auditRun=${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}")"
+          if ! printf '%s' "$health" | jq -e --arg observed "$EXPECTED_CHECKED_AT" '
+            .ok == true and .health.checkedAt == $observed and
+            (.health.forecastWindow.status | type == "string") and
+            (.health.sourceChecks | type == "array") and
+            (.health.nasaSourceChecks | type == "array")
+          ' >/dev/null; then
+            echo "Official-weather state write/read monitoring is incomplete."
+            exit 1
+          fi
+          echo "Live Postgres read-back verified, including forecast horizon and source diagnostics."
+

@@ -99,9 +99,42 @@
   };
   const renderOfficialWeather = forecast => {
     const d = forecast || {};
+    const briefing = d.weatherStory || {};
+    const display = $('fl-weather-story');
+    if (display) display.dataset.stage = briefing.stage || 'unverified';
+    set('fl-weather-story-title', briefing.headline || 'What does the weather mean for this mission?');
+    set('fl-weather-story-lead', briefing.explanation || 'No mission-matched forecast has been verified.');
+    set('fl-weather-story-changes', briefing.changes || 'No previous verified forecast to compare.');
+    set('fl-weather-story-decision', briefing.decision ||
+      'Keep plans flexible and check the official launch operator.');
+    set('fl-weather-story-next', briefing.nextUpdate || 'No next official forecast issue time is confirmed.');
+    const rules = $('fl-weather-story-rules');
+    if (rules) {
+      rules.replaceChildren();
+      const items = Array.isArray(briefing.rules)?briefing.rules.slice(0,4):[];
+      if(items.length){
+        rules.appendChild(element('h6','','Why these rules matter'));
+        for(const item of items){
+          if(typeof item?.label!=='string'||typeof item?.explanation!=='string')continue;
+          const details=element('details');
+          details.appendChild(element('summary','',item.label));
+          details.appendChild(element('p','',item.explanation));
+          rules.appendChild(details);
+        }
+      }
+    }
+    const observed = briefing.observedAt && Number.isFinite(Date.parse(briefing.observedAt)) ?
+      ' · source dated ' + new Date(briefing.observedAt).toLocaleString('en-US',
+        {timeZone:'America/New_York',dateStyle:'medium',timeStyle:'short'}) : '';
+    set('fl-weather-story-attribution',
+      (briefing.sourceLabel || 'No current mission-specific weather evidence') + observed +
+      '. This summary is website interpretation, not an official weather officer statement.');
     const valid = d.status === 'mission-matched-current';
     const hasPov = valid && Number.isInteger(d.povPercent);
-    set('fl-official-status', d.label || 'Official mission forecast has not been verified');
+    set('fl-official-status', d.status === 'mission-matched-current' ?
+      d.label : d.agencyWeather?.status==='nasa-reported-current' ?
+      'Original 45WS PDF not verified; a separate NASA-reported forecast is available below.' :
+      d.label || 'Official mission forecast has not been verified');
     set('fl-official-pov', hasPov ? d.povPercent + '% PoV' : 'Not verified');
     set('fl-official-concerns', valid && d.primaryConcerns?.length ?
       'Official primary concerns: ' + d.primaryConcerns.join(', ') + '.' :
@@ -155,6 +188,10 @@
       /^https:\/\/45thweathersquadron\.nebula\.spaceforce\.mil\/assets\/LaunchForecasts\//.test(d.officialUrl)) {
       links.appendChild(link(d.officialUrl,'Read the exact official mission PDF'));
     }
+    if(d.agencyWeather?.status==='nasa-reported-current' &&
+      /^https:\/\/www\.nasa\.gov\/blogs\/[a-z0-9_-]+\/20\d\d\/\d\d\/\d\d\/[a-z0-9-]+\/$/.test(d.agencyWeather.sourceUrl||'')){
+      links.appendChild(link(d.agencyWeather.sourceUrl,'Read NASA’s dated mission weather report'));
+    }
     links.appendChild(link('https://www.patrick.spaceforce.mil/About-Us/Weather/',
       '45th Weather Squadron forecast portal'));
     const monitor = d.health || {};
@@ -163,6 +200,18 @@
       ' · ' + (monitor.status || 'status unknown')));
     else links.appendChild(element('span','small',
       'Official document monitor has no confirmed observation yet.'));
+    const horizon = monitor.forecastWindow || {};
+    if(horizon.candidates7Days===0 &&
+      ['before-forecast-window','no-launches-in-21-days'].includes(horizon.status))
+      links.appendChild(element('span','small',
+        horizon.candidates21Days>0 ?
+        'No Florida launch is inside this monitor’s seven-day near-launch PDF check window; ' +
+          horizon.candidates21Days + ' scheduled mission(s) are within the 21-day lookahead.' :
+        'The launch schedule currently shows no Florida mission inside this monitor’s 21-day lookahead.'));
+    const agencySources = monitor.nasaSourceChecks || [];
+    if(agencySources.some(x=>x.status==='unavailable'))
+      links.appendChild(element('span','small',
+        'A NASA mission-blog source check was unavailable; NASA weather-report coverage may be incomplete.'));
     const direct = (monitor.sourceChecks || []).filter(x =>
       ['45ws-home','45ws-forecast-support','45ws-sitemap','45ws-parent-weather'].includes(x.id));
     const blocked = direct.filter(x => x.status === 'unavailable').length;

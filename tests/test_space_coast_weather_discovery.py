@@ -113,7 +113,8 @@ class IndependentWeatherDiscoveryTest(unittest.TestCase):
             self.assertEqual(url, PDF_A)
             return {"missionId": mission["id"], "sourceUrl": url}
         health = [{"id":"45ws-forecast-support", "status":"links-found", "links":1}]
-        with patch.object(worker, "get_json", side_effect=fake_json), \
+        with patch.object(worker, "collect_nasa_reports", return_value=([], [])), \
+             patch.object(worker, "get_json", side_effect=fake_json), \
              patch.object(worker, "inspect_sources",
                           return_value=({A["id"]:[PDF_A]}, health)), \
              patch.object(worker, "download", side_effect=fake_download), \
@@ -131,7 +132,8 @@ class IndependentWeatherDiscoveryTest(unittest.TestCase):
         def fake_parse(data, url, mission):
             return {"missionId": mission["id"], "sourceUrl": url}
         health = [{"id":"45ws-forecast-support", "status":"unavailable", "links":0}]
-        with patch.object(worker, "get_json", side_effect=fake_json), \
+        with patch.object(worker, "collect_nasa_reports", return_value=([], [])), \
+             patch.object(worker, "get_json", side_effect=fake_json), \
              patch.object(worker, "inspect_sources",
                           return_value=({}, health)), \
              patch.object(worker, "download", return_value=b"%PDF-fake"), \
@@ -150,7 +152,8 @@ class IndependentWeatherDiscoveryTest(unittest.TestCase):
         def fetch(url,limit,accept=""):
             calls.append(url)
             return b"%PDF-fake"
-        with patch.object(worker, "get_json", side_effect=fake_json), \
+        with patch.object(worker, "collect_nasa_reports", return_value=([], [])), \
+             patch.object(worker, "get_json", side_effect=fake_json), \
              patch.object(worker, "inspect_sources",
                           return_value=({A["id"]:[PDF_A]}, [])), \
              patch.object(worker, "download", side_effect=fetch), \
