@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Northern Lights Michigan Tonight: Can You See Them?</title>
-<meta name="description" content="Can you see the northern lights in Michigan tonight? Check live NOAA activity, local NWS cloud cover, best viewing hours and dark-sky spots by region.">
+<title>Northern Lights Michigan Tonight: Verdict | Chris Izworski</title>
+<meta name="description" content="Northern lights Michigan tonight: See tonight&#39;s verdict, best viewing hours, where to watch in the Upper and Lower Peninsula, and live NOAA sky guidance.">
 <link rel="canonical" href="https://chrisizworski.com/northern-lights-michigan/">
 <meta property="og:title" content="Northern Lights Michigan Tonight: Live NOAA Aurora Forecast">
 <meta property="og:description" content="Northern lights Michigan tonight: live NOAA aurora borealis signals, NWS cloud cover, moonlight and viewing windows. Visibility is never guaranteed.">
@@ -19,6 +19,8 @@
 <link rel="manifest" href="/site.webmanifest">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <link rel="stylesheet" href="/assets/aurora-sky-sim.css?v=20261019-ships">
+<link rel="stylesheet" href="/assets/verdict-card.css?v=1">
+<script defer src="/assets/verdict-card.js?v=1"></script>
 <link rel="stylesheet" href="/assets/growth-commercial.css">
 <link rel="stylesheet" href="/assets/affiliate-commerce.css">
 <script type="application/ld+json">{
@@ -393,6 +395,18 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}
 <div class="breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/tools/">Tools</a> &rsaquo; Northern Lights Michigan</div>
 
 <h1 class="page-title">Northern Lights Michigan Tonight</h1>
+<section id="tonightsVerdict" class="verdict-card" data-verdict="unavailable" data-no-ads aria-labelledby="tonightsVerdictTitle" aria-live="polite" aria-atomic="true">
+  <div class="verdict-card__eyebrow">Michigan statewide · live forecast</div>
+  <h2 class="verdict-card__state" id="tonightsVerdictTitle" data-verdict-state>Forecast currently unavailable</h2>
+  <div class="verdict-card__main">
+    <p class="verdict-card__group"><span class="verdict-card__label">Best hours tonight · Michigan time</span><strong class="verdict-card__value" data-verdict-best>No reliable window available</strong></p>
+    <p class="verdict-card__group"><span class="verdict-card__label">Where to watch · Upper vs. Lower Peninsula</span><strong class="verdict-card__value" data-verdict-where>Michigan: check the official forecast before making a trip</strong></p>
+  </div>
+  <ul class="verdict-card__drivers" data-verdict-drivers hidden></ul>
+  <p class="verdict-card__reason" data-verdict-reason>Checking the latest NOAA aurora, National Weather Service clouds and moonlight. No forecast is a visibility guarantee.</p>
+  <p class="verdict-card__asof" data-verdict-asof>As of: no current assessment</p>
+</section>
+
 <p class="sub">Can you see the northern lights in Michigan tonight? Choose your region to check live NOAA activity, local clouds, moonlight and the best viewing hours. A forecast cannot guarantee visibility.</p>
 
 <!-- Regional decision first; statewide context and guide remain below. -->
@@ -1152,6 +1166,154 @@ function renderMoon(moon){
   document.getElementById('moonPhaseValue').textContent = text;
 }
 
+
+// === Statewide tonight verdict (one pilot, reusable presentation in /assets/verdict-card.js) ===
+// Reuse the existing astronomical-dark window, three-hour NOAA rows, regional
+// planning_kp thresholds, and skyCoverAt mapping. There are NO cloud or
+// moon-illumination cutoffs in the source guidance. Do not invent one here.
+let lastTonightVerdict = null;
+function michiganDateKeyForVerdict(date){
+  const parts = new Intl.DateTimeFormat('en-US',{
+    timeZone:'America/Detroit',year:'numeric',month:'2-digit',day:'2-digit'
+  }).formatToParts(date);
+  const values = Object.fromEntries(parts.map(function(part){return [part.type,part.value];}));
+  return values.year+'-'+values.month+'-'+values.day;
+}
+function unavailableTonightVerdict(reason,asOf,availability){
+  return {verdict:'UNCERTAIN',bestWindow:null,drivers:[],locationNote:null,
+    asOf:asOf||null,availability:availability||'missing',
+    reason:reason||'Current forecast inputs are not available.'};
+}
+function computeTonightVerdict(data,nowValue){
+  const now = Number.isFinite(nowValue) ? nowValue : Date.now();
+  const asOf = data && data.fetched_at || null;
+  const fetched = Date.parse(asOf);
+  if (!Number.isFinite(fetched)) return unavailableTonightVerdict('The aurora forecast has no verified update time.',asOf);
+  if (fetched > now+60000 || now-fetched > 20*60*1000)
+    return unavailableTonightVerdict('The last aurora calculation is stale. Recheck the official forecast.',asOf,'stale');
+  if (!data || !data.forecast || !Array.isArray(data.forecast.periods) ||
+      !data.source_freshness || data.source_freshness.ovation_fresh !== true)
+    return unavailableTonightVerdict('NOAA forecast or short-term aurora source is missing or stale.',asOf);
+  const moon = data.moon;
+  const moonLight = asFiniteNumber(moon && moon.illumination_percent);
+  if (!moon || !moon.phase || !Number.isFinite(moonLight) ||
+      moon.date !== michiganDateKeyForVerdict(new Date(now)))
+    return unavailableTonightVerdict('Current U.S. Naval Observatory moon context is unavailable.',asOf);
+
+  const clockNow = new Date(now);
+  const darkNow = sunAltitudeDeg(clockNow,DARK_REF.lat,DARK_REF.lng)<=-18;
+  const darkStart = darkNow ? clockNow : findSunCrossing(clockNow,24,-18,true,DARK_REF.lat,DARK_REF.lng);
+  const darkEnd = darkStart ? findSunCrossing(darkStart,14,-18,false,DARK_REF.lat,DARK_REF.lng) : null;
+  if (!darkStart || !darkEnd)
+    return {verdict:'UNCERTAIN',bestWindow:'Astronomical darkness not established',
+      drivers:[{label:'Darkness',text:'The existing solar calculation found no complete dark window.'}],
+      locationNote:'Upper and Lower Peninsula: check local twilight before traveling',asOf:asOf,
+      reason:'The existing darkness guidance does not cover this case.'};
+
+  const intervals = data.forecast.periods.map(function(period){
+    const t = Date.parse(period.time_tag), kp = asFiniteNumber(period.kp);
+    const start = Math.max(t,darkStart.getTime());
+    const end = Math.min(t+3*3600000,darkEnd.getTime());
+    return {start:start,end:end,kp:kp};
+  }).filter(function(period){
+    return Number.isFinite(period.start) && Number.isFinite(period.end) &&
+      Number.isFinite(period.kp) && period.start<period.end;
+  });
+  if (!intervals.length)
+    return unavailableTonightVerdict('NOAA has no valid Kp interval overlapping tonight’s dark hours.',asOf);
+
+  const regions = data.ovation && Array.isArray(data.ovation.regions) ? data.ovation.regions : [];
+  const upIds = ['keweenaw','marquette','munising','sault-ste-marie'];
+  const lpIds = ['mackinaw-city','traverse-city','bay-city','detroit'];
+  const candidates = [];
+  regions.forEach(function(region){
+    if (!Number.isFinite(region.planning_kp) || !upIds.concat(lpIds).includes(region.id)) return;
+    intervals.forEach(function(interval){
+      const cover = skyCoverAt(region,new Date(interval.start));
+      if (!Number.isFinite(cover)) return;
+      candidates.push({region:region,cloud:cover,kp:interval.kp,start:interval.start,end:interval.end});
+    });
+  });
+  if (!candidates.some(function(row){return upIds.includes(row.region.id);}) ||
+      !candidates.some(function(row){return lpIds.includes(row.region.id);}))
+    return unavailableTonightVerdict('Fresh NWS cloud coverage is missing for an Upper or Lower Peninsula reference region.',asOf);
+
+  const peakKp = Math.max.apply(null,intervals.map(function(row){return row.kp;}));
+  const minThreshold = Math.min.apply(null,regions.map(function(region){return region.planning_kp;}).filter(Number.isFinite));
+  if (!Number.isFinite(minThreshold))
+    return unavailableTonightVerdict('Michigan regional Kp planning thresholds are missing.',asOf);
+  const eligible = candidates.filter(function(row){
+    return row.kp>=row.region.planning_kp && row.cloud<100;
+  });
+  const choose = eligible.length ? eligible : candidates;
+  choose.sort(function(a,b){
+    if (b.kp!==a.kp) return b.kp-a.kp;
+    if (a.cloud!==b.cloud) return a.cloud-b.cloud;
+    return a.start-b.start;
+  });
+  const best = choose[0];
+  if (!best) return unavailableTonightVerdict('A supported nighttime forecast interval could not be selected.',asOf);
+  const kpExplanation = 'NOAA predicts Kp '+peakKp.toFixed(1)+' while Michigan is dark. Kp measures magnetic disturbance; a higher value can move the aurora farther south.';
+  const cloudExplanation = 'NWS forecasts '+Math.round(best.cloud)+'% sky cover near '+best.region.label+' for the chosen hours. Clouds can hide even a strong display.';
+  const moonExplanation = 'USNO reports '+moon.phase+' ('+Math.round(moonLight)+'% illuminated). Bright moonlight can wash out faint aurora.';
+  const strongest = best.kp === peakKp ? best : intervals.slice().sort(function(a,b){return b.kp-a.kp;})[0];
+  const windowText = michiganClock(new Date(best.start))+' – '+michiganClock(new Date(best.end))+' ET';
+  const upReady = eligible.some(function(row){return upIds.includes(row.region.id);});
+  const lpReady = eligible.some(function(row){return lpIds.includes(row.region.id);});
+  let location;
+  if (peakKp<minThreshold) {
+    location='Upper and Lower Peninsula: the nighttime signal is below even the northern Upper Peninsula planning level.';
+  } else if (upReady && lpReady) {
+    location='Upper Peninsula and parts of the Lower Peninsula have a planning signal. Seek a dark northern horizon and compare local clouds.';
+  } else if (upReady) {
+    location='Upper Peninsula favored, especially the Lake Superior shore. Lower Peninsula viewing is less promising tonight.';
+  } else if (lpReady) {
+    location='Some Lower Peninsula areas meet their planning signal; verify the Upper Peninsula cloud forecast before choosing a route.';
+  } else {
+    location='Upper Peninsula may have an aurora signal, but local sky cover complicates the call; Lower Peninsula conditions also need checking.';
+  }
+  let state='UNCERTAIN',reason='Available guidance gives no cloud-opacity cutoff for a confident viewing recommendation.';
+  if (peakKp<minThreshold) {
+    state='NO-GO';
+    reason='No reliable aurora viewing hours are recommended from the current nighttime Kp outlook.';
+  } else if (eligible.length) {
+    state='WORTH A LOOK';
+    reason='A regional Kp planning threshold is reached. Cloud cover, the NOAA short-term oval, and the actual northern horizon still decide what you see.';
+    // GO requires all of the site’s favorable, unambiguous signals NOW:
+    // regional OVATION active (existing rule), a clear 0% NWS sky, new moon,
+    // darkness and a NOAA window inside the OVATION nowcast horizon.
+    if (best.region.level==='active' && best.cloud===0 &&
+        String(moon.phase).toLowerCase()==='new moon' && darkNow &&
+        best.start<=now+90*60000) {
+      state='GO';
+      reason='Strong short-term aurora signal and clear, moonless conditions at this reference point. Check the sky and NOAA nowcast before leaving.';
+    }
+  } else if (candidates.length===regions.length*intervals.length &&
+             candidates.every(function(row){return row.cloud===100;})) {
+    state='NO-GO';
+    reason='Every covered Michigan reference region has a fully overcast NWS sky for these hours; cloud cover blocks aurora.';
+  }
+  return {
+    verdict:state,
+    bestWindow:state==='NO-GO' ? 'No recommended hours; strongest interval '+michiganClock(new Date(strongest.start))+' – '+michiganClock(new Date(strongest.end))+' ET' : windowText,
+    drivers:[{label:'Aurora',text:kpExplanation},{label:'Clouds',text:cloudExplanation},{label:'Moon',text:moonExplanation}],
+    locationNote:location,asOf:asOf,reason:reason,availability:'fresh'
+  };
+}
+function renderTonightVerdict(data){
+  const element = document.getElementById('tonightsVerdict');
+  if (!element || !window.VerdictCard) return;
+  lastTonightVerdict = computeTonightVerdict(data);
+  window.VerdictCard.render(element,lastTonightVerdict);
+}
+function renderUnavailableTonightVerdict(reason){
+  const element = document.getElementById('tonightsVerdict');
+  if (!element || !window.VerdictCard) return;
+  const lastAsOf = lastTonightVerdict && lastTonightVerdict.asOf;
+  lastTonightVerdict = unavailableTonightVerdict(reason,lastAsOf,'missing');
+  window.VerdictCard.render(element,lastTonightVerdict);
+}
+
 function renderDecisionData(data){
   const region = selectedRegion(data);
   renderRegionalOutlook(data && data.ovation);
@@ -1243,9 +1405,11 @@ async function loadAuroraData(){
     document.getElementById('tonightHeadline').textContent = headline;
     document.getElementById('tonightDetail').innerHTML = 'The next-24-hour NOAA forecast peaks at <strong>Kp '+max24.toFixed(1)+'</strong> around <strong>'+peakTime+' ET</strong>. This is broad geomagnetic guidance, not a visibility promise. Check the regional OVATION signal, darkness, and local cloud cover before driving.'+staleNotice;
     renderDecisionData(data);
+    renderTonightVerdict(data);
     document.getElementById('refreshInfo').textContent = '· API checked '+new Date(data.fetched_at || Date.now()).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})+' · source ages checked separately';
   } catch (error) {
     latestAuroraData = null;
+    renderUnavailableTonightVerdict('The live NOAA fetch failed; no previous verdict is being reused.');
     ['swBz','swSpeed','swKpNow','swKpPeak'].forEach(markSpaceWeatherUnavailable);
     renderRegionalOutlook(null);
     document.getElementById('liveStatus').textContent = 'NOAA feed unavailable · manual guide active';
@@ -1463,6 +1627,11 @@ window.addEventListener('DOMContentLoaded',()=>{
   loadAuroraData();
   // Auto-refresh every 10 minutes
   setInterval(loadAuroraData, 10*60*1000);
+  // Expire a visible verdict even if background tab timers delay the next fetch.
+  setInterval(function(){
+    if (lastTonightVerdict && window.VerdictCard)
+      window.VerdictCard.render(document.getElementById('tonightsVerdict'),lastTonightVerdict);
+  },60*1000);
 });
 </script>
 <aside id="national-aurora-handoff" style="margin:32px 0 8px;padding:18px 20px;border:1px solid #d7ded9;border-radius:6px;background:#f7faf8"><strong>Watching from outside Michigan?</strong><p style="margin:6px 0 0">Use the <a href="/national-tools/aurora/">U.S. Northern Lights forecast</a> for live sky conditions, or choose a state-specific guide with local viewing spots, seasonal hours and regional Kp planning benchmarks:</p><nav aria-label="Northern lights forecasts in other states" style="display:flex;gap:8px 18px;flex-wrap:wrap;margin-top:10px;font:600 14px/1.8 system-ui,sans-serif"><a href="/national-tools/aurora/montana/">Montana northern lights</a><a href="/national-tools/aurora/minnesota/">Minnesota northern lights</a><a href="/national-tools/aurora/north-dakota/">North Dakota northern lights</a><a href="/national-tools/aurora/maine/">Maine northern lights</a><a href="/national-tools/aurora/alaska/">Alaska northern lights</a></nav></aside>
