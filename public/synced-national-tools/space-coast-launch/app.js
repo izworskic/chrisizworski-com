@@ -1017,6 +1017,11 @@
       selectedTargetAt=next&&['minute','second'].includes(next.netPrecision)?
         Date.parse(next.net):null;
       activeMissionId = d.selectedLaunchId || null;
+      document.dispatchEvent(new CustomEvent('rocket-truth:mission-selected',{
+        detail:{launchId:activeMissionId,
+          net:next?.net||null,netPrecision:next?.netPrecision||null,
+          timezone:'America/New_York'}
+      }));
       renderMissionMedia(d.mediaDesk || null);
       // Same trusted, cached launch response powers the GIS layer; its listener
       // cannot fetch another LL2 schedule or infer mission-specific closures.
@@ -1033,6 +1038,8 @@
     } catch (err) {
       if (sequence !== loadSequence) return;
       activeMissionId = previousMissionId;
+      document.dispatchEvent(new CustomEvent('rocket-truth:mission-selected',
+        {detail:{launchId:null}}));
       // Retry failed standard schedule after five minutes, without turning
       // the independent monitor into per-visitor LL2 polling.
       lastScheduleLoadedAt=Date.now()-SCHEDULE_REFRESH_MS+KSC_REFRESH_MS;

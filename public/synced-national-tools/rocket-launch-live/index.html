@@ -16,12 +16,14 @@
 <link rel="preconnect" href="https://basemaps.cartocdn.com">
 <link rel="preconnect" href="https://unpkg.com">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<link rel="stylesheet" href="/national-tools/rocket-launch-live/styles.css?v=20261102-sfn-editorial1">
+<link rel="stylesheet" href="/national-tools/rocket-launch-live/styles.css?v=20261102-truth1">
+<link rel="stylesheet" href="/national-tools/assets/launch-truth-desk.css?v=20261102-truth1">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5D2V2W7HN"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-Y5D2V2W7HN');</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://chrisizworski.com/national-tools/rocket-launch-live/#webpage","url":"https://chrisizworski.com/national-tools/rocket-launch-live/","name":"Rocket Launch Live USA: When and Where to Watch","description":"Coastal U.S. launch calendar with region-specific legal access, launch timing uncertainty and public NWS weather evidence.","dateModified":"2026-10-31","author":{"@id":"https://chrisizworski.com/#person"},"about":[{"@type":"Thing","name":"Rocket launch viewing"},{"@type":"Thing","name":"U.S. coastal spaceports"}]},{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"U.S. Tools","item":"https://chrisizworski.com/national-tools/"},{"@type":"ListItem","position":3,"name":"Rocket Launch Live USA","item":"https://chrisizworski.com/national-tools/rocket-launch-live/"}]}]}</script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
-<script src="/national-tools/rocket-launch-live/app.js?v=20261102-sfn-editorial1" defer></script>
+<script src="/national-tools/rocket-launch-live/app.js?v=20261102-truth1" defer></script>
+<script src="/national-tools/assets/launch-truth-desk.js?v=20261102-truth1" defer></script>
 </head>
 <body>
 <a class="rl-skip" href="#main-content">Skip to launch decisions</a>
@@ -118,7 +120,35 @@
   </div>
  </section>
 
- <section id="rl-news-desk" class="rl-section rl-news-desk" aria-labelledby="rl-news-title">
+ <section class="lt-desk" id="launch-truth-desk" data-launch-truth-context="national" data-status="loading" aria-labelledby="launch-truth-title">
+  <header class="lt-head">
+    <div><p class="lt-eyebrow">The mission record · source intelligence</p>
+      <h2 id="launch-truth-title">Launch Truth: what the sources actually establish</h2>
+      <p class="lt-subtitle">A dated record of published changes, source links and disagreements. An agreement on launch time is not a GO for launch.</p></div>
+    <div class="lt-timestamp" id="lt-timestamp">Checking the last scheduled evidence observation…</div>
+  </header>
+  <div class="lt-summary" aria-live="polite">
+    <div><span class="lt-kicker">The source verdict</span><strong id="lt-headline">Looking for this mission in the evidence ledger…</strong>
+      <p id="lt-explainer">This does not substitute for the launch operator.</p></div>
+    <div class="lt-comparison"><span class="lt-kicker">Cross-calendar check</span>
+      <strong id="lt-compare-state">Checking…</strong>
+      <p id="lt-compare-note">Source agreement is not a weather approval.</p></div>
+  </div>
+  <div class="lt-grid">
+    <div class="lt-track"><h3>What changed in the published schedule?</h3><p class="lt-hint">First observed by this site's scheduled monitor; these are not operator event times.</p>
+      <div id="lt-changes" class="lt-items"><p>Checking dated change history…</p></div></div>
+    <div class="lt-track"><h3>What are the sources reporting?</h3><p class="lt-hint">Launch Library update comments and news indexed to the exact launch ID, each with an original source.</p>
+      <div id="lt-sources" class="lt-items"><p>Checking the source record…</p></div></div>
+  </div>
+  <footer class="lt-foot"><p id="lt-source-health">Coverage is bounded and is checked independently of your browser.</p>
+    <div class="lt-links">
+      <a href="https://ll.thespacedevs.com/" target="_blank" rel="noopener noreferrer">Launch Library</a>
+      <a href="https://www.rocketlaunch.live/" target="_blank" rel="noopener noreferrer">Data by RocketLaunch.Live</a>
+      <a href="https://spaceflightnow.com/launch-schedule/" target="_blank" rel="noopener noreferrer">Spaceflight Now</a>
+    </div>
+  </footer>
+</section>
+<section id="rl-news-desk" class="rl-section rl-news-desk" aria-labelledby="rl-news-title">
   <div class="rl-section-head">
     <div><p class="rl-eyebrow">Independent reporting / the story behind the schedule</p>
       <h2 id="rl-news-title">What is happening with this mission?</h2></div>

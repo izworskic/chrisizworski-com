@@ -534,9 +534,17 @@
       if (sequence !== state.request) return;
       if (!response.ok || !data.ok) throw new Error(data.error || 'Launch data unavailable');
       render(data);
+      document.dispatchEvent(new CustomEvent('rocket-truth:mission-selected',{
+        detail:{launchId:data.selectedLaunchId||null,
+          net:data.selectedLaunch?.net||null,
+          netPrecision:data.selectedLaunch?.netPrecision||null,
+          timezone:data.region?.timezone||'America/New_York'}
+      }));
       syncUrl(data.selectedRegion, data.selectedLaunchId);
     } catch (err) {
       if (sequence !== state.request) return;
+      document.dispatchEvent(new CustomEvent('rocket-truth:mission-selected',
+        {detail:{launchId:null}}));
       chip($('rl-schedule-grade'), 'Schedule temporarily unavailable', 'unknown');
       chip($('rl-access-grade'), 'Official access must be checked', 'unknown');
       chip($('rl-weather-grade'), 'No current forecast', 'unknown');

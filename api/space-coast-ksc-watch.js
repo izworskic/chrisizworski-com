@@ -7,6 +7,7 @@ const { authorizeKscWatchRequest } = require('../lib/space-coast-ksc-watch-auth'
 const { KEY, runKscWatch, missionTimeline, publicWatchHealth } =
   require('../lib/space-coast-ksc-watch');
 const { runLaunchDayWatch } = require('../lib/space-coast-launch-day');
+const { runLaunchTruthWatch } = require('../lib/rocket-launch-truth');
 
 function createHandler({
   now = Date.now,
@@ -15,7 +16,9 @@ function createHandler({
   getWatchState = async () => (stateReady() ? new ToolState().get(KEY) : null),
   readSnapshot = readTrustedLaunches,
   runSchedule = runLaunchDayWatch,
-  scheduleReady = stateReady
+  runTruth = runLaunchTruthWatch,
+  scheduleReady = stateReady,
+  truthReady = stateReady
 } = {}) {
   return async function handler(req, res) {
     res.setHeader('X-Robots-Tag', 'noindex, nofollow');
@@ -26,16 +29,21 @@ function createHandler({
       });
       if (!allowed) return res.status(401).json({ ok: false, error: 'unauthorized' });
       try {
-        // One already-authenticated 15-minute runner, two isolated collectors.
-        // KSC checks never poll LL2; the separately bounded schedule collector
-        // runs concurrently and shares verified observations in private state.
-        const [kscResult,scheduleResult]=await Promise.allSettled([
-          run(),scheduleReady() ? runSchedule() : Promise.resolve({skipped:'storage-unavailable'})
+        // The existing signed runner hosts three isolated bounded collectors.
+        // Launch Truth polls no more often than hourly; never let a news
+        // provider outage disable KSC alerts or Florida schedule observations.
+        const [kscResult,scheduleResult,truthResult]=await Promise.allSettled([
+          run(),
+          scheduleReady() ? runSchedule() : Promise.resolve({skipped:'storage-unavailable'}),
+          truthReady() ? runTruth() : Promise.resolve({skipped:'storage-unavailable'})
         ]);
         if(kscResult.status==='rejected')throw kscResult.reason;
         const schedule=scheduleResult.status==='fulfilled'?
           scheduleResult.value:{ok:false,error:'schedule-check-failed'};
-        return res.status(200).json({...kscResult.value,scheduleMonitor:schedule});
+        const truth=truthResult.status==='fulfilled'?
+          truthResult.value:{ok:false,error:'truth-check-failed'};
+        return res.status(200).json({...kscResult.value,scheduleMonitor:schedule,
+          truthMonitor:truth});
       } catch (e) {
         const detail = String(e?.message || e).slice(0, 150);
         console.error('ksc_monitor_run_failed', detail);

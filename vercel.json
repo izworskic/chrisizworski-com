@@ -2079,6 +2079,14 @@
       "destination": "/synced-national-tools/assets/fall-color-network.css"
     },
     {
+      "source": "/national-tools/assets/launch-truth-desk.js",
+      "destination": "/synced-national-tools/assets/launch-truth-desk.js"
+    },
+    {
+      "source": "/national-tools/assets/launch-truth-desk.css",
+      "destination": "/synced-national-tools/assets/launch-truth-desk.css"
+    },
+    {
       "source": "/national-tools/assets/national-tools-directory.js",
       "destination": "/synced-national-tools/assets/national-tools-directory.js"
     },
