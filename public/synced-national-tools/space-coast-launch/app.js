@@ -164,7 +164,7 @@
     else links.appendChild(element('span','small',
       'Official document monitor has no confirmed observation yet.'));
     const direct = (monitor.sourceChecks || []).filter(x =>
-      ['45ws-forecast-support','45ws-sitemap','45ws-parent-weather'].includes(x.id));
+      ['45ws-home','45ws-forecast-support','45ws-sitemap','45ws-parent-weather'].includes(x.id));
     const blocked = direct.filter(x => x.status === 'unavailable').length;
     const linked = direct.reduce((n,x) => n + (x.links || 0),0);
     if (blocked) links.appendChild(element('span','small',
