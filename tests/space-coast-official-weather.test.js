@@ -231,7 +231,7 @@ test('both launch interfaces contain official evidence and preserve the canonica
   assert.match(fl,/id="fl-official-pov"/);
   assert.match(fl,/id="fl-official-history"/);
   assert.match(national,/id="rl-official-value"/);
-  assert.match(fl,/app\.js\?v=20261101-official1/);
-  assert.match(national,/app\.js\?v=20261101-official1/);
+  assert.match(fl,/app\.js\?v=20261102-weather-story1/);
+  assert.match(national,/app\.js\?v=20261102-weather-story1/);
   assert.equal((national.match(/rel="canonical"/g)||[]).length,1);
 });
