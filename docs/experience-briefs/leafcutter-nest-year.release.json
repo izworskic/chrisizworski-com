@@ -1,0 +1,182 @@
+{
+  "schemaVersion": "1.2",
+  "recordStatus": "draft",
+  "project": {
+    "slug": "leafcutter-bees",
+    "ownerRepo": "izworskic/chrisizworski-com",
+    "canonical": "https://chrisizworski.com/leafcutter-bees/",
+    "pageFile": "public/leafcutter-bees/index.html",
+    "visitorDecision": "Choose the right seasonal habitat care for wild cavity-nesting bees, or safely evaluate already owned commercial bee brood without inferring emergence from weather.",
+    "primaryAction": "Select spring, summer, autumn or winter, report garden flowers, nesting material and bee brood type, then follow one stage-specific cautious next action."
+  },
+  "claims": [
+    {
+      "id": "michigan-extension-nesting",
+      "kind": "official-reference",
+      "subject": "other",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://ncipmhort.cfans.umn.edu/sites/ncipmhort.cfans.umn.edu/files/2020-05/bee%20hotels%20michigan.pdf",
+      "checkedDate": "2026-11-01",
+      "limitation": "MSU management guidance provides seasonal habitat recommendations, not a local live nest census or universal emergence date."
+    },
+    {
+      "id": "xerces-natural-habitat",
+      "kind": "official-reference",
+      "subject": "other",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://xerces.org/publications/fact-sheets/nesting-overwintering-habitat",
+      "checkedDate": "2026-11-01",
+      "limitation": "General pollinator nesting and overwintering recommendations do not authorize handling unidentified brood."
+    },
+    {
+      "id": "npn-seasonal-heat-model",
+      "kind": "official-reference",
+      "subject": "other",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://www.usanpn.org/data/maps/AGDD",
+      "checkedDate": "2026-11-01",
+      "limitation": "Modeled base-50 Fahrenheit accumulation and anomaly describe regional weather-grid heat, not actual blooming or bee emergence."
+    },
+    {
+      "id": "nws-hourly-forecast",
+      "kind": "forecast",
+      "subject": "weather-context",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://api.weather.gov/",
+      "checkedDate": "2026-11-01",
+      "maxAgeMinutes": 1080,
+      "limitation": "NWS forecast at ZIP statistical point is a time-limited planning signal, not direct measurement at the property or proof of species-specific safety."
+    },
+    {
+      "id": "wild-nest-stage",
+      "kind": "unverified",
+      "subject": "other",
+      "state": "UNVERIFIED",
+      "sourceUrl": "https://xerces.org/pollinator-conservation/nesting-resources",
+      "checkedDate": "2026-11-01",
+      "limitation": "Illustrated leaf-lined cells are schematic; exact species, brood stage, and occupancy of the visitor's nest are not remotely verified."
+    },
+    {
+      "id": "field-note-editorial",
+      "kind": "editorial",
+      "subject": "other",
+      "state": "EDITORIAL",
+      "sourceUrl": "https://extension.usu.edu/planthealth/ipm/ornamental-pest-guide/arthopods/leafcutter-bees",
+      "checkedDate": "2026-11-01",
+      "limitation": "Four season chapter copy is interpretive editorial synthesis, not a species-calibrated development progression or real-time camera view."
+    }
+  ],
+  "decisionState": {
+    "selectedIdField": "month.value transformed by seasonFor(month), with selected regional ZIP/city separately identifying optional evidence",
+    "sourceOfTruth": "Existing leafcutter-bees original safe decision planner render(), with month, flowers, nest, path, brood-stage and independent NWS/USA-NPN source evidence.",
+    "linkedSurfaces": [
+      "answer",
+      "season-buttons",
+      "native-month-selector",
+      "illustrated-nest-journal",
+      "visitor-observation-notes",
+      "USA-NPN-evidence",
+      "NWS-evidence",
+      "ZIP-selectors"
+    ],
+    "unavailableBehavior": "Retain safe first-action and interpretive year journal, mark weather/thermal evidence unavailable, never infer a ship or release date, and clear old data when ZIP changes."
+  },
+  "scenarios": [
+    {
+      "kind": "initial",
+      "input": "Load in the current Michigan month with no ZIP lookup and wild-bee setting.",
+      "expectedVisibleAnswer": "Visible habitat-first answer and current seasonal nest chapter, with no verified real-time nest or climate claim.",
+      "sourceAndSafety": "Static editorial field note stays available without any forecast, while dynamic evidence says not checked."
+    },
+    {
+      "kind": "alternative",
+      "input": "Select summer season after spring using a native button or the month selector.",
+      "expectedVisibleAnswer": "Month updates to July, illustration shows leaf provisioning, and the season-specific first next action changes.",
+      "sourceAndSafety": "No spring/summer release forecast is invented by choosing a future month."
+    },
+    {
+      "kind": "reverse",
+      "input": "Choose spring → summer → spring using the seasonal native buttons.",
+      "expectedVisibleAnswer": "Original spring journal title, first action, month and aria-pressed state are restored.",
+      "sourceAndSafety": "The current-week NWS forecast is never recast as a forecast for a manually selected month."
+    },
+    {
+      "kind": "no-js",
+      "input": "Disable JavaScript and open the canonical guide.",
+      "expectedVisibleAnswer": "Static habitat-first next action, autumn narrative as an editorial illustration and primary scientific source links remain in HTML.",
+      "sourceAndSafety": "No claim of live seasonal progression, insect occupancy, or downloaded weather without scripts."
+    },
+    {
+      "kind": "no-tiles",
+      "input": "Block all map tiles and third-party map scripts.",
+      "expectedVisibleAnswer": "No map is part of this tool; the native season choice and ZIP-centroid text continue to work without a mapping service.",
+      "sourceAndSafety": "No implied map route or precise address; Census ZIP statistical point stays explicitly approximate."
+    },
+    {
+      "kind": "stale-data",
+      "input": "Switch to an unmapped ZIP or expire NWS/USA-NPN source responses.",
+      "expectedVisibleAnswer": "Prior heat totals clear, the first actionable garden advice remains and the evidence notebook states forecast/model unavailable.",
+      "sourceAndSafety": "No silent location fallback, no reusing old forecast for a different ZIP, no false flower or cocoon readiness."
+    },
+    {
+      "kind": "managed",
+      "input": "Choose managed cocoons in unknown stage and a month other than summer.",
+      "expectedVisibleAnswer": "Safe planner prioritizes identification and warns against re-refrigerating ready-to-emerge incubated bees.",
+      "sourceAndSafety": "Species-specific brooding instructions take precedence over GDD or 75°F seller planning windows."
+    },
+    {
+      "kind": "photo-error",
+      "input": "Block the externally hosted lead bee photo.",
+      "expectedVisibleAnswer": "The illustration and primary answer remain, with photo figure collapsed rather than a blank image column.",
+      "sourceAndSafety": "Missing imagery does not invent photographic evidence or obstruct scientific sources."
+    }
+  ],
+  "failures": {
+    "no-js": "Static meaningful habitat-first next action, complete source section and printed seasonal explanation stay usable without scripts.",
+    "no-tiles": "No visitor map is embedded in this bee field guide; text ZIP precision and source links survive an unavailable map provider.",
+    "no-image": "Remote Wikimedia photograph collapses to single-column readable answer on error; separate CSS educational diagram remains expressly schematic.",
+    "stale-data": "No forecast/heat clearance; status explains official source stale/unavailable, clears old ZIP evidence and conservatively advises checking real blooms and nests."
+  },
+  "qa": {
+    "viewports": [
+      360,
+      390,
+      768,
+      1440
+    ],
+    "browserStatus": "PENDING",
+    "browserRun": null,
+    "screenshotEvidence": []
+  },
+  "photos": [
+    {
+      "depictedSubject": "Female Megachile sp. carrying a freshly cut leaf segment, photographed in Florida, not authenticated as a Michigan species.",
+      "author": "Bob Peterson",
+      "license": "CC BY-SA 2.0",
+      "sourceUrl": "https://upload.wikimedia.org/wikipedia/commons/1/18/Leafcutter_bee_%28Megachile_sp.%29_collecting_leaves_%287519316920%29.jpg",
+      "creditUrl": "https://commons.wikimedia.org/wiki/File:Leafcutter_bee_(Megachile_sp.)_collecting_leaves_(7519316920).jpg",
+      "subjectMatch": "contextual",
+      "disclosure": "Photographed in Florida; leafcutter species not identified to species level, never used to prove Michigan garden activity."
+    }
+  ],
+  "release": {
+    "implemented": {
+      "status": "CONFIRMED",
+      "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/pull/1403",
+      "checkedDate": "2026-11-01"
+    },
+    "verified": {
+      "status": "PENDING"
+    },
+    "deployed": {
+      "status": "PENDING"
+    },
+    "live": {
+      "status": "PENDING"
+    },
+    "measured": {
+      "status": "NOT_MEASURED"
+    }
+  },
+  "note": "Existing canonical routed from Michigan Gardening and present in sitemap. Release checker --check-site is for new global Tools catalog additions, not this already indexed Michigan-gardening guide. Browser run and public evidence pending."
+}
