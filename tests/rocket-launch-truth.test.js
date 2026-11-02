@@ -238,6 +238,10 @@ test('public endpoint is GET-only, no background source polling and honest unmon
 test('existing signed KSC monitor can collect three streams without making news mandatory for KSC alerts',async()=>{
   let authorized=0,ksc=0,schedule=0,truthChecks=0;
   const api=createKscHandler({
+    nationalReady:()=>true,
+    runNational:async()=>({ok:true,snapshot:{version:2,checkedAt:new Date(NOW).toISOString(),
+      activeCount:2,complete:true,health:[{id:'primary',status:'ok'},{id:'specialist',status:'ok'}],
+      missions:[]}}),
     authorized:async()=>{authorized++;return true;},
     run:async()=>{ksc++;return {ok:true,verifiedPages:1};},
     scheduleReady:()=>true,runSchedule:async()=>{schedule++;return {ok:true,missions:2};},
@@ -249,6 +253,10 @@ test('existing signed KSC monitor can collect three streams without making news 
   assert.equal(authorized,1);
   assert.equal(ksc,1);assert.equal(schedule,1);assert.equal(truthChecks,1);
   const down=createKscHandler({
+    nationalReady:()=>true,
+    runNational:async()=>({ok:true,snapshot:{version:2,checkedAt:new Date(NOW).toISOString(),
+      activeCount:2,complete:true,health:[{id:'primary',status:'ok'},{id:'specialist',status:'ok'}],
+      missions:[]}}),
     authorized:async()=>true,run:async()=>({ok:true}),
     scheduleReady:()=>true,runSchedule:async()=>({ok:true}),
     truthReady:()=>true,runTruth:async()=>{throw Error('SNAPI outage');}
