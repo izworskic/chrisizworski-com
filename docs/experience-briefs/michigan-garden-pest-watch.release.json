@@ -137,9 +137,19 @@
       768,
       1440
     ],
-    "browserStatus": "PENDING",
-    "browserRun": null,
-    "screenshotEvidence": []
+    "browserStatus": "PASSED_FIXTURE_BASED_ON_PREVIOUS_HEAD",
+    "browserRun": "https://github.com/izworskic/chrisizworski-com/actions/runs/41440632614",
+    "screenshotEvidence": [
+      "https://github.com/izworskic/chrisizworski-com/actions/runs/41440632614/artifacts/13139336647"
+    ],
+    "manualLayoutReview": "Desktop and 390px full-page screenshot inspected in this build session; field-note layout and evidence lanes readable, no obstructing layers. Core content copy received a later host-crop fix requiring rerun.",
+    "failureCoverage": [
+      "NWS stale/missing percentages => partial/unknown",
+      "API source outage removes stale pest cards",
+      "Census ZCTA failure never silently replaces the location",
+      "Off-season crop-specific plan and user reported suspect",
+      "No JS source-backed crop note"
+    ]
   },
   "photos": [],
   "release": {
@@ -149,17 +159,85 @@
       "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/tree/feature/garden-pest-watch-goal-engine-20261102"
     },
     "verified": {
-      "status": "PENDING"
+      "status": "PENDING_EXACT_HEAD",
+      "previousGreenCommit": "31fbb11730f0dd4a5501dd73548f4dafe366dffd",
+      "note": "Latest crop-specific science/data repairs require new CI."
     },
     "deployed": {
-      "status": "PENDING"
+      "status": "PREVIEW_READY_PRIOR_HEAD",
+      "previousGreenCommit": "31fbb11730f0dd4a5501dd73548f4dafe366dffd",
+      "note": "Draft PR preview was READY; current updated head awaiting Vercel."
     },
     "live": {
-      "status": "PENDING"
+      "status": "NOT_PRODUCTION_RELEASED"
     },
     "measured": {
       "status": "NOT_MEASURED"
     }
   },
-  "note": "Draft and branch-only. Numeric model validation, source licenses, exact-head full CI, real browser screenshots, biological hindcast, production READY and user outcome are NOT VERIFIED. Do not merge while any hard gate is unmeasured."
+  "note": "Exact current-head CI and Vercel must pass, and critical evidence gates must remain satisfied, before any merge. Missing numeric pest emergence models are deliberately excluded from the shipped feature, not represented as low risk. Outcome and quantitative event calibration require separate post-release evaluation.",
+  "valueFunctions": {
+    "overall": {
+      "target": 92,
+      "score": null,
+      "status": "NOT_FULLY_MEASURED",
+      "reason": "Never treat source/crop unit-test passes as observed visitor task time or biological forecast calibration."
+    },
+    "decision": {
+      "weightPercent": 35,
+      "target": 90,
+      "score": null,
+      "benchmarks": {
+        "pestModules": 18,
+        "crops": 12,
+        "minimumPestModules": 12,
+        "cropStageChanges": "TESTED",
+        "offseasonCropChanges": "TESTED",
+        "interventionBranches": "DOCUMENTED",
+        "visitorTaskCompletionSeconds": "NOT_MEASURED"
+      }
+    },
+    "science": {
+      "weightPercent": 35,
+      "target": 95,
+      "score": null,
+      "benchmarks": {
+        "supportedSourceRegistry": "RECHECKED_SOURCE_PATHS",
+        "degreeDayModels": "REFERENCE_ONLY_NOT_LIVE",
+        "weatherPercentNullProtection": "TESTED",
+        "localConfirmationFabrication": "BLOCKED",
+        "pesticideProducts": "NONE",
+        "imageLicensingRisk": "NO_EXTERNAL_PHOTOS"
+      }
+    },
+    "experience": {
+      "weightPercent": 20,
+      "target": 90,
+      "score": null,
+      "benchmarks": {
+        "screenWidths": [
+          360,
+          390,
+          768,
+          1440
+        ],
+        "browserStateReversal": "PASSED_ON_PRIOR_HEAD",
+        "accessibilityNoJS": "PASSED_ON_PRIOR_HEAD",
+        "humanVisualScreenshot": "INSPECTED",
+        "visitorUsabilityStudy": "NOT_MEASURED"
+      }
+    },
+    "engineering": {
+      "weightPercent": 10,
+      "target": 90,
+      "score": null,
+      "benchmarks": {
+        "previousHeadFullCI": "59/59",
+        "previousHeadBrowser": "PASS",
+        "previousHeadPreview": "READY",
+        "currentHeadFullCI": "PENDING",
+        "productionSmoke": "NOT_RUN"
+      }
+    }
+  }
 }
