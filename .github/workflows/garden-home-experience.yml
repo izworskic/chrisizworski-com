@@ -3,6 +3,11 @@ on:
   pull_request:
     paths:
       - 'public/michigan-gardening/**'
+      - 'public/michigan-garden-pest-watch/**'
+      - 'public/assets/garden-pest-watch.*'
+      - 'lib/garden-pest-watch.cjs'
+      - 'api/michigan-garden-pest-watch.js'
+      - 'scripts/verify-garden-pest-watch-browser.cjs'
       - 'public/leafcutter-bees/**'
       - 'api/leafcutter-release-weather.js'
       - 'lib/leafcutter-release.cjs'
@@ -31,6 +36,8 @@ jobs:
         run: node scripts/verify-garden-home-browser.cjs
       - name: Check leafcutter release forecast and mobile states
         run: node scripts/verify-leafcutter-browser.cjs
+      - name: Check Garden Pest Watch crop, evidence, failure and responsive browser behavior
+        run: node scripts/verify-garden-pest-watch-browser.cjs
       - name: Save screenshots for inspection
         if: always()
         uses: actions/upload-artifact@v4
@@ -39,5 +46,6 @@ jobs:
           path: |
             artifacts/garden-home-browser/
             artifacts/leafcutter-browser/
+            artifacts/garden-pest-watch-browser/
           if-no-files-found: warn
           retention-days: 14
