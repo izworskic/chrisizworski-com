@@ -1,0 +1,165 @@
+{
+  "schemaVersion": "1.2",
+  "recordStatus": "draft",
+  "project": {
+    "slug": "michigan-garden-pest-watch",
+    "ownerRepo": "izworskic/chrisizworski-com",
+    "canonical": "https://chrisizworski.com/michigan-garden-pest-watch/",
+    "pageFile": "public/michigan-garden-pest-watch/index.html",
+    "visitorDecision": "Which source-backed pests are worth scouting in my selected Michigan crop and stage this season, and what action is justified?",
+    "primaryAction": "Choose actual crop and growth stage, inspect the prioritized field sign and use the source to validate identification before intervention."
+  },
+  "claims": [
+    {
+      "id": "msu-cabbage-reference",
+      "kind": "official-reference",
+      "subject": "pest-model-reference",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://enviroweather.msu.edu/crops/coleCrops/cabbagemaggot",
+      "checkedDate": "2026-11-02",
+      "limitation": "MSU adult timing thresholds are reference only here; calculation-method parity and current input series not integrated, so the tool emits no emergence forecast."
+    },
+    {
+      "id": "usa-japanese-phenology",
+      "kind": "official-reference",
+      "subject": "pest-model-reference",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://www.usanpn.org/data/maps/forecasts/Japanese_beetle",
+      "checkedDate": "2026-11-02",
+      "limitation": "Model uses Jan 1 single triangle base 50/upper 92; current generic seasonal heat is not equivalent and must not be substituted."
+    },
+    {
+      "id": "msu-borer-incomplete",
+      "kind": "unverified",
+      "subject": "biological-forecast",
+      "state": "UNVERIFIED",
+      "sourceUrl": "https://enviroweather.msu.edu/crops/cucurbits/squashvineborer",
+      "checkedDate": "2026-11-02",
+      "limitation": "Public specification lacks complete method details and programmatic rights; borer module remains qualitative seasonal scouting."
+    },
+    {
+      "id": "msu-vegetable-scout",
+      "kind": "official-reference",
+      "subject": "scouting-guidance",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://www.canr.msu.edu/uploads/resources/pdfs/pest_scouting_in_vegetables.pdf",
+      "checkedDate": "2026-11-02",
+      "limitation": "Michigan extension scouting recommendations are season- and host-conditioned; not proof of any specific garden occurrence."
+    },
+    {
+      "id": "nws-hourly-weather",
+      "kind": "forecast",
+      "subject": "weather-context",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://www.weather.gov/documentation/services-web-api",
+      "checkedDate": "2026-11-02",
+      "maxAgeMinutes": 1440,
+      "limitation": "Only future official hourly NWS gridpoint weather is summarized; editorial wet/hot-dry cues are not validated pest probabilities and issue dates must be fresh."
+    },
+    {
+      "id": "mdard-invasives",
+      "kind": "official-reference",
+      "subject": "invasive-state-detection",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://www.michigan.gov/en/invasives/id-report/insects/spotted-lanternfly",
+      "checkedDate": "2026-11-02",
+      "limitation": "No live county confirmation feed is connected. State guidance is linked; Bay County or home garden status is not inferred."
+    }
+  ],
+  "decisionState": {
+    "selectedIdField": "crop + stage + ZIP area + visitor-reported suspect",
+    "sourceOfTruth": "lib/garden-pest-watch.cjs makes deterministic stage/season IPM decisions; api/michigan-garden-pest-watch.js adds only quality-gated NWS context and Census ZCTA spatial semantics.",
+    "linkedSurfaces": [
+      "first-screen field assignment",
+      "crop/stage form",
+      "weather and source lanes",
+      "priority field-note cards",
+      "visitor suspect selector",
+      "share URL",
+      "offline checklist"
+    ],
+    "unavailableBehavior": "When official NWS data, Census ZIP mapping or API are missing, no weather or emergence claim is made. A stable HTML scouting checklist remains available; invalid ZIP requires correction, never a silent city substitution."
+  },
+  "scenarios": [
+    {
+      "kind": "initial",
+      "input": "November 2; Bay City default; squash growing",
+      "expectedVisibleAnswer": "Prepare beds and retain non-invasive beneficial overwintering habitat; no claim of summer borer activity.",
+      "sourceAndSafety": "SEASONAL_REFERENCE, not an adult-flight model or a nearby report."
+    },
+    {
+      "kind": "alternative",
+      "input": "July; choose brassicas at seedling stage, ZIP 48706",
+      "expectedVisibleAnswer": "Prioritize cabbage maggot at soil line and flea beetle seedling checks; source links and ZIP interior-point meaning visible.",
+      "sourceAndSafety": "No active local adult claim; MSU biologic model is reference only."
+    },
+    {
+      "kind": "reverse",
+      "input": "Switch squash → tomatoes → squash, and growing → flowering → growing",
+      "expectedVisibleAnswer": "The scouting answer, field notes and shareable URL restore the original crop/stage, with stale response ignored by request sequence.",
+      "sourceAndSafety": "No change to evidence type; local status remains unverified."
+    },
+    {
+      "kind": "no-js",
+      "input": "Disable scripts",
+      "expectedVisibleAnswer": "Readable default squash field assignment, original source link, and evergreen crop scouting tips remain in static HTML.",
+      "sourceAndSafety": "No live NWS indication, no misleading seasonal emergence date."
+    },
+    {
+      "kind": "no-tiles",
+      "input": "Block all map tiles or image requests",
+      "expectedVisibleAnswer": "Tool continues unchanged; no map or external insect photo is a dependency.",
+      "sourceAndSafety": "Vector is decorative and explicitly not a species identification image."
+    },
+    {
+      "kind": "stale-data",
+      "input": "NWS issued >24h ago, timeseries empty or upstream throws",
+      "expectedVisibleAnswer": "Weather marked unavailable; crop/season decision still appears; no weather-derived pest assertion.",
+      "sourceAndSafety": "No stale forecast promoted into live presence or safe status."
+    },
+    {
+      "kind": "user-report",
+      "input": "July squash, suspected squash vine borer visitor report",
+      "expectedVisibleAnswer": "Suspected borer is prioritized with signs and if-confirmed advice, but report clearly says not expert verified.",
+      "sourceAndSafety": "GARDENER_REPORTED is distinct from REGION_REPORTED or confirmed."
+    }
+  ],
+  "failures": {
+    "no-js": "HTML default garden task, crop-specific evergreen tips and official source links remain visible.",
+    "no-tiles": "No map or tile dependency. All garden actions and links are text-first.",
+    "no-image": "No external insect photos are embedded pending provenance; decorative vector only, identified as not an ID image.",
+    "stale-data": "NWS issued time checked within 24h; local weather status UNAVAILABLE on stale/error and seasonal IPM remains."
+  },
+  "qa": {
+    "viewports": [
+      360,
+      390,
+      768,
+      1440
+    ],
+    "browserStatus": "PENDING",
+    "browserRun": null,
+    "screenshotEvidence": []
+  },
+  "photos": [],
+  "release": {
+    "implemented": {
+      "status": "CONFIRMED",
+      "checkedDate": "2026-11-02",
+      "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/tree/feature/garden-pest-watch-goal-engine-20261102"
+    },
+    "verified": {
+      "status": "PENDING"
+    },
+    "deployed": {
+      "status": "PENDING"
+    },
+    "live": {
+      "status": "PENDING"
+    },
+    "measured": {
+      "status": "NOT_MEASURED"
+    }
+  },
+  "note": "Draft and branch-only. Numeric model validation, source licenses, exact-head full CI, real browser screenshots, biological hindcast, production READY and user outcome are NOT VERIFIED. Do not merge while any hard gate is unmeasured."
+}
