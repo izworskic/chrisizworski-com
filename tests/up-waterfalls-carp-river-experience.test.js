@@ -29,9 +29,9 @@ test('Carp River public managed overlook qualifies through five independent docu
  assert.match(f.parking,/NTN South Trailhead/);
  assert.match(f.parking,/shoulder/);
  assert.match(f.walk,/overlook/);
- assert.match(f.walk,/no verified exact GPS polyline|no verified exact GPS|exact 2026 line|no verified exact/i);
+ assert.match(f.walk,/current NTN signs/i);
  assert.match(f.further,/2024/);
- assert.match(f.further,/not been independently georeferenced/i);
+ assert.match(f.further,/exact new-overlook trail geometry/i);
 });
 
 test('Two Carp River named features and Morgan Falls remain geographically distinct',()=>{
