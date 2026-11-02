@@ -30,7 +30,11 @@ try{
   });
   await run('mobile map initializes from local Leaflet JS and CARTO tiles',async()=>{
     await page.waitForFunction(()=>!!window.UPWaterfallMap,{timeout:15000});
-    assert.ok(await page.locator('img.leaflet-tile[src*="cartocdn.com"]').count()>0);
+    await page.waitForFunction(()=>[...document.querySelectorAll('img.leaflet-tile')].some(x=>x.complete&&x.naturalWidth>=200&&(x.src.includes('tile.openstreetmap.org')||x.src.includes('cartocdn.com')&&x.src.includes('?key='))),{timeout:15000});
+    assert.ok(await page.locator('img.leaflet-tile[src*="tile.openstreetmap.org"],img.leaflet-tile[src*="cartocdn.com"][src*="?key="]').count()>0,'only licensed OSM or keyed CARTO tiles may render');
+    assert.ok(await page.locator('#falls-basemap-status').count()>0);
+    const sources=await page.locator('img.leaflet-tile').evaluateAll(imgs=>imgs.map(x=>x.src));
+    assert.ok(!sources.some(src=>src.includes('cartocdn.com')&&!src.includes('?key=')),'keyless CARTO renders watermark');
     assert.ok(await page.locator('script[src="/assets/leaflet-1.9.4.js"]').count()>0);
   });
   await run('390px mobile document fits viewport',async()=>{
@@ -38,6 +42,78 @@ try{
     assert.ok(scroll<=width+2,'horizontal overflow '+scroll+' > '+width);
   });
   await page.screenshot({path:screenshots+'/hub-mobile.png',fullPage:true,animations:'disabled'});
+  await run('visit lens: filter by 30-minute full on-site range and exclude agency closure',async()=>{
+    await page.locator('#visit-region').selectOption('Pictured Rocks / Munising');
+    await page.locator('#visit-budget').selectOption('30');
+    assert.equal(await page.locator('#region').inputValue(),'Pictured Rocks / Munising');
+    assert.equal(await page.locator('[data-visit-pick="wagner-falls"]').count(),1);
+    assert.equal(await page.locator('[data-visit-pick="munising-falls"]').count(),0);
+    assert.equal(await page.locator('[data-visit-pick="chapel-falls"]').count(),0);
+    assert.match(await page.locator('#visit-baseline').innerText(),/high end|at most 30/i);
+  });
+  await run('visit lens: winter Bond source caution and reversibility',async()=>{
+    await page.locator('#visit-region').selectOption('Western U.P.');
+    await page.locator('#visit-budget').selectOption('60');
+    await page.locator('#q').fill('Bond');
+    await page.locator('#visit-date').fill('2026-12-10');
+    assert.equal(await page.locator('[data-visit-pick="bond-falls"]').count(),1);
+    assert.match(await page.locator('#visit-picks').innerText(),/mid-May through mid-October/);
+    await page.locator('[data-visit-pick="bond-falls"] .visit-focus').click();
+    assert.equal(await page.locator('[data-visit-pick="bond-falls"] .visit-focus').getAttribute('aria-pressed'),'true');
+    assert.match(await page.locator('#visit-selection').innerText(),/Bond Falls/);
+    assert.ok(await page.locator('.leaflet-popup-content').count()>0,'map popup should match selection');
+    await page.locator('#q').fill('Rainbow');
+    await page.locator('#visit-budget').selectOption('90');
+    assert.equal(await page.locator('[data-visit-pick="rainbow-falls"]').count(),1);
+    await page.locator('#q').fill('Bond');
+    assert.equal(await page.locator('[data-visit-pick="bond-falls"]').count(),1);
+    await page.screenshot({path:screenshots+'/visit-lens-bond-mobile.png',fullPage:true,animations:'disabled'});
+    await page.locator('#q').fill('');
+    await page.locator('#visit-region').selectOption('all');
+    await page.locator('#visit-budget').selectOption('60');
+    await page.locator('#visit-date').fill('2026-11-02');
+    assert.ok(await page.locator('.visit-pick').count()>0);
+  });
+  await run('visit lens: park-side-only and unfinished viewing do not masquerade as cleared routes',async()=>{
+    await page.locator('#visit-region').selectOption('Pictured Rocks / Munising');
+    await page.locator('#visit-budget').selectOption('30');
+    await page.locator('#q').fill('Scott Falls');
+    assert.equal(await page.locator('[data-visit-pick="scott-falls"]').count(),1);
+    assert.match(await page.locator('#visit-picks').innerText(),/Do not cross the highway|park side of busy M-28/i);
+    await page.locator('#q').fill('');
+    await page.locator('#visit-region').selectOption('all');
+    assert.equal(await page.locator('[data-visit-pick="scott-falls"]').count(),0,'other safer 30-minute options should rank ahead');
+    await page.locator('#visit-region').selectOption('Western U.P.');
+    await page.locator('#visit-budget').selectOption('90');
+    await page.locator('#q').fill('Houghton-Douglass');
+    assert.match(await page.locator('#visit-picks').innerText(),/phased development|accessible falls overlook is not verified/i);
+    await page.locator('#q').fill('');
+    await page.locator('#visit-region').selectOption('all');
+    await page.locator('#visit-budget').selectOption('60');
+  });
+  await run('visit lens: future dates identify superseded historic source window',async()=>{
+    await page.locator('#visit-date').fill('2028-02-10');
+    assert.match(await page.locator('#visit-verdict').innerText(),/beyond this source review period|historical/i);
+    await page.locator('#visit-date').fill('2026-11-02');
+  });
+  await run('visit lens: 360px and 1440px layout has no horizontal overflow',async()=>{
+    for(const width of [360,768,1440]){
+      await page.setViewportSize({width,height:880});
+      const metrics=await page.evaluate(()=>({width:innerWidth,scroll:document.documentElement.scrollWidth}));
+      assert.ok(metrics.scroll<=width+2,'visit lens '+width+' horizontal overflow: '+metrics.scroll);
+      await page.screenshot({path:screenshots+'/visit-lens-'+width+'.png',fullPage:false,animations:'disabled'});
+    }
+    await page.setViewportSize({width:390,height:844});
+  });
+  await run('visit lens: no-JS retains fallback source guidance and full destination list',async()=>{
+    const staticPage=await browser.newPage({viewport:{width:390,height:844},javaScriptEnabled:false});
+    try{
+      await staticPage.goto(base+'/upper-peninsula-waterfalls/',{waitUntil:'domcontentloaded'});
+      assert.equal(await staticPage.locator('[data-fall]').count(),expectedFalls);
+      assert.match(await staticPage.locator('.visit-noscript').innerText(),/requires JavaScript/);
+      assert.ok(await staticPage.locator('a[href="https://www.michigan.gov/recsearch/parks/porkies"]').count()>=1);
+    }finally{await staticPage.close();}
+  });
   await run('search filters cards without changing canonical page',async()=>{
     await page.locator('#q').fill('Rainbow');
     const visible=page.locator('[data-fall]:visible');

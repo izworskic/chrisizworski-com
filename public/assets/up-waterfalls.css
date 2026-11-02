@@ -20,3 +20,70 @@
 
 /* Research notes sit on pale paper; the hero retains its light eyebrow. */
 .detail .eyebrow{color:var(--pine)}
+
+
+/* B55 / Waterfall decision desk: deliberately separate from generic map cards.
+   High contrast paper/river-ink hierarchy, mobile-first; no photos without rights. */
+.visit-lens{color:#183c43;background:linear-gradient(150deg,#f4f0e7 0%,#f6f8f4 74%,#f1f5f2 100%);border:1px solid #b9c9c6;border-top:5px solid #276b77;border-radius:12px;padding:clamp(15px,2.5vw,27px);margin:12px 0 23px;box-shadow:0 4px 20px #133d4212}
+.visit-head{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(240px,.7fr);gap:clamp(16px,3vw,35px);align-items:start}
+.visit-intro h2{color:#183c43;font:normal clamp(1.65rem,3vw,2.45rem)/1.12 Georgia,serif;margin:6px 0 12px;max-width:730px}
+.visit-intro p{max-width:800px;margin:8px 0;color:#38545a;line-height:1.6}
+.visit-eyebrow{font-size:.73rem!important;letter-spacing:.1em;font-weight:800;color:#235d67!important}
+.visit-controls{background:white;border:1px solid #b7c7c4;border-radius:9px;padding:14px;display:grid;grid-template-columns:1fr;gap:6px}
+.visit-controls label{font-size:.84rem;font-weight:800;color:#173d43;margin-top:6px}
+.visit-controls select,.visit-controls input{width:100%;max-width:100%;min-height:42px;border:1px solid #809d9d;border-radius:6px;background:#fff;color:#16363e;font:inherit;padding:7px 9px}
+.visit-controls small{color:#53656b;line-height:1.35;font-size:.76rem}
+.visit-result{border-top:1px solid #bccac5;margin-top:20px;padding-top:14px}
+.visit-summary{display:grid;grid-template-columns:minmax(160px,.85fr) minmax(0,1.1fr);gap:5px 18px;align-items:baseline}
+.visit-summary h3{color:#183c43;font:normal 1.3rem/1.22 Georgia,serif;margin:2px 0 5px}
+.visit-summary p{margin:1px 0;color:#335258;font-size:.94rem}
+.visit-summary .visit-baseline{grid-column:2;font-size:.82rem;color:#546765}
+.visit-picks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:14px 0 10px}
+.visit-pick{background:white;border:1px solid #bbcbc5;border-radius:8px;padding:16px;min-width:0;display:flex;flex-direction:column;gap:7px;box-shadow:0 1px 3px #143d4312}
+.visit-pick.is-selected{border-color:#185365;outline:2px solid #185365;outline-offset:0}
+.visit-pick h3{font:normal 1.3rem/1.2 Georgia,serif;margin:0;color:#19434a}
+.visit-pick h3 a{color:#174e61;text-decoration:underline;text-underline-offset:3px}
+.visit-pick p{margin:0;font-size:.87rem;line-height:1.42;color:#3f5559}
+.visit-pick .visit-kicker{font-size:.68rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#477081}
+.visit-pick .visit-meta{color:#274750;font-size:.82rem;font-weight:700}
+.visit-pick .visit-why{font-size:.88rem;color:#30494d}
+.visit-pick .visit-source-hint{font-size:.78rem;color:#7e4a1f;border-left:3px solid #b47d38;padding-left:9px}
+.visit-actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:auto;padding-top:9px}
+.visit-focus{background:#174854;border:1px solid #174854;color:#fff;font:inherit;font-size:.82rem;font-weight:800;padding:8px 11px;border-radius:6px;min-height:39px;cursor:pointer}
+.visit-focus:hover{background:#0a3440}
+.visit-focus[aria-pressed=true]{background:#e4f0ef;color:#15444e}
+.visit-actions a{color:#185365;font-size:.8rem;font-weight:750;text-underline-offset:2px}
+.visit-selection,.visit-empty,.visit-noscript{padding:10px 12px;background:#e4eeeb;border:1px solid #bdcdc8;border-radius:6px;font-size:.85rem;line-height:1.5;color:#24494c}
+.visit-empty{grid-column:1/-1;padding:20px}
+.visit-proof{margin-top:9px;border-top:1px solid #becdc6;padding:10px 2px 0;color:#3f565a;font-size:.85rem}
+.visit-proof summary{font-weight:800;color:#1d5263;cursor:pointer}
+.visit-proof>div{margin-top:9px;padding:4px 0;line-height:1.55}
+.visit-proof a{color:#1d5263;font-weight:750;text-decoration:underline}
+.visit-lens :is(button,input,select,a,summary):focus-visible{outline:3px solid #b56716;outline-offset:3px}
+@media(max-width:980px){.visit-head{grid-template-columns:1fr}.visit-controls{grid-template-columns:minmax(120px,175px) minmax(0,1fr);gap:7px 12px;align-items:center}.visit-controls label,.visit-controls select,.visit-controls input{grid-column:auto}.visit-controls small{grid-column:2}}
+@media(max-width:740px){.visit-picks{grid-template-columns:1fr}.visit-summary{display:block}.visit-summary p{margin-top:8px}.visit-controls{display:grid;grid-template-columns:1fr;gap:6px}.visit-controls label,.visit-controls select,.visit-controls input,.visit-controls small{grid-column:1}.visit-lens{margin:10px 0 20px}.visit-pick{padding:13px}.visit-pick h3{font-size:1.25rem}.visit-intro h2{font-size:1.75rem}}
+@media(prefers-reduced-motion:reduce){.visit-lens *, .visit-lens *::before,.visit-lens *::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+/* Raw research-only map points are not a green/verified visitor status. */
+.dot.research{background:#657c83}
+
+
+/* Screenshot QA B55: bring the decision into the first mobile viewport.
+   Preserve all four primary/secondary navigation links, just use two concise rows. */
+@media(max-width:740px){
+ .up-waterfall-hub .mast{padding:9px 0}
+ .up-waterfall-hub .mast .wrap{gap:5px}
+ .up-waterfall-hub .mast nav{gap:10px;font-size:.78rem}
+ .up-waterfall-hub .hero{padding:18px 0 14px}
+ .up-waterfall-hub .hero .eyebrow{font-size:.66rem;letter-spacing:.13em}
+ .up-waterfall-hub .hero h1{font-size:clamp(1.95rem,8.7vw,2.35rem);line-height:1.04;margin:7px 0 10px;letter-spacing:-.035em}
+ .up-waterfall-hub .hero p{font-size:.88rem;line-height:1.43;margin:8px 0}
+ .up-waterfall-hub .hero .quicknav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:12px}
+ .up-waterfall-hub .hero .quicknav .pill-link{font-size:.76rem;line-height:1.25;padding:7px 8px;min-height:37px;justify-content:center;text-align:center;overflow-wrap:anywhere}
+ .up-waterfall-hub .truth{padding:9px 0;font-size:.78rem;line-height:1.44}
+ .up-waterfall-hub .map-zone{padding:15px 0}
+ .up-waterfall-hub .map-zone .intro h2{font-size:1.55rem;line-height:1.12;margin:0 0 4px}
+ .up-waterfall-hub .map-zone .intro p{font-size:.8rem;line-height:1.36;margin-bottom:7px}
+ .up-waterfall-hub .visit-intro h2{font-size:1.58rem}
+ .up-waterfall-hub .visit-intro p{font-size:.88rem;line-height:1.45}
+}

@@ -1,0 +1,181 @@
+{
+  "schemaVersion": "1.2",
+  "recordStatus": "draft",
+  "project": {
+    "slug": "upper-peninsula-waterfalls",
+    "ownerRepo": "izworskic/chrisizworski-com",
+    "canonical": "https://chrisizworski.com/upper-peninsula-waterfalls/",
+    "pageFile": "public/upper-peninsula-waterfalls/index.html",
+    "visitorDecision": "Choose up to three source-reviewed waterfall locations worth investigating by U.P. region, intended travel date and upper-end on-site time budget without implying any real-time opening.",
+    "primaryAction": "Select a candidate to focus its waterfall map pin and inspect the primary public parking and trail authority before travel."
+  },
+  "claims": [
+    {
+      "id": "porkies-vehicle-closures",
+      "kind": "official-reference",
+      "state": "SUPPORTED",
+      "subject": "route-guidance",
+      "sourceUrl": "https://www.michigan.gov/recsearch/parks/porkies",
+      "checkedDate": "2026-11-02",
+      "limitation": "Only M-107 at Whitetail and the specified South Boundary Road segment close December 1–late spring; this does not imply every waterfall or park road closes."
+    },
+    {
+      "id": "bond-seasonal-visitor-approach",
+      "kind": "official-reference",
+      "state": "SUPPORTED",
+      "subject": "parking-rule",
+      "sourceUrl": "https://www.michigan.gov/recsearch/parks/bondfalls",
+      "checkedDate": "2026-11-02",
+      "limitation": "Usual seasonal vehicle access is not a live gate state or permission to bypass a posted closure."
+    },
+    {
+      "id": "mdot-roadside-parks",
+      "kind": "official-notice",
+      "state": "SUPPORTED",
+      "subject": "parking-rule",
+      "sourceUrl": "https://www.michigan.gov/mdot/news-outreach/pressreleases/2026/10/15/mdot-roadside-parks-set-to-close-for-season",
+      "checkedDate": "2026-11-02",
+      "limitation": "Most roadside parks announced closed for the season; exact status at Fumee, Agate or Tioga needs confirmation."
+    },
+    {
+      "id": "black-river-construction",
+      "kind": "official-notice",
+      "state": "SUPPORTED",
+      "subject": "park-access",
+      "accessScope": "Named Black River Scenic Byway waterfall trails and platforms, not entire forest or river",
+      "sourceUrl": "https://www.fs.usda.gov/r09/ottawa/alerts/black-river-waterfall-platforms-and-trails-undergoing-major-repairs",
+      "checkedDate": "2026-11-02",
+      "limitation": "Location-specific construction notice; future work or reopening is not proved by absence of another update."
+    },
+    {
+      "id": "munising-trail-closed",
+      "kind": "official-notice",
+      "state": "SUPPORTED",
+      "subject": "park-access",
+      "accessScope": "Munising Falls trail past visitor-center lot, not the visitor center itself",
+      "sourceUrl": "https://www.nps.gov/places/munising-falls.htm",
+      "checkedDate": "2026-11-02",
+      "limitation": "NPS reports trail closed until further notice; lot/visitor center access does not make the waterfall overlook reachable."
+    },
+    {
+      "id": "live-access-unknown",
+      "kind": "unverified",
+      "state": "UNVERIFIED",
+      "subject": "park-access",
+      "sourceUrl": "https://www.michigan.gov/dnr/about/newsroom/closures",
+      "checkedDate": "2026-11-02",
+      "limitation": "No comprehensive official API for all 72 trails, plowed roads and parking; no green open-now status may be generated."
+    },
+    {
+      "id": "regional-hydrology-not-used",
+      "kind": "no-data",
+      "state": "NO_DATA",
+      "subject": "river-flow",
+      "sourceUrl": "https://waterdata.usgs.gov/",
+      "checkedDate": "2026-11-02",
+      "limitation": "USGS station proximity is not waterfall-specific discharge or a safe walking access report; no live water claims are made."
+    }
+  ],
+  "decisionState": {
+    "selectedIdField": "HTML data-id identifying a curated waterfall source record",
+    "sourceOfTruth": "The existing 72 data-fall cards, their high-end published time range, recorded status and cautious official date-specific guidance in public/assets/up-waterfalls-visit-lens.js.",
+    "linkedSurfaces": [
+      "answer",
+      "date-region-time-controls",
+      "candidate-deck",
+      "selected-id",
+      "CARTO-waterfall-marker",
+      "saved-stop-source-cautions",
+      "static-card-list"
+    ],
+    "unavailableBehavior": "Retain HTML waterfall profiles and source links when JS, map tiles, legal parking, full time range or fresh official updates are unavailable; never invent open status."
+  },
+  "scenarios": [
+    {
+      "kind": "initial",
+      "input": "All regions, 60 minutes, current date",
+      "expectedVisibleAnswer": "Show three geographically separate research candidates with full on-site range at or under 60 minutes, not a one-day itinerary.",
+      "sourceAndSafety": "No source certifies today's access; no driving distances computed."
+    },
+    {
+      "kind": "alternative",
+      "input": "Pictured Rocks / Munising, 30 minutes",
+      "expectedVisibleAnswer": "Show Wagner Falls as a short source-backed stop and exclude 90-to-150-minute Chapel Falls and closed Munising Falls.",
+      "sourceAndSafety": "Upper-end time threshold and NPS trail closure remain visible."
+    },
+    {
+      "kind": "reverse",
+      "input": "Search Bond, select winter date, switch to Rainbow, then Bond",
+      "expectedVisibleAnswer": "Restore Bond visit notes and selection; map focus and saved stop use one waterfall ID.",
+      "sourceAndSafety": "Bond road is outside usual vehicle season, not automatically open or permanently closed."
+    },
+    {
+      "kind": "no-js",
+      "input": "Disable all browser scripts",
+      "expectedVisibleAnswer": "Show original full 72 fall cards, source links and clear static date/time feature fallback.",
+      "sourceAndSafety": "No dynamic status or route is claimed without client JavaScript."
+    },
+    {
+      "kind": "no-tiles",
+      "input": "Block CARTO tile requests",
+      "expectedVisibleAnswer": "Keep rendered sourced waterfall list, visitor guide links and official parking source.",
+      "sourceAndSafety": "Missing map does not authorize waterfall pin driving directions."
+    },
+    {
+      "kind": "stale-data",
+      "input": "Choose summer 2028 and select a candidate",
+      "expectedVisibleAnswer": "Identify that selected date is beyond the current source research window and give only historical access guidance.",
+      "sourceAndSafety": "Source age is explicit; no old opening presented as current."
+    },
+    {
+      "kind": "unknown-time",
+      "input": "30-minute budget for a destination without a parseable upper time",
+      "expectedVisibleAnswer": "Exclude unsupported time claims from a bounded visit recommendation.",
+      "sourceAndSafety": "An unknown duration never silently becomes a quick stop."
+    }
+  ],
+  "failures": {
+    "no-js": "All static cards, their links and the no-JavaScript explanatory line remain useful without client calculation.",
+    "no-tiles": "Keep text candidates, field guides and original access-source links; do not draw invented routes or parking positions.",
+    "no-image": "The new desk deliberately has no image; it remains usable with all existing images blocked or unavailable.",
+    "stale-data": "Warn dates beyond spring 2027 as historical, retain conservative source-check links and never infer open-now from a stored seasonal rule."
+  },
+  "qa": {
+    "viewports": [
+      360,
+      390,
+      768,
+      1440
+    ],
+    "browserStatus": "PENDING",
+    "browserRun": null,
+    "screenshotEvidence": [],
+    "scopeNote": "Not yet measured. Real Chromium and GitHub exact-head checks are required, including map tiles, chosen date, 30-minute exclusion and source warnings."
+  },
+  "photos": [],
+  "release": {
+    "implemented": {
+      "status": "PENDING",
+      "evidenceUrl": null,
+      "checkedDate": null
+    },
+    "verified": {
+      "status": "PENDING",
+      "evidenceUrl": null,
+      "checkedDate": null
+    },
+    "deployed": {
+      "status": "PENDING",
+      "evidenceUrl": null,
+      "checkedDate": null
+    },
+    "live": {
+      "status": "NOT_VERIFIED",
+      "evidenceUrl": null,
+      "checkedDate": null
+    },
+    "measured": {
+      "status": "NOT_MEASURED"
+    }
+  }
+}
