@@ -246,3 +246,10 @@ button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid #dc7
 #rl-official-source a{font-weight:800;color:#174d42;font-size:12px}
 #rl-official-source small{font-size:11px;color:#53695d;overflow-wrap:anywhere}
 @media(max-width:700px){.rl-official-45ws{grid-template-columns:1fr}.rl-official-value{text-align:left;align-items:flex-start}}
+
+
+/* Deliberately concise national briefing; full context lives on Florida page. */
+.rl-official-briefing{border-top:1px solid #b5cfc2;margin-top:17px;padding-top:14px}
+.rl-official-briefing strong{display:block;color:#163f40;font-size:16px;line-height:1.4}
+.rl-official-briefing p{font-size:13px!important;line-height:1.65!important;color:#355c54!important;margin:7px 0!important}
+#rl-story-when{font-weight:700;color:#295748!important}
