@@ -86,7 +86,7 @@ test('Accessible decision atlas keeps unsafe routes unavailable and no invented 
  assert.ok(js.includes('No Trespassing'));
  assert.ok(js.includes('gorge-bottom'));
  assert.ok(js.includes('navigator.clipboard'));
- assert.doesNotMatch(js,/L\.polyline\s*\(/);
+ assert.ok(!js.includes('L.polyline('), 'Do not invent or redraw an unverified walking route');
  assert.doesNotMatch(page,/data-parking-lat=/);
  assert.ok(!page.includes('maps/dir/?api=1&destination=46.503807'));
  assert.ok(page.includes('https://www.travelmarquette.com/listing/carp-river-ntn-south-trails/514/'));
