@@ -55,7 +55,7 @@ async function evaluate({fetcher=fetch,now=new Date(),sleep=pause}={}){
  const count=k=>rows.filter(x=>x.status===k).length;
  return {schema:'japanese-beetle-retrospective-field-cross-check-v1',status:'EXPLORATORY_NOT_MODEL_ACCURACY',
   checkedAt:now.toISOString(),dataYears:YEARS,sites:IDS,count:rows.length,
-  summary:{pairedOpportunisticRecords:count('OPPORTUNISTIC_PRESENCE_CROSS_CHECK'),
+  summary:{pairedOpportunisticRecords:count('OPPORTUNISTIC_SPECIES_PRESENCE_CROSS_CHECK'),
    noComparableSightings:count('NO_COMPARABLE_SIGHTINGS'),unavailable:count('UNAVAILABLE'),
    earlierDatedRecords:rows.filter(x=>x.relation==='SIGHTING_BEFORE_MODEL').length,
    laterDatedRecords:rows.filter(x=>x.relation==='SIGHTING_AFTER_MODEL').length,
