@@ -38,6 +38,56 @@ try{
     assert.ok(scroll<=width+2,'horizontal overflow '+scroll+' > '+width);
   });
   await page.screenshot({path:screenshots+'/hub-mobile.png',fullPage:true,animations:'disabled'});
+  await run('visit lens: filter by 30-minute full on-site range and exclude agency closure',async()=>{
+    await page.locator('#visit-region').selectOption('Pictured Rocks / Munising');
+    await page.locator('#visit-budget').selectOption('30');
+    assert.equal(await page.locator('#region').inputValue(),'Pictured Rocks / Munising');
+    assert.equal(await page.locator('[data-visit-pick="wagner-falls"]').count(),1);
+    assert.equal(await page.locator('[data-visit-pick="munising-falls"]').count(),0);
+    assert.equal(await page.locator('[data-visit-pick="chapel-falls"]').count(),0);
+    assert.match(await page.locator('#visit-baseline').innerText(),/high end|at most 30/i);
+  });
+  await run('visit lens: winter Bond source caution and reversibility',async()=>{
+    await page.locator('#visit-region').selectOption('Western U.P.');
+    await page.locator('#visit-budget').selectOption('60');
+    await page.locator('#q').fill('Bond');
+    await page.locator('#visit-date').fill('2026-12-10');
+    assert.equal(await page.locator('[data-visit-pick="bond-falls"]').count(),1);
+    assert.match(await page.locator('#visit-picks').innerText(),/mid-May through mid-October/);
+    await page.locator('[data-visit-pick="bond-falls"] .visit-focus').click();
+    assert.equal(await page.locator('[data-visit-pick="bond-falls"] .visit-focus').getAttribute('aria-pressed'),'true');
+    assert.match(await page.locator('#visit-selection').innerText(),/Bond Falls/);
+    assert.ok(await page.locator('.leaflet-popup-content').count()>0,'map popup should match selection');
+    await page.locator('#q').fill('Rainbow');
+    await page.locator('#visit-budget').selectOption('90');
+    assert.equal(await page.locator('[data-visit-pick="rainbow-falls"]').count(),1);
+    await page.locator('#q').fill('Bond');
+    assert.equal(await page.locator('[data-visit-pick="bond-falls"]').count(),1);
+    await page.screenshot({path:screenshots+'/visit-lens-bond-mobile.png',fullPage:true,animations:'disabled'});
+    await page.locator('#q').fill('');
+    await page.locator('#visit-region').selectOption('all');
+    await page.locator('#visit-budget').selectOption('60');
+    await page.locator('#visit-date').fill('2026-11-02');
+    assert.ok(await page.locator('.visit-pick').count()>0);
+  });
+  await run('visit lens: 360px and 1440px layout has no horizontal overflow',async()=>{
+    for(const width of [360,1440]){
+      await page.setViewportSize({width,height:880});
+      const metrics=await page.evaluate(()=>({width:innerWidth,scroll:document.documentElement.scrollWidth}));
+      assert.ok(metrics.scroll<=width+2,'visit lens '+width+' horizontal overflow: '+metrics.scroll);
+      await page.screenshot({path:screenshots+'/visit-lens-'+width+'.png',fullPage:false,animations:'disabled'});
+    }
+    await page.setViewportSize({width:390,height:844});
+  });
+  await run('visit lens: no-JS retains fallback source guidance and full destination list',async()=>{
+    const staticPage=await browser.newPage({viewport:{width:390,height:844},javaScriptEnabled:false});
+    try{
+      await staticPage.goto(base+'/upper-peninsula-waterfalls/',{waitUntil:'domcontentloaded'});
+      assert.equal(await staticPage.locator('[data-fall]').count(),expectedFalls);
+      assert.match(await staticPage.locator('.visit-noscript').innerText(),/requires JavaScript/);
+      assert.ok(await staticPage.locator('a[href="https://www.michigan.gov/recsearch/parks/porkies"]').count()>=1);
+    }finally{await staticPage.close();}
+  });
   await run('search filters cards without changing canonical page',async()=>{
     await page.locator('#q').fill('Rainbow');
     const visible=page.locator('[data-fall]:visible');
