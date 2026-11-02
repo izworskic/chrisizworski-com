@@ -405,6 +405,11 @@
     box.hidden = data.region?.id !== 'florida';
     if (box.hidden) return; // 45WS is the Florida range forecast, not a national forecast.
     const d = data.officialLaunchWeather || {};
+    const story = d.weatherStory || {};
+    set('rl-story-headline', story.headline || 'No current official mission forecast verified');
+    set('rl-story-detail', story.explanation ||
+      'The mission-specific launch-weather picture is still incomplete.');
+    set('rl-story-when', story.nextUpdate || 'No next official forecast time verified.');
     const matched = d.status === 'mission-matched-current';
     const numeric = matched && Number.isInteger(d.povPercent);
     set('rl-official-title', d.label || 'No official mission forecast verified');
@@ -416,16 +421,21 @@
       matched ? 'A mission-matched official document was found, but its violation percentage could not be safely extracted.' :
       'No current 45th Weather Squadron PDF has been matched to this exact Florida mission and target. The absence of a match is not a favorable-weather forecast.');
     const latest = d.latestChange;
-    set('rl-official-trend', matched && latest ?
-      latest.headline + '. ' + latest.detail +
+    set('rl-official-trend', story.changes ||
+      (matched && latest ? latest.headline + '. ' + latest.detail +
       ' Detected ' + stamp(latest.detectedAt) + '.' :
-      'Forecast revision history is not yet verified for this mission.');
+      'Forecast revision history is not yet verified for this mission.'));
     const target = $('rl-official-source');
     target.replaceChildren();
     const official = matched && typeof d.officialUrl === 'string' &&
       /^https:\/\/45thweathersquadron\.nebula\.spaceforce\.mil\/assets\/LaunchForecasts\//.test(d.officialUrl) ?
       anchor(d.officialUrl,'Read the exact official PDF') : null;
     if (official) target.appendChild(official);
+    if(d.agencyWeather?.status==='nasa-reported-current' &&
+      /^https:\/\/www\.nasa\.gov\/blogs\/[a-z0-9_-]+\/20\d\d\/\d\d\/\d\d\/[a-z0-9-]+\/$/.test(d.agencyWeather.sourceUrl||'')){
+      const report = anchor(d.agencyWeather.sourceUrl,'NASA mission weather report');
+      if(report) target.appendChild(report);
+    }
     const portal = anchor('https://www.patrick.spaceforce.mil/About-Us/Weather/',
       '45WS weather portal');
     if (portal) target.appendChild(portal);
