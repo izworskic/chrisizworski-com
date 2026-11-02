@@ -4,6 +4,10 @@ on:
   pull_request:
     paths:
       - 'scripts/monitor-space-coast-official-weather.py'
+      - 'scripts/space_coast_nasa_weather.py'
+      - 'lib/space-coast-weather-story.js'
+      - 'tests/test_space_coast_nasa_weather.py'
+      - 'tests/space-coast-weather-story.test.js'
       - 'scripts/space_coast_weather_discovery.py'
       - 'tests/test_space_coast_official_weather_pdf.py'
       - 'tests/test_space_coast_weather_discovery.py'
@@ -34,5 +38,6 @@ jobs:
         run: |
           python -m unittest discover -s tests -p 'test_space_coast_official_weather_pdf.py' -v
           python -m unittest discover -s tests -p 'test_space_coast_weather_discovery.py' -v
+          python -m unittest discover -s tests -p 'test_space_coast_nasa_weather.py' -v
       - name: Verify JS source ledger and route
-        run: node --test tests/space-coast-official-weather.test.js
+        run: node --test tests/space-coast-official-weather.test.js tests/space-coast-weather-story.test.js
