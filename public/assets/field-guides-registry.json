@@ -447,6 +447,34 @@
         "/michigan-snow-depth/",
         "/michigan-ski-hills/"
       ]
+    },
+    {
+      "slug": "michigan-coastal-drives-field-guide",
+      "url": "/michigan-coastal-drives-field-guide/",
+      "title": "M-22, M-28 & The Tunnel of Trees: Michigan’s Coastal Drives Field Guide",
+      "subtitle": "12 Iconic Corridors · Milepost Pull-Offs, Smoked Fish, RV Limits & 4-Wave Fall Color",
+      "status": "live",
+      "releaseWave": "Flagship Coastal Corridors",
+      "stopCount": 12,
+      "activeMonths": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "seasonLabel": "Apr–Nov · Peak Coastal Driving & Fall Color Windows",
+      "summary": "12 iconic Michigan coastal highway drives including M-22, M-119 Tunnel of Trees, Brockway Mountain, US-2, US-23, and M-28 with exact milepost turnouts, bakery & smoked fish stops, RV width restrictions, and a 4-wave regional fall color timing engine.",
+      "connectedTools": [
+        "/lake-superior-circle-tour/",
+        "/great-lakes-lighthouses/",
+        "/michigan-wine-cider-spirits/",
+        "/mackinac-bridge-live/",
+        "/fall-color/"
+      ]
     }
   ],
   "plannedRoadmap": [

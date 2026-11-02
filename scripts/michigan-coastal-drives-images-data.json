@@ -1,0 +1,122 @@
+[
+  {
+    "target": "m22-leelanau-scenic-byway.jpg",
+    "route": "M-22",
+    "title": "M-22 Leelanau Peninsula & Sleeping Bear Dunes",
+    "wikiFile": "File:Michigan State Route 22 (M-22).jpg",
+    "author": "Dougtone",
+    "license": "CC BY-SA 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Michigan_State_Route_22_(M-22).jpg",
+    "sizeBytes": 239923
+  },
+  {
+    "target": "m119-tunnel-of-trees.jpg",
+    "route": "M-119",
+    "title": "M-119 Tunnel of Trees",
+    "wikiFile": "File:2009-0619-TunnelofTrees.jpg",
+    "author": "Bobak Ha'Eri",
+    "license": "CC BY 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:2009-0619-TunnelofTrees.jpg",
+    "sizeBytes": 516311
+  },
+  {
+    "target": "m26-brockway-mountain-drive.jpg",
+    "route": "M-26 / Brockway",
+    "title": "M-26 & Brockway Mountain Drive",
+    "wikiFile": "File:Brockway Mountain Drive Panorama cropped.jpg",
+    "author": "Nick Nolte",
+    "license": "CC BY-SA 2.5",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Brockway_Mountain_Drive_Panorama_cropped.jpg",
+    "sizeBytes": 308379
+  },
+  {
+    "target": "us2-cut-river-bridge-coast.jpg",
+    "route": "US-2",
+    "title": "US-2 Top of the Lake Scenic Byway",
+    "wikiFile": "File:Cut River Bridge Centerline 2011 US2.jpg",
+    "author": "Royalbroil",
+    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cut_River_Bridge_Centerline_2011_US2.jpg",
+    "sizeBytes": 203408
+  },
+  {
+    "target": "us23-tawas-point-sunrise-coast.jpg",
+    "route": "US-23",
+    "title": "US-23 Huron Shores Sunrise Byway",
+    "wikiFile": "File:Tawas Point Light.JPG",
+    "author": "Public Domain / Wikimedia",
+    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Tawas_Point_Light.JPG",
+    "sizeBytes": 98596
+  },
+  {
+    "target": "m28-seney-stretch-boreal-drive.jpg",
+    "route": "M-28",
+    "title": "M-28 Superior Heartland & Seney Stretch",
+    "wikiFile": "File:Seney stretch.jpg",
+    "author": "Wrifraff101",
+    "license": "CC BY-SA 2.5",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Seney_stretch.jpg",
+    "sizeBytes": 165659
+  },
+  {
+    "target": "m123-tahquamenon-scenic-byway.jpg",
+    "route": "M-123",
+    "title": "M-123 Tahquamenon Byway & Whitefish Bay",
+    "wikiFile": "File:Upper Tahquamenon Falls.jpg",
+    "author": "James Phelps from USA",
+    "license": "CC BY 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Upper_Tahquamenon_Falls.jpg",
+    "sizeBytes": 225652
+  },
+  {
+    "target": "m134-les-cheneaux-islands-byway.jpg",
+    "route": "M-134",
+    "title": "M-134 Les Cheneaux Islands Scenic Byway",
+    "wikiFile": "File:Morning - Les Cheneaux Islands.jpg",
+    "author": "Kate Ter Haar",
+    "license": "CC BY 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Morning_-_Les_Cheneaux_Islands.jpg",
+    "sizeBytes": 208224
+  },
+  {
+    "target": "m107-porcupine-mountains-escarpment.jpg",
+    "route": "M-107",
+    "title": "M-107 & Porkies Escarpment Coastal Drive",
+    "wikiFile": "File:Lake of the Clouds, Porcupine Mountains, MI.jpg",
+    "author": "Sharon Mollerus",
+    "license": "CC BY 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Lake_of_the_Clouds,_Porcupine_Mountains,_MI.jpg",
+    "sizeBytes": 493441
+  },
+  {
+    "target": "m37-old-mission-peninsula-drive.jpg",
+    "route": "M-37",
+    "title": "M-37 Old Mission Peninsula Ridge Drive",
+    "wikiFile": "File:Mission Point Lighthouse (84490305).jpeg",
+    "author": "Al Rau",
+    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Mission_Point_Lighthouse_(84490305).jpeg",
+    "sizeBytes": 440169
+  },
+  {
+    "target": "m64-black-river-harbor-scenic-drive.jpg",
+    "route": "M-64",
+    "title": "M-64 & Black River Harbor Scenic Byway",
+    "wikiFile": "File:Black River Harbor Michigan.jpg",
+    "author": "Milonica",
+    "license": "CC BY 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Black_River_Harbor_Michigan.jpg",
+    "sizeBytes": 216718
+  },
+  {
+    "target": "us31-charlevoix-grand-traverse-coast.jpg",
+    "route": "US-31",
+    "title": "US-31 Grand Traverse & Little Traverse Bays",
+    "wikiFile": "File:Charlevoix South Pier Light (45346455522).jpg",
+    "author": "Scottb211 from Gaylord, Michigan, U.S.A.",
+    "license": "CC BY 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Charlevoix_South_Pier_Light_(45346455522).jpg",
+    "sizeBytes": 219572
+  }
+]

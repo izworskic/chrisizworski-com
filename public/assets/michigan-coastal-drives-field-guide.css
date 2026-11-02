@@ -1,0 +1,748 @@
+/* ==========================================================================
+   Michigan Coastal Drives Field Guide Stylesheet
+   Persona: Seasoned Great Lakes Highway Cartographer
+   Design: Cartographic parchment, deep nautical navy, highway forest green,
+           and autumn maple accents.
+   ========================================================================== */
+
+:root {
+  --cd-navy: #0f2942;
+  --cd-navy-deep: #081a2b;
+  --cd-green: #1e4a38;
+  --cd-green-light: #2d6a4f;
+  --cd-amber: #c05621;
+  --cd-gold: #d97706;
+  --cd-warning-bg: #fffbeb;
+  --cd-warning-border: #fcd34d;
+  --cd-warning-text: #92400e;
+  --cd-slate: #334155;
+  --cd-slate-light: #64748b;
+  --cd-border: #e2e8f0;
+  --cd-surface: #ffffff;
+  --cd-bg: #f8fafc;
+  --cd-card-bg: #ffffff;
+  --cd-font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --cd-font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--cd-font-sans);
+  background-color: var(--cd-bg);
+  color: #1e293b;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.cd-container {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+/* Header & Hero */
+.cd-hero {
+  background: linear-gradient(135deg, var(--cd-navy-deep) 0%, var(--cd-navy) 60%, var(--cd-green) 100%);
+  color: #ffffff;
+  padding: 3.5rem 0 3rem;
+  border-bottom: 4px solid var(--cd-gold);
+}
+
+.cd-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.85rem;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 9999px;
+  font-size: 0.825rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 1.25rem;
+  color: #fef3c7;
+}
+
+.cd-hero h1 {
+  font-size: clamp(2rem, 4vw, 3.1rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+}
+
+.cd-hero-lead {
+  font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+  color: #cbd5e1;
+  max-width: 860px;
+  margin-bottom: 1.75rem;
+}
+
+.cd-carto-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.cd-meta-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.cd-meta-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #94a3b8;
+  font-weight: 700;
+}
+
+.cd-meta-val {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+/* Fall Color Engine & Timing Bar */
+.cd-fall-engine-card {
+  background: #ffffff;
+  border: 1px solid #fed7aa;
+  border-left: 5px solid var(--cd-amber);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 2rem 0 2.5rem;
+  box-shadow: 0 4px 16px rgba(192, 86, 33, 0.08);
+}
+
+.cd-fall-engine-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.cd-fall-engine-title {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.cd-fall-engine-title h2 {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #7c2d12;
+}
+
+.cd-fall-engine-desc {
+  font-size: 0.95rem;
+  color: #475569;
+  margin-bottom: 1.25rem;
+}
+
+.cd-wave-pills {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.cd-wave-pill {
+  background: #fff7ed;
+  border: 1px solid #ffedd5;
+  border-radius: 8px;
+  padding: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.cd-wave-pill:hover,
+.cd-wave-pill.active {
+  background: #ffedd5;
+  border-color: #fb923c;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(192, 86, 33, 0.12);
+}
+
+.cd-wave-pill-num {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #c2410c;
+  letter-spacing: 0.04em;
+}
+
+.cd-wave-pill-dates {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #7c2d12;
+  margin: 0.15rem 0;
+}
+
+.cd-wave-pill-corridors {
+  font-size: 0.8rem;
+  color: #64748b;
+  line-height: 1.3;
+}
+
+.cd-fall-telemetry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fdfbf7;
+  border: 1px dashed #cbd5e1;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: #334155;
+}
+
+.cd-telemetry-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #dcfce7;
+  color: #166534;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+}
+
+/* Cartographer Map Section */
+.cd-map-section {
+  background: #ffffff;
+  border: 1px solid var(--cd-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2.5rem;
+  box-shadow: 0 4px 12px rgba(15, 41, 66, 0.06);
+}
+
+.cd-map-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.cd-map-header h2 {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--cd-navy);
+}
+
+.cd-map-tools {
+  display: flex;
+  gap: 0.5rem;
+}
+
+#coastal-drives-map {
+  height: 480px;
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  z-index: 10;
+}
+
+/* Interactive Filter Bar */
+.cd-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  padding: 0.75rem 1rem;
+  background: #ffffff;
+  border: 1px solid var(--cd-border);
+  border-radius: 10px;
+}
+
+.cd-filter-label {
+  font-size: 0.825rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--cd-slate);
+  margin-right: 0.5rem;
+}
+
+.cd-filter-btn {
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  color: #334155;
+  padding: 0.45rem 0.9rem;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.cd-filter-btn:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.cd-filter-btn.active {
+  background: var(--cd-navy);
+  border-color: var(--cd-navy);
+  color: #ffffff;
+}
+
+/* Route Cards Grid */
+.cd-routes-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  margin-bottom: 3.5rem;
+}
+
+.wf-story {
+  background: var(--cd-card-bg);
+  border: 1px solid var(--cd-border);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(15, 41, 66, 0.05);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.wf-story:hover {
+  border-color: #94a3b8;
+  box-shadow: 0 8px 24px rgba(15, 41, 66, 0.09);
+}
+
+.cd-card-hero {
+  position: relative;
+  height: 340px;
+  background-color: #0f172a;
+  overflow: hidden;
+}
+
+.cd-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.cd-card-badge-row {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  z-index: 2;
+}
+
+.cd-shield-badge {
+  background: #ffffff;
+  color: var(--cd-navy);
+  font-weight: 800;
+  font-size: 0.9rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  border: 2px solid var(--cd-navy);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  letter-spacing: -0.01em;
+}
+
+.cd-fall-badge {
+  background: var(--cd-amber);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.8rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.cd-body {
+  padding: 1.75rem;
+}
+
+.cd-route-meta-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.25rem;
+  font-size: 0.85rem;
+  color: var(--cd-slate-light);
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.cd-route-meta-strip span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.wf-story h3 {
+  font-size: clamp(1.35rem, 2.5vw, 1.75rem);
+  font-weight: 800;
+  color: var(--cd-navy);
+  line-height: 1.25;
+  margin-bottom: 0.5rem;
+}
+
+.cd-route-subtitle {
+  font-size: 1rem;
+  color: var(--cd-slate);
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.cd-carto-dossier {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 1.25rem;
+  margin: 1.25rem 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.cd-dossier-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.cd-dossier-heading {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #64748b;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.cd-dossier-val {
+  font-size: 0.925rem;
+  color: #1e293b;
+  font-weight: 600;
+}
+
+/* Milepost Pull-Off Planner Table */
+.cd-pull-off-planner {
+  margin: 1.5rem 0;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.cd-planner-header {
+  background: #f1f5f9;
+  padding: 0.75rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--cd-navy);
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.cd-planner-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.cd-planner-item {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid #f1f5f9;
+  align-items: baseline;
+  font-size: 0.9rem;
+}
+
+.cd-planner-item:last-child {
+  border-bottom: none;
+}
+
+.cd-planner-mp {
+  font-family: var(--cd-font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #0369a1;
+}
+
+.cd-planner-content {
+  color: #334155;
+}
+
+.cd-planner-tag {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  margin-right: 0.4rem;
+}
+
+.tag-scenic { background: #e0f2fe; color: #0369a1; }
+.tag-food { background: #fef3c7; color: #92400e; }
+.tag-light { background: #f3e8ff; color: #6b21a8; }
+.tag-warning { background: #fee2e2; color: #991b1b; }
+
+/* RV / Trailer Alert Box */
+.cd-rv-alert {
+  background: var(--cd-warning-bg);
+  border: 1px solid var(--cd-warning-border);
+  border-left: 4px solid var(--cd-gold);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin: 1.25rem 0;
+  color: var(--cd-warning-text);
+  font-size: 0.9rem;
+}
+
+.cd-rv-alert strong {
+  color: #78350f;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.cd-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid #f1f5f9;
+}
+
+.cd-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.cd-btn-primary {
+  background: var(--cd-navy);
+  color: #ffffff;
+  border: 1px solid var(--cd-navy);
+}
+
+.cd-btn-primary:hover {
+  background: var(--cd-navy-deep);
+  color: #ffffff;
+}
+
+.cd-btn-secondary {
+  background: #f8fafc;
+  color: var(--cd-navy);
+  border: 1px solid #cbd5e1;
+}
+
+.cd-btn-secondary:hover {
+  background: #e2e8f0;
+}
+
+/* Cartographer Field Notes Section */
+.cd-field-notes {
+  background: #ffffff;
+  border: 1px solid var(--cd-border);
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 3.5rem;
+}
+
+.cd-field-notes h2 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--cd-navy);
+  margin-bottom: 1.25rem;
+}
+
+.cd-notes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.cd-note-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 1.25rem;
+}
+
+.cd-note-card h4 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--cd-navy);
+  margin-bottom: 0.5rem;
+}
+
+.cd-note-card p {
+  font-size: 0.9rem;
+  color: #475569;
+  line-height: 1.5;
+}
+
+/* FAQ Section */
+.cd-faq-section {
+  background: #ffffff;
+  border: 1px solid var(--cd-border);
+  border-radius: 12px;
+  padding: 2.25rem;
+  margin-bottom: 3.5rem;
+}
+
+.cd-faq-section h2 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--cd-navy);
+  margin-bottom: 1.5rem;
+}
+
+.cd-faq-item {
+  border-bottom: 1px solid #e2e8f0;
+  padding: 1.25rem 0;
+}
+
+.cd-faq-item:last-child {
+  border-bottom: none;
+}
+
+.cd-faq-question {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+}
+
+.cd-faq-answer {
+  font-size: 0.95rem;
+  color: #475569;
+  line-height: 1.6;
+}
+
+/* Connected Tools Shelf */
+.cd-connected-tools {
+  background: linear-gradient(135deg, #0f2942 0%, #1e4a38 100%);
+  color: #ffffff;
+  border-radius: 12px;
+  padding: 2.25rem;
+  margin-bottom: 3.5rem;
+}
+
+.cd-connected-tools h2 {
+  font-size: 1.45rem;
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+}
+
+.cd-connected-tools p {
+  color: #cbd5e1;
+  font-size: 0.95rem;
+  max-width: 760px;
+  margin-bottom: 1.5rem;
+}
+
+.cd-tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.cd-tool-link-card {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+  padding: 1.15rem;
+  text-decoration: none;
+  color: #ffffff;
+  transition: all 0.2s ease;
+}
+
+.cd-tool-link-card:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.35);
+  transform: translateY(-2px);
+}
+
+.cd-tool-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fef08a;
+  margin-bottom: 0.25rem;
+}
+
+.cd-tool-desc {
+  font-size: 0.8rem;
+  color: #e2e8f0;
+}
+
+/* Footer & Back to Guides */
+.cd-footer {
+  padding: 2.5rem 0 4rem;
+  text-align: center;
+  border-top: 1px solid #cbd5e1;
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+.cd-footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.cd-footer-links a {
+  color: var(--cd-navy);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.cd-footer-links a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .cd-hero {
+    padding: 2.5rem 0 2rem;
+  }
+  .cd-card-hero {
+    height: 240px;
+  }
+  #coastal-drives-map {
+    height: 360px;
+  }
+  .cd-planner-item {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+  }
+}

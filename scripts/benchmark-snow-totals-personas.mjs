@@ -15,6 +15,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { createRequire } from 'node:module';
+import { pathToFileURL } from 'node:url';
 
 const require = createRequire(import.meta.url);
 const root = path.resolve(import.meta.dirname, '..');
@@ -114,7 +115,7 @@ add('recreation', 5, 'all 83 Michigan counties belong to exactly one region', ()
 });
 add('recreation', 4, 'every Michigan report carries its region', () => reports.length && reports.filter(r => /^[A-Z][a-z]/.test(r.county) && r.county !== 'Elkhart').every(r => r.region));
 add('recreation', 4, 'snow-belt regions match the snowmobile tool county for county', async () => {
-  const { REGIONS: sm } = await import(path.join(root, 'lib/snowmobile/regions.mjs'));
+  const { REGIONS: sm } = await import(pathToFileURL(path.join(root, 'lib/snowmobile/regions.mjs')).href);
   const pairs = { 'keweenaw-copper-country': 'keweenaw', 'central-western-up': 'central-western-up', 'eastern-up': 'eastern-up' };
   return Object.entries(pairs).every(([smKey, id]) => {
     const a = sm.find(r => r.key === smKey).counties.map(core.normCounty).sort().join();

@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import { FACTS, SOURCES, NOT_COVERED, CHECKED_ON, OPTIONS } from '../lib/snowmobile/rules.mjs';
 import { REGIONS } from '../lib/snowmobile/regions.mjs';
 
@@ -131,7 +132,7 @@ test('the checker stores and sends nothing', () => {
 
 test('the committed page is exactly what the generator produces', () => {
   const before = read(PAGE);
-  const r = spawnSync(process.execPath, ['scripts/generate-snowmobile-need-page.mjs'], { cwd: new URL('../', import.meta.url).pathname, encoding: 'utf8' });
+  const r = spawnSync(process.execPath, ['scripts/generate-snowmobile-need-page.mjs'], { cwd: fileURLToPath(new URL('../', import.meta.url)), encoding: 'utf8' });
   assert.equal(r.status, 0, r.stderr);
   assert.equal(read(PAGE), before, 'run node scripts/generate-snowmobile-need-page.mjs and commit the result');
 });
