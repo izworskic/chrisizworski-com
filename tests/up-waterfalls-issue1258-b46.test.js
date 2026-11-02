@@ -15,7 +15,7 @@ test('batch46: Marquette waterfalls cannot become unsupported driving destinatio
  assert.ok(R.counts.curatedTotal>=71);assert.ok(R.counts.pending<=96);assert.ok(L.unresolvedCandidates<=96);assert.ok(Q.candidates.length<=96);assert.equal(V.records.length,67);
  assert.match(R.candidates.find(x=>x.gisObjectId===163).sourceNotes,/No Trespassing/i);
  assert.match(R.candidates.find(x=>x.gisObjectId===169).sourceNotes,/MORGAN CREEK/);
- assert.match(R.candidates.find(x=>x.gisObjectId===169).sourceNotes,/motor-vehicle-restricted|motor-vehicle-closed|motor traffic/i);
+ assert.match(R.candidates.find(x=>x.gisObjectId===169).visitorRouteEvidence.motorRoad,/closed to cars/i);
  assert.match(R.candidates.find(x=>x.gisObjectId===175).sourceNotes,/779m/);
  assert.match(R.candidates.find(x=>x.gisObjectId===180).sourceNotes,/No Trespassing/);
 });
