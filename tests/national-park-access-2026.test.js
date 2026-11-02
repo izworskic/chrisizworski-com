@@ -101,3 +101,16 @@ test('2026 atlas featured-activity filters classify all 12 destinations consiste
  assert.match(page,/2026 Featured Activity Requires Booking \(4\)/);
  assert.match(page,/2026 Featured Activity: No Advance Permit \(8\)/);
 });
+
+test('Smokies Elkmont 2026 vehicle lottery dates and registered camper exception are distinct',()=>{
+ const fireflies=get('elkmont-synchronous-fireflies');
+ assert.equal(fireflies.accessRules.lotteryStart,'2026-04-24');
+ assert.equal(fireflies.accessRules.lotteryEnd,'2026-04-27');
+ assert.equal(fireflies.accessRules.eventStart,'2026-05-20');
+ assert.equal(fireflies.accessRules.eventEnd,'2026-05-27');
+ assert.equal(fireflies.accessRules.registeredElkmontCamping,'PEDESTRIAN_ACCESS');
+ assert.match(sections(fireflies.id),/Apr 24, 10 AM–Apr 27, 11:59 PM EDT/);
+ assert.match(sections(fireflies.id),/not a park-wide entrance requirement/);
+ assert.match(sections(fireflies.id),/2027 event and lottery dates are unconfirmed/);
+ assert.doesNotMatch(sections(fireflies.id),/shuttle buses into Elkmont|April 24–28/);
+});
