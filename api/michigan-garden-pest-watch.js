@@ -71,7 +71,7 @@ module.exports=async function handler(req,res){
  const result=core.decision({crop,stage,observed,weather});
  // Observations are voluntarily entered in the URL, not saved to a database.
  res.setHeader('Cache-Control',observed?'private, no-store':'public, s-maxage=1800, stale-while-revalidate=300');
- return res.status(200).json({...result,asOfDate:new Date().toISOString().slice(0,10),
+ return res.status(200).json({...result,asOfDate:core.michiganDateParts().date,
    location:{name:site.name||'Michigan ZIP area',kind:site.kind||'named-city',zip:site.zip||null,
     coordinateMeaning:site.coordinateMeaning||'Reference city coordinate, not your property',
     source:hasZip?'US Census 2020 ZCTA interior point':'named Michigan reference city'},
