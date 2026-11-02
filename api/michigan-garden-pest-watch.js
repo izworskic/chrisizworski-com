@@ -9,6 +9,7 @@ const UA='GardenPestWatch/1.0 (https://chrisizworski.com/michigan-garden-pest-wa
 const UNKNOWN=Object.freeze({status:'UNAVAILABLE',source:'National Weather Service',sourceUrl:'https://www.weather.gov/documentation/services-web-api',
   tags:[],summary:'NWS forecast unavailable. Seasonal crop scouting remains useful; no weather-based pest inference.'});
 const dateOk=s=>typeof s==='string'&&Number.isFinite(Date.parse(s));
+const validPercent=v=>typeof v==='number'&&Number.isFinite(v)&&v>=0&&v<=100;
 function parseForecast(data,nowMs=Date.now()){
  const p=data?.properties, periods=p?.periods,issuedAt=p?.updated;
  if(!dateOk(issuedAt)||nowMs-Date.parse(issuedAt)>24*3600000||Date.parse(issuedAt)>nowMs+3600000)throw Error('NWS_FORECAST_STALE');
@@ -17,19 +18,25 @@ function parseForecast(data,nowMs=Date.now()){
    &&Number.isFinite(h.temperature)&&h.temperatureUnit==='F');
  if(hrs.length<24)throw Error('NWS_FORECAST_INCOMPLETE');
  const high=Math.max(...hrs.map(h=>h.temperature)),low=Math.min(...hrs.map(h=>h.temperature));
- const moistHours=hrs.filter(h=>Number(h.probabilityOfPrecipitation?.value)>=60||Number(h.relativeHumidity?.value)>=90).length;
- const hotDryHours=hrs.filter(h=>h.temperature>=85&&
-   h.probabilityOfPrecipitation?.value!==null&&h.probabilityOfPrecipitation?.value!==undefined&&
-   Number(h.probabilityOfPrecipitation.value)<=30&&Number(h.relativeHumidity?.value)<=65).length;
+ // NWS can return missing percent fields as null. Number(null) == 0 would
+ // falsely create "dry" conditions, so require actual percent observations.
+ const completeHours=hrs.filter(h=>validPercent(h.probabilityOfPrecipitation?.value)&&validPercent(h.relativeHumidity?.value)).length;
+ const partial=completeHours<12;
+ const moistHours=partial?0:hrs.filter(h=>
+   (validPercent(h.probabilityOfPrecipitation?.value)&&h.probabilityOfPrecipitation.value>=60)||
+   (validPercent(h.relativeHumidity?.value)&&h.relativeHumidity.value>=90)).length;
+ const hotDryHours=partial?0:hrs.filter(h=>h.temperature>=85&&
+   validPercent(h.probabilityOfPrecipitation?.value)&&h.probabilityOfPrecipitation.value<=30&&
+   validPercent(h.relativeHumidity?.value)&&h.relativeHumidity.value<=65).length;
  const tags=[];
  if(hotDryHours>=6)tags.push('hot_dry');
  if(moistHours>=8)tags.push('wet');
- const explanation=tags.length===0?'No selected broad weather scouting cue was triggered. This does not mean pests are absent.':
+ const explanation=partial?'NWS issued a temperature outlook, but humidity or precipitation coverage is too incomplete to assess pest-weather cues. No inference is made.':tags.length===0?'No selected broad weather scouting cue was triggered. This does not mean pests are absent.':
    tags.includes('hot_dry')&&tags.includes('wet')?'Mixed humid and hot/dry periods appear in this outlook; scout according to the crop and observed symptoms.':
    tags.includes('hot_dry')?'Several hot, relatively dry forecast hours suggest checking drought-stressed plants for mites.':
    'Extended humid or rain-favorable forecast hours suggest inspecting leaves and low-growing plants.';
- return {status:'AVAILABLE',source:'National Weather Service',sourceUrl:'https://www.weather.gov/documentation/services-web-api',
-  issuedAt,checkedAt:new Date(nowMs).toISOString(),periodHours:hrs.length,horizonHours:72,
+ return {status:partial?'PARTIAL':'AVAILABLE',source:'National Weather Service',sourceUrl:'https://www.weather.gov/documentation/services-web-api',
+  issuedAt,checkedAt:new Date(nowMs).toISOString(),periodHours:hrs.length,completePercentHours:completeHours,horizonHours:72,
   forecastLowF:Math.round(low),forecastHighF:Math.round(high),tags,
   summary:explanation,method:'Uncalibrated, qualitative 72-hour scouting cue from NWS hourly gridded forecast, not observed local pest activity or a validated infection model'};
 }
@@ -42,7 +49,7 @@ async function nws(site,fetcher=fetch,nowMs=Date.now()){
  const link=d?.properties?.forecastHourly;
  if(!link)throw Error('NWS_POINT_NO_HOURLY');
  const url=new URL(link);
- if(url.protocol!=='https:'||url.hostname!=='api.weather.gov'||!url.pathname.startsWith('/gridpoints/'))throw Error('NWS_UNTRUSTED_URL');
+ if(url.protocol!=='https:'||url.hostname!=='api.weather.gov'||!/^(?:\/gridpoints\/[A-Za-z]{3}\/\d+,\d+\/forecast\/hourly\/?)$/.test(url.pathname)||url.search||url.hash)throw Error('NWS_UNTRUSTED_URL');
  const b=await fetcher(url.href,opts);
  if(!b.ok)throw Error('NWS_HOURLY_ERROR');
  return parseForecast(await b.json(),nowMs);
@@ -70,7 +77,7 @@ module.exports=async function handler(req,res){
  try{weather=await nws(site);}catch(_error){weather={...UNKNOWN};}
  const result=core.decision({crop,stage,observed,weather});
  // Observations are voluntarily entered in the URL, not saved to a database.
- res.setHeader('Cache-Control',observed?'private, no-store':'public, s-maxage=1800, stale-while-revalidate=300');
+ res.setHeader('Cache-Control',observed?'private, no-store':weather.status==='AVAILABLE'?'public, s-maxage=1800, stale-while-revalidate=300':'public, s-maxage=120');
  return res.status(200).json({...result,asOfDate:core.michiganDateParts().date,
    location:{name:site.name||'Michigan ZIP area',kind:site.kind||'named-city',zip:site.zip||null,
     coordinateMeaning:site.coordinateMeaning||'Reference city coordinate, not your property',
