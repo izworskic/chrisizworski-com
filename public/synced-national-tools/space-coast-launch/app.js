@@ -521,6 +521,159 @@
     void loadPulse(activeMissionId,true);
   });
 
+  // Mission media is piggybacked on the existing LL2 snapshot. No browser
+  // video search or upstream API poll, no auto-playing outside players.
+  let mediaDesk=null,selectedMediaKey=null,mediaSources=[];
+  const validVideoId=id=>typeof id==='string'&&/^[a-zA-Z0-9_-]{11}$/.test(id);
+  const safeMediaHref=href=>{
+    try{
+      const url=new URL(href);
+      return url.protocol==='https:'&&[
+        'www.youtube.com','www.youtube-nocookie.com',
+        'spaceflightnow.com','www.spacex.com','www.blueorigin.com',
+        'www.ulalaunch.com','www.nasa.gov','x.com'
+      ].includes(url.hostname);
+    }catch{return false}
+  };
+  const mediaDate=iso=>{
+    const value=Date.parse(iso||'');
+    if(!Number.isFinite(value))return 'unavailable';
+    return new Date(value).toLocaleString('en-US',{
+      timeZone:'America/New_York',month:'short',day:'numeric',
+      hour:'numeric',minute:'2-digit',timeZoneName:'short'
+    });
+  };
+  const mediaSummary=item=>{
+    if(item.kind==='camera')return item.scope+
+      '. This independent camera is not verified to be showing the selected mission. '+
+      (item.caveat||'');
+    const reportedLive=mediaDesk?.sourceFreshness==='recent'&&
+      item.sourceReportedLive===true&&!item.sourceReportedEnded;
+    if(item.sourceReportedEnded)return 'The LL2 listing records a past broadcast end time. This may be a replay, not live coverage.';
+    if(reportedLive)return 'LL2 reports this video as live as of the last schedule observation; the stream itself was not checked.';
+    return 'Listed for this exact mission in LL2. The stream may be scheduled, offline or a replay. Playback is not verified.';
+  };
+  function selectMedia(key){
+    const screen=$('mission-media-stage-screen');
+    const actions=$('mission-media-stage-actions');
+    if(!screen||!actions)return;
+    const item=mediaSources.find(x=>x.key===key);
+    if(!item)return;
+    selectedMediaKey=key;
+    document.querySelectorAll('[data-media-key]').forEach(el=>{
+      el.dataset.active=el.dataset.mediaKey===key?'true':'false';
+      el.setAttribute('aria-pressed',String(el.dataset.mediaKey===key));
+    });
+    screen.replaceChildren();actions.replaceChildren();
+    set('mission-media-stage-title',item.title);
+    set('mission-media-stage-type',item.kind==='camera'?
+      'Independent camera · coverage may rotate':
+      item.classification==='ll2-official-listed'?
+      'LL2-listed official webcast · not operator-verified':
+      'Mission webcast or video · LL2 listing');
+    set('mission-media-stage-copy',mediaSummary(item));
+    if(validVideoId(item.youtubeId)){
+      const poster=element('div','mission-media-poster');
+      const img=document.createElement('img');
+      img.src='https://i.ytimg.com/vi/'+item.youtubeId+'/hqdefault.jpg';
+      img.alt='YouTube provider preview image, not a verified current camera frame';
+      img.loading='lazy';img.decoding='async';poster.appendChild(img);
+      const overlay=element('span','mission-media-poster-label','Video preview · not a live still');
+      poster.appendChild(overlay);screen.appendChild(poster);
+      const play=element('button','mission-media-play','Play from YouTube');
+      play.type='button';
+      play.addEventListener('click',()=>{
+        screen.replaceChildren();
+        const iframe=document.createElement('iframe');
+        iframe.className='mission-media-player';
+        iframe.title=item.title+' | video hosted by '+item.publisher;
+        iframe.src='https://www.youtube-nocookie.com/embed/'+item.youtubeId+'?autoplay=1&rel=0';
+        iframe.loading='eager';iframe.allow='autoplay; encrypted-media; picture-in-picture';
+        iframe.allowFullscreen=true;
+        iframe.referrerPolicy='strict-origin-when-cross-origin';
+        screen.appendChild(iframe);
+      });
+      actions.appendChild(play);
+    }else{
+      screen.appendChild(element('p','mission-media-no-embed',
+        'This provider does not offer a verified embeddable player through our source records. Open the broadcast at its source.'));
+    }
+    const href=item.kind==='camera'?item.siteUrl:item.url;
+    if(safeMediaHref(href))actions.appendChild(link(
+      href,item.kind==='camera'?'Open camera at provider':'Open video at publisher',
+      'mission-media-outbound'));
+  }
+  function mediaSourceButton(item){
+    const el=element('button','mission-media-source-button');
+    el.type='button';el.dataset.mediaKey=item.key;
+    el.setAttribute('aria-pressed','false');
+    const heading=element('span','mission-media-source-name',item.title);
+    const by=element('span','mission-media-source-by',
+      item.publisher+' · '+(item.kind==='camera'?'General Space Coast feed':
+        item.classification==='ll2-official-listed'?'LL2-listed official webcast':'LL2 mission video'));
+    const flag=element('span','mission-media-source-flag',
+      item.kind==='camera'?'Live playback not checked':
+      item.sourceReportedEnded?'Listed recording / ended':
+      item.sourceReportedLive===true&&mediaDesk?.sourceFreshness==='recent'?
+        'LL2 reports live · not verified':'Broadcast status unverified');
+    el.append(heading,by,flag);
+    el.addEventListener('click',()=>selectMedia(item.key));
+    return el;
+  }
+  function renderMissionMedia(data){
+    const root=$('mission-media');
+    const missions=$('mission-media-mission-list');
+    const cameras=$('mission-media-camera-list');
+    if(!root||!missions||!cameras)return;
+    missions.replaceChildren();cameras.replaceChildren();
+    mediaDesk=data&&data.launchId===activeMissionId?data:null;
+    mediaSources=[];selectedMediaKey=null;
+    if(!mediaDesk){
+      set('mission-media-checked','Mission media could not be matched to this selected launch.');
+      missions.appendChild(element('p','mission-media-empty',
+        'No mission-specific webcast was verified. Do not substitute an unrelated launch video.'));
+      cameras.appendChild(element('p','mission-media-empty',
+        'General camera directory is currently unavailable.'));
+      set('mission-media-operator',
+        'Check the selected mission operator and NASA Live for current coverage.');
+      $('mission-media-stage-screen').replaceChildren(element('p','mission-media-no-embed',
+        'No verified media source for this mission.'));
+      $('mission-media-stage-actions').replaceChildren();
+      return;
+    }
+    set('mission-media-checked','LL2 mission media checked '+mediaDate(mediaDesk.checkedAt)+
+      ' · '+(mediaDesk.sourceFreshness==='recent'?'Recent source check':'Outdated source check'));
+    const videoList=Array.isArray(mediaDesk.videos)?mediaDesk.videos:[];
+    for(const video of videoList.slice(0,5)){
+      if(!safeMediaHref(video.url))continue;
+      const item={...video,kind:'mission',key:'mission:'+video.url};
+      mediaSources.push(item);
+      missions.appendChild(mediaSourceButton(item));
+    }
+    if(!mediaSources.length)missions.appendChild(element('p','mission-media-empty',
+      'No safe, mission-specific webcast link is listed for this launch yet. This is not proof the operator will not broadcast.'));
+    for(const camera of (mediaDesk.cameras||[]).slice(0,3)){
+      if(!safeMediaHref(camera.siteUrl))continue;
+      const item={...camera,kind:'camera',key:'camera:'+camera.id};
+      mediaSources.push(item);cameras.appendChild(mediaSourceButton(item));
+    }
+    if(!cameras.children.length)cameras.appendChild(element('p','mission-media-empty',
+      'No verified camera-provider directory is currently available.'));
+    const operator=$('mission-media-operator');if(operator){
+      operator.replaceChildren();
+      operator.appendChild(document.createTextNode(
+        'Launch operator: '+(mediaDesk.operator?.label||'not matched to an official operator directory')+'. '));
+      if(mediaDesk.operator?.url&&safeMediaHref(mediaDesk.operator.url))
+        operator.appendChild(link(mediaDesk.operator.url,'Check operator announcements','mission-media-outbound'));
+      else operator.appendChild(link(
+        'https://www.nasa.gov/live/','Check NASA live coverage','mission-media-outbound'));
+    }
+    const previous=mediaSources.find(x=>x.key===selectedMediaKey);
+    const first=previous||mediaSources.find(x=>x.kind==='mission'&&!x.sourceReportedEnded)||
+      mediaSources.find(x=>x.kind==='camera')||mediaSources[0];
+    if(first)selectMedia(first.key);
+  }
+
   let loadSequence = 0;
   let activeMissionId = null;
   let lastKscAttemptAt = 0;
@@ -605,6 +758,7 @@
       set('pad', next?.pad || 'Not announced');
       set('provider', next?.provider || 'Not announced');
       renderList(d.upcoming || []);
+      renderMissionMedia(d.mediaDesk || null);
       renderWeather(d.viewingWeatherByArea || []);
       renderAccess(d);
       renderKsc(d);
@@ -639,6 +793,7 @@
       $('weather-card').dataset.level = 'unknown';
       set('schedule-label', 'Live schedule unavailable');
       set('schedule-detail', 'Use official NASA and launch operator sources for current timing.');
+      renderMissionMedia(null);
       set('weather-label', 'Visibility not assessed');
       set('weather-detail', 'This page is not displaying verified live forecast conditions.');
       set('launch-access-checked', 'Live access data could not be checked.');
