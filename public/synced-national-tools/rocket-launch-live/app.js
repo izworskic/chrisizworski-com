@@ -181,14 +181,16 @@
     set('rl-mission-name', launch?.name || 'No upcoming launch in this regional feed');
     const c = launch?.scheduleConfidence;
     chip($('rl-schedule-grade'),
-      c?.label || (data.coverage.partial ? 'Schedule partly unavailable' : 'Timing unverified'),
-      c?.level || 'unknown');
+      data.scheduleFreshness==='stale'?'Launch schedule check overdue':
+        c?.label || (data.coverage.partial ? 'Schedule partly unavailable' : 'Timing unverified'),
+      data.scheduleFreshness==='stale'?'unknown':c?.level || 'unknown');
     set('rl-date', launch ? formattedDate(launch, zone) : 'No confirmed date');
     set('rl-time', launch ? formattedTime(launch, zone) : 'Time not announced');
-    set('rl-schedule-detail', c?.detail ||
-      (data.coverage.partial ?
-        'At least one provider query failed. The absence of a mission is not evidence that the region has no launch.' :
-        'No scheduled launch was returned within this provider’s bounded upcoming sample.'));
+    set('rl-schedule-detail',
+      (data.scheduleWarning?data.scheduleWarning+' ':'')+
+      (c?.detail || (data.coverage.partial ?
+        'One or more provider groups are incomplete; an absent mission is not a confirmed zero.' :
+        'No scheduled launch was returned within the configured bounded sample.')));
     set('rl-pad', launch?.pad || 'Not announced');
     set('rl-rocket', launch?.rocket || 'Not announced');
     set('rl-schedule-updated', launch?.lastUpdated ? stamp(launch.lastUpdated) : 'Not provided');
@@ -197,7 +199,7 @@
         data.regions.find(r => r.id === data.nationalNext.region)?.timezone) :
       'No upcoming coastal mission verified');
     set('rl-feed-health', data.coverage.partial ? 'Partial schedule coverage' : 'Six coastal regions checked');
-    set('rl-updated-at', stamp(data.generatedAt));
+    set('rl-updated-at', data.scheduleCheckedAt?stamp(data.scheduleCheckedAt):'No schedule observation');
   }
   function renderSelector(data) {
     const select = $('rl-launch-select');
@@ -516,9 +518,10 @@
     board();
     const coverage = data.coverage || {};
     set('rl-schedule-coverage',
-      'Source: Launch Library 2, checked ' + stamp(data.generatedAt) +
-      '. Two bounded queries across seven launch location IDs. ' +
-      (coverage.partial ? 'One or more queries were unavailable; some regions may show incomplete results. ' : '') +
+      'Source: Launch Library 2 shared Postgres snapshot, observed ' +
+      stamp(data.scheduleCheckedAt) +
+      '. No upstream launch calendar calls from this visitor request. Two provider groups across seven location IDs. ' +
+      (coverage.partial ? 'At least one source group was unavailable, stale or truncated; not every mission is guaranteed present. ' : '') +
       'This does not include every sounding rocket, military range test or far-future mission. Read each range’s official notice before traveling.');
   }
   async function load(region, launchId) {
