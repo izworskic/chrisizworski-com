@@ -15,12 +15,13 @@
       lng: -119.6247,
       months: [2],
       peakLabel: 'Feb 10–28 (Peak Feb 15–26) · Sunset 15-Min Window',
-      permitType: 'lottery',
-      permitName: 'Recreation.gov Timed Entry',
-      permitLead: 'Book Nov/Dec (~2.5 months advance) + 2-day rolling releases at 8 AM PT',
+      permitType: 'open',
+      permitName: '2026 entrance: no reservation',
+      permitLead: 'NPS: no February 2026 entrance or Firefall viewing reservation. Parking and traffic restrictions apply; 2027 unconfirmed.',
+      accessRules: {season: 2026, entrance: 'NOT_REQUIRED', parking: 'RESTRICTED', activity: 'NO_RESERVATION', future: 'UNCONFIRMED', official: 'https://www.nps.gov/yose/planyourvisit/horsetailfall.htm'},
       category: 'optical',
       activeIntel: 'Feb sunset solar angle reflects through ephemeral Horsetail Fall spray on El Capitan, creating an intense molten lava glow for 10–15 minutes before twilight.',
-      leadAlert: '⚠️ Reserve February weekend vehicle timed-entry reservations on Recreation.gov in December.',
+      leadAlert: 'NPS required no Yosemite or Horsetail Fall reservation in February 2026; designated parking, walking and traffic rules applied. Check for a new NPS announcement before planning 2027.',
       toolUrl: '/yosemite-firefall-live/',
       toolLabel: 'Yosemite Firefall Live Conditions Engine'
     },
@@ -100,12 +101,13 @@
       lng: -113.7178,
       months: [6, 7, 8, 9, 10],
       peakLabel: 'Late Jun/Early Jul–Mid Oct (Peak Alpine Blooms Jul–Aug)',
-      permitType: 'lottery',
-      permitName: 'Recreation.gov Vehicle Timed Entry',
-      permitLead: '120-day rolling vehicle reservations release daily at 8 AM MT + next-day release at 7 PM MT.',
+      permitType: 'open',
+      permitName: '2026 entrance: no vehicle reservation',
+      permitLead: '2026: no park vehicle reservation; Logan Pass had ticketed shuttles and a 3-hour parking limit July 1–Sept 7. 2027 unconfirmed.',
+      accessRules: {season: 2026, entrance: 'NOT_REQUIRED', shuttle: 'TICKET_REQUIRED', parking: 'THREE_HOUR_LIMIT', dateRange: ['2026-07-01','2026-09-07'], future: 'UNCONFIRMED', official: 'https://www.nps.gov/glac/planyourvisit/visiting-loganpass-2026.htm'},
       category: 'optical',
       activeIntel: 'Plowing 40–80 foot avalanche drifts along the Continental Divide takes 10+ weeks. Opening unveils Logan Pass glacier lilies, bighorn sheep, and sheer hanging valleys.',
-      leadAlert: '⚠️ 120-day rolling vehicle reservations open daily at 8 AM MT on Recreation.gov (e.g., book in March for July).',
+      leadAlert: '2026: no vehicle reservations anywhere in Glacier. Logan Pass shuttles required tickets, and parking was limited to 3 hours July 1–September 7. 2027 rules have not been confirmed.',
       toolUrl: '/synced-national-tools/going-to-the-sun-road-status/',
       toolLabel: 'Glacier Sun Road Live Plowing & Logan Pass Engine'
     },
@@ -213,6 +215,13 @@
     }
   ];
 
+  // Never carry a season's permit policy into a later year without a new official source.
+  function getSeasonPolicy(phenomenon, year) {
+    var targetYear = Number(year);
+    if (targetYear !== 2026) return {status:'UNCONFIRMED', text:'Access and reservation rules for ' + targetYear + ' are unconfirmed. Check official land-manager guidance before booking.'};
+    return {status:'HISTORICAL_2026', text:phenomenon.permitLead};
+  }
+
   var MONTH_NAMES = [
     'All Months',
     'January',
@@ -234,19 +243,19 @@
       badge: 'Annual Cycle Overview',
       title: 'Full 12-Month Phenomenon Almanac',
       details: 'Explore 12 audited narrow-window national park phenomena across all 50 states. Use the timeline buttons above to scrub through the calendar and discover which natural spectacles are unfolding right now, alongside urgent booking deadlines.',
-      leadAlert: 'Tip: Click any month button (Jan through Dec) to see exact Recreation.gov lottery opening dates and physical timing windows.'
+      leadAlert: 'Select a month for natural windows. Reservation details are historical 2026 examples, not confirmed future booking instructions; check the responsible agency.'
     },
     1: {
       badge: 'Winter Aggregations & Permits',
       title: 'January: Cold-Water Manatees & Critical Summer Lotteries',
       details: 'Blue Spring manatee numbers peak during January Arctic cold fronts. Acadia Cadillac Mountain continues its astronomical run as the first point in the United States to greet the sunrise.',
-      leadAlert: '🚨 CRITICAL DEADLINE: Katmai Brooks Camp campground reservations open January 5 at 8:00 AM AKST on Recreation.gov and book out in 3 minutes. Also book February Yosemite Firefall reservations.'
+      leadAlert: '2026 reference: check Katmai campground booking with NPS. Yosemite required no February 2026 Firefall entry reservation; 2027 rules are unconfirmed.'
     },
     2: {
       badge: 'Peak Firefall & Manatee Surge',
       title: 'February: Yosemite Firefall & Death Valley Superbloom Early Flashes',
       details: 'Yosemite Horsetail Fall achieves peak solar alignment between Feb 10 and Feb 28, glowing molten orange for 15 minutes before sunset. Florida manatee counts remain at seasonal records.',
-      leadAlert: '⚠️ Check Yosemite sunset cloud clearances daily. 120-day rolling vehicle reservations for Glacier Going-to-the-Sun Road begin opening for late June.'
+      leadAlert: 'Check Yosemite sunset cloud and flow conditions. Glacier had no park vehicle reservations in 2026; check future NPS rules before booking.'
     },
     3: {
       badge: 'Desert Wildflowers & High Spring Runoff',
@@ -270,13 +279,13 @@
       badge: 'Alpine Plowing & Columbia Salmon Ascent',
       title: 'June: Glacier Sun Road Plowing Climax & Sockeye Salmon Runs',
       details: 'NPS snowplow crews break through the 60-foot Big Drift at Logan Pass; Going-to-the-Sun Road typically opens late June. Columbia River sockeye salmon battle through Bonneville fish ladders.',
-      leadAlert: 'Glacier Sun Road vehicle timed-entry checks begin; reserve 24-hour next-day ticket batches at 7:00 PM MT if 120-day permits are sold out.'
+      leadAlert: 'Glacier required no vehicle reservations in 2026. Logan Pass shuttle tickets and time-limited parking were separate requirements July 1–September 7; next-season rules unconfirmed.'
     },
     7: {
       badge: 'Brown Bears & Alpine Wildflower Peak',
       title: 'July: Katmai Brooks Falls Bear Salmon Leap & Glacier Wildflowers',
       details: 'July is the world-famous peak: up to 40+ coastal brown bears line Brooks Falls to catch leaping sockeye salmon. Logan Pass glacier lilies bloom in carpets along the Continental Divide.',
-      leadAlert: 'Peak summer park crowds; arrive at Glacier Logan Pass and Bonneville Dam before 8:00 AM to secure vehicle parking.'
+      leadAlert: '2026 Logan Pass: private-car parking was limited to 3 hours with a free kiosk permit; a separately ticketed shuttle was offered. Verify upcoming-season access.'
     },
     8: {
       badge: 'Monsoon Caution & Stable Trade Winds',
@@ -306,7 +315,7 @@
       badge: 'Winter Solstice Light & Firefall Booking Window',
       title: 'December: Deep Winter Manatee Herds & Firefall Reservation Drops',
       details: 'Over 500+ manatees gather in Blue Spring transparent waters. Cadillac Mountain greets the earliest sunrise in the nation on the winter solstice.',
-      leadAlert: '🚨 CRITICAL DEADLINE: Recreation.gov releases February Yosemite Firefall weekend vehicle reservations in early December. Reserve immediately.'
+      leadAlert: '2027 Yosemite Firefall entrance and viewing rules have not been announced in the cited 2026 NPS guidance. Do not purchase an assumed Firefall vehicle reservation.'
     }
   };
 
@@ -480,7 +489,7 @@
         '<div class="np-map-popup">' +
           '<h4>' + (idx + 1) + '. ' + p.name + '</h4>' +
           '<div class="popup-meta">' + p.park + '</div>' +
-          '<div class="popup-lead"><strong>Peak:</strong> ' + p.peakLabel + '<br><strong>Permit:</strong> ' + p.permitLead + '</div>' +
+          '<div class="popup-lead"><strong>Peak:</strong> ' + p.peakLabel + '<br><strong>Access guidance:</strong> ' + getSeasonPolicy(p,new Date().getFullYear()).text + '</div>' +
           '<a class="popup-jump" href="#' + p.id + '">View Ranger Dossier &darr;</a>' +
         '</div>';
 
@@ -527,6 +536,7 @@
   window.NP_PHENOMENA_DATA = {
     phenomena: PHENOMENA,
     monthIntel: MONTH_INTEL,
+    getSeasonPolicy: getSeasonPolicy,
     state: state
   };
 })();
