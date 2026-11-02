@@ -246,3 +246,28 @@ test('ZIP lookup is dominant over city and invalidates stale city forecast on ch
  await p.nodes['bee-check'].handlers.click();
  assert.match(p.title(),/possible release-planning window/);
 });
+
+
+test('Freighter View Farms photo notes show four self-hosted authentic garden photographs with truthful context',()=>{
+ const match=html.match(/<section id="from-my-garden"[\s\S]*?<\/section>/);
+ assert.ok(match,'The Michigan photo field notes are an accessible inline section');
+ const field=match[0];
+ assert.match(field,/From my garden on Saginaw Bay/);
+ const src=[...field.matchAll(/<img\b[^>]*src="([^"]+)"[^>]*>/g)];
+ assert.equal(src.length,4,'The editorial essay must use four purposeful photographs, not a generic gallery');
+ for(const [,image] of src){
+  assert.ok(image.startsWith('/images/leafcutter-fvf-')&&image.endsWith('.webp'),'Use optimized first-party assets');
+  const filename=path.join(__dirname,'..','public',image.slice(1));
+  assert.ok(fs.existsSync(filename),image+' must be present in the deployed output');
+  const bytes=fs.readFileSync(filename);
+  assert.ok(bytes.byteLength>5000 && bytes.subarray(0,4).toString('ascii')==='RIFF' && bytes.subarray(8,12).toString('ascii')==='WEBP','Expected a real WebP file: '+image);
+ }
+ assert.equal((field.match(/Photograph by Chris Izworski/g)||[]).length,4);
+ assert.match(field,/2024\/10\/11\/leafcutter-bees-garden/);
+ assert.match(field,/2026\/06\/28\/leafcutter-bees-arrive-summer/);
+ assert.match(field,/cannot confirm occupants or successful emergence/);
+ assert.match(field,/cannot simply be put back to sleep/);
+ assert.match(field,/not a species-identification test/);
+ assert.ok(html.indexOf('id="bee-first-title"')<html.indexOf('id="from-my-garden"'),'The visitor decision must precede the optional photo essay');
+ assert.ok(html.includes('src="/images/leafcutter-bee-carrying-leaf-bob-peterson.jpg"'),'Retain the identified existing hero photo');
+});
