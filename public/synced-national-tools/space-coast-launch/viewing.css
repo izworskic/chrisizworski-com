@@ -502,3 +502,24 @@
 .fl-official-links a{font-size:12px;background:#1d5a6d;color:#fff!important;padding:9px 12px;border-radius:8px;text-decoration:none;font-weight:800}
 .fl-official-links small{color:#4d646a}
 @media(max-width:600px){.fl-official-head{grid-template-columns:1fr}.fl-official-value{text-align:left;min-height:0}.fl-official-value strong{font-size:25px}}
+
+
+/* Launch weather story: evidence-first narrative, not a generic forecast card. */
+.fl-weather-story{background:linear-gradient(140deg,#173b4a 0%,#265868 100%);border-radius:12px;padding:clamp(17px,3vw,27px);margin:18px 0 20px;color:#f3faf9;box-shadow:0 9px 22px rgba(18,46,57,.10)}
+.fl-weather-story-eyebrow{font-size:11px!important;text-transform:uppercase;letter-spacing:.13em;font-weight:800;color:#b4ded3!important;margin:0 0 9px!important}
+.fl-weather-story h5{font-size:clamp(21px,2.8vw,30px);line-height:1.22;margin:0 0 12px;color:#fff}
+.fl-weather-story>p{color:#e4f1f0!important;font-size:14px!important;line-height:1.75!important}
+.fl-weather-story-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin:20px 0 12px}
+.fl-weather-story-grid>div,.fl-weather-story-next{padding:15px 16px;background:rgba(255,255,255,.09);border:1px solid rgba(220,246,242,.18);border-radius:9px}
+.fl-weather-story h6,.fl-weather-story-next strong{margin:0 0 7px;color:#b6e9d9;font-size:12px;letter-spacing:.02em;font-weight:800}
+.fl-weather-story-grid p,.fl-weather-story-next p{margin:6px 0 0;color:#f5fbfa;font-size:13px;line-height:1.65}
+.fl-weather-story-rules{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:16px 0}
+.fl-weather-story-rules h6{grid-column:1/-1;margin-bottom:0}
+.fl-weather-story-rules details{background:#eaf4f1;color:#1b4350;padding:12px 13px;border-radius:9px}
+.fl-weather-story-rules summary{font-size:13px;font-weight:800;cursor:pointer;color:#1f4a50}
+.fl-weather-story-rules details p{font-size:13px!important;line-height:1.65!important;color:#315c5e!important;margin:9px 0 0!important}
+.fl-weather-story-next{border-left:4px solid #99d4c3;margin:15px 0 10px}
+.fl-weather-story-attribution{font-size:11px!important;color:#cce5e1!important}
+.fl-weather-story[data-stage="monitor-overdue"]{background:linear-gradient(145deg,#563e34,#795c49)}
+.fl-weather-story[data-stage="nasa-reported"]{background:linear-gradient(145deg,#163c56,#285b79)}
+@media(max-width:650px){.fl-weather-story-grid,.fl-weather-story-rules{grid-template-columns:1fr}.fl-weather-story-rules h6{grid-column:1}}
