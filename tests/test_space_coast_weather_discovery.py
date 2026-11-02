@@ -91,7 +91,7 @@ class IndependentWeatherDiscoveryTest(unittest.TestCase):
             raise RuntimeError("official-source-403")
         got, health = inspect_sources([A], fail, worker.official_pdf_url)
         self.assertEqual(got, {})
-        self.assertEqual(len(health), 3)
+        self.assertEqual(len(health), 4)
         self.assertTrue(all(r["status"] == "unavailable" for r in health))
 
     def test_official_page_success_without_pdf_links_reports_coverage_gap(self):
