@@ -34,10 +34,20 @@ test('November Michigan garden never claims active summer pests',()=>{
  for(const crop of core.CROPS){
   const d=select(crop,11);
   assert.equal(d.mode,'OFF_SEASON');
-  assert.ok(d.firstAction.includes('Remove badly diseased'));
+  assert.ok(d.firstAction.length>45,'Crop-specific off-season assignment should be useful');
   assert.ok(d.featured.every(p=>p.label==='Plan for next growing season'));
   assert.ok(d.featured.every(p=>p.biologicalForecast==='UNAVAILABLE'));
  }
+});
+test('off-season plans differ by host crop and a reported clue is investigated without asserting emergence',()=>{
+ const squash=select('squash',11,'growing'),grapes=select('grapes',11,'growing');
+ assert.notEqual(squash.firstAction,grapes.firstAction);
+ assert.match(squash.firstAction,/squash/i);
+ assert.match(grapes.firstAction,/lanternfly/i);
+ const suspected=select('grapes',11,'growing',{observed:'spotted-lanternfly'});
+ assert.match(suspected.firstAction,/suspected spotted lanternfly/i);
+ assert.equal(suspected.all.find(p=>p.id==='spotted-lanternfly').verifiedLocalOccurrence,false);
+ assert.equal(suspected.mode,'OFF_SEASON');
 });
 test('early spring cabbage directs attention to seedling root pests',()=>{
  const d=select('brassicas',4,'seedling');
@@ -98,6 +108,11 @@ test('unknown crop, stage, month and suspect fail to allowlisted defaults',()=>{
  assert.equal(d.crop,'squash');assert.equal(d.stage,'growing');
  assert.ok(d.all.every(p=>p.state!=='GARDENER_REPORTED'));
 });
+test('repaired public reference links are exact checked sources, not expired shortcuts',()=>{
+ assert.equal(core.SOURCE.msu,'https://msu-prod.dotcmscloud.com/resources/ipm_smart_pest_management_for_the_vegetable_garden');
+ assert.equal(core.SOURCE.umn,'https://extension.umn.edu/garden-and-home/yard-and-garden/yard-and-garden-insects');
+ assert.equal(core.SOURCE.lantern,'https://www.michigan.gov/invasives/id-report/insects/spotted-lanternfly');
+});
 test('seasonal and source links exist and do not create fake probabilities',()=>{
  for(const p of core.PESTS)assert.ok(p.source.startsWith('https://'));
  const json=JSON.stringify(select('roses',7,'flowering',{weather:weather(['hot_dry'])}));
@@ -124,6 +139,21 @@ test('NWS parser identifies wet weather, not disease confirmation',()=>{
  const w=api._test.parseForecast(hourlyFixture(now,{wet:true}),now);
  assert.ok(w.tags.includes('wet'));
  assert.ok(!w.tags.includes('hot_dry'));
+});
+test('missing NWS humidity and precipitation never become artificial dry or wet risk',()=>{
+ const now=Date.UTC(2026,6,12,12);
+ const payload=hourlyFixture(now,{hot:true});
+ for(const period of payload.properties.periods){
+  period.relativeHumidity={value:null};
+  period.probabilityOfPrecipitation={value:null};
+ }
+ const w=api._test.parseForecast(payload,now);
+ assert.equal(w.status,'PARTIAL');
+ assert.equal(w.completePercentHours,0);
+ assert.deepEqual(w.tags,[]);
+ assert.match(w.summary,/incomplete/i);
+ const d=select('tomatoes',7,'growing',{weather:w});
+ assert.ok(d.all.every(p=>p.weatherFavorable===false));
 });
 test('NWS stale, missing, implausible and incomplete forecasts fail closed',()=>{
  const now=Date.UTC(2026,6,12,12);
