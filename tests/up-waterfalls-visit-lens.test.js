@@ -29,6 +29,9 @@ test('B55 conservative full-visit time gate and source-scoped closure safety',()
  assert.match(lens,/Travel between U.P. regions is NOT included/);
  for(const url of ['michigan.gov/recsearch/parks/porkies','michigan.gov/recsearch/parks/bondfalls','fs.usda.gov/r09/ottawa/alerts/black-river','nps.gov/places/munising-falls'])assert.ok(lens.includes(url));
  assert.match(map,/UPWaterfallFocus/);assert.match(map,/upfall:selected/);
+ assert.match(map,/\/api\/carto-basemap-config/);assert.match(map,/tile.openstreetmap.org/);
+ assert.ok(!map.includes("L.tileLayer('https://basemaps.cartocdn.com/light_all/"),'keyless CARTO watermark must never load');
+ assert.match(html,/id="falls-basemap-status"/);
  assert.match(map,/!\['closed','research'\]/);
  assert.match(css,/\.visit-lens/);assert.match(css,/focus-visible/);
  assert.match(css,/\.dot\.research/);
