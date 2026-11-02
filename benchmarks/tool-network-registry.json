@@ -6574,7 +6574,7 @@
       "from": "phenology",
       "to": "leafcutter-bees",
       "type": "seasonal-router",
-      "strength": "medium",
+      "strength": "optional",
       "surface": "gardening-nature-network",
       "reason": "A gardener can take modeled accumulated-heat context into a specific bee nesting and cocoon-care decision without treating heat as observed emergence."
     },
@@ -6582,7 +6582,7 @@
       "from": "leafcutter-bees",
       "to": "bloom-tracker",
       "type": "related-tool",
-      "strength": "medium",
+      "strength": "optional",
       "surface": "tools-directory",
       "reason": "Seasonal flower context can help explain potential forage, but regional bloom predictions are not confirmed flowers at a visitor's address."
     }
