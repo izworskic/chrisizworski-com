@@ -63,13 +63,13 @@ async function ready(){
    assert.match(await page.locator('#bee-story-title').innerText(),/Make a little room/);
    assert.equal(await page.locator('#bee-year-display').getAttribute('data-phase'),'spring');
    assert.equal(await page.locator('#bee-first-title').innerText(),await page.locator('#result-title').innerText());
-   const springAnswer=await page.locator('#bee-first-title').innerText();
+   const springAnswer=await page.locator('#bee-first-action').innerText();
    await page.locator('[data-journey-phase="summer"]').click();
    assert.equal(await page.locator('#month').inputValue(),'6');
    assert.match(await page.locator('#bee-story-title').innerText(),/A small bee/);
-   assert.notEqual(await page.locator('#bee-first-title').innerText(),springAnswer);
+   assert.notEqual(await page.locator('#bee-first-action').innerText(),springAnswer,'The season must change the practical next action');
    await page.locator('[data-journey-phase="spring"]').click();
-   assert.equal(await page.locator('#bee-first-title').innerText(),springAnswer,'A to B to A restores the same answer');
+   assert.equal(await page.locator('#bee-first-action').innerText(),springAnswer,'A to B to A restores the same action');
    await page.locator('#month').selectOption(originalMonth);
    assert.equal(await page.locator('#bee-first-title').innerText(),originalAnswer,'The original season restores the original answer');
    await page.locator('#flowers').selectOption('yes');
