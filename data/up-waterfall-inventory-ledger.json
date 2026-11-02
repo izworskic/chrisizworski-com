@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "issue": 1258,
-  "reviewed": "2026-11-01",
+  "reviewed": "2026-11-02",
   "policy": "All 161 named source candidates retained even when public access is unknown. GIS locations are waterfall positions, never visitor parking. Do not auto-index.",
   "sourceCount": 197,
   "sourceCandidateCount": 161,
@@ -4186,14 +4186,23 @@
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unverified",
+      "access": "research-only",
       "landManager": null,
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-marquette"
+      "checked": "2026-11-02",
+      "nextAction": "Confirm the exact parcel and road authorities, a lawful signed stopping point, and continuous public foot access without crossing private land.",
+      "batch": "county-marquette",
+      "reviewed": "2026-11-02",
+      "reviewBatch": "48",
+      "classification": "private-shortcut-unsigned-forest-approach",
+      "accessAssessment": "The Michigan GIS feature is near 46.343362,-87.250939. A firsthand falls catalog places a small domed drop at 46.34446,-87.25166; this is geographical corroboration, not a trail route or public lot. Independent descriptions acknowledge that the easiest approach crosses private property. Older two-track directions and a clearing are not evidence of legal parking or a public route in 2026.",
+      "evidence": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.waterfallsofthekeweenaw.com/east-branch-chocolay-river/upper-chocolay-falls/",
+        "https://upper-michigan.com/guide/waterfalls/upper-chocolay-falls.html"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -4209,14 +4218,23 @@
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unverified",
+      "access": "research-only",
       "landManager": null,
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-marquette"
+      "checked": "2026-11-02",
+      "nextAction": "Require current landowner permission or an authoritative documented public shore access point, lawful parking and a safe continuous walking route before suggesting any land-based visit.",
+      "batch": "county-marquette",
+      "reviewed": "2026-11-02",
+      "reviewBatch": "48",
+      "classification": "private-shorelands-paddler-hazard",
+      "accessAssessment": "State GIS #183 places White City Falls at 46.390063,-87.719065; a firsthand field record places the same named chute at 46.39015,-87.71900. This is a feature location, never a parking coordinate. A firsthand waterfall account reports gated private property at the cabin. American Whitewater's route description and an August 2024 trip report describe posted private land on both riverbanks, and technical whitewater hazards at the falls. A paddling river route is not a certified public footpath.",
+      "evidence": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.waterfallsofthekeweenaw.com/middle-branch-escanaba-river/white-city-falls/",
+        "https://www.americanwhitewater.org/content/River/view/river-detail/2683/main"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -4232,14 +4250,23 @@
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unverified",
+      "access": "research-only",
       "landManager": null,
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-marquette"
+      "checked": "2026-11-02",
+      "nextAction": "Obtain current DNR Gwinn unit map and inspection of the alternate foot trail, official parking, barriers and current site access. Never reuse the condemned-bridge route.",
+      "batch": "county-marquette",
+      "reviewed": "2026-11-02",
+      "reviewBatch": "48",
+      "classification": "dnr-2017-closed-footbridge-alternate-unverified",
+      "accessAssessment": "State GIS #184 is on the Marquette County Black River at 46.392669,-87.783502. Michigan DNR identifies the Ely Township falls in T46N R28W Section 10. This is distinct from the Gogebic County scenic byway. DNR announced March 16, 2017 that the deteriorated bridge was barricaded and would be removed, and that its trail segment was permanently closed. DNR said it planned to improve an alternate approach, but no present-day approved trail alignment, signed parking, bridge status or completed alternate-route documentation was located in this review. Do not imply the entire falls site is closed today.",
+      "evidence": [
+        "https://content.govdelivery.com/accounts/MIDNR/bulletins/18dd92b",
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://upper-michigan.com/guide/waterfalls/black-river-falls-marquette.html"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -4255,14 +4282,24 @@
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unverified",
+      "access": "research-only",
       "landManager": null,
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-marquette"
+      "checked": "2026-11-02",
+      "nextAction": "Reconcile the state GIS and GNIS positions, obtain authoritative parcel/right-of-way confirmation and a current manager-approved parking-to-viewpoint corridor. Do not send visitors to the nearer of two disputed feature coordinates.",
+      "batch": "county-marquette",
+      "reviewed": "2026-11-02",
+      "reviewBatch": "48",
+      "classification": "private-access-dispute-feature-coordinate-conflict",
+      "accessAssessment": "State GIS #185 places the feature at 46.565112,-88.013696, while a GNIS-derived name record (feature ID 1617009) reports 46.5693786,-88.0354114, about 1.7 kilometres away. Do not silently merge these into an exact visitor destination. American Whitewater cautions that access at the falls may be disputed because of private property. Another waterfall guide reports private land and cabins. Neither older paddling suggestions nor proximity to a wilderness boundary certifies permission, land ownership, parking or safe public walking.",
+      "evidence": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://geo.mytopo.com/feature/michigan/marquette/falls/1617009/dee-lundeen-falls/",
+        "https://www.americanwhitewater.org/content/River/view/river-detail/10797/main",
+        "https://upper-michigan.com/guide/waterfalls/dee-lundeen-falls.html"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -4278,14 +4315,23 @@
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unverified",
+      "access": "research-only",
       "landManager": null,
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-marquette"
+      "checked": "2026-11-02",
+      "nextAction": "Locate credible first-hand feature documentation and its correct fall position, then verify land title, legal road parking and a continuous public trail before publication.",
+      "batch": "county-marquette",
+      "reviewed": "2026-11-02",
+      "reviewBatch": "48",
+      "classification": "creek-evidenced-waterfall-visitor-evidence-missing",
+      "accessAssessment": "Michigan GIS #186 places a named Trout Falls feature at 46.382784,-88.009645. Michigan DNR's fishing waters list and USGS station 04062320 independently confirm Trout Falls Creek, not an officially managed waterfall visitor attraction. No authoritative signed waterfall parking area or visitor pathway was located. The USGS water station is a creek monitoring-location record, not a waterfall's surveyed viewing area or a current public-access permit.",
+      "evidence": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.michigan.gov/dnr/things-to-do/fishing/where/better-fishing-waters",
+        "https://waterdata.usgs.gov/monitoring-location/USGS-04062320/"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -4301,14 +4347,23 @@
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "unverified",
+      "access": "research-only",
       "landManager": null,
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-28",
-      "nextAction": "Resolve identity/alias, land manager, public access, signed visitor arrival and trail; no auto publication",
-      "batch": "county-marquette"
+      "checked": "2026-11-02",
+      "nextAction": "Obtain dependable imagery or first-hand fall evidence, reconcile the discrepant locations, verify ownership and any legal public road/foot access and certified parking before suggesting a trip.",
+      "batch": "county-marquette",
+      "reviewed": "2026-11-02",
+      "reviewBatch": "48",
+      "classification": "unverified-visitor-description-coordinate-discrepancy",
+      "accessAssessment": "State GIS #187 maps Caps Creek Falls at 46.331182,-87.974281. A general waterfall-directory listing instead places it at 46.3214,-87.9403, several kilometres away; neither directory proves a distinct visited drop or a public footpath. A local-interest directory explicitly reports no firsthand account or confirmed directions. Another general directory lists an apparent short hike and County Road FX address without accessible official supporting trail authority; those details are not fit for navigation.",
+      "evidence": [
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://upper-michigan.com/guide/waterfalls/caps-creek-falls.html",
+        "https://michiganupperpeninsula.com/places-to-visit/waterfalls/"
+      ]
     },
     {
       "source": "mi-state-gis",
@@ -5130,5 +5185,5 @@
       ]
     }
   ],
-  "lastBatch": "47"
+  "lastBatch": "48"
 }

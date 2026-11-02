@@ -13,256 +13,160 @@
     {
       "batchNumber": 1,
       "candidates": [
-        181,
-        183,
-        184,
-        185,
-        186,
-        187,
         22,
-        28
-      ]
-    },
-    {
-      "batchNumber": 2,
-      "candidates": [
+        28,
         54,
         57,
         60,
         61,
         62,
-        72,
-        84,
-        106
+        72
       ]
     },
     {
-      "batchNumber": 3,
+      "batchNumber": 2,
       "candidates": [
+        84,
+        106,
         122,
         51,
         120,
         136,
         137,
-        139,
-        140,
-        152
+        139
       ]
     },
     {
-      "batchNumber": 4,
+      "batchNumber": 3,
       "candidates": [
+        140,
+        152,
         176,
         177,
         23,
         213,
         68,
-        8,
-        38,
-        12
+        8
       ]
     },
     {
-      "batchNumber": 5,
+      "batchNumber": 4,
       "candidates": [
+        38,
+        12,
         4,
         9,
         191,
         192,
         46,
-        91,
-        119,
-        190
+        91
       ]
     },
     {
-      "batchNumber": 6,
+      "batchNumber": 5,
       "candidates": [
+        119,
+        190,
         45,
         150,
         151,
         154,
         160,
-        215,
-        195,
-        205
+        215
       ]
     },
     {
-      "batchNumber": 7,
+      "batchNumber": 6,
       "candidates": [
+        195,
+        205,
         52,
         59,
         83,
         99,
         103,
-        105,
-        107,
-        114
+        105
       ]
     },
     {
-      "batchNumber": 8,
+      "batchNumber": 7,
       "candidates": [
+        107,
+        114,
         121,
         123,
         20,
         24,
         25,
-        37,
-        39,
-        40
+        37
       ]
     },
     {
-      "batchNumber": 9,
+      "batchNumber": 8,
       "candidates": [
+        39,
+        40,
         48,
         58,
         63,
         65,
         69,
-        70,
-        74,
-        75
+        70
       ]
     },
     {
-      "batchNumber": 10,
+      "batchNumber": 9,
       "candidates": [
+        74,
+        75,
         86,
         112,
         29,
         42,
         80,
-        85,
-        129,
-        15
+        85
       ]
     },
     {
-      "batchNumber": 11,
+      "batchNumber": 10,
       "candidates": [
+        129,
+        15,
         17,
         144,
         18,
         116,
         127,
-        148,
-        149,
-        153
+        148
       ]
     },
     {
-      "batchNumber": 12,
+      "batchNumber": 11,
       "candidates": [
+        149,
+        153,
         162,
         163,
         170,
         172,
         173,
-        175,
-        180
+        175
+      ]
+    },
+    {
+      "batchNumber": 12,
+      "candidates": [
+        180,
+        181,
+        183,
+        184,
+        185,
+        186,
+        187
       ]
     }
   ],
   "candidates": [
-    {
-      "gisObjectId": 181,
-      "name": "Upper Chocolay Falls",
-      "county": "MARQUETTE",
-      "river": null,
-      "lat": 46.343362,
-      "lng": -87.250939,
-      "cluster": "MARQUETTE / UNKNOWN",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 183,
-      "name": "White City Falls",
-      "county": "MARQUETTE",
-      "river": "ESCANABA RIVER",
-      "lat": 46.390063,
-      "lng": -87.719065,
-      "cluster": "MARQUETTE / ESCANABA RIVER",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 184,
-      "name": "Black River Falls",
-      "county": "MARQUETTE",
-      "river": "BLACK RIVER",
-      "lat": 46.392669,
-      "lng": -87.783502,
-      "cluster": "MARQUETTE / BLACK RIVER",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 185,
-      "name": "Dee Lundeen Falls",
-      "county": "MARQUETTE",
-      "river": "PESHEKEE RIVER",
-      "lat": 46.565112,
-      "lng": -88.013696,
-      "cluster": "MARQUETTE / PESHEKEE RIVER",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 186,
-      "name": "Trout Falls",
-      "county": "MARQUETTE",
-      "river": "TROUT FALLS CREEK",
-      "lat": 46.382784,
-      "lng": -88.009645,
-      "cluster": "MARQUETTE / TROUT FALLS CREEK",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 187,
-      "name": "Caps Creek Falls",
-      "county": "MARQUETTE",
-      "river": "CAPS CREEK",
-      "lat": 46.331182,
-      "lng": -87.974281,
-      "cluster": "MARQUETTE / CAPS CREEK",
-      "priorityScore": 60,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
     {
       "gisObjectId": 22,
       "name": "Rock Bluff Falls",
@@ -1686,6 +1590,102 @@
       "reviewStatus": "previous-research-needs-public-access-review",
       "sourceCount": 4,
       "blockingGate": "Document land manager and road jurisdiction at a potential lawful southern entrance, current signed parking and a continuous public land corridor to safe bank; reject all posted north tracks."
+    },
+    {
+      "gisObjectId": 181,
+      "name": "Upper Chocolay Falls",
+      "county": "MARQUETTE",
+      "river": null,
+      "lat": 46.343362,
+      "lng": -87.250939,
+      "cluster": "MARQUETTE / UNKNOWN",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 3,
+      "blockingGate": "Confirm the exact parcel and road authorities, a lawful signed stopping point, and continuous public foot access without crossing private land."
+    },
+    {
+      "gisObjectId": 183,
+      "name": "White City Falls",
+      "county": "MARQUETTE",
+      "river": "ESCANABA RIVER",
+      "lat": 46.390063,
+      "lng": -87.719065,
+      "cluster": "MARQUETTE / ESCANABA RIVER",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 3,
+      "blockingGate": "Require current landowner permission or an authoritative documented public shore access point, lawful parking and a safe continuous walking route before suggesting any land-based visit."
+    },
+    {
+      "gisObjectId": 184,
+      "name": "Black River Falls",
+      "county": "MARQUETTE",
+      "river": "BLACK RIVER",
+      "lat": 46.392669,
+      "lng": -87.783502,
+      "cluster": "MARQUETTE / BLACK RIVER",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 3,
+      "blockingGate": "Obtain current DNR Gwinn unit map and inspection of the alternate foot trail, official parking, barriers and current site access. Never reuse the condemned-bridge route."
+    },
+    {
+      "gisObjectId": 185,
+      "name": "Dee Lundeen Falls",
+      "county": "MARQUETTE",
+      "river": "PESHEKEE RIVER",
+      "lat": 46.565112,
+      "lng": -88.013696,
+      "cluster": "MARQUETTE / PESHEKEE RIVER",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 4,
+      "blockingGate": "Reconcile the state GIS and GNIS positions, obtain authoritative parcel/right-of-way confirmation and a current manager-approved parking-to-viewpoint corridor. Do not send visitors to the nearer of two disputed feature coordinates."
+    },
+    {
+      "gisObjectId": 186,
+      "name": "Trout Falls",
+      "county": "MARQUETTE",
+      "river": "TROUT FALLS CREEK",
+      "lat": 46.382784,
+      "lng": -88.009645,
+      "cluster": "MARQUETTE / TROUT FALLS CREEK",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 3,
+      "blockingGate": "Locate credible first-hand feature documentation and its correct fall position, then verify land title, legal road parking and a continuous public trail before publication."
+    },
+    {
+      "gisObjectId": 187,
+      "name": "Caps Creek Falls",
+      "county": "MARQUETTE",
+      "river": "CAPS CREEK",
+      "lat": 46.331182,
+      "lng": -87.974281,
+      "cluster": "MARQUETTE / CAPS CREEK",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 3,
+      "blockingGate": "Obtain dependable imagery or first-hand fall evidence, reconcile the discrepant locations, verify ownership and any legal public road/foot access and certified parking before suggesting a trip."
     }
   ]
 }
