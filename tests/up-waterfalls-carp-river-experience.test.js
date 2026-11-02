@@ -133,7 +133,7 @@ test('NTN-authored Trailforks geometry is displayed only on request and never mi
  assert.ok(js.includes("showEvidence('falls')"));
  assert.ok(css.includes('#cr-trail-panel[hidden]'));
  assert.ok(css.includes('.cr-trail-embed'));
- assert.doesNotMatch(js,/L\\.polyline\\s*\\(/);
+ assert.ok(!js.includes('L.polyline('), 'No unverified native map routes');
  assert.doesNotMatch(page,/data-parking-lat=/);
  assert.ok(!page.includes('maps/dir/?api=1&destination=46.503807'));
  assert.match(g.walk,/NOT the measured full hike/);
