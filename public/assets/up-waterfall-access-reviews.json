@@ -1667,6 +1667,92 @@
       }
     },
     {
+      "gisObjectId": 51,
+      "name": "Upper Falls (Sturgeon River)",
+      "county": "BARAGA",
+      "status": "research-only-sturgeon-upper-not-canyon-or-gorge-sturgeon",
+      "publicAccess": "not-established-continuously",
+      "publicationEligible": false,
+      "title": "Upper Falls (Sturgeon River): source and legal arrival review",
+      "summary": "The small, split slate fall beyond Canyon Falls is a real named feature, but the route past Canyon's maintained path is not verified as a signed visitor route. Michigan state GIS #51 locates Upper Falls at 46.621677,-88.489310 on the Sturgeon River; firsthand Upper Falls coordinates 46.621070,-88.482070 differ by 557 metres. This is a slate slide below the Canyon Falls gorge, about 1.17 km from the curated Canyon Falls point and 15.76 km from the unrelated, separately curated Sturgeon Falls in Sturgeon River Gorge Wilderness. No generic 'Upper Falls' point should inherit directions to either other waterfall.",
+      "guidance": "Separate mapped waterfall, not a second officially cleared Canyon Falls destination. No GIS-to-parking marker or canyon-rim route.",
+      "reviewLimitations": "Place name, GIS coordinate, historical path, general nature-area opening or newly proposed parking alone do not prove legal public visitor access.",
+      "nextEvidence": "Reconcile Upper Falls GIS/field position, prove the continuous public land and allowed canyon-rim trail beyond the maintained Canyon Falls segment, and verify safe viewpoint/current restrictions before visitor publication.",
+      "researchPage": "/upper-peninsula-waterfalls/research/upper-falls-sturgeon-river-baraga/",
+      "sourceLinks": [
+        {
+          "label": "Michigan GIS named Upper Falls",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "Firsthand Upper Sturgeon Falls field description",
+          "url": "https://www.waterfallsofthekeweenaw.com/sturgeon-river/upper-falls/"
+        },
+        {
+          "label": "Canyon River Falls: unmaintained extension documented",
+          "url": "https://www.waterfallsofthekeweenaw.com/sturgeon-river/canyon-river-falls/"
+        },
+        {
+          "label": "Northern Michigan University Baraga visitor guide",
+          "url": "https://upheritage.nmu.edu/baraga"
+        },
+        {
+          "label": "Separate Sturgeon River Gorge Falls field site",
+          "url": "https://www.waterfallsofthekeweenaw.com/sturgeon-river/sturgeon-river-falls/"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-11-02",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Exact waterfall identity, aliases and source points",
+            "status": "documented-geography-with-disagreements",
+            "finding": "Michigan state GIS #51 locates Upper Falls at 46.621677,-88.489310 on the Sturgeon River; firsthand Upper Falls coordinates 46.621070,-88.482070 differ by 557 metres. This is a slate slide below the Canyon Falls gorge, about 1.17 km from the curated Canyon Falls point and 15.76 km from the unrelated, separately curated Sturgeon Falls in Sturgeon River Gorge Wilderness. No generic 'Upper Falls' point should inherit directions to either other waterfall.",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Verified landowner and legal public corridor",
+            "status": "not-cleared",
+            "finding": "A mapped natural feature, general public conservation reserve or another waterfall's visitor trail cannot certify exact bank ownership, permitted public transit or complete right-of-way to the mapped drop.",
+            "source": "https://www.waterfallsofthekeweenaw.com/sturgeon-river/canyon-river-falls/"
+          },
+          {
+            "label": "Old visitor accounts versus current authorization",
+            "status": "historical-or-tourism-not-live",
+            "finding": "The Northern Michigan University Baraga attractions guide and the specialist Canyon Falls article identify a maintained visitor path from the US-41 roadside park to Canyon Falls. The specialist explicitly describes an UNMAINTAINED continuation along the cliff/canyon edge toward Upper Falls. A legitimate Canyon Falls lot does not establish a signed, legally verified walking corridor, safe viewpoint or official trail extension to this exact GIS #51 drop.",
+            "source": "https://www.waterfallsofthekeweenaw.com/sturgeon-river/upper-falls/"
+          },
+          {
+            "label": "Current public road, gates and legal vehicle parking",
+            "status": "not-cleared",
+            "finding": "No independently verified currently legal vehicle arrival and parking point for THIS specific waterfall. Rough two-tracks, historical river fords, gates and pending future infrastructure are not certified visitor parking.",
+            "source": "https://upheritage.nmu.edu/baraga"
+          },
+          {
+            "label": "Continuous safe public walking route to the correct fall",
+            "status": "not-cleared",
+            "finding": "No official current complete trail-to-viewpoint corridor verified for this exact GIS feature. Cliff-rim extensions and rugged informal riverbank paths must not be rendered as safe signed routes.",
+            "source": "https://www.waterfallsofthekeweenaw.com/sturgeon-river/canyon-river-falls/"
+          },
+          {
+            "label": "Live restrictions, river conditions and dates of evidence",
+            "status": "not-cleared",
+            "finding": "No November 2026 on-site cliff, road, trail, winter parking or stream condition check was available. Historic field directions do not confirm present-day public route clearance. Last research check November 2, 2026. Historic conditions are not live access.",
+            "source": "https://upheritage.nmu.edu/baraga"
+          }
+        ]
+      },
+      "visitorDecision": {
+        "decision": "Separate mapped waterfall, not a second officially cleared Canyon Falls destination. No GIS-to-parking marker or canyon-rim route.",
+        "context": "The small, split slate fall beyond Canyon Falls is a real named feature, but the route past Canyon's maintained path is not verified as a signed visitor route.",
+        "saferAlternative": "Choose a separately verified managed waterfall destination in the U.P. Waterfall Explorer.",
+        "confidence": "natural-feature-research-supported-but-public-route-not-cleared"
+      }
+    },
+    {
       "gisObjectId": 52,
       "name": "Plumbago Falls",
       "county": "BARAGA",
@@ -4368,6 +4454,92 @@
       }
     },
     {
+      "gisObjectId": 120,
+      "name": "Big Falls (East Branch Huron)",
+      "county": "BARAGA",
+      "status": "research-only-big-east-huron-rough-road-ford-private-banks",
+      "publicAccess": "not-established-continuously",
+      "publicationEligible": false,
+      "title": "Big Falls (East Branch Huron): source and legal arrival review",
+      "summary": "Big Falls is a distinct remote East Branch Huron River cascade, not the developed Big Eric's Falls and not a maintained visitor hike. Michigan state GIS #120 at 46.834803,-88.073480 is about 253 metres from a firsthand Big Falls location 46.837080,-88.073340 on the East Branch Huron River. The already curated Big Eric's Falls is about 3.40 km away on another section of the Huron River system; East Branch Falls is yet another separate downstream feature. These are not aliases or interchangeable visitor approaches.",
+      "guidance": "Backcountry geographic record only. Never route ordinary visitors to a forest ford, private bank or unverified GIS point.",
+      "reviewLimitations": "Place name, GIS coordinate, historical path, general nature-area opening or newly proposed parking alone do not prove legal public visitor access.",
+      "nextEvidence": "Verify feature and land ownership, current public-road/ORV permissions, lawful parking that avoids river fords, and a complete safe allowed foot corridor to this fall.",
+      "researchPage": "/upper-peninsula-waterfalls/research/big-falls-east-branch-huron/",
+      "sourceLinks": [
+        {
+          "label": "Michigan GIS Big Falls #120",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "Firsthand Big Falls field visits and hazardous river ford",
+          "url": "https://www.waterfallsofthekeweenaw.com/east-branch-huron-river/big-falls/"
+        },
+        {
+          "label": "East Branch Falls specialist account: private lands nearby",
+          "url": "https://www.waterfallsofthekeweenaw.com/east-branch-huron-river/east-branch-falls/"
+        },
+        {
+          "label": "Secondary Big Falls unmaintained-access description",
+          "url": "https://upper-michigan.com/guide/waterfalls/big-falls-baraga.html"
+        },
+        {
+          "label": "Nearby but distinct Big Eric's Falls specialist",
+          "url": "https://www.waterfallsofthekeweenaw.com/huron-river/big-ericks-falls/"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-11-02",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Exact waterfall identity, aliases and source points",
+            "status": "documented-geography-with-disagreements",
+            "finding": "Michigan state GIS #120 at 46.834803,-88.073480 is about 253 metres from a firsthand Big Falls location 46.837080,-88.073340 on the East Branch Huron River. The already curated Big Eric's Falls is about 3.40 km away on another section of the Huron River system; East Branch Falls is yet another separate downstream feature. These are not aliases or interchangeable visitor approaches.",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Verified landowner and legal public corridor",
+            "status": "not-cleared",
+            "finding": "A mapped natural feature, general public conservation reserve or another waterfall's visitor trail cannot certify exact bank ownership, permitted public transit or complete right-of-way to the mapped drop.",
+            "source": "https://www.waterfallsofthekeweenaw.com/east-branch-huron-river/east-branch-falls/"
+          },
+          {
+            "label": "Old visitor accounts versus current authorization",
+            "status": "historical-or-tourism-not-live",
+            "finding": "Firsthand records describe either a dangerous seasonal West Branch Huron River vehicle ford plus deep wet forest roads, or a several-mile rough creekbed and bank hike from historical logging routes. A second source specifically warns that private property lies around the East Branch falls. A secondary directory's ATV/ford advice is not a lawful authorization to drive a water crossing, park or traverse private land. No current official road designation, owner-approved foot corridor or safe public parking for this specific fall has been verified.",
+            "source": "https://www.waterfallsofthekeweenaw.com/east-branch-huron-river/big-falls/"
+          },
+          {
+            "label": "Current public road, gates and legal vehicle parking",
+            "status": "not-cleared",
+            "finding": "No independently verified currently legal vehicle arrival and parking point for THIS specific waterfall. Rough two-tracks, historical river fords, gates and pending future infrastructure are not certified visitor parking.",
+            "source": "https://upper-michigan.com/guide/waterfalls/big-falls-baraga.html"
+          },
+          {
+            "label": "Continuous safe public walking route to the correct fall",
+            "status": "not-cleared",
+            "finding": "No official current complete trail-to-viewpoint corridor verified for this exact GIS feature. Cliff-rim extensions and rugged informal riverbank paths must not be rendered as safe signed routes.",
+            "source": "https://www.waterfallsofthekeweenaw.com/east-branch-huron-river/east-branch-falls/"
+          },
+          {
+            "label": "Live restrictions, river conditions and dates of evidence",
+            "status": "not-cleared",
+            "finding": "The firsthand route observations are from 2008/2009 and do not establish current ford depth, legal ORV access, private posting or trail status. Last research check November 2, 2026. Historic conditions are not live access.",
+            "source": "https://upper-michigan.com/guide/waterfalls/big-falls-baraga.html"
+          }
+        ]
+      },
+      "visitorDecision": {
+        "decision": "Backcountry geographic record only. Never route ordinary visitors to a forest ford, private bank or unverified GIS point.",
+        "context": "Big Falls is a distinct remote East Branch Huron River cascade, not the developed Big Eric's Falls and not a maintained visitor hike.",
+        "saferAlternative": "Choose a separately verified managed waterfall destination in the U.P. Waterfall Explorer.",
+        "confidence": "natural-feature-research-supported-but-public-route-not-cleared"
+      }
+    },
+    {
       "gisObjectId": 121,
       "name": "West Branch Falls",
       "county": "BARAGA",
@@ -4901,6 +5073,362 @@
         "context": "A seasonal runnel beside a working university ski hill",
         "saferAlternative": "Houghton-Douglass Falls has an official parking access drive and a separate DNR-managed visitor experience.",
         "confidence": "mixed-geography-and-access"
+      }
+    },
+    {
+      "gisObjectId": 136,
+      "name": "Upper Gratiot River Falls",
+      "county": "KEWEENAW",
+      "status": "research-only-upper-gratiot-2019-beaver-pond-current-state-unverified",
+      "publicAccess": "not-established-continuously",
+      "publicationEligible": false,
+      "title": "Upper Gratiot River Falls: source and legal arrival review",
+      "summary": "The upper Gratiot waterfall has a historical map identity, but its present appearance is uncertain after a reported beaver-pond change. Michigan GIS #136 Upper Falls at 47.329239,-88.433472 is 370 metres from a GNIS-derived Upper Falls coordinate 47.331389,-88.437222. GIS Lower Gratiot #137 is 1.03 km downstream. In a June 23, 2019 firsthand-source comment attributed to Keweenaw Natural Areas, the group wrote that 'The Upper Falls are now part of a beaver pond.' That is a dated 2019 observation, not a November 2026 proof of permanent inundation or a guaranteed flowing waterfall.",
+      "guidance": "Historically named Upper Gratiot feature; neither a currently visible waterfall nor public hiking route is verified.",
+      "reviewLimitations": "Place name, GIS coordinate, historical path, general nature-area opening or newly proposed parking alone do not prove legal public visitor access.",
+      "nextEvidence": "Confirm current Upper Gratiot hydrology and precise named drop, public property boundaries, an authorized parking area and the complete legal walk to the fall before promotion.",
+      "researchPage": "/upper-peninsula-waterfalls/research/upper-gratiot-river-falls/",
+      "sourceLinks": [
+        {
+          "label": "Michigan GIS Upper Gratiot #136",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "Firsthand lower falls and Keweenaw Natural Areas 2019 beaver report",
+          "url": "https://www.waterfallsofthekeweenaw.com/gratiot-river/gratiot-river-falls/"
+        },
+        {
+          "label": "KNA current official holdings (not feature-level route)",
+          "url": "https://keweenawnaturalareas.org/KNA/About_KNA.html"
+        },
+        {
+          "label": "GNIS-derived Upper Falls coordinate listing",
+          "url": "https://www.anyplaceamerica.com/directory/mi/keweenaw-county-26083/falls/"
+        },
+        {
+          "label": "Keweenaw Land Trust public/private boundary precautions",
+          "url": "https://keweenawlandtrust.org/leave-no-trace-visit-responsibly"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-11-02",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Exact waterfall identity, aliases and source points",
+            "status": "documented-geography-with-disagreements",
+            "finding": "Michigan GIS #136 Upper Falls at 47.329239,-88.433472 is 370 metres from a GNIS-derived Upper Falls coordinate 47.331389,-88.437222. GIS Lower Gratiot #137 is 1.03 km downstream. In a June 23, 2019 firsthand-source comment attributed to Keweenaw Natural Areas, the group wrote that 'The Upper Falls are now part of a beaver pond.' That is a dated 2019 observation, not a November 2026 proof of permanent inundation or a guaranteed flowing waterfall.",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Verified landowner and legal public corridor",
+            "status": "not-cleared",
+            "finding": "A mapped natural feature, general public conservation reserve or another waterfall's visitor trail cannot certify exact bank ownership, permitted public transit or complete right-of-way to the mapped drop.",
+            "source": "https://keweenawnaturalareas.org/KNA/About_KNA.html"
+          },
+          {
+            "label": "Old visitor accounts versus current authorization",
+            "status": "historical-or-tourism-not-live",
+            "finding": "Keweenaw Natural Areas currently describes some Gratiot-area preserves as public, but it does not establish legal public foot access to the exact Upper Falls bank or a signed visitor trail. Its 2019 comment discusses INTERIM ownership of LOWER Gratiot lands, not a visitor-use permit or permanent title assurance for Upper. Do not transfer road or parking information from the separate Conglomerate Falls preserve or lower Gratiot point.",
+            "source": "https://www.waterfallsofthekeweenaw.com/gratiot-river/gratiot-river-falls/"
+          },
+          {
+            "label": "Current public road, gates and legal vehicle parking",
+            "status": "not-cleared",
+            "finding": "No independently verified currently legal vehicle arrival and parking point for THIS specific waterfall. Rough two-tracks, historical river fords, gates and pending future infrastructure are not certified visitor parking.",
+            "source": "https://www.anyplaceamerica.com/directory/mi/keweenaw-county-26083/falls/"
+          },
+          {
+            "label": "Continuous safe public walking route to the correct fall",
+            "status": "not-cleared",
+            "finding": "No official current complete trail-to-viewpoint corridor verified for this exact GIS feature. Cliff-rim extensions and rugged informal riverbank paths must not be rendered as safe signed routes.",
+            "source": "https://keweenawnaturalareas.org/KNA/About_KNA.html"
+          },
+          {
+            "label": "Live restrictions, river conditions and dates of evidence",
+            "status": "not-cleared",
+            "finding": "No 2026 beaver pond/flow photograph, owner-corroborated access trail, signed parking or legal walking corridor to GIS #136 was established. Last research check November 2, 2026. Historic conditions are not live access.",
+            "source": "https://www.anyplaceamerica.com/directory/mi/keweenaw-county-26083/falls/"
+          }
+        ]
+      },
+      "visitorDecision": {
+        "decision": "Historically named Upper Gratiot feature; neither a currently visible waterfall nor public hiking route is verified.",
+        "context": "The upper Gratiot waterfall has a historical map identity, but its present appearance is uncertain after a reported beaver-pond change.",
+        "saferAlternative": "Choose a separately verified managed waterfall destination in the U.P. Waterfall Explorer.",
+        "confidence": "natural-feature-research-supported-but-public-route-not-cleared"
+      }
+    },
+    {
+      "gisObjectId": 137,
+      "name": "Lower Gratiot River Falls",
+      "county": "KEWEENAW",
+      "status": "research-only-lower-gratiot-geographic-match-2019-interim-owner-not-current-clearance",
+      "publicAccess": "not-established-continuously",
+      "publicationEligible": false,
+      "title": "Lower Gratiot River Falls: source and legal arrival review",
+      "summary": "The lower basalt ledges are accurately located, but visitor access requires reconciling a 2019 conservation ownership warning with today's property rights. Michigan GIS #137 Lower Falls is 47.335138,-88.444003; firsthand Gratiot River Falls at 47.335340,-88.444360 is just 35 metres away, with a GNIS-derived Lower Falls record about 146 metres from GIS. It is a distinct lower drop around 1.03 km from GIS Upper Gratiot #136. In a June 23, 2019 KNA-attributed comment, the group identified these pictured ledges as Lower Gratiot and said it was INTERIM owner, seeking funds to protect public access, otherwise possibly selling the parcel by the end of 2020. There is no verified 2026 resolution of that historical ownership statement.",
+      "guidance": "Geographic lower-falls identity supported; modern ownership, parking and lawful walk to the falls remain unverified.",
+      "reviewLimitations": "Place name, GIS coordinate, historical path, general nature-area opening or newly proposed parking alone do not prove legal public visitor access.",
+      "nextEvidence": "Resolve the 2019 interim KNA property outcome with authoritative ownership/public-use evidence; then certify signed legal parking, current road rights and a continuous public foot route to GIS #137.",
+      "researchPage": "/upper-peninsula-waterfalls/research/lower-gratiot-river-falls/",
+      "sourceLinks": [
+        {
+          "label": "Michigan GIS Lower Gratiot #137",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "Firsthand Lower Gratiot, coordinate and 2019 KNA ownership warning",
+          "url": "https://www.waterfallsofthekeweenaw.com/gratiot-river/gratiot-river-falls/"
+        },
+        {
+          "label": "Keweenaw Natural Areas current officially public properties",
+          "url": "https://keweenawnaturalareas.org/KNA/About_KNA.html"
+        },
+        {
+          "label": "GNIS-derived Lower Falls coordinate listing",
+          "url": "https://www.anyplaceamerica.com/directory/mi/keweenaw-county-26083/falls/"
+        },
+        {
+          "label": "Independent short footpath account, not verified public access",
+          "url": "https://www.miroadtrip.com/locations/lower-gratiot-river-falls"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-11-02",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Exact waterfall identity, aliases and source points",
+            "status": "documented-geography-with-disagreements",
+            "finding": "Michigan GIS #137 Lower Falls is 47.335138,-88.444003; firsthand Gratiot River Falls at 47.335340,-88.444360 is just 35 metres away, with a GNIS-derived Lower Falls record about 146 metres from GIS. It is a distinct lower drop around 1.03 km from GIS Upper Gratiot #136. In a June 23, 2019 KNA-attributed comment, the group identified these pictured ledges as Lower Gratiot and said it was INTERIM owner, seeking funds to protect public access, otherwise possibly selling the parcel by the end of 2020. There is no verified 2026 resolution of that historical ownership statement.",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Verified landowner and legal public corridor",
+            "status": "not-cleared",
+            "finding": "A mapped natural feature, general public conservation reserve or another waterfall's visitor trail cannot certify exact bank ownership, permitted public transit or complete right-of-way to the mapped drop.",
+            "source": "https://keweenawnaturalareas.org/KNA/About_KNA.html"
+          },
+          {
+            "label": "Old visitor accounts versus current authorization",
+            "status": "historical-or-tourism-not-live",
+            "finding": "Current KNA organizational information lists Gratiot River North and Conglomerate Falls natural areas open to the public; that does not prove the Lower Falls parcel is presently owned by KNA, nor that the muddy access two-track off Bumbletown Road or shoulder stopping is authorized. Historical informal directions and 2019 INTERIM ownership cannot be converted into a present-day visitor parking/route claim.",
+            "source": "https://www.waterfallsofthekeweenaw.com/gratiot-river/gratiot-river-falls/"
+          },
+          {
+            "label": "Current public road, gates and legal vehicle parking",
+            "status": "not-cleared",
+            "finding": "No independently verified currently legal vehicle arrival and parking point for THIS specific waterfall. Rough two-tracks, historical river fords, gates and pending future infrastructure are not certified visitor parking.",
+            "source": "https://www.anyplaceamerica.com/directory/mi/keweenaw-county-26083/falls/"
+          },
+          {
+            "label": "Continuous safe public walking route to the correct fall",
+            "status": "not-cleared",
+            "finding": "No official current complete trail-to-viewpoint corridor verified for this exact GIS feature. Cliff-rim extensions and rugged informal riverbank paths must not be rendered as safe signed routes.",
+            "source": "https://keweenawnaturalareas.org/KNA/About_KNA.html"
+          },
+          {
+            "label": "Live restrictions, river conditions and dates of evidence",
+            "status": "not-cleared",
+            "finding": "No current legal parcel, road gate, seasonal passage or signed public foot trail verification for the exact Lower Falls site was found. Historic photos do not provide live conditions. Last research check November 2, 2026. Historic conditions are not live access.",
+            "source": "https://www.anyplaceamerica.com/directory/mi/keweenaw-county-26083/falls/"
+          }
+        ]
+      },
+      "visitorDecision": {
+        "decision": "Geographic lower-falls identity supported; modern ownership, parking and lawful walk to the falls remain unverified.",
+        "context": "The lower basalt ledges are accurately located, but visitor access requires reconciling a 2019 conservation ownership warning with today's property rights.",
+        "saferAlternative": "Choose a separately verified managed waterfall destination in the U.P. Waterfall Explorer.",
+        "confidence": "natural-feature-research-supported-but-public-route-not-cleared"
+      }
+    },
+    {
+      "gisObjectId": 139,
+      "name": "Lower Montreal Falls",
+      "county": "KEWEENAW",
+      "status": "research-only-lower-montreal-7m-field-match-variable-gates-2026-project-pending",
+      "publicAccess": "not-established-continuously",
+      "publicationEligible": false,
+      "title": "Lower Montreal Falls: source and legal arrival review",
+      "summary": "The lower Montreal river-mouth cascade is real, but the legal and practical way to reach it changes with roads, gates and trail status. Michigan GIS #139 Lower Falls at 47.392581,-87.841233 matches firsthand Montreal Falls at 47.392570,-87.841140 within 7 metres. A GNIS-derived Lower Falls is approximately 198 metres away, and Upper Montreal #140 is 705 metres upstream in the GIS layer. The Keweenaw Montreal River is not the unrelated Montreal River by Interstate Falls on the Wisconsin border.",
+      "guidance": "Lower waterfall location is well supported; do not promise the new DNR parking area or an unchanging, authorized driving-and-walking route.",
+      "reviewLimitations": "Place name, GIS coordinate, historical path, general nature-area opening or newly proposed parking alone do not prove legal public visitor access.",
+      "nextEvidence": "Confirm KORC/DNR project permission status, actual existing legal Fish Cove parking and road gate status, and uninterrupted publicly allowed shoreline path to lower falls, then source trip length under current access constraints.",
+      "researchPage": "/upper-peninsula-waterfalls/research/lower-montreal-falls-keweenaw/",
+      "sourceLinks": [
+        {
+          "label": "Michigan GIS Lower Montreal #139",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "Firsthand river-mouth falls, variable gates and historic coordinates",
+          "url": "https://www.waterfallsofthekeweenaw.com/montreal-river/montreal-falls/"
+        },
+        {
+          "label": "Visit Keweenaw rustic Fish Cove lot and unmaintained trail",
+          "url": "https://www.visitkeweenaw.com/blog/post/a-guide-to-visiting-the-keweenaws-montreal-falls/"
+        },
+        {
+          "label": "KORC 2026 new trailhead DNR-permit campaign",
+          "url": "https://www.keweenawoutdoorrecreation.org/calls-to-action-montreal-falls-trail-access"
+        },
+        {
+          "label": "March 27 2026 reporting confirms project still unapproved",
+          "url": "https://www.uppermichiganssource.com/2026/03/27/recreation-coalition-requests-dnr-take-action-keweenaw-trail-project/?outputType=amp"
+        },
+        {
+          "label": "GNIS-derived Keweenaw Lower Falls location",
+          "url": "https://www.anyplaceamerica.com/directory/mi/keweenaw-county-26083/falls/"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-11-02",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Exact waterfall identity, aliases and source points",
+            "status": "documented-geography-with-disagreements",
+            "finding": "Michigan GIS #139 Lower Falls at 47.392581,-87.841233 matches firsthand Montreal Falls at 47.392570,-87.841140 within 7 metres. A GNIS-derived Lower Falls is approximately 198 metres away, and Upper Montreal #140 is 705 metres upstream in the GIS layer. The Keweenaw Montreal River is not the unrelated Montreal River by Interstate Falls on the Wisconsin border.",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Verified landowner and legal public corridor",
+            "status": "not-cleared",
+            "finding": "A mapped natural feature, general public conservation reserve or another waterfall's visitor trail cannot certify exact bank ownership, permitted public transit or complete right-of-way to the mapped drop.",
+            "source": "https://www.visitkeweenaw.com/blog/post/a-guide-to-visiting-the-keweenaws-montreal-falls/"
+          },
+          {
+            "label": "Old visitor accounts versus current authorization",
+            "status": "historical-or-tourism-not-live",
+            "finding": "Visit Keweenaw describes rustic Fish Cove parking and an UNMAINTAINED shoreline trail. A field guide reports gates on the historical Smiths-Fisheries road since 2021, up to three in 2024, changing hike length substantially. Keweenaw Outdoor Recreation Coalition reported its proposed NEW public parking area and trail connection still unapproved in 2026, corroborated by local reporting dated March 27, 2026. This does not prove all old approaches closed; nor can proposed infrastructure be presented as currently constructed or available. Current gate state, designated existing parking rights, walking-route continuity and shoreline ownership are not independently verified.",
+            "source": "https://www.waterfallsofthekeweenaw.com/montreal-river/montreal-falls/"
+          },
+          {
+            "label": "Current public road, gates and legal vehicle parking",
+            "status": "not-cleared",
+            "finding": "No independently verified currently legal vehicle arrival and parking point for THIS specific waterfall. Rough two-tracks, historical river fords, gates and pending future infrastructure are not certified visitor parking.",
+            "source": "https://www.keweenawoutdoorrecreation.org/calls-to-action-montreal-falls-trail-access"
+          },
+          {
+            "label": "Continuous safe public walking route to the correct fall",
+            "status": "not-cleared",
+            "finding": "No official current complete trail-to-viewpoint corridor verified for this exact GIS feature. Cliff-rim extensions and rugged informal riverbank paths must not be rendered as safe signed routes.",
+            "source": "https://www.visitkeweenaw.com/blog/post/a-guide-to-visiting-the-keweenaws-montreal-falls/"
+          },
+          {
+            "label": "Live restrictions, river conditions and dates of evidence",
+            "status": "not-cleared",
+            "finding": "The 2024 reported road gates and 2026 proposed trailhead permit are dated observations, not a live November 2026 road-closure or public-access verdict. Last research check November 2, 2026. Historic conditions are not live access.",
+            "source": "https://www.uppermichiganssource.com/2026/03/27/recreation-coalition-requests-dnr-take-action-keweenaw-trail-project/?outputType=amp"
+          }
+        ]
+      },
+      "visitorDecision": {
+        "decision": "Lower waterfall location is well supported; do not promise the new DNR parking area or an unchanging, authorized driving-and-walking route.",
+        "context": "The lower Montreal river-mouth cascade is real, but the legal and practical way to reach it changes with roads, gates and trail status.",
+        "saferAlternative": "Choose a separately verified managed waterfall destination in the U.P. Waterfall Explorer.",
+        "confidence": "natural-feature-research-supported-but-public-route-not-cleared"
+      }
+    },
+    {
+      "gisObjectId": 140,
+      "name": "Upper Montreal Falls",
+      "county": "KEWEENAW",
+      "status": "research-only-upper-montreal-267m-field-difference-unmaintained-extension-permit-unapproved",
+      "publicAccess": "not-established-continuously",
+      "publicationEligible": false,
+      "title": "Upper Montreal Falls: source and legal arrival review",
+      "summary": "A separate higher-country chute upstream from the better-known river-mouth falls, with even less certainty about the last stretch of trail. Michigan GIS #140 Upper Falls at 47.397970,-87.836302 is 267 metres from a firsthand Upper Montreal site at 47.395630,-87.835510 and about 290 metres from a GNIS-derived Upper Falls record. GIS Lower Montreal #139 is ~705 metres away. A field account also describes a smaller farther-upstream cascade, so the generic 'Upper Falls' name does not itself identify which drop is meant.",
+      "guidance": "Separate upper falls mapped; do not map the main drop, smaller cascade or proposed future trailhead as an automatically navigable visitor stop.",
+      "reviewLimitations": "Place name, GIS coordinate, historical path, general nature-area opening or newly proposed parking alone do not prove legal public visitor access.",
+      "nextEvidence": "Identify primary Upper versus farther-upstream cascade across GIS/GNIS/field locations, verify current legal Fish Cove arrival, DNR/KORC permit outcome and the complete lawful upper-extension trail to a safe viewpoint.",
+      "researchPage": "/upper-peninsula-waterfalls/research/upper-montreal-falls-keweenaw/",
+      "sourceLinks": [
+        {
+          "label": "Michigan GIS Upper Montreal #140",
+          "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        },
+        {
+          "label": "Firsthand Upper Montreal river drop and site coordinates",
+          "url": "https://www.waterfallsofthekeweenaw.com/montreal-river/upper-montreal-falls/"
+        },
+        {
+          "label": "Lower Montreal gate and access context",
+          "url": "https://www.waterfallsofthekeweenaw.com/montreal-river/montreal-falls/"
+        },
+        {
+          "label": "Visit Keweenaw rugged existing Fish Cove shoreline access",
+          "url": "https://www.visitkeweenaw.com/blog/post/a-guide-to-visiting-the-keweenaws-montreal-falls/"
+        },
+        {
+          "label": "KORC 2026 unapproved future public trailhead",
+          "url": "https://www.keweenawoutdoorrecreation.org/calls-to-action-montreal-falls-trail-access"
+        },
+        {
+          "label": "March 27 2026 local news: permit pending",
+          "url": "https://www.uppermichiganssource.com/2026/03/27/recreation-coalition-requests-dnr-take-action-keweenaw-trail-project/?outputType=amp"
+        },
+        {
+          "label": "GNIS-derived Keweenaw Upper Falls location",
+          "url": "https://www.anyplaceamerica.com/directory/mi/keweenaw-county-26083/falls/"
+        }
+      ],
+      "routeAudit": {
+        "reviewed": "2026-11-02",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Exact waterfall identity, aliases and source points",
+            "status": "documented-geography-with-disagreements",
+            "finding": "Michigan GIS #140 Upper Falls at 47.397970,-87.836302 is 267 metres from a firsthand Upper Montreal site at 47.395630,-87.835510 and about 290 metres from a GNIS-derived Upper Falls record. GIS Lower Montreal #139 is ~705 metres away. A field account also describes a smaller farther-upstream cascade, so the generic 'Upper Falls' name does not itself identify which drop is meant.",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Verified landowner and legal public corridor",
+            "status": "not-cleared",
+            "finding": "A mapped natural feature, general public conservation reserve or another waterfall's visitor trail cannot certify exact bank ownership, permitted public transit or complete right-of-way to the mapped drop.",
+            "source": "https://www.waterfallsofthekeweenaw.com/montreal-river/montreal-falls/"
+          },
+          {
+            "label": "Old visitor accounts versus current authorization",
+            "status": "historical-or-tourism-not-live",
+            "finding": "The older Smiths-Fisheries west-bank walking route reaches Lower Montreal, then continues upstream as an increasingly indistinct trail. The specialist says the path dies out before the smallest uppermost drop and describes road gates; Visit Keweenaw describes the existing Fish Cove unmaintained approach. KORC's NEW proposed parking and connector project remained unapproved by DNR in March 2026. No current signed visitor lot, legal continuity from vehicle to the exact Upper drop or verified safe approach exists in the collected evidence.",
+            "source": "https://www.waterfallsofthekeweenaw.com/montreal-river/upper-montreal-falls/"
+          },
+          {
+            "label": "Current public road, gates and legal vehicle parking",
+            "status": "not-cleared",
+            "finding": "No independently verified currently legal vehicle arrival and parking point for THIS specific waterfall. Rough two-tracks, historical river fords, gates and pending future infrastructure are not certified visitor parking.",
+            "source": "https://www.visitkeweenaw.com/blog/post/a-guide-to-visiting-the-keweenaws-montreal-falls/"
+          },
+          {
+            "label": "Continuous safe public walking route to the correct fall",
+            "status": "not-cleared",
+            "finding": "No official current complete trail-to-viewpoint corridor verified for this exact GIS feature. Cliff-rim extensions and rugged informal riverbank paths must not be rendered as safe signed routes.",
+            "source": "https://www.waterfallsofthekeweenaw.com/montreal-river/montreal-falls/"
+          },
+          {
+            "label": "Live restrictions, river conditions and dates of evidence",
+            "status": "not-cleared",
+            "finding": "Historic route observations, 2021–2024 changing road gates and a pending 2026 DNR project permit must not be presented as a live November 2026 route clearance. Last research check November 2, 2026. Historic conditions are not live access.",
+            "source": "https://www.uppermichiganssource.com/2026/03/27/recreation-coalition-requests-dnr-take-action-keweenaw-trail-project/?outputType=amp"
+          }
+        ]
+      },
+      "visitorDecision": {
+        "decision": "Separate upper falls mapped; do not map the main drop, smaller cascade or proposed future trailhead as an automatically navigable visitor stop.",
+        "context": "A separate higher-country chute upstream from the better-known river-mouth falls, with even less certainty about the last stretch of trail.",
+        "saferAlternative": "Choose a separately verified managed waterfall destination in the U.P. Waterfall Explorer.",
+        "confidence": "natural-feature-research-supported-but-public-route-not-cleared"
       }
     },
     {

@@ -13,105 +13,105 @@
     {
       "batchNumber": 1,
       "candidates": [
-        51,
-        120,
-        136,
-        137,
-        139,
-        140,
         152,
-        176
-      ]
-    },
-    {
-      "batchNumber": 2,
-      "candidates": [
+        176,
         177,
         23,
         213,
         68,
         8,
-        38,
-        12,
-        4
+        38
       ]
     },
     {
-      "batchNumber": 3,
+      "batchNumber": 2,
       "candidates": [
+        12,
+        4,
         9,
         191,
         192,
         46,
         91,
-        119,
-        190,
-        45
+        119
       ]
     },
     {
-      "batchNumber": 4,
+      "batchNumber": 3,
       "candidates": [
+        190,
+        45,
         150,
         151,
         154,
         160,
         215,
-        195,
+        195
+      ]
+    },
+    {
+      "batchNumber": 4,
+      "candidates": [
         205,
-        52
+        51,
+        52,
+        59,
+        83,
+        99,
+        103,
+        105
       ]
     },
     {
       "batchNumber": 5,
       "candidates": [
-        59,
-        83,
-        99,
-        103,
-        105,
         107,
         114,
-        121
+        120,
+        121,
+        123,
+        20,
+        24,
+        25
       ]
     },
     {
       "batchNumber": 6,
       "candidates": [
-        123,
-        20,
-        24,
-        25,
         37,
         39,
         40,
-        48
+        48,
+        58,
+        63,
+        65,
+        69
       ]
     },
     {
       "batchNumber": 7,
       "candidates": [
-        58,
-        63,
-        65,
-        69,
         70,
         74,
         75,
-        86
+        86,
+        112,
+        29,
+        42,
+        80
       ]
     },
     {
       "batchNumber": 8,
       "candidates": [
-        112,
-        29,
-        42,
-        80,
         85,
         129,
         15,
-        17
+        17,
+        136,
+        137,
+        139,
+        140
       ]
     },
     {
@@ -167,102 +167,6 @@
     }
   ],
   "candidates": [
-    {
-      "gisObjectId": 51,
-      "name": "Upper Falls",
-      "county": "BARAGA",
-      "river": "STURGEON RIVER",
-      "lat": 46.621677,
-      "lng": -88.48931,
-      "cluster": "BARAGA / STURGEON RIVER",
-      "priorityScore": 45,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 120,
-      "name": "Big Falls",
-      "county": "BARAGA",
-      "river": "EAST BRANCH HURON",
-      "lat": 46.834803,
-      "lng": -88.07348,
-      "cluster": "BARAGA / EAST BRANCH HURON",
-      "priorityScore": 45,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 136,
-      "name": "Upper Falls",
-      "county": "KEWEENAW",
-      "river": "GRATIOT RIVER",
-      "lat": 47.329239,
-      "lng": -88.433472,
-      "cluster": "KEWEENAW / GRATIOT RIVER",
-      "priorityScore": 45,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 137,
-      "name": "Lower Falls",
-      "county": "KEWEENAW",
-      "river": "GRATIOT RIVER",
-      "lat": 47.335138,
-      "lng": -88.444003,
-      "cluster": "KEWEENAW / GRATIOT RIVER",
-      "priorityScore": 45,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 139,
-      "name": "Lower Falls",
-      "county": "KEWEENAW",
-      "river": "MONTREAL RIVER",
-      "lat": 47.392581,
-      "lng": -87.841233,
-      "cluster": "KEWEENAW / MONTREAL RIVER",
-      "priorityScore": 45,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
-    {
-      "gisObjectId": 140,
-      "name": "Upper Falls",
-      "county": "KEWEENAW",
-      "river": "MONTREAL RIVER",
-      "lat": 47.39797,
-      "lng": -87.836302,
-      "cluster": "KEWEENAW / MONTREAL RIVER",
-      "priorityScore": 45,
-      "priorityReason": "New source discovery: identify waterfall, land manager and credible visitor approach before any publication",
-      "reviewStage": "first-source-discovery",
-      "publicationEligible": false,
-      "reviewStatus": "needs-source-discovery",
-      "sourceCount": 0,
-      "blockingGate": "Verify identity, land manager, public parking, legal approach, and current conditions before indexing"
-    },
     {
       "gisObjectId": 152,
       "name": "Lower Falls",
@@ -664,6 +568,22 @@
       "blockingGate": "Current Alger parcel owner/manager, lawful public arrival and marked continuous walking route to GIS #205; confirm Iron County and Wetmore names are separate."
     },
     {
+      "gisObjectId": 51,
+      "name": "Upper Falls",
+      "county": "BARAGA",
+      "river": "STURGEON RIVER",
+      "lat": 46.621677,
+      "lng": -88.48931,
+      "cluster": "BARAGA / STURGEON RIVER",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 5,
+      "blockingGate": "Reconcile Upper Falls GIS/field position, prove the continuous public land and allowed canyon-rim trail beyond the maintained Canyon Falls segment, and verify safe viewpoint/current restrictions before visitor publication."
+    },
+    {
       "gisObjectId": 52,
       "name": "Plumbago Falls",
       "county": "BARAGA",
@@ -790,6 +710,22 @@
       "reviewStatus": "previous-research-needs-public-access-review",
       "sourceCount": 4,
       "blockingGate": "Verify public Black Creek Road seasonal access, approved bridge-area parking, current parcel title/easement for both banks, signed foot corridor and visitor safety. Do not transfer Big Eric's DNR campground route."
+    },
+    {
+      "gisObjectId": 120,
+      "name": "Big Falls",
+      "county": "BARAGA",
+      "river": "EAST BRANCH HURON",
+      "lat": 46.834803,
+      "lng": -88.07348,
+      "cluster": "BARAGA / EAST BRANCH HURON",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 5,
+      "blockingGate": "Verify feature and land ownership, current public-road/ORV permissions, lawful parking that avoids river fords, and a complete safe allowed foot corridor to this fall."
     },
     {
       "gisObjectId": 121,
@@ -1190,6 +1126,70 @@
       "reviewStatus": "previous-research-needs-public-access-review",
       "sourceCount": 4,
       "blockingGate": "Reconcile reported river rapid against GIS and independent field evidence, then identify land tenure, legal public roadside stopping and a safe public riverbank approach, if any."
+    },
+    {
+      "gisObjectId": 136,
+      "name": "Upper Falls",
+      "county": "KEWEENAW",
+      "river": "GRATIOT RIVER",
+      "lat": 47.329239,
+      "lng": -88.433472,
+      "cluster": "KEWEENAW / GRATIOT RIVER",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 5,
+      "blockingGate": "Confirm current Upper Gratiot hydrology and precise named drop, public property boundaries, an authorized parking area and the complete legal walk to the fall before promotion."
+    },
+    {
+      "gisObjectId": 137,
+      "name": "Lower Falls",
+      "county": "KEWEENAW",
+      "river": "GRATIOT RIVER",
+      "lat": 47.335138,
+      "lng": -88.444003,
+      "cluster": "KEWEENAW / GRATIOT RIVER",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 5,
+      "blockingGate": "Resolve the 2019 interim KNA property outcome with authoritative ownership/public-use evidence; then certify signed legal parking, current road rights and a continuous public foot route to GIS #137."
+    },
+    {
+      "gisObjectId": 139,
+      "name": "Lower Falls",
+      "county": "KEWEENAW",
+      "river": "MONTREAL RIVER",
+      "lat": 47.392581,
+      "lng": -87.841233,
+      "cluster": "KEWEENAW / MONTREAL RIVER",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 6,
+      "blockingGate": "Confirm KORC/DNR project permission status, actual existing legal Fish Cove parking and road gate status, and uninterrupted publicly allowed shoreline path to lower falls, then source trip length under current access constraints."
+    },
+    {
+      "gisObjectId": 140,
+      "name": "Upper Falls",
+      "county": "KEWEENAW",
+      "river": "MONTREAL RIVER",
+      "lat": 47.39797,
+      "lng": -87.836302,
+      "cluster": "KEWEENAW / MONTREAL RIVER",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 7,
+      "blockingGate": "Identify primary Upper versus farther-upstream cascade across GIS/GNIS/field locations, verify current legal Fish Cove arrival, DNR/KORC permit outcome and the complete lawful upper-extension trail to a safe viewpoint."
     },
     {
       "gisObjectId": 144,
