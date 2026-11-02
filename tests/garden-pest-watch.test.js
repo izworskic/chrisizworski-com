@@ -1,0 +1,140 @@
+'use strict';
+const test=require('node:test');
+const assert=require('node:assert/strict');
+const core=require('../lib/garden-pest-watch.cjs');
+const api=require('../api/michigan-garden-pest-watch.js');
+
+const weather=(tags)=>({status:'AVAILABLE',tags,sourceUrl:'https://www.weather.gov/documentation/services-web-api',issuedAt:'2026-07-12T12:00:00Z'});
+const select=(crop,month,stage='growing',extra={})=>core.decision({crop,month,stage,...extra});
+test('portfolio covers at least 17 sourced uniquely identified pest or disease topics',()=>{
+ assert.ok(core.PESTS.length>=17);
+ assert.equal(new Set(core.PESTS.map(p=>p.id)).size,core.PESTS.length);
+ for(const p of core.PESTS){
+  assert.ok(p.source.startsWith('https://'),p.id);
+  for(const name of ['where','sign','prevent','found','beneficial'])assert.ok(p[name].length>20,p.id+':'+name);
+  assert.ok(p.crops.length&&p.months.length&&p.stages.length);
+  assert.ok(p.crops.every(c=>core.CROPS.includes(c)));
+ }
+});
+test('source-specific quantitative models are reference-only, not active forecast claims',()=>{
+ assert.equal(core.MODELS.length,3);
+ assert.equal(core.MODELS.find(m=>m.pest==='japanese-beetle').algorithm,'single-triangle');
+ assert.equal(core.MODELS.find(m=>m.pest==='japanese-beetle').upperF,92);
+ assert.equal(core.MODELS.find(m=>m.pest==='cabbage-maggot').baseF,43);
+ assert.equal(core.MODELS.find(m=>m.pest==='squash-vine-borer').status,'RESEARCH_BLOCKED');
+ assert.ok(core.MODELS.every(m=>m.status!=='PRODUCTION_VALIDATED'));
+});
+test('November Michigan garden never claims active summer pests',()=>{
+ for(const crop of core.CROPS){
+  const d=select(crop,11);
+  assert.equal(d.mode,'OFF_SEASON');
+  assert.ok(d.firstAction.includes('Remove badly diseased'));
+  assert.ok(d.featured.every(p=>p.label==='Plan for next growing season'));
+  assert.ok(d.featured.every(p=>p.biologicalForecast==='UNAVAILABLE'));
+ }
+});
+test('early spring cabbage directs attention to seedling root pests',()=>{
+ const d=select('brassicas',4,'seedling');
+ assert.equal(d.crop,'brassicas');
+ assert.ok(d.featured.some(p=>p.id==='cabbage-maggot'));
+ assert.ok(d.featured.some(p=>p.id==='flea-beetles'));
+ assert.ok(d.firstAction.toLowerCase().includes('soil'));
+});
+test('summer squash directs to vine borer and squash bugs',()=>{
+ const d=select('squash',7,'growing');
+ assert.equal(d.mode,'SCOUTING');
+ assert.ok(d.featured.some(p=>p.id==='squash-vine-borer'));
+ assert.ok(d.featured.some(p=>p.id==='squash-bug'));
+ assert.ok(!d.featured.some(p=>p.id==='cabbage-maggot'));
+});
+test('plant-stage changes are causal and reversed state is deterministic',()=>{
+ const a=select('beans',5,'seedling'),b=select('beans',5,'fruiting'),c=select('beans',5,'seedling');
+ assert.notDeepEqual(a.featured.map(p=>p.id),b.featured.map(p=>p.id));
+ assert.deepEqual(a.featured.map(p=>p.id),c.featured.map(p=>p.id));
+});
+test('seasons are not automatically promoted to observations',()=>{
+ const d=select('grapes',8,'fruiting', {weather:weather(['wet'])});
+ assert.ok(d.all.every(p=>p.verifiedLocalOccurrence===false));
+ assert.equal(d.modelStatus,'NO_LIVE_BIOLOGICAL_FORECAST');
+ assert.ok(d.all.every(p=>p.regionalReport==='UNAVAILABLE'));
+});
+test('hot-dry cue stays an uncalibrated weather preference and requires host and season',()=>{
+ const july=select('tomatoes',7,'growing',{weather:weather(['hot_dry'])});
+ const mites=july.all.find(p=>p.id==='spider-mites');
+ assert.equal(mites.state,'CONDITIONS_FAVORABLE');assert.equal(mites.weatherFavorable,true);
+ assert.equal(mites.biologicalForecast,'UNAVAILABLE');
+ const november=select('tomatoes',11,'growing',{weather:weather(['hot_dry'])});
+ assert.equal(november.all.find(p=>p.id==='spider-mites').weatherFavorable,false);
+ const brassicas=select('brassicas',7,'growing',{weather:weather(['hot_dry'])});
+ assert.ok(!brassicas.all.some(p=>p.id==='spider-mites'));
+});
+test('wet cue relates to slug or leaf-scouting without diagnosing the disease',()=>{
+ const d=select('tomatoes',8,'growing',{weather:weather(['wet'])});
+ const spots=d.all.find(p=>p.id==='tomato-leaf-spot');
+ assert.equal(spots.state,'CONDITIONS_FAVORABLE');
+ assert.ok(spots.found.includes('confirm the disease'));
+});
+test('unavailable weather never asserts zero risk or no pests',()=>{
+ const d=select('cucumbers',6,'growing',{weather:{status:'UNAVAILABLE',tags:[]}});
+ assert.equal(d.weatherStatus,'UNAVAILABLE');
+ assert.ok(d.messages.some(x=>x.includes('not proof')));
+ assert.ok(d.all.every(p=>p.weatherFavorable===false));
+});
+test('gardener reports are labeled self-reported and never expert confirmed',()=>{
+ const d=select('squash',7,'flowering',{observed:'squash-vine-borer'});
+ const p=d.all.find(x=>x.id==='squash-vine-borer');
+ assert.equal(p.state,'GARDENER_REPORTED');
+ assert.equal(p.verifiedLocalOccurrence,false);
+ assert.ok(p.evidence.some(x=>x.kind==='GARDENER_REPORTED'));
+});
+test('unknown crop, stage, month and suspect fail to allowlisted defaults',()=>{
+ const d=core.decision({crop:'<script>',stage:'fruit-bat',month:-999,observed:'dragon'});
+ assert.equal(d.crop,'squash');assert.equal(d.stage,'growing');
+ assert.ok(d.all.every(p=>p.state!=='GARDENER_REPORTED'));
+});
+test('seasonal and source links exist and do not create fake probabilities',()=>{
+ for(const p of core.PESTS)assert.ok(p.source.startsWith('https://'));
+ const json=JSON.stringify(select('roses',7,'flowering',{weather:weather(['hot_dry'])}));
+ assert.ok(!/probability of (infestation|pests)|confirmed in your garden|local pests are absent/i.test(json));
+});
+function hourlyFixture(nowMs, {wet=false,hot=false}={}){
+ const periods=Array.from({length:78},(_,i)=>({
+  startTime:new Date(nowMs+i*3600000).toISOString(),
+  temperatureUnit:'F',temperature:hot?87:wet?70:74,
+  probabilityOfPrecipitation:{value:hot?10:wet?75:20},
+  relativeHumidity:{value:hot?45:wet?94:56}
+ }));
+ return {properties:{updated:new Date(nowMs-1000).toISOString(),periods}};
+}
+test('NWS parser classifies 72h hot/dry cue and preserves scientific disclaimer',()=>{
+ const now=Date.UTC(2026,6,12,12);
+ const w=api._test.parseForecast(hourlyFixture(now,{hot:true}),now);
+ assert.equal(w.status,'AVAILABLE');
+ assert.ok(w.tags.includes('hot_dry'));assert.ok(!w.tags.includes('wet'));
+ assert.ok(w.method.includes('not observed local pest'));
+});
+test('NWS parser identifies wet weather, not disease confirmation',()=>{
+ const now=Date.UTC(2026,6,12,12);
+ const w=api._test.parseForecast(hourlyFixture(now,{wet:true}),now);
+ assert.ok(w.tags.includes('wet'));
+ assert.ok(!w.tags.includes('hot_dry'));
+});
+test('NWS stale, missing, implausible and incomplete forecasts fail closed',()=>{
+ const now=Date.UTC(2026,6,12,12);
+ assert.throws(()=>api._test.parseForecast({},now));
+ const old=hourlyFixture(now);old.properties.updated=new Date(now-48*3600000).toISOString();
+ assert.throws(()=>api._test.parseForecast(old,now),/STALE/);
+ const empty=hourlyFixture(now);empty.properties.periods=[];
+ assert.throws(()=>api._test.parseForecast(empty,now),/INCOMPLETE/);
+});
+test('NWS link target is pinned to official HTTPS gridpoints, never third-party URL',async()=>{
+ const site={lat:43.6028,lon:-83.9631};
+ const fake=async()=>({ok:true,json:async()=>({properties:{forecastHourly:'https://not-weather-gov.example/gridpoints/GRR/10,10/forecast/hourly'}})});
+ await assert.rejects(()=>api._test.nws(site,fake,Date.UTC(2026,6,12,12)),/UNTRUSTED_URL/);
+});
+test('invalid ZIP is rejected before weather request',async()=>{
+ const req={method:'GET',query:{zip:'99999',crop:'squash'}};
+ const res={headers:{},setHeader(k,v){this.headers[k]=v;return this;},status(s){this.code=s;return this;},json(data){this.body=data;return this;}};
+ await api(req,res);
+ assert.equal(res.code,400);assert.equal(res.body.code,'INVALID_ZIP');
+});
