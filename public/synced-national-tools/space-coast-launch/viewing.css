@@ -480,3 +480,25 @@
 .fl-range-sources a:hover{background:#134654}
 @media(max-width:900px){.fl-range-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.fl-range-columns{grid-template-columns:1fr}}
 @media(max-width:600px){.fl-range-lead{flex-direction:column}.fl-range-rail{grid-template-columns:repeat(2,minmax(0,1fr))}.fl-range-metric{padding:11px}}
+
+/* Official, mission-matched launch forecast. Strong visual distinction from NWS. */
+.fl-official-forecast{background:#fff;border:1px solid #bdd2dc;border-top:5px solid #295d70;border-radius:13px;padding:clamp(15px,2.5vw,24px);margin:0 0 25px;color:#1b414e}
+.fl-official-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(140px,205px);gap:17px;margin-bottom:13px;align-items:start}
+.fl-official-head h4{margin:7px 0;font-size:clamp(20px,2.5vw,29px);line-height:1.2}
+.fl-official-head p,.fl-official-forecast>p{font-size:13px;line-height:1.65;color:#47616a;margin:8px 0}
+.fl-official-value{background:#e6eff2;border-radius:11px;padding:15px;text-align:center;display:grid;align-content:center;min-height:100px}
+.fl-official-value strong{font-size:clamp(18px,2.6vw,29px);font-weight:800;color:#173e4a;line-height:1.2}
+.fl-official-value span{font-size:11px;line-height:1.4;color:#355662}
+.fl-official-change{background:#f0f6f4;border-left:4px solid #4f8b7a;border-radius:8px;padding:12px;margin:15px 0;font-size:13px}
+.fl-official-change strong{color:#194b47}
+.fl-official-change p{margin:4px 0;font-size:13px;line-height:1.5}
+.fl-official-change small{color:#4b6464}
+.fl-official-history details{margin-bottom:12px;padding:9px 0;border-top:1px solid #d1dddf;border-bottom:1px solid #d1dddf}
+.fl-official-history summary{font-weight:800;color:#1b5163;cursor:pointer}
+.fl-official-history ol{padding-left:20px}
+.fl-official-history li{font-size:12px;line-height:1.6;margin:12px 0}
+.fl-official-history li a{display:inline-block;margin-left:6px;font-size:12px;color:#205b67}
+.fl-official-links{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:10px 0 15px}
+.fl-official-links a{font-size:12px;background:#1d5a6d;color:#fff!important;padding:9px 12px;border-radius:8px;text-decoration:none;font-weight:800}
+.fl-official-links small{color:#4d646a}
+@media(max-width:600px){.fl-official-head{grid-template-columns:1fr}.fl-official-value{text-align:left;min-height:0}.fl-official-value strong{font-size:25px}}

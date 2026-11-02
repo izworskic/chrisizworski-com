@@ -5,6 +5,7 @@ const { REGIONS, normalizeUsLaunch, groupedSchedule, regionalAccess,
 const { weatherGrade } = require('../lib/space-coast-decision');
 const { skyCoverAt, surfaceSkyAssessment } = require('../lib/space-coast-visibility');
 const { launchWeatherFor } = require('../lib/launch-weather-intelligence');
+const { readWeatherState, missionForecast } = require('../lib/space-coast-official-weather');
 
 const LL2 = 'https://ll.thespacedevs.com/2.3.0/launches/upcoming/';
 const LAUNCH_QUERIES = [
@@ -197,10 +198,11 @@ module.exports = async function handler(req, res) {
     if (selected && selected.region !== region.id) return res.status(400).json({
       ok: false, error: 'This mission belongs to another launch region.'
     });
-    const [weather, launchWeather, texas] = await Promise.all([
+    const [weather, launchWeather, texas, officialState] = await Promise.all([
       weatherFor(region, selected, now),
       launchWeatherFor(region, selected, (url, headers, timeout) => fetchJson(url, timeout, headers), now),
-      region.id === 'texas' ? loadTexasNotice() : Promise.resolve(null)
+      region.id === 'texas' ? loadTexasNotice() : Promise.resolve(null),
+      region.id === 'florida' ? readWeatherState() : Promise.resolve(null)
     ]);
     const access = regionalAccess(region, selected, { starbase: texas });
     return res.status(200).json({
@@ -216,6 +218,7 @@ module.exports = async function handler(req, res) {
       },
       regions,
       access, weather, launchWeather,
+      officialLaunchWeather: region.id === 'florida' ? missionForecast(selected, officialState, now) : null,
       coverage: {
         feed: 'Launch Library 2 v2.3 (third-party launch calendar, not range authority)',
         regions: 6, locationIds: [1, 11, 12, 21, 25, 27, 143],

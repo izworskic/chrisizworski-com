@@ -274,5 +274,5 @@ test('national launch atlas requests keyed CARTO tile URLs and retains functiona
   assert.match(endpoint,/CARTO_BASEMAP_PUBLIC_KEY/);
   const page=fs.readFileSync(path.resolve(__dirname,'../public/synced-national-tools/rocket-launch-live/index.html'),'utf8');
   assert.match(page,/Senior Airman Kadielle Shaw/);
-  assert.match(page,/rocket-launch-live\/app\.js\?v=20261101-1/);
+  assert.match(page,/rocket-launch-live\/app\.js\?v=20261101-official1/);
 });

@@ -97,6 +97,74 @@
       target.appendChild(card);
     });
   };
+  const renderOfficialWeather = forecast => {
+    const d = forecast || {};
+    const valid = d.status === 'mission-matched-current';
+    const hasPov = valid && Number.isInteger(d.povPercent);
+    set('fl-official-status', d.label || 'Official mission forecast has not been verified');
+    set('fl-official-pov', hasPov ? d.povPercent + '% PoV' : 'Not verified');
+    set('fl-official-concerns', valid && d.primaryConcerns?.length ?
+      'Official primary concerns: ' + d.primaryConcerns.join(', ') + '.' :
+      valid ? 'The source did not provide clearly extractable primary concerns.' :
+        'No official weather concerns are verified for this current mission target.');
+    const risks = d.additionalRisks || {};
+    set('fl-official-risks', valid && Object.keys(risks).length ?
+      'Other risks outside the quoted PoV may include: ' +
+      [['upperWindShear','upper-level wind shear'],['boosterRecovery','booster recovery weather'],
+       ['solarActivity','solar activity']]
+        .filter(([key]) => risks[key]).map(([key,label]) => label + ' (' + risks[key] + ')').join('; ') +
+      '. The launch operator makes the final decision.' :
+      'Upper-level winds, booster recovery conditions and other mission-specific criteria may not be included in the official PoV.');
+    const change = $('fl-official-change');
+    change.replaceChildren();
+    if (valid && d.latestChange) {
+      change.appendChild(element('strong', '', d.latestChange.headline));
+      change.appendChild(element('p', '', d.latestChange.detail));
+      const observed = new Date(d.latestChange.detectedAt);
+      if (!Number.isNaN(+observed)) {
+        change.appendChild(element('small', '', 'Detected by this site ' +
+          observed.toLocaleString('en-US',{timeZone:'America/New_York',dateStyle:'medium',timeStyle:'short'}) +
+          '. Forecast issued ' + new Date(d.issuedAt).toLocaleString('en-US',
+            {timeZone:'UTC',dateStyle:'medium',timeStyle:'short'}) + ' UTC.'));
+      }
+    } else change.appendChild(element('p','small',
+      'No verified revision can be shown for this selected mission.'));
+    const history = $('fl-official-history');
+    history.replaceChildren();
+    if (valid && (d.timeline || []).length > 1) {
+      const details = element('details');
+      const summary = element('summary','','Official forecast revision history');
+      details.appendChild(summary);
+      const list = element('ol');
+      for (const e of d.timeline.slice(0,8)) {
+        const row=element('li');
+        row.appendChild(element('strong','',e.headline));
+        row.appendChild(element('span','', ' · ' +
+          (Number.isInteger(e.povPercent) ? e.povPercent + '% PoV' : 'Value not extracted')));
+        const a=typeof e.sourceUrl==='string'&&
+          /^https:\/\/45thweathersquadron\.nebula\.spaceforce\.mil\/assets\/LaunchForecasts\//.test(e.sourceUrl) ?
+          link(e.sourceUrl,'Official PDF') : null;
+        if (a) row.appendChild(a);
+        list.appendChild(row);
+      }
+      details.appendChild(list);history.appendChild(details);
+    }
+    const links = $('fl-official-links');
+    links.replaceChildren();
+    if (valid && typeof d.officialUrl === 'string' &&
+      /^https:\/\/45thweathersquadron\.nebula\.spaceforce\.mil\/assets\/LaunchForecasts\//.test(d.officialUrl)) {
+      links.appendChild(link(d.officialUrl,'Read the exact official mission PDF'));
+    }
+    links.appendChild(link('https://www.patrick.spaceforce.mil/About-Us/Weather/',
+      '45th Weather Squadron forecast portal'));
+    const monitor = d.health || {};
+    if (monitor.checkedAt) links.appendChild(element('span','small',
+      'Source discovery checked ' + new Date(monitor.checkedAt).toLocaleString('en-US') +
+      ' · ' + (monitor.status || 'status unknown')));
+    else links.appendChild(element('span','small',
+      'Official document monitor has no confirmed observation yet.'));
+  };
+
   const renderRangeWeather = forecast => {
     const d = forecast || {};
     const good = d.status === 'forecast';
@@ -834,6 +902,7 @@
       renderList(d.upcoming || []);
       renderWeather(d.viewingWeatherByArea || []);
       renderRangeWeather(d.launchWeatherIntelligence);
+      renderOfficialWeather(d.officialLaunchWeather);
       renderAccess(d);
       renderKsc(d);
       renderArrival(d);
@@ -872,6 +941,7 @@
       set('weather-label', 'Visibility not assessed');
       set('weather-detail', 'This page is not displaying verified live forecast conditions.');
       renderRangeWeather(null);
+      renderOfficialWeather(null);
       set('launch-access-checked', 'Live access data could not be checked.');
       const arrival = $('launch-arrival');
       if (arrival) arrival.textContent = 'Launch-day Playalinda entrance policy could not be evaluated. Check the official NPS page before travel.';

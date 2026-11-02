@@ -228,7 +228,7 @@ test('browser pulse is source-attributed, accessible, and cannot synthesize laun
   assert.match(html,/id="launch-pulse-countdown"/);
   assert.match(html,/id="launch-pulse-refresh"/);
   assert.match(html,/id="launch-pulse-changes-list"/);
-  assert.match(html,/app\.js\?v=20261101-range1/);
+  assert.match(html,/app\.js\?v=20261101-official1/);
   assert.match(js,/fetch\(LAUNCH_DAY_API\+/);
   assert.match(js,/const PULSE_REFRESH_MS = 2 \* 60 \* 1000/);
   assert.match(js,/LAUNCH_DAY_SCHEDULE_REFRESH_MS = 5 \* 60 \* 1000/);

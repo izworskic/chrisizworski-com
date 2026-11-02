@@ -150,8 +150,8 @@ test('browser media experience is user-initiated and retains active GIS, SEO and
   assert.match(html,/id="mission-media-stage-screen"/);
   assert.match(html,/id="mission-media-mission-list"/);
   assert.match(html,/id="mission-media-camera-list"/);
-  assert.match(html,/app\.js\?v=20261101-range1/);
-  assert.match(html,/viewing\.css\?v=20261101-range1/);
+  assert.match(html,/app\.js\?v=20261101-official1/);
+  assert.match(html,/viewing\.css\?v=20261101-official1/);
   assert.match(js,/function renderMissionMedia\(/);
   assert.match(js,/renderMissionMedia\(d\.mediaDesk \|\| null\)/);
   assert.match(js,/mediaDesk=data&&data\.launchId===activeMissionId/);

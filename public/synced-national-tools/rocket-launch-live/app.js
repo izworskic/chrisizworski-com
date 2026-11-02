@@ -399,6 +399,40 @@
     if (nws) links.appendChild(nws);
   }
 
+  function renderOfficial45ws(data) {
+    const box = $('rl-official-wrap');
+    if (!box) return;
+    box.hidden = data.region?.id !== 'florida';
+    if (box.hidden) return; // 45WS is the Florida range forecast, not a national forecast.
+    const d = data.officialLaunchWeather || {};
+    const matched = d.status === 'mission-matched-current';
+    const numeric = matched && Number.isInteger(d.povPercent);
+    set('rl-official-title', d.label || 'No official mission forecast verified');
+    set('rl-official-value', numeric ? d.povPercent + '% PoV' : 'Unverified');
+    set('rl-official-detail', numeric ?
+      'The official forecast lists: ' + (d.primaryConcerns?.join(', ') ||
+        'primary concerns were not reliably extracted') +
+      '. Other hazards, including recovery and upper-level wind limits, may be outside this percentage.' :
+      matched ? 'A mission-matched official document was found, but its violation percentage could not be safely extracted.' :
+      'No current 45th Weather Squadron PDF has been matched to this exact Florida mission and target. The absence of a match is not a favorable-weather forecast.');
+    const latest = d.latestChange;
+    set('rl-official-trend', matched && latest ?
+      latest.headline + '. ' + latest.detail +
+      ' Detected ' + stamp(latest.detectedAt) + '.' :
+      'Forecast revision history is not yet verified for this mission.');
+    const target = $('rl-official-source');
+    target.replaceChildren();
+    const official = matched && typeof d.officialUrl === 'string' &&
+      /^https:\/\/45thweathersquadron\.nebula\.spaceforce\.mil\/assets\/LaunchForecasts\//.test(d.officialUrl) ?
+      anchor(d.officialUrl,'Read the exact official PDF') : null;
+    if (official) target.appendChild(official);
+    const portal = anchor('https://www.patrick.spaceforce.mil/About-Us/Weather/',
+      '45WS weather portal');
+    if (portal) target.appendChild(portal);
+    if (d.health?.checkedAt) target.appendChild(el('small', '',
+      'Discovery checked ' + stamp(d.health.checkedAt) + ' · ' + d.health.status));
+  }
+
   function syncUrl(r, l) {
     const url = new URL(location.href);
     if (r && validRegions.has(r)) url.searchParams.set('region', r);
@@ -417,6 +451,7 @@
     renderAccess(data);
     renderWeather(data);
     renderLaunchWeather(data);
+    renderOfficial45ws(data);
     board();
     const coverage = data.coverage || {};
     set('rl-schedule-coverage',
@@ -447,6 +482,7 @@
       chip($('rl-range-grade'), 'Launch-side forecast unavailable', 'unknown');
       set('rl-range-headline', 'Current launch-side evidence unavailable');
       set('rl-range-summary', 'The launch schedule or forecast request failed. Consult official launch weather and range notices.');
+      if ($('rl-official-wrap')) $('rl-official-wrap').hidden = true;
       $('rl-range-readings')?.replaceChildren();
       $('rl-range-signals')?.replaceChildren();
       $('rl-range-timeline')?.replaceChildren();

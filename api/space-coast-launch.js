@@ -15,6 +15,7 @@ const { buildGeographicViewing } = require('../lib/space-coast-geo');
 const { readFreshLaunchList } = require('../lib/space-coast-launch-day');
 const { buildMediaDesk } = require('../lib/space-coast-media');
 const { launchWeatherFor } = require('../lib/launch-weather-intelligence');
+const { readWeatherState, missionForecast } = require('../lib/space-coast-official-weather');
 
 const LAUNCHES = 'https://ll.thespacedevs.com/2.3.0/launches/upcoming/?location__ids=12%2C27&limit=20&format=json&ordering=net&hide_recent_previous=true';
 const KSC = 'https://www.kennedyspacecenter.com/launches-and-events/';
@@ -170,7 +171,7 @@ module.exports = async function handler(req, res) {
     if (requestedId && !next) return res.status(404).json({
       ok: false, error: 'This mission is no longer in the current Florida launch list.'
     });
-    const [forecasts, kscViewing, , launchWeatherIntelligence] = await Promise.all([
+    const [forecasts, kscViewing, , launchWeatherIntelligence, officialWeatherState] = await Promise.all([
       weatherForLocations(next, now),
       inspectKscLaunch(next).catch(() => ({
         state: 'unverified', checkedAt: new Date().toISOString(),
@@ -181,7 +182,8 @@ module.exports = async function handler(req, res) {
       // Save a trusted LL2 snapshot once with the ordinary cached schedule.
       // The faster official KSC checker reads it without polling LL2 again.
       storeTrustedLaunches(launches, now),
-      launchWeatherFor({ id: 'florida' }, next, fetchJson, now)
+      launchWeatherFor({ id: 'florida' }, next, fetchJson, now),
+      readWeatherState()
     ]);
     const primary = forecasts[0] || null;
     const parkAlerts = nps.alerts.map(a => ({
@@ -217,11 +219,13 @@ module.exports = async function handler(req, res) {
       next, upcoming: launches,
       weather: primary ? { period: primary.period, assessment: primary.assessment } : null,
       launchWeatherIntelligence,
+      officialLaunchWeather: missionForecast(next, officialWeatherState, now),
       viewingWeatherByArea: forecasts,
       nextDecision: {
         schedule,
         viewingWeather: primary?.assessment || weatherGrade(null),
         launchWeatherIntelligence,
+        officialLaunchWeather: missionForecast(next, officialWeatherState, now),
         launchWeather: {
           level: 'unknown', label: 'Official launch-weather approval not verified',
           detail: 'A local spectator forecast cannot establish range approval or a weather launch commit.'
