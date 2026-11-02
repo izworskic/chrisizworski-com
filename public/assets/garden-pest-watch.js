@@ -330,9 +330,12 @@ function renderBeetle(data){
  const eventText=(stage)=>new Date(stage.approximateDate+'T12:00:00Z').toLocaleDateString('en-US',{timeZone:'UTC',month:'short',day:'numeric',year:'numeric'});
  beetleAdult.textContent=(mode==='PREPARE'?'Provisional · ':'Modeled · ')+eventText(data.stages.adult);
  beetleEgg.textContent=(mode==='PREPARE'?'Provisional · ':'Modeled · ')+eventText(data.stages.egg);
+ const remaining=data.source?.remainingNearTermForecastDays;
+ const forecastWindow=Number.isInteger(remaining)&&remaining>=4&&remaining<=6?
+  ' Remaining official near-term window: '+remaining+' day(s) from today; older source days are subtracted from the normal six-day horizon. ':' Near-term source horizon is not verified. ';
  beetleSource.textContent='USA-NPN model layer date '+data.sourceDate+'. Verified exact raster time dimension and adult/egg point values. '+
  (mode==='OFF_SEASON'?'This is a completed season, not a forecast of the next summer. ':
-  'Modeled threshold dates are not detections. ')+'Provider coverage date is not a measured publication timestamp.';
+  'Modeled threshold dates are not detections. '+forecastWindow)+'Provider coverage date is not a measured publication timestamp.';
  const modelLink=data.source?.coverageUrl;
  if(typeof modelLink==='string'&&modelLink.startsWith('https://geoserver.usanpn.org/geoserver/'))beetleRaster.href=modelLink;
  if(biologyEvidence)biologyEvidence.textContent='USA-NPN official Japanese beetle model: '+data.sourceDate+
