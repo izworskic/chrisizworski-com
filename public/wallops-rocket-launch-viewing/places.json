@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "sourceOfTruth": "lib/wallops-viewing.js",
+  "sourceCheckedDate": "2026-11-03",
+  "disclaimer": "Published location feature reference points. Not exact public launch spectator positions, live parking, verified opening, navigable paths to a pad, or a predicted rocket flight track.",
+  "sites": [
+    {
+      "id": "nasa-visitor",
+      "name": "NASA Wallops Visitor Center launch-viewing lawn",
+      "kind": "official-event-venue",
+      "lat": 37.9393167,
+      "lon": -75.4566333,
+      "coordinateRole": "NASA published visitor-center GPS; lawn exact position unverified",
+      "geographicSource": "https://www.nasa.gov/wallops/stem/wallops-ec/",
+      "accessSource": "https://www.nasa.gov/wallops/visitor-center/view-a-launch-from-nasa-wallops-visitor-center/",
+      "address": "175 Chincoteague Road, Wallops Island, VA 23337",
+      "navigation": "37.9393167,-75.4566333",
+      "scene": "NASA's official mainland arrival point. Only open for launch viewing when a mission-specific NASA event says so; no reservations, parking guarantee, pets or Route 175 shoulder stopping."
+    },
+    {
+      "id": "reed",
+      "name": "Robert N. Reed Sr. Downtown Waterfront Park",
+      "kind": "town-waterfront",
+      "lat": 37.934715,
+      "lon": -75.377321,
+      "coordinateRole": "USACE 2026 town floating dock project point, not parking or park entrance",
+      "geographicSource": "https://www.nao.usace.army.mil/Media/Public-Notices/Article/4443337/408-nao-2026-0018-town-of-chincoteague-downtown-floating-dock/",
+      "accessSource": "https://www.nasa.gov/wallops/visitor-center/view-a-launch-from-nasa-wallops-visitor-center/",
+      "address": "Main Street, downtown Chincoteague, VA",
+      "navigation": "Robert Reed Waterfront Park, Chincoteague VA",
+      "scene": "NASA-listed Chincoteague alternative on the downtown waterfront. Current event parking, town dock construction, public hours and an exact unobstructed view are not confirmed."
+    },
+    {
+      "id": "harbor",
+      "name": "Curtis Merritt Harbor of Refuge",
+      "kind": "town-harbor",
+      "lat": 37.902311,
+      "lon": -75.405202,
+      "coordinateRole": "Virginia DOH harbor feature survey 2019, not exact public viewing spot",
+      "geographicSource": "https://www.vdh.virginia.gov/content/uploads/sites/20/2016/05/survey101.pdf",
+      "accessSource": "https://www.nasa.gov/wallops/visitor-center/view-a-launch-from-nasa-wallops-visitor-center/",
+      "address": "2246 Curtis Merritt Harbor Drive, Chincoteague VA 23336",
+      "navigation": "2246 Curtis Merritt Harbor Drive, Chincoteague VA 23336",
+      "scene": "NASA-listed working harbor on south Chincoteague. No launch-day lot opening, night parking, sightline or vessel access promise."
+    }
+  ]
+}
