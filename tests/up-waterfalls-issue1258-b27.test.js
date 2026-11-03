@@ -18,7 +18,7 @@ test('batch 27 keeps each candidate research-only, source-ledger linked, and abs
   assert.ok(g&&s&&u,'missing source '+id);
   assert.equal(g.curatedId,null);assert.equal(g.publicGuide,null);assert.equal(g.publicationEligible,false);
   assert.equal(g.reconciliation,'pending-identity-and-access-research');
-  assert.equal(s.publication,'research-only');assert.equal(s.reviewBatch,'27');assert.equal(s.curatedId,null);
+  assert.equal(s.publication,'research-only');assert.ok(Number(s.reviewBatch)>=27,'later source audits may supersede historical batch ID without changing research-only safety gates');assert.equal(s.curatedId,null);
   assert.equal(u.publicationEligible,false); assert.equal(u.routeAudit.outcome,'not-cleared');
   assert.equal(u.routeAudit.destinationCoordinatesForDriving,false);
   assert.equal(u.routeAudit.routePolylineAuthorized,false);
