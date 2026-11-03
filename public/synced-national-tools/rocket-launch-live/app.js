@@ -82,8 +82,11 @@
     }
   }
   function floridaSpecialistLink(url, data = state.data) {
-    if (typeof url !== 'string' || !url.startsWith('/national-tools/space-coast-launch/')) return url;
-    const selected = data?.selectedRegion === 'florida' ? data.selectedLaunchId : null;
+    if (typeof url !== 'string') return url;
+    const region = url.startsWith('/national-tools/space-coast-launch/')?'florida':
+      url.startsWith('/starbase-rocket-launch-viewing/')?'texas':null;
+    if (!region) return url;
+    const selected = data?.selectedRegion === region ? data.selectedLaunchId : null;
     return selected && /^[0-9a-f-]{36}$/i.test(selected) ?
       url + '?launchId=' + encodeURIComponent(selected) : url;
   }
@@ -95,7 +98,8 @@
       [r.authority, 'Official launch notices'],
       [r.access, 'Viewing and access rules']
     ];
-    if (r.specialist) links.unshift([floridaSpecialistLink(r.specialist), 'Florida detailed viewer · same mission']);
+    if (r.specialist) links.unshift([floridaSpecialistLink(r.specialist),
+      r.id === 'texas' ? 'Starbase public viewing map · same mission' : 'Florida detailed viewer · same mission']);
     for (const [url, title] of links) {
       const a = anchor(url, title);
       if (a) root.appendChild(a);
@@ -449,7 +453,8 @@
     }
     if (data.region?.specialist) {
       const detail = anchor(floridaSpecialistLink(data.region.specialist,data),
-        'Florida: same launch, pad access, tickets and forecast', 'rl-watch-operator');
+        data.region?.id === 'texas' ? 'Texas: same mission, public map and city road notice' :
+          'Florida: same launch, pad access, tickets and forecast', 'rl-watch-operator');
       if (detail) general.appendChild(detail);
     }
   }
@@ -848,6 +853,8 @@
     state.regions = data.regions || [];
     const floridaNav = $('rl-nav-florida');
     if (floridaNav) floridaNav.href = floridaSpecialistLink('/national-tools/space-coast-launch/',data);
+    const texasNav = $('rl-nav-starbase');
+    if (texasNav) texasNav.href = floridaSpecialistLink('/starbase-rocket-launch-viewing/',data);
     initMap();
     showRegion(data.region);
     renderMission(data);
