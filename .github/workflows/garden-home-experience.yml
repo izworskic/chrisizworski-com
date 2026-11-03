@@ -9,6 +9,11 @@ on:
       - 'public/assets/garden-earworm-trap*'
       - 'scripts/build_garden_earworm_traps.py'
       - 'scripts/verify-garden-earworm-traps.cjs'
+      - 'scripts/ingest_msu_earworm_2027.py'
+      - 'tests/test_msu_earworm_2027_ingest.py'
+      - 'scripts/verify-garden-earworm-2027.cjs'
+      - 'scripts/verify-garden-earworm-2027-browser.cjs'
+      - '.github/workflows/msu-earworm-2027-source-review.yml'
       - 'public/assets/garden-pest-field-observations.js'
       - 'lib/garden-pest-field-observations.cjs'
       - 'api/garden-pest-field-observations.js'
@@ -74,6 +79,8 @@ jobs:
         run: |
           python3 scripts/build_garden_earworm_traps.py --check
           node scripts/verify-garden-earworm-traps.cjs
+      - name: Verify source-reviewed 2027 MSU trap gate at four viewport widths
+        run: node scripts/verify-garden-earworm-2027-browser.cjs
       - name: Check Garden Pest Watch crop, evidence, failure and responsive browser behavior
         run: node scripts/verify-garden-pest-watch-browser.cjs
       - name: Verify controlled field station journal, bounded onset and mobile/no-JS behavior
@@ -87,5 +94,6 @@ jobs:
             artifacts/garden-home-browser/
             artifacts/leafcutter-browser/
             artifacts/garden-pest-watch-browser/
+            artifacts/garden-earworm-2027-browser/
           if-no-files-found: warn
           retention-days: 14
