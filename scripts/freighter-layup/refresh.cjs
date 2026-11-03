@@ -27,6 +27,14 @@ async function run(){
  const suggestions=new Map(oldReview.candidates.map(x=>[x.url,x]));for(const r of result.reviews)suggestions.set(r.url,r);
  const reviewText=JSON.stringify({schemaVersion:1,candidates:[...suggestions.values()].slice(-250)},null,2)+'\n';
  const reviewChanged=!fs.existsSync(reviewFile)||fs.readFileSync(reviewFile,'utf8')!==reviewText;
+ const shadowPathArg=process.argv.find(arg=>arg.startsWith('--shadow-input='));
+ if(shadowPathArg){
+  const shadowFile=shadowPathArg.slice('--shadow-input='.length);
+  if(!shadowFile)throw Error('Missing shadow input output path');
+  const shadowInput={schemaVersion:1,season:result.ledger.season,
+    observations:result.observations||[],sources:result.outcomes};
+  fs.writeFileSync(shadowFile,JSON.stringify(shadowInput,null,2)+'\n');
+ }
  if(!process.argv.includes('--dry-run')){
   if(changed)fs.writeFileSync(file,newText);
   if(reviewChanged){fs.mkdirSync(path.dirname(reviewFile),{recursive:true});fs.writeFileSync(reviewFile,reviewText)}
