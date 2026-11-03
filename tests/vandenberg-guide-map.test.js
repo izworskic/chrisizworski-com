@@ -11,6 +11,8 @@ const js=file('public/vandenberg-rocket-launch-viewing/map.js');
 const css=file('public/vandenberg-rocket-launch-viewing/styles.css');
 const ga=file('public/vandenberg-rocket-launch-viewing/guide.js');
 const {SITES,CLOSED}=require('../lib/vandenberg-viewing');
+const {Script}=require('node:vm');
+new Script(js,{filename:'vandenberg-map.js'});
 
 function tags(){
   return [...html.matchAll(/<article class="vg-place-card"([^>]+)>/g)].map(m=>m[1]);
