@@ -30,7 +30,7 @@ async function run(){
   const browser=await chromium.launch({channel:'chrome',headless:true,args:['--no-sandbox']});
   const results=[];
   try{
-    for(const size of [{width:1320,height:950,name:'desktop'},{width:1024,height:800,name:'compact-desktop'},{width:390,height:844,name:'mobile'}]){
+    for(const size of [{width:1320,height:950,name:'desktop'},{width:1024,height:800,name:'compact-desktop'},{width:768,height:860,name:'tablet'},{width:390,height:844,name:'mobile'},{width:360,height:780,name:'small-mobile'}]){
       const context=await browser.newContext({viewport:{width:size.width,height:size.height},reducedMotion:'reduce'});
       // Exercise map markers without letting an external tile/photo/CDN outage block tests.
       await context.route('**/*',route=>{
@@ -328,6 +328,23 @@ async function run(){
       results.push(size.name+': PASS — historical statuses, map, filters, seasons, biographies, layout, JS exceptions');
       await context.close();
     }
+    // A useful historical answer and supporting article links must survive without JS.
+    const noJS = await browser.newContext({viewport:{width:390,height:844},javaScriptEnabled:false,reducedMotion:'reduce'});
+    await noJS.route('**/*',route=>{
+      const host=new URL(route.request().url()).hostname;
+      return host==='127.0.0.1'?route.continue():route.abort();
+    });
+    const staticPage = await noJS.newPage();
+    await staticPage.goto(url,{waitUntil:'domcontentloaded',timeout:15000});
+    check(await staticPage.locator('#winter-fleet-history [data-history-vessel]').count()===14,
+      'no-JS: fourteen historical ship records remain in the document');
+    check(await staticPage.locator('#winter-fleet-history .history-season-panel').count()===2,
+      'no-JS: both winters remain directly available');
+    check(await staticPage.locator('#winter-fleet-history .history-controls').isHidden(),
+      'no-JS: inert history controls are not shown');
+    check(await staticPage.locator('#winter-fleet-history a[href^="https://"]').count()>=14,
+      'no-JS: original evidence links survive');
+    await noJS.close();
     for(const r of results)console.log(r);
   }finally{await browser.close();await new Promise(r=>server.close(r))}
 }
