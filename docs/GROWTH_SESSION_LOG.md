@@ -1888,3 +1888,11 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - CSS had a four-hour cache TTL; the HTML stylesheet query is bumped to `v=20261102a` to make the fix visible to repeat visitors. The actual HTML modification date and its unique winter-sitemap lastmod are synchronized to 2026-11-02; schema structure remains unchanged.
 - Regression coverage now checks the page exception, all seven links, natural scroll and single truthful sitemap entry. The existing freighter browser and design release gates were aligned with the new requested UX, and the generated network ad-policy asset synchronized. GitHub CI provides the full-run and browser evidence.
 - No GSC or AdSense performance measurements were retrieved and no traffic or earnings impact is claimed. **Single next action:** verify the production page at desktop and 390px after the release finishes, including absent AdSense loader and scroll-away navigation.
+
+
+### 2026-11-03 — Freighter tracking Python search pilot
+
+- Moved the existing Gazette panel below the live map and winter handoff, keeping the map and existing safety/source behavior intact. Metadata, canonical, Person entity and ads are unchanged.
+- Added an offline Python CSV analysis that calculates page metrics and classifies explicitly scoped query exports. A site-wide query export is never represented as tracker-specific. Site-wide grouping excludes queries without clear Great Lakes vessel terms; anonymized and omitted queries limit analysis. No data is sent to a server.
+- Search Console Web export created October 24, last 28 days: tracker 9,119 impressions, 142 clicks, 1.56% CTR, 7.25 position. Site-wide Great Lakes ship tracking rows in the exported top queries: 3,722 impressions, 43 clicks, 1.16% CTR, weighted position 7.12; these are NOT tracker-attributed. No causal, ranking, indexing, or revenue uplift measured.
+- PR and deployment pending verification. Next action: compare finalized 28-day page data after release and obtain a page-filtered query export before drawing intent-specific conclusions.

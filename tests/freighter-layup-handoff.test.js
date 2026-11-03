@@ -18,8 +18,10 @@ test('live AIS tracker keeps distinct canonical, search identity, and functional
   assert.match(tracker, /id="freighterNameSearch"/);
   assert.match(tracker, /data-freighter-view="overview"/);
   assert.match(tracker, /id="freighterVessels"/);
-  assert.match(tracker, /"dateModified": "2026-10-25"/);
-  assert.match(sitemap, /<loc>https:\/\/chrisizworski\.com\/great-lakes-freighter-tracking\/<\/loc>\s*<lastmod>2026-10-25<\/lastmod>/);
+  const date = tracker.match(/"dateModified": "(\d{4}-\d{2}-\d{2})"/)?.[1];
+  const sitemapDate = sitemap.match(/<loc>https:\/\/chrisizworski\.com\/great-lakes-freighter-tracking\/<\/loc>\s*<lastmod>(\d{4}-\d{2}-\d{2})<\/lastmod>/)?.[1];
+  assert.ok(date, 'tracker date is present');
+  assert.equal(sitemapDate, date, 'sitemap and tracker modification dates match');
 });
 
 test('contextual winter handoff remains crawlable, accurate, and two-way', () => {

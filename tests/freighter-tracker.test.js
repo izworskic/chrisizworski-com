@@ -118,3 +118,9 @@ test("lake-wide AIS request stays within provider area limits and preserves a Du
   assert.equal(res.data.vessels[0].lon,-92.08);
   assert.equal(res.data.attribution[0].credit,"AISHub via Open Waters");
 });
+
+test("live map comes before the Gazette on the dedicated tracker", () => {
+  const html = read("public/great-lakes-freighter-tracking/index.html");
+  assert.ok(html.indexOf('id="live-map"') < html.indexOf('class="gazette-daily"'));
+  assert.ok(html.indexOf('class="layup-handoff"') < html.indexOf('class="gazette-daily"'));
+});
