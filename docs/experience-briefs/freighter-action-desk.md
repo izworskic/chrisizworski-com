@@ -31,7 +31,7 @@ The current provider payload does not supply a verified crosswalk for existing e
 - Refresh fails: retained observations remain only while within the age limit; the corridor desk says refresh failed and shows the last checked time.
 - All data fails: no counts; explicit unavailable language and existing external passage alternatives.
 - Map/CDN failure: clickable text results remain able to open selected-report details. No JS: page explains that live counts need JS and retains static passage alternatives.
-- Narrow, keyboard, and reduced-motion: native buttons and text labels, no color-only meaning; fixed buttons stay in place while counts refresh. Actual multi-width browser, screenshots, keyboard and map-tile evidence are required before release.
+- Narrow, keyboard, and reduced-motion: native buttons and text labels, no color-only meaning; fixed buttons stay in place while counts refresh. Fixture-based screenshots at 360/390/768/1440 were inspected. They revealed a blank map fallback that was shortened in the follow-up; repeat browser checks are required. Keyboard and real map-tile evidence remain required.
 
 ## QA and outcome
 

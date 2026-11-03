@@ -104,7 +104,7 @@
   var map = typeof L !== "undefined" ? L.map(mapFrame, {scrollWheelZoom:false}).setView([44.8,-84.7],5) : null;
   var layer = map ? L.layerGroup().addTo(map) : null;
   if (map) L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
-  else mapFrame.textContent = "Map unavailable; recent vessel reports are listed below.";
+  else {mapFrame.textContent = "Map unavailable; recent vessel reports are listed below.";mapFrame.parentElement.classList.add("map-stage-unavailable");}
   var reports = null, busy = false, lastFailed = false;
   var vesselSearch = document.getElementById("freighterNameSearch");
   var vesselSearchStatus = document.getElementById("freighterSearchStatus");
