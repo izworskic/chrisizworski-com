@@ -19,11 +19,11 @@ const radians=Math.PI/180;
 const geo=(a,b)=>{const x=a.lat*radians,y=b.lat*radians,dx=(b.lat-a.lat)*radians,dy=(b.lng-a.lng)*radians,z=Math.sin(dx/2)**2+Math.cos(x)*Math.cos(y)*Math.sin(dy/2)**2;return 2*3958.7613*Math.asin(Math.min(1,Math.sqrt(z)));};
 
 test('B59 Python-generated index covers exactly source-verified visitor approaches, never research or closed pins',()=>{
- assert.equal(catalog.length,74);
- assert.equal(cards.length,74);
+ assert.equal(catalog.length,75);
+ assert.equal(cards.length,75);
  assert.equal(index.schemaVersion,1);
- assert.equal(index.counts.curated,74);
- assert.equal(index.counts.eligible,66);
+ assert.equal(index.counts.curated,75);
+ assert.equal(index.counts.eligible,67);
  assert.equal(index.counts.excluded,8);
  assert.deepEqual(index.locations.map(c=>c.id),eligible.map(c=>c.id).sort());
  assert.deepEqual(index.excludedIds,cards.filter(c=>!eligible.some(x=>x.id===c.id)).map(c=>c.id).sort());
