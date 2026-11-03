@@ -142,7 +142,7 @@ test('release surface includes active controls, GIS map, honest site source and 
 test('all visitor claims remain descriptive and intentionally exclude travel-time and pad-entry estimates',()=>{
   const data=model.buildVandenbergViewing(LAUNCH,FORECAST,NOW);
   assert.match(data.statusDetail,/No real-time site opening/);
-  assert.match(data.method,/NOT live verified/);
+  assert.match(data.confidence,/NOT live verified/);
   assert.doesNotMatch(JSON.stringify(data.scenarios),/rocketVisible|probabilityOfSeeing|driveMinutes|flightTrajectory/);
   assert.equal(data.sites.every(s=>s.padGeometry?.miles>0),true);
 });
