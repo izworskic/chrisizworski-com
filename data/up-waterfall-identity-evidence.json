@@ -11,7 +11,8 @@
     "upperSilverSecond": "https://waterfallhikes.com/waterfalls/upper-silver-falls-near-l-anse-in-mi",
     "silverPicnic": "https://upperpeninsulawaterfalls.com/baraga-county-waterfalls/silver-falls-lower.html",
     "millUpper": "https://www.anyplaceamerica.com/directory/mi/dickinson-county-26043/falls/upper-mill-pond-falls-2128902/",
-    "millLower": "https://www.anyplaceamerica.com/directory/mi/dickinson-county-26043/falls/lower-mill-pond-falls-2128901/"
+    "millLower": "https://www.anyplaceamerica.com/directory/mi/dickinson-county-26043/falls/lower-mill-pond-falls-2128901/",
+    "algerField": "https://myhikes.org/trails/alger-falls"
   },
   "clusters": [
     {
@@ -144,7 +145,7 @@
           "name": "Alger Falls, field waypoint",
           "lat": 46.393207,
           "lng": -86.648164,
-          "sourceKey": "michigan"
+          "sourceKey": "algerField"
         }
       ],
       "pairs": [
