@@ -171,6 +171,15 @@ class ShadowTests(unittest.TestCase):
                       result["cases"][0]["risks"])
         self.assertNotIn("confidence", result["cases"][0])
 
+    def test_ignored_explicit_layup_headline_is_triaged_but_not_published(self):
+        result = self.report([observation(
+            self.url, "Mesabi Miner arrived at Superior for winter layup",
+            decision="not_layup", kind=None)])
+        self.assertEqual(result["existingNodeAccepted"], 0)
+        self.assertEqual(result["flaggedObservations"], 1)
+        self.assertIn("potentially_missed_layup_headline", result["cases"][0]["risks"])
+        self.assertFalse(result["publicationEnabled"])
+
     def test_wrong_season_is_rejected(self):
         with self.assertRaises(ValueError):
             shadow.analyze({"schemaVersion": 1, "season": "2026-27",
