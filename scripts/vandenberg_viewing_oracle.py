@@ -48,11 +48,12 @@ def access(kind,iso,lat=34.689528,lon=-120.5992314):
     if iso is None:return "time-unknown"
     local=dt.datetime.fromisoformat(iso.replace("Z","+00:00")).astimezone(ZONE)
     minute=local.hour*60+local.minute
+    if kind=="surf-hours" and 1050<=minute<1080:return "boundary"
     if kind=="surf-hours" and (minute<480 or minute>=1080):return "after-hours"
     if kind=="park-sunset":
         elev=solar_elevation(iso,lat,lon)
         if elev<=-2:return "after-hours"
-        if elev<2:return "boundary"
+        if elev<5:return "boundary"
     return "verify"
 
 SITES=[
@@ -88,6 +89,10 @@ class OracleTests(unittest.TestCase):
         self.assertEqual(access("surf-hours","2026-11-07T03:46:00Z"),"after-hours")
     def test_day_beach_can_be_checked(self):
         self.assertEqual(access("surf-hours","2026-11-07T17:00:00Z"),"verify")
+    def test_near_closing_beach_withheld(self):
+        self.assertEqual(access("surf-hours","2026-11-08T01:45:00Z"),"boundary")
+    def test_sunset_boundary_withheld(self):
+        self.assertEqual(access("park-sunset","2026-11-07T00:46:00Z"),"boundary")
     def test_sunset_park_closed(self):
         self.assertEqual(access("park-sunset","2026-11-07T03:46:00Z"),"after-hours")
     def test_summer_day_park_candidate(self):
