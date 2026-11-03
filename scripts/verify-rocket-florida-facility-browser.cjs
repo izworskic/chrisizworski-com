@@ -4,6 +4,9 @@
  * Fixtures contain no claimed live mission, admission or weather. */
 const fs=require('node:fs'),path=require('node:path'),http=require('node:http');
 const {chromium}=require('playwright');
+const {buildGeographicViewing}=require('../lib/space-coast-geo');
+const {buildFloridaViewingDeck}=require('../lib/florida-viewing-deck');
+const {VIEWPOINTS}=require('../lib/space-coast-decision');
 const root=path.resolve(__dirname,'../public');
 const out=path.resolve(__dirname,'../artifacts/rocket-florida-facility-qa');
 fs.mkdirSync(out,{recursive:true});
@@ -28,6 +31,16 @@ function fixture(id){
  const selected=launches.find(x=>x.id===id)||launches[0];
  const isKsc=selected.id===KSC;
  const selectedName=isKsc?'Kennedy Space Center':'Cape Canaveral Space Force Station';
+ const now=Date.parse('2026-11-03T16:00:00Z');
+ const accessSource={verified:false,checkedAt:null,alerts:[]};
+ const viewpoints=VIEWPOINTS.map(v=>({...v,
+   level:['space-view','rotary','parrish'].includes(v.id)?'candidate':'unknown',
+   label:'Published candidate; launch-day access not confirmed',
+   reason:'The land manager may impose capacity and event restrictions.'}));
+ const launch={...selected,lat:isKsc?28.608:28.563,lon:isKsc?-80.604:-80.577};
+ const geographicViewing=buildGeographicViewing(launch,viewpoints,accessSource,now,[]);
+ const floridaViewingDeck=buildFloridaViewingDeck({launch,geographicViewing,viewpoints,
+   accessSource,kscViewing:{state:'unverified'},scheduleFreshness:'recent'});
  const network={
   facilities:[
    {id:'kennedy',name:'Kennedy Space Center',countInFeed:1,nextLaunchId:KSC},
@@ -55,10 +68,10 @@ function fixture(id){
   scheduleWarning:null,upcoming:launches,next:selected,facilityNetwork:network,
   nextDecision:{schedule:selected.scheduleConfidence,
     viewingWeather:{level:'unknown',label:'Sky unverified',detail:'No forecast assertion'}},
-  viewingWeatherByArea:[],viewpoints:[],parkAlerts:[],
-  accessSource:{verified:false,checkedAt:null},
+  viewingWeatherByArea:[],viewpoints,parkAlerts:[],
+  accessSource,
   mediaDesk:null,kscViewing:{state:'unverified'},
-  geographicViewing:null,arrivalGuidance:{label:'Check NPS entry',level:'unknown'},
+  geographicViewing,floridaViewingDeck,arrivalGuidance:{label:'Check NPS entry',level:'unknown'},
   skyComparison:{label:'No current sky comparison',level:'unknown'}
  };
 }
@@ -115,6 +128,14 @@ async function expectName(page,name){
    assert(await page.locator('#fl-origin-pad').innerText().then(x=>x.includes('39A')),size.name+' Kennedy pad');
    assert(await page.locator('#fl-origin-rule').getAttribute('data-rule')==='gantry-excluded',size.name+' Gantry excluded');
    assert(await page.locator('[data-fl-facility="kennedy"]').getAttribute('aria-pressed')==='true',size.name+' KSC selected');
+   await page.waitForFunction(()=>document.querySelector('#fl-deck-primary-map')?.disabled===false);
+   assert((await page.locator('#fl-deck-headline').innerText()).includes('Titusville'),size.name+' northern shoreline guidance');
+   assert((await page.locator('#fl-deck-primary-name').innerText()).includes('Space View Park'),size.name+' Kennedy public site');
+   assert((await page.locator('#fl-deck-ticket-rule').innerText()).includes('LC-39A'),size.name+' Gantry LC-39A safety exclusion');
+   await page.locator('#fl-deck-primary-map').click();
+   await page.waitForFunction(()=>document.querySelector('[data-geo-id="space-view"]')?.dataset.active==='true');
+   assert((await page.locator('#geo-pad-detail').innerText()).includes('restricted'),size.name+' no pad driving');
+   assert((await page.locator('#fl-deck-provenance').innerText()).includes('never a verified parking stall'),size.name+' access honesty');
    await page.locator('[data-fl-facility="cape"]').click();
    await expectName(page,'Cape Canaveral Space Force Station');
    await page.waitForFunction(id=>new URL(location.href).searchParams.get('launchId')===id,CAPE);
@@ -122,10 +143,18 @@ async function expectName(page,name){
    assert(await page.locator('#fl-origin-rule').getAttribute('data-rule')==='mission-confirm',size.name+' Cape ticket caveat');
    assert((await page.locator('#fl-national-mission-link').getAttribute('href')).includes(CAPE),size.name+' national link preserves mission');
    assert((await page.locator('#mission-name').innerText()).includes('Fixture Cape launch'),size.name+' downstream mission desk follows selection');
+   assert((await page.locator('#fl-deck-headline').innerText()).includes('Port Canaveral'),size.name+' southern shoreline guidance');
+   assert((await page.locator('#fl-deck-primary-name').innerText()).includes('Jetty Park'),size.name+' southern park');
+   assert((await page.locator('#fl-deck-ticket-tag').innerText()).includes('UNVERIFIED'),size.name+' no automatic KSC ticket');
+   assert((await page.locator('#fl-deck-beach-copy').innerText()).includes('30 minutes'),size.name+' NPS inbound cutoff');
    await page.locator('[data-fl-facility="kennedy"]').click();
    await expectName(page,'Kennedy Space Center');
    await page.waitForFunction(id=>new URL(location.href).searchParams.get('launchId')===id,KSC);
    assert((await page.locator('#mission-name').innerText()).includes('Fixture Kennedy launch'),size.name+' reverse mission sync');
+   assert((await page.locator('#fl-deck-primary-name').innerText()).includes('Space View Park'),size.name+' reverse site sync');
+   const deckShot=size.name+'-pad-to-shore.png';
+   await page.locator('#florida-viewing-plan').screenshot({path:path.join(out,deckShot),animations:'disabled'});
+   report.screenshots.push(deckShot);
    const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
    assert(overflow<=2,size.name+' horizontal overflow '+overflow);
    assert((await page.locator('#geo-map-status').innerText()).length>0,size.name+' GIS fallback text absent');
@@ -134,7 +163,7 @@ async function expectName(page,name){
    const shot=size.name+'-florida-facilities.png';
    await page.locator('#florida-launch-facilities').screenshot({path:path.join(out,shot),animations:'disabled'});
    report.screenshots.push(shot);
-   report.scenarios.push({name:size.name,facilityCycle:'A-B-A',missionLinks:'passed',tickets:'unverified',noTileFallback:'passed',overflowPx:overflow});
+   report.scenarios.push({name:size.name,facilityCycle:'A-B-A',missionLinks:'passed',siteChanges:'Kennedy to Cape to Kennedy',mapFocus:'passed',tickets:'unverified',noTileFallback:'passed',overflowPx:overflow});
    await ctx.close();
   }
   const staleContext=await browser.newContext({viewport:{width:390,height:844}});
@@ -149,6 +178,8 @@ async function expectName(page,name){
   assert(await staticPage.locator('#florida-launch-facilities a[href^="https://www.kennedyspacecenter.com/"]').count()===1,'No-JS KSC source missing');
   assert(await staticPage.locator('#florida-launch-facilities a[href^="https://www.nps.gov/"]').count()===1,'No-JS NPS source missing');
   assert(await staticPage.locator('[data-fl-facility]:disabled').count()===2,'No-JS buttons must not claim data');
+  assert(await staticPage.locator('#fl-deck-primary-map').isDisabled(),'No-JS plan falsely claims a destination');
+  assert((await staticPage.locator('#fl-deck-beach-copy').innerText()).includes('not a verified opening'),'No-JS NPS qualifier missing');
   report.scenarios.push({name:'no-js',officialSources:'present',unsupportedControls:'disabled'});
   await noJs.close();
  }catch(e){report.errors.push(e.stack||String(e))}

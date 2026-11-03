@@ -581,3 +581,59 @@
 @media(max-width:800px){.fl-facility-heading{display:block}.fl-facility-flag{display:inline-block;margin-top:12px}.fl-facility-content{grid-template-columns:1fr}.fl-facility-switch{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.fl-facility-switch button{align-items:start;flex-direction:column}.fl-facility-hint{grid-column:1/-1}}
 @media(max-width:450px){.fl-facility-network{margin:16px 0 21px;padding:15px}.fl-facility-switch{grid-template-columns:1fr}.fl-facility-switch button{flex-direction:row;min-height:68px}.fl-facility-hint{grid-column:1}.fl-facility-links a{flex:1 1 100%;text-align:center}}
 @media(prefers-reduced-motion:reduce){.fl-facility-switch button{transition:none}}
+
+
+/* Florida viewing decision deck: range-specific first answer, not a cloned Starbase UI. */
+.fl-deck{margin:22px 0 29px;padding:clamp(18px,3vw,30px);border-radius:22px;background:#f6f5ec;border:1px solid #c5d2ca;box-shadow:0 13px 27px #213d3c12;color:#183d40}
+.fl-deck-intro{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:4px 4px 19px;border-bottom:1px solid #cbd9d4}
+.fl-deck-kicker{color:#315f67;font-size:11px;font-weight:900;letter-spacing:.15em;margin:0 0 6px}
+.fl-deck-intro h2{color:#173b44;font:700 clamp(29px,4vw,44px)/1.12 Georgia,serif;letter-spacing:-.025em;margin:0 0 12px}
+.fl-deck-intro h2 em{font-weight:400;color:#a35e3a}
+.fl-deck-intro p:not(.fl-deck-kicker){font-size:14px;line-height:1.6;color:#45656a;margin:0;max-width:775px}
+.fl-deck-north{flex:0 0 104px;border:2px solid #acc6c4;background:#e0ebe7;border-radius:50%;height:104px;display:flex;align-items:center;flex-direction:column;justify-content:center;color:#2d6465;line-height:1.05}
+.fl-deck-north>span:first-child{font-size:11px;font-weight:900;letter-spacing:.15em}
+.fl-deck-compass{font-size:30px;line-height:1.1}
+.fl-deck-north small{font-size:7px;max-width:83px;letter-spacing:.06em;text-align:center;font-weight:800}
+.fl-deck-basis{padding:20px 4px 16px;display:grid;gap:5px}
+.fl-deck-basis .fl-deck-label{color:#3b7072;font-size:10px;font-weight:850;letter-spacing:.12em;text-transform:uppercase}
+.fl-deck-basis strong{font:700 clamp(24px,3.1vw,33px)/1.15 Georgia,serif;color:#183f45}
+.fl-deck-basis p{font-size:14px;line-height:1.6;max-width:950px;color:#466264;margin:5px 0 0}
+.fl-deck-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.fl-deck-card{display:flex;flex-direction:column;min-width:0;padding:clamp(15px,1.9vw,21px);border-radius:15px;border:1px solid #c3d5d0;background:#fff;box-shadow:0 4px 10px #1c50500c}
+.fl-deck-card-primary{background:#143e49;color:#e8f1ec;border-color:#143e49}
+.fl-deck-card-ticket{background:#edf1ec}
+.fl-deck-card-top{display:flex;justify-content:space-between;align-items:start;gap:8px;flex-wrap:wrap;margin-bottom:13px}
+.fl-deck-card-top>span{font-size:10px;letter-spacing:.1em;font-weight:850;line-height:1.4}
+.fl-deck-card-primary .fl-deck-card-top>span{color:#bfdfdf}
+.fl-deck-tag{font-size:9px;letter-spacing:.05em;border-radius:999px;padding:5px 9px;background:#e3ede9;color:#204b4e;font-weight:850;line-height:1.3}
+.fl-deck-card-primary .fl-deck-tag{background:#dce7d5;color:#1d4645}
+.fl-deck-card h3{font:700 clamp(21px,2.2vw,27px)/1.18 Georgia,serif;color:#183d43;margin:0 0 10px}
+.fl-deck-card-primary h3{color:#fff}
+.fl-deck-card p{font-size:13px;line-height:1.64;color:#486064;margin:3px 0 10px}
+.fl-deck-card-primary p{color:#e2eeec}
+.fl-deck-metrics{display:grid;gap:5px;margin:0 0 15px}
+.fl-deck-metrics span{font-size:12px;line-height:1.4;font-weight:700}
+.fl-deck-card-primary .fl-deck-metrics span{color:#e8d9bb}
+.fl-deck-ticket-rule{padding:10px 11px;border-left:3px solid #ba7c4e;background:#fff5e6;color:#73482b!important;border-radius:6px}
+.fl-deck-card-actions{margin-top:auto;display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding-top:10px}
+.fl-deck-card-actions button,.fl-deck-card-actions a{font:800 12px/1.35 system-ui,sans-serif;border-radius:8px;padding:9px 11px;text-decoration:none}
+.fl-deck-card-actions button{border:0;background:#226576;color:#fff;cursor:pointer}
+.fl-deck-card-primary .fl-deck-card-actions button{background:#f0bd84;color:#173942}
+.fl-deck-card-actions button:disabled{opacity:.54;cursor:not-allowed}
+.fl-deck-card-actions a{color:#1d5365;border:1px solid #b2cfcc;background:#f8fbf9}
+.fl-deck-card-primary .fl-deck-card-actions a{color:#fff;border-color:#8da9ad;background:#244e58}
+.fl-deck-card-actions button:focus-visible,.fl-deck-card-actions a:focus-visible,.fl-deck-bottom a:focus-visible{outline:3px solid #ddaa71;outline-offset:3px}
+.fl-deck-conditions{display:flex;gap:20px;justify-content:space-between;align-items:center;padding:16px 19px;margin-top:13px;border-radius:12px;background:#fbeedc;border-left:4px solid #aa713e}
+.fl-deck-conditions strong{display:block;font-size:14px;color:#663f27}
+.fl-deck-conditions p{font-size:12px;line-height:1.65;max-width:860px;margin:5px 0 0;color:#76553b}
+.fl-deck-conditions a{font-size:12px;color:#75452a;font-weight:850;flex:0 0 auto}
+.fl-deck-conditions[data-closed=true]{background:#ffe5df;border-left-color:#b53f31}
+.fl-deck-conditions[data-closed=true] strong{color:#872c25}
+.fl-deck-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:13px 0 0;padding:0 4px}
+.fl-deck-bottom p{color:#53686b;font-size:11px;line-height:1.6;margin:0;max-width:830px}
+.fl-deck-bottom a{font-size:12px;font-weight:850;color:#205e68;flex:0 0 auto}
+.fl-deck[data-status=unverified] .fl-deck-card-primary{background:#2a4e55}
+@media(max-width:1000px){.fl-deck-cards{grid-template-columns:repeat(2,minmax(0,1fr))}.fl-deck-card-ticket{grid-column:1/-1}}
+@media(max-width:710px){.fl-deck-intro{display:block}.fl-deck-north{display:none}.fl-deck-cards{grid-template-columns:1fr}.fl-deck-card-ticket{grid-column:auto}.fl-deck-conditions,.fl-deck-bottom{display:block}.fl-deck-conditions a,.fl-deck-bottom a{display:inline-block;margin-top:10px}}
+@media(max-width:390px){.fl-deck{padding:14px;margin:14px 0 22px}.fl-deck-basis{padding:14px 2px}.fl-deck-card{padding:15px}.fl-deck-card-actions button,.fl-deck-card-actions a{flex:1 1 100%;text-align:center}}
+@media(prefers-reduced-motion:reduce){.fl-deck *{scroll-behavior:auto}}
