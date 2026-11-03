@@ -43,7 +43,9 @@
     const s=candidate.access?.state;
     return s==='after-hours'?'Not usable at this modeled time':
       s==='boundary'?'Sunset boundary · do not assume entry':
-      s==='time-unknown'?'Hours cannot be assessed':'Candidate · check launch-day conditions';
+      s==='time-unknown'?'Hours cannot be assessed':
+      candidate.forecast?.state==='hazard'?'Unfavorable conditions at nearest NWS forecast point':
+      'Candidate · check launch-day conditions';
   }
   function estimate(site,candidate){
     // Preference ranking is relative and editorial, never an access or visibility score.
@@ -61,7 +63,8 @@
     const selectedCanPlan=Boolean(state.data?.status==='candidate-review'&&scenario);
     if(selectedCanPlan){
       rows.sort((a,b)=>{
-        const bad=x=>DANGER.has(x.candidate?.access?.state)?1:0;
+        const bad=x=>DANGER.has(x.candidate?.access?.state)||
+          x.candidate?.forecast?.state==='hazard'?1:0;
         return bad(a)-bad(b)||estimate(b.site,b.candidate)-estimate(a.site,a.candidate)||
           a.site.name.localeCompare(b.site.name);
       });
@@ -181,7 +184,8 @@
     root.replaceChildren();
     const planning=state.data.status==='candidate-review'&&currentScenario();
     label('rl-vandenberg-count',rows.length+' documented locations');
-    const eligible=rows.filter(x=>x.candidate&&!DANGER.has(x.candidate.access?.state));
+    const eligible=rows.filter(x=>x.candidate&&!DANGER.has(x.candidate.access?.state)&&
+      x.candidate.forecast?.state!=='hazard');
     if(planning&&eligible.length){
       label('rl-vandenberg-headline','First to investigate: '+eligible[0].site.name);
       label('rl-vandenberg-explanation','Ranked for your selected preference and available nearby NWS reference sky cover. NOT a confirmed open or unobstructed viewing spot. Compare the reasons below, and check official restrictions before traveling.');
@@ -227,7 +231,8 @@
       two.appendChild(el('small','','NWS REFERENCE CLOUDS'));
       const forecast=candidate?.forecast;
       two.appendChild(el('strong','',forecast?.state==='reference-only'?
-        forecast.cloud+'% · '+site.reference.name:'Not verified for this time'));
+        forecast.cloud+'% · '+site.reference.name:
+        forecast?.state==='hazard'?'Unfavorable surface forecast':'Not verified for this time'));
       facts.appendChild(two);
       card.appendChild(facts);
       if(forecast?.state==='reference-only'){
