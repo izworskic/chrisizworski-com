@@ -39,6 +39,10 @@ function guidance(c,when){
  if(status==='research'||c.dataset.arrivalVerified!=='verified')return {excluded:true,notice:['Complete legal waterfall approach is not verified.'],level:'unverified'};
  if(status==='restricted')notice.push('Partial restrictions in the source record; check exactly which viewpoint is affected.');
  if(status==='seasonal')notice.push('Vehicle or foot access is seasonal. Opening today is not established.');
+ if(name==='gabbro-falls'){
+  notice.push('Gabbro is on Snowriver resort property. Confirm designated waterfall-visitor parking, non-guest terms and bridge-side footpath with the owner before traveling.');
+  if(month>=11||month<=4)notice.push('Snowriver ski-season operations do not certify winter waterfall pedestrian access; stay off active ski runs and unapproved service roads.');
+ }
  if(name==='scott-falls'){
   notice.push('The documented view is from the MDOT park side of busy M-28 ONLY. Do not cross the highway to the falls or use a shoulder turnout.');
  }
