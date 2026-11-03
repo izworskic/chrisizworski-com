@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "sourceOfTruth": "lib/vandenberg-viewing.js",
+  "geometryDisclosure": "OpenStreetMap feature centers, NOT parking entrances, public-access clearance, launch-pad locations, lines of sight or driving directions",
+  "places": [
+    {
+      "id": "ocean-park",
+      "name": "Ocean Beach Park",
+      "lat": 34.689528,
+      "lon": -120.5992314,
+      "kind": "park-sunset",
+      "pinLabel": "Coast park",
+      "scene": "Close coastal atmosphere after liftoff, no direct pad view. Small parking area; road can close once full.",
+      "accessNote": "Park open dawn to dusk. Parking fills, access road can be closed during launches; this is not a live opening report.",
+      "osm": "https://www.openstreetmap.org/way/44580742",
+      "source": "https://explorelompoc.com/best-places-to-view-a-rocket-launch-in-lompoc/",
+      "accessSource": "https://www.vandenberg.spaceforce.mil/About-Us/Environmental/",
+      "articleAnchor": "coast"
+    },
+    {
+      "id": "surf-station",
+      "name": "Surf Beach / Surf Station",
+      "lat": 34.6825853,
+      "lon": -120.6050676,
+      "kind": "surf-hours",
+      "pinLabel": "Beach access",
+      "scene": "Close to the launch complex when public beach access is available. Stay outside base boundaries and posted nesting closures.",
+      "accessNote": "Vandenberg lists Surf Beach 8 a.m.–6 p.m. daily, but flight operations and protected nesting areas may restrict access. Cross railroad tracks only at permitted crossings.",
+      "osm": "https://www.openstreetmap.org/node/1112397161",
+      "source": "https://explorelompoc.com/best-places-to-view-a-rocket-launch-in-lompoc/",
+      "accessSource": "https://www.vandenberg.spaceforce.mil/About-Us/Environmental/",
+      "articleAnchor": "surf-beach"
+    },
+    {
+      "id": "hancock",
+      "name": "Allan Hancock College — Lompoc",
+      "lat": 34.6793643,
+      "lon": -120.4645477,
+      "kind": "college",
+      "pinLabel": "College site",
+      "scene": "Partial view of the pad, where terrain allows, with room for a camera or binoculars.",
+      "accessNote": "Campus parking requires a permit during published enforcement periods; the college lists $2 daily parking permits. Campus availability for a particular launch has not been confirmed.",
+      "osm": "https://www.openstreetmap.org/way/549619442",
+      "source": "https://explorelompoc.com/best-places-to-view-a-rocket-launch-in-lompoc/",
+      "accessSource": "https://www.hancockcollege.edu/police/parking.php",
+      "articleAnchor": "hancock"
+    },
+    {
+      "id": "riverbend",
+      "name": "Riverbend Park",
+      "lat": 34.6675675,
+      "lon": -120.4466363,
+      "kind": "city-park",
+      "pinLabel": "Family park",
+      "scene": "Open sports fields and flexible family gathering space. The pad itself is not visible.",
+      "accessNote": "Weekend sports can fill parking. Park hours and event access are not verified for this launch.",
+      "osm": "https://www.openstreetmap.org/way/546639471",
+      "source": "https://www.cityoflompoc.com/Home/Components/FacilityDirectory/FacilityDirectory/98/242",
+      "accessSource": "https://explorelompoc.com/best-places-to-view-a-rocket-launch-in-lompoc/",
+      "articleAnchor": "riverbend"
+    },
+    {
+      "id": "beattie",
+      "name": "Beattie Park",
+      "lat": 34.631387,
+      "lon": -120.4430514,
+      "kind": "city-park",
+      "pinLabel": "Valley park",
+      "scene": "A broad park and elevated outlook over the valley; a convenient family-oriented option, not a confirmed pad sightline.",
+      "accessNote": "Some park areas are wooded or below the ridgeline. Public hours for this launch are not verified; follow posted rules.",
+      "osm": "https://www.openstreetmap.org/way/44580932",
+      "source": "https://www.cityoflompoc.com/Home/Components/FacilityDirectory/FacilityDirectory/91/109",
+      "accessSource": "https://explorelompoc.com/best-places-to-view-a-rocket-launch-in-lompoc/",
+      "articleAnchor": "city-parks"
+    },
+    {
+      "id": "ryon",
+      "name": "Ryon Memorial Park",
+      "lat": 34.6377533,
+      "lon": -120.4678383,
+      "kind": "city-park",
+      "pinLabel": "Town park",
+      "scene": "An easy downtown lawn and picnic option; rocket becomes visible after rising above terrain.",
+      "accessNote": "Park hours and launch-event access have not been verified; favor open lawns away from trees.",
+      "osm": "https://www.openstreetmap.org/way/29088644",
+      "source": "https://www.cityoflompoc.com/Home/Components/FacilityDirectory/FacilityDirectory/99/109",
+      "accessSource": "https://explorelompoc.com/best-places-to-view-a-rocket-launch-in-lompoc/",
+      "articleAnchor": "ryon"
+    }
+  ]
+}
