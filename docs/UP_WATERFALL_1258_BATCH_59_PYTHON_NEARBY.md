@@ -19,11 +19,11 @@ Existing catalog source review is dated November 2, 2026. This geographic index 
 
 ## Initial eligibility
 
-74 existing curated destinations; 68 meet the exact currently published visitor-arrival verified and non-closed criteria. Six are intentionally excluded: Munising Falls, Sandstone Falls, Lower Silver Falls, Silver River Falls, Twin Waterfalls Memorial Preserve, and Tahquamenon Falls. Tahquamenon has a separate comprehensive park planner but its hub arrival flag is "specialist", not verified within this same card contract. 94 additional unresolved GIS features remain geographic-only research, not suggestions.
+74 existing curated destinations; 68 meet the exact currently published visitor-arrival verified and non-closed criteria. Eight are intentionally excluded: Munising Falls, Sandstone Falls, Lower Silver Falls, Silver River Falls, Twin Waterfalls Memorial Preserve, Tahquamenon Falls, Scott Falls and Houghton-Douglass Falls. Tahquamenon has a separate comprehensive park planner but its hub arrival flag is "specialist", not verified within this same card contract. Scott Falls (MDOT park-side-only) and Houghton-Douglass Falls (unfinished overlook) remain intentionally explicit-search-only, matching the existing decision desk. 94 additional unresolved GIS features remain geographic-only research, not suggestions.
 
 ## Experience OS acceptance
 
-1. All 68 suggested stops must match a current curated card with documented verified arrival; no closed, research or unsupported parking locations.
+1. All 66 suggested stops must match a current curated card with documented verified arrival; no closed, research or unsupported parking locations.
 2. Each geodesic edge within 50 miles is deterministic and symmetric. Tests independently recompute distances to 0.051 mile tolerance.
 3. User can discover nearby source-reviewed destinations and move them into the existing map/shortlist without any invented route, parking coordinate or drive time.
 4. Responsive layout, contrast, keyboard focus and original evidence links remain visible.
