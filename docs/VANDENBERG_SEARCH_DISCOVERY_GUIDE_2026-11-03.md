@@ -78,3 +78,31 @@ impressions, CTR and average position of this article to the national launch
 engine, and measure the guide-to-planner click event rate. This is a true
 search-discovery test, not a promised ranking improvement. Use the site's
 existing daily Search Growth Watch rather than create a duplicate automation.
+
+## November 3 interactive map follow-up
+
+The search guide now contains the six-point Lompoc Viewing Atlas immediately
+below the direct-answer block. It is not an outbound map-only link and does
+not duplicate the mission-specific weather or launch API.
+
+- Run node scripts/export-vandenberg-guide-map.js --write to rebuild the
+  static same-origin map-data manifest from lib/vandenberg-viewing.js.
+- Run node scripts/export-vandenberg-guide-map.js --check in CI to reject
+  stale coordinates, venue notes and authoritative-source links.
+- OSM feature-center pins cover Ocean Beach Park, Surf Beach / Surf Station,
+  Allan Hancock College, Riverbend Park, Beattie Park and Ryon Memorial Park.
+  They are NOT mapped as verified entrances or parking spaces.
+- Click numbered pins or matching side cards to highlight each location and
+  display the exact access caveat and official/local venue-source link.
+- Coast and Town & Campus filters work without requesting new launch data.
+- CARTO Voyager uses the same /api/carto-basemap-config pattern as the
+  existing planner, with credited OpenStreetMap tile fallback.
+- No-script fallback and complete server-rendered original venue cards stay
+  available if the map library, manifest or tiles cannot load.
+- No launch pad, rocket trajectory, actual access GO, route or ETA is inferred.
+  Mission-specific bearings and delay gating remain in the live planner.
+- New GA4 event vandenberg_guide_map_site_select includes only an allowlisted
+  public venue identifier and explicit map/list interaction, not user GPS.
+
+Acceptance: node --test tests/vandenberg-guide-map.test.js, the existing SEO
+and source tests, full site verification, preview and production checks.
