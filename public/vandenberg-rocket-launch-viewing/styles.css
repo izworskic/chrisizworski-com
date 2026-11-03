@@ -182,18 +182,12 @@ img{max-width:100%}
 .vg-map-popup a{font-size:11px;font-weight:800}
 .vg-map-icon{border:0;background:transparent;filter:drop-shadow(0 3px 4px rgba(0,30,42,.25))}
 .vg-map-icon span{display:flex;align-items:center;justify-content:center;position:relative;width:34px;height:34px;border-radius:50% 50% 50% 4px;transform:rotate(-45deg);border:2px solid #fff;background:#176a78;color:transparent;box-shadow:0 0 0 1px #155266}
-.vg-map-icon span:after{content:attr(data-num)}
-.vg-map-icon span::first-letter{color:white}
 .vg-map-icon-coast span{background:#c46a35;box-shadow:0 0 0 1px #a6572d}
 .vg-map-icon span{font-weight:900;font-size:13px;color:#fff}
 .vg-map-icon span{line-height:1}
-.vg-map-icon span::before{content:''}
 .vg-map-icon span{transform:rotate(-45deg)}
-.vg-map-icon span{writing-mode:horizontal-tb}
-.vg-map-icon span{font-variant-numeric:tabular-nums}
-.vg-map-icon span{letter-spacing:0}
-.vg-map-icon span{font-feature-settings:"tnum"}
 .vg-map-icon span{box-shadow:0 0 0 1px #f8ffff,0 3px 7px #153c46a6}
+.vg-map-icon span b{display:block;font-size:13px;font-weight:900;line-height:1;transform:rotate(45deg);font-variant-numeric:tabular-nums}
 .vg-map-icon span{transition:scale .13s ease}
 .vg-map-pin-selected span{scale:1.18;outline:3px solid #f3c98e;outline-offset:2px}
 .vg-map-after{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-top:14px;padding:18px 20px;background:#f7ede2;border-left:4px solid #c16b40;border-radius:9px}
