@@ -1,0 +1,234 @@
+{
+  "schema": "garden-pest-visual-evidence-v1",
+  "updated": "2026-11-03",
+  "disclaimer": "Photographs are comparisons, not diagnoses or verified local detections. Some photos illustrate the injury type rather than the exact Michigan species.",
+  "clues": [
+    {
+      "id": "frass",
+      "label": "Sawdust-like frass at a stem"
+    },
+    {
+      "id": "wilt",
+      "label": "Sudden wilting"
+    },
+    {
+      "id": "eggs-nymphs",
+      "label": "Eggs or groups of tiny bugs"
+    },
+    {
+      "id": "shot-holes",
+      "label": "Many tiny round holes"
+    },
+    {
+      "id": "ragged-holes",
+      "label": "Large irregular leaf holes"
+    },
+    {
+      "id": "stripped-stems",
+      "label": "Leaves stripped from stems"
+    },
+    {
+      "id": "skeletonized",
+      "label": "Lacy or skeletonized leaves"
+    },
+    {
+      "id": "visible-beetles",
+      "label": "Beetles or larvae feeding"
+    }
+  ],
+  "pests": [
+    {
+      "id": "squash-vine-borer",
+      "name": "Squash vine borer",
+      "crops": [
+        "squash"
+      ],
+      "clues": [
+        "frass",
+        "wilt"
+      ],
+      "diagnostic": "Check the stem base for tan frass or tunneling. Wilting alone may be drought or root trouble.",
+      "lookalike": "Drought stress, bacterial wilt and root injury can also make squash wilt.",
+      "pest": {
+        "file": "Squash vine borer moth (27454889736).jpg",
+        "author": "Melissa McMasters",
+        "license": "CC BY 2.0",
+        "alt": "Orange-and-black adult squash vine borer moth on vegetation",
+        "caption": "Adult moth; look for the orange abdomen and clearwing-moth shape."
+      },
+      "damage": {
+        "file": "SquashVineBorer LarvalPhase ZuchiniPlant.jpg",
+        "author": "Massiv99",
+        "license": "CC0 1.0",
+        "alt": "Cut-open zucchini stem revealing pale squash vine borer larva and tunnel",
+        "caption": "Inside-stem evidence: a pale larva and damaged stem tissues, not a wilt diagnosis by itself."
+      }
+    },
+    {
+      "id": "squash-bug",
+      "name": "Squash bug",
+      "crops": [
+        "squash"
+      ],
+      "clues": [
+        "eggs-nymphs",
+        "wilt"
+      ],
+      "diagnostic": "Look on lower leaf surfaces and near stems for coppery eggs or clusters of gray nymphs; feeding can cause localized collapse.",
+      "lookalike": "Squash vine borer can also cause wilting; look for frass at the stem rather than bug clusters.",
+      "pest": {
+        "file": "Squash bug adult.jpg",
+        "author": "Downtowngal",
+        "license": "CC0 1.0",
+        "alt": "Brown adult squash bug seen from above",
+        "caption": "Adult squash bug; note the flattened brown body."
+      },
+      "damage": {
+        "file": "Anasa nymphs on stem of a squash plant in garden.jpg",
+        "author": "Mordekai99",
+        "license": "CC BY-SA 4.0",
+        "alt": "Cluster of young squash bug nymphs on zucchini stem",
+        "caption": "Early field clue: young squash bug nymphs, not a photograph of damaged tissue."
+      }
+    },
+    {
+      "id": "flea-beetles",
+      "name": "Flea beetles",
+      "crops": [
+        "brassicas",
+        "potatoes",
+        "eggplant"
+      ],
+      "clues": [
+        "shot-holes"
+      ],
+      "diagnostic": "Small jumping beetles and numerous pinholes on tender leaves are a characteristic combination.",
+      "lookalike": "Caterpillars also make holes, often larger and more irregular; holes alone cannot identify the feeder.",
+      "pest": {
+        "file": "Flea Beetle.jpg",
+        "author": "Sangeetha N shet",
+        "license": "CC BY 4.0",
+        "alt": "Small dark flea beetle macro photograph",
+        "caption": "Illustrative flea beetle; this photograph need not be the species on your crop."
+      },
+      "damage": {
+        "file": "Beta vulgaris Rübenerdfloh-Chaetocnema-2-Josef Schlaghecken.jpg",
+        "author": "Schlaghecken Josef",
+        "license": "CC BY 4.0",
+        "alt": "Beet leaf with tiny shot-hole injury from a Chaetocnema flea beetle",
+        "caption": "Illustrative shot-hole feeding on beet leaves; this is not a Michigan crop-specific species confirmation."
+      }
+    },
+    {
+      "id": "cabbage-caterpillars",
+      "name": "Cabbageworms and loopers",
+      "crops": [
+        "brassicas"
+      ],
+      "clues": [
+        "ragged-holes"
+      ],
+      "diagnostic": "Turn leaves over for caterpillars, dark frass and irregular chewing; photos show imported cabbageworm, one of several possible caterpillars.",
+      "lookalike": "Flea beetles make smaller shot-holes. Slugs may cause ragged holes and leave slime.",
+      "pest": {
+        "file": "Pieris Rapae caterpillar.jpg",
+        "author": "Boyana.kjfg",
+        "license": "CC BY 4.0",
+        "alt": "Green imported cabbageworm caterpillar on cabbage",
+        "caption": "Imported cabbageworm, one of the caterpillars covered in this watch."
+      },
+      "damage": {
+        "file": "Brokkoli Cabbage white, Fraßschaden des Kleinen Kohlweißlings. Whitney Cranshaw, Colorado State University, Bugwood.org.jpg",
+        "author": "Whitney Cranshaw, Colorado State University, Bugwood.org",
+        "license": "CC BY 4.0",
+        "alt": "Broccoli leaves with large caterpillar feeding holes",
+        "caption": "Chewed broccoli leaves attributed by the source to imported cabbageworm."
+      }
+    },
+    {
+      "id": "tomato-hornworm",
+      "name": "Tomato hornworm",
+      "crops": [
+        "tomatoes"
+      ],
+      "clues": [
+        "stripped-stems",
+        "ragged-holes"
+      ],
+      "diagnostic": "Look high on tomatoes for missing leaflets, dark droppings and a large green caterpillar; tobacco hornworms can cause very similar injury.",
+      "lookalike": "Tobacco hornworm is a close lookalike and also feeds on tomatoes. Do not diagnose species from damaged leaves alone.",
+      "pest": {
+        "file": "Tomato hornworm in garden.jpg",
+        "author": "Geo Lightspeed7",
+        "license": "CC BY-SA 4.0",
+        "alt": "Green tomato hornworm caterpillar eating a tomato plant",
+        "caption": "Large green hornworm in a home tomato garden."
+      },
+      "damage": {
+        "file": "Tomato Hornworm eating tomato plant.jpg",
+        "author": "Ljessee123",
+        "license": "CC BY-SA 4.0",
+        "alt": "Hornworm on partly defoliated tomato plant",
+        "caption": "Hornworm feeding and associated missing tomato foliage; assess the full plant before acting."
+      }
+    },
+    {
+      "id": "colorado-potato-beetle",
+      "name": "Colorado potato beetle",
+      "crops": [
+        "potatoes",
+        "eggplant"
+      ],
+      "clues": [
+        "visible-beetles",
+        "ragged-holes"
+      ],
+      "diagnostic": "Inspect potatoes and eggplants for striped adults, orange eggs and reddish larvae that chew foliage.",
+      "lookalike": "Three-lined potato beetles and other leaf feeders may be confused at a glance; confirm body markings.",
+      "pest": {
+        "file": "Imago of Colorado potato beetle on leaf.jpg",
+        "author": "Adámozphoto",
+        "license": "CC BY-SA 4.0",
+        "alt": "Yellow striped adult Colorado potato beetle on a leaf",
+        "caption": "Adult beetle with distinctive dark stripes."
+      },
+      "damage": {
+        "file": "Colorado potato beetle larvas (Leptinotarsa decemlineata).jpg",
+        "author": "Tavo Romann",
+        "license": "CC BY 4.0",
+        "alt": "Colorado potato beetle larvae actively chewing potato leaves",
+        "caption": "Larvae feeding on potato foliage; look for irregular losses along leaf edges."
+      }
+    },
+    {
+      "id": "japanese-beetle",
+      "name": "Japanese beetle",
+      "crops": [
+        "beans",
+        "berries",
+        "grapes",
+        "roses"
+      ],
+      "clues": [
+        "skeletonized",
+        "visible-beetles"
+      ],
+      "diagnostic": "Check for metallic-green adults with copper-brown wing covers near lacy leaf skeletonization. Similar injury can have other causes.",
+      "lookalike": "Other chewing insects can skeletonize leaves; verify the adult before choosing a response.",
+      "pest": {
+        "file": "Japanese Beetle (Popillia japonica).jpg",
+        "author": "Ryan Hodnett",
+        "license": "CC BY-SA 4.0",
+        "alt": "Metallic green Japanese beetle with copper wing covers",
+        "caption": "Adult Japanese beetle; photograph is not a Michigan sighting."
+      },
+      "damage": {
+        "file": "Japanese beetle damage to a rose leaf.JPG",
+        "author": "SB_Johnny",
+        "license": "CC BY-SA 3.0",
+        "alt": "Rose leaf with lacy skeletonized feeding injury attributed to Japanese beetles",
+        "caption": "Rose leaf skeletonization; photo does not prove beetles are currently present."
+      }
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+name: Garden pest photo evidence
+on:
+  push:
+    paths:
+      - 'data/garden-pest-visual-catalog.json'
+      - 'public/assets/garden-pest-visual*'
+      - 'public/assets/garden-pest-watch.*'
+      - 'public/michigan-garden-pest-watch/index.html'
+      - 'scripts/build_garden_pest_visuals.py'
+      - 'scripts/verify-garden-pest-visuals.cjs'
+      - '.github/workflows/garden-pest-visuals.yml'
+  pull_request:
+    paths:
+      - 'data/garden-pest-visual-catalog.json'
+      - 'public/assets/garden-pest-visual*'
+      - 'public/assets/garden-pest-watch.*'
+      - 'public/michigan-garden-pest-watch/index.html'
+      - 'scripts/build_garden_pest_visuals.py'
+      - 'scripts/verify-garden-pest-visuals.cjs'
+      - '.github/workflows/garden-pest-visuals.yml'
+jobs:
+  evidence-and-syntax:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate curated photos and Python matching rules
+        run: python3 scripts/build_garden_pest_visuals.py --check
+      - name: Verify JavaScript syntax and page integration
+        run: |
+          node --check public/assets/garden-pest-visual-data.js
+          node --check public/assets/garden-pest-visuals.js
+          node --check public/assets/garden-pest-watch.js
+          node scripts/verify-garden-pest-visuals.cjs

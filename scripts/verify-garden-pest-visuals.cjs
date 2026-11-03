@@ -1,0 +1,34 @@
+'use strict';
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const vm=require('node:vm');
+const path=require('node:path');
+const root=path.resolve(__dirname,'..');
+const read=p=>fs.readFileSync(path.join(root,p),'utf8');
+const manifest=JSON.parse(read('data/garden-pest-visual-catalog.json'));
+const scope={window:{}};
+vm.runInNewContext(read('public/assets/garden-pest-visual-data.js'),scope,{timeout:1000});
+assert.deepEqual(JSON.parse(JSON.stringify(scope.window.GardenPestVisualCatalog)),manifest);
+const page=read('public/michigan-garden-pest-watch/index.html');
+const core=read('public/assets/garden-pest-watch.js');
+const ui=read('public/assets/garden-pest-visuals.js');
+const engine=read('lib/garden-pest-watch.cjs');
+assert.ok(page.includes('id="visual-diagnosis"'));
+assert.ok(page.includes('id="visual-clues"'));
+assert.ok(page.includes('id="visual-results"'));
+assert.ok(page.indexOf('garden-pest-visual-data.js')<page.indexOf('garden-pest-visuals.js'));
+assert.ok(page.indexOf('garden-pest-visuals.js')<page.indexOf('garden-pest-watch.js'));
+assert.match(core,/GardenPestVisuals\?\.renderPair/);
+assert.match(ui,/aria-pressed/);
+assert.match(ui,/Photograph unavailable/);
+assert.match(ui,/possible visual matches, never a diagnosis/);
+assert.match(ui,/encodeURIComponent\(photo\.file\)/);
+assert.match(ui,/photo\.license/);
+for(const item of manifest.pests){
+ assert.ok(engine.includes("id:'"+item.id+"'"),'missing core pest '+item.id);
+ assert.notEqual(item.pest.file,item.damage.file);
+ assert.ok(item.pest.alt.length>20 && item.damage.alt.length>20);
+ assert.ok(item.pest.author && item.damage.author);
+}
+assert.ok(page.includes('https://commons.wikimedia.org/wiki/File:SquashVineBorer_LarvalPhase_ZuchiniPlant.jpg'));
+console.log('Garden pest photo contract PASS: source manifest, photo credits, fallback, host integration and all '+manifest.pests.length+' pest IDs.');

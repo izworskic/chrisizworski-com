@@ -1,0 +1,9 @@
+# Garden Pest Watch visual identification and Python evidence build
+
+- Source of truth: `data/garden-pest-visual-catalog.json`. Curated Wikimedia Commons files with per-image attribution and license, reviewed November 3, 2026. Wikimedia image licenses are not interchangeable with extension-page prose or the rest of the site.
+- Build command: `python3 scripts/build_garden_pest_visuals.py`. Verify: `python3 scripts/build_garden_pest_visuals.py --check`. The script checks photo metadata, identifiers, allowed licenses, and symptom-matching invariants, and writes `public/assets/garden-pest-visual-data.js`.
+- Runtime remains Vercel Node/JavaScript, preserving existing crop-stage/weather evidence, Japanese beetle official model, historical Daymet lab, URLs, analytics, and SEO. Python here is an offline compiler and science/data-quality harness, not a claim of new pest emergence modeling.
+- Images load from Wikimedia Commons Special:FilePath URLs at requested sizes. If external media fail, the UI must show a readable failure state with a link to its source photo; never replace failed images with an AI-generated imitation.
+- No photograph is a current Michigan garden detection. Illustrated damage alone does not identify a pest. The squash-bug second photo is nymphs (an early clue), not leaf damage; the flea-beetle damage photo is on beets and illustrates the injury pattern, not a claim about a particular Michigan species.
+- Symptom ranking is an exact overlap of selected visible clues and verified crop host relationships. It is **comparison ordering only**, not a diagnosis, infestation probability, or treatment instruction.
+- Next photo batches must meet the same verified license, identification, and accurate-pest-versus-damage-caption standards. Add your own original garden photography only after confirming crop, species, provenance, and permission.

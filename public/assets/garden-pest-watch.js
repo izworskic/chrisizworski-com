@@ -86,6 +86,8 @@ function card(p,i){
  const article=el('article','watch-card'+(p.weatherFavorable?' weather-relevant':''));
  const first=el('span','pest-index',String(i+1).padStart(2,'0')+' / GARDEN FIELD NOTE');article.append(first);
  article.append(el('h3','',p.name));
+ const photoPair=window.GardenPestVisuals?.renderPair?.(p.id,true);
+ if(photoPair)article.append(photoPair);
  article.append(el('span','pest-status',p.label));
  const main=el('p','field-task',p.where);article.append(main);
  const details=el('dl');
