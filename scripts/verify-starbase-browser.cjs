@@ -90,11 +90,11 @@ async function waitReady(page){
    assert((await page.locator('#sb-access-note').innerText()).includes('NOT an authorized launch'),v.name+' no beach-open implication');
    assert(await page.locator('#sb-map .sb-restricted-pin').count()===1,v.name+' restricted pad symbol');
    assert((await page.locator('#sb-selected-geometry').innerText()).includes('straight line'),v.name+' geometry qualifier');
-   await page.locator('input[value="no-causeway"]').check();
+   await page.locator('label:has(input[value="no-causeway"]) span').click();
    assert((await page.locator('#sb-selected-name').innerText()).includes('Zapata'),v.name+' mainland persona');
    await page.locator('[data-site-select="lighthouse"]').click();
    assert((await page.locator('#sb-selected-name').innerText()).includes('Lighthouse'),v.name+' map-card selection');
-   await page.locator('input[value="first-time"]').check();
+   await page.locator('label:has(input[value="first-time"]) span').click();
    assert((await page.locator('#sb-selected-name').innerText()).includes('Isla Blanca'),v.name+' restore first-time');
    await page.locator('#sb-mission-picker').selectOption(B);
    await page.waitForFunction(id=>new URL(location.href).searchParams.get('launchId')===id,B);
