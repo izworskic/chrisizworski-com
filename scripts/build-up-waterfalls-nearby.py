@@ -23,6 +23,8 @@ OUTPUT = ROOT / "public/assets/up-waterfalls-nearby.json"
 RADIUS_MILES = 50
 EARTH_RADIUS_MILES = 3958.7613
 ELIGIBLE_STATUSES = frozenset({"verify", "seasonal", "restricted"})
+# Existing visitor decision desk treats these as explicit-search-only, not casual recommendations.
+EXPLICIT_ONLY = frozenset({"scott-falls", "houghton-douglass-falls"})
 
 
 class CuratedCards(HTMLParser):
@@ -69,7 +71,7 @@ def build():
         assert abs(lat - row["lat"]) < 0.00001 and abs(lng - row["lng"]) < 0.00001, f"map/source drift: {ident}"
         assert card["data-status"] == row["status"], f"access status drift: {ident}"
         arrival = card.get("data-arrival-verified")
-        if arrival != "verified" or row["status"] not in ELIGIBLE_STATUSES:
+        if arrival != "verified" or row["status"] not in ELIGIBLE_STATUSES or ident in EXPLICIT_ONLY:
             excluded.append(ident)
             continue
         url = card["data-url"]
