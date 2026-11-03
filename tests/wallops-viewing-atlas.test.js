@@ -109,7 +109,7 @@ test('published Wallops page has one canonical, static source links and no launc
  assert.equal((page.match(/rel="canonical"/g)||[]).length,1);
  assert.match(page,/https:\/\/chrisizworski\.com\/wallops-rocket-launch-viewing\//);
  assert.match(page,/No invented launch countdown/);
- assert.match(page,/No upcoming mission in the bounded third-party feed/);
+ assert.match(page,/A quiet public calendar is not a quiet launch range/);
  assert.match(page,/data-place="nasa-visitor"/);
  assert.match(page,/data-place="reed"/);
  assert.match(page,/data-place="harbor"/);
