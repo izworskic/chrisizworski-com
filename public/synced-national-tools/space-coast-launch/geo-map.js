@@ -913,6 +913,21 @@
         ' mapped land features; exact barricades and beach polygons unknown.' :
       'No source-verified new closure boundaries; walkability unverified.'));
   }
+  // The 30-second pad-to-shore desk focuses this same evidence-backed GIS.
+  // Do not accept arbitrary pad coordinates, a restricted facility, or a
+  // fabricated route from a page event. Only known mapped public reference
+  // sites and the official visitor-complex arrival entrance can be focused.
+  document.addEventListener('space-coast:focus-point',event=>{
+    const id=event.detail?.id;
+    const point=current?.points?.find(p=>p.id===id);
+    if(!point || !['public-viewpoint','ticketed-entry'].includes(point.category) ||
+       !['site-reference','verified-public-entrance'].includes(point.coordinateRole) ||
+       ['closed','ineligible'].includes(point.level)) return;
+    focusPoint(id,true);
+    const target=$('launch-geography');
+    if(target)target.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?
+      'auto':'smooth',block:'start'});
+  });
   updateExplanation();
   document.addEventListener('space-coast:launch-loaded',event=>{
     const d=event.detail;
