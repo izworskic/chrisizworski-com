@@ -149,7 +149,7 @@
     // The only HTML inserted into the Leaflet icon is our own numeric index.
     const icon=window.L.divIcon({
       className:'vg-map-icon vg-map-icon-'+kind(p),
-      html:'<span aria-hidden="true">'+symbol+'</span>',
+      html:'<span aria-hidden="true"><b>'+symbol+'</b></span>',
       iconSize:[34,39],iconAnchor:[17,37],popupAnchor:[0,-38]
     });
     const marker=window.L.marker([p.lat,p.lon],{
