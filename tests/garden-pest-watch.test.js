@@ -39,6 +39,16 @@ test('November Michigan garden never claims active summer pests',()=>{
   assert.ok(d.featured.every(p=>p.biologicalForecast==='UNAVAILABLE'));
  }
 });
+test('dormant watch cards prioritize the crop’s major preparation topics, not alphabetical labels',()=>{
+ const squash=select('squash',11);
+ const ids=squash.featured.map(p=>p.id);
+ assert.ok(ids.includes('squash-vine-borer'),'Squash vine borer must appear with the next-season squash assignment');
+ assert.ok(ids.includes('squash-bug'),'Squash bug must appear with the next-season squash assignment');
+ assert.ok(squash.featured.every(p=>p.weatherFavorable===false));
+ const suspected=select('squash',11,'growing',{observed:'aphids'});
+ assert.equal(suspected.featured[0].id,'aphids','A visitor-reported suspect overrides editorial season priorities but remains unverified');
+ assert.equal(suspected.featured[0].verifiedLocalOccurrence,false);
+});
 test('off-season plans differ by host crop and a reported clue is investigated without asserting emergence',()=>{
  const squash=select('squash',11,'growing'),grapes=select('grapes',11,'growing');
  assert.notEqual(squash.firstAction,grapes.firstAction);
