@@ -13,36 +13,36 @@
     {
       "batchNumber": 1,
       "candidates": [
-        213,
-        68,
         12,
         191,
         192,
+        213,
         46,
         91,
-        119
+        119,
+        190
       ]
     },
     {
       "batchNumber": 2,
       "candidates": [
-        190,
         45,
         150,
         151,
         154,
         160,
         215,
-        195
+        195,
+        205
       ]
     },
     {
       "batchNumber": 3,
       "candidates": [
-        205,
         51,
         52,
         59,
+        68,
         83,
         99,
         103,
@@ -167,38 +167,6 @@
   ],
   "candidates": [
     {
-      "gisObjectId": 213,
-      "name": "Alger Falls",
-      "county": "ALGER",
-      "river": "ALGER CREEK",
-      "lat": 46.393128,
-      "lng": -86.647625,
-      "cluster": "ALGER / ALGER CREEK",
-      "priorityScore": 40,
-      "priorityReason": "Partial evidence already exists: finish owner, legal route and current parking verification",
-      "reviewStage": "incomplete-source-audit",
-      "publicationEligible": false,
-      "reviewStatus": "previous-research-needs-public-access-review",
-      "sourceCount": 3,
-      "blockingGate": "Obtain current MDOT road safety/designated parking and pedestrian access confirmation; municipal planning documents currently state no safe parking. Remain nonindexable; geographic point only."
-    },
-    {
-      "gisObjectId": 68,
-      "name": "Upper Silver Falls",
-      "county": "BARAGA",
-      "river": "SILVER RIVER",
-      "lat": 46.681143,
-      "lng": -88.329766,
-      "cluster": "BARAGA / SILVER RIVER",
-      "priorityScore": 35,
-      "priorityReason": "Partial evidence already exists: finish owner, legal route and current parking verification",
-      "reviewStage": "incomplete-source-audit",
-      "publicationEligible": false,
-      "reviewStatus": "previous-research-needs-public-access-review",
-      "sourceCount": 3,
-      "blockingGate": "Determine actual GIS #68 watercourse location and whether separate upstream feature, duplicate/misplaced point or unrelated named falls. No name-only parent-child matching."
-    },
-    {
       "gisObjectId": 12,
       "name": "Chicagon Falls",
       "county": "IRON",
@@ -245,6 +213,22 @@
       "reviewStatus": "previous-research-needs-public-access-review",
       "sourceCount": 10,
       "blockingGate": "Do not publish visitor route. Need present-day signed written authorization from the current OWNER of each separate upper/lower falls parking and walking parcel, lawful Power Dam Road arrival/gate and continuous pedestrian route, PLUS EGLE order status and documented visitor exclusion/allowed corridor. Check whether June 2026 posted no-trespassing report is still in force; independent review alone does not prove both falls closed. Confirm later EGLE plan/permit/closure restrictions and dam safety notices. No geometry or car link to GIS #192."
+    },
+    {
+      "gisObjectId": 213,
+      "name": "Alger Falls",
+      "county": "ALGER",
+      "river": "ALGER CREEK",
+      "lat": 46.393128,
+      "lng": -86.647625,
+      "cluster": "ALGER / ALGER CREEK",
+      "priorityScore": -29,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 5,
+      "blockingGate": "Require current MDOT site-specific safety determination and certified legal visitor arrival/overlook, resolving the city/county no-safe-parking warning. Do not substitute general shoulder rules or tourist turnout advice."
     },
     {
       "gisObjectId": 46,
@@ -485,6 +469,22 @@
       "reviewStatus": "previous-research-needs-public-access-review",
       "sourceCount": 5,
       "blockingGate": "Verify current road commission legal pull-off/parking and signage at Baraga Plains Road, exact public parcel and authorized dry creek-side viewpoint, reconcile both falls coordinates/features, inspect seasonal road conditions and creek safety."
+    },
+    {
+      "gisObjectId": 68,
+      "name": "Upper Silver Falls",
+      "county": "BARAGA",
+      "river": "SILVER RIVER",
+      "lat": 46.681143,
+      "lng": -88.329766,
+      "cluster": "BARAGA / SILVER RIVER",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 6,
+      "blockingGate": "Find current parcel owner/land manager and formal permission for the full parking-to-Herman waterfall walk, safe signed legal parking, current road/season rules; keep lower picnic chute separate."
     },
     {
       "gisObjectId": 83,

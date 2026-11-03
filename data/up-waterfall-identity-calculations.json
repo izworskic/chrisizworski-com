@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "reviewed": "2026-11-03",
+  "source": "data/up-waterfall-identity-evidence.json",
+  "method": "Haversine geodesic coordinate comparisons, no route or ownership inference",
+  "policy": "Geographic comparison only. No coordinate, nearby road, tourism listing, name similarity or distance establishes landowner permission, legal parking, trail access, current opening or visitor directions.",
+  "clusters": [
+    {
+      "slug": "upper-silver",
+      "label": "Upper Silver Falls near Herman",
+      "identityClassification": "geographic-corroboration-only",
+      "landmarkIds": [
+        68,
+        110
+      ],
+      "findings": "Michigan GIS #68 agrees with two independent waterfall-coordinate sources near Herman. It is about 12.4 km south of the distinct lower Silver picnic falls #110. The rough informal upstream path near the lower picnic area is NOT the #68 Herman waterfall. Property title, access permission and visitor parking are not verified.",
+      "pairs": [
+        {
+          "left": "gis-upper-silver-68",
+          "right": "field-herman-upper-silver",
+          "straightLineMeters": 150.7
+        },
+        {
+          "left": "gis-upper-silver-68",
+          "right": "secondary-upper-silver",
+          "straightLineMeters": 121
+        },
+        {
+          "left": "gis-upper-silver-68",
+          "right": "gis-lower-silver-110",
+          "straightLineMeters": 12409.9
+        }
+      ],
+      "publicRouteCleared": false,
+      "parkingVerified": false,
+      "publicationEligible": false
+    },
+    {
+      "slug": "mill-pond",
+      "label": "Mill Pond Falls name cluster, Sundholm Creek",
+      "identityClassification": "identity-not-reconciled",
+      "landmarkIds": [
+        8
+      ],
+      "findings": "The three points are distinct geographic labels in approximately one kilometer, not established aliases, trail stops or three separately confirmed public waterfalls. GNIS-derived secondary coordinates are research evidence only; consult original GNIS records before treating identities as resolved.",
+      "pairs": [
+        {
+          "left": "gis-mill-8",
+          "right": "gnis-upper-mill",
+          "straightLineMeters": 496.4
+        },
+        {
+          "left": "gis-mill-8",
+          "right": "gnis-lower-mill",
+          "straightLineMeters": 884.2
+        },
+        {
+          "left": "gnis-upper-mill",
+          "right": "gnis-lower-mill",
+          "straightLineMeters": 387.8
+        }
+      ],
+      "publicRouteCleared": false,
+      "parkingVerified": false,
+      "publicationEligible": false
+    },
+    {
+      "slug": "alger",
+      "label": "Alger Falls near M-28/M-94",
+      "identityClassification": "documented-roadside-visibility-not-safe-arrival",
+      "landmarkIds": [
+        213
+      ],
+      "findings": "The adopted City of Munising 2024-2028 recreation plan and Alger County recreation inventory state that no safe parking options were available when reviewed. Secondary advice to use a highway turnout or cross a guardrail is not an MDOT site-specific safety authorization. Current MDOT designated stopping, pedestrian path and land tenure remain unverified.",
+      "pairs": [
+        {
+          "left": "gis-alger-213",
+          "right": "field-alger",
+          "straightLineMeters": 42.3
+        }
+      ],
+      "publicRouteCleared": false,
+      "parkingVerified": false,
+      "publicationEligible": false
+    }
+  ]
+}

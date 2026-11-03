@@ -1,0 +1,159 @@
+{
+  "schemaVersion": 1,
+  "reviewed": "2026-11-03",
+  "policy": "Geographic comparison only. No coordinate, nearby road, tourism listing, name similarity or distance establishes landowner permission, legal parking, trail access, current opening or visitor directions.",
+  "landmarkSources": {
+    "michigan": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+    "algerCity": "https://cityofmunising.org/wp-content/uploads/Munising_RecPlan_Adopted_2024.pdf",
+    "algerCounty": "https://cms2.revize.com/revize/algercounty/document_center/Dashboard/Plans/Alger%20County%205-Year%20Recreation%20Plan%202024-2029%20%28final%29.pdf",
+    "mdotFAQ": "https://www.michigan.gov/mdot/about/faqs/general/common",
+    "upperSilverField": "https://www.waterfallsofthekeweenaw.com/silver-river/upper-silver-falls/",
+    "upperSilverSecond": "https://waterfallhikes.com/waterfalls/upper-silver-falls-near-l-anse-in-mi",
+    "silverPicnic": "https://upperpeninsulawaterfalls.com/baraga-county-waterfalls/silver-falls-lower.html",
+    "millUpper": "https://www.anyplaceamerica.com/directory/mi/dickinson-county-26043/falls/upper-mill-pond-falls-2128902/",
+    "millLower": "https://www.anyplaceamerica.com/directory/mi/dickinson-county-26043/falls/lower-mill-pond-falls-2128901/",
+    "algerField": "https://myhikes.org/trails/alger-falls"
+  },
+  "clusters": [
+    {
+      "slug": "upper-silver",
+      "label": "Upper Silver Falls near Herman",
+      "gisObjectIds": [
+        68,
+        110
+      ],
+      "status": "geographic-corroboration-only",
+      "note": "Michigan GIS #68 agrees with two independent waterfall-coordinate sources near Herman. It is about 12.4 km south of the distinct lower Silver picnic falls #110. The rough informal upstream path near the lower picnic area is NOT the #68 Herman waterfall. Property title, access permission and visitor parking are not verified.",
+      "points": [
+        {
+          "id": "gis-upper-silver-68",
+          "kind": "state-gis",
+          "name": "Upper Silver Falls (GIS #68)",
+          "lat": 46.681143,
+          "lng": -88.329766,
+          "sourceKey": "michigan"
+        },
+        {
+          "id": "field-herman-upper-silver",
+          "kind": "independent-field",
+          "name": "Upper Silver Falls near Herman, field survey",
+          "lat": 46.67981,
+          "lng": -88.33012,
+          "sourceKey": "upperSilverField"
+        },
+        {
+          "id": "secondary-upper-silver",
+          "kind": "independent-secondary",
+          "name": "Upper Silver Falls near Herman, second record",
+          "lat": 46.682216,
+          "lng": -88.3295,
+          "sourceKey": "upperSilverSecond"
+        },
+        {
+          "id": "gis-lower-silver-110",
+          "kind": "state-gis",
+          "name": "Lower Silver Falls picnic site (GIS #110)",
+          "lat": 46.792674,
+          "lng": -88.335692,
+          "sourceKey": "michigan"
+        }
+      ],
+      "pairs": [
+        [
+          "gis-upper-silver-68",
+          "field-herman-upper-silver"
+        ],
+        [
+          "gis-upper-silver-68",
+          "secondary-upper-silver"
+        ],
+        [
+          "gis-upper-silver-68",
+          "gis-lower-silver-110"
+        ]
+      ]
+    },
+    {
+      "slug": "mill-pond",
+      "label": "Mill Pond Falls name cluster, Sundholm Creek",
+      "gisObjectIds": [
+        8
+      ],
+      "status": "identity-not-reconciled",
+      "note": "The three points are distinct geographic labels in approximately one kilometer, not established aliases, trail stops or three separately confirmed public waterfalls. GNIS-derived secondary coordinates are research evidence only; consult original GNIS records before treating identities as resolved.",
+      "points": [
+        {
+          "id": "gis-mill-8",
+          "kind": "state-gis",
+          "name": "Mill Pond Falls (GIS #8)",
+          "lat": 45.98889,
+          "lng": -87.854767,
+          "sourceKey": "michigan"
+        },
+        {
+          "id": "gnis-upper-mill",
+          "kind": "gnis-derived-secondary",
+          "name": "Upper Mill Pond Falls, GNIS-derived",
+          "lat": 45.9863889,
+          "lng": -87.8494444,
+          "sourceKey": "millUpper"
+        },
+        {
+          "id": "gnis-lower-mill",
+          "kind": "gnis-derived-secondary",
+          "name": "Lower Mill Pond Falls, GNIS-derived",
+          "lat": 45.9844444,
+          "lng": -87.8452778,
+          "sourceKey": "millLower"
+        }
+      ],
+      "pairs": [
+        [
+          "gis-mill-8",
+          "gnis-upper-mill"
+        ],
+        [
+          "gis-mill-8",
+          "gnis-lower-mill"
+        ],
+        [
+          "gnis-upper-mill",
+          "gnis-lower-mill"
+        ]
+      ]
+    },
+    {
+      "slug": "alger",
+      "label": "Alger Falls near M-28/M-94",
+      "gisObjectIds": [
+        213
+      ],
+      "status": "documented-roadside-visibility-not-safe-arrival",
+      "note": "The adopted City of Munising 2024-2028 recreation plan and Alger County recreation inventory state that no safe parking options were available when reviewed. Secondary advice to use a highway turnout or cross a guardrail is not an MDOT site-specific safety authorization. Current MDOT designated stopping, pedestrian path and land tenure remain unverified.",
+      "points": [
+        {
+          "id": "gis-alger-213",
+          "kind": "state-gis",
+          "name": "Alger Falls (GIS #213)",
+          "lat": 46.393128,
+          "lng": -86.647625,
+          "sourceKey": "michigan"
+        },
+        {
+          "id": "field-alger",
+          "kind": "independent-field",
+          "name": "Alger Falls, field waypoint",
+          "lat": 46.393207,
+          "lng": -86.648164,
+          "sourceKey": "algerField"
+        }
+      ],
+      "pairs": [
+        [
+          "gis-alger-213",
+          "field-alger"
+        ]
+      ]
+    }
+  ]
+}
