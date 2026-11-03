@@ -14,6 +14,12 @@ on:
       - 'lib/japanese-beetle-field-evidence.cjs'
       - 'api/japanese-beetle-field-evidence.js'
       - 'scripts/audit-japanese-beetle-field-validation.cjs'
+      - 'public/assets/japanese-beetle-monitoring.js'
+      - 'public/assets/japanese-beetle-monitoring-2027-template.csv'
+      - 'lib/japanese-beetle-controlled-monitoring.cjs'
+      - 'api/japanese-beetle-monitoring-coverage.js'
+      - 'tests/japanese-beetle-controlled-monitoring.test.js'
+      - 'scripts/verify-japanese-beetle-monitoring-browser.cjs'
       - 'api/garden-pest-timing-lab.js'
       - 'tests/garden-pest-science.test.js'
       - 'api/michigan-garden-pest-watch.js'
@@ -52,8 +58,12 @@ jobs:
         run: node --test tests/garden-pest-science.test.js
       - name: Verify official Japanese beetle layers, calendar rollover, model states and evidence vetoes
         run: node --test tests/japanese-beetle-forecast.test.js
+      - name: Validate controlled Japanese beetle status and exposure science gates
+        run: node --test tests/japanese-beetle-controlled-monitoring.test.js
       - name: Check Garden Pest Watch crop, evidence, failure and responsive browser behavior
         run: node scripts/verify-garden-pest-watch-browser.cjs
+      - name: Verify controlled field station journal, bounded onset and mobile/no-JS behavior
+        run: node scripts/verify-japanese-beetle-monitoring-browser.cjs
       - name: Save screenshots for inspection
         if: always()
         uses: actions/upload-artifact@v4
