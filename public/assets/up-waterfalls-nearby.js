@@ -28,7 +28,8 @@ function render(data){
   item.dataset.nearbyId=target.id;
   const label=element('p','nearby-distance',match.miles.toFixed(1)+' miles straight-line · '+target.region);
   const title=element('h3');const guide=element('a','',target.name);guide.href=target.url;title.appendChild(guide);
-  const review=element('p','nearby-note',(original.dataset.statusLabel||'Check conditions')+' · '+(target.status==='seasonal'?'Seasonal arrival restrictions apply. ':target.status==='restricted'?'Partial access restrictions apply. ':'')+'Check the source before travel.');
+  const extra=target.id==='gabbro-falls'?'Resort visitor parking and winter walking access are not established. Confirm directly with Snowriver. ':['potawatomi-falls','gorge-falls','rainbow-falls','great-conglomerate-falls'].includes(target.id)?'Black River construction affects specific trails and platforms. ':'';
+  const review=element('p','nearby-note',(original.dataset.statusLabel||'Check conditions')+' · '+(target.status==='seasonal'?'Seasonal arrival restrictions apply. ':target.status==='restricted'?'Partial access restrictions apply. ':'')+extra+'Check the source before travel.');
   const actions=element('div','nearby-actions');
   const locate=element('button','nearby-map-action','Show waterfall on map');locate.type='button';
   locate.addEventListener('click',()=>{
