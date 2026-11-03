@@ -234,3 +234,5 @@ button,a{-webkit-tap-highlight-color:transparent}
 .activity-button[aria-pressed="true"]{border-color:#146c86;box-shadow:inset 0 0 0 2px #146c86;background:#eaf6f7}
 
 .map-stage.map-stage-unavailable{height:110px;min-height:110px}.map-stage.map-stage-unavailable #freighterMap{height:110px;min-height:110px;padding:16px;box-sizing:border-box}
+
+.ship-story{display:grid;grid-template-columns:minmax(140px,36%) minmax(0,1fr);gap:16px;align-items:start;padding:14px;margin:14px 0;background:#fff;border:1px solid #c6dada;border-radius:6px}.ship-story[hidden]{display:none}.ship-story figure{margin:0}.ship-story img{display:block;width:100%;height:155px;object-fit:cover;border-radius:4px}.ship-story figcaption,.ship-story-note{font-size:.71rem;line-height:1.4;color:#48646b;margin-top:6px}.ship-story h4{font-size:1.08rem;line-height:1.25;margin:3px 0 8px;color:#133a43}.ship-story p{font-size:.85rem;line-height:1.5;margin:5px 0 10px}.ship-story a{color:#075e70;text-decoration:underline}.ship-story-link{font-weight:800}@media(max-width:700px){.ship-story{grid-template-columns:1fr}.ship-story img{height:170px}}

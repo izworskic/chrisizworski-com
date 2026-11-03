@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "checkedOn": "2026-11-03",
+  "identityMaxAgeDays": 180,
+  "stories": [
+    {
+      "mmsi": "366904950", "aisName": "LEE A TREGURTHA", "imo": "5385625",
+      "identitySources": ["https://www.vesselfinder.com/vessels/details/5385625", "https://www.myshiptracking.com/vessels/lee-a-tregurtha-mmsi-366904950-imo-5385625"],
+      "headline": "From wartime tanker to Great Lakes freighter",
+      "history": "Built in 1942 as the tanker Chiwawa, she served during World War II before reconstruction for the Great Lakes ore trade.",
+      "historySource": "https://interlakesteamship.com/our-fleet/m-v-lee-a-tregurtha/",
+      "storyUrl": "/great-lakes-freighter-winter-layup/vessels/lee-a-tregurtha/",
+      "image": "/assets/freighter-lee-feature.jpg",
+      "imageAlt": "Lee A. Tregurtha transiting the Soo Locks in 2021.",
+      "photoCredit": "U.S. Army Corps of Engineers, Detroit District · public domain · 2021",
+      "photoSource": "https://commons.wikimedia.org/wiki/File:Lee_A._Tregurtha_in_Soo_MI.jpg",
+      "licenseUrl": null
+    },
+    {
+      "mmsi": "366905890", "aisName": "JAMES R BARKER", "imo": "7390260",
+      "identitySources": ["https://www.myshiptracking.com/vessels/james-r-barker-mmsi-366905890-imo-7390260", "https://maritimeoptima.com/public/vessels/pages/imo%3A7390260/mmsi%3A366905890/JAMES_R_BARKER.html"],
+      "headline": "A thousand-footer built for the lakes",
+      "history": "Launched in 1976, James R. Barker became the first thousand-foot Great Lakes ship built with its wheelhouse aft.",
+      "historySource": "https://wmhs.org/james-r-barker-arrives-at-fincantieri/",
+      "storyUrl": "/great-lakes-freighter-winter-layup/vessels/james-r-barker/",
+      "image": "/assets/freighter-barker-feature.jpg",
+      "imageAlt": "James R. Barker crossing the Straits of Mackinac in 2014.",
+      "photoCredit": "Levi Gates · CC BY-SA 4.0 · 2014",
+      "photoSource": "https://commons.wikimedia.org/wiki/File:James_R_Barker.jpg",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+    }
+  ]
+}

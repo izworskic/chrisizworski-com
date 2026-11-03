@@ -1909,3 +1909,9 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - Counts cover reported vessels of all types, not complete traffic or predicted arrivals; exact circle radii and overlapping coverage are shown. Missing AIS details and uncertain identity remain unknown. No unsupported photo/biography identity joins, new backend, ads or canonical changes.
 - Baseline remains October 24 Search Console export: 9,119 impressions and 142 clicks in 28 days (1.56% CTR), not a post-release result. Release and real-user effects NOT MEASURED. See `docs/experience-briefs/freighter-action-desk.md`.
 - Single next action: inspect exact-head desktop and mobile browser artifacts, including changed selection and feed failure, then finish release review before merge.
+
+### 2026-11-03 — Selected freighter story and photo cards
+
+- Reused two existing source-linked freighter stories and credited local photographs in the live selected-report inspector: Lee A. Tregurtha and James R. Barker. Each identity was checked against two public vessel registries on 2026-11-03; matching needs both MMSI and normalized AIS name and expires after 180 days. Any unresolved identity retains the plain AIS inspector. The photograph is labeled historical, never presented as a current view.
+- Node tests cover mismatched, stale and duplicate identities, source and image presence. Browser fixture covers a matching vessel and an unknown vessel. No additional provider, backend, tracking, new canonical or advertising change.
+- Results, exact-head hosted tests and production status must be verified in the associated PR. Search and revenue effects NOT MEASURED. Next action: complete browser and photo-credit QA, then extend only to identities corroborated against multiple sources.
