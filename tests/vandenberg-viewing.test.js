@@ -128,7 +128,7 @@ test('release surface includes active controls, GIS map, honest site source and 
   assert.match(page,/id="rl-vandenberg"/);
   assert.match(page,/id="rl-vandenberg-map"/);
   assert.ok(page.indexOf('id="rl-vandenberg"')<page.indexOf('id="rocket-visuals"'),
-    'The visitor's viewing decision must appear before decorative imagery and editorial coverage.');
+    "The visitor viewing decision must appear before imagery and editorial coverage.");
   assert.match(page,/data-intent="photo"/);
   assert.match(page,/vandenberg\.js\?v=20261103-viewing-v1/);
   assert.match(page,/rel="canonical" href="https:\/\/chrisizworski.com\/national-tools\/rocket-launch-live\/"/);
