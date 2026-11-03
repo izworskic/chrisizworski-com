@@ -851,6 +851,7 @@
     renderLaunchWeather(data);
     renderOfficial45ws(data);
     board();
+    document.dispatchEvent(new CustomEvent('rocket-viewing:data',{detail:data}));
     const coverage = data.coverage || {};
     set('rl-schedule-coverage',
       'Source: Launch Library 2 shared Postgres snapshot, observed ' +
@@ -883,6 +884,7 @@
       if (sequence !== state.request) return;
       document.dispatchEvent(new CustomEvent('rocket-truth:mission-selected',
         {detail:{launchId:null}}));
+      document.dispatchEvent(new CustomEvent('rocket-viewing:data',{detail:null}));
       chip($('rl-schedule-grade'), 'Schedule temporarily unavailable', 'unknown');
       renderVisuals(null);
       set('rl-watch-status', 'Media unavailable');

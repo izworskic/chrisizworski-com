@@ -294,7 +294,7 @@ test('national launch atlas requests keyed CARTO tile URLs and retains functiona
   assert.match(endpoint,/CARTO_BASEMAP_PUBLIC_KEY/);
   const page=fs.readFileSync(path.resolve(__dirname,'../public/synced-national-tools/rocket-launch-live/index.html'),'utf8');
   assert.match(page,/Senior Airman Kadielle Shaw/);
-  assert.match(page,/rocket-launch-live\/app\.js\?v=20261103-visual-v1/);
+  assert.match(page,/rocket-launch-live\/app\.js\?v=20261103-viewing-v1/);
 });
 
 
@@ -306,7 +306,7 @@ test('national Rocket Watch binds controls to selected mission and defers YouTub
   assert.match(html,/id="mission-watch"/);
   assert.match(html,/id="rl-watch-mission-videos"/);
   assert.match(html,/id="rl-watch-general"/);
-  assert.match(html,/rocket-launch-live\/styles\.css\?v=20261103-visual-v1/);
+  assert.match(html,/rocket-launch-live\/styles\.css\?v=20261103-viewing-v1/);
   assert.match(js,/desk\?\.launchId === launch\.id/);
   assert.match(js,/data\.selectedRegion === 'florida'/);
   assert.match(js,/renderMediaDesk\(data\)/);

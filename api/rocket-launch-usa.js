@@ -10,6 +10,7 @@ const { editorialDesk } = require('../lib/spaceflight-now-editorial');
 const { readNationalSchedule } = require('../lib/rocket-launch-national');
 const { slipWindows } = require('../lib/rocket-launch-slip');
 const { buildMediaDesk } = require('../lib/space-coast-media');
+const { buildVandenbergViewing } = require('../lib/vandenberg-viewing');
 
 const LL2 = 'https://ll.thespacedevs.com/2.3.0/launches/upcoming/';
 const LAUNCH_QUERIES = [
@@ -240,6 +241,8 @@ return async function handler(req, res) {
         context: region.context
       },
       regions,
+      vandenbergViewing:region.id==='california'?
+        buildVandenbergViewing(selected,weather,now):null,
       access, weather, launchWeather,
       independentReporting,
       officialLaunchWeather: region.id === 'florida' ? missionForecast(selected, officialState, now) : null,
