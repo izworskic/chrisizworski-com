@@ -17,7 +17,7 @@ test('guide directory links published standalone guides and major guide collecti
     '/great-lakes-ship-watching-spots/', '/great-lakes-lighthouses/', '/michigan-paddling/',
     '/seed-starting-guide/', '/michigan-native-plants/', '/michigan-last-spring-freeze/',
     '/heirloom-vs-hybrid-seeds/', '/michigan-seed-libraries/', '/old-sow-live/',
-    '/michigan-coastal-drives-field-guide/', '/heirloom-garden-almanac/'
+    '/michigan-coastal-drives-field-guide/'
   ];
   for (const route of routes) {
     assert.ok(html.includes(`href="${route}"`), `missing guide entry ${route}`);
@@ -50,7 +50,7 @@ test('live seasonal registry entries and seasonal wine editions remain discovera
 
 test('collection counts match the visible card groups', () => {
   for (const [id, next, count] of [
-    ['field-guides', 'ai-operations', 23], ['ai-operations', 'great-lakes-travel', 3],
+    ['field-guides', 'ai-operations', 21], ['ai-operations', 'great-lakes-travel', 3],
     ['great-lakes-travel', 'zone-6a-gardening', 27], ['zone-6a-gardening', 'beyond-the-great-lakes', 11]
   ]) {
     const start = html.indexOf(`id="${id}"`), end = html.indexOf(`id="${next}"`, start);

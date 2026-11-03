@@ -426,29 +426,6 @@
       ]
     },
     {
-      "slug": "michigan-winter-cabins-field-guide",
-      "url": "/michigan-winter-cabins-field-guide/",
-      "title": "Michigan Winter Cabins, Saunas & Hot-Tub Basecamps Field Guide",
-      "subtitle": "12 Basecamp Zones · Wood-Fired Shoreline Saunas, Ski Chalets, Yurts & Live Snowpack",
-      "status": "live",
-      "releaseWave": "Release 2: Peak Winter (Jan–Feb)",
-      "stopCount": 12,
-      "activeMonths": [
-        11,
-        12,
-        1,
-        2,
-        3
-      ],
-      "seasonLabel": "Nov–Mar · Peak Winter Basecamps",
-      "summary": "12 architectural winter basecamp zones across Michigan: Keweenaw wood-fired shoreline saunas, Boyne ski chalets, Au Sable log cabins, and Porcupine Mountains yurts with live snowpack and AWD road rules.",
-      "connectedTools": [
-        "/michigan-winter-weekends/",
-        "/michigan-snow-depth/",
-        "/michigan-ski-hills/"
-      ]
-    },
-    {
       "slug": "michigan-coastal-drives-field-guide",
       "url": "/michigan-coastal-drives-field-guide/",
       "title": "M-22, M-28 & The Tunnel of Trees: Michigan’s Coastal Drives Field Guide",
@@ -474,35 +451,6 @@
         "/michigan-wine-cider-spirits/",
         "/mackinac-bridge-live/",
         "/fall-color/"
-      ]
-    },
-    {
-      "slug": "heirloom-garden-almanac",
-      "url": "/heirloom-garden-almanac/",
-      "title": "Freighter View Farms Heirloom Kitchen Garden Almanac",
-      "subtitle": "16 Signature Northern-Hardy Heirlooms · Botanical Photos, MSU Soil Temp Triggers & Seed-Saving Lab",
-      "status": "live",
-      "releaseWave": "Flagship Kitchen Garden Almanac",
-      "stopCount": 16,
-      "activeMonths": [
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9,
-        10
-      ],
-      "seasonLabel": "Mar–Oct · Growing Season & Seed Saving",
-      "summary": "16 signature northern-hardy heirloom varieties from Freighter View Farms on Saginaw Bay with botanical photography, MSU soil-temperature triggers, isolation distances, and seed fermentation protocols.",
-      "connectedTools": [
-        "/michigan-gardening/",
-        "/seed-saving-lab/",
-        "/heirloom-variety-matchmaker/",
-        "/michigan-soil-temperature/",
-        "/zone-6a-planting-calendar/",
-        "/when-to-plant-tomatoes-michigan/"
       ]
     }
   ],
