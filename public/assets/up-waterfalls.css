@@ -87,3 +87,32 @@
  .up-waterfall-hub .visit-intro h2{font-size:1.58rem}
  .up-waterfall-hub .visit-intro p{font-size:.88rem;line-height:1.45}
 }
+
+
+/* B59 Python-built nearby waterfall index: source-gated geographic discovery. */
+.nearby-lab{margin:19px 0 28px;padding:clamp(17px,2.8vw,30px);border:1px solid #2c6974;border-radius:16px;background:linear-gradient(136deg,#123a47 0%,#184c52 58%,#245c59 100%);color:#f4faf7;box-shadow:0 12px 28px rgba(12,43,45,.12)}
+.nearby-eyebrow{color:#e9c886;font-size:.72rem;letter-spacing:.14em;font-weight:850;text-transform:uppercase;margin:0 0 6px}
+.nearby-heading h2{color:#fff;font-size:clamp(1.5rem,2.4vw,2rem);line-height:1.2;margin:0 0 8px}
+.nearby-heading>p:last-child{color:#edf6f3;font-size:.96rem;max-width:80ch;line-height:1.6;margin:0 0 17px}
+.nearby-controls{display:grid;grid-template-columns:minmax(0,2fr) minmax(160px,1fr);gap:13px;max-width:750px}
+.nearby-controls label{display:block;font-size:.78rem;font-weight:800;color:#f4faf7;margin-bottom:6px}
+.nearby-controls select{display:block;width:100%;min-height:43px;border:2px solid #bed5ce;border-radius:7px;padding:8px 10px;background:#fff;color:#173c45;font:inherit;font-size:.94rem}
+.nearby-controls select:disabled{opacity:.7}
+.nearby-status{font-size:.9rem;line-height:1.55;margin:14px 0 13px;color:#f5f8f2}
+.nearby-results{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}
+.nearby-stop{padding:14px;border:1px solid #d2ddd8;border-radius:9px;background:#fff;color:#213d45;min-width:0}
+.nearby-distance{font-size:.73rem;font-weight:850;letter-spacing:.025em;color:#285b5d;margin:0 0 6px}
+.nearby-stop h3{font-size:1.14rem;line-height:1.3;margin:0 0 8px}
+.nearby-stop h3 a{color:#123e4b;text-decoration:underline;text-decoration-color:#afc8c4;text-underline-offset:3px}
+.nearby-note{font-size:.8rem;line-height:1.48;color:#3f5155;margin:0 0 11px}
+.nearby-actions{display:flex;flex-wrap:wrap;align-items:center;gap:7px}
+.nearby-actions button{font:inherit;font-weight:800;font-size:.73rem;line-height:1.3;min-height:37px;border-radius:6px;border:1px solid #255969;padding:7px 9px;cursor:pointer;background:#17546a;color:#fff}
+.nearby-actions .nearby-save-action{color:#184a54;background:#e5f1ed}
+.nearby-actions a{font-size:.74rem;font-weight:850;color:#185568;text-underline-offset:3px}
+.nearby-evidence{border-top:1px solid #779c9e;margin-top:16px;padding-top:12px;display:grid;grid-template-columns:1fr 2fr;gap:16px;font-size:.79rem;line-height:1.5;color:#eef6f3}
+.nearby-evidence p{margin:0}
+.nearby-empty,.nearby-overflow{grid-column:1/-1;color:#f4faf7;font-size:.86rem;padding:8px 0;margin:0}
+.nearby-lab :is(select,button,a):focus-visible{outline:3px solid #ffe3a1;outline-offset:3px}
+@media(max-width:990px){.nearby-results{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:670px){.nearby-lab{padding:16px;margin:12px 0 18px}.nearby-controls,.nearby-results,.nearby-evidence{grid-template-columns:1fr}.nearby-stop{padding:13px}.nearby-heading h2{font-size:1.5rem}}
+@media(prefers-reduced-motion:reduce){.nearby-lab *{scroll-behavior:auto!important;transition:none!important}}
