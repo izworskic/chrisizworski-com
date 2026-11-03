@@ -59,7 +59,7 @@ assert.ok(html.includes('id="earworm-counties'.replace('earworm-counties','earwo
 assert.ok(html.includes('id="earworm-chart"'));
 assert.ok(html.includes('id="earworm-detail"'));
 assert.ok(html.indexOf('garden-earworm-trap-data.js')<html.indexOf('garden-earworm-trap-desk.js'));
-assert.ok(html.includes('garden-earworm-trap-desk.css?v=20261103a'));
+assert.ok(html.includes('garden-earworm-trap-desk.css?v=20261103b'));
 assert.match(js,/Not reported/);
 assert.match(js,/No 2027/gi.test(js)?/No 2027/:/currentYear>2026/);
 assert.match(js,/County labels identify|County labels/gi.test(js)?/County labels/:/County/);
