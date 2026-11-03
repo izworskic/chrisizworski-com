@@ -1,3 +1,12 @@
+### 2026-11-03 — B65: Upper Eagle River Ten-Foot Falls non-GIS evidence and safer visitor distinction
+
+- **Visitor decision:** Upper Eagle River / Ten-Foot Falls is a real, named waterfall distinct from the official Lower Eagle River Bridge Park visitor stop. The 2023 Visit Keweenaw waterfall brochure provides a roadside pull-off description, but its mapped point is 438.3 m from the independent specialist location. General MDOT allowance for roadside parking does not certify a precise M-26 stopping area or a legal riverbank walking corridor.
+- **Implementation:** Separate noindex evidence review at `/upper-peninsula-waterfalls/research/upper-eagle-river-ten-foot-falls/`, including explicit visitor-route gate and 2026–27 Visit Keweenaw evidence; a sourced non-GIS candidate in `data/up-waterfall-supplemental-candidates.json`; contextual link from the already-verified Lower Eagle River guide; guarded source/date and sitemap update; focused B65 regression. Hub geographic-research section provides discovery outside the public map.
+- **Preservation:** 75 curated destinations, 68 GIS-linked, 93 pending, 67 nearby-eligible remain unchanged. No new sitemap URL, indexed waterfall page, car GPS, unverified land approach, publicly suggested map stop, Auto-ad change or Person identity drift.
+- **Measurement:** No GSC, GA4, or AdSense data retrieved for this nonindex editorial source review. No CTR/rank/revenue impact claimed.
+- **Release status:** Development branch `feature/up-waterfalls-b65-ten-foot-falls-evidence-20261103`, PR and CI verification pending at log revision. Not yet live. Detailed evidence at `docs/UP_WATERFALL_1258_BATCH_65_UPPER_EAGLE_M26_SOURCE_GATE.md`.
+- **Exactly one next action:** After full CI/preview/production verification, research the current public Montreal Falls Fish Cove route and new KORC/DNR permitting status without inventing new parking.
+
 ### 2026-11-03 — Upper Eagle River / Ten-Foot Falls B65 non-GIS inventory investigation (release pending)
 
 ### 2026-11-03 — Upper Eagle River / Ten-Foot Falls source gate (B65; research only)
