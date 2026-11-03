@@ -178,6 +178,32 @@
   function clearShip(){selectedMmsi=null;selectedName=null;if(inspector)inspector.hidden=true;if(storyBox){storyBox.hidden=true;storyBox.replaceChildren();delete storyBox.dataset.storyKey;}}
   if(inspectorClose)inspectorClose.addEventListener("click",function(){clearShip();vesselSearch.focus();});
   function node(tag, value) {var el=document.createElement(tag);el.textContent=value;return el;}
+  // AIS type codes describe broad vessel categories, not an exact hull or identity.
+  function vesselShape(v) {
+    var t=typeof v.shipType==="number"?v.shipType:0;
+    if(t>=70&&t<80)return {kind:"cargo",label:"Cargo vessel"};
+    if(t>=80&&t<90)return {kind:"tanker",label:"Tanker"};
+    if(t>=60&&t<70)return {kind:"passenger",label:"Passenger vessel"};
+    if(t===31||t===32||t===52)return {kind:"tug",label:"Tug or towing vessel"};
+    if(t===30)return {kind:"fishing",label:"Fishing vessel"};
+    return {kind:"other",label:"Vessel type not shown"};
+  }
+  function shipIcon(v) {
+    var shape=vesselShape(v), length=typeof v.lengthMeters==="number"?v.lengthMeters:null;
+    var size=length>0?(length>=200?"large":length>=80?"medium":"small"):"unknown";
+    var width=size==="large"?46:size==="medium"?38:size==="small"?30:34, height=24;
+    var state=v.speedKnots===null?"unknown":v.speedKnots>0.5?"moving":"stopped";
+    var details={
+      cargo:'<path class="ship-house" d="M8 19 V9 H20 V19 Z"/><rect class="ship-stack" x="12" y="5" width="4" height="4"/><path class="ship-detail" d="M25 16h8m4 0h8m4 0h7"/>',
+      tanker:'<path class="ship-house" d="M8 19 V9 H20 V19 Z"/><rect class="ship-stack" x="12" y="5" width="4" height="4"/><path class="ship-detail" d="M23 16h34 M28 13v6m13-6v6m13-6v6"/>',
+      passenger:'<path class="ship-house" d="M10 19 V10 H53 L60 19 Z"/><path class="ship-detail dark" d="M15 13h4m4 0h4m4 0h4m4 0h4m4 0h4"/><rect class="ship-stack" x="24" y="6" width="5" height="4"/>',
+      tug:'<path class="ship-house" d="M18 19 V9 H39 L44 19 Z"/><rect class="ship-stack" x="27" y="5" width="4" height="4"/><path class="ship-detail dark" d="M22 12h6m4 0h6"/>',
+      fishing:'<path class="ship-house" d="M12 19 V11 H27 V19 Z"/><path class="ship-detail" d="M40 19V7m0 1 13 9M37 8h8"/>',
+      other:'<path class="ship-house" d="M12 19 V11 H29 V19 Z"/><path class="ship-detail dark" d="M16 14h5m3 0h3"/>'
+    };
+    var html='<svg viewBox="0 0 72 32" aria-hidden="true" focusable="false"><path class="ship-hull" d="M3 19 H62 L69 15 L66 21 L58 25 H11 Z"/>'+details[shape.kind]+'</svg>';
+    return L.divIcon({className:"tracker-ship-marker is-"+state+" type-"+shape.kind+" size-"+size,html:html,iconSize:[width,height],iconAnchor:[width/2,height/2],popupAnchor:[0,-height/2]});
+  }
   function vesselMatchesSearch(vessel,rawQuery) {
     var raw=String(rawQuery||"").trim();
     if(!raw)return true;
@@ -209,9 +235,10 @@
       var detail=(v.speedKnots===null?"Speed unavailable":(v.speedKnots*1.15078).toFixed(1)+" mph ("+v.speedKnots.toFixed(1)+" kn)")+" · reported "+Math.max(0,Math.round((Date.now()-Date.parse(v.seen))/60000))+" min ago · "+v.source;
       var item=document.createElement("li"), popup=document.createElement("div");
       popup.append(node("strong",name),node("p",detail),node("p","MMSI "+v.mmsi));
+      popup.append(node("p",vesselShape(v).label+(v.lengthMeters===null?" · length not reported":" · reported length "+Math.round(v.lengthMeters*3.28084)+" ft")));
       if(v.course!==null) popup.append(node("p","Course "+Math.round(v.course)+"°"));
       if(map){
-        var marker=L.circleMarker([v.lat,v.lon],{radius:v.shipType>=70&&v.shipType<90?8:5,color:"#fff",weight:1,fillColor:v.speedKnots===null?"#64748b":v.speedKnots>0.5?"#146c86":"#a6651e",fillOpacity:0.95}).addTo(layer).bindTooltip(node("span",name)).bindPopup(popup);
+        var marker=L.marker([v.lat,v.lon],{icon:shipIcon(v),title:name,alt:name,keyboard:true}).addTo(layer).bindTooltip(node("span",name)).bindPopup(popup);
         marker.on("click",function(){showShip(v,Date.now());if(inspector)inspector.scrollIntoView({block:"nearest",behavior:"smooth"});});
         var button=node("button",name);button.type="button";button.addEventListener("click",function(){showShip(v,Date.now());map.setView([v.lat,v.lon],13);marker.openPopup();if(inspector)inspector.scrollIntoView({block:"nearest",behavior:"smooth"});else mapFrame.scrollIntoView({block:"center",behavior:"smooth"});});item.append(button);
       }else {var fallback=node("button",name);fallback.type="button";fallback.addEventListener("click",function(){showShip(v,Date.now());});item.append(fallback);}
