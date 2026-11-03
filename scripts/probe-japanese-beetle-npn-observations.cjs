@@ -28,7 +28,14 @@ async function probe(){
   ['USA-2025-Adult327',{year:2025,species_id:target.species_id,phenophase_id:327,request_src:'FreighterViewFarms'}]
  ]){
   const u=new URL(BASE+'/observations/getObservations.json');
-  Object.entries(params).forEach(([k,v])=>u.searchParams.set(k,String(v)));
+  // Official rnpn client: start_date/end_date and bracket-indexed arrays.
+  // A 'year' query parameter is IGNORED by this API and is not a valid test.
+  const year=params.year;
+  const verified={start_date:year+'-01-01',end_date:year+'-12-31',
+   'species_id[1]':params.species_id,request_src:params.request_src,climate_data:0};
+  if(params.state)verified['state[1]']=params.state;
+  if(params.phenophase_id)verified['phenophase_id[1]']=params.phenophase_id;
+  Object.entries(verified).forEach(([k,v])=>u.searchParams.set(k,String(v)));
   try{const d=await read(u.href,22000);const rows=Array.isArray(d)?d:Array.isArray(d.data)?d.data:null;
    observations.push({label,type:Array.isArray(d)?'array':typeof d,totalRows:rows?.length??null,
    firstRowKeys:rows?.[0]?Object.keys(rows[0]).slice(0,40):[],
@@ -39,7 +46,7 @@ async function probe(){
 
  for(const year of years){
   const u=new URL(BASE+'/observations/getObservations.json');
-  Object.entries({year,species_id:target.species_id,state:'MI',request_src:'FreighterViewFarms',format:'json'}).forEach(([k,v])=>u.searchParams.set(k,String(v)));
+  Object.entries({start_date:year+'-01-01',end_date:year+'-12-31','species_id[1]':target.species_id,'state[1]':'MI',request_src:'FreighterViewFarms',climate_data:0}).forEach(([k,v])=>u.searchParams.set(k,String(v)));
   try{
    const data=await read(u.href,26000);
    const rows=Array.isArray(data)?data:Array.isArray(data.data)?data.data:null;
