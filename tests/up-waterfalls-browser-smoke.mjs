@@ -42,6 +42,25 @@ try{
     assert.ok(scroll<=width+2,'horizontal overflow '+scroll+' > '+width);
   });
   await page.screenshot({path:screenshots+'/hub-mobile.png',fullPage:true,animations:'disabled'});
+
+  await run('B59 Python nearby lab: source-gated radius, map focus and shared shortlist on mobile',async()=>{
+    await page.waitForFunction(()=>document.querySelector('#nearby-origin')?.disabled===false,{timeout:15000});
+    await page.locator('#nearby-origin').selectOption('wagner-falls');
+    await page.locator('#nearby-radius').selectOption('10');
+    assert.match(await page.locator('#nearby-status').innerText(),/10 straight-line miles/);
+    assert.equal(await page.locator('[data-nearby-id="miners-falls"]').count(),1);
+    assert.equal(await page.locator('[data-nearby-id="munising-falls"]').count(),0,'closed waterfall cannot be suggested');
+    await page.locator('[data-nearby-id="miners-falls"] .nearby-map-action').click();
+    assert.match(await page.locator('.leaflet-popup-content').innerText(),/Miners Falls/);
+    await page.locator('[data-nearby-id="miners-falls"] .nearby-save-action').click();
+    assert.match(await page.locator('#selected-list').innerText(),/Miners Falls/);
+    await page.locator('#clear-list').click();
+    assert.equal(await page.locator('#selected-list').innerText(),'Nothing added yet. Save a few falls to compare before your drive.');
+    const {width,scroll}=await page.evaluate(()=>({width:innerWidth,scroll:document.documentElement.scrollWidth}));
+    assert.ok(scroll<=width+2,'nearby panel causes mobile horizontal overflow');
+    await page.screenshot({path:screenshots+'/python-nearby-waterfalls-mobile.png',fullPage:true,animations:'disabled'});
+  });
+
   await run('visit lens: filter by 30-minute full on-site range and exclude agency closure',async()=>{
     await page.locator('#visit-region').selectOption('Pictured Rocks / Munising');
     await page.locator('#visit-budget').selectOption('30');

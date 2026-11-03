@@ -1,0 +1,6226 @@
+{
+  "schemaVersion": 1,
+  "reviewed": "2026-11-02",
+  "method": "haversine-waterfall-coordinate-straight-line-not-driving",
+  "maxRadiusMiles": 50,
+  "policy": "Not a route, visitor parking point, driving distance, trail distance, access grant, or live-open forecast.",
+  "counts": {
+    "curated": 74,
+    "eligible": 66,
+    "excluded": 8
+  },
+  "excludedIds": [
+    "houghton-douglass-falls",
+    "lower-silver-falls",
+    "munising-falls",
+    "sandstone-falls",
+    "scott-falls",
+    "silver-river-falls",
+    "tahquamenon",
+    "twin-waterfalls-memorial-preserve"
+  ],
+  "locations": [
+    {
+      "id": "agate-falls",
+      "name": "Agate Falls",
+      "region": "Western U.P.",
+      "status": "restricted",
+      "url": "/upper-peninsula-waterfalls/agate-falls/",
+      "source": "https://www.michigan.gov/recsearch/parks/agatefalls",
+      "lat": 46.480924,
+      "lng": -89.090229
+    },
+    {
+      "id": "big-erics-falls",
+      "name": "Big Eric's Falls",
+      "region": "Western U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/big-erics-falls/",
+      "source": "https://www.michigan.gov/recsearch/sfcampgroundsa-m/BigEricsBridge",
+      "lat": 46.864777,
+      "lng": -88.082503
+    },
+    {
+      "id": "bonanza-falls",
+      "name": "Bonanza Falls (Greenwood Falls)",
+      "region": "Western U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/bonanza-falls/",
+      "source": "https://www.carplaketwp.org/general-resources",
+      "lat": 46.818863,
+      "lng": -89.571458
+    },
+    {
+      "id": "bond-falls",
+      "name": "Bond Falls",
+      "region": "Western U.P.",
+      "status": "seasonal",
+      "url": "/upper-peninsula-waterfalls/bond-falls/",
+      "source": "https://www.michigan.gov/recsearch/parks/bondfalls",
+      "lat": 46.40992,
+      "lng": -89.132584
+    },
+    {
+      "id": "bridalveil-falls",
+      "name": "Bridalveil Falls",
+      "region": "Pictured Rocks / Munising",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/bridalveil-falls/",
+      "source": "https://www.nps.gov/places/miners-castle.htm",
+      "lat": 46.5087,
+      "lng": -86.5233
+    },
+    {
+      "id": "canyon-falls",
+      "name": "Canyon Falls",
+      "region": "Central U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/canyon-falls/",
+      "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_47-58_Mar2024.pdf",
+      "lat": 46.624106,
+      "lng": -88.474395
+    },
+    {
+      "id": "carp-river-falls",
+      "name": "Carp River Falls",
+      "region": "Central U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/carp-river-falls/",
+      "source": "https://www.travelmarquette.com/outdoor-adventure/waterfalls/",
+      "lat": 46.503807,
+      "lng": -87.44655
+    },
+    {
+      "id": "cascade-falls",
+      "name": "Cascade Falls",
+      "region": "Western U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/cascade-falls/",
+      "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_1-15_Dec2025.pdf",
+      "lat": 46.651708,
+      "lng": -89.446195
+    },
+    {
+      "id": "chapel-falls",
+      "name": "Chapel Falls",
+      "region": "Pictured Rocks / Munising",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/chapel-falls/",
+      "source": "https://www.nps.gov/places/chapel-falls.htm",
+      "lat": 46.528877,
+      "lng": -86.44429
+    },
+    {
+      "id": "duppy-falls",
+      "name": "Duppy Falls",
+      "region": "Western U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/duppy-falls/",
+      "source": "https://www.fs.usda.gov/r09/ottawa/recreation/duppy-falls",
+      "lat": 46.412542,
+      "lng": -88.911255
+    },
+    {
+      "id": "eagle-river-falls",
+      "name": "Eagle River Falls",
+      "region": "Keweenaw Peninsula",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/eagle-river-falls/",
+      "source": "https://www.visitkeweenaw.com/blog/post/2-day-keweenaw-waterfall-driving-tour/",
+      "lat": 47.412144,
+      "lng": -88.29635
+    },
+    {
+      "id": "elliot-falls",
+      "name": "Elliot Falls",
+      "region": "Pictured Rocks / Munising",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/elliot-falls/",
+      "source": "https://www.nps.gov/places/miners-beach.htm",
+      "lat": 46.49963,
+      "lng": -86.53181
+    },
+    {
+      "id": "explorers-falls",
+      "name": "Explorers Falls",
+      "region": "Western U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/explorers-falls/",
+      "source": "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf",
+      "lat": 46.735434,
+      "lng": -89.886494
+    },
+    {
+      "id": "falls-river-trail",
+      "name": "Falls River Trail: Middle & Lower Falls",
+      "region": "Western U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/falls-river-trail/",
+      "source": "https://www.baragacountytrails.org/trails/falls-river-trail",
+      "lat": 46.752422,
+      "lng": -88.452723
+    },
+    {
+      "id": "fumee-falls",
+      "name": "Fumee Falls",
+      "region": "Central U.P.",
+      "status": "seasonal",
+      "url": "/upper-peninsula-waterfalls/fumee-falls/",
+      "source": "https://www.michigan.gov/documents/mdot/MI_BYWAYS_BOOK_558227_7.pdf",
+      "lat": 45.800533,
+      "lng": -87.980322
+    },
+    {
+      "id": "gabbro-falls",
+      "name": "Gabbro Falls (Baker’s Falls)",
+      "region": "Western U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/gabbro-falls/",
+      "source": "https://www.snowriver.com/things-to-do/waterfall-fun",
+      "lat": 46.502079,
+      "lng": -89.992485
+    },
+    {
+      "id": "gorge-falls",
+      "name": "Gorge Falls",
+      "region": "Western U.P.",
+      "status": "restricted",
+      "url": "/upper-peninsula-waterfalls/gorge-falls/",
+      "source": "https://ironwoodchamber.org/attraction/black-river-scenic-byway/",
+      "lat": 46.64045,
+      "lng": -90.050083
+    },
+    {
+      "id": "great-conglomerate-falls",
+      "name": "Great Conglomerate Falls",
+      "region": "Western U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/great-conglomerate-falls/",
+      "source": "https://ironwoodchamber.org/attraction/black-river-scenic-byway/",
+      "lat": 46.631634,
+      "lng": -90.054861
+    },
+    {
+      "id": "greenstone-falls",
+      "name": "Greenstone Falls",
+      "region": "Western U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/greenstone-falls/",
+      "source": "https://explorewesternup.com/things-to-do/waterfalls/",
+      "lat": 46.723806,
+      "lng": -89.831469
+    },
+    {
+      "id": "haven-falls",
+      "name": "Haven Falls",
+      "region": "Keweenaw Peninsula",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/haven-falls/",
+      "source": "https://www.visitkeweenaw.com/listing/haven-falls-park/595/",
+      "lat": 47.382887,
+      "lng": -88.025673
+    },
+    {
+      "id": "horseshoe-falls",
+      "name": "Horseshoe Falls",
+      "region": "Pictured Rocks / Munising",
+      "status": "seasonal",
+      "url": "/upper-peninsula-waterfalls/horseshoe-falls/",
+      "source": "https://www.uppermichiganwaterfalls.com/contact-us",
+      "lat": 46.402894,
+      "lng": -86.642575
+    },
+    {
+      "id": "interstate-falls",
+      "name": "Interstate Falls",
+      "region": "Western U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/interstate-falls/",
+      "source": "https://northwoodslandtrust.org/interstate-falls-2/",
+      "lat": 46.473467,
+      "lng": -90.197191
+    },
+    {
+      "id": "jacobs-falls",
+      "name": "Jacob's Falls",
+      "region": "Western U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/jacobs-falls/",
+      "source": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/keweenawmi/KCVB_summer_waterfalls_brochure_20230517_WEB_LOW_1__15f13fff-fd1f-4b37-9438-cd0a32dbaf4a.pdf",
+      "lat": 47.427749,
+      "lng": -88.237254
+    },
+    {
+      "id": "kakabika-falls",
+      "name": "Kakabika Falls",
+      "region": "Western U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/kakabika-falls/",
+      "source": "https://www.uptravel.com/listing/kakabika-falls/2119/",
+      "lat": 46.337278,
+      "lng": -89.45204
+    },
+    {
+      "id": "laughing-whitefish-falls",
+      "name": "Laughing Whitefish Falls",
+      "region": "Central U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/laughing-whitefish-falls/",
+      "source": "https://www.michigan.gov/recsearch/parks/laughingwhitefish",
+      "lat": 46.383822,
+      "lng": -87.068932
+    },
+    {
+      "id": "lepisto-falls",
+      "name": "Lepisto Falls",
+      "region": "Western U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/lepisto-falls/",
+      "source": "https://northcountrytrail.org/files/chapters/nmk/NMK-Segment-Guide-2025.pdf",
+      "lat": 46.658637,
+      "lng": -89.94027
+    },
+    {
+      "id": "little-garlic-falls",
+      "name": "Little Garlic Falls",
+      "region": "Central U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/little-garlic-falls/",
+      "source": "https://northcountrytrail.org/files/chapters/mac/Segment%20Guide_NCTA%20Marquette%20Area%20Chapter-2023.pdf",
+      "lat": 46.667721,
+      "lng": -87.578452
+    },
+    {
+      "id": "little-union-gorge-falls",
+      "name": "Little Union Gorge Falls",
+      "region": "Western U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/little-union-gorge-falls/",
+      "source": "https://explorewesternup.com/things-to-do/waterfalls/",
+      "lat": 46.792961,
+      "lng": -89.624506
+    },
+    {
+      "id": "lower-hungarian-falls",
+      "name": "Lower Hungarian Falls",
+      "region": "Western U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/lower-hungarian-falls/",
+      "source": "https://keweenawlandtrust.org/sites/default/files/2019-11/Hungarian%20Falls%20Nature%20Area%20Directions_0_0.pdf",
+      "lat": 47.169572,
+      "lng": -88.441196
+    },
+    {
+      "id": "manabezho-falls",
+      "name": "Manabezho Falls",
+      "region": "Western U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/manabezho-falls/",
+      "source": "https://www.michigan.gov/dnr/places/natural-areas/presque-isle-river-scenic-site",
+      "lat": 46.704074,
+      "lng": -89.970776
+    },
+    {
+      "id": "manganese-falls",
+      "name": "Manganese Falls",
+      "region": "Western U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/manganese-falls/",
+      "source": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/keweenawmi/KCVB_summer_waterfalls_brochure_20230517_WEB_LOW_1__15f13fff-fd1f-4b37-9438-cd0a32dbaf4a.pdf",
+      "lat": 47.462062,
+      "lng": -87.878959
+    },
+    {
+      "id": "manido-falls",
+      "name": "Manido Falls",
+      "region": "Western U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/manido-falls/",
+      "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/porcupine_mountains_map.pdf?rev=424c589204324cdb805c8557d870f6d2",
+      "lat": 46.707467,
+      "lng": -89.971589
+    },
+    {
+      "id": "mex-i-min-e-falls",
+      "name": "Mex-i-min-e Falls",
+      "region": "Western U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/mex-i-min-e-falls/",
+      "source": "https://www.fs.usda.gov/r09/ottawa/recreation/burned-dam-campground",
+      "lat": 46.313443,
+      "lng": -89.054153
+    },
+    {
+      "id": "miners-falls",
+      "name": "Miners Falls",
+      "region": "Pictured Rocks / Munising",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/miners-falls/",
+      "source": "https://www.nps.gov/places/miners-falls.htm",
+      "lat": 46.4746,
+      "lng": -86.5315
+    },
+    {
+      "id": "misicot-falls",
+      "name": "Misicot Falls (Third Pier)",
+      "region": "Eastern U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/misicot-falls/",
+      "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/Menominee_mrspra_trailmap.pdf?hash=88DE2DBCEDCDBE851E12D5C957A583C1&rev=8a791e46c4404b838b921271509e21fb",
+      "lat": 45.757574,
+      "lng": -87.948049
+    },
+    {
+      "id": "morgan-falls",
+      "name": "Morgan Falls",
+      "region": "Central U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/morgan-falls/",
+      "source": "https://www.travelmarquette.com/outdoor-adventure/waterfalls/",
+      "lat": 46.507745,
+      "lng": -87.446107
+    },
+    {
+      "id": "mosquito-falls",
+      "name": "Mosquito Falls",
+      "region": "Pictured Rocks / Munising",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/mosquito-falls/",
+      "source": "https://www.nps.gov/places/mosquito-beach.htm",
+      "lat": 46.51621,
+      "lng": -86.47776
+    },
+    {
+      "id": "nawadaha-falls",
+      "name": "Nawadaha Falls",
+      "region": "Western U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/nawadaha-falls/",
+      "source": "https://www.michigan.gov/recsearch/parks/porkies",
+      "lat": 46.698631,
+      "lng": -89.974237
+    },
+    {
+      "id": "nonesuch-falls",
+      "name": "Nonesuch Falls",
+      "region": "Western U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/nonesuch-falls/",
+      "source": "https://www.michigan.gov/dnr/-/media/Project/Websites/dnr/Documents/Education/visitorcenters/porkiesgpscoordinates.pdf?hash=F57F6EB35C65E8A9DA27CAB2B722DAB1&rev=50ecc1655b97462aafd08f568d20440a",
+      "lat": 46.755844,
+      "lng": -89.613115
+    },
+    {
+      "id": "o-kun-de-kun-falls",
+      "name": "O Kun de Kun Falls",
+      "region": "Western U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/o-kun-de-kun-falls/",
+      "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_16-32_May2026.pdf",
+      "lat": 46.651152,
+      "lng": -89.15254
+    },
+    {
+      "id": "overlooked-falls",
+      "name": "Overlooked Falls",
+      "region": "Western U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/overlooked-falls/",
+      "source": "https://explorewesternup.com/things-to-do/waterfalls/",
+      "lat": 46.721769,
+      "lng": -89.830185
+    },
+    {
+      "id": "pemene-falls",
+      "name": "Pemene Falls",
+      "region": "Eastern U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/pemene-falls/",
+      "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/Menominee_mrspra_trailmap.pdf?hash=88DE2DBCEDCDBE851E12D5C957A583C1&rev=8a791e46c4404b838b921271509e21fb",
+      "lat": 45.594123,
+      "lng": -87.777192
+    },
+    {
+      "id": "pinnacle-falls",
+      "name": "Pinnacle Falls",
+      "region": "Central U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/pinnacle-falls/",
+      "source": "https://yellowdogwatershed.org/pinnacle-falls-preserve/",
+      "lat": 46.706651,
+      "lng": -87.806989
+    },
+    {
+      "id": "potawatomi-falls",
+      "name": "Potawatomi Falls",
+      "region": "Western U.P.",
+      "status": "restricted",
+      "url": "/upper-peninsula-waterfalls/potawatomi-falls/",
+      "source": "https://ironwoodchamber.org/attraction/black-river-scenic-byway/",
+      "lat": 46.637918,
+      "lng": -90.051383
+    },
+    {
+      "id": "power-house-falls",
+      "name": "Power House Falls",
+      "region": "Western U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/power-house-falls/",
+      "source": "https://www.waterfallsofthekeweenaw.com/falls-river/powerhouse-falls/",
+      "lat": 46.736793,
+      "lng": -88.44433
+    },
+    {
+      "id": "quiver-falls",
+      "name": "Quiver Falls",
+      "region": "Eastern U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/quiver-falls/",
+      "source": "https://www.marinettecountywi.gov/departments/parks/outdoor-recreation/waterfalls/parks/outdoor-recreation/waterfalls/",
+      "lat": 45.654161,
+      "lng": -87.824715
+    },
+    {
+      "id": "rainbow-falls",
+      "name": "Rainbow Falls",
+      "region": "Western U.P.",
+      "status": "restricted",
+      "url": "/upper-peninsula-waterfalls/rainbow-falls/",
+      "source": "https://ironwoodchamber.org/attraction/black-river-scenic-byway/",
+      "lat": 46.658695,
+      "lng": -90.04376
+    },
+    {
+      "id": "rapid-river-falls-delta-county",
+      "name": "Rapid River Falls (Delta County)",
+      "region": "Central U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/rapid-river-falls-delta-county/",
+      "source": "https://deltacountymi.gov/township-information/baldwin-township/points-of-interest/",
+      "lat": 46.021667,
+      "lng": -86.983333
+    },
+    {
+      "id": "rock-river-falls",
+      "name": "Rock River Falls",
+      "region": "Central U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/rock-river-falls/",
+      "source": "https://www.uptravel.com/listing/rock-river-falls/3493/",
+      "lat": 46.411253,
+      "lng": -86.976063
+    },
+    {
+      "id": "sable-falls",
+      "name": "Sable Falls",
+      "region": "Pictured Rocks / Munising",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/sable-falls/",
+      "source": "https://www.nps.gov/places/sable-falls.htm",
+      "lat": 46.66874,
+      "lng": -86.013716
+    },
+    {
+      "id": "sand-portage-falls",
+      "name": "Sand Portage Falls",
+      "region": "Eastern U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/sand-portage-falls/",
+      "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/Menominee_mrspra_trailmap.pdf?hash=52F6932BAE494F3EEDC3FE3038D9228C&rev=1a874afd757b497bbd88c5cd79171df2",
+      "lat": 45.759885,
+      "lng": -87.964463
+    },
+    {
+      "id": "saxon-falls",
+      "name": "Saxon Falls",
+      "region": "Western U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/saxon-falls/",
+      "source": "https://ironcountyoutdoors.org/saxon-falls/",
+      "lat": 46.535849,
+      "lng": -90.37857
+    },
+    {
+      "id": "shining-cloud-falls",
+      "name": "Shining Cloud Falls",
+      "region": "Western U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/shining-cloud-falls/",
+      "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf?hash=E9680F7DEC943301EBCD637007AAAB8C&rev=3d600b0d32ff4a589c9038c1ec545465",
+      "lat": 46.757774,
+      "lng": -89.866956
+    },
+    {
+      "id": "spray-falls",
+      "name": "Spray Falls",
+      "region": "Pictured Rocks / Munising",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/spray-falls/",
+      "source": "https://www.nps.gov/places/spray-falls.htm",
+      "lat": 46.557988,
+      "lng": -86.410616
+    },
+    {
+      "id": "sturgeon-falls",
+      "name": "Sturgeon Falls",
+      "region": "Western U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/sturgeon-falls/",
+      "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_33-46_Apr2025.pdf",
+      "lat": 46.64242,
+      "lng": -88.69346
+    },
+    {
+      "id": "superior-falls",
+      "name": "Superior Falls",
+      "region": "Western U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/superior-falls/",
+      "source": "https://www.travelwisconsin.com/outdoors/waterfalls/superior-falls",
+      "lat": 46.562528,
+      "lng": -90.41554
+    },
+    {
+      "id": "tibbets-falls",
+      "name": "Tibbets Falls",
+      "region": "Western U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/tibbets-falls/",
+      "source": "https://northcountrytrail.org/files/chapters/pwc/PWC_33-46_Apr2025.pdf",
+      "lat": 46.58047,
+      "lng": -88.588843
+    },
+    {
+      "id": "tioga-park-falls",
+      "name": "Tioga Park Falls (roadside cascades)",
+      "region": "Western U.P.",
+      "status": "seasonal",
+      "url": "/upper-peninsula-waterfalls/tioga-park-falls/",
+      "source": "https://www.michigan.gov/mdot/news-outreach/pressreleases/2026/04/21/most-mdot-roadside-parks-reopening-april-28",
+      "lat": 46.5734,
+      "lng": -88.3398
+    },
+    {
+      "id": "trap-falls",
+      "name": "Trap Falls",
+      "region": "Western U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/trap-falls/",
+      "source": "https://www.michigan.gov/dnr/-/media/Project/Websites/dnr/Documents/Education/visitorcenters/PMWSP-paper-23.pdf?hash=DD34CC77EB9AB986C14548DF50C9A3EB&rev=e5d2d9cb3c0b4bcd820232f2dc79dcc5",
+      "lat": 46.791775,
+      "lng": -89.690505
+    },
+    {
+      "id": "trappers-falls",
+      "name": "Trappers Falls",
+      "region": "Western U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/trappers-falls/",
+      "source": "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf",
+      "lat": 46.732624,
+      "lng": -89.884667
+    },
+    {
+      "id": "upper-hungarian-falls",
+      "name": "Upper Hungarian Falls",
+      "region": "Western U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/upper-hungarian-falls/",
+      "source": "https://keweenawlandtrust.org/sites/default/files/2019-11/Hungarian%20Falls%20Nature%20Area%20Directions_0_0.pdf",
+      "lat": 47.173872,
+      "lng": -88.451082
+    },
+    {
+      "id": "wagner-falls",
+      "name": "Wagner Falls",
+      "region": "Pictured Rocks / Munising",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/wagner-falls/",
+      "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsT-Z/Wagner-Falls-Scenic-Site-Trail.pdf",
+      "lat": 46.387663,
+      "lng": -86.646554
+    },
+    {
+      "id": "wright-street-falls",
+      "name": "Wright Street Falls",
+      "region": "Central U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/wright-street-falls/",
+      "source": "https://www.travelmarquette.com/outdoor-adventure/waterfalls/",
+      "lat": 46.56588,
+      "lng": -87.44576
+    },
+    {
+      "id": "wyandotte-falls",
+      "name": "Wyandotte Falls",
+      "region": "Western U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/wyandotte-falls/",
+      "source": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/keweenawmi/KCVB_summer_waterfalls_brochure_20230517_WEB_LOW_1__15f13fff-fd1f-4b37-9438-cd0a32dbaf4a.pdf",
+      "lat": 46.890025,
+      "lng": -88.877565
+    },
+    {
+      "id": "yellow-dog-falls",
+      "name": "Yellow Dog Falls",
+      "region": "Central U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/yellow-dog-falls/",
+      "source": "https://yellowdogwatershed.org/land-protection-program/yellow-dog-river-community-forest/",
+      "lat": 46.72865,
+      "lng": -87.70674
+    },
+    {
+      "id": "yondota-falls",
+      "name": "Yondota Falls",
+      "region": "Western U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/yondota-falls/",
+      "source": "https://forwardtousa.com/recreation/yondota-falls/",
+      "lat": 46.430643,
+      "lng": -89.685341
+    }
+  ],
+  "nearby": {
+    "agate-falls": [
+      {
+        "id": "bond-falls",
+        "miles": 5.3
+      },
+      {
+        "id": "duppy-falls",
+        "miles": 9.7
+      },
+      {
+        "id": "mex-i-min-e-falls",
+        "miles": 11.7
+      },
+      {
+        "id": "o-kun-de-kun-falls",
+        "miles": 12.1
+      },
+      {
+        "id": "kakabika-falls",
+        "miles": 19.9
+      },
+      {
+        "id": "cascade-falls",
+        "miles": 20.6
+      },
+      {
+        "id": "sturgeon-falls",
+        "miles": 21.9
+      },
+      {
+        "id": "tibbets-falls",
+        "miles": 24.8
+      },
+      {
+        "id": "yondota-falls",
+        "miles": 28.5
+      },
+      {
+        "id": "wyandotte-falls",
+        "miles": 30
+      },
+      {
+        "id": "canyon-falls",
+        "miles": 30.9
+      },
+      {
+        "id": "nonesuch-falls",
+        "miles": 31.3
+      },
+      {
+        "id": "bonanza-falls",
+        "miles": 32.7
+      },
+      {
+        "id": "little-union-gorge-falls",
+        "miles": 33.3
+      },
+      {
+        "id": "power-house-falls",
+        "miles": 35.4
+      },
+      {
+        "id": "falls-river-trail",
+        "miles": 35.6
+      },
+      {
+        "id": "trap-falls",
+        "miles": 35.7
+      },
+      {
+        "id": "tioga-park-falls",
+        "miles": 36.2
+      },
+      {
+        "id": "overlooked-falls",
+        "miles": 38.9
+      },
+      {
+        "id": "greenstone-falls",
+        "miles": 39
+      },
+      {
+        "id": "trappers-falls",
+        "miles": 41.5
+      },
+      {
+        "id": "shining-cloud-falls",
+        "miles": 41.5
+      },
+      {
+        "id": "explorers-falls",
+        "miles": 41.7
+      },
+      {
+        "id": "lepisto-falls",
+        "miles": 42.2
+      },
+      {
+        "id": "gabbro-falls",
+        "miles": 42.9
+      },
+      {
+        "id": "manabezho-falls",
+        "miles": 44.6
+      },
+      {
+        "id": "nawadaha-falls",
+        "miles": 44.6
+      },
+      {
+        "id": "manido-falls",
+        "miles": 44.7
+      },
+      {
+        "id": "gorge-falls",
+        "miles": 46.9
+      },
+      {
+        "id": "rainbow-falls",
+        "miles": 46.9
+      },
+      {
+        "id": "potawatomi-falls",
+        "miles": 46.9
+      },
+      {
+        "id": "great-conglomerate-falls",
+        "miles": 47
+      }
+    ],
+    "big-erics-falls": [
+      {
+        "id": "pinnacle-falls",
+        "miles": 17
+      },
+      {
+        "id": "falls-river-trail",
+        "miles": 19.2
+      },
+      {
+        "id": "power-house-falls",
+        "miles": 19.3
+      },
+      {
+        "id": "yellow-dog-falls",
+        "miles": 20.1
+      },
+      {
+        "id": "tioga-park-falls",
+        "miles": 23.5
+      },
+      {
+        "id": "canyon-falls",
+        "miles": 24.9
+      },
+      {
+        "id": "lower-hungarian-falls",
+        "miles": 27
+      },
+      {
+        "id": "little-garlic-falls",
+        "miles": 27.5
+      },
+      {
+        "id": "upper-hungarian-falls",
+        "miles": 27.5
+      },
+      {
+        "id": "tibbets-falls",
+        "miles": 31
+      },
+      {
+        "id": "sturgeon-falls",
+        "miles": 32.7
+      },
+      {
+        "id": "haven-falls",
+        "miles": 35.9
+      },
+      {
+        "id": "wright-street-falls",
+        "miles": 36.6
+      },
+      {
+        "id": "wyandotte-falls",
+        "miles": 37.6
+      },
+      {
+        "id": "morgan-falls",
+        "miles": 39
+      },
+      {
+        "id": "carp-river-falls",
+        "miles": 39.1
+      },
+      {
+        "id": "eagle-river-falls",
+        "miles": 39.1
+      },
+      {
+        "id": "jacobs-falls",
+        "miles": 39.6
+      },
+      {
+        "id": "manganese-falls",
+        "miles": 42.4
+      }
+    ],
+    "bonanza-falls": [
+      {
+        "id": "little-union-gorge-falls",
+        "miles": 3.1
+      },
+      {
+        "id": "nonesuch-falls",
+        "miles": 4.8
+      },
+      {
+        "id": "trap-falls",
+        "miles": 5.9
+      },
+      {
+        "id": "cascade-falls",
+        "miles": 13
+      },
+      {
+        "id": "greenstone-falls",
+        "miles": 13.9
+      },
+      {
+        "id": "overlooked-falls",
+        "miles": 14
+      },
+      {
+        "id": "shining-cloud-falls",
+        "miles": 14.6
+      },
+      {
+        "id": "trappers-falls",
+        "miles": 16
+      },
+      {
+        "id": "explorers-falls",
+        "miles": 16
+      },
+      {
+        "id": "manido-falls",
+        "miles": 20.4
+      },
+      {
+        "id": "manabezho-falls",
+        "miles": 20.5
+      },
+      {
+        "id": "lepisto-falls",
+        "miles": 20.7
+      },
+      {
+        "id": "nawadaha-falls",
+        "miles": 20.8
+      },
+      {
+        "id": "o-kun-de-kun-falls",
+        "miles": 23
+      },
+      {
+        "id": "rainbow-falls",
+        "miles": 25
+      },
+      {
+        "id": "gorge-falls",
+        "miles": 25.8
+      },
+      {
+        "id": "potawatomi-falls",
+        "miles": 25.9
+      },
+      {
+        "id": "great-conglomerate-falls",
+        "miles": 26.3
+      },
+      {
+        "id": "yondota-falls",
+        "miles": 27.4
+      },
+      {
+        "id": "gabbro-falls",
+        "miles": 29.6
+      },
+      {
+        "id": "agate-falls",
+        "miles": 32.7
+      },
+      {
+        "id": "wyandotte-falls",
+        "miles": 33.2
+      },
+      {
+        "id": "kakabika-falls",
+        "miles": 33.8
+      },
+      {
+        "id": "bond-falls",
+        "miles": 35.1
+      },
+      {
+        "id": "interstate-falls",
+        "miles": 38.1
+      },
+      {
+        "id": "duppy-falls",
+        "miles": 42.1
+      },
+      {
+        "id": "mex-i-min-e-falls",
+        "miles": 42.7
+      },
+      {
+        "id": "saxon-falls",
+        "miles": 43
+      },
+      {
+        "id": "sturgeon-falls",
+        "miles": 43.3
+      },
+      {
+        "id": "superior-falls",
+        "miles": 43.7
+      },
+      {
+        "id": "tibbets-falls",
+        "miles": 49.4
+      }
+    ],
+    "bond-falls": [
+      {
+        "id": "agate-falls",
+        "miles": 5.3
+      },
+      {
+        "id": "mex-i-min-e-falls",
+        "miles": 7.6
+      },
+      {
+        "id": "duppy-falls",
+        "miles": 10.5
+      },
+      {
+        "id": "kakabika-falls",
+        "miles": 16
+      },
+      {
+        "id": "o-kun-de-kun-falls",
+        "miles": 16.7
+      },
+      {
+        "id": "cascade-falls",
+        "miles": 22.4
+      },
+      {
+        "id": "sturgeon-falls",
+        "miles": 26.3
+      },
+      {
+        "id": "yondota-falls",
+        "miles": 26.4
+      },
+      {
+        "id": "tibbets-falls",
+        "miles": 28.4
+      },
+      {
+        "id": "nonesuch-falls",
+        "miles": 33
+      },
+      {
+        "id": "canyon-falls",
+        "miles": 34.6
+      },
+      {
+        "id": "bonanza-falls",
+        "miles": 35.1
+      },
+      {
+        "id": "little-union-gorge-falls",
+        "miles": 35.3
+      },
+      {
+        "id": "wyandotte-falls",
+        "miles": 35.3
+      },
+      {
+        "id": "trap-falls",
+        "miles": 37.4
+      },
+      {
+        "id": "tioga-park-falls",
+        "miles": 39.4
+      },
+      {
+        "id": "overlooked-falls",
+        "miles": 39.5
+      },
+      {
+        "id": "greenstone-falls",
+        "miles": 39.7
+      },
+      {
+        "id": "power-house-falls",
+        "miles": 39.7
+      },
+      {
+        "id": "falls-river-trail",
+        "miles": 40
+      },
+      {
+        "id": "gabbro-falls",
+        "miles": 41.4
+      },
+      {
+        "id": "lepisto-falls",
+        "miles": 42.1
+      },
+      {
+        "id": "trappers-falls",
+        "miles": 42.1
+      },
+      {
+        "id": "explorers-falls",
+        "miles": 42.3
+      },
+      {
+        "id": "shining-cloud-falls",
+        "miles": 42.4
+      },
+      {
+        "id": "nawadaha-falls",
+        "miles": 44.7
+      },
+      {
+        "id": "manabezho-falls",
+        "miles": 44.7
+      },
+      {
+        "id": "manido-falls",
+        "miles": 44.8
+      },
+      {
+        "id": "potawatomi-falls",
+        "miles": 46.4
+      },
+      {
+        "id": "gorge-falls",
+        "miles": 46.4
+      },
+      {
+        "id": "great-conglomerate-falls",
+        "miles": 46.4
+      },
+      {
+        "id": "rainbow-falls",
+        "miles": 46.6
+      }
+    ],
+    "bridalveil-falls": [
+      {
+        "id": "elliot-falls",
+        "miles": 0.7
+      },
+      {
+        "id": "mosquito-falls",
+        "miles": 2.2
+      },
+      {
+        "id": "miners-falls",
+        "miles": 2.4
+      },
+      {
+        "id": "chapel-falls",
+        "miles": 4
+      },
+      {
+        "id": "spray-falls",
+        "miles": 6.3
+      },
+      {
+        "id": "horseshoe-falls",
+        "miles": 9.3
+      },
+      {
+        "id": "wagner-falls",
+        "miles": 10.2
+      },
+      {
+        "id": "rock-river-falls",
+        "miles": 22.6
+      },
+      {
+        "id": "sable-falls",
+        "miles": 26.6
+      },
+      {
+        "id": "laughing-whitefish-falls",
+        "miles": 27.4
+      },
+      {
+        "id": "rapid-river-falls-delta-county",
+        "miles": 40.2
+      },
+      {
+        "id": "morgan-falls",
+        "miles": 43.9
+      },
+      {
+        "id": "carp-river-falls",
+        "miles": 43.9
+      },
+      {
+        "id": "wright-street-falls",
+        "miles": 44
+      }
+    ],
+    "canyon-falls": [
+      {
+        "id": "tibbets-falls",
+        "miles": 6.2
+      },
+      {
+        "id": "tioga-park-falls",
+        "miles": 7.3
+      },
+      {
+        "id": "power-house-falls",
+        "miles": 7.9
+      },
+      {
+        "id": "falls-river-trail",
+        "miles": 8.9
+      },
+      {
+        "id": "sturgeon-falls",
+        "miles": 10.5
+      },
+      {
+        "id": "big-erics-falls",
+        "miles": 24.9
+      },
+      {
+        "id": "duppy-falls",
+        "miles": 25.4
+      },
+      {
+        "id": "wyandotte-falls",
+        "miles": 26.5
+      },
+      {
+        "id": "agate-falls",
+        "miles": 30.9
+      },
+      {
+        "id": "pinnacle-falls",
+        "miles": 32.2
+      },
+      {
+        "id": "o-kun-de-kun-falls",
+        "miles": 32.2
+      },
+      {
+        "id": "bond-falls",
+        "miles": 34.6
+      },
+      {
+        "id": "mex-i-min-e-falls",
+        "miles": 35
+      },
+      {
+        "id": "yellow-dog-falls",
+        "miles": 37.1
+      },
+      {
+        "id": "lower-hungarian-falls",
+        "miles": 37.7
+      },
+      {
+        "id": "upper-hungarian-falls",
+        "miles": 38
+      },
+      {
+        "id": "little-garlic-falls",
+        "miles": 42.6
+      },
+      {
+        "id": "cascade-falls",
+        "miles": 46.1
+      },
+      {
+        "id": "wright-street-falls",
+        "miles": 49
+      },
+      {
+        "id": "morgan-falls",
+        "miles": 49.5
+      },
+      {
+        "id": "carp-river-falls",
+        "miles": 49.5
+      }
+    ],
+    "carp-river-falls": [
+      {
+        "id": "morgan-falls",
+        "miles": 0.3
+      },
+      {
+        "id": "wright-street-falls",
+        "miles": 4.3
+      },
+      {
+        "id": "little-garlic-falls",
+        "miles": 12.9
+      },
+      {
+        "id": "laughing-whitefish-falls",
+        "miles": 19.8
+      },
+      {
+        "id": "yellow-dog-falls",
+        "miles": 19.8
+      },
+      {
+        "id": "pinnacle-falls",
+        "miles": 22.1
+      },
+      {
+        "id": "rock-river-falls",
+        "miles": 23.3
+      },
+      {
+        "id": "horseshoe-falls",
+        "miles": 38.9
+      },
+      {
+        "id": "wagner-falls",
+        "miles": 38.9
+      },
+      {
+        "id": "big-erics-falls",
+        "miles": 39.1
+      },
+      {
+        "id": "rapid-river-falls-delta-county",
+        "miles": 40
+      },
+      {
+        "id": "tioga-park-falls",
+        "miles": 42.7
+      },
+      {
+        "id": "elliot-falls",
+        "miles": 43.5
+      },
+      {
+        "id": "miners-falls",
+        "miles": 43.6
+      },
+      {
+        "id": "bridalveil-falls",
+        "miles": 43.9
+      },
+      {
+        "id": "mosquito-falls",
+        "miles": 46.1
+      },
+      {
+        "id": "chapel-falls",
+        "miles": 47.7
+      },
+      {
+        "id": "spray-falls",
+        "miles": 49.4
+      },
+      {
+        "id": "canyon-falls",
+        "miles": 49.5
+      }
+    ],
+    "cascade-falls": [
+      {
+        "id": "nonesuch-falls",
+        "miles": 10.7
+      },
+      {
+        "id": "little-union-gorge-falls",
+        "miles": 12.9
+      },
+      {
+        "id": "bonanza-falls",
+        "miles": 13
+      },
+      {
+        "id": "o-kun-de-kun-falls",
+        "miles": 13.9
+      },
+      {
+        "id": "trap-falls",
+        "miles": 15.1
+      },
+      {
+        "id": "overlooked-falls",
+        "miles": 18.8
+      },
+      {
+        "id": "greenstone-falls",
+        "miles": 18.9
+      },
+      {
+        "id": "yondota-falls",
+        "miles": 19
+      },
+      {
+        "id": "agate-falls",
+        "miles": 20.6
+      },
+      {
+        "id": "shining-cloud-falls",
+        "miles": 21.2
+      },
+      {
+        "id": "trappers-falls",
+        "miles": 21.5
+      },
+      {
+        "id": "explorers-falls",
+        "miles": 21.7
+      },
+      {
+        "id": "kakabika-falls",
+        "miles": 21.7
+      },
+      {
+        "id": "bond-falls",
+        "miles": 22.4
+      },
+      {
+        "id": "lepisto-falls",
+        "miles": 23.4
+      },
+      {
+        "id": "manabezho-falls",
+        "miles": 25.1
+      },
+      {
+        "id": "manido-falls",
+        "miles": 25.2
+      },
+      {
+        "id": "nawadaha-falls",
+        "miles": 25.2
+      },
+      {
+        "id": "gabbro-falls",
+        "miles": 27.9
+      },
+      {
+        "id": "rainbow-falls",
+        "miles": 28.3
+      },
+      {
+        "id": "gorge-falls",
+        "miles": 28.7
+      },
+      {
+        "id": "potawatomi-falls",
+        "miles": 28.7
+      },
+      {
+        "id": "great-conglomerate-falls",
+        "miles": 28.9
+      },
+      {
+        "id": "mex-i-min-e-falls",
+        "miles": 29.9
+      },
+      {
+        "id": "duppy-falls",
+        "miles": 30.3
+      },
+      {
+        "id": "wyandotte-falls",
+        "miles": 31.5
+      },
+      {
+        "id": "sturgeon-falls",
+        "miles": 35.7
+      },
+      {
+        "id": "interstate-falls",
+        "miles": 37.7
+      },
+      {
+        "id": "tibbets-falls",
+        "miles": 41
+      },
+      {
+        "id": "saxon-falls",
+        "miles": 45
+      },
+      {
+        "id": "canyon-falls",
+        "miles": 46.1
+      },
+      {
+        "id": "superior-falls",
+        "miles": 46.4
+      },
+      {
+        "id": "falls-river-trail",
+        "miles": 47.6
+      },
+      {
+        "id": "power-house-falls",
+        "miles": 47.8
+      }
+    ],
+    "chapel-falls": [
+      {
+        "id": "mosquito-falls",
+        "miles": 1.8
+      },
+      {
+        "id": "spray-falls",
+        "miles": 2.6
+      },
+      {
+        "id": "bridalveil-falls",
+        "miles": 4
+      },
+      {
+        "id": "elliot-falls",
+        "miles": 4.6
+      },
+      {
+        "id": "miners-falls",
+        "miles": 5.6
+      },
+      {
+        "id": "horseshoe-falls",
+        "miles": 12.8
+      },
+      {
+        "id": "wagner-falls",
+        "miles": 13.7
+      },
+      {
+        "id": "sable-falls",
+        "miles": 22.6
+      },
+      {
+        "id": "rock-river-falls",
+        "miles": 26.6
+      },
+      {
+        "id": "laughing-whitefish-falls",
+        "miles": 31.4
+      },
+      {
+        "id": "rapid-river-falls-delta-county",
+        "miles": 43.5
+      },
+      {
+        "id": "morgan-falls",
+        "miles": 47.7
+      },
+      {
+        "id": "wright-street-falls",
+        "miles": 47.7
+      },
+      {
+        "id": "carp-river-falls",
+        "miles": 47.7
+      }
+    ],
+    "duppy-falls": [
+      {
+        "id": "mex-i-min-e-falls",
+        "miles": 9.7
+      },
+      {
+        "id": "agate-falls",
+        "miles": 9.7
+      },
+      {
+        "id": "bond-falls",
+        "miles": 10.5
+      },
+      {
+        "id": "sturgeon-falls",
+        "miles": 19
+      },
+      {
+        "id": "tibbets-falls",
+        "miles": 19.2
+      },
+      {
+        "id": "o-kun-de-kun-falls",
+        "miles": 20.1
+      },
+      {
+        "id": "canyon-falls",
+        "miles": 25.4
+      },
+      {
+        "id": "kakabika-falls",
+        "miles": 26.3
+      },
+      {
+        "id": "tioga-park-falls",
+        "miles": 29.4
+      },
+      {
+        "id": "cascade-falls",
+        "miles": 30.3
+      },
+      {
+        "id": "power-house-falls",
+        "miles": 31.5
+      },
+      {
+        "id": "falls-river-trail",
+        "miles": 32
+      },
+      {
+        "id": "wyandotte-falls",
+        "miles": 33
+      },
+      {
+        "id": "yondota-falls",
+        "miles": 36.9
+      },
+      {
+        "id": "nonesuch-falls",
+        "miles": 40.9
+      },
+      {
+        "id": "bonanza-falls",
+        "miles": 42.1
+      },
+      {
+        "id": "little-union-gorge-falls",
+        "miles": 42.9
+      },
+      {
+        "id": "trap-falls",
+        "miles": 45.3
+      },
+      {
+        "id": "overlooked-falls",
+        "miles": 48.6
+      },
+      {
+        "id": "greenstone-falls",
+        "miles": 48.7
+      }
+    ],
+    "eagle-river-falls": [
+      {
+        "id": "jacobs-falls",
+        "miles": 3
+      },
+      {
+        "id": "haven-falls",
+        "miles": 12.8
+      },
+      {
+        "id": "upper-hungarian-falls",
+        "miles": 18
+      },
+      {
+        "id": "lower-hungarian-falls",
+        "miles": 18.1
+      },
+      {
+        "id": "manganese-falls",
+        "miles": 19.8
+      },
+      {
+        "id": "big-erics-falls",
+        "miles": 39.1
+      },
+      {
+        "id": "wyandotte-falls",
+        "miles": 45.2
+      },
+      {
+        "id": "falls-river-trail",
+        "miles": 46.2
+      },
+      {
+        "id": "power-house-falls",
+        "miles": 47.2
+      }
+    ],
+    "elliot-falls": [
+      {
+        "id": "bridalveil-falls",
+        "miles": 0.7
+      },
+      {
+        "id": "miners-falls",
+        "miles": 1.7
+      },
+      {
+        "id": "mosquito-falls",
+        "miles": 2.8
+      },
+      {
+        "id": "chapel-falls",
+        "miles": 4.6
+      },
+      {
+        "id": "spray-falls",
+        "miles": 7
+      },
+      {
+        "id": "horseshoe-falls",
+        "miles": 8.5
+      },
+      {
+        "id": "wagner-falls",
+        "miles": 9.5
+      },
+      {
+        "id": "rock-river-falls",
+        "miles": 22
+      },
+      {
+        "id": "laughing-whitefish-falls",
+        "miles": 26.8
+      },
+      {
+        "id": "sable-falls",
+        "miles": 27.2
+      },
+      {
+        "id": "rapid-river-falls-delta-county",
+        "miles": 39.4
+      },
+      {
+        "id": "morgan-falls",
+        "miles": 43.5
+      },
+      {
+        "id": "carp-river-falls",
+        "miles": 43.5
+      },
+      {
+        "id": "wright-street-falls",
+        "miles": 43.7
+      }
+    ],
+    "explorers-falls": [
+      {
+        "id": "trappers-falls",
+        "miles": 0.2
+      },
+      {
+        "id": "shining-cloud-falls",
+        "miles": 1.8
+      },
+      {
+        "id": "greenstone-falls",
+        "miles": 2.7
+      },
+      {
+        "id": "overlooked-falls",
+        "miles": 2.8
+      },
+      {
+        "id": "manido-falls",
+        "miles": 4.5
+      },
+      {
+        "id": "manabezho-falls",
+        "miles": 4.5
+      },
+      {
+        "id": "nawadaha-falls",
+        "miles": 4.9
+      },
+      {
+        "id": "lepisto-falls",
+        "miles": 5.9
+      },
+      {
+        "id": "rainbow-falls",
+        "miles": 9.1
+      },
+      {
+        "id": "trap-falls",
+        "miles": 10.1
+      },
+      {
+        "id": "gorge-falls",
+        "miles": 10.2
+      },
+      {
+        "id": "potawatomi-falls",
+        "miles": 10.3
+      },
+      {
+        "id": "great-conglomerate-falls",
+        "miles": 10.7
+      },
+      {
+        "id": "nonesuch-falls",
+        "miles": 13
+      },
+      {
+        "id": "little-union-gorge-falls",
+        "miles": 13
+      },
+      {
+        "id": "bonanza-falls",
+        "miles": 16
+      },
+      {
+        "id": "gabbro-falls",
+        "miles": 16.9
+      },
+      {
+        "id": "cascade-falls",
+        "miles": 21.7
+      },
+      {
+        "id": "yondota-falls",
+        "miles": 23.1
+      },
+      {
+        "id": "interstate-falls",
+        "miles": 23.3
+      },
+      {
+        "id": "saxon-falls",
+        "miles": 27.1
+      },
+      {
+        "id": "superior-falls",
+        "miles": 27.8
+      },
+      {
+        "id": "kakabika-falls",
+        "miles": 34.4
+      },
+      {
+        "id": "o-kun-de-kun-falls",
+        "miles": 35.3
+      },
+      {
+        "id": "agate-falls",
+        "miles": 41.7
+      },
+      {
+        "id": "bond-falls",
+        "miles": 42.3
+      },
+      {
+        "id": "wyandotte-falls",
+        "miles": 48.9
+      },
+      {
+        "id": "mex-i-min-e-falls",
+        "miles": 49.2
+      }
+    ],
+    "falls-river-trail": [
+      {
+        "id": "power-house-falls",
+        "miles": 1.2
+      },
+      {
+        "id": "canyon-falls",
+        "miles": 8.9
+      },
+      {
+        "id": "tioga-park-falls",
+        "miles": 13.5
+      },
+      {
+        "id": "tibbets-falls",
+        "miles": 13.5
+      },
+      {
+        "id": "sturgeon-falls",
+        "miles": 13.7
+      },
+      {
+        "id": "big-erics-falls",
+        "miles": 19.2
+      },
+      {
+        "id": "wyandotte-falls",
+        "miles": 22.2
+      },
+      {
+        "id": "lower-hungarian-falls",
+        "miles": 28.8
+      },
+      {
+        "id": "upper-hungarian-falls",
+        "miles": 29.1
+      },
+      {
+        "id": "pinnacle-falls",
+        "miles": 30.7
+      },
+      {
+        "id": "duppy-falls",
+        "miles": 32
+      },
+      {
+        "id": "o-kun-de-kun-falls",
+        "miles": 33.9
+      },
+      {
+        "id": "yellow-dog-falls",
+        "miles": 35.4
+      },
+      {
+        "id": "agate-falls",
+        "miles": 35.6
+      },
+      {
+        "id": "bond-falls",
+        "miles": 40
+      },
+      {
+        "id": "mex-i-min-e-falls",
+        "miles": 41.7
+      },
+      {
+        "id": "little-garlic-falls",
+        "miles": 41.8
+      },
+      {
+        "id": "eagle-river-falls",
+        "miles": 46.2
+      },
+      {
+        "id": "cascade-falls",
+        "miles": 47.6
+      },
+      {
+        "id": "jacobs-falls",
+        "miles": 47.7
+      },
+      {
+        "id": "haven-falls",
+        "miles": 48
+      },
+      {
+        "id": "wright-street-falls",
+        "miles": 49.5
+      }
+    ],
+    "fumee-falls": [
+      {
+        "id": "sand-portage-falls",
+        "miles": 2.9
+      },
+      {
+        "id": "misicot-falls",
+        "miles": 3.4
+      },
+      {
+        "id": "quiver-falls",
+        "miles": 12.6
+      },
+      {
+        "id": "pemene-falls",
+        "miles": 17.3
+      }
+    ],
+    "gabbro-falls": [
+      {
+        "id": "great-conglomerate-falls",
+        "miles": 9.4
+      },
+      {
+        "id": "potawatomi-falls",
+        "miles": 9.8
+      },
+      {
+        "id": "interstate-falls",
+        "miles": 9.9
+      },
+      {
+        "id": "gorge-falls",
+        "miles": 9.9
+      },
+      {
+        "id": "rainbow-falls",
+        "miles": 11.1
+      },
+      {
+        "id": "lepisto-falls",
+        "miles": 11.1
+      },
+      {
+        "id": "nawadaha-falls",
+        "miles": 13.6
+      },
+      {
+        "id": "manabezho-falls",
+        "miles": 14
+      },
+      {
+        "id": "manido-falls",
+        "miles": 14.2
+      },
+      {
+        "id": "yondota-falls",
+        "miles": 15.4
+      },
+      {
+        "id": "trappers-falls",
+        "miles": 16.7
+      },
+      {
+        "id": "explorers-falls",
+        "miles": 16.9
+      },
+      {
+        "id": "overlooked-falls",
+        "miles": 17
+      },
+      {
+        "id": "greenstone-falls",
+        "miles": 17.1
+      },
+      {
+        "id": "saxon-falls",
+        "miles": 18.5
+      },
+      {
+        "id": "shining-cloud-falls",
+        "miles": 18.6
+      },
+      {
+        "id": "superior-falls",
+        "miles": 20.5
+      },
+      {
+        "id": "trap-falls",
+        "miles": 24.6
+      },
+      {
+        "id": "nonesuch-falls",
+        "miles": 25.1
+      },
+      {
+        "id": "little-union-gorge-falls",
+        "miles": 26.6
+      },
+      {
+        "id": "cascade-falls",
+        "miles": 27.9
+      },
+      {
+        "id": "kakabika-falls",
+        "miles": 28.1
+      },
+      {
+        "id": "bonanza-falls",
+        "miles": 29.6
+      },
+      {
+        "id": "o-kun-de-kun-falls",
+        "miles": 41.2
+      },
+      {
+        "id": "bond-falls",
+        "miles": 41.4
+      },
+      {
+        "id": "agate-falls",
+        "miles": 42.9
+      },
+      {
+        "id": "mex-i-min-e-falls",
+        "miles": 46.6
+      }
+    ],
+    "gorge-falls": [
+      {
+        "id": "potawatomi-falls",
+        "miles": 0.2
+      },
+      {
+        "id": "great-conglomerate-falls",
+        "miles": 0.6
+      },
+      {
+        "id": "rainbow-falls",
+        "miles": 1.3
+      },
+      {
+        "id": "lepisto-falls",
+        "miles": 5.4
+      },
+      {
+        "id": "nawadaha-falls",
+        "miles": 5.4
+      },
+      {
+        "id": "manabezho-falls",
+        "miles": 5.8
+      },
+      {
+        "id": "manido-falls",
+        "miles": 5.9
+      },
+      {
+        "id": "gabbro-falls",
+        "miles": 9.9
+      },
+      {
+        "id": "trappers-falls",
+        "miles": 10.1
+      },
+      {
+        "id": "explorers-falls",
+        "miles": 10.2
+      },
+      {
+        "id": "overlooked-falls",
+        "miles": 11.8
+      },
+      {
+        "id": "greenstone-falls",
+        "miles": 11.9
+      },
+      {
+        "id": "shining-cloud-falls",
+        "miles": 11.9
+      },
+      {
+        "id": "interstate-falls",
+        "miles": 13.5
+      },
+      {
+        "id": "saxon-falls",
+        "miles": 17.2
+      },
+      {
+        "id": "superior-falls",
+        "miles": 18.2
+      },
+      {
+        "id": "trap-falls",
+        "miles": 20
+      },
+      {
+        "id": "nonesuch-falls",
+        "miles": 22.2
+      },
+      {
+        "id": "yondota-falls",
+        "miles": 22.6
+      },
+      {
+        "id": "little-union-gorge-falls",
+        "miles": 22.7
+      },
+      {
+        "id": "bonanza-falls",
+        "miles": 25.8
+      },
+      {
+        "id": "cascade-falls",
+        "miles": 28.7
+      },
+      {
+        "id": "kakabika-falls",
+        "miles": 35.3
+      },
+      {
+        "id": "o-kun-de-kun-falls",
+        "miles": 42.6
+      },
+      {
+        "id": "bond-falls",
+        "miles": 46.4
+      },
+      {
+        "id": "agate-falls",
+        "miles": 46.9
+      }
+    ],
+    "great-conglomerate-falls": [
+      {
+        "id": "potawatomi-falls",
+        "miles": 0.5
+      },
+      {
+        "id": "gorge-falls",
+        "miles": 0.6
+      },
+      {
+        "id": "rainbow-falls",
+        "miles": 1.9
+      },
+      {
+        "id": "lepisto-falls",
+        "miles": 5.7
+      },
+      {
+        "id": "nawadaha-falls",
+        "miles": 6
+      },
+      {
+        "id": "manabezho-falls",
+        "miles": 6.4
+      },
+      {
+        "id": "manido-falls",
+        "miles": 6.6
+      },
+      {
+        "id": "gabbro-falls",
+        "miles": 9.4
+      },
+      {
+        "id": "trappers-falls",
+        "miles": 10.7
+      },
+      {
+        "id": "explorers-falls",
+        "miles": 10.7
+      },
+      {
+        "id": "overlooked-falls",
+        "miles": 12.3
+      },
+      {
+        "id": "greenstone-falls",
+        "miles": 12.4
+      },
+      {
+        "id": "shining-cloud-falls",
+        "miles": 12.5
+      },
+      {
+        "id": "interstate-falls",
+        "miles": 12.9
+      },
+      {
+        "id": "saxon-falls",
+        "miles": 16.7
+      },
+      {
+        "id": "superior-falls",
+        "miles": 17.8
+      },
+      {
+        "id": "trap-falls",
+        "miles": 20.5
+      },
+      {
+        "id": "yondota-falls",
+        "miles": 22.4
+      },
+      {
+        "id": "nonesuch-falls",
+        "miles": 22.6
+      },
+      {
+        "id": "little-union-gorge-falls",
+        "miles": 23.2
+      },
+      {
+        "id": "bonanza-falls",
+        "miles": 26.3
+      },
+      {
+        "id": "cascade-falls",
+        "miles": 28.9
+      },
+      {
+        "id": "kakabika-falls",
+        "miles": 35.2
+      },
+      {
+        "id": "o-kun-de-kun-falls",
+        "miles": 42.8
+      },
+      {
+        "id": "bond-falls",
+        "miles": 46.4
+      },
+      {
+        "id": "agate-falls",
+        "miles": 47
+      }
+    ],
+    "greenstone-falls": [
+      {
+        "id": "overlooked-falls",
+        "miles": 0.2
+      },
+      {
+        "id": "trappers-falls",
+        "miles": 2.6
+      },
+      {
+        "id": "explorers-falls",
+        "miles": 2.7
+      },
+      {
+        "id": "shining-cloud-falls",
+        "miles": 2.9
+      },
+      {
+        "id": "manido-falls",
+        "miles": 6.7
+      },
+      {
+        "id": "manabezho-falls",
+        "miles": 6.7
+      },
+      {
+        "id": "lepisto-falls",
+        "miles": 6.8
+      },
+      {
+        "id": "nawadaha-falls",
+        "miles": 7
+      },
+      {
+        "id": "trap-falls",
+        "miles": 8.2
+      },
+      {
+        "id": "nonesuch-falls",
+        "miles": 10.6
+      },
+      {
+        "id": "little-union-gorge-falls",
+        "miles": 10.9
+      },
+      {
+        "id": "rainbow-falls",
+        "miles": 11
+      },
+      {
+        "id": "gorge-falls",
+        "miles": 11.9
+      },
+      {
+        "id": "potawatomi-falls",
+        "miles": 12
+      },
+      {
+        "id": "great-conglomerate-falls",
+        "miles": 12.4
+      },
+      {
+        "id": "bonanza-falls",
+        "miles": 13.9
+      },
+      {
+        "id": "gabbro-falls",
+        "miles": 17.1
+      },
+      {
+        "id": "cascade-falls",
+        "miles": 18.9
+      },
+      {
+        "id": "yondota-falls",
+        "miles": 21.4
+      },
+      {
+        "id": "interstate-falls",
+        "miles": 24.5
+      },
+      {
+        "id": "saxon-falls",
+        "miles": 29
+      },
+      {
+        "id": "superior-falls",
+        "miles": 29.9
+      },
+      {
+        "id": "kakabika-falls",
+        "miles": 32.2
+      },
+      {
+        "id": "o-kun-de-kun-falls",
+        "miles": 32.6
+      },
+      {
+        "id": "agate-falls",
+        "miles": 39
+      },
+      {
+        "id": "bond-falls",
+        "miles": 39.7
+      },
+      {
+        "id": "wyandotte-falls",
+        "miles": 46.6
+      },
+      {
+        "id": "mex-i-min-e-falls",
+        "miles": 46.6
+      },
+      {
+        "id": "duppy-falls",
+        "miles": 48.7
+      }
+    ],
+    "haven-falls": [
+      {
+        "id": "manganese-falls",
+        "miles": 8.8
+      },
+      {
+        "id": "jacobs-falls",
+        "miles": 10.4
+      },
+      {
+        "id": "eagle-river-falls",
+        "miles": 12.8
+      },
+      {
+        "id": "lower-hungarian-falls",
+        "miles": 24.4
+      },
+      {
+        "id": "upper-hungarian-falls",
+        "miles": 24.6
+      },
+      {
+        "id": "big-erics-falls",
+        "miles": 35.9
+      },
+      {
+        "id": "yellow-dog-falls",
+        "miles": 47.6
+      },
+      {
+        "id": "pinnacle-falls",
+        "miles": 47.8
+      },
+      {
+        "id": "falls-river-trail",
+        "miles": 48
+      },
+      {
+        "id": "power-house-falls",
+        "miles": 48.8
+      }
+    ],
+    "horseshoe-falls": [
+      {
+        "id": "wagner-falls",
+        "miles": 1.1
+      },
+      {
+        "id": "miners-falls",
+        "miles": 7.2
+      },
+      {
+        "id": "elliot-falls",
+        "miles": 8.5
+      },
+      {
+        "id": "bridalveil-falls",
+        "miles": 9.3
+      },
+      {
+        "id": "mosquito-falls",
+        "miles": 11.1
+      },
+      {
+        "id": "chapel-falls",
+        "miles": 12.8
+      },
+      {
+        "id": "spray-falls",
+        "miles": 15.4
+      },
+      {
+        "id": "rock-river-falls",
+        "miles": 15.9
+      },
+      {
+        "id": "laughing-whitefish-falls",
+        "miles": 20.4
+      },
+      {
+        "id": "rapid-river-falls-delta-county",
+        "miles": 31
+      },
+      {
+        "id": "sable-falls",
+        "miles": 35.1
+      },
+      {
+        "id": "carp-river-falls",
+        "miles": 38.9
+      },
+      {
+        "id": "morgan-falls",
+        "miles": 38.9
+      },
+      {
+        "id": "wright-street-falls",
+        "miles": 39.8
+      },
+      {
+        "id": "little-garlic-falls",
+        "miles": 48.1
+      }
+    ],
+    "interstate-falls": [
+      {
+        "id": "saxon-falls",
+        "miles": 9.6
+      },
+      {
+        "id": "gabbro-falls",
+        "miles": 9.9
+      },
+      {
+        "id": "superior-falls",
+        "miles": 12.1
+      },
+      {
+        "id": "great-conglomerate-falls",
+        "miles": 12.9
+      },
+      {
+        "id": "potawatomi-falls",
+        "miles": 13.3
+      },
+      {
+        "id": "gorge-falls",
+        "miles": 13.5
+      },
+      {
+        "id": "rainbow-falls",
+        "miles": 14.7
+      },
+      {
+        "id": "lepisto-falls",
+        "miles": 17.7
+      },
+      {
+        "id": "nawadaha-falls",
+        "miles": 18.8
+      },
+      {
+        "id": "manabezho-falls",
+        "miles": 19.2
+      },
+      {
+        "id": "manido-falls",
+        "miles": 19.4
+      },
+      {
+        "id": "trappers-falls",
+        "miles": 23.3
+      },
+      {
+        "id": "explorers-falls",
+        "miles": 23.3
+      },
+      {
+        "id": "overlooked-falls",
+        "miles": 24.5
+      },
+      {
+        "id": "greenstone-falls",
+        "miles": 24.5
+      },
+      {
+        "id": "yondota-falls",
+        "miles": 24.5
+      },
+      {
+        "id": "shining-cloud-falls",
+        "miles": 25.1
+      },
+      {
+        "id": "trap-falls",
+        "miles": 32.6
+      },
+      {
+        "id": "nonesuch-falls",
+        "miles": 33.9
+      },
+      {
+        "id": "little-union-gorge-falls",
+        "miles": 35
+      },
+      {
+        "id": "kakabika-falls",
+        "miles": 36.7
+      },
+      {
+        "id": "cascade-falls",
+        "miles": 37.7
+      },
+      {
+        "id": "bonanza-falls",
+        "miles": 38.1
+      }
+    ],
+    "jacobs-falls": [
+      {
+        "id": "eagle-river-falls",
+        "miles": 3
+      },
+      {
+        "id": "haven-falls",
+        "miles": 10.4
+      },
+      {
+        "id": "manganese-falls",
+        "miles": 16.9
+      },
+      {
+        "id": "upper-hungarian-falls",
+        "miles": 20.2
+      },
+      {
+        "id": "lower-hungarian-falls",
+        "miles": 20.2
+      },
+      {
+        "id": "big-erics-falls",
+        "miles": 39.6
+      },
+      {
+        "id": "falls-river-trail",
+        "miles": 47.7
+      },
+      {
+        "id": "wyandotte-falls",
+        "miles": 47.8
+      },
+      {
+        "id": "power-house-falls",
+        "miles": 48.7
+      }
+    ],
+    "kakabika-falls": [
+      {
+        "id": "yondota-falls",
+        "miles": 12.9
+      },
+      {
+        "id": "bond-falls",
+        "miles": 16
+      },
+      {
+        "id": "mex-i-min-e-falls",
+        "miles": 19.1
+      },
+      {
+        "id": "agate-falls",
+        "miles": 19.9
+      },
+      {
+        "id": "cascade-falls",
+        "miles": 21.7
+      },
+      {
+        "id": "o-kun-de-kun-falls",
+        "miles": 25.9
+      },
+      {
+        "id": "duppy-falls",
+        "miles": 26.3
+      },
+      {
+        "id": "gabbro-falls",
+        "miles": 28.1
+      },
+      {
+        "id": "nonesuch-falls",
+        "miles": 29.9
+      },
+      {
+        "id": "overlooked-falls",
+        "miles": 32.1
+      },
+      {
+        "id": "lepisto-falls",
+        "miles": 32.1
+      },
+      {
+        "id": "greenstone-falls",
+        "miles": 32.2
+      },
+      {
+        "id": "little-union-gorge-falls",
+        "miles": 32.5
+      },
+      {
+        "id": "trap-falls",
+        "miles": 33.4
+      },
+      {
+        "id": "bonanza-falls",
+        "miles": 33.8
+      },
+      {
+        "id": "trappers-falls",
+        "miles": 34.2
+      },
+      {
+        "id": "explorers-falls",
+        "miles": 34.4
+      },
+      {
+        "id": "shining-cloud-falls",
+        "miles": 35.1
+      },
+      {
+        "id": "great-conglomerate-falls",
+        "miles": 35.2
+      },
+      {
+        "id": "nawadaha-falls",
+        "miles": 35.2
+      },
+      {
+        "id": "potawatomi-falls",
+        "miles": 35.3
+      },
+      {
+        "id": "gorge-falls",
+        "miles": 35.3
+      },
+      {
+        "id": "manabezho-falls",
+        "miles": 35.4
+      },
+      {
+        "id": "manido-falls",
+        "miles": 35.6
+      },
+      {
+        "id": "rainbow-falls",
+        "miles": 35.9
+      },
+      {
+        "id": "interstate-falls",
+        "miles": 36.7
+      },
+      {
+        "id": "sturgeon-falls",
+        "miles": 41.8
+      },
+      {
+        "id": "tibbets-falls",
+        "miles": 44.4
+      },
+      {
+        "id": "saxon-falls",
+        "miles": 46.2
+      },
+      {
+        "id": "wyandotte-falls",
+        "miles": 46.9
+      },
+      {
+        "id": "superior-falls",
+        "miles": 48.4
+      }
+    ],
+    "laughing-whitefish-falls": [
+      {
+        "id": "rock-river-falls",
+        "miles": 4.8
+      },
+      {
+        "id": "carp-river-falls",
+        "miles": 19.8
+      },
+      {
+        "id": "morgan-falls",
+        "miles": 19.9
+      },
+      {
+        "id": "wagner-falls",
+        "miles": 20.1
+      },
+      {
+        "id": "horseshoe-falls",
+        "miles": 20.4
+      },
+      {
+        "id": "wright-street-falls",
+        "miles": 21.9
+      },
+      {
+        "id": "rapid-river-falls-delta-county",
+        "miles": 25.4
+      },
+      {
+        "id": "miners-falls",
+        "miles": 26.4
+      },
+      {
+        "id": "elliot-falls",
+        "miles": 26.8
+      },
+      {
+        "id": "bridalveil-falls",
+        "miles": 27.4
+      },
+      {
+        "id": "mosquito-falls",
+        "miles": 29.6
+      },
+      {
+        "id": "little-garlic-falls",
+        "miles": 31.2
+      },
+      {
+        "id": "chapel-falls",
+        "miles": 31.4
+      },
+      {
+        "id": "spray-falls",
+        "miles": 33.6
+      },
+      {
+        "id": "yellow-dog-falls",
+        "miles": 38.5
+      },
+      {
+        "id": "pinnacle-falls",
+        "miles": 41.6
+      }
+    ],
+    "lepisto-falls": [
+      {
+        "id": "nawadaha-falls",
+        "miles": 3.2
+      },
+      {
+        "id": "manabezho-falls",
+        "miles": 3.5
+      },
+      {
+        "id": "manido-falls",
+        "miles": 3.7
+      },
+      {
+        "id": "rainbow-falls",
+        "miles": 4.9
+      },
+      {
+        "id": "gorge-falls",
+        "miles": 5.4
+      },
+      {
+        "id": "potawatomi-falls",
+        "miles": 5.5
+      },
+      {
+        "id": "great-conglomerate-falls",
+        "miles": 5.7
+      },
+      {
+        "id": "trappers-falls",
+        "miles": 5.8
+      },
+      {
+        "id": "explorers-falls",
+        "miles": 5.9
+      },
+      {
+        "id": "overlooked-falls",
+        "miles": 6.8
+      },
+      {
+        "id": "greenstone-falls",
+        "miles": 6.8
+      },
+      {
+        "id": "shining-cloud-falls",
+        "miles": 7.7
+      },
+      {
+        "id": "gabbro-falls",
+        "miles": 11.1
+      },
+      {
+        "id": "trap-falls",
+        "miles": 15
+      },
+      {
+        "id": "nonesuch-falls",
+        "miles": 16.9
+      },
+      {
+        "id": "little-union-gorge-falls",
+        "miles": 17.6
+      },
+      {
+        "id": "interstate-falls",
+        "miles": 17.7
+      },
+      {
+        "id": "yondota-falls",
+        "miles": 19.9
+      },
+      {
+        "id": "bonanza-falls",
+        "miles": 20.7
+      },
+      {
+        "id": "saxon-falls",
+        "miles": 22.5
+      },
+      {
+        "id": "cascade-falls",
+        "miles": 23.4
+      },
+      {
+        "id": "superior-falls",
+        "miles": 23.5
+      },
+      {
+        "id": "kakabika-falls",
+        "miles": 32.1
+      },
+      {
+        "id": "o-kun-de-kun-falls",
+        "miles": 37.4
+      },
+      {
+        "id": "bond-falls",
+        "miles": 42.1
+      },
+      {
+        "id": "agate-falls",
+        "miles": 42.2
+      },
+      {
+        "id": "mex-i-min-e-falls",
+        "miles": 48.4
+      }
+    ],
+    "little-garlic-falls": [
+      {
+        "id": "yellow-dog-falls",
+        "miles": 7.4
+      },
+      {
+        "id": "wright-street-falls",
+        "miles": 9.4
+      },
+      {
+        "id": "pinnacle-falls",
+        "miles": 11.2
+      },
+      {
+        "id": "morgan-falls",
+        "miles": 12.7
+      },
+      {
+        "id": "carp-river-falls",
+        "miles": 12.9
+      },
+      {
+        "id": "big-erics-falls",
+        "miles": 27.5
+      },
+      {
+        "id": "laughing-whitefish-falls",
+        "miles": 31.2
+      },
+      {
+        "id": "rock-river-falls",
+        "miles": 33.7
+      },
+      {
+        "id": "tioga-park-falls",
+        "miles": 36.7
+      },
+      {
+        "id": "power-house-falls",
+        "miles": 41.3
+      },
+      {
+        "id": "falls-river-trail",
+        "miles": 41.8
+      },
+      {
+        "id": "canyon-falls",
+        "miles": 42.6
+      },
+      {
+        "id": "horseshoe-falls",
+        "miles": 48.1
+      },
+      {
+        "id": "tibbets-falls",
+        "miles": 48.3
+      },
+      {
+        "id": "wagner-falls",
+        "miles": 48.3
+      }
+    ],
+    "little-union-gorge-falls": [
+      {
+        "id": "nonesuch-falls",
+        "miles": 2.6
+      },
+      {
+        "id": "bonanza-falls",
+        "miles": 3.1
+      },
+      {
+        "id": "trap-falls",
+        "miles": 3.1
+      },
+      {
+        "id": "greenstone-falls",
+        "miles": 10.9
+      },
+      {
+        "id": "overlooked-falls",
+        "miles": 10.9
+      },
+      {
+        "id": "shining-cloud-falls",
+        "miles": 11.7
+      },
+      {
+        "id": "cascade-falls",
+        "miles": 12.9
+      },
+      {
+        "id": "trappers-falls",
+        "miles": 13
+      },
+      {
+        "id": "explorers-falls",
+        "miles": 13
+      },
+      {
+        "id": "manido-falls",
+        "miles": 17.5
+      },
+      {
+        "id": "manabezho-falls",
+        "miles": 17.5
+      },
+      {
+        "id": "lepisto-falls",
+        "miles": 17.6
+      },
+      {
+        "id": "nawadaha-falls",
+        "miles": 17.8
+      },
+      {
+        "id": "rainbow-falls",
+        "miles": 21.9
+      },
+      {
+        "id": "gorge-falls",
+        "miles": 22.7
+      },
+      {
+        "id": "potawatomi-falls",
+        "miles": 22.9
+      },
+      {
+        "id": "great-conglomerate-falls",
+        "miles": 23.2
+      },
+      {
+        "id": "o-kun-de-kun-falls",
+        "miles": 24.4
+      },
+      {
+        "id": "yondota-falls",
+        "miles": 25.2
+      },
+      {
+        "id": "gabbro-falls",
+        "miles": 26.6
+      },
+      {
+        "id": "kakabika-falls",
+        "miles": 32.5
+      },
+      {
+        "id": "agate-falls",
+        "miles": 33.3
+      },
+      {
+        "id": "interstate-falls",
+        "miles": 35
+      },
+      {
+        "id": "bond-falls",
+        "miles": 35.3
+      },
+      {
+        "id": "wyandotte-falls",
+        "miles": 35.9
+      },
+      {
+        "id": "saxon-falls",
+        "miles": 39.9
+      },
+      {
+        "id": "superior-falls",
+        "miles": 40.7
+      },
+      {
+        "id": "mex-i-min-e-falls",
+        "miles": 42.8
+      },
+      {
+        "id": "duppy-falls",
+        "miles": 42.9
+      },
+      {
+        "id": "sturgeon-falls",
+        "miles": 45.3
+      }
+    ],
+    "lower-hungarian-falls": [
+      {
+        "id": "upper-hungarian-falls",
+        "miles": 0.6
+      },
+      {
+        "id": "eagle-river-falls",
+        "miles": 18.1
+      },
+      {
+        "id": "jacobs-falls",
+        "miles": 20.2
+      },
+      {
+        "id": "haven-falls",
+        "miles": 24.4
+      },
+      {
+        "id": "big-erics-falls",
+        "miles": 27
+      },
+      {
+        "id": "wyandotte-falls",
+        "miles": 28.2
+      },
+      {
+        "id": "falls-river-trail",
+        "miles": 28.8
+      },
+      {
+        "id": "power-house-falls",
+        "miles": 29.9
+      },
+      {
+        "id": "manganese-falls",
+        "miles": 33.2
+      },
+      {
+        "id": "canyon-falls",
+        "miles": 37.7
+      },
+      {
+        "id": "sturgeon-falls",
+        "miles": 38.3
+      },
+      {
+        "id": "tibbets-falls",
+        "miles": 41.3
+      },
+      {
+        "id": "tioga-park-falls",
+        "miles": 41.5
+      },
+      {
+        "id": "pinnacle-falls",
+        "miles": 43.8
+      },
+      {
+        "id": "yellow-dog-falls",
+        "miles": 46.1
+      },
+      {
+        "id": "o-kun-de-kun-falls",
+        "miles": 49.1
+      }
+    ],
+    "manabezho-falls": [
+      {
+        "id": "manido-falls",
+        "miles": 0.2
+      },
+      {
+        "id": "nawadaha-falls",
+        "miles": 0.4
+      },
+      {
+        "id": "lepisto-falls",
+        "miles": 3.5
+      },
+      {
+        "id": "trappers-falls",
+        "miles": 4.5
+      },
+      {
+        "id": "explorers-falls",
+        "miles": 4.5
+      },
+      {
+        "id": "rainbow-falls",
+        "miles": 4.7
+      },
+      {
+        "id": "gorge-falls",
+        "miles": 5.8
+      },
+      {
+        "id": "potawatomi-falls",
+        "miles": 6
+      },
+      {
+        "id": "shining-cloud-falls",
+        "miles": 6.2
+      },
+      {
+        "id": "great-conglomerate-falls",
+        "miles": 6.4
+      },
+      {
+        "id": "greenstone-falls",
+        "miles": 6.7
+      },
+      {
+        "id": "overlooked-falls",
+        "miles": 6.8
+      },
+      {
+        "id": "gabbro-falls",
+        "miles": 14
+      },
+      {
+        "id": "trap-falls",
+        "miles": 14.6
+      },
+      {
+        "id": "nonesuch-falls",
+        "miles": 17.3
+      },
+      {
+        "id": "little-union-gorge-falls",
+        "miles": 17.5
+      },
+      {
+        "id": "interstate-falls",
+        "miles": 19.2
+      },
+      {
+        "id": "bonanza-falls",
+        "miles": 20.5
+      },
+      {
+        "id": "saxon-falls",
+        "miles": 22.6
+      },
+      {
+        "id": "yondota-falls",
+        "miles": 23.3
+      },
+      {
+        "id": "superior-falls",
+        "miles": 23.3
+      },
+      {
+        "id": "cascade-falls",
+        "miles": 25.1
+      },
+      {
+        "id": "kakabika-falls",
+        "miles": 35.4
+      },
+      {
+        "id": "o-kun-de-kun-falls",
+        "miles": 39
+      },
+      {
+        "id": "agate-falls",
+        "miles": 44.6
+      },
+      {
+        "id": "bond-falls",
+        "miles": 44.7
+      }
+    ],
+    "manganese-falls": [
+      {
+        "id": "haven-falls",
+        "miles": 8.8
+      },
+      {
+        "id": "jacobs-falls",
+        "miles": 16.9
+      },
+      {
+        "id": "eagle-river-falls",
+        "miles": 19.8
+      },
+      {
+        "id": "lower-hungarian-falls",
+        "miles": 33.2
+      },
+      {
+        "id": "upper-hungarian-falls",
+        "miles": 33.4
+      },
+      {
+        "id": "big-erics-falls",
+        "miles": 42.4
+      }
+    ],
+    "manido-falls": [
+      {
+        "id": "manabezho-falls",
+        "miles": 0.2
+      },
+      {
+        "id": "nawadaha-falls",
+        "miles": 0.6
+      },
+      {
+        "id": "lepisto-falls",
+        "miles": 3.7
+      },
+      {
+        "id": "trappers-falls",
+        "miles": 4.5
+      },
+      {
+        "id": "explorers-falls",
+        "miles": 4.5
+      },
+      {
+        "id": "rainbow-falls",
+        "miles": 4.8
+      },
+      {
+        "id": "gorge-falls",
+        "miles": 5.9
+      },
+      {
+        "id": "shining-cloud-falls",
+        "miles": 6.1
+      },
+      {
+        "id": "potawatomi-falls",
+        "miles": 6.1
+      },
+      {
+        "id": "great-conglomerate-falls",
+        "miles": 6.6
+      },
+      {
+        "id": "greenstone-falls",
+        "miles": 6.7
+      },
+      {
+        "id": "overlooked-falls",
+        "miles": 6.8
+      },
+      {
+        "id": "gabbro-falls",
+        "miles": 14.2
+      },
+      {
+        "id": "trap-falls",
+        "miles": 14.5
+      },
+      {
+        "id": "nonesuch-falls",
+        "miles": 17.3
+      },
+      {
+        "id": "little-union-gorge-falls",
+        "miles": 17.5
+      },
+      {
+        "id": "interstate-falls",
+        "miles": 19.4
+      },
+      {
+        "id": "bonanza-falls",
+        "miles": 20.4
+      },
+      {
+        "id": "saxon-falls",
+        "miles": 22.7
+      },
+      {
+        "id": "superior-falls",
+        "miles": 23.3
+      },
+      {
+        "id": "yondota-falls",
+        "miles": 23.5
+      },
+      {
+        "id": "cascade-falls",
+        "miles": 25.2
+      },
+      {
+        "id": "kakabika-falls",
+        "miles": 35.6
+      },
+      {
+        "id": "o-kun-de-kun-falls",
+        "miles": 39
+      },
+      {
+        "id": "agate-falls",
+        "miles": 44.7
+      },
+      {
+        "id": "bond-falls",
+        "miles": 44.8
+      }
+    ],
+    "mex-i-min-e-falls": [
+      {
+        "id": "bond-falls",
+        "miles": 7.6
+      },
+      {
+        "id": "duppy-falls",
+        "miles": 9.7
+      },
+      {
+        "id": "agate-falls",
+        "miles": 11.7
+      },
+      {
+        "id": "kakabika-falls",
+        "miles": 19.1
+      },
+      {
+        "id": "o-kun-de-kun-falls",
+        "miles": 23.8
+      },
+      {
+        "id": "sturgeon-falls",
+        "miles": 28.5
+      },
+      {
+        "id": "tibbets-falls",
+        "miles": 28.8
+      },
+      {
+        "id": "cascade-falls",
+        "miles": 29.9
+      },
+      {
+        "id": "yondota-falls",
+        "miles": 31.2
+      },
+      {
+        "id": "canyon-falls",
+        "miles": 35
+      },
+      {
+        "id": "tioga-park-falls",
+        "miles": 38.5
+      },
+      {
+        "id": "nonesuch-falls",
+        "miles": 40.5
+      },
+      {
+        "id": "wyandotte-falls",
+        "miles": 40.7
+      },
+      {
+        "id": "power-house-falls",
+        "miles": 41.2
+      },
+      {
+        "id": "falls-river-trail",
+        "miles": 41.7
+      },
+      {
+        "id": "bonanza-falls",
+        "miles": 42.7
+      },
+      {
+        "id": "little-union-gorge-falls",
+        "miles": 42.8
+      },
+      {
+        "id": "trap-falls",
+        "miles": 44.8
+      },
+      {
+        "id": "overlooked-falls",
+        "miles": 46.4
+      },
+      {
+        "id": "gabbro-falls",
+        "miles": 46.6
+      },
+      {
+        "id": "greenstone-falls",
+        "miles": 46.6
+      },
+      {
+        "id": "lepisto-falls",
+        "miles": 48.4
+      },
+      {
+        "id": "trappers-falls",
+        "miles": 49
+      },
+      {
+        "id": "explorers-falls",
+        "miles": 49.2
+      },
+      {
+        "id": "shining-cloud-falls",
+        "miles": 49.3
+      }
+    ],
+    "miners-falls": [
+      {
+        "id": "elliot-falls",
+        "miles": 1.7
+      },
+      {
+        "id": "bridalveil-falls",
+        "miles": 2.4
+      },
+      {
+        "id": "mosquito-falls",
+        "miles": 3.8
+      },
+      {
+        "id": "chapel-falls",
+        "miles": 5.6
+      },
+      {
+        "id": "horseshoe-falls",
+        "miles": 7.2
+      },
+      {
+        "id": "wagner-falls",
+        "miles": 8.1
+      },
+      {
+        "id": "spray-falls",
+        "miles": 8.1
+      },
+      {
+        "id": "rock-river-falls",
+        "miles": 21.6
+      },
+      {
+        "id": "laughing-whitefish-falls",
+        "miles": 26.4
+      },
+      {
+        "id": "sable-falls",
+        "miles": 28
+      },
+      {
+        "id": "rapid-river-falls-delta-county",
+        "miles": 38
+      },
+      {
+        "id": "morgan-falls",
+        "miles": 43.6
+      },
+      {
+        "id": "carp-river-falls",
+        "miles": 43.6
+      },
+      {
+        "id": "wright-street-falls",
+        "miles": 43.9
+      }
+    ],
+    "misicot-falls": [
+      {
+        "id": "sand-portage-falls",
+        "miles": 0.8
+      },
+      {
+        "id": "fumee-falls",
+        "miles": 3.4
+      },
+      {
+        "id": "quiver-falls",
+        "miles": 9.3
+      },
+      {
+        "id": "pemene-falls",
+        "miles": 14
+      },
+      {
+        "id": "rapid-river-falls-delta-county",
+        "miles": 49.9
+      }
+    ],
+    "morgan-falls": [
+      {
+        "id": "carp-river-falls",
+        "miles": 0.3
+      },
+      {
+        "id": "wright-street-falls",
+        "miles": 4
+      },
+      {
+        "id": "little-garlic-falls",
+        "miles": 12.7
+      },
+      {
+        "id": "yellow-dog-falls",
+        "miles": 19.6
+      },
+      {
+        "id": "laughing-whitefish-falls",
+        "miles": 19.9
+      },
+      {
+        "id": "pinnacle-falls",
+        "miles": 22
+      },
+      {
+        "id": "rock-river-falls",
+        "miles": 23.3
+      },
+      {
+        "id": "horseshoe-falls",
+        "miles": 38.9
+      },
+      {
+        "id": "wagner-falls",
+        "miles": 39
+      },
+      {
+        "id": "big-erics-falls",
+        "miles": 39
+      },
+      {
+        "id": "rapid-river-falls-delta-county",
+        "miles": 40.2
+      },
+      {
+        "id": "tioga-park-falls",
+        "miles": 42.7
+      },
+      {
+        "id": "elliot-falls",
+        "miles": 43.5
+      },
+      {
+        "id": "miners-falls",
+        "miles": 43.6
+      },
+      {
+        "id": "bridalveil-falls",
+        "miles": 43.9
+      },
+      {
+        "id": "mosquito-falls",
+        "miles": 46
+      },
+      {
+        "id": "chapel-falls",
+        "miles": 47.7
+      },
+      {
+        "id": "spray-falls",
+        "miles": 49.3
+      },
+      {
+        "id": "canyon-falls",
+        "miles": 49.5
+      },
+      {
+        "id": "power-house-falls",
+        "miles": 49.9
+      }
+    ],
+    "mosquito-falls": [
+      {
+        "id": "chapel-falls",
+        "miles": 1.8
+      },
+      {
+        "id": "bridalveil-falls",
+        "miles": 2.2
+      },
+      {
+        "id": "elliot-falls",
+        "miles": 2.8
+      },
+      {
+        "id": "miners-falls",
+        "miles": 3.8
+      },
+      {
+        "id": "spray-falls",
+        "miles": 4.3
+      },
+      {
+        "id": "horseshoe-falls",
+        "miles": 11.1
+      },
+      {
+        "id": "wagner-falls",
+        "miles": 12
+      },
+      {
+        "id": "sable-falls",
+        "miles": 24.4
+      },
+      {
+        "id": "rock-river-falls",
+        "miles": 24.8
+      },
+      {
+        "id": "laughing-whitefish-falls",
+        "miles": 29.6
+      },
+      {
+        "id": "rapid-river-falls-delta-county",
+        "miles": 41.8
+      },
+      {
+        "id": "morgan-falls",
+        "miles": 46
+      },
+      {
+        "id": "carp-river-falls",
+        "miles": 46.1
+      },
+      {
+        "id": "wright-street-falls",
+        "miles": 46.1
+      }
+    ],
+    "nawadaha-falls": [
+      {
+        "id": "manabezho-falls",
+        "miles": 0.4
+      },
+      {
+        "id": "manido-falls",
+        "miles": 0.6
+      },
+      {
+        "id": "lepisto-falls",
+        "miles": 3.2
+      },
+      {
+        "id": "rainbow-falls",
+        "miles": 4.3
+      },
+      {
+        "id": "trappers-falls",
+        "miles": 4.8
+      },
+      {
+        "id": "explorers-falls",
+        "miles": 4.9
+      },
+      {
+        "id": "gorge-falls",
+        "miles": 5.4
+      },
+      {
+        "id": "potawatomi-falls",
+        "miles": 5.6
+      },
+      {
+        "id": "great-conglomerate-falls",
+        "miles": 6
+      },
+      {
+        "id": "shining-cloud-falls",
+        "miles": 6.5
+      },
+      {
+        "id": "greenstone-falls",
+        "miles": 7
+      },
+      {
+        "id": "overlooked-falls",
+        "miles": 7
+      },
+      {
+        "id": "gabbro-falls",
+        "miles": 13.6
+      },
+      {
+        "id": "trap-falls",
+        "miles": 14.9
+      },
+      {
+        "id": "nonesuch-falls",
+        "miles": 17.6
+      },
+      {
+        "id": "little-union-gorge-falls",
+        "miles": 17.8
+      },
+      {
+        "id": "interstate-falls",
+        "miles": 18.8
+      },
+      {
+        "id": "bonanza-falls",
+        "miles": 20.8
+      },
+      {
+        "id": "saxon-falls",
+        "miles": 22.2
+      },
+      {
+        "id": "superior-falls",
+        "miles": 23
+      },
+      {
+        "id": "yondota-falls",
+        "miles": 23
+      },
+      {
+        "id": "cascade-falls",
+        "miles": 25.2
+      },
+      {
+        "id": "kakabika-falls",
+        "miles": 35.2
+      },
+      {
+        "id": "o-kun-de-kun-falls",
+        "miles": 39.1
+      },
+      {
+        "id": "agate-falls",
+        "miles": 44.6
+      },
+      {
+        "id": "bond-falls",
+        "miles": 44.7
+      }
+    ],
+    "nonesuch-falls": [
+      {
+        "id": "little-union-gorge-falls",
+        "miles": 2.6
+      },
+      {
+        "id": "trap-falls",
+        "miles": 4.4
+      },
+      {
+        "id": "bonanza-falls",
+        "miles": 4.8
+      },
+      {
+        "id": "overlooked-falls",
+        "miles": 10.5
+      },
+      {
+        "id": "greenstone-falls",
+        "miles": 10.6
+      },
+      {
+        "id": "cascade-falls",
+        "miles": 10.7
+      },
+      {
+        "id": "shining-cloud-falls",
+        "miles": 12
+      },
+      {
+        "id": "trappers-falls",
+        "miles": 13
+      },
+      {
+        "id": "explorers-falls",
+        "miles": 13
+      },
+      {
+        "id": "lepisto-falls",
+        "miles": 16.9
+      },
+      {
+        "id": "manido-falls",
+        "miles": 17.3
+      },
+      {
+        "id": "manabezho-falls",
+        "miles": 17.3
+      },
+      {
+        "id": "nawadaha-falls",
+        "miles": 17.6
+      },
+      {
+        "id": "rainbow-falls",
+        "miles": 21.5
+      },
+      {
+        "id": "gorge-falls",
+        "miles": 22.2
+      },
+      {
+        "id": "potawatomi-falls",
+        "miles": 22.3
+      },
+      {
+        "id": "great-conglomerate-falls",
+        "miles": 22.6
+      },
+      {
+        "id": "yondota-falls",
+        "miles": 22.7
+      },
+      {
+        "id": "o-kun-de-kun-falls",
+        "miles": 23
+      },
+      {
+        "id": "gabbro-falls",
+        "miles": 25.1
+      },
+      {
+        "id": "kakabika-falls",
+        "miles": 29.9
+      },
+      {
+        "id": "agate-falls",
+        "miles": 31.3
+      },
+      {
+        "id": "bond-falls",
+        "miles": 33
+      },
+      {
+        "id": "interstate-falls",
+        "miles": 33.9
+      },
+      {
+        "id": "wyandotte-falls",
+        "miles": 36
+      },
+      {
+        "id": "saxon-falls",
+        "miles": 39.4
+      },
+      {
+        "id": "superior-falls",
+        "miles": 40.3
+      },
+      {
+        "id": "mex-i-min-e-falls",
+        "miles": 40.5
+      },
+      {
+        "id": "duppy-falls",
+        "miles": 40.9
+      },
+      {
+        "id": "sturgeon-falls",
+        "miles": 44.3
+      }
+    ],
+    "o-kun-de-kun-falls": [
+      {
+        "id": "agate-falls",
+        "miles": 12.1
+      },
+      {
+        "id": "cascade-falls",
+        "miles": 13.9
+      },
+      {
+        "id": "bond-falls",
+        "miles": 16.7
+      },
+      {
+        "id": "duppy-falls",
+        "miles": 20.1
+      },
+      {
+        "id": "wyandotte-falls",
+        "miles": 21
+      },
+      {
+        "id": "sturgeon-falls",
+        "miles": 21.8
+      },
+      {
+        "id": "bonanza-falls",
+        "miles": 23
+      },
+      {
+        "id": "nonesuch-falls",
+        "miles": 23
+      },
+      {
+        "id": "mex-i-min-e-falls",
+        "miles": 23.8
+      },
+      {
+        "id": "little-union-gorge-falls",
+        "miles": 24.4
+      },
+      {
+        "id": "kakabika-falls",
+        "miles": 25.9
+      },
+      {
+        "id": "tibbets-falls",
+        "miles": 27.2
+      },
+      {
+        "id": "trap-falls",
+        "miles": 27.3
+      },
+      {
+        "id": "yondota-falls",
+        "miles": 29.6
+      },
+      {
+        "id": "canyon-falls",
+        "miles": 32.2
+      },
+      {
+        "id": "overlooked-falls",
+        "miles": 32.5
+      },
+      {
+        "id": "greenstone-falls",
+        "miles": 32.6
+      },
+      {
+        "id": "falls-river-trail",
+        "miles": 33.9
+      },
+      {
+        "id": "power-house-falls",
+        "miles": 34.1
+      },
+      {
+        "id": "shining-cloud-falls",
+        "miles": 34.6
+      },
+      {
+        "id": "trappers-falls",
+        "miles": 35.2
+      },
+      {
+        "id": "explorers-falls",
+        "miles": 35.3
+      },
+      {
+        "id": "lepisto-falls",
+        "miles": 37.4
+      },
+      {
+        "id": "tioga-park-falls",
+        "miles": 38.9
+      },
+      {
+        "id": "manabezho-falls",
+        "miles": 39
+      },
+      {
+        "id": "manido-falls",
+        "miles": 39
+      },
+      {
+        "id": "nawadaha-falls",
+        "miles": 39.1
+      },
+      {
+        "id": "gabbro-falls",
+        "miles": 41.2
+      },
+      {
+        "id": "rainbow-falls",
+        "miles": 42.3
+      },
+      {
+        "id": "gorge-falls",
+        "miles": 42.6
+      },
+      {
+        "id": "potawatomi-falls",
+        "miles": 42.6
+      },
+      {
+        "id": "great-conglomerate-falls",
+        "miles": 42.8
+      },
+      {
+        "id": "upper-hungarian-falls",
+        "miles": 49
+      },
+      {
+        "id": "lower-hungarian-falls",
+        "miles": 49.1
+      }
+    ],
+    "overlooked-falls": [
+      {
+        "id": "greenstone-falls",
+        "miles": 0.2
+      },
+      {
+        "id": "trappers-falls",
+        "miles": 2.7
+      },
+      {
+        "id": "explorers-falls",
+        "miles": 2.8
+      },
+      {
+        "id": "shining-cloud-falls",
+        "miles": 3
+      },
+      {
+        "id": "manido-falls",
+        "miles": 6.8
+      },
+      {
+        "id": "manabezho-falls",
+        "miles": 6.8
+      },
+      {
+        "id": "lepisto-falls",
+        "miles": 6.8
+      },
+      {
+        "id": "nawadaha-falls",
+        "miles": 7
+      },
+      {
+        "id": "trap-falls",
+        "miles": 8.2
+      },
+      {
+        "id": "nonesuch-falls",
+        "miles": 10.5
+      },
+      {
+        "id": "little-union-gorge-falls",
+        "miles": 10.9
+      },
+      {
+        "id": "rainbow-falls",
+        "miles": 11
+      },
+      {
+        "id": "gorge-falls",
+        "miles": 11.8
+      },
+      {
+        "id": "potawatomi-falls",
+        "miles": 12
+      },
+      {
+        "id": "great-conglomerate-falls",
+        "miles": 12.3
+      },
+      {
+        "id": "bonanza-falls",
+        "miles": 14
+      },
+      {
+        "id": "gabbro-falls",
+        "miles": 17
+      },
+      {
+        "id": "cascade-falls",
+        "miles": 18.8
+      },
+      {
+        "id": "yondota-falls",
+        "miles": 21.3
+      },
+      {
+        "id": "interstate-falls",
+        "miles": 24.5
+      },
+      {
+        "id": "saxon-falls",
+        "miles": 29
+      },
+      {
+        "id": "superior-falls",
+        "miles": 29.9
+      },
+      {
+        "id": "kakabika-falls",
+        "miles": 32.1
+      },
+      {
+        "id": "o-kun-de-kun-falls",
+        "miles": 32.5
+      },
+      {
+        "id": "agate-falls",
+        "miles": 38.9
+      },
+      {
+        "id": "bond-falls",
+        "miles": 39.5
+      },
+      {
+        "id": "mex-i-min-e-falls",
+        "miles": 46.4
+      },
+      {
+        "id": "wyandotte-falls",
+        "miles": 46.5
+      },
+      {
+        "id": "duppy-falls",
+        "miles": 48.6
+      }
+    ],
+    "pemene-falls": [
+      {
+        "id": "quiver-falls",
+        "miles": 4.7
+      },
+      {
+        "id": "misicot-falls",
+        "miles": 14
+      },
+      {
+        "id": "sand-portage-falls",
+        "miles": 14.6
+      },
+      {
+        "id": "fumee-falls",
+        "miles": 17.3
+      },
+      {
+        "id": "rapid-river-falls-delta-county",
+        "miles": 48.3
+      }
+    ],
+    "pinnacle-falls": [
+      {
+        "id": "yellow-dog-falls",
+        "miles": 5
+      },
+      {
+        "id": "little-garlic-falls",
+        "miles": 11.2
+      },
+      {
+        "id": "big-erics-falls",
+        "miles": 17
+      },
+      {
+        "id": "wright-street-falls",
+        "miles": 19.7
+      },
+      {
+        "id": "morgan-falls",
+        "miles": 22
+      },
+      {
+        "id": "carp-river-falls",
+        "miles": 22.1
+      },
+      {
+        "id": "tioga-park-falls",
+        "miles": 26.9
+      },
+      {
+        "id": "power-house-falls",
+        "miles": 30.3
+      },
+      {
+        "id": "falls-river-trail",
+        "miles": 30.7
+      },
+      {
+        "id": "canyon-falls",
+        "miles": 32.2
+      },
+      {
+        "id": "tibbets-falls",
+        "miles": 38.1
+      },
+      {
+        "id": "laughing-whitefish-falls",
+        "miles": 41.6
+      },
+      {
+        "id": "sturgeon-falls",
+        "miles": 42.3
+      },
+      {
+        "id": "lower-hungarian-falls",
+        "miles": 43.8
+      },
+      {
+        "id": "upper-hungarian-falls",
+        "miles": 44.3
+      },
+      {
+        "id": "rock-river-falls",
+        "miles": 44.4
+      },
+      {
+        "id": "haven-falls",
+        "miles": 47.8
+      }
+    ],
+    "potawatomi-falls": [
+      {
+        "id": "gorge-falls",
+        "miles": 0.2
+      },
+      {
+        "id": "great-conglomerate-falls",
+        "miles": 0.5
+      },
+      {
+        "id": "rainbow-falls",
+        "miles": 1.5
+      },
+      {
+        "id": "lepisto-falls",
+        "miles": 5.5
+      },
+      {
+        "id": "nawadaha-falls",
+        "miles": 5.6
+      },
+      {
+        "id": "manabezho-falls",
+        "miles": 6
+      },
+      {
+        "id": "manido-falls",
+        "miles": 6.1
+      },
+      {
+        "id": "gabbro-falls",
+        "miles": 9.8
+      },
+      {
+        "id": "trappers-falls",
+        "miles": 10.3
+      },
+      {
+        "id": "explorers-falls",
+        "miles": 10.3
+      },
+      {
+        "id": "overlooked-falls",
+        "miles": 12
+      },
+      {
+        "id": "greenstone-falls",
+        "miles": 12
+      },
+      {
+        "id": "shining-cloud-falls",
+        "miles": 12
+      },
+      {
+        "id": "interstate-falls",
+        "miles": 13.3
+      },
+      {
+        "id": "saxon-falls",
+        "miles": 17.1
+      },
+      {
+        "id": "superior-falls",
+        "miles": 18.1
+      },
+      {
+        "id": "trap-falls",
+        "miles": 20.1
+      },
+      {
+        "id": "nonesuch-falls",
+        "miles": 22.3
+      },
+      {
+        "id": "yondota-falls",
+        "miles": 22.5
+      },
+      {
+        "id": "little-union-gorge-falls",
+        "miles": 22.9
+      },
+      {
+        "id": "bonanza-falls",
+        "miles": 25.9
+      },
+      {
+        "id": "cascade-falls",
+        "miles": 28.7
+      },
+      {
+        "id": "kakabika-falls",
+        "miles": 35.3
+      },
+      {
+        "id": "o-kun-de-kun-falls",
+        "miles": 42.6
+      },
+      {
+        "id": "bond-falls",
+        "miles": 46.4
+      },
+      {
+        "id": "agate-falls",
+        "miles": 46.9
+      }
+    ],
+    "power-house-falls": [
+      {
+        "id": "falls-river-trail",
+        "miles": 1.2
+      },
+      {
+        "id": "canyon-falls",
+        "miles": 7.9
+      },
+      {
+        "id": "tioga-park-falls",
+        "miles": 12.3
+      },
+      {
+        "id": "tibbets-falls",
+        "miles": 12.8
+      },
+      {
+        "id": "sturgeon-falls",
+        "miles": 13.5
+      },
+      {
+        "id": "big-erics-falls",
+        "miles": 19.3
+      },
+      {
+        "id": "wyandotte-falls",
+        "miles": 23.1
+      },
+      {
+        "id": "lower-hungarian-falls",
+        "miles": 29.9
+      },
+      {
+        "id": "upper-hungarian-falls",
+        "miles": 30.2
+      },
+      {
+        "id": "pinnacle-falls",
+        "miles": 30.3
+      },
+      {
+        "id": "duppy-falls",
+        "miles": 31.5
+      },
+      {
+        "id": "o-kun-de-kun-falls",
+        "miles": 34.1
+      },
+      {
+        "id": "yellow-dog-falls",
+        "miles": 34.9
+      },
+      {
+        "id": "agate-falls",
+        "miles": 35.4
+      },
+      {
+        "id": "bond-falls",
+        "miles": 39.7
+      },
+      {
+        "id": "mex-i-min-e-falls",
+        "miles": 41.2
+      },
+      {
+        "id": "little-garlic-falls",
+        "miles": 41.3
+      },
+      {
+        "id": "eagle-river-falls",
+        "miles": 47.2
+      },
+      {
+        "id": "cascade-falls",
+        "miles": 47.8
+      },
+      {
+        "id": "jacobs-falls",
+        "miles": 48.7
+      },
+      {
+        "id": "haven-falls",
+        "miles": 48.8
+      },
+      {
+        "id": "wright-street-falls",
+        "miles": 48.8
+      },
+      {
+        "id": "morgan-falls",
+        "miles": 49.9
+      }
+    ],
+    "quiver-falls": [
+      {
+        "id": "pemene-falls",
+        "miles": 4.7
+      },
+      {
+        "id": "misicot-falls",
+        "miles": 9.3
+      },
+      {
+        "id": "sand-portage-falls",
+        "miles": 9.9
+      },
+      {
+        "id": "fumee-falls",
+        "miles": 12.6
+      },
+      {
+        "id": "rapid-river-falls-delta-county",
+        "miles": 47.8
+      }
+    ],
+    "rainbow-falls": [
+      {
+        "id": "gorge-falls",
+        "miles": 1.3
+      },
+      {
+        "id": "potawatomi-falls",
+        "miles": 1.5
+      },
+      {
+        "id": "great-conglomerate-falls",
+        "miles": 1.9
+      },
+      {
+        "id": "nawadaha-falls",
+        "miles": 4.3
+      },
+      {
+        "id": "manabezho-falls",
+        "miles": 4.7
+      },
+      {
+        "id": "manido-falls",
+        "miles": 4.8
+      },
+      {
+        "id": "lepisto-falls",
+        "miles": 4.9
+      },
+      {
+        "id": "trappers-falls",
+        "miles": 9.1
+      },
+      {
+        "id": "explorers-falls",
+        "miles": 9.1
+      },
+      {
+        "id": "shining-cloud-falls",
+        "miles": 10.8
+      },
+      {
+        "id": "overlooked-falls",
+        "miles": 11
+      },
+      {
+        "id": "greenstone-falls",
+        "miles": 11
+      },
+      {
+        "id": "gabbro-falls",
+        "miles": 11.1
+      },
+      {
+        "id": "interstate-falls",
+        "miles": 14.7
+      },
+      {
+        "id": "saxon-falls",
+        "miles": 18
+      },
+      {
+        "id": "superior-falls",
+        "miles": 18.9
+      },
+      {
+        "id": "trap-falls",
+        "miles": 19.1
+      },
+      {
+        "id": "nonesuch-falls",
+        "miles": 21.5
+      },
+      {
+        "id": "little-union-gorge-falls",
+        "miles": 21.9
+      },
+      {
+        "id": "yondota-falls",
+        "miles": 23.2
+      },
+      {
+        "id": "bonanza-falls",
+        "miles": 25
+      },
+      {
+        "id": "cascade-falls",
+        "miles": 28.3
+      },
+      {
+        "id": "kakabika-falls",
+        "miles": 35.9
+      },
+      {
+        "id": "o-kun-de-kun-falls",
+        "miles": 42.3
+      },
+      {
+        "id": "bond-falls",
+        "miles": 46.6
+      },
+      {
+        "id": "agate-falls",
+        "miles": 46.9
+      }
+    ],
+    "rapid-river-falls-delta-county": [
+      {
+        "id": "laughing-whitefish-falls",
+        "miles": 25.4
+      },
+      {
+        "id": "rock-river-falls",
+        "miles": 26.9
+      },
+      {
+        "id": "wagner-falls",
+        "miles": 30
+      },
+      {
+        "id": "horseshoe-falls",
+        "miles": 31
+      },
+      {
+        "id": "miners-falls",
+        "miles": 38
+      },
+      {
+        "id": "elliot-falls",
+        "miles": 39.4
+      },
+      {
+        "id": "carp-river-falls",
+        "miles": 40
+      },
+      {
+        "id": "bridalveil-falls",
+        "miles": 40.2
+      },
+      {
+        "id": "morgan-falls",
+        "miles": 40.2
+      },
+      {
+        "id": "mosquito-falls",
+        "miles": 41.8
+      },
+      {
+        "id": "chapel-falls",
+        "miles": 43.5
+      },
+      {
+        "id": "wright-street-falls",
+        "miles": 43.6
+      },
+      {
+        "id": "spray-falls",
+        "miles": 46.1
+      },
+      {
+        "id": "quiver-falls",
+        "miles": 47.8
+      },
+      {
+        "id": "pemene-falls",
+        "miles": 48.3
+      },
+      {
+        "id": "misicot-falls",
+        "miles": 49.9
+      }
+    ],
+    "rock-river-falls": [
+      {
+        "id": "laughing-whitefish-falls",
+        "miles": 4.8
+      },
+      {
+        "id": "wagner-falls",
+        "miles": 15.8
+      },
+      {
+        "id": "horseshoe-falls",
+        "miles": 15.9
+      },
+      {
+        "id": "miners-falls",
+        "miles": 21.6
+      },
+      {
+        "id": "elliot-falls",
+        "miles": 22
+      },
+      {
+        "id": "bridalveil-falls",
+        "miles": 22.6
+      },
+      {
+        "id": "carp-river-falls",
+        "miles": 23.3
+      },
+      {
+        "id": "morgan-falls",
+        "miles": 23.3
+      },
+      {
+        "id": "wright-street-falls",
+        "miles": 24.8
+      },
+      {
+        "id": "mosquito-falls",
+        "miles": 24.8
+      },
+      {
+        "id": "chapel-falls",
+        "miles": 26.6
+      },
+      {
+        "id": "rapid-river-falls-delta-county",
+        "miles": 26.9
+      },
+      {
+        "id": "spray-falls",
+        "miles": 28.7
+      },
+      {
+        "id": "little-garlic-falls",
+        "miles": 33.7
+      },
+      {
+        "id": "yellow-dog-falls",
+        "miles": 41.1
+      },
+      {
+        "id": "pinnacle-falls",
+        "miles": 44.4
+      },
+      {
+        "id": "sable-falls",
+        "miles": 49.1
+      }
+    ],
+    "sable-falls": [
+      {
+        "id": "spray-falls",
+        "miles": 20.3
+      },
+      {
+        "id": "chapel-falls",
+        "miles": 22.6
+      },
+      {
+        "id": "mosquito-falls",
+        "miles": 24.4
+      },
+      {
+        "id": "bridalveil-falls",
+        "miles": 26.6
+      },
+      {
+        "id": "elliot-falls",
+        "miles": 27.2
+      },
+      {
+        "id": "miners-falls",
+        "miles": 28
+      },
+      {
+        "id": "horseshoe-falls",
+        "miles": 35.1
+      },
+      {
+        "id": "wagner-falls",
+        "miles": 35.8
+      },
+      {
+        "id": "rock-river-falls",
+        "miles": 49.1
+      }
+    ],
+    "sand-portage-falls": [
+      {
+        "id": "misicot-falls",
+        "miles": 0.8
+      },
+      {
+        "id": "fumee-falls",
+        "miles": 2.9
+      },
+      {
+        "id": "quiver-falls",
+        "miles": 9.9
+      },
+      {
+        "id": "pemene-falls",
+        "miles": 14.6
+      }
+    ],
+    "saxon-falls": [
+      {
+        "id": "superior-falls",
+        "miles": 2.5
+      },
+      {
+        "id": "interstate-falls",
+        "miles": 9.6
+      },
+      {
+        "id": "great-conglomerate-falls",
+        "miles": 16.7
+      },
+      {
+        "id": "potawatomi-falls",
+        "miles": 17.1
+      },
+      {
+        "id": "gorge-falls",
+        "miles": 17.2
+      },
+      {
+        "id": "rainbow-falls",
+        "miles": 18
+      },
+      {
+        "id": "gabbro-falls",
+        "miles": 18.5
+      },
+      {
+        "id": "nawadaha-falls",
+        "miles": 22.2
+      },
+      {
+        "id": "lepisto-falls",
+        "miles": 22.5
+      },
+      {
+        "id": "manabezho-falls",
+        "miles": 22.6
+      },
+      {
+        "id": "manido-falls",
+        "miles": 22.7
+      },
+      {
+        "id": "trappers-falls",
+        "miles": 27.1
+      },
+      {
+        "id": "explorers-falls",
+        "miles": 27.1
+      },
+      {
+        "id": "shining-cloud-falls",
+        "miles": 28.7
+      },
+      {
+        "id": "overlooked-falls",
+        "miles": 29
+      },
+      {
+        "id": "greenstone-falls",
+        "miles": 29
+      },
+      {
+        "id": "yondota-falls",
+        "miles": 33.8
+      },
+      {
+        "id": "trap-falls",
+        "miles": 37.1
+      },
+      {
+        "id": "nonesuch-falls",
+        "miles": 39.4
+      },
+      {
+        "id": "little-union-gorge-falls",
+        "miles": 39.9
+      },
+      {
+        "id": "bonanza-falls",
+        "miles": 43
+      },
+      {
+        "id": "cascade-falls",
+        "miles": 45
+      },
+      {
+        "id": "kakabika-falls",
+        "miles": 46.2
+      }
+    ],
+    "shining-cloud-falls": [
+      {
+        "id": "explorers-falls",
+        "miles": 1.8
+      },
+      {
+        "id": "trappers-falls",
+        "miles": 1.9
+      },
+      {
+        "id": "greenstone-falls",
+        "miles": 2.9
+      },
+      {
+        "id": "overlooked-falls",
+        "miles": 3
+      },
+      {
+        "id": "manido-falls",
+        "miles": 6.1
+      },
+      {
+        "id": "manabezho-falls",
+        "miles": 6.2
+      },
+      {
+        "id": "nawadaha-falls",
+        "miles": 6.5
+      },
+      {
+        "id": "lepisto-falls",
+        "miles": 7.7
+      },
+      {
+        "id": "trap-falls",
+        "miles": 8.7
+      },
+      {
+        "id": "rainbow-falls",
+        "miles": 10.8
+      },
+      {
+        "id": "little-union-gorge-falls",
+        "miles": 11.7
+      },
+      {
+        "id": "gorge-falls",
+        "miles": 11.9
+      },
+      {
+        "id": "nonesuch-falls",
+        "miles": 12
+      },
+      {
+        "id": "potawatomi-falls",
+        "miles": 12
+      },
+      {
+        "id": "great-conglomerate-falls",
+        "miles": 12.5
+      },
+      {
+        "id": "bonanza-falls",
+        "miles": 14.6
+      },
+      {
+        "id": "gabbro-falls",
+        "miles": 18.6
+      },
+      {
+        "id": "cascade-falls",
+        "miles": 21.2
+      },
+      {
+        "id": "yondota-falls",
+        "miles": 24.2
+      },
+      {
+        "id": "interstate-falls",
+        "miles": 25.1
+      },
+      {
+        "id": "saxon-falls",
+        "miles": 28.7
+      },
+      {
+        "id": "superior-falls",
+        "miles": 29.3
+      },
+      {
+        "id": "o-kun-de-kun-falls",
+        "miles": 34.6
+      },
+      {
+        "id": "kakabika-falls",
+        "miles": 35.1
+      },
+      {
+        "id": "agate-falls",
+        "miles": 41.5
+      },
+      {
+        "id": "bond-falls",
+        "miles": 42.4
+      },
+      {
+        "id": "wyandotte-falls",
+        "miles": 47.7
+      },
+      {
+        "id": "mex-i-min-e-falls",
+        "miles": 49.3
+      }
+    ],
+    "spray-falls": [
+      {
+        "id": "chapel-falls",
+        "miles": 2.6
+      },
+      {
+        "id": "mosquito-falls",
+        "miles": 4.3
+      },
+      {
+        "id": "bridalveil-falls",
+        "miles": 6.3
+      },
+      {
+        "id": "elliot-falls",
+        "miles": 7
+      },
+      {
+        "id": "miners-falls",
+        "miles": 8.1
+      },
+      {
+        "id": "horseshoe-falls",
+        "miles": 15.4
+      },
+      {
+        "id": "wagner-falls",
+        "miles": 16.3
+      },
+      {
+        "id": "sable-falls",
+        "miles": 20.3
+      },
+      {
+        "id": "rock-river-falls",
+        "miles": 28.7
+      },
+      {
+        "id": "laughing-whitefish-falls",
+        "miles": 33.6
+      },
+      {
+        "id": "rapid-river-falls-delta-county",
+        "miles": 46.1
+      },
+      {
+        "id": "wright-street-falls",
+        "miles": 49.2
+      },
+      {
+        "id": "morgan-falls",
+        "miles": 49.3
+      },
+      {
+        "id": "carp-river-falls",
+        "miles": 49.4
+      }
+    ],
+    "sturgeon-falls": [
+      {
+        "id": "tibbets-falls",
+        "miles": 6.6
+      },
+      {
+        "id": "canyon-falls",
+        "miles": 10.5
+      },
+      {
+        "id": "power-house-falls",
+        "miles": 13.5
+      },
+      {
+        "id": "falls-river-trail",
+        "miles": 13.7
+      },
+      {
+        "id": "tioga-park-falls",
+        "miles": 17.5
+      },
+      {
+        "id": "duppy-falls",
+        "miles": 19
+      },
+      {
+        "id": "wyandotte-falls",
+        "miles": 19.2
+      },
+      {
+        "id": "o-kun-de-kun-falls",
+        "miles": 21.8
+      },
+      {
+        "id": "agate-falls",
+        "miles": 21.9
+      },
+      {
+        "id": "bond-falls",
+        "miles": 26.3
+      },
+      {
+        "id": "mex-i-min-e-falls",
+        "miles": 28.5
+      },
+      {
+        "id": "big-erics-falls",
+        "miles": 32.7
+      },
+      {
+        "id": "cascade-falls",
+        "miles": 35.7
+      },
+      {
+        "id": "lower-hungarian-falls",
+        "miles": 38.3
+      },
+      {
+        "id": "upper-hungarian-falls",
+        "miles": 38.5
+      },
+      {
+        "id": "kakabika-falls",
+        "miles": 41.8
+      },
+      {
+        "id": "pinnacle-falls",
+        "miles": 42.3
+      },
+      {
+        "id": "bonanza-falls",
+        "miles": 43.3
+      },
+      {
+        "id": "nonesuch-falls",
+        "miles": 44.3
+      },
+      {
+        "id": "little-union-gorge-falls",
+        "miles": 45.3
+      },
+      {
+        "id": "yellow-dog-falls",
+        "miles": 47.1
+      },
+      {
+        "id": "trap-falls",
+        "miles": 48.3
+      },
+      {
+        "id": "yondota-falls",
+        "miles": 49.4
+      }
+    ],
+    "superior-falls": [
+      {
+        "id": "saxon-falls",
+        "miles": 2.5
+      },
+      {
+        "id": "interstate-falls",
+        "miles": 12.1
+      },
+      {
+        "id": "great-conglomerate-falls",
+        "miles": 17.8
+      },
+      {
+        "id": "potawatomi-falls",
+        "miles": 18.1
+      },
+      {
+        "id": "gorge-falls",
+        "miles": 18.2
+      },
+      {
+        "id": "rainbow-falls",
+        "miles": 18.9
+      },
+      {
+        "id": "gabbro-falls",
+        "miles": 20.5
+      },
+      {
+        "id": "nawadaha-falls",
+        "miles": 23
+      },
+      {
+        "id": "manabezho-falls",
+        "miles": 23.3
+      },
+      {
+        "id": "manido-falls",
+        "miles": 23.3
+      },
+      {
+        "id": "lepisto-falls",
+        "miles": 23.5
+      },
+      {
+        "id": "trappers-falls",
+        "miles": 27.8
+      },
+      {
+        "id": "explorers-falls",
+        "miles": 27.8
+      },
+      {
+        "id": "shining-cloud-falls",
+        "miles": 29.3
+      },
+      {
+        "id": "greenstone-falls",
+        "miles": 29.9
+      },
+      {
+        "id": "overlooked-falls",
+        "miles": 29.9
+      },
+      {
+        "id": "yondota-falls",
+        "miles": 35.9
+      },
+      {
+        "id": "trap-falls",
+        "miles": 37.8
+      },
+      {
+        "id": "nonesuch-falls",
+        "miles": 40.3
+      },
+      {
+        "id": "little-union-gorge-falls",
+        "miles": 40.7
+      },
+      {
+        "id": "bonanza-falls",
+        "miles": 43.7
+      },
+      {
+        "id": "cascade-falls",
+        "miles": 46.4
+      },
+      {
+        "id": "kakabika-falls",
+        "miles": 48.4
+      }
+    ],
+    "tibbets-falls": [
+      {
+        "id": "canyon-falls",
+        "miles": 6.2
+      },
+      {
+        "id": "sturgeon-falls",
+        "miles": 6.6
+      },
+      {
+        "id": "tioga-park-falls",
+        "miles": 11.8
+      },
+      {
+        "id": "power-house-falls",
+        "miles": 12.8
+      },
+      {
+        "id": "falls-river-trail",
+        "miles": 13.5
+      },
+      {
+        "id": "duppy-falls",
+        "miles": 19.2
+      },
+      {
+        "id": "agate-falls",
+        "miles": 24.8
+      },
+      {
+        "id": "wyandotte-falls",
+        "miles": 25.4
+      },
+      {
+        "id": "o-kun-de-kun-falls",
+        "miles": 27.2
+      },
+      {
+        "id": "bond-falls",
+        "miles": 28.4
+      },
+      {
+        "id": "mex-i-min-e-falls",
+        "miles": 28.8
+      },
+      {
+        "id": "big-erics-falls",
+        "miles": 31
+      },
+      {
+        "id": "pinnacle-falls",
+        "miles": 38.1
+      },
+      {
+        "id": "cascade-falls",
+        "miles": 41
+      },
+      {
+        "id": "lower-hungarian-falls",
+        "miles": 41.3
+      },
+      {
+        "id": "upper-hungarian-falls",
+        "miles": 41.5
+      },
+      {
+        "id": "yellow-dog-falls",
+        "miles": 43.1
+      },
+      {
+        "id": "kakabika-falls",
+        "miles": 44.4
+      },
+      {
+        "id": "little-garlic-falls",
+        "miles": 48.3
+      },
+      {
+        "id": "bonanza-falls",
+        "miles": 49.4
+      }
+    ],
+    "tioga-park-falls": [
+      {
+        "id": "canyon-falls",
+        "miles": 7.3
+      },
+      {
+        "id": "tibbets-falls",
+        "miles": 11.8
+      },
+      {
+        "id": "power-house-falls",
+        "miles": 12.3
+      },
+      {
+        "id": "falls-river-trail",
+        "miles": 13.5
+      },
+      {
+        "id": "sturgeon-falls",
+        "miles": 17.5
+      },
+      {
+        "id": "big-erics-falls",
+        "miles": 23.5
+      },
+      {
+        "id": "pinnacle-falls",
+        "miles": 26.9
+      },
+      {
+        "id": "duppy-falls",
+        "miles": 29.4
+      },
+      {
+        "id": "yellow-dog-falls",
+        "miles": 31.9
+      },
+      {
+        "id": "wyandotte-falls",
+        "miles": 33.6
+      },
+      {
+        "id": "agate-falls",
+        "miles": 36.2
+      },
+      {
+        "id": "little-garlic-falls",
+        "miles": 36.7
+      },
+      {
+        "id": "mex-i-min-e-falls",
+        "miles": 38.5
+      },
+      {
+        "id": "o-kun-de-kun-falls",
+        "miles": 38.9
+      },
+      {
+        "id": "bond-falls",
+        "miles": 39.4
+      },
+      {
+        "id": "lower-hungarian-falls",
+        "miles": 41.5
+      },
+      {
+        "id": "upper-hungarian-falls",
+        "miles": 41.8
+      },
+      {
+        "id": "wright-street-falls",
+        "miles": 42.5
+      },
+      {
+        "id": "morgan-falls",
+        "miles": 42.7
+      },
+      {
+        "id": "carp-river-falls",
+        "miles": 42.7
+      }
+    ],
+    "trap-falls": [
+      {
+        "id": "little-union-gorge-falls",
+        "miles": 3.1
+      },
+      {
+        "id": "nonesuch-falls",
+        "miles": 4.4
+      },
+      {
+        "id": "bonanza-falls",
+        "miles": 5.9
+      },
+      {
+        "id": "greenstone-falls",
+        "miles": 8.2
+      },
+      {
+        "id": "overlooked-falls",
+        "miles": 8.2
+      },
+      {
+        "id": "shining-cloud-falls",
+        "miles": 8.7
+      },
+      {
+        "id": "trappers-falls",
+        "miles": 10.1
+      },
+      {
+        "id": "explorers-falls",
+        "miles": 10.1
+      },
+      {
+        "id": "manido-falls",
+        "miles": 14.5
+      },
+      {
+        "id": "manabezho-falls",
+        "miles": 14.6
+      },
+      {
+        "id": "nawadaha-falls",
+        "miles": 14.9
+      },
+      {
+        "id": "lepisto-falls",
+        "miles": 15
+      },
+      {
+        "id": "cascade-falls",
+        "miles": 15.1
+      },
+      {
+        "id": "rainbow-falls",
+        "miles": 19.1
+      },
+      {
+        "id": "gorge-falls",
+        "miles": 20
+      },
+      {
+        "id": "potawatomi-falls",
+        "miles": 20.1
+      },
+      {
+        "id": "great-conglomerate-falls",
+        "miles": 20.5
+      },
+      {
+        "id": "gabbro-falls",
+        "miles": 24.6
+      },
+      {
+        "id": "yondota-falls",
+        "miles": 25
+      },
+      {
+        "id": "o-kun-de-kun-falls",
+        "miles": 27.3
+      },
+      {
+        "id": "interstate-falls",
+        "miles": 32.6
+      },
+      {
+        "id": "kakabika-falls",
+        "miles": 33.4
+      },
+      {
+        "id": "agate-falls",
+        "miles": 35.7
+      },
+      {
+        "id": "saxon-falls",
+        "miles": 37.1
+      },
+      {
+        "id": "bond-falls",
+        "miles": 37.4
+      },
+      {
+        "id": "superior-falls",
+        "miles": 37.8
+      },
+      {
+        "id": "wyandotte-falls",
+        "miles": 39
+      },
+      {
+        "id": "mex-i-min-e-falls",
+        "miles": 44.8
+      },
+      {
+        "id": "duppy-falls",
+        "miles": 45.3
+      },
+      {
+        "id": "sturgeon-falls",
+        "miles": 48.3
+      }
+    ],
+    "trappers-falls": [
+      {
+        "id": "explorers-falls",
+        "miles": 0.2
+      },
+      {
+        "id": "shining-cloud-falls",
+        "miles": 1.9
+      },
+      {
+        "id": "greenstone-falls",
+        "miles": 2.6
+      },
+      {
+        "id": "overlooked-falls",
+        "miles": 2.7
+      },
+      {
+        "id": "manido-falls",
+        "miles": 4.5
+      },
+      {
+        "id": "manabezho-falls",
+        "miles": 4.5
+      },
+      {
+        "id": "nawadaha-falls",
+        "miles": 4.8
+      },
+      {
+        "id": "lepisto-falls",
+        "miles": 5.8
+      },
+      {
+        "id": "rainbow-falls",
+        "miles": 9.1
+      },
+      {
+        "id": "trap-falls",
+        "miles": 10.1
+      },
+      {
+        "id": "gorge-falls",
+        "miles": 10.1
+      },
+      {
+        "id": "potawatomi-falls",
+        "miles": 10.3
+      },
+      {
+        "id": "great-conglomerate-falls",
+        "miles": 10.7
+      },
+      {
+        "id": "nonesuch-falls",
+        "miles": 13
+      },
+      {
+        "id": "little-union-gorge-falls",
+        "miles": 13
+      },
+      {
+        "id": "bonanza-falls",
+        "miles": 16
+      },
+      {
+        "id": "gabbro-falls",
+        "miles": 16.7
+      },
+      {
+        "id": "cascade-falls",
+        "miles": 21.5
+      },
+      {
+        "id": "yondota-falls",
+        "miles": 22.9
+      },
+      {
+        "id": "interstate-falls",
+        "miles": 23.3
+      },
+      {
+        "id": "saxon-falls",
+        "miles": 27.1
+      },
+      {
+        "id": "superior-falls",
+        "miles": 27.8
+      },
+      {
+        "id": "kakabika-falls",
+        "miles": 34.2
+      },
+      {
+        "id": "o-kun-de-kun-falls",
+        "miles": 35.2
+      },
+      {
+        "id": "agate-falls",
+        "miles": 41.5
+      },
+      {
+        "id": "bond-falls",
+        "miles": 42.1
+      },
+      {
+        "id": "wyandotte-falls",
+        "miles": 48.8
+      },
+      {
+        "id": "mex-i-min-e-falls",
+        "miles": 49
+      }
+    ],
+    "upper-hungarian-falls": [
+      {
+        "id": "lower-hungarian-falls",
+        "miles": 0.6
+      },
+      {
+        "id": "eagle-river-falls",
+        "miles": 18
+      },
+      {
+        "id": "jacobs-falls",
+        "miles": 20.2
+      },
+      {
+        "id": "haven-falls",
+        "miles": 24.6
+      },
+      {
+        "id": "big-erics-falls",
+        "miles": 27.5
+      },
+      {
+        "id": "wyandotte-falls",
+        "miles": 28.1
+      },
+      {
+        "id": "falls-river-trail",
+        "miles": 29.1
+      },
+      {
+        "id": "power-house-falls",
+        "miles": 30.2
+      },
+      {
+        "id": "manganese-falls",
+        "miles": 33.4
+      },
+      {
+        "id": "canyon-falls",
+        "miles": 38
+      },
+      {
+        "id": "sturgeon-falls",
+        "miles": 38.5
+      },
+      {
+        "id": "tibbets-falls",
+        "miles": 41.5
+      },
+      {
+        "id": "tioga-park-falls",
+        "miles": 41.8
+      },
+      {
+        "id": "pinnacle-falls",
+        "miles": 44.3
+      },
+      {
+        "id": "yellow-dog-falls",
+        "miles": 46.7
+      },
+      {
+        "id": "o-kun-de-kun-falls",
+        "miles": 49
+      }
+    ],
+    "wagner-falls": [
+      {
+        "id": "horseshoe-falls",
+        "miles": 1.1
+      },
+      {
+        "id": "miners-falls",
+        "miles": 8.1
+      },
+      {
+        "id": "elliot-falls",
+        "miles": 9.5
+      },
+      {
+        "id": "bridalveil-falls",
+        "miles": 10.2
+      },
+      {
+        "id": "mosquito-falls",
+        "miles": 12
+      },
+      {
+        "id": "chapel-falls",
+        "miles": 13.7
+      },
+      {
+        "id": "rock-river-falls",
+        "miles": 15.8
+      },
+      {
+        "id": "spray-falls",
+        "miles": 16.3
+      },
+      {
+        "id": "laughing-whitefish-falls",
+        "miles": 20.1
+      },
+      {
+        "id": "rapid-river-falls-delta-county",
+        "miles": 30
+      },
+      {
+        "id": "sable-falls",
+        "miles": 35.8
+      },
+      {
+        "id": "carp-river-falls",
+        "miles": 38.9
+      },
+      {
+        "id": "morgan-falls",
+        "miles": 39
+      },
+      {
+        "id": "wright-street-falls",
+        "miles": 40
+      },
+      {
+        "id": "little-garlic-falls",
+        "miles": 48.3
+      }
+    ],
+    "wright-street-falls": [
+      {
+        "id": "morgan-falls",
+        "miles": 4
+      },
+      {
+        "id": "carp-river-falls",
+        "miles": 4.3
+      },
+      {
+        "id": "little-garlic-falls",
+        "miles": 9.4
+      },
+      {
+        "id": "yellow-dog-falls",
+        "miles": 16.7
+      },
+      {
+        "id": "pinnacle-falls",
+        "miles": 19.7
+      },
+      {
+        "id": "laughing-whitefish-falls",
+        "miles": 21.9
+      },
+      {
+        "id": "rock-river-falls",
+        "miles": 24.8
+      },
+      {
+        "id": "big-erics-falls",
+        "miles": 36.6
+      },
+      {
+        "id": "horseshoe-falls",
+        "miles": 39.8
+      },
+      {
+        "id": "wagner-falls",
+        "miles": 40
+      },
+      {
+        "id": "tioga-park-falls",
+        "miles": 42.5
+      },
+      {
+        "id": "rapid-river-falls-delta-county",
+        "miles": 43.6
+      },
+      {
+        "id": "elliot-falls",
+        "miles": 43.7
+      },
+      {
+        "id": "miners-falls",
+        "miles": 43.9
+      },
+      {
+        "id": "bridalveil-falls",
+        "miles": 44
+      },
+      {
+        "id": "mosquito-falls",
+        "miles": 46.1
+      },
+      {
+        "id": "chapel-falls",
+        "miles": 47.7
+      },
+      {
+        "id": "power-house-falls",
+        "miles": 48.8
+      },
+      {
+        "id": "canyon-falls",
+        "miles": 49
+      },
+      {
+        "id": "spray-falls",
+        "miles": 49.2
+      },
+      {
+        "id": "falls-river-trail",
+        "miles": 49.5
+      }
+    ],
+    "wyandotte-falls": [
+      {
+        "id": "sturgeon-falls",
+        "miles": 19.2
+      },
+      {
+        "id": "o-kun-de-kun-falls",
+        "miles": 21
+      },
+      {
+        "id": "falls-river-trail",
+        "miles": 22.2
+      },
+      {
+        "id": "power-house-falls",
+        "miles": 23.1
+      },
+      {
+        "id": "tibbets-falls",
+        "miles": 25.4
+      },
+      {
+        "id": "canyon-falls",
+        "miles": 26.5
+      },
+      {
+        "id": "upper-hungarian-falls",
+        "miles": 28.1
+      },
+      {
+        "id": "lower-hungarian-falls",
+        "miles": 28.2
+      },
+      {
+        "id": "agate-falls",
+        "miles": 30
+      },
+      {
+        "id": "cascade-falls",
+        "miles": 31.5
+      },
+      {
+        "id": "duppy-falls",
+        "miles": 33
+      },
+      {
+        "id": "bonanza-falls",
+        "miles": 33.2
+      },
+      {
+        "id": "tioga-park-falls",
+        "miles": 33.6
+      },
+      {
+        "id": "bond-falls",
+        "miles": 35.3
+      },
+      {
+        "id": "little-union-gorge-falls",
+        "miles": 35.9
+      },
+      {
+        "id": "nonesuch-falls",
+        "miles": 36
+      },
+      {
+        "id": "big-erics-falls",
+        "miles": 37.6
+      },
+      {
+        "id": "trap-falls",
+        "miles": 39
+      },
+      {
+        "id": "mex-i-min-e-falls",
+        "miles": 40.7
+      },
+      {
+        "id": "eagle-river-falls",
+        "miles": 45.2
+      },
+      {
+        "id": "overlooked-falls",
+        "miles": 46.5
+      },
+      {
+        "id": "greenstone-falls",
+        "miles": 46.6
+      },
+      {
+        "id": "kakabika-falls",
+        "miles": 46.9
+      },
+      {
+        "id": "shining-cloud-falls",
+        "miles": 47.7
+      },
+      {
+        "id": "jacobs-falls",
+        "miles": 47.8
+      },
+      {
+        "id": "trappers-falls",
+        "miles": 48.8
+      },
+      {
+        "id": "explorers-falls",
+        "miles": 48.9
+      },
+      {
+        "id": "yondota-falls",
+        "miles": 49.7
+      }
+    ],
+    "yellow-dog-falls": [
+      {
+        "id": "pinnacle-falls",
+        "miles": 5
+      },
+      {
+        "id": "little-garlic-falls",
+        "miles": 7.4
+      },
+      {
+        "id": "wright-street-falls",
+        "miles": 16.7
+      },
+      {
+        "id": "morgan-falls",
+        "miles": 19.6
+      },
+      {
+        "id": "carp-river-falls",
+        "miles": 19.8
+      },
+      {
+        "id": "big-erics-falls",
+        "miles": 20.1
+      },
+      {
+        "id": "tioga-park-falls",
+        "miles": 31.9
+      },
+      {
+        "id": "power-house-falls",
+        "miles": 34.9
+      },
+      {
+        "id": "falls-river-trail",
+        "miles": 35.4
+      },
+      {
+        "id": "canyon-falls",
+        "miles": 37.1
+      },
+      {
+        "id": "laughing-whitefish-falls",
+        "miles": 38.5
+      },
+      {
+        "id": "rock-river-falls",
+        "miles": 41.1
+      },
+      {
+        "id": "tibbets-falls",
+        "miles": 43.1
+      },
+      {
+        "id": "lower-hungarian-falls",
+        "miles": 46.1
+      },
+      {
+        "id": "upper-hungarian-falls",
+        "miles": 46.7
+      },
+      {
+        "id": "sturgeon-falls",
+        "miles": 47.1
+      },
+      {
+        "id": "haven-falls",
+        "miles": 47.6
+      }
+    ],
+    "yondota-falls": [
+      {
+        "id": "kakabika-falls",
+        "miles": 12.9
+      },
+      {
+        "id": "gabbro-falls",
+        "miles": 15.4
+      },
+      {
+        "id": "cascade-falls",
+        "miles": 19
+      },
+      {
+        "id": "lepisto-falls",
+        "miles": 19.9
+      },
+      {
+        "id": "overlooked-falls",
+        "miles": 21.3
+      },
+      {
+        "id": "greenstone-falls",
+        "miles": 21.4
+      },
+      {
+        "id": "great-conglomerate-falls",
+        "miles": 22.4
+      },
+      {
+        "id": "potawatomi-falls",
+        "miles": 22.5
+      },
+      {
+        "id": "gorge-falls",
+        "miles": 22.6
+      },
+      {
+        "id": "nonesuch-falls",
+        "miles": 22.7
+      },
+      {
+        "id": "trappers-falls",
+        "miles": 22.9
+      },
+      {
+        "id": "nawadaha-falls",
+        "miles": 23
+      },
+      {
+        "id": "explorers-falls",
+        "miles": 23.1
+      },
+      {
+        "id": "rainbow-falls",
+        "miles": 23.2
+      },
+      {
+        "id": "manabezho-falls",
+        "miles": 23.3
+      },
+      {
+        "id": "manido-falls",
+        "miles": 23.5
+      },
+      {
+        "id": "shining-cloud-falls",
+        "miles": 24.2
+      },
+      {
+        "id": "interstate-falls",
+        "miles": 24.5
+      },
+      {
+        "id": "trap-falls",
+        "miles": 25
+      },
+      {
+        "id": "little-union-gorge-falls",
+        "miles": 25.2
+      },
+      {
+        "id": "bond-falls",
+        "miles": 26.4
+      },
+      {
+        "id": "bonanza-falls",
+        "miles": 27.4
+      },
+      {
+        "id": "agate-falls",
+        "miles": 28.5
+      },
+      {
+        "id": "o-kun-de-kun-falls",
+        "miles": 29.6
+      },
+      {
+        "id": "mex-i-min-e-falls",
+        "miles": 31.2
+      },
+      {
+        "id": "saxon-falls",
+        "miles": 33.8
+      },
+      {
+        "id": "superior-falls",
+        "miles": 35.9
+      },
+      {
+        "id": "duppy-falls",
+        "miles": 36.9
+      },
+      {
+        "id": "sturgeon-falls",
+        "miles": 49.4
+      },
+      {
+        "id": "wyandotte-falls",
+        "miles": 49.7
+      }
+    ]
+  }
+}
