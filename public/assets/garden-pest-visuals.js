@@ -9,6 +9,14 @@
   const intro = document.getElementById('visual-summary');
   const reset = document.getElementById('visual-reset');
   const selected = new Set();
+  let view = 'all';
+  const filterArea = document.getElementById('visual-category');
+  const clueGroups = [
+    {name:'Chewing and holes', ids:['shot-holes','ragged-holes','stripped-stems','skeletonized','ear-tip','flower-chewing']},
+    {name:'Leaves changing color', ids:['stippling','curled-leaves','white-powder','angular-yellowing','leaf-spots']},
+    {name:'Stem and whole-plant problems', ids:['frass','wilt']},
+    {name:'Insects and trails', ids:['eggs-nymphs','visible-beetles','honeydew','webbing','slime-trails']}
+  ];
   const licenses = {
     'CC0 1.0': 'https://creativecommons.org/publicdomain/zero/1.0/',
     'CC BY 2.0': 'https://creativecommons.org/licenses/by/2.0/',
@@ -36,7 +44,7 @@
     link.rel = 'noopener noreferrer';
     return link;
   }
-  function figure(photo, role) {
+  function figure(photo, role, kind) {
     const frame = node('figure', 'visual-figure');
     const media = node('div', 'visual-photo');
     const image = node('img');
@@ -51,7 +59,7 @@
     }, {once:true});
     media.append(image);
     const caption = node('figcaption');
-    caption.append(node('strong', 'visual-kind', role === 'pest' ? 'THE PEST' : 'DAMAGE / FIELD CLUE'));
+    caption.append(node('strong', 'visual-kind', kind === 'disease' ? (role === 'pest' ? 'SYMPTOM / CLOSE-UP' : 'SYMPTOM / ON THE PLANT') : (role === 'pest' ? 'THE ORGANISM' : 'DAMAGE / FIELD CLUE')));
     caption.append(node('span', 'visual-caption', photo.caption));
     const credits = node('span', 'visual-credit');
     credits.append(external('Photo: ' + photo.author, filePage(photo)));
@@ -65,12 +73,14 @@
     const evidence = byId.get(id);
     if (!evidence) return null;
     const pair = node('div', compact ? 'visual-pair is-compact' : 'visual-pair');
-    pair.append(figure(evidence.pest, 'pest'), figure(evidence.damage, 'damage'));
+    pair.append(figure(evidence.pest, 'pest', evidence.kind), figure(evidence.damage, 'damage', evidence.kind));
     return pair;
   }
   // Existing forecast cards reuse the same image and license records.
   window.GardenPestVisuals = Object.freeze({renderPair});
-  for (const clue of catalog.clues) {
+  const knownClues = new Map(catalog.clues.map(c => [c.id, c]));
+  const groupIds = new Set();
+  function clueButton(clue) {
     const button = node('button', 'visual-chip', clue.label);
     button.type = 'button';
     button.dataset.clue = clue.id;
@@ -81,7 +91,45 @@
       button.setAttribute('aria-pressed', String(selected.has(clue.id)));
       render();
     });
-    clueArea.append(button);
+    return button;
+  }
+  for (const group of clueGroups) {
+    const block = node('fieldset', 'visual-clue-group');
+    block.append(node('legend', '', group.name));
+    const buttons = node('div', 'visual-clue-row');
+    for (const id of group.ids) {
+      const clue = knownClues.get(id);
+      if (!clue) continue;
+      groupIds.add(id);
+      buttons.append(clueButton(clue));
+    }
+    block.append(buttons);
+    clueArea.append(block);
+  }
+  if (groupIds.size !== knownClues.size) {
+    // A new clue must be placed into a visible group rather than disappearing.
+    const extra = node('fieldset', 'visual-clue-group');
+    extra.append(node('legend', '', 'Other visible clues'));
+    const buttons = node('div', 'visual-clue-row');
+    catalog.clues.filter(c => !groupIds.has(c.id)).forEach(c => buttons.append(clueButton(c)));
+    extra.append(buttons);
+    clueArea.append(extra);
+  }
+  for (const option of [
+    {value:'all',label:'All problems'},
+    {value:'pest',label:'Insects & slugs'},
+    {value:'disease',label:'Diseases & leaf spots'}
+  ]) {
+    const button = node('button', 'visual-category-button', option.label);
+    button.type = 'button';
+    button.dataset.group = option.value;
+    button.setAttribute('aria-pressed', String(view === option.value));
+    button.addEventListener('click', () => {
+      view = option.value;
+      filterArea.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.group === view)));
+      render();
+    });
+    filterArea.append(button);
   }
   reset.addEventListener('click', function () {
     selected.clear();
@@ -90,14 +138,14 @@
   });
   function render() {
     const cropName = crop.options[crop.selectedIndex]?.textContent || 'this crop';
-    const choices = catalog.pests.filter(item => item.crops.includes(crop.value))
+    const choices = catalog.pests.filter(item => item.crops.includes(crop.value) && (view === 'all' || (view === 'disease' ? item.kind === 'disease' : item.kind !== 'disease')))
       .map(item => ({item, overlap: item.clues.filter(id => selected.has(id)).length}))
       .filter(candidate => !selected.size || candidate.overlap > 0)
       .sort((a,b) => b.overlap - a.overlap || a.item.name.localeCompare(b.item.name));
     results.replaceChildren();
-    const chosenClues = selected.size ? selected.size + ' selected clue' + (selected.size === 1 ? '' : 's') : 'all reviewed photo pairs';
+    const chosenClues = selected.size ? selected.size + ' selected clue' + (selected.size === 1 ? '' : 's') : 'all available photo comparisons';
     intro.textContent = 'Showing ' + choices.length + ' illustrated comparison' + (choices.length === 1 ? '' : 's') +
-      ' for ' + cropName + ' · ' + chosenClues + '. These are possible visual matches, never a diagnosis.';
+      ' for ' + cropName + ' · ' + chosenClues + '. Matching clues indicate topics worth checking, not a diagnosis or measured likelihood.';
     if (!choices.length) {
       const note = node('div', 'visual-empty');
       note.append(node('strong', '', 'No verified photograph pair matches this crop and clue selection.'));
@@ -107,13 +155,19 @@
     }
     for (const {item,overlap} of choices) {
       const article = node('article', 'visual-result');
-      article.append(node('span', 'visual-index', selected.size ? overlap + ' matching visible clue' + (overlap === 1 ? '' : 's') : 'VERIFIED PHOTO PAIR'));
+      article.append(node('span', 'visual-index', selected.size ? overlap + ' of ' + selected.size + ' selected clue' + (selected.size === 1 ? '' : 's') + ' illustrated' : item.kind === 'disease' ? 'DISEASE SYMPTOM EXAMPLES' : 'INSECT / DAMAGE COMPARISON'));
+      if (item.kind === 'disease') article.classList.add('is-disease');
       article.append(node('h3', '', item.name));
       article.append(renderPair(item.id, false));
       article.append(node('p', 'visual-interpretation', item.diagnostic));
       const looks = node('p', 'visual-lookalike');
       looks.append(node('strong', '', 'Before deciding: '), document.createTextNode(item.lookalike));
       article.append(looks);
+      if (item.whatToCheck) {
+        const next = node('p', 'visual-next');
+        next.append(node('strong', '', 'Check this next: '), document.createTextNode(item.whatToCheck));
+        article.append(next);
+      }
       results.append(article);
     }
   }

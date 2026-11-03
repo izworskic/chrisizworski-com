@@ -33,14 +33,17 @@ def load_and_validate():
     assert manifest["schema"] == "garden-pest-visual-evidence-v1"
     clues = manifest["clues"]
     clue_ids = {item["id"] for item in clues}
-    assert len(clue_ids) == len(clues) and len(clues) >= 6
+    assert len(clue_ids) == len(clues) and len(clues) >= 18
     assert all(VALID_ID.fullmatch(item["id"]) and item["label"] for item in clues)
     pests = manifest["pests"]
     pest_ids = {item["id"] for item in pests}
-    assert len(pest_ids) == len(pests) and len(pests) >= 6
+    assert len(pest_ids) == len(pests) and len(pests) >= 15
     for item in pests:
         assert VALID_ID.fullmatch(item["id"])
         assert item["name"] and item["diagnostic"] and item["lookalike"]
+        assert item.get("kind", "insect") in ("insect", "mollusk", "disease")
+        if item.get("kind") == "disease":
+            assert item.get("whatToCheck"), (item["id"], "missing differential examination")
         assert item["crops"] and set(item["crops"]) <= ALLOWED_CROPS
         assert item["clues"] and set(item["clues"]) <= clue_ids
         assert item["pest"]["file"] != item["damage"]["file"]
@@ -97,6 +100,12 @@ def main():
     assert comparisons(manifest, "squash", ["frass"])[0][2] == "squash-vine-borer"
     assert comparisons(manifest, "brassicas", ["shot-holes"])[0][2] == "flea-beetles"
     assert comparisons(manifest, "roses", ["skeletonized"])[0][2] == "japanese-beetle"
+    assert comparisons(manifest, "squash", ["white-powder"])[0][2] == "powdery-mildew"
+    assert comparisons(manifest, "cucumbers", ["angular-yellowing"])[0][2] == "downy-mildew"
+    assert comparisons(manifest, "tomatoes", ["leaf-spots"])[0][2] == "tomato-leaf-spot"
+    assert comparisons(manifest, "corn", ["ear-tip"])[0][2] == "corn-earworm"
+    assert comparisons(manifest, "beans", ["stippling"])[0][2] == "spider-mites"
+    assert comparisons(manifest, "lettuce", ["slime-trails"])[0][2] == "slugs"
     assert not comparisons(manifest, "tomatoes", ["frass"])
     try:
         comparisons(manifest, "squash", ["unknown-symptom"])
