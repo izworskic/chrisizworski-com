@@ -102,12 +102,12 @@ test('B58: noindex accessible research page gives named evidence and no unsafe d
  assert.ok(!review.sourceLinks.some(x=>x.url.includes('google.com/maps/dir')));
 });
 test('B58: research counts and gated nearby alternatives remain stable',()=>{
- assert.equal(rec.counts.curatedTotal,74);
- assert.equal(rec.counts.exactIdMatched,67);
- assert.equal(rec.counts.pending,94);
- assert.equal(ledger.curatedCount,74);
- assert.equal(queue.counts.pendingGisFeatures,94);
- assert.equal(queue.candidates.length,94);
+ assert.equal(rec.counts.curatedTotal,75);
+ assert.equal(rec.counts.exactIdMatched,68);
+ assert.equal(rec.counts.pending,93);
+ assert.equal(ledger.curatedCount,75);
+ assert.equal(queue.counts.pendingGisFeatures,93);
+ assert.equal(queue.candidates.length,93);
  assert.equal(reviews.records.length,97);
  assert.match(guide,/Wagner Falls/);
  assert.match(guide,/Tibbets Falls/);
