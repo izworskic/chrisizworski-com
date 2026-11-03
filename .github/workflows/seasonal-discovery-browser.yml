@@ -1,0 +1,40 @@
+name: Seasonal discovery browser acceptance
+on:
+  pull_request:
+    paths:
+      - 'public/tools/index.html'
+      - 'public/guides/index.html'
+      - 'public/assets/seasonal-discovery*'
+      - 'data/seasonal-discovery-editorial.json'
+      - 'scripts/*seasonal-discovery*'
+      - 'tests/seasonal-discovery.test.js'
+      - '.github/workflows/seasonal-discovery-browser.yml'
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify editorial calendar and shipped UI contract
+        run: node --test tests/seasonal-discovery.test.js
+      - name: Install isolated browser test runner
+        run: |
+          npm install --prefix /tmp/seasonal-playwright --no-save --ignore-scripts playwright@1.58.2
+          echo "NODE_PATH=/tmp/seasonal-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium-browser)" >> "$GITHUB_ENV"
+      - name: Check month changes, reset, mobile and failures
+        run: node scripts/verify-seasonal-discovery-browser.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: seasonal-discovery-browser
+          path: artifacts/seasonal-discovery/
+          if-no-files-found: error
+          retention-days: 7

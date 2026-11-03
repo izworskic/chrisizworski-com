@@ -1,3 +1,13 @@
+### 2026-11-03 — Python seasonal discovery for Tools and Guides (release pending)
+
+- **Decision:** Which specialist tool or guide should I open for the month I am planning? A shared seasonal field desk now precedes the full collection on /tools/ and /guides/.
+- **Implementation:** Offline stdlib Python reconciles 138 canonical candidates, emits all 12 months, and selects six diverse picks with at least two tools and two guides. A native month selector updates the heading, introductory language, links and why-now explanations. Calendar relevance is explicitly editorial; it makes no live weather, sighting, snow, ice or access claim. No new service, database, location collection or scheduled build.
+- **Preservation:** All 90 tool cards and 66 guide cards remain; links increase from 304 to 311 on Tools and 256 to 263 on Guides. Existing ItemList order, title/canonical/Person identity, ads and live weekly source board remain. Tools lastmod truthfully reflects this content edit.
+- **Verified locally:** all 59 npm run verify:all steps passed (69s); Python all-month/rollover/diversity/source tests and shipped UI fallback/reversal/reset tests pass. A duplicate fallback link was caught by an existing catalog test and corrected without weakening that test. Generated data remains stable after directory reconciliation.
+- **Release status:** initial source commit 116500d33d82cde82be2259ebb4dc736c77af5ae on feat/seasonal-tools-guides-20261103; final commit/PR and responsive browser evidence pending. No production release or public-live claim. Hosting connector denied deployment listing; GitHub's Vercel status was pending. GSC/AdSense unavailable; no improvement claim.
+- **PR:** https://github.com/izworskic/chrisizworski-com/pull/1480. Initial responsive run 41703843189 passed all four widths, no-JS and missing-data cases. Screenshot review caught the Guides introduction pushing recommendations down to 1,589px at 390px; the introduction/collection index now follows the seasonal picks, with final layout rerun required. No content or links removed.
+- **One next action:** Confirm the final layout and repository checks in PR #1480, then obtain owner merge.
+
 ### 2026-11-03 — Starbase Texas public viewing atlas / third spaceport milestone (PR pending)
 
 ### 2026-11-03 — U.P. Conglomerate Falls Gratiot KNA source-backed public guide (B64)

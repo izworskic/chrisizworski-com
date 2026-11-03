@@ -102,6 +102,7 @@ h2.section-head{font:500 clamp(1.5rem,2.4vw,1.95rem)/1.18 var(--hm-display);colo
 <meta property="og:site_name" content="Chris Izworski">
 <meta name="twitter:title" content="Michigan &amp; Great Lakes Guides | Chris Izworski">
 <meta name="twitter:description" content="Guides by Chris Izworski covering AI in 911 and public safety, Great Lakes travel and ship watching, and Zone 6a Michigan gardening.">
+<link rel="stylesheet" href="/assets/seasonal-discovery.css?v=1">
 </head>
 <body class="hm-page">
 <a class="hm-skip" href="#main-guides-body">Skip to Guides</a>
@@ -149,11 +150,37 @@ h2.section-head{font:500 clamp(1.5rem,2.4vw,1.95rem)/1.18 var(--hm-display);colo
 <div class="body" id="main-guides-body">
 <div class="breadcrumb"><a href="/">Home</a> &rsaquo; Guides</div>
 
-<section class="guides-hero" aria-labelledby="guides-main-title">
+<section class="guides-hero guides-hero--intro" aria-labelledby="guides-main-title">
   <div>
     <p class="guides-kicker">Great Lakes Almanac &middot; Field Guides &amp; Reference Manuals</p>
     <h1 class="page-title" id="guides-main-title">Guides</h1>
     <p class="sub">Practical reference material on Great Lakes travel, AI operations, and Zone 6a Michigan gardening.</p>
+
+  </div>
+
+</section>
+
+<section class="season-desk" data-seasonal-discovery aria-labelledby="season-desk-title">
+  <p class="season-desk__kicker">The seasonal field desk · Michigan &amp; Great Lakes</p>
+  <h2 id="season-desk-title" data-season-heading>Find your next outing or garden project</h2>
+  <p class="season-desk__intro" data-season-intro>Start with a useful guide or planning tool. The full collection remains below, with current conditions available in the specialist tools.</p>
+  <div class="season-desk__controls" data-season-controls hidden>
+    <label for="season-month">Planning for a different month?</label>
+    <select id="season-month" data-season-month aria-describedby="season-status"></select>
+    <button type="button" data-season-reset hidden>Back to this month</button>
+  </div>
+  <div class="season-desk__picks" data-season-picks>
+    <article class="season-pick"><p class="season-pick__label">Guide · All-season starting point</p><h3><a href="/guides/#field-guides">Browse the seasonal field guides</a></h3><p>Compare places and activities, then check current access and conditions before choosing your trip.</p></article>
+    <article class="season-pick"><p class="season-pick__label">Tool · Garden planning</p><h3><a href="/living-garden/">Plan your raised beds through the seasons</a></h3><p>Lay out beds and explore what can occupy each square through the growing season.</p></article>
+    <article class="season-pick"><p class="season-pick__label">Guide · Shore planning</p><h3><a href="/great-lakes-ship-watching-spots/">Choose a freighter-watching spot</a></h3><p>Find a place to watch ships, then use current vessel activity and access information to plan the visit.</p></article>
+    <article class="season-pick"><p class="season-pick__label">Tool · Check before you travel</p><h3><a href="/mackinac-bridge-live/">Check Mackinac Bridge conditions</a></h3><p>Open the crossing tool for its latest official reports, restrictions and weather context.</p></article>
+  </div>
+  <p class="season-desk__status" id="season-status" data-season-status role="status" aria-live="polite">Calendar recommendations load when available. These starting points do not confirm current conditions, sightings or access.</p>
+  <p class="season-desk__browse"><a href="/tools/#finder">Search the full tool collection</a> · <a href="/guides/#field-guides">Browse the field guides</a></p>
+</section>
+
+<section class="guides-hero" aria-label="About the full guide collection">
+  <div>
     <p>A guide here earns its place by being specific enough to be actually useful. General advice is easy to find. These try to go further, into the particular conditions of Zone 6a Michigan gardening, or the specific decision points that come up when deploying AI in an operational environment. The operations guides are written for people who are responsible for making decisions, not for an academic audience. The gardening guides are written from direct experience at <a href="https://freighterviewfarms.com" target="_blank" rel="noopener">Freighter View Farms</a> on Saginaw Bay, not from general horticultural sources. The <a href="/chris-izworski-freighter-view-farms/" data-growth-cta="guides-fvf-authority">project guide</a> connects that experience to the Michigan gardening cluster.</p>
   </div>
   <aside class="guides-index-box" aria-label="Guide collections on this page">
@@ -623,5 +650,7 @@ h2.section-head{font:500 clamp(1.5rem,2.4vw,1.95rem)/1.18 var(--hm-display);colo
 })();
 </script>
 <script defer src="/assets/growth-cta.js"></script>
+<script defer src="/assets/seasonal-discovery-data.js?v=1"></script>
+<script defer src="/assets/seasonal-discovery.js?v=1"></script>
 </body>
 </html>
