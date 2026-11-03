@@ -6,6 +6,7 @@
 <link rel="canonical" href="https://chrisizworski.com/michigan-garden-pest-watch/">
 <meta name="theme-color" content="#1f392f">
 <link rel="stylesheet" href="/assets/garden-pest-watch.css?v=20261103d">
+<link rel="stylesheet" href="/assets/garden-earworm-trap-desk.css?v=20261103a">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,700&display=swap" rel="stylesheet">
@@ -15,6 +16,8 @@
 <script defer src="/assets/garden-pest-watch.js?v=20261103c"></script>
 <script defer src="/assets/japanese-beetle-monitoring.js?v=20261102a"></script>
 <script defer src="/assets/garden-pest-field-observations.js?v=20261103a"></script>
+<script defer src="/assets/garden-earworm-trap-data.js?v=20261103a"></script>
+<script defer src="/assets/garden-earworm-trap-desk.js?v=20261103a"></script>
 </head>
 <body>
 <a class="skip" href="#watchdesk">Skip to garden watch</a>
@@ -110,6 +113,47 @@
    <div class="section-heading"><div><span class="section-kicker">04 / THE WATCH LIST</span><h2 id="watch-heading">Your next garden checks</h2></div><p id="watch-count">Seasonal guidance for Michigan gardens.</p></div>
    <p class="source-label" id="watch-source-label" role="status" aria-live="polite">This is a seasonal scouting list, not a real-time pest detection service.</p>
    <div id="watch-cards" class="watch-cards"><article class="watch-card"><span class="pest-index">FIELD NOTE</span><h3>Squash stem scouting</h3><p>Inspect squash stems for entry frass, eggs and wilting. Check at-risk plants through summer; in November, focus on next season's crop protection.</p><a href="https://enviroweather.msu.edu/crops/cucurbits/squashvineborer">MSU source and further identification</a></article></div>
+ </section>
+ <section class="earworm-desk" id="earworm-trap-desk" aria-labelledby="earworm-trap-heading">
+  <div class="earworm-top">
+   <div>
+    <span class="earworm-eyebrow">MSU EXTENSION / MEASURED FIELD EVIDENCE / 2026 ARCHIVE</span>
+    <h2 id="earworm-trap-heading">Where were corn earworm moths actually trapped?</h2>
+    <p>Not a forecast and not garden sightings. Explore actual pheromone-trap captures published by Michigan State University Extension for eight Michigan counties during the 2026 sweet-corn season.</p>
+    <p>Pick a county to read its collection history. County labels identify cooperating monitoring locations, not trap coordinates or the number of moths in your garden.</p>
+   </div>
+   <aside class="earworm-definition">
+    <strong>What these numbers mean</strong>
+    Each bar represents MSU's published <em>average moths per night</em> in one reporting trap. A dash means the trap did not report, never zero moths. Cloth Heliothis and wire Hartstack traps catch different numbers and must not be ranked against one another.
+   </aside>
+  </div>
+  <p class="earworm-crop-note" id="earworm-crop-note">This archived observation network is for corn earworm in sweet corn, not a current pest warning for every garden crop.</p>
+  <p class="earworm-selector-label">Choose a county reporting station · not inferred from your ZIP</p>
+  <div class="earworm-counties" id="earworm-county-picker" role="group" aria-label="Select an MSU corn earworm monitoring county">
+   <p>Example: Saginaw County. Source report includes Ottawa, Oceana, Washtenaw, Monroe, Saginaw, Lapeer, Genesee and Midland counties.</p>
+  </div>
+  <div class="earworm-readout" id="earworm-readout" role="status" aria-live="polite">
+   <strong class="earworm-season-label">2026 growing season closed · not a current outbreak</strong>
+   <h3>Saginaw County monitoring example</h3>
+   <p>MSU's August 25, 2026 row reported 2 moths, averaging 0.2 per night, for the cooperating Saginaw County trap. The September 1 row contains no Saginaw report. That is not a zero catch.</p>
+  </div>
+  <p id="earworm-location-note" class="earworm-location-note">County reporting stations are not a location-specific forecast. Your Michigan ZIP is not used to assign a trap or make a risk estimate.</p>
+  <div class="earworm-graph-intro"><strong>Reported moth captures per night · 2026</strong><span>Within-county scale only; missing reports shown as N/R</span></div>
+  <div id="earworm-chart" class="earworm-graph" role="img" aria-label="Graph of county trap reports, with source values in the table below">
+   <p>Select a county with JavaScript to reveal the archived ten-week chart.</p>
+  </div>
+  <p class="earworm-legend">The graph uses the published nightly averages. For readings shown only as a zero total, the graph marks zero without inventing a printed nightly average. August 18 Ottawa and Oceana readings cover two weeks.</p>
+  <div class="earworm-table-wrap"><table class="earworm-table" id="earworm-detail">
+   <caption>Historical MSU Extension corn earworm trap measurements</caption>
+   <thead><tr><th>Collection week</th><th>Published total</th><th>Published average/night</th><th>Note</th></tr></thead>
+   <tbody><tr><td>August 25, 2026</td><td>2</td><td>0.2</td><td>Saginaw County cloth Heliothis trap</td></tr><tr><td>September 1, 2026</td><td>Not reported</td><td>Not reported</td><td>No claim of zero activity</td></tr></tbody>
+  </table></div>
+  <div class="earworm-source">
+   <strong>Publication and evidence limits</strong>
+   <p>Source: MSU Extension's <em>Michigan vegetable crop report – September 2, 2026</em>, published September 4, 2026. This was the final 2026 vegetable crop report. No 2027 trap readings have been reported by this tool.</p>
+   <p>Averages were reported over different sampling intervals, including two-week catches. The published trap type for Midland County was not specified. Local captures may differ considerably from a garden even within the same county. No treatment interval or pesticide recommendation is derived here.</p>
+   <p><a href="https://msu-prod.dotcms.cloud/news/michigan-vegetable-crop-report-september-2-2026" target="_blank" rel="noopener noreferrer">Read the original MSU trap table and footnotes</a> · <a href="https://msu-prod.dotcmscloud.com/resources/video_tutorials_on_using_pheromone_traps_to_monitor_corn_ear_worm_in_sweet" target="_blank" rel="noopener noreferrer">MSU trap placement and interpretation</a></p>
+  </div>
  </section>
  <section class="beetle-desk" id="beetle-forecast" aria-labelledby="beetle-heading">
    <div class="beetle-desk-rule"><span>05 / THE FORECAST WIRE</span><span>JAPANESE BEETLE · OPERATIONAL PILOT</span></div>
