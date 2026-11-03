@@ -452,8 +452,8 @@
       "source": "/michigan-after-dark-field-guide/",
       "destination": "/michigan-dark-sky-field-guide/",
       "permanent": true
-    }
-    ,{
+    },
+    {
       "source": "/vandenberg-rocket-launch-viewing",
       "destination": "/vandenberg-rocket-launch-viewing/",
       "permanent": true
