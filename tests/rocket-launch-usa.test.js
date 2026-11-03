@@ -148,7 +148,11 @@ test('national API provides all coasts, exact launch selection, partial feed hea
     raw('eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee',11,day,'Minute','Launch Successful')
   ],count:3};
   const sparse={results:[
-    raw(idTx,143,t),raw(idWa,21,day,'Day'),
+    {...raw(idTx,143,t),vid_urls:[{
+      priority:8,source:'youtube.com',publisher:'SpaceX',
+      title:'Starbase launch broadcast',url:'https://youtu.be/abcdefghijk',
+      type:{name:'Official Webcast'},live:false
+    }]},raw(idWa,21,day,'Day'),
     raw('ffffffff-ffff-4fff-8fff-ffffffffffff',1,day,'Month')
   ],count:3};
   const starbase='<html>'+('s'.repeat(1200))+
@@ -195,6 +199,13 @@ test('national API provides all coasts, exact launch selection, partial feed hea
     assert.equal(res.body.regions.length,6);
     assert.equal(res.body.selectedLaunchId,idTx);
     assert.equal(res.body.selectedRegion,'texas');
+    assert.equal(res.body.mediaDesk.launchId,idTx);
+    assert.equal(res.body.mediaDesk.cameras.length,0,
+      'Never send Space Coast cameras for a Starbase mission');
+    assert.equal(res.body.mediaDesk.missionVideoCount,1);
+    assert.equal(res.body.mediaDesk.primaryVideo.url,'https://www.youtube.com/watch?v=abcdefghijk');
+    assert.equal(res.body.mediaDesk.streamHealthChecked,false);
+
     assert.deepEqual(res.body.coverage.locationIds,[1,11,12,21,25,27,143]);
     assert.equal(res.body.access.liveOfficialNotice.state,'closed');
     assert.equal(res.body.access.liveOfficialNotice.roadState,'advisory');
@@ -277,5 +288,24 @@ test('national launch atlas requests keyed CARTO tile URLs and retains functiona
   assert.match(endpoint,/CARTO_BASEMAP_PUBLIC_KEY/);
   const page=fs.readFileSync(path.resolve(__dirname,'../public/synced-national-tools/rocket-launch-live/index.html'),'utf8');
   assert.match(page,/Senior Airman Kadielle Shaw/);
-  assert.match(page,/rocket-launch-live\/app\.js\?v=20261102-truth-v2/);
+  assert.match(page,/rocket-launch-live\/app\.js\?v=20261103-watch-v1/);
+});
+
+
+test('national Rocket Watch binds controls to selected mission and defers YouTube playback',()=>{
+  const base=path.resolve(__dirname,'..');
+  const html=fs.readFileSync(path.join(base,'public/synced-national-tools/rocket-launch-live/index.html'),'utf8');
+  const js=fs.readFileSync(path.join(base,'public/synced-national-tools/rocket-launch-live/app.js'),'utf8');
+  const css=fs.readFileSync(path.join(base,'public/synced-national-tools/rocket-launch-live/styles.css'),'utf8');
+  assert.match(html,/id="mission-watch"/);
+  assert.match(html,/id="rl-watch-mission-videos"/);
+  assert.match(html,/id="rl-watch-general"/);
+  assert.match(html,/rocket-launch-live\/styles\.css\?v=20261103-watch-v1/);
+  assert.match(js,/desk\?\.launchId === launch\.id/);
+  assert.match(js,/data\.selectedRegion === 'florida'/);
+  assert.match(js,/renderMediaDesk\(data\)/);
+  assert.match(js,/youtube-nocookie\.com\/embed/);
+  assert.match(js,/play\.addEventListener\('click'/);
+  assert.doesNotMatch(html,/youtube-nocookie\.com\/embed/);
+  assert.match(css,/\.rl-watch-shell/);
 });
