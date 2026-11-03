@@ -11,6 +11,7 @@ const { readNationalSchedule } = require('../lib/rocket-launch-national');
 const { slipWindows } = require('../lib/rocket-launch-slip');
 const { buildMediaDesk } = require('../lib/space-coast-media');
 const { buildVandenbergViewing } = require('../lib/vandenberg-viewing');
+const { buildStarbaseViewing } = require('../lib/starbase-viewing');
 
 const LL2 = 'https://ll.thespacedevs.com/2.3.0/launches/upcoming/';
 const LAUNCH_QUERIES = [
