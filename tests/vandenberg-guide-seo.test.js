@@ -61,9 +61,11 @@ test('search discovery is a single sitemap entry with truthful date and live sta
   for(const filename of fs.readdirSync(path.join(root,'public')).filter(n=>/^sitemap.*\.xml$/.test(n)&&n!=='sitemap.xml'))
     assert.ok(!read('public/'+filename).includes(canonical),
       'Guide must not duplicate a URL in '+filename);
-  assert.deepEqual(config.rewrites.filter(x=>x.source===route),[
+  assert.deepEqual(config.rewrites.filter(x=>x.source===route||x.source===route.slice(0,-1)),[
+    {source:route.slice(0,-1),destination:route+'index.html'},
     {source:route,destination:route+'index.html'}]);
-  assert.ok(config.redirects.some(x=>x.source===route.slice(0,-1)&&x.destination===route&&x.permanent===true));
+  assert.ok(!config.redirects.some(x=>x.source===route||x.source===route.slice(0,-1)),
+    'Both URL forms should resolve through the site-standard rewrite with one canonical, not a retired-alias redirect');
 });
 
 test('schema is well-formed and cites a real article and the canonical page',()=>{
