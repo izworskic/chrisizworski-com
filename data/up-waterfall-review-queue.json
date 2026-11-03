@@ -13,87 +13,87 @@
     {
       "batchNumber": 1,
       "candidates": [
-        12,
         191,
         192,
         213,
         46,
         91,
         119,
-        190
+        190,
+        45
       ]
     },
     {
       "batchNumber": 2,
       "candidates": [
-        45,
         150,
         151,
         154,
         160,
         215,
         195,
-        205
+        205,
+        51
       ]
     },
     {
       "batchNumber": 3,
       "candidates": [
-        51,
         52,
         59,
         68,
         83,
         99,
         103,
-        105
+        105,
+        107
       ]
     },
     {
       "batchNumber": 4,
       "candidates": [
-        107,
         114,
         120,
         121,
         123,
         8,
         20,
-        24
+        24,
+        25
       ]
     },
     {
       "batchNumber": 5,
       "candidates": [
-        25,
         37,
         39,
         40,
         48,
         58,
         63,
-        65
+        65,
+        69
       ]
     },
     {
       "batchNumber": 6,
       "candidates": [
-        69,
         70,
         74,
         75,
         86,
         112,
         29,
-        42
+        42,
+        80
       ]
     },
     {
       "batchNumber": 7,
       "candidates": [
-        80,
         85,
         129,
+        12,
         15,
         17,
         136,
@@ -166,22 +166,6 @@
     }
   ],
   "candidates": [
-    {
-      "gisObjectId": 12,
-      "name": "Chicagon Falls",
-      "county": "IRON",
-      "river": "CHICAGON CREEK",
-      "lat": 46.134032,
-      "lng": -88.452985,
-      "cluster": "IRON / CHICAGON CREEK",
-      "priorityScore": 35,
-      "priorityReason": "Partial evidence already exists: finish owner, legal route and current parking verification",
-      "reviewStage": "incomplete-source-audit",
-      "publicationEligible": false,
-      "reviewStatus": "previous-research-needs-public-access-review",
-      "sourceCount": 9,
-      "blockingGate": "Natural falls on state parcel verified. Official DNR compartment review of nearby Chicagon Creek area records private owners controlling much of vehicle access; neither older county road list nor general state road viewer proves public legal Raymer/Dave's Camp route. Require ROW, designated turnout and full walking trail verification before index."
-    },
     {
       "gisObjectId": 191,
       "name": "Whitefish Falls",
@@ -981,6 +965,22 @@
       "reviewStatus": "previous-research-needs-public-access-review",
       "sourceCount": 9,
       "blockingGate": "Confirm the exact ski-hill/neighbor parcel boundaries, official MTU permission for out-of-season pedestrian access, authorized visitor parking and a signed foot route. Withhold all street/old-school parking and ski slope off-season walking directions until the owner publishes guidance."
+    },
+    {
+      "gisObjectId": 12,
+      "name": "Chicagon Falls",
+      "county": "IRON",
+      "river": "CHICAGON CREEK",
+      "lat": 46.134032,
+      "lng": -88.452985,
+      "cluster": "IRON / CHICAGON CREEK",
+      "priorityScore": -30,
+      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
+      "reviewStage": "awaiting-new-authoritative-evidence",
+      "publicationEligible": false,
+      "reviewStatus": "previous-research-needs-public-access-review",
+      "sourceCount": 12,
+      "blockingGate": "Obtain legal road inventory/jurisdiction for Raymer and Dave's Camp from Iron County Road Commission, parcel/easement overlays for all portions of the approach from DNR and Iron County Equalization/Register of Deeds, a specific permitted parking location, mapped complete walking corridor and current gate/washout/season confirmation. Resolve dated county private scenic inventory versus state land specifically, without inferring private title or public trail from labels."
     },
     {
       "gisObjectId": 15,

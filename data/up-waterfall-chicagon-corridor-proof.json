@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "reviewed": "2026-11-03",
+  "gisObjectId": 12,
+  "source": "data/up-waterfall-chicagon-corridor-evidence.json",
+  "method": "Haversine source-point comparison, not a mapped arrival route",
+  "sourcePoints": [
+    {
+      "id": "michigan-gis-12",
+      "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "evidenceScope": "geographic-location-not-parking"
+    },
+    {
+      "id": "secondary-gazetteer",
+      "sourceUrl": "https://waterfallsamerica.com/waterfalls/chicagon-falls-mi-2129514/",
+      "evidenceScope": "secondary-feature-coordinate-not-parking"
+    },
+    {
+      "id": "inconsistent-tourism-point",
+      "sourceUrl": "https://fallsdiscovery.com/waterfalls/chicagon-falls-michigan/",
+      "evidenceScope": "conflicting-tourism-coordinate-do-not-route"
+    }
+  ],
+  "distances": {
+    "statePointToSecondaryMeters": 67.2,
+    "statePointToConflictingTourismMeters": 4010.1
+  },
+  "sourceConflict": {
+    "dnrPointManagedParcel": true,
+    "countyPlanScenicOwnerPrivate": true,
+    "interpretation": "Source scopes or dates may differ. DNR point ownership and an older county scenic classification conflict; neither proves the road-to-falls public corridor.",
+    "resolved": false
+  },
+  "visitorDecision": {
+    "publicationEligible": false,
+    "publicRoadConfirmed": false,
+    "parkingVerified": false,
+    "walkVerified": false,
+    "openNowVerified": false,
+    "safeToGenerateDrivingDirections": false
+  },
+  "policy": "Source conflict is not a license to infer safe arrival. State ownership at the falls never demonstrates a public right-of-way across all intervening parcels, a legal lot, a continuous trail, current road opening or safe conditions."
+}
