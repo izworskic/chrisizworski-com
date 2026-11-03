@@ -17,7 +17,12 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#0c2533">
 <link rel="preconnect" href="https://media.defense.gov" crossorigin>
-<link rel="stylesheet" href="/vandenberg-rocket-launch-viewing/styles.css?v=20261103-v1">
+<link rel="stylesheet" href="/vandenberg-rocket-launch-viewing/styles.css?v=20261103-map-v1">
+<link rel="preconnect" href="https://basemaps.cartocdn.com">
+<link rel="preconnect" href="https://unpkg.com">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script defer src="/vandenberg-rocket-launch-viewing/map.js?v=20261103-map-v1"></script>
 <script defer src="/vandenberg-rocket-launch-viewing/guide.js?v=20261103-v1"></script>
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://chrisizworski.com/vandenberg-rocket-launch-viewing/#webpage","url":"https://chrisizworski.com/vandenberg-rocket-launch-viewing/","name":"Where to Watch Vandenberg Rocket Launches: Lompoc Viewing Guide","description":"Documented public launch-viewing candidates around Lompoc, access restrictions, marine-layer advice, and a live mission-specific viewing planner.","datePublished":"2026-11-03","dateModified":"2026-11-03","inLanguage":"en-US","author":{"@id":"https://chrisizworski.com/#person"},"mainEntity":{"@id":"https://chrisizworski.com/vandenberg-rocket-launch-viewing/#guide"},"isPartOf":{"@id":"https://chrisizworski.com/#website"},"about":[{"@type":"Place","name":"Vandenberg Space Force Base","address":{"@type":"PostalAddress","addressLocality":"Lompoc","addressRegion":"CA","addressCountry":"US"}},{"@type":"Thing","name":"Public rocket launch viewing"}]},{"@type":"Article","@id":"https://chrisizworski.com/vandenberg-rocket-launch-viewing/#guide","headline":"Where to Watch Vandenberg Rocket Launches Near Lompoc","description":"Practical public viewing-site guide for visitors attending launches from Vandenberg Space Force Base, based on local tourism and official beach/parking access rules.","author":{"@id":"https://chrisizworski.com/#person"},"mainEntityOfPage":{"@id":"https://chrisizworski.com/vandenberg-rocket-launch-viewing/#webpage"},"datePublished":"2026-11-03","dateModified":"2026-11-03","image":"https://media.defense.gov/2026/Jan/25/2003864850/2000/2000/0/260125-X-VF463-1001.JPG","publisher":{"@id":"https://chrisizworski.com/#person"},"isAccessibleForFree":true},{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"BreadcrumbList","@id":"https://chrisizworski.com/vandenberg-rocket-launch-viewing/#breadcrumbs","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"U.S. Tools","item":"https://chrisizworski.com/national-tools/"},{"@type":"ListItem","position":3,"name":"Rocket Launch Live USA","item":"https://chrisizworski.com/national-tools/rocket-launch-live/"},{"@type":"ListItem","position":4,"name":"Vandenberg Launch Viewing Guide","item":"https://chrisizworski.com/vandenberg-rocket-launch-viewing/"}]},{"@type":"FAQPage","@id":"https://chrisizworski.com/vandenberg-rocket-launch-viewing/#faq-schema","mainEntity":[{"@type":"Question","name":"Where can I watch a Vandenberg rocket launch?","acceptedAnswer":{"@type":"Answer","text":"Publicly listed candidates around Lompoc include Ocean Park, Surf Beach when permitted, Allan Hancock College, Beattie Park, Riverbend Park and Ryon Memorial Park. Viewing quality varies by launch pad, weather, terrain, and launch-day access rules."}},{"@type":"Question","name":"Can the public enter Vandenberg Space Force Base to watch a launch?","acceptedAnswer":{"@type":"Answer","text":"The launch complex is an active military installation, not a general public launch-viewing entrance. Use a documented public location outside restricted areas and check the base's official notices."}},{"@type":"Question","name":"Is Surf Beach open for night rocket launches?","acceptedAnswer":{"@type":"Answer","text":"The Vandenberg Space Force Base environmental page lists Surf Beach public hours as 8 a.m. to 6 p.m. daily. A night launch does not extend those hours. The beach can also close for operations or conservation restrictions."}},{"@type":"Question","name":"Can I watch from Ocean Park after sunset?","acceptedAnswer":{"@type":"Answer","text":"No. Explore Lompoc says Ocean Park closes at sunset. Its lot is small and the road may close when parking fills, so it is a poor choice for late-evening missions or delays pushing liftoff near dusk."}},{"@type":"Question","name":"Is Harris Grade Road a recommended rocket-viewing spot?","acceptedAnswer":{"@type":"Answer","text":"Not currently. Explore Lompoc lists the top of Harris Grade Road, Hawk's Nest, Marshallia Ranch Road and Highway 246 as closed to public launch viewing. Do not use outdated viewing guides as proof of access."}},{"@type":"Question","name":"Why does a cloud forecast not guarantee I will see the launch?","acceptedAnswer":{"@type":"Answer","text":"A nearby ground-level cloud-cover forecast does not measure marine-layer height, the rocket's actual flight path, or hills blocking the view. The live planner labels the locations of its NWS forecast samples and withholds claims it cannot establish."}},{"@type":"Question","name":"Where do I find the next Vandenberg launch time?","acceptedAnswer":{"@type":"Answer","text":"Open Rocket Launch Live USA with California selected. It displays the selected mission, the precision and age of its schedule source, NWS reference forecasts when the launch target is sufficiently precise, and hypothetical delay comparisons. Always recheck the launch operator and range before travel."}}]}]}</script>
 </head>
@@ -26,6 +31,7 @@
 <header class="vg-site-header">
   <a class="vg-wordmark" href="/">CHRIS IZWORSKI <span>/ FIELD GUIDES</span></a>
   <nav aria-label="Guide navigation">
+    <a href="#viewing-map">Viewing map</a>
     <a href="#where-to-watch">Viewing places</a>
     <a href="#choose">Choose a spot</a>
     <a href="#faq">Questions</a>
@@ -47,7 +53,7 @@
       <p class="vg-hero-intro">The best viewing spot is not always the closest beach. See six documented public candidates, understand the closures, and choose where to investigate for your actual launch time.</p>
       <div class="vg-hero-actions">
         <a class="vg-button vg-button-primary" href="/national-tools/rocket-launch-live/?region=california#rl-vandenberg" data-vg-planner="hero">Plan the next Vandenberg launch <span aria-hidden="true">→</span></a>
-        <a class="vg-button vg-button-ghost" href="#where-to-watch">Explore viewing locations <span aria-hidden="true">↓</span></a>
+        <a class="vg-button vg-button-ghost" href="#viewing-map">Explore the viewing map <span aria-hidden="true">↓</span></a>
       </div>
       <div class="vg-hero-meta"><span>6 sourced public candidates</span><span>Access-aware planning</span><span>Mission-specific map</span></div>
     </div>
@@ -57,9 +63,68 @@
     <div class="vg-quick-label">THE SHORT ANSWER</div>
     <div class="vg-quick-text">
       <p><strong>To watch a Vandenberg launch, start with public places around Lompoc:</strong> Beattie Park, Riverbend Park, Ryon Memorial Park, Allan Hancock College, Ocean Park, or Surf Beach when entry is permitted. <strong>You cannot assume access to the military launch pads.</strong> The best candidate changes with the mission, daylight, marine-layer clouds, parking, and last-minute launch delays.</p>
-      <a href="#where-to-watch">Compare all six locations <span aria-hidden="true">→</span></a>
+      <a href="#viewing-map">See all six on the map <span aria-hidden="true">→</span></a>
     </div>
   </div>
+
+
+  <section class="vg-map-section" id="viewing-map" aria-labelledby="vg-map-title">
+    <div class="vg-map-heading">
+      <div>
+        <p class="vg-eyebrow">THE VIEWING ATLAS / LOMPOC, CALIFORNIA</p>
+        <h2 id="vg-map-title">Find your place on the coast.</h2>
+        <p>Six documented public viewing <em>candidates</em> in one map. Tap a numbered pin or a place name to see why you might choose it and, importantly, what could keep you out.</p>
+      </div>
+      <div class="vg-map-heading-action">
+        <a href="/national-tools/rocket-launch-live/?region=california#rl-vandenberg" data-vg-planner="map">See the selected launch pad &amp; forecast <span aria-hidden="true">↗</span></a>
+        <span>The pad and bearing depend on the actual mission.</span>
+      </div>
+    </div>
+    <div class="vg-map-interactions">
+      <div class="vg-map-filter" role="group" aria-label="Filter viewing locations on the map">
+        <button type="button" data-vg-filter="all" aria-pressed="true">All six</button>
+        <button type="button" data-vg-filter="coast" aria-pressed="false">Coast</button>
+        <button type="button" data-vg-filter="parks" aria-pressed="false">City parks</button>
+        <button type="button" data-vg-filter="campus" aria-pressed="false">College</button>
+      </div>
+      <button type="button" class="vg-map-reset" id="vg-map-reset">See all locations</button>
+    </div>
+    <div class="vg-map-workspace">
+      <div class="vg-map-visual">
+        <div id="vg-map-canvas" class="vg-map-canvas" role="region" tabindex="0" aria-label="Interactive map of six documented Lompoc rocket-launch viewing candidates">
+          <div class="vg-map-loading" id="vg-map-loading">Preparing the Lompoc viewing map. Place details remain available below if mapping is blocked.</div>
+        </div>
+        <div class="vg-map-key" aria-label="Map pin colors">
+          <span><i class="vg-map-dot vg-map-dot-coast" aria-hidden="true"></i> Coast · restricted hours</span>
+          <span><i class="vg-map-dot vg-map-dot-parks" aria-hidden="true"></i> City parks · verify hours</span>
+          <span><i class="vg-map-dot vg-map-dot-campus" aria-hidden="true"></i> Campus · parking rules</span>
+        </div>
+        <p class="vg-map-limits">Pins mark mapped <strong>feature centers, not verified entrances or parking spots</strong>. The map is a geographic guide, not a live access or rocket-visibility forecast. Closed roadside lookouts are deliberately excluded. <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap attribution</a>.</p>
+      </div>
+      <aside class="vg-map-details" aria-labelledby="vg-map-selection-title">
+        <div class="vg-map-details-head"><span class="vg-map-eyebrow">VIEWING LOCATION / SOURCE CHECK</span><span id="vg-map-result-count">6 candidates</span></div>
+        <nav class="vg-map-location-nav" id="vg-map-location-nav" aria-label="Select a viewing location">
+          <a href="#coast">Ocean Park</a>
+          <a href="#surf-beach">Surf Beach</a>
+          <a href="#hancock">Allan Hancock College</a>
+          <a href="#city-parks">Beattie Park</a>
+          <a href="#riverbend">Riverbend Park</a>
+          <a href="#ryon">Ryon Memorial Park</a>
+        </nav>
+        <div class="vg-map-selected" id="vg-map-selected" aria-live="polite">
+          <span class="vg-map-selected-category" id="vg-map-selected-category">Coastal park · check hours</span>
+          <h3 id="vg-map-selection-title">Ocean Park</h3>
+          <p class="vg-map-selected-description" id="vg-map-selected-description">Close to the coast, but the launch pad is not directly visible. Parking is limited.</p>
+          <div class="vg-map-access"><span>ACCESS BEFORE YOU GO</span><p id="vg-map-access-note">The park closes at sunset; the road can close when the parking lot is full.</p></div>
+          <div class="vg-map-source-actions" id="vg-map-source-actions"><a href="https://explorelompoc.com/best-places-to-view-a-rocket-launch-in-lompoc/" target="_blank" rel="noopener noreferrer">Check local source ↗</a><a href="#coast">Read full place guide ↓</a></div>
+        </div>
+        <a class="vg-map-mission-link" href="/national-tools/rocket-launch-live/?region=california#rl-vandenberg" data-vg-planner="map-panel">Check launch-time access and pad direction <span aria-hidden="true">→</span></a>
+      </aside>
+    </div>
+    <div class="vg-map-fallback">
+      <p><strong>Map not loading?</strong> The six detailed viewing-site descriptions below are available without a map. The linked <a href="https://www.openstreetmap.org/" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> entries are mapped site centers, not approved parking entrances.</p>
+    </div>
+  </section>
 
   <section class="vg-section vg-lens" id="choose" aria-labelledby="choose-title">
     <div class="vg-section-top"><div><p class="vg-eyebrow">01 / Decide before you drive</p><h2 id="choose-title">Match the viewing place to your launch.</h2></div>
@@ -101,42 +166,42 @@
       <p>These are real mapped public-site candidates, not confirmed launch-day openings. Read each constraint before using directions.</p>
     </div>
     <div class="vg-place-grid">
-      <article class="vg-place-card" id="coast">
+      <article class="vg-place-card" data-vg-site="ocean-park" data-vg-category="coast" data-vg-lat="34.689528" data-vg-lon="-120.5992314" data-vg-osm="https://www.openstreetmap.org/way/44580742" id="coast">
         <div class="vg-place-top"><span>COAST / LIMITED ACCESS</span><span>01</span></div>
         <h3>Ocean Park</h3><p class="vg-place-character">Close to the launch experience, but never after sunset.</p>
         <p>About four straight-line miles from a typical southern launch complex, Ocean Park delivers coastal sound and a chance to see the rocket after it clears the horizon. It does <strong>not</strong> provide a direct pad view. Parking is limited and the access road closes when the lot fills.</p>
         <div class="vg-place-restriction"><strong>Access gate:</strong> Closes at sunset. A late launch or delay can rule it out.</div>
         <div class="vg-place-footer"><span>6851 Ocean Park Road, Lompoc</span><a href="https://explorelompoc.com/best-places-to-view-a-rocket-launch-in-lompoc/" target="_blank" rel="noopener noreferrer">Local guide / rules ↗</a></div>
       </article>
-      <article class="vg-place-card">
+      <article class="vg-place-card" id="surf-beach" data-vg-site="surf-station" data-vg-category="coast" data-vg-lat="34.6825853" data-vg-lon="-120.6050676" data-vg-osm="https://www.openstreetmap.org/node/1112397161">
         <div class="vg-place-top"><span>COAST / BASE-MANAGED ACCESS</span><span>02</span></div>
         <h3>Surf Beach / Surf Station</h3><p class="vg-place-character">One of the closest coastal perspectives, only when access is allowed.</p>
         <p>Surf Beach offers a coastal launch experience near Vandenberg. Beach activity, wildlife protections, rail safety and launch operations can change access. A generally open beach is not permission to enter military areas or an active launch safety zone.</p>
         <div class="vg-place-restriction"><strong>Access gate:</strong> Published public hours are <strong>8 a.m.–6 p.m.</strong>; verify the latest launch-day notice.</div>
         <div class="vg-place-footer"><span>Surf Station / Coast Road, Lompoc</span><a href="https://www.vandenberg.spaceforce.mil/About-Us/Environmental/" target="_blank" rel="noopener noreferrer">Official beach status ↗</a></div>
       </article>
-      <article class="vg-place-card" id="hancock">
+      <article class="vg-place-card" data-vg-site="hancock" data-vg-category="campus" data-vg-lat="34.6793643" data-vg-lon="-120.4645477" data-vg-osm="https://www.openstreetmap.org/way/549619442" id="hancock">
         <div class="vg-place-top"><span>CAMPUS / PARTIAL PAD VIEW</span><span>03</span></div>
         <h3>Allan Hancock College, Lompoc</h3><p class="vg-place-character">For visitors who value an open photographic perspective.</p>
         <p>Explore Lompoc describes a partial view toward the launch pad, with the rocket visible as it climbs. Campus parking is regulated, especially during class hours, and a published campus location is not a special launch-event access pass.</p>
         <div class="vg-place-restriction"><strong>Access gate:</strong> Allan Hancock lists $2 daily permits at the Lompoc Valley Center; recheck prices and enforcement.</div>
         <div class="vg-place-footer"><span>1 Hancock Drive, Lompoc</span><a href="https://www.hancockcollege.edu/police/parking.php" target="_blank" rel="noopener noreferrer">Official parking rules ↗</a></div>
       </article>
-      <article class="vg-place-card" id="city-parks">
+      <article class="vg-place-card" data-vg-site="beattie" data-vg-category="parks" data-vg-lat="34.631387" data-vg-lon="-120.4430514" data-vg-osm="https://www.openstreetmap.org/way/44580932" id="city-parks">
         <div class="vg-place-top"><span>FAMILY / OPEN LAWNS</span><span>04</span></div>
         <h3>Beattie Park</h3><p class="vg-place-character">Make the rocket part of a comfortable outing.</p>
         <p>Open lawns, picnic tables and playground facilities make Beattie a practical place to gather while waiting for a launch. Look for open sky rather than a direct view of the pad; hills and trees may hide the earliest moments.</p>
         <div class="vg-place-restriction"><strong>Access gate:</strong> Follow posted city park hours and any event restrictions; nighttime entry is not verified.</div>
         <div class="vg-place-footer"><span>E. Olive Avenue &amp; S. 5th Street</span><a href="https://www.cityoflompoc.com/government/departments/community-development/parks" target="_blank" rel="noopener noreferrer">City parks directory ↗</a></div>
       </article>
-      <article class="vg-place-card">
+      <article class="vg-place-card" id="riverbend" data-vg-site="riverbend" data-vg-category="parks" data-vg-lat="34.6675675" data-vg-lon="-120.4466363" data-vg-osm="https://www.openstreetmap.org/way/546639471">
         <div class="vg-place-top"><span>FAMILY / FLEXIBLE FIELDS</span><span>05</span></div>
         <h3>Riverbend Park</h3><p class="vg-place-character">Room to gather while waiting for the countdown.</p>
         <p>Riverbend’s fields can be comfortable for groups, but its sports facilities also attract crowds and fill parking. You cannot see the pad directly from the park; the rocket may appear only once it rises over the landscape.</p>
         <div class="vg-place-restriction"><strong>Access gate:</strong> Parking and field availability change with sports events; current launch-night hours are unverified.</div>
         <div class="vg-place-footer"><span>N. A Street &amp; McLaughlin Road</span><a href="https://www.cityoflompoc.com/government/departments/community-development/parks" target="_blank" rel="noopener noreferrer">City park location ↗</a></div>
       </article>
-      <article class="vg-place-card">
+      <article class="vg-place-card" id="ryon" data-vg-site="ryon" data-vg-category="parks" data-vg-lat="34.6377533" data-vg-lon="-120.4678383" data-vg-osm="https://www.openstreetmap.org/way/29088644">
         <div class="vg-place-top"><span>DOWNTOWN / CONVENIENCE</span><span>06</span></div>
         <h3>Ryon Memorial Park</h3><p class="vg-place-character">An accessible-feeling downtown base for a longer wait.</p>
         <p>Ryon Park trades a close coastal approach for open lawns, picnic space and proximity to downtown Lompoc. Choose a clear patch of sky and allow for the rocket to clear distant terrain before it appears.</p>
