@@ -768,6 +768,30 @@
   ],
   "rewrites": [
     {
+      "source": "/living-garden",
+      "destination": "https://garden.chrisizworski.com/living-garden"
+    },
+    {
+      "source": "/living-garden/",
+      "destination": "https://garden.chrisizworski.com/living-garden"
+    },
+    {
+      "source": "/_next/:path*",
+      "destination": "https://garden.chrisizworski.com/_next/:path*"
+    },
+    {
+      "source": "/api/living-garden-weather",
+      "destination": "https://garden.chrisizworski.com/api/living-garden-weather"
+    },
+    {
+      "source": "/api/living-garden-climate",
+      "destination": "https://garden.chrisizworski.com/api/living-garden-climate"
+    },
+    {
+      "source": "/api/living-garden-frost",
+      "destination": "https://garden.chrisizworski.com/api/living-garden-frost"
+    },
+    {
       "source": "/api/lake-effect",
       "destination": "https://national-snowpack-melt.vercel.app/api/lake-effect"
     },
