@@ -464,7 +464,7 @@ a:hover { text-decoration: underline; }
 </style>
 <link rel="stylesheet" href="/assets/garden-tools/garden-kit.css">
 <link rel="stylesheet" href="/assets/garden-tools/season-story.css?v=20261101c">
-<link rel="stylesheet" href="/assets/garden-tools/garden-hub.css?v=20261101a">
+<link rel="stylesheet" href="/assets/garden-tools/garden-hub.css?v=20261103p">
 <link rel="stylesheet" href="/assets/garden-tools/garden-welcome.css?v=20261101a">
 
 
@@ -544,13 +544,25 @@ a:hover { text-decoration: underline; }
  <div id="welcomePlaceForm" class="welcome-place" hidden><label for="welcomePlace">Your Michigan town or ZIP</label><div><input id="welcomePlace" list="pnTowns" autocomplete="off" placeholder="Bay City or 48706"><button id="welcomeApply" type="button">Set town</button></div><p id="welcomePlaceStatus" role="status" aria-live="polite"></p></div></div>
  <div class="welcome-seasons" id="welcomeSeasons" aria-label="Explore the gardening year" role="group" hidden><button type="button" data-welcome-season="winter" aria-pressed="false">Winter</button><button type="button" data-welcome-season="spring" aria-pressed="false">Spring</button><button type="button" data-welcome-season="summer" aria-pressed="false">Summer</button><button type="button" data-welcome-season="fall" aria-pressed="false">Fall</button></div>
  <div class="welcome-feature"><figure><img id="welcomeImage" src="/assets/garden-notebook/garden-harvest.webp" alt="Flower bulbs set into garden soil" width="900" height="600" decoding="async"><figcaption>From Chris’s garden notebook</figcaption></figure><div class="welcome-reading" aria-live="polite"><p class="welcome-kicker" id="welcomeSeasonLabel">A garden note</p><h3 id="welcomeSeasonTitle">The garden keeps a story in every season.</h3><p id="welcomeSeasonCopy">There is always something worth noticing, from the first seed trays to the last harvest.</p><p id="welcomeLocal" class="welcome-local">Choose a Michigan town in the planner for your local frost station.</p><div id="welcomeLinks" class="welcome-links"><a href="/michigan-frost-dates/">Explore Michigan frost dates →</a><a href="#plant-now">Open your garden planner →</a></div><p class="welcome-context">Seasonal ideas and historical frost references, not a live weather report. Your soil and forecast have the final say.</p></div></div>
- <div class="welcome-explore"><p>Take a closer look</p><nav aria-label="Explore the garden"><a href="/seed-starting-guide/"><span aria-hidden="true">✳</span> Seed trays</a><a id="welcomeSoil" href="/michigan-soil-temperature/"><span aria-hidden="true">◒</span> Soil</a><a href="/when-to-plant-tomatoes-michigan/"><span aria-hidden="true">●</span> Tomatoes</a><a href="/seed-saving-lab/"><span aria-hidden="true">✿</span> Flowers &amp; seeds</a></nav></div>
+ <div class="welcome-explore"><p>Take a closer look</p><nav aria-label="Explore the garden"><a href="/seed-starting-guide/"><span aria-hidden="true">✳</span> Seed trays</a><a id="welcomeSoil" href="/michigan-soil-temperature/"><span aria-hidden="true">◒</span> Soil</a><a href="/when-to-plant-tomatoes-michigan/"><span aria-hidden="true">●</span> Tomatoes</a><a href="/seed-saving-lab/"><span aria-hidden="true">✿</span> Flowers &amp; seeds</a><a href="/michigan-garden-pest-watch/"><span aria-hidden="true">◈</span> Garden pests</a></nav></div>
  <noscript><p class="welcome-context">Season choices and town lookup need JavaScript. The garden links and guides below still work.</p></noscript>
 </section>
 <section class="garden-door" id="garden-questions" aria-labelledby="garden-door-title">
  <div class="garden-door-head"><div><p class="garden-door-kicker">From Freighter View Farms</p><h2 id="garden-door-title">What brings you to the garden today?</h2><p>Start with a question. We’ll help you find the right tool or guide.</p></div><a class="garden-all-guides" href="#gardening-tools-suite">Browse all garden guides ↓</a></div>
- <div id="garden-find-wrap" class="garden-find" hidden><label for="garden-find">Search featured tools</label><input id="garden-find" type="search" placeholder="Try tomatoes, frost, soil or seeds" autocomplete="off"><p id="garden-find-status" role="status" aria-live="polite"></p></div>
+ <div id="garden-find-wrap" class="garden-find" hidden><label for="garden-find">Search featured tools</label><input id="garden-find" type="search" placeholder="Try tomatoes, pests, frost or seeds" autocomplete="off"><p id="garden-find-status" role="status" aria-live="polite"></p></div>
  <div class="garden-question-grid" id="garden-question-grid">
+  <section class="garden-question garden-pest-feature" data-garden-category aria-labelledby="garden-pest-feature-heading">
+   <div class="garden-pest-feature__story">
+    <p class="garden-question-number">FEATURED GARDEN TOOL / PLANT HEALTH</p>
+    <h3 id="garden-pest-feature-heading">What’s damaging my plants?</h3>
+    <p>Chewed leaves, spotted tomatoes, something tunneling through squash stems. Start with what you see, choose your crop and growth stage, then learn what to inspect and how to protect the garden.</p>
+    <p class="garden-pest-feature__source">Pest and damage photographs · Michigan seasonal scouting · Dated field evidence and MSU Extension trap records, clearly labeled</p>
+   </div>
+   <div class="garden-pest-feature__action">
+    <a data-garden-result data-terms="garden pest pests insects bugs beetles tomato disease plant damage holes leaves squash vine borer corn earworm caterpillar aphid photo identification diagnose scouting treatment prevention" href="/michigan-garden-pest-watch/"><strong>Open Michigan Garden Pest Watch</strong><span>Compare evidence, see what to scout, and plan a sensible next step.</span></a>
+    <p>Seasonal guidance is not a confirmed infestation or a real-time count in your garden.</p>
+   </div>
+  </section>
   <section class="garden-question" data-garden-category><p class="garden-question-number">01 / THE SEASON AHEAD</p><h3>When should I plant?</h3><p>From seed trays on the windowsill to planting out in the beds.</p>
    <a data-garden-result data-terms="plan planner my garden vegetable flower herbs sow" href="#plant-now"><strong>Plan my Michigan garden</strong><span>Choose your town and plants for a personal notebook.</span></a>
    <a data-garden-result data-terms="calendar schedule vegetables sow transplant" href="/zone-6a-planting-calendar/"><strong>Planting calendar</strong><span>See the season for 47 plants at your frost station.</span></a>
@@ -931,7 +943,7 @@ a:hover { text-decoration: underline; }
           <h3><a href="/michigan-garden-pest-watch/">Garden Pest Watch: What to Inspect This Week</a></h3>
         </div>
         <div class="card-body">
-          <p>Choose what you grow and its growth stage. Get a specific scouting assignment, official NWS weather cues when available, original Extension sources, and prevention that protects beneficial insects. No invented local pest sightings.</p>
+          <p>Choose your crop and growth stage. Compare pest and damage photographs, follow a season-aware scouting plan, and explore dated Michigan field evidence and MSU corn earworm trap records where available. Weather alone never proves a local infestation.</p>
           <a class="card-link" href="/michigan-garden-pest-watch/">Open the Garden Watch Desk</a>
         </div>
       </article>

@@ -61,7 +61,34 @@ const assert=require('node:assert/strict');
    await checkContrast();await guideButtons.first().hover();await checkContrast();
    await guideButtons.first().focus();await checkContrast();
    assert.equal(await page.locator('#plant-now').getAttribute('open'),null);
-   assert.equal(await page.locator('[data-garden-result]').count(),12);
+   assert.equal(await page.locator('[data-garden-result]').count(),13);
+   // The main pest tool must be discoverable near the top of the hub,
+   // searchable by symptoms and not hidden in the lower guide directory.
+   const featuredPest=page.locator('.garden-pest-feature');
+   assert.ok(await featuredPest.isVisible());
+   assert.equal(await page.locator('.garden-question-grid > .garden-pest-feature').count(),1);
+   assert.equal(await featuredPest.getAttribute('data-garden-category'),'');
+   assert.match(await featuredPest.locator('h3').innerText(),/What.s damaging my plants/i);
+   assert.equal(await featuredPest.locator('a[data-garden-result]').getAttribute('href'),'/michigan-garden-pest-watch/');
+   assert.equal(await page.locator('.welcome-explore nav a[href="/michigan-garden-pest-watch/"]').count(),1);
+   assert.equal(await page.locator('.guide-card a[href="/michigan-garden-pest-watch/"]').count(),2);
+   const pestAction=featuredPest.locator('a[data-garden-result]');
+   assert.ok(await pestAction.isVisible());
+   // Contrast gate specifically guards against green-on-green featured links.
+   const contrast=await pestAction.evaluate(el=>{
+     const c=(color)=>{const nums=color.match(/[0-9.]+/g).slice(0,3).map(Number).map(v=>{v/=255;return v<=.04045?v/12.92:Math.pow((v+.055)/1.055,2.4)});return nums[0]*.2126+nums[1]*.7152+nums[2]*.0722};
+     const css=getComputedStyle(el);
+     return (Math.max(c(css.color),c(css.backgroundColor))+.05)/(Math.min(c(css.color),c(css.backgroundColor))+.05);
+   });
+   assert.ok(contrast>=4.5,'Garden Pest Watch featured CTA must be legible without hover');
+   const pestBounds=await featuredPest.evaluate(el=>({right:el.getBoundingClientRect().right,screen:document.documentElement.clientWidth}));
+   assert.ok(pestBounds.right<=pestBounds.screen+2,'Pest feature must fit mobile/desktop viewport');
+   await page.locator('#garden-find').fill('aphid');
+   assert.equal(await page.locator('[data-garden-result]:visible').count(),1);
+   assert.ok(await featuredPest.isVisible());
+   await page.locator('#garden-find').fill('damage');
+   assert.equal(await page.locator('[data-garden-result]:visible').count(),1);
+   await page.locator('#garden-find').fill('');
    await page.screenshot({path:`artifacts/garden-home-browser/hub-${width}.png`,fullPage:true,animations:'disabled'});
    await page.locator('#garden-find').fill('tomatoes');
    assert.match(await page.locator('#garden-find-status').innerText(),/featured tools found/);
