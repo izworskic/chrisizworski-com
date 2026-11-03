@@ -81,6 +81,12 @@
       root.appendChild(card);
     }
   }
+  function floridaSpecialistLink(url, data = state.data) {
+    if (typeof url !== 'string' || !url.startsWith('/national-tools/space-coast-launch/')) return url;
+    const selected = data?.selectedRegion === 'florida' ? data.selectedLaunchId : null;
+    return selected && /^[0-9a-f-]{36}$/i.test(selected) ?
+      url + '?launchId=' + encodeURIComponent(selected) : url;
+  }
   function sourceLinks(r) {
     const root = $('rl-region-links');
     if (!root) return;
@@ -89,7 +95,7 @@
       [r.authority, 'Official launch notices'],
       [r.access, 'Viewing and access rules']
     ];
-    if (r.specialist) links.unshift([r.specialist, 'Florida detailed viewer']);
+    if (r.specialist) links.unshift([floridaSpecialistLink(r.specialist), 'Florida detailed viewer · same mission']);
     for (const [url, title] of links) {
       const a = anchor(url, title);
       if (a) root.appendChild(a);
@@ -442,8 +448,8 @@
       if(channel)general.appendChild(channel);
     }
     if (data.region?.specialist) {
-      const detail = anchor(data.region.specialist,
-        'Florida: launch access, tickets and forecast', 'rl-watch-operator');
+      const detail = anchor(floridaSpecialistLink(data.region.specialist,data),
+        'Florida: same launch, pad access, tickets and forecast', 'rl-watch-operator');
       if (detail) general.appendChild(detail);
     }
   }
@@ -511,7 +517,9 @@
         card.appendChild(el('span', 'rl-site-status', s.label || 'Access must be checked'));
         card.appendChild(el('p', '', s.reason || 'Access conditions have not been confirmed for this launch.'));
         const actions = el('div', 'rl-site-actions');
-        const source = anchor(s.source, s.kind === 'specialist' ? 'Open Florida decision engine' : 'Official / operator source', 'rl-mainlink');
+        const source = anchor(s.kind === 'specialist' ?
+          floridaSpecialistLink(s.source,data) : s.source,
+          s.kind === 'specialist' ? 'Continue this mission in Florida' : 'Official / operator source', 'rl-mainlink');
         if (source) actions.appendChild(source);
         if (s.directionsAllowed && s.address && s.state !== 'restricted' && s.state !== 'hours') {
           const directions = anchor('https://www.google.com/maps/search/?api=1&query=' +
@@ -838,6 +846,8 @@
   function render(data) {
     state.data = data;
     state.regions = data.regions || [];
+    const floridaNav = $('rl-nav-florida');
+    if (floridaNav) floridaNav.href = floridaSpecialistLink('/national-tools/space-coast-launch/',data);
     initMap();
     showRegion(data.region);
     renderMission(data);
