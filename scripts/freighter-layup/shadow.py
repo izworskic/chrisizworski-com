@@ -115,6 +115,9 @@ def analyze(inputs: dict, archive: dict, ledger: dict, as_of: str) -> dict:
             risks.append("node_identity_title_disagreement")
         if item["nodeDecision"] == "accepted" and len(matches) == 0:
             risks.append("accepted_without_known_ship_in_headline")
+        if (item["nodeDecision"] not in ("accepted", "review")
+                and matches and PHRASES.search(title)):
+            risks.append("potentially_missed_layup_headline")
         if item["kind"] == "arrival" and PLANNED.search(title):
             risks.append("planned_not_actual_arrival")
         if item["kind"] == "arrival" and DEPART.search(title) and not ARRIVE.search(title):
