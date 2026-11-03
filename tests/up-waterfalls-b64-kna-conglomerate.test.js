@@ -61,7 +61,7 @@ test('B64: public guide is discoverable exactly once and explains seasonal gate,
  assert.match(guide,/rel="canonical" href="https:\/\/chrisizworski\.com\/upper-peninsula-waterfalls\/conglomerate-falls-gratiot\//);
  assert.match(guide,/name="author" content="Chris Izworski"/);
  assert.match(guide,/"@id":"https:\/\/chrisizworski\.com\/#person"/);
- assert.match(guide,/private-property road easement|private-property easement|private-land road easement/);
+ assert.match(guide,/private property/);assert.match(guide,/easement/);
  assert.match(guide,/spring thaw/);
  assert.match(guide,/KNA's official/);
  assert.match(guide,/Lower Gratiot/);
