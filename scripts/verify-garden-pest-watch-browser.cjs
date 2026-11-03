@@ -181,6 +181,21 @@ async function waitForAnswer(page,pest){await page.waitForFunction(name=>documen
   await rp.screenshot({path:'artifacts/garden-pest-watch-browser/outage-after-change.png',fullPage:true,animations:'disabled'});
   await recovery.close();
 
+  // An actual November NWS forecast may be warm/humid, but must not trigger
+  // summer foliage scouting language when the crop desk is in off-season mode.
+  const winterContext=await browser.newContext({viewport:{width:390,height:820}});
+  const winter=await winterContext.newPage();
+  await routeFixtures(winter,11);
+  await winter.goto(ORIGIN+'/michigan-garden-pest-watch/',{waitUntil:'domcontentloaded'});
+  await winter.waitForFunction(()=>document.querySelector('#watch-source-label')?.textContent.includes('off-season'),null,{timeout:6000});
+  assert.match(await winter.locator('#primary-answer').innerText(),/squash/i);
+  assert.match(await winter.locator('#weather-evidence').innerText(),/Off-season in Michigan/);
+  assert.doesNotMatch(await winter.locator('#weather-evidence').innerText(),/scouting for mites|suggest inspecting leaves/i);
+  assert.match(await winter.locator('#watch-cards').innerText(),/Squash vine borer/);
+  assert.match(await winter.locator('#watch-cards').innerText(),/Squash bug/);
+  await winter.screenshot({path:'artifacts/garden-pest-watch-browser/november-preparation-not-pest-weather.png',fullPage:true,animations:'disabled'});
+  await winterContext.close();
+
   // Independent official beetle raster failure does not erase the crop field
   // notes and cannot leave a dated, once-successful beetle prediction behind.
   const modelOutage=await browser.newContext({viewport:{width:390,height:820}});
