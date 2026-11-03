@@ -69,5 +69,7 @@ jobs:
         run: node --test tests/vandenberg-viewing.test.js
       - name: Verify the server-rendered Vandenberg guide, search discovery and planner engagement
         run: node --test tests/vandenberg-guide-seo.test.js
+      - name: Verify the six location map matches live viewing engine coordinates and restrictions
+        run: node --test tests/vandenberg-guide-map.test.js
       - name: Verify visitor and independent editorial source regressions
         run: node --test tests/rocket-launch-usa.test.js tests/space-coast-live.test.js tests/spaceflight-now-editorial.test.js
