@@ -40,7 +40,7 @@ test('case-insensitive matching accepts ship names, multiword names and MMSI, no
 });
 
 test('search respects recent AIS and corridor coverage, does not suppress feed outages',()=>{
-  assert.match(js,/Date\.now\(\)-Date\.parse\(v\.seen\)<=1800000/);
+  assert.match(js,/now-seen<=1800000/);
   assert.match(js,/vesselMatchesSearch\(v,query\)/);
   assert.match(js,/activeView === "overview"/);
   assert.match(js,/Search unavailable: no current AIS reports loaded/);
