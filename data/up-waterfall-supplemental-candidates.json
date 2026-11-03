@@ -1,0 +1,149 @@
+{
+  "schemaVersion": 1,
+  "reviewed": "2026-11-03",
+  "purpose": "Source-backed notable waterfall candidates absent from the named 161-feature Michigan GIS subset; geographical research, not authorized visitor routes.",
+  "policy": "Each candidate must pass the existing five-axis public visitor promotion gate before entering data/up-waterfalls.json, public waterfall map cards, nearby suggestions or public sitemap. A county-tourism parking note or a generic MDOT highway parking policy does not prove a site-specific lawful turnout and continuous riverbank rights.",
+  "records": [
+    {
+      "id": "upper-eagle-river-ten-foot-falls",
+      "name": "Upper Eagle River Falls (Ten-Foot Falls)",
+      "aliases": [
+        "10-Foot Falls",
+        "Ten Foot Falls",
+        "Upper Eagle River Falls"
+      ],
+      "county": "KEWEENAW",
+      "river": "EAGLE RIVER",
+      "near": "Phoenix / M-26, between US-41 and Eagle River",
+      "notInStateGisNamedFeatureList": true,
+      "isSameAsCuratedGis142": false,
+      "closestExistingCuratedId": "eagle-river-falls",
+      "publication": "research-only",
+      "publicationEligible": false,
+      "publicMapEligible": false,
+      "shortlistEligible": false,
+      "sourceReviewed": "2026-11-03",
+      "researchPage": "/upper-peninsula-waterfalls/research/upper-eagle-river-ten-foot-falls/",
+      "geography": {
+        "points": [
+          {
+            "id": "specialist-falls",
+            "lat": 47.39735,
+            "lng": -88.28439,
+            "role": "independent-firsthand-natural-falls-coordinate-not-parking",
+            "source": "https://www.waterfallsofthekeweenaw.com/eagle-river/ten-foot-falls/"
+          },
+          {
+            "id": "visitor-bureau-waterfall-map",
+            "lat": 47.4,
+            "lng": -88.2887,
+            "role": "2023-bureau-map-waterfall-listing-coordinate-not-certified-as-parking-or-falls",
+            "source": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/keweenawmi/KCVB_summer_waterfalls_brochure_20230517_WEB_LOW_1__15f13fff-fd1f-4b37-9438-cd0a32dbaf4a.pdf"
+          }
+        ],
+        "sourcePointDiscrepancyMetersApprox": 438.3,
+        "distanceMethod": "haversine-straight-line",
+        "neitherPointIsParkingNavigation": true,
+        "stateGisOnlyListsDownstreamEagleRiverFalls142": true,
+        "identityConclusion": "Independent field and two Visit Keweenaw publications identify the upstream waterfall, clearly distinct from curated lower Eagle River Falls (#142). Point-to-point discrepancy remains unresolved; do not assign either coordinate to an arrival or hiking route."
+      },
+      "sources": [
+        {
+          "role": "regional-bureau-2026-27-print-guide",
+          "label": "Visit Keweenaw 2026–27 official visitor guide, 10-Foot Falls #7",
+          "url": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/keweenawmi/KCVB_Visitors_Guide_20260407_HIGH_23713277-83e7-418f-aab3-34c51d92bb6f.pdf",
+          "supports": "Short unmarked trail off M-26, seasonal runoff; not a maintained signed visitor trail."
+        },
+        {
+          "role": "regional-bureau-waterfall-brochure",
+          "label": "Keweenaw Waterfalls brochure #7",
+          "url": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/keweenawmi/KCVB_summer_waterfalls_brochure_20230517_WEB_LOW_1__15f13fff-fd1f-4b37-9438-cd0a32dbaf4a.pdf",
+          "supports": "Small roadside parking area on right about 0.8 mile west of Phoenix M-26; map coordinate 47.4000,-88.2887. Does not certify legal parcel, exact turnout or public riverbank route."
+        },
+        {
+          "role": "regional-bureau-driving-tour",
+          "label": "Visit Keweenaw two-day waterfall driving tour",
+          "url": "https://www.visitkeweenaw.com/blog/post/2-day-keweenaw-waterfall-driving-tour/",
+          "supports": "Unmarked gravel pull-off and upper-vs-lower distinction, but not site-specific land title or posted turn-out authority."
+        },
+        {
+          "role": "independent-waterfall-field",
+          "label": "Waterfalls of the Keweenaw, Ten Foot Falls",
+          "url": "https://www.waterfallsofthekeweenaw.com/eagle-river/ten-foot-falls/",
+          "supports": "Independent cascade identity and natural point 47.39735,-88.28439; historical shoulder parking is not current landowner permission."
+        },
+        {
+          "role": "mdot-official-parking-principle",
+          "label": "MDOT common FAQ on state highway roadside parking",
+          "url": "https://www.michigan.gov/mdot/about/faqs/general/common",
+          "supports": "Roadside parking generally not prohibited, with narrow exceptions and site-specific traffic orders; does not establish exact M-26 pull-off legality or private riverbank access."
+        },
+        {
+          "role": "msp-official-parking-regulation",
+          "label": "Michigan State Police traffic control orders and parking restrictions",
+          "url": "https://www.michigan.gov/msp/divisions/spec-ops/inside-sod/traffic-crash-reconstruction-unit/traffic-control-orders",
+          "supports": "Specific roadside stopping restrictions depend on traffic orders and safety; a general highway rule does not guarantee parking rights at a site."
+        },
+        {
+          "role": "county-parcel-authority",
+          "label": "Keweenaw County Equalization GIS and parcel information",
+          "url": "https://www.keweenawcountyonline.org/department-equal.php",
+          "supports": "County land-title records are authoritative, but exact shoreline-bank property/visitor easement not verified in this review."
+        },
+        {
+          "role": "mdot-row-maps",
+          "label": "MDOT right-of-way map program",
+          "url": "https://www.michigan.gov/mdot/business/real-estate",
+          "supports": "Exact M-26 ROW parcel width and pull-off geometry require site-specific verification; public map tools are reference-only."
+        }
+      ],
+      "routeAudit": {
+        "outcome": "not-cleared-for-complete-public-trip",
+        "publishedGeneralShoulderPolicy": true,
+        "regionalTourismDescribesRoadsidePullOff": true,
+        "exactSiteParkingLegalStatus": "unverified",
+        "signedOfficialParkingArea": "unverified",
+        "bankLandManager": "unverified",
+        "publicBankWalkingCorridor": "unverified",
+        "currentRoadRestrictions": "not-live",
+        "safeViewingFromRoad": "described-by-visitor-bureau-but-not-confirmed-at-a-specific-safe-parking-point",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "gate": "Waterfall identity",
+            "status": "corroborated-with-two-point-discrepancy",
+            "finding": "Visit Keweenaw and independent waterfall researcher document this separate upper Eagle River cascade, not Lower Eagle River Bridge Park #142. The two published point locations differ by about 438 metres."
+          },
+          {
+            "gate": "Land manager",
+            "status": "partial-road-only",
+            "finding": "MDOT manages state trunkline M-26; ownership and public-use permission for the precise riverbank from the turnout have not been certified."
+          },
+          {
+            "gate": "Legal parking",
+            "status": "published-unsigned-roadside-area-not-certified",
+            "finding": "Bureau lists a small gravel roadside pull-off, MDOT generally permits roadside parking with exceptions, but no site-specific traffic order, official signed parking area, turnout property survey or live restrictions have been verified."
+          },
+          {
+            "gate": "Pedestrian route",
+            "status": "unmarked-and-rights-unconfirmed",
+            "finding": "Bureau labels the short trail unmarked; no authoritative continuous public walking path to an approved bank viewpoint, no current accessible facilities."
+          },
+          {
+            "gate": "Current season and risk",
+            "status": "not-live",
+            "finding": "Snowplow use, ice, sightlines, deep water and wet volcanic rocks may make this unsuitable even where roadside stopping is permitted."
+          }
+        ]
+      },
+      "visitorDecision": "The waterfall exists and local tourism encourages an unsigned roadside visit. Do not send public visitors to either natural/map coordinate or imply a permitted riverbank footpath until exact parking/right-of-way and land crossing are checked. Direct general visitors to the separately managed, signed Lower Eagle River Bridge Park waterfall instead.",
+      "promotionEvidenceNeeded": [
+        "Resolve the ~438 m bureau-vs-firsthand coordinate discrepancy and identify actual public roadway/viewing sightline without navigational guesses.",
+        "Obtain MDOT site-specific roadside/ROW, signage, traffic-order or verified official public parking determination at the actual pull-off; roadside parking permission depends on posted conditions.",
+        "Establish exact waterfall bank parcel title or public easement, and continuous walking permission if a bank view requires leaving public ROW.",
+        "Provide current seasonal road shoulder/turnout limitations, legal entry and public view safety before an indexable waterfall guide or map stop."
+      ]
+    }
+  ]
+}
