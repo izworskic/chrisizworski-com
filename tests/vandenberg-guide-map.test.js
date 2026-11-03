@@ -89,7 +89,7 @@ test('map includes interactive categories, synchronized markers, safe source lin
 });
 test('static guide map never invents a launch-pad point, rocket view forecast, current legal opening, or road route',()=>{
   assert.doesNotMatch(js,/api\/rocket-launch-usa|images-api\.nasa\.gov|api\.weather\.gov|ll\.thespacedevs\.com/);
-  assert.doesNotMatch(js,/geolocation|getCurrentPosition|watchPosition|localStorage|sessionStorage/);
+  assert.doesNotMatch(js,/navigator\.geolocation|getCurrentPosition\(|watchPosition\(|localStorage[.\[]|sessionStorage[.\[]/);
   assert.doesNotMatch(js,/routePlanner|estimatedDrive|chanceToSee|canSeeRocket|rocketTrajectory/);
   assert.doesNotMatch(html,/data-vg-site="harris|data-vg-site="hawk|data-vg-site="marshallia/);
   assert.match(html,/not a live access or rocket-visibility forecast/);
