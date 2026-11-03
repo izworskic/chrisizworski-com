@@ -5,6 +5,10 @@ on:
       - 'public/michigan-gardening/**'
       - 'public/michigan-garden-pest-watch/**'
       - 'public/assets/garden-pest-watch.*'
+      - 'public/assets/garden-pest-field-observations.js'
+      - 'lib/garden-pest-field-observations.cjs'
+      - 'api/garden-pest-field-observations.js'
+      - 'tests/garden-pest-field-observations.test.js'
       - 'lib/garden-pest-watch.cjs'
       - 'lib/garden-pest-science.cjs'
       - 'lib/japanese-beetle-forecast.cjs'
@@ -60,6 +64,8 @@ jobs:
         run: node --test tests/japanese-beetle-forecast.test.js
       - name: Validate controlled Japanese beetle status and exposure science gates
         run: node --test tests/japanese-beetle-controlled-monitoring.test.js
+      - name: Verify independently filtered squash borer photo records and API failures
+        run: node --test tests/garden-pest-field-observations.test.js
       - name: Check Garden Pest Watch crop, evidence, failure and responsive browser behavior
         run: node scripts/verify-garden-pest-watch-browser.cjs
       - name: Verify controlled field station journal, bounded onset and mobile/no-JS behavior
