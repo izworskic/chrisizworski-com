@@ -54,6 +54,7 @@ const assert = require('node:assert/strict');
           controlHeight: el.querySelector('select').getBoundingClientRect().height
         }));
         assert.equal(sizes.overflow, false);
+        if (surface === 'guides') assert.ok(sizes.top < 1000, 'Seasonal picks must precede the long collection introduction');
         assert.ok(sizes.textSize >= 14);
         assert.ok(sizes.controlHeight >= 44);
         await selector.selectOption('7');

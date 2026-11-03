@@ -115,3 +115,19 @@ Observe comparable 28-day windows after release, accounting for seasonality.
 Transferable lesson: reserve room for both tools and guides before filling a
 seasonal shortlist. Unconstrained sorting produced an unhelpful run of similar
 winter topics; kind quotas and a topic cap are now tested invariants.
+
+## Rendered review correction
+
+The first actual browser run passed functional checks, but its 390px report
+placed the Guides desk at 1,589px below the document start. The long introduction
+and collection navigation were responsible. They now follow the recommendations,
+without removing their content or links. The Guides heading stays first. Browser
+acceptance now rejects a Guides desk below 1,000px; the existing site masthead is
+preserved. Prior screenshots showed readable 14px prose, 44px controls and no desk
+overflow at all four widths. Final layout QA is linked in PR #1480 checks.
+
+The generic release-record --check-site audit is inapplicable to an existing hub:
+it expects a new tool card, own-canonical ItemList node and tool-registry entry.
+This release creates no tool or canonical route. Existing hub/catalog invariants
+are instead verified by the full gate, unchanged 90/66 card counts and structured
+data checks. The ordinary release-record structure checker passes.

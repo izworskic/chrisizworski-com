@@ -19,3 +19,4 @@
 .season-desk__browse a{color:#174e68;text-decoration:underline}
 .season-desk a:focus-visible,.season-desk select:focus-visible,.season-desk button:focus-visible{outline:3px solid #a75217;outline-offset:4px}
 @media(max-width:600px){.season-desk{padding:16px}.season-desk__picks{grid-template-columns:1fr}.season-pick{padding:14px 0}.season-desk__controls{align-items:flex-start}.season-desk label{width:100%}}
+.guides-hero.guides-hero--intro{grid-template-columns:1fr;margin-bottom:0}
