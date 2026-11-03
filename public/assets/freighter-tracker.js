@@ -115,7 +115,8 @@
   var activityGrid=document.getElementById("activity-grid"), activityChecked=document.getElementById("activity-checked");
   var inspector=document.getElementById("ship-inspector"), inspectorTitle=document.getElementById("ship-inspector-title");
   var inspectorStatus=document.getElementById("ship-inspector-status"), inspectorFacts=document.getElementById("ship-inspector-facts");
-  var inspectorClose=document.getElementById("ship-inspector-close"), selectedMmsi=null;
+  var inspectorClose=document.getElementById("ship-inspector-close"), selectedMmsi=null, selectedName=null;
+  var storyBox=document.getElementById("ship-story"), storyPromise=null;
   var corridorKeys=["soo","mackinac","duluth","port-huron","detroit","saginaw"];
   function recent(v,now){ var seen=Date.parse(v.seen); return Number.isFinite(seen) && now-seen>=-60000 && now-seen<=1800000; }
   function corridorRadius(key){return key==="saginaw"?60:35;}
@@ -135,9 +136,37 @@
     });
     activityChecked.textContent=(lastFailed?"Refresh failed; showing retained reports. ":"")+"Feed checked "+new Date(reports.checkedAt).toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit",timeZone:"America/Detroit",timeZoneName:"short"})+" · reports at most 30 min old";
   }
+  function normalizedShipName(value){return String(value||"").toUpperCase().replace(/[^A-Z0-9]/g,"");}
+  function storyFor(catalog,v,now){
+    if(!catalog||catalog.schemaVersion!==1||!Array.isArray(catalog.stories))return null;
+    var checked=Date.parse(catalog.checkedOn+"T00:00:00Z"), age=now-checked;
+    if(!Number.isFinite(checked)||age<0||age>180*86400000)return null;
+    var matches=catalog.stories.filter(function(x){return x.mmsi===String(v.mmsi) && normalizedShipName(x.aisName)===normalizedShipName(v.name);});
+    return matches.length===1?matches[0]:null;
+  }
+  function renderStory(v){
+    if(!storyBox)return;
+    var id=String(v.mmsi), storyKey=id+":"+normalizedShipName(v.name);
+    if(!storyBox.hidden && storyBox.dataset.storyKey===storyKey)return;
+    storyBox.hidden=true;storyBox.replaceChildren();
+    if(!storyPromise)storyPromise=fetch("/assets/freighter-card-stories.json").then(function(r){if(!r.ok)throw Error("stories unavailable");return r.json();}).catch(function(){return null;});
+    storyPromise.then(function(catalog){
+      if(selectedMmsi!==id||selectedName!==normalizedShipName(v.name)||inspector.hidden)return;
+      var story=storyFor(catalog,v,Date.now());if(!story)return;
+      var picture=document.createElement("img");picture.src=story.image;picture.alt=story.imageAlt;picture.loading="lazy";picture.addEventListener("error",function(){picture.hidden=true;});
+      var figure=document.createElement("figure"), caption=document.createElement("figcaption"), credit=node("a",story.photoCredit);
+      credit.href=story.photoSource;credit.target="_blank";credit.rel="noopener";caption.append(credit);
+      if(story.licenseUrl){var license=node("a","License");license.href=story.licenseUrl;license.target="_blank";license.rel="noopener";caption.append(document.createTextNode(" · "),license);}
+      caption.append(document.createTextNode(" · Historical photograph, not live"));figure.append(picture,caption);
+      var content=document.createElement("div"), eyebrow=node("p","SHIP STORY"), heading=node("h4",story.headline), text=node("p",story.history), link=node("a","Read this ship’s full story →"), source=node("a","History source");
+      eyebrow.className="activity-kicker";link.href=story.storyUrl;link.className="ship-story-link";source.href=story.historySource;source.target="_blank";source.rel="noopener";
+      var note=node("p","Identity cross-check reviewed "+catalog.checkedOn+" · AIS details can change.");note.className="ship-story-note";content.append(eyebrow,heading,text,link,document.createTextNode(" · "),source,note);storyBox.replaceChildren(figure,content);storyBox.dataset.storyKey=storyKey;storyBox.hidden=false;
+    });
+  }
   function showShip(v,now){
     if(!inspector)return;
-    selectedMmsi=String(v.mmsi);inspector.hidden=false;inspectorTitle.textContent=v.name||("Vessel "+v.mmsi);
+    selectedMmsi=String(v.mmsi);selectedName=normalizedShipName(v.name);inspector.hidden=false;inspectorTitle.textContent=v.name||("Vessel "+v.mmsi);
+    renderStory(v);
     inspectorStatus.textContent="Last reported "+Math.max(0,Math.round((now-Date.parse(v.seen))/60000))+" min ago · "+v.source+" · MMSI "+v.mmsi;
     inspectorFacts.replaceChildren();
     var fields=[["Speed",v.speedKnots===null?"Not reported":(v.speedKnots*1.15078).toFixed(1)+" mph ("+v.speedKnots.toFixed(1)+" kn)"],
@@ -146,7 +175,7 @@
       ["Reported length",v.lengthMeters===null?"Not reported":Math.round(v.lengthMeters*3.28084)+" ft"]];
     fields.forEach(function(field){var div=document.createElement("div");div.append(node("dt",field[0]),node("dd",field[1]));inspectorFacts.append(div);});
   }
-  function clearShip(){selectedMmsi=null;if(inspector)inspector.hidden=true;}
+  function clearShip(){selectedMmsi=null;selectedName=null;if(inspector)inspector.hidden=true;if(storyBox){storyBox.hidden=true;storyBox.replaceChildren();delete storyBox.dataset.storyKey;}}
   if(inspectorClose)inspectorClose.addEventListener("click",function(){clearShip();vesselSearch.focus();});
   function node(tag, value) {var el=document.createElement(tag);el.textContent=value;return el;}
   function vesselMatchesSearch(vessel,rawQuery) {
