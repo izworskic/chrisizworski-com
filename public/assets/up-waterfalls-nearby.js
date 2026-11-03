@@ -13,6 +13,17 @@ const cards=new Map([...document.querySelectorAll('[data-fall][data-id]')].map(c
 const element=(tag,cls,copy)=>{const node=document.createElement(tag);if(cls)node.className=cls;if(copy!==undefined)node.textContent=copy;return node;};
 const idsafe=id=>/^[a-z0-9-]+$/.test(id);
 function link(label,href){const a=element('a','',label);a.href=href;a.target='_blank';a.rel='noopener noreferrer';return a;}
+function syncSaveButtons(){
+ // The six-stop planner is authoritative, including when stops are cleared elsewhere.
+ for(const item of output.querySelectorAll('[data-nearby-id]')){
+  const source=cards.get(item.dataset.nearbyId),button=item.querySelector('.nearby-save-action');
+  if(!source||!button)continue;
+  const saved=source.querySelector('.save')?.getAttribute('aria-pressed')==='true';
+  button.setAttribute('aria-pressed',String(saved));
+  button.textContent=saved?'Remove saved stop':'Save stop';
+  button.setAttribute('aria-label',(saved?'Remove ':'Save ')+source.dataset.name+(saved?' from':' to')+' your waterfall day');
+ }
+}
 function render(data){
  const current=data.locations.find(x=>x.id===origin.value);
  output.replaceChildren();
@@ -33,20 +44,33 @@ function render(data){
   const actions=element('div','nearby-actions');
   const locate=element('button','nearby-map-action','Show waterfall on map');locate.type='button';
   locate.addEventListener('click',()=>{
-   if(typeof window.UPWaterfallFocus==='function')window.UPWaterfallFocus(target.id);
-   else original.scrollIntoView({block:'nearest',behavior:'auto'});
+   // Nearby geography is independent of the main-list filters. An explicit map
+   // request must reveal the target rather than silently fail on a hidden card.
+   if(original.hidden){
+    const search=document.getElementById('q'),region=document.getElementById('region');
+    const effort=document.getElementById('effort'),access=document.getElementById('access');
+    if(search&&region&&effort&&access){
+     search.value='';region.value='all';effort.value='all';access.value='all';
+     region.dispatchEvent(new Event('change',{bubbles:true}));
+     status.textContent+=' Map filters were cleared to display '+target.name+'.';
+    }
+   }
+   const focused=typeof window.UPWaterfallFocus==='function'&&window.UPWaterfallFocus(target.id);
+   if(!focused&&!original.hidden)original.scrollIntoView({block:'nearest',behavior:'auto'});
+   else if(!focused)status.textContent='Unable to display the requested map marker. Open the source-linked waterfall guide instead.';
   });
-  const save=element('button','nearby-save-action',original.querySelector('.save')?.getAttribute('aria-pressed')==='true'?'Saved to your day':'Save stop');save.type='button';
+  const save=element('button','nearby-save-action','Save stop');save.type='button';
   save.addEventListener('click',()=>{
    const existing=original.querySelector('.save');if(!existing)return;
-   // Reuse existing six-stop constraint, cards and shortlist; no duplicate trip state.
-   if(existing.getAttribute('aria-pressed')!=='true')existing.click();
-   save.textContent=existing.getAttribute('aria-pressed')==='true'?'Saved to your day':'Save stop';
+   // The existing planner owns the six-stop limit and add/remove state.
+   existing.click();
+   syncSaveButtons();
   });
   actions.append(locate,save,link('Arrival evidence',target.source));
   item.append(label,title,review,actions);output.appendChild(item);
  }
  if(matches.length>6)output.appendChild(element('p','nearby-overflow','Showing the six nearest of '+matches.length+'. Expand the radius or choose a different anchor to explore more.'));
+ syncSaveButtons();
 }
 async function init(){
  try{
@@ -67,5 +91,6 @@ async function init(){
   output.replaceChildren();
  }
 }
+document.addEventListener('upfall:shortlist-updated',syncSaveButtons);
 init();
 })();
