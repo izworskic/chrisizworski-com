@@ -53,7 +53,7 @@ async function visit(page,date,status,count){
    await page.waitForFunction(()=>document.getElementById('monitor-npn-result').textContent.includes('no Michigan Japanese beetle adult status records'),null,{timeout:5000});
    assert.match(await page.locator('#monitor-npn-result').innerText(),/NOT evidence that beetles were absent/);
    await page.locator('#monitor-snapshot').click();
-   await page.waitForFunction(()=>document.getElementById('monitor-snapshot-status').textContent.includes('No eligible official'),null,{timeout:5000});
+   await page.waitForFunction(()=>document.getElementById('monitor-snapshot-status').textContent.includes('Adults were already logged'),null,{timeout:5000});
    const download=page.waitForEvent('download');await page.locator('#monitor-export').click();const file=await download;
    const contents=fs.readFileSync(await file.path(),'utf8');assert.match(contents,/2027-06-24/);assert.match(contents,/2027-06-27/);
    assert.match(contents,/modelCapturedOn/);
