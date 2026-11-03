@@ -296,6 +296,12 @@ async function run(){
       check(await page.locator('label[for="ship-search"]').count()===1,size.name+': search label');
       check(await page.locator('a.skip').count()===1,size.name+': keyboard skip link');
       const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
+      if(overflow>3){
+        const offenders=await page.evaluate(()=>[...document.body.querySelectorAll('*')]
+          .filter(el=>{const b=el.getBoundingClientRect();return b.width>0&&(b.right>innerWidth+2||b.left< -2)})
+          .slice(0,18).map(el=>{const b=el.getBoundingClientRect();return {tag:el.tagName,id:el.id,cls:String(el.className||'').slice(0,85),left:Math.round(b.left),right:Math.round(b.right),width:Math.round(b.width)}}));
+        console.error('LAYUP OVERFLOW DEBUG',JSON.stringify({width:size.width,overflow,offenders}));
+      }
       check(overflow<=3,size.name+': horizontal overflow '+overflow+'px');
       // Navigation and harbor details now flow with the document; no fixed ad reserve.
       const flow=await page.evaluate(()=>{
