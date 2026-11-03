@@ -5,9 +5,9 @@
   "policy": "All 161 named source candidates retained even when public access is unknown. GIS locations are waterfall positions, never visitor parking. Do not auto-index.",
   "sourceCount": 197,
   "sourceCandidateCount": 161,
-  "curatedCount": 74,
-  "linkedByExactOid": 67,
-  "unresolvedCandidates": 94,
+  "curatedCount": 75,
+  "linkedByExactOid": 68,
+  "unresolvedCandidates": 93,
   "entries": [
     {
       "source": "mi-state-gis",
@@ -3564,28 +3564,28 @@
         -88.433472
       ],
       "river": "GRATIOT RIVER",
-      "identity": "unreconciled",
-      "curatedId": null,
+      "identity": "linked",
+      "curatedId": "conglomerate-falls-gratiot",
       "possibleCuratedIds": [],
-      "publication": "research-only",
-      "access": "research-only",
-      "landManager": null,
-      "parkingEvidence": null,
-      "trailEvidence": null,
+      "publication": "verified-access-guide",
+      "access": "KNA published daylight access with spring-thaw vehicle closure; not live verified",
+      "landManager": "Keweenaw Natural Areas",
+      "parkingEvidence": "https://keweenawnaturalareas.org/KNA/Conglomerate_Falls.html",
+      "trailEvidence": "https://www.visitkeweenaw.com/blog/post/guide-to-keweenaw-solo-travel/",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-11-02",
-      "nextAction": "Confirm current Upper Gratiot hydrology and precise named drop, public property boundaries, an authorized parking area and the complete legal walk to the fall before promotion.",
-      "batch": "county-keweenaw",
-      "reviewed": "2026-11-02",
-      "reviewBatch": "52",
-      "classification": "upper-gratiot-2019-beaver-pond-current-state-unverified",
-      "accessAssessment": "Michigan GIS #136 Upper Falls at 47.329239,-88.433472 is 370 metres from a GNIS-derived Upper Falls coordinate 47.331389,-88.437222. GIS Lower Gratiot #137 is 1.03 km downstream. In a June 23, 2019 firsthand-source comment attributed to Keweenaw Natural Areas, the group wrote that 'The Upper Falls are now part of a beaver pond.' That is a dated 2019 observation, not a November 2026 proof of permanent inundation or a guaranteed flowing waterfall. Keweenaw Natural Areas currently describes some Gratiot-area preserves as public, but it does not establish legal public foot access to the exact Upper Falls bank or a signed visitor trail. Its 2019 comment discusses INTERIM ownership of LOWER Gratiot lands, not a visitor-use permit or permanent title assurance for Upper. Do not transfer road or parking information from the separate Conglomerate Falls preserve or lower Gratiot point.",
+      "checked": "2026-11-03",
+      "nextAction": "Check KNA road cable, winter maintenance, and cliff-side conditions; never turn natural GIS pin into a parking point or send visitors to Lower Gratiot.",
+      "batch": "64-kna-conglomerate",
+      "reviewed": "2026-11-03",
+      "reviewBatch": "64",
+      "classification": "kna-owner-public-falls-visitor-parking-private-easement-seasonal-road",
+      "accessAssessment": "Michigan GIS #136 'Upper Falls' at 47.329239,-88.433472 is about 77 m from the specialist Conglomerate Falls/Upper Gratiot River Falls point 47.32985,-88.43395. It is NOT Lower Gratiot Falls GIS #137 or Black River Great Conglomerate Falls. Former 2019 beaver-pond reports are historical, not evidence of today's flow. From KNA's designated parking, use the established rustic footpath toward the Gratiot River where signed and safe. Local tourism describes steep, uneven north-bank viewpoints. Avoid the bluff edge, water, steep drop to the riverbed and any cabin/private road. No surveyed parking-to-viewpoint geometry or accessible route is established.",
       "evidence": [
         "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-        "https://www.waterfallsofthekeweenaw.com/gratiot-river/gratiot-river-falls/",
-        "https://keweenawnaturalareas.org/KNA/About_KNA.html",
-        "https://www.anyplaceamerica.com/directory/mi/keweenaw-county-26083/falls/",
-        "https://keweenawlandtrust.org/leave-no-trace-visit-responsibly"
+        "https://keweenawnaturalareas.org/KNA/Conglomerate_Falls.html",
+        "https://www.visitkeweenaw.com/blog/post/guide-to-keweenaw-solo-travel/",
+        "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/keweenawmi/KCVB_summer_waterfalls_brochure_20230517_WEB_LOW_1__15f13fff-fd1f-4b37-9438-cd0a32dbaf4a.pdf",
+        "https://www.waterfallsofthekeweenaw.com/gratiot-river/conglomerate-falls/"
       ]
     },
     {
@@ -5718,5 +5718,5 @@
       "batch": "56-public-access-gap"
     }
   ],
-  "lastBatch": "62"
+  "lastBatch": "64"
 }
