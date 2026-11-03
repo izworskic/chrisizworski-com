@@ -5,7 +5,7 @@
  * If analytics is blocked or absent, all navigation remains ordinary links. */
 (() => {
   const ALLOWED_PLACEMENTS=new Set([
-    'nav','hero','decision','weather','check-schedule','bottom'
+    'nav','hero','decision','weather','check-schedule','bottom','map','map-panel'
   ]);
   function event(name,parameters) {
     if(typeof window.gtag!=='function')return;
