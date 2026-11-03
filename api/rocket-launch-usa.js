@@ -244,6 +244,8 @@ return async function handler(req, res) {
       regions,
       vandenbergViewing:region.id==='california'?
         buildVandenbergViewing(selected,weather,now):null,
+      starbaseViewing:region.id==='texas'?
+        buildStarbaseViewing(selected,texas,weather,now):null,
       access, weather, launchWeather,
       independentReporting,
       officialLaunchWeather: region.id === 'florida' ? missionForecast(selected, officialState, now) : null,
