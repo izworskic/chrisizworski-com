@@ -117,7 +117,16 @@ function showData(d){
  const monthName=new Intl.DateTimeFormat('en-US',{month:'long',timeZone:'America/Detroit'}).format(new Date(Date.UTC(2026,d.month-1,15,12)));
  setInfo('season-evidence',monthName+' / '+d.stage+' stage. This is approximate Michigan seasonal timing, not observed emergence.');
  const w=d.weather||{};
- if(w.status==='AVAILABLE'){
+ if(off){
+  // A real forecast is still valid weather, but November-February temperature
+  // and humidity cues must never imply warm-season leaf or insect scouting.
+  const dated=(w.status==='AVAILABLE'||w.status==='PARTIAL')&&w.issuedAt;
+  setInfo('weather-evidence','Off-season in Michigan. '+
+    (dated?'NWS outlook issued '+new Date(w.issuedAt).toLocaleString('en-US',{timeZone:'America/Detroit',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})+
+    ', '+w.forecastLowF+'–'+w.forecastHighF+'°F. ':'Current NWS forecast not verified. ')+
+    'Weather is context for bed preparation, not evidence of active warm-season pests or a reason to scout summer foliage.');
+  $('weather-dot').className='lane-dot unknown';
+ }else if(w.status==='AVAILABLE'){
   setInfo('weather-evidence',w.summary+' NWS issued '+new Date(w.issuedAt).toLocaleString('en-US',{timeZone:'America/Detroit',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})+
     '. Outlook: '+w.forecastLowF+'–'+w.forecastHighF+'°F. Weather does not establish an infestation.');
   $('weather-dot').className='lane-dot available';
