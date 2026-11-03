@@ -6,61 +6,87 @@
     "ownerRepo": "izworskic/chrisizworski-com",
     "canonical": "https://chrisizworski.com/tools/",
     "pageFile": "public/tools/index.html",
-    "visitorDecision": "PENDING: describe the real visitor decision",
-    "primaryAction": "PENDING: describe the concrete visitor action"
+    "visitorDecision": "Which tool or guide is useful for the month I am planning?",
+    "primaryAction": "Choose a month and open a relevant specialist tool or guide."
   },
-  "claims": [],
+  "claims": [
+    {
+      "id": "calendar",
+      "kind": "editorial",
+      "subject": "other",
+      "state": "EDITORIAL",
+      "sourceUrl": "https://github.com/izworskic/chrisizworski-com/blob/feat/seasonal-tools-guides-20261103/data/seasonal-discovery-editorial.json",
+      "checkedDate": "2026-11-03",
+      "claim": "Calendar windows describe editorial planning relevance only.",
+      "limitation": "Not a forecast, confirmed sighting, measured snow or current access report."
+    },
+    {
+      "id": "live-not-used",
+      "kind": "no-data",
+      "subject": "weather-context",
+      "state": "NO_DATA",
+      "sourceUrl": "https://chrisizworski.com/tools/",
+      "checkedDate": "2026-11-03",
+      "claim": "Live conditions are not inputs to this calendar ordering.",
+      "limitation": "Open the specialist tool for current evidence and source times."
+    }
+  ],
   "decisionState": {
-    "selectedIdField": "PENDING: stable selected item ID",
-    "sourceOfTruth": "PENDING: owning engine and evidence",
+    "selectedIdField": "Month number 1 through 12; canonical-derived pick IDs",
+    "sourceOfTruth": "Precomputed Python editorial calendar artifact shared by both pages",
     "linkedSurfaces": [
-      "answer"
+      "answer",
+      "month selector",
+      "intro",
+      "six picks",
+      "status",
+      "reset button"
     ],
-    "unavailableBehavior": "PENDING: source-linked fallback when selected item is unavailable"
+    "unavailableBehavior": "Keep four useful HTML starting links and the complete existing directory."
   },
   "scenarios": [
     {
       "kind": "initial",
-      "input": "PENDING: what visitor does",
-      "expectedVisibleAnswer": "PENDING: changed user-visible answer",
-      "sourceAndSafety": "PENDING: status and official-source boundaries"
+      "input": "Open the page or use the native month selector and reset control.",
+      "expectedVisibleAnswer": "Current Detroit calendar month yields six varied specialist choices.",
+      "sourceAndSafety": "Editorial calendar planning never certifies present conditions, access or sightings."
     },
     {
       "kind": "alternative",
-      "input": "PENDING: what visitor does",
-      "expectedVisibleAnswer": "PENDING: changed user-visible answer",
-      "sourceAndSafety": "PENDING: status and official-source boundaries"
+      "input": "Open the page or use the native month selector and reset control.",
+      "expectedVisibleAnswer": "January to July replaces winter choices with summer planning choices.",
+      "sourceAndSafety": "Editorial calendar planning never certifies present conditions, access or sightings."
     },
     {
       "kind": "reverse",
-      "input": "PENDING: what visitor does",
-      "expectedVisibleAnswer": "PENDING: changed user-visible answer",
-      "sourceAndSafety": "PENDING: status and official-source boundaries"
+      "input": "Open the page or use the native month selector and reset control.",
+      "expectedVisibleAnswer": "Returning to January restores the same links, titles and qualifiers.",
+      "sourceAndSafety": "Editorial calendar planning never certifies present conditions, access or sightings."
     },
     {
       "kind": "no-js",
-      "input": "PENDING: what visitor does",
-      "expectedVisibleAnswer": "PENDING: changed user-visible answer",
-      "sourceAndSafety": "PENDING: status and official-source boundaries"
+      "input": "Open the page or use the native month selector and reset control.",
+      "expectedVisibleAnswer": "Four all-season HTML starting links and the full directory remain readable.",
+      "sourceAndSafety": "Editorial calendar planning never certifies present conditions, access or sightings."
     },
     {
       "kind": "no-tiles",
-      "input": "PENDING: what visitor does",
-      "expectedVisibleAnswer": "PENDING: changed user-visible answer",
-      "sourceAndSafety": "PENDING: status and official-source boundaries"
+      "input": "Open the page or use the native month selector and reset control.",
+      "expectedVisibleAnswer": "No new map or tiles are needed; the calendar desk stays readable.",
+      "sourceAndSafety": "Editorial calendar planning never certifies present conditions, access or sightings."
     },
     {
       "kind": "stale-data",
-      "input": "PENDING: what visitor does",
-      "expectedVisibleAnswer": "PENDING: changed user-visible answer",
-      "sourceAndSafety": "PENDING: status and official-source boundaries"
+      "input": "Open the page or use the native month selector and reset control.",
+      "expectedVisibleAnswer": "No dated live observations enter ranking; missing artifact retains neutral static links.",
+      "sourceAndSafety": "Editorial calendar planning never certifies present conditions, access or sightings."
     }
   ],
   "failures": {
-    "no-js": "PENDING: useful HTML answer",
-    "no-tiles": "PENDING: official map and readable options",
-    "no-image": "PENDING: text and truthful credits",
-    "stale-data": "PENDING: unknown state and source link"
+    "no-js": "Useful HTML links remain; no forecast, observed event or access guarantee is invented.",
+    "no-tiles": "Useful HTML links remain; no forecast, observed event or access guarantee is invented.",
+    "no-image": "Useful HTML links remain; no forecast, observed event or access guarantee is invented.",
+    "stale-data": "Useful HTML links remain; no forecast, observed event or access guarantee is invented."
   },
   "qa": {
     "viewports": [
@@ -76,7 +102,9 @@
   "photos": [],
   "release": {
     "implemented": {
-      "status": "PENDING"
+      "status": "CONFIRMED",
+      "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/commit/116500d33d82cde82be2259ebb4dc736c77af5ae",
+      "checkedDate": "2026-11-03"
     },
     "verified": {
       "status": "PENDING"
@@ -91,5 +119,5 @@
       "status": "NOT_MEASURED"
     }
   },
-  "note": "Do not change recordStatus to released without exact CI, deployment and independent public verification. This starter intentionally lacks required source evidence and will fail the evidence checker until completed."
+  "note": "Source implemented; deterministic tests passed. Browser and release evidence remain incomplete until independently verified."
 }
