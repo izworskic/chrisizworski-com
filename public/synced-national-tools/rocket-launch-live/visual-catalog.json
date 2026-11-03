@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "reviewedOn": "2026-11-03",
+  "source": "NASA Image and Video Library",
+  "sourceUrl": "https://images.nasa.gov/",
+  "rights": "NASA credit verified from media record; source-specific restrictions still apply. No agency endorsement implied.",
+  "rockets": {
+    "falcon-9": {
+      "family": "Falcon 9",
+      "provider": "SpaceX",
+      "title": "Falcon 9 and Crew Dragon at Cape Canaveral",
+      "nasaId": "NHQ202409270003",
+      "imageUrl": "https://images-assets.nasa.gov/image/NHQ202409270003/NHQ202409270003~medium.jpg",
+      "sourceUrl": "https://images.nasa.gov/details/NHQ202409270003",
+      "credit": "NASA/Keegan Barber",
+      "context": "Falcon 9 on the launch pad for NASA's Crew-9 mission in 2024. Representative rocket-family photograph, not the selected launch.",
+      "summary": "SpaceX's two-stage orbital launcher uses a recoverable first stage on many missions. The selected mission's rocket configuration may differ.",
+      "operatorUrl": "https://www.spacex.com/vehicles/falcon-9/"
+    },
+    "vulcan": {
+      "family": "Vulcan Centaur",
+      "provider": "United Launch Alliance",
+      "title": "Vulcan rocket at Cape Canaveral",
+      "nasaId": "KSC-20210826-PH-KLS01_0073",
+      "imageUrl": "https://images-assets.nasa.gov/image/KSC-20210826-PH-KLS01_0073/KSC-20210826-PH-KLS01_0073~medium.jpg",
+      "sourceUrl": "https://images.nasa.gov/details/KSC-20210826-PH-KLS01_0073",
+      "credit": "NASA/Kim Shiflett",
+      "context": "ULA Vulcan launch infrastructure and vehicle during a 2021 countdown-rehearsal campaign. Representative rocket-family photograph.",
+      "summary": "ULA's Vulcan Centaur combines a main rocket stage with a high-energy Centaur upper stage. Configurations vary with mission requirements.",
+      "operatorUrl": "https://www.ulalaunch.com/rockets/vulcan-centaur"
+    },
+    "starship": {
+      "family": "Starship / Super Heavy",
+      "provider": "SpaceX",
+      "title": "Starship flight test photographed from the International Space Station",
+      "nasaId": "iss072e220043",
+      "imageUrl": "https://images-assets.nasa.gov/image/iss072e220043/iss072e220043~medium.jpg",
+      "sourceUrl": "https://images.nasa.gov/details/iss072e220043",
+      "credit": "NASA/Don Pettit",
+      "context": "The sixth Starship flight test photographed from the International Space Station in 2024. It is not a photograph of the selected flight.",
+      "summary": "SpaceX's Starship system consists of a large Super Heavy booster and upper-stage spacecraft. The program is developing full vehicle reuse.",
+      "operatorUrl": "https://www.spacex.com/vehicles/starship/"
+    },
+    "new-glenn": {
+      "family": "New Glenn",
+      "provider": "Blue Origin",
+      "title": "New Glenn",
+      "nasaId": null,
+      "imageUrl": null,
+      "sourceUrl": null,
+      "credit": null,
+      "context": "An independently cleared NASA-owned vehicle photograph is not yet in this catalog.",
+      "summary": "Blue Origin's New Glenn is a large orbital rocket designed around a reusable first stage.",
+      "operatorUrl": "https://www.blueorigin.com/new-glenn"
+    }
+  },
+  "payloads": {
+    "escapade": {
+      "name": "ESCAPADE",
+      "title": "ESCAPADE spacecraft during prelaunch processing",
+      "nasaId": "KSC-20240822-PH-KLS01_0033",
+      "imageUrl": "https://images-assets.nasa.gov/image/KSC-20240822-PH-KLS01_0033/KSC-20240822-PH-KLS01_0033~medium.jpg",
+      "sourceUrl": "https://images.nasa.gov/details/KSC-20240822-PH-KLS01_0033",
+      "credit": "NASA/Kim Shiflett",
+      "context": "NASA's ESCAPADE spacecraft photographed during processing in 2024, not a live launch image.",
+      "summary": "Twin spacecraft designed to investigate how the solar wind interacts with Mars's magnetic environment."
+    },
+    "imap": {
+      "name": "IMAP",
+      "title": "NASA IMAP spacecraft during assembly and processing",
+      "nasaId": "KSC-20250529-PH-AJN01_0065",
+      "imageUrl": "https://images-assets.nasa.gov/image/KSC-20250529-PH-AJN01_0065/KSC-20250529-PH-AJN01_0065~medium.jpg",
+      "sourceUrl": "https://images.nasa.gov/details/KSC-20250529-PH-AJN01_0065",
+      "credit": "NASA/Amber Jean Notvest",
+      "context": "NASA's IMAP spacecraft during ground processing in 2025; not a photo from a future launch.",
+      "summary": "NASA's Interstellar Mapping and Acceleration Probe investigates the particles and boundaries of the heliosphere."
+    }
+  }
+}
