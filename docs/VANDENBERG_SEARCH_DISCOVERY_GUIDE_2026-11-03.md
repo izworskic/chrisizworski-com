@@ -12,7 +12,7 @@ The guide answers WHERE TO WATCH. The national engine answers WHEN / WHICH MISSI
 - Planner: https://chrisizworski.com/national-tools/rocket-launch-live/?region=california#rl-vandenberg
 - One canonical URL and one listing in public/sitemap.xml, truthful November 3, 2026 modification date.
 - Direct internal links from the national California tool and the Guides > Beyond the Great Lakes directory.
-- A permanent redirect from slashless to slash canonical.
+- Both URL forms resolve directly through the site's established paired Vercel rewrites; the slash URL is the sole canonical and sitemap URL.
 - Authored HTML Article, WebPage, BreadcrumbList and FAQPage structured data, with the same source-visible answers.
 
 ## Grounding
@@ -61,7 +61,7 @@ or other expensive launch-status API call on page load.
 - One canonical and one main sitemap location; Guide hub and article lastmod synchronized with dateModified.
 - Two-way linking between editorial page and interactive planner.
 - Dedicated SEO / source / engagement regression suite and full repository build both pass.
-- Production HTTP status 200 for slash URL, permanent redirect for slashless.
+- Production HTTP status 200 for both URL forms, each with the same canonical link pointing to the slash URL.
 - No misleading SEO traffic-lift statement before measured Google Search Console data exist.
 
 ## Measurement
