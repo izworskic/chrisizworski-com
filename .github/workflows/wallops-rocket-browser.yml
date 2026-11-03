@@ -1,0 +1,46 @@
+name: Wallops Virginia mission and public map browser QA
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'lib/wallops-viewing.js'
+      - 'lib/rocket-launch-usa.js'
+      - 'api/rocket-launch-usa.js'
+      - 'api/wallops-official.js'
+      - 'public/wallops-rocket-launch-viewing/**'
+      - 'public/synced-national-tools/rocket-launch-live/**'
+      - 'tests/wallops-viewing-atlas.test.js'
+      - 'scripts/verify-wallops-browser.cjs'
+      - '.github/workflows/wallops-rocket-browser.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  chromium:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify NASA source split, geospatial provenance, mission types and SEO
+        run: node --test tests/wallops-viewing-atlas.test.js
+      - name: Install isolated matching Playwright and Leaflet browser QA
+        run: |
+          mkdir -p /tmp/wallops-browser-qa
+          npm install --prefix /tmp/wallops-browser-qa --no-save --ignore-scripts playwright@1.58.2 leaflet@1.9.4
+          echo "NODE_PATH=/tmp/wallops-browser-qa/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium-browser)" >> "$GITHUB_ENV"
+      - name: Test 360 390 768 1440 mission profiles map and fail-closed NASA notices
+        run: node scripts/verify-wallops-browser.cjs
+      - name: Preserve screenshots and scenario evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wallops-virginia-browser-evidence
+          path: artifacts/wallops-rocket-browser-qa/
+          if-no-files-found: warn
+          retention-days: 7
