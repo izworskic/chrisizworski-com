@@ -65,7 +65,7 @@ async function visit(page,date,status,count){
   const ctx=await browser.newContext({viewport:{width:390,height:820},javaScriptEnabled:false}),page=await ctx.newPage();
   await page.goto(BASE+'/michigan-garden-pest-watch/',{waitUntil:'domcontentloaded'});
   assert.ok(await page.locator('a[href$="japanese-beetle-monitoring-2027-template.csv"]').count()===1);
-  assert.ok((await page.locator('#beetle-monitoring').innerText()).includes('Zero sightings are data, too.'));
+  assert.ok((await page.locator('#beetle-monitoring').textContent()).includes('Zero sightings are data, too.'));
   await ctx.close();
   console.log('PASS 2027 controlled beetle monitoring field station: 360/390/768/1440, no-JS, no/yes interval, locality switch, official no-cohort, fail-closed snapshot, CSV export.');
  }finally{if(browser)await browser.close();server.kill('SIGTERM')}
