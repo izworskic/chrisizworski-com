@@ -76,7 +76,7 @@ const assert=require('node:assert/strict');
    assert.ok(await pestAction.isVisible());
    // Contrast gate specifically guards against green-on-green featured links.
    const contrast=await pestAction.evaluate(el=>{
-     const c=(color)=>{const nums=color.match(/[\\d.]+/g).slice(0,3).map(Number).map(v=>{v/=255;return v<=.04045?v/12.92:Math.pow((v+.055)/1.055,2.4)});return nums[0]*.2126+nums[1]*.7152+nums[2]*.0722};
+     const c=(color)=>{const nums=color.match(/[0-9.]+/g).slice(0,3).map(Number).map(v=>{v/=255;return v<=.04045?v/12.92:Math.pow((v+.055)/1.055,2.4)});return nums[0]*.2126+nums[1]*.7152+nums[2]*.0722};
      const css=getComputedStyle(el);
      return (Math.max(c(css.color),c(css.backgroundColor))+.05)/(Math.min(c(css.color),c(css.backgroundColor))+.05);
    });
