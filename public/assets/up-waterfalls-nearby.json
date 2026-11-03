@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-02",
+  "reviewed": "2026-11-03",
   "method": "haversine-waterfall-coordinate-straight-line-not-driving",
   "maxRadiusMiles": 50,
   "policy": "Not a route, visitor parking point, driving distance, trail distance, access grant, or live-open forecast.",
   "counts": {
-    "curated": 74,
-    "eligible": 66,
+    "curated": 75,
+    "eligible": 67,
     "excluded": 8
   },
   "excludedIds": [
@@ -109,6 +109,16 @@
       "source": "https://www.nps.gov/places/chapel-falls.htm",
       "lat": 46.528877,
       "lng": -86.44429
+    },
+    {
+      "id": "conglomerate-falls-gratiot",
+      "name": "Conglomerate Falls (Gratiot River)",
+      "region": "Keweenaw Peninsula",
+      "status": "seasonal",
+      "url": "/upper-peninsula-waterfalls/conglomerate-falls-gratiot/",
+      "source": "https://keweenawnaturalareas.org/KNA/Conglomerate_Falls.html",
+      "lat": 47.329239,
+      "lng": -88.433472
     },
     {
       "id": "duppy-falls",
@@ -862,6 +872,10 @@
         "miles": 35.9
       },
       {
+        "id": "conglomerate-falls-gratiot",
+        "miles": 36.1
+      },
+      {
         "id": "wright-street-falls",
         "miles": 36.6
       },
@@ -1278,6 +1292,10 @@
         "miles": 46.1
       },
       {
+        "id": "conglomerate-falls-gratiot",
+        "miles": 48.8
+      },
+      {
         "id": "wright-street-falls",
         "miles": 49
       },
@@ -1564,6 +1582,56 @@
         "miles": 47.7
       }
     ],
+    "conglomerate-falls-gratiot": [
+      {
+        "id": "eagle-river-falls",
+        "miles": 8.6
+      },
+      {
+        "id": "upper-hungarian-falls",
+        "miles": 10.8
+      },
+      {
+        "id": "lower-hungarian-falls",
+        "miles": 11
+      },
+      {
+        "id": "jacobs-falls",
+        "miles": 11.4
+      },
+      {
+        "id": "haven-falls",
+        "miles": 19.4
+      },
+      {
+        "id": "manganese-falls",
+        "miles": 27.5
+      },
+      {
+        "id": "big-erics-falls",
+        "miles": 36.1
+      },
+      {
+        "id": "wyandotte-falls",
+        "miles": 36.8
+      },
+      {
+        "id": "falls-river-trail",
+        "miles": 39.9
+      },
+      {
+        "id": "power-house-falls",
+        "miles": 40.9
+      },
+      {
+        "id": "canyon-falls",
+        "miles": 48.8
+      },
+      {
+        "id": "sturgeon-falls",
+        "miles": 49
+      }
+    ],
     "duppy-falls": [
       {
         "id": "mex-i-min-e-falls",
@@ -1650,6 +1718,10 @@
       {
         "id": "jacobs-falls",
         "miles": 3
+      },
+      {
+        "id": "conglomerate-falls-gratiot",
+        "miles": 8.6
       },
       {
         "id": "haven-falls",
@@ -1912,6 +1984,10 @@
       {
         "id": "agate-falls",
         "miles": 35.6
+      },
+      {
+        "id": "conglomerate-falls-gratiot",
+        "miles": 39.9
       },
       {
         "id": "bond-falls",
@@ -2418,6 +2494,10 @@
         "miles": 12.8
       },
       {
+        "id": "conglomerate-falls-gratiot",
+        "miles": 19.4
+      },
+      {
         "id": "lower-hungarian-falls",
         "miles": 24.4
       },
@@ -2610,6 +2690,10 @@
       {
         "id": "haven-falls",
         "miles": 10.4
+      },
+      {
+        "id": "conglomerate-falls-gratiot",
+        "miles": 11.4
       },
       {
         "id": "manganese-falls",
@@ -3132,6 +3216,10 @@
         "miles": 0.6
       },
       {
+        "id": "conglomerate-falls-gratiot",
+        "miles": 11
+      },
+      {
         "id": "eagle-river-falls",
         "miles": 18.1
       },
@@ -3310,6 +3398,10 @@
       {
         "id": "eagle-river-falls",
         "miles": 19.8
+      },
+      {
+        "id": "conglomerate-falls-gratiot",
+        "miles": 27.5
       },
       {
         "id": "lower-hungarian-falls",
@@ -4496,6 +4588,10 @@
         "miles": 39.7
       },
       {
+        "id": "conglomerate-falls-gratiot",
+        "miles": 40.9
+      },
+      {
         "id": "mex-i-min-e-falls",
         "miles": 41.2
       },
@@ -5204,6 +5300,10 @@
         "miles": 48.3
       },
       {
+        "id": "conglomerate-falls-gratiot",
+        "miles": 49
+      },
+      {
         "id": "yondota-falls",
         "miles": 49.4
       }
@@ -5708,6 +5808,10 @@
         "miles": 0.6
       },
       {
+        "id": "conglomerate-falls-gratiot",
+        "miles": 10.8
+      },
+      {
         "id": "eagle-river-falls",
         "miles": 18
       },
@@ -5980,6 +6084,10 @@
       {
         "id": "nonesuch-falls",
         "miles": 36
+      },
+      {
+        "id": "conglomerate-falls-gratiot",
+        "miles": 36.8
       },
       {
         "id": "big-erics-falls",
