@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import { spawnSync } from 'node:child_process';
 
 const read=p=>fs.readFileSync(p,'utf8');
 const hub=read('public/upper-peninsula-waterfalls/index.html');
@@ -90,4 +91,10 @@ test('B59 visible UX remains source-linked and accessible, with existing trip pl
  assert.match(py,/def great_circle_miles/);
  assert.match(py,/arrival != "verified"/);
  assert.match(py,/--check/);
+});
+
+test('B59 Python source recreates the committed artifact byte-for-byte where Python 3 is installed',t=>{
+ const check=spawnSync('python3',['scripts/build-up-waterfalls-nearby.py','--check'],{encoding:'utf8'});
+ if(check.error?.code==='ENOENT'){t.diagnostic('Python3 not installed on this runner; independent Node geodesic tests still apply');return;}
+ assert.equal(check.status,0,check.stderr||check.stdout);
 });
