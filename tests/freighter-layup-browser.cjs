@@ -107,6 +107,35 @@ async function run(){
       for(const title of ['Winter Harbor Map','Current Winter Arrivals','Harbor Roster','Ship Stories','Why Freighters Lay Up'])check(headings.some(x=>x.includes(title)),size.name+': functional section heading '+title);
       check(await page.locator('main > .wrapper > section').evaluateAll(nodes=>nodes.map(n=>n.id||n.className).join('|')).then(v=>v.startsWith('explorer|fleet|ship-biographies|stories|sources-evidence')),size.name+': page section order');
       check(await page.locator('#source-evidence-details').evaluate(e=>!e.open),size.name+': source and evidence methods collapsed by default');
+      // Python-compiled harbor manifest: every archive ship remains in the HTML,
+      // while the client offers a reversible season + harbor view.
+      const hist = page.locator('#winter-fleet-history');
+      await page.waitForFunction(()=>document.getElementById('winter-fleet-history')?.dataset.historyEnhanced==='true');
+      check(await hist.locator('[data-history-vessel]').count()===14,size.name+': fourteen curated winter records in crawlable source');
+      check(await hist.locator('[data-history-season="2025-26"] [data-history-vessel]:visible').count()===12,
+        size.name+': default 2025–26 contains only its twelve records');
+      check(await hist.locator('[data-history-season="2024-25"]').isHidden(),size.name+': past year hidden only after JS enhancement');
+      await hist.locator('[data-history-pick="2024-25"]').click();
+      check(await hist.locator('[data-history-season="2024-25"] [data-history-vessel]:visible').count()===2,
+        size.name+': two source-backed entries when selecting 2024–25');
+      check(await hist.locator('[data-history-pick="2024-25"]').getAttribute('aria-pressed')==='true',
+        size.name+': year selection is keyboard/assistive accessible');
+      await hist.locator('#history-harbor').selectOption('owen-sound');
+      check(await hist.locator('[data-history-season="2024-25"] [data-history-vessel]:visible').count()===2,
+        size.name+': Owen Sound shows both curated historic records');
+      await hist.locator('[data-history-pick="2025-26"]').click();
+      check(await hist.locator('#history-harbor').inputValue()==='all',size.name+': switching season clears incompatible harbor filter');
+      await hist.locator('#history-harbor').selectOption('superior');
+      check(await hist.locator('[data-history-season="2025-26"] [data-history-vessel]:visible').count()===6,
+        size.name+': Superior narrows the selected winter to six documented ships');
+      await hist.locator('#history-harbor').selectOption('all');
+      check(await hist.locator('[data-history-season="2025-26"] [data-history-vessel]:visible').count()===12,
+        size.name+': clearing harbor restores all twelve records (A-to-B-to-A)');
+      check((await hist.locator('#history-selection').textContent()).includes('Not a total fleet count'),
+        size.name+': history never presents sampled records as a complete fleet census');
+      check(await hist.locator('a[href^="https://"]').count()>=14,
+        size.name+': primary evidence remains linked on historical records');
+
       const adFlow=await page.evaluate(()=>{
         const hero=document.querySelector('main > .hero'),wrapper=document.querySelector('main > .wrapper');
         const slot=document.createElement('div');slot.className='google-auto-placed';slot.style.height='280px';
