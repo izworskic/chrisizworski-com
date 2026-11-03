@@ -7,6 +7,7 @@ on:
       - 'public/assets/garden-pest-watch.*'
       - 'data/garden-earworm-msu-2026.csv'
       - 'public/assets/garden-earworm-trap*'
+      - 'public/assets/garden-earworm-2027.js'
       - 'scripts/build_garden_earworm_traps.py'
       - 'scripts/verify-garden-earworm-traps.cjs'
       - 'scripts/ingest_msu_earworm_2027.py'
