@@ -19,7 +19,7 @@ ARCHIVE = ROOT / "public/assets/freighter-layup-registry.json"
 LEDGER = ROOT / "public/assets/freighter-layup-live-season.json"
 PHRASES = re.compile(r"\b(?:winter lay[\s-]*up|winter berth|wintering|wintered|spring departure)\b", re.I)
 PLANNED = re.compile(r"\b(?:expected|expects|will arrive|scheduled|planning|plans to|due to arrive)\b", re.I)
-DEPART = re.compile(r"\b(?:departed|departure|departing|leaves winter|returned to service)\b", re.I)
+DEPART = re.compile(r"\b(?:departed|departure|departing|leaves winter|returned? to service|returns? to service)\b", re.I)
 ARRIVE = re.compile(r"\b(?:arrived|arrival|docked|berthed|wintering|tied up)\b", re.I)
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
