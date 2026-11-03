@@ -90,10 +90,13 @@ test('B65: only a noindex research page, no map stop or navigational masquerade'
  assert.ok(research.includes('<link rel="canonical" href="https://chrisizworski.com'+slug+'">'));
  const first=research.indexOf('<script type="application/ld+json">')+'<script type="application/ld+json">'.length;
  const schema=JSON.parse(research.slice(first,research.indexOf('</script>',first)));
- assert.equal(schema['@type'],'WebPage');
- assert.equal(schema.author['@id'],'https://chrisizworski.com/#person');
- assert.equal(schema.publisher['@id'],'https://chrisizworski.com/#person');
- assert.equal(schema.dateModified,'2026-11-03');
+ const person=schema['@graph'].find(node=>node['@type']==='Person');
+ const page=schema['@graph'].find(node=>node['@type']==='WebPage');
+ assert.equal(person['@id'],'https://chrisizworski.com/#person');
+ assert.equal(person.name,'Chris Izworski');
+ assert.equal(page.author['@id'],person['@id']);
+ assert.equal(page.publisher['@id'],person['@id']);
+ assert.equal(page.dateModified,'2026-11-03');
 });
 
 test('B65: the existing bridge-side visitor guide distinguishes names without redirecting to research coordinates',()=>{
