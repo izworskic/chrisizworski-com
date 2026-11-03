@@ -203,6 +203,149 @@
     set('rl-feed-health', data.coverage.partial ? 'Partial schedule coverage' : 'Six coastal regions checked');
     set('rl-updated-at', data.scheduleCheckedAt?stamp(data.scheduleCheckedAt):'No schedule observation');
   }
+
+  // Static NASA catalog is built by an independently tested Python source review.
+  // No NASA or launch-provider API requests are issued by the visitor's browser.
+  const VISUAL_CATALOG = '/national-tools/rocket-launch-live/visual-catalog.json';
+  const FAMILY_ORDER = ['falcon-9', 'starship', 'vulcan', 'new-glenn'];
+  const NASA_IMAGE = /^https:\/\/images-assets\.nasa\.gov\/image\/[A-Za-z0-9_-]+\/[A-Za-z0-9_-]+~(?:small|medium|large|thumb)\.(?:jpg|jpeg|png|webp)$/i;
+  const NASA_PAGE = /^https:\/\/images\.nasa\.gov\/details\/[A-Za-z0-9_-]+$/i;
+  const NASA_CREDIT = /^NASA(?:\/|$)/i;
+  function visualImageApproved(item) {
+    return Boolean(item && typeof item.imageUrl==='string' && NASA_IMAGE.test(item.imageUrl) &&
+      NASA_PAGE.test(item.sourceUrl||'') && typeof item.nasaId==='string' &&
+      typeof item.credit==='string' && NASA_CREDIT.test(item.credit) &&
+      !/spacex|blue origin|copyright|courtesy|licensed/i.test(item.credit));
+  }
+  function visualPhoto(host, item, fallback, size) {
+    host.replaceChildren();
+    if (!visualImageApproved(item)) {
+      host.appendChild(el('div', 'rl-visual-unavailable', fallback));
+      return;
+    }
+    const photo=el('img', 'rl-visual-image');
+    photo.src=item.imageUrl;
+    photo.alt='NASA archive: '+(item.title||item.nasaId||'Rocket or spacecraft photo')+
+      '. Representative archival photo, not a current launch camera.';
+    photo.loading='lazy';
+    photo.decoding='async';
+    photo.referrerPolicy='no-referrer';
+    if(size==='small') {photo.width=360;photo.height=230;}
+    else {photo.width=920;photo.height=550;}
+    photo.addEventListener('error',()=>{
+      host.replaceChildren(el('div','rl-visual-unavailable',
+        'Archived photo could not be loaded. The NASA source record remains linked below.'));
+    }, {once:true});
+    host.appendChild(photo);
+    host.appendChild(el('span','rl-visual-caption',
+      'NASA archive · '+item.credit+' · representative image'));
+  }
+  function rocketFamily(launch) {
+    const value=((launch?.rocket||'')+' '+(launch?.name||'')).toLowerCase();
+    if (/\bfalcon\s*heavy\b/.test(value)) return null;
+    if (/\bfalcon[\s-]*9\b/.test(value)) return 'falcon-9';
+    if (/\bstarship\b|\bsuper[\s-]*heavy\b/.test(value)) return 'starship';
+    if (/\bvulcan\b/.test(value)) return 'vulcan';
+    if (/\bnew[\s-]*glenn\b/.test(value)) return 'new-glenn';
+    return null;
+  }
+  function matchedPayload(launch,catalog) {
+    const value=((launch?.mission||'')+' '+(launch?.name||'')).toLowerCase();
+    const tokens=['escapade','imap','europa-clipper','psyche','pace'];
+    for (const key of tokens) {
+      if (!catalog?.payloads?.[key]) continue;
+      const word=key.replace(/-/g,'[\\s-]*');
+      if(new RegExp('(?:^|[^a-z0-9])'+word+'(?:$|[^a-z0-9])','i').test(value))
+        return catalog.payloads[key];
+    }
+    return null;
+  }
+  function renderVisuals(data) {
+    const rocketHost=$('rl-visual-rocket-photo');
+    const payloadHost=$('rl-visual-payload-photo');
+    if(!rocketHost||!payloadHost)return;
+    const launch=data?.selectedLaunch;
+    const catalog=state.visualCatalog;
+    const family=rocketFamily(launch);
+    const rocket=family?catalog?.rockets?.[family]:null;
+    const payload=matchedPayload(launch,catalog);
+    const rocketLinks=$('rl-visual-rocket-links');
+    const payloadLinks=$('rl-visual-payload-links');
+    rocketLinks.replaceChildren();payloadLinks.replaceChildren();
+    if (!launch) {
+      visualPhoto(rocketHost,null,'Select a launch to explore its rocket.');
+      visualPhoto(payloadHost,null,'No payload selected yet.');
+      set('rl-visual-rocket-title','Choose a mission to meet the vehicle');
+      set('rl-visual-rocket-story','Rocket-family images are selected from independently credited NASA archive assets.');
+      set('rl-visual-rocket-evidence','No mission-selected rocket match.');
+      set('rl-visual-payload-title','Choose a mission to learn about its payload');
+      set('rl-visual-payload-story','A mission label alone does not prove a NASA spacecraft-photo match.');
+      set('rl-visual-payload-evidence','No payload image claim.');
+    } else {
+      set('rl-visual-rocket-title',rocket?.family||launch.rocket||'Rocket identity not announced');
+      set('rl-visual-rocket-story',rocket?.summary||
+        'This rocket has not yet been matched to a NASA-credited family image in the catalog.');
+      set('rl-visual-rocket-evidence',visualImageApproved(rocket)?
+        rocket.context+' Source: '+rocket.credit+'.':
+        'No suitable NASA-credited vehicle photo has been cleared for this rocket. Do not substitute another type.');
+      visualPhoto(rocketHost,rocket,'NASA-cleared rocket photo not available for this vehicle.');
+      if(visualImageApproved(rocket)){
+        const a=anchor(rocket.sourceUrl,'Photo and original NASA caption');if(a)rocketLinks.appendChild(a);
+      }
+      if(rocket?.operatorUrl){const a=anchor(rocket.operatorUrl,'Explore the vehicle at its operator');if(a)rocketLinks.appendChild(a);}
+      const payloadName=launch.mission||launch.name?.split('|').slice(1).join('|').trim()||'Payload not yet identified';
+      set('rl-visual-payload-title',payload?.name||payloadName);
+      if(payload&&visualImageApproved(payload)){
+        visualPhoto(payloadHost,payload,'NASA payload photo unavailable.');
+        set('rl-visual-payload-story',payload.summary||'Mission spacecraft photographed by NASA.');
+        set('rl-visual-payload-evidence',payload.context+' Credit: '+payload.credit+'.');
+        const a=anchor(payload.sourceUrl,'Open this spacecraft photo at NASA');if(a)payloadLinks.appendChild(a);
+      }else{
+        visualPhoto(payloadHost,null,'No NASA-credited photo matched to this specific payload.');
+        set('rl-visual-payload-story',
+          'Launch Library identifies this mission, but an independently cleared NASA photo of its payload has not been matched. That is not evidence the payload lacks public imagery.');
+        set('rl-visual-payload-evidence','Payload photography is not inferred from another mission or a similar satellite.');
+        const operator=anchor(data?.mediaDesk?.operator?.url||data?.region?.authority,
+          'Check operator or range for mission details');
+        if(operator)payloadLinks.appendChild(operator);
+      }
+    }
+    const gallery=$('rl-visual-family-gallery');
+    if(!gallery)return;
+    gallery.replaceChildren();
+    for(const key of FAMILY_ORDER){
+      const item=catalog?.rockets?.[key];
+      if(!item)continue;
+      const card=el('article','rl-visual-family-card');
+      card.dataset.selected=family===key?'true':'false';
+      const pic=el('div','rl-visual-family-photo');
+      visualPhoto(pic,item,'NASA photo not cleared for '+item.family,'small');
+      card.appendChild(pic);
+      const copy=el('div','rl-visual-family-copy');
+      copy.appendChild(el('strong','',item.family));
+      copy.appendChild(el('span','',item.provider+' · '+(visualImageApproved(item)?
+        'NASA-credited historical photo':'vehicle image awaiting clearance')));
+      const a=anchor(visualImageApproved(item)?item.sourceUrl:item.operatorUrl,
+        visualImageApproved(item)?'View NASA original':'Explore at operator');
+      if(a)copy.appendChild(a);
+      card.appendChild(copy);gallery.appendChild(card);
+    }
+    if(!catalog?.rockets)gallery.appendChild(el('p','rl-visual-unavailable',
+      'The image catalog is unavailable; no unsourced rocket or payload photos are substituted.'));
+  }
+  async function loadVisualCatalog() {
+    try {
+      const response=await fetch(VISUAL_CATALOG,{credentials:'same-origin',cache:'force-cache',
+        signal:AbortSignal.timeout(9000),headers:{Accept:'application/json'}});
+      if(!response.ok)throw new Error('catalog not available');
+      const parsed=await response.json();
+      if(parsed?.schemaVersion!==1||!parsed?.rockets||!parsed?.payloads)
+        throw new Error('unrecognized image catalog version');
+      state.visualCatalog=parsed;
+    }catch(_){state.visualCatalog=null;}
+    if(state.data)renderVisuals(state.data);
+  }
+
   // Reuse the exact LL2 mission's sanitized media records from the shared collector.
   // These buttons never claim player health, pad alignment, range GO, or launch success.
   function renderMediaDesk(data) {
@@ -291,6 +434,12 @@
       const source = anchor(desk.operator.url,
         desk.operator.label || 'Open launch operator updates', 'rl-watch-operator');
       if (source) general.appendChild(source);
+    }
+    if (desk.operator?.videoChannelUrl) {
+      const channel=anchor(desk.operator.videoChannelUrl,
+        desk.operator.videoChannelLabel||'Operator video channel · mission broadcast unverified',
+        'rl-watch-operator');
+      if(channel)general.appendChild(channel);
     }
     if (data.region?.specialist) {
       const detail = anchor(data.region.specialist,
@@ -693,6 +842,7 @@
     showRegion(data.region);
     renderMission(data);
     renderMediaDesk(data);
+    renderVisuals(data);
     renderIndependentReporting(data);
     renderSelector(data);
     renderAccess(data);
@@ -734,6 +884,7 @@
       document.dispatchEvent(new CustomEvent('rocket-truth:mission-selected',
         {detail:{launchId:null}}));
       chip($('rl-schedule-grade'), 'Schedule temporarily unavailable', 'unknown');
+      renderVisuals(null);
       set('rl-watch-status', 'Media unavailable');
       set('rl-watch-evidence', 'No current mission-media response. Use the operator or official launch source.');
       $('rl-watch-mission-videos')?.replaceChildren(el('p', 'rl-watch-empty', 'Video listing unavailable; not a claim that there is no broadcast.'));
@@ -778,5 +929,6 @@
   state.userFocusedMap = Boolean(region);
   const launch = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
     initial.searchParams.get('launchId') || '') ? initial.searchParams.get('launchId') : null;
+  loadVisualCatalog();
   load(region, launch);
 })();

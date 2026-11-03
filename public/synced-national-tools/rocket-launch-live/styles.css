@@ -328,3 +328,45 @@ button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid #dc7
 .rl-slip-empty{font-size:13px;line-height:1.7;color:#47646a}
 @media(max-width:760px){.rl-slip-intro{display:block}.rl-slip-label{display:inline-flex;margin-top:12px}.rl-slip-options{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:510px){.rl-slip-site-grid{grid-template-columns:1fr}.rl-slip-choice{padding:11px}.rl-slip-detail{padding:13px}.rl-slip-site{padding:13px}}
+
+
+/* Visual Intelligence: purpose-built NASA archive story; mission imagery is not a live camera. */
+.rl-visual-section{--visual-ink:#e7f5f4;--visual-muted:#aec6c9;position:relative;overflow:hidden;padding:clamp(21px,3vw,40px)!important;border-radius:23px!important;background:radial-gradient(ellipse at 80% -12%,#164953 0%,#0b2633 42%,#071b27 100%)!important;color:var(--visual-ink)!important}
+.rl-visual-section .rl-section-head{border:0!important;padding:0!important;margin-bottom:22px}
+.rl-visual-section .rl-section-head h2{color:#f5fbf8!important}
+.rl-visual-section .rl-section-head p{color:#c2d4d4!important;line-height:1.7}
+.rl-visual-section .rl-eyebrow{color:#b6dfd7!important}
+.rl-visual-story{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(280px,1fr);gap:17px;align-items:stretch}
+.rl-visual-feature,.rl-visual-payload{min-width:0;display:flex;flex-direction:column;overflow:hidden;background:#102e3a;border:1px solid #2e555c;border-radius:17px}
+.rl-visual-feature{box-shadow:0 15px 36px rgba(0,0,0,.13)}
+.rl-visual-photo{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;background:radial-gradient(circle at 52% 25%,#376675,#0c2432 72%);color:#cde0dd}
+.rl-visual-payload-photo{aspect-ratio:4/3}
+.rl-visual-photo .rl-visual-image{display:block;width:100%;height:100%;object-fit:cover;object-position:center center}
+.rl-visual-photo .rl-visual-caption{position:absolute;left:12px;right:12px;bottom:12px;max-width:fit-content;padding:7px 10px;border-radius:7px;background:rgba(3,22,32,.88);font-size:11px;line-height:1.3;color:#fff;font-weight:700}
+.rl-visual-unavailable{width:100%;height:100%;min-height:140px;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;color:#d5dfe4;background:radial-gradient(circle at 50% 38%,#1b5260 0%,#0e303c 48%,#0b2734 100%);font-size:12px;line-height:1.75}
+.rl-visual-copy{padding:clamp(17px,2.5vw,26px);flex:1;display:flex;flex-direction:column}
+.rl-visual-label{font-size:10px;font-weight:850;letter-spacing:.16em;text-transform:uppercase;color:#a8dbd1}
+.rl-visual-copy h3{font-family:var(--serif);font-size:clamp(23px,2.5vw,33px);line-height:1.2;color:#f7faf8!important;margin:10px 0!important}
+.rl-visual-copy p{font-size:13px;line-height:1.75;color:#d1e0dc;margin:0 0 10px}
+.rl-visual-copy .rl-visual-evidence{font-size:11px;color:#aec8c9;line-height:1.65}
+.rl-visual-links{margin-top:auto;display:flex;flex-wrap:wrap;gap:9px;padding-top:9px}
+.rl-visual-links a{display:inline-flex;align-items:center;min-height:38px;border:1px solid #6a9294;border-radius:9px;color:#f7fffc!important;text-decoration:none!important;padding:8px 11px;font-size:11px;font-weight:750}
+.rl-visual-links a:hover,.rl-visual-links a:focus-visible{background:#245a65;border-color:#bfe5db}
+.rl-visual-gallery-head{display:flex;justify-content:space-between;align-items:end;gap:12px;margin:29px 0 14px}
+.rl-visual-gallery-head h3{font-family:var(--serif);font-size:25px;color:#f6fcfa!important;margin:0 0 4px}
+.rl-visual-gallery-head p{color:#bfd4d5;font-size:12px;line-height:1.6;margin:0}
+.rl-visual-gallery-head>span{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#9cbfc2;font-weight:800;white-space:nowrap}
+.rl-visual-gallery{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}
+.rl-visual-family-card{overflow:hidden;border:1px solid #3b6268;border-radius:12px;background:#0e2f3a;min-width:0}
+.rl-visual-family-card[data-selected="true"]{outline:2px solid #b8e8d2;outline-offset:2px}
+.rl-visual-family-photo{aspect-ratio:1.55;overflow:hidden;background:#10313a}
+.rl-visual-family-photo .rl-visual-unavailable{min-height:105px;font-size:11px;padding:14px}
+.rl-visual-family-photo .rl-visual-caption{font-size:9px;left:7px;right:7px;bottom:7px;padding:5px}
+.rl-visual-family-copy{display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding:12px}
+.rl-visual-family-copy strong{font-size:14px;color:#f1faf8}
+.rl-visual-family-copy span{font-size:11px;line-height:1.55;color:#abc9c9}
+.rl-visual-family-copy a{color:#d1eee1!important;font-size:11px;font-weight:750;text-underline-offset:2px}
+.rl-visual-ethics{font-size:11px;color:#b9ced0;line-height:1.8;margin:22px 0 0!important}
+.rl-visual-ethics a{color:#d7efe8!important;text-decoration:underline;text-underline-offset:2px}
+@media(max-width:850px){.rl-visual-story{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.rl-visual-gallery{grid-template-columns:repeat(2,minmax(0,1fr))}.rl-visual-section .rl-section-head{display:block!important}.rl-visual-gallery-head>span{white-space:normal;text-align:right}}
+@media(max-width:590px){.rl-visual-section{padding:17px!important;border-radius:16px!important}.rl-visual-story{grid-template-columns:1fr}.rl-visual-payload-photo{aspect-ratio:16/9}.rl-visual-gallery-head{display:block}.rl-visual-gallery-head>span{display:block;margin-top:8px;text-align:left}.rl-visual-family-copy{padding:10px}.rl-visual-family-copy strong{font-size:13px}.rl-visual-family-photo .rl-visual-caption{display:none}}
