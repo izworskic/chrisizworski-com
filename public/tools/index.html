@@ -328,7 +328,7 @@ h2.sh{font:500 clamp(1.45rem,2.3vw,1.9rem)/1.2 var(--hm-display);color:var(--hm-
     <article data-fg-card data-fg-months="10,11,12" style="background:#fff;border:1px solid #dce5de;border-radius:5px;padding:12px 14px;display:flex;flex-direction:column;gap:5px">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><span style="font:700 10px/1.2 Arial,sans-serif;color:#7a2e2e;text-transform:uppercase;letter-spacing:.06em">10 Holiday Towns · Oct–Dec</span><span data-fg-badge hidden style="background:#1d4e42;color:#fff;font:700 9px/1.2 Arial,sans-serif;padding:2px 6px;border-radius:3px;text-transform:uppercase">In season</span></div>
       <h3 style="font-size:15px;line-height:1.3;margin:0"><a href="/michigan-white-christmas-escapes/" style="color:#183a30">Michigan White Christmas Escapes</a></h3>
-      <p style="font-size:12px;line-height:1.45;color:#55635d;margin:0">NOAA 1991–2020 snow odds (96% Marquette to 45.7% Frankenmuth), ski snowmaking &amp; holiday lights.</p>
+      <p style="font-size:12px;line-height:1.45;color:#55635d;margin:0">NOAA 1991–2020 snow odds (<span id="white-christmas-marquette-baseline">85%</span> Marquette to 45.7% Frankenmuth), ski snowmaking &amp; holiday lights.</p>
       <a href="/michigan-white-christmas-escapes/" style="margin-top:auto;padding-top:4px;font:700 11.5px/1.2 Arial,sans-serif;color:#1d4e42">Compare Christmas towns &rarr;</a>
     </article>
     <article data-fg-card data-fg-months="10,11,12" style="background:#fff;border:1px solid #dce5de;border-radius:5px;padding:12px 14px;display:flex;flex-direction:column;gap:5px">
@@ -1306,5 +1306,21 @@ h2.sh{font:500 clamp(1.45rem,2.3vw,1.9rem)/1.2 var(--hm-display);color:var(--hm-
   </div>
 </footer><script defer src="/assets/this-week-engine.js?v=2"></script>
 <script defer src="/assets/this-week.js?v=2"></script>
+<script>
+(async function () {
+  // Use the calculator's historical baseline, not its seasonally adjusted forecast.
+  // Keep the verified 85% fallback if the shared data service is unavailable.
+  var label = document.getElementById('white-christmas-marquette-baseline');
+  try {
+    var response = await fetch('/api/national-white-christmas?lat=46.5436&lon=-87.3954&state=MI');
+    if (!response.ok) return;
+    var data = await response.json();
+    var baseline = data.climatology && data.climatology.history && data.climatology.history.probability;
+    if (typeof baseline === 'number' && Number.isFinite(baseline) && baseline >= 0 && baseline <= 100) {
+      label.textContent = Math.round(baseline / 5) * 5 + '%';
+    }
+  } catch (_) { /* Retain the verified historical fallback. */ }
+})();
+</script>
 </body>
 </html>
