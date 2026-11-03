@@ -84,7 +84,8 @@
   function floridaSpecialistLink(url, data = state.data) {
     if (typeof url !== 'string') return url;
     const region = url.startsWith('/national-tools/space-coast-launch/')?'florida':
-      url.startsWith('/starbase-rocket-launch-viewing/')?'texas':null;
+      url.startsWith('/starbase-rocket-launch-viewing/')?'texas':
+      url.startsWith('/wallops-rocket-launch-viewing/')?'virginia':null;
     if (!region) return url;
     const selected = data?.selectedRegion === region ? data.selectedLaunchId : null;
     return selected && /^[0-9a-f-]{36}$/i.test(selected) ?
@@ -99,7 +100,9 @@
       [r.access, 'Viewing and access rules']
     ];
     if (r.specialist) links.unshift([floridaSpecialistLink(r.specialist),
-      r.id === 'texas' ? 'Starbase public viewing map · same mission' : 'Florida detailed viewer · same mission']);
+      r.id === 'texas' ? 'Starbase public viewing map · same mission' :
+      r.id === 'virginia' ? 'Wallops public launch-viewing atlas · same mission' :
+      'Florida detailed viewer · same mission']);
     for (const [url, title] of links) {
       const a = anchor(url, title);
       if (a) root.appendChild(a);
