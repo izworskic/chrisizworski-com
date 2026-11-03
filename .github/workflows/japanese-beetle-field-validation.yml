@@ -1,0 +1,38 @@
+name: Japanese beetle field evidence cross-check
+on:
+  pull_request:
+    paths:
+      - 'lib/japanese-beetle-field-evidence.cjs'
+      - 'scripts/audit-japanese-beetle-field-validation.cjs'
+      - 'tests/japanese-beetle-field-evidence.test.js'
+      - '.github/workflows/japanese-beetle-field-validation.yml'
+  schedule:
+    # Weekly during the growing season. No private sightings or photographs saved.
+    - cron: '30 14 * 5-9 1'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: japanese-beetle-field-evidence-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  cross-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check scientific evidence eligibility, cross-year and fail-closed gates
+        run: node --test tests/japanese-beetle-field-evidence.test.js
+      - name: Sample 10 reference areas across two official archived seasons
+        run: node scripts/audit-japanese-beetle-field-validation.cjs
+      - name: Retain cited, non-private aggregate validation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: japanese-beetle-field-cross-check
+          path: artifacts/japanese-beetle-field-validation/report.json
+          if-no-files-found: warn
+          retention-days: 45

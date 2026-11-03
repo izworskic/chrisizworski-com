@@ -83,3 +83,21 @@
 .beetle-desk a:focus-visible,.beetle-proof summary:focus-visible{outline:3px solid #ad713d;outline-offset:3px}
 @media(max-width:800px){.beetle-desk-top{grid-template-columns:1fr;padding:20px 18px;gap:12px}.beetle-desk-rule{padding:12px 17px}.beetle-milestones{margin:0 18px}.beetle-proof{margin:12px 18px 0}}
 @media(max-width:540px){.beetle-desk{margin:8px 0 30px}.beetle-desk-top h2{font-size:1.83rem}.beetle-status-panel{padding:19px 17px;box-shadow:3px 3px 0 #d4dac9}.beetle-milestones{grid-template-columns:1fr}.beetle-milestones>div{padding:15px 17px}}
+
+
+/* Japanese beetle field evidence is a separate proof instrument from thermal-model timing. */
+.beetle-field-check{margin:22px 28px 0;padding:20px 23px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.12fr);gap:22px;border:1px solid #c0cdb9;background:linear-gradient(120deg,#f2f5ea,#fffaf2);border-radius:3px}
+.beetle-field-kicker{font-weight:800;font-size:.7rem;letter-spacing:.11em;color:#466a52}
+.beetle-field-intro h3{font:700 clamp(1.4rem,2vw,1.85rem)/1.13 'Fraunces',serif;letter-spacing:-.025em;margin:.5rem 0 .65rem;color:#213d30}
+.beetle-field-intro p{font-size:.86rem;color:#41584b;margin:.2rem 0;line-height:1.65}
+.beetle-field-evidence{background:#fffdf8;border-left:4px solid #9a623b;padding:17px 19px;min-width:0}
+.beetle-field-label{color:#6d4a2b;letter-spacing:.08em;font-weight:800;font-size:.7rem;margin:0}
+.beetle-field-date{color:#203d2e;font:700 clamp(1.3rem,2vw,1.8rem)/1.13 'Fraunces',serif;margin:.6rem 0 .4rem;overflow-wrap:anywhere}
+.beetle-field-compare{font-weight:650;color:#273e34;font-size:.89rem;margin:.2rem 0 .9rem}
+.beetle-field-caveat{font-size:.78rem;color:#526456;margin:.5rem 0}
+.beetle-field-links{display:flex;flex-wrap:wrap;gap:7px 14px}
+.beetle-field-links a{font-size:.78rem;font-weight:750;color:#27513e;overflow-wrap:anywhere}
+.beetle-field-evidence.is-missing{border-left-color:#9b8566}
+.beetle-field-evidence.is-present{border-left-color:#43704e}
+@media(max-width:800px){.beetle-field-check{grid-template-columns:1fr;gap:12px;margin:15px 17px 0;padding:18px}.beetle-field-evidence{padding:16px}}
+@media(max-width:540px){.beetle-field-check{margin:12px 16px 0;padding:14px 12px}.beetle-field-intro h3{font-size:1.5rem}.beetle-field-date{font-size:1.4rem}}
