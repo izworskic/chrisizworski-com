@@ -104,6 +104,24 @@ async function waitForAnswer(page,pest){await page.waitForFunction(name=>documen
    await routeFixtures(page);
    await page.goto(ORIGIN+'/michigan-garden-pest-watch/',{waitUntil:'domcontentloaded'});
    await waitForAnswer(page,'Squash vine borer');
+   // Verified official MSU 2026 trap history: zero != missing, trap types and
+   // county selection remain independent of ZIP and weather-based predictions.
+   assert.equal(await page.locator('#earworm-county-picker button').count(),8);
+   assert.match(await page.locator('#earworm-readout').innerText(),/Saginaw County field-trap record/);
+   assert.match(await page.locator('#earworm-readout').innerText(),/2 moths/);
+   assert.match(await page.locator('#earworm-location-note').innerText(),/not countywide coverage or your ZIP/);
+   assert.equal(await page.locator('#earworm-detail tbody tr').count(),10);
+   assert.match(await page.locator('#earworm-detail tbody tr').first().innerText(),/Not reported/);
+   await page.locator('#earworm-county-picker button[data-county="oceana"]').click();
+   assert.match(await page.locator('#earworm-readout').innerText(),/Wire Hartstack/);
+   assert.match(await page.locator('#earworm-detail').innerText(),/332/);
+   assert.match(await page.locator('#earworm-detail').innerText(),/47\.4/);
+   assert.match(await page.locator('#earworm-detail').innerText(),/Two-week collection/);
+   assert.ok(page.url().includes('trapCounty=oceana'));
+   await page.locator('#earworm-county-picker button[data-county="monroe"]').click();
+   assert.match(await page.locator('#earworm-detail').innerText(),/Zero captured in reported check/);
+   assert.match(await page.locator('#earworm-detail').innerText(),/Not published/);
+   await page.locator('#earworm-county-picker button[data-county="saginaw"]').click();
    assert.ok(await page.locator('#borer-records').isVisible());
    assert.match(await page.locator('#borer-record-status').innerText(),/Not checked/);
    await page.locator('#borer-record-check').click();
@@ -253,6 +271,8 @@ async function waitForAnswer(page,pest){await page.waitForFunction(name=>documen
   assert.match(await winter.locator('.visual-plan-label').first().innerText(),/OFF-SEASON \/ PLAN FOR NEXT YEAR/);
   assert.match(await winter.locator('.visual-plan-primary').first().innerText(),/Next-season preparation/);
   assert.equal(await winter.locator('.visual-plan-details').count(),0,'November must not present in-season confirm-and-treat actions');
+  assert.match(await winter.locator('#earworm-readout').innerText(),/2026 season closed/);
+  assert.match(await winter.locator('#earworm-readout').innerText(),/not activity today or a prediction for next summer/);
   assert.match(await winter.locator('#borer-records').innerText(),/In November.*past growing season/);
   await winter.screenshot({path:'artifacts/garden-pest-watch-browser/november-preparation-not-pest-weather.png',fullPage:true,animations:'disabled'});
   await winterContext.close();
@@ -289,6 +309,9 @@ async function waitForAnswer(page,pest){await page.waitForFunction(name=>documen
   const n=await noJS.newPage();await n.goto(ORIGIN+'/michigan-garden-pest-watch/',{waitUntil:'domcontentloaded'});
   assert.match(await n.locator('#primary-answer').innerText(),/squash stems/i);
   assert.ok(await n.locator('.nojs-guides').isVisible());
+  assert.match(await n.locator('#earworm-trap-desk').innerText(),/August 25, 2026/);
+  assert.match(await n.locator('#earworm-trap-desk').innerText(),/September 1, 2026/);
+  assert.ok(await n.locator('#earworm-trap-desk a').count()>=2);
   assert.match(await n.locator('#borer-records').innerText(),/Enable JavaScript to check dated community records/);
   assert.ok(await n.locator('#borer-records a').count()>=2);
   assert.ok(await n.locator('#history-heading').isVisible());
