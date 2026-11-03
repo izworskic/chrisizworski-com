@@ -48,7 +48,8 @@ def build() -> dict:
     assert abs(falls["lat"] - candidate["lat"]) < 1e-6
     assert abs(falls["lng"] - candidate["lng"]) < 1e-6
     for p in points.values():
-        assert p["url"].startswith("https://") and "parking" not in p["evidenceScope"]
+        assert p["url"].startswith("https://")
+        assert p["evidenceScope"] in {"geographic-location-not-parking", "secondary-feature-coordinate-not-parking", "conflicting-tourism-coordinate-do-not-route"}
         assert 45 < p["lat"] < 48 and -91 < p["lng"] < -84
 
     close = haversine(falls, points["secondary-gazetteer"])
