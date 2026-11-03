@@ -8,7 +8,7 @@ const root=path.resolve(__dirname,'..'),read=p=>fs.readFileSync(path.join(root,p
 const KSC='22222222-2222-4222-8222-222222222222',CAPE='11111111-1111-4111-8111-111111111111';
 function input({id=KSC,locationId=27,pad='LC-39A',npsVerified=false,changes={}}={}){
  const launch={id,locationId,name:'Fixture Florida mission',net:'2026-11-15T18:00:00Z',
-   netPrecision:'minute',pad,lat:locationId===27?28.608:-80,lon:-80.6};
+   netPrecision:'minute',pad,lat:locationId===27?28.608:28.56,lon:-80.6};
  const nps={verified:npsVerified,checkedAt:'2026-11-03T18:30:00Z',alerts:[]};
  const access=Object.assign({
    'space-view':'candidate','rotary':'candidate','parrish':'verify',
