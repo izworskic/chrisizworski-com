@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "issue": 1258,
-  "reviewed": "2026-11-02",
+  "reviewed": "2026-11-03",
   "policy": "All 161 named source candidates retained even when public access is unknown. GIS locations are waterfall positions, never visitor parking. Do not auto-index.",
   "sourceCount": 197,
   "sourceCandidateCount": 161,
@@ -4773,25 +4773,29 @@
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "final-FERC-license-termination-valid-current-utility-visitor-permission-unverified",
-      "landManager": "Michigan EGLE dam safety oversight; 18 former UP Hydro parcels sold to D. Charles Trust Investments LLC (2025); separate falls and parking title still unverified",
-      "parkingEvidence": null,
-      "trailEvidence": "Historic tourism upper/lower gravel walks only, no 2026 title/easement",
+      "access": "not-cleared-egle-emergency-order-split-private-title-two-unverified-waterfall-parking-routes",
+      "landManager": "Michigan EGLE regulates dam safety (dam MI00152); UP Hydro LLC owns dam/embankment parcels per June 2 EGLE order, while FERC records 2025 sale of 18/22 former project parcels to D. Charles Trust Investments LLC including powerhouse/buffer. Current upper/lower falls route parcels, signed access and lot owners not certified.",
+      "parkingEvidence": "Power Dam Road historical two lots in tourism source; present upper lot No Trespassing reported by June 2026 visitor but NOT officially adjudicated; neither owner-approved parking area documented. Former DNR-leased hydro campground and boat launch explicitly not in use as of March 2026 DNR minutes, not proven identical to falls lots.",
+      "trailEvidence": "Historic two upper/lower utility-corridor routes, no current owner-signed public foot easement or cleared trail; EGLE emergency risk action and owner changes require separate verification.",
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-31",
-      "nextAction": "Current 2026 rights owner/EGLE source explicitly documenting a lawful publicly accessible upper and/or lower falls visitor parking area and foot corridor on utility land; verify separate two-view routes, gate policy, dam safety/flow notices and legal parking. FERC final license termination itself neither closes all visits nor authorizes tourist access.",
-      "batch": "county-alger",
-      "reviewed": "2026-10-31",
-      "reviewBatch": "26",
-      "classification": "FERC-license-final-terminated-Dec-2025-EGLE-oversight-utility-visitor-rights-not-verified",
-      "accessAssessment": "FERC's December 29, 2025 final order (Docket P-10856-141, 193 FERC ¶61,242) TERMINATED the Au Train Hydroelectric Project license by implied surrender, effective that day's close of business, with existing facilities LEFT IN PLACE. FERC's record cites high-hazard dam classification, inadequate spillway remediation, licensee UP Hydro's bankruptcy and loss of property control. In 2025 foreclosure, Stephenson Bank acquired 18/22 project parcels and later sold those 18 to D. Charles Trust Investments, LLC (including powerhouse and surrounding project buffer), but individual tourist parking and falls-side parcel title/right of way are not mapped by this order. Michigan EGLE now holds state dam-safety jurisdiction; termination neither orders immediate dam removal nor establishes all waterfall visitor routes closed or open. Munising tourism describes two separate upper/lower falls visitor stops near utility gates, but that older guidance does not establish October 2026 parking, public gate entry, walkway, flow conditions or new property owner consent.",
+      "checked": "2026-11-03",
+      "nextAction": "Do not publish visitor route. Need present-day signed written authorization from the current OWNER of each separate upper/lower falls parking and walking parcel, lawful Power Dam Road arrival/gate and continuous pedestrian route, PLUS EGLE order status and documented visitor exclusion/allowed corridor. Check whether June 2026 posted no-trespassing report is still in force; independent review alone does not prove both falls closed. Confirm later EGLE plan/permit/closure restrictions and dam safety notices. No geometry or car link to GIS #192.",
+      "batch": "58-egle-2026-emergency-dam-and-land-rights",
+      "reviewed": "2026-11-03",
+      "reviewBatch": "58",
+      "classification": "egle-june-2026-emergency-dam-safety-order-owner-parcels-split-public-waterfall-route-not-cleared",
+      "accessAssessment": "FERC's December 29, 2025 final order (Docket P-10856-141, 193 FERC ¶61,242) TERMINATED the Au Train Hydroelectric Project license by implied surrender, effective that day's close of business, with existing facilities LEFT IN PLACE. FERC's record cites high-hazard dam classification, inadequate spillway remediation, licensee UP Hydro's bankruptcy and loss of property control. In 2025 foreclosure, Stephenson Bank acquired 18/22 project parcels and later sold those 18 to D. Charles Trust Investments, LLC (including powerhouse and surrounding project buffer), but individual tourist parking and falls-side parcel title/right of way are not mapped by this order. Michigan EGLE now holds state dam-safety jurisdiction; termination neither orders immediate dam removal nor establishes all waterfall visitor routes closed or open. Munising tourism describes two separate upper/lower falls visitor stops near utility gates, but that older guidance does not establish October 2026 parking, public gate entry, walkway, flow conditions or new property owner consent. NEW NOV 3 2026 EVIDENCE: Michigan EGLE June 2 2026 Dam Owner Responsibility Letter/Emergency Dam Safety Order #MI00152 explicitly identified UP Hydro LLC as owner of north embankment, spillway and south levee parcels 001-206-001-10, 004-036-002-00, 001-231-004-00 and 001-231-005-00; that is different from the powerhouse/project buffer parcels sold to D. Charles Trust. The emergency order stated the 2022 engineering findings identified imminent risk of dam failure under realistic conditions, ordered maintaining target 773.43 ft NAVD88 drawdown pending remediation, a remediation plan by July 2 2026 and a permit application by Aug 31 2026. No independently verified compliance, new permit, order rescission, footpath closure geometry or visitor access authorization was located. Note EGLE's letter says the FERC license ended 'November 29, 2025', in conflict with the primary FERC final order issued effective DECEMBER 29, 2025; preserve FERC's date as legal anchor and flag discrepancy. DNR March 12 2026 approved council minutes report penstock severed in January for river flow and that former DNR-operated hydro campground and boat launch were NO LONGER IN USE after land sale and no new agreement: these are NOT automatically the waterfall lots. A June 2026 third-party visitor review reports the historic upper waterfall lot overgrown, blocked and posted no trespassing; first-person report is a caution, not an official closure map or reliable gate status for both falls. Au Train Township homepage posted November 2026 USACE survey between Au Train Lake and Lake Superior mouth because of dam alterations and future EGLE actions; survey is NOT visitor trail opening. FERC environmental analysis confirms the powerhouse bypassed ~0.7-mile reach contains two cascades. Do not infer their flows from reservoir elevation or the discontinued generation plant.",
       "evidence": [
         "https://mi-psc.my.site.com/sfc/servlet.shepherd/version/download/068cs00001ZSbG5AAL",
         "https://www.troutmanenergyreport.com/2026/01/ferc-terminates-au-train-hydroelectric-project-license-by-implied-surrender/",
         "https://www.munising.org/activities/au-train-falls/",
         "https://www.uppermichiganssource.com/2025/11/17/federal-government-calls-surrender-au-train-dam/",
         "https://www.exploremunising.com/waterfalls/",
-        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+        "https://www.autraintownship.gov/wp-content/uploads/2026/06/Au-Train-Dam-Emergency-Order-SOM.pdf",
+        "https://www.michigan.gov/dnr/-/media/Project/Websites/dnr/Documents/Boards/EUPCAC/Minutes/EUPCAC-2026-March-12-Meeting-Minutes-FINAL.pdf",
+        "https://www.autraintownship.gov/",
+        "https://www.tripadvisor.com/Attraction_Review-g42497-d8560119-Reviews-Au_Train_Falls-Munising_Upper_Peninsula_Michigan.html"
       ]
     },
     {
@@ -5468,5 +5472,5 @@
       "batch": "56-public-access-gap"
     }
   ],
-  "lastBatch": "57"
+  "lastBatch": "58"
 }
