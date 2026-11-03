@@ -1,0 +1,168 @@
+{
+  "schemaVersion": "1.2",
+  "recordStatus": "draft",
+  "project": {
+    "slug": "starbase-rocket-launch-viewing",
+    "ownerRepo": "izworskic/chrisizworski-com",
+    "canonical": "https://chrisizworski.com/starbase-rocket-launch-viewing/",
+    "pageFile": "public/starbase-rocket-launch-viewing/index.html",
+    "visitorDecision": "Choose a sourced public South Texas landmark without entering Starbase restricted roads or assuming launch viewing permission; carry the selected mission to the national launch planner.",
+    "primaryAction": "Choose a mapped candidate and verify City of Starbase beach/road orders and Cameron County park access before making a launch-day trip."
+  },
+  "claims": [
+    {
+      "id": "starbase-closure",
+      "kind": "official-reference",
+      "subject": "beach-road-orders",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://www.starbase.texas.gov/beach-road-access",
+      "checkedDate": "2026-11-03",
+      "limitation": "Beach open at check time is not launch safety approval; notices can change."
+    },
+    {
+      "id": "isla-blanca-public",
+      "kind": "official-reference",
+      "subject": "island-park-ownership-and-address",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://www.cameroncountytx.gov/parks-home/",
+      "checkedDate": "2026-11-03",
+      "limitation": "Admission, hours, parking and view unverified for a particular launch."
+    },
+    {
+      "id": "noaa-zapata",
+      "kind": "official-reference",
+      "subject": "boat-ramp-location",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://tidesandcurrents.noaa.gov/benchmarks/8779911.html",
+      "checkedDate": "2026-11-03",
+      "limitation": "Historic station site location is not precise spectator viewing or current land access."
+    },
+    {
+      "id": "port-isabel-lighthouse",
+      "kind": "official-reference",
+      "subject": "lighthouse-tour-hours",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://portisabellighthouse.com/lighthouse/",
+      "checkedDate": "2026-11-03",
+      "limitation": "Tour hours are not event-specific access and no rocket sightline confirmed."
+    },
+    {
+      "id": "starbase-pad-visibility",
+      "kind": "unverified",
+      "subject": "unobstructed-visible-launch-from-each-point",
+      "state": "UNVERIFIED",
+      "sourceUrl": "https://www.starbase.texas.gov/beach-road-access",
+      "checkedDate": "2026-11-03",
+      "limitation": "Straight bearing is not line-of-sight, trajectory, confirmed visibility or legal authorization."
+    }
+  ],
+  "decisionState": {
+    "selectedIdField": "launch.id",
+    "sourceOfTruth": "/api/rocket-launch-usa uses signed Postgres LL2 snapshot, City of Starbase notice, NWS; pure lib/starbase-viewing.js + checked local places.json for visitor map fallback.",
+    "linkedSurfaces": [
+      "static-first-answer",
+      "launch-selector",
+      "city-access",
+      "NWS-sky",
+      "place-choice",
+      "map-pin",
+      "pad-bearing-if-verified",
+      "national-mission-link",
+      "shareable-url"
+    ],
+    "unavailableBehavior": "Static source-backed places survive both missing schedule and map tile outage; stale/failed access and weather show unknown rather than implying open or safe."
+  },
+  "scenarios": [
+    {
+      "kind": "initial",
+      "input": "Starbase launchId selected and LL2 contains pad coordinates",
+      "expectedVisibleAnswer": "Mission target and source age, map with three public references and distinct restricted pad pin, selected place bearing qualified as geometric only.",
+      "sourceAndSafety": "No driving to pad or claimed sightline."
+    },
+    {
+      "kind": "alternative",
+      "input": "Select mainland preference",
+      "expectedVisibleAnswer": "Jaime Zapata card ranks first, map selection and source link update.",
+      "sourceAndSafety": "No current nighttime entry or visible rocket asserted."
+    },
+    {
+      "kind": "reverse",
+      "input": "Switch mission A→B (missing pad)→A",
+      "expectedVisibleAnswer": "Pad symbol and bearing disappear for B, reappear only for verified A; URL and national link retain correct UUID.",
+      "sourceAndSafety": "No fabricated location for B."
+    },
+    {
+      "kind": "no-js",
+      "input": "Disable JavaScript",
+      "expectedVisibleAnswer": "Sourced public place cards, access prohibitions and links remain; mission picker stays disabled.",
+      "sourceAndSafety": "No current source status is asserted."
+    },
+    {
+      "kind": "no-tiles",
+      "input": "Map tiles blocked",
+      "expectedVisibleAnswer": "Text place cards, original citations and OSM location fallback remain.",
+      "sourceAndSafety": "No 'map works' claim without tested imagery."
+    },
+    {
+      "kind": "stale-data",
+      "input": "Source check older than 90 minutes or API error",
+      "expectedVisibleAnswer": "Unknown road status and no current launch, local place reference map retained.",
+      "sourceAndSafety": "Never infer beach-open or range access."
+    },
+    {
+      "kind": "stale-link",
+      "input": "Old UUID no longer in bounded list",
+      "expectedVisibleAnswer": "Fallback to current first scheduled mission with explicit warning that this is a new selection.",
+      "sourceAndSafety": "Old mission outcome not inferred."
+    }
+  ],
+  "failures": {
+    "no-js": "Static cards and officials; picker inert.",
+    "no-tiles": "OSM link and plain text list.",
+    "no-image": "Alt and text-led decision survive; archived image credit remains.",
+    "stale-data": "No green verdict on old beach status; no fake mission or visibility."
+  },
+  "qa": {
+    "viewports": [
+      360,
+      390,
+      768,
+      1440
+    ],
+    "browserStatus": "NOT_RUN",
+    "browserRun": null,
+    "screenshotEvidence": [],
+    "scopeNote": "Pending CI, browser screenshots and independent live smoke at the exact merged SHA."
+  },
+  "photos": [
+    {
+      "depictedSubject": "SpaceX Starship during fifth integrated flight test on October 13, 2024",
+      "author": "Steve Jurvetson",
+      "license": "CC BY 2.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/SpaceX_IFT-5_Launch_(54063581561).jpg",
+      "creditUrl": "https://commons.wikimedia.org/wiki/File:SpaceX_IFT-5_Launch_(54063581561).jpg",
+      "subjectMatch": "exact",
+      "disclosure": "Archival 2024 mission, not selected current launch."
+    }
+  ],
+  "release": {
+    "implemented": {
+      "status": "CONFIRMED",
+      "checkedDate": "2026-11-03",
+      "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/tree/feat/starbase-launch-viewing-atlas-20261103"
+    },
+    "verified": {
+      "status": "NOT_VERIFIED"
+    },
+    "deployed": {
+      "status": "NOT_DEPLOYED"
+    },
+    "live": {
+      "status": "NOT_VERIFIED"
+    },
+    "measured": {
+      "status": "NOT_MEASURED"
+    }
+  },
+  "verificationLimit": "Review snapshot; do not treat source tests or fixtures as current launch status, verified visitor access, production deployment or measurable traffic impact."
+}
