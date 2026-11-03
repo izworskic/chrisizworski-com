@@ -78,3 +78,38 @@ impressions, CTR and average position of this article to the national launch
 engine, and measure the guide-to-planner click event rate. This is a true
 search-discovery test, not a promised ranking improvement. Use the site's
 existing daily Search Growth Watch rather than create a duplicate automation.
+
+## Interactive viewing map expansion, November 3, 2026
+
+The guide now displays an actual six-site Leaflet/CARTO map immediately after
+the first answer, before the decision advice and written place profiles.
+The map requires no LL2 or NWS API request and is not a screenshot or clone
+of the national mission-dependent viewer.
+
+- Venue points come directly from the six guide cards. Every card has a source
+  model venue ID, OSM feature URL, latitude and longitude. A regression test
+  compares all these fields with lib/vandenberg-viewing.js so the inventories
+  cannot silently drift into divergent physical locations.
+- Visitors filter coastal locations, city parks and the college, select a
+  numbered marker, read documented access limitations, open the original
+  official or tourism source and navigate to the full written place profile.
+  The six article cards include reciprocal links to their map pins.
+- OSM is the initial basemap, with CARTO Voyager loaded using the site's
+  existing keyed basemap config endpoint. OSM remains as the visible fallback.
+  The HTML source links and full guide work when the map library is blocked.
+- A stationary guide map intentionally omits a rocket-pad pin: the pad depends
+  on the selected launch. The guide links to the California mission planner
+  for verified pad bearings, schedule-change scenarios and NWS references.
+- Center coordinates are neither legal public entrances nor certified parking
+  places. Four officially closed roadside lookouts are not plotted as stops.
+  No launch-day opening, travel time, trajectory or sightline is guaranteed.
+- Optional GA4 map-selection and filter events have only public venue IDs or
+  categories. No browser geolocation, personal data, localStorage, Redis,
+  Supabase or additional scheduled data collection is introduced.
+
+Checks:
+  node --test tests/vandenberg-guide-seo.test.js tests/vandenberg-guide-map.test.js
+  node --test tests/vandenberg-viewing.test.js
+
+Production QA: test all six pins, filters, responsive layout, source links,
+map/CARTO/OSM fallbacks, and unchanged national California mission planner.
