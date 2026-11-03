@@ -93,6 +93,14 @@ async function waitForAnswer(page,pest){await page.waitForFunction(name=>documen
    // Photo-diagnosis QA on every viewport: all topics, disease labels, clue match,
    // no-result honesty, reset, and host-crop updates.
    assert.ok(await page.locator('#visual-results .visual-result').count()>=4);
+   // The photo/action bridge uses the exact crop+stage+ZIP seasonal desk;
+   // it never converts a photo into a confirmed pest or local probability.
+   const borer=page.locator('#visual-results .visual-result').filter({hasText:'Squash vine borer'});
+   assert.match(await borer.locator('.visual-plan-label').innerText(),/SEASONAL SCOUTING/);
+   assert.match(await borer.locator('.visual-plan-primary').innerText(),/Where to check:/);
+   await borer.locator('.visual-plan-details summary').click();
+   assert.match(await borer.locator('.visual-plan-details').innerText(),/Only after confirming the organism/);
+   assert.match(await borer.locator('.visual-plan-caveat').last().innerText(),/not a diagnosis/);
    await page.locator('#visual-category button[data-group="disease"]').click();
    assert.match(await page.locator('#visual-results').innerText(),/powdery mildew/i);
    assert.match(await page.locator('#visual-results .visual-kind').first().innerText(),/SYMPTOM/);
@@ -116,9 +124,14 @@ async function waitForAnswer(page,pest){await page.waitForFunction(name=>documen
    const current=await page.locator('#crop').inputValue();
    assert.equal(current,'squash');
    await page.locator('#crop').selectOption('tomatoes');
+   assert.match(await page.locator('.visual-plan-label').first().innerText(),/NOT VERIFIED/,'No stale squash action during crop change');
    await page.locator('#stage').selectOption('growing');
    await page.locator('#watch-form button[type=submit]').click();
    await waitForAnswer(page,'Tomato hornworm');
+   assert.match(await page.locator('.visual-plan-label').first().innerText(),/SEASONAL SCOUTING|OUTSIDE THE MATCHED CROP STAGE/);
+   await page.locator('#stage').selectOption('seedling');
+   assert.match(await page.locator('.visual-plan-label').first().innerText(),/NOT VERIFIED/,'Stage change must invalidate old action plan');
+   await page.locator('#stage').selectOption('growing');
    assert.notEqual(await page.locator('#primary-answer').innerText(),first);
    assert.match(await page.locator('#primary-answer').innerText(),/tomato|leaf/i);
    await page.locator('#crop').selectOption('squash');
@@ -147,6 +160,7 @@ async function waitForAnswer(page,pest){await page.waitForFunction(name=>documen
    assert.match(await page.locator('#beetle-field-comparison').innerText(),/share a calendar date/);
    assert.ok(await page.locator('#beetle-field-links a').count()>=2);
    await page.locator('#zip').fill('48706');
+   assert.match(await page.locator('.visual-plan-label').first().innerText(),/NOT VERIFIED/,'ZIP change cannot retain prior location actions');
    assert.match(await page.locator('#beetle-field-first').innerText(),/No verified field date/);
    assert.match(await page.locator('#beetle-adult-date').innerText(),/Not verified/);
    await page.locator('#watch-form button[type=submit]').click();
@@ -210,6 +224,9 @@ async function waitForAnswer(page,pest){await page.waitForFunction(name=>documen
   assert.doesNotMatch(await winter.locator('#weather-evidence').innerText(),/scouting for mites|suggest inspecting leaves/i);
   assert.match(await winter.locator('#watch-cards').innerText(),/Squash vine borer/);
   assert.match(await winter.locator('#watch-cards').innerText(),/Squash bug/);
+  assert.match(await winter.locator('.visual-plan-label').first().innerText(),/OFF-SEASON \/ PLAN FOR NEXT YEAR/);
+  assert.match(await winter.locator('.visual-plan-primary').first().innerText(),/Next-season preparation/);
+  assert.equal(await winter.locator('.visual-plan-details').count(),0,'November must not present in-season confirm-and-treat actions');
   await winter.screenshot({path:'artifacts/garden-pest-watch-browser/november-preparation-not-pest-weather.png',fullPage:true,animations:'disabled'});
   await winterContext.close();
 
@@ -238,6 +255,7 @@ async function waitForAnswer(page,pest){await page.waitForFunction(name=>documen
   await p.waitForFunction(()=>document.querySelector('#watch-source-label')?.textContent.includes('unavailable'),null,{timeout:6000});
   assert.match(await p.locator('#primary-answer').innerText(),/squash/i);
   assert.match(await p.locator('#weather-evidence').innerText(),/not verified|could not be verified/);
+  assert.match(await p.locator('.visual-plan-label').first().innerText(),/NOT VERIFIED/,'API outage cannot leave a stale action plan');
   await p.screenshot({path:'artifacts/garden-pest-watch-browser/forecast-unavailable.png',fullPage:true,animations:'disabled'});
   await broken.close();
   const noJS=await browser.newContext({viewport:{width:390,height:820},javaScriptEnabled:false});
