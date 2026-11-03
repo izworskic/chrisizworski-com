@@ -19,6 +19,24 @@ async function probe(){
  const adultPhases=phases.filter(x=>String(x.phenophase_name).trim().toLowerCase()==='adults');
  const candidate=adultPhases.map(x=>({id:x.phenophase_id,name:x.phenophase_name,category:x.phenophase_category,class_id:x.pheno_class_id}));
  const years=[2025,2026],observations=[];
+ // Source diagnosis: distinguish no Michigan records from an invalid filter,
+ // and verify whether the taxon has records anywhere at all.
+ for(const [label,params] of [
+  ['USA-2026',{year:2026,species_id:target.species_id,request_src:'FreighterViewFarms'}],
+  ['MI-2024',{year:2024,species_id:target.species_id,state:'MI',request_src:'FreighterViewFarms'}],
+  ['MI-2026-Adult327',{year:2026,species_id:target.species_id,state:'MI',phenophase_id:327,request_src:'FreighterViewFarms'}],
+  ['USA-2025-Adult327',{year:2025,species_id:target.species_id,phenophase_id:327,request_src:'FreighterViewFarms'}]
+ ]){
+  const u=new URL(BASE+'/observations/getObservations.json');
+  Object.entries(params).forEach(([k,v])=>u.searchParams.set(k,String(v)));
+  try{const d=await read(u.href,22000);const rows=Array.isArray(d)?d:Array.isArray(d.data)?d.data:null;
+   observations.push({label,type:Array.isArray(d)?'array':typeof d,totalRows:rows?.length??null,
+   firstRowKeys:rows?.[0]?Object.keys(rows[0]).slice(0,40):[],
+   firstRowPreview:rows?.[0]?Object.fromEntries(Object.entries(rows[0]).filter(([k])=>/phenophase|status|date|year|species/i.test(k)).slice(0,10)):null,
+   error:!rows?JSON.stringify(d).slice(0,200):null});}
+  catch(e){observations.push({label,error:String(e.message||e)})}
+ }
+
  for(const year of years){
   const u=new URL(BASE+'/observations/getObservations.json');
   Object.entries({year,species_id:target.species_id,state:'MI',request_src:'FreighterViewFarms',format:'json'}).forEach(([k,v])=>u.searchParams.set(k,String(v)));
