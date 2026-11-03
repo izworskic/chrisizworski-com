@@ -5,7 +5,7 @@
  * If analytics is blocked or absent, all navigation remains ordinary links. */
 (() => {
   const ALLOWED_PLACEMENTS=new Set([
-    'nav','hero','decision','weather','check-schedule','bottom'
+    'nav','hero','decision','weather','check-schedule','bottom','map'
   ]);
   function event(name,parameters) {
     if(typeof window.gtag!=='function')return;
@@ -28,6 +28,17 @@
         target.searchParams.get('region')!=='california')return;
     event('vandenberg_guide_planner_open',{placement});
   });
+  const ALLOWED_PLACES=new Set(['ocean-park','surf-station','hancock','riverbend','beattie','ryon']);
+  document.addEventListener('vandenberg-guide:site-select',event=>{
+    const place=event.detail?.site;
+    const interaction=event.detail?.interaction;
+    if(ALLOWED_PLACES.has(place)&&['map','marker','list'].includes(interaction))
+      eventLogMap(place,interaction);
+  });
+  function eventLogMap(siteId,interaction){
+    // Public venue IDs only. Never a visitor's own location.
+    event('vandenberg_guide_map_site_select',{venue_id:siteId,interaction});
+  }
   document.querySelectorAll('.vg-faq-item').forEach((entry,index)=>{
     entry.addEventListener('toggle',()=>{
       if(entry.open)event('vandenberg_guide_faq_open',{question_number:index+1});
