@@ -218,3 +218,18 @@
 .visual-next{padding:12px 14px;background:#e7eee4;color:#264635!important;border-left:3px solid #567d62;font-weight:550}
 .visual-next strong{font-weight:850}
 @media(max-width:520px){.visual-category{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.visual-category-button{padding:10px 6px}.visual-clue-row{gap:6px}.visual-chip{font-size:.74rem}}
+
+/* Photo -> field action bridge. No active-outbreak styling or inferred risk scores. */
+.visual-field-plan{margin:17px 0 0;padding:16px 17px;background:#f0f3e9;border:1px solid #c0d2be;border-left:4px solid #40674d;color:#294734;min-width:0}
+.visual-field-plan.is-pending{background:#f7f3e9;border-color:#d9c9ac;border-left-color:#a4774a}
+.visual-plan-label{display:block;color:#31583f;font-size:.69rem;font-weight:850;letter-spacing:.075em;line-height:1.5}
+.visual-field-plan.is-pending .visual-plan-label{color:#744d2b}
+.visual-plan-primary{font-size:.86rem;line-height:1.65;font-weight:650;margin:9px 0 11px;color:#2d4433}
+.visual-field-plan>p:not(.visual-plan-primary){font-size:.78rem;line-height:1.6;margin:9px 0 0}
+.visual-plan-details{margin:11px 0 8px;padding-top:9px;border-top:1px solid #c3d3c1}
+.visual-plan-details summary{cursor:pointer;color:#27503c;font-size:.81rem;line-height:1.5;font-weight:800;padding:7px 0}
+.visual-plan-details p{font-size:.8rem;line-height:1.6;margin:6px 0;color:#3a5140}
+.visual-plan-source,.visual-field-plan>a{display:inline-block;margin-top:5px;font-size:.8rem;line-height:1.45;font-weight:800;color:#24513b;overflow-wrap:anywhere}
+.visual-plan-caveat{color:#536454!important}
+.visual-plan-details summary:focus-visible,.visual-field-plan>a:focus-visible{outline:3px solid #a86b3b;outline-offset:3px}
+@media(max-width:520px){.visual-field-plan{padding:13px 12px}.visual-plan-primary{font-size:.83rem}}

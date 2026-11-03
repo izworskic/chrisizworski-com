@@ -9,6 +9,9 @@
   const intro = document.getElementById('visual-summary');
   const reset = document.getElementById('visual-reset');
   const selected = new Set();
+  const stage = document.getElementById('stage');
+  const zip = document.getElementById('zip');
+  let fieldPlan = null;
   let view = 'all';
   const filterArea = document.getElementById('visual-category');
   const clueGroups = [
@@ -136,6 +139,61 @@
     clueArea.querySelectorAll('button').forEach(button => button.setAttribute('aria-pressed', 'false'));
     render();
   });
+  // A current plan must match the selected crop, plant stage and ZIP exactly.
+  // Photo matches never enter the API as user observations, field detections or model scores.
+  function matchingPlan(item) {
+    if (!fieldPlan || fieldPlan.crop !== crop.value || fieldPlan.stage !== stage?.value ||
+      fieldPlan.zip !== (zip?.value || '')) return null;
+    return fieldPlan.items.find(p => p.id === item.id) || null;
+  }
+  function actionPanel(item) {
+    const plan = matchingPlan(item);
+    const panel = node('div', 'visual-field-plan' + (!plan ? ' is-pending' : ''));
+    if (!plan) {
+      panel.append(node('strong', 'visual-plan-label', 'CROP-STAGE ADVICE / NOT VERIFIED'));
+      panel.append(node('p', '', 'The current garden watch is loading or unavailable for this selection. These photos are comparisons only. Do not treat an unmatched or unavailable result as proof of absence.'));
+      const a = node('a', '', 'Check the seasonal scouting desk');
+      a.href = '#watch-list'; panel.append(a);
+      return panel;
+    }
+    const dormant = fieldPlan.mode === 'OFF_SEASON';
+    const inWindow = !dormant && plan.seasonMatches && plan.stageMatches;
+    const label = dormant ? 'OFF-SEASON / PLAN FOR NEXT YEAR' :
+      inWindow ? 'SEASONAL SCOUTING / CHECK THE PLANT' : 'OUTSIDE THE MATCHED CROP STAGE / PREPARE';
+    panel.append(node('strong', 'visual-plan-label', label));
+    if (dormant) {
+      panel.append(node('p', 'visual-plan-primary', 'Next-season preparation: ' + plan.prevent));
+    } else if (inWindow) {
+      panel.append(node('p', 'visual-plan-primary', 'Where to check: ' + plan.where));
+    } else {
+      panel.append(node('p', 'visual-plan-primary', 'This problem is not flagged for the selected month and growth stage. Prepare now: ' + plan.prevent));
+    }
+    if (inWindow) {
+      const detail = node('details', 'visual-plan-details');
+      detail.append(node('summary', '', 'Prevention and if-confirmed steps'));
+      detail.append(node('p', '', 'Prevent: ' + plan.prevent));
+      detail.append(node('p', '', (item.kind === 'disease' ? 'After identifying the cause: ' : 'Only after confirming the organism: ') + plan.found));
+      panel.append(detail);
+    }
+    if (plan.weatherFavorable && inWindow) {
+      panel.append(node('p', 'visual-plan-caveat', 'The official forecast adds a broad weather-favorability cue for scouting, not a pest probability or local detection.'));
+    }
+    if (plan.state === 'GARDENER_REPORTED') {
+      panel.append(node('p', 'visual-plan-caveat', 'A visitor-reported possible sighting is unverified and does not establish an infestation.'));
+    }
+    if (typeof plan.source === 'string' && plan.source.startsWith('https://')) {
+      panel.append(external('Read the source scouting guidance', plan.source, 'visual-plan-source'));
+    }
+    panel.append(node('p', 'visual-plan-caveat', 'This is seasonal crop-stage advice, not a diagnosis. Photos and symptoms never verify current local presence.'));
+    return panel;
+  }
+  window.addEventListener('garden-pest-watch:evidence', event => {
+    const d = event.detail;
+    fieldPlan = d && d.crop === crop.value && d.stage === stage?.value &&
+      d.zip === (zip?.value || '') && Array.isArray(d.items) &&
+      ['OFF_SEASON', 'SCOUTING'].includes(d.mode) ? d : null;
+    render();
+  });
   function render() {
     const cropName = crop.options[crop.selectedIndex]?.textContent || 'this crop';
     const choices = catalog.pests.filter(item => item.crops.includes(crop.value) && (view === 'all' || (view === 'disease' ? item.kind === 'disease' : item.kind !== 'disease')))
@@ -168,6 +226,7 @@
         next.append(node('strong', '', 'Check this next: '), document.createTextNode(item.whatToCheck));
         article.append(next);
       }
+      article.append(actionPanel(item));
       results.append(article);
     }
   }
