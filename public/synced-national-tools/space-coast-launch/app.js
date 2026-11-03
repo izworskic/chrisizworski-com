@@ -566,6 +566,102 @@
     else url.searchParams.delete('launchId');
     history.replaceState(null, '', url.pathname + url.search + url.hash);
   }
+  // Florida's first visitor decision is one presentation of the exact same
+  // pad/park/NPS/KSC/NWS snapshot driving the detailed map. Never treat a
+  // location recommendation as a current admission or launch GO verdict.
+  const renderFloridaDeck = data => {
+    const deck = data?.floridaViewingDeck || null;
+    const panel = $('florida-viewing-plan');
+    if (!panel) return;
+    const ready = !!(deck && deck.locationStatus === 'source-identified');
+    panel.dataset.status = ready ? 'source-identified' : 'unverified';
+    set('fl-deck-range', deck?.eyebrow ||
+      'Shared launch/access sources unavailable');
+    set('fl-deck-headline', deck?.headline ||
+      'Viewing guidance unavailable — confirm the mission and pad with the operator.');
+    set('fl-deck-story', deck?.story ||
+      'Without a verified mission, a geographical candidate is not a launch-day recommendation.');
+    const cards = Array.isArray(deck?.cards) ? deck.cards : [];
+    const shortDistance = card => card?.geometry ?
+      'Approximately ' + card.geometry.miles.toFixed(1) + ' miles straight to the listed pad · ' +
+      card.geometry.bearingDegrees + '° ' + (card.geometry.bearingCardinal || '') +
+      ' (not driving distance or flight trajectory)' :
+      'Launch-pad distance and bearing not verified';
+    const weatherText = card => Number.isInteger(card?.weather?.cloudCoverPercent) ?
+      'NWS sky cover near this park: ' + card.weather.cloudCoverPercent +
+      '% (not launch approval)' :
+      'Mission-time park sky evidence unavailable';
+    const setSource = (id, url, fallback) => {
+      const anchor = $(id);
+      if (!anchor) return;
+      const verified = typeof url === 'string' && /^https:\/\//i.test(url);
+      anchor.href = verified ? url : fallback;
+    };
+    const renderPublic = (kind, index) => {
+      const entry = cards[index];
+      const box = $('fl-deck-' + kind);
+      if (box) box.dataset.state = entry?.accessLevel || 'unknown';
+      set('fl-deck-' + kind + '-tag',
+        entry ? (entry.accessLevel === 'candidate' ?
+          'PUBLISHED PUBLIC CANDIDATE' : 'CHECK ENTRY BEFORE TRAVEL') :
+          'NO VERIFIED OPTION');
+      set('fl-deck-' + kind + '-name', entry?.name ||
+        (kind === 'primary' ? 'No safe public starting point verified' :
+          'Public fallback not verified'));
+      set('fl-deck-' + kind + '-reason', entry ?
+        (entry.accessLabel + '. ' + entry.accessReason + ' ' + entry.parking) :
+        (deck?.reason ||
+         'Do not treat a missing or restricted park as a verified place to view a rocket.'));
+      set('fl-deck-' + kind + '-pad', shortDistance(entry));
+      set('fl-deck-' + kind + '-weather', weatherText(entry));
+      const button = $('fl-deck-' + kind + '-map');
+      if (button) {
+        button.disabled = !entry?.mapId || entry.excluded;
+        button.onclick = !button.disabled ? () =>
+          document.dispatchEvent(new CustomEvent('space-coast:focus-point',
+            { detail: { id: entry.mapId } })) : null;
+      }
+      setSource('fl-deck-' + kind + '-source',entry?.source,
+        'https://www.visitspacecoast.com/landing-page/launch-venues/');
+    };
+    renderPublic('primary', 0);
+    renderPublic('backup', 1);
+    const ticket = deck?.ksc || null;
+    set('fl-deck-ticket-tag',
+      ticket?.officialEventMatched ? 'OFFICIAL EVENT LISTING MATCHED' :
+      'MISSION TICKETS UNVERIFIED');
+    set('fl-deck-ticket-reason',
+      ticket?.admission ||
+      'Check KSC mission-specific admission and viewing announcements directly.');
+    set('fl-deck-ticket-rule', ticket?.ruleNote ||
+      'The Gantry excludes LC-39A and LC-39B launches. Other venue permissions depend on the exact mission.');
+    const ticketButton = $('fl-deck-ticket-map');
+    if (ticketButton) {
+      ticketButton.disabled = !ticket?.mapId || !data?.geographicViewing;
+      ticketButton.onclick = !ticketButton.disabled ? () =>
+        document.dispatchEvent(new CustomEvent('space-coast:focus-point',
+          { detail: { id:ticket.mapId } })) : null;
+    }
+    const beach = deck?.playalinda || null;
+    const beachWrap = document.querySelector('#florida-viewing-plan .fl-deck-conditions');
+    if (beachWrap) beachWrap.dataset.closed = beach?.excluded ? 'true' : 'false';
+    set('fl-deck-beach-head', beach?.excluded ?
+      'Playalinda: an NPS restriction is reported for the mapped reference lot' :
+      'Playalinda: conditional public beach, not a confirmed open gate');
+    set('fl-deck-beach-copy', beach ?
+      (beach.accessLabel + '. ' + beach.accessReason + ' ' + beach.policy) :
+      'Current NPS closures and launch-day park access are unavailable. Check NPS before visiting.');
+    const note = deck?.decisionNote ||
+      'Live source data unavailable; published geography alone does not confirm access.';
+    const npsStamp = deck?.observation?.npsAlertCheckedAt ?
+      ' NPS alert observation: ' + new Date(deck.observation.npsAlertCheckedAt)
+        .toLocaleString('en-US',{timeZone:'America/New_York',dateStyle:'medium',timeStyle:'short'}) + ' ET.' :
+      ' No verified NPS observation timestamp.';
+    set('fl-deck-provenance',
+      (data?.scheduleFreshness === 'stale' ?
+        'Schedule source is stale: reconfirm this mission before travel. ' : '') +
+      note + npsStamp);
+  };
   const renderArrival = data => {
     const panel = $('launch-arrival');
     if (!panel) return;
@@ -1083,6 +1179,7 @@
       renderOfficialWeather(d.officialLaunchWeather);
       renderIndependentReporting(d.independentReporting);
       renderAccess(d);
+      renderFloridaDeck(d);
       renderKsc(d);
       renderArrival(d);
       renderSkyComparison(d);
@@ -1137,6 +1234,7 @@
       renderRangeWeather(null);
       renderOfficialWeather(null);
       renderIndependentReporting(null);
+      renderFloridaDeck(null);
       set('launch-access-checked', 'Live access data could not be checked.');
       const arrival = $('launch-arrival');
       if (arrival) arrival.textContent = 'Launch-day Playalinda entrance policy could not be evaluated. Check the official NPS page before travel.';
