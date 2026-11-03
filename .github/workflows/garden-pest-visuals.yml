@@ -3,6 +3,10 @@ on:
   push:
     paths:
       - 'data/garden-pest-visual-catalog.json'
+      - 'data/garden-earworm-msu-2026.csv'
+      - 'public/assets/garden-earworm-trap*'
+      - 'scripts/build_garden_earworm_traps.py'
+      - 'scripts/verify-garden-earworm-traps.cjs'
       - 'public/assets/garden-pest-visual*'
       - 'public/assets/garden-pest-watch.*'
       - 'public/assets/garden-pest-field-observations.js'
@@ -16,6 +20,10 @@ on:
   pull_request:
     paths:
       - 'data/garden-pest-visual-catalog.json'
+      - 'data/garden-earworm-msu-2026.csv'
+      - 'public/assets/garden-earworm-trap*'
+      - 'scripts/build_garden_earworm_traps.py'
+      - 'scripts/verify-garden-earworm-traps.cjs'
       - 'public/assets/garden-pest-visual*'
       - 'public/assets/garden-pest-watch.*'
       - 'public/assets/garden-pest-field-observations.js'
@@ -40,11 +48,16 @@ jobs:
           node-version: '22'
       - name: Validate curated photos and Python matching rules
         run: python3 scripts/build_garden_pest_visuals.py --check
+      - name: Verify audited MSU corn earworm trap archive
+        run: python3 scripts/build_garden_earworm_traps.py --check
       - name: Verify JavaScript syntax and page integration
         run: |
           node --check public/assets/garden-pest-visual-data.js
           node --check public/assets/garden-pest-visuals.js
           node --check public/assets/garden-pest-watch.js
+          node --check public/assets/garden-earworm-trap-data.js
+          node --check public/assets/garden-earworm-trap-desk.js
+          node scripts/verify-garden-earworm-traps.cjs
           node --check public/assets/garden-pest-field-observations.js
           node --check lib/garden-pest-field-observations.cjs
           node --check api/garden-pest-field-observations.js

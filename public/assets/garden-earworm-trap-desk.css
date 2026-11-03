@@ -1,0 +1,51 @@
+
+/* The MSU field-trap notebook: a historical evidence display, never an alert engine. */
+.earworm-desk{margin:40px 0;padding:30px 31px 33px;background:#f8f5ea;border:1px solid #c8c3b2;border-top:5px solid #9b613a;color:#264536;box-shadow:6px 6px 0 #d5ddca;min-width:0}
+.earworm-top{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(220px,.65fr);gap:30px;align-items:start}
+.earworm-eyebrow{font-size:.66rem;text-transform:uppercase;font-weight:850;letter-spacing:.12em;color:#855035}
+.earworm-desk h2{font:550 clamp(1.9rem,3.3vw,2.9rem)/1.13 'Fraunces',Georgia,serif;letter-spacing:-.027em;color:#233f32;margin:9px 0 12px}
+.earworm-top p{margin:7px 0;font-size:.87rem;line-height:1.66;color:#445947}
+.earworm-definition{border-left:3px solid #ae7550;padding:13px 17px;background:#ede9dc;color:#354c3a;font-size:.78rem;line-height:1.62}
+.earworm-definition strong{display:block;font-weight:850;color:#7d4830;margin-bottom:6px}
+.earworm-selector-label{margin:19px 0 9px;font-size:.79rem;font-weight:850;color:#35543c}
+.earworm-counties{display:flex;flex-wrap:wrap;gap:8px}
+.earworm-county{min-height:41px;border:1px solid #819982;background:#fffdf8;color:#2b4d3b;font-size:.78rem;font-weight:800;padding:9px 12px;border-radius:3px;cursor:pointer}
+.earworm-county[aria-pressed=true]{background:#274a37;color:#fffef3;border-color:#274a37}
+.earworm-county:hover{border-color:#9f6944}
+.earworm-county:focus-visible,.earworm-source a:focus-visible{outline:3px solid #ae7850;outline-offset:3px}
+.earworm-readout{background:#fffdf8;border:1px solid #cfd6c7;margin-top:19px;padding:19px 20px}
+.earworm-season-label{font-size:.67rem;color:#8f522e;text-transform:uppercase;letter-spacing:.1em}
+.earworm-readout h3{font:550 clamp(1.4rem,2.4vw,1.9rem)/1.18 'Fraunces',serif;color:#274436;margin:7px 0 16px}
+.earworm-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.earworm-stat{border-left:3px solid #ad916e;background:#f0f0e7;padding:12px;min-width:0;display:flex;flex-direction:column;gap:6px}
+.earworm-stat small{color:#516150;line-height:1.45;font-size:.7rem;font-weight:750}
+.earworm-stat strong{font:650 clamp(1.05rem,1.8vw,1.45rem)/1.18 'Fraunces',serif;color:#223f2c;overflow-wrap:anywhere}
+.earworm-stat span{color:#53634f;font-size:.7rem;line-height:1.5}
+.earworm-season-caveat{margin:16px 0 0;padding:11px 14px;background:#f5e9d6;border-left:3px solid #ad6e3e;font-size:.8rem;line-height:1.6;color:#65472d}
+.earworm-location-note{margin:17px 0 12px;color:#445b49;font-size:.79rem;line-height:1.65}
+.earworm-graph-intro{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:1px solid #d3dacd;padding-bottom:10px}
+.earworm-graph-intro strong{font-size:.85rem;color:#284b37}
+.earworm-graph-intro span{font-size:.73rem;color:#54654e}
+.earworm-graph{overflow-x:auto;overflow-y:hidden;max-width:100%;padding:6px 0 14px;scrollbar-width:thin}
+.earworm-bars{display:grid;grid-template-columns:repeat(10,minmax(55px,1fr));gap:7px;min-width:660px}
+.earworm-column{text-align:center;display:grid;grid-template-rows:25px 145px 27px;min-width:0}
+.earworm-bar-value{font-size:.72rem;font-weight:800;color:#664b35;align-self:end;padding-bottom:4px}
+.earworm-bar-holder{height:145px;display:flex;align-items:flex-end;justify-content:center;border-bottom:1px solid #b1bfa9;background:linear-gradient(to top,rgba(175,187,165,.26) 1px,transparent 1px) 0 0/100% 25%}
+.earworm-bar{height:0;width:min(70%,39px);background:#a76b44;min-height:0;border-radius:3px 3px 0 0}
+.earworm-bar.is-two-week{background:repeating-linear-gradient(45deg,#ac724d,#ac724d 7px,#d8ac76 7px,#d8ac76 12px)}
+.earworm-bar.is-missing{background:transparent;color:#6d766b;height:24px!important;align-self:end;font-weight:800;font-size:1.2rem}
+.earworm-bar.is-zero{height:2px!important;min-height:2px;background:#778b77}
+.earworm-bar-week{font-size:.67rem;color:#495a4a;padding:8px 0 0}
+.earworm-legend{margin:5px 0 16px;font-size:.73rem;color:#51634f;line-height:1.55}
+.earworm-table-wrap{overflow-x:auto;max-width:100%}
+.earworm-table{border-collapse:collapse;width:100%;min-width:520px;font-size:.76rem;color:#2b4434}
+.earworm-table caption{text-align:left;font-size:.72rem;color:#526556;padding:9px 0}
+.earworm-table th{text-align:left;background:#dbe5d9;color:#294739;font-size:.69rem;letter-spacing:.02em;padding:11px 10px}
+.earworm-table td{padding:10px;border-bottom:1px solid #d5dece;line-height:1.4}
+.earworm-not-reported td{color:#737669}
+.earworm-source{display:grid;gap:9px;padding:16px 18px;background:#e6ecdf;margin-top:20px;font-size:.77rem;line-height:1.63;color:#385141}
+.earworm-source p{margin:0}
+.earworm-source a{font-weight:850;color:#28573d;text-decoration:underline}
+.earworm-crop-note{padding:10px 13px;background:#e7ecdf;border-left:3px solid #69866d;font-size:.79rem;color:#355440;line-height:1.56}
+@media(max-width:800px){.earworm-top{grid-template-columns:1fr;gap:14px}.earworm-desk{margin:30px 0;padding:23px}.earworm-stats{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:580px){.earworm-desk{margin:24px 0;padding:17px 13px;box-shadow:3px 3px 0 #d5ddca}.earworm-stats{grid-template-columns:1fr}.earworm-readout{padding:15px}.earworm-counties{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.earworm-county{min-width:0}.earworm-graph-intro{display:grid}.earworm-desk h2{font-size:1.9rem}}

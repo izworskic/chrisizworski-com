@@ -5,6 +5,10 @@ on:
       - 'public/michigan-gardening/**'
       - 'public/michigan-garden-pest-watch/**'
       - 'public/assets/garden-pest-watch.*'
+      - 'data/garden-earworm-msu-2026.csv'
+      - 'public/assets/garden-earworm-trap*'
+      - 'scripts/build_garden_earworm_traps.py'
+      - 'scripts/verify-garden-earworm-traps.cjs'
       - 'public/assets/garden-pest-field-observations.js'
       - 'lib/garden-pest-field-observations.cjs'
       - 'api/garden-pest-field-observations.js'
@@ -66,6 +70,10 @@ jobs:
         run: node --test tests/japanese-beetle-controlled-monitoring.test.js
       - name: Verify independently filtered squash borer photo records and API failures
         run: node --test tests/garden-pest-field-observations.test.js
+      - name: Check measured MSU 2026 corn earworm trap archive
+        run: |
+          python3 scripts/build_garden_earworm_traps.py --check
+          node scripts/verify-garden-earworm-traps.cjs
       - name: Check Garden Pest Watch crop, evidence, failure and responsive browser behavior
         run: node scripts/verify-garden-pest-watch-browser.cjs
       - name: Verify controlled field station journal, bounded onset and mobile/no-JS behavior
