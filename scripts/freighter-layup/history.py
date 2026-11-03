@@ -47,7 +47,7 @@ def build_history(registry: dict) -> dict:
     harbors = {h["id"]: h["name"] for h in registry["harbors"]}
     seasons = []
     across_years = defaultdict(set)
-    if registry.get("schemaVersion") != 1:
+    if registry.get("schemaVersion") != 2:
         raise ValueError("Unsupported registry schema version")
     for raw in sorted(registry["seasons"], key=lambda s: s["id"], reverse=True):
         if raw.get("state") != "historical_snapshot":
