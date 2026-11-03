@@ -191,7 +191,7 @@
   function shipIcon(v) {
     var shape=vesselShape(v), length=typeof v.lengthMeters==="number"?v.lengthMeters:null;
     var size=length>0?(length>=200?"large":length>=80?"medium":"small"):"unknown";
-    var width=size==="large"?46:size==="medium"?38:size==="small"?30:34, height=24;
+    var width=size==="large"?60:size==="medium"?50:size==="small"?40:44, height=32;
     var state=v.speedKnots===null?"unknown":v.speedKnots>0.5?"moving":"stopped";
     var details={
       cargo:'<path class="ship-house" d="M8 19 V9 H20 V19 Z"/><rect class="ship-stack" x="12" y="5" width="4" height="4"/><path class="ship-detail" d="M25 16h8m4 0h8m4 0h7"/>',
