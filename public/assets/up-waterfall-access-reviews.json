@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-02",
+  "reviewed": "2026-11-03",
   "purpose": "Opt-in geographic research annotations only; never grants legal access, parking directions or indexable guides",
   "records": [
     {
@@ -2760,68 +2760,90 @@
       "gisObjectId": 68,
       "name": "Upper Silver Falls",
       "county": "BARAGA",
-      "status": "12km-same-name-location-discrepancy",
-      "publicAccess": "research-only-geographic-identity-unresolved",
+      "status": "Herman-geographic-match-no-public-route",
+      "publicAccess": "not-cleared-visitor-route",
       "publicationEligible": false,
-      "title": "Upper Silver Falls #68: not the upper picnic-site chute",
-      "summary": "GIS Upper Silver Falls #68 is at 46.681143,-88.329766, roughly 12 km south of Lower Silver Falls #110 46.792674,-88.335692. Specialist field account names an upper drop only ~0.25 miles upstream from lower picnic falls. No valid exact GIS match for that informal upper chute; do NOT attach #68 to lower Silver visitor guide or send visitors on upstream riverbank routes.",
-      "guidance": "Do not treat source #68 as the short upstream drops above Lower Silver Falls. No verified trailhead or access rights exist for this separate 12-km-distant research marker.",
-      "reviewLimitations": "Independent account's quarter-mile upstream chute location does not agree with GIS #68, and two different river features may share the Upper Silver label.",
-      "nextEvidence": "Determine actual GIS #68 watercourse location and whether separate upstream feature, duplicate/misplaced point or unrelated named falls. No name-only parent-child matching.",
+      "title": "Upper Silver Falls near Herman: identity verified, access not",
+      "summary": "Michigan GIS Upper Silver Falls #68 near Herman (46.681143,-88.329766) agrees geographically with two independently published Herman-area coordinates, 151 m and 121 m away. This resolves an earlier location-identity question only. It is 12.4 km south of the distinct Lower Silver picnic site GIS #110; an informal 'upper falls' about a quarter-mile upstream from that picnic area is NOT #68. No confirmed property authority, legal parking or continuous public walking route for #68. Historic old-gravel-pit and primitive-road directions are NOT public road authorization.",
+      "guidance": "Do not navigate to the Herman GIS falls point or treat the separate Lower Silver picnic-area upper chute as the same location. No permission, parking or approved walk has been verified.",
+      "reviewLimitations": "Two independent field points support rough identity near Herman, not public access or an engineered path. Historic two-track stories and third-party tribal-land tags do not establish lawful parking or travel.",
+      "nextEvidence": "Find current parcel owner/land manager and formal permission for the full parking-to-Herman waterfall walk, safe signed legal parking, current road/season rules; keep lower picnic chute separate.",
       "sourceLinks": [
         {
-          "label": "Source Michigan waterfall GIS",
+          "label": "State GIS waterfall geography",
           "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
         },
         {
-          "label": "Independent lower and upper visitor descriptions",
-          "url": "https://www.waterfallsofthekeweenaw.com/silver-river/silver-falls/"
+          "label": "Independent Herman-area feature survey",
+          "url": "https://www.waterfallsofthekeweenaw.com/silver-river/upper-silver-falls/"
         },
         {
-          "label": "Lower picnic falls coordinates",
-          "url": "https://www.gowaterfalling.com/~gowaterf/waterfalls/silverbaragalower.shtml"
+          "label": "Second independent geographic waypoint",
+          "url": "https://waterfallhikes.com/waterfalls/upper-silver-falls-near-l-anse-in-mi"
+        },
+        {
+          "label": "Distinct lower picnic site field account",
+          "url": "https://upperpeninsulawaterfalls.com/baraga-county-waterfalls/silver-falls-lower.html"
         }
       ],
       "routeAudit": {
+        "reviewed": "2026-11-03",
         "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
         "segments": [
           {
-            "label": "Geographic identity",
+            "label": "Geographic feature identity",
+            "status": "geographically-corroborated-not-route",
+            "finding": "Two independently published field waypoint sources lie roughly 151 m and 121 m from GIS #68 near Herman. This is a geographic identity match, not an access grant.",
+            "source": "https://www.waterfallsofthekeweenaw.com/silver-river/upper-silver-falls/"
+          },
+          {
+            "label": "Name collision with lower Silver picnic cascades",
+            "status": "separate-waterfall-features",
+            "finding": "GIS #68 is 12.4 km from lower picnic #110. The informal rough quarter-mile-upstream chute described at Lower Silver is not this Herman feature; do not merge records or recommend a single connected walk.",
+            "source": "https://upperpeninsulawaterfalls.com/baraga-county-waterfalls/silver-falls-lower.html"
+          },
+          {
+            "label": "Land manager and lawful permission",
             "status": "not-cleared",
-            "finding": "Upper #68 12km south of lower #110, not quarter-mile upstream chute",
+            "finding": "A third-party site labels nearby tribal lands but an authoritative parcel-level landholder/public-access determination has not been established. Do not assume tribal, state or private land grants access.",
             "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
           },
           {
-            "label": "Land manager",
+            "label": "Public road and parking",
             "status": "not-cleared",
-            "finding": "No confirmed public land title/manager for #68",
-            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+            "finding": "Historic field descriptions mention a gravel pit, rough two-track and Lahti Road. No current agency motor-vehicle-use designation, landowner consent or safe waterfall-visitor parking verified.",
+            "source": "https://www.waterfallsofthekeweenaw.com/silver-river/upper-silver-falls/"
           },
           {
-            "label": "Road",
+            "label": "Continuous lawful walking route and viewpoint",
             "status": "not-cleared",
-            "finding": "Lower Falls Rd does not establish road to feature #68",
-            "source": "https://www.waterfallsofthekeweenaw.com/silver-river/silver-falls/"
+            "finding": "No official continuous public lot-to-waterfall path, trail easement, bridges, crossings or safe viewpoint published for this exact GIS feature.",
+            "source": "https://waterfallhikes.com/waterfalls/upper-silver-falls-near-l-anse-in-mi"
           },
           {
-            "label": "Visitor parking",
+            "label": "Season and present conditions",
             "status": "not-cleared",
-            "finding": "No approved public parking for distinct GIS #68",
-            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
-          },
-          {
-            "label": "Trail",
-            "status": "not-cleared",
-            "finding": "No approved approach to #68; short upstream rough path in field guide is unrelated",
-            "source": "https://www.waterfallsofthekeweenaw.com/silver-river/silver-falls/"
-          },
-          {
-            "label": "Current conditions",
-            "status": "not-cleared",
-            "finding": "No current access status",
-            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+            "finding": "No present opening, road maintenance, permission, water level, logging operations or safe-current-conditions statement confirmed. Historic photos do not establish visitability.",
+            "source": "https://www.waterfallsofthekeweenaw.com/silver-river/upper-silver-falls/"
           }
         ]
+      },
+      "researchPage": "/upper-peninsula-waterfalls/research/upper-silver-falls-herman-geographic-review/",
+      "geographicIdentityProof": {
+        "distanceMetersFromField": 150.7,
+        "distanceMetersFromSecond": 121,
+        "distanceMetersFromLowerPicnicGIS": 12409.9,
+        "identityAssessment": "independent-point-agreement-near-Herman-not-public-access",
+        "publicRouteCleared": false,
+        "visitorParkingVerified": false,
+        "sourceArtifact": "data/up-waterfall-identity-calculations.json"
+      },
+      "visitorDecision": {
+        "decision": "No approved visitor route verified",
+        "confidence": "no-public-route",
+        "context": "Geography supported by independent evidence; land access unresolved"
       }
     },
     {
@@ -8152,28 +8174,89 @@
       "gisObjectId": 213,
       "name": "Alger Falls",
       "county": "ALGER",
-      "status": "municipal-plan-no-safe-highway-parking",
-      "publicAccess": "roadside-visible-parking-not-verified-safe",
+      "status": "adopted-city-county-no-safe-parking-unresolved",
+      "publicAccess": "not-cleared-visitor-route",
       "publicationEligible": false,
-      "title": "Alger Falls: no safe parking in city plan",
-      "summary": "Munising's adopted recreation plan says there are no safe parking options at the roadside Alger Falls viewing area by M-28/M-94. Older tourist and hiking accounts mention a turnout, but they do not supersede the city's documented road-safety concern.",
-      "guidance": "Do not stop in travel lanes, walk over the guardrail or use the waterfall GIS point as a parking destination. Safe public parking and pedestrian access require current MDOT confirmation.",
-      "reviewLimitations": "Adopted municipal recreation planning evidence establishes a serious safety concern; it does not establish that all road shoulders are legally closed or that no future improvement has occurred.",
-      "nextEvidence": "Verify current MDOT designated turnout, safe walking/crossing area and whether a legal official view can be reached without stopping on the highway.",
+      "title": "Alger Falls: roadside waterfall, no cleared safe parking",
+      "summary": "Alger Falls is a real roadside cascade at the M-28/M-94 junction. The City of Munising adopted 2024–2028 Recreation Plan explicitly identifies no safe parking options; Alger County's plan independently repeats that warning. Older tourism and field reviews call it a pull-off attraction, while MDOT's general shoulder-parking FAQ is not an official safe visitor turnout or specific pedestrian-view approval. No safe lawful parking-to-view route has been demonstrated as of the November 3 review.",
+      "guidance": "Do not recommend stopping on M-28, crossing a guardrail or using a road shoulder as a visitor parking lot. The local planning record says no safe parking option; current MDOT site approval remains unverified.",
+      "reviewLimitations": "The 2024 city and county safety statements are dated planning evidence, not an official all-location closure; general MDOT shoulder law is not a site-specific visitor safety finding.",
+      "nextEvidence": "Require current MDOT site-specific safety determination and certified legal visitor arrival/overlook, resolving the city/county no-safe-parking warning. Do not substitute general shoulder rules or tourist turnout advice.",
       "sourceLinks": [
         {
-          "label": "City of Munising adopted recreation plan, Alger Falls safety",
+          "label": "City 2024–2028 adopted recreation plan",
           "url": "https://cityofmunising.org/wp-content/uploads/Munising_RecPlan_Adopted_2024.pdf"
         },
         {
-          "label": "Munising visitor bureau attraction listing",
-          "url": "https://www.munising.org/activities/alger-falls/"
+          "label": "Alger County 2024–2029 plan",
+          "url": "https://cms2.revize.com/revize/algercounty/document_center/Dashboard/Plans/Alger%20County%205-Year%20Recreation%20Plan%202024-2029%20%28final%29.pdf"
         },
         {
-          "label": "Third-party turnout claim requiring MDOT review",
+          "label": "Michigan MDOT shoulder-parking FAQs",
+          "url": "https://www.michigan.gov/mdot/about/faqs/general/common"
+        },
+        {
+          "label": "Independent waypoint; not parking approval",
           "url": "https://myhikes.org/trails/alger-falls"
         }
-      ]
+      ],
+      "researchPage": "/upper-peninsula-waterfalls/research/alger-falls-highway-parking-review/",
+      "geographicIdentityProof": {
+        "distanceMetersFromField": 42.3,
+        "roadsideViewing": "documented",
+        "municipalSafetyFinding": "no safe parking options in 2024 adopted plan",
+        "mdotSpecificAuthorizationVerified": false,
+        "sourceArtifact": "data/up-waterfall-identity-calculations.json"
+      },
+      "visitorDecision": {
+        "decision": "No approved visitor route verified",
+        "confidence": "no-public-route",
+        "context": "Municipal no-safe-parking finding has not been superseded by current site-specific MDOT approval"
+      },
+      "routeAudit": {
+        "reviewed": "2026-11-03",
+        "outcome": "not-cleared",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "segments": [
+          {
+            "label": "Named natural waterfall identity",
+            "status": "verified-geography-only",
+            "finding": "Michigan GIS #213 on Alger Creek and an independent published waypoint agree within ~42 m. Waterfall identity is not in dispute; the visitor-arrival route is.",
+            "source": "https://myhikes.org/trails/alger-falls"
+          },
+          {
+            "label": "Municipal adopted safety planning",
+            "status": "documented-no-safe-parking-in-plan",
+            "finding": "The city-adopted 2024–2028 Recreation Plan says there were no safe parking options at the M-28/M-94 waterfall stop. This is a dated planning finding, not a legal closure notice.",
+            "source": "https://cityofmunising.org/wp-content/uploads/Munising_RecPlan_Adopted_2024.pdf"
+          },
+          {
+            "label": "Second local safety source",
+            "status": "corroborated-dated-planning-evidence",
+            "finding": "Alger County 2024–2029 recreation inventory also describes roadside visibility but no safe visitor parking options. Tourism 'pull over' descriptions do not override the public safety planning record.",
+            "source": "https://cms2.revize.com/revize/algercounty/document_center/Dashboard/Plans/Alger%20County%205-Year%20Recreation%20Plan%202024-2029%20%28final%29.pdf"
+          },
+          {
+            "label": "MDOT highway jurisdiction, parking and crossing",
+            "status": "not-cleared",
+            "finding": "MDOT's general shoulder-parking FAQ discusses highway regulations broadly; no site-specific approved stopping zone, safe M-28/M-94 pullout, legal crossing or pedestrian walking space was verified.",
+            "source": "https://www.michigan.gov/mdot/about/faqs/general/common"
+          },
+          {
+            "label": "Continuous walking and safe viewing",
+            "status": "not-cleared",
+            "finding": "No agency-published public parking-to-falls viewpoint route exists in the reviewed sources. Do not advise guardrail crossing, shoulder stopping or approaching from a different road without evidence.",
+            "source": "https://cityofmunising.org/wp-content/uploads/Munising_RecPlan_Adopted_2024.pdf"
+          },
+          {
+            "label": "Current access and seasonal restrictions",
+            "status": "not-cleared",
+            "finding": "No current MDOT field assessment, official traffic control order, designated parking improvement or November weather/ice/snow status established. No open-now claim.",
+            "source": "https://www.michigan.gov/mdot/about/faqs/general/common"
+          }
+        ]
+      }
     },
     {
       "gisObjectId": 215,
@@ -8334,6 +8417,13 @@
         "context": "A mapped name is not yet a place to send a hiker. Michigan GIS lists Mill Pond Falls on Sundholm Creek, while federal-name-derived lists show Upper and Lower Mill Pond Falls nearby at different points.",
         "saferAlternative": "Choose the independently verified Fumee Falls roadside guide or a signed Menominee River recreation area trail instead of navigating by this unverified point.",
         "confidence": "geographic-or-hydropower-source-supported-waterfall-route-unverified"
+      },
+      "geographicIdentityProof": {
+        "stateVsGnisUpperMeters": 496.4,
+        "stateVsGnisLowerMeters": 884.2,
+        "gnisUpperVsLowerMeters": 387.8,
+        "aliasesResolved": false,
+        "sourceArtifact": "data/up-waterfall-identity-calculations.json"
       }
     },
     {
