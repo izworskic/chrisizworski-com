@@ -8,11 +8,11 @@ const map=fs.readFileSync('public/assets/up-waterfalls.js','utf8');
 const data=JSON.parse(fs.readFileSync('data/up-waterfalls.json','utf8')).waterfalls;
 const index=html.indexOf('id="visit-lens"');
 test('B55 waterfall decision desk: visible before map and retains 74 source cards and canonical protections',()=>{
- assert.equal(data.length,74);
- assert.equal((html.match(/<article class="waterfall-card" data-fall /g)||[]).length,74);
+ assert.equal(data.length,75);
+ assert.equal((html.match(/<article class="waterfall-card" data-fall /g)||[]).length,75);
  assert.ok(index>0&&index<html.indexOf('id="falls-map"'));
  for(const id of ['visit-region','visit-budget','visit-date','visit-verdict','visit-picks','visit-selection','visit-baseline'])assert.ok(html.includes('id="'+id+'"'),'missing '+id);
- assert.match(html,/74 curated visitor destinations/);assert.match(html,/74 curated waterfall profiles/);
+ assert.match(html,/75 curated visitor destinations/);assert.match(html,/75 curated waterfall profiles/);
  assert.match(html,/https:\/\/chrisizworski.com\/upper-peninsula-waterfalls\//);
  assert.match(html,/Built by/);assert.match(html,/id="show-geo-candidates"/);
  assert.match(html,/assets\/up-waterfalls-visit-lens.js/);
