@@ -96,6 +96,18 @@ test('the guide and live California tool are connected both ways and remain sepa
   assert.equal((national.match(/href="\/vandenberg-rocket-launch-viewing\/"/g)||[]).length,2);
 });
 
+test('the beyond-Great-Lakes guide directory links this distinct field guide once',()=>{
+  const directory=read('public/guides/index.html');
+  const directorySitemap=sitemap.match(/<loc>https:\/\/chrisizworski\.com\/guides\/<\/loc>\s*<lastmod>([^<]+)<\/lastmod>/);
+  assert.ok(directorySitemap);
+  assert.equal(directorySitemap[1],'2026-11-03');
+  assert.match(directory,/"dateModified": "2026-11-03"/);
+  assert.match(directory,/Beyond the Great Lakes <span>3 Guides<\/span>/);
+  assert.equal((directory.match(/data-field-guide="vandenberg-rocket-viewing"/g)||[]).length,1);
+  assert.ok(directory.includes('href="/vandenberg-rocket-launch-viewing/"'));
+  assert.ok(directory.includes('href="/national-tools/rocket-launch-live/?region=california"'));
+});
+
 test('photography is a verified historical launch with rights/credit, not future mission art',()=>{
   assert.match(page,/<img src="https:\/\/media\.defense\.gov\/2026\/Jan\/25\/2003864850\/2000\/2000\/0\/260125-X-VF463-1001\.JPG"/);
   assert.match(page,/U\.S\. Space Force \/ 2nd Lt\. Andrew Taller/);
