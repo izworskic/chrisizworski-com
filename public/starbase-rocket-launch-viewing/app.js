@@ -47,6 +47,8 @@
  function chooseSite(id,move=true){
   if(!allowedIds.has(id)||!state.places.some(x=>x.id===id))return;
   state.site=id;selection();
+  // Recompute the optional straight-line comparison for this exact choice.
+  if(state.map)displayPad();
   const marker=state.markers.get(id);
   if(marker&&state.map&&move)state.map.panTo(marker.getLatLng(),{animate:false});
  }
