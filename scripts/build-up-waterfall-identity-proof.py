@@ -61,7 +61,9 @@ def build() -> dict:
         pairs = []
         for aid, bid in cluster["pairs"]:
             assert aid != bid and aid in pts and bid in pts
-            pairs.append({"left": aid, "right": bid, "straightLineMeters": round(haversine(pts[aid], pts[bid]), 1)})
+            distance = round(haversine(pts[aid], pts[bid]), 1)
+            distance = int(distance) if distance.is_integer() else distance
+            pairs.append({"left": aid, "right": bid, "straightLineMeters": distance})
         distances = {(p["left"], p["right"]): p["straightLineMeters"] for p in pairs}
         if slug == "upper-silver":
             assert 100 < distances["gis-upper-silver-68", "field-herman-upper-silver"] < 200
