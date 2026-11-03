@@ -1,3 +1,12 @@
+### 2026-11-03 — Upper Eagle River / Ten-Foot Falls B65 non-GIS inventory investigation (release pending)
+- **Visitor decision:** Ten-Foot Falls on the upper Eagle River is distinct from Lower Eagle River Falls. The 2026–27 Visit Keweenaw tour and 2023 bureau brochure identify an unsigned M-26 roadside stop, but the bureau vs independent field coordinate positions are 438.3 m apart and no official site-specific riverbank easement or certified turnout is known.
+- **Evidence:** General MDOT roadside parking permissiveness and State Police traffic-control guidance do **not** clear a given unsigned turnout or adjoining bank. Existing signed Lower Eagle River Bridge Park is the safe independently documented stop.
+- **Implementation:** A source-audited supplemental inventory for notable falls not in the 161 state GIS names, one noindex research guide with two-point provenance and five access gates, a contextual distinction in the existing Lower Eagle visitor guide, and a clearly research-only handoff in the hub's GIS explanation. No visitor pin, sitemap URL, nearby suggestion, guessed car GPS, or TouristAttraction for the upper falls.
+- **SEO/safety:** Lower Eagle River guide dateModified and sitemap lastmod truthfully advance to November 3. Hub's original title, canonical, Person and indexable JSON-LD list retained; waterfall inventory remains 75 curated, 68 GIS matched, 93 pending. No GSC traffic/CTR/earnings gain claimed.
+- **Release state:** Branch `feature/up-waterfalls-b65-ten-foot-falls-evidence-20261103`; checks and PR/merge/production verification pending at authoring.
+- **One next investment:** Reconcile existing Fish Cove and private-road/legal shoreline access at Keweenaw Montreal Falls against 2026 DNR/KORC planned trail project, without calling proposed infrastructure open.
+
+
 ### 2026-11-03 — Python seasonal discovery for Tools and Guides (release pending)
 
 - **Decision:** Which specialist tool or guide should I open for the month I am planning? A shared seasonal field desk now precedes the full collection on /tools/ and /guides/.
