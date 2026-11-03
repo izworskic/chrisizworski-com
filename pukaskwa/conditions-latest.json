@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "park": "pukaskwa",
   "sourceUrl": "https://parks.canada.ca/pn-np/on/pukaskwa/activ/experience/randonnees-hiking/etat-sentiers-trail-conditions",
-  "checkedAt": "2026-11-02T23:07:02.555Z",
-  "lastSuccessAt": "2026-11-02T23:07:02.555Z",
+  "checkedAt": "2026-11-03T10:51:36.996Z",
+  "lastSuccessAt": "2026-11-03T10:51:36.996Z",
   "lastChangeAt": "2026-10-31T14:40:21.611Z",
   "health": "ok",
   "consecutiveFailures": 0,
@@ -12,7 +12,7 @@
   "snapshot": {
     "schemaVersion": 1,
     "park": "pukaskwa",
-    "retrievedAt": "2026-11-02T23:07:02.555Z",
+    "retrievedAt": "2026-11-03T10:51:36.996Z",
     "sourceUrl": "https://parks.canada.ca/pn-np/on/pukaskwa/activ/experience/randonnees-hiking/etat-sentiers-trail-conditions",
     "collectionMethod": "public-html-table",
     "sourceRecords": [
