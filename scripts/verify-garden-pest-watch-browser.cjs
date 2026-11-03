@@ -44,6 +44,20 @@ function beetleFixture(url){
 }
 async function routeFixtures(page,month=7){
  await page.route('**/*',route=>route.request().url().startsWith(ORIGIN)?route.continue():route.abort());
+ await page.route('**/api/garden-pest-field-observations?*',route=>{
+  const u=new URL(route.request().url()),z=u.searchParams.get('zip'),y=Number(u.searchParams.get('year'));
+  if(z==='48707')return route.fulfill({status:503,contentType:'application/json',body:'{"status":"UNAVAILABLE"}'});
+  const date=y+'-07-06';
+  const data={schema:'garden-pest-field-observations-v1',species:'squash-vine-borer',year:y,
+   checkedAt:'2026-11-03T16:00:00Z',status:'DOCUMENTED_SPECIES_PHOTO',
+   sourceKind:'OPPORTUNISTIC_SPECIES_PHOTOGRAPH',lifeStage:'NOT_INDEPENDENTLY_VERIFIED',
+   seasonContext:'PAST_OR_DORMANT_SEASON_RECORDS',
+   location:{name:z?'ZIP '+z+' area':'Bay City',searchRadiusKm:25},
+   records:{inspectedResults:8,qualifyingRecords:2,limitedSearch:false,firstSampledDate:date,
+    sampleNote:'Photo uploads are voluntary, not a standardized survey.',
+    examples:[{date,url:'https://www.inaturalist.org/observations/123456789'}]}};
+  return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(data)});
+ });
  await page.route('**/api/japanese-beetle-forecast?*',route=>{
   const u=new URL(route.request().url());
   if(u.searchParams.get('zip')==='48707'){
@@ -90,6 +104,14 @@ async function waitForAnswer(page,pest){await page.waitForFunction(name=>documen
    await routeFixtures(page);
    await page.goto(ORIGIN+'/michigan-garden-pest-watch/',{waitUntil:'domcontentloaded'});
    await waitForAnswer(page,'Squash vine borer');
+   assert.ok(await page.locator('#borer-records').isVisible());
+   assert.match(await page.locator('#borer-record-status').innerText(),/Not checked/);
+   await page.locator('#borer-record-check').click();
+   await page.waitForFunction(()=>document.querySelector('#borer-record-status')?.textContent.includes('check recorded'),null,{timeout:6000});
+   assert.match(await page.locator('#borer-record-results').innerText(),/Photographed species presence/);
+   assert.match(await page.locator('#borer-record-results').innerText(),/not the first arrival or adult emergence/);
+   assert.match(await page.locator('#borer-record-status').innerText(),/Historical season evidence only/);
+   assert.equal(await page.locator('#borer-record-results .borer-record-links a').count(),1);
    // Photo-diagnosis QA on every viewport: all topics, disease labels, clue match,
    // no-result honesty, reset, and host-crop updates.
    assert.ok(await page.locator('#visual-results .visual-result').count()>=4);
@@ -124,6 +146,7 @@ async function waitForAnswer(page,pest){await page.waitForFunction(name=>documen
    const current=await page.locator('#crop').inputValue();
    assert.equal(current,'squash');
    await page.locator('#crop').selectOption('tomatoes');
+   assert.equal(await page.locator('#borer-records').isVisible(),false,'Other crops must hide squash-only field evidence');
    assert.match(await page.locator('.visual-plan-label').first().innerText(),/NOT VERIFIED/,'No stale squash action during crop change');
    await page.locator('#stage').selectOption('growing');
    await page.locator('#watch-form button[type=submit]').click();
@@ -135,6 +158,8 @@ async function waitForAnswer(page,pest){await page.waitForFunction(name=>documen
    assert.notEqual(await page.locator('#primary-answer').innerText(),first);
    assert.match(await page.locator('#primary-answer').innerText(),/tomato|leaf/i);
    await page.locator('#crop').selectOption('squash');
+   assert.ok(await page.locator('#borer-records').isVisible());
+   assert.match(await page.locator('#borer-record-status').innerText(),/Crop changed/);
    await page.locator('#watch-form button[type=submit]').click();
    await waitForAnswer(page,'Squash vine borer');
    assert.equal(await page.locator('#primary-answer').innerText(),first,'A→B→A must restore the same garden answer');
@@ -160,6 +185,7 @@ async function waitForAnswer(page,pest){await page.waitForFunction(name=>documen
    assert.match(await page.locator('#beetle-field-comparison').innerText(),/share a calendar date/);
    assert.ok(await page.locator('#beetle-field-links a').count()>=2);
    await page.locator('#zip').fill('48706');
+   assert.match(await page.locator('#borer-record-status').innerText(),/Reference area changed/);
    assert.match(await page.locator('.visual-plan-label').first().innerText(),/NOT VERIFIED/,'ZIP change cannot retain prior location actions');
    assert.match(await page.locator('#beetle-field-first').innerText(),/No verified field date/);
    assert.match(await page.locator('#beetle-adult-date').innerText(),/Not verified/);
@@ -227,6 +253,7 @@ async function waitForAnswer(page,pest){await page.waitForFunction(name=>documen
   assert.match(await winter.locator('.visual-plan-label').first().innerText(),/OFF-SEASON \/ PLAN FOR NEXT YEAR/);
   assert.match(await winter.locator('.visual-plan-primary').first().innerText(),/Next-season preparation/);
   assert.equal(await winter.locator('.visual-plan-details').count(),0,'November must not present in-season confirm-and-treat actions');
+  assert.match(await winter.locator('#borer-records').innerText(),/In November.*past growing season/);
   await winter.screenshot({path:'artifacts/garden-pest-watch-browser/november-preparation-not-pest-weather.png',fullPage:true,animations:'disabled'});
   await winterContext.close();
 
@@ -262,6 +289,8 @@ async function waitForAnswer(page,pest){await page.waitForFunction(name=>documen
   const n=await noJS.newPage();await n.goto(ORIGIN+'/michigan-garden-pest-watch/',{waitUntil:'domcontentloaded'});
   assert.match(await n.locator('#primary-answer').innerText(),/squash stems/i);
   assert.ok(await n.locator('.nojs-guides').isVisible());
+  assert.match(await n.locator('#borer-records').innerText(),/Enable JavaScript to check dated community records/);
+  assert.ok(await n.locator('#borer-records a').count()>=2);
   assert.ok(await n.locator('#history-heading').isVisible());
   assert.ok(await n.locator('#beetle-heading').isVisible());
   assert.match(await n.locator('#beetle-source-note').innerText(),/never means no beetles/i);
