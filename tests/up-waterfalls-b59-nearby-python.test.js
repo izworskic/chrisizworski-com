@@ -13,7 +13,8 @@ const catalog=JSON.parse(read('data/up-waterfalls.json')).waterfalls;
 const rows=new Map(catalog.map(c=>[c.id,c]));
 const cards=[...hub.matchAll(/<article class="waterfall-card"([^>]+)>/g)]
   .map(m=>Object.fromEntries([...m[1].matchAll(/data-([\w-]+)="([^"]*)"/g)].map(x=>[x[1],x[2]])));
-const eligible=cards.filter(c=>c['arrival-verified']==='verified'&&['verify','seasonal','restricted'].includes(c.status));
+const explicitOnly=new Set(['scott-falls','houghton-douglass-falls']);
+const eligible=cards.filter(c=>c['arrival-verified']==='verified'&&['verify','seasonal','restricted'].includes(c.status)&&!explicitOnly.has(c.id));
 const radians=Math.PI/180;
 const geo=(a,b)=>{const x=a.lat*radians,y=b.lat*radians,dx=(b.lat-a.lat)*radians,dy=(b.lng-a.lng)*radians,z=Math.sin(dx/2)**2+Math.cos(x)*Math.cos(y)*Math.sin(dy/2)**2;return 2*3958.7613*Math.asin(Math.min(1,Math.sqrt(z)));};
 
@@ -22,11 +23,11 @@ test('B59 Python-generated index covers exactly source-verified visitor approach
  assert.equal(cards.length,74);
  assert.equal(index.schemaVersion,1);
  assert.equal(index.counts.curated,74);
- assert.equal(index.counts.eligible,68);
- assert.equal(index.counts.excluded,6);
+ assert.equal(index.counts.eligible,66);
+ assert.equal(index.counts.excluded,8);
  assert.deepEqual(index.locations.map(c=>c.id),eligible.map(c=>c.id).sort());
  assert.deepEqual(index.excludedIds,cards.filter(c=>!eligible.some(x=>x.id===c.id)).map(c=>c.id).sort());
- for(const id of ['sandstone-falls','munising-falls','silver-river-falls','lower-silver-falls','twin-waterfalls-memorial-preserve']){
+ for(const id of ['sandstone-falls','munising-falls','silver-river-falls','lower-silver-falls','twin-waterfalls-memorial-preserve','scott-falls','houghton-douglass-falls']){
   assert.ok(index.excludedIds.includes(id),id);
   assert.ok(!index.locations.some(c=>c.id===id));
  }
