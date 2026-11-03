@@ -387,7 +387,7 @@ def stage(data):
     if data["season"] != 2027:
         raise Veto("Only 2027 official reports can be staged")
     existing = OUT_JS.read_text("utf-8") if OUT_JS.exists() else ""
-    previous = re.search(r"window\.GardenEarwormTrap2027Data\s*=\s*(\{.+\});\s*$", existing, re.S)
+    previous = re.search(r"window\.GardenEarwormTrap2027Data\s*=\s*Object\.freeze\((\{.+\})\);\s*$", existing, re.S)
     if previous:
         old = json.loads(previous[1])
         if old.get("source", {}).get("publishedDate", "") > data["source"]["publishedDate"]:
