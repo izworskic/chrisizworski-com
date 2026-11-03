@@ -212,6 +212,12 @@ test('national API provides all coasts, exact launch selection, partial feed hea
     assert.equal(res.body.access.sites.find(x=>x.id==='boca-chica').directionsAllowed,false);
     assert.equal(res.body.weather.places.length,2);
     assert.equal(res.body.weather.places[0].cloudCoverPercent,40);
+    assert.equal(res.body.weather.slip.scenarios.length,4);
+    assert.deepEqual(res.body.weather.slip.offsetsHours,[0,1,3,6]);
+    assert.equal(res.body.weather.slip.scenarios[0].places[0].cloudCoverPercent,40);
+    assert.equal(Object.hasOwn(res.body.weather.places[0],'_grid'),false,
+      'Raw NWS grids must not be exposed to visitors');
+    assert.equal(Object.hasOwn(res.body.weather.places[0],'_hourly'),false);
     assert.equal(res.body.weather.comparison.state,'similar');
     assert.equal(res.body.launchWeather.status, 'forecast');
     assert.equal(res.body.launchWeather.officialApproval, 'not-verified');
@@ -288,7 +294,7 @@ test('national launch atlas requests keyed CARTO tile URLs and retains functiona
   assert.match(endpoint,/CARTO_BASEMAP_PUBLIC_KEY/);
   const page=fs.readFileSync(path.resolve(__dirname,'../public/synced-national-tools/rocket-launch-live/index.html'),'utf8');
   assert.match(page,/Senior Airman Kadielle Shaw/);
-  assert.match(page,/rocket-launch-live\/app\.js\?v=20261103-watch-v1/);
+  assert.match(page,/rocket-launch-live\/app\.js\?v=20261103-slip-v1/);
 });
 
 
@@ -300,7 +306,7 @@ test('national Rocket Watch binds controls to selected mission and defers YouTub
   assert.match(html,/id="mission-watch"/);
   assert.match(html,/id="rl-watch-mission-videos"/);
   assert.match(html,/id="rl-watch-general"/);
-  assert.match(html,/rocket-launch-live\/styles\.css\?v=20261103-watch-v1/);
+  assert.match(html,/rocket-launch-live\/styles\.css\?v=20261103-slip-v1/);
   assert.match(js,/desk\?\.launchId === launch\.id/);
   assert.match(js,/data\.selectedRegion === 'florida'/);
   assert.match(js,/renderMediaDesk\(data\)/);
