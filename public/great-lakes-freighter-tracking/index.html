@@ -25,7 +25,7 @@
 <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
-<link rel="stylesheet" href="/assets/freighter-tracker.css">
+<link rel="stylesheet" href="/assets/freighter-tracker.css?v=20261103b">
 <link rel="stylesheet" href="/assets/gazette-latest.css">
 <script type="application/ld+json">{
   "@context": "https://schema.org",
@@ -144,7 +144,7 @@
 <script defer src="/assets/tool-engagement.js"></script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-<script defer src="/assets/freighter-tracker.js?v=20261103a"></script>
+<script defer src="/assets/freighter-tracker.js?v=20261103b"></script>
 <script defer src="/assets/gazette-latest.js?v=20260920"></script>
 <link rel="stylesheet" href="/assets/detroit-network-teaser.css?v=20260921a">
 <script defer src="/assets/detroit-network-teaser.js?v=20260921a"></script>
@@ -223,6 +223,12 @@
         </div>
       </div>
 
+      <section class="activity-desk" aria-labelledby="activity-title">
+        <div class="activity-head"><div><p class="activity-kicker">THE SHIPPING DESK</p><h3 id="activity-title">Where are ships reporting?</h3></div><span id="activity-checked" role="status">Waiting for recent AIS reports</span></div>
+        <p>Choose a corridor to explore nearby reports. Counts include all vessel types in the feed, within the approximate radius shown; coverage can be incomplete and areas can overlap.</p>
+        <div class="activity-grid" id="activity-grid" aria-label="Reported vessels near each corridor"></div>
+        <noscript><p>The live corridor counts need JavaScript. Use the passage links below for another way to check activity.</p></noscript>
+      </section>
       <div class="vessel-search" role="search" aria-label="Search recent vessel reports"><label for="freighterNameSearch">Ship name or MMSI</label><div class="vessel-search-controls"><input id="freighterNameSearch" type="search" placeholder="e.g., a vessel name or MMSI" autocomplete="off" spellcheck="false"><button type="button" id="freighterSearchAll">Search all five lakes</button><button type="button" id="freighterClearSearch">Clear</button></div><p id="freighterSearchStatus" class="vessel-search-status" role="status" aria-live="polite">Search recent AIS reports; no vessel positions are guaranteed.</p></div>
       <div class="map-stage">
         <div id="freighterMap" role="region" aria-label="Live Great Lakes vessel map"></div>
@@ -235,6 +241,11 @@
         <p class="map-disclaimer">JavaScript is required for corridor switching. You can still use the <a href="https://ais.boatnerd.com/">BoatNerd Great Lakes map</a> or <a href="https://www.myshiptracking.com/">MyShipTracking</a>.</p>
       </noscript>
 
+      <section class="ship-inspector" id="ship-inspector" aria-labelledby="ship-inspector-title" hidden>
+        <div class="ship-inspector-top"><div><p class="activity-kicker">SELECTED AIS REPORT</p><h3 id="ship-inspector-title">Selected vessel</h3></div><button type="button" id="ship-inspector-close">Close details</button></div>
+        <p id="ship-inspector-status" role="status"></p><dl class="ship-facts" id="ship-inspector-facts"></dl>
+        <p class="ship-inspector-note">AIS is a reported position, not a confirmed arrival. Destination and vessel dimensions may be missing or outdated; never use this map for navigation.</p>
+      </section>
       <section class="vessel-results" aria-labelledby="vessel-list-heading"><h3 id="vessel-list-heading">Find a Great Lakes freighter by name</h3><p>Search the latest available AIS vessel reports by ship name or MMSI, or choose a corridor above. Tap a name to find that ship on the map. Blue means reported movement, amber means little or no movement, and gray means speed unavailable. Only reports less than 30 minutes old appear. A missing ship does not prove empty water.</p><ul id="freighterVessels"><li>Waiting for vessel reports…</li></ul><p id="freighterCredits"></p></section>
       <div class="tracker-context">
         <div class="corridor-panel">

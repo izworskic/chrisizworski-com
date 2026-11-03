@@ -1902,3 +1902,10 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - Production browser confirmed `/great-lakes-freighter-tracking/` loaded 158 recent AIS reports and showed `LEE A. TREGURTHA`, but `lee tregurtha` returned zero because the search required a literal contiguous substring. Fixed matching for punctuation, omitted middle initials, case and partial name words; numeric MMSI matching remains available. No fuzzy spelling or new vessel claims are introduced.
 - Retained corridor and 30-minute data boundaries, outage language, source credits, canonical and ads. Bumped the tracker script URL for returning visitors. Matching has focused regression coverage; real post-release search verification is required.
 - No post-release Search Console or revenue results measured. Next action: verify the exact name search on the deployed tracker and monitor the 28-day baseline.
+
+### 2026-11-03 — Freighter action desk (in progress)
+
+- Proposed six-corridor observed AIS count desk and selected report details; shared live map uses its existing snapshots and geographic approximation. Python independently tests geography and freshness with deterministic generated cases; it is not a live data provider.
+- Counts cover reported vessels of all types, not complete traffic or predicted arrivals; exact circle radii and overlapping coverage are shown. Missing AIS details and uncertain identity remain unknown. No unsupported photo/biography identity joins, new backend, ads or canonical changes.
+- Baseline remains October 24 Search Console export: 9,119 impressions and 142 clicks in 28 days (1.56% CTR), not a post-release result. Release and real-user effects NOT MEASURED. See `docs/experience-briefs/freighter-action-desk.md`.
+- Single next action: inspect exact-head desktop and mobile browser artifacts, including changed selection and feed failure, then finish release review before merge.

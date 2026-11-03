@@ -104,7 +104,7 @@
   var map = typeof L !== "undefined" ? L.map(mapFrame, {scrollWheelZoom:false}).setView([44.8,-84.7],5) : null;
   var layer = map ? L.layerGroup().addTo(map) : null;
   if (map) L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
-  else mapFrame.textContent = "Map unavailable; recent vessel reports are listed below.";
+  else {mapFrame.textContent = "Map unavailable; recent vessel reports are listed below.";mapFrame.parentElement.classList.add("map-stage-unavailable");}
   var reports = null, busy = false, lastFailed = false;
   var vesselSearch = document.getElementById("freighterNameSearch");
   var vesselSearchStatus = document.getElementById("freighterSearchStatus");
@@ -112,6 +112,42 @@
   var clearSearchButton = document.getElementById("freighterClearSearch");
   var vesselList = document.getElementById("freighterVessels");
   var sourceCredits = document.getElementById("freighterCredits");
+  var activityGrid=document.getElementById("activity-grid"), activityChecked=document.getElementById("activity-checked");
+  var inspector=document.getElementById("ship-inspector"), inspectorTitle=document.getElementById("ship-inspector-title");
+  var inspectorStatus=document.getElementById("ship-inspector-status"), inspectorFacts=document.getElementById("ship-inspector-facts");
+  var inspectorClose=document.getElementById("ship-inspector-close"), selectedMmsi=null;
+  var corridorKeys=["soo","mackinac","duluth","port-huron","detroit","saginaw"];
+  function recent(v,now){ var seen=Date.parse(v.seen); return Number.isFinite(seen) && now-seen>=-60000 && now-seen<=1800000; }
+  function corridorRadius(key){return key==="saginaw"?60:35;}
+  function inCorridor(v,key){var view=views[key];return distanceMiles(view.lat,view.lng,v.lat,v.lon)<=corridorRadius(key);}
+  function updateActivity(now){
+    if(!activityGrid)return;
+    var fresh=reports.vessels.filter(function(v){return recent(v,now);});
+    corridorKeys.forEach(function(key){
+      var n=fresh.filter(function(v){return inCorridor(v,key);}).length;
+      var button=activityGrid.querySelector('[data-activity-key="'+key+'"]');
+      if(!button){button=node("button","");button.type="button";button.className="activity-button";button.dataset.activityKey=key;
+        button.addEventListener("click",function(){selectView(key,{updateHash:true,track:true});document.getElementById("live-map").scrollIntoView({block:"start",behavior:"smooth"});});activityGrid.append(button);}
+      button.replaceChildren();
+      button.setAttribute("aria-pressed",key===activeView?"true":"false");
+      button.setAttribute("aria-label",views[key].label+": "+n+" recent vessel reports within about "+corridorRadius(key)+" miles. Show corridor.");
+      button.append(node("strong",views[key].label),node("span",n+" recent "+(n===1?"report":"reports")),node("small","within ~"+corridorRadius(key)+" miles"));
+    });
+    activityChecked.textContent=(lastFailed?"Refresh failed; showing retained reports. ":"")+"Feed checked "+new Date(reports.checkedAt).toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit",timeZone:"America/Detroit",timeZoneName:"short"})+" · reports at most 30 min old";
+  }
+  function showShip(v,now){
+    if(!inspector)return;
+    selectedMmsi=String(v.mmsi);inspector.hidden=false;inspectorTitle.textContent=v.name||("Vessel "+v.mmsi);
+    inspectorStatus.textContent="Last reported "+Math.max(0,Math.round((now-Date.parse(v.seen))/60000))+" min ago · "+v.source+" · MMSI "+v.mmsi;
+    inspectorFacts.replaceChildren();
+    var fields=[["Speed",v.speedKnots===null?"Not reported":(v.speedKnots*1.15078).toFixed(1)+" mph ("+v.speedKnots.toFixed(1)+" kn)"],
+      ["Course",v.course===null?"Not reported":Math.round(v.course)+"°"],
+      ["AIS destination",v.destination||"Not reported"],
+      ["Reported length",v.lengthMeters===null?"Not reported":Math.round(v.lengthMeters*3.28084)+" ft"]];
+    fields.forEach(function(field){var div=document.createElement("div");div.append(node("dt",field[0]),node("dd",field[1]));inspectorFacts.append(div);});
+  }
+  function clearShip(){selectedMmsi=null;if(inspector)inspector.hidden=true;}
+  if(inspectorClose)inspectorClose.addEventListener("click",function(){clearShip();vesselSearch.focus();});
   function node(tag, value) {var el=document.createElement(tag);el.textContent=value;return el;}
   function vesselMatchesSearch(vessel,rawQuery) {
     var raw=String(rawQuery||"").trim();
@@ -126,8 +162,9 @@
   }
   function renderVessels() {
     if (!reports) return;
-    var view=views[activeView];
-    var current=reports.vessels.filter(function(v){return Date.now()-Date.parse(v.seen)<=1800000 && (activeView === "overview" || distanceMiles(view.lat,view.lng,v.lat,v.lon)<= (activeView === "saginaw" ? 60 : 35));});
+    var view=views[activeView], now=Date.now();
+    var current=reports.vessels.filter(function(v){return recent(v,now) && (activeView === "overview" || inCorridor(v,activeView));});
+    updateActivity(now);
     var query=vesselSearch.value.trim();
     var vessels=current.filter(function(v){return vesselMatchesSearch(v,query);});
     if(query){
@@ -135,6 +172,8 @@
     }else{
       vesselSearchStatus.textContent=current.length+" recent AIS reports available in "+view.label+". Enter a ship name or MMSI to narrow the map.";
     }
+    var selected=vessels.find(function(v){return String(v.mmsi)===selectedMmsi;});
+    if(selected)showShip(selected,now);else clearShip();
     vesselList.replaceChildren(); if(layer) layer.clearLayers();
     vessels.forEach(function(v){
       var name=v.name || "Vessel " + v.mmsi;
@@ -144,8 +183,9 @@
       if(v.course!==null) popup.append(node("p","Course "+Math.round(v.course)+"°"));
       if(map){
         var marker=L.circleMarker([v.lat,v.lon],{radius:v.shipType>=70&&v.shipType<90?8:5,color:"#fff",weight:1,fillColor:v.speedKnots===null?"#64748b":v.speedKnots>0.5?"#146c86":"#a6651e",fillOpacity:0.95}).addTo(layer).bindTooltip(node("span",name)).bindPopup(popup);
-        var button=node("button",name);button.type="button";button.addEventListener("click",function(){map.setView([v.lat,v.lon],13);marker.openPopup();mapFrame.scrollIntoView({block:"center",behavior:"smooth"});});item.append(button);
-      }else item.append(node("strong",name));
+        marker.on("click",function(){showShip(v,Date.now());if(inspector)inspector.scrollIntoView({block:"nearest",behavior:"smooth"});});
+        var button=node("button",name);button.type="button";button.addEventListener("click",function(){showShip(v,Date.now());map.setView([v.lat,v.lon],13);marker.openPopup();if(inspector)inspector.scrollIntoView({block:"nearest",behavior:"smooth"});else mapFrame.scrollIntoView({block:"center",behavior:"smooth"});});item.append(button);
+      }else {var fallback=node("button",name);fallback.type="button";fallback.addEventListener("click",function(){showShip(v,Date.now());});item.append(fallback);}
       item.append(node("span",detail));vesselList.append(item);
     });
     if(!vessels.length) vesselList.append(node("li",query
@@ -160,7 +200,7 @@
       var r=await fetch("/api/freighter-ais",{signal:AbortSignal.timeout(12000)}), data=await r.json();
       if(!r.ok||!data.ok||!Array.isArray(data.vessels))throw new Error("AIS unavailable");
       reports=data;lastFailed=false;renderVessels();
-    }catch(_){lastFailed=true;if(reports)renderVessels();else{setStatus("Vessel reports unavailable. Try refresh or the passage links below.","slow");vesselList.replaceChildren(node("li","The feed did not return usable data. This is not a zero-traffic report."));vesselSearchStatus.textContent="Search unavailable: no current AIS reports loaded. Try refresh or the external passage sources."; }}
+    }catch(_){lastFailed=true;if(reports)renderVessels();else{if(activityChecked)activityChecked.textContent="AIS unavailable; no corridor counts can be shown.";setStatus("Vessel reports unavailable. Try refresh or the passage links below.","slow");vesselList.replaceChildren(node("li","The feed did not return usable data. This is not a zero-traffic report."));vesselSearchStatus.textContent="Search unavailable: no current AIS reports loaded. Try refresh or the external passage sources."; }}
     finally{busy=false;refreshButton.disabled=false;}
   }
 
