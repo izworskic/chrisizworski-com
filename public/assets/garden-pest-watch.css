@@ -160,3 +160,46 @@
 @media(max-width:970px){.beetle-study{margin:26px 18px}.beetle-study-summary{grid-template-columns:1fr;gap:8px}.beetle-study-summary-action{justify-self:start}.study-guide{grid-template-columns:1fr}.study-form{grid-template-columns:repeat(2,minmax(0,1fr))}.study-board-top{display:block}}
 @media(max-width:600px){.beetle-study{margin:23px 12px}.beetle-study-summary{padding:19px}.beetle-study-body{padding:15px;gap:16px}.study-board{padding:18px;box-shadow:3px 3px 0 #d6dbc9}.study-form{grid-template-columns:1fr}.study-npn{grid-template-columns:1fr;padding:16px}.study-actions button{width:100%}.study-protocol{font-size:.85rem}.study-guide h2{font-size:2rem}}
 @media(prefers-reduced-motion:reduce){.beetle-study *{scroll-behavior:auto!important}}
+
+/* Pest Photo Field Guide. Crop/injury comparisons, never an outbreak prediction. */
+.visual-diagnosis{padding:45px 0 30px;border-top:1px solid #c9d5c6}
+.visual-header{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(240px,.75fr);gap:35px;align-items:end;margin-bottom:24px}
+.visual-header h2{font:500 clamp(2rem,3.7vw,3.05rem)/1.13 'Fraunces',Georgia,serif;letter-spacing:-.035em;color:#1e3d31;margin:8px 0 0}
+.visual-intro{font-size:.93rem;line-height:1.6;color:#526455;margin:0 0 5px}
+.visual-picker{background:#f1f3e8;border-left:4px solid #ad6a3c;padding:19px 23px 22px;margin-bottom:18px}
+.visual-picker-head{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.visual-picker-head strong{font-size:.92rem;color:#233e30}
+.visual-reset{padding:8px 12px;border:1px solid #738a77;background:#fffdf8;color:#275138;font-size:.77rem;font-weight:800;min-height:40px;border-radius:3px;cursor:pointer}
+.visual-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.visual-chip{background:#fffdf8;border:1px solid #a8b9a6;border-radius:50px;padding:10px 14px;color:#294a34;font-size:.78rem;font-weight:750;cursor:pointer;min-height:42px;line-height:1.25}
+.visual-chip[aria-pressed=true]{background:#27503d;color:#fffdf2;border-color:#27503d}
+.visual-chip:hover{border-color:#325b40}
+.visual-summary{color:#586b5a;font-size:.79rem;margin:0 0 15px;line-height:1.5}
+.visual-results{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.visual-result{background:#fffdf7;border:1px solid #cad5c8;border-top:3px solid #9b5d39;padding:19px 19px 21px;min-width:0}
+.visual-index{color:#965b37;text-transform:uppercase;letter-spacing:.1em;font-weight:800;font-size:.66rem}
+.visual-result h3{font:500 1.55rem/1.2 'Fraunces',Georgia,serif;color:#233b30;margin:7px 0 17px}
+.visual-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin:12px 0 17px}
+.visual-figure{margin:0;min-width:0;background:#f2f1e8;border:1px solid #d5ddcd}
+.visual-photo{aspect-ratio:4/3;background:#e7e8dd;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.visual-photo img{width:100%;height:100%;object-fit:cover;display:block}
+.visual-figure figcaption{padding:11px 11px 12px}
+.visual-kind{display:block;font-size:.66rem;letter-spacing:.08em;color:#92532d;margin:0 0 7px}
+.visual-caption{display:block;color:#2d4736;font-size:.77rem;line-height:1.5}
+.visual-credit{display:block;margin-top:8px;font-size:.65rem;line-height:1.6;overflow-wrap:anywhere}
+.visual-credit a{color:#265a42;text-decoration:underline;font-weight:700}
+.visual-image-unavailable{padding:10px;color:#56675a;font-size:.72rem;line-height:1.45;text-align:center}
+.visual-interpretation,.visual-lookalike{color:#415b49;font-size:.84rem;line-height:1.6;margin:11px 0}
+.visual-lookalike{border-top:1px solid #d5dfd0;padding-top:11px}
+.visual-empty{background:#f0f1e9;border:1px solid #b8c6b9;padding:25px;grid-column:1/-1}
+.visual-empty p{margin-bottom:0}
+.visual-caution{margin:18px 0 0;color:#536555;font-size:.79rem;line-height:1.55}
+.watch-card .visual-pair{margin:14px 0 18px;gap:8px}
+.watch-card .visual-figure figcaption{padding:9px}
+.watch-card .visual-caption{font-size:.72rem}
+.watch-card .visual-kind{font-size:.6rem}
+.watch-card .visual-credit{font-size:.64rem}
+.visual-chip:focus-visible,.visual-reset:focus-visible,.visual-credit a:focus-visible{outline:3px solid #9c613c;outline-offset:3px}
+@media(max-width:900px){.visual-header{grid-template-columns:1fr;gap:12px}.visual-results{grid-template-columns:1fr 1fr}}
+@media(max-width:700px){.visual-results{grid-template-columns:1fr}.visual-diagnosis{padding-top:35px}.visual-result{padding:16px}.visual-picker{padding:16px}.visual-chips{gap:7px}.visual-chip{padding:10px 12px}}
+@media(max-width:370px){.visual-pair{gap:6px}.visual-figure figcaption{padding:7px}.visual-caption{font-size:.68rem}}
