@@ -290,8 +290,8 @@ def parse_report(html: str, url: str, year: int, now: dt.date | None = None):
         elif code == "4":
             trap_types.append("WIRE_HARTSTACK")
         else:
+            # Explicitly unknown is a valid source state, never an inferred trap type.
             trap_types.append("TYPE_NOT_SPECIFIED")
-            flags.append("TRAP_TYPE_UNSPECIFIED:" + name)
     if not (3 <= len(col_ids) <= 20) or len(rows) > 30 or len(rows) < 2:
         raise Veto("Unexpected MSU county roster or observation row count")
     # MSU's 2026 footnotes explicitly define 3=cloth and 4=wire. Do not
@@ -354,7 +354,8 @@ def parse_report(html: str, url: str, year: int, now: dt.date | None = None):
             "publishedDate": published.isoformat(),
             "latestCollectionWeek": latest,
             "dataType": "INDEPENDENT_REGIONAL_PHEROMONE_TRAPS",
-            "sourceHtmlSha256": hashlib.sha256(html.encode("utf-8")).hexdigest(),
+            # Hash the actual table evidence, not a changing navigation/sidebar.
+            "sourceTableSha256": hashlib.sha256(canonical_json(rows).encode("utf-8")).hexdigest(),
         },
         "sourceLimitations": [
             "A cooperating trap is not a survey of a county or your ZIP.",
