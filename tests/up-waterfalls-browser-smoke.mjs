@@ -178,6 +178,23 @@ try{
     assert.ok(!await page.evaluate(()=>[...document.querySelectorAll('[data-fall]')].some(x=>x.dataset.id==='gabbro-falls'&&x.dataset.arrivalVerified!=='verified')));
     assert.equal(await page.locator('[data-id="gabbro-falls"] a[href="/upper-peninsula-waterfalls/gabbro-falls/"]').count()>0,true);
   });
+  await run('B61 Chicagon conflict page stays noindex and readable at 390px without driving advice',async()=>{
+    const p=await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:1,isMobile:true});
+    try{
+      await p.goto(base+'/upper-peninsula-waterfalls/research/chicagon-falls-private-corridor-review/',{waitUntil:'domcontentloaded',timeout:30000});
+      assert.equal(await p.locator('h1').count(),1);
+      assert.equal(await p.locator('meta[name="robots"]').getAttribute('content'),'noindex,follow');
+      assert.equal(await p.locator('.cp-gate').count(),6);
+      assert.match(await p.locator('body').innerText(),/county.*private|classified.*Private/i);
+      assert.match(await p.locator('body').innerText(),/DNR-managed land/);
+      assert.match(await p.locator('body').innerText(),/no confirmed open-now trip/i);
+      assert.ok(!await p.locator('a[href*="google.com/maps/dir"]').count());
+      assert.equal(await p.locator('a[href*="Recreation-Paln-2022-2026.pdf"]').count()>0,true);
+      const size=await p.evaluate(()=>({viewport:window.innerWidth,scroll:document.documentElement.scrollWidth}));
+      assert.ok(size.scroll<=size.viewport+2,'Chicagon source page horizontally overflows mobile');
+      await p.screenshot({path:screenshots+'/chicagon-source-conflict-mobile.png',fullPage:true,animations:'disabled'});
+    }finally{await p.close();}
+  });
   await run('desktop layout and map usable',async()=>{
     await page.setViewportSize({width:1280,height:850});
     const {width,scroll}=await page.evaluate(()=>({width:innerWidth,scroll:document.documentElement.scrollWidth}));
