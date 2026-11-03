@@ -174,6 +174,9 @@ def analyze(inputs: dict, archive: dict, ledger: dict, as_of: str) -> dict:
         "dataSource": "existing Node maritime feed scanner metadata only",
         "sourceCoverage": {"ok": outcomes.get("OK", 0), "failed": outcomes.get("FAILED", 0),
                            "catalogTotal": len(source_outcomes)},
+        "failedSources": [{"sourceId": str(x.get("source") or ""),
+                           "error": str(x.get("error") or "Unavailable")[:100]}
+                          for x in source_outcomes if not x.get("ok")],
         "observedArticles": len(rows), "validObservations": len(analyzed),
         "existingNodeAccepted": sum(x["nodeDecision"] == "accepted" for x in analyzed),
         "existingNodeReview": sum(x["nodeDecision"] == "review" for x in analyzed),
