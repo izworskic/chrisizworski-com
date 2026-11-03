@@ -240,6 +240,8 @@
       if(map){
         var marker=L.marker([v.lat,v.lon],{icon:shipIcon(v),title:name,alt:name,keyboard:true}).addTo(layer).bindTooltip(node("span",name)).bindPopup(popup);
         marker.on("click",function(){showShip(v,Date.now());if(inspector)inspector.scrollIntoView({block:"nearest",behavior:"smooth"});});
+        var markerElement=marker.getElement();
+        if(markerElement)markerElement.addEventListener("keydown",function(event){if(event.key==="Enter"||event.key===" "){event.preventDefault();showShip(v,Date.now());marker.openPopup();}});
         var button=node("button",name);button.type="button";button.addEventListener("click",function(){showShip(v,Date.now());map.setView([v.lat,v.lon],13);marker.openPopup();if(inspector)inspector.scrollIntoView({block:"nearest",behavior:"smooth"});else mapFrame.scrollIntoView({block:"center",behavior:"smooth"});});item.append(button);
       }else {var fallback=node("button",name);fallback.type="button";fallback.addEventListener("click",function(){showShip(v,Date.now());});item.append(fallback);}
       item.append(node("span",detail));vesselList.append(item);
