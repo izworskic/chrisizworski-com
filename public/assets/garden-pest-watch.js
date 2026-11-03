@@ -42,7 +42,25 @@ function persist(){
  if(suspect.value)u.searchParams.set('observed',suspect.value);else u.searchParams.delete('observed');
  history.replaceState(null,'',u.pathname+'?'+u.searchParams.toString()+u.hash);
 }
+// Photo comparisons receive only advice from the verified, same-selection watch response.
+// Never pass a visitor's photo selections as observations or pest forecast evidence.
+function publishVisualPlan(data) {
+ const valid=data?.schema==='michigan-garden-pest-watch-v1' &&
+  data.crop===crop.value && data.stage===stage.value &&
+  ['SCOUTING','OFF_SEASON'].includes(data.mode) && Array.isArray(data.all);
+ const detail=valid?{
+  crop:data.crop,stage:data.stage,zip:zip.value,mode:data.mode,
+  asOfDate:data.asOfDate,
+  items:data.all.map(p=>({
+   id:p.id,where:p.where,prevent:p.prevent,found:p.found,source:p.source,
+   seasonMatches:p.seasonMatches,stageMatches:p.stageMatches,
+   weatherFavorable:p.weatherFavorable,state:p.state
+  }))
+ }:null;
+ window.dispatchEvent(new CustomEvent('garden-pest-watch:evidence',{detail}));
+}
 function showUnavailable(errorCode='SOURCE_UNAVAILABLE'){
+ publishVisualPlan(null);
  resetBeetle('Main crop/ZIP source unavailable. The official beetle model is not being linked to an unverified reference area.');
  const month=Number(new Intl.DateTimeFormat('en-US',{timeZone:'America/Detroit',month:'numeric'}).format(new Date()));
  const winter=month>=11||month<=2;
@@ -108,6 +126,7 @@ function card(p,i){
 function showData(d){
  if(!d||d.schema!=='michigan-garden-pest-watch-v1'||!Array.isArray(d.featured)||!Array.isArray(d.all))throw Error('UNKNOWN_DATA_SCHEMA');
  lastCatalog=d.all;
+ publishVisualPlan(d);
  renderCatalogOptions(d.all);
  const locationLabel=d.location?.name||'Michigan reference area';
  setInfo('location-label',locationLabel.toUpperCase());
@@ -155,6 +174,7 @@ async function update(){
    zip.reportValidity();return;
  }
  zip.setCustomValidity('');persist();
+ publishVisualPlan(null); // Prevent a previous crop, stage or ZIP's action plan from surviving a refresh.
  const thisRequest=++requestNumber;
  source.textContent='Updating your crop-stage scouting desk from authoritative reference sources…';
  const params=new URLSearchParams({crop:crop.value,stage:stage.value});
@@ -173,8 +193,9 @@ async function update(){
 }
 form.addEventListener('submit',ev=>{ev.preventDefault();update();});
 confirm.addEventListener('click',update);
-crop.addEventListener('change',()=>{suspect.value='';resetBeetle('Crop changed. Update your watch to check the appropriate model and location.');});
-zip.addEventListener('input',()=>{zip.setCustomValidity('');resetBeetle('ZIP reference changed. Update your watch to request an exact matching forecast pixel.');});
+crop.addEventListener('change',()=>{publishVisualPlan(null);suspect.value='';resetBeetle('Crop changed. Update your watch to check the appropriate model and location.');});
+stage.addEventListener('change',()=>publishVisualPlan(null));
+zip.addEventListener('input',()=>{publishVisualPlan(null);zip.setCustomValidity('');resetBeetle('ZIP reference changed. Update your watch to request an exact matching forecast pixel.');});
 share.addEventListener('click',async()=>{
  const url=location.href;
  try{if(!navigator.clipboard?.writeText)throw Error('NO_CLIPBOARD');
