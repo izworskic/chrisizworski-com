@@ -10,7 +10,7 @@
     "exactIdMatched": 68,
     "pending": 93,
     "curatedTotal": 75,
-    "curatedNoMatchingGIS": 10
+    "curatedNoMatchingGIS": 11
   },
   "candidates": [
     {
@@ -6271,7 +6271,7 @@
       "lat": 47.329239,
       "lng": -88.433472,
       "source": "Michigan state GIS Waterfalls MapServer/7",
-      "reconciliation": "verified-source-backed-visitor-guide",
+      "reconciliation": "curated-exact-gis-id",
       "curatedId": "conglomerate-falls-gratiot",
       "publicGuide": "/upper-peninsula-waterfalls/conglomerate-falls-gratiot/",
       "landManager": "Keweenaw Natural Areas",
