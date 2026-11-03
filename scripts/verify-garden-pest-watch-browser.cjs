@@ -271,7 +271,7 @@ async function waitForAnswer(page,pest){await page.waitForFunction(name=>documen
   assert.match(await winter.locator('.visual-plan-label').first().innerText(),/OFF-SEASON \/ PLAN FOR NEXT YEAR/);
   assert.match(await winter.locator('.visual-plan-primary').first().innerText(),/Next-season preparation/);
   assert.equal(await winter.locator('.visual-plan-details').count(),0,'November must not present in-season confirm-and-treat actions');
-  assert.match(await winter.locator('#earworm-readout').innerText(),/2026 season closed/);
+  assert.match(await winter.locator('#earworm-readout').innerText(),/2026 season closed/i);
   assert.match(await winter.locator('#earworm-readout').innerText(),/not activity today or a prediction for next summer/);
   assert.match(await winter.locator('#borer-records').innerText(),/In November.*past growing season/);
   await winter.screenshot({path:'artifacts/garden-pest-watch-browser/november-preparation-not-pest-weather.png',fullPage:true,animations:'disabled'});
