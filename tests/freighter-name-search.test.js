@@ -26,6 +26,11 @@ test('case-insensitive matching accepts ship names, multiword names and MMSI, no
   const fn=vm.runInNewContext('('+match+')');
   const vessel={name:'M/V Arthur M. Anderson',mmsi:367001234};
   assert.equal(fn(vessel,'anderson'),true);
+  assert.equal(fn(vessel,'arthur anderson'),true);
+  assert.equal(fn({name:'LEE A. TREGURTHA',mmsi:'367000001'},'lee tregurtha'),true);
+  assert.equal(fn({name:'CHI-CHEEMAUN',mmsi:'367000002'},'chi cheemaun'),true);
+  assert.equal(fn({name:'LEE A. TREGURTHA',mmsi:'367000001'},'lee nonexistent'),false);
+  assert.equal(fn(vessel,'!!!'),false);
   assert.equal(fn(vessel,'ARTHUR  M.'),true);
   assert.equal(fn(vessel,'367001234'),true);
   assert.equal(fn(vessel,'unknown freighter'),false);

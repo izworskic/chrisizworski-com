@@ -114,10 +114,15 @@
   var sourceCredits = document.getElementById("freighterCredits");
   function node(tag, value) {var el=document.createElement(tag);el.textContent=value;return el;}
   function vesselMatchesSearch(vessel,rawQuery) {
-    var query=String(rawQuery||"").trim().toLowerCase().replace(/\s+/g," ");
-    if(!query)return true;
-    return String(vessel.name||"").toLowerCase().replace(/\s+/g," ").includes(query)
-      || String(vessel.mmsi==null?"":vessel.mmsi).includes(query);
+    var raw=String(rawQuery||"").trim();
+    if(!raw)return true;
+    if(/^\d+$/.test(raw) && String(vessel.mmsi==null?"":vessel.mmsi).includes(raw))return true;
+    function words(value){
+      return String(value||"").toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g," ").trim().split(/\s+/).filter(Boolean);
+    }
+    var terms=words(raw), name=words(vessel.name);
+    if(!terms.length || !name.length)return false;
+    return terms.every(function(term){return name.some(function(part){return part.startsWith(term);});});
   }
   function renderVessels() {
     if (!reports) return;

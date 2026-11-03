@@ -1896,3 +1896,9 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - Added an offline Python CSV analysis that calculates page metrics and classifies explicitly scoped query exports. A site-wide query export is never represented as tracker-specific. Site-wide grouping excludes queries without clear Great Lakes vessel terms; anonymized and omitted queries limit analysis. No data is sent to a server.
 - Search Console Web export created October 24, last 28 days: tracker 9,119 impressions, 142 clicks, 1.56% CTR, 7.25 position. Site-wide Great Lakes ship tracking rows in the exported top queries: 3,722 impressions, 43 clicks, 1.16% CTR, weighted position 7.12; these are NOT tracker-attributed. No causal, ranking, indexing, or revenue uplift measured.
 - PR and deployment pending verification. Next action: compare finalized 28-day page data after release and obtain a page-filtered query export before drawing intent-specific conclusions.
+
+### 2026-11-03 — Freighter name-search follow-up
+
+- Production browser confirmed `/great-lakes-freighter-tracking/` loaded 158 recent AIS reports and showed `LEE A. TREGURTHA`, but `lee tregurtha` returned zero because the search required a literal contiguous substring. Fixed matching for punctuation, omitted middle initials, case and partial name words; numeric MMSI matching remains available. No fuzzy spelling or new vessel claims are introduced.
+- Retained corridor and 30-minute data boundaries, outage language, source credits, canonical and ads. Bumped the tracker script URL for returning visitors. Matching has focused regression coverage; real post-release search verification is required.
+- No post-release Search Console or revenue results measured. Next action: verify the exact name search on the deployed tracker and monitor the 28-day baseline.
