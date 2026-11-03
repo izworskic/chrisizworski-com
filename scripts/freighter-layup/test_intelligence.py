@@ -160,6 +160,7 @@ class ShadowTests(unittest.TestCase):
         self.assertTrue(result["unknownIsNotZero"])
         mixed = self.report([], outcomes=[{"ok": True}, {"ok": False}])
         self.assertEqual(mixed["status"], "PARTIAL")
+        self.assertEqual(len(mixed["failedSources"]), 1)
 
     def test_aliases_do_not_become_verified_berth_positions(self):
         result = self.report([observation(self.url,
