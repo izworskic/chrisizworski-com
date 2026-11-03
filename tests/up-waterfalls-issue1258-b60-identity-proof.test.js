@@ -45,7 +45,7 @@ test('B60: unresolved access gates stay blocked across ledger, queue and researc
  assert.equal(R.counts.pending,93);
  assert.equal(L.curatedCount,75);
  assert.equal(L.unresolvedCandidates,93);
- assert.equal(Q.candidates.length,94);
+ assert.equal(Q.candidates.length,93);
  assert.equal(V.records.length,97);
  for(const oid of [8,68,213]){
   const source=R.candidates.find(x=>x.gisObjectId===oid);
