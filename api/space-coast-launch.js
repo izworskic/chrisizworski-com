@@ -13,6 +13,7 @@ const { inspectKscLaunch, CALENDAR: KSC_CALENDAR } =
 const { storeTrustedLaunches } = require('../lib/space-coast-ksc-snapshot');
 const { buildGeographicViewing } = require('../lib/space-coast-geo');
 const { floridaLaunchNetwork } = require('../lib/rocket-launch-florida-facilities');
+const { buildFloridaViewingDeck } = require('../lib/florida-viewing-deck');
 const { readNationalSchedule } = require('../lib/rocket-launch-national');
 const { buildMediaDesk } = require('../lib/space-coast-media');
 const { launchWeatherFor } = require('../lib/launch-weather-intelligence');
@@ -224,6 +225,13 @@ return async function handler(req, res) {
       actualGateStatus:'not-verified'
     };
     const skyComparisonDecision = skyComparison(forecasts);
+    // One bounded mission/access/GIS response drives the visitor's 30-second
+    // plan. This is a presentation synthesis, NOT a fresh source call or an
+    // assertion that a park, beach, paid venue or road is open.
+    const floridaViewingDeck = buildFloridaViewingDeck({
+      launch:next,geographicViewing,viewpoints,kscViewing,
+      accessSource:nps,scheduleFreshness:feed.freshness,arrivalGuidance
+    });
     const schedule = next?.scheduleConfidence || {
       level: 'none', label: 'No future Florida launch in current feed',
       detail: 'Check official NASA and launch-operator schedules for new announcements.'
@@ -255,7 +263,7 @@ return async function handler(req, res) {
           detail: 'A local spectator forecast cannot establish range approval or a weather launch commit.'
         }
       },
-      viewpoints, parkAlerts, geographicViewing,
+      viewpoints, parkAlerts, geographicViewing, floridaViewingDeck,
       arrivalGuidance, skyComparison: skyComparisonDecision,
       kscViewing,
       accessSource: {
