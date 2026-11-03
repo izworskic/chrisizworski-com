@@ -194,7 +194,9 @@
       // visible until a CARTO tile actually loads; outages do not blank the map.
       if(typeof window.fetch==='function'){
         fetch('/api/carto-basemap-config',{
-          credentials:'same-origin',signal:AbortSignal.timeout(6500),
+          credentials:'same-origin',
+          signal:typeof AbortSignal!=='undefined'&&typeof AbortSignal.timeout==='function'?
+            AbortSignal.timeout(6500):undefined,
           headers:{Accept:'application/json'}
         }).then(r=>r.ok?r.json():null).then(config=>{
           if(!config||config.provider!=='CARTO'||typeof config.key!=='string'||
