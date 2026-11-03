@@ -241,6 +241,18 @@
       "profileUrl": "https://chrisizworski.com/chris-izworski/",
       "repo": "izworskic/chrisizworski-com",
       "evidence": "Main middleware composes the noindex lab source into the canonical host response; source tests cover the canonical graph. Production output remains subject to the separate live audit."
+    },
+    {
+      "id": "living-garden-origin",
+      "host": "garden.chrisizworski.com",
+      "toolIds": [
+        "living-garden"
+      ],
+      "repo": "izworskic/freighter-view-garden-planner",
+      "status": "verified",
+      "personId": "https://chrisizworski.com/#person",
+      "profileUrl": "https://chrisizworski.com/chris-izworski/",
+      "evidence": "Vercel production garden domain was verified and independent browser extraction on 2026-11-02 confirmed a public HTTP response, The Living Garden H1, main-site canonical, indexable production metadata and creator; main-site proxy still requires public post-release smoke."
     }
   ],
   "authorityValueFunction": {
@@ -322,7 +334,7 @@
       "noRankingGuarantee": true
     },
     "auditState": {
-      "totalTrackedProperties": 18,
+      "totalTrackedProperties": 19,
       "pendingSourceRepositoryAudit": [
         "ausable-field-map"
       ],

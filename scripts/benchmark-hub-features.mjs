@@ -122,7 +122,16 @@ section('Guide catalogue', 'Every garden page listed, each described accurately'
     return /47 crops/.test(z) && /78/.test(z) && !/30\+/.test(z) && !/10%/.test(fr) && /75, 50 and 25 percent/.test(fr) && !/90%|NOAA's full/.test(ls);
   });
   crit(20, 'Every card link points at a page that exists', () => [...html.matchAll(/class="card-link" href="(\/[^"]+)"/g)].every(m => fs.existsSync(pub(m[1].replace(/^\//, '') + 'index.html'))));
-  crit(15, 'Section counts match their cards', () => [...html.matchAll(/<section class="category"[\s\S]*?<\/section>/g)].every(m => { const n = Number((m[0].match(/(\d+) guides?</i) || [])[1]); return n === (m[0].match(/<article class="guide-card/g) || []).length; }));
+  crit(15, 'Section counts match their cards', () => {
+    const counts = [...html.matchAll(/<section class="category"[\s\S]*?<\/section>/g)].map(m => ({
+      title: (m[0].match(/id="cat-([^"]+)"/) || [])[1] || 'unnamed',
+      declared: Number((m[0].match(/(\d+) guides?/i) || [])[1]),
+      actual: (m[0].match(/<article class="guide-card/g) || []).length,
+    }));
+    const bad = counts.filter(row => row.declared !== row.actual);
+    if (bad.length) console.error('Guide count mismatch (actual source vs articles):', JSON.stringify(bad));
+    return bad.length === 0;
+  });
   crit(10, 'Clean link labels (no doubled arrows)', () => !/→<\/a>/.test(html.slice(html.indexOf('<!-- CATEGORY'))));
 });
 

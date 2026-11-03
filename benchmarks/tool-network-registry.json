@@ -1639,6 +1639,45 @@
       }
     },
     {
+      "id": "living-garden",
+      "name": "The Living Garden — Raised-Bed & Harvest Journal",
+      "canonical": "https://chrisizworski.com/living-garden/",
+      "aliases": [],
+      "kind": "interactive-planner",
+      "cluster": "gardening",
+      "primaryIntent": "Design a raised bed by square, test spring-to-fall succession plantings, and record actual seasonal harvest outcomes",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "united-states"
+      ],
+      "personas": [
+        "raised-bed-grower",
+        "small-space-vegetable-gardener",
+        "season-journal-keeper"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active"
+      },
+      "searchEvidence": {
+        "status": "unknown",
+        "note": "New public release; no verified baseline or search lift claimed."
+      }
+    },
+    {
       "id": "heirloom-matchmaker",
       "name": "Heirloom Variety Matchmaker",
       "canonical": "https://chrisizworski.com/heirloom-variety-matchmaker/",
@@ -6646,6 +6685,38 @@
       "strength": "optional",
       "surface": "gardening-tool-network",
       "reason": "If dry weather stresses plants, the dedicated irrigation decision is distinct from pest identification or phenology."
+    },
+    {
+      "from": "planting-calendar",
+      "to": "living-garden",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "garden",
+      "reason": "After verifying crop timing, gardeners can place crops in a real bed and explore successive use of the same space."
+    },
+    {
+      "from": "living-garden",
+      "to": "planting-calendar",
+      "type": "evidence-next",
+      "strength": "strong",
+      "surface": "garden",
+      "reason": "Michigan planting-calendar rules provide an independent local cross-check of the saved bed's illustrative frost assumptions."
+    },
+    {
+      "from": "living-garden",
+      "to": "frost-dates",
+      "type": "evidence-next",
+      "strength": "strong",
+      "surface": "garden",
+      "reason": "Historical station freeze dates explain one key constraint used by the bed planner."
+    },
+    {
+      "from": "living-garden",
+      "to": "michigan-garden-pest-watch",
+      "type": "decision-next",
+      "strength": "optional",
+      "surface": "garden",
+      "reason": "A recorded crop and plant stage can guide follow-up pest scouting, without pretending the journal diagnoses pests."
     }
   ],
   "cannibalizationGroups": [
