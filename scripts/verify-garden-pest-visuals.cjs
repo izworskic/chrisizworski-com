@@ -20,14 +20,14 @@ assert.ok(page.indexOf('garden-pest-visual-data.js')<page.indexOf('garden-pest-v
 assert.ok(page.indexOf('garden-pest-visuals.js')<page.indexOf('garden-pest-watch.js'));
 assert.match(core,/GardenPestVisuals\?\.renderPair/);
 assert.match(ui,/aria-pressed/);
-assert.match(ui,/SYMPTOM \\/ CLOSE-UP/);
+assert.ok(ui.includes('SYMPTOM / CLOSE-UP'));
 assert.match(ui,/visual-category-button/);
 assert.match(ui,/Check this next:/);
 assert.match(ui,/if \(item\.whatToCheck\)/);
 assert.ok(manifest.pests.length >= 15);
 assert.ok(manifest.clues.length >= 18);
 assert.match(ui,/Photograph unavailable/);
-assert.match(ui,/possible visual matches, never a diagnosis/);
+assert.ok(ui.includes('not a diagnosis or measured likelihood'));
 assert.match(ui,/encodeURIComponent\(photo\.file\)/);
 assert.match(ui,/photo\.license/);
 for(const item of manifest.pests){
