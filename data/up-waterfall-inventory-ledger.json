@@ -220,22 +220,22 @@
         -88.452985
       ],
       "river": "CHICAGON CREEK",
-      "identity": "unreconciled",
+      "identity": "state-falls-geography-corroborated-county-private-inventory-unresolved",
       "curatedId": null,
       "possibleCuratedIds": [],
       "publication": "research-only",
-      "access": "documented-land-or-tourism-feature-only-complete-public-route-unverified",
+      "access": "blocked-private-ownership-inventory-right-of-way-conflict",
       "landManager": "Michigan DNR Crystal Falls Management Unit — natural falls parcel only",
       "parkingEvidence": null,
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
-      "checked": "2026-10-28",
-      "nextAction": "Require legal public road/right-of-way inventory for Raymer/Dave's Camp, safe parking and entire trail; no GIS point driving.",
+      "checked": "2026-11-03",
+      "nextAction": "Obtain legal road inventory/jurisdiction for Raymer and Dave's Camp from Iron County Road Commission, parcel/easement overlays for all portions of the approach from DNR and Iron County Equalization/Register of Deeds, a specific permitted parking location, mapped complete walking corridor and current gate/washout/season confirmation. Resolve dated county private scenic inventory versus state land specifically, without inferring private title or public trail from labels.",
       "batch": "county-iron",
-      "reviewBatch": "11",
-      "reviewed": "2026-10-28",
-      "classification": "dnr-falls-parcel-verified-historic-private-access-road-corridor-gated",
-      "accessAssessment": "Official Michigan DNR LOTS places falls GIS #12 in dedicated 47.8-acre DNR Crystal Falls Management Unit forest parcel (ParID 258918). This describes waterfall land only, NOT legal road, parking or full footpath. Official DNR Crystal Falls Compartment 12139 management report states private landowners control nearly all VEHICLE access into adjacent Chicagon Creek area; county Long Lake Rd listed in historical restricted-roads document, but Raymer/Dave's Camp road/right-of-way, turnout and walking path to state falls parcel have not been publicly verified. This historical forest-compartment statement is area context only, not proof of exact falls-access easement.",
+      "reviewBatch": "61",
+      "reviewed": "2026-11-03",
+      "classification": "dnr-falls-parcel-vs-iron-county-private-recreation-inventory-unresolved-corridor",
+      "accessAssessment": "Michigan DNR LOTS currently identifies the state GIS #12 Chicagon waterfall point within dedicated 47.8-acre Crystal Falls Management Unit parcel ParID 258918. In apparent conflict, Iron County's official 2022–2026 Recreation Inventory lists Chicaugon Falls, Crystal Falls Township, Scenic, owner Private. These are different scopes and dates, not a legal survey proving private ownership of the waterfall point or a public easement to it. Chamber tourism directs visitors toward Raymer/Dave's Camp Road, while independent reporting notes private camps and spring washouts. There is no authoritative, current road classification and right-of-way continuing to a safe signed lot or lawful uninterrupted walk. No waterfall coordinate, tourism turnout claim, county road index map or state-land parcel establishes a visitor route. Independent GIS/field locations agree within 67 m, but another tourism waypoint lies 4.0 km away; that discrepancy cannot be used for directions.",
       "evidence": [
         "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
         "https://www.iron.org/outdoors/waterfalls/",
@@ -243,8 +243,69 @@
         "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/2",
         "https://www.michigandnr.com/publications/pdfs/ForestsLandWater/Cmpt_Reviews/Crystal_Falls/2021/cry139_comp_info.pdf",
         "https://ironcountyroads.com/wp-content/uploads/2023/04/Roads-Restricted-List.pdf",
-        "https://gisagocss.state.mi.us/arcgis/rest/services/OpenData/michigan_geographic_framework/MapServer/20"
-      ]
+        "https://gisagocss.state.mi.us/arcgis/rest/services/OpenData/michigan_geographic_framework/MapServer/20",
+        "https://ironmi.com/wp-content/uploads/2024/05/Recreation-Paln-2022-2026.pdf",
+        "https://ironcountyroads.com/seasonal-information",
+        "https://ironcountyroads.com/wp-content/uploads/2026/03/Geographical-Page.pdf"
+      ],
+      "sourceConflictProof": {
+        "sourceArtifact": "data/up-waterfall-chicagon-corridor-proof.json",
+        "dnrParcelId": 258918,
+        "countyPlanScenicPrivate": true,
+        "ownershipScopesReconciled": false,
+        "publicCorridorCleared": false,
+        "secondaryPointDistanceMeters": 67.2,
+        "inconsistentTourismPointDistanceMeters": 4010.1
+      },
+      "routeAudit": {
+        "reviewed": "2026-11-03",
+        "outcome": "not-cleared",
+        "publicRouteCleared": false,
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false,
+        "fullVehicleApproachVerified": false,
+        "publicParkingVerified": false,
+        "continuousPublicFootpathVerified": false,
+        "currentOpenStatus": "unverified",
+        "segments": [
+          {
+            "label": "Waterfall identity and source geography",
+            "status": "feature-position-corroborated-not-arrival",
+            "finding": "State GIS #12 at 46.134032,-88.452985 lies approximately 67.2 m from secondary mapped waterfall coordinates. A conflicting older tourism point is about 4.01 km away and cannot be used as a parking or falls waypoint.",
+            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+          },
+          {
+            "label": "Land tenure and documented ownership contradiction",
+            "status": "state-point-and-county-private-inventory-scope-conflict",
+            "finding": "DNR LOTS ParID 258918 is a 47.8-acre dedicated state-managed parcel at the waterfall GIS point. Iron County's adopted 2022–2026 Recreation Inventory lists Chicaugon Falls as a scenic site with owner Private. The inventory is dated and not a surveyed parcel join; the difference requires current boundary/easement reconciliation.",
+            "source": "https://ironmi.com/wp-content/uploads/2024/05/Recreation-Paln-2022-2026.pdf"
+          },
+          {
+            "label": "Legal road right-of-way from Long Lake Road",
+            "status": "not-cleared",
+            "finding": "The Iron County Chamber describes Raymer/Dave's Camp approach and washouts, but tourist directions do not establish legal road dedication or continuous public access. Road Commission current updates do not certify the exact segment or identify a waterfall lot.",
+            "source": "https://ironcountyroads.com/seasonal-information"
+          },
+          {
+            "label": "Designated visitor parking",
+            "status": "not-cleared",
+            "finding": "No current landowner/agency-designated waterfall visitor parking and safe vehicle approach verified. A widened area described by older trip accounts could be on a private camp route; do not drive to raw falls coordinate.",
+            "source": "https://www.iron.org/outdoors/waterfalls/"
+          },
+          {
+            "label": "Complete authorized walking trail",
+            "status": "not-cleared",
+            "finding": "No authoritative public trail/easement from an approved lot across intervening road/footpath parcels into state falls parcel. Signs and historical accounts do not certify uninterrupted public permission; no route polyline.",
+            "source": "https://ironcountylodging.com/waterfalls-in-iron-county-michigan/"
+          },
+          {
+            "label": "Seasonal roads, closures, gate and water conditions",
+            "status": "not-cleared",
+            "finding": "Chamber reports seasonal washouts and county road commission provides general road updates. No current Raymer/Dave's Camp road status, parking availability, authorized bridge/crossing or same-day falls conditions verified.",
+            "source": "https://ironcountyroads.com/seasonal-information"
+          }
+        ]
+      }
     },
     {
       "source": "mi-state-gis",
@@ -5595,5 +5656,5 @@
       "batch": "56-public-access-gap"
     }
   ],
-  "lastBatch": "60"
+  "lastBatch": "61"
 }
