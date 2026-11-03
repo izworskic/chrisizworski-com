@@ -233,3 +233,29 @@
 .visual-plan-caveat{color:#536454!important}
 .visual-plan-details summary:focus-visible,.visual-field-plan>a:focus-visible{outline:3px solid #a86b3b;outline-offset:3px}
 @media(max-width:520px){.visual-field-plan{padding:13px 12px}.visual-plan-primary{font-size:.83rem}}
+
+/* An independent photo-record desk: no map pins or fake live pest heat markers. */
+.borer-records{margin:26px 0 18px;padding:25px 27px;background:#213e31;color:#eff3e7;border:1px solid #456854;box-shadow:5px 5px 0 #afc1a9;min-width:0}
+.borer-record-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(210px,.36fr);gap:23px;align-items:start}
+.borer-record-kicker{display:block;color:#c5dbb5;font-size:.66rem;letter-spacing:.1em;font-weight:800}
+.borer-record-head h3{margin:9px 0 12px;color:white;font:500 clamp(1.55rem,2.5vw,2.15rem)/1.2 'Fraunces',Georgia,serif}
+.borer-record-head p{margin:0;color:#d9e4d6;font-size:.87rem;line-height:1.65}
+.borer-record-form{display:grid;gap:8px;align-self:center}
+.borer-record-form label{color:#d8e7d2;font-size:.76rem;font-weight:800}
+.borer-record-form select{min-height:44px;width:100%;color:#233e30;background:#fffdf6;border:1px solid #9daf9b;border-radius:3px;padding:8px 10px;font-size:.86rem}
+.borer-record-form button{min-height:46px;padding:11px;color:#1d382a;background:#edce89;border:1px solid #edce89;font-weight:850;line-height:1.35;font-size:.82rem;border-radius:3px;cursor:pointer}
+.borer-record-form button:disabled{opacity:.72;cursor:wait}
+.borer-record-status{margin:19px 0 12px;padding:11px 13px;border:1px solid #78947f;color:#edf5e8;font-size:.76rem;line-height:1.55}
+.borer-record-results{background:#faf9f0;color:#2d4938;padding:17px 18px;min-width:0;font-size:.85rem;line-height:1.6}
+.borer-record-results p{margin:7px 0 10px}
+.borer-proof-label{display:block;color:#775332;font-weight:850;font-size:.67rem;letter-spacing:.08em}
+.borer-record-verdict strong{display:block;font:550 1.27rem/1.3 'Fraunces',Georgia,serif;margin:8px 0;color:#264737}
+.borer-proof-explanation{color:#405747}
+.borer-record-links{display:grid;gap:5px;padding:12px 0;border-top:1px solid #cfddca}
+.borer-record-links strong{font-size:.77rem}
+.borer-record-results a{display:inline-block;margin:5px 15px 5px 0;color:#205d42;overflow-wrap:anywhere;font-weight:800}
+.borer-proof-limit{padding:12px 14px;background:#edece1;border-left:3px solid #ab824b;color:#504a37}
+.borer-record-caveat{margin:15px 0 0;color:#d2dfcf;font-size:.76rem;line-height:1.65}
+.borer-record-form button:focus-visible,.borer-record-form select:focus-visible,.borer-record-results a:focus-visible{outline:3px solid #f4d592;outline-offset:3px}
+@media(max-width:720px){.borer-record-head{grid-template-columns:1fr;gap:16px}.borer-records{margin:22px 0;padding:19px}.borer-record-form{display:flex;flex-wrap:wrap;align-items:center}.borer-record-form select{width:110px}.borer-record-form button{flex:1;min-width:170px}}
+@media(max-width:390px){.borer-records{padding:14px 12px;box-shadow:3px 3px 0 #afc1a9}.borer-record-form button{width:100%;flex:0 0 100%}.borer-record-results{padding:13px 12px}}
