@@ -125,8 +125,8 @@ test('website pages contain mission-selected editorial desk without altering can
   assert.match(nat,/id="rl-news-stories"/);
   assert.match(fl,/id="sfn-reporting-list"/);
   assert.match(fl,/https:\/\/spaceflightnow.com\/launch-schedule\//);
-  assert.match(nat,/app\.js\?v=20261103-viewing-v1/);
-  assert.match(fl,/app\.js\?v=20261102-truth-v2/);
+  assert.match(nat,/app\.js\?v=20261103-florida-network-v1/);
+  assert.match(fl,/app\.js\?v=20261103-facility-v1/);
   assert.equal((nat.match(/rel="canonical"/g)||[]).length,1);
   assert.equal((fl.match(/rel="canonical"/g)||[]).length,1);
 });

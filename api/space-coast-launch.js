@@ -12,6 +12,7 @@ const { inspectKscLaunch, CALENDAR: KSC_CALENDAR } =
   require('../lib/space-coast-ksc-viewing');
 const { storeTrustedLaunches } = require('../lib/space-coast-ksc-snapshot');
 const { buildGeographicViewing } = require('../lib/space-coast-geo');
+const { floridaLaunchNetwork } = require('../lib/rocket-launch-florida-facilities');
 const { readNationalSchedule } = require('../lib/rocket-launch-national');
 const { buildMediaDesk } = require('../lib/space-coast-media');
 const { launchWeatherFor } = require('../lib/launch-weather-intelligence');
@@ -208,6 +209,9 @@ return async function handler(req, res) {
       ...a, description: a.description.slice(0, 600)
     }));
     const viewpoints = VIEWPOINTS.map(v => viewAccess(v, next, nps.alerts, nps.verified, { now }));
+    // Shared calendar drives both launch facilities; never invent an opening
+    // or a pad from its region alone.
+    const facilityNetwork = floridaLaunchNetwork(launches, next);
     const geographicViewing = buildGeographicViewing(next, viewpoints, nps, now, forecasts);
     const arrivalGuidance = launchArrivalGuidance(next, nps.alerts, nps.verified, now);
     geographicViewing.roadDecision = {
@@ -235,7 +239,7 @@ return async function handler(req, res) {
       mediaDesk: next ? buildMediaDesk(next, {
         checkedAt: feed.sharedScheduleCheckedAt||new Date().toISOString(),now
       }) : null,
-      next, upcoming: launches,
+      next, upcoming: launches, facilityNetwork,
       independentReporting,
       weather: primary ? { period: primary.period, assessment: primary.assessment } : null,
       launchWeatherIntelligence,

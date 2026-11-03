@@ -1,0 +1,148 @@
+{
+  "schemaVersion": "1.2",
+  "recordStatus": "draft",
+  "project": {
+    "slug": "rocket-florida-facility-network",
+    "ownerRepo": "izworskic/chrisizworski-com",
+    "canonical": "https://chrisizworski.com/national-tools/space-coast-launch/",
+    "pageFile": "public/synced-national-tools/space-coast-launch/index.html",
+    "visitorDecision": "Distinguish Kennedy Space Center from Cape Canaveral for an actual selected mission, verify pad-specific KSC Gantry restrictions, and carry the same mission from the national launch atlas into the Florida viewing/map desk.",
+    "primaryAction": "Select the real next scheduled mission for one Florida launch facility and read live NPS/KSC access evidence separately from schedule and spectator weather."
+  },
+  "claims": [
+    {
+      "id": "ksc-gantry-pad-restriction",
+      "kind": "official-reference",
+      "subject": "launch-viewing-eligibility",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://www.kennedyspacecenter.com/launches-and-events/see-a-launch/launch-viewing-locations/",
+      "checkedDate": "2026-11-03",
+      "limitation": "LC-39A and LC-39B are excluded from Gantry viewing; other pads are not automatic ticket approval."
+    },
+    {
+      "id": "nps-launch-security",
+      "kind": "official-reference",
+      "subject": "playalinda-range-access",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://www.nps.gov/cana/planyourvisit/rocket-launch-viewing.htm",
+      "checkedDate": "2026-11-03",
+      "limitation": "Published restrictions and site policy, not proof that any individual numbered lot is currently open."
+    },
+    {
+      "id": "ll2-calendar-identity",
+      "kind": "unverified",
+      "subject": "selected-mission-location-id",
+      "state": "UNVERIFIED",
+      "sourceUrl": "https://ll.thespacedevs.com/2.3.0/launches/upcoming/",
+      "checkedDate": "2026-11-03",
+      "limitation": "Location IDs 27 and 12 are interpreted only from the shared cached schedule; no current selected live launch is asserted in this release record."
+    },
+    {
+      "id": "ticket-status",
+      "kind": "unverified",
+      "subject": "ksc-mission-ticket-availability",
+      "state": "UNVERIFIED",
+      "sourceUrl": "https://www.kennedyspacecenter.com/launches-and-events/",
+      "checkedDate": "2026-11-03",
+      "limitation": "KSC mission viewing is verified elsewhere in the existing specialist; this facility panel alone never claims tickets or public access."
+    }
+  ],
+  "decisionState": {
+    "selectedIdField": "launch.id",
+    "sourceOfTruth": "Shared national LL2 Postgres schedule -> /api/space-coast-launch -> floridaLaunchNetwork() facility groups; existing selected launch UUID drives KSC, NPS, media, weather, GIS, and Launch Truth desks.",
+    "linkedSurfaces": [
+      "national-region-and-selected-mission",
+      "florida-facility-switch",
+      "selected-mission-header",
+      "pad-rule",
+      "space-coast-geo-map",
+      "nps-and-ksc-access",
+      "launch-weather",
+      "shareable-url"
+    ],
+    "unavailableBehavior": "Disable facility switches with no scheduled mission, retain source links and existing map fallback, explicitly disclose unverified launch location, tickets, NPS access and forecasts."
+  },
+  "scenarios": [
+    {
+      "kind": "initial",
+      "input": "Open Florida with an existing Cape Canaveral launchId",
+      "expectedVisibleAnswer": "Selected Cape mission and SLC pad; all existing access and map panels follow the same UUID.",
+      "sourceAndSafety": "Military pad remains restricted and KSC ticket availability unknown."
+    },
+    {
+      "kind": "alternative",
+      "input": "Choose Kennedy while both facilities have scheduled missions",
+      "expectedVisibleAnswer": "Switch to a real KSC mission and pad with KSC-specific Gantry restriction for LC-39A/B.",
+      "sourceAndSafety": "Location ID 27 is the authority; pad restrictions are separate from ticket status."
+    },
+    {
+      "kind": "reverse",
+      "input": "Choose Cape after Kennedy",
+      "expectedVisibleAnswer": "Same mission context, URL and map all return to a Cape schedule record.",
+      "sourceAndSafety": "No old KSC response should overwrite the current mission."
+    },
+    {
+      "kind": "no-js",
+      "input": "Disable JavaScript",
+      "expectedVisibleAnswer": "HTML origin explainer, official KSC/NPS sources and existing national planner remain accessible.",
+      "sourceAndSafety": "No claim of live access or mission forecast."
+    },
+    {
+      "kind": "no-tiles",
+      "input": "Block CARTO and OSM tiles",
+      "expectedVisibleAnswer": "Existing geospatial source-linked viewing locations and access status remain; no guessed route.",
+      "sourceAndSafety": "No pad bearing becomes a flight trajectory or legal driving path."
+    },
+    {
+      "kind": "stale-data",
+      "input": "Shared schedule, KSC or NPS unavailable",
+      "expectedVisibleAnswer": "Unavailable indicators remain; no facility switch/tickets from missing data.",
+      "sourceAndSafety": "Unknown is never promoted to open; corroborate on official sites."
+    },
+    {
+      "kind": "stale-link",
+      "input": "Deep-link to launch UUID no longer listed",
+      "expectedVisibleAnswer": "Switch to latest Florida record with disclosure that the originally linked mission no longer appears.",
+      "sourceAndSafety": "Do not assume the original mission occurred or cancelled."
+    }
+  ],
+  "failures": {
+    "no-js": "Static launch-facility explainer and official source links remain; disabled controls cannot falsely imply selection.",
+    "no-tiles": "Pre-existing text-linked venue list and access notices remain; no trajectory, road or open status invented.",
+    "no-image": "No new image dependencies; vehicle images are only source-credited via existing media catalog.",
+    "stale-data": "Original API failure state and facility-level unknown labels, with direct official handoffs."
+  },
+  "qa": {
+    "viewports": [
+      360,
+      390,
+      768,
+      1440
+    ],
+    "browserStatus": "NOT_RUN",
+    "browserRun": null,
+    "screenshotEvidence": [],
+    "scopeNote": "Source tests and full CI pending; browser and live-public behavior not yet verified."
+  },
+  "photos": [],
+  "release": {
+    "implemented": {
+      "status": "CONFIRMED",
+      "checkedDate": "2026-11-03",
+      "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/tree/feat/florida-launch-facility-network-20261103"
+    },
+    "verified": {
+      "status": "NOT_VERIFIED"
+    },
+    "deployed": {
+      "status": "NOT_DEPLOYED"
+    },
+    "live": {
+      "status": "NOT_VERIFIED"
+    },
+    "measured": {
+      "status": "NOT_MEASURED"
+    }
+  },
+  "verificationLimit": "This is an implementation record, not evidence of current event, real-time access, screenshot pass, production deployment or traffic impact."
+}

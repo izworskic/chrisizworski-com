@@ -1,0 +1,43 @@
+name: Florida Rocket Launch facility browser QA
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'lib/rocket-launch-florida-facilities.js'
+      - 'api/space-coast-launch.js'
+      - 'public/synced-national-tools/space-coast-launch/**'
+      - 'public/synced-national-tools/rocket-launch-live/**'
+      - 'scripts/verify-rocket-florida-facility-browser.cjs'
+      - '.github/workflows/rocket-florida-facility-browser.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  chromium:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run Florida facility identity and mission routing regressions
+        run: node --test tests/rocket-launch-florida-facilities.test.js
+      - name: Install isolated Playwright
+        run: |
+          mkdir -p /tmp/rocket-florida-playwright
+          npm install --prefix /tmp/rocket-florida-playwright --no-save --ignore-scripts playwright@1.58.2
+          echo "NODE_PATH=/tmp/rocket-florida-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium-browser)" >> "$GITHUB_ENV"
+      - name: Test 360, 390, 768 and 1440, facility cycle, source failures, and no JS
+        run: node scripts/verify-rocket-florida-facility-browser.cjs
+      - name: Retain responsive screenshots and detailed report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rocket-florida-facility-qa
+          path: artifacts/rocket-florida-facility-qa
+          if-no-files-found: warn
+          retention-days: 7

@@ -501,6 +501,71 @@
       if (select.value) load(select.value);
     };
   };
+  const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  let staleDeepLink = false;
+
+  // The facility selector changes the ACTUAL selected mission, not a parallel
+  // decorative filter. All weather, map, ticket and source desks use the same
+  // launchId and refresh together. Empty facilities never manufacture missions.
+  const renderFacilityNetwork = data => {
+    const network = data.facilityNetwork || {};
+    const selected = network.selected || {};
+    const groups = Array.isArray(network.facilities) ? network.facilities : [];
+    const active = data.selectedLaunchId || null;
+    for (const id of ['kennedy', 'cape']) {
+      const facility = groups.find(x => x.id === id);
+      const button = document.querySelector('[data-fl-facility="' + id + '"]');
+      if (!button) continue;
+      const idOfNext = facility?.nextLaunchId;
+      const available = typeof idOfNext === 'string' && UUID_RE.test(idOfNext);
+      button.disabled = !available;
+      button.setAttribute('aria-pressed', selected.id === id ? 'true' : 'false');
+      set('fl-' + id + '-count', facility ?
+        (facility.countInFeed ? facility.countInFeed + ' upcoming in the bounded feed' :
+          'No upcoming mission in this feed') : 'Schedule unavailable');
+      button.onclick = available ? () => {
+        if (idOfNext !== active) {
+          staleDeepLink = false;
+          void load(idOfNext);
+        }
+      } : null;
+    }
+    set('fl-origin-name', selected.name || 'Florida launch facility unverified');
+    set('fl-origin-pad', selected.pad ?
+      'Launch pad: ' + selected.pad + ' (restricted facility)' :
+      'Launch pad: not verified in this mission record');
+    set('fl-origin-context', selected.description ||
+      'A launch schedule does not establish the correct Florida spaceport.');
+    set('fl-origin-viewing', selected.viewing ||
+      'Public viewing, ticketed viewing and range access must be confirmed separately.');
+    set('fl-origin-rule-title', selected.padRule?.headline || 'No pad-specific access verified');
+    set('fl-origin-rule-copy', selected.padRule?.note ||
+      'Check the mission operator and Kennedy Space Center for current access details.');
+    const rule = $('fl-origin-rule');
+    if (rule) rule.dataset.rule = selected.padRule?.code || 'unverified';
+    const linkToNational = $('fl-national-mission-link');
+    if (linkToNational) linkToNational.href =
+      '/national-tools/rocket-launch-live/?region=florida' +
+      (active && UUID_RE.test(active) ? '&launchId=' + encodeURIComponent(active) : '');
+    set('fl-facility-hint', staleDeepLink ?
+      'The linked mission is no longer in the current schedule. Showing the next Florida launch instead. Verify the new mission before travel.' :
+      'Choose a facility with an upcoming mission to switch every mission-specific map and decision. No listed mission does not mean the range is inactive.');
+    const confidence = data.scheduleCheckedAt ?
+      new Date(data.scheduleCheckedAt).toLocaleString('en-US',
+        {dateStyle:'medium',timeStyle:'short',timeZone:'America/New_York'}) + ' ET' :
+      'time unavailable';
+    set('fl-facility-evidence',
+      'Shared launch-source observation: ' + confidence + '. ' +
+      (network.unassignedCount ?
+        network.unassignedCount + ' upcoming record(s) have an unverified Florida facility. ' : '') +
+      'Facility classification is not a ticket, road-entry or launch approval. Confirm with the official operator.');
+  };
+  function syncMissionLink(launchId) {
+    const url = new URL(location.href);
+    if (launchId && UUID_RE.test(launchId)) url.searchParams.set('launchId', launchId);
+    else url.searchParams.delete('launchId');
+    history.replaceState(null, '', url.pathname + url.search + url.hash);
+  }
   const renderArrival = data => {
     const panel = $('launch-arrival');
     if (!panel) return;
@@ -982,6 +1047,7 @@
       if (sequence !== loadSequence) return;
       if (!r.ok || !d.ok) throw new Error(d.error || 'Launch data unavailable');
       renderSelector(d);
+      renderFacilityNetwork(d);
       set('loading',
         (d.scheduleCheckedAt?
           'Launch schedule observed '+new Date(d.scheduleCheckedAt).toLocaleString('en-US') :
@@ -1025,6 +1091,7 @@
       selectedTargetAt=next&&['minute','second'].includes(next.netPrecision)?
         Date.parse(next.net):null;
       activeMissionId = d.selectedLaunchId || null;
+      syncMissionLink(activeMissionId);
       document.dispatchEvent(new CustomEvent('rocket-truth:mission-selected',{
         detail:{launchId:activeMissionId,
           net:next?.net||null,netPrecision:next?.netPrecision||null,
@@ -1045,7 +1112,14 @@
       checkForKscUpdate();
     } catch (err) {
       if (sequence !== loadSequence) return;
+      if (selectedId && !previousMissionId &&
+          /no longer in the current Florida launch list/i.test(err.message)) {
+        staleDeepLink = true;
+        void load();
+        return;
+      }
       activeMissionId = previousMissionId;
+      set('fl-facility-hint', 'Launch details could not be checked. Facility switches are unavailable until the shared source recovers.');
       document.dispatchEvent(new CustomEvent('rocket-truth:mission-selected',
         {detail:{launchId:null}}));
       // Retry failed standard schedule after five minutes, without turning
@@ -1076,5 +1150,6 @@
   }
   document.addEventListener('visibilitychange', checkForPageUpdates);
   window.setInterval(checkForPageUpdates, 60 * 1000);
-  load();
+  const incoming = new URL(location.href).searchParams.get('launchId');
+  load(incoming && UUID_RE.test(incoming) ? incoming : null);
 })();
