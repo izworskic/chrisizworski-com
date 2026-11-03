@@ -165,3 +165,22 @@ test('browser media experience is user-initiated and retains active GIS, SEO and
   assert.match(html,/geo-map\.js\?v=20261101-repair1/);
   assert.doesNotThrow(()=>new Function(js));
 });
+
+
+test('national Mission Watch never assigns Florida cameras to other coastal regions',()=>{
+  const media=normalizeMissionMedia(raw(),NOW);
+  const launch={id:ID,name:'Vulcan test',provider:'United Launch Alliance',media};
+  const checkedAt=new Date(NOW).toISOString();
+  const tx=buildMediaDesk(launch,{checkedAt,now:NOW+60000,regionId:'texas'});
+  assert.equal(tx.launchId,ID);
+  assert.equal(tx.sourceFreshness,'recent');
+  assert.equal(tx.missionVideoCount,1);
+  assert.equal(tx.cameras.length,0);
+  assert.equal(tx.cameraCoverage,'no-verified-general-camera');
+  const florida=buildMediaDesk(launch,{checkedAt,now:NOW+60000,regionId:'florida'});
+  assert.equal(florida.cameras.length,CAMERA_CATALOG.length);
+  assert.ok(florida.cameras.every(c=>c.verifiedLiveNow===false));
+  const stale=buildMediaDesk(launch,{checkedAt,now:NOW+60000,sourceStale:true,regionId:'texas'});
+  assert.equal(stale.sourceFreshness,'overdue');
+  assert.equal(stale.webcastFlagReported,false);
+});

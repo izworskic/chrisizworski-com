@@ -269,3 +269,29 @@ button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid #dc7
 .rl-news-sources a{font-weight:750;color:#d6f4e5;text-decoration:underline;text-underline-offset:3px;font-size:13px}
 .rl-news-sources small{font-size:11px;color:#c6dcd8;line-height:1.65}
 @media(max-width:700px){.rl-news-layout{grid-template-columns:1fr}.rl-news-sources{padding:17px}}
+
+
+/* Mission Watch: distinct national live-media journey, without false stream-health claims. */
+.rl-watch-shell{background:#102e39;color:#f2f7f5;border-radius:20px;padding:clamp(20px,3vw,35px);border:1px solid #365664}
+.rl-watch-head{display:flex;align-items:start;justify-content:space-between;gap:18px;margin-bottom:9px}
+.rl-watch-head h3{font-family:var(--serif);font-size:clamp(23px,2.6vw,35px);line-height:1.2;color:#fff;margin:7px 0}
+.rl-watch-kicker,.rl-watch-card-kind{text-transform:uppercase;letter-spacing:.11em;font-size:10px;font-weight:850;color:#e8b891}
+.rl-watch-status{background:#e0edec;color:#204c48;font-size:11px;font-weight:850;padding:9px 12px;border-radius:100px;white-space:nowrap}
+.rl-watch-evidence{max-width:950px;color:#cbdfe0;font-size:13px;line-height:1.7;margin:0 0 22px}
+.rl-watch-columns{display:grid;grid-template-columns:minmax(0,1.28fr) minmax(260px,.72fr);gap:25px}
+.rl-watch-columns h4{font-size:15px;color:#fff;margin:0 0 13px}
+.rl-watch-cameras{border-left:1px solid #496671;padding-left:25px;min-width:0}
+.rl-watch-videos{display:grid;gap:12px}
+.rl-watch-card{background:#244854;border:1px solid #54717b;border-radius:13px;padding:17px;min-width:0}
+.rl-watch-card-title{font-size:16px;color:#fff;line-height:1.38;display:block;margin:7px 0}
+.rl-watch-card-publisher{display:block;font-size:12px;color:#d2e6e4;line-height:1.6;margin-bottom:11px}
+.rl-watch-link,.rl-watch-operator{display:inline-flex;align-items:center;color:#f9dbbb;font-size:13px;font-weight:800;text-underline-offset:4px;margin:3px 12px 10px 0;overflow-wrap:anywhere}
+.rl-watch-operator{display:block;margin-top:16px}
+.rl-watch-play{display:inline-block;border:0;border-radius:9px;background:#f3c19b;color:#18323b;font-size:13px;font-weight:850;min-height:42px;padding:10px 14px;cursor:pointer;max-width:100%;text-align:left}
+.rl-watch-play:hover,.rl-watch-play:focus-visible{background:#fff1db;color:#172d33}
+.rl-watch-frame{max-width:600px;aspect-ratio:16/9;border-radius:10px;background:#081e27;overflow:hidden;margin:8px 0 12px}
+.rl-watch-preview,.rl-watch-player{display:block;width:100%;height:100%;border:0;object-fit:cover}
+.rl-watch-empty,.rl-watch-disclaimer{color:#cddfdf;font-size:13px;line-height:1.72;margin:0}
+.rl-watch-disclaimer{font-size:12px;margin-top:17px}
+@media(max-width:850px){.rl-watch-columns{grid-template-columns:1fr}.rl-watch-cameras{border-left:0;border-top:1px solid #496671;padding:20px 0 0}}
+@media(max-width:590px){.rl-watch-head{display:block}.rl-watch-status{display:inline-block;white-space:normal;margin-bottom:13px}.rl-watch-card{padding:14px}.rl-watch-shell{padding:17px}}

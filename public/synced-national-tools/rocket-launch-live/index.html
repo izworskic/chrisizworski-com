@@ -16,13 +16,13 @@
 <link rel="preconnect" href="https://basemaps.cartocdn.com">
 <link rel="preconnect" href="https://unpkg.com">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<link rel="stylesheet" href="/national-tools/rocket-launch-live/styles.css?v=20261102-truth-v2">
+<link rel="stylesheet" href="/national-tools/rocket-launch-live/styles.css?v=20261103-watch-v1">
 <link rel="stylesheet" href="/national-tools/assets/launch-truth-desk.css?v=20261102-truth-v2">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5D2V2W7HN"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-Y5D2V2W7HN');</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://chrisizworski.com/national-tools/rocket-launch-live/#webpage","url":"https://chrisizworski.com/national-tools/rocket-launch-live/","name":"Rocket Launch Live USA: When and Where to Watch","description":"Coastal U.S. launch calendar with region-specific legal access, launch timing uncertainty and public NWS weather evidence.","dateModified":"2026-10-31","author":{"@id":"https://chrisizworski.com/#person"},"about":[{"@type":"Thing","name":"Rocket launch viewing"},{"@type":"Thing","name":"U.S. coastal spaceports"}]},{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"U.S. Tools","item":"https://chrisizworski.com/national-tools/"},{"@type":"ListItem","position":3,"name":"Rocket Launch Live USA","item":"https://chrisizworski.com/national-tools/rocket-launch-live/"}]}]}</script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
-<script src="/national-tools/rocket-launch-live/app.js?v=20261102-truth-v2" defer></script>
+<script src="/national-tools/rocket-launch-live/app.js?v=20261103-watch-v1" defer></script>
 <script src="/national-tools/assets/launch-truth-desk.js?v=20261102-truth-v2" defer></script>
 </head>
 <body>
@@ -148,6 +148,22 @@
     </div>
   </footer>
 </section>
+<section class="rl-section rl-watch-desk" id="mission-watch" aria-labelledby="rl-watch-title">
+  <div class="rl-section-head"><div><p class="rl-eyebrow">Mission watch / source-matched media</p>
+    <h2 id="rl-watch-title">Watch the rocket, not an unrelated replay.</h2></div>
+    <p>A video attached to the selected launch record is different from an area camera. Neither a video listing nor an always-on camera verifies a live stream or a successful launch.</p></div>
+  <div class="rl-watch-shell">
+    <div class="rl-watch-head"><div><span class="rl-watch-kicker">Selected mission</span><h3 id="rl-watch-mission">Checking mission media…</h3></div>
+      <span id="rl-watch-status" class="rl-watch-status">Source not checked</span></div>
+    <p id="rl-watch-evidence" class="rl-watch-evidence">Checking mission-linked video records and source age.</p>
+    <div class="rl-watch-columns">
+      <div><h4>Links for this exact launch</h4><div id="rl-watch-mission-videos" class="rl-watch-videos" aria-live="polite"><p>Checking webcast listings…</p></div></div>
+      <aside class="rl-watch-cameras"><h4>Area cameras and operator</h4><div id="rl-watch-general" class="rl-watch-videos"><p>General cameras are not launch-pad confirmation.</p></div>
+      <p class="rl-watch-disclaimer">Watch links open the publisher. Embedded YouTube playback loads only after you select Play. Stream uptime and camera angles are not independently monitored.</p></aside>
+    </div>
+  </div>
+ </section>
+
 <section id="rl-news-desk" class="rl-section rl-news-desk" aria-labelledby="rl-news-title">
   <div class="rl-section-head">
     <div><p class="rl-eyebrow">Independent reporting / the story behind the schedule</p>

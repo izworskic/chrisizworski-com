@@ -203,6 +203,101 @@
     set('rl-feed-health', data.coverage.partial ? 'Partial schedule coverage' : 'Six coastal regions checked');
     set('rl-updated-at', data.scheduleCheckedAt?stamp(data.scheduleCheckedAt):'No schedule observation');
   }
+  // Reuse the exact LL2 mission's sanitized media records from the shared collector.
+  // These buttons never claim player health, pad alignment, range GO, or launch success.
+  function renderMediaDesk(data) {
+    const root = $('rl-watch-mission-videos');
+    const general = $('rl-watch-general');
+    if (!root || !general) return;
+    root.replaceChildren();
+    general.replaceChildren();
+    const launch = data?.selectedLaunch;
+    const desk = data?.mediaDesk;
+    const matched = Boolean(launch?.id && desk?.launchId === launch.id);
+    set('rl-watch-mission', launch?.name || 'No launch selected for this coast');
+    const current = matched && desk.sourceFreshness === 'recent' &&
+      launch.sourceStale !== true && data.scheduleFreshness !== 'stale';
+    set('rl-watch-status', !matched ? 'No mission media record' :
+      current ? 'Recent LL2 media listing' : 'Media source overdue');
+    set('rl-watch-evidence', !matched ?
+      'No mission-specific media can be matched without a selected launch. An empty listing is not proof a webcast will not happen.' :
+      (desk.missionVideoCount || 0) + ' link(s) attached to this exact launch ID. ' +
+      'Schedule observation: ' + stamp(desk.checkedAt) + '. ' +
+      (current ? 'Source recently checked; stream playback still unverified.' :
+        'Video links may have changed since this mission was last observed.') +
+      ' "Official webcast" is the LL2 classification, not independent operator verification.');
+    if (!matched) {
+      root.appendChild(el('p', 'rl-watch-empty',
+        'Select a mission with a current source record to see its specific video links.'));
+      general.appendChild(el('p', 'rl-watch-empty',
+        'A generic camera is not evidence for a selected rocket or pad.'));
+      return;
+    }
+    function videoCard(item, camera) {
+      const card = el('article', 'rl-watch-card');
+      card.appendChild(el('span', 'rl-watch-card-kind',
+        camera ? 'Area camera · not a mission match' :
+          item.sourceLabel || 'LL2 mission-linked video'));
+      card.appendChild(el('strong', 'rl-watch-card-title',
+        camera ? item.title : item.title || 'Mission video'));
+      card.appendChild(el('small', 'rl-watch-card-publisher',
+        (camera ? item.publisher : item.publisher || 'Publisher not identified') +
+        ' · ' + (camera ? 'source documented ' + item.verifiedAsSourceOn :
+          item.sourceReportedEnded ? 'LL2 lists stream as ended or a replay' :
+          current && item.sourceReportedLive === true ?
+            'LL2 reported live when last checked; not independently confirmed' :
+            'Playback status unverified')));
+      const source = anchor(camera ? item.siteUrl : item.url,
+        camera ? 'Open publisher camera' : 'Watch on publisher site', 'rl-watch-link');
+      if (source) card.appendChild(source);
+      const id = item.youtubeId;
+      if (typeof id === 'string' && /^[A-Za-z0-9_-]{11}$/.test(id)) {
+        const frameHost = el('div', 'rl-watch-frame');
+        if (!camera && item.url === desk.primaryVideo?.url) {
+          const preview = el('img', 'rl-watch-preview');
+          preview.src = 'https://i.ytimg.com/vi/' + id + '/hqdefault.jpg';
+          preview.loading = 'lazy';
+          preview.alt = 'Publisher video thumbnail; not a live camera still';
+          frameHost.appendChild(preview);
+        }
+        const play = el('button', 'rl-watch-play',
+          camera ? 'Play area camera from YouTube' : 'Play this mission video from YouTube');
+        play.type = 'button';
+        play.addEventListener('click', () => {
+          const frame = el('iframe', 'rl-watch-player');
+          frame.title = (camera ? 'Area camera: ' : 'Mission video: ') + item.title;
+          frame.src = 'https://www.youtube-nocookie.com/embed/' + id + '?rel=0';
+          frame.loading = 'lazy';
+          frame.referrerPolicy = 'strict-origin-when-cross-origin';
+          frame.allow = 'encrypted-media; picture-in-picture; fullscreen';
+          frame.allowFullscreen = true;
+          frameHost.replaceChildren(frame);
+          play.remove();
+        });
+        card.append(frameHost, play);
+      }
+      return card;
+    }
+    const videos = Array.isArray(desk.videos) ? desk.videos.slice(0, 5) : [];
+    if (videos.length) videos.forEach(item => root.appendChild(videoCard(item, false)));
+    else root.appendChild(el('p', 'rl-watch-empty',
+      'No webcast link is attached to this mission in the last checked LL2 record. Check the operator as launch day approaches.'));
+    const cameras = data.selectedRegion === 'florida' && Array.isArray(desk.cameras) ?
+      desk.cameras : [];
+    if (cameras.length) cameras.forEach(item => general.appendChild(videoCard(item, true)));
+    else general.appendChild(el('p', 'rl-watch-empty',
+      'No independently sourced general pad camera is verified for this coast. Do not substitute a Florida camera for another launch range.'));
+    if (desk.operator?.url) {
+      const source = anchor(desk.operator.url,
+        desk.operator.label || 'Open launch operator updates', 'rl-watch-operator');
+      if (source) general.appendChild(source);
+    }
+    if (data.region?.specialist) {
+      const detail = anchor(data.region.specialist,
+        'Florida: launch access, tickets and forecast', 'rl-watch-operator');
+      if (detail) general.appendChild(detail);
+    }
+  }
   function renderSelector(data) {
     const select = $('rl-launch-select');
     if (!select) return;
@@ -511,6 +606,7 @@
     initMap();
     showRegion(data.region);
     renderMission(data);
+    renderMediaDesk(data);
     renderIndependentReporting(data);
     renderSelector(data);
     renderAccess(data);
@@ -551,6 +647,10 @@
       document.dispatchEvent(new CustomEvent('rocket-truth:mission-selected',
         {detail:{launchId:null}}));
       chip($('rl-schedule-grade'), 'Schedule temporarily unavailable', 'unknown');
+      set('rl-watch-status', 'Media unavailable');
+      set('rl-watch-evidence', 'No current mission-media response. Use the operator or official launch source.');
+      $('rl-watch-mission-videos')?.replaceChildren(el('p', 'rl-watch-empty', 'Video listing unavailable; not a claim that there is no broadcast.'));
+      $('rl-watch-general')?.replaceChildren();
       chip($('rl-access-grade'), 'Official access must be checked', 'unknown');
       chip($('rl-weather-grade'), 'No current forecast', 'unknown');
       chip($('rl-range-grade'), 'Launch-side forecast unavailable', 'unknown');
