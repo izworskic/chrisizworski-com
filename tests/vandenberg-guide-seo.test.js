@@ -149,6 +149,7 @@ test('responsive, accessible reading does not depend on third-party maps or a fi
   assert.match(stylesheet, /@media\(prefers-reduced-motion:reduce\)/);
   assert.match(stylesheet,/:focus-visible/);
   assert.doesNotMatch(page,/<iframe/i);
-  assert.doesNotMatch(page,/maps\.googleapis\.com|leaflet\.js|api\/rocket-launch-usa/);
+  assert.doesNotMatch(page,/maps\.googleapis\.com|api\/rocket-launch-usa|api\.weather\.gov/);
+  assert.match(page,/leaflet@1\.9\.4\/dist\/leaflet\.js/);
   assert.doesNotMatch(stylesheet,/position:fixed/);
 });
