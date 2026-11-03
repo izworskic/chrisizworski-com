@@ -203,3 +203,18 @@
 @media(max-width:900px){.visual-header{grid-template-columns:1fr;gap:12px}.visual-results{grid-template-columns:1fr 1fr}}
 @media(max-width:700px){.visual-results{grid-template-columns:1fr}.visual-diagnosis{padding-top:35px}.visual-result{padding:16px}.visual-picker{padding:16px}.visual-chips{gap:7px}.visual-chip{padding:10px 12px}}
 @media(max-width:370px){.visual-pair{gap:6px}.visual-figure figcaption{padding:7px}.visual-caption{font-size:.68rem}}
+
+/* Visual diagnosis v2: organized injury clusters and deliberate problem-type selection. */
+.visual-instruction{color:#435d49;font-size:.83rem;line-height:1.55;margin:11px 0 14px}
+.visual-category{display:flex;flex-wrap:wrap;gap:8px;padding-bottom:15px;margin-bottom:13px;border-bottom:1px solid #cad6c9}
+.visual-category-button{min-height:43px;cursor:pointer;border:1px solid #788f7c;border-radius:4px;background:#fffdf6;color:#214c37;padding:9px 13px;font-size:.81rem;font-weight:800}
+.visual-category-button[aria-pressed=true]{background:#244c39;color:#fffdf5;border-color:#244c39}
+.visual-category-button:focus-visible{outline:3px solid #ab713f;outline-offset:3px}
+.visual-chips{display:grid;gap:13px}
+.visual-clue-group{border:0;padding:0;margin:0;min-width:0}
+.visual-clue-group legend{color:#526452;font-weight:850;letter-spacing:.08em;text-transform:uppercase;font-size:.7rem;margin:0 0 8px;padding:0}
+.visual-clue-row{display:flex;flex-wrap:wrap;gap:8px}
+.visual-result.is-disease{border-top-color:#547e71}
+.visual-next{padding:12px 14px;background:#e7eee4;color:#264635!important;border-left:3px solid #567d62;font-weight:550}
+.visual-next strong{font-weight:850}
+@media(max-width:520px){.visual-category{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.visual-category-button{padding:10px 6px}.visual-clue-row{gap:6px}.visual-chip{font-size:.74rem}}

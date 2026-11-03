@@ -90,6 +90,23 @@ async function waitForAnswer(page,pest){await page.waitForFunction(name=>documen
    await routeFixtures(page);
    await page.goto(ORIGIN+'/michigan-garden-pest-watch/',{waitUntil:'domcontentloaded'});
    await waitForAnswer(page,'Squash vine borer');
+   // Photo-diagnosis QA on every viewport: all topics, disease labels, clue match,
+   // no-result honesty, reset, and host-crop updates.
+   assert.ok(await page.locator('#visual-results .visual-result').count()>=4);
+   await page.locator('#visual-category button[data-group="disease"]').click();
+   assert.match(await page.locator('#visual-results').innerText(),/powdery mildew/i);
+   assert.match(await page.locator('#visual-results .visual-kind').first().innerText(),/SYMPTOM/);
+   await page.locator('#visual-category button[data-group="pest"]').click();
+   assert.doesNotMatch(await page.locator('#visual-results').innerText(),/powdery mildew/i);
+   await page.locator('#visual-category button[data-group="all"]').click();
+   await page.locator('#visual-clues button[data-clue="white-powder"]').click();
+   assert.equal(await page.locator('#visual-results .visual-result').count(),1);
+   assert.match(await page.locator('#visual-results h3').first().innerText(),/powdery mildew/i);
+   await page.locator('#visual-clues button[data-clue="shot-holes"]').click();
+   assert.match(await page.locator('#visual-summary').innerText(),/2 selected clues/);
+   await page.locator('#visual-reset').click();
+   assert.ok(await page.locator('#visual-results .visual-result').count()>=4);
+   assert.equal(await page.locator('#visual-clues button[aria-pressed="true"]').count(),0);
    const first=await page.locator('#primary-answer').innerText();
    assert.match(first,/squash/i);
    assert.match(await page.locator('#season-evidence').innerText(),/July/);

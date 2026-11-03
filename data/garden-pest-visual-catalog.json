@@ -1,7 +1,7 @@
 {
   "schema": "garden-pest-visual-evidence-v1",
   "updated": "2026-11-03",
-  "disclaimer": "Photographs are comparisons, not diagnoses or verified local detections. Some photos illustrate the injury type rather than the exact Michigan species.",
+  "disclaimer": "Photographs illustrate possible signs, not a diagnosis or verified local detection. Disease photos depict symptoms, not insects; some comparisons intentionally show different diseases. Confirm clues and consult Extension advice before treatment.",
   "clues": [
     {
       "id": "frass",
@@ -34,6 +34,46 @@
     {
       "id": "visible-beetles",
       "label": "Beetles or larvae feeding"
+    },
+    {
+      "id": "honeydew",
+      "label": "Sticky residue or clusters of soft insects"
+    },
+    {
+      "id": "curled-leaves",
+      "label": "Curled, puckered or distorted leaves"
+    },
+    {
+      "id": "stippling",
+      "label": "Tiny yellow or pale speckles on leaves"
+    },
+    {
+      "id": "webbing",
+      "label": "Fine silk webbing on leaf undersides"
+    },
+    {
+      "id": "white-powder",
+      "label": "White powder coating on a leaf"
+    },
+    {
+      "id": "angular-yellowing",
+      "label": "Blocky yellow patches between leaf veins"
+    },
+    {
+      "id": "leaf-spots",
+      "label": "Brown or gray leaf spots with edges or rings"
+    },
+    {
+      "id": "slime-trails",
+      "label": "Slime trail or night feeding"
+    },
+    {
+      "id": "ear-tip",
+      "label": "Chewed corn kernels near the silk end"
+    },
+    {
+      "id": "flower-chewing",
+      "label": "Damage to squash or cucumber blossoms"
     }
   ],
   "pests": [
@@ -228,6 +268,262 @@
         "license": "CC BY-SA 3.0",
         "alt": "Rose leaf with lacy skeletonized feeding injury attributed to Japanese beetles",
         "caption": "Rose leaf skeletonization; photo does not prove beetles are currently present."
+      }
+    },
+    {
+      "id": "aphids",
+      "name": "Aphids",
+      "kind": "insect",
+      "crops": [
+        "brassicas",
+        "squash",
+        "cucumbers",
+        "tomatoes",
+        "potatoes",
+        "beans",
+        "corn",
+        "lettuce",
+        "grapes",
+        "berries",
+        "roses",
+        "eggplant"
+      ],
+      "clues": [
+        "honeydew",
+        "curled-leaves",
+        "eggs-nymphs"
+      ],
+      "diagnostic": "Look for clusters of small, soft-bodied insects, often at tender shoot tips or under leaves. Sticky honeydew and curled growth can support the identification.",
+      "lookalike": "Heat, herbicide drift and some diseases can curl leaves. Ladybug larvae and lacewing larvae are beneficial predators; do not treat them as aphids.",
+      "whatToCheck": "Turn over a new leaf and inspect the shoot tip with a hand lens. Check for living aphids and beneficial predators before choosing any control.",
+      "pest": {
+        "file": "Cabbage Aphids on Kale Leaf.jpg",
+        "author": "Sanjay Acharya",
+        "license": "CC BY-SA 4.0",
+        "alt": "Close-up of cabbage aphid colony on kale",
+        "caption": "Aphids photographed on kale; illustrative of soft-bodied colonies on leaf surfaces."
+      },
+      "damage": {
+        "file": "Chinakohl 1-Blattläuse-Lenz-DLR-NW-jk.jpg",
+        "author": "Jochen Kreiselmaier, DLR Rheinpfalz",
+        "license": "CC BY-SA 4.0",
+        "alt": "Chinese cabbage foliage yellowed and distorted by aphid feeding",
+        "caption": "Aphid-associated yellowing of Chinese cabbage; appearance varies by crop and aphid species."
+      }
+    },
+    {
+      "id": "cucumber-beetles",
+      "name": "Striped and spotted cucumber beetles",
+      "kind": "insect",
+      "crops": [
+        "cucumbers",
+        "squash"
+      ],
+      "clues": [
+        "visible-beetles",
+        "ragged-holes",
+        "flower-chewing"
+      ],
+      "diagnostic": "Look for small yellow beetles with black spots or three dark stripes. Check cucumber seedlings and squash blossoms for fresh chewing.",
+      "lookalike": "Lady beetles and some harmless leaf beetles can appear similar. Wilting alone is not evidence of bacterial wilt or beetle transmission.",
+      "whatToCheck": "Look directly for striped or spotted beetles at flowers and tender leaves, then compare body patterns. Damage without a beetle cannot establish the culprit.",
+      "pest": {
+        "file": "Spotted Cucumber Beetle - Diabrotica undecimpunctata, Prince William Forest Park, Triangle, Virginia.jpg",
+        "author": "Judy Gallagher",
+        "license": "CC BY 2.0",
+        "alt": "Spotted cucumber beetle with yellow-green wing covers and black spots",
+        "caption": "Spotted cucumber beetle; striped cucumber beetles have a different wing pattern."
+      },
+      "damage": {
+        "file": "Cucumber beetle damage.jpg",
+        "author": "Rob Mitchell, University of Illinois Urbana-Champaign",
+        "license": "CC BY-SA 3.0",
+        "alt": "Cucumber beetle feeding damage on winter squash blossoms",
+        "caption": "Cucumber beetle injury in winter squash blossoms; not every torn blossom indicates this insect."
+      }
+    },
+    {
+      "id": "spider-mites",
+      "name": "Twospotted spider mites",
+      "kind": "insect",
+      "crops": [
+        "beans",
+        "tomatoes",
+        "cucumbers",
+        "berries",
+        "eggplant",
+        "roses"
+      ],
+      "clues": [
+        "stippling",
+        "webbing",
+        "curled-leaves"
+      ],
+      "diagnostic": "Early injury looks like pale stippling or bronzing, often starting on dry, dusty leaves. Dense infestations may leave fine webbing underneath.",
+      "lookalike": "Thrips, leafhoppers, nutrient stress and disease can create pale speckles. Webbing alone can come from spiders rather than spider mites.",
+      "whatToCheck": "Use a hand lens on the underside of a stippled leaf for tiny moving mites and eggs; inspect several leaves before judging whether intervention is warranted.",
+      "pest": {
+        "file": "Tetranychus urticae on beans leaf.jpg",
+        "author": "Claudio Labita",
+        "license": "CC BY 4.0",
+        "alt": "Twospotted spider mites photographed on the underside of a bean leaf",
+        "caption": "Twospotted mites on bean foliage; tiny enough to require magnification."
+      },
+      "damage": {
+        "file": "Stokboon bonenspintmijt Phaseolus vulgaris with Tetranychus urticae.jpg",
+        "author": "Rasbak",
+        "license": "CC BY-SA 3.0",
+        "alt": "Bean foliage showing mite-associated discoloration",
+        "caption": "Bean leaf damage associated with twospotted mites; feeding injury is not species-specific."
+      }
+    },
+    {
+      "id": "powdery-mildew",
+      "name": "Cucurbit powdery mildew",
+      "kind": "disease",
+      "crops": [
+        "squash",
+        "cucumbers"
+      ],
+      "clues": [
+        "white-powder"
+      ],
+      "diagnostic": "Powdery mildew produces whitish, powder-like colonies on leaves, typically becoming more obvious as growth matures.",
+      "lookalike": "Some squash varieties have naturally silvery leaf markings. Dust or pesticide residue can also look white; confirm raised, spreading fungal growth rather than pattern alone.",
+      "whatToCheck": "Look for new powdery patches on both leaf surfaces and check whether the white areas expand over days. Natural variegation is part of the leaf pattern.",
+      "pest": {
+        "file": "Kürbis-Cucurbita-Echter Mehltau-Golovinomyces-4-JS.jpg",
+        "author": "Schlaghecken Josef",
+        "license": "CC BY-SA 4.0",
+        "alt": "White powdery mildew colonies on a pumpkin leaf",
+        "caption": "Close view of a pumpkin leaf with powdery mildew; this is a disease, not an insect."
+      },
+      "damage": {
+        "file": "Kürbis-Cucurbita-Echter Mehltau-Golovinomyces-3-JS.jpg",
+        "author": "Schlaghecken Josef",
+        "license": "CC BY-SA 4.0",
+        "alt": "Pumpkin foliage displaying powdery mildew over multiple leaves",
+        "caption": "Wider plant context for powdery mildew on cucurbit foliage."
+      }
+    },
+    {
+      "id": "tomato-leaf-spot",
+      "name": "Tomato leaf spots",
+      "kind": "disease",
+      "crops": [
+        "tomatoes"
+      ],
+      "clues": [
+        "leaf-spots",
+        "angular-yellowing"
+      ],
+      "diagnostic": "Look for spotted older leaves; early blight may show concentric rings, while Septoria often creates smaller spots with pale centers.",
+      "lookalike": "Early blight and Septoria are DIFFERENT diseases. Bacterial spots, chemical injury, nutrient problems and late blight can resemble them; these photos cannot diagnose the causal organism.",
+      "whatToCheck": "Inspect spot shape, ring patterns, affected leaf age and recent moisture. Compare with Michigan Extension guidance before diagnosing; seek expert confirmation when symptoms are ambiguous.",
+      "pest": {
+        "file": "Early blight on tomato leaves (7871930010).jpg",
+        "author": "Dwight Sipler",
+        "license": "CC BY 2.0",
+        "alt": "Tomato leaves with larger brown lesions attributed to early blight",
+        "caption": "Example of early blight symptoms on tomato leaves, not a universal tomato leaf spot."
+      },
+      "damage": {
+        "file": "Tomato septoria leaf spot 3047.jpg",
+        "author": "Wolan268",
+        "license": "CC0 1.0",
+        "alt": "Tomato leaf bearing multiple Septoria leaf spot lesions",
+        "caption": "Different cause: Septoria leaf spot on tomato, shown intentionally for comparison with early blight."
+      }
+    },
+    {
+      "id": "downy-mildew",
+      "name": "Cucurbit downy mildew",
+      "kind": "disease",
+      "crops": [
+        "cucumbers",
+        "squash"
+      ],
+      "clues": [
+        "angular-yellowing",
+        "leaf-spots"
+      ],
+      "diagnostic": "Angular yellow areas bounded by leaf veins may turn brown; disease progression often follows periods favorable to leaf wetness.",
+      "lookalike": "Powdery mildew usually has an obvious white, powdery coating. Nutrient problems, other leaf spots and drought stress can also cause yellow leaves.",
+      "whatToCheck": "Look for vein-bounded yellow patches and, when conditions are humid, gray-purple sporulation on the underside. Symptoms do not establish active local disease reports.",
+      "pest": {
+        "file": "Downy mildew on leaves of Cucumis sativus.jpg",
+        "author": "Wee Hong",
+        "license": "CC BY-SA 4.0",
+        "alt": "Cucumber leaf with angular yellow patches from downy mildew",
+        "caption": "Close-up of downy mildew symptoms on cucumber foliage."
+      },
+      "damage": {
+        "file": "Pseudoperonospora cubensis a1.jpg",
+        "author": "Jerzy Opioła",
+        "license": "CC BY-SA 4.0",
+        "alt": "Cucumber leaf showing symptoms attributed to Pseudoperonospora cubensis",
+        "caption": "A second photographic example of cucurbit downy mildew on cucumber."
+      }
+    },
+    {
+      "id": "slugs",
+      "name": "Slugs",
+      "kind": "mollusk",
+      "crops": [
+        "lettuce",
+        "brassicas",
+        "berries"
+      ],
+      "clues": [
+        "ragged-holes",
+        "slime-trails"
+      ],
+      "diagnostic": "Irregular, smooth-edged holes and a silvery slime trail are useful clues, especially during damp nights or mornings.",
+      "lookalike": "Caterpillars, earwigs and other chewing pests can make similar holes. A hole without a slug or slime trail is inconclusive.",
+      "whatToCheck": "Check under boards, pots and damp debris at dusk or early morning. Look for an actual slug or a fresh slime trail on the crop.",
+      "pest": {
+        "file": "Garden Slug.jpg",
+        "author": "Theactivistuk",
+        "license": "CC BY-SA 4.0",
+        "alt": "Garden slug moving across a surface",
+        "caption": "Garden slug, a mollusk rather than an insect."
+      },
+      "damage": {
+        "file": "Slug damaging vegetables.jpg",
+        "author": "Dialectum",
+        "license": "CC BY-SA 4.0",
+        "alt": "Slug actively feeding on leafy vegetables",
+        "caption": "Visible slug feeding on vegetables; this is direct field evidence, not an outbreak forecast."
+      }
+    },
+    {
+      "id": "corn-earworm",
+      "name": "Corn earworm",
+      "kind": "insect",
+      "crops": [
+        "corn",
+        "tomatoes"
+      ],
+      "clues": [
+        "ear-tip",
+        "ragged-holes"
+      ],
+      "diagnostic": "On sweet corn, inspect the silk end of ears for a caterpillar, frass and chewed kernels. Similar larvae may also damage tomatoes.",
+      "lookalike": "Bird feeding, other caterpillars and physical ear injury can resemble earworm damage. Adult moth photographs alone do not establish local egg laying.",
+      "whatToCheck": "Open an affected ear at the silk end and look for a larva and frass. Do not infer current trap pressure from historical photographs.",
+      "pest": {
+        "file": "Helicoverpa zea.jpg",
+        "author": "Gregbaker",
+        "license": "CC BY-SA 3.0",
+        "alt": "Corn earworm larva feeding on a corn cob",
+        "caption": "Corn earworm larva photographed on an ear of corn."
+      },
+      "damage": {
+        "file": "Green caterpillar on ear of corn.jpg",
+        "author": "Sarah Zukoff",
+        "license": "CC BY 2.0",
+        "alt": "Green corn earworm among corn silk and kernels",
+        "caption": "Another corn-earworm feeding example at the ear tip; feeding damage can vary."
       }
     }
   ]
