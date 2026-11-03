@@ -5,6 +5,10 @@ on:
       - 'data/garden-pest-visual-catalog.json'
       - 'public/assets/garden-pest-visual*'
       - 'public/assets/garden-pest-watch.*'
+      - 'public/assets/garden-pest-field-observations.js'
+      - 'lib/garden-pest-field-observations.cjs'
+      - 'api/garden-pest-field-observations.js'
+      - 'tests/garden-pest-field-observations.test.js'
       - 'public/michigan-garden-pest-watch/index.html'
       - 'scripts/build_garden_pest_visuals.py'
       - 'scripts/verify-garden-pest-visuals.cjs'
@@ -14,6 +18,10 @@ on:
       - 'data/garden-pest-visual-catalog.json'
       - 'public/assets/garden-pest-visual*'
       - 'public/assets/garden-pest-watch.*'
+      - 'public/assets/garden-pest-field-observations.js'
+      - 'lib/garden-pest-field-observations.cjs'
+      - 'api/garden-pest-field-observations.js'
+      - 'tests/garden-pest-field-observations.test.js'
       - 'public/michigan-garden-pest-watch/index.html'
       - 'scripts/build_garden_pest_visuals.py'
       - 'scripts/verify-garden-pest-visuals.cjs'
@@ -37,4 +45,8 @@ jobs:
           node --check public/assets/garden-pest-visual-data.js
           node --check public/assets/garden-pest-visuals.js
           node --check public/assets/garden-pest-watch.js
+          node --check public/assets/garden-pest-field-observations.js
+          node --check lib/garden-pest-field-observations.cjs
+          node --check api/garden-pest-field-observations.js
           node scripts/verify-garden-pest-visuals.cjs
+          node --test tests/garden-pest-field-observations.test.js
