@@ -101,3 +101,62 @@
 .beetle-field-evidence.is-present{border-left-color:#43704e}
 @media(max-width:800px){.beetle-field-check{grid-template-columns:1fr;gap:12px;margin:15px 17px 0;padding:18px}.beetle-field-evidence{padding:16px}}
 @media(max-width:540px){.beetle-field-check{margin:12px 16px 0;padding:14px 12px}.beetle-field-intro h3{font-size:1.5rem}.beetle-field-date{font-size:1.4rem}}
+
+
+/* Experience OS: distinct garden field-station notebook, not another weather verdict card. */
+.beetle-study{max-width:1170px;margin:30px auto 30px;border:1px solid #819c7a;background:#f1f3e6;box-shadow:0 6px 0 #c9d3bd;overflow:clip}
+.beetle-study-summary{cursor:pointer;list-style:none;padding:20px 28px;display:grid;grid-template-columns:156px minmax(0,1fr) auto;align-items:center;gap:18px;min-height:90px;background:#213f33;color:#fff}
+.beetle-study-summary::-webkit-details-marker{display:none}
+.beetle-study-summary:focus-visible{outline:3px solid #f5c072;outline-offset:-4px}
+.beetle-study-index{font-size:.64rem;letter-spacing:.14em;font-weight:800;color:#c9dfbb}
+.beetle-study-summary-title{font:500 clamp(1.3rem,2.1vw,1.85rem)/1.2 'Fraunces',Georgia,serif;color:#fff}
+.beetle-study-summary-action{font-weight:750;font-size:.72rem;letter-spacing:.025em;color:#fff;background:#466a53;padding:11px 13px;border:1px solid #a4c7a3}
+.beetle-study-summary-action:after{content:' +';font-weight:900}
+.beetle-study[open] .beetle-study-summary-action:after{content:' −'}
+.beetle-study-body{padding:28px;display:grid;gap:20px}
+.study-guide{display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);gap:28px;align-items:start}
+.study-kicker{font-size:.68rem;letter-spacing:.12em;font-weight:850;color:#315d3a}
+.study-guide h2{font:600 clamp(2rem,3.4vw,2.95rem)/1.07 'Fraunces',Georgia,serif;letter-spacing:-.035em;color:#24412f;margin:12px 0}
+.study-guide p,.study-protocol{font-size:.91rem;line-height:1.7;color:#354d3d}
+.study-protocol{margin:0;padding:0 0 0 27px;display:grid;gap:9px}
+.study-protocol li{padding-left:8px}
+.study-protocol li::marker{font-weight:800;color:#986440}
+.study-board{background:#fffdf7;border:1px solid #c9cfbe;padding:25px;box-shadow:6px 6px 0 #d6dbc9;min-width:0}
+.study-board-top{display:flex;align-items:baseline;gap:20px;justify-content:space-between}
+.study-board-top h3{font:600 clamp(1.4rem,2.2vw,1.95rem)/1.15 'Fraunces',Georgia,serif;color:#243e30;margin:0}
+.study-board-top p{font-size:.78rem;line-height:1.6;color:#536353;max-width:560px;margin:2px 0 0}
+.study-season{font-size:.82rem;background:#e8eddb;border-left:3px solid #598166;color:#2f4a38;padding:12px 14px;margin:18px 0}
+.study-form{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px 16px;align-items:start}
+.study-field{display:grid;gap:4px;min-width:0}
+.study-field label{font-size:.75rem;font-weight:800;color:#2d4835;line-height:1.4}
+.study-field input,.study-field select{width:100%;min-width:0;border:1px solid #9daa9b;border-radius:3px;background:#fff;color:#21392e;padding:11px 12px;font-size:.9rem;min-height:46px}
+.study-field small{color:#576c5c;font-size:.68rem;line-height:1.35}
+.study-field :disabled{background:#eaede5;color:#536358;cursor:not-allowed}
+.study-field input:focus-visible,.study-field select:focus-visible{outline:3px solid #ae7955;outline-offset:1px}
+.study-actions{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:6px}
+.study-actions button,.study-footer-actions button,.study-npn-check button{font:750 .81rem/1.3 'DM Sans',sans-serif;min-height:44px;padding:12px 15px;border-radius:3px;cursor:pointer}
+.study-primary{background:#27543b;color:white;border:1px solid #27543b}
+.study-secondary{background:#fff;color:#2b4d37;border:1px solid #75927a}
+.study-actions button:disabled{opacity:.6;cursor:not-allowed}
+.study-readout{border-left:4px solid #b07a4e;background:#f2f1e8;margin-top:22px;padding:16px 19px}
+.study-readout-kicker{display:block;color:#715134;font-size:.68rem;font-weight:800;letter-spacing:.1em}
+.study-readout strong{display:block;font:550 clamp(1.35rem,2.3vw,1.85rem)/1.2 'Fraunces',Georgia,serif;margin:8px 0;color:#2a4433}
+.study-readout p{font-size:.84rem;color:#455b4b;margin:8px 0 0;line-height:1.6}
+.study-visits{margin-top:16px;font-size:.81rem;overflow-x:auto;color:#465b4b}
+.study-visits table{width:100%;border-collapse:collapse;text-align:left;min-width:440px}
+.study-visits th,.study-visits td{padding:9px 7px;border-bottom:1px solid #d3dccc}
+.study-visits th{font-size:.72rem;text-transform:uppercase;letter-spacing:.03em;color:#3e5c47}
+.study-visits .study-no{font-weight:800;color:#385f48}.study-visits .study-yes{font-weight:800;color:#995f31}.study-visits .study-uncertain{font-weight:800;color:#655e57}
+.study-footer-actions{display:flex;gap:8px 16px;flex-wrap:wrap;align-items:center;margin-top:18px}
+.study-footer-actions button{background:#f3f6ed;border:1px solid #90a492;color:#244b32}
+.study-footer-actions a{font-weight:750;font-size:.81rem}
+.study-npn{padding:23px;border:1px dashed #9eaa90;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.75fr);gap:22px;background:#e6eddd}
+.study-npn h3{font:550 clamp(1.35rem,2vw,1.75rem)/1.2 'Fraunces',Georgia,serif;color:#284632;margin:6px 0}
+.study-npn p{margin:7px 0;font-size:.82rem;line-height:1.65;color:#405749}
+.study-npn-check button{background:#28543b;border:1px solid #28543b;color:white}
+.study-npn-check p{margin:10px 0 0}
+.study-bottom-note{margin:0;font-size:.76rem;line-height:1.7;color:#536653}
+.beetle-study button:focus-visible,.beetle-study a:focus-visible{outline:3px solid #b67b4a;outline-offset:2px}
+@media(max-width:970px){.beetle-study{margin:26px 18px}.beetle-study-summary{grid-template-columns:1fr;gap:8px}.beetle-study-summary-action{justify-self:start}.study-guide{grid-template-columns:1fr}.study-form{grid-template-columns:repeat(2,minmax(0,1fr))}.study-board-top{display:block}}
+@media(max-width:600px){.beetle-study{margin:23px 12px}.beetle-study-summary{padding:19px}.beetle-study-body{padding:15px;gap:16px}.study-board{padding:18px;box-shadow:3px 3px 0 #d6dbc9}.study-form{grid-template-columns:1fr}.study-npn{grid-template-columns:1fr;padding:16px}.study-actions button{width:100%}.study-protocol{font-size:.85rem}.study-guide h2{font-size:2rem}}
+@media(prefers-reduced-motion:reduce){.beetle-study *{scroll-behavior:auto!important}}

@@ -5,12 +5,13 @@
 <meta name="description" content="Michigan garden pest scouting by crop and season. Learn where to inspect, how to prevent damage, and when weather warrants a closer look.">
 <link rel="canonical" href="https://chrisizworski.com/michigan-garden-pest-watch/">
 <meta name="theme-color" content="#1f392f">
-<link rel="stylesheet" href="/assets/garden-pest-watch.css?v=20261102c">
+<link rel="stylesheet" href="/assets/garden-pest-watch.css?v=20261102d">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,700&display=swap" rel="stylesheet">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Michigan Garden Pest Watch","url":"https://chrisizworski.com/michigan-garden-pest-watch/","applicationCategory":"EducationalApplication","operatingSystem":"Web","description":"A Michigan home-garden pest scouting and prevention decision tool with seasonal and weather evidence.","@id":"https://chrisizworski.com/michigan-garden-pest-watch/#app","creator":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"}},{"@type":"WebPage","@id":"https://chrisizworski.com/michigan-garden-pest-watch/#page","url":"https://chrisizworski.com/michigan-garden-pest-watch/","dateModified":"2026-11-02","name":"Michigan Garden Pest Watch: What to Scout This Week","inLanguage":"en-US","author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Michigan Gardening","item":"https://chrisizworski.com/michigan-gardening/"},{"@type":"ListItem","position":2,"name":"Garden Pest Watch","item":"https://chrisizworski.com/michigan-garden-pest-watch/"}]},{"@type":"Person","@id":"https://chrisizworski.com/#person","url":"https://chrisizworski.com/","name":"Chris Izworski","mainEntityOfPage":"https://chrisizworski.com/chris-izworski/"}]}</script>
 <script defer src="/assets/garden-pest-watch.js?v=20261102c"></script>
+<script defer src="/assets/japanese-beetle-monitoring.js?v=20261102a"></script>
 </head>
 <body>
 <a class="skip" href="#watchdesk">Skip to garden watch</a>
@@ -111,6 +112,56 @@
      </details>
    </div>
  </section>
+ <details class="beetle-study" id="beetle-monitoring">
+   <summary class="beetle-study-summary"><span class="beetle-study-index">FIELD STATION / 2027</span><span class="beetle-study-summary-title">Help test the forecast with real adult beetle checks.</span><span class="beetle-study-summary-action">Open the monitoring field notebook</span></summary>
+   <div class="beetle-study-body">
+     <div class="study-guide">
+       <div>
+         <span class="study-kicker">A REPEAT-VISIT DETECTION STUDY</span>
+         <h2>Zero sightings are data, too.</h2>
+         <p>An adult beetle sighting alone cannot tell us when beetles first appeared. The missing evidence is <strong>dated visits when you checked carefully and saw none</strong>, followed by a visit when you confirmed an adult. This notebook is designed to preserve that sequence rather than manufacture an accuracy percentage.</p>
+       </div>
+       <ol class="study-protocol">
+         <li><strong>Start before the adult window.</strong> Choose one fixed garden bed of beans, roses, berries or grapes. Begin at least two weeks before the seasonal arrival you expect.</li>
+         <li><strong>Repeat the same check.</strong> Search the same plants, with the same method and effort, for at least five minutes each visit. Check weekly early on and every 2–3 days near emergence.</li>
+         <li><strong>Record a real no, yes or uncertain.</strong> A “no” means you actually completed the inspection and saw no adults. “Uncertain” must never be counted as a no.</li>
+         <li><strong>Verify and export.</strong> Link a clear identification to your own records and consult <a href="https://naturesnotebook.usanpn.org/npnapps/species/Popillia/japonica">USA-NPN's adult phenophase protocol</a> and verify whether enrollment for this species is available at your Michigan site. The public species profile does not currently list Michigan among its displayed states. This site does not submit observations for you.</li>
+       </ol>
+     </div>
+     <div class="study-board">
+       <div class="study-board-top">
+         <h3>My garden field journal</h3>
+         <p>Records stay in <strong>this browser only</strong>. No names, street address, photographs or GPS coordinates are collected. Clear browser data and they are lost; export your CSV regularly.</p>
+       </div>
+       <p class="study-season" id="monitor-season-status" role="status">Monitoring for the 2027 growing season opens on January 1, 2027. Download the field sheet and choose a fixed study site now.</p>
+       <form id="monitor-form" class="study-form" autocomplete="off">
+         <div class="study-field"><label for="monitor-site">Private plot code, not an address</label><input id="monitor-site" name="site" value="roses-1" maxlength="30" pattern="[A-Za-z0-9][A-Za-z0-9_-]{1,29}" required><small>Use the same code on every visit, such as roses-1.</small></div>
+         <div class="study-field"><label for="monitor-crop">Host plant</label><select id="monitor-crop"><option value="roses">Roses</option><option value="beans">Beans</option><option value="grapes">Grapes</option><option value="berries">Berries</option></select></div>
+         <div class="study-field"><label for="monitor-date">Date checked (Michigan local date)</label><input id="monitor-date" type="date" min="2027-01-01" max="2027-12-31" required></div>
+         <div class="study-field"><label for="monitor-method">Repeatable inspection</label><select id="monitor-method"><option value="leaf-inspection">Check leaves and flowers</option><option value="visual-host-check">Visual check of fixed host plants</option><option value="fixed-transect">Fixed walking transect</option></select></div>
+         <div class="study-field"><label for="monitor-minutes">Minutes actually spent checking</label><input id="monitor-minutes" type="number" min="5" max="90" step="1" value="5" required></div>
+         <div class="study-field"><label for="monitor-status">Adult Japanese beetles?</label><select id="monitor-status"><option value="no">No, after a complete inspection</option><option value="yes">Yes, adult(s) actually seen</option><option value="uncertain">Uncertain / cannot confirm</option></select></div>
+         <div class="study-field"><label for="monitor-count">Count (zero for no; at least 1 for yes)</label><input id="monitor-count" type="number" min="0" max="10000" step="1" value="0" required></div>
+         <div class="study-field"><label for="monitor-treatment">Recent pesticide or adult trap interference?</label><select id="monitor-treatment"><option value="no">No known treatment or trap</option><option value="yes">Yes: method may be affected</option><option value="unknown">Unknown</option></select></div>
+         <div class="study-actions"><button type="submit" class="study-primary" id="monitor-save">Save inspected visit locally</button><button type="button" id="monitor-snapshot" class="study-secondary">Freeze near-term official model snapshot</button></div>
+       </form>
+       <div class="study-readout" aria-live="polite">
+         <span class="study-readout-kicker">DETECTION INTERVAL / NOT FORECAST ACCURACY</span>
+         <strong id="monitor-verdict">No qualifying visit sequence recorded.</strong>
+         <p id="monitor-reason">Two real negative visits followed by a confirmed adult within seven days at a consistently checked site can bracket first observed adult activity.</p>
+         <p id="monitor-snapshot-status">No independently time-stamped model snapshot is stored. Future forecasts cannot be reconstructed from an October raster and called prospective.</p>
+       </div>
+       <div id="monitor-visits" class="study-visits"><p>No private entries yet. The example protocol above is not data.</p></div>
+       <div class="study-footer-actions"><button type="button" id="monitor-export">Export my field data (CSV)</button><button type="button" id="monitor-import-button">Import a previous CSV</button><input type="file" id="monitor-import" accept=".csv,text/csv" hidden><button type="button" id="monitor-clear">Erase journal on this browser</button><a href="/assets/japanese-beetle-monitoring-2027-template.csv">Download empty field sheet</a></div>
+     </div>
+     <div class="study-npn">
+       <div><span class="study-kicker">INDEPENDENT SOURCE CHECK</span><h3>Do scientific monitoring records exist for Michigan?</h3>
+       <p>USA-NPN's Nature's Notebook can record explicit yes and no adult phenophase status at repeat-visit sites. A site without both records cannot constrain the first observed-adult window. The official feed is separate from your private journal and the iNaturalist photo sample.</p></div>
+       <div class="study-npn-check"><button type="button" id="monitor-npn-check">Check official Michigan monitoring coverage</button><p id="monitor-npn-result" role="status" aria-live="polite">Not checked in this visit. An unavailable record is not evidence of absent beetles or a successful forecast.</p></div>
+     </div>
+     <p class="study-bottom-note">Research state: <strong>unvalidated</strong>. Site visits are self-reported unless independently reviewed. Weather models predict heat-stage dates; they do not verify local beetle emergence, density or treatment need. This notebook does not send your data to this website or to USA-NPN.</p>
+   </div>
+ </details>
  <section class="history-lab" id="history-lab" aria-labelledby="history-heading">
   <div class="history-eyebrow"><span class="section-kicker">06 / THE SCIENCE LAB</span><span>FIVE HISTORIC SEASONS · NOT A LIVE PEST FORECAST</span></div>
   <div class="history-layout">

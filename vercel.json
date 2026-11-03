@@ -9,6 +9,7 @@
     "api/garden-pest-timing-lab.js": {"maxDuration":25},
     "api/japanese-beetle-forecast.js": {"maxDuration":25},
     "api/japanese-beetle-field-evidence.js": {"maxDuration":15},
+    "api/japanese-beetle-monitoring-coverage.js": {"maxDuration":15},
     "api/leafcutter-release-weather.js": {
       "maxDuration": 25
     },

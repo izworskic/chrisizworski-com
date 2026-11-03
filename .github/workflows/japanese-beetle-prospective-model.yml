@@ -1,0 +1,47 @@
+name: Japanese beetle prospective model capture
+on:
+  schedule:
+    # Michigan daytime, Mon/Wed/Fri, May–September. Starts in 2027.
+    - cron: '20 13 * 5-9 1,3,5'
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'scripts/archive-japanese-beetle-prospective-model.cjs'
+      - 'tests/japanese-beetle-prospective-model.test.js'
+      - '.github/workflows/japanese-beetle-prospective-model.yml'
+permissions:
+  contents: read
+  issues: write
+concurrency:
+  group: japanese-beetle-prospective-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test source dates, six-day horizon and archive truth
+        run: node --test tests/japanese-beetle-prospective-model.test.js
+      - name: Query 10 Michigan official USA-NPN point rasters
+        if: github.event_name != 'pull_request'
+        run: node scripts/archive-japanese-beetle-prospective-model.cjs
+      - name: Preserve source audit evidence
+        if: always() && github.event_name != 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: japanese-beetle-prospective-model-source
+          path: artifacts/japanese-beetle-prospective/
+          if-no-files-found: warn
+          retention-days: 90
+      - name: Permanently archive genuine near-term source captures in GitHub issue
+        if: success() && github.event_name != 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if test -s artifacts/japanese-beetle-prospective/issue-comment.md; then
+            gh issue comment 1451 --repo "${GITHUB_REPOSITORY}" --body-file artifacts/japanese-beetle-prospective/issue-comment.md
+          fi
