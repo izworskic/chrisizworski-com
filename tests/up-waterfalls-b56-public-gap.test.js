@@ -31,7 +31,7 @@ test('Wright Street is source-backed public walking access, not a route to McClu
  const au=rec.candidates.find(x=>x.gisObjectId===192);
  assert.equal(au.publicationEligible,false);
  const gabbro=rec.candidates.find(x=>x.gisObjectId===38);
- assert.equal(gabbro.publicationEligible,false);
+ assert.equal(gabbro.publicationEligible,true);assert.equal(gabbro.curatedId,'gabbro-falls');
 });
 test('guide, sitemap, JSON-LD and map keep creator, location and discovery consistent',()=>{
  const url='https://chrisizworski.com/upper-peninsula-waterfalls/wright-street-falls/';
@@ -48,15 +48,15 @@ test('guide, sitemap, JSON-LD and map keep creator, location and discovery consi
  assert.ok(json['@graph'].some(x=>x['@type']==='Person'));
  assert.equal((sitemap.match(new RegExp(url.replaceAll('/','\\/'),'g'))||[]).length,1);
  assert.ok(hub.includes('data-id="wright-street-falls"'));
- assert.equal((hub.match(/<article class="waterfall-card"/g)||[]).length,73);
+ assert.equal((hub.match(/<article class="waterfall-card"/g)||[]).length,74);
  const list=JSON.parse(hub.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1])['@graph'].find(x=>x['@type']==='ItemList');
- assert.equal(list.numberOfItems,71);
+ assert.equal(list.numberOfItems,72);
  assert.equal(list.itemListElement.find(x=>x.url===url).position,71);
- assert.equal(records.length,73);
- assert.equal(rec.counts.curatedTotal,73);assert.equal(rec.counts.curatedNoMatchingGIS,11);
- assert.equal(ledger.curatedCount,73);assert.equal(queue.counts.curatedDestinations,73);
- assert.equal(queue.candidates.length,95);
- assert.equal(rec.counts.exactIdMatched,66);
+ assert.equal(records.length,74);
+ assert.equal(rec.counts.curatedTotal,74);assert.equal(rec.counts.curatedNoMatchingGIS,11);
+ assert.equal(ledger.curatedCount,74);assert.equal(queue.counts.curatedDestinations,74);
+ assert.equal(queue.candidates.length,94);
+ assert.equal(rec.counts.exactIdMatched,67);
  assert.ok(mapJs.includes('/api/carto-basemap-config'));
  assert.ok(mapJs.includes('tile.openstreetmap.org'));
  assert.ok(!mapJs.includes("L.tileLayer('https://basemaps.cartocdn.com/light_all/"));
