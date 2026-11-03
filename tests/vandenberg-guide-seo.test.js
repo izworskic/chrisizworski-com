@@ -141,7 +141,7 @@ test('measurement only sends allowlisted link placements, no visitor coordinates
   assert.ok(page.includes('/vandenberg-rocket-launch-viewing/guide.js?v=20261103-v1'));
 });
 
-test('responsive, accessible reading does not depend on third-party maps or a fixed-position ad',()=>{
+test('responsive and accessible guide preserves static answers if an optional map library fails',()=>{
   assert.match(page,/href="#main"/);
   assert.match(page,/<main id="main">/);
   assert.match(page,/<section class="vg-section vg-faq" id="faq"/);
@@ -149,6 +149,8 @@ test('responsive, accessible reading does not depend on third-party maps or a fi
   assert.match(stylesheet, /@media\(prefers-reduced-motion:reduce\)/);
   assert.match(stylesheet,/:focus-visible/);
   assert.doesNotMatch(page,/<iframe/i);
-  assert.doesNotMatch(page,/maps\.googleapis\.com|leaflet\.js|api\/rocket-launch-usa/);
+  assert.match(page,/unpkg\.com\/leaflet@1\.9\.4\/dist\/leaflet\.js/);
+  assert.match(page,/\/vandenberg-rocket-launch-viewing\/map\.js\?v=20261103-map-v1/);
+  assert.doesNotMatch(page,/maps\.googleapis\.com|api\/rocket-launch-usa/);
   assert.doesNotMatch(stylesheet,/position:fixed/);
 });
