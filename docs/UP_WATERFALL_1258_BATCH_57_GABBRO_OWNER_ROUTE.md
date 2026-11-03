@@ -1,0 +1,38 @@
+# Upper Peninsula Waterfalls #1258 — Batch 57: Gabbro / Baker's Falls landowner verification
+Review date: **2026-11-02**. Revision purpose: revisit previously blocked Michigan state GIS #38 after discovering newer, direct landowner visitor statements. The following documents the facts supporting a *limited* public guide, not an open-now claim or a navigable parking point.
+
+## Visitor question answered
+Can someone see Gabbro Falls near Bessemer without following an improvised pipeline easement, private resort maintenance road, or guessed GIS coordinates? **Yes, the owner and City jointly publish a bridge-side walking approach, subject to current operator rules.** Snowriver itself invites visits to its Gabbro waterfall, identifies it on its Black River Basin property and says the longer hike from the Black River bridge is approximately 0.3 mile. City of Bessemer independently identifies the bridge trailhead near Blackjack Ski Hill parking and a separate upper route. Neither publishes a precise waterfall-visitor lot point, a current-day permit for non-resort guests, or a complete surveyed track. We disclose those unknowns and offer no car navigation to the falls.
+
+## Five independent source gates (source-first)
+| Axis | Source | Dated verified fact | Explicit limits |
+| --- | --- | --- | --- |
+| Natural identity | Michigan state geological GIS MapServer/7, #38, https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7 | 46.502079,-89.992485 is named Gabbro Falls, Gogebic County, Black River. Also called Baker's Falls. | Natural feature, never a visitor parking location or route geometry |
+| Operator / permission context | https://www.snowriver.com/things-to-do/waterfall-fun | Owner states falls are on the Black River Basin resort property, markets them for visitors and describes two approaches. | Promotional invitation is not a posted daily gate status or carte blanche to enter adjacent private/utility land |
+| Public visitor approach | https://www.snowriver.com/discover/summer-at-snowriver-0 | Owner explicitly promotes Gabbro as a summer visitor waterfall on its property. | Owner's separate winter photograph is not a blanket winter-access guarantee |
+| Named parking vicinity | https://www.cityofbessemer.org/visit/scenic-drives/ with operator map https://www.snowriver.com/mountain-info/trail-map-mountain-stats | City names a falls trailhead at Black River bridge near Blackjack Ski Hill parking; resort's official 2025 ski map includes Black River Basin parking near its main lodge. | No independent proof of free non-guest use, dedicated waterfall-only spaces, legal shoulder parking or survey-level parking coordinates |
+| Foot route | Snowriver owner https://www.snowriver.com/things-to-do/waterfall-fun and City visitor page above | Owner gives *approximately 0.3 mile bridge-to-falls*; City points to the lower bridge-side trailhead. | No complete mapped GPX line, bridge-side lot geometry or permission for informal route variants. The owner's ~20-yard approach from an unnamed upper road does **not** grant public driving rights on its service roads. |
+
+Check: Snowriver official visitor attraction, summer page and City tourism were retrieved Nov 2 2026. Operator's [2025 illustrated ski trail map](https://www.snowriver.com/sites/default/files/2025-11/SNOWRIVER-01.5%2009292025forWEB.pdf) was visually inspected, including identified Black River Basin chalet and parking; it is a ski-area map and **not** a hike-to-falls legal access survey.
+
+## Route decision
+**Recommend:** call Snowriver guest services **906-229-5181** for current waterfall visitor parking, non-guest terms and footpath status. Follow signage from a *permitted* Black River Basin parking area toward the publicly described trailhead near the Black River bridge, then the operator-described 0.3-mile walk. Avoid all cliffs, icy slopes, water entries and unauthorized service roads. A default conservative 45–90-minute visit allowance includes unknown mud/parking delays but does not count travel between towns.
+
+**Do not recommend:** the old bloggers' west-of-road gas/powerline corridor, driving through resort service roads to a 20-yard upper drop, bridge-side shoulder parking, unprotected drop descents, swimming in the plunge pool, class-V paddling or navigation to the #38 raw falls coordinates. Snowriver's own copy mentions swimming/fishing, but this is not a site-specific safety inspection. American Whitewater https://www.americanwhitewater.org/content/River/view/river-detail/927/main flags the falls as a Class V waterfall hazard; legal/safe activity cannot be inferred from promotion.
+
+### Source contradiction and scope resolution
+Old October 28 notes said **no landowner invitation found**; the November 2 owner page directly contradicts that prior gap and establishes an actual visitor attraction. This supersedes the older "no consent at all" claim, but does not magically validate a specific visitor lot coordinate, upper hillside access, or free day use. Permit/parking/winter remain **conditional**, and signed site directions take precedence. Public research review #38 remains as a **historical archived audit** with source and change justification; the GIS feature is now linked to one public guide, so the opt-in raw research overlay suppresses a duplicate marker.
+
+The **five federally maintained scenic-byway falls** on the Black River farther north (Great Conglomerate, Potawatomi, Gorge, Sandstone, Rainbow) are independent curated attractions with different agencies/access conditions; Snowriver/Bessemer's Gabbro is not on the byway trail network and no path between them is inferred.
+
+## Implemented scope
+- Curated entries **73 → 74**, exact GIS identities **66 → 67**, research GIS queue **95 → 94**; no-GIS curated count 11 unchanged; geographic GIS 161 unchanged; archival source reviews 97 unchanged.
+- New independently indexable child guide `/upper-peninsula-waterfalls/gabbro-falls/`, source links, accessible on-page map with **no parking-coordinate data**, original image links (not copied stock), real visitor/access decisions.
+- Main searchable map/card, 45–90-minute on-site visit lens integration, ItemList 71→72, sitemap-u.p.-waterfalls 71→72 without duplicate sitemap entries; dateModified/lastmod true on 2026-11-02.
+- Core route/ownership reconciliation, canonical inventory, regenerated queue, archived access review and targeted test assertions. No new API, tables, GPS route interpolation, Redis, Supabase, trackers, AdSense or image licenses.
+
+## QA acceptance
+Verify source-linked current/future date cautions, mobile CTA/legibility, map key fallback, no old Gabbro research pin overlay, no public bridge shoulder or service route directions, correct owner source and season-specific unknowns, no combined Black River Scenic Byway route claims. Run `node scripts/build-up-waterfall-review-queue.mjs --check`, full `npm run verify:all`, full waterfall browser screenshots, name SERP and Vercel preview; merge only after all pass. Then confirm exact production SHA and inspect public hub, child guide and sitemap.
+
+## What remains genuinely unresolved
+No independently established GPS of a legal falls-specific parking lot, owner-signed non-guest free parking entitlement, live winter bridge trail state, upper private road access or parcel-level full route. Revisit with Snowriver written permission or a current operator map if those claims become necessary. They are *not* prerequisites for a conservative, source-based bridge visitor guidance page, provided it never promises parking or an open gate.
