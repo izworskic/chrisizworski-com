@@ -8,6 +8,10 @@ on:
       - 'scripts/rocket_launch_slip_lab.py'
       - 'tests/rocket-launch-slip.test.js'
       - 'lib/rocket-launch-national.js'
+      - 'lib/space-coast-media.js'
+      - 'scripts/rocket_launch_visual_catalog.py'
+      - 'tests/rocket-launch-visuals.test.js'
+      - '.github/workflows/rocket-visual-nasa-catalog.yml'
       - 'api/rocket-launch-truth.js'
       - 'api/space-coast-ksc-watch.js'
       - 'api/rocket-launch-refresh.js'
@@ -48,5 +52,9 @@ jobs:
         run: python3 scripts/rocket_launch_slip_lab.py --test
       - name: Verify JavaScript weather scenarios against Python model
         run: node --test tests/rocket-launch-slip.test.js
+      - name: Confirm Python NASA imagery provenance and strict source matching
+        run: python3 scripts/rocket_launch_visual_catalog.py --test
+      - name: Verify NASA media catalog, image rights and official webcast fallbacks
+        run: node --test tests/rocket-launch-visuals.test.js tests/space-coast-media.test.js
       - name: Verify visitor and independent editorial source regressions
         run: node --test tests/rocket-launch-usa.test.js tests/space-coast-live.test.js tests/spaceflight-now-editorial.test.js
