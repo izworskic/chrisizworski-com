@@ -370,3 +370,64 @@ button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid #dc7
 .rl-visual-ethics a{color:#d7efe8!important;text-decoration:underline;text-underline-offset:2px}
 @media(max-width:850px){.rl-visual-story{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.rl-visual-gallery{grid-template-columns:repeat(2,minmax(0,1fr))}.rl-visual-section .rl-section-head{display:block!important}.rl-visual-gallery-head>span{white-space:normal;text-align:right}}
 @media(max-width:590px){.rl-visual-section{padding:17px!important;border-radius:16px!important}.rl-visual-story{grid-template-columns:1fr}.rl-visual-payload-photo{aspect-ratio:16/9}.rl-visual-gallery-head{display:block}.rl-visual-gallery-head>span{display:block;margin-top:8px;text-align:left}.rl-visual-family-copy{padding:10px}.rl-visual-family-copy strong{font-size:13px}.rl-visual-family-photo .rl-visual-caption{display:none}}
+
+
+/* Vandenberg / purpose-built spectator intelligence, not another launch calendar. */
+.rl-vandenberg[hidden]{display:none!important}
+.rl-vandenberg{--v-ink:#102c3c;--v-blue:#0f4350;--v-mist:#45677a;--v-orange:#bb572f;--v-line:#d1d9d8;background:linear-gradient(153deg,#f5f5eb 0%,#e8f0ed 78%);color:var(--v-ink);border:1px solid #c7d6d3;border-radius:20px;padding:clamp(16px,2.4vw,33px);margin:17px 0 23px;box-shadow:0 15px 38px rgba(10,51,59,.08)}
+.rl-vandenberg-header{display:flex;justify-content:space-between;align-items:start;gap:23px;margin-bottom:20px}
+.rl-vandenberg-kicker{font:800 10px/1.4 system-ui,sans-serif!important;color:#8a4a26!important;text-transform:uppercase;letter-spacing:.15em;margin:0 0 8px!important}
+.rl-vandenberg h3#rl-vandenberg-title{font:700 clamp(25px,3.25vw,42px)/1.08 Georgia,serif!important;color:#102b3a!important;letter-spacing:-.03em;margin:0 0 11px!important}
+.rl-vandenberg-header p:not(.rl-vandenberg-kicker){font-size:13px;line-height:1.75;color:#355362!important;max-width:720px;margin:0}
+.rl-vandenberg-state{display:inline-flex;flex-shrink:0;font-size:10px;font-weight:800;letter-spacing:.05em;color:#17485a;border:1px solid #a9c4c5;border-radius:50px;padding:9px 12px;background:#fafffc}
+.rl-vandenberg-controls{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:0 0 21px}
+.rl-vandenberg-control{border:0;padding:0;margin:0;min-width:0}
+.rl-vandenberg-control legend{font-size:12px;font-weight:850;color:#1b4552;padding:0 0 10px}
+.rl-vandenberg-buttons{display:flex;flex-wrap:wrap;gap:7px}
+.rl-vandenberg-buttons button{cursor:pointer;border:1px solid #8caeb1;border-radius:9px;background:#fff;color:#203f4d!important;font-weight:750;font-size:11px;line-height:1.4;min-height:40px;padding:9px 11px}
+.rl-vandenberg-buttons button[aria-pressed="true"]{background:#174b59!important;color:#fff!important;border-color:#174b59!important}
+.rl-vandenberg-buttons button:focus-visible,.rl-vandenberg-focus:focus-visible,.rl-vandenberg-actions a:focus-visible{outline:3px solid #bc6b39;outline-offset:3px}
+.rl-vandenberg-no-time{font-size:12px;color:#4d6572;line-height:1.5}
+.rl-vandenberg-verdict{padding:16px 18px;border-left:5px solid #b76439;background:#dce9e5;border-radius:10px;margin-bottom:20px}
+.rl-vandenberg-verdict strong{color:#123743;font:700 clamp(17px,2vw,23px)/1.3 Georgia,serif}
+.rl-vandenberg-verdict p{color:#315462;font-size:12px;line-height:1.65;margin:5px 0 0}
+.rl-vandenberg-workspace{display:grid;grid-template-columns:minmax(280px,1fr) minmax(310px,1.15fr);align-items:start;gap:20px}
+.rl-vandenberg-map-shell{min-width:0}
+.rl-vandenberg-map{position:relative;height:510px;width:100%;border-radius:14px;overflow:hidden;background:#cfddd8;border:1px solid #a4c2c0;z-index:0}
+.rl-vandenberg-map .leaflet-container{font-family:system-ui,sans-serif}
+.rl-vandenberg-map-fallback{padding:28px;color:#264857;font-size:13px}
+.rl-vandenberg-map-caption{font-size:11px!important;line-height:1.65;color:#466574!important;margin:9px 0 0!important}
+.rl-vandenberg-sources{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.rl-vandenberg-sources a{border-radius:8px;background:#fff;border:1px solid #b0c8c7;padding:8px 10px;color:#145168!important;font-size:11px;font-weight:750;text-decoration:none!important}
+.rl-vandenberg-results{min-width:0}
+.rl-vandenberg-results>h4{font:700 18px/1.3 Georgia,serif!important;color:#1a3f4c;margin:0 0 12px}
+.rl-vandenberg-results>h4 span{font:600 10px/1.4 system-ui,sans-serif;color:#56707b;letter-spacing:.02em;margin-left:8px}
+.rl-vandenberg-cards{display:grid;grid-template-columns:1fr;gap:10px}
+.rl-vandenberg-card{min-width:0;border:1px solid #bfd0cc;border-radius:13px;background:#fff;padding:15px 16px;box-shadow:0 3px 8px rgba(0,0,0,.025)}
+.rl-vandenberg-card[data-selected="true"]{border:2px solid #2c747d;padding:14px 15px;box-shadow:0 0 0 3px rgba(40,133,141,.12)}
+.rl-vandenberg-card[data-access="after-hours"]{background:#f8f3ee}
+.rl-vandenberg-card-top{display:flex;align-items:start;gap:10px}
+.rl-vandenberg-number{display:flex;align-items:center;justify-content:center;flex-shrink:0;width:31px;height:31px;background:#d9e9e3;border-radius:7px;color:#195465;font-weight:850;font-size:11px}
+.rl-vandenberg-card-top>div{flex:1;min-width:0}
+.rl-vandenberg-card-top h5{font:700 17px/1.3 Georgia,serif;color:#142f3e;margin:0 0 3px}
+.rl-vandenberg-kind{font-size:10px;color:#58717d}
+.rl-vandenberg-focus{flex-shrink:0;background:#e4eee9!important;color:#204956!important;border:1px solid #a1c4c2!important;font-size:11px!important;font-weight:800!important;border-radius:8px!important;padding:7px 9px!important;cursor:pointer}
+.rl-vandenberg-status{display:inline-block;background:#dbe9e5;color:#1d5b60;padding:7px 9px;border-radius:6px;margin:12px 0 8px!important;font-size:11px!important;font-weight:800;line-height:1.5}
+.rl-vandenberg-card[data-access="after-hours"] .rl-vandenberg-status{background:#f4d7ca;color:#86391f}
+.rl-vandenberg-card[data-access="boundary"] .rl-vandenberg-status{background:#f6e9cc;color:#75511a}
+.rl-vandenberg-scene{font-size:12px!important;color:#3a5863;line-height:1.7;margin:0 0 11px!important}
+.rl-vandenberg-facts{display:grid;grid-template-columns:1fr 1fr;gap:10px;border-top:1px solid #dce5e4;padding-top:11px}
+.rl-vandenberg-facts small{display:block;font-size:9px;font-weight:850;color:#5a7481;letter-spacing:.065em;margin-bottom:4px}
+.rl-vandenberg-facts strong{font-size:13px;line-height:1.45;color:#204352}
+.rl-vandenberg-proxy{color:#63767d!important;font-size:10px!important;line-height:1.7;margin:9px 0!important}
+.rl-vandenberg-access{color:#566d75!important;font-size:11px!important;line-height:1.7;margin:10px 0!important}
+.rl-vandenberg-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.rl-vandenberg-actions a{color:#135065!important;background:#edf5f3;border:1px solid #b9d3d0;border-radius:7px;text-decoration:none!important;font-size:10px;font-weight:800;padding:9px 10px;line-height:1.4}
+.rl-vandenberg-actions a.rl-vandenberg-directions{background:#194c5b;color:#fff!important;border-color:#194c5b}
+.rl-vandenberg-closure{border-left:4px solid #b15e42;background:#faede6;border-radius:8px;padding:14px 18px;margin-top:17px}
+.rl-vandenberg-closure strong{color:#733820;font-size:12px}
+.rl-vandenberg-closure p{font-size:12px;line-height:1.7;color:#754735;margin:4px 0 0}
+.rl-vandenberg-honesty{margin:14px 0 0!important;color:#5d7378!important;font-size:11px!important;line-height:1.7!important}
+.rl-vandenberg-popup strong{font-size:12px}.rl-vandenberg-popup p{font-size:11px;margin:6px 0}
+@media(max-width:980px){.rl-vandenberg-workspace{grid-template-columns:1fr}.rl-vandenberg-map{height:360px}.rl-vandenberg-controls{grid-template-columns:1fr}}
+@media(max-width:610px){.rl-vandenberg{padding:15px;margin:10px 0;border-radius:13px}.rl-vandenberg-header{display:block}.rl-vandenberg-state{margin-top:12px}.rl-vandenberg-map{height:300px}.rl-vandenberg-buttons button{flex:1 0 auto}.rl-vandenberg-facts{gap:8px}.rl-vandenberg-card-top{flex-wrap:wrap}.rl-vandenberg-focus{margin-left:auto}}
