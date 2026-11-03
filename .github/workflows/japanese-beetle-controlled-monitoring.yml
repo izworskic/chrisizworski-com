@@ -1,0 +1,26 @@
+name: Japanese beetle controlled-observation research probe
+on:
+  pull_request:
+    paths:
+      - 'scripts/probe-japanese-beetle-npn-observations.cjs'
+      - 'lib/japanese-beetle-controlled-monitoring.cjs'
+      - 'tests/japanese-beetle-controlled-monitoring.test.js'
+      - 'docs/experience-briefs/japanese-beetle-controlled-monitoring-v1-20261102.md'
+      - '.github/workflows/japanese-beetle-controlled-monitoring.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  science:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Discover real official NPN taxon and biological observation source
+        run: node scripts/probe-japanese-beetle-npn-observations.cjs
+      - name: Validate controlled-monitoring science logic and failure gates
+        run: |
+          if [ -f tests/japanese-beetle-controlled-monitoring.test.js ]; then node --test tests/japanese-beetle-controlled-monitoring.test.js; fi
