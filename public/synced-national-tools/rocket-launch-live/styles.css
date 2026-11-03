@@ -295,3 +295,36 @@ button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid #dc7
 .rl-watch-disclaimer{font-size:12px;margin-top:17px}
 @media(max-width:850px){.rl-watch-columns{grid-template-columns:1fr}.rl-watch-cameras{border-left:0;border-top:1px solid #496671;padding:20px 0 0}}
 @media(max-width:590px){.rl-watch-head{display:block}.rl-watch-status{display:inline-block;white-space:normal;margin-bottom:13px}.rl-watch-card{padding:14px}.rl-watch-shell{padding:17px}}
+
+
+/* Slip Lab: decision-focused spectator timeline, not a rocket launch probability. */
+.rl-slip-lab{margin:30px 0 0;padding:clamp(18px,3vw,29px);background:#e8f2f1;border:1px solid #abc9c3;border-radius:19px;color:#123e43}
+.rl-slip-intro{display:flex;align-items:start;justify-content:space-between;gap:20px}
+.rl-slip-intro h3{font-family:var(--serif);font-size:clamp(24px,2.5vw,33px);line-height:1.18;color:#17424c;margin:6px 0 12px}
+.rl-slip-intro p{font-size:13px;line-height:1.7;color:#355b5d;max-width:840px;margin:0}
+.rl-slip-kicker{text-transform:uppercase;letter-spacing:.1em;font-size:11px;font-weight:850;color:#536f72!important}
+.rl-slip-label{border-radius:99px;background:#d3e8db;color:#244f47;padding:10px 13px;font-size:11px;font-weight:850;flex-shrink:0}
+.rl-slip-brief{font-size:13px;color:#244e55;line-height:1.7;font-weight:650;margin:18px 0}
+.rl-slip-options{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin:14px 0}
+.rl-slip-choice{display:flex;flex-direction:column;gap:4px;border:1px solid #aec9c8;border-radius:10px;padding:14px;text-align:left;background:#fff;color:#23484d;cursor:pointer;min-height:72px}
+.rl-slip-choice strong{font-size:14px}
+.rl-slip-choice small{font-size:11px;line-height:1.5;color:#4d686a}
+.rl-slip-choice[aria-pressed="true"]{background:#174451;border-color:#174451;color:#fff}
+.rl-slip-choice[aria-pressed="true"] small{color:#d2e4e7}
+.rl-slip-choice:focus-visible{outline:3px solid #d4784e;outline-offset:2px}
+.rl-slip-detail{padding:20px;border:1px solid #c6dcd8;border-radius:12px;background:#fff;color:#214950}
+.rl-slip-detail-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.rl-slip-detail-head strong{font-size:16px}
+.rl-slip-detail-head span{color:#4b6366;font-size:12px;font-weight:700}
+.rl-slip-site-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.rl-slip-site{padding:15px 17px;border:1px solid #d6e4e1;background:#f2f8f6;border-radius:10px;min-width:0}
+.rl-slip-site-label{display:block;font-size:12px;color:#547276;font-weight:800}
+.rl-slip-number{display:block;font-family:var(--serif);font-size:clamp(19px,2vw,26px);color:#1b4650;margin:8px 0}
+.rl-slip-site small{display:block;color:#516b6c;font-size:11px;line-height:1.65;margin-top:9px}
+.rl-slip-track{height:9px;background:#d5e4e5;border-radius:99px;overflow:hidden}
+.rl-slip-fill{display:block;height:100%;background:#4b94a3;border-radius:99px;max-width:100%}
+.rl-slip-verdict{margin:17px 0 0;font-size:13px;line-height:1.65;font-weight:750;color:#21525c}
+.rl-slip-method{border-top:1px solid #b9cecb;padding-top:14px;font-size:12px;line-height:1.65;color:#456267;margin:18px 0 0}
+.rl-slip-empty{font-size:13px;line-height:1.7;color:#47646a}
+@media(max-width:760px){.rl-slip-intro{display:block}.rl-slip-label{display:inline-flex;margin-top:12px}.rl-slip-options{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:510px){.rl-slip-site-grid{grid-template-columns:1fr}.rl-slip-choice{padding:11px}.rl-slip-detail{padding:13px}.rl-slip-site{padding:13px}}

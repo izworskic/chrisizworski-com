@@ -8,6 +8,7 @@ const { launchWeatherFor } = require('../lib/launch-weather-intelligence');
 const { readWeatherState, missionForecast } = require('../lib/space-coast-official-weather');
 const { editorialDesk } = require('../lib/spaceflight-now-editorial');
 const { readNationalSchedule } = require('../lib/rocket-launch-national');
+const { slipWindows } = require('../lib/rocket-launch-slip');
 const { buildMediaDesk } = require('../lib/space-coast-media');
 
 const LL2 = 'https://ll.thespacedevs.com/2.3.0/launches/upcoming/';
@@ -147,16 +148,19 @@ async function weatherFor(region, launch, now = Date.now()) {
         } : null,
         cloudStatus: assessment.cloudStatus, cloudCoverPercent: assessment.cloudCoverPercent,
         updatedAt: assessment.forecastUpdatedAt,
-        source: 'https://www.weather.gov/' };
+        source: 'https://www.weather.gov/', _hourly:hourly, _grid:grid };
     } catch (_) {
       return { id: p.id, name: p.name, status: 'unavailable',
         assessment: weatherGrade(null), period: null, cloudStatus: 'unavailable',
-        cloudCoverPercent: null, updatedAt: null, source: 'https://www.weather.gov/' };
+        cloudCoverPercent: null, updatedAt: null, source: 'https://www.weather.gov/',
+        _hourly:null, _grid:null };
     }
   }));
-  return { level: places.every(x => x.status === 'ok') ? 'assessed' : 'partial',
+  const slip=slipWindows(places,launch,now,skyCompare,weatherGrade);
+  const publicPlaces=places.map(({_hourly,_grid,...site})=>site);
+  return { level: publicPlaces.every(x => x.status === 'ok') ? 'assessed' : 'partial',
     label: 'NWS surface and sky-cover forecast', detail: 'Cloud cover is local to the viewing point, not the rocket path.',
-    places, comparison: skyCompare(places) };
+    places:publicPlaces, comparison:skyCompare(publicPlaces), slip };
 }
 
 function createHandler({getSchedule=readNationalSchedule}={}) {
