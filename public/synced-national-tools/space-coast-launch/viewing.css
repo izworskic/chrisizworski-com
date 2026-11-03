@@ -542,3 +542,42 @@
 .sfn-reporting-actions a{display:inline-flex;padding:10px 12px;background:#235e67;color:#fff!important;border-radius:8px;font-size:12px;font-weight:800;text-decoration:none}
 #sfn-reporting-note{font-size:11px;line-height:1.7;color:#466763;margin:12px 0 0}
 @media(max-width:650px){.sfn-reporting-head,.sfn-reporting-list{grid-template-columns:1fr}.sfn-reporting-actions a{flex:1 1 160px;text-align:center;justify-content:center}}
+
+
+/* Florida facility network: mission-first range identity, not a second map or a competing calendar. */
+.fl-facility-network{margin:20px 0 28px;padding:clamp(18px,3.1vw,30px);border-radius:20px;background:linear-gradient(145deg,#102f3d,#1e4c56 64%,#285861);color:#f8fbf8;box-shadow:0 16px 35px rgba(18,50,62,.16)}
+.fl-facility-heading{display:flex;align-items:start;justify-content:space-between;gap:20px;margin-bottom:20px}
+.fl-facility-heading .eyebrow{color:#b8ded7!important;font-size:11px;letter-spacing:.14em}
+.fl-facility-heading h2{font-size:clamp(25px,3.5vw,39px);line-height:1.12;max-width:700px;color:#fff;margin:6px 0 10px}
+.fl-facility-heading p:not(.eyebrow){color:#e3efed;line-height:1.6;font-size:14px;max-width:720px;margin:0}
+.fl-facility-flag{font-size:10px;letter-spacing:.1em;font-weight:850;white-space:nowrap;padding:10px 12px;border:1px solid #9ebebd;border-radius:99px;color:#f0f9f5}
+.fl-facility-content{display:grid;grid-template-columns:minmax(235px,.8fr) minmax(0,1.2fr);gap:18px;align-items:stretch}
+.fl-facility-switch{display:flex;flex-direction:column;gap:10px}
+.fl-facility-switch button{display:flex;text-align:left;align-items:center;gap:13px;border:1px solid #6b9294;border-radius:13px;background:#244f57;color:#f6fbf9;min-height:85px;width:100%;padding:13px 15px;cursor:pointer;font:inherit;transition:background .15s ease,border-color .15s ease}
+.fl-facility-switch button:not(:disabled):hover,.fl-facility-switch button[aria-pressed="true"]{background:#e0efe9;border-color:#e0efe9;color:#173c40}
+.fl-facility-switch button:focus-visible{outline:3px solid #f4d98e;outline-offset:3px}
+.fl-facility-switch button:disabled{cursor:not-allowed;opacity:.68}
+.fl-facility-switch button[aria-pressed="true"]:disabled{opacity:1}
+.fl-facility-icon{display:grid;place-items:center;flex:0 0 48px;aspect-ratio:1;border:2px solid currentColor;border-radius:50%;font-size:16px;font-weight:850;letter-spacing:.04em}
+.fl-facility-switch button span:nth-child(2){display:flex;flex-direction:column;gap:4px;min-width:0}
+.fl-facility-switch strong{font-size:16px;line-height:1.25;color:inherit}
+.fl-facility-switch small{font-size:12px;line-height:1.35;color:inherit;opacity:.85}
+.fl-facility-switch em{font-size:11px;color:inherit;font-style:normal;font-weight:750;opacity:.9}
+.fl-facility-hint{font-size:12px;line-height:1.6;color:#d7e7e4;margin:3px 2px 0}
+.fl-origin-desk{padding:clamp(17px,2.5vw,25px);border-radius:15px;background:#f7f7f0;color:#243e42}
+.fl-origin-kicker{display:block;font-size:10px;letter-spacing:.13em;font-weight:900;color:#526a68}
+.fl-origin-desk h3{font-size:clamp(23px,3vw,32px);line-height:1.16;margin:9px 0 9px;color:#163d43}
+.fl-origin-desk p{font-size:13px;line-height:1.6;color:#385359;margin:8px 0}
+.fl-origin-pad{display:inline-block;font-size:13px!important;font-weight:850;color:#114c4f!important;background:#deebe6;padding:7px 11px;border-radius:8px}
+.fl-origin-rule{padding:12px 14px;margin:14px 0;background:#eff1e8;border-left:4px solid #7d8c86;border-radius:8px}
+.fl-origin-rule[data-rule="gantry-excluded"]{background:#fff0e5;border-left-color:#ad612c}
+.fl-origin-rule strong{display:block;font-size:14px;line-height:1.4;color:#27444a}
+.fl-origin-rule p{font-size:13px;margin:6px 0 0}
+.fl-facility-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.fl-facility-links a{color:#f6fffc!important;background:#285d62;border:1px solid #729d9c;border-radius:9px;padding:9px 12px;font-size:12px;font-weight:800;text-decoration:underline;text-underline-offset:3px;line-height:1.4}
+.fl-facility-links a:hover,.fl-facility-links a:focus-visible{color:#183943!important;background:#e6f1ed;outline-offset:2px}
+.fl-facility-links a#fl-national-mission-link{background:#d8e8dd;color:#123f3c!important;border-color:#d8e8dd;text-decoration:none}
+.fl-facility-disclosure{font-size:11px;line-height:1.6;margin:16px 0 0;color:#d5e8e5}
+@media(max-width:800px){.fl-facility-heading{display:block}.fl-facility-flag{display:inline-block;margin-top:12px}.fl-facility-content{grid-template-columns:1fr}.fl-facility-switch{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.fl-facility-switch button{align-items:start;flex-direction:column}.fl-facility-hint{grid-column:1/-1}}
+@media(max-width:450px){.fl-facility-network{margin:16px 0 21px;padding:15px}.fl-facility-switch{grid-template-columns:1fr}.fl-facility-switch button{flex-direction:row;min-height:68px}.fl-facility-hint{grid-column:1}.fl-facility-links a{flex:1 1 100%;text-align:center}}
+@media(prefers-reduced-motion:reduce){.fl-facility-switch button{transition:none}}
