@@ -68,7 +68,9 @@ function render(){
  const today=nowMI(),active=today.startsWith('2027-');
  date.max=active?today:'2027-12-31';
  if(active&&(!date.value||date.value>today))date.value=today;
- form.querySelectorAll('input,select').forEach(x=>{x.disabled=!active});
+ for(const x of [date,method,minutes,status,count,interference])x.disabled=!active;
+ // The plot alias and host can be chosen before the 2027 study starts;
+ // actual visits and forecast snapshots cannot be entered before their dates.
  $('monitor-save').disabled=!active;snapBtn.disabled=!active;
  seasonStatus.textContent=active?'2027 field season: record only inspections you completed. This browser holds your private observations; it is not an independent scientific dataset.':
   today<'2027-01-01'?'The 2027 study season has not begun. Prepare a fixed plot now, and download the empty field sheet. The journal activates with the 2027 season.':
@@ -157,6 +159,11 @@ clearBtn.addEventListener('click',()=>{if(!window.confirm('Erase ALL saved field
 snapBtn.addEventListener('click',async()=>{
  const id=site.value.trim().toLowerCase(),ref=reference(),today=nowMI();
  if(!activeSeason()||!/^[a-z0-9][a-z0-9_-]{1,29}$/.test(id)){snapshotStatus.textContent='Choose a stable study plot during the 2027 season.';return}
+ // Already observed adults at this plot preclude treating a later snapshot as
+ // a prospective validation of the first yes. Refuse look-ahead contamination.
+ if(entries.some(x=>x.site===id&&x.crop===crop.value&&x.reference===ref&&x.adults==='yes'&&x.date<=today)){
+  snapshotStatus.textContent='Adults were already logged at this plot; a new model snapshot would be after the observed event and cannot serve as prospective evidence.';return
+ }
  snapBtn.disabled=true;snapshotStatus.textContent='Checking official dated USA-NPN model before storing a local snapshot…';
  try{
   const p=new URLSearchParams({crop:crop.value});if(ref.startsWith('zip:'))p.set('zip',ref.slice(4));else p.set('site','bay-city');
