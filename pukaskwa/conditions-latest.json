@@ -2,17 +2,17 @@
   "schemaVersion": 1,
   "park": "pukaskwa",
   "sourceUrl": "https://parks.canada.ca/pn-np/on/pukaskwa/activ/experience/randonnees-hiking/etat-sentiers-trail-conditions",
-  "checkedAt": "2026-11-03T10:51:36.996Z",
-  "lastSuccessAt": "2026-11-03T10:51:36.996Z",
-  "lastChangeAt": "2026-10-31T14:40:21.611Z",
+  "checkedAt": "2026-11-03T21:00:19.916Z",
+  "lastSuccessAt": "2026-11-03T21:00:19.916Z",
+  "lastChangeAt": "2026-11-03T21:00:19.916Z",
   "health": "ok",
   "consecutiveFailures": 0,
   "lastError": null,
-  "fingerprint": "2072e0e12b39e6ec49ade18467007e4609ce45a3547fbe02f9f8341a1301305e",
+  "fingerprint": "fbd2de204a39044f92806c2e6f9fb683b5be6c9d70b92405320661b848980479",
   "snapshot": {
     "schemaVersion": 1,
     "park": "pukaskwa",
-    "retrievedAt": "2026-11-03T10:51:36.996Z",
+    "retrievedAt": "2026-11-03T21:00:19.916Z",
     "sourceUrl": "https://parks.canada.ca/pn-np/on/pukaskwa/activ/experience/randonnees-hiking/etat-sentiers-trail-conditions",
     "collectionMethod": "public-html-table",
     "sourceRecords": [
@@ -75,10 +75,10 @@
       {
         "name": "White River Suspension Bridge Trail",
         "difficulty": "Difficult",
-        "status": "closed",
-        "rawStatus": "Closed.",
-        "issuedOn": "2026-10-22",
-        "comment": "2026-10-22: Adhere to all posted warnings and closures along trails;"
+        "status": "open",
+        "rawStatus": "Open.",
+        "issuedOn": "2026-11-03",
+        "comment": "2026-11-03: Adhere to all posted warnings and closures along trails;"
       },
       {
         "name": "Mdaabii Miikna: 0 KM - 3.75 KM: North Entrance to Playter Harbour South",
@@ -239,6 +239,20 @@
       "Seasonal backcountry dates conflict between official pages; conservative boundary applied."
     ]
   },
-  "recentChanges": [],
+  "recentChanges": [
+    {
+      "checkedAt": "2026-11-03T21:00:19.916Z",
+      "name": "White River Suspension Bridge Trail",
+      "type": "status",
+      "before": {
+        "status": "closed",
+        "issuedOn": "2026-10-22"
+      },
+      "after": {
+        "status": "open",
+        "issuedOn": "2026-11-03"
+      }
+    }
+  ],
   "closureHolds": []
 }
