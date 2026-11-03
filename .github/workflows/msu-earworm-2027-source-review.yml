@@ -72,6 +72,10 @@ jobs:
           date="$(python3 -c 'import json;print(json.load(open("data/garden-earworm-msu-2027-provenance.json"))["source"]["publishedDate"])')"
           hash="$(python3 -c 'import json;print(json.load(open("data/garden-earworm-msu-2027-provenance.json"))["source"]["sourceTableSha256"][:10])')"
           branch="automation/msu-earworm-2027-${date}-${hash}"
+          if git ls-remote --exit-code --heads origin "$branch" >/dev/null 2>&1; then
+            echo "This official table revision already has a source-review branch; preserving the existing human review."
+            exit 0
+          fi
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git switch -c "$branch"
