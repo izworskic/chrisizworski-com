@@ -4,6 +4,9 @@ on:
   pull_request:
     paths:
       - 'lib/rocket-launch-truth.js'
+      - 'lib/rocket-launch-slip.js'
+      - 'scripts/rocket_launch_slip_lab.py'
+      - 'tests/rocket-launch-slip.test.js'
       - 'lib/rocket-launch-national.js'
       - 'api/rocket-launch-truth.js'
       - 'api/space-coast-ksc-watch.js'
@@ -41,5 +44,9 @@ jobs:
         run: node --test tests/rocket-launch-truth.test.js
       - name: Verify existing Florida launch and KSC watch are preserved
         run: node --test tests/space-coast-launch-day.test.js tests/space-coast-ksc-watch.test.js
+      - name: Verify independent Python launch-slip model and safety boundaries
+        run: python3 scripts/rocket_launch_slip_lab.py --test
+      - name: Verify JavaScript weather scenarios against Python model
+        run: node --test tests/rocket-launch-slip.test.js
       - name: Verify visitor and independent editorial source regressions
         run: node --test tests/rocket-launch-usa.test.js tests/space-coast-live.test.js tests/spaceflight-now-editorial.test.js
