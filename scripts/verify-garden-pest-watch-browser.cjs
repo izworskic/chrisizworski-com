@@ -95,7 +95,7 @@ async function waitForAnswer(page,pest){await page.waitForFunction(name=>documen
    assert.ok(await page.locator('#visual-results .visual-result').count()>=4);
    // The photo/action bridge uses the exact crop+stage+ZIP seasonal desk;
    // it never converts a photo into a confirmed pest or local probability.
-   const borer=page.locator('#visual-results .visual-result').filter({hasText:'Squash vine borer'});
+   const borer=page.locator('#visual-results .visual-result').filter({has:page.getByRole('heading',{name:'Squash vine borer',exact:true})});
    assert.match(await borer.locator('.visual-plan-label').innerText(),/SEASONAL SCOUTING/);
    assert.match(await borer.locator('.visual-plan-primary').innerText(),/Where to check:/);
    await borer.locator('.visual-plan-details summary').click();
