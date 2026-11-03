@@ -195,6 +195,49 @@ try{
       await p.screenshot({path:screenshots+'/chicagon-source-conflict-mobile.png',fullPage:true,animations:'disabled'});
     }finally{await p.close();}
   });
+  await run('B62 Whitefish water-access research pin never invents public falls parking or confuses upstream boat launch',async()=>{
+    const info=await page.evaluate(()=>{
+      const map=window.UPWaterfallMap;
+      if(!map)throw Error('Missing waterfall map');
+      let marker=null;
+      map.eachLayer(layer=>{
+        if(typeof layer.getLayers!=='function')return;
+        for(const item of layer.getLayers()){
+          if(typeof item.getLatLng!=='function')continue;
+          const loc=item.getLatLng();
+          if(Math.abs(loc.lat-46.217693)<0.00006&&Math.abs(loc.lng+87.050041)<0.00006)marker=item;
+        }
+      });
+      if(!marker||!marker.getPopup())throw Error('Whitefish research-only GIS #191 not shown');
+      const body=marker.getPopup().getContent();
+      return {text:body.textContent,gates:body.querySelectorAll('ol.route-evidence-list li').length,links:body.querySelectorAll('ol.route-evidence-list a[href^="https://"]').length,research:body.querySelector('a[href="/upper-peninsula-waterfalls/research/whitefish-falls-dnr-access-review/"]')?.getAttribute('href')};
+    });
+    assert.equal(info.gates,6);assert.equal(info.links,6);
+    assert.match(info.text,/A-02-004/);assert.match(info.text,/A-02-010/);
+    assert.match(info.text,/parking.*(NULL|unknown)|NULL.*parking/i);
+    assert.match(info.text,/water-access.*falls|watercraft.*falls|DNR.*site/i);
+    assert.equal(info.research,'/upper-peninsula-waterfalls/research/whitefish-falls-dnr-access-review/');
+    assert.doesNotMatch(info.text,/Google Maps driving directions/);
+  });
+  await run('B62 Whitefish DNR research page is noindex, readable at mobile width and provides no falls driving point',async()=>{
+    const p=await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:1,isMobile:true});
+    try{
+      await p.goto(base+'/upper-peninsula-waterfalls/research/whitefish-falls-dnr-access-review/',{waitUntil:'domcontentloaded',timeout:30000});
+      assert.equal(await p.locator('h1').count(),1);
+      assert.equal(await p.locator('meta[name="robots"]').getAttribute('content'),'noindex,follow');
+      assert.equal(await p.locator('.wf-source-card').count(),4);
+      assert.equal(await p.locator('.wf-gate').count(),6);
+      assert.match(await p.locator('body').innerText(),/ROUTE UNVERIFIED/);
+      assert.match(await p.locator('body').innerText(),/A-02-004/);
+      assert.match(await p.locator('body').innerText(),/A-02-010/);
+      assert.match(await p.locator('body').innerText(),/24 m/);
+      assert.match(await p.locator('body').innerText(),/parking fields are unknown/i);
+      assert.equal(await p.locator('a[href*="google.com/maps/dir"]').count(),0);
+      const dim=await p.evaluate(()=>({width:innerWidth,scroll:document.documentElement.scrollWidth}));
+      assert.ok(dim.scroll<=dim.width+2,'Whitefish source page horizontally overflows mobile');
+      await p.screenshot({path:screenshots+'/whitefish-dnr-evidence-mobile.png',fullPage:true,animations:'disabled'});
+    }finally{await p.close();}
+  });
   await run('desktop layout and map usable',async()=>{
     await page.setViewportSize({width:1280,height:850});
     const {width,scroll}=await page.evaluate(()=>({width:innerWidth,scroll:document.documentElement.scrollWidth}));
