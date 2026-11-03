@@ -4,6 +4,8 @@ on:
     paths:
       - 'public/great-lakes-freighter-tracking/**'
       - 'public/assets/freighter-tracker.*'
+      - 'public/assets/freighter-card-stories.json'
+      - 'tests/freighter-card-stories.test.js'
       - 'tests/freighter-action-*'
       - '.github/workflows/freighter-action-browser.yml'
 permissions:
