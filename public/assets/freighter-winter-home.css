@@ -282,6 +282,7 @@
 .layup-home .season-engine-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(79,207,149,.14);border:1px solid var(--aurora);color:var(--aurora);border-radius:999px;padding:.42rem .9rem;font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
 .layup-home .season-engine-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:18px}
 .layup-home .season-engine-panels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.layup-home .season-engine-panels>.season-panel{min-width:0}
 .layup-home .season-tab{display:inline-flex;align-items:center;background:rgba(5,13,22,.5);border:1px solid var(--line);color:var(--fog);border-radius:12px;padding:.7rem .85rem;font-size:.82rem;font-weight:650;cursor:pointer;text-align:left;text-decoration:none;transition:border-color .2s,background .2s,color .2s}
 .layup-home .season-tab:hover{border-color:var(--line-strong);color:var(--ice);text-decoration:none}
 .layup-home .season-tab.is-active{background:rgba(242,178,74,.14);border-color:var(--lamp);color:var(--white);box-shadow:0 0 0 1px rgba(242,178,74,.35)}
@@ -377,6 +378,7 @@ html:has(.layup-home){scroll-padding-bottom:var(--layup-anchor-reserve)}
  .layup-home .stats{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
  .layup-home .stats strong{font-size:1.4rem}
  .layup-home .feature-grid,.layup-home .story-grid,.layup-home .bio-related-grid,.layup-home .season-engine-tabs{grid-template-columns:1fr}
+ .layup-home .season-engine-panels{grid-template-columns:1fr}
  .layup-home .feature-story,.layup-home .feature-info{min-height:300px}
  .layup-home .winter-update{grid-template-columns:1fr;gap:4px}
  .layup-home .living-winter,.layup-home .ais-watch,.layup-home .detail,.layup-home .layup-season-engine,.layup-home .season-panel{padding:16px}
