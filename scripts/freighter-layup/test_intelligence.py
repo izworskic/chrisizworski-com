@@ -19,7 +19,7 @@ history = mod("history")
 
 def archive():
     return {
-        "schemaVersion": 1,
+        "schemaVersion": 2,
         "harbors": [{"id": "superior", "name": "Superior, WI"},
                     {"id": "milwaukee", "name": "Milwaukee, WI"}],
         "seasons": [
