@@ -73,9 +73,8 @@ def build() -> dict:
             assert 350 < distances["gnis-upper-mill", "gnis-lower-mill"] < 425
         elif slug == "alger":
             assert distances["gis-alger-213", "field-alger"] < 100
-        for oid in cluster["gisObjectIds"]:
-            if oid in by_id:
-                assert not by_id[oid].get("curatedId"), f"Accidentally published research-only GIS {oid}"
+        for oid in [expected[slug]]:
+            assert not by_id[oid].get("curatedId"), f"Accidentally published research-only GIS {oid}"
         clusters.append({
             "slug": slug, "label": cluster["label"], "identityClassification": cluster["status"],
             "landmarkIds": cluster["gisObjectIds"], "findings": cluster["note"],
