@@ -105,7 +105,7 @@ test('search intent and safety are present in static HTML with no script, withou
 test('map and mission selection are wired, fail closed, and share launch UUID with national hub',()=>{
  assert.match(js,/state\.request/);
  assert.match(js,/loadPlaces\(\);loadMission/);
- assert.match(js,/data\.starbaseViewing\?\.pad/);
+ assert.match(js,/state\.data\?\.starbaseViewing\?\.pad/);
  assert.match(js,/if\(state\.map\)displayPad\(\)/);
  assert.match(js,/data\.starbaseViewing\?\.accessNotice/);
  assert.match(js,/if\(response\.status===404&&id&&!fromExpired\)/);
