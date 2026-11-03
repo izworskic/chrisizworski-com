@@ -25,6 +25,8 @@ on:
       - 'public/synced-national-tools/rocket-launch-live/**'
       - 'public/vandenberg-rocket-launch-viewing/**'
       - 'tests/vandenberg-guide-seo.test.js'
+      - 'tests/vandenberg-guide-map.test.js'
+      - 'scripts/export-vandenberg-guide-map.js'
       - 'public/synced-national-tools/space-coast-launch/**'
       - 'tests/rocket-launch-truth.test.js'
       - 'tests/rocket-launch-national-v2.test.js'
