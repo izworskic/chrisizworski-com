@@ -447,37 +447,37 @@
         "segments": [
           {
             "label": "Waterfall identity and source geography",
-            "status": "feature-position-corroborated-not-arrival",
+            "status": "verified-geography",
             "finding": "State GIS #12 at 46.134032,-88.452985 lies approximately 67.2 m from secondary mapped waterfall coordinates. A conflicting older tourism point is about 4.01 km away and cannot be used as a parking or falls waypoint.",
             "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
           },
           {
             "label": "Land tenure and documented ownership contradiction",
-            "status": "state-point-and-county-private-inventory-scope-conflict",
+            "status": "documented-not-live",
             "finding": "DNR LOTS ParID 258918 is a 47.8-acre dedicated state-managed parcel at the waterfall GIS point. Iron County's adopted 2022–2026 Recreation Inventory lists Chicaugon Falls as a scenic site with owner Private. The inventory is dated and not a surveyed parcel join; the difference requires current boundary/easement reconciliation.",
             "source": "https://ironmi.com/wp-content/uploads/2024/05/Recreation-Paln-2022-2026.pdf"
           },
           {
             "label": "Legal road right-of-way from Long Lake Road",
-            "status": "not-cleared",
+            "status": "not-verified",
             "finding": "The Iron County Chamber describes Raymer/Dave's Camp approach and washouts, but tourist directions do not establish legal road dedication or continuous public access. Road Commission current updates do not certify the exact segment or identify a waterfall lot.",
             "source": "https://ironcountyroads.com/seasonal-information"
           },
           {
             "label": "Designated visitor parking",
-            "status": "not-cleared",
+            "status": "not-verified",
             "finding": "No current landowner/agency-designated waterfall visitor parking and safe vehicle approach verified. A widened area described by older trip accounts could be on a private camp route; do not drive to raw falls coordinate.",
             "source": "https://www.iron.org/outdoors/waterfalls/"
           },
           {
             "label": "Complete authorized walking trail",
-            "status": "not-cleared",
+            "status": "not-verified",
             "finding": "No authoritative public trail/easement from an approved lot across intervening road/footpath parcels into state falls parcel. Signs and historical accounts do not certify uninterrupted public permission; no route polyline.",
             "source": "https://ironcountylodging.com/waterfalls-in-iron-county-michigan/"
           },
           {
             "label": "Seasonal roads, closures, gate and water conditions",
-            "status": "not-cleared",
+            "status": "not-verified",
             "finding": "Chamber reports seasonal washouts and county road commission provides general road updates. No current Raymer/Dave's Camp road status, parking availability, authorized bridge/crossing or same-day falls conditions verified.",
             "source": "https://ironcountyroads.com/seasonal-information"
           }
