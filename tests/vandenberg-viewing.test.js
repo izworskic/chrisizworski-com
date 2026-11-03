@@ -58,6 +58,12 @@ test('Surf Beach hours and Ocean Park sunset remove night directions, even if we
   assert.equal(late.find(x=>x.id==='surf-station').access.directionsAllowed,false);
   assert.equal(late.find(x=>x.id==='ocean-park').access.state,'after-hours');
   assert.equal(late.find(x=>x.id==='ocean-park').access.directionsAllowed,false);
+  const surf=data.sites.find(x=>x.id==='surf-station');
+  assert.equal(model.accessAt(surf,'2026-11-08T01:45:00Z').state,'boundary',
+    'The final 30 minutes before public beach closure cannot support viewing arrival.');
+  const ocean=data.sites.find(x=>x.id==='ocean-park');
+  assert.equal(model.accessAt(ocean,LAUNCH.net).state,'boundary',
+    'Sunset-boundary buffer withholds directions even before actual sunset.');
   assert.equal(late.find(x=>x.id==='hancock').access.state,'verify',
     'College is a candidate requiring campus parking checks, not a verified open event site.');
   assert.equal(data.sites.find(x=>x.id==='surf-station').accessSource,model.BEACH);
@@ -77,7 +83,7 @@ test('weather remains a proximate NWS sample, never a site-level or flight visib
   assert.match(data.method,/NOT/i);
   const unsafe=model.forecastAt({id:'surf',miles:0.4},{
     places:[{id:'surf',cloudStatus:'ok',cloudCoverPercent:5,assessment:{level:'poor'}}]});
-  assert.equal(unsafe.state,'unavailable','Hazard signals must veto a low-cloud visibility recommendation');
+  assert.equal(unsafe.state,'hazard','Hazard signals must veto a low-cloud visibility recommendation');
   assert.equal(model.forecastAt(null,FORECAST.slip.scenarios[0]).state,'unavailable');
 });
 
