@@ -249,10 +249,10 @@
         "living-garden"
       ],
       "repo": "izworskic/freighter-view-garden-planner",
-      "status": "pending-audit",
+      "status": "verified",
       "personId": "https://chrisizworski.com/#person",
       "profileUrl": "https://chrisizworski.com/chris-izworski/",
-      "evidence": "Vercel domain verified and published as behind-the-scenes origin; sole indexable tool canonical is https://chrisizworski.com/living-garden/. Public same-host proxy still requires external verification."
+      "evidence": "Vercel production garden domain was verified and independent browser extraction on 2026-11-02 confirmed a public HTTP response, The Living Garden H1, main-site canonical, indexable production metadata and creator; main-site proxy still requires public post-release smoke."
     }
   ],
   "authorityValueFunction": {
@@ -334,7 +334,7 @@
       "noRankingGuarantee": true
     },
     "auditState": {
-      "totalTrackedProperties": 18,
+      "totalTrackedProperties": 19,
       "pendingSourceRepositoryAudit": [
         "ausable-field-map"
       ],
