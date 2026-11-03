@@ -401,6 +401,92 @@
       } else notice.hidden = true;
     }
   }
+  // These are NWS *hypothetical delayed target* samples, not a launch forecast.
+  // No extra calls: all four cases come with the existing regional weather API.
+  function renderSlipForecast(data) {
+    const root=$('rl-slip-options'),detail=$('rl-slip-detail');
+    if (!root || !detail) return;
+    root.replaceChildren();detail.replaceChildren();
+    const forecast=data?.weather?.slip;
+    const scenarios=Array.isArray(forecast?.scenarios)?forecast.scenarios:[];
+    const safe=scenarios.filter(s=>[0,1,3,6].includes(s.offsetHours));
+    const sourceStale=data.scheduleFreshness==='stale'||forecast?.sourceOverdue===true;
+    if (!safe.length) {
+      set('rl-slip-brief','No delay scenario yet. A minute-level launch target, two NWS regional forecast samples and an in-range date are necessary.');
+      detail.appendChild(el('p','rl-slip-empty',
+        'This does not mean clouds will be clear or that a launch will occur. Use the official range and operator sources.'));
+      return;
+    }
+    set('rl-slip-brief',
+      (sourceStale?'The mission target has not been checked recently. Comparison recommendations are withheld. ':
+        forecast?.outlook+' ') +
+      'Samples are hypothetical delays only; the published liftoff time has not changed.');
+    const buttons=[];
+    const timeLabel=iso=>{
+      const parsed=Date.parse(iso||'');
+      if(!Number.isFinite(parsed))return 'Time not available';
+      return new Intl.DateTimeFormat('en-US',{
+        timeZone:data.region?.timezone||'UTC',weekday:'short',hour:'numeric',minute:'2-digit',
+        timeZoneName:'short'
+      }).format(new Date(parsed));
+    };
+    function update(index) {
+      for(const [i,button] of buttons.entries()){
+        button.setAttribute('aria-pressed',i===index?'true':'false');
+      }
+      detail.replaceChildren();
+      const item=safe[index];
+      const head=el('div','rl-slip-detail-head');
+      head.appendChild(el('strong','',item.offsetHours===0?'The scheduled target':
+        '+'+item.offsetHours+' hour'+(item.offsetHours===1?'':'s')+' from the target'));
+      head.appendChild(el('span','',timeLabel(item.targetAt)));
+      detail.appendChild(head);
+      const rows=el('div','rl-slip-site-grid');
+      for(const point of item.places||[]){
+        const card=el('div','rl-slip-site');
+        card.appendChild(el('span','rl-slip-site-label',point.name||'Regional forecast reference'));
+        const numeric=point.cloudStatus==='ok'&&Number.isInteger(point.cloudCoverPercent);
+        const val=el('strong','rl-slip-number',
+          numeric?point.cloudCoverPercent+'% total sky cover':'Cloud value unavailable');
+        card.appendChild(val);
+        if(numeric){
+          const track=el('div','rl-slip-track');
+          const fill=el('span','rl-slip-fill');
+          fill.style.width=point.cloudCoverPercent+'%';
+          track.appendChild(fill);
+          track.setAttribute('aria-hidden','true');
+          card.appendChild(track);
+        }
+        card.appendChild(el('small','',
+          point.assessment?.level==='poor'?
+            'Weather hazards also indicated; do not favor this area solely for lower cloud cover.':
+          !numeric?'NWS grid value missing, stale, or outside this forecast hour.':
+          point.status!=='forecast-hour'?'Hourly surface forecast missing; do not infer a safe viewing window.':
+          (point.shortForecast||'Hourly surface forecast checked')+' · regional reference, not a pad sightline'));
+        rows.appendChild(card);
+      }
+      detail.appendChild(rows);
+      const comp=item.comparison||{};
+      const desc=item.status==='outside-horizon'?
+        'The hypothetical delay falls beyond the seven-day NWS hourly window.':
+        sourceStale?'This launch target is overdue. The weather comparison cannot guide a trip.':
+        comp.state==='relative'?comp.label+' '+comp.detail:
+        comp.state==='similar'?'Similar modeled total cloud cover at the two reference areas. No meaningful advantage is established.':
+        'A reliable two-point comparison is unavailable for this hour. Missing data and surface hazards are not treated as clear skies.';
+      detail.appendChild(el('p','rl-slip-verdict',desc));
+    }
+    for(const [index,scenario] of safe.entries()){
+      const button=el('button','rl-slip-choice');
+      button.type='button';
+      button.appendChild(el('strong','',scenario.offsetHours===0?'Scheduled':
+        '+'+scenario.offsetHours+' hr'));
+      button.appendChild(el('small','',timeLabel(scenario.targetAt)));
+      button.addEventListener('click',()=>update(index));
+      root.appendChild(button);buttons.push(button);
+    }
+    update(0);
+  }
+
   function renderWeather(data) {
     const weather = data.weather || {};
     const root = $('rl-regional-sky');
@@ -611,6 +697,7 @@
     renderSelector(data);
     renderAccess(data);
     renderWeather(data);
+    renderSlipForecast(data);
     renderLaunchWeather(data);
     renderOfficial45ws(data);
     board();
@@ -653,6 +740,9 @@
       $('rl-watch-general')?.replaceChildren();
       chip($('rl-access-grade'), 'Official access must be checked', 'unknown');
       chip($('rl-weather-grade'), 'No current forecast', 'unknown');
+      set('rl-slip-brief','Delay comparisons unavailable until the mission and weather sources can be checked.');
+      $('rl-slip-options')?.replaceChildren();
+      $('rl-slip-detail')?.replaceChildren(el('p','rl-slip-empty','No verified current forecast data for delay scenarios.'));
       chip($('rl-range-grade'), 'Launch-side forecast unavailable', 'unknown');
       set('rl-range-headline', 'Current launch-side evidence unavailable');
       set('rl-range-summary', 'The launch schedule or forecast request failed. Consult official launch weather and range notices.');
