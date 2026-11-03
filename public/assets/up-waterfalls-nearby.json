@@ -6,13 +6,15 @@
   "policy": "Not a route, visitor parking point, driving distance, trail distance, access grant, or live-open forecast.",
   "counts": {
     "curated": 74,
-    "eligible": 68,
-    "excluded": 6
+    "eligible": 66,
+    "excluded": 8
   },
   "excludedIds": [
+    "houghton-douglass-falls",
     "lower-silver-falls",
     "munising-falls",
     "sandstone-falls",
+    "scott-falls",
     "silver-river-falls",
     "tahquamenon",
     "twin-waterfalls-memorial-preserve"
@@ -227,16 +229,6 @@
       "source": "https://www.uppermichiganwaterfalls.com/contact-us",
       "lat": 46.402894,
       "lng": -86.642575
-    },
-    {
-      "id": "houghton-douglass-falls",
-      "name": "Houghton-Douglass Falls",
-      "region": "Western U.P.",
-      "status": "verify",
-      "url": "/upper-peninsula-waterfalls/houghton-douglass-falls/",
-      "source": "https://www.michigan.gov/recsearch/parks/houghtondouglassfalls",
-      "lat": 47.206922,
-      "lng": -88.427485
     },
     {
       "id": "interstate-falls",
@@ -549,16 +541,6 @@
       "lng": -90.37857
     },
     {
-      "id": "scott-falls",
-      "name": "Scott Falls",
-      "region": "Pictured Rocks / Munising",
-      "status": "verify",
-      "url": "/upper-peninsula-waterfalls/scott-falls/",
-      "source": "https://www.michigan.gov/mdot/news-outreach/pressreleases/2026/04/21/most-mdot-roadside-parks-reopening-april-28",
-      "lat": 46.436999,
-      "lng": -86.81447
-    },
-    {
       "id": "shining-cloud-falls",
       "name": "Shining Cloud Falls",
       "region": "Western U.P.",
@@ -866,10 +848,6 @@
       {
         "id": "upper-hungarian-falls",
         "miles": 27.5
-      },
-      {
-        "id": "houghton-douglass-falls",
-        "miles": 28.7
       },
       {
         "id": "tibbets-falls",
@@ -1198,10 +1176,6 @@
         "miles": 10.2
       },
       {
-        "id": "scott-falls",
-        "miles": 14.7
-      },
-      {
         "id": "rock-river-falls",
         "miles": 22.6
       },
@@ -1296,10 +1270,6 @@
         "miles": 38
       },
       {
-        "id": "houghton-douglass-falls",
-        "miles": 40.3
-      },
-      {
         "id": "little-garlic-falls",
         "miles": 42.6
       },
@@ -1348,10 +1318,6 @@
       {
         "id": "rock-river-falls",
         "miles": 23.3
-      },
-      {
-        "id": "scott-falls",
-        "miles": 30.4
       },
       {
         "id": "horseshoe-falls",
@@ -1570,10 +1536,6 @@
         "miles": 13.7
       },
       {
-        "id": "scott-falls",
-        "miles": 18.7
-      },
-      {
         "id": "sable-falls",
         "miles": 22.6
       },
@@ -1694,10 +1656,6 @@
         "miles": 12.8
       },
       {
-        "id": "houghton-douglass-falls",
-        "miles": 15.5
-      },
-      {
         "id": "upper-hungarian-falls",
         "miles": 18
       },
@@ -1754,10 +1712,6 @@
       {
         "id": "wagner-falls",
         "miles": 9.5
-      },
-      {
-        "id": "scott-falls",
-        "miles": 14.1
       },
       {
         "id": "rock-river-falls",
@@ -1942,10 +1896,6 @@
       {
         "id": "pinnacle-falls",
         "miles": 30.7
-      },
-      {
-        "id": "houghton-douglass-falls",
-        "miles": 31.4
       },
       {
         "id": "duppy-falls",
@@ -2468,10 +2418,6 @@
         "miles": 12.8
       },
       {
-        "id": "houghton-douglass-falls",
-        "miles": 22.4
-      },
-      {
         "id": "lower-hungarian-falls",
         "miles": 24.4
       },
@@ -2511,10 +2457,6 @@
       },
       {
         "id": "elliot-falls",
-        "miles": 8.5
-      },
-      {
-        "id": "scott-falls",
         "miles": 8.5
       },
       {
@@ -2564,72 +2506,6 @@
       {
         "id": "little-garlic-falls",
         "miles": 48.1
-      }
-    ],
-    "houghton-douglass-falls": [
-      {
-        "id": "upper-hungarian-falls",
-        "miles": 2.5
-      },
-      {
-        "id": "lower-hungarian-falls",
-        "miles": 2.7
-      },
-      {
-        "id": "eagle-river-falls",
-        "miles": 15.5
-      },
-      {
-        "id": "jacobs-falls",
-        "miles": 17.7
-      },
-      {
-        "id": "haven-falls",
-        "miles": 22.4
-      },
-      {
-        "id": "big-erics-falls",
-        "miles": 28.7
-      },
-      {
-        "id": "wyandotte-falls",
-        "miles": 30.5
-      },
-      {
-        "id": "manganese-falls",
-        "miles": 31.2
-      },
-      {
-        "id": "falls-river-trail",
-        "miles": 31.4
-      },
-      {
-        "id": "power-house-falls",
-        "miles": 32.5
-      },
-      {
-        "id": "canyon-falls",
-        "miles": 40.3
-      },
-      {
-        "id": "sturgeon-falls",
-        "miles": 41
-      },
-      {
-        "id": "tibbets-falls",
-        "miles": 43.9
-      },
-      {
-        "id": "tioga-park-falls",
-        "miles": 44
-      },
-      {
-        "id": "pinnacle-falls",
-        "miles": 45.3
-      },
-      {
-        "id": "yellow-dog-falls",
-        "miles": 47.4
       }
     ],
     "interstate-falls": [
@@ -2738,10 +2614,6 @@
       {
         "id": "manganese-falls",
         "miles": 16.9
-      },
-      {
-        "id": "houghton-douglass-falls",
-        "miles": 17.7
       },
       {
         "id": "upper-hungarian-falls",
@@ -2898,10 +2770,6 @@
       {
         "id": "rock-river-falls",
         "miles": 4.8
-      },
-      {
-        "id": "scott-falls",
-        "miles": 12.7
       },
       {
         "id": "carp-river-falls",
@@ -3112,10 +2980,6 @@
         "miles": 36.7
       },
       {
-        "id": "scott-falls",
-        "miles": 39.6
-      },
-      {
         "id": "power-house-falls",
         "miles": 41.3
       },
@@ -3266,10 +3130,6 @@
       {
         "id": "upper-hungarian-falls",
         "miles": 0.6
-      },
-      {
-        "id": "houghton-douglass-falls",
-        "miles": 2.7
       },
       {
         "id": "eagle-river-falls",
@@ -3450,10 +3310,6 @@
       {
         "id": "eagle-river-falls",
         "miles": 19.8
-      },
-      {
-        "id": "houghton-douglass-falls",
-        "miles": 31.2
       },
       {
         "id": "lower-hungarian-falls",
@@ -3706,10 +3562,6 @@
         "miles": 8.1
       },
       {
-        "id": "scott-falls",
-        "miles": 13.7
-      },
-      {
         "id": "rock-river-falls",
         "miles": 21.6
       },
@@ -3788,10 +3640,6 @@
       {
         "id": "rock-river-falls",
         "miles": 23.3
-      },
-      {
-        "id": "scott-falls",
-        "miles": 30.5
       },
       {
         "id": "horseshoe-falls",
@@ -3874,10 +3722,6 @@
       {
         "id": "wagner-falls",
         "miles": 12
-      },
-      {
-        "id": "scott-falls",
-        "miles": 16.9
       },
       {
         "id": "sable-falls",
@@ -4480,10 +4324,6 @@
         "miles": 44.4
       },
       {
-        "id": "houghton-douglass-falls",
-        "miles": 45.3
-      },
-      {
         "id": "haven-falls",
         "miles": 47.8
       }
@@ -4638,10 +4478,6 @@
       {
         "id": "duppy-falls",
         "miles": 31.5
-      },
-      {
-        "id": "houghton-douglass-falls",
-        "miles": 32.5
       },
       {
         "id": "o-kun-de-kun-falls",
@@ -4830,10 +4666,6 @@
         "miles": 26.9
       },
       {
-        "id": "scott-falls",
-        "miles": 29.8
-      },
-      {
         "id": "wagner-falls",
         "miles": 30
       },
@@ -4894,10 +4726,6 @@
       {
         "id": "laughing-whitefish-falls",
         "miles": 4.8
-      },
-      {
-        "id": "scott-falls",
-        "miles": 7.9
       },
       {
         "id": "wagner-falls",
@@ -4996,10 +4824,6 @@
       {
         "id": "wagner-falls",
         "miles": 35.8
-      },
-      {
-        "id": "scott-falls",
-        "miles": 41.3
       },
       {
         "id": "rock-river-falls",
@@ -5116,76 +4940,6 @@
       {
         "id": "kakabika-falls",
         "miles": 46.2
-      }
-    ],
-    "scott-falls": [
-      {
-        "id": "rock-river-falls",
-        "miles": 7.9
-      },
-      {
-        "id": "horseshoe-falls",
-        "miles": 8.5
-      },
-      {
-        "id": "wagner-falls",
-        "miles": 8.7
-      },
-      {
-        "id": "laughing-whitefish-falls",
-        "miles": 12.7
-      },
-      {
-        "id": "miners-falls",
-        "miles": 13.7
-      },
-      {
-        "id": "elliot-falls",
-        "miles": 14.1
-      },
-      {
-        "id": "bridalveil-falls",
-        "miles": 14.7
-      },
-      {
-        "id": "mosquito-falls",
-        "miles": 16.9
-      },
-      {
-        "id": "chapel-falls",
-        "miles": 18.7
-      },
-      {
-        "id": "spray-falls",
-        "miles": 20.9
-      },
-      {
-        "id": "rapid-river-falls-delta-county",
-        "miles": 29.8
-      },
-      {
-        "id": "carp-river-falls",
-        "miles": 30.4
-      },
-      {
-        "id": "morgan-falls",
-        "miles": 30.5
-      },
-      {
-        "id": "wright-street-falls",
-        "miles": 31.3
-      },
-      {
-        "id": "little-garlic-falls",
-        "miles": 39.6
-      },
-      {
-        "id": "sable-falls",
-        "miles": 41.3
-      },
-      {
-        "id": "yellow-dog-falls",
-        "miles": 46.9
       }
     ],
     "shining-cloud-falls": [
@@ -5336,10 +5090,6 @@
         "miles": 20.3
       },
       {
-        "id": "scott-falls",
-        "miles": 20.9
-      },
-      {
         "id": "rock-river-falls",
         "miles": 28.7
       },
@@ -5424,10 +5174,6 @@
       {
         "id": "upper-hungarian-falls",
         "miles": 38.5
-      },
-      {
-        "id": "houghton-douglass-falls",
-        "miles": 41
       },
       {
         "id": "kakabika-falls",
@@ -5626,10 +5372,6 @@
         "miles": 43.1
       },
       {
-        "id": "houghton-douglass-falls",
-        "miles": 43.9
-      },
-      {
         "id": "kakabika-falls",
         "miles": 44.4
       },
@@ -5722,10 +5464,6 @@
       {
         "id": "carp-river-falls",
         "miles": 42.7
-      },
-      {
-        "id": "houghton-douglass-falls",
-        "miles": 44
       }
     ],
     "trap-falls": [
@@ -5970,10 +5708,6 @@
         "miles": 0.6
       },
       {
-        "id": "houghton-douglass-falls",
-        "miles": 2.5
-      },
-      {
         "id": "eagle-river-falls",
         "miles": 18
       },
@@ -6042,10 +5776,6 @@
       {
         "id": "miners-falls",
         "miles": 8.1
-      },
-      {
-        "id": "scott-falls",
-        "miles": 8.7
       },
       {
         "id": "elliot-falls",
@@ -6128,10 +5858,6 @@
       {
         "id": "rock-river-falls",
         "miles": 24.8
-      },
-      {
-        "id": "scott-falls",
-        "miles": 31.3
       },
       {
         "id": "big-erics-falls",
@@ -6226,10 +5952,6 @@
       {
         "id": "agate-falls",
         "miles": 30
-      },
-      {
-        "id": "houghton-douglass-falls",
-        "miles": 30.5
       },
       {
         "id": "cascade-falls",
@@ -6370,16 +6092,8 @@
         "miles": 46.7
       },
       {
-        "id": "scott-falls",
-        "miles": 46.9
-      },
-      {
         "id": "sturgeon-falls",
         "miles": 47.1
-      },
-      {
-        "id": "houghton-douglass-falls",
-        "miles": 47.4
       },
       {
         "id": "haven-falls",
