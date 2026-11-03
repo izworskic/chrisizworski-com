@@ -1,9 +1,9 @@
 {
-  "date": "2026-11-02",
-  "updated": "2026-11-02T20:49:05.501Z",
-  "body": "Southwest Lower Michigan models at peak color with 100 percent estimated foliage change, while Southeast Lower follows at 79 percent in falling phase. Central and Saginaw Bay regions show 14 percent, and all other areas remain at 7 percent in downward phase. The contrast between southwest and remaining regions is substantial.\n\nRain expected across all regions over the next few days with highs ranging from 64 to 73 degrees and lows from 44 to 53. Weekend conditions favor viewing in Southwest Lower and Southeast Lower where color is most advanced. Cooler temperatures in the U.P. and northern Lower Peninsula may slow remaining color development.\n\nFor optimal viewing this weekend, Blue Star Highway along the Saugatuck dunes in Southwest Lower offers peak foliage conditions. Alternatively, the Irish Hills along US-12 in Southeast Lower provides strong color at 79 percent. Both routes feature scenic driving with current conditions supporting quality fall observation.",
+  "date": "2026-11-03",
+  "updated": "2026-11-03T18:29:59.621Z",
+  "body": "The model shows stark regional variation in fall color progression. Southwest and Southeast Lower Michigan are at peak color with 100 percent foliage change, while Central and Saginaw Bay regions display 23 percent. The Upper Peninsula and Tip of the Mitt remain in early stages at 7 percent, still in downward phase. This snapshot reflects significant differences in seasonal timing across the state.\n\nRain is expected across all regions over the next few days, with highs ranging from 63 to 76 degrees and lows from 37 to 52 degrees. The cooler Upper Peninsula temperatures may slow color development, while warmer conditions in lower Michigan support continued progression. Weekend travel should account for wet conditions, though temperatures remain mild enough for outdoor viewing.\n\nFor this weekend, Southeast Lower Michigan offers the most developed foliage experience at peak phase. The Irish Hills along US-12 provides an accessible route through peak color conditions. Alternatively, those in central regions can explore the river road through Chippewa Nature Center in Midland, where falling color at 23 percent suggests active change in progress.",
   "generationMethod": "AI-generated model summary",
-  "conditionsUpdated": "2026-11-02T20:49:02.207Z",
+  "conditionsUpdated": "2026-11-03T18:29:55.894Z",
   "sourceEvidence": [
     {
       "region": "wup",
@@ -14,10 +14,10 @@
           "recent weather",
           "canopy camera anchor"
         ],
-        "anchorShiftDays": -9,
+        "anchorShiftDays": -10,
         "anchorConfidence": "good",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 50,
+        "satelliteAgeDays": 51,
         "satelliteWeight": 0
       }
     },
@@ -30,10 +30,10 @@
           "recent weather",
           "canopy camera anchor"
         ],
-        "anchorShiftDays": -9,
+        "anchorShiftDays": -10,
         "anchorConfidence": "good",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 50,
+        "satelliteAgeDays": 51,
         "satelliteWeight": 0
       }
     },
@@ -46,10 +46,10 @@
           "recent weather",
           "canopy camera anchor"
         ],
-        "anchorShiftDays": -9,
+        "anchorShiftDays": -10,
         "anchorConfidence": "good",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 50,
+        "satelliteAgeDays": 51,
         "satelliteWeight": 0
       }
     },
@@ -62,10 +62,10 @@
           "recent weather",
           "canopy camera anchor"
         ],
-        "anchorShiftDays": -9,
+        "anchorShiftDays": -10,
         "anchorConfidence": "good",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 50,
+        "satelliteAgeDays": 51,
         "satelliteWeight": 0
       }
     },
@@ -78,26 +78,26 @@
           "recent weather",
           "canopy camera anchor"
         ],
-        "anchorShiftDays": -9,
+        "anchorShiftDays": -10,
         "anchorConfidence": "good",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 50,
+        "satelliteAgeDays": 51,
         "satelliteWeight": 0
       }
     },
     {
       "region": "cen",
-      "modeledPercent": 14,
+      "modeledPercent": 23,
       "source": {
         "drivers": [
           "regional climatology",
           "recent weather",
           "canopy camera anchor"
         ],
-        "anchorShiftDays": -9,
+        "anchorShiftDays": -10,
         "anchorConfidence": "good",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 50,
+        "satelliteAgeDays": 51,
         "satelliteWeight": 0
       }
     },
@@ -110,26 +110,26 @@
           "recent weather",
           "canopy camera anchor"
         ],
-        "anchorShiftDays": -9,
+        "anchorShiftDays": -10,
         "anchorConfidence": "good",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 50,
+        "satelliteAgeDays": 51,
         "satelliteWeight": 0
       }
     },
     {
       "region": "sel",
-      "modeledPercent": 79,
+      "modeledPercent": 100,
       "source": {
         "drivers": [
           "regional climatology",
           "recent weather",
           "canopy camera anchor"
         ],
-        "anchorShiftDays": -9,
+        "anchorShiftDays": -10,
         "anchorConfidence": "good",
         "satelliteDate": "2026-09-14",
-        "satelliteAgeDays": 50,
+        "satelliteAgeDays": 51,
         "satelliteWeight": 0
       }
     }
