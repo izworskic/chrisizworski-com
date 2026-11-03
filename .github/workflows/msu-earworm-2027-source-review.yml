@@ -1,0 +1,122 @@
+name: MSU earworm 2027 official-source discovery
+# Never auto-merge or directly publish: a staged report requires a reviewed PR.
+on:
+  schedule:
+    - cron: '23 14 * 5-9 4'
+  workflow_dispatch:
+    inputs:
+      operation:
+        type: choice
+        required: true
+        default: discover-2027
+        options:
+          - discover-2027
+          - backtest-2026
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+concurrency:
+  group: msu-earworm-evidence-2027
+  cancel-in-progress: false
+jobs:
+  source-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run scientific offline and 2026 archive gates
+        run: |
+          python3 -m unittest discover -s tests -p test_msu_earworm_2027_ingest.py -v
+          python3 scripts/build_garden_earworm_traps.py --check
+          node scripts/verify-garden-earworm-traps.cjs
+          node scripts/verify-garden-earworm-2027.cjs
+      - name: Backtest actual MSU 2026 HTML (manual dispatch only)
+        if: github.event_name == 'workflow_dispatch' && inputs.operation == 'backtest-2026'
+        run: python3 scripts/ingest_msu_earworm_2027.py --mode backtest-2026
+      - name: Discover dated 2027 official trap table
+        id: discovery
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.operation == 'discover-2027')
+        env:
+          STATUS_FILE: ${{ runner.temp }}/earworm-2027-status.json
+        run: |
+          python3 scripts/ingest_msu_earworm_2027.py --mode discover-2027 --output-status "$STATUS_FILE"
+          node scripts/verify-garden-earworm-2027.cjs
+          python3 - "$STATUS_FILE" "$GITHUB_OUTPUT" <<'PY'
+          import json,sys
+          state=json.load(open(sys.argv[1],encoding='utf-8'))
+          with open(sys.argv[2],'a',encoding='utf-8') as f:
+              f.write('status='+state['status']+'\n')
+          print(state)
+          PY
+          echo '## Official MSU earworm source check' >> "$GITHUB_STEP_SUMMARY"
+          cat "$STATUS_FILE" >> "$GITHUB_STEP_SUMMARY"
+      - name: Prepare review-only draft PR for a source change
+        if: steps.discovery.outputs.status == 'REVIEW_CANDIDATE_WRITTEN'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          git add -- data/garden-earworm-msu-2027-candidate.csv data/garden-earworm-msu-2027-provenance.json public/assets/garden-earworm-trap-2027-data.js
+          if git diff --cached --quiet; then
+            echo 'Source already staged; no duplicate PR.'
+            exit 0
+          fi
+          date="$(python3 -c 'import json;print(json.load(open("data/garden-earworm-msu-2027-provenance.json"))["source"]["publishedDate"])')"
+          hash="$(python3 -c 'import json;print(json.load(open("data/garden-earworm-msu-2027-provenance.json"))["source"]["sourceTableSha256"][:10])')"
+          branch="automation/msu-earworm-2027-${date}-${hash}"
+          if git ls-remote --exit-code --heads origin "$branch" >/dev/null 2>&1; then
+            echo "This official table revision already has a source-review branch; preserving the existing human review."
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git switch -c "$branch"
+          git commit -m "MSU 2027 earworm source candidate $date ($hash)"
+          git push origin "$branch"
+          if [ "$(gh pr list --repo "$REPO" --head "$branch" --state open --json number --jq length)" != "0" ]; then
+            echo 'A source review PR already exists.'
+            exit 0
+          fi
+          python3 - <<'PY'
+          import json
+          p=json.load(open('data/garden-earworm-msu-2027-provenance.json',encoding='utf-8'))
+          items=[
+            '## Official MSU Extension source candidate — requires human review',
+            '',
+            'Publication: '+p['source']['url'],
+            'Published: '+p['source']['publishedDate'],
+            'Last collected: '+p['source']['latestCollectionWeek'],
+            'Source table SHA256: '+p['source']['sourceTableSha256'],
+            'County and trap-type roster: '+', '.join(c['id']+' '+c['trapType'] for c in p['columns']),
+            'Review flags: '+(', '.join(p['reviewFlags']) if p['reviewFlags'] else 'none, but manual review remains mandatory'),
+            '',
+            'Compare each county header, reported/missing cell, footnote, sampling period, and nightly average with the official report. Reject ambiguous data. No ZIP-level outbreak, forecast, or pesticide interval is implied.',
+            '',
+            'No automatic merge occurs. A blocked or unreviewed candidate cannot replace the audited 2026 archive.',
+          ]
+          open('/tmp/msu-earworm-review.md','w',encoding='utf-8').write('\n'.join(items)+'\n')
+          PY
+          if ! gh pr create --repo "$REPO" --base main --head "$branch" --draft \
+            --title "Review MSU 2027 earworm source: $date" --body-file /tmp/msu-earworm-review.md; then
+            gh issue create --repo "$REPO" \
+              --title "Manual review needed: MSU 2027 earworm source $date" \
+              --body "GitHub Actions cannot create a PR under current settings. Review branch $branch against the original MSU article. No data were published."
+          fi
+      - name: Retain diagnostic candidate artifacts
+        if: always() && steps.discovery.outcome != 'skipped'
+        uses: actions/upload-artifact@v4
+        with:
+          name: msu-earworm-2027-evidence
+          path: |
+            data/garden-earworm-msu-2027-candidate.csv
+            data/garden-earworm-msu-2027-provenance.json
+            public/assets/garden-earworm-trap-2027-data.js
+          retention-days: 30

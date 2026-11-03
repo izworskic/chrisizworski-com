@@ -49,3 +49,22 @@
 .earworm-crop-note{padding:10px 13px;background:#e7ecdf;border-left:3px solid #69866d;font-size:.79rem;color:#355440;line-height:1.56}
 @media(max-width:800px){.earworm-top{grid-template-columns:1fr;gap:14px}.earworm-desk{margin:30px 0;padding:23px}.earworm-stats{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:580px){.earworm-desk{margin:24px 0;padding:17px 13px;box-shadow:3px 3px 0 #d5ddca}.earworm-stats{grid-template-columns:1fr}.earworm-readout{padding:15px}.earworm-counties{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.earworm-county{min-width:0}.earworm-graph-intro{display:grid}.earworm-desk h2{font-size:1.9rem}}
+
+/* Source-reviewed next season: visually distinct from the immutable 2026 lab. */
+.earworm-next-panel{margin:22px 0 21px;padding:19px 21px;border:1px solid #aebfa8;background:#e8ede2;color:#2a4637;min-width:0}
+.earworm-next-top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:1px solid #bbcdb9;padding-bottom:10px}
+.earworm-next-top strong{font:600 1.25rem/1.2 'Fraunces',Georgia,serif;color:#294b36}
+.earworm-next-summary{font-size:.83rem;line-height:1.6;margin:13px 0;color:#385c44;font-weight:650}
+.earworm-next-footer{font-size:.74rem;line-height:1.5;color:#516452;margin:16px 0 0;border-top:1px solid #c8d6c3;padding-top:10px}
+.earworm-next-footer a{color:#22523b;font-weight:800;text-decoration:underline}
+.earworm-2026-label{font-size:.68rem;letter-spacing:.09em;text-transform:uppercase;color:#81563a;font-weight:850;margin:13px 0 8px}
+.earworm-next-guidance{font-size:.81rem;line-height:1.6;color:#3e5944;margin:16px 0 12px}
+.earworm-next-readout{padding:14px;background:#f9faf2;border:1px solid #c3d1be;margin:15px 0 9px;font-size:.8rem;line-height:1.65;color:#304f3d}
+.earworm-next-readout .earworm-next-county{font:550 1.22rem/1.4 'Fraunces',Georgia,serif;color:#244632;display:block}
+.earworm-next-readout p{margin:5px 0 0}
+.earworm-next-picker{margin:10px 0}
+.earworm-next-panel .earworm-graph{margin:13px 0}
+.earworm-next-panel .earworm-source{margin:18px 0 0}
+.earworm-next-panel .earworm-table td{padding:9px}
+.earworm-next-panel [hidden]{display:none!important}
+@media(max-width:520px){.earworm-next-panel{padding:14px 12px;margin:17px 0}.earworm-next-top{display:grid;gap:6px}.earworm-next-panel .earworm-counties{grid-template-columns:repeat(2,minmax(0,1fr))}}

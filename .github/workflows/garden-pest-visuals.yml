@@ -5,7 +5,13 @@ on:
       - 'data/garden-pest-visual-catalog.json'
       - 'data/garden-earworm-msu-2026.csv'
       - 'public/assets/garden-earworm-trap*'
+      - 'public/assets/garden-earworm-2027.js'
       - 'scripts/build_garden_earworm_traps.py'
+      - 'scripts/ingest_msu_earworm_2027.py'
+      - 'tests/test_msu_earworm_2027_ingest.py'
+      - 'scripts/verify-garden-earworm-2027.cjs'
+      - 'scripts/verify-garden-earworm-2027-browser.cjs'
+      - '.github/workflows/msu-earworm-2027-source-review.yml'
       - 'scripts/verify-garden-earworm-traps.cjs'
       - 'public/assets/garden-pest-visual*'
       - 'public/assets/garden-pest-watch.*'
@@ -22,7 +28,13 @@ on:
       - 'data/garden-pest-visual-catalog.json'
       - 'data/garden-earworm-msu-2026.csv'
       - 'public/assets/garden-earworm-trap*'
+      - 'public/assets/garden-earworm-2027.js'
       - 'scripts/build_garden_earworm_traps.py'
+      - 'scripts/ingest_msu_earworm_2027.py'
+      - 'tests/test_msu_earworm_2027_ingest.py'
+      - 'scripts/verify-garden-earworm-2027.cjs'
+      - 'scripts/verify-garden-earworm-2027-browser.cjs'
+      - '.github/workflows/msu-earworm-2027-source-review.yml'
       - 'scripts/verify-garden-earworm-traps.cjs'
       - 'public/assets/garden-pest-visual*'
       - 'public/assets/garden-pest-watch.*'
@@ -49,7 +61,10 @@ jobs:
       - name: Validate curated photos and Python matching rules
         run: python3 scripts/build_garden_pest_visuals.py --check
       - name: Verify audited MSU corn earworm trap archive
-        run: python3 scripts/build_garden_earworm_traps.py --check
+        run: |
+          python3 scripts/build_garden_earworm_traps.py --check
+          python3 -m unittest discover -s tests -p test_msu_earworm_2027_ingest.py -v
+          python3 scripts/ingest_msu_earworm_2027.py --mode check-window
       - name: Verify JavaScript syntax and page integration
         run: |
           node --check public/assets/garden-pest-visual-data.js
@@ -57,6 +72,10 @@ jobs:
           node --check public/assets/garden-pest-watch.js
           node --check public/assets/garden-earworm-trap-data.js
           node --check public/assets/garden-earworm-trap-desk.js
+          node --check public/assets/garden-earworm-trap-2027-data.js
+          node --check public/assets/garden-earworm-2027.js
+          node --check scripts/verify-garden-earworm-2027-browser.cjs
+          node scripts/verify-garden-earworm-2027.cjs
           node scripts/verify-garden-earworm-traps.cjs
           node --check public/assets/garden-pest-field-observations.js
           node --check lib/garden-pest-field-observations.cjs
