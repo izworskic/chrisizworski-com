@@ -1,0 +1,183 @@
+{
+  "schemaVersion": 1,
+  "reviewed": "2026-11-03",
+  "gisObjectId": 191,
+  "canonicalName": "Whitefish Falls",
+  "county": "ALGER",
+  "watercourse": "WHITEFISH RIVER",
+  "locality": "near Trenary",
+  "policy": "Official state-owned water-access land and an official DNR watercraft carry-down site corroborate the named location. They do not certify legal signed vehicle parking, a designated waterfall viewpoint, a continuous maintained or approved walking trail, weather or seasonal opening. Never use the alternate A-02-010 West Branch access for this waterfall.",
+  "officialSources": {
+    "stateFalls": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+    "stateParcels": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/DNRLOTSParcelsOPENDATA/FeatureServer/2",
+    "dnrDevelopedAccess": "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/arcgis/rest/services/DNR_State_Sponsored_Developed_Boating_Access_Sites_Public_View/FeatureServer/0",
+    "munisingBureau": "https://www.munising.org/activities/whitefish-falls/",
+    "independentField": "https://www.miroadtrip.com/locations/whitefish-falls",
+    "gnisDerived": "https://topoquest.com/place/michigan/populated-place/trenary/1621941",
+    "townshipParkSecondary": "https://michiganupperpeninsula.com/places-to-visit/waterfalls/",
+    "dnrAlternative": "https://www.michigan.gov/recsearch/parks/laughingwhitefish"
+  },
+  "points": [
+    {
+      "id": "falls-gis-191",
+      "type": "natural-geographic-waterfall-point",
+      "label": "Whitefish Falls, Michigan GIS #191",
+      "lat": 46.217693,
+      "lng": -87.050041,
+      "sourceKey": "stateFalls",
+      "navigationAuthorized": false
+    },
+    {
+      "id": "dnr-access-a-02-004",
+      "type": "official-state-watercraft-carry-down-not-certified-waterfall-parking",
+      "label": "Whitefish River DNR boating access A-02-004",
+      "lat": 46.21758429,
+      "lng": -87.04976723,
+      "sourceKey": "dnrDevelopedAccess",
+      "navigationAuthorized": false
+    },
+    {
+      "id": "dnr-access-a-02-010",
+      "type": "different-upstream-official-water-access-not-falls-arrival",
+      "label": "West Branch Whitefish River DNR boating access A-02-010",
+      "lat": 46.27671399,
+      "lng": -87.09832846,
+      "sourceKey": "dnrDevelopedAccess",
+      "navigationAuthorized": false
+    },
+    {
+      "id": "gnis-derived-whitefish",
+      "type": "independent-falls-name-geography",
+      "label": "USGS GNIS-derived Whitefish Falls #1622606",
+      "lat": 46.218839,
+      "lng": -87.051534,
+      "sourceKey": "gnisDerived",
+      "navigationAuthorized": false
+    },
+    {
+      "id": "unrelated-township-park",
+      "type": "unrelated-aggregator-township-park-waypoint",
+      "label": "Unrelated purported Whitefish River Township Park point",
+      "lat": 46.2122,
+      "lng": -86.9867,
+      "sourceKey": "townshipParkSecondary",
+      "navigationAuthorized": false
+    }
+  ],
+  "pairs": [
+    {
+      "left": "falls-gis-191",
+      "right": "dnr-access-a-02-004",
+      "meaning": "Official DNR carry-down point closely located beside mapped natural falls"
+    },
+    {
+      "left": "falls-gis-191",
+      "right": "gnis-derived-whitefish",
+      "meaning": "Independent waterfall place-name corroboration"
+    },
+    {
+      "left": "falls-gis-191",
+      "right": "dnr-access-a-02-010",
+      "meaning": "Different upstream boating access with similar Whitefish name; do NOT route"
+    },
+    {
+      "left": "falls-gis-191",
+      "right": "unrelated-township-park",
+      "meaning": "Misplaced secondary township park point; do NOT route"
+    }
+  ],
+  "dnrParcel": {
+    "ParID": 1122650,
+    "County": "Alger",
+    "Acreage": 38,
+    "LandStatus": "Dedicated",
+    "ProjectName": "PUBLIC WATER ACCESS SITE",
+    "ProjectUseType": "Public Water Access Site",
+    "DivisionDepartment": "Parks and Recreation Division",
+    "LegalDescription": "SW1/4 SW1/4 EXC that part lying N of US-41 R/W extending 100 ft each side of centerline",
+    "queryScope": "State DNR LOTS point-in-parcel spatial intersection for Michigan GIS #191; does not prove public foot-route geometry"
+  },
+  "dnrFacilities": [
+    {
+      "legacyId": "A-02-004",
+      "name": "Whitefish River",
+      "waterbody": "West Branch Whitefish River",
+      "siteType": "Boating Access Site",
+      "latitude": 46.21758429,
+      "longitude": -87.04976723,
+      "ownedBy": "DNR-PRD",
+      "administeredBy": "Van Riper State Park",
+      "managedBy": "Van Riper State Park",
+      "rampLanes": 0,
+      "carryDown": true,
+      "carryDownLaunches": 1,
+      "vehicleOnlyParking": null,
+      "trailerParking": null,
+      "siteStatusAsOf": null,
+      "sourceObjectId": 6286,
+      "sourceEditDateUtcEpochMs": 1714083482966,
+      "sourceKey": "dnrDevelopedAccess",
+      "verifiedWaterfallViewpoint": false,
+      "verifiedFallsWalk": false
+    },
+    {
+      "legacyId": "A-02-010",
+      "name": "West Branch of Whitefish River",
+      "waterbody": "West Branch Whitefish River",
+      "siteType": "Boating Access Site",
+      "latitude": 46.27671399,
+      "longitude": -87.09832846,
+      "ownedBy": "DNR-FRD",
+      "administeredBy": "Van Riper State Park",
+      "managedBy": "Van Riper State Park",
+      "rampLanes": 1,
+      "carryDown": false,
+      "carryDownLaunches": 0,
+      "vehicleOnlyParking": 1,
+      "trailerParking": 1,
+      "siteStatusAsOf": null,
+      "sourceObjectId": 6285,
+      "sourceEditDateUtcEpochMs": 1714083482504,
+      "sourceKey": "dnrDevelopedAccess",
+      "verifiedWaterfallViewpoint": false,
+      "verifiedFallsWalk": false
+    }
+  ],
+  "bureauEvidence": {
+    "namedFalls": true,
+    "unimprovedTrail": true,
+    "walkTimeDescription": "15 minutes or less",
+    "specificRoadTurn": null,
+    "designatedVehicleParking": null,
+    "officialFallsTrailLine": null,
+    "sourceKey": "munisingBureau"
+  },
+  "publicationGates": {
+    "naturalFeatureLocated": true,
+    "publicLandAtFeatureVerified": true,
+    "officialPublicWaterAccessSiteNearby": true,
+    "waterfallSpecificLegalParkingVerified": false,
+    "continuousPublicFallsWalkingRouteVerified": false,
+    "designatedSafeFallsViewpointVerified": false,
+    "currentRoadAndSiteOpeningVerified": false,
+    "wetSeasonAndWinterConditionsVerified": false,
+    "publicWaterfallGuideEligible": false
+  },
+  "authorityFollowups": [
+    {
+      "organization": "Michigan DNR Parks and Recreation, Van Riper State Park",
+      "question": "Is boating access A-02-004 an active public land-arrival/parking location for waterfall sightseers, not just canoe carry-down? Confirm allowed parking, number of places, access route or posted restrictions and whether a short legal falls overlook is on Parcel 1122650.",
+      "sourceKey": "dnrDevelopedAccess"
+    },
+    {
+      "organization": "Alger County Road Commission / relevant land manager",
+      "question": "Confirm legal public River Road route/roadway to DNR A-02-004 and lawful off-road vehicle stopping; verify seasonal plowing and no private-camp access issue.",
+      "sourceKey": "stateParcels"
+    },
+    {
+      "organization": "Munising Visitor Bureau",
+      "question": "Update generic Whitefish Falls unimproved-trail listing to identify the official DNR carry-down site A-02-004 and distinguish upstream A-02-010, including a reliable trailhead and land manager if available.",
+      "sourceKey": "munisingBureau"
+    }
+  ]
+}
