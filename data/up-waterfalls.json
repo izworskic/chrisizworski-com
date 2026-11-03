@@ -1,5 +1,5 @@
 {
-  "reviewed": "2026-11-02",
+  "reviewed": "2026-11-03",
   "purpose": "Curated planning destinations; not live access or real-time water flow",
   "waterfalls": [
     {
@@ -4234,6 +4234,62 @@
           },
           "noDrivingToWaterfallCoordinate": true,
           "routePolylineAuthorized": false
+        }
+      }
+    },
+    {
+      "id": "conglomerate-falls-gratiot",
+      "name": "Conglomerate Falls (Gratiot River)",
+      "region": "Keweenaw Peninsula",
+      "place": "Ahmeek · KNA Conglomerate Falls Natural Area · Gratiot River",
+      "lat": 47.329239,
+      "lng": -88.433472,
+      "gisObjectId": 136,
+      "level": "moderate",
+      "minutes": "45–90 min",
+      "walk": "From KNA's designated parking, use the established rustic footpath toward the Gratiot River where signed and safe. Local tourism describes steep, uneven north-bank viewpoints. Avoid the bluff edge, water, steep drop to the riverbed and any cabin/private road. No surveyed parking-to-viewpoint geometry or accessible route is established.",
+      "best": "Spring flow and autumn color can be striking; check current conditions. Spring thaw closes the dirt entry road to vehicles.",
+      "access": "KNA welcomes public daylight recreation and provides an easement-backed visitor parking approach, but bars entry-road driving during spring thaw and prohibits cabin parking. Road, cable and river conditions are not live.",
+      "status": "seasonal",
+      "note": "KNA's daylight invitation, preserve parking and named private-road easement are owner-confirmed. The GIS marker is the natural waterfall, never a driving destination. Flow and safety are variable.",
+      "source": "https://keweenawnaturalareas.org/KNA/Conglomerate_Falls.html",
+      "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+      "kind": "Keweenaw Natural Areas public conservation property",
+      "link": "/upper-peninsula-waterfalls/conglomerate-falls-gratiot/",
+      "path": "",
+      "parking": "KNA's Conglomerate Falls Lane preserve parking off Tanskanen Road (Ahmeek). From Five Mile Point Road, follow South Farmer's Block Road and the official 1600 Conglomerate Falls Lane approach. KNA confirms first quarter-mile of the entry road uses an easement across private property. Do not park at the cabin or drive during spring thaw; no lot GPS or winter plowing is certified.",
+      "feature": "A long Gratiot River slide over conglomerate rock with red bluffs, forest and public conservation land.",
+      "decision": "Visit only during published daylight access, if KNA's entry road and designated parking are physically available. Treat this as a rustic river-view walk rather than a safe riverbed scramble.",
+      "publication": "verified-access-guide",
+      "accessConfidence": "KNA-owner-specific-daylight-parking-easement-and-regional-trail-confirmed; no-live-gate-or-safe-riverbed-descent",
+      "manager": "Keweenaw Natural Areas (KNA)",
+      "sourceReviewed": "2026-11-03",
+      "further": "Michigan GIS #136 'Upper Falls' at 47.329239,-88.433472 is about 77 m from the specialist Conglomerate Falls/Upper Gratiot River Falls point 47.32985,-88.43395. It is NOT Lower Gratiot Falls GIS #137 or Black River Great Conglomerate Falls. Former 2019 beaver-pond reports are historical, not evidence of today's flow. KNA published rules: road cable during spring thaw; no fires, camping, general hunting or motor vehicles beyond entrance. No winter-plow or route polyline asserted. 45–90 minutes is editorial trip allowance, not surveyed hike time.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://keweenawnaturalareas.org/KNA/Conglomerate_Falls.html",
+          "description": "KNA official Conglomerate Falls Natural Area page names its 281-acre public conservation property."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://keweenawnaturalareas.org/KNA/Conglomerate_Falls.html",
+          "description": "KNA invites day visitors and states daylight hours each day, with rules; open-now is not established."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://keweenawnaturalareas.org/KNA/Conglomerate_Falls.html",
+          "description": "KNA publishes its 1600 Conglomerate Falls Lane access, private-property easement first quarter-mile and preserve lot; spring-thaw driving and cabin parking prohibited; no parking coordinate."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.visitkeweenaw.com/blog/post/guide-to-keweenaw-solo-travel/",
+          "description": "Visit Keweenaw describes the owner-signed parking area and waterfall access; trail is rustic, no continuous surveyed safer bluff-to-riverbed route and no ADA claim."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+          "description": "State GIS #136 is 77m from independent Upper Gratiot/Conglomerate position; Lower Gratiot #137 stays separate."
         }
       }
     }
