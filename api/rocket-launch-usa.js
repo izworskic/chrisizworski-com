@@ -8,6 +8,7 @@ const { launchWeatherFor } = require('../lib/launch-weather-intelligence');
 const { readWeatherState, missionForecast } = require('../lib/space-coast-official-weather');
 const { editorialDesk } = require('../lib/spaceflight-now-editorial');
 const { readNationalSchedule } = require('../lib/rocket-launch-national');
+const { buildMediaDesk } = require('../lib/space-coast-media');
 
 const LL2 = 'https://ll.thespacedevs.com/2.3.0/launches/upcoming/';
 const LAUNCH_QUERIES = [
@@ -222,6 +223,11 @@ return async function handler(req, res) {
       scheduleWarning:schedule.warning||null,
       selectedRegion: region.id, selectedLaunchId: selected?.id || null,
       selectedLaunch: selected,
+      mediaDesk: selected ? buildMediaDesk(selected, {
+        checkedAt: selected.sourceObservedAt || schedule.checkedAt,
+        sourceStale: selected.sourceStale === true || schedule.freshness === 'stale',
+        regionId: region.id, now
+      }) : null,
       nationalNext: schedule.launches[0] || null,
       region: {
         id: region.id, name: region.name, subtitle: region.subtitle, coast: region.coast,
