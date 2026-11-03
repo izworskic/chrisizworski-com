@@ -1,3 +1,9 @@
+## PYTHON_INTELLIGENCE_OS_V1 — reusable scientific/analytical intelligence (2026-11-03)
+
+**Automatic adoption:** Before substantial Python enhancements, forecasting, GIS analysis, simulation, optimization, data reconciliation, or other numerical-intelligence work anywhere in this tool network, read `design-systems/python-intelligence-os-v1/AGENTS.md`, `README.md` and `docs/QUALITY_GATES.md`. Compare Python against keeping existing JavaScript and using precomputed data; Python is not mandatory. Reject unlicensed, unvalidated, stale or unsafe models regardless of apparent visitor value. Existing Experience OS v1.2 governs visitor-facing experience; owning-repository science, deployment and complete CI rules remain authoritative. **Standardize the quality. Never standardize away the imagination.**
+
+The first implementation is in the owning `izworskic/phenology-michigan` repository, not the mirrored main site. The Python OS package is a reusable governance system, not a new production route. See `design-systems/python-intelligence-os-v1/docs/PHENOLOGY_PILOT.md`.
+
 ## EXPERIENCE_OS_V1 — automatic experience research for visitor-facing work (2026-10-31)
 
 **Version resolution for any bot:** “Experience OS”, “EXPERIENCE_OS_V1”, “v1.2” and “use Experience OS v1.2” refer to **one** canonical package at `design-systems/experience-os-v1/` on `main`. For v1.2 use the latest released `1.2.x` manifest (currently 1.2.1), not a stale development branch. Read [canonical version resolution](design-systems/experience-os-v1/docs/VERSION_RESOLUTION.md); check in-flight PRs and owning-repo instructions before making changes. This root instruction does not automatically apply in independent tool repositories.
