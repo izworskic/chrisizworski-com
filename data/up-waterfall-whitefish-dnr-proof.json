@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "reviewed": "2026-11-03",
+  "source": "data/up-waterfall-whitefish-dnr-evidence.json",
+  "method": "Exact DNR IDs and land parcel point intersection; WGS84 Haversine for context only",
+  "gisObjectId": 191,
+  "pointsCompared": 5,
+  "distances": [
+    {
+      "left": "falls-gis-191",
+      "right": "dnr-access-a-02-004",
+      "straightLineMeters": 24.3,
+      "meaning": "Official DNR carry-down point closely located beside mapped natural falls"
+    },
+    {
+      "left": "falls-gis-191",
+      "right": "gnis-derived-whitefish",
+      "straightLineMeters": 171.6,
+      "meaning": "Independent waterfall place-name corroboration"
+    },
+    {
+      "left": "falls-gis-191",
+      "right": "dnr-access-a-02-010",
+      "straightLineMeters": 7540.5,
+      "meaning": "Different upstream boating access with similar Whitefish name; do NOT route"
+    },
+    {
+      "left": "falls-gis-191",
+      "right": "unrelated-township-park",
+      "straightLineMeters": 4911.7,
+      "meaning": "Misplaced secondary township park point; do NOT route"
+    }
+  ],
+  "identity": {
+    "waterfallStateGisId": 191,
+    "dnrPublicWaterAccessParcelId": 1122650,
+    "dnrPublicWaterAccessParcelAcres": 38,
+    "nearbyCarryDownId": "A-02-004",
+    "nearbyCarryDownIsDnrManaged": true,
+    "nearbyCarryDownVehicleParkingUnknown": true,
+    "upstreamDifferentBoatAccessId": "A-02-010",
+    "townshipParkWaypointUnrelated": true
+  },
+  "visitorDecision": {
+    "naturalFallsGeographyCorroborated": true,
+    "stateManagedWaterAccessLandAtFallsConfirmed": true,
+    "dnrCarryDownNearFallsConfirmed": true,
+    "waterfallVehicleParkingCleared": false,
+    "waterfallWalkingTrailCleared": false,
+    "waterfallViewpointCleared": false,
+    "currentOpeningCleared": false,
+    "publicWaterfallGuideEligible": false,
+    "allowDrivingToNaturalFallsCoordinate": false,
+    "allowWaterAccessAsFallsParkingWaypoint": false,
+    "allowOtherBoatAccessAsFallsArrival": false
+  },
+  "policy": "Official state-owned water-access land and an official DNR watercraft carry-down site corroborate the named location. They do not certify legal signed vehicle parking, a designated waterfall viewpoint, a continuous maintained or approved walking trail, weather or seasonal opening. Never use the alternate A-02-010 West Branch access for this waterfall."
+}
