@@ -453,6 +453,11 @@
       "destination": "/michigan-dark-sky-field-guide/",
       "permanent": true
     }
+    ,{
+      "source": "/vandenberg-rocket-launch-viewing",
+      "destination": "/vandenberg-rocket-launch-viewing/",
+      "permanent": true
+    }
   ],
   "headers": [
     {
@@ -2390,6 +2395,10 @@
     {
       "source": "/national-tools/kilauea-episode-watch/",
       "destination": "/synced-national-tools/kilauea-episode-watch/index.html"
+    },
+    {
+      "source": "/vandenberg-rocket-launch-viewing/",
+      "destination": "/vandenberg-rocket-launch-viewing/index.html"
     },
     {
       "source": "/national-tools/rocket-launch-live",
