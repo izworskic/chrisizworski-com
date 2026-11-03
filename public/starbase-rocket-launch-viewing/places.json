@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "sourceOfTruth": "lib/starbase-viewing.js",
+  "sourceCheckedDate": "2026-11-03",
+  "geometryDisclosure": "Points are source-referenced place features, NOT verified entrance, parking or precise viewing locations; pad location is added only when source mission GPS is valid.",
+  "sites": [
+    {
+      "id": "isla-blanca",
+      "name": "Isla Blanca County Park",
+      "lat": 26.071745,
+      "lon": -97.160249,
+      "kind": "island-park",
+      "coordinateRole": "USGS published park feature center — not parking or a guaranteed viewing position",
+      "geographicSource": "https://topoquest.com/place/texas/park/isla-blanca-park/1374243",
+      "operator": "Cameron County",
+      "accessSource": "https://www.cameroncountytx.gov/parks-home/",
+      "viewingSource": "https://visitsouthpadreisland.com/spacex/",
+      "accessNote": "Cameron County manages the park. Daily entrance fees, launch-event gate times and capacity can change. County park-office hours are not a verified launch-day entry schedule.",
+      "bestFor": "The closest documented public island park setting",
+      "scene": "At the southern tip of South Padre Island, the shoreline faces over Brazos Santiago Pass toward the Starbase range. This is the popular public gathering place, not an exclusive viewing platform.",
+      "tradeoff": "Expect a congested Queen Isabella Causeway and park queues. The published park reference is not a signed parking entrance.",
+      "profiles": [
+        "first-time",
+        "family",
+        "coastal"
+      ]
+    },
+    {
+      "id": "zapata",
+      "name": "Jaime J. Zapata Memorial Boat Ramp",
+      "lat": 26.00181,
+      "lon": -97.29856,
+      "kind": "mainland-ramp",
+      "coordinateRole": "NOAA San Martin Lake Channel station 8779911 location beside the boat ramp — not a surveyed viewing area",
+      "geographicSource": "https://tidesandcurrents.noaa.gov/benchmarks/8779911.html",
+      "operator": "Cameron County",
+      "accessSource": "https://www.cameroncountytx.gov/parks-home/",
+      "viewingSource": "https://www.cameroncountytx.gov/parks-home/",
+      "accessNote": "Cameron County lists this facility. Current opening hours, launch-specific parking rules and unobstructed pad visibility have not been independently confirmed.",
+      "bestFor": "A county-managed mainland reference without crossing to South Padre",
+      "scene": "On the mainland side of the Laguna Madre region, this county boat-ramp facility offers an alternative to island access. The NOAA station location near the ramp is not a surveyed rocket sightline.",
+      "tradeoff": "A farther reference can be an easier mainland plan, but this does not establish road travel time, night entry or a usable launch sightline.",
+      "profiles": [
+        "no-causeway",
+        "flexible"
+      ]
+    },
+    {
+      "id": "lighthouse",
+      "name": "Port Isabel Lighthouse historic site",
+      "lat": 26.077984,
+      "lon": -97.207133,
+      "kind": "historic-site",
+      "coordinateRole": "Texas Historical Commission published historic-site reference, not a launch-watching platform",
+      "geographicSource": "https://www.thc.texas.gov/public/upload/publications/Port%20Isabel%20Lighthouse_Rack%20Card.pdf",
+      "operator": "City of Port Isabel / Texas Historical Commission",
+      "accessSource": "https://atlas.thc.texas.gov/Details/4200001068",
+      "viewingSource": "https://portisabellighthouse.com/lighthouse/",
+      "accessNote": "Climbing the lighthouse is ticketed and governed by published daytime or seasonal tour hours. Never assume access to the top, or public grounds, for a night launch.",
+      "bestFor": "Combine a Port Isabel visit with a mainland launch-watch plan",
+      "scene": "The nineteenth-century lighthouse recalls when this channel was navigated by a lamp rather than a launch computer. The historic site is a land reference, not a confirmed rocket-viewing terrace.",
+      "tradeoff": "Choose this for a cultural day stop. It has no mission-specific viewing authorization or proven unobstructed line of sight.",
+      "profiles": [
+        "history",
+        "no-causeway"
+      ]
+    }
+  ]
+}

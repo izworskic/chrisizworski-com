@@ -1,0 +1,45 @@
+name: Starbase Texas visitor map and mission browser QA
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'lib/starbase-viewing.js'
+      - 'api/rocket-launch-usa.js'
+      - 'public/starbase-rocket-launch-viewing/**'
+      - 'public/synced-national-tools/rocket-launch-live/**'
+      - 'tests/starbase-viewing-atlas.test.js'
+      - 'scripts/export-starbase-places.js'
+      - 'scripts/verify-starbase-browser.cjs'
+      - '.github/workflows/starbase-rocket-browser.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  chromium:
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify source manifest, geo, closures, and canonical safety
+        run: node --test tests/starbase-viewing-atlas.test.js
+      - name: Install isolated browser runner and matching Leaflet
+        run: |
+          mkdir -p /tmp/starbase-browser-qa
+          npm install --prefix /tmp/starbase-browser-qa --no-save --ignore-scripts playwright@1.58.2 leaflet@1.9.4
+          echo "NODE_PATH=/tmp/starbase-browser-qa/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium-browser)" >> "$GITHUB_ENV"
+      - name: Verify mission A-B-A, public map/controls, access, failures and mobile viewports
+        run: node scripts/verify-starbase-browser.cjs
+      - name: Preserve Starbase map screenshots and scenario report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: starbase-texas-map-browser-evidence
+          path: artifacts/starbase-browser-qa/
+          if-no-files-found: warn
+          retention-days: 7
