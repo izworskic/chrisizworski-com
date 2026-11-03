@@ -435,6 +435,12 @@
         desk.operator.label || 'Open launch operator updates', 'rl-watch-operator');
       if (source) general.appendChild(source);
     }
+    if (desk.operator?.videoChannelUrl) {
+      const channel=anchor(desk.operator.videoChannelUrl,
+        desk.operator.videoChannelLabel||'Operator video channel · mission broadcast unverified',
+        'rl-watch-operator');
+      if(channel)general.appendChild(channel);
+    }
     if (data.region?.specialist) {
       const detail = anchor(data.region.specialist,
         'Florida: launch access, tickets and forecast', 'rl-watch-operator');
