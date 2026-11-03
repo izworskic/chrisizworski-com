@@ -14,7 +14,7 @@
       "summary": "Michigan DNR LOTS currently identifies the state GIS #12 Chicagon waterfall point within dedicated 47.8-acre Crystal Falls Management Unit parcel ParID 258918. In apparent conflict, Iron County's official 2022–2026 Recreation Inventory lists Chicaugon Falls, Crystal Falls Township, Scenic, owner Private. These are different scopes and dates, not a legal survey proving private ownership of the waterfall point or a public easement to it. Chamber tourism directs visitors toward Raymer/Dave's Camp Road, while independent reporting notes private camps and spring washouts. There is no authoritative, current road classification and right-of-way continuing to a safe signed lot or lawful uninterrupted walk. No waterfall coordinate, tourism turnout claim, county road index map or state-land parcel establishes a visitor route. Independent GIS/field locations agree within 67 m, but another tourism waypoint lies 4.0 km away; that discrepancy cannot be used for directions.",
       "guidance": "Do not drive to the GIS waterfall marker, assume a Raymer/Dave's Camp public right-of-way or stop at an informal private-camp turnout. The state-managed waterfall parcel is not proof of a public access route; confirm an authorized legal lot, road and continuous walking path before considering a visit.",
       "locationNotes": "Michigan GIS #12 at 46.134032,-88.452985 agrees broadly with other geographic catalogs around 46.1336,-88.4535; a separate tourism listing reports 46.1089,-88.4903, a materially different location. The latter must not be substituted as parking or falls position.",
-      "reviewLimitations": "The 2022 county recreation inventory is older and classifies the scenic attraction, not an exact surveyed GIS tract. The DNR data certifies only the falls-point parcel, and the 2019/2020 compartment report concerns broader vehicle access. Do not claim the waterfall itself is definitively private, closed or open based on any one source.",
+      "reviewLimitations": "The Iron County 2022 recreation inventory is dated and classifies a scenic site, not the surveyed GIS tract. The DNR information identifies only the falls parcel. The 2019/2020 DNR compartment report is area context, not a survey of road rights or the full trail. No current road or parking permission confirmed.",
       "nextEvidence": "Obtain legal road inventory/jurisdiction for Raymer and Dave's Camp from Iron County Road Commission, parcel/easement overlays for all portions of the approach from DNR and Iron County Equalization/Register of Deeds, a specific permitted parking location, mapped complete walking corridor and current gate/washout/season confirmation. Resolve dated county private scenic inventory versus state land specifically, without inferring private title or public trail from labels.",
       "sourceLinks": [
         {
@@ -81,37 +81,37 @@
         "segments": [
           {
             "label": "Waterfall identity and source geography",
-            "status": "feature-position-corroborated-not-arrival",
+            "status": "verified-geography",
             "finding": "State GIS #12 at 46.134032,-88.452985 lies approximately 67.2 m from secondary mapped waterfall coordinates. A conflicting older tourism point is about 4.01 km away and cannot be used as a parking or falls waypoint.",
             "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
           },
           {
             "label": "Land tenure and documented ownership contradiction",
-            "status": "state-point-and-county-private-inventory-scope-conflict",
+            "status": "documented-not-live",
             "finding": "DNR LOTS ParID 258918 is a 47.8-acre dedicated state-managed parcel at the waterfall GIS point. Iron County's adopted 2022–2026 Recreation Inventory lists Chicaugon Falls as a scenic site with owner Private. The inventory is dated and not a surveyed parcel join; the difference requires current boundary/easement reconciliation.",
             "source": "https://ironmi.com/wp-content/uploads/2024/05/Recreation-Paln-2022-2026.pdf"
           },
           {
             "label": "Legal road right-of-way from Long Lake Road",
-            "status": "not-cleared",
+            "status": "not-verified",
             "finding": "The Iron County Chamber describes Raymer/Dave's Camp approach and washouts, but tourist directions do not establish legal road dedication or continuous public access. Road Commission current updates do not certify the exact segment or identify a waterfall lot.",
             "source": "https://ironcountyroads.com/seasonal-information"
           },
           {
             "label": "Designated visitor parking",
-            "status": "not-cleared",
+            "status": "not-verified",
             "finding": "No current landowner/agency-designated waterfall visitor parking and safe vehicle approach verified. A widened area described by older trip accounts could be on a private camp route; do not drive to raw falls coordinate.",
             "source": "https://www.iron.org/outdoors/waterfalls/"
           },
           {
             "label": "Complete authorized walking trail",
-            "status": "not-cleared",
+            "status": "not-verified",
             "finding": "No authoritative public trail/easement from an approved lot across intervening road/footpath parcels into state falls parcel. Signs and historical accounts do not certify uninterrupted public permission; no route polyline.",
             "source": "https://ironcountylodging.com/waterfalls-in-iron-county-michigan/"
           },
           {
             "label": "Seasonal roads, closures, gate and water conditions",
-            "status": "not-cleared",
+            "status": "not-verified",
             "finding": "Chamber reports seasonal washouts and county road commission provides general road updates. No current Raymer/Dave's Camp road status, parking availability, authorized bridge/crossing or same-day falls conditions verified.",
             "source": "https://ironcountyroads.com/seasonal-information"
           }
