@@ -5,6 +5,7 @@ on:
     paths:
       - 'public/great-lakes-freighter-winter-layup/**'
       - 'public/assets/freighter-layup*'
+      - 'public/assets/freighter-winter-home.css'
       - 'public/assets/freighter-vessel-biographies.json'
       - 'public/assets/freighter-layup-live-season.json'
       - 'api/freighter-layup-live.js'
@@ -38,6 +39,10 @@ jobs:
         run: npm ci
       - name: Verify actual Node assertions
         run: node --test tests/freighter-layup.test.js tests/freighter-layup-biographies.test.js tests/freighter-layup-season.test.js tests/freighter-layup-feeds.test.js
+      - name: Verify Python evidence intelligence and generated historical manifest
+        run: |
+          python3 -m unittest discover -s scripts/freighter-layup -p 'test_*.py' -v
+          python3 scripts/freighter-layup/history.py --check
       - name: Check generated biographies match source exactly
         run: node scripts/generate-freighter-layup-profiles.cjs --check
       - name: Prepare headless browser runner

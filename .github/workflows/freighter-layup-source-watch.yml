@@ -26,7 +26,20 @@ jobs:
         with:
           node-version: '22'
       - name: Run dated-report ingestion and November season rollover
-        run: node scripts/freighter-layup/refresh.cjs
+        run: node scripts/freighter-layup/refresh.cjs --shadow-input=/tmp/freighter-layup-shadow-input.json
+      - name: Run Python shadow intelligence without publishing any findings
+        run: |
+          python3 scripts/freighter-layup/shadow.py \
+            --input /tmp/freighter-layup-shadow-input.json \
+            --output /tmp/freighter-layup-shadow-report.json
+          python3 -m unittest discover -s scripts/freighter-layup -p 'test_*.py' -v
+      - name: Keep the private non-publishing evidence audit for seven days
+        uses: actions/upload-artifact@v4
+        with:
+          name: winter-layup-shadow-intelligence
+          path: /tmp/freighter-layup-shadow-report.json
+          if-no-files-found: error
+          retention-days: 7
       - name: Validate winter story ledger
         run: node --test tests/freighter-layup-season.test.js tests/freighter-layup-feeds.test.js
       - name: Publish only on new evidence or season rollover

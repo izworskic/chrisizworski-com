@@ -30,7 +30,7 @@ async function run(){
   const browser=await chromium.launch({channel:'chrome',headless:true,args:['--no-sandbox']});
   const results=[];
   try{
-    for(const size of [{width:1320,height:950,name:'desktop'},{width:1024,height:800,name:'compact-desktop'},{width:390,height:844,name:'mobile'}]){
+    for(const size of [{width:1320,height:950,name:'desktop'},{width:1024,height:800,name:'compact-desktop'},{width:768,height:860,name:'tablet'},{width:390,height:844,name:'mobile'},{width:360,height:780,name:'small-mobile'}]){
       const context=await browser.newContext({viewport:{width:size.width,height:size.height},reducedMotion:'reduce'});
       // Exercise map markers without letting an external tile/photo/CDN outage block tests.
       await context.route('**/*',route=>{
@@ -107,6 +107,35 @@ async function run(){
       for(const title of ['Winter Harbor Map','Current Winter Arrivals','Harbor Roster','Ship Stories','Why Freighters Lay Up'])check(headings.some(x=>x.includes(title)),size.name+': functional section heading '+title);
       check(await page.locator('main > .wrapper > section').evaluateAll(nodes=>nodes.map(n=>n.id||n.className).join('|')).then(v=>v.startsWith('explorer|fleet|ship-biographies|stories|sources-evidence')),size.name+': page section order');
       check(await page.locator('#source-evidence-details').evaluate(e=>!e.open),size.name+': source and evidence methods collapsed by default');
+      // Python-compiled harbor manifest: every archive ship remains in the HTML,
+      // while the client offers a reversible season + harbor view.
+      const hist = page.locator('#winter-fleet-history');
+      await page.waitForFunction(()=>document.getElementById('winter-fleet-history')?.dataset.historyEnhanced==='true');
+      check(await hist.locator('[data-history-vessel]').count()===14,size.name+': fourteen curated winter records in crawlable source');
+      check(await hist.locator('[data-history-season="2025-26"] [data-history-vessel]:visible').count()===12,
+        size.name+': default 2025–26 contains only its twelve records');
+      check(await hist.locator('[data-history-season="2024-25"]').isHidden(),size.name+': past year hidden only after JS enhancement');
+      await hist.locator('[data-history-pick="2024-25"]').click();
+      check(await hist.locator('[data-history-season="2024-25"] [data-history-vessel]:visible').count()===2,
+        size.name+': two source-backed entries when selecting 2024–25');
+      check(await hist.locator('[data-history-pick="2024-25"]').getAttribute('aria-pressed')==='true',
+        size.name+': year selection is keyboard/assistive accessible');
+      await hist.locator('#history-harbor').selectOption('owen-sound');
+      check(await hist.locator('[data-history-season="2024-25"] [data-history-vessel]:visible').count()===2,
+        size.name+': Owen Sound shows both curated historic records');
+      await hist.locator('[data-history-pick="2025-26"]').click();
+      check(await hist.locator('#history-harbor').inputValue()==='all',size.name+': switching season clears incompatible harbor filter');
+      await hist.locator('#history-harbor').selectOption('superior');
+      check(await hist.locator('[data-history-season="2025-26"] [data-history-vessel]:visible').count()===6,
+        size.name+': Superior narrows the selected winter to six documented ships');
+      await hist.locator('#history-harbor').selectOption('all');
+      check(await hist.locator('[data-history-season="2025-26"] [data-history-vessel]:visible').count()===12,
+        size.name+': clearing harbor restores all twelve records (A-to-B-to-A)');
+      check((await hist.locator('#history-selection').textContent()).includes('Not a total fleet count'),
+        size.name+': history never presents sampled records as a complete fleet census');
+      check(await hist.locator('a[href^="https://"]').count()>=14,
+        size.name+': primary evidence remains linked on historical records');
+
       const adFlow=await page.evaluate(()=>{
         const hero=document.querySelector('main > .hero'),wrapper=document.querySelector('main > .wrapper');
         const slot=document.createElement('div');slot.className='google-auto-placed';slot.style.height='280px';
@@ -267,6 +296,12 @@ async function run(){
       check(await page.locator('label[for="ship-search"]').count()===1,size.name+': search label');
       check(await page.locator('a.skip').count()===1,size.name+': keyboard skip link');
       const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
+      if(overflow>3){
+        const offenders=await page.evaluate(()=>[...document.body.querySelectorAll('*')]
+          .filter(el=>{const b=el.getBoundingClientRect();return b.width>0&&(b.right>innerWidth+2||b.left< -2)})
+          .slice(0,18).map(el=>{const b=el.getBoundingClientRect();return {tag:el.tagName,id:el.id,cls:String(el.className||'').slice(0,85),left:Math.round(b.left),right:Math.round(b.right),width:Math.round(b.width)}}));
+        console.error('LAYUP OVERFLOW DEBUG',JSON.stringify({width:size.width,overflow,offenders}));
+      }
       check(overflow<=3,size.name+': horizontal overflow '+overflow+'px');
       // Navigation and harbor details now flow with the document; no fixed ad reserve.
       const flow=await page.evaluate(()=>{
@@ -299,6 +334,23 @@ async function run(){
       results.push(size.name+': PASS — historical statuses, map, filters, seasons, biographies, layout, JS exceptions');
       await context.close();
     }
+    // A useful historical answer and supporting article links must survive without JS.
+    const noJS = await browser.newContext({viewport:{width:390,height:844},javaScriptEnabled:false,reducedMotion:'reduce'});
+    await noJS.route('**/*',route=>{
+      const host=new URL(route.request().url()).hostname;
+      return host==='127.0.0.1'?route.continue():route.abort();
+    });
+    const staticPage = await noJS.newPage();
+    await staticPage.goto(url,{waitUntil:'domcontentloaded',timeout:15000});
+    check(await staticPage.locator('#winter-fleet-history [data-history-vessel]').count()===14,
+      'no-JS: fourteen historical ship records remain in the document');
+    check(await staticPage.locator('#winter-fleet-history .history-season-panel').count()===2,
+      'no-JS: both winters remain directly available');
+    check(await staticPage.locator('#winter-fleet-history .history-controls').isHidden(),
+      'no-JS: inert history controls are not shown');
+    check(await staticPage.locator('#winter-fleet-history a[href^="https://"]').count()>=14,
+      'no-JS: original evidence links survive');
+    await noJS.close();
     for(const r of results)console.log(r);
   }finally{await browser.close();await new Promise(r=>server.close(r))}
 }

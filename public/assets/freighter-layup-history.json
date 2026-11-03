@@ -1,0 +1,444 @@
+{
+  "schemaVersion": 1,
+  "status": "PARTIAL",
+  "dataClass": "curated_historical_source_records",
+  "notFleetCensus": true,
+  "source": "/assets/freighter-layup-registry.json",
+  "asOfPolicy": "Record as-of dates are not inferred arrival or departure dates.",
+  "coverageNote": "A curated selection of documented vessel winters, not a full fleet census. Different seasons have different source coverage; record counts are not fleet totals.",
+  "recordCount": 14,
+  "uniqueVesselCount": 13,
+  "recurringKeys": [
+    "algoma-compass"
+  ],
+  "seasons": [
+    {
+      "id": "2025-26",
+      "label": "Winter 2025–2026",
+      "recordCount": 12,
+      "verifiedCount": 10,
+      "reportedCount": 2,
+      "harbors": [
+        {
+          "id": "superior",
+          "name": "Superior, Wisconsin",
+          "records": 6
+        },
+        {
+          "id": "sturgeon-bay",
+          "name": "Sturgeon Bay, Wisconsin",
+          "records": 3
+        },
+        {
+          "id": "milwaukee",
+          "name": "Milwaukee, Wisconsin",
+          "records": 1
+        },
+        {
+          "id": "owen-sound",
+          "name": "Owen Sound, Ontario",
+          "records": 1
+        },
+        {
+          "id": "toledo",
+          "name": "Toledo, Ohio",
+          "records": 1
+        }
+      ],
+      "vessels": [
+        {
+          "id": "stewart-j-cort",
+          "key": "stewart-j-cort",
+          "name": "Stewart J. Cort",
+          "harborId": "milwaukee",
+          "harborName": "Milwaukee, Wisconsin",
+          "asOf": "2026-01-20",
+          "status": "confirmed_historical",
+          "evidenceClass": "maritime_historical_society",
+          "source": {
+            "url": "https://wmhs.org/stewart-j-cort-arrives-in-milwaukee/",
+            "publisher": "Wisconsin Marine Historical Society",
+            "title": "STEWART J. CORT arrives in Milwaukee"
+          },
+          "events": [
+            {
+              "date": "2026-01-20",
+              "kind": "arrival",
+              "description": "Wisconsin Marine Historical Society documented the Cort's arrival for winter layup in Milwaukee. The precise berth was not specified.",
+              "source": "https://wmhs.org/stewart-j-cort-arrives-in-milwaukee/"
+            }
+          ]
+        },
+        {
+          "id": "algoma-compass",
+          "key": "algoma-compass",
+          "name": "Algoma Compass",
+          "harborId": "owen-sound",
+          "harborName": "Owen Sound, Ontario",
+          "asOf": "2026-01-24",
+          "status": "confirmed_historical",
+          "evidenceClass": "local_maritime_museum",
+          "source": {
+            "url": "https://waterfrontheritage.ca/the-algoma-compass-arrives-for-winter-layup/",
+            "publisher": "Community Waterfront Heritage Centre",
+            "title": "The Algoma Compass Arrives for Winter Layup"
+          },
+          "events": [
+            {
+              "date": "2026-01-18",
+              "kind": "icebreak_assistance",
+              "description": "CCGS Judy LaMarsh entered Owen Sound to break harbor ice so the waiting Compass could come in.",
+              "source": "https://waterfrontheritage.ca/ccgs-judy-lamarsh-breaks-the-ice/"
+            },
+            {
+              "date": "2026-01-19",
+              "kind": "arrival",
+              "description": "The Compass tied up for winter layup following a second day of harbor icebreaking.",
+              "source": "https://waterfrontheritage.ca/the-algoma-compass-arrives-for-winter-layup/"
+            }
+          ]
+        },
+        {
+          "id": "edgar-b-speer",
+          "key": "edgar-b-speer",
+          "name": "Edgar B. Speer",
+          "harborId": "sturgeon-bay",
+          "harborName": "Sturgeon Bay, Wisconsin",
+          "asOf": "2026-01-21",
+          "status": "confirmed_historical",
+          "evidenceClass": "maritime_historical_society",
+          "source": {
+            "url": "https://wmhs.org/edgar-b-speer-arrives-at-fincantieri/",
+            "publisher": "Wisconsin Marine Historical Society",
+            "title": "EDGAR B. SPEER arrives at Fincantieri"
+          },
+          "events": [
+            {
+              "date": "2026-01-18",
+              "kind": "arrival",
+              "description": "Arrived at Fincantieri Bay Shipbuilding assisted by tugs Nickelena and Erika Kobasic.",
+              "source": "https://wmhs.org/edgar-b-speer-arrives-at-fincantieri/"
+            },
+            {
+              "date": "2026-03-24",
+              "kind": "reported_berth_move",
+              "description": "Community observer reported a shift into the large graving dock. This is not an official berth assignment.",
+              "source": "https://search.boatnerd.com/viewtopic.php?p=274441"
+            }
+          ]
+        },
+        {
+          "id": "james-r-barker",
+          "key": "james-r-barker",
+          "name": "James R. Barker",
+          "harborId": "sturgeon-bay",
+          "harborName": "Sturgeon Bay, Wisconsin",
+          "asOf": "2026-01-08",
+          "status": "confirmed_historical",
+          "evidenceClass": "maritime_historical_society",
+          "source": {
+            "url": "https://wmhs.org/james-r-barker-arrives-at-fincantieri/",
+            "publisher": "Wisconsin Marine Historical Society",
+            "title": "JAMES R. BARKER arrives at Fincantieri"
+          },
+          "events": [
+            {
+              "date": "2026-01-05",
+              "kind": "arrival",
+              "description": "Arrived at Sturgeon Bay with tug assistance; entered the Fincantieri graving dock for winter storage and five-year inspection.",
+              "source": "https://wmhs.org/james-r-barker-arrives-at-fincantieri/"
+            },
+            {
+              "date": "2026-03-23",
+              "kind": "reported_departure",
+              "description": "Community port observers reported the Barker leaving its winter berth with tug and Coast Guard assistance.",
+              "source": "https://search.boatnerd.com/viewtopic.php?p=274441"
+            }
+          ]
+        },
+        {
+          "id": "manitoulin",
+          "key": "manitoulin",
+          "name": "Manitoulin",
+          "harborId": "sturgeon-bay",
+          "harborName": "Sturgeon Bay, Wisconsin",
+          "asOf": "2026-01-18",
+          "status": "reported_historical",
+          "evidenceClass": "community_report",
+          "source": {
+            "url": "https://search.boatnerd.com/viewtopic.php?p=274441",
+            "publisher": "BoatNerd Discussion Forum (community reports)",
+            "title": "BoatNerd community reports — Sturgeon Bay activity in winter 2026"
+          },
+          "events": [
+            {
+              "date": "2026-01-18",
+              "kind": "reported_arrival",
+              "description": "Community observers reported Manitoulin arriving for layup in Sturgeon Bay; dock assignment not verified.",
+              "source": "https://search.boatnerd.com/viewtopic.php?p=274441"
+            },
+            {
+              "date": "2026-02-13",
+              "kind": "reported_berth_move",
+              "description": "A subsequent community discussion described Manitoulin entering the shipyard's graving dock.",
+              "source": "https://search.boatnerd.com/viewtopic.php?t=178499"
+            }
+          ]
+        },
+        {
+          "id": "burns-harbor",
+          "key": "burns-harbor",
+          "name": "Burns Harbor",
+          "harborId": "superior",
+          "harborName": "Superior, Wisconsin",
+          "asOf": "2026-01-30",
+          "status": "confirmed_historical",
+          "evidenceClass": "port_authority",
+          "source": {
+            "url": "https://duluthport.com/news/duluth-superior-tonnage-falls-amid-trade-headwinds/",
+            "publisher": "Duluth Seaway Port Authority",
+            "title": "Duluth Seaway Port Authority — Winter layup roster"
+          },
+          "events": [
+            {
+              "date": "2026-01-30",
+              "kind": "roster",
+              "description": "Listed at Redwood Group Elevator M in Superior's winter layup roster.",
+              "source": "https://duluthport.com/news/duluth-superior-tonnage-falls-amid-trade-headwinds/"
+            }
+          ]
+        },
+        {
+          "id": "honorable-james-l-oberstar",
+          "key": "honorable-james-l-oberstar",
+          "name": "Honorable James L. Oberstar",
+          "harborId": "superior",
+          "harborName": "Superior, Wisconsin",
+          "asOf": "2026-01-30",
+          "status": "confirmed_historical",
+          "evidenceClass": "port_authority",
+          "source": {
+            "url": "https://duluthport.com/news/duluth-superior-tonnage-falls-amid-trade-headwinds/",
+            "publisher": "Duluth Seaway Port Authority",
+            "title": "Duluth Seaway Port Authority — Winter layup roster"
+          },
+          "events": [
+            {
+              "date": "2026-01-30",
+              "kind": "roster",
+              "description": "Listed at Fraser Shipyards for winter 2025–26.",
+              "source": "https://duluthport.com/news/duluth-superior-tonnage-falls-amid-trade-headwinds/"
+            },
+            {
+              "date": "2026-03-23",
+              "kind": "departure",
+              "description": "Duluth Harbor Cam reported the Oberstar departing as the first ship out of port that spring.",
+              "source": "https://www.duluthharborcam.com/search?max-results=5&updated-max=2026-04-05T08%3A40%3A00-05%3A00"
+            }
+          ]
+        },
+        {
+          "id": "indiana-harbor",
+          "key": "indiana-harbor",
+          "name": "Indiana Harbor",
+          "harborId": "superior",
+          "harborName": "Superior, Wisconsin",
+          "asOf": "2026-01-30",
+          "status": "confirmed_historical",
+          "evidenceClass": "port_authority",
+          "source": {
+            "url": "https://duluthport.com/news/duluth-superior-tonnage-falls-amid-trade-headwinds/",
+            "publisher": "Duluth Seaway Port Authority",
+            "title": "Duluth Seaway Port Authority — Winter layup roster"
+          },
+          "events": [
+            {
+              "date": "2026-01-30",
+              "kind": "roster",
+              "description": "Listed at Ogdensburg Pier for winter layup.",
+              "source": "https://duluthport.com/news/duluth-superior-tonnage-falls-amid-trade-headwinds/"
+            }
+          ]
+        },
+        {
+          "id": "john-j-boland",
+          "key": "john-j-boland",
+          "name": "John J. Boland",
+          "harborId": "superior",
+          "harborName": "Superior, Wisconsin",
+          "asOf": "2026-01-30",
+          "status": "confirmed_historical",
+          "evidenceClass": "port_authority",
+          "source": {
+            "url": "https://duluthport.com/news/duluth-superior-tonnage-falls-amid-trade-headwinds/",
+            "publisher": "Duluth Seaway Port Authority",
+            "title": "Duluth Seaway Port Authority — Winter layup roster"
+          },
+          "events": [
+            {
+              "date": "2026-01-30",
+              "kind": "roster",
+              "description": "Listed at Fraser Shipyards for winter layup.",
+              "source": "https://duluthport.com/news/duluth-superior-tonnage-falls-amid-trade-headwinds/"
+            }
+          ]
+        },
+        {
+          "id": "lee-a-tregurtha",
+          "key": "lee-a-tregurtha",
+          "name": "Lee A. Tregurtha",
+          "harborId": "superior",
+          "harborName": "Superior, Wisconsin",
+          "asOf": "2026-01-30",
+          "status": "confirmed_historical",
+          "evidenceClass": "port_authority",
+          "source": {
+            "url": "https://duluthport.com/news/duluth-superior-tonnage-falls-amid-trade-headwinds/",
+            "publisher": "Duluth Seaway Port Authority",
+            "title": "Duluth Seaway Port Authority — Winter layup roster"
+          },
+          "events": [
+            {
+              "date": "2026-01-16",
+              "kind": "arrival",
+              "description": "Duluth Harbor Cam documented arrival for winter layup at Fraser Shipyards.",
+              "source": "https://www.duluthharborcam.com/2026/01/lee-tregurtha-arrived-in-duluth-01162026.html"
+            },
+            {
+              "date": "2026-01-30",
+              "kind": "roster",
+              "description": "Confirmed at Fraser Shipyards in the port's winter roster.",
+              "source": "https://duluthport.com/news/duluth-superior-tonnage-falls-amid-trade-headwinds/"
+            },
+            {
+              "date": "2026-04-05",
+              "kind": "departure",
+              "description": "Duluth Harbor Cam reported a loaded departure through ice on Lake Superior.",
+              "source": "https://www.duluthharborcam.com/search/label/Lee%20A%20Tregurtha"
+            }
+          ]
+        },
+        {
+          "id": "mesabi-miner",
+          "key": "mesabi-miner",
+          "name": "Mesabi Miner",
+          "harborId": "superior",
+          "harborName": "Superior, Wisconsin",
+          "asOf": "2026-01-30",
+          "status": "confirmed_historical",
+          "evidenceClass": "port_authority",
+          "source": {
+            "url": "https://duluthport.com/news/duluth-superior-tonnage-falls-amid-trade-headwinds/",
+            "publisher": "Duluth Seaway Port Authority",
+            "title": "Duluth Seaway Port Authority — Winter layup roster"
+          },
+          "events": [
+            {
+              "date": "2026-01-29",
+              "kind": "yard",
+              "description": "Shipyard reported this was Mesabi Miner's first winter layup at Fraser.",
+              "source": "https://shipyards.marinelink.com/news/mesabi-miner/mesabi-miner-winter-lay-up-fraser-shipyards"
+            },
+            {
+              "date": "2026-01-30",
+              "kind": "roster",
+              "description": "Confirmed at Fraser Shipyards on the port's winter roster.",
+              "source": "https://duluthport.com/news/duluth-superior-tonnage-falls-amid-trade-headwinds/"
+            },
+            {
+              "date": "2026-03-22",
+              "kind": "departure",
+              "description": "MPR reported the vessel moved from its layup dock to load iron ore pellets in Duluth.",
+              "source": "https://www.mprnews.org/story/2026/03/24/great-lakes-shipping-season-starts-up-again-in-duluth-port"
+            }
+          ]
+        },
+        {
+          "id": "american-spirit",
+          "key": "american-spirit",
+          "name": "American Spirit",
+          "harborId": "toledo",
+          "harborName": "Toledo, Ohio",
+          "asOf": "2026-01-22",
+          "status": "reported_historical",
+          "evidenceClass": "journalistic_report",
+          "source": {
+            "url": "https://maritime-executive.com/article/uscg-icebreakers-aid-great-lakes-shipping-as-arctic-front-ices-the-lakes",
+            "publisher": "The Maritime Executive",
+            "title": "USCG Icebreakers Aid Great Lakes Shipping as Arctic Front Ices the Lakes"
+          },
+          "events": [
+            {
+              "date": "2026-01-21",
+              "kind": "reported_layup_arrival",
+              "description": "Media reporting says Neah Bay escorted American Spirit through Lake Erie ice and it reached Toledo intending winter layup; specific berth unconfirmed.",
+              "source": "https://maritime-executive.com/article/uscg-icebreakers-aid-great-lakes-shipping-as-arctic-front-ices-the-lakes"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2024-25",
+      "label": "Winter 2024–2025",
+      "recordCount": 2,
+      "verifiedCount": 2,
+      "reportedCount": 0,
+      "harbors": [
+        {
+          "id": "owen-sound",
+          "name": "Owen Sound, Ontario",
+          "records": 2
+        }
+      ],
+      "vessels": [
+        {
+          "id": "algoma-compass",
+          "key": "algoma-compass",
+          "name": "Algoma Compass",
+          "harborId": "owen-sound",
+          "harborName": "Owen Sound, Ontario",
+          "asOf": "2025-01-31",
+          "status": "confirmed_historical",
+          "evidenceClass": "local_maritime_museum",
+          "source": {
+            "url": "https://waterfrontheritage.ca/the-algoma-compass-arrives-for-winter-layup/",
+            "publisher": "Community Waterfront Heritage Centre",
+            "title": "The Algoma Compass Arrives for Winter Layup (reviews previous winters)"
+          },
+          "events": [
+            {
+              "date": "2025-01-31",
+              "kind": "historical_arrival",
+              "description": "A later news report dates a photograph of the ship after docking at Owen Sound to January 31, 2025; the local maritime museum confirms a 2025 winter stay.",
+              "source": "https://www.bayshorebroadcasting.ca/2026/01/16/algoma-compass-expected-to-arrive-in-owen-sound-for-winter-berth/"
+            }
+          ]
+        },
+        {
+          "id": "oakglen",
+          "key": "oakglen",
+          "name": "Oakglen",
+          "harborId": "owen-sound",
+          "harborName": "Owen Sound, Ontario",
+          "asOf": "2024-12-31",
+          "status": "confirmed_historical",
+          "evidenceClass": "operator_statement",
+          "source": {
+            "url": "https://www.bayshorebroadcasting.ca/2024/12/31/large-cargo-ship-docks-in-owen-sound/",
+            "publisher": "Bayshore Broadcasting quoting CSL Ships director of communications",
+            "title": "MV Oakglen Stays In Owen Sound For Winter"
+          },
+          "events": [
+            {
+              "date": "2024-12-31",
+              "kind": "arrival",
+              "description": "Arrived at Owen Sound's east harbor side; CSL communications representative confirmed winter layup and general maintenance plans.",
+              "source": "https://www.bayshorebroadcasting.ca/2024/12/31/large-cargo-ship-docks-in-owen-sound/"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
