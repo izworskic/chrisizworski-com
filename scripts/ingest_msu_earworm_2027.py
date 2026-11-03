@@ -86,8 +86,10 @@ class ListingParser(HTMLParser):
 class ReportParser(HTMLParser):
     def __init__(self):
         super().__init__(convert_charrefs=True)
-        self.h1 = []
-        self._h1_depth = 0
+        self.og_titles = []
+        self.canonicals = []
+        self.article_h2 = []
+        self._h2_depth = 0
         self.times = []
         self.tables = []
         self._table = None
@@ -100,8 +102,12 @@ class ReportParser(HTMLParser):
 
     def handle_starttag(self, tag, attrs):
         d = dict(attrs)
-        if tag == "h1":
-            self._h1_depth += 1
+        if tag == "meta" and d.get("property") == "og:title":
+            self.og_titles.append(d.get("content", ""))
+        if tag == "link" and d.get("rel") == "canonical":
+            self.canonicals.append(d.get("href", ""))
+        if tag == "h2":
+            self._h2_depth += 1
         if tag == "time" and re.fullmatch(r"20\d\d-\d\d-\d\d", d.get("datetime", "")):
             self.times.append(d["datetime"])
         if tag == "table":
@@ -120,8 +126,8 @@ class ReportParser(HTMLParser):
             self._cell_text = []
 
     def handle_data(self, value):
-        if self._h1_depth:
-            self.h1.append(value)
+        if self._h2_depth:
+            self.article_h2.append(value)
         self._general.append(value)
         if self._cell is not None:
             self._cell_text.append(value)
@@ -139,8 +145,8 @@ class ReportParser(HTMLParser):
         elif tag == "table" and self._table is not None:
             self.tables.append(self._table)
             self._table = None
-        if tag == "h1":
-            self._h1_depth = max(0, self._h1_depth - 1)
+        if tag == "h2":
+            self._h2_depth = max(0, self._h2_depth - 1)
 
     def text(self):
         return normalize(" ".join(self._general))
@@ -239,7 +245,11 @@ def parse_report(html: str, url: str, year: int, now: dt.date | None = None):
         raise Veto("Off-domain or off-year article")
     p = ReportParser()
     p.feed(html)
-    title = normalize(" ".join(p.h1))
+    if len(p.og_titles) != 1 or len(p.canonicals) != 1 or p.canonicals[0] != url:
+        raise Veto("Official article title or canonical does not match verified MSU URL")
+    title = normalize(p.og_titles[0])
+    if title not in normalize(" ".join(p.article_h2)):
+        raise Veto("Article title does not match the visible MSU report heading")
     if not re.search(r"^Michigan vegetable crop report\s*[–-]\s*.+,\s*" + str(year) + r"$",
                      title, re.I):
         raise Veto("Source article heading is not an exact-year vegetable crop report")
