@@ -7,47 +7,6 @@
   <div class="launch-select-control"><label for="launch-selector">Mission to plan around</label><select id="launch-selector" name="launch-selector" aria-describedby="launch-selector-hint"><option value="">Loading the Florida launch list…</option></select><p id="launch-selector-hint">A day-only date is not a confirmed launch hour.</p></div>
 
 </section>
-<section class="fl-facility-network" id="florida-launch-facilities" aria-labelledby="fl-facilities-title">
-  <div class="fl-facility-heading">
-    <div>
-      <p class="eyebrow">Florida launch geography / two distinct ranges</p>
-      <h2 id="fl-facilities-title">Which spaceport is your rocket leaving?</h2>
-      <p>Kennedy and Cape Canaveral share the Space Coast, not the same launch pads. Choose a facility to jump to its next scheduled mission; the viewing map, access alerts and forecast will follow the mission.</p>
-    </div>
-    <span class="fl-facility-flag">PAD ≠ PUBLIC ENTRY</span>
-  </div>
-  <div class="fl-facility-content">
-    <div class="fl-facility-switch" role="group" aria-label="Choose a Florida launch facility">
-      <button type="button" data-fl-facility="kennedy" aria-pressed="false" disabled>
-        <span class="fl-facility-icon" aria-hidden="true">39</span>
-        <span><strong>Kennedy Space Center</strong><small>LC-39 area · NASA</small><em id="fl-kennedy-count">Checking shared calendar…</em></span>
-      </button>
-      <button type="button" data-fl-facility="cape" aria-pressed="false" disabled>
-        <span class="fl-facility-icon" aria-hidden="true">40</span>
-        <span><strong>Cape Canaveral SFS</strong><small>SLC-40 / SLC-41 area · Space Force range</small><em id="fl-cape-count">Checking shared calendar…</em></span>
-      </button>
-      <p class="fl-facility-hint" id="fl-facility-hint">A facility with no launch in our bounded feed is not necessarily inactive. The selected mission remains the source of truth.</p>
-    </div>
-    <article class="fl-origin-desk" aria-live="polite" aria-atomic="false">
-      <span class="fl-origin-kicker">YOUR SELECTED MISSION / LAUNCH ORIGIN</span>
-      <h3 id="fl-origin-name">Identifying the actual launch facility…</h3>
-      <p class="fl-origin-pad" id="fl-origin-pad">Launch pad: awaiting the shared launch record.</p>
-      <p id="fl-origin-context">KSC visitor viewing, range restrictions and public shoreline options depend on the actual mission and its pad.</p>
-      <div class="fl-origin-rule" id="fl-origin-rule" data-rule="unverified">
-        <strong id="fl-origin-rule-title">Pad-specific restrictions not yet verified</strong>
-        <p id="fl-origin-rule-copy">Access is never inferred from a schedule entry.</p>
-      </div>
-      <p class="fl-origin-viewing" id="fl-origin-viewing">Published venues are candidates, never verified launch-day openings.</p>
-    </article>
-  </div>
-  <div class="fl-facility-links">
-    <a href="https://www.kennedyspacecenter.com/launches-and-events/see-a-launch/launch-viewing-locations/" target="_blank" rel="noopener noreferrer">Official KSC venue and pad exclusions</a>
-    <a href="https://www.nps.gov/cana/planyourvisit/rocket-launch-viewing.htm" target="_blank" rel="noopener noreferrer">Playalinda / NPS launch rules</a>
-    <a id="fl-national-mission-link" href="/national-tools/rocket-launch-live/?region=florida">Follow this mission on the U.S. launch map</a>
-    <a href="/vandenberg-rocket-launch-viewing/">Compare Vandenberg’s Pacific viewing guide</a>
-  </div>
-  <p class="fl-facility-disclosure" id="fl-facility-evidence">Facility ID and pad come from the shared Launch Library schedule. Visitor access, tickets and exact pad coordinates are separate evidence.</p>
-</section>
 <section id="launch-day-pulse" class="launch-day-pulse" aria-labelledby="launch-day-pulse-title" data-level="loading">
   <div class="launch-day-pulse-header">
     <div><p class="eyebrow">The launch-day desk · source-attributed updates</p>
@@ -172,7 +131,48 @@
   </div>
   <p class="mission-media-footer">The video provider owns the stream, camera angle, playback availability and footage. Webcast flags come from Launch Library 2 and may lag; they are not real-time launch-control or stream-health measurements. YouTube playback may set third-party cookies. No stream is auto-loaded or rehosted. Always confirm live operations with the mission operator.</p>
 </section>
-<section class="decision" aria-labelledby="next-title"><p class="eyebrow">One mission. Three decisions.</p><h2 id="next-title">Your selected Florida launch</h2><div id="loading" class="small">Checking the launch schedule and NWS hourly weather…</div><div class="decision-grid" style="margin-top:18px"><div class="card status" id="schedule-card" data-level="unknown"><span class="kicker">Schedule confidence</span><h3 id="schedule-label">Loading…</h3><p id="schedule-detail">—</p></div><div class="card status" id="weather-card" data-level="unknown"><span class="kicker">Viewing weather</span><h3 id="weather-label">Loading…</h3><p id="weather-detail">—</p></div><div class="metric"><span>Target launch time</span><strong id="launch-time">—</strong><p class="small" id="launch-date">—</p></div></div></section><section><div class="section-head"><div><p class="eyebrow">Mission</p><h2 id="mission-name">Upcoming Space Coast launch</h2></div><p id="mission-context">Launch details are loading.</p></div><div class="metric-grid"><div class="metric"><span>Rocket</span><strong id="rocket">—</strong></div><div class="metric"><span>Pad</span><strong id="pad">—</strong></div><div class="metric"><span>Provider</span><strong id="provider">—</strong></div></div></section><section class="launch-desk" id="where-to-watch" aria-labelledby="watch-title">
+<section class="decision" aria-labelledby="next-title"><p class="eyebrow">One mission. Three decisions.</p><h2 id="next-title">Your selected Florida launch</h2><div id="loading" class="small">Checking the launch schedule and NWS hourly weather…</div><div class="decision-grid" style="margin-top:18px"><div class="card status" id="schedule-card" data-level="unknown"><span class="kicker">Schedule confidence</span><h3 id="schedule-label">Loading…</h3><p id="schedule-detail">—</p></div><div class="card status" id="weather-card" data-level="unknown"><span class="kicker">Viewing weather</span><h3 id="weather-label">Loading…</h3><p id="weather-detail">—</p></div><div class="metric"><span>Target launch time</span><strong id="launch-time">—</strong><p class="small" id="launch-date">—</p></div></div></section><section><div class="section-head"><div><p class="eyebrow">Mission</p><h2 id="mission-name">Upcoming Space Coast launch</h2></div><p id="mission-context">Launch details are loading.</p></div><div class="metric-grid"><div class="metric"><span>Rocket</span><strong id="rocket">—</strong></div><div class="metric"><span>Pad</span><strong id="pad">—</strong></div><div class="metric"><span>Provider</span><strong id="provider">—</strong></div></div></section><section class="fl-facility-network" id="florida-launch-facilities" aria-labelledby="fl-facilities-title">
+  <div class="fl-facility-heading">
+    <div>
+      <p class="eyebrow">Florida launch geography / two distinct ranges</p>
+      <h2 id="fl-facilities-title">Which spaceport is your rocket leaving?</h2>
+      <p>Kennedy and Cape Canaveral share the Space Coast, not the same launch pads. Choose a facility to jump to its next scheduled mission; the viewing map, access alerts and forecast will follow the mission.</p>
+    </div>
+    <span class="fl-facility-flag">PAD ≠ PUBLIC ENTRY</span>
+  </div>
+  <div class="fl-facility-content">
+    <div class="fl-facility-switch" role="group" aria-label="Choose a Florida launch facility">
+      <button type="button" data-fl-facility="kennedy" aria-pressed="false" disabled>
+        <span class="fl-facility-icon" aria-hidden="true">39</span>
+        <span><strong>Kennedy Space Center</strong><small>LC-39 area · NASA</small><em id="fl-kennedy-count">Checking shared calendar…</em></span>
+      </button>
+      <button type="button" data-fl-facility="cape" aria-pressed="false" disabled>
+        <span class="fl-facility-icon" aria-hidden="true">40</span>
+        <span><strong>Cape Canaveral SFS</strong><small>SLC-40 / SLC-41 area · Space Force range</small><em id="fl-cape-count">Checking shared calendar…</em></span>
+      </button>
+      <p class="fl-facility-hint" id="fl-facility-hint">A facility with no launch in our bounded feed is not necessarily inactive. The selected mission remains the source of truth.</p>
+    </div>
+    <article class="fl-origin-desk" aria-live="polite" aria-atomic="false">
+      <span class="fl-origin-kicker">YOUR SELECTED MISSION / LAUNCH ORIGIN</span>
+      <h3 id="fl-origin-name">Identifying the actual launch facility…</h3>
+      <p class="fl-origin-pad" id="fl-origin-pad">Launch pad: awaiting the shared launch record.</p>
+      <p id="fl-origin-context">KSC visitor viewing, range restrictions and public shoreline options depend on the actual mission and its pad.</p>
+      <div class="fl-origin-rule" id="fl-origin-rule" data-rule="unverified">
+        <strong id="fl-origin-rule-title">Pad-specific restrictions not yet verified</strong>
+        <p id="fl-origin-rule-copy">Access is never inferred from a schedule entry.</p>
+      </div>
+      <p class="fl-origin-viewing" id="fl-origin-viewing">Published venues are candidates, never verified launch-day openings.</p>
+    </article>
+  </div>
+  <div class="fl-facility-links">
+    <a href="https://www.kennedyspacecenter.com/launches-and-events/see-a-launch/launch-viewing-locations/" target="_blank" rel="noopener noreferrer">Official KSC venue and pad exclusions</a>
+    <a href="https://www.nps.gov/cana/planyourvisit/rocket-launch-viewing.htm" target="_blank" rel="noopener noreferrer">Playalinda / NPS launch rules</a>
+    <a id="fl-national-mission-link" href="/national-tools/rocket-launch-live/?region=florida">Follow this mission on the U.S. launch map</a>
+    <a href="/vandenberg-rocket-launch-viewing/">Compare Vandenberg’s Pacific viewing guide</a>
+  </div>
+  <p class="fl-facility-disclosure" id="fl-facility-evidence">Facility ID and pad come from the shared Launch Library schedule. Visitor access, tickets and exact pad coordinates are separate evidence.</p>
+</section>
+<section class="launch-desk" id="where-to-watch" aria-labelledby="watch-title">
 <div class="launch-desk-head"><div><p class="eyebrow">Access can change on launch day</p><h2 id="watch-title">Where can I actually watch?</h2></div>
 <p>Compare public viewing sites, paid Kennedy Space Center experiences, and current Playalinda restrictions. A good sightline is not the same as confirmed entry.</p></div>
 <div class="launch-statusline" id="launch-access-flags" aria-live="polite"></div>
