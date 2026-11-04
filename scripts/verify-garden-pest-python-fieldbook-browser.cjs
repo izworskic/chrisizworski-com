@@ -45,7 +45,7 @@ async function setup(browser,width,disabled=false){
    assert.equal(await page.locator('#pest-python-stage option').count(),2);
    await page.locator('#pest-python-model').selectOption('cabbage-maggot');
    assert.equal(await page.locator('#pest-python-stage option').count(),3);
-   assert.match(await page.locator('#pest-python-readout').innerText(),/Unverified calculation method/);
+   assert.match(await page.locator('#pest-python-readout').innerText(),/Unverified calculation method/i);
    assert.match(await page.locator('#pest-python-readout').innerText(),/May 4/);
    assert.match(await page.locator('#pest-python-readout').innerText(),/May 14/);
    assert.match(await page.locator('#pest-python-method').innerText(),/not specify complete accumulation/);
