@@ -80,6 +80,8 @@
   readout.replaceChildren();chart.replaceChildren();years.replaceChildren();
   return;
  }
+ const interfaceArea=document.getElementById('pest-python-ui');
+ if(interfaceArea)interfaceArea.hidden=false;
  const options=[...data.models];
  const refCities=[...data.cities];
  // Never reinterpret a visitor's ZIP as one of seven fixed NASA grid cells.
