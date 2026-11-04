@@ -181,6 +181,43 @@ class ShadowTests(unittest.TestCase):
         self.assertIn("potentially_missed_layup_headline", result["cases"][0]["risks"])
         self.assertFalse(result["publicationEnabled"])
 
+    def test_nonlayup_duplicates_and_out_of_season_vessels_do_not_generate_alerts(self):
+        other = self.url + "-two"
+        rows = [
+            observation(self.url, "Lee A Tregurtha arrived on the lake",
+                        date="2025-08-20", decision="wrong_season", vessel=None),
+            observation(other, "Routine trade update from a publisher",
+                        date="2026-01-16", decision="not_layup", vessel=None),
+            observation(other, "Routine trade update from a second feed",
+                        date="2026-01-16", decision="not_layup", vessel=None),
+        ]
+        result = self.report(rows)
+        self.assertEqual(result["flaggedObservations"], 0)
+        self.assertEqual(result["duplicateArticleRows"], 1)
+        self.assertEqual(result["uniqueSourceURLs"], 2)
+        self.assertEqual(result["outOfSeasonObservations"], 1)
+
+    def test_museum_winter_arrival_is_review_only_even_without_layup_keyword(self):
+        row = observation(self.url, "Mesabi Miner arrives at Fincantieri",
+                          date="2026-01-16", decision="not_layup",
+                          kind=None)
+        row["sourceClass"] = "maritime_historical_society"
+        report = self.report([row])
+        self.assertEqual(report["flaggedObservations"], 1)
+        self.assertIn("potentially_missed_layup_headline", report["cases"][0]["risks"])
+        self.assertFalse(report["cases"][0]["publishEligible"])
+        self.assertFalse(report["publicationEnabled"])
+
+    def test_all_sources_blocked_is_unavailable_and_empty_feeds_are_not_dated(self):
+        blocked = self.report([], outcomes=[{"source":"one","ok":False,"error":"HTTP 403"}])
+        self.assertEqual(blocked["status"], "UNAVAILABLE")
+        empty = self.report([], outcomes=[
+            {"source":"port","ok":True,"feedState":"empty","items":0}
+        ])
+        self.assertEqual(empty["status"], "PARTIAL")
+        self.assertEqual(empty["sourceCoverage"]["emptyFeeds"], 1)
+        self.assertEqual(empty["sourceCoverage"]["datedFeeds"], 0)
+
     def test_wrong_season_is_rejected(self):
         with self.assertRaises(ValueError):
             shadow.analyze({"schemaVersion": 1, "season": "2026-27",

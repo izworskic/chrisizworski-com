@@ -77,14 +77,14 @@
     {
       "id": "thunder-bay-port",
       "publisher": "Thunder Bay Port Authority",
-      "url": "https://portofthunderbay.ca/feed/",
-      "homepage": "https://portofthunderbay.ca/",
-      "host": "portofthunderbay.ca",
+      "url": "https://www.portthunderbay.ca/feed/",
+      "homepage": "https://www.portthunderbay.ca/news/",
+      "host": "www.portthunderbay.ca",
       "sourceClass": "port_authority",
       "format": "rss",
       "mode": "publish",
       "region": "Canada · Lake Superior",
-      "role": "Canadian port authority"
+      "role": "Canadian port authority · canonical official RSS, verified 2026-11-04"
     },
     {
       "id": "cleveland-port",

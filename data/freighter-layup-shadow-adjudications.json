@@ -1,0 +1,173 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Retrospective hand-curated source cases. Does an article merit further winter-layup evidence review? This does not label confirmed arrivals or estimate future model accuracy.",
+  "status": "SMALL_SELECTED_SAMPLE_NOT_CALIBRATED",
+  "caseSelection": "Known source-backed winter records plus observed nonlayup feed headlines; selected rather than random. Off-season and routine traffic negatives were reviewed from dates/titles. No user submissions.",
+  "cases": [
+    {
+      "season": "2025-26",
+      "date": "2026-01-08",
+      "title": "JAMES R. BARKER arrives at Fincantieri",
+      "url": "https://wmhs.org/james-r-barker-arrives-at-fincantieri/",
+      "sourceId": "wmhs",
+      "sourceClass": "maritime_historical_society",
+      "editorialReviewRequired": true,
+      "reviewBasis": "The article documents winter storage at Fincantieri Bay Shipbuilding.",
+      "sourceCheckedOn": "2026-11-04"
+    },
+    {
+      "season": "2025-26",
+      "date": "2026-01-21",
+      "title": "EDGAR B. SPEER arrives at Fincantieri",
+      "url": "https://wmhs.org/edgar-b-speer-arrives-at-fincantieri/",
+      "sourceId": "wmhs",
+      "sourceClass": "maritime_historical_society",
+      "editorialReviewRequired": true,
+      "reviewBasis": "The maritime history report documents a winter shipyard arrival.",
+      "sourceCheckedOn": "2026-11-04"
+    },
+    {
+      "season": "2025-26",
+      "date": "2026-01-20",
+      "title": "STEWART J. CORT arrives in Milwaukee",
+      "url": "https://wmhs.org/stewart-j-cort-arrives-in-milwaukee/",
+      "sourceId": "wmhs",
+      "sourceClass": "maritime_historical_society",
+      "editorialReviewRequired": true,
+      "reviewBasis": "The article explicitly says Cort arrived for layup.",
+      "sourceCheckedOn": "2026-11-04"
+    },
+    {
+      "season": "2025-26",
+      "date": "2026-01-24",
+      "title": "The Algoma Compass Arrives for Winter Layup",
+      "url": "https://waterfrontheritage.ca/the-algoma-compass-arrives-for-winter-layup/",
+      "sourceId": "owen-museum",
+      "sourceClass": "local_maritime_museum",
+      "editorialReviewRequired": true,
+      "reviewBasis": "Museum reports the vessel arrived for its winter stay.",
+      "sourceCheckedOn": "2026-11-04"
+    },
+    {
+      "season": "2025-26",
+      "date": "2026-01-16",
+      "title": "Lee A Tregurtha arrived in Duluth 01/16/2026",
+      "url": "https://www.duluthharborcam.com/2026/01/lee-tregurtha-arrived-in-duluth-01162026.html",
+      "sourceId": "duluth-cam",
+      "sourceClass": "journalistic_report",
+      "editorialReviewRequired": true,
+      "reviewBasis": "Harbor camera source text explicitly reports arrival for winter layup.",
+      "sourceCheckedOn": "2026-11-04"
+    },
+    {
+      "season": "2024-25",
+      "date": "2024-12-31",
+      "title": "MV Oakglen Stays In Owen Sound For Winter",
+      "url": "https://www.bayshorebroadcasting.ca/2024/12/31/large-cargo-ship-docks-in-owen-sound/",
+      "sourceId": "bayshore",
+      "sourceClass": "journalistic_report",
+      "editorialReviewRequired": true,
+      "reviewBasis": "Local report documents a winter berth rather than a routine delivery.",
+      "sourceCheckedOn": "2026-11-04"
+    },
+    {
+      "season": "2025-26",
+      "date": "2026-01-22",
+      "title": "USCG Icebreakers Aid Great Lakes Shipping as Arctic Front Ices the Lakes",
+      "url": "https://maritime-executive.com/article/uscg-icebreakers-aid-great-lakes-shipping-as-arctic-front-ices-the-lakes",
+      "sourceId": "marinelink",
+      "sourceClass": "journalistic_report",
+      "editorialReviewRequired": true,
+      "reviewBasis": "Article body refers to American Spirit and an intended winter layup; requires editorial caution, not confirmation.",
+      "sourceCheckedOn": "2026-11-04"
+    },
+    {
+      "season": "2026-27",
+      "date": "2026-08-20",
+      "title": "Indiana Harbor arrived & James R Barker departed Duluth 08/19/2026",
+      "url": "https://www.duluthharborcam.com/2026/08/indiana-harbor-arrived-james-r-barker.html",
+      "sourceId": "duluth-cam",
+      "sourceClass": "journalistic_report",
+      "editorialReviewRequired": false,
+      "reviewBasis": "August transit is outside the 2026–27 winter and reports routine vessel movements.",
+      "sourceCheckedOn": "2026-11-04"
+    },
+    {
+      "season": "2026-27",
+      "date": "2026-11-03",
+      "title": "Soo Locks Visitor Center Now Closed for Season",
+      "url": "https://www.boatnerd.com/news/soo-locks-visitor-center-now-closed-for-season/",
+      "sourceId": "boatnerd-news",
+      "sourceClass": "journalistic_report",
+      "editorialReviewRequired": false,
+      "reviewBasis": "Visitor-center operations, not a ship winter layup.",
+      "sourceCheckedOn": "2026-11-04"
+    },
+    {
+      "season": "2026-27",
+      "date": "2026-11-04",
+      "title": "Fire Causes Significant Damage to Two Harbors Lighthouse Gift Shop",
+      "url": "https://www.boatnerd.com/news/fire-causes-significant-damage-to-two-harbors-lighthouse-gift-shop/",
+      "sourceId": "boatnerd-news",
+      "sourceClass": "journalistic_report",
+      "editorialReviewRequired": false,
+      "reviewBasis": "A lighthouse facility fire, not a freighter winter stay.",
+      "sourceCheckedOn": "2026-11-04"
+    },
+    {
+      "season": "2026-27",
+      "date": "2026-11-04",
+      "title": "Great Lakes Iron Ore Trade Up 11.4 Percent in October",
+      "url": "https://www.boatnerd.com/news/great-lakes-iron-ore-trade-up-11-4-percent-in-october/",
+      "sourceId": "boatnerd-news",
+      "sourceClass": "journalistic_report",
+      "editorialReviewRequired": false,
+      "reviewBasis": "Cargo statistics, not an individual vessel winter berth.",
+      "sourceCheckedOn": "2026-11-04"
+    },
+    {
+      "season": "2026-27",
+      "date": "2026-11-04",
+      "title": "Lakes Limestone Trade Down in October",
+      "url": "https://www.boatnerd.com/news/lakes-limestone-trade-down-in-october/",
+      "sourceId": "boatnerd-news",
+      "sourceClass": "journalistic_report",
+      "editorialReviewRequired": false,
+      "reviewBasis": "Commodity totals, not winter layup evidence.",
+      "sourceCheckedOn": "2026-11-04"
+    },
+    {
+      "season": "2026-27",
+      "date": "2026-11-04",
+      "title": "Lake Erie Ports – November 3",
+      "url": "https://www.boatnerd.com/noteworthy-passages/lake-erie-ports-november-3/",
+      "sourceId": "boatnerd-news",
+      "sourceClass": "journalistic_report",
+      "editorialReviewRequired": false,
+      "reviewBasis": "Routine port traffic roundup not proof of winter layup.",
+      "sourceCheckedOn": "2026-11-04"
+    },
+    {
+      "season": "2026-27",
+      "date": "2026-11-03",
+      "title": "Lake Erie Ports – November 2",
+      "url": "https://www.boatnerd.com/noteworthy-passages/lake-erie-ports-november-2/",
+      "sourceId": "boatnerd-news",
+      "sourceClass": "journalistic_report",
+      "editorialReviewRequired": false,
+      "reviewBasis": "Port traffic roundup, not a documented winter stay.",
+      "sourceCheckedOn": "2026-11-04"
+    },
+    {
+      "season": "2026-27",
+      "date": "2026-11-01",
+      "title": "Alpena at Sturgeon Bay for Repairs",
+      "url": "https://www.boatnerd.com/noteworthy-passages/alpena-at-sturgeon-bay-for-repairs/",
+      "sourceId": "boatnerd-news",
+      "sourceClass": "journalistic_report",
+      "editorialReviewRequired": false,
+      "reviewBasis": "A repair visit alone does not establish a season-long winter berth.",
+      "sourceCheckedOn": "2026-11-04"
+    }
+  ]
+}

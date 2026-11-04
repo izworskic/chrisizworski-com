@@ -65,5 +65,8 @@ test('existing canonical, author, H1 and the sole winter sitemap entry remain in
   assert.ok(html.includes('Built by <a href="/chris-izworski/">Chris Izworski</a>.'));
   const winter = read('public/sitemap-winter.xml');
   assert.equal((winter.match(new RegExp('<loc>' + canonical + '</loc>', 'g')) || []).length, 1);
-  assert.match(winter, /great-lakes-freighter-winter-layup\/<\/loc><lastmod>2026-11-03<\/lastmod>/);
+  const modified=html.match(/"dateModified":"(\d{4}-\d{2}-\d{2})"/)?.[1];
+  assert.ok(modified,'valid existing page modification date');
+  assert.ok(winter.includes('<loc>'+canonical+'</loc><lastmod>'+modified+'</lastmod>'),
+    'the single winter sitemap entry must match page dateModified');
 });
