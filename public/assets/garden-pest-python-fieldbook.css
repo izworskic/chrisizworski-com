@@ -1,0 +1,76 @@
+/* Python Regional Fieldbook: evidence-dated historical thermal comparison.
+   Purpose-built editorial mapless ladder; never an active pest signal. */
+.pest-regional{margin:0 0 48px;padding:clamp(18px,3.5vw,38px);
+ background:#f4f0e5;border:1px solid #b6baa9;border-top:6px solid #3a5949;
+ color:#253e32;border-radius:4px;min-width:0}
+.pest-regional *{box-sizing:border-box}
+.pest-regional__eyebrow{display:flex;justify-content:space-between;flex-wrap:wrap;gap:9px;
+ font-size:.66rem;font-weight:800;letter-spacing:.11em;text-transform:uppercase;color:#75633f;
+ border-bottom:1px solid #c8cbbb;padding:0 0 12px;margin:0 0 20px}
+.pest-regional__heading{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);align-items:start;gap:30px}
+.pest-regional h2{font:500 clamp(1.65rem,3.1vw,2.45rem)/1.15 'Fraunces',Georgia,serif;color:#203f31;margin:0 0 12px}
+.pest-regional__heading p{font-size:.86rem;line-height:1.65;margin:6px 0;color:#4e6151}
+.pest-regional__audit{background:#fffaf0;border:1px solid #c6c9b9;padding:16px 17px;color:#2e4938;
+ display:grid;grid-template-columns:1fr 1fr;gap:10px 17px;min-width:0}
+.pest-regional__audit>div{min-width:0}.pest-regional__audit strong{display:block;font:500 1.5rem/1.2 'Fraunces',Georgia,serif;color:#28543b}
+.pest-regional__audit span{display:block;font-size:.71rem;color:#536b57;line-height:1.4;margin-top:4px}
+.pest-regional__audit p{grid-column:1/-1;font-size:.7rem!important;margin:1px 0 0!important;color:#695338!important;border-top:1px solid #ddd8c8;padding-top:9px}
+.pest-regional__controls{margin:22px 0 8px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.pest-regional__controls label{font-weight:750;font-size:.73rem;color:#31503a;display:grid;gap:6px}
+.pest-regional__controls select{display:block;width:100%;min-width:0;min-height:44px;color:#254331;background:#fffdf7;
+ border:1px solid #7d977f;padding:9px 11px;border-radius:4px;font:600 .86rem/1.3 'DM Sans',system-ui,sans-serif}
+.pest-regional__readout{background:#fdfcf7;border-left:4px solid #a65e37;margin:17px 0 21px;
+ padding:14px 18px;color:#334c3e;font-size:.82rem;line-height:1.58;min-width:0}
+.pest-regional__readout strong{display:block;font:500 clamp(1.15rem,2.2vw,1.45rem)/1.25 'Fraunces',Georgia,serif;
+ margin:0 0 4px;color:#244434}
+.pest-regional__readout small{display:block;color:#53675a;font-size:.74rem;line-height:1.5;margin-top:7px}
+.pest-regional__readout .pest-regional__flag{font-weight:800;color:#7b4a2e;margin:0 0 5px;font-size:.68rem;letter-spacing:.04em;text-transform:uppercase}
+.pest-regional__ladder{background:#fffdf6;border:1px solid #ccd2c4;padding:15px 17px 16px;min-width:0;overflow:hidden}
+.pest-regional__legend{font-size:.73rem;color:#4c6456;line-height:1.5;margin:0 0 11px}
+.pest-regional__line{display:grid;grid-template-columns:minmax(92px,160px) minmax(0,1fr) minmax(92px,140px);
+ align-items:center;gap:12px;padding:9px 0;border-top:1px solid #e0e5d9}
+.pest-regional__line[aria-current="true"]{background:#e4efdc;outline:1px solid #c4d6b7;outline-offset:-1px}
+.pest-regional__place{font-weight:800;font-size:.79rem;line-height:1.4;padding-left:7px;color:#244534}
+.pest-regional__track{height:25px;border-bottom:1px solid #b6c3b3;position:relative;min-width:0;
+ background:repeating-linear-gradient(90deg,transparent,transparent calc(25% - 1px),#d5e0d0 calc(25% - 1px),#d5e0d0 25%)}
+.pest-regional__range{position:absolute;top:9px;height:8px;background:#a15c35;border-radius:5px;min-width:6px}
+.pest-regional__mark{position:absolute;top:6px;height:14px;width:3px;transform:translateX(-50%);background:#314e3d}
+.pest-regional__mark.is-start{background:#7b5034}.pest-regional__mark.is-end{background:#7b5034}
+.pest-regional__dates{text-align:right;font-size:.74rem;line-height:1.4;font-variant-numeric:tabular-nums;color:#425c49}
+.pest-regional__dates small{display:block;color:#718174;font-size:.65rem}
+.pest-regional__axis{display:flex;justify-content:space-between;padding:8px 140px 0 175px;font-size:.66rem;color:#6b7667;font-weight:750}
+.pest-regional__years{margin:20px 0 0;border:1px solid #cad5c4;background:#fffcf5;padding:16px 18px}
+.pest-regional__years h3{font:500 1.2rem/1.3 'Fraunces',Georgia,serif;margin:0 0 8px;color:#264936}
+.pest-regional__years>p{font-size:.76rem;color:#536959;margin:0 0 11px}
+.pest-regional__year-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.pest-regional__year-grid>div{border:1px solid #cbd6c9;padding:11px 9px;background:#f3f6ed;min-width:0}
+.pest-regional__year-grid strong{display:block;color:#5c765c;font-size:.73rem}
+.pest-regional__year-grid span{display:block;color:#274c38;font-weight:800;font-size:.86rem;margin-top:4px}
+.pest-regional__method{padding:19px 0 0;border-top:1px solid #c9d2c4;margin-top:20px;display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.pest-regional__method h3{font:600 1rem Georgia,serif;color:#2c4a39;margin:0 0 6px}
+.pest-regional__method p{font-size:.77rem;line-height:1.6;color:#455d4e;margin:0 0 8px}
+.pest-regional__method a{color:#195c3b;font-weight:750;overflow-wrap:anywhere;text-decoration:underline}
+.pest-regional__method .pest-regional__proviso{border-left:3px solid #ae603c;padding:8px 12px;background:#fff4e9;color:#5c4335}
+.pest-regional__status{margin:11px 0;font-size:.72rem;font-weight:750;color:#6d4b30}
+.pest-regional [hidden]{display:none!important}
+.pest-regional a:focus-visible,.pest-regional select:focus-visible{outline:3px solid #b86835;outline-offset:3px}
+@media(max-width:900px){
+ .pest-regional__heading{grid-template-columns:1fr;gap:12px}
+ .pest-regional__axis{padding-right:105px;padding-left:115px}
+ .pest-regional__line{grid-template-columns:100px minmax(0,1fr) 95px;gap:7px}
+ .pest-regional__audit{max-width:480px}
+}
+@media(max-width:620px){
+ .pest-regional{margin-bottom:34px;padding:16px 12px}
+ .pest-regional__controls{grid-template-columns:1fr 1fr;gap:9px}
+ .pest-regional__controls label:last-child{grid-column:1/-1}
+ .pest-regional__audit strong{font-size:1.25rem}
+ .pest-regional__ladder{padding:11px 8px}
+ .pest-regional__line{grid-template-columns:73px minmax(0,1fr) 76px;gap:4px}
+ .pest-regional__place{font-size:.69rem;padding-left:1px}
+ .pest-regional__dates{font-size:.65rem}
+ .pest-regional__axis{padding:7px 79px 0 77px;font-size:.59rem}
+ .pest-regional__year-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .pest-regional__method{grid-template-columns:1fr;gap:13px}
+ .pest-regional__years{padding:12px}
+}
