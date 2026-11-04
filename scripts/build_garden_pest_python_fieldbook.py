@@ -155,11 +155,7 @@ def compile_one_year(year: int, rows):
             total = japan_cumulative if model == "japanese-beetle" else cabbage_cumulative
             if events[key] is None and total >= threshold:
                 events[key] = date_for_day(year, day)
-    return {"year": year, "events": events,
-            "endYearHeatF": {
-                "japanese": round(japan_cumulative, 1),
-                "cabbage": round(cabbage_cumulative, 1),
-            }}
+    return {"year": year, "events": events}
 
 
 def same_month_day(iso: str):
