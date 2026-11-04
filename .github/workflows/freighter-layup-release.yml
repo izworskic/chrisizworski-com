@@ -43,6 +43,7 @@ jobs:
         run: |
           python3 -m unittest discover -s scripts/freighter-layup -p 'test_*.py' -v
           python3 scripts/freighter-layup/history.py --check
+          python3 scripts/freighter-layup/evaluate.py --check
       - name: Check generated biographies match source exactly
         run: node scripts/generate-freighter-layup-profiles.cjs --check
       - name: Prepare headless browser runner
