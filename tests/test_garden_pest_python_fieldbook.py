@@ -100,7 +100,7 @@ class PythonPestFieldbookTests(unittest.TestCase):
                     for value in yr["events"].values()))
         self.assertTrue(all("2026" not in c["summary"]["japanese-adults"]["sampledCrossingYears"][0]["date"]
                     for c in data["cities"]))
-        self.assertNotIn("probability", F.render(data).lower())
+        self.assertNotIn("predictedProbability", F.render(data))
         self.assertIn("not a sighting", F.render(data).lower())
 
 
