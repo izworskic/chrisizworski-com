@@ -7,10 +7,11 @@
 <meta name="theme-color" content="#1f392f">
 <link rel="stylesheet" href="/assets/garden-pest-watch.css?v=20261103d">
 <link rel="stylesheet" href="/assets/garden-earworm-trap-desk.css?v=20261103b">
+<link rel="stylesheet" href="/assets/garden-pest-python-fieldbook.css?v=20261104a">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,700&display=swap" rel="stylesheet">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Michigan Garden Pest Watch","url":"https://chrisizworski.com/michigan-garden-pest-watch/","applicationCategory":"EducationalApplication","operatingSystem":"Web","description":"A Michigan home-garden pest scouting and prevention decision tool with seasonal and weather evidence.","@id":"https://chrisizworski.com/michigan-garden-pest-watch/#app","creator":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"}},{"@type":"WebPage","@id":"https://chrisizworski.com/michigan-garden-pest-watch/#page","url":"https://chrisizworski.com/michigan-garden-pest-watch/","dateModified":"2026-11-03","name":"Michigan Garden Pest Watch: What to Scout This Week","inLanguage":"en-US","author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Michigan Gardening","item":"https://chrisizworski.com/michigan-gardening/"},{"@type":"ListItem","position":2,"name":"Garden Pest Watch","item":"https://chrisizworski.com/michigan-garden-pest-watch/"}]},{"@type":"Person","@id":"https://chrisizworski.com/#person","url":"https://chrisizworski.com/","name":"Chris Izworski","mainEntityOfPage":"https://chrisizworski.com/chris-izworski/"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Michigan Garden Pest Watch","url":"https://chrisizworski.com/michigan-garden-pest-watch/","applicationCategory":"EducationalApplication","operatingSystem":"Web","description":"A Michigan home-garden pest scouting and prevention decision tool with seasonal and weather evidence.","@id":"https://chrisizworski.com/michigan-garden-pest-watch/#app","creator":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"}},{"@type":"WebPage","@id":"https://chrisizworski.com/michigan-garden-pest-watch/#page","url":"https://chrisizworski.com/michigan-garden-pest-watch/","dateModified":"2026-11-04","name":"Michigan Garden Pest Watch: What to Scout This Week","inLanguage":"en-US","author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Michigan Gardening","item":"https://chrisizworski.com/michigan-gardening/"},{"@type":"ListItem","position":2,"name":"Garden Pest Watch","item":"https://chrisizworski.com/michigan-garden-pest-watch/"}]},{"@type":"Person","@id":"https://chrisizworski.com/#person","url":"https://chrisizworski.com/","name":"Chris Izworski","mainEntityOfPage":"https://chrisizworski.com/chris-izworski/"}]}</script>
 <script defer src="/assets/garden-pest-visual-data.js?v=20261103b"></script>
 <script defer src="/assets/garden-pest-visuals.js?v=20261103c"></script>
 <script defer src="/assets/garden-pest-watch.js?v=20261103c"></script>
@@ -20,6 +21,8 @@
 <script defer src="/assets/garden-earworm-trap-desk.js?v=20261103a"></script>
 <script defer src="/assets/garden-earworm-trap-2027-data.js?v=20261103a"></script>
 <script defer src="/assets/garden-earworm-2027.js?v=20261103a"></script>
+<script defer src="/assets/garden-pest-python-fieldbook-data.js?v=20261104a"></script>
+<script defer src="/assets/garden-pest-python-fieldbook.js?v=20261104a"></script>
 </head>
 <body>
 <a class="skip" href="#watchdesk">Skip to garden watch</a>
@@ -279,6 +282,52 @@
     <a href="https://www.usanpn.org/data/maps/forecasts/Japanese_beetle">USA-NPN: Japanese beetle adult / egg hatch method</a>
     <a href="https://daymet.ornl.gov/web_services">NASA ORNL Daymet: temperature data and API</a>
     <a href="https://doi.org/10.3334/ORNLDAAC/2129">Daymet V4 R1 dataset citation</a>
+  </div>
+ </section>
+ <section class="pest-regional" id="pest-regional-fieldbook" aria-labelledby="pest-regional-heading">
+  <div class="pest-regional__eyebrow"><span>07 / PYTHON REGIONAL FIELDBOOK</span><span>NASA DAYMET · HISTORICAL 2021–2025 · NOT A CURRENT FORECAST</span></div>
+  <div class="pest-regional__heading">
+   <div>
+    <h2 id="pest-regional-heading">Why does the same garden pest run on a different calendar across Michigan?</h2>
+    <p>A growing season unfolds differently around Detroit, Bay City and the Upper Peninsula. Python can reconstruct the dates when published pest heat thresholds <em>would have been crossed</em> in seven regional NASA temperature grids across five past growing seasons.</p>
+    <p>Explore the different timing of Japanese beetle and cabbage maggot heat milestones. These dates come from historical <strong>weather</strong>, not actual insect observations. They cannot tell you that a pest was present, or will appear, in your garden.</p>
+   </div>
+   <div class="pest-regional__audit" aria-label="Source quality of the historical regional fieldbook">
+    <div><strong>7</strong><span>Michigan reference regions</span></div>
+    <div><strong>35</strong><span>Complete region-year records</span></div>
+    <div><strong>12,775</strong><span>Daymet daily temperature records</span></div>
+    <div><strong>0</strong><span>Actual pest sightings in these weather data</span></div>
+    <p>Source verification is not forecast validation. No outbreak probabilities or treatment schedules are inferred.</p>
+   </div>
+  </div>
+  <p class="pest-regional__status" id="pest-python-status" role="status" aria-live="polite">The seven-region historical comparison requires JavaScript. Original scientific sources are linked below.</p>
+  <div id="pest-python-ui" hidden>
+   <div class="pest-regional__controls">
+    <label for="pest-python-model">Which pest's published heat model?
+     <select id="pest-python-model" aria-label="Choose a pest thermal reconstruction"></select>
+    </label>
+    <label for="pest-python-stage">Which life-stage threshold?
+     <select id="pest-python-stage" aria-label="Choose a published heat milestone"></select>
+    </label>
+    <label for="pest-python-city">Which fixed reference city?
+     <select id="pest-python-city" aria-label="Choose a Michigan regional NASA reference grid"></select>
+    </label>
+   </div>
+   <div class="pest-regional__readout" id="pest-python-readout" aria-live="polite"></div>
+   <div class="pest-regional__ladder" id="pest-python-ladder" aria-label="Historical climate threshold ranges by Michigan region"></div>
+   <div class="pest-regional__years" id="pest-python-years" aria-label="Actual year-by-year reconstructed heat milestone dates"></div>
+  </div>
+  <div class="pest-regional__method">
+   <div>
+    <h3>What was calculated?</h3>
+    <p>NASA ORNL Daymet V4 R1 1-kilometer gridded daily minimum and maximum temperatures, 2021–2025. Japanese beetle uses a reconstructed single-triangle degree-day method with a 50°F base and 92°F upper cap, starting January 1. Cabbage maggot uses a provisional positive daily-average degree-day method with a 43°F base starting March 1.</p>
+    <p><a href="https://daymet.ornl.gov/web_services" target="_blank" rel="noopener noreferrer">NASA Daymet source</a> · <a href="https://doi.org/10.3334/ORNLDAAC/2129" target="_blank" rel="noopener noreferrer">Official dataset citation</a></p>
+   </div>
+   <div>
+    <h3>How much should you trust it?</h3>
+    <p id="pest-python-method" class="pest-regional__proviso">The historic calculations have not established exact parity with MSU or USA-NPN operational forecasts. MSU's public cabbage maggot page does not fully specify the accumulation method used by its station tool.</p>
+    <p><a id="pest-python-model-source" href="https://www.usanpn.org/data/maps/forecasts/Japanese_beetle" target="_blank" rel="noopener noreferrer">USA-NPN Japanese beetle model</a> · <a href="https://enviroweather.msu.edu/crops/coleCrops/cabbagemaggot" target="_blank" rel="noopener noreferrer">MSU Enviroweather cabbage maggot</a></p>
+   </div>
   </div>
  </section>
  <section class="garden-check" aria-labelledby="report-heading">
