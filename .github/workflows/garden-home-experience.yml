@@ -5,6 +5,12 @@ on:
       - 'public/michigan-gardening/**'
       - 'public/michigan-garden-pest-watch/**'
       - 'public/assets/garden-pest-watch.*'
+      - 'data/garden-pest-daymet-2021-2025/**'
+      - 'scripts/build_garden_pest_python_fieldbook.py'
+      - 'tests/test_garden_pest_python_fieldbook.py'
+      - 'public/assets/garden-pest-python-fieldbook*'
+      - 'scripts/verify-garden-pest-python-fieldbook.cjs'
+      - 'scripts/verify-garden-pest-python-fieldbook-browser.cjs'
       - 'data/garden-earworm-msu-2026.csv'
       - 'public/assets/garden-earworm-trap*'
       - 'public/assets/garden-earworm-2027.js'
@@ -82,6 +88,11 @@ jobs:
           node scripts/verify-garden-earworm-traps.cjs
       - name: Verify source-reviewed 2027 MSU trap gate at four viewport widths
         run: node scripts/verify-garden-earworm-2027-browser.cjs
+      - name: Check source-verified Python regional pest lab, stage gates and mobile layout
+        run: |
+          python3 scripts/build_garden_pest_python_fieldbook.py --check
+          node scripts/verify-garden-pest-python-fieldbook.cjs
+          node scripts/verify-garden-pest-python-fieldbook-browser.cjs
       - name: Check Garden Pest Watch crop, evidence, failure and responsive browser behavior
         run: node scripts/verify-garden-pest-watch-browser.cjs
       - name: Verify controlled field station journal, bounded onset and mobile/no-JS behavior
@@ -95,6 +106,7 @@ jobs:
             artifacts/garden-home-browser/
             artifacts/leafcutter-browser/
             artifacts/garden-pest-watch-browser/
+            artifacts/garden-pest-python-fieldbook/
             artifacts/garden-earworm-2027-browser/
           if-no-files-found: warn
           retention-days: 14
