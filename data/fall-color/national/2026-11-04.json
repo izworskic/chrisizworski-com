@@ -1,0 +1,39 @@
+{
+  "date": "2026-11-04",
+  "updated": "2026-11-04T18:42:25.512Z",
+  "briefings": {
+    "new-england": "Season has largely passed; early November typically marks the end. Light rain expected this weekend.",
+    "great-smoky-mountains": "Peak timing window active with optimal conditions. Mostly sunny skies favor weekend viewing.",
+    "colorado-aspens": "Aspen season concluded; minimal color remains. Clear skies but limited foliage to observe.",
+    "adirondacks": "Season well past; minimal color persists. Light rain likely this weekend.",
+    "north-shore-superior": "Season concluded; live weather data unavailable for weekend planning.",
+    "ozarks": "Within prime viewing window with excellent conditions. Mostly sunny skies ideal for weekend drives.",
+    "eastern-sierra": "Aspen season finished; limited color remains. Sunny conditions but minimal foliage expected.",
+    "wasatch": "Season ended; minimal aspen color persists. Clear skies but limited viewing opportunity.",
+    "columbia-river-gorge": "Active timing window but high rain risk. 81% chance of precipitation this weekend.",
+    "door-county": "Transitioning past peak; some color remains. Sunny conditions favor weekend exploration.",
+    "poconos": "Fading but still visible; late-season color lingers. Mostly sunny with minimal rain risk.",
+    "texas-hill-country": "Prime viewing window active. Chance of rain showers this weekend.",
+    "west-virginia-highlands": "Season waning; residual color remains. Light rain possible this weekend.",
+    "catskills": "Past peak but color still present. Light rain chance this weekend.",
+    "shenandoah": "Strong residual color remains in late season. Sunny conditions ideal for weekend drives."
+  },
+  "method": "AI-generated model summary",
+  "evidenceRegions": [
+    "new-england",
+    "great-smoky-mountains",
+    "colorado-aspens",
+    "adirondacks",
+    "north-shore-superior",
+    "ozarks",
+    "eastern-sierra",
+    "wasatch",
+    "columbia-river-gorge",
+    "door-county",
+    "poconos",
+    "texas-hill-country",
+    "west-virginia-highlands",
+    "catskills",
+    "shenandoah"
+  ]
+}
