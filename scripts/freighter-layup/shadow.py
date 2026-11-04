@@ -112,8 +112,17 @@ def analyze(inputs: dict, archive: dict, ledger: dict, as_of: str) -> dict:
         matches = matching_keys(title, aliases)
         winter_article = winter_start <= d <= min(winter_end, now)
         explicit_layup = bool(PHRASES.search(title))
+        # A museum headline may say "arrives at Fincantieri" without the
+        # words "winter layup", even when its cited article documents storage.
+        # Surfacing it for review does NOT establish a layup.
+        museum_winter_arrival = (
+            item["sourceClass"] in {"maritime_historical_society", "local_maritime_museum"}
+            and d.month in (12, 1, 2) and bool(ARRIVE.search(title)))
+        winter_stay_headline = bool(re.search(
+            r"\b(?:stays?|docks?|berthed)\b.*\b(?:for\s+)?winter\b", title, re.I))
+        review_cue = explicit_layup or museum_winter_arrival or winter_stay_headline
         node_candidate = item["nodeDecision"] in ("accepted", "review")
-        potentially_missed = winter_article and explicit_layup and bool(matches) and not node_candidate
+        potentially_missed = winter_article and review_cue and bool(matches) and not node_candidate
         actionable = node_candidate or potentially_missed
         risks = []
         if actionable and len(matches) > 1:
@@ -206,6 +215,13 @@ def analyze(inputs: dict, archive: dict, ledger: dict, as_of: str) -> dict:
                            "links count as feed overlap; old-season headlines are not "
                            "current layup leads. Review priorities are never probabilities, "
                            "confirmed arrivals, vessel positions or fleet counts."),
+        # Case-scoped metadata only. The seven-day CI artifact is not public,
+        # and contains no full article bodies, photos, AIS or user data.
+        "evaluationSample": [
+            {"url": x["url"], "title": x["title"], "sourceId": x["sourceId"],
+             "date": x["date"], "inAuditedWinter": x["inAuditedWinter"],
+             "needsShadowReview": bool(x["risks"])}
+            for x in analyzed[:2000]],
         "anomalies": issues[:100], "cases": prioritized[:100],
     }
 
