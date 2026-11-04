@@ -1,5 +1,16 @@
 name: Garden homepage browser verification
 on:
+  push:
+    paths:
+      - 'data/garden-pest-daymet-2021-2025/**'
+      - 'scripts/build_garden_pest_python_fieldbook.py'
+      - 'tests/test_garden_pest_python_fieldbook.py'
+      - 'public/assets/garden-pest-python-fieldbook*'
+      - 'scripts/verify-garden-pest-python-fieldbook.cjs'
+      - 'scripts/verify-garden-pest-python-fieldbook-browser.cjs'
+      - 'public/michigan-garden-pest-watch/**'
+      - 'public/sitemap.xml'
+      - '.github/workflows/garden-home-experience.yml'
   pull_request:
     paths:
       - 'public/michigan-gardening/**'
@@ -63,6 +74,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Verify site source parity and truthful page/sitemap freshness
+        run: |
+          node scripts/verify-source.mjs
+          node scripts/stamp-freshness.mjs --check
       - name: Install isolated browser harness
         run: |
           npm install --prefix /tmp/garden-playwright --no-save --ignore-scripts playwright@1.58.2
