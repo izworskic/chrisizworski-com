@@ -3,6 +3,12 @@ on:
   push:
     paths:
       - 'data/garden-pest-visual-catalog.json'
+      - 'data/garden-pest-daymet-2021-2025/**'
+      - 'scripts/build_garden_pest_python_fieldbook.py'
+      - 'tests/test_garden_pest_python_fieldbook.py'
+      - 'public/assets/garden-pest-python-fieldbook*'
+      - 'scripts/verify-garden-pest-python-fieldbook.cjs'
+      - 'scripts/verify-garden-pest-python-fieldbook-browser.cjs'
       - 'data/garden-earworm-msu-2026.csv'
       - 'public/assets/garden-earworm-trap*'
       - 'public/assets/garden-earworm-2027.js'
@@ -26,6 +32,12 @@ on:
   pull_request:
     paths:
       - 'data/garden-pest-visual-catalog.json'
+      - 'data/garden-pest-daymet-2021-2025/**'
+      - 'scripts/build_garden_pest_python_fieldbook.py'
+      - 'tests/test_garden_pest_python_fieldbook.py'
+      - 'public/assets/garden-pest-python-fieldbook*'
+      - 'scripts/verify-garden-pest-python-fieldbook.cjs'
+      - 'scripts/verify-garden-pest-python-fieldbook-browser.cjs'
       - 'data/garden-earworm-msu-2026.csv'
       - 'public/assets/garden-earworm-trap*'
       - 'public/assets/garden-earworm-2027.js'
@@ -65,11 +77,19 @@ jobs:
           python3 scripts/build_garden_earworm_traps.py --check
           python3 -m unittest discover -s tests -p test_msu_earworm_2027_ingest.py -v
           python3 scripts/ingest_msu_earworm_2027.py --mode check-window
+      - name: Audit original NASA Daymet climate inputs with Python and reproduce frozen website data
+        run: |
+          python3 scripts/build_garden_pest_python_fieldbook.py --check
+          python3 -m unittest discover -s tests -p test_garden_pest_python_fieldbook.py -v
+          node scripts/verify-garden-pest-python-fieldbook.cjs
       - name: Verify JavaScript syntax and page integration
         run: |
           node --check public/assets/garden-pest-visual-data.js
           node --check public/assets/garden-pest-visuals.js
           node --check public/assets/garden-pest-watch.js
+          node --check public/assets/garden-pest-python-fieldbook-data.js
+          node --check public/assets/garden-pest-python-fieldbook.js
+          node --check scripts/verify-garden-pest-python-fieldbook-browser.cjs
           node --check public/assets/garden-earworm-trap-data.js
           node --check public/assets/garden-earworm-trap-desk.js
           node --check public/assets/garden-earworm-trap-2027-data.js
