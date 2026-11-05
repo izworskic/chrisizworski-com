@@ -3,7 +3,15 @@ const test=require('node:test'),assert=require('node:assert/strict'),fs=require(
 const root=path.join(__dirname,'..');
 const registry=JSON.parse(fs.readFileSync(path.join(root,'public/assets/freighter-layup-registry.json'),'utf8'));
 const bios=JSON.parse(fs.readFileSync(path.join(root,'public/assets/freighter-vessel-biographies.json'),'utf8'));
-const {renderProfile}=require('../lib/freighter-layup-profile-render.cjs');
+const {renderProfile:renderRawProfile}=require('../lib/freighter-layup-profile-render.cjs');
+const xml=fs.readFileSync(path.join(root,'public/sitemap-winter.xml'),'utf8');
+function renderProfile(p,registry){
+ const needle='https://chrisizworski.com/great-lakes-freighter-winter-layup/vessels/'+p.id+'/</loc><lastmod>';
+ const pos=xml.indexOf(needle);
+ assert.ok(pos>=0,'biography has sitemap entry: '+p.id);
+ const modified=xml.slice(pos+needle.length,pos+needle.length+10);
+ return renderRawProfile(p,registry,modified);
+}
 test('six authored biography subjects with meaningful chapters and trusted references',()=>{
  assert.equal(bios.schemaVersion,1);
  assert.equal(bios.profiles.length,6);
