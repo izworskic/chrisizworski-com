@@ -3,6 +3,8 @@ on:
   schedule:
     # UTC, four source scans daily during Nov–Apr; no weather/ship writes outside winter.
     - cron: '29 0,6,12,18 * 11,12,1,2,3,4 *'
+    # Early Nov 1 publishing pass follows midnight in America/Detroit (04:00 UTC).
+    - cron: '9 4 1 11 *'
   workflow_dispatch:
   push:
     branches: [main]
