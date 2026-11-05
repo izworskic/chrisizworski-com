@@ -54,9 +54,10 @@
     },
     "currentConditions": {
       "status": "unverified",
-      "note": "No November 2026 official public road/parking/gate and uninterrupted foot corridor status established; do not claim winter driving, current opening, GPS parking or safe shoreline passage.",
+      "note": "November 2026 public road/parking/gate and continuous foot-corridor verification was not established. Trailforks itself marks the historical Smiths-Fisheries approach as restricted, and its listed trailhead is not legal parking. DNR July 22 2026 trail map identifies a proposal/approval corridor, not a finished parking-to-falls route; no winter opening, GPS parking or safe shoreline passage can be asserted.",
       "sources": [
-        "https://www.visitkeweenaw.com/blog/post/a-guide-to-visiting-the-keweenaws-montreal-falls/"
+        "https://www.visitkeweenaw.com/blog/post/a-guide-to-visiting-the-keweenaws-montreal-falls/",
+        "https://www.trailforks.com/trails/montreal-falls-trail/"
       ]
     },
     "newConstruction": {
@@ -101,6 +102,99 @@
       "parkingToUpperFallsVerified": false,
       "visitorOpenNowVerified": false,
       "independentlyConfirmedRoadGates": false
+    },
+    "asBuiltMapAndParking": {
+      "reviewDate": "2026-11-05",
+      "verdict": "no-verified-official-asbuilt-parking-to-each-fall-itinerary",
+      "mapSources": [
+        {
+          "id": "michigan-dnr-2026-07-22",
+          "type": "official-dated-planning-map",
+          "url": "https://www.michigan.gov/dnr/-/media/Project/Websites/recsearch/documents/MapsI-N/KeweenawPointTrailsMap.pdf?hash=B5CF668B5EB28B028366E0D43202FDCD&rev=7c639c3716eb42a5bf0005dfeec252b6",
+          "date": "2026-07-22",
+          "finding": "East-bank Montreal River Trail shown in magenta RTPD-approved proposal style, not existing DNR-managed trail style; does not map named falls spur or legal parking to either falls",
+          "asBuilt": false,
+          "parkingVerified": false,
+          "fallsSpurVerified": false
+        },
+        {
+          "id": "copper-harbor-map-portal",
+          "type": "trail-operator-map-portal",
+          "url": "https://www.copperharbortrails.org/maps-guides",
+          "date": null,
+          "finding": "Operator advertises a summer downloadable PDF, but linked PDF could not be retrieved for independent examination during this review; portal alone cannot certify an as-built Montreal Falls spur or named parking area",
+          "asBuilt": false,
+          "parkingVerified": false,
+          "fallsSpurVerified": false,
+          "summerMapPdfUrl": "https://www.copperharbortrails.org/_files/ugd/268b07_92a9a10d17c349708339d2ae29890a77.pdf",
+          "summerMapPdfInspection": "not-retrievable-unverified"
+        },
+        {
+          "id": "copper-harbor-trail-status",
+          "type": "trail-operator-status",
+          "url": "https://www.copperharbortrails.org/trail-status",
+          "date": null,
+          "finding": "Oct 23 surface-maintenance note, but trail-by-trail table last dated May 18 2026; does not name new Montreal waterfall spur, Fish Cove parking conditions or November trail status",
+          "asBuilt": false,
+          "parkingVerified": false,
+          "fallsSpurVerified": false
+        },
+        {
+          "id": "trailforks-kpt-fish-cove",
+          "type": "third-party-trail-network-route",
+          "url": "https://www.trailforks.com/route/keweenaw-point-trail-manganese-to-fish-cove/",
+          "date": null,
+          "finding": "23.3-mile route ends at Fish Cove; eight listed segments do not include a Montreal Falls spur or new East-bank Montreal River section; route description may lag the builder completion notice",
+          "asBuilt": false,
+          "parkingVerified": false,
+          "fallsSpurVerified": false
+        },
+        {
+          "id": "trailforks-old-montreal",
+          "type": "third-party-restricted-route-warning",
+          "url": "https://www.trailforks.com/trails/montreal-falls-trail/",
+          "date": "2024-09-27",
+          "finding": "Trailforks maps a 1.9-mile legacy Montreal Falls Trail but explicitly marks access restricted by a third-party Smith Fisheries Road gate and points to Visit Keweenaw and a 2024 alternate; its displayed trailhead coordinates are not legal parking or proof of the new corridor",
+          "asBuilt": false,
+          "parkingVerified": false,
+          "fallsSpurVerified": false
+        }
+      ],
+      "publishedLegacyApproach": {
+        "id": "fish-cove-lower",
+        "url": "https://www.visitkeweenaw.com/blog/post/a-guide-to-visiting-the-keweenaws-montreal-falls/",
+        "supporting2026VisitorGuide": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/keweenawmi/KCVB_Visitors_Guide_20260407_HIGH_23713277-83e7-418f-aab3-34c51d92bb6f.pdf",
+        "evidence": "Visitor bureau describes a named rustic Fish Cove parking lot and one-mile unmarked, unmaintained shoreline walk to Lower Montreal; 2026-27 brochure repeats the seasonal Fish Cove approach",
+        "formalNamedPublicParking": true,
+        "exactLotCoordinatesVerified": false,
+        "currentRoadGateStatusVerified": false,
+        "upperFallsExtensionVerified": false,
+        "currentTrailConditionVerified": false
+      },
+      "perFalls": {
+        "lower": {
+          "gisId": 139,
+          "newCorridorAsBuiltConnectionVerified": false,
+          "oldFishCoveSeasonalPublicApproachDocumented": true,
+          "automaticDrivingDirectionsPermitted": false,
+          "publicGuidePromotion": false
+        },
+        "upper": {
+          "gisId": 140,
+          "newCorridorAsBuiltConnectionVerified": false,
+          "oldFishCoveSeasonalPublicApproachDocumented": false,
+          "automaticDrivingDirectionsPermitted": false,
+          "publicGuidePromotion": false,
+          "unresolvedIdentityDiscrepancyMetres": 267
+        }
+      },
+      "noUserVerificationRequired": true,
+      "blockers": [
+        "Operator-issued post-build as-built map labeling signed trail and safe viewpoints to individual falls",
+        "Named authorized parking-to-corridor arrival and complete pedestrian connection",
+        "Road, gate and season constraints published by appropriate land manager",
+        "For Upper Montreal: resolve 267m GIS versus specialist waterfall identity discrepancy"
+      ]
     }
   },
   "routes": [
@@ -154,14 +248,17 @@
     "current published/written manager confirmation of complete lower-falls visitor walk",
     "for Upper: reconcile feature identity and complete legal signed route",
     "current construction opening explicitly stated by operator before promoting new trails",
-    "post-completion as-built trailhead, explicit accessible parking, and signed walking links to both individual waterfall viewpoints verified separately"
+    "post-completion as-built trailhead, explicit accessible parking, and signed walking links to both individual waterfall viewpoints verified separately",
+    "Trailforks legacy trailhead coordinates on Smiths-Fisheries Road must not be treated as legal parking or a substitute for an operator as-built map"
   ],
   "prohibitedAssumptions": [
     "A named parking area is not an exact GPS parking pin",
     "A trail planned or under construction is not open",
     "A Fish Cove lower-falls walk is not automatically an Upper Falls route",
-    "A GIS waterfall coordinate is not a vehicle destination"
+    "A GIS waterfall coordinate is not a vehicle destination",
+    "A third-party route that ends at Fish Cove does not establish an east-bank spur or a route to either Montreal Falls",
+    "A Trailforks trailhead marked restricted is not a valid parking point despite displaying coordinates"
   ],
-  "batchUpdated": "B67",
+  "batchUpdated": "B68",
   "latestReviewDate": "2026-11-05"
 }
