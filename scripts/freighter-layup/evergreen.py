@@ -290,20 +290,21 @@ def main() -> None:
         (args.page, html),
         (args.sitemap, xml),
     ]
+    different = [(p, content) for p, content in results
+                 if p.read_text(encoding="utf-8") != content]
     if args.check:
-        different = [str(p) for p, content in results if p.read_text(encoding="utf-8") != content]
         if different:
-            raise SystemExit("Evergreen winter artifacts need rebuilding: " + ", ".join(different))
+            raise SystemExit("Evergreen winter artifacts need rebuilding: " +
+                             ", ".join(str(p) for p, _ in different))
     else:
-        # Build and validate every input BEFORE writing a single artifact.
-        for p, content in results:
-            if p.read_text(encoding="utf-8") != content:
-                p.write_text(content, encoding="utf-8")
+        # Validate ALL of the outputs before writing any of them.
+        for p, content in different:
+            p.write_text(content, encoding="utf-8")
     print(json.dumps({
         "status": "CURRENT", "season": ledger["season"],
         "historicalSeasons": len([s for s in updated["seasons"] if s["state"] == "historical_snapshot"]),
-        "updatedArtifacts": 0 if args.check else sum(p.read_text(encoding="utf-8") != content for p, content in results),
-        "sourceConfidencePreserved": True, "checked": args.check,
+        "updatedArtifacts": len(different), "sourceConfidencePreserved": True,
+        "checked": args.check,
     }))
 
 
