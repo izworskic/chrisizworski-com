@@ -1,0 +1,40 @@
+name: Sunshine Skyway Crossing Companion browser QA
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'public/sunshine-skyway-bridge/**'
+      - 'public/assets/sunshine-skyway*'
+      - 'scripts/verify-skyway-crossing-browser.cjs'
+      - 'tests/sunshine-skyway*'
+      - '.github/workflows/sunshine-skyway-browser.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  skyway-crossing-experience:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install isolated browser test harness
+        run: |
+          mkdir -p /tmp/skyway-playwright
+          npm install --prefix /tmp/skyway-playwright --no-save --ignore-scripts playwright@1.58.2
+          echo "NODE_PATH=/tmp/skyway-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium-browser)" >> "$GITHUB_ENV"
+      - name: Run official-status source fixtures and responsive interaction tests
+        run: node scripts/verify-skyway-crossing-browser.cjs
+      - name: Retain exact source HTML screenshots and scenario log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sunshine-skyway-browser-evidence
+          path: artifacts/skyway-crossing
+          if-no-files-found: warn
+          retention-days: 7
