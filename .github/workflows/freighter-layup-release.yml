@@ -44,6 +44,7 @@ jobs:
         run: |
           python3 -m unittest discover -s scripts/freighter-layup -p 'test_*.py' -v
           python3 scripts/freighter-layup/history.py --check
+          python3 scripts/freighter-layup/evergreen.py --check
           python3 scripts/freighter-layup/evaluate.py --check
           python3 scripts/freighter-layup/evaluate.py --cases data/freighter-layup-source-checked-evaluation-2026.json --check --require-large-sample
       - name: Check generated biographies match source exactly
