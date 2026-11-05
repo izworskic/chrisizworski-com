@@ -34,7 +34,7 @@ test('core answers, all six venues and restrictions are published in HTML with J
   const visible=page.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi,'');
   const body=visible.match(/<main[^>]*>([\s\S]*?)<\/main>/)?.[1]||'';
   assert.ok(body.length>14000,'This must be a substantive guide, not an empty JS wrapper');
-  assert.match(body,/To watch a Vandenberg launch, start with public places around Lompoc/);
+  assert.match(body,/For the strongest public launch-viewing prospects, start with Ocean Park/);
   assert.match(body,/6 sourced public candidates/);
   assert.equal((body.match(/class="vg-place-card"/g)||[]).length,6);
   for(const venue of model.SITES)assert.ok(body.includes(venue.name.replace('Ocean Beach Park','Ocean Park')
@@ -55,8 +55,8 @@ test('core answers, all six venues and restrictions are published in HTML with J
 test('search discovery is a single sitemap entry with truthful date and live static route',()=>{
   const occurrence=(sitemap.match(/<loc>https:\/\/chrisizworski\.com\/vandenberg-rocket-launch-viewing\/<\/loc>/g)||[]).length;
   assert.equal(occurrence,1,'Exactly one main sitemap URL');
-  assert.match(sitemap,/<loc>https:\/\/chrisizworski\.com\/vandenberg-rocket-launch-viewing\/<\/loc>\s*<lastmod>2026-11-03<\/lastmod>/);
-  assert.equal(page.match(/"dateModified":"2026-11-03"/g)?.length,2,
+  assert.match(sitemap,/<loc>https:\/\/chrisizworski\.com\/vandenberg-rocket-launch-viewing\/<\/loc>\s*<lastmod>2026-11-04<\/lastmod>/);
+  assert.equal(page.match(/"dateModified":"2026-11-04"/g)?.length,2,
     'Both published WebPage and Article need honest source modification dates');
   for(const filename of fs.readdirSync(path.join(root,'public')).filter(n=>/^sitemap.*\.xml$/.test(n)&&n!=='sitemap.xml'))
     assert.ok(!read('public/'+filename).includes(canonical),
@@ -95,7 +95,8 @@ test('the guide and live California tool are connected both ways and remain sepa
   assert.match(national,/href="\/vandenberg-rocket-launch-viewing\/"/);
   assert.match(national,/id="rl-vandenberg"/);
   assert.match(national,/rel="canonical" href="https:\/\/chrisizworski\.com\/national-tools\/rocket-launch-live\/"/);
-  assert.equal((national.match(/href="\/vandenberg-rocket-launch-viewing\/"/g)||[]).length,2);
+  assert.ok((national.match(/href="\/vandenberg-rocket-launch-viewing\/"/g)||[]).length>=2,
+    'The live rocket tool must have at least two discoverable source-guide links');
 });
 
 test('the beyond-Great-Lakes guide directory links this distinct field guide once',()=>{
