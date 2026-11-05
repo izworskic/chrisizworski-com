@@ -259,7 +259,7 @@
     "A third-party route that ends at Fish Cove does not establish an east-bank spur or a route to either Montreal Falls",
     "A Trailforks trailhead marked restricted is not a valid parking point despite displaying coordinates"
   ],
-  "batchUpdated": "B68",
+  "batchUpdated": "B70",
   "latestReviewDate": "2026-11-05",
   "b69SeasonalPublicArrival": {
     "reviewDate": "2026-11-05",
@@ -364,5 +364,148 @@
       "A historic 2022 gravel lot or dated 2027 forest planning record is a November 2026 open-now permit",
       "Private Smiths-Fisheries access and proposed KORC lot are valid visitor arrival points"
     ]
+  },
+  "b70RoadJurisdictionProof": {
+    "reviewedDate": "2026-11-05",
+    "visitorQuestion": "Is there a continuously legal route for street-legal passenger vehicles from US-41 via Mandan Road/Hoar Lake Road to Fish Cove parking, then a permitted public walking route to Lower Montreal Falls?",
+    "disposition": "not-yet-proven-by-current-route-specific-authority",
+    "authoritativeEvidence": [
+      {
+        "id": "dnr-point-existing-conditions-2024",
+        "authority": "Michigan DNR",
+        "date": "2024-10-11",
+        "url": "https://www.michigan.gov/dnr/-/media/Project/Websites/dnr/Documents/PRD/MgtPlans-in-progress/KeweenawPoint_ExistingConditions.pdf?hash=732370CD6062E03A9BDF9290F3726351&rev=b9ab50b5f2c645c5838b1058ca77e54e",
+        "type": "land-management-road-jurisdiction-map",
+        "finding": "DNR map labels North and South Mandan, Hoar Lake Road and Fish Cove and separately symbolizes State Forest Road, Other County Road, Private Road, ORV Route, and Snowmobile Trail. Dated general management planning map; not a current vehicle permission/lot or continuous named legal route.",
+        "routeLevelCurrentAccessProof": false
+      },
+      {
+        "id": "dnr-forest-roads-2026",
+        "authority": "Michigan DNR",
+        "date": "2026-04-01",
+        "url": "https://www2.dnr.state.mi.us/Publications/pdfs/ForestsLandWater/DNRRoads/PA288_KEWEENAW.pdf",
+        "type": "effective-2026-state-forest-road-orv-classification",
+        "finding": "Official Keweenaw PDF maps DNR forest roads open/closed to ORVs, restricted routes and non-DNR roads. Not a legal access or winter passability inventory for all county/private segments or any individual Fish Cove lot.",
+        "routeLevelCurrentAccessProof": false
+      },
+      {
+        "id": "dnr-forest-faq",
+        "authority": "Michigan DNR",
+        "date": null,
+        "url": "https://www.michigan.gov/dnr/faqs/forestry/forest-roads",
+        "type": "definitional-rule",
+        "finding": "DNR state forest roads are DNR-managed roads open to conventional vehicles; trails and county highways are different categories. A DNR open-road legend cannot authorize every connecting non-DNR road, ORV route, or gated private drive.",
+        "routeLevelCurrentAccessProof": false
+      },
+      {
+        "id": "dnr-compartment-2025",
+        "authority": "Michigan DNR Baraga FMU",
+        "date": "2025-09-16",
+        "url": "https://www2.dnr.state.mi.us/publications/pdfs/forestslandwater/Cmpt_Reviews/Baraga/2027/bar082_comp_info.pdf",
+        "type": "land-manager-vehicle-easement-lot-record",
+        "finding": "State has easements over parts of Mandan Road; Fish Cove parking built with Keweenaw ATV Club. Identifies partial, not fully continuous, route rights. Entry year 2027 is the timber inventory planning cycle, not a road permit start date.",
+        "routeLevelCurrentAccessProof": false
+      },
+      {
+        "id": "dnr-2026-proposal-status",
+        "authority": "Michigan DNR",
+        "date": "2026-10-30",
+        "url": "https://www.michigan.gov/dnr/about/newsroom/releases/2026/10/30/annual-review",
+        "type": "approval-timing-for-2027-proposals",
+        "finding": "The current October 2026 road change proposals include conventional-vehicle open/closed status changes, but require 2027 director approval and are planned to take effect April 1, 2027; they cannot be presented as currently in force.",
+        "routeLevelCurrentAccessProof": false
+      },
+      {
+        "id": "korc-mandan-general-gates",
+        "authority": "Keweenaw Outdoor Recreation Coalition",
+        "date": null,
+        "url": "https://www.keweenawoutdoorrecreation.org/hunting-fishing",
+        "type": "conservation-group-general-gate-report",
+        "finding": "KORC says portions of Mandan Road were gated for hunters. Does not identify whether the gated portions intersect the separately published Fish Cove route. Do not infer specific gate position or whole-route closure.",
+        "routeLevelCurrentAccessProof": false
+      },
+      {
+        "id": "county-road-jurisdiction-contact",
+        "authority": "Keweenaw County Road Commission",
+        "date": "2026-11-05",
+        "url": "https://keweenawcountyonline.com/commissions-roads.php",
+        "type": "current-road-jurisdiction-information-source",
+        "finding": "Commission maintains county and trunkline roads under contract. Public roster and general winter notice are not a county-certified segment-by-segment Mandan/Hoar Lake status or construction/maintenance guarantee.",
+        "routeLevelCurrentAccessProof": false
+      },
+      {
+        "id": "visit-keweenaw-historic-lower-walk",
+        "authority": "Visit Keweenaw",
+        "date": "2023-06-09",
+        "url": "https://www.visitkeweenaw.com/blog/post/a-guide-to-visiting-the-keweenaws-montreal-falls/",
+        "type": "seasonal-tourist-description",
+        "finding": "Published directions via Mandan and Fish Cove to rustic lot and unmaintained rocky shoreline to Lower Montreal; does not certify actual 2026 road jurisdiction, parking permission, maintained path, or current open winter arrival.",
+        "routeLevelCurrentAccessProof": false
+      }
+    ],
+    "roadLegs": [
+      {
+        "id": "end-us41",
+        "name": "End of US-41 at Copper Harbor",
+        "recordedContext": "state highway terminus",
+        "currentLegalToNextSegmentVerified": false
+      },
+      {
+        "id": "mandan",
+        "name": "Mandan Road",
+        "recordedContext": "DNR map shows multiple road classes in the region; DNR holds partial easements",
+        "currentLegalToNextSegmentVerified": false,
+        "allSegmentsOwnershipResolved": false
+      },
+      {
+        "id": "hoar-lake",
+        "name": "Hoar Lake / Fish Cove Road",
+        "recordedContext": "DNR existing-conditions map includes ORV route plus road-category distinctions; no complete conventional-vehicle designation for Fish Cove connection",
+        "currentLegalToNextSegmentVerified": false,
+        "allSegmentsOwnershipResolved": false
+      },
+      {
+        "id": "fish-cove",
+        "name": "Fish Cove historic gravel lot",
+        "recordedContext": "historically constructed, no November 2026 lot hours/ownership vehicle permission independently verified",
+        "currentLegalToNextSegmentVerified": false,
+        "lotOpenNowVerified": false
+      },
+      {
+        "id": "shoreline",
+        "name": "Fish Cove to Lower Montreal Falls shoreline walk",
+        "recordedContext": "Visit Keweenaw describes unmarked and unmaintained trail; exact current legal corridor and conditions not established",
+        "currentLegalToNextSegmentVerified": false,
+        "maintainedVisitorTrailVerified": false
+      }
+    ],
+    "asOfDate": "2026-11-05",
+    "currentEffectiveMapYear": 2026,
+    "proposalEffectiveYear": 2027,
+    "proposalEffectiveDate": "2027-04-01",
+    "proposalAlreadyInForce": false,
+    "noConventionalVehicleAccessClaim": true,
+    "noPublicParkingGps": true,
+    "noAutomatedDrivingDirections": true,
+    "noLiveRoadOpenClaim": true,
+    "noUpperFallsRouteInference": true,
+    "authoritativeReplyReceived": false,
+    "outreach": {
+      "state": "drafted-not-sent",
+      "roadAuthority": "Keweenaw County Road Commission",
+      "landManager": "Michigan DNR Road Inventory / Baraga Forest Management Unit",
+      "questions": [
+        "Road-by-road jurisdiction and recorded public easements to Fish Cove",
+        "Conventional passenger-vehicle use and seasonal restrictions on full continuous route",
+        "Current lawful Fish Cove lot use and authoritative lot location",
+        "Permitted uninterrupted foot corridor to Lower Montreal, distinguished from Upper and private Smiths-Fisheries"
+      ]
+    },
+    "definitiveMissingProof": [
+      "Named, current, continuous passenger-vehicle public-right-of-way/easements from end US-41 to Fish Cove lot",
+      "Current permitted lot status and vehicle/season restrictions",
+      "Landowner-issued continuous legal Lower Montreal pedestrian corridor independent of private road"
+    ],
+    "consistencyGuard": "No unverified map point, county-road general rules or future-year DNR proposed state-forest-road changes may satisfy a route-specific access gate."
   }
 }
