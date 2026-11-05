@@ -41,7 +41,7 @@ replaceOnce('How does a floating ship climb inland? One roomful of water at a ti
 html=html.replace('dateModified":"2026-10-24','dateModified":"2026-11-05');
 html=html.replaceAll('/assets/seaway.css?v=20261024b','/assets/seaway.css?v=20261105b')
   .replaceAll('/assets/seaway-core.js?v=20261024c','/assets/seaway-core.js?v=20261105a')
-  .replaceAll('/assets/seaway.js?v=20261024c','/assets/seaway.js?v=20261105b');
+  .replaceAll('/assets/seaway.js?v=20261024c','/assets/seaway.js?v=20261105c');
 if(!html.includes('id="journey"')||!html.includes('data-region-count="massena"'))throw new Error('Seaway journey enhancement not generated');
 // Python Intelligence OS: read a versioned and independently checked BTS
 // artifact. Vercel does NOT execute Python or fetch new data at request time.
@@ -70,6 +70,7 @@ const seasonalDesk='<section class="editorial seaway-seasonal-desk" id="seaway-s
 '<h2 id="seaway-seasonal-title">When has the Seaway been busiest?</h2>'+
 '<p>Visitors planning a trip have two clocks: monthly shipping activity and whether a public viewing area is accessible. Choose a month to compare <strong>observed monthly system-wide vessel transits from 2022–2024</strong>. The range shows how much those years differed. This is not a prediction of ships at an individual lock or a recommended visit date.</p>'+
 '<div class="seasonal-months" role="group" aria-label="Choose a calendar month for historical shipping patterns">'+monthButtons+'</div>'+
+'<p class="seasonal-swipe-hint">On a phone, swipe this row sideways to explore all twelve months.</p>'+
 '<div class="seasonal-reading" id="seawaySeasonalReadout" role="status" aria-live="polite"><strong>Select a month to read the historical evidence.</strong><p>Missing monthly values remain unreported. The historical table is available below without JavaScript.</p></div>'+
 '<div class="seasonal-visit-bridge"><strong>Want to turn the history into a real visit?</strong> Check <a data-seasonal-destination="eisenhower" href="/eisenhower-lock/">Eisenhower’s documented public viewing guide</a>, <a data-seasonal-destination="operator_hours" href="https://www.seaway.dot.gov/explore/seaway-visitor-center" target="_blank" rel="noopener noreferrer">operator visitor hours</a>, <a data-seasonal-destination="official_queue" href="'+esc(places.officialQueue)+'" target="_blank" rel="noopener noreferrer">official vessel order of turn</a>, and <a data-seasonal-destination="seaway_notices" href="https://greatlakes-seaway.com/en/news-and-information/notices/seaway-notices/" target="_blank" rel="noopener noreferrer">current Seaway notices</a> independently. More monthly transits do not guarantee a ship will be visible when you arrive.</div>'+
 '<p class="seasonal-next-tools">Prefer watching ships move? <a data-seasonal-destination="ship_watch" href="#ship-watch">Return to recent Seaway ship reports</a>, or <a data-seasonal-destination="welland" href="/welland-canal/">continue inland to Welland Canal’s ships and locks</a>.</p>'+
@@ -80,7 +81,7 @@ const seasonalDesk='<section class="editorial seaway-seasonal-desk" id="seaway-s
 replaceOnce('<section class="editorial resources">',seasonalDesk+'<section class="editorial resources">');
 
 // Keep the measurement script next to the Seaway UI, without a new data API.
-const funnelAnchor='<script defer src="/assets/seaway.js?v=20261105b"></script>';
+const funnelAnchor='<script defer src="/assets/seaway.js?v=20261105c"></script>';
 replaceOnce(funnelAnchor,funnelAnchor+'<script defer src="/assets/seaway-seasonal-funnel.js?v=20261105a"></script>');
 fs.writeFileSync(file,html);
 console.log('Seaway corridor journey enhancement applied');
