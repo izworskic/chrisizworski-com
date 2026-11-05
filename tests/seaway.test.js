@@ -41,7 +41,7 @@ test('endpoint validates scope and method before any network request',async()=>{
 });
 test('endpoint preserves a regional source failure without claiming zero traffic',async()=>{
   const original=global.fetch;global.fetch=async url=>{if(String(url).includes('44.91'))throw new Error('Massena unavailable');return {ok:true,json:async()=>collection([])};};
-  try{const r=response();await handler({method:'GET',query:{region:'all'}},r);assert.equal(r.code,200);assert.equal(r.body.state,'partial');assert.equal(r.body.regions.find(x=>x.id==='massena').state,'unavailable');assert.equal(r.body.isSchedule,false);assert.match(r.headers['Cache-Control'],/s-maxage=90/);}finally{global.fetch=original;}
+  try{const r=response();await handler({method:'GET',query:{region:'all'}},r);assert.equal(r.code,200);assert.equal(r.body.state,'partial');assert.equal(r.body.regions.find(x=>x.id==='massena').state,'unavailable');assert.equal(r.body.isSchedule,false);assert.match(r.headers['Cache-Control'],/s-maxage=30/);}finally{global.fetch=original;}
 });
 test('all-source failure is an unavailable 502, never an empty success',async()=>{
   const original=global.fetch;global.fetch=async()=>{throw new Error('offline');};
@@ -84,4 +84,52 @@ test('both canonical pages carry working asset references, differentiated static
     for(const name of ['seaway.css','seaway-reference.js','seaway-core.js','seaway.js'])assert.ok(html.includes('/assets/'+name));
     const title=html.match(/<title>(.*?)<\/title>/)[1].replace(/&amp;/g,'&');assert.ok(title.length<=60,title);assert.ok(html.match(/<meta name="description" content="([^"]+)/)[1].length<=158);
   }
+});
+
+test('a recently heard vessel belongs to a river chapter, not a proven route or lock ETA',()=>{
+  const regions=JSON.parse(fs.readFileSync('data/seaway/places.json','utf8')).regions;
+  const ctx=C.journeyContext({regionIds:['massena']},regions);
+  assert.equal(ctx.id,'massena');
+  assert.equal(ctx.name,'Massena · Eisenhower & Snell');
+  assert.equal(ctx.downbound.id,'beauharnois');
+  assert.equal(ctx.upbound.id,'iroquois');
+  assert.equal(ctx.directionVerified,false);
+  assert.equal(ctx.etaVerified,false);
+  assert.equal(C.journeyContext({regionIds:[]},regions).id,null);
+  assert.equal(C.journeyContext({regionIds:['iroquois','massena']},regions,'iroquois').id,'iroquois');
+});
+test('AIS upstream rate limit is a source failure, not proof that the river is empty',async()=>{
+  const original=global.fetch;
+  global.fetch=async()=>({ok:false,status:429});
+  try{
+    const r=response();await handler({method:'GET',query:{region:'massena'}},r);
+    assert.equal(r.code,502);
+    assert.equal(r.body.state,'unavailable');
+    assert.equal(r.body.regions[0].reason,'rate-limited');
+    assert.equal(r.body.regions[0].httpStatus,429);
+    assert.equal(r.headers['Cache-Control'],'no-store');
+  }finally{global.fetch=original;}
+});
+test('invalid upstream JSON is not treated as no ship reports',async()=>{
+  const original=global.fetch;
+  global.fetch=async()=>({ok:true,json:async()=>({invalid:true})});
+  try{
+    const r=response();await handler({method:'GET',query:{region:'massena'}},r);
+    assert.equal(r.code,502);
+    assert.equal(r.body.regions[0].reason,'invalid-response');
+    assert.equal(r.body.regions[0].state,'unavailable');
+  }finally{global.fetch=original;}
+});
+test('generated journey has actionable chapters and keeps a static no-JavaScript path',()=>{
+  const html=fs.readFileSync('public/st-lawrence-seaway/index.html','utf8');
+  for(const id of C.CORRIDOR){
+    assert.ok(html.includes('data-journey-region="'+id+'"'),id);
+    assert.ok(html.includes('href="?region='+id+'#ship-watch"'),id);
+  }
+  assert.match(html,/Where is the ship in its journey\?/);
+  assert.match(html,/Follow the voyage/);
+  assert.match(html,/not a confirmed ship itinerary|not the vessel.s entire itinerary/i);
+  assert.match(html,/\/welland-canal\//);
+  assert.match(html,/\/soo-locks\//);
+  assert.match(html,/dateModified":"2026-11-05/);
 });

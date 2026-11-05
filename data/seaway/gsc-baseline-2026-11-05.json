@@ -1,0 +1,27 @@
+{
+  "source": "Google Search Console Web export uploaded 2026-11-05",
+  "window_start": "2026-10-07",
+  "window_end": "2026-11-03",
+  "window_days": 28,
+  "notes": "Landing page metrics from 28-day GSC export. Seaway launched Oct 23; do not treat all 28 days as post-launch. Welland and prior exports overlap.",
+  "pages": {
+    "/welland-canal/": {
+      "clicks": 69,
+      "impressions": 3012,
+      "ctr": 0.0229,
+      "position": 8.16
+    },
+    "/st-lawrence-seaway/": {
+      "clicks": 1,
+      "impressions": 85,
+      "ctr": 0.0118,
+      "position": 16.29
+    },
+    "/eisenhower-lock/": {
+      "clicks": 1,
+      "impressions": 29,
+      "ctr": 0.0345,
+      "position": 8.41
+    }
+  }
+}
