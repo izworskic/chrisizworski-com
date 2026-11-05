@@ -104,3 +104,24 @@ test('atlas has accessible Open Graph and X preview metadata with actual image d
  assert.ok(page.includes('<meta name="twitter:card" content="summary_large_image">'));
  assert.ok(page.includes('<meta name="twitter:image:alt" content='));
 });
+
+
+test('image sitemap advertises the original winter hero and locally hosted ship previews',()=>{
+ const xml=fs.readFileSync(path.join(root,'public/image-sitemap.xml'),'utf8');
+ const available=[
+  ['','freighter-winter-hero.jpg'],
+  ['vessels/lee-a-tregurtha/','freighter-lee-feature.jpg'],
+  ['vessels/james-r-barker/','freighter-barker-feature.jpg'],
+  ['vessels/american-spirit/','freighter-american-feature.jpg'],
+  ['vessels/oakglen/','freighter-oakglen-feature.jpg']
+ ];
+ for(const [suffix,image] of available){
+  const url='https://chrisizworski.com/great-lakes-freighter-winter-layup/'+suffix;
+  assert.equal(xml.split('<loc>'+url+'</loc>').length-1,1,'exactly one image sitemap URL '+suffix);
+  assert.ok(xml.includes('<image:loc>https://chrisizworski.com/assets/'+image+'</image:loc>'));
+  assert.ok(fs.statSync(path.join(root,'public/assets',image)).size>20000,'nonempty local photo '+image);
+ }
+ assert.ok(xml.includes('FREIGHTER_LAYUP_IMAGE_SITEMAP:START'));
+ assert.ok(xml.includes('FREIGHTER_LAYUP_IMAGE_SITEMAP:END'));
+ assert.equal((xml.match(/FREIGHTER_LAYUP_IMAGE_SITEMAP:START/g)||[]).length,1);
+});
