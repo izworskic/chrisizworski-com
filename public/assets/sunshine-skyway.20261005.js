@@ -9,6 +9,8 @@
     trafficTitle: $('trafficTitle'), trafficCopy: $('trafficCopy'), mentionMetric: $('mentionMetric'), sourceMetric: $('sourceMetric'),
     axles: $('axles'), payment: $('payment'), tollHeadline: $('tollHeadline'), plazaCopy: $('plazaCopy'), tollResult: $('tollResult'), tollNote: $('tollNote'),
     windRisk: $('windRisk'), maxWind: $('maxWind'), forecast: $('forecast'), events: $('events'), cameras: $('cameras'),
+    tripDecision: $('tripDecision'), tripReason: $('tripReason'), outlookItems: $('outlookItems'),
+    routeContext: $('routeContext'), routeSteps: $('routeSteps'), routePlanner: $('routePlanner'), shareTrip: $('shareTrip'),
   };
   let requestSerial = 0;
   let selectedCameraId = null;
@@ -21,7 +23,7 @@
     if (!value) return 'time unavailable';
     const date = new Date(value);
     if (!Number.isFinite(date.getTime())) return 'time unavailable';
-    return new Intl.DateTimeFormat(undefined, { hour:'numeric', minute:'2-digit', month:'short', day:'numeric' }).format(date);
+    return new Intl.DateTimeFormat('en-US', { timeZone:'America/New_York', timeZoneName:'short', hour:'numeric', minute:'2-digit', month:'short', day:'numeric' }).format(date);
   }
   function params() {
     return new URLSearchParams({
@@ -87,7 +89,7 @@
     const sourceLiveCount = eventLiveCount + (speedsState === 'ok' ? 1 : 0);
     const flow = traffic?.flow || {};
     const selected = flow?.selected || {};
-    const flowUsable = selected.state && selected.state !== 'UNAVAILABLE' && speedsState !== 'unavailable';
+    const flowUsable = selected.state && selected.state !== 'UNAVAILABLE' && speedsState === 'ok';
     const directionLabel = flow?.selectedDirection === 'southbound' ? 'southbound' : 'northbound';
     const noEvent = eventLiveCount === 2 && mentions.length === 0;
     els.mentionMetric.textContent = String(mentions.length);
@@ -121,7 +123,7 @@
 
     if (eventLiveCount === 2) {
       els.trafficTitle.textContent = 'Nothing specific is being reported on the Skyway';
-      els.trafficCopy.textContent = "We checked both live FL511 event feeds. Neither is showing a Skyway-specific crash, closure or traffic event right now. The Traffic Speeds layer is unavailable, so we do not guess at congestion or delay.";
+      els.trafficCopy.textContent = "We checked both live FL511 event feeds. Neither is showing a Skyway-specific crash, closure or traffic event right now. The Traffic Speeds layer is unavailable or not fresh enough to use, so we do not guess at congestion or delay.";
     } else {
       els.trafficTitle.textContent = 'Traffic source coverage is partial';
       els.trafficCopy.textContent = 'Open FL511 before traveling if current traffic conditions are important to your decision.';
@@ -154,7 +156,7 @@
       return;
     }
     els.forecast.innerHTML = periods.slice(0, 4).map(period => {
-      const when = period.startTime ? new Date(period.startTime).toLocaleTimeString([], { hour:'numeric' }) : period.name || 'Forecast';
+      const when = period.startTime ? new Date(period.startTime).toLocaleTimeString('en-US', { hour:'numeric', timeZone:'America/New_York', timeZoneName:'short' }) : period.name || 'Forecast';
       return `<div class="forecast-item"><strong>${esc(when)}</strong><span>${period.temperature != null ? `${esc(period.temperature)}°${esc(period.temperatureUnit || 'F')}` : 'temp n/a'}</span><span>${esc(period.windSpeed || 'wind n/a')} ${esc(period.windDirection || '')}</span><span>${esc(period.shortForecast || '')}</span></div>`;
     }).join('');
   }
@@ -266,6 +268,44 @@
     }));
   }
 
+
+  // Keep geographic route and deep link synchronized immediately on input changes.
+  function updateRouteSelection() {
+  const helper=window.SkywayCompanion;
+  if(!helper)return;
+  const route=helper.routeFor(els.direction.value);
+  els.routeContext.textContent=`${route.label}. This is an example corridor around Tampa Bay, not an official detour. Compare the live road picture before leaving.`;
+  els.routeSteps.innerHTML=route.steps.map(step=>`<li>${esc(step)}</li>`).join('');
+  els.routePlanner.href=route.url;
+  els.shareTrip.href=helper.shareHref(els.direction.value,els.vehicle.value);
+}
+
+  // Companion is interpretive guidance; FL511 always owns bridge closure status.
+  function renderCompanion(data) {
+    const helper = window.SkywayCompanion;
+    if (!helper) {
+      els.tripDecision.textContent = 'Check current Skyway conditions on FL511.';
+      els.tripReason.textContent = 'Personalized guidance is temporarily unavailable. The official FL511 link remains available.';
+      els.outlookItems.innerHTML = '<p class="empty">Forecast guidance unavailable. Check NWS directly.</p>';
+      return;
+    }
+    const next = helper.decision(data);
+    els.tripDecision.parentElement.dataset.tone = next.tone;
+    els.tripDecision.textContent = next.title;
+    els.tripReason.textContent = next.detail;
+    updateRouteSelection();
+    const periods = helper.outlook(data);
+    els.outlookItems.innerHTML = periods.length
+      ? periods.map(period => `<div class="outlook-row"><strong>${esc(period.label)}</strong><span>${esc(period.wind)} ${esc(period.direction)}</span></div>`).join('')
+      : '<p class="empty">A current, time-qualified NWS outlook is unavailable. No wind forecast is inferred.</p>';
+}
+  function applyTripLink() {
+    const qs = new URLSearchParams(window.location.search);
+    for (const field of ['direction','vehicle']) {
+      const value=qs.get(field),select=els[field];
+      if(value && [...select.options].some(option=>option.value===value)) select.value=value;
+    }
+}
   async function load() {
     const serial = ++requestSerial;
     els.refresh.disabled = true;
@@ -282,6 +322,7 @@
       renderToll(data.toll);
       renderWind(data.windContext);
       renderEvents(data.traffic, data.windContext);
+      renderCompanion(data);
       renderCameras(data.cameras);
       if (window.gtag) window.gtag('event', 'sunshine_skyway_snapshot', { status: data.officialStatus?.state || 'unknown', wind_context: data.windContext?.level || 'unknown', traffic_flow: data.traffic?.flow?.selected?.state || 'unknown' });
     } catch (error) {
@@ -298,6 +339,7 @@
       els.vehicleReason.textContent = 'Official bridge data is unavailable.';
       els.trafficTitle.textContent = 'Traffic data unavailable';
       els.events.innerHTML = '<p class="empty">Live source data could not be loaded. Open FL511 directly.</p>';
+      renderCompanion(null);
       console.error('Sunshine Skyway load failed', error);
     } finally {
       if (serial === requestSerial) {
@@ -308,12 +350,24 @@
     }
   }
 
-  function changed() { load(); }
+  function changed() {
+    els.tripDecision.textContent = 'Refreshing the selected crossing context…';
+    els.tripReason.textContent = 'Waiting for a matching official data snapshot. Do not use the previous direction as a current traffic assessment.';
+    updateRouteSelection();
+    load();
+  }
   els.direction.addEventListener('change', changed);
   els.vehicle.addEventListener('change', changed);
   els.axles.addEventListener('change', changed);
   els.payment.addEventListener('change', changed);
   els.refresh.addEventListener('click', load);
+  $('compareRoute').addEventListener('click', event => {
+    event.preventDefault();
+    const alternative = $('alternativeRoute');
+    alternative.open = true;
+    alternative.querySelector('summary').focus();
+  });
   window.addEventListener('pagehide', destroyHls, { once:true });
+  applyTripLink();
   load();
 })();

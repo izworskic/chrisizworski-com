@@ -1,3 +1,11 @@
+### 2026-11-05 — Sunshine Skyway Crossing Companion (PR #1521; verification pending)
+- **Problem:** Growing Skyway visibility should lead to a better actual crossing decision, not a generic dashboard or SEO rewrite. Existing FL511 status, NWS wind, direction, camera, tolls and vehicle context were isolated panels.
+- **Implementation:** Cross-source next-move interpretation with official closure priority, date-qualified Eastern-time NWS periods, source-health-gated traffic, compact mobile photo hero, accessible native trip choice, reversible north/south Howard Frankland/I-4/I-75 example corridor, official FL511 link and allowlisted share URL. No new prediction, route-time claim, geolocation, API service, Python runtime, ads change, canonical or search metadata.
+- **Research/OS:** Existing Experience OS v1.2.1 and Python OS assessed; kept JS as lowest-cost appropriate runtime. Official FL511, NWS and FDOT sources plus two competitor experiences documented in Skyway brief. Python deferred until independently checked historical evidence creates actual visitor value.
+- **Truth:** Example corridor is NOT an FDOT-designated detour; changing forecast wind cannot set bridge status. Missing/stale FL511 means UNKNOWN. Original camera, tolls and SEO preserved.
+- **Status:** PR #1521 opened. Dedicated tests added; full Agent branch verification, Name SERP, Vercel and actual browser checks were not verified at this entry. No search growth or outcome claimed.
+- **Exactly one next action:** Obtain passing full PR CI and real 390px/desktop browser source-failure checks before deciding whether to merge.
+
 ### 2026-11-05 — Seaway historical month mobile discovery repair (release pending)
 - **Test finding:** Independent mobile screenshot at 390px showed the historical readout defaulting to November while the horizontal month selector displayed January–May. This hid the current selection and risked misleading a future comparison-to-trip funnel.
 - **Fix:** Native JavaScript now centers the selected local month inside the horizontal control only, never scrolling the page. A visible mobile swipe instruction clarifies all 12 months are available. Checked-in generated HTML, JS/CSS cache keys and regression tests updated; no new data, infrastructure, ad, canonical or GA4 event design.
