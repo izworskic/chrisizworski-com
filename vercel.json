@@ -2392,6 +2392,14 @@
       "destination": "/synced-national-tools/kilauea-episode-watch/index.html"
     },
     {
+      "source": "/barking-sands-rocket-launch-viewing",
+      "destination": "/barking-sands-rocket-launch-viewing/index.html"
+    },
+    {
+      "source": "/barking-sands-rocket-launch-viewing/",
+      "destination": "/barking-sands-rocket-launch-viewing/index.html"
+    },
+    {
       "source": "/kodiak-rocket-launch-viewing",
       "destination": "/kodiak-rocket-launch-viewing/index.html"
     },
