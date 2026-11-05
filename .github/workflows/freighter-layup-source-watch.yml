@@ -27,6 +27,11 @@ jobs:
           node-version: '22'
       - name: Run dated-report ingestion and November season rollover
         run: node scripts/freighter-layup/refresh.cjs --shadow-input=/tmp/freighter-layup-shadow-input.json
+      - name: Publish the current winter and freeze completed source-backed winters
+        run: |
+          python3 scripts/freighter-layup/evergreen.py
+          python3 scripts/freighter-layup/evergreen.py --check
+          python3 scripts/freighter-layup/history.py --check
       - name: Run Python shadow intelligence without publishing any findings
         run: |
           python3 scripts/freighter-layup/shadow.py \
@@ -53,12 +58,12 @@ jobs:
         run: node --test tests/freighter-layup-season.test.js tests/freighter-layup-feeds.test.js
       - name: Publish only on new evidence or season rollover
         run: |
-          if git diff --quiet -- public/assets/freighter-layup-live-season.json data/freighter-layup-review.json; then
+          if git diff --quiet -- public/assets/freighter-layup-live-season.json data/freighter-layup-review.json public/assets/freighter-layup-registry.json public/assets/freighter-layup-history.json public/great-lakes-freighter-winter-layup/index.html public/sitemap-winter.xml; then
             echo 'No new independently sourced winter stories; no deploy.'
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add public/assets/freighter-layup-live-season.json data/freighter-layup-review.json
-          git commit -m "data(layup): refresh verified winter evidence and annual rollover"
+          git add public/assets/freighter-layup-live-season.json data/freighter-layup-review.json public/assets/freighter-layup-registry.json public/assets/freighter-layup-history.json public/great-lakes-freighter-winter-layup/index.html public/sitemap-winter.xml
+          git commit -m "data(layup): refresh source evidence and archive the completed shipping winter"
           git push origin HEAD:main
