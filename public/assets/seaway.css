@@ -36,3 +36,30 @@
 .journey-stop:focus-visible,.journey-primer a:focus-visible,.ship-journey-context button:focus-visible{outline:3px solid #bb7b20;outline-offset:3px}
 @media(max-width:1000px){.journey-rail{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:740px){.journey-primer{margin-left:0;margin-right:0;padding:18px 14px}.journey-rail{display:flex;overflow-x:auto;scroll-snap-type:x proximity;overscroll-behavior-inline:contain;padding:2px 2px 12px;margin-right:-12px}.journey-rail li{flex:0 0 min(75vw,245px);scroll-snap-align:start}.journey-stop{padding:14px;min-height:190px}.journey-directions{grid-template-columns:1fr}}
+
+/* Python Intelligence OS v1: BTS season passage is evidence, not a schedule. */
+.seaway-seasonal-desk{border-top:2px solid #b9d1cb;background:linear-gradient(150deg,#f7faf7 0%,#f6f1e8 100%);scroll-margin-top:20px}
+.seaway-seasonal-desk h2{max-width:45rem;letter-spacing:-.025em}
+.seaway-seasonal-desk>p{max-width:83ch}
+.seasonal-months{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:7px;margin:22px 0}
+.seasonal-month{display:flex;flex-direction:column;align-items:center;gap:5px;padding:10px 3px 9px;min-width:0;min-height:138px;background:#fffefa;border:1px solid #cbd8d1;border-radius:11px;color:#24474f;font:inherit;cursor:pointer;transition:border-color .12s ease,background-color .12s ease}
+.seasonal-month:hover{background:#eaf5ef;border-color:#28798a}
+.seasonal-month[aria-pressed="true"]{background:#e1eee9;border:2px solid #176678;padding:9px 2px 8px}
+.seasonal-month-label{font-size:12px;font-weight:750}
+.seasonal-month-value{font-size:13px;font-weight:750;font-variant-numeric:tabular-nums}
+.seasonal-month-gauge{height:75px;width:min(100%,21px);display:flex;align-items:flex-end;border-radius:5px;background:#e4e9e4;overflow:hidden}
+.seasonal-month-gauge>span{display:block;width:100%;min-height:0;background:linear-gradient(180deg,#73aaaf,#1d7184);border-radius:4px}
+.seasonal-month:focus-visible{outline:3px solid #b67d24;outline-offset:3px}
+.seasonal-reading{min-height:118px;padding:18px 20px;background:#fffefa;border:1px solid #c4d7d2;border-left:5px solid #226a7c;border-radius:12px}
+.seasonal-reading strong{display:block;font-size:19px;color:#153f4b}
+.seasonal-reading p{margin:8px 0 0}
+.seasonal-visit-bridge{margin:16px 0;padding:16px 18px;background:#e5efec;border-radius:11px;line-height:1.7}
+.seasonal-visit-bridge strong{display:block;margin:0 0 3px;color:#173d47}
+.seasonal-visit-bridge a{color:#11576c;font-weight:680;text-underline-offset:2px}
+.seaway-seasonal-desk details{margin-top:17px}
+.seaway-seasonal-desk table{width:100%;border-collapse:collapse}
+.seaway-seasonal-desk th,.seaway-seasonal-desk td{padding:9px 12px;text-align:left;border-bottom:1px solid #d6e1dc}
+.seaway-seasonal-desk th{font-weight:700}
+@media(max-width:1050px){.seasonal-months{grid-template-columns:repeat(6,minmax(0,1fr))}.seasonal-month{min-height:122px}.seasonal-month-gauge{height:64px}}
+@media(max-width:740px){.seasonal-months{display:flex;overflow-x:auto;scroll-snap-type:x proximity;gap:8px;padding:2px 4px 12px;margin-right:-12px}.seasonal-month{flex:0 0 66px;min-height:124px;scroll-snap-align:start}.seasonal-month-gauge{height:65px}.seasonal-reading{padding:15px}.seasonal-reading strong{font-size:17px}}
+@media(prefers-reduced-motion:reduce){.seasonal-month{transition:none}}
