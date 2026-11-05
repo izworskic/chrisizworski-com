@@ -120,13 +120,15 @@ async function loadOfficial(){
   if(!r.ok)throw Error('source desk offline');
   const d=await r.json();if(!d?.ok||!d.evidence)throw Error('source desk incomplete');
   const labels={
-   beach:{'general-policy-retrieved':'General shoreline policy retrieved','unverified':'Changed or unverified','source-unavailable':'Official source unavailable'},
-   guest:{'recreation-only-confirmed':'Recreation-only terms retrieved','unverified':'Changed or unverified','source-unavailable':'Official source unavailable'},
+   beach:{'general-policy-retrieved':'General shoreline policy retrieved','unverified':'Changed or unverified','source-unavailable':'Official source unavailable','archived-policy-not-live':'2026-11-05 policy · live refresh blocked'},
+   guest:{'recreation-only-confirmed':'Recreation-only terms retrieved','unverified':'Changed or unverified','source-unavailable':'Official source unavailable','archived-policy-not-live':'2026-11-05 policy · live refresh blocked'},
    park:{'published-closure':'Closure bulletin retrieved','unverified':'Closure/reopening not verified','source-unavailable':'Official source unavailable'}
   };
   for(const k of ['beach','guest','park']){const record=d.evidence[k]||{},value=labels[k][record.status]||'No verification';set('source-'+k,value);}
-  set('source-checked','Independent official pages last fetched '+time(d.checkedAt,{hour:'numeric',minute:'2-digit',timeZoneName:'short'})+
-   '. These are source-text checks, not live gate, beach or maritime activation sensors.');
+  const navyArchived=['beach','guest'].some(k=>d.evidence[k]?.status==='archived-policy-not-live');
+  set('source-checked','Official source requests attempted '+time(d.checkedAt,{hour:'numeric',minute:'2-digit',timeZoneName:'short'})+'. '+
+   (navyArchived?'Navy automated refresh was blocked; its displayed policy was independently reviewed November 5, 2026, not verified open now. ':'')+
+   'No source check is a live gate, beach or maritime-zone activation sensor.');
  }catch{
   for(const k of ['beach','guest','park'])set('source-'+k,'Official check unavailable');
   set('source-checked','Could not fetch the official source desk. Follow Navy, DLNR and Coast Guard links. No open-access inference is made.');
