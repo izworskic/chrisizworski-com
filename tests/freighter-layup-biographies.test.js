@@ -3,7 +3,15 @@ const test=require('node:test'),assert=require('node:assert/strict'),fs=require(
 const root=path.join(__dirname,'..');
 const registry=JSON.parse(fs.readFileSync(path.join(root,'public/assets/freighter-layup-registry.json'),'utf8'));
 const bios=JSON.parse(fs.readFileSync(path.join(root,'public/assets/freighter-vessel-biographies.json'),'utf8'));
-const {renderProfile}=require('../lib/freighter-layup-profile-render.cjs');
+const {renderProfile:renderRawProfile}=require('../lib/freighter-layup-profile-render.cjs');
+const xml=fs.readFileSync(path.join(root,'public/sitemap-winter.xml'),'utf8');
+function renderProfile(p,registry){
+ const needle='https://chrisizworski.com/great-lakes-freighter-winter-layup/vessels/'+p.id+'/</loc><lastmod>';
+ const pos=xml.indexOf(needle);
+ assert.ok(pos>=0,'biography has sitemap entry: '+p.id);
+ const modified=xml.slice(pos+needle.length,pos+needle.length+10);
+ return renderRawProfile(p,registry,modified);
+}
 test('six authored biography subjects with meaningful chapters and trusted references',()=>{
  assert.equal(bios.schemaVersion,1);
  assert.equal(bios.profiles.length,6);
@@ -66,4 +74,33 @@ test('all six biographies keep the editorial family and verified winter tables',
   assert.ok(page.includes('bio-hero-actions')&&page.includes('bio-trust-bar'),p.id);
   assert.ok(page.includes('id="winter-record"')&&page.includes('Read the original reporting'),p.id);
  }
+});
+
+test('every ship biography has a crawlable winter sitemap entry and a named-vessel social preview',()=>{
+ const xml=fs.readFileSync(path.join(root,'public/sitemap-winter.xml'),'utf8');
+ const site='https://chrisizworski.com/great-lakes-freighter-winter-layup/';
+ const urls=[];
+ for(const p of bios.profiles){
+  const url=site+'vessels/'+p.id+'/';
+  const page=fs.readFileSync(path.join(root,'public/great-lakes-freighter-winter-layup/vessels',p.id,'index.html'),'utf8');
+  const match='<loc>'+url+'</loc><lastmod>';
+  assert.equal(xml.split(match).length-1,1,'one sitemap URL for '+p.id);
+  assert.match(page,/<meta property="og:image" content="https:\/\/[^"]+"/);
+  assert.match(page,/<meta property="og:image:alt" content="[^"]+"/);
+  assert.match(page,/<meta name="twitter:image" content="https:\/\/[^"]+"/);
+  assert.match(page,/<meta name="twitter:image:alt" content="[^"]+"/);
+  assert.ok(page.includes('<meta name="twitter:card" content="summary_large_image">'));
+  urls.push(url);
+ }
+ assert.equal(urls.length,6);
+ assert.ok(xml.includes('FREIGHTER_LAYUP_VESSEL_SITEMAP:START'));
+ assert.ok(xml.includes('FREIGHTER_LAYUP_VESSEL_SITEMAP:END'));
+});
+
+test('atlas has accessible Open Graph and X preview metadata with actual image dimensions',()=>{
+ const page=fs.readFileSync(path.join(root,'public/great-lakes-freighter-winter-layup/index.html'),'utf8');
+ assert.ok(page.includes('<meta property="og:image:width" content="1280">'));
+ assert.ok(page.includes('<meta property="og:image:height" content="960">'));
+ assert.ok(page.includes('<meta name="twitter:card" content="summary_large_image">'));
+ assert.ok(page.includes('<meta name="twitter:image:alt" content='));
 });
