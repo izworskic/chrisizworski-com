@@ -95,8 +95,8 @@ def build_history(registry: dict) -> dict:
                 "events": sorted(events, key=lambda e: (e["date"], e["kind"])),
             })
             across_years[key].add(year)
-        if not vessels:
-            continue
+        # Keep zero-report historical years visible rather than pretending the
+        # fleet was empty or erasing a completed winter entirely.
         vessels.sort(key=lambda v: (v["harborName"], v["name"]))
         counts = Counter(v["harborId"] for v in vessels)
         seasons.append({
@@ -148,7 +148,7 @@ def render(history: dict) -> str:
 
     content = []
     for season in seasons:
-        max_count = max(h["records"] for h in season["harbors"])
+        max_count = max((h["records"] for h in season["harbors"]), default=1)
         bars = "".join(
             f'<li><span>{e(h["name"])}</span>'
             f'<span class="history-bar-track" aria-hidden="true">'
@@ -179,6 +179,9 @@ def render(history: dict) -> str:
                 f'<div class="history-vessel-links"><a href="{e(v["source"]["url"])}" '
                 f'target="_blank" rel="noopener noreferrer">View supporting source ↗</a></div>'
                 f'{details}</li>')
+        empty_year = ('<p class="history-empty-year">No source-backed layup reports were '
+                      'collected for this shipping winter. This is not evidence that '
+                      'the Great Lakes harbors were empty.</p>') if not vessel_cards else ''
         content.append(
             f'<div class="history-season-panel" data-history-season="{e(season["id"])}">'
             f'<div class="history-insight"><div><strong>{season["recordCount"]}</strong>'
@@ -188,7 +191,7 @@ def render(history: dict) -> str:
             f'<div class="history-body-grid"><div class="history-harbors">'
             f'<h4>Harbor register</h4><p>Records in this selected archive, not harbor fleet capacity.</p>'
             f'<ol>{bars}</ol></div><div class="history-vessels-area">'
-            f'<h4>Ship-by-ship ledger</h4><ol class="history-vessel-list">'
+            f'<h4>Ship-by-ship ledger</h4>{empty_year}<ol class="history-vessel-list">'
             f'{"".join(vessel_cards)}</ol></div></div></div>')
     recurrent = ""
     if history["recurringKeys"]:
@@ -201,11 +204,12 @@ def render(history: dict) -> str:
         recurrent = ('<p class="history-returning"><strong>Across the ledgers:</strong> '
                      + e(", ".join(examples)) + ' appears in more than one curated winter record. '
                      'This does not establish continuous occupancy or an identical berth.</p>')
+    winter_count = {1: "One", 2: "Two", 3: "Three"}.get(len(seasons), str(len(seasons)))
     return (START + '\n'
             '<section id="winter-fleet-history" class="winter-ledger" aria-labelledby="history-heading" '
             'data-history-enhanced="false">'
             '<div class="history-heading"><p class="kicker">The winter manifest / ship-by-ship evidence</p>'
-            '<h3 id="history-heading">Two winters. Different harbors. Real records.</h3>'
+            '<h3 id="history-heading">' + e(winter_count) + ' winters. Different harbors. Real records.</h3>'
             '<p>Turn the pages of a working harbor ledger. Follow a documented ship, '
             'then open the evidence behind its winter stay. '
             'These records tell us what was reported, not where every ship on the lakes spent the season.</p></div>'
