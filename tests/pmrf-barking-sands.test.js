@@ -62,6 +62,7 @@ test('DLNR closure parser is conservative and never fabricates a reopening',()=>
  assert.equal(parkPolicy('<div>Good morning Kauaʻi</div>').status,'unverified');
  const changed='<p>11/2/26</p><p>POLIHALE STATE PARK HAS REOPENED. ALL OTHER KAUAʻI STATE PARKS REMAIN CLOSED</p>';
  assert.equal(parkPolicy(changed).status,'unverified','A reopening must suppress older blanket closure wording');
+ assert.equal(parkPolicy(closed+' '.repeat(12000)+' 11/3/26 POLIHALE STATE PARK HAS REOPENED').status,'unverified','A newer announcement anywhere in archived notices suppresses an older closure claim');
 });
 test('official source desk uses fixed source hosts, independent failure, and no false live access',async()=>{
  const bodies={
