@@ -63,11 +63,16 @@ async function ready(){
   const p=await c.newPage();
   // Register catchall before special route; Playwright prioritizes later routes.
   await p.route('**/*',route=>route.request().url().startsWith(base)?route.continue():route.abort());
-  await p.route('**/assets/garden-cabbage-validation-data.js*',route=>route.fulfill({
+  let corruptedSourceIntercepts=0;
+  await p.route('**/assets/garden-cabbage-validation-data.js*',route=>{
+   corruptedSourceIntercepts++;
+   return route.fulfill({
    status:200,contentType:'application/javascript',body:'window.GardenCabbageValidation={schema:"invalid",evaluation:{promotionAllowed:true}};'
-  }));
+   });
+  });
   await p.goto(base+'/michigan-garden-pest-watch/',{waitUntil:'domcontentloaded'});
   await p.waitForFunction(()=>document.getElementById('cm-status')?.textContent.includes('could not be verified'));
+  assert.equal(corruptedSourceIntercepts,1,'The intentionally corrupt source must actually be delivered to the browser');
   assert.ok(await p.locator('#cm-ui').isHidden());
   assert.equal(await p.locator('#cm-field-reports .cm-validate__record').count(),0);
   assert.ok(await p.locator('.cm-validate__footnotes a').count()>=4);
