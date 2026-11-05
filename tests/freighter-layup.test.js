@@ -2,16 +2,17 @@
 const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 const root=path.join(__dirname,'..','public'),registry=JSON.parse(fs.readFileSync(path.join(root,'assets','freighter-layup-registry.json'),'utf8'));
 const model=require('../public/assets/freighter-layup-model.js'),seasons=registry.seasons;
-const old=seasons.find(s=>s.id==='2024-25'),hist=seasons.find(s=>s.id==='2025-26'),upcoming=seasons.find(s=>s.id==='2026-27');
+const old=seasons.find(s=>s.id==='2024-25'),hist=seasons.find(s=>s.id==='2025-26'),ledger=JSON.parse(fs.readFileSync(path.join(root,'assets','freighter-layup-live-season.json'),'utf8')),upcoming=seasons.find(s=>s.id===ledger.season);
 const app=fs.readFileSync(path.join(root,'assets','freighter-layup.js'),'utf8');
 const html=fs.readFileSync(path.join(root,'great-lakes-freighter-winter-layup','index.html'),'utf8');
 const secure=s=>/^https:\/\/[^\s]+$/.test(s||'');
-test('source model supports three winters without future location carryover',()=>{
+test('source model includes the current winter with no historical vessel carryover',()=>{
  assert.deepEqual(model.validateRegistry(registry),[]);
  assert.deepEqual(model.totals(hist),{documented:12,confirmed:10,reported:2,harbors:5});
  assert.deepEqual(model.totals(old),{documented:2,confirmed:2,reported:0,harbors:1});
  assert.deepEqual(upcoming.records,[]);
  assert.equal(upcoming.state,'upcoming_unconfirmed');
+ assert.ok(seasons.length>=3);
 });
 test('thirteen watch harbors are approximate references, including Canada and Michigan',()=>{
  assert.equal(registry.harbors.length,13);

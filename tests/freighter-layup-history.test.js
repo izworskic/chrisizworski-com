@@ -16,7 +16,7 @@ test('Python historical artifact is a source-only subset, not a winter forecast'
   assert.match(history.coverageNote, /not a full fleet census/i);
   assert.equal(history.recordCount, history.seasons.reduce((n, s) => n + s.vessels.length, 0));
   assert.equal(history.uniqueVesselCount, new Set(history.seasons.flatMap(s => s.vessels.map(v => v.key))).size);
-  assert.ok(history.seasons.every(s => s.vessels.length > 0 &&
+  assert.ok(history.seasons.every(s => s.vessels.length >= 0 &&
     s.recordCount === archive.seasons.find(a => a.id === s.id)?.records.length &&
     archive.seasons.find(a => a.id === s.id)?.state === 'historical_snapshot'));
   assert.equal(history.seasons.find(x => x.id === '2026-27'), undefined);
@@ -44,6 +44,7 @@ test('history is crawlable source-linked HTML, with no speculative last-winter c
   assert.ok(html.includes('not a full fleet census'));
   assert.ok(html.includes('data-history-enhanced="false"'));
   assert.ok(!html.includes('predicted berth'));
+  assert.equal(history.seasons.length, archive.seasons.filter(s=>s.state==='historical_snapshot').length);
 });
 
 test('season and harbor changes use one accessible, reversible selection state', () => {
@@ -55,7 +56,7 @@ test('season and harbor changes use one accessible, reversible selection state',
   assert.match(css, /data-history-enhanced="true"/);
   assert.match(css, /\.history-vessel-list/);
   assert.match(css, /@media\(max-width:620px\)/);
-  assert.ok(html.includes('/assets/freighter-layup-history.js?v=20261103a'));
+  assert.match(html,/\/assets\/freighter-layup-history\.js\?v=[a-zA-Z0-9-]+/);
 });
 
 test('existing canonical, author, H1 and the sole winter sitemap entry remain intact', () => {

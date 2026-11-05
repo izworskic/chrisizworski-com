@@ -9,6 +9,9 @@ const http=require('node:http');
 const assert=require('node:assert/strict');
 const {chromium}=require('playwright');
 const root=path.resolve(__dirname,'..','public');
+const {seasonForDate}=require('../lib/freighter-layup-season');
+const activeSeason=seasonForDate(new Date()),activeYear=Number(activeSeason.slice(0,4));
+const historyData=JSON.parse(fs.readFileSync(path.join(root,'assets','freighter-layup-history.json'),'utf8'));
 const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.json':'application/json; charset=utf-8','.css':'text/css; charset=utf-8','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.svg':'image/svg+xml','.ico':'image/x-icon','.webp':'image/webp'};
 const server=http.createServer((req,res)=>{
   const raw=(req.url||'/').split('?')[0];
@@ -42,7 +45,7 @@ async function run(){
       await page.goto(url,{waitUntil:'domcontentloaded',timeout:15000});
       await page.locator('#winter-live').waitFor({timeout:10000});
       await page.waitForFunction(()=>!document.getElementById('live-update-status')?.textContent?.includes('Loading the new winter'),{timeout:10000});
-      check(await page.locator('#season').inputValue()==='2025-26',size.name+': evidence-rich archive is default until first active report');
+      check(await page.locator('#season').inputValue()===activeSeason,size.name+': current winter is default even before new reports');
       check(await page.locator('#winter-live').isVisible(),size.name+': living winter desk stays visible while browsing archives');
       await page.locator('#source-evidence-details > summary').click();
       check(await page.locator('#layup-reporting-network .coverage-source').count()===20,size.name+': twenty linked reporting inputs');
@@ -111,9 +114,9 @@ async function run(){
       // while the client offers a reversible season + harbor view.
       const hist = page.locator('#winter-fleet-history');
       await page.waitForFunction(()=>document.getElementById('winter-fleet-history')?.dataset.historyEnhanced==='true');
-      check(await hist.locator('[data-history-vessel]').count()===14,size.name+': fourteen curated winter records in crawlable source');
-      check(await hist.locator('[data-history-season="2025-26"] [data-history-vessel]:visible').count()===12,
-        size.name+': default 2025–26 contains only its twelve records');
+      check(await hist.locator('[data-history-vessel]').count()===historyData.recordCount,size.name+': every archived source record is crawlable');
+      check(await hist.locator('[data-history-season="'+historyData.seasons[0].id+'"] [data-history-vessel]:visible').count()===historyData.seasons[0].recordCount,
+        size.name+': latest historical winter is initially selected even when its records are empty');
       check(await hist.locator('[data-history-season="2024-25"]').isHidden(),size.name+': past year hidden only after JS enhancement');
       await hist.locator('[data-history-pick="2024-25"]').click();
       check(await hist.locator('[data-history-season="2024-25"] [data-history-vessel]:visible').count()===2,
@@ -199,7 +202,7 @@ async function run(){
       check(await page.locator('#season').inputValue()==='2025-26',size.name+': cross-winter season navigation');
       check((await page.locator('#detail-title').textContent())==='Algoma Compass',size.name+': vessel identity preserved across winters');
 
-      await page.locator('#season').selectOption('2026-27');
+      await page.locator('#season').selectOption(activeSeason);
       check(await page.locator('#winter-live').isVisible(),size.name+': live desk visible in current season');
       check(await page.locator('[data-ship]').count()===0,size.name+': no invented future ship records');
       check(await page.locator('.layup-pin').count()===0,size.name+': no old harbor markers in future season');
@@ -207,16 +210,16 @@ async function run(){
       check(await page.locator('[data-ship]').count()===12,size.name+': archive restored');
 
       // Simulated authorized dated report exercises live-season integration, not AIS inference.
-      const sampleLive={schemaVersion:1,season:'2026-27',startedAt:'2026-11-01T00:00:00.000Z',updatedAt:'2027-01-16T12:00:00Z',previousSeasons:[],events:[{
+      const sampleLive={schemaVersion:1,season:activeSeason,startedAt:activeYear+'-11-01T04:00:00.000Z',updatedAt:(activeYear+1)+'-01-16T12:00:00Z',previousSeasons:[],events:[{
        id:'winter-demo-arrival',vessel:{key:'lee-a-tregurtha',name:'Lee A. Tregurtha'},harborId:'superior',
-       kind:'arrival',date:'2027-01-16',confidence:'reported',
+       kind:'arrival',date:(activeYear+1)+'-01-16',confidence:'reported',
        summary:'Lee A. Tregurtha arrived for winter layup according to a dated harbor report.',
        source:{url:'https://www.duluthharborcam.com/2027/01/lee-arrival.html',title:'Arrival for winter layup',publisher:'Duluth Harbor Cam',class:'journalistic_report'}
       }]};
       await context.route('**/assets/freighter-layup-live-season.json',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(sampleLive)}));
       await page.reload({waitUntil:'domcontentloaded'});
       await page.locator('#winter-feed .winter-update').first().waitFor({timeout:10000});
-      check(await page.locator('#season').inputValue()==='2026-27',size.name+': sourced winter chosen');
+      check(await page.locator('#season').inputValue()===activeSeason,size.name+': sourced winter chosen');
       check(await page.locator('#live-arrivals').textContent()==='1',size.name+': dated report adds arrival');
       check(await page.locator('.layup-pin').count()===1,size.name+': sourced record adds harbor map pin');
       check(await page.locator('[data-ship="lee-a-tregurtha"]').count()===1,size.name+': new winter roster grows');
@@ -228,16 +231,16 @@ async function run(){
       // A departure ends the current berth but must NOT erase the dated story.
       sampleLive.events.push({
        id:'winter-demo-departure',vessel:{key:'lee-a-tregurtha',name:'Lee A. Tregurtha'},harborId:'superior',
-       kind:'departure',date:'2027-03-01',confidence:'reported',
+       kind:'departure',date:(activeYear+1)+'-03-01',confidence:'reported',
        summary:'Lee A. Tregurtha departed winter layup at Superior.',
        source:{url:'https://www.duluthharborcam.com/2027/03/lee-departure.html',title:'Departure',publisher:'Duluth Harbor Cam',class:'journalistic_report'}
       });
       await page.reload({waitUntil:'domcontentloaded'});
       await page.locator('#winter-feed .winter-update').first().waitFor({timeout:10000});
       check(await page.locator('#winter-live').isVisible(),size.name+': current-season story desk remains visible in archive view');
-      check(await page.locator('#season').inputValue()==='2025-26',size.name+': archive is default when no actively reported berth remains');
+      check(await page.locator('#season').inputValue()===activeSeason,size.name+': season remains current after a departure');
       check(await page.locator('#live-departures').textContent()==='1',size.name+': departure is retained as a real winter event');
-      await page.locator('#season').selectOption('2026-27');
+      await page.locator('#season').selectOption(activeSeason);
       check(await page.locator('.layup-pin').count()===0,size.name+': departed vessel removed from occupied winter harbor map');
       check(await page.locator('[data-ship]').count()===0,size.name+': departed vessel removed from current berth cards');
       check((await page.locator('#winter-feed').textContent()).includes('departed winter layup'),size.name+': departure preserved in source timeline');
@@ -246,16 +249,16 @@ async function run(){
       // to one of the other eight candidate harbor areas.
       sampleLive.events.splice(0,sampleLive.events.length,{
        id:'first-verified-arrival',vessel:{key:'lee-a-tregurtha',name:'Lee A. Tregurtha'},harborId:'superior',
-       kind:'arrival',date:'2027-01-16',confidence:'confirmed',summary:'Confirmed arrival at Superior.',
+       kind:'arrival',date:(activeYear+1)+'-01-16',confidence:'confirmed',summary:'Confirmed arrival at Superior.',
        source:{url:'https://duluthport.com/news/arrival/',title:'Verified winter arrival',publisher:'Duluth Seaway Port Authority',class:'port_authority'}
       },{
        id:'unverified-harbor-move',vessel:{key:'lee-a-tregurtha',name:'Lee A. Tregurtha'},harborId:'sarnia',
-       kind:'berth_change',date:'2027-01-20',confidence:'reported',summary:'Reported move to Sarnia, pending independent confirmation.',
+       kind:'berth_change',date:(activeYear+1)+'-01-20',confidence:'reported',summary:'Reported move to Sarnia, pending independent confirmation.',
        source:{url:'https://www.duluthharborcam.com/2027/01/ship-moved.html',title:'Possible move to Sarnia',publisher:'Duluth Harbor Cam',class:'journalistic_report'}
       });
       await page.reload({waitUntil:'domcontentloaded'});
       await page.locator('[data-ship="lee-a-tregurtha"]').waitFor({timeout:10000});
-      check(await page.locator('#season').inputValue()==='2026-27',size.name+': active winter regains default');
+      check(await page.locator('#season').inputValue()===activeSeason,size.name+': active winter regains default');
       check(await page.locator('#harbor-filter option').count()===2,size.name+': newly sourced candidate harbor now filterable');
       check(await page.locator('#harbor-filter option[value="sarnia"]').count()===1,size.name+': Sarnia can be shown with actual dated evidence');
       check((await page.locator('#stat-year').textContent())==='0 / 1',size.name+': old confirmed harbor cannot validate new reported berth');
@@ -342,15 +345,44 @@ async function run(){
     });
     const staticPage = await noJS.newPage();
     await staticPage.goto(url,{waitUntil:'domcontentloaded',timeout:15000});
-    check(await staticPage.locator('#winter-fleet-history [data-history-vessel]').count()===14,
-      'no-JS: fourteen historical ship records remain in the document');
-    check(await staticPage.locator('#winter-fleet-history .history-season-panel').count()===2,
-      'no-JS: both winters remain directly available');
+    check(await staticPage.locator('#winter-fleet-history [data-history-vessel]').count()===historyData.recordCount,
+      'no-JS: all historical ship records remain in the document');
+    check(await staticPage.locator('#winter-fleet-history .history-season-panel').count()===historyData.seasons.length,
+      'no-JS: every archived winter remains directly available');
     check(await staticPage.locator('#winter-fleet-history .history-controls').isHidden(),
       'no-JS: inert history controls are not shown');
-    check(await staticPage.locator('#winter-fleet-history a[href^="https://"]').count()>=14,
+    check(await staticPage.locator('#winter-fleet-history a[href^="https://"]').count()>=historyData.recordCount,
       'no-JS: original evidence links survive');
     await noJS.close();
+    // Simulate a visit two November rollovers in the future, before a
+    // scheduled ledger refresh. The browser must show that year's EMPTY
+    // provisional desk, not the old 2026-27 season or its ship locations.
+    const nextYear=activeYear+2;
+    const futureId=nextYear+'-'+String((nextYear+1)%100).padStart(2,'0');
+    const frozen=Date.UTC(nextYear,10,2,12);
+    const future=await browser.newContext({viewport:{width:390,height:844},reducedMotion:'reduce'});
+    await future.addInitScript(ms=>{
+      const OriginalDate=Date;
+      window.Date=class extends OriginalDate {
+        constructor(...args){super(...(args.length?args:[ms]));}
+        static now(){return ms;}
+      };
+    },frozen);
+    await future.route('**/*',route=>{
+      const host=new URL(route.request().url()).hostname;
+      return host==='127.0.0.1'?route.continue():route.abort();
+    });
+    const futurePage=await future.newPage();
+    await futurePage.goto(url,{waitUntil:'domcontentloaded',timeout:15000});
+    await futurePage.waitForFunction(expected=>document.querySelector('#season')?.value===expected,
+      futureId,{timeout:10000});
+    check(await futurePage.locator('#season').inputValue()===futureId,
+      'future date: generated year appears as living season without a rebuild');
+    check(await futurePage.locator('[data-ship]').count()===0,
+      'future date: stale year never invents current ship locations');
+    check((await futurePage.locator('#live-update-status').textContent()).includes('pending'),
+      'future date: unavailable source ledger is explicitly pending, not zero ships');
+    await future.close();
     for(const r of results)console.log(r);
   }finally{await browser.close();await new Promise(r=>server.close(r))}
 }

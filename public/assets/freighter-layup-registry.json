@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "updatedOn": "2026-10-24",
-  "description": "Curated historical layup archive; 2024–25 and 2025–26 source-dated records in US and Canadian Great Lakes harbors. Incomplete samples, with explicit evidence status and no inferred current positions.",
+  "updatedOn": "2026-11-05",
+  "description": "Curated source-backed historical winter layup records across the Great Lakes. The current winter and all newly completed seasons roll forward automatically without inferring ship berths from prior winters or AIS.",
   "harbors": [
     {
       "id": "superior",
@@ -155,118 +155,6 @@
       "asOf": "2026-10-24",
       "note": "The 2026–27 layup season is not yet confirmed in this registry. Do not inherit last winter's locations.",
       "records": []
-    },
-    {
-      "id": "2024-25",
-      "label": "Winter 2024–25",
-      "state": "historical_snapshot",
-      "asOf": "2025-01-31",
-      "note": "A deliberately incomplete older archive: two separately reported Owen Sound winter berths. The Algoma Compass record links to the same vessel identity as in 2025–26; no claim of continuous winter occupancy or complete fleet coverage.",
-      "records": [
-        {
-          "identity": {
-            "key": "algoma-compass",
-            "imo": "7326245",
-            "mmsi": null,
-            "matchPolicy": "verified_imo_and_curated_aliases"
-          },
-          "aliases": [
-            "Roger M. Kyes",
-            "Adam E. Cornelius (1989–2018)"
-          ],
-          "berthPrecision": "berth_unverified",
-          "id": "algoma-compass",
-          "name": "Algoma Compass",
-          "harborId": "owen-sound",
-          "berth": "Owen Sound harbor — exact berth not verified",
-          "status": "confirmed_historical",
-          "statusAsOf": "2025-01-31",
-          "evidenceClass": "local_maritime_museum",
-          "evidence": {
-            "url": "https://waterfrontheritage.ca/the-algoma-compass-arrives-for-winter-layup/",
-            "title": "The Algoma Compass Arrives for Winter Layup (reviews previous winters)",
-            "publisher": "Community Waterfront Heritage Centre",
-            "published": "2026-01-24"
-          },
-          "summary": "Local waterfront historians identify Owen Sound as a 2025 winter stop for Algoma Compass. A January 2026 local news report captions a photograph taken after its January 31, 2025 docking. Those retrospective sources establish the earlier season but do not independently verify a precise berth.",
-          "events": [
-            {
-              "date": "2025-01-31",
-              "type": "historical_arrival",
-              "text": "A later news report dates a photograph of the ship after docking at Owen Sound to January 31, 2025; the local maritime museum confirms a 2025 winter stay.",
-              "source": "https://www.bayshorebroadcasting.ca/2026/01/16/algoma-compass-expected-to-arrive-in-owen-sound-for-winter-berth/",
-              "sourceClass": "journalistic_report"
-            }
-          ],
-          "storyFacts": [
-            {
-              "text": "A year before the icebreaker-assisted 2026 arrival, the ship also used Owen Sound for its winter stay.",
-              "source": "https://waterfrontheritage.ca/the-algoma-compass-arrives-for-winter-layup/"
-            }
-          ],
-          "photo": {
-            "file": "Algoma Compass Owen Sound 2020.jpg",
-            "page": "https://commons.wikimedia.org/wiki/File:Algoma_Compass_Owen_Sound_2020.jpg",
-            "creator": "JustSomePics",
-            "license": "CC BY-SA 4.0",
-            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-            "date": "2020-08-12",
-            "alt": "Algoma Compass photographed at Owen Sound in August 2020; not a winter layup photograph.",
-            "thumbUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ab/Algoma_Compass_Owen_Sound_2020.jpg/960px-Algoma_Compass_Owen_Sound_2020.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
-          }
-        },
-        {
-          "identity": {
-            "key": "oakglen",
-            "imo": null,
-            "mmsi": null,
-            "matchPolicy": "curated_alias_only"
-          },
-          "aliases": [
-            "M/V Oakglen"
-          ],
-          "berthPrecision": "berth_unverified",
-          "id": "oakglen",
-          "name": "Oakglen",
-          "harborId": "owen-sound",
-          "berth": "East side of Owen Sound harbor — individual berth unverified",
-          "status": "confirmed_historical",
-          "statusAsOf": "2024-12-31",
-          "evidenceClass": "operator_statement",
-          "evidence": {
-            "url": "https://www.bayshorebroadcasting.ca/2024/12/31/large-cargo-ship-docks-in-owen-sound/",
-            "title": "MV Oakglen Stays In Owen Sound For Winter",
-            "publisher": "Bayshore Broadcasting quoting CSL Ships director of communications",
-            "published": "2024-12-31"
-          },
-          "summary": "On December 31, 2024, the Oakglen reached Owen Sound from Port Colborne for winter layup. CSL confirmed plans for general maintenance before the next shipping season. The 1980-built gearless freighter relies on shore equipment rather than its own unloading gear.",
-          "events": [
-            {
-              "date": "2024-12-31",
-              "type": "arrival",
-              "text": "Arrived at Owen Sound's east harbor side; CSL communications representative confirmed winter layup and general maintenance plans.",
-              "source": "https://www.bayshorebroadcasting.ca/2024/12/31/large-cargo-ship-docks-in-owen-sound/",
-              "sourceClass": "operator_statement"
-            }
-          ],
-          "storyFacts": [
-            {
-              "text": "Built in 1980, approximately 222 metres long, and described by CSL as a gearless bulk carrier.",
-              "source": "https://www.bayshorebroadcasting.ca/2024/12/31/large-cargo-ship-docks-in-owen-sound/"
-            }
-          ],
-          "photo": {
-            "file": "Ship Oakglen.jpg",
-            "page": "https://commons.wikimedia.org/wiki/File:Ship_Oakglen.jpg",
-            "creator": "GuavaTrain",
-            "license": "CC BY-SA 4.0",
-            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-            "date": "2021-12-19",
-            "alt": "Oakglen photographed exiting a lock in December 2021; not a winter layup photograph.",
-            "thumbUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/09/Ship_Oakglen.jpg/960px-Ship_Oakglen.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
-          }
-        }
-      ]
     },
     {
       "id": "2025-26",
@@ -906,6 +794,118 @@
             "date": "2011-09-15",
             "alt": "American Spirit inside the Soo Locks in September 2011; not a winter layup photograph.",
             "thumbUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cf/American_Spirit.jpg/960px-American_Spirit.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "2024-25",
+      "label": "Winter 2024–25",
+      "state": "historical_snapshot",
+      "asOf": "2025-01-31",
+      "note": "A deliberately incomplete older archive: two separately reported Owen Sound winter berths. The Algoma Compass record links to the same vessel identity as in 2025–26; no claim of continuous winter occupancy or complete fleet coverage.",
+      "records": [
+        {
+          "identity": {
+            "key": "algoma-compass",
+            "imo": "7326245",
+            "mmsi": null,
+            "matchPolicy": "verified_imo_and_curated_aliases"
+          },
+          "aliases": [
+            "Roger M. Kyes",
+            "Adam E. Cornelius (1989–2018)"
+          ],
+          "berthPrecision": "berth_unverified",
+          "id": "algoma-compass",
+          "name": "Algoma Compass",
+          "harborId": "owen-sound",
+          "berth": "Owen Sound harbor — exact berth not verified",
+          "status": "confirmed_historical",
+          "statusAsOf": "2025-01-31",
+          "evidenceClass": "local_maritime_museum",
+          "evidence": {
+            "url": "https://waterfrontheritage.ca/the-algoma-compass-arrives-for-winter-layup/",
+            "title": "The Algoma Compass Arrives for Winter Layup (reviews previous winters)",
+            "publisher": "Community Waterfront Heritage Centre",
+            "published": "2026-01-24"
+          },
+          "summary": "Local waterfront historians identify Owen Sound as a 2025 winter stop for Algoma Compass. A January 2026 local news report captions a photograph taken after its January 31, 2025 docking. Those retrospective sources establish the earlier season but do not independently verify a precise berth.",
+          "events": [
+            {
+              "date": "2025-01-31",
+              "type": "historical_arrival",
+              "text": "A later news report dates a photograph of the ship after docking at Owen Sound to January 31, 2025; the local maritime museum confirms a 2025 winter stay.",
+              "source": "https://www.bayshorebroadcasting.ca/2026/01/16/algoma-compass-expected-to-arrive-in-owen-sound-for-winter-berth/",
+              "sourceClass": "journalistic_report"
+            }
+          ],
+          "storyFacts": [
+            {
+              "text": "A year before the icebreaker-assisted 2026 arrival, the ship also used Owen Sound for its winter stay.",
+              "source": "https://waterfrontheritage.ca/the-algoma-compass-arrives-for-winter-layup/"
+            }
+          ],
+          "photo": {
+            "file": "Algoma Compass Owen Sound 2020.jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:Algoma_Compass_Owen_Sound_2020.jpg",
+            "creator": "JustSomePics",
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+            "date": "2020-08-12",
+            "alt": "Algoma Compass photographed at Owen Sound in August 2020; not a winter layup photograph.",
+            "thumbUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ab/Algoma_Compass_Owen_Sound_2020.jpg/960px-Algoma_Compass_Owen_Sound_2020.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+          }
+        },
+        {
+          "identity": {
+            "key": "oakglen",
+            "imo": null,
+            "mmsi": null,
+            "matchPolicy": "curated_alias_only"
+          },
+          "aliases": [
+            "M/V Oakglen"
+          ],
+          "berthPrecision": "berth_unverified",
+          "id": "oakglen",
+          "name": "Oakglen",
+          "harborId": "owen-sound",
+          "berth": "East side of Owen Sound harbor — individual berth unverified",
+          "status": "confirmed_historical",
+          "statusAsOf": "2024-12-31",
+          "evidenceClass": "operator_statement",
+          "evidence": {
+            "url": "https://www.bayshorebroadcasting.ca/2024/12/31/large-cargo-ship-docks-in-owen-sound/",
+            "title": "MV Oakglen Stays In Owen Sound For Winter",
+            "publisher": "Bayshore Broadcasting quoting CSL Ships director of communications",
+            "published": "2024-12-31"
+          },
+          "summary": "On December 31, 2024, the Oakglen reached Owen Sound from Port Colborne for winter layup. CSL confirmed plans for general maintenance before the next shipping season. The 1980-built gearless freighter relies on shore equipment rather than its own unloading gear.",
+          "events": [
+            {
+              "date": "2024-12-31",
+              "type": "arrival",
+              "text": "Arrived at Owen Sound's east harbor side; CSL communications representative confirmed winter layup and general maintenance plans.",
+              "source": "https://www.bayshorebroadcasting.ca/2024/12/31/large-cargo-ship-docks-in-owen-sound/",
+              "sourceClass": "operator_statement"
+            }
+          ],
+          "storyFacts": [
+            {
+              "text": "Built in 1980, approximately 222 metres long, and described by CSL as a gearless bulk carrier.",
+              "source": "https://www.bayshorebroadcasting.ca/2024/12/31/large-cargo-ship-docks-in-owen-sound/"
+            }
+          ],
+          "photo": {
+            "file": "Ship Oakglen.jpg",
+            "page": "https://commons.wikimedia.org/wiki/File:Ship_Oakglen.jpg",
+            "creator": "GuavaTrain",
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+            "date": "2021-12-19",
+            "alt": "Oakglen photographed exiting a lock in December 2021; not a winter layup photograph.",
+            "thumbUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/09/Ship_Oakglen.jpg/960px-Ship_Oakglen.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
           }
         }
       ]

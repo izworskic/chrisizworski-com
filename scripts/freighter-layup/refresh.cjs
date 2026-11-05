@@ -9,10 +9,12 @@ async function run(){
  const file=path.join(root,'public/assets/freighter-layup-live-season.json'),reviewFile=path.join(root,'data/freighter-layup-review.json');
  const prior=fs.readFileSync(file,'utf8'),ledger=JSON.parse(prior);
  if(!validLedger(ledger))throw Error('Current season ledger failed validation');
- const m=new Date(now).getUTCMonth()+1;
  const localMonth=Number(new Intl.DateTimeFormat('en-US',{timeZone:'America/Detroit',month:'numeric'}).format(new Date(now)));
- const preSeason=Number(ledger.season.slice(0,4))===Number(season.slice(0,4))+1&&ledger.events.length===0;
- const current=preSeason?ledger:rollover(ledger,season),scan=!preSeason&&(localMonth>=11||localMonth<=4);
+ // The winter on the clock is the only live winter. Never pre-seed next
+ // November with old ship positions or silently serve a future ledger.
+ if(Number(ledger.season.slice(0,4))>Number(season.slice(0,4)))
+  throw Error('Future ledger pre-seeded before Detroit winter boundary; reconcile before publishing');
+ const current=rollover(ledger,season),scan=localMonth>=11||localMonth<=4;
  const result=scan?await refresh({ledger:current,archive:JSON.parse(fs.readFileSync(path.join(root,'public/assets/freighter-layup-registry.json'),'utf8')),now}):{ledger:current,changed:false,reviews:[],outcomes:[]};
 
  const editorial=JSON.parse(fs.readFileSync(path.join(root,'data/freighter-layup-editorial.json'),'utf8'));
