@@ -1,0 +1,83 @@
+name: Rocket six-region Python official notice intelligence
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/rocket-official-notices.yml'
+      - 'scripts/rocket_official_notices.py'
+      - 'lib/rocket-official-notices.js'
+      - 'api/rocket-official-notices.js'
+      - 'public/synced-national-tools/rocket-launch-live/app.js'
+      - 'tests/rocket-official-notices.test.js'
+  schedule:
+    # GitHub hosted schedules are best effort. The public UI reports overdue
+    # observations instead of claiming a guaranteed 24/7 source monitor.
+    - cron: '19,49 * * * *'
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: rocket-python-official-notice-watch
+  cancel-in-progress: false
+
+jobs:
+  refresh-official-range-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+      - name: Python cross-region safety and classification regression
+        run: python3 scripts/rocket_official_notices.py --test
+      - name: Verify live API route is deployed (only on new release)
+        if: github.event_name == 'push'
+        run: |
+          for attempt in $(seq 1 25); do
+            if curl --fail --silent --show-error --max-time 8 \
+              'https://chrisizworski.com/api/rocket-official-notices' |
+              jq -e '.ok==true and .version==1' >/dev/null; then
+              exit 0
+            fi
+            sleep 10
+          done
+          echo 'The signed official notice endpoint is not live.'
+          exit 1
+      - name: Collect official source evidence with Python (not LL2)
+        run: |
+          python3 scripts/rocket_official_notices.py --collect \
+            --output "$RUNNER_TEMP/rocket-official-notices.json"
+          jq -e '.version==1 and .sourceCount==10 and
+            (.regions|keys|length)==6 and
+            .availableSources>=2' "$RUNNER_TEMP/rocket-official-notices.json" >/dev/null
+      - name: Mint short-lived repository/workflow scoped OIDC identity
+        uses: actions/github-script@v7
+        id: oidc
+        with:
+          script: |
+            const token=await core.getIDToken('https://chrisizworski.com/api/rocket-official-notices');
+            core.setSecret(token);
+            core.setOutput('token',token);
+      - name: Publish verified compact evidence to existing Postgres-backed ToolState
+        env:
+          ROCKET_NOTICE_TOKEN: ${{ steps.oidc.outputs.token }}
+        run: |
+          result="$(curl --fail-with-body --silent --show-error \
+            --retry 1 --retry-all-errors --max-time 40 \
+            -X POST -H "Authorization: Bearer ${ROCKET_NOTICE_TOKEN}" \
+            -H "Content-Type: application/json" \
+            --data-binary @"$RUNNER_TEMP/rocket-official-notices.json" \
+            'https://chrisizworski.com/api/rocket-official-notices')"
+          printf '%s' "$result" |
+            jq -e '.ok==true and .version==1 and
+              .sourceCount==10 and .availableSources>=2' >/dev/null
+          printf '%s' "$result" | jq '{checkedAt,sourceCount,availableSources,changedSources}'
+      - name: Verify public evidence display endpoint (not launch permission)
+        run: |
+          curl --fail --silent --show-error --max-time 15 \
+            'https://chrisizworski.com/api/rocket-official-notices?region=texas' |
+            jq -e '.ok==true and .version==1 and
+              .health!="unavailable" and
+              (.regions.texas|length)==1' >/dev/null
