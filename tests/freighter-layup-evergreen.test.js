@@ -53,7 +53,7 @@ test('browser no longer hardcodes current, archive or map reference to specific 
  assert.match(app,/provisional:true/);
 });
 test('published ledger and registry agree on active year without copying historical vessels',()=>{
- assert.equal(ledger.season,m.seasonForDate(new Date('2026-11-05T12:00:00Z')));
+ assert.equal(ledger.season,m.seasonForDate(new Date()),'released source ledger must match the current Detroit winter');
  const year=registry.seasons.find(s=>s.id===ledger.season);
  assert.ok(year);
  assert.equal(year.records.length,0);
