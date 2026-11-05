@@ -41,16 +41,19 @@ test('winter layup hero does not repeat the map and arrival ledger counts', () =
   const map = read('public/assets/freighter-layup.js');
   assert.ok(map.includes('state.map.fitBounds(bounds'));
   assert.ok(map.includes('dataset.initialBounds'));
-  assert.ok(map.includes("['2025-26']") || map.includes("s.id==='2025-26'"));
+  assert.ok(map.includes('latestArchive()?.records'),'map reference follows most recent sourced archive, not a fixed year');
+  assert.ok(map.includes('winterForDate'),'live season follows Detroit time');
 });
 
 test('historical roster ships have photographic media, with a shared missing-image fallback', () => {
   const data = JSON.parse(read('public/assets/freighter-layup-registry.json'));
   const historical = data.seasons.filter((s) => s.state === 'historical_snapshot');
   assert.ok(historical.length >= 2);
-  historical.forEach((s) => s.records.forEach((v) => {
-    assert.ok(v.photo?.alt && (v.photo.thumbUrl || v.photo.file), s.id + ': photo missing for ' + v.name);
+  historical.filter(s=>s.archiveProvenance!=='dated_live_ledger_rollover').forEach((s) => s.records.forEach((v) => {
+    assert.ok(v.photo?.alt && (v.photo.thumbUrl || v.photo.file), s.id + ': curated photo missing for ' + v.name);
   }));
+  // Future automatically archived vessels may have no licensed photograph.
+  // The existing vessel art fallback is the honest visual state.
   const js = read('public/assets/freighter-layup.js');
   assert.ok(js.includes('fallback-ship'));
 });
