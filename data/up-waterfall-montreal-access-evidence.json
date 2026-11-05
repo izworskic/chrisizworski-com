@@ -60,14 +60,47 @@
       ]
     },
     "newConstruction": {
-      "status": "separate-projects-not-open-visitor-routes",
-      "note": "KORC west-bank parking/connector proposed since 2022 and still subject to approval in March 2026. DNR/Copper Harbor Trails Club east-bank Montreal Corridor is a different approved/under-construction trail phase in 2026; its future waterfall access is not available merely because construction has begun.",
+      "status": "builder-completion-reported-access-still-unverified",
+      "note": "New finding: Copper Harbor Trails Club homepage says the Montreal Corridor is complete and announces a June 26 2027 celebration. However, CHTC's detailed KPT project story describes access to both falls in future tense, Michigan DNR's project page still describes 2026 construction, its July 2026 map marks RTPD approval rather than as-built walking connections, and CHTC's trail-status page does not give a dated Montreal-falls trailhead/parking opening. KORC's separate west-bank parking/connector remains permit-pending in its own 2026 notice. A complete long-distance corridor is not proof of a visitor-ready route or exact parking to either fall.",
       "sources": [
         "https://www.keweenawoutdoorrecreation.org/calls-to-action-montreal-falls-trail-access",
         "https://www.uppermichiganssource.com/2026/03/27/recreation-coalition-requests-dnr-take-action-keweenaw-trail-project/?outputType=amp",
         "https://www.michigan.gov/dnr/managing-resources/prd/key-project-updates",
-        "https://www.copperharbortrails.org/kpt"
+        "https://www.copperharbortrails.org/kpt",
+        "https://www.copperharbortrails.org/",
+        "https://www.copperharbortrails.org/trail-status",
+        "https://www.copperharbortrails.org/maps-guides"
       ]
+    },
+    "completionReconciliation": {
+      "status": "operator-reports-corridor-complete-falls-route-not-cleared",
+      "reviewed": "2026-11-05",
+      "builderHomepage": {
+        "claim": "Montreal Segment of Keweenaw Point Trail is Complete; more than 30 miles connected; celebration announced for June 26, 2027",
+        "publishedDate": null,
+        "url": "https://www.copperharbortrails.org/"
+      },
+      "builderProjectPage": {
+        "claim": "2026 Montreal Corridor will create purpose-built access to Upper and Lower Montreal Falls (future-tense text)",
+        "url": "https://www.copperharbortrails.org/kpt"
+      },
+      "dnrProjectPage": {
+        "claim": "2026 Montreal Corridor construction underway and continuing through season",
+        "url": "https://www.michigan.gov/dnr/managing-resources/prd/key-project-updates"
+      },
+      "dnrMap": {
+        "claim": "July 22 2026 official map identifies RTPD-approved east-side Montreal River segment, not a verified as-built trail-to-falls line",
+        "url": "https://www.michigan.gov/dnr/-/media/Project/Websites/recsearch/documents/MapsI-N/KeweenawPointTrailsMap.pdf?hash=B5CF668B5EB28B028366E0D43202FDCD&rev=7c639c3716eb42a5bf0005dfeec252b6"
+      },
+      "trailStatus": {
+        "claim": "Trail-status page mixes an Oct 23 season note with last-dated May 18 2026 listing; no Montreal Falls named route status, legal parking or precise waterfall spur",
+        "url": "https://www.copperharbortrails.org/trail-status"
+      },
+      "conclusion": "Do not infer current November 2026 public parking, road gate permissions, Upper viewpoint GPS, continuous official Lower or Upper waterfall walking line, or open-now winter trail from a general corridor completion headline.",
+      "parkingToLowerFallsVerified": false,
+      "parkingToUpperFallsVerified": false,
+      "visitorOpenNowVerified": false,
+      "independentlyConfirmedRoadGates": false
     }
   },
   "routes": [
@@ -105,23 +138,30 @@
     },
     {
       "id": "dnr-east-montreal-corridor",
-      "authority": "Michigan DNR/Copper Harbor Trails Club 2026 construction",
+      "authority": "Copper Harbor Trails Club homepage completion announcement; DNR 2026 project status and mapped approval do not yet reconcile visitor trailhead",
       "published": false,
       "currentOpen": false,
       "preciseParkingGps": null,
-      "renderDirections": false
+      "renderDirections": false,
+      "constructionCompletionReportedByBuilder": true,
+      "constructionCompletionPublishedDate": null,
+      "verifiedLowerFallsConnection": false,
+      "verifiedUpperFallsConnection": false
     }
   ],
   "noindexUntil": [
     "site-specific current vehicle access and parking rights",
     "current published/written manager confirmation of complete lower-falls visitor walk",
     "for Upper: reconcile feature identity and complete legal signed route",
-    "current construction opening explicitly stated by operator before promoting new trails"
+    "current construction opening explicitly stated by operator before promoting new trails",
+    "post-completion as-built trailhead, explicit accessible parking, and signed walking links to both individual waterfall viewpoints verified separately"
   ],
   "prohibitedAssumptions": [
     "A named parking area is not an exact GPS parking pin",
     "A trail planned or under construction is not open",
     "A Fish Cove lower-falls walk is not automatically an Upper Falls route",
     "A GIS waterfall coordinate is not a vehicle destination"
-  ]
+  ],
+  "batchUpdated": "B67",
+  "latestReviewDate": "2026-11-05"
 }
