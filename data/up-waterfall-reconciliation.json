@@ -7842,7 +7842,9 @@
             "source": "https://www.michigan.gov/mdot/news-outreach/pressreleases/2026/08/12/m-35-culvert-replacements-in-marquette-county-start-aug-24"
           }
         ],
-        "reviewed": "2026-11-05"
+        "reviewed": "2026-11-05",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false
       },
       "researchBatch": "69"
     },
