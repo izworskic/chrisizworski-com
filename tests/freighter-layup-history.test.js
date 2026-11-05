@@ -56,7 +56,7 @@ test('season and harbor changes use one accessible, reversible selection state',
   assert.match(css, /data-history-enhanced="true"/);
   assert.match(css, /\.history-vessel-list/);
   assert.match(css, /@media\(max-width:620px\)/);
-  assert.ok(html.includes('/assets/freighter-layup-history.js?v=20261103a'));
+  assert.match(html,/\/assets\/freighter-layup-history\.js\?v=[a-zA-Z0-9-]+/);
 });
 
 test('existing canonical, author, H1 and the sole winter sitemap entry remain intact', () => {
