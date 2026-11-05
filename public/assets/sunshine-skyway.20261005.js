@@ -349,6 +349,12 @@
   els.axles.addEventListener('change', changed);
   els.payment.addEventListener('change', changed);
   els.refresh.addEventListener('click', load);
+  $('compareRoute').addEventListener('click', event => {
+    event.preventDefault();
+    const alternative = $('alternativeRoute');
+    alternative.open = true;
+    alternative.querySelector('summary').focus();
+  });
   window.addEventListener('pagehide', destroyHls, { once:true });
   applyTripLink();
   load();
