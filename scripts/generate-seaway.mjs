@@ -63,4 +63,5 @@ for(const page of pages){
 <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script><script defer src="/assets/seaway-reference.js?v=20261024c"></script><script defer src="/assets/seaway-core.js?v=20261024c"></script><script defer src="/assets/seaway-cameras.js?v=20261023d"></script><script defer src="/assets/seaway.js?v=20261024c"></script><script defer src="/assets/tool-engagement.js"></script><script defer src="/_vercel/insights/script.js"></script><script defer src="/_vercel/speed-insights/script.js"></script></body></html>`;
  fs.mkdirSync('public/'+page.slug,{recursive:true});fs.writeFileSync('public/'+page.slug+'/index.html',html);
 }
+await import('./enhance-seaway-journey.mjs');
 console.log('Seaway hub and Eisenhower destination generated from reviewed sources.');
