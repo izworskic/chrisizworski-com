@@ -109,7 +109,17 @@ test('generated page connects the monthly fieldbook to real trip and ship-watchi
   assert.match(html,/src="\/assets\/seaway-seasonal-funnel\.js\?v=20261105a"/);
   assert.match(html,/href="\/welland-canal\/"/);
   assert.match(html,/href="#ship-watch"/);
-  assert.match(html,/\/assets\/seaway\.js\?v=20261105b/);
+  assert.match(html,/\/assets\/seaway\.js\?v=20261105c/);
   assert.match(html,/id="seawaySeasonalReadout"/);
   assert.match(html,/Read the 2022–2024 comparison as a table/);
+});
+
+test('mobile month selector has discovery hint and centers current month without scrolling the page',()=>{
+  const html=fs.readFileSync('public/st-lawrence-seaway/index.html','utf8');
+  const js=fs.readFileSync('public/assets/seaway.js','utf8');
+  assert.match(html,/class="seasonal-swipe-hint"/);
+  assert.match(html,/swipe this row sideways/i);
+  assert.match(html,/seaway\.css\?v=20261105c/);
+  assert.match(js,/monthStrip\.scrollLeft=Math\.max\(0,centered\)/);
+  assert.doesNotMatch(js,/selected\.scrollIntoView/);
 });

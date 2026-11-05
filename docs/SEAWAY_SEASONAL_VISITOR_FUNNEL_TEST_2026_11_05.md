@@ -65,3 +65,9 @@ GA4 custom dimensions needed for breakdowns (register as event-scoped): `destina
 ## Release / rollback
 
 Scope: `public/assets/seaway-seasonal-funnel.js`, `scripts/enhance-seaway-journey.mjs` (generates page CTA metadata and script tag), generated Seaway HTML, `tests/seaway-seasonal-funnel.test.js`, dedicated CI. Revert this set together to remove tracking if events duplicate or interfere. Seasonal fieldbook and live map continue without the tracking module. No production behavior changes outside Seaway; no ads touched.
+
+## November 5 mobile discovery validation
+
+An independent **390px public-page screenshot** showed the seasonal readout correctly defaulting to November, but the month strip was left-scrolled to January–May. Visitors couldn't see the active November button or infer the sideways scroll affordance. This is a real pre-measurement UX defect, not an analytics result.
+
+The follow-on repair adds a mobile-only swipe instruction and scrolls **only the month strip** to the selected local calendar month at initialization. It must never call `scrollIntoView` or jump the document to the deep section. Desktop grid and HTML no-JS table remain unchanged. Node tests enforce the emitted copy, asset version and scroller-only behavior; production 390px viewport screenshot remains an independent release gate.

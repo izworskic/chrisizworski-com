@@ -1,3 +1,9 @@
+### 2026-11-05 — Seaway historical month mobile discovery repair (release pending)
+- **Test finding:** Independent mobile screenshot at 390px showed the historical readout defaulting to November while the horizontal month selector displayed January–May. This hid the current selection and risked misleading a future comparison-to-trip funnel.
+- **Fix:** Native JavaScript now centers the selected local month inside the horizontal control only, never scrolling the page. A visible mobile swipe instruction clarifies all 12 months are available. Checked-in generated HTML, JS/CSS cache keys and regression tests updated; no new data, infrastructure, ad, canonical or GA4 event design.
+- **Status:** Branch `seaway-seasonal-mobile-month-discovery-20261105`; CI, PR, merge and production screenshot pending. Do not claim visitor conversion gain.
+- **One next action:** Validate the production 390px month strip shows November and the swipe hint, then wait for actual GA4 same-session funnel evidence once reporting access is restored.
+
 ### 2026-11-05 — Seaway seasonal planning funnel measurement test (PR #1517)
 - **Visitor hypothesis:** After encountering the historical Seaway shipping-month comparison, visitors manually compare a month and proceed to a verified trip-planning source, Eisenhower Lock, the recent Seaway ship map or Welland Canal. Event clicks are *intent indicators*, not booked travel, completed destination visits, or confirmed ship sightings.
 - **Initial gap:** Existing GA4 month interaction was generic; follow-on seasonal CTA clicks had no explicit `after_manual_compare` attribution. Site Vercel custom-event query returned Web Analytics not found; Windsor.ai GA4 data reporting returned paused due to connected-account plan limits. These are measurement-access blockers, **not evidence of zero traffic**.

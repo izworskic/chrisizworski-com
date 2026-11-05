@@ -385,6 +385,18 @@
     // It neither checks current lock status nor changes the official data.
     const easternMonth=Number(new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',month:'numeric'}).format(new Date()));
     show(easternMonth,false);
+    // The initial month must be visible inside the mobile strip. Move only
+    // its scroll container; scrollIntoView would jump the entire page on load.
+    const monthStrip=$('seaway-seasonal-lens')?.querySelector('.seasonal-months');
+    if(monthStrip&&matchMedia('(max-width: 740px)').matches){
+      const selected=controls.find(b=>Number(b.dataset.seawayMonth)===easternMonth);
+      if(selected){
+        const stripRect=monthStrip.getBoundingClientRect();
+        const monthRect=selected.getBoundingClientRect();
+        const centered=monthStrip.scrollLeft+(monthRect.left-stripRect.left)-(monthStrip.clientWidth-monthRect.width)/2;
+        monthStrip.scrollLeft=Math.max(0,centered);
+      }
+    }
   }
   $('regionSelect').addEventListener('change',e=>setRegion(e.target.value,true));
   $('refreshReports').addEventListener('click',()=>{track('refresh','manual');void loadReports();});

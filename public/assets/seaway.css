@@ -63,3 +63,9 @@
 @media(max-width:1050px){.seasonal-months{grid-template-columns:repeat(6,minmax(0,1fr))}.seasonal-month{min-height:122px}.seasonal-month-gauge{height:64px}}
 @media(max-width:740px){.seasonal-months{display:flex;overflow-x:auto;scroll-snap-type:x proximity;gap:8px;padding:2px 4px 12px;margin-right:-12px}.seasonal-month{flex:0 0 66px;min-height:124px;scroll-snap-align:start}.seasonal-month-gauge{height:65px}.seasonal-reading{padding:15px}.seasonal-reading strong{font-size:17px}}
 @media(prefers-reduced-motion:reduce){.seasonal-month{transition:none}}
+
+/* Keep horizontal month discovery explicit on small screens; no automatic page jump. */
+.seasonal-swipe-hint{display:none}
+@media(max-width:740px){
+  .seaway-seasonal-desk .seasonal-swipe-hint{display:block;margin:-5px 0 12px;color:#3a5c63;font-size:13px;line-height:1.5}
+}
