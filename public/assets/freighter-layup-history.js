@@ -40,6 +40,9 @@
       summary.textContent = year + ' · ' + count + ' of ' + allInSeason +
         ' documented records shown · ' + harborName + '. Not a total fleet count.';
       empty.hidden = count !== 0;
+      empty.textContent = allInSeason===0
+        ? 'No source-backed layup reports were collected for this winter. That does not prove the harbors were empty.'
+        : 'No historical source records match that harbor in this winter. Try another harbor.';
     }
     buttons.forEach(button => button.addEventListener('click', () => {
       activeSeason = button.dataset.historyPick;
