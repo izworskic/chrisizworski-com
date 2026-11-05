@@ -61,10 +61,11 @@ async function ready(){
   }
   const c=await browser.newContext({viewport:{width:390,height:850},reducedMotion:'reduce'});
   const p=await c.newPage();
+  // Register catchall before special route; Playwright prioritizes later routes.
+  await p.route('**/*',route=>route.request().url().startsWith(base)?route.continue():route.abort());
   await p.route('**/assets/garden-cabbage-validation-data.js*',route=>route.fulfill({
    status:200,contentType:'application/javascript',body:'window.GardenCabbageValidation={schema:"invalid",evaluation:{promotionAllowed:true}};'
   }));
-  await p.route('**/*',route=>route.request().url().startsWith(base)?route.continue():route.abort());
   await p.goto(base+'/michigan-garden-pest-watch/',{waitUntil:'domcontentloaded'});
   await p.waitForFunction(()=>document.getElementById('cm-status')?.textContent.includes('could not be verified'));
   assert.ok(await p.locator('#cm-ui').isHidden());
