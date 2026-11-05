@@ -107,7 +107,7 @@ test('GIS manifest contains only general place references and correct conditiona
  assert.ok(Math.abs(z.polygonLatLon[0][1]+159.7883333333)<1e-6);
  assert.ok(Math.abs(z.polygonLatLon[3][1]+159.7466666667)<1e-6);
  assert.match(z.appliesTo,/STARS launch operations/);
- assert.match(page,/NOT necessarily active now/);
+ assert.match(page,/not necessarily active now/i);
  assert.match(page,/33 CFR 165\.1406/);
  assert.doesNotMatch(page+js,/google\.com\/maps\/dir|maps\/dir\/|launchTrajectory|rangeGateDirections/);
 });
