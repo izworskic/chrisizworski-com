@@ -336,6 +336,56 @@
     target.replaceChildren(s);$('historyReadout').textContent=year+' · '+(field==='vessel_transits'?'commercial vessel transits':'commercial tonnage, metric tons')+'. Choose a month to open that page of the logbook.';
     const table=el('table'),head=el('thead'),tr=el('tr');tr.append(el('th','Month · '+year),el('th',field==='vessel_transits'?'Commercial vessel transits':'Commercial metric tons'));head.append(tr);const body=el('tbody');for(const r of rows){const row=el('tr');row.append(el('th',new Date(Date.UTC(year,r.month-1,1)).toLocaleString('en-US',{month:'long',timeZone:'UTC'})),el('td',r.value===null?'Not reported':r.value.toLocaleString('en-US')));body.append(row);}table.append(head,body);$('historyTable').replaceChildren(table);
   }
+  function initSeasonalPassage(){
+    const source=$('seawaySeasonalData'),readout=$('seawaySeasonalReadout');
+    if(!source||!readout)return;
+    let fieldbook;
+    try{
+      fieldbook=JSON.parse(source.textContent);
+      if(fieldbook.schema!=='seaway-seasonal-fieldbook-v1'||!Array.isArray(fieldbook.months)||
+         fieldbook.months.length!==12||fieldbook.years?.length<3)throw new Error('invalid historical data');
+    }catch(_){
+      readout.replaceChildren(el('strong','Historical comparison unavailable.'),
+        el('p','The source-backed monthly table and the original year-by-year chart remain available below.'));
+      return;
+    }
+    const controls=[...document.querySelectorAll('[data-seaway-month]')];
+    const show=(month,announce=true)=>{
+      const entry=fieldbook.months.find(m=>m.month===month);
+      if(!entry)return;
+      for(const b of controls){
+        const selected=Number(b.dataset.seawayMonth)===month;
+        b.setAttribute('aria-pressed',String(selected));
+      }
+      const heading=el('strong',entry.name+' · published commercial vessel transits');
+      const details=el('p');
+      if(entry.state==='available'&&entry.sampleCount>=3&&
+          Number.isFinite(entry.median)&&Number.isFinite(entry.minimum)&&Number.isFinite(entry.maximum)){
+        details.textContent='Across '+entry.sampleCount+' reported years ('+entry.sampleYears.join(', ')+'), the monthly median was '+
+          entry.median.toLocaleString('en-US')+' vessel transits. The observed totals ranged from '+
+          entry.minimum.toLocaleString('en-US')+' to '+entry.maximum.toLocaleString('en-US')+'.';
+      }else if(entry.state==='unreported'){
+        details.textContent='The archived years contain no numeric vessel-transit totals for '+entry.name+
+          '. That is missing reporting, not a zero-ship measurement.';
+      }else{
+        details.textContent='Only '+entry.sampleCount+' archived year(s) have numeric totals for this month. We do not infer a typical month from fewer than three.';
+      }
+      const caution=el('p','System-wide historical measurements, not a ship schedule or a probability of seeing a vessel. Check today’s operator notices, order of turn and visitor hours separately.','fine');
+      if(entry.sourceClosedNoteYears?.length){
+        caution.textContent='The historical source marks this month closed in '+entry.sourceClosedNoteYears.join(', ')+
+          '. Opening/closing dates change each year; this is not a statement about the current season.';
+      }
+      readout.replaceChildren(heading,details,caution);
+      if(announce)track('seasonal_month',String(month));
+    };
+    for(const b of controls){
+      b.addEventListener('click',()=>show(Number(b.dataset.seawayMonth)));
+    }
+    // Calendar choice is purely for which historical month to display.
+    // It neither checks current lock status nor changes the official data.
+    const easternMonth=Number(new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',month:'numeric'}).format(new Date()));
+    show(easternMonth,false);
+  }
   $('regionSelect').addEventListener('change',e=>setRegion(e.target.value,true));
   $('refreshReports').addEventListener('click',()=>{track('refresh','manual');void loadReports();});
   $('resetMap').addEventListener('click',showEntireSeaway);
@@ -381,6 +431,7 @@
     if(link.href.includes('google.com/maps/dir'))track('directions_opened','verified-viewpoint');
     if(link.getAttribute('href')==='/welland-canal/')track('next_corridor_opened','welland');
   });
+  initSeasonalPassage();
   readURL();chooseLock(selectedLock);renderFit();drawHistory();render();void startMap();void loadReports();
   setInterval(()=>{if(!document.hidden)void loadReports();},120000);
   setInterval(()=>{if(!document.hidden)render();},30000);

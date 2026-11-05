@@ -133,3 +133,24 @@ test('generated journey has actionable chapters and keeps a static no-JavaScript
   assert.match(html,/\/soo-locks\//);
   assert.match(html,/dateModified":"2026-11-05/);
 });
+
+test('Python Intelligence OS seasonal passage lens is static, source-backed and no-JS readable',()=>{
+  const html=fs.readFileSync('public/st-lawrence-seaway/index.html','utf8');
+  assert.match(html,/id="seaway-seasonal-lens"/);
+  assert.match(html,/id="seawaySeasonalReadout"/);
+  assert.match(html,/Read the 2022–2024 comparison as a table/);
+  assert.match(html,/not a prediction of ships at an individual lock/i);
+  assert.match(html,/seaway\.js\?v=20261105b/);
+  const raw=html.match(/<script type="application\/json" id="seawaySeasonalData">([\s\S]*?)<\/script>/);
+  assert.ok(raw,'Seasonal data must exist as an embedded artifact with no client fetch');
+  const data=JSON.parse(raw[1]);
+  assert.equal(data.schema,'seaway-seasonal-fieldbook-v1');
+  assert.deepEqual(data.years,[2022,2023,2024]);
+  assert.equal(data.months.length,12);
+  assert.equal(data.months[0].state,'unreported');
+  assert.equal(data.months[0].median,null);
+  assert.equal(data.months[9].median,279);
+  for(const n of Array.from({length:12},(_,i)=>i+1))
+    assert.ok(html.includes('data-seaway-month="'+n+'"'),'month '+n);
+  assert.match(html,/Official|official vessel order of turn|official vessel order/);
+});
