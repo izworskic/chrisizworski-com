@@ -36,8 +36,9 @@ Scores follow Python Intelligence OS prioritization (30/25/15/15/15). They are d
 1. The existing `freighter-layup-source-watch.yml` scans four times per day during November–April and runs an extra pass November 1 at 04:09 UTC, shortly after local midnight in Michigan.
 2. Node chooses the Detroit season from the actual timestamp and rolls the current ledger to that year. Old source-backed events move to `previousSeasons`, never to the new current season.
 3. Offline Python converts only valid historic source events, creates the fresh empty live slot and rebuilds static manifest + HTML. The HTML's schema.org `dateModified` and the **single** winter-sitemap `lastmod` update only if content changes.
-4. Only changed files are committed to `main`. Normal Vercel publication takes over. Repeated scheduled checks with unchanged data do not produce an annual artifact commit.
-5. The browser's current-year fallback protects visitors even between local midnight and the next job, or if source polling fails. It does not assert source coverage or ship occupancy.
+4. Automatically regenerate the six existing permanent ship biographies from the source-backed archive, updating their per-winter tables and chronology only when source history changes. Validate the entire registry against the shared JS source/identity policy before committing.
+5. Only changed files are committed to `main`. Normal Vercel publication takes over. Repeated scheduled checks with unchanged data do not produce an annual artifact commit.
+6. The browser's current-year fallback protects visitors even between local midnight and the next job, or if source polling fails. It does not assert source coverage or ship occupancy.
 
 Annual coverage intentionally retains a fixed canonical page; a unique year URL, sitemap expansion, and mass-generated archive pages would risk duplicate content and maintenance. All documented years remain available in one indexed ship-by-ship archive.
 
