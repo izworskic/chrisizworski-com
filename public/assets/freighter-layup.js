@@ -4,9 +4,30 @@
 (() => {
  'use strict';
  const $ = id => document.getElementById(id);
- const state = {archive:null,biographies:null,season:'2026-27',liveLedger:null,aisActivity:[],aisCheckedAt:null,aisLoaded:false,aisPartial:false,aisMonitoredHarbors:null,aisExpanded:false,query:'',berth:'all',selected:null,activeHarbor:'all',map:null,markerLayer:null,markers:[],tiles:null,locMarker:null};
+ const state = {archive:null,biographies:null,season:null,liveLedger:null,aisActivity:[],aisCheckedAt:null,aisLoaded:false,aisPartial:false,aisMonitoredHarbors:null,aisExpanded:false,query:'',berth:'all',selected:null,activeHarbor:'all',map:null,markerLayer:null,markers:[],tiles:null,locMarker:null};
  const esc = value => String(value ?? '').replace(/[&<>"']/g,c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const text = (tag,content) => {const el=document.createElement(tag);el.textContent=content;return el};
+ // Detroit November 1 is the live shipping winter boundary. This is a
+ // calendar label only; it never implies any vessel is laid up.
+ const winterForDate=(date=new Date())=>{
+  const p=new Intl.DateTimeFormat('en-US',{timeZone:'America/Detroit',year:'numeric',month:'2-digit'}).formatToParts(date);
+  const year=Number(p.find(x=>x.type==='year')?.value),month=Number(p.find(x=>x.type==='month')?.value);
+  const first=year-(month<11?1:0);
+  return first+'-'+String((first+1)%100).padStart(2,'0');
+ };
+ const winterLabel=id=>'Winter '+id.slice(0,4)+'–20'+id.slice(-2);
+ const latestArchive=()=>state.archive?.seasons.filter(s=>s.state==='historical_snapshot'&&s.records?.length)
+  .sort((a,b)=>b.id.localeCompare(a.id))[0]||null;
+ function ensureCurrentSeason(id){
+  let s=state.archive.seasons.find(x=>x.id===id);
+  if(s&&s.state==='historical_snapshot')return false;
+  if(!s){
+   s={id,label:winterLabel(id),state:'upcoming_unconfirmed',records:[],
+      note:'Current winter is awaiting its source ledger, not proof of empty harbors.'};
+   state.archive.seasons.push(s);
+  }
+  return true;
+ }
  const seasonData = () => state.archive.seasons.find(x=>x.id===state.season);
  const records = () => (seasonData()?.records || []).filter(v=>v.status!=='departed_current');
  const harbor = id => state.archive.harbors.find(h=>h.id===id);
@@ -64,8 +85,14 @@
    if(data?.schemaVersion!==1||!/^\d{4}-\d{2}$/.test(data.season)||!Array.isArray(data.events)||!Array.isArray(data.previousSeasons))return false;
     if(data.events.some(e=>!e?.id||!e?.vessel?.key||!e?.vessel?.name||!/^\d{4}-\d{2}-\d{2}$/.test(e.date||'')||!['arrival','berth_change','maintenance','departure','status_update'].includes(e.kind)||!['confirmed','reported'].includes(e.confidence)||!/^https:\/\//.test(e.source?.url||'')||!e.source?.publisher|| (e.confidence==='confirmed'&&!['port_authority','operator','operator_statement','official_agency','maritime_historical_society','local_maritime_museum'].includes(e.source?.class))))return false;
    const candidate={...state.archive,seasons:state.archive.seasons.map(s=>({...s,records:s.records.slice()}))};
-   const season=candidate.seasons.find(s=>s.id===data.season);
-   if(!season)return false;
+   if(data.season!==winterForDate())return false; // stale ledger never becomes live
+   let season=candidate.seasons.find(s=>s.id===data.season);
+   if(!season){
+    season={id:data.season,label:winterLabel(data.season),state:'upcoming_unconfirmed',
+      records:[],note:'Awaiting source-dated winter reports.'};
+    candidate.seasons.push(season);
+   }
+   if(season.state==='historical_snapshot')return false;
    // A new winter can show live sourced reports without mutating last winter's archive.
    const stories=activeRecordsFromLedger(data,candidate);
    season.records=stories;
@@ -73,9 +100,14 @@
    season.note=stories.length?'Live season: source-dated winter reports only, separate from AIS activity.':'No source-confirmed layup arrivals in the new-season ledger yet. AIS harbor traffic does not prove layup.';
    const historic=data.previousSeasons||[];
    for(const past of historic){
-     if(!/^\d{4}-\d{2}$/.test(past.season)||!Array.isArray(past.events)||candidate.seasons.some(s=>s.id===past.season))continue;
-     const records=activeRecordsFromLedger({...data,events:past.events},candidate).map(v=>({...v,status:v.status==='confirmed_current'?'confirmed_historical':'reported_historical'}));
-     candidate.seasons.push({id:past.season,label:'Winter '+past.season.replace('-', '–20'),state:'historical_snapshot',asOf:past.season,records,note:'Dated winter ledger archive; reported statuses retain their uncertainty.'});
+    if(!/^\d{4}-\d{2}$/.test(past.season)||!Array.isArray(past.events)||past.season>=data.season)continue;
+    const existing=candidate.seasons.find(s=>s.id===past.season);
+    if(existing?.state==='historical_snapshot')continue;
+    if(existing?.records?.length)return false;
+    const records=activeRecordsFromLedger({...data,events:past.events},candidate).map(v=>({...v,status:v.status==='confirmed_current'?'confirmed_historical':'reported_historical'}));
+    const snapshot={id:past.season,label:winterLabel(past.season),state:'historical_snapshot',
+      asOf:past.season,records,note:'No documented reports do not establish empty harbors.'};
+    if(existing)Object.assign(existing,snapshot);else candidate.seasons.push(snapshot);
    }
    if(policy().validateRegistry(candidate).length)return false;
    state.archive=candidate;
