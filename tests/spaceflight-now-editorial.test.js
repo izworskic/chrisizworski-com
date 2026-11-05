@@ -125,7 +125,7 @@ test('website pages contain mission-selected editorial desk without altering can
   assert.match(nat,/id="rl-news-stories"/);
   assert.match(fl,/id="sfn-reporting-list"/);
   assert.match(fl,/https:\/\/spaceflightnow.com\/launch-schedule\//);
-  assert.match(nat,/app\.js\?v=20261105-kodiak-network-v1/);
+  assert.match(nat,/app\.js\?v=20261105-pmrf-network-v1/);
   assert.match(fl,/app\.js\?v=20261103-deck-v1/);
   assert.equal((nat.match(/rel="canonical"/g)||[]).length,1);
   assert.equal((fl.match(/rel="canonical"/g)||[]).length,1);
