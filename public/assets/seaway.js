@@ -16,7 +16,7 @@
   function el(tag,value,cls){const n=document.createElement(tag);if(value!==undefined)n.textContent=value;if(cls)n.className=cls;return n;}
   function a(label,url){const n=el('a',label);n.href=url;n.target='_blank';n.rel='noopener noreferrer';return n;}
   function svg(tag,attrs={},value){const n=document.createElementNS(svgNS,tag);for(const [k,v]of Object.entries(attrs))n.setAttribute(k,v);if(value!==undefined)n.textContent=value;return n;}
-  function track(action,label){if(typeof window.gtag==='function')window.gtag('event','seaway_interaction',{action,label,page:document.body.dataset.seawayPage});}
+  function track(action,label){if(typeof window.gtag==='function'){const params={action,label,page:document.body.dataset.seawayPage};window.gtag('event','seaway_interaction',params);const named={select_ship:'seaway_ship_selected',select_region:'seaway_region_changed',next_chapter:'seaway_next_chapter_opened',official_schedule_opened:'seaway_official_schedule_opened',directions_opened:'seaway_directions_opened',next_corridor_opened:'seaway_next_corridor_opened'}[action];if(named)window.gtag('event',named,{page_family:'seaway',detail:label});}}
   const time=value=>{const d=new Date(value);return Number.isFinite(d.getTime())?d.toLocaleString('en-US',{timeZone:'America/New_York',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'}):'time unavailable';};
   const age=value=>{const mins=Math.max(0,Math.floor((Date.now()-Date.parse(value))/60000));return mins<1?'less than a minute ago':mins+' min ago';};
   const directions=v=>'https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(v.directionsQuery);
@@ -47,6 +47,37 @@
   function reports(){return C.visible(data()?.vessels||[],region,$('shipSearch').value,$('vesselKind').value);}
   function reportFor(id){return C.visible(data()?.vessels||[],region).find(v=>v.mmsi===id);}
   function shipSVG(){return '<svg viewBox="0 0 72 32" aria-hidden="true" focusable="false"><path class="ship-hull" d="M3 19h5l3 5h47l9-6 3-4h-8l-7 4H20z"/><path class="ship-house" d="M8 19V10h12v9z"/><rect class="ship-stack" x="11" y="5" width="4" height="5" rx="1"/><rect class="ship-window" x="10" y="12" width="3" height="2"/><rect class="ship-window" x="15" y="12" width="3" height="2"/><rect class="ship-hatch" x="24" y="15" width="8" height="4" rx="1"/><rect class="ship-hatch" x="34" y="15" width="8" height="4" rx="1"/><rect class="ship-hatch" x="44" y="15" width="8" height="4" rx="1"/></svg>';}
+  function appendJourneyContext(panel,v){
+    const ctx=C.journeyContext(v,D.regions,region);
+    const block=el('section',undefined,'ship-journey-context');
+    block.append(el('strong',ctx.id?'Observed river chapter · '+ctx.name:'Observed vessel · corridor chapter uncertain'));
+    block.append(el('p','AIS position: '+time(v.seen)+'. '+ctx.meaning));
+    const segments=el('div',undefined,'journey-directions');
+    if(ctx.downbound)segments.append(el('span','Toward Montreal · '+ctx.downbound.name));
+    if(ctx.upbound)segments.append(el('span','Toward Lake Ontario · '+ctx.upbound.name));
+    if(segments.children.length)block.append(segments);
+    block.append(el('p','These are geographic reference directions, not a confirmed course, next lock, itinerary or ETA. Use the official lock order for operational information.','fine'));
+    if(ctx.id){
+      const chapter=el('button','Explore this river chapter →','button secondary');
+      chapter.type='button';
+      chapter.addEventListener('click',()=>{setRegion(ctx.id,true);showShipWatch();track('next_chapter',ctx.id);});
+      block.append(chapter);
+    }
+    panel.append(block);
+  }
+  function renderJourney(){
+    const links=[...document.querySelectorAll('[data-journey-region]')];
+    if(!links.length)return;
+    for(const link of links){
+      const id=link.dataset.journeyRegion,local=cache.get(id),all=cache.get('all');
+      const snapshot=local||all,record=snapshot?.regions?.find(x=>x.id===id);
+      const count=C.visible(snapshot?.vessels||[],id).length,output=link.querySelector('[data-region-count]');
+      link.classList.toggle('is-current',region===id);
+      if(region===id)link.setAttribute('aria-current','location');else link.removeAttribute('aria-current');
+      if(!output)continue;
+      output.textContent=!snapshot?'Check recent reports →':errors.has(id)||record?.state==='unavailable'?'Receiver unavailable · view sources →':record?.state==='partial'?count+' recent reports · partial coverage →':count?count+' recently reported vessel'+(count===1?'':'s')+' →':'No recent reports received →';
+    }
+  }
   function shipDetail(v){
     const div=el('div');div.append(el('h3',v.name||'AIS vessel '+v.mmsi),el('p',C.motion(v)+' · '+C.direction(v)),el('p','Reported '+time(v.seen)+' · '+age(v.seen)));
     if(v.lengthMeters)div.append(el('p','Reported length '+v.lengthMeters+' m'+(v.beamMeters?' · beam '+v.beamMeters+' m':'')));
@@ -127,11 +158,12 @@
   function chooseShip(id,focus){
     const v=reportFor(id);if(!v)return;
     selectedShip=id;$('mapSelection').dataset.selection='ship';writeURL();updateList();drawShips();const panel=$('mapSelection');panel.replaceChildren(el('strong',v.name||'AIS vessel '+v.mmsi),el('p',C.motion(v)+' · '+C.direction(v)+' · last heard '+age(v.seen)),el('p','Start with the report’s age, then look at its place on the river. This position does not establish the next lock or an arrival time.'));
+    appendJourneyContext(panel,v);
     const links=el('div',undefined,'link-row');links.append(a('Official transit information ↗',D.officialQueue),a('Original ship reports ↗','https://ais.openwaters.io/v1/vessels/'+v.mmsi));panel.append(links);
     if(focus&&map){map.setView([v.lat,v.lon],Math.max(11,map.getZoom()),{animate:false});markers.get(id)?.openPopup();}
     track('select_ship','reported-vessel');
   }
-  function render(){updateReportLine();updateList();updateRegionReports();drawShips();renderView();if(selectedShip&&!reportFor(selectedShip)){$('mapSelection').replaceChildren(el('strong','That ship’s fresh signal is out of reach.'),el('p','Its report may have aged out or left the selected region. Pick another recent ship report, or check the official transit information to keep following the journey.'));}}
+  function render(){updateReportLine();updateList();updateRegionReports();renderJourney();drawShips();renderView();if(selectedShip&&!reportFor(selectedShip)){$('mapSelection').replaceChildren(el('strong','That ship’s fresh signal is out of reach.'),el('p','Its report may have aged out or left the selected region. Pick another recent ship report, or check the official transit information to keep following the journey.'));}}
   async function loadReports(){
     if(document.hidden)return;
     const id=++requestId,scope=region;loading=true;updateReportLine();updateList();$('refreshReports').disabled=true;
@@ -333,6 +365,22 @@
   let resizeTimer;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{drawProfile();drawHistory();map?.invalidateSize({pan:false});},200);});
   document.addEventListener('visibilitychange',()=>{if(document.hidden){pauseModel();if(cameraPlayer?.isLoaded())cameraPlayer.stop('Video stopped while this tab was hidden. Load the camera again when you return.');}});
   cameraPlayer=window.SeawayCameras?.mount({root:$('seawayCameras'),feeds:D.cameras,document,onSelect:camera=>{selectedCamera=camera.id;writeURL(true);track('select_camera',camera.id);},onPlayback:camera=>track('camera_player',camera.id)});
+  for(const link of document.querySelectorAll('[data-journey-region]')){
+    link.addEventListener('click',event=>{
+      if(event.metaKey||event.ctrlKey||event.shiftKey||event.altKey||event.button!==0)return;
+      event.preventDefault();
+      setRegion(link.dataset.journeyRegion,true);
+      showShipWatch();
+      track('next_chapter',link.dataset.journeyRegion);
+    });
+  }
+  document.addEventListener('click',event=>{
+    const link=event.target.closest?.('a[href]');
+    if(!link)return;
+    if(link.href===D.officialQueue)track('official_schedule_opened','official-queue');
+    if(link.href.includes('google.com/maps/dir'))track('directions_opened','verified-viewpoint');
+    if(link.getAttribute('href')==='/welland-canal/')track('next_corridor_opened','welland');
+  });
   readURL();chooseLock(selectedLock);renderFit();drawHistory();render();void startMap();void loadReports();
   setInterval(()=>{if(!document.hidden)void loadReports();},120000);
   setInterval(()=>{if(!document.hidden)render();},30000);
