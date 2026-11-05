@@ -85,7 +85,8 @@
     if (typeof url !== 'string') return url;
     const region = url.startsWith('/national-tools/space-coast-launch/')?'florida':
       url.startsWith('/starbase-rocket-launch-viewing/')?'texas':
-      url.startsWith('/wallops-rocket-launch-viewing/')?'virginia':null;
+      url.startsWith('/wallops-rocket-launch-viewing/')?'virginia':
+      url.startsWith('/kodiak-rocket-launch-viewing/')?'alaska':null;
     if (!region) return url;
     const selected = data?.selectedRegion === region ? data.selectedLaunchId : null;
     return selected && /^[0-9a-f-]{36}$/i.test(selected) ?
@@ -102,6 +103,7 @@
     if (r.specialist) links.unshift([floridaSpecialistLink(r.specialist),
       r.id === 'texas' ? 'Starbase public viewing map · same mission' :
       r.id === 'virginia' ? 'Wallops public launch-viewing atlas · same mission' :
+      r.id === 'alaska' ? 'Kodiak range access desk · same mission' :
       'Florida detailed viewer · same mission']);
     for (const [url, title] of links) {
       const a = anchor(url, title);

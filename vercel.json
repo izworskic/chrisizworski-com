@@ -2392,6 +2392,14 @@
       "destination": "/synced-national-tools/kilauea-episode-watch/index.html"
     },
     {
+      "source": "/kodiak-rocket-launch-viewing",
+      "destination": "/kodiak-rocket-launch-viewing/index.html"
+    },
+    {
+      "source": "/kodiak-rocket-launch-viewing/",
+      "destination": "/kodiak-rocket-launch-viewing/index.html"
+    },
+    {
       "source": "/vandenberg-rocket-launch-viewing",
       "destination": "/vandenberg-rocket-launch-viewing/index.html"
     },

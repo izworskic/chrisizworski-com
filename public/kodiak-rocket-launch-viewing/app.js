@@ -1,0 +1,157 @@
+'use strict';
+/* Kodiak access atlas. Never present a launch listing or park as an access permit.
+ * LL2 data is exclusively the shared /api/rocket-launch-usa snapshot.
+ * No range routes, invented closures, pad trajectories, or public viewing certainty.
+ */
+(()=>{
+ const API='/api/rocket-launch-usa',PLACES='/kodiak-rocket-launch-viewing/places.json';
+ const UUID=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+ const $=id=>document.getElementById(id);
+ const set=(id,v)=>{const node=$(id);if(node)node.textContent=v??'Not verified';};
+ const state={places:[],map:null,pins:new Map(),osm:null,tiles:false,loading:null,request:0};
+ const local=(iso,opts={})=>{const date=new Date(iso||'');return Number.isFinite(+date)?
+  date.toLocaleString('en-US',{timeZone:'America/Anchorage',month:'short',day:'numeric',year:'numeric',...opts}):'Not verified';};
+ const timing=m=>{
+  if(!m||!m.net)return 'No target verified';
+  if(!['minute','second','hour'].includes(m.netPrecision)){
+   const p=m.netPrecision;
+   return (p==='year'?'Year':p==='month'?'Month':'Date')+' provisional · launch hour unverified ('+local(m.net)+')';
+  }
+  return local(m.net,{hour:'numeric',minute:'2-digit',timeZoneName:'short'})+
+   (m.netPrecision==='hour'?' · hour approximate':' · scheduled target, not launch GO');
+ };
+ function selectedNational(id){
+  const query='?region=alaska'+(id&&UUID.test(id)?'&launchId='+encodeURIComponent(id):'');
+  for(const key of ['national-link','bottom-national']){const a=$(key);if(a)a.href='/national-tools/rocket-launch-live/'+query;}
+ }
+ function present(data,expired){
+  const region=Array.isArray(data.regions)?data.regions.find(r=>r.id==='alaska'):null;
+  const missions=Array.isArray(region?.launches)?region.launches.filter(m=>UUID.test(m.id)):[];
+  const selected=data.selectedLaunch?.region==='alaska'?data.selectedLaunch:null;
+  const select=$('mission-select');select.replaceChildren();
+  for(const m of missions){const op=document.createElement('option');op.value=m.id;op.textContent=(m.name||'Kodiak mission')+' · '+timing(m);select.appendChild(op);}
+  if(!missions.length){const op=document.createElement('option');op.textContent='No Kodiak mission in bounded feed';op.value='';select.appendChild(op);}
+  select.disabled=!missions.length;
+  if(selected&&missions.some(m=>m.id===selected.id))select.value=selected.id;
+  else if(missions.length&&!select.value)select.value=missions[0].id;
+  const picked=missions.find(m=>m.id===select.value)||null;
+  set('mission-name',picked?.name||'No upcoming Kodiak launch in this bounded feed');
+  set('mission-time',timing(picked));
+  set('mission-pad',picked?.pad?picked.pad+' · restricted range, not an approach destination':'Restricted range · exact pad not verified');
+  set('mission-freshness',data.scheduleCheckedAt?local(data.scheduleCheckedAt,{hour:'numeric',minute:'2-digit',timeZoneName:'short'}):'Observation time unavailable');
+  let note='';
+  if(expired)note+='The prior linked launch is no longer in this bounded snapshot; no outcome is inferred. ';
+  note+=region?.feedState==='unavailable'?
+   'Kodiak feed unavailable. Check the operator directly. ':
+   'This is a bounded public collector, not every military or short-notice mission. ';
+  note+=data.scheduleFreshness==='stale'?
+   'The latest snapshot is stale. ':data.scheduleFreshness==='recent'?
+   'The schedule was recently observed, not cleared for flight. ':'Source freshness cannot be verified. ';
+  if(data.scheduleWarning)note+=data.scheduleWarning;
+  set('feed-detail',note);
+  set('mission-advice',picked?
+   'Even with a published target, do not approach Narrow Cape until Alaska Aerospace independently confirms access and road restrictions. No public launch-day viewing venue is verified.':
+   'No public mission is returned in the limited snapshot. This does NOT establish that range activity has stopped; government launches may be unannounced.');
+  selectedNational(picked?.id);
+  const url=new URL(location.href);
+  if(picked?.id)url.searchParams.set('launchId',picked.id);else url.searchParams.delete('launchId');
+  history.replaceState(null,'',url.pathname+url.search+url.hash);
+ }
+ async function loadMission(id,expired=false){
+  const serial=++state.request,params=new URLSearchParams({region:'alaska'});
+  if(id&&UUID.test(id))params.set('launchId',id);
+  $('mission-select').disabled=true;set('feed-detail','Checking the shared national launch snapshot…');
+  try{
+   const response=await fetch(API+'?'+params.toString(),{headers:{Accept:'application/json'},signal:AbortSignal.timeout(12000)});
+   if(serial!==state.request)return;
+   if(response.status===404&&id&&!expired){await loadMission(null,true);return;}
+   const data=await response.json();
+   if(!response.ok||!data?.ok||data.region?.id!=='alaska')throw Error('Source unavailable');
+   present(data,expired);
+  }catch{
+   if(serial!==state.request)return;
+   set('mission-name','Shared Kodiak schedule unavailable');
+   set('mission-time','Not verified');
+   set('mission-pad','Restricted range · no visit directions');
+   set('mission-freshness','Source unavailable');
+   set('feed-detail','National schedule unavailable. No launch or cancellation can be inferred.');
+   set('mission-advice','Confirm the mission with the operator. Do not use a previous target as permission to travel toward a road safety closure.');
+   const select=$('mission-select');select.replaceChildren();
+   const op=document.createElement('option');op.textContent='Source unavailable';select.appendChild(op);select.disabled=true;
+   selectedNational(null);
+  }
+ }
+ async function loadPlaces(){
+  if(state.places.length)return state.places;
+  const response=await fetch(PLACES,{headers:{Accept:'application/json'},signal:AbortSignal.timeout(8000)});
+  if(!response.ok)throw Error('Geography unavailable');
+  const data=await response.json();
+  if(data.schemaVersion!==1||!Array.isArray(data.places)||data.places.length!==2||
+   new Set(data.places.map(x=>x.id)).size!==2||
+   !data.places.every(p=>['pasagshak','range'].includes(p.id)&&
+     Number.isFinite(p.lat)&&Number.isFinite(p.lon)&&p.lat>57.3&&p.lat<57.55&&p.lon> -152.6&&p.lon< -152.2&&
+     /^https:\/\//.test(p.source)&&/^https:\/\//.test(p.access)))throw Error('Unverified map reference');
+  state.places=data.places;return state.places;
+ }
+ async function leaflet(){
+  if(window.L?.map)return;
+  if(state.loading)return state.loading;
+  state.loading=new Promise((resolve,reject)=>{
+   const style=document.createElement('link');style.rel='stylesheet';style.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';document.head.appendChild(style);
+   const script=document.createElement('script');script.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+   script.onload=()=>window.L?.map?resolve():reject(Error('Map library did not load'));
+   script.onerror=()=>reject(Error('Map library failed'));document.head.appendChild(script);
+  });return state.loading;
+ }
+ function choose(id,focus=true){
+  const place=state.places.find(x=>x.id===id);if(!place)return;
+  document.querySelectorAll('.place').forEach(card=>{card.dataset.selected=card.id==='place-'+id?'true':'false';});
+  document.querySelectorAll('[data-map-place]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.mapPlace===id?'true':'false'));
+  if(focus&&state.map){state.map.panTo([place.lat,place.lon],{animate:false});state.pins.get(id)?.openPopup();}
+  set('map-status',place.coordinateRole+'. This is NOT an approved launch-day viewpoint or travel authorization.');
+ }
+ function pinIcon(p){return window.L.divIcon({className:'k-icon-wrap',html:'<span class="k-pin'+(p.kind==='restricted-range'?' is-range':'')+'">'+(p.kind==='restricted-range'?'!':'P')+'</span>',iconSize:[37,37],iconAnchor:[18,18]});}
+ async function startMap(){
+  if(state.map)return;
+  const button=$('load-map');if(button){button.disabled=true;button.textContent='Loading map…';}
+  try{
+   const places=await loadPlaces();await leaflet();
+   const root=$('k-map');root.replaceChildren();root.setAttribute('role','region');
+   const L=window.L,map=L.map(root,{scrollWheelZoom:false,zoomControl:true,preferCanvas:true});
+   state.map=map;
+   const attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+   const osm=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution,maxZoom:18}).addTo(map);
+   state.osm=osm;
+   osm.on('tileload',()=>{state.tiles=true;});
+   osm.on('tileerror',()=>{if(!state.tiles)set('map-status','Map tiles unavailable. Use the official source links in the place cards.');});
+   for(const p of places){
+    const marker=L.marker([p.lat,p.lon],{icon:pinIcon(p),keyboard:true,title:p.name});
+    const content=document.createElement('div');content.className='k-popup';
+    const title=document.createElement('strong');title.textContent=p.name;
+    const msg=document.createElement('p');msg.textContent=p.coordinateRole;
+    const link=document.createElement('a');link.href=p.access;link.textContent='Read official access rules';link.target='_blank';link.rel='noopener noreferrer';
+    content.append(title,msg,link);marker.bindPopup(content);marker.on('click',()=>choose(p.id,false));
+    marker.addTo(map);state.pins.set(p.id,marker);
+   }
+   map.fitBounds(places.map(p=>[p.lat,p.lon]),{padding:[35,35],maxZoom:11,animate:false});
+   set('map-status','Two source-backed geographic references. No launch-day parking, route, pad entrance, safety-zone perimeter or trajectory asserted.');
+   if(typeof ResizeObserver!=='undefined')new ResizeObserver(()=>map.invalidateSize()).observe(root);
+   fetch('/api/carto-basemap-config',{signal:AbortSignal.timeout(5500)}).then(r=>r.ok?r.json():null).then(c=>{
+    if(c?.provider!=='CARTO'||!c.key?.trim())return;
+    const keyed='https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key='+encodeURIComponent(c.key.trim());
+    const carto=L.tileLayer(keyed,{subdomains:'abcd',maxZoom:19,attribution:attribution+' &copy; <a href="https://carto.com/attributions">CARTO</a>'});
+    let loaded=false,failures=0;
+    carto.on('tileload',()=>{if(!loaded&&map.hasLayer(carto)){loaded=true;map.removeLayer(osm);}});
+    carto.on('tileerror',()=>{if(++failures>2&&!loaded&&map.hasLayer(carto)){map.removeLayer(carto);if(!map.hasLayer(osm))osm.addTo(map);}});
+    carto.addTo(map);
+   }).catch(()=>{});
+  }catch{set('map-status','Interactive map unavailable. Official park and spaceport source links remain available.');if(button){button.disabled=false;button.textContent='Retry map';}}
+ }
+ $('load-map')?.addEventListener('click',()=>{void startMap();});
+ document.querySelectorAll('[data-map-place]').forEach(b=>b.addEventListener('click',async()=>{
+  if(!state.map)await startMap();choose(b.dataset.mapPlace);
+ }));
+ $('mission-select')?.addEventListener('change',e=>{if(UUID.test(e.target.value))void loadMission(e.target.value);});
+ const id=new URL(location.href).searchParams.get('launchId');
+ void loadMission(id&&UUID.test(id)?id:null);
+})();

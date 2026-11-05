@@ -102,9 +102,9 @@ test('the beyond-Great-Lakes guide directory links this distinct field guide onc
   const directory=read('public/guides/index.html');
   const directorySitemap=sitemap.match(/<loc>https:\/\/chrisizworski\.com\/guides\/<\/loc>\s*<lastmod>([^<]+)<\/lastmod>/);
   assert.ok(directorySitemap);
-  assert.equal(directorySitemap[1],'2026-11-03');
-  assert.match(directory,/"dateModified": "2026-11-03"/);
-  assert.match(directory,/Beyond the Great Lakes <span>3 Guides<\/span>/);
+  assert.equal(directorySitemap[1],'2026-11-05');
+  assert.match(directory,/"dateModified": "2026-11-05"/);
+  assert.match(directory,/Beyond the Great Lakes <span>4 Guides<\/span>/);
   assert.equal((directory.match(/data-field-guide="vandenberg-rocket-viewing"/g)||[]).length,1);
   assert.ok(directory.includes('href="/vandenberg-rocket-launch-viewing/"'));
   assert.ok(directory.includes('href="/national-tools/rocket-launch-live/?region=california"'));

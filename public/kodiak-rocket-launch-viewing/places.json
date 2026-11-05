@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "sourceCheckedDate": "2026-11-05",
+  "coordinateWarning": "Map markers are geographic references, not approved rocket launch spectator positions or active road-status assertions.",
+  "places": [
+    {
+      "id": "pasagshak",
+      "name": "Pasagshak River State Recreation Site vicinity",
+      "kind": "public-park-reference",
+      "lat": 57.47917,
+      "lon": -152.44972,
+      "coordinateRole": "Alaska State Parks published Pasersaq cabin coordinate within the state recreation site, not the campground entrance, a parking marker, or a confirmed launch viewpoint",
+      "source": "https://alaskastateparks.reserveamerica.com/camping/pasagshak-river-state-recreation-site/r/facilityDetails.do?contractCode=AK&parkId=1182200",
+      "access": "https://dnr.alaska.gov/parks/aspunits/kodiak/pasagsrs.htm"
+    },
+    {
+      "id": "range",
+      "name": "Pacific Spaceport Complex–Alaska (approximate)",
+      "kind": "restricted-range",
+      "lat": 57.43,
+      "lon": -152.34,
+      "coordinateRole": "Approximate regional spaceport reference from the existing national launch atlas; not a surveyed pad, approach road, gate or place to stand",
+      "source": "https://akaerospace.com/spaceports",
+      "access": "https://akaerospace.com/beyond-launch"
+    }
+  ]
+}
