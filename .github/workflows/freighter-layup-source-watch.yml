@@ -34,6 +34,9 @@ jobs:
           python3 scripts/freighter-layup/evergreen.py
           python3 scripts/freighter-layup/evergreen.py --check
           python3 scripts/freighter-layup/history.py --check
+          node scripts/generate-freighter-layup-profiles.cjs
+          node scripts/generate-freighter-layup-profiles.cjs --check
+          node -e "const m=require('./public/assets/freighter-layup-model.js');const r=require('./public/assets/freighter-layup-registry.json');const e=m.validateRegistry(r);if(e.length)throw Error(e.join('; '))"
       - name: Run Python shadow intelligence without publishing any findings
         run: |
           python3 scripts/freighter-layup/shadow.py \
@@ -56,16 +59,16 @@ jobs:
             /tmp/freighter-layup-large-source-check.json
           if-no-files-found: error
           retention-days: 7
-      - name: Validate winter story ledger
-        run: node --test tests/freighter-layup-season.test.js tests/freighter-layup-feeds.test.js
+      - name: Validate winter story ledger and published archive integrity
+        run: node --test tests/freighter-layup-season.test.js tests/freighter-layup-feeds.test.js tests/freighter-layup-evergreen.test.js tests/freighter-layup-history.test.js tests/freighter-layup.test.js
       - name: Publish only on new evidence or season rollover
         run: |
-          if git diff --quiet -- public/assets/freighter-layup-live-season.json data/freighter-layup-review.json public/assets/freighter-layup-registry.json public/assets/freighter-layup-history.json public/great-lakes-freighter-winter-layup/index.html public/sitemap-winter.xml; then
+          if git diff --quiet -- public/assets/freighter-layup-live-season.json data/freighter-layup-review.json public/assets/freighter-layup-registry.json public/assets/freighter-layup-history.json public/great-lakes-freighter-winter-layup/index.html public/great-lakes-freighter-winter-layup/vessels public/sitemap-winter.xml; then
             echo 'No new independently sourced winter stories; no deploy.'
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add public/assets/freighter-layup-live-season.json data/freighter-layup-review.json public/assets/freighter-layup-registry.json public/assets/freighter-layup-history.json public/great-lakes-freighter-winter-layup/index.html public/sitemap-winter.xml
+          git add public/assets/freighter-layup-live-season.json data/freighter-layup-review.json public/assets/freighter-layup-registry.json public/assets/freighter-layup-history.json public/great-lakes-freighter-winter-layup/index.html public/great-lakes-freighter-winter-layup/vessels public/sitemap-winter.xml
           git commit -m "data(layup): refresh source evidence and archive the completed shipping winter"
           git push origin HEAD:main
