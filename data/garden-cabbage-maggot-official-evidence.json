@@ -1,0 +1,163 @@
+{
+  "schema": "msu-cabbage-maggot-field-evidence-v1",
+  "policy": "VERIFIED_OFFICIAL_EXTENSION_REPORTS_ONLY",
+  "reviewDate": "2026-11-05",
+  "targetTaxon": "Delia radicum",
+  "qualification": "Report-date and region-only evidence; no trap-station first adult flight observations or independent year/site validation.",
+  "reports": [
+    {
+      "id": "msu-2025-05-07-brassica-eggs",
+      "issueDate": "2025-05-07",
+      "sourceUrl": "https://www.canr.msu.edu/news/michigan-vegetable-crop-report-may-7-2025",
+      "sourcePublisher": "Michigan State University Extension",
+      "reportedAs": "this week",
+      "observationDateExact": null,
+      "observationDateEarliest": null,
+      "observationDateLatest": "2025-05-07",
+      "observed": "Eggs on brassica planting",
+      "observedStage": "EGGS",
+      "observationKind": "VERIFIED_FIELD_REPORT",
+      "regionLabel": "West-central Michigan",
+      "sitePrecision": "REGION_ONLY",
+      "siteID": null,
+      "coords": null,
+      "trapEffort": null,
+      "confirmedAdultFirstFlight": false,
+      "sourceSection": "Brassicas and greens",
+      "sourcePhrase": "Cabbage maggot eggs were present this week in one west central Michigan brassica planting.",
+      "independenceGroup": "msu-2025-05-07-week-unspecified-fields",
+      "note": "The date is the article's publication day, not a documented first-egg or first-adult emergence date."
+    },
+    {
+      "id": "msu-2025-05-07-turnip-eggs",
+      "issueDate": "2025-05-07",
+      "sourceUrl": "https://www.canr.msu.edu/news/michigan-vegetable-crop-report-may-7-2025",
+      "sourcePublisher": "Michigan State University Extension",
+      "reportedAs": "this week",
+      "observationDateExact": null,
+      "observationDateEarliest": null,
+      "observationDateLatest": "2025-05-07",
+      "observed": "Eggs at bases of turnip plants in at least one field",
+      "observedStage": "EGGS",
+      "observationKind": "VERIFIED_FIELD_REPORT",
+      "regionLabel": "Michigan, field location undisclosed",
+      "sitePrecision": "STATE_UNSPECIFIED",
+      "siteID": null,
+      "coords": null,
+      "trapEffort": null,
+      "confirmedAdultFirstFlight": false,
+      "sourceSection": "Root crops",
+      "sourcePhrase": "Cabbage maggot eggs were present at the base of turnips in at least one field this week.",
+      "independenceGroup": "msu-2025-05-07-week-unspecified-fields",
+      "note": "Not provably a second independent station, and not documented as a first egg detection."
+    },
+    {
+      "id": "msu-2025-05-14-maggot-feeding",
+      "issueDate": "2025-05-14",
+      "sourceUrl": "https://www.canr.msu.edu/news/michigan-vegetable-crop-report-may-14-2025",
+      "sourcePublisher": "Michigan State University Extension",
+      "reportedAs": "reported in this issue",
+      "observationDateExact": null,
+      "observationDateEarliest": null,
+      "observationDateLatest": "2025-05-14",
+      "observed": "Cabbage maggot stem feeding along field edges",
+      "observedStage": "LARVAL_FEEDING",
+      "observationKind": "VERIFIED_FIELD_REPORT",
+      "regionLabel": "Michigan, location undisclosed",
+      "sitePrecision": "STATE_UNSPECIFIED",
+      "siteID": null,
+      "coords": null,
+      "trapEffort": null,
+      "confirmedAdultFirstFlight": false,
+      "sourceSection": "Brassicas and greens",
+      "sourcePhrase": "Cabbage maggot has been observed feeding on plant stems along field edges.",
+      "independenceGroup": "msu-2025-05-14-unknown",
+      "note": "Adult first flight could have preceded larval injury; the record cannot date first emergence."
+    },
+    {
+      "id": "msu-2025-06-04-spring-damage",
+      "issueDate": "2025-06-04",
+      "sourceUrl": "https://www.canr.msu.edu/news/michigan-vegetable-crop-report-june-4-2025",
+      "sourcePublisher": "Michigan State University Extension",
+      "reportedAs": "spring generation described in report",
+      "observationDateExact": null,
+      "observationDateEarliest": null,
+      "observationDateLatest": "2025-06-04",
+      "observed": "Spring generation cabbage maggot root injury in multiple Michigan fields",
+      "observedStage": "LARVAL_DAMAGE",
+      "observationKind": "VERIFIED_FIELD_REPORT",
+      "regionLabel": "Multiple Michigan fields, precise counties not identified",
+      "sitePrecision": "STATEWIDE_UNLOCATED",
+      "siteID": null,
+      "coords": null,
+      "trapEffort": null,
+      "confirmedAdultFirstFlight": false,
+      "sourceSection": "Brassicas and greens",
+      "sourcePhrase": "Cabbage maggots from the spring generation have been causing damage across the state",
+      "independenceGroup": "msu-2025-06-04-unspecified-fields",
+      "note": "Not a first flight or a sampled population trend."
+    }
+  ],
+  "excludedEvidence": [
+    {
+      "id": "msu-2026-04-29-projected-peak",
+      "sourceUrl": "https://www.canr.msu.edu/news/michigan-vegetable-crop-report-april-29-2026",
+      "reason": "PREDICTED_PEAK_NOT_FIELD_OBSERVATION",
+      "note": "MSU said spring peak flight was approaching based on an Enviroweather model; this cannot independently validate that model."
+    },
+    {
+      "id": "msu-2026-05-13-pest-trial",
+      "sourceUrl": "https://www.canr.msu.edu/news/michigan-vegetable-crop-report-may-13-2026",
+      "reason": "TRIAL_ACTIVITY_IS_NOT_PEST_FIRST_FLIGHT",
+      "note": "A cabbage maggot trial was described but no species-confirmed first adult trap catch was reported."
+    }
+  ],
+  "stationFirstFlights": [],
+  "stationValidationContract": {
+    "requiredSpecies": "Delia radicum",
+    "requiredEvent": "FIRST_CONFIRMED_ADULT_TRAP_CAPTURE",
+    "requiredMethod": "MONITORED_NEGATIVE_BEFORE_FIRST_POSITIVE",
+    "requiredFields": [
+      "dateOfFirstPositiveSamplingInterval",
+      "dateOfMostRecentNegative",
+      "stationID",
+      "exactCoordinates",
+      "sampleMethod",
+      "speciesVerification",
+      "sourceURL",
+      "originalRecordLicense",
+      "archivedStationWeather"
+    ],
+    "forbid": [
+      "research-grade photo as first emergence",
+      "crop damage as first flight",
+      "climate-only threshold as observed flight",
+      "forecast-derived trap label",
+      "unknown sampling start or count as zero"
+    ],
+    "minHeldOutDistinctSeasons": 3,
+    "minDistinctStationIDs": 2
+  },
+  "methodReferences": [
+    {
+      "label": "MSU Enviroweather threshold model",
+      "url": "https://enviroweather.msu.edu/crops/coleCrops/cabbagemaggot",
+      "note": "Base 43F, March 1; 300 / 1476 / 2652°F-degree-day milestones. Public page does not provide complete algorithm and site-weather parity."
+    },
+    {
+      "label": "MSU Extension first flight vs peak",
+      "url": "https://www.canr.msu.edu/news/cabbage_maggots_of_cole_crops",
+      "note": "First adult emergence 300 DD43; spring peak flight/egg laying around 565 DD43 (different events)."
+    },
+    {
+      "label": "UC IPM published field validation",
+      "url": "https://ipm.ucanr.edu/weather/phenology-models-description/cabbage-maggot/",
+      "note": "1972 Wisconsin field study with modified max/min method; UC IPM recommends single sine. This is published validation in Wisconsin, not a Michigan station-year test."
+    },
+    {
+      "label": "UMN Extension simple-average guidance",
+      "url": "https://extension.umn.edu/garden-and-home/yard-and-garden/yard-and-garden-insects/root-maggots",
+      "note": "Positive mean daily temperature above base 43F is a public guidance method, but its accumulation start and source inputs must not be silently substituted for MSU's operational model."
+    }
+  ]
+}
