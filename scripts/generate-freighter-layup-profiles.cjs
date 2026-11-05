@@ -51,12 +51,13 @@ if(updated.includes(begin)||updated.includes(end)){
  if(updated.split(begin).length!==2||updated.split(end).length!==2)throw Error('duplicated sitemap ownership markers');
  updated=updated.slice(0,updated.indexOf(begin))+begin+'\n'+entries.join('\n')+'\n'+end+updated.slice(updated.indexOf(end)+end.length);
 }else{
- const parentRe=new RegExp('  <url><loc>'+parent.replace(/[.*+?^$\{\}()|[\]\\]/g,'\\const check=process.argv.includes('--check');
-for(const p of bios.profiles){
- const target=path.join(root,'public/great-lakes-freighter-winter-layup/vessels',p.id,'index.html');
- const generated=renderProfile(p,data);
- if(check){if(!fs.existsSync(target)||fs.readFileSync(target,'utf8')!==generated)throw Error('stale biography '+p.id);}
- else {fs.mkdirSync(path.dirname(target),{recursive:true});fs.writeFileSync(target,generated,'utf8');}
+ const locator='<loc>'+parent+'</loc><lastmod>';
+ const at=updated.indexOf(locator);
+ if(at<0||updated.indexOf(locator,at+1)>=0)throw Error('winter atlas sitemap entry missing or duplicated');
+ const close=updated.indexOf('</url>',at);
+ if(close<0)throw Error('winter atlas sitemap URL malformed');
+ const position=close+'</url>'.length;
+ updated=updated.slice(0,position)+'\n'+begin+'\n'+entries.join('\n')+'\n'+end+updated.slice(position);
 }
 console.log((check?'Checked':'Generated')+' '+bios.profiles.length+' vessel biographies');')+'<\\/loc><lastmod>\\d{4}-\\d{2}-\\d{2}<\\/lastmod><\\/url>');
  const matches=updated.match(parentRe);
