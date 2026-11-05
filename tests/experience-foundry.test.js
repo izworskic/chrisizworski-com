@@ -1,5 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {spawnSync} from 'node:child_process';
 import {starter,validateSpec,inspectNetwork,compile} from '../experience-foundry/lib/foundry.mjs';
 import {qualification} from '../experience-foundry/lib/safety.mjs';
 
@@ -86,4 +90,18 @@ test('empty inputs render truthful no-data pages in both independent designs',()
     assert.match(html,/No (qualified field records supplied|source-linked passages supplied)/);
     assert.match(html,/NOT A LIVE CONDITIONS REPORT/);
   }
+});
+
+test('CLI builds a noindex preview and review report, then cleans test output',()=>{
+  const root=fileURLToPath(new URL('../',import.meta.url));
+  const folder='build/experience-foundry/cli-smoke-'+process.pid+'-'+Date.now();
+  const target=path.join(root,folder);
+  try{
+    const result=spawnSync(process.execPath,['scripts/experience-foundry.mjs','build','--spec','experience-foundry/examples/saginaw-field-notes.json','--out',folder],{cwd:root,encoding:'utf8'});
+    assert.equal(result.status,0,result.stderr||result.stdout);
+    assert.match(fs.readFileSync(path.join(target,'index.html'),'utf8'),/noindex,nofollow/);
+    const review=JSON.parse(fs.readFileSync(path.join(target,'review.json'),'utf8'));
+    assert.equal(review.newCanonicalCreated,false);
+    assert.equal(review.sourceVerification,'NOT VERIFIED');
+  } finally { fs.rmSync(target,{recursive:true,force:true}); }
 });
