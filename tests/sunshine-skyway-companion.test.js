@@ -22,7 +22,7 @@ test('forecast wind never changes an official no-closure finding to CLOSED', () 
 });
 test('operational impact is not a closure and slow traffic is not an invented ETA', () => {
   assert.equal(companion.decision({officialStatus:{state:'IMPACTED'}}).tone,'impacted');
-  const result=companion.decision({officialStatus:{state:'NO_CLOSURE_SIGNAL_FOUND'},traffic:{flow:{selected:{state:'STOP_AND_GO'}}}});
+  const result=companion.decision({officialStatus:{state:'NO_CLOSURE_SIGNAL_FOUND'},traffic:{flow:{selected:{state:'STOP_AND_GO'}}},sourceHealth:{trafficSpeeds:{state:'ok'}}});
   assert.match(result.detail,/does not provide a verified travel-time estimate/i);
 });
 test('corridor directions and example navigation links reverse with selection', () => {
@@ -52,4 +52,10 @@ test('page supplies companion, live integration and non-JavaScript official fall
   assert.match(page,/<noscript>/);
   assert.match(page,/not an official detour/i);
   assert.match(view,/renderCompanion\(data\)/);
+});
+
+test('stale traffic speed tiles do not produce a live slowdown recommendation', () => {
+ const result=companion.decision({officialStatus:{state:'NO_CLOSURE_SIGNAL_FOUND'},traffic:{flow:{selected:{state:'STOP_AND_GO'}}},sourceHealth:{trafficSpeeds:{state:'degraded_cached'}}});
+ assert.equal(result.tone,'informational');
+ assert.doesNotMatch(result.detail,/live FL511 Traffic Speeds/i);
 });
