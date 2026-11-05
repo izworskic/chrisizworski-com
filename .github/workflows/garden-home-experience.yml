@@ -6,6 +6,12 @@ on:
       - 'scripts/build_garden_pest_python_fieldbook.py'
       - 'tests/test_garden_pest_python_fieldbook.py'
       - 'public/assets/garden-pest-python-fieldbook*'
+      - 'data/garden-cabbage-maggot-official-evidence.json'
+      - 'scripts/build_garden_cabbage_validation.py'
+      - 'tests/test_garden_cabbage_validation.py'
+      - 'public/assets/garden-cabbage-validation*'
+      - 'scripts/verify-garden-cabbage-validation.cjs'
+      - 'scripts/verify-garden-cabbage-validation-browser.cjs'
       - 'scripts/verify-garden-pest-python-fieldbook.cjs'
       - 'scripts/verify-garden-pest-python-fieldbook-browser.cjs'
       - 'public/michigan-garden-pest-watch/**'
@@ -20,6 +26,12 @@ on:
       - 'scripts/build_garden_pest_python_fieldbook.py'
       - 'tests/test_garden_pest_python_fieldbook.py'
       - 'public/assets/garden-pest-python-fieldbook*'
+      - 'data/garden-cabbage-maggot-official-evidence.json'
+      - 'scripts/build_garden_cabbage_validation.py'
+      - 'tests/test_garden_cabbage_validation.py'
+      - 'public/assets/garden-cabbage-validation*'
+      - 'scripts/verify-garden-cabbage-validation.cjs'
+      - 'scripts/verify-garden-cabbage-validation-browser.cjs'
       - 'scripts/verify-garden-pest-python-fieldbook.cjs'
       - 'scripts/verify-garden-pest-python-fieldbook-browser.cjs'
       - 'data/garden-earworm-msu-2026.csv'
@@ -110,6 +122,11 @@ jobs:
           python3 scripts/build_garden_pest_python_fieldbook.py --check
           node scripts/verify-garden-pest-python-fieldbook.cjs
           node scripts/verify-garden-pest-python-fieldbook-browser.cjs
+      - name: Test MSU extension cabbage field observations versus modeled thermal stages
+        run: |
+          python3 scripts/build_garden_cabbage_validation.py --check
+          node scripts/verify-garden-cabbage-validation.cjs
+          node scripts/verify-garden-cabbage-validation-browser.cjs
       - name: Check Garden Pest Watch crop, evidence, failure and responsive browser behavior
         run: node scripts/verify-garden-pest-watch-browser.cjs
       - name: Verify controlled field station journal, bounded onset and mobile/no-JS behavior
@@ -124,6 +141,7 @@ jobs:
             artifacts/leafcutter-browser/
             artifacts/garden-pest-watch-browser/
             artifacts/garden-pest-python-fieldbook/
+            artifacts/garden-cabbage-validation/
             artifacts/garden-earworm-2027-browser/
           if-no-files-found: warn
           retention-days: 14
