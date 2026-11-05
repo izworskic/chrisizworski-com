@@ -8,7 +8,7 @@ const read = relative => fs.readFileSync(path.join(root, relative), 'utf8');
 const data = JSON.parse(read('data/up-waterfall-montreal-access-evidence.json'));
 
 test('B67 distinguishes construction completion from validated waterfall access', () => {
-  assert.ok(/^B\\d+$/.test(data.batchUpdated) && Number(data.batchUpdated.slice(1)) >= 67);
+  assert.ok(/^B\d+$/.test(data.batchUpdated) && Number(data.batchUpdated.slice(1)) >= 67);
   const evidence = data.sourceAxes.completionReconciliation;
   assert.equal(evidence.status, 'operator-reports-corridor-complete-falls-route-not-cleared');
   assert.match(evidence.builderHomepage.claim, /complete/i);
