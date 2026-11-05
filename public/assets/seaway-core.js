@@ -45,5 +45,20 @@
     const stage=p<25?0:p<35?1:p<70?2:p<80?3:4;
     return {progress:p,stage,water,x,high,lowerOpen:down?p>=80:p<25,upperOpen:down?p<25:p>=80,changing:p>=35&&p<70};
   }
-  return {fresh,visible,emptyReportState,motion,direction,distance,fit,monthly,lockFrame,clamp};
+  // The ordered reference is geographic, not an inferred voyage or live ETA.
+  const CORRIDOR=['montreal','beauharnois','massena','iroquois','thousand-islands'];
+  function journeyContext(v,regions,selectedRegion='all') {
+    const memberships=Array.isArray(v?.regionIds)?v.regionIds:[];
+    const id=selectedRegion!=='all'&&memberships.includes(selectedRegion)?selectedRegion:CORRIDOR.find(x=>memberships.includes(x));
+    const index=CORRIDOR.indexOf(id);
+    const name=regions?.find(r=>r.id===id)?.name||'Unidentified river stretch';
+    const neighbor=offset=>{
+      const next=CORRIDOR[index+offset];
+      return next?{id:next,name:regions?.find(r=>r.id===next)?.name||next}:null;
+    };
+    return {id:id||null,name,index,upbound:index<0?null:neighbor(1),downbound:index<0?null:neighbor(-1),
+      meaning:'This is the chapter where a recent receiver heard the vessel. The next chapter depends on its actual voyage and may not be the next place it calls.',
+      directionVerified:false,etaVerified:false};
+  }
+  return {fresh,visible,emptyReportState,motion,direction,distance,fit,monthly,lockFrame,clamp,journeyContext,CORRIDOR};
 });
