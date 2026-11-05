@@ -43,7 +43,7 @@ export function validateSpec(spec,registry) {
   if (!Array.isArray(spec.closestTools)||new Set(spec.closestTools).size!==2||spec.closestTools.length!==2||spec.closestTools.some(x=>!owners.has(x))) errors.push('closestTools must name two distinct existing registry IDs');
   if (spec.mode==='enhance-existing' && !owners.has(spec.intentOwner)) errors.push('enhance-existing requires a valid existing intentOwner');
   if (!Array.isArray(spec.distinctiveness)||spec.distinctiveness.length<2||new Set((spec.distinctiveness||[]).map(x=>x.dimension)).size<2)errors.push('at least two distinct originality dimensions required');
-  for(const d of spec.distinctiveness||[])if(!DIMENSIONS.has(d.dimension)||typeof d.reason!=='string'||d.reason.trim().length<30)errors.push('each originality dimension needs an allowed name and specific 30+ character reason');
+  for(const d of (Array.isArray(spec.distinctiveness)?spec.distinctiveness:[]))if(!DIMENSIONS.has(d.dimension)||typeof d.reason!=='string'||d.reason.trim().length<30)errors.push('each originality dimension needs an allowed name and specific 30+ character reason');
   if(!Array.isArray(spec.sources)||!Array.isArray(spec.records))errors.push('sources and records must be arrays');
   const urls = new Set();
   for(const [i,s] of (Array.isArray(spec.sources)?spec.sources:[]).entries()) {
@@ -59,8 +59,9 @@ export function validateSpec(spec,registry) {
     if(!validIso(r.issuedAt))errors.push('record '+i+' requires timezone-aware issuedAt');
     if(!https(r.sourceUrl)||!urls.has(r.sourceUrl))errors.push('record '+i+' must link a declared HTTPS source');
     if(r.kind==='forecast'&&(!validIso(r.validUntil)||Date.parse(r.validUntil)<Date.parse(r.issuedAt)))errors.push('forecast '+i+' requires valid validUntil after issue');
+    if(r.kind==='observation'&&validIso(r.issuedAt)&&Date.parse(r.issuedAt)>Date.now()+300000)errors.push('observation '+i+' cannot have a future issuedAt');
     if(r.kind==='observation'&&(!(r.maxAgeHours>0)||!Number.isFinite(r.maxAgeHours)))errors.push('observation '+i+' requires finite positive maxAgeHours');
-    if(r.kind==='official-notice'&&(!r.scope||r.scope.trim().length<5))errors.push('official notice '+i+' must state its access/notice scope');
+    if(r.kind==='official-notice'&&(typeof r.scope!=='string'||r.scope.trim().length<5))errors.push('official notice '+i+' must state its access/notice scope');
     if(r.from!==undefined&&typeof r.from!=='string'||r.to!==undefined&&typeof r.to!=='string')errors.push('record '+i+' from/to must be text');
   }
   return errors;
