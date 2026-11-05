@@ -1,9 +1,10 @@
 'use strict';
 (() => {
   const API = '/api/rocket-launch-usa';
+  const OFFICIAL_EVIDENCE_API = '/api/rocket-official-notices';
   const $ = id => document.getElementById(id);
   const validRegions = new Set(['california', 'florida', 'texas', 'virginia', 'alaska', 'hawaii']);
-  const state = { request: 0, data: null, map: null, markers: new Map(), regions: [], userFocusedMap: false };
+  const state = { request: 0, data: null, map: null, markers: new Map(), regions: [], userFocusedMap: false, officialEvidence: null, officialEvidenceLoaded: false };
   const el = (tag, className, value) => {
     const n = document.createElement(tag);
     if (className) n.className = className;
@@ -855,6 +856,113 @@
     else url.searchParams.delete('launchId');
     history.replaceState(null, '', url.pathname + url.search + url.hash);
   }
+  // Python produces a signed, bounded source ledger. Client never scrapes
+  // authority websites, promotes archived orders into closures or merges
+  // raw page text into a selected LL2 mission record.
+  const officialName = {
+    'vandenberg-news':'Vandenberg / Space Force news',
+    'vandenberg-alerts':'Space Force launch-alert subscriptions',
+    'canaveral-nps':'Canaveral / NPS Playalinda policy',
+    'ksc-viewing':'Kennedy Visitor Complex viewing rules',
+    'starbase-city':'City of Starbase beach & road notices',
+    'wallops-schedule':'NASA Wallops launch schedule',
+    'wallops-visitor':'NASA Wallops Visitor Center',
+    'alaska-aerospace':'Alaska Aerospace road-closure desk',
+    'alaska-news':'Alaska Aerospace operator news',
+    'pmrf-beach':'Navy / Barking Sands shoreline policy'
+  };
+  const evidenceKind = {
+    'access-status':'Published status · checked at source',
+    'road-status':'Published road report · checked at source',
+    'historical-order-index':'Previous order · not active by inference',
+    'notice-check-required':'Current notice requires official review',
+    'schedule-status':'NASA public schedule statement',
+    'access-policy':'General policy · not event clearance',
+    'source-link':'Official alert subscription',
+    'official-article':'Official article · event not independently matched'
+  };
+  function renderOfficialEvidence(data) {
+    const root = $('rl-evidence-sources');
+    if (!root) return;
+    root.replaceChildren();
+    const current = data?.region?.id;
+    const feed = state.officialEvidence;
+    if (!current || !validRegions.has(current)) {
+      set('rl-evidence-status','Select a coast to inspect official evidence.');
+      return;
+    }
+    const records = feed?.regions?.[current] || [];
+    if (!records.length) {
+      set('rl-evidence-status',state.officialEvidenceLoaded ?
+        'Official source snapshot unavailable · do not infer an open range':
+        'Awaiting the independently scheduled source check');
+      set('rl-evidence-checked',state.officialEvidenceLoaded ?
+        'No independently checked source snapshot is available. Follow the authority link in the coast panel; official access is unverified.' :
+        'The collector is loading. No source observation is assumed current.');
+      const fallback = el('p','rl-evidence-none',
+        'No verified event-specific evidence in this source desk. A launch calendar is not an access approval.');
+      root.appendChild(fallback);
+      const official = anchor(data.region?.authority,'Open the selected coast’s official launch authority');
+      if (official) root.appendChild(official);
+      return;
+    }
+    const fresh = feed.health === 'recent';
+    const available = records.filter(r=>r.status==='retrieved').length;
+    set('rl-evidence-status',fresh ?
+      available+' of '+records.length+' sources verified for this coast' :
+      'Official notice observations '+(feed.health==='late'?'overdue':'stale')+' · verify directly');
+    set('rl-evidence-checked','Python source scan: '+stamp(feed.checkedAt)+'. '+
+      'A check timestamp is not a launch-event date or authorization. '+(
+        fresh ? 'Published statuses are only valid at source-check time.' :
+        'Current access statements have been suppressed until the next successful refresh.'));
+    for (const src of records) {
+      const article = el('article','rl-evidence-card');
+      article.dataset.status=src.status;
+      const top=el('div','rl-evidence-card-head');
+      top.appendChild(el('strong','',officialName[src.id]||'Official regional source'));
+      const marker=el('span','rl-evidence-marker',
+        src.status==='unavailable'?'Source unreachable':
+          src.status==='limited'?'Partial parsing':
+            fresh?'Source retrieved':'Source overdue');
+      marker.dataset.status=src.status;
+      top.appendChild(marker);article.appendChild(top);
+      const signals=(src.signals||[]).slice(0,4);
+      if(!signals.length)article.appendChild(el('p','rl-evidence-empty',
+        src.status==='unavailable'?'Source could not be retrieved. No opening, closure or launch can be inferred.':
+        'No independently supported event-specific status extracted from this official page.'));
+      for (const notice of signals) {
+        const note=el('div','rl-evidence-signal');
+        note.appendChild(el('span','rl-evidence-type',
+          evidenceKind[notice.kind]||'Official-source observation'));
+        note.appendChild(el('strong','',notice.title));
+        note.appendChild(el('p','',notice.detail));
+        const link=anchor(notice.sourceUrl,'Read original official source');
+        if(link)note.appendChild(link);
+        article.appendChild(note);
+      }
+      if(src.changedSinceLastCheck===true)article.appendChild(el('p','rl-evidence-change',
+        'Normalized official evidence changed since the preceding successful scan; this does not establish a closure or a launch change.'));
+      const source=anchor(src.sourceUrl,'Open source for current rules','rl-evidence-origin');
+      if(source)article.appendChild(source);
+      root.appendChild(article);
+    }
+  }
+  async function loadOfficialEvidence() {
+    try {
+      const response=await fetch(OFFICIAL_EVIDENCE_API,{
+        headers:{Accept:'application/json'},signal:AbortSignal.timeout(12000)});
+      if(!response.ok)throw new Error('evidence-source-unavailable');
+      const result=await response.json();
+      if(result?.ok!==true||result.version!==1||!result.regions)
+        throw new Error('invalid-evidence');
+      state.officialEvidence=result;
+    }catch{
+      state.officialEvidence=null;
+    }
+    state.officialEvidenceLoaded=true;
+    if(state.data)renderOfficialEvidence(state.data);
+  }
+
   function render(data) {
     state.data = data;
     state.regions = data.regions || [];
@@ -874,6 +982,7 @@
     renderSlipForecast(data);
     renderLaunchWeather(data);
     renderOfficial45ws(data);
+    renderOfficialEvidence(data);
     board();
     document.dispatchEvent(new CustomEvent('rocket-viewing:data',{detail:data}));
     const coverage = data.coverage || {};
@@ -956,5 +1065,6 @@
   const launch = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
     initial.searchParams.get('launchId') || '') ? initial.searchParams.get('launchId') : null;
   loadVisualCatalog();
+  void loadOfficialEvidence();
   load(region, launch);
 })();
