@@ -32,6 +32,8 @@ async function ready(){
    assert.ok(await page.locator('#cm-ui').isVisible());
    assert.equal(await page.locator('.cm-validate__record').count(),4);
    assert.match(await page.locator('#cm-truth').innerText(),/cannot grade the model against first adult flights/i);
+   assert.match(await page.locator('#cm-status').innerText(),/2025 ONLY.*NOT A LIVE WARNING/);
+   assert.match(await page.locator('#cm-field-reports').innerText(),/report date, not the first day/i);
    assert.match(await page.locator('#cm-evaluation').innerText(),/zero matched first-adult trap-flight station-years/i);
    assert.match(await page.locator('#cm-method-sensitivity').innerText(),/1–15 days earlier/);
    assert.equal(await page.locator('#cm-city').inputValue(),'grand-rapids');
