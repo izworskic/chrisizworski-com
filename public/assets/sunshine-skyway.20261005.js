@@ -89,7 +89,7 @@
     const sourceLiveCount = eventLiveCount + (speedsState === 'ok' ? 1 : 0);
     const flow = traffic?.flow || {};
     const selected = flow?.selected || {};
-    const flowUsable = selected.state && selected.state !== 'UNAVAILABLE' && speedsState !== 'unavailable';
+    const flowUsable = selected.state && selected.state !== 'UNAVAILABLE' && speedsState === 'ok';
     const directionLabel = flow?.selectedDirection === 'southbound' ? 'southbound' : 'northbound';
     const noEvent = eventLiveCount === 2 && mentions.length === 0;
     els.mentionMetric.textContent = String(mentions.length);
@@ -123,7 +123,7 @@
 
     if (eventLiveCount === 2) {
       els.trafficTitle.textContent = 'Nothing specific is being reported on the Skyway';
-      els.trafficCopy.textContent = "We checked both live FL511 event feeds. Neither is showing a Skyway-specific crash, closure or traffic event right now. The Traffic Speeds layer is unavailable, so we do not guess at congestion or delay.";
+      els.trafficCopy.textContent = "We checked both live FL511 event feeds. Neither is showing a Skyway-specific crash, closure or traffic event right now. The Traffic Speeds layer is unavailable or not fresh enough to use, so we do not guess at congestion or delay.";
     } else {
       els.trafficTitle.textContent = 'Traffic source coverage is partial';
       els.trafficCopy.textContent = 'Open FL511 before traveling if current traffic conditions are important to your decision.';
@@ -269,6 +269,17 @@
   }
 
 
+  // Keep geographic route and deep link synchronized immediately on input changes.
+  function updateRouteSelection() {
+  const helper=window.SkywayCompanion;
+  if(!helper)return;
+  const route=helper.routeFor(els.direction.value);
+  els.routeContext.textContent=`${route.label}. This is an example corridor around Tampa Bay, not an official detour. Compare the live road picture before leaving.`;
+  els.routeSteps.innerHTML=route.steps.map(step=>`<li>${esc(step)}</li>`).join('');
+  els.routePlanner.href=route.url;
+  els.shareTrip.href=helper.shareHref(els.direction.value,els.vehicle.value);
+}
+
   // Companion is interpretive guidance; FL511 always owns bridge closure status.
   function renderCompanion(data) {
     const helper = window.SkywayCompanion;
@@ -282,11 +293,7 @@
     els.tripDecision.parentElement.dataset.tone = next.tone;
     els.tripDecision.textContent = next.title;
     els.tripReason.textContent = next.detail;
-    const route = helper.routeFor(els.direction.value);
-    els.routeContext.textContent = `${route.label}. This is an example corridor around Tampa Bay, not an official detour. Compare the live road picture before leaving.`;
-    els.routeSteps.innerHTML = route.steps.map(step => `<li>${esc(step)}</li>`).join('');
-    els.routePlanner.href = route.url;
-    els.shareTrip.href = helper.shareHref(els.direction.value, els.vehicle.value);
+    updateRouteSelection();
     const periods = helper.outlook(data);
     els.outlookItems.innerHTML = periods.length
       ? periods.map(period => `<div class="outlook-row"><strong>${esc(period.label)}</strong><span>${esc(period.wind)} ${esc(period.direction)}</span></div>`).join('')
@@ -343,7 +350,12 @@
     }
   }
 
-  function changed() { load(); }
+  function changed() {
+    els.tripDecision.textContent = 'Refreshing the selected crossing context…';
+    els.tripReason.textContent = 'Waiting for a matching official data snapshot. Do not use the previous direction as a current traffic assessment.';
+    updateRouteSelection();
+    load();
+  }
   els.direction.addEventListener('change', changed);
   els.vehicle.addEventListener('change', changed);
   els.axles.addEventListener('change', changed);
