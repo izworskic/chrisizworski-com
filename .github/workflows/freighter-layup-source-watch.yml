@@ -34,6 +34,10 @@ jobs:
             --output /tmp/freighter-layup-shadow-report.json
           python3 scripts/freighter-layup/evaluate.py --check \
             --output /tmp/freighter-layup-retrospective-check.json
+          python3 scripts/freighter-layup/evaluate.py \
+            --cases data/freighter-layup-source-checked-evaluation-2026.json \
+            --check --require-large-sample \
+            --output /tmp/freighter-layup-large-source-check.json
           python3 -m unittest discover -s scripts/freighter-layup -p 'test_*.py' -v
       - name: Keep the private non-publishing evidence audit for seven days
         uses: actions/upload-artifact@v4
@@ -42,6 +46,7 @@ jobs:
           path: |
             /tmp/freighter-layup-shadow-report.json
             /tmp/freighter-layup-retrospective-check.json
+            /tmp/freighter-layup-large-source-check.json
           if-no-files-found: error
           retention-days: 7
       - name: Validate winter story ledger
