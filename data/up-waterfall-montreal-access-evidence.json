@@ -260,5 +260,109 @@
     "A Trailforks trailhead marked restricted is not a valid parking point despite displaying coordinates"
   ],
   "batchUpdated": "B68",
-  "latestReviewDate": "2026-11-05"
+  "latestReviewDate": "2026-11-05",
+  "b69SeasonalPublicArrival": {
+    "reviewDate": "2026-11-05",
+    "candidate": "Lower Montreal Falls #139",
+    "decision": "historically-built-fish-cove-parking-current-road-and-lot-status-unverified",
+    "publicGuidePromotion": false,
+    "historicalNamedLot": {
+      "originalReport": {
+        "date": "2022-08-19",
+        "source": "https://www.visitkeweenaw.com/blog/post/our-top-4-places-to-ride-in-the-keweenaw/",
+        "evidence": "Visit Keweenaw describes Keweenaw ATV Club trail ending at a NEW graveled parking lot at Fish Cove. This supports lot existence by August 2022, not November 2026 conditions."
+      },
+      "tourismGuide": {
+        "date": "2023-06",
+        "source": "https://www.visitkeweenaw.com/blog/post/a-guide-to-visiting-the-keweenaws-montreal-falls/",
+        "evidence": "Rustic parking area at Fish Cove and one-mile unmarked shoreline hike to Lower Montreal; high-clearance access recommended; no route maintained or signed."
+      },
+      "currentSeasonTourism": {
+        "season": "2026-2027",
+        "source": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/keweenawmi/KCVB_Visitors_Guide_20260407_HIGH_23713277-83e7-418f-aab3-34c51d92bb6f.pdf",
+        "evidence": "Fish Cove from Mandan Road remains a challenging-hike recommendation. No verified November lot open-now status."
+      },
+      "identityConfidence": "historically-documented-named-lot",
+      "lotConstructedHistorical": true,
+      "exactPublicParkingGps": null,
+      "lotOpenNowVerified": false
+    },
+    "dnrCompartment": {
+      "record": "Baraga DNR Compartment 11082, entry year 2027, reviewed/exported Sept 2025",
+      "source": "https://www2.dnr.state.mi.us/publications/pdfs/forestslandwater/Cmpt_Reviews/Baraga/2027/bar082_comp_info.pdf",
+      "evidence": "DNR identifies easements for PARTS of Mandan Road; DNR and Keweenaw ATV Club PARTNERED to build Fish Cove visitor parking. Planning record is not an as-built certificate, specific public-road determination or current parking status.",
+      "datedRecord": "2025-09-16",
+      "namesFishCove": true,
+      "exactLotSurvey": false,
+      "fullDrivingEasementProved": false,
+      "currentPassabilityProved": false
+    },
+    "hoarLakeBKOrvSeason": {
+      "source": "https://www.michigandnr.com/PUBLICATIONS/pdfs/ForestsLandWater/ORV/Maps-Trail/BK_Route.pdf",
+      "mapDated": "2024-03-19",
+      "clubCrosscheck": "https://www.keweenawatvclub.com/map-update-with-openclosed-trails/",
+      "clubDated": "2026-06-22",
+      "statusOn20261105": "seasonally-closed-to-ORVs",
+      "closureStarts": "11-01",
+      "usualSeasonResumes": "05-01",
+      "dataQuality": "DNR printed 2024 PDF erroneously says April 31 (nonexistent calendar date); club independently states May 1–Nov 1 operating season. Do not repeat April 31 as a valid date.",
+      "appliesTo": "designated Keweenaw BK Hoar Lake ORV route, not necessarily every county road, forest road, Fish Cove lot, or passenger car",
+      "conventionalVehicleAccessVerified": false,
+      "walkAccessVerified": false,
+      "licenseOrPermitRequiredForOrv": true
+    },
+    "roadCommissionWinterParking": {
+      "source": "https://keweenawcountyonline.com/news-roads-view.php?target=2778",
+      "published": "2026-10-27",
+      "validFrom": "11-01",
+      "validUntil": "04-15",
+      "fromLocal": "02:00",
+      "untilLocal": "08:00",
+      "applies": "county roads and highways, roadways AND shoulders; not a determination of separate off-road lot rules",
+      "visitorRule": "Do not use a roadside shoulder as an unverified overnight alternative parking point.",
+      "roadsideParkingDuringProhibitedHours": false
+    },
+    "ownershipReconciliation": {
+      "source": "https://www.michigan.gov/dnr/managing-resources/prd/parks/mgt-plans/keweenaw-point-state-lands",
+      "evidence": "Keweenaw Point land transfer/general management plan is delayed, while previously approved corridor projects continue. Do not treat adjacent TNC/State parcel boundaries or uncompleted acquisition as blanket DNR ownership or access authorization.",
+      "exactFishCoveRoadParcelTenureEstablished": false
+    },
+    "independentApproaches": [
+      {
+        "id": "fish-cove-established-lot",
+        "confirmedHistoricalAccess": true,
+        "currentParkingOpenVerified": false,
+        "automatedCarNavigationAllowed": false
+      },
+      {
+        "id": "hoar-lake-unnamed-forest-road-2024",
+        "confirmedHistoricalAccess": true,
+        "currentParkingOpenVerified": false,
+        "automatedCarNavigationAllowed": false
+      },
+      {
+        "id": "bk-designated-orv-route",
+        "seasonalOrvClosureOnReviewDate": true,
+        "automatedCarNavigationAllowed": false
+      },
+      {
+        "id": "private-smiths-fisheries",
+        "confirmedHistoricalAccess": false,
+        "automatedCarNavigationAllowed": false
+      }
+    ],
+    "remainingGates": [
+      "DNR/Keweenaw ATV Club verified present Fish Cove lot availability and ownership/visitor-use terms",
+      "Current Mandan–Hoar Lake/Fish Cove road status, classification, winter closures and legal passenger-vehicle use",
+      "Source-verified current Lower Montreal shoreline foot approach and viewpoint access, with no winter safety guarantees",
+      "Separate exact Upper Montreal point and legal trail access"
+    ],
+    "prohibitedClaims": [
+      "There was never a Fish Cove parking lot",
+      "DNR's ORV winter closure means all conventional cars are banned everywhere in the Hoar Lake area",
+      "The county's 2am–8am roadway/shoulder parking ban automatically applies inside all off-road lots",
+      "A historic 2022 gravel lot or dated 2027 forest planning record is a November 2026 open-now permit",
+      "Private Smiths-Fisheries access and proposed KORC lot are valid visitor arrival points"
+    ]
+  }
 }
