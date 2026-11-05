@@ -59,11 +59,6 @@ if(updated.includes(begin)||updated.includes(end)){
  const position=close+'</url>'.length;
  updated=updated.slice(0,position)+'\n'+begin+'\n'+entries.join('\n')+'\n'+end+updated.slice(position);
 }
-console.log((check?'Checked':'Generated')+' '+bios.profiles.length+' vessel biographies');')+'<\\/loc><lastmod>\\d{4}-\\d{2}-\\d{2}<\\/lastmod><\\/url>');
- const matches=updated.match(parentRe);
- if(!matches||matches.length!==1)throw Error('winter atlas sitemap entry unavailable');
- updated=updated.replace(parentRe,x=>x+'\n'+begin+'\n'+entries.join('\n')+'\n'+end);
-}
 if(check){
  if(updated!==sitemap)throw Error('winter layup vessel sitemap is stale');
 }else if(updated!==sitemap){
