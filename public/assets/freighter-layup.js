@@ -133,7 +133,9 @@
    $('live-season').textContent='Winter '+state.liveLedger.season.replace('-', '–20');
    $('live-arrivals').textContent=new Set(arrival.map(e=>e.vessel.key)).size;
    $('live-departures').textContent=new Set(departures.map(e=>e.vessel.key)).size;
-   $('live-update-status').textContent=events.length?'Latest sourced update: '+fmt(events[0].date)+'. A dated report, not continuous vessel positioning.':
+   $('live-update-status').textContent=state.liveLedger.provisional
+     ?'Current winter source-ledger update pending; no berths can be confirmed or denied yet.'
+     :events.length?'Latest sourced update: '+fmt(events[0].date)+'. A dated report, not continuous vessel positioning.':
      (beforeStart?'Winter '+state.liveLedger.season.replace('-', '–20')+' begins November 1. No layups are forecast from last winter; explore the dated archive below.':'No verified arrivals reported in this winter yet. Source checks run seasonally; an empty record is not evidence of empty harbors.');
    $('winter-feed').innerHTML=events.length?events.slice(0,18).map(e=>
      '<article class="winter-update"><span class="winter-date">'+esc(fmt(e.date))+'</span><div><span class="tag'+(e.confidence==='reported'?' tag-reported':'')+'">'+esc(e.confidence==='confirmed'?'Confirmed source':'Reported source')+'</span><h3>'+esc(e.vessel.name)+'</h3><p>'+esc(e.summary)+'</p><a href="'+esc(e.source.url)+'" target="_blank" rel="noopener">Source: '+esc(e.source.publisher)+' ↗</a></div></article>').join(''):
@@ -186,9 +188,9 @@
    $('count-note').textContent=seasonData().state==='upcoming_unconfirmed'||(seasonData().state==='active_current'&&!records().length)?'No confirmed '+seasonData().label+' layups yet. Previous-season docks are not forecasts.':
     'Showing vessels for '+scope+'.';
    $('ship-grid').innerHTML=seasonData().state==='upcoming_unconfirmed'||(seasonData().state==='active_current'&&!records().length)?
-     '<div class="current-empty"><h3>'+esc(seasonData().label)+' is still being written.</h3><p>No active winter berth is documented in this season. Departed ships remain in the dated story feed but do not appear as occupied harbor pins. AIS silence does not prove layup.</p><button type="button" id="view-archive" class="small-button">Explore the verified 2025–26 archive →</button></div>':
+     '<div class="current-empty"><h3>'+esc(seasonData().label)+' is still being written.</h3><p>No active winter berth is documented in this season. Departed ships remain in the dated story feed but do not appear as occupied harbor pins. AIS silence does not prove layup.</p>'+(latestArchive()?'<button type="button" id="view-archive" class="small-button">Explore '+esc(latestArchive().label)+' documented records →</button>':'')+'</div>':
      list.length?list.map(vesselCard).join(''):'<div class="empty">No ships match those filters. Clear your search or choose another harbor or berth.</div>';
-   const archiveBtn=$('view-archive');if(archiveBtn)archiveBtn.addEventListener('click',()=>{$('season').value='2025-26';setSeason('2025-26')});
+   const archiveBtn=$('view-archive');if(archiveBtn)archiveBtn.addEventListener('click',()=>{const last=latestArchive();if(last){$('season').value=last.id;setSeason(last.id)}});
    $('ship-grid').querySelectorAll('[data-ship]').forEach(b=>b.addEventListener('click',()=>selectShip(b.dataset.ship,true)));
  }
  function renderStats(){
@@ -268,7 +270,7 @@
  function fitLakes(){
    if(!state.map||!state.archive)return;
    // Fit to source-dated harbors; for an empty/live or single-port winter preserve a five-lake context.
-   const current=records(),reference=state.archive.seasons.find(s=>s.id==='2025-26')?.records||[];
+   const current=records(),reference=latestArchive()?.records||[];
    const selected=[...new Set(current.map(v=>v.harborId))];
    const footprint=(selected.length>=2?current:reference).map(v=>harbor(v.harborId)).filter(Boolean);
    const lat=footprint.map(h=>h.lat),lon=footprint.map(h=>h.lon);
@@ -353,7 +355,9 @@
      const harborId=btn.dataset.portSelectHarbor;
      if(!state.archive)return;
      if(!records().some(v=>v.harborId===harborId)){
-       $('season').value='2025-26';setSeason('2025-26');
+       const historical=state.archive.seasons.filter(s=>s.state==='historical_snapshot'&&s.records.some(v=>v.harborId===harborId))
+          .sort((a,b)=>b.id.localeCompare(a.id))[0];
+        if(historical){$('season').value=historical.id;setSeason(historical.id)}
      }
      setHarbor(harborId,true);
      $('fleet')?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
@@ -370,6 +374,9 @@
      if(archive.schemaVersion!==2||!Array.isArray(archive.seasons)||!Array.isArray(archive.harbors))throw new Error('Unexpected archive format');
      if(!policy()||policy().validateRegistry(archive).length)throw new Error('Layup integrity check failed');
      state.archive=archive;
+     const currentId=winterForDate();
+     if(!ensureCurrentSeason(currentId))throw new Error('Current winter cannot be historical');
+     state.season=currentId;
      try{
        const lr=await fetch('/assets/freighter-layup-live-season.json',{cache:'no-store',signal:AbortSignal.timeout(7000)});
        if(lr.ok){const live=await lr.json();if(!mountLedger(live))console.warn('Live layup ledger ignored due to validation failure')}
@@ -383,12 +390,15 @@
      return;
    }
    archive=state.archive;
-   const current=state.liveLedger&&archive.seasons.find(s=>s.id===state.liveLedger.season);
-   if(!current?.records.some(v=>v.status!=='departed_current')){
-     const lastYear=archive.seasons.filter(s=>s.state==='historical_snapshot'&&s.records.length).sort((a,b)=>b.id.localeCompare(a.id))[0];
-     if(lastYear)state.season=lastYear.id;
-   }
-   $('season').replaceChildren(...archive.seasons.slice().sort((a,b)=>b.id.localeCompare(a.id)).map(season=>{const option=document.createElement('option');option.value=season.id;option.textContent=season.label+(season.state==='upcoming_unconfirmed'?' · upcoming / unconfirmed':' · archive');return option}));
+   const expected=winterForDate();
+   state.season=expected;
+   // A delayed scanner is not permission to display last winter as live.
+   if(!state.liveLedger)state.liveLedger={season:expected,events:[],startedAt:null,updatedAt:null,provisional:true};
+   $('season').replaceChildren(...archive.seasons.slice().sort((a,b)=>b.id.localeCompare(a.id)).map(season=>{
+     const option=document.createElement('option');option.value=season.id;
+     option.textContent=season.label+(season.id===expected?' · current winter':season.state==='historical_snapshot'?' · historical archive':' · archive pending');
+     return option;
+   }));
    $('season').value=state.season;
    // Filter includes only harbors with a record in the selected season.
    $('harbor-filter').addEventListener('change',e=>setHarbor(e.target.value,true));
