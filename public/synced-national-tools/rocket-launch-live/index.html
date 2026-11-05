@@ -23,7 +23,7 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://chrisizworski.com/national-tools/rocket-launch-live/#webpage","url":"https://chrisizworski.com/national-tools/rocket-launch-live/","name":"Rocket Launch Live USA: When and Where to Watch","description":"Coastal U.S. launch calendar with region-specific legal access, launch timing uncertainty and public NWS weather evidence.","dateModified":"2026-11-05","author":{"@id":"https://chrisizworski.com/#person"},"about":[{"@type":"Thing","name":"Rocket launch viewing"},{"@type":"Thing","name":"U.S. coastal spaceports"}]},{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"U.S. Tools","item":"https://chrisizworski.com/national-tools/"},{"@type":"ListItem","position":3,"name":"Rocket Launch Live USA","item":"https://chrisizworski.com/national-tools/rocket-launch-live/"}]}]}</script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
 <script src="/national-tools/rocket-launch-live/vandenberg.js?v=20261103-viewing-v1" defer></script>
-<script src="/national-tools/rocket-launch-live/app.js?v=20261105-pmrf-network-v1" defer></script>
+<script src="/national-tools/rocket-launch-live/app.js?v=20261105-python-notices-v1" defer></script>
 <script src="/national-tools/assets/launch-truth-desk.js?v=20261102-truth-v2" defer></script>
 </head>
 <body>
@@ -121,6 +121,24 @@
   </div>
  </section>
 
+
+<section class="rl-section rl-official-evidence" id="official-notice-desk" aria-labelledby="rl-evidence-title">
+  <div class="rl-section-head"><div>
+    <p class="rl-eyebrow">Official source desk / Python evidence</p>
+    <h2 id="rl-evidence-title">What has the range authority actually published?</h2>
+  </div><p>One normalized source desk for six coasts. Launch announcements, posted conditions and general access policies are different things. This is not a prediction or an access pass.</p></div>
+  <div class="rl-evidence-summary">
+    <div><span class="rl-evidence-kicker">SOURCE COVERAGE FOR YOUR COAST</span>
+      <strong id="rl-evidence-status" role="status" aria-live="polite">Checking official-source observations…</strong>
+      <p id="rl-evidence-checked">The official land-manager links below remain usable when scheduled evidence is unavailable.</p>
+    </div>
+    <div class="rl-evidence-legend"><span>Published now ≠ safe on launch day</span><span>Old order ≠ current closure</span><span>No public listing ≠ no launch</span></div>
+  </div>
+  <div id="rl-evidence-sources" class="rl-evidence-sources" aria-live="polite">
+    <p>Official-source status not yet checked. Start with the selected coast's launch and access authority above.</p>
+  </div>
+  <p class="rl-evidence-disclaimer">This desk is descriptive evidence. It cannot issue Navy access, park entry, city road clearance, a launch GO, spectator admission or Coast Guard navigation instructions. Confirm the named operator's event notice before traveling.</p>
+</section>
 
   <section class="rl-vandenberg" id="rl-vandenberg" aria-labelledby="rl-vandenberg-title" hidden>
     <div class="rl-vandenberg-header"><div>
