@@ -13,6 +13,16 @@ const SOURCES=Object.freeze({
  navcen:'https://navcen.uscg.gov/local-notices-to-mariners-by-cg-district'
 });
 const MAX_BYTES=700000;
+// Dated snapshots from independent source review; never promoted to current access.
+// Navy's site may deny server-to-server fetching. A failure must not erase
+// published context or pretend a failed fetch confirmed anything current.
+const HISTORICAL_NAVY=Object.freeze({
+ beach:{status:'archived-policy-not-live',verifiedAt:'2026-11-05',
+  message:'Dated November 5, 2026: Navy published general walk-in beach recreation subject to restricted signs, force protection and range hazards. Automated current-source retrieval failed. Do not infer access today.'},
+ guest:{status:'archived-policy-not-live',verifiedAt:'2026-11-05',
+  message:'Dated November 5, 2026: Navy guest-card policy authorized screened recreational visits only, subject to restrictions. Automated current-source retrieval failed. No launch-viewing permission is confirmed.'}
+});
+
 const normalize=s=>String(s||'').replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi,' ')
  .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi,' ')
  .replace(/<!--[\s\S]*?-->/g,' ').replace(/<[^>]*>/g,' ')
@@ -64,8 +74,10 @@ async function readOfficial({fetcher=fetch,now=new Date().toISOString()}={}){
  for(let i=0;i<keys.length;i++){
   const k=keys[i],item=results[i];
   const parsed=item.status==='fulfilled'?parser[k](item.value):
-   {status:'source-unavailable',message:'Official source could not be retrieved. Follow the official link and do not infer any opening.'};
-  evidence[k]={...parsed,sourceUrl:SOURCES[k],checkedAt:now};
+   (HISTORICAL_NAVY[k]||{status:'source-unavailable',message:'Official source could not be retrieved. Follow the official link and do not infer any opening.'});
+  evidence[k]={...parsed,sourceUrl:SOURCES[k],checkedAt:now,
+   sourceFetchedAt:item.status==='fulfilled'?now:null,
+   verifiedAt:item.status==='fulfilled'?now:(parsed.verifiedAt||null)};
  }
  return {ok:true,checkedAt:now,
   rule:{type:'conditional-maritime-safety-zone',citation:'33 CFR 165.1406',
@@ -83,4 +95,4 @@ function createHandler(deps={}){
  };
 }
 module.exports=createHandler();
-module.exports._test={SOURCES,MAX_BYTES,normalize,beachPolicy,guestPolicy,parkPolicy,fetchOfficial,readOfficial,createHandler};
+module.exports._test={SOURCES,MAX_BYTES,HISTORICAL_NAVY,normalize,beachPolicy,guestPolicy,parkPolicy,fetchOfficial,readOfficial,createHandler};
