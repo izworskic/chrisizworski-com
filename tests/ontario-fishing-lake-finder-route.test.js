@@ -24,8 +24,8 @@ test('Ontario fishing surfaces deploy from the pinned standalone V2 release with
   assert.match(sync, /Why isn't my lake here\?/);
   assert.match(html, /<link rel="canonical" href="https:\/\/chrisizworski\.com\/ontario-fishing-lake-finder\/">/);
   assert.match(html, /aria-label="Browse Ontario lake areas"/);
-  assert.match(html, /if\\(zoom<9\\)/);
+  assert.match(html, /if\(zoom<9\)/);
   assert.match(html, /Lakes in this map area/);
-  assert.doesNotMatch(html, /syncChips\\(\\);loadMap\\(\\);search\\(\\);/, 'initial load must not count the entire OHN province');
+  assert.doesNotMatch(html, /syncChips\(\);loadMap\(\);search\(\);/, 'initial load must not count the entire OHN province');
   assert.doesNotMatch(api + sync + html, /replit\.app/i);
 });
