@@ -12,7 +12,7 @@ const html = fs.readFileSync(path.join(root, 'public', 'ontario-fishing-lake-fin
 test('Ontario fishing surfaces deploy from the pinned standalone V2 release without Replit', () => {
   assert.equal(
     pkg.dependencies?.['ontario-fishing-lake-finder'],
-    'github:izworskic/ontario-fishing-lake-finder#d569e47823058b5b95fd55a0700254e8b5f633f8'
+    'github:izworskic/ontario-fishing-lake-finder#ac39319686010d5a7e3e0f1fd3422cb9a664aba9'
   );
   assert.match(pkg.scripts?.['build:site'] || '', /sync-ontario-finder\.mjs/);
   assert.match(api, /ontario-fishing-lake-finder\/api\/lakes/);
@@ -23,5 +23,9 @@ test('Ontario fishing surfaces deploy from the pinned standalone V2 release with
   assert.match(sync, /No hidden top-candidate sampling\./);
   assert.match(sync, /Why isn't my lake here\?/);
   assert.match(html, /<link rel="canonical" href="https:\/\/chrisizworski\.com\/ontario-fishing-lake-finder\/">/);
+  assert.match(html, /aria-label="Browse Ontario lake areas"/);
+  assert.match(html, /if\(zoom<9\)/);
+  assert.match(html, /Lakes in this map area/);
+  assert.doesNotMatch(html, /syncChips\(\);loadMap\(\);search\(\);/, 'initial load must not count the entire OHN province');
   assert.doesNotMatch(api + sync + html, /replit\.app/i);
 });

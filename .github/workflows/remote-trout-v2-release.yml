@@ -44,11 +44,12 @@ jobs:
           node - <<'NODE'
           const index=require('ontario-fishing-lake-finder/data/trout-index.json');
           const s=index.summary||{};
-          const expected={unionWaterbodyIds:6538,lakes:5651,mappable:5649,remoteScored:5649,unmapped:2,excludedNonLake:887,excludedUncertain:0};
+          // Exact index snapshot from owning release ac393196; preserve independent accounting gates.
+          const expected={unionWaterbodyIds:6596,lakes:5689,mappable:5687,remoteScored:5687,unmapped:2,excludedNonLake:907,excludedUncertain:0};
           for(const [key,value] of Object.entries(expected)){
             if(s[key]!==value) throw new Error(`${key}: expected ${value}, got ${s[key]}`);
           }
-          const expectedSpecies={'Brook Trout':3414,'Lake Trout':2368,'Rainbow Trout':459,'Brown Trout':58,'Splake':509};
+          const expectedSpecies={'Brook Trout':3386,'Lake Trout':2423,'Rainbow Trout':459,'Brown Trout':58,'Splake':508};
           for(const [species,value] of Object.entries(expectedSpecies)){
             if(s.bySpecies?.[species]!==value) throw new Error(`${species}: expected ${value}, got ${s.bySpecies?.[species]}`);
           }
