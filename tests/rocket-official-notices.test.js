@@ -41,7 +41,7 @@ t('scope and source provenance are not spoofable by arbitrary Python payload',()
  a.throws(()=>validateSnapshot(fake,NOW),/signal-untrusted/);
  a.equal(signalUrl('https://evil.example/xxx',SOURCES['starbase-city'][1]),null);
  const extra=fixture();extra.regions.hawaii.push({...extra.regions.hawaii[0]});
- a.throws(()=>validateSnapshot(extra,NOW),/source-count|duplicate/);
+ a.throws(()=>validateSnapshot(extra,NOW),/source-inventory|source-count|duplicate/);
 });
 t('unavailable source may never carry a beach-open signal or fingerprint',()=>{
  const raw=fixture(),src=raw.regions.texas[0];
