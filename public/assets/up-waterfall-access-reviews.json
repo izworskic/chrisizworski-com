@@ -6721,38 +6721,35 @@
       "researchPage": "/upper-peninsula-waterfalls/research/warner-falls/",
       "sourceLinks": [
         {
-          "label": "Michigan state GIS",
+          "label": "Michigan state GIS Warner Falls",
           "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
         },
         {
-          "label": "MDOT July north-of-Palmer",
+          "label": "MDOT July north-of-Palmer branch culvert",
           "url": "https://www.michigan.gov/mdot/news-outreach/pressreleases/2026/07/01/m-35-culvert-project-detour-starts-july-27"
         },
         {
-          "label": "MDOT August MT/MP",
+          "label": "Travel Marquette regional waterfall visitor guide",
           "url": "https://www.travelmarquette.com/outdoor-adventure/waterfalls/"
         },
         {
-          "label": "Independent source 1",
+          "label": "Michigan tourism historic roadside guidance",
           "url": "https://www.michigan.org/property/warner-falls"
         },
         {
-          "label": "Independent source 2"
-        },
-        {
-          "label": "Independent source 3",
+          "label": "MDOT August two other south-of-Palmer culverts",
           "url": "https://www.michigan.gov/mdot/news-outreach/pressreleases/2026/08/12/m-35-culvert-replacements-in-marquette-county-start-aug-24"
         },
         {
-          "label": "Independent source 4",
+          "label": "Travel Marquette regional waterfall visitor guide",
           "url": "https://www.travelmarquette.com/blog/post/waterfalls-you-need-to-see-in-fall/"
         },
         {
-          "label": "Independent source 5",
+          "label": "UP Travel Warner Falls south of Palmer",
           "url": "https://www.uptravel.com/listing/warner-falls/4598/"
         },
         {
-          "label": "Independent source 6",
+          "label": "Independent Warner Falls field coordinates",
           "url": "https://www.waterfallsofthekeweenaw.com/warner-creek/warner-falls/"
         }
       ],
