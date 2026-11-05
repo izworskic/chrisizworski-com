@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "batch": "B69",
+  "reviewDate": "2026-11-05",
+  "feature": {
+    "stateGisId": 172,
+    "name": "Warner Falls",
+    "county": "Marquette",
+    "waterway": "Warner Creek",
+    "latitude": 46.433378,
+    "longitude": -87.59896,
+    "coordinateUse": "natural-feature-only-not-parking",
+    "gisSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+  },
+  "verdict": "tourism-recognized-roadside-falls-culvert-identity-error-corrected-parking-unverified",
+  "constructionReports": [
+    {
+      "id": "mdot-north-palmer",
+      "date": "2026-07-01",
+      "road": "M-35",
+      "location": "Over a branch of Warner Creek, north of Palmer",
+      "locationProof": "Place named north of Palmer, whereas the named waterfall is south of Palmer; the shared creek name does not locate construction at the falls.",
+      "status": "scheduled-project-not-completion-or-falls-parking-approval",
+      "source": "https://www.michigan.gov/mdot/news-outreach/pressreleases/2026/07/01/m-35-culvert-project-detour-starts-july-27"
+    },
+    {
+      "id": "mdot-south-palmer-other-culverts",
+      "date": "2026-08-12",
+      "road": "M-35",
+      "location": "Two culverts near Marquette County Roads MT and MP, south of Palmer",
+      "locationProof": "The notice names road intersections but not Warner Falls or its turnout; site identity remains unproven.",
+      "status": "scheduled-replacements-not-falls-parking-approval",
+      "source": "https://www.michigan.gov/mdot/news-outreach/pressreleases/2026/08/12/m-35-culvert-replacements-in-marquette-county-start-aug-24"
+    }
+  ],
+  "travelSources": [
+    {
+      "publisher": "Travel Marquette",
+      "statement": "Warner Falls south of Palmer at 46.43333,-87.59888, visible from M-35. Prior visitor directions say park completely off roadway past guardrail and follow signs to short trail.",
+      "source": "https://www.travelmarquette.com/blog/post/waterfalls-you-need-to-see-in-fall/"
+    },
+    {
+      "publisher": "Michigan.org",
+      "statement": "State tourism listing names Warner Falls and historic roadside viewing, with off-road stopping beyond guardrail; this is tourism guidance not an MDOT traffic-control approval.",
+      "source": "https://www.michigan.org/property/warner-falls"
+    },
+    {
+      "publisher": "UP Travel",
+      "statement": "Regional listing identifies south-of-Palmer roadside waterfall visible near M-35 bridge.",
+      "source": "https://www.uptravel.com/listing/warner-falls/4598/"
+    },
+    {
+      "publisher": "Waterfalls of the Keweenaw",
+      "statement": "Firsthand site at 46.43338,-87.59897; older field report of shoulder and informal trails. Not current stopping permission.",
+      "source": "https://www.waterfallsofthekeweenaw.com/warner-creek/warner-falls/"
+    }
+  ],
+  "geometryReview": {
+    "tourismPoint": [
+      46.43333,
+      -87.59888
+    ],
+    "waterfallRegion": "South of Palmer on M-35",
+    "mdotNorthProjectRegion": "North of Palmer",
+    "differentProjectLocationsSupported": true,
+    "exactCulvertCoordinatesFound": false,
+    "augustSouthProjectCrosswalkToFalls": false,
+    "originalPostConstructionGuardrailClaimUnsupported": true
+  },
+  "sixAxes": {
+    "waterfallIdentity": "Strong agreement: state GIS #172 and two independent waterfall/tourism coordinates on Warner Creek south of Palmer",
+    "landOwnership": "MDOT is highway authority but highway ROW does not by itself establish legal public use of the stream bank or an informal descent; parcel/permission unverified",
+    "publicApproach": "Travel Marquette and Michigan.org describe roadside viewing and signed short trail historically, but not an official current trailhead opening or post-2026 site inspection",
+    "legalParking": "Two destination marketing sources describe standing completely off-road beyond guardrail, but no current MDOT site-specific turnout approval, parking restriction or as-built layout verified",
+    "continuousWalking": "Historic short trail described, but no independent manager-verified 2026 right-of-way and continuous safe foot access to the lower bank",
+    "currentConditions": "No confirmed November 2026 opening, shoulder safe status, guardrail position, traffic controls, or winter access at exact falls site"
+  },
+  "publication": {
+    "researchPage": "/upper-peninsula-waterfalls/research/warner-falls/",
+    "robots": "noindex,follow",
+    "createCuratedDestination": false,
+    "addToVisitorSitemap": false,
+    "directionsToNaturalPoint": false,
+    "directionsToHistoricalShoulder": false,
+    "trailPolylineAuthorized": false,
+    "touristAttractionSchema": false
+  },
+  "nextProof": "Seek an MDOT official project/location/ROW or current site-specific stopping decision and landowner/trail manager confirmation of safe public foot access, independently tied to the south-of-Palmer waterfall; do not ask visitors for proof.",
+  "sources": [
+    null,
+    "https://www.michigan.gov/mdot/news-outreach/pressreleases/2026/07/01/m-35-culvert-project-detour-starts-july-27",
+    "https://www.michigan.gov/mdot/news-outreach/pressreleases/2026/08/12/m-35-culvert-replacements-in-marquette-county-start-aug-24",
+    "https://www.travelmarquette.com/blog/post/waterfalls-you-need-to-see-in-fall/",
+    "https://www.michigan.org/property/warner-falls",
+    "https://www.uptravel.com/listing/warner-falls/4598/",
+    "https://www.waterfallsofthekeweenaw.com/warner-creek/warner-falls/"
+  ]
+}
