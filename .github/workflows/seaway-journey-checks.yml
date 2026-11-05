@@ -1,0 +1,48 @@
+name: Seaway journey and source-truth checks
+on:
+  pull_request:
+    paths:
+      - 'api/st-lawrence-seaway.js'
+      - 'lib/seaway-ais.js'
+      - 'public/assets/seaway*'
+      - 'public/st-lawrence-seaway/**'
+      - 'public/eisenhower-lock/**'
+      - 'scripts/generate-seaway.mjs'
+      - 'scripts/enhance-seaway-journey.mjs'
+      - 'scripts/audit-seaway-growth.py'
+      - 'tests/seaway.test.js'
+      - 'data/seaway/**'
+      - '.github/workflows/seaway-journey-checks.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'api/st-lawrence-seaway.js'
+      - 'lib/seaway-ais.js'
+      - 'public/assets/seaway*'
+      - 'scripts/generate-seaway.mjs'
+      - 'scripts/enhance-seaway-journey.mjs'
+      - 'tests/seaway.test.js'
+      - '.github/workflows/seaway-journey-checks.yml'
+permissions:
+  contents: read
+jobs:
+  source-truth:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+      - name: Check JS and Python syntax
+        run: |
+          node --check scripts/enhance-seaway-journey.mjs
+          node --check public/assets/seaway.js
+          node --check api/st-lawrence-seaway.js
+          python3 -m py_compile scripts/audit-seaway-growth.py
+      - name: Regenerate both Seaway pages
+        run: node scripts/generate-seaway.mjs
+      - name: Test AIS truth, context and generated pages
+        run: node --test tests/seaway.test.js
