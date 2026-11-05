@@ -54,7 +54,7 @@ function fixture(params,scenario){
    await page.goto(base+'/sunshine-skyway-bridge/',{waitUntil:'domcontentloaded'});
    await page.waitForFunction(()=>document.querySelector('#statusWord').textContent.includes('NO CLOSURE SIGNAL'));
    assert.match(await page.locator('#tripDecision').innerText(),/No official Skyway closure signal/);
-   assert.ok((await page.locator('#routeSteps').innerText()).includes('I-75 north'));
+   assert.ok((await page.locator('#routeSteps').textContent()).includes('I-75 north'));
    const head=await page.locator('#statusPanel').boundingBox();
    assert.ok(head&&head.y<830,'Operational answer outside initial 900px viewport, width '+width);
    const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-window.innerWidth);
@@ -62,7 +62,7 @@ function fixture(params,scenario){
    await page.screenshot({path:path.join(out,'skyway-'+width+'-initial.png'),fullPage:true,animations:'disabled'});
    await page.locator('#direction').selectOption('southbound');
    await page.waitForFunction(()=>document.querySelector('#routeSteps').textContent.includes('I-75 south'));
-   assert.match(await page.locator('#routeContext').innerText(),/Southbound/);
+   assert.match(await page.locator('#routeContext').textContent(),/Southbound/);
    assert.match(await page.locator('#shareTrip').getAttribute('href'),/direction=southbound/);
    await page.locator('#direction').selectOption('northbound');
    await page.waitForFunction(()=>document.querySelector('#routeSteps').textContent.includes('I-75 north'));
