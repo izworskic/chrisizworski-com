@@ -5,6 +5,7 @@ on:
     paths:
       - 'public/great-lakes-freighter-winter-layup/**'
       - 'public/assets/freighter-layup*'
+      - 'public/sitemap-winter.xml'
       - 'public/assets/freighter-winter-home.css'
       - 'public/assets/freighter-vessel-biographies.json'
       - 'public/assets/freighter-layup-live-season.json'
