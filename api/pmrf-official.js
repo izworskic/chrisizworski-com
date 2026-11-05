@@ -50,8 +50,9 @@ function parkPolicy(body){
  const content=normalize(body),anchor=content.search(/(?:11\/2\/26|10\/30\/26|11\/02\/26)/);
  const early=anchor<0?content.slice(0,17000):content.slice(anchor,anchor+11000);
  const closure=early.includes('ALL OTHER KAUA')&&early.includes('STATE PARKS REMAIN CLOSED');
- const reopened=early.includes('POLIHALE STATE PARK HAS REOPENED')||
-  early.includes('POLIHALE STATE PARK REOPENED')||early.includes('POLIHALE STATE PARK HAS REOPENED');
+ // A newer reopening appended anywhere must override an older archived closure.
+ // That is still not proof of a current open gate or launch-viewing permission.
+ const reopened=/POLIHALE STATE PARK.{0,50}\b(?:HAS )?REOPEN(?:ED|ING)\b/.test(content);
  if(closure&&!reopened)return {status:'published-closure',message:'DLNR notice still states that other Kauaʻi state parks remain closed. Polihale is not among its listed reopenings. This is a dated agency notice, not a live gate sensor.'};
  return {status:'unverified',message:'Could not establish Polihale access from the latest parsed DLNR notice. Do not assume it reopened.'};
 }
