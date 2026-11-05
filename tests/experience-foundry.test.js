@@ -105,3 +105,12 @@ test('CLI builds a noindex preview and review report, then cleans test output',(
     assert.equal(review.sourceVerification,'NOT VERIFIED');
   } finally { fs.rmSync(target,{recursive:true,force:true}); }
 });
+
+test('scoped notices must display their scope; future observations fail',()=>{
+  const s=spec('field-notes');
+  s.records=[{...record,kind:'official-notice',scope:'Illustrative lock gate only'}];
+  const html=compile(s,registry).html;
+  assert.match(html,/Notice scope: Illustrative lock gate only/);
+  s.records=[{...record,issuedAt:'2099-01-01T00:00:00Z'}];
+  assert.match(validateSpec(s,registry).join(' '),/future issuedAt/);
+});
