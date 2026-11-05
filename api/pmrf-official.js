@@ -13,6 +13,16 @@ const SOURCES=Object.freeze({
  navcen:'https://navcen.uscg.gov/local-notices-to-mariners-by-cg-district'
 });
 const MAX_BYTES=700000;
+// Dated snapshots from independent source review; never promoted to current access.
+// Navy's site may deny server-to-server fetching. A failure must not erase
+// published context or pretend a failed fetch confirmed anything current.
+const HISTORICAL_NAVY=Object.freeze({
+ beach:{status:'archived-policy-not-live',verifiedAt:'2026-11-05',
+  message:'Dated November 5, 2026: Navy published general walk-in beach recreation subject to restricted signs, force protection and range hazards. Automated current-source retrieval failed. Do not infer access today.'},
+ guest:{status:'archived-policy-not-live',verifiedAt:'2026-11-05',
+  message:'Dated November 5, 2026: Navy guest-card policy authorized screened recreational visits only, subject to restrictions. Automated current-source retrieval failed. No launch-viewing permission is confirmed.'}
+});
+
 const normalize=s=>String(s||'').replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi,' ')
  .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi,' ')
  .replace(/<!--[\s\S]*?-->/g,' ').replace(/<[^>]*>/g,' ')
@@ -40,8 +50,9 @@ function parkPolicy(body){
  const content=normalize(body),anchor=content.search(/(?:11\/2\/26|10\/30\/26|11\/02\/26)/);
  const early=anchor<0?content.slice(0,17000):content.slice(anchor,anchor+11000);
  const closure=early.includes('ALL OTHER KAUA')&&early.includes('STATE PARKS REMAIN CLOSED');
- const reopened=early.includes('POLIHALE STATE PARK HAS REOPENED')||
-  early.includes('POLIHALE STATE PARK REOPENED')||early.includes('POLIHALE STATE PARK HAS REOPENED');
+ // A newer reopening appended anywhere must override an older archived closure.
+ // That is still not proof of a current open gate or launch-viewing permission.
+ const reopened=/POLIHALE STATE PARK.{0,50}\b(?:HAS )?REOPEN(?:ED|ING)\b/.test(content);
  if(closure&&!reopened)return {status:'published-closure',message:'DLNR notice still states that other Kauaʻi state parks remain closed. Polihale is not among its listed reopenings. This is a dated agency notice, not a live gate sensor.'};
  return {status:'unverified',message:'Could not establish Polihale access from the latest parsed DLNR notice. Do not assume it reopened.'};
 }
@@ -64,8 +75,10 @@ async function readOfficial({fetcher=fetch,now=new Date().toISOString()}={}){
  for(let i=0;i<keys.length;i++){
   const k=keys[i],item=results[i];
   const parsed=item.status==='fulfilled'?parser[k](item.value):
-   {status:'source-unavailable',message:'Official source could not be retrieved. Follow the official link and do not infer any opening.'};
-  evidence[k]={...parsed,sourceUrl:SOURCES[k],checkedAt:now};
+   (HISTORICAL_NAVY[k]||{status:'source-unavailable',message:'Official source could not be retrieved. Follow the official link and do not infer any opening.'});
+  evidence[k]={...parsed,sourceUrl:SOURCES[k],checkedAt:now,
+   sourceFetchedAt:item.status==='fulfilled'?now:null,
+   verifiedAt:item.status==='fulfilled'?now:(parsed.verifiedAt||null)};
  }
  return {ok:true,checkedAt:now,
   rule:{type:'conditional-maritime-safety-zone',citation:'33 CFR 165.1406',
@@ -83,4 +96,4 @@ function createHandler(deps={}){
  };
 }
 module.exports=createHandler();
-module.exports._test={SOURCES,MAX_BYTES,normalize,beachPolicy,guestPolicy,parkPolicy,fetchOfficial,readOfficial,createHandler};
+module.exports._test={SOURCES,MAX_BYTES,HISTORICAL_NAVY,normalize,beachPolicy,guestPolicy,parkPolicy,fetchOfficial,readOfficial,createHandler};
