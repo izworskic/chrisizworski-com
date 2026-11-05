@@ -22,7 +22,11 @@ export function inspectNetwork(query, registry, limit=8) {
     const score = tokens.reduce((sum,t)=>sum+(name.has(t)?5:0)+(intent.has(t)?3:0)+(area.has(t)?1:0),0);
     return {id:tool.id,name:tool.name,canonical:tool.canonical,primaryIntent:tool.primaryIntent,score,matchedTerms:overlap};
   }).filter(x=>x.score>0).sort((a,b)=>b.score-a.score||a.id.localeCompare(b.id));
-  return {query,method:'token overlap against local registry, not keyword research',possibleOwners:tools.slice(0,limit),warning:'Similarity is exploratory only. Inspect live behavior, owning repos, actual Google queries, and cannibalization groups before changing search ownership.'};
+  const selected=tools.slice(0,limit);
+  const ids=new Set(selected.map(t=>t.id));
+  const protectedIntents=(registry?.cannibalizationGroups||[]).filter(g=>ids.has(g.owner)||(g.supports||[]).some(id=>ids.has(id))||tokens.some(t=>words(g.intent).includes(t))).map(g=>({intent:g.intent,owner:g.owner,supports:g.supports||[],rule:g.rule}));
+  const usefulHandoffs=(registry?.relationships||[]).filter(edge=>ids.has(edge.from)&&ids.has(edge.to)&&['essential','strong'].includes(edge.strength)).slice(0,12).map(edge=>({from:edge.from,to:edge.to,reason:edge.reason,type:edge.type}));
+  return {query,method:'token overlap against local registry, not keyword research',possibleOwners:selected,protectedIntents,usefulHandoffs,warning:'Similarity is exploratory only. Inspect live behavior, owning repos, actual Google queries, and cannibalization groups before changing search ownership.'};
 }
 export function starter({recipe,slug,place,title,question}) {
   if (!RECIPES[recipe]) throw Error('Unknown recipe: '+recipe);
@@ -78,6 +82,8 @@ export function compile(spec,registry) {
     recordCount:spec.records.length,sourceCount:spec.sources.length,
     closestTools:spec.closestTools.map(id=>({id,canonical:lookup.get(id).canonical})),
     distinctiveness:spec.distinctiveness,
+    canonicalProtection:(registry.cannibalizationGroups||[]).filter(g=>g.owner===spec.intentOwner||(g.supports||[]).includes(spec.intentOwner)).map(g=>({intent:g.intent,owner:g.owner,rule:g.rule})),
+    existingNetworkHandoffs:(registry.relationships||[]).filter(e=>e.from===spec.intentOwner||e.to===spec.intentOwner).slice(0,12).map(e=>({from:e.from,to:e.to,type:e.type,strength:e.strength})),
     hardGates:{
       sourceTruth:'REVIEW REQUIRED: URLs and timestamps structurally validated; source content not independently verified',
       visualDistinctiveness:'REVIEW REQUIRED: compare rendered first screen and interaction with both existing tools',
