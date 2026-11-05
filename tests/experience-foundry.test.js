@@ -114,3 +114,14 @@ test('scoped notices must display their scope; future observations fail',()=>{
   s.records=[{...record,issuedAt:'2099-01-01T00:00:00Z'}];
   assert.match(validateSpec(s,registry).join(' '),/future issuedAt/);
 });
+
+test('discovery highlights protected canonical owners and strong existing handoffs',()=>{
+ const network={...registry,
+   cannibalizationGroups:[{intent:'Michigan bird migration',owner:'birding',supports:['phenology'],rule:'One canonical owner'}],
+   relationships:[{from:'birding',to:'phenology',strength:'strong',type:'decision-next',reason:'Explain seasonal context'}]};
+ const result=inspectNetwork('Michigan bird migration',network);
+ assert.equal(result.protectedIntents[0].owner,'birding');
+ assert.equal(result.usefulHandoffs[0].to,'phenology');
+ const report=compile(spec(),network).report;
+ assert.equal(report.canonicalProtection.length,1);
+});
