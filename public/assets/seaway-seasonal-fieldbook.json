@@ -1,0 +1,372 @@
+{
+  "schema": "seaway-seasonal-fieldbook-v1",
+  "metric": "Commercial vessel transits in the published BTS Great Lakes–St. Lawrence Seaway performance series",
+  "scope": "BTS Great Lakes St. Lawrence Seaway Performance monthly series; not individual lock counts or arrivals",
+  "source": "https://data.bts.gov/resource/swpm-impx.json",
+  "sourceMetadata": "https://data.bts.gov/Research-and-Statistics/Great-Lakes-St-Lawrence-Seaway-Performance/swpm-impx",
+  "sourceLicense": "Public Domain U.S. Government",
+  "snapshotRetrievedAt": "2026-10-23",
+  "years": [
+    2022,
+    2023,
+    2024
+  ],
+  "method": "Per-calendar-month median and observed min–max across three or more distinct complete-year measurements. No forecast, smoothing, zero filling or extrapolation.",
+  "limitations": [
+    "The count is a published system-wide monthly measure, not ships visible at a selected lock or viewing point.",
+    "The archive is 2022–2024; trends are descriptive and may not represent 2026 conditions.",
+    "A missing transit number never means zero ships. Some historical rows explicitly say the Seaway was closed.",
+    "An apparently busy month is not a lock arrival estimate, a promise of public access or a safety recommendation.",
+    "Confirm season notices, visitor-center hours and actual vessel order from the respective operators."
+  ],
+  "months": [
+    {
+      "month": 1,
+      "name": "January",
+      "state": "unreported",
+      "sampleCount": 0,
+      "sampleYears": [],
+      "minimum": null,
+      "median": null,
+      "maximum": null,
+      "reportedValues": [
+        {
+          "year": 2022,
+          "transits": null
+        },
+        {
+          "year": 2023,
+          "transits": null
+        },
+        {
+          "year": 2024,
+          "transits": null
+        }
+      ],
+      "sourceClosedNoteYears": [
+        2022,
+        2023,
+        2024
+      ]
+    },
+    {
+      "month": 2,
+      "name": "February",
+      "state": "unreported",
+      "sampleCount": 0,
+      "sampleYears": [],
+      "minimum": null,
+      "median": null,
+      "maximum": null,
+      "reportedValues": [
+        {
+          "year": 2022,
+          "transits": null
+        },
+        {
+          "year": 2023,
+          "transits": null
+        },
+        {
+          "year": 2024,
+          "transits": null
+        }
+      ],
+      "sourceClosedNoteYears": [
+        2022,
+        2023,
+        2024
+      ]
+    },
+    {
+      "month": 3,
+      "name": "March",
+      "state": "unreported",
+      "sampleCount": 0,
+      "sampleYears": [],
+      "minimum": null,
+      "median": null,
+      "maximum": null,
+      "reportedValues": [
+        {
+          "year": 2022,
+          "transits": null
+        },
+        {
+          "year": 2023,
+          "transits": null
+        },
+        {
+          "year": 2024,
+          "transits": null
+        }
+      ],
+      "sourceClosedNoteYears": [
+        2022,
+        2023,
+        2024
+      ]
+    },
+    {
+      "month": 4,
+      "name": "April",
+      "state": "available",
+      "sampleCount": 3,
+      "sampleYears": [
+        2022,
+        2023,
+        2024
+      ],
+      "minimum": 226,
+      "median": 251,
+      "maximum": 257,
+      "reportedValues": [
+        {
+          "year": 2022,
+          "transits": 251
+        },
+        {
+          "year": 2023,
+          "transits": 257
+        },
+        {
+          "year": 2024,
+          "transits": 226
+        }
+      ],
+      "sourceClosedNoteYears": []
+    },
+    {
+      "month": 5,
+      "name": "May",
+      "state": "available",
+      "sampleCount": 3,
+      "sampleYears": [
+        2022,
+        2023,
+        2024
+      ],
+      "minimum": 241,
+      "median": 252,
+      "maximum": 253,
+      "reportedValues": [
+        {
+          "year": 2022,
+          "transits": 241
+        },
+        {
+          "year": 2023,
+          "transits": 253
+        },
+        {
+          "year": 2024,
+          "transits": 252
+        }
+      ],
+      "sourceClosedNoteYears": []
+    },
+    {
+      "month": 6,
+      "name": "June",
+      "state": "available",
+      "sampleCount": 3,
+      "sampleYears": [
+        2022,
+        2023,
+        2024
+      ],
+      "minimum": 230,
+      "median": 232,
+      "maximum": 244,
+      "reportedValues": [
+        {
+          "year": 2022,
+          "transits": 244
+        },
+        {
+          "year": 2023,
+          "transits": 232
+        },
+        {
+          "year": 2024,
+          "transits": 230
+        }
+      ],
+      "sourceClosedNoteYears": []
+    },
+    {
+      "month": 7,
+      "name": "July",
+      "state": "available",
+      "sampleCount": 3,
+      "sampleYears": [
+        2022,
+        2023,
+        2024
+      ],
+      "minimum": 204,
+      "median": 221,
+      "maximum": 247,
+      "reportedValues": [
+        {
+          "year": 2022,
+          "transits": 247
+        },
+        {
+          "year": 2023,
+          "transits": 221
+        },
+        {
+          "year": 2024,
+          "transits": 204
+        }
+      ],
+      "sourceClosedNoteYears": []
+    },
+    {
+      "month": 8,
+      "name": "August",
+      "state": "available",
+      "sampleCount": 3,
+      "sampleYears": [
+        2022,
+        2023,
+        2024
+      ],
+      "minimum": 224,
+      "median": 232,
+      "maximum": 246,
+      "reportedValues": [
+        {
+          "year": 2022,
+          "transits": 232
+        },
+        {
+          "year": 2023,
+          "transits": 246
+        },
+        {
+          "year": 2024,
+          "transits": 224
+        }
+      ],
+      "sourceClosedNoteYears": []
+    },
+    {
+      "month": 9,
+      "name": "September",
+      "state": "available",
+      "sampleCount": 3,
+      "sampleYears": [
+        2022,
+        2023,
+        2024
+      ],
+      "minimum": 224,
+      "median": 238,
+      "maximum": 247,
+      "reportedValues": [
+        {
+          "year": 2022,
+          "transits": 224
+        },
+        {
+          "year": 2023,
+          "transits": 247
+        },
+        {
+          "year": 2024,
+          "transits": 238
+        }
+      ],
+      "sourceClosedNoteYears": []
+    },
+    {
+      "month": 10,
+      "name": "October",
+      "state": "available",
+      "sampleCount": 3,
+      "sampleYears": [
+        2022,
+        2023,
+        2024
+      ],
+      "minimum": 204,
+      "median": 279,
+      "maximum": 292,
+      "reportedValues": [
+        {
+          "year": 2022,
+          "transits": 292
+        },
+        {
+          "year": 2023,
+          "transits": 204
+        },
+        {
+          "year": 2024,
+          "transits": 279
+        }
+      ],
+      "sourceClosedNoteYears": []
+    },
+    {
+      "month": 11,
+      "name": "November",
+      "state": "available",
+      "sampleCount": 3,
+      "sampleYears": [
+        2022,
+        2023,
+        2024
+      ],
+      "minimum": 244,
+      "median": 274,
+      "maximum": 298,
+      "reportedValues": [
+        {
+          "year": 2022,
+          "transits": 244
+        },
+        {
+          "year": 2023,
+          "transits": 298
+        },
+        {
+          "year": 2024,
+          "transits": 274
+        }
+      ],
+      "sourceClosedNoteYears": []
+    },
+    {
+      "month": 12,
+      "name": "December",
+      "state": "available",
+      "sampleCount": 3,
+      "sampleYears": [
+        2022,
+        2023,
+        2024
+      ],
+      "minimum": 258,
+      "median": 271,
+      "maximum": 290,
+      "reportedValues": [
+        {
+          "year": 2022,
+          "transits": 258
+        },
+        {
+          "year": 2023,
+          "transits": 271
+        },
+        {
+          "year": 2024,
+          "transits": 290
+        }
+      ],
+      "sourceClosedNoteYears": []
+    }
+  ]
+}
