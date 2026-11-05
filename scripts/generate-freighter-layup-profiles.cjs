@@ -29,9 +29,13 @@ const priorDates=new Map([...sitemap.matchAll(pattern)].map(x=>[x[2],x[3]]));
 if(priorDates.size&&sitemap.split(begin).length!==2)throw Error('stray vessel sitemap entries');
 for(const p of bios.profiles.slice().sort((a,b)=>a.id.localeCompare(b.id))){
  const target=path.join(root,'public/great-lakes-freighter-winter-layup/vessels',p.id,'index.html');
- const generated=renderProfile(p,data);
+ const previous=priorDates.get(p.id);
+ const baseline=previous||today;
+ let generated=renderProfile(p,data,baseline);
  const exists=fs.existsSync(target),old=exists?fs.readFileSync(target,'utf8'):null;
  const changed=generated!==old;
+ const modified=changed?today:baseline;
+ if(modified!==baseline)generated=renderProfile(p,data,modified);
  const canonical=vesselRoot+p.id+'/';
  if(!generated.includes('<link rel="canonical" href="'+canonical+'">'))throw Error('biography canonical mismatch '+p.id);
  if(check){
@@ -41,8 +45,6 @@ for(const p of bios.profiles.slice().sort((a,b)=>a.id.localeCompare(b.id))){
   fs.writeFileSync(target,generated,'utf8');
  }
  // Only a changed page receives a new lastmod; rerunning the watch is inert.
- const previous=priorDates.get(p.id);
- const modified=changed||!previous?today:previous;
  if(modified>today)throw Error('future sitemap lastmod '+p.id);
  entries.push('  <url><loc>'+canonical+'</loc><lastmod>'+modified+'</lastmod></url>');
 }
