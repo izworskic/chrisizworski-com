@@ -6708,78 +6708,95 @@
     },
     {
       "gisObjectId": 172,
-      "name": "Warner Falls: 2026 M-35 culvert access review",
+      "name": "Warner Falls: roadside access and culvert project correction",
       "county": "MARQUETTE",
       "status": "not-safe-to-promote",
       "publicAccess": "not-established",
       "publicationEligible": false,
-      "title": "Warner Falls: 2026 M-35 culvert access review",
-      "summary": "Michigan tourism and Travel Marquette historically call Warner Falls a roadside stop on M-35 near Palmer. Michigan MDOT's July 1 2026 release documents replacement of the M-35 culvert over Warner Creek with road reconstruction, asphalt and new pavement markings, and predicted a mid-August completion. A predicted construction finish does not certify safe October visitor parking, shoulder legality or an intact old guardrail footpath. No post-work MDOT-sanctioned parking and pedestrian route identified. Do not route drivers to a shoulder.",
+      "title": "Warner Falls: roadside access and culvert project correction",
+      "summary": "Warner Falls (GIS #172) is south of Palmer on M-35 and independently identified by Travel Marquette, Michigan tourism, UP Travel and specialist field coordinates. The July 2026 MDOT replacement concerns a branch of Warner Creek NORTH of Palmer; the August 2026 replacement concerns two other culverts near County Roads MT and MP SOUTH of Palmer. Neither notice establishes construction at Warner Falls itself or changes to its old guardrail/path. Previous research mistakenly used the July north-side project as evidence of postconstruction changes at the falls. Tourism publications describe historic off-road stopping and a short signed path, but no current site-specific MDOT parking permission, safe turnout layout or complete public bank-access right was verified. No car directions to the waterfall or historical shoulder.",
       "guidance": "Do not navigate to a raw waterfall GIS pin, assume unsigned bridge parking or follow a guessed riverbank route.",
-      "reviewLimitations": "Obtain current MDOT postconstruction parking permissions and safe signed viewpoint/footpath, verify lane/opening status, prohibited shoulder conditions and walk from legal visitor parking.",
-      "nextEvidence": "Obtain current MDOT postconstruction parking permissions and safe signed viewpoint/footpath, verify lane/opening status, prohibited shoulder conditions and walk from legal visitor parking.",
+      "reviewLimitations": "Verify site-specific legal M-35 turnout and stopping rules with MDOT and current signed public pedestrian access to the roadside view or waterfall bank; do not require visitors to supply confirmation. The July north-of-Palmer and August county-road culvert notices alone are not Warner Falls access records.",
+      "nextEvidence": "Verify site-specific legal M-35 turnout and stopping rules with MDOT and current signed public pedestrian access to the roadside view or waterfall bank; do not require visitors to supply confirmation. The July north-of-Palmer and August county-road culvert notices alone are not Warner Falls access records.",
       "researchPage": "/upper-peninsula-waterfalls/research/warner-falls/",
       "sourceLinks": [
         {
-          "label": "Evidence 1",
+          "label": "Michigan state GIS",
           "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
         },
         {
-          "label": "Evidence 2",
+          "label": "MDOT July north-of-Palmer",
           "url": "https://www.michigan.gov/mdot/news-outreach/pressreleases/2026/07/01/m-35-culvert-project-detour-starts-july-27"
         },
         {
-          "label": "Evidence 3",
+          "label": "MDOT August MT/MP",
           "url": "https://www.travelmarquette.com/outdoor-adventure/waterfalls/"
         },
         {
-          "label": "Evidence 4",
+          "label": "Independent source 1",
           "url": "https://www.michigan.org/property/warner-falls"
+        },
+        {
+          "label": "Independent source 2"
+        },
+        {
+          "label": "Independent source 3",
+          "url": "https://www.michigan.gov/mdot/news-outreach/pressreleases/2026/08/12/m-35-culvert-replacements-in-marquette-county-start-aug-24"
+        },
+        {
+          "label": "Independent source 4",
+          "url": "https://www.travelmarquette.com/blog/post/waterfalls-you-need-to-see-in-fall/"
+        },
+        {
+          "label": "Independent source 5",
+          "url": "https://www.uptravel.com/listing/warner-falls/4598/"
+        },
+        {
+          "label": "Independent source 6",
+          "url": "https://www.waterfallsofthekeweenaw.com/warner-creek/warner-falls/"
         }
       ],
       "routeAudit": {
-        "reviewed": "2026-10-31",
         "outcome": "not-cleared",
-        "destinationCoordinatesForDriving": false,
-        "routePolylineAuthorized": false,
         "segments": [
           {
             "label": "Waterfall identity",
             "status": "documented-not-live",
-            "finding": "State GIS #172 locates Warner Creek natural falls separately from parking",
-            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+            "finding": "State GIS #172 matches tourism and specialist south-of-Palmer Warner Creek fall; MDOT July project is described NORTH of Palmer.",
+            "source": "https://www.travelmarquette.com/blog/post/waterfalls-you-need-to-see-in-fall/"
           },
           {
             "label": "Manager or ownership",
-            "status": "documented-not-live",
-            "finding": "MDOT confirmed 2026 replacement of M-35 culvert at Warner Creek",
+            "status": "not-cleared",
+            "finding": "MDOT controls state highway; adjacent shore parcel or pedestrian bank permission remains unconfirmed; north project is not same-site authorization.",
             "source": "https://www.michigan.gov/mdot/news-outreach/pressreleases/2026/07/01/m-35-culvert-project-detour-starts-july-27"
           },
           {
             "label": "Road and approach",
-            "status": "not-cleared",
-            "finding": "Historic visitor listings predate road/culvert work and are not live access records",
-            "source": "https://www.travelmarquette.com/outdoor-adventure/waterfalls/"
+            "status": "documented-not-live",
+            "finding": "Travel Marquette and Michigan tourism describe historic M-35 roadside viewing and trail; neither notice confirms today's turnout state.",
+            "source": "https://www.travelmarquette.com/blog/post/waterfalls-you-need-to-see-in-fall/"
           },
           {
             "label": "Parking",
             "status": "not-cleared",
-            "finding": "No MDOT-designated legal new roadside parking verified",
+            "finding": "Tourism describes stopping fully off M-35; no MDOT site-specific public turnout permission or current guardrail/shoulder geometry established.",
             "source": "https://www.michigan.org/property/warner-falls"
           },
           {
             "label": "Continuous visitor path",
             "status": "not-cleared",
-            "finding": "No confirmed safe walk from allowed lot after guardrail/roadway rebuilding",
-            "source": "https://www.michigan.org/property/warner-falls"
+            "finding": "Short path and signage reported by tourism, but no authoritative continuous permitted bank route or 2026 site condition established.",
+            "source": "https://www.travelmarquette.com/blog/post/waterfalls-you-need-to-see-in-fall/"
           },
           {
             "label": "Current restrictions",
             "status": "not-cleared",
-            "finding": "MDOT July project estimate does not confirm present site open status",
-            "source": "https://www.michigan.org/property/warner-falls"
+            "finding": "July project north of Palmer and August projects near CR MT/MP cannot certify present conditions at Falls south of Palmer.",
+            "source": "https://www.michigan.gov/mdot/news-outreach/pressreleases/2026/08/12/m-35-culvert-replacements-in-marquette-county-start-aug-24"
           }
-        ]
+        ],
+        "reviewed": "2026-11-05"
       }
     },
     {
