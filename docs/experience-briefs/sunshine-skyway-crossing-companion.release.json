@@ -110,7 +110,9 @@
   "photos": [],
   "release": {
     "implemented": {
-      "status": "PENDING"
+      "status": "CONFIRMED",
+      "checkedDate": "2026-11-05",
+      "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/pull/1521"
     },
     "verified": {
       "status": "PENDING"
