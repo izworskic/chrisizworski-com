@@ -43,5 +43,40 @@ html=html.replaceAll('/assets/seaway.css?v=20261024b','/assets/seaway.css?v=2026
   .replaceAll('/assets/seaway-core.js?v=20261024c','/assets/seaway-core.js?v=20261105a')
   .replaceAll('/assets/seaway.js?v=20261024c','/assets/seaway.js?v=20261105a');
 if(!html.includes('id="journey"')||!html.includes('data-region-count="massena"'))throw new Error('Seaway journey enhancement not generated');
+// Python Intelligence OS: read a versioned and independently checked BTS
+// artifact. Vercel does NOT execute Python or fetch new data at request time.
+const fieldbook=JSON.parse(fs.readFileSync('public/assets/seaway-seasonal-fieldbook.json','utf8'));
+if(fieldbook.schema!=='seaway-seasonal-fieldbook-v1'||fieldbook.months?.length!==12
+   ||fieldbook.months.some((m,i)=>m.month!==i+1||!['available','partial','unreported'].includes(m.state))){
+  throw new Error('Invalid Seaway seasonal fieldbook contract');
+}
+const monthsShort=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const maxMedian=Math.max(1,...fieldbook.months.filter(m=>m.median!==null).map(m=>m.median));
+const monthButtons=fieldbook.months.map(m=>{
+  const scale=m.median===null?0:Math.round(m.median/maxMedian*100);
+  const indicator=m.state==='available'?esc(String(m.median)):'—';
+  const label=m.name+': '+(m.state==='available'?m.median+' median monthly transits across '+m.sampleCount+' historical years':'no comparable monthly total in this archive');
+  return '<button class="seasonal-month" type="button" data-seaway-month="'+m.month+'" aria-pressed="false" aria-label="'+esc(label)+'">'+
+    '<span class="seasonal-month-label">'+monthsShort[m.month-1]+'</span>'+
+    '<span class="seasonal-month-gauge" aria-hidden="true"><span style="height:'+scale+'%"></span></span>'+
+    '<span class="seasonal-month-value">'+indicator+'</span></button>';
+}).join('');
+const monthRows=fieldbook.months.map(m=>'<tr><th scope="row">'+esc(m.name)+'</th><td>'+
+    (m.median===null?'Not established':m.median)+'</td><td>'+
+    (m.minimum===null?'Not reported':m.minimum+'–'+m.maximum)+'</td><td>'+
+    m.sampleCount+'/'+fieldbook.years.length+'</td></tr>').join('');
+const seasonalDesk='<section class="editorial seaway-seasonal-desk" id="seaway-seasonal-lens" aria-labelledby="seaway-seasonal-title">'+
+'<p class="eyebrow">The seasonal passage · Python-checked historical fieldbook</p>'+
+'<h2 id="seaway-seasonal-title">When has the Seaway been busiest?</h2>'+
+'<p>Visitors planning a trip have two clocks: monthly shipping activity and whether a public viewing area is accessible. Choose a month to compare <strong>observed monthly system-wide vessel transits from 2022–2024</strong>. The range shows how much those years differed. This is not a prediction of ships at an individual lock or a recommended visit date.</p>'+
+'<div class="seasonal-months" role="group" aria-label="Choose a calendar month for historical shipping patterns">'+monthButtons+'</div>'+
+'<div class="seasonal-reading" id="seawaySeasonalReadout" role="status" aria-live="polite"><strong>Select a month to read the historical evidence.</strong><p>Missing monthly values remain unreported. The historical table is available below without JavaScript.</p></div>'+
+'<div class="seasonal-visit-bridge"><strong>Want to turn the history into a real visit?</strong> Check <a href="/eisenhower-lock/">Eisenhower’s documented public viewing guide</a>, <a href="https://www.seaway.dot.gov/explore/seaway-visitor-center" target="_blank" rel="noopener noreferrer">operator visitor hours</a>, <a href="'+esc(places.officialQueue)+'" target="_blank" rel="noopener noreferrer">official vessel order of turn</a>, and <a href="https://greatlakes-seaway.com/en/news-and-information/notices/seaway-notices/" target="_blank" rel="noopener noreferrer">current Seaway notices</a> independently. More monthly transits do not guarantee a ship will be visible when you arrive.</div>'+
+'<details><summary>Read the 2022–2024 comparison as a table</summary><div class="table-scroll"><table><thead><tr><th>Calendar month</th><th>Median transits</th><th>Observed min–max</th><th>Years reporting</th></tr></thead><tbody>'+monthRows+'</tbody></table></div></details>'+
+'<p class="fine">Source: <a href="'+esc(fieldbook.sourceMetadata)+'">U.S. Bureau of Transportation Statistics, Great Lakes–St. Lawrence Seaway Performance</a> (public-domain federal data). Archive retrieved '+esc(fieldbook.snapshotRetrievedAt)+'. Only three historical years; no inference about tomorrow, exact passages, individual vessels or this season’s opening dates. January–March are annotated closed in the archived source; actual annual opening and closing dates vary.</p>'+
+'<script type="application/json" id="seawaySeasonalData">'+JSON.stringify(fieldbook).replace(/</g,'\\u003c')+'</script>'+
+'</section>';
+replaceOnce('<section class="editorial resources">',seasonalDesk+'<section class="editorial resources">');
+
 fs.writeFileSync(file,html);
 console.log('Seaway corridor journey enhancement applied');
