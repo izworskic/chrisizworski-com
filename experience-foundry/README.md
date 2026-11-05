@@ -70,6 +70,10 @@ Every preview records its two closest comparators and at least two visitor-servi
 4. Add tests for missing/stale/conflicting records, injection, reversibility, and screen-reader/keyboard/no-JS use. Do a visual Playwright review at 360, 390, 768 and 1440px, and log failures. Do not describe structural tests as browser QA.
 5. Where a real release is requested, implement in the owning repo under Experience OS, register discovery/SEO exactly once, pass full CI, inspect production, and measure comparable search/visitor outcomes. **Generated `index.html` is never automatically promoted.**
 
+## First cross-repository pilot
+
+[The First Freeze source/experience record](pilots/first-freeze.md) links the authoritative `izworskic/phenology-michigan` implementation and real browser acceptance. It validates the shared source/time/access/interaction process with a **different, purpose-built JSX interface**, not by pretending the v0.1 `field-notes` CLI recipe generated a Next.js product. Continue to respect the owning repo's CI and live-release evidence.
+
 ## Limitations and follow-on milestone
 
 V0.1 has two authored renderers, a CLI, registry-based collision discovery, structural truth/originality checks and a review report. It does **not** dynamically invent a design from any arbitrary question, gather primary observations, run agentic research, render third-party maps, publish, or measure traffic.
