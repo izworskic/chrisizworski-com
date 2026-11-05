@@ -354,6 +354,35 @@ async function run(){
     check(await staticPage.locator('#winter-fleet-history a[href^="https://"]').count()>=historyData.recordCount,
       'no-JS: original evidence links survive');
     await noJS.close();
+    // Simulate a visit two November rollovers in the future, before a
+    // scheduled ledger refresh. The browser must show that year's EMPTY
+    // provisional desk, not the old 2026-27 season or its ship locations.
+    const nextYear=activeYear+2;
+    const futureId=nextYear+'-'+String((nextYear+1)%100).padStart(2,'0');
+    const frozen=Date.UTC(nextYear,10,2,12);
+    const future=await browser.newContext({viewport:{width:390,height:844},reducedMotion:'reduce'});
+    await future.addInitScript(ms=>{
+      const OriginalDate=Date;
+      window.Date=class extends OriginalDate {
+        constructor(...args){super(...(args.length?args:[ms]));}
+        static now(){return ms;}
+      };
+    },frozen);
+    await future.route('**/*',route=>{
+      const host=new URL(route.request().url()).hostname;
+      return host==='127.0.0.1'?route.continue():route.abort();
+    });
+    const futurePage=await future.newPage();
+    await futurePage.goto(url,{waitUntil:'domcontentloaded',timeout:15000});
+    await futurePage.waitForFunction(expected=>document.querySelector('#season')?.value===expected,
+      futureId,{timeout:10000});
+    check(await futurePage.locator('#season').inputValue()===futureId,
+      'future date: generated year appears as living season without a rebuild');
+    check(await futurePage.locator('[data-ship]').count()===0,
+      'future date: stale year never invents current ship locations');
+    check((await futurePage.locator('#live-update-status').textContent()).includes('pending'),
+      'future date: unavailable source ledger is explicitly pending, not zero ships');
+    await future.close();
     for(const r of results)console.log(r);
   }finally{await browser.close();await new Promise(r=>server.close(r))}
 }
