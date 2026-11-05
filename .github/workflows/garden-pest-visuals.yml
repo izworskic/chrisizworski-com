@@ -4,6 +4,12 @@ on:
     paths:
       - 'data/garden-pest-visual-catalog.json'
       - 'data/garden-pest-daymet-2021-2025/**'
+      - 'data/garden-cabbage-maggot-official-evidence.json'
+      - 'scripts/build_garden_cabbage_validation.py'
+      - 'tests/test_garden_cabbage_validation.py'
+      - 'public/assets/garden-cabbage-validation*'
+      - 'scripts/verify-garden-cabbage-validation.cjs'
+      - 'scripts/verify-garden-cabbage-validation-browser.cjs'
       - 'scripts/build_garden_pest_python_fieldbook.py'
       - 'tests/test_garden_pest_python_fieldbook.py'
       - 'public/assets/garden-pest-python-fieldbook*'
@@ -33,6 +39,12 @@ on:
     paths:
       - 'data/garden-pest-visual-catalog.json'
       - 'data/garden-pest-daymet-2021-2025/**'
+      - 'data/garden-cabbage-maggot-official-evidence.json'
+      - 'scripts/build_garden_cabbage_validation.py'
+      - 'tests/test_garden_cabbage_validation.py'
+      - 'public/assets/garden-cabbage-validation*'
+      - 'scripts/verify-garden-cabbage-validation.cjs'
+      - 'scripts/verify-garden-cabbage-validation-browser.cjs'
       - 'scripts/build_garden_pest_python_fieldbook.py'
       - 'tests/test_garden_pest_python_fieldbook.py'
       - 'public/assets/garden-pest-python-fieldbook*'
@@ -82,6 +94,11 @@ jobs:
           python3 scripts/build_garden_pest_python_fieldbook.py --check
           python3 -m unittest discover -s tests -p test_garden_pest_python_fieldbook.py -v
           node scripts/verify-garden-pest-python-fieldbook.cjs
+      - name: Check real MSU field reports and Python model-calibration science gates
+        run: |
+          python3 scripts/build_garden_cabbage_validation.py --check
+          python3 -m unittest discover -s tests -p test_garden_cabbage_validation.py -v
+          node scripts/verify-garden-cabbage-validation.cjs
       - name: Verify JavaScript syntax and page integration
         run: |
           node --check public/assets/garden-pest-visual-data.js
@@ -89,6 +106,9 @@ jobs:
           node --check public/assets/garden-pest-watch.js
           node --check public/assets/garden-pest-python-fieldbook-data.js
           node --check public/assets/garden-pest-python-fieldbook.js
+          node --check public/assets/garden-cabbage-validation-data.js
+          node --check public/assets/garden-cabbage-validation.js
+          node --check scripts/verify-garden-cabbage-validation-browser.cjs
           node --check scripts/verify-garden-pest-python-fieldbook-browser.cjs
           node --check public/assets/garden-earworm-trap-data.js
           node --check public/assets/garden-earworm-trap-desk.js
