@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "status": "review-ready",
+  "slug": "saginaw-field-notes",
+  "recipe": "field-notes",
+  "title": "Saginaw Bay: Seasonal Field Notes",
+  "place": "Saginaw Bay, Michigan",
+  "question": "What changes are documented around the bay, and which observations remain unverified?",
+  "mode": "enhance-existing",
+  "intentOwner": "phenology",
+  "closestTools": [
+    "saginaw-bay",
+    "birding"
+  ],
+  "distinctiveness": [
+    {
+      "dimension": "decision",
+      "reason": "Interpret dated marsh and migratory field records rather than promising a general weekend forecast."
+    },
+    {
+      "dimension": "hierarchy",
+      "reason": "Lead with a source-qualified chronological field journal, not a destination map or generic card grid."
+    },
+    {
+      "dimension": "interaction",
+      "reason": "Switch evidence types to understand observations versus forecasts while preserving original field entries."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Existing Michigan phenology owner (not a verified observation)",
+      "url": "https://phenology.chrisizworski.com/"
+    },
+    {
+      "label": "Existing Michigan birding tool (not current sightings evidence)",
+      "url": "https://michiganbirdingreport.com/"
+    }
+  ],
+  "records": [],
+  "constraints": {
+    "noNewCanonical": true,
+    "noPublicRoute": true,
+    "doNotInferLiveStatus": true
+  },
+  "notes": "No field observations supplied. Add primary, timestamped, licensed records before a visitor-facing interpretation. This example tests a differentiated preview and its honest no-data state."
+}
