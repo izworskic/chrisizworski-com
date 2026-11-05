@@ -31,7 +31,7 @@ replaceOnce('<div class="wrap"><section class="station" id="ship-watch"','<div c
 replaceOnce('<div class="link-row"><a href="#ship-watch">Find ships & viewing spots ↓</a><a href="#lock-lab">Explore a lock ↓</a></div>',
 '<div class="link-row"><a href="#ship-watch">Find recent ships ↓</a><a href="#viewing-plan">Choose a shore viewpoint ↓</a><a href="#journey">Follow the voyage ↓</a></div>');
 const oldTitle='St. Lawrence Seaway Ship Tracker | Chris Izworski';
-const newTitle='St. Lawrence Seaway Ships & Locks | Chris Izworski';
+const newTitle='St. Lawrence Seaway Ship Tracker & Locks | Chris Izworski';
 const oldDescription='Find recent Seaway ships, explore seven locks, compare public viewing spots and see how ships climb inland. Includes Eisenhower and official transit links.';
 const newDescription='See recent Seaway ship reports, explore the Montreal–Lake Ontario lock map, choose verified public viewing spots and check official transit sources.';
 html=html.replaceAll(oldTitle,newTitle).replaceAll(oldDescription,newDescription);
