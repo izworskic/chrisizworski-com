@@ -124,4 +124,7 @@ test('image sitemap advertises the original winter hero and locally hosted ship 
  assert.ok(xml.includes('FREIGHTER_LAYUP_IMAGE_SITEMAP:START'));
  assert.ok(xml.includes('FREIGHTER_LAYUP_IMAGE_SITEMAP:END'));
  assert.equal((xml.match(/FREIGHTER_LAYUP_IMAGE_SITEMAP:START/g)||[]).length,1);
+ const owned=xml.split('FREIGHTER_LAYUP_IMAGE_SITEMAP:START')[1].split('FREIGHTER_LAYUP_IMAGE_SITEMAP:END')[0];
+ assert.doesNotMatch(owned,/<image:(?:title|caption|geo_location|license)>/,'no deprecated Google image-sitemap tags');
+ assert.equal((owned.match(/<image:loc>/g)||[]).length,5);
 });
