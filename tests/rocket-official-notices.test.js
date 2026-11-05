@@ -137,7 +137,7 @@ t('national desk is indexable and independent of mission schedule availability',
  a.match(js,/OFFICIAL_EVIDENCE_API = '\/api\/rocket-official-notices'/);
  a.match(js,/renderOfficialEvidence\(data\)/);
  a.match(js,/void loadOfficialEvidence\(\)/);
- a.match(js,/published now ≠ safe on launch day/i);
+ a.match(index,/Published now ≠ safe on launch day/);
  a.match(css,/\.rl-evidence-card/);
  a.match(css,/@media\(max-width:460px\)/);
  a.doesNotMatch(js,/officialEvidence.*missionMatched|officialEvidence.*goForLaunch/i);
