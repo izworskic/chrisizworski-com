@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "sourceCheckedDate": "2026-11-05",
+  "scope": "Interpretive geographic references, not launch-day viewpoints, entrances or navigation routes.",
+  "coordinateDatumNote": "33 CFR 165.1406 publishes the maritime safety boundary in OHD. Decimal-degree conversion here is illustrative and may differ from GPS/WGS84 chart coordinates. Consult Coast Guard charts/notices; this overlay is NOT for navigation.",
+  "points": [
+    {
+      "id": "pmrf-range",
+      "name": "Pacific Missile Range Facility — approximate vicinity",
+      "kind": "restricted-range",
+      "lat": 22.02,
+      "lon": -159.78,
+      "coordinateRole": "Approximate range reference from the site's six-region public atlas; NOT a launch pad, gate, checkpoint, parking location or published spectator site.",
+      "source": "https://cnrh.cnic.navy.mil/Installations/PMRF-Barking-Sands/",
+      "access": "https://cnrh.cnic.navy.mil/Installations/PMRF-Barking-Sands/Operations-and-Management/Beach-Access/"
+    },
+    {
+      "id": "polihale-park",
+      "name": "Polihale State Park — general park vicinity",
+      "kind": "state-park-closed",
+      "lat": 22.08333,
+      "lon": -159.76528,
+      "coordinateRole": "Third-party named park vicinity only, not the park entrance or an approved viewing point. Hawaiʻi DLNR November 2026 notice reports the park CLOSED pending explicit reopening.",
+      "source": "https://kauai.uscoast.info/POI/Parks/Polihale-State-Park/1677418/",
+      "access": "https://dlnr.hawaii.gov/dsp/important-park-notices/"
+    }
+  ],
+  "maritimeRule": {
+    "statute": "33 CFR 165.1406",
+    "source": "https://www.ecfr.gov/current/title-33/chapter-I/subchapter-P/part-165/section-165.1406",
+    "alternate": "https://www.law.cornell.edu/cfr/text/33/165.1406",
+    "noticeSource": "https://navcen.uscg.gov/local-notices-to-mariners-by-cg-district",
+    "appliesTo": "STARS launch operations under the regulation; activated by Coast Guard notice. This map never declares it active, and other hazard areas can apply independently.",
+    "datum": "OHD",
+    "polygonLatLon": [
+      [
+        22.02,
+        -159.7883333333
+      ],
+      [
+        22.02,
+        -159.845
+      ],
+      [
+        22.105,
+        -159.845
+      ],
+      [
+        22.105,
+        -159.7466666667
+      ]
+    ],
+    "precision": "Regulatory sexagesimal minutes converted to decimal degrees for general illustration only"
+  }
+}
