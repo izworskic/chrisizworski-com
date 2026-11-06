@@ -2196,6 +2196,51 @@
         "Verify winter-maintained approach road and specific plowed parking lot",
         "Confirm selected route geometry before directions"
       ]
+    },
+    {
+      "id": "piro-sand-point-marsh",
+      "displayName": "Pictured Rocks — Sand Point Marsh Trail",
+      "region": "upper-peninsula",
+      "placeGroup": "piro",
+      "routeForm": "loop",
+      "lengthMiles": 0.5,
+      "lengthEvidence": "official_named_route",
+      "sourceDnrTrailId": null,
+      "sourceDnrTrailName": null,
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "ungroomed_nature_walk",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 46.448947,
+        "lon": -86.605869,
+        "meaning": "NPS 2026 ranger event meeting coordinate for Sand Point Marsh Trail, not certified current winter parking or a driving entrance"
+      },
+      "officialPage": "https://www.nps.gov/places/sand-point-marsh-trail-in-winter.htm",
+      "officialMap": null,
+      "routeEvidenceUrl": "https://www.nps.gov/places/sand-point-marsh-trail-in-winter.htm",
+      "managerPhone": "906-387-3700",
+      "caveats": [
+        "Boardwalk can be icy even with little snow; snowshoes often needed in deep snow.",
+        "Pets prohibited on the marsh trail.",
+        "NPS winter policy describes Sand Point Road and beach parking as plowed. This is not evidence of today's road or lot condition.",
+        "September 2026 NPS notice scheduled Sand Point Road construction closure October 1–14. No independent reopening confirmation was found; check current alerts before travel."
+      ],
+      "editorialSummary": "Half-mile wetland boardwalk through cattails, dunes and winterberries, reached from the Sand Point Beach area when access is permitted.",
+      "needs": [
+        "verify Sand Point Road reopened after October 2026 construction notice",
+        "dated manager-confirmed road and plowed lot status for trip date",
+        "dated route opening and boardwalk safety",
+        "official route geometry if navigation is ever considered"
+      ]
     }
   ],
   "quarantined": [
