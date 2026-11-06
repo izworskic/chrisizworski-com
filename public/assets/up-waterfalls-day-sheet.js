@@ -23,6 +23,8 @@
     const lat = Number(d.parkingLat), lng = Number(d.parkingLng);
     // Defense against absent/zero/misplaced natural-feature coordinates.
     if (!Number.isFinite(lat) || !Number.isFinite(lng) || lat < 45 || lat > 48.5 || lng < -91.5 || lng > -84) return '';
+    // An exactly duplicated natural waterfall pin is not independently proved parking.
+    if (lat === Number(d.lat) && lng === Number(d.lng)) return '';
     return 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(lat + ',' + lng) + '&travelmode=driving';
   }
   function shareUrl(base, ids, date) {
@@ -120,7 +122,7 @@
       for (const note of warningsFor(c)) article.appendChild(node('p', 'day-sheet-warning', note));
       const refs = node('p', 'day-sheet-links');
       const official = safeExternal(c.dataset.arrivalSource);
-      if (official) refs.appendChild(link('Check land manager / arrival source', official, true));
+      if (official) refs.appendChild(link('Check cited arrival evidence', official, true));
       else if (internal) refs.appendChild(link('Read destination guide', internal));
       const parkingUrl = parkingDirections(c);
       if (parkingUrl) {
