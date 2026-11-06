@@ -87,3 +87,24 @@ test('NPS past road closure stays a named unresolved access issue, never a fabri
  assert.match(c.question,/reopen after the 2026 construction closure/i);
  assert.match(c.sourceMeaning,/not a dated 2026.27 open\/cleared report/i);
 });
+
+test('future winters accept fresh manager observations only in their own requested season',()=>{
+ const site=Parking.registry.checkpoints.find(x=>x.id==='piro-sand-point');
+ const template={checkpointId:site.id,routeId:id,sourceUrl:ref,
+   sourceType:'dated-manager-operational',winterSpecific:true,season:'2027-28',
+   managerObservedAt:'2027-11-15T13:00:00Z',effectiveFrom:'2027-11-15',effectiveThrough:'2027-11-16',
+   namedRouteConfirmed:true,roadMaintenanceConfirmed:true,plowedConfirmed:true,
+   parkingEntranceConfirmed:true,waypoint:{
+     kind:'winter-parking-lot',managerLotName:'Sand Point NPS verified lot for fixture',
+     lat:46.448947,lon:-86.605869
+   }};
+ const now=Date.parse('2027-11-15T14:00:00Z'),day='2027-11-15';
+ const observations=['trail','road','parking'].map(kind=>({...template,kind,status:'open'}));
+ for(const item of observations) assert.equal(Parking.validateObservation(item,site,id,day,now),true);
+ const complete=Parking.assess(id,{tripDay:day,now,observations});
+ assert.equal(complete.managerAccessConfirmed,true);
+ assert.equal(complete.navigationReady,false,'fresh reports do not enable auto-routing to a GPS point');
+ assert.equal(complete.drivingDirectionsUrl,null);
+ assert.equal(Parking.assess(id,{tripDay:day,now,observations:observations.map(item=>({...item,season:'2026-27'}))}).parking,'unknown');
+ assert.equal(Parking.assess(id,{tripDay:day,now,observations:observations.map(item=>({...item,managerObservedAt:'2026-11-15T13:00:00Z'}))}).parking,'unknown');
+});
