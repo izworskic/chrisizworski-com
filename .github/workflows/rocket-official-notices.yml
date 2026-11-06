@@ -7,6 +7,8 @@ on:
     paths:
       - '.github/workflows/rocket-official-notices.yml'
       - 'scripts/rocket_official_notices.py'
+      - 'scripts/rocket_official_matcher.py'
+      - 'scripts/test_rocket_official_matcher.py'
       - 'lib/rocket-official-notices.js'
       - 'api/rocket-official-notices.js'
       - 'public/synced-national-tools/rocket-launch-live/app.js'
@@ -32,6 +34,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Python cross-region safety and classification regression
         run: python3 scripts/rocket_official_notices.py --test
+      - name: Python official event-to-mission reconciliation and abstention gates
+        run: python3 -m unittest discover -s scripts -p test_rocket_official_matcher.py -v
       - name: Verify live API route is deployed (only on new release)
         if: github.event_name == 'push'
         run: |
@@ -45,9 +49,20 @@ jobs:
           done
           echo 'The signed official notice endpoint is not live.'
           exit 1
-      - name: Collect official source evidence with Python (not LL2)
+      - name: Retrieve bounded same-site mission manifest (not an LL2 fetch)
+        run: |
+          curl --fail-with-body --silent --show-error \
+            --retry 2 --retry-all-errors --max-time 20 \
+            'https://chrisizworski.com/api/rocket-official-notices?manifest=1' \
+            > "$RUNNER_TEMP/rocket-national-mission-manifest.json"
+          jq -e '.ok==true and .version==1 and
+            (.source=="shared-postgres-ll2-national-v2") and
+            (.missions|type=="array")' \
+            "$RUNNER_TEMP/rocket-national-mission-manifest.json" >/dev/null
+      - name: Collect official source and event-linked evidence with Python
         run: |
           python3 scripts/rocket_official_notices.py --collect \
+            --mission-manifest "$RUNNER_TEMP/rocket-national-mission-manifest.json" \
             --output "$RUNNER_TEMP/rocket-official-notices.json"
           jq -e '.version==1 and .sourceCount==10 and
             (.regions|keys|length)==6 and

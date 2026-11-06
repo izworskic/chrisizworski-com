@@ -881,9 +881,74 @@
     'source-link':'Official alert subscription',
     'official-article':'Official article · event not independently matched'
   };
+  function launchLocalDay(launch,timezone){
+    const stamp=Date.parse(launch?.net||'');
+    if(!Number.isFinite(stamp))return null;
+    try{
+      const parts=new Intl.DateTimeFormat('en-US',{timeZone:timezone||'UTC',
+        year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date(stamp));
+      const part=t=>parts.find(x=>x.type===t)?.value;
+      return part('year')+'-'+part('month')+'-'+part('day');
+    }catch{return null;}
+  }
+  function renderOfficialMatch(data) {
+    const root=$('rl-mission-official-match');
+    if(!root)return;
+    root.replaceChildren();
+    root.appendChild(el('span','rl-match-eyebrow','EVENT-SPECIFIC SOURCE RECONCILIATION'));
+    const rec=state.officialEvidence?.reconciliation;
+    const launch=data?.selectedLaunch;
+    if(!launch?.id){
+      root.dataset.status='unknown';
+      root.appendChild(el('h3','','No mission selected'));
+      root.appendChild(el('p','','Choose a scheduled mission to compare its exact designation and local date with a published government or range-operator announcement.'));
+      return;
+    }
+    const fresh=state.officialEvidence?.health==='recent'&&
+      rec?.health!=='unavailable-or-stale'&&rec?.manifestCheckedAt&&
+      data.scheduleFreshness==='recent';
+    const match=fresh?rec?.matches?.find(m=>m.launchId===launch.id&&m.region===data.region?.id):null;
+    const day=launchLocalDay(launch,data.region?.timezone);
+    const dateGap=match&&day&&match.officialEventDate?
+      Math.abs((Date.parse(day+'T12:00:00Z')-Date.parse(match.officialEventDate+'T12:00:00Z'))/86400000):Infinity;
+    if(match&&dateGap<=1&&match.matchRule==='exact-designation-and-local-date'){
+      root.dataset.status='matched';
+      root.appendChild(el('h3','','Official event article matched to this mission'));
+      root.appendChild(el('p','rl-match-heading',match.noticeTitle));
+      const meta=el('p','rl-match-meta','Exact designation: '+match.missionMarker+
+        ' · Published event date: '+match.officialEventDate+
+        (match.publishedDate?' · Article published: '+match.publishedDate:' · Article publication date unavailable')+
+        ' · Matched at '+stamp(rec.checkedAt));
+      root.appendChild(meta);
+      root.appendChild(el('p','rl-match-caution',
+        'Matches the third-party launch listing by identifier and local calendar window. This does not confirm a liftoff time, ticket inventory, public viewing access, range safety GO, road opening or maritime clearance.'));
+      const link=anchor(match.articleUrl,'Read original official event article');
+      if(link)root.appendChild(link);
+      const changes=(rec.history||[]).filter(x=>x.launchId===launch.id).slice(0,2);
+      for(const change of changes)root.appendChild(el('p','rl-match-change',
+        change.type==='official-link-first-verified'?
+        'First verified official link recorded '+stamp(change.detectedAt)+'.':
+        'Official evidence changed '+stamp(change.detectedAt)+'. Recheck the latest operator announcement.'));
+      return;
+    }
+    root.dataset.status='unverified';
+    root.appendChild(el('h3','','No mission-specific official article matched'));
+    const unavailable=state.officialEvidenceLoaded!==true||!rec||
+      rec.health==='schedule-unavailable'||rec.health==='unavailable-or-stale'||
+      data.scheduleFreshness!=='recent';
+    root.appendChild(el('p','',unavailable?
+      'One or more source or schedule observations are unavailable or overdue. No reliable mission-to-article comparison can be made.':
+      dateGap!==Infinity?
+      'The national mission target differs from the last matched official article date. Verify the current operator statement before planning travel.':
+      'This source scan found no unambiguous official article naming this exact mission inside a compatible launch window. A missing match does not mean the launch is canceled, unannounced, or inaccessible.'));
+    const official=anchor(data.region?.authority,'Check current range authority');
+    if(official)root.appendChild(official);
+  }
+
   function renderOfficialEvidence(data) {
     const root = $('rl-evidence-sources');
     if (!root) return;
+    renderOfficialMatch(data);
     root.replaceChildren();
     const current = data?.region?.id;
     const feed = state.officialEvidence;

@@ -281,7 +281,7 @@ def fetch_public(entry, now, opener=None):
     return classify(entry, body, now)
 
 
-def collect(now=None, fetcher=fetch_public):
+def collect(now=None, fetcher=fetch_public, manifest=None, event_fetcher=None):
     now=now or utcnow()
     if now.tzinfo is None:
         raise ValueError("UTC timezone required")
@@ -296,10 +296,26 @@ def collect(now=None, fetcher=fetch_public):
         records=list(pool.map(read_one, SOURCES))
     regions={region:[r for r in records if r["region"]==region] for region in REGIONS}
     counts={k:sum(s["status"]=="retrieved" for s in v) for k,v in regions.items()}
-    return {"version":VERSION, "checkedAt":iso(now), "sourceCount":len(records),
+    result={"version":VERSION, "checkedAt":iso(now), "sourceCount":len(records),
             "regions":regions, "availableSources":sum(counts.values()),
             "partial":any(s["status"]!="retrieved" for s in records),
             "coverageRule":"Source evidence only. No event permission, all-clear, cancellation or marine-zone activation inferred."}
+    # The matching layer is opt-in for the scheduled job, preserving
+    # deterministic legacy collector tests and no extra website requests
+    # in the LL2 national schedule collector.
+    if manifest is not None:
+        from rocket_official_matcher import collect_evidence
+        try:
+            if event_fetcher:
+                result["reconciliation"]=collect_evidence(manifest,now,event_fetcher)
+            else:
+                result["reconciliation"]=collect_evidence(manifest,now)
+        except Exception:
+            result["reconciliation"]={
+                "version":1,"checkedAt":iso(now),"health":"unavailable",
+                "manifestCheckedAt":None,"matches":[],"candidateCount":0,
+                "unmatched":0,"conflicts":0,"sourceStatus":[]}
+    return result
 
 
 class EvidenceTests(unittest.TestCase):
@@ -390,12 +406,20 @@ def main():
     p.add_argument("--test", action="store_true")
     p.add_argument("--collect", action="store_true")
     p.add_argument("--output", default="")
+    p.add_argument("--mission-manifest", default="", help="Saved compact, trusted same-site schedule manifest; never LL2 HTTP")
     args=p.parse_args()
     if args.test:
         suite=unittest.defaultTestLoader.loadTestsFromTestCase(EvidenceTests)
         report=unittest.TextTestRunner(verbosity=2).run(suite)
         return 0 if report.wasSuccessful() else 1
-    data=collect()
+    manifest=None
+    if args.mission_manifest:
+        try:
+            with open(args.mission_manifest,"r",encoding="utf-8") as handle:
+                manifest=json.load(handle)
+        except (OSError,ValueError):
+            manifest={"version":1,"health":"unavailable","missions":[]}
+    data=collect(manifest=manifest)
     output=json.dumps(data, separators=(",",":"),ensure_ascii=False)
     if args.output:
         with open(args.output, "w", encoding="utf-8") as handle:
