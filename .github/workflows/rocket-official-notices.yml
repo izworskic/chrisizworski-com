@@ -9,6 +9,8 @@ on:
       - 'scripts/rocket_official_notices.py'
       - 'scripts/rocket_official_matcher.py'
       - 'scripts/test_rocket_official_matcher.py'
+      - 'scripts/test_rocket_official_rss.py'
+      - 'tests/rocket-official-rss-ksc.test.js'
       - 'lib/rocket-official-notices.js'
       - 'api/rocket-official-notices.js'
       - 'public/synced-national-tools/rocket-launch-live/app.js'
@@ -36,6 +38,8 @@ jobs:
         run: python3 scripts/rocket_official_notices.py --test
       - name: Python official event-to-mission reconciliation and abstention gates
         run: python3 -m unittest discover -s scripts -p test_rocket_official_matcher.py -v
+      - name: Python federal Space Force RSS source-failure and exact-mission tests
+        run: python3 -m unittest discover -s scripts -p test_rocket_official_rss.py -v
       - name: Verify live API route is deployed (only on new release)
         if: github.event_name == 'push'
         run: |
