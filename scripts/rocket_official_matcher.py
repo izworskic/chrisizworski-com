@@ -193,16 +193,26 @@ def prospective_date(body,now):
         # An article's publication date in one sentence must NEVER be matched
         # to an undated "launch window" or mission update in the next sentence.
         for sentence in re.split(r"(?<=[.!?])\s+",line):
-            if not PROSPECTIVE.search(sentence) or not EVENT_TERMS.search(sentence):
-                continue
-            # Historic launch reports never yield upcoming event notices.
-            if HISTORIC.search(sentence):continue
-            for match in DATE.finditer(sentence):
-                month=MONTHS[match.group(1).upper().rstrip(".")]
-                try:d=datetime(int(match.group(3)),month,int(match.group(2)),tzinfo=UTC)
-                except ValueError:continue
-                if now-timedelta(days=2)<=d<=now+timedelta(days=65):
-                    return d.date().isoformat()
+            # A semicolon often separates the planned launch from the
+            # *publication* date in the very same sentence. Each clause must
+            # itself contain both prospective launch language and the date.
+            for clause in sentence.split(";"):
+                if not PROSPECTIVE.search(clause) or not EVENT_TERMS.search(clause):
+                    continue
+                if HISTORIC.search(clause):continue
+                for match in DATE.finditer(clause):
+                    before_date=clause[:match.start()]
+                    # Do not turn an article issue, update or briefing date
+                    # into the scheduled event date, even when a launch is
+                    # discussed in the preceding part of the same clause.
+                    if re.search(r"\b(published|posted|issued|article dated|briefing dated|update dated)\b",
+                                 before_date[-100:],re.I):
+                        continue
+                    month=MONTHS[match.group(1).upper().rstrip(".")]
+                    try:d=datetime(int(match.group(3)),month,int(match.group(2)),tzinfo=UTC)
+                    except ValueError:continue
+                    if now-timedelta(days=2)<=d<=now+timedelta(days=65):
+                        return d.date().isoformat()
     return None
 
 def launch_region_attested(region,body):
