@@ -467,3 +467,19 @@ button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid #dc7
  .rl-evidence-card-head{flex-direction:column;gap:8px}
  .rl-evidence-legend{gap:4px}
 }
+
+
+/* Event-specific evidence above the general land-manager source ledger. */
+.rl-mission-official-match{margin-top:14px;margin-bottom:18px;border:1px solid #d2b58b;border-left:5px solid #9c6a3b;background:#fcf8ef;padding:22px 25px;border-radius:9px;max-width:100%}
+.rl-mission-official-match[data-status="matched"]{border-color:#8fbfb3;border-left-color:#176756;background:#f1f9f5}
+.rl-mission-official-match[data-status="unknown"]{border-color:#ccd6d1;border-left-color:#637c7d;background:#f5f8f5}
+.rl-match-eyebrow{display:block;letter-spacing:.11em;text-transform:uppercase;font-size:10px;font-weight:800;color:#996536;margin-bottom:7px}
+.rl-mission-official-match[data-status="matched"] .rl-match-eyebrow{color:#2d6e5b}
+.rl-mission-official-match h3{font-family:var(--serif);font-size:clamp(19px,2.15vw,27px);line-height:1.27;margin:0 0 12px}
+.rl-mission-official-match p{font-size:13px;line-height:1.66;color:#3e5b5e;max-width:96ch;margin:7px 0}
+.rl-mission-official-match .rl-match-heading{font-size:15px;font-weight:800;color:#183d43}
+.rl-mission-official-match .rl-match-meta{font-size:12px;font-weight:700;color:#345966}
+.rl-mission-official-match .rl-match-caution{border-top:1px solid #b7d0c6;padding-top:12px}
+.rl-mission-official-match a{display:inline-block;margin-top:10px;font-size:13px;font-weight:800;color:#116479}
+.rl-mission-official-match .rl-match-change{font-size:11px;color:#5e766e}
+@media(max-width:460px){.rl-mission-official-match{padding:17px 18px}}
