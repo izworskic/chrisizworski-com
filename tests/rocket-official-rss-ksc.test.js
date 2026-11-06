@@ -87,5 +87,7 @@ test('signed Python workflow retains two independent source families and officia
  assert.match(python,/official_rss_events/);
  assert.match(wf,/test_rocket_official_rss\.py/);
  assert.match(wf,/getIDToken/);
+ assert.match(wf,/20261106-official-rss-ksc-v1/);
+ assert.match(wf,/rocket-release-probe\.html/);
  assert.doesNotMatch(python,/supabase|redis|ll\.thespacedevs\.com/);
 });
