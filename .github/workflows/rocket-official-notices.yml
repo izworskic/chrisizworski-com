@@ -39,15 +39,21 @@ jobs:
       - name: Verify live API route is deployed (only on new release)
         if: github.event_name == 'push'
         run: |
-          for attempt in $(seq 1 25); do
+          # A generic version-1 GET already existed before this release.
+          # Wait for the NEW compact mission-manifest route before fetching it.
+          # Otherwise a push job races the Vercel production deployment and
+          # treats the old release's valid JSON as proof of readiness.
+          for attempt in $(seq 1 35); do
             if curl --fail --silent --show-error --max-time 8 \
-              'https://chrisizworski.com/api/rocket-official-notices' |
-              jq -e '.ok==true and .version==1' >/dev/null; then
+              'https://chrisizworski.com/api/rocket-official-notices?manifest=1' |
+              jq -e '.ok==true and .version==1 and
+                .source=="shared-postgres-ll2-national-v2" and
+                (.missions|type=="array")' >/dev/null; then
               exit 0
             fi
             sleep 10
           done
-          echo 'The signed official notice endpoint is not live.'
+          echo 'The deployed mission manifest is not yet available. Do not publish against an older API.'
           exit 1
       - name: Retrieve bounded same-site mission manifest (not an LL2 fetch)
         run: |
