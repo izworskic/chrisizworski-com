@@ -25,15 +25,24 @@ test('operational copy explicitly prevents weather from becoming bridge status',
   assert.match(view, /not a weather-derived “OPEN” declaration/i);
 });
 
-test('camera experience plays FL511 video in place and keeps an official embedded fallback', () => {
+test('camera experience defaults to a verified FL511 image instead of a non-embeddable tooltip fragment', () => {
+  assert.match(view, /id="skywayCameraImage"/);
+  assert.match(view, /attachStillCamera\(active\)/);
+  assert.match(view, /loadCameraImage\(image, camera\.imageUrl\)/);
+  assert.match(view, /setInterval\(\(\) =>/);
+  assert.match(view, /Image unavailable · FL511 map link below/);
+  assert.match(view, /href="https:\/\/fl511\.com\/map"/);
+  assert.doesNotMatch(view, /<iframe id="skywayCameraFrame"/);
+  assert.match(page, /Official camera still image/);
+  assert.match(page, /Watch Skyway camera video on FL511 map/);
+});
+test('video when provided has an image fallback and startup watchdog', () => {
   assert.match(view, /<video id="skywayCameraVideo"/);
+  assert.match(view, /skywayCameraBackup/);
   assert.match(view, /hls\.js@1\.7\.3/);
-  assert.match(view, /Hls\.isSupported\(\)/);
   assert.match(view, /loadSource\(source\)/);
-  assert.match(view, /<iframe id="skywayCameraFrame"/);
-  assert.match(view, /Open in FL511/);
+  assert.match(view, /readyState < 2/);
   assert.doesNotMatch(view, /scrollIntoView\s*\(/);
-  assert.match(page, /Official camera embedded/i);
 });
 
 test('current toll UI exposes only electronic payment modes and browser code does not own rate constants', () => {
