@@ -77,7 +77,7 @@ test('B59 visible UX remains source-linked and accessible, with existing trip pl
  assert.ok(hub.indexOf('id="visit-lens"')<hub.indexOf('id="nearby-lab"'));
  assert.ok(hub.indexOf('id="nearby-lab"')<hub.indexOf('class="explorer"'));
  assert.match(hub,/assets\/up-waterfalls-nearby\.js/);
- assert.match(hub,/dateModified":"2026-11-03"/);
+ assert.match(hub,/dateModified":"2026-11-05"/);
  assert.match(hub,/id="show-geo-candidates"/);
  assert.match(hub,/id="selected-list"/);
  assert.match(hub,/https:\/\/chrisizworski.com\/upper-peninsula-waterfalls\//);
