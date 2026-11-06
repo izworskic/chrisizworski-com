@@ -24,6 +24,8 @@
   // One park can have several widely separated trailheads: cluster by source position.
   const map=new Map();
   for(const r of routes){
+   // A general town point is suitable for regional weather, NOT a trail-area map marker.
+   if(/General Munising-area map reference/.test(r.point?.meaning||''))continue;
    const key=r.group+'|'+Number(r.point.lat).toFixed(5)+'|'+Number(r.point.lon).toFixed(5);
    if(!map.has(key))map.set(key,{id:key,group:r.group,title:r.title,
      lat:r.point.lat,lon:r.point.lon,count:0,routeIds:[]});
@@ -80,6 +82,7 @@
     (p.currentConditionsUrl?'<p><a href="'+esc(p.currentConditionsUrl)+'" target="_blank" rel="noopener noreferrer">Check the manager current-conditions and closure notices ↗</a></p>':''):'';
   const winterAccessPanel='<div class="verification" aria-label="Winter parking access status"><strong>Winter arrival evidence — '+esc(tracked?'access conditions remain unverified':'specific parking research incomplete')+'</strong>'+
    '<ul class="evidence-list">'+accessRows+'</ul>'+accessDetails+
+   '<p><strong>Map/forecast reference:</strong> '+esc(route.point?.meaning||'Regional location only, not a trailhead')+'</p>'+ 
    '<p><strong>No GPS directions:</strong> a trail reference point or park address is not certified cleared winter parking.</p></div>';
   $('detail-body').innerHTML=
    '<div class="evidence-grid"><div class="metric"><b>'+esc(route.miles===null?'—':route.miles+' mi')+'</b><small>'+
@@ -269,7 +272,11 @@
    state.parkFilter=null;state.pointFilter=null;
    $('region').value='all';$('activity').value='either';$('search').value='';
    filtered();pick(id,true);
-   if(state.mapLoaded)state.map.easeTo({center:[route.point.lon,route.point.lat],zoom:10,duration:450});
+   if(state.mapLoaded){
+    if(/General Munising-area map reference/.test(route.point?.meaning||''))
+      $('map-status').textContent='Munising snowshoe entrance is not mapped: the general city reference is used only for regional weather. Follow the official NPS parking approach in the route details.';
+    else state.map.easeTo({center:[route.point.lon,route.point.lat],zoom:10,duration:450});
+   }
   }));
   $('nearby').addEventListener('click',()=>{
    if(!navigator.geolocation){$('map-status').textContent='Geolocation unavailable; filter by region.';return}

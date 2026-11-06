@@ -7,8 +7,8 @@ const DNR=require('../data/winter-hike/michigan-dnr-candidates.json');
 const {routes,quarantined}=data;
 test('curation v1 is a non-live catalog with independent explicit source and parking contracts',()=>{
  const a=Routes.auditCatalog();
- assert.equal(a.ok,true,JSON.stringify(a.errors));assert.equal(a.count,51);
- assert.equal(a.measured,38);assert.equal(a.unknown,13);assert.equal(a.groups,16);
+ assert.equal(a.ok,true,JSON.stringify(a.errors));assert.equal(a.count,52);
+ assert.equal(a.measured,39);assert.equal(a.unknown,13);assert.equal(a.groups,16);
  assert.equal(data.operationalDefaults.directionsEnabled,false);
 });
 test('official route identities are unique and evidence scoped to particular route, not entire state park',()=>{
@@ -88,10 +88,10 @@ test('listed winter snowshoe routes differ from boots-only packed Upper Falls wa
  const boots=Routes.listRoutes({activity:'hike'});
  assert.ok(!snow.some(r=>r.id==='tahq-upper-packed-walking'));
  assert.ok(boots.some(r=>r.id==='tahq-upper-packed-walking'));
- assert.equal(Routes.listRoutes({region:'upper-peninsula'}).length,10);
+ assert.equal(Routes.listRoutes({region:'upper-peninsula'}).length,11);
 });
 test('length filter excludes unverified mileage instead of estimating it',()=>{
- assert.equal(Routes.listRoutes({onlyMeasured:true}).length,38);
+ assert.equal(Routes.listRoutes({onlyMeasured:true}).length,39);
  assert.ok(Routes.listRoutes({onlyMeasured:true}).every(r=>r.miles>0));
  assert.throws(()=>Routes.listRoutes({activity:'trailrunning'}));
 });
@@ -147,7 +147,7 @@ test('all public route cards remain research-only even if route length and map a
  }
 });
 
-test('51 named winter trails retain unverified winter access and do not create driving directions',()=>{
+test('52 named winter trails retain unverified winter access and do not create driving directions',()=>{
  const a=Routes.auditCatalog();assert.equal(a.ok,true,JSON.stringify(a.errors));
  const expanded=routes.filter(r=>r.placeGroup==='spring'||r.placeGroup==='sleepbear');
  assert.equal(expanded.length,12);

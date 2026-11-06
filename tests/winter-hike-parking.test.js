@@ -23,11 +23,11 @@ function apiResponse(){
  return {setHeader(k,v){headers[k]=v},status(n){code=n;return this},
  json(body){return {code,headers,body}}};
 }
-test('eleven official-source access checkpoints cover 23 specific named routes',()=>{
+test('twelve official-source access checkpoints cover 24 specific named routes',()=>{
  const a=Parking.audit();
  assert.deepEqual(a.failures,[]);assert.equal(a.ok,true);
- assert.equal(a.checkpoints,11);assert.equal(a.assignedRoutes,23);
- assert.equal(Parking.list({tripDay:DAY,now:NOW}).length,11);
+ assert.equal(a.checkpoints,12);assert.equal(a.assignedRoutes,24);
+ assert.equal(Parking.list({tripDay:DAY,now:NOW}).length,12);
  assert.ok(Parking.registry.checkpoints.every(s=>s.winterParkingVerified===false&&
    s.drivingDirectionsEnabled===false&&s.parkingEntranceCoordinates===null));
 });

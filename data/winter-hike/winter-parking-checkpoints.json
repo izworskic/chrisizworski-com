@@ -2,7 +2,7 @@
   "schema": "winter-parking-checkpoints-v1",
   "reviewedAt": "2026-11-06",
   "season": "2026-27",
-  "description": "Eleven route-linked official-manager access checkpoints. Static manager sources may establish normal winter parking policy, but never the date-specific road, lot or route clearance.",
+  "description": "Twelve route-linked official-manager access checkpoints. Static NPS winter parking guidance must never be treated as dated road, lot or route clearance.",
   "operationalEvidencePolicy": "No live winter plowing, road access, or trail-open assertion can be inferred from a static webpage, historical PDF, DNR point, NPS trailhead GPS, or fetch timestamp. Positive results require dated manager operational observations with route-specific details.",
   "checkpoints": [
     {
@@ -289,6 +289,34 @@
       "question": "Did Sand Point Road reopen after the 2026 construction closure, and are the road, beach lot and marsh trail open for today's conditions?",
       "routeIds": [
         "piro-sand-point-marsh"
+      ],
+      "sourceReviewedAt": "2026-11-06",
+      "observationalMeaning": "STATIC_MANAGER_DESCRIPTION_NOT_2026_27_OPERATIONAL_REPORT",
+      "trailStatus": "unknown",
+      "roadStatus": "unknown",
+      "winterParkingStatus": "unknown",
+      "winterParkingVerified": false,
+      "parkingEntranceCoordinates": null,
+      "drivingDirectionsEnabled": false,
+      "operationalObservations": [],
+      "managerPhone": "906-387-3700"
+    },
+    {
+      "id": "piro-munising-snowshoe",
+      "title": "Pictured Rocks — Munising dedicated snowshoe trail",
+      "group": "piro",
+      "source": "https://www.nps.gov/places/snowshoe-trail-piro.htm",
+      "secondarySource": "https://www.nps.gov/piro/planyourvisit/conditions.htm",
+      "sourceMeaning": "NPS documents the 2.65-mile dedicated Munising snowshoe trail, the ski parking area off East City Limits Road, a short approach past a fence, and winter-use rules. This published description is NOT a current-date lot or road report.",
+      "publishedWinterMaintenance": "NPS states Munising ski trail parking areas are normally plowed in winter. General NPS road guidance says only Sand Point Road is plowed as a park road; the maintenance/jurisdiction distinction must be checked.",
+      "knownAccessIssue": "Specific NPS snowshoe and ski pages describe normally plowed ski lots, while the park's general winter-road closure page lists only Sand Point Road as the plowed park road. No dated confirmation for the East City Limits Road approach and lot. The nearest map pin is only a general Munising area reference.",
+      "parkingHint": "NPS-designated ski parking area on the left near the end of East City Limits Road off H-58 (no verified entrance GPS; not the main H-58 ski lot)",
+      "parkingType": "nps-published-parking-approach-not-current-lot-clearance",
+      "roadHint": "Alger County H-58 east of Munising, turn onto East City Limits Road; check current winter road jurisdiction and vehicle access",
+      "restriction": "Blue-blazed dedicated snowshoe route; leashed pets only on snowshoe trail; adjacent groomed ski tracks prohibit snowshoes, walking and pets.",
+      "question": "For the date selected, is East City Limits Road accessible, which signed ski lot is plowed, and is the dedicated blue-blazed snowshoe loop open?",
+      "routeIds": [
+        "piro-munising-snowshoe"
       ],
       "sourceReviewedAt": "2026-11-06",
       "observationalMeaning": "STATIC_MANAGER_DESCRIPTION_NOT_2026_27_OPERATIONAL_REPORT",
