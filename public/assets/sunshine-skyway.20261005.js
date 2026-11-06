@@ -228,7 +228,7 @@
   // FL511 exposes a public JPEG at /map/Cctv/{id}; the tooltip URL is HTML only.
   // Reload actual JPEGs every 60s, record success only on image decode, never imply continuous video.
   function loadCameraImage(image, source) {
-    const stamp = Math.floor(Date.now() / 60000);
+    const stamp = Date.now(); // Explicit refresh requests must bypass the previous image, even within one minute.
     const url = new URL(source);
     url.searchParams.set('frame', String(stamp));
     image.src = url.toString();
