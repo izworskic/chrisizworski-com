@@ -13,7 +13,7 @@ const catalog=JSON.parse(read('data/up-waterfalls.json')).waterfalls;
 const rows=new Map(catalog.map(c=>[c.id,c]));
 const cards=[...hub.matchAll(/<article class="waterfall-card"([^>]+)>/g)]
   .map(m=>Object.fromEntries([...m[1].matchAll(/data-([\w-]+)="([^"]*)"/g)].map(x=>[x[1],x[2]])));
-const explicitOnly=new Set(['scott-falls','houghton-douglass-falls']);
+const explicitOnly=new Set(['scott-falls','houghton-douglass-falls','boston-creek-cascades']);
 const eligible=cards.filter(c=>c['arrival-verified']==='verified'&&['verify','seasonal','restricted'].includes(c.status)&&!explicitOnly.has(c.id));
 const radians=Math.PI/180;
 const geo=(a,b)=>{const x=a.lat*radians,y=b.lat*radians,dx=(b.lat-a.lat)*radians,dy=(b.lng-a.lng)*radians,z=Math.sin(dx/2)**2+Math.cos(x)*Math.cos(y)*Math.sin(dy/2)**2;return 2*3958.7613*Math.asin(Math.min(1,Math.sqrt(z)));};
@@ -34,6 +34,8 @@ test('B59 Python-generated index covers exactly source-verified visitor approach
  // Tahquamenon uses its own park planner, but this hub card does not have
  // the same "verified" arrival contract. Never infer a shared arrival.
  assert.ok(index.excludedIds.includes('tahquamenon'));
+ assert.ok(index.excludedIds.includes('boston-creek-cascades'),'Nature-area centre cannot enter natural waterfall nearby model');
+ assert.ok(!index.locations.some(c=>c.id==='boston-creek-cascades'));
  for(const c of index.locations){
   const row=rows.get(c.id);
   assert.ok(row,'missing curated record '+c.id);
