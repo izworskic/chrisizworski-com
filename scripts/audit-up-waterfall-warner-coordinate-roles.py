@@ -62,7 +62,7 @@ def build() -> dict:
         "method": "haversine-straight-line-geodesic-not-road-or-trail",
         "waterfallStateGisId": 172,
         "tourismToWaterfallMetres": tourism_gap,
-        "usgsCrossingToWaterfallMetres": usgs_gap,
+        "usgsCrossingToWaterfallMetres": int(usgs_gap) if usgs_gap.is_integer() else usgs_gap,
         "usgsStation": source["usgs"]["siteId"],
         "mdotProjectGeometryResolved": False,
         "legalVisitorArrivalResolved": False,
