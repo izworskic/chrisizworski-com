@@ -19,11 +19,11 @@ const radians=Math.PI/180;
 const geo=(a,b)=>{const x=a.lat*radians,y=b.lat*radians,dx=(b.lat-a.lat)*radians,dy=(b.lng-a.lng)*radians,z=Math.sin(dx/2)**2+Math.cos(x)*Math.cos(y)*Math.sin(dy/2)**2;return 2*3958.7613*Math.asin(Math.min(1,Math.sqrt(z)));};
 
 test('B59 Python-generated index covers exactly source-verified visitor approaches, never research or closed pins',()=>{
- assert.equal(catalog.length,75);
- assert.equal(cards.length,75);
+ assert.equal(catalog.length,76);
+ assert.equal(cards.length,76);
  assert.equal(index.schemaVersion,1);
- assert.equal(index.counts.curated,75);
- assert.equal(index.counts.eligible,67);
+ assert.equal(index.counts.curated,76);
+ assert.equal(index.counts.eligible,68);
  assert.equal(index.counts.excluded,8);
  assert.deepEqual(index.locations.map(c=>c.id),eligible.map(c=>c.id).sort());
  assert.deepEqual(index.excludedIds,cards.filter(c=>!eligible.some(x=>x.id===c.id)).map(c=>c.id).sort());
@@ -77,7 +77,7 @@ test('B59 visible UX remains source-linked and accessible, with existing trip pl
  assert.ok(hub.indexOf('id="visit-lens"')<hub.indexOf('id="nearby-lab"'));
  assert.ok(hub.indexOf('id="nearby-lab"')<hub.indexOf('class="explorer"'));
  assert.match(hub,/assets\/up-waterfalls-nearby\.js/);
- assert.match(hub,/dateModified":"2026-11-03"/);
+ assert.match(hub,/dateModified":"2026-11-05"/);
  assert.match(hub,/id="show-geo-candidates"/);
  assert.match(hub,/id="selected-list"/);
  assert.match(hub,/https:\/\/chrisizworski.com\/upper-peninsula-waterfalls\//);

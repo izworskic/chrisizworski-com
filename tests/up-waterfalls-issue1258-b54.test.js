@@ -24,7 +24,7 @@ test('batch54: source identity and hydropower telemetry never masquerade as an o
   assert.equal(schema.author['@id'],'https://chrisizworski.com/#person');assert.equal(schema.publisher['@id'],'https://chrisizworski.com/#person');
   assert.doesNotMatch(page,/"@type":"TouristAttraction"/);assert.ok(!page.includes('https://www.google.com/maps/dir/'));
  }
- assert.equal(V.records.length,97);assert.equal(R.counts.curatedTotal,75);assert.equal(R.counts.exactIdMatched,68);assert.equal(R.counts.pending,93);assert.equal(L.unresolvedCandidates,93);assert.equal(Q.candidates.length,93);
+ assert.equal(V.records.length,97);assert.equal(R.counts.curatedTotal,76);assert.equal(R.counts.exactIdMatched,69);assert.equal(R.counts.pending,92);assert.equal(L.unresolvedCandidates,92);assert.equal(Q.candidates.length,92);
  assert.match(R.candidates.find(x=>x.gisObjectId===8).sourceNotes,/496 metres/);assert.match(R.candidates.find(x=>x.gisObjectId===8).sourceNotes,/884 metres/);
  assert.match(R.candidates.find(x=>x.gisObjectId===4).sourceNotes,/FERC Project P-2536/);
  assert.equal(R.candidates.find(x=>x.gisObjectId===4).projectRecreationEvidence.hikingTrailListed,false);
