@@ -87,7 +87,7 @@ function renderEngine(){
   if(mode==='shared-harness-jev'){
     setText('#engineStatus',`Recommendation engine: JEV ranked the fixed NOAA-derived candidate windows for visitor practicality. The selected window is ${d.decision.nextWindow?.id?'the JEV choice':'the deterministic fallback'}; JEV did not create or alter any tide/current time.`);
   }else{
-    setText('#engineStatus',`Recommendation engine: deterministic NOAA ranking. JEV did not supply an accepted candidate recommendation${rec?.reason?` (${rec.reason})`:''}.`);
+    setText('#engineStatus','Recommendation engine: NOAA-based deterministic ranking. Optional AI ranking was not used. Viewing windows and NOAA/NWS source values are unchanged.');
   }
 }
 function rowsForRange(){
