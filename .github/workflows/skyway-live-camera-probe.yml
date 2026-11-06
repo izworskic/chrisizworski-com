@@ -1,0 +1,37 @@
+name: Skyway live camera provider diagnostic
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/verify-skyway-camera-live-browser.cjs'
+      - '.github/workflows/skyway-live-camera-probe.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  live-camera-probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install isolated Playwright
+        run: |
+          mkdir -p /tmp/skyway-live-probe
+          npm install --prefix /tmp/skyway-live-probe --no-save --ignore-scripts playwright@1.58.2
+          echo "NODE_PATH=/tmp/skyway-live-probe/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium-browser)" >> "$GITHUB_ENV"
+      - name: Diagnose public camera image requests and response policy
+        run: node scripts/verify-skyway-camera-live-browser.cjs
+      - name: Save provider and browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: skyway-live-camera-browser-diagnostic
+          path: artifacts/skyway-camera-live
+          retention-days: 3
+          if-no-files-found: warn
