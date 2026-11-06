@@ -128,7 +128,7 @@ test('visitor panel uses selected UUID and rejects drift in official-vs-calendar
  const wf=read('.github/workflows/rocket-official-notices.yml');
  assert.match(index,/id="rl-mission-official-match"/);
  assert.match(index,/20261105-reconciled-notices-v1/);
- assert.match(js,/match\.launchId===launch\.id/);
+ assert.match(js,/m=>m\.launchId===launch\.id/);
  assert.match(js,/dateGap<=1/);
  assert.match(js,/No mission-specific official article matched/);
  assert.match(js,/not confirm a liftoff time, ticket inventory/);
