@@ -131,7 +131,7 @@ class MissionReconciliationTests(unittest.TestCase):
             raise OSError("blocked")
         out=collect_evidence(manifest(),NOW,fail)
         self.assertEqual(out["matches"],[])
-        self.assertEqual(len(out["sourceStatus"]),2)
+        self.assertEqual(len(out["sourceStatus"]),3)
         self.assertTrue(all(s["status"]=="unavailable" for s in out["sourceStatus"]))
     def test_no_article_published_date_as_event_date(self):
         event=record("wallops-range-blog",WAL_URL,"NASA HASTE 12",
