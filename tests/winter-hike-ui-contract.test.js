@@ -59,7 +59,7 @@ test('visualization module loads before main UI and uses keyboard-accessible nat
  const a=html.indexOf('/winter-hike-snowshoe-lab/visuals.js?v=2');
  const satellite=html.indexOf('/winter-hike-snowshoe-lab/satellite.js?v=1');
  const satelliteUi=html.indexOf('/winter-hike-snowshoe-lab/satellite-ui.js?v=1');
- const b=html.indexOf('/winter-hike-snowshoe-lab/app.js?v=3');
+ const b=html.indexOf('/winter-hike-snowshoe-lab/app.js?v=4');
  assert.ok(a>0&&satellite>a&&satelliteUi>satellite&&b>satelliteUi);
  assert.match(visuals,/data-wx-day/);assert.match(visuals,/aria-pressed/);
  assert.match(visuals,/data-wx-hour/);
