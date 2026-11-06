@@ -987,6 +987,22 @@
       renderKscMission(state.data);
   }
 
+  function renderOfficialEventCoverage(root,reconciliation,region){
+    const records=(reconciliation?.sourceStatus||[]).filter(x=>x.region===region);
+    if(!records.length)return;
+    const sourceNames={
+      'vandenberg-launch-news':'Vandenberg newsroom',
+      'spaceforce-news-rss':'Federal Space Force RSS',
+      'wallops-range-blog':'NASA Wallops blog'
+    };
+    root.appendChild(el('p','rl-match-coverage',
+      'Official launch-announcement channels checked: '+records.map(x=>
+        (sourceNames[x.id]||x.id)+' '+(
+          x.status==='retrieved'?'retrieved':
+          x.status==='partial'?'partially checked':'unavailable'
+        )).join(' · ')+'. A retrieved source without an exact match is not a cancellation.'));
+  }
+
   function renderOfficialMatch(data) {
     const root=$('rl-mission-official-match');
     if(!root)return;
@@ -1029,6 +1045,7 @@
         change.type==='official-link-first-verified'?
         'First verified official link recorded '+stamp(change.detectedAt)+'.':
         'Official evidence changed '+stamp(change.detectedAt)+'. Recheck the latest operator announcement.'));
+      renderOfficialEventCoverage(root,rec,data.region?.id);
       return;
     }
     root.dataset.status='unverified';
@@ -1043,6 +1060,7 @@
       'This source scan found no unambiguous official article naming this exact mission inside a compatible launch window. A missing match does not mean the launch is canceled, unannounced, or inaccessible.'));
     const official=anchor(data.region?.authority,'Check current range authority');
     if(official)root.appendChild(official);
+    renderOfficialEventCoverage(root,rec,data.region?.id);
   }
 
   function renderOfficialEvidence(data) {
