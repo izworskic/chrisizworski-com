@@ -46,7 +46,7 @@ test('B73 research page explains the source-role distinction and retains noindex
  assert.match(html,/475 meters straight-line/);
  assert.match(html,/1970–1976/);
  assert.match(html,/map<\/em>/);
- assert.match(html,/do not be silently joined/i);
+ assert.match(html,/must not be silently joined/i);
  assert.match(html,/MDOT Superior Region/);
  assert.match(html,/Marquette County Equalization/);
  assert.match(html,/NOT CLEARED FOR AUTOMATED VISITOR NAVIGATION/);
