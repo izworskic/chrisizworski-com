@@ -174,3 +174,23 @@ test('all four regional news searches remain discovery-only; publishing and revi
   assert.match(source.url,/^https:\/\/news\.google\.com\/rss\/search\?/);
  }
 });
+
+test('private source observations contain only a bounded context window around stay terms',async()=>{
+ const src=f.SOURCES[0];
+ const description=('General seasonal harbor conditions and weather reports. ').repeat(55)+
+   'Mesabi Miner docked for winter layup at Superior.';
+ const sourceArticle={title:'Mesabi Miner harbor arrival report',text:description,
+   date:'2027-01-18T12:00:00Z',url:'https://www.duluthharborcam.com/2027/01/mesabi-report.html'};
+ const payload=JSON.stringify({feed:{entry:[{title:{$t:sourceArticle.title},
+   content:{$t:sourceArticle.text},published:{$t:sourceArticle.date},
+   link:[{rel:'alternate',href:sourceArticle.url}]}]}});
+ const fetcher=async url=>url===src.url?{ok:true,text:async()=>payload}:{ok:false,status:503};
+ const archive={seasons:[{records:[{identity:{key:'mesabi-miner'},name:'Mesabi Miner',aliases:[]}]}]};
+ const data=await f.refresh({ledger:s.freshSeason('2026-27'),archive,fetcher,now:'2027-01-19T00:00:00Z'});
+ const snippet=data.observations.find(x=>x.url===sourceArticle.url)?.sourceExcerpt;
+ assert.ok(snippet,'transient scan carries source context');
+ assert.ok(snippet.length<=720,'source text is capped');
+ assert.match(snippet,/Mesabi Miner docked for winter layup/);
+ assert.ok(!snippet.startsWith('General seasonal harbor'),'window centers the useful evidence');
+ assert.ok(!JSON.stringify(data.ledger).includes('sourceExcerpt'),'never publish a feed excerpt');
+});
