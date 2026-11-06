@@ -182,3 +182,62 @@ t('Starbase future transport windows are source-bound, dated and never launch pe
  a.match(js,/not an active closure, launch approval or viewing permission/);
  new vm.Script(js);
 });
+
+
+t('dated Starbase transport windows require official city origin and bounded UTC dates',()=>{
+ const x=fixture(),road=x.regions.texas[0];
+ const window={kind:'scheduled-road-activity',title:'Nov 6, 2026 11:59 PM to Nov 7, 2026 4 AM Central',
+  detail:'City-listed transport movement. This is not a road closure or future launch-day access permission.',
+  sourceUrl:road.sourceUrl,publishedDate:null,relevance:'dated-road-advisory',
+  scope:'Starbase road movement window',
+  windowStart:new Date(NOW+3600000).toISOString().replace('.000Z','Z'),
+  windowEnd:new Date(NOW+4*3600000).toISOString().replace('.000Z','Z')};
+ road.signals=[window];
+ let valid=validateSnapshot(x,NOW);
+ a.equal(valid.regions.texas[0].signals[0].windowStart,window.windowStart.replace('Z','.000Z'));
+ a.equal(valid.regions.texas[0].signals[0].relevance,'dated-road-advisory');
+ const cases=[
+  {windowStart:undefined},{windowEnd:undefined},
+  {windowEnd:new Date(NOW+40*3600000).toISOString().replace('.000Z','Z')},
+  {windowStart:new Date(NOW-4*3600000).toISOString().replace('.000Z','Z')},
+  {windowStart:new Date(NOW+20*86400000).toISOString().replace('.000Z','Z')},
+  {sourceUrl:'https://evil.example/road'},
+  {relevance:'current-published-status'}
+ ];
+ for(const patch of cases){
+  const altered=fixture();altered.regions.texas[0].signals=[{...window,...patch}];
+  a.throws(()=>validateSnapshot(altered,NOW),/signal-untrusted/);
+ }
+ const wrongCoast=fixture();wrongCoast.regions.california[0].signals=[window];
+ a.throws(()=>validateSnapshot(wrongCoast,NOW),/signal-untrusted/);
+ const mixed=fixture();mixed.regions.texas[0].signals=[
+  {...fixture().regions.texas[0].signals[0],windowStart:window.windowStart}];
+ a.throws(()=>validateSnapshot(mixed,NOW),/signal-untrusted/);
+});
+t('stale snapshots suppress dated Starbase transport windows alongside beach-open conditions',async()=>{
+ const raw=fixture(),src=raw.regions.texas[0];
+ src.signals.push({kind:'scheduled-road-activity',
+  title:'Nov 6, 2026 11:59 PM to Nov 7, 2026 4 AM Central',
+  detail:'City-listed vehicle movement is not a launch-specific road closure.',
+  sourceUrl:src.sourceUrl,publishedDate:null,relevance:'dated-road-advisory',
+  scope:'Starbase road movement window',
+  windowStart:new Date(NOW+20*3600000).toISOString().replace('.000Z','Z'),
+  windowEnd:new Date(NOW+24*3600000).toISOString().replace('.000Z','Z')});
+ const stored=validateSnapshot(raw,NOW);
+ const current=await readSnapshot({ready:()=>true,state:{get:async()=>stored},now:NOW+60000});
+ a.equal(current.regions.texas[0].signals.length,2);
+ const overdue=await readSnapshot({ready:()=>true,state:{get:async()=>stored},now:NOW+91*60000});
+ a.equal(overdue.regions.texas[0].signals.length,0);
+});
+t('visitor display never treats city transport timing as a closure or launch authorization',()=>{
+ a.match(py,/def starbase_road_windows\(/);
+ a.match(py,/ROAD_MOVEMENT/);
+ a.match(py,/PREVIOUS ORDERS/);
+ a.match(js,/notice\.kind==='scheduled-road-activity'/);
+ a.match(js,/data\.scheduleFreshness==='recent'/);
+ a.match(js,/target>=from&&target<=through/);
+ a.match(js,/not an active closure, launch approval or viewing permission/);
+ a.match(index,/starbase-road-v1/);
+ a.match(workflow,/starbase-road-v1/);
+ new vm.Script(js);
+});
