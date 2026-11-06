@@ -71,7 +71,7 @@ test('B69 Warner page is a source-rich noindex research decision, never a direct
  assert.match(page,/michigan\.gov\/mdot\/news-outreach\/pressreleases\/2026\/08\/12/);
  assert.match(page,/travelmarquette\.com\/blog\/post\/waterfalls-you-need-to-see-in-fall/);
  assert.match(page,/wright-street-falls/);
- assert.match(page,/"dateModified":"2026-11-05"/);
+ assert.match(page,/"dateModified":"20\d{2}-\d{2}-\d{2}"/); // later source batches may refresh this page
  assert.match(page,/https:\/\/chrisizworski\.com\/#person/);
  assert.doesNotMatch(page,/"@type":"TouristAttraction"/);
  assert.doesNotMatch(page,/google\.com\/maps\/dir\//i);
