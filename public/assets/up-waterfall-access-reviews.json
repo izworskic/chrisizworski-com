@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-03",
+  "reviewed": "2026-11-05",
   "purpose": "Opt-in geographic research annotations only; never grants legal access, parking directions or indexable guides",
   "records": [
     {
@@ -965,14 +965,14 @@
       "gisObjectId": 29,
       "name": "Jumbo Falls",
       "county": "HOUGHTON",
-      "status": "public-trail-position-discrepancy",
-      "publicAccess": "USFS public trail documented, exact falls route geometry and parking current state not established",
-      "publicationEligible": false,
-      "title": "Jumbo Falls: public trail, but maps disagree by nearly a kilometre",
-      "summary": "The USDA Forest Service Ottawa National Forest 2015 Recreation Opportunity Guide names Jumbo Falls and directs visitors from M-28 west of Kenton through Golden Glow Road, Forest Road 4589 and 4589-B past Jumbo Pit to an established falls trail. Its official coordinate is 46.457753,-88.912228. A regional trail list describes a short, roughly 0.1-mile level trail from the named parking to Jumbo Falls, but a specialist natural falls point is 46.44963,-88.91278, 904 metres from the agency brochure point; Michigan GIS #29 at 46.453006,-88.912138 lies between them, 528 metres from agency and 379 metres from specialist. We cannot identify which coordinate is trailhead, fall, other cascade or an outdated record from currently published evidence. Historic park/trail road descriptions do NOT establish road passability, a correct map pin, new signage or a precise current legal parking turnout.",
-      "guidance": "The U.S. Forest Service has an established named Jumbo Falls Trail via Golden Glow Road and FR4589-B. Do not use a raw mapped falls pin as parking or an off-road route until its physical location and current trailhead are reconciled.",
-      "reviewLimitations": "Obtain current U.S. Forest Service GIS trailhead and Jumbo Falls geomarker/route polyline or other reliable surveyed source distinguishing the 2015 agency coordinates from the specialist falls point, establish certified designated visitor parking and the ~0.1-mile trail's correct physical destination, plus present FR4589-B road/trail restrictions. Do not route to any of the three coordinates before reconciling.",
-      "nextEvidence": "Obtain current U.S. Forest Service GIS trailhead and Jumbo Falls geomarker/route polyline or other reliable surveyed source distinguishing the 2015 agency coordinates from the specialist falls point, establish certified designated visitor parking and the ~0.1-mile trail's correct physical destination, plus present FR4589-B road/trail restrictions. Do not route to any of the three coordinates before reconciling.",
+      "status": "verified-seasonal-forest-trail",
+      "publicAccess": "USFS Trail 60056 approved pedestrian path; FR4589-B designated motor access May16–Mar14; no live road/gate or bridge report",
+      "publicationEligible": true,
+      "title": "Jumbo Falls: the mapped Forest Service trail is finally verified",
+      "summary": "USFS EDW Nov 2026: national public foot trail 60056, 0.079 miles and NOT ACCESSIBLE, terminates 23m from specialist falls 46.44963,-88.91278. Prior USFS recreation point is 904m north and MI GIS #29 point 379m north; neither is car parking or true visitor map feature. Federal MVUM shows FR4589-B passenger vehicle May16–Mar14, but no live gate/lot/bridge status; agency historical guide and regional source describe named visitor arrival.",
+      "guidance": "Use only the published named approach and current posted rules. Never drive to GIS waterfall, old recreation centroid, trail coordinates or informal gravel-pit spaces.",
+      "reviewLimitations": "Live gate, off-road designated parking spaces, bridge/tread conditions and vehicle passability not monitored; no confirmed ADA access.",
+      "nextEvidence": "Owner site source confirms an open recreation listing and official trail. Future monitoring should validate physical access, never automatically claim open-now.",
       "researchPage": "/upper-peninsula-waterfalls/research/jumbo-falls/",
       "sourceLinks": [
         {
@@ -998,52 +998,30 @@
         {
           "label": "Source 6",
           "url": "https://www.fs.usda.gov/r09/ottawa"
+        },
+        {
+          "label": "Official USFS Trail 60056",
+          "url": "https://apps.fs.usda.gov/ArcX/rest/services/EDW/EDW_TrailNFSPublish_01/MapServer/0/query?where=trail_name%20%3D%20'JUMBO%20FALLS'&outFields=*&returnGeometry=true&outSR=4326&f=pjson"
+        },
+        {
+          "label": "USFS MVUM 4589-B",
+          "url": "https://apps.fs.usda.gov/ArcX/rest/services/EDW/EDW_MVUM_01/MapServer/1/query?where=id%20%3D%20'4589-B'%20AND%20forestname%20LIKE%20'%25Ottawa%25'&outFields=id%2Cname%2Csymbol%2Cmvum_symbol_name%2Cpassengervehicle%2Cpassengervehicle_datesopen%2Chighclearancevehicle%2Chighclearancevehicle_datesopen%2Croutestatus%2Cjurisdiction%2Cforestname&returnGeometry=true&outSR=4326&f=pjson"
+        },
+        {
+          "label": "USFS Recreation Site 12356",
+          "url": "https://apps.fs.usda.gov/ArcX/rest/services/EDW/EDW_RecreationOpportunities_01/MapServer/0/query?where=recareaid%3D12356&outFields=recareaname%2Crecareaid%2Crecareaurl%2Clatitude%2Clongitude%2Copenstatus%2Cforestname%2Copen_season_start%2Copen_season_end%2Crestrictions%2Crecareadescription&returnGeometry=true&f=pjson"
         }
       ],
       "routeAudit": {
-        "reviewed": "2026-10-31",
-        "outcome": "not-cleared",
+        "outcome": "verified-seasonal-forest-trail",
         "destinationCoordinatesForDriving": false,
-        "routePolylineAuthorized": false,
-        "segments": [
-          {
-            "label": "USFS named waterfall",
-            "status": "verified-geography",
-            "finding": "USFS 2015 waterfall recreation guide explicitly names a public Jumbo Falls trail in Ottawa National Forest.",
-            "source": "https://upnorthentertainment.com/wp-content/uploads/2021/01/Ottawa-National-Forest-Waterfalls.pdf"
-          },
-          {
-            "label": "Forest road approach",
-            "status": "documented-not-live",
-            "finding": "Agency directions use Golden Glow Rd, FR4589 and FR4589-B through Jumbo Pit, but may be 11 years old and not current legal/seasonal road status.",
-            "source": "https://upnorthentertainment.com/wp-content/uploads/2021/01/Ottawa-National-Forest-Waterfalls.pdf"
-          },
-          {
-            "label": "Public trail",
-            "status": "documented-not-live",
-            "finding": "Regional trail guide describes a 0.1-mile fairly level two-bridge footpath through hardwoods near Jumbo River; exact endpoint requires reconciliation.",
-            "source": "https://www.coppercountry.com/experiences/hiking/ottawa-national-forest-trails/"
-          },
-          {
-            "label": "Mapped waterfall identity",
-            "status": "conflicting",
-            "finding": "Agency coordinate to specialist falls coordinate 904m; GIS source lies between, creating over-300m position discrepancies.",
-            "source": "https://www.waterfallsofthekeweenaw.com/jumbo-river/jumbo-falls/"
-          },
-          {
-            "label": "Visitor parking and map destination",
-            "status": "not-cleared",
-            "finding": "Road/turnout descriptions do not tie a currently authorized public parking site to a verified falls point; no parking GPS may be synthesized.",
-            "source": "https://upnorthentertainment.com/wp-content/uploads/2021/01/Ottawa-National-Forest-Waterfalls.pdf"
-          },
-          {
-            "label": "Current road, river and trail",
-            "status": "not-cleared",
-            "finding": "No dated 2026 route-specific road restrictions, trail bridges, gate opening or exact waterfall pin survey confirmed.",
-            "source": "https://www.fs.usda.gov/r09/ottawa"
-          }
-        ]
-      }
+        "routePolylineAuthorized": true,
+        "footTrailOnly": true,
+        "parkingCoordinatesVerified": false,
+        "liveGateVerified": false
+      },
+      "publicGuide": "/upper-peninsula-waterfalls/jumbo-falls/",
+      "sourceReviewed": "2026-11-05"
     },
     {
       "gisObjectId": 37,
