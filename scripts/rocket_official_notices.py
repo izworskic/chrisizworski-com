@@ -38,6 +38,7 @@ SOURCES = (
     ("ksc-viewing", "florida", "https://www.kennedyspacecenter.com/launches-and-events/see-a-launch/launch-viewing", "policy"),
     ("starbase-city", "texas", "https://www.starbase.texas.gov/beach-road-access", "access"),
     ("wallops-schedule", "virginia", "https://www.nasa.gov/wallops-launch-schedule/", "schedule"),
+    ("wallops-range-blog", "virginia", "https://www.nasa.gov/blogs/wallops-range/", "news"),
     ("wallops-visitor", "virginia", "https://www.nasa.gov/wallops/visitor-center/view-a-launch-from-nasa-wallops-visitor-center/", "policy"),
     ("alaska-aerospace", "alaska", "https://akaerospace.com/", "access"),
     ("alaska-news", "alaska", "https://akaerospace.com/news", "news"),
@@ -141,6 +142,41 @@ def recent_title_articles(doc, url, now):
             break
     return results
 
+
+
+def wallops_recent_posts(doc, url, now):
+    """Dated NASA article pointers, NEVER launch targets or public permissions.
+
+    Wallops Range issues suborbital and defense support notices that may not
+    appear in LL2. A blog *publication* date does not establish a future
+    launch date; this feed is intentionally not merged into the mission list.
+    """
+    results = []
+    seen = set()
+    for raw, title in doc.links:
+        target = official_link(url, raw)
+        if not target or not re.search(r"\b(?:rocket|launch|sounding)\b", title, re.I):
+            continue
+        match = re.fullmatch(
+            r"/blogs/wallops/(20\d{2})/(\d{2})/(\d{2})/[a-z0-9-]+/?",
+            urllib.parse.urlsplit(target).path)
+        if not match or target in seen:
+            continue
+        try:
+            published = dt.date(*(int(part) for part in match.groups()))
+        except ValueError:
+            continue
+        days = (now.date() - published).days
+        if not (0 <= days <= 75):
+            continue
+        seen.add(target)
+        results.append(item("official-article", title, target,
+            date=published.isoformat(),
+            detail="Dated NASA Wallops Range article. Publication date is not a launch date. Check the article for actual mission timing, public viewing rules and later changes.",
+            relevance="unmatched-official-article", scope="historical-or-current-article"))
+        if len(results) >= 3:
+            break
+    return results
 
 
 # Travel-only intelligence: scheduled vehicle moves are not launch closures.
@@ -277,6 +313,10 @@ def classify(entry, body, now):
         else:
             status = "limited"
             notes.append("Operator road-closure statement could not be identified.")
+    elif sid == "wallops-range-blog":
+        observations.extend(wallops_recent_posts(doc, url, now))
+        if not observations:
+            notes.append("No recent attributable NASA Wallops Range launch articles found. This is not evidence that no range operations are planned.")
     elif sid == "wallops-schedule":
         if "NO PUBLIC LAUNCHES ON THE SCHEDULE AT THIS TIME" in upper:
             observations.append(item("schedule-status", "NASA lists no current public Wallops launches", url,
@@ -507,6 +547,29 @@ class EvidenceTests(unittest.TestCase):
         self.assertFalse(any(s["kind"] in ("access-status", "road-status",
                                           "notice-check-required")
                              for s in record["signals"]))
+
+    def test_wallops_range_blog_is_a_dated_article_feed_not_launch_schedule(self):
+        record = classify(self.source("wallops-range-blog"), """
+        <a href="/blogs/wallops/2026/09/30/nasa-wallops-to-support-october-sounding-rocket-launch/">
+          NASA Wallops to support October Sounding Rocket Launch</a>
+        <a href="/blogs/wallops/2026/09/30/nasa-wallops-to-support-october-sounding-rocket-launch/">
+          Read Full Post about Rocket Launch</a>
+        <a href="/blogs/wallops/2026/01/02/old-rocket/">
+          NASA Wallops past rocket launch</a>
+        <a href="https://malicious.example/2026/11/06/rocket/">
+          NASA rocket launch</a>
+        <a href="/blogs/wallops/2027/11/06/future-rocket/">
+          NASA future rocket launch</a>
+        """, self.now)
+        self.assertEqual(record["status"], "retrieved")
+        self.assertEqual(len(record["signals"]), 1)
+        signal = record["signals"][0]
+        self.assertEqual(signal["publishedDate"], "2026-09-30")
+        self.assertEqual(signal["kind"], "official-article")
+        self.assertEqual(signal["relevance"], "unmatched-official-article")
+        self.assertIn("not a launch date", signal["detail"])
+        self.assertTrue(signal["sourceUrl"].startswith("https://www.nasa.gov/blogs/wallops/"))
+        self.assertNotIn("windowStart", signal)
 
     def test_ambiguous_status_is_limited_not_open(self):
         s=classify(self.source("starbase-city"), "<h1>Beach rules</h1><p>The beach was open yesterday.</p>",self.now)
