@@ -61,6 +61,40 @@ try{
     await page.screenshot({path:screenshots+'/python-nearby-waterfalls-mobile.png',fullPage:true,animations:'disabled'});
   });
 
+  await run('B72: six-stop day sheet stays opt-in, includes source details and prints without extra page furniture',async()=>{
+    await page.locator('#clear-list').click();
+    assert.equal(await page.locator('#upfall-day-sheet').isVisible(),false);
+    await page.locator('[data-id="wagner-falls"] .save').click();
+    await page.locator('#open-day-sheet').click();
+    assert.equal(await page.locator('#upfall-day-sheet').isVisible(),true);
+    assert.match(await page.locator('.day-sheet-stop').first().innerText(),/Wagner Falls|Arrival:|Walk:/);
+    assert.equal(await page.locator('.day-sheet-stop').count(),1);
+    assert.equal(await page.locator('#open-day-sheet').getAttribute('aria-expanded'),'true');
+    assert.ok(await page.locator('.day-sheet-links a').count()>0,'source evidence should stay with the saved stop');
+    await page.evaluate(()=>{window.__waterfallTestPrintCalls=0;window.print=()=>{window.__waterfallTestPrintCalls++};});
+    await page.locator('.day-sheet-actions button').nth(2).click();
+    assert.equal(await page.evaluate(()=>window.__waterfallTestPrintCalls),1);
+    assert.equal(await page.locator('body').evaluate(e=>e.classList.contains('upfall-print-mode')),true);
+    await page.evaluate(()=>window.dispatchEvent(new Event('afterprint')));
+    assert.equal(await page.locator('body').evaluate(e=>e.classList.contains('upfall-print-mode')),false);
+    await page.locator('#clear-list').click();
+    assert.equal(await page.locator('.day-sheet-stop').count(),0);
+    assert.ok((await page.evaluate(()=>document.documentElement.scrollWidth))<=390+2,'day sheet causes mobile overflow');
+  });
+  await run('B72: shared links hydrate only safe stops, drop closed/unknown and retain trip date',async()=>{
+    const trip=await browser.newPage({viewport:{width:390,height:844}});
+    try{
+      await trip.route('https://pagead2.googlesyndication.com/**',r=>r.abort());
+      await trip.goto(base+'/upper-peninsula-waterfalls/?falls=wagner-falls,munising-falls,not-real&day=2026-11-29',{waitUntil:'domcontentloaded',timeout:30000});
+      await trip.locator('#upfall-day-sheet').waitFor();
+      assert.equal(await trip.locator('#visit-date').inputValue(),'2026-11-29');
+      assert.equal(await trip.locator('.day-sheet-stop').count(),1);
+      assert.match(await trip.locator('#upfall-day-sheet .day-sheet-stop').first().innerText(),/Wagner Falls/);
+      assert.match(await trip.locator('#upfall-day-sheet .day-sheet-status').innerText(),/2 shared stop/);
+      assert.equal(await trip.locator('a[href*="destination=0%2C0"]').count(),0);
+    }finally{await trip.close();}
+  });
+
   await run('visit lens: filter by 30-minute full on-site range and exclude agency closure',async()=>{
     await page.locator('#visit-region').selectOption('Pictured Rocks / Munising');
     await page.locator('#visit-budget').selectOption('30');
