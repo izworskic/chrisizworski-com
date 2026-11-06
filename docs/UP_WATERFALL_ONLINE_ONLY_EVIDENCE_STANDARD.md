@@ -1,0 +1,9 @@
+# Upper Peninsula waterfall explorer: online-only source and release policy
+
+Effective November 6, 2026. **Do not send emails, create email drafts, contact agencies, or seek visitor-supplied observations for the waterfall build.** Research published online materials only. If authoritative evidence cannot establish an essential access fact, retain the waterfall as noindex research and move to another candidate; do not spend repeated batches investigating the same offline-only blocker.
+
+A candidate can be presented to visitors only with independent feature identity, documented public land-manager trail/access, a published approach including lawful motor-road designations and material seasonal restrictions, and source-linked uncertainty about conditions. Never infer safe parking coordinates from natural-feature points, trail ends, historic map centroids, road geometry, or photographs. When an official trail/agency recreational route is established but precise parking GPS is unverified, an indexable field guide may describe the published approach **without** automated vehicle directions. Do not claim open-now, winter plowing, current bridge condition or guaranteed parking unless supported by a current official record.
+
+Jumbo Falls meets the published-trail threshold with federal hiker trail 60056, Ottawa National Forest recreation guidance and seasonal FR4589-B MVUM; it has no claimed precise parking destination. Warner Falls and the Montreal Falls routes remain research-only because complete safe legal stopping and bank/walking rights cannot be established from published evidence.
+
+Every release needs full exact-head testing, including deterministic geographic indexes, source confidence, smartphone map tests, sitemap/SEO/author safeguards and Vercel preview. Stop and repair any red gate before merging.

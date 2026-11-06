@@ -53,13 +53,13 @@ test('B73 research page explains the source-role distinction and retains noindex
  assert.doesNotMatch(html,/google\.com\/maps\/dir\/|@type":"TouristAttraction"/i);
  assert.doesNotMatch(read('public/sitemap-up-waterfalls.xml'),/\/research\/warner-falls\//);
 });
-test('B73 is research-only and does not modify the 75/68/93 visitor inventory',()=>{
+test('B73 keeps Warner unpromoted after independently sourced Jumbo addition',()=>{
  const rec=JSON.parse(read('data/up-waterfall-reconciliation.json'));
  const row=rec.candidates.find(x=>x.gisObjectId===172);
  assert.ok(row);
  assert.equal(row.curatedId,null);
  assert.equal(row.publicationEligible,false);
- assert.deepEqual([rec.counts.curatedTotal,rec.counts.exactIdMatched,rec.counts.pending],[75,68,93]);
+ assert.deepEqual([rec.counts.curatedTotal,rec.counts.exactIdMatched,rec.counts.pending],[76,69,92]);
  for(const k of ['noVerifiedDrivingDestination','noCurrentParkingPermissionOrSafeShoulderWidth',
   'noContinuousLawfulFootRoute','notOpenNowClaim','sameCreekDoesNotProveSameProject'])assert.equal(source.access[k],true,k);
  assert.equal(source.access.curated,false);

@@ -1,10 +1,30 @@
-import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';
-const rec=JSON.parse(fs.readFileSync('data/up-waterfall-reconciliation.json','utf8')),ledger=JSON.parse(fs.readFileSync('data/up-waterfall-inventory-ledger.json','utf8')),rev=JSON.parse(fs.readFileSync('public/assets/up-waterfall-access-reviews.json','utf8')),queue=JSON.parse(fs.readFileSync('data/up-waterfall-review-queue.json','utf8')),hub=fs.readFileSync('public/upper-peninsula-waterfalls/index.html','utf8'),sm=fs.readFileSync('public/sitemap-up-waterfalls.xml','utf8');
-test('Jumbo federal trail is real but conflicting waterfall points stay research only',()=>{
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+const read=p=>fs.readFileSync(p,'utf8');
+const rec=JSON.parse(read('data/up-waterfall-reconciliation.json'));
+const ledger=JSON.parse(read('data/up-waterfall-inventory-ledger.json'));
+const rev=JSON.parse(read('public/assets/up-waterfall-access-reviews.json'));
+const queue=JSON.parse(read('data/up-waterfall-review-queue.json'));
+const hub=read('public/upper-peninsula-waterfalls/index.html');
+const sitemap=read('public/sitemap-up-waterfalls.xml');
+const trail=JSON.parse(read('data/up-waterfall-jumbo-usfs-2026-evidence.json'));
+test('B37 originally quarantined Jumbo; B72 supersedes only that candidate based on named official NFS trail and motor-use proof',()=>{
  const g=rec.candidates.find(x=>x.gisObjectId===29),l=ledger.entries.find(x=>x.sourceId===29&&x.source==='mi-state-gis'),a=rev.records.find(x=>x.gisObjectId===29);
- assert.ok(g&&l&&a);assert.equal(g.curatedId,null);assert.equal(g.publicationEligible,false);assert.equal(l.reviewBatch,'37');assert.equal(l.publication,'research-only');
- assert.equal(a.routeAudit.outcome,'not-cleared');assert.equal(a.routeAudit.segments.length,6);assert.equal(a.routeAudit.destinationCoordinatesForDriving,false);
- assert.equal(a.routeAudit.routePolylineAuthorized,false);assert.match(g.sourceNotes,/metres/);assert.match(g.sourceNotes,/Forest Service/);
- const h=fs.readFileSync('public/upper-peninsula-waterfalls/research/jumbo-falls/index.html','utf8');
- assert.match(h,/noindex,follow/);assert.ok(!sm.includes('/upper-peninsula-waterfalls/jumbo-falls/'));assert.ok(!hub.includes('data-id="jumbo-falls"'));assert.equal(queue.candidates.length,rec.counts.pending);
+ assert.ok(g&&l&&a);
+ assert.equal(g.curatedId,'jumbo-falls');assert.equal(g.publicationEligible,true);
+ assert.equal(l.reviewBatch,'72');assert.equal(l.publication,'verified-access-guide');
+ assert.equal(a.routeAudit.outcome,'verified-seasonal-forest-trail');
+ assert.equal(a.routeAudit.destinationCoordinatesForDriving,false);
+ assert.equal(a.routeAudit.routePolylineAuthorized,true);
+ assert.equal(trail.sources.publishedTrail.number,'60056');
+ assert.equal(trail.geometry.distanceMeters.officialTrailEndpointToSpecialistFallsMeters,23);
+ assert.equal(trail.sources.motorVehicleUseMap.segments[0].attributes.passengervehicle_datesopen,'05/16-03/14');
+ assert.match(g.sourceNotes,/904m/);assert.match(g.sourceNotes,/379m/);
+ const old=read('public/upper-peninsula-waterfalls/research/jumbo-falls/index.html');
+ assert.match(old,/noindex,follow/);assert.match(old,/NEW B72 FINDING/);
+ assert.match(old,/upper-peninsula-waterfalls\/jumbo-falls\//);
+ assert.ok(sitemap.includes('/upper-peninsula-waterfalls/jumbo-falls/'));
+ assert.ok(hub.includes('data-id="jumbo-falls"'));
+ assert.equal(queue.candidates.length,rec.counts.pending);
 });

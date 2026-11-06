@@ -66,9 +66,9 @@ test('B70 reconciles six gates without promoting a possibly dangerous highway st
   assert.match(popup.routeAudit.segments.find(s=>s.label==='Parking').finding,/generally legal/);
   assert.equal(q.sourceCount,gis.sourceLinks.length);
   assert.equal(q.reviewStage,'awaiting-new-authoritative-evidence');
-  assert.equal(queue.counts.curatedDestinations,75);
-  assert.equal(queue.counts.matchedGisFeatures,68);
-  assert.equal(queue.counts.pendingGisFeatures,93);
+  assert.equal(queue.counts.curatedDestinations,76);
+  assert.equal(queue.counts.matchedGisFeatures,69);
+  assert.equal(queue.counts.pendingGisFeatures,92);
 });
 test('B70 public research page explains state law, avoids visitor car and trail geometry',()=>{
   const html=read('public/upper-peninsula-waterfalls/research/warner-falls/index.html');

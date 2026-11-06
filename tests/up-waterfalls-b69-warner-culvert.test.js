@@ -54,9 +54,9 @@ test('B69 Warner source/visitor JSON remain aligned and research-only',()=>{
  assert.match(gis.sourceNotes,/County Roads MT and MP/);
  assert.equal(queue.sourceCount,gis.sourceLinks.length);
  assert.equal(queue.reviewStage,'awaiting-new-authoritative-evidence');
- assert.equal(q.counts.curatedDestinations,75);
- assert.equal(q.counts.matchedGisFeatures,68);
- assert.equal(q.counts.pendingGisFeatures,93);
+ assert.equal(q.counts.curatedDestinations,76);
+ assert.equal(q.counts.matchedGisFeatures,69);
+ assert.equal(q.counts.pendingGisFeatures,92);
  assert.ok(gis.sourceLinks.includes(e.constructionReports[1].source));
 });
 
@@ -79,7 +79,7 @@ test('B69 Warner page is a source-rich noindex research decision, never a direct
  assert.ok(desc && desc.length<=158);
  const sitemap=read('public/sitemap-up-waterfalls.xml');
  assert.doesNotMatch(sitemap,/\/upper-peninsula-waterfalls\/research\/warner-falls\//);
- assert.equal(r.counts.curatedTotal,75);
- assert.equal(r.counts.exactIdMatched,68);
- assert.equal(r.counts.pending,93);
+ assert.equal(r.counts.curatedTotal,76);
+ assert.equal(r.counts.exactIdMatched,69);
+ assert.equal(r.counts.pending,92);
 });
