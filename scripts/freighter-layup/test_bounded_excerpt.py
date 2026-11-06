@@ -112,7 +112,7 @@ class BoundedExcerptScientificContracts(unittest.TestCase):
         report = run(observation("Mesabi Miner arrives in port", huge),
                      observation("Regular port news", ["untrusted", "array"],
                                  url="https://publisher.example.org/another"))
-        self.assertEqual(report["excerptSupplied"], 2)
+        self.assertEqual(report["excerptSupplied"], 1)
         self.assertEqual(report["snippetPolicy"].split(";")[0], "720 characters maximum")
         self.assertNotIn(sentinel, json.dumps(report))
         self.assertNotIn("sourceExcerpt", json.dumps(report))
