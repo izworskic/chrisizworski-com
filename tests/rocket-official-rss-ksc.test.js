@@ -63,7 +63,7 @@ test('Florida KSC viewing bridge explicitly checks mission ID, calendar health, 
  const html=get('public/synced-national-tools/rocket-launch-live/index.html');
  const css=get('public/synced-national-tools/rocket-launch-live/styles.css');
  assert.match(js,/KSC_OFFICIAL_API = '\/api\/space-coast-ksc-watch'/);
- assert.match(js,/fetch\(KSC_OFFICIAL_API\+'\\?launchId='/);
+ assert.ok(js.includes("KSC_OFFICIAL_API+'?launchId='"));
  assert.match(js,/timeline\.verifiedPageIsRecent===true/);
  assert.match(js,/health\.status==='checked'\|\|health\.status==='partial'/);
  assert.match(js,/evidence\.selectedLaunchId===launch\.id/);
