@@ -36,7 +36,7 @@ def haste_event():
        "NASA Wallops Flight Facility in Virginia is targeting a HASTE 12 rocket launch on November 12, 2026 from Wallops Island.")
 class MissionReconciliationTests(unittest.TestCase):
     def test_distinctive_markers_only(self):
-        self.assertEqual(markers("Starlink Group 15-24 and USSF-259"),{"USSF-259"})
+        self.assertEqual(markers("Starlink Group 15-24 and USSF-259"),{"STARLINK-15-24","USSF-259"})
         self.assertEqual(markers("USSF 259"),{"USSF-259"})
         self.assertEqual(markers("Falcon 9 rocket launch"),set())
         self.assertEqual(markers("TOMEX+"),{"TOMEX+"})
