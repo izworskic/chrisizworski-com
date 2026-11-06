@@ -51,7 +51,7 @@ test('B70 reconciles six gates without promoting a possibly dangerous highway st
   assert.equal(gis.roadsideLegalAccessEvidence,'data/up-waterfall-warner-roadside-access-evidence.json');
   assert.equal(popup.roadsideLegalAccessEvidence,gis.roadsideLegalAccessEvidence);
   assert.match(gis.sourceNotes,/NORTH of Palmer/);
-  assert.match(gis.sourceNotes,/side of state highways/i);
+  assert.match(gis.sourceNotes,/generally allows roadside shoulder stopping/i);
   assert.match(gis.sourceNotes,/5 km/);
   assert.equal(gis.curatedId,null);
   assert.equal(gis.publicationEligible,false);
@@ -63,7 +63,7 @@ test('B70 reconciles six gates without promoting a possibly dangerous highway st
   assert.equal(popup.routeAudit.routePolylineAuthorized,false);
   assert.equal(gis.accessRouteAudit.destinationCoordinatesForDriving,false);
   assert.equal(gis.accessRouteAudit.routePolylineAuthorized,false);
-  assert.match(popup.routeAudit.segments.find(s=>s.label==='Parking').finding,/not generally require a named MDOT park/);
+  assert.match(popup.routeAudit.segments.find(s=>s.label==='Parking').finding,/generally legal/);
   assert.equal(q.sourceCount,gis.sourceLinks.length);
   assert.equal(q.reviewStage,'awaiting-new-authoritative-evidence');
   assert.equal(queue.counts.curatedDestinations,75);
@@ -78,7 +78,7 @@ test('B70 public research page explains state law, avoids visitor car and trail 
   assert.match(html,/MCL 257\.672 and 257\.674/);
   assert.match(html,/5 km/);
   assert.match(html,/2023/);
-  assert.match(html,/No 2026 official/);
+  assert.match(html,/No nearby named MDOT roadside park is recorded/);
   assert.match(html,/NOT CLEARED FOR AUTOMATED VISITOR NAVIGATION/);
   assert.match(html,/michigan\.gov\/mdot\/about\/faqs\/general\/common/);
   assert.match(html,/michigan\.gov\/msp\/divisions\/spec-ops/);
