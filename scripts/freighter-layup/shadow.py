@@ -253,8 +253,8 @@ def analyze(inputs: dict, archive: dict, ledger: dict, as_of: str) -> dict:
         "runAsOf": as_of, "season": inputs["season"], "publicationEnabled": False,
         "dataSource": "existing Node maritime feed scanner metadata and bounded feed snippets only",
         "snippetPolicy": "720 characters maximum; used in-memory and omitted from audit output",
-        "excerptSupplied": sum(bool(isinstance(r, dict) and r.get("sourceExcerpt"))
-                               for r in rows),
+        "excerptSupplied": sum(bool(isinstance(r, dict) and isinstance(r.get("sourceExcerpt"), str)
+                                    and r["sourceExcerpt"]) for r in rows),
         "sourceCoverage": {"ok": reachable, "failed": outcomes.get("FAILED", 0),
                            "datedFeeds": dated, "emptyFeeds": empty,
                            "undatedFeeds": undated, "catalogTotal": len(source_outcomes)},
