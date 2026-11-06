@@ -143,3 +143,42 @@ t('national desk is indexable and independent of mission schedule availability',
  a.doesNotMatch(js,/officialEvidence.*missionMatched|officialEvidence.*goForLaunch/i);
  new vm.Script(js);
 });
+
+
+t('Starbase future transport windows are source-bound, dated and never launch permission',()=>{
+ const road={kind:'scheduled-road-activity',
+  title:'Nov 6, 11:59 PM to Nov 7, 4:00 AM Central',
+  detail:'City-listed transport movement: Production to Masseys. Not a launch closure; recheck Highway 4.',
+  sourceUrl:SOURCES['starbase-city'][1],publishedDate:null,
+  relevance:'dated-road-advisory',scope:'Starbase road movement window',
+  windowStart:'2026-11-07T05:59:00Z',windowEnd:'2026-11-07T10:00:00Z'};
+ const request=fixture();
+ request.regions.texas[0].signals.push(road);
+ const valid=validateSnapshot(request,NOW).regions.texas[0].signals[1];
+ a.equal(valid.kind,'scheduled-road-activity');
+ a.equal(valid.windowStart,road.windowStart);
+ a.equal(valid.windowEnd,road.windowEnd);
+ a.equal(valid.relevance,'dated-road-advisory');
+ for(const [field,value] of [
+  ['windowStart','2026-11-01T05:59:00Z'],
+  ['windowEnd','2026-11-07T05:00:00Z'],
+  ['windowEnd','2026-11-09T10:00:00Z'],
+  ['windowStart','2026-11-30T05:59:00Z'],
+  ['relevance','current-published-status'],
+  ['kind','access-status'],
+  ['sourceUrl','https://malicious.example/road']
+ ]){
+  const bad=fixture();
+  bad.regions.texas[0].signals.push({...road,[field]:value});
+  a.throws(()=>validateSnapshot(bad,NOW),/signal-untrusted/,field);
+ }
+ const spoof=fixture();
+ spoof.regions.florida[0].signals.push({...road,sourceUrl:SOURCES['canaveral-nps'][1]});
+ a.throws(()=>validateSnapshot(spoof,NOW),/signal-untrusted/);
+ a.match(js,/scheduled-road-activity/);
+ a.match(js,/Travel timing overlap/);
+ a.match(js,/data\.scheduleFreshness==='recent'/);
+ a.match(js,/\['minute','second'\]\.includes\(launch\?\.netPrecision\)/);
+ a.match(js,/not an active closure, launch approval or viewing permission/);
+ new vm.Script(js);
+});
