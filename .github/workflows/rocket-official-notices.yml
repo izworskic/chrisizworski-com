@@ -31,7 +31,7 @@ concurrency:
 jobs:
   refresh-official-range-evidence:
     runs-on: ubuntu-latest
-    timeout-minutes: 9
+    timeout-minutes: 13
     steps:
       - uses: actions/checkout@v4
       - name: Python cross-region safety and classification regression
@@ -47,17 +47,26 @@ jobs:
           # Wait for the NEW compact mission-manifest route before fetching it.
           # Otherwise a push job races the Vercel production deployment and
           # treats the old release's valid JSON as proof of readiness.
-          for attempt in $(seq 1 35); do
+          # Both the manifest API AND this release's public client must be live.
+          # A generic version-1 manifest is insufficient because the earlier
+          # backend rejects the newly added third official event source.
+          for attempt in $(seq 1 50); do
             if curl --fail --silent --show-error --max-time 8 \
               'https://chrisizworski.com/api/rocket-official-notices?manifest=1' |
               jq -e '.ok==true and .version==1 and
                 .source=="shared-postgres-ll2-national-v2" and
-                (.missions|type=="array")' >/dev/null; then
+                (.missions|type=="array")' >/dev/null &&
+              curl --fail --silent --show-error --max-time 10 \
+                -H 'Cache-Control: no-cache' \
+                "https://chrisizworski.com/national-tools/rocket-launch-live/?release-probe=${GITHUB_SHA}" \
+                > "$RUNNER_TEMP/rocket-release-probe.html" &&
+              grep -Fq '20261106-official-rss-ksc-v1' \
+                "$RUNNER_TEMP/rocket-release-probe.html"; then
               exit 0
             fi
             sleep 10
           done
-          echo 'The deployed mission manifest is not yet available. Do not publish against an older API.'
+          echo 'The deployed official RSS + KSC release is not yet available. Do not publish against the old API.'
           exit 1
       - name: Retrieve bounded same-site mission manifest (not an LL2 fetch)
         run: |
