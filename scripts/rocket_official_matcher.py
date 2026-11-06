@@ -28,7 +28,7 @@ UTC=timezone.utc
 UUID=re.compile(r"^[a-f0-9]{8}-(?:[a-f0-9]{4}-){3}[a-f0-9]{12}$",re.I)
 ISO_DATE=re.compile(r"^\d{4}-\d{2}-\d{2}$")
 MARKERS=(
-    re.compile(r"\bSTARLINK[\s-]+(\d{1,2})\s*[-–]\s*(\d{1,3})\b",re.I),
+    re.compile(r"\bSTARLINK[\s-]+(?:GROUP[\s-]+)?(\d{1,2})\s*[-–]\s*(\d{1,3})\b",re.I),
     re.compile(r"\bUSSF[\s-]+(\d{2,4})\b",re.I),
     re.compile(r"\bNROL[\s-]+(\d{2,4})\b",re.I),
     re.compile(r"\bTRANSPORTER[\s-]+(\d{1,3})\b",re.I),
@@ -197,7 +197,7 @@ def launch_region_attested(region,body):
     top=body[:5500].upper()
     if region=="virginia":
         return bool(re.search(r"\bWALLOPS(?:\s+ISLAND|\s+FLIGHT\s+FACILITY|\s+LAUNCH\s+RANGE)?\b",top)) and not re.search(
-            r"LAUNCH LOCATION:\s*(?:POKER FLAT|WHITE SANDS|AND[ØO]YA|NORWAY|ALASKA)",top)
+            r"(?:LAUNCH LOCATION:|LAUNCH(?:ING)? (?:FROM|AT)|FROM)\s*(?:POKER FLAT|WHITE SANDS|AND[ØO]YA|NORWAY|ALASKA)",top)
     if region=="california":
         return bool(re.search(r"\bVANDENBERG\b|\bSLC-4[EW]?\b",top)) and "CAPE CANAVERAL" not in top
     return False
