@@ -13,7 +13,7 @@ const id='piro-sand-point-marsh';
 const ref='https://www.nps.gov/places/sand-point-marsh-trail-in-winter.htm';
 const response=()=>({setHeader(){},status(code){this.code=code;return this},json(body){return{code:this.code,body}}});
 
-test('a 2026 NPS source-backed Sand Point Marsh route appears in the real 51-route weather catalog',async()=>{
+test('the NPS Sand Point Marsh route appears in the current 52-route weather catalog',async()=>{
  const route=Routes.routeById(id);
  assert.ok(route);
  assert.equal(route.lengthMiles,.5);
@@ -28,7 +28,7 @@ test('a 2026 NPS source-backed Sand Point Marsh route appears in the real 51-rou
  assert.deepEqual(Routes.validateRoute(route),[]);
  const r=await API({method:'GET',query:{mode:'catalog'}},response());
  assert.equal(r.code,200);
- assert.equal(r.body.routes.length,51);
+ assert.equal(r.body.routes.length,52);
  const card=r.body.routes.find(x=>x.id===id);
  assert.equal(card.miles,.5);
  assert.equal(card.winterAccess.checkpointId,'piro-sand-point');
