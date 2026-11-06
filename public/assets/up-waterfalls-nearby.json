@@ -1,15 +1,16 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-05",
+  "reviewed": "2026-11-06",
   "method": "haversine-waterfall-coordinate-straight-line-not-driving",
   "maxRadiusMiles": 50,
   "policy": "Not a route, visitor parking point, driving distance, trail distance, access grant, or live-open forecast.",
   "counts": {
-    "curated": 76,
+    "curated": 77,
     "eligible": 68,
-    "excluded": 8
+    "excluded": 9
   },
   "excludedIds": [
+    "boston-creek-cascades",
     "houghton-douglass-falls",
     "lower-silver-falls",
     "munising-falls",
