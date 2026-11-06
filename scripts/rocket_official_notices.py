@@ -224,12 +224,16 @@ def classify(entry, body, now):
     notes = []
 
     if sid == "starbase-city":
-        # Only fixed current-status labels. Historical "Previous Orders" never
-        # determine whether a launch-day road closure is active now.
-        beach = re.search(r"BEACH ACCESS STATUS\s+(BOCA CHICA BEACH IS OPEN|BOCA CHICA BEACH IS CLOSED)\b", upper)
-        road = re.search(r"ROAD UPDATES\s+(ROAD DELAY\s+NO ROAD DELAYS|(?:ROAD CLOSURE|ROAD DELAY)[^\.]{0,90})", upper)
+        # Scope live status to current sections. Historical orders may quote
+        # OLD "beach closed" or "no notice" text, which is not current access.
+        live_page = upper.split("PREVIOUS ORDERS", 1)[0]
+        current_parts = re.split(r"\bPUBLIC NOTICE OF MAYOR.S ORDER\b", live_page, maxsplit=1)
+        current_status = current_parts[0]
+        mayor_section = current_parts[1].strip() if len(current_parts) > 1 else None
+        beach = re.search(r"BEACH ACCESS STATUS\s+(BOCA CHICA BEACH IS OPEN|BOCA CHICA BEACH IS CLOSED)\b", current_status)
+        road = re.search(r"ROAD UPDATES\s+(ROAD DELAY\s+NO ROAD DELAYS|(?:ROAD CLOSURE|ROAD DELAY)[^\.]{0,90})", current_status)
         if beach:
-            label = beach.group(1).capitalize().replace("Boca", "Boca").replace("Chica", "Chica")
+            label = "Boca Chica Beach is " + ("open" if beach.group(1).endswith("OPEN") else "closed")
             observations.append(item("access-status", label, url,
                 detail="City of Starbase website status at source-check time, not a future launch-window clearance.",
                 relevance="current-published-status", scope="Boca Chica Beach"))
@@ -253,7 +257,10 @@ def classify(entry, body, now):
                     "Previous mayoral orders listed", url,
                     detail="Archived official orders exist. The newest listed order does not establish an active closure or the next mission's road status.",
                     relevance="historical-only", scope="prior-order-archive"))
-        if "PUBLIC NOTICE OF MAYOR'S ORDER" in upper and "NO PUBLIC NOTICES AT THIS TIME" not in upper:
+        # A "no notices" quote under Previous Orders cannot clear an active
+        # current mayoral-order notice. A heading alone cannot confirm closure.
+        if mayor_section is not None and mayor_section and not re.search(
+                r"\bNO PUBLIC NOTICES? AT THIS TIME\b", mayor_section):
             observations.append(item("notice-check-required", "Current mayoral-order notice may be posted", url,
                 detail="Review the executed order and event-specific dates on the city's official page. This parser does not infer road closure from a heading.",
                 relevance="review-required", scope="mayoral-order-section"))
@@ -473,6 +480,33 @@ class EvidenceTests(unittest.TestCase):
         self.assertIn("notice-check-required",kinds)
         self.assertEqual(kinds[0],"notice-check-required")
         self.assertNotIn("closure",record["signals"][0]["title"].lower())
+
+    def test_archived_mayoral_words_cannot_suppress_current_notice(self):
+        record = classify(self.source("starbase-city"), """
+        <h2>BEACH Access Status</h2><p>Boca Chica Beach is open.</p>
+        <h2>Road Updates</h2><p>No road delays.</p>
+        <h2>Public Notice of Mayor's Order</h2>
+        <p>Review the published prospective order and its actual dates.</p>
+        <h2>Previous Orders</h2>
+        <p>No public notices at this time.</p>
+        <p>BEACH Access Status Boca Chica Beach is closed.</p>
+        """, self.now)
+        kinds = [signal["kind"] for signal in record["signals"]]
+        self.assertIn("notice-check-required", kinds)
+        beach = next(s for s in record["signals"] if s["kind"] == "access-status")
+        self.assertEqual(beach["title"], "Boca Chica Beach is open")
+
+    def test_archived_beach_status_cannot_be_read_as_current(self):
+        record = classify(self.source("starbase-city"), """
+        <h2>Previous Orders</h2>
+        <p>BEACH Access Status</p><p>Boca Chica Beach is open.</p>
+        <p>Road Updates</p><p>No road delays.</p>
+        <p>October 27, 2026</p>
+        """, self.now)
+        self.assertEqual(record["status"], "limited")
+        self.assertFalse(any(s["kind"] in ("access-status", "road-status",
+                                          "notice-check-required")
+                             for s in record["signals"]))
 
     def test_ambiguous_status_is_limited_not_open(self):
         s=classify(self.source("starbase-city"), "<h1>Beach rules</h1><p>The beach was open yesterday.</p>",self.now)
