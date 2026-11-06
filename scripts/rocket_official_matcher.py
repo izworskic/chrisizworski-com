@@ -37,7 +37,7 @@ MARKERS=(
     re.compile(r"\bNG[\s-]+(\d{1,3})\b",re.I),
     re.compile(r"\bHASTE[\s-]+(\d{1,3})\b",re.I),
     re.compile(r"\bARTEMIS[\s-]+(II|III|IV|V|VI)\b",re.I),
-    re.compile(r"\bTOMEX\+\b",re.I)
+    re.compile(r"\bTOMEX\+(?!\w)",re.I)
 )
 # Only these official sources are accepted for strict mission matching.
 # NASA's indexed Wallops Range blog sometimes links to its /blogs/wallops/ pages.
@@ -86,19 +86,13 @@ def clean(value,length=280):
 
 def markers(text):
     names=set()
-    for pattern in MARKERS:
+    stems=("STARLINK","USSF","NROL","TRANSPORTER","BANDWAGON","CRS","NG","HASTE","ARTEMIS","TOMEX")
+    for stem,pattern in zip(stems,MARKERS):
         for match in pattern.finditer(text or ""):
-            if match.re.pattern.startswith(r"\bTOMEX"):
-                names.add("TOMEX+")
-            elif match.re.pattern.startswith(r"\bARTEMIS"):
-                names.add("ARTEMIS-"+match.group(1).upper())
-            elif match.re.pattern.startswith(r"\bSTARLINK"):
-                names.add("STARLINK-"+match.group(1)+"-"+match.group(2))
-            else:
-                prefix=match.group(0).split()[0].split("-")[0].upper()
-                # Use actual recognizer rather than noisy generic words.
-                stem=re.match(r"\\b([A-Z]+)",pattern.pattern[2:]) 
-                names.add((stem.group(1) if stem else prefix)+"-"+match.group(1))
+            if stem=="TOMEX":names.add("TOMEX+")
+            elif stem=="ARTEMIS":names.add("ARTEMIS-"+match.group(1).upper())
+            elif stem=="STARLINK":names.add("STARLINK-"+match.group(1)+"-"+match.group(2))
+            else:names.add(stem+"-"+match.group(1))
     return names
 
 def event_url(index_id,raw):
@@ -222,8 +216,13 @@ def extract_event(article,html,now):
     date=prospective_date(body,now)
     if not date:return None
     # The mission identifier MUST occur in the article's core evidence.
-    ids=markers(body[:8500])
-    if not ids:return None
+    # Take identifiers from the source article title or from paragraphs
+    # that actually announce an upcoming attempt. Ignore unrelated footer,
+    # "related stories" and navigation links.
+    announcements=" ".join(line[:1500] for line in body.splitlines()
+                            if PROSPECTIVE.search(line) and EVENT_TERMS.search(line))
+    ids=markers(article["title"]) | markers(announcements)
+    if len(ids)!=1:return None
     title=clean(article["title"],150)
     return {"sourceId":article["sourceId"],"region":article["region"],
             "articleUrl":article["url"],"title":title,
