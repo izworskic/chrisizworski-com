@@ -1,0 +1,389 @@
+{
+  "batch": "B72",
+  "reviewDate": "2026-11-05",
+  "sourceRetrieved": "2026-11-05",
+  "candidate": {
+    "gisObjectId": 29,
+    "name": "Jumbo Falls",
+    "county": "Houghton",
+    "naturalFeatureCoordinates": {
+      "lat": 46.44963,
+      "lng": -88.91278,
+      "source": "https://www.waterfallsofthekeweenaw.com/jumbo-river/jumbo-falls/"
+    },
+    "stateGISCoordinates": {
+      "lat": 46.453006,
+      "lng": -88.912138,
+      "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+    },
+    "statePointDiscrepancyAcknowledged": true,
+    "featureSameNamedFallSourcedByOfficialTrail": true
+  },
+  "sources": {
+    "recreation": {
+      "url": "https://apps.fs.usda.gov/ArcX/rest/services/EDW/EDW_RecreationOpportunities_01/MapServer/0/query?where=recareaid%3D12356&outFields=recareaname%2Crecareaid%2Crecareaurl%2Clatitude%2Clongitude%2Copenstatus%2Cforestname%2Copen_season_start%2Copen_season_end%2Crestrictions%2Crecareadescription&returnGeometry=true&f=pjson",
+      "service": "USFS EDW RecreationOpportunities, nightly-refreshed federal site feed",
+      "recareaId": 12356,
+      "attributes": {
+        "recareaname": "Jumbo Falls",
+        "recareaid": 12356,
+        "recareaurl": "https://www.fs.usda.gov/recarea/ottawa/recarea/?recid=12356",
+        "latitude": "46.457753",
+        "longitude": "-88.912228",
+        "openstatus": "open",
+        "forestname": "Ottawa National Forest",
+        "open_season_start": "January",
+        "open_season_end": "December",
+        "restrictions": null,
+        "recareadescription": "<p>This trail passes through some old growth hemlock, and is quite level. It is a scenic trail, and the water of the Jumbo River is crystal clear.</p>"
+      },
+      "geographyRole": "general-usfs-recreation-opportunity-marker-not-falls-or-parking",
+      "useAsNaturalFalls": false,
+      "useAsParking": false,
+      "openNowGuaranteed": false
+    },
+    "publishedTrail": {
+      "url": "https://apps.fs.usda.gov/ArcX/rest/services/EDW/EDW_TrailNFSPublish_01/MapServer/0/query?where=trail_name%20%3D%20'JUMBO%20FALLS'&outFields=*&returnGeometry=true&outSR=4326&f=pjson",
+      "service": "USFS EDW TrailNFSPublish_01 published NFS trail line",
+      "name": "JUMBO FALLS",
+      "number": "60056",
+      "attributes": {
+        "objectid": 11360513,
+        "trail_name": "JUMBO FALLS",
+        "trail_type": "TERRA",
+        "trail_cn": "5056.007461",
+        "bmp": 0,
+        "emp": 0.0934,
+        "segment_length": 0.0934,
+        "admin_org": "090704",
+        "managing_org": "090704",
+        "security_id": "0907",
+        "attributesubset": "TrailNFS_MGMT",
+        "national_trail_designation": 1,
+        "trail_class": "3",
+        "accessibility_status": "NOT ACCESSIBLE",
+        "trail_surface": "NATIVE MATERIAL",
+        "surface_firmness": null,
+        "typical_trail_grade": "0-5%",
+        "typical_tread_width": "TW04 - 24-36 INCHES",
+        "minimum_trail_width": null,
+        "typical_tread_cross_slope": null,
+        "special_mgmt_area": null,
+        "terra_base_symbology": "TC3",
+        "mvum_symbol": null,
+        "terra_motorized": "N",
+        "snow_motorized": null,
+        "water_motorized": null,
+        "allowed_terra_use": "321",
+        "allowed_snow_use": null,
+        "hiker_pedestrian_managed": "01/01-12/31",
+        "hiker_pedestrian_accpt": null,
+        "hiker_pedestrian_disc": null,
+        "hiker_pedestrian_accpt_disc": null,
+        "hiker_pedestrian_restricted": null,
+        "pack_saddle_managed": null,
+        "pack_saddle_accpt": "01/01-12/31",
+        "pack_saddle_disc": null,
+        "pack_saddle_accpt_disc": null,
+        "pack_saddle_restricted": null,
+        "bicycle_managed": null,
+        "bicycle_accpt": "01/01-12/31",
+        "bicycle_disc": null,
+        "bicycle_accpt_disc": "01/01-12/31 ",
+        "bicycle_restricted": null,
+        "motorcycle_managed": null,
+        "motorcycle_accpt": null,
+        "motorcycle_disc": null,
+        "motorcycle_accpt_disc": null,
+        "motorcycle_restricted": "01/01-12/31",
+        "atv_managed": null,
+        "atv_accpt": null,
+        "atv_disc": null,
+        "atv_accpt_disc": null,
+        "atv_restricted": "01/01-12/31",
+        "fourwd_managed": null,
+        "fourwd_accpt": null,
+        "fourwd_disc": null,
+        "fourwd_accpt_disc": null,
+        "fourwd_restricted": "01/01-12/31",
+        "trail_no": "60056",
+        "snowcoach_snowcat_managed": null,
+        "snowcoach_snowcat_accpt": null,
+        "snowcoach_snowcat_disc": "01/01-12/31",
+        "snowcoach_snowcat_accpt_disc": "01/01-12/31",
+        "snowcoach_snowcat_restricted": null,
+        "snowmobile_managed": null,
+        "snowmobile_accpt": null,
+        "snowmobile_disc": "01/01-12/31",
+        "snowmobile_accpt_disc": "01/01-12/31",
+        "snowmobile_restricted": null,
+        "snowshoe_managed": null,
+        "snowshoe_accpt": "01/01-12/31",
+        "snowshoe_disc": null,
+        "snowshoe_accpt_disc": null,
+        "snowshoe_restricted": null,
+        "xcountry_ski_managed": null,
+        "xcountry_ski_accpt": "01/01-12/31",
+        "xcountry_ski_disc": null,
+        "xcountry_ski_accpt_disc": null,
+        "xcountry_ski_restricted": null,
+        "motor_watercraft_managed": null,
+        "motor_watercraft_accpt": null,
+        "motor_watercraft_disc": null,
+        "motor_watercraft_accpt_disc": null,
+        "motor_watercraft_restricted": null,
+        "nonmotor_watercraft_managed": null,
+        "nonmotor_watercraft_accpt": null,
+        "nonmotor_watercraft_disc": null,
+        "nonmotor_watercraft_accpt_disc": null,
+        "nonmotor_watercraft_restricted": null,
+        "gis_miles": 0.079,
+        "e_bike_class1_managed": null,
+        "e_bike_class1_accpt": null,
+        "e_bike_class1_disc": null,
+        "e_bike_class1_restricted": null,
+        "e_bike_class2_managed": null,
+        "e_bike_class2_accpt": null,
+        "e_bike_class2_disc": null,
+        "e_bike_class2_restricted": null,
+        "e_bike_class3_managed": null,
+        "e_bike_class3_accpt": null,
+        "e_bike_class3_disc": null,
+        "e_bike_class3_restricted": null,
+        "globalid": "{FC97930D-A8AE-43CD-9E1B-7FDE88BDA574}",
+        "st_length(shape)": 0.0014176548470780732
+      },
+      "lineCoordinatesLonLat": [
+        [
+          -88.9141901,
+          46.4503638
+        ],
+        [
+          -88.9141403,
+          46.4503426
+        ],
+        [
+          -88.9141077,
+          46.4503081
+        ],
+        [
+          -88.9140401,
+          46.4502912
+        ],
+        [
+          -88.9139874,
+          46.4502717
+        ],
+        [
+          -88.9139312,
+          46.4502337
+        ],
+        [
+          -88.9138661,
+          46.4502107
+        ],
+        [
+          -88.9137794,
+          46.4501851
+        ],
+        [
+          -88.9137339,
+          46.4501449
+        ],
+        [
+          -88.9136855,
+          46.4500958
+        ],
+        [
+          -88.9136295,
+          46.450038
+        ],
+        [
+          -88.9136126,
+          46.4499983
+        ],
+        [
+          -88.913563,
+          46.4499583
+        ],
+        [
+          -88.9135066,
+          46.4499474
+        ],
+        [
+          -88.9134639,
+          46.4499151
+        ],
+        [
+          -88.9134297,
+          46.4498628
+        ],
+        [
+          -88.9133736,
+          46.4498227
+        ],
+        [
+          -88.9133357,
+          46.4497669
+        ],
+        [
+          -88.9132659,
+          46.4497499
+        ],
+        [
+          -88.9132017,
+          46.4497305
+        ],
+        [
+          -88.913122,
+          46.4496772
+        ],
+        [
+          -88.9130892,
+          46.4496412
+        ],
+        [
+          -88.9130712,
+          46.4495918
+        ]
+      ],
+      "geographyRole": "official-pedestrian-trail-line-not-car-arrival",
+      "currentFootpathPhysicalConditionVerified": false
+    },
+    "motorVehicleUseMap": {
+      "url": "https://apps.fs.usda.gov/ArcX/rest/services/EDW/EDW_MVUM_01/MapServer/1/query?where=id%20%3D%20'4589-B'%20AND%20forestname%20LIKE%20'%25Ottawa%25'&outFields=id%2Cname%2Csymbol%2Cmvum_symbol_name%2Cpassengervehicle%2Cpassengervehicle_datesopen%2Chighclearancevehicle%2Chighclearancevehicle_datesopen%2Croutestatus%2Cjurisdiction%2Cforestname&returnGeometry=true&outSR=4326&f=pjson",
+      "service": "USFS EDW MVUM_01 map-consistent published 4589-B designated motor road data",
+      "segments": [
+        {
+          "attributes": {
+            "id": "4589-B",
+            "name": "FDR4589-B",
+            "symbol": "2",
+            "mvum_symbol_name": "Roads open to all Vehicles, Seasonal",
+            "passengervehicle": "open",
+            "passengervehicle_datesopen": "05/16-03/14",
+            "highclearancevehicle": "open",
+            "highclearancevehicle_datesopen": "05/16-03/14",
+            "routestatus": "EX - EXISTING",
+            "jurisdiction": "FS - FOREST SERVICE",
+            "forestname": "Ottawa National Forest"
+          },
+          "geometryEndpointsLonLat": [
+            [
+              [
+                -88.9230671,
+                46.4631977
+              ],
+              [
+                -88.9160095,
+                46.4481806
+              ]
+            ]
+          ],
+          "longLatPathCount": 1
+        },
+        {
+          "attributes": {
+            "id": "4589-B",
+            "name": "FDR4589-B",
+            "symbol": "2",
+            "mvum_symbol_name": "Roads open to all Vehicles, Seasonal",
+            "passengervehicle": "open",
+            "passengervehicle_datesopen": "05/16-03/14",
+            "highclearancevehicle": "open",
+            "highclearancevehicle_datesopen": "05/16-03/14",
+            "routestatus": "EX - EXISTING",
+            "jurisdiction": "FS - FOREST SERVICE",
+            "forestname": "Ottawa National Forest"
+          },
+          "geometryEndpointsLonLat": [
+            [
+              [
+                -88.9160095,
+                46.4481806
+              ],
+              [
+                -88.9186966,
+                46.4482027
+              ]
+            ]
+          ],
+          "longLatPathCount": 1
+        }
+      ],
+      "vehicleClass": "passenger-vehicle",
+      "federalDesignatedDates": "05/16–03/14",
+      "roadSegmentPhysicalPassabilityLive": false,
+      "allApproachRoadsIndependentlyVerified": false,
+      "parkingLotCertifiedPoint": false
+    },
+    "legacyGuide": {
+      "url": "https://upnorthentertainment.com/wp-content/uploads/2021/01/Ottawa-National-Forest-Waterfalls.pdf",
+      "publisher": "U.S. Forest Service",
+      "reviewOf": "2015/2019 recreation guide directions via Golden Glow Rd, FR4589/Jumbo Pit Rd and FR4589-B to end of road/foot trail",
+      "notCurrentMVUM": true
+    },
+    "trailParkingTourism": {
+      "url": "https://www.coppercountry.com/experiences/hiking/ottawa-national-forest-trails/",
+      "description": "Regional guide explicitly names parking area and short 0.1-mile NFS trail with two puncheon bridges; no exact approved parking-space GPS"
+    },
+    "trailField": {
+      "url": "https://travelthemitten.com/waterfalls/jumbo-falls-a-secluded-waterfall-in-the-ottawa-national-forest/",
+      "description": "Independent 2022 description of well-used path and parking near a trout sign; not a current lot or road inspection"
+    }
+  },
+  "geometry": {
+    "officialTrailStartLonLat": [
+      -88.9141901,
+      46.4503638
+    ],
+    "officialTrailEndLonLat": [
+      -88.9130712,
+      46.4495918
+    ],
+    "specialistNaturalFeatureLonLat": [
+      -88.91278,
+      46.44963
+    ],
+    "officialRecreationGenericLonLat": [
+      -88.912228,
+      46.457753
+    ],
+    "michiganStateGisNaturalPointLonLat": [
+      -88.912138,
+      46.453006
+    ],
+    "distanceMeters": {
+      "officialTrailEndpointToSpecialistFallsMeters": 23,
+      "usfsRecreationPointToSpecialistFallsMeters": 904,
+      "miGisToSpecialistFallsMeters": 379,
+      "closestRoad4589BVertexToTrailStartMeters": 0
+    },
+    "geometryValidation": "TRAIL #60056 endpoint within 23m of independent mapped natural waterfall; federal rec marker 904m away is NOT waterfall"
+  },
+  "publication": {
+    "publicGuideEligible": true,
+    "officialPedestrianRouteLine": true,
+    "parkingPointLocationVerified": false,
+    "carNavigationToFalls": false,
+    "carNavigationToRecreationPoint": false,
+    "carNavigationToTrailStart": false,
+    "carNavigationToForestRoadGeometry": false,
+    "liveOpenNow": false,
+    "seasonalUseConditionCheck": true,
+    "roadVehiclePermissionsSourced": true,
+    "trailManagedForHikers": true,
+    "reportedParkArea": true,
+    "physicalBridgeConditionLive": false,
+    "wheelchairAccessible": false,
+    "doNotPromiseWinterRoadPlowing": true
+  },
+  "risks": [
+    "U.S. Forest Service recarea OPEN status is not a live gate or bridge check",
+    "Official motor vehicle dates 05/16–03/14 indicate designation, not road surface/winter plowing or present-day physical passability",
+    "Recreation area point 46.457753,-88.912228 is 904m from natural fall: never use as fall or parking",
+    "Michigan state GIS #29 natural point 379m from independently identified waterfall: keep separate and annotate correction",
+    "Route map should show ONLY actual 2026 USFS foot-trail polyline and natural water feature, never invented parking-to-road segment",
+    "Non-accessible NFS trail #60056 despite relatively level tourism description: do not call ADA-accessible"
+  ]
+}
