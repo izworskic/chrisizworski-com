@@ -1,10 +1,10 @@
 {
   "schema": "winter-route-catalog-v1",
   "status": "CURATED_STATIC_ROUTE_IDENTITIES_NOT_LIVE_WINTER_ACCESS",
-  "compiledAt": "2026-10-25",
+  "compiledAt": "2026-11-06",
   "state": "Michigan",
   "countMeaning": "Named routes, trail segments, and mapped winter corridors; NOT confirmed open, plowed or safe destinations. Some snowshoe trails are explicitly ski-shared. No turn-by-turn navigation.",
-  "dataProvenance": "Michigan DNR official named trail pages, accessible official hiking maps, and dated GIS trail point records. No GIS segment sums are used as route lengths.",
+  "dataProvenance": "Michigan DNR official named trail pages, maps and dated GIS trail point records, plus NPS Pictured Rocks official winter guide and the sourced 2026 Sand Point Marsh event meeting point. Seasonal manager-maintenance policy is not today's open road or plowed lot report. No GIS segment sums are used as route lengths.",
   "sources": {
     "muskegon": {
       "page": "https://www.michigan.gov/recsearch/parks/muskegon",
@@ -80,6 +80,12 @@
       "page": "https://www.nps.gov/slbe/planyourvisit/winteractivities.htm",
       "map": null,
       "phone": "231-326-4700"
+    },
+    "piro": {
+      "page": "https://www.nps.gov/places/sand-point-marsh-trail-in-winter.htm",
+      "map": null,
+      "phone": "906-387-3700",
+      "currentAlerts": "https://www.nps.gov/piro/planyourvisit/conditions.htm"
     }
   },
   "routes": [
