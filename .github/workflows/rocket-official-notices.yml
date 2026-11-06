@@ -66,7 +66,7 @@ jobs:
             fi
             sleep 10
           done
-          echo 'The deployed official RSS + KSC release is not yet available. Do not publish against the old API.'
+          echo 'The deployed mission manifest is not yet available with the official RSS + KSC release. Do not publish against the old API.'
           exit 1
       - name: Retrieve bounded same-site mission manifest (not an LL2 fetch)
         run: |
