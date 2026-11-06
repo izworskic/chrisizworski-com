@@ -880,7 +880,8 @@
     'schedule-status':'NASA public schedule statement',
     'access-policy':'General policy · not event clearance',
     'source-link':'Official alert subscription',
-    'official-article':'Official article · event not independently matched'
+    'official-article':'Official article · event not independently matched',
+    'scheduled-road-activity':'Dated city transport window · not a closure'
   };
   function launchLocalDay(launch,timezone){
     const stamp=Date.parse(launch?.net||'');
@@ -1119,6 +1120,23 @@
           evidenceKind[notice.kind]||'Official-source observation'));
         note.appendChild(el('strong','',notice.title));
         note.appendChild(el('p','',notice.detail));
+        // A transport movement may affect travel planning, but is not a
+        // mayoral closure or mission launch authorization. Only compare
+        // intervals when both the city scan and precise LL2 target are fresh.
+        const launch=data?.selectedLaunch;
+        if(notice.kind==='scheduled-road-activity'&&current==='texas'&&fresh&&
+          data.scheduleFreshness==='recent'&&
+          ['minute','second'].includes(launch?.netPrecision)){
+          const target=Date.parse(launch.net||'');
+          const from=Date.parse(notice.windowStart||'');
+          const through=Date.parse(notice.windowEnd||'');
+          if(Number.isFinite(target)&&Number.isFinite(from)&&Number.isFinite(through)&&
+            target>=from&&target<=through){
+            const warning=el('p','rl-evidence-change',
+              'Travel timing overlap: this city-listed movement window overlaps the selected mission’s current published target time. Confirm Highway 4 conditions directly. This is not an active closure, launch approval or viewing permission.');
+            note.appendChild(warning);
+          }
+        }
         const link=anchor(notice.sourceUrl,'Read original official source');
         if(link)note.appendChild(link);
         article.appendChild(note);
