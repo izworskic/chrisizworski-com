@@ -60,13 +60,13 @@ jobs:
                 -H 'Cache-Control: no-cache' \
                 "https://chrisizworski.com/national-tools/rocket-launch-live/?release-probe=${GITHUB_SHA}" \
                 > "$RUNNER_TEMP/rocket-release-probe.html" &&
-              grep -Fq '20261106-official-rss-ksc-v1-starbase-road-v1' \
+              grep -Fq '20261106-official-rss-ksc-v1-starbase-road-v1-wallops-blog-v1' \
                 "$RUNNER_TEMP/rocket-release-probe.html"; then
               exit 0
             fi
             sleep 10
           done
-          echo 'The deployed mission manifest is not yet available with the official RSS + KSC release. Do not publish against the old API.'
+          echo 'The deployed mission manifest is not yet available with the eleven-source Wallops Blog release. Do not publish against the old API.'
           exit 1
       - name: Retrieve bounded same-site mission manifest (not an LL2 fetch)
         run: |
@@ -83,7 +83,7 @@ jobs:
           python3 scripts/rocket_official_notices.py --collect \
             --mission-manifest "$RUNNER_TEMP/rocket-national-mission-manifest.json" \
             --output "$RUNNER_TEMP/rocket-official-notices.json"
-          jq -e '.version==1 and .sourceCount==10 and
+          jq -e '.version==1 and .sourceCount==11 and
             (.regions|keys|length)==6 and
             .availableSources>=2' "$RUNNER_TEMP/rocket-official-notices.json" >/dev/null
       - name: Mint short-lived repository/workflow scoped OIDC identity
@@ -106,7 +106,7 @@ jobs:
             'https://chrisizworski.com/api/rocket-official-notices')"
           printf '%s' "$result" |
             jq -e '.ok==true and .version==1 and
-              .sourceCount==10 and .availableSources>=2' >/dev/null
+              .sourceCount==11 and .availableSources>=2' >/dev/null
           printf '%s' "$result" | jq '{checkedAt,sourceCount,availableSources,changedSources}'
       - name: Verify public evidence display endpoint (not launch permission)
         run: |
