@@ -195,8 +195,8 @@ def starbase_road_windows(text, now):
             if not (end > local and start >= local - dt.timedelta(hours=36) and
                     start <= local + dt.timedelta(days=14)):
                 continue
-            label = (start.strftime("%b %-d, %-I:%M %p") + " to " +
-                     end.strftime("%b %-d, %-I:%M %p") + " Central")
+            label = (start.strftime("%b %-d, %Y %-I:%M %p") + " to " +
+                     end.strftime("%b %-d, %Y %-I:%M %p") + " Central")
             signal = item(
                 "scheduled-road-activity", label, SOURCE_MAP["starbase-city"][2],
                 detail=("City-listed transport movement: " + tidy(desc, 80) +
