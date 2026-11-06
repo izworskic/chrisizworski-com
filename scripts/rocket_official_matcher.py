@@ -17,6 +17,8 @@ from datetime import datetime, timedelta, timezone
 from html.parser import HTMLParser
 from zoneinfo import ZoneInfo
 import hashlib
+import email.utils
+import xml.etree.ElementTree as ET
 import html
 import json
 import re
@@ -46,6 +48,12 @@ INDEXES=(
   ("vandenberg-launch-news","california","https://www.vandenberg.spaceforce.mil/News/")
 )
 SOURCE={x[0]:x for x in INDEXES}
+# Public federal Space Force news RSS; not a Vandenberg-specific feed.
+# Only an actual prospective notice naming Vandenberg and a unique mission
+# can become a candidate; the general feed itself is not a local launch list.
+RSS_SOURCE=("spaceforce-news-rss","california",
+            "https://www.spaceforce.mil/DesktopModules/ArticleCS/RSS.ashx?ContentType=1&Site=1060&max=20")
+SOURCE[RSS_SOURCE[0]]=RSS_SOURCE
 ZONES={"virginia":"America/New_York","california":"America/Los_Angeles"}
 MONTHS={"JAN":1,"JANUARY":1,"FEB":2,"FEBRUARY":2,"MAR":3,"MARCH":3,
         "APR":4,"APRIL":4,"MAY":5,"JUN":6,"JUNE":6,"JUL":7,"JULY":7,"AUG":8,"AUGUST":8,
@@ -294,11 +302,77 @@ def reconcile(events,manifest,now):
             "noticeTitle":event["title"],"officialEventDate":event["eventDate"],
             "publishedDate":event["publishedDate"],"missionMarker":marker,
             "sourceFingerprint":event["sourceFingerprint"],"dateDifferenceDays":delta,
-            "matchRule":"exact-designation-and-local-date",
+            "matchRule":"official-rss-exact-designation-and-local-date" if event["sourceId"]==RSS_SOURCE[0] else "exact-designation-and-local-date",
             "accessStatus":"not-evaluated","launchStatus":"not-evaluated"})
     return {"version":1,"health":"matched-with-current-ll2" if matched else "no-verified-match",
             "manifestCheckedAt":ready["checkedAt"],"matches":matched[:12],
             "unmatched":unmatched,"conflicts":ambiguous,"candidateCount":len(events)}
+
+
+def rss_article_url(value):
+    """Canonical same-agency article permalink, NOT an arbitrary RSS hyperlink."""
+    try:
+        u=urllib.parse.urlsplit(str(value))
+        if (u.scheme!="https" or u.hostname!="www.spaceforce.mil" or u.username
+            or u.password or u.port not in (None,443) or u.fragment or u.query):
+            return None
+        if not re.fullmatch(r"/News/Article-Display/Article/\d+/[a-z0-9-]+/?",u.path,re.I):
+            return None
+        return urllib.parse.urlunsplit(("https","www.spaceforce.mil",u.path,"",""))
+    except ValueError:
+        return None
+
+
+def official_rss_events(raw,now):
+    """Official item metadata; RSS pubDate is NEVER the event's launch date.
+
+    Do not take unauthenticated article copies, generic USSF headlines, Earth
+    geography mentioned in a footer, or old completed mission articles.
+    """
+    if len(raw)>INDEX_MAX_BYTES or "<!DOCTYPE" in raw.upper() or "<!ENTITY" in raw.upper():
+        raise ValueError("rss-content-untrusted")
+    root=ET.fromstring(raw)
+    if root.tag.lower()!="rss" or root.find("channel") is None:
+        raise ValueError("rss-shape-untrusted")
+    items=root.findall("./channel/item")[:20]
+    examined=0;events=[]
+    for item in items:
+        title=clean(item.findtext("title"),150)
+        description=item.findtext("description") or ""
+        url=rss_article_url(item.findtext("link"))
+        pub=item.findtext("pubDate") or ""
+        if not url or not EVENT_TERMS.search(title+" "+description):
+            continue
+        try:
+            published=email.utils.parsedate_to_datetime(pub).astimezone(UTC)
+        except (ValueError,TypeError,OverflowError):
+            continue
+        if published>now+timedelta(days=1) or now-published>timedelta(days=MAX_AGE_DAYS):
+            continue
+        examined+=1
+        # Decoded text in RSS description is short enough to keep as sentences.
+        parser=Extract();parser.feed(description)
+        body=clean(parser.body() or description,3000)
+        evidence=title+". "+body
+        if not launch_region_attested("california",evidence):
+            continue
+        target=prospective_date(body,now)
+        if not target:
+            continue
+        snippets=" ".join(sentence for sentence in re.split(r"(?<=[.!?])\s+",body)
+                          if PROSPECTIVE.search(sentence) and EVENT_TERMS.search(sentence))
+        identifiers=markers(title)|markers(snippets)
+        if len(identifiers)!=1:
+            continue
+        events.append({"sourceId":RSS_SOURCE[0],"region":"california",
+            "articleUrl":url,"title":title,"eventDate":target,
+            "publishedDate":published.date().isoformat(),
+            "markers":sorted(identifiers),"scope":"official-space-force-rss-summary",
+            "sourceFingerprint":hashlib.sha256((url+"|"+title+"|"+target+"|"+
+                  "|".join(sorted(identifiers))).encode()).hexdigest()[:24]})
+        if len(events)>=MAX_ARTICLES_PER_INDEX:
+            break
+    return events, min(examined,MAX_ARTICLES_PER_INDEX)
 
 def collect_evidence(manifest,now,fetcher=fetch_text):
     status=[];events=[]
@@ -320,6 +394,21 @@ def collect_evidence(manifest,now,fetcher=fetch_text):
             state="unavailable"
         status.append({"id":sid,"region":region,"sourceUrl":index,
                        "status":state,"articlesChecked":scanned,"candidateCount":found})
+    # A different official host and format provide independent discovery
+    # resilience when Vandenberg web pages reject automated retrieval. It
+    # never inherits California locality from the URL alone.
+    scanned=0;found=0
+    try:
+        raw=fetcher(RSS_SOURCE[2],"www.spaceforce.mil",INDEX_MAX_BYTES)
+        feed_events,scanned=official_rss_events(raw,now)
+        events.extend(feed_events)
+        found=len(feed_events)
+        state="retrieved"
+    except (OSError,ValueError,urllib.error.URLError,TimeoutError,ET.ParseError):
+        state="unavailable"
+    status.append({"id":RSS_SOURCE[0],"region":"california",
+                   "sourceUrl":RSS_SOURCE[2],"status":state,
+                   "articlesChecked":scanned,"candidateCount":found})
     # Candidate metadata remains bounded; only exact matches go public.
     output=reconcile(events,manifest,now)
     output["sourceStatus"]=status
