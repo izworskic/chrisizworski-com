@@ -156,8 +156,8 @@ t('Starbase future transport windows are source-bound, dated and never launch pe
  request.regions.texas[0].signals.push(road);
  const valid=validateSnapshot(request,NOW).regions.texas[0].signals[1];
  a.equal(valid.kind,'scheduled-road-activity');
- a.equal(valid.windowStart,road.windowStart);
- a.equal(valid.windowEnd,road.windowEnd);
+ a.equal(valid.windowStart,new Date(road.windowStart).toISOString());
+ a.equal(valid.windowEnd,new Date(road.windowEnd).toISOString());
  a.equal(valid.relevance,'dated-road-advisory');
  for(const [field,value] of [
   ['windowStart','2026-11-01T05:59:00Z'],
