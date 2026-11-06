@@ -71,7 +71,7 @@ test('B72 visitor pages and generated indexes retain source gates',()=>{
  assert.match(hub,/data-id="jumbo-falls" data-gis-oid="29"/);
  assert.match(hub,/77 curated visitor destinations/);
  assert.match(hub,/data-lat="46.44963" data-lng="-88.91278"/);
- assert.equal((sitemap.match(/<loc>/g)||[]).length,74);
+ assert.equal((sitemap.match(/<loc>/g)||[]).length,75);
  assert.equal((sitemap.match(/upper-peninsula-waterfalls\/jumbo-falls\//g)||[]).length,1);
  assert.equal(nearby.counts.eligible,68);
  assert.ok(nearby.nearby['jumbo-falls'].some(x=>x.id==='duppy-falls'&&x.miles===2.6));
