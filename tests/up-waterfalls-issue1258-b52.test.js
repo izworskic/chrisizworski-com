@@ -15,7 +15,7 @@ test('batch52: generic Upper/Lower waterfall names never imply public access',()
  assert.ok(!Q.candidates.some(x=>x.gisObjectId===136));assert.ok(map.includes('/upper-peninsula-waterfalls/conglomerate-falls-gratiot/'));
  assert.match(fs.readFileSync('public/upper-peninsula-waterfalls/research/upper-gratiot-river-falls/index.html','utf8'),/noindex,follow/);
  assert.equal(R.candidates.find(x=>x.gisObjectId===137).publicationEligible,false);
- assert.ok(V.records.length>=90);assert.equal(R.counts.curatedTotal,76);assert.equal(R.counts.exactIdMatched,69);assert.equal(R.counts.pending,92);assert.equal(L.unresolvedCandidates,92);assert.equal(Q.candidates.length,92);
+ assert.ok(V.records.length>=90);assert.equal(R.counts.curatedTotal,77);assert.equal(R.counts.exactIdMatched,69);assert.equal(R.counts.pending,92);assert.equal(L.unresolvedCandidates,92);assert.equal(Q.candidates.length,92);
  const notes=id=>R.candidates.find(x=>x.gisObjectId===id).sourceNotes;
  assert.match(notes(51),/557 metres/);assert.match(notes(51),/Sturgeon Falls/);
  assert.match(notes(120),/253 metres/);assert.match(notes(120),/ford/);
