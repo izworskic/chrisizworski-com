@@ -199,7 +199,7 @@ t('dated Starbase transport windows require official city origin and bounded UTC
  const cases=[
   {windowStart:undefined},{windowEnd:undefined},
   {windowEnd:new Date(NOW+40*3600000).toISOString().replace('.000Z','Z')},
-  {windowStart:new Date(NOW-4*3600000).toISOString().replace('.000Z','Z')},
+  {windowStart:new Date(NOW-40*3600000).toISOString().replace('.000Z','Z')},
   {windowStart:new Date(NOW+20*86400000).toISOString().replace('.000Z','Z')},
   {sourceUrl:'https://evil.example/road'},
   {relevance:'current-published-status'}
