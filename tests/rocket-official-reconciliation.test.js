@@ -31,7 +31,7 @@ function fixture(){
   regions[region].push({id,region,sourceUrl,scope,status:'retrieved',
    checkedAt:AT,fingerprint:'b'.repeat(24),signals:[],notes:[]});
  }
- return {version:1,checkedAt:AT,sourceCount:10,regions,reconciliation:reconciliation()};
+ return {version:1,checkedAt:AT,sourceCount:11,regions,reconciliation:reconciliation()};
 }
 function national(name='USSF-259 | Falcon 9',region='california',net='2026-11-06T22:30:00Z'){
  return {freshness:'recent',checkedAt:AT,complete:true,
@@ -97,11 +97,11 @@ test('Postgres write strips matches when the shared schedule has moved or gone s
  const state={get:async()=>null,set:async(k,value)=>{saved=value;return 'OK';}};
  const result=await saveSnapshot(fixture(),{state,now:NOW,
   getNational:async()=>national('Generic rocket')});
- assert.equal(result.sourceCount,10);
+ assert.equal(result.sourceCount,11);
  assert.equal(saved.reconciliation.matches.length,0);
  assert.equal(saved.reconciliation.health,'no-verified-match');
  const second=await saveSnapshot(fixture(),{state,now:NOW,getNational:async()=>national()});
- assert.equal(second.sourceCount,10);assert.equal(saved.reconciliation.matches.length,1);
+ assert.equal(second.sourceCount,11);assert.equal(saved.reconciliation.matches.length,1);
 });
 test('official note edits get revision events but cannot assert scrub or range GO',()=>{
  const first=validateSnapshot(fixture(),NOW);
