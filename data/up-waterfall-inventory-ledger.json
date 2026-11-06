@@ -4376,12 +4376,12 @@
       "trailEvidence": null,
       "sourceUrl": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "checked": "2026-11-05",
-      "nextAction": "Verify site-specific legal M-35 turnout and stopping rules with MDOT and current signed public pedestrian access to the roadside view or waterfall bank; do not require visitors to supply confirmation. The July north-of-Palmer and August county-road culvert notices alone are not Warner Falls access records.",
+      "nextAction": "Confirm the south-of-Palmer M-35 actual fully-off-road stopping space, current posted signs and any MDOT/MSP parking traffic-control order, shoulder width and sightlines, plus current county parcel ownership/right-of-way and an authorized complete creek-bank viewpoint route. Do not demand a dedicated MDOT visitor lot if generally lawful off-road shoulder parking can instead be established. Do not ask visitors to supply site proof.",
       "batch": "county-marquette",
       "reviewed": "2026-11-05",
       "reviewBatch": "34",
       "classification": "roadside-falls-confirmed-separate-culvert-projects-visitor-parking-not-cleared",
-      "accessAssessment": "Warner Falls (GIS #172) is south of Palmer on M-35 and independently identified by Travel Marquette, Michigan tourism, UP Travel and specialist field coordinates. The July 2026 MDOT replacement concerns a branch of Warner Creek NORTH of Palmer; the August 2026 replacement concerns two other culverts near County Roads MT and MP SOUTH of Palmer. Neither notice establishes construction at Warner Falls itself or changes to its old guardrail/path. Previous research mistakenly used the July north-side project as evidence of postconstruction changes at the falls. Tourism publications describe historic off-road stopping and a short signed path, but no current site-specific MDOT parking permission, safe turnout layout or complete public bank-access right was verified. No car directions to the waterfall or historical shoulder.",
+      "accessAssessment": "Warner Falls (GIS #172) is south of Palmer on M-35 and independently identified by Travel Marquette, Michigan tourism, UP Travel and specialist field coordinates. The July 2026 MDOT replacement concerns a branch of Warner Creek NORTH of Palmer; the August 2026 replacement concerns two other culverts near County Roads MT and MP SOUTH of Palmer. Neither notice establishes construction at Warner Falls itself or changes to its old guardrail/path. Previous research mistakenly used the July north-side project as evidence of postconstruction changes at the falls. Tourism publications describe historic fully-off-road stops and a short signed path. Michigan MDOT's own FAQ generally allows roadside shoulder stopping subject to safety, signs and narrow exceptions; a specially approved waterfall lot is not legally required statewide. MCL 257.672 and 257.674 prohibit parking on the traveled lane, bridges and posted prohibited locations. MSP confirms sign-based parking controls may be created by a traffic-control order. MDOT's named roadside-park GIS has zero features within 5 km, so this is not a confirmed MDOT roadside park; absence of a park does not prove all nearby off-road shoulders unlawful. A stale 2023 parcel layer labeled the falls area Residential but does not establish current title or public trail rights. Local shoulder suitability, site-specific signs/orders and continuous legal bank walking remain unverified. No car directions to the waterfall or historical shoulder.",
       "evidence": [
         "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
         "https://www.michigan.gov/mdot/news-outreach/pressreleases/2026/07/01/m-35-culvert-project-detour-starts-july-27",
@@ -4391,10 +4391,17 @@
         "https://www.michigan.gov/mdot/news-outreach/pressreleases/2026/08/12/m-35-culvert-replacements-in-marquette-county-start-aug-24",
         "https://www.travelmarquette.com/blog/post/waterfalls-you-need-to-see-in-fall/",
         "https://www.uptravel.com/listing/warner-falls/4598/",
-        "https://www.waterfallsofthekeweenaw.com/warner-creek/warner-falls/"
+        "https://www.waterfallsofthekeweenaw.com/warner-creek/warner-falls/",
+        "https://www.michigan.gov/mdot/about/faqs/general/common",
+        "https://www.michigan.gov/msp/divisions/spec-ops/inside-sod/traffic-crash-reconstruction-unit/traffic-control-orders",
+        "https://www.michigan.gov/sos/-/media/Project/Websites/sos/Resources/Forms-and-publications/WEDMK/WEDMK.pdf",
+        "https://gisagomdot.state.mi.us/arcgis/rest/services/MDOT/MdotRoadsideParkPublic/FeatureServer/0",
+        "https://www.co.marquette.mi.us/departments/equalization_tax_roll/gis_mapping.php",
+        "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/marquettemi/waterfalls3_2025brochureV2_03a81a20-d8c9-4ab9-b1c6-ccc8ac1bfc68.pdf"
       ],
       "latestSourceReview": "2026-11-05",
-      "researchBatch": "69"
+      "researchBatch": "69",
+      "researchBatchLatest": "70"
     },
     {
       "source": "mi-state-gis",
