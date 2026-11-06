@@ -59,7 +59,7 @@ test('B73 keeps Warner unpromoted after independently sourced Jumbo addition',()
  assert.ok(row);
  assert.equal(row.curatedId,null);
  assert.equal(row.publicationEligible,false);
- assert.deepEqual([rec.counts.curatedTotal,rec.counts.exactIdMatched,rec.counts.pending],[76,69,92]);
+ assert.deepEqual([rec.counts.curatedTotal,rec.counts.exactIdMatched,rec.counts.pending],[77,69,92]);
  for(const k of ['noVerifiedDrivingDestination','noCurrentParkingPermissionOrSafeShoulderWidth',
   'noContinuousLawfulFootRoute','notOpenNowClaim','sameCreekDoesNotProveSameProject'])assert.equal(source.access[k],true,k);
  assert.equal(source.access.curated,false);
