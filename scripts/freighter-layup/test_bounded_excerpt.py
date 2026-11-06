@@ -85,6 +85,10 @@ class BoundedExcerptScientificContracts(unittest.TestCase):
              "Ice conditions and lake weather are worsening."),
             ("Mesabi Miner expected to arrive in January",
              "The vessel is scheduled for winter layup pending arrival."),
+            ("Mesabi Miner expected for winter layup",
+             "A ship is due to arrive but no berth has occurred."),
+            ("Mesabi Miner not wintering at this port",
+             "No winter berth is documented."),
             ("Remembering Atlantic Herald arrives in Sturgeon Bay",
              "An archive recalls an old winter layup."),
         ]:
