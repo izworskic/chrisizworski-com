@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-03",
+  "reviewed": "2026-11-05",
   "method": "haversine-waterfall-coordinate-straight-line-not-driving",
   "maxRadiusMiles": 50,
   "policy": "Not a route, visitor parking point, driving distance, trail distance, access grant, or live-open forecast.",
   "counts": {
-    "curated": 75,
-    "eligible": 67,
+    "curated": 76,
+    "eligible": 68,
     "excluded": 8
   },
   "excludedIds": [
@@ -259,6 +259,16 @@
       "source": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/keweenawmi/KCVB_summer_waterfalls_brochure_20230517_WEB_LOW_1__15f13fff-fd1f-4b37-9438-cd0a32dbaf4a.pdf",
       "lat": 47.427749,
       "lng": -88.237254
+    },
+    {
+      "id": "jumbo-falls",
+      "name": "Jumbo Falls",
+      "region": "Western U.P.",
+      "status": "seasonal",
+      "url": "/upper-peninsula-waterfalls/jumbo-falls/",
+      "source": "https://www.coppercountry.com/experiences/hiking/ottawa-national-forest-trails/",
+      "lat": 46.44963,
+      "lng": -88.91278
     },
     {
       "id": "kakabika-falls",
@@ -698,6 +708,10 @@
         "miles": 5.3
       },
       {
+        "id": "jumbo-falls",
+        "miles": 8.7
+      },
+      {
         "id": "duppy-falls",
         "miles": 9.7
       },
@@ -902,6 +916,10 @@
       {
         "id": "manganese-falls",
         "miles": 42.4
+      },
+      {
+        "id": "jumbo-falls",
+        "miles": 48.7
       }
     ],
     "bonanza-falls": [
@@ -1006,6 +1024,10 @@
         "miles": 38.1
       },
       {
+        "id": "jumbo-falls",
+        "miles": 40.3
+      },
+      {
         "id": "duppy-falls",
         "miles": 42.1
       },
@@ -1042,6 +1064,10 @@
       {
         "id": "duppy-falls",
         "miles": 10.5
+      },
+      {
+        "id": "jumbo-falls",
+        "miles": 10.8
       },
       {
         "id": "kakabika-falls",
@@ -1238,6 +1264,10 @@
       {
         "id": "sturgeon-falls",
         "miles": 10.5
+      },
+      {
+        "id": "jumbo-falls",
+        "miles": 24.1
       },
       {
         "id": "big-erics-falls",
@@ -1480,6 +1510,10 @@
         "miles": 28.9
       },
       {
+        "id": "jumbo-falls",
+        "miles": 28.9
+      },
+      {
         "id": "mex-i-min-e-falls",
         "miles": 29.9
       },
@@ -1633,6 +1667,10 @@
       }
     ],
     "duppy-falls": [
+      {
+        "id": "jumbo-falls",
+        "miles": 2.6
+      },
       {
         "id": "mex-i-min-e-falls",
         "miles": 9.7
@@ -1964,6 +2002,10 @@
       {
         "id": "upper-hungarian-falls",
         "miles": 29.1
+      },
+      {
+        "id": "jumbo-falls",
+        "miles": 30.2
       },
       {
         "id": "pinnacle-falls",
@@ -2476,6 +2518,10 @@
         "miles": 46.6
       },
       {
+        "id": "jumbo-falls",
+        "miles": 47.6
+      },
+      {
         "id": "duppy-falls",
         "miles": 48.7
       }
@@ -2724,6 +2770,96 @@
         "miles": 48.7
       }
     ],
+    "jumbo-falls": [
+      {
+        "id": "duppy-falls",
+        "miles": 2.6
+      },
+      {
+        "id": "agate-falls",
+        "miles": 8.7
+      },
+      {
+        "id": "bond-falls",
+        "miles": 10.8
+      },
+      {
+        "id": "mex-i-min-e-falls",
+        "miles": 11.6
+      },
+      {
+        "id": "sturgeon-falls",
+        "miles": 16.9
+      },
+      {
+        "id": "tibbets-falls",
+        "miles": 17.9
+      },
+      {
+        "id": "o-kun-de-kun-falls",
+        "miles": 18
+      },
+      {
+        "id": "canyon-falls",
+        "miles": 24.1
+      },
+      {
+        "id": "kakabika-falls",
+        "miles": 26.8
+      },
+      {
+        "id": "tioga-park-falls",
+        "miles": 28.6
+      },
+      {
+        "id": "cascade-falls",
+        "miles": 28.9
+      },
+      {
+        "id": "power-house-falls",
+        "miles": 29.8
+      },
+      {
+        "id": "falls-river-trail",
+        "miles": 30.2
+      },
+      {
+        "id": "wyandotte-falls",
+        "miles": 30.5
+      },
+      {
+        "id": "yondota-falls",
+        "miles": 36.8
+      },
+      {
+        "id": "nonesuch-falls",
+        "miles": 39.4
+      },
+      {
+        "id": "bonanza-falls",
+        "miles": 40.3
+      },
+      {
+        "id": "little-union-gorge-falls",
+        "miles": 41.3
+      },
+      {
+        "id": "trap-falls",
+        "miles": 43.8
+      },
+      {
+        "id": "overlooked-falls",
+        "miles": 47.4
+      },
+      {
+        "id": "greenstone-falls",
+        "miles": 47.6
+      },
+      {
+        "id": "big-erics-falls",
+        "miles": 48.7
+      }
+    ],
     "kakabika-falls": [
       {
         "id": "yondota-falls",
@@ -2752,6 +2888,10 @@
       {
         "id": "duppy-falls",
         "miles": 26.3
+      },
+      {
+        "id": "jumbo-falls",
+        "miles": 26.8
       },
       {
         "id": "gabbro-falls",
@@ -3198,6 +3338,10 @@
         "miles": 40.7
       },
       {
+        "id": "jumbo-falls",
+        "miles": 41.3
+      },
+      {
         "id": "mex-i-min-e-falls",
         "miles": 42.8
       },
@@ -3530,6 +3674,10 @@
       {
         "id": "duppy-falls",
         "miles": 9.7
+      },
+      {
+        "id": "jumbo-falls",
+        "miles": 11.6
       },
       {
         "id": "agate-falls",
@@ -4056,6 +4204,10 @@
         "miles": 39.4
       },
       {
+        "id": "jumbo-falls",
+        "miles": 39.4
+      },
+      {
         "id": "superior-falls",
         "miles": 40.3
       },
@@ -4084,6 +4236,10 @@
       {
         "id": "bond-falls",
         "miles": 16.7
+      },
+      {
+        "id": "jumbo-falls",
+        "miles": 18
       },
       {
         "id": "duppy-falls",
@@ -4324,6 +4480,10 @@
         "miles": 46.5
       },
       {
+        "id": "jumbo-falls",
+        "miles": 47.4
+      },
+      {
         "id": "duppy-falls",
         "miles": 48.6
       }
@@ -4554,6 +4714,10 @@
       {
         "id": "wyandotte-falls",
         "miles": 23.1
+      },
+      {
+        "id": "jumbo-falls",
+        "miles": 29.8
       },
       {
         "id": "lower-hungarian-falls",
@@ -5228,6 +5392,10 @@
         "miles": 13.7
       },
       {
+        "id": "jumbo-falls",
+        "miles": 16.9
+      },
+      {
         "id": "tioga-park-falls",
         "miles": 17.5
       },
@@ -5424,6 +5592,10 @@
         "miles": 13.5
       },
       {
+        "id": "jumbo-falls",
+        "miles": 17.9
+      },
+      {
         "id": "duppy-falls",
         "miles": 19.2
       },
@@ -5512,6 +5684,10 @@
       {
         "id": "pinnacle-falls",
         "miles": 26.9
+      },
+      {
+        "id": "jumbo-falls",
+        "miles": 28.6
       },
       {
         "id": "duppy-falls",
@@ -5674,6 +5850,10 @@
       {
         "id": "wyandotte-falls",
         "miles": 39
+      },
+      {
+        "id": "jumbo-falls",
+        "miles": 43.8
       },
       {
         "id": "mex-i-min-e-falls",
@@ -6058,6 +6238,10 @@
         "miles": 30
       },
       {
+        "id": "jumbo-falls",
+        "miles": 30.5
+      },
+      {
         "id": "cascade-falls",
         "miles": 31.5
       },
@@ -6316,6 +6500,10 @@
       {
         "id": "superior-falls",
         "miles": 35.9
+      },
+      {
+        "id": "jumbo-falls",
+        "miles": 36.8
       },
       {
         "id": "duppy-falls",
