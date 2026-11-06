@@ -74,7 +74,10 @@
     '<p><strong>Published location clue:</strong> '+esc(p.parkingHint||'not available')+'</p>'+
     '<p><strong>Road approach:</strong> '+esc(p.roadHint||'not available')+'</p>'+
     '<p><strong>Unresolved access question:</strong> '+esc(p.managerQuestion||'Current trail, road and plowed lot conditions are unknown')+'</p>'+
-    '<p><a href="'+esc(p.source)+'" target="_blank" rel="noopener">Review the official manager source ↗</a> · Description reviewed '+esc(p.sourceReviewedAt||'undated')+'. This is not a live plowing report.</p>':'';
+    '<p><a href="'+esc(p.source)+'" target="_blank" rel="noopener">Review the official manager source ↗</a> · Description reviewed '+esc(p.sourceReviewedAt||'undated')+'. This is not a live plowing report.</p>'+
+    (p.publishedWinterMaintenance?'<p class="source-line"><strong>Published seasonal policy (not today):</strong> '+esc(p.publishedWinterMaintenance)+'</p>':'')+
+    (p.knownAccessIssue?'<p class="source-line"><strong>Specific access conflict:</strong> '+esc(p.knownAccessIssue)+'</p>':'')+
+    (p.currentConditionsUrl?'<p><a href="'+esc(p.currentConditionsUrl)+'" target="_blank" rel="noopener noreferrer">Check the manager current-conditions and closure notices ↗</a></p>':''):'';
   const winterAccessPanel='<div class="verification" aria-label="Winter parking access status"><strong>Winter arrival evidence — '+esc(tracked?'access conditions remain unverified':'specific parking research incomplete')+'</strong>'+
    '<ul class="evidence-list">'+accessRows+'</ul>'+accessDetails+
    '<p><strong>No GPS directions:</strong> a trail reference point or park address is not certified cleared winter parking.</p></div>';
@@ -259,6 +262,15 @@
   $('clear').addEventListener('click',()=>{state.parkFilter=null;state.pointFilter=null;filtered()});
   $('all-map').addEventListener('click',()=>{state.parkFilter=null;state.pointFilter=null;filtered();if(state.mapLoaded)state.map.easeTo({center:[-86.9,44.4],zoom:5.2,duration:400})});
   $('cards').addEventListener('click',e=>{const b=e.target.closest('[data-route]');if(b)pick(b.dataset.route,true)});
+  document.querySelectorAll('[data-select-route]').forEach(button=>button.addEventListener('click',()=>{
+   const id=button.dataset.selectRoute;
+   const route=state.routes.find(item=>item.id===id);
+   if(!route){$('result-count').textContent='Route catalog unavailable. Use the linked NPS official guidance.';return}
+   state.parkFilter=null;state.pointFilter=null;
+   $('region').value='all';$('activity').value='either';$('search').value='';
+   filtered();pick(id,true);
+   if(state.mapLoaded)state.map.easeTo({center:[route.point.lon,route.point.lat],zoom:10,duration:450});
+  }));
   $('nearby').addEventListener('click',()=>{
    if(!navigator.geolocation){$('map-status').textContent='Geolocation unavailable; filter by region.';return}
    $('map-status').textContent='Requesting your device location…';

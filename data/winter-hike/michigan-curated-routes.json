@@ -1,10 +1,10 @@
 {
   "schema": "winter-route-catalog-v1",
   "status": "CURATED_STATIC_ROUTE_IDENTITIES_NOT_LIVE_WINTER_ACCESS",
-  "compiledAt": "2026-10-25",
+  "compiledAt": "2026-11-06",
   "state": "Michigan",
   "countMeaning": "Named routes, trail segments, and mapped winter corridors; NOT confirmed open, plowed or safe destinations. Some snowshoe trails are explicitly ski-shared. No turn-by-turn navigation.",
-  "dataProvenance": "Michigan DNR official named trail pages, accessible official hiking maps, and dated GIS trail point records. No GIS segment sums are used as route lengths.",
+  "dataProvenance": "Michigan DNR official named trail pages, maps and dated GIS trail point records, plus NPS Pictured Rocks official winter guide and the sourced 2026 Sand Point Marsh event meeting point. Seasonal manager-maintenance policy is not today's open road or plowed lot report. No GIS segment sums are used as route lengths.",
   "sources": {
     "muskegon": {
       "page": "https://www.michigan.gov/recsearch/parks/muskegon",
@@ -80,6 +80,12 @@
       "page": "https://www.nps.gov/slbe/planyourvisit/winteractivities.htm",
       "map": null,
       "phone": "231-326-4700"
+    },
+    "piro": {
+      "page": "https://www.nps.gov/places/sand-point-marsh-trail-in-winter.htm",
+      "map": null,
+      "phone": "906-387-3700",
+      "currentAlerts": "https://www.nps.gov/piro/planyourvisit/conditions.htm"
     }
   },
   "routes": [
@@ -2195,6 +2201,51 @@
         "Verify current-season trail and closure status",
         "Verify winter-maintained approach road and specific plowed parking lot",
         "Confirm selected route geometry before directions"
+      ]
+    },
+    {
+      "id": "piro-sand-point-marsh",
+      "displayName": "Pictured Rocks — Sand Point Marsh Trail",
+      "region": "upper-peninsula",
+      "placeGroup": "piro",
+      "routeForm": "loop",
+      "lengthMiles": 0.5,
+      "lengthEvidence": "official_named_route",
+      "sourceDnrTrailId": null,
+      "sourceDnrTrailName": null,
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "ungroomed_nature_walk",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 46.448947,
+        "lon": -86.605869,
+        "meaning": "NPS 2026 ranger event meeting coordinate for Sand Point Marsh Trail, not certified current winter parking or a driving entrance"
+      },
+      "officialPage": "https://www.nps.gov/places/sand-point-marsh-trail-in-winter.htm",
+      "officialMap": null,
+      "routeEvidenceUrl": "https://www.nps.gov/places/sand-point-marsh-trail-in-winter.htm",
+      "managerPhone": "906-387-3700",
+      "caveats": [
+        "Boardwalk can be icy even with little snow; snowshoes often needed in deep snow.",
+        "Pets prohibited on the marsh trail.",
+        "NPS winter policy describes Sand Point Road and beach parking as plowed. This is not evidence of today's road or lot condition.",
+        "September 2026 NPS notice scheduled Sand Point Road construction closure October 1–14. No independent reopening confirmation was found; check current alerts before travel."
+      ],
+      "editorialSummary": "Half-mile wetland boardwalk through cattails, dunes and winterberries, reached from the Sand Point Beach area when access is permitted.",
+      "needs": [
+        "verify Sand Point Road reopened after October 2026 construction notice",
+        "dated manager-confirmed road and plowed lot status for trip date",
+        "dated route opening and boardwalk safety",
+        "official route geometry if navigation is ever considered"
       ]
     }
   ],
