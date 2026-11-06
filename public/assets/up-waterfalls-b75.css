@@ -1,0 +1,28 @@
+
+/* B75: two distinct public waterfall experiences with truthful coordinate roles. */
+.b75{--ink:#19362d;--muted:#415c51;--paper:#f7f8f2;--line:#c1d0c5;--accent:#16745c;max-width:1160px;padding:1.15rem clamp(1rem,4.5vw,3rem) 4rem;margin:auto;color:var(--ink)}
+.b75 .kicker{font-size:.75rem;letter-spacing:.13em;text-transform:uppercase;font-weight:800;color:#4f6f62}
+.b75 h1{font-size:clamp(2.1rem,5vw,4.3rem);line-height:1.07;max-width:21ch;letter-spacing:-.035em;margin:.4rem 0 .7rem}
+.b75 h2{font-size:clamp(1.4rem,2.6vw,2rem);line-height:1.24;margin:1rem 0 .6rem}
+.b75 h3{font-size:1.12rem}.b75 p{line-height:1.65}.b75 .intro{max-width:75ch;font-size:clamp(1.04rem,2vw,1.36rem);line-height:1.52}
+.b75 .summary-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.7rem;margin:1.5rem 0}
+.b75 .summary-strip>div{border:1px solid var(--line);border-radius:12px;background:var(--paper);padding:.85rem 1rem}
+.b75 .summary-strip strong{display:block;font-weight:800;font-size:1.13rem;line-height:1.23}
+.b75 .summary-strip span{display:block;font-size:.82rem;line-height:1.4;margin-top:.3rem}
+.b75 .decision{border-left:4px solid #c18037;padding:1rem 1.15rem;background:#fdf2e5;border-radius:5px;margin:1.3rem 0;line-height:1.55;color:#48341e}
+.b75 .columns{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(285px,.9fr);gap:1.5rem;align-items:start}
+.b75 .b75-map{height:400px;border:1px solid var(--line);border-radius:14px;background:#ebf0ed;overflow:hidden}
+.b75 .geo-note{font-size:.85rem;background:#eaf0ea;border:1px solid var(--line);border-radius:9px;padding:.75rem 1rem;color:#314f44}
+.b75 .side{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:1rem 1.2rem}
+.b75 .side dt{font-weight:800;margin-top:1.1rem}.b75 .side dd{margin:.22rem 0 .85rem;line-height:1.55}
+.b75 .story{max-width:78ch;margin-top:2.25rem}.b75 .source-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.8rem}
+.b75 .source-grid a{color:#096c55;font-weight:730}
+.b75 .source-grid article{border:1px solid var(--line);border-radius:10px;padding:.9rem 1rem;background:var(--paper)}
+.b75 a:focus-visible{outline:3px solid #edaa41;outline-offset:3px}
+.b75 .nav-pills{display:flex;flex-wrap:wrap;gap:.45rem;margin:1rem 0}
+.b75 .nav-pills a{border:1px solid #9bb2a5;border-radius:30px;padding:.55rem .85rem;color:#134b3c;text-decoration:none}
+.b75 .map-fallback{padding:.9rem 1rem;font-size:.95rem}
+.b75 .b75-map .leaflet-popup-content{min-width:190px;line-height:1.5}
+@media(max-width:760px){.b75 .columns,.b75 .source-grid{grid-template-columns:1fr}.b75 .summary-strip{grid-template-columns:1fr 1fr}.b75 .b75-map{height:330px}}
+@media(max-width:420px){.b75 .summary-strip{grid-template-columns:1fr}}
+@media(prefers-color-scheme:dark){.b75{--ink:#e9f6ef;--muted:#b7d2c6;--paper:#172f28;--line:#4b6c5e}.b75 .decision{background:#443624;color:#ffeaca}.b75 .geo-note{background:#152d26;color:#d3e7dc}.b75 .nav-pills a,.b75 .source-grid a{color:#9bdac6}.b75 .b75-map{background:#20382f}}
