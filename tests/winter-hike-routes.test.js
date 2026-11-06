@@ -7,8 +7,8 @@ const DNR=require('../data/winter-hike/michigan-dnr-candidates.json');
 const {routes,quarantined}=data;
 test('curation v1 is a non-live catalog with independent explicit source and parking contracts',()=>{
  const a=Routes.auditCatalog();
- assert.equal(a.ok,true,JSON.stringify(a.errors));assert.equal(a.count,50);
- assert.equal(a.measured,37);assert.equal(a.unknown,13);assert.equal(a.groups,15);
+ assert.equal(a.ok,true,JSON.stringify(a.errors));assert.equal(a.count,51);
+ assert.equal(a.measured,38);assert.equal(a.unknown,13);assert.equal(a.groups,16);
  assert.equal(data.operationalDefaults.directionsEnabled,false);
 });
 test('official route identities are unique and evidence scoped to particular route, not entire state park',()=>{
@@ -88,10 +88,10 @@ test('listed winter snowshoe routes differ from boots-only packed Upper Falls wa
  const boots=Routes.listRoutes({activity:'hike'});
  assert.ok(!snow.some(r=>r.id==='tahq-upper-packed-walking'));
  assert.ok(boots.some(r=>r.id==='tahq-upper-packed-walking'));
- assert.equal(Routes.listRoutes({region:'upper-peninsula'}).length,9);
+ assert.equal(Routes.listRoutes({region:'upper-peninsula'}).length,10);
 });
 test('length filter excludes unverified mileage instead of estimating it',()=>{
- assert.equal(Routes.listRoutes({onlyMeasured:true}).length,37);
+ assert.equal(Routes.listRoutes({onlyMeasured:true}).length,38);
  assert.ok(Routes.listRoutes({onlyMeasured:true}).every(r=>r.miles>0));
  assert.throws(()=>Routes.listRoutes({activity:'trailrunning'}));
 });
@@ -115,8 +115,8 @@ test('invalid official website host, missing provenance or fake navigation fails
 const accessResearch=require('../data/winter-hike/michigan-route-access-research.json');
 test('all 13 curated route areas preserve manager-sourced winter-access caveats',()=>{
  const groups=new Set(routes.map(r=>r.placeGroup));
- assert.equal(groups.size,15);
- assert.equal(accessResearch.records.length,15);
+ assert.equal(groups.size,16);
+ assert.equal(accessResearch.records.length,16);
  for(const record of accessResearch.records) {
   assert.ok(groups.has(record.group));
   assert.equal(record.navigationReady,false);
@@ -147,7 +147,7 @@ test('all public route cards remain research-only even if route length and map a
  }
 });
 
-test('50 named winter trails retain unverified winter access and do not create driving directions',()=>{
+test('51 named winter trails retain unverified winter access and do not create driving directions',()=>{
  const a=Routes.auditCatalog();assert.equal(a.ok,true,JSON.stringify(a.errors));
  const expanded=routes.filter(r=>r.placeGroup==='spring'||r.placeGroup==='sleepbear');
  assert.equal(expanded.length,12);
