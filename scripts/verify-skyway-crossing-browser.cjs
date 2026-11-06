@@ -29,7 +29,7 @@ function fixture(params,scenario){
   windContext:{level:wind?'HIGH_WIND_CLOSURE_RISK_CONTEXT':'ROUTINE_CONTEXT',maxWindMph:wind?45:12,sourceLabel:'NWS test forecast',periods:[{startTime:new Date(Date.now()+3600000).toISOString(),windSpeed:wind?'45 mph':'12 mph',windDirection:'N',shortForecast:'Fixture forecast'}],alerts:[]},
   sourceHealth:{alerts:{state:unknown?'unavailable':'ok'},traffic:{state:unknown?'unavailable':'ok'},trafficSpeeds:{state:speed},camera:{state:'unavailable'}},
   toll:{amount:direction==='southbound'?1.62:1.16,direction,plaza:direction==='southbound'?'North Plaza':'South Plaza',note:'Fixture only'},
-  cameras:[]
+  cameras:[{id:'fl511-skyway-2553',name:'Skyway Bridge View',official:true,embedUrl:'https://fl511.com/tooltip/Cameras/2553',imageUrl:'https://fl511.com/map/Cctv/2553',sourceUrl:'https://fl511.com/tooltip/Cameras/2553',note:'Official FL511 camera image'}]
  };
 }
 (async()=>{
@@ -40,9 +40,15 @@ function fixture(params,scenario){
   browser=await chromium.launch({executablePath:process.env.CHROME_PATH||undefined,headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});
   for(const width of [360,390,768,1440]){
    const context=await browser.newContext({viewport:{width,height:900},timezoneId:'America/New_York',reducedMotion:'reduce'});
-   let scenario='normal';
+   let scenario='normal',imageFails=false,imageRequests=0;
    await context.route('**/*',route=>{
     const u=route.request().url();
+    if(u.startsWith('https://fl511.com/map/Cctv/2553')) {
+     imageRequests++;
+     if(imageFails) return route.abort('failed');
+     const svg='<svg xmlns="http://www.w3.org/2000/svg" width="320" height="180"><rect width="320" height="180" fill="#294b60"/><text x="20" y="90" font-size="22" fill="#fff">TEST CAMERA IMAGE</text></svg>';
+     return route.fulfill({status:200,contentType:'image/svg+xml',body:svg});
+    }
     if(u.includes('/api/sunshine-skyway?')){
      const params=new URL(u).searchParams;
      return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(fixture(params,scenario))});
@@ -54,6 +60,23 @@ function fixture(params,scenario){
    await page.goto(base+'/sunshine-skyway-bridge/',{waitUntil:'domcontentloaded'});
    await page.waitForFunction(()=>document.querySelector('#statusWord').textContent.includes('NO CLOSURE SIGNAL'));
    assert.match(await page.locator('#tripDecision').innerText(),/No official Skyway closure signal/);
+   await page.waitForFunction(()=>document.querySelector('#skywayCameraImage')?.naturalWidth>0);
+   assert.equal(await page.locator('#skywayCameraImage').isVisible(),true,'Official still panel must render');
+   assert.equal(await page.locator('#skywayCameraFrame').count(),0,'Tooltip iframe must not ship');
+   assert.match(await page.locator('#skywayCameraImageStatus').innerText(),/Still image, not continuous video/);
+   assert.match(await page.locator('.camera-meta a').last().getAttribute('href'),/https:\/\/fl511\.com\/map/);
+   const firstImageRequests=imageRequests;
+   await page.locator('#skywayCameraRefresh').click();
+   await page.waitForFunction(()=>document.querySelector('#skywayCameraImageStatus')?.textContent.includes('Still image, not continuous video'));
+   assert.ok(imageRequests>firstImageRequests,'Manual refresh must request a new official frame');
+   if(width===390){
+    imageFails=true;await page.locator('#skywayCameraRefresh').click();
+    await page.waitForFunction(()=>document.querySelector('#skywayCameraFallback')?.textContent.includes('unavailable'));
+    assert.equal(await page.locator('#skywayCameraImage').isVisible(),false,'Failed image should not masquerade as live');
+    imageFails=false;await page.locator('#skywayCameraRefresh').click();
+    await page.waitForFunction(()=>document.querySelector('#skywayCameraImage')?.naturalWidth>0 && !document.querySelector('#skywayCameraImage').hidden);
+    assert.equal(await page.locator('#skywayCameraFallback').isVisible(),false,'Success should clear failure message');
+   }
    assert.ok((await page.locator('#routeSteps').textContent()).includes('I-75 north'));
    const head=await page.locator('#statusPanel').boundingBox();
    assert.ok(head&&head.y<830,'Operational answer outside initial 900px viewport, width '+width);
@@ -85,7 +108,7 @@ function fixture(params,scenario){
    await page.waitForFunction(()=>document.querySelector('#statusWord').textContent.includes('NO CLOSURE SIGNAL'));
    assert.doesNotMatch(await page.locator('#tripDecision').innerText(),/traffic is slow/i);
    assert.equal(errors.length,0,'JS errors at '+width+': '+errors.join('; '));
-   report.views.push({width,overflow,statusTop:head.y,normal:true,reversed:true,wind:true,closed:true,unknown:true,stale:true});
+   report.views.push({width,overflow,statusTop:head.y,officialImageFixture:true,imageRequests,recovery:width===390,normal:true,reversed:true,wind:true,closed:true,unknown:true,stale:true});
    await context.close();
   }
   const ctx=await browser.newContext({javaScriptEnabled:false,viewport:{width:390,height:900}});
