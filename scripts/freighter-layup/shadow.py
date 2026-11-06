@@ -28,8 +28,7 @@ EXCERPT_LIMIT = 720
 STAY_CONTEXT = re.compile(
     r"\b(?:winter lay[\s-]*up|winter berth|wintering|wintered|"
     r"laid up (?:for|over) (?:the )?winter|winter mooring|"
-    r"tied up for (?:the )?winter|staying for (?:the )?winter|"
-    r"(?:final|last) (?:ship|boat|vessel) (?:in|for) (?:the )?season)\b",
+    r"tied up for (?:the )?winter|staying for (?:the )?winter)\b",
     re.I)
 NEGATED_STAY = re.compile(
     r"\b(?:no|not|never|without|denies?)\s+(?:\w+\s+){0,2}"
@@ -152,7 +151,8 @@ def analyze(inputs: dict, archive: dict, ledger: dict, as_of: str) -> dict:
         excerpt_evidence = excerpt_stay and excerpt_action
         # Do not revive forecasts or historical retrospectives as fresh leads.
         excerpt_evidence = (excerpt_evidence and not PLANNED.search(title)
-                            and not RETROSPECTIVE.search(title))
+                            and not RETROSPECTIVE.search(title)
+                            and not NEGATED_STAY.search(title))
         tentative = (tentative_title_name(title) if excerpt_evidence
                      and not matches and not excerpt_matches else None)
         # A museum headline may say "arrives at Fincantieri" without the
@@ -168,8 +168,12 @@ def analyze(inputs: dict, archive: dict, ledger: dict, as_of: str) -> dict:
         # Excerpt evidence can surface known ships absent from generic titles,
         # or a *tentative* unregistered vessel in a named-arrival headline.
         excerpt_candidate = excerpt_evidence and bool(matches or excerpt_matches or tentative)
+        headline_candidate = (review_cue and bool(matches)
+                              and not PLANNED.search(title)
+                              and not RETROSPECTIVE.search(title)
+                              and not NEGATED_STAY.search(title))
         potentially_missed = (winter_article and not node_candidate and
-                              ((review_cue and bool(matches)) or excerpt_candidate))
+                              (headline_candidate or excerpt_candidate))
         actionable = node_candidate or potentially_missed
         risks = []
         if actionable and len(matches) > 1:
@@ -180,7 +184,7 @@ def analyze(inputs: dict, archive: dict, ledger: dict, as_of: str) -> dict:
             risks.append("accepted_without_known_ship_in_headline")
         if potentially_missed:
             risks.append("potentially_missed_layup_excerpt" if excerpt_candidate
-                         and not (review_cue and matches) else "potentially_missed_layup_headline")
+                         and not headline_candidate else "potentially_missed_layup_headline")
             if tentative:
                 risks.append("unregistered_vessel_identity_requires_editorial_verification")
             if excerpt_matches and not matches:
