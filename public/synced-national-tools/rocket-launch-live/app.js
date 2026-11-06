@@ -2,9 +2,10 @@
 (() => {
   const API = '/api/rocket-launch-usa';
   const OFFICIAL_EVIDENCE_API = '/api/rocket-official-notices';
+  const KSC_OFFICIAL_API = '/api/space-coast-ksc-watch';
   const $ = id => document.getElementById(id);
   const validRegions = new Set(['california', 'florida', 'texas', 'virginia', 'alaska', 'hawaii']);
-  const state = { request: 0, data: null, map: null, markers: new Map(), regions: [], userFocusedMap: false, officialEvidence: null, officialEvidenceLoaded: false };
+  const state = { request: 0, data: null, map: null, markers: new Map(), regions: [], userFocusedMap: false, officialEvidence: null, officialEvidenceLoaded: false, kscEvidence: null, kscMissionId: null, kscRequest: 0 };
   const el = (tag, className, value) => {
     const n = document.createElement(tag);
     if (className) n.className = className;
@@ -891,6 +892,101 @@
       return part('year')+'-'+part('month')+'-'+part('day');
     }catch{return null;}
   }
+  // Existing mission-specific KSC event monitor already verifies the actual
+  // official event page and sourcePad against the selected Florida snapshot.
+  // Do NOT duplicate the scraper, infer admission or recast general policy
+  // as a launch ticket. This is a read-only same-site evidence bridge.
+  function officialKscEventUrl(value) {
+    try {
+      const u=new URL(value);
+      return u.origin==='https://www.kennedyspacecenter.com'&&
+        /^\/event\/[a-z0-9-]{5,160}\/?$/.test(u.pathname)&&
+        !u.search&&!u.hash?u.href:null;
+    }catch{return null;}
+  }
+  function renderKscMission(data){
+    const root=$('rl-ksc-official-viewing');
+    if(!root)return;
+    const florida=data?.region?.id==='florida';
+    root.hidden=!florida;
+    if(!florida)return;
+    root.replaceChildren();
+    root.appendChild(el('span','rl-match-eyebrow','FLORIDA · KENNEDY VISITOR COMPLEX'));
+    const launch=data?.selectedLaunch;
+    if(!launch?.id||data.scheduleFreshness!=='recent'){
+      root.dataset.status='unknown';
+      root.appendChild(el('h3','','KSC event cannot be linked without a recent mission'));
+      root.appendChild(el('p','','A mission and a recent schedule are needed before checking specific Kennedy Space Center visitor viewing arrangements.'));
+      return;
+    }
+    const evidence=state.kscMissionId===launch.id?state.kscEvidence:null;
+    if(!evidence){
+      root.dataset.status='unknown';
+      root.appendChild(el('h3','',state.kscMissionId===launch.id?'Checking the KSC verified-event watcher':'Looking for KSC event-specific viewing notices'));
+      root.appendChild(el('p','','The Kennedy visitor-complex source is independent of the Python government news matcher. No tickets or public access are implied.'));
+      return;
+    }
+    const health=evidence.health||{},timeline=evidence.timeline||{};
+    const source=officialKscEventUrl(timeline.officialSourceUrl);
+    const day=launchLocalDay(launch,'America/New_York');
+    const target=timeline.officialEventDate;
+    const dateGap=day&&target?Math.abs((Date.parse(day+'T12:00:00Z')-Date.parse(target+'T12:00:00Z'))/86400000):Infinity;
+    const valid=evidence.ok===true&&evidence.selectedLaunchId===launch.id&&
+      (health.status==='checked'||health.status==='partial')&&
+      timeline.verifiedPageIsRecent===true&&source&&dateGap<=1;
+    if(valid){
+      root.dataset.status='matched';
+      root.appendChild(el('h3','','KSC published a viewing event for this mission'));
+      root.appendChild(el('p','rl-match-heading','Official event date: '+target+
+        ' · Mission designation: '+timeline.missionMarker));
+      root.appendChild(el('p','rl-match-meta','Official page last verified: '+
+        stamp(timeline.officialPageLastVerifiedAt)+' · Watcher: '+health.status));
+      root.appendChild(el('p','rl-match-caution',
+        'A matched KSC event is not admission. Check current ticket offers, viewing location availability, visitor-center entry, launch-specific closures and delay rules on the original page before purchasing or traveling.'));
+      const link=anchor(source,'Inspect official KSC event and ticket conditions');
+      if(link)root.appendChild(link);
+    }else{
+      root.dataset.status='unverified';
+      root.appendChild(el('h3','','No current KSC viewing event verified for this mission'));
+      const overdue=health.status==='overdue'||health.status==='not-initialized'||!evidence.ok;
+      root.appendChild(el('p','',overdue?
+        'The KSC event watcher is overdue or unavailable. A missing verification is not evidence that visitor viewing will be closed.':
+        'The watcher has not verified a current, exact-mission KSC viewing event with compatible date and source. General visitor hours are not launch-day viewing availability.'));
+      root.appendChild(el('p','rl-match-meta','Last KSC source check: '+
+        stamp(health.lastCalendarCheckedAt)+'.'));
+      const link=anchor(health.calendarUrl,'Open Kennedy’s official events calendar');
+      if(link)root.appendChild(link);
+    }
+    const specialist=anchor(floridaSpecialistLink('/national-tools/space-coast-launch/',data),
+      'Open detailed Florida viewing and ticket desk');
+    if(specialist)root.appendChild(specialist);
+  }
+  async function loadKscMission(data){
+    const sequence=++state.kscRequest;
+    const id=data?.selectedLaunch?.id;
+    const use=data?.region?.id==='florida'&&data.scheduleFreshness==='recent'&&
+      /^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i.test(id||'');
+    state.kscEvidence=null;
+    state.kscMissionId=use?id:null;
+    renderKscMission(data);
+    if(!use)return;
+    try{
+      const response=await fetch(KSC_OFFICIAL_API+'?launchId='+encodeURIComponent(id),
+        {headers:{Accept:'application/json'},signal:AbortSignal.timeout(9500)});
+      if(!response.ok)throw new Error('ksc-event-source-not-available');
+      const result=await response.json();
+      if(sequence!==state.kscRequest)return;
+      if(result?.ok!==true||result.selectedLaunchId!==id)throw new Error('ksc-event-mismatch');
+      state.kscEvidence=result;
+    }catch{
+      if(sequence!==state.kscRequest)return;
+      state.kscEvidence={ok:false,selectedLaunchId:id,health:{status:'overdue'},
+        timeline:null};
+    }
+    if(state.data?.selectedLaunch?.id===id&&state.data?.region?.id==='florida')
+      renderKscMission(state.data);
+  }
+
   function renderOfficialMatch(data) {
     const root=$('rl-mission-official-match');
     if(!root)return;
@@ -911,9 +1007,10 @@
     const day=launchLocalDay(launch,data.region?.timezone);
     const dateGap=match&&day&&match.officialEventDate?
       Math.abs((Date.parse(day+'T12:00:00Z')-Date.parse(match.officialEventDate+'T12:00:00Z'))/86400000):Infinity;
-    if(match&&dateGap<=1&&match.matchRule==='exact-designation-and-local-date'){
+    if(match&&dateGap<=1&&['exact-designation-and-local-date','official-rss-exact-designation-and-local-date'].includes(match.matchRule)){
       root.dataset.status='matched';
-      root.appendChild(el('h3','','Official event article matched to this mission'));
+      root.appendChild(el('h3','',match.matchRule==='official-rss-exact-designation-and-local-date'?
+        'Official Space Force RSS announcement matched':'Official event article matched to this mission'));
       root.appendChild(el('p','rl-match-heading',match.noticeTitle));
       const meta=el('p','rl-match-meta','Exact designation: '+match.missionMarker+
         ' · Published event date: '+match.officialEventDate+
@@ -921,7 +1018,10 @@
         ' · Matched at '+stamp(rec.checkedAt));
       root.appendChild(meta);
       root.appendChild(el('p','rl-match-caution',
-        'Matches the third-party launch listing by identifier and local calendar window. This does not confirm a liftoff time, ticket inventory, public viewing access, range safety GO, road opening or maritime clearance.'));
+        (match.matchRule==='official-rss-exact-designation-and-local-date' ?
+          'The exact mission, future launch date and Vandenberg range are attested by an official Space Force RSS summary; the linked full article may be inaccessible. ' :
+          'The exact mission and launch date are present in the original official article. ')+
+        'This does not confirm liftoff time, ticket inventory, public viewing access, range safety GO, road opening or maritime clearance.'));
       const link=anchor(match.articleUrl,'Read original official event article');
       if(link)root.appendChild(link);
       const changes=(rec.history||[]).filter(x=>x.launchId===launch.id).slice(0,2);
@@ -1048,6 +1148,7 @@
     renderLaunchWeather(data);
     renderOfficial45ws(data);
     renderOfficialEvidence(data);
+    void loadKscMission(data);
     board();
     document.dispatchEvent(new CustomEvent('rocket-viewing:data',{detail:data}));
     const coverage = data.coverage || {};
