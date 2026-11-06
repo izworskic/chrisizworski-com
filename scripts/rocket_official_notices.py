@@ -142,6 +142,77 @@ def recent_title_articles(doc, url, now):
     return results
 
 
+
+# Travel-only intelligence: scheduled vehicle moves are not launch closures.
+# City of Starbase labels these as "Description" / "Date" under Road Updates.
+# They MUST NOT be read from the archived mayoral-order section.
+ROAD_MONTHS = {name.upper(): i for i, name in enumerate(
+    ("January","February","March","April","May","June","July","August",
+     "September","October","November","December"), 1)}
+ROAD_MONTH = r"(January|February|March|April|May|June|July|August|September|October|November|December)"
+ROAD_MOVEMENT = re.compile(
+    r"\bDescription:\s*([A-Za-z][A-Za-z0-9 ,.'()/\-]{3,85}?)\s+Date:\s*" +
+    ROAD_MONTH + r"\s+(\d{1,2})\s+(\d{1,2}):(\d{2})\s*(AM|PM)\s+to\s+" +
+    ROAD_MONTH + r"\s+(\d{1,2})\s+(\d{1,2}):(\d{2})\s*(AM|PM)\b", re.I)
+
+
+def starbase_road_windows(text, now):
+    """Return at most two near-term city transport windows, never closures."""
+    from zoneinfo import ZoneInfo
+    zone = ZoneInfo("America/Chicago")
+    local = now.astimezone(zone)
+    # Stop before the historical mayoral orders. A prior-order date must not
+    # become a current or future road notice.
+    match = re.search(
+        r"\bROAD UPDATES\b(.*?)(?=\bPUBLIC NOTICE OF MAYOR.S ORDER\b|\bPREVIOUS ORDERS\b|$)",
+        text, re.I | re.S)
+    if not match:
+        return []
+    section = re.sub(r"\s+", " ", match.group(1)[:7000])
+    output = []
+    for found in ROAD_MOVEMENT.finditer(section):
+        desc, m1, d1, h1, min1, am1, m2, d2, h2, min2, am2 = found.groups()
+        # Yearless notices get the closest plausible local future occurrence.
+        # No date guess more than 14 days ahead is permitted.
+        for year in (local.year - 1, local.year, local.year + 1):
+            try:
+                sh = int(h1); eh = int(h2)
+                if not (1 <= sh <= 12 and 1 <= eh <= 12):
+                    break
+                start = dt.datetime(
+                    year, ROAD_MONTHS[m1.upper()], int(d1),
+                    sh % 12 + (12 if am1.upper() == "PM" else 0),
+                    int(min1), tzinfo=zone)
+                endyear = year + (ROAD_MONTHS[m2.upper()] < ROAD_MONTHS[m1.upper()])
+                end = dt.datetime(
+                    endyear, ROAD_MONTHS[m2.upper()], int(d2),
+                    eh % 12 + (12 if am2.upper() == "PM" else 0),
+                    int(min2), tzinfo=zone)
+            except (ValueError, OverflowError):
+                continue
+            if not (dt.timedelta(0) < end - start <= dt.timedelta(hours=36)):
+                continue
+            if not (end > local and start >= local - dt.timedelta(hours=36) and
+                    start <= local + dt.timedelta(days=14)):
+                continue
+            label = (start.strftime("%b %-d, %-I:%M %p") + " to " +
+                     end.strftime("%b %-d, %-I:%M %p") + " Central")
+            signal = item(
+                "scheduled-road-activity", label, SOURCE_MAP["starbase-city"][2],
+                detail=("City-listed transport movement: " + tidy(desc, 80) +
+                        ". A scheduled vehicle movement is not a mission-specific "
+                        "road closure or proof Highway 4 will be shut; verify access before driving."),
+                relevance="dated-road-advisory",
+                scope="Starbase road movement window")
+            signal["windowStart"] = iso(start)
+            signal["windowEnd"] = iso(end)
+            output.append((start, signal))
+            break
+    output.sort(key=lambda entry: entry[0])
+    return [s for _, s in output[:2]]
+
+
+
 def classify(entry, body, now):
     sid, region, url, source_type = entry
     doc = PlainDocument()
@@ -169,6 +240,11 @@ def classify(entry, body, now):
         if not beach:
             status = "limited"
             notes.append("Current city beach status field was not located; no access conclusion.")
+
+        # These are future city-listed transport windows, NOT active
+        # beach closures. Their real dates are more useful than the
+        # generic "Road Delay / No road delays" header alone.
+        observations.extend(starbase_road_windows(text, now))
         # A dated PDF under "Previous Orders" is ALWAYS history, not an active order.
         if "PREVIOUS ORDERS" in upper:
             dates = STAMP.findall(upper.split("PREVIOUS ORDERS", 1)[1][:5000])
@@ -336,6 +412,44 @@ class EvidenceTests(unittest.TestCase):
         self.assertIn("historical-order-index",[s["kind"] for s in record["signals"]])
         self.assertNotIn("notice-check-required",[s["kind"] for s in record["signals"]])
         self.assertTrue(all(s["relevance"]!="permission" for s in record["signals"]))
+
+
+    def test_starbase_dated_transport_not_confused_with_launch_closure(self):
+        source=self.source("starbase-city")
+        record=classify(source, """
+        <h2>BEACH Access Status</h2><p>Boca Chica Beach is open.</p>
+        <h2>Road Updates</h2><p>Road Delay</p><p>No road delays.</p>
+        <div>Description: Production to Masseys</div>
+        <div>Date: November 6 11:59 PM to November 7 4:00 AM</div>
+        <div>Description: Production to Masseys</div>
+        <div>Date: November 7 11:59 PM to November 8 4:00 AM</div>
+        <h2>Public Notice of Mayor's Order</h2><p>No public notices at this time.</p>
+        <h2>Previous Orders</h2><div>Description: historical beach closure</div>
+        <div>Date: November 9 1:00 PM to November 9 4:00 PM</div>
+        """, self.now)
+        windows=[v for v in record["signals"] if v["kind"]=="scheduled-road-activity"]
+        self.assertEqual(len(windows),2)
+        self.assertEqual(windows[0]["windowStart"],"2026-11-07T05:59:00Z")
+        self.assertEqual(windows[0]["windowEnd"],"2026-11-07T10:00:00Z")
+        self.assertEqual(windows[0]["relevance"],"dated-road-advisory")
+        self.assertTrue(all("not a mission-specific" in v["detail"] for v in windows))
+        self.assertNotIn("historical",str(windows).lower())
+        self.assertEqual(record["status"],"retrieved")
+
+    def test_starbase_old_and_unattributed_movement_not_promoted(self):
+        source=self.source("starbase-city")
+        record=classify(source, """
+        <h2>BEACH Access Status</h2><p>Boca Chica Beach is open.</p>
+        <h2>Road Updates</h2><p>No road delays.</p>
+        <div>Description: Old production movement</div>
+        <div>Date: October 1 11:59 PM to October 2 4:00 AM</div>
+        <div>Description: Date not verified</div><div>Date: Unknown</div>
+        <h2>Previous Orders</h2>
+        <div>Description: Previous order</div>
+        <div>Date: November 7 1:00 PM to November 7 4:00 PM</div>
+        """, self.now)
+        self.assertNotIn("scheduled-road-activity",
+                         [v["kind"] for v in record["signals"]])
 
     def test_ambiguous_status_is_limited_not_open(self):
         s=classify(self.source("starbase-city"), "<h1>Beach rules</h1><p>The beach was open yesterday.</p>",self.now)
