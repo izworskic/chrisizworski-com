@@ -207,10 +207,14 @@
     if (b.getAttribute('aria-pressed') !== 'true') b.click();
   }
   if (saved.length > 6) omitted++;
-  if (omitted) {
+  if (saved.length) {
+    // A shared link should reveal its imported trip, rather than land at the top of a 75-stop map.
     sheet.hidden = false;
     openButton.setAttribute('aria-expanded', 'true');
-    status.textContent = omitted + ' shared stop(s) were not loaded: missing, unsafe, or not currently verified for public arrival.';
+    status.textContent = omitted
+      ? omitted + ' shared stop(s) were not loaded: missing, unsafe, or not currently verified for public arrival.'
+      : 'Shared day sheet loaded. Confirm current access with each cited authority before travel.';
   }
   render();
+  if (saved.length) window.requestAnimationFrame(() => sheet.scrollIntoView({ block: 'start', behavior: 'auto' }));
 })();
