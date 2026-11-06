@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "batch": "B73",
+  "reviewDate": "2026-11-06",
+  "method": "haversine-straight-line-geodesic-not-road-or-trail",
+  "waterfallStateGisId": 172,
+  "tourismToWaterfallMetres": 8.1,
+  "usgsCrossingToWaterfallMetres": 475,
+  "usgsStation": "USGS-04058240",
+  "mdotProjectGeometryResolved": false,
+  "legalVisitorArrivalResolved": false,
+  "routeToCreekOrUSGSPoint": false,
+  "disposition": "research-only-not-indexed",
+  "policy": "Geographic proximity and a shared stream name cannot authorize parking, bridge access, or creek-bank walking."
+}

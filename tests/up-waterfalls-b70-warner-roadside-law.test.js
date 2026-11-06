@@ -86,7 +86,7 @@ test('B70 public research page explains state law, avoids visitor car and trail 
   assert.match(html,/co\.marquette\.mi\.us\/departments\/equalization_tax_roll\/gis_mapping/);
   assert.match(html,/2025 waterfall brochure/);
   assert.match(html,/https:\/\/chrisizworski\.com\/#person/);
-  assert.match(html,/"dateModified":"2026-11-05"/);
+  assert.match(html,/"dateModified":"20\d{2}-\d{2}-\d{2}"/); // later source batches may refresh this page
   assert.doesNotMatch(html,/"@type":"TouristAttraction"/);
   assert.doesNotMatch(html,/google\.com\/maps\/dir\//i);
   const meta=html.match(/<meta name="description" content="([^"]+)"/)?.[1];
