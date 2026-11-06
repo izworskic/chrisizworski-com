@@ -60,7 +60,7 @@ jobs:
                 -H 'Cache-Control: no-cache' \
                 "https://chrisizworski.com/national-tools/rocket-launch-live/?release-probe=${GITHUB_SHA}" \
                 > "$RUNNER_TEMP/rocket-release-probe.html" &&
-              grep -Fq '20261106-official-rss-ksc-v1' \
+              grep -Fq '20261106-official-rss-ksc-v1-starbase-road-v1' \
                 "$RUNNER_TEMP/rocket-release-probe.html"; then
               exit 0
             fi
