@@ -21,17 +21,33 @@ function fixture(){
  texas.signals=[{kind:'access-status',title:'Boca Chica Beach is open',
   detail:'Published city website condition at scan time, not mission-time permission.',
   sourceUrl:texas.sourceUrl,publishedDate:null,relevance:'current-published-status',scope:'Boca Chica Beach'}];
- return {version:1,checkedAt:at,sourceCount:10,regions,availableSources:10,partial:false};
+ return {version:1,checkedAt:at,sourceCount:11,regions,availableSources:11,partial:false};
 }
-t('six-region source registry maps exactly ten official authorities to fixed URLs',()=>{
+t('six-region source registry maps exactly eleven official authorities to fixed URLs',()=>{
  a.deepEqual(REGIONS,['california','florida','texas','virginia','alaska','hawaii']);
- a.equal(Object.keys(SOURCES).length,10);
+ a.equal(Object.keys(SOURCES).length,11);
  const snap=validateSnapshot(fixture(),NOW);
- a.equal(snap.sourceCount,10);a.equal(snap.regions.california.length,2);
+ a.equal(snap.sourceCount,11);a.equal(snap.regions.california.length,2);
  a.equal(snap.regions.florida.length,2);a.equal(snap.regions.texas.length,1);
- a.equal(snap.regions.virginia.length,2);a.equal(snap.regions.alaska.length,2);
+ a.equal(snap.regions.virginia.length,3);a.equal(snap.regions.alaska.length,2);
  a.equal(snap.regions.hawaii.length,1);
  a.equal(snap.regions.texas[0].signals[0].kind,'access-status');
+});
+t('NASA Wallops Range article is an attributed dated link, not an active range GO',()=>{
+ const source=SOURCES['wallops-range-blog'][1];
+ const good=fixture();
+ good.regions.virginia.find(r=>r.id==='wallops-range-blog').signals.push({
+  kind:'official-article',title:'NASA Wallops to support October Sounding Rocket Launch',
+  detail:'A dated NASA Wallops Range article, not an independently verified launch or opening.',
+  sourceUrl:'https://www.nasa.gov/blogs/wallops/2026/09/30/nasa-wallops-to-support-october-sounding-rocket-launch/',
+  publishedDate:'2026-09-30',relevance:'unmatched-official-article',
+  scope:'historical-or-current-article'
+ });
+ a.equal(validateSnapshot(good,NOW).regions.virginia.length,3);
+ const evil=fixture();
+ evil.regions.virginia.find(r=>r.id==='wallops-range-blog').signals=[{...good.regions.virginia.find(r=>r.id==='wallops-range-blog').signals[0],sourceUrl:'https://www.nasa.gov.evil.example/blogs/wallops-range/2026/09/30/rocket/'}];
+ a.throws(()=>validateSnapshot(evil,NOW),/signal-untrusted/);
+ a.equal(signalUrl('https://www.nasa.gov/blogs/wallops-other/2026/09/30/rocket/',source),null);
 });
 t('scope and source provenance are not spoofable by arbitrary Python payload',()=>{
  const o=fixture();o.regions.texas[0].sourceUrl='https://private.example/';a.throws(()=>validateSnapshot(o,NOW),/source-provenance/);
@@ -48,7 +64,7 @@ t('unavailable source may never carry a beach-open signal or fingerprint',()=>{
  src.status='unavailable';a.throws(()=>validateSnapshot(raw,NOW),/outage-has-claims/);
  src.signals=[];src.fingerprint=null;
  const result=validateSnapshot(raw,NOW);
- a.equal(result.availableSources,9);
+ a.equal(result.availableSources,10);
  a.equal(result.regions.texas[0].status,'unavailable');
  a.equal(result.regions.texas[0].signals.length,0);
 });
@@ -102,7 +118,7 @@ t('only signed repository workflow identity may POST; GET remains public',async(
  const res=()=>({setHeader(){},status(code){this.code=code;return this;},json(payload){responses.push({code:this.code,payload});return this;}});
  let wrote=false;
  const handler=createHandler({authorized:async()=>true,ready:()=>true,clock:()=>NOW,
-  save:async()=>{wrote=true;return {sourceCount:10,availableSources:10,checkedAt:at,changedSources:[]};},
+  save:async()=>{wrote=true;return {sourceCount:11,availableSources:11,checkedAt:at,changedSources:[]};},
   read:async()=>({ok:true,version:1,health:'recent',checkedAt:at,regions:{texas:[]}})});
  await handler({method:'POST',headers:{'content-length':'256'},body:fixture()},res());
  a.equal(wrote,true);a.equal(responses.at(-1).code,200);
