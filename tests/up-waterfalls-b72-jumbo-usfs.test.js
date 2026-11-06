@@ -44,21 +44,21 @@ test('B72 published motor road season is not current passability or parking perm
  assert.equal(e.publication.parkingPointLocationVerified,false);
  assert.equal(e.publication.liveOpenNow,false);
 });
-test('B72 76 curated, 69 linked GIS, 92 unapproved research records and corrected feature point',()=>{
+test('B72 source preservation across 77 curated, 69 linked GIS, 92 unapproved research records and corrected feature point',()=>{
  const row=cat.waterfalls.find(x=>x.id==='jumbo-falls');
- assert.equal(cat.waterfalls.length,76);
+ assert.equal(cat.waterfalls.length,77);
  assert.equal(row.gisObjectId,29);
  assert.deepEqual([row.lat,row.lng],[46.44963,-88.91278]);
  assert.equal(row.publication,'verified-access-guide');
  for(const a of ['landManager','publicAccess','parking','trail','location'])assert.equal(row.verification[a].verified,true);
- assert.equal(rec.counts.curatedTotal,76);
+ assert.equal(rec.counts.curatedTotal,77);
  assert.equal(rec.counts.exactIdMatched,69);
  assert.equal(rec.counts.pending,92);
  const old=rec.candidates.find(x=>x.gisObjectId===29);
  assert.deepEqual([old.lat,old.lng],[46.453006,-88.912138]);
  assert.equal(old.curatedId,'jumbo-falls');
  assert.equal(old.accessRouteAudit.destinationCoordinatesForDriving,false);
- assert.equal(ledger.curatedCount,76);
+ assert.equal(ledger.curatedCount,77);
  assert.equal(ledger.linkedByExactOid,69);
  assert.equal(queue.counts.pendingGisFeatures,92);
  assert.ok(!queue.candidates.some(x=>x.gisObjectId===29));
@@ -69,9 +69,9 @@ test('B72 visitor pages and generated indexes retain source gates',()=>{
  assert.doesNotMatch(guide,/maps\/dir\//);
  assert.match(research,/noindex,follow/);assert.match(research,/NEW B72 FINDING/);
  assert.match(hub,/data-id="jumbo-falls" data-gis-oid="29"/);
- assert.match(hub,/76 curated visitor destinations/);
+ assert.match(hub,/77 curated visitor destinations/);
  assert.match(hub,/data-lat="46.44963" data-lng="-88.91278"/);
- assert.equal((sitemap.match(/<loc>/g)||[]).length,74);
+ assert.equal((sitemap.match(/<loc>/g)||[]).length,75);
  assert.equal((sitemap.match(/upper-peninsula-waterfalls\/jumbo-falls\//g)||[]).length,1);
  assert.equal(nearby.counts.eligible,68);
  assert.ok(nearby.nearby['jumbo-falls'].some(x=>x.id==='duppy-falls'&&x.miles===2.6));

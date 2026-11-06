@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-05",
+  "reviewed": "2026-11-06",
   "issue": 1258,
   "method": "Exact gisObjectId only. No name-only joins, inferred public access, or indexable candidate generation.",
   "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
@@ -9,8 +9,8 @@
     "gisCandidates": 161,
     "exactIdMatched": 69,
     "pending": 92,
-    "curatedTotal": 76,
-    "curatedNoMatchingGIS": 11
+    "curatedTotal": 77,
+    "curatedNoMatchingGIS": 12
   },
   "candidates": [
     {
@@ -9816,6 +9816,13 @@
       "gisObjectId": null,
       "publication": "verified-access-guide",
       "reason": "Travel Marquette verifies 46.56588,-87.44576 and a public Wright Street/NTN walking approach; this is distinct from GIS #160 Dead River Falls on the privately constrained McClure gorge. No exact Michigan GIS waterfall ID assigned."
+    },
+    {
+      "id": "boston-creek-cascades",
+      "name": "Boston Creek Cascades (Nature Area)",
+      "gisObjectId": null,
+      "publication": "verified-access-guide",
+      "reason": "Keweenaw Land Trust confirms small UNNAMED stream ledges inside the 2025-opened public Boston Creek Nature Area; no individually surveyed waterfall coordinate or exact Michigan GIS feature. The catalog's map point is the sourced OSM nature-area centre only, NOT a waterfall, parking or trailhead. Public signed owner-maintained 0.8-mile loop and ~3-car lot are documented online."
     }
   ],
   "batchCheckpoints": [
@@ -10348,6 +10355,15 @@
         "conglomerate-falls-gratiot"
       ],
       "pendingGisFeatures": 93
+    },
+    {
+      "batch": "75",
+      "reviewed": "2026-11-06",
+      "summary": "Owner-verified KLT Boston Creek public nature-area loop with small unnamed cascades and OSM preserve-centre role; no mapped individual waterfall or parking GPS. Upper Eagle River Ten Foot Falls remains held under prior noindex access assessment.",
+      "published": [
+        "boston-creek-cascades"
+      ],
+      "pendingGisFeatures": 92
     }
   ]
 }

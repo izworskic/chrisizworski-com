@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "batch": "B75",
+  "reviewDate": "2026-11-06",
+  "policy": "online-only-no-agency-contact-no-email-drafts",
+  "featuredDestination": {
+    "id": "boston-creek-cascades",
+    "displayName": "Boston Creek Cascades at Boston Creek Nature Area",
+    "namedWaterfall": false,
+    "description": "Several small unnamed stream ledges within a signed public nature-area loop, not an individually mapped tall named waterfall.",
+    "county": "Houghton",
+    "state": "Michigan",
+    "sourceType": "land-manager-published",
+    "owner": "Keweenaw Land Trust",
+    "sizeAcres": 40,
+    "publicOpening": "2025-10-25",
+    "openingEvidence": "https://www.uppermichiganssource.com/2025/10/21/keweenaw-land-trust-opens-new-nature-area/",
+    "landManagerSource": "https://keweenawlandtrust.org/protected-lands/boston-creek-nature-area",
+    "trailLoopMiles": 0.8,
+    "trailWayfinding": "Look for a nature-area sign on south side of Boston Cross Cut Road; approximately three visitor spaces; trail begins south end of lot and loops along creek",
+    "stepsSteepGrades": true,
+    "accessibilityStatus": "not-advertised-accessible-and-stairs",
+    "liveOpenNow": false,
+    "waterFlowLive": false,
+    "verifiedExactCascadeCoordinates": false,
+    "verifiedParkingCoordinate": false,
+    "natureAreaCenter": {
+      "lat": 47.1832201,
+      "lng": -88.5711361,
+      "role": "OpenStreetMap mapped nature-area centre, not waterfall/trailhead/lot",
+      "osmRelation": 21118953,
+      "source": "https://nominatim.openstreetmap.org/search?q=Boston+Creek+Nature+Area%2C+Houghton+County%2C+Michigan&format=json&limit=2",
+      "osmProfile": "https://www.openstreetmap.org/relation/21118953",
+      "exactPointForDriving": false
+    },
+    "namedTrailGeometryAvailable": false,
+    "publicationEligible": true,
+    "routeToMapCenter": false,
+    "routeToNaturalCascade": false,
+    "sourceLinks": [
+      "https://keweenawlandtrust.org/protected-lands/boston-creek-nature-area",
+      "https://keweenawlandtrust.org/overview-map",
+      "https://www.visitkeweenaw.com/october-2025-industry-newsletter/",
+      "https://www.uppermichiganssource.com/2025/10/21/keweenaw-land-trust-opens-new-nature-area/",
+      "https://www.openstreetmap.org/relation/21118953"
+    ]
+  },
+  "heldCandidate": {
+    "name": "Upper Eagle River / Ten Foot Falls",
+    "researchPage": "/upper-peninsula-waterfalls/research/upper-eagle-river-ten-foot-falls/",
+    "sources": [
+      "https://www.visitkeweenaw.com/blog/post/2-day-keweenaw-waterfall-driving-tour/",
+      "https://www.waterfallsofthekeweenaw.com/eagle-river/ten-foot-falls/"
+    ],
+    "reviewResult": "Hold: exact natural waterfall is independently documented and tourism describes an unsigned roadside gravel pull-off, but a legally cleared stopping site and complete bank walking rights still lack sufficient online source evidence.",
+    "publicGuideEligible": false,
+    "addCard": false,
+    "addIndex": false,
+    "directionsToFalls": false
+  },
+  "accounting": {
+    "before": {
+      "curated": 76,
+      "gisMatches": 69,
+      "pending": 92,
+      "curatedWithoutGIS": 11
+    },
+    "after": {
+      "curated": 77,
+      "gisMatches": 69,
+      "pending": 92,
+      "curatedWithoutGIS": 12
+    },
+    "newRecordHasStateGisId": false
+  },
+  "risks": [
+    "Map centre is the reserve polygon representative coordinate, NOT one specific cascade",
+    "No GPS car directions to map centre or historical informal pull-off",
+    "Small creek ledges are not a tall named waterfall; preserve the honest identity",
+    "Unmarked or unofficial footpath to an unnamed falls may not be inferred; follow signed KLT loop",
+    "November winter road, snow, bridges, and creek flow unknown"
+  ],
+  "noOutreach": true
+}

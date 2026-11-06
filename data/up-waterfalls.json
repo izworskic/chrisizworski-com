@@ -1,5 +1,5 @@
 {
-  "reviewed": "2026-11-05",
+  "reviewed": "2026-11-06",
   "purpose": "Curated planning destinations; not live access or real-time water flow",
   "waterfalls": [
     {
@@ -4373,6 +4373,65 @@
         "statePositionOffMetres": 379,
         "recreationMarkerOffMetres": 904
       }
+    },
+    {
+      "id": "boston-creek-cascades",
+      "name": "Boston Creek Cascades (Nature Area)",
+      "region": "Keweenaw Peninsula",
+      "place": "Hancock · Boston Cross Cut Road · Keweenaw Land Trust",
+      "lat": 47.1832201,
+      "lng": -88.5711361,
+      "gisObjectId": null,
+      "level": "moderate",
+      "minutes": "35–80 min",
+      "walk": "Follow Keweenaw Land Trust's signed 0.8-mile loop from the south end of its small signed parking area on Boston Cross Cut Road. Switchbacks, stairs, boardwalks and a bridge descend Boston Creek's valley. Small unnamed cascades occur along the creek; no individually surveyed waterfall endpoint or off-trail shortcut is documented.",
+      "best": "After spring snowmelt or rain for flowing creek ledges and fresh woodland growth; summer shade and fall color are pleasant, but there is no live cascade-flow gauge.",
+      "access": "Keweenaw Land Trust owns and welcomes visitors to its 40-acre nature area, opened publicly in 2025. Its manager describes a signed three-space lot and 0.8-mile trail loop. Steep sections/stairs mean it is not an accessible route; weather, snow, temporary closures and lot occupancy are not live-checked.",
+      "status": "verify",
+      "source": "https://keweenawlandtrust.org/protected-lands/boston-creek-nature-area",
+      "locationSource": "https://www.openstreetmap.org/relation/21118953",
+      "kind": "Keweenaw Land Trust public nature area · small creek cascades",
+      "parking": "From Hancock follow US-41/Pontiac Road to Boston Cross Cut Road; locate Keweenaw Land Trust's nature-area sign on the south side. Park only in the signed small preserve lot (manager reports about three spaces), do not assume extra shoulder or overflow. The reserve-centre map coordinate is not a parking location.",
+      "feature": "Shale ledges, little unnamed creek falls, a shaded mixed forest and a newly built volunteer boardwalk and bridge on a 2025-opened public conservation trail.",
+      "decision": "A worthwhile short nature walk when the small signed lot has room and stairs, bridge and creek-side tread are safe. Expect little cascades, not a large named plunge. Follow the posted loop, not a geocode to a supposed individual falls.",
+      "publication": "verified-access-guide",
+      "accessConfidence": "Keweenaw-Land-Trust-owner-published-public-loop-and-small-parking-2025-opening; unmapped-individual-cascades-no-live-conditions",
+      "sourceReviewed": "2026-11-06",
+      "manager": "Keweenaw Land Trust",
+      "further": "This is a named PUBLIC NATURE AREA with several small unnamed creek cascades according to the owner, not a separately surveyed named waterfall. OSM relation 21118953 centre 47.1832201,-88.5711361 is a map orientation point for the preserve polygon, not a waterfall, trailhead, parking bay, or road route. KLT publishes signed lot ~3 vehicles, trail start south of lot, 0.8-mile loop, stairs/boardwalk/bridge. TV6 independently reported October 2025 public opening. No invented cascades coordinates, polyline or turn-by-turn car GPS.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://keweenawlandtrust.org/protected-lands/boston-creek-nature-area",
+          "description": "Owner Keweenaw Land Trust names the 40-acre public nature area and 2025 trail improvements."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://keweenawlandtrust.org/protected-lands/boston-creek-nature-area",
+          "description": "KLT publishes a public walking loop and signed public entry from Boston Cross Cut Road."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://keweenawlandtrust.org/protected-lands/boston-creek-nature-area",
+          "description": "KLT says a small marked lot on the south side of Boston Cross Cut Road holds about three cars; no exact parking coordinate published."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://keweenawlandtrust.org/protected-lands/boston-creek-nature-area",
+          "description": "Land manager publishes a loop of approximately 0.8 mile with switchbacks, stairs, bridge and boardwalk; exact official trail line and cascade coordinates not published."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://www.openstreetmap.org/relation/21118953",
+          "description": "OSM relation 21118953 identifies preserve geographical centre only, NOT waterfall location. No individually surveyed falls endpoint; map uses a preserve-centre label."
+        }
+      },
+      "note": "Map pin = publicly mapped reserve centre, NEVER an individual waterfall, trailhead or car destination. Follow the manager's signed entrance. No exact individual cascade points.",
+      "link": "",
+      "path": "",
+      "mapRole": "preserve-centre",
+      "nearbyExcluded": true,
+      "winterRoad": "No confirmed live snow-clearing, icy stair safety, bridge inspection or creek flow. Verify posted signs when arriving; no winter-plow guarantee."
     }
   ]
 }
