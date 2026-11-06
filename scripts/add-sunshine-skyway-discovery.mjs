@@ -3,7 +3,7 @@ import fs from 'node:fs';
 const KEY='sunshine-skyway';
 const URL='https://chrisizworski.com/sunshine-skyway-bridge/';
 const REL='/sunshine-skyway-bridge/';
-const LASTMOD='2026-11-05';
+const LASTMOD='2026-11-06';
 const NAME='Sunshine Skyway Bridge Live';
 const DESC='Check Sunshine Skyway closures, FL511 traffic and camera video, wind context and current all-electronic tolls before crossing I-275 Tampa Bay.';
 

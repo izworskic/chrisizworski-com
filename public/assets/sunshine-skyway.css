@@ -54,3 +54,6 @@
 .outlook-row{grid-template-columns:minmax(68px,.7fr) minmax(0,1.3fr)}
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* Camera accessibility and source-failure guard: never expose hidden backup beneath video. */
+.camera-stage [hidden]{display:none!important}.camera-stage-unavailable{display:flex;align-items:center;justify-content:center;padding:24px;color:#fff;text-align:center}.camera-stage-unavailable p{margin:0;max-width:420px}.camera-meta small{display:block;margin-top:4px}.camera-meta .cta-row{margin-top:0}.camera-meta button.button-link{font:inherit;cursor:pointer;border:1px solid #b8d3df;min-height:44px}.camera-meta .button-link{min-height:44px;align-items:center}.camera-meta button.button-link:hover{background:#d9eaf0}.camera-meta button.button-link:focus-visible{outline:3px solid #d08d11;outline-offset:3px}.camera-stage .camera-fallback{position:absolute;bottom:14px;left:14px;right:14px;top:auto}
