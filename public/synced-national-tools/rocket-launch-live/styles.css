@@ -483,3 +483,15 @@ button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid #dc7
 .rl-mission-official-match a{display:inline-block;margin-top:10px;font-size:13px;font-weight:800;color:#116479}
 .rl-mission-official-match .rl-match-change{font-size:11px;color:#5e766e}
 @media(max-width:460px){.rl-mission-official-match{padding:17px 18px}}
+
+
+/* Florida's own verified event/ticket source is an independent second answer
+   beneath the government agency news reconciliation, never a booking guarantee. */
+.rl-ksc-match{border:1px solid #b8cbd7;border-left:5px solid #37758d;background:#f4f8fc;padding:20px 24px;border-radius:9px;margin:0 0 17px}
+.rl-ksc-match[hidden]{display:none!important}
+.rl-ksc-match[data-status="matched"]{background:#f1f9f5;border-color:#8fbfb3;border-left-color:#24745d}
+.rl-ksc-match[data-status="unverified"]{background:#fcf8ef;border-color:#d2b58b;border-left-color:#9c6a3b}
+.rl-ksc-match h3{font-family:var(--serif);font-size:clamp(19px,2vw,26px);line-height:1.26;margin:0 0 9px}
+.rl-ksc-match p{font-size:13px;line-height:1.65;color:#3b5960;max-width:94ch;margin:7px 0}
+.rl-ksc-match a{display:inline-block;margin:10px 17px 1px 0;color:#12617b;font-weight:800;font-size:13px}
+@media(max-width:460px){.rl-ksc-match{padding:17px 18px}}

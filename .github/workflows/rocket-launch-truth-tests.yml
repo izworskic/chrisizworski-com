@@ -8,6 +8,8 @@ on:
       - 'scripts/rocket_official_notices.py'
       - 'scripts/rocket_official_matcher.py'
       - 'scripts/test_rocket_official_matcher.py'
+      - 'scripts/test_rocket_official_rss.py'
+      - 'tests/rocket-official-rss-ksc.test.js'
       - 'tests/rocket-official-reconciliation.test.js'
       - 'tests/rocket-official-notices.test.js'
       - '.github/workflows/rocket-official-notices.yml'
@@ -67,6 +69,10 @@ jobs:
         run: python3 scripts/rocket_official_notices.py --test
       - name: Test exact official article-to-mission matches and conservative abstentions in Python
         run: python3 -m unittest discover -s scripts -p test_rocket_official_matcher.py -v
+      - name: Verify official Space Force RSS fallback with synthetic source-failure and false-positive cases
+        run: python3 -m unittest discover -s scripts -p test_rocket_official_rss.py -v
+      - name: Verify source-trust boundary and read-only Florida KSC event bridge
+        run: node --test tests/rocket-official-rss-ksc.test.js
       - name: Verify independent shared-schedule mission matching and false-GO regression
         run: node --test tests/rocket-official-reconciliation.test.js
       - name: Verify signed notice contract, staleness and no unsafe GO in browser

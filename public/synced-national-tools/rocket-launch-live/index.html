@@ -23,7 +23,7 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://chrisizworski.com/national-tools/rocket-launch-live/#webpage","url":"https://chrisizworski.com/national-tools/rocket-launch-live/","name":"Rocket Launch Live USA: When and Where to Watch","description":"Coastal U.S. launch calendar with region-specific legal access, launch timing uncertainty and public NWS weather evidence.","dateModified":"2026-11-05","author":{"@id":"https://chrisizworski.com/#person"},"about":[{"@type":"Thing","name":"Rocket launch viewing"},{"@type":"Thing","name":"U.S. coastal spaceports"}]},{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"U.S. Tools","item":"https://chrisizworski.com/national-tools/"},{"@type":"ListItem","position":3,"name":"Rocket Launch Live USA","item":"https://chrisizworski.com/national-tools/rocket-launch-live/"}]}]}</script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
 <script src="/national-tools/rocket-launch-live/vandenberg.js?v=20261103-viewing-v1" defer></script>
-<script src="/national-tools/rocket-launch-live/app.js?v=20261105-reconciled-notices-v1" defer></script>
+<script src="/national-tools/rocket-launch-live/app.js?v=20261106-official-rss-ksc-v1" defer></script>
 <script src="/national-tools/assets/launch-truth-desk.js?v=20261102-truth-v2" defer></script>
 </head>
 <body>
@@ -137,6 +137,10 @@
   <div id="rl-mission-official-match" class="rl-mission-official-match" role="region" aria-label="Mission-specific official notice status" aria-live="polite">
     <span class="rl-match-eyebrow">EVENT-SPECIFIC SOURCE CHECK</span>
     <p>Choose a launch to check whether a government or range operator has published an independently matched mission notice.</p>
+  </div>
+  <div id="rl-ksc-official-viewing" class="rl-ksc-match" role="region" aria-label="Kennedy Space Center mission-specific public viewing evidence" hidden>
+    <span class="rl-match-eyebrow">FLORIDA · KENNEDY VISITOR COMPLEX</span>
+    <p>Kennedy mission-linked viewing information is checked separately from the Space Force official news feed.</p>
   </div>
   <div id="rl-evidence-sources" class="rl-evidence-sources" aria-live="polite">
     <p>Official-source status not yet checked. Start with the selected coast's launch and access authority above.</p>
