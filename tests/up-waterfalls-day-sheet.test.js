@@ -54,7 +54,7 @@ test('directions require separate verified visitor parking coordinates and HTTPS
     { status: 'closed' }, { status: 'research' }, { arrivalVerified: 'pending' },
     { parkingSource: '' }, { parkingSource: 'http://example.com/park' },
     { parkingLat: '0' }, { parkingLng: '0' }, { parkingLat: 'NaN' },
-    { parkingLng: '-120.0' }
+    { parkingLng: '-120.0' }, { parkingLat: '46.399', parkingLng: '-89.126' }
   ]) assert.equal(parkingDirections(card(changes)), '', JSON.stringify(changes));
 });
 
