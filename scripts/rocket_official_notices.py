@@ -321,6 +321,11 @@ def classify(entry, body, now):
         if not observations:
             notes.append("No attributable launch article extracted. Absence is not absence of range activity.")
 
+    # An active mayoral-order notice must survive the four-signal limit
+    # even when both dated transport windows and current status are present.
+    if sid == "starbase-city":
+        observations.sort(key=lambda signal: 0 if signal["kind"] == "notice-check-required" else 1)
+
     # Fingerprint the relevant evidence, NOT a whole web page's changing ads,
     # timestamps or unrelated layout. No source text stored.
     normalized = json.dumps([status, observations], separators=(",", ":"), sort_keys=True)
@@ -450,6 +455,24 @@ class EvidenceTests(unittest.TestCase):
         """, self.now)
         self.assertNotIn("scheduled-road-activity",
                          [v["kind"] for v in record["signals"]])
+
+    def test_current_mayoral_notice_survives_transport_window_limit(self):
+        record=classify(self.source("starbase-city"), """
+        <h2>BEACH Access Status</h2><p>Boca Chica Beach is open.</p>
+        <h2>Road Updates</h2><p>Road Delay</p><p>No road delays.</p>
+        <div>Description: Production to Masseys</div>
+        <div>Date: November 6 11:59 PM to November 7 4:00 AM</div>
+        <div>Description: Production to Masseys</div>
+        <div>Date: November 7 11:59 PM to November 8 4:00 AM</div>
+        <h2>Public Notice of Mayor's Order</h2>
+        <p>Review the posted active notice.</p>
+        <h2>Previous Orders</h2><p>October 27, 2026</p>
+        """, self.now)
+        kinds=[signal["kind"] for signal in record["signals"]]
+        self.assertEqual(len(kinds),4)
+        self.assertIn("notice-check-required",kinds)
+        self.assertEqual(kinds[0],"notice-check-required")
+        self.assertNotIn("closure",record["signals"][0]["title"].lower())
 
     def test_ambiguous_status_is_limited_not_open(self):
         s=classify(self.source("starbase-city"), "<h1>Beach rules</h1><p>The beach was open yesterday.</p>",self.now)
