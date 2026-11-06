@@ -80,6 +80,7 @@
     (p.currentConditionsUrl?'<p><a href="'+esc(p.currentConditionsUrl)+'" target="_blank" rel="noopener noreferrer">Check the manager current-conditions and closure notices ↗</a></p>':''):'';
   const winterAccessPanel='<div class="verification" aria-label="Winter parking access status"><strong>Winter arrival evidence — '+esc(tracked?'access conditions remain unverified':'specific parking research incomplete')+'</strong>'+
    '<ul class="evidence-list">'+accessRows+'</ul>'+accessDetails+
+   '<p><strong>Map/forecast reference:</strong> '+esc(route.point?.meaning||'Regional location only, not a trailhead')+'</p>'+ 
    '<p><strong>No GPS directions:</strong> a trail reference point or park address is not certified cleared winter parking.</p></div>';
   $('detail-body').innerHTML=
    '<div class="evidence-grid"><div class="metric"><b>'+esc(route.miles===null?'—':route.miles+' mi')+'</b><small>'+
