@@ -14,7 +14,8 @@ function reconciliation(){
  return {version:1,checkedAt:AT,health:'matched-with-current-ll2',manifestCheckedAt:AT,
   sourceStatus:[
    {id:'wallops-range-blog',region:'virginia',sourceUrl:'https://www.nasa.gov/blogs/wallops-range/',status:'retrieved',articlesChecked:1,candidateCount:0},
-   {id:'vandenberg-launch-news',region:'california',sourceUrl:'https://www.vandenberg.spaceforce.mil/News/',status:'retrieved',articlesChecked:1,candidateCount:1}
+   {id:'vandenberg-launch-news',region:'california',sourceUrl:'https://www.vandenberg.spaceforce.mil/News/',status:'retrieved',articlesChecked:1,candidateCount:1},
+   {id:'spaceforce-news-rss',region:'california',sourceUrl:'https://www.spaceforce.mil/DesktopModules/ArticleCS/RSS.ashx?ContentType=1&Site=1060&max=20',status:'retrieved',articlesChecked:0,candidateCount:0}
   ],
   candidateCount:1,unmatched:0,conflicts:0,
   matches:[{launchId:ID,region:'california',sourceId:'vandenberg-launch-news',
@@ -127,11 +128,11 @@ test('visitor panel uses selected UUID and rejects drift in official-vs-calendar
  const py=read('scripts/rocket_official_matcher.py');
  const wf=read('.github/workflows/rocket-official-notices.yml');
  assert.match(index,/id="rl-mission-official-match"/);
- assert.match(index,/20261105-reconciled-notices-v1/);
+ assert.match(index,/20261106-official-rss-ksc-v1/);
  assert.match(js,/m=>m\.launchId===launch\.id/);
  assert.match(js,/dateGap<=1/);
  assert.match(js,/No mission-specific official article matched/);
- assert.match(js,/not confirm a liftoff time, ticket inventory/);
+ assert.match(js,/This does not confirm liftoff time, ticket inventory/);
  assert.match(css,/\.rl-mission-official-match\[data-status="matched"\]/);
  assert.match(py,/def reconcile\(/);
  assert.match(wf,/rocket_official_matcher\.py/);
