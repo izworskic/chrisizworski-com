@@ -24,7 +24,7 @@ const card = overrides => ({
 test('share has six-stop bound, deduplicates, omits unsafe IDs and preserves optional date', () => {
   const url = new URL(shareUrl(site, ['bond-falls', 'wagner-falls', 'bond-falls', '../bad',
     'munising-falls', 'scott-falls', 'agate-falls', 'tioga-park-falls', 'extra-falls'], '2026-11-28'));
-  assert.equal(url.origin + url.pathname, site.slice(0, -1));
+  assert.equal(url.origin + url.pathname, site);
   assert.deepEqual(url.searchParams.get('falls').split(','), [
     'bond-falls', 'wagner-falls', 'munising-falls', 'scott-falls', 'agate-falls', 'tioga-park-falls'
   ]);
