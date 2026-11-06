@@ -22,6 +22,35 @@ PLANNED = re.compile(r"\b(?:expected|expects|will arrive|scheduled|planning|plan
 DEPART = re.compile(r"\b(?:departed|departure|departing|leaves winter|returned? to service|returns? to service)\b", re.I)
 ARRIVE = re.compile(r"\b(?:arrive(?:s|d)?|arrival|docked|berthed|wintering|tied up)\b", re.I)
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+# This is a *bounded, already-fetched publisher feed snippet*; never scrape
+# complete articles in the shadow worker or write excerpts to its report.
+EXCERPT_LIMIT = 720
+STAY_CONTEXT = re.compile(
+    r"\b(?:winter lay[\s-]*up|winter berth|wintering|wintered|"
+    r"laid up (?:for|over) (?:the )?winter|winter mooring|"
+    r"tied up for (?:the )?winter|staying for (?:the )?winter|"
+    r"(?:final|last) (?:ship|boat|vessel) (?:in|for) (?:the )?season)\b",
+    re.I)
+NEGATED_STAY = re.compile(
+    r"\b(?:no|not|never|without|denies?)\s+(?:\w+\s+){0,2}"
+    r"(?:winter lay[\s-]*up|winter berth|wintering|laid up)\b", re.I)
+RETROSPECTIVE = re.compile(r"\b(?:retrospective|from the archives|remembering|look back)\b", re.I)
+UNKNOWN_SHIP_TITLE = re.compile(
+    r"^(?:(?:M/V|MV|S/S)\s+)?"
+    r"([A-Z][A-Za-z0-9.' -]{3,65}?)\s+"
+    r"(?:arriv(?:e|es|ed)|dock(?:s|ed)?|berth(?:s|ed)?|tied up)\b", re.I)
+NOT_VESSEL = re.compile(
+    r"\b(?:traffic|ports?|weather|lighthouse|visitor|center|"
+    r"freighters?|vessels?|ships?|boats?|news|roundup|season)\b", re.I)
+
+
+def tentative_title_name(title: str) -> str | None:
+    """A review hint, NEVER a vessel identity or new registry entry."""
+    match = UNKNOWN_SHIP_TITLE.match(title.strip())
+    if not match:
+        return None
+    name = match.group(1).strip(" .-'")
+    return name if len(name) >= 5 and not NOT_VESSEL.search(name) else None
 
 
 def norm(s: str) -> str:
@@ -110,8 +139,22 @@ def analyze(inputs: dict, archive: dict, ledger: dict, as_of: str) -> dict:
             "title": title,
         }
         matches = matching_keys(title, aliases)
+        # The Node feed parser has *already fetched* this metadata. No URLs
+        # are followed; absent or malformed snippets simply lose this signal.
+        excerpt = row.get("sourceExcerpt")
+        excerpt = excerpt[:EXCERPT_LIMIT] if isinstance(excerpt, str) else ""
+        excerpt_matches = matching_keys(excerpt, aliases) if excerpt else []
         winter_article = winter_start <= d <= min(winter_end, now)
         explicit_layup = bool(PHRASES.search(title))
+        excerpt_stay = bool(STAY_CONTEXT.search(excerpt)) and not NEGATED_STAY.search(excerpt)
+        excerpt_action = bool(ARRIVE.search(title + " " + excerpt)) or bool(
+            re.search(r"\b(?:winter berth|wintering|winter mooring|laid up)\b", excerpt, re.I))
+        excerpt_evidence = excerpt_stay and excerpt_action
+        # Do not revive forecasts or historical retrospectives as fresh leads.
+        excerpt_evidence = (excerpt_evidence and not PLANNED.search(title)
+                            and not RETROSPECTIVE.search(title))
+        tentative = (tentative_title_name(title) if excerpt_evidence
+                     and not matches and not excerpt_matches else None)
         # A museum headline may say "arrives at Fincantieri" without the
         # words "winter layup", even when its cited article documents storage.
         # Surfacing it for review does NOT establish a layup.
@@ -122,7 +165,11 @@ def analyze(inputs: dict, archive: dict, ledger: dict, as_of: str) -> dict:
             r"\b(?:stays?|docks?|berthed)\b.*\b(?:for\s+)?winter\b", title, re.I))
         review_cue = explicit_layup or museum_winter_arrival or winter_stay_headline
         node_candidate = item["nodeDecision"] in ("accepted", "review")
-        potentially_missed = winter_article and review_cue and bool(matches) and not node_candidate
+        # Excerpt evidence can surface known ships absent from generic titles,
+        # or a *tentative* unregistered vessel in a named-arrival headline.
+        excerpt_candidate = excerpt_evidence and bool(matches or excerpt_matches or tentative)
+        potentially_missed = (winter_article and not node_candidate and
+                              ((review_cue and bool(matches)) or excerpt_candidate))
         actionable = node_candidate or potentially_missed
         risks = []
         if actionable and len(matches) > 1:
@@ -132,7 +179,12 @@ def analyze(inputs: dict, archive: dict, ledger: dict, as_of: str) -> dict:
         if node_candidate and item["nodeDecision"] == "accepted" and not matches:
             risks.append("accepted_without_known_ship_in_headline")
         if potentially_missed:
-            risks.append("potentially_missed_layup_headline")
+            risks.append("potentially_missed_layup_excerpt" if excerpt_candidate
+                         and not (review_cue and matches) else "potentially_missed_layup_headline")
+            if tentative:
+                risks.append("unregistered_vessel_identity_requires_editorial_verification")
+            if excerpt_matches and not matches:
+                risks.append("vessel_named_only_in_feed_excerpt")
         if actionable and item["kind"] == "arrival" and PLANNED.search(title):
             risks.append("planned_not_actual_arrival")
         if actionable and item["kind"] == "arrival" and DEPART.search(title) and not ARRIVE.search(title):
@@ -150,7 +202,11 @@ def analyze(inputs: dict, archive: dict, ledger: dict, as_of: str) -> dict:
         priority = min(100, 20 + (25 if item["nodeDecision"] == "review" else 0)
                        + (15 if matches else 0) + (10 if PHRASES.search(title) else 0)
                        + (10 if item["harborId"] else 0) + (15 if risks else 0))
-        analyzed.append({**item, "headlineMatches": matches, "risks": risks,
+        analyzed.append({**item, "headlineMatches": matches,
+                         "excerptMatches": excerpt_matches if excerpt_evidence else [],
+                         "tentativeVesselName": tentative if potentially_missed else None,
+                         "excerptEvidence": bool(excerpt_evidence),
+                         "risks": risks,
                          "reviewPriority": priority, "publishEligible": False})
 
     # Same-ship contradictory messages are an investigation, not proof of a bad record.
@@ -191,7 +247,10 @@ def analyze(inputs: dict, archive: dict, ledger: dict, as_of: str) -> dict:
     return {
         "schemaVersion": 1, "mode": "SHADOW_ONLY", "status": status,
         "runAsOf": as_of, "season": inputs["season"], "publicationEnabled": False,
-        "dataSource": "existing Node maritime feed scanner metadata only",
+        "dataSource": "existing Node maritime feed scanner metadata and bounded feed snippets only",
+        "snippetPolicy": "720 characters maximum; used in-memory and omitted from audit output",
+        "excerptSupplied": sum(bool(isinstance(r, dict) and r.get("sourceExcerpt"))
+                               for r in rows),
         "sourceCoverage": {"ok": reachable, "failed": outcomes.get("FAILED", 0),
                            "datedFeeds": dated, "emptyFeeds": empty,
                            "undatedFeeds": undated, "catalogTotal": len(source_outcomes)},
@@ -211,7 +270,9 @@ def analyze(inputs: dict, archive: dict, ledger: dict, as_of: str) -> dict:
         "existingNodeReview": sum(x["nodeDecision"] == "review" for x in analyzed),
         "flaggedObservations": len(at_risk), "anomalyCount": len(issues),
         "unknownIsNotZero": True,
-        "interpretation": ("A non-publishing audit of dated source metadata. Duplicate "
+        "interpretation": ("A non-publishing audit of dated source metadata and optional "
+                           "bounded feed snippets. Snippets are not an original-article "
+                           "verification or authorization to publish ship status. Duplicate "
                            "links count as feed overlap; old-season headlines are not "
                            "current layup leads. Review priorities are never probabilities, "
                            "confirmed arrivals, vessel positions or fleet counts."),
