@@ -181,16 +181,20 @@ def prospective_date(body,now):
     # previous order must never become an event date.
     lines=[clean(p,1400) for p in body.splitlines() if clean(p)]
     for line in lines:
-        if not PROSPECTIVE.search(line) or not EVENT_TERMS.search(line):
-            continue
-        # Historic launch reports never yield upcoming event notices.
-        if HISTORIC.search(line):continue
-        for match in DATE.finditer(line):
-            month=MONTHS[match.group(1).upper().rstrip(".")]
-            try:d=datetime(int(match.group(3)),month,int(match.group(2)),tzinfo=UTC)
-            except ValueError:continue
-            if now-timedelta(days=2)<=d<=now+timedelta(days=65):
-                return d.date().isoformat()
+        # HTML parsers can concatenate several sentences into one paragraph.
+        # An article's publication date in one sentence must NEVER be matched
+        # to an undated "launch window" or mission update in the next sentence.
+        for sentence in re.split(r"(?<=[.!?])\s+",line):
+            if not PROSPECTIVE.search(sentence) or not EVENT_TERMS.search(sentence):
+                continue
+            # Historic launch reports never yield upcoming event notices.
+            if HISTORIC.search(sentence):continue
+            for match in DATE.finditer(sentence):
+                month=MONTHS[match.group(1).upper().rstrip(".")]
+                try:d=datetime(int(match.group(3)),month,int(match.group(2)),tzinfo=UTC)
+                except ValueError:continue
+                if now-timedelta(days=2)<=d<=now+timedelta(days=65):
+                    return d.date().isoformat()
     return None
 
 def launch_region_attested(region,body):
