@@ -136,5 +136,7 @@ test('visitor panel uses selected UUID and rejects drift in official-vs-calendar
  assert.match(py,/def reconcile\(/);
  assert.match(wf,/rocket_official_matcher\.py/);
  assert.match(wf,/mission-manifest/);
+ assert.match(wf,/\.source=="shared-postgres-ll2-national-v2"/);
+ assert.match(wf,/The deployed mission manifest is not yet available/);
  new vm.Script(js);
 });
