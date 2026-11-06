@@ -122,6 +122,7 @@ test('regional news discovery can generate leads but cannot certify a vessel',as
  const result=await f.refresh({ledger:s.freshSeason('2026-27'),archive,fetcher,now:'2027-01-19T00:00:00Z'});
  assert.equal(result.ledger.events.length,0);
  assert.ok(result.reviews.some(x=>x.url===story.url&&x.why==='editorial_review_required'));
+ assert.equal(result.observations[0].sourceExcerpt,'','discovery aggregators do not masquerade as first-party excerpts');
 });
 
 test('two independent specialist reports create one sourced reported arrival, never confirmed',async()=>{
