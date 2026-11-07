@@ -129,13 +129,19 @@ def badger_season(text: str, now: dt.date) -> tuple[int, list[str]] | None:
 
 
 def monitored(planners: dict) -> list[dict]:
-    work = []
+    work, seen = [], set()
     for route, config in planners.items():
-        # Maximum three primary operator sources per route. No image/CDN/tracker fetch.
-        for label, url in config.get("sources", [])[:3]:
-            work.append({"route": route, "label": label, "url": url})
+        # Monitor all curated original sources, including park access and terminals.
+        # Deduplicate a shared operator page so it is not polled repeatedly.
+        sources = config.get("sources", []) + config.get("experience", {}).get("extraSources", [])
+        for label, url in sources:
+            if url not in seen:
+                work.append({"route": route, "label": label, "url": url})
+                seen.add(url)
     for label, url in MACKINAC_SOURCES:
-        work.append({"route": "mackinac", "label": label, "url": url})
+        if url not in seen:
+            work.append({"route": "mackinac", "label": label, "url": url})
+            seen.add(url)
     return work
 
 
