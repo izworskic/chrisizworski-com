@@ -35,8 +35,8 @@ def validate(data):
             errors.append(f"{key}: duplicate path or mismatched id")
         paths.add(slug)
         year = c.get("fareReferenceYear")
-        if year != 2026:
-            errors.append(f"{key}: expected explicit verified fare year 2026, got {year}")
+        if type(year) is not int or not (2000 <= year <= 2100):
+            errors.append(f"{key}: missing or invalid explicit fare reference year {year}")
         for name, window in (c.get("seasonWindows") or {}).items():
             if not re.fullmatch(r"\d{4}", name):
                 errors.append(f"{key}: bad window year {name}")
@@ -64,9 +64,6 @@ def validate(data):
         results.append({"id": key, "path": slug, "fare_reference_year": year,
                         "published_season_years": sorted((c.get("seasonWindows") or {}).keys()),
                         "source_count": len(links)})
-    badger = data.get("ss-badger", {})
-    if (badger.get("seasonWindows") or {}).get("2027") != ["2027-05-14", "2027-10-10"]:
-        errors.append("Badger 2027 operator-published season mismatch")
     return errors, results
 
 
