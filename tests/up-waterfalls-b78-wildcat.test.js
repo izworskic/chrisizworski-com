@@ -36,7 +36,7 @@ test('B78 all inventory, curator, nearby Python and sitemap counts agree without
  assert.match(hub,/79 curated visitor destinations/);assert.match(hub,/79 curated waterfall profiles/);
  assert.equal((hub.match(/data-id="wildcat-falls"/g)||[]).length,1);
  assert.equal((sm.match(/<loc>/g)||[]).length,77);
- assert.match(sm,/wildcat-falls\/</loc><lastmod>2026-11-07/);
+ assert.ok(sm.includes('wildcat-falls/</loc><lastmod>2026-11-07</lastmod>'));
  const graph=JSON.parse(hub.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1])['@graph'];const list=graph.find(x=>x['@type']==='ItemList');
  assert.equal(list.numberOfItems,77);assert.equal(list.itemListElement.at(-1).name,'Wildcat Falls');
 });
