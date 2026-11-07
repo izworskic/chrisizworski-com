@@ -57,6 +57,7 @@
     const feed=data.regions?.find(r=>r.id===region);
     const reported=(data.access||{}).liveOfficialNotice;
     const snapshotStale=data.scheduleFreshness==='stale'||mission?.sourceStale===true;
+    const sourceUnknown=!['stale','recent'].includes(data.scheduleFreshness);
     const feedUnavailable=feed?.feedState==='unavailable';
     const precision=mission?.netPrecision;
     const hold=Boolean(mission&&/hold|scrub/i.test(mission.status||''));
@@ -73,6 +74,9 @@
     }else if(snapshotStale){
       status='stale';headline='Schedule check overdue';
       note='This target may have changed. Recheck an official operator or range notice before making plans.';
+    }else if(sourceUnknown){
+      status='stale';headline='Schedule observation not verified';
+      note='The latest source age cannot be established. Confirm the current official mission target before a trip.';
     }else if(hold){
       status='hold';headline='Launch held or scrubbed';
       note='Do not travel based on the previous target. Await a new official attempt window.';
@@ -194,5 +198,9 @@
   const api=Object.freeze({decide,target,mount});
   root.RocketFlightDesk=api;
   if(typeof module==='object'&&module.exports)module.exports=api;
-  if(typeof document!=='undefined')document.addEventListener('DOMContentLoaded',()=>mount(document),{once:true});
+  if(typeof document!=='undefined'){
+    if(document.readyState==='loading')
+      document.addEventListener('DOMContentLoaded',()=>mount(document),{once:true});
+    else mount(document);
+  }
 })(typeof window!=='undefined'?window:globalThis);
