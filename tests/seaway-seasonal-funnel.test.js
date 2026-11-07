@@ -119,7 +119,7 @@ test('mobile month selector has discovery hint and centers current month without
   const js=fs.readFileSync('public/assets/seaway.js','utf8');
   assert.match(html,/class="seasonal-swipe-hint"/);
   assert.match(html,/swipe this row sideways/i);
-  assert.match(html,/seaway\.css\?v=20261105c/);
+  assert.match(html,/seaway\.css\?v=20261107b/);
   assert.match(js,/monthStrip\.scrollLeft=Math\.max\(0,centered\)/);
   assert.doesNotMatch(js,/selected\.scrollIntoView/);
 });
