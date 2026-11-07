@@ -41,7 +41,7 @@ for(const [slug,contract] of Object.entries(seo)){
     assert.equal(can.length,1,'one canonical tag');
     assert.equal(attr(can[0],'href'),canonical);
     assert.match(head,/<meta name="robots" content="index,follow,max-image-preview:large">/);
-    assert.equal(attr(matchTag(head,'meta','property','og:title')[0]||'','content'),contract.title.replace(/&/g,'&amp;'));
+    assert.equal(decode(attr(matchTag(head,'meta','property','og:title')[0]||'','content')),contract.title);
     assert.equal(decode(attr(matchTag(head,'meta','property','og:description')[0]||'','content')),contract.description);
     assert.equal(attr(matchTag(head,'meta','property','og:url')[0]||'','content'),canonical);
     assert.equal(attr(matchTag(head,'meta','name','twitter:card')[0]||'','content'),'summary_large_image');
