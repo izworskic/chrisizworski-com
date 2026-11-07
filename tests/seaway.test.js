@@ -131,7 +131,8 @@ test('generated journey has actionable chapters and keeps a static no-JavaScript
   assert.match(html,/not a confirmed ship itinerary|not the vessel.s entire itinerary/i);
   assert.match(html,/\/welland-canal\//);
   assert.match(html,/\/soo-locks\//);
-  assert.match(html,/dateModified":"2026-11-05/);
+  const lastSignificantEdit=require('../data/seaway/search-surface.json')['st-lawrence-seaway'].dateModified;
+  assert.ok(html.includes('"dateModified":"'+lastSignificantEdit+'"'),'generated schema follows source-owned edit date');
 });
 
 test('Python Intelligence OS seasonal passage lens is static, source-backed and no-JS readable',()=>{
