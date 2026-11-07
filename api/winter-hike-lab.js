@@ -118,15 +118,13 @@ async function handler(req,res) {
  }
  const access=Access.resolveAccess(dest);
  const parkingAccess=Parking.assess(route.id,{tripDay:date});
- // A source-backed CURRENT NPS closure can only close the applicable road
- // or trail. Absence of an NPS alert cannot open parking or upgrade a verdict.
- if(officialAlerts?.status==='official-closure'){
-  for(const kind of officialAlerts.blockedKinds||[])if(kind==='road'||kind==='trail')access[kind]='closed';
- }
- // Explicit, dated manager closures constrain the weather decision; unknown
- // parking is never promoted to open from a static park page.
+ // Manager-verified, date-specific access evidence can constrain a forecast,
+ // but it must never cancel a separately active official NPS closure.
  for(const k of ['trail','road','parking']){
   if(['open','closed','restricted'].includes(parkingAccess[k]))access[k]=parkingAccess[k];
+ }
+ if(officialAlerts?.status==='official-closure'){
+  for(const kind of officialAlerts.blockedKinds||[])if(kind==='road'||kind==='trail')access[kind]='closed';
  }
  const gis=geometry?.spatial||null;
  const decision=Eval.interpret(dest,{
