@@ -26,19 +26,19 @@ test('B78 Wildcat source triangulation separates owner trail & legal road arriva
  assert.match(row.verification.trail.source,/Slide2\.jpg/);
 });
 test('B78 all inventory, curator, nearby Python and sitemap counts agree without stealing a GIS feature',()=>{
- assert.deepEqual([cat.waterfalls.length,rec.counts.curatedTotal,ledger.curatedCount,queue.counts.curatedDestinations],[79,79,79,79]);
- assert.deepEqual([rec.counts.exactIdMatched,rec.counts.pending,rec.counts.curatedNoMatchingGIS],[69,92,14]);
+ assert.deepEqual([cat.waterfalls.length,rec.counts.curatedTotal,ledger.curatedCount,queue.counts.curatedDestinations],[80,80,80,80]);
+ assert.deepEqual([rec.counts.exactIdMatched,rec.counts.pending,rec.counts.curatedNoMatchingGIS],[69,92,15]);
  assert.ok(rec.curatedWithoutExactGISMatch.some(x=>x.id==='wildcat-falls'&&x.gisObjectId===null));
  assert.ok(ledger.entries.some(x=>x.curatedId==='wildcat-falls'&&x.coordinateRole.includes('not-road-parking')));
- assert.deepEqual(near.counts,{curated:79,eligible:70,excluded:9});
+ assert.deepEqual(near.counts,{curated:80,eligible:71,excluded:9});
  assert.deepEqual(near.locations.filter(x=>x.id==='wildcat-falls').map(x=>[x.lat,x.lng]),[[46.346173,-89.292236]]);
  assert.ok(near.nearby['wildcat-falls'].some(x=>x.id==='bond-falls'));
- assert.match(hub,/79 curated visitor destinations/);assert.match(hub,/79 curated waterfall profiles/);
+ assert.match(hub,/80 curated visitor destinations/);assert.match(hub,/80 curated waterfall profiles/);
  assert.equal((hub.match(/data-id="wildcat-falls"/g)||[]).length,1);
- assert.equal((sm.match(/<loc>/g)||[]).length,77);
+ assert.equal((sm.match(/<loc>/g)||[]).length,78);
  assert.ok(sm.includes('wildcat-falls/</loc><lastmod>2026-11-07</lastmod>'));
  const graph=JSON.parse(hub.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1])['@graph'];const list=graph.find(x=>x['@type']==='ItemList');
- assert.equal(list.numberOfItems,77);assert.equal(list.itemListElement.at(-1).name,'Wildcat Falls');
+ assert.equal(list.numberOfItems,78);assert.equal(list.itemListElement.at(-1).name,'Wildcat Falls');
 });
 test('B78 public indexable guide is evidence-rich, not navigation to approximate falls pin',()=>{
  assert.match(page,/rel="canonical" href="https:\/\/chrisizworski.com\/upper-peninsula-waterfalls\/wildcat-falls\//);
