@@ -44,10 +44,10 @@ test('B61: Python landmark distances do not become driving or trail waypoints',(
  assert.ok(proof.sourcePoints.every(p=>/not-parking|do-not-route/.test(p.evidenceScope)));
 });
 test('B61: all three sources of truth block visitor promotion and public route',()=>{
- assert.equal(reconciliation.counts.curatedTotal,77);
+ assert.equal(reconciliation.counts.curatedTotal,78;
  assert.equal(reconciliation.counts.exactIdMatched,69);
  assert.equal(reconciliation.counts.pending,92);
- assert.equal(inventory.curatedCount,77);
+ assert.equal(inventory.curatedCount,78;
  assert.equal(inventory.unresolvedCandidates,92);
  assert.equal(reviews.records.length,97);
  assert.equal(queue.candidates.length,92);
