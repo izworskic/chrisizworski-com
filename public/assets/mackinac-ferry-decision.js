@@ -143,7 +143,8 @@
     }catch(err){if(requestId===activeRequest&&service===el("ferry-service-data"))service.textContent="Schedule lookup unavailable. Please use the official schedule links for your operator.";}
     finally{if(requestId===activeRequest&&button.isConnected)button.disabled=false;}
   });
-  if(!el("ferry-date").value){const today=new Date();el("ferry-date").value=[today.getFullYear(),String(today.getMonth()+1).padStart(2,"0"),String(today.getDate()).padStart(2,"0")].join("-");}\n  form.addEventListener("submit",function(e){e.preventDefault();render();results.scrollIntoView({behavior:"smooth",block:"start"});});
+  if(!el("ferry-date").value){const today=new Date();el("ferry-date").value=[today.getFullYear(),String(today.getMonth()+1).padStart(2,"0"),String(today.getDate()).padStart(2,"0")].join("-");}
+  form.addEventListener("submit",function(e){e.preventDefault();render();results.scrollIntoView({behavior:"smooth",block:"start"});});
   form.addEventListener("change",render);
   render();
 })(typeof window!=="undefined"?window:globalThis);
