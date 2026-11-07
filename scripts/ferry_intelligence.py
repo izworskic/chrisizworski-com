@@ -34,10 +34,12 @@ MACKINAC_SOURCES = [
     ("Arnold's official fares", "https://www.arnoldtransitcompany.com/summer-ferry-rates/"),
 ]
 WATCH_TERMS = re.compile(
-    r"\b(?:20[2-9][0-9]|schedule|season|sail|depart|ferr|fare|rate|fee|"
-    r"cancel|delay|suspend|dock|service|closed|opening|reserv|terminal|vehicle|"
-    r"May|June|July|August|September|October|November|December|January|"
-    r"February|March|April)\b", re.IGNORECASE)
+    r"\b(?:20[2-9][0-9]|schedul\w*|season\w*|sail\w*|depart\w*|"
+    r"ferr(?:y|ies)|fare\w*|rate\w*|fee\w*|cancel\w*|delay\w*|"
+    r"suspend\w*|dock\w*|servic\w*|clos\w*|open\w*|reserv\w*|"
+    r"terminal\w*|vehicle\w*|May|June|July|August|September|October|"
+    r"November|December|January|February|March|April)\b", re.IGNORECASE)
+
 MONTH = {name: i for i, name in enumerate(
     ("", "January", "February", "March", "April", "May", "June", "July",
      "August", "September", "October", "November", "December")) if i}
@@ -275,7 +277,10 @@ def main() -> int:
     planners = json.loads(PLANNERS.read_text())
     state = json.loads(STATE.read_text()) if STATE.exists() else {"version": 1, "sources": {}}
     work = monitored(planners)
-    hosts = {(urlparse(item["url"]).hostname or "").lower() for item in work}
+    source_hosts = {(urlparse(item["url"]).hostname or "").lower() for item in work}
+    # Common canonical www/no-www redirects are part of the same curated operator.
+    hosts = source_hosts | {host.removeprefix("www.") for host in source_hosts} | {
+        "www." + host.removeprefix("www.") for host in source_hosts}
     with concurrent.futures.ThreadPoolExecutor(max_workers=6) as pool:
         observations = list(pool.map(lambda item: fetch_source(item, hosts), work))
     data, newstate, report = process(planners, state, observations, today)
