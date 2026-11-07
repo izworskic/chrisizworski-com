@@ -35,10 +35,10 @@ MACKINAC_SOURCES = [
     ("Arnold's official fares", "https://www.arnoldtransitcompany.com/summer-ferry-rates/"),
 ]
 WATCH_TERMS = re.compile(
-    r"\\b(?:20[2-9][0-9]|schedule|season|sail|depart|ferr|fare|rate|fee|"
+    r"\b(?:20[2-9][0-9]|schedule|season|sail|depart|ferr|fare|rate|fee|"
     r"cancel|delay|suspend|dock|service|closed|opening|reserv|terminal|vehicle|"
     r"May|June|July|August|September|October|November|December|January|"
-    r"February|March|April)\\b", re.IGNORECASE)
+    r"February|March|April)\b", re.IGNORECASE)
 MONTH = {name: i for i, name in enumerate(
     ("", "January", "February", "March", "April", "May", "June", "July",
      "August", "September", "October", "November", "December")) if i}
@@ -59,13 +59,13 @@ class ReadableText(HTMLParser):
         elif tag in self.SKIP:
             self.depth = 1
         elif tag in self.BLOCK:
-            self.parts.append("\\n")
+            self.parts.append("\n")
 
     def handle_endtag(self, tag):
         if self.depth:
             self.depth -= 1
         elif tag in self.BLOCK:
-            self.parts.append("\\n")
+            self.parts.append("\n")
 
     def handle_data(self, data):
         if not self.depth and data.strip():
@@ -85,12 +85,12 @@ def semantic_lines(raw: bytes, content_type: str) -> tuple[str, str]:
     body = readable(raw)
     lines = []
     for line in body.splitlines():
-        clean = re.sub(r"\\s+", " ", line).strip()
+        clean = re.sub(r"\s+", " ", line).strip()
         if 8 <= len(clean) <= 900 and WATCH_TERMS.search(clean):
             lines.append(clean)
     if not lines:
         raise ValueError("no recognizable official ferry statements; cannot compare")
-    normalized = "\\n".join(lines[:1200])
+    normalized = "\n".join(lines[:1200])
     return hashlib.sha256(normalized.encode("utf-8")).hexdigest(), " | ".join(lines[:7])[:450]
 
 
@@ -100,21 +100,21 @@ def badger_season(text: str, now: dt.date) -> tuple[int, list[str]] | None:
     Never derive a season from isolated dates, promotional banners, prior-year
     fares, overnight sailing exceptions, or a "coming soon" placeholder.
     """
-    normalized = re.sub(r"\\s+", " ", text)
-    headings = list(re.finditer(r"\\b(20\\d{2})\\s+Schedule\\b", normalized, re.I))
+    normalized = re.sub(r"\s+", " ", text)
+    headings = list(re.finditer(r"\b(20\d{2})\s+Schedule\b", normalized, re.I))
     valid = []
     for heading in headings:
         year = int(heading.group(1))
         if year < now.year or year > now.year + 2:
             continue
         segment = normalized[heading.end():heading.end() + 1800]
-        if re.search(r"\\bcoming soon\\b", segment[:150], re.I):
+        if re.search(r"\bcoming soon\b", segment[:150], re.I):
             continue
         match = re.search(
-            r"\\bFull Season\\s*[-:–]\\s*(January|February|March|April|May|June|"
-            r"July|August|September|October|November|December)\\s+(\\d{1,2})"
-            r"\\s*(?:-|–|—|to)\\s*(January|February|March|April|May|June|"
-            r"July|August|September|October|November|December)\\s+(\\d{1,2})\\b",
+            r"\bFull Season\s*[-:–]\s*(January|February|March|April|May|June|"
+            r"July|August|September|October|November|December)\s+(\d{1,2})"
+            r"\s*(?:-|–|—|to)\s*(January|February|March|April|May|June|"
+            r"July|August|September|October|November|December)\s+(\d{1,2})\b",
             segment, re.I)
         if not match:
             continue
@@ -247,7 +247,7 @@ def main() -> int:
     args = parser.parse_args()
     today = dt.datetime.now(dt.timezone.utc).date()
     if args.respect_cadence and not due_today(today):
-        Path(args.report).write_text(json.dumps({"skipped": "winter cadence", "date": today.isoformat()}, indent=2) + "\\n")
+        Path(args.report).write_text(json.dumps({"skipped": "winter cadence", "date": today.isoformat()}, indent=2) + "\n")
         print("Winter cadence: next Monday or manual dispatch.")
         return 0
     planners = json.loads(PLANNERS.read_text())
@@ -259,12 +259,12 @@ def main() -> int:
     data, newstate, report = process(planners, state, observations, today)
     report_path = Path(args.report)
     report_path.parent.mkdir(parents=True, exist_ok=True)
-    report_path.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\\n")
+    report_path.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n")
     if args.apply:
         if data != planners:
-            PLANNERS.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\\n")
+            PLANNERS.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n")
         if newstate != state:
-            STATE.write_text(json.dumps(newstate, indent=2, ensure_ascii=False) + "\\n")
+            STATE.write_text(json.dumps(newstate, indent=2, ensure_ascii=False) + "\n")
     print(json.dumps({k: report[k] for k in ("sources_monitored", "sources_reachable",
                 "accepted_season_windows", "requires_review", "conflicting_official_windows",
                 "auto_publish_eligible")}, indent=2))
