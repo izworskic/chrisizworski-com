@@ -1,0 +1,16 @@
+{
+  "st-lawrence-seaway": {
+    "title": "St. Lawrence Seaway Ship Tracker & Locks | Chris Izworski",
+    "description": "Track recently reported St. Lawrence Seaway ships by river region, explore seven locks and public viewing spots, and check official vessel transit information.",
+    "dateModified": "2026-11-07",
+    "image": "eisenhower-deck.jpg",
+    "imageAlt": "Visitors watching a red freighter at Eisenhower Lock"
+  },
+  "eisenhower-lock": {
+    "title": "Eisenhower Lock Ships & Visitor Guide | Chris Izworski",
+    "description": "Plan an Eisenhower Lock visit in Massena, NY: public observation decks, visiting hours, recent ship reports and official Seaway transit information.",
+    "dateModified": "2026-11-07",
+    "image": "eisenhower-deck.jpg",
+    "imageAlt": "Visitors watching a red freighter at Eisenhower Lock"
+  }
+}
