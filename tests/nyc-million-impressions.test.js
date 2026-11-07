@@ -20,7 +20,7 @@ test('NYC SERP promises match one indexable canonical intent',()=>{
  assert.match(desc,/tolls.*congestion pricing.*live crossing times/i);
  assert.ok(html.includes('<link rel="canonical" href="https://chrisizworski.com/nyc-crossing/">'));
  assert.ok(html.includes('<meta name="robots" content="index,follow'));
- assert.ok(html.includes('<h1>Which NYC crossing should you take?</h1>'));
+ assert.ok(html.includes('<h1>NYC Bridge &amp; Tunnel Toll Calculator</h1>'));
  assert.equal(b.canonical,'https://chrisizworski.com/nyc-crossing/');
  assert.equal(b.decision.newIndexableUrls,0);
 });
