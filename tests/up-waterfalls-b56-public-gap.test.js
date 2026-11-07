@@ -50,7 +50,7 @@ test('guide, sitemap, JSON-LD and map keep creator, location and discovery consi
  assert.ok(hub.includes('data-id="wright-street-falls"'));
  assert.equal((hub.match(/<article class="waterfall-card"/g)||[]).length,78);
  const list=JSON.parse(hub.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1])['@graph'].find(x=>x['@type']==='ItemList');
- assert.equal(list.numberOfItems,76;
+ assert.equal(list.numberOfItems,76);
  assert.equal(list.itemListElement.find(x=>x.url===url).position,71);
  assert.equal(records.length,78);
  assert.equal(rec.counts.curatedTotal,78);assert.equal(rec.counts.curatedNoMatchingGIS,13);
