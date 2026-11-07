@@ -128,17 +128,17 @@
    if(!screen)return;
    screen.replaceChildren();
    state.map=L.map(screen,{scrollWheelZoom:false,preferCanvas:true,zoomControl:true});
+   const credit='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+   const osm=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:credit}).addTo(state.map);
+   osm.on('tileload',readyTiles);
+   osm.on('tileerror',()=>{if(!state.tiles)mapFallback('Base-map tiles could not load.');});
+   addMapSites();
       state.rocketPins=window.RocketMapPins?.mount(state.map,{
         region:'virginia',centers:{virginia:{lat:37.84,lon:-75.48}},
         onSelect:id=>{void loadMission(id);}
       });
       state.rocketPins?.update(state.data?.regions?.find(r=>r.id==='virginia')?.launches||[],
         state.data?.selectedLaunchId);
-   const credit='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
-   const osm=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:credit}).addTo(state.map);
-   osm.on('tileload',readyTiles);
-   osm.on('tileerror',()=>{if(!state.tiles)mapFallback('Base-map tiles could not load.');});
-   addMapSites();
    if(typeof ResizeObserver!=='undefined')new ResizeObserver(()=>state.map?.invalidateSize()).observe(screen);
    fetch('/api/carto-basemap-config',{signal:AbortSignal.timeout(5500)})
     .then(r=>r.ok?r.json():null).then(config=>{

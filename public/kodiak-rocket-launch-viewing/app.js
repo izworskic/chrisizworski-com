@@ -122,12 +122,6 @@
    const root=$('k-map');root.replaceChildren();root.setAttribute('role','region');
    const L=window.L,map=L.map(root,{scrollWheelZoom:false,zoomControl:true,preferCanvas:true});
    state.map=map;
-   state.rocketPins=window.RocketMapPins?.mount(map,{
-     region:'alaska',centers:{alaska:{lat:57.43,lon:-152.34}},
-     onSelect:id=>{void loadMission(id);}
-   });
-   state.rocketPins?.update(state.data?.regions?.find(r=>r.id==='alaska')?.launches||[],
-     state.data?.selectedLaunchId);
    const attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
    const osm=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution,maxZoom:18}).addTo(map);
    state.osm=osm;
@@ -143,6 +137,12 @@
     marker.addTo(map);state.pins.set(p.id,marker);
    }
    map.fitBounds(places.map(p=>[p.lat,p.lon]),{padding:[35,35],maxZoom:11,animate:false});
+   state.rocketPins=window.RocketMapPins?.mount(map,{
+     region:'alaska',centers:{alaska:{lat:57.43,lon:-152.34}},
+     onSelect:id=>{void loadMission(id);}
+   });
+   state.rocketPins?.update(state.data?.regions?.find(r=>r.id==='alaska')?.launches||[],
+     state.data?.selectedLaunchId);
    set('map-status','Two source-backed geographic references. No launch-day parking, route, pad entrance, safety-zone perimeter or trajectory asserted.');
    if(typeof ResizeObserver!=='undefined')new ResizeObserver(()=>map.invalidateSize()).observe(root);
    fetch('/api/carto-basemap-config',{signal:AbortSignal.timeout(5500)}).then(r=>r.ok?r.json():null).then(c=>{

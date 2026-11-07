@@ -677,13 +677,13 @@
       const L=await loadLeaflet();
       screen.replaceChildren();
       map=L.map(screen,{scrollWheelZoom:false,zoomControl:true,preferCanvas:true});
+      map.setView([28.56,-80.68],10);
         rocketPins=window.RocketMapPins?.mount(map,{
           region:'florida',centers:{florida:{lat:28.58,lon:-80.61}},
           onSelect:id=>document.dispatchEvent(new CustomEvent(
             'space-coast:mission-marker-selected',{detail:{launchId:id}}))
         });
         rocketPins?.update(scheduledLaunches,lastMissionId);
-      map.setView([28.56,-80.68],10);
       void loadTiles(L,map); // Draw markers immediately; basemap configuration can arrive afterward.
       const resize=()=>map?.invalidateSize({pan:false});
       if (typeof ResizeObserver !== 'undefined') new ResizeObserver(resize).observe(screen);

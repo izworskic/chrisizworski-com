@@ -123,18 +123,18 @@
   try{
    const node=$('sb-map');const map=window.L.map(node,{scrollWheelZoom:false,preferCanvas:true});
    state.map=map;
-      state.rocketPins=window.RocketMapPins?.mount(map,{
-       region:'texas',centers:{texas:{lat:25.997,lon:-97.157}},
-       onSelect:id=>{void loadMission(id);}
-      });
-      state.rocketPins?.update(state.data?.regions?.find(r=>r.id==='texas')?.launches||[],
-       state.data?.selectedLaunchId);
    const credit='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
    const osm=window.L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',
     {maxZoom:19,attribution:credit}).addTo(map);
    osm.on('tileload',setTileReady);
    osm.on('tileerror',()=>{if(!state.tilesReady)fallbackMap('Map imagery could not be loaded.');});
    addPlacesToMap();displayPad();selection();
+      state.rocketPins=window.RocketMapPins?.mount(map,{
+       region:'texas',centers:{texas:{lat:25.997,lon:-97.157}},
+       onSelect:id=>{void loadMission(id);}
+      });
+      state.rocketPins?.update(state.data?.regions?.find(r=>r.id==='texas')?.launches||[],
+       state.data?.selectedLaunchId);
    // Optional existing licensed CARTO configuration, never an unkeyed endpoint.
    fetch('/api/carto-basemap-config',{signal:AbortSignal.timeout(5000)})
     .then(r=>r.ok?r.json():null).then(config=>{

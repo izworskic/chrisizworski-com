@@ -186,12 +186,6 @@ async function startMap(){
   const d=await loadAtlas();await loadLeaflet();const L=window.L,root=$('pmrf-map');
   root.replaceChildren();root.setAttribute('role','region');root.setAttribute('aria-label','Interactive interpretive west Kauaʻi range map');
   const map=L.map(root,{scrollWheelZoom:false,preferCanvas:true,zoomControl:true});state.map=map;
- state.rocketPins=window.RocketMapPins?.mount(map,{
-   region:'hawaii',centers:{hawaii:{lat:22.02,lon:-159.78}},
-   onSelect:id=>{void loadMission(id);}
- });
- state.rocketPins?.update(state.data?.regions?.find(r=>r.id==='hawaii')?.launches||[],
-   state.data?.selectedLaunchId);
   const osmCredit='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
   const osm=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:osmCredit}).addTo(map);
   osm.on('tileload',()=>{state.tilesReady=true;});
@@ -212,6 +206,12 @@ async function startMap(){
   popup.append(strong,message);const anchor=external(d.maritimeRule.source,'Read governing rule');if(anchor)popup.append(anchor);
   state.polygon.bindPopup(popup);if(state.ruleShown)state.polygon.addTo(map);
   bounds.push(...coords);map.fitBounds(bounds,{padding:[24,24],maxZoom:11,animate:false});
+ state.rocketPins=window.RocketMapPins?.mount(map,{
+   region:'hawaii',centers:{hawaii:{lat:22.02,lon:-159.78}},
+   onSelect:id=>{void loadMission(id);}
+ });
+ state.rocketPins?.update(state.data?.regions?.find(r=>r.id==='hawaii')?.launches||[],
+   state.data?.selectedLaunchId);
   if(typeof ResizeObserver!=='undefined')new ResizeObserver(()=>map.invalidateSize()).observe(root);
   syncRule();
   fetch('/api/carto-basemap-config',{signal:AbortSignal.timeout(6000)}).then(r=>r.ok?r.json():null).then(c=>{
