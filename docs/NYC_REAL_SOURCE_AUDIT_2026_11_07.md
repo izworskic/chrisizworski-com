@@ -32,7 +32,20 @@ Both queries were retrieved from the official live Socrata API November 7. Metad
 ## Model science, deliberately held out
 The 70 calendar days of training data and 14 most recent held-out calendar days remain separate. Evaluate each NYC DOT link's *daily-hourly mean*, not individual five-minute polls treated as independent days. Compare weekday/weekend hourly median and empirical 10–90 percentile range against a same-link all-hour median. Gate on >=100 scored held-out date-hours, >=30 qualified hour slots, >=5% MAE reduction, >=55% holdout interval coverage, 72-hour source freshness, and exact link/segment scope. Never infer a fastest door-to-door crossing from unlike segments.
 
-The initial real-data inspection suggested that the two recent valid approach links may underperform the 5% improvement threshold. This is a **preliminary independent extraction**, not the approved final model. The GitHub Actions Python `audit-live` command prints an authoritative per-link breakdown of MAE, comparator MAE, improvement, coverage and source availability. Actual Python results determine the publish decision.
+**Real Python evaluation completed successfully on November 7, 2026.** Exact GitHub Actions run: https://github.com/izworskic/chrisizworski-com/actions/runs/42407765008
+
+| Link | Valid date-hours | Independent holdout result | Gate |
+| --- | ---: | --- | --- |
+| Brooklyn approach 4616339 | 2,104 | 275 scored held-out date-hours; 3.241 min MAE vs 3.277 min naive, +1.09% improvement, 58.18% range coverage | **FAIL** — less than 5% gain |
+| Manhattan approach 4616340 | 897 | 206 independently scored hours but only 22 eligible hour slots | **FAIL** — at least 30 slots required; error statistic withheld |
+| Queens–Midtown 4456510 | 1,563 | 95 scored holdout hours; 20 qualifying slots; last usable November 1 | **FAIL** — stale and insufficient coverage |
+| Hugh Carey 4456501 | 1,378 | 88 scored holdout hours; 18 qualifying slots; last usable November 1 | **FAIL** — stale and insufficient coverage |
+| RFK 4456452 | 0 | No usable positive travel-time rows in the 93-day ingestion window | **FAIL** — no evidence |
+| Verrazzano 4763652 | 0 | No usable positive travel-time rows in the 93-day ingestion window | **FAIL** — no evidence |
+
+Total usable date-hours: **5,942**. Rejected aggregated date-hours: **465**. `modelReadyLinks=[]`; `publishingCandidateState=UNAVAILABLE`. There is **no publishable real-data model** under the current source and documented threshold. The fact that the source endpoint returns newer timestamps must never override these results.
+
+**Ingestion integrity repair made during this audit:** the first real-data run returned exactly 1,000 grouped Manhattan records and did not include the newest valid date. The Python ingest now queries **non-overlapping, at-most-30-day calendar partitions**. Each query can contain at most 720 distinct date-hour buckets; the explicit server limit is 800. The parser checks completeness bounds, exact link ID, date window, unique date/hour groups and rejects suspicious batches. On rerun it recovered the missing current-day rows and produced 1,016 grouped Manhattan source records. This is evidence of a retrieval-completeness risk, not proof of its provider-side cause. Deterministic tests reproduce and reject the partial-response condition.
 
 ## Implemented investment
 - `scripts/nyc_departure_intelligence.py audit-live --report /tmp/nyc-source.json`: queries six exact official links and a seven-day raw-status heartbeat; normalizes, evaluates genuine out-of-time holdout skill even if it **fails**, and reports per-link `MODEL_ELIGIBLE`, `STALE_LINK`, `BACKTEST_FAILED`, or `NO_USABLE_HISTORY`.
