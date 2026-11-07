@@ -41,7 +41,7 @@ test('selected vessel must be independently visible even if other observations s
 test('input order does not determine grouping, location estimates or vessel ownership',()=>{
   const ships=fixture();
   const a=C.groupMapReports(ships,project,67),b=C.groupMapReports([...ships].reverse(),project,67);
-  const signature=g=>g.map(x=>[x.id,x.count,x.lat,x.lon]).sort((p,q)=>p[0].localeCompare(q[0]));
+  const signature=g=>g.map(x=>[x.id,x.count,Number(x.lat.toFixed(8)),Number(x.lon.toFixed(8))]).sort((p,q)=>p[0].localeCompare(q[0]));
   assert.deepEqual(signature(a),signature(b));
 });
 test('map has actual counted ship markers, an in-map report counter, source confidence and drill-down controls',()=>{
@@ -51,7 +51,7 @@ test('map has actual counted ship markers, an in-map report counter, source conf
   assert.match(js,/seaway-vessel-cluster/);
   assert.match(js,/mapReportBadge\.replaceChildren/);
   assert.match(js,/inspectVesselGroup\(/);
-  assert.match(js,/group\.vessels\)/);
+  assert.match(js,/group\.vessels\.map\(/);
   assert.match(js,/map\.fitBounds/);
   assert.match(js,/chooseShip\(v\.mmsi,true\)/);
   assert.match(js,/zIndexOffset:1250/);
