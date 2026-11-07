@@ -120,6 +120,65 @@ test('invalid upstream JSON is not treated as no ship reports',async()=>{
     assert.equal(r.body.regions[0].state,'unavailable');
   }finally{global.fetch=original;}
 });
+
+test('a successful empty AIS response leaves receiver coverage unverified, not a verified empty river',()=>{
+  const empty=assess(collection([]),'massena',now);
+  assert.equal(empty.state,'no-reports');
+  assert.equal(empty.coverageEvidence,'not-established');
+  assert.equal(empty.vessels.length,0);
+  const received=assess(collection([feature(316000001)]),'massena',now);
+  assert.equal(received.coverageEvidence,'recent-observations');
+  const combined=combine([empty,received],now);
+  assert.equal(combined.ok,true);
+  assert.equal(combined.regions[0].coverageEvidence,'not-established');
+});
+test('warm Seaway function coalesces concurrent corridor and regional upstream checks',async()=>{
+  const original=global.fetch;
+  const calls=new Map();
+  global.fetch=async url=>{
+    const match=String(url).match(/bbox=([^&]+)/);
+    const bbox=match?.[1]||'unknown';
+    calls.set(bbox,(calls.get(bbox)||0)+1);
+    await Promise.resolve();
+    return {ok:true,json:async()=>collection([])};
+  };
+  try{
+    const broad=response(),local=response();
+    await Promise.all([handler({method:'GET',query:{region:'all'}},broad),
+      handler({method:'GET',query:{region:'massena'}},local)]);
+    assert.equal(broad.code,200);
+    assert.equal(local.code,200);
+    assert.equal(broad.body.regions.length,5);
+    assert.equal(local.body.regions.length,1);
+    assert.equal([...calls.values()].reduce((a,b)=>a+b,0),5,'one upstream request per region, not six');
+    assert.equal(local.body.regions[0].coverageEvidence,'not-established');
+    assert.equal(local.body.regions[0].checkedAt,broad.body.regions.find(r=>r.id==='massena').checkedAt);
+    assert.equal(local.body.checkedAt,local.body.regions[0].checkedAt);
+  }finally{global.fetch=original;}
+});
+test('repeated checked region reuses a bounded source snapshot without fabricating a fresh check',async()=>{
+  const original=global.fetch;let hits=0;
+  global.fetch=async()=>{hits++;return {ok:true,json:async()=>collection([])};};
+  try{
+    const first=response(),second=response();
+    await handler({method:'GET',query:{region:'iroquois'}},first);
+    await handler({method:'GET',query:{region:'iroquois'}},second);
+    assert.equal(hits,1);
+    assert.equal(second.body.regions[0].state,'no-reports');
+    assert.equal(second.body.regions[0].checkedAt,first.body.regions[0].checkedAt);
+    assert.ok(second.body.regions[0].sourceCheckAgeSeconds>=0);
+    assert.equal(second.body.vessels.length,0);
+  }finally{global.fetch=original;}
+});
+test('the Seaway interface links required source credit and distinguishes a quiet feed',()=>{
+  const ui=fs.readFileSync('public/assets/seaway.js','utf8');
+  const core=fs.readFileSync('public/assets/seaway-core.js','utf8');
+  assert.match(ui,/AISHub contributors/);
+  assert.match(ui,/https:\/\/www\.aishub\.net\//);
+  assert.match(ui,/coverage unverified/);
+  assert.match(core,/Receiver coverage here is not verified/);
+});
+
 test('generated journey has actionable chapters and keeps a static no-JavaScript path',()=>{
   const html=fs.readFileSync('public/st-lawrence-seaway/index.html','utf8');
   for(const id of C.CORRIDOR){
