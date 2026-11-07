@@ -41,12 +41,12 @@ GENERIC = frozenset(("falls", "upper falls", "lower falls", "middle falls",
 def normal(value: str) -> str:
     value = unicodedata.normalize("NFKD", str(value or "")).encode("ascii", "ignore").decode("ascii").lower()
     value = re.sub(r"[^a-z0-9]+", " ", value).strip()
-    return re.sub(r"\\s+", " ", value)
+    return re.sub(r"\s+", " ", value)
 
 
 def county_from_place(place: str) -> str | None:
     for county in sorted(COUNTIES):
-        if re.search(r"\\b" + re.escape(county) + r"\\s+County\\b", place or "", re.I):
+        if re.search(r"\b" + re.escape(county) + r"\s+County\b", place or "", re.I):
             return county
     return None
 
@@ -193,7 +193,7 @@ def main() -> None:
     group.add_argument("--summary", action="store_true")
     args = cli.parse_args()
     result = build()
-    body = json.dumps(result, ensure_ascii=False, indent=2) + "\\n"
+    body = json.dumps(result, ensure_ascii=False, indent=2) + "\n"
     if args.check:
         if not OUTPUT.exists() or OUTPUT.read_text(encoding="utf-8") != body:
             raise SystemExit("Waterfall research index stale: run python3 scripts/build-up-waterfall-discovery.py --write")
