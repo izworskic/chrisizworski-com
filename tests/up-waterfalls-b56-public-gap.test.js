@@ -48,13 +48,13 @@ test('guide, sitemap, JSON-LD and map keep creator, location and discovery consi
  assert.ok(json['@graph'].some(x=>x['@type']==='Person'));
  assert.equal((sitemap.match(new RegExp(url.replaceAll('/','\\/'),'g'))||[]).length,1);
  assert.ok(hub.includes('data-id="wright-street-falls"'));
- assert.equal((hub.match(/<article class="waterfall-card"/g)||[]).length,79);
+ assert.equal((hub.match(/<article class="waterfall-card"/g)||[]).length,80);
  const list=JSON.parse(hub.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1])['@graph'].find(x=>x['@type']==='ItemList');
- assert.equal(list.numberOfItems,77);
+ assert.equal(list.numberOfItems,78);
  assert.equal(list.itemListElement.find(x=>x.url===url).position,71);
- assert.equal(records.length,79);
- assert.equal(rec.counts.curatedTotal,79);assert.equal(rec.counts.curatedNoMatchingGIS,14);
- assert.equal(ledger.curatedCount,79);assert.equal(queue.counts.curatedDestinations,79);
+ assert.equal(records.length,80);
+ assert.equal(rec.counts.curatedTotal,80);assert.equal(rec.counts.curatedNoMatchingGIS,15);
+ assert.equal(ledger.curatedCount,80);assert.equal(queue.counts.curatedDestinations,80);
  assert.equal(queue.candidates.length,92);
  assert.equal(rec.counts.exactIdMatched,69);
  assert.ok(mapJs.includes('/api/carto-basemap-config'));
