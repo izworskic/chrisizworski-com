@@ -6,2040 +6,2040 @@
   "sourceAdvertisedEntries": 291,
   "observationCount": 291,
   "scope": "source-identity-observations-not-verified-distinct-geographic-waterfalls",
-  "policy": "Research-only factual name, county, watercourse and original listing link. No descriptions, photos, copied routes, ownership claims, coordinates, access permission or publishing eligibility. Conflicting names, duplicate tiers and source accuracy require independent verification.",
+  "policy": "Research-only factual name, county, watercourse and original listing link. No descriptions, photos, copied routes, ownership claims, coordinates, access permission or publishing eligibility. Conflicting names, duplicate tiers and source accuracy require independent verification. Observation IDs follow stable URL slugs across future review snapshots.",
   "observations": [
     {
-      "id": "ss-001",
+      "id": "ss:jasper-falls",
       "name": "Jasper Falls",
       "county": "Alger",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/jasper-falls/"
     },
     {
-      "id": "ss-002",
+      "id": "ss:douglass-houghton-falls",
       "name": "Douglass - Houghton Falls",
       "county": "Houghton",
       "river": "Hammell Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/douglass-houghton-falls/"
     },
     {
-      "id": "ss-003",
+      "id": "ss:laughing-whitefish-falls",
       "name": "Laughing Whitefish Falls",
       "county": "Alger",
       "river": "Laughing Whitefish River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/laughing-whitefish-falls/"
     },
     {
-      "id": "ss-004",
+      "id": "ss:saxon-falls",
       "name": "Saxon Falls",
       "county": "Gogebic",
       "river": "Montreal River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/saxon-falls/"
     },
     {
-      "id": "ss-005",
+      "id": "ss:munising-falls",
       "name": "Munising Falls",
       "county": "Alger",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/munising-falls/"
     },
     {
-      "id": "ss-006",
+      "id": "ss:spray-falls",
       "name": "Spray Falls",
       "county": "Alger",
       "river": "Spray Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/spray-falls/"
     },
     {
-      "id": "ss-007",
+      "id": "ss:chapel-falls",
       "name": "Chapel Falls",
       "county": "Alger",
       "river": "Section Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/chapel-falls/"
     },
     {
-      "id": "ss-008",
+      "id": "ss:eagle-river-falls",
       "name": "Eagle River Falls",
       "county": "Keweenaw",
       "river": "Eagle River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/eagle-river-falls/"
     },
     {
-      "id": "ss-009",
+      "id": "ss:gabbro-falls",
       "name": "Gabbro Falls",
       "county": "Gogebic",
       "river": "Black River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/gabbro-falls/"
     },
     {
-      "id": "ss-010",
+      "id": "ss:lower-hungarian-falls",
       "name": "Lower Hungarian Falls",
       "county": "Houghton",
       "river": "Dover Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/lower-hungarian-falls/"
     },
     {
-      "id": "ss-011",
+      "id": "ss:superior-falls",
       "name": "Superior Falls",
       "county": "Gogebic",
       "river": "Montreal River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/superior-falls/"
     },
     {
-      "id": "ss-012",
+      "id": "ss:upper-tahquamenon-falls",
       "name": "Upper Tahquamenon Falls",
       "county": "Luce",
       "river": "Tahquamenon River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/upper-tahquamenon-falls/"
     },
     {
-      "id": "ss-013",
+      "id": "ss:little-union-gorge-falls",
       "name": "Little Union Gorge Falls",
       "county": "Gogebic",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/little-union-gorge-falls/"
     },
     {
-      "id": "ss-014",
+      "id": "ss:manganese-gorge-falls",
       "name": "Manganese Gorge Falls",
       "county": "Keweenaw",
       "river": "Manganese Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/manganese-gorge-falls/"
     },
     {
-      "id": "ss-015",
+      "id": "ss:rainbow-falls-black-river",
       "name": "Rainbow Falls",
       "county": "Ontonagon",
       "river": "Black River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/rainbow-falls-black-river/"
     },
     {
-      "id": "ss-016",
+      "id": "ss:agate-falls",
       "name": "Agate Falls",
       "county": "Ontonagon",
       "river": "Middle Branch Ontonagon River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/agate-falls/"
     },
     {
-      "id": "ss-017",
+      "id": "ss:bond-falls",
       "name": "Bond Falls",
       "county": "Ontonagon",
       "river": "Middle Branch Ontonagon River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/bond-falls/"
     },
     {
-      "id": "ss-018",
+      "id": "ss:jacobs-falls",
       "name": "Jacob's Falls",
       "county": "Keweenaw",
       "river": "Jacobs Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/jacobs-falls/"
     },
     {
-      "id": "ss-019",
+      "id": "ss:little-miners-falls",
       "name": "Little Miners Falls",
       "county": "Alger",
       "river": "Little Miners River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/little-miners-falls/"
     },
     {
-      "id": "ss-020",
+      "id": "ss:potawatomi-falls",
       "name": "Potawatomi Falls",
       "county": "Gogebic",
       "river": "Black River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/potawatomi-falls/"
     },
     {
-      "id": "ss-021",
+      "id": "ss:tannery-falls",
       "name": "Tannery Falls",
       "county": "Alger",
       "river": "Tannery Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/tannery-falls/"
     },
     {
-      "id": "ss-022",
+      "id": "ss:haven-falls",
       "name": "Haven Falls",
       "county": "Keweenaw",
       "river": "Haven Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/haven-falls/"
     },
     {
-      "id": "ss-023",
+      "id": "ss:dead-river-falls",
       "name": "Dead River Falls",
       "county": "Marquette",
       "river": "Dead River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/dead-river-falls/"
     },
     {
-      "id": "ss-024",
+      "id": "ss:miners-falls",
       "name": "Miners Falls",
       "county": "Alger",
       "river": "Miners River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/miners-falls/"
     },
     {
-      "id": "ss-025",
+      "id": "ss:sable-falls",
       "name": "Sable Falls",
       "county": "Alger",
       "river": "Sable Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/sable-falls/"
     },
     {
-      "id": "ss-026",
+      "id": "ss:upper-dead-river-falls-1",
       "name": "Upper Dead River Falls #1",
       "county": "Marquette",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/upper-dead-river-falls-1/"
     },
     {
-      "id": "ss-027",
+      "id": "ss:upper-dead-river-falls-2",
       "name": "Upper Dead River Falls #2",
       "county": "Marquette",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/upper-dead-river-falls-2/"
     },
     {
-      "id": "ss-028",
+      "id": "ss:upper-dead-river-falls-3",
       "name": "Upper Dead River Falls #3",
       "county": "Marquette",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/upper-dead-river-falls-3/"
     },
     {
-      "id": "ss-029",
+      "id": "ss:upper-dead-river-falls-4",
       "name": "Upper Dead River Falls #4",
       "county": "Marquette",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/upper-dead-river-falls-4/"
     },
     {
-      "id": "ss-030",
+      "id": "ss:upper-dead-river-falls-5",
       "name": "Upper Dead River Falls #5",
       "county": "Marquette",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/upper-dead-river-falls-5/"
     },
     {
-      "id": "ss-031",
+      "id": "ss:alder-falls",
       "name": "Alder Falls",
       "county": "Marquette",
       "river": "Alder Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/alder-falls/"
     },
     {
-      "id": "ss-032",
+      "id": "ss:great-conglomerate-falls",
       "name": "Great Conglomerate Falls",
       "county": "Gogebic",
       "river": "Black River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/great-conglomerate-falls/"
     },
     {
-      "id": "ss-033",
+      "id": "ss:kakabika-falls",
       "name": "Kakabika Falls",
       "county": "Gogebic",
       "river": "Cisco Branch Ontonagon River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/kakabika-falls/"
     },
     {
-      "id": "ss-034",
+      "id": "ss:lower-canyon-falls",
       "name": "Lower Canyon Falls",
       "county": "Baraga",
       "river": "Carp River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/lower-canyon-falls/"
     },
     {
-      "id": "ss-035",
+      "id": "ss:middle-canyon-falls",
       "name": "Middle Canyon Falls",
       "county": "Baraga",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/middle-canyon-falls/"
     },
     {
-      "id": "ss-036",
+      "id": "ss:powder-horn-falls",
       "name": "Powder Horn Falls",
       "county": "Gogebic",
       "river": "Powder Mill Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/powder-horn-falls/"
     },
     {
-      "id": "ss-037",
+      "id": "ss:reany-falls",
       "name": "Reany Falls",
       "county": "Marquette",
       "river": "Reany Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/reany-falls/"
     },
     {
-      "id": "ss-038",
+      "id": "ss:interstate-falls-montreal-falls",
       "name": "Interstate Falls (Montreal Falls)",
       "county": "Gogebic",
       "river": "Montreal River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/interstate-falls-montreal-falls/"
     },
     {
-      "id": "ss-039",
+      "id": "ss:manido-falls",
       "name": "Manido Falls",
       "county": "Gogebic",
       "river": "Presque Isle River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/manido-falls/"
     },
     {
-      "id": "ss-040",
+      "id": "ss:o-kun-de-kun-falls",
       "name": "O Kun de Kun Falls",
       "county": "Ontonagon",
       "river": "Baltimore River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/o-kun-de-kun-falls/"
     },
     {
-      "id": "ss-041",
+      "id": "ss:sandstone-falls-black-river",
       "name": "Sandstone Falls",
       "county": "Gogebic",
       "river": "Black River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/sandstone-falls-black-river/"
     },
     {
-      "id": "ss-042",
+      "id": "ss:sturgeon-falls",
       "name": "Sturgeon Falls",
       "county": "Houghton",
       "river": "West Branch Sturgeon River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/sturgeon-falls/"
     },
     {
-      "id": "ss-043",
+      "id": "ss:gorge-falls",
       "name": "Gorge Falls",
       "county": "Gogebic",
       "river": "Black River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/gorge-falls/"
     },
     {
-      "id": "ss-044",
+      "id": "ss:chicagon-falls",
       "name": "Chicagon Falls",
       "county": "Iron",
       "river": "Chicagon Slough",
       "reference": "https://shorelinescout.com/michigan/waterfalls/chicagon-falls/"
     },
     {
-      "id": "ss-045",
+      "id": "ss:alger-falls",
       "name": "Alger Falls",
       "county": "Alger",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/alger-falls/"
     },
     {
-      "id": "ss-046",
+      "id": "ss:horseshoe-falls-2",
       "name": "Horseshoe Falls",
       "county": "Alger",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/horseshoe-falls-2/"
     },
     {
-      "id": "ss-047",
+      "id": "ss:lower-montreal-falls",
       "name": "Lower Montreal Falls",
       "county": "Keweenaw",
       "river": "Montreal River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/lower-montreal-falls/"
     },
     {
-      "id": "ss-048",
+      "id": "ss:manabezho-falls",
       "name": "Manabezho Falls",
       "county": "Ontonagon",
       "river": "Presque Isle River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/manabezho-falls/"
     },
     {
-      "id": "ss-049",
+      "id": "ss:middle-hungarian-falls",
       "name": "Middle Hungarian Falls",
       "county": "Houghton",
       "river": "Dover Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/middle-hungarian-falls/"
     },
     {
-      "id": "ss-050",
+      "id": "ss:power-house-falls",
       "name": "Power House Falls",
       "county": "Baraga",
       "river": "Falls River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/power-house-falls/"
     },
     {
-      "id": "ss-051",
+      "id": "ss:rock-river-falls",
       "name": "Rock River Falls",
       "county": "Alger",
       "river": "Rock River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/rock-river-falls/"
     },
     {
-      "id": "ss-052",
+      "id": "ss:sandstone-falls-2",
       "name": "Sandstone Falls",
       "county": "Gogebic",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/sandstone-falls-2/"
     },
     {
-      "id": "ss-053",
+      "id": "ss:sandstone-falls",
       "name": "Sandstone Falls",
       "county": "Gogebic",
       "river": "Sandstone Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/sandstone-falls/"
     },
     {
-      "id": "ss-054",
+      "id": "ss:upper-hungarian-falls",
       "name": "Upper Hungarian Falls",
       "county": "Houghton",
       "river": "Dover Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/upper-hungarian-falls/"
     },
     {
-      "id": "ss-055",
+      "id": "ss:upper-wagner-falls-1",
       "name": "Upper Wagner Falls 1",
       "county": "Alger",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/upper-wagner-falls-1/"
     },
     {
-      "id": "ss-056",
+      "id": "ss:upper-wagner-falls-2",
       "name": "Upper Wagner Falls 2",
       "county": "Alger",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/upper-wagner-falls-2/"
     },
     {
-      "id": "ss-057",
+      "id": "ss:wagner-falls",
       "name": "Wagner Falls",
       "county": "Alger",
       "river": "Wagner Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/wagner-falls/"
     },
     {
-      "id": "ss-058",
+      "id": "ss:warner-falls",
       "name": "Warner Falls",
       "county": "Marquette",
       "river": "Warner Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/warner-falls/"
     },
     {
-      "id": "ss-059",
+      "id": "ss:canyon-falls",
       "name": "Canyon Falls",
       "county": "Baraga",
       "river": "Sturgeon River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/canyon-falls/"
     },
     {
-      "id": "ss-060",
+      "id": "ss:lower-tahquamenon-falls",
       "name": "Lower Tahquamenon Falls",
       "county": "Luce",
       "river": "Tahquamenon River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/lower-tahquamenon-falls/"
     },
     {
-      "id": "ss-061",
+      "id": "ss:nelson-canyon-falls",
       "name": "Nelson Canyon Falls",
       "county": "Baraga",
       "river": "Nelson Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/nelson-canyon-falls/"
     },
     {
-      "id": "ss-062",
+      "id": "ss:yondota-falls",
       "name": "Yondota Falls",
       "county": "Gogebic",
       "river": "Presque Isle River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/yondota-falls/"
     },
     {
-      "id": "ss-063",
+      "id": "ss:bonanza-falls",
       "name": "Bonanza Falls",
       "county": "Ontonagon",
       "river": "Big Iron River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/bonanza-falls/"
     },
     {
-      "id": "ss-064",
+      "id": "ss:lower-falls-river-falls",
       "name": "Lower Falls River Falls",
       "county": "Baraga",
       "river": "Falls River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/lower-falls-river-falls/"
     },
     {
-      "id": "ss-065",
+      "id": "ss:lower-dead-river-falls",
       "name": "Lower Dead River Falls",
       "county": "Marquette",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/lower-dead-river-falls/"
     },
     {
-      "id": "ss-066",
+      "id": "ss:nonesuch-falls",
       "name": "Nonesuch Falls",
       "county": "Ontonagon",
       "river": "Little Iron River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/nonesuch-falls/"
     },
     {
-      "id": "ss-067",
+      "id": "ss:unnamed-falls-river-falls",
       "name": "Unnamed Falls River Falls",
       "county": "Baraga",
       "river": "Falls River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/unnamed-falls-river-falls/"
     },
     {
-      "id": "ss-068",
+      "id": "ss:au-train-falls",
       "name": "Au Train Falls",
       "county": "Alger",
       "river": "Au Train River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/au-train-falls/"
     },
     {
-      "id": "ss-069",
+      "id": "ss:chapel-beach-falls",
       "name": "Chapel Beach Falls",
       "county": "Alger",
       "river": "Chapel Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/chapel-beach-falls/"
     },
     {
-      "id": "ss-070",
+      "id": "ss:ogemaw-falls",
       "name": "Ogemaw Falls",
       "county": "Baraga",
       "river": "Ogemaw Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/ogemaw-falls/"
     },
     {
-      "id": "ss-071",
+      "id": "ss:scott-falls",
       "name": "Scott Falls",
       "county": "Alger",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/scott-falls/"
     },
     {
-      "id": "ss-072",
+      "id": "ss:silver-river-falls",
       "name": "Silver River Falls",
       "county": "Keweenaw",
       "river": "Silver River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/silver-river-falls/"
     },
     {
-      "id": "ss-073",
+      "id": "ss:upper-o-kun-de-kun-falls",
       "name": "Upper O Kun de Kun Falls",
       "county": "Ontonagon",
       "river": "Baltimore River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/upper-o-kun-de-kun-falls/"
     },
     {
-      "id": "ss-074",
+      "id": "ss:wyandote-falls",
       "name": "Wyandote Falls",
       "county": "Houghton",
       "river": "Misery River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/wyandote-falls/"
     },
     {
-      "id": "ss-075",
+      "id": "ss:mosquito-falls",
       "name": "Mosquito Falls",
       "county": "Alger",
       "river": "Mosquito River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/mosquito-falls/"
     },
     {
-      "id": "ss-076",
+      "id": "ss:greenstone-falls",
       "name": "Greenstone Falls",
       "county": "Ontonagon",
       "river": "Little Carp River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/greenstone-falls/"
     },
     {
-      "id": "ss-077",
+      "id": "ss:rapid-river-falls",
       "name": "Rapid River Falls",
       "county": "Delta",
       "river": "Rapid River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/rapid-river-falls/"
     },
     {
-      "id": "ss-078",
+      "id": "ss:middle-carp-river-falls",
       "name": "Middle Carp River Falls",
       "county": "Marquette",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/middle-carp-river-falls/"
     },
     {
-      "id": "ss-079",
+      "id": "ss:arnold-mine-falls",
       "name": "Arnold Mine Falls",
       "county": "Keweenaw",
       "river": "Jacob's Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/arnold-mine-falls/"
     },
     {
-      "id": "ss-080",
+      "id": "ss:duppy-falls",
       "name": "Duppy Falls",
       "county": "Iron",
       "river": "Jumbo River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/duppy-falls/"
     },
     {
-      "id": "ss-081",
+      "id": "ss:tibbets-falls",
       "name": "Tibbets Falls",
       "county": "Baraga",
       "river": "Sturgeon River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/tibbets-falls/"
     },
     {
-      "id": "ss-082",
+      "id": "ss:whitefish-falls",
       "name": "Whitefish Falls",
       "county": "Alger",
       "river": "West Branch Whitefish River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/whitefish-falls/"
     },
     {
-      "id": "ss-083",
+      "id": "ss:tobacco-falls",
       "name": "Tobacco Falls",
       "county": "Keweenaw",
       "river": "Tobacco River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/tobacco-falls/"
     },
     {
-      "id": "ss-084",
+      "id": "ss:carp-river-falls",
       "name": "Carp River Falls",
       "county": "Marquette",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/carp-river-falls/"
     },
     {
-      "id": "ss-085",
+      "id": "ss:lower-saxon-falls",
       "name": "Lower Saxon Falls",
       "county": "Gogebic",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/lower-saxon-falls/"
     },
     {
-      "id": "ss-086",
+      "id": "ss:lower-silver-falls",
       "name": "Lower silver falls",
       "county": "Baraga",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/lower-silver-falls/"
     },
     {
-      "id": "ss-087",
+      "id": "ss:marquette-mountain-falls",
       "name": "Marquette Mountain Falls",
       "county": "Marquette",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/marquette-mountain-falls/"
     },
     {
-      "id": "ss-088",
+      "id": "ss:middle-montreal-falls",
       "name": "Middle Montreal Falls",
       "county": "Keweenaw",
       "river": "Montreal River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/middle-montreal-falls/"
     },
     {
-      "id": "ss-089",
+      "id": "ss:miners-beach-falls",
       "name": "Miners Beach Falls",
       "county": "Alger",
       "river": "Elliot Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/miners-beach-falls/"
     },
     {
-      "id": "ss-090",
+      "id": "ss:pinnacle-falls",
       "name": "Pinnacle Falls",
       "county": "Marquette",
       "river": "Yellow Dog River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/pinnacle-falls/"
     },
     {
-      "id": "ss-091",
+      "id": "ss:trestle-falls",
       "name": "Trestle Falls",
       "county": "Marquette",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/trestle-falls/"
     },
     {
-      "id": "ss-092",
+      "id": "ss:upper-alder-falls-1",
       "name": "Upper Alder Falls #1",
       "county": "Marquette",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/upper-alder-falls-1/"
     },
     {
-      "id": "ss-093",
+      "id": "ss:upper-alder-falls-2",
       "name": "Upper Alder Falls #2",
       "county": "Marquette",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/upper-alder-falls-2/"
     },
     {
-      "id": "ss-094",
+      "id": "ss:upper-saxon-falls",
       "name": "Upper Saxon Falls",
       "county": "Gogebic",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/upper-saxon-falls/"
     },
     {
-      "id": "ss-095",
+      "id": "ss:bridal-veil-falls",
       "name": "Bridal Veil Falls",
       "county": "Alger",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/bridal-veil-falls/"
     },
     {
-      "id": "ss-096",
+      "id": "ss:eighty-foot-falls-ives-falls",
       "name": "Eighty Foot Falls (Ives Falls)",
       "county": "Marquette",
       "river": "River Styx",
       "reference": "https://shorelinescout.com/michigan/waterfalls/eighty-foot-falls-ives-falls/"
     },
     {
-      "id": "ss-097",
+      "id": "ss:plumbago-falls",
       "name": "Plumbago Falls",
       "county": "Baraga",
       "river": "Plumbago Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/plumbago-falls/"
     },
     {
-      "id": "ss-098",
+      "id": "ss:rocking-chair-lakes-falls",
       "name": "Rocking Chair Lakes Falls",
       "county": "Marquette",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/rocking-chair-lakes-falls/"
     },
     {
-      "id": "ss-099",
+      "id": "ss:west-branch-falls",
       "name": "West Branch Falls",
       "county": "Baraga",
       "river": "West Branch Huron River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/west-branch-falls/"
     },
     {
-      "id": "ss-100",
+      "id": "ss:forty-foot-falls-cliff-falls",
       "name": "Forty Foot Falls (Cliff Falls)",
       "county": "Marquette",
       "river": "Cliff River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/forty-foot-falls-cliff-falls/"
     },
     {
-      "id": "ss-101",
+      "id": "ss:little-trap-falls",
       "name": "Little Trap Falls",
       "county": "Ontonagon",
       "river": "Anderson Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/little-trap-falls/"
     },
     {
-      "id": "ss-102",
+      "id": "ss:lower-gratiot-falls",
       "name": "Lower Gratiot Falls",
       "county": "Keweenaw",
       "river": "Gratiot River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/lower-gratiot-falls/"
     },
     {
-      "id": "ss-103",
+      "id": "ss:memorial-falls-mna",
       "name": "Memorial Falls (MNA)",
       "county": "Alger",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/memorial-falls-mna/"
     },
     {
-      "id": "ss-104",
+      "id": "ss:schweitzer-falls-upper",
       "name": "Schweitzer Falls (upper)",
       "county": "Marquette",
       "river": "Schweitzer Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/schweitzer-falls-upper/"
     },
     {
-      "id": "ss-105",
+      "id": "ss:potato-patch-falls",
       "name": "Potato Patch Falls",
       "county": "Alger",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/potato-patch-falls/"
     },
     {
-      "id": "ss-106",
+      "id": "ss:silver-bell-falls",
       "name": "Silver Bell Falls",
       "county": "Alger",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/silver-bell-falls/"
     },
     {
-      "id": "ss-107",
+      "id": "ss:judson-falls",
       "name": "Judson Falls",
       "county": "Gogebic",
       "river": "Slate River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/judson-falls/"
     },
     {
-      "id": "ss-108",
+      "id": "ss:manakiki-falls",
       "name": "Manakiki Falls",
       "county": "Gogebic",
       "river": "Maple Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/manakiki-falls/"
     },
     {
-      "id": "ss-109",
+      "id": "ss:middle-falls-river-falls",
       "name": "Middle Falls River Falls",
       "county": "Baraga",
       "river": "Falls River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/middle-falls-river-falls/"
     },
     {
-      "id": "ss-110",
+      "id": "ss:montreal-falls",
       "name": "Montreal Falls",
       "county": "Gogebic",
       "river": "Montreal River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/montreal-falls/"
     },
     {
-      "id": "ss-111",
+      "id": "ss:ripley-falls",
       "name": "Ripley Falls",
       "county": "Houghton",
       "river": "Ripley Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/ripley-falls/"
     },
     {
-      "id": "ss-112",
+      "id": "ss:slate-river-falls",
       "name": "Slate River Falls",
       "county": "Baraga",
       "river": "Slate River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/slate-river-falls/"
     },
     {
-      "id": "ss-113",
+      "id": "ss:big-falls",
       "name": "Big Falls",
       "county": "Baraga",
       "river": "East Branch Huron River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/big-falls/"
     },
     {
-      "id": "ss-114",
+      "id": "ss:black-river-falls",
       "name": "Black River Falls",
       "county": "Marquette",
       "river": "Black River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/black-river-falls/"
     },
     {
-      "id": "ss-115",
+      "id": "ss:copper-falls",
       "name": "Copper Falls",
       "county": "Keweenaw",
       "river": "Owl Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/copper-falls/"
     },
     {
-      "id": "ss-116",
+      "id": "ss:daults-falls",
       "name": "Daults Falls",
       "county": "Baraga",
       "river": "Daults Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/daults-falls/"
     },
     {
-      "id": "ss-117",
+      "id": "ss:morgan-falls",
       "name": "Morgan Falls",
       "county": "Marquette",
       "river": "Morgan Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/morgan-falls/"
     },
     {
-      "id": "ss-118",
+      "id": "ss:yellow-dog-falls",
       "name": "Yellow Dog Falls",
       "county": "Marquette",
       "river": "Yellow Dog River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/yellow-dog-falls/"
     },
     {
-      "id": "ss-119",
+      "id": "ss:shining-cloud-falls",
       "name": "Shining Cloud Falls",
       "county": "Gogebic",
       "river": "Carp River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/shining-cloud-falls/"
     },
     {
-      "id": "ss-120",
+      "id": "ss:abinodji-falls",
       "name": "Abinodji Falls",
       "county": "Gogebic",
       "river": "Copper Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/abinodji-falls/"
     },
     {
-      "id": "ss-121",
+      "id": "ss:ajibikika-falls",
       "name": "Ajibikika Falls",
       "county": "Gogebic",
       "river": "Sucker Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/ajibikika-falls/"
     },
     {
-      "id": "ss-122",
+      "id": "ss:bull-dog-falls-1",
       "name": "Bull Dog Falls #1",
       "county": "Marquette",
       "river": "Yellow Dog River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/bull-dog-falls-1/"
     },
     {
-      "id": "ss-123",
+      "id": "ss:gooseneck-creek-falls",
       "name": "Gooseneck Creek Falls",
       "county": "Houghton",
       "river": "Gooseneck Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/gooseneck-creek-falls/"
     },
     {
-      "id": "ss-124",
+      "id": "ss:nawadaha-falls",
       "name": "Nawadaha Falls",
       "county": "Gogebic",
       "river": "Presque Isle River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/nawadaha-falls/"
     },
     {
-      "id": "ss-125",
+      "id": "ss:nimikon-falls",
       "name": "Nimikon Falls",
       "county": "Ontonagon",
       "river": "Presque Isle River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/nimikon-falls/"
     },
     {
-      "id": "ss-126",
+      "id": "ss:ogimakwe-falls",
       "name": "Ogimakwe Falls",
       "county": "Gogebic",
       "river": "Copper Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/ogimakwe-falls/"
     },
     {
-      "id": "ss-127",
+      "id": "ss:peterson-falls-montreal-river",
       "name": "Peterson Falls",
       "county": "Gogebic",
       "river": "Montreal River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/peterson-falls-montreal-river/"
     },
     {
-      "id": "ss-128",
+      "id": "ss:peterson-falls",
       "name": "Peterson Falls",
       "county": "Gogebic",
       "river": "Montreal River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/peterson-falls/"
     },
     {
-      "id": "ss-129",
+      "id": "ss:upper-gratiot-falls",
       "name": "Upper Gratiot Falls",
       "county": "Keweenaw",
       "river": "Gratiot River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/upper-gratiot-falls/"
     },
     {
-      "id": "ss-130",
+      "id": "ss:explorers-falls",
       "name": "Explorers Falls",
       "county": "Gogebic",
       "river": "Little Carp River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/explorers-falls/"
     },
     {
-      "id": "ss-131",
+      "id": "ss:rapid-river-falls-rapid-river",
       "name": "Rapid River Falls",
       "county": "Ontonagon",
       "river": "Rapid River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/rapid-river-falls-rapid-river/"
     },
     {
-      "id": "ss-132",
+      "id": "ss:upper-falls-river-falls",
       "name": "Upper Falls River Falls",
       "county": "Baraga",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/upper-falls-river-falls/"
     },
     {
-      "id": "ss-133",
+      "id": "ss:white-city-falls",
       "name": "White City Falls",
       "county": "Marquette",
       "river": "Middle Branch Escanaba River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/white-city-falls/"
     },
     {
-      "id": "ss-134",
+      "id": "ss:carpenter-creek-falls",
       "name": "Carpenter Creek Falls",
       "county": "Alger",
       "river": "Carpenter Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/carpenter-creek-falls/"
     },
     {
-      "id": "ss-135",
+      "id": "ss:chippewa-falls",
       "name": "Chippewa Falls",
       "county": "Gogebic",
       "river": "Black River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/chippewa-falls/"
     },
     {
-      "id": "ss-136",
+      "id": "ss:eister-falls",
       "name": "Eister Falls",
       "county": "Keweenaw",
       "river": "Eister Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/eister-falls/"
     },
     {
-      "id": "ss-137",
+      "id": "ss:gomanche-falls",
       "name": "Gomanche falls",
       "county": "Baraga",
       "river": "Gomanche Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/gomanche-falls/"
     },
     {
-      "id": "ss-138",
+      "id": "ss:marshall-falls",
       "name": "Marshall Falls",
       "county": "Gogebic",
       "river": "Marshall Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/marshall-falls/"
     },
     {
-      "id": "ss-139",
+      "id": "ss:ogima-falls",
       "name": "Ogima Falls",
       "county": "Gogebic",
       "river": "Copper Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/ogima-falls/"
     },
     {
-      "id": "ss-140",
+      "id": "ss:pinkerton-falls",
       "name": "Pinkerton Falls",
       "county": "Gogebic",
       "river": "Pinkerton Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/pinkerton-falls/"
     },
     {
-      "id": "ss-141",
+      "id": "ss:ten-foot-falls",
       "name": "Ten Foot falls",
       "county": "Keweenaw",
       "river": "Eagle River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/ten-foot-falls/"
     },
     {
-      "id": "ss-142",
+      "id": "ss:tioga-falls",
       "name": "Tioga Falls",
       "county": "Baraga",
       "river": "Tioga River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/tioga-falls/"
     },
     {
-      "id": "ss-143",
+      "id": "ss:tioga-falls-upper",
       "name": "Tioga Falls (Upper)",
       "county": "Baraga",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/tioga-falls-upper/"
     },
     {
-      "id": "ss-144",
+      "id": "ss:fenner-falls",
       "name": "Fenner Falls",
       "county": "Keweenaw",
       "river": "Eagle River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/fenner-falls/"
     },
     {
-      "id": "ss-145",
+      "id": "ss:bathtub-falls",
       "name": "Bathtub Falls",
       "county": "Gogebic",
       "river": "Big Carp River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/bathtub-falls/"
     },
     {
-      "id": "ss-146",
+      "id": "ss:piers-gorge-falls",
       "name": "Piers Gorge Falls",
       "county": "Dickinson",
       "river": "Menominee River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/piers-gorge-falls/"
     },
     {
-      "id": "ss-147",
+      "id": "ss:quartzite-falls",
       "name": "Quartzite Falls",
       "county": "Baraga",
       "river": "Slate River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/quartzite-falls/"
     },
     {
-      "id": "ss-148",
+      "id": "ss:root-beer-falls",
       "name": "Root Beer Falls",
       "county": "Gogebic",
       "river": "Planter Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/root-beer-falls/"
     },
     {
-      "id": "ss-149",
+      "id": "ss:unnamed-ravine-river-rd-falls",
       "name": "Unnamed Ravine River Rd Falls",
       "county": "Baraga",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/unnamed-ravine-river-rd-falls/"
     },
     {
-      "id": "ss-150",
+      "id": "ss:upper-carp-river-falls",
       "name": "Upper Carp River Falls",
       "county": "Marquette",
       "river": "Carp River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/upper-carp-river-falls/"
     },
     {
-      "id": "ss-151",
+      "id": "ss:big-garlic-river-falls-higher",
       "name": "Big Garlic River Falls (Higher)",
       "county": "Marquette",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/big-garlic-river-falls-higher/"
     },
     {
-      "id": "ss-152",
+      "id": "ss:big-pup-falls",
       "name": "Big Pup Falls",
       "county": "Marquette",
       "river": "Big Pup Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/big-pup-falls/"
     },
     {
-      "id": "ss-153",
+      "id": "ss:upper-rocky-forty-falls",
       "name": "Upper Rocky Forty Falls",
       "county": "Gogebic",
       "river": "Siemens Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/upper-rocky-forty-falls/"
     },
     {
-      "id": "ss-154",
+      "id": "ss:dee-lundeen-falls",
       "name": "Dee Lundeen Falls",
       "county": "Marquette",
       "river": "West Branch Peshekee River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/dee-lundeen-falls/"
     },
     {
-      "id": "ss-155",
+      "id": "ss:harley-falls-1",
       "name": "Harley Falls #1",
       "county": "Baraga",
       "river": "Harley Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/harley-falls-1/"
     },
     {
-      "id": "ss-156",
+      "id": "ss:iagoo-falls",
       "name": "Iagoo Falls",
       "county": "Gogebic",
       "river": "Presque Isle River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/iagoo-falls/"
     },
     {
-      "id": "ss-157",
+      "id": "ss:middle-silver-river-falls",
       "name": "Middle Silver River Falls",
       "county": "Baraga",
       "river": "Silver River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/middle-silver-river-falls/"
     },
     {
-      "id": "ss-158",
+      "id": "ss:morgan-meadows-falls",
       "name": "Morgan Meadows Falls",
       "county": "Marquette",
       "river": "Morgan Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/morgan-meadows-falls/"
     },
     {
-      "id": "ss-159",
+      "id": "ss:traders-falls",
       "name": "Traders Falls",
       "county": "Gogebic",
       "river": "Little Carp River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/traders-falls/"
     },
     {
-      "id": "ss-160",
+      "id": "ss:trappers-falls",
       "name": "Trappers Falls",
       "county": "Gogebic",
       "river": "Little Carp River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/trappers-falls/"
     },
     {
-      "id": "ss-161",
+      "id": "ss:lower-carp-river-falls",
       "name": "Lower Carp River Falls",
       "county": "Marquette",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/lower-carp-river-falls/"
     },
     {
-      "id": "ss-162",
+      "id": "ss:lower-craigs-falls",
       "name": "Lower Craig's Falls",
       "county": "Baraga",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/lower-craigs-falls/"
     },
     {
-      "id": "ss-163",
+      "id": "ss:overlooked-falls",
       "name": "Overlooked Falls",
       "county": "Gogebic",
       "river": "Pinkerton Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/overlooked-falls/"
     },
     {
-      "id": "ss-164",
+      "id": "ss:black-slate-falls",
       "name": "Black Slate Falls",
       "county": "Baraga",
       "river": "Slate River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/black-slate-falls/"
     },
     {
-      "id": "ss-165",
+      "id": "ss:ecstasy-falls",
       "name": "Ecstasy Falls",
       "county": "Baraga",
       "river": "Slate River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/ecstasy-falls/"
     },
     {
-      "id": "ss-166",
+      "id": "ss:holeyoke-falls",
       "name": "Holeyoke Falls",
       "county": "Marquette",
       "river": "Holyoke Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/holeyoke-falls/"
     },
     {
-      "id": "ss-167",
+      "id": "ss:jumbo-falls",
       "name": "Jumbo Falls",
       "county": "Houghton",
       "river": "Jumbo River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/jumbo-falls/"
     },
     {
-      "id": "ss-168",
+      "id": "ss:ely-falls",
       "name": "Ely Falls",
       "county": "Marquette",
       "river": "Ely Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/ely-falls/"
     },
     {
-      "id": "ss-169",
+      "id": "ss:haymeadows-falls",
       "name": "Haymeadows Falls",
       "county": "Delta",
       "river": "Haymeadow Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/haymeadows-falls/"
     },
     {
-      "id": "ss-170",
+      "id": "ss:bushy-creek-mouth-falls",
       "name": "Bushy Creek Mouth Falls",
       "county": "Marquette",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/bushy-creek-mouth-falls/"
     },
     {
-      "id": "ss-171",
+      "id": "ss:big-ericks-fall",
       "name": "Big Erick's Fall",
       "county": "Baraga",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/big-ericks-fall/"
     },
     {
-      "id": "ss-172",
+      "id": "ss:algonquin-falls",
       "name": "Algonquin Falls",
       "county": "Gogebic",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/algonquin-falls/"
     },
     {
-      "id": "ss-173",
+      "id": "ss:big-carp-falls",
       "name": "Big Carp Falls",
       "county": "Gogebic",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/big-carp-falls/"
     },
     {
-      "id": "ss-174",
+      "id": "ss:big-garlic-falls",
       "name": "Big Garlic Falls",
       "county": "Marquette",
       "river": "Big Garlic River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/big-garlic-falls/"
     },
     {
-      "id": "ss-175",
+      "id": "ss:big-garlic-river-falls-lower",
       "name": "Big Garlic River Falls (Lower)",
       "county": "Marquette",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/big-garlic-river-falls-lower/"
     },
     {
-      "id": "ss-176",
+      "id": "ss:birch-creek-falls",
       "name": "Birch Creek Falls",
       "county": "Marquette",
       "river": "Birch Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/birch-creek-falls/"
     },
     {
-      "id": "ss-177",
+      "id": "ss:bull-dog-falls-2",
       "name": "Bull Dog Falls #2",
       "county": "Marquette",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/bull-dog-falls-2/"
     },
     {
-      "id": "ss-178",
+      "id": "ss:bull-dog-falls-3",
       "name": "Bull Dog Falls #3",
       "county": "Marquette",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/bull-dog-falls-3/"
     },
     {
-      "id": "ss-179",
+      "id": "ss:bull-dog-falls-4",
       "name": "Bull Dog Falls #4",
       "county": "Marquette",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/bull-dog-falls-4/"
     },
     {
-      "id": "ss-180",
+      "id": "ss:bull-dog-falls-5",
       "name": "Bull Dog Falls #5",
       "county": "Marquette",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/bull-dog-falls-5/"
     },
     {
-      "id": "ss-181",
+      "id": "ss:bushy-creek-falls",
       "name": "Bushy Creek Falls",
       "county": "Marquette",
       "river": "Bushy Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/bushy-creek-falls/"
     },
     {
-      "id": "ss-182",
+      "id": "ss:caps-creek-falls",
       "name": "Caps Creek Falls",
       "county": "Marquette",
       "river": "Caps Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/caps-creek-falls/"
     },
     {
-      "id": "ss-183",
+      "id": "ss:cascade-falls",
       "name": "Cascade Falls",
       "county": "Ontonagon",
       "river": "Cascade Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/cascade-falls/"
     },
     {
-      "id": "ss-184",
+      "id": "ss:cedar-falls",
       "name": "Cedar Falls",
       "county": "Marquette",
       "river": "Cedar Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/cedar-falls/"
     },
     {
-      "id": "ss-185",
+      "id": "ss:chipmunk-falls-2",
       "name": "Chipmunk Falls",
       "county": "Iron",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/chipmunk-falls-2/"
     },
     {
-      "id": "ss-186",
+      "id": "ss:chipmunk-falls",
       "name": "Chipmunk Falls",
       "county": "Alger",
       "river": "Chipmunk Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/chipmunk-falls/"
     },
     {
-      "id": "ss-187",
+      "id": "ss:cole-creek-falls",
       "name": "Cole Creek Falls",
       "county": "Alger",
       "river": "Cole Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/cole-creek-falls/"
     },
     {
-      "id": "ss-188",
+      "id": "ss:copper-adit-falls",
       "name": "Copper Adit Falls",
       "county": "Keweenaw",
       "river": "Owl Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/copper-adit-falls/"
     },
     {
-      "id": "ss-189",
+      "id": "ss:deer-creek-falls",
       "name": "Deer Creek Falls",
       "county": "Ontonagon",
       "river": "White Deer Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/deer-creek-falls/"
     },
     {
-      "id": "ss-190",
+      "id": "ss:east-branch-falls-2",
       "name": "East Branch Falls",
       "county": "Baraga",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/east-branch-falls-2/"
     },
     {
-      "id": "ss-191",
+      "id": "ss:east-branch-falls",
       "name": "East Branch Falls",
       "county": "Baraga",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/east-branch-falls/"
     },
     {
-      "id": "ss-192",
+      "id": "ss:frohling-falls",
       "name": "Frohling Falls",
       "county": "Marquette",
       "river": "West Branch Chocolay River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/frohling-falls/"
     },
     {
-      "id": "ss-193",
+      "id": "ss:gleason-creek-falls",
       "name": "Gleason Creek Falls",
       "county": "Ontonagon",
       "river": "Gleason Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/gleason-creek-falls/"
     },
     {
-      "id": "ss-194",
+      "id": "ss:granite-falls",
       "name": "Granite Falls",
       "county": "Gogebic",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/granite-falls/"
     },
     {
-      "id": "ss-195",
+      "id": "ss:harley-falls-2",
       "name": "Harley Falls #2",
       "county": "Baraga",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/harley-falls-2/"
     },
     {
-      "id": "ss-196",
+      "id": "ss:harley-falls-3",
       "name": "Harley Falls #3",
       "county": "Baraga",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/harley-falls-3/"
     },
     {
-      "id": "ss-197",
+      "id": "ss:harley-falls-4",
       "name": "Harley Falls #4",
       "county": "Baraga",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/harley-falls-4/"
     },
     {
-      "id": "ss-198",
+      "id": "ss:haypress-falls",
       "name": "Haypress Falls",
       "county": "Baraga",
       "river": "Peshekee River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/haypress-falls/"
     },
     {
-      "id": "ss-199",
+      "id": "ss:hidden-falls",
       "name": "Hidden Falls",
       "county": "Ontonagon",
       "river": "Cascade Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/hidden-falls/"
     },
     {
-      "id": "ss-200",
+      "id": "ss:hogback-falls",
       "name": "Hogback Falls",
       "county": "Marquette",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/hogback-falls/"
     },
     {
-      "id": "ss-201",
+      "id": "ss:hogger-falls",
       "name": "Hogger Falls",
       "county": "Houghton",
       "river": "West Branch Sturgeon River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/hogger-falls/"
     },
     {
-      "id": "ss-202",
+      "id": "ss:hunters-brook-falls",
       "name": "Hunters Brook Falls",
       "county": "Delta",
       "river": "Hunters Brook",
       "reference": "https://shorelinescout.com/michigan/waterfalls/hunters-brook-falls/"
     },
     {
-      "id": "ss-203",
+      "id": "ss:huron-creek-falls",
       "name": "Huron Creek Falls",
       "county": "Houghton",
       "river": "Huron Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/huron-creek-falls/"
     },
     {
-      "id": "ss-204",
+      "id": "ss:kuckuks-falls",
       "name": "Kuckuk's Falls",
       "county": "Baraga",
       "river": "Slate River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/kuckuks-falls/"
     },
     {
-      "id": "ss-205",
+      "id": "ss:lepisto-falls",
       "name": "Lepisto Falls",
       "county": "Gogebic",
       "river": "Presque Isle River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/lepisto-falls/"
     },
     {
-      "id": "ss-206",
+      "id": "ss:letherby-falls",
       "name": "Letherby Falls",
       "county": "Baraga",
       "river": "West Branch Huron River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/letherby-falls/"
     },
     {
-      "id": "ss-207",
+      "id": "ss:little-falls-2",
       "name": "Little Falls",
       "county": "Ontonagon",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/little-falls-2/"
     },
     {
-      "id": "ss-208",
+      "id": "ss:little-garlic-falls",
       "name": "Little Garlic Falls",
       "county": "Marquette",
       "river": "Little Garlic River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/little-garlic-falls/"
     },
     {
-      "id": "ss-209",
+      "id": "ss:little-iron-falls",
       "name": "Little Iron Falls",
       "county": "Ontonagon",
       "river": "Little Iron River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/little-iron-falls/"
     },
     {
-      "id": "ss-210",
+      "id": "ss:little-union-falls",
       "name": "Little Union Falls",
       "county": "Ontonagon",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/little-union-falls/"
     },
     {
-      "id": "ss-211",
+      "id": "ss:lower-cliff-falls",
       "name": "Lower Cliff Falls",
       "county": "Marquette",
       "river": "Cliff River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/lower-cliff-falls/"
     },
     {
-      "id": "ss-212",
+      "id": "ss:lower-falls-2",
       "name": "Lower Falls",
       "county": "Keweenaw",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/lower-falls-2/"
     },
     {
-      "id": "ss-213",
+      "id": "ss:lower-falls-salmon-trout-river",
       "name": "Lower Falls",
       "county": "Marquette",
       "river": "Salmon Trout River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/lower-falls-salmon-trout-river/"
     },
     {
-      "id": "ss-214",
+      "id": "ss:lower-falls",
       "name": "Lower Falls",
       "county": "Houghton",
       "river": "West Branch Sturgeon River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/lower-falls/"
     },
     {
-      "id": "ss-215",
+      "id": "ss:lower-gleason-creek-falls",
       "name": "Lower Gleason Creek Falls",
       "county": "Ontonagon",
       "river": "Gleason Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/lower-gleason-creek-falls/"
     },
     {
-      "id": "ss-216",
+      "id": "ss:lower-letherby-falls-erics-falls",
       "name": "Lower Letherby Falls (Erics Falls)",
       "county": "Baraga",
       "river": "West Branch Huron River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/lower-letherby-falls-erics-falls/"
     },
     {
-      "id": "ss-217",
+      "id": "ss:lower-penn-falls",
       "name": "Lower Penn Falls",
       "county": "Ontonagon",
       "river": "East Branch Firesteel River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/lower-penn-falls/"
     },
     {
-      "id": "ss-218",
+      "id": "ss:lower-plover-falls",
       "name": "Lower Plover Falls",
       "county": "Ontonagon",
       "river": "Plover Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/lower-plover-falls/"
     },
     {
-      "id": "ss-219",
+      "id": "ss:lower-yellow-dog-falls",
       "name": "Lower Yellow Dog Falls",
       "county": "Marquette",
       "river": "Yellow Dog River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/lower-yellow-dog-falls/"
     },
     {
-      "id": "ss-220",
+      "id": "ss:maple-creek-falls",
       "name": "Maple Creek Falls",
       "county": "Gogebic",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/maple-creek-falls/"
     },
     {
-      "id": "ss-221",
+      "id": "ss:margeson-falls",
       "name": "Margeson Falls",
       "county": "Iron",
       "river": "Margeson Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/margeson-falls/"
     },
     {
-      "id": "ss-222",
+      "id": "ss:mex-i-min-e-falls",
       "name": "Mex-i-min-e Falls",
       "county": "Gogebic",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/mex-i-min-e-falls/"
     },
     {
-      "id": "ss-223",
+      "id": "ss:michigamme-falls",
       "name": "Michigamme Falls",
       "county": "Iron",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/michigamme-falls/"
     },
     {
-      "id": "ss-224",
+      "id": "ss:middle-east-jumbo-river-falls",
       "name": "Middle East Jumbo River Falls",
       "county": "Iron",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/middle-east-jumbo-river-falls/"
     },
     {
-      "id": "ss-225",
+      "id": "ss:middle-falls",
       "name": "Middle Falls",
       "county": "Marquette",
       "river": "Salmon Trout River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/middle-falls/"
     },
     {
-      "id": "ss-226",
+      "id": "ss:middle-falls-river-falls-2",
       "name": "Middle Falls River Falls",
       "county": "Baraga",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/middle-falls-river-falls-2/"
     },
     {
-      "id": "ss-227",
+      "id": "ss:mill-pond-falls",
       "name": "Mill Pond Falls",
       "county": "Dickinson",
       "river": "West Branch Sturgeon River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/mill-pond-falls/"
     },
     {
-      "id": "ss-228",
+      "id": "ss:minnewawa-falls",
       "name": "Minnewawa Falls",
       "county": "Ontonagon",
       "river": "Presque Isle River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/minnewawa-falls/"
     },
     {
-      "id": "ss-229",
+      "id": "ss:morgan-falls-2",
       "name": "Morgan Falls",
       "county": "Marquette",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/morgan-falls-2/"
     },
     {
-      "id": "ss-230",
+      "id": "ss:mountain-stream-falls",
       "name": "Mountain Stream Falls",
       "county": "Marquette",
       "river": "Mountain Stream",
       "reference": "https://shorelinescout.com/michigan/waterfalls/mountain-stream-falls/"
     },
     {
-      "id": "ss-231",
+      "id": "ss:mulligan-falls",
       "name": "Mulligan Falls",
       "county": "Marquette",
       "river": "Mulligan Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/mulligan-falls/"
     },
     {
-      "id": "ss-232",
+      "id": "ss:neepikon-falls",
       "name": "Neepikon Falls",
       "county": "Gogebic",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/neepikon-falls/"
     },
     {
-      "id": "ss-233",
+      "id": "ss:no-name-falls-2",
       "name": "No Name Falls",
       "county": "Baraga",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/no-name-falls-2/"
     },
     {
-      "id": "ss-234",
+      "id": "ss:no-name-falls",
       "name": "No Name Falls",
       "county": "Baraga",
       "river": "No Name Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/no-name-falls/"
     },
     {
-      "id": "ss-235",
+      "id": "ss:onion-falls",
       "name": "Onion Falls",
       "county": "Houghton",
       "river": "Onion Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/onion-falls/"
     },
     {
-      "id": "ss-236",
+      "id": "ss:otter-falls",
       "name": "Otter Falls",
       "county": "Houghton",
       "river": "Otter River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/otter-falls/"
     },
     {
-      "id": "ss-237",
+      "id": "ss:page-creek-falls",
       "name": "Page Creek Falls",
       "county": "Baraga",
       "river": "Page Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/page-creek-falls/"
     },
     {
-      "id": "ss-238",
+      "id": "ss:pauls-falls",
       "name": "Pauls Falls",
       "county": "Houghton",
       "river": "Sante River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/pauls-falls/"
     },
     {
-      "id": "ss-239",
+      "id": "ss:pewabeck-falls",
       "name": "Pewabeck Falls",
       "county": "Ontonagon",
       "river": "Little Iron River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/pewabeck-falls/"
     },
     {
-      "id": "ss-240",
+      "id": "ss:plover-falls",
       "name": "Plover Falls",
       "county": "Ontonagon",
       "river": "Plover Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/plover-falls/"
     },
     {
-      "id": "ss-241",
+      "id": "ss:potluck-falls",
       "name": "Potluck Falls",
       "county": "Marquette",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/potluck-falls/"
     },
     {
-      "id": "ss-242",
+      "id": "ss:queen-anne-falls",
       "name": "Queen Anne Falls",
       "county": "Houghton",
       "river": "Slaughterhouse Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/queen-anne-falls/"
     },
     {
-      "id": "ss-243",
+      "id": "ss:quincy-falls",
       "name": "Quincy Falls",
       "county": "Houghton",
       "river": "Quincy Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/quincy-falls/"
     },
     {
-      "id": "ss-244",
+      "id": "ss:ravine-river-falls",
       "name": "Ravine River Falls",
       "county": "Baraga",
       "river": "Ravine River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/ravine-river-falls/"
     },
     {
-      "id": "ss-245",
+      "id": "ss:rock-bluff-falls",
       "name": "Rock Bluff Falls",
       "county": "Ontonagon",
       "river": "Matheson Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/rock-bluff-falls/"
     },
     {
-      "id": "ss-246",
+      "id": "ss:rock-dam-falls",
       "name": "Rock Dam Falls",
       "county": "Dickinson",
       "river": "Pine Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/rock-dam-falls/"
     },
     {
-      "id": "ss-247",
+      "id": "ss:rocky-forty-falls",
       "name": "Rocky Forty Falls",
       "county": "Gogebic",
       "river": "Siemens Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/rocky-forty-falls/"
     },
     {
-      "id": "ss-248",
+      "id": "ss:rose-falls-east",
       "name": "Rose Falls (East)",
       "county": "Delta",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/rose-falls-east/"
     },
     {
-      "id": "ss-249",
+      "id": "ss:rose-falls-west",
       "name": "Rose Falls (West)",
       "county": "Delta",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/rose-falls-west/"
     },
     {
-      "id": "ss-250",
+      "id": "ss:saint-louis-falls",
       "name": "Saint Louis Falls",
       "county": "Houghton",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/saint-louis-falls/"
     },
     {
-      "id": "ss-251",
+      "id": "ss:sandhill-creek-falls",
       "name": "Sandhill Creek Falls",
       "county": "Ontonagon",
       "river": "Sandhill Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/sandhill-creek-falls/"
     },
     {
-      "id": "ss-252",
+      "id": "ss:schweitzer-falls-lower",
       "name": "Schweitzer Falls (lower)",
       "county": "Marquette",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/schweitzer-falls-lower/"
     },
     {
-      "id": "ss-253",
+      "id": "ss:second-city-falls",
       "name": "Second City Falls",
       "county": "Marquette",
       "river": "Middle Branch Escanaba River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/second-city-falls/"
     },
     {
-      "id": "ss-254",
+      "id": "ss:silver-creek-falls-silver-creek",
       "name": "Silver Creek falls",
       "county": "Keweenaw",
       "river": "Silver Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/silver-creek-falls-silver-creek/"
     },
     {
-      "id": "ss-255",
+      "id": "ss:silver-creek-falls",
       "name": "Silver Creek Falls",
       "county": "Alger",
       "river": "Silver Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/silver-creek-falls/"
     },
     {
-      "id": "ss-256",
+      "id": "ss:silver-falls",
       "name": "Silver Falls",
       "county": "Baraga",
       "river": "Silver River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/silver-falls/"
     },
     {
-      "id": "ss-257",
+      "id": "ss:slide-falls",
       "name": "Slide Falls",
       "county": "Baraga",
       "river": "Slate River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/slide-falls/"
     },
     {
-      "id": "ss-258",
+      "id": "ss:tiger-falls",
       "name": "Tiger Falls",
       "county": "Marquette",
       "river": "Schweitzer Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/tiger-falls/"
     },
     {
-      "id": "ss-259",
+      "id": "ss:trap-falls",
       "name": "Trap Falls",
       "county": "Ontonagon",
       "river": "Carp River Inlet",
       "reference": "https://shorelinescout.com/michigan/waterfalls/trap-falls/"
     },
     {
-      "id": "ss-260",
+      "id": "ss:turkey-neck-falls-2",
       "name": "Turkey Neck Falls",
       "county": "Marquette",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/turkey-neck-falls-2/"
     },
     {
-      "id": "ss-261",
+      "id": "ss:turkey-neck-falls",
       "name": "Turkey Neck Falls",
       "county": "Marquette",
       "river": "Cedar Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/turkey-neck-falls/"
     },
     {
-      "id": "ss-262",
+      "id": "ss:twin-falls",
       "name": "Twin Falls",
       "county": "Marquette",
       "river": "East Branch Salmon Trout River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/twin-falls/"
     },
     {
-      "id": "ss-263",
+      "id": "ss:unnamed-falls-2-alt",
       "name": "Unnamed Falls",
       "county": "Marquette",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/unnamed-falls-2-alt/"
     },
     {
-      "id": "ss-264",
+      "id": "ss:unnamed-falls-2",
       "name": "Unnamed Falls",
       "county": "Gogebic",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/unnamed-falls-2/"
     },
     {
-      "id": "ss-265",
+      "id": "ss:unnamed-falls",
       "name": "Unnamed Falls",
       "county": "Alger",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/unnamed-falls/"
     },
     {
-      "id": "ss-266",
+      "id": "ss:unnamed-falls-on-creek-to-dead-river",
       "name": "Unnamed Falls on Creek to Dead River",
       "county": "Marquette",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/unnamed-falls-on-creek-to-dead-river/"
     },
     {
-      "id": "ss-267",
+      "id": "ss:upper-chocolay-falls-2",
       "name": "Upper Chocolay Falls",
       "county": "Marquette",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/upper-chocolay-falls-2/"
     },
     {
-      "id": "ss-268",
+      "id": "ss:upper-chocolay-falls",
       "name": "Upper Chocolay Falls",
       "county": "Marquette",
       "river": "East Branch Chocolay River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/upper-chocolay-falls/"
     },
     {
-      "id": "ss-269",
+      "id": "ss:upper-craigs-falls",
       "name": "Upper Craig's Falls",
       "county": "Baraga",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/upper-craigs-falls/"
     },
     {
-      "id": "ss-270",
+      "id": "ss:upper-falls-salmon-trout-river",
       "name": "Upper Falls",
       "county": "Marquette",
       "river": "Salmon Trout River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/upper-falls-salmon-trout-river/"
     },
     {
-      "id": "ss-271",
+      "id": "ss:upper-falls",
       "name": "Upper Falls",
       "county": "Baraga",
       "river": "Sturgeon River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/upper-falls/"
     },
     {
-      "id": "ss-272",
+      "id": "ss:upper-frohling-falls-2-chocolay-falls",
       "name": "Upper Frohling Falls #2 (Chocolay Falls)",
       "county": "Marquette",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/upper-frohling-falls-2-chocolay-falls/"
     },
     {
-      "id": "ss-273",
+      "id": "ss:upper-garlic-falls-1",
       "name": "Upper Garlic Falls 1",
       "county": "Marquette",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/upper-garlic-falls-1/"
     },
     {
-      "id": "ss-274",
+      "id": "ss:upper-garlic-falls-2",
       "name": "Upper Garlic Falls 2",
       "county": "Marquette",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/upper-garlic-falls-2/"
     },
     {
-      "id": "ss-275",
+      "id": "ss:upper-garlic-falls-3",
       "name": "Upper Garlic Falls 3",
       "county": "Marquette",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/upper-garlic-falls-3/"
     },
     {
-      "id": "ss-276",
+      "id": "ss:upper-leatherby-falls",
       "name": "Upper Leatherby Falls",
       "county": "Baraga",
       "river": "West Branch Huron River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/upper-leatherby-falls/"
     },
     {
-      "id": "ss-277",
+      "id": "ss:upper-montreal-falls",
       "name": "Upper Montreal Falls",
       "county": "Keweenaw",
       "river": "Montreal River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/upper-montreal-falls/"
     },
     {
-      "id": "ss-278",
+      "id": "ss:upper-penn-falls",
       "name": "Upper Penn Falls",
       "county": "Ontonagon",
       "river": "East Branch Firesteel River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/upper-penn-falls/"
     },
     {
-      "id": "ss-279",
+      "id": "ss:upper-raney-falls",
       "name": "Upper Raney Falls",
       "county": "Marquette",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/upper-raney-falls/"
     },
     {
-      "id": "ss-280",
+      "id": "ss:upper-silver-falls",
       "name": "Upper Silver Falls",
       "county": "Baraga",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/upper-silver-falls/"
     },
     {
-      "id": "ss-281",
+      "id": "ss:upper-silver-falls-1",
       "name": "Upper silver falls #1",
       "county": "Baraga",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/upper-silver-falls-1/"
     },
     {
-      "id": "ss-282",
+      "id": "ss:upper-silver-falls-2",
       "name": "Upper Silver Falls #2",
       "county": "Baraga",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/upper-silver-falls-2/"
     },
     {
-      "id": "ss-283",
+      "id": "ss:upper-silver-falls-3",
       "name": "Upper Silver Falls #3",
       "county": "Baraga",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/upper-silver-falls-3/"
     },
     {
-      "id": "ss-284",
+      "id": "ss:upper-silver-falls-4",
       "name": "Upper Silver Falls #4",
       "county": "Baraga",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/upper-silver-falls-4/"
     },
     {
-      "id": "ss-285",
+      "id": "ss:upper-slate-falls",
       "name": "Upper Slate Falls",
       "county": "Baraga",
       "river": "Slate River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/upper-slate-falls/"
     },
     {
-      "id": "ss-286",
+      "id": "ss:upper-sturgeon-falls",
       "name": "Upper Sturgeon Falls",
       "county": "Baraga",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/upper-sturgeon-falls/"
     },
     {
-      "id": "ss-287",
+      "id": "ss:vista-falls",
       "name": "Vista Falls",
       "county": "Houghton",
       "river": "West Branch Sturgeon River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/vista-falls/"
     },
     {
-      "id": "ss-288",
+      "id": "ss:west-branch-yellow-dog-falls",
       "name": "West Branch Yellow Dog Falls",
       "county": "Marquette",
       "river": "West Branch Yellow Dog River",
       "reference": "https://shorelinescout.com/michigan/waterfalls/west-branch-yellow-dog-falls/"
     },
     {
-      "id": "ss-289",
+      "id": "ss:wildcat-falls",
       "name": "Wildcat Falls",
       "county": "Ontonagon",
       "river": "Scott and Howe Creek",
       "reference": "https://shorelinescout.com/michigan/waterfalls/wildcat-falls/"
     },
     {
-      "id": "ss-290",
+      "id": "ss:woodys-waterfall",
       "name": "Woodys Waterfall",
       "county": "Marquette",
       "river": null,
       "reference": "https://shorelinescout.com/michigan/waterfalls/woodys-waterfall/"
     },
     {
-      "id": "ss-291",
+      "id": "ss:wylie-falls",
       "name": "Wylie Falls",
       "county": "Marquette",
       "river": null,
