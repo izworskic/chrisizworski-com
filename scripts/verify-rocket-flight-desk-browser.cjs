@@ -171,6 +171,12 @@ const whenReady=page=>page.waitForFunction(id=>
    const shot=v.name+'-flight-desk-A.png';
    await page.locator('.rl-hero').screenshot({path:path.join(out,shot),animations:'disabled'});
    report.screenshots.push(shot);
+   // Small inspection frames in CI logs let code reviewers actually inspect
+   // the viewport composition, not only a success flag or JSON metrics.
+   if(['phone390','desktop1440'].includes(v.name)){
+     const preview=await page.locator('.rl-hero').screenshot({type:'jpeg',quality:28,animations:'disabled'});
+     console.log('ROCKET_FLIGHT_DESK_PREVIEW_'+v.name+'='+preview.toString('base64'));
+   }
    report.cases.push({viewport:v.name,firstAnswerTop:first,
     mission:'A-B-A + native/hero sync',map:'focused',overflowPx:overflow,
     fontPx:computed,jsErrors:0});
