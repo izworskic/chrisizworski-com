@@ -12,10 +12,10 @@ The visitor selects an audited traffic segment in the existing calculator and re
 | Architecture | Outcome | Score |
 | --- | --- | --- |
 | Keep existing JS live comparison + 8-week NYC DOT current-hour average | No future hour comparison, fragile historical freshness/quality coverage | 69/100 |
-| **Python nightly batch → versioned audited JSON → existing Node API + JS panel** | Separate scientific validation from fast visitor path; no extra runtime services; fails closed | **88/100** |
+| **Python nightly batch → versioned audited JSON → existing Node API + JS panel** | Separate scientific validation from fast visitor path; no extra runtime services; fails closed | **89/100** |
 | Python invoked for every visitor/API request | Extra network latency, city dataset load and Vercel runtime cost without demonstrated benefit | 52/100 |
 
-Score categories (0–5) for the chosen approach: visitor decision 5, scientific reliability 4, distinct interface 4, cost/maintenance 5, search discovery 4. Weighted by Python OS (30/25/15/15/15): 91/100. This score is not validation evidence; all hard gates still apply. No redesign of the main crossing product.
+Score categories (0–5) for the chosen approach: visitor decision 5, scientific reliability 4, distinct interface 4, cost/maintenance 5, search discovery 4. Weighted by Python OS (30/25/15/15/15): 89/100. This score is not validation evidence; all hard gates still apply. No redesign of the main crossing product.
 
 ## Source and rights register
 | Source | Rights | Time/scope | Limitation |
