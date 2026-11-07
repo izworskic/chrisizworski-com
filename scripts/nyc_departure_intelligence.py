@@ -160,10 +160,18 @@ def build_model(rows, now):
     start = cutoff - timedelta(days=70)
     eligible = [r for r in clean if start <= r[1] <= latest]
     for crossing, (link_id, scope, direction) in LINKS.items():
-        fitted = fit_link([r for r in eligible if r[0] == link_id], cutoff)
+        samples = [r for r in eligible if r[0] == link_id]
+        if not samples:
+            continue
+        link_latest = max(r[1] for r in samples)
+        # A recently updated dataset is not proof that *this link* has recent data.
+        if (latest - link_latest).days > 1:
+            continue
+        fitted = fit_link(samples, cutoff)
         if fitted:
             artifact["crossings"][crossing] = {
-                "linkId": link_id, "scope": scope, "direction": direction, **fitted}
+                "linkId": link_id, "scope": scope, "direction": direction,
+                "latestObservationDate": link_latest.isoformat(), **fitted}
     if artifact["crossings"]:
         artifact["state"] = "AVAILABLE" if len(artifact["crossings"]) == 6 else "PARTIAL"
         artifact["reason"] = "Validated historical patterns, never door-to-door travel predictions."
