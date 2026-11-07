@@ -1,0 +1,106 @@
+name: Ferry intelligence engine
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Daily check UTC. Python cadence enforces Mondays only Nov–Mar.
+    - cron: '23 12 * * *'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/ferry-intelligence.yml'
+      - 'scripts/ferry_intelligence.py'
+      - 'data/ferry-planners.json'
+      - 'data/ferry-monitor-state.json'
+  pull_request:
+    paths:
+      - '.github/workflows/ferry-intelligence.yml'
+      - 'scripts/ferry_intelligence.py'
+      - 'tests/test_ferry_intelligence.py'
+      - 'data/ferry-planners.json'
+      - 'data/ferry-monitor-state.json'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: ferry-intelligence-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  validate-and-monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test change detection, season parsing and fail-closed behavior
+        run: python3 -m unittest discover -s tests -p test_ferry_intelligence.py -v
+      - name: Inspect official sources (release, scheduled or manual)
+        if: github.event_name != 'pull_request'
+        shell: bash
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = "schedule" ]; then
+            python3 scripts/ferry_intelligence.py --apply --respect-cadence --report ferry-intelligence-report.json
+          else
+            python3 scripts/ferry_intelligence.py --apply --report ferry-intelligence-report.json
+          fi
+      - name: Rebuild ferry destination HTML from accepted evidence
+        run: node scripts/generate-ferry-planners.mjs
+      - name: Check static evidence and no guessed fares
+        run: |
+          python3 scripts/audit_ferry_sources.py --json ferry-evidence-static.json
+          node --test tests/ferry-evergreen.test.js tests/great-lakes-ferries.test.js tests/mackinac-ferry-decision.test.js
+      - name: Publish machine-verifiable changes or open a review PR
+        if: github.event_name != 'pull_request'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "$(git status --porcelain -- data/ferry-planners.json data/ferry-monitor-state.json public)" ]; then
+            echo "No source evidence or public planner changes."
+            exit 0
+          fi
+          # Do not generate daily duplicate PRs while an operator discrepancy is under review.
+          open_count="$(gh pr list --state open --json title --jq '[.[] | select(.title | startswith("Ferry source intelligence"))] | length')"
+          if [ "$open_count" != "0" ]; then
+            echo "::warning::Existing ferry source intelligence PR awaits review; no duplicate created."
+            exit 0
+          fi
+          branch="automation/ferry-intelligence-$GITHUB_RUN_ID"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add -A -- data/ferry-planners.json data/ferry-monitor-state.json public
+          git commit -m "Record official ferry source changes and verified season evidence"
+          git push origin "$branch"
+          gh pr create --base main --head "$branch" \
+            --title "Ferry source intelligence: verified changes or evidence review" \
+            --body "Automated source check. Read the GitHub Actions ferry-intelligence-report artifact for changed operator content, unavailable sources, accepted season windows, and conflicts. No ticket inventory or cancellation is inferred. Only an explicitly dated S.S. Badger season window can be auto-published. Existing conflicting windows and all other site changes require review."
+          safe="$(jq -r '.auto_publish_eligible // false' ferry-intelligence-report.json)"
+          if [ "$safe" = "true" ]; then
+            # The suite above must pass before this line. Repository protections still apply.
+            if gh pr merge "$branch" --squash --delete-branch; then
+              echo "A strictly verified evidence update was merged."
+            else
+              echo "::warning::Branch protections or policy prevented automatic merge. Review PR."
+            fi
+          else
+            echo "::warning::Unstructured or conflicting source changes detected; review PR, do not publish."
+          fi
+      - name: Retain operator evidence and ambiguity log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ferry-intelligence-report
+          path: |
+            ferry-intelligence-report.json
+            ferry-evidence-static.json
+          if-no-files-found: ignore
