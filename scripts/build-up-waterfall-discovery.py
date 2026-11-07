@@ -195,7 +195,17 @@ def main() -> None:
     result = build()
     body = json.dumps(result, ensure_ascii=False, indent=2) + "\n"
     if args.check:
-        if not OUTPUT.exists() or OUTPUT.read_text(encoding="utf-8") != body:
+        if not OUTPUT.exists():
+            raise SystemExit("Missing waterfall discovery index; run --write after reviewing source inputs")
+        actual = OUTPUT.read_text(encoding="utf-8")
+        if actual != body:
+            import difflib
+            print("Waterfall discovery index mismatch (first 45 unified diff lines):", file=__import__("sys").stderr)
+            diff = difflib.unified_diff(actual.splitlines(), body.splitlines(), fromfile="committed-index", tofile="python-generated", lineterm="")
+            for index, line in enumerate(diff):
+                if index >= 45:
+                    break
+                print(line, file=__import__("sys").stderr)
             raise SystemExit("Waterfall research index stale: run python3 scripts/build-up-waterfall-discovery.py --write")
         print("Waterfall identity and GIS research index is deterministic; no access is inferred.")
     elif args.write:
