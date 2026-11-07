@@ -140,6 +140,19 @@
     const official=$('rl-flight-official');
     const specialist=$('rl-flight-specialist');
     let current=null;
+    // The government-source hero photo is historical context. It must never
+    // leave a giant broken panel or cover the actual mission decision.
+    const photo=doc.querySelector?.('.rl-hero-photo img');
+    const photoPanel=photo?.closest?.('.rl-hero-photo');
+    const hero=photo?.closest?.('.rl-hero');
+    const imageUnavailable=()=>{
+      if(photoPanel)photoPanel.hidden=true;
+      if(hero)hero.dataset.photoUnavailable='true';
+    };
+    if(photo){
+      photo.addEventListener('error',imageUnavailable);
+      if(photo.complete&&photo.naturalWidth===0)imageUnavailable();
+    }
     const set=(id,v)=>{const el=$(id);if(el)el.textContent=String(v??'—');};
     function render(data) {
       current=data;
