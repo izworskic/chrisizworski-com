@@ -68,3 +68,24 @@ The NYC DOT metadata guide at https://www.nyc.gov/html/dot/downloads/pdf/metadat
 **Revised eligibility** in the Python historical batch: exact audited link ID, dated and bounded query, `0 < travel_time < 3600` seconds, `0 < speed < 100` mph, enough sensor polls per date-hour, independent held-out validity. The `status` field is retained only in source-health diagnostics to reveal source revisions; it is not a validity or closure decision. This physical-values criterion is conservative about speed/duration and may still require source-specific sanity checks. Always distinguish valid numeric *records* from verified route access or safety.
 
 The corrected Python Action must re-run the real-data holdout. **No live historical forecast should be enabled merely because prior status filtering was mistaken.** The above older model scores remain included as transparent, explicitly superseded diagnostic evidence, rather than deleted.
+
+## Final corrected real-data evaluation — status-independent numerical evidence
+
+Official NYC DOT Traffic Speeds metadata explicitly calls `status` an “Artifact – not useful.” The Python source filter now selects physically plausible numeric values (`0 < travel_time < 3600` seconds; `0 < speed < 100` mph), not `status=0`. Independently tested source ingestion batches cover no more than 30 days per query.
+
+GitHub Actions real Python audit completed successfully on November 7, 2026: https://github.com/izworskic/chrisizworski-com/actions/runs/42408652242.
+
+| Audited segment | Valid independent date-hour observations | Actual held-out result | Verdict |
+| --- | ---: | --- | --- |
+| Brooklyn approach 4616339 | 2,186 | 320 scored hours; model MAE 3.805 minutes versus naive 3.750; **-1.48% improvement**, interval coverage 53.12% | BACKTEST_FAILED |
+| Manhattan approach 4616340 | 991 | 234 scored hours, just **24** qualified hour slots (minimum 30) | BACKTEST_FAILED; withhold model MAE |
+| Queens–Midtown Tunnel 4456510 | 1,970 | 125 scored hours, 26 qualified slots; last usable Nov. 1 | STALE_LINK |
+| Hugh Carey Tunnel 4456501 | 1,659 | 107 scored hours, 23 qualified slots; last usable Nov. 1 | STALE_LINK |
+| RFK Manhattan approach 4456452 | 0 | No qualifying positive speed/travel time in 93-day window | NO_USABLE_HISTORY |
+| Verrazzano eastbound 4763652 | 0 | No qualifying positive speed/travel time in 93-day window | NO_USABLE_HISTORY |
+
+Total: **6,806** accepted date-hour observations, **190** invalid/insufficient aggregates. Python outputs `state=COMPLETE`, `publishingCandidateState=UNAVAILABLE`, `modelReadyLinks=[]`. **Zero of six models pass.** This supersedes all earlier status=0-restricted figures in this document. No historic travel advisory is published.
+
+The corrected partition fetch encountered a transient Socrata read timeout during one workflow attempt. Network failures now yield a bounded retry and an explicit `INCOMPLETE` science audit, without fabricating a backtest or replacing published models. Deterministic tests enforce the failure boundary. Numeric validity does not imply that a road is open, safe or physically available.
+
+**Next scientific threshold:** secure adequate fresh, licensed historic segment measurements and outperform a naive same-segment model in independent holdout. Never lower the release thresholds to fill the interface.
