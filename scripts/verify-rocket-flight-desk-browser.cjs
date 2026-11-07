@@ -173,7 +173,7 @@ const whenReady=page=>page.waitForFunction(id=>
    report.screenshots.push(shot);
    // Small inspection frames in CI logs let code reviewers actually inspect
    // the viewport composition, not only a success flag or JSON metrics.
-   if(['phone390','desktop1440'].includes(v.name)){
+   if(['phone360','phone390','tablet768','desktop1440'].includes(v.name)){
      const preview=await page.locator('.rl-hero').screenshot({type:'jpeg',quality:28,animations:'disabled'});
      console.log('ROCKET_FLIGHT_DESK_PREVIEW_'+v.name+'='+preview.toString('base64'));
    }
