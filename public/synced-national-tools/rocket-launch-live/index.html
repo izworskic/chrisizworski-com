@@ -16,12 +16,14 @@
 <link rel="preconnect" href="https://basemaps.cartocdn.com">
 <link rel="preconnect" href="https://unpkg.com">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="/assets/rocket-map-pins.css?v=20261107-origin-v1">
 <link rel="stylesheet" href="/national-tools/rocket-launch-live/styles.css?v=20261103-viewing-v1">
 <link rel="stylesheet" href="/national-tools/assets/launch-truth-desk.css?v=20261102-truth-v2">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5D2V2W7HN"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-Y5D2V2W7HN');</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://chrisizworski.com/national-tools/rocket-launch-live/#webpage","url":"https://chrisizworski.com/national-tools/rocket-launch-live/","name":"Rocket Launch Live USA: When and Where to Watch","description":"Coastal U.S. launch calendar with region-specific legal access, launch timing uncertainty and public NWS weather evidence.","dateModified":"2026-11-05","author":{"@id":"https://chrisizworski.com/#person"},"about":[{"@type":"Thing","name":"Rocket launch viewing"},{"@type":"Thing","name":"U.S. coastal spaceports"}]},{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"U.S. Tools","item":"https://chrisizworski.com/national-tools/"},{"@type":"ListItem","position":3,"name":"Rocket Launch Live USA","item":"https://chrisizworski.com/national-tools/rocket-launch-live/"}]}]}</script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
+<script defer src="/assets/rocket-map-pins.js?v=20261107-origin-v1"></script>
 <script src="/national-tools/rocket-launch-live/vandenberg.js?v=20261103-viewing-v1" defer></script>
 <script src="/national-tools/rocket-launch-live/app.js?v=20261106-official-rss-ksc-v1-starbase-road-v1-wallops-blog-v1" defer></script>
 <script src="/national-tools/assets/launch-truth-desk.js?v=20261102-truth-v2" defer></script>
@@ -72,10 +74,10 @@
    </div>
    <div class="rl-atlas">
      <div class="rl-map-wrap">
-       <div id="rl-coast-map" class="rl-map" role="img" aria-label="Interactive U.S. coastal launch regions, including Alaska and Hawaii">
+       <div id="rl-coast-map" class="rl-map" role="region" tabindex="0" aria-label="Interactive U.S. coastal launch regions, including Alaska and Hawaii">
          <div class="rl-map-fallback">Loading the coastal atlas. Use the region buttons above if the map is unavailable.</div>
        </div>
-       <div class="rl-map-legend">Coastal range locations · approximate regional map markers, not public entrances <span>CARTO / OpenStreetMap</span></div>
+       <div class="rl-map-legend"><span class="rocket-map-key"><span class="rocket-key-symbol" aria-hidden="true">🚀</span>Rocket = launch location</span> <span class="rocket-map-key-approx">Dashed rocket = approximate region, not a pad</span> · Coast navigation circles are not public entrances <span>CARTO / OpenStreetMap</span></div>
      </div>
      <div class="rl-atlas-summary">
        <p class="rl-eyebrow">Selected coast</p>
