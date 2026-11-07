@@ -67,7 +67,7 @@ test('B65: only a noindex research page, no map stop or navigational masquerade'
  assert.ok(!hub.includes('data-id="upper-eagle-river-ten-foot-falls"'));
  assert.ok(!sitemap.includes(slug));
  assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/ten-foot-falls/'));
- assert.equal((sitemap.match(/<loc>/g)||[]).length,76;
+ assert.equal((sitemap.match(/<loc>/g)||[]).length,76);
  assert.match(research,/<meta name="robots" content="noindex,follow">/);
  assert.match(research,/VISITOR ROUTE NOT FULLY VERIFIED/);
  assert.match(research,/438 m/);
