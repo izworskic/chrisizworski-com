@@ -187,6 +187,31 @@ class PythonNycIntelligenceTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "Invalid upstream NYC"):
             nyc.fetch_rows(NOW,fetcher=bad_link)
 
+    def test_one_transient_timeout_does_not_erase_a_valid_calendar_partition(self):
+        attempts = {}
+        def sometimes_timeout(request, timeout=35):
+            key=request.full_url
+            attempts[key]=attempts.get(key,0)+1
+            if len(attempts)==1 and attempts[key]==1:
+                raise TimeoutError("Simulated upstream read timeout")
+            where=parse_qs(urlsplit(key).query)["$where"][0]
+            link=re.search(r"link_id='(\d+)'",where).group(1)
+            start=re.search(r"data_as_of >= '(\d{4}-\d{2}-\d{2})",where).group(1)
+            return io.BytesIO(json.dumps([{"link_id":link,
+                "service_date":start+"T00:00:00.000","hour":"8",
+                "mean_seconds":"300","sample_count":"8"}]).encode())
+        rows=nyc.fetch_rows(NOW,fetcher=sometimes_timeout)
+        self.assertEqual(len(rows),24)
+        self.assertEqual(sum(attempts.values()),25)
+
+    def test_unreachable_source_is_explicitly_incomplete_not_a_valid_model(self):
+        report=nyc.source_incomplete(NOW,"Official historical source timed out.")
+        self.assertEqual(report["state"],"INCOMPLETE")
+        self.assertEqual(report["publishingCandidateState"],"UNAVAILABLE")
+        self.assertEqual(report["modelReadyLinks"],[])
+        self.assertEqual(report["crossings"],{})
+        self.assertIn("timed out",report["reason"])
+
     def test_official_2026_toll_reference_matches_calculation_engine(self):
         proof=nyc.audit_tolls()
         self.assertGreaterEqual(proof["casesChecked"],10)
