@@ -44,7 +44,7 @@ test('input order does not determine grouping, location estimates or vessel owne
   const signature=g=>g.map(x=>[x.id,x.count,Number(x.lat.toFixed(8)),Number(x.lon.toFixed(8))]).sort((p,q)=>p[0].localeCompare(q[0]));
   assert.deepEqual(signature(a),signature(b));
 });
-test('map has actual counted ship markers, an in-map report counter, source confidence and drill-down controls',()=>{
+test('map shows counted ship markers and below-map caption without a blocking overlay',()=>{
   const js=read('public/assets/seaway.js'),css=read('public/assets/seaway.css');
   assert.match(js,/C\.groupMapReports\(/);
   assert.match(js,/data-vessel-count/);
@@ -63,8 +63,9 @@ test('map has actual counted ship markers, an in-map report counter, source conf
   assert.match(js,/\$\('mapStatus'\)\.textContent/);
   for(const slug of ['st-lawrence-seaway','eisenhower-lock']){
     const html=read('public/'+slug+'/index.html');
-    for(const asset of ['seaway.css','seaway-core.js','seaway.js'])
+    for(const asset of ['seaway.css','seaway.js'])
       assert.ok(html.includes('/assets/'+asset+'?v=20261107c'),slug+' old asset version '+asset);
+    assert.ok(html.includes('/assets/seaway-core.js?v=20261107b'),slug+' shared core version');
     assert.match(html,/name="robots" content="index,follow,max-image-preview:large"/);
   }
 });
