@@ -30,8 +30,8 @@ test('Badger 2026 standard passenger, child and vehicle categories are actually 
 test('Lake Express fare table starts August 11; capped children waiver retains mandatory fees',()=>{
  const c=data['lake-express'],o=option('lake-express');
  assert.equal(core.fare(c,o,'2026-08-10',1,2,0,true),null);
- assert.equal(core.fare(c,o,'2026-08-25',1,2,0,true)?.total,279);
- assert.equal(core.fare(c,o,'2026-08-25',1,3,0,true)?.total,433);
+ assert.equal(core.fare(c,o,'2026-08-25',1,2,0,true)?.total,309);
+ assert.equal(core.fare(c,o,'2026-08-25',1,3,0,true)?.total,463);
  assert.equal(core.fare(c,o,'2026-09-02',1,2,0,true)?.total,557);
  assert.equal(core.fare(c,o,'2027-08-25',1,2,0,true),null);
 });
