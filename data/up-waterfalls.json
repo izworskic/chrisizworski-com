@@ -1023,13 +1023,13 @@
       "locationSource": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
       "kind": "National scenic trail",
       "parking": "Signed trailhead lot east of US-45 approximately 7.8 miles north of Bruce Crossing; typically plowed in winter, but never park on highway shoulder or assume guaranteed access.",
-      "feature": "A remote-feeling Baltimore River curtain viewed from a suspension bridge.",
+      "feature": "Two waterfalls in one signed NCT hike: the smaller Konteka (Peanut Butter) Falls first, then the larger O Kun de Kun curtain from the suspension bridge.",
       "further": "The eastern side of the Baltimore River is not a parking access point. Do not plan to scramble behind the waterfall.",
       "manager": "Ottawa National Forest / U.S. Forest Service (landowner); Peter Wolfe Chapter NCTA (trail maintenance)",
       "publication": "verified-access-guide",
       "gisObjectId": 64,
       "accessConfidence": "public-route-documented-current-open-unknown",
-      "sourceReviewed": "2026-10-26",
+      "sourceReviewed": "2026-11-07",
       "verification": {
         "publicAccess": {
           "verified": true,
@@ -1055,6 +1055,22 @@
           "verified": true,
           "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
         }
+      },
+      "companionWaterfall": {
+        "name": "Konteka Falls",
+        "aliases": [
+          "Konteko Falls",
+          "Peanut Butter Falls"
+        ],
+        "lat": 46.64996,
+        "lng": -89.15506,
+        "featurePositionRole": "approximate-natural-feature-not-parking-or-trail-junction",
+        "locationSource": "https://www.waterfallsofthekeweenaw.com/baltimore-river/konteko-falls/",
+        "publicTrailSource": "https://northcountrytrail.org/files/chapters/pwc/PWC_16-32_May2026.pdf",
+        "independentTourismSource": "https://www.visitkeweenaw.com/blog/post/a-fall-day-trip-to-o-kun-de-kun-falls/",
+        "sameUS45Trailhead": true,
+        "separateDrivingArrival": false,
+        "measuredRouteToFeature": false
       }
     },
     {
