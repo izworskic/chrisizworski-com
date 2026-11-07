@@ -9,8 +9,8 @@
     "gisCandidates": 161,
     "exactIdMatched": 69,
     "pending": 92,
-    "curatedTotal": 79,
-    "curatedNoMatchingGIS": 14
+    "curatedTotal": 80,
+    "curatedNoMatchingGIS": 15
   },
   "candidates": [
     {
@@ -9837,6 +9837,13 @@
       "gisObjectId": null,
       "publication": "verified-access-guide",
       "reason": "Owner Northwoods Alliance maps public signed waterfall trailhead and named FALLS on its community forest parcel, publishes legal non-motorized public access and roadside directions at 0.6 mile north of McGinty Lane. WUPCVB brochure #29 independently names this Scott and Howe Creek Wildcat Falls and provides approximate NATURAL FEATURE coordinate 46.346173,-89.292236 plus same owner-published road approach. No separate exact Michigan named GIS source ID, no surveyed trail or parking geometry, no feature-pin vehicle directions."
+    },
+    {
+      "id": "montreal-falls-keweenaw",
+      "name": "Montreal Falls (Keweenaw)",
+      "gisObjectId": null,
+      "publication": "verified-access-guide",
+      "reason": "Keweenaw Montreal Falls is distinct from GIS Interstate Falls (#35) on the Gogebic-Wisconsin border. Official tourism Visit Keweenaw names legal public Fish Cove/Mandan approach and roughly one-mile unsigned shoreline path to lower falls; independent specialist lower-falls coordinate (47.39257,-87.84114) is natural feature only; Smith Fisheries Road illegal; no surveyed parking GPS or trail line."
     }
   ],
   "batchCheckpoints": [
@@ -10394,6 +10401,15 @@
       "summary": "Wildcat Falls Community Forest verified via current owner property/trail map labeling both FALLS and TRAIL HEAD, yellow-marked public path and County Line Lake Road signed arrival, plus regional waterfall brochure #29 approximate distinct natural-feature point. No car routing to falls, no invented parking GPS, no live snow/road conditions, no outreach.",
       "published": [
         "wildcat-falls"
+      ],
+      "pendingGisFeatures": 92
+    },
+    {
+      "batch": "80",
+      "reviewed": "2026-11-07",
+      "summary": "Added distinct Keweenaw Montreal Falls visitor guide with official legal Fish Cove access and natural-feature-only map role. Protected Peterson Falls closed access, Eliot/Miners Beach alias, and Piers Gorge grouping. 161 GIS records unchanged; no new state GIS OID assigned.",
+      "published": [
+        "montreal-falls-keweenaw"
       ],
       "pendingGisFeatures": 92
     }

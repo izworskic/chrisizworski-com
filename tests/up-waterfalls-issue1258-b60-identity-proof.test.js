@@ -40,10 +40,10 @@ test('B60: point matches are reproducible Haversine comparisons, never parking o
  assert.ok(silver[2]>12000,'the remote Herman Upper Silver waterfall cannot be the nearby Lower Silver picnic upper chute');
 });
 test('B60: unresolved access gates stay blocked across ledger, queue and research-only map popup data',()=>{
- assert.equal(R.counts.curatedTotal,79);
+ assert.equal(R.counts.curatedTotal,80);
  assert.equal(R.counts.exactIdMatched,69);
  assert.equal(R.counts.pending,92);
- assert.equal(L.curatedCount,79);
+ assert.equal(L.curatedCount,80);
  assert.equal(L.unresolvedCandidates,92);
  assert.equal(Q.candidates.length,92);
  assert.equal(V.records.length,97);

@@ -5,8 +5,8 @@
   "maxRadiusMiles": 50,
   "policy": "Not a route, visitor parking point, driving distance, trail distance, access grant, or live-open forecast.",
   "counts": {
-    "curated": 79,
-    "eligible": 70,
+    "curated": 80,
+    "eligible": 71,
     "excluded": 9
   },
   "excludedIds": [
@@ -400,6 +400,16 @@
       "source": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsI-N/Menominee_mrspra_trailmap.pdf?hash=88DE2DBCEDCDBE851E12D5C957A583C1&rev=8a791e46c4404b838b921271509e21fb",
       "lat": 45.757574,
       "lng": -87.948049
+    },
+    {
+      "id": "montreal-falls-keweenaw",
+      "name": "Montreal Falls (Keweenaw)",
+      "region": "Keweenaw Peninsula",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/montreal-falls-keweenaw/",
+      "source": "https://www.visitkeweenaw.com/blog/post/a-guide-to-visiting-the-keweenaws-montreal-falls/",
+      "lat": 47.39257,
+      "lng": -87.84114
     },
     {
       "id": "morgan-falls",
@@ -925,6 +935,10 @@
       {
         "id": "wyandotte-falls",
         "miles": 37.6
+      },
+      {
+        "id": "montreal-falls-keweenaw",
+        "miles": 38.2
       },
       {
         "id": "morgan-falls",
@@ -1695,6 +1709,10 @@
         "miles": 27.5
       },
       {
+        "id": "montreal-falls-keweenaw",
+        "miles": 28.1
+      },
+      {
         "id": "big-erics-falls",
         "miles": 36.1
       },
@@ -1837,6 +1855,10 @@
       {
         "id": "manganese-falls",
         "miles": 19.8
+      },
+      {
+        "id": "montreal-falls-keweenaw",
+        "miles": 21.3
       },
       {
         "id": "big-erics-falls",
@@ -2617,6 +2639,10 @@
     ],
     "haven-falls": [
       {
+        "id": "montreal-falls-keweenaw",
+        "miles": 8.7
+      },
+      {
         "id": "manganese-falls",
         "miles": 8.8
       },
@@ -2841,6 +2867,10 @@
       {
         "id": "manganese-falls",
         "miles": 16.9
+      },
+      {
+        "id": "montreal-falls-keweenaw",
+        "miles": 18.7
       },
       {
         "id": "upper-hungarian-falls",
@@ -3513,6 +3543,10 @@
         "miles": 29.9
       },
       {
+        "id": "montreal-falls-keweenaw",
+        "miles": 32.1
+      },
+      {
         "id": "manganese-falls",
         "miles": 33.2
       },
@@ -3656,6 +3690,10 @@
       }
     ],
     "manganese-falls": [
+      {
+        "id": "montreal-falls-keweenaw",
+        "miles": 5.1
+      },
       {
         "id": "haven-falls",
         "miles": 8.8
@@ -3951,6 +3989,10 @@
         "miles": 30.1
       },
       {
+        "id": "montreal-falls-keweenaw",
+        "miles": 32.3
+      },
+      {
         "id": "manganese-falls",
         "miles": 33.3
       },
@@ -4061,6 +4103,52 @@
       {
         "id": "rapid-river-falls-delta-county",
         "miles": 49.9
+      }
+    ],
+    "montreal-falls-keweenaw": [
+      {
+        "id": "manganese-falls",
+        "miles": 5.1
+      },
+      {
+        "id": "haven-falls",
+        "miles": 8.7
+      },
+      {
+        "id": "jacobs-falls",
+        "miles": 18.7
+      },
+      {
+        "id": "eagle-river-falls",
+        "miles": 21.3
+      },
+      {
+        "id": "conglomerate-falls-gratiot",
+        "miles": 28.1
+      },
+      {
+        "id": "lower-hungarian-falls",
+        "miles": 32.1
+      },
+      {
+        "id": "middle-hungarian-falls",
+        "miles": 32.3
+      },
+      {
+        "id": "upper-hungarian-falls",
+        "miles": 32.3
+      },
+      {
+        "id": "big-erics-falls",
+        "miles": 38.2
+      },
+      {
+        "id": "yellow-dog-falls",
+        "miles": 46.3
+      },
+      {
+        "id": "pinnacle-falls",
+        "miles": 47.4
       }
     ],
     "morgan-falls": [
@@ -4809,6 +4897,10 @@
       {
         "id": "rock-river-falls",
         "miles": 44.4
+      },
+      {
+        "id": "montreal-falls-keweenaw",
+        "miles": 47.4
       },
       {
         "id": "haven-falls",
@@ -6311,6 +6403,10 @@
         "miles": 30.2
       },
       {
+        "id": "montreal-falls-keweenaw",
+        "miles": 32.3
+      },
+      {
         "id": "manganese-falls",
         "miles": 33.4
       },
@@ -6819,6 +6915,10 @@
       {
         "id": "lower-hungarian-falls",
         "miles": 46.1
+      },
+      {
+        "id": "montreal-falls-keweenaw",
+        "miles": 46.3
       },
       {
         "id": "middle-hungarian-falls",

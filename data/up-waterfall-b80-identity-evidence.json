@@ -1,0 +1,96 @@
+{
+  "batch": "B80",
+  "reviewed": "2026-11-07",
+  "policy": "Online sources only; no email, no user or visitor verification; distinguish waterfall geography from official public arrival",
+  "cases": [
+    {
+      "case": "keweenaw-montreal",
+      "sourceIds": [
+        "ss:lower-montreal-falls",
+        "ss:middle-montreal-falls",
+        "ss:upper-montreal-falls"
+      ],
+      "destinationId": "montreal-falls-keweenaw",
+      "decision": "single canonical public visitor guide for Keweenaw Montreal Falls; lower feature only mapped approximately; upper confirmed distinct geographic feature but no public walking route drawn; middle identity under review",
+      "published": true,
+      "distinctFrom": [
+        "interstate-falls"
+      ],
+      "location": {
+        "lat": 47.39257,
+        "lng": -87.84114,
+        "role": "approximate-lower-natural-feature-not-parking-or-viewpoint",
+        "source": "https://www.waterfallsofthekeweenaw.com/montreal-river/montreal-falls/"
+      },
+      "publicArrival": {
+        "approvedSource": "https://www.visitkeweenaw.com/blog/post/a-guide-to-visiting-the-keweenaws-montreal-falls/",
+        "description": "Copper Harbor US-41 to Mandan Road, Hoar Lake/Fish Cove Road, signed rustic Fish Cove lot; foot-worn westbound Lake Superior shore walk approx 1 mile to lower falls",
+        "notSurveyed": true,
+        "preciseParkingPoint": null,
+        "travelStatusNow": "unknown"
+      },
+      "restrictions": {
+        "privateRoad": "Smith Fisheries Road",
+        "doNotSuggestOrRoute": true,
+        "source": "https://www.visitkeweenaw.com/july-2023-industry-newsletter/"
+      },
+      "plannedTrail": {
+        "unpermittedAsOfLastFound2026": true,
+        "source": "https://www.keweenawoutdoorrecreation.org/calls-to-action-montreal-falls-trail-access"
+      },
+      "stateAcquisition": {
+        "source": "https://www.michigan.gov/dnr/about/newsroom/releases/2026/11/06/dnr-tnc-protect-public-access",
+        "parcelSpecificRouteAuthorizationNotEstablished": true
+      }
+    },
+    {
+      "case": "miners-beach-elliot",
+      "sourceIds": [
+        "ss:miners-beach-falls"
+      ],
+      "destinationId": "elliot-falls",
+      "decision": "Search alias mapped to existing NPS-managed Elliot Falls on far eastern Miners Beach; do not create duplicate park waterfall guide; distinct from Miners Falls inland",
+      "published": false,
+      "identityConfidence": "strong-location-concordance; independent directory does not itself prove name equivalence",
+      "sources": [
+        "https://www.nps.gov/places/elliot-falls.htm",
+        "https://www.nps.gov/places/miners-beach.htm",
+        "https://www.nps.gov/places/miners-falls.htm"
+      ],
+      "noNewNaturalPoint": true
+    },
+    {
+      "case": "piers-gorge-group",
+      "sourceIds": [
+        "ss:piers-gorge-falls"
+      ],
+      "destinationIds": [
+        "misicot-falls",
+        "sand-portage-falls"
+      ],
+      "decision": "Piers Gorge Falls is a corridor/group search term, not a single independently proven new waterfall. Third Pier = Misicot Falls on MI side, other piers and Sand Portage accessed separately from WI side",
+      "published": false,
+      "visitorApproach": "Two distinct DNR trailheads; never paddling scout lines",
+      "sources": [
+        "https://dnr.wisconsin.gov/topic/parks/menominee/recreation",
+        "https://www.michigan.org/property/menominee-river-piers-gorge-scenic-hiking-trail"
+      ],
+      "noNewNaturalPoint": true
+    },
+    {
+      "case": "peterson-closed",
+      "sourceIds": [
+        "ss:peterson-falls",
+        "ss:peterson-falls-montreal-river"
+      ],
+      "destinationId": null,
+      "decision": "Confirmed as an upstream distinct falls from Interstate Falls; public access reported closed by Iron County WI. Do not index visitor directions or map an arrival marker.",
+      "published": false,
+      "accessStatus": "closed-to-public",
+      "publishedAuthority": "https://www.co.iron.wi.gov/Facilities/Facility/Details/Interstate-Falls-40",
+      "notInterstateFalls": true,
+      "notKeweenawMontrealFalls": true,
+      "noParkingNoTrailNoGeoRoute": true
+    }
+  ]
+}

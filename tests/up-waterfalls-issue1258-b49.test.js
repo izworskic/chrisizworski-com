@@ -14,7 +14,7 @@ test('batch49: Ontonagon location conflicts stay geographic research only',()=>{
  const desc=(html.match(/<meta name="description" content="([^"]*)">/)||[])[1];assert.ok(desc&&desc.length<=158,'SERP description too long '+slug);
  const tag='<script type="application/ld+json">',at=html.indexOf(tag);assert.ok(at>=0);const ld=JSON.parse(html.slice(at+tag.length,html.indexOf('</script>',at)));assert.equal(ld['@type'],'WebPage');assert.equal(ld.author['@id'],'https://chrisizworski.com/#person');assert.doesNotMatch(html,/"@type":"TouristAttraction"/);
  }
- assert.ok(V.records.length>=75);assert.equal(R.counts.curatedTotal,79);assert.equal(R.counts.exactIdMatched,69);assert.equal(R.counts.pending,92);assert.equal(L.unresolvedCandidates,92);assert.equal(Q.candidates.length,92);
+ assert.ok(V.records.length>=75);assert.equal(R.counts.curatedTotal,80);assert.equal(R.counts.exactIdMatched,69);assert.equal(R.counts.pending,92);assert.equal(L.unresolvedCandidates,92);assert.equal(Q.candidates.length,92);
  const rock=R.candidates.find(x=>x.gisObjectId===22),wol=R.candidates.find(x=>x.gisObjectId===28);
  assert.match(rock.sourceNotes,/377 metres/);assert.match(rock.sourceNotes,/Mateson Creek/);
  assert.match(wol.sourceNotes,/Cisco Branch/);assert.match(wol.sourceNotes,/2026/);

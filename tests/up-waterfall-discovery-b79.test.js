@@ -34,11 +34,11 @@ test('B79 consumes all 291 independent named directory mentions with permanent f
 test('B79 maps evidence identities to existing GIS and curated inventory without confusing mentions with distinct falls',()=>{
   assert.equal(gis.counts.gisCandidates,161);
   assert.equal(gis.counts.pending,92);
-  assert.equal(curated.waterfalls.length,79);
+  assert.equal(curated.waterfalls.length,80);
   assert.equal(index.counts.externalObservations,source.observations.length);
   assert.equal(index.counts.externalUniqueNameCountyGroups,282);
   assert.equal(index.counts.stateGisRecords,161);
-  assert.equal(index.counts.curatedDestinations,79);
+  assert.equal(index.counts.curatedDestinations,80);
   assert.equal(index.counts.stateGisPendingAccessReview,92);
   const classes=index.counts.classification;
   assert.equal(Object.values(classes).reduce((a,b)=>a+b,0),291);
@@ -58,8 +58,8 @@ test('B79 maps evidence identities to existing GIS and curated inventory without
     assert.equal('parking' in row,false);
     assert.equal('route' in row,false);
   }
-  assert.equal((sitemap.match(/<loc>/g)||[]).length,77);
-  assert.equal((hub.match(/<article class="waterfall-card"/g)||[]).length,79);
+  assert.equal((sitemap.match(/<loc>/g)||[]).length,78);
+  assert.equal((hub.match(/<article class="waterfall-card"/g)||[]).length,80);
   assert.ok(!sitemap.includes('upper-montreal-falls/'));
   assert.ok(!sitemap.includes('peterson-falls/'));
 });

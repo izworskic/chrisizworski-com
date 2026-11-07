@@ -48,8 +48,8 @@ test('B76 new middle fall is GIS-identity honest, KLT public access is source-ba
  assert.equal(x.geocodeProvenance.notOfficialFallsSurvey,true);
  assert.equal(x.geocodeProvenance.notParking,true);
  assert.equal(x.geocodeProvenance.notTrailRoute,true);
- assert.deepEqual([cat.waterfalls.length,rec.counts.curatedTotal,led.curatedCount,queue.counts.curatedDestinations],[79,79,79,79]);
- assert.deepEqual([rec.counts.exactIdMatched,rec.counts.pending,rec.counts.curatedNoMatchingGIS],[69,92,14]);
+ assert.deepEqual([cat.waterfalls.length,rec.counts.curatedTotal,led.curatedCount,queue.counts.curatedDestinations],[80,80,80,80]);
+ assert.deepEqual([rec.counts.exactIdMatched,rec.counts.pending,rec.counts.curatedNoMatchingGIS],[69,92,15]);
  assert.ok(rec.curatedWithoutExactGISMatch.some(row=>row.id===x.id&&row.gisObjectId===null));
  assert.ok(led.entries.some(row=>row.curatedId===x.id&&row.sourceId===null&&row.coordinateRole==='independent-waterfall-feature-not-parking-or-trailhead'));
  const top=rec.candidates.find(row=>row.gisObjectId===134);
@@ -72,8 +72,8 @@ test('B76 middle guide, hub and sitemap add exactly one distinct indexable water
  assert.match(guide,/Middle Falls/);
  assert.match(hub,/data-id="middle-hungarian-falls"/);
  assert.match(hub,/data-parking-lat="47.173159" data-parking-lng="-88.444743"/);
- assert.match(hub,/79 curated visitor destinations/);
- assert.match(hub,/79 curated waterfall profiles/);
+ assert.match(hub,/80 curated visitor destinations/);
+ assert.match(hub,/80 curated waterfall profiles/);
  for(const id of ['upper-hungarian-falls','lower-hungarian-falls']){
    assert.match(read('public/upper-peninsula-waterfalls/'+id+'/index.html'),/href="\/upper-peninsula-waterfalls\/middle-hungarian-falls\/"/);
  }
@@ -81,14 +81,14 @@ test('B76 middle guide, hub and sitemap add exactly one distinct indexable water
  assert.match(guide,/href="\/upper-peninsula-waterfalls\/lower-hungarian-falls\/"/);
  const m=hub.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
  const graph=JSON.parse(m[1])['@graph'];const list=graph.find(x=>x['@type']==='ItemList');
- assert.equal(list.numberOfItems,77);
- assert.equal(list.itemListElement.length,77);
+ assert.equal(list.numberOfItems,78);
+ assert.equal(list.itemListElement.length,78);
  assert.equal(list.itemListElement.filter(x=>x.name==='Middle Hungarian Falls').length,1);
- assert.equal((sitemap.match(/<loc>/g)||[]).length,77);
+ assert.equal((sitemap.match(/<loc>/g)||[]).length,78);
  assert.match(sitemap,/middle-hungarian-falls\/<\/loc><lastmod>2026-11-07/);
 });
 test('B76 Python nearby index includes only the independently identified waterfall point, never the parking position',()=>{
- assert.deepEqual(near.counts,{curated:79,eligible:70,excluded:9});
+ assert.deepEqual(near.counts,{curated:80,eligible:71,excluded:9});
  const x=near.locations.find(x=>x.id==='middle-hungarian-falls');
  assert.ok(x);
  assert.deepEqual([x.lat,x.lng],[47.17193,-88.44781]);

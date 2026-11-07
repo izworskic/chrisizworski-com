@@ -5,7 +5,7 @@
   "policy": "All 161 named source candidates retained even when public access is unknown. GIS locations are waterfall positions, never visitor parking. Do not auto-index.",
   "sourceCount": 197,
   "sourceCandidateCount": 161,
-  "curatedCount": 79,
+  "curatedCount": 80,
   "linkedByExactOid": 69,
   "unresolvedCandidates": 92,
   "entries": [
@@ -5812,7 +5812,31 @@
       "checked": "2026-11-07",
       "nextAction": "Review official online changes to trail signage, legal roadside parking and road condition. Never route cars to the WUPCVB approximate feature coordinate; online only.",
       "batch": "78"
+    },
+    {
+      "source": "curated-non-gis",
+      "sourceId": null,
+      "sourceName": "Montreal Falls (Keweenaw)",
+      "county": "KEWEENAW",
+      "coordinates": [
+        47.39257,
+        -87.84114
+      ],
+      "coordinateRole": "approximate-lower-falls-natural-feature-not-parking-or-trail",
+      "river": "MONTREAL RIVER (KEWEENAW)",
+      "identity": "independent-site-feature-and-legal-Fish-Cove-shoreline-arrival",
+      "curatedId": "montreal-falls-keweenaw",
+      "possibleCuratedIds": [],
+      "publication": "verified-access-guide",
+      "access": "official-tourism-rugged-unsigned-public-route-no-private-road-or-live-conditions",
+      "landManager": "State of Michigan and The Nature Conservancy lands in the Keweenaw Point area; parcel-specific boundary and new DNR management transitions need checked against posted signs",
+      "parkingEvidence": "Visit Keweenaw signed rustic Fish Cove parking reached via US-41/Mandan/Hoar Lake, no surveyed parking coordinate",
+      "trailEvidence": "Official tourism describes about one-mile unmaintained westbound shoreline path from Fish Cove; no approved upper-falls trail or polyline",
+      "sourceUrl": "https://www.visitkeweenaw.com/blog/post/a-guide-to-visiting-the-keweenaws-montreal-falls/",
+      "checked": "2026-11-07",
+      "nextAction": "Check legally designated parking, road conditions and any newly opened KORC route; preserve private-road exclusion and distinction from Gogebic Montreal River.",
+      "batch": "80"
     }
   ],
-  "lastBatch": "78"
+  "lastBatch": "80"
 }

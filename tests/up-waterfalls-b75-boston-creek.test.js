@@ -43,8 +43,8 @@ test('B75 curated Boston public nature trail changes only non-GIS inventory',()=
  assert.equal(x.verification.parking.verified,true);
  assert.equal(x.verification.trail.verified,true);
  assert.match(x.verification.location.description,/NOT waterfall location/);
- assert.deepEqual([c.waterfalls.length,rec.counts.curatedTotal,led.curatedCount,q.counts.curatedDestinations],[79,79,79,79]);
- assert.deepEqual([rec.counts.exactIdMatched,rec.counts.pending,rec.counts.curatedNoMatchingGIS],[69,92,14]);
+ assert.deepEqual([c.waterfalls.length,rec.counts.curatedTotal,led.curatedCount,q.counts.curatedDestinations],[80,80,80,80]);
+ assert.deepEqual([rec.counts.exactIdMatched,rec.counts.pending,rec.counts.curatedNoMatchingGIS],[69,92,15]);
  assert.equal(led.linkedByExactOid,69);
  assert.equal(q.counts.pendingGisFeatures,92);
  assert.ok(rec.curatedWithoutExactGISMatch.some(r=>r.id===x.id));
@@ -53,8 +53,8 @@ test('B75 curated Boston public nature trail changes only non-GIS inventory',()=
 test('B75 map never makes the reserve centre a waterfall/trailhead/parking coordinate',()=>{
  assert.match(hub,/data-id="boston-creek-cascades"/);
  assert.match(hub,/data-point-role="preserve-centre"/);
- assert.match(hub,/79 curated visitor destinations/);
- assert.match(hub,/79 curated waterfall profiles/);
+ assert.match(hub,/80 curated visitor destinations/);
+ assert.match(hub,/80 curated waterfall profiles/);
  assert.match(guide,/<meta name="robots" content="index,follow,max-image-preview:large">/);
  assert.match(guide,/rel="canonical" href="https:\/\/chrisizworski.com\/upper-peninsula-waterfalls\/boston-creek-cascades\//);
  assert.match(guide,/data-role="preserve-centre"/);
@@ -71,9 +71,9 @@ test('B75 map never makes the reserve centre a waterfall/trailhead/parking coord
  const s=JSON.parse((hub.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)||[])[1]);
  const list=s['@graph'].find(v=>v['@type']==='ItemList');
  assert.ok(list);
- assert.equal(list.itemListElement.length,77);
+ assert.equal(list.itemListElement.length,78);
  assert.ok(list.itemListElement.some(v=>v.name==='Boston Creek Cascades (Nature Area)'));
- assert.equal((sitemap.match(/<loc>/g)||[]).length,77);
+ assert.equal((sitemap.match(/<loc>/g)||[]).length,78);
  assert.match(sitemap,/upper-peninsula-waterfalls\/boston-creek-cascades\//);
 });
 test('B75 Ten Foot Falls remains research-only, absent from sitemap, catalog and hub',()=>{
@@ -87,7 +87,7 @@ test('B75 Ten Foot Falls remains research-only, absent from sitemap, catalog and
  assert.equal(fs.existsSync(path.join(__dirname,'../public/upper-peninsula-waterfalls/ten-foot-falls/index.html')),false);
 });
 test('B75 Python nearby engine excludes place-only point and both generators remain deterministic',()=>{
- assert.deepEqual(near.counts,{curated:79,eligible:70,excluded:9});
+ assert.deepEqual(near.counts,{curated:80,eligible:71,excluded:9});
  assert.ok(near.excludedIds.includes('boston-creek-cascades'));
  assert.equal(near.locations.some(x=>x.id==='boston-creek-cascades'),false);
  const py=cp.spawnSync('python3',['scripts/build-up-waterfalls-nearby.py','--check'],{cwd:path.join(__dirname,'..'),encoding:'utf8'});
