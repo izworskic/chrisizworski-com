@@ -206,7 +206,7 @@ def historical_date_windows(now, days=93, chunk_days=30):
 def fetch_rows(now, fetcher=urlopen):
     """Fetch complete official 30-day batches; reject truncated/invalid aggregates.
 
-    A single 93-day group query can silently stop at 1,000 rows, even when the
+    Status is explicitly an artifact in NYC DOT metadata; keep positive plausible travel time and speed regardless of status code. A single 93-day group query can silently stop at 1,000 rows, even when the
     requested $limit is larger. Bounded date partitions make the maximum
     distinct day-hour buckets 720, safely below the explicitly requested 800.
     """
@@ -221,10 +221,11 @@ def fetch_rows(now, fetcher=urlopen):
             "$select": ("link_id,date_trunc_ymd(data_as_of) as service_date,"
                         "date_extract_hh(data_as_of) as hour,"
                         "avg(travel_time::number) as mean_seconds,count(*) as sample_count"),
-            "$where": (f"status='0' and link_id='{link_id}' and "
+            "$where": (f"link_id='{link_id}' and "
                        f"data_as_of >= '{start.isoformat()}T00:00:00.000' and "
                        f"data_as_of < '{stop.isoformat()}T00:00:00.000' and "
-                       "travel_time::number>0 and travel_time::number<3600"),
+                       "travel_time::number>0 and travel_time::number<3600 and "
+                       "speed::number>0 and speed::number<100"),
             "$group": "link_id,service_date,hour",
             "$order": "service_date asc,hour asc",
             "$limit": "800",
