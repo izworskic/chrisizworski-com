@@ -60,5 +60,37 @@
       meaning:'This is the chapter where a recent receiver heard the vessel. The next chapter depends on its actual voyage and may not be the next place it calls.',
       directionVerified:false,etaVerified:false};
   }
-  return {fresh,visible,emptyReportState,motion,direction,distance,fit,monthly,lockFrame,clamp,journeyContext,CORRIDOR};
+
+  // Group *actual* received AIS positions by projected screen distance, never
+  // by invented harbor coordinates. The original reports remain selectable.
+  // Union-find makes grouping independent of upstream sort order.
+  function groupMapReports(vessels,project,radius=58,selectedMmsi=null) {
+    const valid=vessels.map(v=>({v,point:project(v)}))
+      .filter(x=>Number.isFinite(x.v.lat)&&Number.isFinite(x.v.lon)&&Number.isFinite(x.point?.x)&&Number.isFinite(x.point?.y));
+    const parent=valid.map((_,i)=>i);
+    function root(i){while(parent[i]!==i){parent[i]=parent[parent[i]];i=parent[i];}return i;}
+    function union(i,j){const a=root(i),b=root(j);if(a!==b)parent[b]=a;}
+    const radiusSq=Math.max(0,radius)**2;
+    for(let i=0;i<valid.length;i++)for(let j=i+1;j<valid.length;j++){
+      if(String(valid[i].v.mmsi)===String(selectedMmsi)||String(valid[j].v.mmsi)===String(selectedMmsi))continue;
+      const dx=valid[i].point.x-valid[j].point.x,dy=valid[i].point.y-valid[j].point.y;
+      if(dx*dx+dy*dy<=radiusSq)union(i,j);
+    }
+    const grouped=new Map();
+    for(let i=0;i<valid.length;i++){
+      const key=root(i);if(!grouped.has(key))grouped.set(key,[]);
+      grouped.get(key).push(valid[i].v);
+    }
+    return [...grouped.values()].map(items=>{
+      items.sort((a,b)=>String(a.mmsi).localeCompare(String(b.mmsi)));
+      const lat=items.reduce((n,v)=>n+v.lat,0)/items.length;
+      const lon=items.reduce((n,v)=>n+v.lon,0)/items.length;
+      return {id:items.map(v=>String(v.mmsi)).join(':'),count:items.length,lat,lon,
+        bounds:[[Math.min(...items.map(v=>v.lat)),Math.min(...items.map(v=>v.lon))],
+          [Math.max(...items.map(v=>v.lat)),Math.max(...items.map(v=>v.lon))]],
+        vessels:items};
+    });
+  }
+
+  return {fresh,visible,groupMapReports,emptyReportState,motion,direction,distance,fit,monthly,lockFrame,clamp,journeyContext,CORRIDOR};
 });
