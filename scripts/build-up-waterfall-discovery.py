@@ -199,14 +199,34 @@ def main() -> None:
             raise SystemExit("Missing waterfall discovery index; run --write after reviewing source inputs")
         actual = OUTPUT.read_text(encoding="utf-8")
         if actual != body:
-            import difflib
-            print("Waterfall discovery index mismatch (first 45 unified diff lines):", file=__import__("sys").stderr)
-            diff = difflib.unified_diff(actual.splitlines(), body.splitlines(), fromfile="committed-index", tofile="python-generated", lineterm="")
-            for index, line in enumerate(diff):
-                if index >= 45:
-                    break
-                print(line, file=__import__("sys").stderr)
-            raise SystemExit("Waterfall research index stale: run python3 scripts/build-up-waterfall-discovery.py --write")
+            old = json.loads(actual)
+            def first_difference(left, right, where="$"):
+                if type(left) != type(right):
+                    return where, left, right
+                if isinstance(left, dict):
+                    for key in list(dict.fromkeys([*left, *right])):
+                        if key not in left or key not in right:
+                            return where + "." + key, left.get(key, "<missing>"), right.get(key, "<missing>")
+                        found = first_difference(left[key], right[key], where + "." + key)
+                        if found:
+                            return found
+                elif isinstance(left, list):
+                    if len(left) != len(right):
+                        return where + ".length", len(left), len(right)
+                    for number, (a, b) in enumerate(zip(left, right)):
+                        found = first_difference(a, b, where + "[" + str(number) + "]")
+                        if found:
+                            return found
+                elif left != right:
+                    return where, left, right
+                return None
+            difference = first_difference(old, result)
+            if difference:
+                place, committed, generated = difference
+                raise SystemExit("Waterfall discovery mismatch at " + place +
+                                 "\nexpected: " + json.dumps(committed, ensure_ascii=False)[:250] +
+                                 "\nactual: " + json.dumps(generated, ensure_ascii=False)[:250])
+            raise SystemExit("Waterfall research index serialization mismatch: update generator formatting")
         print("Waterfall identity and GIS research index is deterministic; no access is inferred.")
     elif args.write:
         OUTPUT.write_text(body, encoding="utf-8")
