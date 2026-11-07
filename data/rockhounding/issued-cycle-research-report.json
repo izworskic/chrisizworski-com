@@ -1,13 +1,13 @@
 {
   "schemaVersion": "glwu-research-cycle-summary-v1",
-  "generatedAt": "2026-11-06T20:32:08.000Z",
+  "generatedAt": "2026-11-07T00:16:18.000Z",
   "status": "MULTIPLE_ISSUES_AVAILABLE_FOR_RESEARCH",
   "source": "NOAA_GLWU_MODEL_OUTPUT",
   "modelCycleCounts": {
     "500m-greatlakes": {
-      "cycles": 56,
-      "analysis": 56,
-      "issuedForecasts": 2387,
+      "cycles": 55,
+      "analysis": 55,
+      "issuedForecasts": 2342,
       "distinctCells": 1,
       "readyFor14DayBaseline": true
     }
@@ -33,8 +33,8 @@
     },
     "500m-greatlakes": {
       "grid": "500m-greatlakes",
-      "matchedPairs": 269,
-      "unmatchedForecastRows": 2118,
+      "matchedPairs": 263,
+      "unmatchedForecastRows": 2079,
       "matches": [
         {
           "issuedAt": "2026-10-20T18:00:00.000Z",
@@ -1838,25 +1838,25 @@
         }
       ],
       "leadBuckets": {
-        "1-6h": {
-          "pairs": 34,
-          "meanAbsoluteChangeM": 0.005,
-          "meanSignedChangeM": 0.0015
-        },
-        "13-24h": {
-          "pairs": 74,
-          "meanAbsoluteChangeM": 0.017,
-          "meanSignedChangeM": 0.0003
-        },
-        "25-48h": {
-          "pairs": 123,
-          "meanAbsoluteChangeM": 0.0317,
-          "meanSignedChangeM": -0.0124
-        },
         "7-12h": {
           "pairs": 38,
           "meanAbsoluteChangeM": 0.01,
           "meanSignedChangeM": 0
+        },
+        "13-24h": {
+          "pairs": 72,
+          "meanAbsoluteChangeM": 0.0171,
+          "meanSignedChangeM": 0.0007
+        },
+        "25-48h": {
+          "pairs": 120,
+          "meanAbsoluteChangeM": 0.0312,
+          "meanSignedChangeM": -0.012
+        },
+        "1-6h": {
+          "pairs": 33,
+          "meanAbsoluteChangeM": 0.0052,
+          "meanSignedChangeM": 0.0015
         }
       },
       "comparison": "MODEL_FORECAST_VS_LATER_MODEL_INITIAL_SAME_FIXED_CELL",
