@@ -87,14 +87,6 @@
 .seaway-vessel-cluster .ship-hatch{fill:#d9ebdd}
 .seaway-vessel-cluster strong{min-width:1.3em;color:#fffefa;text-align:center;font:inherit}
 .seaway-ship-marker.leaflet-marker-icon{filter:drop-shadow(0 0 2px #093d4bcc)}
-.seaway-map-report-badge.leaflet-control{
-  max-width:175px;margin:12px 12px 0 0;padding:8px 10px;
-  background:#fffefa;color:#123d4a;border:2px solid #d4a24d;border-radius:8px;
-  box-shadow:0 2px 7px #113b4b38;pointer-events:none;
-  font:700 12px/1.3 system-ui,sans-serif;
-}
-.seaway-map-report-badge strong{display:block;color:#143d4d;font-size:15px;font-weight:800}
-.seaway-map-report-badge span{display:block;color:#315962;font-size:10px;margin-top:3px;font-weight:600}
 .seaway-cluster-popup{display:grid;gap:7px}
 .seaway-cluster-popup>strong{font:700 16px/1.3 system-ui,sans-serif;color:#123d4a}
 .seaway-cluster-popup p{font-size:12px;margin:0 0 5px}
@@ -104,5 +96,3 @@
 .seaway-cluster-choice:focus-visible,.seaway-vessel-cluster:focus-visible{
   outline:3px solid #d19438;outline-offset:3px
 }
-@media(max-width:740px){.seaway-map-report-badge.leaflet-control{max-width:158px;margin:9px 9px 0 0;padding:7px}
-.seaway-map-report-badge strong{font-size:14px}}
