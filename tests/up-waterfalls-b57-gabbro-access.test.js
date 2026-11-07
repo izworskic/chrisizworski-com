@@ -77,14 +77,14 @@ test('published guide preserves source, SEO and never sends visitors to natural 
  assert.ok(json['@graph'].some(x=>x['@type']==='TouristAttraction'&&x.geo.latitude===46.502079));
  assert.ok(json['@graph'].some(x=>x['@type']==='Person'));
  assert.ok(sitemap.includes('<loc>'+url+'</loc><lastmod>2026-11-02</lastmod>'));
- assert.equal((sitemap.match(/<loc>/g)||[]).length,76;
+ assert.equal((sitemap.match(/<loc>/g)||[]).length,76);
  assert.equal((hub.match(/<article class="waterfall-card"/g)||[]).length,78);
  const m=hub.match(/<article class="waterfall-card"[^>]*data-id="gabbro-falls"[\s\S]*?<\/article>/);
  assert.ok(m);assert.match(m[0],/data-gis-oid="38"/);
  assert.match(m[0],/data-arrival-verified="verified"/);
  assert.ok(!m[0].includes('data-parking-lat='));
  const list=JSON.parse(hub.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1])['@graph'].find(x=>x['@type']==='ItemList');
- assert.equal(list.numberOfItems,76;
+ assert.equal(list.numberOfItems,76);
  assert.equal(list.itemListElement.filter(x=>x.url===url).length,1);
  assert.equal(list.itemListElement.find(x=>x.url===url).position,72);
 });
