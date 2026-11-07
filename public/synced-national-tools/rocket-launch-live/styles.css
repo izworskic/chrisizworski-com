@@ -495,3 +495,7 @@ button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid #dc7
 .rl-ksc-match p{font-size:13px;line-height:1.65;color:#3b5960;max-width:94ch;margin:7px 0}
 .rl-ksc-match a{display:inline-block;margin:10px 17px 1px 0;color:#12617b;font-weight:800;font-size:13px}
 @media(max-width:460px){.rl-ksc-match{padding:17px 18px}}
+
+/* Mission card selection follows the published launch-origin marker on the atlas. */
+.rl-map-locate{margin:7px 0 0;align-self:start;border:1px solid #b3c8c3;border-radius:8px;background:#e7f1ed;color:#204d52;padding:8px 12px;font:800 12px var(--sans);cursor:pointer}
+.rl-map-locate:focus-visible,.rl-map-locate:hover{outline:2px solid #3f8c8a;outline-offset:2px}
