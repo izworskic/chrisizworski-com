@@ -78,7 +78,7 @@ test("Winter and seasonal gates are conservative",()=>{
  assert.match(interact("lake-michigan-ferry/ss-badger","2026-10-18"),/Outside the published season/);
  assert.match(interact("pelee-island-ferry","2026-10-18"),/Kingsville/);
  const toronto=interact("toronto-islands-ferry","2026-10-18");
- assert.match(toronto,/Ward.s Island/);
+ assert.match(toronto,/Ward(?:&#39;|’|\x27)s Island/);
  assert.doesNotMatch(toronto,/Centre Island ferry/);
  const august=interact("toronto-islands-ferry","2026-08-18",{adults:1,kids:1});
  assert.match(august,/\$9\.57/);
