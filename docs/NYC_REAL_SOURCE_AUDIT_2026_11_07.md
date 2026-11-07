@@ -89,3 +89,7 @@ Total: **6,806** accepted date-hour observations, **190** invalid/insufficient a
 The corrected partition fetch encountered a transient Socrata read timeout during one workflow attempt. Network failures now yield a bounded retry and an explicit `INCOMPLETE` science audit, without fabricating a backtest or replacing published models. Deterministic tests enforce the failure boundary. Numeric validity does not imply that a road is open, safe or physically available.
 
 **Next scientific threshold:** secure adequate fresh, licensed historic segment measurements and outperform a naive same-segment model in independent holdout. Never lower the release thresholds to fill the interface.
+
+### Same-hour historical baseline reconciliation
+
+The existing separate eight-week NYC DOT baseline in `lib/nyc-crossing/baseline.js` also used `status='0'` despite the official "artifact—not useful" metadata. Its source query now requires plausible positive speed and duration instead, leaving the 24-sample minimum, official link IDs, same-weekday/hour logic, and live traffic-failure fallback intact. The query's cache namespace was advanced from `baseline:v2` to `baseline:v3` to avoid treating previously filtered averages as new evidence. Tests guard the new source filter and cache contract. The live 511NY traffic normalizer was not broadened in this scientific release pending independent feed-specific validation.
