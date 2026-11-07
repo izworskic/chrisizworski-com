@@ -43,7 +43,7 @@
   }
   function decide(data) {
     const region=data?.region?.id;
-    const mission=data?.selectedLaunch?.region===region?data.selectedLaunch:null;
+    const mission=data?.selectedLaunch&&data.selectedLaunch.region===region?data.selectedLaunch:null;
     const unavailable=!data||data.ok===false||!REGION_NAMES[region];
     if(unavailable)return {
       status:'unavailable',headline:'Launch schedule is unavailable',
