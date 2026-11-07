@@ -72,6 +72,8 @@
           ' · ' + formattedTime(l, r.timezone) + ' · ' + (l.scheduleConfidence?.label || 'Timing unconfirmed')));
         const locate=el('button','rl-map-locate','Locate this rocket');
         locate.type='button';
+        locate.dataset.region=r.id;
+        locate.dataset.launchId=l.id;
         locate.setAttribute('aria-label','Show launch location for '+(l.name||'this mission'));
         locate.addEventListener('click',()=>{
           state.userFocusedMap=true;void load(r.id,l.id);
@@ -86,7 +88,7 @@
           'No upcoming mission in this bounded schedule window. This is not a claim that the range has no operations.'));
       const button = el('button', '', 'Explore ' + r.name);
       button.type = 'button';
-      button.addEventListener('click', () => changeRegion(r.id, true));
+      button.addEventListener('click', () => changeRegion(r.id, true, 'national_board'));
       card.appendChild(button);
       root.appendChild(card);
     }
@@ -195,7 +197,7 @@
           radius: 8, fillColor: '#163f4b', fillOpacity: 1, color: '#fff', weight: 2
         }).addTo(map);
         circle.bindTooltip(r.name + ' · ' + r.coast, { direction: 'top' });
-        circle.on('click', () => changeRegion(r.id));
+        circle.on('click', () => changeRegion(r.id, false, 'region_map'));
         state.markers.set(r.id, circle);
         bounds.push([r.lat, r.lon]);
       }
@@ -205,6 +207,7 @@
         region:'all',
         centers:window.RocketMapPins.centersOf(state.data.regions),
         onSelect:(id,region)=>{
+          document.dispatchEvent(new CustomEvent('rocket-experience:map-choose',{detail:{launchId:id,region}}));
           state.userFocusedMap=true;void load(region,id);
           $('rl-next-title')?.scrollIntoView({behavior:'smooth',block:'start'});
         }
@@ -1275,14 +1278,15 @@
       $('rl-launch-select').disabled = true;
     }
   }
-  function changeRegion(region, scroll) {
+  function changeRegion(region, scroll, surface='coast_picker') {
     if (!validRegions.has(region)) return;
+    document.dispatchEvent(new CustomEvent('rocket-experience:region-selected',{detail:{region,surface}}));
     state.userFocusedMap = true;
     load(region);
     if (scroll) $('choose-coast')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
   document.querySelectorAll('.rl-region-btn[data-region]').forEach(b =>
-    b.addEventListener('click', () => changeRegion(b.dataset.region)));
+    b.addEventListener('click', () => changeRegion(b.dataset.region, false, 'coast_picker')));
   $('rl-launch-select')?.addEventListener('change', event => {
     const id=event.target.value;
     if(id){state.userFocusedMap=true;void load(state.data?.selectedRegion,id);}
@@ -1308,7 +1312,9 @@
     if(!state.data||state.data.selectedLaunchId!==id||state.data.selectedRegion!==region)return;
     state.userFocusedMap=true;
     const map=$('rl-coast-map');
-    if(state.map&&state.rocketPins?.focusSelected()){
+    const focused=Boolean(state.map&&state.rocketPins?.focusSelected());
+    document.dispatchEvent(new CustomEvent('rocket-experience:locate-result',{detail:{region,focused}}));
+    if(focused){
       map?.scrollIntoView({behavior:window.matchMedia?.('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});
       map?.focus({preventScroll:true});
     }else{
