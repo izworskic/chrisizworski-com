@@ -13,11 +13,16 @@
  }
  function availability(c,date,r){
   if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||(!Number.isFinite(Date.parse(date+'T12:00:00Z'))||new Date(date+'T12:00:00Z').toISOString().slice(0,10)!==date))return {state:'unknown',title:'Choose a valid travel date',text:'The plan needs a calendar date.'};
-  if(c.id==='manitou')return date.slice(0,4)==='2026'?{state:'closed',title:'No regular ferry service in 2026',text:'Both Manitou docks are under construction. Do not use this plan as a sailing or fare offer.'}:{state:'unknown',title:'Ferry restart not confirmed here',text:'NPS expects dock and village reopening in 2027. Confirm a new operator schedule and access notice before planning a ferry departure.'};
-  if(date.slice(0,4)!=='2026')return {state:'unknown',title:'A new operator calendar is needed',text:'This planner has 2026 references only. Another year’s season, fares and sailings are unverified.'};
-  if(c.season&&!inRange(date,...c.season))return {state:'closed',title:'Outside the published ferry season',text:'The selected date falls outside the operator’s 2026 reference season. Check for a newly published calendar before traveling.'};
-  if(c.id==='pelee'&&!inRange(date,'2026-04-01','2026-12-07'))return {state:'closed',title:'Outside the 2026 ferry season',text:'Winter air service is a separate transport option; no ferry departure is offered here.'};
-  if(c.id==='toronto'&&r.seasonal&&(date>='2026-10-14'||date<='2026-04-15'))return {state:'closed',title:'This island dock has no winter ferry in this reference',text:'Use Ward’s Island for the published winter operation, and check the city timetable. Do not assume a summer route is running.'};
+  const year=date.slice(0,4),fareYear=String(c.fareReferenceYear||2026),known=c.seasonWindows?.[year]||(year===fareYear?c.season:null);
+  if(c.id==='manitou'){
+   if(year==='2026')return {state:'closed',title:'No regular ferry service in 2026',text:'Both Manitou docks were under construction; no scheduled ferry service in 2026.'};
+   if(year==='2027')return {state:'unknown',title:'2027 ferry restart not confirmed',text:'A 2026 NPS notice expected dock reopening in 2027, not a confirmed ferry service restart. Check current NPS and Manitou Island Transit announcements.'};
+   return {state:'unknown',title:'Ferry service must be verified',text:'No current-year ferry service is verified here. Consult NPS and Manitou Island Transit for present dock access and booking.'};
+  }
+  if(known&&!inRange(date,...known))return {state:'closed',title:'Outside the published ferry season',text:'The selected date is outside the operator’s published '+year+' season window. Verify the precise dated timetable and exceptions.'};
+  if(year!==fareYear&&!known)return {state:'unknown',title:'A new operator calendar is needed',text:'No published '+year+' sailing season is verified in this planner. Historical fare data is not carried into a new year.'};
+  if(c.id==='toronto'&&r.seasonal&&(date>='2026-10-14'||date<='2026-04-15'))return {state:'closed',title:'This dock has no winter ferry in the 2026 reference',text:'Use Ward’s Island for the published 2026 winter operation; consult the city for exact season transitions.'};
+  if(year!==fareYear)return {state:'reference',title:'Published '+year+' season, exact sailing unconfirmed',text:'The operator published a '+year+' season window, not confirmed ticket inventory, individual departures or '+year+' fares. Enter times only after checking the official timetable.'};
   return {state:'reference',title:'Check your exact sailing with the operator',text:'A date inside a reference season does not confirm a departure, available seat, vehicle space or today’s operation.'};
  }
  function localInstant(date,time,zone){
@@ -59,7 +64,8 @@
   if(c.id==='toronto'&&inRange(date,'2026-08-01','2026-08-31'))t={...t,childRT:0};
   const s=roundtrip?'RT':'OW';adults=number(adults,1,20);kids=number(kids,0,20);vehicle=number(vehicle,0,1);
   if(t['adult'+s]==null||(kids&&t['child'+s]==null)||(vehicle&&t['vehicle'+s]==null))return null;
-  const passengers=adults*t['adult'+s]+kids*(t['child'+s]||0),car=vehicle*(t['vehicle'+s]||0),fees=(adults+kids)*(t['feePerson'+s]||0)+vehicle*(t['feeVehicle'+s]||0);
+  const promo=o.childPromo,free=promo&&inRange(date,promo.start,promo.end)?Math.min(kids,adults*promo.freePerAdult):0;
+  const passengers=adults*t['adult'+s]+(kids-free)*(t['child'+s]||0),car=vehicle*(t['vehicle'+s]||0),fees=(adults+kids)*(t['feePerson'+s]||0)+vehicle*(t['feeVehicle'+s]||0);
   return {passengers,vehicle:car,fees,total:Math.round((passengers+car+fees)*100)/100};
  }
  return {routeFor,availability,localInstant,tripPlan,fare};
