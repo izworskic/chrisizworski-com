@@ -44,12 +44,12 @@ test('input order does not determine grouping, location estimates or vessel owne
   const signature=g=>g.map(x=>[x.id,x.count,Number(x.lat.toFixed(8)),Number(x.lon.toFixed(8))]).sort((p,q)=>p[0].localeCompare(q[0]));
   assert.deepEqual(signature(a),signature(b));
 });
-test('map has actual counted ship markers, an in-map report counter, source confidence and drill-down controls',()=>{
+test('map shows counted ship markers and below-map caption without a blocking overlay',()=>{
   const js=read('public/assets/seaway.js'),css=read('public/assets/seaway.css');
   assert.match(js,/C\.groupMapReports\(/);
   assert.match(js,/data-vessel-count/);
   assert.match(js,/seaway-vessel-cluster/);
-  assert.match(js,/mapReportBadge\.replaceChildren/);
+  assert.doesNotMatch(js,/mapReportBadge|seaway-map-report-badge|L\.control\(\{position:'topright'\}\)/);
   assert.match(js,/inspectVesselGroup\(/);
   assert.match(js,/group\.vessels\.map\(/);
   assert.match(js,/map\.fitBounds/);
@@ -57,13 +57,15 @@ test('map has actual counted ship markers, an in-map report counter, source conf
   assert.match(js,/zIndexOffset:1250/);
   assert.match(js,/zIndexOffset:v\.mmsi===selectedShip\?1800:1100/);
   assert.match(css,/\.seaway-vessel-cluster\.leaflet-marker-icon/);
-  assert.match(css,/\.seaway-map-report-badge\.leaflet-control/);
+  assert.doesNotMatch(css,/seaway-map-report-badge/);
   assert.match(css,/\.seaway-cluster-choice:focus-visible/);
   assert.match(js,/Positions are reports, not guaranteed arrivals/);
+  assert.match(js,/\$\('mapStatus'\)\.textContent/);
   for(const slug of ['st-lawrence-seaway','eisenhower-lock']){
     const html=read('public/'+slug+'/index.html');
-    for(const asset of ['seaway.css','seaway-core.js','seaway.js'])
-      assert.ok(html.includes('/assets/'+asset+'?v=20261107b'),slug+' old asset version '+asset);
+    for(const asset of ['seaway.css','seaway.js'])
+      assert.ok(html.includes('/assets/'+asset+'?v=20261107c'),slug+' old asset version '+asset);
+    assert.ok(html.includes('/assets/seaway-core.js?v=20261107b'),slug+' shared core version');
     assert.match(html,/name="robots" content="index,follow,max-image-preview:large"/);
   }
 });

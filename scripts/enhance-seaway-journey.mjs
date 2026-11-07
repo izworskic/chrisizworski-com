@@ -81,7 +81,7 @@ const seasonalDesk='<section class="editorial seaway-seasonal-desk" id="seaway-s
 replaceOnce('<section class="editorial resources">',seasonalDesk+'<section class="editorial resources">');
 
 // Keep the measurement script next to the Seaway UI, without a new data API.
-const funnelAnchor='<script defer src="/assets/seaway.js?v=20261107b"></script>';
+const funnelAnchor='<script defer src="/assets/seaway.js?v=20261107c"></script>';
 replaceOnce(funnelAnchor,funnelAnchor+'<script defer src="/assets/seaway-seasonal-funnel.js?v=20261105a"></script>');
 fs.writeFileSync(file,html);
 console.log('Seaway corridor journey enhancement applied');
