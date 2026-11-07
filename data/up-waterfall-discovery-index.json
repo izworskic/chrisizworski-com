@@ -10,7 +10,7 @@
   "counts": {
     "externalObservations": 291,
     "externalUniqueNameCountyGroups": 282,
-    "curatedDestinations": 79,
+    "curatedDestinations": 80,
     "stateGisRecords": 161,
     "stateGisPendingAccessReview": 92,
     "classification": {
