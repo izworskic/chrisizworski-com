@@ -1,0 +1,4730 @@
+{
+  "schemaVersion": 1,
+  "reviewed": "2026-11-07",
+  "generatedFrom": [
+    "data/up-waterfall-external-identity-shorelinescout.json",
+    "data/up-waterfall-reconciliation.json",
+    "data/up-waterfalls.json"
+  ],
+  "publicationPolicy": "RESEARCH ONLY. Name/river mentions, GIS points, rankings, aliases and presumed routes never grant access, authorize car navigation or create indexable guides.",
+  "counts": {
+    "externalObservations": 291,
+    "externalUniqueNameCountyGroups": 282,
+    "curatedDestinations": 79,
+    "stateGisRecords": 161,
+    "stateGisPendingAccessReview": 92,
+    "classification": {
+      "curated_exact_identity": 50,
+      "external_only_research": 140,
+      "gis_identity_review": 67,
+      "possible_alias_review": 17,
+      "same_name_same_county_review": 17
+    },
+    "unresolvedSourceObservations": 241,
+    "distinctGeographicFallsVerifiedByThisEngine": 0
+  },
+  "externalRecords": [
+    {
+      "sourceId": "ss-001",
+      "name": "Jasper Falls",
+      "county": "Alger",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-002",
+      "name": "Douglass - Houghton Falls",
+      "county": "Houghton",
+      "river": "Hammell Creek",
+      "category": "possible_alias_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [
+        "houghton-douglass-falls"
+      ],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 20,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-003",
+      "name": "Laughing Whitefish Falls",
+      "county": "Alger",
+      "river": "Laughing Whitefish River",
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "laughing-whitefish-falls"
+      ],
+      "exactGisIds": [
+        193
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-004",
+      "name": "Saxon Falls",
+      "county": "Gogebic",
+      "river": "Montreal River",
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "saxon-falls"
+      ],
+      "exactGisIds": [
+        47
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-005",
+      "name": "Munising Falls",
+      "county": "Alger",
+      "river": null,
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "munising-falls"
+      ],
+      "exactGisIds": [
+        200
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-006",
+      "name": "Spray Falls",
+      "county": "Alger",
+      "river": "Spray Creek",
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "spray-falls"
+      ],
+      "exactGisIds": [
+        203
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-007",
+      "name": "Chapel Falls",
+      "county": "Alger",
+      "river": "Section Creek",
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "chapel-falls"
+      ],
+      "exactGisIds": [
+        201
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-008",
+      "name": "Eagle River Falls",
+      "county": "Keweenaw",
+      "river": "Eagle River",
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "eagle-river-falls"
+      ],
+      "exactGisIds": [
+        142
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-009",
+      "name": "Gabbro Falls",
+      "county": "Gogebic",
+      "river": "Black River",
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "gabbro-falls"
+      ],
+      "exactGisIds": [
+        38
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-010",
+      "name": "Lower Hungarian Falls",
+      "county": "Houghton",
+      "river": "Dover Creek",
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "lower-hungarian-falls"
+      ],
+      "exactGisIds": [
+        130
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-011",
+      "name": "Superior Falls",
+      "county": "Gogebic",
+      "river": "Montreal River",
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "superior-falls"
+      ],
+      "exactGisIds": [
+        50
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-012",
+      "name": "Upper Tahquamenon Falls",
+      "county": "Luce",
+      "river": "Tahquamenon River",
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "tahquamenon"
+      ],
+      "exactGisIds": [
+        207
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-013",
+      "name": "Little Union Gorge Falls",
+      "county": "Gogebic",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-014",
+      "name": "Manganese Gorge Falls",
+      "county": "Keweenaw",
+      "river": "Manganese Creek",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-015",
+      "name": "Rainbow Falls",
+      "county": "Ontonagon",
+      "river": "Black River",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-016",
+      "name": "Agate Falls",
+      "county": "Ontonagon",
+      "river": "Middle Branch Ontonagon River",
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "agate-falls"
+      ],
+      "exactGisIds": [
+        33
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-017",
+      "name": "Bond Falls",
+      "county": "Ontonagon",
+      "river": "Middle Branch Ontonagon River",
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "bond-falls"
+      ],
+      "exactGisIds": [
+        27
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-018",
+      "name": "Jacob's Falls",
+      "county": "Keweenaw",
+      "river": "Jacobs Creek",
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "jacobs-falls"
+      ],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-019",
+      "name": "Little Miners Falls",
+      "county": "Alger",
+      "river": "Little Miners River",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-020",
+      "name": "Potawatomi Falls",
+      "county": "Gogebic",
+      "river": "Black River",
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "potawatomi-falls"
+      ],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-021",
+      "name": "Tannery Falls",
+      "county": "Alger",
+      "river": "Tannery Creek",
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "twin-waterfalls-memorial-preserve"
+      ],
+      "exactGisIds": [
+        199
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-022",
+      "name": "Haven Falls",
+      "county": "Keweenaw",
+      "river": "Haven Creek",
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "haven-falls"
+      ],
+      "exactGisIds": [
+        138
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-023",
+      "name": "Dead River Falls",
+      "county": "Marquette",
+      "river": "Dead River",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        160
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-024",
+      "name": "Miners Falls",
+      "county": "Alger",
+      "river": "Miners River",
+      "category": "possible_alias_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [
+        "miners-falls"
+      ],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 20,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-025",
+      "name": "Sable Falls",
+      "county": "Alger",
+      "river": "Sable Creek",
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "sable-falls"
+      ],
+      "exactGisIds": [
+        204
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-026",
+      "name": "Upper Dead River Falls #1",
+      "county": "Marquette",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-027",
+      "name": "Upper Dead River Falls #2",
+      "county": "Marquette",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-028",
+      "name": "Upper Dead River Falls #3",
+      "county": "Marquette",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-029",
+      "name": "Upper Dead River Falls #4",
+      "county": "Marquette",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-030",
+      "name": "Upper Dead River Falls #5",
+      "county": "Marquette",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-031",
+      "name": "Alder Falls",
+      "county": "Marquette",
+      "river": "Alder Creek",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        153
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-032",
+      "name": "Great Conglomerate Falls",
+      "county": "Gogebic",
+      "river": "Black River",
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "great-conglomerate-falls"
+      ],
+      "exactGisIds": [
+        66
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-033",
+      "name": "Kakabika Falls",
+      "county": "Gogebic",
+      "river": "Cisco Branch Ontonagon River",
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "kakabika-falls"
+      ],
+      "exactGisIds": [
+        21
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-034",
+      "name": "Lower Canyon Falls",
+      "county": "Baraga",
+      "river": "Carp River",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-035",
+      "name": "Middle Canyon Falls",
+      "county": "Baraga",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-036",
+      "name": "Powder Horn Falls",
+      "county": "Gogebic",
+      "river": "Powder Mill Creek",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        39
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-037",
+      "name": "Reany Falls",
+      "county": "Marquette",
+      "river": "Reany Creek",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        162
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-038",
+      "name": "Interstate Falls (Montreal Falls)",
+      "county": "Gogebic",
+      "river": "Montreal River",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 55,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-039",
+      "name": "Manido Falls",
+      "county": "Gogebic",
+      "river": "Presque Isle River",
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "manido-falls"
+      ],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-040",
+      "name": "O Kun de Kun Falls",
+      "county": "Ontonagon",
+      "river": "Baltimore River",
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "o-kun-de-kun-falls"
+      ],
+      "exactGisIds": [
+        64
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-041",
+      "name": "Sandstone Falls",
+      "county": "Gogebic",
+      "river": "Black River",
+      "category": "same_name_same_county_review",
+      "exactCuratedIds": [
+        "sandstone-falls"
+      ],
+      "exactGisIds": [
+        78
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 3,
+      "reviewPriority": 5,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-042",
+      "name": "Sturgeon Falls",
+      "county": "Houghton",
+      "river": "West Branch Sturgeon River",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        45
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-043",
+      "name": "Gorge Falls",
+      "county": "Gogebic",
+      "river": "Black River",
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "gorge-falls"
+      ],
+      "exactGisIds": [
+        73
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-044",
+      "name": "Chicagon Falls",
+      "county": "Iron",
+      "river": "Chicagon Slough",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        12
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-045",
+      "name": "Alger Falls",
+      "county": "Alger",
+      "river": null,
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        213
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-046",
+      "name": "Horseshoe Falls",
+      "county": "Alger",
+      "river": null,
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "horseshoe-falls"
+      ],
+      "exactGisIds": [
+        197
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-047",
+      "name": "Lower Montreal Falls",
+      "county": "Keweenaw",
+      "river": "Montreal River",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 55,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-048",
+      "name": "Manabezho Falls",
+      "county": "Ontonagon",
+      "river": "Presque Isle River",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-049",
+      "name": "Middle Hungarian Falls",
+      "county": "Houghton",
+      "river": "Dover Creek",
+      "category": "possible_alias_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [
+        "middle-hungarian-falls"
+      ],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 20,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-050",
+      "name": "Power House Falls",
+      "county": "Baraga",
+      "river": "Falls River",
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "power-house-falls"
+      ],
+      "exactGisIds": [
+        88
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-051",
+      "name": "Rock River Falls",
+      "county": "Alger",
+      "river": "Rock River",
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "rock-river-falls"
+      ],
+      "exactGisIds": [
+        194
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-052",
+      "name": "Sandstone Falls",
+      "county": "Gogebic",
+      "river": null,
+      "category": "same_name_same_county_review",
+      "exactCuratedIds": [
+        "sandstone-falls"
+      ],
+      "exactGisIds": [
+        78
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 3,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-053",
+      "name": "Sandstone Falls",
+      "county": "Gogebic",
+      "river": "Sandstone Creek",
+      "category": "same_name_same_county_review",
+      "exactCuratedIds": [
+        "sandstone-falls"
+      ],
+      "exactGisIds": [
+        78
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 3,
+      "reviewPriority": 5,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-054",
+      "name": "Upper Hungarian Falls",
+      "county": "Houghton",
+      "river": "Dover Creek",
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "upper-hungarian-falls"
+      ],
+      "exactGisIds": [
+        134
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-055",
+      "name": "Upper Wagner Falls 1",
+      "county": "Alger",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-056",
+      "name": "Upper Wagner Falls 2",
+      "county": "Alger",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-057",
+      "name": "Wagner Falls",
+      "county": "Alger",
+      "river": "Wagner Creek",
+      "category": "possible_alias_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [
+        "wagner-falls"
+      ],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 20,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-058",
+      "name": "Warner Falls",
+      "county": "Marquette",
+      "river": "Warner Creek",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        172
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-059",
+      "name": "Canyon Falls",
+      "county": "Baraga",
+      "river": "Sturgeon River",
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "canyon-falls"
+      ],
+      "exactGisIds": [
+        53
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-060",
+      "name": "Lower Tahquamenon Falls",
+      "county": "Luce",
+      "river": "Tahquamenon River",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-061",
+      "name": "Nelson Canyon Falls",
+      "county": "Baraga",
+      "river": "Nelson Creek",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-062",
+      "name": "Yondota Falls",
+      "county": "Gogebic",
+      "river": "Presque Isle River",
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "yondota-falls"
+      ],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-063",
+      "name": "Bonanza Falls",
+      "county": "Ontonagon",
+      "river": "Big Iron River",
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "bonanza-falls"
+      ],
+      "exactGisIds": [
+        124
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-064",
+      "name": "Lower Falls River Falls",
+      "county": "Baraga",
+      "river": "Falls River",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-065",
+      "name": "Lower Dead River Falls",
+      "county": "Marquette",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-066",
+      "name": "Nonesuch Falls",
+      "county": "Ontonagon",
+      "river": "Little Iron River",
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "nonesuch-falls"
+      ],
+      "exactGisIds": [
+        108
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-067",
+      "name": "Unnamed Falls River Falls",
+      "county": "Baraga",
+      "river": "Falls River",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-068",
+      "name": "Au Train Falls",
+      "county": "Alger",
+      "river": "Au Train River",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        192
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-069",
+      "name": "Chapel Beach Falls",
+      "county": "Alger",
+      "river": "Chapel Creek",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-070",
+      "name": "Ogemaw Falls",
+      "county": "Baraga",
+      "river": "Ogemaw Creek",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        59
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-071",
+      "name": "Scott Falls",
+      "county": "Alger",
+      "river": null,
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "scott-falls"
+      ],
+      "exactGisIds": [
+        196
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-072",
+      "name": "Silver River Falls",
+      "county": "Keweenaw",
+      "river": "Silver River",
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "silver-river-falls"
+      ],
+      "exactGisIds": [
+        146
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-073",
+      "name": "Upper O Kun de Kun Falls",
+      "county": "Ontonagon",
+      "river": "Baltimore River",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-074",
+      "name": "Wyandote Falls",
+      "county": "Houghton",
+      "river": "Misery River",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-075",
+      "name": "Mosquito Falls",
+      "county": "Alger",
+      "river": "Mosquito River",
+      "category": "possible_alias_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [
+        "mosquito-falls"
+      ],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 20,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-076",
+      "name": "Greenstone Falls",
+      "county": "Ontonagon",
+      "river": "Little Carp River",
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "greenstone-falls"
+      ],
+      "exactGisIds": [
+        98
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-077",
+      "name": "Rapid River Falls",
+      "county": "Delta",
+      "river": "Rapid River",
+      "category": "possible_alias_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [
+        "rapid-river-falls-delta-county"
+      ],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 20,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-078",
+      "name": "Middle Carp River Falls",
+      "county": "Marquette",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-079",
+      "name": "Arnold Mine Falls",
+      "county": "Keweenaw",
+      "river": "Jacob's Creek",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-080",
+      "name": "Duppy Falls",
+      "county": "Iron",
+      "river": "Jumbo River",
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "duppy-falls"
+      ],
+      "exactGisIds": [
+        26
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-081",
+      "name": "Tibbets Falls",
+      "county": "Baraga",
+      "river": "Sturgeon River",
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "tibbets-falls"
+      ],
+      "exactGisIds": [
+        44
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-082",
+      "name": "Whitefish Falls",
+      "county": "Alger",
+      "river": "West Branch Whitefish River",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        191
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-083",
+      "name": "Tobacco Falls",
+      "county": "Keweenaw",
+      "river": "Tobacco River",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-084",
+      "name": "Carp River Falls",
+      "county": "Marquette",
+      "river": null,
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "carp-river-falls"
+      ],
+      "exactGisIds": [
+        163
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-085",
+      "name": "Lower Saxon Falls",
+      "county": "Gogebic",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-086",
+      "name": "Lower silver falls",
+      "county": "Baraga",
+      "river": null,
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "lower-silver-falls"
+      ],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-087",
+      "name": "Marquette Mountain Falls",
+      "county": "Marquette",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-088",
+      "name": "Middle Montreal Falls",
+      "county": "Keweenaw",
+      "river": "Montreal River",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 55,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-089",
+      "name": "Miners Beach Falls",
+      "county": "Alger",
+      "river": "Elliot Creek",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 55,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-090",
+      "name": "Pinnacle Falls",
+      "county": "Marquette",
+      "river": "Yellow Dog River",
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "pinnacle-falls"
+      ],
+      "exactGisIds": [
+        155
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-091",
+      "name": "Trestle Falls",
+      "county": "Marquette",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-092",
+      "name": "Upper Alder Falls #1",
+      "county": "Marquette",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-093",
+      "name": "Upper Alder Falls #2",
+      "county": "Marquette",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-094",
+      "name": "Upper Saxon Falls",
+      "county": "Gogebic",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-095",
+      "name": "Bridal Veil Falls",
+      "county": "Alger",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-096",
+      "name": "Eighty Foot Falls (Ives Falls)",
+      "county": "Marquette",
+      "river": "River Styx",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-097",
+      "name": "Plumbago Falls",
+      "county": "Baraga",
+      "river": "Plumbago Creek",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        52
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-098",
+      "name": "Rocking Chair Lakes Falls",
+      "county": "Marquette",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-099",
+      "name": "West Branch Falls",
+      "county": "Baraga",
+      "river": "West Branch Huron River",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        121
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-100",
+      "name": "Forty Foot Falls (Cliff Falls)",
+      "county": "Marquette",
+      "river": "Cliff River",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-101",
+      "name": "Little Trap Falls",
+      "county": "Ontonagon",
+      "river": "Anderson Creek",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        84
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-102",
+      "name": "Lower Gratiot Falls",
+      "county": "Keweenaw",
+      "river": "Gratiot River",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 55,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-103",
+      "name": "Memorial Falls (MNA)",
+      "county": "Alger",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-104",
+      "name": "Schweitzer Falls (upper)",
+      "county": "Marquette",
+      "river": "Schweitzer Creek",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-105",
+      "name": "Potato Patch Falls",
+      "county": "Alger",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-106",
+      "name": "Silver Bell Falls",
+      "county": "Alger",
+      "river": null,
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        195
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-107",
+      "name": "Judson Falls",
+      "county": "Gogebic",
+      "river": "Slate River",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        24
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-108",
+      "name": "Manakiki Falls",
+      "county": "Gogebic",
+      "river": "Maple Creek",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        75
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-109",
+      "name": "Middle Falls River Falls",
+      "county": "Baraga",
+      "river": "Falls River",
+      "category": "same_name_same_county_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 2,
+      "reviewPriority": 5,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-110",
+      "name": "Montreal Falls",
+      "county": "Gogebic",
+      "river": "Montreal River",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 55,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-111",
+      "name": "Ripley Falls",
+      "county": "Houghton",
+      "river": "Ripley Creek",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        129
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-112",
+      "name": "Slate River Falls",
+      "county": "Baraga",
+      "river": "Slate River",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        119
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-113",
+      "name": "Big Falls",
+      "county": "Baraga",
+      "river": "East Branch Huron River",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        120
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-114",
+      "name": "Black River Falls",
+      "county": "Marquette",
+      "river": "Black River",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        184
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-115",
+      "name": "Copper Falls",
+      "county": "Keweenaw",
+      "river": "Owl Creek",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        144
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-116",
+      "name": "Daults Falls",
+      "county": "Baraga",
+      "river": "Daults Creek",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        83
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-117",
+      "name": "Morgan Falls",
+      "county": "Marquette",
+      "river": "Morgan Creek",
+      "category": "same_name_same_county_review",
+      "exactCuratedIds": [
+        "morgan-falls"
+      ],
+      "exactGisIds": [
+        166
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 2,
+      "reviewPriority": 5,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-118",
+      "name": "Yellow Dog Falls",
+      "county": "Marquette",
+      "river": "Yellow Dog River",
+      "category": "possible_alias_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [
+        "yellow-dog-falls"
+      ],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 20,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-119",
+      "name": "Shining Cloud Falls",
+      "county": "Gogebic",
+      "river": "Carp River",
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "shining-cloud-falls"
+      ],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-120",
+      "name": "Abinodji Falls",
+      "county": "Gogebic",
+      "river": "Copper Creek",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        70
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-121",
+      "name": "Ajibikika Falls",
+      "county": "Gogebic",
+      "river": "Sucker Creek",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-122",
+      "name": "Bull Dog Falls #1",
+      "county": "Marquette",
+      "river": "Yellow Dog River",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-123",
+      "name": "Gooseneck Creek Falls",
+      "county": "Houghton",
+      "river": "Gooseneck Creek",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-124",
+      "name": "Nawadaha Falls",
+      "county": "Gogebic",
+      "river": "Presque Isle River",
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "nawadaha-falls"
+      ],
+      "exactGisIds": [
+        89
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-125",
+      "name": "Nimikon Falls",
+      "county": "Ontonagon",
+      "river": "Presque Isle River",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        57
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-126",
+      "name": "Ogimakwe Falls",
+      "county": "Gogebic",
+      "river": "Copper Creek",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        69
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-127",
+      "name": "Peterson Falls",
+      "county": "Gogebic",
+      "river": "Montreal River",
+      "category": "same_name_same_county_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 2,
+      "reviewPriority": 25,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-128",
+      "name": "Peterson Falls",
+      "county": "Gogebic",
+      "river": "Montreal River",
+      "category": "same_name_same_county_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 2,
+      "reviewPriority": 25,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-129",
+      "name": "Upper Gratiot Falls",
+      "county": "Keweenaw",
+      "river": "Gratiot River",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-130",
+      "name": "Explorers Falls",
+      "county": "Gogebic",
+      "river": "Little Carp River",
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "explorers-falls"
+      ],
+      "exactGisIds": [
+        104
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-131",
+      "name": "Rapid River Falls",
+      "county": "Ontonagon",
+      "river": "Rapid River",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        60
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-132",
+      "name": "Upper Falls River Falls",
+      "county": "Baraga",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-133",
+      "name": "White City Falls",
+      "county": "Marquette",
+      "river": "Middle Branch Escanaba River",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        183
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-134",
+      "name": "Carpenter Creek Falls",
+      "county": "Alger",
+      "river": "Carpenter Creek",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-135",
+      "name": "Chippewa Falls",
+      "county": "Gogebic",
+      "river": "Black River",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        58
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-136",
+      "name": "Eister Falls",
+      "county": "Keweenaw",
+      "river": "Eister Creek",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-137",
+      "name": "Gomanche falls",
+      "county": "Baraga",
+      "river": "Gomanche Creek",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-138",
+      "name": "Marshall Falls",
+      "county": "Gogebic",
+      "river": "Marshall Creek",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-139",
+      "name": "Ogima Falls",
+      "county": "Gogebic",
+      "river": "Copper Creek",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        65
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-140",
+      "name": "Pinkerton Falls",
+      "county": "Gogebic",
+      "river": "Pinkerton Creek",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-141",
+      "name": "Ten Foot falls",
+      "county": "Keweenaw",
+      "river": "Eagle River",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-142",
+      "name": "Tioga Falls",
+      "county": "Baraga",
+      "river": "Tioga River",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        46
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-143",
+      "name": "Tioga Falls (Upper)",
+      "county": "Baraga",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-144",
+      "name": "Fenner Falls",
+      "county": "Keweenaw",
+      "river": "Eagle River",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-145",
+      "name": "Bathtub Falls",
+      "county": "Gogebic",
+      "river": "Big Carp River",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-146",
+      "name": "Piers Gorge Falls",
+      "county": "Dickinson",
+      "river": "Menominee River",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 55,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-147",
+      "name": "Quartzite Falls",
+      "county": "Baraga",
+      "river": "Slate River",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        107
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-148",
+      "name": "Root Beer Falls",
+      "county": "Gogebic",
+      "river": "Planter Creek",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-149",
+      "name": "Unnamed Ravine River Rd Falls",
+      "county": "Baraga",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-150",
+      "name": "Upper Carp River Falls",
+      "county": "Marquette",
+      "river": "Carp River",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-151",
+      "name": "Big Garlic River Falls (Higher)",
+      "county": "Marquette",
+      "river": null,
+      "category": "possible_alias_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [
+        "gis:215"
+      ],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-152",
+      "name": "Big Pup Falls",
+      "county": "Marquette",
+      "river": "Big Pup Creek",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 55,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-153",
+      "name": "Upper Rocky Forty Falls",
+      "county": "Gogebic",
+      "river": "Siemens Creek",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-154",
+      "name": "Dee Lundeen Falls",
+      "county": "Marquette",
+      "river": "West Branch Peshekee River",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        185
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-155",
+      "name": "Harley Falls #1",
+      "county": "Baraga",
+      "river": "Harley Creek",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-156",
+      "name": "Iagoo Falls",
+      "county": "Gogebic",
+      "river": "Presque Isle River",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        86
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-157",
+      "name": "Middle Silver River Falls",
+      "county": "Baraga",
+      "river": "Silver River",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-158",
+      "name": "Morgan Meadows Falls",
+      "county": "Marquette",
+      "river": "Morgan Creek",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-159",
+      "name": "Traders Falls",
+      "county": "Gogebic",
+      "river": "Little Carp River",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        112
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-160",
+      "name": "Trappers Falls",
+      "county": "Gogebic",
+      "river": "Little Carp River",
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "trappers-falls"
+      ],
+      "exactGisIds": [
+        102
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-161",
+      "name": "Lower Carp River Falls",
+      "county": "Marquette",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-162",
+      "name": "Lower Craig's Falls",
+      "county": "Baraga",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-163",
+      "name": "Overlooked Falls",
+      "county": "Gogebic",
+      "river": "Pinkerton Creek",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-164",
+      "name": "Black Slate Falls",
+      "county": "Baraga",
+      "river": "Slate River",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        105
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-165",
+      "name": "Ecstasy Falls",
+      "county": "Baraga",
+      "river": "Slate River",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-166",
+      "name": "Holeyoke Falls",
+      "county": "Marquette",
+      "river": "Holyoke Creek",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-167",
+      "name": "Jumbo Falls",
+      "county": "Houghton",
+      "river": "Jumbo River",
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "jumbo-falls"
+      ],
+      "exactGisIds": [
+        29
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-168",
+      "name": "Ely Falls",
+      "county": "Marquette",
+      "river": "Ely Creek",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        170
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-169",
+      "name": "Haymeadows Falls",
+      "county": "Delta",
+      "river": "Haymeadow Creek",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-170",
+      "name": "Bushy Creek Mouth Falls",
+      "county": "Marquette",
+      "river": null,
+      "category": "possible_alias_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [
+        "gis:154"
+      ],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 15,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-171",
+      "name": "Big Erick's Fall",
+      "county": "Baraga",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-172",
+      "name": "Algonquin Falls",
+      "county": "Gogebic",
+      "river": null,
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        63
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-173",
+      "name": "Big Carp Falls",
+      "county": "Gogebic",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-174",
+      "name": "Big Garlic Falls",
+      "county": "Marquette",
+      "river": "Big Garlic River",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        215
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-175",
+      "name": "Big Garlic River Falls (Lower)",
+      "county": "Marquette",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 50,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-176",
+      "name": "Birch Creek Falls",
+      "county": "Marquette",
+      "river": "Birch Creek",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-177",
+      "name": "Bull Dog Falls #2",
+      "county": "Marquette",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-178",
+      "name": "Bull Dog Falls #3",
+      "county": "Marquette",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-179",
+      "name": "Bull Dog Falls #4",
+      "county": "Marquette",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-180",
+      "name": "Bull Dog Falls #5",
+      "county": "Marquette",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-181",
+      "name": "Bushy Creek Falls",
+      "county": "Marquette",
+      "river": "Bushy Creek",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        154
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-182",
+      "name": "Caps Creek Falls",
+      "county": "Marquette",
+      "river": "Caps Creek",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        187
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-183",
+      "name": "Cascade Falls",
+      "county": "Ontonagon",
+      "river": "Cascade Creek",
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "cascade-falls"
+      ],
+      "exactGisIds": [
+        67
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-184",
+      "name": "Cedar Falls",
+      "county": "Marquette",
+      "river": "Cedar Creek",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-185",
+      "name": "Chipmunk Falls",
+      "county": "Iron",
+      "river": null,
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        17
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-186",
+      "name": "Chipmunk Falls",
+      "county": "Alger",
+      "river": "Chipmunk Creek",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        205
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-187",
+      "name": "Cole Creek Falls",
+      "county": "Alger",
+      "river": "Cole Creek",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-188",
+      "name": "Copper Adit Falls",
+      "county": "Keweenaw",
+      "river": "Owl Creek",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-189",
+      "name": "Deer Creek Falls",
+      "county": "Ontonagon",
+      "river": "White Deer Creek",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        72
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-190",
+      "name": "East Branch Falls",
+      "county": "Baraga",
+      "river": null,
+      "category": "same_name_same_county_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        123
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 2,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-191",
+      "name": "East Branch Falls",
+      "county": "Baraga",
+      "river": null,
+      "category": "same_name_same_county_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        123
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 2,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-192",
+      "name": "Frohling Falls",
+      "county": "Marquette",
+      "river": "West Branch Chocolay River",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        180
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-193",
+      "name": "Gleason Creek Falls",
+      "county": "Ontonagon",
+      "river": "Gleason Creek",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-194",
+      "name": "Granite Falls",
+      "county": "Gogebic",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-195",
+      "name": "Harley Falls #2",
+      "county": "Baraga",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-196",
+      "name": "Harley Falls #3",
+      "county": "Baraga",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-197",
+      "name": "Harley Falls #4",
+      "county": "Baraga",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-198",
+      "name": "Haypress Falls",
+      "county": "Baraga",
+      "river": "Peshekee River",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-199",
+      "name": "Hidden Falls",
+      "county": "Ontonagon",
+      "river": "Cascade Creek",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        61
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-200",
+      "name": "Hogback Falls",
+      "county": "Marquette",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-201",
+      "name": "Hogger Falls",
+      "county": "Houghton",
+      "river": "West Branch Sturgeon River",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-202",
+      "name": "Hunters Brook Falls",
+      "county": "Delta",
+      "river": "Hunters Brook",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-203",
+      "name": "Huron Creek Falls",
+      "county": "Houghton",
+      "river": "Huron Creek",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-204",
+      "name": "Kuckuk's Falls",
+      "county": "Baraga",
+      "river": "Slate River",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-205",
+      "name": "Lepisto Falls",
+      "county": "Gogebic",
+      "river": "Presque Isle River",
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "lepisto-falls"
+      ],
+      "exactGisIds": [
+        79
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-206",
+      "name": "Letherby Falls",
+      "county": "Baraga",
+      "river": "West Branch Huron River",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        103
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-207",
+      "name": "Little Falls",
+      "county": "Ontonagon",
+      "river": null,
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        23
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-208",
+      "name": "Little Garlic Falls",
+      "county": "Marquette",
+      "river": "Little Garlic River",
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "little-garlic-falls"
+      ],
+      "exactGisIds": [
+        157
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-209",
+      "name": "Little Iron Falls",
+      "county": "Ontonagon",
+      "river": "Little Iron River",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        106
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-210",
+      "name": "Little Union Falls",
+      "county": "Ontonagon",
+      "river": null,
+      "category": "possible_alias_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [
+        "gis:117",
+        "little-union-gorge-falls"
+      ],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 15,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-211",
+      "name": "Lower Cliff Falls",
+      "county": "Marquette",
+      "river": "Cliff River",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-212",
+      "name": "Lower Falls",
+      "county": "Keweenaw",
+      "river": null,
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        137,
+        139
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-213",
+      "name": "Lower Falls",
+      "county": "Marquette",
+      "river": "Salmon Trout River",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        152
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-214",
+      "name": "Lower Falls",
+      "county": "Houghton",
+      "river": "West Branch Sturgeon River",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 23,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-215",
+      "name": "Lower Gleason Creek Falls",
+      "county": "Ontonagon",
+      "river": "Gleason Creek",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-216",
+      "name": "Lower Letherby Falls (Erics Falls)",
+      "county": "Baraga",
+      "river": "West Branch Huron River",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-217",
+      "name": "Lower Penn Falls",
+      "county": "Ontonagon",
+      "river": "East Branch Firesteel River",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-218",
+      "name": "Lower Plover Falls",
+      "county": "Ontonagon",
+      "river": "Plover Creek",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-219",
+      "name": "Lower Yellow Dog Falls",
+      "county": "Marquette",
+      "river": "Yellow Dog River",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-220",
+      "name": "Maple Creek Falls",
+      "county": "Gogebic",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-221",
+      "name": "Margeson Falls",
+      "county": "Iron",
+      "river": "Margeson Creek",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        15
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-222",
+      "name": "Mex-i-min-e Falls",
+      "county": "Gogebic",
+      "river": null,
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "mex-i-min-e-falls"
+      ],
+      "exactGisIds": [
+        19
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-223",
+      "name": "Michigamme Falls",
+      "county": "Iron",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-224",
+      "name": "Middle East Jumbo River Falls",
+      "county": "Iron",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-225",
+      "name": "Middle Falls",
+      "county": "Marquette",
+      "river": "Salmon Trout River",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        151
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-226",
+      "name": "Middle Falls River Falls",
+      "county": "Baraga",
+      "river": null,
+      "category": "same_name_same_county_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 2,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-227",
+      "name": "Mill Pond Falls",
+      "county": "Dickinson",
+      "river": "West Branch Sturgeon River",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        8
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-228",
+      "name": "Minnewawa Falls",
+      "county": "Ontonagon",
+      "river": "Presque Isle River",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        54
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-229",
+      "name": "Morgan Falls",
+      "county": "Marquette",
+      "river": null,
+      "category": "same_name_same_county_review",
+      "exactCuratedIds": [
+        "morgan-falls"
+      ],
+      "exactGisIds": [
+        166
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 2,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-230",
+      "name": "Mountain Stream Falls",
+      "county": "Marquette",
+      "river": "Mountain Stream",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        127
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-231",
+      "name": "Mulligan Falls",
+      "county": "Marquette",
+      "river": "Mulligan Creek",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-232",
+      "name": "Neepikon Falls",
+      "county": "Gogebic",
+      "river": null,
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        37
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-233",
+      "name": "No Name Falls",
+      "county": "Baraga",
+      "river": null,
+      "category": "same_name_same_county_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 2,
+      "reviewPriority": -12,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-234",
+      "name": "No Name Falls",
+      "county": "Baraga",
+      "river": "No Name Creek",
+      "category": "same_name_same_county_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 2,
+      "reviewPriority": -7,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-235",
+      "name": "Onion Falls",
+      "county": "Houghton",
+      "river": "Onion Creek",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        42
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-236",
+      "name": "Otter Falls",
+      "county": "Houghton",
+      "river": "Otter River",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-237",
+      "name": "Page Creek Falls",
+      "county": "Baraga",
+      "river": "Page Creek",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-238",
+      "name": "Pauls Falls",
+      "county": "Houghton",
+      "river": "Sante River",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-239",
+      "name": "Pewabeck Falls",
+      "county": "Ontonagon",
+      "river": "Little Iron River",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        122
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-240",
+      "name": "Plover Falls",
+      "county": "Ontonagon",
+      "river": "Plover Creek",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-241",
+      "name": "Potluck Falls",
+      "county": "Marquette",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-242",
+      "name": "Queen Anne Falls",
+      "county": "Houghton",
+      "river": "Slaughterhouse Creek",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-243",
+      "name": "Quincy Falls",
+      "county": "Houghton",
+      "river": "Quincy Creek",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-244",
+      "name": "Ravine River Falls",
+      "county": "Baraga",
+      "river": "Ravine River",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-245",
+      "name": "Rock Bluff Falls",
+      "county": "Ontonagon",
+      "river": "Matheson Creek",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        22
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-246",
+      "name": "Rock Dam Falls",
+      "county": "Dickinson",
+      "river": "Pine Creek",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-247",
+      "name": "Rocky Forty Falls",
+      "county": "Gogebic",
+      "river": "Siemens Creek",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        40
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-248",
+      "name": "Rose Falls (East)",
+      "county": "Delta",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-249",
+      "name": "Rose Falls (West)",
+      "county": "Delta",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-250",
+      "name": "Saint Louis Falls",
+      "county": "Houghton",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-251",
+      "name": "Sandhill Creek Falls",
+      "county": "Ontonagon",
+      "river": "Sandhill Creek",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-252",
+      "name": "Schweitzer Falls (lower)",
+      "county": "Marquette",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-253",
+      "name": "Second City Falls",
+      "county": "Marquette",
+      "river": "Middle Branch Escanaba River",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-254",
+      "name": "Silver Creek falls",
+      "county": "Keweenaw",
+      "river": "Silver Creek",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-255",
+      "name": "Silver Creek Falls",
+      "county": "Alger",
+      "river": "Silver Creek",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-256",
+      "name": "Silver Falls",
+      "county": "Baraga",
+      "river": "Silver River",
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "lower-silver-falls"
+      ],
+      "exactGisIds": [
+        110
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-257",
+      "name": "Slide Falls",
+      "county": "Baraga",
+      "river": "Slate River",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-258",
+      "name": "Tiger Falls",
+      "county": "Marquette",
+      "river": "Schweitzer Creek",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        175
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-259",
+      "name": "Trap Falls",
+      "county": "Ontonagon",
+      "river": "Carp River Inlet",
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "trap-falls"
+      ],
+      "exactGisIds": [
+        118
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-260",
+      "name": "Turkey Neck Falls",
+      "county": "Marquette",
+      "river": null,
+      "category": "same_name_same_county_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 2,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-261",
+      "name": "Turkey Neck Falls",
+      "county": "Marquette",
+      "river": "Cedar Creek",
+      "category": "same_name_same_county_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 2,
+      "reviewPriority": 5,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-262",
+      "name": "Twin Falls",
+      "county": "Marquette",
+      "river": "East Branch Salmon Trout River",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        150
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-263",
+      "name": "Unnamed Falls",
+      "county": "Marquette",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 18,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-264",
+      "name": "Unnamed Falls",
+      "county": "Gogebic",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 18,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-265",
+      "name": "Unnamed Falls",
+      "county": "Alger",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 18,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-266",
+      "name": "Unnamed Falls on Creek to Dead River",
+      "county": "Marquette",
+      "river": null,
+      "category": "possible_alias_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [
+        "gis:160"
+      ],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 15,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-267",
+      "name": "Upper Chocolay Falls",
+      "county": "Marquette",
+      "river": null,
+      "category": "same_name_same_county_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        181
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 2,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-268",
+      "name": "Upper Chocolay Falls",
+      "county": "Marquette",
+      "river": "East Branch Chocolay River",
+      "category": "same_name_same_county_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        181
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 2,
+      "reviewPriority": 5,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-269",
+      "name": "Upper Craig's Falls",
+      "county": "Baraga",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-270",
+      "name": "Upper Falls",
+      "county": "Marquette",
+      "river": "Salmon Trout River",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        149
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-271",
+      "name": "Upper Falls",
+      "county": "Baraga",
+      "river": "Sturgeon River",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        51,
+        91
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-272",
+      "name": "Upper Frohling Falls #2 (Chocolay Falls)",
+      "county": "Marquette",
+      "river": null,
+      "category": "possible_alias_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [
+        "gis:181"
+      ],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 15,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-273",
+      "name": "Upper Garlic Falls 1",
+      "county": "Marquette",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-274",
+      "name": "Upper Garlic Falls 2",
+      "county": "Marquette",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-275",
+      "name": "Upper Garlic Falls 3",
+      "county": "Marquette",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-276",
+      "name": "Upper Leatherby Falls",
+      "county": "Baraga",
+      "river": "West Branch Huron River",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-277",
+      "name": "Upper Montreal Falls",
+      "county": "Keweenaw",
+      "river": "Montreal River",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 55,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-278",
+      "name": "Upper Penn Falls",
+      "county": "Ontonagon",
+      "river": "East Branch Firesteel River",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-279",
+      "name": "Upper Raney Falls",
+      "county": "Marquette",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-280",
+      "name": "Upper Silver Falls",
+      "county": "Baraga",
+      "river": null,
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        68
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-281",
+      "name": "Upper silver falls #1",
+      "county": "Baraga",
+      "river": null,
+      "category": "possible_alias_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [
+        "gis:68"
+      ],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 15,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-282",
+      "name": "Upper Silver Falls #2",
+      "county": "Baraga",
+      "river": null,
+      "category": "possible_alias_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [
+        "gis:68"
+      ],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 15,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-283",
+      "name": "Upper Silver Falls #3",
+      "county": "Baraga",
+      "river": null,
+      "category": "possible_alias_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [
+        "gis:68"
+      ],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 15,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-284",
+      "name": "Upper Silver Falls #4",
+      "county": "Baraga",
+      "river": null,
+      "category": "possible_alias_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [
+        "gis:68"
+      ],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 15,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-285",
+      "name": "Upper Slate Falls",
+      "county": "Baraga",
+      "river": "Slate River",
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 35,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-286",
+      "name": "Upper Sturgeon Falls",
+      "county": "Baraga",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-287",
+      "name": "Vista Falls",
+      "county": "Houghton",
+      "river": "West Branch Sturgeon River",
+      "category": "gis_identity_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [
+        80
+      ],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-288",
+      "name": "West Branch Yellow Dog Falls",
+      "county": "Marquette",
+      "river": "West Branch Yellow Dog River",
+      "category": "possible_alias_review",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [
+        "yellow-dog-falls"
+      ],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 20,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-289",
+      "name": "Wildcat Falls",
+      "county": "Ontonagon",
+      "river": "Scott and Howe Creek",
+      "category": "curated_exact_identity",
+      "exactCuratedIds": [
+        "wildcat-falls"
+      ],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 0,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-290",
+      "name": "Woodys Waterfall",
+      "county": "Marquette",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    },
+    {
+      "sourceId": "ss-291",
+      "name": "Wylie Falls",
+      "county": "Marquette",
+      "river": null,
+      "category": "external_only_research",
+      "exactCuratedIds": [],
+      "exactGisIds": [],
+      "possibleAliasIds": [],
+      "sourceDuplicateGroupSize": 1,
+      "reviewPriority": 30,
+      "publicationEligible": false,
+      "legalRouteVerifiedByThisSource": false
+    }
+  ],
+  "researchPrioritySourceIds": [
+    "ss-089",
+    "ss-146",
+    "ss-038",
+    "ss-110",
+    "ss-102",
+    "ss-047",
+    "ss-088",
+    "ss-277",
+    "ss-152",
+    "ss-175",
+    "ss-134",
+    "ss-069",
+    "ss-187",
+    "ss-019",
+    "ss-255",
+    "ss-165",
+    "ss-137",
+    "ss-155",
+    "ss-198",
+    "ss-204",
+    "ss-034",
+    "ss-064",
+    "ss-216",
+    "ss-157",
+    "ss-061",
+    "ss-237",
+    "ss-244",
+    "ss-257",
+    "ss-067",
+    "ss-276",
+    "ss-285",
+    "ss-169",
+    "ss-202",
+    "ss-246",
+    "ss-121",
+    "ss-145",
+    "ss-138",
+    "ss-163",
+    "ss-140",
+    "ss-148",
+    "ss-153",
+    "ss-123",
+    "ss-201",
+    "ss-203",
+    "ss-236",
+    "ss-238",
+    "ss-242",
+    "ss-243",
+    "ss-074",
+    "ss-079",
+    "ss-188",
+    "ss-136",
+    "ss-144",
+    "ss-014",
+    "ss-254",
+    "ss-141",
+    "ss-083",
+    "ss-129",
+    "ss-060",
+    "ss-151",
+    "ss-176",
+    "ss-122",
+    "ss-184",
+    "ss-096",
+    "ss-100",
+    "ss-166",
+    "ss-211",
+    "ss-219",
+    "ss-158",
+    "ss-231",
+    "ss-104",
+    "ss-253",
+    "ss-150",
+    "ss-193",
+    "ss-215",
+    "ss-217",
+    "ss-218",
+    "ss-048",
+    "ss-240",
+    "ss-015",
+    "ss-251",
+    "ss-073",
+    "ss-278",
+    "ss-095",
+    "ss-001",
+    "ss-103",
+    "ss-105",
+    "ss-055",
+    "ss-056",
+    "ss-171",
+    "ss-195",
+    "ss-196",
+    "ss-197",
+    "ss-162",
+    "ss-035",
+    "ss-143",
+    "ss-149",
+    "ss-269",
+    "ss-132",
+    "ss-286",
+    "ss-248",
+    "ss-249",
+    "ss-173",
+    "ss-194",
+    "ss-013",
+    "ss-085",
+    "ss-220",
+    "ss-094",
+    "ss-250",
+    "ss-223",
+    "ss-224",
+    "ss-177",
+    "ss-178",
+    "ss-179",
+    "ss-180",
+    "ss-200",
+    "ss-161",
+    "ss-065",
+    "ss-087",
+    "ss-078",
+    "ss-241",
+    "ss-098",
+    "ss-252",
+    "ss-091",
+    "ss-092",
+    "ss-093",
+    "ss-026",
+    "ss-027",
+    "ss-028",
+    "ss-029",
+    "ss-030",
+    "ss-273",
+    "ss-274",
+    "ss-275",
+    "ss-279",
+    "ss-290",
+    "ss-291",
+    "ss-127",
+    "ss-128",
+    "ss-214",
+    "ss-024",
+    "ss-075",
+    "ss-057",
+    "ss-077",
+    "ss-002",
+    "ss-049",
+    "ss-288",
+    "ss-118",
+    "ss-265",
+    "ss-264",
+    "ss-263",
+    "ss-281",
+    "ss-282",
+    "ss-283",
+    "ss-284",
+    "ss-170",
+    "ss-266",
+    "ss-272",
+    "ss-210",
+    "ss-109",
+    "ss-041",
+    "ss-053",
+    "ss-117",
+    "ss-261",
+    "ss-268",
+    "ss-045",
+    "ss-068",
+    "ss-186",
+    "ss-106",
+    "ss-082",
+    "ss-113",
+    "ss-164",
+    "ss-116",
+    "ss-190",
+    "ss-191",
+    "ss-206",
+    "ss-226",
+    "ss-070",
+    "ss-097",
+    "ss-147",
+    "ss-112",
+    "ss-142",
+    "ss-271",
+    "ss-280",
+    "ss-099",
+    "ss-227",
+    "ss-120",
+    "ss-172",
+    "ss-135",
+    "ss-156",
+    "ss-107",
+    "ss-108",
+    "ss-232",
+    "ss-139",
+    "ss-126",
+    "ss-036",
+    "ss-247",
+    "ss-052",
+    "ss-159",
+    "ss-235",
+    "ss-111",
+    "ss-042",
+    "ss-287",
+    "ss-044",
+    "ss-185",
+    "ss-221",
+    "ss-115",
+    "ss-212",
+    "ss-031",
+    "ss-174",
+    "ss-114",
+    "ss-181",
+    "ss-182",
+    "ss-023",
+    "ss-154",
+    "ss-168",
+    "ss-192",
+    "ss-213",
+    "ss-225",
+    "ss-229",
+    "ss-230",
+    "ss-037",
+    "ss-258",
+    "ss-260",
+    "ss-262",
+    "ss-267",
+    "ss-270",
+    "ss-058",
+    "ss-133",
+    "ss-189",
+    "ss-199",
+    "ss-207",
+    "ss-209",
+    "ss-101",
+    "ss-228",
+    "ss-125",
+    "ss-239",
+    "ss-131",
+    "ss-245",
+    "ss-234",
+    "ss-233"
+  ]
+}
