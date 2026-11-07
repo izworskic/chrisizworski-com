@@ -32,7 +32,7 @@ jobs:
       - name: Validate ferry evidence structure
         run: python3 scripts/audit_ferry_sources.py --json ferry-evidence-audit.json
       - name: Check season rollovers and fares
-        run: node --test tests/ferry-evergreen.test.js tests/great-lakes-ferries.test.js
+        run: node --test tests/ferry-evergreen.test.js tests/great-lakes-ferries.test.js tests/mackinac-ferry-decision.test.js
       - name: Probe official source links (schedule and manual runs)
         if: github.event_name != 'pull_request'
         run: python3 scripts/audit_ferry_sources.py --online --json ferry-evidence-audit.json
