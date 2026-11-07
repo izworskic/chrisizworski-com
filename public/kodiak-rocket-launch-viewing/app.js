@@ -8,7 +8,7 @@
  const UUID=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
  const $=id=>document.getElementById(id);
  const set=(id,v)=>{const node=$(id);if(node)node.textContent=v??'Not verified';};
- const state={places:[],map:null,pins:new Map(),osm:null,tiles:false,loading:null,request:0};
+ const state={places:[],map:null,pins:new Map(),osm:null,tiles:false,loading:null,request:0,data:null,rocketPins:null};
  const local=(iso,opts={})=>{const date=new Date(iso||'');return Number.isFinite(+date)?
   date.toLocaleString('en-US',{timeZone:'America/Anchorage',month:'short',day:'numeric',year:'numeric',...opts}):'Not verified';};
  const timing=m=>{
@@ -25,6 +25,7 @@
   for(const key of ['national-link','bottom-national']){const a=$(key);if(a)a.href='/national-tools/rocket-launch-live/'+query;}
  }
  function present(data,expired){
+  state.data=data;
   const region=Array.isArray(data.regions)?data.regions.find(r=>r.id==='alaska'):null;
   const missions=Array.isArray(region?.launches)?region.launches.filter(m=>UUID.test(m.id)):[];
   const selected=data.selectedLaunch?.region==='alaska'?data.selectedLaunch:null;
@@ -35,6 +36,7 @@
   if(selected&&missions.some(m=>m.id===selected.id))select.value=selected.id;
   else if(missions.length&&!select.value)select.value=missions[0].id;
   const picked=missions.find(m=>m.id===select.value)||null;
+  state.rocketPins?.update(missions,picked?.id);
   set('mission-name',picked?.name||'No upcoming Kodiak launch in this bounded feed');
   set('mission-time',timing(picked));
   set('mission-pad',picked?.pad?picked.pad+' · restricted range, not an approach destination':'Restricted range · exact pad not verified');
@@ -70,6 +72,7 @@
    present(data,expired);
   }catch{
    if(serial!==state.request)return;
+   state.data=null;state.rocketPins?.update([],null);
    set('mission-name','Shared Kodiak schedule unavailable');
    set('mission-time','Not verified');
    set('mission-pad','Restricted range · no visit directions');
@@ -119,6 +122,12 @@
    const root=$('k-map');root.replaceChildren();root.setAttribute('role','region');
    const L=window.L,map=L.map(root,{scrollWheelZoom:false,zoomControl:true,preferCanvas:true});
    state.map=map;
+   state.rocketPins=window.RocketMapPins?.mount(map,{
+     region:'alaska',centers:{alaska:{lat:57.43,lon:-152.34}},
+     onSelect:id=>{void loadMission(id);}
+   });
+   state.rocketPins?.update(state.data?.regions?.find(r=>r.id==='alaska')?.launches||[],
+     state.data?.selectedLaunchId);
    const attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
    const osm=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution,maxZoom:18}).addTo(map);
    state.osm=osm;

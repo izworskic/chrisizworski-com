@@ -27,7 +27,7 @@ const modes={
   facts:['Do not navigate by this map','Verify broadcast/local notices','No marine launch-viewing authorization'],
   links:[['https://navcen.uscg.gov/local-notices-to-mariners-by-cg-district','Current Coast Guard LNM hub'],['https://www.ecfr.gov/current/title-33/chapter-I/subchapter-P/part-165/section-165.1406','33 CFR 165.1406 official text']]}
 };
-const state={data:null,request:0,atlas:null,map:null,pins:new Map(),polygon:null,tilesReady:false,leaflet:null,loadingMap:false,ruleShown:true};
+const state={data:null,request:0,atlas:null,map:null,pins:new Map(),polygon:null,rocketPins:null,tilesReady:false,leaflet:null,loadingMap:false,ruleShown:true};
 const external=(href,label)=>{
  if(typeof href!=='string'||!/^https:\/\/[a-z0-9.-]+(?:\/|$)/i.test(href))return null;
  const a=document.createElement('a');a.href=href;a.target='_blank';a.rel='noopener noreferrer';a.textContent=label;return a;
@@ -72,6 +72,7 @@ function showMissions(data,expired=false){
  const pick=data.selectedLaunch?.region==='hawaii'?data.selectedLaunch:null;
  if(pick&&missions.some(m=>m.id===pick.id))select.value=pick.id;
  const selected=missions.find(m=>m.id===select.value)||null;
+ state.rocketPins?.update(missions,selected?.id);
  set('mission-name',selected?.name||'No upcoming Barking Sands launch in this bounded feed');
  set('mission-time',target(selected));
  set('mission-facility',selected?.pad?selected.pad+' · restricted facility; no public pad directions':'PMRF military range · pad unverified');
@@ -105,7 +106,7 @@ async function loadMission(id,expired=false){
   showMissions(d,expired);
  }catch{
   if(seq!==state.request)return;
-  state.data=null;$('mission-picker').disabled=true;
+  state.data=null;state.rocketPins?.update([],null);$('mission-picker').disabled=true;
   const sel=$('mission-picker');sel.replaceChildren();const op=document.createElement('option');op.textContent='Schedule unavailable';sel.appendChild(op);
   set('mission-name','Shared launch schedule unavailable');set('mission-time','Not verified');
   set('mission-facility','Military range · no public pad directions');
@@ -185,6 +186,12 @@ async function startMap(){
   const d=await loadAtlas();await loadLeaflet();const L=window.L,root=$('pmrf-map');
   root.replaceChildren();root.setAttribute('role','region');root.setAttribute('aria-label','Interactive interpretive west Kauaʻi range map');
   const map=L.map(root,{scrollWheelZoom:false,preferCanvas:true,zoomControl:true});state.map=map;
+ state.rocketPins=window.RocketMapPins?.mount(map,{
+   region:'hawaii',centers:{hawaii:{lat:22.02,lon:-159.78}},
+   onSelect:id=>{void loadMission(id);}
+ });
+ state.rocketPins?.update(state.data?.regions?.find(r=>r.id==='hawaii')?.launches||[],
+   state.data?.selectedLaunchId);
   const osmCredit='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
   const osm=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:osmCredit}).addTo(map);
   osm.on('tileload',()=>{state.tilesReady=true;});
