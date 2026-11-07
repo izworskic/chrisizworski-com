@@ -151,9 +151,7 @@ const whenReady=page=>page.waitForFunction(id=>
    assert(new URL(await page.url()).searchParams.get('launchId')===B,
     v.name+' deep-link selection drift');
    const altShot=v.name+'-flight-desk-B.png';
-   await page.locator('#rl-hero').screenshot({path:path.join(out,altShot),animations:'disabled'}).catch(async()=>{
-    await page.locator('.rl-hero').screenshot({path:path.join(out,altShot),animations:'disabled'});
-   });
+   await page.locator('.rl-hero').screenshot({path:path.join(out,altShot),animations:'disabled'});
    report.screenshots.push(altShot);
    await page.locator('#rl-launch-select').selectOption(A);
    await page.waitForFunction(id=>document.querySelector('#rl-flight-desk')?.dataset.launchId===id,A);
