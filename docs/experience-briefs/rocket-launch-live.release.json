@@ -135,8 +135,12 @@
       768,
       1440
     ],
-    "browserStatus": "PENDING",
-    "scopeNote": "Source-only design and model tests are not actual browser screenshots. Mark PASSED only after Chromium fixture and screenshot artifact evidence is inspected."
+    "browserStatus": "PASSED",
+    "scopeNote": "Passed four-viewport fixture-based Chromium screenshot/interaction check, including A→B→A mission and map focus, 0 horizontal overflow, 0 reported JS exceptions, no-JS source links and source/photo outages. Screenshots generated but human image inspection and live tile/production behavior have NOT been independently established. Source truth is not proven by fixtures.",
+    "browserRun": "https://github.com/izworskic/chrisizworski-com/actions/runs/42379718379",
+    "screenshotEvidence": [
+      "https://github.com/izworskic/chrisizworski-com/actions/runs/42379718379/artifacts/13577091334"
+    ]
   },
   "photos": [
     {
@@ -151,7 +155,9 @@
   ],
   "release": {
     "implemented": {
-      "status": "PENDING"
+      "status": "CONFIRMED",
+      "checkedDate": "2026-11-07",
+      "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/pull/1553"
     },
     "verified": {
       "status": "PENDING"
