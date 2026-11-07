@@ -1,0 +1,42 @@
+name: Rocket Launch Live Experience OS browser QA
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'public/assets/rocket-flight-desk.*'
+      - 'public/synced-national-tools/rocket-launch-live/**'
+      - 'tests/rocket-flight-desk.test.js'
+      - 'scripts/verify-rocket-flight-desk-browser.cjs'
+      - '.github/workflows/rocket-flight-desk-browser.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  chromium:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test mission source/evidence model and A to B to A state
+        run: node --test tests/rocket-flight-desk.test.js
+      - name: Install isolated Playwright and local Leaflet fixture
+        run: |
+          mkdir -p /tmp/rocket-experience-playwright
+          npm install --prefix /tmp/rocket-experience-playwright --no-save --ignore-scripts playwright@1.58.2 leaflet@1.9.4
+          echo "NODE_PATH=/tmp/rocket-experience-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium-browser)" >> "$GITHUB_ENV"
+      - name: Verify 360/390/768/1440, same mission across map and picker, unavailable data, no JS and missing image
+        run: node scripts/verify-rocket-flight-desk-browser.cjs
+      - name: Retain actual screenshots and runnable QA report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rocket-flight-desk-experience-qa
+          path: artifacts/rocket-flight-desk-qa
+          if-no-files-found: warn
+          retention-days: 10
