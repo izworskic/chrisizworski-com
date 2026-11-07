@@ -10,7 +10,7 @@
   function emptyReportState({loading=false,unavailable=false,filtered=false}={}) {
     if(loading)return {title:'Checking the river…',text:'Recent ship reports are still arriving. While we listen, explore a lock or choose a public place to watch.'};
     if(unavailable)return {title:'The receiver is out of reach.',text:'We cannot check this stretch right now. This does not tell us whether ships are present. Try Refresh or check the official transit information.'};
-    return filtered?{title:'Try a wider search.',text:'No fresh received report matches these filters. Clear the ship search or show all reporting vessels.'}:{title:'Keep a little room for the river.',text:'No fresh ship reports have reached us from this stretch. A quiet receiver does not mean an empty waterway. While we wait, explore a lock or choose a place to watch.'};
+    return filtered?{title:'Try a wider search.',text:'No fresh received report matches these filters. Clear the ship search or show all reporting vessels.'}:{title:'No recent AIS report received.',text:'The provider returned no qualifying position for this stretch in the past 30 minutes. Receiver coverage here is not verified; this does not establish whether ships are present. Check official transit information or another river region.'};
   }
   function motion(v) {return !Number.isFinite(v.speedKnots)?'Speed unreported':v.speedKnots<0.5?'Slow or stopped':v.speedKnots.toFixed(1)+' kn reported';}
   function direction(v) {
