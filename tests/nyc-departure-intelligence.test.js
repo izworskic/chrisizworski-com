@@ -14,7 +14,7 @@ const fixture=()=>({
  source:{url:'https://data.cityofnewyork.us/resource/i4gi-tjb9.json',
    latestObservationDate:'2026-11-07'},
  crossings:{'queens-midtown':{linkId:'4456510',scope:'CROSSING_ONLY',
-   direction:'Toward Manhattan',
+   direction:'Toward Manhattan',latestObservationDate:'2026-11-07',
    slots:{'weekend:9':slot(15),'weekend:10':slot(11),'weekend:11':slot(10)},
    holdout:{gainFraction:.15,intervalCoverage:.72,observedHourRows:120,
      maeMinutes:2.4,naiveMaeMinutes:2.9}}},
@@ -40,6 +40,8 @@ test('stale artifact or official archive cannot create departure advice',()=>{
  assert.equal(compareDepartures('queens-midtown',now,older).state,'STALE');
  const oldArchive=fixture();oldArchive.source.latestObservationDate='2026-10-28';
  assert.equal(compareDepartures('queens-midtown',now,oldArchive).state,'STALE');
+ const oldLink=fixture();oldLink.crossings['queens-midtown'].latestObservationDate='2026-10-28';
+ assert.equal(compareDepartures('queens-midtown',now,oldLink).state,'STALE');
  const future=fixture();future.generatedAt='2026-11-09T10:00:00Z';
  assert.equal(compareDepartures('queens-midtown',now,future).state,'STALE');
 });
