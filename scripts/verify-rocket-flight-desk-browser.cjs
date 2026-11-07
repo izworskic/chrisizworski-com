@@ -207,6 +207,8 @@ const whenReady=page=>page.waitForFunction(id=>
   await photo.route('https://media.defense.gov/**',route=>route.abort());
   await photo.goto(base+'?region=florida&launchId='+A,{waitUntil:'domcontentloaded'});
   await whenReady(photo);
+  await photo.waitForFunction(()=>document.querySelector('.rl-hero')?.dataset.photoUnavailable==='true',{timeout:10000});
+  assert(await photo.locator('.rl-hero-photo').isHidden(),'Broken archival photo left a giant blank hero panel');
   assert((await photo.locator('#rl-flight-mission').innerText()).includes('Fixture Florida'),
    'Photo outage hides answer');
   report.cases.push({case:'image-outage',primaryAnswer:'preserved'});
