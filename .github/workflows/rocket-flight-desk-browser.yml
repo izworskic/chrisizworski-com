@@ -4,8 +4,10 @@ on:
     branches: [main]
     paths:
       - 'public/assets/rocket-flight-desk.*'
+      - 'public/assets/rocket-engagement-funnel.js'
       - 'public/synced-national-tools/rocket-launch-live/**'
       - 'tests/rocket-flight-desk.test.js'
+      - 'tests/rocket-engagement-funnel.test.js'
       - 'scripts/verify-rocket-flight-desk-browser.cjs'
       - '.github/workflows/rocket-flight-desk-browser.yml'
   workflow_dispatch:
@@ -23,14 +25,14 @@ jobs:
         with:
           node-version: '22'
       - name: Test mission source/evidence model and A to B to A state
-        run: node --test tests/rocket-flight-desk.test.js
+        run: node --test tests/rocket-flight-desk.test.js tests/rocket-engagement-funnel.test.js
       - name: Install isolated Playwright and local Leaflet fixture
         run: |
           mkdir -p /tmp/rocket-experience-playwright
           npm install --prefix /tmp/rocket-experience-playwright --no-save --ignore-scripts playwright@1.58.2 leaflet@1.9.4
           echo "NODE_PATH=/tmp/rocket-experience-playwright/node_modules" >> "$GITHUB_ENV"
           echo "CHROME_PATH=$(command -v google-chrome || command -v chromium-browser)" >> "$GITHUB_ENV"
-      - name: Verify 360/390/768/1440, same mission across map and picker, unavailable data, no JS and missing image
+      - name: Verify 360/390/768/1440, source-safe funnel actions, A-B-A, map, no JS and missing image
         run: node scripts/verify-rocket-flight-desk-browser.cjs
       - name: Retain actual screenshots and runnable QA report
         if: always()
