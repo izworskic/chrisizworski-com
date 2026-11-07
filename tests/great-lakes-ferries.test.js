@@ -84,7 +84,7 @@ test("Winter and seasonal gates are conservative",()=>{
  assert.match(august,/\$9\.57/);
  assert.match(august,/August 2026/);
  const future=interact("beaver-island-ferry","2027-07-01");
- assert.match(future,/2026 reference information only/);
+ assert.match(future,/2026 reference fares are historical/);
  assert.doesNotMatch(future,/\$67\.00/);
 });
 
