@@ -6,6 +6,7 @@ historical data, live traffic, prediction precision or cross-segment rankings.
 """
 import argparse
 from collections import defaultdict
+from concurrent.futures import ThreadPoolExecutor
 from datetime import date, datetime, timedelta, timezone
 import json
 import math
@@ -188,35 +189,77 @@ def build_model(rows, now):
     return artifact
 
 
+def historical_date_windows(now, days=93, chunk_days=30):
+    """Nonoverlapping NYC wall-date ranges. 30 days * 24 hours < SoQL row cap."""
+    if chunk_days < 1 or chunk_days > 30:
+        raise ValueError("Date batches must remain at most 30 days")
+    start = local_date(now) - timedelta(days=days)
+    finish = local_date(now) + timedelta(days=1)
+    while start < finish:
+        stop = min(start + timedelta(days=chunk_days), finish)
+        yield start, stop
+        start = stop
+
+
 def fetch_rows(now, fetcher=urlopen):
-    """Query small daily/hourly SoQL aggregates; never download raw 113M rows."""
-    start = (local_date(now) - timedelta(days=93)).isoformat()
-    end = (local_date(now) + timedelta(days=1)).isoformat()
-    rows = []
-    for crossing, (link_id, _, _) in LINKS.items():
+    """Fetch complete official 30-day batches; reject truncated/invalid aggregates.
+
+    A single 93-day group query can silently stop at 1,000 rows, even when the
+    requested $limit is larger. Bounded date partitions make the maximum
+    distinct day-hour buckets 720, safely below the explicitly requested 800.
+    """
+    windows = list(historical_date_windows(now))
+    tasks = [(crossing, link_id, start, stop)
+             for crossing, (link_id, _, _) in LINKS.items()
+             for start, stop in windows]
+
+    def fetch_batch(task):
+        crossing, link_id, start, stop = task
         params = {
             "$select": ("link_id,date_trunc_ymd(data_as_of) as service_date,"
                         "date_extract_hh(data_as_of) as hour,"
                         "avg(travel_time::number) as mean_seconds,count(*) as sample_count"),
             "$where": (f"status='0' and link_id='{link_id}' and "
-                       f"data_as_of between '{start}T00:00:00.000' and "
-                       f"'{end}T00:00:00.000' and "
+                       f"data_as_of >= '{start.isoformat()}T00:00:00.000' and "
+                       f"data_as_of < '{stop.isoformat()}T00:00:00.000' and "
                        "travel_time::number>0 and travel_time::number<3600"),
             "$group": "link_id,service_date,hour",
-            "$order": "service_date asc,hour asc", "$limit": "3000",
+            "$order": "service_date asc,hour asc",
+            "$limit": "800",
         }
         url = SOURCE + "?" + urlencode(params)
         response = fetcher(Request(url, headers={"Accept": "application/json",
-                           "User-Agent": "chrisizworski-nyc-history/1.0"}), timeout=35)
+                       "User-Agent": "chrisizworski-nyc-history/1.1"}), timeout=35)
         try:
             data = json.load(response)
         finally:
             response.close()
-        if not isinstance(data, list) or len(data) >= 3000:
-            raise ValueError(f"Incomplete official hourly aggregate for {crossing}")
-        rows.extend(data)
-    return rows
+        days = (stop - start).days
+        if not isinstance(data, list) or len(data) >= 800 or len(data) > days * 24:
+            raise ValueError(f"Potentially truncated/duplicated NYC DOT aggregation for {crossing} "
+                             f"{start} to {stop}: {len(data) if isinstance(data,list) else 'non-list'}")
+        keys = set()
+        for row in data:
+            try:
+                if str(row["link_id"]) != link_id:
+                    raise ValueError("Unexpected link")
+                day = date.fromisoformat(str(row["service_date"])[:10])
+                hour = int(row["hour"])
+                if not (start <= day < stop and 0 <= hour <= 23):
+                    raise ValueError("Day/hour outside requested partition")
+                key = (day, hour)
+                if key in keys:
+                    raise ValueError("Duplicate date-hour in upstream aggregation")
+                keys.add(key)
+            except (KeyError, TypeError, ValueError) as exc:
+                raise ValueError(f"Invalid upstream NYC date-hour group for {crossing}") from exc
+        return data
 
+    # Bounded standard-library fan-out avoids 24 sequential remote requests
+    # without overwhelming NYC Open Data or introducing any runtime dependency.
+    with ThreadPoolExecutor(max_workers=3) as pool:
+        chunks = list(pool.map(fetch_batch, tasks))
+    return [row for chunk in chunks for row in chunk]
 
 
 def score_link(records, cutoff):
