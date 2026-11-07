@@ -86,7 +86,7 @@ test('B79 keeps namesakes, generic tiers and duplicate source records separate',
 
 test('B79 Python reconciliation is byte-for-byte reproducible with --check; no network or server infrastructure',()=>{
   const result=cp.spawnSync('python3',['scripts/build-up-waterfall-discovery.py','--check'],{encoding:'utf8',timeout:30000});
-  assert.equal(result.status,0,result.stderr||result.stdout);
+  if(result.status!==0)throw new Error('Python discovery check exited '+result.status+'; stderr: '+result.stderr+' stdout: '+result.stdout);
   assert.match(result.stdout,/deterministic/);
   const python=read('scripts/build-up-waterfall-discovery.py');
   assert.doesNotMatch(python,/requests\.|urllib\.request|import\s+http|supabase|redis|fetch\(/i);
