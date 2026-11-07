@@ -15,8 +15,10 @@ from zoneinfo import ZoneInfo
 import statistics
 import subprocess
 import sys
+import time
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
+from urllib.error import HTTPError, URLError
 
 ROOT = Path(__file__).resolve().parent.parent
 SOURCE = "https://data.cityofnewyork.us/resource/i4gi-tjb9.json"
@@ -228,12 +230,25 @@ def fetch_rows(now, fetcher=urlopen):
             "$limit": "800",
         }
         url = SOURCE + "?" + urlencode(params)
-        response = fetcher(Request(url, headers={"Accept": "application/json",
-                       "User-Agent": "chrisizworski-nyc-history/1.1"}), timeout=35)
-        try:
-            data = json.load(response)
-        finally:
-            response.close()
+        # One bounded retry for a transient Socrata timeout/429/5xx. Do not
+        # turn a failed partition into an empty observation or zero-minute ETA.
+        for attempt in range(2):
+            try:
+                response = fetcher(Request(url, headers={"Accept": "application/json",
+                               "User-Agent": "chrisizworski-nyc-history/1.1"}), timeout=35)
+                try:
+                    data = json.load(response)
+                finally:
+                    response.close()
+                break
+            except HTTPError as error:
+                if error.code not in (408, 429, 500, 502, 503, 504) or attempt:
+                    raise
+                time.sleep(1.5)
+            except (TimeoutError, URLError, ConnectionResetError) as error:
+                if attempt:
+                    raise
+                time.sleep(1.5)
         days = (stop - start).days
         if not isinstance(data, list) or len(data) >= 800 or len(data) > days * 24:
             raise ValueError(f"Potentially truncated/duplicated NYC DOT aggregation for {crossing} "
@@ -405,6 +420,21 @@ def audit_live(now, rows=None, heartbeats=None):
         "noHistoricalModelMayBePublishedWithoutIndividualSourceAndHoldoutGates": True,
     }
 
+def source_incomplete(now, reason):
+    """Network failure is not a failed model and is never a successful data audit."""
+    return {
+        "schemaVersion": "nyc-source-audit-v1",
+        "state": "INCOMPLETE",
+        "auditedAt": now.astimezone(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z"),
+        "source": SOURCE,
+        "reason": reason,
+        "publishingCandidateState": "UNAVAILABLE",
+        "modelReadyLinks": [],
+        "crossings": {},
+        "noHistoricalModelMayBePublishedWithoutIndividualSourceAndHoldoutGates": True,
+    }
+
+
 def audit_tolls(fixture=RATE_REFERENCE):
     """Dated independent official rates checked against the existing Node engine."""
     reference = json.loads(Path(fixture).read_text())
@@ -450,8 +480,16 @@ def main():
     if not now.tzinfo:
         raise ValueError("--at must include a UTC offset")
     if args.command == "audit-live":
-        rows = json.loads(args.input.read_text()) if args.input else fetch_rows(now)
-        report = audit_live(now, rows=rows)
+        try:
+            rows = json.loads(args.input.read_text()) if args.input else fetch_rows(now)
+            report = audit_live(now, rows=rows)
+            report["state"] = "COMPLETE"
+        except HTTPError as error:
+            if error.code not in (408, 429, 500, 502, 503, 504):
+                raise
+            report = source_incomplete(now, f"Official source returned HTTP {error.code}.")
+        except (TimeoutError, URLError, ConnectionResetError):
+            report = source_incomplete(now, "Official historical source timed out or could not be reached.")
         if args.report:
             args.report.parent.mkdir(parents=True, exist_ok=True)
             args.report.write_text(json.dumps(report, sort_keys=True, indent=2) + "\n")
