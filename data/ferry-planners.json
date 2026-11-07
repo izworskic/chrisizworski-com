@@ -49,7 +49,7 @@
         "https://www.bibco.com/know-before-you-go/rates/"
       ]
     ],
-    "meta": "Plan Charlevoix to Beaver Island by ferry: 2026 adult and child fares, standard-car pricing, vehicle reservations and exact sailing-date calendar.",
+    "meta": "Plan the Charlevoix–Beaver Island ferry: sailing calendar, vehicle reservations, age bands, fare references and round-trip timing.",
     "experience": {
       "accent": "#2b7466",
       "kicker": "Charlevoix → St. James · Northern Lake Michigan",
@@ -149,7 +149,9 @@
       ],
       "checked": "2026-10-18",
       "routesLabel": "Choose your crossing"
-    }
+    },
+    "fareReferenceYear": 2026,
+    "modified": "2026-11-07"
   },
   "put-in-bay": {
     "id": "put-in-bay",
@@ -169,7 +171,8 @@
     "notes": [
       "Miller lands at Lime Kiln on the south end of the island; Jet Express docks downtown in Put-in-Bay.",
       "Jet Express is passenger-only. Miller accepts vehicles but recommends leaving cars on the mainland for most day trips.",
-      "Jet Express has a date-specific calendar; do not assume its late-night schedule is available on your date."
+      "Jet Express has a date-specific calendar; do not assume its late-night schedule is available on your date.",
+      "Miller Ferry states that same-day return vehicle transport is not available on weekends and holidays; even weekdays can be limited. Foot-passenger travel is different."
     ],
     "steps": [
       "Choose the mainland dock: Catawba for Miller, Port Clinton for Jet Express.",
@@ -224,7 +227,7 @@
         "https://jet-express.com/"
       ]
     ],
-    "meta": "Compare 2026 Miller Ferry and Jet Express prices, Put-in-Bay terminals, vehicles and return planning. Source-linked; not live booking.",
+    "meta": "Compare Put-in-Bay ferries: Miller Ferry versus Jet Express, island arrival docks, vehicles, fare references and official sailing calendars.",
     "experience": {
       "accent": "#146965",
       "kicker": "South Bass Island · Lake Erie",
@@ -343,7 +346,9 @@
       ],
       "checked": "2026-10-18",
       "routesLabel": "Choose your crossing"
-    }
+    },
+    "fareReferenceYear": 2026,
+    "modified": "2026-11-07"
   },
   "chi": {
     "id": "chi",
@@ -364,7 +369,7 @@
     ],
     "notes": [
       "2026 adult fare is CAD $18.05 each way. Standard low vehicles up to 20 ft are CAD $38.75 off-peak or $49.10 peak, each direction. Vehicle fees are separate from each passenger.",
-      "The 2026 sailing season runs May 1–October 18. Future-year dates need the next published timetable.",
+      "The 2026 season ended October 18. As of November 7, 2026, the operator has not issued its 2027 timetable and says 2027 reservations are expected to open in March. Check the official schedule for updates rather than assuming the 2026 dates recur.",
       "Tobermory and South Baymouth terminal parking has published daily fees for park-and-ride ferry customers.",
       "Vehicle dimensions and reservation inventory matter. Comparing the ferry to a road-only itinerary needs actual origins and destinations; no universal 'hours saved' applies."
     ],
@@ -400,16 +405,16 @@
     ],
     "sources": [
       [
-        "Official 2026 Chi-Cheemaun schedule",
-        "https://www.ontarioferries.com/ms-chi-cheemaun/schedule-overview/"
+        "Official Chi-Cheemaun schedule and forthcoming seasons",
+        "https://www.ontarioferries.com/routes/tobermory-manitoulin-island-ferry/schedule"
       ],
       [
         "Official passenger and vehicle fares",
-        "https://www.ontarioferries.com/ms-chi-cheemaun/fares/"
+        "https://www.ontarioferries.com/routes/tobermory-manitoulin-island-ferry/fares-tickets"
       ],
       [
-        "Ontario Ferries operating information",
-        "https://www.ontarioferries.com/"
+        "Official route and service information",
+        "https://www.ontarioferries.com/routes/tobermory-manitoulin-island-ferry"
       ]
     ],
     "meta": "Plan the MS Chi-Cheemaun ferry between Tobermory and Manitoulin Island: seasonal calendar, vehicles, parking and driving around Georgian Bay.",
@@ -529,6 +534,14 @@
       ],
       "checked": "2026-10-18",
       "routesLabel": "Choose your crossing"
+    },
+    "fareReferenceYear": 2026,
+    "modified": "2026-11-07",
+    "seasonWindows": {
+      "2026": [
+        "2026-05-01",
+        "2026-10-18"
+      ]
     }
   },
   "toronto": {
@@ -547,7 +560,7 @@
     "vehicleAllowed": false,
     "note": "This public passenger planner does not provide general automobile transport. Teenagers ages 15–19 and seniors have separate fares; use the official city pricing for those categories.",
     "notes": [
-      "Mid-April to mid-October typically serves Centre Island, Ward's Island and Hanlan's Point. Toronto's 2026 winter schedule begins October 14 on Ward's only.",
+      "Toronto Island ferries run year-round, but winter service is on Ward's Island only. Three-route service usually runs from mid-April to mid-October; exact changeover dates must be confirmed from the city's current schedule.",
       "Tickets include the return journey. Last boats vary by landing and season; confirm city schedule, especially after dusk.",
       "The city warns of long peak-season queues. Online tickets provide an express entrance line, not a reserved departure seat."
     ],
@@ -598,7 +611,7 @@
         "https://www.toronto.ca/explore-enjoy/toronto-island-ferries/ferry-ticket-passenger-information/"
       ]
     ],
-    "meta": "Choose Centre, Ward's or Hanlan's Point Toronto Island ferry using seasonal routing, 2026 ticket prices and last-return planning.",
+    "meta": "Choose Centre Island, Ward's Island or Hanlan's Point ferry from Toronto, with winter routing, ticket categories, dates and official departure calendars.",
     "experience": {
       "accent": "#3d6587",
       "kicker": "Three island docks · Toronto Harbour",
@@ -738,7 +751,9 @@
       ],
       "checked": "2026-10-18",
       "routesLabel": "Choose your island dock"
-    }
+    },
+    "fareReferenceYear": 2026,
+    "modified": "2026-11-07"
   },
   "pelee": {
     "id": "pelee",
@@ -786,19 +801,19 @@
     ],
     "sources": [
       [
-        "Pelee Island 2026 day-by-day schedule",
-        "https://www.ontarioferries.com/pelee-island-ferries/schedule-overview/"
+        "Official date-by-date Pelee sailing schedule",
+        "https://www.ontarioferries.com/routes/pelee-island/schedule"
       ],
       [
-        "2026 operator passenger and vehicle fares",
-        "https://www.ontarioferries.com/pelee-island-ferries/fares/"
+        "Official operator ferry fares and vehicle categories",
+        "https://www.ontarioferries.com/routes/pelee-island/fares-tickets"
       ],
       [
-        "Ontario Ferries home and advisories",
-        "https://www.ontarioferries.com/"
+        "Pelee Island route, Sandusky and winter-air information",
+        "https://www.ontarioferries.com/routes/pelee-island"
       ]
     ],
-    "meta": "Plan a Pelee Island ferry trip with the right mainland dock, 2026 fare references, vehicle choices, check-in and return planning. Check official sailings.",
+    "meta": "Plan the Pelee Island ferry from Leamington or Kingsville, find the correct terminal by date, and compare vehicle rules, ferry fare references and operator sailings.",
     "experience": {
       "accent": "#477244",
       "kicker": "Canada’s Lake Erie island",
@@ -891,6 +906,14 @@
       ],
       "checked": "2026-10-18",
       "routesLabel": "Choose your crossing"
+    },
+    "fareReferenceYear": 2026,
+    "modified": "2026-11-07",
+    "seasonWindows": {
+      "2026": [
+        "2026-04-01",
+        "2026-12-07"
+      ]
     }
   },
   "isle-royale": {
@@ -956,7 +979,7 @@
         "https://home.nps.gov/isro/planyourvisit/directions.htm"
       ]
     ],
-    "meta": "Compare Ranger III, Queen IV, Voyageur II and Sea Hunter III for Isle Royale: gateway, Rock Harbor versus Windigo, trip duration and return planning.",
+    "meta": "Compare Isle Royale ferries: Ranger III, Queen IV, Voyageur II and Sea Hunter III by mainland gateway, Rock Harbor or Windigo, crossing length and return planning.",
     "experience": {
       "accent": "#37584e",
       "kicker": "Four ferry choices · One wilderness island",
@@ -1127,7 +1150,9 @@
       ],
       "checked": "2026-10-18",
       "routesLabel": "Choose your gateway and island end"
-    }
+    },
+    "fareReferenceYear": 2026,
+    "modified": "2026-11-07"
   },
   "lake-express": {
     "id": "lake-express",
@@ -1148,7 +1173,7 @@
     ],
     "notes": [
       "All departure and arrival times are local: Milwaukee is Central; Muskegon is Eastern.",
-      "2026 rates effective August 11 exclude optional extras; posted $6 fuel and $9 port/security charges per paying person and standard vehicle, per crossing, are included in our estimate.",
+      "The fare table was effective August 11, 2026. A 2026 Kids Ride Free promotion waived base fares for up to two accompanied children ages 5–17 per paying adult through August 31; applicable surcharges remained due. Dates before August 11 need a different verified price table.",
       "The published 2026 October schedule has Tuesday restrictions and Saturday-specific departures. Allow 45 minutes before departure; boarding closes 15 minutes prior."
     ],
     "steps": [
@@ -1176,7 +1201,12 @@
           "feeVehicleOW": 15,
           "feeVehicleRT": 30
         },
-        "notice": "Children under 5 ride free; this calculator does not model infants, Premier seating or summer-only promotions."
+        "notice": "Children under 5 ride free; this calculator does not model infants, Premier seating or summer-only promotions. 2026 Kids Ride Free promotion applies June 1–August 31 with limits; this fare table starts August 11, and waived child base fares still incur applicable surcharges.",
+        "childPromo": {
+          "start": "2026-08-11",
+          "end": "2026-08-31",
+          "freePerAdult": 2
+        }
       }
     ],
     "sources": [
@@ -1193,7 +1223,7 @@
         "https://www.lake-express.com/plan-your-trip/"
       ]
     ],
-    "meta": "Plan the Muskegon to Milwaukee Lake Express ferry: 2026 seasonal sailings, published fares, vehicle charges, time zones and driving trade-offs.",
+    "meta": "Compare Muskegon–Milwaukee Lake Express ferry travel, published schedules, time zones, vehicle costs, and date-limited fare references.",
     "experience": {
       "accent": "#166a87",
       "kicker": "Muskegon ↔ Milwaukee · Lake Michigan",
@@ -1309,6 +1339,14 @@
       "roadCompare": true,
       "checked": "2026-10-18",
       "routesLabel": "Choose your crossing"
+    },
+    "fareReferenceYear": 2026,
+    "modified": "2026-11-07",
+    "seasonWindows": {
+      "2026": [
+        "2026-05-01",
+        "2026-10-19"
+      ]
     }
   },
   "ss-badger": {
@@ -1329,7 +1367,7 @@
       "2026-10-11"
     ],
     "notes": [
-      "The 2026 Badger season ended October 11. The operator now also publishes future schedules, which must not be mistaken for 2026 sailings.",
+      "The operator has published May 14–October 10 as its 2027 season window, including specific exceptions and overnight sailing dates. The 2026 fares shown in this tool do not carry over to 2027.",
       "Departure 9:00 a.m. Eastern from Ludington reaches Manitowoc around noon Central after four hours aboard.",
       "Passenger tickets are separate from vehicle tickets; the calculator only quotes standard adult passenger fares when all entered traveler and vehicle categories are covered."
     ],
@@ -1346,30 +1384,34 @@
         "tripTime": "4 hours",
         "pricing": {
           "adultOW": 78,
-          "adultRT": 156
+          "adultRT": 156,
+          "childOW": 44,
+          "childRT": 88,
+          "vehicleOW": 102,
+          "vehicleRT": 204
         },
         "summerPricing": {
           "adultOW": 89,
-          "adultRT": 178
+          "adultRT": 178,
+          "childOW": 44,
+          "childRT": 88,
+          "vehicleOW": 102,
+          "vehicleRT": 204
         },
-        "notice": "Vehicle and child amounts intentionally require the current official fare table; adult passenger-only arithmetic is displayed when applicable."
+        "notice": "Published 2026 adult, child (5–15) and standard-auto fares. Vehicles are charged separately from each passenger. Oversize vehicles, bikes, cabins and discounts require the operator quote."
       }
     ],
     "sources": [
       [
-        "S.S. Badger current operator timetable",
+        "Official Badger schedule, including 2027 season",
         "https://ssbadger.com/schedule/"
       ],
       [
-        "2026 S.S. Badger schedule archive",
-        "https://ssbadger.getanchor.io/schedule/index.html"
-      ],
-      [
-        "2026 S.S. Badger fares",
-        "https://ssbadger.getanchor.io/fares/index.html"
+        "Official published 2026 Badger fares",
+        "https://ssbadger.com/fares/"
       ]
     ],
-    "meta": "Plan the S.S. Badger between Ludington and Manitowoc: the four-hour crossing, 2026 seasons, adult fare tiers, vehicles and time-zone adjustment.",
+    "meta": "Plan the S.S. Badger between Ludington and Manitowoc: published seasonal schedule, four-hour crossing, time zones, vehicles, and verified historical fare references.",
     "experience": {
       "accent": "#8a4930",
       "kicker": "Ludington ↔ Manitowoc · Historic lake crossing",
@@ -1489,6 +1531,18 @@
       "roadCompare": true,
       "checked": "2026-10-18",
       "routesLabel": "Choose your crossing"
+    },
+    "fareReferenceYear": 2026,
+    "modified": "2026-11-07",
+    "seasonWindows": {
+      "2026": [
+        "2026-05-15",
+        "2026-10-11"
+      ],
+      "2027": [
+        "2027-05-14",
+        "2027-10-10"
+      ]
     }
   },
   "manitou": {
@@ -1508,7 +1562,7 @@
     "season": null,
     "notes": [
       "Ferry service to both islands is suspended for the entire 2026 season.",
-      "NPS expects dock and village reopening in 2027; no confirmed ferry restart date is implied.",
+      "NPS expected both dock and village areas to reopen in 2027 in its 2026 notice. That was not a confirmed resumption of regular ferry service; check current NPS and operator information for travel in any future year.",
       "Dock and utility closures do not mean every acre of either island is closed. Consult NPS for exact access boundaries."
     ],
     "steps": [
@@ -1548,7 +1602,7 @@
         "https://www.nps.gov/slbe/planyourvisit/northmanitouisland.htm"
       ]
     ],
-    "meta": "Check Manitou Island ferry access, compare North and South Manitou, and plan around the 2026 service suspension and unconfirmed 2027 restart.",
+    "meta": "Check North and South Manitou Island ferry access, NPS dock construction notices, confirmed transport status and planning for possible reopening.",
     "experience": {
       "accent": "#697543",
       "kicker": "North & South Manitou · Sleeping Bear Dunes",
@@ -1675,6 +1729,7 @@
       "checked": "2026-10-18",
       "routesLabel": "Choose an island"
     },
-    "modified": "2026-10-19"
+    "modified": "2026-11-07",
+    "fareReferenceYear": 2026
   }
 }
