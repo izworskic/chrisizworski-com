@@ -1,0 +1,45 @@
+name: Great Lakes ferry evidence watch
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Weekly source health check, independent of the ferry operating season.
+    - cron: '47 13 * * 1'
+  pull_request:
+    paths:
+      - 'data/ferry-planners.json'
+      - 'scripts/generate-ferry-planners.mjs'
+      - 'scripts/audit_ferry_sources.py'
+      - 'public/assets/great-lakes-ferry.js'
+      - 'public/assets/ferry-planning-core.js'
+      - 'tests/ferry-evergreen.test.js'
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate ferry evidence structure
+        run: python3 scripts/audit_ferry_sources.py --json ferry-evidence-audit.json
+      - name: Check season rollovers and fares
+        run: node --test tests/ferry-evergreen.test.js tests/great-lakes-ferries.test.js
+      - name: Probe official source links (schedule and manual runs)
+        if: github.event_name != 'pull_request'
+        run: python3 scripts/audit_ferry_sources.py --online --json ferry-evidence-audit.json
+      - name: Retain report for review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ferry-evidence-audit
+          path: ferry-evidence-audit.json
+          if-no-files-found: ignore
