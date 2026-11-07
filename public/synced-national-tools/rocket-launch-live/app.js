@@ -5,7 +5,7 @@
   const KSC_OFFICIAL_API = '/api/space-coast-ksc-watch';
   const $ = id => document.getElementById(id);
   const validRegions = new Set(['california', 'florida', 'texas', 'virginia', 'alaska', 'hawaii']);
-  const state = { request: 0, data: null, map: null, markers: new Map(), regions: [], userFocusedMap: false, officialEvidence: null, officialEvidenceLoaded: false, kscEvidence: null, kscMissionId: null, kscRequest: 0 };
+  const state = { request: 0, data: null, map: null, markers: new Map(), rocketPins: null, regions: [], userFocusedMap: false, officialEvidence: null, officialEvidenceLoaded: false, kscEvidence: null, kscMissionId: null, kscRequest: 0 };
   const el = (tag, className, value) => {
     const n = document.createElement(tag);
     if (className) n.className = className;
@@ -70,6 +70,14 @@
         item.appendChild(el('strong', '', l.name || 'Upcoming mission'));
         item.appendChild(el('span', '', formattedDate(l, r.timezone) +
           ' · ' + formattedTime(l, r.timezone) + ' · ' + (l.scheduleConfidence?.label || 'Timing unconfirmed')));
+        const locate=el('button','rl-map-locate','Locate this rocket');
+        locate.type='button';
+        locate.setAttribute('aria-label','Show launch location for '+(l.name||'this mission'));
+        locate.addEventListener('click',()=>{
+          state.userFocusedMap=true;void load(r.id,l.id);
+          $('rl-coast-map')?.scrollIntoView({behavior:'smooth',block:'nearest'});
+        });
+        item.appendChild(locate);
         card.appendChild(item);
       });
       else card.appendChild(el('p', 'rl-board-empty',
@@ -132,7 +140,10 @@
         fillColor: id === r.id ? '#dc754c' : '#163f4b',
         color: '#fff', weight: id === r.id ? 3 : 2, fillOpacity: 1
       });
-      if (state.userFocusedMap) state.map.setView([match.lat, match.lon], r.id === 'hawaii' || r.id === 'alaska' ? 7 : 8, { animate: false });
+      if (state.userFocusedMap) {
+        state.map.setView([match.lat, match.lon], r.id === 'hawaii' || r.id === 'alaska' ? 7 : 8, { animate: false });
+        state.rocketPins?.focusSelected();
+      }
     }
   }
   function initMap() {
@@ -190,6 +201,15 @@
       }
       if (bounds.length) map.fitBounds(bounds, { padding: [27, 27] });
       state.map = map;
+      state.rocketPins=window.RocketMapPins?.mount(map,{
+        region:'all',
+        centers:window.RocketMapPins.centersOf(state.data.regions),
+        onSelect:(id,region)=>{
+          state.userFocusedMap=true;void load(region,id);
+          $('rl-next-title')?.scrollIntoView({behavior:'smooth',block:'start'});
+        }
+      });
+      state.rocketPins?.update(state.data.regions.flatMap(r=>r.launches||[]),state.data.selectedLaunchId);
     } catch (_) {
       root.replaceChildren(el('div', 'rl-map-fallback', 'Map tiles unavailable. The coast buttons above remain fully functional.'));
     }
@@ -1173,6 +1193,7 @@
     const texasNav = $('rl-nav-starbase');
     if (texasNav) texasNav.href = floridaSpecialistLink('/starbase-rocket-launch-viewing/',data);
     initMap();
+    state.rocketPins?.update(data.regions.flatMap(r=>r.launches||[]),data.selectedLaunchId);
     showRegion(data.region);
     renderMission(data);
     renderMediaDesk(data);
@@ -1218,6 +1239,11 @@
       syncUrl(data.selectedRegion, data.selectedLaunchId);
     } catch (err) {
       if (sequence !== state.request) return;
+      // A previously selected mission may have vanished or the shared source
+      // may be offline. Retaining clickable old rockets would imply a current
+      // schedule after this request has explicitly failed.
+      state.rocketPins?.update([],null);
+      state.data=null;
       document.dispatchEvent(new CustomEvent('rocket-truth:mission-selected',
         {detail:{launchId:null}}));
       document.dispatchEvent(new CustomEvent('rocket-viewing:data',{detail:null}));
@@ -1258,8 +1284,14 @@
   document.querySelectorAll('.rl-region-btn[data-region]').forEach(b =>
     b.addEventListener('click', () => changeRegion(b.dataset.region)));
   $('rl-launch-select')?.addEventListener('change', event => {
-    const id = event.target.value;
-    if (id) load(state.data?.selectedRegion, id);
+    const id=event.target.value;
+    if(id){state.userFocusedMap=true;void load(state.data?.selectedRegion,id);}
+  });
+  document.addEventListener('rocket-map:choose-mission',event=>{
+    const id=event.detail?.launchId,region=event.detail?.region;
+    if(validRegions.has(region)&&state.data?.regions.some(r=>(r.launches||[]).some(m=>m.id===id&&m.region===region))){
+      state.userFocusedMap=true;void load(region,id);
+    }
   });
   const initial = new URL(location.href);
   const region = validRegions.has(initial.searchParams.get('region')) ?

@@ -1,0 +1,32 @@
+/* Common rocket-origin semantics: rocket = launch, existing venue pins = viewing/access.
+   This layer is not a flight path, range entry point, road route or permission. */
+.rocket-origin-icon{background:none!important;border:0!important;filter:drop-shadow(0 3px 3px rgba(12,34,42,.4));}
+.rocket-origin-symbol{width:44px;height:44px;display:grid;place-items:center;position:relative;
+ background:#153f50;color:#fff;border:3px solid #fff;border-radius:50%;
+ box-shadow:0 0 0 2px #104754,0 3px 8px #0a1b2555;box-sizing:border-box}
+.rocket-origin-icon.is-selected .rocket-origin-symbol{width:52px;height:52px;background:#b74c26;
+ box-shadow:0 0 0 3px #ffd08c,0 3px 12px #4b271955;}
+.rocket-origin-icon.is-approximate .rocket-origin-symbol{background:#405e6a;border-style:dashed;}
+.rocket-origin-icon.is-selected.is-approximate .rocket-origin-symbol{background:#a44c30;}
+.rocket-origin-symbol svg{width:25px;height:25px;transform:rotate(45deg);display:block;}
+.rocket-origin-icon.is-selected svg{width:29px;height:29px;}
+.rocket-origin-count{position:absolute;top:-8px;right:-10px;min-width:19px;height:19px;
+ padding:0 4px;border-radius:13px;background:#f8c875;border:2px solid #fff;
+ color:#152f3d;font:800 10px/16px system-ui,sans-serif;text-align:center;box-sizing:content-box;}
+.rocket-origin-popup{font:13px/1.45 system-ui,sans-serif;color:#163340;min-width:180px}
+.rocket-origin-popup strong{font-size:15px}.rocket-origin-popup p{margin:8px 0;color:#475b61}
+.rocket-origin-missions{display:grid;max-height:235px;overflow-y:auto;gap:5px}
+.rocket-origin-mission,.rocket-origin-zoom{display:block;width:100%;text-align:left;padding:9px 11px;
+ border:1px solid #c8d8d5;border-radius:8px;background:#f5f9f8;color:#173f4b;cursor:pointer;
+ font:700 12px/1.3 system-ui,sans-serif}
+.rocket-origin-mission:hover,.rocket-origin-mission:focus-visible,.rocket-origin-zoom:focus-visible{outline:2px solid #237786}
+.rocket-origin-mission.is-selected{background:#ffe9d4;border-color:#b85c31}
+.rocket-origin-mission span,.rocket-origin-mission small{display:block;overflow-wrap:anywhere}
+.rocket-origin-mission small{font-weight:500;color:#47636a;margin-top:4px}
+.rocket-origin-zoom{margin-top:8px;text-align:center;background:#e8f1f2}
+.rocket-map-key{display:inline-flex;gap:7px;align-items:center;font-weight:750}
+.rocket-map-key .rocket-key-symbol{display:inline-grid;place-items:center;width:23px;height:23px;
+ border-radius:50%;background:#153f50;color:#fff;border:2px solid #fff;box-shadow:0 0 0 1px #284e5a}
+.rocket-key-symbol svg{height:16px;width:16px;transform:rotate(45deg)}
+.rocket-map-key-approx{font-weight:500;color:#4b6067}
+@media(hover:none){.rocket-origin-mission{min-height:44px}}

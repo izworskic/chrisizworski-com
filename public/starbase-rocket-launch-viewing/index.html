@@ -16,11 +16,13 @@
 <link rel="preconnect" href="https://commons.wikimedia.org">
 <link rel="preconnect" href="https://unpkg.com">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="/assets/rocket-map-pins.css?v=20261107-origin-v1">
 <link rel="stylesheet" href="/starbase-rocket-launch-viewing/styles.css?v=20261103-v1">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5D2V2W7HN"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-Y5D2V2W7HN');</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://chrisizworski.com/starbase-rocket-launch-viewing/#webpage","url":"https://chrisizworski.com/starbase-rocket-launch-viewing/","name":"Where to Watch Starship Launches: Texas Viewing Atlas","description":"Three public Texas geographic viewing references, sourced road closure guidance and mission-specific launch planning connected to Rocket Launch Live USA.","datePublished":"2026-11-03","dateModified":"2026-11-03","inLanguage":"en-US","author":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@id":"https://chrisizworski.com/#website"},"mainEntity":{"@id":"https://chrisizworski.com/starbase-rocket-launch-viewing/#guide"}},{"@type":"Article","@id":"https://chrisizworski.com/starbase-rocket-launch-viewing/#guide","headline":"Where to Watch a Starship Launch in South Texas","author":{"@id":"https://chrisizworski.com/#person"},"datePublished":"2026-11-03","dateModified":"2026-11-03","mainEntityOfPage":{"@id":"https://chrisizworski.com/starbase-rocket-launch-viewing/#webpage"}},{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Rocket Launch Live USA","item":"https://chrisizworski.com/national-tools/rocket-launch-live/"},{"@type":"ListItem","position":3,"name":"Starbase Texas Viewing Guide","item":"https://chrisizworski.com/starbase-rocket-launch-viewing/"}]}]}</script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
+<script defer src="/assets/rocket-map-pins.js?v=20261107-origin-v1"></script>
 <script src="/starbase-rocket-launch-viewing/app.js?v=20261103-v1" defer></script>
 </head>
 <body>
@@ -71,7 +73,7 @@
     <div class="sb-map-col">
       <div id="sb-map" class="sb-map" role="region" tabindex="0" aria-label="Map of three documented South Texas public sites and a restricted launch pad when verified"><div class="sb-map-fallback">The map is optional. Select a public place below, or open the <a href="https://www.openstreetmap.org/#map=11/26.037/-97.202" target="_blank" rel="noopener noreferrer">South Texas OpenStreetMap view</a>.</div></div>
       <p id="sb-map-status" class="sb-map-status" role="status">Map pins use published geographic references; pad location awaits mission evidence.</p>
-      <div class="sb-map-legend"><span><i class="sb-dot"></i>Public location reference</span><span><i class="sb-pad-dot"></i>Restricted pad from LL2, if known</span><span><i class="sb-line-key"></i>Straight bearing, not a route</span></div>
+      <div class="sb-map-legend"><span class="rocket-map-key"><span class="rocket-key-symbol" aria-hidden="true">🚀</span>Rocket = launch location</span> <span class="rocket-map-key-approx">Dashed rocket = approximate region, not a pad</span><span><i class="sb-dot"></i>Public location reference</span><span><i class="sb-pad-dot"></i>Restricted pad from LL2, if known</span><span><i class="sb-line-key"></i>Straight bearing, not a route</span></div>
     </div>
     <div class="sb-place-list" id="sb-place-list">
       <article class="sb-place-card" id="isla-blanca" data-site="isla-blanca" data-active="true">
