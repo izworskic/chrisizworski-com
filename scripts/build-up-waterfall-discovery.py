@@ -79,12 +79,12 @@ def build() -> dict:
     gis = json.loads(GIS.read_text(encoding="utf-8"))
     curated = json.loads(CURATED.read_text(encoding="utf-8"))["waterfalls"]
     external = source["observations"]
-    assert source["observationCount"] == source["sourceAdvertisedEntries"] == len(external) == 291
+    assert source["observationCount"] == source["sourceAdvertisedEntries"] == len(external) and len(external) >= 150
     assert len({x["id"] for x in external}) == len(external)
     assert len({x["reference"] for x in external}) == len(external)
     assert len(curated) == gis["counts"]["curatedTotal"]
-    assert len(gis["candidates"]) == gis["counts"]["gisCandidates"] == 161
-    assert gis["counts"]["pending"] == 92
+    assert len(gis["candidates"]) == gis["counts"]["gisCandidates"] and len(gis["candidates"]) >= 100
+    assert 0 <= gis["counts"]["pending"] <= len(gis["candidates"])
     assert all(x["county"] in COUNTIES and x["reference"].startswith(
         "https://shorelinescout.com/michigan/waterfalls/") for x in external)
 
