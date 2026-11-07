@@ -192,9 +192,9 @@ class PythonNycIntelligenceTests(unittest.TestCase):
         def sometimes_timeout(request, timeout=35):
             key=request.full_url
             attempts[key]=attempts.get(key,0)+1
-            if len(attempts)==1 and attempts[key]==1:
-                raise TimeoutError("Simulated upstream read timeout")
             where=parse_qs(urlsplit(key).query)["$where"][0]
+            if "link_id='4456510'" in where and "2026-08-06" in where and attempts[key]==1:
+                raise TimeoutError("Simulated upstream read timeout")
             link=re.search(r"link_id='(\d+)'",where).group(1)
             start=re.search(r"data_as_of >= '(\d{4}-\d{2}-\d{2})",where).group(1)
             return io.BytesIO(json.dumps([{"link_id":link,
