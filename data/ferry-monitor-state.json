@@ -1,0 +1,220 @@
+{
+  "version": 1,
+  "sources": {
+    "https://www.bibco.com/ferry-schedules/": {
+      "digest": "b278f7be5185e0e7649a6512143df2b05d23808ce1cdb1534d84210b0d13e400",
+      "sample": "Beaver Island Ferry Schedules | Docks & Hours | Vehicle Reservations | Ferry Schedules | Ferry Schedules | Boat Delay & Cancellations | Ferry History",
+      "observed_at": "2026-11-07"
+    },
+    "https://www.bibco.com/know-before-you-go/rates/": {
+      "digest": "e7646f71c9b4d9b43f352bfb2b5913354b10932013d6b58c2f6cf9ce37d5b9e6",
+      "sample": "Beaver Island Ferry | Docks & Hours | Vehicle Reservations | Ferry Schedules | Ferry Schedules | Boat Delay & Cancellations | Ferry History",
+      "observed_at": "2026-11-07"
+    },
+    "https://www.bibco.com/know-before-you-go/frequently-asked-questions/": {
+      "digest": "f8eb1f36e1ff72e07064ee2e1344725297875cb58a6ebb3e364c54bf9526bd92",
+      "sample": "Beaver Island Ferry FAQ | Docks & Hours | Vehicle Reservations | Ferry Schedules | Ferry Schedules | Boat Delay & Cancellations | Ferry History",
+      "observed_at": "2026-11-07"
+    },
+    "https://www.bibco.com/know-before-you-go/reservations/": {
+      "digest": "aa9ef510f92f14adb16244bec4a8f294dd1e040fe626438bb79a0e9cec5fb938",
+      "sample": "Beaver Island Ferry Vehicle Reservations | Docks & Hours | Vehicle Reservations | Ferry Schedules | Ferry Schedules | Boat Delay & Cancellations | Ferry History",
+      "observed_at": "2026-11-07"
+    },
+    "https://www.bibco.com/know-before-you-go/dock-location-and-weather/": {
+      "digest": "93f1de7ccd34fe22cd11767d4c1674e3c4ca6b506b1f04ea7ed3816c11f8c772",
+      "sample": "Beaver Island Boat Company Dock Location and Hours | Docks & Hours | Vehicle Reservations | Ferry Schedules | Ferry Schedules | Boat Delay & Cancellations | Ferry History",
+      "observed_at": "2026-11-07"
+    },
+    "https://millerferry.com/put-in-bay/": {
+      "digest": "69f27e59ea3c9aaac15af44565a3030af8c946d9a6047370618125711b3d2395",
+      "sample": "Put-in-Bay – Miller Ferry | Miller Ferries | Passenger & Vehicle Service to Put-in-Bay & Middle Bass Island, Ohio | Welcome aboard the Miller Ferry to Put-in-Bay, the 18 minute cruise to Lake Erie’s historic getaway (also known as South Bass Island). Miller offers the lowest fares, travel/lodging savings, free mainland parking, & most frequent trips. Enjoy the region’s best dining & live entertainment, wineries, lakefront parks, South Bass Island",
+      "observed_at": "2026-11-07"
+    },
+    "https://millerferry.com/put-in-bay/put-in-bay-schedule/": {
+      "digest": "a039e0fdba61fddbd1fe46e6e422935e8aa7a2640600c63d96aa1814d73cef37",
+      "sample": "Put-in-Bay Schedule – Miller Ferry | Miller Ferries | Passenger & Vehicle Service to Put-in-Bay & Middle Bass Island, Ohio | Put-in-Bay Schedule | When’s the Next Miller Ferry to Put-in-Bay? | Put-in-Bay Schedule | November 2, 2026 – November 25, 2026",
+      "observed_at": "2026-11-07"
+    },
+    "https://jet-express.com/": {
+      "digest": "88176007b528c3e0a1d1e5e568fbf53a4a2f8261247f5f82faf90d3d3ee06264",
+      "sample": "Jet Express | Ferry to Downtown Put-in-Bay and Kelleys Island | Thank you for an amazing 2026 Season. We will see you in 2027! Don't forget to purchase your gift cards for Christmas now online! | FERRY SERVICE TO THE | CATCH THE PORT CLINTON & SANDUSKY FERRIES | Embark on a journey to the Lake Erie Islands with our convenient ferry service. Whether you’re heading to the shores of Kelleys Island or the lively attractions of Put-in-Bay, Jet Express",
+      "observed_at": "2026-11-07"
+    },
+    "https://millerferry.com/travel-tips/": {
+      "digest": "52e39729c9b25aa5f476ff3a6a72dde4a570aedcb88467f8e0ae592019eb5cb6",
+      "sample": "Miller Ferry FAQ – Miller Ferry | Miller Ferries | Passenger & Vehicle Service to Put-in-Bay & Middle Bass Island, Ohio | Miller Ferry | Miller Ferries offer passenger and vehicle service to the Lake Erie Islands of Put-in-Bay (South Bass Island) or Middle Bass Island, Ohio. | How do I get to Miller Ferry? | Miller Ferries depart from Catawba, end of OH-53 North.",
+      "observed_at": "2026-11-07"
+    },
+    "https://www.ontarioferries.com/routes/tobermory-manitoulin-island-ferry/schedule": {
+      "digest": "764c373d4d58664b56022a0529c0fc4279cf2e633b4ec2fd310dde8a257055a1",
+      "sample": "Sailing Schedule - MS Chi-Cheemaun | OSTC | Welcome! Our website has a fresh new look! Planning your trip, checking schedules and booking your crossing is now easier than ever. | TPelee Island Ferries:",
+      "observed_at": "2026-11-07"
+    },
+    "https://www.ontarioferries.com/routes/tobermory-manitoulin-island-ferry/fares-tickets": {
+      "digest": "e65d790eaaa6647c427cfa09c0c9ba49996ffd5a82748b236615799c2f467ed5",
+      "sample": "Ferry Fares & Tickets - MS Chi-Cheemaun | OSTC | Welcome! Our website has a fresh new look! Planning your trip, checking schedules and booking your crossing is now easier than ever. | TPelee Island Ferries:",
+      "observed_at": "2026-11-07"
+    },
+    "https://www.ontarioferries.com/routes/tobermory-manitoulin-island-ferry": {
+      "digest": "d746093a26044c44c96215c2b6ae96c44dc2055b799a291050bb36d5009142a4",
+      "sample": "Welcome! Our website has a fresh new look! Planning your trip, checking schedules and booking your crossing is now easier than ever. | TPelee Island Ferries:",
+      "observed_at": "2026-11-07"
+    },
+    "https://www.ontarioferries.com/ms-chi-cheemaun/": {
+      "digest": "3e3678abe56b3161197c6e4b95fb3aed1d9a741c0770de28fd78b94a287b6f7f",
+      "sample": "TPelee Island Ferries:",
+      "observed_at": "2026-11-07"
+    },
+    "https://www.toronto.ca/explore-enjoy/toronto-island-ferries/ferry-routes-schedules/": {
+      "digest": "5cd6a6d3e5f058c90b1d8240a225831d0b073e2468341346ad14c0e8e9b7fefc",
+      "sample": "Ferry Routes & Schedules – City of TorontoSkip to content | Ferry Routes & Schedules",
+      "observed_at": "2026-11-07"
+    },
+    "https://www.toronto.ca/explore-enjoy/toronto-island-ferries/ferry-ticket-passenger-information/": {
+      "digest": "04e75a53ef20895c245748e49a306cdc3303f9daf8a18f01cb439727cce74832",
+      "sample": "Ferry Ticket & Passenger Information – City of TorontoSkip to content | Ferry Ticket & Passenger Information",
+      "observed_at": "2026-11-07"
+    },
+    "https://www.ontarioferries.com/routes/pelee-island/schedule": {
+      "digest": "a5a6b9dc03460516b4d05fad6d313bbe3261518ced631a3b5fe86e54164b14f5",
+      "sample": "Sailing Schedule - Pelee Island Ferries | OSTC | Welcome! Our website has a fresh new look! Planning your trip, checking schedules and booking your crossing is now easier than ever. | TPelee Island Ferries:",
+      "observed_at": "2026-11-07"
+    },
+    "https://www.ontarioferries.com/routes/pelee-island/fares-tickets": {
+      "digest": "2b1675d527e79fc8865d1caa4e1a1ccc0422506a99475bda7364686727bcbf7f",
+      "sample": "Ferry Fares & Tickets - Pelee Island | OSTC | Welcome! Our website has a fresh new look! Planning your trip, checking schedules and booking your crossing is now easier than ever. | TPelee Island Ferries:",
+      "observed_at": "2026-11-07"
+    },
+    "https://www.ontarioferries.com/routes/pelee-island": {
+      "digest": "929ba2fa91f6b6e900005c834ac5263135679e702f06404a7ababd87f139e7b2",
+      "sample": "Pelee Island Ferry | Owen Sound Transportation Company | Welcome! Our website has a fresh new look! Planning your trip, checking schedules and booking your crossing is now easier than ever. | TPelee Island Ferries:",
+      "observed_at": "2026-11-07"
+    },
+    "https://www.ontarioferries.com/pelee-island-ferries/": {
+      "digest": "3e3678abe56b3161197c6e4b95fb3aed1d9a741c0770de28fd78b94a287b6f7f",
+      "sample": "TPelee Island Ferries:",
+      "observed_at": "2026-11-07"
+    },
+    "https://www.nps.gov/isro/planyourvisit/ferry-transportation-services.htm": {
+      "digest": "c6358b1c2420f71b965b729ab5b8cc2359c90a21ea4f42e678c0ffda819f0c5e",
+      "sample": "Ferry Transportation Services - Isle Royale National Park (U.S. National Park Service) | National Park Service | Ferry Transportation Services | The RANGER III passenger ferry operates between Houghton, MI and Rock Harbor, MI. | The ISLE ROYALE QUEEN IV passenger ferry operates between Copper Harbor, MI and Rock Harbor, MI. | The VOYAGEUR II passenger ferry operates from Grand Portage, MN, to Windigo and Rock Harbor, MI. | The SEA HUNTER III pass",
+      "observed_at": "2026-11-07"
+    },
+    "https://home.nps.gov/isro/planyourvisit/ranger-iii-schedule.htm": {
+      "digest": "5fe4ee17a564dc9e6f8013a7edf323249480303f45a90a69fad1c44bed2e05fd",
+      "sample": "RANGER III Schedule - Isle Royale National Park (U.S. National Park Service) | National Park Service | RANGER III Schedule | Ranger III Schedule 2027 | Passenger service is offered from late May through early September. The Ranger III takes approximately 6 hours to cross Lake Superior each way. You do not have to schedule a round-trip; one-way trips may be scheduled. There are no one-day, round-trip voyages. | RANGER III Reservations | Reserve se",
+      "observed_at": "2026-11-07"
+    },
+    "https://home.nps.gov/isro/planyourvisit/directions.htm": {
+      "digest": "745fe10ae6a31dcbdfc30d26f2c5c25a635c39b9b206c74ad62f10833d9e655c",
+      "sample": "Directions & Transportation - Isle Royale National Park (U.S. National Park Service) | National Park Service | Isle Royale National Park is closed to all visitors from November 1 until April 15. Operating Hours & Seasons | The ferries and seaplane provide transportation for the public from the middle of May until September. Check their websites for their schedule. | Planning a trip to Isle Royale may feel complicated. All is well, traveling to th",
+      "observed_at": "2026-11-07"
+    },
+    "https://www.nps.gov/isro/planyourvisit/directions.htm": {
+      "digest": "745fe10ae6a31dcbdfc30d26f2c5c25a635c39b9b206c74ad62f10833d9e655c",
+      "sample": "Directions & Transportation - Isle Royale National Park (U.S. National Park Service) | National Park Service | Isle Royale National Park is closed to all visitors from November 1 until April 15. Operating Hours & Seasons | The ferries and seaplane provide transportation for the public from the middle of May until September. Check their websites for their schedule. | Planning a trip to Isle Royale may feel complicated. All is well, traveling to th",
+      "observed_at": "2026-11-07"
+    },
+    "https://www.nps.gov/isro/planyourvisit/ranger-iii-info.htm": {
+      "digest": "3ba078c9f5ab1da07c5d787029216e3c6f9a8f47e2fc6ca954cb00ba54998fb0",
+      "sample": "RANGER III Passenger Ferry - Isle Royale National Park (U.S. National Park Service) | National Park Service | RANGER III Passenger Ferry | RANGER III Schedule | RANGER III Fares | The Ranger III is a 165 foot long, 34 feet wide, 648 ton passenger vessel. All service departs from Houghton, Michigan and travels to either Rock Harbor or Windigo on Isle Royale. All transportation to and from Isle Royale is passengers only. All vehicles are parked on ",
+      "observed_at": "2026-11-07"
+    },
+    "https://chrisizworski.com/isle-royale-ferry/": {
+      "digest": "ff3b898417d5caf4de189beb6a99dfab0e897a9931cf5fc2c7df9c382c456801",
+      "sample": "Isle Royale Ferry Cost & Schedule | Chris IzworskiSkip to ferry decision | Isle Royale Ferry Planner. | Windigo for the day? Rock Harbor for a longer stay? Tell us where you're headed. We'll explain which ferry actually serves that journey, what must be booked together, and what still needs to be verified. | Sea Hunter III · Grand Portage, 2022 · Tony Webster · CC BY 2.0 · not live | 2027 sailings not yet confirmed. Route guidance uses the operat",
+      "observed_at": "2026-11-07"
+    },
+    "https://www.lake-express.com/plan-your-trip/schedule/": {
+      "digest": "ccdf8ae4bea02d1ed590e3c32c3d269b374fdfaa1fd14595488604774612fc28",
+      "sample": "Lake Michigan fast ferry schedule - Lake ExpressSkip to content | Lake Michigan fast ferry schedule | Milwaukee, WI Ferry Terminal | Muskegon, MI Ferry Terminal | Lake Michigan fast ferry scheduleTéa Tetting2026-09-24T08:25:29-05:00 | The fast ferry shortcut | The Lake Express high-speed ferry has two daily departures from Milwaukee and Muskegon in Spring and Fall, with additional evening crossings in Summer on popular travel days.",
+      "observed_at": "2026-11-07"
+    },
+    "https://www.lake-express.com/plan-your-trip/rates/": {
+      "digest": "815ac5fbadedd82a186460b021bbc51a9b7070e7577b0b009fb208b72660a376",
+      "sample": "Rates - Lake ExpressSkip to content | Lake Michigan fast ferry schedule | Milwaukee, WI Ferry Terminal | Muskegon, MI Ferry Terminal | RatesTéa Tetting2026-09-01T14:37:04-05:00 | 2026 Rates | Enjoy the Ride on Lake Michigan’s Fast Ferry",
+      "observed_at": "2026-11-07"
+    },
+    "https://www.lake-express.com/plan-your-trip/": {
+      "digest": "a3f12a73ddd3126dc453370db136fe90a47039a93d1b8acea691f6a3561cbfa0",
+      "sample": "Lake Michigan fast ferry schedule | Milwaukee, WI Ferry Terminal | Muskegon, MI Ferry Terminal | Your next Great Lakes adventure is only a reservation away. Frequent daily departures and accommodations for a variety of vehicles that is stress free, time-saving, easy to use, and efficient. The only thing left to do is enjoy Lake Michigan’s fast ferry shortcut. | Schedules | 2026 daily roundtrip service returns May 1, 2026, with two daily departure",
+      "observed_at": "2026-11-07"
+    },
+    "https://www.lake-express.com/plan-your-trip/travel-faqs/": {
+      "digest": "6979a43cc7d9b9a248088faeade57172c521c979d02b2bf5a3350f74af005be2",
+      "sample": "Lake Michigan fast ferry schedule | Milwaukee, WI Ferry Terminal | Muskegon, MI Ferry Terminal | Purchase tickets online, by contacting us, or by visiting one of our terminals. It is best to do this well in advance of your trip to ensure space is available as popular trips often sell out. A limited number of stand-by spaces may be available for sold out trips – call for details. Tickets must be purchased for each traveler, including infants, and ",
+      "observed_at": "2026-11-07"
+    },
+    "https://ssbadger.com/schedule/": {
+      "digest": "552fb7afae41aa7b42f7cb06c41e50876b79c14c9fd51ae98609fbcfa5cbe400",
+      "sample": "Schedule | Lake Michigan Carferry Service | Online reservations are now open for 2027! | 2027 Schedule | S.S. Badger's Departure and Arrival Schedules | May 14 - October 10 | Overnight Crossings June 18 - August 20 | Travel round trip without a vehicle in 3 days or less and pay just $120 per adult! You can also take 2 kids FREE per paying adult. Each additional child ages 5-15 is $68. Learn more.",
+      "observed_at": "2026-11-07"
+    },
+    "https://ssbadger.com/fares/": {
+      "digest": "a3313251545b2e5bce359c5a2a0d15de36e04da9f650b74d7ce25ca1f25d895a",
+      "sample": "Fares | Lake Michigan Carferry Service | Online reservations are now open for 2027! | S.S. Badger's Fares for 2027 | Passenger fares are separate from vehicle fares. | Children under the age of 16 sailing aboard the S.S. Badger must be accompanied by an adult. | Reservations Recommended! We cannot guarantee you a spot without a reservation. | Travel round trip without a vehicle in 3 days or less and pay just $120 per adult! You can also take 2 ki",
+      "observed_at": "2026-11-07"
+    },
+    "https://ssbadger.com/contact/": {
+      "digest": "e810b4717158071d12b19a1acb93b65ab7a8e33d567d900051a3ee20b3ca64b3",
+      "sample": "Contact | Lake Michigan Carferry Service | Online reservations are now open for 2027! | Dock Terminals | Ludington Dock | Manitowoc Dock | Lake Michigan Carferry Service | Department Managers:",
+      "observed_at": "2026-11-07"
+    },
+    "https://ssbadger.com/": {
+      "digest": "f52f1543e04c47f0f9b0ee39604fb2fd884a627fdcdec2cd7c5d465e7b721ea3",
+      "sample": "Lake Michigan Carferry Service - SS Badger | Online reservations are now open for 2027! | SS Badger Ferry | Lake Michigan Ferry Between Ludington & Manitowoc | Choose Your Ferry Ticket Type | Book Lake Michigan Cross Lake Ferry Tickets by Date | Use arrow keys to navigate dates when calendar is open",
+      "observed_at": "2026-11-07"
+    },
+    "https://www.nps.gov/slbe/planyourvisit/the-manitou-islands.htm": {
+      "digest": "6b38236ee67c642fdd9f5ac0fc6e53d509fd278bd1a462c80826ddbe861be296",
+      "sample": "The Manitou Islands - Sleeping Bear Dunes National Lakeshore (U.S. National Park Service) | National Park Service | Manitou Island Access 2026 | Both North Manitou Island and South Manitou Island will have limited visitor access throughout the 2026 season due to a major construction project. | The National Park Service is relocating the docks on both islands to safer, more sheltered locations. This project addresses damage caused by storms, shift",
+      "observed_at": "2026-11-07"
+    },
+    "https://manitoutransit.com/": {
+      "digest": "3a635caa422a3cd8ec4e7fa2f19e82e8eef23e330a1879552510fb9d6e5b3e3b",
+      "sample": "Manitou Island Transit — Ferry Service to the Manitou Islands | Ferry Service to the Manitou Islands | 2026 SEASON | 2026 Season: | THE SLEEPING BEAR DUNES NATIONAL PARK SERVICE HAVE CLOSED BOTH SOUTH AND NORTH MANITOU ISLANDS DOCKS FOR THE WHOLE 2026 SEASON. MANITOU ISLAND TRANSIT WILL NOT BE RUNNING ANY TRIPS. | Copyright © 2026 · Magazine Child Theme on Genesis Framework · WordPress · Log in",
+      "observed_at": "2026-11-07"
+    },
+    "https://www.nps.gov/slbe/planyourvisit/southmanitouisland.htm": {
+      "digest": "0df0c2e335042283def1dafb6069456b16e93a9edfc4bb79ee2791953f3cb861",
+      "sample": "South Manitou Island - Sleeping Bear Dunes National Lakeshore (U.S. National Park Service) | National Park Service | South Manitou Island Access 2026 | Both North Manitou Island and South Manitou Island will have limited visitor access throughout the 2026 season due to a major construction project. | The National Park Service is relocating the docks on both islands to safer, more sheltered locations. This project addresses damage caused by storms",
+      "observed_at": "2026-11-07"
+    },
+    "https://www.nps.gov/slbe/planyourvisit/northmanitouisland.htm": {
+      "digest": "dbec3894a459c3d0c50f8443a434c41434ff89c4f592fccce7144418b7425a96",
+      "sample": "North Manitou Island1 - Sleeping Bear Dunes National Lakeshore (U.S. National Park Service) | National Park Service | Manitou Islands Access Update – 2026 | Both North Manitou Island and South Manitou Island will have limited visitor access throughout the 2026 season due to a major construction project. | The National Park Service is relocating the docks on both islands to safer, more sheltered locations. This project addresses damage caused by s",
+      "observed_at": "2026-11-07"
+    },
+    "https://www.nps.gov/slbe/planyourvisit/backcountrycamping.htm": {
+      "digest": "60981a1e3959dee5f5d00fc9ad2a01a9ba386f3562be1a04c34a6f96e2d6b8ab",
+      "sample": "Backcountry Camping - Sleeping Bear Dunes National Lakeshore (U.S. National Park Service) | National Park Service | Manitou Island Access 2026 | North Manitou Island 2026 | Closed until further notice: | The North Manitou Island village and dock are closed until further notice. | An announcement on 2026 access will be posted mid-winter, 2026.",
+      "observed_at": "2026-11-07"
+    },
+    "https://www.manitoutransit.com/islands/boat.html": {
+      "digest": "b01cb4f27fb9f8542d46f42bcee3293c5bb3e3bae44a1063d8d4f383b49249e3",
+      "sample": "You journey to North and South Manitou Islands by boat from the Leland Harbor. The trip is about 50 minutes to North and 1 1/2 hours to South. The trip is across the historic Manitou Passage, where modern freighter may still be seen as well as landmarks like Pyramid Point. On your way, you'll see \"the Crib\", the North Manitou Shoal Light. The light (pictured right) was built in 1935 and sits on a 9 foot shoal off the island. We remind you that th",
+      "observed_at": "2026-11-07"
+    },
+    "https://www.sheplersferry.com/ticket-options/": {
+      "digest": "b6654883f064fb29feb29e47e71ac6f43e0b85c1748327d6f6b1f91658aec5db",
+      "sample": "Ticket Options - Shepler's Mackinac Island Ferry | 2026 Labor Day Bridge Walk | Ferry Tickets | All tickets, add-ons, and combinations valid for any departure April 21 through October 31, 2026 and are entirely non-refundable. There will be a $2 booking fee per ferry ticket ticket. | Purchase tickets online in advance of your Mackinac Island visit! Tickets valid for any date and departure during the 2026 season. All round-trip tickets are entirely",
+      "observed_at": "2026-11-07"
+    },
+    "https://www.sheplersferry.com/": {
+      "digest": "c806ba2ab94d4fba1937be7a8ddfeda210f9e58385cfc3955076b5f37af5fb38",
+      "sample": "Homepage - Shepler's Mackinac Island Ferry | 2026 Labor Day Bridge Walk | Shepler's Mackinac Island Ferry | Buy Ferry Tickets | Schedule and Tickets | Plan your departure with ease by exploring up-to-date ferry schedule and purchasing your roundtrip tickets in just a few clicks | Find the right parking and choose the most convenient departure location so your trip starts smoothly from the moment you arrive",
+      "observed_at": "2026-11-07"
+    },
+    "https://www.arnoldtransitcompany.com/summer-schedule/": {
+      "digest": "8b754b24f2a24b20247ca4a73d4e3394fb5c9a3f025518264d6885c15e934db4",
+      "sample": "Summer Ferry Schedule | Arnold Transit Company - Mackinac Island Ferry | SCHEDULE | SCHEDULE | FALL SCHEDULE | CHOOSE YOUR DEPARTURE LOCATION | MACKINAW CITYST. IGNACE MAIN DOCKST. IGNACE CLASSIC DOCK | TRADITIONAL FAST FERRY SERVICE",
+      "observed_at": "2026-11-07"
+    },
+    "https://www.arnoldtransitcompany.com/summer-ferry-rates/": {
+      "digest": "7bca8651487aceead2dde76fc9554979333fb4cf9d43682928104747f030fe4d",
+      "sample": "Summer Ferry Rates | Arnold Transit Company - Mackinac Island Ferry | SCHEDULE | SCHEDULE | SUMMER RATES | TRADITIONAL FAST FERRY SERVICE | Departing from Mackinaw City & St. Ignace Main Dock from April 21 – October 31, 2026 | BUY FAST FERRY TICKETS HERE",
+      "observed_at": "2026-11-07"
+    }
+  }
+}
