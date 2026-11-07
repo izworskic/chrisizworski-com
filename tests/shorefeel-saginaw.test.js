@@ -65,7 +65,7 @@ test('Saginaw API keeps a valid inner-bay pixel when the west NOAA request fails
  const oldFetch=global.fetch;
  const now=new Date();
  const observation=new Date(now.getTime()-12*3600000).toISOString().slice(0,10)+'T12:00:00Z';
- const ordinal=Math.floor((Date.UTC(now.getUTCFullYear(),now.getUTCMonth(),now.getUTCDate())-Date.UTC(now.getUTCFullYear(),0,0))/86400000)+1;
+ const ordinal=Math.floor((Date.UTC(now.getUTCFullYear(),now.getUTCMonth(),now.getUTCDate())-Date.UTC(now.getUTCFullYear(),0,0))/86400000);
  const pad=n=>String(n).padStart(2,'0');
  const ndbc=now.getUTCFullYear()+' '+pad(now.getUTCMonth()+1)+' '+pad(now.getUTCDate())+' '+pad(now.getUTCHours())+' '+pad(now.getUTCMinutes())+' 16.1';
  const row=(lat,lon,c)=>'time,latitude,longitude,sst\nUTC,degrees_north,degrees_east,degree_C\n'+observation+','+lat+','+lon+','+c+'\n';
