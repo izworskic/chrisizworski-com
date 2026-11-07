@@ -30,20 +30,13 @@ test('B77 Konteka is a distinct approximate natural feature on an existing publi
  assert.ok(!catalog.waterfalls.some(x=>x.id==='konteka-falls'||x.id==='konteko-falls'));
  assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/konteka-falls/'));
 });
-test('B77 Wildcat holds publication while exact feature-point role remains independent of owner arrival',()=>{
+test('B77 snapshot remains an honest research-only historical record after B78 publication',()=>{
  assert.equal(e.method,'online-sources-only-no-outreach');
- assert.equal(e.access.landManager.verified,true);
- assert.equal(e.access.publicAccess.verified,true);
- assert.equal(e.access.parking.verified,true);
- assert.equal(e.access.trail.verified,true);
- assert.equal(e.access.location.verified,false);
- assert.equal(e.discrepancy.officialPositionWins,true);
- assert.equal(e.publicMapEligible,false);
- assert.equal(e.indexableGuideEligible,false);
- assert.equal(catalog.waterfalls.length,78);
- assert.equal((sitemap.match(/<loc>/g)||[]).length,76);
- assert.ok(!catalog.waterfalls.some(x=>x.id==='wildcat-falls'));
- assert.ok(!hub.includes('data-id="wildcat-falls"'));
- assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/wildcat-falls/'));
- assert.ok(!fs.existsSync('public/upper-peninsula-waterfalls/wildcat-falls/index.html'));
+ assert.equal(e.access.location.verified,false,'B77 original research held this gate');
+ assert.equal(e.supersededByBatch,'B78');
+ const a=JSON.parse(read('data/up-waterfall-b78-wildcat-publication-evidence.json'));
+ assert.equal(a.publication.eligible,true);
+ assert.ok(catalog.waterfalls.some(x=>x.id==='wildcat-falls'));
+ assert.match(hub,/data-id="wildcat-falls"/);
+ assert.match(sitemap,/upper-peninsula-waterfalls\/wildcat-falls\//);
 });

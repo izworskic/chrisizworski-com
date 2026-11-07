@@ -9,8 +9,8 @@
     "gisCandidates": 161,
     "exactIdMatched": 69,
     "pending": 92,
-    "curatedTotal": 78,
-    "curatedNoMatchingGIS": 13
+    "curatedTotal": 79,
+    "curatedNoMatchingGIS": 14
   },
   "candidates": [
     {
@@ -9830,6 +9830,13 @@
       "gisObjectId": null,
       "publication": "verified-access-guide",
       "reason": "KLT official map labels Middle Falls between public upper preserve and Michigan DNR lower gorge, and its owner brochure maps the route plus Golf Course Road roadside arrival. Visit Keweenaw independently describes middle waterfall downstream on the public gorge trail. Two non-government point records agree within about 21m at 47.17193,-88.44781. No separate Middle GIS feature id exists in the 161-source subset; DO NOT merge into lower #130 or upper #134, and DO NOT use the falls pin as parking."
+    },
+    {
+      "id": "wildcat-falls",
+      "name": "Wildcat Falls",
+      "gisObjectId": null,
+      "publication": "verified-access-guide",
+      "reason": "Owner Northwoods Alliance maps public signed waterfall trailhead and named FALLS on its community forest parcel, publishes legal non-motorized public access and roadside directions at 0.6 mile north of McGinty Lane. WUPCVB brochure #29 independently names this Scott and Howe Creek Wildcat Falls and provides approximate NATURAL FEATURE coordinate 46.346173,-89.292236 plus same owner-published road approach. No separate exact Michigan named GIS source ID, no surveyed trail or parking geometry, no feature-pin vehicle directions."
     }
   ],
   "batchCheckpoints": [
@@ -10378,6 +10385,15 @@
       "summary": "Published the third Hungarian Falls destination using the KLT owner map, KLT parking source, public middle-gorge trail and independently corroborated approximate middle feature point. Kept blocked Gardener's Creek, Eister and Haymeadow trail claims out of the public count.",
       "published": [
         "middle-hungarian-falls"
+      ],
+      "pendingGisFeatures": 92
+    },
+    {
+      "batch": "78",
+      "reviewed": "2026-11-07",
+      "summary": "Wildcat Falls Community Forest verified via current owner property/trail map labeling both FALLS and TRAIL HEAD, yellow-marked public path and County Line Lake Road signed arrival, plus regional waterfall brochure #29 approximate distinct natural-feature point. No car routing to falls, no invented parking GPS, no live snow/road conditions, no outreach.",
+      "published": [
+        "wildcat-falls"
       ],
       "pendingGisFeatures": 92
     }
