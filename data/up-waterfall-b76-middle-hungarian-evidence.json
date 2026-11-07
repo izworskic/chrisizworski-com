@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "batch": "B76",
+  "reviewDate": "2026-11-07",
+  "method": "online-sources-only-no-agency-contact",
+  "name": "Middle Hungarian Falls",
+  "curatedId": "middle-hungarian-falls",
+  "county": "Houghton",
+  "river": "Dover Creek / Hungarian Creek",
+  "resolution": "publish-public-gorge-walk-with-independent-approximate-feature-point",
+  "governmentGIS": {
+    "upperObjectId": 134,
+    "lowerObjectId": 130,
+    "individualMiddleObjectId": null,
+    "doNotAliasWithUpperLower": true
+  },
+  "naturalFeature": {
+    "lat": 47.17193,
+    "lng": -88.44781,
+    "role": "waterfall-only-not-car-destination",
+    "source": "https://www.byway.world/places/waterfalls/middle-hungarian-falls-02e90dbe",
+    "secondary": {
+      "lat": 47.1721,
+      "lng": -88.4477,
+      "source": "https://shorelinescout.com/michigan/waterfalls/middle-hungarian-falls/"
+    },
+    "approximateSourcesMetresApart": 20.7,
+    "officialSurvey": false
+  },
+  "arrival": {
+    "lat": 47.173159,
+    "lng": -88.444743,
+    "role": "land-manager-published-roadside-parking-reference-only",
+    "source": "https://keweenawlandtrust.org/sites/default/files/2019-11/Hungarian%20Falls%20Brochure_0.pdf",
+    "driveGate": "public Golf Course Road subject to legal shoulder availability and winter plow",
+    "notLiveParkingCapacity": true
+  },
+  "landOwnership": {
+    "landTrust": "upper 10-acre nature area",
+    "state": "much of middle/lower gorge",
+    "private": "surrounding parcels marked on brochure",
+    "source": "https://keweenawlandtrust.org/sites/default/files/2019-11/Hungarian%20Falls%20Brochure_0.pdf"
+  },
+  "walking": {
+    "entry": "KLT public roadside sign, rough former access road 400 yards to gathering area",
+    "towardMiddle": "mapped downstream public gorge trail on owner brochure, named middle waterfall marked",
+    "support": "https://www.visitkeweenaw.com/blog/post/your-ultimate-hungarian-falls-adventure-guide/",
+    "totalGorgeDistance": "roughly 2 miles, not a measured middle-specific hike",
+    "trailPolylineSurveyed": false,
+    "viewpointSurveyed": false,
+    "creekCrossingRequired": false,
+    "steepBaseScrambleEndorsed": false
+  },
+  "seasonal": {
+    "yearRoundPedestrianPublic": true,
+    "winterRoadPlowed": false,
+    "liveStreamgage": false,
+    "liveOpenNowEstablished": false,
+    "source": "https://keweenawlandtrust.org/protected-lands/hungarian-falls-nature-area"
+  },
+  "publication": {
+    "verifiedTrail": true,
+    "verifiedParkingReference": true,
+    "approximateNaturalFeature": true,
+    "featurePinIsCarDestination": false,
+    "routeToFeaturePin": false,
+    "noEmails": true,
+    "sourceConfidence": "owner/trail and tourism route documented; approximate independently corroborated falls coordinate; no live water or trail status"
+  },
+  "researchOnly": [
+    {
+      "name": "Gardener’s Creek Falls",
+      "reason": "Visit Keweenaw's public driving tour explicitly states the trail does not lead to a waterfall, despite separate niche specialist small cascade record; do not advertise a separate falls-specific visitor route without resolving contradiction",
+      "sources": [
+        "https://www.visitkeweenaw.com/blog/post/2-day-keweenaw-waterfall-driving-tour/",
+        "https://www.waterfallsofthekeweenaw.com/gardeners-creek/gardeners-falls/"
+      ]
+    },
+    {
+      "name": "Eister Falls",
+      "reason": "MNA official sanctuary details mention falls, but live public sanctuary directory currently labels Gratiot Lake Overlook access limited; do not publish trail directions without online clarification",
+      "sources": [
+        "https://michigannature.org/index.cfm?action=listing&fuseaction=locationgallery&listing=200",
+        "https://www.michigannature.org/map.html"
+      ]
+    },
+    {
+      "name": "Haymeadow Falls",
+      "reason": "An active USFS trail-and-bridge closure notice exists; do not treat NEPA bridge-replacement approval as an opened bridge",
+      "source": "https://organizations.outerspatial.com/organizations/united-states-forest-service-6899/alerts/1045"
+    }
+  ]
+}
