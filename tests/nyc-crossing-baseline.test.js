@@ -33,7 +33,10 @@ test('NYC historical baseline query is tightly bounded to same weekday/hour and 
   const select = url.searchParams.get('$select');
   assert.match(select, /avg\(travel_time::number\)/);
   assert.match(select, /count\(travel_time\)/);
-  assert.match(where, /status='0'/);
+  assert.doesNotMatch(where, /status=/);
+  assert.match(where, /speed::number>0/);
+  assert.match(where, /speed::number<100/);
+  assert.match(where, /travel_time::number<3600/);
   assert.match(where, /date_extract_dow\(data_as_of\)=2/);
   assert.match(where, /date_extract_hh\(data_as_of\)=8/);
   assert.match(where, /travel_time::number>0/);
@@ -44,7 +47,7 @@ test('NYC historical baseline query is tightly bounded to same weekday/hour and 
   assert.match(where, /2026-10-05T23:59:59\.999/);
   assert.equal(url.searchParams.get('$group'), 'link_id');
   assert.equal(url.searchParams.get('$limit'), '100');
-  assert.match(baselineCacheKey(now), /baseline:v2:/);
+  assert.match(baselineCacheKey(now), /baseline:v3:/);
 });
 
 test('historical baseline rows require enough valid observations', () => {
