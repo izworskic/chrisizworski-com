@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "nyc-departure-evidence-v1",
+  "state": "UNAVAILABLE",
+  "generatedAt": null,
+  "source": {
+    "datasetId": "i4gi-tjb9",
+    "url": "https://data.cityofnewyork.us/resource/i4gi-tjb9.json",
+    "latestObservationDate": null,
+    "ageHours": null
+  },
+  "method": {
+    "kind": "weekday/weekend hourly medians of daily means",
+    "trainingCalendarDays": 70,
+    "holdoutCalendarDays": 14,
+    "segmentOnly": true,
+    "notDoorToDoor": true,
+    "notLiveForecast": true
+  },
+  "quality": {
+    "validHourRows": 0,
+    "invalidRows": 0,
+    "duplicateRows": 0,
+    "conflictRows": 0
+  },
+  "crossings": {},
+  "reason": "No fresh, independently validated historical model is published yet."
+}

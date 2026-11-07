@@ -51,8 +51,8 @@ test('one Person identity anchors WebPage, WebApplication and breadcrumb',()=>{
 test('mobile explainer, updated assets and truthful incident outage state',()=>{
  assert.ok(css.includes('.quick-facts{display:grid'));
  assert.ok(css.includes('@media(max-width:760px){.quick-facts{grid-template-columns:minmax(0,1fr)}'));
- assert.ok(html.includes('nyc-crossing.css?v=20261009d'));
- assert.ok(html.includes('nyc-crossing.js?v=20261009d'));
+ assert.ok(html.includes('nyc-crossing.css?v=20261107-intel1'));
+ assert.ok(html.includes('nyc-crossing.js?v=20261107-intel1'));
  assert.ok(js.includes("info?.state==='CACHE_UNAVAILABLE'"));
  assert.ok(js.includes('incident cache temporarily unavailable'));
  assert.ok(js.includes('no incident-clear claim is available'));

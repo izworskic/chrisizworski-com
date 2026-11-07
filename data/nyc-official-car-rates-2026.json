@@ -1,0 +1,136 @@
+{
+  "schemaVersion": "nyc-car-rate-audit-v1",
+  "verifiedOn": "2026-11-07",
+  "sources": [
+    {
+      "agency": "MTA",
+      "url": "https://www.mta.info/fares-tolls/tolls/vehicle-types",
+      "effective": "2026-01-04",
+      "scope": "standard two-axle cars"
+    },
+    {
+      "agency": "PANYNJ",
+      "url": "https://www.panynj.gov/bridges-tunnels/en/tolls.html",
+      "effective": "2026-07-12",
+      "scope": "standard two-axle cars / toll direction toward NY"
+    },
+    {
+      "agency": "MTA Congestion Relief Zone",
+      "url": "https://www.mta.info/fares-tolls/tolls/congestion-relief-zone/about",
+      "effective": "2025-01-05",
+      "scope": "2026 personal-car rates and eligible crossing credit"
+    }
+  ],
+  "cases": [
+    {
+      "name": "PA weekday peak NYC-bound with crossing credit",
+      "crossing": "lincoln",
+      "payment": "ny-ezpass",
+      "travelAt": "2026-11-02T08:00",
+      "destinationZone": true,
+      "toll": 1679,
+      "zone": 600,
+      "credit": 300,
+      "total": 2279
+    },
+    {
+      "name": "PA midday off-peak while zone is peak",
+      "crossing": "lincoln",
+      "payment": "ny-ezpass",
+      "travelAt": "2026-11-02T12:00",
+      "destinationZone": true,
+      "toll": 1479,
+      "zone": 600,
+      "credit": 300,
+      "total": 2079
+    },
+    {
+      "name": "PA car Tolls by Mail and CRZ",
+      "crossing": "holland",
+      "payment": "mail",
+      "travelAt": "2026-11-02T12:00",
+      "destinationZone": true,
+      "toll": 2330,
+      "zone": 1350,
+      "credit": 0,
+      "total": 3680
+    },
+    {
+      "name": "PA weekend peak NYC-bound",
+      "crossing": "gwb",
+      "payment": "ny-ezpass",
+      "travelAt": "2026-11-07T12:00",
+      "destinationZone": false,
+      "toll": 1679,
+      "zone": 0,
+      "credit": 0,
+      "total": 1679
+    },
+    {
+      "name": "PA weekend offpeak NYC-bound",
+      "crossing": "gwb",
+      "payment": "ny-ezpass",
+      "travelAt": "2026-11-07T10:00",
+      "destinationZone": false,
+      "toll": 1479,
+      "zone": 0,
+      "credit": 0,
+      "total": 1479
+    },
+    {
+      "name": "MTA qualifying E-ZPass car",
+      "crossing": "rfk",
+      "payment": "ny-ezpass",
+      "travelAt": "2026-11-02T08:00",
+      "destinationZone": false,
+      "toll": 746,
+      "zone": 0,
+      "credit": 0,
+      "total": 746
+    },
+    {
+      "name": "MTA mail car with CRZ",
+      "crossing": "queens-midtown",
+      "payment": "mail",
+      "travelAt": "2026-11-02T08:00",
+      "destinationZone": true,
+      "toll": 1203,
+      "zone": 1350,
+      "credit": 0,
+      "total": 2553
+    },
+    {
+      "name": "Brooklyn no crossing toll but CRZ peak",
+      "crossing": "brooklyn",
+      "payment": "ny-ezpass",
+      "travelAt": "2026-11-02T08:00",
+      "destinationZone": true,
+      "toll": 0,
+      "zone": 900,
+      "credit": 0,
+      "total": 900
+    },
+    {
+      "name": "Brooklyn overnight CRZ",
+      "crossing": "brooklyn",
+      "payment": "ny-ezpass",
+      "travelAt": "2026-11-02T23:00",
+      "destinationZone": true,
+      "toll": 0,
+      "zone": 225,
+      "credit": 0,
+      "total": 225
+    },
+    {
+      "name": "Verrazzano car mail base toll",
+      "crossing": "verrazzano",
+      "payment": "mail",
+      "travelAt": "2026-11-02T08:00",
+      "destinationZone": false,
+      "toll": 1203,
+      "zone": 0,
+      "credit": 0,
+      "total": 1203
+    }
+  ]
+}
