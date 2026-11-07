@@ -867,6 +867,7 @@
     'ksc-viewing':'Kennedy Visitor Complex viewing rules',
     'starbase-city':'City of Starbase beach & road notices',
     'wallops-schedule':'NASA Wallops launch schedule',
+    'wallops-range-blog':'NASA Wallops Range official articles',
     'wallops-visitor':'NASA Wallops Visitor Center',
     'alaska-aerospace':'Alaska Aerospace road-closure desk',
     'alaska-news':'Alaska Aerospace operator news',
