@@ -149,6 +149,10 @@ class PythonNycIntelligenceTests(unittest.TestCase):
             self.assertEqual(params["$limit"], ["800"])
             self.assertEqual(timeout, 35)
             where = params["$where"][0]
+            # NYC DOT calls status an artifact, not evidence of measurement validity.
+            self.assertNotIn("status=", where)
+            self.assertIn("speed::number>0", where)
+            self.assertIn("travel_time::number>0", where)
             lid = re.search(r"link_id='(\d+)'", where).group(1)
             start = date.fromisoformat(re.search(r"data_as_of >= '(\d{4}-\d{2}-\d{2})", where).group(1))
             stop = date.fromisoformat(re.search(r"data_as_of < '(\d{4}-\d{2}-\d{2})", where).group(1))
