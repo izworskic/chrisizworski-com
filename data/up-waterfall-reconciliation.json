@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-06",
+  "reviewed": "2026-11-07",
   "issue": 1258,
   "method": "Exact gisObjectId only. No name-only joins, inferred public access, or indexable candidate generation.",
   "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
@@ -9,8 +9,8 @@
     "gisCandidates": 161,
     "exactIdMatched": 69,
     "pending": 92,
-    "curatedTotal": 77,
-    "curatedNoMatchingGIS": 12
+    "curatedTotal": 78,
+    "curatedNoMatchingGIS": 13
   },
   "candidates": [
     {
@@ -9823,6 +9823,13 @@
       "gisObjectId": null,
       "publication": "verified-access-guide",
       "reason": "Keweenaw Land Trust confirms small UNNAMED stream ledges inside the 2025-opened public Boston Creek Nature Area; no individually surveyed waterfall coordinate or exact Michigan GIS feature. The catalog's map point is the sourced OSM nature-area centre only, NOT a waterfall, parking or trailhead. Public signed owner-maintained 0.8-mile loop and ~3-car lot are documented online."
+    },
+    {
+      "id": "middle-hungarian-falls",
+      "name": "Middle Hungarian Falls",
+      "gisObjectId": null,
+      "publication": "verified-access-guide",
+      "reason": "KLT official map labels Middle Falls between public upper preserve and Michigan DNR lower gorge, and its owner brochure maps the route plus Golf Course Road roadside arrival. Visit Keweenaw independently describes middle waterfall downstream on the public gorge trail. Two non-government point records agree within about 21m at 47.17193,-88.44781. No separate Middle GIS feature id exists in the 161-source subset; DO NOT merge into lower #130 or upper #134, and DO NOT use the falls pin as parking."
     }
   ],
   "batchCheckpoints": [
@@ -10362,6 +10369,15 @@
       "summary": "Owner-verified KLT Boston Creek public nature-area loop with small unnamed cascades and OSM preserve-centre role; no mapped individual waterfall or parking GPS. Upper Eagle River Ten Foot Falls remains held under prior noindex access assessment.",
       "published": [
         "boston-creek-cascades"
+      ],
+      "pendingGisFeatures": 92
+    },
+    {
+      "batch": "76",
+      "reviewed": "2026-11-07",
+      "summary": "Published the third Hungarian Falls destination using the KLT owner map, KLT parking source, public middle-gorge trail and independently corroborated approximate middle feature point. Kept blocked Gardener's Creek, Eister and Haymeadow trail claims out of the public count.",
+      "published": [
+        "middle-hungarian-falls"
       ],
       "pendingGisFeatures": 92
     }

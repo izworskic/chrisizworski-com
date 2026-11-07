@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
   "issue": 1258,
-  "reviewed": "2026-11-06",
+  "reviewed": "2026-11-07",
   "policy": "All 161 named source candidates retained even when public access is unknown. GIS locations are waterfall positions, never visitor parking. Do not auto-index.",
   "sourceCount": 197,
   "sourceCandidateCount": 161,
-  "curatedCount": 77,
+  "curatedCount": 78,
   "linkedByExactOid": 69,
   "unresolvedCandidates": 92,
   "entries": [
@@ -5764,7 +5764,31 @@
       "checked": "2026-11-06",
       "nextAction": "No offline outreach. Preserve position-role disclosure. Revisit only if KLT publishes new online trail or falls geometry; no claim of live water or plowed lot.",
       "batch": "75"
+    },
+    {
+      "source": "curated-non-gis",
+      "sourceId": null,
+      "sourceName": "Middle Hungarian Falls (Dover Creek)",
+      "county": "HOUGHTON",
+      "coordinates": [
+        47.17193,
+        -88.44781
+      ],
+      "coordinateRole": "independent-waterfall-feature-not-parking-or-trailhead",
+      "river": "DOVER CREEK",
+      "identity": "middle-of-three-KLT-labelled-falls-on-public-MI-DNR-gorge-trail",
+      "curatedId": "middle-hungarian-falls",
+      "possibleCuratedIds": [],
+      "publication": "verified-access-guide",
+      "access": "KLT-public-year-round-hiking-middle-gorge-trail-with-seasonal-road-unknown",
+      "landManager": "Keweenaw Land Trust upper entry, Michigan DNR middle gorge",
+      "parkingEvidence": "KLT owner map roadside sign on Golf Course Road, GPS 47.173159,-88.444743; winter roadway not fully plowed.",
+      "trailEvidence": "KLT red-dashed public gorge trail labels Middle Falls; Visit Keweenaw independently describes downstream Middle section and cautions against rugged base descent.",
+      "sourceUrl": "https://keweenawlandtrust.org/sites/default/files/2019-11/Hungarian%20Falls%20Brochure_0.pdf",
+      "checked": "2026-11-07",
+      "nextAction": "Online-only; any official trail reroute may be incorporated if published. Never map feature pin as parking. Do not conflate middle OSM with state upper #134 or lower #130.",
+      "batch": "76"
     }
   ],
-  "lastBatch": "75"
+  "lastBatch": "76"
 }

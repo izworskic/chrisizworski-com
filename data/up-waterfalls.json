@@ -1,5 +1,5 @@
 {
-  "reviewed": "2026-11-06",
+  "reviewed": "2026-11-07",
   "purpose": "Curated planning destinations; not live access or real-time water flow",
   "waterfalls": [
     {
@@ -4432,6 +4432,82 @@
       "mapRole": "preserve-centre",
       "nearbyExcluded": true,
       "winterRoad": "No confirmed live snow-clearing, icy stair safety, bridge inspection or creek flow. Verify posted signs when arriving; no winter-plow guarantee."
+    },
+    {
+      "id": "middle-hungarian-falls",
+      "name": "Middle Hungarian Falls",
+      "region": "Western U.P.",
+      "place": "Tamarack City · Dover Creek gorge · Hungarian Falls trail network",
+      "lat": 47.17193,
+      "lng": -88.44781,
+      "gisObjectId": null,
+      "level": "moderate",
+      "minutes": "45–110 min",
+      "walk": "Use KLT's Golf Course Road sign/roadside parking, walk the old blocked vehicle track about 400 yards to the trail junction, then take the downstream gorge path to the Middle Falls. Visit Keweenaw describes the Middle Falls a few hundred yards beyond the split. Steep roots and ledges; remain on public paths, and do NOT descend informal, eroded rock faces or cross Dover Creek.",
+      "best": "Spring melt or after substantial rain for the sandstone plunge; shade and hardwood color in summer/fall. Low flow is common and no current flow sensor is available.",
+      "access": "KLT publishes public year-round hiking access for the upper 10 acres and maps a state-owned public gorge connecting Middle and Lower Falls. KLT roadside parking on Golf Course Road is seasonally dependent; most of the road is unplowed in winter. No current road, trail, river or bank safety report.",
+      "status": "verify",
+      "publication": "verified-access-guide",
+      "source": "https://keweenawlandtrust.org/protected-lands/hungarian-falls-nature-area",
+      "locationSource": "https://www.byway.world/places/waterfalls/middle-hungarian-falls-02e90dbe",
+      "kind": "Public Dover Creek gorge trail · KLT and Michigan DNR lands",
+      "parking": "Use only KLT-documented roadside parking near the Hungarian Falls sign on Golf Course Road (47.173159,-88.444743), when the road/shoulder is legally and physically usable. From M-26 take 6th Street in Tamarack City, then roughly 0.5 mile uphill on Golf Course Road. Never drive the old woods road or treat the Middle Falls natural pin as parking. In winter most of Golf Course Road is not plowed.",
+      "feature": "The middle of Hungarian Falls' three best-known drops: Dover Creek spills over sandstone into a shaded pool between the upper basalt ledges and the dramatic lower cliff.",
+      "decision": "Choose Middle for a moderate gorge walk with a worthwhile sandstone cascade, not the fastest stop. The upper KLT preserve is the simpler option; the lower cliff is more demanding. Stay on the official rough forest trail, remain above unstable drop-offs and skip any creek crossing or informal base scramble.",
+      "manager": "Keweenaw Land Trust (upper entry) and Michigan DNR (public lower gorge corridor)",
+      "sourceReviewed": "2026-11-07",
+      "accessConfidence": "klt-official-2019-gorge-trail-parking-and-land-ownership-tourism-middle-falls-description-two-nearby-natural-feature-locations; no-precise-official-fall-gps-no-live-trail",
+      "note": "The Middle Falls map pin is an approximate natural-feature point supported by two independent public sources about 20 m apart, NOT an official surveyed trail or a parking destination. KLT's owner-published roadway parking reference is separate. The middle waterfall is absent from Michigan GIS object subset (only upper #134 and lower #130 are matched); don't fabricate a GIS match.",
+      "winterRoad": "KLT says most of Golf Course Road is not plowed, even though gorge recreation is permitted year-round. Do not promise winter passenger-car access, safe frozen creek crossings, or maintained icy trails.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://keweenawlandtrust.org/sites/default/files/2019-11/Hungarian%20Falls%20Brochure_0.pdf",
+          "description": "KLT map shows upper ten-acre land trust parcel, separate Michigan DNR public gorge with Middle Falls label, and adjacent private parcels."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://keweenawlandtrust.org/protected-lands/hungarian-falls-nature-area",
+          "description": "KLT provides year-round public trail access to Hungarian Falls system; use published public parcels/paths and avoid private neighbors."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://keweenawlandtrust.org/sites/default/files/2019-11/Hungarian%20Falls%20Brochure_0.pdf",
+          "description": "KLT map places permitted visitor roadside parking on Golf Course Road near 47.173159,-88.444743, subject to winter plowing and local signage."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://keweenawlandtrust.org/sites/default/files/2019-11/Hungarian%20Falls%20Brochure_0.pdf",
+          "description": "KLT map shows red dotted public gorge trails to labelled Middle Falls. Visit Keweenaw independently describes the downstream turn to the middle waterfall; no river crossing or base descent required."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://www.byway.world/places/waterfalls/middle-hungarian-falls-02e90dbe",
+          "description": "Byway mapped Middle Hungarian Falls at 47.17193,-88.44781; ShorelineScout separately places the feature at 47.1721,-88.4477 (~21 m away). These are approximate geographic waterfall positions, not a surveyed KLT viewpoint or parking."
+        }
+      },
+      "geocodeProvenance": {
+        "kind": "approximate-natural-waterfall",
+        "point": [
+          47.17193,
+          -88.44781
+        ],
+        "supportingSecondary": "https://shorelinescout.com/michigan/waterfalls/middle-hungarian-falls/",
+        "parking": [
+          47.173159,
+          -88.444743
+        ],
+        "parkingSource": "https://keweenawlandtrust.org/sites/default/files/2019-11/Hungarian%20Falls%20Brochure_0.pdf",
+        "notOfficialFallsSurvey": true,
+        "notParking": true,
+        "notTrailRoute": true
+      },
+      "relatedWaterfalls": [
+        "upper-hungarian-falls",
+        "lower-hungarian-falls"
+      ],
+      "link": "",
+      "path": ""
     }
   ]
 }

@@ -66,7 +66,7 @@ test('B70 reconciles six gates without promoting a possibly dangerous highway st
   assert.match(popup.routeAudit.segments.find(s=>s.label==='Parking').finding,/generally legal/);
   assert.equal(q.sourceCount,gis.sourceLinks.length);
   assert.equal(q.reviewStage,'awaiting-new-authoritative-evidence');
-  assert.equal(queue.counts.curatedDestinations,77);
+  assert.equal(queue.counts.curatedDestinations,78);
   assert.equal(queue.counts.matchedGisFeatures,69);
   assert.equal(queue.counts.pendingGisFeatures,92);
 });

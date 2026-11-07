@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-06",
+  "reviewed": "2026-11-07",
   "method": "haversine-waterfall-coordinate-straight-line-not-driving",
   "maxRadiusMiles": 50,
   "policy": "Not a route, visitor parking point, driving distance, trail distance, access grant, or live-open forecast.",
   "counts": {
-    "curated": 77,
-    "eligible": 68,
+    "curated": 78,
+    "eligible": 69,
     "excluded": 9
   },
   "excludedIds": [
@@ -370,6 +370,16 @@
       "source": "https://www.fs.usda.gov/r09/ottawa/recreation/burned-dam-campground",
       "lat": 46.313443,
       "lng": -89.054153
+    },
+    {
+      "id": "middle-hungarian-falls",
+      "name": "Middle Hungarian Falls",
+      "region": "Western U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/middle-hungarian-falls/",
+      "source": "https://keweenawlandtrust.org/sites/default/files/2019-11/Hungarian%20Falls%20Brochure_0.pdf",
+      "lat": 47.17193,
+      "lng": -88.44781
     },
     {
       "id": "miners-falls",
@@ -867,6 +877,10 @@
         "miles": 27
       },
       {
+        "id": "middle-hungarian-falls",
+        "miles": 27.3
+      },
+      {
         "id": "little-garlic-falls",
         "miles": 27.5
       },
@@ -1311,6 +1325,10 @@
         "miles": 37.7
       },
       {
+        "id": "middle-hungarian-falls",
+        "miles": 37.9
+      },
+      {
         "id": "upper-hungarian-falls",
         "miles": 38
       },
@@ -1627,6 +1645,10 @@
         "miles": 10.8
       },
       {
+        "id": "middle-hungarian-falls",
+        "miles": 10.9
+      },
+      {
         "id": "lower-hungarian-falls",
         "miles": 11
       },
@@ -1769,6 +1791,10 @@
       {
         "id": "upper-hungarian-falls",
         "miles": 18
+      },
+      {
+        "id": "middle-hungarian-falls",
+        "miles": 18.1
       },
       {
         "id": "lower-hungarian-falls",
@@ -1999,6 +2025,10 @@
       {
         "id": "lower-hungarian-falls",
         "miles": 28.8
+      },
+      {
+        "id": "middle-hungarian-falls",
+        "miles": 29
       },
       {
         "id": "upper-hungarian-falls",
@@ -2549,6 +2579,10 @@
         "miles": 24.4
       },
       {
+        "id": "middle-hungarian-falls",
+        "miles": 24.6
+      },
+      {
         "id": "upper-hungarian-falls",
         "miles": 24.6
       },
@@ -2752,6 +2786,10 @@
       },
       {
         "id": "lower-hungarian-falls",
+        "miles": 20.2
+      },
+      {
+        "id": "middle-hungarian-falls",
         "miles": 20.2
       },
       {
@@ -3357,6 +3395,10 @@
     ],
     "lower-hungarian-falls": [
       {
+        "id": "middle-hungarian-falls",
+        "miles": 0.4
+      },
+      {
         "id": "upper-hungarian-falls",
         "miles": 0.6
       },
@@ -3551,6 +3593,10 @@
       {
         "id": "lower-hungarian-falls",
         "miles": 33.2
+      },
+      {
+        "id": "middle-hungarian-falls",
+        "miles": 33.3
       },
       {
         "id": "upper-hungarian-falls",
@@ -3771,6 +3817,80 @@
       {
         "id": "shining-cloud-falls",
         "miles": 49.3
+      }
+    ],
+    "middle-hungarian-falls": [
+      {
+        "id": "upper-hungarian-falls",
+        "miles": 0.2
+      },
+      {
+        "id": "lower-hungarian-falls",
+        "miles": 0.4
+      },
+      {
+        "id": "conglomerate-falls-gratiot",
+        "miles": 10.9
+      },
+      {
+        "id": "eagle-river-falls",
+        "miles": 18.1
+      },
+      {
+        "id": "jacobs-falls",
+        "miles": 20.2
+      },
+      {
+        "id": "haven-falls",
+        "miles": 24.6
+      },
+      {
+        "id": "big-erics-falls",
+        "miles": 27.3
+      },
+      {
+        "id": "wyandotte-falls",
+        "miles": 28.1
+      },
+      {
+        "id": "falls-river-trail",
+        "miles": 29
+      },
+      {
+        "id": "power-house-falls",
+        "miles": 30.1
+      },
+      {
+        "id": "manganese-falls",
+        "miles": 33.3
+      },
+      {
+        "id": "canyon-falls",
+        "miles": 37.9
+      },
+      {
+        "id": "sturgeon-falls",
+        "miles": 38.4
+      },
+      {
+        "id": "tibbets-falls",
+        "miles": 41.4
+      },
+      {
+        "id": "tioga-park-falls",
+        "miles": 41.7
+      },
+      {
+        "id": "pinnacle-falls",
+        "miles": 44.1
+      },
+      {
+        "id": "yellow-dog-falls",
+        "miles": 46.5
+      },
+      {
+        "id": "o-kun-de-kun-falls",
+        "miles": 49
       }
     ],
     "miners-falls": [
@@ -4363,6 +4483,10 @@
         "miles": 49
       },
       {
+        "id": "middle-hungarian-falls",
+        "miles": 49
+      },
+      {
         "id": "lower-hungarian-falls",
         "miles": 49.1
       }
@@ -4569,6 +4693,10 @@
         "miles": 43.8
       },
       {
+        "id": "middle-hungarian-falls",
+        "miles": 44.1
+      },
+      {
         "id": "upper-hungarian-falls",
         "miles": 44.3
       },
@@ -4723,6 +4851,10 @@
       {
         "id": "lower-hungarian-falls",
         "miles": 29.9
+      },
+      {
+        "id": "middle-hungarian-falls",
+        "miles": 30.1
       },
       {
         "id": "upper-hungarian-falls",
@@ -5437,6 +5569,10 @@
         "miles": 38.3
       },
       {
+        "id": "middle-hungarian-falls",
+        "miles": 38.4
+      },
+      {
         "id": "upper-hungarian-falls",
         "miles": 38.5
       },
@@ -5637,6 +5773,10 @@
         "miles": 41.3
       },
       {
+        "id": "middle-hungarian-falls",
+        "miles": 41.4
+      },
+      {
         "id": "upper-hungarian-falls",
         "miles": 41.5
       },
@@ -5725,6 +5865,10 @@
       {
         "id": "lower-hungarian-falls",
         "miles": 41.5
+      },
+      {
+        "id": "middle-hungarian-falls",
+        "miles": 41.7
       },
       {
         "id": "upper-hungarian-falls",
@@ -5985,6 +6129,10 @@
     ],
     "upper-hungarian-falls": [
       {
+        "id": "middle-hungarian-falls",
+        "miles": 0.2
+      },
+      {
         "id": "lower-hungarian-falls",
         "miles": 0.6
       },
@@ -6231,6 +6379,10 @@
         "miles": 28.1
       },
       {
+        "id": "middle-hungarian-falls",
+        "miles": 28.1
+      },
+      {
         "id": "lower-hungarian-falls",
         "miles": 28.2
       },
@@ -6379,6 +6531,10 @@
       {
         "id": "lower-hungarian-falls",
         "miles": 46.1
+      },
+      {
+        "id": "middle-hungarian-falls",
+        "miles": 46.5
       },
       {
         "id": "upper-hungarian-falls",
