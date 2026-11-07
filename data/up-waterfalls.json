@@ -4600,6 +4600,82 @@
       ],
       "link": "",
       "path": ""
+    },
+    {
+      "id": "montreal-falls-keweenaw",
+      "name": "Montreal Falls (Keweenaw)",
+      "region": "Keweenaw Peninsula",
+      "place": "Keweenaw County · near Copper Harbor / Fish Cove",
+      "lat": 47.39257,
+      "lng": -87.84114,
+      "gisObjectId": null,
+      "level": "difficult",
+      "minutes": "Half-day planning buffer",
+      "walk": "From the Fish Cove rustic parking area, reach Lake Superior shoreline and follow the westbound foot-worn path to Lower Montreal Falls; Visit Keweenaw estimates about one mile along the coast. No signage, maintained trail, surveyed walking polyline or guaranteed upper-falls route.",
+      "best": "A dry-weather summer or early autumn visit offers a better chance of passable two-track roads and manageable rocks; flow depends on recent rainfall. No current road, shoreline-wave or creek gauge feed.",
+      "access": "Documented public Fish Cove/Mandan Road shoreline hiking approach, but access is an unsigned, unmaintained backcountry footpath. Smith Fisheries Road is private, not a lawful visitor approach. No live road or trail opening verification.",
+      "status": "verify",
+      "publication": "verified-access-guide",
+      "source": "https://www.visitkeweenaw.com/blog/post/a-guide-to-visiting-the-keweenaws-montreal-falls/",
+      "locationSource": "https://www.waterfallsofthekeweenaw.com/montreal-river/montreal-falls/",
+      "kind": "Lake Superior shoreline falls · legal Fish Cove backcountry approach",
+      "parking": "From Copper Harbor follow US-41 to Mandan Road, continue approximately 7.5 miles to Hoar Lake/Fish Cove Road, then follow posted signs to the rustic Fish Cove parking area. Rough two-track roads may need high clearance. Never use the waterfall feature coordinate or private Smith Fisheries Road for driving.",
+      "feature": "Lower Montreal Falls cascades into the rocky Lake Superior mouth of the Keweenaw's Montreal River; a distinct upper waterfall lies farther inland. A third middle feature remains identity research-only.",
+      "decision": "Choose Montreal Falls for a challenging backcountry outing with route-finding, not for a short roadside stop. Reach the established Fish Cove trail access only; do not drive toward the approximate waterfall GPS point or trespass on gated roads.",
+      "manager": "State of Michigan and The Nature Conservancy lands in the Keweenaw Point area; parcel-specific boundary and new DNR management transitions need checked against posted signs",
+      "sourceReviewed": "2026-11-07",
+      "accessConfidence": "Visit-Keweenaw-public-Fish-Cove-roadside-arrival-and-unmaintained-shoreline-visitor-path; independent-specialist-approximate-lower-falls-feature; no-surveyed-parking-or-route; recent-TNC-DNR-land-acquisition-not-site-access-proof",
+      "note": "Approximate Lower Montreal Falls natural-feature coordinate 47.39257,-87.84114, separately reported by a specialist inventory that retains obsolete private-road advice. DO NOT use that advice or route cars to the falls pin; current legal arrival described only by Visit Keweenaw via Fish Cove.",
+      "further": "2024 DNR/TNC-supported access reporting separately described a Hoar Lake Loop former forest road walk (about 1.3 mi to the river mouth), but that is a different arrival from the Visit Keweenaw Fish Cove lot and should not be stitched together into a mapped track. KORC's proposed new lot and trail were still seeking permits in public 2026 statements; do not claim the project is open. The 2026-11-06 DNR Keweenaw land acquisition does not itself certify a surveyed lot, route or immediate unrestricted use of a particular forest road. Upper and Middle Montreal tiers are not approved public viewpoints.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.michigan.gov/dnr/about/newsroom/releases/2026/11/06/dnr-tnc-protect-public-access",
+          "description": "Michigan DNR documents regional Keweenaw Point public-land transition and continuing recreation; exact segment boundaries and new management policy require posted-condition checking."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.visitkeweenaw.com/blog/post/a-guide-to-visiting-the-keweenaws-montreal-falls/",
+          "description": "Visit Keweenaw publishes a public Fish Cove approach and expressly says private Smith Fisheries Road travel is trespassing."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.visitkeweenaw.com/blog/post/a-guide-to-visiting-the-keweenaws-montreal-falls/",
+          "description": "Visit Keweenaw documents rustic Fish Cove arrival following Mandan/Hoar Lake roads; precise surveyed lot position and present passability not published."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.visitkeweenaw.com/blog/post/a-guide-to-visiting-the-keweenaws-montreal-falls/",
+          "description": "Visit Keweenaw describes an unsigned, unmaintained westbound shoreline footpath of about one mile to lower falls, requiring navigation; no marked upper-falls route."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://www.waterfallsofthekeweenaw.com/montreal-river/montreal-falls/",
+          "description": "Independent lower Montreal Falls natural-feature position; source's older Smith Fisheries driving advice must never be used. Coordinate is an approximate feature, not a visitor arrival."
+        }
+      },
+      "geocodeProvenance": {
+        "kind": "approximate-lower-waterfall-natural-feature",
+        "point": [
+          47.39257,
+          -87.84114
+        ],
+        "publishedFeatureSource": "https://www.waterfallsofthekeweenaw.com/montreal-river/montreal-falls/",
+        "legalVisitorArrivalSource": "https://www.visitkeweenaw.com/blog/post/a-guide-to-visiting-the-keweenaws-montreal-falls/",
+        "dnrLandTransitionSource": "https://www.michigan.gov/dnr/about/newsroom/releases/2026/11/06/dnr-tnc-protect-public-access",
+        "trailProposalSource": "https://www.keweenawoutdoorrecreation.org/calls-to-action-montreal-falls-trail-access",
+        "notOfficialFallsSurvey": true,
+        "notParking": true,
+        "notTrailRoute": true,
+        "parkingGPSPublished": false
+      },
+      "relatedWaterfalls": [
+        "haven-falls",
+        "jacobs-falls",
+        "interstate-falls"
+      ],
+      "link": "",
+      "path": ""
     }
   ]
 }
