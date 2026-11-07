@@ -41,8 +41,7 @@ if(!html.includes('<title>'+esc(hubSeo.title)+'</title>') ||
 replaceOnce('Follow the ships. Understand the journey.','Follow the voyage, one river chapter at a time.');
 replaceOnce('How does a floating ship climb inland? One roomful of water at a time. Follow recent ship reports, choose a public place to watch, then try the lock model to see how gates, valves and gravity turn a river journey into a staircase.',
 'Where was that freighter last reported? Which locks connect it to the Great Lakes? Where can you legally watch from shore? Explore the Montreal–Lake Ontario passage, then follow the voyage into Welland and beyond. Recent AIS positions are observations, not promised arrival times.');
-html=html.replaceAll('/assets/seaway.css?v=20261024b','/assets/seaway.css?v=20261105c')
-;
+// Assets keep their version in scripts/generate-seaway.mjs for both canonical pages.
 if(!html.includes('id="journey"')||!html.includes('data-region-count="massena"'))throw new Error('Seaway journey enhancement not generated');
 // Python Intelligence OS: read a versioned and independently checked BTS
 // artifact. Vercel does NOT execute Python or fetch new data at request time.
@@ -82,7 +81,7 @@ const seasonalDesk='<section class="editorial seaway-seasonal-desk" id="seaway-s
 replaceOnce('<section class="editorial resources">',seasonalDesk+'<section class="editorial resources">');
 
 // Keep the measurement script next to the Seaway UI, without a new data API.
-const funnelAnchor='<script defer src="/assets/seaway.js?v=20261107a"></script>';
+const funnelAnchor='<script defer src="/assets/seaway.js?v=20261107c"></script>';
 replaceOnce(funnelAnchor,funnelAnchor+'<script defer src="/assets/seaway-seasonal-funnel.js?v=20261105a"></script>');
 fs.writeFileSync(file,html);
 console.log('Seaway corridor journey enhancement applied');

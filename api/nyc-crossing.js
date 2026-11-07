@@ -1,5 +1,6 @@
 'use strict';
 const { buildSnapshot } = require('../lib/nyc-crossing/engine');
+const { compareDepartures } = require('../lib/nyc-crossing/departure');
 const { fetchTraffic } = require('../lib/nyc-crossing/traffic');
 const { enrichNycdotBaselines } = require('../lib/nyc-crossing/baseline');
 const { getCached511 } = require('../lib/nyc-crossing/ny511');
@@ -23,6 +24,11 @@ module.exports = async function handler(req, res) {
     const [traffic, ny511] = await Promise.all([fetchTraffic(), getCached511()]);
     await enrichNycdotBaselines(traffic);
     const snapshot = buildSnapshot({ vehicle, payment, destinationZone, travelAt: q.travelAt, traffic, ny511 });
+    // Historical models may be absent or stale. Do not block the live traffic/toll path.
+    snapshot.departure = compareDepartures(
+      typeof q.timingCrossing === 'string' ? q.timingCrossing : 'queens-midtown',
+      new Date()
+    );
     if (traffic.mapboxState === 'LIVE') {
       res.setHeader('Cache-Control', 'public, max-age=0, s-maxage=45, stale-while-revalidate=15');
     }

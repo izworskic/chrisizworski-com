@@ -22,16 +22,16 @@ const v=research.records.find(x=>x.gisObjectId===136);
 
 test('B64: landowner invitation, named road easement and season gate promote only the correct Gratiot feature',()=>{
  assert.ok(row&&c&&l&&v);
- assert.equal(cat.length,78);
- assert.equal(rec.counts.curatedTotal,78);
+ assert.equal(cat.length,79);
+ assert.equal(rec.counts.curatedTotal,79);
  assert.equal(rec.counts.exactIdMatched,69);
  assert.equal(rec.counts.pending,92);
- assert.equal(rec.counts.curatedNoMatchingGIS,13);
- assert.equal(ledger.curatedCount,78);
+ assert.equal(rec.counts.curatedNoMatchingGIS,14);
+ assert.equal(ledger.curatedCount,79);
  assert.equal(ledger.linkedByExactOid,69);
  assert.equal(ledger.unresolvedCandidates,92);
  assert.equal(queue.candidates.length,92);
- assert.equal(near.counts.eligible,69);
+ assert.equal(near.counts.eligible,70);
  assert.equal(row.gisObjectId,136);
  assert.equal(c.curatedId,id);assert.equal(l.curatedId,id);
  assert.equal(c.publicGuide,'/upper-peninsula-waterfalls/'+id+'/');
@@ -71,17 +71,17 @@ test('B64: public guide is discoverable exactly once and explains seasonal gate,
  assert.ok(!guide.includes('google.com/maps/dir/?api=1&destination=47.329239'));
  assert.ok(!guide.includes('data-parking-lat='));
  assert.equal((sitemap.match(new RegExp(url,'g'))||[]).length,1);
- assert.equal((sitemap.match(/<loc>/g)||[]).length,76);
+ assert.equal((sitemap.match(/<loc>/g)||[]).length,77);
  assert.match(hub,/data-id="conglomerate-falls-gratiot" data-gis-oid="136"/);
  assert.match(hub,/data-arrival-verified="verified"/);
- assert.match(hub,/78 curated visitor destinations/);
+ assert.match(hub,/79 curated visitor destinations/);
  assert.match(original,/noindex,follow/);
  assert.match(original,/OLDER “NOT CLEARED” ACCESS FINDING HAS BEEN SUPERSEDED/);
  assert.ok(original.includes('/upper-peninsula-waterfalls/conglomerate-falls-gratiot/'));
  assert.ok(!sitemap.includes('/research/upper-gratiot-river-falls/'));
  const jsonld=JSON.parse(hub.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
  const list=jsonld['@graph'].find(x=>x['@type']==='ItemList');
- assert.equal(list.numberOfItems,76);
+ assert.equal(list.numberOfItems,77);
  assert.equal(list.itemListElement.filter(x=>x.url===url).length,1);
 });
 

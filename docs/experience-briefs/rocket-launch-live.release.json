@@ -1,0 +1,176 @@
+{
+  "schemaVersion": "1.2",
+  "recordStatus": "draft",
+  "project": {
+    "slug": "rocket-launch-live",
+    "ownerRepo": "izworskic/chrisizworski-com",
+    "canonical": "https://chrisizworski.com/national-tools/rocket-launch-live/",
+    "pageFile": "public/synced-national-tools/rocket-launch-live/index.html",
+    "visitorDecision": "Choose the actual scheduled rocket, locate its published launch origin and decide what must be confirmed before a legal public viewing trip.",
+    "primaryAction": "Select a mission in the first-screen Flight Desk and inspect official viewing/access sources and its pad marker before traveling."
+  },
+  "claims": [
+    {
+      "id": "range-visibility",
+      "kind": "official-reference",
+      "subject": "other",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://www.nasa.gov/kennedy/see-a-launch-up-close/",
+      "checkedDate": "2026-11-07",
+      "limitation": "General NASA public viewing guidance is not authorization to enter a restricted launch pad or confirmation of current spectator entry."
+    },
+    {
+      "id": "kennedy-event-tickets",
+      "kind": "official-reference",
+      "subject": "other",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://www.kennedyspacecenter.com/launches-and-events/see-a-launch/launch-viewing",
+      "checkedDate": "2026-11-07",
+      "limitation": "KSC visitor complex sells launch-specific viewing opportunities; purchase does not guarantee a launch or visitor eligibility elsewhere."
+    },
+    {
+      "id": "wallops-event-opening",
+      "kind": "official-reference",
+      "subject": "other",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://www.nasa.gov/wallops/visitor-center/view-a-launch-from-nasa-wallops-visitor-center/",
+      "checkedDate": "2026-11-07",
+      "limitation": "Visitor Center opening and parking are mission-specific, capacity-limited and cannot be inferred from the general schedule."
+    },
+    {
+      "id": "site-schedule",
+      "kind": "unverified",
+      "subject": "other",
+      "state": "UNVERIFIED",
+      "sourceUrl": "https://ll.thespacedevs.com/",
+      "checkedDate": "2026-11-07",
+      "limitation": "LL2 is a third-party calendar. No mission target means an absence in a bounded snapshot, not no range activity or launch clearance."
+    },
+    {
+      "id": "spectator-weather",
+      "kind": "unverified",
+      "subject": "weather-context",
+      "state": "UNVERIFIED",
+      "sourceUrl": "https://www.weather.gov/",
+      "checkedDate": "2026-11-07",
+      "limitation": "A forecast only appears when existing engine returns usable mission-time evidence; it never guarantees rocket visibility or flight approval."
+    }
+  ],
+  "decisionState": {
+    "selectedIdField": "selectedLaunchId (LL2 UUID)",
+    "sourceOfTruth": "One /api/rocket-launch-usa response; app.js is the only mission fetch and validates all hero/map/native-picker selections before loading; flight desk is read-only derived model.",
+    "linkedSurfaces": [
+      "answer",
+      "flight-desk-mission-picker",
+      "original-native-launch-picker",
+      "map-or-unavailable",
+      "selected-mission-detail",
+      "photo-source-or-unavailable",
+      "spectator-weather",
+      "official-access",
+      "shareable-URL"
+    ],
+    "unavailableBehavior": "Unavailable/held/stale sources label the decision unknown or not cleared, disable mission/map selection when no selected UUID, retain static coast/official range links; no invented GO."
+  },
+  "scenarios": [
+    {
+      "kind": "initial",
+      "input": "Florida region, precise mission A",
+      "expectedVisibleAnswer": "Show A's name, local scheduled target, LL2 origin qualifier, unverified official access and scoped NWS sky status.",
+      "sourceAndSafety": "Published third-party schedule is not launch authorization."
+    },
+    {
+      "kind": "alternative",
+      "input": "Use hero mission selector to choose B with day-only time",
+      "expectedVisibleAnswer": "Switch to B across hero/map/existing selector and show time TBD instead of a false midnight countdown.",
+      "sourceAndSafety": "No plan-ready timing can be inferred from a day-only entry."
+    },
+    {
+      "kind": "reverse",
+      "input": "Use hero selector B → A",
+      "expectedVisibleAnswer": "A's original ID, time, pad source qualifier and regional source links return unchanged; map and original selector follow.",
+      "sourceAndSafety": "No stale B info may survive on the active mission."
+    },
+    {
+      "kind": "no-js",
+      "input": "Disable scripts at the national page",
+      "expectedVisibleAnswer": "A readable question, three source-evidence caveats, coast navigation and official range links remain available.",
+      "sourceAndSafety": "Static HTML makes no claim that a current mission is confirmed."
+    },
+    {
+      "kind": "no-tiles",
+      "input": "Block CARTO and OSM or the Leaflet library",
+      "expectedVisibleAnswer": "The native region selector and evidence cards still work; the focus action routes to usable coast buttons.",
+      "sourceAndSafety": "No guessed rocket position or public driving directions appear."
+    },
+    {
+      "kind": "stale-data",
+      "input": "Expire schedule freshness or return 502/404",
+      "expectedVisibleAnswer": "Show overdue/unavailable; disable the map action on 502; never display a current positive GO state.",
+      "sourceAndSafety": "Existing data is invalidated, not silently reused."
+    },
+    {
+      "kind": "restricted-region",
+      "input": "Select Kodiak or Hawaiʻi mission",
+      "expectedVisibleAnswer": "The Flight Desk states that no public launch viewing venue has been verified.",
+      "sourceAndSafety": "A range center or pad cannot be used as visitor directions."
+    },
+    {
+      "kind": "closed-access",
+      "input": "Select Texas mission while official city source reports a closure",
+      "expectedVisibleAnswer": "Beach closure is described as dated official report and visitors are directed to official rules.",
+      "sourceAndSafety": "A generally open beach never overrides launch/test exclusion controls."
+    }
+  ],
+  "failures": {
+    "no-js": "Static landing question, honest no-verified-current-status text, native anchor to coast selection, already printed official source links and map-independent visitor guidance.",
+    "no-tiles": "Use region and native mission selection without Leaflet; map focus lands on the region buttons and links instead of showing blank/map-only advice.",
+    "no-image": "Keep launch decision text, anchor controls, source descriptions and photo credits visible; existing historical hero photo never represents the selected launch.",
+    "stale-data": "Announce schedule check overdue or unavailable and keep source limitations; no old launch mission offered as a fresh decision."
+  },
+  "qa": {
+    "viewports": [
+      360,
+      390,
+      768,
+      1440
+    ],
+    "browserStatus": "PASSED",
+    "scopeNote": "Passed four-viewport fixture-based Chromium screenshot/interaction check, including A→B→A mission and map focus, 0 horizontal overflow, 0 reported JS exceptions, no-JS source links and source/photo outages. Screenshots generated but human image inspection and live tile/production behavior have NOT been independently established. Source truth is not proven by fixtures.",
+    "browserRun": "https://github.com/izworskic/chrisizworski-com/actions/runs/42379718379",
+    "screenshotEvidence": [
+      "https://github.com/izworskic/chrisizworski-com/actions/runs/42379718379/artifacts/13577091334"
+    ]
+  },
+  "photos": [
+    {
+      "depictedSubject": "Spectators observing a Vandenberg launch at the California range (historical image, not the selected event)",
+      "author": "Senior Airman Kadielle Shaw / U.S. Space Force",
+      "license": "U.S. government credited imagery; source terms apply",
+      "sourceUrl": "https://media.defense.gov/2024/Apr/11/2003436336/2000/2000/0/240411-X-XI961-1034.JPG",
+      "creditUrl": "https://www.vandenberg.spaceforce.mil/News/Article-Display/Article/3738319/ussf-62-mission-launches-from-vsfb/",
+      "subjectMatch": "contextual",
+      "disclosure": "This photograph illustrates public spectators at a past California launch; it does not show the selected mission or certify current public access."
+    }
+  ],
+  "release": {
+    "implemented": {
+      "status": "CONFIRMED",
+      "checkedDate": "2026-11-07",
+      "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/pull/1553"
+    },
+    "verified": {
+      "status": "PENDING"
+    },
+    "deployed": {
+      "status": "NOT_VERIFIED"
+    },
+    "live": {
+      "status": "NOT_VERIFIED"
+    },
+    "measured": {
+      "status": "NOT_MEASURED"
+    }
+  },
+  "verificationLimit": "A dated Experience OS research/release record, not a current launch, access, weather, actual browser or visitor-outcome assessment. Repository QA and live status are separately established."
+}

@@ -5,7 +5,7 @@
   "policy": "All 161 named source candidates retained even when public access is unknown. GIS locations are waterfall positions, never visitor parking. Do not auto-index.",
   "sourceCount": 197,
   "sourceCandidateCount": 161,
-  "curatedCount": 78,
+  "curatedCount": 79,
   "linkedByExactOid": 69,
   "unresolvedCandidates": 92,
   "entries": [
@@ -5788,7 +5788,31 @@
       "checked": "2026-11-07",
       "nextAction": "Online-only; any official trail reroute may be incorporated if published. Never map feature pin as parking. Do not conflate middle OSM with state upper #134 or lower #130.",
       "batch": "76"
+    },
+    {
+      "source": "curated-non-gis",
+      "sourceId": null,
+      "sourceName": "Wildcat Falls",
+      "county": "ONTONAGON",
+      "coordinates": [
+        46.346173,
+        -89.292236
+      ],
+      "coordinateRole": "approximate-waterfall-natural-feature-not-road-parking-or-mapped-trail",
+      "river": "SCOTT AND HOWE CREEK",
+      "identity": "owner-mapped-waterfall-trail-with-regional-natural-feature-coordinate",
+      "curatedId": "wildcat-falls",
+      "possibleCuratedIds": [],
+      "publication": "verified-access-guide",
+      "access": "owner-published-permanent-nonmotorized-forest-access-seasonal-road-unverified",
+      "landManager": "Northwoods Alliance · Wildcat Falls Community Forest",
+      "parkingEvidence": "Owner-published sign 0.6 mile north of McGinty Lane on County Line Lake Road; roadside only, no surveyed parking location.",
+      "trailEvidence": "Owner illustrated FALLS and TRAIL HEAD on separate public waterfall parcel, yellow-marked 3/4-mile trail with uneven terrain; not an authoritative GIS polyline or measured one-way distance.",
+      "sourceUrl": "https://www.northwoodalliance.org/wildcat-falls",
+      "checked": "2026-11-07",
+      "nextAction": "Review official online changes to trail signage, legal roadside parking and road condition. Never route cars to the WUPCVB approximate feature coordinate; online only.",
+      "batch": "78"
     }
   ],
-  "lastBatch": "76"
+  "lastBatch": "78"
 }

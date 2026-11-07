@@ -4,7 +4,7 @@
   const D=window.SeawayReference,C=window.SeawayCore,$=id=>document.getElementById(id);
   if(!D||!C)return;
   const regionById=new Map(D.regions.map(r=>[r.id,r])),lockById=new Map(D.locks.map(l=>[l.id,l])),viewById=new Map(D.viewpoints.map(v=>[v.id,v]));
-  const cache=new Map(),errors=new Set(),markers=new Map(),lockMarkers=new Map(),viewMarkers=new Map(),lockGroups=new Map();
+  const cache=new Map(),errors=new Set(),markers=new Map(),clusterMarkers=new Map(),clusterGroups=new Map(),lockMarkers=new Map(),viewMarkers=new Map(),lockGroups=new Map();
   const cameraById=new Map((D.cameras||[]).map(c=>[c.id,c]));
   let selectedCamera=D.cameras?.[0]?.id,cameraPlayer=null;
   let region=document.body.dataset.defaultRegion||'all',selectedLock='eisenhower',selectedView='eisenhower-center',selectedShip=null;
@@ -144,24 +144,87 @@
     }
     restoreFocus(container,focused);
   }
-  function mapMessage(){if(!map)return;const count=reports().filter(v=>map.getBounds().contains([v.lat,v.lon])).length;$('mapStatus').textContent=count+' loaded ship report'+(count===1?'':'s')+' in this map view. Ships stay scoped to the selected region; choose another stretch to load its reports. Dots are approximate lock landmarks.';}
+  function mapMessage(){
+    if(!map)return;
+    const ships=reports(),visible=ships.filter(v=>map.getBounds().contains([v.lat,v.lon])).length;
+    const symbols=[...markers.values(),...clusterMarkers.values()].filter(m=>map.getBounds().contains(m.getLatLng())).length;
+    const groups=[...clusterMarkers.values()].filter(m=>map.getBounds().contains(m.getLatLng())).length;
+    const label=visible+' recent AIS report'+(visible===1?'':'s')+' in this map view';
+    $('mapStatus').textContent=!ships.length
+      ?'No recent vessel positions for this selection. A missing report is not proof of no ships. Use View entire Seaway to inspect other stretches.'
+      :label+' · '+symbols+' visible ship symbol'+(symbols===1?'':'s')+(groups?' (numbered symbols group nearby observations)':'')+'. Choose a ship group to zoom in. Positions are reports, not guaranteed arrivals.';
+
+  }
   function shipIcon(v){
-    const z=map.getZoom(),chosen=v.mmsi===selectedShip,size=chosen?[59,29]:z<8?[30,17]:[43,23],state=!Number.isFinite(v.speedKnots)?'is-unknown':v.speedKnots<.5?'is-stopped':'';
+    const z=map.getZoom(),chosen=v.mmsi===selectedShip,size=chosen?[60,34]:z<8?[42,26]:[48,29],state=!Number.isFinite(v.speedKnots)?'is-unknown':v.speedKnots<.5?'is-stopped':'';
     return {key:size.join(':')+state+chosen,icon:L.divIcon({className:'seaway-ship-marker '+state+(chosen?' is-selected':''),html:shipSVG(),iconSize:size,iconAnchor:[size[0]/2,size[1]/2],popupAnchor:[0,-size[1]/2]})};
   }
+  function vesselGroupIcon(group){
+    const size=[68,44];
+    return L.divIcon({className:'seaway-vessel-cluster',
+      html:'<span class="seaway-vessel-emblem" aria-hidden="true">'+shipSVG()+'</span><strong data-vessel-count="'+group.count+'">'+group.count+'</strong>',
+      iconSize:size,iconAnchor:[size[0]/2,size[1]/2],popupAnchor:[0,-size[1]/2]});
+  }
+  function inspectVesselGroup(key){
+    const group=clusterGroups.get(key);
+    if(!group||!map)return;
+    if(map.getZoom()<12){
+      // Zooming is an exploration aid, never an inferred route or ETA.
+      const target=Math.min(12,map.getZoom()+3);
+      const bounds=L.latLngBounds(group.vessels.map(v=>[v.lat,v.lon]));
+      if(bounds.isValid()&&!bounds.getSouthWest().equals(bounds.getNorthEast()))
+        map.fitBounds(bounds.pad(.35),{padding:[42,42],maxZoom:target,animate:false});
+      if(map.getZoom()<target)map.setView([group.lat,group.lon],target,{animate:false});
+      track('select_region','vessel-group-zoom');
+      return;
+    }
+    // Two AIS reports can share exact coordinates even at maximum zoom.
+    // Offer the actual received names rather than hiding one under another.
+    const panel=el('div',undefined,'seaway-cluster-popup');
+    panel.append(el('strong',group.count+' recently reported vessels'),
+      el('p','Positions overlap at this scale. Choose a vessel for its individual report, not an estimated ship arrival.'));
+    for(const v of group.vessels){
+      const button=el('button',(v.name||'AIS vessel '+v.mmsi)+' · '+age(v.seen),'seaway-cluster-choice');
+      button.type='button';
+      button.addEventListener('click',()=>{map.closePopup();chooseShip(v.mmsi,true);});
+      panel.append(button);
+    }
+    L.popup({maxWidth:280,autoPan:true}).setLatLng([group.lat,group.lon]).setContent(panel).openOn(map);
+  }
   function drawShips(){
-    if(!map)return;const ships=reports(),keep=new Set(ships.map(v=>v.mmsi));
+    if(!map)return;
+    const ships=reports(),zoom=map.getZoom(),distance=zoom<9?67:zoom<11?54:zoom<13?34:19;
+    const groups=C.groupMapReports(ships,v=>map.latLngToLayerPoint([v.lat,v.lon]),distance,selectedShip);
+    const singles=groups.filter(g=>g.count===1).map(g=>g.vessels[0]);
+    const keep=new Set(singles.map(v=>v.mmsi));
     for(const [id,m]of markers)if(!keep.has(id)){shipsLayer.removeLayer(m);markers.delete(id);}
-    for(const v of ships){
+    for(const v of singles){
       const glyph=shipIcon(v);let m=markers.get(v.mmsi);
-      if(!m){m=L.marker([v.lat,v.lon],{icon:glyph.icon,keyboard:true,title:v.name||'AIS vessel '+v.mmsi,zIndexOffset:v.mmsi===selectedShip?1000:0}).addTo(shipsLayer).bindPopup(shipDetail(v),{maxWidth:270});m.on('click',()=>chooseShip(v.mmsi,false));markers.set(v.mmsi,m);}
-      else{
+      if(!m){
+        m=L.marker([v.lat,v.lon],{icon:glyph.icon,keyboard:true,title:(v.name||'AIS vessel '+v.mmsi)+' · recent observed position',zIndexOffset:v.mmsi===selectedShip?1800:1100})
+          .addTo(shipsLayer).bindPopup(shipDetail(v),{maxWidth:270});
+        m.on('click',()=>chooseShip(v.mmsi,false));markers.set(v.mmsi,m);
+      }else{
         if(m._seawayLat!==v.lat||m._seawayLon!==v.lon)m.setLatLng([v.lat,v.lon]);
         if(m._seawayIcon!==glyph.key)m.setIcon(glyph.icon);
         if(m._seawaySeen!==v.seen)m.setPopupContent(shipDetail(v));
-        m.setZIndexOffset(v.mmsi===selectedShip?1000:0);
+        m.setZIndexOffset(v.mmsi===selectedShip?1800:1100);
       }
       m._seawayLat=v.lat;m._seawayLon=v.lon;m._seawayIcon=glyph.key;m._seawaySeen=v.seen;
+    }
+    const active=new Set(groups.filter(g=>g.count>1).map(g=>g.id));
+    for(const [id,m]of clusterMarkers)if(!active.has(id)){shipsLayer.removeLayer(m);clusterMarkers.delete(id);clusterGroups.delete(id);}
+    for(const group of groups.filter(g=>g.count>1)){
+      clusterGroups.set(group.id,group);
+      let m=clusterMarkers.get(group.id);
+      if(!m){
+        m=L.marker([group.lat,group.lon],{icon:vesselGroupIcon(group),keyboard:true,
+          title:group.count+' recently reported vessels · choose to zoom or inspect',zIndexOffset:1250}).addTo(shipsLayer);
+        m.on('click',()=>inspectVesselGroup(group.id));clusterMarkers.set(group.id,m);
+      }else{
+        m.setLatLng([group.lat,group.lon]);
+        m.setIcon(vesselGroupIcon(group));
+      }
     }
     mapMessage();
   }

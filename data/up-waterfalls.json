@@ -4524,6 +4524,82 @@
       ],
       "link": "",
       "path": ""
+    },
+    {
+      "id": "wildcat-falls",
+      "name": "Wildcat Falls",
+      "region": "Western U.P.",
+      "place": "Watersmeet vicinity · Ontonagon County · County Line Lake Road",
+      "lat": 46.346173,
+      "lng": -89.292236,
+      "gisObjectId": null,
+      "level": "moderate",
+      "minutes": "60–120 min",
+      "walk": "Follow the owner-marked yellow footpath from the waterfall trail sign on the west side of County Line Lake Road, about 0.6 mile north of McGinty Lane. Northwoods Alliance describes a ¾-mile waterfall trail but does not specify whether this is one-way or total. Expect uneven terrain, exposed roots and rock outcrops; use the posted signs and published illustrated trail map.",
+      "best": "Spring snowmelt or days after substantial rainfall provide more water to this small tributary. Forest shade, moss and old-growth cedar-hemlock are rewarding even during low flow; no gauge predicts today's cascade.",
+      "access": "Northwoods Alliance owns and manages the 200-acre Community Forest and welcomes non-motorized public visitors to its yellow-marked waterfall trail. There is no published precise surveyed parking/trailhead GPS, and today's seasonal road/shoulder/trail conditions are not live verified.",
+      "status": "verify",
+      "publication": "verified-access-guide",
+      "source": "https://www.northwoodalliance.org/wildcat-falls",
+      "locationSource": "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf",
+      "kind": "Northwoods Alliance Community Forest · publicly marked foot trail",
+      "parking": "From Watersmeet take US-45 north to County Road 206 (Sucker Lake Road), west to County Line Lake Road, north past McGinty Lane approximately 0.6 mile, then look for the waterfall trail sign on the LEFT. Northwoods Alliance permits roadside parking; check legal shoulder, traffic and snow conditions. Do not use the County Line Lake parcel, Merganser Lane boat landing, or falls GPS as the waterfall trailhead.",
+      "feature": "A tiered creek waterfall in a community-protected old-growth cedar and hemlock forest, with mossy bedrock, distinctive rock outcrops and a gorge view along a signed yellow trail.",
+      "decision": "Choose Wildcat for a quiet, uneven, woodland waterfall walk rather than a quick accessible roadside stop. Navigate by the owner's named roads and yellow trail sign, not the approximate natural-feature point; no off-trail creek navigation or scrambling is required.",
+      "manager": "Northwoods Alliance · Wildcat Falls Community Forest",
+      "sourceReviewed": "2026-11-07",
+      "accessConfidence": "northwoods-alliance-owner-marked-trail-and-roadside-arrival-plus-tourism-falls-approximate-coordinate; no-surveyed-lot-or-trail-line-no-current-open-claim",
+      "note": "Map pin = approximate waterfall natural feature from WUPCVB brochure #29 at 46.346173,-89.292236, cross-checked against Northwoods Alliance's separate visual trail/falls and property road map. NOT a surveyed waterfall viewpoint, car destination, legal lot GPS, or actual trail polyline.",
+      "further": "Northwoods Alliance's official visitor guide distinguishes the waterfall parcel from a separate County Line Lake parcel near McGinty Lane, maps the public waterfall walk in red, and labels both waterfall and signed trailhead. Its published ¾-mile hiking trail does not state one way or loop. The independent Western U.P. Visitors Bureau places Wildcat Falls on Scott and Howe Creek near 46.346173,-89.292236, supplies the SAME McGinty-Lane-relative signed access, and illustrates its regional location. This convergence establishes approximate natural-feature geography, not surveyed coordinates. Legacy descriptions of no maintained trail are obsolete and must not supersede the owner. No GPS driving link to natural feature, off-trail river shortcut, photo-base scramble, or fabricated parking waypoints.",
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.northwoodalliance.org/wildcat-falls",
+          "description": "Northwoods Alliance's published Wildcat Falls Community Forest page identifies it as owner and manager of the protected public forest."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.northwoodalliance.org/wildcat-falls",
+          "description": "Owner offers non-motorized public recreation at the 200-acre Wildcat Falls Community Forest and warns visitors to stay off adjoining private property."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.northwoodalliance.org/wildcat-falls",
+          "description": "Owner documents roadside visitor parking on County Line Lake Road at a signed waterfall trail start roughly 0.6 mile north of McGinty Lane; precise bay GPS and live winter access NOT confirmed."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://images.squarespace-cdn.com/content/v1/5a2b1734d7bdce1bf888562a/1608837636794-WA87O7DHXFPR0PI1ZSU2/Slide2.jpg",
+          "description": "Owner's satellite trail illustration labels TRAIL HEAD and FALLS and traces its marked yellow waterfall loop. Website describes ~¾-mile rough route; no survey line is available."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf",
+          "description": "Western Upper Peninsula visitors bureau brochure #29 maps Wildcat Falls on Scott and Howe Creek at approximately 46.346173,-89.292236. Owner's separate maps and signs confirm the falls are west of County Line Lake Road on its public waterfall parcel. Coordinate is APPROXIMATE, never parking or surveyed viewpoint."
+        }
+      },
+      "geocodeProvenance": {
+        "kind": "approximate-natural-waterfall",
+        "point": [
+          46.346173,
+          -89.292236
+        ],
+        "publishedFeatureSource": "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf",
+        "ownerIllustratedFallsSource": "https://images.squarespace-cdn.com/content/v1/5a2b1734d7bdce1bf888562a/1608837636794-WA87O7DHXFPR0PI1ZSU2/Slide2.jpg",
+        "ownerPropertyTrailMapSource": "https://images.squarespace-cdn.com/content/v1/5a2b1734d7bdce1bf888562a/1608837440421-OHK7QXXHA9HRCID9CNS2/1withlegend.jpg",
+        "ownerVisitorSource": "https://www.northwoodalliance.org/wildcat-falls",
+        "notOfficialFallsSurvey": true,
+        "notParking": true,
+        "notTrailRoute": true,
+        "parkingGPSPublished": false
+      },
+      "relatedWaterfalls": [
+        "bond-falls",
+        "kakabika-falls",
+        "yondota-falls"
+      ],
+      "link": "",
+      "path": ""
     }
   ]
 }

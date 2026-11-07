@@ -43,3 +43,18 @@
 .quick-guide a{color:var(--blue);text-underline-offset:2px}
 #comparison-results{scroll-margin-top:20px}
 @media(max-width:760px){.quick-facts{grid-template-columns:minmax(0,1fr)}}
+
+/* NYC timing evidence: intentionally not a live/forecast heatmap. */
+.timing-panel h2{font-size:clamp(1.28rem,2.8vw,1.8rem);margin:.2rem 0 10px;line-height:1.18}
+.timing-panel>p{max-width:880px}
+.timing-selected{font-weight:750;margin:14px 0 12px}
+.timing-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.timing-window{min-width:0;background:#f2f7fa;border:1px solid #bed2dd;border-radius:14px;padding:16px}
+.timing-window-label{font-weight:750;color:#244b63;font-size:.86rem;margin:0}
+.timing-median{margin:12px 0 5px;font-size:clamp(1.6rem,3vw,2.2rem);font-weight:800;color:#102f47;line-height:1.05}
+.timing-median span{display:block;margin-top:5px;font-size:.8rem;font-weight:600;color:#526d7a}
+.timing-conclusion{background:#eff7f7;border-left:3px solid #327d82;border-radius:5px;padding:12px 14px;color:#16464a}
+.timing-panel .notice{margin:12px 0}
+.timing-panel .detail{margin-top:10px;line-height:1.5}
+@media(max-width:760px){.timing-grid{grid-template-columns:minmax(0,1fr)}.timing-window{padding:14px}.timing-median span{display:inline;margin-left:10px}}
+@media(prefers-reduced-motion:reduce){.timing-grid *{transition:none!important;animation:none!important}}

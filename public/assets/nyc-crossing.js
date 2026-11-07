@@ -40,7 +40,52 @@
     return '<div class="disruption"><strong>'+incidentLabel+'</strong>'+(d.signCount?' · '+d.signCount+' sign'+(d.signCount===1?'':'s'):'')+events+signs+'</div>';
   }
 
+  function renderDeparture(info){
+    const target=$('departureIntelligence');
+    if(!target)return;
+    if(!info||info.state!=='AVAILABLE'||!Array.isArray(info.windows)||info.windows.length!==3){
+      const reason=info?.reason||'Historical evidence is currently unavailable.';
+      target.innerHTML='<p class="notice"><strong>Timing comparison not available.</strong> '+escapeHtml(reason)+
+        ' This does not affect current tolls or measured traffic.</p>'+
+        (info?.source?.latestObservationDate?'<p class="detail">Last archived day: '+escapeHtml(info.source.latestObservationDate)+'</p>':'');
+      return;
+    }
+    const names={
+      'queens-midtown':'Queens–Midtown Tunnel',
+      'hugh-carey':'Hugh L. Carey Tunnel',
+      'brooklyn':'Brooklyn Bridge approach corridor',
+      'manhattan':'Manhattan Bridge approach corridor',
+      'rfk':'RFK Manhattan approach segment',
+      'verrazzano':'Verrazzano eastbound span'
+    };
+    const cards=info.windows.map(w=>{
+      const lower=Number(w.lowerMinutes),upper=Number(w.upperMinutes),typical=Number(w.typicalMinutes);
+      const title=w.inMinutes===0?'This hour':w.inMinutes===60?'+1 hour':'+2 hours';
+      return '<article class="timing-window"><p class="timing-window-label">'+title+
+        ' · '+escapeHtml(w.clockLabel)+' ET</p><p class="timing-median">'+typical.toFixed(1)+
+        '<span>min typical</span></p><p class="detail">Historical daily-hourly range: '+
+        lower.toFixed(1)+'–'+upper.toFixed(1)+' min</p><p class="detail">'+
+        escapeHtml(w.trainingDays)+' distinct training days</p></article>';
+    }).join('');
+    const movement=info.historicallyLighterInMinutes==null
+      ? 'No defensible advantage at one time over another.'
+      : 'Historically lighter segment near +'+escapeHtml(info.historicallyLighterInMinutes)+
+        ' minutes; not a travel recommendation.';
+    const holdout=info.holdout||{};
+    target.innerHTML='<p class="timing-selected">'+escapeHtml(names[info.crossingId]||info.crossingId)+
+      ' · '+escapeHtml(scopeLabel(info.scope))+' · '+escapeHtml(info.direction)+'</p>'+
+      '<div class="timing-grid">'+cards+'</div>'+
+      '<p class="timing-conclusion"><strong>'+movement+'</strong> Current incidents can reverse this pattern.</p>'+
+      '<p class="detail">Independent holdout: '+escapeHtml(holdout.observedHourRows)+
+      ' observed date-hours, model MAE '+escapeHtml(holdout.maeMinutes)+
+      ' min versus all-hour baseline '+escapeHtml(holdout.naiveMaeMinutes)+
+      ' min. Historical range coverage '+Math.round(Number(holdout.intervalCoverage)*100)+
+      '%. Archive through '+escapeHtml(info.source?.latestObservationDate||'unknown')+'.</p>'+
+      '<p class="detail">'+escapeHtml(info.disclaimer||'Historical segment evidence only.')+'</p>';
+  }
+
   function render(data){
+    renderDeparture(data.departure);
     const liveCount=data.routes.filter(r=>r.etaState==='LIVE').length;
     status.textContent=data.trafficState==='UNAVAILABLE'
       ? 'Live times unavailable'
@@ -81,6 +126,7 @@
     }catch(e){
       status.textContent='Unable to load decision service';
       status.className='status off';
+      renderDeparture({state:'UNAVAILABLE',reason:'The comparison API is unavailable.'});
     }
   }
 

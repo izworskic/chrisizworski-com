@@ -56,5 +56,8 @@
     "Do not route visitors to point coordinate or infer a mapped line from owner narrative",
     "No emails, agency outreach, crowd-sourced verification or visitor reports"
   ],
-  "nextAction": "Verify the feature point against the owner's illustrative visitor map or another independently geolocated, site-specific natural waterfall reference. Once reconciled, publish one owner-sourced, GPS-honest guide with hub and sitemap, regenerate Python nearby and queue, and run all source and browser release gates."
+  "nextAction": "Verify the feature point against the owner's illustrative visitor map or another independently geolocated, site-specific natural waterfall reference. Once reconciled, publish one owner-sourced, GPS-honest guide with hub and sitemap, regenerate Python nearby and queue, and run all source and browser release gates.",
+  "supersededByBatch": "B78",
+  "supersededByEvidence": "data/up-waterfall-b78-wildcat-publication-evidence.json",
+  "historicalStateNotice": "This file preserves B77's prior research-only snapshot. B78 separately reconciled location using owner-documented FALLS/TRAIL HEAD map and regional natural-feature coordinates, then published the public guide."
 }
