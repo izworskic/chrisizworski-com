@@ -6,3 +6,6 @@ audit/*.tmp
 __pycache__/
 *.pyc
 scratch/
+build/experience-foundry/
+experience-foundry/drafts/
+artifacts/experience-foundry/

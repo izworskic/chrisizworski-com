@@ -307,7 +307,11 @@ async function waitForAnswer(page,pest){await page.waitForFunction(name=>documen
   await broken.close();
   const noJS=await browser.newContext({viewport:{width:390,height:820},javaScriptEnabled:false});
   const n=await noJS.newPage();await n.goto(ORIGIN+'/michigan-garden-pest-watch/',{waitUntil:'domcontentloaded'});
-  assert.match(await n.locator('#primary-answer').innerText(),/squash stems/i);
+  // The static answer is seasonally authored: November prevention replaces
+  // summer stem-scouting. Require useful squash guidance, not a summer phrase.
+  const staticAnswer=await n.locator('#primary-answer').innerText();
+  assert.match(staticAnswer,/squash/i);
+  assert.match(staticAnswer,/stems|protection|prevention/i);
   assert.ok(await n.locator('.nojs-guides').isVisible());
   assert.match(await n.locator('#earworm-trap-desk').innerText(),/August 25, 2026/);
   assert.match(await n.locator('#earworm-trap-desk').innerText(),/September 1, 2026/);

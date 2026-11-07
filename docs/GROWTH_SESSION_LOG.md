@@ -2020,6 +2020,13 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - Local branch validation: 11 Python tests and deterministic `history.py --check` passed; targeted Node tests passed; complete `npm run verify:all` passed in a Vercel sandbox. Final PR/browser and production status must be recorded separately; Search Console/AdSense impacts NOT MEASURED.
 - **Single next action:** verify the real-browser desktop/mobile year and harbor filters, then the public production version matching the merged commit.
 
+### 2026-11-07 — Experience Foundry workbench completion (PR #1511)
+
+- Reviewed and enhanced the existing Foundry draft, preserving original intent: custom visitor experiences with shared evidence/QA contracts. Added executable custom planning packets, schema-v2 source/time/scope/rights/conflict validation, deterministic snapshot provenance, safe output handling, and populated/adverse browser acceptance for both distinct recipes. Updated First Freeze's record to its verified merged status.
+- Development infrastructure only; no public route, sitemap, canonical, ad stack, production provider or cross-repo mutation. GSC/AdSense data NOT AVAILABLE in this session; visitor/search/revenue uplift NOT MEASURED.
+- Local evidence: 19 focused tests, 50 Chromium acceptance cases and all 59 repository gate steps passed; screenshots inspected. Implementation review and precise hosted CI/release state are tracked in existing PR #1511 and `experience-foundry/docs/REVIEW_2026_11_07.md`. Not merged or deployed by this session.
+- **Single next action:** use the completed workbench for a real-data maritime experience in the existing Seaway owner, first auditing the current build and completing its source, interaction and owner-release evidence.
+
 ### 2026-11-07 — NYC Crossing Python historical segment intelligence (feature branch; PR/CI pending)
 - Canonical remains https://chrisizworski.com/nyc-crossing/; no extra URLs, Redis, Supabase, ad changes or frontend framework. Existing live providers, vehicle tolls and authoritative segment scopes preserved.
 - Added Python standard-library archive normalizer, 70-day train / independent 14-day holdout, validated historical weekday/weekend hourly median/10–90% intervals, naive all-hour baseline comparator, stale/duplicate/future failure gates and source-specific freshness. Python also independently audits current Node car-rate math against dated official 2026 source fixtures. Synthetic fixtures are labeled synthetic; **no actual forecast skill is claimed**.

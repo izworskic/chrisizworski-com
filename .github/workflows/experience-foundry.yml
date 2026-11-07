@@ -1,0 +1,44 @@
+name: Experience Foundry acceptance
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'experience-foundry/**'
+      - 'scripts/experience-foundry.mjs'
+      - 'scripts/verify-foundry-browser.cjs'
+      - 'tests/experience-foundry*'
+      - 'benchmarks/tool-network-registry.json'
+      - '.github/workflows/experience-foundry.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: foundry-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  acceptance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Structural, source-time and CLI tests
+        run: node --test tests/experience-foundry*.test.js
+      - name: Install isolated browser harness
+        run: |
+          npm install --prefix /tmp/foundry-playwright --no-save --ignore-scripts playwright@1.58.2
+          echo "NODE_PATH=/tmp/foundry-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium-browser)" >> "$GITHUB_ENV"
+      - name: Exercise both recipes, adverse evidence and responsive behavior
+        run: node scripts/verify-foundry-browser.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: foundry-browser-evidence
+          path: artifacts/experience-foundry/
+          if-no-files-found: error
+          retention-days: 14

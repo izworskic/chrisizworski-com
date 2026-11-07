@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "status": "review-ready",
+  "slug": "seaway-passage",
+  "recipe": "passage-log",
+  "title": "Seaway Passage: Vessel Stories",
+  "place": "Great Lakes and St. Lawrence Seaway",
+  "question": "Which documented vessel passage can I follow, and what is actually known about its journey?",
+  "mode": "enhance-existing",
+  "intentOwner": "st-lawrence-seaway",
+  "closestTools": [
+    "ship-tracker",
+    "welland-canal"
+  ],
+  "distinctiveness": [
+    {
+      "dimension": "decision",
+      "reason": "Follow a dated documented passage and its source record rather than comparing wildlife observations or generic travel stops."
+    },
+    {
+      "dimension": "hierarchy",
+      "reason": "Present a maritime ledger beside a focused passage dossier instead of a chronological field-journal column."
+    },
+    {
+      "dimension": "interaction",
+      "reason": "Select vessel event records to change provenance, narrative and documented endpoints without inventing live tracking."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Existing Seaway tool (not a verified live passage)",
+      "url": "https://chrisizworski.com/st-lawrence-seaway/"
+    },
+    {
+      "label": "Existing Welland Canal tool (not a verified passage record)",
+      "url": "https://chrisizworski.com/welland-canal/"
+    }
+  ],
+  "records": [],
+  "constraints": {
+    "noNewCanonical": true,
+    "noPublicRoute": true,
+    "doNotInferLiveStatus": true
+  },
+  "notes": "No verified vessel passage record supplied. This example demonstrates a distinct passage interaction and honest empty state; it does not claim live AIS, ETA or lock access."
+}
