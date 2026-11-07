@@ -5,8 +5,8 @@
   "maxRadiusMiles": 50,
   "policy": "Not a route, visitor parking point, driving distance, trail distance, access grant, or live-open forecast.",
   "counts": {
-    "curated": 78,
-    "eligible": 69,
+    "curated": 79,
+    "eligible": 70,
     "excluded": 9
   },
   "excludedIds": [
@@ -672,6 +672,16 @@
       "lng": -86.646554
     },
     {
+      "id": "wildcat-falls",
+      "name": "Wildcat Falls",
+      "region": "Western U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/wildcat-falls/",
+      "source": "https://www.northwoodalliance.org/wildcat-falls",
+      "lat": 46.346173,
+      "lng": -89.292236
+    },
+    {
       "id": "wright-street-falls",
       "name": "Wright Street Falls",
       "region": "Central U.P.",
@@ -733,6 +743,10 @@
       {
         "id": "o-kun-de-kun-falls",
         "miles": 12.1
+      },
+      {
+        "id": "wildcat-falls",
+        "miles": 13.4
       },
       {
         "id": "kakabika-falls",
@@ -1035,6 +1049,10 @@
         "miles": 35.1
       },
       {
+        "id": "wildcat-falls",
+        "miles": 35.2
+      },
+      {
         "id": "interstate-falls",
         "miles": 38.1
       },
@@ -1075,6 +1093,10 @@
       {
         "id": "mex-i-min-e-falls",
         "miles": 7.6
+      },
+      {
+        "id": "wildcat-falls",
+        "miles": 8.8
       },
       {
         "id": "duppy-falls",
@@ -1337,6 +1359,10 @@
         "miles": 42.6
       },
       {
+        "id": "wildcat-falls",
+        "miles": 43.4
+      },
+      {
         "id": "cascade-falls",
         "miles": 46.1
       },
@@ -1487,6 +1513,10 @@
       {
         "id": "kakabika-falls",
         "miles": 21.7
+      },
+      {
+        "id": "wildcat-falls",
+        "miles": 22.3
       },
       {
         "id": "bond-falls",
@@ -1705,6 +1735,10 @@
       {
         "id": "bond-falls",
         "miles": 10.5
+      },
+      {
+        "id": "wildcat-falls",
+        "miles": 18.7
       },
       {
         "id": "sturgeon-falls",
@@ -1977,6 +2011,10 @@
         "miles": 35.3
       },
       {
+        "id": "wildcat-falls",
+        "miles": 39
+      },
+      {
         "id": "agate-falls",
         "miles": 41.7
       },
@@ -2089,6 +2127,10 @@
       {
         "id": "haven-falls",
         "miles": 48
+      },
+      {
+        "id": "wildcat-falls",
+        "miles": 48.8
       },
       {
         "id": "wright-street-falls",
@@ -2207,6 +2249,10 @@
         "miles": 29.6
       },
       {
+        "id": "wildcat-falls",
+        "miles": 35
+      },
+      {
         "id": "o-kun-de-kun-falls",
         "miles": 41.2
       },
@@ -2317,6 +2363,10 @@
         "miles": 35.3
       },
       {
+        "id": "wildcat-falls",
+        "miles": 41.4
+      },
+      {
         "id": "o-kun-de-kun-falls",
         "miles": 42.6
       },
@@ -2421,6 +2471,10 @@
       {
         "id": "kakabika-falls",
         "miles": 35.2
+      },
+      {
+        "id": "wildcat-falls",
+        "miles": 41.3
       },
       {
         "id": "o-kun-de-kun-falls",
@@ -2531,6 +2585,10 @@
       {
         "id": "o-kun-de-kun-falls",
         "miles": 32.6
+      },
+      {
+        "id": "wildcat-falls",
+        "miles": 36.6
       },
       {
         "id": "agate-falls",
@@ -2761,6 +2819,10 @@
       {
         "id": "bonanza-falls",
         "miles": 38.1
+      },
+      {
+        "id": "wildcat-falls",
+        "miles": 44
       }
     ],
     "jacobs-falls": [
@@ -2839,6 +2901,10 @@
         "miles": 18
       },
       {
+        "id": "wildcat-falls",
+        "miles": 19.4
+      },
+      {
         "id": "canyon-falls",
         "miles": 24.1
       },
@@ -2900,6 +2966,10 @@
       }
     ],
     "kakabika-falls": [
+      {
+        "id": "wildcat-falls",
+        "miles": 7.6
+      },
       {
         "id": "yondota-falls",
         "miles": 12.9
@@ -3193,6 +3263,10 @@
         "miles": 37.4
       },
       {
+        "id": "wildcat-falls",
+        "miles": 37.6
+      },
+      {
         "id": "bond-falls",
         "miles": 42.1
       },
@@ -3355,6 +3429,10 @@
       {
         "id": "agate-falls",
         "miles": 33.3
+      },
+      {
+        "id": "wildcat-falls",
+        "miles": 34.7
       },
       {
         "id": "interstate-falls",
@@ -3565,6 +3643,10 @@
         "miles": 39
       },
       {
+        "id": "wildcat-falls",
+        "miles": 40.6
+      },
+      {
         "id": "agate-falls",
         "miles": 44.6
       },
@@ -3705,6 +3787,10 @@
         "miles": 39
       },
       {
+        "id": "wildcat-falls",
+        "miles": 40.8
+      },
+      {
         "id": "agate-falls",
         "miles": 44.7
       },
@@ -3724,6 +3810,10 @@
       },
       {
         "id": "jumbo-falls",
+        "miles": 11.6
+      },
+      {
+        "id": "wildcat-falls",
         "miles": 11.6
       },
       {
@@ -4211,6 +4301,10 @@
         "miles": 39.1
       },
       {
+        "id": "wildcat-falls",
+        "miles": 40.5
+      },
+      {
         "id": "agate-falls",
         "miles": 44.6
       },
@@ -4309,6 +4403,10 @@
         "miles": 31.3
       },
       {
+        "id": "wildcat-falls",
+        "miles": 32.2
+      },
+      {
         "id": "bond-falls",
         "miles": 33
       },
@@ -4373,6 +4471,10 @@
       {
         "id": "sturgeon-falls",
         "miles": 21.8
+      },
+      {
+        "id": "wildcat-falls",
+        "miles": 22.1
       },
       {
         "id": "bonanza-falls",
@@ -4589,6 +4691,10 @@
         "miles": 32.5
       },
       {
+        "id": "wildcat-falls",
+        "miles": 36.4
+      },
+      {
         "id": "agate-falls",
         "miles": 38.9
       },
@@ -4803,6 +4909,10 @@
         "miles": 35.3
       },
       {
+        "id": "wildcat-falls",
+        "miles": 41.4
+      },
+      {
         "id": "o-kun-de-kun-falls",
         "miles": 42.6
       },
@@ -4903,6 +5013,10 @@
       {
         "id": "cascade-falls",
         "miles": 47.8
+      },
+      {
+        "id": "wildcat-falls",
+        "miles": 48.5
       },
       {
         "id": "jacobs-falls",
@@ -5035,6 +5149,10 @@
       {
         "id": "kakabika-falls",
         "miles": 35.9
+      },
+      {
+        "id": "wildcat-falls",
+        "miles": 41.8
       },
       {
         "id": "o-kun-de-kun-falls",
@@ -5433,6 +5551,10 @@
         "miles": 35.1
       },
       {
+        "id": "wildcat-falls",
+        "miles": 39.4
+      },
+      {
         "id": "agate-falls",
         "miles": 41.5
       },
@@ -5559,6 +5681,10 @@
       {
         "id": "big-erics-falls",
         "miles": 32.7
+      },
+      {
+        "id": "wildcat-falls",
+        "miles": 35.1
       },
       {
         "id": "cascade-falls",
@@ -5761,6 +5887,10 @@
         "miles": 31
       },
       {
+        "id": "wildcat-falls",
+        "miles": 37.2
+      },
+      {
         "id": "pinnacle-falls",
         "miles": 38.1
       },
@@ -5885,6 +6015,10 @@
       {
         "id": "carp-river-falls",
         "miles": 42.7
+      },
+      {
+        "id": "wildcat-falls",
+        "miles": 48
       }
     ],
     "trap-falls": [
@@ -5979,6 +6113,10 @@
       {
         "id": "agate-falls",
         "miles": 35.7
+      },
+      {
+        "id": "wildcat-falls",
+        "miles": 36.1
       },
       {
         "id": "saxon-falls",
@@ -6109,6 +6247,10 @@
       {
         "id": "o-kun-de-kun-falls",
         "miles": 35.2
+      },
+      {
+        "id": "wildcat-falls",
+        "miles": 38.8
       },
       {
         "id": "agate-falls",
@@ -6261,6 +6403,148 @@
       {
         "id": "little-garlic-falls",
         "miles": 48.3
+      }
+    ],
+    "wildcat-falls": [
+      {
+        "id": "kakabika-falls",
+        "miles": 7.6
+      },
+      {
+        "id": "bond-falls",
+        "miles": 8.8
+      },
+      {
+        "id": "mex-i-min-e-falls",
+        "miles": 11.6
+      },
+      {
+        "id": "agate-falls",
+        "miles": 13.4
+      },
+      {
+        "id": "duppy-falls",
+        "miles": 18.7
+      },
+      {
+        "id": "jumbo-falls",
+        "miles": 19.4
+      },
+      {
+        "id": "yondota-falls",
+        "miles": 19.6
+      },
+      {
+        "id": "o-kun-de-kun-falls",
+        "miles": 22.1
+      },
+      {
+        "id": "cascade-falls",
+        "miles": 22.3
+      },
+      {
+        "id": "nonesuch-falls",
+        "miles": 32.2
+      },
+      {
+        "id": "little-union-gorge-falls",
+        "miles": 34.7
+      },
+      {
+        "id": "gabbro-falls",
+        "miles": 35
+      },
+      {
+        "id": "sturgeon-falls",
+        "miles": 35.1
+      },
+      {
+        "id": "bonanza-falls",
+        "miles": 35.2
+      },
+      {
+        "id": "trap-falls",
+        "miles": 36.1
+      },
+      {
+        "id": "overlooked-falls",
+        "miles": 36.4
+      },
+      {
+        "id": "greenstone-falls",
+        "miles": 36.6
+      },
+      {
+        "id": "tibbets-falls",
+        "miles": 37.2
+      },
+      {
+        "id": "lepisto-falls",
+        "miles": 37.6
+      },
+      {
+        "id": "trappers-falls",
+        "miles": 38.8
+      },
+      {
+        "id": "explorers-falls",
+        "miles": 39
+      },
+      {
+        "id": "shining-cloud-falls",
+        "miles": 39.4
+      },
+      {
+        "id": "nawadaha-falls",
+        "miles": 40.5
+      },
+      {
+        "id": "manabezho-falls",
+        "miles": 40.6
+      },
+      {
+        "id": "manido-falls",
+        "miles": 40.8
+      },
+      {
+        "id": "great-conglomerate-falls",
+        "miles": 41.3
+      },
+      {
+        "id": "potawatomi-falls",
+        "miles": 41.4
+      },
+      {
+        "id": "gorge-falls",
+        "miles": 41.4
+      },
+      {
+        "id": "rainbow-falls",
+        "miles": 41.8
+      },
+      {
+        "id": "wyandotte-falls",
+        "miles": 42.4
+      },
+      {
+        "id": "canyon-falls",
+        "miles": 43.4
+      },
+      {
+        "id": "interstate-falls",
+        "miles": 44
+      },
+      {
+        "id": "tioga-park-falls",
+        "miles": 48
+      },
+      {
+        "id": "power-house-falls",
+        "miles": 48.5
+      },
+      {
+        "id": "falls-river-trail",
+        "miles": 48.8
       }
     ],
     "wright-street-falls": [
@@ -6439,6 +6723,10 @@
         "miles": 40.7
       },
       {
+        "id": "wildcat-falls",
+        "miles": 42.4
+      },
+      {
         "id": "eagle-river-falls",
         "miles": 45.2
       },
@@ -6561,6 +6849,10 @@
       {
         "id": "cascade-falls",
         "miles": 19
+      },
+      {
+        "id": "wildcat-falls",
+        "miles": 19.6
       },
       {
         "id": "lepisto-falls",

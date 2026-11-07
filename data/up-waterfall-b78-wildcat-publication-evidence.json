@@ -1,0 +1,55 @@
+{
+  "batch": "B78",
+  "reviewed": "2026-11-07",
+  "method": "online-sources-only-no-outreach",
+  "destination": "Wildcat Falls",
+  "sourceGisOid": null,
+  "curatedCount": 79,
+  "sitemapGuides": 77,
+  "landManager": "https://www.northwoodalliance.org/wildcat-falls",
+  "officialMappedVisitorTrail": {
+    "overviewMap": "https://images.squarespace-cdn.com/content/v1/5a2b1734d7bdce1bf888562a/1608837440421-OHK7QXXHA9HRCID9CNS2/1withlegend.jpg",
+    "markedFallsAndTrailHead": "https://images.squarespace-cdn.com/content/v1/5a2b1734d7bdce1bf888562a/1608837636794-WA87O7DHXFPR0PI1ZSU2/Slide2.jpg",
+    "role": "owner-illustrated-non-surveyed-falls-and-trail",
+    "publicTrailMarkedYellow": true,
+    "publishedTrailLengthMiles": 0.75,
+    "oneWayOrRoundTripPublished": false
+  },
+  "approximateNaturalFeature": {
+    "lat": 46.346173,
+    "lng": -89.292236,
+    "source": "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf",
+    "brochureFeature": 29,
+    "role": "waterfall-not-car-route-or-surveyed-trailhead",
+    "ownerVisualMapCompatible": true,
+    "independentlySurveyed": false
+  },
+  "roadsideParking": {
+    "ownerRoute": "From Watersmeet via US-45, County Road 206/Sucker Lake Road, County Line Lake Road, 0.6 mile north of McGinty Lane to yellow waterfall trail sign on west/left side",
+    "surveyedGPS": null,
+    "roadPlowedNow": null,
+    "vehicleDirectionsToFallsPin": false
+  },
+  "fiveAxes": {
+    "landManager": true,
+    "publicAccess": true,
+    "parkingOwnerText": true,
+    "trailOwnerMap": true,
+    "featureApproximateBureauAndOwner": true
+  },
+  "legacyNoTrailOutdated": "https://upper-michigan.com/guide/waterfalls/wildcat-falls.html",
+  "publication": {
+    "eligible": true,
+    "noDrivingToNaturalPin": true,
+    "noInventedParkingPin": true,
+    "noInventedTrailPolyline": true,
+    "noLiveAccessClaim": true,
+    "noAgencyEmails": true
+  },
+  "limitations": [
+    "Owner map is geographic illustration, not surveyed ground-control GIS",
+    "Regional tourism falls coordinate is approximate natural-feature, not viewpoint or parking",
+    "No current-season plowing, shoulder legality at an arbitrary moment, closure, trail-hazard or flow reporting",
+    "0.75-mile owner trail does not specify one-way or round-trip"
+  ]
+}
