@@ -46,9 +46,9 @@ MONTH = {name: i for i, name in enumerate(
 
 
 class ReadableText(HTMLParser):
-    SKIP = {"script", "style", "template", "noscript", "svg", "nav", "footer", "header"}
+    SKIP = {"script", "style", "template", "noscript", "svg", "nav", "footer"}
     BLOCK = {"p", "li", "h1", "h2", "h3", "h4", "h5", "h6", "section",
-             "article", "div", "tr", "br", "main", "table", "td", "th"}
+             "article", "div", "tr", "br", "main", "table", "td", "th", "header"}
     def __init__(self):
         super().__init__(convert_charrefs=True)
         self.depth = 0
