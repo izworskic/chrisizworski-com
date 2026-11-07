@@ -73,3 +73,20 @@ test('national and all five separate regional page implementations load and sync
   assert.match(s,/rocketPins\?\.update\(/);
  }
 });
+
+test('source failure clears stale national map choices and regional body races cannot reverse selections',()=>{
+ const national=fs.readFileSync(path.join(ROOT,'public/synced-national-tools/rocket-launch-live/app.js'),'utf8');
+ const fail=national.slice(national.indexOf('} catch (err) {\n      if (sequence !== state.request) return;',national.indexOf('async function load(region, launchId)')));
+ assert.match(fail,/state\.rocketPins\?\.update\(\[\],null\)/);
+ assert.match(fail,/state\.data=null/);
+ for(const [filename,serial] of [
+  ['public/kodiak-rocket-launch-viewing/app.js','serial'],
+  ['public/barking-sands-rocket-launch-viewing/app.js','seq']
+ ]){
+  const source=fs.readFileSync(path.join(ROOT,filename),'utf8');
+  assert.match(source,new RegExp('const (?:data|d)=await (?:response|r)\\.json\\(\\);\\s+if\\('+serial+'!==state\\.request\\)return;'));
+ }
+ const wallops=fs.readFileSync(path.join(ROOT,'public/wallops-rocket-launch-viewing/app.js'),'utf8');
+ assert.match(wallops,/frameMissionOrigins\(\)/);
+ assert.match(wallops,/rocketPins\?\.getGroups\(\)/);
+});

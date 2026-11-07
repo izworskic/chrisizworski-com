@@ -86,6 +86,17 @@
   state.map.fitBounds(bounds,{padding:[25,25],maxZoom:12,animate:false});
   updatePad();
  }
+ function frameMissionOrigins(){
+  if(!state.map||!state.places.length)return;
+  const refs=state.places.filter(p=>Number.isFinite(p.lat)&&Number.isFinite(p.lon))
+    .map(p=>[p.lat,p.lon]);
+  const origins=state.rocketPins?.getGroups()||[];
+  for(const g of origins)if(Number.isFinite(g.lat)&&Number.isFinite(g.lon))
+    refs.push([g.lat,g.lon]);
+  // Include viewing places and scheduled origin, including approximate fallback
+  // whose regional reference can fall outside a phone-sized visitor-only map.
+  if(refs.length)state.map.fitBounds(refs,{padding:[34,34],maxZoom:11,animate:false});
+ }
  function updatePad(){
   if(!state.map||!window.L)return;
   if(state.padMarker)state.map.removeLayer(state.padMarker);
@@ -139,6 +150,7 @@
       });
       state.rocketPins?.update(state.data?.regions?.find(r=>r.id==='virginia')?.launches||[],
         state.data?.selectedLaunchId);
+      frameMissionOrigins();
    if(typeof ResizeObserver!=='undefined')new ResizeObserver(()=>state.map?.invalidateSize()).observe(screen);
    fetch('/api/carto-basemap-config',{signal:AbortSignal.timeout(5500)})
     .then(r=>r.ok?r.json():null).then(config=>{
@@ -269,6 +281,7 @@
    'NWS: mission-time spectator sky comparison unavailable, not a clear-view promise');
   state.data=data;
   state.rocketPins?.update(missions,picked?.id);
+  frameMissionOrigins();
   deepLink(picked?.id);
   const u=new URL(location.href);
   if(picked?.id&&UUID.test(picked.id))u.searchParams.set('launchId',picked.id);

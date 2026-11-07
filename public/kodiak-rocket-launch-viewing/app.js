@@ -68,6 +68,7 @@
    if(serial!==state.request)return;
    if(response.status===404&&id&&!expired){await loadMission(null,true);return;}
    const data=await response.json();
+   if(serial!==state.request)return;
    if(!response.ok||!data?.ok||data.region?.id!=='alaska')throw Error('Source unavailable');
    present(data,expired);
   }catch{

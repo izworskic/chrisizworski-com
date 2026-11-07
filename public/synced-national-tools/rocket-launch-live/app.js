@@ -1239,6 +1239,11 @@
       syncUrl(data.selectedRegion, data.selectedLaunchId);
     } catch (err) {
       if (sequence !== state.request) return;
+      // A previously selected mission may have vanished or the shared source
+      // may be offline. Retaining clickable old rockets would imply a current
+      // schedule after this request has explicitly failed.
+      state.rocketPins?.update([],null);
+      state.data=null;
       document.dispatchEvent(new CustomEvent('rocket-truth:mission-selected',
         {detail:{launchId:null}}));
       document.dispatchEvent(new CustomEvent('rocket-viewing:data',{detail:null}));

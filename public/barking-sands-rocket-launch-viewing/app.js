@@ -102,7 +102,9 @@ async function loadMission(id,expired=false){
   const r=await fetch(API+'?'+params.toString(),{headers:{Accept:'application/json'},signal:AbortSignal.timeout(13000)});
   if(seq!==state.request)return;
   if(r.status===404&&id&&!expired){await loadMission(null,true);return;}
-  const d=await r.json();if(!r.ok||!d?.ok||d.region?.id!=='hawaii')throw Error('PMRF national feed unavailable');
+  const d=await r.json();
+  if(seq!==state.request)return;
+  if(!r.ok||!d?.ok||d.region?.id!=='hawaii')throw Error('PMRF national feed unavailable');
   showMissions(d,expired);
  }catch{
   if(seq!==state.request)return;
