@@ -124,6 +124,12 @@ const whenReady=page=>page.waitForFunction(id=>
    const response=await page.goto(base+'?region=florida&launchId='+A,{waitUntil:'domcontentloaded'});
    assert(response.status()===200,v.name+' public HTML HTTP failed');
    await whenReady(page);
+   await page.waitForFunction(()=>window.vaq?.some(a=>a[0]==='event'&&a[1]?.name==='Rocket Flight Desk Exposed'));
+   const metrics=()=>page.evaluate(()=>window.vaq?.filter(a=>a[0]==='event').map(a=>a[1])||[]);
+   let events=await metrics();
+   assert(events.filter(a=>a.name==='Rocket Flight Desk Exposed').length===1,v.name+' initial exposure missing/duplicated');
+   assert(!events.some(a=>a.name==='Rocket Mission Selected'),v.name+' auto-selected launch falsely counted as visitor choice');
+   assert(await page.locator('script[src="/_vercel/insights/script.js"]').count()===1,v.name+' Vercel pageview loader missing');
    assert((await page.locator('#rl-flight-mission').innerText()).includes('Fixture Florida rocket A'),
     v.name+' hero mission not bound');
    assert((await page.locator('#rl-mission-name').innerText()).includes('Fixture Florida rocket A'),
@@ -140,6 +146,9 @@ const whenReady=page=>page.waitForFunction(id=>
    assert(first>=0 && first<v.height,v.name+' first useful answer below phone viewport '+first);
    await page.locator('#rl-flight-mission-select').selectOption(B);
    await page.waitForFunction(id=>document.querySelector('#rl-flight-desk')?.dataset.launchId===id,B);
+   events=await metrics();
+   assert(events.filter(a=>a.name==='Rocket Mission Selected'&&a.data.surface==='flight_desk').length===1,
+     v.name+' hero choice did not emit one committed selection');
    assert((await page.locator('#rl-flight-headline').innerText()).includes('too uncertain'),
     v.name+' day-only mission falsely travel-ready');
    assert((await page.locator('#rl-flight-time').innerText()).includes('time TBD'),
@@ -155,9 +164,26 @@ const whenReady=page=>page.waitForFunction(id=>
    report.screenshots.push(altShot);
    await page.locator('#rl-launch-select').selectOption(A);
    await page.waitForFunction(id=>document.querySelector('#rl-flight-desk')?.dataset.launchId===id,A);
+   events=await metrics();
+   assert(events.filter(a=>a.name==='Rocket Mission Selected'&&a.data.surface==='native_picker').length===1,
+     v.name+' reverse native choice was not attributed correctly');
    assert((await page.locator('#rl-flight-mission-select').inputValue())===A,
     v.name+' reversing native picker did not return A');
    await page.locator('#rl-flight-locate').click();
+   await page.waitForFunction(()=>window.vaq?.some(a=>a[0]==='event'&&a[1]?.name==='Rocket Map Engaged'));
+   events=await metrics();
+   assert(events.some(a=>a.name==='Rocket Map Engaged'&&a.data.surface==='flight_desk'&&
+     a.data.outcome==='pad_marker_focused'),v.name+' rocket-map focus not measured');
+   await page.locator('#rl-flight-specialist').evaluate(a=>{
+     a.addEventListener('click',e=>e.preventDefault(),{once:true});a.click();
+   });
+   events=await metrics();
+   assert(events.some(a=>a.name==='Rocket Viewing Next Step'&&a.data.destination==='regional_guide'&&
+     a.data.surface==='flight_desk'),v.name+' regional guide handoff not measured');
+   assert(!JSON.stringify(events).includes(A)&&!JSON.stringify(events).includes(B),
+     v.name+' analytics leaked a mission identifier');
+   assert(events.filter(a=>a.name==='Rocket Flight Desk Exposed').length===1,
+     v.name+' exposure counted again on mission updates');
    await page.waitForFunction(()=>document.activeElement?.id==='rl-coast-map'||
      document.activeElement?.classList.contains('rl-region-btn'));
    assert(await page.locator('#rl-coast-map .rocket-origin-icon').count()>0,
