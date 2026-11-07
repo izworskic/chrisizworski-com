@@ -30,15 +30,17 @@ const journey='<section id="journey" class="journey-primer" aria-labelledby="jou
 replaceOnce('<div class="wrap"><section class="station" id="ship-watch"','<div class="wrap">'+journey+'<section class="station" id="ship-watch"');
 replaceOnce('<div class="link-row"><a href="#ship-watch">Find ships & viewing spots ↓</a><a href="#lock-lab">Explore a lock ↓</a></div>',
 '<div class="link-row"><a href="#ship-watch">Find recent ships ↓</a><a href="#viewing-plan">Choose a shore viewpoint ↓</a><a href="#journey">Follow the voyage ↓</a></div>');
-const oldTitle='St. Lawrence Seaway Ship Tracker | Chris Izworski';
-const newTitle='St. Lawrence Seaway Ship Tracker & Locks | Chris Izworski';
-const oldDescription='Find recent Seaway ships, explore seven locks, compare public viewing spots and see how ships climb inland. Includes Eisenhower and official transit links.';
-const newDescription='See recent Seaway ship reports, explore the Montreal–Lake Ontario lock map, choose verified public viewing spots and check official transit sources.';
-html=html.replaceAll(oldTitle,newTitle).replaceAll(oldDescription,newDescription);
+// Metadata is generated once from data/seaway/search-surface.json, never rewritten here.
+const searchSurface=JSON.parse(fs.readFileSync('data/seaway/search-surface.json','utf8'));
+const hubSeo=searchSurface['st-lawrence-seaway'];
+if(!html.includes('<title>'+esc(hubSeo.title)+'</title>') ||
+   !html.includes('<meta name="description" content="'+esc(hubSeo.description)+'">') ||
+   !html.includes('"dateModified":"'+hubSeo.dateModified+'"')) {
+  throw new Error('Seaway journey search metadata drift from canonical source');
+}
 replaceOnce('Follow the ships. Understand the journey.','Follow the voyage, one river chapter at a time.');
 replaceOnce('How does a floating ship climb inland? One roomful of water at a time. Follow recent ship reports, choose a public place to watch, then try the lock model to see how gates, valves and gravity turn a river journey into a staircase.',
 'Where was that freighter last reported? Which locks connect it to the Great Lakes? Where can you legally watch from shore? Explore the Montreal–Lake Ontario passage, then follow the voyage into Welland and beyond. Recent AIS positions are observations, not promised arrival times.');
-html=html.replace('dateModified":"2026-10-24','dateModified":"2026-11-05');
 html=html.replaceAll('/assets/seaway.css?v=20261024b','/assets/seaway.css?v=20261105c')
   .replaceAll('/assets/seaway-core.js?v=20261024c','/assets/seaway-core.js?v=20261105a')
   .replaceAll('/assets/seaway.js?v=20261024c','/assets/seaway.js?v=20261105c');
