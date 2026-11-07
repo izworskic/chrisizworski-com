@@ -15,21 +15,20 @@
   if(config.note)$("individual-note").textContent=config.note;
   const dateIn=(date,start,end)=>date>=start&&date<=end;
   function season(date){
-    if(config.id==="manitou")return{state:date.slice(0,4)==="2026"?"no":"unknown",text:date.slice(0,4)==="2026"?"No regular ferry service to North or South Manitou in 2026. NPS dock construction prevents service. No current fare or sailing is offered.":"Manitou ferry restart, timetable and fares are not confirmed here. NPS expects dock reopening in 2027; confirm with NPS and the ferry operator."};
-    if(!/^2026-\d{2}-\d{2}$/.test(date))return{state:"unknown",text:"This tool currently has verified 2026 reference information only. For another year, check the operator before traveling."};
-    if(config.id==="toronto"){return{state:"yes",text:date>="2026-10-14"?"Winter service: Ward’s Island only on the city's published winter schedule; Centre and Hanlan’s routes are seasonal.":"Toronto Islands summer routes operate seasonally; check the city’s exact sailing calendar."}};
-    if(config.id==="pelee"){
-      if(!dateIn(date,"2026-04-01","2026-12-07"))return{state:"no",text:"Outside the published 2026 Pelee Island ferry season. Winter air service is separate."};
-      return{state:"yes",text:date<"2026-07-29"?"Canadian mainland ferry gateway: Leamington.":"Canadian mainland ferry gateway: Kingsville on the published seasonal schedule. Some special sailings use Leamington; confirm the exact booking and terminal."};
-    }
-    if(config.season){
-      const active=dateIn(date,config.season[0],config.season[1]);
-      return{state:active?"yes":"no",text:active?"Inside the operator's published 2026 sailing-season window. This does not confirm a departure, seat, vehicle space or weather clearance.":"Outside the operator's stated 2026 sailing-season window. Do not plan a crossing without a newly published schedule."};
-    }
-    return{state:"unknown",text:"The 2026 timetable is date-specific. Consult the operator calendar for a confirmed departure."};
+    const year=date.slice(0,4),fareYear=String(config.fareReferenceYear||2026);
+    if(config.id==="manitou")return year==="2026"?{state:"no",text:"No regular ferry service to either Manitou Island in 2026; both docks were under construction."}:{state:"unknown",text:year==="2027"?"In a 2026 notice NPS expected dock reopening in 2027, but no regular ferry restart, timetable or fare has been verified. Check NPS and Manitou Island Transit.":"No verified current-year ferry operation is available in this planner. Check NPS and Manitou Island Transit for the latest access status."};
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(date))return{state:"unknown",text:"Choose a valid travel date."};
+    const window=config.seasonWindows?.[year]||(year===fareYear?config.season:null);
+    if(window&&!(date>=window[0]&&date<=window[1]))return{state:"no",text:"Outside the operator's published "+year+" season window. Check the exact dates and exceptions."};
+    if(year!==fareYear&&!window)return{state:"unknown",text:"No "+year+" timetable is verified here. The "+fareYear+" reference fares are historical and are not applied to a new year. Open the official operator calendar."};
+    if(year!==fareYear&&window)return{state:"yes",text:"The operator has published a "+year+" season window. Individual departures, changes, inventory, and "+year+" fares require official confirmation; historical prices are not used."};
+    if(config.id==="toronto")return{state:"yes",text:date>="2026-10-14"?"2026 winter service: Ward's Island only on the published winter timetable; the other two routes are seasonal.":"Toronto's city ferries operate year-round, with seasonal docks and date-specific sailings."};
+    if(config.id==="pelee")return{state:"yes",text:date<"2026-07-29"?"2026 Canadian mainland gateway generally Leamington; check your exact sailing.":"2026 Canadian mainland gateway generally Kingsville; specific sailings can vary. Check your booking and terminal."};
+    if(window)return{state:"yes",text:"Inside the operator's published "+year+" season window. This does not confirm a departure, weather clearance or capacity."};
+    return{state:"unknown",text:"Check the operator's exact dated "+year+" timetable for a confirmed departure."};
   }
   function eligibleOption(o,date){
-    if(config.id==="toronto"&&(date>="2026-10-14"||date<="2026-04-15")&&o.id!=="wards")return false;
+    if(config.id==="toronto"&&date.slice(0,4)==="2026"&&(date>="2026-10-14"||date<="2026-04-15")&&o.id!=="wards")return false;
     return true;
   }
   function tariff(o,date){
@@ -48,7 +47,8 @@
     if(t["adult"+s]==null||(kids>0&&t["child"+s]==null)||(vehicle>0&&t["vehicle"+s]==null)){
       return {text:"A complete quote needs operator pricing",complete:false};
     }
-    const base=adults*t["adult"+s]+(kids ? kids*t["child"+s] : 0)+(vehicle ? vehicle*t["vehicle"+s] : 0);
+    const promo=o.childPromo,free=promo&&date>=promo.start&&date<=promo.end?Math.min(kids,adults*promo.freePerAdult):0;
+    const base=adults*t["adult"+s]+(kids ? (kids-free)*t["child"+s] : 0)+(vehicle ? vehicle*t["vehicle"+s] : 0);
     const surcharge=(t["feePerson"+s]||0)*(adults+kids)+(t["feeVehicle"+s]||0)*vehicle;
     return {text:currency(base+surcharge,config.currency),complete:true,base,fee:surcharge};
   }
@@ -60,7 +60,7 @@
     if(config.id==="put-in-bay"&&vehicle)html+='<div class="note">Miller Ferry transports vehicles; Jet Express is passenger-only. For a vehicle, only Miller is a possible option. Island car traffic can be restricted on busy weekends.</div>';
     if(config.id==="toronto"&&dateIn(date,"2026-08-01","2026-08-31"))html+='<div class="note">Toronto City Council waived children, youth and older-adult round-trip ferry fares for August 2026. The junior (ages 2–14) category is discounted to free here; youth/senior ticket types require operator selection.</div>';
     if(config.id==="pelee"&&date.slice(0,4)==="2026")html+='<div class="note">Pelee–Sandusky international trips use distinct fares, specific travel dates and border documents. This estimate is for the Canadian mainland–Pelee crossing only.</div>';
-    if(config.id==="lake-express"&&date.slice(0,4)==="2026")html+='<div class="note">The published 2026 rates shown here took effect August 11. Late-season sailings end October 19 and have weekday exceptions. Verify the exact date and remaining space.</div>';
+    if(config.id==="lake-express"&&date.slice(0,4)==="2026")html+='<div class="note">The 2026 fare table took effect August 11. From August 11–31, up to two accompanied children ages 5–17 per paying adult had their base fare waived, but published per-crossing surcharges still applied. Verify schedule exceptions and exact booking totals.</div>';
     if(config.id==="ss-badger"&&date.slice(0,4)==="2026")html+='<div class="note">Ludington is in Eastern Time and Manitowoc is in Central Time. Crossing time is four hours, not the wall-clock difference between published departure and arrival.</div>';
     html+='<div class="compare">';
     const available=(config.options||[]).filter(o=>eligibleOption(o,date)&&!(vehicle&&o.noVehicle));
@@ -75,7 +75,7 @@
       html+='</div>';
     }
     html+='</div>';
-    html+='<p class="fine">Prices and calendars are dated 2026 public references, not guarantees. No live capacity, cancellation or seat-availability feed is connected. Vehicle size, senior/youth categories, special tickets, parking, tax and other fees may require operator pricing. Check official booking before departure.</p>';
+    html+='<p class="fine">Fare figures are published 2026 historical references, never automatic prices for later years. Calendars can change.  No live capacity, cancellation or seat-availability feed is connected. Vehicle size, senior/youth categories, special tickets, parking, tax and other fees may require operator pricing. Check official booking before departure.</p>';
     $("ferry-results").innerHTML=html;
   }
   $("ferry-form").addEventListener("submit",event=>{event.preventDefault();render();$("ferry-results").scrollIntoView({behavior:"smooth",block:"nearest"});});
