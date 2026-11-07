@@ -140,5 +140,6 @@ test('national rocket page has Vercel pageview loader and no analytics in ads co
  assert.match(app,/rocket-experience:region-selected/);
  assert.match(app,/rocket-experience:locate-result/);
  assert.match(app,/rocket-experience:map-choose/);
- assert.doesNotMatch(funnel.toString(),/localStorage|sessionStorage|document.cookie/);
+ const source=fs.readFileSync(path.join(__dirname,'../public/assets/rocket-engagement-funnel.js'),'utf8');
+ assert.doesNotMatch(source,/localStorage|sessionStorage|document.cookie/);
 });
