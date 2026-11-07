@@ -8,7 +8,7 @@
   const cameraById=new Map((D.cameras||[]).map(c=>[c.id,c]));
   let selectedCamera=D.cameras?.[0]?.id,cameraPlayer=null;
   let region=document.body.dataset.defaultRegion||'all',selectedLock='eisenhower',selectedView='eisenhower-center',selectedShip=null;
-  let map=null,shipsLayer=null,mapReportBadge=null,requestId=0,loading=true,location=null,playing=false,frameId=null,lastFrame=null,progress=0;
+  let map=null,shipsLayer=null,requestId=0,loading=true,location=null,playing=false,frameId=null,lastFrame=null,progress=0;
   const svgNS='http://www.w3.org/2000/svg',reduceMotion=matchMedia('(prefers-reduced-motion: reduce)');
   const focusable='a[href],button,[tabindex]';
   function focusIndex(root){return [...root.querySelectorAll(focusable)].indexOf(document.activeElement);}
@@ -153,10 +153,7 @@
     $('mapStatus').textContent=!ships.length
       ?'No recent vessel positions for this selection. A missing report is not proof of no ships. Use View entire Seaway to inspect other stretches.'
       :label+' · '+symbols+' visible ship symbol'+(symbols===1?'':'s')+(groups?' (numbered symbols group nearby observations)':'')+'. Choose a ship group to zoom in. Positions are reports, not guaranteed arrivals.';
-    if(mapReportBadge){
-      mapReportBadge.replaceChildren(el('strong',visible+' AIS report'+(visible===1?'':'s')),
-        el('span',!ships.length?'Coverage unverified':groups?groups+' numbered group'+(groups===1?'':'s')+' · tap to zoom':'Select a ship to inspect'));
-    }
+
   }
   function shipIcon(v){
     const z=map.getZoom(),chosen=v.mmsi===selectedShip,size=chosen?[60,34]:z<8?[42,26]:[48,29],state=!Number.isFinite(v.speedKnots)?'is-unknown':v.speedKnots<.5?'is-stopped':'';
@@ -285,15 +282,6 @@
       if(!window.L)throw new Error('Map library unavailable');
       map=L.map('seawayMap',{scrollWheelZoom:false,zoomControl:true,preferCanvas:true,worldCopyJump:true});
       shipsLayer=L.layerGroup().addTo(map);fitRegion();
-      const summary=L.control({position:'topright'});
-      summary.onAdd=()=>{
-        mapReportBadge=el('div',undefined,'seaway-map-report-badge');
-        mapReportBadge.setAttribute('role','status');
-        mapReportBadge.setAttribute('aria-live','polite');
-        L.DomEvent.disableClickPropagation(mapReportBadge);
-        return mapReportBadge;
-      };
-      summary.addTo(map);
       for(const l of D.locks){
         const icon=L.divIcon({className:'seaway-lock-marker'+(l.id===selectedLock?' is-selected':''),html:'<span>'+l.number+'</span>',iconSize:[26,26],iconAnchor:[13,13]});
         const marker=L.marker([l.lat,l.lon],{icon,title:'Lock '+l.number+' · '+l.name,keyboard:true,zIndexOffset:500}).addTo(map).bindTooltip('Lock '+l.number+' · '+l.name,{direction:'top'});
