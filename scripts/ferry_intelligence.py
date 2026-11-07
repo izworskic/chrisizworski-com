@@ -14,7 +14,6 @@ import hashlib
 import html
 from html.parser import HTMLParser
 import json
-import os
 from pathlib import Path
 import re
 import urllib.error
@@ -239,6 +238,23 @@ def process(planners: dict, state: dict, observations: list[dict],
     return updated, {"version": 1, "sources": snapshots}, report
 
 
+def update_sitemap(route_path: str, today: dt.date) -> None:
+    """Only stamp a sitemap entry when its destination is genuinely revised."""
+    sitemap = ROOT / "public/sitemap.xml"
+    xml = sitemap.read_text()
+    url = "https://chrisizworski.com/" + route_path.strip("/") + "/"
+    pattern = re.compile(
+        r"(<url>\s*<loc>" + re.escape(url) +
+        r"</loc>\s*<lastmod>)(\d{4}-\d{2}-\d{2})(</lastmod>)")
+    fresh, count = pattern.subn(
+        lambda match: match.group(1) + today.isoformat() + match.group(3),
+        xml, count=1)
+    if count != 1:
+        raise ValueError("published route missing unique main-sitemap entry: " + url)
+    if fresh != xml:
+        sitemap.write_text(fresh)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--apply", action="store_true", help="Write vetted data and source fingerprint proposals")
@@ -262,6 +278,8 @@ def main() -> int:
     report_path.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n")
     if args.apply:
         if data != planners:
+            for item in report["accepted_season_windows"]:
+                update_sitemap(data[item["route"]]["path"], today)
             PLANNERS.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n")
         if newstate != state:
             STATE.write_text(json.dumps(newstate, indent=2, ensure_ascii=False) + "\n")
