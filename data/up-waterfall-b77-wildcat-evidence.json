@@ -1,0 +1,60 @@
+{
+  "batch": "B77",
+  "reviewed": "2026-11-07",
+  "method": "online-sources-only-no-outreach",
+  "candidate": "Wildcat Falls",
+  "near": "Watersmeet, Gogebic/Ontonagon border area",
+  "landManager": "Northwoods Alliance · Wildcat Falls Community Forest",
+  "publication": "research-qualified-public-route-not-published",
+  "publicMapEligible": false,
+  "indexableGuideEligible": false,
+  "curatedCountChange": 0,
+  "stateGISNamedMatch": null,
+  "managerSource": "https://www.northwoodalliance.org/wildcat-falls",
+  "access": {
+    "landManager": {
+      "verified": true,
+      "source": "https://www.northwoodalliance.org/wildcat-falls",
+      "note": "Owner identifies itself as owner and manager of Wildcat Falls Community Forest."
+    },
+    "publicAccess": {
+      "verified": true,
+      "source": "https://www.northwoodalliance.org/wildcat-falls",
+      "note": "Community forest established for perpetual public non-motorized access."
+    },
+    "parking": {
+      "verified": true,
+      "precision": "published-road-and-trail-sign-only-no-point",
+      "source": "https://www.northwoodalliance.org/wildcat-falls",
+      "note": "From Watersmeet US-45 to County Rd 206/Sucker Lake Rd, north on County Line Lake Rd, 0.6 miles north of McGinty Lane look for yellow trail sign on left. Roadside parking described, but precise parking coordinate, plowing and present shoulder conditions not supplied."
+    },
+    "trail": {
+      "verified": true,
+      "source": "https://www.northwoodalliance.org/wildcat-falls",
+      "note": "Owner says 3/4-mile yellow-marked waterfall trail with uneven topography, cedar/hemlock and outcrops; whether one-way or total is not specified. No driving or route geometry to falls pin."
+    },
+    "location": {
+      "verified": false,
+      "role": "approximate-natural-waterfall-feature-only",
+      "point": [
+        46.346173,
+        -89.292236
+      ],
+      "source": "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf",
+      "note": "Regional tourism brochure #29 provides an approximate Wildcat Falls feature coordinate; owner trail map location not independently georeferenced. Never issue vehicle directions or survey-grade trail marker from this position."
+    }
+  },
+  "discrepancy": {
+    "legacyThirdParty": "https://upper-michigan.com/guide/waterfalls/wildcat-falls.html",
+    "claim": "No maintained trail; off-trail navigation from creek crossing",
+    "resolution": "Contradicted by the land manager's more authoritative explicitly marked yellow visitor trail. Do not use legacy bushwhack directions.",
+    "officialPositionWins": true
+  },
+  "limitations": [
+    "No site-specific current opening, seasonal road maintenance, signed shoulder capacity or accessibility data",
+    "No owner-published GPS trailhead or falls point",
+    "Do not route visitors to point coordinate or infer a mapped line from owner narrative",
+    "No emails, agency outreach, crowd-sourced verification or visitor reports"
+  ],
+  "nextAction": "Verify the feature point against the owner's illustrative visitor map or another independently geolocated, site-specific natural waterfall reference. Once reconciled, publish one owner-sourced, GPS-honest guide with hub and sitemap, regenerate Python nearby and queue, and run all source and browser release gates."
+}

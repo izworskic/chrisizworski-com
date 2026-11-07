@@ -79,7 +79,9 @@ test('B59 visible UX remains source-linked and accessible, with existing trip pl
  assert.ok(hub.indexOf('id="visit-lens"')<hub.indexOf('id="nearby-lab"'));
  assert.ok(hub.indexOf('id="nearby-lab"')<hub.indexOf('class="explorer"'));
  assert.match(hub,/assets\/up-waterfalls-nearby\.js/);
- assert.match(hub,/dateModified":"2026-11-05"/);
+ const modified=hub.match(/dateModified":"(\d{4}-\d{2}-\d{2})"/);
+ assert.ok(modified,"hub needs a dateModified value");
+ assert.ok(read('public/sitemap-up-waterfalls.xml').includes('<loc>https://chrisizworski.com/upper-peninsula-waterfalls/</loc><lastmod>'+modified[1]+'</lastmod>'),'hub schema dateModified and sitemap lastmod must agree');
  assert.match(hub,/id="show-geo-candidates"/);
  assert.match(hub,/id="selected-list"/);
  assert.match(hub,/https:\/\/chrisizworski.com\/upper-peninsula-waterfalls\//);
