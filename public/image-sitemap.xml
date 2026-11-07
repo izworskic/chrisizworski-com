@@ -758,4 +758,9 @@
     </image:image>
   </url>
   <!-- FREIGHTER_LAYUP_IMAGE_SITEMAP:END -->
+
+  <!-- SEAWAY_IMAGE_SITEMAP:START -->
+  <url><loc>https://chrisizworski.com/st-lawrence-seaway/</loc><image:image><image:loc>https://chrisizworski.com/assets/seaway/eisenhower-deck.jpg</image:loc></image:image></url>
+  <url><loc>https://chrisizworski.com/eisenhower-lock/</loc><image:image><image:loc>https://chrisizworski.com/assets/seaway/eisenhower-deck.jpg</image:loc></image:image></url>
+  <!-- SEAWAY_IMAGE_SITEMAP:END -->
 </urlset>
