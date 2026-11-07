@@ -96,6 +96,9 @@ def main():
         jobs = [(c["id"], title, url) for c in data.values() for title, url in source_urls(c)]
         with concurrent.futures.ThreadPoolExecutor(max_workers=5) as pool:
             probes = list(pool.map(probe, jobs))
+    broken = [p for p in probes if p["result"] == "unreachable_or_removed"]
+    if broken:
+        errors.extend(f"{p['route']}: official source unavailable ({p['status']}) {p['url']}" for p in broken)
     report = {"audited_at_utc": dt.datetime.now(dt.timezone.utc).isoformat(),
               "scope": "nine generated ferry planners; Mackinac maintained independently",
               "rules": "URL reachability is not timetable or fare verification. Never extrapolate 2026 fares.",
