@@ -183,3 +183,13 @@
 .arrival-grounding{font-size:12px;line-height:1.55;margin:14px 2px 0;color:#40554b}
 @media(max-width:1050px){.arrival-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){.winter-arrival{padding:15px}.arrival-grid{grid-template-columns:1fr}.arrival-card{padding:15px}.arrival-card h3{font-size:22px}}
+
+/* Evidence desk: separate policy, on-the-day manager reports and NPS alerts. */
+.access-census{margin:13px 0 4px;padding:13px 17px;border:1px solid #b7ccc0;background:#f0f6f0;border-radius:11px;color:#294b3f;font-size:13px;line-height:1.55}
+.operator-alerts{background:#edf4f5;border:1px solid #b8ced1;border-radius:12px;padding:14px 16px;margin:15px 0;color:#203f46;font-size:13px;line-height:1.58}
+.operator-alerts strong{color:#163d41}
+.operator-alerts p{margin:9px 0}
+.operator-alerts ul{margin:10px 0 8px;padding-left:18px}
+.operator-alerts li{margin-bottom:9px}
+.operator-alerts a{color:#135a51;font-weight:650}
+@media(max-width:680px){.access-census{font-size:12px;padding:12px}.operator-alerts{padding:12px}}
