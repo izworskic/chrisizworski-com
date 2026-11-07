@@ -141,3 +141,15 @@ test('existing canonical, SEO/Person, photo credit and national map are preserve
  assert.match(app,/state\.rocketPins\?\.focusSelected\(\)/);
  assert.doesNotMatch(app,/supabase|redis/i);
 });
+
+test('Experience OS v1.2.1 release evidence structurally validates without asserting live or outcome proof',async()=>{
+ const {validateReleaseRecord}=await import('../design-systems/experience-os-v1/lib/release-evidence.mjs');
+ const record=JSON.parse(fs.readFileSync(path.join(ROOT,'docs/experience-briefs/rocket-launch-live.release.json'),'utf8'));
+ const result=validateReleaseRecord(record);
+ assert.equal(result.ok,true,JSON.stringify(result.issues));
+ assert.equal(record.recordStatus,'draft');
+ assert.equal(record.qa.browserStatus,'PASSED');
+ assert.equal(record.release.deployed.status,'NOT_VERIFIED');
+ assert.equal(record.release.live.status,'NOT_VERIFIED');
+ assert.equal(record.release.measured.status,'NOT_MEASURED');
+});
