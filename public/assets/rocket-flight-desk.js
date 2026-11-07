@@ -99,9 +99,15 @@
       (mission.pad||'Published launch pad')+' · source-listed pad coordinate':
       'Approximate launch region · exact pad GPS not confirmed'):'Launch origin not verified';
     const weather=data.weather||{};
-    const sky=hasUsefulTime&&!snapshotStale&&weather.level==='assessed'?
+    // NWS can report a nominal "partial" envelope even when every individual
+    // point lookup failed. Do not advertise an actual forecast without any
+    // bounded mission-time location evidence.
+    const usableWeather=Array.isArray(weather.places)&&weather.places.some(p=>
+      p?.status==='ok'&&Boolean(p.period?.startTime||p.period?.shortForecast||
+        (p.cloudStatus==='ok'&&Number.isInteger(p.cloudCoverPercent))));
+    const sky=hasUsefulTime&&!snapshotStale&&usableWeather&&weather.level==='assessed'?
       'NWS spectator forecast available · not rocket GO':
-      hasUsefulTime&&!snapshotStale&&weather.level==='partial'?
+      hasUsefulTime&&!snapshotStale&&usableWeather&&weather.level==='partial'?
         'Partial NWS forecast · visibility unverified':
         'No verified mission-time viewing forecast';
     const access=closed?'City reported beach closed · recheck dated notice':
