@@ -35,8 +35,13 @@
  }
  function filtered(){
   const query=$('search').value.trim().toLowerCase(),mode=$('activity').value,region=$('region').value;
+  const arrival=$('arrival-evidence').value;
   let list=state.routes.filter(r=>(mode==='either'||r.activities.includes(mode)) &&
-    (region==='all'||r.region===region) && (!state.parkFilter||r.group===state.parkFilter) &&
+    (region==='all'||r.region===region) &&
+    (arrival==='all'||(arrival==='policy'&&r.winterAccess?.coverageTier==='published-seasonal-maintenance-policy')||
+     (arrival==='checkpoint'&&r.winterAccess?.tracked===true)||
+     (arrival==='area'&&r.winterAccess?.coverageTier==='manager-area-only')) &&
+    (!state.parkFilter||r.group===state.parkFilter) &&
     (!state.pointFilter||state.pointFilter.has(r.id)) &&
     (!query||(r.title+' '+r.group).toLowerCase().includes(query)));
   if(state.geolocation)list.sort((a,b)=>distance(state.geolocation,a.point)-distance(state.geolocation,b.point));
@@ -71,7 +76,7 @@
   const p=route.winterAccess||{},tracked=p.tracked===true;
   const accessRows=tracked?[
    ['Named trail',p.trail],['Approach road',p.road],['Winter parking',p.parking]
-  ].map(([label,value])=>'<li><strong>'+esc(label)+':</strong> '+esc(value==='unknown'?'Not verified':value==='conflict'?'Conflicting manager reports':value)+'</li>').join(''):'<li>Trail-specific winter parking checkpoint has not been researched yet.</li>';
+  ].map(([label,value])=>'<li><strong>'+esc(label)+':</strong> '+esc(value==='unknown'?'Not verified':value==='conflict'?'Conflicting manager reports':value)+'</li>').join(''):'<li>Named trail documented; only manager-area research is available for winter vehicle access. Road, lot, and route are not certified open.</li>';
   const accessDetails=tracked?
     '<p><strong>Published location clue:</strong> '+esc(p.parkingHint||'not available')+'</p>'+
     '<p><strong>Road approach:</strong> '+esc(p.roadHint||'not available')+'</p>'+
@@ -79,7 +84,11 @@
     '<p><a href="'+esc(p.source)+'" target="_blank" rel="noopener">Review the official manager source ↗</a> · Description reviewed '+esc(p.sourceReviewedAt||'undated')+'. This is not a live plowing report.</p>'+
     (p.publishedWinterMaintenance?'<p class="source-line"><strong>Published seasonal policy (not today):</strong> '+esc(p.publishedWinterMaintenance)+'</p>':'')+
     (p.knownAccessIssue?'<p class="source-line"><strong>Specific access conflict:</strong> '+esc(p.knownAccessIssue)+'</p>':'')+
-    (p.currentConditionsUrl?'<p><a href="'+esc(p.currentConditionsUrl)+'" target="_blank" rel="noopener noreferrer">Check the manager current-conditions and closure notices ↗</a></p>':''):'';
+    (p.currentConditionsUrl?'<p><a href="'+esc(p.currentConditionsUrl)+'" target="_blank" rel="noopener noreferrer">Check the manager current-conditions and closure notices ↗</a></p>':''):
+    '<p><strong>Manager-area research (not a specific parking checkpoint):</strong> '+esc(p.parkingHint||'No parking entrance validated')+'</p>'+
+    '<p><strong>Access concern:</strong> '+esc(p.roadHint||'Road maintenance unknown')+'</p>'+
+    '<p><strong>Unresolved arrival check:</strong> '+esc(p.managerQuestion||'Winter road and parking unresolved')+'</p>'+
+    (p.source?'<p><a href="'+esc(p.source)+'" target="_blank" rel="noopener noreferrer">Review the official land manager source ↗</a></p>':'');
   const winterAccessPanel='<div class="verification" aria-label="Winter parking access status"><strong>Winter arrival evidence — '+esc(tracked?'access conditions remain unverified':'specific parking research incomplete')+'</strong>'+
    '<ul class="evidence-list">'+accessRows+'</ul>'+accessDetails+
    '<p><strong>Map/forecast reference:</strong> '+esc(route.point?.meaning||'Regional location only, not a trailhead')+'</p>'+ 
@@ -90,6 +99,7 @@
    '</small></div><div class="metric"><b>'+esc(route.activities.join(' / '))+'</b><small>Documented activity, not current access</small></div></div>'+
    '<p class="subhead">Trail-specific cautions</p><ul class="evidence-list">'+(caveats||'<li>Winter ground and parking status unavailable</li>')+'</ul>'+
    winterAccessPanel+
+   '<div class="operator-alerts" id="operator-alerts" role="status" aria-live="polite">Checking official manager alerts separately from weather. No alert means no confirmed parking clearance.</div>'+
    '<div class="detail-links"><a href="'+esc(route.officialUrl)+'" target="_blank" rel="noopener">Official manager page ↗</a>'+
    (route.mapUrl?'<a href="'+esc(route.mapUrl)+'" target="_blank" rel="noopener">Official route map ↗</a>':'')+'</div>'+
    '<section class="history-zone" id="history-zone" aria-label="Four winter snow depth comparison"></section>'+
@@ -98,9 +108,39 @@
    '<p class="source-line">No driving directions will be provided without a validated winter trailhead.</p>'+
    '<div id="weather-output" aria-live="polite"></div>';
   $('check-weather').addEventListener('click',check);
+  loadManagerAlerts(route);
   window.WinterHikeHistory?.render($('history-zone'),route);
   window.WinterHikeSeason?.render($('season-zone'),route);
   if(scroll && matchMedia('(max-width:850px)').matches)$('detail').scrollIntoView({behavior:'smooth',block:'start'});
+ }
+ function renderManagerAlerts(feed){
+  if(!feed || feed.status==='unavailable')return '<strong>Current official NPS alert feed unavailable.</strong><p>Do not assume roads, parking or trails are open. Use the manager current-conditions link.</p>';
+  if(feed.status==='not-covered')return '<strong>No automated NPS alerts for this DNR route.</strong><p>The named land manager source and the unresolved winter parking question appear above.</p>';
+  const stamp=esc(feed.checkedAt||'time unavailable'),url=esc(feed.sourceUrl||''),link=url?
+    '<a href="'+url+'" target="_blank" rel="noopener noreferrer">Verify on the official NPS current-conditions page ↗</a>':'';
+  const closures=Array.isArray(feed.closures)?feed.closures:[];
+  const advisories=Array.isArray(feed.advisories)?feed.advisories:[];
+  const items=arr=>arr.map(a=>'<li><strong>'+esc(a.title)+'</strong> — '+esc(a.description||'Read official notice')+
+    ' <a href="'+esc(a.url||feed.sourceUrl||'')+'" target="_blank" rel="noopener noreferrer">NPS source ↗</a></li>').join('');
+  return '<strong>'+(closures.length?'NPS ACTIVE CLOSURE — follow official restrictions':
+    'NPS alerts checked; winter arrival is still unverified')+'</strong>'+
+    '<p>Official alert check '+stamp+'. No alert is never proof of plowed parking or an open route.</p>'+
+    (closures.length?'<ul class="evidence-list">'+items(closures)+'</ul>':'')+
+    (advisories.length?'<p><strong>Other applicable NPS notices:</strong></p><ul class="evidence-list">'+items(advisories)+'</ul>':'')+link;
+ }
+ async function loadManagerAlerts(route){
+  const slot=$('operator-alerts');if(!slot)return;
+  try{
+   const resp=await fetch('/api/winter-hike-lab?'+new URLSearchParams({mode:'access',route:route.id}),{
+     headers:{Accept:'application/json'}});
+   if(!resp.ok)throw Error('source failed');
+   const data=await resp.json();
+   if(state.selected?.id!==route.id||!$('operator-alerts'))return;
+   $('operator-alerts').innerHTML=renderManagerAlerts(data.parkAlerts);
+  }catch{
+   if(state.selected?.id===route.id&&$('operator-alerts'))
+    $('operator-alerts').innerHTML='<strong>Official alert check unavailable.</strong> <p>Current route closures and parking access must be checked directly with the manager; no safe-travel verdict is inferred.</p>';
+  }
  }
  function selectGroup(pinId){
   const pin=state.areas.find(a=>a.id===pinId);if(!pin)return;
@@ -255,7 +295,7 @@
     input.value=value;
     if(state.selected){pick(state.selected.id);check()}
    }
-  });['activity','region','search'].forEach(id=>$(id).addEventListener(id==='search'?'input':'change',()=>{
+  });['activity','region','search','arrival-evidence'].forEach(id=>$(id).addEventListener(id==='search'?'input':'change',()=>{
    if(id==='activity'&&state.selected&&!['either',...state.selected.activities].includes($('activity').value)){
     state.selected=null;$('detail-title').textContent='Choose an allowed route';$('detail-body').replaceChildren();
    }
@@ -270,7 +310,7 @@
    const route=state.routes.find(item=>item.id===id);
    if(!route){$('result-count').textContent='Route catalog unavailable. Use the linked NPS official guidance.';return}
    state.parkFilter=null;state.pointFilter=null;
-   $('region').value='all';$('activity').value='either';$('search').value='';
+   $('region').value='all';$('activity').value='either';$('arrival-evidence').value='all';$('search').value='';
    filtered();pick(id,true);
    if(state.mapLoaded){
     if(/General Munising-area map reference/.test(route.point?.meaning||''))
@@ -300,6 +340,12 @@
    const json=await r.json();
    if(!Array.isArray(json.routes)||!json.routes.length)throw Error('Catalog is empty');
    state.routes=json.routes;state.areas=areaPins(json.routes);
+   const c=json.accessCoverage||{};
+   $('access-census').textContent=c.totalRoutes?
+     c.totalRoutes+' named trails · '+c.namedCheckpoints+' routes with a researched parking/approach checkpoint · '+
+     c.managerAreaOnly+' with manager-area research only · '+c.currentOperationallyConfirmed+
+     ' with current-date road, lot AND route confirmation. A named lot or published maintenance policy is not proof of plowing today.':
+     'Official route identities are available; winter arrival evidence has not been counted.';
    filtered();initMap();
   }catch(e){$('result-count').textContent='Inventory unavailable';$('cards').innerHTML='<div class="empty">The official route catalog could not be loaded. No substitute or fabricated trails have been added.</div>';mapFallback('Route catalog unavailable')}
  }
