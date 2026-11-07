@@ -14,7 +14,7 @@
 <link rel="preconnect" href="https://tiles.openfreemap.org" crossorigin>
 <link rel="preconnect" href="https://gibs.earthdata.nasa.gov" crossorigin>
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.16.0/dist/maplibre-gl.css">
-<link rel="stylesheet" href="/winter-hike-snowshoe-lab/style.css?v=2">
+<link rel="stylesheet" href="/winter-hike-snowshoe-lab/style.css?v=3">
 </head><body>
 <a class="skip" href="#routes">Skip to named routes</a>
 <header class="mast"><div class="shell mast-inner"><a href="/" class="brand">Chris Izworski <span>Outdoor decision tools</span></a><a href="/michigan-snow-depth/" class="other">Michigan snow depth ↗</a></div></header>
@@ -27,6 +27,14 @@
 <div class="ctrl"><label for="region">Part of Michigan</label><select id="region"><option value="all">Entire state</option><option value="upper-peninsula">Upper Peninsula</option><option value="northern-lower">Northern Lower Peninsula</option><option value="southern-lower">Southern Lower Peninsula</option></select></div>
 <div class="ctrl"><label for="day">Day to check</label><input type="date" id="day" required aria-describedby="date-note"><small id="date-note">NWS hourly outlook: next 7 days</small></div>
 <div class="ctrl"><label for="search">Trail or park</label><input id="search" type="search" placeholder="e.g., Tahquamenon, Vasa" autocomplete="off"></div>
+<div class="ctrl"><label for="arrival-evidence">Winter arrival evidence</label><select id="arrival-evidence">
+<option value="all">All documented routes</option>
+<option value="policy">Official winter maintenance policy</option>
+<option value="checkpoint">Named approach researched</option>
+<option value="area">Manager-area description only</option></select><small>Not a filter for currently open parking</small></div>
+</section>
+<section class="access-census" aria-label="Winter access evidence coverage" id="access-census" role="status" aria-live="polite">
+Source checks loading. Trail identities, winter parking policy, and operational road or lot clearance are different kinds of evidence.
 </section>
 <section class="winter-arrival" id="winter-arrival" aria-labelledby="arrival-title">
   <div class="topline"><div><p class="eyebrow">NPS-confirmed seasonal policy · Pictured Rocks pilot</p><h2 id="arrival-title">Start with access evidence, not a snow score.</h2>
@@ -86,5 +94,5 @@
 <script defer src="/winter-hike-snowshoe-lab/satellite-ui.js?v=1"></script>
 <script defer src="/winter-hike-snowshoe-lab/history-ui.js?v=1"></script>
 <script defer src="/winter-hike-snowshoe-lab/season-ui.js?v=1"></script>
-<script defer src="/winter-hike-snowshoe-lab/app.js?v=5"></script>
+<script defer src="/winter-hike-snowshoe-lab/app.js?v=6"></script>
 </body></html>
