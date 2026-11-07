@@ -75,7 +75,7 @@
       link.classList.toggle('is-current',region===id);
       if(region===id)link.setAttribute('aria-current','location');else link.removeAttribute('aria-current');
       if(!output)continue;
-      output.textContent=!snapshot?'Check recent reports →':errors.has(id)||record?.state==='unavailable'?'Receiver unavailable · view sources →':record?.state==='partial'?count+' recent reports · partial coverage →':count?count+' recently reported vessel'+(count===1?'':'s')+' →':'No recent reports received →';
+      output.textContent=!snapshot?'Check recent reports →':errors.has(id)||record?.state==='unavailable'?'Receiver unavailable · view sources →':record?.state==='partial'?count+' recent reports · partial coverage →':count?count+' recently reported vessel'+(count===1?'':'s')+' →':'No recent reports · coverage unverified →';
     }
   }
   function shipDetail(v){
@@ -86,7 +86,7 @@
   function updateReportLine(){
     const d=data(),has=C.visible(d?.vessels||[],region).length,regionResult=d?.regions?.find(r=>r.id===region);
     const unavailable=errors.has(region)||d?.state==='unavailable'||regionResult?.state==='unavailable',state=region==='all'?d?.state:regionResult?.state||d?.state;
-    let label=loading?'Checking the river’s recent signals…':unavailable?'The receiver cannot be checked right now':state==='partial'?'Partial reports received · coverage has gaps':has?has+' recently reported vessel'+(has===1?'':'s'):'No fresh signals received from this stretch';
+    let label=loading?'Checking the river’s recent signals…':unavailable?'The receiver cannot be checked right now':state==='partial'?'Partial reports received · coverage has gaps':has?has+' recently reported vessel'+(has===1?'':'s'):'No recent AIS positions · coverage unverified';
     if(unavailable&&has)label+=' · recent saved reports remain below';
     $('reportState').textContent=label;$('reportState').parentElement.dataset.state=unavailable?'unavailable':state||'loading';
     $('reportTime').textContent=d?.checkedAt?'Last successful source check '+time(d.checkedAt):'Report ages appear with each ship.';
@@ -120,8 +120,18 @@
         const index=ships.indexOf(v);if(container.children[index]!==card)container.insertBefore(card,container.children[index]||null);
       }
     }
-    const credits=[...new Set((data()?.attribution||[]).map(x=>x.credit||x.source))];
-    $('shipAttribution').textContent='Open Waters public AIS'+(credits.length?' · '+credits.join(' · '):' · attribution supplied with received reports');
+    const credits=(data()?.attribution||[]).filter(x=>typeof x?.source==='string');
+    const attribution=$('shipAttribution');
+    attribution.replaceChildren(document.createTextNode('Open Waters public AIS'));
+    if(!credits.length)attribution.append(document.createTextNode(' · received reports identify their sources'));
+    for(const credit of credits){
+      attribution.append(document.createTextNode(' · '));
+      // Open Waters lists AISHub attribution with a link as an explicit
+      // source condition. Never treat the aggregate as uniformly CC0.
+      if(credit.source.toLowerCase()==='aishub'){
+        attribution.append(a('AISHub contributors','https://www.aishub.net/'));
+      }else attribution.append(document.createTextNode(credit.credit||credit.source));
+    }
     const selected=reportFor(selectedShip);$('useShipDimensions').disabled=!(selected?.lengthMeters&&selected?.beamMeters);
   }
   function updateRegionReports(){
@@ -129,7 +139,7 @@
     for(const r of D.regions){
       const snapshot=data(r.id),record=snapshot?.regions?.find(x=>x.id===r.id),button=el('button',undefined,'region-report');button.type='button';button.append(el('strong',r.name));
       const count=C.visible(snapshot?.vessels||[],r.id).length;
-      button.append(el('span',errors.has(r.id)||record?.state==='unavailable'?'Source unavailable'+(count?' · '+count+' recent saved':''):!record?'Choose to check reports':count?count+' received report'+(count===1?'':'s')+(record.truncated?' · partial':''):'No fresh reports received'));
+      button.append(el('span',errors.has(r.id)||record?.state==='unavailable'?'Source unavailable'+(count?' · '+count+' recent saved':''):!record?'Choose to check reports':count?count+' received report'+(count===1?'':'s')+(record.truncated?' · partial':''):'No recent reports · coverage unverified'));
       button.setAttribute('aria-pressed',String(region===r.id));button.setAttribute('aria-label',r.name+': '+button.lastChild.textContent);button.addEventListener('click',()=>setRegion(r.id,true));container.append(button);
     }
     restoreFocus(container,focused);
