@@ -9,8 +9,8 @@
     "gisCandidates": 161,
     "exactIdMatched": 69,
     "pending": 92,
-    "curatedTotal": 79,
-    "curatedNoMatchingGIS": 14
+    "curatedTotal": 80,
+    "curatedNoMatchingGIS": 15
   },
   "candidates": [
     {
@@ -9837,6 +9837,13 @@
       "gisObjectId": null,
       "publication": "verified-access-guide",
       "reason": "Owner Northwoods Alliance maps public signed waterfall trailhead and named FALLS on its community forest parcel, publishes legal non-motorized public access and roadside directions at 0.6 mile north of McGinty Lane. WUPCVB brochure #29 independently names this Scott and Howe Creek Wildcat Falls and provides approximate NATURAL FEATURE coordinate 46.346173,-89.292236 plus same owner-published road approach. No separate exact Michigan named GIS source ID, no surveyed trail or parking geometry, no feature-pin vehicle directions."
+    },
+    {
+      "id": "lower-montreal-falls",
+      "name": "Lower Montreal Falls",
+      "gisObjectId": null,
+      "publication": "verified-access-guide",
+      "reason": "State-owned Lower Montreal Falls with Upper companion, legal Fish Cove access supported by Visit Keweenaw and DNR-supported notice; explicit private Smith Fisheries prohibition; approximate waterfall coordinates not parking or route."
     }
   ],
   "batchCheckpoints": [
@@ -10394,6 +10401,15 @@
       "summary": "Wildcat Falls Community Forest verified via current owner property/trail map labeling both FALLS and TRAIL HEAD, yellow-marked public path and County Line Lake Road signed arrival, plus regional waterfall brochure #29 approximate distinct natural-feature point. No car routing to falls, no invented parking GPS, no live snow/road conditions, no outreach.",
       "published": [
         "wildcat-falls"
+      ],
+      "pendingGisFeatures": 92
+    },
+    {
+      "batch": "80",
+      "reviewed": "2026-11-07",
+      "summary": "Legal Fish Cove Lower Montreal + separate Upper Montreal; Peterson closed, Elliot Miners Beach alias, Piers Gorge area identity corrected.",
+      "published": [
+        "lower-montreal-falls"
       ],
       "pendingGisFeatures": 92
     }
