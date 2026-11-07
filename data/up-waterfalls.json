@@ -4600,6 +4600,85 @@
       ],
       "link": "",
       "path": ""
+    },
+    {
+      "id": "lower-montreal-falls",
+      "name": "Lower Montreal Falls",
+      "region": "Keweenaw Peninsula",
+      "place": "Copper Harbor vicinity · Keweenaw County",
+      "lat": 47.39257,
+      "lng": -87.84114,
+      "gisObjectId": null,
+      "level": "strenuous",
+      "minutes": "150–300+ min",
+      "walk": "From Fish Cove parking descend to the Lake Superior shore, then follow the unmarked, unmaintained western shoreline footpath about one mile to Lower Montreal Falls. Upper Montreal Falls is upstream on a rough, less-defined riverside path; no official measured or signed upper-falls walking route.",
+      "best": "Mid-to-late spring through fall after the roads and footpath firm up. Road conditions, gate status, water flow and lake-wave hazards are not monitored here.",
+      "access": "Michigan state-owned public waterfall site, approached legally through Fish Cove as directed by Visit Keweenaw and landowner/DNR-supported access notice. Unmaintained footpath, no assured year-round road or parking access. Smith Fisheries Road entrance is private and must not be used.",
+      "status": "seasonal",
+      "publication": "verified-access-guide",
+      "source": "https://www.visitkeweenaw.com/blog/post/a-guide-to-visiting-the-keweenaws-montreal-falls/",
+      "locationSource": "https://www.waterfallsofthekeweenaw.com/montreal-river/montreal-falls/",
+      "kind": "State forest lakeshore waterfall · remote unmarked hiking route",
+      "parking": "Via Copper Harbor, continue from US-41 onto Mandan Road about 7.5 miles, then turn onto Hoar Lake/Fish Cove Road and follow signs to rustic Fish Cove parking. Rough two-track; high clearance recommended. Road or gate conditions not verified; do not navigate to waterfall coordinates. Smith Fisheries Road is private and prohibited for waterfall access.",
+      "feature": "Lower Montreal Falls pours into Lake Superior; Upper Montreal Falls is a different drop upstream along the same Montreal River. These are distinct from Interstate/Montreal Falls on the Wisconsin–Gogebic border.",
+      "decision": "For experienced backcountry hikers with daylight, offline maps and appropriate vehicle only. Abort if Mandan Road, Fish Cove parking or shore route is inaccessible or unsafe; never use Smith Fisheries Road.",
+      "manager": "Michigan Department of Natural Resources · state-owned Montreal River corridor",
+      "sourceReviewed": "2026-11-07",
+      "note": "Map pin is approximate Lower Montreal natural feature, NOT parking, official trail, surveyed viewpoint or vehicle waypoint. Upper pin is likewise approximate and not an approved footpath.",
+      "further": "Visit Keweenaw and DNR-supported landowner bulletin establish Fish Cove as the legal visitor arrival. Upper and lower feature locations are independently identified by Waterfalls of the Keweenaw; owner travel notice explicitly forbids Smith Fisheries Road. State DNR Montreal Corridor construction/permit projects are not a currently open substitute public trail.",
+      "companionWaterfall": {
+        "name": "Upper Montreal Falls",
+        "lat": 47.39563,
+        "lng": -87.83551,
+        "featurePositionRole": "approximate-natural-upper-falls-not-hike-parking-or-trail",
+        "locationSource": "https://www.waterfallsofthekeweenaw.com/montreal-river/upper-montreal-falls/",
+        "sameFishCoveEntry": true,
+        "separateDrivingArrival": false,
+        "measuredRouteToFeature": false
+      },
+      "relatedWaterfalls": [
+        "manganese-falls",
+        "haven-falls"
+      ],
+      "geocodeProvenance": {
+        "kind": "approximate-natural-waterfall",
+        "point": [
+          47.39257,
+          -87.84114
+        ],
+        "lowerFeatureSource": "https://www.waterfallsofthekeweenaw.com/montreal-river/montreal-falls/",
+        "upperFeatureSource": "https://www.waterfallsofthekeweenaw.com/montreal-river/upper-montreal-falls/",
+        "notParking": true,
+        "notOfficialTrail": true,
+        "privateSmithFisheriesDisallowed": true
+      },
+      "verification": {
+        "landManager": {
+          "verified": true,
+          "source": "https://www.visitkeweenaw.com/blog/post/a-guide-to-visiting-the-keweenaws-montreal-falls/",
+          "description": "Visit Keweenaw confirms the Montreal Falls state-owned land and DNR management."
+        },
+        "publicAccess": {
+          "verified": true,
+          "source": "https://www.copperbeacon.org/bulletin/montreal-falls-guide-keweenaw",
+          "description": "Landowner and DNR-supported visitor-access statement directs public to Fish Cove and forbids Smith Fisheries Road trespass."
+        },
+        "parking": {
+          "verified": true,
+          "source": "https://www.visitkeweenaw.com/blog/post/a-guide-to-visiting-the-keweenaws-montreal-falls/",
+          "description": "Official tourism documents rustic Fish Cove parking approached by Mandan Road/Hoar Lake Road; GPS location and current usability unverified."
+        },
+        "trail": {
+          "verified": true,
+          "source": "https://www.visitkeweenaw.com/blog/post/a-guide-to-visiting-the-keweenaws-montreal-falls/",
+          "description": "Official tourism describes unmarked, unmaintained shoreline path about one mile to lower falls. Upper optional route is rougher and not signed."
+        },
+        "location": {
+          "verified": true,
+          "source": "https://www.waterfallsofthekeweenaw.com/montreal-river/montreal-falls/",
+          "description": "Independent specialist locates lower natural feature at 47.39257,-87.84114 and separate upstream upper feature at 47.39563,-87.83551; not surveyed access points."
+        }
+      }
     }
   ]
 }
