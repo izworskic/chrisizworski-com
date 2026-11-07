@@ -5,6 +5,13 @@ on:
   schedule:
     # Daily check UTC. Python cadence enforces Mondays only Nov–Mar.
     - cron: '23 12 * * *'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/ferry-intelligence.yml'
+      - 'scripts/ferry_intelligence.py'
+      - 'data/ferry-planners.json'
+      - 'data/ferry-monitor-state.json'
   pull_request:
     paths:
       - '.github/workflows/ferry-intelligence.yml'
@@ -35,7 +42,7 @@ jobs:
           node-version: '22'
       - name: Test change detection, season parsing and fail-closed behavior
         run: python3 -m unittest discover -s tests -p test_ferry_intelligence.py -v
-      - name: Inspect official sources (scheduled or manual only)
+      - name: Inspect official sources (release, scheduled or manual)
         if: github.event_name != 'pull_request'
         shell: bash
         run: |
