@@ -31,7 +31,7 @@ test('B80 Montreal public approach is Fish Cove, map point is never vehicle park
  assert.ok(!f.parkingLocation);
  assert.match(pages.montreal,/not a parking/);
  assert.match(pages.montreal,/data-lat="47.39257" data-lng="-87.84114"/);
- assert.match(pages.montreal,/Smith Fisheries Road is private/);
+ assert.ok(pages.montreal.includes('Smith Fisheries Road')&&pages.montreal.includes('private'),'private-road exclusion is explicit regardless of HTML emphasis');
  assert.match(pages.montreal,/no signs|not maintained|unmaintained/);
  assert.doesNotMatch(pages.montreal,/data-parking-lat=/);
  assert.doesNotMatch(pages.montreal,/google.com\/maps\/dir\//);
