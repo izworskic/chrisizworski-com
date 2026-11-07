@@ -71,7 +71,7 @@ test('B64: public guide is discoverable exactly once and explains seasonal gate,
  assert.ok(!guide.includes('google.com/maps/dir/?api=1&destination=47.329239'));
  assert.ok(!guide.includes('data-parking-lat='));
  assert.equal((sitemap.match(new RegExp(url,'g'))||[]).length,1);
- assert.equal((sitemap.match(/<loc>/g)||[]).length,76;
+ assert.equal((sitemap.match(/<loc>/g)||[]).length,76);
  assert.match(hub,/data-id="conglomerate-falls-gratiot" data-gis-oid="136"/);
  assert.match(hub,/data-arrival-verified="verified"/);
  assert.match(hub,/78 curated visitor destinations/);
@@ -81,7 +81,7 @@ test('B64: public guide is discoverable exactly once and explains seasonal gate,
  assert.ok(!sitemap.includes('/research/upper-gratiot-river-falls/'));
  const jsonld=JSON.parse(hub.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
  const list=jsonld['@graph'].find(x=>x['@type']==='ItemList');
- assert.equal(list.numberOfItems,76;
+ assert.equal(list.numberOfItems,76);
  assert.equal(list.itemListElement.filter(x=>x.url===url).length,1);
 });
 
