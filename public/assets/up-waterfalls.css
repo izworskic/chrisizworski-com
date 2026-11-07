@@ -116,3 +116,45 @@
 @media(max-width:990px){.nearby-results{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:670px){.nearby-lab{padding:16px;margin:12px 0 18px}.nearby-controls,.nearby-results,.nearby-evidence{grid-template-columns:1fr}.nearby-stop{padding:13px}.nearby-heading h2{font-size:1.5rem}}
 @media(prefers-reduced-motion:reduce){.nearby-lab *{scroll-behavior:auto!important;transition:none!important}}
+
+
+/* Six-stop waterfall day sheet: opt-in inside the existing shortlist, not another homepage panel. */
+.upfall-day-sheet{background:#fffdf7;color:#17312f;border:1px solid #b9d4c9;border-radius:10px;padding:18px;margin-top:17px}
+.upfall-day-sheet[hidden]{display:none}
+.upfall-day-sheet h4{font:normal 1.6rem/1.2 Georgia,serif;margin:0 0 8px;color:#133d38}
+.upfall-day-sheet :is(.day-sheet-date,.day-sheet-lead){font-size:.9rem;color:#375c54;margin:7px 0 11px}
+.day-sheet-entries{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin-top:14px}
+.day-sheet-stop{min-width:0;border:1px solid #cadcd4;background:white;border-radius:8px;padding:13px}
+.day-sheet-stop h5{font:normal 1.2rem/1.3 Georgia,serif;margin:0 0 7px}
+.day-sheet-stop h5 a{color:#174e54}
+.day-sheet-stop p{font-size:.84rem;line-height:1.48;color:#314c49;margin:5px 0}
+.day-sheet-stop .day-sheet-meta{font-size:.75rem;font-weight:750;color:#315f5d}
+.day-sheet-stop .day-sheet-warning{border-left:3px solid #b46a20;padding-left:8px;color:#694312}
+.day-sheet-stop .day-sheet-no-navigation{font-weight:700;color:#754b17}
+.day-sheet-stop .day-sheet-links a{font-weight:750;color:#10596b}
+.day-sheet-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:14px}
+.day-sheet-actions button{background:#174e4a;color:#fff;border:1px solid #174e4a;border-radius:6px;min-height:42px;padding:8px 12px;font-size:.82rem;font-weight:750}
+.day-sheet-actions button:disabled{opacity:.5;cursor:not-allowed}
+.day-sheet-status{font-size:.84rem;font-weight:700;color:#28594f;min-height:1.2em}
+.day-sheet-footnote{padding-top:8px;border-top:1px solid #c9dad2;font-size:.78rem;color:#536a64}
+@media(max-width:650px){
+ .upfall-day-sheet{padding:12px}
+ .day-sheet-entries{grid-template-columns:1fr}
+ .day-sheet-actions button{width:100%}
+}
+@media print{
+ @page{margin:13mm}
+ body.upfall-print-mode{background:#fff;color:#111}
+ body.upfall-print-mode :is(.mast,.hero,.truth,.below,.footer){display:none!important}
+ body.upfall-print-mode #main > :not(.map-zone){display:none!important}
+ body.upfall-print-mode .map-zone{padding:0!important}
+ body.upfall-print-mode .map-zone > .wrap > :not(#shortlist){display:none!important}
+ body.upfall-print-mode #shortlist{margin:0;padding:0;border:0;box-shadow:none;background:white}
+ body.upfall-print-mode #shortlist > :not(#upfall-day-sheet){display:none!important}
+ body.upfall-print-mode #upfall-day-sheet{display:block!important;padding:0;margin:0;border:0}
+ body.upfall-print-mode :is(.day-sheet-actions,.day-sheet-status){display:none!important}
+ body.upfall-print-mode .day-sheet-entries{grid-template-columns:1fr;gap:8px}
+ body.upfall-print-mode .day-sheet-stop{break-inside:avoid;border:1px solid #999;padding:8px}
+ body.upfall-print-mode .day-sheet-stop p{font-size:10pt}
+ body.upfall-print-mode a{color:#111;text-decoration:underline}
+}

@@ -5,7 +5,7 @@
   // This module never asks the browser to fetch LL2 or NWS independently.
   const $=id=>document.getElementById(id);
   const state={data:null,intent:'family',offsetHours:0,selectedSite:null,map:null,markers:new Map(),
-    line:null,padMarker:null,tiles:null};
+    line:null,padMarker:null,tiles:null,rocketPins:null,allLaunches:[],selectedLaunchId:null};
   const label=(id,value)=>{const n=$(id);if(n)n.textContent=value;};
   const el=(tag,cls,value)=>{
     const n=document.createElement(tag);
@@ -86,6 +86,7 @@
           weight:active?3:2});
       }
       showBearing();
+      state.rocketPins?.update(state.allLaunches,state.selectedLaunchId);
       state.map.invalidateSize(false);
       return;
     }
@@ -151,6 +152,13 @@
       }
       if(bounds.length)map.fitBounds(bounds,{padding:[29,29],maxZoom:12});
       state.map=map;
+      state.rocketPins=window.RocketMapPins?.mount(map,{
+        region:'california',
+        centers:{california:{lat:34.74,lon:-120.57}},
+        onSelect:(id,region)=>document.dispatchEvent(new CustomEvent(
+          'rocket-map:choose-mission',{detail:{launchId:id,region}}))
+      });
+      state.rocketPins?.update(state.allLaunches,state.selectedLaunchId);
       showBearing();
     }catch(_){
       root.replaceChildren(el('p','rl-vandenberg-map-fallback',
@@ -310,6 +318,10 @@
   // response. Never reuse California site pins for another region's mission.
   document.addEventListener('rocket-viewing:data',event=>{
     const data=event.detail;
+    state.allLaunches=data?.selectedRegion==='california'?
+      data.regions?.find(r=>r.id==='california')?.launches||[]:[];
+    state.selectedLaunchId=data?.selectedRegion==='california'?data.selectedLaunchId:null;
+    state.rocketPins?.update(state.allLaunches,state.selectedLaunchId);
     state.data=data?.selectedRegion==='california'&&data?.vandenbergViewing?.region==='california'?
       data.vandenbergViewing:null;
     state.offsetHours=0;

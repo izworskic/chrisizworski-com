@@ -1,0 +1,670 @@
+#!/usr/bin/env python3
+"""Six-region official launch-notice evidence collector. Python Intelligence OS v1.
+
+Runs ONLY as a scheduled GitHub Actions batch; never from a visitor request.
+Does not scrape protected pages, fabricate missions, infer safety-zone activity,
+or conflate a policy with event-specific public viewing permission.
+
+Stdlib-only. The existing shared Node/Postgres launch collector remains the
+single source for orbital mission IDs, windows, and pad schedule precision.
+"""
+from __future__ import annotations
+
+import argparse
+import concurrent.futures
+import datetime as dt
+import hashlib
+import html
+from html.parser import HTMLParser
+import json
+import re
+import sys
+import unittest
+import urllib.error
+import urllib.parse
+import urllib.request
+
+UTC = dt.timezone.utc
+VERSION = 1
+LIMIT = 800_000
+USER_AGENT = "ChrisIzworskiOfficialLaunchNotices/1.0 (+https://chrisizworski.com/)"
+REGIONS = ("california", "florida", "texas", "virginia", "alaska", "hawaii")
+# Public government/land-manager pages only. No paid API, private range systems,
+# generalized search scraping, user's IP or guessed pad coordinates.
+SOURCES = (
+    ("vandenberg-news", "california", "https://www.vandenberg.spaceforce.mil/News/", "news"),
+    ("vandenberg-alerts", "california", "https://public.govdelivery.com/accounts/USDODSFVANDENBERG/signup/41755", "alerts"),
+    ("canaveral-nps", "florida", "https://www.nps.gov/cana/planyourvisit/rocket-launch-viewing.htm", "policy"),
+    ("ksc-viewing", "florida", "https://www.kennedyspacecenter.com/launches-and-events/see-a-launch/launch-viewing", "policy"),
+    ("starbase-city", "texas", "https://www.starbase.texas.gov/beach-road-access", "access"),
+    ("wallops-schedule", "virginia", "https://www.nasa.gov/wallops-launch-schedule/", "schedule"),
+    ("wallops-range-blog", "virginia", "https://www.nasa.gov/blogs/wallops-range/", "news"),
+    ("wallops-visitor", "virginia", "https://www.nasa.gov/wallops/visitor-center/view-a-launch-from-nasa-wallops-visitor-center/", "policy"),
+    ("alaska-aerospace", "alaska", "https://akaerospace.com/", "access"),
+    ("alaska-news", "alaska", "https://akaerospace.com/news", "news"),
+    ("pmrf-beach", "hawaii", "https://cnrh.cnic.navy.mil/Installations/PMRF-Barking-Sands/Operations-and-Management/Beach-Access/", "policy"),
+)
+SOURCE_MAP = {x[0]: x for x in SOURCES}
+STAMP = re.compile(r"\b(?:JAN(?:UARY)?|FEB(?:RUARY)?|MAR(?:CH)?|APR(?:IL)?|MAY|JUN(?:E)?|JUL(?:Y)?|AUG(?:UST)?|SEP(?:T(?:EMBER)?)?|OCT(?:OBER)?|NOV(?:EMBER)?|DEC(?:EMBER)?)\.?\s+\d{1,2},?\s+20\d{2}\b", re.I)
+EVENT_WORDS = re.compile(r"\b(?:rocket|launch|falcon|starship|artemis|atlas|missile|sounding)\b", re.I)
+INVALID_LINK = re.compile(r"^(?:mailto:|javascript:|data:|#)", re.I)
+
+
+def utcnow():
+    return dt.datetime.now(UTC)
+
+
+def iso(value):
+    return value.astimezone(UTC).isoformat(timespec="seconds").replace("+00:00", "Z")
+
+
+def tidy(value, n=220):
+    return re.sub(r"\s+", " ", html.unescape(str(value or ""))).strip()[:n]
+
+
+class PlainDocument(HTMLParser):
+    """Small, deterministic HTML-to-evidence extractor; no HTML retained."""
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.hidden = 0
+        self.parts = []
+        self.links = []
+        self.active = None
+
+    def handle_starttag(self, tag, attrs):
+        if tag in ("script", "style", "noscript", "svg"):
+            self.hidden += 1
+        if self.hidden:
+            return
+        if tag in ("div", "p", "li", "section", "h1", "h2", "h3", "h4", "br", "time"):
+            self.parts.append("\n")
+        if tag == "a":
+            href = dict(attrs).get("href", "")
+            self.active = [href, []]
+
+    def handle_endtag(self, tag):
+        if tag in ("script", "style", "noscript", "svg"):
+            self.hidden = max(0, self.hidden - 1)
+            return
+        if self.hidden:
+            return
+        if tag == "a" and self.active:
+            self.links.append((self.active[0], tidy(" ".join(self.active[1]), 250)))
+            self.active = None
+        if tag in ("p", "li", "h1", "h2", "h3", "h4", "section"):
+            self.parts.append("\n")
+
+    def handle_data(self, data):
+        if not self.hidden:
+            self.parts.append(data)
+            if self.active:
+                self.active[1].append(data)
+
+    @property
+    def text(self):
+        # Preserve item boundaries but normalize excess whitespace.
+        return "\n".join(tidy(p, 4000) for p in "".join(self.parts).splitlines() if tidy(p))
+
+
+def official_link(base, raw):
+    if not raw or INVALID_LINK.match(raw):
+        return None
+    u = urllib.parse.urlsplit(urllib.parse.urljoin(base, raw))
+    root = urllib.parse.urlsplit(base)
+    if u.scheme != "https" or u.hostname != root.hostname or u.username or u.password:
+        return None
+    if len(u.geturl()) > 420:
+        return None
+    return urllib.parse.urlunsplit((u.scheme, u.netloc, u.path, "", ""))
+
+
+def item(kind, title, source, *, detail, date=None, relevance="general", scope="source-observation"):
+    return {"kind": kind, "title": tidy(title, 150), "detail": tidy(detail, 320),
+            "sourceUrl": source, "publishedDate": date, "relevance": relevance,
+            "scope": scope}
+
+
+def recent_title_articles(doc, url, now):
+    """Official article pointers only; no launch dates or beach status inferred."""
+    results = []
+    for raw, name in doc.links:
+        target = official_link(url, raw)
+        if not target or not EVENT_WORDS.search(name):
+            continue
+        if not any(s in target.lower() for s in ("/article", "/news/", "/press-release", "/updates/")):
+            continue
+        if name.lower() in ("news", "launches", "launch alerts", "rocket launch"):
+            continue
+        results.append(item("official-article", name, target,
+                            detail="Official source article; its event date and operational implications have not been independently verified.",
+                            relevance="unmatched-official-article", scope="historical-or-current-article"))
+        if len(results) >= 3:
+            break
+    return results
+
+
+
+def wallops_recent_posts(doc, url, now):
+    """Dated NASA article pointers, NEVER launch targets or public permissions.
+
+    Wallops Range issues suborbital and defense support notices that may not
+    appear in LL2. A blog *publication* date does not establish a future
+    launch date; this feed is intentionally not merged into the mission list.
+    """
+    results = []
+    seen = set()
+    for raw, title in doc.links:
+        target = official_link(url, raw)
+        if not target or not re.search(r"\b(?:rocket|launch|sounding)\b", title, re.I):
+            continue
+        match = re.fullmatch(
+            r"/blogs/wallops/(20\d{2})/(\d{2})/(\d{2})/[a-z0-9-]+/?",
+            urllib.parse.urlsplit(target).path)
+        if not match or target in seen:
+            continue
+        try:
+            published = dt.date(*(int(part) for part in match.groups()))
+        except ValueError:
+            continue
+        days = (now.date() - published).days
+        if not (0 <= days <= 75):
+            continue
+        seen.add(target)
+        results.append(item("official-article", title, target,
+            date=published.isoformat(),
+            detail="Dated NASA Wallops Range article. Publication date is not a launch date. Check the article for actual mission timing, public viewing rules and later changes.",
+            relevance="unmatched-official-article", scope="historical-or-current-article"))
+        if len(results) >= 3:
+            break
+    return results
+
+
+# Travel-only intelligence: scheduled vehicle moves are not launch closures.
+# City of Starbase labels these as "Description" / "Date" under Road Updates.
+# They MUST NOT be read from the archived mayoral-order section.
+ROAD_MONTHS = {name.upper(): i for i, name in enumerate(
+    ("January","February","March","April","May","June","July","August",
+     "September","October","November","December"), 1)}
+ROAD_MONTH = r"(January|February|March|April|May|June|July|August|September|October|November|December)"
+ROAD_MOVEMENT = re.compile(
+    r"\bDescription:\s*([A-Za-z][A-Za-z0-9 ,.'()/\-]{3,85}?)\s+Date:\s*" +
+    ROAD_MONTH + r"\s+(\d{1,2})\s+(\d{1,2}):(\d{2})\s*(AM|PM)\s+to\s+" +
+    ROAD_MONTH + r"\s+(\d{1,2})\s+(\d{1,2}):(\d{2})\s*(AM|PM)\b", re.I)
+
+
+def starbase_road_windows(text, now):
+    """Return at most two near-term city transport windows, never closures."""
+    from zoneinfo import ZoneInfo
+    zone = ZoneInfo("America/Chicago")
+    local = now.astimezone(zone)
+    # Stop before the historical mayoral orders. A prior-order date must not
+    # become a current or future road notice.
+    match = re.search(
+        r"\bROAD UPDATES\b(.*?)(?=\bPUBLIC NOTICE OF MAYOR.S ORDER\b|\bPREVIOUS ORDERS\b|$)",
+        text, re.I | re.S)
+    if not match:
+        return []
+    section = re.sub(r"\s+", " ", match.group(1)[:7000])
+    output = []
+    for found in ROAD_MOVEMENT.finditer(section):
+        desc, m1, d1, h1, min1, am1, m2, d2, h2, min2, am2 = found.groups()
+        # Yearless notices get the closest plausible local future occurrence.
+        # No date guess more than 14 days ahead is permitted.
+        for year in (local.year - 1, local.year, local.year + 1):
+            try:
+                sh = int(h1); eh = int(h2)
+                if not (1 <= sh <= 12 and 1 <= eh <= 12):
+                    break
+                start = dt.datetime(
+                    year, ROAD_MONTHS[m1.upper()], int(d1),
+                    sh % 12 + (12 if am1.upper() == "PM" else 0),
+                    int(min1), tzinfo=zone)
+                endyear = year + (ROAD_MONTHS[m2.upper()] < ROAD_MONTHS[m1.upper()])
+                end = dt.datetime(
+                    endyear, ROAD_MONTHS[m2.upper()], int(d2),
+                    eh % 12 + (12 if am2.upper() == "PM" else 0),
+                    int(min2), tzinfo=zone)
+            except (ValueError, OverflowError):
+                continue
+            if not (dt.timedelta(0) < end - start <= dt.timedelta(hours=36)):
+                continue
+            if not (end > local and start >= local - dt.timedelta(hours=36) and
+                    start <= local + dt.timedelta(days=14)):
+                continue
+            label = (start.strftime("%b %-d, %Y %-I:%M %p") + " to " +
+                     end.strftime("%b %-d, %Y %-I:%M %p") + " Central")
+            signal = item(
+                "scheduled-road-activity", label, SOURCE_MAP["starbase-city"][2],
+                detail=("City-listed transport movement: " + tidy(desc, 80) +
+                        ". A scheduled vehicle movement is not a mission-specific "
+                        "road closure or proof Highway 4 will be shut; verify access before driving."),
+                relevance="dated-road-advisory",
+                scope="Starbase road movement window")
+            signal["windowStart"] = iso(start)
+            signal["windowEnd"] = iso(end)
+            output.append((start, signal))
+            break
+    output.sort(key=lambda entry: entry[0])
+    return [s for _, s in output[:2]]
+
+
+
+def classify(entry, body, now):
+    sid, region, url, source_type = entry
+    doc = PlainDocument()
+    doc.feed(body)
+    text = doc.text
+    upper = re.sub(r"\s+", " ", text).upper()
+    observations = []
+    status = "retrieved"
+    notes = []
+
+    if sid == "starbase-city":
+        # Scope live status to current sections. Historical orders may quote
+        # OLD "beach closed" or "no notice" text, which is not current access.
+        live_page = upper.split("PREVIOUS ORDERS", 1)[0]
+        current_parts = re.split(r"\bPUBLIC NOTICE OF MAYOR.S ORDER\b", live_page, maxsplit=1)
+        current_status = current_parts[0]
+        mayor_section = current_parts[1].strip() if len(current_parts) > 1 else None
+        beach = re.search(r"BEACH ACCESS STATUS\s+(BOCA CHICA BEACH IS OPEN|BOCA CHICA BEACH IS CLOSED)\b", current_status)
+        road = re.search(r"ROAD UPDATES\s+(ROAD DELAY\s+NO ROAD DELAYS|(?:ROAD CLOSURE|ROAD DELAY)[^\.]{0,90})", current_status)
+        if beach:
+            label = "Boca Chica Beach is " + ("open" if beach.group(1).endswith("OPEN") else "closed")
+            observations.append(item("access-status", label, url,
+                detail="City of Starbase website status at source-check time, not a future launch-window clearance.",
+                relevance="current-published-status", scope="Boca Chica Beach"))
+        if road:
+            observations.append(item("road-status", tidy(road.group(1), 95).capitalize(), url,
+                detail="City road-update text checked now. Road access can change before a mission; follow signed orders.",
+                relevance="current-published-status", scope="Highway 4 approaches"))
+        if not beach:
+            status = "limited"
+            notes.append("Current city beach status field was not located; no access conclusion.")
+
+        # These are future city-listed transport windows, NOT active
+        # beach closures. Their real dates are more useful than the
+        # generic "Road Delay / No road delays" header alone.
+        observations.extend(starbase_road_windows(text, now))
+        # A dated PDF under "Previous Orders" is ALWAYS history, not an active order.
+        if "PREVIOUS ORDERS" in upper:
+            dates = STAMP.findall(upper.split("PREVIOUS ORDERS", 1)[1][:5000])
+            if dates:
+                observations.append(item("historical-order-index",
+                    "Previous mayoral orders listed", url,
+                    detail="Archived official orders exist. The newest listed order does not establish an active closure or the next mission's road status.",
+                    relevance="historical-only", scope="prior-order-archive"))
+        # A "no notices" quote under Previous Orders cannot clear an active
+        # current mayoral-order notice. A heading alone cannot confirm closure.
+        if mayor_section is not None and mayor_section and not re.search(
+                r"\bNO PUBLIC NOTICES? AT THIS TIME\b", mayor_section):
+            observations.append(item("notice-check-required", "Current mayoral-order notice may be posted", url,
+                detail="Review the executed order and event-specific dates on the city's official page. This parser does not infer road closure from a heading.",
+                relevance="review-required", scope="mayoral-order-section"))
+    elif sid == "alaska-aerospace":
+        if re.search(r"THERE ARE NO ACTIVE CLOSURES ON KODIAK ISLAND\b", upper):
+            observations.append(item("access-status", "Alaska Aerospace reports no active Kodiak closures", url,
+                detail="Operator's current homepage wording, not a launch-day road pass or an all-clear for Narrow Cape.",
+                relevance="current-published-status", scope="Kodiak road-closure feed"))
+        elif "KODIAK ISLAND CLOSURES" in upper:
+            status = "limited"
+            observations.append(item("notice-check-required", "Kodiak road-closure notice needs review", url,
+                detail="The closure heading is present but 'no active closures' could not be confirmed. Follow the operator and hotline.",
+                relevance="review-required", scope="Kodiak approach"))
+        else:
+            status = "limited"
+            notes.append("Operator road-closure statement could not be identified.")
+    elif sid == "wallops-range-blog":
+        observations.extend(wallops_recent_posts(doc, url, now))
+        if not observations:
+            notes.append("No recent attributable NASA Wallops Range launch articles found. This is not evidence that no range operations are planned.")
+    elif sid == "wallops-schedule":
+        if "NO PUBLIC LAUNCHES ON THE SCHEDULE AT THIS TIME" in upper:
+            observations.append(item("schedule-status", "NASA lists no current public Wallops launches", url,
+                detail="NASA Wallops official schedule at check time; this does not exclude classified tests, commercial flights, or off-range sounding rockets.",
+                relevance="current-published-status", scope="NASA Wallops public launch schedule"))
+        else:
+            status = "limited"
+            observations.append(item("notice-check-required", "NASA Wallops schedule requires mission review", url,
+                detail="The NASA page no longer asserts no public launches. Open the official list for event-specific dates and Visitor Center access.",
+                relevance="review-required", scope="NASA Wallops public launch schedule"))
+    elif sid == "pmrf-beach":
+        if "CURRENT BEACH ACCESS" in upper and "ALL PUBLIC ACCESSIBLE SHORELINE AREAS ARE OPEN" in upper:
+            observations.append(item("access-policy", "PMRF posts general shoreline recreation policy", url,
+                detail="This policy does not authorize launch viewing or override posted restrictions, Navy force-protection closures or maritime safety notices.",
+                relevance="policy-only", scope="designated recreation shoreline"))
+        else:
+            status = "limited"
+            notes.append("Navy general access language changed or could not be parsed.")
+    elif sid == "canaveral-nps":
+        if "ROCKET LAUNCH VIEWING" in upper and "PLAYALINDA" in upper:
+            observations.append(item("access-policy", "NPS Playalinda rocket-launch restrictions apply", url,
+                detail="General park viewing and 30-minute Playalinda Road closing guidance; live mission-specific NASA closure not verified by this policy.",
+                relevance="policy-only", scope="Playalinda District"))
+        else:
+            status = "limited"
+            notes.append("NPS launch-policy fields not found.")
+    elif sid == "ksc-viewing":
+        if "LAUNCH VIEWING" in upper and ("OFFICIAL" in upper or "PURCHASING" in upper):
+            observations.append(item("access-policy", "KSC viewing requires mission-specific ticket verification", url,
+                detail="The existing KSC mission watcher remains authoritative for official events and ticket details; this source is a general policy reference.",
+                relevance="policy-only", scope="Kennedy Space Center Visitor Complex"))
+        else:
+            status = "limited"
+            notes.append("Visitor-complex launch viewing policy could not be parsed.")
+    elif sid == "vandenberg-alerts":
+        observations.append(item("source-link", "Space Force official launch alert subscriptions", url,
+            detail="Subscribe to official notices; the sign-up page is not a launch date, an active beach closure or a public viewing permit.",
+            relevance="policy-only", scope="SLD 30 official launch alert sign-up"))
+    elif sid == "wallops-visitor":
+        if "LAUNCH VIEWING AREA" in upper:
+            observations.append(item("access-policy", "NASA's Visitor Center opening is mission-specific", url,
+                detail="The Visitor Center publishes event-specific availability; historical 'Next Launch' cards are not current access permission.",
+                relevance="policy-only", scope="Wallops Visitor Center"))
+        else:
+            status = "limited"
+            notes.append("Launch-viewing guidance could not be verified.")
+    elif sid in ("vandenberg-news", "alaska-news"):
+        observations.extend(recent_title_articles(doc, url, now))
+        if not observations:
+            notes.append("No attributable launch article extracted. Absence is not absence of range activity.")
+
+    # An active mayoral-order notice must survive the four-signal limit
+    # even when both dated transport windows and current status are present.
+    if sid == "starbase-city":
+        observations.sort(key=lambda signal: 0 if signal["kind"] == "notice-check-required" else 1)
+
+    # Fingerprint the relevant evidence, NOT a whole web page's changing ads,
+    # timestamps or unrelated layout. No source text stored.
+    normalized = json.dumps([status, observations], separators=(",", ":"), sort_keys=True)
+    return {"id":sid, "region":region, "sourceUrl":url, "scope":source_type,
+            "status":status, "checkedAt":iso(now), "fingerprint":hashlib.sha256(normalized.encode()).hexdigest()[:24],
+            "signals":observations[:4], "notes":notes[:2]}
+
+
+def unavailable(entry, now):
+    sid, region, url, scope = entry
+    return {"id":sid, "region":region, "sourceUrl":url, "scope":scope,
+            "status":"unavailable", "checkedAt":iso(now), "fingerprint":None,
+            "signals":[], "notes":["Official page not retrievable. No statement about current access or upcoming launches."]}
+
+
+def fetch_public(entry, now, opener=None):
+    sid, region, url, _ = entry
+    request=urllib.request.Request(url, headers={"User-Agent":USER_AGENT, "Accept":"text/html"})
+    client=opener or urllib.request.urlopen
+    with client(request, timeout=8) as response:
+        final_url=response.geturl()
+        # Redirects away from the registered official host cannot supply evidence.
+        if urllib.parse.urlsplit(final_url).hostname != urllib.parse.urlsplit(url).hostname or \
+           urllib.parse.urlsplit(final_url).scheme != "https":
+            raise ValueError("untrusted redirect")
+        size=int(response.headers.get("Content-Length") or 0)
+        if size>LIMIT:
+            raise ValueError("oversized source")
+        data=response.read(LIMIT+1)
+        if len(data)>LIMIT:
+            raise ValueError("oversized source")
+        encoding=response.headers.get_content_charset() or "utf-8"
+        body=data.decode(encoding, errors="replace")
+    return classify(entry, body, now)
+
+
+def collect(now=None, fetcher=fetch_public, manifest=None, event_fetcher=None):
+    now=now or utcnow()
+    if now.tzinfo is None:
+        raise ValueError("UTC timezone required")
+    def read_one(entry):
+        try:
+            return fetcher(entry, now)
+        except (ValueError, urllib.error.URLError, OSError, UnicodeError, TimeoutError):
+            return unavailable(entry, now)
+        except Exception:
+            return unavailable(entry, now)
+    with concurrent.futures.ThreadPoolExecutor(max_workers=5) as pool:
+        records=list(pool.map(read_one, SOURCES))
+    regions={region:[r for r in records if r["region"]==region] for region in REGIONS}
+    counts={k:sum(s["status"]=="retrieved" for s in v) for k,v in regions.items()}
+    result={"version":VERSION, "checkedAt":iso(now), "sourceCount":len(records),
+            "regions":regions, "availableSources":sum(counts.values()),
+            "partial":any(s["status"]!="retrieved" for s in records),
+            "coverageRule":"Source evidence only. No event permission, all-clear, cancellation or marine-zone activation inferred."}
+    # The matching layer is opt-in for the scheduled job, preserving
+    # deterministic legacy collector tests and no extra website requests
+    # in the LL2 national schedule collector.
+    if manifest is not None:
+        from rocket_official_matcher import collect_evidence
+        try:
+            if event_fetcher:
+                result["reconciliation"]=collect_evidence(manifest,now,event_fetcher)
+            else:
+                result["reconciliation"]=collect_evidence(manifest,now)
+        except Exception:
+            result["reconciliation"]={
+                "version":1,"checkedAt":iso(now),"health":"unavailable",
+                "manifestCheckedAt":None,"matches":[],"candidateCount":0,
+                "unmatched":0,"conflicts":0,"sourceStatus":[]}
+    return result
+
+
+class EvidenceTests(unittest.TestCase):
+    now=dt.datetime(2026,11,5,12,tzinfo=UTC)
+    def source(self, sid):
+        return SOURCE_MAP[sid]
+
+    def test_starbase_status_with_historical_orders(self):
+        source=self.source("starbase-city")
+        record=classify(source, """
+        <h2>BEACH Access Status</h2><p>Boca Chica Beach is open.</p>
+        <h2>Road Updates</h2><p>Road Delay</p><p>No road delays.</p>
+        <h2>Public Notice of Mayor's Order</h2><p>No public notices at this time.</p>
+        <h2>Previous Orders</h2><p>October 27, 2026</p><a href="/order.pdf">Executed order</a>
+        """, self.now)
+        self.assertEqual(record["status"],"retrieved")
+        self.assertIn("access-status",[s["kind"] for s in record["signals"]])
+        self.assertIn("historical-order-index",[s["kind"] for s in record["signals"]])
+        self.assertNotIn("notice-check-required",[s["kind"] for s in record["signals"]])
+        self.assertTrue(all(s["relevance"]!="permission" for s in record["signals"]))
+
+
+    def test_starbase_dated_transport_not_confused_with_launch_closure(self):
+        source=self.source("starbase-city")
+        record=classify(source, """
+        <h2>BEACH Access Status</h2><p>Boca Chica Beach is open.</p>
+        <h2>Road Updates</h2><p>Road Delay</p><p>No road delays.</p>
+        <div>Description: Production to Masseys</div>
+        <div>Date: November 6 11:59 PM to November 7 4:00 AM</div>
+        <div>Description: Production to Masseys</div>
+        <div>Date: November 7 11:59 PM to November 8 4:00 AM</div>
+        <h2>Public Notice of Mayor's Order</h2><p>No public notices at this time.</p>
+        <h2>Previous Orders</h2><div>Description: historical beach closure</div>
+        <div>Date: November 9 1:00 PM to November 9 4:00 PM</div>
+        """, self.now)
+        windows=[v for v in record["signals"] if v["kind"]=="scheduled-road-activity"]
+        self.assertEqual(len(windows),2)
+        self.assertEqual(windows[0]["windowStart"],"2026-11-07T05:59:00Z")
+        self.assertEqual(windows[0]["windowEnd"],"2026-11-07T10:00:00Z")
+        self.assertEqual(windows[0]["relevance"],"dated-road-advisory")
+        self.assertTrue(all("not a mission-specific" in v["detail"] for v in windows))
+        self.assertNotIn("historical",str(windows).lower())
+        self.assertEqual(record["status"],"retrieved")
+
+    def test_starbase_old_and_unattributed_movement_not_promoted(self):
+        source=self.source("starbase-city")
+        record=classify(source, """
+        <h2>BEACH Access Status</h2><p>Boca Chica Beach is open.</p>
+        <h2>Road Updates</h2><p>No road delays.</p>
+        <div>Description: Old production movement</div>
+        <div>Date: October 1 11:59 PM to October 2 4:00 AM</div>
+        <div>Description: Date not verified</div><div>Date: Unknown</div>
+        <h2>Previous Orders</h2>
+        <div>Description: Previous order</div>
+        <div>Date: November 7 1:00 PM to November 7 4:00 PM</div>
+        """, self.now)
+        self.assertNotIn("scheduled-road-activity",
+                         [v["kind"] for v in record["signals"]])
+
+    def test_current_mayoral_notice_survives_transport_window_limit(self):
+        record=classify(self.source("starbase-city"), """
+        <h2>BEACH Access Status</h2><p>Boca Chica Beach is open.</p>
+        <h2>Road Updates</h2><p>Road Delay</p><p>No road delays.</p>
+        <div>Description: Production to Masseys</div>
+        <div>Date: November 6 11:59 PM to November 7 4:00 AM</div>
+        <div>Description: Production to Masseys</div>
+        <div>Date: November 7 11:59 PM to November 8 4:00 AM</div>
+        <h2>Public Notice of Mayor's Order</h2>
+        <p>Review the posted active notice.</p>
+        <h2>Previous Orders</h2><p>October 27, 2026</p>
+        """, self.now)
+        kinds=[signal["kind"] for signal in record["signals"]]
+        self.assertEqual(len(kinds),4)
+        self.assertIn("notice-check-required",kinds)
+        self.assertEqual(kinds[0],"notice-check-required")
+        self.assertNotIn("closure",record["signals"][0]["title"].lower())
+
+    def test_archived_mayoral_words_cannot_suppress_current_notice(self):
+        record = classify(self.source("starbase-city"), """
+        <h2>BEACH Access Status</h2><p>Boca Chica Beach is open.</p>
+        <h2>Road Updates</h2><p>No road delays.</p>
+        <h2>Public Notice of Mayor's Order</h2>
+        <p>Review the published prospective order and its actual dates.</p>
+        <h2>Previous Orders</h2>
+        <p>No public notices at this time.</p>
+        <p>BEACH Access Status Boca Chica Beach is closed.</p>
+        """, self.now)
+        kinds = [signal["kind"] for signal in record["signals"]]
+        self.assertIn("notice-check-required", kinds)
+        beach = next(s for s in record["signals"] if s["kind"] == "access-status")
+        self.assertEqual(beach["title"], "Boca Chica Beach is open")
+
+    def test_archived_beach_status_cannot_be_read_as_current(self):
+        record = classify(self.source("starbase-city"), """
+        <h2>Previous Orders</h2>
+        <p>BEACH Access Status</p><p>Boca Chica Beach is open.</p>
+        <p>Road Updates</p><p>No road delays.</p>
+        <p>October 27, 2026</p>
+        """, self.now)
+        self.assertEqual(record["status"], "limited")
+        self.assertFalse(any(s["kind"] in ("access-status", "road-status",
+                                          "notice-check-required")
+                             for s in record["signals"]))
+
+    def test_wallops_range_blog_is_a_dated_article_feed_not_launch_schedule(self):
+        record = classify(self.source("wallops-range-blog"), """
+        <a href="/blogs/wallops/2026/09/30/nasa-wallops-to-support-october-sounding-rocket-launch/">
+          NASA Wallops to support October Sounding Rocket Launch</a>
+        <a href="/blogs/wallops/2026/09/30/nasa-wallops-to-support-october-sounding-rocket-launch/">
+          Read Full Post about Rocket Launch</a>
+        <a href="/blogs/wallops/2026/01/02/old-rocket/">
+          NASA Wallops past rocket launch</a>
+        <a href="https://malicious.example/2026/11/06/rocket/">
+          NASA rocket launch</a>
+        <a href="/blogs/wallops/2027/11/06/future-rocket/">
+          NASA future rocket launch</a>
+        """, self.now)
+        self.assertEqual(record["status"], "retrieved")
+        self.assertEqual(len(record["signals"]), 1)
+        signal = record["signals"][0]
+        self.assertEqual(signal["publishedDate"], "2026-09-30")
+        self.assertEqual(signal["kind"], "official-article")
+        self.assertEqual(signal["relevance"], "unmatched-official-article")
+        self.assertIn("not a launch date", signal["detail"])
+        self.assertTrue(signal["sourceUrl"].startswith("https://www.nasa.gov/blogs/wallops/"))
+        self.assertNotIn("windowStart", signal)
+
+    def test_ambiguous_status_is_limited_not_open(self):
+        s=classify(self.source("starbase-city"), "<h1>Beach rules</h1><p>The beach was open yesterday.</p>",self.now)
+        self.assertEqual(s["status"],"limited")
+        self.assertEqual(s["signals"],[])
+
+    def test_alaska_operator_home_current_but_not_future_permission(self):
+        s=classify(self.source("alaska-aerospace"), "<h2>Kodiak Island Closures</h2><p>There are no active closures on Kodiak Island.</p>",self.now)
+        self.assertEqual(s["signals"][0]["relevance"],"current-published-status")
+        self.assertIn("not a launch-day road pass",s["signals"][0]["detail"])
+
+    def test_wallops_no_sounding_rocket_absence_inference(self):
+        s=classify(self.source("wallops-schedule"), "<h2>No public launches on the schedule at this time</h2>",self.now)
+        self.assertEqual(s["signals"][0]["kind"],"schedule-status")
+        self.assertIn("does not exclude",s["signals"][0]["detail"])
+
+    def test_hawaii_policy_is_not_launch_permission(self):
+        s=classify(self.source("pmrf-beach"),"<h3>CURRENT BEACH ACCESS</h3><p>ALL PUBLIC ACCESSIBLE SHORELINE AREAS ARE OPEN</p>",self.now)
+        self.assertEqual(s["signals"][0]["relevance"],"policy-only")
+        self.assertIn("does not authorize launch viewing",s["signals"][0]["detail"])
+
+    def test_nps_conditions_are_only_general_policy(self):
+        s=classify(self.source("canaveral-nps"),"<h1>Rocket launch viewing</h1> Playalinda Beach Road closes 30 minutes prior",self.now)
+        self.assertEqual(s["signals"][0]["kind"],"access-policy")
+        self.assertNotIn("permission",s["signals"][0]["relevance"])
+
+    def test_no_arbitrary_source_links(self):
+        self.assertIsNone(official_link("https://www.nasa.gov/wallops-launch-schedule/","https://evil.example/x"))
+        self.assertIsNone(official_link("https://akaerospace.com/news","javascript:alert(1)"))
+        self.assertEqual(official_link("https://akaerospace.com/news","/news/thing?tracking=2"),"https://akaerospace.com/news/thing")
+
+    def test_alert_page_is_not_mission_date(self):
+        s=classify(self.source("vandenberg-alerts"),"<p>Signup</p>",self.now)
+        self.assertEqual(s["signals"][0]["relevance"],"policy-only")
+
+    def test_fallback_failure_is_fail_closed(self):
+        def fail(entry, now):
+            if entry[0]=="starbase-city":raise TimeoutError("provider timeout")
+            return classify(entry,"no relevant public data",now)
+        result=collect(self.now,fail)
+        self.assertEqual(result["sourceCount"],len(SOURCES))
+        self.assertEqual(result["regions"]["texas"][0]["status"],"unavailable")
+        self.assertEqual(result["regions"]["texas"][0]["signals"],[])
+        self.assertEqual(result["version"],VERSION)
+
+    def test_duplicate_date_not_falsely_promoted_to_access(self):
+        s=classify(self.source("vandenberg-news"),
+           '<a href="/News/Article-Display/Article/999/launch-complete/">Falcon 9 launch complete</a> <p>October 27, 2026</p>',
+           self.now)
+        self.assertEqual(s["signals"][0]["relevance"],"unmatched-official-article")
+        self.assertIsNone(s["signals"][0]["publishedDate"])
+        self.assertNotIn("open",s["signals"][0]["detail"].lower())
+
+    def test_fixture_stability(self):
+        a=classify(self.source("alaska-aerospace"),"<p>There are no active closures on Kodiak Island.</p>",self.now)
+        b=classify(self.source("alaska-aerospace"),"<p>There are no active closures on Kodiak Island.</p>",self.now)
+        self.assertEqual(a["fingerprint"],b["fingerprint"])
+
+    def test_source_failure_never_returns_old_access(self):
+        s=unavailable(self.source("pmrf-beach"),self.now)
+        self.assertEqual(s["status"],"unavailable")
+        self.assertEqual(s["signals"],[])
+        self.assertIsNone(s["fingerprint"])
+
+
+def main():
+    p=argparse.ArgumentParser()
+    p.add_argument("--test", action="store_true")
+    p.add_argument("--collect", action="store_true")
+    p.add_argument("--output", default="")
+    p.add_argument("--mission-manifest", default="", help="Saved compact, trusted same-site schedule manifest; never LL2 HTTP")
+    args=p.parse_args()
+    if args.test:
+        suite=unittest.defaultTestLoader.loadTestsFromTestCase(EvidenceTests)
+        report=unittest.TextTestRunner(verbosity=2).run(suite)
+        return 0 if report.wasSuccessful() else 1
+    manifest=None
+    if args.mission_manifest:
+        try:
+            with open(args.mission_manifest,"r",encoding="utf-8") as handle:
+                manifest=json.load(handle)
+        except (OSError,ValueError):
+            manifest={"version":1,"health":"unavailable","missions":[]}
+    data=collect(manifest=manifest)
+    output=json.dumps(data, separators=(",",":"),ensure_ascii=False)
+    if args.output:
+        with open(args.output, "w", encoding="utf-8") as handle:
+            handle.write(output+"\n")
+    else:
+        print(output)
+    print("Official sources: %d/%d confirmed retrieved; %d unavailable" %
+          (data["availableSources"],data["sourceCount"],sum(
+              r["status"]=="unavailable" for sources in data["regions"].values() for r in sources)),
+          file=sys.stderr)
+    return 0
+
+if __name__=="__main__":
+    sys.exit(main())

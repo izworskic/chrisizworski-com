@@ -27,7 +27,7 @@ const modes={
   facts:['Do not navigate by this map','Verify broadcast/local notices','No marine launch-viewing authorization'],
   links:[['https://navcen.uscg.gov/local-notices-to-mariners-by-cg-district','Current Coast Guard LNM hub'],['https://www.ecfr.gov/current/title-33/chapter-I/subchapter-P/part-165/section-165.1406','33 CFR 165.1406 official text']]}
 };
-const state={data:null,request:0,atlas:null,map:null,pins:new Map(),polygon:null,tilesReady:false,leaflet:null,loadingMap:false,ruleShown:true};
+const state={data:null,request:0,atlas:null,map:null,pins:new Map(),polygon:null,rocketPins:null,tilesReady:false,leaflet:null,loadingMap:false,ruleShown:true};
 const external=(href,label)=>{
  if(typeof href!=='string'||!/^https:\/\/[a-z0-9.-]+(?:\/|$)/i.test(href))return null;
  const a=document.createElement('a');a.href=href;a.target='_blank';a.rel='noopener noreferrer';a.textContent=label;return a;
@@ -72,6 +72,7 @@ function showMissions(data,expired=false){
  const pick=data.selectedLaunch?.region==='hawaii'?data.selectedLaunch:null;
  if(pick&&missions.some(m=>m.id===pick.id))select.value=pick.id;
  const selected=missions.find(m=>m.id===select.value)||null;
+ state.rocketPins?.update(missions,selected?.id);
  set('mission-name',selected?.name||'No upcoming Barking Sands launch in this bounded feed');
  set('mission-time',target(selected));
  set('mission-facility',selected?.pad?selected.pad+' · restricted facility; no public pad directions':'PMRF military range · pad unverified');
@@ -101,11 +102,13 @@ async function loadMission(id,expired=false){
   const r=await fetch(API+'?'+params.toString(),{headers:{Accept:'application/json'},signal:AbortSignal.timeout(13000)});
   if(seq!==state.request)return;
   if(r.status===404&&id&&!expired){await loadMission(null,true);return;}
-  const d=await r.json();if(!r.ok||!d?.ok||d.region?.id!=='hawaii')throw Error('PMRF national feed unavailable');
+  const d=await r.json();
+  if(seq!==state.request)return;
+  if(!r.ok||!d?.ok||d.region?.id!=='hawaii')throw Error('PMRF national feed unavailable');
   showMissions(d,expired);
  }catch{
   if(seq!==state.request)return;
-  state.data=null;$('mission-picker').disabled=true;
+  state.data=null;state.rocketPins?.update([],null);$('mission-picker').disabled=true;
   const sel=$('mission-picker');sel.replaceChildren();const op=document.createElement('option');op.textContent='Schedule unavailable';sel.appendChild(op);
   set('mission-name','Shared launch schedule unavailable');set('mission-time','Not verified');
   set('mission-facility','Military range · no public pad directions');
@@ -205,6 +208,12 @@ async function startMap(){
   popup.append(strong,message);const anchor=external(d.maritimeRule.source,'Read governing rule');if(anchor)popup.append(anchor);
   state.polygon.bindPopup(popup);if(state.ruleShown)state.polygon.addTo(map);
   bounds.push(...coords);map.fitBounds(bounds,{padding:[24,24],maxZoom:11,animate:false});
+ state.rocketPins=window.RocketMapPins?.mount(map,{
+   region:'hawaii',centers:{hawaii:{lat:22.02,lon:-159.78}},
+   onSelect:id=>{void loadMission(id);}
+ });
+ state.rocketPins?.update(state.data?.regions?.find(r=>r.id==='hawaii')?.launches||[],
+   state.data?.selectedLaunchId);
   if(typeof ResizeObserver!=='undefined')new ResizeObserver(()=>map.invalidateSize()).observe(root);
   syncRule();
   fetch('/api/carto-basemap-config',{signal:AbortSignal.timeout(6000)}).then(r=>r.ok?r.json():null).then(c=>{

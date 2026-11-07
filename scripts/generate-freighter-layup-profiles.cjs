@@ -16,10 +16,54 @@ for(const p of bios.profiles){
 }
 data.__profiles=bios.profiles;
 const check=process.argv.includes('--check');
-for(const p of bios.profiles){
+const sitemapPath=path.join(root,'public/sitemap-winter.xml');
+const sitemap=fs.readFileSync(sitemapPath,'utf8');
+const begin='  <!-- FREIGHTER_LAYUP_VESSEL_SITEMAP:START -->';
+const end='  <!-- FREIGHTER_LAYUP_VESSEL_SITEMAP:END -->';
+const vesselRoot='https://chrisizworski.com/great-lakes-freighter-winter-layup/vessels/';
+const parent='https://chrisizworski.com/great-lakes-freighter-winter-layup/';
+const today=new Date().toISOString().slice(0,10);
+const entries=[];
+const pattern=/<url><loc>(https:\/\/chrisizworski\.com\/great-lakes-freighter-winter-layup\/vessels\/([a-z0-9-]+)\/)<\/loc><lastmod>(\d{4}-\d{2}-\d{2})<\/lastmod><\/url>/g;
+const priorDates=new Map([...sitemap.matchAll(pattern)].map(x=>[x[2],x[3]]));
+if(priorDates.size&&sitemap.split(begin).length!==2)throw Error('stray vessel sitemap entries');
+for(const p of bios.profiles.slice().sort((a,b)=>a.id.localeCompare(b.id))){
  const target=path.join(root,'public/great-lakes-freighter-winter-layup/vessels',p.id,'index.html');
- const generated=renderProfile(p,data);
- if(check){if(!fs.existsSync(target)||fs.readFileSync(target,'utf8')!==generated)throw Error('stale biography '+p.id);}
- else {fs.mkdirSync(path.dirname(target),{recursive:true});fs.writeFileSync(target,generated,'utf8');}
+ const previous=priorDates.get(p.id);
+ const baseline=previous||today;
+ let generated=renderProfile(p,data,baseline);
+ const exists=fs.existsSync(target),old=exists?fs.readFileSync(target,'utf8'):null;
+ const changed=generated!==old;
+ const modified=changed?today:baseline;
+ if(modified!==baseline)generated=renderProfile(p,data,modified);
+ const canonical=vesselRoot+p.id+'/';
+ if(!generated.includes('<link rel="canonical" href="'+canonical+'">'))throw Error('biography canonical mismatch '+p.id);
+ if(check){
+  if(changed)throw Error('stale biography '+p.id);
+ }else if(changed){
+  fs.mkdirSync(path.dirname(target),{recursive:true});
+  fs.writeFileSync(target,generated,'utf8');
+ }
+ // Only a changed page receives a new lastmod; rerunning the watch is inert.
+ if(modified>today)throw Error('future sitemap lastmod '+p.id);
+ entries.push('  <url><loc>'+canonical+'</loc><lastmod>'+modified+'</lastmod></url>');
 }
-console.log((check?'Checked':'Generated')+' '+bios.profiles.length+' vessel biographies');
+let updated=sitemap;
+if(updated.includes(begin)||updated.includes(end)){
+ if(updated.split(begin).length!==2||updated.split(end).length!==2)throw Error('duplicated sitemap ownership markers');
+ updated=updated.slice(0,updated.indexOf(begin))+begin+'\n'+entries.join('\n')+'\n'+end+updated.slice(updated.indexOf(end)+end.length);
+}else{
+ const locator='<loc>'+parent+'</loc><lastmod>';
+ const at=updated.indexOf(locator);
+ if(at<0||updated.indexOf(locator,at+1)>=0)throw Error('winter atlas sitemap entry missing or duplicated');
+ const close=updated.indexOf('</url>',at);
+ if(close<0)throw Error('winter atlas sitemap URL malformed');
+ const position=close+'</url>'.length;
+ updated=updated.slice(0,position)+'\n'+begin+'\n'+entries.join('\n')+'\n'+end+updated.slice(position);
+}
+if(check){
+ if(updated!==sitemap)throw Error('winter layup vessel sitemap is stale');
+}else if(updated!==sitemap){
+ fs.writeFileSync(sitemapPath,updated,'utf8');
+}
+console.log((check?'Checked':'Generated')+' '+bios.profiles.length+' vessel biographies and sitemap URLs');

@@ -15,7 +15,9 @@ test('installed lake API serves indexed list and map modes through the hub wrapp
     assert.equal(headers['X-Robots-Tag'], 'noindex, nofollow');
     assert.equal(body.coverageComplete, true);
     if (mode === 'remote') {
-      assert.equal(body.candidateCount, 3414);
+      const index = require('ontario-fishing-lake-finder/data/trout-index.json');
+      assert.equal(body.candidateCount, index.summary.bySpecies['Brook Trout'],
+        'The runtime list must match the pinned source index rather than a stale release count');
       assert.equal(body.lakes.length, 6);
       assert.ok(body.lakes.every(lake => Number.isFinite(lake.troutFit) && lake.targetEvidence.length));
     } else {

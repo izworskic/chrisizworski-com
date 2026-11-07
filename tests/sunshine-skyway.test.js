@@ -114,4 +114,5 @@ test('V1 camera set is official and anchored to the verified FL511 Skyway camera
   assert.ok(STATIC_CAMERAS.length >= 1);
   assert.equal(STATIC_CAMERAS.every(camera => camera.official === true), true);
   assert.equal(STATIC_CAMERAS.some(camera => camera.embedUrl === 'https://fl511.com/tooltip/Cameras/2553'), true);
+  assert.equal(STATIC_CAMERAS[0].imageUrl, 'https://fl511.com/map/Cctv/2553');
 });

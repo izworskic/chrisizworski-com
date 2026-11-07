@@ -1,9 +1,11 @@
 'use strict';
 (() => {
   const API = '/api/rocket-launch-usa';
+  const OFFICIAL_EVIDENCE_API = '/api/rocket-official-notices';
+  const KSC_OFFICIAL_API = '/api/space-coast-ksc-watch';
   const $ = id => document.getElementById(id);
   const validRegions = new Set(['california', 'florida', 'texas', 'virginia', 'alaska', 'hawaii']);
-  const state = { request: 0, data: null, map: null, markers: new Map(), regions: [], userFocusedMap: false };
+  const state = { request: 0, data: null, map: null, markers: new Map(), rocketPins: null, regions: [], userFocusedMap: false, officialEvidence: null, officialEvidenceLoaded: false, kscEvidence: null, kscMissionId: null, kscRequest: 0 };
   const el = (tag, className, value) => {
     const n = document.createElement(tag);
     if (className) n.className = className;
@@ -68,6 +70,14 @@
         item.appendChild(el('strong', '', l.name || 'Upcoming mission'));
         item.appendChild(el('span', '', formattedDate(l, r.timezone) +
           ' · ' + formattedTime(l, r.timezone) + ' · ' + (l.scheduleConfidence?.label || 'Timing unconfirmed')));
+        const locate=el('button','rl-map-locate','Locate this rocket');
+        locate.type='button';
+        locate.setAttribute('aria-label','Show launch location for '+(l.name||'this mission'));
+        locate.addEventListener('click',()=>{
+          state.userFocusedMap=true;void load(r.id,l.id);
+          $('rl-coast-map')?.scrollIntoView({behavior:'smooth',block:'nearest'});
+        });
+        item.appendChild(locate);
         card.appendChild(item);
       });
       else card.appendChild(el('p', 'rl-board-empty',
@@ -130,7 +140,10 @@
         fillColor: id === r.id ? '#dc754c' : '#163f4b',
         color: '#fff', weight: id === r.id ? 3 : 2, fillOpacity: 1
       });
-      if (state.userFocusedMap) state.map.setView([match.lat, match.lon], r.id === 'hawaii' || r.id === 'alaska' ? 7 : 8, { animate: false });
+      if (state.userFocusedMap) {
+        state.map.setView([match.lat, match.lon], r.id === 'hawaii' || r.id === 'alaska' ? 7 : 8, { animate: false });
+        state.rocketPins?.focusSelected();
+      }
     }
   }
   function initMap() {
@@ -188,6 +201,15 @@
       }
       if (bounds.length) map.fitBounds(bounds, { padding: [27, 27] });
       state.map = map;
+      state.rocketPins=window.RocketMapPins?.mount(map,{
+        region:'all',
+        centers:window.RocketMapPins.centersOf(state.data.regions),
+        onSelect:(id,region)=>{
+          state.userFocusedMap=true;void load(region,id);
+          $('rl-next-title')?.scrollIntoView({behavior:'smooth',block:'start'});
+        }
+      });
+      state.rocketPins?.update(state.data.regions.flatMap(r=>r.launches||[]),state.data.selectedLaunchId);
     } catch (_) {
       root.replaceChildren(el('div', 'rl-map-fallback', 'Map tiles unavailable. The coast buttons above remain fully functional.'));
     }
@@ -855,6 +877,314 @@
     else url.searchParams.delete('launchId');
     history.replaceState(null, '', url.pathname + url.search + url.hash);
   }
+  // Python produces a signed, bounded source ledger. Client never scrapes
+  // authority websites, promotes archived orders into closures or merges
+  // raw page text into a selected LL2 mission record.
+  const officialName = {
+    'vandenberg-news':'Vandenberg / Space Force news',
+    'vandenberg-alerts':'Space Force launch-alert subscriptions',
+    'canaveral-nps':'Canaveral / NPS Playalinda policy',
+    'ksc-viewing':'Kennedy Visitor Complex viewing rules',
+    'starbase-city':'City of Starbase beach & road notices',
+    'wallops-schedule':'NASA Wallops launch schedule',
+    'wallops-range-blog':'NASA Wallops Range official articles',
+    'wallops-visitor':'NASA Wallops Visitor Center',
+    'alaska-aerospace':'Alaska Aerospace road-closure desk',
+    'alaska-news':'Alaska Aerospace operator news',
+    'pmrf-beach':'Navy / Barking Sands shoreline policy'
+  };
+  const evidenceKind = {
+    'access-status':'Published status · checked at source',
+    'road-status':'Published road report · checked at source',
+    'historical-order-index':'Previous order · not active by inference',
+    'notice-check-required':'Current notice requires official review',
+    'schedule-status':'NASA public schedule statement',
+    'access-policy':'General policy · not event clearance',
+    'source-link':'Official alert subscription',
+    'official-article':'Official article · event not independently matched',
+    'scheduled-road-activity':'Dated city transport window · not a closure'
+  };
+  function launchLocalDay(launch,timezone){
+    const stamp=Date.parse(launch?.net||'');
+    if(!Number.isFinite(stamp))return null;
+    try{
+      const parts=new Intl.DateTimeFormat('en-US',{timeZone:timezone||'UTC',
+        year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date(stamp));
+      const part=t=>parts.find(x=>x.type===t)?.value;
+      return part('year')+'-'+part('month')+'-'+part('day');
+    }catch{return null;}
+  }
+  // Existing mission-specific KSC event monitor already verifies the actual
+  // official event page and sourcePad against the selected Florida snapshot.
+  // Do NOT duplicate the scraper, infer admission or recast general policy
+  // as a launch ticket. This is a read-only same-site evidence bridge.
+  function officialKscEventUrl(value) {
+    try {
+      const u=new URL(value);
+      return u.origin==='https://www.kennedyspacecenter.com'&&
+        /^\/event\/[a-z0-9-]{5,160}\/?$/.test(u.pathname)&&
+        !u.search&&!u.hash?u.href:null;
+    }catch{return null;}
+  }
+  function renderKscMission(data){
+    const root=$('rl-ksc-official-viewing');
+    if(!root)return;
+    const florida=data?.region?.id==='florida';
+    root.hidden=!florida;
+    if(!florida)return;
+    root.replaceChildren();
+    root.appendChild(el('span','rl-match-eyebrow','FLORIDA · KENNEDY VISITOR COMPLEX'));
+    const launch=data?.selectedLaunch;
+    if(!launch?.id||data.scheduleFreshness!=='recent'){
+      root.dataset.status='unknown';
+      root.appendChild(el('h3','','KSC event cannot be linked without a recent mission'));
+      root.appendChild(el('p','','A mission and a recent schedule are needed before checking specific Kennedy Space Center visitor viewing arrangements.'));
+      return;
+    }
+    const evidence=state.kscMissionId===launch.id?state.kscEvidence:null;
+    if(!evidence){
+      root.dataset.status='unknown';
+      root.appendChild(el('h3','',state.kscMissionId===launch.id?'Checking the KSC verified-event watcher':'Looking for KSC event-specific viewing notices'));
+      root.appendChild(el('p','','The Kennedy visitor-complex source is independent of the Python government news matcher. No tickets or public access are implied.'));
+      return;
+    }
+    const health=evidence.health||{},timeline=evidence.timeline||{};
+    const source=officialKscEventUrl(timeline.officialSourceUrl);
+    const day=launchLocalDay(launch,'America/New_York');
+    const target=timeline.officialEventDate;
+    const dateGap=day&&target?Math.abs((Date.parse(day+'T12:00:00Z')-Date.parse(target+'T12:00:00Z'))/86400000):Infinity;
+    const valid=evidence.ok===true&&evidence.selectedLaunchId===launch.id&&
+      (health.status==='checked'||health.status==='partial')&&
+      timeline.verifiedPageIsRecent===true&&source&&dateGap<=1;
+    if(valid){
+      root.dataset.status='matched';
+      root.appendChild(el('h3','','KSC published a viewing event for this mission'));
+      root.appendChild(el('p','rl-match-heading','Official event date: '+target+
+        ' · Mission designation: '+timeline.missionMarker));
+      root.appendChild(el('p','rl-match-meta','Official page last verified: '+
+        stamp(timeline.officialPageLastVerifiedAt)+' · Watcher: '+health.status));
+      root.appendChild(el('p','rl-match-caution',
+        'A matched KSC event is not admission. Check current ticket offers, viewing location availability, visitor-center entry, launch-specific closures and delay rules on the original page before purchasing or traveling.'));
+      const link=anchor(source,'Inspect official KSC event and ticket conditions');
+      if(link)root.appendChild(link);
+    }else{
+      root.dataset.status='unverified';
+      root.appendChild(el('h3','','No current KSC viewing event verified for this mission'));
+      const overdue=health.status==='overdue'||health.status==='not-initialized'||!evidence.ok;
+      root.appendChild(el('p','',overdue?
+        'The KSC event watcher is overdue or unavailable. A missing verification is not evidence that visitor viewing will be closed.':
+        'The watcher has not verified a current, exact-mission KSC viewing event with compatible date and source. General visitor hours are not launch-day viewing availability.'));
+      root.appendChild(el('p','rl-match-meta','Last KSC source check: '+
+        stamp(health.lastCalendarCheckedAt)+'.'));
+      const link=anchor(health.calendarUrl,'Open Kennedy’s official events calendar');
+      if(link)root.appendChild(link);
+    }
+    const specialist=anchor(floridaSpecialistLink('/national-tools/space-coast-launch/',data),
+      'Open detailed Florida viewing and ticket desk');
+    if(specialist)root.appendChild(specialist);
+  }
+  async function loadKscMission(data){
+    const sequence=++state.kscRequest;
+    const id=data?.selectedLaunch?.id;
+    const use=data?.region?.id==='florida'&&data.scheduleFreshness==='recent'&&
+      /^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i.test(id||'');
+    state.kscEvidence=null;
+    state.kscMissionId=use?id:null;
+    renderKscMission(data);
+    if(!use)return;
+    try{
+      const response=await fetch(KSC_OFFICIAL_API+'?launchId='+encodeURIComponent(id),
+        {headers:{Accept:'application/json'},signal:AbortSignal.timeout(9500)});
+      if(!response.ok)throw new Error('ksc-event-source-not-available');
+      const result=await response.json();
+      if(sequence!==state.kscRequest)return;
+      if(result?.ok!==true||result.selectedLaunchId!==id)throw new Error('ksc-event-mismatch');
+      state.kscEvidence=result;
+    }catch{
+      if(sequence!==state.kscRequest)return;
+      state.kscEvidence={ok:false,selectedLaunchId:id,health:{status:'overdue'},
+        timeline:null};
+    }
+    if(state.data?.selectedLaunch?.id===id&&state.data?.region?.id==='florida')
+      renderKscMission(state.data);
+  }
+
+  function renderOfficialEventCoverage(root,reconciliation,region){
+    const records=(reconciliation?.sourceStatus||[]).filter(x=>x.region===region);
+    if(!records.length)return;
+    const sourceNames={
+      'vandenberg-launch-news':'Vandenberg newsroom',
+      'spaceforce-news-rss':'Federal Space Force RSS',
+      'wallops-range-blog':'NASA Wallops blog'
+    };
+    root.appendChild(el('p','rl-match-coverage',
+      'Official launch-announcement channels checked: '+records.map(x=>
+        (sourceNames[x.id]||x.id)+' '+(
+          x.status==='retrieved'?'retrieved':
+          x.status==='partial'?'partially checked':'unavailable'
+        )).join(' · ')+'. A retrieved source without an exact match is not a cancellation.'));
+  }
+
+  function renderOfficialMatch(data) {
+    const root=$('rl-mission-official-match');
+    if(!root)return;
+    root.replaceChildren();
+    root.appendChild(el('span','rl-match-eyebrow','EVENT-SPECIFIC SOURCE RECONCILIATION'));
+    const rec=state.officialEvidence?.reconciliation;
+    const launch=data?.selectedLaunch;
+    if(!launch?.id){
+      root.dataset.status='unknown';
+      root.appendChild(el('h3','','No mission selected'));
+      root.appendChild(el('p','','Choose a scheduled mission to compare its exact designation and local date with a published government or range-operator announcement.'));
+      return;
+    }
+    const fresh=state.officialEvidence?.health==='recent'&&
+      rec?.health!=='unavailable-or-stale'&&rec?.manifestCheckedAt&&
+      data.scheduleFreshness==='recent';
+    const match=fresh?rec?.matches?.find(m=>m.launchId===launch.id&&m.region===data.region?.id):null;
+    const day=launchLocalDay(launch,data.region?.timezone);
+    const dateGap=match&&day&&match.officialEventDate?
+      Math.abs((Date.parse(day+'T12:00:00Z')-Date.parse(match.officialEventDate+'T12:00:00Z'))/86400000):Infinity;
+    if(match&&dateGap<=1&&['exact-designation-and-local-date','official-rss-exact-designation-and-local-date'].includes(match.matchRule)){
+      root.dataset.status='matched';
+      root.appendChild(el('h3','',match.matchRule==='official-rss-exact-designation-and-local-date'?
+        'Official Space Force RSS announcement matched':'Official event article matched to this mission'));
+      root.appendChild(el('p','rl-match-heading',match.noticeTitle));
+      const meta=el('p','rl-match-meta','Exact designation: '+match.missionMarker+
+        ' · Published event date: '+match.officialEventDate+
+        (match.publishedDate?' · Article published: '+match.publishedDate:' · Article publication date unavailable')+
+        ' · Matched at '+stamp(rec.checkedAt));
+      root.appendChild(meta);
+      root.appendChild(el('p','rl-match-caution',
+        (match.matchRule==='official-rss-exact-designation-and-local-date' ?
+          'The exact mission, future launch date and Vandenberg range are attested by an official Space Force RSS summary; the linked full article may be inaccessible. ' :
+          'The exact mission and launch date are present in the original official article. ')+
+        'This does not confirm liftoff time, ticket inventory, public viewing access, range safety GO, road opening or maritime clearance.'));
+      const link=anchor(match.articleUrl,'Read original official event article');
+      if(link)root.appendChild(link);
+      const changes=(rec.history||[]).filter(x=>x.launchId===launch.id).slice(0,2);
+      for(const change of changes)root.appendChild(el('p','rl-match-change',
+        change.type==='official-link-first-verified'?
+        'First verified official link recorded '+stamp(change.detectedAt)+'.':
+        'Official evidence changed '+stamp(change.detectedAt)+'. Recheck the latest operator announcement.'));
+      renderOfficialEventCoverage(root,rec,data.region?.id);
+      return;
+    }
+    root.dataset.status='unverified';
+    root.appendChild(el('h3','','No mission-specific official article matched'));
+    const unavailable=state.officialEvidenceLoaded!==true||!rec||
+      rec.health==='schedule-unavailable'||rec.health==='unavailable-or-stale'||
+      data.scheduleFreshness!=='recent';
+    root.appendChild(el('p','',unavailable?
+      'One or more source or schedule observations are unavailable or overdue. No reliable mission-to-article comparison can be made.':
+      dateGap!==Infinity?
+      'The national mission target differs from the last matched official article date. Verify the current operator statement before planning travel.':
+      'This source scan found no unambiguous official article naming this exact mission inside a compatible launch window. A missing match does not mean the launch is canceled, unannounced, or inaccessible.'));
+    const official=anchor(data.region?.authority,'Check current range authority');
+    if(official)root.appendChild(official);
+    renderOfficialEventCoverage(root,rec,data.region?.id);
+  }
+
+  function renderOfficialEvidence(data) {
+    const root = $('rl-evidence-sources');
+    if (!root) return;
+    renderOfficialMatch(data);
+    root.replaceChildren();
+    const current = data?.region?.id;
+    const feed = state.officialEvidence;
+    if (!current || !validRegions.has(current)) {
+      set('rl-evidence-status','Select a coast to inspect official evidence.');
+      return;
+    }
+    const records = feed?.regions?.[current] || [];
+    if (!records.length) {
+      set('rl-evidence-status',state.officialEvidenceLoaded ?
+        'Official source snapshot unavailable · do not infer an open range':
+        'Awaiting the independently scheduled source check');
+      set('rl-evidence-checked',state.officialEvidenceLoaded ?
+        'No independently checked source snapshot is available. Follow the authority link in the coast panel; official access is unverified.' :
+        'The collector is loading. No source observation is assumed current.');
+      const fallback = el('p','rl-evidence-none',
+        'No verified event-specific evidence in this source desk. A launch calendar is not an access approval.');
+      root.appendChild(fallback);
+      const official = anchor(data.region?.authority,'Open the selected coast’s official launch authority');
+      if (official) root.appendChild(official);
+      return;
+    }
+    const fresh = feed.health === 'recent';
+    const available = records.filter(r=>r.status==='retrieved').length;
+    set('rl-evidence-status',fresh ?
+      available+' of '+records.length+' sources verified for this coast' :
+      'Official notice observations '+(feed.health==='late'?'overdue':'stale')+' · verify directly');
+    set('rl-evidence-checked','Python source scan: '+stamp(feed.checkedAt)+'. '+
+      'A check timestamp is not a launch-event date or authorization. '+(
+        fresh ? 'Published statuses are only valid at source-check time.' :
+        'Current access statements have been suppressed until the next successful refresh.'));
+    for (const src of records) {
+      const article = el('article','rl-evidence-card');
+      article.dataset.status=src.status;
+      const top=el('div','rl-evidence-card-head');
+      top.appendChild(el('strong','',officialName[src.id]||'Official regional source'));
+      const marker=el('span','rl-evidence-marker',
+        src.status==='unavailable'?'Source unreachable':
+          src.status==='limited'?'Partial parsing':
+            fresh?'Source retrieved':'Source overdue');
+      marker.dataset.status=src.status;
+      top.appendChild(marker);article.appendChild(top);
+      const signals=(src.signals||[]).slice(0,4);
+      if(!signals.length)article.appendChild(el('p','rl-evidence-empty',
+        src.status==='unavailable'?'Source could not be retrieved. No opening, closure or launch can be inferred.':
+        'No independently supported event-specific status extracted from this official page.'));
+      for (const notice of signals) {
+        const note=el('div','rl-evidence-signal');
+        note.appendChild(el('span','rl-evidence-type',
+          evidenceKind[notice.kind]||'Official-source observation'));
+        note.appendChild(el('strong','',notice.title));
+        note.appendChild(el('p','',notice.detail));
+        // A transport movement may affect travel planning, but is not a
+        // mayoral closure or mission launch authorization. Only compare
+        // intervals when both the city scan and precise LL2 target are fresh.
+        const launch=data?.selectedLaunch;
+        if(notice.kind==='scheduled-road-activity'&&current==='texas'&&fresh&&
+          data.scheduleFreshness==='recent'&&
+          ['minute','second'].includes(launch?.netPrecision)){
+          const target=Date.parse(launch.net||'');
+          const from=Date.parse(notice.windowStart||'');
+          const through=Date.parse(notice.windowEnd||'');
+          if(Number.isFinite(target)&&Number.isFinite(from)&&Number.isFinite(through)&&
+            target>=from&&target<=through){
+            const warning=el('p','rl-evidence-change',
+              'Travel timing overlap: this city-listed movement window overlaps the selected mission’s current published target time. Confirm Highway 4 conditions directly. This is not an active closure, launch approval or viewing permission.');
+            note.appendChild(warning);
+          }
+        }
+        const link=anchor(notice.sourceUrl,'Read original official source');
+        if(link)note.appendChild(link);
+        article.appendChild(note);
+      }
+      if(src.changedSinceLastCheck===true)article.appendChild(el('p','rl-evidence-change',
+        'Normalized official evidence changed since the preceding successful scan; this does not establish a closure or a launch change.'));
+      const source=anchor(src.sourceUrl,'Open source for current rules','rl-evidence-origin');
+      if(source)article.appendChild(source);
+      root.appendChild(article);
+    }
+  }
+  async function loadOfficialEvidence() {
+    try {
+      const response=await fetch(OFFICIAL_EVIDENCE_API,{
+        headers:{Accept:'application/json'},signal:AbortSignal.timeout(12000)});
+      if(!response.ok)throw new Error('evidence-source-unavailable');
+      const result=await response.json();
+      if(result?.ok!==true||result.version!==1||!result.regions)
+        throw new Error('invalid-evidence');
+      state.officialEvidence=result;
+    }catch{
+      state.officialEvidence=null;
+    }
+    state.officialEvidenceLoaded=true;
+    if(state.data)renderOfficialEvidence(state.data);
+  }
+
   function render(data) {
     state.data = data;
     state.regions = data.regions || [];
@@ -863,6 +1193,7 @@
     const texasNav = $('rl-nav-starbase');
     if (texasNav) texasNav.href = floridaSpecialistLink('/starbase-rocket-launch-viewing/',data);
     initMap();
+    state.rocketPins?.update(data.regions.flatMap(r=>r.launches||[]),data.selectedLaunchId);
     showRegion(data.region);
     renderMission(data);
     renderMediaDesk(data);
@@ -874,6 +1205,8 @@
     renderSlipForecast(data);
     renderLaunchWeather(data);
     renderOfficial45ws(data);
+    renderOfficialEvidence(data);
+    void loadKscMission(data);
     board();
     document.dispatchEvent(new CustomEvent('rocket-viewing:data',{detail:data}));
     const coverage = data.coverage || {};
@@ -906,6 +1239,11 @@
       syncUrl(data.selectedRegion, data.selectedLaunchId);
     } catch (err) {
       if (sequence !== state.request) return;
+      // A previously selected mission may have vanished or the shared source
+      // may be offline. Retaining clickable old rockets would imply a current
+      // schedule after this request has explicitly failed.
+      state.rocketPins?.update([],null);
+      state.data=null;
       document.dispatchEvent(new CustomEvent('rocket-truth:mission-selected',
         {detail:{launchId:null}}));
       document.dispatchEvent(new CustomEvent('rocket-viewing:data',{detail:null}));
@@ -946,8 +1284,14 @@
   document.querySelectorAll('.rl-region-btn[data-region]').forEach(b =>
     b.addEventListener('click', () => changeRegion(b.dataset.region)));
   $('rl-launch-select')?.addEventListener('change', event => {
-    const id = event.target.value;
-    if (id) load(state.data?.selectedRegion, id);
+    const id=event.target.value;
+    if(id){state.userFocusedMap=true;void load(state.data?.selectedRegion,id);}
+  });
+  document.addEventListener('rocket-map:choose-mission',event=>{
+    const id=event.detail?.launchId,region=event.detail?.region;
+    if(validRegions.has(region)&&state.data?.regions.some(r=>(r.launches||[]).some(m=>m.id===id&&m.region===region))){
+      state.userFocusedMap=true;void load(region,id);
+    }
   });
   const initial = new URL(location.href);
   const region = validRegions.has(initial.searchParams.get('region')) ?
@@ -956,5 +1300,6 @@
   const launch = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
     initial.searchParams.get('launchId') || '') ? initial.searchParams.get('launchId') : null;
   loadVisualCatalog();
+  void loadOfficialEvidence();
   load(region, launch);
 })();

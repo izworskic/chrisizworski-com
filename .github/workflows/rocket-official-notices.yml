@@ -1,0 +1,117 @@
+name: Rocket six-region Python official notice intelligence
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/rocket-official-notices.yml'
+      - 'scripts/rocket_official_notices.py'
+      - 'scripts/rocket_official_matcher.py'
+      - 'scripts/test_rocket_official_matcher.py'
+      - 'scripts/test_rocket_official_rss.py'
+      - 'tests/rocket-official-rss-ksc.test.js'
+      - 'lib/rocket-official-notices.js'
+      - 'api/rocket-official-notices.js'
+      - 'public/synced-national-tools/rocket-launch-live/app.js'
+      - 'tests/rocket-official-notices.test.js'
+  schedule:
+    # GitHub hosted schedules are best effort. The public UI reports overdue
+    # observations instead of claiming a guaranteed 24/7 source monitor.
+    - cron: '19,49 * * * *'
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: rocket-python-official-notice-watch
+  cancel-in-progress: false
+
+jobs:
+  refresh-official-range-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 13
+    steps:
+      - uses: actions/checkout@v4
+      - name: Python cross-region safety and classification regression
+        run: python3 scripts/rocket_official_notices.py --test
+      - name: Python official event-to-mission reconciliation and abstention gates
+        run: python3 -m unittest discover -s scripts -p test_rocket_official_matcher.py -v
+      - name: Python federal Space Force RSS source-failure and exact-mission tests
+        run: python3 -m unittest discover -s scripts -p test_rocket_official_rss.py -v
+      - name: Verify live API route is deployed (only on new release)
+        if: github.event_name == 'push'
+        run: |
+          # A generic version-1 GET already existed before this release.
+          # Wait for the NEW compact mission-manifest route before fetching it.
+          # Otherwise a push job races the Vercel production deployment and
+          # treats the old release's valid JSON as proof of readiness.
+          # Both the manifest API AND this release's public client must be live.
+          # A generic version-1 manifest is insufficient because the earlier
+          # backend rejects the newly added third official event source.
+          for attempt in $(seq 1 50); do
+            if curl --fail --silent --show-error --max-time 8 \
+              'https://chrisizworski.com/api/rocket-official-notices?manifest=1' |
+              jq -e '.ok==true and .version==1 and
+                .source=="shared-postgres-ll2-national-v2" and
+                (.missions|type=="array")' >/dev/null &&
+              curl --fail --silent --show-error --max-time 10 \
+                -H 'Cache-Control: no-cache' \
+                "https://chrisizworski.com/national-tools/rocket-launch-live/?release-probe=${GITHUB_SHA}" \
+                > "$RUNNER_TEMP/rocket-release-probe.html" &&
+              grep -Fq '20261106-official-rss-ksc-v1-starbase-road-v1-wallops-blog-v1' \
+                "$RUNNER_TEMP/rocket-release-probe.html"; then
+              exit 0
+            fi
+            sleep 10
+          done
+          echo 'The deployed mission manifest is not yet available with the eleven-source Wallops Blog release. Do not publish against the old API.'
+          exit 1
+      - name: Retrieve bounded same-site mission manifest (not an LL2 fetch)
+        run: |
+          curl --fail-with-body --silent --show-error \
+            --retry 2 --retry-all-errors --max-time 20 \
+            'https://chrisizworski.com/api/rocket-official-notices?manifest=1' \
+            > "$RUNNER_TEMP/rocket-national-mission-manifest.json"
+          jq -e '.ok==true and .version==1 and
+            (.source=="shared-postgres-ll2-national-v2") and
+            (.missions|type=="array")' \
+            "$RUNNER_TEMP/rocket-national-mission-manifest.json" >/dev/null
+      - name: Collect official source and event-linked evidence with Python
+        run: |
+          python3 scripts/rocket_official_notices.py --collect \
+            --mission-manifest "$RUNNER_TEMP/rocket-national-mission-manifest.json" \
+            --output "$RUNNER_TEMP/rocket-official-notices.json"
+          jq -e '.version==1 and .sourceCount==11 and
+            (.regions|keys|length)==6 and
+            .availableSources>=2' "$RUNNER_TEMP/rocket-official-notices.json" >/dev/null
+      - name: Mint short-lived repository/workflow scoped OIDC identity
+        uses: actions/github-script@v7
+        id: oidc
+        with:
+          script: |
+            const token=await core.getIDToken('https://chrisizworski.com/api/rocket-official-notices');
+            core.setSecret(token);
+            core.setOutput('token',token);
+      - name: Publish verified compact evidence to existing Postgres-backed ToolState
+        env:
+          ROCKET_NOTICE_TOKEN: ${{ steps.oidc.outputs.token }}
+        run: |
+          result="$(curl --fail-with-body --silent --show-error \
+            --retry 1 --retry-all-errors --max-time 40 \
+            -X POST -H "Authorization: Bearer ${ROCKET_NOTICE_TOKEN}" \
+            -H "Content-Type: application/json" \
+            --data-binary @"$RUNNER_TEMP/rocket-official-notices.json" \
+            'https://chrisizworski.com/api/rocket-official-notices')"
+          printf '%s' "$result" |
+            jq -e '.ok==true and .version==1 and
+              .sourceCount==11 and .availableSources>=2' >/dev/null
+          printf '%s' "$result" | jq '{checkedAt,sourceCount,availableSources,changedSources}'
+      - name: Verify public evidence display endpoint (not launch permission)
+        run: |
+          curl --fail --silent --show-error --max-time 15 \
+            'https://chrisizworski.com/api/rocket-official-notices?region=texas' |
+            jq -e '.ok==true and .version==1 and
+              .health!="unavailable" and
+              (.regions.texas|length)==1' >/dev/null

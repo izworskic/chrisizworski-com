@@ -726,4 +726,41 @@
       <image:title>White Christmas 2026 local snow probability</image:title>
     </image:image>
   </url>
+  <!-- FREIGHTER_LAYUP_IMAGE_SITEMAP:START -->
+  <url>
+    <loc>https://chrisizworski.com/great-lakes-freighter-winter-layup/</loc>
+    <image:image>
+      <image:loc>https://chrisizworski.com/assets/freighter-winter-hero.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://chrisizworski.com/great-lakes-freighter-winter-layup/vessels/lee-a-tregurtha/</loc>
+    <image:image>
+      <image:loc>https://chrisizworski.com/assets/freighter-lee-feature.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://chrisizworski.com/great-lakes-freighter-winter-layup/vessels/james-r-barker/</loc>
+    <image:image>
+      <image:loc>https://chrisizworski.com/assets/freighter-barker-feature.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://chrisizworski.com/great-lakes-freighter-winter-layup/vessels/american-spirit/</loc>
+    <image:image>
+      <image:loc>https://chrisizworski.com/assets/freighter-american-feature.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://chrisizworski.com/great-lakes-freighter-winter-layup/vessels/oakglen/</loc>
+    <image:image>
+      <image:loc>https://chrisizworski.com/assets/freighter-oakglen-feature.jpg</image:loc>
+    </image:image>
+  </url>
+  <!-- FREIGHTER_LAYUP_IMAGE_SITEMAP:END -->
+
+  <!-- SEAWAY_IMAGE_SITEMAP:START -->
+  <url><loc>https://chrisizworski.com/st-lawrence-seaway/</loc><image:image><image:loc>https://chrisizworski.com/assets/seaway/eisenhower-deck.jpg</image:loc></image:image></url>
+  <url><loc>https://chrisizworski.com/eisenhower-lock/</loc><image:image><image:loc>https://chrisizworski.com/assets/seaway/eisenhower-deck.jpg</image:loc></image:image></url>
+  <!-- SEAWAY_IMAGE_SITEMAP:END -->
 </urlset>

@@ -12,7 +12,7 @@ test('batch51: three source-verified identities cannot create unsafe arrival dir
  const path='/upper-peninsula-waterfalls/research/'+slug+'/';assert.equal(v.researchPage,path);assert.ok(!map.includes(path));const page=fs.readFileSync('public'+path+'index.html','utf8');assert.match(page,/noindex,follow/);assert.match(page,/NOT CLEARED FOR AUTOMATED VISITOR NAVIGATION/);assert.match(page,/Built by Chris Izworski/);const desc=(page.match(/<meta name="description" content="([^"]*)">/)||[])[1];assert.ok(desc&&desc.length<=158,'description too long '+id);
  const tag='<script type="application/ld+json">',start=page.indexOf(tag);assert.ok(start>=0);const j=JSON.parse(page.slice(start+tag.length,page.indexOf('</script>',start)));assert.equal(j['@type'],'WebPage');assert.equal(j.author['@id'],'https://chrisizworski.com/#person');assert.doesNotMatch(page,/"@type":"TouristAttraction"/);
  }
- assert.ok(V.records.length>=84);assert.equal(R.counts.curatedTotal,75);assert.equal(R.counts.exactIdMatched,68);assert.equal(R.counts.pending,93);assert.equal(L.unresolvedCandidates,93);assert.equal(Q.candidates.length,93);
+ assert.ok(V.records.length>=84);assert.equal(R.counts.curatedTotal,78);assert.equal(R.counts.exactIdMatched,69);assert.equal(R.counts.pending,92);assert.equal(L.unresolvedCandidates,92);assert.equal(Q.candidates.length,92);
  const trap=R.candidates.find(x=>x.gisObjectId===84),iron=R.candidates.find(x=>x.gisObjectId===106),pew=R.candidates.find(x=>x.gisObjectId===122);
  assert.match(trap.sourceNotes,/93 metres/);assert.match(trap.sourceNotes,/13.16 km/);
  assert.match(iron.sourceNotes,/13.00 km/);assert.match(iron.sourceNotes,/1956/);assert.match(iron.sourceNotes,/Pewabeck/);

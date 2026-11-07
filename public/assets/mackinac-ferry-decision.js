@@ -17,7 +17,7 @@
     const futureDate=(()=>{if(!/^\d{4}-\d{2}-\d{2}$/.test(date))return "";const d=new Date(date+"T12:00:00");if(Number.isNaN(d.getTime()))return "";d.setDate(d.getDate()+nights);const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,"0"),day=String(d.getDate()).padStart(2,"0");return y+"-"+m+"-"+day;})();
     if(!date||!futureDate)return {status:"invalid",message:"Choose a valid trip date."};
     if(date<start||date>end||futureDate>end){
-      return {status:"season",message:date>"2026-12-31"?"2027 fares and scheduled departures have not been verified. Please use the operator's current booking and schedule pages.":date> end?"The published 2026 summer fast-ferry season ends October 31. Arnold lists winter service from the St. Ignace Classic Dock, but the winter timetable and fares must be checked directly.":"These published fares cover trips entirely inside the 2026 April 21–October 31 fast-ferry season. Confirm the exact off-season crossing with the operator.",options:[]};
+      return {status:"season",message:date>"2026-12-31"?"Fares and scheduled departures for the chosen year have not been verified. Please use the operator's current booking and schedule pages.":date> end?"The published 2026 summer fast-ferry season ends October 31. Arnold lists winter service from the St. Ignace Classic Dock, but the winter timetable and fares must be checked directly.":"These published fares cover trips entirely inside the 2026 April 21–October 31 fast-ferry season. Confirm the exact off-season crossing with the operator.",options:[]};
     }
     const options=[];
     for(const port of ["mackinaw","stignace"]){
@@ -143,6 +143,7 @@
     }catch(err){if(requestId===activeRequest&&service===el("ferry-service-data"))service.textContent="Schedule lookup unavailable. Please use the official schedule links for your operator.";}
     finally{if(requestId===activeRequest&&button.isConnected)button.disabled=false;}
   });
+  if(!el("ferry-date").value){const today=new Date();el("ferry-date").value=[today.getFullYear(),String(today.getMonth()+1).padStart(2,"0"),String(today.getDate()).padStart(2,"0")].join("-");}
   form.addEventListener("submit",function(e){e.preventDefault();render();results.scrollIntoView({behavior:"smooth",block:"start"});});
   form.addEventListener("change",render);
   render();

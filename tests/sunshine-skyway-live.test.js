@@ -44,6 +44,7 @@ test('camera adapter prefers the FL511 videoUrl for the embedded viewer', () => 
   assert.equal(rows[0].official, true);
   assert.equal(rows[0].embedUrl, 'https://example.test/fl511-skyway-video');
   assert.equal(rows[0].sourceUrl, 'https://fl511.com/tooltip/Cameras/2553');
+  assert.equal(rows[0].imageUrl, 'https://fl511.com/map/Cctv/2553');
 });
 
 test('Skyway Bridge View wins over generic nearby Skyway cameras', () => {
@@ -59,4 +60,15 @@ test('Skyway Bridge View wins over generic nearby Skyway cameras', () => {
 test('public API is wired to the live FL511 adapter', () => {
   const api = fs.readFileSync(path.join(__dirname, '..', 'api', 'sunshine-skyway.js'), 'utf8');
   assert.match(api, /sunshine-skyway-live/);
+});
+
+test('FL511 camera data without a stream still supplies a real image, never tooltip iframe as image', () => {
+  const cameras = normalizeCameraRows({ data: [
+    { id: '2553', description2: 'Skyway Bridge View', roadway: 'I-275' }
+  ] });
+  assert.equal(cameras.length, 1);
+  assert.equal(cameras[0].imageUrl, 'https://fl511.com/map/Cctv/2553');
+  assert.equal(cameras[0].videoUrl, null);
+  assert.equal(cameras[0].sourceUrl, 'https://fl511.com/tooltip/Cameras/2553');
+  assert.match(cameras[0].note, /camera image/i);
 });

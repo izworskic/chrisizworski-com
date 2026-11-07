@@ -1,0 +1,131 @@
+{
+  "schemaVersion": "1.2",
+  "recordStatus": "draft",
+  "project": {
+    "slug": "sunshine-skyway",
+    "ownerRepo": "izworskic/chrisizworski-com",
+    "canonical": "https://chrisizworski.com/sunshine-skyway-bridge/",
+    "pageFile": "public/sunshine-skyway-bridge/index.html",
+    "visitorDecision": "Determine a source-grounded next step for a northbound or southbound Sunshine Skyway crossing without guessing conditions.",
+    "primaryAction": "Confirm directly on FL511 or compare a qualified Tampa Bay alternative corridor when the crossing is affected."
+  },
+  "claims": [
+    {
+      "id": "fl511-operational-evidence",
+      "kind": "official-reference",
+      "subject": "other",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://fl511.com/",
+      "checkedDate": "2026-11-05",
+      "limitation": "No closure signal found is not an affirmative declaration that the bridge is currently open and safe."
+    },
+    {
+      "id": "nws-context-only",
+      "kind": "forecast",
+      "subject": "weather-context",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://forecast.weather.gov/MapClick.php?FcstType=digital&lat=27.61&lon=-82.65&unit=0",
+      "checkedDate": "2026-11-05",
+      "maxAgeMinutes": 120,
+      "limitation": "Wind forecasts never create FDOT bridge closure states or legal vehicle bans."
+    },
+    {
+      "id": "example-not-official-detour",
+      "kind": "unverified",
+      "subject": "route-guidance",
+      "state": "UNVERIFIED",
+      "sourceUrl": "https://fl511.com/map",
+      "checkedDate": "2026-11-05",
+      "limitation": "Howard Frankland, I-4 and I-75 are an illustrative alternate corridor, not a current official detour or verified ETA."
+    }
+  ],
+  "decisionState": {
+    "selectedIdField": "direction plus vehicle allowlisted native selections",
+    "sourceOfTruth": "FL511 /api/sunshine-skyway operational snapshot, interpreted by pure SkywayCompanion browser helper.",
+    "linkedSurfaces": [
+      "answer",
+      "choice-controls",
+      "weather-outlook",
+      "alternate-route",
+      "shareable-url",
+      "source-panel"
+    ],
+    "unavailableBehavior": "State UNKNOWN, preserve official FL511 source action, never invent closure, open status or route time."
+  },
+  "scenarios": [
+    {
+      "kind": "initial",
+      "input": "Northbound and car",
+      "expectedVisibleAnswer": "Official status and next move, with an explicitly illustrative northbound bypass sequence.",
+      "sourceAndSafety": "Operational answer comes from FL511, never from wind."
+    },
+    {
+      "kind": "alternative",
+      "input": "Southbound and RV with forecast wind",
+      "expectedVisibleAnswer": "Vehicle-dependent caution with reversed I-275, I-4 and I-75 example legs.",
+      "sourceAndSafety": "No invented official detour or legal restriction."
+    },
+    {
+      "kind": "reverse",
+      "input": "Return to northbound from southbound",
+      "expectedVisibleAnswer": "Northbound steps, route comparison and share link restore their initial direction.",
+      "sourceAndSafety": "Same operational snapshot remains authoritative."
+    },
+    {
+      "kind": "no-js",
+      "input": "Disable JavaScript",
+      "expectedVisibleAnswer": "Readable source handoff with clearly unverified current status.",
+      "sourceAndSafety": "Static HTML never claims a live road report."
+    },
+    {
+      "kind": "no-tiles",
+      "input": "Block external map tiles",
+      "expectedVisibleAnswer": "Text corridor and official FL511 map link remain available.",
+      "sourceAndSafety": "No unverified embedded route geometry is rendered."
+    },
+    {
+      "kind": "stale-data",
+      "input": "Expire or fail operational feeds",
+      "expectedVisibleAnswer": "Unknown-status next move and an actionable link to FL511.",
+      "sourceAndSafety": "Stale sources and NWS context never create an OPEN state."
+    }
+  ],
+  "failures": {
+    "no-js": "Keep official FL511 check available from the static page, with a clear unknown-status message.",
+    "no-tiles": "No custom map tiles; keep accessible textual bypass steps and official FL511 map link.",
+    "no-image": "Keep dark hero gradient and plain status text without introducing any extra image dependency.",
+    "stale-data": "Show UNKNOWN and official check; avoid any live-slowdown claim from degraded traffic tiles."
+  },
+  "qa": {
+    "viewports": [
+      360,
+      390,
+      768,
+      1440
+    ],
+    "browserStatus": "PENDING",
+    "screenshotEvidence": [],
+    "scopeNote": "Browser captures and exact CI verification have not yet been reviewed."
+  },
+  "photos": [],
+  "release": {
+    "implemented": {
+      "status": "CONFIRMED",
+      "checkedDate": "2026-11-05",
+      "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/pull/1521"
+    },
+    "verified": {
+      "status": "PENDING"
+    },
+    "deployed": {
+      "status": "PENDING"
+    },
+    "live": {
+      "status": "NOT_VERIFIED"
+    },
+    "measured": {
+      "status": "NOT_MEASURED"
+    }
+  },
+  "verificationLimit": "Draft research and implementation plan; current release and visitor/search outcomes are unverified."
+}

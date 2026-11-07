@@ -62,5 +62,6 @@ test('loading, source failure, filtered results and a checked quiet river have d
   assert.match(C.emptyReportState({loading:true}).title,/Checking/);
   assert.match(C.emptyReportState({unavailable:true,filtered:true}).text,/cannot check/);
   assert.match(C.emptyReportState({filtered:true}).title,/wider search/);
-  assert.match(C.emptyReportState().text,/quiet receiver/);
+  assert.match(C.emptyReportState().text,/Receiver coverage here is not verified/);
+  assert.match(C.emptyReportState().text,/does not establish whether ships are present/);
 });

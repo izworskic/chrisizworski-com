@@ -431,3 +431,71 @@ button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid #dc7
 .rl-vandenberg-popup strong{font-size:12px}.rl-vandenberg-popup p{font-size:11px;margin:6px 0}
 @media(max-width:980px){.rl-vandenberg-workspace{grid-template-columns:1fr}.rl-vandenberg-map{height:360px}.rl-vandenberg-controls{grid-template-columns:1fr}}
 @media(max-width:610px){.rl-vandenberg{padding:15px;margin:10px 0;border-radius:13px}.rl-vandenberg-header{display:block}.rl-vandenberg-state{margin-top:12px}.rl-vandenberg-map{height:300px}.rl-vandenberg-buttons button{flex:1 0 auto}.rl-vandenberg-facts{gap:8px}.rl-vandenberg-card-top{flex-wrap:wrap}.rl-vandenberg-focus{margin-left:auto}}
+
+
+/* Source-governed evidence desk: never style an observation as range clearance. */
+.rl-official-evidence{scroll-margin-top:30px;margin:40px 0 64px}
+.rl-evidence-summary{background:#163d4a;color:#f4f8f6;border-radius:15px;padding:23px 26px;display:flex;justify-content:space-between;gap:28px;align-items:center}
+.rl-evidence-kicker{font-size:10px;letter-spacing:.13em;font-weight:800;color:#f5bf90;display:block;margin-bottom:8px}
+.rl-evidence-summary strong{font-family:var(--serif);font-size:clamp(19px,2.2vw,28px);display:block;line-height:1.32}
+.rl-evidence-summary p{font-size:12px;max-width:700px;color:#d1e4e3;line-height:1.65;margin:9px 0 0}
+.rl-evidence-legend{min-width:230px;display:grid;gap:7px}
+.rl-evidence-legend span{font-size:11px;background:#295462;border:1px solid #688b91;border-radius:4px;padding:6px 10px;font-weight:800;color:#e0efed}
+.rl-evidence-sources{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:16px}
+.rl-evidence-card{border:1px solid #cbd7d5;background:#fff;border-radius:12px;padding:21px;min-width:0}
+.rl-evidence-card[data-status="unavailable"]{border-color:#d9d0c6;background:#fcfaf6}
+.rl-evidence-card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px}
+.rl-evidence-card-head strong{font-size:14px;line-height:1.4}
+.rl-evidence-marker{flex-shrink:0;font-size:10px;padding:4px 8px;border:1px solid #b2c7c0;border-radius:20px;background:#eff7f4;color:#24574b;font-weight:800}
+.rl-evidence-marker[data-status="limited"]{background:#fff7eb;color:#865c20;border-color:#ddc19b}
+.rl-evidence-marker[data-status="unavailable"]{background:#f7f1ed;color:#8e4b33;border-color:#e1b6a4}
+.rl-evidence-signal{border-top:1px solid #e5ebe8;padding:13px 0 12px}
+.rl-evidence-signal .rl-evidence-type{font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#9a6240;display:block;margin-bottom:6px}
+.rl-evidence-signal strong{display:block;font-size:14px;line-height:1.4;color:#153c46}
+.rl-evidence-signal p,.rl-evidence-empty,.rl-evidence-change{font-size:12px;line-height:1.68;color:#52696b;margin:7px 0 9px}
+.rl-evidence-signal a,.rl-evidence-origin{font-size:12px;font-weight:800;color:#17637a}
+.rl-evidence-origin{display:inline-block;margin-top:8px;padding-top:10px;border-top:1px solid #e4e9e6}
+.rl-evidence-disclaimer{font-size:12px;color:#62746d;line-height:1.7;max-width:100ch;margin:14px 0 0}
+.rl-evidence-none{font-size:14px;margin:15px 0 0}
+@media(max-width:780px){
+ .rl-evidence-summary{flex-direction:column;align-items:stretch}
+ .rl-evidence-legend{min-width:0}
+ .rl-evidence-sources{grid-template-columns:1fr}
+}
+@media(max-width:460px){
+ .rl-evidence-summary,.rl-evidence-card{padding:17px}
+ .rl-evidence-card-head{flex-direction:column;gap:8px}
+ .rl-evidence-legend{gap:4px}
+}
+
+
+/* Event-specific evidence above the general land-manager source ledger. */
+.rl-mission-official-match{margin-top:14px;margin-bottom:18px;border:1px solid #d2b58b;border-left:5px solid #9c6a3b;background:#fcf8ef;padding:22px 25px;border-radius:9px;max-width:100%}
+.rl-mission-official-match[data-status="matched"]{border-color:#8fbfb3;border-left-color:#176756;background:#f1f9f5}
+.rl-mission-official-match[data-status="unknown"]{border-color:#ccd6d1;border-left-color:#637c7d;background:#f5f8f5}
+.rl-match-eyebrow{display:block;letter-spacing:.11em;text-transform:uppercase;font-size:10px;font-weight:800;color:#996536;margin-bottom:7px}
+.rl-mission-official-match[data-status="matched"] .rl-match-eyebrow{color:#2d6e5b}
+.rl-mission-official-match h3{font-family:var(--serif);font-size:clamp(19px,2.15vw,27px);line-height:1.27;margin:0 0 12px}
+.rl-mission-official-match p{font-size:13px;line-height:1.66;color:#3e5b5e;max-width:96ch;margin:7px 0}
+.rl-mission-official-match .rl-match-heading{font-size:15px;font-weight:800;color:#183d43}
+.rl-mission-official-match .rl-match-meta{font-size:12px;font-weight:700;color:#345966}
+.rl-mission-official-match .rl-match-caution{border-top:1px solid #b7d0c6;padding-top:12px}
+.rl-mission-official-match a{display:inline-block;margin-top:10px;font-size:13px;font-weight:800;color:#116479}
+.rl-mission-official-match .rl-match-change{font-size:11px;color:#5e766e}
+@media(max-width:460px){.rl-mission-official-match{padding:17px 18px}}
+
+
+/* Florida's own verified event/ticket source is an independent second answer
+   beneath the government agency news reconciliation, never a booking guarantee. */
+.rl-ksc-match{border:1px solid #b8cbd7;border-left:5px solid #37758d;background:#f4f8fc;padding:20px 24px;border-radius:9px;margin:0 0 17px}
+.rl-ksc-match[hidden]{display:none!important}
+.rl-ksc-match[data-status="matched"]{background:#f1f9f5;border-color:#8fbfb3;border-left-color:#24745d}
+.rl-ksc-match[data-status="unverified"]{background:#fcf8ef;border-color:#d2b58b;border-left-color:#9c6a3b}
+.rl-ksc-match h3{font-family:var(--serif);font-size:clamp(19px,2vw,26px);line-height:1.26;margin:0 0 9px}
+.rl-ksc-match p{font-size:13px;line-height:1.65;color:#3b5960;max-width:94ch;margin:7px 0}
+.rl-ksc-match a{display:inline-block;margin:10px 17px 1px 0;color:#12617b;font-weight:800;font-size:13px}
+@media(max-width:460px){.rl-ksc-match{padding:17px 18px}}
+
+/* Mission card selection follows the published launch-origin marker on the atlas. */
+.rl-map-locate{margin:7px 0 0;align-self:start;border:1px solid #b3c8c3;border-radius:8px;background:#e7f1ed;color:#204d52;padding:8px 12px;font:800 12px var(--sans);cursor:pointer}
+.rl-map-locate:focus-visible,.rl-map-locate:hover{outline:2px solid #3f8c8a;outline-offset:2px}

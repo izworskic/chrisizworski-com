@@ -75,7 +75,7 @@
       link.classList.toggle('is-current',region===id);
       if(region===id)link.setAttribute('aria-current','location');else link.removeAttribute('aria-current');
       if(!output)continue;
-      output.textContent=!snapshot?'Check recent reports →':errors.has(id)||record?.state==='unavailable'?'Receiver unavailable · view sources →':record?.state==='partial'?count+' recent reports · partial coverage →':count?count+' recently reported vessel'+(count===1?'':'s')+' →':'No recent reports received →';
+      output.textContent=!snapshot?'Check recent reports →':errors.has(id)||record?.state==='unavailable'?'Receiver unavailable · view sources →':record?.state==='partial'?count+' recent reports · partial coverage →':count?count+' recently reported vessel'+(count===1?'':'s')+' →':'No recent reports · coverage unverified →';
     }
   }
   function shipDetail(v){
@@ -86,7 +86,7 @@
   function updateReportLine(){
     const d=data(),has=C.visible(d?.vessels||[],region).length,regionResult=d?.regions?.find(r=>r.id===region);
     const unavailable=errors.has(region)||d?.state==='unavailable'||regionResult?.state==='unavailable',state=region==='all'?d?.state:regionResult?.state||d?.state;
-    let label=loading?'Checking the river’s recent signals…':unavailable?'The receiver cannot be checked right now':state==='partial'?'Partial reports received · coverage has gaps':has?has+' recently reported vessel'+(has===1?'':'s'):'No fresh signals received from this stretch';
+    let label=loading?'Checking the river’s recent signals…':unavailable?'The receiver cannot be checked right now':state==='partial'?'Partial reports received · coverage has gaps':has?has+' recently reported vessel'+(has===1?'':'s'):'No recent AIS positions · coverage unverified';
     if(unavailable&&has)label+=' · recent saved reports remain below';
     $('reportState').textContent=label;$('reportState').parentElement.dataset.state=unavailable?'unavailable':state||'loading';
     $('reportTime').textContent=d?.checkedAt?'Last successful source check '+time(d.checkedAt):'Report ages appear with each ship.';
@@ -120,8 +120,18 @@
         const index=ships.indexOf(v);if(container.children[index]!==card)container.insertBefore(card,container.children[index]||null);
       }
     }
-    const credits=[...new Set((data()?.attribution||[]).map(x=>x.credit||x.source))];
-    $('shipAttribution').textContent='Open Waters public AIS'+(credits.length?' · '+credits.join(' · '):' · attribution supplied with received reports');
+    const credits=(data()?.attribution||[]).filter(x=>typeof x?.source==='string');
+    const attribution=$('shipAttribution');
+    attribution.replaceChildren(document.createTextNode('Open Waters public AIS'));
+    if(!credits.length)attribution.append(document.createTextNode(' · received reports identify their sources'));
+    for(const credit of credits){
+      attribution.append(document.createTextNode(' · '));
+      // Open Waters lists AISHub attribution with a link as an explicit
+      // source condition. Never treat the aggregate as uniformly CC0.
+      if(credit.source.toLowerCase()==='aishub'){
+        attribution.append(a('AISHub contributors','https://www.aishub.net/'));
+      }else attribution.append(document.createTextNode(credit.credit||credit.source));
+    }
     const selected=reportFor(selectedShip);$('useShipDimensions').disabled=!(selected?.lengthMeters&&selected?.beamMeters);
   }
   function updateRegionReports(){
@@ -129,7 +139,7 @@
     for(const r of D.regions){
       const snapshot=data(r.id),record=snapshot?.regions?.find(x=>x.id===r.id),button=el('button',undefined,'region-report');button.type='button';button.append(el('strong',r.name));
       const count=C.visible(snapshot?.vessels||[],r.id).length;
-      button.append(el('span',errors.has(r.id)||record?.state==='unavailable'?'Source unavailable'+(count?' · '+count+' recent saved':''):!record?'Choose to check reports':count?count+' received report'+(count===1?'':'s')+(record.truncated?' · partial':''):'No fresh reports received'));
+      button.append(el('span',errors.has(r.id)||record?.state==='unavailable'?'Source unavailable'+(count?' · '+count+' recent saved':''):!record?'Choose to check reports':count?count+' received report'+(count===1?'':'s')+(record.truncated?' · partial':''):'No recent reports · coverage unverified'));
       button.setAttribute('aria-pressed',String(region===r.id));button.setAttribute('aria-label',r.name+': '+button.lastChild.textContent);button.addEventListener('click',()=>setRegion(r.id,true));container.append(button);
     }
     restoreFocus(container,focused);
@@ -336,6 +346,68 @@
     target.replaceChildren(s);$('historyReadout').textContent=year+' · '+(field==='vessel_transits'?'commercial vessel transits':'commercial tonnage, metric tons')+'. Choose a month to open that page of the logbook.';
     const table=el('table'),head=el('thead'),tr=el('tr');tr.append(el('th','Month · '+year),el('th',field==='vessel_transits'?'Commercial vessel transits':'Commercial metric tons'));head.append(tr);const body=el('tbody');for(const r of rows){const row=el('tr');row.append(el('th',new Date(Date.UTC(year,r.month-1,1)).toLocaleString('en-US',{month:'long',timeZone:'UTC'})),el('td',r.value===null?'Not reported':r.value.toLocaleString('en-US')));body.append(row);}table.append(head,body);$('historyTable').replaceChildren(table);
   }
+  function initSeasonalPassage(){
+    const source=$('seawaySeasonalData'),readout=$('seawaySeasonalReadout');
+    if(!source||!readout)return;
+    let fieldbook;
+    try{
+      fieldbook=JSON.parse(source.textContent);
+      if(fieldbook.schema!=='seaway-seasonal-fieldbook-v1'||!Array.isArray(fieldbook.months)||
+         fieldbook.months.length!==12||fieldbook.years?.length<3)throw new Error('invalid historical data');
+    }catch(_){
+      readout.replaceChildren(el('strong','Historical comparison unavailable.'),
+        el('p','The source-backed monthly table and the original year-by-year chart remain available below.'));
+      return;
+    }
+    const controls=[...document.querySelectorAll('[data-seaway-month]')];
+    const show=(month,announce=true)=>{
+      const entry=fieldbook.months.find(m=>m.month===month);
+      if(!entry)return;
+      for(const b of controls){
+        const selected=Number(b.dataset.seawayMonth)===month;
+        b.setAttribute('aria-pressed',String(selected));
+      }
+      const heading=el('strong',entry.name+' · published commercial vessel transits');
+      const details=el('p');
+      if(entry.state==='available'&&entry.sampleCount>=3&&
+          Number.isFinite(entry.median)&&Number.isFinite(entry.minimum)&&Number.isFinite(entry.maximum)){
+        details.textContent='Across '+entry.sampleCount+' reported years ('+entry.sampleYears.join(', ')+'), the monthly median was '+
+          entry.median.toLocaleString('en-US')+' vessel transits. The observed totals ranged from '+
+          entry.minimum.toLocaleString('en-US')+' to '+entry.maximum.toLocaleString('en-US')+'.';
+      }else if(entry.state==='unreported'){
+        details.textContent='The archived years contain no numeric vessel-transit totals for '+entry.name+
+          '. That is missing reporting, not a zero-ship measurement.';
+      }else{
+        details.textContent='Only '+entry.sampleCount+' archived year(s) have numeric totals for this month. We do not infer a typical month from fewer than three.';
+      }
+      const caution=el('p','System-wide historical measurements, not a ship schedule or a probability of seeing a vessel. Check today’s operator notices, order of turn and visitor hours separately.','fine');
+      if(entry.sourceClosedNoteYears?.length){
+        caution.textContent='The historical source marks this month closed in '+entry.sourceClosedNoteYears.join(', ')+
+          '. Opening/closing dates change each year; this is not a statement about the current season.';
+      }
+      readout.replaceChildren(heading,details,caution);
+      if(announce)track('seasonal_month',String(month));
+    };
+    for(const b of controls){
+      b.addEventListener('click',()=>show(Number(b.dataset.seawayMonth)));
+    }
+    // Calendar choice is purely for which historical month to display.
+    // It neither checks current lock status nor changes the official data.
+    const easternMonth=Number(new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',month:'numeric'}).format(new Date()));
+    show(easternMonth,false);
+    // The initial month must be visible inside the mobile strip. Move only
+    // its scroll container; scrollIntoView would jump the entire page on load.
+    const monthStrip=$('seaway-seasonal-lens')?.querySelector('.seasonal-months');
+    if(monthStrip&&matchMedia('(max-width: 740px)').matches){
+      const selected=controls.find(b=>Number(b.dataset.seawayMonth)===easternMonth);
+      if(selected){
+        const stripRect=monthStrip.getBoundingClientRect();
+        const monthRect=selected.getBoundingClientRect();
+        const centered=monthStrip.scrollLeft+(monthRect.left-stripRect.left)-(monthStrip.clientWidth-monthRect.width)/2;
+        monthStrip.scrollLeft=Math.max(0,centered);
+      }
+    }
+  }
   $('regionSelect').addEventListener('change',e=>setRegion(e.target.value,true));
   $('refreshReports').addEventListener('click',()=>{track('refresh','manual');void loadReports();});
   $('resetMap').addEventListener('click',showEntireSeaway);
@@ -381,6 +453,7 @@
     if(link.href.includes('google.com/maps/dir'))track('directions_opened','verified-viewpoint');
     if(link.getAttribute('href')==='/welland-canal/')track('next_corridor_opened','welland');
   });
+  initSeasonalPassage();
   readURL();chooseLock(selectedLock);renderFit();drawHistory();render();void startMap();void loadReports();
   setInterval(()=>{if(!document.hidden)void loadReports();},120000);
   setInterval(()=>{if(!document.hidden)render();},30000);

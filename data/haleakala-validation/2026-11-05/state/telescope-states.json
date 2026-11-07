@@ -1,0 +1,87 @@
+{
+  "ogg.clma.0m4a": [
+    {
+      "telescope": "ogg.clma.0m4a",
+      "event_type": "AVAILABLE",
+      "event_reason": "Available for scheduling",
+      "start": "2026-11-05T15:59:32Z",
+      "end": "2026-11-05T16:33:19.774000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4a",
+      "event_type": "ENCLOSURE_INTERLOCK",
+      "event_reason": "Enclosure: Interlocked(ENCLOSURE_FLAPPING)",
+      "start": "2026-11-05T16:33:19.774000Z",
+      "end": "2026-11-05T16:49:32Z"
+    }
+  ],
+  "ogg.clma.0m4b": [
+    {
+      "telescope": "ogg.clma.0m4b",
+      "event_type": "AVAILABLE",
+      "event_reason": "Available for scheduling",
+      "start": "2026-11-05T15:59:32Z",
+      "end": "2026-11-05T16:33:19.607000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4b",
+      "event_type": "ENCLOSURE_INTERLOCK",
+      "event_reason": "Enclosure: Interlocked(ENCLOSURE_FLAPPING)",
+      "start": "2026-11-05T16:33:19.607000Z",
+      "end": "2026-11-05T16:49:32Z"
+    }
+  ],
+  "ogg.clma.0m4c": [
+    {
+      "telescope": "ogg.clma.0m4c",
+      "event_type": "AVAILABLE",
+      "event_reason": "Available for scheduling",
+      "start": "2026-11-05T15:59:32Z",
+      "end": "2026-11-05T16:33:19.588000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4c",
+      "event_type": "ENCLOSURE_INTERLOCK",
+      "event_reason": "Enclosure: Interlocked(ENCLOSURE_FLAPPING)",
+      "start": "2026-11-05T16:33:19.588000Z",
+      "end": "2026-11-05T16:49:32Z"
+    }
+  ],
+  "ogg.clma.2m0a": [
+    {
+      "telescope": "ogg.clma.2m0a",
+      "event_type": "NOT_AVAILABLE",
+      "event_reason": "Unknown",
+      "start": "2026-11-05T15:59:32Z",
+      "end": "2026-11-05T16:07:31.215000Z"
+    },
+    {
+      "telescope": "ogg.clma.2m0a",
+      "event_type": "SEQUENCER_DISABLED",
+      "event_reason": "Sequencer: MANUAL state. Mount: SUSPEND state",
+      "start": "2026-11-05T16:07:31.215000Z",
+      "end": "2026-11-05T16:07:33.861000Z"
+    },
+    {
+      "telescope": "ogg.clma.2m0a",
+      "event_type": "SEQUENCER_DISABLED",
+      "event_reason": "Sequencer: MANUAL state",
+      "start": "2026-11-05T16:07:33.861000Z",
+      "end": "2026-11-05T16:12:50.497000Z"
+    },
+    {
+      "telescope": "ogg.clma.2m0a",
+      "event_type": "AVAILABLE",
+      "event_reason": "Available for scheduling",
+      "start": "2026-11-05T16:12:50.497000Z",
+      "end": "2026-11-05T16:33:20.584000Z"
+    },
+    {
+      "telescope": "ogg.clma.2m0a",
+      "event_type": "ENCLOSURE_INTERLOCK",
+      "event_reason": "Enclosure: Interlocked(ENCLOSURE_FLAPPING)",
+      "start": "2026-11-05T16:33:20.584000Z",
+      "end": "2026-11-05T16:49:32Z"
+    }
+  ]
+}

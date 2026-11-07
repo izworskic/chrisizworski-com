@@ -1,10 +1,10 @@
 {
   "schema": "winter-route-catalog-v1",
   "status": "CURATED_STATIC_ROUTE_IDENTITIES_NOT_LIVE_WINTER_ACCESS",
-  "compiledAt": "2026-10-25",
+  "compiledAt": "2026-11-06",
   "state": "Michigan",
   "countMeaning": "Named routes, trail segments, and mapped winter corridors; NOT confirmed open, plowed or safe destinations. Some snowshoe trails are explicitly ski-shared. No turn-by-turn navigation.",
-  "dataProvenance": "Michigan DNR official named trail pages, accessible official hiking maps, and dated GIS trail point records. No GIS segment sums are used as route lengths.",
+  "dataProvenance": "Michigan DNR official named trail pages, maps and dated GIS trail point records, plus NPS Pictured Rocks official winter guide, documented Sand Point Marsh ranger-event point and Munising Snowshoe Trail official 2.65-mi description. Munising's existing general-area map point is NOT a verified parking location. Seasonal manager-maintenance policy is not a dated open road or plowed lot report. No GIS segment sums are used as route lengths.",
   "sources": {
     "muskegon": {
       "page": "https://www.michigan.gov/recsearch/parks/muskegon",
@@ -80,6 +80,14 @@
       "page": "https://www.nps.gov/slbe/planyourvisit/winteractivities.htm",
       "map": null,
       "phone": "231-326-4700"
+    },
+    "piro": {
+      "page": "https://www.nps.gov/places/sand-point-marsh-trail-in-winter.htm",
+      "map": null,
+      "phone": "906-387-3700",
+      "currentAlerts": "https://www.nps.gov/piro/planyourvisit/conditions.htm",
+      "munisingSnowshoe": "https://www.nps.gov/places/snowshoe-trail-piro.htm",
+      "munisingSnowshoeOfficialMap": "https://www.nps.gov/piro/planyourvisit/upload/PIRO-Ski-and-Snowshoe-Trails-508.pdf"
     }
   },
   "routes": [
@@ -2195,6 +2203,96 @@
         "Verify current-season trail and closure status",
         "Verify winter-maintained approach road and specific plowed parking lot",
         "Confirm selected route geometry before directions"
+      ]
+    },
+    {
+      "id": "piro-sand-point-marsh",
+      "displayName": "Pictured Rocks — Sand Point Marsh Trail",
+      "region": "upper-peninsula",
+      "placeGroup": "piro",
+      "routeForm": "loop",
+      "lengthMiles": 0.5,
+      "lengthEvidence": "official_named_route",
+      "sourceDnrTrailId": null,
+      "sourceDnrTrailName": null,
+      "supportedActivity": [
+        "hike",
+        "snowshoe"
+      ],
+      "winterUse": "ungroomed_nature_walk",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 46.448947,
+        "lon": -86.605869,
+        "meaning": "NPS 2026 ranger event meeting coordinate for Sand Point Marsh Trail, not certified current winter parking or a driving entrance"
+      },
+      "officialPage": "https://www.nps.gov/places/sand-point-marsh-trail-in-winter.htm",
+      "officialMap": null,
+      "routeEvidenceUrl": "https://www.nps.gov/places/sand-point-marsh-trail-in-winter.htm",
+      "managerPhone": "906-387-3700",
+      "caveats": [
+        "Boardwalk can be icy even with little snow; snowshoes often needed in deep snow.",
+        "Pets prohibited on the marsh trail.",
+        "NPS winter policy describes Sand Point Road and beach parking as plowed. This is not evidence of today's road or lot condition.",
+        "September 2026 NPS notice scheduled Sand Point Road construction closure October 1–14. No independent reopening confirmation was found; check current alerts before travel."
+      ],
+      "editorialSummary": "Half-mile wetland boardwalk through cattails, dunes and winterberries, reached from the Sand Point Beach area when access is permitted.",
+      "needs": [
+        "verify Sand Point Road reopened after October 2026 construction notice",
+        "dated manager-confirmed road and plowed lot status for trip date",
+        "dated route opening and boardwalk safety",
+        "official route geometry if navigation is ever considered"
+      ]
+    },
+    {
+      "id": "piro-munising-snowshoe",
+      "displayName": "Pictured Rocks — Munising Snowshoe Trail",
+      "region": "upper-peninsula",
+      "placeGroup": "piro",
+      "routeForm": "loop",
+      "lengthMiles": 2.65,
+      "lengthEvidence": "official_named_route",
+      "sourceDnrTrailId": null,
+      "sourceDnrTrailName": null,
+      "supportedActivity": [
+        "snowshoe"
+      ],
+      "winterUse": "marked_dedicated_snowshoe",
+      "publicRouteDescriptionStatus": "named_route_documented",
+      "currentWinterAccess": "unverified",
+      "verifiedWinterParking": null,
+      "verifiedTrailhead": null,
+      "verifiedDriveTarget": null,
+      "navigationReady": false,
+      "routeGeometryObjectIds": null,
+      "referencePoint": {
+        "lat": 46.41,
+        "lon": -86.64,
+        "meaning": "General Munising-area map reference carried from the site's published winter trails guide, not the trail start, NPS parking entrance, official measured trail coordinate, or a current access observation"
+      },
+      "officialPage": "https://www.nps.gov/places/snowshoe-trail-piro.htm",
+      "officialMap": "https://www.nps.gov/piro/planyourvisit/upload/PIRO-Ski-and-Snowshoe-Trails-508.pdf",
+      "routeEvidenceUrl": "https://www.nps.gov/places/snowshoe-trail-piro.htm",
+      "managerPhone": "906-387-3700",
+      "caveats": [
+        "Park at the NPS-described ski parking area near the end of East City Limits Road, then walk a few hundred yards to the blue-blazed snowshoe trail beyond a wooden fence. The map's general Munising point is NOT that parking lot.",
+        "Dedicated 2.65-mile winter snowshoe loop; NPS lists leashed pets on this snowshoe trail in winter, not on the adjacent groomed ski trails.",
+        "Do not walk or snowshoe on the groomed ski track. An optional shared ungroomed G loop exists, but its mileage is NOT added to this 2.65-mile route.",
+        "NPS states the ski-area parking lots are normally plowed, while its general winter-road page says Sand Point Road is the only plowed park road. These may describe different road jurisdictions; no current access is certified.",
+        "The current Pictured Rocks NPS alerts must be checked for closures, snowstorms, ski-area maintenance and East City Limits Road vehicle access."
+      ],
+      "editorialSummary": "NPS's dedicated blue-blazed 2.65-mile Munising snowshoe circuit through northwoods, with a signed approach from the ski parking area off East City Limits Road.",
+      "needs": [
+        "independently verify exact snowshoe trailhead and E City Limits Road lot position against official NPS geometry before displaying navigation",
+        "date-specific manager report that East City Limits Road and the selected parking lot are vehicle-accessible",
+        "dated NPS trail and grooming/closure status",
+        "do not use general Munising area map reference as a parking or trail start"
       ]
     }
   ],

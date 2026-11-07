@@ -13,18 +13,18 @@ const catalog=JSON.parse(read('data/up-waterfalls.json')).waterfalls;
 const rows=new Map(catalog.map(c=>[c.id,c]));
 const cards=[...hub.matchAll(/<article class="waterfall-card"([^>]+)>/g)]
   .map(m=>Object.fromEntries([...m[1].matchAll(/data-([\w-]+)="([^"]*)"/g)].map(x=>[x[1],x[2]])));
-const explicitOnly=new Set(['scott-falls','houghton-douglass-falls']);
+const explicitOnly=new Set(['scott-falls','houghton-douglass-falls','boston-creek-cascades']);
 const eligible=cards.filter(c=>c['arrival-verified']==='verified'&&['verify','seasonal','restricted'].includes(c.status)&&!explicitOnly.has(c.id));
 const radians=Math.PI/180;
 const geo=(a,b)=>{const x=a.lat*radians,y=b.lat*radians,dx=(b.lat-a.lat)*radians,dy=(b.lng-a.lng)*radians,z=Math.sin(dx/2)**2+Math.cos(x)*Math.cos(y)*Math.sin(dy/2)**2;return 2*3958.7613*Math.asin(Math.min(1,Math.sqrt(z)));};
 
 test('B59 Python-generated index covers exactly source-verified visitor approaches, never research or closed pins',()=>{
- assert.equal(catalog.length,75);
- assert.equal(cards.length,75);
+ assert.equal(catalog.length,78);
+ assert.equal(cards.length,78);
  assert.equal(index.schemaVersion,1);
- assert.equal(index.counts.curated,75);
- assert.equal(index.counts.eligible,67);
- assert.equal(index.counts.excluded,8);
+ assert.equal(index.counts.curated,78);
+ assert.equal(index.counts.eligible,69);
+ assert.equal(index.counts.excluded,9);
  assert.deepEqual(index.locations.map(c=>c.id),eligible.map(c=>c.id).sort());
  assert.deepEqual(index.excludedIds,cards.filter(c=>!eligible.some(x=>x.id===c.id)).map(c=>c.id).sort());
  for(const id of ['sandstone-falls','munising-falls','silver-river-falls','lower-silver-falls','twin-waterfalls-memorial-preserve','scott-falls','houghton-douglass-falls']){
@@ -34,6 +34,8 @@ test('B59 Python-generated index covers exactly source-verified visitor approach
  // Tahquamenon uses its own park planner, but this hub card does not have
  // the same "verified" arrival contract. Never infer a shared arrival.
  assert.ok(index.excludedIds.includes('tahquamenon'));
+ assert.ok(index.excludedIds.includes('boston-creek-cascades'),'Nature-area centre cannot enter natural waterfall nearby model');
+ assert.ok(!index.locations.some(c=>c.id==='boston-creek-cascades'));
  for(const c of index.locations){
   const row=rows.get(c.id);
   assert.ok(row,'missing curated record '+c.id);
@@ -77,7 +79,9 @@ test('B59 visible UX remains source-linked and accessible, with existing trip pl
  assert.ok(hub.indexOf('id="visit-lens"')<hub.indexOf('id="nearby-lab"'));
  assert.ok(hub.indexOf('id="nearby-lab"')<hub.indexOf('class="explorer"'));
  assert.match(hub,/assets\/up-waterfalls-nearby\.js/);
- assert.match(hub,/dateModified":"2026-11-03"/);
+ const modified=hub.match(/dateModified":"(\d{4}-\d{2}-\d{2})"/);
+ assert.ok(modified,"hub needs a dateModified value");
+ assert.ok(read('public/sitemap-up-waterfalls.xml').includes('<loc>https://chrisizworski.com/upper-peninsula-waterfalls/</loc><lastmod>'+modified[1]+'</lastmod>'),'hub schema dateModified and sitemap lastmod must agree');
  assert.match(hub,/id="show-geo-candidates"/);
  assert.match(hub,/id="selected-list"/);
  assert.match(hub,/https:\/\/chrisizworski.com\/upper-peninsula-waterfalls\//);

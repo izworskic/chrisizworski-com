@@ -7,7 +7,7 @@
  const UUID=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
  const $=id=>document.getElementById(id),set=(id,value)=>{const x=$(id);if(x)x.textContent=value??'Not verified'};
  const state={request:0,places:[],site:'isla-blanca',profile:'first-time',map:null,markers:new Map(),
-   padMarker:null,bearingLine:null,data:null,tilesReady:false,sourceAvailable:false};
+   padMarker:null,bearingLine:null,data:null,rocketPins:null,tilesReady:false,sourceAvailable:false};
  const allowedIds=new Set(['isla-blanca','zapata','lighthouse']);
  const profiles={
   'first-time':{hint:'Start with the island county park most clearly documented for Starship viewing; expect queues and verify current gate access.',order:['isla-blanca','zapata','lighthouse']},
@@ -129,6 +129,12 @@
    osm.on('tileload',setTileReady);
    osm.on('tileerror',()=>{if(!state.tilesReady)fallbackMap('Map imagery could not be loaded.');});
    addPlacesToMap();displayPad();selection();
+      state.rocketPins=window.RocketMapPins?.mount(map,{
+       region:'texas',centers:{texas:{lat:25.997,lon:-97.157}},
+       onSelect:id=>{void loadMission(id);}
+      });
+      state.rocketPins?.update(state.data?.regions?.find(r=>r.id==='texas')?.launches||[],
+       state.data?.selectedLaunchId);
    // Optional existing licensed CARTO configuration, never an unkeyed endpoint.
    fetch('/api/carto-basemap-config',{signal:AbortSignal.timeout(5000)})
     .then(r=>r.ok?r.json():null).then(config=>{
@@ -219,6 +225,7 @@
     '. Local forecast; not launch approval or full flight visibility.':
     'The launch timing or NWS forecast is missing, stale, or too far out. No clear-sky verdict is inferred.');
   set('sb-sky-checked','Weather issue time: '+(good.length?good.map(x=>safeStamp(x.updatedAt)).join(' / '):'not verified'));
+  state.rocketPins?.update(options,picked?.id);
   deepLink(picked?.id);
   const u=new URL(location.href);
   if(picked?.id&&UUID.test(picked.id))u.searchParams.set('launchId',picked.id);
@@ -252,7 +259,7 @@
    $('sb-sky-status').dataset.state='unknown';
    set('sb-sky-label','Spectator weather unavailable');
    deepLink(null);
-   state.data=null;displayPad();selection();
+   state.data=null;state.rocketPins?.update([],null);displayPad();selection();
   }
  }
  document.querySelectorAll('[data-site-select]').forEach(button=>

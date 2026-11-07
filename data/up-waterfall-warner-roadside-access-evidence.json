@@ -1,0 +1,122 @@
+{
+  "schemaVersion": 1,
+  "batch": "B70",
+  "reviewDate": "2026-11-05",
+  "featureId": 172,
+  "fall": {
+    "name": "Warner Falls",
+    "county": "Marquette",
+    "naturalPoint": [
+      46.433378,
+      -87.59896
+    ],
+    "naturalPointOnly": true
+  },
+  "decision": "general-roadside-stopping-law-source-verified-no-site-specific-parking-or-land-access-clearance",
+  "visitorInterpretation": "Michigan law and MDOT policy do not require a named designated park for every legal roadside stop; a legal, safe, fully-off-road stop requires the exact shoulder to be unobstructed, not posted against parking and consistent with bridge and traffic-control rules. Tourism instructions do not certify those on-site facts or ownership of the walking route.",
+  "officialLegalSources": [
+    {
+      "authority": "Michigan MDOT",
+      "id": "mdot-state-highway-roadside-parking-faq",
+      "kind": "state-agency-policy",
+      "url": "https://www.michigan.gov/mdot/about/faqs/general/common",
+      "finding": "MDOT says it generally does not prohibit parking on the side of state highways, subject to narrow exceptions. MDOT and MSP may arrange location-specific official No Parking signs through a traffic control order.",
+      "scope": "general-state-trunkline-not-site-authorization"
+    },
+    {
+      "authority": "Michigan Legislature",
+      "id": "mcl-257-672",
+      "kind": "statute",
+      "url": "https://www.legislature.mi.gov/documents/mcl/pdf/mcl-257-672.pdf",
+      "finding": "Outside cities and villages prohibits parking upon the main traveled portion when parking off that portion is possible. Does not establish that any particular shoulder is safe.",
+      "scope": "state-law-general"
+    },
+    {
+      "authority": "Michigan Legislature",
+      "id": "mcl-257-674",
+      "kind": "statute",
+      "url": "https://www.legislature.mi.gov/documents/mcl/pdf/mcl-257-674.pdf",
+      "finding": "Prohibits parking upon bridges or elevated highway structures and where official signs forbid stopping or parking, in addition to other location-specific restrictions.",
+      "scope": "state-law-general"
+    },
+    {
+      "authority": "Michigan MSP",
+      "id": "msp-traffic-control-orders",
+      "kind": "state-police-policy",
+      "url": "https://www.michigan.gov/msp/divisions/spec-ops/inside-sod/traffic-crash-reconstruction-unit/traffic-control-orders",
+      "finding": "State trunkline parking restrictions are engineering-survey-based traffic control orders signed by authorized MDOT and MSP officials and posted by official signage; survey checks shoulder width and pedestrian safety.",
+      "scope": "general-process-no-falls-order-located"
+    },
+    {
+      "authority": "Michigan SOS",
+      "id": "sos-driver-manual-parking",
+      "kind": "driver-guide",
+      "url": "https://www.michigan.gov/sos/-/media/Project/Websites/sos/Resources/Forms-and-publications/WEDMK/WEDMK.pdf",
+      "finding": "State driver manual independently warns never park on a bridge, in a highway travel lane when shoulder exists, or where prohibitory signs are posted.",
+      "scope": "general-rules"
+    }
+  ],
+  "tourismEvidence": {
+    "issuer": "Travel Marquette",
+    "source": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/marquettemi/waterfalls3_2025brochureV2_03a81a20-d8c9-4ab9-b1c6-ccc8ac1bfc68.pdf",
+    "sourceDate": "2025",
+    "reviewStatus": "published-tourism-wayfinding-not-traffic-regulatory",
+    "finding": "2025 brochure names Warner Falls 46.43333, -87.59888 and suggests parking on right side of M-35 and a short walk west. Its destination coordinate is the waterfall, not a certified legal shoulder position. No as-built road condition or owner-approved foot route."
+  },
+  "officialRoadsideParkLayer": {
+    "authority": "MDOT GIS",
+    "service": "https://gisagomdot.state.mi.us/arcgis/rest/services/MDOT/MdotRoadsideParkPublic/FeatureServer/0",
+    "dateQueried": "2026-11-05",
+    "nameQuery": "https://gisagomdot.state.mi.us/arcgis/rest/services/MDOT/MdotRoadsideParkPublic/FeatureServer/0/query?where=Name%20LIKE%20%27%25Warner%25%27&outFields=Name%2CStatus%2CClosureDetails&returnGeometry=false&f=pjson",
+    "nameMatches": 0,
+    "radiusQuery": "https://gisagomdot.state.mi.us/arcgis/rest/services/MDOT/MdotRoadsideParkPublic/FeatureServer/0/query?where=1%3D1&geometry=-87.59896%2C46.433378&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=5000&units=esriSRUnit_Meter&outFields=Name%2CStatus&returnGeometry=true&outSR=4326&f=pjson",
+    "radiusMetres": 5000,
+    "radiusMatches": 0,
+    "finding": "No MDOT roadside-park feature named Warner or within 5 km of the state-GIS natural falls point. The layer covers roadside parks, not every shoulder, scenic turnout, or other public view.",
+    "noParkFeatureDoesNotProhibitShoulderParking": true,
+    "roadsideParkSeasonSource": "https://www.michigan.gov/mdot/news-outreach/pressreleases/2026/10/15/mdot-roadside-parks-set-to-close-for-season",
+    "seasonScope": "Most official MDOT roadside parks closed October 29 2026, but Warner is not classified as one in the queried layer; do not assign that closure to the falls or the generic state highway shoulder."
+  },
+  "parcelEvidence": {
+    "sourceType": "historical-third-party-compiled-arcgis-layer-not-current-legal-title",
+    "service": "https://services9.arcgis.com/6EuFgO4fLTqfNOhu/ArcGIS/rest/services/MarquetteParcelData/FeatureServer/2",
+    "layerLastEditedMs": 1692574139294,
+    "queryUrl": "https://services9.arcgis.com/6EuFgO4fLTqfNOhu/ArcGIS/rest/services/MarquetteParcelData/FeatureServer/2/query?where=1%3D1&geometry=-87.59896%2C46.433378&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=FID%2Caddress%2CUseClass%2Ccity%2Ccounty&returnGeometry=false&f=pjson",
+    "historicalIntersectCount": 1,
+    "historicalUseClass": "Res",
+    "ownershipConfirmed": false,
+    "bankEasementConfirmed": false,
+    "publicTrailPermissionConfirmed": false,
+    "finding": "An August 2023 compiled parcel polygon intersected the GIS falls point and the older informal parking waypoint, marked land use Res. Land-use classification is not current fee title, an exact ROW/easement boundary or proof of public access, and cannot be translated into a private-property/trespass verdict by itself.",
+    "currentAuthoritativeCountyGIS": "https://www.co.marquette.mi.us/departments/equalization_tax_roll/gis_mapping.php",
+    "countyPublicMap": "https://app.fetchgis.com/marquette",
+    "countySourceReviewStatus": "Current county parcel-level owner/ROW at both banks and approach not independently inspected; county advertises online parcel lookup, so this remains a targeted future source path."
+  },
+  "previousProjectDisambiguation": {
+    "reference": "data/up-waterfall-warner-culvert-evidence.json",
+    "conclusion": "2026 MDOT July north-of-Palmer culvert and August county road MT/MP culverts do not establish construction at the south-of-Palmer waterfall."
+  },
+  "accessGates": {
+    "featureIdentity": "documented",
+    "generalStoppingLegalPrinciple": "documented-conditional",
+    "namedDesignatedRoadsidePark": "not-found-in-official-roadside-park-layer",
+    "siteSpecificTrafficControlOrderOrSignReview": "not-verified",
+    "shoulderWidthSightlinesAndCurrentCondition": "not-verified",
+    "bankParcelOwnerAndPedestrianEasement": "not-verified",
+    "completeAuthorizedWalkingCorridor": "not-verified",
+    "seasonalAccessibleVisitorParking": "not-verified"
+  },
+  "classification": {
+    "researchOnly": true,
+    "robots": "noindex,follow",
+    "curated": false,
+    "autoDirections": false,
+    "rawGisCoordinateNotParking": true,
+    "historicalShoulderPointNotParking": true,
+    "privateOwnershipNotEstablishedByUseClass": true,
+    "currentOpenNow": false,
+    "publicRoadsidePark": false,
+    "addedPublicMapPin": false
+  },
+  "nextEvidence": "Obtain a current official site-specific M-35 sign/traffic-control order and roadside width/sightline record near the actual south-of-Palmer waterfall, and the county's current parcel/easement or managing landowner confirmation for an entire walking approach. Do not require a bespoke MDOT lot if legal off-road shoulder stopping is established under statewide law. No crowdsourced visitor proof."
+}

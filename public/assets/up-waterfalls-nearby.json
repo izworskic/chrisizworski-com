@@ -1,15 +1,16 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-03",
+  "reviewed": "2026-11-07",
   "method": "haversine-waterfall-coordinate-straight-line-not-driving",
   "maxRadiusMiles": 50,
   "policy": "Not a route, visitor parking point, driving distance, trail distance, access grant, or live-open forecast.",
   "counts": {
-    "curated": 75,
-    "eligible": 67,
-    "excluded": 8
+    "curated": 78,
+    "eligible": 69,
+    "excluded": 9
   },
   "excludedIds": [
+    "boston-creek-cascades",
     "houghton-douglass-falls",
     "lower-silver-falls",
     "munising-falls",
@@ -261,6 +262,16 @@
       "lng": -88.237254
     },
     {
+      "id": "jumbo-falls",
+      "name": "Jumbo Falls",
+      "region": "Western U.P.",
+      "status": "seasonal",
+      "url": "/upper-peninsula-waterfalls/jumbo-falls/",
+      "source": "https://www.coppercountry.com/experiences/hiking/ottawa-national-forest-trails/",
+      "lat": 46.44963,
+      "lng": -88.91278
+    },
+    {
       "id": "kakabika-falls",
       "name": "Kakabika Falls",
       "region": "Western U.P.",
@@ -359,6 +370,16 @@
       "source": "https://www.fs.usda.gov/r09/ottawa/recreation/burned-dam-campground",
       "lat": 46.313443,
       "lng": -89.054153
+    },
+    {
+      "id": "middle-hungarian-falls",
+      "name": "Middle Hungarian Falls",
+      "region": "Western U.P.",
+      "status": "verify",
+      "url": "/upper-peninsula-waterfalls/middle-hungarian-falls/",
+      "source": "https://keweenawlandtrust.org/sites/default/files/2019-11/Hungarian%20Falls%20Brochure_0.pdf",
+      "lat": 47.17193,
+      "lng": -88.44781
     },
     {
       "id": "miners-falls",
@@ -698,6 +719,10 @@
         "miles": 5.3
       },
       {
+        "id": "jumbo-falls",
+        "miles": 8.7
+      },
+      {
         "id": "duppy-falls",
         "miles": 9.7
       },
@@ -852,6 +877,10 @@
         "miles": 27
       },
       {
+        "id": "middle-hungarian-falls",
+        "miles": 27.3
+      },
+      {
         "id": "little-garlic-falls",
         "miles": 27.5
       },
@@ -902,6 +931,10 @@
       {
         "id": "manganese-falls",
         "miles": 42.4
+      },
+      {
+        "id": "jumbo-falls",
+        "miles": 48.7
       }
     ],
     "bonanza-falls": [
@@ -1006,6 +1039,10 @@
         "miles": 38.1
       },
       {
+        "id": "jumbo-falls",
+        "miles": 40.3
+      },
+      {
         "id": "duppy-falls",
         "miles": 42.1
       },
@@ -1042,6 +1079,10 @@
       {
         "id": "duppy-falls",
         "miles": 10.5
+      },
+      {
+        "id": "jumbo-falls",
+        "miles": 10.8
       },
       {
         "id": "kakabika-falls",
@@ -1240,6 +1281,10 @@
         "miles": 10.5
       },
       {
+        "id": "jumbo-falls",
+        "miles": 24.1
+      },
+      {
         "id": "big-erics-falls",
         "miles": 24.9
       },
@@ -1278,6 +1323,10 @@
       {
         "id": "lower-hungarian-falls",
         "miles": 37.7
+      },
+      {
+        "id": "middle-hungarian-falls",
+        "miles": 37.9
       },
       {
         "id": "upper-hungarian-falls",
@@ -1480,6 +1529,10 @@
         "miles": 28.9
       },
       {
+        "id": "jumbo-falls",
+        "miles": 28.9
+      },
+      {
         "id": "mex-i-min-e-falls",
         "miles": 29.9
       },
@@ -1592,6 +1645,10 @@
         "miles": 10.8
       },
       {
+        "id": "middle-hungarian-falls",
+        "miles": 10.9
+      },
+      {
         "id": "lower-hungarian-falls",
         "miles": 11
       },
@@ -1633,6 +1690,10 @@
       }
     ],
     "duppy-falls": [
+      {
+        "id": "jumbo-falls",
+        "miles": 2.6
+      },
       {
         "id": "mex-i-min-e-falls",
         "miles": 9.7
@@ -1730,6 +1791,10 @@
       {
         "id": "upper-hungarian-falls",
         "miles": 18
+      },
+      {
+        "id": "middle-hungarian-falls",
+        "miles": 18.1
       },
       {
         "id": "lower-hungarian-falls",
@@ -1962,8 +2027,16 @@
         "miles": 28.8
       },
       {
+        "id": "middle-hungarian-falls",
+        "miles": 29
+      },
+      {
         "id": "upper-hungarian-falls",
         "miles": 29.1
+      },
+      {
+        "id": "jumbo-falls",
+        "miles": 30.2
       },
       {
         "id": "pinnacle-falls",
@@ -2476,6 +2549,10 @@
         "miles": 46.6
       },
       {
+        "id": "jumbo-falls",
+        "miles": 47.6
+      },
+      {
         "id": "duppy-falls",
         "miles": 48.7
       }
@@ -2500,6 +2577,10 @@
       {
         "id": "lower-hungarian-falls",
         "miles": 24.4
+      },
+      {
+        "id": "middle-hungarian-falls",
+        "miles": 24.6
       },
       {
         "id": "upper-hungarian-falls",
@@ -2708,6 +2789,10 @@
         "miles": 20.2
       },
       {
+        "id": "middle-hungarian-falls",
+        "miles": 20.2
+      },
+      {
         "id": "big-erics-falls",
         "miles": 39.6
       },
@@ -2721,6 +2806,96 @@
       },
       {
         "id": "power-house-falls",
+        "miles": 48.7
+      }
+    ],
+    "jumbo-falls": [
+      {
+        "id": "duppy-falls",
+        "miles": 2.6
+      },
+      {
+        "id": "agate-falls",
+        "miles": 8.7
+      },
+      {
+        "id": "bond-falls",
+        "miles": 10.8
+      },
+      {
+        "id": "mex-i-min-e-falls",
+        "miles": 11.6
+      },
+      {
+        "id": "sturgeon-falls",
+        "miles": 16.9
+      },
+      {
+        "id": "tibbets-falls",
+        "miles": 17.9
+      },
+      {
+        "id": "o-kun-de-kun-falls",
+        "miles": 18
+      },
+      {
+        "id": "canyon-falls",
+        "miles": 24.1
+      },
+      {
+        "id": "kakabika-falls",
+        "miles": 26.8
+      },
+      {
+        "id": "tioga-park-falls",
+        "miles": 28.6
+      },
+      {
+        "id": "cascade-falls",
+        "miles": 28.9
+      },
+      {
+        "id": "power-house-falls",
+        "miles": 29.8
+      },
+      {
+        "id": "falls-river-trail",
+        "miles": 30.2
+      },
+      {
+        "id": "wyandotte-falls",
+        "miles": 30.5
+      },
+      {
+        "id": "yondota-falls",
+        "miles": 36.8
+      },
+      {
+        "id": "nonesuch-falls",
+        "miles": 39.4
+      },
+      {
+        "id": "bonanza-falls",
+        "miles": 40.3
+      },
+      {
+        "id": "little-union-gorge-falls",
+        "miles": 41.3
+      },
+      {
+        "id": "trap-falls",
+        "miles": 43.8
+      },
+      {
+        "id": "overlooked-falls",
+        "miles": 47.4
+      },
+      {
+        "id": "greenstone-falls",
+        "miles": 47.6
+      },
+      {
+        "id": "big-erics-falls",
         "miles": 48.7
       }
     ],
@@ -2752,6 +2927,10 @@
       {
         "id": "duppy-falls",
         "miles": 26.3
+      },
+      {
+        "id": "jumbo-falls",
+        "miles": 26.8
       },
       {
         "id": "gabbro-falls",
@@ -3198,6 +3377,10 @@
         "miles": 40.7
       },
       {
+        "id": "jumbo-falls",
+        "miles": 41.3
+      },
+      {
         "id": "mex-i-min-e-falls",
         "miles": 42.8
       },
@@ -3211,6 +3394,10 @@
       }
     ],
     "lower-hungarian-falls": [
+      {
+        "id": "middle-hungarian-falls",
+        "miles": 0.4
+      },
       {
         "id": "upper-hungarian-falls",
         "miles": 0.6
@@ -3408,6 +3595,10 @@
         "miles": 33.2
       },
       {
+        "id": "middle-hungarian-falls",
+        "miles": 33.3
+      },
+      {
         "id": "upper-hungarian-falls",
         "miles": 33.4
       },
@@ -3532,6 +3723,10 @@
         "miles": 9.7
       },
       {
+        "id": "jumbo-falls",
+        "miles": 11.6
+      },
+      {
         "id": "agate-falls",
         "miles": 11.7
       },
@@ -3622,6 +3817,80 @@
       {
         "id": "shining-cloud-falls",
         "miles": 49.3
+      }
+    ],
+    "middle-hungarian-falls": [
+      {
+        "id": "upper-hungarian-falls",
+        "miles": 0.2
+      },
+      {
+        "id": "lower-hungarian-falls",
+        "miles": 0.4
+      },
+      {
+        "id": "conglomerate-falls-gratiot",
+        "miles": 10.9
+      },
+      {
+        "id": "eagle-river-falls",
+        "miles": 18.1
+      },
+      {
+        "id": "jacobs-falls",
+        "miles": 20.2
+      },
+      {
+        "id": "haven-falls",
+        "miles": 24.6
+      },
+      {
+        "id": "big-erics-falls",
+        "miles": 27.3
+      },
+      {
+        "id": "wyandotte-falls",
+        "miles": 28.1
+      },
+      {
+        "id": "falls-river-trail",
+        "miles": 29
+      },
+      {
+        "id": "power-house-falls",
+        "miles": 30.1
+      },
+      {
+        "id": "manganese-falls",
+        "miles": 33.3
+      },
+      {
+        "id": "canyon-falls",
+        "miles": 37.9
+      },
+      {
+        "id": "sturgeon-falls",
+        "miles": 38.4
+      },
+      {
+        "id": "tibbets-falls",
+        "miles": 41.4
+      },
+      {
+        "id": "tioga-park-falls",
+        "miles": 41.7
+      },
+      {
+        "id": "pinnacle-falls",
+        "miles": 44.1
+      },
+      {
+        "id": "yellow-dog-falls",
+        "miles": 46.5
+      },
+      {
+        "id": "o-kun-de-kun-falls",
+        "miles": 49
       }
     ],
     "miners-falls": [
@@ -4056,6 +4325,10 @@
         "miles": 39.4
       },
       {
+        "id": "jumbo-falls",
+        "miles": 39.4
+      },
+      {
         "id": "superior-falls",
         "miles": 40.3
       },
@@ -4084,6 +4357,10 @@
       {
         "id": "bond-falls",
         "miles": 16.7
+      },
+      {
+        "id": "jumbo-falls",
+        "miles": 18
       },
       {
         "id": "duppy-falls",
@@ -4206,6 +4483,10 @@
         "miles": 49
       },
       {
+        "id": "middle-hungarian-falls",
+        "miles": 49
+      },
+      {
         "id": "lower-hungarian-falls",
         "miles": 49.1
       }
@@ -4324,6 +4605,10 @@
         "miles": 46.5
       },
       {
+        "id": "jumbo-falls",
+        "miles": 47.4
+      },
+      {
         "id": "duppy-falls",
         "miles": 48.6
       }
@@ -4406,6 +4691,10 @@
       {
         "id": "lower-hungarian-falls",
         "miles": 43.8
+      },
+      {
+        "id": "middle-hungarian-falls",
+        "miles": 44.1
       },
       {
         "id": "upper-hungarian-falls",
@@ -4556,8 +4845,16 @@
         "miles": 23.1
       },
       {
+        "id": "jumbo-falls",
+        "miles": 29.8
+      },
+      {
         "id": "lower-hungarian-falls",
         "miles": 29.9
+      },
+      {
+        "id": "middle-hungarian-falls",
+        "miles": 30.1
       },
       {
         "id": "upper-hungarian-falls",
@@ -5228,6 +5525,10 @@
         "miles": 13.7
       },
       {
+        "id": "jumbo-falls",
+        "miles": 16.9
+      },
+      {
         "id": "tioga-park-falls",
         "miles": 17.5
       },
@@ -5266,6 +5567,10 @@
       {
         "id": "lower-hungarian-falls",
         "miles": 38.3
+      },
+      {
+        "id": "middle-hungarian-falls",
+        "miles": 38.4
       },
       {
         "id": "upper-hungarian-falls",
@@ -5424,6 +5729,10 @@
         "miles": 13.5
       },
       {
+        "id": "jumbo-falls",
+        "miles": 17.9
+      },
+      {
         "id": "duppy-falls",
         "miles": 19.2
       },
@@ -5462,6 +5771,10 @@
       {
         "id": "lower-hungarian-falls",
         "miles": 41.3
+      },
+      {
+        "id": "middle-hungarian-falls",
+        "miles": 41.4
       },
       {
         "id": "upper-hungarian-falls",
@@ -5514,6 +5827,10 @@
         "miles": 26.9
       },
       {
+        "id": "jumbo-falls",
+        "miles": 28.6
+      },
+      {
         "id": "duppy-falls",
         "miles": 29.4
       },
@@ -5548,6 +5865,10 @@
       {
         "id": "lower-hungarian-falls",
         "miles": 41.5
+      },
+      {
+        "id": "middle-hungarian-falls",
+        "miles": 41.7
       },
       {
         "id": "upper-hungarian-falls",
@@ -5674,6 +5995,10 @@
       {
         "id": "wyandotte-falls",
         "miles": 39
+      },
+      {
+        "id": "jumbo-falls",
+        "miles": 43.8
       },
       {
         "id": "mex-i-min-e-falls",
@@ -5803,6 +6128,10 @@
       }
     ],
     "upper-hungarian-falls": [
+      {
+        "id": "middle-hungarian-falls",
+        "miles": 0.2
+      },
       {
         "id": "lower-hungarian-falls",
         "miles": 0.6
@@ -6050,12 +6379,20 @@
         "miles": 28.1
       },
       {
+        "id": "middle-hungarian-falls",
+        "miles": 28.1
+      },
+      {
         "id": "lower-hungarian-falls",
         "miles": 28.2
       },
       {
         "id": "agate-falls",
         "miles": 30
+      },
+      {
+        "id": "jumbo-falls",
+        "miles": 30.5
       },
       {
         "id": "cascade-falls",
@@ -6196,6 +6533,10 @@
         "miles": 46.1
       },
       {
+        "id": "middle-hungarian-falls",
+        "miles": 46.5
+      },
+      {
         "id": "upper-hungarian-falls",
         "miles": 46.7
       },
@@ -6316,6 +6657,10 @@
       {
         "id": "superior-falls",
         "miles": 35.9
+      },
+      {
+        "id": "jumbo-falls",
+        "miles": 36.8
       },
       {
         "id": "duppy-falls",

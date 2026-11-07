@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "batch": "B73",
+  "reviewDate": "2026-11-06",
+  "decision": "independent-creek-crossing-not-waterfall-or-mdot-workzone-or-parking",
+  "fall": {
+    "name": "Warner Falls",
+    "stateGisObjectId": 172,
+    "coordinates": [
+      46.433378,
+      -87.59896
+    ],
+    "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7",
+    "role": "natural-waterfall-not-parking"
+  },
+  "tourism": {
+    "publisher": "Travel Marquette",
+    "coordinates": [
+      46.43333,
+      -87.59888
+    ],
+    "source": "https://www.travelmarquette.com/blog/post/waterfalls-you-need-to-see-in-fall/",
+    "role": "approximate-tourism-waterfall-marker-not-parking"
+  },
+  "usgs": {
+    "siteId": "USGS-04058240",
+    "name": "Warner Creek at State Hwy M-35 at Palmer, MI",
+    "coordinates": [
+      46.4368822210745,
+      -87.5954141613727
+    ],
+    "source": "https://waterdata.usgs.gov/monitoring-location/USGS-04058240/",
+    "role": "historic-water-sampling-monitoring-location-not-waterfall-parking-or-mdot-worksite",
+    "coordinateMethod": "map-interpolated",
+    "coordinateAccuracy": "plus-or-minus-one-arc-second",
+    "observationStart": "1970-08-31",
+    "observationEnd": "1976-08-30",
+    "recentContinuousStreamflow": false
+  },
+  "mdotProjects": [
+    {
+      "name": "July 2026 branch of Warner Creek culvert",
+      "location": "north of Palmer",
+      "coordinates": null,
+      "source": "https://www.michigan.gov/mdot/news-outreach/pressreleases/2026/07/01/m-35-culvert-project-detour-starts-july-27",
+      "usgsSiteIdentityEstablished": false,
+      "waterfallIdentityEstablished": false
+    },
+    {
+      "name": "August 2026 culverts near CR MT/MP",
+      "location": "south of Palmer, separate named intersections",
+      "coordinates": null,
+      "source": "https://www.michigan.gov/mdot/news-outreach/pressreleases/2026/08/12/m-35-culvert-replacements-in-marquette-county-start-aug-24",
+      "waterfallIdentityEstablished": false
+    }
+  ],
+  "parcel": {
+    "evidence": "historical-third-party-2023-parcel-class-only",
+    "source": "https://services9.arcgis.com/6EuFgO4fLTqfNOhu/ArcGIS/rest/services/MarquetteParcelData/FeatureServer/2",
+    "fallsPointIntersectingFID": 15298,
+    "useClass": "Res",
+    "proofOfCurrentOwner": false,
+    "proofOfPrivateProhibition": false,
+    "proofOfPublicWalkingRight": false,
+    "currentCountyViewer": "https://app.fetchgis.com/marquette"
+  },
+  "access": {
+    "noVerifiedDrivingDestination": true,
+    "noCurrentParkingPermissionOrSafeShoulderWidth": true,
+    "noContinuousLawfulFootRoute": true,
+    "notOpenNowClaim": true,
+    "curated": false,
+    "indexable": false,
+    "addNaturalOrUSGSPointToCarRouting": false,
+    "sameCreekDoesNotProveSameProject": true
+  },
+  "authoritativeNextSteps": [
+    {
+      "agency": "Michigan MDOT Superior Region / Ishpeming TSC",
+      "officialContact": "MDOT-Contact-SuperiorRegion@Michigan.gov",
+      "contactSource": "https://www.michigan.gov/mdot/about/regions/superior",
+      "question": "Confirm exact M-35 south-of-Palmer road shoulder width, sightline, signage/TCO and any 2026 work at Warner Falls; do not assume an unnamed tourist turnout is cleared."
+    },
+    {
+      "agency": "Marquette County Equalization and GIS",
+      "officialContact": "cfuess@mqtco.org",
+      "contactSource": "https://www.co.marquette.mi.us/departments/equalization_tax_roll/gis_mapping.php",
+      "question": "Identify current mapped parcel and right-of-way/easement covering the creek bank and a lawful walking approach from M-35; GIS is informational, not a legal survey."
+    }
+  ],
+  "outreach": "not-sent-no-official-reply"
+}

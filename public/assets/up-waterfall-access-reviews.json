@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-03",
+  "reviewed": "2026-11-05",
   "purpose": "Opt-in geographic research annotations only; never grants legal access, parking directions or indexable guides",
   "records": [
     {
@@ -965,14 +965,14 @@
       "gisObjectId": 29,
       "name": "Jumbo Falls",
       "county": "HOUGHTON",
-      "status": "public-trail-position-discrepancy",
-      "publicAccess": "USFS public trail documented, exact falls route geometry and parking current state not established",
-      "publicationEligible": false,
-      "title": "Jumbo Falls: public trail, but maps disagree by nearly a kilometre",
-      "summary": "The USDA Forest Service Ottawa National Forest 2015 Recreation Opportunity Guide names Jumbo Falls and directs visitors from M-28 west of Kenton through Golden Glow Road, Forest Road 4589 and 4589-B past Jumbo Pit to an established falls trail. Its official coordinate is 46.457753,-88.912228. A regional trail list describes a short, roughly 0.1-mile level trail from the named parking to Jumbo Falls, but a specialist natural falls point is 46.44963,-88.91278, 904 metres from the agency brochure point; Michigan GIS #29 at 46.453006,-88.912138 lies between them, 528 metres from agency and 379 metres from specialist. We cannot identify which coordinate is trailhead, fall, other cascade or an outdated record from currently published evidence. Historic park/trail road descriptions do NOT establish road passability, a correct map pin, new signage or a precise current legal parking turnout.",
-      "guidance": "The U.S. Forest Service has an established named Jumbo Falls Trail via Golden Glow Road and FR4589-B. Do not use a raw mapped falls pin as parking or an off-road route until its physical location and current trailhead are reconciled.",
-      "reviewLimitations": "Obtain current U.S. Forest Service GIS trailhead and Jumbo Falls geomarker/route polyline or other reliable surveyed source distinguishing the 2015 agency coordinates from the specialist falls point, establish certified designated visitor parking and the ~0.1-mile trail's correct physical destination, plus present FR4589-B road/trail restrictions. Do not route to any of the three coordinates before reconciling.",
-      "nextEvidence": "Obtain current U.S. Forest Service GIS trailhead and Jumbo Falls geomarker/route polyline or other reliable surveyed source distinguishing the 2015 agency coordinates from the specialist falls point, establish certified designated visitor parking and the ~0.1-mile trail's correct physical destination, plus present FR4589-B road/trail restrictions. Do not route to any of the three coordinates before reconciling.",
+      "status": "verified-seasonal-forest-trail",
+      "publicAccess": "USFS Trail 60056 approved pedestrian path; FR4589-B designated motor access May16–Mar14; no live road/gate or bridge report",
+      "publicationEligible": true,
+      "title": "Jumbo Falls: the mapped Forest Service trail is finally verified",
+      "summary": "USFS EDW Nov 2026: national public foot trail 60056, 0.079 miles and NOT ACCESSIBLE, terminates 23m from specialist falls 46.44963,-88.91278. Prior USFS recreation point is 904m north and MI GIS #29 point 379m north; neither is car parking or true visitor map feature. Federal MVUM shows FR4589-B passenger vehicle May16–Mar14, but no live gate/lot/bridge status; agency historical guide and regional source describe named visitor arrival.",
+      "guidance": "Use only the published named approach and current posted rules. Never drive to GIS waterfall, old recreation centroid, trail coordinates or informal gravel-pit spaces.",
+      "reviewLimitations": "Live gate, off-road designated parking spaces, bridge/tread conditions and vehicle passability not monitored; no confirmed ADA access.",
+      "nextEvidence": "Owner site source confirms an open recreation listing and official trail. Future monitoring should validate physical access, never automatically claim open-now.",
       "researchPage": "/upper-peninsula-waterfalls/research/jumbo-falls/",
       "sourceLinks": [
         {
@@ -998,52 +998,30 @@
         {
           "label": "Source 6",
           "url": "https://www.fs.usda.gov/r09/ottawa"
+        },
+        {
+          "label": "Official USFS Trail 60056",
+          "url": "https://apps.fs.usda.gov/ArcX/rest/services/EDW/EDW_TrailNFSPublish_01/MapServer/0/query?where=trail_name%20%3D%20'JUMBO%20FALLS'&outFields=*&returnGeometry=true&outSR=4326&f=pjson"
+        },
+        {
+          "label": "USFS MVUM 4589-B",
+          "url": "https://apps.fs.usda.gov/ArcX/rest/services/EDW/EDW_MVUM_01/MapServer/1/query?where=id%20%3D%20'4589-B'%20AND%20forestname%20LIKE%20'%25Ottawa%25'&outFields=id%2Cname%2Csymbol%2Cmvum_symbol_name%2Cpassengervehicle%2Cpassengervehicle_datesopen%2Chighclearancevehicle%2Chighclearancevehicle_datesopen%2Croutestatus%2Cjurisdiction%2Cforestname&returnGeometry=true&outSR=4326&f=pjson"
+        },
+        {
+          "label": "USFS Recreation Site 12356",
+          "url": "https://apps.fs.usda.gov/ArcX/rest/services/EDW/EDW_RecreationOpportunities_01/MapServer/0/query?where=recareaid%3D12356&outFields=recareaname%2Crecareaid%2Crecareaurl%2Clatitude%2Clongitude%2Copenstatus%2Cforestname%2Copen_season_start%2Copen_season_end%2Crestrictions%2Crecareadescription&returnGeometry=true&f=pjson"
         }
       ],
       "routeAudit": {
-        "reviewed": "2026-10-31",
-        "outcome": "not-cleared",
+        "outcome": "verified-seasonal-forest-trail",
         "destinationCoordinatesForDriving": false,
-        "routePolylineAuthorized": false,
-        "segments": [
-          {
-            "label": "USFS named waterfall",
-            "status": "verified-geography",
-            "finding": "USFS 2015 waterfall recreation guide explicitly names a public Jumbo Falls trail in Ottawa National Forest.",
-            "source": "https://upnorthentertainment.com/wp-content/uploads/2021/01/Ottawa-National-Forest-Waterfalls.pdf"
-          },
-          {
-            "label": "Forest road approach",
-            "status": "documented-not-live",
-            "finding": "Agency directions use Golden Glow Rd, FR4589 and FR4589-B through Jumbo Pit, but may be 11 years old and not current legal/seasonal road status.",
-            "source": "https://upnorthentertainment.com/wp-content/uploads/2021/01/Ottawa-National-Forest-Waterfalls.pdf"
-          },
-          {
-            "label": "Public trail",
-            "status": "documented-not-live",
-            "finding": "Regional trail guide describes a 0.1-mile fairly level two-bridge footpath through hardwoods near Jumbo River; exact endpoint requires reconciliation.",
-            "source": "https://www.coppercountry.com/experiences/hiking/ottawa-national-forest-trails/"
-          },
-          {
-            "label": "Mapped waterfall identity",
-            "status": "conflicting",
-            "finding": "Agency coordinate to specialist falls coordinate 904m; GIS source lies between, creating over-300m position discrepancies.",
-            "source": "https://www.waterfallsofthekeweenaw.com/jumbo-river/jumbo-falls/"
-          },
-          {
-            "label": "Visitor parking and map destination",
-            "status": "not-cleared",
-            "finding": "Road/turnout descriptions do not tie a currently authorized public parking site to a verified falls point; no parking GPS may be synthesized.",
-            "source": "https://upnorthentertainment.com/wp-content/uploads/2021/01/Ottawa-National-Forest-Waterfalls.pdf"
-          },
-          {
-            "label": "Current road, river and trail",
-            "status": "not-cleared",
-            "finding": "No dated 2026 route-specific road restrictions, trail bridges, gate opening or exact waterfall pin survey confirmed.",
-            "source": "https://www.fs.usda.gov/r09/ottawa"
-          }
-        ]
-      }
+        "routePolylineAuthorized": true,
+        "footTrailOnly": true,
+        "parkingCoordinatesVerified": false,
+        "liveGateVerified": false
+      },
+      "publicGuide": "/upper-peninsula-waterfalls/jumbo-falls/",
+      "sourceReviewed": "2026-11-05"
     },
     {
       "gisObjectId": 37,
@@ -6708,79 +6686,120 @@
     },
     {
       "gisObjectId": 172,
-      "name": "Warner Falls: 2026 M-35 culvert access review",
+      "name": "Warner Falls: roadside access and culvert project correction",
       "county": "MARQUETTE",
       "status": "not-safe-to-promote",
       "publicAccess": "not-established",
       "publicationEligible": false,
-      "title": "Warner Falls: 2026 M-35 culvert access review",
-      "summary": "Michigan tourism and Travel Marquette historically call Warner Falls a roadside stop on M-35 near Palmer. Michigan MDOT's July 1 2026 release documents replacement of the M-35 culvert over Warner Creek with road reconstruction, asphalt and new pavement markings, and predicted a mid-August completion. A predicted construction finish does not certify safe October visitor parking, shoulder legality or an intact old guardrail footpath. No post-work MDOT-sanctioned parking and pedestrian route identified. Do not route drivers to a shoulder.",
+      "title": "Warner Falls: roadside access and culvert project correction",
+      "summary": "Warner Falls (GIS #172) is south of Palmer on M-35 and independently identified by Travel Marquette, Michigan tourism, UP Travel and specialist field coordinates. The July 2026 MDOT replacement concerns a branch of Warner Creek NORTH of Palmer; the August 2026 replacement concerns two other culverts near County Roads MT and MP SOUTH of Palmer. Neither notice establishes construction at Warner Falls itself or changes to its old guardrail/path. Previous research mistakenly used the July north-side project as evidence of postconstruction changes at the falls. Tourism publications describe historic fully-off-road stops and a short signed path. Michigan MDOT's own FAQ generally allows roadside shoulder stopping subject to safety, signs and narrow exceptions; a specially approved waterfall lot is not legally required statewide. MCL 257.672 and 257.674 prohibit parking on the traveled lane, bridges and posted prohibited locations. MSP confirms sign-based parking controls may be created by a traffic-control order. MDOT's named roadside-park GIS has zero features within 5 km, so this is not a confirmed MDOT roadside park; absence of a park does not prove all nearby off-road shoulders unlawful. A stale 2023 parcel layer labeled the falls area Residential but does not establish current title or public trail rights. Local shoulder suitability, site-specific signs/orders and continuous legal bank walking remain unverified. No car directions to the waterfall or historical shoulder.",
       "guidance": "Do not navigate to a raw waterfall GIS pin, assume unsigned bridge parking or follow a guessed riverbank route.",
-      "reviewLimitations": "Obtain current MDOT postconstruction parking permissions and safe signed viewpoint/footpath, verify lane/opening status, prohibited shoulder conditions and walk from legal visitor parking.",
-      "nextEvidence": "Obtain current MDOT postconstruction parking permissions and safe signed viewpoint/footpath, verify lane/opening status, prohibited shoulder conditions and walk from legal visitor parking.",
+      "reviewLimitations": "Confirm the south-of-Palmer M-35 actual fully-off-road stopping space, current posted signs and any MDOT/MSP parking traffic-control order, shoulder width and sightlines, plus current county parcel ownership/right-of-way and an authorized complete creek-bank viewpoint route. Do not demand a dedicated MDOT visitor lot if generally lawful off-road shoulder parking can instead be established. Do not ask visitors to supply site proof.",
+      "nextEvidence": "Confirm the south-of-Palmer M-35 actual fully-off-road stopping space, current posted signs and any MDOT/MSP parking traffic-control order, shoulder width and sightlines, plus current county parcel ownership/right-of-way and an authorized complete creek-bank viewpoint route. Do not demand a dedicated MDOT visitor lot if generally lawful off-road shoulder parking can instead be established. Do not ask visitors to supply site proof.",
       "researchPage": "/upper-peninsula-waterfalls/research/warner-falls/",
       "sourceLinks": [
         {
-          "label": "Evidence 1",
+          "label": "Michigan state GIS Warner Falls",
           "url": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
         },
         {
-          "label": "Evidence 2",
+          "label": "MDOT July north-of-Palmer branch culvert",
           "url": "https://www.michigan.gov/mdot/news-outreach/pressreleases/2026/07/01/m-35-culvert-project-detour-starts-july-27"
         },
         {
-          "label": "Evidence 3",
+          "label": "Travel Marquette regional waterfall visitor guide",
           "url": "https://www.travelmarquette.com/outdoor-adventure/waterfalls/"
         },
         {
-          "label": "Evidence 4",
+          "label": "Michigan tourism historic roadside guidance",
           "url": "https://www.michigan.org/property/warner-falls"
+        },
+        {
+          "label": "MDOT August two other south-of-Palmer culverts",
+          "url": "https://www.michigan.gov/mdot/news-outreach/pressreleases/2026/08/12/m-35-culvert-replacements-in-marquette-county-start-aug-24"
+        },
+        {
+          "label": "Travel Marquette regional waterfall visitor guide",
+          "url": "https://www.travelmarquette.com/blog/post/waterfalls-you-need-to-see-in-fall/"
+        },
+        {
+          "label": "UP Travel Warner Falls south of Palmer",
+          "url": "https://www.uptravel.com/listing/warner-falls/4598/"
+        },
+        {
+          "label": "Independent Warner Falls field coordinates",
+          "url": "https://www.waterfallsofthekeweenaw.com/warner-creek/warner-falls/"
+        },
+        {
+          "label": "MDOT state-highway parking policy",
+          "url": "https://www.michigan.gov/mdot/about/faqs/general/common"
+        },
+        {
+          "label": "MSP traffic control order process",
+          "url": "https://www.michigan.gov/msp/divisions/spec-ops/inside-sod/traffic-crash-reconstruction-unit/traffic-control-orders"
+        },
+        {
+          "label": "Michigan SOS parking and driver safety guide",
+          "url": "https://www.michigan.gov/sos/-/media/Project/Websites/sos/Resources/Forms-and-publications/WEDMK/WEDMK.pdf"
+        },
+        {
+          "label": "MDOT roadside park public GIS",
+          "url": "https://gisagomdot.state.mi.us/arcgis/rest/services/MDOT/MdotRoadsideParkPublic/FeatureServer/0"
+        },
+        {
+          "label": "Marquette County official current GIS lookup",
+          "url": "https://www.co.marquette.mi.us/departments/equalization_tax_roll/gis_mapping.php"
+        },
+        {
+          "label": "Travel Marquette 2025 waterfall guide",
+          "url": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/marquettemi/waterfalls3_2025brochureV2_03a81a20-d8c9-4ab9-b1c6-ccc8ac1bfc68.pdf"
         }
       ],
       "routeAudit": {
-        "reviewed": "2026-10-31",
         "outcome": "not-cleared",
-        "destinationCoordinatesForDriving": false,
-        "routePolylineAuthorized": false,
         "segments": [
           {
             "label": "Waterfall identity",
             "status": "documented-not-live",
-            "finding": "State GIS #172 locates Warner Creek natural falls separately from parking",
-            "source": "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+            "finding": "State GIS #172 matches tourism and specialist south-of-Palmer Warner Creek fall; MDOT July project is described NORTH of Palmer.",
+            "source": "https://www.travelmarquette.com/blog/post/waterfalls-you-need-to-see-in-fall/"
           },
           {
             "label": "Manager or ownership",
-            "status": "documented-not-live",
-            "finding": "MDOT confirmed 2026 replacement of M-35 culvert at Warner Creek",
-            "source": "https://www.michigan.gov/mdot/news-outreach/pressreleases/2026/07/01/m-35-culvert-project-detour-starts-july-27"
+            "status": "not-cleared",
+            "finding": "MDOT manages M-35, but its 2023-era compiled parcel counterpart is not current legal bank title or a visitor easement. Current county FetchGIS has not been positively inspected.",
+            "source": "https://www.co.marquette.mi.us/departments/equalization_tax_roll/gis_mapping.php"
           },
           {
             "label": "Road and approach",
-            "status": "not-cleared",
-            "finding": "Historic visitor listings predate road/culvert work and are not live access records",
-            "source": "https://www.travelmarquette.com/outdoor-adventure/waterfalls/"
+            "status": "documented-not-live",
+            "finding": "Travel Marquette and Michigan tourism describe historic M-35 roadside viewing and trail; neither notice confirms today's turnout state.",
+            "source": "https://www.travelmarquette.com/blog/post/waterfalls-you-need-to-see-in-fall/"
           },
           {
             "label": "Parking",
             "status": "not-cleared",
-            "finding": "No MDOT-designated legal new roadside parking verified",
-            "source": "https://www.michigan.org/property/warner-falls"
+            "finding": "MDOT says roadside stopping is generally legal, subject to MCL 257.672/257.674, posted exceptions and real shoulder safety; no named official roadside park or verified Warner Falls shoulder/sightlines/traffic control order.",
+            "source": "https://www.michigan.gov/mdot/about/faqs/general/common"
           },
           {
             "label": "Continuous visitor path",
             "status": "not-cleared",
-            "finding": "No confirmed safe walk from allowed lot after guardrail/roadway rebuilding",
-            "source": "https://www.michigan.org/property/warner-falls"
+            "finding": "Short path and signage reported by tourism, but no authoritative continuous permitted bank route or 2026 site condition established.",
+            "source": "https://www.travelmarquette.com/blog/post/waterfalls-you-need-to-see-in-fall/"
           },
           {
             "label": "Current restrictions",
             "status": "not-cleared",
-            "finding": "MDOT July project estimate does not confirm present site open status",
-            "source": "https://www.michigan.org/property/warner-falls"
+            "finding": "MSP documents formal traffic-control-order/sign process; no location-specific Warner Falls no-parking order or safe all-season shoulder status was independently confirmed.",
+            "source": "https://www.michigan.gov/msp/divisions/spec-ops/inside-sod/traffic-crash-reconstruction-unit/traffic-control-orders"
           }
-        ]
-      }
+        ],
+        "reviewed": "2026-11-05",
+        "destinationCoordinatesForDriving": false,
+        "routePolylineAuthorized": false
+      },
+      "roadsideLegalAccessEvidence": "data/up-waterfall-warner-roadside-access-evidence.json"
     },
     {
       "gisObjectId": 173,

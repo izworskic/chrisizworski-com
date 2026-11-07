@@ -10,7 +10,10 @@ on:
       - 'scripts/generate-seaway.mjs'
       - 'scripts/enhance-seaway-journey.mjs'
       - 'scripts/audit-seaway-growth.py'
+      - 'scripts/build_seaway_seasonal_fieldbook.py'
+      - 'tests/test_seaway_fieldbook.py'
       - 'tests/seaway.test.js'
+      - 'tests/seaway-seasonal-funnel.test.js'
       - 'data/seaway/**'
       - '.github/workflows/seaway-journey-checks.yml'
   push:
@@ -22,6 +25,7 @@ on:
       - 'scripts/generate-seaway.mjs'
       - 'scripts/enhance-seaway-journey.mjs'
       - 'tests/seaway.test.js'
+      - 'tests/seaway-seasonal-funnel.test.js'
       - '.github/workflows/seaway-journey-checks.yml'
 permissions:
   contents: read
@@ -40,9 +44,14 @@ jobs:
         run: |
           node --check scripts/enhance-seaway-journey.mjs
           node --check public/assets/seaway.js
+          node --check public/assets/seaway-seasonal-funnel.js
           node --check api/st-lawrence-seaway.js
           python3 -m py_compile scripts/audit-seaway-growth.py
+      - name: Python Intelligence OS fieldbook quality and deterministic output
+        run: |
+          python3 -m unittest discover -s tests -p 'test_seaway_fieldbook.py' -v
+          python3 scripts/build_seaway_seasonal_fieldbook.py --check
       - name: Regenerate both Seaway pages
         run: node scripts/generate-seaway.mjs
       - name: Test AIS truth, context and generated pages
-        run: node --test tests/seaway.test.js
+        run: node --test tests/seaway.test.js tests/seaway-seasonal-funnel.test.js

@@ -1199,7 +1199,8 @@
       // cannot fetch another LL2 schedule or infer mission-specific closures.
       document.dispatchEvent(new CustomEvent('space-coast:launch-loaded', {
         detail: { selectedLaunchId: activeMissionId,
-          geographicViewing: d.geographicViewing || null }
+          geographicViewing: d.geographicViewing || null,
+          launches: [...(d.upcoming||[]),...(next&&!(d.upcoming||[]).some(m=>m.id===next.id)?[next]:[])] }
       }));
       if (activeMissionId) {
         void loadKscChronicle(sequence, activeMissionId);
@@ -1248,6 +1249,10 @@
   }
   document.addEventListener('visibilitychange', checkForPageUpdates);
   window.setInterval(checkForPageUpdates, 60 * 1000);
+  document.addEventListener('space-coast:mission-marker-selected',event=>{
+    const id=event.detail?.launchId;
+    if(typeof id==='string'&&UUID_RE.test(id))void load(id);
+  });
   const incoming = new URL(location.href).searchParams.get('launchId');
   load(incoming && UUID_RE.test(incoming) ? incoming : null);
 })();

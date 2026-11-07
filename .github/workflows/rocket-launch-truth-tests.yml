@@ -3,6 +3,16 @@ name: Rocket Launch Truth source reconciliation regression
 on:
   pull_request:
     paths:
+      - 'lib/rocket-official-notices.js'
+      - 'api/rocket-official-notices.js'
+      - 'scripts/rocket_official_notices.py'
+      - 'scripts/rocket_official_matcher.py'
+      - 'scripts/test_rocket_official_matcher.py'
+      - 'scripts/test_rocket_official_rss.py'
+      - 'tests/rocket-official-rss-ksc.test.js'
+      - 'tests/rocket-official-reconciliation.test.js'
+      - 'tests/rocket-official-notices.test.js'
+      - '.github/workflows/rocket-official-notices.yml'
       - 'lib/rocket-launch-truth.js'
       - 'lib/rocket-launch-slip.js'
       - 'scripts/rocket_launch_slip_lab.py'
@@ -55,6 +65,18 @@ jobs:
         run: node --test tests/rocket-launch-truth.test.js
       - name: Verify existing Florida launch and KSC watch are preserved
         run: node --test tests/space-coast-launch-day.test.js tests/space-coast-ksc-watch.test.js
+      - name: Verify six-region official access notices with Python
+        run: python3 scripts/rocket_official_notices.py --test
+      - name: Test exact official article-to-mission matches and conservative abstentions in Python
+        run: python3 -m unittest discover -s scripts -p test_rocket_official_matcher.py -v
+      - name: Verify official Space Force RSS fallback with synthetic source-failure and false-positive cases
+        run: python3 -m unittest discover -s scripts -p test_rocket_official_rss.py -v
+      - name: Verify source-trust boundary and read-only Florida KSC event bridge
+        run: node --test tests/rocket-official-rss-ksc.test.js
+      - name: Verify independent shared-schedule mission matching and false-GO regression
+        run: node --test tests/rocket-official-reconciliation.test.js
+      - name: Verify signed notice contract, staleness and no unsafe GO in browser
+        run: node --test tests/rocket-official-notices.test.js
       - name: Verify independent Python launch-slip model and safety boundaries
         run: python3 scripts/rocket_launch_slip_lab.py --test
       - name: Verify JavaScript weather scenarios against Python model

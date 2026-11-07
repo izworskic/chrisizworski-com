@@ -14,7 +14,7 @@
 <link rel="preconnect" href="https://tiles.openfreemap.org" crossorigin>
 <link rel="preconnect" href="https://gibs.earthdata.nasa.gov" crossorigin>
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.16.0/dist/maplibre-gl.css">
-<link rel="stylesheet" href="/winter-hike-snowshoe-lab/style.css?v=1">
+<link rel="stylesheet" href="/winter-hike-snowshoe-lab/style.css?v=3">
 </head><body>
 <a class="skip" href="#routes">Skip to named routes</a>
 <header class="mast"><div class="shell mast-inner"><a href="/" class="brand">Chris Izworski <span>Outdoor decision tools</span></a><a href="/michigan-snow-depth/" class="other">Michigan snow depth ↗</a></div></header>
@@ -27,6 +27,38 @@
 <div class="ctrl"><label for="region">Part of Michigan</label><select id="region"><option value="all">Entire state</option><option value="upper-peninsula">Upper Peninsula</option><option value="northern-lower">Northern Lower Peninsula</option><option value="southern-lower">Southern Lower Peninsula</option></select></div>
 <div class="ctrl"><label for="day">Day to check</label><input type="date" id="day" required aria-describedby="date-note"><small id="date-note">NWS hourly outlook: next 7 days</small></div>
 <div class="ctrl"><label for="search">Trail or park</label><input id="search" type="search" placeholder="e.g., Tahquamenon, Vasa" autocomplete="off"></div>
+<div class="ctrl"><label for="arrival-evidence">Winter arrival evidence</label><select id="arrival-evidence">
+<option value="all">All documented routes</option>
+<option value="policy">Official winter maintenance policy</option>
+<option value="checkpoint">Named approach researched</option>
+<option value="area">Manager-area description only</option></select><small>Not a filter for currently open parking</small></div>
+</section>
+<section class="access-census" aria-label="Winter access evidence coverage" id="access-census" role="status" aria-live="polite">
+Source checks loading. Trail identities, winter parking policy, and operational road or lot clearance are different kinds of evidence.
+</section>
+<section class="winter-arrival" id="winter-arrival" aria-labelledby="arrival-title">
+  <div class="topline"><div><p class="eyebrow">NPS-confirmed seasonal policy · Pictured Rocks pilot</p><h2 id="arrival-title">Start with access evidence, not a snow score.</h2>
+  <p class="muted">Two actual winter outing choices have official parking-approach descriptions. These describe normal park policy, not a dated observation that today's road, lot or trail is open.</p></div></div>
+  <div class="arrival-grid">
+    <article class="arrival-card">
+      <span class="arrival-kicker">0.5 mi · marsh boardwalk · winter snowshoe or cautious walk</span><h3>Sand Point Marsh Trail</h3>
+      <p>The National Park Service describes Sand Point Road and its beach parking area as normally plowed in winter. The wetland boardwalk can be icy; snowshoes are often needed. No pets.</p>
+      <p class="arrival-caution"><strong>2026 construction caveat:</strong> NPS announced a Sand Point Road closure for October 1–14. A subsequent reopening has not been independently verified. Check current park alerts before driving.</p>
+      <div class="arrival-links"><button type="button" data-select-route="piro-sand-point-marsh">Inspect this route, snow and access evidence</button><a href="https://www.nps.gov/places/sand-point-marsh-trail-in-winter.htm" target="_blank" rel="noopener noreferrer">Official winter trail</a></div>
+    </article>
+    <article class="arrival-card">
+      <span class="arrival-kicker">2.65 mi · marked winter snowshoe loop</span><h3>Munising Snowshoe Trail</h3>
+      <p>NPS directs visitors to the ski trail parking area off East City Limits Road, then a short walk to the blue-blazed trail beyond the fence. The park describes its winter ski-area lots as normally plowed. The groomed cross-country ski loops are off limits to walking and snowshoes.</p>
+      <p class="arrival-caution">NPS describes normally plowed ski lots, but its general winter-road page says Sand Point Road is the only plowed park road. Road jurisdiction and current clearing are not reconciled for this lot. The map pin is a general Munising reference, not the snowshoe trailhead or parking entrance.</p>
+      <div class="arrival-links"><button type="button" data-select-route="piro-munising-snowshoe">Inspect this route, snow and access evidence</button><a href="https://www.nps.gov/places/snowshoe-trail-piro.htm" target="_blank" rel="noopener noreferrer">Official trail and approach</a><a href="https://www.nps.gov/piro/planyourvisit/winteractivities.htm" target="_blank" rel="noopener noreferrer">Winter access rules</a></div>
+    </article>
+    <article class="arrival-card arrival-closure">
+      <span class="arrival-kicker">Current official closure</span><h3>Munising Falls Trail: closed</h3>
+      <p>NPS says the paved waterfall trail is closed until further notice after a 2025 washout. Visitor center parking availability is not permission to enter the closed trail. Repairs are planned through 2027.</p>
+      <div class="arrival-links"><a href="https://www.nps.gov/piro/planyourvisit/conditions.htm" target="_blank" rel="noopener noreferrer">Check NPS current alerts</a><a href="https://www.nps.gov/piro/learn/news/2026-09-03-munising-falls-contract-awarded.htm" target="_blank" rel="noopener noreferrer">Official repair update</a></div>
+    </article>
+  </div>
+  <p class="arrival-grounding"><strong>Winter road boundary:</strong> NPS reports most other Pictured Rocks roads are unplowed and restricted to snowmobiles when snow-covered. The October construction notice may conflict with the usual Sand Point access pattern. None of these cards authorizes vehicle travel or counts as a 2026–27 plowing observation. <a href="https://www.nps.gov/piro/planyourvisit/winter-road-closures.htm" target="_blank" rel="noopener noreferrer">Official winter road rules</a></p>
 </section>
 <section class="explore"><div class="topline"><div><p class="eyebrow">Explore the official route inventory</p><h2>Where should I investigate?</h2><p class="muted">Location points represent manager trail areas, not current winter parking. Click a trail-area marker to filter its matching routes.</p></div>
 <div class="map-actions"><button type="button" id="nearby">Use my location</button><button type="button" id="all-map">Show all Michigan</button></div></div>
@@ -62,5 +94,5 @@
 <script defer src="/winter-hike-snowshoe-lab/satellite-ui.js?v=1"></script>
 <script defer src="/winter-hike-snowshoe-lab/history-ui.js?v=1"></script>
 <script defer src="/winter-hike-snowshoe-lab/season-ui.js?v=1"></script>
-<script defer src="/winter-hike-snowshoe-lab/app.js?v=3"></script>
+<script defer src="/winter-hike-snowshoe-lab/app.js?v=6"></script>
 </body></html>

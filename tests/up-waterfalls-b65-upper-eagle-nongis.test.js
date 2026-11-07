@@ -30,12 +30,12 @@ test('B65: independent waterfall is distinct from GIS #142 and coordinates disag
  assert.equal(candidate.notInStateGisNamedFeatureList,true);
  assert.equal(candidate.isSameAsCuratedGis142,false);
  assert.equal(candidate.closestExistingCuratedId,'eagle-river-falls');
- assert.equal(source.length,75);
+ assert.equal(source.length,78);
  assert.equal(state.length,161);
- assert.equal(matched.counts.curatedTotal,75);
- assert.equal(matched.counts.exactIdMatched,68);
- assert.equal(matched.counts.pending,93);
- assert.equal(queue.counts.pendingGisFeatures,93);
+ assert.equal(matched.counts.curatedTotal,78);
+ assert.equal(matched.counts.exactIdMatched,69);
+ assert.equal(matched.counts.pending,92);
+ assert.equal(queue.counts.pendingGisFeatures,92);
  assert.equal(candidate.geography.points.length,2);
  assert.deepEqual(candidate.geography.points.map(x=>x.role),[
   'independent-firsthand-natural-falls-coordinate-not-parking',
@@ -67,7 +67,7 @@ test('B65: only a noindex research page, no map stop or navigational masquerade'
  assert.ok(!hub.includes('data-id="upper-eagle-river-ten-foot-falls"'));
  assert.ok(!sitemap.includes(slug));
  assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/ten-foot-falls/'));
- assert.equal((sitemap.match(/<loc>/g)||[]).length,73);
+ assert.equal((sitemap.match(/<loc>/g)||[]).length,76);
  assert.match(research,/<meta name="robots" content="noindex,follow">/);
  assert.match(research,/VISITOR ROUTE NOT FULLY VERIFIED/);
  assert.match(research,/438 m/);

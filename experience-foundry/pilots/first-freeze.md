@@ -3,7 +3,7 @@
 **Owner implementation:** [phenology-michigan PR #91](https://github.com/izworskic/phenology-michigan/pull/91)  
 **Canonical visitor location:** `https://phenology.chrisizworski.com/#first-freeze` (existing homepage, not another URL)  
 **Record created:** 2026-11-05  
-**Phase:** implementing/reviewing in authoritative owning repository; not independently verified live production here.
+**Phase (checked 2026-11-07):** PR #91 merged 2026-11-05 at `4ee5f4ad47a0badb5b0eadf81d93d9886e56b6d8`. GitHub merge status verified; current live production and visitor outcomes not independently verified in this workbench review. The old PR body still describes draft-era checks, so it is not a current release-status record.
 
 ## Why it exists
 
@@ -21,10 +21,10 @@ The first Foundry production candidate is *not* an isolated generated article or
 Foundry v0.1 currently includes `discover`, `init` and `build` plus two authored review-preview recipes (`field-notes`, `passage-log`). The First Freeze is the first **cross-repo, product-specific implementation using Foundry's operating rules**, not a claim that those two CLI recipes automatically generated Next.js JSX.
 
 The owning repository contains source-aware implementation and tests:
-- [Evidence model](https://github.com/izworskic/phenology-michigan/blob/feat/first-freeze-foundry-pilot-20261105/lib/first-freeze.mjs)
-- [Purpose-built interaction](https://github.com/izworskic/phenology-michigan/blob/feat/first-freeze-foundry-pilot-20261105/components/FirstFreezeJourney.js)
-- [Source/experience brief](https://github.com/izworskic/phenology-michigan/blob/feat/first-freeze-foundry-pilot-20261105/docs/FIRST_FREEZE_FOUNDRY_PILOT.md)
-- [Real browser workflow](https://github.com/izworskic/phenology-michigan/blob/feat/first-freeze-foundry-pilot-20261105/.github/workflows/first-freeze-browser.yml)
+- [Evidence model](https://github.com/izworskic/phenology-michigan/blob/4ee5f4ad47a0badb5b0eadf81d93d9886e56b6d8/lib/first-freeze.mjs)
+- [Purpose-built interaction](https://github.com/izworskic/phenology-michigan/blob/4ee5f4ad47a0badb5b0eadf81d93d9886e56b6d8/components/FirstFreezeJourney.js)
+- [Source/experience brief](https://github.com/izworskic/phenology-michigan/blob/4ee5f4ad47a0badb5b0eadf81d93d9886e56b6d8/docs/FIRST_FREEZE_FOUNDRY_PILOT.md)
+- [Real browser workflow](https://github.com/izworskic/phenology-michigan/blob/4ee5f4ad47a0badb5b0eadf81d93d9886e56b6d8/.github/workflows/first-freeze-browser.yml)
 
 ## Transferable Foundry pattern
 

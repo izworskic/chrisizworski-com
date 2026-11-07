@@ -4,9 +4,9 @@
   "policy": "RESEARCH ONLY. Priority is a review-effort heuristic, not evidence of legal visitor access, permission, parking, or live opening. Do not auto-index.",
   "counts": {
     "gisFeatures": 161,
-    "curatedDestinations": 75,
-    "matchedGisFeatures": 68,
-    "pendingGisFeatures": 93
+    "curatedDestinations": 78,
+    "matchedGisFeatures": 69,
+    "pendingGisFeatures": 92
   },
   "batchSize": 8,
   "batches": [
@@ -83,80 +83,79 @@
         75,
         86,
         112,
-        29,
         42,
-        80
+        80,
+        85
       ]
     },
     {
       "batchNumber": 7,
       "candidates": [
-        85,
         129,
         12,
         15,
         17,
         137,
         139,
-        140
+        140,
+        144
       ]
     },
     {
       "batchNumber": 8,
       "candidates": [
-        144,
         18,
         116,
         127,
         148,
         149,
         152,
-        153
+        153,
+        162
       ]
     },
     {
       "batchNumber": 9,
       "candidates": [
-        162,
         163,
         170,
         172,
         173,
         175,
         176,
-        177
+        177,
+        180
       ]
     },
     {
       "batchNumber": 10,
       "candidates": [
-        180,
         181,
         183,
         184,
         185,
         186,
         187,
-        22
+        22,
+        23
       ]
     },
     {
       "batchNumber": 11,
       "candidates": [
-        23,
         28,
         54,
         57,
         60,
         61,
         62,
-        72
+        72,
+        84
       ]
     },
     {
       "batchNumber": 12,
       "candidates": [
-        84,
         106,
         122,
         4,
@@ -886,22 +885,6 @@
       "blockingGate": "Reconcile source #112 and tourism point to a confirmed natural drop, verify any DNR-sanctioned spur/shoreline viewpoint from Pinkerton Trail, named public parking and current seasonal conditions."
     },
     {
-      "gisObjectId": 29,
-      "name": "Jumbo Falls",
-      "county": "HOUGHTON",
-      "river": "JUMBO RIVER",
-      "lat": 46.453006,
-      "lng": -88.912138,
-      "cluster": "HOUGHTON / JUMBO RIVER",
-      "priorityScore": -30,
-      "priorityReason": "Source gate blocked: only revisit when current authoritative permission, parking, route or identity evidence changes",
-      "reviewStage": "awaiting-new-authoritative-evidence",
-      "publicationEligible": false,
-      "reviewStatus": "previous-research-needs-public-access-review",
-      "sourceCount": 6,
-      "blockingGate": "Obtain current U.S. Forest Service GIS trailhead and Jumbo Falls geomarker/route polyline or other reliable surveyed source distinguishing the 2015 agency coordinates from the specialist falls point, establish certified designated visitor parking and the ~0.1-mile trail's correct physical destination, plus present FR4589-B road/trail restrictions. Do not route to any of the three coordinates before reconciling."
-    },
-    {
       "gisObjectId": 42,
       "name": "Onion Falls",
       "county": "HOUGHTON",
@@ -1250,8 +1233,8 @@
       "reviewStage": "awaiting-new-authoritative-evidence",
       "publicationEligible": false,
       "reviewStatus": "previous-research-needs-public-access-review",
-      "sourceCount": 4,
-      "blockingGate": "Obtain current MDOT postconstruction parking permissions and safe signed viewpoint/footpath, verify lane/opening status, prohibited shoulder conditions and walk from legal visitor parking."
+      "sourceCount": 14,
+      "blockingGate": "Confirm the south-of-Palmer M-35 actual fully-off-road stopping space, current posted signs and any MDOT/MSP parking traffic-control order, shoulder width and sightlines, plus current county parcel ownership/right-of-way and an authorized complete creek-bank viewpoint route. Do not demand a dedicated MDOT visitor lot if generally lawful off-road shoulder parking can instead be established. Do not ask visitors to supply site proof."
     },
     {
       "gisObjectId": 173,

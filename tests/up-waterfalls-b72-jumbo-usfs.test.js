@@ -1,0 +1,85 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {spawnSync} from 'node:child_process';
+const read=p=>fs.readFileSync(p,'utf8');
+const e=JSON.parse(read('data/up-waterfall-jumbo-usfs-2026-evidence.json'));
+const cat=JSON.parse(read('data/up-waterfalls.json'));
+const rec=JSON.parse(read('data/up-waterfall-reconciliation.json'));
+const ledger=JSON.parse(read('data/up-waterfall-inventory-ledger.json'));
+const queue=JSON.parse(read('data/up-waterfall-review-queue.json'));
+const nearby=JSON.parse(read('public/assets/up-waterfalls-nearby.json'));
+const hub=read('public/upper-peninsula-waterfalls/index.html');
+const guide=read('public/upper-peninsula-waterfalls/jumbo-falls/index.html');
+const research=read('public/upper-peninsula-waterfalls/research/jumbo-falls/index.html');
+const sitemap=read('public/sitemap-up-waterfalls.xml');
+const rad=d=>d*Math.PI/180;
+const geo=(a,b)=>{const x=rad(a[1]),y=rad(b[1]),h=Math.sin((y-x)/2)**2+Math.cos(x)*Math.cos(y)*Math.sin(rad(b[0]-a[0])/2)**2;return Math.round(12742000*Math.asin(Math.sqrt(h)))};
+test('B72 official USFS trail and natural fall independently reconcile old 904m point mismatch',()=>{
+ assert.equal(e.batch,'B72');
+ const t=e.sources.publishedTrail;
+ assert.equal(t.number,'60056');
+ assert.equal(t.attributes.gis_miles,0.079);
+ assert.equal(t.attributes.accessibility_status,'NOT ACCESSIBLE');
+ assert.equal(t.attributes.hiker_pedestrian_managed,'01/01-12/31');
+ assert.equal(t.lineCoordinatesLonLat.length,23);
+ assert.equal(geo(t.lineCoordinatesLonLat.at(-1),e.geometry.specialistNaturalFeatureLonLat),23);
+ assert.equal(geo(e.geometry.officialRecreationGenericLonLat,e.geometry.specialistNaturalFeatureLonLat),904);
+ assert.equal(geo(e.geometry.michiganStateGisNaturalPointLonLat,e.geometry.specialistNaturalFeatureLonLat),379);
+ assert.equal(e.sources.recreation.attributes.openstatus,'open');
+ assert.equal(e.sources.recreation.useAsParking,false);
+});
+test('B72 published motor road season is not current passability or parking permission',()=>{
+ const mv=e.sources.motorVehicleUseMap;
+ assert.equal(mv.segments.length,2);
+ for(const r of mv.segments){
+  assert.equal(r.attributes.id,'4589-B');
+  assert.equal(r.attributes.mvum_symbol_name,'Roads open to all Vehicles, Seasonal');
+  assert.equal(r.attributes.passengervehicle_datesopen,'05/16-03/14');
+  assert.equal(r.attributes.jurisdiction,'FS - FOREST SERVICE');
+ }
+ assert.equal(e.geometry.distanceMeters.closestRoad4589BVertexToTrailStartMeters,0);
+ assert.equal(e.publication.carNavigationToFalls,false);
+ assert.equal(e.publication.carNavigationToTrailStart,false);
+ assert.equal(e.publication.parkingPointLocationVerified,false);
+ assert.equal(e.publication.liveOpenNow,false);
+});
+test('B72 source preservation across 77 curated, 69 linked GIS, 92 unapproved research records and corrected feature point',()=>{
+ const row=cat.waterfalls.find(x=>x.id==='jumbo-falls');
+ assert.equal(cat.waterfalls.length,78);
+ assert.equal(row.gisObjectId,29);
+ assert.deepEqual([row.lat,row.lng],[46.44963,-88.91278]);
+ assert.equal(row.publication,'verified-access-guide');
+ for(const a of ['landManager','publicAccess','parking','trail','location'])assert.equal(row.verification[a].verified,true);
+ assert.equal(rec.counts.curatedTotal,78);
+ assert.equal(rec.counts.exactIdMatched,69);
+ assert.equal(rec.counts.pending,92);
+ const old=rec.candidates.find(x=>x.gisObjectId===29);
+ assert.deepEqual([old.lat,old.lng],[46.453006,-88.912138]);
+ assert.equal(old.curatedId,'jumbo-falls');
+ assert.equal(old.accessRouteAudit.destinationCoordinatesForDriving,false);
+ assert.equal(ledger.curatedCount,78);
+ assert.equal(ledger.linkedByExactOid,69);
+ assert.equal(queue.counts.pendingGisFeatures,92);
+ assert.ok(!queue.candidates.some(x=>x.gisObjectId===29));
+});
+test('B72 visitor pages and generated indexes retain source gates',()=>{
+ assert.match(guide,/index,follow/);assert.match(guide,/NOT ACCESSIBLE/);
+ assert.match(guide,/Trail 60056/);assert.match(guide,/379 metres/);assert.match(guide,/904 metres/);
+ assert.doesNotMatch(guide,/maps\/dir\//);
+ assert.match(research,/noindex,follow/);assert.match(research,/NEW B72 FINDING/);
+ assert.match(hub,/data-id="jumbo-falls" data-gis-oid="29"/);
+ assert.match(hub,/78 curated visitor destinations/);
+ assert.match(hub,/data-lat="46.44963" data-lng="-88.91278"/);
+ assert.equal((sitemap.match(/<loc>/g)||[]).length,76);
+ assert.equal((sitemap.match(/upper-peninsula-waterfalls\/jumbo-falls\//g)||[]).length,1);
+ assert.equal(nearby.counts.eligible,69);
+ assert.ok(nearby.nearby['jumbo-falls'].some(x=>x.id==='duppy-falls'&&x.miles===2.6));
+});
+test('B72 both source-generated indexes regenerate byte-for-byte',t=>{
+ const p=spawnSync('python3',['scripts/build-up-waterfalls-nearby.py','--check'],{encoding:'utf8'});
+ if(p.error?.code==='ENOENT')t.diagnostic('Python unavailable; other index assertions apply');
+ else assert.equal(p.status,0,p.stderr||p.stdout);
+ const q=spawnSync('node',['scripts/build-up-waterfall-review-queue.mjs','--check'],{encoding:'utf8'});
+ assert.equal(q.status,0,q.stderr||q.stdout);
+});

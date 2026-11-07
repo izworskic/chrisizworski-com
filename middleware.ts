@@ -21,6 +21,8 @@ const PICTURED_ROCKS_SOCIAL_IMAGE = 'https://www.nps.gov/common/uploads/structur
 const PICTURED_ROCKS_MAIN_SITE_PREFIXES = [
   '/northern-lights-michigan',
   '/soo-locks',
+  '/st-lawrence-seaway',
+  '/eisenhower-lock',
   '/fall-color',
   '/mackinac-bridge-live',
   '/great-lakes-beaches',
@@ -210,6 +212,8 @@ export const config = {
     '/index.html',
     '/northern-lights-michigan/:path*',
     '/soo-locks/:path*',
+    '/st-lawrence-seaway/:path*',
+    '/eisenhower-lock/:path*',
     '/fall-color/:path*',
     '/mackinac-bridge-live/:path*',
     '/great-lakes-beaches/:path*',

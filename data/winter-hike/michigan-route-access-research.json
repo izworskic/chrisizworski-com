@@ -197,6 +197,19 @@
       "verifiedWinterParkingCoordinates": null,
       "navigationReady": false,
       "checkedForStaticDescription": "2026-10-25"
+    },
+    {
+      "group": "piro",
+      "officialSource": "https://www.nps.gov/places/sand-point-marsh-trail-in-winter.htm",
+      "accessHint": "NPS identifies the Sand Point Beach parking area as the winter access for the 0.5-mile marsh loop, with Sand Point Road and lot normally plowed. A 2026 NPS ranger event lists 46.448947,-86.605869 as the trail meeting point, NOT the parking entrance.",
+      "restriction": "Official September 2026 construction notice scheduled Sand Point Road closure October 1–14; no post-project reopening proof was found in this research. NPS also lists Munising Falls Trail CLOSED until further notice.",
+      "requiredManagerCheck": "Confirm post-construction Sand Point Road access, current road and parking clearing, marsh boardwalk and trail status; use NPS current conditions/alerts.",
+      "currentWinterParkingConfirmed": false,
+      "currentAccessRoadConfirmed": false,
+      "currentTrailOpenConfirmed": false,
+      "verifiedWinterParkingCoordinates": null,
+      "navigationReady": false,
+      "checkedForStaticDescription": "2026-11-06"
     }
   ]
 }

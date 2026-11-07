@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Deterministic U.P. waterfall proximity index, generated from curated visitor cards.
 
-Only cards with a documented verified visitor arrival are eligible. Geographic
+Only cards with a documented verified visitor arrival AND a natural-feature coordinate are eligible. Geographic
 distance is straight-line between waterfall features, NEVER trail length, road
 mileage, parking directions, a legal route or a live opening prediction.
 
@@ -24,7 +24,7 @@ RADIUS_MILES = 50
 EARTH_RADIUS_MILES = 3958.7613
 ELIGIBLE_STATUSES = frozenset({"verify", "seasonal", "restricted"})
 # Existing visitor decision desk treats these as explicit-search-only, not casual recommendations.
-EXPLICIT_ONLY = frozenset({"scott-falls", "houghton-douglass-falls"})
+EXPLICIT_ONLY = frozenset({"scott-falls", "houghton-douglass-falls", "boston-creek-cascades"})
 
 
 class CuratedCards(HTMLParser):
