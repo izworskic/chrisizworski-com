@@ -1,6 +1,9 @@
 """Scientific/contract tests: fixtures are synthetic, NEVER published as NYC observations."""
 import importlib.util
 import json
+import io
+import re
+from urllib.parse import parse_qs, urlsplit
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 import unittest
@@ -138,6 +141,51 @@ class PythonNycIntelligenceTests(unittest.TestCase):
         self.assertIsNotNone(score["modelMaeMinutes"])
         self.assertIsNotNone(score["naiveMaeMinutes"])
         self.assertIsNone(nyc.fit_link(selected, cutoff))
+
+    def test_real_ingestion_partitions_are_bounded_and_cover_every_link(self):
+        calls = []
+        def fake_urlopen(request, timeout=35):
+            params = parse_qs(urlsplit(request.full_url).query)
+            self.assertEqual(params["$limit"], ["800"])
+            self.assertEqual(timeout, 35)
+            where = params["$where"][0]
+            lid = re.search(r"link_id='(\d+)'", where).group(1)
+            start = date.fromisoformat(re.search(r"data_as_of >= '(\d{4}-\d{2}-\d{2})", where).group(1))
+            stop = date.fromisoformat(re.search(r"data_as_of < '(\d{4}-\d{2}-\d{2})", where).group(1))
+            self.assertLessEqual((stop-start).days, 30)
+            self.assertIn(lid, nyc.BY_LINK)
+            calls.append((lid, start, stop))
+            payload = [{"link_id": lid, "service_date": start.isoformat()+"T00:00:00.000",
+                        "hour": "8", "mean_seconds": "300", "sample_count": "6"}]
+            return io.BytesIO(json.dumps(payload).encode())
+        rows=nyc.fetch_rows(NOW, fetcher=fake_urlopen)
+        self.assertEqual(len(rows),24)
+        self.assertEqual(len(calls),24)
+        for lid in nyc.BY_LINK:
+            windows=sorted((a,b) for link,a,b in calls if link==lid)
+            self.assertEqual(len(windows),4)
+            self.assertEqual(windows[0][0],nyc.local_date(NOW)-timedelta(days=93))
+            self.assertEqual(windows[-1][1],nyc.local_date(NOW)+timedelta(days=1))
+            for previous, following in zip(windows,windows[1:]):
+                self.assertEqual(previous[1],following[0])
+
+    def test_truncated_hourly_aggregate_is_rejected_not_partial_model(self):
+        def truncated(request, timeout=35):
+            params=parse_qs(urlsplit(request.full_url).query)
+            lid=re.search(r"link_id='(\d+)'",params["$where"][0]).group(1)
+            item={"link_id":lid,"service_date":"2026-08-06T00:00:00.000",
+                  "hour":"8","mean_seconds":"300","sample_count":"8"}
+            return io.BytesIO(json.dumps([item]*800).encode())
+        with self.assertRaisesRegex(ValueError, "Potentially truncated"):
+            nyc.fetch_rows(NOW, fetcher=truncated)
+
+    def test_wrong_date_partition_and_wrong_link_cannot_pass_upstream(self):
+        def bad_link(request, timeout=35):
+            entry={"link_id":"not-a-sensor","service_date":"2026-08-06T00:00:00.000",
+                   "hour":"8","mean_seconds":"300","sample_count":"8"}
+            return io.BytesIO(json.dumps([entry]).encode())
+        with self.assertRaisesRegex(ValueError, "Invalid upstream NYC"):
+            nyc.fetch_rows(NOW,fetcher=bad_link)
 
     def test_official_2026_toll_reference_matches_calculation_engine(self):
         proof=nyc.audit_tolls()
