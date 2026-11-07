@@ -17,6 +17,7 @@
 <link rel="preconnect" href="https://unpkg.com">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <link rel="stylesheet" href="/assets/rocket-map-pins.css?v=20261107-origin-v1">
+<link rel="stylesheet" href="/assets/rocket-flight-desk.css?v=20261107-eos-v1">
 <link rel="stylesheet" href="/national-tools/rocket-launch-live/styles.css?v=20261103-viewing-v1">
 <link rel="stylesheet" href="/national-tools/assets/launch-truth-desk.css?v=20261102-truth-v2">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5D2V2W7HN"></script>
@@ -24,6 +25,7 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://chrisizworski.com/national-tools/rocket-launch-live/#webpage","url":"https://chrisizworski.com/national-tools/rocket-launch-live/","name":"Rocket Launch Live USA: When and Where to Watch","description":"Coastal U.S. launch calendar with region-specific legal access, launch timing uncertainty and public NWS weather evidence.","dateModified":"2026-11-05","author":{"@id":"https://chrisizworski.com/#person"},"about":[{"@type":"Thing","name":"Rocket launch viewing"},{"@type":"Thing","name":"U.S. coastal spaceports"}]},{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"U.S. Tools","item":"https://chrisizworski.com/national-tools/"},{"@type":"ListItem","position":3,"name":"Rocket Launch Live USA","item":"https://chrisizworski.com/national-tools/rocket-launch-live/"}]}]}</script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
 <script defer src="/assets/rocket-map-pins.js?v=20261107-origin-v1"></script>
+<script defer src="/assets/rocket-flight-desk.js?v=20261107-eos-v1"></script>
 <script src="/national-tools/rocket-launch-live/vandenberg.js?v=20261103-viewing-v1" defer></script>
 <script src="/national-tools/rocket-launch-live/app.js?v=20261106-official-rss-ksc-v1-starbase-road-v1-wallops-blog-v1" defer></script>
 <script src="/national-tools/assets/launch-truth-desk.js?v=20261102-truth-v2" defer></script>
@@ -39,8 +41,62 @@
  <section class="rl-hero" aria-labelledby="rl-title">
    <div class="rl-hero-copy">
      <p class="rl-eyebrow"><span class="rl-pulse" aria-hidden="true"></span> USA launch intelligence <span class="rl-hero-separator">/</span> Atlantic · Pacific · Gulf</p>
-     <h1 id="rl-title">The launch is scheduled.<br><em>Will the trip work?</em></h1>
-     <p class="rl-lede">A rocket calendar is only the beginning. Choose a U.S. coast, follow the actual mission, and find out what we know about its launch time, legal viewing access and the sky you might stand beneath.</p>
+     <h1 id="rl-title">Find the rocket.<br><em>Know where to watch.</em></h1>
+     <p class="rl-lede">A launch on the calendar is not a viewing plan. Select a real mission, locate its pad, and check timing, public access, and the sky before you travel.</p>
+     <div class="rl-flight-desk" id="rl-flight-desk" data-status="unavailable" data-launch-id="" aria-labelledby="rl-flight-mission">
+       <div class="rl-flight-topline">
+         <span class="rl-flight-kicker">Launch flight desk / Pad → Shore → Sky</span>
+         <span class="rl-flight-region" id="rl-flight-region">Six coastal regions</span>
+       </div>
+       <h2 id="rl-flight-mission">Select a launch. Explore the actual viewing decision.</h2>
+       <div class="rl-flight-statement">
+         <strong id="rl-flight-headline" role="status" aria-live="polite">Checking the mission schedule…</strong>
+         <p id="rl-flight-note">Launch time, public access and spectator weather require separate source checks. A launch site is not a public entrance.</p>
+       </div>
+       <div class="rl-flight-picker">
+         <label for="rl-flight-mission-select">Selected rocket launch</label>
+         <select id="rl-flight-mission-select" disabled aria-label="Select a mission on the chosen launch coast">
+           <option value="">Checking scheduled missions…</option>
+         </select>
+       </div>
+       <div class="rl-flight-path" aria-label="Three checks before a rocket launch trip">
+         <div class="rl-flight-step">
+           <span>01 / Pad · When and where</span>
+           <strong id="rl-flight-time">Scheduled time not confirmed</strong>
+           <strong id="rl-flight-origin">Pad location not confirmed</strong>
+         </div>
+         <div class="rl-flight-step">
+           <span>02 / Shore · Public access</span>
+           <strong id="rl-flight-access">No launch-day viewing permission established</strong>
+         </div>
+         <div class="rl-flight-step">
+           <span>03 / Sky · Viewing conditions</span>
+           <strong id="rl-flight-sky">No launch-time viewing forecast verified</strong>
+         </div>
+       </div>
+       <div class="rl-flight-actions">
+         <button type="button" id="rl-flight-locate" disabled>Show this rocket on the map</button>
+         <a href="#rl-viewing">Inspect viewing options</a>
+         <a href="#choose-coast">Change coast</a>
+       </div>
+       <p id="rl-flight-source" class="rl-flight-source">Source status is unavailable until the current schedule is checked. A calendar listing is not clearance to launch or enter a range.</p>
+       <div class="rl-flight-evidence-links">
+         <a id="rl-flight-official" href="https://www.nasa.gov/event-type/launch-schedule/" target="_blank" rel="noopener noreferrer" hidden>Official range and access source</a>
+         <a id="rl-flight-specialist" href="#rl-viewing" hidden>Open the regional launch guide</a>
+         <a href="#rocket-visuals">Meet the rocket and payload</a>
+       </div>
+     </div>
+     <noscript>
+       <div class="rl-flight-noscript">
+         <p>Interactive schedules cannot update without JavaScript. No current launch time, public entry or weather status is established here. Read an official or source-linked regional guide before traveling.</p>
+         <a href="https://www.vandenberg.spaceforce.mil/About-Us/Environmental/" target="_blank" rel="noopener noreferrer">California / Space Force access rules</a>
+         <a href="/national-tools/space-coast-launch/">Florida</a>
+         <a href="/starbase-rocket-launch-viewing/">Texas</a>
+         <a href="/wallops-rocket-launch-viewing/">Virginia</a>
+         <a href="/kodiak-rocket-launch-viewing/">Alaska</a>
+         <a href="/barking-sands-rocket-launch-viewing/">Hawaiʻi</a>
+       </div>
+     </noscript>
      <div class="rl-hero-actions">
        <a class="rl-btn rl-btn-primary" href="#choose-coast">Choose a launch coast <span aria-hidden="true">↓</span></a>
        <a class="rl-text-link" href="#how-it-works">How the decisions work</a>

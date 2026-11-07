@@ -1293,6 +1293,32 @@
       state.userFocusedMap=true;void load(region,id);
     }
   });
+  // Experience OS v1.2.1: a first-screen mission selector and map handoff
+  // must use the SAME validated ID and fetch pipeline as the native roster,
+  // source/visitor desks and map. Never create a parallel schedule API.
+  document.addEventListener('rocket-experience:choose',event=>{
+    const region=event.detail?.region,id=event.detail?.launchId;
+    const selected=state.data?.regions?.find(r=>r.id===region);
+    if(!validRegions.has(region)||!selected?.launches?.some(l=>l.id===id))return;
+    state.userFocusedMap=true;
+    void load(region,id);
+  });
+  document.addEventListener('rocket-experience:locate',event=>{
+    const region=event.detail?.region,id=event.detail?.launchId;
+    if(!state.data||state.data.selectedLaunchId!==id||state.data.selectedRegion!==region)return;
+    state.userFocusedMap=true;
+    const map=$('rl-coast-map');
+    if(state.map&&state.rocketPins?.focusSelected()){
+      map?.scrollIntoView({behavior:window.matchMedia?.('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});
+      map?.focus({preventScroll:true});
+    }else{
+      // The same coast buttons and source links remain usable without map tiles.
+      const source=$('rl-region-picker');
+      source?.scrollIntoView({behavior:'auto',block:'start'});
+      const chosen=source?.querySelector('[aria-pressed="true"]');
+      chosen?.focus({preventScroll:true});
+    }
+  });
   const initial = new URL(location.href);
   const region = validRegions.has(initial.searchParams.get('region')) ?
     initial.searchParams.get('region') : null;
