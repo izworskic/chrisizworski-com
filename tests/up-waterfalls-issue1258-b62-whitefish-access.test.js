@@ -56,8 +56,8 @@ test('B62: DNR access at falls is A-02-004 and never confused with A-02-010 upst
 
 test('B62: public water-access land is official but waterfall sightseeing route not cleared',()=>{
  assert.ok(candidate&&entry&&review&&inQueue);
- assert.equal(rec.counts.curatedTotal,77);assert.equal(rec.counts.exactIdMatched,69);
- assert.equal(rec.counts.pending,92);assert.equal(ledger.curatedCount,77);
+ assert.equal(rec.counts.curatedTotal,78;assert.equal(rec.counts.exactIdMatched,69);
+ assert.equal(rec.counts.pending,92);assert.equal(ledger.curatedCount,78;
  assert.equal(ledger.unresolvedCandidates,92);assert.equal(queue.candidates.length,92);
  assert.equal(reviews.records.length,97);
  assert.equal(candidate.curatedId,null);assert.equal(entry.curatedId,null);
