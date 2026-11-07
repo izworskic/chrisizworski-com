@@ -1,9 +1,9 @@
 {
-  "date": "2026-11-06",
-  "updated": "2026-11-06T18:07:11.785Z",
-  "body": "The model shows Southwest and Southeast Lower Michigan leading color change at 50 percent in falling phase, while all other regions remain at 10-18 percent in down phase. Central and Saginaw Bay follows at 18 percent. The Upper Peninsula and northern Lower regions lag significantly behind.\n\nThis weekend brings rain to most areas except the Western and Tip of the Mitt regions, which will see mixed skies. Temperatures range from highs near 45-59 degrees with lows near 32-39. Rain may dampen foliage viewing but cooler nights support continued color development across the state.\n\nFor weekend outings, Southwest Lower Michigan offers the most advanced color along Blue Star Highway near Saugatuck, while Southeast Lower provides similar conditions along US-12 through the Irish Hills. Those seeking quieter viewing with emerging color might explore Pierce Stocking Scenic Drive in Northwest Lower or River Road near Midland.",
+  "date": "2026-11-07",
+  "updated": "2026-11-07T16:54:09.878Z",
+  "body": "The modeled color progression shows a stark divide across Michigan. Southwest and Southeast Lower Peninsula regions lead at 44 percent color, in the falling phase. Central and Saginaw Bay follows at 17 percent. The Upper Peninsula and northern Lower Peninsula regions all model at 10 percent, still in early decline.\n\nThis weekend's weather will slow color development in rain-prone areas. Eastern U.P., Tip of the Mitt, and Northeast Lower face incoming rain with highs near 47–51 degrees and lows near 30–36. Mixed skies dominate the western and southern zones with slightly warmer highs near 51–55, favoring continued leaf drop in Southwest and Southeast Lower.\n\nFor peak viewing this weekend, head to Southwest Lower Michigan along Blue Star Highway near Saugatuck or Southeast Lower along the Irish Hills on US-12, where modeled color is most advanced. Both regions expect mixed skies and mild temperatures ideal for a scenic drive.",
   "generationMethod": "AI-generated model summary",
-  "conditionsUpdated": "2026-11-06T18:07:08.596Z",
+  "conditionsUpdated": "2026-11-07T16:54:06.607Z",
   "sourceEvidence": [
     {
       "region": "wup",
@@ -18,8 +18,8 @@
         "anchorShiftDays": -10,
         "anchorConfidence": "good",
         "satelliteDate": "2026-10-16",
-        "satelliteAgeDays": 22,
-        "satelliteWeight": 0.92
+        "satelliteAgeDays": 23,
+        "satelliteWeight": 0.88
       }
     },
     {
@@ -35,8 +35,8 @@
         "anchorShiftDays": -10,
         "anchorConfidence": "good",
         "satelliteDate": "2026-10-16",
-        "satelliteAgeDays": 22,
-        "satelliteWeight": 0.92
+        "satelliteAgeDays": 23,
+        "satelliteWeight": 0.88
       }
     },
     {
@@ -52,8 +52,8 @@
         "anchorShiftDays": -10,
         "anchorConfidence": "good",
         "satelliteDate": "2026-10-16",
-        "satelliteAgeDays": 22,
-        "satelliteWeight": 0.92
+        "satelliteAgeDays": 23,
+        "satelliteWeight": 0.88
       }
     },
     {
@@ -69,8 +69,8 @@
         "anchorShiftDays": -10,
         "anchorConfidence": "good",
         "satelliteDate": "2026-10-16",
-        "satelliteAgeDays": 22,
-        "satelliteWeight": 0.92
+        "satelliteAgeDays": 23,
+        "satelliteWeight": 0.88
       }
     },
     {
@@ -86,13 +86,13 @@
         "anchorShiftDays": -10,
         "anchorConfidence": "good",
         "satelliteDate": "2026-10-16",
-        "satelliteAgeDays": 22,
-        "satelliteWeight": 0.92
+        "satelliteAgeDays": 23,
+        "satelliteWeight": 0.88
       }
     },
     {
       "region": "cen",
-      "modeledPercent": 18,
+      "modeledPercent": 17,
       "source": {
         "drivers": [
           "regional climatology",
@@ -103,13 +103,13 @@
         "anchorShiftDays": -10,
         "anchorConfidence": "good",
         "satelliteDate": "2026-10-16",
-        "satelliteAgeDays": 22,
-        "satelliteWeight": 0.92
+        "satelliteAgeDays": 23,
+        "satelliteWeight": 0.88
       }
     },
     {
       "region": "swl",
-      "modeledPercent": 50,
+      "modeledPercent": 44,
       "source": {
         "drivers": [
           "regional climatology",
@@ -120,13 +120,13 @@
         "anchorShiftDays": -10,
         "anchorConfidence": "good",
         "satelliteDate": "2026-10-16",
-        "satelliteAgeDays": 22,
-        "satelliteWeight": 0.92
+        "satelliteAgeDays": 23,
+        "satelliteWeight": 0.88
       }
     },
     {
       "region": "sel",
-      "modeledPercent": 50,
+      "modeledPercent": 44,
       "source": {
         "drivers": [
           "regional climatology",
@@ -137,8 +137,8 @@
         "anchorShiftDays": -10,
         "anchorConfidence": "good",
         "satelliteDate": "2026-10-16",
-        "satelliteAgeDays": 22,
-        "satelliteWeight": 0.92
+        "satelliteAgeDays": 23,
+        "satelliteWeight": 0.88
       }
     }
   ],
