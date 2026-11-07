@@ -54,6 +54,7 @@
   let map = null, padMarker = null, connectors = null, lotBoundaries = null, policyLine = null, boardwalkLayer = null, activeClosureLayer = null, lotFilter = 'all';
   const boardwalkSegments = new Map();
   let markers = new Map(), leafletPromise = null, mapPromise = null, lastMissionId = null;
+  let rocketPins=null,scheduledLaunches=[];
   const options = document.querySelectorAll('input[name="geo-intent"]');
   function updateExplanation() { say('geo-intent-explainer', profileDescription[profile]); }
   options.forEach(r => r.addEventListener('change', () => {
@@ -676,6 +677,12 @@
       const L=await loadLeaflet();
       screen.replaceChildren();
       map=L.map(screen,{scrollWheelZoom:false,zoomControl:true,preferCanvas:true});
+        rocketPins=window.RocketMapPins?.mount(map,{
+          region:'florida',centers:{florida:{lat:28.58,lon:-80.61}},
+          onSelect:id=>document.dispatchEvent(new CustomEvent(
+            'space-coast:mission-marker-selected',{detail:{launchId:id}}))
+        });
+        rocketPins?.update(scheduledLaunches,lastMissionId);
       map.setView([28.56,-80.68],10);
       void loadTiles(L,map); // Draw markers immediately; basemap configuration can arrive afterward.
       const resize=()=>map?.invalidateSize({pan:false});
@@ -932,10 +939,13 @@
   document.addEventListener('space-coast:launch-loaded',event=>{
     const d=event.detail;
     if(!d || !d.geographicViewing) {
-      current=null;render();return;
+      current=null;scheduledLaunches=[];rocketPins?.update([],null);render();return;
     }
     if(d.selectedLaunchId!==lastMissionId)selected=null;
     lastMissionId=d.selectedLaunchId;
+    scheduledLaunches=(Array.isArray(d.launches)?d.launches:[])
+      .map(m=>({...m,region:'florida'}));
+    rocketPins?.update(scheduledLaunches,lastMissionId);
     current=d.geographicViewing;
     render();
     loadRepairHistoryOnce();
