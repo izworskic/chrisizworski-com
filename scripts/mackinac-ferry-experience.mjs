@@ -2,10 +2,10 @@
 // No timetable or live-operations claim is made by this page.
 export function ferryExperienceMarkup(){
   return `<section class="shell ferry-lab" id="ferry-compare" aria-labelledby="ferry-lab-title">
-  <div class="ferry-intro"><div><div class="eyebrow">2026 ferry decision engine</div><h2 id="ferry-lab-title">Find the right boat, parking lot and total family fare</h2><p>Compare Shepler's and Arnold Transit from Mackinaw City and St. Ignace. Include children, bikes, military discounts and the cost of leaving your vehicle on the mainland. Start with the trip, not a ticket ad.</p></div><a class="ferry-subtle-link" href="/tools/">More Michigan tools →</a></div>
+  <div class="ferry-intro"><div><div class="eyebrow">Ferry decision engine · dated fare references</div><h2 id="ferry-lab-title">Find the right boat, parking lot and total family fare</h2><p>Compare Shepler's and Arnold Transit from Mackinaw City and St. Ignace. Include children, bikes, military discounts and the cost of leaving your vehicle on the mainland. Start with the trip, not a ticket ad.</p></div><a class="ferry-subtle-link" href="/tools/">More Michigan tools →</a></div>
   <form id="ferry-form" class="ferry-form" autocomplete="off">
     <div class="ferry-fields">
-      <label>When are you going?<input id="ferry-date" type="date" value="2026-10-17" min="2026-01-01" required></label>
+      <label>When are you going?<input id="ferry-date" type="date" min="2026-01-01" required></label>
       <label>Coming from<select id="ferry-origin"><option value="lower">Lower Peninsula / south of the bridge</option><option value="upper">Upper Peninsula / north of the bridge</option><option value="either">Already near the Straits / compare both</option></select></label>
       <label>Your visit<select id="ferry-trip"><option value="day">Day trip</option><option value="overnight">Staying overnight</option></select></label>
       <label id="ferry-nights-label" hidden>Nights parked on mainland<input id="ferry-nights" type="number" min="1" max="14" value="1" inputmode="numeric"></label>
@@ -19,7 +19,7 @@ export function ferryExperienceMarkup(){
     <label class="ferry-check"><input id="ferry-pets" type="checkbox"><span>Bringing a pet</span></label>
     <button type="submit" class="ferry-submit">Compare ferry options <span aria-hidden="true">→</span></button>
   </form>
-  <div id="ferry-results" class="ferry-results" aria-live="polite"><p>Choose your party and date to compare 2026 ferry fares.</p></div>
+  <div id="ferry-results" class="ferry-results" aria-live="polite"><p>Choose your travel date; only seasons with verified published fares produce a quote.</p></div>
   <div class="ferry-data-note">2026 published fares, not a live ticket quote. Arnold's booking fee is not published as a flat amount; any applicable fees are shown as extra. Ferry tickets do not reserve a departure. Confirm schedules and weather notices with the operator before driving. <a href="https://www.arnoldtransitcompany.com/summer-ferry-rates/" target="_blank" rel="noopener">Arnold fares</a> · <a href="https://www.sheplersferry.com/ticket-options/" target="_blank" rel="noopener">Shepler's fares</a>.</div>
   </section>
   <section class="shell ferry-journey" aria-label="Ferry terminals and boarding">
