@@ -11,7 +11,7 @@
  const IDS=new Set(['nasa-visitor','reed','harbor']),$=id=>document.getElementById(id);
  const set=(id,value)=>{const node=$(id);if(node)node.textContent=value??'Not verified'};
  const state={request:0,data:null,places:[],profile:'first',site:'nasa-visitor',
-  map:null,markers:new Map(),padMarker:null,bearingLine:null,tiles:false,leafletPromise:null};
+  map:null,markers:new Map(),padMarker:null,bearingLine:null,rocketPins:null,tiles:false,leafletPromise:null};
  const profiles={
   first:{order:['nasa-visitor','reed','harbor'],note:'Start with the NASA launch-viewing event if NASA explicitly opens its lawn for this mission. Otherwise investigate the downtown Chincoteague waterfront.'},
   backup:{order:['reed','harbor','nasa-visitor'],note:'Town waterfronts are alternatives to investigate if the NASA Visitor Center is closed or full; launch parking and local access still require confirmation.'},
@@ -128,6 +128,12 @@
    if(!screen)return;
    screen.replaceChildren();
    state.map=L.map(screen,{scrollWheelZoom:false,preferCanvas:true,zoomControl:true});
+      state.rocketPins=window.RocketMapPins?.mount(state.map,{
+        region:'virginia',centers:{virginia:{lat:37.84,lon:-75.48}},
+        onSelect:id=>{void loadMission(id);}
+      });
+      state.rocketPins?.update(state.data?.regions?.find(r=>r.id==='virginia')?.launches||[],
+        state.data?.selectedLaunchId);
    const credit='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
    const osm=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:credit}).addTo(state.map);
    osm.on('tileload',readyTiles);
@@ -261,7 +267,9 @@
    'NWS spectator sky near '+sky.map(x=>x.name+': '+x.cloudCoverPercent+'% cloud').join(' / ')+
    ' · not trajectory, GO or viewing permission':
    'NWS: mission-time spectator sky comparison unavailable, not a clear-view promise');
-  state.data=data;deepLink(picked?.id);
+  state.data=data;
+  state.rocketPins?.update(missions,picked?.id);
+  deepLink(picked?.id);
   const u=new URL(location.href);
   if(picked?.id&&UUID.test(picked.id))u.searchParams.set('launchId',picked.id);
   else u.searchParams.delete('launchId');
@@ -291,6 +299,7 @@
    set('w-decision-title','TRIP DECISION · SOURCE UNAVAILABLE');
    set('w-decision-copy','Do not travel based on an old countdown. Confirm any mission and launch-specific visitor opening directly with NASA.');
    set('w-sky-status','NWS spectator weather unavailable');
+   state.rocketPins?.update([],null);
    deepLink(null);selection();updatePad();
   }
  }
