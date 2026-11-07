@@ -38,7 +38,7 @@ test('B78 all inventory, curator, nearby Python and sitemap counts agree without
  assert.equal((sm.match(/<loc>/g)||[]).length,78);
  assert.ok(sm.includes('wildcat-falls/</loc><lastmod>2026-11-07</lastmod>'));
  const graph=JSON.parse(hub.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1])['@graph'];const list=graph.find(x=>x['@type']==='ItemList');
- assert.equal(list.numberOfItems,78);assert.equal(list.itemListElement.at(-1).name,'Wildcat Falls');
+ assert.equal(list.numberOfItems,78);assert.ok(list.itemListElement.some(x=>x.name==='Wildcat Falls'),'B78 Wildcat must remain in the ItemList after newer verified destinations');
 });
 test('B78 public indexable guide is evidence-rich, not navigation to approximate falls pin',()=>{
  assert.match(page,/rel="canonical" href="https:\/\/chrisizworski.com\/upper-peninsula-waterfalls\/wildcat-falls\//);
