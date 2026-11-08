@@ -1,0 +1,1427 @@
+{
+  "schemaVersion": 1,
+  "reviewed": "2026-11-08",
+  "purpose": "Source-by-source Upper Peninsula visitor-bureau waterfall name crosswalk against 80 curated site records; not an access permit, exhaustive 300+ waterfall inventory, scraped live feed or permission to drive to a GIS feature.",
+  "curatedInventoryPath": "data/up-waterfalls.json",
+  "counts": {
+    "curatedAtAudit": 80,
+    "michiganStateGisFeatures": 161,
+    "exactGisLinks": 69,
+    "unresolvedGisFeatures": 92,
+    "tourismSourceSets": 13,
+    "tourismMentions": 151,
+    "distinctSourceNameStrings": 98,
+    "byDisposition": {
+      "curated": 108,
+      "research_only": 32,
+      "closure_guide": 4,
+      "not_distinct_natural_falls": 5,
+      "companion_covered": 1,
+      "needs_identity_review": 1
+    }
+  },
+  "statusDefinitions": {
+    "curated": "Named entry with existing published guide; access may be seasonal or conditional.",
+    "closure_guide": "Published page explicitly documents closure; should not be suggested as a currently available visit.",
+    "research_only": "Regional bureau mentions it but independent safe public arrival/route remains unverified or prohibited; retain as researched name, never a public navigation pin.",
+    "companion_covered": "Different named small tier or alias covered inside an existing primary guide, with no duplicate parking destination.",
+    "not_distinct_natural_falls": "A dam spillway, creek walk without a waterfall, or rapids; not an independently qualified natural waterfall trip.",
+    "needs_identity_review": "Regional name still requires a geographic identity and safe public-route audit."
+  },
+  "sources": [
+    {
+      "id": "pure-michigan",
+      "name": "Pure Michigan statewide waterfall highlights",
+      "url": "https://www.michigan.org/waterfalls",
+      "namedCount": 3,
+      "sourceScope": "Visible named falls/sites in the reviewed editorial list, not the entire dynamic tourism directory."
+    },
+    {
+      "id": "uptravel-eastern-central",
+      "name": "Upper Peninsula Travel & Recreation Association eastern/central must-sees",
+      "url": "https://www.uptravel.com/blog/post/best-waterfalls-eastern-central/",
+      "namedCount": 7,
+      "sourceScope": "Visible named falls/sites in the reviewed editorial list, not the entire dynamic tourism directory."
+    },
+    {
+      "id": "uptravel-interactive",
+      "name": "Upper Peninsula Travel & Recreation Association interactive five",
+      "url": "https://www.uptravel.com/blog/post/interactive-waterfalls/",
+      "namedCount": 5,
+      "sourceScope": "Visible named falls/sites in the reviewed editorial list, not the entire dynamic tourism directory."
+    },
+    {
+      "id": "munising-regional",
+      "name": "Munising Visitor Bureau and Explore Munising local waterfall lists",
+      "url": "https://www.munising.org/water-activities/waterfalls-in-munising/",
+      "namedCount": 16,
+      "sourceScope": "Visible named falls/sites in the reviewed editorial list, not the entire dynamic tourism directory."
+    },
+    {
+      "id": "grand-marais",
+      "name": "Grand Marais Chamber regional waterfall guide",
+      "url": "https://grandmaraismichigan.com/visit-us/attractions/waterfalls/",
+      "namedCount": 8,
+      "sourceScope": "Visible named falls/sites in the reviewed editorial list, not the entire dynamic tourism directory."
+    },
+    {
+      "id": "nps-pictured-rocks",
+      "name": "NPS Pictured Rocks main-waterfall list",
+      "url": "https://www.nps.gov/piro/planyourvisit/waterfalls.htm",
+      "namedCount": 7,
+      "sourceScope": "Visible named falls/sites in the reviewed editorial list, not the entire dynamic tourism directory."
+    },
+    {
+      "id": "travel-marquette",
+      "name": "Travel Marquette waterfall destinations",
+      "url": "https://www.travelmarquette.com/outdoor-adventure/waterfalls/",
+      "namedCount": 8,
+      "sourceScope": "Visible named falls/sites in the reviewed editorial list, not the entire dynamic tourism directory."
+    },
+    {
+      "id": "iron-chamber",
+      "name": "Iron County Economic Chamber waterfall guide",
+      "url": "https://www.iron.org/outdoors/waterfalls/",
+      "namedCount": 8,
+      "sourceScope": "Visible named falls/sites in the reviewed editorial list, not the entire dynamic tourism directory."
+    },
+    {
+      "id": "iron-guide-2026",
+      "name": "Iron County 2026 printed visitor guide waterfall tour",
+      "url": "https://www.iron.org/wp-content/uploads/2026/01/2026-Iron-County-Visitors-Guide.pdf",
+      "namedCount": 9,
+      "sourceScope": "Visible named falls/sites in the reviewed editorial list, not the entire dynamic tourism directory."
+    },
+    {
+      "id": "keweenaw-guide-2026",
+      "name": "Visit Keweenaw 2026–27 visitor guide waterfall tour",
+      "url": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/keweenawmi/KCVB_Visitors_Guide_20260407_HIGH_23713277-83e7-418f-aab3-34c51d92bb6f.pdf",
+      "namedCount": 12,
+      "sourceScope": "Visible named falls/sites in the reviewed editorial list, not the entire dynamic tourism directory."
+    },
+    {
+      "id": "keweenaw-driving",
+      "name": "Visit Keweenaw two-day waterfall driving tour",
+      "url": "https://www.visitkeweenaw.com/blog/post/2-day-keweenaw-waterfall-driving-tour/",
+      "namedCount": 13,
+      "sourceScope": "Visible named falls/sites in the reviewed editorial list, not the entire dynamic tourism directory."
+    },
+    {
+      "id": "keweenaw-special",
+      "name": "Visit Keweenaw waterfall and gorge excursion stories",
+      "url": "https://www.visitkeweenaw.com/outdoors/waterfalls/",
+      "namedCount": 8,
+      "sourceScope": "Visible named falls/sites in the reviewed editorial list, not the entire dynamic tourism directory."
+    },
+    {
+      "id": "westernup",
+      "name": "Western U.P. CVB published waterfall guide",
+      "url": "https://explorewesternup.com/things-to-do/waterfalls/",
+      "namedCount": 47,
+      "sourceScope": "Visible named falls/sites in the reviewed editorial list, not the entire dynamic tourism directory."
+    }
+  ],
+  "entries": [
+    {
+      "sourceId": "pure-michigan",
+      "sourceName": "Tahquamenon Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "tahquamenon"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "pure-michigan",
+      "sourceName": "Bond Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "bond-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "pure-michigan",
+      "sourceName": "Hungarian Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "upper-hungarian-falls",
+        "middle-hungarian-falls",
+        "lower-hungarian-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "uptravel-eastern-central",
+      "sourceName": "Upper Tahquamenon Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "tahquamenon"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "uptravel-eastern-central",
+      "sourceName": "Lower Tahquamenon Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "tahquamenon"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "uptravel-eastern-central",
+      "sourceName": "Miners Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "miners-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "uptravel-eastern-central",
+      "sourceName": "Chapel Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "chapel-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "uptravel-eastern-central",
+      "sourceName": "Sable Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "sable-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "uptravel-eastern-central",
+      "sourceName": "Dead River Falls",
+      "disposition": "research_only",
+      "curatedIds": [],
+      "note": "Private gorge path; FERC historical lot and township commercial-forest description do not establish current recreational easement or approved parking."
+    },
+    {
+      "sourceId": "uptravel-eastern-central",
+      "sourceName": "Black River Falls (Ishpeming)",
+      "disposition": "research_only",
+      "curatedIds": [],
+      "note": "Distinct from the five Gogebic County Black River falls; the historic footbridge was condemned and no current DNR-authorized substitute waterfall approach is verified."
+    },
+    {
+      "sourceId": "uptravel-interactive",
+      "sourceName": "O Kun de Kun Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "o-kun-de-kun-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "uptravel-interactive",
+      "sourceName": "Canyon Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "canyon-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "uptravel-interactive",
+      "sourceName": "Elliot Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "elliot-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "uptravel-interactive",
+      "sourceName": "Scott Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "scott-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "uptravel-interactive",
+      "sourceName": "Lower Tahquamenon Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "tahquamenon"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "munising-regional",
+      "sourceName": "Sable Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "sable-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "munising-regional",
+      "sourceName": "Whitefish Falls",
+      "disposition": "research_only",
+      "curatedIds": [],
+      "note": "DNR river parcel and natural feature supported; lawful parking and complete waterfall footpath remain unverified."
+    },
+    {
+      "sourceId": "munising-regional",
+      "sourceName": "Wagner Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "wagner-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "munising-regional",
+      "sourceName": "Spray Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "spray-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "munising-regional",
+      "sourceName": "Scott Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "scott-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "munising-regional",
+      "sourceName": "Rock River Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "rock-river-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "munising-regional",
+      "sourceName": "Munising Falls",
+      "disposition": "closure_guide",
+      "curatedIds": [
+        "munising-falls"
+      ],
+      "note": "Indexed closure information, not a currently recommended hike."
+    },
+    {
+      "sourceId": "munising-regional",
+      "sourceName": "Mosquito Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "mosquito-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "munising-regional",
+      "sourceName": "Miners Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "miners-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "munising-regional",
+      "sourceName": "Laughing Whitefish Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "laughing-whitefish-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "munising-regional",
+      "sourceName": "Alger Falls",
+      "disposition": "research_only",
+      "curatedIds": [],
+      "note": "Munising and Alger County recreation plans report no safe M-28/M-94 visitor parking. Do not route to shoulder."
+    },
+    {
+      "sourceId": "munising-regional",
+      "sourceName": "Au Train Falls",
+      "disposition": "research_only",
+      "curatedIds": [],
+      "note": "Post-license ownership and 2026 EGLE emergency dam order; neither upper nor lower former parking/walking route independently cleared."
+    },
+    {
+      "sourceId": "munising-regional",
+      "sourceName": "Horseshoe Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "horseshoe-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "munising-regional",
+      "sourceName": "Elliot Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "elliot-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "munising-regional",
+      "sourceName": "Chapel Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "chapel-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "munising-regional",
+      "sourceName": "Bridalveil Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "bridalveil-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "grand-marais",
+      "sourceName": "Sable Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "sable-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "grand-marais",
+      "sourceName": "Tahquamenon Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "tahquamenon"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "grand-marais",
+      "sourceName": "Munising Falls",
+      "disposition": "closure_guide",
+      "curatedIds": [
+        "munising-falls"
+      ],
+      "note": "Indexed closure information, not a currently recommended hike."
+    },
+    {
+      "sourceId": "grand-marais",
+      "sourceName": "Miners Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "miners-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "grand-marais",
+      "sourceName": "Bridalveil Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "bridalveil-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "grand-marais",
+      "sourceName": "Mosquito Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "mosquito-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "grand-marais",
+      "sourceName": "Chapel Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "chapel-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "grand-marais",
+      "sourceName": "Spray Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "spray-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "nps-pictured-rocks",
+      "sourceName": "Munising Falls",
+      "disposition": "closure_guide",
+      "curatedIds": [
+        "munising-falls"
+      ],
+      "note": "Indexed closure information, not a currently recommended hike."
+    },
+    {
+      "sourceId": "nps-pictured-rocks",
+      "sourceName": "Bridalveil Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "bridalveil-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "nps-pictured-rocks",
+      "sourceName": "Mosquito Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "mosquito-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "nps-pictured-rocks",
+      "sourceName": "Chapel Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "chapel-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "nps-pictured-rocks",
+      "sourceName": "Miners Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "miners-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "nps-pictured-rocks",
+      "sourceName": "Spray Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "spray-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "nps-pictured-rocks",
+      "sourceName": "Sable Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "sable-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "travel-marquette",
+      "sourceName": "Wright Street Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "wright-street-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "travel-marquette",
+      "sourceName": "Cataract Dam Falls",
+      "disposition": "research_only",
+      "curatedIds": [],
+      "note": "Gwinn dam/river approach requires operator authorization, current restrictions and route proof."
+    },
+    {
+      "sourceId": "travel-marquette",
+      "sourceName": "Morgan Creek Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "morgan-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "travel-marquette",
+      "sourceName": "Little Garlic Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "little-garlic-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "travel-marquette",
+      "sourceName": "Warner Creek Falls",
+      "disposition": "research_only",
+      "curatedIds": [],
+      "note": "Warner Falls on M-35; no source-verified safe post-construction stopping/footpath."
+    },
+    {
+      "sourceId": "travel-marquette",
+      "sourceName": "Canyon Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "canyon-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "travel-marquette",
+      "sourceName": "Carp River Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "carp-river-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "travel-marquette",
+      "sourceName": "Laughing Whitefish Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "laughing-whitefish-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "iron-chamber",
+      "sourceName": "Horse Race Rapids",
+      "disposition": "not_distinct_natural_falls",
+      "curatedIds": [],
+      "note": "Rapid-water recreation site; not an individually verified waterfall."
+    },
+    {
+      "sourceId": "iron-chamber",
+      "sourceName": "Chicaugon Falls",
+      "disposition": "research_only",
+      "curatedIds": [],
+      "note": "Chicagon/Chicaugon Falls; waterfall on DNR parcel but intervening road and trail rights unresolved."
+    },
+    {
+      "sourceId": "iron-chamber",
+      "sourceName": "Duppy Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "duppy-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "iron-chamber",
+      "sourceName": "Jumbo Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "jumbo-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "iron-chamber",
+      "sourceName": "Mexi-Mini Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "mex-i-min-e-falls"
+      ],
+      "note": "Alternative spelling for the existing verified Mex-i-min-e Falls visitor guide."
+    },
+    {
+      "sourceId": "iron-chamber",
+      "sourceName": "Bond Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "bond-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "iron-chamber",
+      "sourceName": "Agate Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "agate-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "iron-chamber",
+      "sourceName": "Canyon Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "canyon-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "iron-guide-2026",
+      "sourceName": "Agate Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "agate-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "iron-guide-2026",
+      "sourceName": "Bond Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "bond-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "iron-guide-2026",
+      "sourceName": "Canyon Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "canyon-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "iron-guide-2026",
+      "sourceName": "Chicagoon Falls",
+      "disposition": "research_only",
+      "curatedIds": [],
+      "note": "Chicagon/Chicaugon Falls; waterfall on DNR parcel but intervening road and trail rights unresolved."
+    },
+    {
+      "sourceId": "iron-guide-2026",
+      "sourceName": "Duppy Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "duppy-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "iron-guide-2026",
+      "sourceName": "Horse Race Rapids",
+      "disposition": "not_distinct_natural_falls",
+      "curatedIds": [],
+      "note": "Rapid-water recreation site; not an individually verified waterfall."
+    },
+    {
+      "sourceId": "iron-guide-2026",
+      "sourceName": "Jumbo Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "jumbo-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "iron-guide-2026",
+      "sourceName": "Mex-i-min-e Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "mex-i-min-e-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "iron-guide-2026",
+      "sourceName": "Tribbets Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "tibbets-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "keweenaw-guide-2026",
+      "sourceName": "Montreal Falls (Keweenaw)",
+      "disposition": "curated",
+      "curatedIds": [
+        "montreal-falls-keweenaw"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "keweenaw-guide-2026",
+      "sourceName": "Houghton-Douglass Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "houghton-douglass-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "keweenaw-guide-2026",
+      "sourceName": "Canyon Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "canyon-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "keweenaw-guide-2026",
+      "sourceName": "Hungarian Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "upper-hungarian-falls",
+        "middle-hungarian-falls",
+        "lower-hungarian-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "keweenaw-guide-2026",
+      "sourceName": "Wyandotte Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "wyandotte-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "keweenaw-guide-2026",
+      "sourceName": "10-Foot Falls (Upper Eagle River)",
+      "disposition": "research_only",
+      "curatedIds": [],
+      "note": "Separate from the existing Lower Eagle River Falls guide; Visit Keweenaw's 2026 route uses an unsigned M-26 stop, and the mapped feature positions differ by approximately 438m. Highway parking and bank rights have not been independently cleared."
+    },
+    {
+      "sourceId": "keweenaw-guide-2026",
+      "sourceName": "Red Ridge Dam",
+      "disposition": "not_distinct_natural_falls",
+      "curatedIds": [],
+      "note": "Historic manmade dam/spillway feature; not a separate natural-waterfall visitor guide."
+    },
+    {
+      "sourceId": "keweenaw-guide-2026",
+      "sourceName": "Silver River Falls",
+      "disposition": "research_only",
+      "curatedIds": [
+        "silver-river-falls"
+      ],
+      "note": "Included as source/research record, but not an indexable public outing."
+    },
+    {
+      "sourceId": "keweenaw-guide-2026",
+      "sourceName": "Jacob's Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "jacobs-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "keweenaw-guide-2026",
+      "sourceName": "Lower Eagle River Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "eagle-river-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "keweenaw-guide-2026",
+      "sourceName": "Haven Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "haven-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "keweenaw-guide-2026",
+      "sourceName": "Manganese Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "manganese-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "keweenaw-driving",
+      "sourceName": "Canyon Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "canyon-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "keweenaw-driving",
+      "sourceName": "Bond Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "bond-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "keweenaw-driving",
+      "sourceName": "Sturgeon Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "sturgeon-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "keweenaw-driving",
+      "sourceName": "Wyandotte Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "wyandotte-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "keweenaw-driving",
+      "sourceName": "Hungarian Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "upper-hungarian-falls",
+        "middle-hungarian-falls",
+        "lower-hungarian-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "keweenaw-driving",
+      "sourceName": "Gardeners Creek Nature Trail",
+      "disposition": "not_distinct_natural_falls",
+      "curatedIds": [],
+      "note": "Visit Keweenaw explicitly says this public walking trail does not lead to a waterfall."
+    },
+    {
+      "sourceId": "keweenaw-driving",
+      "sourceName": "Upper Eagle River Falls",
+      "disposition": "research_only",
+      "curatedIds": [],
+      "note": "Separate from Lower Eagle River Falls; unsigned M-26 pull-off, position conflict and bank-rights unresolved."
+    },
+    {
+      "sourceId": "keweenaw-driving",
+      "sourceName": "Lower Eagle River Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "eagle-river-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "keweenaw-driving",
+      "sourceName": "Jacob's Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "jacobs-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "keweenaw-driving",
+      "sourceName": "Silver River Falls",
+      "disposition": "research_only",
+      "curatedIds": [
+        "silver-river-falls"
+      ],
+      "note": "Included as source/research record, but not an indexable public outing."
+    },
+    {
+      "sourceId": "keweenaw-driving",
+      "sourceName": "Manganese Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "manganese-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "keweenaw-driving",
+      "sourceName": "Haven Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "haven-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "keweenaw-driving",
+      "sourceName": "Red Ridge Dam",
+      "disposition": "not_distinct_natural_falls",
+      "curatedIds": [],
+      "note": "Historic manmade dam/spillway feature; not a separate natural-waterfall visitor guide."
+    },
+    {
+      "sourceId": "keweenaw-special",
+      "sourceName": "O Kun de Kun Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "o-kun-de-kun-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "keweenaw-special",
+      "sourceName": "Hogger Falls",
+      "disposition": "research_only",
+      "curatedIds": [],
+      "note": "Visit Keweenaw discusses rough remote outing; riverbank off-trail and seasonal forest road are not a verified maintained visitor corridor."
+    },
+    {
+      "sourceId": "keweenaw-special",
+      "sourceName": "West Branch Sturgeon Falls",
+      "disposition": "research_only",
+      "curatedIds": [],
+      "note": "Potentially separate from published Sturgeon Falls gorge; needs exact identity and owner-approved arrival before linking."
+    },
+    {
+      "sourceId": "keweenaw-special",
+      "sourceName": "Houghton-Douglass Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "houghton-douglass-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "keweenaw-special",
+      "sourceName": "Montreal Falls (Keweenaw)",
+      "disposition": "curated",
+      "curatedIds": [
+        "montreal-falls-keweenaw"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "keweenaw-special",
+      "sourceName": "Haven Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "haven-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "keweenaw-special",
+      "sourceName": "Hungarian Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "upper-hungarian-falls",
+        "middle-hungarian-falls",
+        "lower-hungarian-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "keweenaw-special",
+      "sourceName": "Jacob's Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "jacobs-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Great Conglomerate Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "great-conglomerate-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Potawatomi Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "potawatomi-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Gorge Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "gorge-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Sandstone Falls",
+      "disposition": "closure_guide",
+      "curatedIds": [
+        "sandstone-falls"
+      ],
+      "note": "Indexed closure information, not a currently recommended hike."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Rainbow Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "rainbow-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Bond Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "bond-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Gabbro Falls/Bakers Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "gabbro-falls"
+      ],
+      "note": "Owner-described visit covered by existing Gabbro (Baker's) Falls destination; road/lot and actual viewing corridor still need site-specific conditions."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Agate Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "agate-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Cascade Falls (Cascade Creek)",
+      "disposition": "curated",
+      "curatedIds": [
+        "cascade-falls"
+      ],
+      "note": "Alternative qualified name for published Cascade Falls (Trap Hills) guide."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Kakabika Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "kakabika-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Mex-i-min-e Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "mex-i-min-e-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Peanut Butter Falls",
+      "disposition": "companion_covered",
+      "curatedIds": [
+        "o-kun-de-kun-falls"
+      ],
+      "note": "Konteka/Peanut Butter is a distinct falls encountered on the existing O Kun de Kun trail; mapped as a companion waterfall, not a second car trip."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "O Kun de Kun Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "o-kun-de-kun-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Yondota Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "yondota-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Ajibikoka Falls",
+      "disposition": "research_only",
+      "curatedIds": [],
+      "note": "Remote orientation-only directions; public arrival, ownership and continuous hiking corridor not source-cleared."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Manabezho Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "manabezho-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Manido Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "manido-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Nawadaha Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "nawadaha-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Lepisto Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "lepisto-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Iagoo Falls",
+      "disposition": "research_only",
+      "curatedIds": [],
+      "note": "GIS point and regional map point differ about 3.9 km; does not inherit Lepisto lot/route."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Shining Cloud Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "shining-cloud-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Big Carp Falls",
+      "disposition": "research_only",
+      "curatedIds": [],
+      "note": "Named along Porkies Big Carp River, but distinct natural-feature identity and safe spur viewpoint not verified."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Bathtub Falls",
+      "disposition": "research_only",
+      "curatedIds": [],
+      "note": "Named along Porkies Big Carp River; no independent exact feature identity, approved viewpoint/footpath or verified outing established."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Overlooked Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "overlooked-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Greenstone Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "greenstone-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Trappers Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "trappers-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Explorers Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "explorers-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Traders Falls",
+      "disposition": "research_only",
+      "curatedIds": [],
+      "note": "DNR Pinkerton trail is real; source waterfall points disagree and a certified final viewpoint spur is absent."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Trap Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "trap-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Nonesuch Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "nonesuch-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Little Union Gorge Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "little-union-gorge-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Interstate Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "interstate-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Unnamed Falls (near Interstate)",
+      "disposition": "needs_identity_review",
+      "curatedIds": [],
+      "note": "Regional tourism lists an unnamed river feature, but an unambiguous physically distinct waterfall, position and lawful visiting corridor have not been established."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Peterson Falls",
+      "disposition": "research_only",
+      "curatedIds": [],
+      "note": "Iron County Wisconsin's current source indicates closed-to-public upstream feature; historical tourism route should not be reused."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Superior Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "superior-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Powderhorn Falls",
+      "disposition": "research_only",
+      "curatedIds": [],
+      "note": "Older Western U.P. instructions rely on unsigned approach; distinct site identity and public parking/route need confirmation."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Root Beer Falls",
+      "disposition": "research_only",
+      "curatedIds": [],
+      "note": "Historical roadside turnout claim; current safe stopping place and site-specific rights not verified."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Little Trap Falls",
+      "disposition": "research_only",
+      "curatedIds": [],
+      "note": "Unmaintained creek bushwhack from shoulder; no authorized walking corridor or parking."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Judson Falls",
+      "disposition": "research_only",
+      "curatedIds": [],
+      "note": "Remote unmarked two-track/forest approach; no land manager-certified endpoint route."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Maple Creek Falls",
+      "disposition": "research_only",
+      "curatedIds": [],
+      "note": "Forest-road bridge and creek-bank approach; parking/parcel/route need official proof."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Manakiki Falls",
+      "disposition": "research_only",
+      "curatedIds": [],
+      "note": "Possible distinct feature upstream from Maple Creek Falls, not independent verified visitor destination."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Victoria Dam Falls",
+      "disposition": "research_only",
+      "curatedIds": [],
+      "note": "Hydropower spillway, flow-dependent; current operator public route and safety exclusions unverified."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Gleason Falls",
+      "disposition": "research_only",
+      "curatedIds": [],
+      "note": "No marked public route in regional source; requires verified manager/parking."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Rock Bluff Falls",
+      "disposition": "research_only",
+      "curatedIds": [],
+      "note": "Unsigned creek approach, geography and rights unresolved."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Wildcat Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "wildcat-falls"
+      ],
+      "note": "Published destination(s) in U.P. Waterfall Explorer."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Powdermill Falls",
+      "disposition": "research_only",
+      "curatedIds": [],
+      "note": "Could overlap Powderhorn on Powder Mill Creek, but identity equivalence not independently proven."
+    },
+    {
+      "sourceId": "westernup",
+      "sourceName": "Nelson Canyon Falls",
+      "disposition": "research_only",
+      "curatedIds": [],
+      "note": "No currently approved lot, signed path or landowner authority established."
+    }
+  ],
+  "auditLimitations": [
+    "Crosswalk records major regional editorial lists rather than every item in every statewide dynamic directory or all 300+ purported U.P. features.",
+    "A tourism name or geographic point alone never certifies public walking access, a legal parking area, a currently open attraction, or a safe view.",
+    "Regional source listing names were normalized against curated guide identities and research variants; source counts are mentions, not confirmed distinct waterfalls.",
+    "Published destination statuses are a snapshot of the November 8, 2026 GitHub main branch; public website deployment is independently verified only after release."
+  ]
+}
