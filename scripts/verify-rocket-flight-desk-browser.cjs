@@ -177,7 +177,7 @@ const whenReady=page=>page.waitForFunction(id=>
      v.name+' reverse native choice was not attributed correctly');
    assert((await page.locator('#rl-flight-mission-select').inputValue())===A,
     v.name+' reversing native picker did not return A');
-   assert((await page.locator('#rl-flight-next-title').innerText()).includes('viewing arrangements'),
+   assert((await page.locator('#rl-flight-next-title').innerText()).includes('source-backed spectator option'),
     v.name+' next-check answer did not reverse from B to A');
    await page.locator('#rl-flight-locate').click();
    await page.waitForFunction(()=>window.vaq?.some(a=>a[0]==='event'&&a[1]?.name==='Rocket Map Engaged'));
