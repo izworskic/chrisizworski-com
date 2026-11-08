@@ -32,12 +32,14 @@ const launches=[
 ];
 const mime={'.html':'text/html; charset=utf-8','.css':'text/css','.js':'application/javascript','.json':'application/json','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg'};
 let failedSource=false,removedMission=null;
+let floridaRich=false,floridaMismatch=false,floridaNpsClosure=false;
 const assert=(ok,message)=>{if(!ok)throw Error(message)};
 const stamp=()=>new Date(Date.now()-60000).toISOString();
 function payload(region='florida',id=null,stale=false){
  const r=REGIONS.find(x=>x.id===region)||REGIONS[1];
  const missions=launches.filter(x=>x.region===r.id);
- const selected=missions.find(x=>x.id===id)||missions[0]||null;
+ const picked=missions.find(x=>x.id===id)||missions[0]||null;
+ const selected=floridaRich&&r.id==='florida'&&picked?{...picked,locationId:27}:picked;
  const regions=REGIONS.map(p=>({id:p.id,name:p.name,subtitle:p.subtitle,coast:p.coast,
   lat:p.lat,lon:p.lon,timezone:p.timezone,description:p.description,
   authority:p.authority,access:p.access,specialist:p.specialist||null,
@@ -52,6 +54,28 @@ function payload(region='florida',id=null,stale=false){
      endTime:new Date(Date.parse(selected.net)+30*60000).toISOString()}}]}:
   {level:'unknown',label:'No precise target for a forecast',places:[],
    detail:'No launch-time NWS grid could be matched'};
+ const floridaSites=[
+  {id:'space-view',name:'Space View Park',address:'8 Broad Street, Titusville, FL',kind:'public-check',
+   state:'candidate',label:'Public viewing candidate',
+   source:'https://www.brevardfl.gov/ParksAndRecreation/ParkDirectory/SpaceView',
+   directionsAllowed:true,reason:'Public riverfront site; parking for this mission unverified.'},
+  {id:'rotary',name:'Rotary Riverfront Park',address:'4141 S Washington Ave, Titusville, FL',kind:'public-check',
+   state:'candidate',label:'Public viewing candidate',
+   source:'https://www.brevardfl.gov/ParksAndRecreation/ParkDirectory/RotaryRiverfront',
+   directionsAllowed:true,reason:'County public launch viewing site; parking unverified.'},
+  {id:'jetty',name:'Jetty Park',address:'9035 Campground Circle, Cape Canaveral, FL',kind:'port-hours',
+   state:'verify',label:'Launch-day park hours unverified',
+   source:'https://www.portcanaveral.com/recreation/jetty-park',
+   directionsAllowed:true,reason:'Pass and park hours may change.'},
+  {id:'playalinda-south',name:'Playalinda Beach, lots 4–7',address:'Playalinda Beach Road, Titusville, FL',
+   kind:'conditional-nps',state:'verify',label:'Mission entry unverified',
+   source:'https://www.nps.gov/cana/planyourvisit/rocket-launch-viewing.htm',
+   directionsAllowed:false,reason:'Launch security may close lots.'},
+  {id:'ksc-visitor',name:'Kennedy Space Center Visitor Complex',address:'Space Commerce Way, Merritt Island, FL',
+   kind:'ticketed',state:'verify',label:'Mission admission unverified',
+   source:'https://www.kennedyspacecenter.com/launches-and-events/',
+   directionsAllowed:false,reason:'Ordinary admission not a launch viewing ticket.'}
+ ];
  return {
   ok:true,generatedAt:stamp(),scheduleCheckedAt:stamp(),
   scheduleFreshness:stale?'stale':'recent',scheduleComplete:true,
@@ -63,7 +87,7 @@ function payload(region='florida',id=null,stale=false){
    access:r.access,specialist:r.specialist||null,context:r.context},
   regions,
   access:{guidance:'Public access is not verified by a launch calendar. Read official range notices.',
-   sites:[{id:'source-venue',name:'Official range viewing guidance',kind:'mission-confirm',
+   sites:floridaRich&&r.id==='florida'?floridaSites:[{id:'source-venue',name:'Official range viewing guidance',kind:'mission-confirm',
     source:r.access,reason:'Launch-day public entry must be verified separately.',
     label:'Event-specific permission unverified',state:'mission',directionsAllowed:false}]},
   weather,launchWeather:{status:'unavailable',label:'Range weather unverified',
@@ -87,7 +111,33 @@ const server=http.createServer(async(req,res)=>{
     return send(404,{ok:false,error:'Fixture mission no longer in bounded feed'});
    return send(200,payload(region,id,u.searchParams.get('stale')==='1'));
   }
-  if(u.pathname.startsWith('/api/'))return send(503,{ok:false,error:'Fixture upstream intentionally unavailable'});
+  if(u.pathname==='/api/space-coast-launch'){
+   const id=u.searchParams.get('launchId');
+   const found=launches.find(m=>m.id===id&&m.region==='florida');
+   if(!found)return send(404,{ok:false,error:'No matching Florida mission'});
+   const selected=floridaMismatch?B:id;
+   return send(200,{ok:true,selectedLaunchId:selected,next:{...found,id:selected},
+    scheduleFreshness:'recent',accessSource:{verified:true,checkedAt:stamp()},
+    floridaViewingDeck:{missionId:selected,facility:'kennedy',
+      cards:[{id:'space-view'},{id:'rotary'}],
+      playalinda:{npsVerified:true,excluded:floridaNpsClosure},
+      ksc:{officialEventMatched:false}},
+    viewpoints:[
+      {id:'space-view',name:'Space View Park',area:'Titusville',level:'candidate',
+       label:'Public site',reason:'County riverfront; parking unverified.',address:'8 Broad Street, Titusville, FL',
+       source:'https://www.brevardfl.gov/ParksAndRecreation/ParkDirectory/SpaceView'},
+      {id:'rotary',name:'Rotary Riverfront Park',area:'Titusville',level:'candidate',
+       label:'Public site',reason:'County park; parking unverified.',address:'4141 S Washington Ave, Titusville, FL',
+       source:'https://www.brevardfl.gov/ParksAndRecreation/ParkDirectory/RotaryRiverfront'},
+      {id:'playalinda-south',name:'Playalinda Beach, lots 4–7',area:'Canaveral National Seashore',
+       level:floridaNpsClosure?'closed':'unknown',
+       label:floridaNpsClosure?'Closed by NPS':'Gate unverified',
+       reason:floridaNpsClosure?'Active NPS closure affects these lots.':'NASA can close the park.',
+       source:'https://www.nps.gov/cana/planyourvisit/conditions.htm'}],
+    kscViewing:{state:'unverified',sourceUrl:null}
+   });
+  }
+ if(u.pathname.startsWith('/api/'))return send(503,{ok:false,error:'Fixture upstream intentionally unavailable'});
   let loc=u.pathname;
   if(loc.startsWith('/national-tools/rocket-launch-live/'))
    loc=loc.replace('/national-tools/rocket-launch-live/','/synced-national-tools/rocket-launch-live/');
