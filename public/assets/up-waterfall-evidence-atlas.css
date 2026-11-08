@@ -11,3 +11,10 @@
 @media(max-width:950px){.ea-hero{grid-template-columns:1fr}.ea-controls{grid-template-columns:1.4fr 1fr}.ea-toolgrid{grid-template-columns:1fr}.ea-record-list{max-height:540px}.ea-map{height:360px}.ea-totals{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:560px){.ea-shell{padding:18px 14px 50px}.ea-hero{padding:25px 19px}.ea-controls{grid-template-columns:1fr}.ea-totals{gap:7px}.ea-totals div{padding:12px}.ea-totals span{font-size:.73rem}.ea-evidence-keys{grid-template-columns:1fr}.ea-record-list{max-height:470px}.ea-record{padding:11px}.ea-map{height:320px}.ea-detail dl{grid-template-columns:1fr;gap:1px}.ea-detail dd{margin-bottom:7px}}
 @media(prefers-reduced-motion:reduce){.ea-shell{scroll-behavior:auto}}
+
+/* Source completeness: auditable differences, not competing visit pins. */
+.ea-completeness{border-left:4px solid #8b7154;background:#faf4e6;border-radius:8px;padding:16px 19px;margin:18px 0 10px;max-width:1040px;font-size:.88rem;color:#4e4b3b}
+.ea-completeness a{font-weight:800}.ea-compare{padding:12px 0 4px;border-top:1px solid #d6e0d9;margin-top:13px}.ea-compare p{font-size:.83rem;color:#516962}
+.ea-compare-btn{display:inline-flex;padding:9px 11px;margin:5px 7px 5px 0;min-height:44px;background:#ecf4ed;color:#214d47;border-radius:8px;border:1px solid #a6c9b7;cursor:pointer;font-weight:700;font-size:.8rem;text-align:left;align-items:center}
+.ea-compare-btn:hover{background:#dceee1}
+@media(max-width:560px){.ea-compare-btn{width:100%;justify-content:center}}
