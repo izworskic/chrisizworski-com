@@ -96,9 +96,13 @@ async function verifyPhoto(base,browser,broken=false){
  const page=await ctx.newPage();
  // Deterministic 1x1 PNG fixture: tests layout and fallback, not Wikimedia availability.
  const image=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAJUbZYQAAAAASUVORK5CYII=','base64');
- await page.route(/commons\.wikimedia\.org\/wiki\/Special:FilePath/,route=>route.fulfill({
-   status:broken?404:200,contentType:broken?'text/plain':'image/png',body:broken?'not found':image
- }));
+ let interceptedImages=0;
+ await page.route(/Algoma_Equinox|(?:commons|thumb|upload)\.wikimedia\.org/,route=>{
+   interceptedImages++;
+   return route.fulfill({
+     status:broken?404:200,contentType:broken?'text/plain':'image/png',body:broken?'not found':image
+   });
+ });
  await page.route(/googlesyndication|googletagmanager|doubleclick/,r=>r.abort());
  await page.goto(base+'/st-lawrence-seaway/',{waitUntil:'domcontentloaded',timeout:40000});
  const card=page.locator('#shipList .ship-card').first();
@@ -108,6 +112,8 @@ async function verifyPhoto(base,browser,broken=false){
  await popup.waitFor({state:'visible',timeout:8000});
  assert.equal(await popup.locator('a').count(),0,'photo popup has no external links');
  assert.match(await popup.textContent(),/ALGOMA EQUINOX/);
+ await page.waitForFunction(()=>Boolean(document.querySelector('#seawayMap .leaflet-popup-content img')),null,{timeout:7000}).catch(()=>{});
+ assert.ok(interceptedImages>=1,'historical photo request should be routed through deterministic image fixture');
  if(broken){
    await page.waitForFunction(()=>document.querySelector('#seawayMap .leaflet-popup-content')?.dataset.photoFailed==='true',null,{timeout:10000});
    assert.equal(await popup.locator('.seaway-popup-figure').count(),0,'missing image never leaves an empty photograph box');
