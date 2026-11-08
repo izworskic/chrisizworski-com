@@ -84,6 +84,39 @@ test('severe NWS warning blocks a model-backed outing',()=>{
  assert.equal(plan.weather.level,'avoid');
  assert.match(plan.weather.note,/High Wind Warning/);
 });
+test('wind becoming hazardous in a later hour overrides a favorable first hour',()=>{
+ const wideWindow={start:iso(now+30*60000),end:iso(now+150*60000)};
+ const periods=[
+   {...forecast().periods[1],starts:iso(now+30*60000),ends:iso(now+90*60000),windMph:6},
+   {...forecast().periods[1],starts:iso(now+90*60000),ends:iso(now+150*60000),windMph:42}
+ ];
+ const plan=engine.recommendation(report({pick:{ship:ship(),window:wideWindow}}),
+   context('soo',forecast({periods})),now);
+ assert.equal(plan.code,'WEATHER_HOLD');
+ assert.equal(plan.weather.level,'avoid');
+ assert.match(plan.weather.note,/wind up to 42 mph/);
+});
+test('an alert beginning after the window starts still blocks the outing',()=>{
+ const wideWindow={start:iso(now+30*60000),end:iso(now+150*60000)};
+ const periods=[
+  {...forecast().periods[1],starts:iso(now+30*60000),ends:iso(now+90*60000)},
+  {...forecast().periods[1],starts:iso(now+90*60000),ends:iso(now+150*60000)}
+ ];
+ const alerts=[{event:'Storm Warning',severity:'Severe',starts:iso(now+110*60000),expires:iso(now+180*60000)}];
+ const plan=engine.recommendation(report({pick:{ship:ship(),window:wideWindow}}),
+   context('soo',forecast({periods,alerts})),now);
+ assert.equal(plan.code,'WEATHER_HOLD');
+ assert.match(plan.weather.note,/Storm Warning/);
+});
+test('a missing forecast hour in a broad passage cannot produce favorable conditions',()=>{
+ const wideWindow={start:iso(now+30*60000),end:iso(now+150*60000)};
+ const periods=[{...forecast().periods[1],starts:iso(now+30*60000),ends:iso(now+90*60000)}];
+ const plan=engine.recommendation(report({pick:{ship:ship(),window:wideWindow}}),
+   context('soo',forecast({periods})),now);
+ assert.equal(plan.code,'VERIFY_BEFORE_TRAVEL');
+ assert.equal(plan.weather.level,'unknown');
+ assert.match(plan.weather.note,/does not cover the whole ship window/);
+});
 test('wind forecast can veto a sunny-looking passage even without an active alert',()=>{
  const periods=forecast().periods.map(p=>({...p,windMph:41}));
  const plan=engine.recommendation(report(),context('soo',forecast({periods})),now);
