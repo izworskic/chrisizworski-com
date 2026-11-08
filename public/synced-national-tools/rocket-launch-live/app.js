@@ -5,7 +5,7 @@
   const KSC_OFFICIAL_API = '/api/space-coast-ksc-watch';
   const $ = id => document.getElementById(id);
   const validRegions = new Set(['california', 'florida', 'texas', 'virginia', 'alaska', 'hawaii']);
-  const state = { request: 0, data: null, map: null, markers: new Map(), rocketPins: null, regions: [], userFocusedMap: false, officialEvidence: null, officialEvidenceLoaded: false, kscEvidence: null, kscMissionId: null, kscRequest: 0, floridaEvidence: null, floridaRequest: 0, floridaController: null };
+  const state = { request: 0, data: null, scheduleFailed: false, map: null, markers: new Map(), rocketPins: null, regions: [], userFocusedMap: false, officialEvidence: null, officialEvidenceLoaded: false, kscEvidence: null, kscMissionId: null, kscRequest: 0, floridaEvidence: null, floridaRequest: 0, floridaController: null };
   const el = (tag, className, value) => {
     const n = document.createElement(tag);
     if (className) n.className = className;
@@ -13,6 +13,17 @@
     return n;
   };
   const set = (id, value) => { const n = $(id); if (n) n.textContent = value ?? '—'; };
+  function updateAtlasStatus(){
+    const offline=$('rl-coast-map')?.dataset.tiles==='reference-only';
+    const prefix=offline?'Online map tiles unavailable; Natural Earth coastlines shown. ':'';
+    const message=state.scheduleFailed?
+      'Launch schedule unavailable; only geographic reference regions are shown.':
+      state.data?
+        'Region circles are references, not public entrances. Rocket icons reflect the selected schedule source.':
+        'Reference launch regions. Checking mission data.';
+    set('rl-atlas-status',prefix+message);
+  }
+
   const safeUrl = url => typeof url === 'string' &&
     (/^https:\/\/[a-z0-9.-]+(?:\/|$)/i.test(url) || /^\/(?!\/)/.test(url));
   const anchor = (url, label, className) => {
@@ -233,6 +244,7 @@
             fillColor:'#d0dfd4',fillOpacity:1}
         }).addTo(map);
         root.dataset.outline='ready';
+        updateAtlasStatus();
       }).catch(()=>{root.dataset.outline='unavailable';});
       const osmCredit = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
       // Never request a keyless CARTO tile: as of 2026 those tiles return
@@ -242,6 +254,20 @@
         maxZoom: 18, attribution: osmCredit
       }).addTo(map);
       root.dataset.tiles = 'osm-fallback';
+      let osmLoaded=false,osmErrors=0;
+      osm.on('tileload',()=>{
+        osmLoaded=true;
+        if(root.dataset.tiles!=='carto-keyed'){
+          root.dataset.tiles='osm-fallback';
+          updateAtlasStatus();
+        }
+      });
+      osm.on('tileerror',()=>{
+        if(++osmErrors>=2&&!osmLoaded&&root.dataset.tiles!=='carto-keyed'){
+          root.dataset.tiles='reference-only';
+          updateAtlasStatus();
+        }
+      });
       fetch('/api/carto-basemap-config', { credentials: 'same-origin', signal: AbortSignal.timeout(6500) })
         .then(response => response.ok ? response.json() : null)
         .then(config => {
@@ -257,6 +283,7 @@
             if (!confirmed && map.hasLayer(carto)) {
               confirmed = true;
               root.dataset.tiles = 'carto-keyed';
+              updateAtlasStatus();
               if (map.hasLayer(osm)) map.removeLayer(osm);
             }
           });
@@ -264,12 +291,13 @@
             if (++errors >= 2 && !confirmed) {
               if (map.hasLayer(carto)) map.removeLayer(carto);
               if (!map.hasLayer(osm)) osm.addTo(map);
-              root.dataset.tiles = 'osm-fallback';
+              root.dataset.tiles = osmLoaded?'osm-fallback':'reference-only';
+              updateAtlasStatus();
             }
           });
           carto.addTo(map);
         })
-        .catch(() => { root.dataset.tiles = 'osm-fallback'; });
+        .catch(() => { if(root.dataset.tiles!=='reference-only')root.dataset.tiles='osm-fallback';updateAtlasStatus(); });
       const bounds = [];
       for (const r of regions) {
         if (!Number.isFinite(r.lat) || !Number.isFinite(r.lon)) continue;
@@ -297,6 +325,7 @@
       });
       state.rocketPins?.update(state.data?.regions?.flatMap(r=>r.launches||[])||[],state.data?.selectedLaunchId||null);
       root.dataset.mapState='ready';
+      updateAtlasStatus();
     } catch (_) {
       root.dataset.mapState='unavailable';
       state.map=null;
@@ -1331,6 +1360,7 @@
 
   function render(data) {
     state.data = data;
+    state.scheduleFailed=false;
     state.regions = data.regions || [];
     const floridaNav = $('rl-nav-florida');
     if (floridaNav) floridaNav.href = floridaSpecialistLink('/national-tools/space-coast-launch/',data);
@@ -1342,7 +1372,7 @@
       if(marker&&Number.isFinite(region.lat)&&Number.isFinite(region.lon))
         marker.setLatLng([region.lat,region.lon]);
     }
-    set('rl-atlas-status','Region circles are references, not public entrances. Rocket icons reflect the selected schedule source.');
+    updateAtlasStatus();
     state.rocketPins?.update(data.regions.flatMap(r=>r.launches||[]),data.selectedLaunchId);
     showRegion(data.region);
     renderMission(data);
@@ -1401,7 +1431,8 @@
       // schedule after this request has explicitly failed.
       state.rocketPins?.update([],null);
       state.data=null;
-      set('rl-atlas-status','Launch schedule unavailable; only geographic reference regions are shown.');
+      state.scheduleFailed=true;
+      updateAtlasStatus();
       document.dispatchEvent(new CustomEvent('rocket-truth:mission-selected',
         {detail:{launchId:null}}));
       document.dispatchEvent(new CustomEvent('rocket-viewing:data',{detail:null}));
