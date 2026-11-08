@@ -78,7 +78,7 @@
   function evaluate(key, data, when = 'today', now = Date.now()) {
     const config = CONFIG[key] || CONFIG.soo;
     const base = {config,when,source:'Open Waters AIS via existing site engine',observations:[],pick:null,
-      status:'unknown',reason:'No reliable recent evidence is available.',checkedAt:null,attribution:[]};
+      status:'unknown',reason:'No reliable recent evidence is available.',checkedAt:null,attribution:[],inLock:null};
     if (when === 'tomorrow') {
       base.reason = 'Current AIS does not establish tomorrow’s ship passages. Use the local guide and return when fresh evidence is available.';
       return base;
@@ -94,6 +94,11 @@
     vessels = Array.isArray(vessels) ? vessels : [];
     base.observations = vessels.filter(v => usableVessel(v, now) &&
       (!config.bbox || inBounds(v, config.bbox))).sort((a,b) => Date.parse(b.seen) - Date.parse(a.seen)).slice(0,20);
+    if(config.kind==='soo'){
+      const within=Array.isArray(data.nextShip?.inLock)?data.nextShip.inLock:[];
+      base.inLock=within.find(v=>usableVessel(v,now)&&validDate(v.seen,now,8*60000)!==null&&v.state==='in-lock')||null;
+      if(base.inLock&&!base.observations.some(v=>identity(v)===identity(base.inLock)))base.observations.unshift(base.inLock);
+    }
     let candidate = null;
     let candidateList = [];
     if (config.kind === 'soo' && data.nextShip && data.nextShip.ok === true) {
@@ -104,6 +109,11 @@
       candidateList = data.candidates;
     }
     const window = safeWindow(candidate,candidateList,now,config.kind === 'soo' ? 10 : 26);
+    if (when==='now'&&base.inLock){
+      base.status='in-lock';
+      base.reason='A source-modeled in-chamber vessel was recently reported at the Soo Locks. It may depart before you arrive.';
+      return base;
+    }
     if (window && eligibleForWhen(window,when,now,config.zone)) {
       base.pick = {ship:candidate,window};
       // Corridor models may see an approaching vessel beyond the map's local AIS box.
@@ -148,8 +158,11 @@
     if(!headline||!body||!ships||!status||!source||!next)return;
     if(watching) watching.textContent='Watching from: '+config.spot+' (check access and hours in the local guide).';
     status.dataset.status=result.status;
-    status.textContent = result.status==='window'?'MODELED WINDOW':result.status==='observed'?'RECENT OBSERVATIONS':result.status==='unavailable'?'SOURCE UNAVAILABLE':'NOT CONFIRMED';
-    if (result.pick) {
+    status.textContent = result.status==='window'?'MODELED WINDOW':result.status==='in-lock'?'IN LOCK NOW · AIS':result.status==='observed'?'RECENT OBSERVATIONS':result.status==='unavailable'?'SOURCE UNAVAILABLE':'NOT CONFIRMED';
+    if(result.status==='in-lock'&&result.inLock){
+      headline.textContent=(result.inLock.name||'A vessel')+' reported in '+(result.inLock.chamberName||'Soo Locks');
+      body.textContent=result.reason;
+    }else if (result.pick) {
       headline.textContent = result.pick.ship.name || 'Reported vessel';
       const w=result.pick.window;
       body.textContent='Estimated passage: '+formatTime(w.start,config.zone)+' to '+formatTime(w.end,config.zone)+'. '+result.reason;
