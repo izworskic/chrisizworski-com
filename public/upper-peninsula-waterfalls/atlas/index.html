@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en-US"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>U.P. Waterfall Evidence Atlas | Research Catalog</title>
+<meta name="description" content="Explore U.P. waterfall names and locations across visitor guides, Michigan GIS and tourism records. Natural-feature dots are not parking.">
+<meta name="robots" content="noindex,follow">
+<link rel="canonical" href="https://chrisizworski.com/upper-peninsula-waterfalls/atlas/">
+<link rel="icon" href="/favicon.ico">
+<link rel="stylesheet" href="/assets/up-waterfalls.css">
+<link rel="stylesheet" href="/assets/vendor/leaflet-1.9.4.css">
+<link rel="stylesheet" href="/assets/up-waterfall-evidence-atlas.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebPage","@id":"https://chrisizworski.com/upper-peninsula-waterfalls/atlas/#webpage","url":"https://chrisizworski.com/upper-peninsula-waterfalls/atlas/","name":"Upper Peninsula Waterfall Evidence Atlas","dateModified":"2026-11-08","author":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@id":"https://chrisizworski.com/#website"}}]}</script>
+</head><body>
+<a class="skip" href="#main">Skip to evidence catalog</a>
+<header class="mast"><div class="wrap"><a class="brand" href="/">Chris Izworski</a><nav aria-label="Site navigation"><a href="/upper-peninsula-waterfalls/">Waterfall trip planner</a><a href="/tools/">All tools</a></nav></div></header>
+<main id="main" class="ea-shell">
+<nav class="ea-breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/upper-peninsula-waterfalls/">U.P. Waterfalls</a> / Evidence Atlas</nav>
+<header class="ea-hero"><div><p class="ea-eyebrow">Field records / Upper Peninsula / 2026</p><h1>Every name has a source. Not every name has a trail.</h1><p class="ea-lede">Explore the evidence behind the waterfall inventory: published visitor guides, mapped state features, independent waterfall names and regional tourism listings. This is the <strong>research companion</strong> to the trip planner, not a second route finder.</p>
+<div class="ea-actions"><a href="/upper-peninsula-waterfalls/" class="ea-primary">Plan a verified waterfall visit</a><a href="#atlas-workbench" class="ea-secondary">Investigate the source records</a></div></div>
+<div class="ea-truth"><strong>Source count is not waterfall count.</strong><p>Names may be aliases, duplicate observations, separate drops on one river or uncertain geography. Points mark natural features, never parking. A missing dot is not a missing waterfall.</p><p>Latest source snapshots: Michigan state GIS October 26, independent name inventory November 7, tourism sample November 8, 2026. These are <em>not live access reports</em>.</p></div></header>
+<section class="ea-totals" aria-label="Inventory source families">
+<div><strong>80</strong><span>Curated guide records</span></div><div><strong>161</strong><span>State GIS feature records</span></div><div><strong>291</strong><span>Independent name observations</span></div><div><strong>12</strong><span>UP Travel location listings sampled</span></div>
+</section>
+<section class="ea-explainer" aria-labelledby="reading-heading"><h2 id="reading-heading">Read the evidence, not just the pin</h2>
+<div class="ea-evidence-keys">
+<p><span class="ea-key ea-key-guide"></span><strong>Visitor guide</strong> means the site has a curated page, which may also report a closure or research limitation. It does not mean open today.</p>
+<p><span class="ea-key ea-key-gis"></span><strong>State GIS</strong> means Michigan maps a named geographic feature. Coordinates do not establish ownership or a legal approach.</p>
+<p><span class="ea-key ea-key-name"></span><strong>Name-only</strong> means a cited directory mentions a waterfall, with a county and sometimes a river. We do not invent its position.</p>
+<p><span class="ea-key ea-key-tourism"></span><strong>Tourism listing</strong> means a regional tourism name and road/town description, not a verified parking location.</p></div></section>
+<section id="atlas-workbench" class="ea-workbench" aria-labelledby="workbench-title">
+<div class="ea-toolhead"><div><p class="ea-eyebrow">Evidence workbench</p><h2 id="workbench-title">Find a waterfall across sources</h2></div><p>Choose a source class, search a name or river, or narrow to a county. Select a record to inspect provenance.</p></div>
+<div class="ea-controls">
+<label for="ea-search">Waterfall or river name<input id="ea-search" type="search" placeholder="Try Paul’s, Chicagon, Tahquamenon…" autocomplete="off"></label>
+<label for="ea-kind">Evidence class<select id="ea-kind"><option value="all">All 544 source records</option><option value="guide">Curated guides (80)</option><option value="gis">Michigan GIS (161)</option><option value="name">Independent names (291)</option><option value="tourism">UP Travel sample (12)</option></select></label>
+<label for="ea-county">County<select id="ea-county"><option value="all">All counties</option></select></label>
+<button id="ea-reset" type="button">Clear filters</button>
+</div>
+<div class="ea-toolgrid">
+<section class="ea-records" aria-label="Waterfall source records"><p id="ea-count" class="ea-count" role="status" aria-live="polite">Loading reviewed evidence…</p><div id="ea-record-list" class="ea-record-list"><p>Data-backed records require JavaScript. The <a href="/upper-peninsula-waterfalls/">main visitor guide</a> remains accessible without it.</p></div><button id="ea-more" type="button" class="ea-more" hidden>Show 30 more records</button></section>
+<div class="ea-side"><section class="ea-map-panel" aria-labelledby="ea-map-title"><div class="ea-map-head"><h3 id="ea-map-title">Documented feature positions</h3><span>Never parking</span></div><div id="ea-map" class="ea-map" role="region" aria-label="Map of state-mapped waterfall natural features, not trails or road entrances"><p class="ea-map-unavailable">Map loading. Names and sources remain searchable without map tiles.</p></div><p id="ea-map-state" class="ea-map-foot" role="status">Map shows source-verified natural positions only, not driving routes.</p></section>
+<aside class="ea-detail" id="ea-detail" aria-live="polite" aria-label="Selected record details"><p class="ea-eyebrow">Source inspection</p><h3>Select a waterfall name</h3><p>The evidence panel will show the cited source, what kind of location exists, and whether any separately curated visitor guide is linked.</p><p>Unmapped names stay off the map. No “directions” buttons are generated from source geography.</p></aside></div>
+</div></section>
+<section class="ea-method" aria-labelledby="method-title"><h2 id="method-title">What this atlas cannot prove</h2><p>A waterfall name in a guide, a state GIS natural-feature point, or a third-party mapping observation cannot verify that a visitor can legally park, walk across every parcel or reach a safe viewpoint. The 80 curated records and 161 GIS records overlap; they must never be added into a claim of distinct places. The 291 independent name observations may also describe those same features. The sample of 12 UP Travel listings is not their complete dynamic directory or a complete 300-plus waterfall export.</p>
+<p>Explore our <a href="/upper-peninsula-waterfalls/research/pauls-loytila-falls/">Paul’s / Löytilä name investigation</a>, <a href="/upper-peninsula-waterfalls/research/dead-river-falls/">Dead River public-rights review</a> and <a href="/upper-peninsula-waterfalls/research/au-train-falls/">Au Train dam and access review</a> to see why these distinctions matter.</p>
+<p>Original dataset sources: <a href="https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7">Michigan GIS Waterfalls (layer 7)</a> · <a href="https://shorelinescout.com/michigan/waterfalls/upper-peninsula/">independent waterfall-name directory</a> · <a href="https://www.uptravel.com/outdoors-recreation/waterfalls/">UP Travel waterfall listings</a>. Consult the land manager for current access.</p>
+</section>
+</main>
+<script defer src="/assets/leaflet-1.9.4.js"></script><script defer src="/assets/up-waterfall-evidence-atlas.js"></script>
+<footer class="footer"><div class="wrap"><p>Built by <a href="/chris-izworski/">Chris Izworski</a> · Source observations, not visitation instructions. <a href="/upper-peninsula-waterfalls/">Return to waterfall visitor planning</a>.</p></div></footer>
+</body></html>
