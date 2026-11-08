@@ -21,11 +21,15 @@
     const sites=Array.isArray(national.access?.sites)?national.access.sites:[];
     const byId=new Map(sites.filter(s=>s&&nonEmpty(s.id)).map(s=>[s.id,s]));
     const deck=regional?.floridaViewingDeck;
+    const padKind=mission.locationId===12?'cape':mission.locationId===27?'kennedy':null;
+    const regionalPad=regional?.next?.locationId===12?'cape':
+      regional?.next?.locationId===27?'kennedy':null;
     const match=national.scheduleFreshness==='recent'&&regional?.ok===true&&
       regional?.selectedLaunchId===id&&regional?.next?.id===id&&
       regional?.scheduleFreshness==='recent'&&deck?.missionId===id&&
-      Array.isArray(regional?.viewpoints);
-    const padKind=mission.locationId===12?'cape':mission.locationId===27?'kennedy':null;
+      Array.isArray(regional?.viewpoints)&&
+      (!padKind||deck.facility===padKind)&&
+      (!padKind||!regionalPad||regionalPad===padKind);
     // Fallback is published public viewing inventory, NOT mission-verified access.
     const fallback=padKind==='cape'?['jetty','space-view']:padKind==='kennedy'?
       ['space-view','rotary']:['space-view','jetty'];
