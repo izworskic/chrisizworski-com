@@ -76,6 +76,16 @@ test('old, expired, tampered and weak windows cannot become predictions',()=>{
     assert.notEqual(result.status,'window');
   }
 });
+test('a fresh in-lock report from the Soo specialist engine is a distinct immediate state',()=>{
+  const ship=vessel({speedKnots:0,lat:46.503,lon:-84.352,state:'in-lock',chamber:'poe',chamberName:'Poe Lock'});
+  const data=report({vessels:[ship],nextShip:{ok:true,pick:null,candidates:[],inLock:[ship]}});
+  const result=desk.evaluate('soo',data,'now',now);
+  assert.equal(result.status,'in-lock');
+  assert.equal(result.inLock.mmsi,ship.mmsi);
+  assert.ok(result.observations.some(v=>v.mmsi===ship.mmsi));
+  const stale=desk.evaluate('soo',report({nextShip:{ok:true,inLock:[{...ship,seen:iso(now-12*60000)}],candidates:[]}}),'now',now);
+  assert.notEqual(stale.status,'in-lock');
+});
 test('time selection actually changes recommendations without tomorrow prediction',()=>{
   const ship=vessel({window:{start:iso(now+4*3600000),end:iso(now+5*3600000)}});
   const data=report({nextShip:{ok:true,pick:ship,candidates:[ship]}});
