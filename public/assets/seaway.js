@@ -139,7 +139,7 @@
         if(card.dataset.stamp!==stamp){
           const top=el('strong',undefined,'ship-name'),symbol=el('span',undefined,'ship-symbol');
           const shape=Icons?.icon(v,{zoom:11,selected:false});
-          symbol.classList.add('type-'+(shape?.kind||'unknown'));
+          symbol.classList.add('type-'+(shape?.kind||'unknown'),'size-'+(shape?.band||'unknown'));
           symbol.innerHTML=shape?.html||shipSVG();
           top.append(symbol,el('span',v.name||'AIS vessel '+v.mmsi));
           card.replaceChildren(top,el('span',(shape?.label||'Type unknown')+' · '+C.motion(v)+' · '+C.direction(v),'meta'),el('span',(displayFeet(v.lengthMeters)?displayFeet(v.lengthMeters)+' · ':'')+'MMSI '+v.mmsi,'meta'),el('small','Heard '+age(v.seen)+' · '+time(v.seen)));
