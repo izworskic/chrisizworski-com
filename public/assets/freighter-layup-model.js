@@ -100,5 +100,27 @@
       reported:records.filter(v=>classify(v,season).reported).length,
       harbors:new Set(records.map(v=>v.harborId)).size};
   }
-  return Object.freeze({STATUSES,normalizeName,validImo,validMmsi,identityKey,validateRegistry,findVessel,matchesSearch,classify,totals});
+  // Evidence-only harbor decision. History cannot substitute for an unreported live season.
+  // Each option represents actual source-dated records in one explicit winter.
+  function harborEvidenceOptions(archive, harborId, currentSeasonId, selectedSeasonId) {
+    if(!archive?.harbors?.some(h=>h.id===harborId)||!Array.isArray(archive?.seasons))return null;
+    const summarize = (season,kind) => {
+      const sourceRecords=(season?.records||[]).filter(v=>v.harborId===harborId&&
+        (kind==='current'?['confirmed_current','reported_current'].includes(v.status):
+          ['confirmed_historical','reported_historical'].includes(v.status)));
+      const dates=sourceRecords.map(v=>v.statusAsOf).filter(v=>/^\d{4}-\d{2}-\d{2}$/.test(v||'')).sort();
+      return {id:season?.id||currentSeasonId,label:season?.label||'Winter '+currentSeasonId,
+        count:sourceRecords.length,confirmed:sourceRecords.filter(v=>v.status==='confirmed_'+kind).length,
+        reported:sourceRecords.filter(v=>v.status==='reported_'+kind).length,
+        latestAsOf:dates.at(-1)||null};
+    };
+    const live=archive.seasons.find(s=>s.id===currentSeasonId&&s.state==='active_current');
+    const current=summarize(live||{id:currentSeasonId,label:'Winter '+currentSeasonId,records:[]},'current');
+    const history=archive.seasons.filter(s=>s.state==='historical_snapshot')
+      .sort((a,b)=>b.id.localeCompare(a.id))
+      .map(s=>summarize(s,'historical')).filter(s=>s.count>0);
+    return {harborId,current,history,selectedSeasonId,
+      selected:current.id===selectedSeasonId?current:history.find(s=>s.id===selectedSeasonId)||null};
+  }
+  return Object.freeze({STATUSES,normalizeName,validImo,validMmsi,identityKey,validateRegistry,findVessel,matchesSearch,classify,totals,harborEvidenceOptions});
 });
