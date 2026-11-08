@@ -26,6 +26,8 @@ function harness(region,{id=A,withVia=true,stage='access',api=null}={}){
   querySelectorAll:q=>q==='a[data-vg-planner]'?links:[],
   createElement:tag=>({
    tag,style:{},dataset:{},attrs:{},children:[],textContent:'',
+   get firstChild(){return this.children[0]||null;},
+   get lastChild(){return this.children[this.children.length-1]||null;},
    setAttribute(k,v){this.attrs[k]=v;},
    append(...nodes){this.children.push(...nodes);}
   }),
@@ -60,8 +62,20 @@ test('regional mission restoration requires exact loaded ID and never trusts URL
   const wire=JSON.stringify({ga:h.ga,va:h.va});
   assert.equal(wire.includes(A),false,region+' leaked mission ID');
   assert.equal(wire.includes('Mission A'),false,region+' leaked mission name');
-  assert.equal(h.win.RocketFoundryHandoff.loaded(region,A),false,'cannot double count');
+  assert.equal(h.win.RocketFoundryHandoff.loaded(region,A),true,'same mission remains correct');
+  assert.equal(h.ga.length,1,'cannot double-count restoration');
  }
+});
+test('regional A to B to A updates receipt without stale claims or additional conversions',()=>{
+ const h=harness('texas');
+ assert.equal(h.win.RocketFoundryHandoff.loaded('texas',A,'Mission A'),true);
+ assert.equal(h.win.RocketFoundryHandoff.loaded('texas',B,'Mission B'),false);
+ assert.equal(h.main.children[0].dataset.restoration,'changed');
+ assert.match(h.main.children[0].children[0].textContent,/different regional mission/);
+ assert.equal(h.win.RocketFoundryHandoff.loaded('texas',A,'Mission A'),true);
+ assert.equal(h.main.children[0].dataset.restoration,'restored');
+ assert.match(h.main.children[0].children[0].textContent,/reselected/);
+ assert.equal(h.ga.length,1,'returning to original should not mint another handoff');
 });
 test('removed or changed mission is explained, not a completed restoration',()=>{
  const h=harness('texas');
