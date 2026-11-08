@@ -92,17 +92,24 @@ button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid #dc7
 .rl-mission-meta span{display:flex;justify-content:space-between;gap:15px;color:#b8cbc7;font-size:11px}
 .rl-mission-meta strong{color:#fff;text-align:right;max-width:65%;font-weight:700}
 .rl-small{font-size:12px!important;color:#61716b!important}
+.rl-access-answer{margin:12px 0;border-top:1px solid #d9e6de;padding-top:12px;display:grid;gap:8px;color:#25463a}
+.rl-access-answer strong{font-size:14px;line-height:1.4}
+.rl-access-answer p{margin:0;font-size:13px;line-height:1.55;color:#425d50}
+.rl-access-answer .rl-access-source-age{font-size:11px;color:#50665b}
+.rl-access-answer a{font-size:12px;font-weight:800;text-decoration:underline;text-underline-offset:3px;line-height:1.4}
+.rl-access-answer a:focus-visible{outline:3px solid #c78e41;outline-offset:4px;border-radius:2px}
+.rl-access-answer[data-state="closed"]{border-top-color:#bd7652}
 .rl-official-notice{margin-top:10px;background:#eef5f1;border-left:3px solid #3a8a69;border-radius:5px;padding:11px;font-size:12px;line-height:1.55}
 .rl-official-notice[data-state="closed"],.rl-official-notice[data-state="advisory"]{background:#fff0e9;border-color:#c75d3b}
 .rl-official-notice strong{display:block;margin-bottom:4px}
 .rl-official-notice a{display:block;margin-top:8px;font-weight:800}
 .rl-site-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
 .rl-site-card{padding:18px;border:1px solid #d1ddd7;background:#fff;border-radius:14px;display:flex;flex-direction:column;gap:10px}
-.rl-site-card[data-state="restricted"],.rl-site-card[data-state="hours"]{background:#f6f4f1;border-color:#ddd4ca}
+.rl-site-card[data-state="closed"],.rl-site-card[data-state="restricted"],.rl-site-card[data-state="hours"]{background:#f6f4f1;border-color:#ddd4ca}
 .rl-site-kicker{color:#678073;font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:800}
 .rl-site-card h3{font-family:var(--serif);font-size:22px;line-height:1.2;margin:0}
 .rl-site-status{color:#205942;background:#eaf5eb;align-self:flex-start;font-size:11px;font-weight:800;padding:6px 9px;border-radius:7px}
-.rl-site-card[data-state="restricted"] .rl-site-status,.rl-site-card[data-state="hours"] .rl-site-status{color:#8d432c;background:#f9e8df}
+.rl-site-card[data-state="closed"] .rl-site-status,.rl-site-card[data-state="restricted"] .rl-site-status,.rl-site-card[data-state="hours"] .rl-site-status{color:#8d432c;background:#f9e8df}
 .rl-site-card[data-state="mission"] .rl-site-status{color:#755820;background:#fff2d7}
 .rl-site-card>p{font-size:13px;line-height:1.63;margin:0;color:#52645a}
 .rl-site-card .rl-best{color:#314d3d;font-weight:800}

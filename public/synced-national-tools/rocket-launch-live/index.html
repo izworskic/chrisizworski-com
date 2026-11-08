@@ -18,18 +18,19 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <link rel="stylesheet" href="/assets/rocket-map-pins.css?v=20261107-origin-v1">
 <link rel="stylesheet" href="/assets/rocket-flight-desk.css?v=20261108-foundry-v2">
-<link rel="stylesheet" href="/national-tools/rocket-launch-live/styles.css?v=20261103-viewing-v1">
+<link rel="stylesheet" href="/national-tools/rocket-launch-live/styles.css?v=20261108-florida-answer-v1">
 <link rel="stylesheet" href="/national-tools/assets/launch-truth-desk.css?v=20261102-truth-v2">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5D2V2W7HN"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-Y5D2V2W7HN');</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://chrisizworski.com/national-tools/rocket-launch-live/#webpage","url":"https://chrisizworski.com/national-tools/rocket-launch-live/","name":"Rocket Launch Live USA: When and Where to Watch","description":"Coastal U.S. launch calendar with region-specific legal access, launch timing uncertainty and public NWS weather evidence.","dateModified":"2026-11-05","author":{"@id":"https://chrisizworski.com/#person"},"about":[{"@type":"Thing","name":"Rocket launch viewing"},{"@type":"Thing","name":"U.S. coastal spaceports"}]},{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"U.S. Tools","item":"https://chrisizworski.com/national-tools/"},{"@type":"ListItem","position":3,"name":"Rocket Launch Live USA","item":"https://chrisizworski.com/national-tools/rocket-launch-live/"}]}]}</script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
 <script defer src="/assets/rocket-map-pins.js?v=20261107-origin-v1"></script>
-<script defer src="/assets/rocket-flight-desk.js?v=20261108-foundry-v2"></script>
-<script defer src="/assets/rocket-engagement-funnel.js?v=20261108-foundry-v2"></script>
+<script defer src="/assets/rocket-flight-desk.js?v=20261108-florida-answer-v1"></script>
+<script defer src="/assets/rocket-engagement-funnel.js?v=20261108-florida-answer-v1"></script>
 <script defer src="/_vercel/insights/script.js"></script>
-<script src="/national-tools/rocket-launch-live/vandenberg.js?v=20261103-viewing-v1" defer></script>
-<script src="/national-tools/rocket-launch-live/app.js?v=20261106-official-rss-ksc-v1-starbase-road-v1-wallops-blog-v1" defer></script>
+<script src="/assets/rocket-florida-access.js?v=20261108-visitor-v1" defer></script>
+ <script src="/national-tools/rocket-launch-live/vandenberg.js?v=20261103-viewing-v1" defer></script>
+<script src="/national-tools/rocket-launch-live/app.js?v=20261108-florida-answer-v1" defer></script>
 <script src="/national-tools/assets/launch-truth-desk.js?v=20261102-truth-v2" defer></script>
 </head>
 <body>
@@ -176,8 +177,9 @@
     <article class="rl-decision rl-decision-secondary">
       <div class="rl-decision-top"><span>Visitor decision / 02</span><span class="rl-status" id="rl-access-grade">Check required</span></div>
       <h3>Can I get to the viewing area?</h3>
-      <p id="rl-access-summary">Land managers and range safety, not the rocket calendar, control public entry.</p>
-      <p class="rl-small">An open beach today may close during launch operations. A military launch facility is never a general public viewing destination.</p>
+      <p id="rl-access-summary">Checking published public viewing locations for this selected launch.</p>
+      <div id="rl-access-answer" class="rl-access-answer" role="status" aria-live="polite"></div>
+      <p id="rl-access-safety" class="rl-small">A public viewing place is not the restricted pad. Access, tickets and launch-day security require separate evidence.</p>
       <div id="rl-official-notice" class="rl-official-notice" hidden></div>
     </article>
     <article class="rl-decision rl-decision-secondary">

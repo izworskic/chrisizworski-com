@@ -96,7 +96,10 @@ test('restricted military range and Boca Chica sites never offer navigation',()=
     }
   }
   const fl=model.REGIONS.find(x=>x.id==='florida');
-  assert.equal(model.viewDecision(fl,fl.sites[0],null).state,'specialist');
+  assert.equal(model.viewDecision(fl,fl.sites[0],null).state,'candidate');
+  assert.equal(fl.sites[0].name,'Space View Park');
+  assert.ok(fl.sites.every(s=>s.kind!=='specialist'));
+  assert.equal(fl.sites.find(s=>s.id==='playalinda-south').noDirections,true);
   assert.equal(fl.specialist,'/national-tools/space-coast-launch/');
 });
 test('NASA Wallops Visitor Center stays event-specific, not assumed open after hours',()=>{
@@ -294,7 +297,7 @@ test('national launch atlas requests keyed CARTO tile URLs and retains functiona
   assert.match(endpoint,/CARTO_BASEMAP_PUBLIC_KEY/);
   const page=fs.readFileSync(path.resolve(__dirname,'../public/synced-national-tools/rocket-launch-live/index.html'),'utf8');
   assert.match(page,/Senior Airman Kadielle Shaw/);
-  assert.match(page,/rocket-launch-live\/app\.js\?v=20261106-official-rss-ksc-v1/);
+  assert.match(page,/rocket-launch-live\/app\.js\?v=20261108-florida-answer-v1/);
 });
 
 
@@ -306,7 +309,7 @@ test('national Rocket Watch binds controls to selected mission and defers YouTub
   assert.match(html,/id="mission-watch"/);
   assert.match(html,/id="rl-watch-mission-videos"/);
   assert.match(html,/id="rl-watch-general"/);
-  assert.match(html,/rocket-launch-live\/styles\.css\?v=20261103-viewing-v1/);
+  assert.match(html,/rocket-launch-live\/styles\.css\?v=20261108-florida-answer-v1/);
   assert.match(js,/desk\?\.launchId === launch\.id/);
   assert.match(js,/data\.selectedRegion === 'florida'/);
   assert.match(js,/renderMediaDesk\(data\)/);

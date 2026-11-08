@@ -13,6 +13,8 @@ test('Foundry plans require credible competing concepts, exact linked state and 
  assert.equal(output.plan.constraints.noNewCanonical,true);
  assert.equal(output.plan.handoffs.filter(x=>x.type==='regional-handoff').length,6);
  const requirements=output.plan.acceptanceRequirements;
+ assert.match(requirements.visitorAnswer,/engine name/i);
+ assert.match(requirements.visitorAnswer,/source-backed answer/i);
  for(const key of ['competingConcepts','linkedState','evidenceProgression','measurement','releaseProof']){
   assert.equal(typeof requirements[key],'string');
   assert.ok(requirements[key].length>75,key);

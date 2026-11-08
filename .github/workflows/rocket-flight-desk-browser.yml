@@ -5,6 +5,9 @@ on:
     paths:
       - 'public/assets/rocket-flight-desk.*'
       - 'public/assets/rocket-engagement-funnel.js'
+      - 'public/assets/rocket-florida-access.js'
+      - 'tests/rocket-florida-answer.test.js'
+      - 'lib/rocket-launch-usa.js'
       - 'public/assets/rocket-foundry-handoff.js'
       - 'public/starbase-rocket-launch-viewing/**'
       - 'public/wallops-rocket-launch-viewing/**'
@@ -34,7 +37,7 @@ jobs:
         with:
           node-version: '22'
       - name: Test mission source/evidence model and A to B to A state
-        run: node --test tests/rocket-flight-desk.test.js tests/rocket-engagement-funnel.test.js tests/rocket-foundry-pilot.test.js tests/rocket-foundry-handoff.test.js
+        run: node --test tests/rocket-flight-desk.test.js tests/rocket-engagement-funnel.test.js tests/rocket-florida-answer.test.js tests/rocket-foundry-pilot.test.js tests/rocket-foundry-handoff.test.js
       - name: Install isolated Playwright and local Leaflet fixture
         run: |
           mkdir -p /tmp/rocket-experience-playwright
