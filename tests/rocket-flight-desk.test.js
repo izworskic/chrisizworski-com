@@ -60,7 +60,7 @@ test('stale snapshot, hold, closure and restricted region all block a positive v
  assert.equal(alaska.status,'access');assert.match(alaska.access,/No public/i);
 });
 test('a weather reference is not an approval, and source incompleteness is displayed',()=>{
- const d=desk.decide(data('florida',florida[0],{weather:{level:'assessed',places:[{status:'ok',period:{shortForecast:'Partly cloudy',startTime:'2026-11-12T19:00:00Z'}}]},coverage:{partial:true}}));
+ const d=desk.decide(data('florida',florida[0],{weather:{level:'assessed',places:[{status:'ok',cloudStatus:'ok',cloudCoverPercent:46,updatedAt:'2026-11-07T11:00:00Z',assessment:{level:'fair'},period:{shortForecast:'Partly cloudy',startTime:'2026-11-12T19:00:00Z',endTime:'2026-11-12T20:00:00Z'}}]},coverage:{partial:true}}));
  assert.match(d.sky,/not rocket GO/i);
  assert.match(d.source,/coverage incomplete/i);
  assert.equal(d.status,'review');
@@ -71,7 +71,7 @@ test('nominal partial weather with every NWS sample unavailable is not claimed a
            {status:'unavailable',period:null,cloudStatus:'unavailable'}]}}));
  assert.equal(d.sky,'No verified mission-time viewing forecast');
  const some=desk.decide(data('florida',florida[0],{weather:{level:'partial',
-   places:[{status:'ok',period:{shortForecast:'Cloudy',startTime:'2026-11-12T19:00:00Z'}},
+   places:[{status:'ok',cloudStatus:'ok',cloudCoverPercent:56,updatedAt:'2026-11-07T11:00:00Z',assessment:{level:'fair'},period:{shortForecast:'Cloudy',startTime:'2026-11-12T19:00:00Z',endTime:'2026-11-12T20:00:00Z'}},
            {status:'unavailable',period:null}]}}));
  assert.match(some.sky,/Partial NWS forecast/);
 });
