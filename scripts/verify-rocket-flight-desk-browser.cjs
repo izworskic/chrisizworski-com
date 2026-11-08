@@ -142,6 +142,10 @@ const whenReady=page=>page.waitForFunction(id=>
     v.name+' hero mission picker disabled');
    assert(await page.locator('#rl-flight-locate').isEnabled(),
     v.name+' mapped mission focus disabled');
+   assert((await page.locator('#rl-flight-next-title').innerText()).includes('viewing arrangements'),
+    v.name+' Foundry next evidence is not an access check for precise Florida mission');
+   assert((await page.locator('#rl-flight-next-link').getAttribute('href'))==='/national-tools/space-coast-launch/',
+    v.name+' Foundry source handoff misroutes the selected coast');
    const first=await page.locator('#rl-flight-headline').evaluate(n=>n.getBoundingClientRect().top);
    assert(first>=0 && first<v.height,v.name+' first useful answer below phone viewport '+first);
    await page.locator('#rl-flight-mission-select').selectOption(B);
@@ -153,6 +157,10 @@ const whenReady=page=>page.waitForFunction(id=>
     v.name+' day-only mission falsely travel-ready');
    assert((await page.locator('#rl-flight-time').innerText()).includes('time TBD'),
     v.name+' date-only misused as a launch hour');
+   assert((await page.locator('#rl-flight-next-title').innerText()).includes('Confirm an exact launch hour'),
+    v.name+' date-only next action did not change to a timing verification');
+   assert((await page.locator('#rl-flight-next-link').getAttribute('href'))===REGIONS.find(x=>x.id==='florida').authority,
+    v.name+' a tentative launch target must hand off to the official range authority');
    assert((await page.locator('#rl-launch-select').inputValue())===B,
     v.name+' original mission picker drift');
    assert((await page.locator('#rl-flight-origin').innerText()).includes('Approximate'),
@@ -169,6 +177,8 @@ const whenReady=page=>page.waitForFunction(id=>
      v.name+' reverse native choice was not attributed correctly');
    assert((await page.locator('#rl-flight-mission-select').inputValue())===A,
     v.name+' reversing native picker did not return A');
+   assert((await page.locator('#rl-flight-next-title').innerText()).includes('viewing arrangements'),
+    v.name+' next-check answer did not reverse from B to A');
    await page.locator('#rl-flight-locate').click();
    await page.waitForFunction(()=>window.vaq?.some(a=>a[0]==='event'&&a[1]?.name==='Rocket Map Engaged'));
    events=await metrics();
@@ -214,6 +224,8 @@ const whenReady=page=>page.waitForFunction(id=>
   await error.goto(base,{waitUntil:'domcontentloaded'});
   await error.waitForFunction(()=>document.querySelector('#rl-flight-headline')?.textContent.includes('unavailable'));
   assert(await error.locator('#rl-flight-locate').isDisabled(),'Source outage retained stale rocket focus');
+  assert((await error.locator('#rl-flight-next-title').innerText()).includes('schedule cannot establish'),
+    'Source outage claimed an available next mission or viewing clearance');
   assert(await error.locator('#rl-flight-mission-select').isDisabled(),'Source outage retained launch menu');
   report.cases.push({case:'source-outage',status:'unavailable; no source invented'});
   await errCtx.close();failedSource=false;

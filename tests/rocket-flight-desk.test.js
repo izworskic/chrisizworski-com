@@ -16,7 +16,7 @@ function data(region='florida',selected=florida[0],more={}){
  const regions=[{id:'florida',name:'Florida Space Coast',lat:28.58,lon:-80.61,launches:florida},
   {id:'texas',name:'Starbase',lat:25.997,lon:-97.157,launches:[]}];
  return {ok:true,selectedRegion:region,selectedLaunchId:selected?.id||null,
-  selectedLaunch:selected,region:{id:region,timezone:'America/New_York',
+  selectedLaunch:selected,region:{id:region,timezone:'America/New_York',authority:'https://www.nasa.gov/kennedy/',
    access:'https://www.nps.gov/cana/planyourvisit/rocket-launch-viewing.htm'},
   regions,weather:{level:'unknown'},access:{sites:[]},coverage:{partial:false},
   scheduleFreshness:'recent',scheduleCheckedAt:'2026-11-07T12:00:00Z',...more};
@@ -92,7 +92,7 @@ test('mission switch dispatches stable selected UUID and a map handoff without a
  const els=new Map(),listeners={};const events=[];
  function el(id){if(!els.has(id))els.set(id,{
   id,dataset:{},attrs:{},children:[],textContent:'',href:'',disabled:false,hidden:false,
-  listeners:{},setAttribute(k,v){this.attrs[k]=v;},
+  listeners:{},setAttribute(k,v){this.attrs[k]=v;},removeAttribute(k){delete this.attrs[k];},
   addEventListener(n,cb){this.listeners[n]=cb;},
   replaceChildren(...children){this.children=children;},
   appendChild(x){this.children.push(x);},
@@ -108,6 +108,9 @@ test('mission switch dispatches stable selected UUID and a map handoff without a
  mounted.render(data());
  assert.equal(el('rl-flight-mission').textContent,florida[0].name);
  assert.equal(el('rl-flight-desk').dataset.launchId,ids[0]);
+ assert.equal(el('rl-flight-desk').dataset.nextGate,'access');
+ assert.match(el('rl-flight-next-title').textContent,/Verify the launch-day viewing arrangements/);
+ assert.equal(el('rl-flight-specialist').hidden,true,'do not duplicate next regional CTA');
  assert.equal(el('rl-flight-mission-select').disabled,false);
  assert.equal(el('rl-flight-locate').disabled,false);
  el('rl-flight-mission-select').value=ids[1];
@@ -117,12 +120,17 @@ test('mission switch dispatches stable selected UUID and a map handoff without a
  mounted.render(data('florida',florida[1]));
  assert.equal(el('rl-flight-mission').textContent,florida[1].name);
  assert.equal(el('rl-flight-desk').dataset.launchId,ids[1]);
+ assert.equal(el('rl-flight-desk').dataset.nextGate,'schedule');
+ assert.match(el('rl-flight-next-title').textContent,/Confirm an exact launch hour/);
+ assert.equal(el('rl-flight-specialist').hidden,false,'regional guide remains alternative to authority for tentative time');
  el('rl-flight-locate').listeners.click();
  assert.equal(events.at(-1).type,'rocket-experience:locate');
  assert.deepEqual(events.at(-1).detail,{launchId:ids[1],region:'florida'});
  mounted.render(data());
  assert.equal(el('rl-flight-desk').dataset.launchId,ids[0]);
  mounted.render(null);
+ assert.match(el('rl-flight-next-title').textContent,/schedule cannot establish/);
+ assert.equal(el('rl-flight-next-link').attrs.href,'https://www.nasa.gov/event-type/launch-schedule/');
  assert.equal(el('rl-flight-locate').disabled,true);
  assert.equal(el('rl-flight-mission-select').disabled,true);
 });
@@ -131,8 +139,8 @@ test('existing canonical, SEO/Person, photo credit and national map are preserve
  const app=fs.readFileSync(path.join(ROOT,'public/synced-national-tools/rocket-launch-live/app.js'),'utf8');
  assert.match(html,/canonical" href="https:\/\/chrisizworski\.com\/national-tools\/rocket-launch-live\//);
  assert.match(html,/https:\/\/chrisizworski\.com\/#person/);
- assert.match(html,/\/assets\/rocket-flight-desk\.js\?v=20261107-eos-v1/);
- assert.match(html,/\/assets\/rocket-flight-desk\.css\?v=20261107-eos-v1/);
+ assert.match(html,/\/assets\/rocket-flight-desk\.js\?v=20261108-foundry-v1/);
+ assert.match(html,/\/assets\/rocket-flight-desk\.css\?v=20261108-foundry-v1/);
  assert.match(html,/id="rl-coast-map"/);
  assert.match(html,/Photo: Senior Airman Kadielle Shaw/);
  assert.match(html,/id="rl-viewing"/);

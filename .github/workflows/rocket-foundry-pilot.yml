@@ -1,0 +1,69 @@
+name: Rocket Launch Live through Experience Foundry 0.2
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'benchmarks/tool-network-registry.json'
+      - 'experience-foundry/pilots/rocket-launch-live*'
+      - 'public/assets/rocket-flight-desk.*'
+      - 'public/assets/rocket-engagement-funnel.js'
+      - 'public/synced-national-tools/rocket-launch-live/**'
+      - 'tests/rocket-foundry-pilot.test.js'
+      - 'scripts/verify-rocket-flight-desk-browser.cjs'
+      - '.github/workflows/rocket-foundry-pilot.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  foundry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Foundry actual registry discovery
+        run: |
+          node scripts/experience-foundry.mjs discover --query "rocket launch coastal viewing schedule" > /tmp/rocket-foundry-discovery.json
+          node --input-type=module -e '
+            import fs from "node:fs";
+            const d=JSON.parse(fs.readFileSync("/tmp/rocket-foundry-discovery.json","utf8"));
+            if(!d.possibleOwners.some(x=>x.id==="rocket-launch-usa"))throw Error("Foundry cannot discover the national owner");
+            if(!d.possibleOwners.some(x=>x.id==="rocket-florida-viewing"))throw Error("Foundry cannot discover the Florida specialist");
+            console.log("Foundry discovery: national owner and regional specialists found");
+          '
+      - name: Foundry actual plan invocation with custom concept and protected canonical
+        run: |
+          node scripts/experience-foundry.mjs plan \
+            --slug rocket-launch-trip-gates \
+            --question "For a U.S. coastal rocket launch, which timing, public viewing access and weather source should the visitor verify next before deciding to travel?" \
+            --owner rocket-launch-usa \
+            --out experience-foundry/drafts/rocket-launch-trip-gates
+          node --input-type=module -e '
+            import fs from "node:fs";
+            const path="experience-foundry/drafts/rocket-launch-trip-gates";
+            const p=JSON.parse(fs.readFileSync(path+"/plan.json","utf8"));
+            const required=["plan.json","discovery.json","brief.md","state-matrix.md","IMPLEMENT.md"];
+            if(required.some(x=>!fs.existsSync(path+"/"+x)))throw Error("Foundry output packet incomplete");
+            if(p.intentOwner?.id!=="rocket-launch-usa"||p.recipe!=="custom")throw Error("Wrong owner or forced template");
+            if(p.handoffs.filter(x=>x.type==="regional-handoff").length!==6)throw Error("Six regional handoffs not resolved");
+            if(p.constraints.noNewCanonical!==true||p.constraints.noPublicRoute!==true||p.constraints.doNotInferLiveStatus!==true)throw Error("Unsafe Foundry output");
+            if(p.stages.some(x=>x.status!=="NOT_VERIFIED"))throw Error("Scaffold falsely claims a release");
+            console.log("Foundry run complete: owner, six distinct regional paths, custom concept, noindex/no route");
+          '
+      - name: Validate unique owners, evidence priorities and launch-reversal behavior
+        run: |
+          node --test tests/rocket-foundry-pilot.test.js tests/rocket-flight-desk.test.js tests/rocket-engagement-funnel.test.js
+          npm run benchmark:tool-network -- --check
+          node scripts/verify-experience-os-v1.2.mjs docs/experience-briefs/rocket-foundry-next-check.release.json
+      - name: Retain bounded noindex Foundry research artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rocket-foundry-planning-packet
+          path: experience-foundry/drafts/rocket-launch-trip-gates/
+          if-no-files-found: warn
+          retention-days: 14

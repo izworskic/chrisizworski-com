@@ -131,6 +131,75 @@
       padExact:inRange
     };
   }
+  /*
+   * Foundry pilot: one purpose-built, consequence-aware next verification.
+   * This is not a second readiness score and never declares a visitor GO.
+   * It uses only the same region/mission snapshot as the existing Flight Desk.
+   * The links go to official authority or the existing regional access owner.
+   */
+  function nextCheck(data) {
+    const d=decide(data);
+    const region=d.region;
+    const choose='Check the latest official information before any trip.';
+    if(!region){
+      return {gate:'source',headline:'The schedule cannot establish a current launch',
+        detail:'No verified mission or range selection is available. NASA’s public list does not include every commercial or military range operation.',
+        label:'Open NASA’s public launch schedule',
+        href:'https://www.nasa.gov/event-type/launch-schedule/',source:'nasa'};
+    }
+    const authority=typeof data?.region?.authority==='string'&&
+      /^https:\/\/[a-z0-9.-]+\//i.test(data.region.authority)?
+      data.region.authority:null;
+    const specialist=SPECIALISTS[region];
+    const rangeLink=authority||specialist;
+    if(!d.launchId){
+      return {gate:'schedule',headline:'Check the range for an unlisted operation',
+        detail:'No future mission is selected in this bounded third-party feed. That is not confirmation the range is inactive.',
+        label:authority?'Check the official range authority':'Read the regional guide',
+        href:rangeLink,source:authority?'authority':'specialist'};
+    }
+    if(d.status==='stale'||d.status==='unavailable'){
+      return {gate:'schedule',headline:'Reconfirm the published mission target',
+        detail:'The shared schedule is stale or the regional source is unavailable. A saved time cannot be treated as current.',
+        label:authority?'Check the range authority':'Review regional source guidance',
+        href:rangeLink,source:authority?'authority':'specialist'};
+    }
+    if(d.status==='hold'){
+      const texasClosure=region==='texas'&&data?.access?.liveOfficialNotice?.state==='closed';
+      return {gate:texasClosure?'access':'schedule',
+        headline:texasClosure?'Check the dated Starbase beach and road closure':'Wait for an updated launch attempt',
+        detail:texasClosure?
+          'The official city source reports a closure; this does not provide an alternative legal viewing location. Recheck the dated notice.':
+          'A hold or scrub invalidates the prior arrival plan. Verify a new official window before leaving.',
+        label:texasClosure?'Read regional closure guidance':authority?'Check official range updates':'Read the regional guide',
+        href:texasClosure?specialist:rangeLink,source:texasClosure?'specialist':authority?'authority':'specialist'};
+    }
+    if(d.status==='timing'){
+      return {gate:'schedule',headline:'Confirm an exact launch hour first',
+        detail:'A date-only, monthly or approximate-hour entry is not enough to plan a departure or forecast the spectator sky.',
+        label:authority?'Check official mission notices':'Read the regional launch guide',
+        href:rangeLink,source:authority?'authority':'specialist'};
+    }
+    if(d.status==='access'){
+      return {gate:'access',headline:'Establish whether public viewing is allowed',
+        detail:'This range has no independently verified public launch-viewing venue for this mission. Do not route to the pad.',
+        label:'Read restricted-range visitor guidance',href:specialist,source:'specialist'};
+    }
+    // Even when time and NWS evidence exist, neither proves a legal
+    // launch-day viewpoint. This gate is always unresolved by a calendar.
+    return {gate:'access',headline:'Verify the launch-day viewing arrangements',
+      detail:region==='florida'?
+        'Kennedy viewing tickets and safe locations vary by mission, pad and official event notices. A listed launch is not admission.':
+        region==='virginia'?
+        'NASA announces event-specific Wallops Visitor Center openings. Regular museum hours are not launch viewing permission.':
+        region==='california'?
+        'Vandenberg launch exclusions, Surf Beach protections and access hours can override normal public opening.':
+        region==='texas'?
+        'Starbase road and beach restrictions may change by official notice before a scheduled launch.':
+        choose,
+      label:'Open the regional viewing decision',href:specialist,source:'specialist'};
+  }
+
   function mount(doc) {
     if(!doc?.getElementById)return null;
     const $=id=>doc.getElementById(id),box=$('rl-flight-desk');
@@ -139,6 +208,7 @@
     const mapButton=$('rl-flight-locate');
     const official=$('rl-flight-official');
     const specialist=$('rl-flight-specialist');
+    const nextLink=$('rl-flight-next-link');
     let current=null;
     // The government-source hero photo is historical context. It must never
     // leave a giant broken panel or cover the actual mission decision.
@@ -169,6 +239,22 @@
       set('rl-flight-access',d.access);
       set('rl-flight-sky',d.sky);
       set('rl-flight-source',d.source);
+      const next=nextCheck(data);
+      box.dataset.nextGate=next.gate;
+      set('rl-flight-next-title',next.headline);
+      set('rl-flight-next-detail',next.detail);
+      if(nextLink){
+        nextLink.textContent=next.label;
+        nextLink.setAttribute('href',next.href);
+        nextLink.dataset.nextSource=next.source;
+        if(next.source!=='specialist'){
+          nextLink.setAttribute('target','_blank');
+          nextLink.setAttribute('rel','noopener noreferrer');
+        }else{
+          nextLink.removeAttribute('target');
+          nextLink.removeAttribute('rel');
+        }
+      }
       if(mapButton){
         mapButton.disabled=!d.launchId;
         mapButton.setAttribute('aria-label',d.launchId?'Locate the selected launch '+d.name+' on the map':'No selected rocket location available');
@@ -178,7 +264,10 @@
         if(d.official)official.href=d.official;
       }
       if(specialist){
-        specialist.hidden=!d.specialist;
+        // The Foundry's contextual next action already links to this regional
+        // guide in access-gated states. Do not repeat the same destination
+        // immediately underneath it as a second ambiguous call to action.
+        specialist.hidden=!d.specialist||next.source==='specialist';
         if(d.specialist)specialist.href=d.specialist+
           (d.launchId&&d.region!=='california'?'?launchId='+encodeURIComponent(d.launchId):'');
       }
@@ -214,7 +303,7 @@
     render(null);
     return {render,decision:()=>decide(current)};
   }
-  const api=Object.freeze({decide,target,mount});
+  const api=Object.freeze({decide,target,nextCheck,mount});
   root.RocketFlightDesk=api;
   if(typeof module==='object'&&module.exports)module.exports=api;
   if(typeof document!=='undefined'){
