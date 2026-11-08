@@ -88,8 +88,8 @@ try{
   assert.match(await page.locator('#ea-detail').innerText(),/Upper, Middle & Lower Hungarian Falls/);
   assert.equal(await page.locator('#ea-detail a[href*="/upper-peninsula-waterfalls/"][href*="hungarian"]').count(),3,'one tourism title links to three distinct curated guides');
   await page.locator('#ea-search').fill('Tannery Falls');
-  assert.match(await page.locator('#ea-count').innerText(),/1 source record matching/,'historical alias must find Rudy Olson');
-  await page.locator('.ea-record').first().click();
+  assert.match(await page.locator('#ea-count').innerText(),/2 source records matching/,'historical alias should include both the Tannery source and reviewed Rudy Olson source');
+  await page.locator('.ea-record').filter({hasText:'Rudolph Olson Memorial Falls'}).click();
   assert.match(await page.locator('#ea-detail').innerText(),/LAND-MANAGER CLOSED/);
   assert.match(await page.locator('#ea-detail .ea-decision').innerText(),/NO authorized visitor route/);
   assert.ok(await page.locator('#ea-detail a[href*="twin-waterfalls-memorial-preserve"]').count()>0);
