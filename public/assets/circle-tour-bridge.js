@@ -151,6 +151,13 @@
       chip.addEventListener('click',()=>{state.focusStop=id;state.showAll=false;remember();render();track('choose-route-stop',{stop:id});});rail.append(chip);
     });
     if(scope.length>9)rail.append(el('span','ctb-route-more','+'+(scope.length-9)+' more'));
+    // Reveal the current selected stop inside this horizontal rail without moving the page.
+    const current=rail.querySelector('button[aria-pressed="true"]');
+    if(current){
+      const left=current.offsetLeft,right=left+current.offsetWidth;
+      if(right>rail.scrollLeft+rail.clientWidth)rail.scrollLeft=right-rail.clientWidth+12;
+      else if(left<rail.scrollLeft)rail.scrollLeft=Math.max(0,left-12);
+    }
   }
   function renderRoad(opts){
     const box=$('ctb-road');if(!box)return;
