@@ -136,7 +136,7 @@ test('fresh source-classified Soo in-lock vessel gives only an immediate nearby 
  const plan=engine.recommendation(r,context('soo'),now);
  assert.equal(plan.code,'LOCAL_IN_LOCK');
  assert.match(plan.title,/Look toward the locks/);
- assert.match(plan.when,/not a future arrival/);
+ assert.match(plan.when,/not a future passage estimate/);
 });
 test('near Port Huron moving commercial AIS gives a nearby ship signal without an ETA',()=>{
  const nearby=ship({lat:42.997,lon:-82.423,speedKnots:6,seen:iso(now-2*60000)});
