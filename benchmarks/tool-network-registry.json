@@ -1,6 +1,6 @@
 {
   "version": "1.4.0",
-  "updated": "2026-11-02",
+  "updated": "2026-11-08",
   "objective": "Maintain one source of truth for how Chris Izworski tools own search intent, connect into visitor journeys, avoid cannibalization, and qualify future builds.",
   "rules": {
     "catalogCoverage": "Every first-party tool card on /tools/ must have a registry node.",
@@ -4611,6 +4611,299 @@
         "decisionWindowDays": 28,
         "privacy": "No geolocation, browser storage, or visitor identity"
       }
+    },
+    {
+      "id": "rocket-launch-usa",
+      "name": "Rocket Launch Live USA",
+      "canonical": "https://chrisizworski.com/national-tools/rocket-launch-live/",
+      "aliases": [],
+      "kind": "flagship-live",
+      "cluster": "rocket-launch-viewing",
+      "primaryIntent": "Which U.S. coastal rocket mission is scheduled, where does it launch, and what independent timing, official viewing access and sky evidence must be checked before traveling?",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "united-states",
+        "six-coastal-launch-regions"
+      ],
+      "personas": [
+        "rocket-watcher",
+        "launch-trip-planner",
+        "photographer",
+        "family-traveler"
+      ],
+      "networkRole": "bridge",
+      "searchTreatment": {
+        "status": "active",
+        "intentSeparation": "This national canonical owns the bounded six-region mission schedule, common mission ID and evidence context, not any local range's public-access rules."
+      },
+      "searchEvidence": {
+        "status": "measured",
+        "impressions": 29,
+        "clicks": 0,
+        "ctr": 0,
+        "averagePosition": 20.41,
+        "period": "2026-10-07 to 2026-11-03",
+        "note": "November 5 Google Search Console Web export. Pre-Flight-Desk; NOT a postlaunch uplift."
+      }
+    },
+    {
+      "id": "rocket-vandenberg-viewing",
+      "name": "Vandenberg California Rocket Launch Viewing",
+      "canonical": "https://chrisizworski.com/vandenberg-rocket-launch-viewing/",
+      "aliases": [],
+      "kind": "decision-engine",
+      "cluster": "rocket-launch-viewing",
+      "primaryIntent": "Vandenberg Space Force Base and public California viewing access restrictions",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "west-coast",
+        "california"
+      ],
+      "personas": [
+        "rocket-watcher",
+        "launch-trip-planner",
+        "photographer"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active",
+        "intentSeparation": "Regional specialist owns legally qualified access and viewing-place comparison. National Rocket Launch Live owns the common cross-coast calendar and source confidence."
+      },
+      "searchEvidence": {
+        "status": "unknown",
+        "note": "Regional postrelease search demand and actual cross-tool conversion not established by the November 5 national GSC export."
+      }
+    },
+    {
+      "id": "rocket-florida-viewing",
+      "name": "Florida Space Coast Launch Viewer",
+      "canonical": "https://chrisizworski.com/national-tools/space-coast-launch/",
+      "aliases": [],
+      "kind": "decision-engine",
+      "cluster": "rocket-launch-viewing",
+      "primaryIntent": "Florida launch facility, exact mission and official ticket and NPS viewing availability",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "space-coast",
+        "florida"
+      ],
+      "personas": [
+        "rocket-watcher",
+        "launch-trip-planner",
+        "photographer"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active",
+        "intentSeparation": "Regional specialist owns legally qualified access and viewing-place comparison. National Rocket Launch Live owns the common cross-coast calendar and source confidence."
+      },
+      "searchEvidence": {
+        "status": "unknown",
+        "note": "Regional postrelease search demand and actual cross-tool conversion not established by the November 5 national GSC export."
+      }
+    },
+    {
+      "id": "rocket-starbase-viewing",
+      "name": "Starbase Texas Launch Viewing Atlas",
+      "canonical": "https://chrisizworski.com/starbase-rocket-launch-viewing/",
+      "aliases": [],
+      "kind": "decision-engine",
+      "cluster": "rocket-launch-viewing",
+      "primaryIntent": "Starbase Texas public viewing, road and beach access against official notices",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "gulf-coast",
+        "texas"
+      ],
+      "personas": [
+        "rocket-watcher",
+        "launch-trip-planner",
+        "photographer"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active",
+        "intentSeparation": "Regional specialist owns legally qualified access and viewing-place comparison. National Rocket Launch Live owns the common cross-coast calendar and source confidence."
+      },
+      "searchEvidence": {
+        "status": "unknown",
+        "note": "Regional postrelease search demand and actual cross-tool conversion not established by the November 5 national GSC export."
+      }
+    },
+    {
+      "id": "rocket-wallops-viewing",
+      "name": "Wallops Virginia Launch Viewing Atlas",
+      "canonical": "https://chrisizworski.com/wallops-rocket-launch-viewing/",
+      "aliases": [],
+      "kind": "decision-engine",
+      "cluster": "rocket-launch-viewing",
+      "primaryIntent": "Wallops Virginia documented public viewpoints and event-specific NASA viewing openings",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "virginia-coast",
+        "virginia"
+      ],
+      "personas": [
+        "rocket-watcher",
+        "launch-trip-planner",
+        "photographer"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active",
+        "intentSeparation": "Regional specialist owns legally qualified access and viewing-place comparison. National Rocket Launch Live owns the common cross-coast calendar and source confidence."
+      },
+      "searchEvidence": {
+        "status": "unknown",
+        "note": "Regional postrelease search demand and actual cross-tool conversion not established by the November 5 national GSC export."
+      }
+    },
+    {
+      "id": "rocket-kodiak-viewing",
+      "name": "Kodiak Alaska Launch Access Desk",
+      "canonical": "https://chrisizworski.com/kodiak-rocket-launch-viewing/",
+      "aliases": [],
+      "kind": "decision-engine",
+      "cluster": "rocket-launch-viewing",
+      "primaryIntent": "Kodiak Alaska restricted-range launch context and documented public access boundaries",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "kodiak-island",
+        "alaska"
+      ],
+      "personas": [
+        "rocket-watcher",
+        "launch-trip-planner",
+        "photographer"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active",
+        "intentSeparation": "Regional specialist owns legally qualified access and viewing-place comparison. National Rocket Launch Live owns the common cross-coast calendar and source confidence."
+      },
+      "searchEvidence": {
+        "status": "unknown",
+        "note": "Regional postrelease search demand and actual cross-tool conversion not established by the November 5 national GSC export."
+      }
+    },
+    {
+      "id": "rocket-barking-sands-viewing",
+      "name": "Barking Sands Hawaiʻi Range Guide",
+      "canonical": "https://chrisizworski.com/barking-sands-rocket-launch-viewing/",
+      "aliases": [],
+      "kind": "decision-engine",
+      "cluster": "rocket-launch-viewing",
+      "primaryIntent": "Barking Sands Hawaiʻi restricted-range launch and beach-access boundaries",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "kauai",
+        "hawaii"
+      ],
+      "personas": [
+        "rocket-watcher",
+        "launch-trip-planner",
+        "photographer"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active",
+        "intentSeparation": "Regional specialist owns legally qualified access and viewing-place comparison. National Rocket Launch Live owns the common cross-coast calendar and source confidence."
+      },
+      "searchEvidence": {
+        "status": "unknown",
+        "note": "Regional postrelease search demand and actual cross-tool conversion not established by the November 5 national GSC export."
+      }
     }
   ],
   "relationships": [
@@ -6717,6 +7010,102 @@
       "strength": "optional",
       "surface": "garden",
       "reason": "A recorded crop and plant stage can guide follow-up pest scouting, without pretending the journal diagnoses pests."
+    },
+    {
+      "from": "rocket-launch-usa",
+      "to": "rocket-vandenberg-viewing",
+      "type": "regional-handoff",
+      "strength": "essential",
+      "surface": "flight-desk-region-guide",
+      "reason": "After selecting a california mission, the Vandenberg California Rocket Launch Viewing guide owns the distinct public viewing/access decision, not the calendar or launch approval."
+    },
+    {
+      "from": "rocket-vandenberg-viewing",
+      "to": "rocket-launch-usa",
+      "type": "mission-evidence",
+      "strength": "essential",
+      "surface": "regional-selected-mission",
+      "reason": "Return from the california viewing and access guide to the national mission UUID, timetable precision, source cross-checks and spectator-weather context."
+    },
+    {
+      "from": "rocket-launch-usa",
+      "to": "rocket-florida-viewing",
+      "type": "regional-handoff",
+      "strength": "essential",
+      "surface": "flight-desk-region-guide",
+      "reason": "After selecting a florida mission, the Florida Space Coast Launch Viewer guide owns the distinct public viewing/access decision, not the calendar or launch approval."
+    },
+    {
+      "from": "rocket-florida-viewing",
+      "to": "rocket-launch-usa",
+      "type": "mission-evidence",
+      "strength": "essential",
+      "surface": "regional-selected-mission",
+      "reason": "Return from the florida viewing and access guide to the national mission UUID, timetable precision, source cross-checks and spectator-weather context."
+    },
+    {
+      "from": "rocket-launch-usa",
+      "to": "rocket-starbase-viewing",
+      "type": "regional-handoff",
+      "strength": "essential",
+      "surface": "flight-desk-region-guide",
+      "reason": "After selecting a texas mission, the Starbase Texas Launch Viewing Atlas guide owns the distinct public viewing/access decision, not the calendar or launch approval."
+    },
+    {
+      "from": "rocket-starbase-viewing",
+      "to": "rocket-launch-usa",
+      "type": "mission-evidence",
+      "strength": "essential",
+      "surface": "regional-selected-mission",
+      "reason": "Return from the texas viewing and access guide to the national mission UUID, timetable precision, source cross-checks and spectator-weather context."
+    },
+    {
+      "from": "rocket-launch-usa",
+      "to": "rocket-wallops-viewing",
+      "type": "regional-handoff",
+      "strength": "essential",
+      "surface": "flight-desk-region-guide",
+      "reason": "After selecting a virginia mission, the Wallops Virginia Launch Viewing Atlas guide owns the distinct public viewing/access decision, not the calendar or launch approval."
+    },
+    {
+      "from": "rocket-wallops-viewing",
+      "to": "rocket-launch-usa",
+      "type": "mission-evidence",
+      "strength": "essential",
+      "surface": "regional-selected-mission",
+      "reason": "Return from the virginia viewing and access guide to the national mission UUID, timetable precision, source cross-checks and spectator-weather context."
+    },
+    {
+      "from": "rocket-launch-usa",
+      "to": "rocket-kodiak-viewing",
+      "type": "regional-handoff",
+      "strength": "essential",
+      "surface": "flight-desk-region-guide",
+      "reason": "After selecting a alaska mission, the Kodiak Alaska Launch Access Desk guide owns the distinct public viewing/access decision, not the calendar or launch approval."
+    },
+    {
+      "from": "rocket-kodiak-viewing",
+      "to": "rocket-launch-usa",
+      "type": "mission-evidence",
+      "strength": "essential",
+      "surface": "regional-selected-mission",
+      "reason": "Return from the alaska viewing and access guide to the national mission UUID, timetable precision, source cross-checks and spectator-weather context."
+    },
+    {
+      "from": "rocket-launch-usa",
+      "to": "rocket-barking-sands-viewing",
+      "type": "regional-handoff",
+      "strength": "essential",
+      "surface": "flight-desk-region-guide",
+      "reason": "After selecting a hawaii mission, the Barking Sands Hawaiʻi Range Guide guide owns the distinct public viewing/access decision, not the calendar or launch approval."
+    },
+    {
+      "from": "rocket-barking-sands-viewing",
+      "to": "rocket-launch-usa",
+      "type": "mission-evidence",
+      "strength": "essential",
+      "surface": "regional-selected-mission",
+      "reason": "Return from the hawaii viewing and access guide to the national mission UUID, timetable precision, source cross-checks and spectator-weather context."
     }
   ],
   "cannibalizationGroups": [
@@ -6902,6 +7291,19 @@
         "beach-report"
       ],
       "rule": "Rockhounding owns the after-storm hunt decision and collecting rules per beach. Buoys own raw station observations; the Beach Report owns swim notices and hazards. Do not create per-stone or per-beach doorway pages without distinct data."
+    },
+    {
+      "intent": "U.S. coastal rocket launch schedule and public viewing trip",
+      "owner": "rocket-launch-usa",
+      "supports": [
+        "rocket-vandenberg-viewing",
+        "rocket-florida-viewing",
+        "rocket-starbase-viewing",
+        "rocket-wallops-viewing",
+        "rocket-kodiak-viewing",
+        "rocket-barking-sands-viewing"
+      ],
+      "rule": "The national page owns six-coast mission selection and schedule/forecast evidence; each named regional viewing guide owns local lawful viewpoints, tickets, closures and range-source context. No duplicate all-coast calendars or invented public access."
     }
   ],
   "expansionOpportunities": [
