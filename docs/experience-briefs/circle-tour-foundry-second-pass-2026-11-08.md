@@ -44,7 +44,7 @@ The two closest existing experiences are (1) the original 31-stop Circle Tour ma
 - Stable ID: existing original stop IDs, 1–31 (Whitefish Point is ID 31 between Tahquamenon and Sault). A future tool cannot invent a stop or silently move one.
 - Existing shared state: CircleTourPage.selectedIds(), original plan, itinerary and direction in URL, original trip-change/stop-open events. No modification of the planner's source.
 - Custom trip: follow the user-selected insertion order **as selected**, not a supposed optimized highway itinerary; disclose this in the UI.
-- Published itinerary applied with query itinerary=7/10/15: use the actual saved direction. Clockwise reverses the canonical route, anchored at Duluth. Preview-only direction controls never override a custom trip.
+- Published itinerary applied with query itinerary=7/10/15: use the original saved stop order, which already reflects applied direction. Never reverse it a second time. Preview-only direction controls never override a custom trip.
 - Explicit focus outside selected trip: preserve it, disclose “not in your saved trip”, and do not invent a next planned stop.
 - Choice: a focused stop's approved matches sorted by usual season and stop specificity. One primary decision, question and original caveat; the full secondary catalog is available by disclosure.
 - No choice: ask the user to pick a stop rather than guess a priority; no-match shows approved coverage gap, original stop link and reversible “other interests” reset.
