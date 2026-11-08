@@ -200,7 +200,7 @@ test('Python Intelligence OS seasonal passage lens is static, source-backed and 
   assert.match(html,/id="seawaySeasonalReadout"/);
   assert.match(html,/Read the 2022–2024 comparison as a table/);
   assert.match(html,/not a prediction of ships at an individual lock/i);
-  assert.match(html,/seaway\.js\?v=20261107c/);
+  assert.match(html,/seaway\.js\?v=20261108d/);
   const raw=html.match(/<script type="application\/json" id="seawaySeasonalData">([\s\S]*?)<\/script>/);
   assert.ok(raw,'Seasonal data must exist as an embedded artifact with no client fetch');
   const data=JSON.parse(raw[1]);
