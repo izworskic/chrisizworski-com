@@ -1,0 +1,51 @@
+name: Follow the Freighter browser acceptance
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'public/assets/seaway-follow.js'
+      - 'public/assets/seaway-follow.css'
+      - 'public/assets/seaway.js'
+      - 'public/st-lawrence-seaway/index.html'
+      - 'scripts/enhance-seaway-journey.mjs'
+      - 'scripts/verify-seaway-follow-browser.cjs'
+      - 'tests/seaway-follow-freighter.test.js'
+      - '.github/workflows/seaway-follow-browser.yml'
+  workflow_dispatch: {}
+permissions:
+  contents: read
+jobs:
+  follow-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Test report truth, corridor ownership and previous Seaway behaviors
+        run: node --test tests/seaway-follow-freighter.test.js tests/seaway-ui.test.js tests/seaway.test.js tests/seaway-map-visibility.test.js
+      - name: Confirm post-generation feature and assets are retained
+        run: |
+          node scripts/generate-seaway.mjs
+          node --test tests/seaway-follow-freighter.test.js
+      - name: Install isolated real browser driver
+        run: npm install --prefix /tmp/follow-browser --no-save --ignore-scripts playwright-core@1.56.1
+      - name: Test actual generated page with synthetic AIS fixtures
+        env:
+          NODE_PATH: /tmp/follow-browser/node_modules
+          CHROME_BIN: /usr/bin/google-chrome
+          SHOTS: /tmp/follow-shots
+        run: node scripts/verify-seaway-follow-browser.cjs
+      - name: Preserve screenshots for manual Experience OS review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: seaway-follow-browser-proof
+          path: /tmp/follow-shots/
+          if-no-files-found: warn
+          retention-days: 14
