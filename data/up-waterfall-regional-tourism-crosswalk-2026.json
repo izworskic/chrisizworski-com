@@ -12,12 +12,12 @@
     "tourismMentions": 151,
     "distinctSourceNameStrings": 98,
     "byDisposition": {
-      "curated": 105,
-      "research_only": 30,
-      "needs_identity_review": 6,
+      "curated": 108,
+      "research_only": 32,
       "closure_guide": 4,
       "not_distinct_natural_falls": 5,
-      "companion_covered": 1
+      "companion_covered": 1,
+      "needs_identity_review": 1
     }
   },
   "statusDefinitions": {
@@ -206,9 +206,9 @@
     {
       "sourceId": "uptravel-eastern-central",
       "sourceName": "Black River Falls (Ishpeming)",
-      "disposition": "needs_identity_review",
+      "disposition": "research_only",
       "curatedIds": [],
-      "note": "Named in regional listing but not matched to an independently cleared public waterfall route."
+      "note": "Distinct from the five Gogebic County Black River falls; the historic footbridge was condemned and no current DNR-authorized substitute waterfall approach is verified."
     },
     {
       "sourceId": "uptravel-interactive",
@@ -631,9 +631,11 @@
     {
       "sourceId": "iron-chamber",
       "sourceName": "Mexi-Mini Falls",
-      "disposition": "needs_identity_review",
-      "curatedIds": [],
-      "note": "Named in regional listing but not matched to an independently cleared public waterfall route."
+      "disposition": "curated",
+      "curatedIds": [
+        "mex-i-min-e-falls"
+      ],
+      "note": "Alternative spelling for the existing verified Mex-i-min-e Falls visitor guide."
     },
     {
       "sourceId": "iron-chamber",
@@ -789,9 +791,9 @@
     {
       "sourceId": "keweenaw-guide-2026",
       "sourceName": "10-Foot Falls (Upper Eagle River)",
-      "disposition": "needs_identity_review",
+      "disposition": "research_only",
       "curatedIds": [],
-      "note": "Named in regional listing but not matched to an independently cleared public waterfall route."
+      "note": "Separate from the existing Lower Eagle River Falls guide; Visit Keweenaw's 2026 route uses an unsigned M-26 stop, and the mapped feature positions differ by approximately 438m. Highway parking and bank rights have not been independently cleared."
     },
     {
       "sourceId": "keweenaw-guide-2026",
@@ -1085,9 +1087,11 @@
     {
       "sourceId": "westernup",
       "sourceName": "Gabbro Falls/Bakers Falls",
-      "disposition": "needs_identity_review",
-      "curatedIds": [],
-      "note": "Named in regional listing but not matched to an independently cleared public waterfall route."
+      "disposition": "curated",
+      "curatedIds": [
+        "gabbro-falls"
+      ],
+      "note": "Owner-described visit covered by existing Gabbro (Baker's) Falls destination; road/lot and actual viewing corridor still need site-specific conditions."
     },
     {
       "sourceId": "westernup",
@@ -1101,9 +1105,11 @@
     {
       "sourceId": "westernup",
       "sourceName": "Cascade Falls (Cascade Creek)",
-      "disposition": "needs_identity_review",
-      "curatedIds": [],
-      "note": "Named in regional listing but not matched to an independently cleared public waterfall route."
+      "disposition": "curated",
+      "curatedIds": [
+        "cascade-falls"
+      ],
+      "note": "Alternative qualified name for published Cascade Falls (Trap Hills) guide."
     },
     {
       "sourceId": "westernup",
@@ -1307,7 +1313,7 @@
       "sourceName": "Unnamed Falls (near Interstate)",
       "disposition": "needs_identity_review",
       "curatedIds": [],
-      "note": "Named in regional listing but not matched to an independently cleared public waterfall route."
+      "note": "Regional tourism lists an unnamed river feature, but an unambiguous physically distinct waterfall, position and lawful visiting corridor have not been established."
     },
     {
       "sourceId": "westernup",
@@ -1411,5 +1417,11 @@
       "curatedIds": [],
       "note": "No currently approved lot, signed path or landowner authority established."
     }
+  ],
+  "auditLimitations": [
+    "Crosswalk records major regional editorial lists rather than every item in every statewide dynamic directory or all 300+ purported U.P. features.",
+    "A tourism name or geographic point alone never certifies public walking access, a legal parking area, a currently open attraction, or a safe view.",
+    "Regional source listing names were normalized against curated guide identities and research variants; source counts are mentions, not confirmed distinct waterfalls.",
+    "Published destination statuses are a snapshot of the November 8, 2026 GitHub main branch; public website deployment is independently verified only after release."
   ]
 }
