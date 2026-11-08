@@ -243,8 +243,8 @@
         const outlineRenderer=window.L.svg({pane:'rocket-reference-land'});
         window.L.geoJSON(geo,{
           renderer:outlineRenderer,pane:'rocket-reference-land',interactive:false,
-          style:{color:'#9db6ae',weight:1.15,opacity:1,
-            fillColor:'#d0dfd4',fillOpacity:1}
+          style:{color:'#719993',weight:1.3,opacity:1,
+            fillColor:'#eef0e2',fillOpacity:1}
         }).addTo(map);
         root.dataset.outline='ready';
         updateAtlasStatus();
