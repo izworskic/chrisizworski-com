@@ -193,12 +193,12 @@
           guideRegion(href,pageBase)===current?.selectedRegion;
         const trustedOfficial=(nextKind==='authority'||nextKind==='nasa')&&
           /^https:\/\/[a-z0-9.-]+\//i.test(href);
-        const inPage=nextKind==='in_page'&&href==='#rl-regional-sky';
+        const inPage=nextKind==='in_page'&&['#rl-regional-sky','#rl-viewing'].includes(href);
         if(STAGES.has(stage)&&(trustedGuide||trustedOfficial||inPage)){
           emit(win,inPage?'stage':'attempt',{
             region:regionOf(current?.selectedRegion),surface:'flight_desk',
             status:state(),stage,
-            destination:inPage?'spectator_weather':trustedGuide?'regional_guide':'official_access'
+            destination:inPage?(href==='#rl-viewing'?'viewing_options':'spectator_weather'):trustedGuide?'regional_guide':'official_access'
           });
         }
         return;
