@@ -96,3 +96,12 @@
 .seaway-cluster-choice:focus-visible,.seaway-vessel-cluster:focus-visible{
   outline:3px solid #d19438;outline-offset:3px
 }
+
+/* Compact vessel-only popup media. Images represent an individually verified
+   historical vessel photograph, never a live camera. No popup links. */
+.leaflet-popup-content .seaway-popup-figure{width:220px;max-width:100%;margin:9px 0 7px}
+.leaflet-popup-content .seaway-popup-figure[hidden]{display:none}
+.leaflet-popup-content .seaway-popup-figure img{display:block;width:100%;height:112px;object-fit:cover;object-position:center;border-radius:6px;background:#e2e8e5}
+.leaflet-popup-content .seaway-popup-figure figcaption{font:10px/1.4 system-ui,sans-serif;margin:5px 0 0;color:#5b6e71}
+.map-selection .seaway-photo-credit-outside{font:11px/1.5 system-ui,sans-serif;color:#49636a;margin-top:8px}
+.map-selection .seaway-photo-credit-outside a{display:inline;color:#246274;text-decoration:underline}

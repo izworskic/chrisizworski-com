@@ -6,6 +6,12 @@ on:
       - 'public/assets/seaway-follow.js'
       - 'public/assets/seaway-follow.css'
       - 'public/assets/seaway.js'
+      - 'public/assets/seaway.css'
+      - 'public/assets/seaway-popup-photos.js'
+      - 'public/assets/seaway-popup-photos.json'
+      - 'public/eisenhower-lock/index.html'
+      - 'scripts/generate-seaway.mjs'
+      - 'tests/seaway-popup-compact.test.js'
       - 'public/st-lawrence-seaway/index.html'
       - 'scripts/enhance-seaway-journey.mjs'
       - 'scripts/verify-seaway-follow-browser.cjs'
@@ -28,11 +34,11 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Test report truth, corridor ownership and previous Seaway behaviors
-        run: node --test tests/seaway-follow-freighter.test.js tests/seaway-ui.test.js tests/seaway.test.js tests/seaway-map-visibility.test.js
+        run: node --test tests/seaway-popup-compact.test.js tests/seaway-follow-freighter.test.js tests/seaway-ui.test.js tests/seaway.test.js tests/seaway-map-visibility.test.js
       - name: Confirm post-generation feature and assets are retained
         run: |
           node scripts/generate-seaway.mjs
-          node --test tests/seaway-follow-freighter.test.js
+          node --test tests/seaway-popup-compact.test.js tests/seaway-follow-freighter.test.js
       - name: Install isolated real browser driver
         run: npm install --prefix /tmp/follow-browser --no-save --ignore-scripts playwright-core@1.56.1
       - name: Test actual generated page with synthetic AIS fixtures
