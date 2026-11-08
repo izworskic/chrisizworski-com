@@ -30,7 +30,7 @@ const server=http.createServer((req,res)=>{
    res.writeHead(r.status,{'Content-Type':'application/json','Cache-Control':'no-store'});
    res.end(JSON.stringify(r.data));return;
  }
- const rel=decodeURIComponent(url.pathname)==='/'?'st-lawrence-seaway/index.html':decodeURIComponent(url.pathname).replace(/^\//,'');
+ const pathname=decodeURIComponent(url.pathname);const rel=pathname==='/'?'st-lawrence-seaway/index.html':pathname.endsWith('/')?pathname.replace(/^\//,'')+'index.html':pathname.replace(/^\//,'');
  const filepath=path.resolve(ROOT,rel);
  if(!filepath.startsWith(ROOT+path.sep)){res.writeHead(404);res.end('not found');return;}
  try{
