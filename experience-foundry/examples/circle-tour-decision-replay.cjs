@@ -17,7 +17,7 @@ const trip=chosen({selectedIds:['11','15','18'],theme:'water',date:'2027-07-18'}
 record('trip-one-next-check',trip?.kind==='next-check'&&trip.stopId==='11'&&trip.primary?.toolId==='pictured-rocks'
   &&trip.nextStopId==='15'&&trip.position===1&&trip.total===3&&trip.primary.caveat.length>12,
   'Pictured Rocks summer selection: '+JSON.stringify(trip?{kind:trip.kind,stop:trip.stopId,tool:trip.primary?.toolId,next:trip.nextStopId,position:trip.position,total:trip.total}:'No stop-specific decision model exported.'));
-const clockwise=chosen({selectedIds:['11','15','18'],itinerary:'10',direction:'clockwise',theme:'parks',date:'2027-07-18'});
+const clockwise=chosen({selectedIds:['18','15','11'],itinerary:'10',direction:'clockwise',theme:'parks',date:'2027-07-18'});
 record('applied-direction-progression',clockwise?.stopId==='18'&&clockwise?.nextStopId==='15'
   &&clockwise?.direction==='clockwise'&&clockwise?.orderedStops.join(',')==='18,15,11',
   'Applied clockwise ten-day route: '+JSON.stringify(clockwise?{stop:clockwise.stopId,next:clockwise.nextStopId,order:clockwise.orderedStops}:'No route stepper available.'));
