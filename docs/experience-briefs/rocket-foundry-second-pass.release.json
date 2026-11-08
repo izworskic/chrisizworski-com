@@ -176,10 +176,12 @@
       768,
       1440
     ],
-    "browserStatus": "PENDING",
-    "scopeNote": "Second-pass browser and exact-head owner CI need independent evidence; earlier PR #1565 screenshots do not validate this version. Synthetic unit cases are not current official launch/access/weather evidence.",
-    "browserRun": null,
-    "screenshotEvidence": []
+    "browserStatus": "PASSED",
+    "scopeNote": "Actual Chromium screenshots at 360, 390, 768 and 1440 px inspected, plus real fixture-powered non-default national D → loaded Starbase D → national D → removed D (phone and desktop). Failed map tiles, missing media and no-JS states tested. Sources are simulated; no actual public access, NWS issuance or launch GO established.",
+    "browserRun": "https://github.com/izworskic/chrisizworski-com/actions/runs/42486209029",
+    "screenshotEvidence": [
+      "https://github.com/izworskic/chrisizworski-com/actions/runs/42486209029/artifacts/13619990543"
+    ]
   },
   "photos": [
     {
@@ -194,20 +196,31 @@
   ],
   "release": {
     "implemented": {
-      "status": "PENDING"
+      "status": "CONFIRMED",
+      "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/pull/1569",
+      "checkedDate": "2026-11-08",
+      "commitSha": "019f12bc79b038e4655d1ed52e38e788d3ba249c",
+      "scope": "Working branch only, not merged"
     },
     "verified": {
-      "status": "PENDING"
+      "status": "CONFIRMED",
+      "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/actions/runs/42486209028",
+      "checkedDate": "2026-11-08",
+      "commitSha": "019f12bc79b038e4655d1ed52e38e788d3ba249c",
+      "scope": "10 exact-head workflows green; owner verify:all and production profile build; screenshot artifact and Chromium journey run 42486209029"
     },
     "deployed": {
-      "status": "NOT_VERIFIED"
+      "status": "NOT_VERIFIED",
+      "scope": "No production deployment of this PR"
     },
     "live": {
-      "status": "NOT_VERIFIED"
+      "status": "NOT_VERIFIED",
+      "scope": "No production smoke on this PR; Vercel preview is not live canonical"
     },
     "measured": {
-      "status": "NOT_MEASURED"
+      "status": "NOT_MEASURED",
+      "scope": "Pre-Foundry national rocket GSC 29 impressions and zero clicks in 28d; no outcome uplift established"
     }
   },
-  "verificationLimit": "Distinct implementation, exact-SHA CI, preview, deployment, public smoke and real visitor outcomes are separate evidence levels. Unit tests and Click/Attempt analytics do not establish a trip decision or postrelease search growth."
+  "verificationLimit": "Actual exact-head SHA 019f12bc passed owner full gate and independent Foundry/rocket regional/browser workflows on 2026-11-08. Preview READY exists but protected web URL could not be independently opened; this is not production deployment, public smoke or measured visitor outcomes. No click or loaded destination alone is a completed trip decision."
 }
