@@ -99,7 +99,9 @@ test('clock-based day sheet handles time zones, border waits, sunset and tonight
   assert.match(live, /America\/Chicago/);
   assert.match(live, /America\/Detroit/);
   assert.match(live, /formatClock/);
-  assert.match(live, /Sault Ste\. Marie border crossing/);
+  assert.match(live, /name: 'Sault Ste\. Marie'/);
+  assert.match(live, /name: 'Pigeon River \/ Grand Portage'/);
+  assert.match(live, /borderAllowancesForSegment/);
   assert.match(live, /function sunTime/);
   assert.match(live, /Sunset at the overnight stop/);
   assert.match(live, /auroraOpportunity/);
