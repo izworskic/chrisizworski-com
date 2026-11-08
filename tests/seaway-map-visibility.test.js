@@ -64,7 +64,7 @@ test('map shows counted ship markers and below-map caption without a blocking ov
   for(const slug of ['st-lawrence-seaway','eisenhower-lock']){
     const html=read('public/'+slug+'/index.html');
     assert.ok(html.includes('/assets/seaway.css?v=20261108f'),slug+' CSS version');
-    assert.ok(html.includes('/assets/seaway.js?v=20261108f'),slug+' refreshed ship popup JS');
+    assert.ok(html.includes('/assets/seaway.js?v=20261108g'),slug+' refreshed ship popup JS');
     assert.ok(html.includes('/assets/seaway-core.js?v=20261107b'),slug+' shared core version');
     assert.match(html,/name="robots" content="index,follow,max-image-preview:large"/);
   }
