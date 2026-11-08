@@ -48,6 +48,9 @@
   function roadChecks(catalog,opts={}){
     const scope=Array.isArray(opts.scope)?opts.scope:[];
     const regions=new Set(scope.map(id=>catalog.stopRegion?.[id]).filter(Boolean));
+    // Border stops require source checks on both sides of the crossing, not one state's coverage.
+    if(scope.some(id=>['13','14'].includes(String(id)))){regions.add('mi');regions.add('on');}
+    if(scope.some(id=>['20','21'].includes(String(id)))){regions.add('mn');regions.add('on');}
     if(!scope.length&&opts.region&&opts.region!=='all')regions.add(opts.region);
     return (Array.isArray(catalog.roadChecks)?catalog.roadChecks:[])
       .filter(x=>(!regions.size||regions.has(x.region))&&safeRoadUrl(x.url));
