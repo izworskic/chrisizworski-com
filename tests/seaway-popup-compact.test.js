@@ -72,7 +72,7 @@ test('both generated Seaway pages load photo adapter before updated map script',
     assert.match(html,/rel="canonical"/);
   }
   assert.match(generator,/\/assets\/seaway-popup-photos\.js\?v=20261108f/);
-  assert.match(generator,/\/assets\/seaway\.js\?v=20261108f/);
-  assert.match(enhancer,/\/assets\/seaway\.js\?v=20261108f/);
+  assert.match(generator,/\/assets\/seaway\.js\?v=20261108g/);
+  assert.match(enhancer,/\/assets\/seaway\.js\?v=20261108g/);
   assert.doesNotMatch(popup,/\bOpen Waters photo|Generic ship photograph/);
 });
