@@ -142,9 +142,9 @@ const whenReady=page=>page.waitForFunction(id=>
     v.name+' hero mission picker disabled');
    assert(await page.locator('#rl-flight-locate').isEnabled(),
     v.name+' mapped mission focus disabled');
-   assert((await page.locator('#rl-flight-next-title').innerText()).includes('viewing arrangements'),
+   assert((await page.locator('#rl-flight-next-title').innerText()).includes('source-backed spectator option'),
     v.name+' Foundry next evidence is not an access check for precise Florida mission');
-   assert((await page.locator('#rl-flight-next-link').getAttribute('href'))==='/national-tools/space-coast-launch/',
+   assert((await page.locator('#rl-flight-next-link').getAttribute('href'))==='/national-tools/space-coast-launch/?launchId='+A+'&via=rocket-foundry&stage=access',
     v.name+' Foundry source handoff misroutes the selected coast');
    const first=await page.locator('#rl-flight-headline').evaluate(n=>n.getBoundingClientRect().top);
    assert(first>=0 && first<v.height,v.name+' first useful answer below phone viewport '+first);
@@ -184,12 +184,15 @@ const whenReady=page=>page.waitForFunction(id=>
    events=await metrics();
    assert(events.some(a=>a.name==='Rocket Map Engaged'&&a.data.surface==='flight_desk'&&
      a.data.outcome==='pad_marker_focused'),v.name+' rocket-map focus not measured');
-   await page.locator('#rl-flight-specialist').evaluate(a=>{
+   await page.locator('#rl-flight-next-link').evaluate(a=>{
      a.addEventListener('click',e=>e.preventDefault(),{once:true});a.click();
    });
    events=await metrics();
-   assert(events.some(a=>a.name==='Rocket Viewing Next Step'&&a.data.destination==='regional_guide'&&
-     a.data.surface==='flight_desk'),v.name+' regional guide handoff not measured');
+   assert(events.some(a=>a.name==='Rocket Foundry Handoff Attempt'&&
+     a.data.destination==='regional_guide'&&a.data.stage==='access'),
+     v.name+' new primary Foundry attempt was not distinguished from older links');
+   assert(!events.some(a=>a.name==='Rocket Foundry Mission Restored'),
+     v.name+' a click alone cannot certify mission restoration');
    assert(!JSON.stringify(events).includes(A)&&!JSON.stringify(events).includes(B),
      v.name+' analytics leaked a mission identifier');
    assert(events.filter(a=>a.name==='Rocket Flight Desk Exposed').length===1,
