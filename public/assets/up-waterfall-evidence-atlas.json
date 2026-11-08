@@ -1,18 +1,20 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "generatedFrom": {
     "curated": "data/up-waterfalls.json",
     "gis": "data/up-waterfall-reconciliation.json",
     "external": "data/up-waterfall-external-identity-shorelinescout.json",
     "discovery": "data/up-waterfall-discovery-index.json",
     "tourism": "data/up-waterfall-uptravel-location-review-2026.json",
-    "tourismIndex": "data/up-waterfall-uptravel-indexed-listings-2026.json"
+    "tourismIndex": "data/up-waterfall-uptravel-indexed-listings-2026.json",
+    "identityReview": "data/up-waterfall-uptravel-unmatched-identity-review-2026.json"
   },
   "sourceDates": {
     "gis": "2026-10-26",
     "nameDirectory": "2026-11-07",
     "tourismSample": "2026-11-08",
-    "upTravelIndex": "2026-11-08"
+    "upTravelIndex": "2026-11-08",
+    "identityReview": "2026-11-08"
   },
   "claim": "Source observations, NOT distinct waterfalls or public visitor destinations.",
   "warning": "This atlas contains source mentions, not verified distinct waterfalls. Natural-feature dots are NOT parking or approved trailheads. A name-only listing has no independently verified coordinates or public access.",
@@ -29,7 +31,8 @@
     "upTravelUnrelatedKeywordPagesExcluded": 41,
     "totalSourceRecords": 640,
     "gisExplicitlyLinkedToGuides": 69,
-    "nameOnlyWithoutPoint": 399
+    "nameOnlyWithoutPoint": 399,
+    "upTravelUnmatchedIdentityReviews": 13
   },
   "records": [
     {
@@ -9174,7 +9177,8 @@
       "directoryMembership": "observed-on-directory-first-page",
       "note": "Named waterfall; historic county-road label not verified trailhead.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:47",
@@ -9201,7 +9205,8 @@
       "directoryMembership": "observed-on-directory-first-page",
       "note": "Viewpoint reopened 2026; historic trestle not open.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:52",
@@ -9232,7 +9237,8 @@
       "directoryMembership": "observed-on-directory-first-page",
       "note": "Backcountry falls; street label is not safe arrival or parking.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:65",
@@ -9265,7 +9271,8 @@
       "directoryMembership": "observed-on-directory-first-page",
       "note": "Existing source review says unmarked sand-road approach lacks verified legal public waterfall trailhead.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:73",
@@ -9298,7 +9305,8 @@
       "directoryMembership": "observed-on-directory-first-page",
       "note": "Adopted city/county planning records no safe parking at highway; do not copy listed intersection as stop.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:222",
@@ -9331,7 +9339,8 @@
       "directoryMembership": "observed-on-directory-first-page",
       "note": "Historic recreational directions superseded by changed ownership and 2026 EGLE dam order; no approved waterfall approach.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:273",
@@ -9362,7 +9371,8 @@
       "directoryMembership": "observed-on-directory-first-page",
       "note": "Porkies backcountry tier; listed roads are orientation only, not certified parking-to-viewpoint route.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:398",
@@ -9395,7 +9405,8 @@
       "directoryMembership": "observed-on-directory-first-page",
       "note": "Existing DNR Big Eric's Bridge State Forest Campground guide; distinct from upstream Erick's Falls.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:409",
@@ -9422,7 +9433,26 @@
       "directoryMembership": "observed-on-directory-first-page",
       "note": "Potential separate Big Pup feature, river access/parking and correct natural point not yet cleared.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": {
+        "disposition": "research-name-alias",
+        "canonicalName": "Big Pup Falls",
+        "finding": "UP Travel's Big Pup Creek waterfall and the independent Big Pup Falls record refer to cascades on Big Pup Creek near County Road 510 in Marquette County. The specialist explicitly flags private property; a road bridge is not public trail permission.",
+        "barrier": "Private-property and road-shoulder rights; creek has distinct upper and lower drops, so natural feature precision remains unsettled.",
+        "confidence": "supported-identity-no-access-route",
+        "reviewedGuideIds": [],
+        "linkedGisIds": [],
+        "relatedExternalIds": [
+          "ss:big-pup-falls"
+        ],
+        "sourceUrls": [
+          "https://www.uptravel.com/blog/post/nine-pet-friendly-waterfalls/",
+          "https://www.waterfallsofthekeweenaw.com/big-pup-creek/big-pup-falls/"
+        ],
+        "reviewed": "2026-11-08",
+        "publicRouteCleared": false,
+        "newDestinationAuthorized": false
+      }
     },
     {
       "id": "tourism:437",
@@ -9455,7 +9485,8 @@
       "directoryMembership": "observed-on-directory-first-page",
       "note": "Different from Gogebic scenic byway; historic footbridge reportedly condemned, so route requires verification.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:470",
@@ -9482,7 +9513,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:471",
@@ -9509,7 +9541,8 @@
       "directoryMembership": "observed-on-directory-first-page",
       "note": "Existing Michigan DNR scenic visitor guide.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:472",
@@ -9536,7 +9569,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:473",
@@ -9563,7 +9597,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:506",
@@ -9594,7 +9629,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:546",
@@ -9621,7 +9657,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:610",
@@ -9656,7 +9693,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:628",
@@ -9691,7 +9729,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:632",
@@ -9726,7 +9765,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:698",
@@ -9761,7 +9801,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:719",
@@ -9794,7 +9835,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:723",
@@ -9821,7 +9863,28 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": {
+        "disposition": "research-name-alias",
+        "canonicalName": "Chipmunk Falls (Net River near Amasa)",
+        "finding": "The UP Travel Amasa listing identifies the Net River area of Iron County, consistent with state GIS #17 Chipmunk Falls on the Net River and an Iron County independent name. Michigan GIS #205 is a DIFFERENT Chipmunk Falls on Chipmunk Creek in Alger County.",
+        "barrier": "The tourism page itself states there is no direct trail access or dependable signage. No approved parking/visitor path found.",
+        "confidence": "supported-identity-no-access-route",
+        "reviewedGuideIds": [],
+        "linkedGisIds": [
+          17
+        ],
+        "relatedExternalIds": [
+          "ss:chipmunk-falls-2"
+        ],
+        "sourceUrls": [
+          "https://www.uptravel.com/listing/chipmunk-falls-amasa/723/",
+          "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        ],
+        "reviewed": "2026-11-08",
+        "publicRouteCleared": false,
+        "newDestinationAuthorized": false
+      }
     },
     {
       "id": "tourism:799",
@@ -9848,7 +9911,27 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": {
+        "disposition": "research-name-alias",
+        "canonicalName": "Cliff Falls (Forty Foot Falls)",
+        "finding": "UP Travel calls this waterfall Forty Foot Falls or Cliff Falls; the independent field account confirms the Cliff River identity in northern Marquette County. Do NOT confuse with GIS #40 Rocky Forty Falls on Siemens Creek in Gogebic County.",
+        "barrier": "Historic driving directions cross unsigned forestry roads by Cliff Falls Hunting Club, with no current rights, vehicle access or managed trail confirmed.",
+        "confidence": "supported-identity-no-access-route",
+        "reviewedGuideIds": [],
+        "linkedGisIds": [],
+        "relatedExternalIds": [
+          "ss:forty-foot-falls-cliff-falls"
+        ],
+        "sourceUrls": [
+          "https://www.uptravel.com/listing/forty-foot-falls/799/",
+          "https://www.waterfallsofthekeweenaw.com/cliff-river/forty-foot-falls/",
+          "https://www.worldwaterfalldatabase.com/waterfall/Cliff-Falls-13121"
+        ],
+        "reviewed": "2026-11-08",
+        "publicRouteCleared": false,
+        "newDestinationAuthorized": false
+      }
     },
     {
       "id": "tourism:863",
@@ -9881,7 +9964,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:864",
@@ -9908,7 +9992,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:1021",
@@ -9941,7 +10026,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:1179",
@@ -9976,7 +10062,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:1196",
@@ -10011,7 +10098,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:1300",
@@ -10038,7 +10126,29 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": {
+        "disposition": "existing-guide-umbrella",
+        "canonicalName": "Falls River Trail: Middle & Lower Falls",
+        "finding": "UP Travel explicitly describes a cascade sequence including Lower and Middle Falls in L'Anse, plus an upstream unnamed drop. These are already covered by the curated Falls River Trail destination; Power House Falls is separately covered elsewhere, not a second version of the same waterfall.",
+        "barrier": "The UP Travel umbrella is not one independently distinct waterfall or a license to visit unsigned upper riverbanks. Use existing, source-vetted trailhead guidance only.",
+        "confidence": "source-confirmed-existing-coverage",
+        "reviewedGuideIds": [
+          "falls-river-trail"
+        ],
+        "linkedGisIds": [],
+        "relatedExternalIds": [
+          "ss:lower-falls-river-falls",
+          "ss:middle-falls-river-falls"
+        ],
+        "sourceUrls": [
+          "https://www.uptravel.com/listing/falls-river-falls/1300/",
+          "https://www.baragacountytrails.org/trails/falls-river-trail"
+        ],
+        "reviewed": "2026-11-08",
+        "publicRouteCleared": false,
+        "newDestinationAuthorized": false
+      }
     },
     {
       "id": "tourism:1514",
@@ -10071,7 +10181,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:1521",
@@ -10104,7 +10215,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:1525",
@@ -10133,7 +10245,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:1623",
@@ -10168,7 +10281,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:1675",
@@ -10203,7 +10317,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:1686",
@@ -10238,7 +10353,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:1697",
@@ -10273,7 +10389,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:1699",
@@ -10300,7 +10417,29 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": {
+        "disposition": "existing-guide-alias",
+        "canonicalName": "Bonanza Falls (Greenwood Falls)",
+        "finding": "UP Travel identifies Greenwood/Bonanza Falls on the Big Iron River at White Pine. Site's Bonanza Falls (Greenwood Falls) destination and state GIS #124 already cover this feature.",
+        "barrier": "No new destination or parking is added from a duplicate tourism name. Review present-day local visitor access using the curated guide.",
+        "confidence": "source-confirmed-existing-coverage",
+        "reviewedGuideIds": [
+          "bonanza-falls"
+        ],
+        "linkedGisIds": [
+          124
+        ],
+        "relatedExternalIds": [
+          "ss:bonanza-falls"
+        ],
+        "sourceUrls": [
+          "https://www.uptravel.com/listing/greenwood-bonanza-falls/1699/"
+        ],
+        "reviewed": "2026-11-08",
+        "publicRouteCleared": false,
+        "newDestinationAuthorized": false
+      }
     },
     {
       "id": "tourism:1772",
@@ -10327,7 +10466,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:1774",
@@ -10354,7 +10494,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:1899",
@@ -10389,7 +10530,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:1919",
@@ -10416,7 +10558,35 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": {
+        "disposition": "existing-guide-umbrella",
+        "canonicalName": "Upper, Middle & Lower Hungarian Falls",
+        "finding": "UP Travel describes the three named drops along Dover Creek near Hubbell; the atlas already has three distinct curated guide identities, including Middle Hungarian Falls. Two tier coordinates exist in the linked state GIS snapshot.",
+        "barrier": "One tourism name is an umbrella, not a missing fourth waterfall or permission to access closed banks. No new directions generated.",
+        "confidence": "source-confirmed-existing-coverage",
+        "reviewedGuideIds": [
+          "upper-hungarian-falls",
+          "middle-hungarian-falls",
+          "lower-hungarian-falls"
+        ],
+        "linkedGisIds": [
+          130,
+          134
+        ],
+        "relatedExternalIds": [
+          "ss:upper-hungarian-falls",
+          "ss:middle-hungarian-falls",
+          "ss:lower-hungarian-falls"
+        ],
+        "sourceUrls": [
+          "https://www.uptravel.com/listing/hungarian-falls/1919/",
+          "https://www.uptravel.com/blog/post/spring-waterfalls/"
+        ],
+        "reviewed": "2026-11-08",
+        "publicRouteCleared": false,
+        "newDestinationAuthorized": false
+      }
     },
     {
       "id": "tourism:2041",
@@ -10447,7 +10617,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:2111",
@@ -10482,7 +10653,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:2119",
@@ -10517,7 +10689,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:2366",
@@ -10544,7 +10717,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:2430",
@@ -10579,7 +10753,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:2441",
@@ -10612,7 +10787,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:2470",
@@ -10646,7 +10822,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:2552",
@@ -10682,7 +10859,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:2553",
@@ -10715,7 +10893,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:2554",
@@ -10748,7 +10927,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:2713",
@@ -10783,7 +10963,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:2754",
@@ -10816,7 +10997,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:2802",
@@ -10852,7 +11034,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:2804",
@@ -10885,7 +11068,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:2830",
@@ -10912,7 +11096,30 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": {
+        "disposition": "existing-closure-guide",
+        "canonicalName": "Munising Falls",
+        "finding": "The NPS says the Munising Falls Trail remains closed after April 2025 storm damage; a September 3, 2026 award describes a project potentially extending through end of 2027. The UP Travel listing is an alias/status qualifier, not another waterfall.",
+        "barrier": "NO CURRENT VISITOR ROUTE. An accessible historic path description must not override the NPS live closure.",
+        "confidence": "source-confirmed-existing-coverage",
+        "reviewedGuideIds": [
+          "munising-falls"
+        ],
+        "linkedGisIds": [
+          200
+        ],
+        "relatedExternalIds": [
+          "ss:munising-falls"
+        ],
+        "sourceUrls": [
+          "https://www.nps.gov/piro/planyourvisit/conditions.htm",
+          "https://www.nps.gov/piro/learn/news/2026-09-03-munising-falls-contract-awarded.htm"
+        ],
+        "reviewed": "2026-11-08",
+        "publicRouteCleared": false,
+        "newDestinationAuthorized": false
+      }
     },
     {
       "id": "tourism:2879",
@@ -10947,7 +11154,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:2915",
@@ -10982,7 +11190,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:3030",
@@ -11017,7 +11226,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:3097",
@@ -11053,7 +11263,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:3174",
@@ -11086,7 +11297,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:3210",
@@ -11119,7 +11331,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:3265",
@@ -11154,7 +11367,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:3320",
@@ -11187,7 +11401,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:3321",
@@ -11222,7 +11437,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:3333",
@@ -11249,7 +11465,27 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": {
+        "disposition": "existing-guide-region",
+        "canonicalName": "Presque Isle River waterfall group",
+        "finding": "UP Travel explicitly describes the Presque Isle River Waterfalls Loop at Porcupine Mountains, not a new individually named cascade. Existing site guides cover Manabezho, Manido and Nawadaha as separate locations.",
+        "barrier": "The label is a corridor/trail grouping, not a safe pin of an unnamed fourth fall. Consult current DNR trail status separately.",
+        "confidence": "source-confirmed-existing-coverage",
+        "reviewedGuideIds": [
+          "manabezho-falls",
+          "manido-falls",
+          "nawadaha-falls"
+        ],
+        "linkedGisIds": [],
+        "relatedExternalIds": [],
+        "sourceUrls": [
+          "https://www.uptravel.com/listing/presque-isle-falls/3333/"
+        ],
+        "reviewed": "2026-11-08",
+        "publicRouteCleared": false,
+        "newDestinationAuthorized": false
+      }
     },
     {
       "id": "tourism:3375",
@@ -11285,7 +11521,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:3395",
@@ -11320,7 +11557,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:3406",
@@ -11353,7 +11591,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:3493",
@@ -11388,7 +11627,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:3524",
@@ -11415,7 +11655,28 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": {
+        "disposition": "existing-closure-guide",
+        "canonicalName": "Tannery / Rudy M. Olson Falls",
+        "finding": "Michigan Nature Association identifies Rudy M. Olson Falls as Tannery Falls within Twin Waterfalls Memorial Plant Preserve, currently CLOSED to ALL visitors. The site already has one preserve closure guide covering both Tannery/Olson and Memorial Falls.",
+        "barrier": "NO VISITATION, PARKING OR INGRESS via historic H-58, Nestor or neighborhood directions. Ignore out-of-date tourism walking instructions.",
+        "confidence": "source-confirmed-existing-coverage",
+        "reviewedGuideIds": [
+          "twin-waterfalls-memorial-preserve"
+        ],
+        "linkedGisIds": [
+          199
+        ],
+        "relatedExternalIds": [],
+        "sourceUrls": [
+          "https://michigannature.org/index.cfm?action=listing&fuseaction=locationgallery&listing=171",
+          "https://www.uptravel.com/listing/rudolph-olson-memorial-falls/3524/"
+        ],
+        "reviewed": "2026-11-08",
+        "publicRouteCleared": false,
+        "newDestinationAuthorized": false
+      }
     },
     {
       "id": "tourism:3563",
@@ -11452,7 +11713,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:3602",
@@ -11487,7 +11749,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:3657",
@@ -11520,7 +11783,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:3688",
@@ -11553,7 +11817,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:3694",
@@ -11588,7 +11853,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:3695",
@@ -11615,7 +11881,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:3701",
@@ -11642,7 +11909,25 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": {
+        "disposition": "research-distinct-wilderness",
+        "canonicalName": "Siskiwit Falls (Isle Royale, Siskiwit Lake outlet)",
+        "finding": "UP Travel identifies the Siskiwit River outlet between Siskiwit Lake and Malone Bay on Isle Royale. This is NOT the separately named Siskiwit Falls near Cornucopia, Wisconsin, which is managed by Bayfield County. The Michigan feature is a backcountry waterfall with no verified current land-manager waterfall-viewpoint route.",
+        "barrier": "NPS park access is seasonal and by boat/seaplane, and old maps are insufficient to certify a present-day waterfall path. No local road arrival, direct GPS parking or day-trip promise.",
+        "confidence": "supported-identity-no-access-route",
+        "reviewedGuideIds": [],
+        "linkedGisIds": [],
+        "relatedExternalIds": [],
+        "sourceUrls": [
+          "https://www.uptravel.com/listing/siskiwit-falls/3701/",
+          "https://www.nps.gov/thingstodo/feldtmann-loop-section-3-hike-from-siskiwit-bay-to-island-mine.htm",
+          "https://www.bayfieldcounty.wi.gov/waterfalls"
+        ],
+        "reviewed": "2026-11-08",
+        "publicRouteCleared": false,
+        "newDestinationAuthorized": false
+      }
     },
     {
       "id": "tourism:3708",
@@ -11675,7 +11960,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:3792",
@@ -11710,7 +11996,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:3957",
@@ -11745,7 +12032,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:3958",
@@ -11772,7 +12060,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:4105",
@@ -11799,7 +12088,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:4118",
@@ -11832,7 +12122,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:4345",
@@ -11867,7 +12158,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:4392",
@@ -11900,7 +12192,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:4472",
@@ -11935,7 +12228,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:4474",
@@ -11962,7 +12256,25 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": {
+        "disposition": "unresolved-specific-feature",
+        "canonicalName": "Unnamed Falls on Pinkerton Creek",
+        "finding": "UP Travel references an unnamed cascade on Pinkerton Creek in Porcupine Mountains. The independent directory also has Pinkerton Falls in Gogebic County, but the two source labels are not enough to prove the same tier, feature position or public arrival; do not collapse onto Traders Falls on a nearby trail.",
+        "barrier": "No official independently sourced feature coordinate, precise identity with Pinkerton Falls, continuous public route or parking authorization. KEEP UNRESOLVED.",
+        "confidence": "unresolved",
+        "reviewedGuideIds": [],
+        "linkedGisIds": [],
+        "relatedExternalIds": [
+          "ss:pinkerton-falls"
+        ],
+        "sourceUrls": [
+          "https://www.uptravel.com/listing/unnamed-falls-pinkerton-creek/4474/"
+        ],
+        "reviewed": "2026-11-08",
+        "publicRouteCleared": false,
+        "newDestinationAuthorized": false
+      }
     },
     {
       "id": "tourism:4579",
@@ -11989,7 +12301,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:4598",
@@ -12022,7 +12335,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:4670",
@@ -12055,7 +12369,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:4765",
@@ -12088,7 +12403,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:4770",
@@ -12121,7 +12437,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:4777",
@@ -12154,7 +12471,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:5417",
@@ -12185,7 +12503,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:5453",
@@ -12218,7 +12537,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:5457",
@@ -12245,7 +12565,25 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": {
+        "disposition": "research-distinct-wilderness",
+        "canonicalName": "Bulldog Falls (Yellow Dog River, McCormick Wilderness)",
+        "finding": "The federal Wild & Scenic Yellow Dog River record confirms multiple remote cascades in the McCormick Wilderness. Independent specialist field account explicitly identifies Bulldog Falls as a stretch below Bulldog Lake, distinct from the signed Yellow Dog Falls visitor outing on a different river section.",
+        "barrier": "The congressionally designated wilderness is unmarked and may involve stream crossings. Historic private guides do not establish an official signed parking-to-viewpoint route; never recommend automatic drive directions.",
+        "confidence": "supported-identity-no-access-route",
+        "reviewedGuideIds": [],
+        "linkedGisIds": [],
+        "relatedExternalIds": [],
+        "sourceUrls": [
+          "https://www.fws.gov/rivers/river/yellow-dog",
+          "https://www.waterfallsofthekeweenaw.com/yellow-dog-river/bulldog-falls/",
+          "https://www.uptravel.com/blog/post/nine-pet-friendly-waterfalls/"
+        ],
+        "reviewed": "2026-11-08",
+        "publicRouteCleared": false,
+        "newDestinationAuthorized": false
+      }
     },
     {
       "id": "tourism:5480",
@@ -12278,7 +12616,8 @@
       "directoryMembership": "observed-on-directory-first-page",
       "note": "Tourism byway listing is not itself a sixth waterfall; five falls already in curated inventory with conditional 2026-27 USFS closures.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:5557",
@@ -12313,7 +12652,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:5563",
@@ -12344,7 +12684,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:5644",
@@ -12375,7 +12716,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:5649",
@@ -12402,7 +12744,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:5695",
@@ -12429,7 +12772,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:5725",
@@ -12458,7 +12802,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:5735",
@@ -12491,7 +12836,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:5815",
@@ -12518,7 +12864,28 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": {
+        "disposition": "research-name-alias",
+        "canonicalName": "Powder Horn Falls (Powder Mill Creek)",
+        "finding": "UP Travel's Powderhorn Falls text places it on Powder Mill Creek near Bessemer. Michigan state GIS #39 names Powder Horn Falls on the same creek in Gogebic County, and the independent directory matches that spelling. Strong same-stream alias match; not a separate scenic-byway waterfall.",
+        "barrier": "Neither GIS nor the resort's road label establishes legal visitor parking, walking permission or trail. No auto route or public-map addition.",
+        "confidence": "supported-identity-no-access-route",
+        "reviewedGuideIds": [],
+        "linkedGisIds": [
+          39
+        ],
+        "relatedExternalIds": [
+          "ss:powder-horn-falls"
+        ],
+        "sourceUrls": [
+          "https://www.uptravel.com/listing/powderhorn-falls/5815/",
+          "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+        ],
+        "reviewed": "2026-11-08",
+        "publicRouteCleared": false,
+        "newDestinationAuthorized": false
+      }
     },
     {
       "id": "tourism:5848",
@@ -12547,7 +12914,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     },
     {
       "id": "tourism:5880",
@@ -12583,7 +12951,8 @@
       "directoryMembership": "unknown",
       "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival",
+      "identityReview": null
     }
   ]
 }

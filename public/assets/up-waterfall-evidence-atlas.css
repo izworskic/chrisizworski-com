@@ -18,3 +18,11 @@
 .ea-compare-btn{display:inline-flex;padding:9px 11px;margin:5px 7px 5px 0;min-height:44px;background:#ecf4ed;color:#214d47;border-radius:8px;border:1px solid #a6c9b7;cursor:pointer;font-weight:700;font-size:.8rem;text-align:left;align-items:center}
 .ea-compare-btn:hover{background:#dceee1}
 @media(max-width:560px){.ea-compare-btn{width:100%;justify-content:center}}
+
+/* Evidence Atlas identity-review state: evidence is descriptive, never a new arrival. */
+.ea-investigation{border:1px solid #c6dad1;border-radius:11px;padding:16px 16px 12px;margin:16px 0;background:#f2f8f5}
+.ea-investigation h4{font-family:Georgia,serif;font-size:1.35rem;font-weight:normal;line-height:1.25;margin:6px 0 10px;color:#173f3e}
+.ea-investigation .ea-canonical{font-weight:800;color:#174c43}
+.ea-investigation .ea-barrier{padding-top:8px;border-top:1px solid #bfd7cc;color:#584829}
+.ea-investigation .ea-no-route{font-weight:800;color:#6c4627}
+.ea-investigation p{overflow-wrap:anywhere}
