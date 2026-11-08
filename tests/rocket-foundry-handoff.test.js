@@ -147,6 +147,7 @@ test('no-JS navigation remains a static guide without a false mission-success cl
  })){
   const html=fs.readFileSync(path.join(__dirname,'..',file),'utf8');
   assert.match(html,/rocket-foundry-handoff\.js/);
+  assert.match(html,/\/_vercel\/insights\/script\.js/,'first-party analytics receiver required for regional receipts');
   assert.match(html,/<a\b[^>]*href=/);
   assert.doesNotMatch(html,/Mission restored<\/strong>/);
  }
