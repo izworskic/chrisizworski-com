@@ -13,6 +13,8 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
+import unicodedata
 from collections import Counter, defaultdict
 from pathlib import Path
 
@@ -24,8 +26,9 @@ INPUTS = {
     "external": "data/up-waterfall-external-identity-shorelinescout.json",
     "discovery": "data/up-waterfall-discovery-index.json",
     "tourism": "data/up-waterfall-uptravel-location-review-2026.json",
+    "tourismIndex": "data/up-waterfall-uptravel-indexed-listings-2026.json",
 }
-VERSION = 1
+VERSION = 2
 WARNING = (
     "This atlas contains source mentions, not verified distinct waterfalls. "
     "Natural-feature dots are NOT parking or approved trailheads. A name-only "
@@ -40,17 +43,30 @@ def load_all() -> dict:
     }
 
 
+def normalized_name(value: str) -> str:
+    value = unicodedata.normalize("NFKD", str(value or "")).encode("ascii", "ignore").decode("ascii").lower()
+    return re.sub(r"[^a-z0-9]+", " ", value).strip()
+
+
 def make() -> dict:
     src = load_all()
     guides = src["curated"]["waterfalls"]
     gis = src["gis"]["candidates"]
     names = src["external"]["observations"]
     discovery = src["discovery"]["externalRecords"]
-    tourist = src["tourism"]["mainDirectoryFirstTwelve"]
+    first_page = src["tourism"]["mainDirectoryFirstTwelve"]
+    index = src["tourismIndex"]
+    tourist = [x for x in index["records"] if x["inAtlas"]]
+    by_first_name = {normalized_name(x["name"]): x for x in first_page}
+    assert len(by_first_name) == len(first_page) == 12
+    assert len(index["records"]) == index["counts"]["siteWideTermMatchedUrls"]
+    assert len(tourist) == index["counts"]["researchAtlasListingRecords"]
+    assert len({x["listingId"] for x in index["records"]}) == len(index["records"])
+    assert len({x["sourceUrl"] for x in index["records"]}) == len(index["records"])
     assert len(guides) == src["gis"]["counts"]["curatedTotal"]
     assert len(gis) == src["gis"]["counts"]["gisCandidates"]
     assert len(names) == src["external"]["observationCount"] == len(discovery)
-    assert len(tourist) == 12
+    assert len(tourist) > len(first_page)
     assert len({x["id"] for x in guides}) == len(guides)
     assert len({x["gisObjectId"] for x in gis}) == len(gis)
     assert len({x["id"] for x in names}) == len(names)
@@ -113,16 +129,45 @@ def make() -> dict:
             "sourceReviewed": src["external"]["retrieved"],
             "mapRole": "no-geographic-point",
         })
-    for i, t in enumerate(tourist):
+    guide_by_name = defaultdict(list)
+    gis_by_name = defaultdict(list)
+    external_by_name = defaultdict(list)
+    for g in guides:
+        guide_by_name[normalized_name(g["name"])].append(g["id"])
+    for g in gis:
+        gis_by_name[normalized_name(g["name"])].append(g)
+    for n in names:
+        external_by_name[normalized_name(n["name"])].append(n)
+    for t in tourist:
+        k = normalized_name(t["name"])
+        first = by_first_name.get(k) if t["sourceCategoryMembership"] == "observed-on-directory-first-page" else None
+        if t["sourceCategoryMembership"] == "observed-on-directory-first-page" and first is None:
+            raise ValueError("First page crosswalk mismatch: " + t["name"])
+        matches_gis = gis_by_name[k]
+        matches_external = external_by_name[k]
+        candidate_counties = sorted(set(g["county"].title() for g in matches_gis)
+                                    | set(n["county"] for n in matches_external))
+        if t["role"] not in ("waterfall-named-listing", "related-place-or-activity"):
+            raise ValueError("Unsafe inclusion of non-falls index record: " + t["name"])
         records.append({
-            "id": "tourism:" + str(i + 1), "kind": "tourism", "name": t["name"],
-            "county": None, "river": None,
-            "lat": None, "lng": None, "sourceUrl": src["tourism"]["sourceCitation"],
-            "place": t["cityLabel"], "addressLabel": t["addressLabel"],
-            "identityStatus": t["disposition"], "relatedGuideId": t.get("curatedId"),
-            "relatedGuideIds": t.get("curatedIds") or [],
-            "note": t["note"], "sourceReviewed": src["tourism"]["reviewed"],
-            "mapRole": "tourism-address-not-validated-visitor-arrival",
+            "id": "tourism:" + str(t["listingId"]), "kind": "tourism",
+            "name": t["name"], "county": None, "river": None,
+            "lat": None, "lng": None, "sourceUrl": t["sourceUrl"],
+            "place": t["areaLabel"], "addressLabel": t["roadLabel"],
+            "identityStatus": t["firstPageDisposition"] or "indexed-url-research-only",
+            "relatedGuideId": t["firstPageCuratedId"],
+            "relatedGuideIds": t["firstPageCuratedIds"],
+            "candidateGuideIds": sorted(guide_by_name[k]),
+            "candidateGisIds": sorted(g["gisObjectId"] for g in matches_gis),
+            "candidateExternalIds": sorted(n["id"] for n in matches_external),
+            "candidateCounties": candidate_counties,
+            "listingId": t["listingId"], "listingRole": t["role"],
+            "nameMethod": t["nameMethod"],
+            "siteIndexWaterfallSearch": t["siteIndexWaterfallSearch"],
+            "directoryMembership": t["sourceCategoryMembership"],
+            "note": first["note"] if first else "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+            "sourceReviewed": index["reviewed"],
+            "mapRole": "tourism-index-no-geographic-point-or-arrival",
         })
     expected = len(guides) + len(gis) + len(names) + len(tourist)
     assert len(records) == expected
@@ -141,6 +186,7 @@ def make() -> dict:
             "gis": src["gis"]["sourceRetrieved"],
             "nameDirectory": src["external"]["retrieved"],
             "tourismSample": src["tourism"]["reviewed"],
+            "upTravelIndex": index["reviewed"],
         },
         "claim": "Source observations, NOT distinct waterfalls or public visitor destinations.",
         "warning": WARNING,
@@ -148,7 +194,13 @@ def make() -> dict:
             "curatedGuideRecords": len(guides),
             "stateGisFeatureRecords": len(gis),
             "independentNameObservations": len(names),
-            "upTravelDirectorySampleRecords": len(tourist),
+            "upTravelDirectorySampleRecords": len(first_page),
+            "upTravelIndexedListingRecords": len(tourist),
+            "upTravelKeywordIndexRecords": len(index["records"]),
+            "upTravelIndexedWaterfallSearchHits": index["counts"]["indexWaterfallSearchHits"],
+            "upTravelWaterfallNamedListings": index["counts"]["atlasWaterfallNamedRecords"],
+            "upTravelRelatedPlaces": index["counts"]["atlasRelatedPlacesOrActivities"],
+            "upTravelUnrelatedKeywordPagesExcluded": index["counts"]["excludedBroadIndexHits"],
             "totalSourceRecords": expected,
             "gisExplicitlyLinkedToGuides": sum(bool(g.get("curatedId")) for g in gis),
             "nameOnlyWithoutPoint": len(names) + len(tourist),

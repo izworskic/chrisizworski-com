@@ -17,8 +17,8 @@ try{
  page.on('pageerror',e=>errors.push('Unhandled Atlas JS error: '+e.message));
  await page.goto(base+'/upper-peninsula-waterfalls/atlas/',{waitUntil:'domcontentloaded',timeout:30000});
  await page.locator('.ea-record').first().waitFor({timeout:20000});
- await run('mobile: 544 source records are available without claiming 544 waterfalls',async()=>{
-  assert.match(await page.locator('#ea-count').innerText(),/544 source records matching/);
+ await run('mobile: 640 source records are available without claiming 640 waterfalls',async()=>{
+  assert.match(await page.locator('#ea-count').innerText(),/640 source records matching/);
   assert.match(await page.locator('.ea-hero').innerText(),/Not every name has a trail/);
   assert.equal(await page.locator('meta[name="robots"]').getAttribute('content'),'noindex,follow');
   assert.equal(await page.locator('.ea-record').count(),30);
@@ -36,7 +36,7 @@ try{
   assert.match(await page.locator('#ea-detail').innerText(),/County\s+Houghton/);
   assert.ok(!/maps\.google|directions/.test(await page.locator('#ea-detail a').evaluateAll(arr=>arr.map(a=>a.href).join(' '))));
   await page.locator('#ea-reset').click();
-  assert.match(await page.locator('#ea-count').innerText(),/544 source records matching/);
+  assert.match(await page.locator('#ea-count').innerText(),/640 source records matching/);
   await page.locator('#ea-kind').selectOption('gis');
   assert.match(await page.locator('#ea-count').innerText(),/161 source records matching/);
   assert.ok(await page.locator('#ea-map .leaflet-interactive').count()>0,'GIS source must provide natural-feature pins');
@@ -46,11 +46,33 @@ try{
   assert.ok(rows>0&&rows<=30);
   await page.locator('#ea-reset').click();
   await page.locator('#ea-kind').selectOption('tourism');
-  assert.match(await page.locator('#ea-count').innerText(),/12 source records matching/);
+  assert.match(await page.locator('#ea-count').innerText(),/108 source records matching/);
   assert.match(await page.locator('#ea-map-state').innerText(),/0 geographic dots/);
   await page.locator('.ea-record').filter({hasText:'Alger Falls'}).click();
   assert.match(await page.locator('#ea-detail').innerText(),/Tourism road label/);
   assert.match(await page.locator('#ea-detail').innerText(),/NOT been validated as visitor parking|no safe parking/i);
+  assert.match(await page.locator('#ea-detail').innerText(),/Observed as a directory card/);
+  assert.match(await page.locator('#ea-detail').innerText(),/Same-name GIS objects/);
+  assert.ok(await page.locator('#ea-detail .ea-compare-btn').count()>0,'Alger has a same-name GIS comparison');
+  await page.locator('#ea-detail .ea-compare-btn').first().click();
+  assert.match(await page.locator('#ea-detail').innerText(),/State GIS|STATE GIS/);
+  assert.match(await page.locator('#ea-map-state').innerText(),/evidence comparison/);
+  assert.equal(await page.locator('#ea-map .leaflet-interactive').count(),1,'GIS comparison must focus one natural-feature marker, not a parking pin');
+  await page.locator('#ea-reset').click();
+  await page.locator('#ea-kind').selectOption('tourism');
+  await page.locator('#ea-search').fill('Pauls Falls');
+  assert.match(await page.locator('#ea-count').innerText(),/1 source record matching/);
+  await page.locator('.ea-record').first().click();
+  assert.match(await page.locator('#ea-detail').innerText(),/not been confirmed as a current directory card|NOT been confirmed as a current directory card/i);
+  assert.match(await page.locator('#ea-detail').innerText(),/No verified geographic point/);
+  assert.equal(await page.locator('#ea-detail .ea-compare-btn').count(),0,'Pauls source name must not invent a state GIS match');
+  await page.locator('#ea-search').fill('Bond Falls Outpost');
+  await page.locator('.ea-record').first().click();
+  assert.match(await page.locator('#ea-detail .ea-decision').innerText(),/NOT a separately confirmed natural waterfall/);
+  await page.locator('#ea-search').fill('Alger Falls Motel');
+  assert.match(await page.locator('#ea-count').innerText(),/0 source records matching/,'motel is excluded from waterfall research index');
+  await page.locator('#ea-reset').click();
+  assert.match(await page.locator('#ea-count').innerText(),/640 source records matching/);
  });
  await run('mobile: source comparison works for existing curated waterfall',async()=>{
   await page.locator('#ea-reset').click();
@@ -64,6 +86,10 @@ try{
   assert.ok(await page.locator('#ea-detail a[href="/tahquamenon-falls/"]').count()>0);
   const bounds=await page.evaluate(()=>({w:window.innerWidth,s:document.documentElement.scrollWidth}));
   assert.ok(bounds.s<=bounds.w+2,'mobile horizontal overflow: '+bounds.s);
+  await page.setViewportSize({width:360,height:760});
+  const narrow=await page.evaluate(()=>({w:window.innerWidth,s:document.documentElement.scrollWidth}));
+  assert.ok(narrow.s<=narrow.w+2,'360px horizontal overflow: '+narrow.s);
+  await page.setViewportSize({width:390,height:844});
   await page.screenshot({path:screenshots+'/evidence-atlas-mobile.png',fullPage:true,animations:'disabled'});
  });
  const desktop=await browser.newPage({viewport:{width:1440,height:900}});
@@ -73,6 +99,10 @@ try{
   const b=await desktop.evaluate(()=>({w:window.innerWidth,s:document.documentElement.scrollWidth}));
   assert.ok(b.s<=b.w+2,'desktop horizontal overflow: '+b.s);
   assert.ok(await desktop.locator('#ea-map.leaflet-container').count()>0);
+  await desktop.setViewportSize({width:768,height:900});
+  const mid=await desktop.evaluate(()=>({w:window.innerWidth,s:document.documentElement.scrollWidth}));
+  assert.ok(mid.s<=mid.w+2,'768px horizontal overflow: '+mid.s);
+  await desktop.setViewportSize({width:1440,height:900});
   await desktop.screenshot({path:screenshots+'/evidence-atlas-desktop.png',fullPage:true,animations:'disabled'});
  });
  const offline=await browser.newPage({viewport:{width:390,height:844}});

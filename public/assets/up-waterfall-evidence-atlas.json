@@ -1,16 +1,18 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "generatedFrom": {
     "curated": "data/up-waterfalls.json",
     "gis": "data/up-waterfall-reconciliation.json",
     "external": "data/up-waterfall-external-identity-shorelinescout.json",
     "discovery": "data/up-waterfall-discovery-index.json",
-    "tourism": "data/up-waterfall-uptravel-location-review-2026.json"
+    "tourism": "data/up-waterfall-uptravel-location-review-2026.json",
+    "tourismIndex": "data/up-waterfall-uptravel-indexed-listings-2026.json"
   },
   "sourceDates": {
     "gis": "2026-10-26",
     "nameDirectory": "2026-11-07",
-    "tourismSample": "2026-11-08"
+    "tourismSample": "2026-11-08",
+    "upTravelIndex": "2026-11-08"
   },
   "claim": "Source observations, NOT distinct waterfalls or public visitor destinations.",
   "warning": "This atlas contains source mentions, not verified distinct waterfalls. Natural-feature dots are NOT parking or approved trailheads. A name-only listing has no independently verified coordinates or public access.",
@@ -19,9 +21,15 @@
     "stateGisFeatureRecords": 161,
     "independentNameObservations": 291,
     "upTravelDirectorySampleRecords": 12,
-    "totalSourceRecords": 544,
+    "upTravelIndexedListingRecords": 108,
+    "upTravelKeywordIndexRecords": 149,
+    "upTravelIndexedWaterfallSearchHits": 107,
+    "upTravelWaterfallNamedListings": 91,
+    "upTravelRelatedPlaces": 17,
+    "upTravelUnrelatedKeywordPagesExcluded": 41,
+    "totalSourceRecords": 640,
     "gisExplicitlyLinkedToGuides": 69,
-    "nameOnlyWithoutPoint": 303
+    "nameOnlyWithoutPoint": 399
   },
   "records": [
     {
@@ -9136,194 +9144,3118 @@
       "mapRole": "no-geographic-point"
     },
     {
-      "id": "tourism:1",
+      "id": "tourism:19",
       "kind": "tourism",
       "name": "Abinodji Falls",
       "county": null,
       "river": null,
       "lat": null,
       "lng": null,
-      "sourceUrl": "https://www.uptravel.com/outdoors-recreation/waterfalls/",
+      "sourceUrl": "https://www.uptravel.com/listing/abinodji-falls/19/",
       "place": "Thomaston, MI 49968",
       "addressLabel": "County Road 519",
       "identityStatus": "research-only",
       "relatedGuideId": null,
       "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [
+        70
+      ],
+      "candidateExternalIds": [
+        "ss:abinodji-falls"
+      ],
+      "candidateCounties": [
+        "Gogebic"
+      ],
+      "listingId": 19,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "directory-first-page-card",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "observed-on-directory-first-page",
       "note": "Named waterfall; historic county-road label not verified trailhead.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-address-not-validated-visitor-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
     },
     {
-      "id": "tourism:2",
+      "id": "tourism:47",
       "kind": "tourism",
       "name": "Agate Falls Scenic Site",
       "county": null,
       "river": null,
       "lat": null,
       "lng": null,
-      "sourceUrl": "https://www.uptravel.com/outdoors-recreation/waterfalls/",
+      "sourceUrl": "https://www.uptravel.com/listing/agate-falls-scenic-site/47/",
       "place": "Trout Creek, MI 49967",
       "addressLabel": "State Highway M28",
       "identityStatus": "curated",
       "relatedGuideId": "agate-falls",
       "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [],
+      "candidateExternalIds": [],
+      "candidateCounties": [],
+      "listingId": 47,
+      "listingRole": "related-place-or-activity",
+      "nameMethod": "directory-first-page-card",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "observed-on-directory-first-page",
       "note": "Viewpoint reopened 2026; historic trestle not open.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-address-not-validated-visitor-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
     },
     {
-      "id": "tourism:3",
+      "id": "tourism:52",
       "kind": "tourism",
       "name": "Ajibikoka Falls",
       "county": null,
       "river": null,
       "lat": null,
       "lng": null,
-      "sourceUrl": "https://www.uptravel.com/outdoors-recreation/waterfalls/",
+      "sourceUrl": "https://www.uptravel.com/listing/ajibikoka-falls/52/",
       "place": "Watersmeet, MI 49969",
       "addressLabel": "Sucker Lake Road",
       "identityStatus": "research-only",
       "relatedGuideId": null,
       "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [
+        20
+      ],
+      "candidateExternalIds": [],
+      "candidateCounties": [
+        "Gogebic"
+      ],
+      "listingId": 52,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "directory-first-page-card",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "observed-on-directory-first-page",
       "note": "Backcountry falls; street label is not safe arrival or parking.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-address-not-validated-visitor-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
     },
     {
-      "id": "tourism:4",
+      "id": "tourism:65",
       "kind": "tourism",
       "name": "Alder Falls",
       "county": null,
       "river": null,
       "lat": null,
       "lng": null,
-      "sourceUrl": "https://www.uptravel.com/outdoors-recreation/waterfalls/",
+      "sourceUrl": "https://www.uptravel.com/listing/alder-falls/65/",
       "place": "Big Bay, MI 49855",
       "addressLabel": "Alder Creek Truck Trail",
       "identityStatus": "research-only",
       "relatedGuideId": null,
       "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [
+        153
+      ],
+      "candidateExternalIds": [
+        "ss:alder-falls"
+      ],
+      "candidateCounties": [
+        "Marquette"
+      ],
+      "listingId": 65,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "directory-first-page-card",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "observed-on-directory-first-page",
       "note": "Existing source review says unmarked sand-road approach lacks verified legal public waterfall trailhead.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-address-not-validated-visitor-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
     },
     {
-      "id": "tourism:5",
+      "id": "tourism:73",
       "kind": "tourism",
       "name": "Alger Falls",
       "county": null,
       "river": null,
       "lat": null,
       "lng": null,
-      "sourceUrl": "https://www.uptravel.com/outdoors-recreation/waterfalls/",
+      "sourceUrl": "https://www.uptravel.com/listing/alger-falls/73/",
       "place": "Munising, MI 49862",
       "addressLabel": "Jct Of State Highway M28 & M94",
       "identityStatus": "research-only",
       "relatedGuideId": null,
       "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [
+        213
+      ],
+      "candidateExternalIds": [
+        "ss:alger-falls"
+      ],
+      "candidateCounties": [
+        "Alger"
+      ],
+      "listingId": 73,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "directory-first-page-card",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "observed-on-directory-first-page",
       "note": "Adopted city/county planning records no safe parking at highway; do not copy listed intersection as stop.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-address-not-validated-visitor-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
     },
     {
-      "id": "tourism:6",
+      "id": "tourism:222",
       "kind": "tourism",
       "name": "Au Train Falls",
       "county": null,
       "river": null,
       "lat": null,
       "lng": null,
-      "sourceUrl": "https://www.uptravel.com/outdoors-recreation/waterfalls/",
+      "sourceUrl": "https://www.uptravel.com/listing/au-train-falls/222/",
       "place": "Au Train, MI 49862",
       "addressLabel": "County Highway 533",
       "identityStatus": "research-only",
       "relatedGuideId": null,
       "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [
+        192
+      ],
+      "candidateExternalIds": [
+        "ss:au-train-falls"
+      ],
+      "candidateCounties": [
+        "Alger"
+      ],
+      "listingId": 222,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "directory-first-page-card",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "observed-on-directory-first-page",
       "note": "Historic recreational directions superseded by changed ownership and 2026 EGLE dam order; no approved waterfall approach.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-address-not-validated-visitor-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
     },
     {
-      "id": "tourism:7",
+      "id": "tourism:273",
       "kind": "tourism",
       "name": "Bathtub Falls",
       "county": null,
       "river": null,
       "lat": null,
       "lng": null,
-      "sourceUrl": "https://www.uptravel.com/outdoors-recreation/waterfalls/",
+      "sourceUrl": "https://www.uptravel.com/listing/bathtub-falls/273/",
       "place": "Thomaston, MI 49953",
       "addressLabel": "M-64 N and S Boundary Rd",
       "identityStatus": "research-only",
       "relatedGuideId": null,
       "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [],
+      "candidateExternalIds": [
+        "ss:bathtub-falls"
+      ],
+      "candidateCounties": [
+        "Gogebic"
+      ],
+      "listingId": 273,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "directory-first-page-card",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "observed-on-directory-first-page",
       "note": "Porkies backcountry tier; listed roads are orientation only, not certified parking-to-viewpoint route.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-address-not-validated-visitor-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
     },
     {
-      "id": "tourism:8",
+      "id": "tourism:398",
       "kind": "tourism",
       "name": "Big Eric's Falls",
       "county": null,
       "river": null,
       "lat": null,
       "lng": null,
-      "sourceUrl": "https://www.uptravel.com/outdoors-recreation/waterfalls/",
+      "sourceUrl": "https://www.uptravel.com/listing/big-erics-falls/398/",
       "place": "Skanee, MI 49962",
       "addressLabel": "Erick Rd",
       "identityStatus": "curated",
       "relatedGuideId": "big-erics-falls",
       "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "big-erics-falls"
+      ],
+      "candidateGisIds": [
+        126
+      ],
+      "candidateExternalIds": [],
+      "candidateCounties": [
+        "Baraga"
+      ],
+      "listingId": 398,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "directory-first-page-card",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "observed-on-directory-first-page",
       "note": "Existing DNR Big Eric's Bridge State Forest Campground guide; distinct from upstream Erick's Falls.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-address-not-validated-visitor-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
     },
     {
-      "id": "tourism:9",
+      "id": "tourism:409",
       "kind": "tourism",
       "name": "Big Pup Creek Falls",
       "county": null,
       "river": null,
       "lat": null,
       "lng": null,
-      "sourceUrl": "https://www.uptravel.com/outdoors-recreation/waterfalls/",
+      "sourceUrl": "https://www.uptravel.com/listing/big-pup-creek-falls/409/",
       "place": "Negaunee, MI 49849",
       "addressLabel": "County Road 510",
       "identityStatus": "research-only",
       "relatedGuideId": null,
       "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [],
+      "candidateExternalIds": [],
+      "candidateCounties": [],
+      "listingId": 409,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "directory-first-page-card",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "observed-on-directory-first-page",
       "note": "Potential separate Big Pup feature, river access/parking and correct natural point not yet cleared.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-address-not-validated-visitor-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
     },
     {
-      "id": "tourism:10",
+      "id": "tourism:437",
       "kind": "tourism",
       "name": "Black River Falls",
       "county": null,
       "river": null,
       "lat": null,
       "lng": null,
-      "sourceUrl": "https://www.uptravel.com/outdoors-recreation/waterfalls/",
+      "sourceUrl": "https://www.uptravel.com/listing/black-river-falls/437/",
       "place": "Ishpeming, MI 49849",
       "addressLabel": "County Road 581",
       "identityStatus": "research-only",
       "relatedGuideId": null,
       "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [
+        184
+      ],
+      "candidateExternalIds": [
+        "ss:black-river-falls"
+      ],
+      "candidateCounties": [
+        "Marquette"
+      ],
+      "listingId": 437,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "directory-first-page-card",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "observed-on-directory-first-page",
       "note": "Different from Gogebic scenic byway; historic footbridge reportedly condemned, so route requires verification.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-address-not-validated-visitor-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
     },
     {
-      "id": "tourism:11",
+      "id": "tourism:470",
+      "kind": "tourism",
+      "name": "Bond Falls Outpost",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/bond-falls-outpost/470/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [],
+      "candidateExternalIds": [],
+      "candidateCounties": [],
+      "listingId": 470,
+      "listingRole": "related-place-or-activity",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:471",
+      "kind": "tourism",
+      "name": "Bond Falls Scenic Site",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/bond-falls-scenic-site/471/",
+      "place": "Paulding, MI 49912",
+      "addressLabel": "Bond Falls Rd",
+      "identityStatus": "curated",
+      "relatedGuideId": "bond-falls",
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [],
+      "candidateExternalIds": [],
+      "candidateCounties": [],
+      "listingId": 471,
+      "listingRole": "related-place-or-activity",
+      "nameMethod": "directory-first-page-card",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "observed-on-directory-first-page",
+      "note": "Existing Michigan DNR scenic visitor guide.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:472",
+      "kind": "tourism",
+      "name": "Boney Falls Basin",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/boney-falls-basin/472/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [],
+      "candidateExternalIds": [],
+      "candidateCounties": [],
+      "listingId": 472,
+      "listingRole": "related-place-or-activity",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:473",
+      "kind": "tourism",
+      "name": "Boney Falls Campground",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/boney-falls-campground/473/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [],
+      "candidateExternalIds": [],
+      "candidateCounties": [],
+      "listingId": 473,
+      "listingRole": "related-place-or-activity",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:506",
+      "kind": "tourism",
+      "name": "Bridal Veil Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/bridal-veil-falls/506/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [],
+      "candidateExternalIds": [
+        "ss:bridal-veil-falls"
+      ],
+      "candidateCounties": [
+        "Alger"
+      ],
+      "listingId": 506,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:546",
+      "kind": "tourism",
+      "name": "Bond Falls Loop",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/bond-falls-loop/546/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [],
+      "candidateExternalIds": [],
+      "candidateCounties": [],
+      "listingId": 546,
+      "listingRole": "related-place-or-activity",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:610",
+      "kind": "tourism",
+      "name": "Canyon Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/canyon-falls/610/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "canyon-falls"
+      ],
+      "candidateGisIds": [
+        53
+      ],
+      "candidateExternalIds": [
+        "ss:canyon-falls"
+      ],
+      "candidateCounties": [
+        "Baraga"
+      ],
+      "listingId": 610,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:628",
+      "kind": "tourism",
+      "name": "Carp River Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/carp-river-falls/628/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "carp-river-falls"
+      ],
+      "candidateGisIds": [
+        163
+      ],
+      "candidateExternalIds": [
+        "ss:carp-river-falls"
+      ],
+      "candidateCounties": [
+        "Marquette"
+      ],
+      "listingId": 628,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:632",
+      "kind": "tourism",
+      "name": "Cascade Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/cascade-falls/632/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "cascade-falls"
+      ],
+      "candidateGisIds": [
+        67
+      ],
+      "candidateExternalIds": [
+        "ss:cascade-falls"
+      ],
+      "candidateCounties": [
+        "Ontonagon"
+      ],
+      "listingId": 632,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:698",
+      "kind": "tourism",
+      "name": "Chapel Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/chapel-falls/698/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "chapel-falls"
+      ],
+      "candidateGisIds": [
+        201
+      ],
+      "candidateExternalIds": [
+        "ss:chapel-falls"
+      ],
+      "candidateCounties": [
+        "Alger"
+      ],
+      "listingId": 698,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:719",
+      "kind": "tourism",
+      "name": "Chicagon Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/chicagon-falls/719/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [
+        12
+      ],
+      "candidateExternalIds": [
+        "ss:chicagon-falls"
+      ],
+      "candidateCounties": [
+        "Iron"
+      ],
+      "listingId": 719,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:723",
+      "kind": "tourism",
+      "name": "Chipmunk Falls Amasa",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/chipmunk-falls-amasa/723/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [],
+      "candidateExternalIds": [],
+      "candidateCounties": [],
+      "listingId": 723,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:799",
+      "kind": "tourism",
+      "name": "Forty Foot Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/forty-foot-falls/799/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [],
+      "candidateExternalIds": [],
+      "candidateCounties": [],
+      "listingId": 799,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:863",
+      "kind": "tourism",
+      "name": "Copper Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/copper-falls/863/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [
+        144
+      ],
+      "candidateExternalIds": [
+        "ss:copper-falls"
+      ],
+      "candidateCounties": [
+        "Keweenaw"
+      ],
+      "listingId": 863,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:864",
+      "kind": "tourism",
+      "name": "Copper Falls Park",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/copper-falls-park/864/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [],
+      "candidateExternalIds": [],
+      "candidateCounties": [],
+      "listingId": 864,
+      "listingRole": "related-place-or-activity",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:1021",
+      "kind": "tourism",
+      "name": "Dead River Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/dead-river-falls/1021/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [
+        160
+      ],
+      "candidateExternalIds": [
+        "ss:dead-river-falls"
+      ],
+      "candidateCounties": [
+        "Marquette"
+      ],
+      "listingId": 1021,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:1179",
+      "kind": "tourism",
+      "name": "Duppy Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/duppy-falls/1179/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "duppy-falls"
+      ],
+      "candidateGisIds": [
+        26
+      ],
+      "candidateExternalIds": [
+        "ss:duppy-falls"
+      ],
+      "candidateCounties": [
+        "Iron"
+      ],
+      "listingId": 1179,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:1196",
+      "kind": "tourism",
+      "name": "Eagle River Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/eagle-river-falls/1196/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "eagle-river-falls"
+      ],
+      "candidateGisIds": [
+        142
+      ],
+      "candidateExternalIds": [
+        "ss:eagle-river-falls"
+      ],
+      "candidateCounties": [
+        "Keweenaw"
+      ],
+      "listingId": 1196,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:1300",
+      "kind": "tourism",
+      "name": "Falls River Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/falls-river-falls/1300/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [],
+      "candidateExternalIds": [],
+      "candidateCounties": [],
+      "listingId": 1300,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:1514",
+      "kind": "tourism",
+      "name": "Frohling Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/frohling-falls/1514/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [
+        180
+      ],
+      "candidateExternalIds": [
+        "ss:frohling-falls"
+      ],
+      "candidateCounties": [
+        "Marquette"
+      ],
+      "listingId": 1514,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:1521",
+      "kind": "tourism",
+      "name": "Fumee Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/fumee-falls/1521/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "fumee-falls"
+      ],
+      "candidateGisIds": [
+        6
+      ],
+      "candidateExternalIds": [],
+      "candidateCounties": [
+        "Dickinson"
+      ],
+      "listingId": 1521,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:1525",
+      "kind": "tourism",
+      "name": "Gabbro Falls Bakers Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/gabbro-falls-bakers-falls/1525/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "gabbro-falls"
+      ],
+      "candidateGisIds": [],
+      "candidateExternalIds": [],
+      "candidateCounties": [],
+      "listingId": 1525,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:1623",
+      "kind": "tourism",
+      "name": "Gorge Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/gorge-falls/1623/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "gorge-falls"
+      ],
+      "candidateGisIds": [
+        73
+      ],
+      "candidateExternalIds": [
+        "ss:gorge-falls"
+      ],
+      "candidateCounties": [
+        "Gogebic"
+      ],
+      "listingId": 1623,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:1675",
+      "kind": "tourism",
+      "name": "Great Conglomerate Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/great-conglomerate-falls/1675/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "great-conglomerate-falls"
+      ],
+      "candidateGisIds": [
+        66
+      ],
+      "candidateExternalIds": [
+        "ss:great-conglomerate-falls"
+      ],
+      "candidateCounties": [
+        "Gogebic"
+      ],
+      "listingId": 1675,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:1686",
+      "kind": "tourism",
+      "name": "Sable Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/sable-falls/1686/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "sable-falls"
+      ],
+      "candidateGisIds": [
+        204
+      ],
+      "candidateExternalIds": [
+        "ss:sable-falls"
+      ],
+      "candidateCounties": [
+        "Alger"
+      ],
+      "listingId": 1686,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:1697",
+      "kind": "tourism",
+      "name": "Greenstone Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/greenstone-falls/1697/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "greenstone-falls"
+      ],
+      "candidateGisIds": [
+        98
+      ],
+      "candidateExternalIds": [
+        "ss:greenstone-falls"
+      ],
+      "candidateCounties": [
+        "Ontonagon"
+      ],
+      "listingId": 1697,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:1699",
+      "kind": "tourism",
+      "name": "Greenwood Bonanza Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/greenwood-bonanza-falls/1699/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [],
+      "candidateExternalIds": [],
+      "candidateCounties": [],
+      "listingId": 1699,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:1772",
+      "kind": "tourism",
+      "name": "Haven Falls Park",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/haven-falls-park/1772/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [],
+      "candidateExternalIds": [],
+      "candidateCounties": [],
+      "listingId": 1772,
+      "listingRole": "related-place-or-activity",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:1774",
+      "kind": "tourism",
+      "name": "Haymeadow Creek Hiawatha National Forest Falls Trail",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/haymeadow-creek-hiawatha-national-forest-falls-trail/1774/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [],
+      "candidateExternalIds": [],
+      "candidateCounties": [],
+      "listingId": 1774,
+      "listingRole": "related-place-or-activity",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:1899",
+      "kind": "tourism",
+      "name": "Horseshoe Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/horseshoe-falls/1899/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "horseshoe-falls"
+      ],
+      "candidateGisIds": [
+        197
+      ],
+      "candidateExternalIds": [
+        "ss:horseshoe-falls-2"
+      ],
+      "candidateCounties": [
+        "Alger"
+      ],
+      "listingId": 1899,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:1919",
+      "kind": "tourism",
+      "name": "Hungarian Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/hungarian-falls/1919/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [],
+      "candidateExternalIds": [],
+      "candidateCounties": [],
+      "listingId": 1919,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:2041",
+      "kind": "tourism",
+      "name": "Jacobs Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/jacobs-falls/2041/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [
+        143
+      ],
+      "candidateExternalIds": [],
+      "candidateCounties": [
+        "Keweenaw"
+      ],
+      "listingId": 2041,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:2111",
+      "kind": "tourism",
+      "name": "Jumbo Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/jumbo-falls/2111/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "jumbo-falls"
+      ],
+      "candidateGisIds": [
+        29
+      ],
+      "candidateExternalIds": [
+        "ss:jumbo-falls"
+      ],
+      "candidateCounties": [
+        "Houghton"
+      ],
+      "listingId": 2111,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:2119",
+      "kind": "tourism",
+      "name": "Kakabika Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/kakabika-falls/2119/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "kakabika-falls"
+      ],
+      "candidateGisIds": [
+        21
+      ],
+      "candidateExternalIds": [
+        "ss:kakabika-falls"
+      ],
+      "candidateCounties": [
+        "Gogebic"
+      ],
+      "listingId": 2119,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:2366",
+      "kind": "tourism",
+      "name": "Laughing Whitefish Falls State Park",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/laughing-whitefish-falls-state-park/2366/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [],
+      "candidateExternalIds": [],
+      "candidateCounties": [],
+      "listingId": 2366,
+      "listingRole": "related-place-or-activity",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:2430",
+      "kind": "tourism",
+      "name": "Little Garlic Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/little-garlic-falls/2430/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "little-garlic-falls"
+      ],
+      "candidateGisIds": [
+        157
+      ],
+      "candidateExternalIds": [
+        "ss:little-garlic-falls"
+      ],
+      "candidateCounties": [
+        "Marquette"
+      ],
+      "listingId": 2430,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:2441",
+      "kind": "tourism",
+      "name": "Little Trap Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/little-trap-falls/2441/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [
+        84
+      ],
+      "candidateExternalIds": [
+        "ss:little-trap-falls"
+      ],
+      "candidateCounties": [
+        "Ontonagon"
+      ],
+      "listingId": 2441,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:2470",
+      "kind": "tourism",
+      "name": "Lower Tahquamenon Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/lower-tahquamenon-falls/2470/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [
+        208
+      ],
+      "candidateExternalIds": [
+        "ss:lower-tahquamenon-falls"
+      ],
+      "candidateCounties": [
+        "Chippewa",
+        "Luce"
+      ],
+      "listingId": 2470,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:2552",
+      "kind": "tourism",
+      "name": "Manabezho Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/manabezho-falls/2552/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "manabezho-falls"
+      ],
+      "candidateGisIds": [
+        90
+      ],
+      "candidateExternalIds": [
+        "ss:manabezho-falls"
+      ],
+      "candidateCounties": [
+        "Gogebic",
+        "Ontonagon"
+      ],
+      "listingId": 2552,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:2553",
+      "kind": "tourism",
+      "name": "Manganese Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/manganese-falls/2553/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "manganese-falls"
+      ],
+      "candidateGisIds": [
+        145
+      ],
+      "candidateExternalIds": [],
+      "candidateCounties": [
+        "Keweenaw"
+      ],
+      "listingId": 2553,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:2554",
+      "kind": "tourism",
+      "name": "Manido Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/manido-falls/2554/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "manido-falls"
+      ],
+      "candidateGisIds": [],
+      "candidateExternalIds": [
+        "ss:manido-falls"
+      ],
+      "candidateCounties": [
+        "Gogebic"
+      ],
+      "listingId": 2554,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:2713",
+      "kind": "tourism",
+      "name": "Mex I Min E Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/mex-i-min-e-falls/2713/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "mex-i-min-e-falls"
+      ],
+      "candidateGisIds": [
+        19
+      ],
+      "candidateExternalIds": [
+        "ss:mex-i-min-e-falls"
+      ],
+      "candidateCounties": [
+        "Gogebic"
+      ],
+      "listingId": 2713,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:2754",
+      "kind": "tourism",
+      "name": "Miners Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/miners-falls/2754/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "miners-falls"
+      ],
+      "candidateGisIds": [],
+      "candidateExternalIds": [
+        "ss:miners-falls"
+      ],
+      "candidateCounties": [
+        "Alger"
+      ],
+      "listingId": 2754,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:2802",
+      "kind": "tourism",
+      "name": "Morgan Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/morgan-falls/2802/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "morgan-falls"
+      ],
+      "candidateGisIds": [
+        166
+      ],
+      "candidateExternalIds": [
+        "ss:morgan-falls",
+        "ss:morgan-falls-2"
+      ],
+      "candidateCounties": [
+        "Marquette"
+      ],
+      "listingId": 2802,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:2804",
+      "kind": "tourism",
+      "name": "Mosquito Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/mosquito-falls/2804/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "mosquito-falls"
+      ],
+      "candidateGisIds": [],
+      "candidateExternalIds": [
+        "ss:mosquito-falls"
+      ],
+      "candidateCounties": [
+        "Alger"
+      ],
+      "listingId": 2804,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:2830",
+      "kind": "tourism",
+      "name": "Munising Falls (Temporarily Closed)",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/munising-falls-(temporarily-closed)/2830/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [],
+      "candidateExternalIds": [],
+      "candidateCounties": [],
+      "listingId": 2830,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:2879",
+      "kind": "tourism",
+      "name": "Nawadaha Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/nawadaha-falls/2879/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "nawadaha-falls"
+      ],
+      "candidateGisIds": [
+        89
+      ],
+      "candidateExternalIds": [
+        "ss:nawadaha-falls"
+      ],
+      "candidateCounties": [
+        "Gogebic"
+      ],
+      "listingId": 2879,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:2915",
+      "kind": "tourism",
+      "name": "Nonesuch Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/nonesuch-falls/2915/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "nonesuch-falls"
+      ],
+      "candidateGisIds": [
+        108
+      ],
+      "candidateExternalIds": [
+        "ss:nonesuch-falls"
+      ],
+      "candidateCounties": [
+        "Ontonagon"
+      ],
+      "listingId": 2915,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:3030",
+      "kind": "tourism",
+      "name": "O Kun De Kun Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/o-kun-de-kun-falls/3030/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "o-kun-de-kun-falls"
+      ],
+      "candidateGisIds": [
+        64
+      ],
+      "candidateExternalIds": [
+        "ss:o-kun-de-kun-falls"
+      ],
+      "candidateCounties": [
+        "Ontonagon"
+      ],
+      "listingId": 3030,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:3097",
+      "kind": "tourism",
+      "name": "Overlooked Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/overlooked-falls/3097/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "overlooked-falls"
+      ],
+      "candidateGisIds": [
+        97
+      ],
+      "candidateExternalIds": [
+        "ss:overlooked-falls"
+      ],
+      "candidateCounties": [
+        "Gogebic",
+        "Ontonagon"
+      ],
+      "listingId": 3097,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:3174",
+      "kind": "tourism",
+      "name": "Pemene Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/pemene-falls/3174/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "pemene-falls"
+      ],
+      "candidateGisIds": [
+        188
+      ],
+      "candidateExternalIds": [],
+      "candidateCounties": [
+        "Menominee"
+      ],
+      "listingId": 3174,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:3210",
+      "kind": "tourism",
+      "name": "Pewabeck Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/pewabeck-falls/3210/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [
+        122
+      ],
+      "candidateExternalIds": [
+        "ss:pewabeck-falls"
+      ],
+      "candidateCounties": [
+        "Ontonagon"
+      ],
+      "listingId": 3210,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:3265",
+      "kind": "tourism",
+      "name": "Pinnacle Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/pinnacle-falls/3265/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "pinnacle-falls"
+      ],
+      "candidateGisIds": [
+        155
+      ],
+      "candidateExternalIds": [
+        "ss:pinnacle-falls"
+      ],
+      "candidateCounties": [
+        "Marquette"
+      ],
+      "listingId": 3265,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:3320",
+      "kind": "tourism",
+      "name": "Potawatomi Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/potawatomi-falls/3320/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "potawatomi-falls"
+      ],
+      "candidateGisIds": [],
+      "candidateExternalIds": [
+        "ss:potawatomi-falls"
+      ],
+      "candidateCounties": [
+        "Gogebic"
+      ],
+      "listingId": 3320,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:3321",
+      "kind": "tourism",
+      "name": "Power House Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/power-house-falls/3321/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "power-house-falls"
+      ],
+      "candidateGisIds": [
+        88
+      ],
+      "candidateExternalIds": [
+        "ss:power-house-falls"
+      ],
+      "candidateCounties": [
+        "Baraga"
+      ],
+      "listingId": 3321,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:3333",
+      "kind": "tourism",
+      "name": "Presque Isle Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/presque-isle-falls/3333/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [],
+      "candidateExternalIds": [],
+      "candidateCounties": [],
+      "listingId": 3333,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:3375",
+      "kind": "tourism",
+      "name": "Rainbow Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/rainbow-falls/3375/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "rainbow-falls"
+      ],
+      "candidateGisIds": [
+        81
+      ],
+      "candidateExternalIds": [
+        "ss:rainbow-falls-black-river"
+      ],
+      "candidateCounties": [
+        "Gogebic",
+        "Ontonagon"
+      ],
+      "listingId": 3375,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:3395",
+      "kind": "tourism",
+      "name": "Rapid River Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/rapid-river-falls/3395/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [
+        60
+      ],
+      "candidateExternalIds": [
+        "ss:rapid-river-falls",
+        "ss:rapid-river-falls-rapid-river"
+      ],
+      "candidateCounties": [
+        "Delta",
+        "Ontonagon"
+      ],
+      "listingId": 3395,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:3406",
+      "kind": "tourism",
+      "name": "Reany Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/reany-falls/3406/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [
+        162
+      ],
+      "candidateExternalIds": [
+        "ss:reany-falls"
+      ],
+      "candidateCounties": [
+        "Marquette"
+      ],
+      "listingId": 3406,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:3493",
+      "kind": "tourism",
+      "name": "Rock River Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/rock-river-falls/3493/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "rock-river-falls"
+      ],
+      "candidateGisIds": [
+        194
+      ],
+      "candidateExternalIds": [
+        "ss:rock-river-falls"
+      ],
+      "candidateCounties": [
+        "Alger"
+      ],
+      "listingId": 3493,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:3524",
+      "kind": "tourism",
+      "name": "Rudolph Olson Memorial Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/rudolph-olson-memorial-falls/3524/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [],
+      "candidateExternalIds": [],
+      "candidateCounties": [],
+      "listingId": 3524,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:3563",
+      "kind": "tourism",
+      "name": "Sandstone Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/sandstone-falls/3563/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "sandstone-falls"
+      ],
+      "candidateGisIds": [
+        78
+      ],
+      "candidateExternalIds": [
+        "ss:sandstone-falls",
+        "ss:sandstone-falls-2",
+        "ss:sandstone-falls-black-river"
+      ],
+      "candidateCounties": [
+        "Gogebic"
+      ],
+      "listingId": 3563,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:3602",
+      "kind": "tourism",
+      "name": "Scott Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/scott-falls/3602/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "scott-falls"
+      ],
+      "candidateGisIds": [
+        196
+      ],
+      "candidateExternalIds": [
+        "ss:scott-falls"
+      ],
+      "candidateCounties": [
+        "Alger"
+      ],
+      "listingId": 3602,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:3657",
+      "kind": "tourism",
+      "name": "Shining Cloud Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/shining-cloud-falls/3657/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "shining-cloud-falls"
+      ],
+      "candidateGisIds": [],
+      "candidateExternalIds": [
+        "ss:shining-cloud-falls"
+      ],
+      "candidateCounties": [
+        "Gogebic"
+      ],
+      "listingId": 3657,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:3688",
+      "kind": "tourism",
+      "name": "Silver Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/silver-falls/3688/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [
+        110
+      ],
+      "candidateExternalIds": [
+        "ss:silver-falls"
+      ],
+      "candidateCounties": [
+        "Baraga"
+      ],
+      "listingId": 3688,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:3694",
+      "kind": "tourism",
+      "name": "Silver River Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/silver-river-falls/3694/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "silver-river-falls"
+      ],
+      "candidateGisIds": [
+        146
+      ],
+      "candidateExternalIds": [
+        "ss:silver-river-falls"
+      ],
+      "candidateCounties": [
+        "Keweenaw"
+      ],
+      "listingId": 3694,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:3695",
+      "kind": "tourism",
+      "name": "Silver River Falls Boating Access",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/silver-river-falls-boating-access/3695/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [],
+      "candidateExternalIds": [],
+      "candidateCounties": [],
+      "listingId": 3695,
+      "listingRole": "related-place-or-activity",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:3701",
+      "kind": "tourism",
+      "name": "Siskiwit Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/siskiwit-falls/3701/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [],
+      "candidateExternalIds": [],
+      "candidateCounties": [],
+      "listingId": 3701,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:3708",
+      "kind": "tourism",
+      "name": "Slate River Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/slate-river-falls/3708/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [
+        119
+      ],
+      "candidateExternalIds": [
+        "ss:slate-river-falls"
+      ],
+      "candidateCounties": [
+        "Baraga"
+      ],
+      "listingId": 3708,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:3792",
+      "kind": "tourism",
+      "name": "Spray Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/spray-falls/3792/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "spray-falls"
+      ],
+      "candidateGisIds": [
+        203
+      ],
+      "candidateExternalIds": [
+        "ss:spray-falls"
+      ],
+      "candidateCounties": [
+        "Alger"
+      ],
+      "listingId": 3792,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:3957",
+      "kind": "tourism",
+      "name": "Sturgeon Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/sturgeon-falls/3957/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "sturgeon-falls"
+      ],
+      "candidateGisIds": [
+        45
+      ],
+      "candidateExternalIds": [
+        "ss:sturgeon-falls"
+      ],
+      "candidateCounties": [
+        "Houghton"
+      ],
+      "listingId": 3957,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:3958",
+      "kind": "tourism",
+      "name": "Sturgeon Falls Dam",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/sturgeon-falls-dam/3958/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [],
+      "candidateExternalIds": [],
+      "candidateCounties": [],
+      "listingId": 3958,
+      "listingRole": "related-place-or-activity",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:4105",
+      "kind": "tourism",
+      "name": "Tahquamenon Falls State Park",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/tahquamenon-falls-state-park/4105/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [],
+      "candidateExternalIds": [],
+      "candidateCounties": [],
+      "listingId": 4105,
+      "listingRole": "related-place-or-activity",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:4118",
+      "kind": "tourism",
+      "name": "Tannery Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/tannery-falls/4118/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [
+        199
+      ],
+      "candidateExternalIds": [
+        "ss:tannery-falls"
+      ],
+      "candidateCounties": [
+        "Alger"
+      ],
+      "listingId": 4118,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:4345",
+      "kind": "tourism",
+      "name": "Tibbets Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/tibbets-falls/4345/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "tibbets-falls"
+      ],
+      "candidateGisIds": [
+        44
+      ],
+      "candidateExternalIds": [
+        "ss:tibbets-falls"
+      ],
+      "candidateCounties": [
+        "Baraga"
+      ],
+      "listingId": 4345,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:4392",
+      "kind": "tourism",
+      "name": "Traders Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/traders-falls/4392/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [
+        112
+      ],
+      "candidateExternalIds": [
+        "ss:traders-falls"
+      ],
+      "candidateCounties": [
+        "Gogebic"
+      ],
+      "listingId": 4392,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:4472",
+      "kind": "tourism",
+      "name": "Unnamed Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/unnamed-falls/4472/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [],
+      "candidateExternalIds": [
+        "ss:unnamed-falls",
+        "ss:unnamed-falls-2",
+        "ss:unnamed-falls-2-alt"
+      ],
+      "candidateCounties": [
+        "Alger",
+        "Gogebic",
+        "Marquette"
+      ],
+      "listingId": 4472,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:4474",
+      "kind": "tourism",
+      "name": "Unnamed Falls Pinkerton Creek",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/unnamed-falls-pinkerton-creek/4474/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [],
+      "candidateExternalIds": [],
+      "candidateCounties": [],
+      "listingId": 4474,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:4579",
+      "kind": "tourism",
+      "name": "Wagner Falls Scenic Site",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/wagner-falls-scenic-site/4579/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [],
+      "candidateExternalIds": [],
+      "candidateCounties": [],
+      "listingId": 4579,
+      "listingRole": "related-place-or-activity",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:4598",
+      "kind": "tourism",
+      "name": "Warner Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/warner-falls/4598/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [
+        172
+      ],
+      "candidateExternalIds": [
+        "ss:warner-falls"
+      ],
+      "candidateCounties": [
+        "Marquette"
+      ],
+      "listingId": 4598,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:4670",
+      "kind": "tourism",
+      "name": "Whitefish Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/whitefish-falls/4670/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [
+        191
+      ],
+      "candidateExternalIds": [
+        "ss:whitefish-falls"
+      ],
+      "candidateCounties": [
+        "Alger"
+      ],
+      "listingId": 4670,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:4765",
+      "kind": "tourism",
+      "name": "Wyandotte Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/wyandotte-falls/4765/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "wyandotte-falls"
+      ],
+      "candidateGisIds": [
+        128
+      ],
+      "candidateExternalIds": [],
+      "candidateCounties": [
+        "Houghton"
+      ],
+      "listingId": 4765,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:4770",
+      "kind": "tourism",
+      "name": "Yellow Dog Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/yellow-dog-falls/4770/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "yellow-dog-falls"
+      ],
+      "candidateGisIds": [],
+      "candidateExternalIds": [
+        "ss:yellow-dog-falls"
+      ],
+      "candidateCounties": [
+        "Marquette"
+      ],
+      "listingId": 4770,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:4777",
+      "kind": "tourism",
+      "name": "Yondota Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/yondota-falls/4777/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "yondota-falls"
+      ],
+      "candidateGisIds": [],
+      "candidateExternalIds": [
+        "ss:yondota-falls"
+      ],
+      "candidateCounties": [
+        "Gogebic"
+      ],
+      "listingId": 4777,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:5417",
+      "kind": "tourism",
+      "name": "Pauls Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/pauls-falls/5417/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [],
+      "candidateExternalIds": [
+        "ss:pauls-falls"
+      ],
+      "candidateCounties": [
+        "Houghton"
+      ],
+      "listingId": 5417,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:5453",
+      "kind": "tourism",
+      "name": "Ogemaw Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/ogemaw-falls/5453/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [
+        59
+      ],
+      "candidateExternalIds": [
+        "ss:ogemaw-falls"
+      ],
+      "candidateCounties": [
+        "Baraga"
+      ],
+      "listingId": 5453,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:5457",
+      "kind": "tourism",
+      "name": "Bulldog Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/bulldog-falls/5457/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [],
+      "candidateExternalIds": [],
+      "candidateCounties": [],
+      "listingId": 5457,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:5480",
       "kind": "tourism",
       "name": "Black River National Scenic Byway",
       "county": null,
       "river": null,
       "lat": null,
       "lng": null,
-      "sourceUrl": "https://www.uptravel.com/outdoors-recreation/waterfalls/",
+      "sourceUrl": "https://www.uptravel.com/listing/black-river-national-scenic-byway/5480/",
       "place": "Ironwood, MI 49938",
       "addressLabel": "Black River National Forest Scenic Byway",
       "identityStatus": "region-not-single-waterfall",
@@ -9335,27 +12267,323 @@
         "sandstone-falls",
         "rainbow-falls"
       ],
+      "candidateGuideIds": [],
+      "candidateGisIds": [],
+      "candidateExternalIds": [],
+      "candidateCounties": [],
+      "listingId": 5480,
+      "listingRole": "related-place-or-activity",
+      "nameMethod": "directory-first-page-card",
+      "siteIndexWaterfallSearch": false,
+      "directoryMembership": "observed-on-directory-first-page",
       "note": "Tourism byway listing is not itself a sixth waterfall; five falls already in curated inventory with conditional 2026-27 USFS closures.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-address-not-validated-visitor-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
     },
     {
-      "id": "tourism:12",
+      "id": "tourism:5557",
       "kind": "tourism",
-      "name": "Bond Falls Scenic Site",
+      "name": "Superior Falls",
       "county": null,
       "river": null,
       "lat": null,
       "lng": null,
-      "sourceUrl": "https://www.uptravel.com/outdoors-recreation/waterfalls/",
-      "place": "Paulding, MI 49912",
-      "addressLabel": "Bond Falls Rd",
-      "identityStatus": "curated",
-      "relatedGuideId": "bond-falls",
+      "sourceUrl": "https://www.uptravel.com/listing/superior-falls/5557/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
       "relatedGuideIds": [],
-      "note": "Existing Michigan DNR scenic visitor guide.",
+      "candidateGuideIds": [
+        "superior-falls"
+      ],
+      "candidateGisIds": [
+        50
+      ],
+      "candidateExternalIds": [
+        "ss:superior-falls"
+      ],
+      "candidateCounties": [
+        "Gogebic"
+      ],
+      "listingId": 5557,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
       "sourceReviewed": "2026-11-08",
-      "mapRole": "tourism-address-not-validated-visitor-arrival"
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:5563",
+      "kind": "tourism",
+      "name": "Gomanche Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/gomanche-falls/5563/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [],
+      "candidateExternalIds": [
+        "ss:gomanche-falls"
+      ],
+      "candidateCounties": [
+        "Baraga"
+      ],
+      "listingId": 5563,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:5644",
+      "kind": "tourism",
+      "name": "Montreal Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/montreal-falls/5644/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [],
+      "candidateExternalIds": [
+        "ss:montreal-falls"
+      ],
+      "candidateCounties": [
+        "Gogebic"
+      ],
+      "listingId": 5644,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:5649",
+      "kind": "tourism",
+      "name": "Explore: Munising Alger Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/explore%3a-munising-alger-falls/5649/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [],
+      "candidateExternalIds": [],
+      "candidateCounties": [],
+      "listingId": 5649,
+      "listingRole": "related-place-or-activity",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:5695",
+      "kind": "tourism",
+      "name": "Rock Dam Falls Hiking Trails",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/rock-dam-falls-hiking-trails/5695/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [],
+      "candidateExternalIds": [],
+      "candidateCounties": [],
+      "listingId": 5695,
+      "listingRole": "related-place-or-activity",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:5725",
+      "kind": "tourism",
+      "name": "Houghton Douglass Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/houghton-douglass-falls/5725/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "houghton-douglass-falls"
+      ],
+      "candidateGisIds": [],
+      "candidateExternalIds": [],
+      "candidateCounties": [],
+      "listingId": 5725,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:5735",
+      "kind": "tourism",
+      "name": "Quartzite Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/quartzite-falls/5735/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [
+        107
+      ],
+      "candidateExternalIds": [
+        "ss:quartzite-falls"
+      ],
+      "candidateCounties": [
+        "Baraga"
+      ],
+      "listingId": 5735,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:5815",
+      "kind": "tourism",
+      "name": "Powderhorn Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/powderhorn-falls/5815/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [],
+      "candidateGisIds": [],
+      "candidateExternalIds": [],
+      "candidateCounties": [],
+      "listingId": 5815,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:5848",
+      "kind": "tourism",
+      "name": "Elliot Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/elliot-falls/5848/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "elliot-falls"
+      ],
+      "candidateGisIds": [],
+      "candidateExternalIds": [],
+      "candidateCounties": [],
+      "listingId": 5848,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
+    },
+    {
+      "id": "tourism:5880",
+      "kind": "tourism",
+      "name": "Little Union Gorge Falls",
+      "county": null,
+      "river": null,
+      "lat": null,
+      "lng": null,
+      "sourceUrl": "https://www.uptravel.com/listing/little-union-gorge-falls/5880/",
+      "place": null,
+      "addressLabel": null,
+      "identityStatus": "indexed-url-research-only",
+      "relatedGuideId": null,
+      "relatedGuideIds": [],
+      "candidateGuideIds": [
+        "little-union-gorge-falls"
+      ],
+      "candidateGisIds": [
+        117
+      ],
+      "candidateExternalIds": [
+        "ss:little-union-gorge-falls"
+      ],
+      "candidateCounties": [
+        "Gogebic",
+        "Ontonagon"
+      ],
+      "listingId": 5880,
+      "listingRole": "waterfall-named-listing",
+      "nameMethod": "url-slug-derived-not-page-title",
+      "siteIndexWaterfallSearch": true,
+      "directoryMembership": "unknown",
+      "note": "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
+      "sourceReviewed": "2026-11-08",
+      "mapRole": "tourism-index-no-geographic-point-or-arrival"
     }
   ]
 }
