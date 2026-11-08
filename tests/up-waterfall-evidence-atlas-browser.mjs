@@ -33,7 +33,7 @@ try{
   assert.match(await page.locator('#ea-count').innerText(),/1 source record matching/);
   await page.locator('.ea-record').first().click();
   assert.match(await page.locator('#ea-detail').innerText(),/No verified geographic point/);
-  assert.match(await page.locator('#ea-detail').innerText(),/Houghton County/);
+  assert.match(await page.locator('#ea-detail').innerText(),/County\s+Houghton/);
   assert.ok(!/maps\.google|directions/.test(await page.locator('#ea-detail a').evaluateAll(arr=>arr.map(a=>a.href).join(' '))));
   await page.locator('#ea-reset').click();
   assert.match(await page.locator('#ea-count').innerText(),/544 source records matching/);
