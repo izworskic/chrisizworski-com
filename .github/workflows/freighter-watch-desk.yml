@@ -1,0 +1,56 @@
+name: Freighter Watch Desk source and experience acceptance
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'public/great-lakes-ship-watching-spots/**'
+      - 'public/assets/freighter-watch-desk.*'
+      - 'tests/freighter-watch-desk*'
+      - 'scripts/prove-freighter-watch-desk.mjs'
+      - 'scripts/verify-freighter-watch-desk-browser.cjs'
+      - 'benchmarks/tool-network-registry.json'
+      - 'docs/experience-briefs/FREIGHTER_WATCH_DESK*'
+      - '.github/workflows/freighter-watch-desk.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: freighter-watch-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  acceptance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install repository dependencies
+        run: npm ci
+      - name: Run focused truth and source regression tests
+        run: node --test tests/freighter-watch-desk.test.js
+      - name: Prove Foundry 0.3 source-captured improvement
+        run: node scripts/prove-freighter-watch-desk.mjs
+      - name: Install isolated Chromium and cartographic test dependencies
+        run: |
+          npm install --prefix /tmp/fwd-playwright --no-save --ignore-scripts playwright@1.58.2 leaflet@1.9.4
+          echo "NODE_PATH=/tmp/fwd-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium-browser || true)" >> "$GITHUB_ENV"
+      - name: Check four viewports, source states, map and no-JavaScript fallback
+        run: node scripts/verify-freighter-watch-desk-browser.cjs
+      - name: Run full source, search, sitemap and product gates
+        run: npm run verify:all
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: freighter-watch-desk-proof
+          path: |
+            artifacts/freighter-watch-desk-foundry/
+            artifacts/freighter-watch-desk-browser/
+          if-no-files-found: warn
+          retention-days: 14
