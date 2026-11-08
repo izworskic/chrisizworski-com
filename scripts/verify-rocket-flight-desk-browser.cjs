@@ -278,7 +278,52 @@ const whenReady=page=>page.waitForFunction(id=>
     fontPx:computed,jsErrors:0});
    await context.close();
   }
-  // Full browser handoff: a non-default national selection must be confirmed
+  // Verify the actual visitor answer in the rendered national page.
+ floridaRich=true;
+ for(const scenario of [{name:'florida-verified',closed:false,mismatch:false},
+  {name:'florida-closed',closed:true,mismatch:false},
+  {name:'florida-wrong-mission',closed:true,mismatch:true}]){
+  floridaNpsClosure=scenario.closed;floridaMismatch=scenario.mismatch;
+  const context=await browser.newContext({viewport:{width:390,height:844},reducedMotion:'reduce'});
+  const page=await context.newPage();await localLeaflet(page);
+  await page.route('https://*.basemaps.cartocdn.com/**',route=>route.abort());
+  await page.goto(base+'?region=florida&launchId='+A,{waitUntil:'domcontentloaded'});
+  await page.waitForFunction(id=>document.querySelector('#rl-flight-desk')?.dataset.launchId===id,A);
+  await page.waitForFunction(()=>document.querySelector('#rl-access-answer')?.textContent
+    .includes('Florida source checked.')||
+    document.querySelector('#rl-access-answer')?.textContent.includes('not verified.'));
+  const summary=await page.locator('#rl-access-summary').innerText();
+  assert(summary.includes('Titusville')&&summary.includes('Space View Park'),
+    scenario.name+' still substitutes an engine description for an answer');
+  assert((await page.locator('#rl-flight-next-link').getAttribute('href'))==='#rl-viewing',
+    scenario.name+' should compare choices on national tool');
+  assert(!(await page.locator('#rl-access-grade').innerText()).includes('engine'),
+    scenario.name+' leaked technical implementation as visitor status');
+  if(scenario.mismatch){
+   assert(!(await page.locator('#rl-access-grade').innerText()).includes('NPS restriction'),
+    'mission-mismatched beach closure leaked from another launch');
+   assert((await page.locator('#rl-access-answer').innerText()).includes('not verified'),
+    'wrong mission must remain unresolved');
+  }else if(scenario.closed){
+   assert((await page.locator('#rl-access-grade').innerText()).includes('NPS restriction'),
+    'NPS closure did not control Florida access response');
+   assert((await page.locator('#rl-sites .rl-site-card[data-state="closed"]').count())>=1,
+    'closed Playalinda lot group was omitted');
+  }else{
+   assert((await page.locator('#rl-access-grade').innerText()).includes('entry unverified'),
+    'source-checked park reported as open without mission confirmation');
+  }
+  const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
+  assert(overflow<=2,scenario.name+' overflow '+overflow);
+  const screenshot=scenario.name+'-access-decision.png';
+  await page.locator('.rl-decision-grid').screenshot({path:path.join(out,screenshot),animations:'disabled'});
+  report.screenshots.push(screenshot);
+  report.cases.push({case:scenario.name,evidence:scenario.mismatch?'mismatch-discarded':
+    scenario.closed?'official-closure-applied':'entry-remains-unverified',overflowPx:overflow});
+  await context.close();
+ }
+ floridaRich=false;floridaNpsClosure=false;floridaMismatch=false;
+ // Full browser handoff: a non-default national selection must be confirmed
   // from the regional app's OWN loaded schedule; then return to national and
   // reject a removed ID. Synthetic fixture values are never live launch facts.
   for(const v of [{name:'phone390',width:390,height:844},
