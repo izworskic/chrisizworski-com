@@ -109,7 +109,7 @@ async function verifyPhoto(base,browser,broken=false){
  assert.equal(await popup.locator('a').count(),0,'photo popup has no external links');
  assert.match(await popup.textContent(),/ALGOMA EQUINOX/);
  if(broken){
-   await page.waitForFunction(()=>document.querySelector('#seawayMap .leaflet-popup-content')?.dataset.photoFailed==='true',{timeout:10000});
+   await page.waitForFunction(()=>document.querySelector('#seawayMap .leaflet-popup-content')?.dataset.photoFailed==='true',null,{timeout:10000});
    assert.equal(await popup.locator('.seaway-popup-figure').count(),0,'missing image never leaves an empty photograph box');
    assert.equal(await page.locator('#mapSelection .seaway-photo-credit-outside').count(),0);
  }else{
