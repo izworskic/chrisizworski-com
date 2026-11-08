@@ -226,7 +226,8 @@
     'The launch timing or NWS forecast is missing, stale, or too far out. No clear-sky verdict is inferred.');
   set('sb-sky-checked','Weather issue time: '+(good.length?good.map(x=>safeStamp(x.updatedAt)).join(' / '):'not verified'));
   state.rocketPins?.update(options,picked?.id);
-  deepLink(picked?.id);
+  window.RocketFoundryHandoff?.loaded('texas',picked?.id,picked?.name);
+   deepLink(picked?.id);
   const u=new URL(location.href);
   if(picked?.id&&UUID.test(picked.id))u.searchParams.set('launchId',picked.id);
   else u.searchParams.delete('launchId');
