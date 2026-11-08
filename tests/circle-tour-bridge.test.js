@@ -138,3 +138,52 @@ test('new UI is isolated and preserves the current 31-stop planner, canonical an
   assert.match(bridge,/The original Circle Tour map, stops and itineraries remain available/);
   assert.match(bridge,/target='_blank'/);
 });
+
+test('Foundry: a custom trip yields one stop-specific decision and a next planned stop',()=>{
+  const result=ui.planNextDecision(committed,{selectedIds:['11','15','18'],theme:'water',date:'2027-07-18'});
+  assert.equal(result.kind,'next-check');
+  assert.equal(result.stopId,'11');
+  assert.equal(result.primary.toolId,'pictured-rocks');
+  assert.equal(result.position,1);
+  assert.equal(result.total,3);
+  assert.equal(result.nextStopId,'15');
+  assert.ok(result.primary.caveat.length>12);
+  assert.deepEqual(result.orderedStops,['11','15','18']);
+});
+test('Foundry: only an actually applied published direction can reorder the selected trip',()=>{
+  const custom=ui.planNextDecision(committed,{selectedIds:['11','15','18'],direction:'clockwise',theme:'parks'});
+  assert.deepEqual(custom.orderedStops,['11','15','18']);
+  assert.equal(custom.direction,'');
+  const applied=ui.planNextDecision(committed,{selectedIds:['11','15','18'],itinerary:'10',direction:'clockwise'});
+  assert.deepEqual(applied.orderedStops,['18','15','11']);
+  assert.equal(applied.nextStopId,'15');
+  assert.equal(applied.position,1);
+});
+test('Foundry: unserved interest remains an honest coverage gap with reversible discovery',()=>{
+  const blank=ui.planNextDecision(committed,{selectedIds:['11','15'],focusStop:'11',theme:'ships'});
+  assert.equal(blank.kind,'no-specialist');
+  assert.equal(blank.primary,null);
+  assert.equal(blank.otherThemesAvailable,true);
+  const retry=ui.planNextDecision(committed,{selectedIds:['11','15'],focusStop:'11',theme:'all'});
+  assert.equal(retry.kind,'next-check');
+});
+test('Foundry: explicit out-of-trip focus and seasonal disclaimers cannot become invented openings',()=>{
+  const focus=ui.planNextDecision(committed,{selectedIds:['15','18'],focusStop:'11',theme:'water'});
+  assert.equal(focus.inSavedTrip,false);
+  assert.equal(focus.nextStopId,'');
+  assert.equal(focus.stopId,'11');
+  const winter=ui.planNextDecision(committed,{selectedIds:['18'],date:'2027-02-20',theme:'parks'});
+  assert.equal(winter.primary.toolId,'pukaskwa-national-park');
+  assert.equal(winter.primary.inSeason,false);
+});
+test('Foundry: no selected itinerary invites an explicit stop rather than inventing a driving priority',()=>{
+  const choice=ui.planNextDecision(committed,{selectedIds:[],focusStop:'',theme:'water'});
+  assert.equal(choice.kind,'choose-stop');
+  assert.equal(choice.primary,null);
+  assert.equal(choice.stopId,'');
+  assert.equal(choice.total,0);
+  const html=readFileSync(path.join(root,'public/lake-superior-circle-tour/index.html'),'utf8');
+  assert.match(html,/id="ctb-decision"/);
+  assert.match(html,/id="ctb-compare"/);
+  assert.match(html,/id="ctb-fallback"/);
+});
