@@ -264,7 +264,10 @@
         if(d.official)official.href=d.official;
       }
       if(specialist){
-        specialist.hidden=!d.specialist;
+        // The Foundry's contextual next action already links to this regional
+        // guide in access-gated states. Do not repeat the same destination
+        // immediately underneath it as a second ambiguous call to action.
+        specialist.hidden=!d.specialist||next.source==='specialist';
         if(d.specialist)specialist.href=d.specialist+
           (d.launchId&&d.region!=='california'?'?launchId='+encodeURIComponent(d.launchId):'');
       }
