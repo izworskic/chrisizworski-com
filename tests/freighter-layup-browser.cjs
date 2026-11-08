@@ -56,6 +56,21 @@ async function run(){
       if(size.name==='mobile'){
        check(await page.locator('#winter-live').evaluate(e=>e.getBoundingClientRect().height)<1150,size.name+': compact preseason does not push the useful archive too far down');
       }
+      // Foundry 0.3: an empty live season must NOT silently become last winter.
+      const firstHarbor=page.locator('#layup-port-guide [data-port-select-harbor="superior"]');
+      await firstHarbor.click();
+      const evidencePanel=page.locator('#layup-port-guide [data-port-harbor="superior"] [data-harbor-evidence-choices]');
+      check(await evidencePanel.isVisible(),size.name+': opening a port reveals dated evidence choices');
+      check(await page.locator('#season').inputValue()===activeSeason,size.name+': port choice never silently changes from current winter');
+      check((await evidencePanel.textContent()).includes('does not establish an empty harbor'),
+        size.name+': empty new-season ledger qualifies unknown berths');
+      const olderChoice=evidencePanel.getByRole('button',{name:/Explore Winter 2025/});
+      check(await olderChoice.count()===1,size.name+': specifically labeled 2025–26 archival harbor choice');
+      await olderChoice.click();
+      check(await page.locator('#season').inputValue()==='2025-26',size.name+': only an explicit archival click changes winter');
+      check(await page.locator('#harbor-filter').inputValue()==='superior',size.name+': archive choice keeps the selected harbor');
+      await page.locator('#season').selectOption(activeSeason);
+
       await page.locator('#season').selectOption('2025-26');
       try{await page.locator('[data-ship]').first().waitFor({timeout:10000});}
       catch(err){
