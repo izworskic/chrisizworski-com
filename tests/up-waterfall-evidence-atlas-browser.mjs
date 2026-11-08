@@ -99,7 +99,9 @@ try{
   await page.locator('#ea-search').fill('Chipmunk Falls Amasa');
   await page.locator('.ea-record').first().click();
   assert.match(await page.locator('#ea-detail').innerText(),/GIS #17|state GIS #17/);
-  assert.ok(!/GIS #205|state GIS #205/.test(await page.locator('#ea-detail').innerText()));
+  assert.equal(await page.locator('#ea-detail .ea-compare-btn').count(),1,'Amasa must expose exactly one reviewed state feature');
+  assert.match(await page.locator('#ea-detail .ea-compare-btn').first().innerText(),/#17/);
+  assert.ok(!/#205/.test(await page.locator('#ea-detail .ea-compare-btn').first().innerText()),'Alger Chipmunk cannot be offered as Amasa comparison');
   await page.locator('#ea-search').fill('Bulldog Falls');
   await page.locator('.ea-record').first().click();
   assert.match(await page.locator('#ea-detail').innerText(),/Distinct remote waterfall; no approved route/);
