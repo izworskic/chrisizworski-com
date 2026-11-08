@@ -63,7 +63,48 @@
     if(STOPS.has(focus))url.searchParams.set('ctStop',focus);else url.searchParams.delete('ctStop');
     return url.href;
   }
-  const helpers={rankConnections,roadChecks,buildReturnHref,safeDate,safeTheme,safeToolUrl,safeRoadUrl};
+
+  /**
+   * Decision progression is a pure consumer of the approved catalog.
+   * An applied preset already supplies ordered selected IDs; never reverse them twice.
+   * It neither predicts access nor changes any independent specialist.
+   */
+  function planNextDecision(catalog, options = {}) {
+    const selected=[...new Set((Array.isArray(options.selectedIds)?options.selectedIds:[]).map(String).filter(id=>STOPS.has(id)))];
+    const published=options.itinerary && ['7','10','15'].includes(String(options.itinerary));
+    const direction=published && options.direction==='clockwise' ? 'clockwise' : published ? 'counterclockwise' : '';
+    // CircleTourPage.selectedIds() and the saved plan query already contain the actual
+    // applied itinerary order, including clockwise reversal and its endpoint semantics.
+    // The bridge is not a second route engine and must never reorder these IDs.
+    const ordered=selected;
+    const explicit=STOPS.has(String(options.focusStop))?String(options.focusStop):'';
+    const stopId=explicit || ordered[0] || '';
+    const index=ordered.indexOf(stopId);
+    const date=safeDate(options.date);
+    const theme=safeTheme(options.theme);
+    const noChoice={kind:'choose-stop',stopId:'',position:0,total:0,source:'route',
+      primary:null,alternatives:[],otherThemesAvailable:false,prevStopId:'',nextStopId:'',
+      inSavedTrip:false,orderedStops:[],date,theme,direction};
+    if(!stopId)return noChoice;
+    const matches=rankConnections(catalog,{focusStop:stopId,date,theme}).items
+      .slice().sort((a,b)=>Number(b.inSeason)-Number(a.inSeason)
+        ||a.stopIds.length-b.stopIds.length||a.toolId.localeCompare(b.toolId));
+    const allForStop=rankConnections(catalog,{focusStop:stopId,date,theme:'all'}).items;
+    const primary=matches[0]||null;
+    return {
+      kind:primary?'next-check':'no-specialist',
+      stopId,position:index>=0?index+1:0,total:ordered.length,
+      source:explicit?'explicit-stop':ordered.length?'selected-trip':'route',
+      inSavedTrip:index>=0,
+      orderedStops:ordered,direction,date,theme,primary,alternatives:matches.slice(1),
+      otherThemesAvailable:!matches.length&&allForStop.length>0,
+      prevStopId:index>0?ordered[index-1]:'',
+      nextStopId:index>=0&&index+1<ordered.length?ordered[index+1]:'',
+      evidence:'Registered specialist link and editorial caveat only; no live access, travel-time, ticket or road verdict'
+    };
+  }
+
+  const helpers={rankConnections,roadChecks,buildReturnHref,planNextDecision,safeDate,safeTheme,safeToolUrl,safeRoadUrl};
   if(typeof module!=='undefined'&&module.exports)module.exports=helpers;
   if(!root?.document)return;
   const document=root.document,host=document.querySelector('[data-circle-tour-bridge]');
@@ -99,16 +140,24 @@
     if($('ctb-date'))$('ctb-date').value=state.date;
     if($('ctb-theme'))$('ctb-theme').value=state.theme;
   }
-  function renderRail(scope){
+  function renderRail(scope,activeStop){
     const rail=$('ctb-route');if(!rail)return;
     rail.replaceChildren();
     if(!scope.length){rail.append(el('span','ctb-route-empty','Choose a stop or select stops in the trip planner above.'));return;}
     rail.append(el('span','ctb-route-prefix',scope.length+' route stop'+(scope.length===1?'':'s')));
     scope.slice(0,9).forEach(id=>{
       const name=$('stop-'+id)?.querySelector('.stop-name')?.textContent.trim()||'Stop '+id;
-      const chip=el('a','ctb-route-chip',name);chip.href='#stop-'+id;rail.append(chip);
+      const chip=el('button','ctb-route-chip',name);chip.type='button';chip.setAttribute('aria-pressed',String(id===activeStop));
+      chip.addEventListener('click',()=>{state.focusStop=id;state.showAll=false;remember();render();track('choose-route-stop',{stop:id});});rail.append(chip);
     });
     if(scope.length>9)rail.append(el('span','ctb-route-more','+'+(scope.length-9)+' more'));
+    // Reveal the current selected stop inside this horizontal rail without moving the page.
+    const current=rail.querySelector('button[aria-pressed="true"]');
+    if(current){
+      const left=current.offsetLeft,right=left+current.offsetWidth;
+      if(right>rail.scrollLeft+rail.clientWidth)rail.scrollLeft=right-rail.clientWidth+12;
+      else if(left<rail.scrollLeft)rail.scrollLeft=Math.max(0,left-12);
+    }
   }
   function renderRoad(opts){
     const box=$('ctb-road');if(!box)return;
@@ -120,10 +169,86 @@
     }
     if(!box.children.length)box.append(el('li','ctb-road-note','No official source links in this region; check the highway authority directly.'));
   }
+  function renderDecision(model){
+    const host=$('ctb-decision');if(!host)return;
+    host.replaceChildren();
+    const eyebrow=el('p','ctb-stage-label',model.stopId
+      ?model.inSavedTrip?'YOUR TRIP · STOP '+model.position+' OF '+model.total
+        :'EXPLORING STOP '+model.stopId+' · NOT IN YOUR SAVED TRIP'
+      :'START WITH A PLACE');
+    host.append(eyebrow);
+    if(!model.stopId){
+      host.append(el('h3','ctb-stage-title','Where do you want to stop?'),
+        el('p','ctb-stage-explainer','Choose a stop above, or add stops in the original planner. We will show one next decision and what remains unknown, not a generic list of links.'));
+      const start=el('a','ctb-secondary-link','Explore the 31 stops');
+      start.href='#stop-1';host.append(start);
+      return;
+    }
+    const name=$('stop-'+model.stopId)?.querySelector('.stop-name')?.textContent.trim()||'Stop '+model.stopId;
+    host.append(el('h3','ctb-stage-title',name));
+    if(model.direction){
+      host.append(el('p','ctb-stage-path','Applied published '+model.direction+' itinerary · following the original saved stop sequence, not a driving-time estimate.'));
+    }else if(model.inSavedTrip&&model.total>1){
+      host.append(el('p','ctb-stage-path','Following your selection order, not a verified driving sequence.'));
+    }
+    if(model.kind==='next-check'){
+      host.append(el('p','ctb-stage-prefix','ONE USEFUL NEXT CHECK'));
+      host.append(el('p','ctb-stage-question',model.primary.decision));
+      const unknown=el('div','ctb-stage-unknown');
+      unknown.append(el('strong','', 'What this does not establish'),
+        el('p','',model.primary.caveat));
+      host.append(unknown);
+      if(model.date&&!model.primary.inSeason){
+        host.append(el('p','ctb-stage-season','The date you entered falls outside this tool’s usual listed months. Verify seasonal service and access directly; this is not a closure verdict.'));
+      }
+      const actions=el('div','ctb-stage-actions');
+      const check=link('Check '+model.primary.name,model.primary.url,'ctb-link ctb-stage-primary');
+      check.addEventListener('click',()=>{
+        track('next-check-open',{destination:model.primary.toolId,stop:model.stopId,
+          theme:model.primary.theme,season:model.primary.inSeason?'usual':'outside-usual'});
+      });
+      const stop=el('a','ctb-secondary-link','Review stop details');
+      stop.href='#stop-'+model.stopId;
+      actions.append(check,stop);host.append(actions);
+      if(model.alternatives.length){
+        host.append(el('p','ctb-stage-alt',model.alternatives.length+' other approved check'+(model.alternatives.length===1?'':'s')+' for this stop. Open “Other specialist checks” below to compare.'));
+      }
+    }else{
+      host.append(el('p','ctb-stage-question','No approved '+(model.theme==='all'?'specialist':'specialist for this interest')+' at this stop.'));
+      host.append(el('p','ctb-stage-unknown','This is a coverage gap, not evidence that the stop is closed, unsafe or uninteresting.'));
+      const options=el('div','ctb-stage-actions');
+      if(model.otherThemesAvailable){
+        const reset=el('button','ctb-stage-reset','See other interests at this stop');
+        reset.type='button';
+        reset.addEventListener('click',()=>{state.theme='all';state.showAll=false;remember();render();track('interest-recovered',{stop:model.stopId});});
+        options.append(reset);
+      }
+      const stop=el('a','ctb-secondary-link','Use the original stop guide');
+      stop.href='#stop-'+model.stopId;options.append(stop);host.append(options);
+    }
+    if(model.total>1){
+      const nav=el('div','ctb-stage-navigation');
+      const prev=el('button','ctb-nav-button','Previous planned stop');
+      prev.type='button';prev.disabled=!model.prevStopId;
+      const next=el('button','ctb-nav-button','Next planned stop');
+      next.type='button';next.disabled=!model.nextStopId;
+      const move=id=>{state.focusStop=id;state.showAll=false;remember();render();track('step-stop',{stop:id});};
+      prev.addEventListener('click',()=>{if(model.prevStopId)move(model.prevStopId);});
+      next.addEventListener('click',()=>{if(model.nextStopId)move(model.nextStopId);});
+      nav.append(prev,next);host.append(nav);
+    }else if(!model.inSavedTrip&&state.selectedIds.length){
+      host.append(el('p','ctb-stage-path','This is outside your selected itinerary. Clear Route focus above to return to the first selected stop.'));
+    }
+  }
   function render(){
     if(!state.catalog)return;
     state.selectedIds=selectedIds();
     controls();
+    const routeUrl=new URL(root.location.href);
+    const decision=planNextDecision(state.catalog,{selectedIds:state.selectedIds,focusStop:state.focusStop,
+      theme:state.theme,date:state.date,region:state.region,
+      itinerary:routeUrl.searchParams.get('itinerary'),direction:routeUrl.searchParams.get('direction')});
+    renderDecision(decision);
     const ranked=rankConnections(state.catalog,{selectedIds:state.selectedIds,focusStop:state.focusStop,
       theme:state.theme,date:state.date,region:state.region});
     const box=$('ctb-results');if(!box)return;
@@ -150,8 +275,8 @@
       $('ctb-more').hidden=count<=LIMIT;
       $('ctb-more').textContent=state.showAll?'Show fewer':'Show all '+count+' connections';
     }
-    renderRail(ranked.scope.length?ranked.scope:state.selectedIds);
-    renderRoad({scope:ranked.scope.length?ranked.scope:state.selectedIds,region:state.region});
+    renderRail(decision.orderedStops.length?decision.orderedStops:state.selectedIds,decision.stopId);
+    renderRoad({scope:decision.stopId?[decision.stopId]:state.selectedIds,region:state.region});
   }
   function populate(){
     const input=$('ctb-stop');if(!input)return;
@@ -186,7 +311,8 @@
     });
     root.addEventListener('circle-tour:trip-change',event=>{
       state.selectedIds=(event.detail?.ids||[]).map(String);
-      if(state.focusStop&&!state.selectedIds.includes(state.focusStop))state.focusStop='';
+      // An explicitly inspected stop must not be silently erased when the itinerary changes.
+      // An out-of-plan stop is disclosed by the decision card and can be cleared by the visitor.
       remember();render();
     });
     root.addEventListener('circle-tour:stop-open',event=>{

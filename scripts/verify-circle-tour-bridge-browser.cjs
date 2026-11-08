@@ -24,7 +24,7 @@ function check(value,message){if(!value)throw Error(message);}
  const report={browser:'chromium',screenshots:[],cases:[],failures:[]};let browser;
  try{
   browser=await chromium.launch({executablePath:process.env.CHROME_PATH||undefined,headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});
-  for(const size of [{name:'mobile360',width:360,height:780},{name:'mobile390',width:390,height:844},{name:'tablet',width:768,height:900},{name:'desktop',width:1366,height:900}]){
+  for(const size of [{name:'mobile360',width:360,height:780},{name:'mobile390',width:390,height:844},{name:'tablet',width:768,height:900},{name:'desktop',width:1366,height:900},{name:'wideDesktop',width:1440,height:900}]){
     const ctx=await browser.newContext({viewport:{width:size.width,height:size.height}}),page=await ctx.newPage();
     const response=await page.goto(url,{waitUntil:'domcontentloaded',timeout:35000});
     check(response.status()===200,size.name+': original route missing');
@@ -44,6 +44,10 @@ function check(value,message){if(!value)throw Error(message);}
     await page.waitForFunction(()=>document.querySelector('#ctb-status')?.textContent.includes('approved connection'));
     const items=await page.locator('#ctb-results .ctb-entry').count();
     check(items>0,size.name+': Pictured Rocks connections missing');
+    check((await page.locator('#ctb-decision').textContent()).includes('Choose a boat, kayak'),size.name+': next question not actionable');
+    check((await page.locator('#ctb-decision').textContent()).includes('What this does not establish'),size.name+': evidence boundary not visible');
+    check((await page.locator('#ctb-decision .ctb-stage-primary').getAttribute('href'))==='https://picturedrocks.chrisizworski.com/',
+      size.name+': first next-check canonical incorrect');
     const stopCount=await page.locator('#ctb-results .ctb-stop-link').allTextContents();
     check(stopCount.every(x=>x.startsWith('Stop 11')),size.name+': focus not respected');
     const target=page.locator('#ctb-results .ctb-link').first();
@@ -65,11 +69,91 @@ function check(value,message){if(!value)throw Error(message);}
     await page.waitForFunction(()=>document.querySelector('#ctb-status')?.textContent.includes('approved connection'));
     const selectedResults=await page.locator('#ctb-results .ctb-stop-link').allTextContents();
     check(selectedResults.length>0&&selectedResults.every(x=>x.startsWith('Stop 15')),size.name+': selected trip ignored');
-    await page.locator('#circle-tour-tool-bridge').screenshot({path:path.join(out,size.name+'.png'),timeout:25000});
-    report.screenshots.push(size.name+'.png');
+    check((await page.locator('#ctb-decision .ctb-stage-title').textContent()).includes('Lake Superior Provincial Park'),
+      size.name+': selected stop did not change primary answer');
+    await page.locator('#stop-18 .add-btn').click();
+    await page.waitForFunction(()=>document.querySelector('#stop-18 .add-btn')?.getAttribute('aria-pressed')==='true');
+    check(await page.locator('#ctb-decision .ctb-nav-button').count()===2,size.name+': route progression missing');
+    await page.locator('#ctb-decision .ctb-nav-button').last().focus();
+    await page.keyboard.press('Enter');
+    check((await page.locator('#ctb-decision .ctb-stage-title').textContent()).includes('Pukaskwa'),
+      size.name+': keyboard progression did not change the decision');
+    await page.locator('#ctb-decision .ctb-nav-button').first().click();
+    check((await page.locator('#ctb-decision .ctb-stage-title').textContent()).includes('Lake Superior Provincial Park'),
+      size.name+': previous planned stop did not reverse the selection');
+    await page.locator('#ctb-decision .ctb-nav-button').last().click();
+    check((await page.locator('#ctb-decision .ctb-stage-title').textContent()).includes('Pukaskwa'),
+      size.name+': A-B-A re-entry lost progression');
+    await page.locator('#ctb-theme').selectOption('ships');
+    check((await page.locator('#ctb-decision').textContent()).includes('No approved specialist'),
+      size.name+': unsupported interest invented a result');
+    await page.locator('#ctb-decision .ctb-stage-reset').click();
+    check((await page.locator('#ctb-decision').textContent()).includes('ONE USEFUL NEXT CHECK'),
+      size.name+': reset did not restore a grounded choice');
+    // The original CircleTourPage opens its own mobile trip sheet after Add.
+    // Verify that it can be dismissed and capture the independent bridge unobstructed.
+    const mobileSheet=page.locator('#mobileTripSheet');
+    if(await mobileSheet.evaluate(el=>el.classList.contains('open'))){
+      await page.locator('#mobileTripClose').click();
+      check(!(await mobileSheet.evaluate(el=>el.classList.contains('open'))),size.name+': original trip sheet could not close');
+    }
+    if(size.width<=760){
+      // The original sheet has a 220ms exit transition. Its class is removed
+      // synchronously, but screenshots made immediately still capture the overlay.
+      await page.waitForFunction(()=>document.querySelector('#mobileTripSheet').getBoundingClientRect().top>=innerHeight-1,
+        null,{timeout:5000});
+    }
+    const railVisibility=await page.evaluate(()=>{
+      const rail=document.querySelector('#ctb-route'),current=rail?.querySelector('button[aria-pressed="true"]');
+      if(!rail||!current)return {found:false};
+      const a=rail.getBoundingClientRect(),b=current.getBoundingClientRect();
+      return {found:true,left:b.left-a.left,right:a.right-b.right};
+    });
+    check(railVisibility.found&&railVisibility.left>=-2&&railVisibility.right>=-2,
+      size.name+': focused stop chip was hidden under horizontal rail '+JSON.stringify(railVisibility));
+    // A real viewport capture verifies the actual fixed overlay behavior. A tall
+    // element screenshot can stitch fixed controls at arbitrary positions, even
+    // after the sheet is fully offscreen, so it is not sufficient evidence.
+    await page.locator('#ctb-decision').scrollIntoViewIfNeeded();
+    const sheetState=await page.evaluate(()=>{
+      const sheet=document.querySelector('#mobileTripSheet');
+      return {open:sheet.classList.contains('open'),top:sheet.getBoundingClientRect().top,viewport:innerHeight};
+    });
+    check(!sheetState.open&&sheetState.top>=sheetState.viewport-2,
+      size.name+': original mobile drawer is genuinely covering decision '+JSON.stringify(sheetState));
+    await page.screenshot({path:path.join(out,size.name+'-viewport.png'),animations:'disabled',timeout:25000});
+    // Isolated full-height design evidence masks only the existing, fixed
+    // original planner drawer/trigger during the screenshot. The live UI is unchanged.
+    await page.locator('#circle-tour-tool-bridge').screenshot({
+      path:path.join(out,size.name+'.png'),timeout:25000,animations:'disabled',
+      style:'#mobileTripSheet,#mobileTripBackdrop,#mobileTripTrigger{visibility:hidden!important}'
+    });
+    report.screenshots.push(size.name+'-viewport.png',size.name+'.png');
     report.cases.push({viewport:size.name,initial:count,focus:items,selectedTrip:selectedResults.length,overflow:false,contextUrl:true});
     await ctx.close();
   }
+  // A published, actually applied clockwise route may reverse sequence; a generic
+  // preview-only direction control cannot silently reorder a custom selection.
+  const routeCtx=await browser.newContext({viewport:{width:390,height:844}}),routePage=await routeCtx.newPage();
+  await routePage.goto(url+'?plan=18%2C15%2C11&itinerary=10&direction=clockwise&ctTheme=parks',{waitUntil:'domcontentloaded',timeout:35000});
+  await routePage.waitForFunction(()=>document.querySelector('#ctb-decision .ctb-stage-title')?.textContent.includes('Pukaskwa'),null,{timeout:30000});
+  check((await routePage.locator('#ctb-decision').textContent()).includes('STOP 1 OF 3'),'published route should have a real step');
+  await routePage.locator('#ctb-decision .ctb-nav-button').last().click();
+  check((await routePage.locator('#ctb-decision .ctb-stage-title').textContent()).includes('Lake Superior Provincial Park'),
+    'clockwise next stop did not preserve applied direction');
+  report.cases.push({state:'applied clockwise published route',result:'ordered stop 18 to stop 15 without changing original planner'});
+  await routeCtx.close();
+
+  // Blocking the original map import does not block the independent evidence desk.
+  const tileContext=await browser.newContext({viewport:{width:390,height:844}}),tilePage=await tileContext.newPage();
+  await tilePage.route('**/assets/lake-superior-circle-tour-map.js*',route=>route.abort());
+  await tilePage.goto(url+'?plan=11&ctTheme=water',{waitUntil:'domcontentloaded',timeout:35000});
+  await tilePage.waitForFunction(()=>document.querySelector('#ctb-decision .ctb-stage-title')?.textContent.includes('Pictured Rocks'),null,{timeout:30000});
+  check((await tilePage.locator('#ctb-decision .ctb-stage-primary').getAttribute('href'))==='https://picturedrocks.chrisizworski.com/',
+    'missing basemap import incorrectly blocked independent specialist action');
+  report.cases.push({state:'map import unavailable',result:'independent specialist decision remains actionable'});
+  await tileContext.close();
+
   // Bridge failure must never take down original route, atlas or static backup.
   const context=await browser.newContext({viewport:{width:390,height:844}}),failPage=await context.newPage();
   await failPage.route('**/circle-tour-tool-catalog.json',route=>route.fulfill({status:503,body:'unavailable'}));
