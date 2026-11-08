@@ -66,16 +66,17 @@
 
   /**
    * Decision progression is a pure consumer of the approved catalog.
-   * A saved preset has a defined direction; a custom trip preserves selection order.
+   * An applied preset already supplies ordered selected IDs; never reverse them twice.
    * It neither predicts access nor changes any independent specialist.
    */
   function planNextDecision(catalog, options = {}) {
     const selected=[...new Set((Array.isArray(options.selectedIds)?options.selectedIds:[]).map(String).filter(id=>STOPS.has(id)))];
-    const route=Array.isArray(catalog?.routeOrder)?catalog.routeOrder.map(String).filter(id=>STOPS.has(id)):IDS;
     const published=options.itinerary && ['7','10','15'].includes(String(options.itinerary));
     const direction=published && options.direction==='clockwise' ? 'clockwise' : published ? 'counterclockwise' : '';
-    const routeSequence=direction==='clockwise'?[route[0],...route.slice(1).reverse()]:route;
-    const ordered=direction?routeSequence.filter(id=>selected.includes(id)):selected;
+    // CircleTourPage.selectedIds() and the saved plan query already contain the actual
+    // applied itinerary order, including clockwise reversal and its endpoint semantics.
+    // The bridge is not a second route engine and must never reorder these IDs.
+    const ordered=selected;
     const explicit=STOPS.has(String(options.focusStop))?String(options.focusStop):'';
     const stopId=explicit || ordered[0] || '';
     const index=ordered.indexOf(stopId);
@@ -179,7 +180,7 @@
     const name=$('stop-'+model.stopId)?.querySelector('.stop-name')?.textContent.trim()||'Stop '+model.stopId;
     host.append(el('h3','ctb-stage-title',name));
     if(model.direction){
-      host.append(el('p','ctb-stage-path','Selected published '+model.direction+' direction · original route order; this is not a driving-time estimate.'));
+      host.append(el('p','ctb-stage-path','Applied published '+model.direction+' itinerary · following the original saved stop sequence, not a driving-time estimate.'));
     }else if(model.inSavedTrip&&model.total>1){
       host.append(el('p','ctb-stage-path','Following your selection order, not a verified driving sequence.'));
     }
