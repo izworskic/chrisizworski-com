@@ -480,7 +480,12 @@ const whenReady=page=>page.waitForFunction(id=>
   failedSource=true;
   const errCtx=await browser.newContext({viewport:{width:390,height:844}});
   const error=await errCtx.newPage();await localLeaflet(error);
+  await error.route('https://unpkg.com/**',route=>route.abort());
+  await error.route('https://tile.openstreetmap.org/**',route=>route.abort());
+  await error.route('https://*.basemaps.cartocdn.com/**',route=>route.abort());
   await error.goto(base,{waitUntil:'domcontentloaded'});
+  await error.waitForFunction(()=>document.querySelector('#rl-coast-map')?.dataset.outline==='ready',
+    {timeout:15000});
   await error.waitForFunction(()=>document.querySelector('#rl-flight-headline')?.textContent.includes('unavailable'));
   assert((await error.locator('#rl-coast-map').getAttribute('data-map-state'))==='ready',
     'Launch source outage must retain a real geographic map');
@@ -488,11 +493,20 @@ const whenReady=page=>page.waitForFunction(id=>
     'Offline map did not distinguish approximate regions from live missions');
   assert(!(await error.locator('#rl-coast-map').innerText()).includes('Loading the coastal atlas'),
     'Launch outage left map in infinite loading state');
+  assert(await error.locator('#rl-coast-map .leaflet-rocket-reference-land-pane path').count()>0,
+    'Both tile providers blocked: no visible reference coastline was drawn');
+  await error.waitForFunction(()=>document.querySelector('#rl-coast-map')?.dataset.tiles==='reference-only',
+    {timeout:12000});
+  assert((await error.locator('#rl-atlas-status').innerText()).includes('Natural Earth coastlines shown'),
+    'No-tile mode silently left a gray box instead of explaining the coastline fallback');
+  const coastShot='phone390-all-tiles-blocked-geography.png';
+  await error.locator('#rl-map-wrap').screenshot({path:path.join(out,coastShot),animations:'disabled'});
+  report.screenshots.push(coastShot);
   assert(await error.locator('#rl-flight-locate').isDisabled(),'Source outage retained stale rocket focus');
   assert((await error.locator('#rl-flight-next-title').innerText()).includes('schedule cannot establish'),
     'Source outage claimed an available next mission or viewing clearance');
   assert(await error.locator('#rl-flight-mission-select').isDisabled(),'Source outage retained launch menu');
-  report.cases.push({case:'source-outage',status:'unavailable; no source invented'});
+  report.cases.push({case:'source-outage',status:'unavailable; local outline visible with CDN, OSM, CARTO and launch API blocked'});
   await errCtx.close();failedSource=false;
   const noCtx=await browser.newContext({javaScriptEnabled:false,viewport:{width:390,height:844}});
   const no=await noCtx.newPage();
