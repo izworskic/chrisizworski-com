@@ -460,6 +460,44 @@
       }
     },
     {
+      "id": "freighter-watch-desk",
+      "name": "Great Lakes Freighter Watch Desk",
+      "canonical": "https://chrisizworski.com/great-lakes-ship-watching-spots/",
+      "aliases": [],
+      "kind": "live-opportunity-desk",
+      "cluster": "great-lakes-shipping",
+      "primaryIntent": "where to watch Great Lakes freighters from shore with current supported passage evidence",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "great-lakes"
+      ],
+      "personas": [
+        "ship-watcher",
+        "traveler",
+        "photographer"
+      ],
+      "networkRole": "owner",
+      "searchTreatment": {
+        "status": "active"
+      },
+      "searchEvidence": {
+        "status": "unmeasured"
+      }
+    },
+    {
       "id": "edmund-fitzgerald",
       "name": "SS Edmund Fitzgerald",
       "canonical": "https://chrisizworski.com/edmund-fitzgerald/",
@@ -7106,6 +7144,38 @@
       "strength": "essential",
       "surface": "regional-selected-mission",
       "reason": "Return from the hawaii viewing and access guide to the national mission UUID, timetable precision, source cross-checks and spectator-weather context."
+    },
+    {
+      "from": "ship-tracker",
+      "to": "freighter-watch-desk",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "great-lakes-shipping",
+      "reason": "The live map owns vessel positions; the Watch Desk owns the distinct decision of when and where to look from a public shoreline."
+    },
+    {
+      "from": "freighter-watch-desk",
+      "to": "soo-locks",
+      "type": "regional-handoff",
+      "strength": "strong",
+      "surface": "great-lakes-shipping",
+      "reason": "A supported Soo passage window continues to the authoritative lock and public-access engines."
+    },
+    {
+      "from": "freighter-watch-desk",
+      "to": "duluth-canal-park",
+      "type": "regional-handoff",
+      "strength": "strong",
+      "surface": "great-lakes-shipping",
+      "reason": "The Duluth corridor estimator and Canal Park cameras provide specialist verification of a modeled window."
+    },
+    {
+      "from": "freighter-watch-desk",
+      "to": "winter-layup",
+      "type": "seasonal-handoff",
+      "strength": "strong",
+      "surface": "great-lakes-shipping",
+      "reason": "When moving vessels are not supported, dated winter layup reporting provides a different seasonal experience without implying passage."
     }
   ],
   "cannibalizationGroups": [
