@@ -41,6 +41,8 @@
   }
   const time=value=>{const d=new Date(value);return Number.isFinite(d.getTime())?d.toLocaleString('en-US',{timeZone:'America/New_York',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'}):'time unavailable';};
   const age=value=>{const mins=Math.max(0,Math.floor((Date.now()-Date.parse(value))/60000));return mins<1?'less than a minute ago':mins+' min ago';};
+  // AIS dimensions remain meters internally; only vessel-card and popup labels use feet.
+  const displayFeet=meters=>Number.isFinite(meters)&&meters>0?Math.round(meters*3.280839895).toLocaleString('en-US')+' ft':null;
   const directions=v=>'https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(v.directionsQuery);
   function readURL(){
     const p=new URL(locationHref()).searchParams;
@@ -103,7 +105,7 @@
   function shipDetail(v){
     const div=el('div');div.dataset.shipMmsi=String(v.mmsi);div.dataset.shipSeen=String(v.seen);
     div.append(el('h3',v.name||'AIS vessel '+v.mmsi),el('p',C.motion(v)+' · '+C.direction(v)),el('p','Reported '+time(v.seen)+' · '+age(v.seen)));
-    if(v.lengthMeters)div.append(el('p','Reported length '+v.lengthMeters+' m'+(v.beamMeters?' · beam '+v.beamMeters+' m':'')));
+    if(displayFeet(v.lengthMeters))div.append(el('p','Reported length '+displayFeet(v.lengthMeters)+(displayFeet(v.beamMeters)?' · beam '+displayFeet(v.beamMeters):'')));
     return div;
   }
   function updateReportLine(){
@@ -136,7 +138,7 @@
         const stamp=[v.name,v.seen,v.speedKnots,v.heading,v.course,v.lengthMeters,age(v.seen)].join('|');
         if(card.dataset.stamp!==stamp){
           const top=el('strong',undefined,'ship-name'),symbol=el('span',undefined,'ship-symbol');symbol.innerHTML=shipSVG();top.append(symbol,el('span',v.name||'AIS vessel '+v.mmsi));
-          card.replaceChildren(top,el('span',C.motion(v)+' · '+C.direction(v),'meta'),el('span',(v.lengthMeters?v.lengthMeters+' m · ':'')+'MMSI '+v.mmsi,'meta'),el('small','Heard '+age(v.seen)+' · '+time(v.seen)));
+          card.replaceChildren(top,el('span',C.motion(v)+' · '+C.direction(v),'meta'),el('span',(displayFeet(v.lengthMeters)?displayFeet(v.lengthMeters)+' · ':'')+'MMSI '+v.mmsi,'meta'),el('small','Heard '+age(v.seen)+' · '+time(v.seen)));
           card.dataset.stamp=stamp;
         }
         // Maintain order without detaching a focused control during refresh.

@@ -109,7 +109,7 @@ test('generated page connects the monthly fieldbook to real trip and ship-watchi
   assert.match(html,/src="\/assets\/seaway-seasonal-funnel\.js\?v=20261105a"/);
   assert.match(html,/href="\/welland-canal\/"/);
   assert.match(html,/href="#ship-watch"/);
-  assert.match(html,/\/assets\/seaway\.js\?v=20261108f/);
+  assert.match(html,/\/assets\/seaway\.js\?v=20261108g/);
   assert.match(html,/id="seawaySeasonalReadout"/);
   assert.match(html,/Read the 2022–2024 comparison as a table/);
 });

@@ -11,7 +11,7 @@ let fakeMode='recent';
 const REFERENCE=JSON.parse(fs.readFileSync(path.join(__dirname,'../data/seaway/places.json'),'utf8'));
 function responseFor(scope){
  const now=new Date(),v={mmsi:fakeMode==='photo'?'316009090':'316123456',name:fakeMode==='photo'?'ALGOMA EQUINOX':'TEST VESSEL — NOT REAL',lat:44.978,lon:-74.851,
-  speedKnots:5.2,heading:240,course:220,shipType:70,seen:new Date(+now-120000).toISOString(),
+  speedKnots:5.2,heading:240,course:220,shipType:70,lengthMeters:200,beamMeters:24,seen:new Date(+now-120000).toISOString(),
   regionIds:['massena']};
  if(fakeMode==='unavailable')return{status:502,data:{ok:false,state:'unavailable'}};
  const includes=scope==='all'||scope==='massena';
@@ -58,6 +58,8 @@ async function run(base,browser,width){
  assert.equal(await page.locator('#shipList').count(),1);
  const card=page.locator('#shipList .ship-card').first();
  await card.waitFor({state:'visible',timeout:25000});
+ assert.match(await card.textContent(),/656 ft/,'200 meters should be shown as 656 ft on ship card');
+ assert.doesNotMatch(await card.textContent(),/200 m(?!eters)/,'ship list must not show metric length');
  await card.click();
  await panel.waitFor({state:'visible',timeout:6000});
  assert.equal(await page.locator('#followSelectedShip').isVisible(),true);
@@ -70,6 +72,7 @@ async function run(base,browser,width){
  assert.doesNotMatch(await panel.textContent(),/arriving at.*\d+:\d+|ship will reach/i);
  const popupText=page.locator('#seawayMap .leaflet-popup-content').first();
  if(await popupText.isVisible()){
+   assert.match(await popupText.textContent(),/Reported length 656 ft · beam 79 ft/,'popup shows rounded feet for length and beam');
    assert.equal(await popupText.locator('a').count(),0,'individual ship bubble should have zero links');
    assert.equal(await popupText.locator('.seaway-popup-figure').count(),0,'unverified test ship receives no fake image');
  }

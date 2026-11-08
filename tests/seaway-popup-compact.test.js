@@ -66,13 +66,13 @@ test('both generated Seaway pages load photo adapter before updated map script',
   for(const slug of ['st-lawrence-seaway','eisenhower-lock']){
     const html=fs.readFileSync('public/'+slug+'/index.html','utf8');
     const photo=html.indexOf('/assets/seaway-popup-photos.js?v=20261108f');
-    const map=html.indexOf('/assets/seaway.js?v=20261108f');
+    const map=html.indexOf('/assets/seaway.js?v=20261108g');
     assert.ok(photo>=0&&map>photo,slug+' should preload vetted photo helper before map');
     assert.match(html,/\/assets\/seaway\.css\?v=20261108f/);
     assert.match(html,/rel="canonical"/);
   }
   assert.match(generator,/\/assets\/seaway-popup-photos\.js\?v=20261108f/);
-  assert.match(generator,/\/assets\/seaway\.js\?v=20261108f/);
-  assert.match(enhancer,/\/assets\/seaway\.js\?v=20261108f/);
+  assert.match(generator,/\/assets\/seaway\.js\?v=20261108g/);
+  assert.match(enhancer,/\/assets\/seaway\.js\?v=20261108g/);
   assert.doesNotMatch(popup,/\bOpen Waters photo|Generic ship photograph/);
 });
