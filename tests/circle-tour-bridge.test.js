@@ -32,12 +32,14 @@ test('new approved specialist automatically joins after tool-registry update, wi
     canonical:'https://new.chrisizworski.com/keweenaw/',
     geographies:['keweenaw','lake-superior'],
     seasons:[5,6,7,8,9,10],
-    circleTour:{approval:'approved',stopIds:['8'],theme:'parks',
+    circleTour:{approval:'approved',productionVerifiedAt:'2026-11-08',stopIds:['8'],theme:'parks',
       decision:'Choose a suitable Keweenaw trail for my stop.',
       caveat:'Trail access and parking must be verified at the destination.'}
   };
   const updated={...registry,tools:[...registry.tools,addition]};
   const {catalog,report}=compileCircleTourCatalog(updated,seed);
+  const unverified={...addition,circleTour:{...addition.circleTour,productionVerifiedAt:undefined}};
+  assert.throws(()=>compileCircleTourCatalog({...registry,tools:[...registry.tools,unverified]},seed),/productionVerifiedAt/);
   const entry=catalog.connections.find(x=>x.toolId===addition.id);
   assert.equal(entry.source,'registry-approved');
   assert.deepEqual(entry.stopIds,['8']);
