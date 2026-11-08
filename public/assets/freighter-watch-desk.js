@@ -78,7 +78,7 @@
   function evaluate(key, data, when = 'today', now = Date.now()) {
     const config = CONFIG[key] || CONFIG.soo;
     const base = {config,when,source:'Open Waters AIS via existing site engine',observations:[],pick:null,
-      status:'unknown',reason:'No reliable recent evidence is available.',checkedAt:null,attribution:[]};
+      status:'unknown',reason:'No reliable recent evidence is available.',checkedAt:null,attribution:[],inLock:null};
     if (when === 'tomorrow') {
       base.reason = 'Current AIS does not establish tomorrow’s ship passages. Use the local guide and return when fresh evidence is available.';
       return base;
@@ -94,6 +94,11 @@
     vessels = Array.isArray(vessels) ? vessels : [];
     base.observations = vessels.filter(v => usableVessel(v, now) &&
       (!config.bbox || inBounds(v, config.bbox))).sort((a,b) => Date.parse(b.seen) - Date.parse(a.seen)).slice(0,20);
+    if(config.kind==='soo'){
+      const within=Array.isArray(data.nextShip?.inLock)?data.nextShip.inLock:[];
+      base.inLock=within.find(v=>usableVessel(v,now)&&validDate(v.seen,now,8*60000)!==null&&v.state==='in-lock')||null;
+      if(base.inLock&&!base.observations.some(v=>identity(v)===identity(base.inLock)))base.observations.unshift(base.inLock);
+    }
     let candidate = null;
     let candidateList = [];
     if (config.kind === 'soo' && data.nextShip && data.nextShip.ok === true) {
@@ -104,6 +109,11 @@
       candidateList = data.candidates;
     }
     const window = safeWindow(candidate,candidateList,now,config.kind === 'soo' ? 10 : 26);
+    if (when==='now'&&base.inLock){
+      base.status='in-lock';
+      base.reason='A source-modeled in-chamber vessel was recently reported at the Soo Locks. It may depart before you arrive.';
+      return base;
+    }
     if (window && eligibleForWhen(window,when,now,config.zone)) {
       base.pick = {ship:candidate,window};
       // Corridor models may see an approaching vessel beyond the map's local AIS box.
@@ -148,8 +158,11 @@
     if(!headline||!body||!ships||!status||!source||!next)return;
     if(watching) watching.textContent='Watching from: '+config.spot+' (check access and hours in the local guide).';
     status.dataset.status=result.status;
-    status.textContent = result.status==='window'?'MODELED WINDOW':result.status==='observed'?'RECENT OBSERVATIONS':result.status==='unavailable'?'SOURCE UNAVAILABLE':'NOT CONFIRMED';
-    if (result.pick) {
+    status.textContent = result.status==='window'?'MODELED WINDOW':result.status==='in-lock'?'IN LOCK NOW · AIS':result.status==='observed'?'RECENT OBSERVATIONS':result.status==='unavailable'?'SOURCE UNAVAILABLE':'NOT CONFIRMED';
+    if(result.status==='in-lock'&&result.inLock){
+      headline.textContent=(result.inLock.name||'A vessel')+' reported in '+(result.inLock.chamberName||'Soo Locks');
+      body.textContent=result.reason;
+    }else if (result.pick) {
       headline.textContent = result.pick.ship.name || 'Reported vessel';
       const w=result.pick.window;
       body.textContent='Estimated passage: '+formatTime(w.start,config.zone)+' to '+formatTime(w.end,config.zone)+'. '+result.reason;
@@ -186,6 +199,63 @@
       ships.append(card);
     }
   }
+
+  function minimalSite(key){
+    const c=CONFIG[key]||CONFIG.soo;
+    return {id:key,name:c.spot,address:c.label,zone:c.zone,lat:c.center[0],lon:c.center[1],nearNm:3,
+      notes:c.note,reviewed:null,hoursByMonth:null,accessUrl:c.visit,evidenceUrl:c.link,
+      directionsUrl:'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(c.spot+', '+c.label)};
+  }
+  function renderVisitPlan(result,context,doc,now=Date.now()){
+    const engine=typeof window!=='undefined'?window.FreighterWatchDecision:null;
+    const panel=doc.getElementById('fwd-visit-plan');
+    if(!panel)return;
+    if(!engine||typeof engine.recommendation!=='function'){
+      doc.getElementById('fwd-plan-title').textContent='Recommendation temporarily unavailable';
+      doc.getElementById('fwd-plan-summary').textContent='Use the live AIS evidence and local shore guide while the planning layer is unavailable.';
+      panel.dataset.verdict='NO_ENGINE';
+      return;
+    }
+    if(context?.pending){
+      panel.dataset.verdict='CHECKING_CONDITIONS';
+      panel.dataset.tone='conditional';
+      doc.getElementById('fwd-plan-title').textContent='Ship evidence received. Checking weather and public access…';
+      doc.getElementById('fwd-plan-summary').textContent='We will not recommend a trip until the other conditions have been checked or clearly marked unavailable.';
+      return;
+    }
+    const decision=engine.recommendation(result,context,now);
+    panel.dataset.verdict=decision.code;
+    panel.dataset.tone=decision.tone;
+    function put(id,value){const el=doc.getElementById(id);if(el)el.textContent=value;}
+    put('fwd-plan-kind',decision.tone==='supported'?'· Supported opportunity':
+      decision.tone==='hold'?'· Reconsider this visit':
+      decision.code==='NO_SHIP_TRIP'?'· No ship-only trip supported':
+      decision.code==='PLAN_SHORE'?'· Shoreline visit, no ship forecast':'· Conditional recommendation');
+    put('fwd-plan-title',decision.title);
+    put('fwd-plan-summary',decision.summary);
+    put('fwd-plan-where',decision.where);
+    put('fwd-plan-when',decision.when);
+    put('fwd-plan-weather',decision.weather?.label+': '+decision.weather?.note);
+    put('fwd-plan-access',decision.access?.label+': '+decision.access?.note);
+    put('fwd-plan-why',decision.why.join(' ')||'Review the live evidence and official access source.');
+    put('fwd-plan-method','Official site information reviewed '+(decision.site?.reviewed||'date unavailable')+
+      '. Site opening/closures are not monitored live. NWS forecasts are not observed weather; '+decision.disclaimer);
+    const actions=doc.getElementById('fwd-plan-actions');
+    actions.replaceChildren();
+    const links=[
+      ['Find this public watching area',decision.site?.directionsUrl],
+      ['Check official public-access details',decision.site?.accessUrl],
+      ['Open local live ship evidence',decision.site?.evidenceUrl],
+      ['Read NWS weather forecast',decision.site?.forecastUrl]
+    ];
+    for(const [label,href] of links){
+      if(!href||!(/^\//.test(href)||/^https:\/\//.test(href)))continue;
+      const a=link(doc,label,href,'fwd-plan-action');
+      if(href.startsWith('https://')){a.target='_blank';a.rel='noopener noreferrer';}
+      actions.append(a);
+    }
+    return decision;
+  }
   function mount(doc) {
     const shell=doc.getElementById('freighter-watch-desk');
     if(!shell)return;
@@ -198,6 +268,7 @@
     const localDate=doc.getElementById('fwd-local-date');
     if(!select||!when||!refresh||!mapBox||!next)return;
     let map=null, layer=null, generation=0, active=null, lastResult=null;
+    let weatherAbort=null,lastContext=null;
     let fallbackRequested=false, baseLayer=null, fallbackTiles=false, basemapName='Loading basemap', mapSummary='Area map';
     function showMapStatus(){mapStatus.textContent=mapSummary+' · '+basemapName;}
     function fallbackBasemap(){
@@ -249,7 +320,9 @@
     function track(action) {
       if (typeof window.gtag === 'function') window.gtag('event', action, {
         corridor:select.value, visit_window:when.value,
-        evidence_status:lastResult ? lastResult.status : 'unknown', surface:'freighter-watch-desk'
+        evidence_status:lastResult ? lastResult.status : 'unknown',
+        decision_code:doc.getElementById('fwd-visit-plan')?.dataset.verdict||'unknown',
+        surface:'freighter-watch-desk'
       });
     }
     const params=new URLSearchParams(location.search);
@@ -322,14 +395,38 @@
       const key=select.value, windowChoice=when.value;
       const conf=CONFIG[key];const thisGen=++generation;
       if(active)active.abort();
+      if(weatherAbort)weatherAbort.abort();
       active=new AbortController();
+      weatherAbort=new AbortController();
+      lastResult=null;
+      lastContext={site:minimalSite(key),weather:{ok:false},pending:true};
+      const panel=doc.getElementById('fwd-visit-plan');
+      panel.dataset.verdict='CHECKING';
+      doc.getElementById('fwd-plan-title').textContent='Checking the evidence for '+conf.label+'…';
+      doc.getElementById('fwd-plan-summary').textContent='The ship and weather checks are separate. A recent vessel position alone is not a reason to drive here.';
       refresh.disabled=true; refresh.textContent='Checking…';
       showLocalDate();
       const fetchNow=Date.now();
-      // No current position can substantiate a next-day visit. Avoid unnecessary upstream calls.
+      const weatherController=weatherAbort;
+      const weatherTimeout=setTimeout(()=>weatherController.abort(),11500);
+      void fetch('/api/freighter-watch-conditions?place='+encodeURIComponent(key),{
+        signal:weatherController.signal,cache:'no-store',headers:{Accept:'application/json'}
+      }).then(r=>{if(!r.ok)throw Error('NWS endpoint unavailable');return r.json();}).then(data=>{
+        if(thisGen!==generation)return;
+        if(data?.ok===true&&data.site&&data.site.id===key)lastContext={site:data.site,weather:data.weather,pending:false};
+        else lastContext={...lastContext,pending:false};
+        if(lastResult)renderVisitPlan(lastResult,lastContext,doc);
+      }).catch(()=>{
+        if(thisGen===generation){
+          lastContext={...lastContext,pending:false};
+          if(lastResult)renderVisitPlan(lastResult,lastContext,doc);
+        }
+      }).finally(()=>clearTimeout(weatherTimeout));
+      // Tomorrow's real ship movements are unknown; still fetch shore weather and public access.
       if(windowChoice==='tomorrow'){
         lastResult=evaluate(key,null,windowChoice,fetchNow);
-        render(lastResult,doc);draw(lastResult);refresh.disabled=false;refresh.textContent='Check again';return;
+        render(lastResult,doc);draw(lastResult);renderVisitPlan(lastResult,lastContext,doc);
+        refresh.disabled=false;refresh.textContent='Check again';return;
       }
       const controller=active;
       const timeoutId=setTimeout(()=>controller.abort(),12000);
@@ -346,7 +443,7 @@
         clearTimeout(timeoutId);
       }
       if(thisGen!==generation)return;
-      render(lastResult,doc);draw(lastResult);
+      render(lastResult,doc);draw(lastResult);renderVisitPlan(lastResult,lastContext,doc);
       refresh.disabled=false;refresh.textContent='Check again';
     }
     select.addEventListener('change',()=>{
@@ -361,6 +458,9 @@
     });
     refresh.addEventListener('click',()=>{ track('freighter_watch_refresh'); load(); });
     next.addEventListener('click',e=>{ if(e.target.closest('a'))track('freighter_watch_next_action'); });
+    doc.getElementById('fwd-plan-actions')?.addEventListener('click',e=>{
+      if(e.target.closest('a'))track('freighter_watch_decision_action');
+    });
     doc.getElementById('fwd-ships').addEventListener('click',e=>{
       const b=e.target.closest('button[data-mmsi]');
       if(!b||!map||!layer)return;
@@ -378,5 +478,5 @@
     showLocalDate();
     load();
   }
-  return {CONFIG,validDate,usableVessel,safeWindow,eligibleForWhen,evaluate,mount};
+  return {CONFIG,validDate,usableVessel,safeWindow,eligibleForWhen,evaluate,renderVisitPlan,mount};
 });
