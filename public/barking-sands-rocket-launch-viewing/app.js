@@ -90,6 +90,7 @@ function showMissions(data,expired=false){
  set('mission-advice',selected?
   'Launch target does not imply a public spectator venue. Confirm any official operational and shoreline restrictions separately; neither a guest card nor a beach policy is a launch ticket.':
   'No mission in the bounded feed is NOT evidence of an open beach, inactive safety zone or canceled Navy operation.');
+ window.RocketFoundryHandoff?.loaded('hawaii',selected?.id,selected?.name);
  network(selected?.id);
  const url=new URL(location.href);if(selected?.id)url.searchParams.set('launchId',selected.id);else url.searchParams.delete('launchId');
  history.replaceState(null,'',url.pathname+url.search+url.hash);
