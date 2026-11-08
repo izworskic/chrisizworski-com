@@ -41,7 +41,7 @@ function tomorrowKey(now,zone){
 function formatClock(iso,zone){
  return new Intl.DateTimeFormat('en-US',{timeZone:zone,hour:'numeric',minute:'2-digit',timeZoneName:'short'}).format(new Date(iso));
 }
-function publishedAccess(site,targetMs,now){
+function publishedAccess(site,targetMs,now,windowEndMs=null){
  const hours=Array.isArray(site?.hoursByMonth)?site.hoursByMonth:null;
  const reviewed=Date.parse(String(site?.reviewed||'')+'T12:00:00Z');
  const recent=Number.isFinite(reviewed)&&now>=reviewed-86400000&&now-reviewed<=180*86400000;
@@ -56,7 +56,18 @@ function publishedAccess(site,targetMs,now){
  const schedule='Published general hours '+fmt(limits[0])+'–'+fmt(limits[1])+'. ';
  if(!recent)return {level:'unverified',label:'Reconfirm published hours',note:schedule+'The source review is older than six months. '+note};
  if(!within)return {level:'outside',label:'Outside published hours',note:schedule+'This selected hour falls outside the published general park schedule. '+note};
- return {level:'published',label:'Within published hours',note:schedule+'This is not a live closure check. '+note};
+ // A model window is not usable merely because its first minute is inside opening hours.
+ // Check the final minute, including the local calendar day. A different day's
+ // opening hours must never make an overnight or closing-time overlap look open.
+ if(Number.isFinite(windowEndMs)&&windowEndMs>targetMs){
+   const finish=localParts(windowEndMs-1,site.zone);
+   const sameDay=finish&&finish.year===local.year&&finish.month===local.month&&finish.day===local.day;
+   const fullWindowInside=sameDay&&finish.hour>=limits[0]&&finish.hour<limits[1];
+   if(!fullWindowInside)return {level:'partial',label:'Only part of the ship window fits published hours',
+     note:schedule+'The estimated passage window extends outside published park hours. The vessel may not pass before closing; do not assume the public park stays open for the full estimate. '+note};
+ }
+ return {level:'published',label:'Full modeled window within published hours',
+   note:schedule+'This is not a live closure check. '+note};
 }
 function chooseHour(weather,when,window,now,zone){
  if(!weather?.ok||!validAge(weather.checkedAt,now,MAX_WEATHER_AGE)||!Array.isArray(weather.periods))
@@ -127,8 +138,8 @@ function recommendation(result,context,now=Date.now()){
  const near=recentNear(result,site,now);
  const weather=chooseHour(context?.weather,when,window,now,site.zone);
  const target=window?Math.max(now,Date.parse(window.start)):weather.at?Date.parse(weather.at):when==='tomorrow'?now+24*3600000:now;
- const access=publishedAccess(site,target,now);
- const blocked=access.level==='outside';
+ const access=publishedAccess(site,target,now,window?Date.parse(window.end):null);
+ const blocked=access.level==='outside'||access.level==='partial';
  const risk=weather.level==='avoid';
  let code,title,summary,whenText,why=[];
  if(result?.status==='in-lock'&&result.inLock&&validAge(result.inLock.seen,now,8*60000)){
@@ -150,6 +161,7 @@ function recommendation(result,context,now=Date.now()){
    code='PLAN_WINDOW';
    why.push('AIS-based corridor prediction is available; ships can wait, stop, turn or use another approach.');
    if(starts-now<20*60000)why.push('The window begins soon: only consider this if you are already close enough.');
+   if(ends-starts>120*60000)why.push('This broad prediction spans more than two hours. It does not justify assuming the ship will pass at any particular moment.');
    if(Number.isFinite(ship.confidence))why.push('Source-model confidence is not a calibrated probability of seeing the ship.');
  }else if(when==='tomorrow'){
    code='PLAN_SHORE';title='Plan a shore stop, not a ship arrival';
@@ -171,9 +183,17 @@ function recommendation(result,context,now=Date.now()){
    why.push('The broad AIS map is not a schedule, and an empty or stale receiver report does not prove the waterway is empty.');
  }
  if(blocked){
-   code='HOURS_CONFLICT';title='Not at this time: published park hours conflict';
-   summary='The selected visit would fall outside this location’s posted general hours. A ship report cannot override access rules.';
-   why.push('Check the official land-manager page for possible schedule changes, closures and alternative viewpoints.');
+   code='HOURS_CONFLICT';
+   if(access.level==='partial'){
+     title='Ship window runs beyond published park hours';
+     summary='Only the early portion of this estimated passage window falls within posted park hours. The ship could arrive after the park closes, so this is not a reliable full-window visit plan.';
+     whenText+=' The modeled window extends beyond posted access hours. Do not expect the park to remain open until the predicted end.';
+     why.push('A ship might arrive after closing; check the official land-manager notice before planning any access.');
+   }else{
+     title='Not at this time: published park hours conflict';
+     summary='The selected visit would fall outside this location’s posted general hours. A ship report cannot override access rules.';
+     why.push('Check the official land-manager page for possible schedule changes, closures and alternative viewpoints.');
+   }
  }else if(risk){
    code='WEATHER_HOLD';title='Reconsider the outdoor trip: weather concern';
    summary='The NWS forecast or active severe alert raises a material outdoor exposure concern. Do not treat a ship prediction as a reason to overlook it.';
