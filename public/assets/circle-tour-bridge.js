@@ -63,7 +63,47 @@
     if(STOPS.has(focus))url.searchParams.set('ctStop',focus);else url.searchParams.delete('ctStop');
     return url.href;
   }
-  const helpers={rankConnections,roadChecks,buildReturnHref,safeDate,safeTheme,safeToolUrl,safeRoadUrl};
+
+  /**
+   * Decision progression is a pure consumer of the approved catalog.
+   * A saved preset has a defined direction; a custom trip preserves selection order.
+   * It neither predicts access nor changes any independent specialist.
+   */
+  function planNextDecision(catalog, options = {}) {
+    const selected=[...new Set((Array.isArray(options.selectedIds)?options.selectedIds:[]).map(String).filter(id=>STOPS.has(id)))];
+    const route=Array.isArray(catalog?.routeOrder)?catalog.routeOrder.map(String).filter(id=>STOPS.has(id)):IDS;
+    const published=options.itinerary && ['7','10','15'].includes(String(options.itinerary));
+    const direction=published && options.direction==='clockwise' ? 'clockwise' : published ? 'counterclockwise' : '';
+    const routeSequence=direction==='clockwise'?[route[0],...route.slice(1).reverse()]:route;
+    const ordered=direction?routeSequence.filter(id=>selected.includes(id)):selected;
+    const explicit=STOPS.has(String(options.focusStop))?String(options.focusStop):'';
+    const stopId=explicit || ordered[0] || '';
+    const index=ordered.indexOf(stopId);
+    const date=safeDate(options.date);
+    const theme=safeTheme(options.theme);
+    const noChoice={kind:'choose-stop',stopId:'',position:0,total:0,source:'route',
+      primary:null,alternatives:[],otherThemesAvailable:false,prevStopId:'',nextStopId:'',
+      inSavedTrip:false,orderedStops:[],date,theme,direction};
+    if(!stopId)return noChoice;
+    const matches=rankConnections(catalog,{focusStop:stopId,date,theme}).items
+      .slice().sort((a,b)=>Number(b.inSeason)-Number(a.inSeason)
+        ||a.stopIds.length-b.stopIds.length||a.toolId.localeCompare(b.toolId));
+    const allForStop=rankConnections(catalog,{focusStop:stopId,date,theme:'all'}).items;
+    const primary=matches[0]||null;
+    return {
+      kind:primary?'next-check':'no-specialist',
+      stopId,position:index>=0?index+1:0,total:ordered.length,
+      source:explicit?'explicit-stop':ordered.length?'selected-trip':'route',
+      inSavedTrip:index>=0,
+      orderedStops:ordered,direction,date,theme,primary,alternatives:matches.slice(1),
+      otherThemesAvailable:!matches.length&&allForStop.length>0,
+      prevStopId:index>0?ordered[index-1]:'',
+      nextStopId:index>=0&&index+1<ordered.length?ordered[index+1]:'',
+      evidence:'Registered specialist link and editorial caveat only; no live access, travel-time, ticket or road verdict'
+    };
+  }
+
+  const helpers={rankConnections,roadChecks,buildReturnHref,planNextDecision,safeDate,safeTheme,safeToolUrl,safeRoadUrl};
   if(typeof module!=='undefined'&&module.exports)module.exports=helpers;
   if(!root?.document)return;
   const document=root.document,host=document.querySelector('[data-circle-tour-bridge]');
