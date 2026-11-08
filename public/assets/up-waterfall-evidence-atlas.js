@@ -92,7 +92,7 @@ function showDetail(r){
 function score(r,q){const n=norm(r.name);if(n===q)return 0;if(n.startsWith(q))return 1;if(n.includes(q))return 2;return 3;}
 function applyFilters(){
  shown=30;const q=norm(search.value),k=kind.value,c=county.value;
- visible=records.filter(r=>(k==='all'||r.kind===k)&&(c==='all'||r.county===c)&&(!q||norm([r.name,r.river,r.place,r.addressLabel,r.identityReview?.canonicalName].filter(Boolean).join(' ')).includes(q)));
+ visible=records.filter(r=>(k==='all'||r.kind===k)&&(c==='all'||r.county===c)&&(!q||norm([r.name,r.river,r.place,r.addressLabel,r.identityReview?.canonicalName,r.identityReview?.finding].filter(Boolean).join(' ')).includes(q)));
  if(q)visible.sort((a,b)=>score(a,q)-score(b,q)||a.name.localeCompare(b.name)||a.id.localeCompare(b.id));
  resetSelection();renderList();renderPins();
 }
