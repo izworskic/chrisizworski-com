@@ -97,6 +97,14 @@ function check(value,message){if(!value)throw Error(message);}
       await page.locator('#mobileTripClose').click();
       check(!(await mobileSheet.evaluate(el=>el.classList.contains('open'))),size.name+': original trip sheet could not close');
     }
+    const railVisibility=await page.evaluate(()=>{
+      const rail=document.querySelector('#ctb-route'),current=rail?.querySelector('button[aria-pressed="true"]');
+      if(!rail||!current)return {found:false};
+      const a=rail.getBoundingClientRect(),b=current.getBoundingClientRect();
+      return {found:true,left:b.left-a.left,right:a.right-b.right};
+    });
+    check(railVisibility.found&&railVisibility.left>=-2&&railVisibility.right>=-2,
+      size.name+': focused stop chip was hidden under horizontal rail '+JSON.stringify(railVisibility));
     await page.locator('#circle-tour-tool-bridge').screenshot({path:path.join(out,size.name+'.png'),timeout:25000});
     report.screenshots.push(size.name+'.png');
     report.cases.push({viewport:size.name,initial:count,focus:items,selectedTrip:selectedResults.length,overflow:false,contextUrl:true});
