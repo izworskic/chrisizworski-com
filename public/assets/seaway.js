@@ -103,7 +103,7 @@
   function shipDetail(v){
     const div=el('div');div.append(el('h3',v.name||'AIS vessel '+v.mmsi),el('p',C.motion(v)+' · '+C.direction(v)),el('p','Reported '+time(v.seen)+' · '+age(v.seen)));
     if(v.lengthMeters)div.append(el('p','Reported length '+v.lengthMeters+' m'+(v.beamMeters?' · beam '+v.beamMeters+' m':'')));
-    div.append(el('p','A radio postcard from the ship: where it reported, and when. It does not reserve a turn at a lock. AIS destination text is not a verified itinerary.'),a('Check official lock order of turn ↗',D.officialQueue),el('br'),a('Original ship reports & source ↗','https://ais.openwaters.io/v1/vessels/'+v.mmsi));return div;
+    div.append(a('Check official lock order of turn ↗',D.officialQueue),el('br'),a('Original ship reports & source ↗','https://ais.openwaters.io/v1/vessels/'+v.mmsi));return div;
   }
   function updateReportLine(){
     const d=data(),has=C.visible(d?.vessels||[],region).length,regionResult=d?.regions?.find(r=>r.id===region);
