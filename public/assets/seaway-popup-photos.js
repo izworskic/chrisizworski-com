@@ -58,7 +58,9 @@
     const content=marker.getPopup?.()?.getContent?.();
     if(!content||content.dataset.shipMmsi!==String(ship.mmsi)||
        content.dataset.shipSeen!==String(ship.seen)||
-       content.querySelector('.seaway-popup-figure'))return false;
+       content.dataset.photoFailed==='true')return false;
+    const existing=content.querySelector('.seaway-popup-figure');
+    if(existing){if(!existing.hidden)creditOutsidePopup(doc,ship,photo);return true;}
     const figure=doc.createElement('figure');figure.className='seaway-popup-figure';
     figure.hidden=true;
     const img=doc.createElement('img');
@@ -70,12 +72,14 @@
     const parent=content.firstChild?.nextSibling||null;
     content.insertBefore(figure,parent);
     img.addEventListener('load',()=>{
-      if(!marker.isPopupOpen?.()||marker.getPopup?.()?.getContent?.()!==content)return;
+      if(marker.getPopup?.()?.getContent?.()!==content)return;
       figure.hidden=false;
-      creditOutsidePopup(doc,ship,photo);
-      marker.getPopup?.()?.update?.();
+      if(marker.isPopupOpen?.()){
+        creditOutsidePopup(doc,ship,photo);
+        marker.getPopup?.()?.update?.();
+      }
     },{once:true});
-    img.addEventListener('error',()=>{figure.remove();},{once:true});
+    img.addEventListener('error',()=>{content.dataset.photoFailed='true';figure.remove();},{once:true});
     img.src=photo.image;
     return true;
   }
