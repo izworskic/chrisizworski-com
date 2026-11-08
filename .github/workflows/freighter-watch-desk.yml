@@ -5,11 +5,19 @@ on:
     paths:
       - 'public/great-lakes-ship-watching-spots/**'
       - 'public/assets/freighter-watch-desk.*'
+      - 'public/assets/freighter-watch-decision.js'
+      - 'lib/freighter-watch-sites.js'
+      - 'api/freighter-watch-conditions.js'
       - 'tests/freighter-watch-desk*'
+      - 'tests/freighter-watch-decision.test.js'
+      - 'tests/freighter-watch-conditions.test.js'
+      - 'tests/freighter-watch-visit-foundry-replay.cjs'
       - 'scripts/prove-freighter-watch-desk.mjs'
+      - 'scripts/prove-freighter-watch-visit.mjs'
       - 'scripts/verify-freighter-watch-desk-browser.cjs'
       - 'benchmarks/tool-network-registry.json'
       - 'docs/experience-briefs/FREIGHTER_WATCH_DESK*'
+      - 'docs/experience-briefs/FREIGHTER_WATCH_VISIT_VERDICT*'
       - '.github/workflows/freighter-watch-desk.yml'
   workflow_dispatch:
 permissions:
@@ -33,9 +41,11 @@ jobs:
       - name: Install repository dependencies
         run: npm ci
       - name: Run focused truth and source regression tests
-        run: node --test tests/freighter-watch-desk.test.js
+        run: node --test tests/freighter-watch-desk.test.js tests/freighter-watch-decision.test.js tests/freighter-watch-conditions.test.js
       - name: Prove Foundry 0.3 source-captured improvement
         run: node scripts/prove-freighter-watch-desk.mjs
+      - name: Prove Foundry 0.3 visitor-recommendation improvement
+        run: node scripts/prove-freighter-watch-visit.mjs
       - name: Install isolated Chromium and cartographic test dependencies
         run: |
           npm install --prefix /tmp/fwd-playwright --no-save --ignore-scripts playwright@1.58.2 leaflet@1.9.4
@@ -51,6 +61,7 @@ jobs:
           name: freighter-watch-desk-proof
           path: |
             artifacts/freighter-watch-desk-foundry/
+            artifacts/freighter-watch-visit-foundry/
             artifacts/freighter-watch-desk-browser/
           if-no-files-found: warn
           retention-days: 14
