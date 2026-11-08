@@ -10,7 +10,7 @@ const PORT=Number(process.env.PORT)||0;
 let fakeMode='recent';
 const REFERENCE=JSON.parse(fs.readFileSync(path.join(__dirname,'../data/seaway/places.json'),'utf8'));
 function responseFor(scope){
- const now=new Date(),v={mmsi:'316123456',name:'TEST VESSEL — NOT REAL',lat:44.978,lon:-74.851,
+ const now=new Date(),v={mmsi:fakeMode==='photo'?'316009090':'316123456',name:fakeMode==='photo'?'ALGOMA EQUINOX':'TEST VESSEL — NOT REAL',lat:44.978,lon:-74.851,
   speedKnots:5.2,heading:240,course:220,shipType:70,seen:new Date(+now-120000).toISOString(),
   regionIds:['massena']};
  if(fakeMode==='unavailable')return{status:502,data:{ok:false,state:'unavailable'}};
@@ -68,6 +68,11 @@ async function run(base,browser,width){
  assert.match(await panel.locator('.follow-actions').textContent(),/Plan Seaway Visitor Center viewing/);
  assert.match(await panel.textContent(),/not a verified voyage direction/);
  assert.doesNotMatch(await panel.textContent(),/arriving at.*\d+:\d+|ship will reach/i);
+ const popupText=page.locator('#seawayMap .leaflet-popup-content').first();
+ if(await popupText.isVisible()){
+   assert.equal(await popupText.locator('a').count(),0,'individual ship bubble should have zero links');
+   assert.equal(await popupText.locator('.seaway-popup-figure').count(),0,'unverified test ship receives no fake image');
+ }
  const size=await panel.evaluate(el=>({cw:el.clientWidth,sw:el.scrollWidth,left:el.getBoundingClientRect().left,right:el.getBoundingClientRect().right}));
  assert.ok(size.sw<=size.cw+3,width+'px no horizontal panel scrolling '+JSON.stringify(size));
  assert.ok(size.left>=-12&&size.right<=width+12,width+'px panel inside viewport '+JSON.stringify(size));
@@ -85,6 +90,45 @@ async function run(base,browser,width){
  assert.ok(errors.every(msg=>!msg.includes('SeawayFollow')&&!msg.includes('followFreighter')),'follow code page errors '+errors.join('; '));
  await context.close();
 }
+
+async function verifyPhoto(base,browser,broken=false){
+ const ctx=await browser.newContext({viewport:{width:390,height:844},reducedMotion:'reduce'});
+ const page=await ctx.newPage();
+ // Deterministic 1x1 PNG fixture: tests layout and fallback, not Wikimedia availability.
+ const image=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAJUbZYQAAAAASUVORK5CYII=','base64');
+ await page.route(/commons\.wikimedia\.org\/wiki\/Special:FilePath/,route=>route.fulfill({
+   status:broken?404:200,contentType:broken?'text/plain':'image/png',body:broken?'not found':image
+ }));
+ await page.route(/googlesyndication|googletagmanager|doubleclick/,r=>r.abort());
+ await page.goto(base+'/st-lawrence-seaway/',{waitUntil:'domcontentloaded',timeout:40000});
+ const card=page.locator('#shipList .ship-card').first();
+ await card.waitFor({state:'visible',timeout:25000});
+ await card.click();
+ const popup=page.locator('#seawayMap .leaflet-popup-content').first();
+ await popup.waitFor({state:'visible',timeout:8000});
+ assert.equal(await popup.locator('a').count(),0,'photo popup has no external links');
+ assert.match(await popup.textContent(),/ALGOMA EQUINOX/);
+ if(broken){
+   await page.waitForFunction(()=>document.querySelector('#seawayMap .leaflet-popup-content')?.dataset.photoFailed==='true',{timeout:10000});
+   assert.equal(await popup.locator('.seaway-popup-figure').count(),0,'missing image never leaves an empty photograph box');
+   assert.equal(await page.locator('#mapSelection .seaway-photo-credit-outside').count(),0);
+ }else{
+   const figure=popup.locator('.seaway-popup-figure');
+   await figure.waitFor({state:'visible',timeout:10000});
+   const img=figure.locator('img');
+   assert.equal(await img.getAttribute('width'),'220');
+   assert.equal(await img.getAttribute('height'),'112');
+   assert.match(await img.getAttribute('alt'),/Algoma Equinox.*2019/);
+   const box=await img.boundingBox();
+   assert.ok(box.width<=230&&box.height<=120,'thumbnail stays bubble-sized');
+   assert.match(await figure.locator('figcaption').textContent(),/GriffBill.*CC BY-SA 4\.0/);
+   assert.equal(await page.locator('#mapSelection .seaway-photo-credit-outside a').count(),2,
+     'credit and license links are outside bubble only');
+   if(SHOTS){fs.mkdirSync(SHOTS,{recursive:true});await popup.screenshot({path:path.join(SHOTS,'seaway-ship-popup-photo-390.png')});}
+ }
+ await ctx.close();
+}
+
 (async()=>{
  await new Promise(resolve=>server.listen(PORT,'127.0.0.1',resolve));
  const base='http://127.0.0.1:'+server.address().port;
@@ -98,12 +142,15 @@ async function run(base,browser,width){
   await page.locator('#shipList .empty').waitFor({state:'visible',timeout:25000});
   assert.equal(await page.locator('#followFreighter').isVisible(),false,'empty AIS cannot fabricate a journey');
   await ctx.close();
+  fakeMode='photo';
+  await verifyPhoto(base,browser,false);
+  await verifyPhoto(base,browser,true);
   const nojs=await browser.newContext({viewport:{width:390,height:850},javaScriptEnabled:false});
   const staticPage=await nojs.newPage();await staticPage.goto(base+'/st-lawrence-seaway/',{waitUntil:'domcontentloaded'});
   assert.equal(await staticPage.locator('#journey .journey-stop').count(),5,'five static geography links survive without JS');
   assert.equal(await staticPage.locator('#viewing-plan').count(),1,'official visitor source remains available without JS');
   assert.equal(await staticPage.locator('#followFreighter').isVisible(),false);
   await nojs.close();
-  console.log('Follow the Freighter browser acceptance passed: 4 viewports, manual selected ship, corridor search, region reset, empty source and no-JS.');
+  console.log('Follow the Freighter browser acceptance passed: 4 viewports, manual selected ship, corridor search, region reset, verified-photo/fallback, empty source and no-JS.');
  }finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}
 })().catch(err=>{console.error(err);process.exitCode=1;});
