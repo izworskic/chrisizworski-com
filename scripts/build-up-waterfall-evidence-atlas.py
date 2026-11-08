@@ -28,8 +28,9 @@ INPUTS = {
     "tourism": "data/up-waterfall-uptravel-location-review-2026.json",
     "tourismIndex": "data/up-waterfall-uptravel-indexed-listings-2026.json",
     "identityReview": "data/up-waterfall-uptravel-unmatched-identity-review-2026.json",
+    "priorityAccess": "data/up-waterfall-three-priority-access-research-2026.json",
 }
-VERSION = 3
+VERSION = 4
 WARNING = (
     "This atlas contains source mentions, not verified distinct waterfalls. "
     "Natural-feature dots are NOT parking or approved trailheads. A name-only "
@@ -58,6 +59,7 @@ def make() -> dict:
     first_page = src["tourism"]["mainDirectoryFirstTwelve"]
     index = src["tourismIndex"]
     reviews = src["identityReview"]
+    priorities = src["priorityAccess"]
     tourist = [x for x in index["records"] if x["inAtlas"]]
     by_first_name = {normalized_name(x["name"]): x for x in first_page}
     assert len(by_first_name) == len(first_page) == 12
@@ -72,6 +74,35 @@ def make() -> dict:
     assert reviews["schemaVersion"] == 1
     by_review = {r["listingId"]: r for r in reviews["records"]}
     assert len(by_review) == len(reviews["records"]) == 13
+    assert priorities["schemaVersion"] == 1
+    by_priority = {r["listingId"]: r for r in priorities["records"]}
+    assert len(by_priority) == len(priorities["records"]) == 3
+    assert set(by_priority) == {4474, 5457, 3701}
+    assert set(by_priority).issubset(set(by_review))
+    for access in by_priority.values():
+        assert access["sourceRecordId"] == "tourism:" + str(access["listingId"])
+        assert access["reviewed"] == priorities["reviewed"]
+        assert access["routeCleared"] is False
+        assert access["newDestinationAuthorized"] is False
+        assert access["featurePoint"] is None
+        assert access["parkingPoint"] is None
+        assert access["routeGeometry"] is None
+        assert access["accessVerdict"] in (
+            "NO VERIFIED WATERFALL ROUTE",
+            "PARK CLOSED NOVEMBER 1–APRIL 15; NO VERIFIED FALLS ROUTE")
+        assert len(access["officialFacts"]) >= 3
+        assert len(access["nextEvidence"]) >= 2
+        assert access["references"] and any(x["authority"] == "land-manager" for x in access["references"])
+        cited_ids = [x["id"] for x in access["references"]]
+        assert len(cited_ids) == len(set(cited_ids))
+        for source in access["references"]:
+            assert source["url"].startswith("https://")
+        for fact in access["officialFacts"] + access["independentFacts"]:
+            assert fact["sourceId"] in cited_ids
+        assert len(access["establishedStart"]) > 40
+        assert len(access["waterfallViewpoint"]) > 40
+        assert len(access["falseEquivalence"]) > 40
+
     assert set(by_review).issubset({x["listingId"] for x in tourist})
     guide_ids = {g["id"] for g in guides}
     gis_ids = {g["gisObjectId"] for g in gis}
@@ -158,6 +189,7 @@ def make() -> dict:
         external_by_name[normalized_name(n["name"])].append(n)
     for t in tourist:
         review = by_review.get(t["listingId"])
+        access = by_priority.get(t["listingId"])
         if review and (review["sourceUrl"] != t["sourceUrl"] or
                        normalized_name(review["originalName"]) != normalized_name(t["name"])):
             raise ValueError("Identity review drift: " + str(t["listingId"]))
@@ -190,6 +222,7 @@ def make() -> dict:
             "note": first["note"] if first else "Indexed listing URL only. Current category membership, location and visitor access are not verified.",
             "sourceReviewed": index["reviewed"],
             "mapRole": "tourism-index-no-geographic-point-or-arrival",
+            "priorityAccess": access if access else None,
             "identityReview": ({
                 "disposition": review["disposition"], "canonicalName": review["canonicalName"],
                 "finding": review["identityFinding"], "barrier": review["accessBarrier"],
@@ -221,6 +254,7 @@ def make() -> dict:
             "tourismSample": src["tourism"]["reviewed"],
             "upTravelIndex": index["reviewed"],
             "identityReview": reviews["reviewed"],
+            "priorityAccess": priorities["reviewed"],
         },
         "claim": "Source observations, NOT distinct waterfalls or public visitor destinations.",
         "warning": WARNING,
@@ -235,6 +269,8 @@ def make() -> dict:
             "upTravelWaterfallNamedListings": index["counts"]["atlasWaterfallNamedRecords"],
             "upTravelRelatedPlaces": index["counts"]["atlasRelatedPlacesOrActivities"],
             "upTravelUnmatchedIdentityReviews": len(by_review),
+            "priorityAccessInvestigations": len(by_priority),
+            "priorityAccessClearedVisitorRoutes": sum(a["routeCleared"] for a in by_priority.values()),
             "upTravelUnrelatedKeywordPagesExcluded": index["counts"]["excludedBroadIndexHits"],
             "totalSourceRecords": expected,
             "gisExplicitlyLinkedToGuides": sum(bool(g.get("curatedId")) for g in gis),

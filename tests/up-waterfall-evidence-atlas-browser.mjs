@@ -119,6 +119,38 @@ try{
   await page.locator('#ea-reset').click();
   assert.match(await page.locator('#ea-count').innerText(),/640 source records matching/);
  });
+ await run('mobile: primary-source investigation cards open exact evidence with no new destination',async()=>{
+   await page.locator('#ea-reset').click();
+   const pinkerton=page.locator('[data-review-listing="4474"]');
+   assert.equal(await pinkerton.isDisabled(),false);
+   await pinkerton.click();
+   assert.equal(await page.locator('#ea-kind').inputValue(),'tourism');
+   assert.match(await page.locator('#ea-search').inputValue(),/Unnamed Falls Pinkerton Creek/);
+   assert.match(await page.locator('#ea-detail').innerText(),/NO VERIFIED WATERFALL ROUTE/);
+   assert.match(await page.locator('#ea-detail').innerText(),/South Boundary Road/);
+   assert.match(await page.locator('#ea-detail').innerText(),/Traders Falls/);
+   assert.equal(await page.locator('#ea-map .leaflet-interactive').count(),0);
+   await page.locator('.ea-access-sources summary').click();
+   assert.ok(await page.locator('#ea-detail a[href*="michigan.gov/recsearch"]').count()>=1,'DNR source should be linked');
+   assert.match(await page.locator('#ea-detail').innerText(),/1.4 miles/);
+   await page.screenshot({path:screenshots+'/evidence-atlas-pinkerton-access-mobile.png',fullPage:true,animations:'disabled'});
+   await page.locator('[data-review-listing="5457"]').click();
+   assert.match(await page.locator('#ea-detail').innerText(),/McCormick Wilderness/);
+   assert.match(await page.locator('#ea-detail').innerText(),/NO VERIFIED WATERFALL ROUTE/);
+   assert.match(await page.locator('#ea-detail').innerText(),/White Deer Lake Trail/);
+   assert.equal(await page.locator('#ea-map .leaflet-interactive').count(),0);
+   await page.locator('[data-review-listing="3701"]').click();
+   assert.match(await page.locator('#ea-detail').innerText(),/PARK CLOSED NOVEMBER 1/);
+   assert.match(await page.locator('#ea-detail').innerText(),/0.3-mile Malone Bay/);
+   assert.match(await page.locator('#ea-detail').innerText(),/November 1 through April 15/);
+   assert.match(await page.locator('#ea-detail').innerText(),/not a confirmed route to a waterfall viewpoint/);
+   assert.equal(await page.locator('#ea-map .leaflet-interactive').count(),0);
+   await page.locator('.ea-access-sources summary').click();
+   assert.ok(await page.locator('#ea-detail a[href*="Web_Optimized_2026-Greenstone.pdf"]').count()===1);
+   assert.ok(await page.locator('#ea-detail a[href*="/isro/planyourvisit/hours.htm"]').count()===1);
+   await page.locator('#ea-reset').click();
+   assert.match(await page.locator('#ea-count').innerText(),/640 source records matching/);
+ });
  await run('mobile: source comparison works for existing curated waterfall',async()=>{
   await page.locator('#ea-reset').click();
   await page.locator('#ea-kind').selectOption('guide');
