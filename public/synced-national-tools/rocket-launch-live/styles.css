@@ -105,11 +105,11 @@ button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid #dc7
 .rl-official-notice a{display:block;margin-top:8px;font-weight:800}
 .rl-site-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
 .rl-site-card{padding:18px;border:1px solid #d1ddd7;background:#fff;border-radius:14px;display:flex;flex-direction:column;gap:10px}
-.rl-site-card[data-state="restricted"],.rl-site-card[data-state="hours"]{background:#f6f4f1;border-color:#ddd4ca}
+.rl-site-card[data-state="closed"],.rl-site-card[data-state="restricted"],.rl-site-card[data-state="hours"]{background:#f6f4f1;border-color:#ddd4ca}
 .rl-site-kicker{color:#678073;font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:800}
 .rl-site-card h3{font-family:var(--serif);font-size:22px;line-height:1.2;margin:0}
 .rl-site-status{color:#205942;background:#eaf5eb;align-self:flex-start;font-size:11px;font-weight:800;padding:6px 9px;border-radius:7px}
-.rl-site-card[data-state="restricted"] .rl-site-status,.rl-site-card[data-state="hours"] .rl-site-status{color:#8d432c;background:#f9e8df}
+.rl-site-card[data-state="closed"] .rl-site-status,.rl-site-card[data-state="restricted"] .rl-site-status,.rl-site-card[data-state="hours"] .rl-site-status{color:#8d432c;background:#f9e8df}
 .rl-site-card[data-state="mission"] .rl-site-status{color:#755820;background:#fff2d7}
 .rl-site-card>p{font-size:13px;line-height:1.63;margin:0;color:#52645a}
 .rl-site-card .rl-best{color:#314d3d;font-weight:800}
