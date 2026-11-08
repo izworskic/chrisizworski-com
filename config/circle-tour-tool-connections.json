@@ -304,11 +304,12 @@
     "approvalRequired": "approved",
     "fields": [
       "approval",
+      "productionVerifiedAt",
       "stopIds",
       "theme",
       "decision",
       "caveat"
     ],
-    "defaultBehavior": "Discovery yields candidates only. Approval plus a valid first-party canonical and stop mapping publishes the tool at the next site build. No specialist files are modified."
+    "defaultBehavior": "The build audits geographic candidates but never publishes them. Approval, an independently reviewed production URL/date, valid first-party canonical and stop mapping qualify a tool for the next build. No specialist files are modified."
   }
 }
