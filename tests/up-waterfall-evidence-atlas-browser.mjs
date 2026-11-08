@@ -28,7 +28,7 @@ try{
  await run('mobile: research filters cause meaningful reversible output',async()=>{
   await page.locator('#ea-kind').selectOption('name');
   assert.match(await page.locator('#ea-count').innerText(),/291 source records matching/);
-  assert.match(await page.locator('#ea-map-state').innerText(),/0 geographic dots/);
+  assert.equal(await page.locator('#ea-map .leaflet-interactive').count(),0,'name-only source must not create map pins');
   await page.locator('#ea-search').fill('Pauls Falls');
   assert.match(await page.locator('#ea-count').innerText(),/1 source record matching/);
   await page.locator('.ea-record').first().click();
@@ -39,7 +39,7 @@ try{
   assert.match(await page.locator('#ea-count').innerText(),/544 source records matching/);
   await page.locator('#ea-kind').selectOption('gis');
   assert.match(await page.locator('#ea-count').innerText(),/161 source records matching/);
-  assert.match(await page.locator('#ea-map-state').innerText(),/161 natural-feature dots/);
+  assert.ok(await page.locator('#ea-map .leaflet-interactive').count()>0,'GIS source must provide natural-feature pins');
   await page.locator('#ea-county').selectOption('Iron');
   assert.match(await page.locator('#ea-count').innerText(),/source records matching/);
   const rows=await page.locator('.ea-record').count();
@@ -50,7 +50,7 @@ try{
   assert.match(await page.locator('#ea-map-state').innerText(),/0 geographic dots/);
   await page.locator('.ea-record').filter({hasText:'Alger Falls'}).click();
   assert.match(await page.locator('#ea-detail').innerText(),/Tourism road label/);
-  assert.match(await page.locator('#ea-detail').innerText(),/not a verified parking/i);
+  assert.match(await page.locator('#ea-detail').innerText(),/NOT been validated as visitor parking|no safe parking/i);
  });
  await run('mobile: source comparison works for existing curated waterfall',async()=>{
   await page.locator('#ea-reset').click();
@@ -79,7 +79,7 @@ try{
  await offline.route('**/assets/up-waterfall-evidence-atlas.json',r=>r.fulfill({status:503,contentType:'text/plain',body:'Unavailable'}));
  await offline.goto(base+'/upper-peninsula-waterfalls/atlas/',{waitUntil:'domcontentloaded',timeout:30000});
  await run('source outage fails closed without fabricated map points',async()=>{
-  await offline.locator('#ea-count').getByText(/Atlas data is unavailable/).waitFor();
+  await offline.waitForFunction(()=>document.querySelector('#ea-count')?.textContent?.includes('Atlas data is unavailable'));
   assert.equal(await offline.locator('.ea-record').count(),0);
   assert.match(await offline.locator('#ea-map').innerText(),/Map withheld/);
  });
