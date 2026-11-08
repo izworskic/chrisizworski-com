@@ -150,12 +150,43 @@
       }
     }
   }
+  function mountMapTouchControls(map, root) {
+    const wrap=$('rl-map-wrap'),toggle=$('rl-map-expand'),details=$('rl-map-details');
+    if(!wrap||!toggle)return;
+    let expanded=false;
+    const updateZoom=()=>{root.dataset.zoom=String(map.getZoom());};
+    map.on('zoomend',updateZoom);
+    updateZoom();
+    const resize=()=>requestAnimationFrame(()=>map.invalidateSize({pan:false,animate:false}));
+    function setExpanded(next){
+      if(expanded===next)return;
+      expanded=next;
+      wrap.dataset.expanded=String(expanded);
+      document.documentElement.classList.toggle('rl-map-fullscreen',expanded);
+      toggle.textContent=expanded?'Close map':'Expand map';
+      toggle.setAttribute('aria-expanded',String(expanded));
+      toggle.setAttribute('aria-label',expanded?'Close full-screen map':'Expand map for easier zooming');
+      resize();
+    }
+    toggle.disabled=false;
+    toggle.setAttribute('aria-label','Expand map for easier zooming');
+    toggle.addEventListener('click',()=>setExpanded(!expanded));
+    document.addEventListener('keydown',event=>{
+      if(expanded&&event.key==='Escape'){
+        event.preventDefault();
+        setExpanded(false);
+        toggle.focus({preventScroll:true});
+      }
+    });
+    details?.addEventListener('click',()=>setExpanded(false));
+    window.addEventListener('pagehide',()=>setExpanded(false));
+  }
   function initMap() {
     if (state.map || !window.L || !$('rl-coast-map') || !state.data?.regions?.length) return;
     const root = $('rl-coast-map');
     root.replaceChildren();
     try {
-      const map = window.L.map(root, { scrollWheelZoom: false, zoomControl: true, preferCanvas: true });
+      const map = window.L.map(root, { scrollWheelZoom: false, zoomControl: true, preferCanvas: true, touchZoom: true, dragging: true, bounceAtZoomLimits: false, tapHold: false });
       const osmCredit = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
       // Never request a keyless CARTO tile: as of 2026 those tiles return
       // an "API KEY REQUIRED" watermark even though the HTTP response is 200.
@@ -205,13 +236,15 @@
       }
       if (bounds.length) map.fitBounds(bounds, { padding: [27, 27] });
       state.map = map;
+      mountMapTouchControls(map,root);
       state.rocketPins=window.RocketMapPins?.mount(map,{
         region:'all',
         centers:window.RocketMapPins.centersOf(state.data.regions),
         onSelect:(id,region)=>{
           document.dispatchEvent(new CustomEvent('rocket-experience:map-choose',{detail:{launchId:id,region}}));
           state.userFocusedMap=true;void load(region,id);
-          $('rl-next-title')?.scrollIntoView({behavior:'smooth',block:'start'});
+          // Never steal page scroll during a map tap or pinch; the explicit
+          // 'View mission details' link below the map handles navigation.
         }
       });
       state.rocketPins?.update(state.data.regions.flatMap(r=>r.launches||[]),state.data.selectedLaunchId);
