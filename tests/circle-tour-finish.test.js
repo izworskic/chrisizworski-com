@@ -43,16 +43,21 @@ test('planner supports real trip actions without storing personal data', () => {
   assert.doesNotMatch(html + page + core + map + live, /localStorage|sessionStorage|document\.cookie/);
 });
 
-test('October 26 park-access update preserves the adaptive Circle Tour engine', () => {
-  assert.match(page, /const RELEASE = '2026-10-26'/);
+test('November season rollover preserves the adaptive Circle Tour and refuses stale access assumptions', () => {
+  assert.match(page, /const RELEASE = '2026-11-08'/);
   assert.match(page, /lake-superior-circle-tour-live-day\.js\?v=20260930-1/);
-  assert.match(page, /Agawa Canyon Tour Train runs August 1–October 18/);
+  assert.match(page, /sourceSeasonIsCurrent/);
+  assert.match(page, /Last verified schedule: August 1–October 18, 2026/);
+  assert.match(page, /New-season dates and ticket availability are not confirmed here/);
   assert.match(page, /https:\/\/agawatrain\.com\//);
   assert.match(page, /Agawa Rock Pictographs Trail and Trapper’s Trail/);
   assert.match(page, /Other off-season access is unverified/);
+  assert.match(page, /Historical 2026 notice|historical 2026 notice|historical 2026/i);
   assert.match(html, /href="\/lake-superior-provincial-park\/"/);
-  assert.match(page, /Munising Falls Trail remains closed until further notice/);
-  assert.match(page, /Sand Point Road and beach are open/);
+  assert.match(page, /Munising Falls Trail was listed closed until further notice/);
+  assert.match(page, /Current-season access is not verified here/);
+  assert.match(page, /alert\.dataset\.currentSeason = String\(is2026\)/);
+  assert.match(live, /accessNotice\?\.dataset\.currentSeason === 'true'/);
   assert.match(page, /block\.remove\(\)/);
   assert.match(page, /article\.dateModified = RELEASE/);
 });
@@ -94,7 +99,9 @@ test('clock-based day sheet handles time zones, border waits, sunset and tonight
   assert.match(live, /America\/Chicago/);
   assert.match(live, /America\/Detroit/);
   assert.match(live, /formatClock/);
-  assert.match(live, /Sault Ste\. Marie border crossing/);
+  assert.match(live, /name: 'Sault Ste\. Marie'/);
+  assert.match(live, /name: 'Pigeon River \/ Grand Portage'/);
+  assert.match(live, /borderAllowancesForSegment/);
   assert.match(live, /function sunTime/);
   assert.match(live, /Sunset at the overnight stop/);
   assert.match(live, /auroraOpportunity/);
