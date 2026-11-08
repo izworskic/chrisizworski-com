@@ -92,7 +92,7 @@ test('mission switch dispatches stable selected UUID and a map handoff without a
  const els=new Map(),listeners={};const events=[];
  function el(id){if(!els.has(id))els.set(id,{
   id,dataset:{},attrs:{},children:[],textContent:'',href:'',disabled:false,hidden:false,
-  listeners:{},setAttribute(k,v){this.attrs[k]=v;},
+  listeners:{},setAttribute(k,v){this.attrs[k]=v;},removeAttribute(k){delete this.attrs[k];},
   addEventListener(n,cb){this.listeners[n]=cb;},
   replaceChildren(...children){this.children=children;},
   appendChild(x){this.children.push(x);},
@@ -108,6 +108,8 @@ test('mission switch dispatches stable selected UUID and a map handoff without a
  mounted.render(data());
  assert.equal(el('rl-flight-mission').textContent,florida[0].name);
  assert.equal(el('rl-flight-desk').dataset.launchId,ids[0]);
+ assert.equal(el('rl-flight-desk').dataset.nextGate,'access');
+ assert.match(el('rl-flight-next-title').textContent,/Verify the launch-day viewing arrangements/);
  assert.equal(el('rl-flight-mission-select').disabled,false);
  assert.equal(el('rl-flight-locate').disabled,false);
  el('rl-flight-mission-select').value=ids[1];
@@ -117,12 +119,16 @@ test('mission switch dispatches stable selected UUID and a map handoff without a
  mounted.render(data('florida',florida[1]));
  assert.equal(el('rl-flight-mission').textContent,florida[1].name);
  assert.equal(el('rl-flight-desk').dataset.launchId,ids[1]);
+ assert.equal(el('rl-flight-desk').dataset.nextGate,'schedule');
+ assert.match(el('rl-flight-next-title').textContent,/Confirm an exact launch hour/);
  el('rl-flight-locate').listeners.click();
  assert.equal(events.at(-1).type,'rocket-experience:locate');
  assert.deepEqual(events.at(-1).detail,{launchId:ids[1],region:'florida'});
  mounted.render(data());
  assert.equal(el('rl-flight-desk').dataset.launchId,ids[0]);
  mounted.render(null);
+ assert.match(el('rl-flight-next-title').textContent,/schedule cannot establish/);
+ assert.equal(el('rl-flight-next-link').attrs.href,'https://www.nasa.gov/event-type/launch-schedule/');
  assert.equal(el('rl-flight-locate').disabled,true);
  assert.equal(el('rl-flight-mission-select').disabled,true);
 });
