@@ -166,6 +166,18 @@ test('stale, stopped, noncommercial and older vessel reports cannot trigger a ne
   assert.equal(engine.recommendation(r,context('port'),now).code,'NO_CLOSE_REPORT');
  }
 });
+test('no AIS passage model never produces a fictional full modeled access window',()=>{
+ const site=publicSite('soo');
+ const access=engine.publishedAccess(site,now,now);
+ assert.equal(access.level,'published');
+ assert.match(access.label,/Selected viewing hour/);
+ assert.doesNotMatch(access.label,/modeled window/i);
+ const r=report({status:'unknown',pick:null,observations:[],when:'now'});
+ const plan=engine.recommendation(r,context('soo'),now);
+ assert.equal(plan.code,'NO_CLOSE_REPORT');
+ assert.match(plan.access.label,/Selected viewing hour/);
+ assert.doesNotMatch(plan.access.label,/modeled window/i);
+});
 test('on-shore empty signal tells visitors to keep watching rather than leave',()=>{
  const r=report({status:'unknown',pick:null,observations:[],when:'now'});
  const plan=engine.recommendation(r,context('soo'),now);
