@@ -8,17 +8,17 @@
 
 **The leading waterfall destinations are covered, but the visitor inventory is not complete.** There are clear, popular names that have been intentionally omitted from the published visiting map because a lawful, safe public parking-to-viewpoint route cannot be substantiated. That is not equivalent to the waterfalls being nonexistent or permanently closed.
 
-The reviewed **13 principal regional tourism/editorial source sets** contain **151 name mentions, representing 98 normalized name strings**. This is a source-name comparison, not 98 independently verified geographic waterfalls. The source mentions resolve as follows:
+The reviewed **14 principal regional tourism/editorial source sets** contain **162 name mentions, representing 102 normalized name strings**. This is a source-name comparison, not 98 independently verified geographic waterfalls. The source mentions resolve as follows:
 
 | Disposition | Source-name mentions |
 |---|---:|
-| Existing curated visitor guide | 108 |
+| Existing curated visitor guide | 117 |
 | Existing closure guide (not an open destination) | 4 |
-| Researched waterfall without cleared public route | 32 |
+| Researched waterfall without cleared public route | 34 |
 | Smaller companion feature documented under primary trip | 1 |
 | Dam, rapids or trail without independent natural waterfall | 5 |
 | Unidentified name requiring geographic proof | 1 |
-| **Total mentions** | **151** |
+| **Total mentions** | **162** |
 
 **Limits:** Editorial lists are often selective and published at different dates. This audit does **not** enumerate every item in every live tourism directory or independently validate all 300-plus U.P. waterfalls claimed in some marketing materials. Tour-bureau advice does not supersede an agency closure or create private-land parking/hiking rights. The separate Michigan GIS scientific catalog includes 161 candidates, with 69 exact source-linked records and 92 that still require individual review.
 
@@ -41,6 +41,7 @@ The “present/closure” column counts name mentions mapped to an existing publ
 | [Visit Keweenaw two-day waterfall driving tour](https://www.visitkeweenaw.com/blog/post/2-day-keweenaw-waterfall-driving-tour/) | 13 | 9 | 2 | 2 | 0 |
 | [Visit Keweenaw waterfall and gorge excursion stories](https://www.visitkeweenaw.com/outdoors/waterfalls/) | 8 | 6 | 2 | 0 | 0 |
 | [Western U.P. CVB published waterfall guide](https://explorewesternup.com/things-to-do/waterfalls/) | 47 | 28 | 17 | 1 | 1 |
+| [UP Travel Western U.P. featured waterfalls, February 2024](https://www.uptravel.com/blog/post/best-waterfalls-western-upper-peninsula/) | 11 | 9 | 2 | 0 | 0 |
 
 ## Three priority public-access decisions
 
@@ -94,3 +95,21 @@ Also retain research-only for [these 31 distinct regional source spellings] in t
 Keep the primary waterfall map for safely source-supported **visits and documented closure information**, not raw GIS or tourism dots. Research-only candidates may remain in the opt-in geographic layer, with nonindex page and no car-navigation/parking destination. Publish a new guide only when feature identity, land authority, legal arrival, complete pedestrian corridor and current applicable restrictions pass the source gate. Avoid inventing live opening, waterfall flow, access permissions or detailed trail geometries.
 
 The audit crosswalk is **not a direct publication feed** and should be deliberately refreshed with source dates. This PR does **not** modify ads, unrelated tool pages, GPS parking pins, sitemap URLs or existing curated route data. Full repository QA, waterfall map/mobile browser checks and actual production deployment must be confirmed separately before merge.
+
+## Additional full-directory investigation: UP Travel's 300+ claim versus its listings
+
+The [UP Travel main waterfall page](https://www.uptravel.com/outdoors-recreation/waterfalls/) says the U.P. has 300+ waterfalls. That is a **regionwide tourism estimate**, not a source-verifiable public access count or a usable 300-row data file. The site's waterfall directory presents regional filters of **Eastern 1, Central 39, Western 64** when indexed, totalling **104 directory listing entries** in that observed search view, including an entry for the Black River National Scenic Byway rather than one distinct waterfall. Directory counts are subject to updates, different category filters and pagination; **104 is not a count of 104 natural falls** and none of those counts establish access rights.
+
+The publicly indexed first twelve directory cards have source-published name, street-or-road orientation string and town. We preserved that sample, with source roles and precise no-navigation warnings, in `data/up-waterfall-uptravel-location-review-2026.json`. The visible first-twelve entries include **Abinodji, Agate, Ajibikoka, Alder, Alger, Au Train, Bathtub, Big Eric's, Big Pup Creek, Black River near Ishpeming, Black River National Scenic Byway, Bond**. The directory's highway labels for **Alger Falls** and **Au Train Falls** still cannot pass our independently established legal and safe parking gates. A 'County Road 581' or 'M-64 and South Boundary Road' business listing is a regional descriptor, not a surveyed falls coordinate or legal visitor arrival.
+
+### Paul's Falls / Löytilä Falls — previously missed high-signal identity
+
+The [UP Travel Western U.P. destination feature](https://www.uptravel.com/blog/post/best-waterfalls-western-upper-peninsula/) has **11 named destinations** including **Paul's Falls** on the **Sante River**, described in a Copper Harbor-oriented article as a rugged **six-mile round trip**. The independent [Waterfalls of the Keweenaw Löytilä Falls field report](https://www.waterfallsofthekeweenaw.com/sante-river/loytila-falls/) explicitly confirms the author formerly called this same Sante River drop 'Paul's Falls', explains the locally remembered Finnish name, and places its **natural feature** in **Houghton County near Toivola**, at **46.96483,-88.69343**. **The identity is supported; a present-day approved visitor approach is not.** 'Copper Harbor' and 'Toivola' should not create two destination records, and a natural feature coordinate should never become an auto-navigable parking pin.
+
+The specialist's multi-fork logging-road directions are historic unsurveyed advice and describe difficult terrain, not land-manager access approval. Land parcels, motor roads and exact continuous walking permission have not been cleared. New `/upper-peninsula-waterfalls/research/pauls-loytila-falls/` is intentionally noindex. Preserve it as a source-checked geography/alias investigation, **not** a new curated guide, map stop or nearby-routing suggestion.
+
+### Next geographic coverage strategy
+
+Use three deliberately separated datasets: **(1)** 80 curated destinations with authority-verified visitor route decisions, **(2)** 161 state GIS named geographic candidate features whose access is separately assessed, **(3)** 291 independently indexed external names / county / river facts, plus UP Travel regional directory names with road/town orientation fields when actually obtained. Match on **name aliases + county + stream + independently checked geography**, never automatically on a tourism street string. Many entries in datasets overlap, represent separate tiers, or aren't natural waterfall sites; their raw totals must never be added together.
+
+**Acquisition limitation:** This audit could verify the main site's regional filter counts and the twelve publicly indexed first-page cards, but could not extract a complete canonical, paginated directory export from the dynamically served listings in this session. No claim that every directory item or every waterfall has been reconciled or that 104 legal map pins have been obtained. Follow up with a supported paginated source or public index before claiming a comprehensive source-by-source all-location comparison.

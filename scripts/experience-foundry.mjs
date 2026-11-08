@@ -7,15 +7,21 @@ import {inspectNetwork,starter,compile,validateSpec,RECIPES} from '../experience
 import {validIso} from '../experience-foundry/lib/safety.mjs';
 import {planExperience} from '../experience-foundry/lib/planning.mjs';
 import {restrictedOutput,writePacket} from '../experience-foundry/lib/output.mjs';
+import {startImprovement,assessRun,proveImprovement,reviewProof,verifyBaseline} from '../experience-foundry/lib/improvement.mjs';
 const root=fileURLToPath(new URL('../',import.meta.url));
 const [command='help',...args]=process.argv.slice(2);
 const flags={};
-const allowed={discover:['query'],init:['recipe','slug','place','title','question','out'],plan:['slug','question','owner','recipe','out'],validate:['spec','as-of'],build:['spec','as-of','out'],recipes:[],help:[]};
+const allowed={discover:['query'],init:['recipe','slug','place','title','question','out'],plan:['slug','question','owner','recipe','out'],improve:['slug','question','owner','files','add-files','baseline','out'],assess:['run','proof'],prove:['run','out'],validate:['spec','as-of'],build:['spec','as-of','out'],recipes:[],help:[]};
 function required(name){if(!flags[name])throw Error('Missing --'+name);return flags[name];}
 async function registry(){return JSON.parse(await fs.readFile(path.join(root,'benchmarks/tool-network-registry.json'),'utf8'));}
 async function run(){
   if(args.includes('--help')||command==='help'){
-    console.log(`Experience Foundry 0.2 — offline development workbench
+    console.log(`Experience Foundry 0.3 — tool improvement cycle and preview workbench
+  improve --slug NAME --owner REGISTRY_ID --question "visitor decision"
+          --files PATH,PATH [--add-files NEW_PATH] [--baseline REF] [--out DRAFT_DIR]
+                                    capture source and start an improvement assignment
+  assess --run FILE [--proof FILE]  identify next unresolved action; reject stale proof
+  prove --run FILE [--out DIR]      replay the same visitor cases before and after
   recipes                           list supported preview interactions
   discover --query "visitor need"  inspect possible existing intent owners
   plan --slug NAME --question "visitor decision" [--owner REGISTRY_ID] [--recipe NAME]
@@ -44,6 +50,37 @@ async function run(){
   }
   if(command==='discover'){
     console.log(JSON.stringify(inspectNetwork(required('query'),await registry()),null,2));return;
+  }
+  if(command==='improve'){
+    const slug=required('slug');
+    const {files}=startImprovement({root,slug,question:required('question'),owner:required('owner'),
+      files:required('files').split(',').map(s=>s.trim()),newFiles:flags['add-files']?.split(',').map(s=>s.trim()),baseline:flags.baseline},await registry());
+    const out=await restrictedOutput(root,flags.out||'experience-foundry/drafts/'+slug,'experience-foundry/drafts');
+    await writePacket(out,files);
+    console.log('Captured improvement baseline in '+path.relative(root,out)+'. Follow IMPLEMENT.md through implementation and before/after proof; a packet alone is not completion.');return;
+  }
+  if(command==='assess'||command==='prove'){
+    const runPath=path.resolve(process.cwd(),required('run'));
+    const run=JSON.parse(await fs.readFile(runPath,'utf8'));
+    const snapshot=JSON.parse(await fs.readFile(path.join(path.dirname(runPath),'baseline.json'),'utf8'));
+    verifyBaseline(root,snapshot);
+    const network=await registry();
+    if(command==='assess'){
+      const report=flags.proof ? await reviewProof({root,run,snapshot,registry:network,
+        proof:JSON.parse(await fs.readFile(path.resolve(process.cwd(),flags.proof),'utf8'))}) : assessRun(run,snapshot,network);
+      console.log(JSON.stringify(report,null,2));
+      if(!report.readyToImplement||(flags.proof&&!report.demonstrated)) process.exitCode=1;
+      return;
+    }
+    // Validate output before executing reviewed local code. Never overwrite proof.
+    const out=await restrictedOutput(root,flags.out||'build/experience-foundry/'+run.slug+'-proof','build/experience-foundry');
+    try{await fs.lstat(out);throw Error('Output already exists; select a new --out.');}catch(e){if(e.code!=='ENOENT')throw e;}
+    const result=await proveImprovement({root,run,snapshot,registry:network});
+    await writePacket(out,result.files);
+    console.log(JSON.stringify({status:result.proof.status,proof:path.relative(root,path.join(out,'proof.json')),
+      nextAction:result.proof.nextAction},null,2));
+    if(!result.proof.demonstrated)process.exitCode=1;
+    return;
   }
   if(command==='plan'){
     const slug=required('slug');

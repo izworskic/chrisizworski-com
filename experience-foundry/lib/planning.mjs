@@ -13,7 +13,7 @@ export function planExperience({slug, question, owner, recipe}, registry) {
     destination: registry.tools.find(t => t.id === (e.from === owner ? e.to : e.from))?.canonical || null
   })) : [];
   const plan = {
-    schemaVersion: 1, foundryVersion: '0.2.0', status: 'RESEARCH_REQUIRED', slug, question,
+    schemaVersion: 1, foundryVersion: '0.3.0', status: 'RESEARCH_REQUIRED', slug, question,
     intentOwner: selected ? {id:selected.id,canonical:selected.canonical,primaryIntent:selected.primaryIntent} : null,
     owningRepository: null, recipe: recipe || 'custom', discovery, handoffs,
     sourceContractVersion: 2,

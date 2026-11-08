@@ -1,4 +1,4 @@
-# Experience Foundry 0.2 — from visitor question to tested implementation handoff
+# Experience Foundry 0.3 — diagnose, build and demonstrate tool improvements
 
 **Owner:** `izworskic/chrisizworski-com`  
 **Status:** Development infrastructure. No public route, new canonical, ad modification, direct external fetch, content publication, or cross-repository mutation.  
@@ -10,7 +10,34 @@ Create *different* user experiences around real visitor decisions while reusing 
 
 This is an **executable starting platform**, not yet a general-purpose natural-language AI website builder. New interaction families need a purpose-written recipe, credible source adapters and actual browser review. Never claim keyword volume, legal access, live conditions, model skill, media rights, or production deployment merely because a preview compiles.
 
-## Start with the visitor decision
+## Improve an existing tool (the default workflow)
+
+Foundry is an agent-operated improvement system. The agent investigates the visitor problem, compares credible alternatives and implements the chosen experience. The CLI captures the actual baseline, checks the assignment for missing decisions, executes the same behavioral adapter before and after, and reports gains, regressions and stale proof. It does not pretend to autonomously research or judge creativity.
+
+```bash
+node scripts/experience-foundry.mjs improve --slug rocket-improvement \
+  --owner rocket-launch-usa \
+  --question "Can a visitor continue planning the launch they selected?" \
+  --files public/assets/rocket-flight-desk.js
+# Follow IMPLEMENT.md through diagnosis, design AND implementation.
+node scripts/experience-foundry.mjs assess \
+  --run experience-foundry/drafts/rocket-improvement/run.json
+# After completing the assignment and implementing a reviewed replay adapter:
+node scripts/experience-foundry.mjs prove \
+  --run experience-foundry/drafts/rocket-improvement/run.json \
+  --out build/experience-foundry/rocket-improvement-proof-1
+node scripts/experience-foundry.mjs assess \
+  --run experience-foundry/drafts/rocket-improvement/run.json \
+  --proof build/experience-foundry/rocket-improvement-proof-1/proof.json
+```
+
+An incomplete assessment or undemonstrated change exits nonzero with the next unresolved action. The system requires an evidence-backed diagnosis, three investigated opportunities, two viable concepts for the selected opportunity, explicit visitor outcomes and a distinguishable completion signal. It does not assign invented benefit scores. A plan, filled form, extra source link or green existing tests alone cannot establish a new visitor capability.
+
+`prove` runs a **reviewed local Node adapter with local process privileges**, once against the committed baseline and once against the current captured scope. It never reads shell commands from the manifest. Outputs retain exact source snapshots, the adapter, actual observations and SHA-256 hashes. Every candidate scenario must pass, a declared improvement must change from unmet to met, and preservation cases must pass in both versions. Source, adapter or assignment drift invalidates an earlier proof. A failed harness is an error, not a convenient failing baseline.
+
+[Improvement cycle contract and schema](docs/IMPROVEMENT_CYCLE.md) explains new files, dependencies, honest proof scope and release boundaries. The [Rocket diagnostic example](examples/rocket-improvement.mjs) reproduces the selected-mission handoff defect at PR #1565 without modifying Rocket. It deliberately cannot claim completion while that outcome remains unmet. [The 0.3 review](docs/REVIEW_2026_11_08.md) records what this system does and does not establish.
+
+## Plan a new research packet
 
 ```bash
 node scripts/experience-foundry.mjs plan --slug seaway-next-passage \
@@ -94,7 +121,7 @@ Every preview records its two closest comparators and at least two visitor-servi
 
 The owner selected [Rocket Launch Live](pilots/rocket-launch-live.md) to run through the actual Foundry development pipeline. The national rocket page and six regional viewing owners previously existed but were missing from the central Tool Network Registry. The reviewed network correction permits the genuine `discover` and `plan --owner rocket-launch-usa` commands to resolve one canonical intent owner with six specialist lawful-access handoffs.
 
-The dedicated `rocket-foundry-pilot.yml` workflow runs both commands, checks the five-file research packet and safe custom recipe, executes the owning launch decision tests, benchmarks the tool network and uploads the isolated packet as an artifact. The custom product pilot extends the existing mission-selected Flight Desk with one source-qualified next verification. **The CLI did not generate or publish the production rocket UI**; authored code, owning-repository CI and production proof govern that release. There is no third generic preview renderer, no new public URL or live-status claim. The maritime passage pilot remains a separate future investment.
+The dedicated `rocket-foundry-pilot.yml` workflow runs both commands, checks the five-file research packet and safe custom recipe, executes the owning launch decision tests, benchmarks the tool network and uploads the isolated packet as an artifact. The custom product pilot extends the existing mission-selected Flight Desk with one source-qualified next verification. **The CLI did not generate or publish the production rocket UI**; authored code, owning-repository CI and production proof govern that release. There is no third generic preview renderer, no new public URL or live-status claim. The Seaway Follow the Freighter pilot is tracked separately in PR #1564.
 
 ## Reproducible acceptance and safe output
 
@@ -124,8 +151,8 @@ All new plan packets now require:
 
 These are **shared quality questions**, not a mandatory Pad/Shore/Sky interface. Mission-specific priorities, source rules and visuals remain in Rocket Launch Live; future tools should invent their own decision and composition.
 
-## Completion boundary and next product
+## Completion boundaries
 
-Version 0.2 completes the bounded development workbench: discovery, custom planning packets, schema-v2 initialization, validation, deterministic preview builds, source-context displays and automated browser acceptance. It does **not** dynamically invent a design from any arbitrary question, gather primary observations, run agentic research, render third-party maps, publish, or measure traffic.
+Version 0.2 established the bounded preview workbench: discovery, custom planning packets, schema-v2 initialization, validation, deterministic preview builds, source-context displays and automated browser acceptance. It does **not** dynamically invent a design from any arbitrary question, gather primary observations, run agentic research, render third-party maps, publish, or measure traffic.
 
-The First Freeze pilot has merged in its owning repo (see the dated pilot record). Rocket Launch Live is now the second owner-selected Foundry pilot, using custom product code and actual Foundry planning rather than pretending the existing preview recipes created a national launch viewer. A **real-data maritime passage experience** remains a distinct prospective pilot in its owning repository, after auditing the live Seaway build. Do not create a parallel AIS engine or a new URL to demonstrate Foundry. The [audit and completion record](docs/REVIEW_2026_11_07.md) separates implementation, test and release evidence.
+The First Freeze pilot has merged in its owning repo (see the dated pilot record). Rocket Launch Live is now the second owner-selected Foundry pilot, using custom product code and actual Foundry planning rather than pretending the existing preview recipes created a national launch viewer. The Seaway Follow the Freighter pilot subsequently merged in PR #1564; inspect its actual implementation before proposing additional maritime work. Do not create a parallel AIS engine or a new URL to demonstrate Foundry. The [audit and completion record](docs/REVIEW_2026_11_07.md) separates implementation, test and release evidence.
