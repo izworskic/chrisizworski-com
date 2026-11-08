@@ -131,7 +131,15 @@ function recommendation(result,context,now=Date.now()){
  const blocked=access.level==='outside';
  const risk=weather.level==='avoid';
  let code,title,summary,whenText,why=[];
- if(window&&ship){
+ if(result?.status==='in-lock'&&result.inLock&&validAge(result.inLock.seen,now,8*60000)){
+   code='LOCAL_IN_LOCK';
+   title=(result.inLock.name||'A commercial vessel')+' is reported in the locks now';
+   summary='The Soo Locks engine identified this vessel inside '+(result.inLock.chamberName||'a lock chamber')+
+     '. If you are already at the observation platform, it may be worth looking. A vessel can leave before you arrive.';
+   whenText='Right now, not a future arrival. Last AIS report '+formatClock(result.inLock.seen,site.zone)+
+     '. Do not start a long drive for an in-chamber ship.';
+   why.push('The in-lock state comes from the specialist chamber engine, not a guessed itinerary.');
+ }else if(window&&ship){
    const starts=Date.parse(window.start),ends=Date.parse(window.end);
    const arrive=new Date(Math.max(now,starts-20*60000)).toISOString();
    whenText= 'Modeled passage '+formatClock(window.start,site.zone)+'–'+formatClock(window.end,site.zone)+
@@ -186,7 +194,7 @@ function recommendation(result,context,now=Date.now()){
    ['HOURS_CONFLICT','WEATHER_HOLD'].includes(code)?'hold':
    ['NO_SHIP_TRIP','PLAN_SHORE'].includes(code)?'no-schedule':'conditional',
    title,summary,where:site.name+' · '+site.address,when:whenText,why,
-   weather,access,ship:ship||near?.v||null,site,nearNm:near?.distance??null,
+   weather,access,ship:ship||result?.inLock||near?.v||null,site,nearNm:near?.distance??null,
    disclaimer:'This recommends an observation plan, never guarantees a ship sighting, navigational safety, or live public access.'};
 }
 return {recommendation,chooseHour,publishedAccess,recentNear,distanceNm,formatClock,validAge,dayKey};
