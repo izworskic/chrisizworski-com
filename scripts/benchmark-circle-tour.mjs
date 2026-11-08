@@ -29,6 +29,8 @@ section('Search framing', 10, [
 section('Map and planner', 15, [
   [(html.match(/class="stop-card"/g) || []).length === 31, '31 stop cards'],
   [has(html, 'id="circleTourMap"'), 'interactive map'],
+  [has(html, 'id="stop-5" data-seg="mi"') && has(html, '<td class="stop-n">Ironwood & Black River Corridor</td><td class="region region-mi">MI</td>'), 'Ironwood is Michigan in stop and summary'],
+  [html.indexOf('id="stop-5"') > html.indexOf('id="seg-mi"') && html.indexOf('id="stop-5"') < html.indexOf('id="stop-6"'), 'Ironwood rendered within Michigan section'],
   [has(html, 'data-preset="7"') && has(html, 'data-preset="10"') && has(html, 'data-preset="15"'), 'three complete presets'],
   [has(html, 'data-direction="counterclockwise"') && has(html, 'data-direction="clockwise"'), 'both directions'],
   [has(map, 'MAPLIBRE_VERSION = "6.3.0"') && has(map, 'tiles.openfreemap.org/styles/liberty'), 'pinned map stack'],
@@ -40,6 +42,10 @@ section('Continuous route integrity', 10, [
   [has(html, 'approximately 1,358 route miles'), 'route mileage is explicit'],
   [has(html, 'id="itin-7"') && has(html, 'id="itin-10"') && has(html, 'id="itin-15"'), 'written itineraries'],
   [has(core, 'google.com/maps/dir'), 'daily Google directions'],
+  [has(core, 'Do not carry counterclockwise day prose') && has(core, 'original counterclockwise guide'), 'clockwise preview avoids mismatched narratives'],
+  [has(live, "return match ? Number(match[1].replace(/,/g, '')) : null") && has(live, 'Route mileage not verified for this leg'), 'missing segment distance fails closed rather than inventing 45 miles'],
+  [has(live, "String(id) === '5'") && has(live, 'America/Chicago'), 'Ironwood keeps Central Time while categorized Michigan'],
+  [has(html, 'Choose one longer park visit') && has(html, 'transit day'), 'North Shore days distinguish waypoints from visits'],
   [has(live, "id === '1' || id === '30'"), 'duplicate Duluth seam has zero fake mileage'],
 ]);
 
@@ -52,14 +58,15 @@ section('Adaptive route intelligence', 25, [
   [has(live, '/api/border-crossings') && has(live, 'borderMinutes'), 'official Sault wait enters time budget'],
   [has(live, 'view=circle-tour-smoke') && has(smokeAdapter, 'national-smoke-window'), 'national smoke engine reused'],
   [has(live, 'liveDelta') && has(live, 'used + item.hours <= stopBudget'), 'live score changes are bounded by honest time'],
-  [has(live, 'data-current-alert="pictured-rocks"') && has(live, 'data-current-alert="lspp"'), 'both access constraints are causal'],
+  [has(live, 'data-current-alert="pictured-rocks"') && has(live, 'data-current-alert="lspp"') && has(live, "accessNotice?.dataset.currentSeason === 'true'"), 'dated access notices affect scoring only during checked season'],
+  [has(live, "pairCrossing(segment, '20', '21')") && has(live, 'borderAllowancesForSegment'), 'both Sault and Pigeon River crossings have explicit planning allowances'],
 ]);
 
 section('Clock-based day sheet', 15, [
   [has(live, 'ctTodayStartTime') && has(live, 'Today’s day sheet'), 'departure-time day sheet'],
   [has(live, 'America/Chicago') && has(live, 'America/Detroit'), 'CT/ET handled'],
   [has(live, 'function buildDaySheet') && has(live, 'formatClock'), 'ordered clock schedule'],
-  [has(live, 'Sault Ste. Marie border crossing'), 'border block rendered'],
+  [has(live, "name: 'Sault Ste. Marie'") && has(live, 'border.name') && has(live, 'border crossing'), 'border blocks rendered for supported crossings'],
   [has(live, 'function sunTime') && has(live, 'Sunset at the overnight stop'), 'sunset context'],
   [has(live, 'if (start === end)') && has(live, 'stayDay:true'), 'same-stop local day'],
   [has(live, 'page.setTrip(p.ids'), 'today route replaces trip in route order'],
@@ -72,14 +79,15 @@ section('Mobile, live data and resilience', 10, [
   [has(html, 'id="liveData"') && has(page, 'station=9099064') && has(page, 'datum=LWD'), 'NOAA Duluth water level'],
   [!/(localStorage|sessionStorage|document\.cookie)/.test(html + page + core + map + live), 'no personal browser storage'],
   [has(live, 'attempts <= 30') && has(live, 'CircleTourMap?.focusStop'), 'lazy-map focus retry'],
-  [has(live, 'The planner does not invent') && has(live, 'no air-quality penalty is being assumed'), 'fail-soft live evidence'],
+  [has(live, 'NOT an observed border delay') && has(live, 'no air-quality penalty is being assumed'), 'unavailable evidence is not misrepresented as observed'],
 ]);
 
 section('Current 2026 trip facts', 5, [
-  [has(page, "const RELEASE = '2026-10-26'"), 'release stamp'],
-  [has(page, 'Agawa Canyon Tour Train runs August 1–October 18'), 'current Agawa season'],
+  [has(page, "const RELEASE = '2026-11-08'"), 'release stamp'],
+  [has(page, 'Last verified schedule: August 1–October 18, 2026') && has(page, 'sourceSeasonIsCurrent'), 'Agawa 2026 reference expires outside verified season'],
   [has(page, 'Agawa Rock Pictographs Trail and Trapper’s Trail') && has(html, '/lake-superior-provincial-park/'), '2026 LSPP closure and park-explorer handoff'],
-  [has(page, 'Munising Falls Trail remains closed until further notice'), 'current Pictured Rocks closure'],
+  [has(page, 'Current-season access is not verified') && has(page, 'historical'), 'closed-season notices cannot silently roll into 2027'],
+  [has(page, 'Munising Falls Trail was listed closed until further notice') && has(page, 'alert.dataset.currentSeason'), 'Pictured Rocks 2026 notice explicitly dated'],
 ]);
 
 const tool = registry.tools.find((item) => item.id === 'circle-tour');

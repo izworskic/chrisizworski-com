@@ -45,7 +45,8 @@
     const raw = STOP_COORDS[String(id)];
     return raw ? {lon: raw[0], lat: raw[1]} : null;
   };
-  const zoneFor = (id) => CT_ZONES.has(region(id)) ? 'America/Chicago' : 'America/Detroit';
+  // Ironwood remains Central Time even though its state (and region filter) is Michigan.
+  const zoneFor = (id) => String(id) === '5' || CT_ZONES.has(region(id)) ? 'America/Chicago' : 'America/Detroit';
 
   function track(action, data = {}) {
     page.track?.(`today-${action}`, data);
@@ -157,11 +158,23 @@
     if ((ccwB + 1) % ROUTE_ORDER.length === ccwA) mileageCard = card(from);
     const text = mileageCard?.querySelector('.stop-dist')?.textContent || '';
     const match = text.match(/([\d,.]+)\s*mi/i);
-    return match ? Number(match[1].replace(/,/g, '')) : 45;
+    return match ? Number(match[1].replace(/,/g, '')) : null; // Never invent a 45-mile leg when the source has none.
   }
 
   function totalMiles(ids) {
-    return ids.slice(1).reduce((sum, id, index) => sum + edgeMiles(ids[index], id), 0);
+    let total = 0;
+    for (let i = 1; i < ids.length; i += 1) {
+      const miles = edgeMiles(ids[i - 1], ids[i]);
+      if (!Number.isFinite(miles)) return null;
+      total += miles;
+    }
+    return total;
+  }
+
+  // A conservative planning allowance, not a live routed ETA. Traffic, detours,
+  // closures, stops and road conditions must be checked with a navigation provider.
+  function driveAllowanceHours(miles) {
+    return miles / 47 * 1.2;
   }
 
   function visitHours(id) {
@@ -241,14 +254,17 @@
       reasons.push(ship.short || 'Live ship opportunity');
     }
 
-    const access = id === '11'
-      ? document.querySelector('#stop-11 [data-current-alert="pictured-rocks"]')?.textContent.trim()
+    const accessNotice = id === '11'
+      ? document.querySelector('#stop-11 [data-current-alert="pictured-rocks"]')
       : id === '15'
-        ? document.querySelector('#stop-15 [data-current-alert="lspp"]')?.textContent.trim()
-        : '';
+        ? document.querySelector('#stop-15 [data-current-alert="lspp"]')
+        : null;
+    const access = accessNotice?.dataset.currentSeason === 'true'
+      ? accessNotice.textContent.trim()
+      : '';
     if (access && /closed/i.test(access)) {
       delta -= 1;
-      reasons.push('Current access constraint reduces flexibility at this stop');
+      reasons.push('Dated 2026 access notice reduces flexibility; verify the official source');
     }
 
     const buoy = nearestFreshSuperiorBuoy(id);
@@ -339,8 +355,24 @@
     };
   }
 
+  function borderAllowancesForSegment(segment) {
+    const crossings = [];
+    const sault = saultBorderForSegment(segment);
+    if (sault) crossings.push({
+      ...sault, name: 'Sault Ste. Marie', allowanceMinutes: sault.available ? sault.waitMinutes : 45
+    });
+    if (pairCrossing(segment, '20', '21') >= 0 || pairCrossing(segment, '21', '20') >= 0) {
+      crossings.push({
+        name: 'Pigeon River / Grand Portage', available: false,
+        directionLabel: pairCrossing(segment, '20', '21') >= 0 ? 'U.S.-bound' : 'Canada-bound',
+        waitMinutes: null, allowanceMinutes: 45
+      });
+    }
+    return crossings;
+  }
+
   function borderMinutesForSegment(segment) {
-    return saultBorderForSegment(segment)?.waitMinutes || 0;
+    return borderAllowancesForSegment(segment).reduce((total, crossing) => total + crossing.allowanceMinutes, 0);
   }
 
   function buildTodayPlan({measure = true, requestSmoke = true} = {}) {
@@ -350,16 +382,26 @@
     const startTime = $('ctTodayStartTime').value;
     const interests = chosenInterests();
     const segment = segmentIds(start, end);
-    const miles = Math.round(totalMiles(segment));
-    const driveHours = start === end ? 0 : Math.max(0, miles / 47);
+    const routeMiles = totalMiles(segment);
+    if (!Number.isFinite(routeMiles)) {
+      currentPlan = null;
+      renderTodayPlan();
+      $('ctTodayOutput').innerHTML = '<div class="ct-plan-call"><strong>Route mileage not verified for this leg.</strong> The published stop inventory is missing at least one distance. This planner will not substitute a guessed mileage or arrival clock. Use the daily directions in the standard itineraries to confirm the road route, then choose a different segment for a supported day sheet.</div>';
+      renderSignals();
+      return null;
+    }
+    const miles = Math.round(routeMiles);
+    const driveHours = start === end ? 0 : driveAllowanceHours(routeMiles);
+    const borderAllowances = borderAllowancesForSegment(segment);
     const borderMinutes = borderMinutesForSegment(segment);
+    const borderUnknown = borderAllowances.some((crossing) => !crossing.available);
     const transitHours = driveHours + borderMinutes / 60;
     const stopBudget = Math.max(0, hours - transitHours - 0.5);
 
     if (start === end) {
       const localVisit = Math.max(0, Math.min(hours - 0.5, visitHours(start)));
       currentPlan = {
-        start,end,hours,startTime,interests,segment:[start],ids:[start],miles:0,driveHours:0,borderMinutes:0,
+        start,end,hours,startTime,interests,segment:[start],ids:[start],miles:0,driveHours:0,borderMinutes:0,borderUnknown:false,
         visitHours:localVisit,stayDay:true,candidates:[],adjustments:[],
       };
       renderTodayPlan();
@@ -393,7 +435,7 @@
       .map((item) => ({...item, selected:keep.has(item.id)}));
 
     currentPlan = {
-      start,end,hours,startTime,interests,segment,ids,miles,driveHours,borderMinutes,visitHours:used,
+      start,end,hours,startTime,interests,segment,ids,miles,driveHours,borderMinutes,borderUnknown,visitHours:used,
       stayDay:false,candidates:optional,adjustments,
     };
     renderTodayPlan();
@@ -566,20 +608,19 @@
       const to = plan.ids[i];
       const subsegment = routeSliceBetween(plan.segment, from, to);
       const miles = totalMiles(subsegment);
-      const driveMinutes = Math.round((miles / 47) * 60);
+      const driveMinutes = Math.round(driveAllowanceHours(miles) * 60);
       const fromZone = zoneFor(from);
       const toZone = zoneFor(to);
       const zoneNote = fromZone !== toZone ? ' The clock changes time zones on this leg; arrival is shown in local time.' : '';
-      add('drive', from, `Drive ${Math.round(miles)} mi toward ${name(to)}`, `${formatDuration(driveMinutes)} base-drive estimate.${zoneNote}`, fromZone);
+      add('drive', from, `Drive ${Math.round(miles)} mi toward ${name(to)}`, `${formatDuration(driveMinutes)} planning allowance (47 mph basis plus 20% cushion), not a routed ETA.${zoneNote}`, fromZone);
       clock = new Date(clock.getTime() + driveMinutes * 60000);
 
-      const border = saultBorderForSegment(subsegment);
-      if (border) {
+      for (const border of borderAllowancesForSegment(subsegment)) {
         const detail = border.available
-          ? `${border.directionLabel} official passenger wait: ${border.display}. This reported processing delay is added to the day budget.`
-          : `${border.directionLabel} official wait is unavailable. The planner does not invent a delay; verify before crossing.`;
-        add('border', '13', 'Sault Ste. Marie border crossing', detail, 'America/Detroit');
-        if (border.waitMinutes) clock = new Date(clock.getTime() + border.waitMinutes * 60000);
+          ? `${border.directionLabel} reported passenger wait: ${border.display}. ${border.allowanceMinutes} reported minutes included; check freshness before travel.`
+          : `${border.directionLabel} live wait unavailable. A 45-minute planning cushion is reserved, NOT an observed border delay; verify before crossing.`;
+        add('border', to, `${border.name} border crossing`, detail, zoneFor(to));
+        clock = new Date(clock.getTime() + border.allowanceMinutes * 60000);
       }
 
       if (to === plan.end) {
@@ -624,8 +665,8 @@
     const routeLabel = p.stayDay ? name(p.start) : `${name(p.start)} → ${name(p.end)}`;
     const call = p.stayDay
       ? `This is a stay day. The planner keeps the day local instead of pretending you need a transit segment.`
-      : p.driveHours > p.hours - 0.5
-        ? 'This is mostly a driving day. The route itself consumes nearly all of the available time, so optional stops are not forced into an over-budget plan.'
+      : transitHours > p.hours - 0.5
+        ? 'The driving allowance and border planning time consume nearly all of this day. No optional stops are forced into an over-budget plan. Confirm actual route travel times before departure.'
         : p.ids.length <= 2
           ? 'Keep this as a transit day. No intermediate stop cleared both the priority score and the honest time budget.'
           : `The route keeps ${p.ids.length - 2} intermediate stop${p.ids.length - 2 === 1 ? '' : 's'} and leaves about ${room.toFixed(1)} hours of unallocated margin.`;
@@ -651,11 +692,12 @@
     out.innerHTML = `
       <div class="ct-plan-summary">
         <div class="ct-metric"><strong>${p.miles.toLocaleString()} mi</strong>segment estimate</div>
-        <div class="ct-metric"><strong>~${p.driveHours.toFixed(1)} hr</strong>base driving</div>
-        <div class="ct-metric"><strong>${p.borderMinutes ? `${p.borderMinutes} min` : '0 min'}</strong>live Sault wait added</div>
+        <div class="ct-metric"><strong>~${p.driveHours.toFixed(1)} hr</strong>driving allowance*</div>
+        <div class="ct-metric"><strong>${p.borderMinutes ? `${p.borderMinutes} min` : '—'}</strong>${p.borderUnknown ? 'crossing time incl. unverified reserve' : p.borderMinutes ? 'reported crossing wait' : 'no border on segment'}</div>
         <div class="ct-metric"><strong>${p.ids.length}</strong>route stops today</div>
       </div>
       <div class="ct-plan-call"><strong>${escapeHtml(routeLabel)}</strong><br>${escapeHtml(call)}</div>
+      <p class="ct-plan-caveat">*Planning allowance only: published stop distances / 47 mph plus a 20% cushion. Not live navigation, a road-closure check or a guaranteed arrival. Unavailable border waits receive a separate 45-minute planning reserve, not a reported wait. Confirm both crossings and actual driving directions before leaving.</p>
       ${renderAdjustments(p)}
       <div class="ct-day-sheet">
         <div class="ct-sheet-head"><strong>Today’s day sheet</strong><span>local clock times · CT / ET changes handled</span></div>
@@ -734,18 +776,20 @@
     if (!border) return null;
     const detail = border.available
       ? `${border.directionLabel} official passenger wait is ${border.display}; ${border.waitMinutes} minutes are included in today’s time budget.`
-      : `${border.directionLabel} official wait is unavailable. No delay is invented; verify before committing to the crossing.`;
+      : `${border.directionLabel} official wait is unavailable. A 45-minute planning cushion, not a measured delay, is reserved; verify before crossing.`;
     return signal('border','Border','Sault Ste. Marie crossing',border.available ? 'live' : 'check',detail,'/sault-ste-marie-border-wait-time/','13','/michigan-border-wait-times/');
   }
 
   function accessSignal(stopId, label, selector, href) {
     if (!routeIncludes(stopId)) return null;
-    const text = document.querySelector(selector)?.textContent.replace(/\s+/g,' ').trim();
+    const notice = document.querySelector(selector);
+    const text = notice?.textContent.replace(/\s+/g,' ').trim();
+    const verifiedThisSeason = notice?.dataset.currentSeason === 'true';
     return signal(
       `access-${stopId}`,
       'Access',
       label,
-      text ? 'warn' : 'check',
+      text && verifiedThisSeason ? 'warn' : 'check',
       text || 'Verify current access before committing time to this stop.',
       href,
       stopId
@@ -771,7 +815,7 @@
       auroraSignal()
     ].filter(Boolean).forEach((item) => list.push(item));
     if (routeIncludes('21')) {
-      list.push(signal('pigeon','Border','Pigeon River / Grand Portage crossing','check','This is an international crossing, but the Michigan border-wait feed does not cover it. The planner does not invent a live wait. Verify crossing requirements before the day.','https://www.cbp.gov/about/contact/ports/grand-portage','21'));
+      list.push(signal('pigeon','Border','Pigeon River / Grand Portage crossing','check','This is an international crossing, but the Michigan border-wait feed does not cover it. The planner reserves 45 minutes as an unverified buffer, not a live wait. Verify crossing requirements before the day.','https://www.cbp.gov/about/contact/ports/grand-portage','21'));
     }
     return list;
   }

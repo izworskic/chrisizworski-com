@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const RELEASE = '2026-10-26';
+  const RELEASE = '2026-11-08';
 
   function addStyles() {
     if (document.getElementById('circle-tour-current-style')) return;
@@ -53,38 +53,64 @@
     }
   }
 
+  // These are dated source notices, not a perpetual current-season feed.
+  // Future seasons must not inherit a 2026 closure or operating calendar.
+  function sourceSeasonIsCurrent(year = 2026) {
+    return new Date().getFullYear() === year;
+  }
+
   function patchAgawaTrain() {
     document.querySelectorAll('a[href*="agawacanyontrain.com"]').forEach((a) => {
       a.href = 'https://agawatrain.com/';
     });
-    const stop = document.getElementById('stop-14');
-    const note = stop?.querySelector('.season-note');
-    if (note) note.innerHTML = '🗓 <strong>2026 season:</strong> Agawa Canyon Tour Train runs August 1–October 18. Summer fares run through September 14; fall season starts September 15. Reserve ahead, especially for fall color. <a href="https://agawatrain.com/" target="_blank" rel="noopener">Train schedule →</a>';
-
+    const note = document.querySelector('#stop-14 .season-note');
+    const current = sourceSeasonIsCurrent();
+    const label = current
+      ? 'The published 2026 Agawa Canyon Tour Train season ran August 1–October 18 and has ended. These are reference dates, not live ticket availability.'
+      : 'Last verified schedule: August 1–October 18, 2026. New-season dates and ticket availability are not confirmed here.';
+    if (note) {
+      note.innerHTML = `🗓 <strong>${current ? '2026 season ended:' : 'Historical schedule:'}</strong> ${label} <a href="https://agawatrain.com/" target="_blank" rel="noopener">Verify train schedule →</a>`;
+    }
     document.querySelectorAll('.fn-item').forEach((item) => {
       if (!/Agawa Canyon train/i.test(item.textContent)) return;
-      item.innerHTML = '<strong>The Agawa Canyon train.</strong> The 2026 season runs August 1–October 18 from Sault Ste. Marie. Fall dates sell quickly; verify the current schedule before building it into a driving day.';
+      item.innerHTML = `<strong>The Agawa Canyon train.</strong> ${label} Check the <a href="https://agawatrain.com/" target="_blank" rel="noopener">official operator schedule</a> before building a day around the train.`;
     });
   }
 
   function addCurrentAlerts() {
-    const pictured = document.querySelector('#stop-11 .stop-body');
-    if (pictured && !pictured.querySelector('[data-current-alert="pictured-rocks"]')) {
-      const alert = document.createElement('div');
-      alert.className = 'ct-current-alert';
-      alert.dataset.currentAlert = 'pictured-rocks';
-      alert.innerHTML = '<strong>Pictured Rocks current note</strong>Munising Falls Trail remains closed until further notice. Sand Point Road and beach are open after the planned July closure was postponed. <a href="https://www.nps.gov/piro/planyourvisit/conditions.htm" target="_blank" rel="noopener">Check NPS conditions →</a>';
-      pictured.prepend(alert);
-    }
-
-    const lspp = document.querySelector('#stop-15 .stop-body');
-    if (lspp && !lspp.querySelector('[data-current-alert="lspp"]')) {
-      const alert = document.createElement('div');
-      alert.className = 'ct-current-alert';
-      alert.dataset.currentAlert = 'lspp';
-      alert.innerHTML = '<strong>Lake Superior Provincial Park alert</strong>As of October 26, the 2026 day-use season has ended. Agawa Rock Pictographs Trail and Trapper’s Trail were closed for the 2026 season; Nokomis and South Old Woman River had hunting-area advisories. Other off-season access is unverified. <a href="/lake-superior-provincial-park/">Compare park stops and trails →</a> <a href="https://www.ontarioparks.ca/park/LakeSuperior/alerts" target="_blank" rel="noopener">Check Ontario Parks alerts →</a>';
-      lspp.prepend(alert);
-    }
+    const is2026 = sourceSeasonIsCurrent();
+    const alerts = [
+      {
+        stop: '11', key: 'pictured-rocks',
+        heading: is2026 ? 'Pictured Rocks: latest checked 2026 notice' : 'Pictured Rocks: historical access notice',
+        body: is2026
+          ? 'As checked October 26, 2026, Munising Falls Trail was listed closed until further notice; this page does not verify its present status.'
+          : 'The 2026 source check listed Munising Falls Trail closed. Current-season access is not verified here.',
+        links: '<a href="https://www.nps.gov/piro/planyourvisit/conditions.htm" target="_blank" rel="noopener">Verify NPS conditions →</a>'
+      },
+      {
+        stop: '15', key: 'lspp',
+        heading: is2026 ? 'Lake Superior Provincial Park: 2026 operating season ended' : 'Lake Superior Provincial Park: historical 2026 notice',
+        body: is2026
+          ? 'The 2026 day-use season ended October 25. Agawa Rock Pictographs Trail and Trapper’s Trail were closed for the 2026 season. Other off-season access is unverified.'
+          : 'The park’s 2026 day-use dates and trail closures are historical. New-season opening dates and access have not been confirmed by this Circle Tour page.',
+        links: '<a href="/lake-superior-provincial-park/">Compare park experiences →</a> <a href="https://www.ontarioparks.ca/park/lakesuperior/alerts" target="_blank" rel="noopener">Verify Ontario Parks alerts →</a>'
+      }
+    ];
+    alerts.forEach(({stop, key, heading, body, links}) => {
+      const host = document.querySelector(`#stop-${stop} .stop-body`);
+      if (!host) return;
+      let alert = host.querySelector(`[data-current-alert="${key}"]`);
+      if (!alert) {
+        alert = document.createElement('div');
+        alert.className = 'ct-current-alert';
+        alert.dataset.currentAlert = key;
+        host.prepend(alert);
+      }
+      alert.dataset.currentSeason = String(is2026);
+      alert.dataset.sourceYear = '2026';
+      alert.innerHTML = `<strong>${heading}</strong>${body} ${links}`;
+    });
   }
 
   function flattenCompanionCards() {
@@ -108,7 +134,7 @@
     document.documentElement.dataset.circleTourRelease = RELEASE;
     const footer = document.querySelector('.footer');
     if (footer) {
-      footer.textContent = footer.textContent.replace(/Updated (August 2026|August 20, 2026|September 29, 2026)/, 'Updated October 26, 2026');
+      footer.textContent = footer.textContent.replace(/Updated (August 2026|August 20, 2026|September 29, 2026)/, 'Updated November 8, 2026');
     }
   }
 

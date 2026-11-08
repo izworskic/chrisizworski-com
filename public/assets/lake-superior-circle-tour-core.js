@@ -95,7 +95,7 @@
     byId("mobileTripCount").textContent = ids.length;
     byId("tripDays").textContent = days || "–";
     byId("mobileTripDays").textContent = days || "–";
-    byId("mobileTripSummary").textContent = ids.length ? `${ids.length} stops · ~${days} days` : "0 stops · start building";
+    byId("mobileTripSummary").textContent = ids.length ? `${ids.length} stops · ~${days} days selected (plus travel)` : "0 stops · start building";
 
     document.querySelectorAll(".add-btn").forEach((button) => setButtonState(button.dataset.id, TRIP.has(button.dataset.id)));
     if (syncUrl) updatePlanQuery();
@@ -166,6 +166,8 @@
       ...day,
       day: index + 1,
       stops: day.stops.slice().reverse(),
+      // Do not carry counterclockwise day prose into a clockwise itinerary.
+      summary: `Clockwise: ${shortStopName(day.stops.at(-1))} → ${shortStopName(day.stops[0])}. Confirm stops, opening hours and actual drive time for this direction.`,
     }));
   }
 
@@ -197,9 +199,12 @@
     const route = displayedItinerary();
     const directionLabel = activeDirection === "counterclockwise" ? "counterclockwise" : "clockwise";
     byId("routePreviewTitle").textContent = `${activePreset}-Day ${activePreset === "7" ? "Highlights" : activePreset === "10" ? "Balanced Route" : "Chris's Route"}`;
-    byId("routePreviewMeta").textContent = `A continuous ${directionLabel} loop from Duluth · approximately 1,358 route miles`;
+    byId("routePreviewMeta").textContent = `A continuous ${directionLabel} loop from Duluth · approximately 1,358 published itinerary miles (verify detours and navigation)`;
     byId("usePresetRoute").textContent = `Use this ${activePreset}-day route`;
     byId("routeDetailLink").href = `#itin-${activePreset}`;
+    byId("routeDetailLink").textContent = activeDirection === "clockwise"
+      ? "Read the original counterclockwise guide"
+      : "Read the full itinerary";
 
     const list = byId("routeDayList");
     list.replaceChildren();
@@ -220,7 +225,13 @@
       directions.rel = "noopener";
       directions.textContent = day.stops.length > 1 ? "Open daily directions →" : "Open this stop in Google Maps →";
       directions.addEventListener("click", () => trackCircleTour("directions-open", {days: Number(activePreset), day: day.day, direction: activeDirection}));
-      copy.append(heading, endpoints, document.createElement("br"), directions);
+      copy.append(heading, endpoints);
+      if (activeDirection === "clockwise") {
+        const note = document.createElement("small");
+        note.textContent = "Reversed route; daily descriptions below are written counterclockwise.";
+        copy.append(document.createElement("br"), note);
+      }
+      copy.append(document.createElement("br"), directions);
       item.append(number, copy);
       list.append(item);
     });
@@ -471,7 +482,7 @@
       const description = card.querySelector(".stop-desc")?.textContent || "";
       return `<div class="stop"><h2><span class="num">${index + 1}</span>${escapeHtml(name)}</h2>${sub ? `<p class="sub">${escapeHtml(sub)}</p>` : ""}${description ? `<p class="desc">${escapeHtml(description)}</p>` : ""}</div>`;
     }).join("");
-    printWindow.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>My Lake Superior Circle Tour</title><style>body{font-family:Georgia,Times,serif;max-width:720px;margin:30px auto;padding:0 20px;color:#222;line-height:1.7}h1{font-size:24px;border-bottom:2px solid #2c5f2d;padding-bottom:10px;color:#2c5f2d;margin-bottom:6px}.meta{font-size:11px;color:#888;letter-spacing:.5px;text-transform:uppercase;margin-bottom:24px}.stop{margin-bottom:22px;break-inside:avoid;border-left:3px solid #b8d8b8;padding:8px 14px;background:#fafaf6}.stop h2{font-size:16px;margin:0 0 4px;color:#2c5f2d;font-weight:normal}.num{display:inline-block;width:24px;height:24px;background:#2c5f2d;color:#fff;border-radius:50%;text-align:center;font-size:12px;line-height:24px;margin-right:8px;vertical-align:middle}.sub{margin:0 0 6px;font-size:13px;color:#666;font-style:italic}.desc{margin:0;font-size:13px;color:#333}.footer{margin-top:30px;font-size:11px;color:#888;border-top:1px solid #ccc;padding-top:12px}@media print{body{margin:0;font-size:11pt}}</style></head><body><h1>My Lake Superior Circle Tour</h1><div class="meta">${ids.length} stops · ~${days} days · built at chrisizworski.com/lake-superior-circle-tour/</div>${stops}<div class="footer">Compiled by Chris Izworski · Updated August 2026</div></body></html>`);
+    printWindow.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>My Lake Superior Circle Tour</title><style>body{font-family:Georgia,Times,serif;max-width:720px;margin:30px auto;padding:0 20px;color:#222;line-height:1.7}h1{font-size:24px;border-bottom:2px solid #2c5f2d;padding-bottom:10px;color:#2c5f2d;margin-bottom:6px}.meta{font-size:11px;color:#888;letter-spacing:.5px;text-transform:uppercase;margin-bottom:24px}.stop{margin-bottom:22px;break-inside:avoid;border-left:3px solid #b8d8b8;padding:8px 14px;background:#fafaf6}.stop h2{font-size:16px;margin:0 0 4px;color:#2c5f2d;font-weight:normal}.num{display:inline-block;width:24px;height:24px;background:#2c5f2d;color:#fff;border-radius:50%;text-align:center;font-size:12px;line-height:24px;margin-right:8px;vertical-align:middle}.sub{margin:0 0 6px;font-size:13px;color:#666;font-style:italic}.desc{margin:0;font-size:13px;color:#333}.footer{margin-top:30px;font-size:11px;color:#888;border-top:1px solid #ccc;padding-top:12px}@media print{body{margin:0;font-size:11pt}}</style></head><body><h1>My Lake Superior Circle Tour</h1><div class="meta">${ids.length} selected stops · ~${days} indicative on-site days plus travel (not an optimized route) · built at chrisizworski.com/lake-superior-circle-tour/</div>${stops}<div class="footer">Compiled by Chris Izworski · Updated November 2026. Verify destination access and road directions before travel.</div></body></html>`);
     printWindow.document.close();
     window.setTimeout(() => { try { printWindow.print(); } catch (error) {} }, 400);
   };
