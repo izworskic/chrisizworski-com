@@ -22,7 +22,7 @@
     onExploreRegion:id=>{clearFollowing();setRegion(id,true);showShipWatch();},
     onExploreLock:id=>{chooseLock(id,true);$('lock-lab')?.scrollIntoView({behavior:reduceMotion.matches?'instant':'smooth',block:'start'});},
     onExploreView:id=>chooseView(id,true),
-    onInspectAll:id=>{if(!/^\\d{9}$/.test(id))return;$('shipSearch').value=id;
+    onInspectAll:id=>{if(!/^\d{9}$/.test(id))return;$('shipSearch').value=id;
       if(region==='all'){selectedShip=null;clearFollowing();applyShipFilters();void loadReports();}
       else setRegion('all',true);
       showShipWatch();
