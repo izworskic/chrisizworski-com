@@ -243,10 +243,10 @@
     const actions=doc.getElementById('fwd-plan-actions');
     actions.replaceChildren();
     const links=[
-      ['Find this public watching area',decision.site?.directionsUrl],
-      ['Check official public-access details',decision.site?.accessUrl],
-      ['Open local live ship evidence',decision.site?.evidenceUrl],
-      ['Read NWS weather forecast',decision.site?.forecastUrl]
+      ['See live ships for this waterway',decision.site?.evidenceUrl],
+      ['View the public shoreline area',decision.site?.directionsUrl],
+      ['Check posted access and closures',decision.site?.accessUrl],
+      ['Read local NWS weather',decision.site?.forecastUrl]
     ];
     for(const [label,href] of links){
       if(!href||!(/^\//.test(href)||/^https:\/\//.test(href)))continue;
