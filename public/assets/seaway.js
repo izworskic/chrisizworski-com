@@ -101,9 +101,10 @@
     }
   }
   function shipDetail(v){
-    const div=el('div');div.append(el('h3',v.name||'AIS vessel '+v.mmsi),el('p',C.motion(v)+' · '+C.direction(v)),el('p','Reported '+time(v.seen)+' · '+age(v.seen)));
+    const div=el('div');div.dataset.shipMmsi=String(v.mmsi);div.dataset.shipSeen=String(v.seen);
+    div.append(el('h3',v.name||'AIS vessel '+v.mmsi),el('p',C.motion(v)+' · '+C.direction(v)),el('p','Reported '+time(v.seen)+' · '+age(v.seen)));
     if(v.lengthMeters)div.append(el('p','Reported length '+v.lengthMeters+' m'+(v.beamMeters?' · beam '+v.beamMeters+' m':'')));
-    div.append(a('Check official lock order of turn ↗',D.officialQueue),el('br'),a('Original ship reports & source ↗','https://ais.openwaters.io/v1/vessels/'+v.mmsi));return div;
+    return div;
   }
   function updateReportLine(){
     const d=data(),has=C.visible(d?.vessels||[],region).length,regionResult=d?.regions?.find(r=>r.id===region);
@@ -225,7 +226,9 @@
       if(!m){
         m=L.marker([v.lat,v.lon],{icon:glyph.icon,keyboard:true,title:(v.name||'AIS vessel '+v.mmsi)+' · recent observed position',zIndexOffset:v.mmsi===selectedShip?1800:1100})
           .addTo(shipsLayer).bindPopup(shipDetail(v),{maxWidth:270});
-        m.on('click',()=>chooseShip(v.mmsi,false));markers.set(v.mmsi,m);
+        m.on('click',()=>chooseShip(v.mmsi,false));
+        m.on('popupopen',()=>{void window.SeawayPopupPhotos?.enhance(m,reportFor(v.mmsi)||v,document);});
+        markers.set(v.mmsi,m);
       }else{
         if(m._seawayLat!==v.lat||m._seawayLon!==v.lon)m.setLatLng([v.lat,v.lon]);
         if(m._seawayIcon!==glyph.key)m.setIcon(glyph.icon);
@@ -252,7 +255,7 @@
   }
   function chooseShip(id,focus){
     const v=reportFor(id);if(!v)return;
-    selectedShip=id;$('mapSelection').dataset.selection='ship';writeURL();updateList();drawShips();const panel=$('mapSelection');panel.replaceChildren(el('strong',v.name||'AIS vessel '+v.mmsi),el('p',C.motion(v)+' · '+C.direction(v)+' · last heard '+age(v.seen)),el('p','Start with the report’s age, then look at its place on the river. This position does not establish the next lock or an arrival time.'));
+    selectedShip=id;$('mapSelection').dataset.selection='ship';writeURL();updateList();drawShips();const panel=$('mapSelection');panel.dataset.shipMmsi=String(v.mmsi);panel.dataset.shipSeen=String(v.seen);panel.replaceChildren(el('strong',v.name||'AIS vessel '+v.mmsi),el('p',C.motion(v)+' · '+C.direction(v)+' · last heard '+age(v.seen)),el('p','Start with the report’s age, then look at its place on the river. This position does not establish the next lock or an arrival time.'));
     appendJourneyContext(panel,v);
     const links=el('div',undefined,'link-row');
     const journeyReady=follow?.select(v,C.journeyContext(v,D.regions,region),data()?.checkedAt);
