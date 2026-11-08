@@ -19,7 +19,7 @@
       center:[46.503,-84.352],zoom:12,link:'/soo-locks/',visit:'/soo-locks/plan-your-visit/',
       spot:'Soo Locks observation platform',note:'Confirm observation-platform and Visitor Center access before traveling.'},
     duluth: {label:'Duluth Canal Park',zone:'America/Chicago',kind:'duluth',endpoint:'/api/duluth-canal',
-      center:[46.7783,-92.0908],zoom:13,link:'/duluth-canal-park/',visit:'/duluth-canal-park/',
+      center:[46.7783,-92.0908],zoom:13,viewPoint:[46.779847,-92.092464],link:'/duluth-canal-park/',visit:'/duluth-canal-park/',
       spot:'Ship Canal / Canal Park',note:'Use the Duluth guide to compare the north pier, Park Point and Lakewalk viewing areas.'},
     port: {label:'Port Huron',zone:'America/Detroit',kind:'observation',endpoint:'/api/freighter-ais',
       center:[42.977,-82.423],zoom:11,bbox:[42.84,-82.58,43.14,-82.34],
@@ -115,8 +115,8 @@
     if (base.observations.length) {
       base.status = 'observed';
       base.reason = config.kind === 'observation'
-        ? 'Fresh vessels reported in this broad area; their future route and shore visibility are unverified.'
-        : 'Recent vessel positions are available, but no supported passage window meets the selected time.';
+        ? 'Ships have reported positions in this general area, but we cannot confirm when one will pass your viewing spot. Check the map before you drive.'
+        : 'There are recent vessel reports, but no reliable passage window for the time you selected.';
     } else {
       base.reason = 'No vessel report under 30 minutes old meets this location filter. This does not mean the waterway is empty.';
     }
@@ -144,7 +144,9 @@
     const source=doc.getElementById('fwd-source');
     const ships=doc.getElementById('fwd-ships');
     const next=doc.getElementById('fwd-next');
+    const watching=doc.getElementById('fwd-viewing-location');
     if(!headline||!body||!ships||!status||!source||!next)return;
+    if(watching) watching.textContent='Watching from: '+config.spot+' (check access and hours in the local guide).';
     status.dataset.status=result.status;
     status.textContent = result.status==='window'?'MODELED WINDOW':result.status==='observed'?'RECENT OBSERVATIONS':result.status==='unavailable'?'SOURCE UNAVAILABLE':'NOT CONFIRMED';
     if (result.pick) {
@@ -153,15 +155,15 @@
       body.textContent='Estimated passage: '+formatTime(w.start,config.zone)+' to '+formatTime(w.end,config.zone)+'. '+result.reason;
     } else {
       headline.textContent = result.status==='observed'
-        ? String(result.observations.length)+' fresh area report'+(result.observations.length===1?'':'s')
+        ? String(result.observations.length)+' recent ship report'+(result.observations.length===1?'':'s')+' in the selected area'
         : result.when==='tomorrow'?'Tomorrow is not confirmed':result.status==='unavailable'?'Live source unavailable':'No supported passage to call';
       body.textContent=result.reason;
     }
     source.textContent=result.checkedAt ? 'Source checked '+formatTime(result.checkedAt,config.zone)+' · reports expire after 30 minutes · Open Waters AIS' :
       'No current verified source check · no passage forecast';
     next.replaceChildren(
-      link(doc,'Plan a public viewing spot',config.visit,'fwd-button'),
-      link(doc,'Open specialist evidence',config.link,'fwd-button fwd-button-alt'));
+      link(doc,'Where to watch from shore',config.visit,'fwd-button'),
+      link(doc,'Open local ship tracker',config.link,'fwd-button fwd-button-alt'));
     ships.replaceChildren();
     const records = result.observations.slice();
     if(result.pick && !records.some(v=>identity(v)===identity(result.pick.ship)))records.unshift(result.pick.ship);
@@ -192,8 +194,20 @@
     const refresh=doc.getElementById('fwd-refresh');
     const mapBox=doc.getElementById('fwd-map');
     const mapStatus=doc.getElementById('fwd-map-note');
-    if(!select||!when||!refresh||!mapBox)return;
+    const next=doc.getElementById('fwd-next');
+    const localDate=doc.getElementById('fwd-local-date');
+    if(!select||!when||!refresh||!mapBox||!next)return;
     let map=null, layer=null, generation=0, active=null, lastResult=null;
+    let fallbackRequested=false;
+    function showLocalDate(){
+      if(!localDate)return;
+      const config=CONFIG[select.value] || CONFIG.soo;
+      const time=new Intl.DateTimeFormat('en-US',{
+        timeZone:config.zone,weekday:'long',month:'long',day:'numeric',year:'numeric',
+        hour:'numeric',minute:'2-digit',timeZoneName:'short'
+      }).format(new Date());
+      localDate.textContent='Local date and time in '+config.label+': '+time;
+    }
     function track(action) {
       if (typeof window.gtag === 'function') window.gtag('event', action, {
         corridor:select.value, visit_window:when.value,
@@ -204,15 +218,44 @@
     if(CONFIG[params.get('place')])select.value=params.get('place');
     if(['now','today','tomorrow'].includes(params.get('when')))when.value=params.get('when');
     function initMap(){
-      if(map || typeof L === 'undefined'){
-        if(!map)mapStatus.textContent='Map tiles unavailable. The vessel evidence list remains available.';
+      if(map)return;
+      if(typeof window.L === 'undefined'){
+        mapStatus.textContent='Loading map library. Ship evidence and viewing links remain available.';
+        if(!fallbackRequested){
+          fallbackRequested=true;
+          const stylesheet=doc.createElement('link');
+          stylesheet.rel='stylesheet';
+          stylesheet.href='https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css';
+          doc.head.append(stylesheet);
+          const backup=doc.createElement('script');
+          backup.src='https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js';
+          backup.onload=()=>{if(lastResult)draw(lastResult);};
+          backup.onerror=()=>{
+            mapStatus.textContent='Map library unavailable. Use the vessel list and specialist tracking links instead.';
+            mapBox.replaceChildren(make(doc,'p','Map unavailable. The ship list and public-viewing links above still work.','fwd-map-loading'));
+          };
+          doc.head.append(backup);
+        }
         return;
       }
-      map=L.map(mapBox,{scrollWheelZoom:false,zoomControl:true}).setView(CONFIG[select.value].center,CONFIG[select.value].zoom);
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{
+      mapBox.replaceChildren();
+      map=window.L.map(mapBox,{scrollWheelZoom:false,zoomControl:true}).setView(CONFIG[select.value].center,CONFIG[select.value].zoom);
+      const tiles=window.L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{
         attribution:'&copy; OpenStreetMap contributors &copy; CARTO',maxZoom:18,subdomains:'abcd'
-      }).addTo(map);
-      layer=L.layerGroup().addTo(map);
+      });
+      let failedTiles=0, alternate=false;
+      tiles.on('tileerror',()=>{
+        failedTiles++;
+        if(failedTiles>=5 && !alternate){
+          alternate=true;
+          map.removeLayer(tiles);
+          window.L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
+            attribution:'&copy; OpenStreetMap contributors',maxZoom:18
+          }).on('tileerror',()=>{mapStatus.textContent='Base map unavailable. The vessel evidence list is still usable.';}).addTo(map);
+        }
+      });
+      tiles.addTo(map);
+      layer=window.L.layerGroup().addTo(map);
       mapBox.dataset.ready='true';
     }
     function shipMarker(v){
@@ -238,9 +281,16 @@
         m.options.shipMmsi=identity(v);
         coords.push([Number(v.lat),Number(v.lon)]);
       }
+      if(conf.viewPoint){
+        const watching=window.L.circleMarker(conf.viewPoint,{radius:10,color:'#fff',weight:3,fillColor:'#c68e31',fillOpacity:1}).addTo(layer);
+        const info=make(doc,'div',null,'fwd-map-popup');
+        info.append(make(doc,'strong','Public viewing reference: '+conf.spot),
+          make(doc,'p','Approximate location from the existing Duluth viewing guide. Confirm access and hours before traveling.'));
+        watching.bindPopup(info);
+      }
       if(!coords.length)map.setView(conf.center,conf.zoom);
       else map.fitBounds([conf.center,...coords],{padding:[32,32],maxZoom:conf.zoom});
-      mapStatus.textContent=coords.length?coords.length+' vessel positions · recent AIS, not verified shore sightings':'Area reference only · no eligible recent vessel positions';
+      mapStatus.textContent=coords.length?coords.length+' recent AIS ship position'+(coords.length===1?'':'s')+' · not guaranteed shore sightings':'No eligible ship reports in this area at the last check. Map still shows the waterway.';
       map.invalidateSize();
     }
     async function load(){
@@ -249,14 +299,17 @@
       if(active)active.abort();
       active=new AbortController();
       refresh.disabled=true; refresh.textContent='Checking…';
+      showLocalDate();
       const fetchNow=Date.now();
       // No current position can substantiate a next-day visit. Avoid unnecessary upstream calls.
       if(windowChoice==='tomorrow'){
         lastResult=evaluate(key,null,windowChoice,fetchNow);
         render(lastResult,doc);draw(lastResult);refresh.disabled=false;refresh.textContent='Check again';return;
       }
+      const controller=active;
+      const timeoutId=setTimeout(()=>controller.abort(),12000);
       try{
-        const r=await fetch(conf.endpoint,{signal:active.signal,cache:'no-store'});
+        const r=await fetch(conf.endpoint,{signal:controller.signal,cache:'no-store'});
         if(!r.ok)throw new Error('provider response');
         const data=await r.json();
         if(thisGen!==generation)return;
@@ -264,6 +317,8 @@
       }catch(error){
         if(thisGen!==generation)return;
         lastResult=evaluate(key,null,windowChoice,Date.now());
+      }finally{
+        clearTimeout(timeoutId);
       }
       if(thisGen!==generation)return;
       render(lastResult,doc);draw(lastResult);
@@ -291,10 +346,11 @@
         }
       });
     });
-    if(typeof L === 'undefined')mapStatus.textContent='Map library unavailable. Viewing links and the vessel list still work.';
+    // Map initialization is attempted after each source evaluation, with a secondary Leaflet CDN if needed.
     // A once-valid prediction must not sit on screen indefinitely after a tab is left open.
     setInterval(()=>{ if(!doc.hidden)load(); },90000);
     doc.addEventListener('visibilitychange',()=>{ if(!doc.hidden)load(); });
+    showLocalDate();
     load();
   }
   return {CONFIG,validDate,usableVessel,safeWindow,eligibleForWhen,evaluate,mount};
