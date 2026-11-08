@@ -144,7 +144,10 @@
     ],
     "browserStatus": "PASSED",
     "scopeNote": "The first Foundry pilot Chromium run exercised 360,390,768,1440 responsive A-B-A, real next-source action transitions, map focus, no JS, no tile, failed photo and source outage, with zero JS errors/overflow and retained screenshots. Later iteration removes duplicate guide link; final-head recheck remains required. Fixtures do not prove live launch/source truth or visitor behavior.",
-    "browserRun": "https://github.com/izworskic/chrisizworski-com/actions/runs/42478858832"
+    "browserRun": "https://github.com/izworskic/chrisizworski-com/actions/runs/42478858832",
+    "screenshotEvidence": [
+      "https://github.com/izworskic/chrisizworski-com/actions/runs/42478858832/artifacts/13616936314"
+    ]
   },
   "photos": [
     {
