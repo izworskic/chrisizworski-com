@@ -159,8 +159,8 @@ const whenReady=page=>page.waitForFunction(id=>
     v.name+' date-only misused as a launch hour');
    assert((await page.locator('#rl-flight-next-title').innerText()).includes('Confirm an exact launch hour'),
     v.name+' date-only next action did not change to a timing verification');
-   assert((await page.locator('#rl-flight-next-link').getAttribute('href'))==='/national-tools/space-coast-launch/',
-    v.name+' pending target must keep local source fallback');
+   assert((await page.locator('#rl-flight-next-link').getAttribute('href'))===REGIONS.find(x=>x.id==='florida').authority,
+    v.name+' a tentative launch target must hand off to the official range authority');
    assert((await page.locator('#rl-launch-select').inputValue())===B,
     v.name+' original mission picker drift');
    assert((await page.locator('#rl-flight-origin').innerText()).includes('Approximate'),
