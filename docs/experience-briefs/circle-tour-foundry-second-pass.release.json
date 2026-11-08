@@ -1,0 +1,140 @@
+{
+  "schemaVersion": "1.2",
+  "recordStatus": "draft",
+  "project": {
+    "slug": "circle-tour",
+    "ownerRepo": "izworskic/chrisizworski-com",
+    "canonical": "https://chrisizworski.com/lake-superior-circle-tour/",
+    "pageFile": "public/lake-superior-circle-tour/index.html",
+    "visitorDecision": "For a selected Circle Tour stop, identify one useful specialist decision, the current evidence gap, and how to move to the next saved stop without losing itinerary state.",
+    "primaryAction": "Open the chosen independent specialist's canonical URL after reading the caveat; verify actual access, schedule or weather there."
+  },
+  "claims": [
+    {
+      "id": "registered-editorial-connection",
+      "kind": "editorial",
+      "subject": "other",
+      "state": "EDITORIAL",
+      "sourceUrl": "https://chrisizworski.com/lake-superior-circle-tour/",
+      "checkedDate": "2026-11-08",
+      "limitation": "A reviewed connection is an editorial decision based on the local registry, not current park access, tickets, travel time, or a measured visitor preference."
+    },
+    {
+      "id": "pictured-rocks-access-is-unknown",
+      "kind": "unverified",
+      "subject": "park-access",
+      "state": "UNVERIFIED",
+      "sourceUrl": "https://www.nps.gov/piro/planyourvisit/conditions.htm",
+      "checkedDate": "2026-11-08",
+      "limitation": "The official NPS page provides condition information but the bridge does not ingest it, calculate a status, or establish whether a specific hike, cruise or launch is operating."
+    },
+    {
+      "id": "official-nps-app-pattern",
+      "kind": "official-reference",
+      "subject": "other",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://www.nps.gov/subjects/digital/nps-apps.htm",
+      "checkedDate": "2026-11-08",
+      "limitation": "The official NPS App is only a design reference for guided stop-by-stop decisions and park-specific source checks. Its proprietary UX or data is not reproduced."
+    }
+  ],
+  "decisionState": {
+    "selectedIdField": "model.stopId derived from explicit stop focus or saved selectedIds",
+    "sourceOfTruth": "The existing CircleTourPage.selectedIds and the applied itinerary query direction feed the pure planNextDecision helper, which consumes only the approved static Tool Network catalog.",
+    "linkedSurfaces": [
+      "answer",
+      "route-chips",
+      "original-stop-link",
+      "specialist-action",
+      "seasonal-source-qualifier",
+      "return-url",
+      "road-source-links",
+      "secondary-catalog"
+    ],
+    "unavailableBehavior": "The original 31-stop planner, readable HTML fallback and official road links stay available when the approved static catalog is missing; zero specialist matches remain explicitly unknown."
+  },
+  "scenarios": [
+    {
+      "kind": "initial",
+      "input": "Open page without a saved itinerary or chosen stop",
+      "expectedVisibleAnswer": "Choose a route stop to receive a specific next check; no arbitrary first stop is claimed to be the user's intended stop.",
+      "sourceAndSafety": "All 31 original stops and static independent source links remain available."
+    },
+    {
+      "kind": "alternative",
+      "input": "Select stop 11 in July with water interest",
+      "expectedVisibleAnswer": "One Pictured Rocks question, unknown/access caveat, canonical specialist action and original-stop link.",
+      "sourceAndSafety": "Typical season never certifies active boat excursions, marine safety or site opening."
+    },
+    {
+      "kind": "reverse",
+      "input": "Choose stops 15 then 18; use Next planned stop, then Previous planned stop",
+      "expectedVisibleAnswer": "LSPP decision changes to Pukaskwa and returns to LSPP without losing trip IDs, date or category.",
+      "sourceAndSafety": "Only published itinerary direction is allowed to affect true route order; custom trip follows selection order."
+    },
+    {
+      "kind": "no-js",
+      "input": "Disable browser JavaScript entirely",
+      "expectedVisibleAnswer": "Keep readable static guidance and actual specialist plus official highway sources next to the original 31-stop itinerary.",
+      "sourceAndSafety": "No static element pretends to know current road or park conditions."
+    },
+    {
+      "kind": "no-tiles",
+      "input": "Block third-party basemap tiles and browser map imports",
+      "expectedVisibleAnswer": "Standalone decision desk and original itinerary links remain usable without a map tile dependency.",
+      "sourceAndSafety": "No fake map line, hiking geometry, location or drive-time is inferred."
+    },
+    {
+      "kind": "stale-data",
+      "input": "Fail or delay the approved static catalog response",
+      "expectedVisibleAnswer": "Original stop cards and static approved guide links remain usable, with a visible unavailable message.",
+      "sourceAndSafety": "Never reuse a stale current-status claim or invent a replacement tool."
+    },
+    {
+      "kind": "out-of-season",
+      "input": "Choose Pukaskwa parks in February",
+      "expectedVisibleAnswer": "Open the specialist with an explicit warning that the selected date is outside its typical listed months.",
+      "sourceAndSafety": "Out-of-season does not establish closure; in-season does not establish opening."
+    },
+    {
+      "kind": "no-match",
+      "input": "Choose ship-watching at Pictured Rocks without a matching approved specialist",
+      "expectedVisibleAnswer": "State the missing approved coverage and offer a reversible interest reset or the original stop guide.",
+      "sourceAndSafety": "Never substitute a different region or assert that no ships are available."
+    }
+  ],
+  "failures": {
+    "no-js": "Show the original stops and static specialist/source links without requiring the client catalog or controls.",
+    "no-tiles": "The decision desk does not depend on map tiles; keep original list and map error fallback.",
+    "no-image": "No new image is required to answer; text, source caveat and link remain fully readable.",
+    "stale-data": "If the static approved catalog cannot load or is structurally invalid, show static vetted links and preserve the original 31-stop planner."
+  },
+  "qa": {
+    "viewports": [
+      360,
+      390,
+      768,
+      1440
+    ],
+    "browserStatus": "PENDING",
+    "scopeNote": "The final candidate will be tested in real Chromium with stop A-B-A, date, direction, source failure, no-JS, no-tiles, 360/390/768/1366/1440px, focus visibility and screenshot review. Status remains pending until observed."
+  },
+  "photos": [],
+  "release": {
+    "implemented": {
+      "status": "PENDING"
+    },
+    "verified": {
+      "status": "PENDING"
+    },
+    "deployed": {
+      "status": "NOT_VERIFIED"
+    },
+    "live": {
+      "status": "NOT_VERIFIED"
+    },
+    "measured": {
+      "status": "NOT_MEASURED"
+    }
+  }
+}
