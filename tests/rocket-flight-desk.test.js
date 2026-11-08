@@ -137,8 +137,8 @@ test('existing canonical, SEO/Person, photo credit and national map are preserve
  const app=fs.readFileSync(path.join(ROOT,'public/synced-national-tools/rocket-launch-live/app.js'),'utf8');
  assert.match(html,/canonical" href="https:\/\/chrisizworski\.com\/national-tools\/rocket-launch-live\//);
  assert.match(html,/https:\/\/chrisizworski\.com\/#person/);
- assert.match(html,/\/assets\/rocket-flight-desk\.js\?v=20261107-eos-v1/);
- assert.match(html,/\/assets\/rocket-flight-desk\.css\?v=20261107-eos-v1/);
+ assert.match(html,/\/assets\/rocket-flight-desk\.js\?v=20261108-foundry-v1/);
+ assert.match(html,/\/assets\/rocket-flight-desk\.css\?v=20261108-foundry-v1/);
  assert.match(html,/id="rl-coast-map"/);
  assert.match(html,/Photo: Senior Airman Kadielle Shaw/);
  assert.match(html,/id="rl-viewing"/);
