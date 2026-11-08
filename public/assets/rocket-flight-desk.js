@@ -225,6 +225,15 @@
     if(!venuesDocumented)return handoff('access','Establish a source-backed spectator option',
       'A listed launch and ordinary venue hours do not establish public mission viewing. The existing regional guide distinguishes access restrictions, closures and candidate viewpoints.',
       'Compare documented regional access');
+    if(region==='florida'&&publicCandidates.length){
+      const names=publicCandidates.slice(0,2).map(s=>s.name).join(' and ');
+      return {
+        gate:'viewing',headline:'Choose a public shoreline, not the launch pad',
+        detail:'Published Florida options include '+names+'. Your exact mission still needs launch-day access and parking checks. The page below compares places and reports available NPS/KSC evidence without assuming entry.',
+        label:'Compare Florida public viewing options',href:'#rl-viewing',
+        source:'in_page',destination:'viewing_options'
+      };
+    }
     const weather=data?.weather||{};
     const spectatorSamples=usableSkySamples(data);
     const weatherUsable=['assessed','partial'].includes(weather.level)&&
