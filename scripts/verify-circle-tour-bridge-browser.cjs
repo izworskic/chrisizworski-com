@@ -44,6 +44,10 @@ function check(value,message){if(!value)throw Error(message);}
     await page.waitForFunction(()=>document.querySelector('#ctb-status')?.textContent.includes('approved connection'));
     const items=await page.locator('#ctb-results .ctb-entry').count();
     check(items>0,size.name+': Pictured Rocks connections missing');
+    check((await page.locator('#ctb-decision').textContent()).includes('Choose a boat, kayak'),size.name+': next question not actionable');
+    check((await page.locator('#ctb-decision').textContent()).includes('What this does not establish'),size.name+': evidence boundary not visible');
+    check((await page.locator('#ctb-decision .ctb-stage-primary').getAttribute('href'))==='https://picturedrocks.chrisizworski.com/',
+      size.name+': first next-check canonical incorrect');
     const stopCount=await page.locator('#ctb-results .ctb-stop-link').allTextContents();
     check(stopCount.every(x=>x.startsWith('Stop 11')),size.name+': focus not respected');
     const target=page.locator('#ctb-results .ctb-link').first();
@@ -65,11 +69,37 @@ function check(value,message){if(!value)throw Error(message);}
     await page.waitForFunction(()=>document.querySelector('#ctb-status')?.textContent.includes('approved connection'));
     const selectedResults=await page.locator('#ctb-results .ctb-stop-link').allTextContents();
     check(selectedResults.length>0&&selectedResults.every(x=>x.startsWith('Stop 15')),size.name+': selected trip ignored');
+    check((await page.locator('#ctb-decision .ctb-stage-title').textContent()).includes('Lake Superior Provincial Park'),
+      size.name+': selected stop did not change primary answer');
+    await page.locator('#stop-18 .add-btn').click();
+    await page.waitForFunction(()=>document.querySelector('#stop-18 .add-btn')?.getAttribute('aria-pressed')==='true');
+    check(await page.locator('#ctb-decision .ctb-nav-button').count()===2,size.name+': route progression missing');
+    await page.locator('#ctb-decision .ctb-nav-button').last().click();
+    check((await page.locator('#ctb-decision .ctb-stage-title').textContent()).includes('Pukaskwa'),
+      size.name+': next planned stop did not change decision');
+    await page.locator('#ctb-theme').selectOption('ships');
+    check((await page.locator('#ctb-decision').textContent()).includes('No approved specialist'),
+      size.name+': unsupported interest invented a result');
+    await page.locator('#ctb-decision .ctb-stage-reset').click();
+    check((await page.locator('#ctb-decision').textContent()).includes('ONE USEFUL NEXT CHECK'),
+      size.name+': reset did not restore a grounded choice');
     await page.locator('#circle-tour-tool-bridge').screenshot({path:path.join(out,size.name+'.png'),timeout:25000});
     report.screenshots.push(size.name+'.png');
     report.cases.push({viewport:size.name,initial:count,focus:items,selectedTrip:selectedResults.length,overflow:false,contextUrl:true});
     await ctx.close();
   }
+  // A published, actually applied clockwise route may reverse sequence; a generic
+  // preview-only direction control cannot silently reorder a custom selection.
+  const routeCtx=await browser.newContext({viewport:{width:390,height:844}}),routePage=await routeCtx.newPage();
+  await routePage.goto(url+'?plan=11%2C15%2C18&itinerary=10&direction=clockwise&ctTheme=parks',{waitUntil:'domcontentloaded',timeout:35000});
+  await routePage.waitForFunction(()=>document.querySelector('#ctb-decision .ctb-stage-title')?.textContent.includes('Pukaskwa'),null,{timeout:30000});
+  check((await routePage.locator('#ctb-decision').textContent()).includes('STOP 1 OF 3'),'published route should have a real step');
+  await routePage.locator('#ctb-decision .ctb-nav-button').last().click();
+  check((await routePage.locator('#ctb-decision .ctb-stage-title').textContent()).includes('Lake Superior Provincial Park'),
+    'clockwise next stop did not preserve applied direction');
+  report.cases.push({state:'applied clockwise published route',result:'ordered stop 18 to stop 15 without changing original planner'});
+  await routeCtx.close();
+
   // Bridge failure must never take down original route, atlas or static backup.
   const context=await browser.newContext({viewport:{width:390,height:844}}),failPage=await context.newPage();
   await failPage.route('**/circle-tour-tool-catalog.json',route=>route.fulfill({status:503,body:'unavailable'}));
