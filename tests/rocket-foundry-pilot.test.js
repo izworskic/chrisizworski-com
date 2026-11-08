@@ -175,7 +175,7 @@ test('all six regional links preserve the selected mission, including static Van
    paths.add(u.pathname);
   }
  }
- assert.equal(paths.size,5,'all but California need specialist handoffs at the first evidence stage');
+ assert.equal(paths.size,6,'all six regions have mission-bound specialist handoffs');
  const california=model.regionalHref('california',uuid,'viewing');
  assert.match(california,/vandenberg-rocket-launch-viewing\/\?launchId=/);
  assert.equal(model.regionalHref('california','bad','viewing'),'/vandenberg-rocket-launch-viewing/');
