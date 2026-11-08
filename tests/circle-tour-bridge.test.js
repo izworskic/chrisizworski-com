@@ -104,6 +104,8 @@ test('official road checks remain source links, limited to actual itinerary regi
   assert.deepEqual(mi.map(x=>x.region),['mi']);
   const ontario=ui.roadChecks(committed,{scope:['18']});
   assert.deepEqual(ontario.map(x=>x.region),['on']);
+  assert.deepEqual(ui.roadChecks(committed,{scope:['13']}).map(x=>x.region),['mi','on']);
+  assert.deepEqual(ui.roadChecks(committed,{scope:['21']}).map(x=>x.region),['on','mn']);
   assert.equal(ui.roadChecks(committed,{scope:[]}).length,4);
   assert.equal(ui.safeRoadUrl('https://example.org/traffic'),'');
 });
