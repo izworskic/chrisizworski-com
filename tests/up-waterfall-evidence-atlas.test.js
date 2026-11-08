@@ -174,7 +174,7 @@ test('source completeness page has a careful search interface and no new indexab
   assert.match(html,/108 indexed source pages/);
   assert.match(js,/candidateGisIds/);
   assert.match(js,/nameMethod/);
-  assert.match(js,/Inspect state GIS #/);
+  assert.match(js,/Inspect '.+state GIS #/);
   assert.match(js,/NOT a separately confirmed natural waterfall/);
   assert.ok(!html.includes('href="https://www.google.com/maps/dir/'));
   assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/atlas/'));
