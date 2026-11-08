@@ -7,7 +7,7 @@ const generator=fs.readFileSync('scripts/generate-seaway.mjs','utf8');
 const enhancer=fs.readFileSync('scripts/enhance-seaway-journey.mjs','utf8');
 const popup=js.slice(js.indexOf('function shipDetail(v)'),js.indexOf('function updateReportLine()'));
 test('ship map popup remains compact without repeated AIS explanatory paragraph',()=>{
-  assert.match(popup,/Reported '+time\(v\.seen\)/);
+  assert.match(popup,/Reported '\+time\(v\.seen\)/);
   assert.match(popup,/C\.motion\(v\)/);
   assert.match(popup,/C\.direction\(v\)/);
   assert.match(popup,/Reported length/);
