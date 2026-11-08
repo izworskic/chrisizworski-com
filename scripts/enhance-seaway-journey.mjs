@@ -88,7 +88,7 @@ replaceOnce(funnelAnchor,funnelAnchor+'<script defer src="/assets/seaway-seasona
 // Do not put it above the map or inside an ad/Leaflet overlay.
 const followFreighter='<section class="follow-panel" id="followFreighter" aria-labelledby="followFreighterTitle" data-has-ship="false" hidden>'+
 '<p class="follow-kicker">After choosing a ship · an individual river story</p>'+
-'<h2 id="followFreighterTitle">Follow the Freighter</h2>'+
+'<h2 id="followFreighterTitle" tabindex="-1">Follow the Freighter</h2>'+
 '<p class="follow-intro-copy">From the selected AIS radio report, explore the documented river chapter, locks within it, and verified public viewpoints. Other stretches are a geographic guide, not that ship\'s confirmed route.</p>'+
 '<p class="follow-status" id="followFreighterStatus" role="status" aria-live="polite"></p>'+
 '<div id="followFreighterContent"></div></section>';
