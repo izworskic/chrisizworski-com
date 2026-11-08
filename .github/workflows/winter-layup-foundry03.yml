@@ -1,0 +1,50 @@
+name: Winter layup Foundry 0.3 proof
+
+on:
+  pull_request:
+    paths:
+      - 'public/assets/freighter-layup-model.js'
+      - 'public/assets/freighter-layup.js'
+      - 'public/assets/freighter-winter-home.css'
+      - 'public/great-lakes-freighter-winter-layup/index.html'
+      - 'benchmarks/tool-network-registry.json'
+      - 'tests/freighter-layup-harbor-journey.test.cjs'
+      - 'experience-foundry/examples/winter-layup-*.mjs'
+      - 'experience-foundry/examples/winter-layup-*.cjs'
+      - '.github/workflows/winter-layup-foundry03.yml'
+
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Parse changed scripts and run local regression tests
+        run: |
+          node --check public/assets/freighter-layup-model.js
+          node --check public/assets/freighter-layup.js
+          node --check experience-foundry/examples/winter-layup-improvement.mjs
+          node --check experience-foundry/examples/winter-layup-replay.cjs
+          node --test tests/freighter-layup-harbor-journey.test.cjs
+      - name: Capture and assess the real baseline improvement assignment
+        run: |
+          node experience-foundry/examples/winter-layup-improvement.mjs
+          node scripts/experience-foundry.mjs assess --run experience-foundry/drafts/winter-layup-harbor-journey/run.json
+      - name: Prove observable gain and preservation using identical fixtures
+        run: |
+          node scripts/experience-foundry.mjs prove --run experience-foundry/drafts/winter-layup-harbor-journey/run.json --out build/experience-foundry/winter-layup-harbor-proof
+          node scripts/experience-foundry.mjs assess --run experience-foundry/drafts/winter-layup-harbor-journey/run.json --proof build/experience-foundry/winter-layup-harbor-proof/proof.json
+      - name: Keep reviewable proof artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: winter-layup-foundry03-evidence
+          path: |
+            experience-foundry/drafts/winter-layup-harbor-journey/
+            build/experience-foundry/winter-layup-harbor-proof/
