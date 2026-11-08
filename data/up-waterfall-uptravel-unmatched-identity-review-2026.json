@@ -1,0 +1,320 @@
+{
+  "schemaVersion": 1,
+  "reviewed": "2026-11-08",
+  "scope": "The 13 UP Travel waterfall-named listing URLs without exact normalized-name matches to existing guide, Michigan GIS or independent name records as of indexed listing source pass 2026-11-08; identity review does NOT establish access.",
+  "method": "Compare each raw UP Travel listing and specific river/county context against site-owned curated identifiers, explicit Michigan GIS natural-feature IDs and independent primary/field sources; promote reviewed identity links only, never new GPS or visitor routes.",
+  "sourceIndexPath": "data/up-waterfall-uptravel-indexed-listings-2026.json",
+  "primaryCatalogPath": "data/up-waterfalls.json",
+  "stateGisPath": "data/up-waterfall-reconciliation.json",
+  "counts": {
+    "investigated": 13,
+    "research-name-alias": 4,
+    "existing-guide-umbrella": 2,
+    "existing-guide-alias": 1,
+    "existing-closure-guide": 2,
+    "existing-guide-region": 1,
+    "research-distinct-wilderness": 2,
+    "unresolved-specific-feature": 1,
+    "clearedVisitorArrivals": 0,
+    "newCuratedDestinations": 0
+  },
+  "records": [
+    {
+      "listingId": 409,
+      "sourceUrl": "https://www.uptravel.com/listing/big-pup-creek-falls/409/",
+      "originalName": "Big Pup Creek Falls",
+      "disposition": "research-name-alias",
+      "canonicalName": "Big Pup Falls",
+      "existingGuideIds": [],
+      "linkedGisIds": [],
+      "relatedExternalIds": [
+        "ss:big-pup-falls"
+      ],
+      "identityFinding": "UP Travel's Big Pup Creek waterfall and the independent Big Pup Falls record refer to cascades on Big Pup Creek near County Road 510 in Marquette County. The specialist explicitly flags private property; a road bridge is not public trail permission.",
+      "accessBarrier": "Private-property and road-shoulder rights; creek has distinct upper and lower drops, so natural feature precision remains unsettled.",
+      "identityConfidence": "supported-identity-no-access-route",
+      "publicRouteCleared": false,
+      "publishNewDestination": false,
+      "sourceUrls": [
+        "https://www.uptravel.com/blog/post/nine-pet-friendly-waterfalls/",
+        "https://www.waterfallsofthekeweenaw.com/big-pup-creek/big-pup-falls/"
+      ]
+    },
+    {
+      "listingId": 723,
+      "sourceUrl": "https://www.uptravel.com/listing/chipmunk-falls-amasa/723/",
+      "originalName": "Chipmunk Falls Amasa",
+      "disposition": "research-name-alias",
+      "canonicalName": "Chipmunk Falls (Net River near Amasa)",
+      "existingGuideIds": [],
+      "linkedGisIds": [
+        17
+      ],
+      "relatedExternalIds": [
+        "ss:chipmunk-falls-2"
+      ],
+      "identityFinding": "The UP Travel Amasa listing identifies the Net River area of Iron County, consistent with state GIS #17 Chipmunk Falls on the Net River and an Iron County independent name. Michigan GIS #205 is a DIFFERENT Chipmunk Falls on Chipmunk Creek in Alger County.",
+      "accessBarrier": "The tourism page itself states there is no direct trail access or dependable signage. No approved parking/visitor path found.",
+      "identityConfidence": "supported-identity-no-access-route",
+      "publicRouteCleared": false,
+      "publishNewDestination": false,
+      "sourceUrls": [
+        "https://www.uptravel.com/listing/chipmunk-falls-amasa/723/",
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+      ]
+    },
+    {
+      "listingId": 799,
+      "sourceUrl": "https://www.uptravel.com/listing/forty-foot-falls/799/",
+      "originalName": "Forty Foot Falls",
+      "disposition": "research-name-alias",
+      "canonicalName": "Cliff Falls (Forty Foot Falls)",
+      "existingGuideIds": [],
+      "linkedGisIds": [],
+      "relatedExternalIds": [
+        "ss:forty-foot-falls-cliff-falls"
+      ],
+      "identityFinding": "UP Travel calls this waterfall Forty Foot Falls or Cliff Falls; the independent field account confirms the Cliff River identity in northern Marquette County. Do NOT confuse with GIS #40 Rocky Forty Falls on Siemens Creek in Gogebic County.",
+      "accessBarrier": "Historic driving directions cross unsigned forestry roads by Cliff Falls Hunting Club, with no current rights, vehicle access or managed trail confirmed.",
+      "identityConfidence": "supported-identity-no-access-route",
+      "publicRouteCleared": false,
+      "publishNewDestination": false,
+      "sourceUrls": [
+        "https://www.uptravel.com/listing/forty-foot-falls/799/",
+        "https://www.waterfallsofthekeweenaw.com/cliff-river/forty-foot-falls/",
+        "https://www.worldwaterfalldatabase.com/waterfall/Cliff-Falls-13121"
+      ]
+    },
+    {
+      "listingId": 1300,
+      "sourceUrl": "https://www.uptravel.com/listing/falls-river-falls/1300/",
+      "originalName": "Falls River Falls",
+      "disposition": "existing-guide-umbrella",
+      "canonicalName": "Falls River Trail: Middle & Lower Falls",
+      "existingGuideIds": [
+        "falls-river-trail"
+      ],
+      "linkedGisIds": [],
+      "relatedExternalIds": [
+        "ss:lower-falls-river-falls",
+        "ss:middle-falls-river-falls"
+      ],
+      "identityFinding": "UP Travel explicitly describes a cascade sequence including Lower and Middle Falls in L'Anse, plus an upstream unnamed drop. These are already covered by the curated Falls River Trail destination; Power House Falls is separately covered elsewhere, not a second version of the same waterfall.",
+      "accessBarrier": "The UP Travel umbrella is not one independently distinct waterfall or a license to visit unsigned upper riverbanks. Use existing, source-vetted trailhead guidance only.",
+      "identityConfidence": "source-confirmed-existing-coverage",
+      "publicRouteCleared": false,
+      "publishNewDestination": false,
+      "sourceUrls": [
+        "https://www.uptravel.com/listing/falls-river-falls/1300/",
+        "https://www.baragacountytrails.org/trails/falls-river-trail"
+      ]
+    },
+    {
+      "listingId": 1699,
+      "sourceUrl": "https://www.uptravel.com/listing/greenwood-bonanza-falls/1699/",
+      "originalName": "Greenwood Bonanza Falls",
+      "disposition": "existing-guide-alias",
+      "canonicalName": "Bonanza Falls (Greenwood Falls)",
+      "existingGuideIds": [
+        "bonanza-falls"
+      ],
+      "linkedGisIds": [
+        124
+      ],
+      "relatedExternalIds": [
+        "ss:bonanza-falls"
+      ],
+      "identityFinding": "UP Travel identifies Greenwood/Bonanza Falls on the Big Iron River at White Pine. Site's Bonanza Falls (Greenwood Falls) destination and state GIS #124 already cover this feature.",
+      "accessBarrier": "No new destination or parking is added from a duplicate tourism name. Review present-day local visitor access using the curated guide.",
+      "identityConfidence": "source-confirmed-existing-coverage",
+      "publicRouteCleared": false,
+      "publishNewDestination": false,
+      "sourceUrls": [
+        "https://www.uptravel.com/listing/greenwood-bonanza-falls/1699/"
+      ]
+    },
+    {
+      "listingId": 1919,
+      "sourceUrl": "https://www.uptravel.com/listing/hungarian-falls/1919/",
+      "originalName": "Hungarian Falls",
+      "disposition": "existing-guide-umbrella",
+      "canonicalName": "Upper, Middle & Lower Hungarian Falls",
+      "existingGuideIds": [
+        "upper-hungarian-falls",
+        "middle-hungarian-falls",
+        "lower-hungarian-falls"
+      ],
+      "linkedGisIds": [
+        130,
+        134
+      ],
+      "relatedExternalIds": [
+        "ss:upper-hungarian-falls",
+        "ss:middle-hungarian-falls",
+        "ss:lower-hungarian-falls"
+      ],
+      "identityFinding": "UP Travel describes the three named drops along Dover Creek near Hubbell; the atlas already has three distinct curated guide identities, including Middle Hungarian Falls. Two tier coordinates exist in the linked state GIS snapshot.",
+      "accessBarrier": "One tourism name is an umbrella, not a missing fourth waterfall or permission to access closed banks. No new directions generated.",
+      "identityConfidence": "source-confirmed-existing-coverage",
+      "publicRouteCleared": false,
+      "publishNewDestination": false,
+      "sourceUrls": [
+        "https://www.uptravel.com/listing/hungarian-falls/1919/",
+        "https://www.uptravel.com/blog/post/spring-waterfalls/"
+      ]
+    },
+    {
+      "listingId": 2830,
+      "sourceUrl": "https://www.uptravel.com/listing/munising-falls-(temporarily-closed)/2830/",
+      "originalName": "Munising Falls (Temporarily Closed)",
+      "disposition": "existing-closure-guide",
+      "canonicalName": "Munising Falls",
+      "existingGuideIds": [
+        "munising-falls"
+      ],
+      "linkedGisIds": [
+        200
+      ],
+      "relatedExternalIds": [
+        "ss:munising-falls"
+      ],
+      "identityFinding": "The NPS says the Munising Falls Trail remains closed after April 2025 storm damage; a September 3, 2026 award describes a project potentially extending through end of 2027. The UP Travel listing is an alias/status qualifier, not another waterfall.",
+      "accessBarrier": "NO CURRENT VISITOR ROUTE. An accessible historic path description must not override the NPS live closure.",
+      "identityConfidence": "source-confirmed-existing-coverage",
+      "publicRouteCleared": false,
+      "publishNewDestination": false,
+      "sourceUrls": [
+        "https://www.nps.gov/piro/planyourvisit/conditions.htm",
+        "https://www.nps.gov/piro/learn/news/2026-09-03-munising-falls-contract-awarded.htm"
+      ]
+    },
+    {
+      "listingId": 3333,
+      "sourceUrl": "https://www.uptravel.com/listing/presque-isle-falls/3333/",
+      "originalName": "Presque Isle Falls",
+      "disposition": "existing-guide-region",
+      "canonicalName": "Presque Isle River waterfall group",
+      "existingGuideIds": [
+        "manabezho-falls",
+        "manido-falls",
+        "nawadaha-falls"
+      ],
+      "linkedGisIds": [],
+      "relatedExternalIds": [],
+      "identityFinding": "UP Travel explicitly describes the Presque Isle River Waterfalls Loop at Porcupine Mountains, not a new individually named cascade. Existing site guides cover Manabezho, Manido and Nawadaha as separate locations.",
+      "accessBarrier": "The label is a corridor/trail grouping, not a safe pin of an unnamed fourth fall. Consult current DNR trail status separately.",
+      "identityConfidence": "source-confirmed-existing-coverage",
+      "publicRouteCleared": false,
+      "publishNewDestination": false,
+      "sourceUrls": [
+        "https://www.uptravel.com/listing/presque-isle-falls/3333/"
+      ]
+    },
+    {
+      "listingId": 3524,
+      "sourceUrl": "https://www.uptravel.com/listing/rudolph-olson-memorial-falls/3524/",
+      "originalName": "Rudolph Olson Memorial Falls",
+      "disposition": "existing-closure-guide",
+      "canonicalName": "Tannery / Rudy M. Olson Falls",
+      "existingGuideIds": [
+        "twin-waterfalls-memorial-preserve"
+      ],
+      "linkedGisIds": [
+        199
+      ],
+      "relatedExternalIds": [],
+      "identityFinding": "Michigan Nature Association identifies Rudy M. Olson Falls as Tannery Falls within Twin Waterfalls Memorial Plant Preserve, currently CLOSED to ALL visitors. The site already has one preserve closure guide covering both Tannery/Olson and Memorial Falls.",
+      "accessBarrier": "NO VISITATION, PARKING OR INGRESS via historic H-58, Nestor or neighborhood directions. Ignore out-of-date tourism walking instructions.",
+      "identityConfidence": "source-confirmed-existing-coverage",
+      "publicRouteCleared": false,
+      "publishNewDestination": false,
+      "sourceUrls": [
+        "https://michigannature.org/index.cfm?action=listing&fuseaction=locationgallery&listing=171",
+        "https://www.uptravel.com/listing/rudolph-olson-memorial-falls/3524/"
+      ]
+    },
+    {
+      "listingId": 3701,
+      "sourceUrl": "https://www.uptravel.com/listing/siskiwit-falls/3701/",
+      "originalName": "Siskiwit Falls",
+      "disposition": "research-distinct-wilderness",
+      "canonicalName": "Siskiwit Falls (Isle Royale, Siskiwit Lake outlet)",
+      "existingGuideIds": [],
+      "linkedGisIds": [],
+      "relatedExternalIds": [],
+      "identityFinding": "UP Travel identifies the Siskiwit River outlet between Siskiwit Lake and Malone Bay on Isle Royale. This is NOT the separately named Siskiwit Falls near Cornucopia, Wisconsin, which is managed by Bayfield County. The Michigan feature is a backcountry waterfall with no verified current land-manager waterfall-viewpoint route.",
+      "accessBarrier": "NPS park access is seasonal and by boat/seaplane, and old maps are insufficient to certify a present-day waterfall path. No local road arrival, direct GPS parking or day-trip promise.",
+      "identityConfidence": "supported-identity-no-access-route",
+      "publicRouteCleared": false,
+      "publishNewDestination": false,
+      "sourceUrls": [
+        "https://www.uptravel.com/listing/siskiwit-falls/3701/",
+        "https://www.nps.gov/thingstodo/feldtmann-loop-section-3-hike-from-siskiwit-bay-to-island-mine.htm",
+        "https://www.bayfieldcounty.wi.gov/waterfalls"
+      ]
+    },
+    {
+      "listingId": 4474,
+      "sourceUrl": "https://www.uptravel.com/listing/unnamed-falls-pinkerton-creek/4474/",
+      "originalName": "Unnamed Falls Pinkerton Creek",
+      "disposition": "unresolved-specific-feature",
+      "canonicalName": "Unnamed Falls on Pinkerton Creek",
+      "existingGuideIds": [],
+      "linkedGisIds": [],
+      "relatedExternalIds": [
+        "ss:pinkerton-falls"
+      ],
+      "identityFinding": "UP Travel references an unnamed cascade on Pinkerton Creek in Porcupine Mountains. The independent directory also has Pinkerton Falls in Gogebic County, but the two source labels are not enough to prove the same tier, feature position or public arrival; do not collapse onto Traders Falls on a nearby trail.",
+      "accessBarrier": "No official independently sourced feature coordinate, precise identity with Pinkerton Falls, continuous public route or parking authorization. KEEP UNRESOLVED.",
+      "identityConfidence": "unresolved",
+      "publicRouteCleared": false,
+      "publishNewDestination": false,
+      "sourceUrls": [
+        "https://www.uptravel.com/listing/unnamed-falls-pinkerton-creek/4474/"
+      ]
+    },
+    {
+      "listingId": 5457,
+      "sourceUrl": "https://www.uptravel.com/listing/bulldog-falls/5457/",
+      "originalName": "Bulldog Falls",
+      "disposition": "research-distinct-wilderness",
+      "canonicalName": "Bulldog Falls (Yellow Dog River, McCormick Wilderness)",
+      "existingGuideIds": [],
+      "linkedGisIds": [],
+      "relatedExternalIds": [],
+      "identityFinding": "The federal Wild & Scenic Yellow Dog River record confirms multiple remote cascades in the McCormick Wilderness. Independent specialist field account explicitly identifies Bulldog Falls as a stretch below Bulldog Lake, distinct from the signed Yellow Dog Falls visitor outing on a different river section.",
+      "accessBarrier": "The congressionally designated wilderness is unmarked and may involve stream crossings. Historic private guides do not establish an official signed parking-to-viewpoint route; never recommend automatic drive directions.",
+      "identityConfidence": "supported-identity-no-access-route",
+      "publicRouteCleared": false,
+      "publishNewDestination": false,
+      "sourceUrls": [
+        "https://www.fws.gov/rivers/river/yellow-dog",
+        "https://www.waterfallsofthekeweenaw.com/yellow-dog-river/bulldog-falls/",
+        "https://www.uptravel.com/blog/post/nine-pet-friendly-waterfalls/"
+      ]
+    },
+    {
+      "listingId": 5815,
+      "sourceUrl": "https://www.uptravel.com/listing/powderhorn-falls/5815/",
+      "originalName": "Powderhorn Falls",
+      "disposition": "research-name-alias",
+      "canonicalName": "Powder Horn Falls (Powder Mill Creek)",
+      "existingGuideIds": [],
+      "linkedGisIds": [
+        39
+      ],
+      "relatedExternalIds": [
+        "ss:powder-horn-falls"
+      ],
+      "identityFinding": "UP Travel's Powderhorn Falls text places it on Powder Mill Creek near Bessemer. Michigan state GIS #39 names Powder Horn Falls on the same creek in Gogebic County, and the independent directory matches that spelling. Strong same-stream alias match; not a separate scenic-byway waterfall.",
+      "accessBarrier": "Neither GIS nor the resort's road label establishes legal visitor parking, walking permission or trail. No auto route or public-map addition.",
+      "identityConfidence": "supported-identity-no-access-route",
+      "publicRouteCleared": false,
+      "publishNewDestination": false,
+      "sourceUrls": [
+        "https://www.uptravel.com/listing/powderhorn-falls/5815/",
+        "https://gisp.mcgi.state.mi.us/arcgis/rest/services/BaseMap/General_Geology/MapServer/7"
+      ]
+    }
+  ]
+}
