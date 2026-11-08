@@ -1,0 +1,54 @@
+name: Circle Tour isolated connection bridge browser QA
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'public/lake-superior-circle-tour/index.html'
+      - 'public/assets/circle-tour-bridge.*'
+      - 'public/assets/circle-tour-tool-catalog.json'
+      - 'config/circle-tour-tool-connections.json'
+      - 'lib/circle-tour-network.mjs'
+      - 'benchmarks/tool-network-registry.json'
+      - 'scripts/build-circle-tour-network.mjs'
+      - 'scripts/experience-foundry.mjs'
+      - 'tests/circle-tour-bridge.test.js'
+      - 'scripts/verify-circle-tour-bridge-browser.cjs'
+      - '.github/workflows/circle-tour-bridge-browser-qa.yml'
+  workflow_dispatch:
+concurrency:
+  group: circle-tour-bridge-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  chromium:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Prove approved catalog is fresh, strictly scoped and deterministic
+        run: |
+          node scripts/build-circle-tour-network.mjs --check
+          node --test tests/circle-tour-bridge.test.js tests/circle-tour-foundation.test.cjs
+          node scripts/experience-foundry.mjs connections --owner pictured-rocks
+      - name: Install isolated pinned Chromium harness
+        run: |
+          mkdir -p /tmp/circle-bridge-playwright
+          npm install --prefix /tmp/circle-bridge-playwright --no-save --ignore-scripts playwright@1.58.2
+          echo "NODE_PATH=/tmp/circle-bridge-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium-browser)" >> "$GITHUB_ENV"
+      - name: Verify responsive browser, real planner sync, date, degraded catalog and no-JS
+        run: node scripts/verify-circle-tour-bridge-browser.cjs
+      - name: Retain browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: circle-tour-bridge-browser-qa
+          path: artifacts/circle-tour-bridge/
+          if-no-files-found: warn
+          retention-days: 7
