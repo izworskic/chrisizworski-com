@@ -181,7 +181,15 @@
       if(el.tagName!=='A')return;
       const href=el.getAttribute('href')||'';
       let destination=null,surface='other';
-      if(el.id==='rl-flight-specialist'&&guideRegion(href,pageBase)){
+      if(el.id==='rl-flight-next-link'&&desk.contains(el)){
+        const nextKind=el.dataset.nextSource;
+        if(nextKind==='specialist'&&guideRegion(href,pageBase))
+          destination='regional_guide';
+        else if((nextKind==='authority'||nextKind==='nasa')&&
+          /^https:\/\/[a-z0-9.-]+\//i.test(href))
+          destination='official_access';
+        surface='flight_desk';
+      }else if(el.id==='rl-flight-specialist'&&guideRegion(href,pageBase)){
         destination='regional_guide';surface='flight_desk';
       }else if(el.id==='rl-flight-official'&&/^https:\/\//i.test(href)){
         destination='official_access';surface='flight_desk';
