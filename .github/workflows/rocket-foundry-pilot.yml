@@ -58,6 +58,7 @@ jobs:
         run: |
           node --test tests/rocket-foundry-pilot.test.js tests/rocket-flight-desk.test.js tests/rocket-engagement-funnel.test.js
           npm run benchmark:tool-network -- --check
+          node scripts/verify-experience-os-v1.2.mjs docs/experience-briefs/rocket-foundry-next-check.release.json
       - name: Retain bounded noindex Foundry research artifacts
         if: always()
         uses: actions/upload-artifact@v4
