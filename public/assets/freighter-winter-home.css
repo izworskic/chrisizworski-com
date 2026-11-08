@@ -451,3 +451,13 @@ html:has(.layup-home){scroll-padding-bottom:var(--layup-anchor-reserve)}
 
 /* An archived winter with zero collected source reports is not proof of empty harbors. */
 .layup-home .history-empty-year{margin:12px 0;padding:14px 16px;border:1px solid rgba(242,178,74,.34);border-radius:12px;background:rgba(242,178,74,.07);color:var(--fog);line-height:1.55;font-size:.89rem}
+
+/* Foundry 0.3: deliberate current-vs-archive choices inside each port field guide.
+   Evidence is read beside that harbor's public viewing guidance. */
+.layup-home .harbor-evidence-choices{margin-top:1rem;padding:1rem;border:1px solid var(--line-strong);background:rgba(5,13,22,.85);border-radius:12px;overflow-wrap:anywhere}
+.layup-home .harbor-evidence-choices h4{margin:0 0 .6rem;font-size:1rem;color:var(--ice)}
+.layup-home .harbor-evidence-choices p{margin:.55rem 0;color:var(--fog);font-size:.89rem;line-height:1.55}
+.layup-home .harbor-evidence-actions{display:flex;flex-wrap:wrap;gap:.55rem;margin:.8rem 0}
+.layup-home .harbor-evidence-actions button,.layup-home .harbor-evidence-actions a{display:inline-flex;align-items:center;min-height:44px;max-width:100%;padding:.6rem .75rem;border-radius:8px;border:1px solid var(--lamp);color:var(--lamp);background:rgba(242,178,74,.08);font-size:.9rem;line-height:1.4;text-align:left;cursor:pointer;text-decoration:none}
+.layup-home .harbor-evidence-actions button:hover,.layup-home .harbor-evidence-actions a:hover{background:var(--lamp-soft);text-decoration:underline}
+@media(max-width:480px){.layup-home .harbor-evidence-actions{flex-direction:column}.layup-home .harbor-evidence-actions button,.layup-home .harbor-evidence-actions a{width:100%;justify-content:flex-start}}
