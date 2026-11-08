@@ -23,6 +23,11 @@
   const enabled=Boolean(region&&url.searchParams.get('via')==='rocket-foundry'&&
     UUID.test(requested||'')&&STAGES.has(stage));
   let completed=false,receipt=null;
+  // Match national tool-engagement's privacy-safe Vercel queue: a restored
+  // mission must not vanish from telemetry because the optional analytics
+  // library has not loaded yet. Queue initialization has no navigation effect.
+  if(enabled&&typeof win.va!=='function')
+    win.va=function(){(win.vaq=win.vaq||[]).push(arguments);};
   function measure(name,outcome){
     const properties={region,stage,destination:'regional_guide',outcome};
     if(typeof win.gtag==='function'){
