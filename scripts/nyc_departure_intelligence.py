@@ -6,15 +6,19 @@ historical data, live traffic, prediction precision or cross-segment rankings.
 """
 import argparse
 from collections import defaultdict
+from concurrent.futures import ThreadPoolExecutor
 from datetime import date, datetime, timedelta, timezone
 import json
 import math
 from pathlib import Path
+from zoneinfo import ZoneInfo
 import statistics
 import subprocess
 import sys
+import time
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
+from urllib.error import HTTPError, URLError
 
 ROOT = Path(__file__).resolve().parent.parent
 SOURCE = "https://data.cityofnewyork.us/resource/i4gi-tjb9.json"
@@ -31,6 +35,13 @@ LINKS = {
     "verrazzano": ("4763652", "CROSSING_ONLY", "Staten Island to Brooklyn"),
 }
 BY_LINK = {value[0]: key for key, value in LINKS.items()}
+NYC_ZONE = ZoneInfo('America/New_York')
+
+
+def local_date(now):
+    if not now.tzinfo:
+        raise ValueError('Timezone-aware timestamp required')
+    return now.astimezone(NYC_ZONE).date()
 
 
 def percentile(values, fraction):
@@ -59,7 +70,7 @@ def normalize(rows, now):
             seconds = float(row["mean_seconds"])
             if not (0 <= hour < 24 and 4 <= count <= 2000 and
                     math.isfinite(seconds) and 1 <= seconds < 3600 and
-                    now.date() - timedelta(days=130) <= day <= now.date()):
+                    local_date(now) - timedelta(days=130) <= day <= local_date(now)):
                 raise ValueError("Invalid data")
             key = (link, day, hour)
             value = (round(seconds / 60, 5), count)
@@ -150,7 +161,7 @@ def build_model(rows, now):
     if not clean:
         return artifact
     latest = max(r[1] for r in clean)
-    age = (now.date() - latest).days * 24
+    age = (local_date(now) - latest).days * 24
     artifact["source"].update(latestObservationDate=latest.isoformat(), ageHours=age)
     if age > 72:
         artifact["state"] = "STALE"
@@ -180,34 +191,249 @@ def build_model(rows, now):
     return artifact
 
 
+def historical_date_windows(now, days=93, chunk_days=30):
+    """Nonoverlapping NYC wall-date ranges. 30 days * 24 hours < SoQL row cap."""
+    if chunk_days < 1 or chunk_days > 30:
+        raise ValueError("Date batches must remain at most 30 days")
+    start = local_date(now) - timedelta(days=days)
+    finish = local_date(now) + timedelta(days=1)
+    while start < finish:
+        stop = min(start + timedelta(days=chunk_days), finish)
+        yield start, stop
+        start = stop
+
+
 def fetch_rows(now, fetcher=urlopen):
-    """Query small daily/hourly SoQL aggregates; never download raw 113M rows."""
-    start = (now.date() - timedelta(days=93)).isoformat()
-    end = (now.date() + timedelta(days=1)).isoformat()
-    rows = []
-    for crossing, (link_id, _, _) in LINKS.items():
+    """Fetch complete official 30-day batches; reject truncated/invalid aggregates.
+
+    Status is explicitly an artifact in NYC DOT metadata; keep positive plausible travel time and speed regardless of status code. A single 93-day group query can silently stop at 1,000 rows, even when the
+    requested $limit is larger. Bounded date partitions make the maximum
+    distinct day-hour buckets 720, safely below the explicitly requested 800.
+    """
+    windows = list(historical_date_windows(now))
+    tasks = [(crossing, link_id, start, stop)
+             for crossing, (link_id, _, _) in LINKS.items()
+             for start, stop in windows]
+
+    def fetch_batch(task):
+        crossing, link_id, start, stop = task
         params = {
             "$select": ("link_id,date_trunc_ymd(data_as_of) as service_date,"
                         "date_extract_hh(data_as_of) as hour,"
                         "avg(travel_time::number) as mean_seconds,count(*) as sample_count"),
-            "$where": (f"status='0' and link_id='{link_id}' and "
-                       f"data_as_of between '{start}T00:00:00.000' and "
-                       f"'{end}T00:00:00.000' and "
-                       "travel_time::number>0 and travel_time::number<3600"),
+            "$where": (f"link_id='{link_id}' and "
+                       f"data_as_of >= '{start.isoformat()}T00:00:00.000' and "
+                       f"data_as_of < '{stop.isoformat()}T00:00:00.000' and "
+                       "travel_time::number>0 and travel_time::number<3600 and "
+                       "speed::number>0 and speed::number<100"),
             "$group": "link_id,service_date,hour",
-            "$order": "service_date asc,hour asc", "$limit": "3000",
+            "$order": "service_date asc,hour asc",
+            "$limit": "800",
         }
         url = SOURCE + "?" + urlencode(params)
-        response = fetcher(Request(url, headers={"Accept": "application/json",
-                           "User-Agent": "chrisizworski-nyc-history/1.0"}), timeout=35)
-        try:
-            data = json.load(response)
-        finally:
-            response.close()
-        if not isinstance(data, list) or len(data) >= 3000:
-            raise ValueError(f"Incomplete official hourly aggregate for {crossing}")
-        rows.extend(data)
-    return rows
+        # One bounded retry for a transient Socrata timeout/429/5xx. Do not
+        # turn a failed partition into an empty observation or zero-minute ETA.
+        for attempt in range(2):
+            try:
+                response = fetcher(Request(url, headers={"Accept": "application/json",
+                               "User-Agent": "chrisizworski-nyc-history/1.1"}), timeout=35)
+                try:
+                    data = json.load(response)
+                finally:
+                    response.close()
+                break
+            except HTTPError as error:
+                if error.code not in (408, 429, 500, 502, 503, 504) or attempt:
+                    raise
+                time.sleep(1.5)
+            except (TimeoutError, URLError, ConnectionResetError) as error:
+                if attempt:
+                    raise
+                time.sleep(1.5)
+        days = (stop - start).days
+        if not isinstance(data, list) or len(data) >= 800 or len(data) > days * 24:
+            raise ValueError(f"Potentially truncated/duplicated NYC DOT aggregation for {crossing} "
+                             f"{start} to {stop}: {len(data) if isinstance(data,list) else 'non-list'}")
+        keys = set()
+        for row in data:
+            try:
+                if str(row["link_id"]) != link_id:
+                    raise ValueError("Unexpected link")
+                day = date.fromisoformat(str(row["service_date"])[:10])
+                hour = int(row["hour"])
+                if not (start <= day < stop and 0 <= hour <= 23):
+                    raise ValueError("Day/hour outside requested partition")
+                key = (day, hour)
+                if key in keys:
+                    raise ValueError("Duplicate date-hour in upstream aggregation")
+                keys.add(key)
+            except (KeyError, TypeError, ValueError) as exc:
+                raise ValueError(f"Invalid upstream NYC date-hour group for {crossing}") from exc
+        return data
+
+    # Bounded standard-library fan-out avoids 24 sequential remote requests
+    # without overwhelming NYC Open Data or introducing any runtime dependency.
+    with ThreadPoolExecutor(max_workers=3) as pool:
+        chunks = list(pool.map(fetch_batch, tasks))
+    return [row for chunk in chunks for row in chunk]
+
+
+def score_link(records, cutoff):
+    """Report out-of-time model skill even when it FAILS publication gates.
+
+    Historical diagnosis only. Never use this as forecast or bypass fit_link.
+    """
+    training = [r for r in records if r[1] < cutoff]
+    testing = [r for r in records if r[1] >= cutoff]
+    report = {
+        "trainingDateHours": len(training), "holdoutDateHours": len(testing),
+        "scoredHoldoutDateHours": 0, "qualifiedHourSlots": 0,
+        "modelMaeMinutes": None, "naiveMaeMinutes": None,
+        "gainFraction": None, "intervalCoverage": None,
+        "passed": False, "reason": "Insufficient training or independent holdout observations.",
+    }
+    if len(training) < 350 or len(testing) < 100:
+        return report
+    train_slots = defaultdict(list)
+    test_slots = defaultdict(list)
+    for _, day, hour, minutes in training:
+        train_slots[(day_type(day), hour)].append(minutes)
+    for _, day, hour, minutes in testing:
+        test_slots[(day_type(day), hour)].append(minutes)
+    naive = statistics.median(r[3] for r in training)
+    comparisons = []
+    for key, values in train_slots.items():
+        holdouts = test_slots.get(key, [])
+        if len(values) < 8 or len(holdouts) < 3:
+            continue
+        report["qualifiedHourSlots"] += 1
+        typical = statistics.median(values)
+        low, high = percentile(values, .1), percentile(values, .9)
+        comparisons.extend((abs(actual - typical), abs(actual - naive),
+                            low <= actual <= high) for actual in holdouts)
+    report["scoredHoldoutDateHours"] = len(comparisons)
+    if len(comparisons) < 100 or report["qualifiedHourSlots"] < 30:
+        report["reason"] = "Too few independently scored date-hours or eligible hourly slots."
+        return report
+    mae = statistics.mean(value[0] for value in comparisons)
+    naive_mae = statistics.mean(value[1] for value in comparisons)
+    gain = 1 - mae / naive_mae if naive_mae > 0 else -1
+    coverage = statistics.mean(float(value[2]) for value in comparisons)
+    report.update({
+        "modelMaeMinutes": round(mae, 3),
+        "naiveMaeMinutes": round(naive_mae, 3),
+        "gainFraction": round(gain, 4),
+        "intervalCoverage": round(coverage, 4),
+    })
+    report["passed"] = bool(math.isfinite(gain) and gain >= .05 and coverage >= .55)
+    report["reason"] = (
+        "Passed independent holdout skill and interval coverage."
+        if report["passed"] else "Historical model did not beat the naive benchmark by 5% with adequate interval coverage."
+    )
+    return report
+
+
+def fetch_status_heartbeat(now, fetcher=urlopen):
+    """Latest record can be a sensor outage. Separate raw update from usable speeds."""
+    since = (local_date(now) - timedelta(days=7)).isoformat()
+    ids = ",".join("'" + link + "'" for link in BY_LINK)
+    params = {
+        "$select": "link_id,status,count(*) as n,max(data_as_of) as latest",
+        "$where": f"link_id in({ids}) and data_as_of >= '{since}T00:00:00.000'",
+        "$group": "link_id,status",
+        "$limit": "100",
+    }
+    url = SOURCE + "?" + urlencode(params)
+    response = fetcher(Request(url, headers={"Accept":"application/json",
+                                           "User-Agent":"chrisizworski-nyc-history-audit/1.0"}), timeout=35)
+    try:
+        data = json.load(response)
+    finally:
+        response.close()
+    if not isinstance(data,list) or len(data) >= 100:
+        raise ValueError("Latest NYC DOT sensor status response incomplete")
+    return data
+
+
+def audit_live(now, rows=None, heartbeats=None):
+    """Dated actual-observation audit; describes failed sensors AND weak models."""
+    if rows is None:
+        rows = fetch_rows(now)
+    if heartbeats is None:
+        heartbeats = fetch_status_heartbeat(now)
+    clean, integrity = normalize(rows, now)
+    latest = max((r[1] for r in clean), default=None)
+    cutoff = latest - timedelta(days=13) if latest else local_date(now)
+    start = cutoff - timedelta(days=70)
+    health = defaultdict(lambda: {"reportedRecords7d": 0, "statusCounts7d": {},
+                                  "latestReportedAt": None})
+    for row in heartbeats:
+        lid = str(row.get("link_id", ""))
+        if lid not in BY_LINK:
+            continue
+        entry = health[lid]
+        status = str(row.get("status", "missing"))
+        n = int(row.get("n", 0))
+        entry["reportedRecords7d"] += n
+        entry["statusCounts7d"][status] = n
+        observed = row.get("latest")
+        if observed and (entry["latestReportedAt"] is None or observed > entry["latestReportedAt"]):
+            entry["latestReportedAt"] = observed
+    crossing_results = {}
+    for crossing, (link_id, scope, direction) in LINKS.items():
+        raw = [r for r in rows if str(r.get("link_id")) == link_id]
+        valid = [r for r in clean if r[0] == link_id]
+        within = [r for r in valid if start <= r[1] <= latest] if latest else []
+        last = max((r[1] for r in valid), default=None)
+        age = (local_date(now) - last).days if last else None
+        score = score_link(within, cutoff)
+        # fit_link is the actual publication threshold; this audit never overrides it.
+        model_ok = bool(last is not None and age <= 3 and latest is not None and
+                        (latest - last).days <= 1 and
+                        fit_link(within, cutoff) is not None)
+        if last is None:
+            state = "NO_USABLE_HISTORY"
+        elif age > 3 or (latest - last).days > 1:
+            state = "STALE_LINK"
+        elif not model_ok:
+            state = "BACKTEST_FAILED"
+        else:
+            state = "MODEL_ELIGIBLE"
+        crossing_results[crossing] = {
+            "linkId": link_id, "measurementScope": scope,
+            "firstAndLastAreNotDoorToDoor": True,
+            "sourceRows": len(raw), "validDateHours": len(valid),
+            "lastUsableDate": last.isoformat() if last else None,
+            "usableAgeCalendarDays": age,
+            "state": state, "holdout": score, **health[link_id],
+        }
+    candidate = build_model(rows, now)
+    return {
+        "schemaVersion": "nyc-source-audit-v1",
+        "auditedAt": now.astimezone(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z"),
+        "source": SOURCE,
+        "latestUsableDateAcrossLinks": latest.isoformat() if latest else None,
+        "sourceMetadataMayBeCached": True,
+        "publishingCandidateState": candidate["state"],
+        "modelReadyLinks": sorted(candidate["crossings"]),
+        "integrity": integrity,
+        "crossings": crossing_results,
+        "noHistoricalModelMayBePublishedWithoutIndividualSourceAndHoldoutGates": True,
+    }
+
+def source_incomplete(now, reason):
+    """Network failure is not a failed model and is never a successful data audit."""
+    return {
+        "schemaVersion": "nyc-source-audit-v1",
+        "state": "INCOMPLETE",
+        "auditedAt": now.astimezone(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z"),
+        "source": SOURCE,
+        "reason": reason,
+        "publishingCandidateState": "UNAVAILABLE",
+        "modelReadyLinks": [],
+        "crossings": {},
+        "noHistoricalModelMayBePublishedWithoutIndividualSourceAndHoldoutGates": True,
+    }
 
 
 def audit_tolls(fixture=RATE_REFERENCE):
@@ -242,8 +468,9 @@ process.stdout.write(JSON.stringify(result));"""
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("command", choices=["train", "fetch-build", "audit-tolls"])
+    parser.add_argument("command", choices=["train", "fetch-build", "audit-tolls", "audit-live"])
     parser.add_argument("--input", type=Path)
+    parser.add_argument("--report", type=Path, help="Optional dated science report, not a model artifact")
     parser.add_argument("--output", type=Path, default=OUTPUT)
     parser.add_argument("--at", help="Timezone-aware ISO time for deterministic testing")
     args = parser.parse_args()
@@ -253,6 +480,22 @@ def main():
     now = datetime.fromisoformat(args.at.replace("Z", "+00:00")) if args.at else datetime.now(timezone.utc)
     if not now.tzinfo:
         raise ValueError("--at must include a UTC offset")
+    if args.command == "audit-live":
+        try:
+            rows = json.loads(args.input.read_text()) if args.input else fetch_rows(now)
+            report = audit_live(now, rows=rows)
+            report["state"] = "COMPLETE"
+        except HTTPError as error:
+            if error.code not in (408, 429, 500, 502, 503, 504):
+                raise
+            report = source_incomplete(now, f"Official source returned HTTP {error.code}.")
+        except (TimeoutError, URLError, ConnectionResetError):
+            report = source_incomplete(now, "Official historical source timed out or could not be reached.")
+        if args.report:
+            args.report.parent.mkdir(parents=True, exist_ok=True)
+            args.report.write_text(json.dumps(report, sort_keys=True, indent=2) + "\n")
+        print(json.dumps(report, sort_keys=True, indent=2))
+        return
     rows = json.loads(args.input.read_text()) if args.command == "train" else fetch_rows(now)
     model = build_model(rows, now)
     if args.command == "fetch-build" and model["state"] not in ("AVAILABLE", "PARTIAL"):
