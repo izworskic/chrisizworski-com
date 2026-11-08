@@ -212,6 +212,28 @@
     root.dataset.mapState='initializing';
     try {
       const map = window.L.map(root, { scrollWheelZoom: false, zoomControl: true, preferCanvas: true, touchZoom: true, dragging: true, bounceAtZoomLimits: false, tapHold: false });
+      // Public-domain Natural Earth 1:110m coastline backup. It sits *behind*
+      // live raster tiles, cannot accept clicks, and contains no invented pads
+      // or visitor directions. When OSM/CARTO is blocked, a geographic map
+      // still appears instead of an empty gray canvas.
+      const referencePane=map.createPane('rocket-reference-land');
+      referencePane.style.zIndex='180'; // Leaflet tile pane is z-index 200.
+      referencePane.style.pointerEvents='none';
+      fetch('/assets/rocket-reference-land.geojson',{
+        cache:'force-cache',signal:AbortSignal.timeout(8000)
+      }).then(response=>{
+        if(!response.ok)throw new Error('reference-geography-unavailable');
+        return response.json();
+      }).then(geo=>{
+        if(geo?.type!=='FeatureCollection'||!Array.isArray(geo.features)||
+           !geo.features.length)throw new Error('invalid-reference-geography');
+        window.L.geoJSON(geo,{
+          pane:'rocket-reference-land',interactive:false,
+          style:{color:'#9db6ae',weight:1.15,opacity:1,
+            fillColor:'#d0dfd4',fillOpacity:1}
+        }).addTo(map);
+        root.dataset.outline='ready';
+      }).catch(()=>{root.dataset.outline='unavailable';});
       const osmCredit = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
       // Never request a keyless CARTO tile: as of 2026 those tiles return
       // an "API KEY REQUIRED" watermark even though the HTTP response is 200.
