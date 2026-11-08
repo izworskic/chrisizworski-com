@@ -24,7 +24,7 @@ function check(value,message){if(!value)throw Error(message);}
  const report={browser:'chromium',screenshots:[],cases:[],failures:[]};let browser;
  try{
   browser=await chromium.launch({executablePath:process.env.CHROME_PATH||undefined,headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});
-  for(const size of [{name:'mobile360',width:360,height:780},{name:'mobile390',width:390,height:844},{name:'tablet',width:768,height:900},{name:'desktop',width:1366,height:900}]){
+  for(const size of [{name:'mobile360',width:360,height:780},{name:'mobile390',width:390,height:844},{name:'tablet',width:768,height:900},{name:'desktop',width:1366,height:900},{name:'wideDesktop',width:1440,height:900}]){
     const ctx=await browser.newContext({viewport:{width:size.width,height:size.height}}),page=await ctx.newPage();
     const response=await page.goto(url,{waitUntil:'domcontentloaded',timeout:35000});
     check(response.status()===200,size.name+': original route missing');
@@ -74,9 +74,16 @@ function check(value,message){if(!value)throw Error(message);}
     await page.locator('#stop-18 .add-btn').click();
     await page.waitForFunction(()=>document.querySelector('#stop-18 .add-btn')?.getAttribute('aria-pressed')==='true');
     check(await page.locator('#ctb-decision .ctb-nav-button').count()===2,size.name+': route progression missing');
+    await page.locator('#ctb-decision .ctb-nav-button').last().focus();
+    await page.keyboard.press('Enter');
+    check((await page.locator('#ctb-decision .ctb-stage-title').textContent()).includes('Pukaskwa'),
+      size.name+': keyboard progression did not change the decision');
+    await page.locator('#ctb-decision .ctb-nav-button').first().click();
+    check((await page.locator('#ctb-decision .ctb-stage-title').textContent()).includes('Lake Superior Provincial Park'),
+      size.name+': previous planned stop did not reverse the selection');
     await page.locator('#ctb-decision .ctb-nav-button').last().click();
     check((await page.locator('#ctb-decision .ctb-stage-title').textContent()).includes('Pukaskwa'),
-      size.name+': next planned stop did not change decision');
+      size.name+': A-B-A re-entry lost progression');
     await page.locator('#ctb-theme').selectOption('ships');
     check((await page.locator('#ctb-decision').textContent()).includes('No approved specialist'),
       size.name+': unsupported interest invented a result');
@@ -99,6 +106,16 @@ function check(value,message){if(!value)throw Error(message);}
     'clockwise next stop did not preserve applied direction');
   report.cases.push({state:'applied clockwise published route',result:'ordered stop 18 to stop 15 without changing original planner'});
   await routeCtx.close();
+
+  // Blocking the original map import does not block the independent evidence desk.
+  const tileContext=await browser.newContext({viewport:{width:390,height:844}}),tilePage=await tileContext.newPage();
+  await tilePage.route('**/assets/lake-superior-circle-tour-map.js*',route=>route.abort());
+  await tilePage.goto(url+'?plan=11&ctTheme=water',{waitUntil:'domcontentloaded',timeout:35000});
+  await tilePage.waitForFunction(()=>document.querySelector('#ctb-decision .ctb-stage-title')?.textContent.includes('Pictured Rocks'),null,{timeout:30000});
+  check((await tilePage.locator('#ctb-decision .ctb-stage-primary').getAttribute('href'))==='https://picturedrocks.chrisizworski.com/',
+    'missing basemap import incorrectly blocked independent specialist action');
+  report.cases.push({state:'map import unavailable',result:'independent specialist decision remains actionable'});
+  await tileContext.close();
 
   // Bridge failure must never take down original route, atlas or static backup.
   const context=await browser.newContext({viewport:{width:390,height:844}}),failPage=await context.newPage();
