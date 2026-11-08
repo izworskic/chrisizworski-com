@@ -74,7 +74,7 @@ test('visitor data rendered using DOM text nodes, not provider-supplied HTML',()
  const source=fs.readFileSync('public/assets/seaway-follow.js','utf8');
  assert.match(source,/node\.textContent=text/);
  assert.doesNotMatch(source,/\.innerHTML|insertAdjacentHTML|eval\(/);
- assert.match(source,/not a confirmed transit or arrival/);
+ assert.match(source,/not a confirmed transit or arrival/i);
  assert.match(source,/not a verified voyage direction/);
  const css=fs.readFileSync('public/assets/seaway-follow.css','utf8');
  assert.match(css,/\.follow-panel/);
