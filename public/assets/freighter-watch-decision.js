@@ -41,7 +41,7 @@ function tomorrowKey(now,zone){
 function formatClock(iso,zone){
  return new Intl.DateTimeFormat('en-US',{timeZone:zone,hour:'numeric',minute:'2-digit',timeZoneName:'short'}).format(new Date(iso));
 }
-function publishedAccess(site,targetMs,now){
+function publishedAccess(site,targetMs,now,windowEndMs=null){
  const hours=Array.isArray(site?.hoursByMonth)?site.hoursByMonth:null;
  const reviewed=Date.parse(String(site?.reviewed||'')+'T12:00:00Z');
  const recent=Number.isFinite(reviewed)&&now>=reviewed-86400000&&now-reviewed<=180*86400000;
@@ -56,16 +56,30 @@ function publishedAccess(site,targetMs,now){
  const schedule='Published general hours '+fmt(limits[0])+'–'+fmt(limits[1])+'. ';
  if(!recent)return {level:'unverified',label:'Reconfirm published hours',note:schedule+'The source review is older than six months. '+note};
  if(!within)return {level:'outside',label:'Outside published hours',note:schedule+'This selected hour falls outside the published general park schedule. '+note};
- return {level:'published',label:'Within published hours',note:schedule+'This is not a live closure check. '+note};
+ // A model window is not usable merely because its first minute is inside opening hours.
+ // Check the final minute, including the local calendar day. A different day's
+ // opening hours must never make an overnight or closing-time overlap look open.
+ if(Number.isFinite(windowEndMs)&&windowEndMs>targetMs){
+   const finish=localParts(windowEndMs-1,site.zone);
+   const sameDay=finish&&finish.year===local.year&&finish.month===local.month&&finish.day===local.day;
+   const fullWindowInside=sameDay&&finish.hour>=limits[0]&&finish.hour<limits[1];
+   if(!fullWindowInside)return {level:'partial',label:'Only part of the ship window fits published hours',
+     note:schedule+'The estimated passage window extends outside published park hours. The vessel may not pass before closing; do not assume the public park stays open for the full estimate. '+note};
+ }
+ return {level:'published',label:'Full modeled window within published hours',
+   note:schedule+'This is not a live closure check. '+note};
 }
 function chooseHour(weather,when,window,now,zone){
  if(!weather?.ok||!validAge(weather.checkedAt,now,MAX_WEATHER_AGE)||!Array.isArray(weather.periods))
    return {level:'unknown',label:'Weather not verified',note:'The NWS hourly forecast is unavailable or older than 35 minutes. Check NWS before leaving.',at:null,period:null,alerts:[]};
  const valid=weather.periods.filter(p=>Number.isFinite(Date.parse(p?.starts||''))&&
-   Number.isFinite(Date.parse(p?.ends||''))&&Date.parse(p.ends)>Date.parse(p.starts)&&Date.parse(p.ends)>now-3600000);
+   Number.isFinite(Date.parse(p?.ends||''))&&Date.parse(p.ends)>Date.parse(p.starts)&&Date.parse(p.ends)>now-3600000)
+   .sort((a,b)=>Date.parse(a.starts)-Date.parse(b.starts));
  if(!valid.length)return {level:'unknown',label:'No usable hourly forecast',note:'NWS returned no forecast for the chosen period.',at:null,period:null,alerts:[]};
+ const start=window?Math.max(now,Date.parse(window.start)):null;
+ const finish=window?Date.parse(window.end):null;
  let selected=null;
- let target=window?Math.max(now,Date.parse(window.start)):when==='tomorrow'?null:now+20*60000;
+ let target=start===null?when==='tomorrow'?null:now+20*60000:start;
  if(when==='tomorrow'){
    const key=tomorrowKey(now,zone);
    selected=valid.filter(p=>dayKey(p.starts,zone)===key&&p.isDaytime===true)
@@ -76,33 +90,51 @@ function chooseHour(weather,when,window,now,zone){
  }
  if(!selected)return {level:'unknown',label:'Chosen-hour forecast unavailable',note:'Do not substitute an unrelated hour or an earlier day for your viewing time.',at:null,period:null,alerts:[]};
  target=Math.max(now,Date.parse(selected.starts));
- const severity=(Array.isArray(weather.alerts)?weather.alerts:[]).filter(a=>{
-   const start=Date.parse(a.starts||'');
-   const end=Date.parse(a.expires||'');
-   return (!Number.isFinite(start)||start<=target)&&(!Number.isFinite(end)||end>target);
+ // A visit spanning hours must check every relevant hourly interval, not just
+ // the initial conditions. Incomplete time coverage cannot become favorable.
+ const fullWindow=Number.isFinite(start)&&Number.isFinite(finish)&&finish>start;
+ const watchStart=fullWindow?start:Date.parse(selected.starts);
+ const watchEnd=fullWindow?finish:Date.parse(selected.ends);
+ const scope=valid.filter(p=>Date.parse(p.starts)<watchEnd&&Date.parse(p.ends)>watchStart);
+ let cursor=watchStart;
+ for(const p of scope) {
+   const a=Date.parse(p.starts),b=Date.parse(p.ends);
+   if(a>cursor)break;
+   cursor=Math.max(cursor,b);
+ }
+ const fullyCovered=scope.length>0&&cursor>=watchEnd;
+ const effective=scope.length?scope:[selected];
+ const overlappingAlerts=(Array.isArray(weather.alerts)?weather.alerts:[]).filter(a=>{
+   const aStart=Date.parse(a.starts||''),aEnd=Date.parse(a.expires||'');
+   return (!Number.isFinite(aStart)||aStart<watchEnd)&&(!Number.isFinite(aEnd)||aEnd>watchStart);
  });
- const important=severity.filter(a=>['Severe','Extreme'].includes(a.severity));
- const hardWind=selected.windMph!==null&&selected.windMph>=35;
- const highPrecip=selected.precipProbability!==null&&selected.precipProbability>=75;
- const dark=selected.isDaytime===false;
- const cold=selected.temperatureF!==null&&selected.temperatureF<=25;
- const wind=selected.windMph!==null&&selected.windMph>=18;
- const rain=selected.precipProbability!==null&&selected.precipProbability>=45;
+ const important=overlappingAlerts.filter(a=>['Severe','Extreme'].includes(a.severity));
+ const hardWind=effective.some(p=>p.windMph!==null&&p.windMph>=35);
+ const highPrecip=effective.some(p=>p.precipProbability!==null&&p.precipProbability>=75);
+ const dark=effective.some(p=>p.isDaytime===false);
+ const cold=effective.some(p=>p.temperatureF!==null&&p.temperatureF<=25);
+ const wind=effective.some(p=>p.windMph!==null&&p.windMph>=18);
+ const rain=effective.some(p=>p.precipProbability!==null&&p.precipProbability>=45);
+ const windValues=effective.map(p=>p.windMph).filter(Number.isFinite);
+ const precipValues=effective.map(p=>p.precipProbability).filter(Number.isFinite);
+ const tempValues=effective.map(p=>p.temperatureF).filter(Number.isFinite);
  const weatherSummary=[
-   selected.temperatureF===null?null:Math.round(selected.temperatureF)+'°F',
-   selected.windMph===null?null:'wind up to '+selected.windMph+' mph',
-   selected.precipProbability===null?null:selected.precipProbability+'% precipitation chance',
+   tempValues.length?(Math.round(Math.min(...tempValues))+'–'+Math.round(Math.max(...tempValues))+'°F'):null,
+   windValues.length?'wind up to '+Math.max(...windValues)+' mph':null,
+   precipValues.length?Math.max(...precipValues)+'% highest hourly precipitation chance':null,
    selected.shortForecast||null
  ].filter(Boolean).join(' · ');
  let level='favorable',label='No major hourly limiter identified';
- if(important.length||hardWind) {level='avoid';label=important.length?'Active severe NWS alert':'Very strong forecast wind';}
- else if(dark||highPrecip||cold||wind||rain){level='caution';label=dark?'Viewing hour is after dark':'Conditions may be uncomfortable';}
+ if(important.length||hardWind) {level='avoid';label=important.length?'Active severe NWS alert in visit window':'Very strong forecast wind in visit window';}
+ else if(!fullyCovered){level='unknown';label='Forecast incomplete for the full viewing window';}
+ else if(dark||highPrecip||cold||wind||rain){level='caution';label=dark?'Part of the viewing window is after dark':'Conditions may be uncomfortable';}
  if(weather.alertsStatus!=='available'&&level==='favorable') {level='unverified';label='Weather alerts could not be checked';}
  return {level,label,
    note:weatherSummary+(important.length?' · Alert: '+important.map(a=>a.event).join(', '):'')+
+     (fullWindow&&!fullyCovered?' · NWS forecast does not cover the whole ship window.':'')+
      (weather.alertsStatus!=='available'?' · NWS active alerts not verified.':'')+
-     ' · NWS hourly shore forecast, not an observed condition or safety clearance.',
-   at:selected.starts,period:selected,alerts:severity,
+     ' · NWS hourly shore forecast for the viewing window, not observed conditions or safety clearance.',
+   at:selected.starts,period:selected,alerts:overlappingAlerts,
    sourceUrl:weather.sourceUrl,checkedAt:weather.checkedAt
  };
 }
@@ -127,8 +159,8 @@ function recommendation(result,context,now=Date.now()){
  const near=recentNear(result,site,now);
  const weather=chooseHour(context?.weather,when,window,now,site.zone);
  const target=window?Math.max(now,Date.parse(window.start)):weather.at?Date.parse(weather.at):when==='tomorrow'?now+24*3600000:now;
- const access=publishedAccess(site,target,now);
- const blocked=access.level==='outside';
+ const access=publishedAccess(site,target,now,window?Date.parse(window.end):null);
+ const blocked=access.level==='outside'||access.level==='partial';
  const risk=weather.level==='avoid';
  let code,title,summary,whenText,why=[];
  if(result?.status==='in-lock'&&result.inLock&&validAge(result.inLock.seen,now,8*60000)){
@@ -150,6 +182,7 @@ function recommendation(result,context,now=Date.now()){
    code='PLAN_WINDOW';
    why.push('AIS-based corridor prediction is available; ships can wait, stop, turn or use another approach.');
    if(starts-now<20*60000)why.push('The window begins soon: only consider this if you are already close enough.');
+   if(ends-starts>120*60000)why.push('This broad prediction spans more than two hours. It does not justify assuming the ship will pass at any particular moment.');
    if(Number.isFinite(ship.confidence))why.push('Source-model confidence is not a calibrated probability of seeing the ship.');
  }else if(when==='tomorrow'){
    code='PLAN_SHORE';title='Plan a shore stop, not a ship arrival';
@@ -171,9 +204,17 @@ function recommendation(result,context,now=Date.now()){
    why.push('The broad AIS map is not a schedule, and an empty or stale receiver report does not prove the waterway is empty.');
  }
  if(blocked){
-   code='HOURS_CONFLICT';title='Not at this time: published park hours conflict';
-   summary='The selected visit would fall outside this location’s posted general hours. A ship report cannot override access rules.';
-   why.push('Check the official land-manager page for possible schedule changes, closures and alternative viewpoints.');
+   code='HOURS_CONFLICT';
+   if(access.level==='partial'){
+     title='Ship window runs beyond published park hours';
+     summary='Only the early portion of this estimated passage window falls within posted park hours. The ship could arrive after the park closes, so this is not a reliable full-window visit plan.';
+     whenText+=' The modeled window extends beyond posted access hours. Do not expect the park to remain open until the predicted end.';
+     why.push('A ship might arrive after closing; check the official land-manager notice before planning any access.');
+   }else{
+     title='Not at this time: published park hours conflict';
+     summary='The selected visit would fall outside this location’s posted general hours. A ship report cannot override access rules.';
+     why.push('Check the official land-manager page for possible schedule changes, closures and alternative viewpoints.');
+   }
  }else if(risk){
    code='WEATHER_HOLD';title='Reconsider the outdoor trip: weather concern';
    summary='The NWS forecast or active severe alert raises a material outdoor exposure concern. Do not treat a ship prediction as a reason to overlook it.';

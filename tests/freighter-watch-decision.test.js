@@ -52,12 +52,70 @@ test('out of park hours blocks even supported vessel passage',()=>{
  assert.equal(plan.code,'HOURS_CONFLICT');
  assert.equal(plan.access.level,'outside');
 });
+test('Soo window beginning before park closure but ending afterward is not an open-hours recommendation',()=>{
+ const crossing={start:'2026-11-08T20:49:00Z',end:'2026-11-09T00:53:00Z'};
+ const access=engine.publishedAccess(publicSite('soo'),Date.parse(crossing.start),now,Date.parse(crossing.end));
+ assert.equal(access.level,'partial');
+ assert.match(access.note,/extends outside published park hours/);
+ const plan=engine.recommendation(report({pick:{ship:ship(),window:crossing}}),context(),now);
+ assert.equal(plan.code,'HOURS_CONFLICT');
+ assert.match(plan.title,/beyond published park hours/);
+ assert.match(plan.summary,/ship could arrive after the park closes/);
+ assert.match(plan.when,/Do not expect the park to remain open/);
+ assert.notEqual(plan.access.level,'published');
+});
+test('a window ending at the exact closing minute is acceptable, but one minute later is not',()=>{
+ const site=publicSite('soo');
+ const start=Date.parse('2026-11-08T20:30:00Z');
+ const closing=Date.parse('2026-11-08T23:00:00Z');
+ assert.equal(engine.publishedAccess(site,start,now,closing).level,'published');
+ assert.equal(engine.publishedAccess(site,start,now,closing+60000).level,'partial');
+});
+test('overnight passage window cannot borrow tomorrow’s published hours',()=>{
+ const site=publicSite('soo');
+ const start=Date.parse('2026-11-08T21:00:00Z');
+ const tomorrowMorning=Date.parse('2026-11-09T15:00:00Z');
+ assert.equal(engine.publishedAccess(site,start,now,tomorrowMorning).level,'partial');
+});
 test('severe NWS warning blocks a model-backed outing',()=>{
  const alerts=[{event:'High Wind Warning',severity:'Severe',starts:iso(now-3600000),expires:iso(now+3*3600000)}];
  const plan=engine.recommendation(report(),context('soo',forecast({alerts})),now);
  assert.equal(plan.code,'WEATHER_HOLD');
  assert.equal(plan.weather.level,'avoid');
  assert.match(plan.weather.note,/High Wind Warning/);
+});
+test('wind becoming hazardous in a later hour overrides a favorable first hour',()=>{
+ const wideWindow={start:iso(now+30*60000),end:iso(now+150*60000)};
+ const periods=[
+   {...forecast().periods[1],starts:iso(now+30*60000),ends:iso(now+90*60000),windMph:6},
+   {...forecast().periods[1],starts:iso(now+90*60000),ends:iso(now+150*60000),windMph:42}
+ ];
+ const plan=engine.recommendation(report({pick:{ship:ship(),window:wideWindow}}),
+   context('soo',forecast({periods})),now);
+ assert.equal(plan.code,'WEATHER_HOLD');
+ assert.equal(plan.weather.level,'avoid');
+ assert.match(plan.weather.note,/wind up to 42 mph/);
+});
+test('an alert beginning after the window starts still blocks the outing',()=>{
+ const wideWindow={start:iso(now+30*60000),end:iso(now+150*60000)};
+ const periods=[
+  {...forecast().periods[1],starts:iso(now+30*60000),ends:iso(now+90*60000)},
+  {...forecast().periods[1],starts:iso(now+90*60000),ends:iso(now+150*60000)}
+ ];
+ const alerts=[{event:'Storm Warning',severity:'Severe',starts:iso(now+110*60000),expires:iso(now+180*60000)}];
+ const plan=engine.recommendation(report({pick:{ship:ship(),window:wideWindow}}),
+   context('soo',forecast({periods,alerts})),now);
+ assert.equal(plan.code,'WEATHER_HOLD');
+ assert.match(plan.weather.note,/Storm Warning/);
+});
+test('a missing forecast hour in a broad passage cannot produce favorable conditions',()=>{
+ const wideWindow={start:iso(now+30*60000),end:iso(now+150*60000)};
+ const periods=[{...forecast().periods[1],starts:iso(now+30*60000),ends:iso(now+90*60000)}];
+ const plan=engine.recommendation(report({pick:{ship:ship(),window:wideWindow}}),
+   context('soo',forecast({periods})),now);
+ assert.equal(plan.code,'VERIFY_BEFORE_TRAVEL');
+ assert.equal(plan.weather.level,'unknown');
+ assert.match(plan.weather.note,/does not cover the whole ship window/);
 });
 test('wind forecast can veto a sunny-looking passage even without an active alert',()=>{
  const periods=forecast().periods.map(p=>({...p,windMph:41}));

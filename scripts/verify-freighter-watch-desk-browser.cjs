@@ -34,6 +34,8 @@ const sunny={ok:true,checkedAt:iso(now),alertsStatus:'available',
   ]};
 const soo={ok:true,checkedAt:iso(now),vessels:[ship],
   nextShip:{ok:true,pick:ship,candidates:[ship],inLock:[]}};
+const lateShip={...ship,window:{start:'2026-11-08T20:49:00Z',end:'2026-11-09T00:53:00Z'}};
+const lateSoo={...soo,nextShip:{...soo.nextShip,pick:lateShip,candidates:[lateShip]}};
 const general={ok:true,checkedAt:iso(now),
   vessels:[{...ship,lat:42.98,lon:-82.42,seen:iso(now-3*60000)}]};
 const server=http.createServer((req,res)=>{
@@ -69,7 +71,8 @@ const server=http.createServer((req,res)=>{
       page.on('pageerror',error=>pageErrors.push(String(error.message || error)));
       await page.route('**/leaflet.js',r=>r.fulfill({path:leafletJs,contentType:'application/javascript'}));
       await page.route('**/leaflet.css',r=>r.fulfill({path:leafletCss,contentType:'text/css'}));
-      await page.route('**/api/soo-ais',r=>r.fulfill({json:soo}));
+      let liveSoo=soo;
+      await page.route('**/api/soo-ais',r=>r.fulfill({json:liveSoo}));
       await page.route('**/api/freighter-watch-conditions**',r=>{
         const id=new URL(r.request().url()).searchParams.get('place');
         return r.fulfill({json:{ok:true,site:publicSite(id),weather:sunny}});
@@ -124,6 +127,16 @@ const server=http.createServer((req,res)=>{
       assert.match(await page.textContent('#fwd-headline'),/Tomorrow is not confirmed/);
       await page.waitForFunction(()=>document.querySelector('#fwd-visit-plan').dataset.verdict==='PLAN_SHORE');
       assert.match(await page.textContent('#fwd-plan-summary'),/no verified ship passage for tomorrow/i);
+      // Real failure found on 2026-11-08: ship window reached 7:53 PM but Soo park closes at 6 PM.
+      // Changing a selected place and time must change the actual access verdict, not just the map.
+      liveSoo=lateSoo;
+      await page.selectOption('#fwd-place','soo');
+      await page.selectOption('#fwd-when','today');
+      await page.waitForFunction(()=>document.querySelector('#fwd-visit-plan').dataset.verdict==='HOURS_CONFLICT');
+      assert.match(await page.textContent('#fwd-plan-title'),/beyond published park hours/);
+      assert.match(await page.textContent('#fwd-plan-access'),/Only part of the ship window/);
+      assert.match(await page.textContent('#fwd-plan-when'),/Do not expect the park to remain open/);
+      assert.equal(pageErrors.length,0,'no script errors after the closing-time conflict');
       assert.equal(pageErrors.length,0,'no script errors after changing region and time');
       await context.close();
       cases+=4;
