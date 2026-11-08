@@ -43,7 +43,10 @@
   }
   function decide(data) {
     const region=data?.region?.id;
-    const mission=data?.selectedLaunch&&data.selectedLaunch.region===region?data.selectedLaunch:null;
+    const mission=data?.selectedLaunch&&data.selectedLaunch.region===region&&
+      data.selectedLaunchId===data.selectedLaunch.id&&
+      data.regions?.some(r=>r.id===region&&r.launches?.some(l=>l.id===data.selectedLaunch.id))?
+      data.selectedLaunch:null;
     const unavailable=!data||data.ok===false||!REGION_NAMES[region];
     if(unavailable)return {
       status:'unavailable',headline:'Launch schedule is unavailable',
@@ -137,67 +140,89 @@
    * It uses only the same region/mission snapshot as the existing Flight Desk.
    * The links go to official authority or the existing regional access owner.
    */
-  function nextCheck(data) {
-    const d=decide(data);
-    const region=d.region;
-    const choose='Check the latest official information before any trip.';
-    if(!region){
-      return {gate:'source',headline:'The schedule cannot establish a current launch',
-        detail:'No verified mission or range selection is available. NASA’s public list does not include every commercial or military range operation.',
-        label:'Open NASA’s public launch schedule',
-        href:'https://www.nasa.gov/event-type/launch-schedule/',source:'nasa'};
-    }
+  const UUID=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  // A linked guide receives both the selected mission and a bounded journey tag.
+  // The destination must independently restore the mission before reporting success.
+  function regionalHref(region,id,stage) {
+    const base=SPECIALISTS[region];
+    if(!base||!UUID.test(id||''))return base||null;
+    return base+'?launchId='+encodeURIComponent(id)+'&via=rocket-foundry&stage='+encodeURIComponent(stage);
+  }
+  function nextCheck(data,context={}) {
+    const d=decide(data),region=d.region;
     const authority=typeof data?.region?.authority==='string'&&
       /^https:\/\/[a-z0-9.-]+\//i.test(data.region.authority)?
       data.region.authority:null;
     const specialist=SPECIALISTS[region];
+    const handoff=(gate,headline,detail,label,source='specialist')=>({
+      gate,headline,detail,label,
+      href:regionalHref(region,d.launchId,gate),source,
+      destination:'regional_guide'
+    });
+    if(!region)return {
+      gate:'source',headline:'The schedule cannot establish a current launch',
+      detail:'No verified mission or range selection is available. NASA’s public list does not include every commercial or military range operation.',
+      label:'Open NASA’s public launch schedule',
+      href:'https://www.nasa.gov/event-type/launch-schedule/',source:'nasa',destination:'official_access'
+    };
     const rangeLink=authority||specialist;
-    if(!d.launchId){
-      return {gate:'schedule',headline:'Check the range for an unlisted operation',
-        detail:'No future mission is selected in this bounded third-party feed. That is not confirmation the range is inactive.',
-        label:authority?'Check the official range authority':'Read the regional guide',
-        href:rangeLink,source:authority?'authority':'specialist'};
-    }
-    if(d.status==='stale'||d.status==='unavailable'){
-      return {gate:'schedule',headline:'Reconfirm the published mission target',
-        detail:'The shared schedule is stale or the regional source is unavailable. A saved time cannot be treated as current.',
-        label:authority?'Check the range authority':'Review regional source guidance',
-        href:rangeLink,source:authority?'authority':'specialist'};
-    }
+    const official=(gate,headline,detail,label)=>({
+      gate,headline,detail,label,href:rangeLink,
+      source:authority?'authority':'specialist',
+      destination:authority?'official_access':'regional_guide'
+    });
+    if(!d.launchId)return official('schedule','Check the range for an unlisted or removed mission',
+      'No current selected mission is verified in this bounded feed. An absent, removed or mismatched mission must not silently become a different launch. This is not evidence the range is inactive.',
+      authority?'Check the official range authority':'Read the regional source guidance');
+    if(d.status==='stale'||d.status==='unavailable')return official('schedule',
+      'Reconfirm the published mission target',
+      'The schedule is stale or unavailable. An old target, viewing notice or forecast is not current.',
+      authority?'Check the range authority':'Review regional source guidance');
+    const closed=region==='texas'&&data?.access?.liveOfficialNotice?.state==='closed';
     if(d.status==='hold'){
-      const texasClosure=region==='texas'&&data?.access?.liveOfficialNotice?.state==='closed';
-      return {gate:texasClosure?'access':'schedule',
-        headline:texasClosure?'Check the dated Starbase beach and road closure':'Wait for an updated launch attempt',
-        detail:texasClosure?
-          'The official city source reports a closure; this does not provide an alternative legal viewing location. Recheck the dated notice.':
-          'A hold or scrub invalidates the prior arrival plan. Verify a new official window before leaving.',
-        label:texasClosure?'Read regional closure guidance':authority?'Check official range updates':'Read the regional guide',
-        href:texasClosure?specialist:rangeLink,source:texasClosure?'specialist':authority?'authority':'specialist'};
+      if(closed)return handoff('access','Check the dated Starbase beach and road closure',
+        'An official city closure is reported. It does not identify a legal replacement viewing site; read the notice and respect restrictions.',
+        'Read Starbase closure and alternative-place guidance');
+      return official('schedule','Wait for an updated launch attempt',
+        'A hold or scrub invalidates the earlier arrival window. Verify a new official target before departure.',
+        authority?'Check official range updates':'Read the regional source guidance');
     }
-    if(d.status==='timing'){
-      return {gate:'schedule',headline:'Confirm an exact launch hour first',
-        detail:'A date-only, monthly or approximate-hour entry is not enough to plan a departure or forecast the spectator sky.',
-        label:authority?'Check official mission notices':'Read the regional launch guide',
-        href:rangeLink,source:authority?'authority':'specialist'};
-    }
-    if(d.status==='access'){
-      return {gate:'access',headline:'Establish whether public viewing is allowed',
-        detail:'This range has no independently verified public launch-viewing venue for this mission. Do not route to the pad.',
-        label:'Read restricted-range visitor guidance',href:specialist,source:'specialist'};
-    }
-    // Even when time and NWS evidence exist, neither proves a legal
-    // launch-day viewpoint. This gate is always unresolved by a calendar.
-    return {gate:'access',headline:'Verify the launch-day viewing arrangements',
-      detail:region==='florida'?
-        'Kennedy viewing tickets and safe locations vary by mission, pad and official event notices. A listed launch is not admission.':
-        region==='virginia'?
-        'NASA announces event-specific Wallops Visitor Center openings. Regular museum hours are not launch viewing permission.':
-        region==='california'?
-        'Vandenberg launch exclusions, Surf Beach protections and access hours can override normal public opening.':
-        region==='texas'?
-        'Starbase road and beach restrictions may change by official notice before a scheduled launch.':
-        choose,
-      label:'Open the regional viewing decision',href:specialist,source:'specialist'};
+    if(d.status==='timing')return official('schedule','Confirm an exact launch hour first',
+      'A date-only, monthly or approximate-hour target cannot support a departure plan or a mission-time sky forecast.',
+      authority?'Check official mission notices':'Read the regional launch guide');
+    if(['alaska','hawaii'].includes(region))return handoff('access',
+      'Establish whether public viewing is allowed',
+      'This restricted range has no verified public spectator venue for this specific operation. A pad pin is not a public entrance.',
+      'Read restricted-range access guidance');
+    const sites=Array.isArray(data?.access?.sites)?data.access.sites:[];
+    const publicCandidates=sites.filter(s=>
+      s?.state==='candidate'&&s.directionsAllowed!==false&&
+      typeof s.source==='string'&&/^https:\/\//.test(s.source));
+    const kscMatched=region==='florida'&&context.kscEvent==='matched'&&
+      context.kscLaunchId===d.launchId;
+    const venuesDocumented=publicCandidates.length>0||kscMatched;
+    if(!venuesDocumented)return handoff('access','Establish a source-backed spectator option',
+      'A listed launch and ordinary venue hours do not establish public mission viewing. The existing regional guide distinguishes access restrictions, closures and candidate viewpoints.',
+      'Compare documented regional access');
+    const weather=data?.weather||{};
+    const spectatorSamples=Array.isArray(weather.places)?weather.places.filter(p=>
+      p?.status==='ok'&&p.cloudStatus==='ok'&&
+      Number.isInteger(p.cloudCoverPercent)&&
+      (p.period?.startTime||p.period?.shortForecast)):[];
+    const weatherUsable=['assessed','partial'].includes(weather.level)&&
+      spectatorSamples.length>0&&d.status!=='stale';
+    if(weatherUsable&&publicCandidates.length>0)return {
+      gate:'sky',headline:'Compare the mission-time spectator sky',
+      detail:'The schedule is precise and documented public viewing candidates exist. NWS forecast samples now inform the next choice, but do not prove event admission, pad sightlines or visibility along the rocket’s flight path.',
+      label:'Compare NWS reference forecasts below',href:'#rl-regional-sky',
+      source:'in_page',destination:'spectator_weather'
+    };
+    if(kscMatched)return handoff('viewing','KSC has published a mission-linked viewing event',
+      'An independently matched KSC event listing is supported. Tickets, actual admission, available viewing locations and any launch-specific closure remain unverified. Compare the options rather than assuming an open gate.',
+      'Compare Florida event and public viewing options');
+    return handoff('viewing','Compare documented public viewing candidates',
+      'Published places are mapped candidates, not confirmed open for this launch. No usable mission-time spectator forecast is established; inspect the local alternatives and their official restrictions.',
+      'Compare public viewpoints and access rules');
   }
 
   function mount(doc) {
@@ -209,7 +234,7 @@
     const official=$('rl-flight-official');
     const specialist=$('rl-flight-specialist');
     const nextLink=$('rl-flight-next-link');
-    let current=null;
+    let current=null,kscEvent='unknown',kscLaunchId=null;
     // The government-source hero photo is historical context. It must never
     // leave a giant broken panel or cover the actual mission decision.
     const photo=doc.querySelector?.('.rl-hero-photo img');
@@ -225,6 +250,7 @@
     }
     const set=(id,v)=>{const el=$(id);if(el)el.textContent=String(v??'—');};
     function render(data) {
+      if(current?.selectedLaunchId!==data?.selectedLaunchId){kscEvent='unknown';kscLaunchId=null;}
       current=data;
       const d=decide(data);
       box.dataset.status=d.status;
@@ -239,7 +265,7 @@
       set('rl-flight-access',d.access);
       set('rl-flight-sky',d.sky);
       set('rl-flight-source',d.source);
-      const next=nextCheck(data);
+      const next=nextCheck(data,{kscEvent,kscLaunchId});
       box.dataset.nextGate=next.gate;
       set('rl-flight-next-title',next.headline);
       set('rl-flight-next-detail',next.detail);
@@ -247,7 +273,9 @@
         nextLink.textContent=next.label;
         nextLink.setAttribute('href',next.href);
         nextLink.dataset.nextSource=next.source;
-        if(next.source!=='specialist'){
+        nextLink.dataset.evidenceStage=next.gate;
+        nextLink.dataset.destinationCategory=next.destination;
+        if(next.source==='authority'||next.source==='nasa'){
           nextLink.setAttribute('target','_blank');
           nextLink.setAttribute('rel','noopener noreferrer');
         }else{
@@ -268,8 +296,8 @@
         // guide in access-gated states. Do not repeat the same destination
         // immediately underneath it as a second ambiguous call to action.
         specialist.hidden=!d.specialist||next.source==='specialist';
-        if(d.specialist)specialist.href=d.specialist+
-          (d.launchId&&d.region!=='california'?'?launchId='+encodeURIComponent(d.launchId):'');
+        if(d.specialist)specialist.href=d.launchId?
+          d.specialist+'?launchId='+encodeURIComponent(d.launchId):d.specialist;
       }
       if(!picker)return;
       const region=data?.regions?.find(r=>r.id===d.region);
@@ -300,10 +328,25 @@
       doc.dispatchEvent(new CustomEvent('rocket-experience:locate',{detail:{launchId:d.launchId,region:d.region}}));
     });
     doc.addEventListener('rocket-viewing:data',event=>render(event.detail));
+    doc.addEventListener('rocket-viewing:ksc-evidence',event=>{
+      if(event.detail?.region!=='florida'||!current||
+         event.detail.launchId!==current.selectedLaunchId)return;
+      kscEvent=event.detail.status;
+      kscLaunchId=event.detail.launchId;
+      render(current);
+    });
+    doc.addEventListener('rocket-viewing:failure',event=>{
+      render(null);
+      if(event.detail?.removed===true){
+        set('rl-flight-headline','The selected mission is no longer listed');
+        set('rl-flight-note','This exact mission could not be restored. No different launch has been substituted. Check the official range for updates.');
+        set('rl-flight-next-title','Recheck this removed mission with the range');
+      }
+    });
     render(null);
     return {render,decision:()=>decide(current)};
   }
-  const api=Object.freeze({decide,target,nextCheck,mount});
+  const api=Object.freeze({decide,target,nextCheck,regionalHref,mount});
   root.RocketFlightDesk=api;
   if(typeof module==='object'&&module.exports)module.exports=api;
   if(typeof document!=='undefined'){
