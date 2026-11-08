@@ -13,7 +13,12 @@ const shots=path.join(root,'artifacts/freighter-watch-desk-browser');
 fs.mkdirSync(shots,{recursive:true});
 const leafletJs='/tmp/fwd-playwright/node_modules/leaflet/dist/leaflet.js';
 const leafletCss='/tmp/fwd-playwright/node_modules/leaflet/dist/leaflet.css';
-const now=Date.now(),iso=x=>new Date(x).toISOString();
+// Fixed source time ensures the same published-hour and alert cases all year.
+const now=Date.parse('2026-11-08T17:30:00Z'),iso=x=>new Date(x).toISOString();
+async function freezeClock(page){
+  const stamp=String(now);
+  await page.addInitScript({content:'(()=>{const Native=Date;class FixedDate extends Native{constructor(...args){super(...(args.length?args:['+stamp+']));}static now(){return '+stamp+';}}window.Date=FixedDate;})();'});
+}
 const tilePng=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScLttAAAAABJRU5ErkJggg==','base64');
 const ship={mmsi:'366123456',name:'Browser fixture freighter',lat:46.52,lon:-84.41,
   seen:iso(now-4*60000),speedKnots:8,course:90,lengthMeters:300,confidence:.83,
@@ -58,6 +63,7 @@ const server=http.createServer((req,res)=>{
     for(const width of [360,390,768,1440]){
       const context=await browser.newContext({viewport:{width,height:900},reducedMotion:'reduce'});
       const page=await context.newPage();
+      await freezeClock(page);
       const missingKeyTiles=[];
       const pageErrors=[];
       page.on('pageerror',error=>pageErrors.push(String(error.message || error)));
@@ -124,6 +130,7 @@ const server=http.createServer((req,res)=>{
     }
     const adverse=await browser.newContext({viewport:{width:390,height:800}});
     const adversePage=await adverse.newPage();
+    await freezeClock(adversePage);
     await adversePage.route('**/leaflet.js',r=>r.fulfill({path:leafletJs,contentType:'application/javascript'}));
     await adversePage.route('**/leaflet.css',r=>r.fulfill({path:leafletCss,contentType:'text/css'}));
     await adversePage.route('**/api/soo-ais',r=>r.fulfill({json:soo}));
@@ -139,6 +146,7 @@ const server=http.createServer((req,res)=>{
     await adverse.close();cases++;
     const fallback=await browser.newContext({viewport:{width:390,height:800}});
     const fallbackPage=await fallback.newPage();
+    await freezeClock(fallbackPage);
     await fallbackPage.route('**/leaflet.js',r=>r.fulfill({path:leafletJs,contentType:'application/javascript'}));
     await fallbackPage.route('**/leaflet.css',r=>r.fulfill({path:leafletCss,contentType:'text/css'}));
     await fallbackPage.route('**/api/soo-ais',r=>r.fulfill({json:soo}));
@@ -152,6 +160,7 @@ const server=http.createServer((req,res)=>{
     cases++;
     const noMap=await browser.newContext({viewport:{width:390,height:800}});
     const p=await noMap.newPage();
+    await freezeClock(p);
     await p.route('**/leaflet.js',r=>r.abort());
     await p.route('**/api/soo-ais',r=>r.fulfill({json:soo}));
     await p.route('**/api/freighter-watch-conditions**',r=>r.fulfill({json:{ok:true,site:publicSite('soo'),weather:sunny}}));
