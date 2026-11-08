@@ -352,15 +352,57 @@
      cards.forEach(c=>{c.hidden=region!=='all'&&c.dataset.portRegion!==region});
    }));
    guide.querySelectorAll('[data-port-select-harbor]').forEach(btn=>btn.addEventListener('click',()=>{
-     const harborId=btn.dataset.portSelectHarbor;
      if(!state.archive)return;
-     if(!records().some(v=>v.harborId===harborId)){
-       const historical=state.archive.seasons.filter(s=>s.state==='historical_snapshot'&&s.records.some(v=>v.harborId===harborId))
-          .sort((a,b)=>b.id.localeCompare(a.id))[0];
-        if(historical){$('season').value=historical.id;setSeason(historical.id)}
+     const harborId=btn.dataset.portSelectHarbor;
+     const evidence=policy().harborEvidenceOptions(state.archive,harborId,winterForDate(),state.season);
+     if(!evidence)return;
+     const card=btn.closest('.port-guide-card');
+     if(!card)return;
+     guide.querySelectorAll('[data-harbor-evidence-choices]').forEach(node=>{node.hidden=true});
+     let panel=card.querySelector('[data-harbor-evidence-choices]');
+     if(!panel){
+       panel=document.createElement('div');
+       panel.className='harbor-evidence-choices';
+       panel.dataset.harborEvidenceChoices='';
+       panel.setAttribute('role','group');
+       panel.setAttribute('aria-label','Choose dated evidence for this harbor');
+       panel.tabIndex=-1;
+       card.querySelector('.port-card-body')?.append(panel);
      }
-     setHarbor(harborId,true);
-     $('fleet')?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+     panel.hidden=false;panel.replaceChildren();
+     panel.append(text('h4','Choose your winter evidence'));
+     const current=evidence.current;
+     panel.append(text('p',current.count
+       ?current.label+': '+current.count+' dated harbor '+(current.count===1?'record':'records')+
+         ' ('+current.confirmed+' confirmed, '+current.reported+' reported). Latest report: '+fmt(current.latestAsOf)+'.'
+       :current.label+': no sourced arrivals in this harbor in our ledger yet. Berth status remains unknown; this does not establish an empty harbor.'));
+     const options=document.createElement('div');options.className='harbor-evidence-actions';
+     const chooseSeason=(seasonId,kind)=>{
+       if(!$('season').querySelector('option[value="'+seasonId+'"]'))return;
+       $('season').value=seasonId;
+       setSeason(seasonId);
+       setHarbor(harborId,true);
+       document.dispatchEvent(new CustomEvent('layup:harbor-evidence-choice',{detail:{harborId,seasonId,kind}}));
+       window.gtag?.('event','layup_harbor_evidence_choice',{harbor_id:harborId,season_id:seasonId,evidence_kind:kind});
+       $('fleet')?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+     };
+     if(current.count){
+       const currentButton=text('button','Open '+current.label+' roster ('+current.count+')');
+       currentButton.type='button';currentButton.addEventListener('click',()=>chooseSeason(current.id,'current'));options.append(currentButton);
+     }else{
+       const read=text('a','Read current winter source ledger');
+       read.href='#winter-live';read.addEventListener('click',()=>document.dispatchEvent(new CustomEvent('layup:harbor-evidence-choice',{detail:{harborId,seasonId:current.id,kind:'current-ledger'}})));
+       options.append(read);
+     }
+     evidence.history.slice(0,3).forEach(s=>{
+       const button=text('button','Explore '+s.label+' archive ('+s.count+')');
+       button.type='button';button.addEventListener('click',()=>chooseSeason(s.id,'historical'));options.append(button);
+     });
+     panel.append(options);
+     panel.append(text('p',evidence.history.length
+       ?'Archive ships were documented in those past winters only. This does not confirm their location today. AIS harbor signals are not winter layup confirmation.'
+       :'No historical layup records have been collected for this harbor either. The public shore-viewing guidance above is not a ship-location report.'));
+     panel.focus({preventScroll:true});
    }));
  }
  async function boot(){
