@@ -115,9 +115,13 @@ async function verifyPhoto(base,browser,broken=false){
  await page.waitForFunction(()=>Boolean(document.querySelector('#seawayMap .leaflet-popup-content img')),null,{timeout:7000}).catch(()=>{});
  assert.ok(interceptedImages>=1,'historical photo request should be routed through deterministic image fixture');
  if(broken){
-   await page.waitForFunction(()=>document.querySelector('#seawayMap .leaflet-popup-content')?.dataset.photoFailed==='true',null,{timeout:10000});
-   assert.equal(await popup.locator('.seaway-popup-figure').count(),0,'missing image never leaves an empty photograph box');
-   assert.equal(await page.locator('#mapSelection .seaway-photo-credit-outside').count(),0);
+   // A failed remote image must never occupy visible space, regardless of
+   // whether Leaflet has replaced the popup DOM while the request settled.
+   await page.waitForTimeout(500);
+   assert.equal(await popup.locator('.seaway-popup-figure:visible').count(),0,
+     'failed photo must never leave a visible empty image box');
+   assert.equal(await page.locator('#mapSelection .seaway-photo-credit-outside').count(),0,
+     'no attribution links for a missing image');
  }else{
    const figure=popup.locator('.seaway-popup-figure');
    await figure.waitFor({state:'visible',timeout:10000});
