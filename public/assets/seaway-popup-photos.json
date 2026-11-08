@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "checkedOn": "2026-11-08",
+  "identityMaxAgeDays": 180,
+  "description": "Vetted historical Wikimedia Commons photos matched only by current AIS MMSI and exact normalized vessel name. Not current ship positions; no photo for unknown or mismatched identities.",
+  "photos": [
+    {
+      "mmsi": "316009090",
+      "aisName": "ALGOMA EQUINOX",
+      "imo": "9613927",
+      "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Algoma_Equinox_in_the_Burlington_Canal_November_2019_(Ontario,_Canada).jpg?width=330",
+      "imageAlt": "Algoma Equinox in the Burlington Canal, photographed in November 2019, not a live image.",
+      "photoYear": "2019",
+      "credit": "GriffBill",
+      "license": "CC BY-SA 4.0",
+      "photoSource": "https://commons.wikimedia.org/wiki/File:Algoma_Equinox_in_the_Burlington_Canal_November_2019_(Ontario,_Canada).jpg",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "identitySources": [
+        "https://www.myshiptracking.com/vessels/algoma-equinox-mmsi-316009090-imo-9613927",
+        "https://commons.wikimedia.org/wiki/Category:IMO_9613927"
+      ]
+    },
+    {
+      "mmsi": "316036228",
+      "aisName": "ALGOMA BUFFALO",
+      "imo": "7620653",
+      "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Algoma_Buffalo_in_Cleveland_2.jpg?width=330",
+      "imageAlt": "Algoma Buffalo with tug Ohio in Cleveland, photographed June 2021, not a live image.",
+      "photoYear": "2021",
+      "credit": "GuavaTrain",
+      "license": "CC BY-SA 4.0",
+      "photoSource": "https://commons.wikimedia.org/wiki/File:Algoma_Buffalo_in_Cleveland_2.jpg",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "identitySources": [
+        "https://www.myshiptracking.com/vessels/algoma-buffalo-mmsi-316036228-imo-7620653",
+        "https://commons.wikimedia.org/wiki/Category:Algoma_Buffalo_(ship,_1978)"
+      ]
+    }
+  ]
+}
