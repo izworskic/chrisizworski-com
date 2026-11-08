@@ -10,6 +10,7 @@ const gis = JSON.parse(read('data/up-waterfall-reconciliation.json')).candidates
 const external = JSON.parse(read('data/up-waterfall-external-identity-shorelinescout.json')).observations;
 const upTravel = JSON.parse(read('data/up-waterfall-uptravel-location-review-2026.json')).mainDirectoryFirstTwelve;
 const indexed = JSON.parse(read('data/up-waterfall-uptravel-indexed-listings-2026.json'));
+const investigations = JSON.parse(read('data/up-waterfall-uptravel-unmatched-identity-review-2026.json'));
 const html = read('public/upper-peninsula-waterfalls/atlas/index.html');
 const js = read('public/assets/up-waterfall-evidence-atlas.js');
 const hub = read('public/upper-peninsula-waterfalls/index.html');
@@ -17,7 +18,7 @@ const sitemap = read('public/sitemap-up-waterfalls.xml');
 const base = '/upper-peninsula-waterfalls/atlas/';
 
 test('source atlas contract includes all four review collections, but never calls them distinct waterfalls', () => {
-  assert.equal(atlas.schemaVersion,2);
+  assert.equal(atlas.schemaVersion,3);
   assert.equal(atlas.counts.curatedGuideRecords,curated.length);
   assert.equal(atlas.counts.stateGisFeatureRecords,gis.length);
   assert.equal(atlas.counts.independentNameObservations,external.length);
@@ -27,6 +28,7 @@ test('source atlas contract includes all four review collections, but never call
   assert.equal(atlas.counts.totalSourceRecords,curated.length+gis.length+external.length+indexed.counts.researchAtlasListingRecords);
   assert.equal(atlas.records.length,640);
   assert.equal(atlas.counts.nameOnlyWithoutPoint,399);
+  assert.equal(atlas.counts.upTravelUnmatchedIdentityReviews,13);
   assert.match(atlas.claim,/NOT distinct waterfalls/);
   assert.match(atlas.warning,/NOT parking/);
   assert.ok(!atlas.records.some(r=>/open-now|safe parking today/i.test(r.identityStatus||'')));
@@ -176,4 +178,77 @@ test('source completeness page has a careful search interface and no new indexab
   assert.match(js,/NOT a separately confirmed natural waterfall/);
   assert.ok(!html.includes('href="https://www.google.com/maps/dir/'));
   assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/atlas/'));
+});
+
+test('all thirteen formerly unmatched UP Travel waterfall subjects get source-backed identity dispositions',()=>{
+  assert.equal(investigations.schemaVersion,1);
+  assert.equal(investigations.records.length,13);
+  assert.equal(investigations.counts.investigated,13);
+  assert.equal(investigations.counts.clearedVisitorArrivals,0);
+  assert.equal(investigations.counts.newCuratedDestinations,0);
+  const groups=new Map();
+  const guides=new Set(curated.map(x=>x.id));
+  const gisIds=new Set(gis.map(x=>x.gisObjectId));
+  const externalIds=new Set(external.map(x=>x.id));
+  for(const caseFile of investigations.records){
+    const record=atlas.records.find(x=>x.id==='tourism:'+caseFile.listingId);
+    const original=indexed.records.find(x=>x.listingId===caseFile.listingId);
+    assert.ok(record&&original,String(caseFile.listingId));
+    assert.equal(record.kind,'tourism');
+    assert.equal(record.lat,null,record.id);
+    assert.equal(record.lng,null,record.id);
+    assert.equal(record.county,null,record.id);
+    assert.equal(record.sourceUrl,caseFile.sourceUrl);
+    assert.equal(record.identityReview.canonicalName,caseFile.canonicalName);
+    assert.equal(record.identityReview.disposition,caseFile.disposition);
+    assert.equal(record.identityReview.reviewed,'2026-11-08');
+    assert.equal(record.identityReview.publicRouteCleared,false);
+    assert.equal(record.identityReview.newDestinationAuthorized,false);
+    assert.match(record.identityReview.barrier,/.{20}/);
+    assert.ok(record.identityReview.sourceUrls.length>0);
+    for(const source of record.identityReview.sourceUrls)assert.ok(source.startsWith('https://'),source);
+    for(const id of record.identityReview.reviewedGuideIds)assert.ok(guides.has(id),id);
+    for(const id of record.identityReview.linkedGisIds)assert.ok(gisIds.has(id),id);
+    for(const id of record.identityReview.relatedExternalIds)assert.ok(externalIds.has(id),id);
+    groups.set(caseFile.disposition,(groups.get(caseFile.disposition)||0)+1);
+  }
+  assert.deepEqual(Object.fromEntries(groups),{
+    'research-name-alias':4,
+    'existing-guide-umbrella':2,
+    'existing-guide-alias':1,
+    'existing-closure-guide':2,
+    'existing-guide-region':1,
+    'research-distinct-wilderness':2,
+    'unresolved-specific-feature':1,
+  });
+  assert.equal(atlas.records.filter(x=>x.kind==='tourism'&&x.identityReview!==null).length,13);
+  assert.equal(atlas.records.filter(x=>x.kind==='tourism'&&x.identityReview===null).length,95);
+});
+
+test('hard identities: wilderness, same-name streams, closures and group cascades do not become new access',()=>{
+  const get=id=>atlas.records.find(x=>x.id==='tourism:'+id).identityReview;
+  assert.deepEqual(get(1300).reviewedGuideIds,['falls-river-trail']);
+  assert.deepEqual(get(1699).reviewedGuideIds,['bonanza-falls']);
+  assert.deepEqual(get(1919).reviewedGuideIds,['upper-hungarian-falls','middle-hungarian-falls','lower-hungarian-falls']);
+  assert.deepEqual(get(3333).reviewedGuideIds,['manabezho-falls','manido-falls','nawadaha-falls']);
+  assert.deepEqual(get(2830).reviewedGuideIds,['munising-falls']);
+  assert.deepEqual(get(3524).reviewedGuideIds,['twin-waterfalls-memorial-preserve']);
+  assert.equal(get(2830).disposition,'existing-closure-guide');
+  assert.equal(get(3524).disposition,'existing-closure-guide');
+  assert.deepEqual(get(723).linkedGisIds,[17]);
+  assert.ok(!get(723).linkedGisIds.includes(205));
+  assert.deepEqual(get(5815).linkedGisIds,[39]);
+  assert.ok(!get(799).linkedGisIds.includes(40),'Forty Foot/Cliff must not be conflated with Rocky Forty');
+  assert.equal(get(3701).disposition,'research-distinct-wilderness');
+  assert.equal(get(5457).disposition,'research-distinct-wilderness');
+  assert.equal(get(4474).disposition,'unresolved-specific-feature');
+  assert.match(get(409).barrier,/Private-property/);
+  assert.match(get(3701).finding,/NOT the separately named Siskiwit Falls near Cornucopia, Wisconsin/);
+  assert.match(get(4474).barrier,/KEEP UNRESOLVED/);
+  assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/research/bulldog-falls/'));
+  assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/research/siskiwit-falls/'));
+  assert.match(js,/identityReview\.canonicalName/);
+  assert.match(js,/reviewedGuideIds/);
+  assert.match(js,/reviewed state GIS/);
+  assert.match(html,/Thirteen previously unmatched names, investigated/);
 });
