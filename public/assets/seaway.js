@@ -17,6 +17,28 @@
   function a(label,url){const n=el('a',label);n.href=url;n.target='_blank';n.rel='noopener noreferrer';return n;}
   function svg(tag,attrs={},value){const n=document.createElementNS(svgNS,tag);for(const [k,v]of Object.entries(attrs))n.setAttribute(k,v);if(value!==undefined)n.textContent=value;return n;}
   function track(action,label){if(typeof window.gtag==='function'){const params={action,label,page:document.body.dataset.seawayPage};window.gtag('event','seaway_interaction',params);const named={select_ship:'seaway_ship_selected',select_region:'seaway_region_changed',next_chapter:'seaway_next_chapter_opened',official_schedule_opened:'seaway_official_schedule_opened',directions_opened:'seaway_directions_opened',next_corridor_opened:'seaway_next_corridor_opened'}[action];if(named)window.gtag('event',named,{page_family:'seaway',detail:label});}}
+  const follow=window.SeawayFollow?.mount({
+    document,root:$('followFreighter'),reference:D,
+    onExploreRegion:id=>{clearFollowing();setRegion(id,true);showShipWatch();},
+    onExploreLock:id=>{chooseLock(id,true);$('lock-lab')?.scrollIntoView({behavior:reduceMotion.matches?'instant':'smooth',block:'start'});},
+    onExploreView:id=>chooseView(id,true),
+    onInspectAll:id=>{if(!/^\d{9}$/.test(id))return;$('shipSearch').value=id;
+      if(region==='all'){selectedShip=null;clearFollowing();applyShipFilters();void loadReports();}
+      else setRegion('all',true);
+      showShipWatch();
+    },
+    onTrack:action=>track(action,'selected-ship')
+  });
+  function clearFollowing(){
+    follow?.clear();
+    const jump=$('followSelectedShip');if(jump)jump.hidden=true;
+  }
+  function showFollowing(){
+    const target=$('followFreighter');if(!target||target.hidden)return;
+    target.scrollIntoView({behavior:reduceMotion.matches?'instant':'smooth',block:'start'});
+    target.querySelector('h2')?.focus({preventScroll:true});
+    track('follow_open','selected-ship');
+  }
   const time=value=>{const d=new Date(value);return Number.isFinite(d.getTime())?d.toLocaleString('en-US',{timeZone:'America/New_York',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'}):'time unavailable';};
   const age=value=>{const mins=Math.max(0,Math.floor((Date.now()-Date.parse(value))/60000));return mins<1?'less than a minute ago':mins+' min ago';};
   const directions=v=>'https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(v.directionsQuery);
@@ -232,11 +254,16 @@
     const v=reportFor(id);if(!v)return;
     selectedShip=id;$('mapSelection').dataset.selection='ship';writeURL();updateList();drawShips();const panel=$('mapSelection');panel.replaceChildren(el('strong',v.name||'AIS vessel '+v.mmsi),el('p',C.motion(v)+' · '+C.direction(v)+' · last heard '+age(v.seen)),el('p','Start with the report’s age, then look at its place on the river. This position does not establish the next lock or an arrival time.'));
     appendJourneyContext(panel,v);
-    const links=el('div',undefined,'link-row');links.append(a('Official transit information ↗',D.officialQueue),a('Original ship reports ↗','https://ais.openwaters.io/v1/vessels/'+v.mmsi));panel.append(links);
+    const links=el('div',undefined,'link-row');
+    const journeyReady=follow?.select(v,C.journeyContext(v,D.regions,region),data()?.checkedAt);
+    const jump=$('followSelectedShip');if(jump)jump.hidden=!journeyReady;
+    if(journeyReady){const open=el('button','Follow this ship’s journey ↓','button secondary');
+      open.type='button';open.addEventListener('click',showFollowing);links.append(open);}
+    links.append(a('Official transit information ↗',D.officialQueue),a('Original ship reports ↗','https://ais.openwaters.io/v1/vessels/'+v.mmsi));panel.append(links);
     if(focus&&map){map.setView([v.lat,v.lon],Math.max(11,map.getZoom()),{animate:false});markers.get(id)?.openPopup();}
     track('select_ship','reported-vessel');
   }
-  function render(){updateReportLine();updateList();updateRegionReports();renderJourney();drawShips();renderView();if(selectedShip&&!reportFor(selectedShip)){$('mapSelection').replaceChildren(el('strong','That ship’s fresh signal is out of reach.'),el('p','Its report may have aged out or left the selected region. Pick another recent ship report, or check the official transit information to keep following the journey.'));}}
+  function render(){updateReportLine();updateList();updateRegionReports();renderJourney();drawShips();renderView();if(selectedShip&&!reportFor(selectedShip)){follow?.expire();const jump=$('followSelectedShip');if(jump)jump.hidden=true;$('mapSelection').replaceChildren(el('strong','That ship’s fresh signal is out of reach.'),el('p','Its report may have aged out or left the selected region. Pick another recent ship report, or check the official transit information to keep following the journey.'));}}
   async function loadReports(){
     if(document.hidden)return;
     const id=++requestId,scope=region;loading=true;updateReportLine();updateList();$('refreshReports').disabled=true;
@@ -259,18 +286,18 @@
   }
   function showShipWatch(){$('ship-watch').scrollIntoView({behavior:reduceMotion.matches?'instant':'smooth',block:'start'});}
   function applyShipFilters(){
-    if(selectedShip&&!reports().some(v=>v.mmsi===selectedShip)){selectedShip=null;resetMapSelection();writeURL();}
+    if(selectedShip&&!reports().some(v=>v.mmsi===selectedShip)){selectedShip=null;clearFollowing();resetMapSelection();writeURL();}
     updateList();drawShips();
   }
   function clearShipFilters(){$('shipSearch').value='';$('vesselKind').value='all';applyShipFilters();}
   function setRegion(id,push=false){
     if(id!=='all'&&!regionById.has(id))return;
-    if(id!==region){region=id;selectedShip=null;resetMapSelection();$('regionSelect').value=id;writeURL(push);fitRegion();render();void loadReports();}
+    if(id!==region){region=id;selectedShip=null;clearFollowing();resetMapSelection();$('regionSelect').value=id;writeURL(push);fitRegion();render();void loadReports();}
     else fitRegion();track('select_region',id);
   }
   function showEntireSeaway(){
     const wasAll=region==='all';
-    selectedShip=null;$('shipSearch').value='';$('vesselKind').value='all';
+    selectedShip=null;clearFollowing();$('shipSearch').value='';$('vesselKind').value='all';
     map?.closePopup();setRegion('all',true);
     // An already-wide region can still have a selected ship, filters or a close zoom.
     if(wasAll){writeURL(true);render();}
@@ -334,7 +361,7 @@
   }
   function chooseView(id,focus=true){
     const v=viewById.get(id);if(!v)return;
-    selectedView=id;selectedShip=null;if($('viewingSide').value!=='all')$('viewingSide').value=v.country;renderView();writeURL(true);
+    selectedView=id;selectedShip=null;clearFollowing();if($('viewingSide').value!=='all')$('viewingSide').value=v.country;renderView();writeURL(true);
     if(focus){setRegion(v.region);if(map){map.setView([v.lat,v.lon],13,{animate:false});viewMarkers.get(id)?.openPopup();}$('viewing-plan').scrollIntoView({behavior:reduceMotion.matches?'instant':'smooth',block:'start'});}
     const panel=$('mapSelection');panel.dataset.selection='view';panel.replaceChildren(el('strong',v.name+' · '+v.place),el('p',v.description),a('Google Maps directions ↗',directions(v)));updateList();drawShips();
     track('select_viewpoint',id);
@@ -345,7 +372,7 @@
     const story=$('lockStory');story.replaceChildren(el('p','Lock '+lock.number+' · '+(lock.country==='US'?'United States':'Canada'),'eyebrow'),el('h3',lock.name),el('p',lock.story),el('p',lock.access));
     if(lock.viewpoint){const button=el('button','Explore public viewing →','button secondary');button.type='button';button.addEventListener('click',()=>chooseView(lock.viewpoint));story.append(button,a('Google Maps directions ↗',directions(viewById.get(lock.viewpoint))));}
     if(map)for(const [key,marker]of lockMarkers){if(marker._seawaySelected!==(key===id)){marker.setIcon(L.divIcon({className:'seaway-lock-marker'+(key===id?' is-selected':''),html:'<span>'+lockById.get(key).number+'</span>',iconSize:[26,26],iconAnchor:[13,13]}));marker._seawaySelected=key===id;}}
-    if(focus){selectedShip=null;map?.closePopup();setRegion(lock.region,true);if(map)map.setView([lock.lat,lock.lon],13,{animate:false});const panel=$('mapSelection');panel.dataset.selection='lock';panel.replaceChildren(el('strong','Lock '+lock.number+' · '+lock.name),el('p',lock.story),el('p',lock.access));if(lock.viewpoint)panel.append(a('Google Maps directions ↗',directions(viewById.get(lock.viewpoint))));}
+    if(focus){selectedShip=null;clearFollowing();map?.closePopup();setRegion(lock.region,true);if(map)map.setView([lock.lat,lock.lon],13,{animate:false});const panel=$('mapSelection');panel.dataset.selection='lock';panel.replaceChildren(el('strong','Lock '+lock.number+' · '+lock.name),el('p',lock.story),el('p',lock.access));if(lock.viewpoint)panel.append(a('Google Maps directions ↗',directions(viewById.get(lock.viewpoint))));}
     if(focus){updateList();drawShips();}writeURL(focus);track('select_lock',id);
   }
   const stages=['Enter the water elevator. The chamber matches the water level on the ship’s approach.','Close the doors. The ship is secured and both gates shut before the water changes level.','Let gravity do the work. Valves let water flow from the higher side toward the lower side; the ship stays afloat.','Match the levels. The chamber and the departure side must be level before the exit gate opens.','Open the way ahead. The ship floats out at its new level, ready for the next reach of river.'];
@@ -516,6 +543,7 @@
     if(link.href.includes('google.com/maps/dir'))track('directions_opened','verified-viewpoint');
     if(link.getAttribute('href')==='/welland-canal/')track('next_corridor_opened','welland');
   });
+  $('followSelectedShip')?.addEventListener('click',showFollowing);
   initSeasonalPassage();
   readURL();chooseLock(selectedLock);renderFit();drawHistory();render();void startMap();void loadReports();
   setInterval(()=>{if(!document.hidden)void loadReports();},120000);
