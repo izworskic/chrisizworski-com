@@ -106,6 +106,8 @@
     const window = safeWindow(candidate,candidateList,now,config.kind === 'soo' ? 10 : 26);
     if (window && eligibleForWhen(window,when,now,config.zone)) {
       base.pick = {ship:candidate,window};
+      // Corridor models may see an approaching vessel beyond the map's local AIS box.
+      if (!base.observations.some(v => identity(v) === identity(candidate))) base.observations.unshift(candidate);
       base.status = 'window';
       base.reason = 'A corridor-specific engine supports a modeled viewing window. Movement, waiting and access can still change.';
       return base;
@@ -161,7 +163,7 @@
       link(doc,'Plan a public viewing spot',config.visit,'fwd-button'),
       link(doc,'Open specialist evidence',config.link,'fwd-button fwd-button-alt'));
     ships.replaceChildren();
-    const records = result.observations;
+    const records = result.observations.slice();
     if(result.pick && !records.some(v=>identity(v)===identity(result.pick.ship)))records.unshift(result.pick.ship);
     if(!records.length) {
       ships.append(make(doc,'p','No eligible live vessel records to show. The viewing guide below remains available.','fwd-empty'));
