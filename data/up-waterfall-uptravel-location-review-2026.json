@@ -1,0 +1,149 @@
+{
+  "schemaVersion": 1,
+  "reviewed": "2026-11-08",
+  "source": {
+    "url": "https://www.uptravel.com/outdoors-recreation/waterfalls/",
+    "claim": "300+ waterfalls is a regional total estimate, not the number of source-access-verified listed visitor routes.",
+    "regionalFilterCountsObserved": {
+      "Eastern": 1,
+      "Central": 39,
+      "Western": 64
+    },
+    "regionalFilterSum": 104,
+    "coverage": "Only the first 12 waterfall/listing directory cards visible in an independently indexed main-page search excerpt, plus UP Travel's separate complete 11-name western featured article. This is NOT an exhaustive export of the dynamically rendered directory.",
+    "addressWarning": "Tourist-listing street and municipality labels are not GPS, validated driveway access, public parking sites, pedestrian-rights proof or live opening status."
+  },
+  "sourceCitation": "https://www.uptravel.com/outdoors-recreation/waterfalls/",
+  "mainDirectoryFirstTwelve": [
+    {
+      "name": "Abinodji Falls",
+      "addressLabel": "County Road 519",
+      "cityLabel": "Thomaston, MI 49968",
+      "disposition": "research-only",
+      "note": "Named waterfall; historic county-road label not verified trailhead."
+    },
+    {
+      "name": "Agate Falls Scenic Site",
+      "addressLabel": "State Highway M28",
+      "cityLabel": "Trout Creek, MI 49967",
+      "disposition": "curated",
+      "curatedId": "agate-falls",
+      "note": "Viewpoint reopened 2026; historic trestle not open."
+    },
+    {
+      "name": "Ajibikoka Falls",
+      "addressLabel": "Sucker Lake Road",
+      "cityLabel": "Watersmeet, MI 49969",
+      "disposition": "research-only",
+      "note": "Backcountry falls; street label is not safe arrival or parking."
+    },
+    {
+      "name": "Alder Falls",
+      "addressLabel": "Alder Creek Truck Trail",
+      "cityLabel": "Big Bay, MI 49855",
+      "disposition": "research-only",
+      "note": "Existing source review says unmarked sand-road approach lacks verified legal public waterfall trailhead."
+    },
+    {
+      "name": "Alger Falls",
+      "addressLabel": "Jct Of State Highway M28 & M94",
+      "cityLabel": "Munising, MI 49862",
+      "disposition": "research-only",
+      "note": "Adopted city/county planning records no safe parking at highway; do not copy listed intersection as stop."
+    },
+    {
+      "name": "Au Train Falls",
+      "addressLabel": "County Highway 533",
+      "cityLabel": "Au Train, MI 49862",
+      "disposition": "research-only",
+      "note": "Historic recreational directions superseded by changed ownership and 2026 EGLE dam order; no approved waterfall approach."
+    },
+    {
+      "name": "Bathtub Falls",
+      "addressLabel": "M-64 N and S Boundary Rd",
+      "cityLabel": "Thomaston, MI 49953",
+      "disposition": "research-only",
+      "note": "Porkies backcountry tier; listed roads are orientation only, not certified parking-to-viewpoint route."
+    },
+    {
+      "name": "Big Eric's Falls",
+      "addressLabel": "Erick Rd",
+      "cityLabel": "Skanee, MI 49962",
+      "disposition": "curated",
+      "curatedId": "big-erics-falls",
+      "note": "Existing DNR Big Eric's Bridge State Forest Campground guide; distinct from upstream Erick's Falls."
+    },
+    {
+      "name": "Big Pup Creek Falls",
+      "addressLabel": "County Road 510",
+      "cityLabel": "Negaunee, MI 49849",
+      "disposition": "research-only",
+      "note": "Potential separate Big Pup feature, river access/parking and correct natural point not yet cleared."
+    },
+    {
+      "name": "Black River Falls",
+      "addressLabel": "County Road 581",
+      "cityLabel": "Ishpeming, MI 49849",
+      "disposition": "research-only",
+      "note": "Different from Gogebic scenic byway; historic footbridge reportedly condemned, so route requires verification."
+    },
+    {
+      "name": "Black River National Scenic Byway",
+      "addressLabel": "Black River National Forest Scenic Byway",
+      "cityLabel": "Ironwood, MI 49938",
+      "disposition": "region-not-single-waterfall",
+      "curatedIds": [
+        "great-conglomerate-falls",
+        "potawatomi-falls",
+        "gorge-falls",
+        "sandstone-falls",
+        "rainbow-falls"
+      ],
+      "note": "Tourism byway listing is not itself a sixth waterfall; five falls already in curated inventory with conditional 2026-27 USFS closures."
+    },
+    {
+      "name": "Bond Falls Scenic Site",
+      "addressLabel": "Bond Falls Rd",
+      "cityLabel": "Paulding, MI 49912",
+      "disposition": "curated",
+      "curatedId": "bond-falls",
+      "note": "Existing Michigan DNR scenic visitor guide."
+    }
+  ],
+  "highPriorityAliasCase": {
+    "name": "Paul's Falls",
+    "originalUpTravelLabel": "Paul's Falls on the Sante River, listed under a Copper Harbor regional article",
+    "specialistCanonicalName": "Löytilä Falls",
+    "aliases": [
+      "Pauls Falls",
+      "Löytilä's Falls",
+      "Lyytila Falls",
+      "Lotilla Falls"
+    ],
+    "county": "Houghton",
+    "closestTownBySpecialist": "Toivola",
+    "naturalFeature": {
+      "lat": 46.96483,
+      "lng": -88.69343,
+      "role": "historical-specialist-natural-falls-point-not-road-parking-or-trailhead"
+    },
+    "sourceRefs": [
+      "https://www.uptravel.com/blog/post/best-waterfalls-western-upper-peninsula/",
+      "https://www.uptravel.com/listing/pauls-falls/5417/",
+      "https://www.waterfallsofthekeweenaw.com/sante-river/loytila-falls/"
+    ],
+    "disposition": "alias-resolved-access-not-verified",
+    "sourceStatus": "UP Travel's region/city wording and specialist locality do not establish a common safe arrival; do not send cars to natural feature.",
+    "publicationEligible": false,
+    "publicMapEligible": false,
+    "nearbyEligible": false,
+    "routePolylineAuthorized": false,
+    "parkingPoint": null
+  },
+  "policies": [
+    "No town-label-to-precise-GPS geocoding or road-entrance inference.",
+    "No route navigation based on tourism addresses, informal field reports or coordinates of the cascade.",
+    "Keep source-only candidates out of published recommendation, parking, nearby, itemlist and sitemap.",
+    "Do not treat the 104 indexed tourism directory listing-count estimate as 104 separately verified falls, or assume the 300+ estimate is an accessible source table."
+  ]
+}
