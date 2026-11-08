@@ -23,6 +23,36 @@
   },
   "tools": [
     {
+      "id": "winter-layup",
+      "name": "Great Lakes Freighter Winter Layup Tracker",
+      "canonical": "https://chrisizworski.com/great-lakes-freighter-winter-layup/",
+      "aliases": [],
+      "kind": "seasonal-evidence-atlas",
+      "cluster": "great-lakes-shipping",
+      "primaryIntent": "where do Great Lakes freighters spend winter and which layups are documented",
+      "seasons": [
+        1,
+        2,
+        3,
+        11,
+        12
+      ],
+      "geographies": [
+        "great-lakes"
+      ],
+      "personas": [
+        "ship-watcher",
+        "traveler"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active"
+      },
+      "searchEvidence": {
+        "status": "unmeasured"
+      }
+    },
+    {
       "id": "michigan-ice-caves",
       "name": "Michigan Ice Caves & Frozen Waterfalls",
       "canonical": "https://chrisizworski.com/michigan-ice-caves/",
@@ -4907,6 +4937,22 @@
     }
   ],
   "relationships": [
+    {
+      "from": "winter-layup",
+      "to": "ship-tracker",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "great-lakes-shipping",
+      "reason": "Documented winter berth history cannot show present position; the live ship tracker owns AIS verification."
+    },
+    {
+      "from": "ship-tracker",
+      "to": "winter-layup",
+      "type": "content-depth",
+      "strength": "strong",
+      "surface": "ships",
+      "reason": "Visitors who have spotted a ship can explore dated winter layup records without mistaking AIS for confirmation."
+    },
     {
       "from": "michigan-ice-caves",
       "to": "snowmobile",
