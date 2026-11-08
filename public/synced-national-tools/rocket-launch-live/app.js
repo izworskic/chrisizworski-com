@@ -181,9 +181,27 @@
     details?.addEventListener('click',()=>setExpanded(false));
     window.addEventListener('pagehide',()=>setExpanded(false));
   }
+  // The six geographic bounds already used by the Rocket pins provide a
+  // source-independent regional atlas. They never invent a mission, pad or
+  // viewing entrance when the launch-schedule API is unavailable.
+  function referenceMapRegions(){
+    const boxes=window.RocketMapPins?.BOX||{};
+    return [...validRegions].map(id=>{
+      const bounds=boxes[id];
+      if(!Array.isArray(bounds)||bounds.length!==4||
+         !bounds.every(Number.isFinite))return null;
+      const button=document.querySelector('.rl-region-btn[data-region="'+id+'"]');
+      return {
+        id,lat:(bounds[0]+bounds[1])/2,lon:(bounds[2]+bounds[3])/2,
+        name:button?.querySelector('small')?.textContent?.trim()||id,
+        coast:button?.querySelector('span')?.textContent?.trim()||'Coastal range'
+      };
+    }).filter(Boolean);
+  }
   function initMap() {
     const root=$('rl-coast-map');
-    if(state.map||!root||!state.data?.regions?.length)return;
+    if(state.map||!root)return;
+    const regions=state.data?.regions?.length?state.data.regions:referenceMapRegions();
     if(!window.L?.map){
       root.dataset.mapState='unavailable';
       root.replaceChildren(el('div','rl-map-fallback',
@@ -231,7 +249,7 @@
         })
         .catch(() => { root.dataset.tiles = 'osm-fallback'; });
       const bounds = [];
-      for (const r of state.data.regions) {
+      for (const r of regions) {
         if (!Number.isFinite(r.lat) || !Number.isFinite(r.lon)) continue;
         const circle = window.L.circleMarker([r.lat, r.lon], {
           radius: 8, fillColor: '#163f4b', fillOpacity: 1, color: '#fff', weight: 2
@@ -242,11 +260,12 @@
         bounds.push([r.lat, r.lon]);
       }
       if (bounds.length) map.fitBounds(bounds, { padding: [27, 27] });
+      else map.setView([38,-98],3,{animate:false});
       state.map = map;
       mountMapTouchControls(map,root);
       state.rocketPins=window.RocketMapPins?.mount(map,{
         region:'all',
-        centers:window.RocketMapPins.centersOf(state.data.regions),
+        centers:window.RocketMapPins.centersOf(regions),
         onSelect:(id,region)=>{
           document.dispatchEvent(new CustomEvent('rocket-experience:map-choose',{detail:{launchId:id,region}}));
           state.userFocusedMap=true;void load(region,id);
@@ -254,7 +273,7 @@
           // 'View mission details' link below the map handles navigation.
         }
       });
-      state.rocketPins?.update(state.data.regions.flatMap(r=>r.launches||[]),state.data.selectedLaunchId);
+      state.rocketPins?.update(state.data?.regions?.flatMap(r=>r.launches||[])||[],state.data?.selectedLaunchId||null);
       root.dataset.mapState='ready';
     } catch (_) {
       root.dataset.mapState='unavailable';
@@ -1296,6 +1315,12 @@
     const texasNav = $('rl-nav-starbase');
     if (texasNav) texasNav.href = floridaSpecialistLink('/starbase-rocket-launch-viewing/',data);
     initMap();
+    for(const region of data.regions||[]){
+      const marker=state.markers.get(region.id);
+      if(marker&&Number.isFinite(region.lat)&&Number.isFinite(region.lon))
+        marker.setLatLng([region.lat,region.lon]);
+    }
+    set('rl-atlas-status','Region circles are references, not public entrances. Rocket icons reflect the selected schedule source.');
     state.rocketPins?.update(data.regions.flatMap(r=>r.launches||[]),data.selectedLaunchId);
     showRegion(data.region);
     renderMission(data);
@@ -1354,6 +1379,7 @@
       // schedule after this request has explicitly failed.
       state.rocketPins?.update([],null);
       state.data=null;
+      set('rl-atlas-status','Launch schedule unavailable; only geographic reference regions are shown.');
       document.dispatchEvent(new CustomEvent('rocket-truth:mission-selected',
         {detail:{launchId:null}}));
       document.dispatchEvent(new CustomEvent('rocket-viewing:data',{detail:null}));
@@ -1448,6 +1474,7 @@
   state.userFocusedMap = Boolean(region);
   const launch = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
     initial.searchParams.get('launchId') || '') ? initial.searchParams.get('launchId') : null;
+  initMap(); // Geographic reference does not depend on live launch data.
   loadVisualCatalog();
   void loadOfficialEvidence();
   load(region, launch);
