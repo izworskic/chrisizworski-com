@@ -38,7 +38,7 @@ test('source-independent fallback keeps the expand button disabled without Leafl
  const start=js.indexOf('function initMap()');
  const end=js.indexOf('function renderMission(',start);
  assert(start>=0&&end>start);
- assert.match(js.slice(start,end),/Map tiles unavailable/);
+ assert.match(js.slice(start,end),/The interactive map could not start/);
 });
 
 test('map boots from same-origin Leaflet even when CDN and launch feed are inaccessible',()=>{
