@@ -6,6 +6,7 @@ const path=require('node:path');
 const http=require('node:http');
 const assert=require('node:assert/strict');
 const {chromium}=require('playwright');
+const {publicSite}=require('../lib/freighter-watch-sites');
 const root=path.resolve(__dirname,'..');
 const pub=path.join(root,'public');
 const shots=path.join(root,'artifacts/freighter-watch-desk-browser');
@@ -17,6 +18,15 @@ const tilePng=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQ
 const ship={mmsi:'366123456',name:'Browser fixture freighter',lat:46.52,lon:-84.41,
   seen:iso(now-4*60000),speedKnots:8,course:90,lengthMeters:300,confidence:.83,
   window:{start:iso(now+15*60000),end:iso(now+75*60000)}};
+const sunny={ok:true,checkedAt:iso(now),alertsStatus:'available',
+  sourceUrl:'https://www.weather.gov/',alerts:[],periods:[
+    {starts:iso(now-30*60000),ends:iso(now+30*60000),isDaytime:true,temperatureF:46,
+      windMph:7,precipProbability:5,shortForecast:'Mostly sunny'},
+    {starts:iso(now+30*60000),ends:iso(now+90*60000),isDaytime:true,temperatureF:47,
+      windMph:8,precipProbability:10,shortForecast:'Mostly sunny'},
+    {starts:iso(now+24*3600000),ends:iso(now+25*3600000),isDaytime:true,temperatureF:45,
+      windMph:9,precipProbability:15,shortForecast:'Partly cloudy'}
+  ]};
 const soo={ok:true,checkedAt:iso(now),vessels:[ship],
   nextShip:{ok:true,pick:ship,candidates:[ship],inLock:[]}};
 const general={ok:true,checkedAt:iso(now),
@@ -54,6 +64,10 @@ const server=http.createServer((req,res)=>{
       await page.route('**/leaflet.js',r=>r.fulfill({path:leafletJs,contentType:'application/javascript'}));
       await page.route('**/leaflet.css',r=>r.fulfill({path:leafletCss,contentType:'text/css'}));
       await page.route('**/api/soo-ais',r=>r.fulfill({json:soo}));
+      await page.route('**/api/freighter-watch-conditions**',r=>{
+        const id=new URL(r.request().url()).searchParams.get('place');
+        return r.fulfill({json:{ok:true,site:publicSite(id),weather:sunny}});
+      });
       await page.route('**/api/carto-basemap-config',r=>r.fulfill({json:{provider:'CARTO',key:'test-public-key'}}));
       await page.route('**/light_all/**',r=>{
         if(new URL(r.request().url()).searchParams.get('key')!=='test-public-key')
@@ -74,6 +88,13 @@ const server=http.createServer((req,res)=>{
       await page.selectOption('#fwd-when','now');
       await page.waitForFunction(()=>document.querySelector('#fwd-status').dataset.status==='window');
       assert.match(await page.textContent('#fwd-headline'),/Browser fixture freighter/);
+      await page.waitForFunction(()=>document.querySelector('#fwd-visit-plan').dataset.verdict==='PROMISING');
+      assert.match(await page.textContent('#fwd-plan-title'),/Worth considering a shoreline visit/);
+      assert.match(await page.textContent('#fwd-plan-where'),/Soo Locks observation platform/);
+      assert.match(await page.textContent('#fwd-plan-when'),/Modeled passage/);
+      assert.match(await page.textContent('#fwd-plan-weather'),/Mostly sunny|hourly limiter/i);
+      assert.match(await page.textContent('#fwd-plan-access'),/published hours/);
+      assert.ok(await page.locator('#fwd-plan-actions a').count()>=3);
       assert.match(await page.textContent('#fwd-message'),/Estimated passage/);
       await page.waitForFunction(()=>document.querySelector('#fwd-map').dataset.ready==='true');
       assert.equal(await page.locator('#fwd-ships button[data-mmsi]').count(),1);
@@ -88,19 +109,40 @@ const server=http.createServer((req,res)=>{
       await page.waitForFunction(()=>document.querySelector('#fwd-status').dataset.status==='observed');
       assert.match(await page.textContent('#fwd-message'),/cannot confirm when one will pass/);
       assert.match(await page.textContent('#fwd-viewing-location'),/Vantage Point/);
+      await page.waitForFunction(()=>document.querySelector('#fwd-visit-plan').dataset.verdict==='NEARBY_ONLY');
+      assert.match(await page.textContent('#fwd-plan-title'),/already nearby/);
+      assert.match(await page.textContent('#fwd-plan-where'),/Thomas Edison Parkway/);
       assert.doesNotMatch(await page.textContent('#fwd-message'),/Estimated passage/);
       await page.selectOption('#fwd-when','tomorrow');
       await page.waitForFunction(()=>document.querySelector('#fwd-status').dataset.status==='unknown');
       assert.match(await page.textContent('#fwd-headline'),/Tomorrow is not confirmed/);
+      await page.waitForFunction(()=>document.querySelector('#fwd-visit-plan').dataset.verdict==='PLAN_SHORE');
+      assert.match(await page.textContent('#fwd-plan-summary'),/no verified ship passage for tomorrow/i);
       assert.equal(pageErrors.length,0,'no script errors after changing region and time');
       await context.close();
       cases+=4;
     }
+    const adverse=await browser.newContext({viewport:{width:390,height:800}});
+    const adversePage=await adverse.newPage();
+    await adversePage.route('**/leaflet.js',r=>r.fulfill({path:leafletJs,contentType:'application/javascript'}));
+    await adversePage.route('**/leaflet.css',r=>r.fulfill({path:leafletCss,contentType:'text/css'}));
+    await adversePage.route('**/api/soo-ais',r=>r.fulfill({json:soo}));
+    await adversePage.route('**/api/freighter-watch-conditions**',r=>r.fulfill({json:{
+      ok:true,site:publicSite('soo'),weather:{...sunny,alerts:[{
+        event:'High Wind Warning',severity:'Severe',starts:iso(now-3600000),expires:iso(now+3600000)
+      }]}
+    }}));
+    await adversePage.goto(base+'/great-lakes-ship-watching-spots/',{waitUntil:'domcontentloaded'});
+    await adversePage.selectOption('#fwd-when','now');
+    await adversePage.waitForFunction(()=>document.querySelector('#fwd-visit-plan').dataset.verdict==='WEATHER_HOLD');
+    assert.match(await adversePage.textContent('#fwd-plan-title'),/Reconsider the outdoor trip/);
+    await adverse.close();cases++;
     const fallback=await browser.newContext({viewport:{width:390,height:800}});
     const fallbackPage=await fallback.newPage();
     await fallbackPage.route('**/leaflet.js',r=>r.fulfill({path:leafletJs,contentType:'application/javascript'}));
     await fallbackPage.route('**/leaflet.css',r=>r.fulfill({path:leafletCss,contentType:'text/css'}));
     await fallbackPage.route('**/api/soo-ais',r=>r.fulfill({json:soo}));
+    await fallbackPage.route('**/api/freighter-watch-conditions**',r=>r.fulfill({json:{ok:true,site:publicSite('soo'),weather:sunny}}));
     await fallbackPage.route('**/api/carto-basemap-config',r=>r.fulfill({status:503,json:{error:'unavailable'}}));
     await fallbackPage.route('**/tile.openstreetmap.org/**',r=>r.fulfill({body:tilePng,contentType:'image/png'}));
     await fallbackPage.goto(base+'/great-lakes-ship-watching-spots/',{waitUntil:'domcontentloaded'});
@@ -112,6 +154,7 @@ const server=http.createServer((req,res)=>{
     const p=await noMap.newPage();
     await p.route('**/leaflet.js',r=>r.abort());
     await p.route('**/api/soo-ais',r=>r.fulfill({json:soo}));
+    await p.route('**/api/freighter-watch-conditions**',r=>r.fulfill({json:{ok:true,site:publicSite('soo'),weather:sunny}}));
     await p.goto(base+'/great-lakes-ship-watching-spots/',{waitUntil:'domcontentloaded'});
     await p.selectOption('#fwd-when','now');
     await p.waitForFunction(()=>document.querySelector('#fwd-status').dataset.status==='window');
