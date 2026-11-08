@@ -41,7 +41,7 @@ test('general corridor does not create an ETA from motion or vendor destination'
   const result=desk.evaluate('port',data,'today',now);
   assert.equal(result.status,'observed');
   assert.equal(result.pick,null);
-  assert.match(result.reason,/cannot confirm when one will pass/);
+  assert.match(result.reason,/cannot confirm when or whether one will pass/);
 });
 test('area filtering does not conflate an open-lake report with shore visibility',()=>{
   const near=vessel({lat:43.7,lon:-83.82});

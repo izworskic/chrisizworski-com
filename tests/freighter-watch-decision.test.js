@@ -30,18 +30,20 @@ test('six named public spots have linked official access sources, forecast point
    assert.equal(site.reviewed,'2026-11-08');
  }
 });
-test('existing Soo corridor window produces a qualified destination, arrival lead and source boundary',()=>{
+test('existing Soo corridor window gives a useful on-shore watch target and source boundary',()=>{
  const plan=engine.recommendation(report(),context(),now);
  assert.equal(plan.code,'PROMISING');
  assert.match(plan.title,/Sample freighter/);
  assert.match(plan.where,/Soo Locks observation platform/);
  assert.match(plan.when,/Modeled passage/);
- assert.match(plan.when,/by/);
+ assert.match(plan.when,/If you are already on the waterfront/);
+ assert.match(plan.when,/If a short walk away/);
+ assert.doesNotMatch(plan.when,/parking|drive|trip/i);
  assert.equal(plan.access.level,'published');
  assert.equal(plan.weather.level,'favorable');
  assert.match(plan.disclaimer,/never guarantees/);
 });
-test('weather unknown never becomes an affirmative trip recommendation',()=>{
+test('unknown weather prevents an unconditional on-shore recommendation',()=>{
  const plan=engine.recommendation(report(),context('soo',{ok:false}),now);
  assert.equal(plan.code,'VERIFY_BEFORE_TRAVEL');
  assert.equal(plan.weather.level,'unknown');
@@ -60,7 +62,7 @@ test('Soo window beginning before park closure but ending afterward is not an op
  const plan=engine.recommendation(report({pick:{ship:ship(),window:crossing}}),context(),now);
  assert.equal(plan.code,'HOURS_CONFLICT');
  assert.match(plan.title,/beyond published park hours/);
- assert.match(plan.summary,/ship could arrive after the park closes/);
+ assert.match(plan.summary,/ship could arrive after closing/);
  assert.match(plan.when,/Do not expect the park to remain open/);
  assert.notEqual(plan.access.level,'published');
 });
@@ -133,15 +135,16 @@ test('fresh source-classified Soo in-lock vessel gives only an immediate nearby 
  const r=report({status:'in-lock',pick:null,inLock,observations:[inLock],when:'now'});
  const plan=engine.recommendation(r,context('soo'),now);
  assert.equal(plan.code,'LOCAL_IN_LOCK');
- assert.match(plan.title,/reported in the locks now/);
- assert.match(plan.when,/not a future arrival/);
+ assert.match(plan.title,/Look toward the locks/);
+ assert.match(plan.when,/not a future passage estimate/);
 });
-test('near Port Huron moving commercial AIS yields only a local opportunistic look',()=>{
+test('near Port Huron moving commercial AIS gives a nearby ship signal without an ETA',()=>{
  const nearby=ship({lat:42.997,lon:-82.423,speedKnots:6,seen:iso(now-2*60000)});
  const r=report({status:'observed',pick:null,observations:[nearby]});
  const plan=engine.recommendation(r,context('port'),now);
  assert.equal(plan.code,'NEARBY_ONLY');
- assert.match(plan.title,/already nearby/);
+ assert.match(plan.title,/Moving freighter reported near this shoreline/);
+ assert.doesNotMatch(plan.summary,/make a trip|drive|parking/i);
  assert.doesNotMatch(plan.when,/Modeled passage/);
  assert.ok(plan.nearNm<1);
 });
@@ -149,10 +152,10 @@ test('a ship anywhere in Saginaw Bay does not imply a downtown Bay City viewing 
  const far=ship({lat:43.96,lon:-83.5,speedKnots:10});
  const r=report({status:'observed',pick:null,observations:[far]});
  const plan=engine.recommendation(r,context('saginaw'),now);
- assert.equal(plan.code,'NO_SHIP_TRIP');
- assert.match(plan.summary,/far away or stationary/);
+ assert.equal(plan.code,'NO_CLOSE_REPORT');
+ assert.match(plan.summary,/vessels missing from receivers/);
 });
-test('stale, stopped, noncommercial and older vessel reports cannot trigger drive advice',()=>{
+test('stale, stopped, noncommercial and older vessel reports cannot trigger a nearby ship claim',()=>{
  const cases=[
   ship({lat:42.997,lon:-82.423,speedKnots:0}),
   ship({lat:42.997,lon:-82.423,seen:iso(now-12*60000)}),
@@ -160,14 +163,29 @@ test('stale, stopped, noncommercial and older vessel reports cannot trigger driv
  ];
  for(const v of cases){
   const r=report({status:'observed',pick:null,observations:[v]});
-  assert.equal(engine.recommendation(r,context('port'),now).code,'NO_SHIP_TRIP');
+  assert.equal(engine.recommendation(r,context('port'),now).code,'NO_CLOSE_REPORT');
  }
+});
+test('on-shore empty signal tells visitors to keep watching rather than leave',()=>{
+ const r=report({status:'unknown',pick:null,observations:[],when:'now'});
+ const plan=engine.recommendation(r,context('soo'),now);
+ assert.equal(plan.code,'NO_CLOSE_REPORT');
+ assert.match(plan.title,/No nearby moving freighter confirmed/);
+ assert.match(plan.when,/Keep an eye on the waterway/);
+ assert.doesNotMatch(plan.title+' '+plan.summary+' '+plan.when,/drive|trip|departure|parking/i);
+});
+test('source outage offers on-shore unknown rather than a travel recommendation',()=>{
+ const r=report({status:'unavailable',pick:null,checkedAt:null,observations:[]});
+ const plan=engine.recommendation(r,context('port'),now);
+ assert.equal(plan.code,'NO_CLOSE_REPORT');
+ assert.match(plan.title,/Live ship positions unavailable/);
+ assert.match(plan.summary,/watch the waterway/);
 });
 test('tomorrow selects actual next-day daylight forecast, never an AIS arrival',()=>{
  const r=report({status:'unknown',when:'tomorrow',pick:null,observations:[]});
  const plan=engine.recommendation(r,context('detroit'),now);
  assert.equal(plan.code,'PLAN_SHORE');
- assert.match(plan.when,/No vessel schedule/);
+ assert.match(plan.when,/weather hour, not a ship passage time/);
  assert.match(plan.where,/Cullen Plaza/);
  assert.equal(engine.dayKey(plan.weather.at,'America/Detroit'),'2026-11-09');
 });
@@ -180,7 +198,7 @@ test('a nighttime shoreline time is caution, not a carefree outing',()=>{
  const weather=forecast({checkedAt:iso(after-10000),periods:[night]});
  const plan=engine.recommendation(r,context('port',weather),after);
  assert.equal(plan.weather.level,'caution');
- assert.equal(plan.code,'NO_SHIP_TRIP');
+ assert.equal(plan.code,'NO_CLOSE_REPORT');
 });
 test('published hours expire into verify-only rather than evergreen open-now claims',()=>{
  const farLater=Date.parse('2027-09-01T17:30:00Z');
@@ -198,7 +216,7 @@ test('weather fails closed when timestamp stale or period not relevant',()=>{
 test('the no-ship weather view does not promise safe public access',()=>{
  const r=report({status:'unavailable',pick:null,observations:[],checkedAt:null});
  const plan=engine.recommendation(r,context('duluth'),now);
- assert.equal(plan.code,'NO_SHIP_TRIP');
+ assert.equal(plan.code,'NO_CLOSE_REPORT');
  assert.equal(plan.access.level,'unverified');
- assert.match(plan.summary,/unavailable/);
+ assert.match(plan.summary,/live vessel check could not be completed/);
 });

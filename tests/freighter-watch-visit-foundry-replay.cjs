@@ -46,14 +46,25 @@ if(available){
       'The Port Huron outcome lacks an explicit nearby-only limit.');
   const bay=decision.recommendation({...result,status:'observed',pick:null,observations:[{...ship,lat:43.98,lon:-83.5}]},
     {site:sites.publicSite('saginaw'),weather},now);
-  one('broad-bay-honesty',bay.code==='NO_SHIP_TRIP',
-    bay.code==='NO_SHIP_TRIP'?'A remote bay AIS report cannot trigger a downtown ship-only trip recommendation.':
-      'A broad bay AIS report was overstated as a viable shore sighting.');
+  one('broad-bay-honesty',bay.code==='NO_CLOSE_REPORT',
+    bay.code==='NO_CLOSE_REPORT'?'A distant bay AIS report does not become a false close-by ship sighting.':
+      'The bay report was overstated as a ship near the downtown waterfront.');
+  const quiet=decision.recommendation({...result,status:'unknown',pick:null,observations:[]},
+    {site:sites.publicSite('saginaw'),weather},now);
+  const fromHere=html.includes('Already on the waterfront or close by?')&&
+    html.includes('Now / next 90 minutes')&&
+    !html.includes('make a ship-only trip');
+  one('onshore-next-look',fromHere&&quiet.code==='NO_CLOSE_REPORT'&&
+    quiet.when.includes('Keep an eye on the waterway')&&
+    !/drive|trip|departure|parking/i.test(quiet.title+' '+quiet.summary+' '+quiet.when),
+    fromHere&&quiet.code==='NO_CLOSE_REPORT'
+      ?'On-site visitor sees a no-close-report state and useful watch/refresh advice without an imaginary drive.'
+      :'No on-site default or quiet-waterway outcome with an actionable next look.');
   one('access-sources',Object.keys(sites.sites).length===6&&
     Object.keys(sites.sites).every(k=>sites.publicSite(k).accessUrl.startsWith('https://')),
     'Six named public viewing areas have explicit land-manager source links and documented general-hours boundaries.');
 }else{
-  for(const id of ['supported-window-trip','weather-veto','nearby-no-eta','broad-bay-honesty','access-sources'])
+  for(const id of ['supported-window-trip','weather-veto','nearby-no-eta','broad-bay-honesty','access-sources','onshore-next-look'])
     one(id,false,'The captured baseline does not contain the shore-visit decision and source adapter.');
 }
 const normalizedShip={...ship,window,lat:46.5,lon:-84.35};

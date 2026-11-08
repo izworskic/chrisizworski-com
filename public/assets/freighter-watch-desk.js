@@ -17,7 +17,7 @@
   const CONFIG = Object.freeze({
     soo: {label:'Soo Locks',zone:'America/Detroit',kind:'soo',endpoint:'/api/soo-ais',
       center:[46.503,-84.352],zoom:12,link:'/soo-locks/',visit:'/soo-locks/plan-your-visit/',
-      spot:'Soo Locks observation platform',note:'Confirm observation-platform and Visitor Center access before traveling.'},
+      spot:'Soo Locks observation platform',note:'Check posted access hours and Visitor Center notices while at the waterfront.'},
     duluth: {label:'Duluth Canal Park',zone:'America/Chicago',kind:'duluth',endpoint:'/api/duluth-canal',
       center:[46.7783,-92.0908],zoom:13,viewPoint:[46.779847,-92.092464],link:'/duluth-canal-park/',visit:'/duluth-canal-park/',
       spot:'Ship Canal / Canal Park',note:'Use the Duluth guide to compare the north pier, Park Point and Lakewalk viewing areas.'},
@@ -125,7 +125,7 @@
     if (base.observations.length) {
       base.status = 'observed';
       base.reason = config.kind === 'observation'
-        ? 'Ships have reported positions in this general area, but we cannot confirm when one will pass your viewing spot. Check the map before you drive.'
+        ? 'Ships have reported positions in this wider area. Check the map and the shoreline; we cannot confirm when or whether one will pass your exact viewpoint.'
         : 'There are recent vessel reports, but no reliable passage window for the time you selected.';
     } else {
       base.reason = 'No vessel report under 30 minutes old meets this location filter. This does not mean the waterway is empty.';
@@ -220,7 +220,7 @@
       panel.dataset.verdict='CHECKING_CONDITIONS';
       panel.dataset.tone='conditional';
       doc.getElementById('fwd-plan-title').textContent='Ship evidence received. Checking weather and public access…';
-      doc.getElementById('fwd-plan-summary').textContent='We will not recommend a trip until the other conditions have been checked or clearly marked unavailable.';
+      doc.getElementById('fwd-plan-summary').textContent='We are checking the shoreline forecast and public-access information before suggesting how to watch.';
       return;
     }
     const decision=engine.recommendation(result,context,now);
@@ -229,8 +229,8 @@
     function put(id,value){const el=doc.getElementById(id);if(el)el.textContent=value;}
     put('fwd-plan-kind',decision.tone==='supported'?'· Supported opportunity':
       decision.tone==='hold'?'· Reconsider this visit':
-      decision.code==='NO_SHIP_TRIP'?'· No ship-only trip supported':
-      decision.code==='PLAN_SHORE'?'· Shoreline visit, no ship forecast':'· Conditional recommendation');
+      decision.code==='NO_CLOSE_REPORT'?'· No close-moving-ship signal':
+      decision.code==='PLAN_SHORE'?'· No verified tomorrow passage':'· Check shoreline conditions');
     put('fwd-plan-title',decision.title);
     put('fwd-plan-summary',decision.summary);
     put('fwd-plan-where',decision.where);
@@ -243,10 +243,10 @@
     const actions=doc.getElementById('fwd-plan-actions');
     actions.replaceChildren();
     const links=[
-      ['Find this public watching area',decision.site?.directionsUrl],
-      ['Check official public-access details',decision.site?.accessUrl],
-      ['Open local live ship evidence',decision.site?.evidenceUrl],
-      ['Read NWS weather forecast',decision.site?.forecastUrl]
+      ['See live ships for this waterway',decision.site?.evidenceUrl],
+      ['View the public shoreline area',decision.site?.directionsUrl],
+      ['Check posted access and closures',decision.site?.accessUrl],
+      ['Read local NWS weather',decision.site?.forecastUrl]
     ];
     for(const [label,href] of links){
       if(!href||!(/^\//.test(href)||/^https:\/\//.test(href)))continue;
@@ -403,7 +403,7 @@
       const panel=doc.getElementById('fwd-visit-plan');
       panel.dataset.verdict='CHECKING';
       doc.getElementById('fwd-plan-title').textContent='Checking the evidence for '+conf.label+'…';
-      doc.getElementById('fwd-plan-summary').textContent='The ship and weather checks are separate. A recent vessel position alone is not a reason to drive here.';
+      doc.getElementById('fwd-plan-summary').textContent='We will show which ships are worth watching from here, while keeping AIS positions separate from confirmed passages.';
       refresh.disabled=true; refresh.textContent='Checking…';
       showLocalDate();
       const fetchNow=Date.now();
@@ -472,7 +472,7 @@
       });
     });
     // Map initialization is attempted after each source evaluation, with a secondary Leaflet CDN if needed.
-    // A once-valid prediction must not sit on screen indefinitely after a tab is left open.
+    // A once-valid watch signal must not sit on screen indefinitely while the visitor is at the waterfront.
     setInterval(()=>{ if(!doc.hidden)load(); },90000);
     doc.addEventListener('visibilitychange',()=>{ if(!doc.hidden)load(); });
     showLocalDate();

@@ -8,7 +8,7 @@ const root=fileURLToPath(new URL('../',import.meta.url));
 const registry=JSON.parse(await fs.readFile(path.join(root,'benchmarks/tool-network-registry.json'),'utf8'));
 const packet=startImprovement({root,slug:'freighter-shore-visit-verdict',
   owner:'freighter-watch-desk',
-  question:'Should this visitor go to this public shoreline for a specific ship and time, and why?',
+  question:'For a visitor already at or near this shoreline, what ship is worth watching, when, and what is still unknown?',
   baseline:'7aed09e449fd7b91aa67cebcf907b5284727772f',
   files:['public/great-lakes-ship-watching-spots/index.html',
     'public/assets/freighter-watch-desk.js','public/assets/freighter-watch-desk.css'],
@@ -17,7 +17,7 @@ const packet=startImprovement({root,slug:'freighter-shore-visit-verdict',
 const run=packet.run;
 run.owningRepository='izworskic/chrisizworski-com';
 run.diagnosis={
- visitorTask:'Decide whether a Great Lakes freighter-watching trip is worth making, to which named public shore, for which ship and time, with weather, access and uncertainties together.',
+ visitorTask:'Help a visitor already at the waterfront or a few minutes away decide which freighter to watch, when to look, and what AIS, access, daylight and NWS evidence can actually support.',
  currentFriction:'The existing Watch Desk makes the visitor inspect raw AIS and specialist links. It reports observed ships but does not combine source-supported passage, actual named site, weather or published visiting hours into a travel decision.',
  capabilities:['Re-use established Soo and Duluth candidate and modeled-time engines as the only ETA owners.',
    'Keep the existing six-region normalized AIS live map, clickable vessel report list and CARTO tile fallback.',
@@ -28,7 +28,7 @@ run.diagnosis={
    observation:'The canonical guide displays a Watch Desk and editorial spots, but does not present weather, published access and a travel decision at the point of selection.'}]
 };
 run.opportunities=[
- {id:'complete-shore-verdict',outcome:'Answer with named public shoreline, conditional trip verdict, source-supplied ship time, published access hours, hourly weather, and specific next steps.',
+ {id:'complete-shore-verdict',outcome:'Answer from the existing shoreline with a practical watch-now signal, source-owned ship time where supported, published access hours, weather and next look.',
   evidenceIds:['ais-only','guide-only'],reuse:'Preserve specialist AIS/ETA owners and normalized vessel positions; integrate allowlisted NWS and officially documented public shore choices.',
   effort:'One fixed-site weather adapter, visitor decision module, six-site land-manager inventory, new verdict surface and rigorous browser/failure tests.',
   risk:'Forecasts and park listings must not be confused with observed conditions, closures or a promise of a ship passing.'},
@@ -42,7 +42,7 @@ run.opportunities=[
   risk:'Incorrect ship photograph or unverified access route would mislead photographers.'}
 ];
 run.selection={opportunityId:'complete-shore-verdict',
- rationale:'A named answer with honest weather and access limits resolves the unfinished visitor task now; vessel handoff and verified photography are valuable but secondary to a functioning go/no-go planning decision.'};
+ rationale:'A named watch-from-here answer with honest weather and access limits resolves the visitor task now; vessel handoff and verified photography remain secondary.'};
 const opportunityId='complete-shore-verdict',evidenceIds=['ais-only','guide-only'];
 run.concepts=[
  {id:'all-sources-dashboard',opportunityId,
@@ -53,16 +53,16 @@ run.concepts=[
   tradeoff:'It remains a technically rich dashboard that places the core interpretation burden on casual visitors.',evidenceIds},
  {id:'shore-trip-verdict',opportunityId,
   firstScreen:'A visitor chooses the shoreline and time, then reads one evidence-qualified recommendation above an explorable AIS map.',
-  interaction:'The answer changes between modeled passage, nearby-only, no ship-only trip, weather concern and published-hour conflict; official sources and route search are one tap away.',
-  completedAction:'The visitor knows whether this ship justifies traveling, where to look, which hours matter, and what independent conditions remain unverified.',
+  interaction:'The answer changes between a model-supported passage, fresh nearby ship, no close moving report, weather concern and published-hour conflict; local source/map links remain one tap away.',
+  completedAction:'The visitor already at or near the shore knows what vessel to look for now, when to scan the channel, and when live evidence simply cannot establish an arrival.',
   feasibility:'A pure JS evidence layer and allowlisted NWS point adapter can reuse the existing map and corridor model without Redis or new credentials.',
-  tradeoff:'A definitive ship-only trip recommendation is sometimes impossible. The correct product must say so and provide a useful alternate shore plan.',evidenceIds}
+  tradeoff:'A precise passage is often unknowable from raw AIS. The page must say so, not manufacture an arrival or recommend travel decisions that the user never asked for.',evidenceIds}
 ];
 run.design={conceptId:'shore-trip-verdict',reviewer:'Experience OS 1.2.1 / Foundry 0.3 agent design review',
- rationale:'The selected trip-verdict design is different from the flagship tracker (vessel first) and the static ship-watching guide (place descriptions). It leads with the specific visitor decision, its constraints and next action, while retaining inspectable AIS details and the map.'};
+ rationale:'The selected on-shore briefing differs from the flagship vessel-first tracker and editorial shore guide. It leads with a current watch target, a time if supported, and evidence limits; the AIS map remains inspectable.'};
 run.scenarios=[
  {id:'visitor-verdict-surface',role:'improvement',journey:'Select a public shore and viewing time in the existing canonical Watch Desk.',
-  input:'A default Soo Locks visit, even before source loading.',expected:'A visible visit-verdict card names the actionable questions of public location, when, NWS weather and access.'},
+  input:'A visitor already beside the Soo Locks, before source loading.',expected:'The first screen answers what to watch from here, when to look, and any local weather or access limitations.'},
  {id:'supported-window-trip',role:'improvement',journey:'Evaluate a recent supported Soo passage with a clear hourly forecast and published daytime hours.',
   input:'Source candidate with an unaltered 30–70 minute passage window, within reviewed Soo park hours and no active severe alert.',
   expected:'Give a qualified, named viewing plan with the source-supplied passage window and arrival preparation; no fabricated certainty.'},
@@ -72,9 +72,12 @@ run.scenarios=[
   input:'Fresh commercial vessel position without a corridor-specific arrival model.',
   expected:'Only an if-already-nearby shore opportunity appears, without a future passage time or route promise.'},
  {id:'broad-bay-honesty',role:'improvement',journey:'Choose Bay City while a freighter is reporting far offshore in Saginaw Bay.',
-  input:'Broad-bay AIS position away from downtown and no river arrival model.',expected:'Do not recommend a downtown ship-only trip based on a distant bay dot.'},
+  input:'Broad-bay AIS position away from downtown and no river arrival model.',expected:'Show no close moving ship signal rather than implying a freighter will be visible downtown.'},
  {id:'access-sources',role:'improvement',journey:'Consider one of six shoreline locations, including parks with unknown opening hours.',
   input:'Official land-manager source, a named public site and NWS shore forecast point.',expected:'Each place has a specific, linked official source, a named navigation search, and explicit unknown closure limitations.'},
+ {id:'onshore-next-look',role:'improvement',journey:'Stand on a public waterfront with no close moving commercial AIS signal.',
+  input:'A dated but empty nearby vessel report, plus the existing viewing-guide map and weather.',
+  expected:'The first screen assumes the visitor is already there, says no close ship is confirmed, and suggests watching/refreshing rather than advising against driving.'},
  {id:'preserve-corridor-eta-owner',role:'preservation',journey:'Revisit original Soo Locks next-ship candidate selection.',
   input:'Identical fresh matching vessel identity and model-supplied passage window.',expected:'The original model-owned ETA candidate remains authoritative and its provided window is unchanged.'},
  {id:'preserve-canonical-editorial',role:'preservation',journey:'Read the ship-watching guide without JavaScript.',
