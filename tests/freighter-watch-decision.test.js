@@ -135,7 +135,7 @@ test('fresh source-classified Soo in-lock vessel gives only an immediate nearby 
  const r=report({status:'in-lock',pick:null,inLock,observations:[inLock],when:'now'});
  const plan=engine.recommendation(r,context('soo'),now);
  assert.equal(plan.code,'LOCAL_IN_LOCK');
- assert.match(plan.title,/reported in the locks now/);
+ assert.match(plan.title,/Look toward the locks/);
  assert.match(plan.when,/not a future arrival/);
 });
 test('near Port Huron moving commercial AIS gives a nearby ship signal without an ETA',()=>{
@@ -153,7 +153,7 @@ test('a ship anywhere in Saginaw Bay does not imply a downtown Bay City viewing 
  const r=report({status:'observed',pick:null,observations:[far]});
  const plan=engine.recommendation(r,context('saginaw'),now);
  assert.equal(plan.code,'NO_CLOSE_REPORT');
- assert.match(plan.summary,/far away or stationary/);
+ assert.match(plan.summary,/vessels missing from receivers/);
 });
 test('stale, stopped, noncommercial and older vessel reports cannot trigger a nearby ship claim',()=>{
  const cases=[
@@ -185,7 +185,7 @@ test('tomorrow selects actual next-day daylight forecast, never an AIS arrival',
  const r=report({status:'unknown',when:'tomorrow',pick:null,observations:[]});
  const plan=engine.recommendation(r,context('detroit'),now);
  assert.equal(plan.code,'PLAN_SHORE');
- assert.match(plan.when,/No vessel schedule/);
+ assert.match(plan.when,/weather hour, not a ship passage time/);
  assert.match(plan.where,/Cullen Plaza/);
  assert.equal(engine.dayKey(plan.weather.at,'America/Detroit'),'2026-11-09');
 });
@@ -218,5 +218,5 @@ test('the no-ship weather view does not promise safe public access',()=>{
  const plan=engine.recommendation(r,context('duluth'),now);
  assert.equal(plan.code,'NO_CLOSE_REPORT');
  assert.equal(plan.access.level,'unverified');
- assert.match(plan.summary,/unavailable/);
+ assert.match(plan.summary,/live vessel check could not be completed/);
 });
