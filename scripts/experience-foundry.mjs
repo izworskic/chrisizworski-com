@@ -5,13 +5,14 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {inspectNetwork,starter,compile,validateSpec,RECIPES} from '../experience-foundry/lib/foundry.mjs';
 import {validIso} from '../experience-foundry/lib/safety.mjs';
+import {compileCircleTourCatalog} from '../lib/circle-tour-network.mjs';
 import {planExperience} from '../experience-foundry/lib/planning.mjs';
 import {restrictedOutput,writePacket} from '../experience-foundry/lib/output.mjs';
 import {startImprovement,assessRun,proveImprovement,reviewProof,verifyBaseline} from '../experience-foundry/lib/improvement.mjs';
 const root=fileURLToPath(new URL('../',import.meta.url));
 const [command='help',...args]=process.argv.slice(2);
 const flags={};
-const allowed={discover:['query'],init:['recipe','slug','place','title','question','out'],plan:['slug','question','owner','recipe','out'],improve:['slug','question','owner','files','add-files','baseline','out'],assess:['run','proof'],prove:['run','out'],validate:['spec','as-of'],build:['spec','as-of','out'],recipes:[],help:[]};
+const allowed={discover:['query'],connections:['owner'],init:['recipe','slug','place','title','question','out'],plan:['slug','question','owner','recipe','out'],improve:['slug','question','owner','files','add-files','baseline','out'],assess:['run','proof'],prove:['run','out'],validate:['spec','as-of'],build:['spec','as-of','out'],recipes:[],help:[]};
 function required(name){if(!flags[name])throw Error('Missing --'+name);return flags[name];}
 async function registry(){return JSON.parse(await fs.readFile(path.join(root,'benchmarks/tool-network-registry.json'),'utf8'));}
 async function run(){
@@ -24,6 +25,7 @@ async function run(){
   prove --run FILE [--out DIR]      replay the same visitor cases before and after
   recipes                           list supported preview interactions
   discover --query "visitor need"  inspect possible existing intent owners
+  connections [--owner REGISTRY_ID]  audit approved and candidate Circle Tour integration without modifying tools
   plan --slug NAME --question "visitor decision" [--owner REGISTRY_ID] [--recipe NAME]
                                     create brief, state matrix and implementation packet
   init --recipe NAME --slug NAME [--place PLACE] [--title TITLE] [--question QUESTION]
@@ -50,6 +52,22 @@ async function run(){
   }
   if(command==='discover'){
     console.log(JSON.stringify(inspectNetwork(required('query'),await registry()),null,2));return;
+  }
+  if(command==='connections'){
+    const network=await registry();
+    const seeds=JSON.parse(await fs.readFile(path.join(root,'config/circle-tour-tool-connections.json'),'utf8'));
+    const {catalog,report}=compileCircleTourCatalog(network,seeds);
+    const owner=flags.owner||null;
+    if(owner&&!network.tools.some(tool=>tool.id===owner))throw Error('Unregistered tool owner: '+owner);
+    const published=catalog.connections.filter(item=>!owner||item.toolId===owner);
+    const candidates=report.candidates.filter(item=>!owner||item.toolId===owner);
+    console.log(JSON.stringify({owner:owner||'all',approved:published.map(item=>({toolId:item.toolId,
+      stopIds:item.stopIds,url:item.url,source:item.source})),candidates,
+      status:published.length?'APPROVED CONNECTION':candidates.length?'CANDIDATE — NOT PUBLISHED':'NO CIRCLE TOUR MATCH',
+      nextAction:published.length?'Verify site build catalog and release checks.':
+        'Validate a specific route stop and visitor decision; add reviewed circleTour metadata with approval=approved to that tool registry node. Never auto-publish a geography guess.',
+      unchanged:'Specialist code, canonical URLs, APIs and original Circle Tour planner remain untouched.'},null,2));
+    return;
   }
   if(command==='improve'){
     const slug=required('slug');

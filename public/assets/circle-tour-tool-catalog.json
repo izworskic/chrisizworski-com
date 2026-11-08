@@ -1,0 +1,666 @@
+{
+  "schemaVersion": 1,
+  "owner": "circle-tour",
+  "registryVersion": "1.4.0",
+  "connectionPolicy": "approved-only",
+  "routeOrder": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11",
+    "12",
+    "31",
+    "13",
+    "14",
+    "15",
+    "16",
+    "17",
+    "18",
+    "19",
+    "20",
+    "21",
+    "22",
+    "23",
+    "24",
+    "25",
+    "26",
+    "27",
+    "28",
+    "29",
+    "30"
+  ],
+  "stopRegion": {
+    "1": "mn",
+    "2": "wi",
+    "3": "wi",
+    "4": "wi",
+    "5": "mi",
+    "6": "mi",
+    "7": "mi",
+    "8": "mi",
+    "9": "mi",
+    "10": "mi",
+    "11": "mi",
+    "12": "mi",
+    "13": "mi",
+    "14": "on",
+    "15": "on",
+    "16": "on",
+    "17": "on",
+    "18": "on",
+    "19": "on",
+    "20": "on",
+    "21": "mn",
+    "22": "mn",
+    "23": "mn",
+    "24": "mn",
+    "25": "mn",
+    "26": "mn",
+    "27": "mn",
+    "28": "mn",
+    "29": "mn",
+    "30": "mn",
+    "31": "mi"
+  },
+  "connections": [
+    {
+      "toolId": "duluth-canal-park",
+      "name": "Duluth Canal Park Live",
+      "url": "https://chrisizworski.com/duluth-canal-park/",
+      "stopIds": [
+        "1",
+        "30"
+      ],
+      "theme": "ships",
+      "decision": "Is there a supported ship-watching opportunity at Canal Park?",
+      "caveat": "Check the actual vessel picture before waiting beside the bridge.",
+      "seasons": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "source": "curated",
+      "evidence": "specialist-owned; current access and availability not asserted"
+    },
+    {
+      "toolId": "lighthouses",
+      "name": "Great Lakes Lighthouses",
+      "url": "https://chrisizworski.com/great-lakes-lighthouses/",
+      "stopIds": [
+        "1",
+        "8",
+        "31",
+        "13",
+        "20",
+        "22",
+        "27",
+        "29"
+      ],
+      "theme": "history",
+      "decision": "Find a historic lighthouse on your route.",
+      "caveat": "Directory entries do not guarantee tours or public access.",
+      "seasons": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "source": "curated",
+      "evidence": "specialist-owned; current access and availability not asserted"
+    },
+    {
+      "toolId": "ship-tracker",
+      "name": "Great Lakes Ship Tracker",
+      "url": "https://chrisizworski.com/great-lakes-freighter-tracking/",
+      "stopIds": [
+        "1",
+        "10",
+        "31",
+        "13",
+        "29",
+        "30"
+      ],
+      "theme": "ships",
+      "decision": "Follow Great Lakes ships near your next port.",
+      "caveat": "AIS location is a report, not a verified itinerary.",
+      "seasons": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "source": "curated",
+      "evidence": "specialist-owned; current access and availability not asserted"
+    },
+    {
+      "toolId": "shipwrecks",
+      "name": "Great Lakes Shipwreck Explorer",
+      "url": "https://chrisizworski.com/great-lakes-shipwrecks/",
+      "stopIds": [
+        "1",
+        "3",
+        "31",
+        "20"
+      ],
+      "theme": "history",
+      "decision": "Explore the stories behind Lake Superior shipwrecks.",
+      "caveat": "Historical records are not permission to dive or enter a site.",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "source": "curated",
+      "evidence": "specialist-owned; current access and availability not asserted"
+    },
+    {
+      "toolId": "apostle-islands",
+      "name": "Apostle Islands Explorer",
+      "url": "https://chrisizworski.com/apostle-islands/",
+      "stopIds": [
+        "3"
+      ],
+      "theme": "water",
+      "decision": "Choose a shore, island, boat tour or cave visit.",
+      "caveat": "Compare access and timing before committing a full Bayfield day.",
+      "seasons": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "source": "curated",
+      "evidence": "specialist-owned; current access and availability not asserted"
+    },
+    {
+      "toolId": "great-lakes-buoys",
+      "name": "Great Lakes Buoy Dashboard",
+      "url": "https://chrisizworski.com/great-lakes-buoys/",
+      "stopIds": [
+        "3",
+        "11",
+        "15",
+        "18",
+        "20",
+        "22",
+        "23",
+        "27",
+        "30"
+      ],
+      "theme": "water",
+      "decision": "Check measured Lake Superior conditions.",
+      "caveat": "Offshore buoys do not certify local beaches, boats or kayak launches as safe.",
+      "seasons": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "source": "curated",
+      "evidence": "specialist-owned; current access and availability not asserted"
+    },
+    {
+      "toolId": "fall-color",
+      "name": "Michigan Fall Color",
+      "url": "https://chrisizworski.com/fall-color/",
+      "stopIds": [
+        "5",
+        "6",
+        "8",
+        "10",
+        "11",
+        "12"
+      ],
+      "theme": "seasonal",
+      "decision": "Compare current Upper Peninsula fall-color context.",
+      "caveat": "Seasonal timing is not confirmation that a specific trail is open.",
+      "seasons": [
+        9,
+        10
+      ],
+      "source": "curated",
+      "evidence": "specialist-owned; current access and availability not asserted"
+    },
+    {
+      "toolId": "michigan-rockhounding",
+      "name": "Michigan Rockhounding Conditions",
+      "url": "https://chrisizworski.com/michigan-rockhounding/",
+      "stopIds": [
+        "5",
+        "8",
+        "9",
+        "10",
+        "11"
+      ],
+      "theme": "history",
+      "decision": "Find a lawful Lake Superior rockhounding opportunity.",
+      "caveat": "Storms can expose stones, but public collection rules still apply.",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "source": "curated",
+      "evidence": "specialist-owned; current access and availability not asserted"
+    },
+    {
+      "toolId": "upper-peninsula-waterfalls",
+      "name": "Upper Peninsula Waterfall Map & Trip Planner",
+      "url": "https://chrisizworski.com/upper-peninsula-waterfalls/",
+      "stopIds": [
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12"
+      ],
+      "theme": "falls",
+      "decision": "Pick a waterfall with verified public access.",
+      "caveat": "Not every cascade on the map is legal or practical on a driving day.",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "source": "curated",
+      "evidence": "specialist-owned; current access and availability not asserted"
+    },
+    {
+      "toolId": "estivant-pines",
+      "name": "Estivant Pines Hike Planner",
+      "url": "https://chrisizworski.com/estivant-pines/",
+      "stopIds": [
+        "8"
+      ],
+      "theme": "parks",
+      "decision": "Choose a genuine Keweenaw old-growth trail.",
+      "caveat": "Check seasonal access before heading toward Copper Harbor.",
+      "seasons": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "source": "curated",
+      "evidence": "specialist-owned; current access and availability not asserted"
+    },
+    {
+      "toolId": "isle-royale-map",
+      "name": "Isle Royale Interactive Map",
+      "url": "https://chrisizworski.com/isle-royale-map/",
+      "stopIds": [
+        "8",
+        "22"
+      ],
+      "theme": "parks",
+      "decision": "Explore Isle Royale before adding an island detour.",
+      "caveat": "The island is not a roadside stop; factor in boat and overnight commitments.",
+      "seasons": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "source": "curated",
+      "evidence": "specialist-owned; current access and availability not asserted"
+    },
+    {
+      "toolId": "pictured-rocks",
+      "name": "Pictured Rocks Planner",
+      "url": "https://picturedrocks.chrisizworski.com/",
+      "stopIds": [
+        "11"
+      ],
+      "theme": "water",
+      "decision": "Choose a boat, kayak, hike or scenic drive.",
+      "caveat": "Weather and vessel schedules can change the right choice.",
+      "seasons": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "source": "curated",
+      "evidence": "specialist-owned; current access and availability not asserted"
+    },
+    {
+      "toolId": "tahquamenon",
+      "name": "Tahquamenon Falls Trip Planner",
+      "url": "https://chrisizworski.com/tahquamenon-falls/",
+      "stopIds": [
+        "12"
+      ],
+      "theme": "falls",
+      "decision": "Choose Upper Falls, Lower Falls or both.",
+      "caveat": "Plan walking and parking before leaving the Michigan shore.",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "source": "curated",
+      "evidence": "specialist-owned; current access and availability not asserted"
+    },
+    {
+      "toolId": "border-waits",
+      "name": "Michigan Border Wait Times",
+      "url": "https://chrisizworski.com/michigan-border-wait-times/",
+      "stopIds": [
+        "13",
+        "14"
+      ],
+      "theme": "logistics",
+      "decision": "Check the Sault Ste. Marie crossing.",
+      "caveat": "This Michigan crossing feed does not cover Pigeon River.",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "source": "curated",
+      "evidence": "specialist-owned; current access and availability not asserted"
+    },
+    {
+      "toolId": "soo-locks",
+      "name": "Soo Locks Live",
+      "url": "https://chrisizworski.com/soo-locks/",
+      "stopIds": [
+        "13",
+        "14"
+      ],
+      "theme": "ships",
+      "decision": "Check whether a freighter visit fits your Sault stop.",
+      "caveat": "A tracked vessel is not a guaranteed lock passage.",
+      "seasons": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "source": "curated",
+      "evidence": "specialist-owned; current access and availability not asserted"
+    },
+    {
+      "toolId": "lake-superior-provincial-park",
+      "name": "Lake Superior Provincial Park Explorer",
+      "url": "https://chrisizworski.com/lake-superior-provincial-park/",
+      "stopIds": [
+        "15",
+        "16"
+      ],
+      "theme": "parks",
+      "decision": "Choose a provincial-park stop that fits your available time.",
+      "caveat": "Verify access and seasonal trail closures at the park guide.",
+      "seasons": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "source": "curated",
+      "evidence": "specialist-owned; current access and availability not asserted"
+    },
+    {
+      "toolId": "pukaskwa-national-park",
+      "name": "Pukaskwa National Park Trail & Conditions Chooser",
+      "url": "https://chrisizworski.com/pukaskwa-national-park/",
+      "stopIds": [
+        "18"
+      ],
+      "theme": "parks",
+      "decision": "Choose a Pukaskwa day hike or short visit.",
+      "caveat": "Highway 627 adds a detour; official access may be restricted.",
+      "seasons": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "source": "curated",
+      "evidence": "specialist-owned; current access and availability not asserted"
+    },
+    {
+      "toolId": "sleeping-giant-provincial-park",
+      "name": "Sleeping Giant Provincial Park Trail Explorer",
+      "url": "https://chrisizworski.com/sleeping-giant-provincial-park/",
+      "stopIds": [
+        "20"
+      ],
+      "theme": "parks",
+      "decision": "Choose a Sleeping Giant experience without underestimating distance.",
+      "caveat": "Trail and bike-to-hike distances are not interchangeable.",
+      "seasons": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "source": "curated",
+      "evidence": "specialist-owned; current access and availability not asserted"
+    },
+    {
+      "toolId": "isle-royale-ferry",
+      "name": "Grand Portage Isle Royale Ferry and Permit Planner",
+      "url": "https://chrisizworski.com/isle-royale-ferry/",
+      "stopIds": [
+        "22"
+      ],
+      "theme": "water",
+      "decision": "Does a Grand Portage ferry fit your actual travel days?",
+      "caveat": "Schedules and tickets are operator-owned and date-specific.",
+      "seasons": [
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "source": "curated",
+      "evidence": "specialist-owned; current access and availability not asserted"
+    },
+    {
+      "toolId": "split-rock-lighthouse-visit",
+      "name": "Split Rock Lighthouse Tickets Parking and Fitzgerald Memorial",
+      "url": "https://chrisizworski.com/split-rock-lighthouse-visit/",
+      "stopIds": [
+        "27"
+      ],
+      "theme": "history",
+      "decision": "What ticket and parking do you actually need at Split Rock?",
+      "caveat": "Historic interior tickets and state-park entry are different.",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "source": "curated",
+      "evidence": "specialist-owned; current access and availability not asserted"
+    },
+    {
+      "toolId": "split-rock-river-loop",
+      "name": "Split Rock River Loop Missing Bridge and Detour",
+      "url": "https://chrisizworski.com/split-rock-river-loop/",
+      "stopIds": [
+        "27"
+      ],
+      "theme": "parks",
+      "decision": "Understand the missing Split Rock River bridge before hiking.",
+      "caveat": "Do not treat the historic loop as a safe river crossing.",
+      "seasons": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "source": "curated",
+      "evidence": "specialist-owned; current access and availability not asserted"
+    },
+    {
+      "toolId": "gooseberry-falls",
+      "name": "Gooseberry Falls Waterfall Walk & Access Planner",
+      "url": "https://chrisizworski.com/gooseberry-falls/",
+      "stopIds": [
+        "28"
+      ],
+      "theme": "falls",
+      "decision": "Which Gooseberry waterfall walk fits your time?",
+      "caveat": "Choose the documented walk, not an assumed accessible route.",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "source": "curated",
+      "evidence": "specialist-owned; current access and availability not asserted"
+    }
+  ],
+  "roadChecks": [
+    {
+      "id": "wi",
+      "region": "wi",
+      "name": "Wisconsin 511",
+      "url": "https://511wi.gov/map",
+      "note": "Open official Wisconsin road and construction reports. No live status is inferred here.",
+      "evidence": "official source link; no live route status fetched"
+    },
+    {
+      "id": "mi",
+      "region": "mi",
+      "name": "Michigan Mi Drive",
+      "url": "https://mdotjboss.state.mi.us/MiDrive/",
+      "note": "Check Michigan incidents and MDOT route closures. Not every local road is covered.",
+      "evidence": "official source link; no live route status fetched"
+    },
+    {
+      "id": "on",
+      "region": "on",
+      "name": "Ontario 511",
+      "url": "https://511on.ca/",
+      "note": "Check Highway 17 closures, roadwork and conditions directly with Ontario.",
+      "evidence": "official source link; no live route status fetched"
+    },
+    {
+      "id": "mn",
+      "region": "mn",
+      "name": "Minnesota 511",
+      "url": "https://511mn.org/",
+      "note": "Check the Minnesota North Shore highway before departing; non-state roads may be omitted.",
+      "evidence": "official source link; no live route status fetched"
+    }
+  ]
+}

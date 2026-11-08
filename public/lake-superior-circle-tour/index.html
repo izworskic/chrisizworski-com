@@ -343,6 +343,7 @@ a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}
 <script defer src="/_vercel/speed-insights/script.js"></script>
 <script defer src="/assets/growth-cta.js"></script>
 <link rel="stylesheet" href="/assets/journey-atlas-v1.css">
+<link rel="stylesheet" href="/assets/circle-tour-bridge.css">
 </head>
 <body itemscope itemtype="https://schema.org/WebPage" data-analytics-page="lake-superior-circle-tour">
 <header class="site-header"><p class="site-title"><a href="/">Chris Izworski</a></p></header>
@@ -424,6 +425,64 @@ a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}
   <p class="planner-note">The map is a planning overview, not turn-by-turn navigation. Daily direction links open Google Maps; confirm road, weather, park, and <a href="#planning-essentials">border conditions</a> before departure. The map loads only when it nears your screen, and no account is required.</p>
   <noscript><p class="planner-note"><strong>JavaScript is off.</strong> Use the complete 7-, 10-, and 15-day written itineraries and all 31 stop cards below.</p></noscript>
 </section>
+<!-- INDEPENDENT CIRCLE TOUR BRIDGE: approved tool URLs only; original planner and all specialist sources stay intact. -->
+<section class="ctb-shell" id="circle-tour-tool-bridge" data-circle-tour-bridge aria-labelledby="ctb-heading">
+  <div class="ctb-top">
+    <div>
+      <p class="ctb-eyebrow">Lake Superior · Connected trip desk</p>
+      <h2 id="ctb-heading">Make the next stop count</h2>
+      <p class="ctb-deck">Choose a stop, travel date or interest. This route-aware desk points to the right independent park, waterfall, ship or island tool without taking you away from the itinerary you are building.</p>
+    </div>
+    <span class="ctb-privacy">Your trip stays in this tab</span>
+  </div>
+  <div class="ctb-controls">
+    <label for="ctb-stop">Route focus
+      <select id="ctb-stop"><option value="">My selected stops or the entire Circle Tour</option></select>
+    </label>
+    <label for="ctb-date">When are you traveling?
+      <input id="ctb-date" type="date" autocomplete="off" aria-describedby="ctb-date-note">
+    </label>
+    <label for="ctb-theme">What matters most?
+      <select id="ctb-theme">
+        <option value="all">All experiences</option>
+        <option value="parks">Parks &amp; hikes</option>
+        <option value="falls">Waterfalls</option>
+        <option value="water">Islands, boats &amp; lake</option>
+        <option value="ships">Freighters &amp; locks</option>
+        <option value="history">History &amp; places</option>
+        <option value="logistics">Border &amp; logistics</option>
+        <option value="seasonal">Seasonal landscapes</option>
+      </select>
+    </label>
+  </div>
+  <p class="ctb-support" id="ctb-date-note">Dates help prioritize a tool's usual season; they do not confirm opening hours, scheduled boats, road conditions or public access. Specialist tools open separately.</p>
+  <div class="ctb-route" id="ctb-route" aria-label="Selected Circle Tour route"></div>
+  <p id="ctb-status" class="ctb-support" role="status" aria-live="polite">Independent specialist connections are loading. The existing 31-stop Circle Tour works without them.</p>
+  <div class="ctb-results" id="ctb-results" aria-label="Trip-specific independent tools"></div>
+  <button type="button" id="ctb-more" class="ctb-more" hidden>Show more specialists</button>
+  <div id="ctb-fallback" class="ctb-fallback">
+    <strong>Continue planning with our existing field guides:</strong>
+    <a href="/apostle-islands/">Apostle Islands</a>
+    <a href="https://picturedrocks.chrisizworski.com/">Pictured Rocks</a>
+    <a href="/lake-superior-provincial-park/">Lake Superior Provincial Park</a>
+    <a href="/gooseberry-falls/">Gooseberry Falls</a>
+    <p>Check roads directly: <a href="https://511wi.gov/map" target="_blank" rel="noopener">Wisconsin 511</a> <a href="https://mdotjboss.state.mi.us/MiDrive/" target="_blank" rel="noopener">Michigan Mi Drive</a> <a href="https://511on.ca/" target="_blank" rel="noopener">Ontario 511</a> <a href="https://511mn.org/" target="_blank" rel="noopener">Minnesota 511</a>. These links do not imply a live closure check.</p>
+  </div>
+  <div class="ctb-bottom">
+    <div>
+      <h3>Before the next leg, verify the road</h3>
+      <p>Official highway systems below own current road information. We do not import, re-label or guess their live status.</p>
+      <ul id="ctb-road" class="ctb-road" aria-label="Official road reports for selected route"></ul>
+    </div>
+    <div class="ctb-trip-keep">
+      <h3>Keep your route</h3>
+      <p>Every specialist opens in a separate tab. This Circle Tour stays available with your selected stops. Copy the return link to reopen the trip later or share it.</p>
+      <button id="ctb-copy" type="button">Copy my Circle Tour return link</button>
+      <p class="ctb-copy-status" id="ctb-copy-status" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+</section>
+
 <!-- JOURNEY_ATLAS_V1: editorial chooser; no live-safety inference; preserves existing 31-stop map -->
 <section class="ja-shell" id="journey-atlas" data-journey-atlas aria-labelledby="ja-heading">
   <p class="ja-kicker">Lake Superior · JOURNEY_ATLAS_V1</p>
@@ -1270,5 +1329,6 @@ a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}
 <footer class="footer">Route corrections updated November 8, 2026, Compiled by <a href="https://chrisizworski.com">Chris Izworski</a>, <a href="/tools/">Back to Tools</a></footer>
 <script defer src="/assets/lake-superior-circle-tour.js"></script>
 <script defer src="/assets/journey-atlas-v1.js"></script>
+<script defer src="/assets/circle-tour-bridge.js"></script>
 </body>
 </html>
