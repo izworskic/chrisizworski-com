@@ -19,7 +19,7 @@
       center:[46.503,-84.352],zoom:12,link:'/soo-locks/',visit:'/soo-locks/plan-your-visit/',
       spot:'Soo Locks observation platform',note:'Confirm observation-platform and Visitor Center access before traveling.'},
     duluth: {label:'Duluth Canal Park',zone:'America/Chicago',kind:'duluth',endpoint:'/api/duluth-canal',
-      center:[46.7783,-92.0908],zoom:13,link:'/duluth-canal-park/',visit:'/duluth-canal-park/',
+      center:[46.7783,-92.0908],zoom:13,viewPoint:[46.779847,-92.092464],link:'/duluth-canal-park/',visit:'/duluth-canal-park/',
       spot:'Ship Canal / Canal Park',note:'Use the Duluth guide to compare the north pier, Park Point and Lakewalk viewing areas.'},
     port: {label:'Port Huron',zone:'America/Detroit',kind:'observation',endpoint:'/api/freighter-ais',
       center:[42.977,-82.423],zoom:11,bbox:[42.84,-82.58,43.14,-82.34],
@@ -115,8 +115,8 @@
     if (base.observations.length) {
       base.status = 'observed';
       base.reason = config.kind === 'observation'
-        ? 'Fresh vessels reported in this broad area; their future route and shore visibility are unverified.'
-        : 'Recent vessel positions are available, but no supported passage window meets the selected time.';
+        ? 'Ships have reported positions in this general area, but we cannot confirm when one will pass your viewing spot. Check the map before you drive.'
+        : 'There are recent vessel reports, but no reliable passage window for the time you selected.';
     } else {
       base.reason = 'No vessel report under 30 minutes old meets this location filter. This does not mean the waterway is empty.';
     }
@@ -162,8 +162,8 @@
     source.textContent=result.checkedAt ? 'Source checked '+formatTime(result.checkedAt,config.zone)+' · reports expire after 30 minutes · Open Waters AIS' :
       'No current verified source check · no passage forecast';
     next.replaceChildren(
-      link(doc,'Plan a public viewing spot',config.visit,'fwd-button'),
-      link(doc,'Open specialist evidence',config.link,'fwd-button fwd-button-alt'));
+      link(doc,'Where to watch from shore',config.visit,'fwd-button'),
+      link(doc,'Open local ship tracker',config.link,'fwd-button fwd-button-alt'));
     ships.replaceChildren();
     const records = result.observations.slice();
     if(result.pick && !records.some(v=>identity(v)===identity(result.pick.ship)))records.unshift(result.pick.ship);
@@ -281,9 +281,16 @@
         m.options.shipMmsi=identity(v);
         coords.push([Number(v.lat),Number(v.lon)]);
       }
+      if(conf.viewPoint){
+        const watching=window.L.circleMarker(conf.viewPoint,{radius:10,color:'#fff',weight:3,fillColor:'#c68e31',fillOpacity:1}).addTo(layer);
+        const info=make(doc,'div',null,'fwd-map-popup');
+        info.append(make(doc,'strong','Public viewing reference: '+conf.spot),
+          make(doc,'p','Approximate location from the existing Duluth viewing guide. Confirm access and hours before traveling.'));
+        watching.bindPopup(info);
+      }
       if(!coords.length)map.setView(conf.center,conf.zoom);
       else map.fitBounds([conf.center,...coords],{padding:[32,32],maxZoom:conf.zoom});
-      mapStatus.textContent=coords.length?coords.length+' vessel positions · recent AIS, not verified shore sightings':'Area reference only · no eligible recent vessel positions';
+      mapStatus.textContent=coords.length?coords.length+' recent AIS ship position'+(coords.length===1?'':'s')+' · not guaranteed shore sightings':'No eligible ship reports in this area at the last check. Map still shows the waterway.';
       map.invalidateSize();
     }
     async function load(){
