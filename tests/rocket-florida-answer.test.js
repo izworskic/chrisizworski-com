@@ -91,6 +91,16 @@ test('matched NPS closure overrides beach possibility without erasing public alt
  assert.equal(a.cards.find(c=>c.id==='playalinda-south').directionsAllowed,false);
  assert.equal(a.chosen[0].id,'space-view');
 });
+test('conflicting Kennedy-vs-Cape pad identity does not adopt the wrong coast closure',()=>{
+ const d=detail(ID,{closed:true});
+ const a=model.assess(national(12),d);
+ assert.equal(a.matched,false);
+ assert.equal(a.npsClosed,false);
+ assert.equal(a.chosen[0].id,'jetty');
+ assert.match(a.note,/another mission|stale|missing/i);
+ const reg=detail();reg.next.locationId=12;
+ assert.equal(model.assess(national(27),reg).matched,false);
+});
 test('a mission-matched KSC event is not ticket availability',()=>{
  const a=model.assess(national(),detail(ID,{matchedKsc:true}));
  assert.equal(a.kscMatched,true);
