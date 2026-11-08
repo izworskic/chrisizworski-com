@@ -119,7 +119,7 @@ const server=http.createServer((req,res)=>{
       await page.screenshot({path:path.join(shots,'soo-'+width+'.png'),fullPage:false});
       await page.selectOption('#fwd-place','port');
       await page.waitForFunction(()=>document.querySelector('#fwd-status').dataset.status==='observed');
-      assert.match(await page.textContent('#fwd-message'),/cannot confirm when one will pass/);
+      assert.match(await page.textContent('#fwd-message'),/cannot confirm when or whether one will pass/);
       assert.match(await page.textContent('#fwd-viewing-location'),/Vantage Point/);
       await page.waitForFunction(()=>document.querySelector('#fwd-visit-plan').dataset.verdict==='NEARBY_ONLY');
       assert.match(await page.textContent('#fwd-plan-title'),/Moving freighter reported near this shoreline/);
