@@ -78,7 +78,7 @@ async function basemap(){
 }
 function initMap(){
  if(typeof L==='undefined'){text(mapRoot,'Map unavailable. Research names and sources remain accessible below.');mapState.textContent='Map library unavailable. No records have been hidden.';return;}
- try{map=L.map(mapRoot,{scrollWheelZoom:false,zoomControl:true}).setView([46.65,-87.8],7);mapPins=L.layerGroup().addTo(map);void basemap();}
+ try{mapRoot.replaceChildren();map=L.map(mapRoot,{scrollWheelZoom:false,zoomControl:true}).setView([46.65,-87.8],7);mapPins=L.layerGroup().addTo(map);void basemap();}
  catch{map=null;text(mapRoot,'Map unavailable. Search the text-only evidence catalog.');mapState.textContent='Map failed to initialize. Records are still accessible.';}
 }
 function renderPins(){
