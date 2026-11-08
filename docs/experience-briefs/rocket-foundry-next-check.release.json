@@ -60,6 +60,7 @@
     "selectedIdField": "selectedLaunchId, same validated LL2 UUID as national Flight Desk and regional guides",
     "sourceOfTruth": "Existing shared /api/rocket-launch-usa response; nextCheck derives a single unresolved evidence gate without new provider call, location tracking, ticket inventory or synthetic launch date.",
     "linkedSurfaces": [
+      "answer",
       "original-mission-selection",
       "selected-rocket-pad-pin",
       "flight-desk-pad-shore-sky",
