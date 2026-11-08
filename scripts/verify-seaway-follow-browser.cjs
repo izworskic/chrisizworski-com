@@ -10,9 +10,15 @@ const PORT=Number(process.env.PORT)||0;
 let fakeMode='recent';
 const REFERENCE=JSON.parse(fs.readFileSync(path.join(__dirname,'../data/seaway/places.json'),'utf8'));
 function responseFor(scope){
+ const shapeCases={
+  pleasure:{shipType:37,lengthMeters:14,name:'TEST PLEASURE CRAFT',mmsi:'316444444'},
+  sail:{shipType:36,lengthMeters:16,name:'TEST SAILBOAT',mmsi:'316555555'},
+  tug:{shipType:52,lengthMeters:37,name:'TEST WORK TUG',mmsi:'316666666'},
+  unknown:{shipType:null,lengthMeters:225,name:'TEST UNCLASSIFIED VESSEL',mmsi:'316777777'}
+ };
  const now=new Date(),v={mmsi:fakeMode==='photo'?'316009090':'316123456',name:fakeMode==='photo'?'ALGOMA EQUINOX':'TEST VESSEL — NOT REAL',lat:44.978,lon:-74.851,
-  speedKnots:5.2,heading:240,course:220,shipType:70,seen:new Date(+now-120000).toISOString(),
-  regionIds:['massena']};
+  speedKnots:5.2,heading:240,course:220,shipType:70,lengthMeters:200,beamMeters:24,seen:new Date(+now-120000).toISOString(),
+  regionIds:['massena'],...(shapeCases[fakeMode]||{})};
  if(fakeMode==='unavailable')return{status:502,data:{ok:false,state:'unavailable'}};
  const includes=scope==='all'||scope==='massena';
  const vessels=fakeMode==='empty'||!includes?[]:[v];
@@ -58,6 +64,15 @@ async function run(base,browser,width){
  assert.equal(await page.locator('#shipList').count(),1);
  const card=page.locator('#shipList .ship-card').first();
  await card.waitFor({state:'visible',timeout:25000});
+ assert.equal(await page.locator('#seawayTypeLegend .seaway-type-legend-item').count(),9,
+   'compact below-map legend explains all eight specific AIS categories and unknown type');
+ assert.equal(await card.locator('.ship-symbol.type-cargo').count(),1,
+   'cargo ship report uses freighter glyph in list');
+ await page.locator('#seawayMap .seaway-ship-marker.type-cargo').first().waitFor({state:'visible',timeout:10000});
+ assert.match(await page.locator('#seawayMap .seaway-ship-marker.type-cargo').first().getAttribute('title'),/TEST VESSEL/);
+ assert.match(await card.textContent(),/Freighter \/ cargo/);
+ assert.match(await card.textContent(),/656 ft/,'200 meters should be shown as 656 ft on ship card');
+ assert.doesNotMatch(await card.textContent(),/200 m(?!eters)/,'ship list must not show metric length');
  await card.click();
  await panel.waitFor({state:'visible',timeout:6000});
  assert.equal(await page.locator('#followSelectedShip').isVisible(),true);
@@ -70,6 +85,7 @@ async function run(base,browser,width){
  assert.doesNotMatch(await panel.textContent(),/arriving at.*\d+:\d+|ship will reach/i);
  const popupText=page.locator('#seawayMap .leaflet-popup-content').first();
  if(await popupText.isVisible()){
+   assert.match(await popupText.textContent(),/Reported length 656 ft · beam 79 ft/,'popup shows rounded feet for length and beam');
    assert.equal(await popupText.locator('a').count(),0,'individual ship bubble should have zero links');
    assert.equal(await popupText.locator('.seaway-popup-figure').count(),0,'unverified test ship receives no fake image');
  }
@@ -89,6 +105,27 @@ async function run(base,browser,width){
  assert.equal(await panel.isVisible(),false,'different river region clears selected journey');
  assert.ok(errors.every(msg=>!msg.includes('SeawayFollow')&&!msg.includes('followFreighter')),'follow code page errors '+errors.join('; '));
  await context.close();
+}
+
+async function verifyVesselIcon(base,browser,mode,kind,size){
+ const ctx=await browser.newContext({viewport:{width:390,height:844},reducedMotion:'reduce'});
+ const page=await ctx.newPage();
+ await page.route(/googlesyndication|googletagmanager|doubleclick/,r=>r.abort());
+ await page.route('https://*.basemaps.cartocdn.com/**',r=>r.abort());
+ await page.goto(base+'/st-lawrence-seaway/',{waitUntil:'domcontentloaded',timeout:40000});
+ const list=page.locator('#shipList .ship-card').first();
+ await list.waitFor({state:'visible',timeout:25000});
+ assert.equal(await list.locator('.ship-symbol.type-'+kind).count(),1,
+   mode+' AIS type should produce matching list silhouette');
+ const marker=page.locator('#seawayMap .seaway-ship-marker.type-'+kind).first();
+ await marker.waitFor({state:'visible',timeout:12000});
+ assert.match(await marker.getAttribute('class'),new RegExp('size-'+size),
+   mode+' icon scale must reflect reported length');
+ assert.match(await marker.locator('svg').getAttribute('viewBox'),/0 0 72 36/);
+ await list.click();
+ assert.equal(await page.locator('#followFreighter').isVisible(),true,
+   mode+' marker does not break the existing selected-ship journey');
+ await ctx.close();
 }
 
 async function verifyPhoto(base,browser,broken=false){
@@ -152,6 +189,12 @@ async function verifyPhoto(base,browser,broken=false){
   await page.locator('#shipList .empty').waitFor({state:'visible',timeout:25000});
   assert.equal(await page.locator('#followFreighter').isVisible(),false,'empty AIS cannot fabricate a journey');
   await ctx.close();
+  for(const [mode,kind,size] of [
+    ['pleasure','pleasure','small'],['sail','sail','small'],
+    ['tug','tug','small'],['unknown','unknown','large']
+  ]){
+    fakeMode=mode;await verifyVesselIcon(base,browser,mode,kind,size);
+  }
   fakeMode='photo';
   await verifyPhoto(base,browser,false);
   await verifyPhoto(base,browser,true);
@@ -161,6 +204,6 @@ async function verifyPhoto(base,browser,broken=false){
   assert.equal(await staticPage.locator('#viewing-plan').count(),1,'official visitor source remains available without JS');
   assert.equal(await staticPage.locator('#followFreighter').isVisible(),false);
   await nojs.close();
-  console.log('Follow the Freighter browser acceptance passed: 4 viewports, manual selected ship, corridor search, region reset, verified-photo/fallback, empty source and no-JS.');
+  console.log('Follow the Freighter browser acceptance passed: 4 viewports, selected AIS-class silhouettes and size bands, corridor search, region reset, verified-photo/fallback, empty source and no-JS.');
  }finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}
 })().catch(err=>{console.error(err);process.exitCode=1;});

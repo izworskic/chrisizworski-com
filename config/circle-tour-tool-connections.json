@@ -1,0 +1,315 @@
+{
+  "schemaVersion": 1,
+  "routeId": "circle-tour",
+  "updated": "2026-11-08",
+  "intent": "Connect independent specialist tools at their relevant Circle Tour stops without modifying the tools, copying their data engines, or implying a live access verdict.",
+  "connections": [
+    {
+      "toolId": "apostle-islands",
+      "stopIds": [
+        "3"
+      ],
+      "theme": "water",
+      "decision": "Choose a shore, island, boat tour or cave visit.",
+      "caveat": "Compare access and timing before committing a full Bayfield day.",
+      "approval": "approved"
+    },
+    {
+      "toolId": "upper-peninsula-waterfalls",
+      "stopIds": [
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12"
+      ],
+      "theme": "falls",
+      "decision": "Pick a waterfall with verified public access.",
+      "caveat": "Not every cascade on the map is legal or practical on a driving day.",
+      "approval": "approved"
+    },
+    {
+      "toolId": "tahquamenon",
+      "stopIds": [
+        "12"
+      ],
+      "theme": "falls",
+      "decision": "Choose Upper Falls, Lower Falls or both.",
+      "caveat": "Plan walking and parking before leaving the Michigan shore.",
+      "approval": "approved"
+    },
+    {
+      "toolId": "pictured-rocks",
+      "stopIds": [
+        "11"
+      ],
+      "theme": "water",
+      "decision": "Choose a boat, kayak, hike or scenic drive.",
+      "caveat": "Weather and vessel schedules can change the right choice.",
+      "approval": "approved"
+    },
+    {
+      "toolId": "soo-locks",
+      "stopIds": [
+        "13",
+        "14"
+      ],
+      "theme": "ships",
+      "decision": "Check whether a freighter visit fits your Sault stop.",
+      "caveat": "A tracked vessel is not a guaranteed lock passage.",
+      "approval": "approved"
+    },
+    {
+      "toolId": "duluth-canal-park",
+      "stopIds": [
+        "1",
+        "30"
+      ],
+      "theme": "ships",
+      "decision": "Is there a supported ship-watching opportunity at Canal Park?",
+      "caveat": "Check the actual vessel picture before waiting beside the bridge.",
+      "approval": "approved"
+    },
+    {
+      "toolId": "ship-tracker",
+      "stopIds": [
+        "1",
+        "10",
+        "13",
+        "29",
+        "30",
+        "31"
+      ],
+      "theme": "ships",
+      "decision": "Follow Great Lakes ships near your next port.",
+      "caveat": "AIS location is a report, not a verified itinerary.",
+      "approval": "approved"
+    },
+    {
+      "toolId": "border-waits",
+      "stopIds": [
+        "13",
+        "14"
+      ],
+      "theme": "logistics",
+      "decision": "Check the Sault Ste. Marie crossing.",
+      "caveat": "This Michigan crossing feed does not cover Pigeon River.",
+      "approval": "approved"
+    },
+    {
+      "toolId": "lake-superior-provincial-park",
+      "stopIds": [
+        "15",
+        "16"
+      ],
+      "theme": "parks",
+      "decision": "Choose a provincial-park stop that fits your available time.",
+      "caveat": "Verify access and seasonal trail closures at the park guide.",
+      "approval": "approved"
+    },
+    {
+      "toolId": "pukaskwa-national-park",
+      "stopIds": [
+        "18"
+      ],
+      "theme": "parks",
+      "decision": "Choose a Pukaskwa day hike or short visit.",
+      "caveat": "Highway 627 adds a detour; official access may be restricted.",
+      "approval": "approved"
+    },
+    {
+      "toolId": "sleeping-giant-provincial-park",
+      "stopIds": [
+        "20"
+      ],
+      "theme": "parks",
+      "decision": "Choose a Sleeping Giant experience without underestimating distance.",
+      "caveat": "Trail and bike-to-hike distances are not interchangeable.",
+      "approval": "approved"
+    },
+    {
+      "toolId": "isle-royale-ferry",
+      "stopIds": [
+        "22"
+      ],
+      "theme": "water",
+      "decision": "Does a Grand Portage ferry fit your actual travel days?",
+      "caveat": "Schedules and tickets are operator-owned and date-specific.",
+      "approval": "approved"
+    },
+    {
+      "toolId": "isle-royale-map",
+      "stopIds": [
+        "8",
+        "22"
+      ],
+      "theme": "parks",
+      "decision": "Explore Isle Royale before adding an island detour.",
+      "caveat": "The island is not a roadside stop; factor in boat and overnight commitments.",
+      "approval": "approved"
+    },
+    {
+      "toolId": "gooseberry-falls",
+      "stopIds": [
+        "28"
+      ],
+      "theme": "falls",
+      "decision": "Which Gooseberry waterfall walk fits your time?",
+      "caveat": "Choose the documented walk, not an assumed accessible route.",
+      "approval": "approved"
+    },
+    {
+      "toolId": "split-rock-river-loop",
+      "stopIds": [
+        "27"
+      ],
+      "theme": "parks",
+      "decision": "Understand the missing Split Rock River bridge before hiking.",
+      "caveat": "Do not treat the historic loop as a safe river crossing.",
+      "approval": "approved"
+    },
+    {
+      "toolId": "split-rock-lighthouse-visit",
+      "stopIds": [
+        "27"
+      ],
+      "theme": "history",
+      "decision": "What ticket and parking do you actually need at Split Rock?",
+      "caveat": "Historic interior tickets and state-park entry are different.",
+      "approval": "approved"
+    },
+    {
+      "toolId": "estivant-pines",
+      "stopIds": [
+        "8"
+      ],
+      "theme": "parks",
+      "decision": "Choose a genuine Keweenaw old-growth trail.",
+      "caveat": "Check seasonal access before heading toward Copper Harbor.",
+      "approval": "approved"
+    },
+    {
+      "toolId": "michigan-rockhounding",
+      "stopIds": [
+        "5",
+        "8",
+        "9",
+        "10",
+        "11"
+      ],
+      "theme": "history",
+      "decision": "Find a lawful Lake Superior rockhounding opportunity.",
+      "caveat": "Storms can expose stones, but public collection rules still apply.",
+      "approval": "approved"
+    },
+    {
+      "toolId": "lighthouses",
+      "stopIds": [
+        "1",
+        "8",
+        "13",
+        "20",
+        "22",
+        "27",
+        "29",
+        "31"
+      ],
+      "theme": "history",
+      "decision": "Find a historic lighthouse on your route.",
+      "caveat": "Directory entries do not guarantee tours or public access.",
+      "approval": "approved"
+    },
+    {
+      "toolId": "shipwrecks",
+      "stopIds": [
+        "1",
+        "3",
+        "20",
+        "31"
+      ],
+      "theme": "history",
+      "decision": "Explore the stories behind Lake Superior shipwrecks.",
+      "caveat": "Historical records are not permission to dive or enter a site.",
+      "approval": "approved"
+    },
+    {
+      "toolId": "great-lakes-buoys",
+      "stopIds": [
+        "3",
+        "11",
+        "15",
+        "18",
+        "20",
+        "22",
+        "23",
+        "27",
+        "30"
+      ],
+      "theme": "water",
+      "decision": "Check measured Lake Superior conditions.",
+      "caveat": "Offshore buoys do not certify local beaches, boats or kayak launches as safe.",
+      "approval": "approved"
+    },
+    {
+      "toolId": "fall-color",
+      "stopIds": [
+        "5",
+        "6",
+        "8",
+        "10",
+        "11",
+        "12"
+      ],
+      "theme": "seasonal",
+      "decision": "Compare current Upper Peninsula fall-color context.",
+      "caveat": "Seasonal timing is not confirmation that a specific trail is open.",
+      "approval": "approved"
+    }
+  ],
+  "roadChecks": [
+    {
+      "id": "wi",
+      "label": "Wisconsin 511",
+      "url": "https://511wi.gov/map",
+      "region": "wi",
+      "note": "Open official Wisconsin road and construction reports. No live status is inferred here."
+    },
+    {
+      "id": "mi",
+      "label": "Michigan Mi Drive",
+      "url": "https://mdotjboss.state.mi.us/MiDrive/",
+      "region": "mi",
+      "note": "Check Michigan incidents and MDOT route closures. Not every local road is covered."
+    },
+    {
+      "id": "on",
+      "label": "Ontario 511",
+      "url": "https://511on.ca/",
+      "region": "on",
+      "note": "Check Highway 17 closures, roadwork and conditions directly with Ontario."
+    },
+    {
+      "id": "mn",
+      "label": "Minnesota 511",
+      "url": "https://511mn.org/",
+      "region": "mn",
+      "note": "Check the Minnesota North Shore highway before departing; non-state roads may be omitted."
+    }
+  ],
+  "futureToolContract": {
+    "metadataPath": "tools[].circleTour",
+    "approvalRequired": "approved",
+    "fields": [
+      "approval",
+      "productionVerifiedAt",
+      "stopIds",
+      "theme",
+      "decision",
+      "caveat"
+    ],
+    "defaultBehavior": "The build audits geographic candidates but never publishes them. Approval, an independently reviewed production URL/date, valid first-party canonical and stop mapping qualify a tool for the next build. No specialist files are modified."
+  }
+}

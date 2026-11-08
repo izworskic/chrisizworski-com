@@ -10,6 +10,36 @@ Create *different* user experiences around real visitor decisions while reusing 
 
 This is an **executable starting platform**, not yet a general-purpose natural-language AI website builder. New interaction families need a purpose-written recipe, credible source adapters and actual browser review. Never claim keyword volume, legal access, live conditions, model skill, media rights, or production deployment merely because a preview compiles.
 
+## Automatically audit Circle Tour compatibility when a tool is built
+
+The independent Lake Superior Circle Tour integration is an optional downstream **catalog consumer**, not a new owner of any specialist tool, data engine, API or canonical URL.
+
+At the end of **every new tool release**, inspect whether the visitor intent and verified geographic coverage justify a Circle Tour stop handoff:
+
+~~~bash
+node scripts/experience-foundry.mjs connections --owner YOUR_REGISTRY_ID
+node scripts/build-circle-tour-network.mjs --audit
+~~~
+
+The audit discovers *candidates*, but a candidate **never** appears on the site. Do not build or rewrite an existing specialist tool merely to make it connect. Only a verified, published tool qualifies for the optional metadata below in its existing benchmarks/tool-network-registry.json node:
+
+~~~json
+"circleTour": {
+  "approval": "approved",
+  "productionVerifiedAt": "2026-11-08",
+  "stopIds": ["8"],
+  "theme": "parks",
+  "decision": "Choose a suitable Keweenaw stop for my trip.",
+  "caveat": "Verify current trail access and parking with the source."
+}
+~~~
+
+The date is the actual independent verification of the destination's live canonical URL, **not** a guessed publication date. A build-time compiler verifies approved metadata, known stop IDs, unique registry ownership, safe first-party URLs and a distinct visitor decision. On the next site build, the new specialist is included in public/assets/circle-tour-tool-catalog.json automatically. Run npm run circle-tour:network and npm run benchmark:circle-tour locally; the full npm run verify:all gate remains mandatory. For a candidate awaiting independent verification, use approval: candidate or leave metadata absent. The original tool stays untouched.
+
+The Circle Tour runtime reads only the generated allowlisted catalog and existing CircleTourPage events. It carries optional trip date, interest and stop via namespaced URL parameters, opens old tools in a **new tab** and offers a return-link copy; it **does not** claim the specialist understands the URL context, can accept it back or that any road/park is currently open. No automatic new pages, search canonicals, personal storage, live closures or cross-repo mutation.
+
+Owner instructions, QA, scope and source limits: [Circle Tour integration contract](../docs/CIRCLE_TOUR_INTEGRATION_ARCHITECTURE_2026_11_08.md).
+
 ## Improve an existing tool (the default workflow)
 
 Foundry is an agent-operated improvement system. The agent investigates the visitor problem, compares credible alternatives and implements the chosen experience. The CLI captures the actual baseline, checks the assignment for missing decisions, executes the same behavioral adapter before and after, and reports gains, regressions and stale proof. It does not pretend to autonomously research or judge creativity.

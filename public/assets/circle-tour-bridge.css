@@ -1,0 +1,50 @@
+/* The Journey Handoff Rail: isolated from existing stop planner, map, ads and tools. */
+.ctb-shell{max-width:1220px;margin:24px auto;padding:clamp(18px,2.5vw,32px);border:1px solid #bccac3;border-radius:18px;background:linear-gradient(138deg,#f3f6f0 0%,#fffdf6 65%,#f6f3eb 100%);box-shadow:0 8px 28px rgba(27,56,42,.06);color:#1e382e}
+.ctb-top{display:flex;gap:20px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
+.ctb-eyebrow{margin:0 0 9px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#45654e}
+.ctb-shell h2{font-family:Georgia,'Times New Roman',serif;font-size:clamp(1.55rem,3vw,2.2rem);line-height:1.16;color:#244b38;font-weight:normal;margin:0 0 10px}
+.ctb-deck{max-width:66ch;margin:0 0 14px;font-size:14px;line-height:1.7;color:#43574d}
+.ctb-privacy{background:#e9eee5;border:1px solid #d4ddcf;border-radius:999px;padding:7px 12px;font-size:11px;font-weight:600;color:#365c45;align-self:flex-start}
+.ctb-controls{display:grid;grid-template-columns:minmax(160px,1.4fr) minmax(150px,.8fr) minmax(145px,.8fr);gap:12px;border-top:1px solid #d2dbd1;padding-top:18px;margin-top:6px}
+.ctb-controls label{font-size:12px;color:#385744;font-weight:650;display:flex;flex-direction:column;gap:6px}
+.ctb-controls input,.ctb-controls select{width:100%;min-width:0;min-height:44px;border:1px solid #a7b9ac;border-radius:9px;background:#fff;padding:9px 11px;color:#213b2d;font-size:14px;font-family:inherit}
+.ctb-controls :is(input,select):focus-visible,.ctb-shell :is(a,button):focus-visible{outline:3px solid #245dab;outline-offset:3px}
+.ctb-support{font-size:12px;line-height:1.6;color:#55695b;margin:11px 0 14px}
+.ctb-route{display:flex;align-items:center;gap:7px;overflow-x:auto;padding:12px 0 14px;scrollbar-width:thin;white-space:nowrap}
+.ctb-route-prefix{flex:0 0 auto;letter-spacing:.04em;text-transform:uppercase;font-size:10px;font-weight:800;color:#527462;margin-right:7px}
+.ctb-route-chip{flex:0 0 auto;display:block;padding:7px 10px;border-radius:7px;border:1px solid #d3e0d0;background:#fff;color:#31593f;font-size:11px;max-width:195px;overflow:hidden;text-overflow:ellipsis;text-decoration:none}
+.ctb-route-chip:hover{background:#eaf2e9;text-decoration:underline}
+.ctb-route-empty,.ctb-route-more{font-size:12px;color:#557063}
+.ctb-results{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.ctb-entry{position:relative;min-width:0;display:flex;flex-direction:column;gap:8px;border:1px solid #d6e0d5;border-left:4px solid #598269;background:#fff;border-radius:10px;padding:16px 17px;box-shadow:0 1px 3px rgba(29,63,39,.04)}
+.ctb-entry-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;min-width:0}
+.ctb-stop-link{font-size:11px;line-height:1.45;color:#286147;text-decoration:underline;text-decoration-color:#b0c7b7;text-underline-offset:3px;min-width:0}
+.ctb-theme-name{text-transform:uppercase;letter-spacing:.08em;background:#eef3ed;color:#476452;font-size:9px;font-weight:800;border-radius:5px;padding:5px 7px;flex-shrink:0}
+.ctb-entry-title{font-family:Georgia,'Times New Roman',serif;font-weight:normal;font-size:clamp(16px,1.5vw,19px);line-height:1.28;color:#203f2e;margin:0}
+.ctb-entry-caveat{color:#526257;font-size:12px;line-height:1.6;margin:0;flex:1}
+.ctb-season-caution{margin:0;padding:7px 9px;background:#f5efe0;color:#72502d;font-size:11px;border-radius:6px}
+.ctb-entry-actions{padding-top:5px}
+.ctb-link{display:inline-flex;align-items:center;min-height:40px;border:1px solid #2c6547;background:#295b40;color:#fff!important;padding:9px 13px;border-radius:8px;text-decoration:none;font-weight:700;font-size:12px;line-height:1.4}
+.ctb-link:hover{background:#19432e}
+.ctb-link:after{content:'↗';margin-left:9px}
+.ctb-more{display:block;margin:14px auto 3px;border:1px solid #9bb49f;background:#fff;color:#29543b;padding:10px 16px;border-radius:8px;font-size:13px;min-height:44px;cursor:pointer;font-weight:700}
+.ctb-more:hover{background:#e4efe4}
+.ctb-bottom{border-top:1px solid #cfdacf;margin-top:21px;padding-top:18px;display:grid;grid-template-columns:minmax(0,1.6fr) minmax(210px,.8fr);gap:22px}
+.ctb-bottom h3{font-family:Georgia,'Times New Roman',serif;font-weight:normal;color:#264a35;font-size:19px;line-height:1.2;margin:0 0 7px}
+.ctb-bottom p{font-size:12px;line-height:1.6;color:#4c6455;margin:0 0 9px}
+.ctb-road{list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:0;margin:0}
+.ctb-road li{min-width:0;padding:10px;border:1px solid #d6e0d4;border-radius:8px;background:#fff}
+.ctb-road-link{font-size:12px;font-weight:700;display:block;color:#24583e;text-decoration:underline;text-underline-offset:3px}
+.ctb-road-link:after{content:'↗';margin-left:5px}
+.ctb-road-note{display:block;margin-top:5px;line-height:1.45;font-size:11px;color:#53665a}
+.ctb-trip-keep{background:#e9eee5;border-radius:10px;padding:15px}
+.ctb-trip-keep button{display:inline-flex;min-height:44px;align-items:center;margin:6px 0 2px;border:1px solid #729078;border-radius:7px;background:#fff;color:#27533b;font-weight:700;font-size:12px;padding:9px 12px;cursor:pointer}
+.ctb-trip-keep button:hover{background:#f5faf4}
+.ctb-copy-status{min-height:1.2em;font-size:11px!important;margin:4px 0 0!important}
+.ctb-fallback{margin:10px 0;padding:15px;background:#fff;border:1px solid #dae4d7;border-radius:8px;font-size:13px;line-height:1.8}
+.ctb-fallback a{color:#2f6041;margin-right:14px}
+.ctb-fallback[hidden],.ctb-more[hidden]{display:none!important}
+@media(max-width:760px){.ctb-controls{grid-template-columns:repeat(2,minmax(0,1fr))}.ctb-controls label:first-child{grid-column:1/-1}.ctb-results,.ctb-bottom{grid-template-columns:1fr}.ctb-road{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:440px){.ctb-shell{margin:16px 10px;padding:16px;border-radius:12px}.ctb-controls{grid-template-columns:1fr}.ctb-controls label:first-child{grid-column:auto}.ctb-road{grid-template-columns:1fr}.ctb-entry{padding:14px}.ctb-privacy{border-radius:8px}}
+@media(prefers-reduced-motion:reduce){.ctb-shell *{scroll-behavior:auto!important;transition:none!important}}
+@media print{.ctb-shell{display:none!important}}
