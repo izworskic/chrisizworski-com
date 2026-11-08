@@ -120,3 +120,7 @@
   .rl-flight-next a{max-width:none;width:100%;font-size:13px}
 }
 @media(prefers-reduced-motion:reduce){.rl-flight-next *{transition:none!important}}
+
+/* Distinct evidence states remain legible without introducing a generic readiness dial. */
+.rl-flight-desk[data-next-gate="viewing"] .rl-flight-next{box-shadow:inset 3px 0 0 #b4d4af}
+.rl-flight-desk[data-next-gate="sky"] .rl-flight-next{box-shadow:inset 3px 0 0 #8fb9df}
