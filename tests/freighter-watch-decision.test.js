@@ -52,6 +52,31 @@ test('out of park hours blocks even supported vessel passage',()=>{
  assert.equal(plan.code,'HOURS_CONFLICT');
  assert.equal(plan.access.level,'outside');
 });
+test('Soo window beginning before park closure but ending afterward is not an open-hours recommendation',()=>{
+ const crossing={start:'2026-11-08T20:49:00Z',end:'2026-11-09T00:53:00Z'};
+ const access=engine.publishedAccess(publicSite('soo'),Date.parse(crossing.start),now,Date.parse(crossing.end));
+ assert.equal(access.level,'partial');
+ assert.match(access.note,/extends outside published park hours/);
+ const plan=engine.recommendation(report({pick:{ship:ship(),window:crossing}}),context(),now);
+ assert.equal(plan.code,'HOURS_CONFLICT');
+ assert.match(plan.title,/beyond published park hours/);
+ assert.match(plan.summary,/ship could arrive after the park closes/);
+ assert.match(plan.when,/Do not expect the park to remain open/);
+ assert.notEqual(plan.access.level,'published');
+});
+test('a window ending at the exact closing minute is acceptable, but one minute later is not',()=>{
+ const site=publicSite('soo');
+ const start=Date.parse('2026-11-08T20:30:00Z');
+ const closing=Date.parse('2026-11-08T23:00:00Z');
+ assert.equal(engine.publishedAccess(site,start,now,closing).level,'published');
+ assert.equal(engine.publishedAccess(site,start,now,closing+60000).level,'partial');
+});
+test('overnight passage window cannot borrow tomorrow’s published hours',()=>{
+ const site=publicSite('soo');
+ const start=Date.parse('2026-11-08T21:00:00Z');
+ const tomorrowMorning=Date.parse('2026-11-09T15:00:00Z');
+ assert.equal(engine.publishedAccess(site,start,now,tomorrowMorning).level,'partial');
+});
 test('severe NWS warning blocks a model-backed outing',()=>{
  const alerts=[{event:'High Wind Warning',severity:'Severe',starts:iso(now-3600000),expires:iso(now+3*3600000)}];
  const plan=engine.recommendation(report(),context('soo',forecast({alerts})),now);
