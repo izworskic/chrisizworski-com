@@ -18,7 +18,7 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <link rel="stylesheet" href="/assets/rocket-map-pins.css?v=20261107-origin-v1">
 <link rel="stylesheet" href="/assets/rocket-flight-desk.css?v=20261108-foundry-v2">
-<link rel="stylesheet" href="/national-tools/rocket-launch-live/styles.css?v=20261108-florida-answer-v1">
+<link rel="stylesheet" href="/national-tools/rocket-launch-live/styles.css?v=20261108-touch-v1">
 <link rel="stylesheet" href="/national-tools/assets/launch-truth-desk.css?v=20261102-truth-v2">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5D2V2W7HN"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-Y5D2V2W7HN');</script>
@@ -30,7 +30,7 @@
 <script defer src="/_vercel/insights/script.js"></script>
 <script src="/assets/rocket-florida-access.js?v=20261108-visitor-v1" defer></script>
  <script src="/national-tools/rocket-launch-live/vandenberg.js?v=20261103-viewing-v1" defer></script>
-<script src="/national-tools/rocket-launch-live/app.js?v=20261108-florida-answer-v1" defer></script>
+<script src="/national-tools/rocket-launch-live/app.js?v=20261108-touch-v1" defer></script>
 <script src="/national-tools/assets/launch-truth-desk.js?v=20261102-truth-v2" defer></script>
 </head>
 <body>
@@ -140,11 +140,12 @@
     <button type="button" class="rl-region-btn" data-region="hawaii" aria-pressed="false"><span>Pacific</span>Hawaiʻi <small>Barking Sands</small></button>
    </div>
    <div class="rl-atlas">
-     <div class="rl-map-wrap">
-       <div id="rl-coast-map" class="rl-map" role="region" tabindex="0" aria-label="Interactive U.S. coastal launch regions, including Alaska and Hawaii">
+     <div class="rl-map-wrap" id="rl-map-wrap">
+       <button id="rl-map-expand" class="rl-map-toggle" type="button" aria-controls="rl-coast-map" aria-expanded="false" disabled>Expand map</button>
+        <div id="rl-coast-map" class="rl-map" role="region" tabindex="0" aria-label="Interactive U.S. coastal launch regions, including Alaska and Hawaii">
          <div class="rl-map-fallback">Loading the coastal atlas. Use the region buttons above if the map is unavailable.</div>
        </div>
-       <div class="rl-map-legend"><span class="rocket-map-key"><span class="rocket-key-symbol" aria-hidden="true">🚀</span>Rocket = launch location</span> <span class="rocket-map-key-approx">Dashed rocket = approximate region, not a pad</span> · Coast navigation circles are not public entrances <span>CARTO / OpenStreetMap</span></div>
+       <div class="rl-map-legend"><span class="rocket-map-key"><span class="rocket-key-symbol" aria-hidden="true">🚀</span>Rocket = launch location</span> <span class="rocket-map-key-approx">Dashed rocket = approximate region, not a pad</span> · Coast navigation circles are not public entrances <span>CARTO / OpenStreetMap</span> <a href="#rl-next-title" id="rl-map-details">View mission details</a></div>
      </div>
      <div class="rl-atlas-summary">
        <p class="rl-eyebrow">Selected coast</p>
