@@ -431,7 +431,7 @@ a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}
     <div>
       <p class="ctb-eyebrow">Lake Superior · Connected trip desk</p>
       <h2 id="ctb-heading">Make the next stop count</h2>
-      <p class="ctb-deck">Choose a stop, travel date or interest. This route-aware desk points to the right independent park, waterfall, ship or island tool without taking you away from the itinerary you are building.</p>
+      <p class="ctb-deck">Choose a stop, travel date or interest. For each stop in your trip, choose the next useful check, see what is still unknown, and continue planning without losing the itinerary you are building.</p>
     </div>
     <span class="ctb-privacy">Your trip stays in this tab</span>
   </div>
@@ -456,10 +456,18 @@ a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}
     </label>
   </div>
   <p class="ctb-support" id="ctb-date-note">Dates help prioritize a tool's usual season; they do not confirm opening hours, scheduled boats, road conditions or public access. Specialist tools open separately.</p>
-  <div class="ctb-route" id="ctb-route" aria-label="Selected Circle Tour route"></div>
-  <p id="ctb-status" class="ctb-support" role="status" aria-live="polite">Independent specialist connections are loading. The existing 31-stop Circle Tour works without them.</p>
-  <div class="ctb-results" id="ctb-results" aria-label="Trip-specific independent tools"></div>
-  <button type="button" id="ctb-more" class="ctb-more" hidden>Show more specialists</button>
+  <div class="ctb-route" id="ctb-route" aria-label="Choose among your selected stops"></div>
+  <div class="ctb-decision" id="ctb-decision" aria-live="polite" aria-atomic="true" aria-label="Your next stop-specific decision">
+    <p class="ctb-stage-label">START WITH A PLACE</p>
+    <h3 class="ctb-stage-title">Where do you want to stop?</h3>
+    <p class="ctb-stage-explainer">Choose a route stop above or add stops in the original planner. Your trip remains on this page even if specialist connections are unavailable.</p>
+  </div>
+  <details class="ctb-companion" id="ctb-compare">
+    <summary>Other specialist checks along your route</summary>
+    <p id="ctb-status" class="ctb-support" role="status" aria-live="polite">Independent specialist connections are loading. The existing 31-stop Circle Tour works without them.</p>
+    <div class="ctb-results" id="ctb-results" aria-label="Other trip-specific independent tools"></div>
+    <button type="button" id="ctb-more" class="ctb-more" hidden>Show more specialists</button>
+  </details>
   <div id="ctb-fallback" class="ctb-fallback">
     <strong>Continue planning with our existing field guides:</strong>
     <a href="/apostle-islands/">Apostle Islands</a>
