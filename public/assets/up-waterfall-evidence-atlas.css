@@ -26,3 +26,31 @@
 .ea-investigation .ea-barrier{padding-top:8px;border-top:1px solid #bfd7cc;color:#584829}
 .ea-investigation .ea-no-route{font-weight:800;color:#6c4627}
 .ea-investigation p{overflow-wrap:anywhere}
+
+/* Three access investigations: purpose-built trail/route evidence, no visitor routing controls. */
+.ea-access-research{margin:24px 0 36px;padding:24px clamp(16px,3vw,28px);background:#f6f9f5;border:1px solid #c7dbd1;border-radius:18px}
+.ea-access-head h2{font:normal clamp(1.65rem,2.5vw,2.3rem) Georgia,serif;letter-spacing:-.02em;margin:6px 0 10px}
+.ea-access-head>p:last-child{max-width:870px;color:#546c64;font-size:.9rem;margin:0 0 20px}
+.ea-access-cases{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.ea-access-cases article{display:flex;flex-direction:column;align-items:stretch;gap:9px;padding:18px;background:white;border:1px solid #cfdfd6;border-radius:13px;min-width:0}
+.ea-access-index{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;font-weight:800;color:#456b63;margin:0}
+.ea-access-cases h3{font:normal 1.28rem/1.25 Georgia,serif;color:#254643;margin:0}
+.ea-access-cases article>p:not(.ea-access-index){font-size:.84rem;color:#546f68;line-height:1.5;margin:0 0 9px;flex-grow:1}
+.ea-access-cases button{min-height:44px;border:1px solid #9dbfaf;border-radius:8px;background:#1c524a;color:white;font-weight:760;padding:10px 12px;font-size:.84rem;cursor:pointer}
+.ea-access-cases button:hover:not(:disabled){background:#123f38}
+.ea-access-cases button:disabled{opacity:.65;cursor:wait}
+.ea-access-dossier{margin:18px 0;background:#f9fbf8;border:1px solid #bdcec7;border-radius:13px;padding:18px}
+.ea-access-dossier h4{font:normal 1.44rem/1.2 Georgia,serif;margin:7px 0;color:#543c2c}
+.ea-access-verdict{font-weight:740;line-height:1.6;color:#244b45!important}
+.ea-access-context{display:grid;grid-template-columns:minmax(94px,110px) 1fr;column-gap:12px;row-gap:9px;border-top:1px solid #cbdbd1;padding-top:14px}
+.ea-access-context dt{font-size:.78rem;font-weight:800;color:#335a4f}
+.ea-access-context dd{font-size:.83rem;margin:0;color:#445e57;overflow-wrap:anywhere}
+.ea-access-sources{margin:15px 0;border:1px solid #c7dbd1;background:white;border-radius:9px;padding:10px 14px}
+.ea-access-sources summary{font-size:.82rem;color:#225b50;font-weight:850;cursor:pointer;min-height:26px}
+.ea-access-sources p{font-weight:800;margin:12px 0 5px;font-size:.83rem}
+.ea-access-sources ul{padding-left:20px;margin:6px 0}
+.ea-access-sources li{margin:0 0 9px;font-size:.81rem;line-height:1.55}
+.ea-access-sources li a{white-space:nowrap;font-size:.78rem}
+.ea-access-dossier .ea-no-route{font-size:.85rem;color:#73533b;margin:12px 0 0}
+@media(max-width:950px){.ea-access-cases{grid-template-columns:1fr}.ea-access-cases article{min-height:0}}
+@media(max-width:560px){.ea-access-research{padding:19px 14px}.ea-access-context{grid-template-columns:1fr;gap:1px}.ea-access-context dd{margin-bottom:9px}.ea-access-dossier{padding:15px 11px}}
