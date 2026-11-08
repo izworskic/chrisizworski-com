@@ -1,0 +1,57 @@
+name: Circle Tour decision sequence Foundry 0.3 + Experience OS
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'public/assets/circle-tour-bridge.*'
+      - 'public/lake-superior-circle-tour/index.html'
+      - 'tests/circle-tour-bridge.test.js'
+      - 'experience-foundry/examples/circle-tour-decision-*.{cjs,mjs}'
+      - 'docs/experience-briefs/circle-tour-foundry-second-pass*'
+      - 'scripts/verify-circle-tour-bridge-browser.cjs'
+      - '.github/workflows/circle-tour-foundry03.yml'
+  workflow_dispatch:
+concurrency:
+  group: circle-tour-foundry03-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  decision-proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify existing and new stop-specific decisions
+        run: |
+          node --test tests/circle-tour-bridge.test.js
+          node scripts/build-circle-tour-network.mjs --check
+      - name: Run the actual Foundry improvement capture, assess and before-after proof
+        run: |
+          node experience-foundry/examples/circle-tour-decision-improvement.mjs
+          node scripts/experience-foundry.mjs assess --run experience-foundry/drafts/circle-tour-decision-sequence/run.json
+          node scripts/experience-foundry.mjs prove \
+            --run experience-foundry/drafts/circle-tour-decision-sequence/run.json \
+            --out build/experience-foundry/circle-tour-decision-sequence-proof
+          node scripts/experience-foundry.mjs assess \
+            --run experience-foundry/drafts/circle-tour-decision-sequence/run.json \
+            --proof build/experience-foundry/circle-tour-decision-sequence-proof/proof.json
+      - name: Experience OS v1.2.1 structural evidence and original site contract
+        run: |
+          node scripts/verify-experience-os-v1.2.mjs docs/experience-briefs/circle-tour-foundry-second-pass.release.json --check-site
+      - name: Retain exact source snapshots, replay and design evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: circle-tour-foundry03-before-after
+          path: |
+            experience-foundry/drafts/circle-tour-decision-sequence/
+            build/experience-foundry/circle-tour-decision-sequence-proof/
+          if-no-files-found: warn
+          retention-days: 7
