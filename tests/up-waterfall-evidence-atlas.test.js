@@ -11,6 +11,7 @@ const external = JSON.parse(read('data/up-waterfall-external-identity-shorelines
 const upTravel = JSON.parse(read('data/up-waterfall-uptravel-location-review-2026.json')).mainDirectoryFirstTwelve;
 const indexed = JSON.parse(read('data/up-waterfall-uptravel-indexed-listings-2026.json'));
 const investigations = JSON.parse(read('data/up-waterfall-uptravel-unmatched-identity-review-2026.json'));
+const priorityResearch = JSON.parse(read('data/up-waterfall-three-priority-access-research-2026.json'));
 const html = read('public/upper-peninsula-waterfalls/atlas/index.html');
 const js = read('public/assets/up-waterfall-evidence-atlas.js');
 const hub = read('public/upper-peninsula-waterfalls/index.html');
@@ -18,7 +19,7 @@ const sitemap = read('public/sitemap-up-waterfalls.xml');
 const base = '/upper-peninsula-waterfalls/atlas/';
 
 test('source atlas contract includes all four review collections, but never calls them distinct waterfalls', () => {
-  assert.equal(atlas.schemaVersion,3);
+  assert.equal(atlas.schemaVersion,4);
   assert.equal(atlas.counts.curatedGuideRecords,curated.length);
   assert.equal(atlas.counts.stateGisFeatureRecords,gis.length);
   assert.equal(atlas.counts.independentNameObservations,external.length);
@@ -29,6 +30,8 @@ test('source atlas contract includes all four review collections, but never call
   assert.equal(atlas.records.length,640);
   assert.equal(atlas.counts.nameOnlyWithoutPoint,399);
   assert.equal(atlas.counts.upTravelUnmatchedIdentityReviews,13);
+  assert.equal(atlas.counts.priorityAccessInvestigations,3);
+  assert.equal(atlas.counts.priorityAccessClearedVisitorRoutes,0);
   assert.match(atlas.claim,/NOT distinct waterfalls/);
   assert.match(atlas.warning,/NOT parking/);
   assert.ok(!atlas.records.some(r=>/open-now|safe parking today/i.test(r.identityStatus||'')));
@@ -251,4 +254,82 @@ test('hard identities: wilderness, same-name streams, closures and group cascade
   assert.match(js,/reviewedGuideIds/);
   assert.match(js,/linkedGisIds/);
   assert.match(html,/Thirteen previously unmatched names, investigated/);
+});
+
+test('Pinkerton, Bulldog, Siskiwit official-source access review is bounded and reproducible', () => {
+  assert.equal(priorityResearch.schemaVersion,1);
+  assert.equal(priorityResearch.reviewed,'2026-11-08');
+  assert.deepEqual(priorityResearch.records.map(x=>x.listingId).sort((a,b)=>a-b),[3701,4474,5457]);
+  assert.equal(priorityResearch.counts.prioritiesReviewed,3);
+  assert.equal(priorityResearch.counts.confirmedManagedFallsRoutes,0);
+  assert.equal(priorityResearch.counts.identityUnresolved,1);
+  assert.equal(priorityResearch.counts.annualParkClosureApplies,1);
+  assert.equal(atlas.schemaVersion,4);
+  assert.equal(atlas.counts.totalSourceRecords,640);
+  assert.equal(atlas.counts.nameOnlyWithoutPoint,399);
+  assert.equal(atlas.counts.curatedGuideRecords,80);
+  assert.equal(atlas.counts.priorityAccessInvestigations,3);
+  assert.equal(atlas.counts.priorityAccessClearedVisitorRoutes,0);
+  assert.equal(atlas.generatedFrom.priorityAccess,'data/up-waterfall-three-priority-access-research-2026.json');
+  assert.equal(atlas.sourceDates.priorityAccess,'2026-11-08');
+  const all=atlas.records.filter(x=>x.priorityAccess);
+  assert.equal(all.length,3);
+  const originals=new Map(investigations.records.map(x=>[x.listingId,x]));
+  for(const row of all){
+    assert.equal(row.kind,'tourism');
+    assert.ok(originals.has(row.listingId));
+    assert.equal(row.lat,null);
+    assert.equal(row.lng,null);
+    assert.equal(row.county,null);
+    const a=row.priorityAccess;
+    assert.equal(a.listingId,row.listingId);
+    assert.equal(a.sourceRecordId,row.id);
+    assert.equal(a.reviewed,'2026-11-08');
+    assert.equal(a.routeCleared,false);
+    assert.equal(a.newDestinationAuthorized,false);
+    assert.equal(a.featurePoint,null);
+    assert.equal(a.parkingPoint,null);
+    assert.equal(a.routeGeometry,null);
+    assert.ok(a.officialFacts.length>=3);
+    assert.ok(a.references.length>=5);
+    assert.ok(a.nextEvidence.length>=2);
+    assert.ok(a.establishedStart.length>40);
+    assert.ok(a.waterfallViewpoint.length>40);
+    const refs=new Map(a.references.map(x=>[x.id,x]));
+    assert.equal(refs.size,a.references.length);
+    for(const record of a.references)assert.ok(record.url.startsWith('https://'),record.url);
+    assert.ok([...refs.values()].some(x=>x.authority==='land-manager'),row.id);
+    for(const fact of [...a.officialFacts,...a.independentFacts])assert.ok(refs.has(fact.sourceId),row.id+': '+fact.sourceId);
+  }
+  assert.equal(atlas.records.filter(x=>x.kind==='tourism'&&!x.priorityAccess).length,105);
+  assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/research/bulldog-falls/'));
+});
+
+test('source-specific geographic and seasonal non-equivalence gates survive future rebuilds',()=>{
+  const get=id=>atlas.records.find(x=>x.id==='tourism:'+id).priorityAccess;
+  const p=get(4474),b=get(5457),s=get(3701);
+  assert.equal(p.assessment,'feature-identity-unresolved');
+  assert.match(p.establishedStart,/Pinkerton Trail/);
+  assert.match(p.officialFacts[0].fact,/1\.4 miles/);
+  assert.match(p.falseEquivalence,/Traders Falls/);
+  assert.ok(!p.references.some(x=>x.url.includes('maps/dir')));
+  assert.equal(b.assessment,'remote-feature-confirmed-no-managed-route');
+  assert.match(b.falseEquivalence,/Community Forest/);
+  assert.match(b.waterfallViewpoint,/No USDA Forest Service/);
+  assert.ok(!b.establishedStart.includes('official route to Bulldog'));
+  assert.equal(s.assessment,'island-seasonally-closed-waterfall-approach-unverified');
+  assert.match(s.shortVerdict,/0\.3-mile/);
+  assert.match(s.seasonality,/November 1 through April 15/);
+  assert.match(s.falseEquivalence,/NOT the 'distance to Siskiwit Falls'/);
+  assert.ok(s.references.some(x=>x.url.includes('Web_Optimized_2026-Greenstone.pdf')));
+  for(const a of [p,b,s])assert.equal(a.routeCleared,false);
+  assert.match(html,/Three source-backed investigations/);
+  assert.match(html,/data-review-listing="4474"/);
+  assert.match(html,/data-review-listing="5457"/);
+  assert.match(html,/data-review-listing="3701"/);
+  assert.match(js,/priorityAccess\.accessVerdict/);
+  assert.match(js,/payload\.schemaVersion!==4/);
+  assert.match(js,/access\.featurePoint|a\.featurePoint/);
+  assert.ok(!html.includes('data-arrival-parking'));
+  assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/atlas/'));
 });
