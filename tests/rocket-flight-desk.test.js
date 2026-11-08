@@ -16,7 +16,7 @@ function data(region='florida',selected=florida[0],more={}){
  const regions=[{id:'florida',name:'Florida Space Coast',lat:28.58,lon:-80.61,launches:florida},
   {id:'texas',name:'Starbase',lat:25.997,lon:-97.157,launches:[]}];
  return {ok:true,selectedRegion:region,selectedLaunchId:selected?.id||null,
-  selectedLaunch:selected,region:{id:region,timezone:'America/New_York',
+  selectedLaunch:selected,region:{id:region,timezone:'America/New_York',authority:'https://www.nasa.gov/kennedy/',
    access:'https://www.nps.gov/cana/planyourvisit/rocket-launch-viewing.htm'},
   regions,weather:{level:'unknown'},access:{sites:[]},coverage:{partial:false},
   scheduleFreshness:'recent',scheduleCheckedAt:'2026-11-07T12:00:00Z',...more};
@@ -110,6 +110,7 @@ test('mission switch dispatches stable selected UUID and a map handoff without a
  assert.equal(el('rl-flight-desk').dataset.launchId,ids[0]);
  assert.equal(el('rl-flight-desk').dataset.nextGate,'access');
  assert.match(el('rl-flight-next-title').textContent,/Verify the launch-day viewing arrangements/);
+ assert.equal(el('rl-flight-specialist').hidden,true,'do not duplicate next regional CTA');
  assert.equal(el('rl-flight-mission-select').disabled,false);
  assert.equal(el('rl-flight-locate').disabled,false);
  el('rl-flight-mission-select').value=ids[1];
@@ -121,6 +122,7 @@ test('mission switch dispatches stable selected UUID and a map handoff without a
  assert.equal(el('rl-flight-desk').dataset.launchId,ids[1]);
  assert.equal(el('rl-flight-desk').dataset.nextGate,'schedule');
  assert.match(el('rl-flight-next-title').textContent,/Confirm an exact launch hour/);
+ assert.equal(el('rl-flight-specialist').hidden,false,'regional guide remains alternative to authority for tentative time');
  el('rl-flight-locate').listeners.click();
  assert.equal(events.at(-1).type,'rocket-experience:locate');
  assert.deepEqual(events.at(-1).detail,{launchId:ids[1],region:'florida'});
