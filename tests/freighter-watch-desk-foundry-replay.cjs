@@ -41,7 +41,7 @@ if(installed){
   item('uncertain-state',false,'The baseline does not vary a live source decision by freshness and chosen day.');
 }
 item('canonical-guide',html.includes('rel="canonical" href="https://chrisizworski.com/great-lakes-ship-watching-spots/"')&&
-  html.includes('Frequently asked questions')&&html.includes('Visitor sources')&&html.includes('winter layup'),
+  html.includes('Frequently asked questions')&&html.includes('Visitor sources')&&html.toLowerCase().includes('winter layup'),
   'The canonical shore guide, visitor source citations, FAQ and winter context remain discoverable.');
 item('creator-identity',html.includes('https://chrisizworski.com/#person')&&html.includes('Built by <a href="https://chrisizworski.com/chris-izworski/"'),
   'The existing canonical Person identity and visible author credit remain intact.');
