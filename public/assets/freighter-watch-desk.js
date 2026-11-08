@@ -216,6 +216,13 @@
       panel.dataset.verdict='NO_ENGINE';
       return;
     }
+    if(context?.pending){
+      panel.dataset.verdict='CHECKING_CONDITIONS';
+      panel.dataset.tone='conditional';
+      doc.getElementById('fwd-plan-title').textContent='Ship evidence received. Checking weather and public access…';
+      doc.getElementById('fwd-plan-summary').textContent='We will not recommend a trip until the other conditions have been checked or clearly marked unavailable.';
+      return;
+    }
     const decision=engine.recommendation(result,context,now);
     panel.dataset.verdict=decision.code;
     panel.dataset.tone=decision.tone;
@@ -313,7 +320,9 @@
     function track(action) {
       if (typeof window.gtag === 'function') window.gtag('event', action, {
         corridor:select.value, visit_window:when.value,
-        evidence_status:lastResult ? lastResult.status : 'unknown', surface:'freighter-watch-desk'
+        evidence_status:lastResult ? lastResult.status : 'unknown',
+        decision_code:doc.getElementById('fwd-visit-plan')?.dataset.verdict||'unknown',
+        surface:'freighter-watch-desk'
       });
     }
     const params=new URLSearchParams(location.search);
@@ -390,7 +399,7 @@
       active=new AbortController();
       weatherAbort=new AbortController();
       lastResult=null;
-      lastContext={site:minimalSite(key),weather:{ok:false}};
+      lastContext={site:minimalSite(key),weather:{ok:false},pending:true};
       const panel=doc.getElementById('fwd-visit-plan');
       panel.dataset.verdict='CHECKING';
       doc.getElementById('fwd-plan-title').textContent='Checking the evidence for '+conf.label+'…';
@@ -404,10 +413,14 @@
         signal:weatherController.signal,cache:'no-store',headers:{Accept:'application/json'}
       }).then(r=>{if(!r.ok)throw Error('NWS endpoint unavailable');return r.json();}).then(data=>{
         if(thisGen!==generation)return;
-        if(data?.ok===true&&data.site&&data.site.id===key)lastContext={site:data.site,weather:data.weather};
+        if(data?.ok===true&&data.site&&data.site.id===key)lastContext={site:data.site,weather:data.weather,pending:false};
+        else lastContext={...lastContext,pending:false};
         if(lastResult)renderVisitPlan(lastResult,lastContext,doc);
       }).catch(()=>{
-        if(thisGen===generation&&lastResult)renderVisitPlan(lastResult,lastContext,doc);
+        if(thisGen===generation){
+          lastContext={...lastContext,pending:false};
+          if(lastResult)renderVisitPlan(lastResult,lastContext,doc);
+        }
       }).finally(()=>clearTimeout(weatherTimeout));
       // Tomorrow's real ship movements are unknown; still fetch shore weather and public access.
       if(windowChoice==='tomorrow'){
@@ -445,6 +458,9 @@
     });
     refresh.addEventListener('click',()=>{ track('freighter_watch_refresh'); load(); });
     next.addEventListener('click',e=>{ if(e.target.closest('a'))track('freighter_watch_next_action'); });
+    doc.getElementById('fwd-plan-actions')?.addEventListener('click',e=>{
+      if(e.target.closest('a'))track('freighter_watch_decision_action');
+    });
     doc.getElementById('fwd-ships').addEventListener('click',e=>{
       const b=e.target.closest('button[data-mmsi]');
       if(!b||!map||!layer)return;
