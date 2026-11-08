@@ -60,7 +60,21 @@
       ok?'restored':'unavailable');
   }
   function loaded(givenRegion,id,name){
-    if(!enabled||givenRegion!==region||completed)return false;
+    if(!enabled||givenRegion!==region)return false;
+    if(completed){
+      // A regional picker can change after the original link arrived.
+      // Keep the receipt honest during A → B → A without double-counting.
+      if(receipt){
+        const exact=id===requested;
+        receipt.dataset.restoration=exact?'restored':'changed';
+        receipt.firstChild.textContent=exact?
+          'Original linked mission reselected':'You selected a different regional mission';
+        receipt.lastChild.textContent=exact?
+          'The loaded regional data again matches the originally linked launch. Recheck its current access, timing and spectator forecast.':
+          'The currently selected regional mission is different from the linked launch. Its weather, access and return link must follow this new selection.';
+      }
+      return id===requested;
+    }
     if(id===requested){show(true,name);return true;}
     show(false);return false;
   }
