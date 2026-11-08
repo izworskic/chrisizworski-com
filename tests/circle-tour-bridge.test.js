@@ -154,8 +154,10 @@ test('Foundry: only an actually applied published direction can reorder the sele
   const custom=ui.planNextDecision(committed,{selectedIds:['11','15','18'],direction:'clockwise',theme:'parks'});
   assert.deepEqual(custom.orderedStops,['11','15','18']);
   assert.equal(custom.direction,'');
-  const applied=ui.planNextDecision(committed,{selectedIds:['11','15','18'],itinerary:'10',direction:'clockwise'});
+  const applied=ui.planNextDecision(committed,{selectedIds:['18','15','11'],itinerary:'10',direction:'clockwise'});
   assert.deepEqual(applied.orderedStops,['18','15','11']);
+  const saved=ui.planNextDecision(committed,{selectedIds:['11','15','18'],itinerary:'10',direction:'clockwise'});
+  assert.deepEqual(saved.orderedStops,['11','15','18'],'original saved order must not reverse twice');
   assert.equal(applied.nextStopId,'15');
   assert.equal(applied.position,1);
 });
