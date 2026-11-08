@@ -58,7 +58,7 @@ button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid #dc7
 .rl-region-btn[aria-pressed="true"] span,.rl-region-btn[aria-pressed="true"] small{color:#d7e6df}
 .rl-atlas{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(260px,.75fr);border:1px solid #cbd5d1;border-radius:17px;overflow:hidden;background:#fff}
 .rl-map-wrap{min-width:0;position:relative}
-.rl-map{height:380px;background:#e1eae6}
+.rl-map{height:380px;background:#d8e9ee}
 /* Leaflet owns map gestures. Prevent the browser from turning a map pinch into
    a page scroll or whole-page zoom; nothing outside the map is touch-locked. */
 #rl-coast-map.leaflet-container{touch-action:none!important;overscroll-behavior:contain;overflow-anchor:none}
