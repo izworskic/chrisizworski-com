@@ -142,8 +142,9 @@
       768,
       1440
     ],
-    "browserStatus": "PENDING",
-    "scopeNote": "Foundry CLI plan, true end-to-end browser tests at 360/390/768/1440, source-offline/no-JS, source-action A-B-A and full site CI must be verified at PR head before changing this status. New live outcome NOT MEASURED."
+    "browserStatus": "PASSED",
+    "scopeNote": "The first Foundry pilot Chromium run exercised 360,390,768,1440 responsive A-B-A, real next-source action transitions, map focus, no JS, no tile, failed photo and source outage, with zero JS errors/overflow and retained screenshots. Later iteration removes duplicate guide link; final-head recheck remains required. Fixtures do not prove live launch/source truth or visitor behavior.",
+    "browserRun": "https://github.com/izworskic/chrisizworski-com/actions/runs/42478858832"
   },
   "photos": [
     {
@@ -158,7 +159,9 @@
   ],
   "release": {
     "implemented": {
-      "status": "PENDING"
+      "status": "CONFIRMED",
+      "checkedDate": "2026-11-08",
+      "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/pull/1565"
     },
     "verified": {
       "status": "PENDING"
