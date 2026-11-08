@@ -90,6 +90,13 @@ function check(value,message){if(!value)throw Error(message);}
     await page.locator('#ctb-decision .ctb-stage-reset').click();
     check((await page.locator('#ctb-decision').textContent()).includes('ONE USEFUL NEXT CHECK'),
       size.name+': reset did not restore a grounded choice');
+    // The original CircleTourPage opens its own mobile trip sheet after Add.
+    // Verify that it can be dismissed and capture the independent bridge unobstructed.
+    const mobileSheet=page.locator('#mobileTripSheet');
+    if(await mobileSheet.evaluate(el=>el.classList.contains('open'))){
+      await page.locator('#mobileTripClose').click();
+      check(!(await mobileSheet.evaluate(el=>el.classList.contains('open'))),size.name+': original trip sheet could not close');
+    }
     await page.locator('#circle-tour-tool-bridge').screenshot({path:path.join(out,size.name+'.png'),timeout:25000});
     report.screenshots.push(size.name+'.png');
     report.cases.push({viewport:size.name,initial:count,focus:items,selectedTrip:selectedResults.length,overflow:false,contextUrl:true});
