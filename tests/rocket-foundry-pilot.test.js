@@ -127,9 +127,10 @@ const publicSite={id:'published-park',name:'Source-linked park',state:'candidate
   source:'https://www.nps.gov/cana/planyourvisit/rocket-launch-viewing.htm',
   directionsAllowed:true};
 const currentSky={level:'assessed',places:[{id:'a',status:'ok',cloudStatus:'ok',
-  cloudCoverPercent:42,period:{startTime:'2026-11-23T15:00:00Z',shortForecast:'Cloudy'}}]};
+  cloudCoverPercent:42,updatedAt:'2026-11-08T08:30:00Z',assessment:{level:'fair'},
+  period:{startTime:'2026-11-11T15:00:00Z',endTime:'2026-11-11T16:00:00Z',shortForecast:'Cloudy'}}]};
 test('documented public viewpoint advances to viewing options, then mission-time sky',()=>{
- const d=data('virginia');d.access={sites:[publicSite]};
+ const d=data('virginia');d.selectedLaunch.net='2026-11-11T15:25:00Z';d.access={sites:[publicSite]};
  const first=model.nextCheck(d);
  assert.equal(first.gate,'viewing');
  assert.match(first.detail,/not confirmed open/i);
@@ -141,6 +142,25 @@ test('documented public viewpoint advances to viewing options, then mission-time
  assert.equal(second.destination,'spectator_weather');
  assert.match(second.detail,/do not prove event admission/i);
  assert.notEqual(first.href,second.href);
+});
+test('a stale, off-target or unsuitable NWS sample cannot advance to a sky decision',()=>{
+ const d=data('california');
+ d.selectedLaunch.net='2026-11-11T15:25:00Z';
+ d.access={sites:[publicSite]};
+ d.weather=currentSky;
+ assert.equal(model.nextCheck(d).gate,'sky');
+ d.weather={...currentSky,places:[{...currentSky.places[0],
+   period:{...currentSky.places[0].period,startTime:'2026-11-12T15:00:00Z',endTime:'2026-11-12T16:00:00Z'}}]};
+ assert.equal(model.nextCheck(d).gate,'viewing','a forecast for another target hour is not usable');
+ d.weather={...currentSky,places:[{...currentSky.places[0],
+   updatedAt:'2026-11-04T08:00:00Z'}]};
+ assert.equal(model.nextCheck(d).gate,'viewing','stale issue time cannot justify sky stage');
+ d.weather={...currentSky,places:[{...currentSky.places[0],
+   assessment:{level:'poor'}}]};
+ assert.equal(model.nextCheck(d).gate,'viewing','weak surface evidence is not a supported comparison');
+ d.selectedLaunch.net='2026-11-23T15:25:00Z';
+ d.weather=currentSky;
+ assert.equal(model.nextCheck(d).gate,'viewing','outside the seven-day NWS horizon');
 });
 test('KSC current exact event listing advances to admission choices, never a ticket claim',()=>{
  const d=data();
