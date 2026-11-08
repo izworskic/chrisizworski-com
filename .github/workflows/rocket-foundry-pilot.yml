@@ -5,6 +5,7 @@ on:
     paths:
       - 'benchmarks/tool-network-registry.json'
       - 'experience-foundry/pilots/rocket-launch-live*'
+      - 'docs/experience-briefs/rocket-foundry-second-pass.release.json'
       - 'public/assets/rocket-flight-desk.*'
       - 'public/assets/rocket-engagement-funnel.js'
       - 'public/assets/rocket-foundry-handoff.js'
