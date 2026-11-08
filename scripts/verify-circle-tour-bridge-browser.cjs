@@ -97,6 +97,12 @@ function check(value,message){if(!value)throw Error(message);}
       await page.locator('#mobileTripClose').click();
       check(!(await mobileSheet.evaluate(el=>el.classList.contains('open'))),size.name+': original trip sheet could not close');
     }
+    if(size.width<=760){
+      // The original sheet has a 220ms exit transition. Its class is removed
+      // synchronously, but screenshots made immediately still capture the overlay.
+      await page.waitForFunction(()=>document.querySelector('#mobileTripSheet').getBoundingClientRect().top>=innerHeight-1,
+        null,{timeout:5000});
+    }
     const railVisibility=await page.evaluate(()=>{
       const rail=document.querySelector('#ctb-route'),current=rail?.querySelector('button[aria-pressed="true"]');
       if(!rail||!current)return {found:false};
@@ -105,7 +111,7 @@ function check(value,message){if(!value)throw Error(message);}
     });
     check(railVisibility.found&&railVisibility.left>=-2&&railVisibility.right>=-2,
       size.name+': focused stop chip was hidden under horizontal rail '+JSON.stringify(railVisibility));
-    await page.locator('#circle-tour-tool-bridge').screenshot({path:path.join(out,size.name+'.png'),timeout:25000});
+    await page.locator('#circle-tour-tool-bridge').screenshot({path:path.join(out,size.name+'.png'),timeout:25000,animations:'disabled'});
     report.screenshots.push(size.name+'.png');
     report.cases.push({viewport:size.name,initial:count,focus:items,selectedTrip:selectedResults.length,overflow:false,contextUrl:true});
     await ctx.close();
