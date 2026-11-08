@@ -41,6 +41,29 @@
     const when=asDate(iso);
     return when?new Intl.DateTimeFormat('en-US',{dateStyle:'medium',timeStyle:'short'}).format(when):'Not available';
   }
+  // Never promote weather from another launch hour or an aged NWS grid.
+  // The server's existing NWS adapter matches each hourly interval to the
+  // selected NET; recheck that contract when deciding the visitor's next step.
+  function usableSkySamples(data) {
+    const selected=data?.selectedLaunch;
+    const t=Date.parse(selected?.net||'');
+    const checked=Date.parse(data?.generatedAt||data?.scheduleCheckedAt||'');
+    if(!selected||selected.id!==data?.selectedLaunchId||
+       !PRECISE.has(selected.netPrecision)||!Number.isFinite(t)||
+       !Number.isFinite(checked)||t<checked-15*60000||
+       t>checked+7*86400000)return [];
+    return (Array.isArray(data?.weather?.places)?data.weather.places:[]).filter(p=>{
+      const start=Date.parse(p?.period?.startTime||'');
+      const end=Date.parse(p?.period?.endTime||'');
+      const issued=Date.parse(p?.updatedAt||'');
+      return p?.status==='ok'&&p.cloudStatus==='ok'&&
+        Number.isInteger(p.cloudCoverPercent)&&
+        !['unknown','poor'].includes(p?.assessment?.level)&&
+        Number.isFinite(start)&&Number.isFinite(end)&&
+        start<=t&&t<end&&Number.isFinite(issued)&&
+        issued<=checked+15*60000&&checked-issued<=36*3600000;
+    });
+  }
   function decide(data) {
     const region=data?.region?.id;
     const mission=data?.selectedLaunch&&data.selectedLaunch.region===region&&
@@ -105,9 +128,7 @@
     // NWS can report a nominal "partial" envelope even when every individual
     // point lookup failed. Do not advertise an actual forecast without any
     // bounded mission-time location evidence.
-    const usableWeather=Array.isArray(weather.places)&&weather.places.some(p=>
-      p?.status==='ok'&&Boolean(p.period?.startTime||p.period?.shortForecast||
-        (p.cloudStatus==='ok'&&Number.isInteger(p.cloudCoverPercent))));
+    const usableWeather=usableSkySamples(data).length>0;
     const sky=hasUsefulTime&&!snapshotStale&&usableWeather&&weather.level==='assessed'?
       'NWS spectator forecast available · not rocket GO':
       hasUsefulTime&&!snapshotStale&&usableWeather&&weather.level==='partial'?
@@ -205,10 +226,7 @@
       'A listed launch and ordinary venue hours do not establish public mission viewing. The existing regional guide distinguishes access restrictions, closures and candidate viewpoints.',
       'Compare documented regional access');
     const weather=data?.weather||{};
-    const spectatorSamples=Array.isArray(weather.places)?weather.places.filter(p=>
-      p?.status==='ok'&&p.cloudStatus==='ok'&&
-      Number.isInteger(p.cloudCoverPercent)&&
-      (p.period?.startTime||p.period?.shortForecast)):[];
+    const spectatorSamples=usableSkySamples(data);
     const weatherUsable=['assessed','partial'].includes(weather.level)&&
       spectatorSamples.length>0&&d.status!=='stale';
     if(weatherUsable&&publicCandidates.length>0)return {
