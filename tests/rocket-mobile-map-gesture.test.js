@@ -55,3 +55,18 @@ test('map boots from same-origin Leaflet even when CDN and launch feed are inacc
  assert.match(js,/state\.rocketPins\?\.update\(\[\],null\)/);
  assert.match(html,/id="rl-atlas-status"/);
 });
+
+test('offline coastline geography is public-domain, geographically bounded, and not mission data',()=>{
+ const data=JSON.parse(source('public/assets/rocket-reference-land.geojson'));
+ assert.equal(data.type,'FeatureCollection');
+ assert.match(data.source,/Natural Earth.*public domain/);
+ assert.match(data.sourceUrl,/nvkelso\/natural-earth-vector/);
+ assert(data.features.length>=40);
+ assert(data.features.every(f=>f.geometry?.type==='Polygon'&&Array.isArray(f.geometry.coordinates)));
+ assert.match(js,/createPane\('rocket-reference-land'\)/);
+ assert.match(js,/referencePane\.style\.zIndex='180'/);
+ assert.match(js,/\/assets\/rocket-reference-land\.geojson/);
+ assert.match(js,/root\.dataset\.outline='ready'/);
+ assert.match(js,/root\.dataset\.tiles='reference-only'/);
+ assert.match(js,/Online map tiles unavailable; Natural Earth coastlines shown/);
+});
