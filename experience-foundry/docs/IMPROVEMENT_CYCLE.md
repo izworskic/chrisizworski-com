@@ -2,6 +2,12 @@
 
 The output of an improvement assignment is an implemented, reviewable change with evidence of a useful new visitor capability. The agent does research, design and coding. Foundry supplies captured source, an explicit assignment, gap detection and executable before/after evidence. It is not an autonomous coding service or a compulsory interface template.
 
+## A handoff is not a visitor answer
+
+The Rocket Florida access-card failure (November 8, 2026) is an anti-pattern: the label **“Open Florida detail engine”** and a description of an internal NPS/KSC integration appeared under **“Can I get to the viewing area?”** The visitor still could not name an actual public place or understand the next decision.
+
+Acceptance now requires the selected mission or place to produce a **visible, source-backed answer at the decision point**, then clearly state the unknown and the next concrete action. A link to a deeper regional product is valid for expanded comparisons, never a substitute for the initial answer. Use the best existing engine to answer the question where the visitor is; show a named public location, a source-checked closure or a precise reason that access is unverified. Check mobile screens and the no-source case. Do not turn general public park rules into event admission or invent a route to a restricted facility.
+
 ## Choose work before choosing a layout
 
 Start with the actual unfinished visitor task. Read the source, use the existing experience, inspect current PRs and identify reusable intelligence. Record dated evidence, including uncertainty. Investigate at least three opportunities; name the changed outcome, existing capabilities, effort and risks for each. Select using an explicit tradeoff, not invented traffic estimates or a numerical score with no measured basis.
