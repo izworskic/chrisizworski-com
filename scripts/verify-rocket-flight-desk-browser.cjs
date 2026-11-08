@@ -278,6 +278,86 @@ const whenReady=page=>page.waitForFunction(id=>
     fontPx:computed,jsErrors:0});
    await context.close();
   }
+  // Genuine touchscreen pinch gestures, not only map-control clicks.
+  for(const width of [360,390]){
+   const context=await browser.newContext({viewport:{width,height:800},
+     deviceScaleFactor:2,isMobile:true,hasTouch:true,reducedMotion:'reduce'});
+   const page=await context.newPage(),errors=[];
+   page.on('pageerror',e=>errors.push(e.message));
+   await localLeaflet(page);
+   await page.route('https://tile.openstreetmap.org/**',route=>route.abort());
+   await page.route('https://*.basemaps.cartocdn.com/**',route=>route.abort());
+   await page.goto(base+'?region=florida&launchId='+A,{waitUntil:'domcontentloaded'});
+   await page.waitForFunction(()=>document.querySelector('#rl-map-expand')?.disabled===false&&
+     document.querySelector('#rl-coast-map')?.dataset.zoom,{timeout:15000});
+   const map=page.locator('#rl-coast-map');
+   await map.scrollIntoViewIfNeeded();
+   const box=await map.boundingBox();
+   assert(box&&box.height>=330,width+' map too short for finger gestures');
+   const css=await map.evaluate(el=>({
+     touch:getComputedStyle(el).touchAction,
+     overscroll:getComputedStyle(el).overscrollBehavior
+   }));
+   assert(css.touch==='none',width+' page still owns map pinch');
+   assert(css.overscroll.includes('contain'),width+' map overscroll leaks to page');
+   const cdp=await context.newCDPSession(page);
+   async function pinch(){
+     const bounds=await map.boundingBox();
+     assert(bounds&&bounds.width>260,'Map bounds missing');
+     const x=bounds.x+bounds.width/2,y=bounds.y+bounds.height/2;
+     const fingers=d=>[
+       {x:x-d/2,y,id:1,radiusX:3,radiusY:3,force:1},
+       {x:x+d/2,y,id:2,radiusX:3,radiusY:3,force:1}
+     ];
+     const scrollBefore=await page.evaluate(()=>window.scrollY);
+     const zoomBefore=Number(await map.getAttribute('data-zoom'));
+     await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:fingers(60)});
+     for(const d of [85,110,135,165,195,225]){
+       await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:fingers(d)});
+       await page.waitForTimeout(40);
+     }
+     await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+     await page.waitForTimeout(420);
+     const zoomAfter=Number(await map.getAttribute('data-zoom'));
+     const scrollAfter=await page.evaluate(()=>window.scrollY);
+     assert(zoomAfter>zoomBefore,width+' Leaflet did not zoom from a two-finger pinch ('+
+       zoomBefore+' to '+zoomAfter+')');
+     assert(Math.abs(scrollAfter-scrollBefore)<=3,width+
+       ' whole page moved '+(scrollAfter-scrollBefore)+'px during pinch');
+     return {zoomBefore,zoomAfter,pageScrollDelta:scrollAfter-scrollBefore};
+   }
+   const embedded=await pinch();
+   await page.locator('#rl-map-expand').click();
+   assert((await page.locator('#rl-map-wrap').getAttribute('data-expanded'))==='true',
+     width+' map did not expand');
+   assert(await page.evaluate(()=>getComputedStyle(document.documentElement).overflow)==='hidden',
+     width+' full map did not lock page scroll');
+   const fullBounds=await map.boundingBox();
+   assert(fullBounds&&fullBounds.height>500,width+' expanded map too short');
+   const full=await pinch();
+   const controlSize=await page.locator('#rl-coast-map .leaflet-control-zoom a').first()
+     .evaluate(el=>el.getBoundingClientRect().height);
+   assert(controlSize>=44,width+' zoom buttons too small '+controlSize);
+   const screenshot='phone'+width+'-touch-expanded.png';
+   await page.locator('#rl-map-wrap').screenshot({path:path.join(out,screenshot),animations:'disabled'});
+   report.screenshots.push(screenshot);
+   await page.keyboard.press('Escape');
+   assert((await page.locator('#rl-map-wrap').getAttribute('data-expanded'))==='false',
+     width+' Escape did not close map');
+   assert(await page.evaluate(()=>getComputedStyle(document.documentElement).overflow)!=='hidden',
+     width+' page still scroll-locked after Escape');
+   await page.locator('#rl-map-expand').click();
+   await page.locator('#rl-map-details').click();
+   assert(new URL(page.url()).hash==='#rl-next-title',
+     width+' explicit mission details link not functional');
+   assert(await page.evaluate(()=>!document.documentElement.classList.contains('rl-map-fullscreen')),
+     width+' full-screen leaked after navigation');
+   assert(errors.length===0,width+' touch JS errors '+errors.join('; '));
+   report.cases.push({case:'phone'+width+'-physical-pinch',embedded,full,
+     exit:'Escape and mission link',jsErrors:0});
+   await cdp.detach();
+   await context.close();
+  }
   // Verify the actual visitor answer in the rendered national page.
  floridaRich=true;
  for(const scenario of [{name:'florida-verified',closed:false,mismatch:false},
