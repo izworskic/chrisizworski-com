@@ -45,7 +45,7 @@ function publishedAccess(site,targetMs,now,windowEndMs=null){
  const hours=Array.isArray(site?.hoursByMonth)?site.hoursByMonth:null;
  const reviewed=Date.parse(String(site?.reviewed||'')+'T12:00:00Z');
  const recent=Number.isFinite(reviewed)&&now>=reviewed-86400000&&now-reviewed<=180*86400000;
- const note=site?.notes||'Check the current official location rules before traveling.';
+ const note=site?.notes||'Check posted site rules and current official notices for this shoreline.';
  if(!hours)return {level:'unverified',label:'Access hours not established',note:note+' No live closure verification is available.'};
  const local=localParts(targetMs,site.zone);
  const limits=local&&hours[local.month-1];
@@ -165,75 +165,75 @@ function recommendation(result,context,now=Date.now()){
  let code,title,summary,whenText,why=[];
  if(result?.status==='in-lock'&&result.inLock&&validAge(result.inLock.seen,now,8*60000)){
    code='LOCAL_IN_LOCK';
-   title=(result.inLock.name||'A commercial vessel')+' is reported in the locks now';
+   title='Look toward the locks: '+(result.inLock.name||'a commercial vessel')+' reported in a chamber';
    summary='The Soo Locks engine identified this vessel inside '+(result.inLock.chamberName||'a lock chamber')+
-     '. If you are already at the observation platform, it may be worth looking. A vessel can leave before you arrive.';
-   whenText='Right now, not a future arrival. Last AIS report '+formatClock(result.inLock.seen,site.zone)+
-     '. Do not start a long drive for an in-chamber ship.';
+     '. If you are at the waterfront, look toward the chamber and follow its current position. It may move at any time.';
+   whenText='Look now. Last AIS report '+formatClock(result.inLock.seen,site.zone)+
+     '. This is an observed in-chamber position, not a future passage estimate.';
    why.push('The in-lock state comes from the specialist chamber engine, not a guessed itinerary.');
  }else if(window&&ship){
    const starts=Date.parse(window.start),ends=Date.parse(window.end);
    const arrive=new Date(Math.max(now,starts-20*60000)).toISOString();
    whenText= 'Modeled passage '+formatClock(window.start,site.zone)+'–'+formatClock(window.end,site.zone)+
-     '. Aim to be at the public shore by '+formatClock(arrive,site.zone)+', allowing your own travel and parking time.';
-   title='A possible passage: '+(ship.name||'reported vessel');
+     '. If you are already on the waterfront, watch during this interval. If a short walk away, be at the viewing area by '+formatClock(arrive,site.zone)+'.';
+   title='Watch for '+(ship.name||'a reported vessel');
    summary='The existing '+(site.id==='soo'?'Soo Locks':'Duluth canal')+
-     ' engine supports a bounded window from recent AIS movement. This is not a confirmed arrival or a reservation.';
+     ' engine supports a bounded passage window from recent AIS movement. Use it to decide when to watch from this shoreline; a sighting is not guaranteed.';
    code='PLAN_WINDOW';
    why.push('AIS-based corridor prediction is available; ships can wait, stop, turn or use another approach.');
-   if(starts-now<20*60000)why.push('The window begins soon: only consider this if you are already close enough.');
+   if(starts-now<20*60000)why.push('The window begins soon: scan the waterway and map now.');
    if(ends-starts>120*60000)why.push('This broad prediction spans more than two hours. It does not justify assuming the ship will pass at any particular moment.');
    if(Number.isFinite(ship.confidence))why.push('Source-model confidence is not a calibrated probability of seeing the ship.');
  }else if(when==='tomorrow'){
-   code='PLAN_SHORE';title='Plan a shore stop, not a ship arrival';
-   summary='There is no verified ship passage for tomorrow. You can choose a public viewing location and check the live AIS again shortly before leaving.';
-   whenText=weather.at?'Forecast reference for '+formatClock(weather.at,site.zone)+'. No vessel schedule for that hour.':'Tomorrow: choose a time after checking posted park hours and current weather.';
+   code='PLAN_SHORE';title='No confirmed ship passage for tomorrow yet';
+   summary='Tomorrow’s ships are not established by today’s AIS. When you are at this shoreline, refresh the vessel reports to see what is actually nearby.';
+   whenText=weather.at?'Forecast reference for '+formatClock(weather.at,site.zone)+'. This is a weather hour, not a ship passage time.':'No reliable ship time for tomorrow. Check live reports when you are there.';
    why.push('Tomorrow’s forecast describes the shore, not tomorrow’s ship movements.');
  }else if(near){
-   code='NEARBY_ONLY';title='Worth a look if you are already nearby';
+   code='NEARBY_ONLY';title='Moving freighter reported near this shoreline';
    summary=(near.v.name||'A commercial vessel')+' last reported moving within about '+
      near.distance.toFixed(1)+' nautical miles of the general shore reference. That does not establish its route, berth, or visibility from this spot.';
-   whenText='Check now; this ship may stop, turn or disappear from AIS coverage. No future passage time is supported.';
+   whenText='Look toward the waterway and check the ship marker now. AIS does not confirm when or whether it will pass this particular viewpoint.';
    why.push('A recent moving AIS report is close to the selected area, but it is not a shore-sighting forecast.');
  }else {
-   code='NO_SHIP_TRIP';title='Do not make a trip solely for a ship yet';
+   code='NO_CLOSE_REPORT';title=result?.status==='unavailable'?'Live ship positions unavailable right now':'No nearby moving freighter confirmed right now';
    summary=result?.status==='unavailable'
-     ?'The live vessel check is unavailable. We cannot determine which ships may be near this shoreline.'
-     :'There is no recent moving commercial vessel close enough to this viewing area to justify a ship-specific recommendation. Other ships in the broad map region may be far away or stationary.';
-   whenText='Recheck AIS closer to departure. No reliable arrival window is available for your selected time.';
+     ?'The live vessel check could not be completed. You can still watch the waterway, but there is no fresh evidence to identify which vessel to look for.'
+     :'Current AIS reports do not identify a nearby moving commercial vessel for this viewing area. Ships farther out, stationary vessels, or vessels missing from receivers may still be on the water.';
+   whenText='No supported passage time for this location. Keep an eye on the waterway, or refresh the vessel reports in a few minutes.';
    why.push('The broad AIS map is not a schedule, and an empty or stale receiver report does not prove the waterway is empty.');
  }
  if(blocked){
    code='HOURS_CONFLICT';
    if(access.level==='partial'){
      title='Ship window runs beyond published park hours';
-     summary='Only the early portion of this estimated passage window falls within posted park hours. The ship could arrive after the park closes, so this is not a reliable full-window visit plan.';
+     summary='Only the early portion of this estimated passage window falls within posted park hours. The ship could arrive after closing. Watch only while public access is permitted.';
      whenText+=' The modeled window extends beyond posted access hours. Do not expect the park to remain open until the predicted end.';
-     why.push('A ship might arrive after closing; check the official land-manager notice before planning any access.');
+     why.push('A ship might arrive after closing. Follow posted signs and current land-manager notices.');
    }else{
-     title='Not at this time: published park hours conflict';
-     summary='The selected visit would fall outside this location’s posted general hours. A ship report cannot override access rules.';
+     title='Viewing area may be closed at this hour';
+     summary='The time you selected is outside this location’s published general hours. Do not enter or remain in a closed public area to watch a vessel.';
      why.push('Check the official land-manager page for possible schedule changes, closures and alternative viewpoints.');
    }
  }else if(risk){
-   code='WEATHER_HOLD';title='Reconsider the outdoor trip: weather concern';
-   summary='The NWS forecast or active severe alert raises a material outdoor exposure concern. Do not treat a ship prediction as a reason to overlook it.';
+   code='WEATHER_HOLD';title='Severe weather concern at this shoreline';
+   summary='The NWS forecast or a severe alert signals potentially hazardous exposure at the shoreline. Prioritize shelter and current official warnings over ship watching.';
    why.push('Weather is a separate constraint and can override a promising ship position.');
  }else if(code==='PLAN_WINDOW'&&weather.level!=='favorable'){
-   code='VERIFY_BEFORE_TRAVEL';title='Possible passage, but verify conditions first';
-   why.push('Do not interpret missing weather/alert information or adverse conditions as a GO signal.');
+   code='VERIFY_BEFORE_TRAVEL';title='Possible passage; check conditions while watching';
+   why.push('Unknown or adverse shore conditions are not an all-clear for staying at the waterfront.');
  }else if(code==='PLAN_WINDOW'&&access.level!=='published'){
-   code='VERIFY_BEFORE_TRAVEL';title='Possible passage; public access still needs checking';
+   code='VERIFY_BEFORE_TRAVEL';title='Possible passage; confirm this viewing area is accessible';
    why.push('The site is named from official information, but current operating access is not independently confirmed.');
  }else if(code==='PLAN_WINDOW'){
-   code='PROMISING';title='Worth considering a shoreline visit for '+(ship.name||'this vessel');
+   code='PROMISING';title='Watch for '+(ship.name||'this vessel')+' during the modeled window';
    why.push('Published hours include this time; they do not verify that gates or facilities are open today.');
  }
- if(weather.level==='unknown')why.push('Hourly weather is missing or stale; check NWS before leaving.');
+ if(weather.level==='unknown')why.push('Hourly weather is missing or stale; check NWS before staying at the exposed shoreline.');
  if(access.level==='unverified')why.push('No current, affirmative site-opening determination is available.');
  return {code,tone:['PROMISING'].includes(code)?'supported':
    ['HOURS_CONFLICT','WEATHER_HOLD'].includes(code)?'hold':
-   ['NO_SHIP_TRIP','PLAN_SHORE'].includes(code)?'no-schedule':'conditional',
+   ['NO_CLOSE_REPORT','PLAN_SHORE'].includes(code)?'no-schedule':'conditional',
    title,summary,where:site.name+' · '+site.address,when:whenText,why,
    weather,access,ship:ship||result?.inLock||near?.v||null,site,nearNm:near?.distance??null,
    disclaimer:'This recommends an observation plan, never guarantees a ship sighting, navigational safety, or live public access.'};
