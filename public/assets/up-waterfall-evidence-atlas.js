@@ -3,6 +3,7 @@ const $=id=>document.getElementById(id);
 const search=$('ea-search'),kind=$('ea-kind'),county=$('ea-county'),list=$('ea-record-list'),count=$('ea-count'),more=$('ea-more'),detail=$('ea-detail'),mapState=$('ea-map-state'),mapRoot=$('ea-map');
 if(!search||!kind||!county||!list||!count||!more||!detail||!mapRoot)return;
 const labels={guide:'Visitor guide',gis:'State GIS',name:'Name only',tourism:'UP Travel index'};
+const reviewLabels={'existing-guide-umbrella':'Existing waterfall group','existing-guide-alias':'Existing waterfall, alternate name','existing-guide-region':'Existing waterfall trail area','existing-closure-guide':'Known waterfall, LAND-MANAGER CLOSED','research-name-alias':'Alternate name supported; visitor route unknown','research-distinct-wilderness':'Distinct remote waterfall; no approved route','unresolved-specific-feature':'Identity unresolved; do not navigate'};
 const statusLabels={'verified-access-guide':'Published access guide (current conditions unknown)','verified-closure-guide':'Closure guide: not a current public outing','research-only-guide':'Source research, no cleared visitor approach','multi-falls-planner':'Multi-waterfall visitor planner'};
 const norm=s=>String(s||'').normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
 const typeOf=r=>labels[r.kind]||'Research';
@@ -21,9 +22,15 @@ function showDetail(r){
  const caution=el('p','ea-decision',r.kind==='guide'?
    (r.publication==='verified-closure-guide'?'This visitor page documents a closure. Do not assume access is open.':r.publication==='research-only-guide'?'Research-only guide: no verified legal visitor approach.':'This is a published guide, NOT a live opening report. Check current land-manager conditions.') :
    r.kind==='gis'?'State-mapped natural-feature coordinate. Never a parking pin, public trail or river crossing authorization.':
+   r.kind==='tourism'&&r.identityReview?.disposition==='existing-closure-guide'?'This source name refers to an existing land-manager CLOSED waterfall guide. There is NO authorized visitor route.':
    r.kind==='tourism'?(r.listingRole==='related-place-or-activity'?'This is a related park, trail, business or facility listing, NOT a separately confirmed natural waterfall. ':'The listing URL contains a waterfall name. Its exact geographic identity and visitor access are not confirmed. ')+(r.directoryMembership==='observed-on-directory-first-page'?'Its road/town labels were seen in the public waterfall directory, but they are NOT visitor parking or a legal route.':'This indexed URL has NOT been confirmed as a current directory card, parking location or hiking destination.'): 
    'An independently cataloged name. No independently verified coordinates, parking, or public trail are provided by this source.');
  detail.append(caution);
+ if(r.kind==='tourism'&&r.identityReview){
+ const v=r.identityReview,box=el('section','ea-investigation');box.append(el('p','ea-eyebrow','Reviewed November 8, 2026'),el('h4','',reviewLabels[v.disposition]||'Investigated waterfall identity'),el('p','ea-canonical','Source identity: '+v.canonicalName),el('p','',v.finding),el('p','ea-barrier','Access decision: '+v.barrier));
+ if(!v.publicRouteCleared||!v.newDestinationAuthorized)box.append(el('p','ea-no-route','No new destination or visitor route authorized by this source review.'));
+ detail.append(box);
+ }
  const dl=el('dl');detailRow(dl,'County',r.county||'Not confidently assigned');detailRow(dl,'River',r.river);
  detailRow(dl,'Area / town',r.place);detailRow(dl,'Source date',r.sourceReviewed);
  if(r.kind==='guide'){detailRow(dl,'Publication',statusLabels[r.publication]||r.publication);detailRow(dl,'Existing status',r.status);detailRow(dl,'Linked GIS IDs',r.linkedGisIds?.join(', ')||'None explicitly linked');}
@@ -38,7 +45,9 @@ function showDetail(r){
  detailRow(dl,'Potential county names',r.candidateCounties?.length?r.candidateCounties.join(', ')+' (name-match hints only)':'No geographic county match');
  detailRow(dl,'Same-name GIS objects',r.candidateGisIds?.length?r.candidateGisIds.join(', ')+' (not verified as this tourism listing)':'None');
  detailRow(dl,'Same-name independent names',r.candidateExternalIds?.length?String(r.candidateExternalIds.length)+' source record(s), identity unverified':'None');
- detailRow(dl,'Earlier audit classification',r.identityStatus);detailRow(dl,'Caution',r.note);
+ detailRow(dl,'Earlier audit classification',r.identityStatus);
+ if(r.identityReview){detailRow(dl,'Reviewed identity',reviewLabels[r.identityReview.disposition]||r.identityReview.disposition);detailRow(dl,'Investigation date',r.identityReview.reviewed);}
+ detailRow(dl,'Caution',r.note);
  }
  detailRow(dl,'Map position',Number.isFinite(r.lat)&&Number.isFinite(r.lng)?'Natural feature only: '+r.lat.toFixed(5)+', '+r.lng.toFixed(5):'No verified geographic point in this record');detail.append(dl);
  const links=el('p','ea-source');
@@ -46,18 +55,25 @@ function showDetail(r){
  if(r.kind==='gis'&&r.relatedGuideId){const g=guideLookup.get(r.relatedGuideId);if(g)link(links,'Open linked guide',g.guidePath);}
  if(r.kind==='name'&&r.relatedGuideIds?.length){for(const id of r.relatedGuideIds.slice(0,3)){const g=guideLookup.get(id);if(g)link(links,'Compare named guide: '+g.name,g.guidePath);}}
  if(r.kind==='tourism'){
+ for(const id of (r.identityReview?.reviewedGuideIds||[])){
+  const g=guideLookup.get(id);if(g)link(links,r.identityReview.disposition==='existing-closure-guide'?'Read existing closure guide: '+g.name:'Read existing researched guide: '+g.name,g.guidePath);
+ }
  for(const id of [r.relatedGuideId,...(r.relatedGuideIds||[])]){const g=guideLookup.get(id);if(g)link(links,'Previously verified guide link: '+g.name,g.guidePath);}
  for(const id of (r.candidateGuideIds||[]).filter(id=>id!==r.relatedGuideId&&!(r.relatedGuideIds||[]).includes(id)).slice(0,4)){
  const g=guideLookup.get(id);if(g)link(links,'Compare same-named guide (unverified identity): '+g.name,g.guidePath);
  }
  }
- link(links,'Examine original source',r.sourceUrl);
+ link(links,'Examine original UP Travel listing',r.sourceUrl);
+ if(r.kind==='tourism'&&r.identityReview?.sourceUrls?.length){
+ for(const source of r.identityReview.sourceUrls)if(source!==r.sourceUrl)link(links,'Supporting identity/access source',source);
+ }
  detail.append(links);
- if(r.kind==='tourism'&&r.candidateGisIds?.length){
- const compare=el('div','ea-compare');compare.append(el('p','','Same-name Michigan GIS features. Comparing them DOES NOT prove they are this exact listing or establish a safe route.'));
- for(const id of r.candidateGisIds.slice(0,5)){
+ if(r.kind==='tourism'&&(r.candidateGisIds?.length||r.identityReview?.linkedGisIds?.length)){
+ const compare=el('div','ea-compare');compare.append(el('p','',r.identityReview?.linkedGisIds?.length?'Source-reviewed Michigan GIS identity. The GIS point is the waterfall, NOT parking or a lawful visitor trail.':'Same-name Michigan GIS features. Comparing them DOES NOT prove they are this exact listing or establish a safe route.'));
+ const ids=[...new Set([...(r.identityReview?.linkedGisIds||[]),...(r.candidateGisIds||[])])];
+ for(const id of ids.slice(0,5)){
   const g=recordLookup.get('gis:'+id);if(!g)continue;
-  const btn=el('button','ea-compare-btn','Inspect state GIS #'+id+' · '+g.county+' County');
+  const btn=el('button','ea-compare-btn','Inspect '+((r.identityReview?.linkedGisIds||[]).includes(id)?'reviewed ':'')+'state GIS #'+id+' · '+g.county+' County');
   btn.type='button';btn.addEventListener('click',()=>showDetail(g));compare.append(btn);
  }
  detail.append(compare);
@@ -76,7 +92,7 @@ function showDetail(r){
 function score(r,q){const n=norm(r.name);if(n===q)return 0;if(n.startsWith(q))return 1;if(n.includes(q))return 2;return 3;}
 function applyFilters(){
  shown=30;const q=norm(search.value),k=kind.value,c=county.value;
- visible=records.filter(r=>(k==='all'||r.kind===k)&&(c==='all'||r.county===c)&&(!q||norm([r.name,r.river,r.place,r.addressLabel].filter(Boolean).join(' ')).includes(q)));
+ visible=records.filter(r=>(k==='all'||r.kind===k)&&(c==='all'||r.county===c)&&(!q||norm([r.name,r.river,r.place,r.addressLabel,r.identityReview?.canonicalName].filter(Boolean).join(' ')).includes(q)));
  if(q)visible.sort((a,b)=>score(a,q)-score(b,q)||a.name.localeCompare(b.name)||a.id.localeCompare(b.id));
  resetSelection();renderList();renderPins();
 }
@@ -132,7 +148,7 @@ async function load(){
  try{
   const response=await fetch('/assets/up-waterfall-evidence-atlas.json',{cache:'force-cache'});if(!response.ok)throw Error('Atlas unavailable');
   const payload=await response.json();
-  if(payload.schemaVersion!==2||!Array.isArray(payload.records)||payload.records.length!==payload.counts.totalSourceRecords||payload.counts.totalSourceRecords!==640)throw Error('Atlas contract mismatch');
+  if(payload.schemaVersion!==3||!Array.isArray(payload.records)||payload.records.length!==payload.counts.totalSourceRecords||payload.counts.totalSourceRecords!==640)throw Error('Atlas contract mismatch');
   for(const r of payload.records){
    if(!['guide','gis','name','tourism'].includes(r.kind)||typeof r.id!=='string'||typeof r.name!=='string')throw Error('Invalid record');
    if(['name','tourism'].includes(r.kind)&&(r.lat!==null||r.lng!==null))throw Error('Unsafe source location');
