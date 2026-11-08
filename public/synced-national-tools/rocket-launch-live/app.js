@@ -182,9 +182,16 @@
     window.addEventListener('pagehide',()=>setExpanded(false));
   }
   function initMap() {
-    if (state.map || !window.L || !$('rl-coast-map') || !state.data?.regions?.length) return;
-    const root = $('rl-coast-map');
+    const root=$('rl-coast-map');
+    if(state.map||!root||!state.data?.regions?.length)return;
+    if(!window.L?.map){
+      root.dataset.mapState='unavailable';
+      root.replaceChildren(el('div','rl-map-fallback',
+        'The interactive map could not start. Use the coast buttons above while the map library is unavailable.'));
+      return;
+    }
     root.replaceChildren();
+    root.dataset.mapState='initializing';
     try {
       const map = window.L.map(root, { scrollWheelZoom: false, zoomControl: true, preferCanvas: true, touchZoom: true, dragging: true, bounceAtZoomLimits: false, tapHold: false });
       const osmCredit = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
@@ -248,8 +255,14 @@
         }
       });
       state.rocketPins?.update(state.data.regions.flatMap(r=>r.launches||[]),state.data.selectedLaunchId);
+      root.dataset.mapState='ready';
     } catch (_) {
-      root.replaceChildren(el('div', 'rl-map-fallback', 'Map tiles unavailable. The coast buttons above remain fully functional.'));
+      root.dataset.mapState='unavailable';
+      state.map=null;
+      state.rocketPins=null;
+      $('rl-map-expand')?.setAttribute('disabled','');
+      root.replaceChildren(el('div','rl-map-fallback',
+        'The interactive map could not start. Select a coast above to continue.'));
     }
   }
   function renderMission(data) {
@@ -1371,6 +1384,12 @@
       set('rl-feed-health', 'Source check failed');
       set('rl-updated-at', 'Not verified');
       set('rl-schedule-coverage', err.message + ' Official NASA and launch-range pages linked below remain the primary authority.');
+      const mapRoot=$('rl-coast-map');
+      if(mapRoot&&!state.map){
+        mapRoot.dataset.mapState='source-unavailable';
+        mapRoot.replaceChildren(el('div','rl-map-fallback',
+          'The launch calendar is unavailable, so no current rocket locations can be shown. Use the coast buttons above and check official launch sources.'));
+      }
       const root = $('rl-national-board');
       if (root && !state.data) root.textContent = 'National provider temporarily unavailable. Recheck the official NASA, Space Force, Starbase and Alaska Aerospace launch notices.';
       $('rl-launch-select').disabled = true;
