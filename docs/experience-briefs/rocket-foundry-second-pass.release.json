@@ -176,7 +176,7 @@
       768,
       1440
     ],
-    "browserStatus": "NOT_VERIFIED",
+    "browserStatus": "PENDING",
     "scopeNote": "Second-pass browser and exact-head owner CI need independent evidence; earlier PR #1565 screenshots do not validate this version. Synthetic unit cases are not current official launch/access/weather evidence.",
     "browserRun": null,
     "screenshotEvidence": []
