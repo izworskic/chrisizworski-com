@@ -194,6 +194,12 @@
     const mapStatus=doc.getElementById('fwd-map-note');
     if(!select||!when||!refresh||!mapBox)return;
     let map=null, layer=null, generation=0, active=null, lastResult=null;
+    function track(action) {
+      if (typeof window.gtag === 'function') window.gtag('event', action, {
+        corridor:select.value, visit_window:when.value,
+        evidence_status:lastResult ? lastResult.status : 'unknown', surface:'freighter-watch-desk'
+      });
+    }
     const params=new URLSearchParams(location.search);
     if(CONFIG[params.get('place')])select.value=params.get('place');
     if(['now','today','tomorrow'].includes(params.get('when')))when.value=params.get('when');
@@ -265,13 +271,16 @@
     }
     select.addEventListener('change',()=>{
       const u=new URL(location.href);u.searchParams.set('place',select.value);u.searchParams.set('when',when.value);history.replaceState(null,'',u);
+      track('freighter_watch_select');
       load();
     });
     when.addEventListener('change',()=>{
       const u=new URL(location.href);u.searchParams.set('place',select.value);u.searchParams.set('when',when.value);history.replaceState(null,'',u);
+      track('freighter_watch_time');
       load();
     });
-    refresh.addEventListener('click',load);
+    refresh.addEventListener('click',()=>{ track('freighter_watch_refresh'); load(); });
+    next.addEventListener('click',e=>{ if(e.target.closest('a'))track('freighter_watch_next_action'); });
     doc.getElementById('fwd-ships').addEventListener('click',e=>{
       const b=e.target.closest('button[data-mmsi]');
       if(!b||!map||!layer)return;
@@ -283,6 +292,9 @@
       });
     });
     if(typeof L === 'undefined')mapStatus.textContent='Map library unavailable. Viewing links and the vessel list still work.';
+    // A once-valid prediction must not sit on screen indefinitely after a tab is left open.
+    setInterval(()=>{ if(!doc.hidden)load(); },90000);
+    doc.addEventListener('visibilitychange',()=>{ if(!doc.hidden)load(); });
     load();
   }
   return {CONFIG,validDate,usableVessel,safeWindow,eligibleForWhen,evaluate,mount};
