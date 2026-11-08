@@ -119,6 +119,7 @@
       r.id === 'virginia' ? 'Wallops public launch-viewing atlas · same mission' :
       r.id === 'alaska' ? 'Kodiak range access desk · same mission' :
       r.id === 'hawaii' ? 'Barking Sands Navy access desk · same mission' :
+      r.id === 'california' ? 'Vandenberg public viewing guide · same mission' :
       'Florida detailed viewer · same mission']);
     for (const [url, title] of links) {
       const a = anchor(url, title);
