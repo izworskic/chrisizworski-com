@@ -83,7 +83,8 @@ const server=http.createServer((req,res)=>{
           missingKeyTiles.push(r.request().url());
         return r.fulfill({body:tilePng,contentType:'image/png'});
       });
-      await page.route('**/api/freighter-ais',r=>r.fulfill({json:general}));
+      let liveGeneral=general;
+      await page.route('**/api/freighter-ais',r=>r.fulfill({json:liveGeneral}));
       await page.route('**/api/duluth-canal',r=>r.fulfill({json:{ok:true,checkedAt:iso(now),candidates:[],mapVessels:[],watchPick:null}}));
       await page.goto(base+'/great-lakes-ship-watching-spots/',{waitUntil:'domcontentloaded'});
       assert.equal(await page.locator('text=October 11, 2026').count(),0,'hard-coded stale hero date removed');
@@ -94,11 +95,13 @@ const server=http.createServer((req,res)=>{
       assert.match(await page.textContent('#fwd-local-date'),/November 8, 2026/);
       assert.match(await page.textContent('#fwd-viewing-location'),/Soo Locks observation platform/);
       assert.equal(pageErrors.length,0,'no startup page errors on default load');
+      assert.equal(await page.locator('#fwd-when').inputValue(),'now','on-shore now is the default');
+      assert.match(await page.textContent('#fwd-title'),/worth watching at your shoreline/);
       await page.selectOption('#fwd-when','now');
       await page.waitForFunction(()=>document.querySelector('#fwd-status').dataset.status==='window');
       assert.match(await page.textContent('#fwd-headline'),/Browser fixture freighter/);
       await page.waitForFunction(()=>document.querySelector('#fwd-visit-plan').dataset.verdict==='PROMISING');
-      assert.match(await page.textContent('#fwd-plan-title'),/Worth considering a shoreline visit/);
+      assert.match(await page.textContent('#fwd-plan-title'),/Watch for .* during the modeled window/);
       assert.match(await page.textContent('#fwd-plan-where'),/Soo Locks observation platform/);
       assert.match(await page.textContent('#fwd-plan-when'),/Modeled passage/);
       assert.match(await page.textContent('#fwd-plan-weather'),/Mostly sunny|hourly limiter/i);
@@ -119,14 +122,22 @@ const server=http.createServer((req,res)=>{
       assert.match(await page.textContent('#fwd-message'),/cannot confirm when one will pass/);
       assert.match(await page.textContent('#fwd-viewing-location'),/Vantage Point/);
       await page.waitForFunction(()=>document.querySelector('#fwd-visit-plan').dataset.verdict==='NEARBY_ONLY');
-      assert.match(await page.textContent('#fwd-plan-title'),/already nearby/);
+      assert.match(await page.textContent('#fwd-plan-title'),/Moving freighter reported near this shoreline/);
+      assert.doesNotMatch(await page.textContent('#fwd-plan-summary'),/trip|drive/i);
       assert.match(await page.textContent('#fwd-plan-where'),/Thomas Edison Parkway/);
+      liveGeneral={...general,vessels:[]};
+      await page.click('#fwd-refresh');
+      await page.waitForFunction(()=>document.querySelector('#fwd-visit-plan').dataset.verdict==='NO_CLOSE_REPORT');
+      assert.match(await page.textContent('#fwd-plan-title'),/No nearby moving freighter confirmed/);
+      const quietAnswer=(await page.textContent('#fwd-plan-title'))+' '+(await page.textContent('#fwd-plan-summary'))+' '+(await page.textContent('#fwd-plan-when'));
+      assert.doesNotMatch(quietAnswer,/trip|drive|departure|parking/i);
+      liveGeneral=general;
       assert.doesNotMatch(await page.textContent('#fwd-message'),/Estimated passage/);
       await page.selectOption('#fwd-when','tomorrow');
       await page.waitForFunction(()=>document.querySelector('#fwd-status').dataset.status==='unknown');
       assert.match(await page.textContent('#fwd-headline'),/Tomorrow is not confirmed/);
       await page.waitForFunction(()=>document.querySelector('#fwd-visit-plan').dataset.verdict==='PLAN_SHORE');
-      assert.match(await page.textContent('#fwd-plan-summary'),/no verified ship passage for tomorrow/i);
+      assert.match(await page.textContent('#fwd-plan-summary'),/Tomorrow’s ships are not established by today’s AIS/);
       // Real failure found on 2026-11-08: ship window reached 7:53 PM but Soo park closes at 6 PM.
       // Changing a selected place and time must change the actual access verdict, not just the map.
       liveSoo=lateSoo;
@@ -155,7 +166,7 @@ const server=http.createServer((req,res)=>{
     await adversePage.goto(base+'/great-lakes-ship-watching-spots/',{waitUntil:'domcontentloaded'});
     await adversePage.selectOption('#fwd-when','now');
     await adversePage.waitForFunction(()=>document.querySelector('#fwd-visit-plan').dataset.verdict==='WEATHER_HOLD');
-    assert.match(await adversePage.textContent('#fwd-plan-title'),/Reconsider the outdoor trip/);
+    assert.match(await adversePage.textContent('#fwd-plan-title'),/Severe weather concern at this shoreline/);
     await adverse.close();cases++;
     const fallback=await browser.newContext({viewport:{width:390,height:800}});
     const fallbackPage=await fallback.newPage();
