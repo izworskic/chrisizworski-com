@@ -5,7 +5,7 @@
   const KSC_OFFICIAL_API = '/api/space-coast-ksc-watch';
   const $ = id => document.getElementById(id);
   const validRegions = new Set(['california', 'florida', 'texas', 'virginia', 'alaska', 'hawaii']);
-  const state = { request: 0, data: null, map: null, markers: new Map(), rocketPins: null, regions: [], userFocusedMap: false, officialEvidence: null, officialEvidenceLoaded: false, kscEvidence: null, kscMissionId: null, kscRequest: 0 };
+  const state = { request: 0, data: null, map: null, markers: new Map(), rocketPins: null, regions: [], userFocusedMap: false, officialEvidence: null, officialEvidenceLoaded: false, kscEvidence: null, kscMissionId: null, kscRequest: 0, floridaEvidence: null, floridaRequest: 0, floridaController: null };
   const el = (tag, className, value) => {
     const n = document.createElement(tag);
     if (className) n.className = className;
@@ -545,13 +545,34 @@
 
   function renderAccess(data) {
     const access = data.access || {};
+    const florida=data.region?.id==='florida'?
+      window.RocketFloridaAccess?.assess(data,state.floridaEvidence):null;
+    const floridaAnswer=$('rl-access-answer');
+    if(floridaAnswer){
+      floridaAnswer.replaceChildren();floridaAnswer.hidden=!florida;
+      if(florida){
+        floridaAnswer.dataset.state=florida.state;
+        floridaAnswer.appendChild(el('strong','',florida.chosen.length?
+          'Viewing starting points: '+florida.chosen.map(x=>x.name).join(' / '):
+          'No pad-specific starting point established'));
+        floridaAnswer.appendChild(el('p','',florida.note));
+        floridaAnswer.appendChild(el('p','rl-access-source-age',florida.matched?
+          'Florida source checked. NPS alerts last checked '+stamp(florida.sourceCheckedAt)+
+          '. No launch-specific gate permission or parking is established.':
+          'Live Florida access evidence is not verified. Listed locations are published possibilities, not current gate reports.'));
+        const detail=anchor(florida.detailUrl,'View this mission’s detailed Florida access and weather');
+        if(detail)floridaAnswer.appendChild(detail);
+        const ksc=florida.kscMatched?anchor(florida.kscUrl,'Read this mission’s KSC event notice'):null;
+        if(ksc)floridaAnswer.appendChild(ksc);
+      }
+    }
     const sites = $('rl-sites');
     if (sites) {
       sites.replaceChildren();
-      for (const s of access.sites || []) {
+      for (const s of (florida?.cards?.length?florida.cards:access.sites)||[]) {
         const card = el('article', 'rl-site-card');
         card.dataset.state = s.state || 'verify';
-        card.appendChild(el('span', 'rl-site-kicker', s.bestFor || 'Viewing area'));
+        card.appendChild(el('span', 'rl-site-kicker', s.role || s.bestFor || 'Viewing area'));
         card.appendChild(el('h3', '', s.name));
         card.appendChild(el('span', 'rl-site-status', s.label || 'Access must be checked'));
         card.appendChild(el('p', '', s.reason || 'Access conditions have not been confirmed for this launch.'));
@@ -570,11 +591,11 @@
       }
     }
     chip($('rl-access-grade'),
-      data.region.id === 'florida' ? 'Open Florida detail engine' :
+      florida ? florida.status :
       data.region.id === 'alaska' || data.region.id === 'hawaii' ?
         'No public launch access verified' : 'Access requires confirmation',
-      data.region.id === 'alaska' || data.region.id === 'hawaii' ? 'restricted' : 'unknown');
-    set('rl-access-summary', access.guidance ||
+      data.region.id === 'alaska' || data.region.id === 'hawaii' ? 'restricted' : florida ? florida.state : 'unknown');
+    set('rl-access-summary', florida?.answer || access.guidance ||
       'Viewing and access guidance is not verified. Use the range’s official notice.');
     const notice = $('rl-official-notice');
     const live = access.liveOfficialNotice;
@@ -596,6 +617,29 @@
         if (a) notice.appendChild(a);
       } else notice.hidden = true;
     }
+  }
+  // The existing Florida source resolves mission-specific public sites and NPS
+  // restrictions. Do not block the national answer or admit another mission's
+  // conditions if a slow response races a selector change.
+  async function loadFloridaEvidence(data){
+    const seq=++state.floridaRequest;
+    const id=data?.selectedLaunchId;
+    if(data?.selectedRegion!=='florida'||data.scheduleFreshness!=='recent'||
+      id!==data.selectedLaunch?.id||
+      !/^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i.test(id||''))return;
+    const controller=new AbortController();state.floridaController=controller;
+    const timer=AbortSignal.timeout(18000);
+    const cancel=()=>controller.abort();timer.addEventListener('abort',cancel,{once:true});
+    let detail={ok:false};
+    try{
+      const response=await fetch('/api/space-coast-launch?launchId='+encodeURIComponent(id),{
+        headers:{Accept:'application/json'},signal:controller.signal});
+      if(response.ok)detail=await response.json();
+    }catch{}finally{timer.removeEventListener('abort',cancel);}
+    if(seq!==state.floridaRequest||state.data?.selectedLaunchId!==id||
+      state.data?.selectedRegion!=='florida')return;
+    state.floridaEvidence=detail;
+    renderAccess(state.data);
   }
   // These are NWS *hypothetical delayed target* samples, not a launch forecast.
   // No extra calls: all four cases come with the existing regional weather API.
@@ -1210,6 +1254,7 @@
     renderIndependentReporting(data);
     renderSelector(data);
     renderAccess(data);
+    void loadFloridaEvidence(data);
     renderWeather(data);
     renderSlipForecast(data);
     renderLaunchWeather(data);
@@ -1228,6 +1273,10 @@
   }
   async function load(region, launchId) {
     const sequence = ++state.request;
+    ++state.floridaRequest;
+    state.floridaController?.abort();
+    state.floridaController=null;
+    state.floridaEvidence=null;
     const params = new URLSearchParams();
     if (region && validRegions.has(region)) params.set('region', region);
     if (launchId) params.set('launchId', launchId);
@@ -1267,6 +1316,8 @@
       $('rl-watch-mission-videos')?.replaceChildren(el('p', 'rl-watch-empty', 'Video listing unavailable; not a claim that there is no broadcast.'));
       $('rl-watch-general')?.replaceChildren();
       chip($('rl-access-grade'), 'Official access must be checked', 'unknown');
+      $('rl-access-answer')?.replaceChildren();
+      set('rl-access-summary','The selected mission could not be verified. No public viewing access can be confirmed.');
       chip($('rl-weather-grade'), 'No current forecast', 'unknown');
       set('rl-slip-brief','Delay comparisons unavailable until the mission and weather sources can be checked.');
       $('rl-slip-options')?.replaceChildren();
