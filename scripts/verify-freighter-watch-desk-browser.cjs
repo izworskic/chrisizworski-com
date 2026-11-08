@@ -76,7 +76,7 @@ const server=http.createServer((req,res)=>{
       await page.screenshot({path:path.join(shots,'soo-'+width+'.png'),fullPage:false});
       await page.selectOption('#fwd-place','port');
       await page.waitForFunction(()=>document.querySelector('#fwd-status').dataset.status==='observed');
-      assert.match(await page.textContent('#fwd-message'),/future route and shore visibility are unverified/);
+      assert.match(await page.textContent('#fwd-message'),/cannot confirm when one will pass/);
       assert.match(await page.textContent('#fwd-viewing-location'),/Vantage Point/);
       assert.doesNotMatch(await page.textContent('#fwd-message'),/Estimated passage/);
       await page.selectOption('#fwd-when','tomorrow');
