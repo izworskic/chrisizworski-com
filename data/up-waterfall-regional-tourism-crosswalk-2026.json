@@ -8,12 +8,12 @@
     "michiganStateGisFeatures": 161,
     "exactGisLinks": 69,
     "unresolvedGisFeatures": 92,
-    "tourismSourceSets": 13,
-    "tourismMentions": 151,
-    "distinctSourceNameStrings": 98,
+    "tourismSourceSets": 14,
+    "tourismMentions": 162,
+    "distinctSourceNameStrings": 102,
     "byDisposition": {
-      "curated": 108,
-      "research_only": 32,
+      "curated": 117,
+      "research_only": 34,
       "closure_guide": 4,
       "not_distinct_natural_falls": 5,
       "companion_covered": 1,
@@ -119,6 +119,13 @@
       "url": "https://explorewesternup.com/things-to-do/waterfalls/",
       "namedCount": 47,
       "sourceScope": "Visible named falls/sites in the reviewed editorial list, not the entire dynamic tourism directory."
+    },
+    {
+      "id": "uptravel-western-feature-2024",
+      "name": "UP Travel Western U.P. featured waterfalls (February 2024)",
+      "url": "https://www.uptravel.com/blog/post/best-waterfalls-western-upper-peninsula/",
+      "namedCount": 11,
+      "sourceScope": "All eleven named waterfall section headings in this published editorial article; this does NOT enumerate the main 300+ estimated geographic inventory."
     }
   ],
   "entries": [
@@ -1416,12 +1423,110 @@
       "disposition": "research_only",
       "curatedIds": [],
       "note": "No currently approved lot, signed path or landowner authority established."
+    },
+    {
+      "sourceId": "uptravel-western-feature-2024",
+      "sourceName": "Eagle River Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "eagle-river-falls"
+      ],
+      "note": "Existing Lower Eagle River bridge-side published guide; not Upper Eagle River/Ten-Foot Falls."
+    },
+    {
+      "sourceId": "uptravel-western-feature-2024",
+      "sourceName": "Hungarian Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "upper-hungarian-falls",
+        "middle-hungarian-falls",
+        "lower-hungarian-falls"
+      ],
+      "note": "Existing three-tier Hungarian Falls nature area; no duplicate destination for generic name."
+    },
+    {
+      "sourceId": "uptravel-western-feature-2024",
+      "sourceName": "Paul's Falls",
+      "disposition": "research_only",
+      "curatedIds": [],
+      "note": "UP Travel calls this Sante River waterfall a Copper Harbor-area hike; the independent specialist says Paul's was an older name for Löytilä Falls, gives a natural point near Toivola in Houghton County and describes complex logging roads. No approved public arrival or continuous trail verified."
+    },
+    {
+      "sourceId": "uptravel-western-feature-2024",
+      "sourceName": "O Kun de Kun Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "o-kun-de-kun-falls"
+      ],
+      "note": "Existing signed NCT visitor hike, with Konteka as companion cascade."
+    },
+    {
+      "sourceId": "uptravel-western-feature-2024",
+      "sourceName": "Bond Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "bond-falls"
+      ],
+      "note": "Existing verified state scenic site."
+    },
+    {
+      "sourceId": "uptravel-western-feature-2024",
+      "sourceName": "Great Conglomerate Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "great-conglomerate-falls"
+      ],
+      "note": "Existing Black River byway guide."
+    },
+    {
+      "sourceId": "uptravel-western-feature-2024",
+      "sourceName": "Nawadaha Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "nawadaha-falls"
+      ],
+      "note": "Existing Porcupine Mountains guide."
+    },
+    {
+      "sourceId": "uptravel-western-feature-2024",
+      "sourceName": "Chicagon Falls",
+      "disposition": "research_only",
+      "curatedIds": [],
+      "note": "Natural DNR parcel known; intervening road/property right-of-way and final visitor approach not cleared."
+    },
+    {
+      "sourceId": "uptravel-western-feature-2024",
+      "sourceName": "Manabezho Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "manabezho-falls"
+      ],
+      "note": "Existing Porcupine Mountains published guide."
+    },
+    {
+      "sourceId": "uptravel-western-feature-2024",
+      "sourceName": "Power House Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "power-house-falls"
+      ],
+      "note": "Existing Baraga Falls River guide."
+    },
+    {
+      "sourceId": "uptravel-western-feature-2024",
+      "sourceName": "Canyon Falls",
+      "disposition": "curated",
+      "curatedIds": [
+        "canyon-falls"
+      ],
+      "note": "Existing Canyon Falls roadside park visitor guide."
     }
   ],
   "auditLimitations": [
     "Crosswalk records major regional editorial lists rather than every item in every statewide dynamic directory or all 300+ purported U.P. features.",
     "A tourism name or geographic point alone never certifies public walking access, a legal parking area, a currently open attraction, or a safe view.",
     "Regional source listing names were normalized against curated guide identities and research variants; source counts are mentions, not confirmed distinct waterfalls.",
-    "Published destination statuses are a snapshot of the November 8, 2026 GitHub main branch; public website deployment is independently verified only after release."
+    "Published destination statuses are a snapshot of the November 8, 2026 GitHub main branch; public website deployment is independently verified only after release.",
+    "UP Travel's primary waterfall page uses '300+' as a region-wide estimate; its current listing directory exposes regional filtering and approximate address strings, but that count is not the number of independently visitor-cleared waterfall stops. The separate February 2024 western feature provides a precise eleven-name comparison."
   ]
 }
