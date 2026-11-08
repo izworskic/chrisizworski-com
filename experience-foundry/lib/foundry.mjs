@@ -94,7 +94,7 @@ export function compile(spec,registry,{now = new Date()} = {}) {
   const html=RECIPES[spec.recipe].render(renderedSpec,{now});
   const lookup=new Map(registry.tools.map(t=>[t.id,t]));
   const report={
-    schemaVersion:2,foundryVersion:'0.2.0',evaluatedAt:now.toISOString(),
+    schemaVersion:2,foundryVersion:'0.3.0',evaluatedAt:now.toISOString(),
     specHash:createHash('sha256').update(JSON.stringify(spec)).digest('hex'),
     registryHash:createHash('sha256').update(JSON.stringify(registry)).digest('hex'),
     evidenceStates:renderedSpec.records.map(r=>({id:r.id,kind:r.kind,issuedAt:r.issuedAt,observedAt:r.observedAt||null,qualification:qualification(r,now)})),
