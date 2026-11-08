@@ -247,8 +247,8 @@ test('hard identities: wilderness, same-name streams, closures and group cascade
   assert.match(get(4474).barrier,/KEEP UNRESOLVED/);
   assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/research/bulldog-falls/'));
   assert.ok(!sitemap.includes('/upper-peninsula-waterfalls/research/siskiwit-falls/'));
-  assert.match(js,/identityReview\.canonicalName/);
+  assert.match(js,/identityReview\?\.canonicalName/);
   assert.match(js,/reviewedGuideIds/);
-  assert.match(js,/reviewed state GIS/);
+  assert.match(js,/linkedGisIds/);
   assert.match(html,/Thirteen previously unmatched names, investigated/);
 });
