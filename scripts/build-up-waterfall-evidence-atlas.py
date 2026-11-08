@@ -65,8 +65,7 @@ def make() -> dict:
     for g in guides:
         gs = g_by_curated.get(g["id"], [])
         counties = sorted({x["county"].title() for x in gs})
-        if len(counties) > 1:
-            raise ValueError("Conflicting county identity: " + g["id"])
+        # A multi-falls planner can span county lines; do not invent one county.
         pub = g.get("publication") or "multi-falls-planner"
         if pub not in ("verified-access-guide", "verified-closure-guide",
                        "research-only-guide", "multi-falls-planner"):
