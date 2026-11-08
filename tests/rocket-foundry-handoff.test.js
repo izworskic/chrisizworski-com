@@ -15,7 +15,7 @@ const paths={
  alaska:'/kodiak-rocket-launch-viewing/',
  hawaii:'/barking-sands-rocket-launch-viewing/'
 };
-function harness(region,{id=A,withVia=true,stage='access',api=null}={}){
+function harness(region,{id=A,withVia=true,stage='access',api=null,analytics=true}={}){
  const listeners={},ga=[],va=[],fetches=[];
  const children=[];
  const main={children,insertBefore(x){children.unshift(x);},
@@ -37,10 +37,12 @@ function harness(region,{id=A,withVia=true,stage='access',api=null}={}){
  const url='https://chrisizworski.com'+paths[region]+
   '?launchId='+id+(withVia?'&via=rocket-foundry&stage='+stage:'');
  const win={
-  location:{href:url,origin:'https://chrisizworski.com'},
-  gtag(...args){ga.push(args);},
-  va(...args){va.push(args);}
+  location:{href:url,origin:'https://chrisizworski.com'}
  };
+ if(analytics){
+  win.gtag=(...args)=>ga.push(args);
+  win.va=(...args)=>va.push(args);
+ }
  const context={
   window:win,document:doc,URL,URLSearchParams,
   fetch:async q=>{fetches.push(q);return api?api(q):{ok:false,status:404};}
@@ -120,6 +122,19 @@ test('Vandenberg verifies selected ID via existing national API before preservin
  await new Promise(setImmediate);
  assert.equal(bad.main.children[0].dataset.restoration,'unavailable');
  assert.equal(new URL(bad.links[0].href).searchParams.has('launchId'),false);
+});
+test('regional restoration queues its bounded event even before optional analytics loads',()=>{
+ const h=harness('hawaii',{analytics:false});
+ assert.equal(typeof h.win.va,'function','regional queue must be initialized by receipt');
+ assert.equal(h.win.RocketFoundryHandoff.loaded('hawaii',A,'Mission A'),true);
+ assert.equal(h.win.vaq.length,1);
+ const event=Array.from(h.win.vaq[0]);
+ assert.equal(event[0],'event');
+ assert.equal(event[1].name,'Rocket Foundry Mission Restored');
+ assert.equal(event[1].data.region,'hawaii');
+ assert.equal(event[1].data.stage,'access');
+ assert.equal(event[1].data.destination,'regional_guide');
+ assert.doesNotMatch(JSON.stringify(event),new RegExp(A));
 });
 test('no-JS navigation remains a static guide without a false mission-success claim',()=>{
  for(const file of Object.values({
