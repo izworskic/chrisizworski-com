@@ -81,7 +81,7 @@ const seasonalDesk='<section class="editorial seaway-seasonal-desk" id="seaway-s
 replaceOnce('<section class="editorial resources">',seasonalDesk+'<section class="editorial resources">');
 
 // Keep the measurement script next to the Seaway UI, without a new data API.
-const funnelAnchor='<script defer src="/assets/seaway.js?v=20261108g"></script>';
+const funnelAnchor='<script defer src="/assets/seaway.js?v=20261108i"></script>';
 replaceOnce(funnelAnchor,funnelAnchor+'<script defer src="/assets/seaway-seasonal-funnel.js?v=20261105a"></script>');
 // Experience Foundry pilot 02: a selected-vessel passage desk directly below
 // the map + ship list. The panel stays hidden until a real AIS report is chosen.
@@ -94,9 +94,9 @@ const followFreighter='<section class="follow-panel" id="followFreighter" aria-l
 '<div id="followFreighterContent"></div></section>';
 replaceOnce('<div id="regionReports" class="region-reports"',followFreighter+'<div id="regionReports" class="region-reports"');
 replaceOnce('<p id="shipAttribution" class="fine">','<button id="followSelectedShip" type="button" class="button follow-list-button" aria-controls="followFreighter" hidden>Follow the selected ship\'s journey ↓</button><p id="shipAttribution" class="fine">');
-replaceOnce('<link rel="stylesheet" href="/assets/seaway.css?v=20261108f">','<link rel="stylesheet" href="/assets/seaway.css?v=20261108f"><link rel="stylesheet" href="/assets/seaway-follow.css?v=20261108a">');
+replaceOnce('<link rel="stylesheet" href="/assets/seaway.css?v=20261108i">','<link rel="stylesheet" href="/assets/seaway.css?v=20261108i"><link rel="stylesheet" href="/assets/seaway-follow.css?v=20261108a">');
 // The follow module loads first, then mounts inside the existing live AIS UI.
-replaceOnce('<script defer src="/assets/seaway.js?v=20261108g"></script>','<script defer src="/assets/seaway-follow.js?v=20261108a"></script><script defer src="/assets/seaway.js?v=20261108g"></script>');
+replaceOnce('<script defer src="/assets/seaway.js?v=20261108i"></script>','<script defer src="/assets/seaway-follow.js?v=20261108a"></script><script defer src="/assets/seaway.js?v=20261108i"></script>');
 if(!html.includes('id="followFreighter"')||!html.includes('aria-controls="followFreighter"'))throw new Error('Follow the Freighter generation missing');
 
 fs.writeFileSync(file,html);
