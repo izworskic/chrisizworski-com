@@ -89,11 +89,11 @@ replaceOnce(funnelAnchor,funnelAnchor+'<script defer src="/assets/seaway-seasona
 const followFreighter='<section class="follow-panel" id="followFreighter" aria-labelledby="followFreighterTitle" data-has-ship="false" hidden>'+
 '<p class="follow-kicker">After choosing a ship · an individual river story</p>'+
 '<h2 id="followFreighterTitle">Follow the Freighter</h2>'+
-'<p class="follow-intro-copy">From the selected AIS radio report, explore the documented river chapter, locks within it, and verified public viewpoints. Other stretches are a geographic guide, not that ship\\'s confirmed route.</p>'+
+'<p class="follow-intro-copy">From the selected AIS radio report, explore the documented river chapter, locks within it, and verified public viewpoints. Other stretches are a geographic guide, not that ship\'s confirmed route.</p>'+
 '<p class="follow-status" id="followFreighterStatus" role="status" aria-live="polite"></p>'+
 '<div id="followFreighterContent"></div></section>';
 replaceOnce('<div id="regionReports" class="region-reports"',followFreighter+'<div id="regionReports" class="region-reports"');
-replaceOnce('<p id="shipAttribution" class="fine">','<button id="followSelectedShip" type="button" class="button follow-list-button" aria-controls="followFreighter" hidden>Follow the selected ship\\'s journey ↓</button><p id="shipAttribution" class="fine">');
+replaceOnce('<p id="shipAttribution" class="fine">','<button id="followSelectedShip" type="button" class="button follow-list-button" aria-controls="followFreighter" hidden>Follow the selected ship\'s journey ↓</button><p id="shipAttribution" class="fine">');
 replaceOnce('<link rel="stylesheet" href="/assets/seaway.css?v=20261107c">','<link rel="stylesheet" href="/assets/seaway.css?v=20261107c"><link rel="stylesheet" href="/assets/seaway-follow.css?v=20261108a">');
 // The follow module loads first, then mounts inside the existing live AIS UI.
 replaceOnce('<script defer src="/assets/seaway.js?v=20261107c"></script>','<script defer src="/assets/seaway-follow.js?v=20261108a"></script><script defer src="/assets/seaway.js?v=20261107c"></script>');
