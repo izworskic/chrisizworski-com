@@ -73,10 +73,13 @@ function chooseHour(weather,when,window,now,zone){
  if(!weather?.ok||!validAge(weather.checkedAt,now,MAX_WEATHER_AGE)||!Array.isArray(weather.periods))
    return {level:'unknown',label:'Weather not verified',note:'The NWS hourly forecast is unavailable or older than 35 minutes. Check NWS before leaving.',at:null,period:null,alerts:[]};
  const valid=weather.periods.filter(p=>Number.isFinite(Date.parse(p?.starts||''))&&
-   Number.isFinite(Date.parse(p?.ends||''))&&Date.parse(p.ends)>Date.parse(p.starts)&&Date.parse(p.ends)>now-3600000);
+   Number.isFinite(Date.parse(p?.ends||''))&&Date.parse(p.ends)>Date.parse(p.starts)&&Date.parse(p.ends)>now-3600000)
+   .sort((a,b)=>Date.parse(a.starts)-Date.parse(b.starts));
  if(!valid.length)return {level:'unknown',label:'No usable hourly forecast',note:'NWS returned no forecast for the chosen period.',at:null,period:null,alerts:[]};
+ const start=window?Math.max(now,Date.parse(window.start)):null;
+ const finish=window?Date.parse(window.end):null;
  let selected=null;
- let target=window?Math.max(now,Date.parse(window.start)):when==='tomorrow'?null:now+20*60000;
+ let target=start===null?when==='tomorrow'?null:now+20*60000:start;
  if(when==='tomorrow'){
    const key=tomorrowKey(now,zone);
    selected=valid.filter(p=>dayKey(p.starts,zone)===key&&p.isDaytime===true)
@@ -87,33 +90,51 @@ function chooseHour(weather,when,window,now,zone){
  }
  if(!selected)return {level:'unknown',label:'Chosen-hour forecast unavailable',note:'Do not substitute an unrelated hour or an earlier day for your viewing time.',at:null,period:null,alerts:[]};
  target=Math.max(now,Date.parse(selected.starts));
- const severity=(Array.isArray(weather.alerts)?weather.alerts:[]).filter(a=>{
-   const start=Date.parse(a.starts||'');
-   const end=Date.parse(a.expires||'');
-   return (!Number.isFinite(start)||start<=target)&&(!Number.isFinite(end)||end>target);
+ // A visit spanning hours must check every relevant hourly interval, not just
+ // the initial conditions. Incomplete time coverage cannot become favorable.
+ const fullWindow=Number.isFinite(start)&&Number.isFinite(finish)&&finish>start;
+ const watchStart=fullWindow?start:Date.parse(selected.starts);
+ const watchEnd=fullWindow?finish:Date.parse(selected.ends);
+ const scope=valid.filter(p=>Date.parse(p.starts)<watchEnd&&Date.parse(p.ends)>watchStart);
+ let cursor=watchStart;
+ for(const p of scope) {
+   const a=Date.parse(p.starts),b=Date.parse(p.ends);
+   if(a>cursor)break;
+   cursor=Math.max(cursor,b);
+ }
+ const fullyCovered=scope.length>0&&cursor>=watchEnd;
+ const effective=scope.length?scope:[selected];
+ const overlappingAlerts=(Array.isArray(weather.alerts)?weather.alerts:[]).filter(a=>{
+   const aStart=Date.parse(a.starts||''),aEnd=Date.parse(a.expires||'');
+   return (!Number.isFinite(aStart)||aStart<watchEnd)&&(!Number.isFinite(aEnd)||aEnd>watchStart);
  });
- const important=severity.filter(a=>['Severe','Extreme'].includes(a.severity));
- const hardWind=selected.windMph!==null&&selected.windMph>=35;
- const highPrecip=selected.precipProbability!==null&&selected.precipProbability>=75;
- const dark=selected.isDaytime===false;
- const cold=selected.temperatureF!==null&&selected.temperatureF<=25;
- const wind=selected.windMph!==null&&selected.windMph>=18;
- const rain=selected.precipProbability!==null&&selected.precipProbability>=45;
+ const important=overlappingAlerts.filter(a=>['Severe','Extreme'].includes(a.severity));
+ const hardWind=effective.some(p=>p.windMph!==null&&p.windMph>=35);
+ const highPrecip=effective.some(p=>p.precipProbability!==null&&p.precipProbability>=75);
+ const dark=effective.some(p=>p.isDaytime===false);
+ const cold=effective.some(p=>p.temperatureF!==null&&p.temperatureF<=25);
+ const wind=effective.some(p=>p.windMph!==null&&p.windMph>=18);
+ const rain=effective.some(p=>p.precipProbability!==null&&p.precipProbability>=45);
+ const windValues=effective.map(p=>p.windMph).filter(Number.isFinite);
+ const precipValues=effective.map(p=>p.precipProbability).filter(Number.isFinite);
+ const tempValues=effective.map(p=>p.temperatureF).filter(Number.isFinite);
  const weatherSummary=[
-   selected.temperatureF===null?null:Math.round(selected.temperatureF)+'°F',
-   selected.windMph===null?null:'wind up to '+selected.windMph+' mph',
-   selected.precipProbability===null?null:selected.precipProbability+'% precipitation chance',
+   tempValues.length?(Math.round(Math.min(...tempValues))+'–'+Math.round(Math.max(...tempValues))+'°F'):null,
+   windValues.length?'wind up to '+Math.max(...windValues)+' mph':null,
+   precipValues.length?Math.max(...precipValues)+'% highest hourly precipitation chance':null,
    selected.shortForecast||null
  ].filter(Boolean).join(' · ');
  let level='favorable',label='No major hourly limiter identified';
- if(important.length||hardWind) {level='avoid';label=important.length?'Active severe NWS alert':'Very strong forecast wind';}
- else if(dark||highPrecip||cold||wind||rain){level='caution';label=dark?'Viewing hour is after dark':'Conditions may be uncomfortable';}
+ if(important.length||hardWind) {level='avoid';label=important.length?'Active severe NWS alert in visit window':'Very strong forecast wind in visit window';}
+ else if(!fullyCovered){level='unknown';label='Forecast incomplete for the full viewing window';}
+ else if(dark||highPrecip||cold||wind||rain){level='caution';label=dark?'Part of the viewing window is after dark':'Conditions may be uncomfortable';}
  if(weather.alertsStatus!=='available'&&level==='favorable') {level='unverified';label='Weather alerts could not be checked';}
  return {level,label,
    note:weatherSummary+(important.length?' · Alert: '+important.map(a=>a.event).join(', '):'')+
+     (fullWindow&&!fullyCovered?' · NWS forecast does not cover the whole ship window.':'')+
      (weather.alertsStatus!=='available'?' · NWS active alerts not verified.':'')+
-     ' · NWS hourly shore forecast, not an observed condition or safety clearance.',
-   at:selected.starts,period:selected,alerts:severity,
+     ' · NWS hourly shore forecast for the viewing window, not observed conditions or safety clearance.',
+   at:selected.starts,period:selected,alerts:overlappingAlerts,
    sourceUrl:weather.sourceUrl,checkedAt:weather.checkedAt
  };
 }
