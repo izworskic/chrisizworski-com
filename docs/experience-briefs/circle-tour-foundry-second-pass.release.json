@@ -70,7 +70,7 @@
       "kind": "reverse",
       "input": "Choose stops 15 then 18; use Next planned stop, then Previous planned stop",
       "expectedVisibleAnswer": "LSPP decision changes to Pukaskwa and returns to LSPP without losing trip IDs, date or category.",
-      "sourceAndSafety": "Only published itinerary direction is allowed to affect true route order; custom trip follows selection order."
+      "sourceAndSafety": "The original planner's saved selection order is authoritative, including applied clockwise direction; the bridge never reverses it a second time."
     },
     {
       "kind": "no-js",
@@ -116,13 +116,19 @@
       768,
       1440
     ],
-    "browserStatus": "PENDING",
-    "scopeNote": "The final candidate will be tested in real Chromium with stop A-B-A, date, direction, source failure, no-JS, no-tiles, 360/390/768/1366/1440px, focus visibility and screenshot review. Status remains pending until observed."
+    "browserStatus": "PASSED",
+    "scopeNote": "Actual Chromium assertions passed at 360, 390, 768, 1366 and 1440px. Tested route-step A-B-A, keyboard Enter, applied original clockwise stop sequence, explicit no-match reset, date/season, map-import failure, catalog 503 and no JavaScript. Screenshots are retained as artifacts; independent visual screenshot inspection and observed visitor outcomes are not claimed.",
+    "browserRun": "https://github.com/izworskic/chrisizworski-com/actions/runs/42494698902",
+    "screenshotEvidence": [
+      "https://github.com/izworskic/chrisizworski-com/actions/runs/42494698902/artifacts/13622599475"
+    ]
   },
   "photos": [],
   "release": {
     "implemented": {
-      "status": "PENDING"
+      "status": "CONFIRMED",
+      "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/pull/1584",
+      "checkedDate": "2026-11-08"
     },
     "verified": {
       "status": "PENDING"
