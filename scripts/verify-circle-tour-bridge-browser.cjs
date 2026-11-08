@@ -98,7 +98,7 @@ function check(value,message){if(!value)throw Error(message);}
   // A published, actually applied clockwise route may reverse sequence; a generic
   // preview-only direction control cannot silently reorder a custom selection.
   const routeCtx=await browser.newContext({viewport:{width:390,height:844}}),routePage=await routeCtx.newPage();
-  await routePage.goto(url+'?plan=11%2C15%2C18&itinerary=10&direction=clockwise&ctTheme=parks',{waitUntil:'domcontentloaded',timeout:35000});
+  await routePage.goto(url+'?plan=18%2C15%2C11&itinerary=10&direction=clockwise&ctTheme=parks',{waitUntil:'domcontentloaded',timeout:35000});
   await routePage.waitForFunction(()=>document.querySelector('#ctb-decision .ctb-stage-title')?.textContent.includes('Pukaskwa'),null,{timeout:30000});
   check((await routePage.locator('#ctb-decision').textContent()).includes('STOP 1 OF 3'),'published route should have a real step');
   await routePage.locator('#ctb-decision .ctb-nav-button').last().click();
