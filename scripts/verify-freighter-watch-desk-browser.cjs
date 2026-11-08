@@ -13,6 +13,7 @@ fs.mkdirSync(shots,{recursive:true});
 const leafletJs='/tmp/fwd-playwright/node_modules/leaflet/dist/leaflet.js';
 const leafletCss='/tmp/fwd-playwright/node_modules/leaflet/dist/leaflet.css';
 const now=Date.now(),iso=x=>new Date(x).toISOString();
+const tilePng=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScLttAAAAABJRU5ErkJggg==','base64');
 const ship={mmsi:'366123456',name:'Browser fixture freighter',lat:46.52,lon:-84.41,
   seen:iso(now-4*60000),speedKnots:8,course:90,lengthMeters:300,confidence:.83,
   window:{start:iso(now+15*60000),end:iso(now+75*60000)}};
@@ -47,17 +48,26 @@ const server=http.createServer((req,res)=>{
     for(const width of [360,390,768,1440]){
       const context=await browser.newContext({viewport:{width,height:900},reducedMotion:'reduce'});
       const page=await context.newPage();
+      const missingKeyTiles=[];
       const pageErrors=[];
       page.on('pageerror',error=>pageErrors.push(String(error.message || error)));
       await page.route('**/leaflet.js',r=>r.fulfill({path:leafletJs,contentType:'application/javascript'}));
       await page.route('**/leaflet.css',r=>r.fulfill({path:leafletCss,contentType:'text/css'}));
       await page.route('**/api/soo-ais',r=>r.fulfill({json:soo}));
+      await page.route('**/api/carto-basemap-config',r=>r.fulfill({json:{provider:'CARTO',key:'test-public-key'}}));
+      await page.route('**/light_all/**',r=>{
+        if(new URL(r.request().url()).searchParams.get('key')!=='test-public-key')
+          missingKeyTiles.push(r.request().url());
+        return r.fulfill({body:tilePng,contentType:'image/png'});
+      });
       await page.route('**/api/freighter-ais',r=>r.fulfill({json:general}));
       await page.route('**/api/duluth-canal',r=>r.fulfill({json:{ok:true,checkedAt:iso(now),candidates:[],mapVessels:[],watchPick:null}}));
       await page.goto(base+'/great-lakes-ship-watching-spots/',{waitUntil:'domcontentloaded'});
       assert.equal(await page.locator('text=October 11, 2026').count(),0,'hard-coded stale hero date removed');
       await page.waitForFunction(()=>['observed','window','unknown','unavailable'].includes(document.querySelector('#fwd-status').dataset.status));
       await page.waitForFunction(()=>document.querySelector('#fwd-map').dataset.ready==='true');
+      await page.waitForFunction(()=>document.querySelector('#fwd-map').dataset.basemap==='carto');
+      assert.equal(missingKeyTiles.length,0,'no unkeyed CARTO tile requests');
       assert.match(await page.textContent('#fwd-local-date'),/November 8, 2026/);
       assert.match(await page.textContent('#fwd-viewing-location'),/Soo Locks observation platform/);
       assert.equal(pageErrors.length,0,'no startup page errors on default load');
@@ -86,6 +96,18 @@ const server=http.createServer((req,res)=>{
       await context.close();
       cases+=4;
     }
+    const fallback=await browser.newContext({viewport:{width:390,height:800}});
+    const fallbackPage=await fallback.newPage();
+    await fallbackPage.route('**/leaflet.js',r=>r.fulfill({path:leafletJs,contentType:'application/javascript'}));
+    await fallbackPage.route('**/leaflet.css',r=>r.fulfill({path:leafletCss,contentType:'text/css'}));
+    await fallbackPage.route('**/api/soo-ais',r=>r.fulfill({json:soo}));
+    await fallbackPage.route('**/api/carto-basemap-config',r=>r.fulfill({status:503,json:{error:'unavailable'}}));
+    await fallbackPage.route('**/tile.openstreetmap.org/**',r=>r.fulfill({body:tilePng,contentType:'image/png'}));
+    await fallbackPage.goto(base+'/great-lakes-ship-watching-spots/',{waitUntil:'domcontentloaded'});
+    await fallbackPage.waitForFunction(()=>document.querySelector('#fwd-map').dataset.basemap==='osm');
+    assert.match(await fallbackPage.textContent('#fwd-map-note'),/OpenStreetMap fallback/);
+    await fallback.close();
+    cases++;
     const noMap=await browser.newContext({viewport:{width:390,height:800}});
     const p=await noMap.newPage();
     await p.route('**/leaflet.js',r=>r.abort());

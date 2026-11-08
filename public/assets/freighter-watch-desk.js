@@ -198,7 +198,45 @@
     const localDate=doc.getElementById('fwd-local-date');
     if(!select||!when||!refresh||!mapBox||!next)return;
     let map=null, layer=null, generation=0, active=null, lastResult=null;
-    let fallbackRequested=false;
+    let fallbackRequested=false, baseLayer=null, fallbackTiles=false, basemapName='Loading basemap', mapSummary='Area map';
+    function showMapStatus(){mapStatus.textContent=mapSummary+' · '+basemapName;}
+    function fallbackBasemap(){
+      if(!map||fallbackTiles)return;
+      fallbackTiles=true;
+      if(baseLayer)map.removeLayer(baseLayer);
+      basemapName='OpenStreetMap fallback';
+      mapBox.dataset.basemap='osm';
+      const tiles=window.L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
+        attribution:'&copy; OpenStreetMap contributors',maxZoom:18
+      });
+      let missing=0;
+      tiles.on('tileerror',()=>{if(++missing>=3){basemapName='Basemap unavailable';mapBox.dataset.basemap='unavailable';showMapStatus();}});
+      tiles.on('tileload',()=>{if(mapBox.dataset.basemap!=='unavailable'){basemapName='OpenStreetMap fallback';showMapStatus();}});
+      baseLayer=tiles.addTo(map);
+      showMapStatus();
+    }
+    async function loadBasemap(){
+      const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),7000);
+      try{
+        const response=await fetch('/api/carto-basemap-config',{
+          credentials:'same-origin',headers:{Accept:'application/json'},signal:controller.signal
+        });
+        if(!response.ok)throw Error('No usable CARTO configuration');
+        const cfg=await response.json();
+        if(cfg?.provider!=='CARTO'||typeof cfg.key!=='string'||!cfg.key.trim())
+          throw Error('No valid public CARTO key');
+        const url='https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png?key='+encodeURIComponent(cfg.key.trim());
+        const tiles=window.L.tileLayer(url,{
+          attribution:'&copy; OpenStreetMap contributors &copy; CARTO',
+          maxZoom:18,subdomains:'abcd'
+        });
+        let missing=0;
+        tiles.on('tileload',()=>{if(!fallbackTiles){basemapName='CARTO map';mapBox.dataset.basemap='carto';showMapStatus();}});
+        tiles.on('tileerror',()=>{if(++missing>=3)fallbackBasemap();});
+        baseLayer=tiles.addTo(map);
+      }catch(_){fallbackBasemap();}
+      finally{clearTimeout(timeout);}
+    }
     function showLocalDate(){
       if(!localDate)return;
       const config=CONFIG[select.value] || CONFIG.soo;
@@ -240,23 +278,9 @@
       }
       mapBox.replaceChildren();
       map=window.L.map(mapBox,{scrollWheelZoom:false,zoomControl:true}).setView(CONFIG[select.value].center,CONFIG[select.value].zoom);
-      const tiles=window.L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{
-        attribution:'&copy; OpenStreetMap contributors &copy; CARTO',maxZoom:18,subdomains:'abcd'
-      });
-      let failedTiles=0, alternate=false;
-      tiles.on('tileerror',()=>{
-        failedTiles++;
-        if(failedTiles>=5 && !alternate){
-          alternate=true;
-          map.removeLayer(tiles);
-          window.L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
-            attribution:'&copy; OpenStreetMap contributors',maxZoom:18
-          }).on('tileerror',()=>{mapStatus.textContent='Base map unavailable. The vessel evidence list is still usable.';}).addTo(map);
-        }
-      });
-      tiles.addTo(map);
       layer=window.L.layerGroup().addTo(map);
       mapBox.dataset.ready='true';
+      void loadBasemap();
     }
     function shipMarker(v){
       const size=Number(v.lengthMeters)>=298?42:Number(v.lengthMeters)>=190?36:30;
@@ -290,7 +314,8 @@
       }
       if(!coords.length)map.setView(conf.center,conf.zoom);
       else map.fitBounds([conf.center,...coords],{padding:[32,32],maxZoom:conf.zoom});
-      mapStatus.textContent=coords.length?coords.length+' recent AIS ship position'+(coords.length===1?'':'s')+' · not guaranteed shore sightings':'No eligible ship reports in this area at the last check. Map still shows the waterway.';
+      mapSummary=coords.length?coords.length+' recent AIS ship position'+(coords.length===1?'':'s')+' · not guaranteed shore sightings':'No eligible ship reports in this area at the last check. The map still shows the waterway.';
+      showMapStatus();
       map.invalidateSize();
     }
     async function load(){
