@@ -289,9 +289,11 @@ const whenReady=page=>page.waitForFunction(id=>
   await page.route('https://*.basemaps.cartocdn.com/**',route=>route.abort());
   await page.goto(base+'?region=florida&launchId='+A,{waitUntil:'domcontentloaded'});
   await page.waitForFunction(id=>document.querySelector('#rl-flight-desk')?.dataset.launchId===id,A);
-  await page.waitForFunction(()=>document.querySelector('#rl-access-answer')?.textContent
-    .includes('Florida source checked.')||
-    document.querySelector('#rl-access-answer')?.textContent.includes('not verified.'));
+  await page.waitForFunction(mismatch=>{
+    const text=document.querySelector('#rl-access-answer')?.textContent||'';
+    return mismatch?text.includes('another mission, so no access status was adopted'):
+      text.includes('Florida source checked.');
+  },scenario.mismatch,{timeout:18000});
   const summary=await page.locator('#rl-access-summary').innerText();
   assert(summary.includes('Titusville')&&summary.includes('Space View Park'),
     scenario.name+' still substitutes an engine description for an answer');
