@@ -72,7 +72,7 @@ def make() -> dict:
             raise ValueError("Unknown curated publication: " + pub)
         records.append({
             "id": "guide:" + g["id"], "kind": "guide", "name": g["name"],
-            "county": counties[0] if counties else None,
+            "county": counties[0] if len(counties) == 1 else None,
             "river": None, "place": g.get("place"),
             "lat": g.get("lat"), "lng": g.get("lng"),
             "sourceUrl": g.get("source"),
