@@ -37,6 +37,6 @@ test('both Seaway routes and their generator use the fresh version of the shared
   ];
   for(const file of files){
     const content=fs.readFileSync(file,'utf8');
-    assert.ok(content.includes('/assets/seaway.js?v=20261108g'),file+' must load the feet-label renderer');
+    assert.ok(content.includes('/assets/seaway.js?v=20261108i'),file+' must load the feet-label renderer');
   }
 });

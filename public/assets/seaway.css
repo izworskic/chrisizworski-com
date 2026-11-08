@@ -105,3 +105,47 @@
 .leaflet-popup-content .seaway-popup-figure figcaption{font:10px/1.4 system-ui,sans-serif;margin:5px 0 0;color:#5b6e71}
 .map-selection .seaway-photo-credit-outside{font:11px/1.5 system-ui,sans-serif;color:#49636a;margin-top:8px}
 .map-selection .seaway-photo-credit-outside a{display:inline;color:#246274;text-decoration:underline}
+
+/* AIS vessel-type silhouettes on ship maps and the recent-reports list.
+   The SVG uses authored paths, not fetched photos or unreliable name heuristics.
+   Length sets a screen-scale band only; marker size is NOT a chart distance. */
+.seaway-ship-marker,.ship-card .ship-symbol,.seaway-type-glyph{--vessel-color:#18778e}
+.seaway-ship-marker.type-cargo,.ship-card .ship-symbol.type-cargo,.seaway-type-legend .type-cargo{--vessel-color:#19748d}
+.seaway-ship-marker.type-tanker,.ship-card .ship-symbol.type-tanker,.seaway-type-legend .type-tanker{--vessel-color:#806d96}
+.seaway-ship-marker.type-passenger,.ship-card .ship-symbol.type-passenger,.seaway-type-legend .type-passenger{--vessel-color:#357b67}
+.seaway-ship-marker.type-tug,.ship-card .ship-symbol.type-tug,.seaway-type-legend .type-tug{--vessel-color:#a16a36}
+.seaway-ship-marker.type-pleasure,.ship-card .ship-symbol.type-pleasure,.seaway-type-legend .type-pleasure{--vessel-color:#4d84ae}
+.seaway-ship-marker.type-sail,.ship-card .ship-symbol.type-sail,.seaway-type-legend .type-sail{--vessel-color:#54828f}
+.seaway-ship-marker.type-fishing,.ship-card .ship-symbol.type-fishing,.seaway-type-legend .type-fishing{--vessel-color:#65835b}
+.seaway-ship-marker.type-service,.ship-card .ship-symbol.type-service,.seaway-type-legend .type-service{--vessel-color:#8f6e4f}
+.seaway-ship-marker.type-unknown,.ship-card .ship-symbol.type-unknown,.seaway-type-legend .type-unknown{--vessel-color:#74828a}
+.seaway-ship-marker .ship-hull,.ship-card .ship-symbol .ship-hull,.seaway-type-legend .ship-hull{fill:var(--vessel-color);stroke:#fff;stroke-width:1.8;stroke-linejoin:round}
+.seaway-ship-marker .ship-house,.ship-card .ship-symbol .ship-house,.seaway-type-legend .ship-house{fill:#f6f8f4;stroke:var(--vessel-color);stroke-width:1}
+.seaway-ship-marker .ship-stack,.ship-card .ship-symbol .ship-stack,.seaway-type-legend .ship-stack{fill:#e4ebe5}
+.seaway-ship-marker .ship-window,.ship-card .ship-symbol .ship-window,.seaway-type-legend .ship-window{fill:#244854}
+.seaway-ship-marker .ship-hatch,.ship-card .ship-symbol .ship-hatch,.seaway-type-legend .ship-hatch{fill:#d3e5de;stroke:#fff;stroke-width:1}
+.seaway-ship-marker .ship-tank,.ship-card .ship-symbol .ship-tank,.seaway-type-legend .ship-tank{fill:#b7d1d7;stroke:var(--vessel-color);stroke-width:1}
+.seaway-ship-marker .ship-sail,.ship-card .ship-symbol .ship-sail,.seaway-type-legend .ship-sail{fill:#f5f3e6;stroke:var(--vessel-color);stroke-width:1.1;stroke-linejoin:round}
+.seaway-ship-marker .ship-mast,.ship-card .ship-symbol .ship-mast,.seaway-type-legend .ship-mast{fill:none;stroke:#274955;stroke-width:2;stroke-linecap:round}
+.seaway-ship-marker .ship-windows,.ship-card .ship-symbol .ship-windows,.seaway-type-legend .ship-windows{fill:none;stroke:#25515c;stroke-width:2.2;stroke-linecap:round}
+.seaway-ship-marker .ship-detail,.ship-card .ship-symbol .ship-detail,.seaway-type-legend .ship-detail{fill:none;stroke:#f1f5f1;stroke-width:1.7;stroke-linecap:round}
+.seaway-ship-marker.is-stopped .ship-hull{fill:#8c7350}
+.seaway-ship-marker.is-unknown .ship-hull{fill:#68797f}
+.seaway-ship-marker.is-selected .ship-hull{fill:#ab543e;stroke:#fff;stroke-width:2.4}
+/* Keep card rows aligned while making reported small craft visibly shorter. */
+.ship-card .ship-symbol{display:flex;align-items:center;justify-content:center}
+.ship-card .ship-symbol.size-small svg{width:23px;height:17px}
+.ship-card .ship-symbol.size-medium svg{width:29px;height:19px}
+.ship-card .ship-symbol.size-large svg{width:35px;height:22px}
+.ship-card .ship-symbol.size-unknown svg{width:30px;height:19px}
+.seaway-type-legend{padding:7px 14px 10px;border-top:1px solid #e0e7e3;background:#f7f9f6}
+.seaway-type-legend-items{display:flex;align-items:center;flex-wrap:wrap;gap:5px 10px}
+.seaway-type-legend-item{display:inline-flex;align-items:center;gap:4px;min-width:0;white-space:nowrap;font:600 10px/1.3 system-ui,sans-serif;color:#2f5962}
+.seaway-type-glyph{display:inline-block;flex:0 0 26px;width:26px;height:16px}
+.seaway-type-glyph svg{display:block;width:26px;height:16px}
+.seaway-type-legend p.fine{margin:5px 0 0;font-size:10px;line-height:1.4;color:#63777c}
+@media(max-width:550px){
+ .seaway-type-legend{padding:8px 10px}
+ .seaway-type-legend-items{gap:6px 9px}
+ .seaway-type-legend-item{font-size:10px}
+}

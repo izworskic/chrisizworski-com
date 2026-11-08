@@ -1,7 +1,7 @@
 /* Seaway ship watch: recent observations, verified places, and educational models. */
 (()=>{
   'use strict';
-  const D=window.SeawayReference,C=window.SeawayCore,$=id=>document.getElementById(id);
+  const D=window.SeawayReference,C=window.SeawayCore,Icons=window.SeawayVesselIcons,$=id=>document.getElementById(id);
   if(!D||!C)return;
   const regionById=new Map(D.regions.map(r=>[r.id,r])),lockById=new Map(D.locks.map(l=>[l.id,l])),viewById=new Map(D.viewpoints.map(v=>[v.id,v]));
   const cache=new Map(),errors=new Set(),markers=new Map(),clusterMarkers=new Map(),clusterGroups=new Map(),lockMarkers=new Map(),viewMarkers=new Map(),lockGroups=new Map();
@@ -135,10 +135,14 @@
         let card=[...container.children].find(n=>n.dataset.mmsi===v.mmsi);
         if(!card){card=el('button',undefined,'ship-card');card.type='button';card.dataset.mmsi=v.mmsi;card.addEventListener('click',()=>chooseShip(v.mmsi,true));container.append(card);}
         card.setAttribute('aria-pressed',String(selectedShip===v.mmsi));
-        const stamp=[v.name,v.seen,v.speedKnots,v.heading,v.course,v.lengthMeters,age(v.seen)].join('|');
+        const stamp=[v.name,v.seen,v.speedKnots,v.heading,v.course,v.lengthMeters,v.shipType,age(v.seen)].join('|');
         if(card.dataset.stamp!==stamp){
-          const top=el('strong',undefined,'ship-name'),symbol=el('span',undefined,'ship-symbol');symbol.innerHTML=shipSVG();top.append(symbol,el('span',v.name||'AIS vessel '+v.mmsi));
-          card.replaceChildren(top,el('span',C.motion(v)+' · '+C.direction(v),'meta'),el('span',(displayFeet(v.lengthMeters)?displayFeet(v.lengthMeters)+' · ':'')+'MMSI '+v.mmsi,'meta'),el('small','Heard '+age(v.seen)+' · '+time(v.seen)));
+          const top=el('strong',undefined,'ship-name'),symbol=el('span',undefined,'ship-symbol');
+          const shape=Icons?.icon(v,{zoom:11,selected:false});
+          symbol.classList.add('type-'+(shape?.kind||'unknown'),'size-'+(shape?.band||'unknown'));
+          symbol.innerHTML=shape?.html||shipSVG();
+          top.append(symbol,el('span',v.name||'AIS vessel '+v.mmsi));
+          card.replaceChildren(top,el('span',(shape?.label||'Type unknown')+' · '+C.motion(v)+' · '+C.direction(v),'meta'),el('span',(displayFeet(v.lengthMeters)?displayFeet(v.lengthMeters)+' · ':'')+'MMSI '+v.mmsi,'meta'),el('small','Heard '+age(v.seen)+' · '+time(v.seen)));
           card.dataset.stamp=stamp;
         }
         // Maintain order without detaching a focused control during refresh.
@@ -181,8 +185,34 @@
 
   }
   function shipIcon(v){
-    const z=map.getZoom(),chosen=v.mmsi===selectedShip,size=chosen?[60,34]:z<8?[42,26]:[48,29],state=!Number.isFinite(v.speedKnots)?'is-unknown':v.speedKnots<.5?'is-stopped':'';
-    return {key:size.join(':')+state+chosen,icon:L.divIcon({className:'seaway-ship-marker '+state+(chosen?' is-selected':''),html:shipSVG(),iconSize:size,iconAnchor:[size[0]/2,size[1]/2],popupAnchor:[0,-size[1]/2]})};
+    // Type is sourced from normalized AIS. Length only changes screen size.
+    const shape=Icons?.icon(v,{zoom:map.getZoom(),selected:v.mmsi===selectedShip});
+    if(shape){
+      const [w,h]=shape.size;
+      return {key:shape.key,kind:shape.kind,label:shape.label,
+        icon:L.divIcon({className:shape.className,html:shape.html,
+          iconSize:shape.size,iconAnchor:[w/2,h/2],popupAnchor:[0,-h/2]})};
+    }
+    // A failed optional icon script must not remove the real AIS marker.
+    const chosen=v.mmsi===selectedShip,size=chosen?[60,34]:[48,29];
+    return {key:'fallback:'+size.join(':'),kind:'unknown',label:'Vessel type unknown',
+      icon:L.divIcon({className:'seaway-ship-marker type-unknown',html:shipSVG(),
+        iconSize:size,iconAnchor:[size[0]/2,size[1]/2],popupAnchor:[0,-size[1]/2]})};
+  }
+  function renderVesselTypeLegend(){
+    const caption=$('mapStatus');
+    if(!caption||!Icons||document.getElementById('seawayTypeLegend'))return;
+    const legend=el('div',undefined,'seaway-type-legend');legend.id='seawayTypeLegend';
+    legend.setAttribute('role','group');legend.setAttribute('aria-label','Reported AIS vessel type symbols');
+    const items=el('div',undefined,'seaway-type-legend-items');
+    for(const type of Icons.KINDS){
+      const chip=el('span',undefined,'seaway-type-legend-item type-'+type.kind);
+      const glyph=el('span',undefined,'seaway-type-glyph');glyph.setAttribute('aria-hidden','true');
+      glyph.innerHTML=Icons.svg(type.kind);
+      chip.append(glyph,el('span',type.label));items.append(chip);
+    }
+    legend.append(items,el('p','Silhouette = reported AIS type · size = reported length (approximate screen scale). Missing types stay unknown; no position or route is inferred.','fine'));
+    caption.after(legend);
   }
   function vesselGroupIcon(group){
     const size=[68,44];
@@ -226,7 +256,7 @@
     for(const v of singles){
       const glyph=shipIcon(v);let m=markers.get(v.mmsi);
       if(!m){
-        m=L.marker([v.lat,v.lon],{icon:glyph.icon,keyboard:true,title:(v.name||'AIS vessel '+v.mmsi)+' · recent observed position',zIndexOffset:v.mmsi===selectedShip?1800:1100})
+        m=L.marker([v.lat,v.lon],{icon:glyph.icon,keyboard:true,title:(v.name||'AIS vessel '+v.mmsi)+' · '+glyph.label+' · recent observed position',zIndexOffset:v.mmsi===selectedShip?1800:1100})
           .addTo(shipsLayer).bindPopup(shipDetail(v),{maxWidth:270});
         m.on('click',()=>chooseShip(v.mmsi,false));
         m.on('popupopen',()=>{void window.SeawayPopupPhotos?.enhance(m,reportFor(v.mmsi)||v,document);});
@@ -313,7 +343,7 @@
     try{
       if(!window.L)throw new Error('Map library unavailable');
       map=L.map('seawayMap',{scrollWheelZoom:false,zoomControl:true,preferCanvas:true,worldCopyJump:true});
-      shipsLayer=L.layerGroup().addTo(map);fitRegion();
+      shipsLayer=L.layerGroup().addTo(map);fitRegion();renderVesselTypeLegend();
       for(const l of D.locks){
         const icon=L.divIcon({className:'seaway-lock-marker'+(l.id===selectedLock?' is-selected':''),html:'<span>'+l.number+'</span>',iconSize:[26,26],iconAnchor:[13,13]});
         const marker=L.marker([l.lat,l.lon],{icon,title:'Lock '+l.number+' · '+l.name,keyboard:true,zIndexOffset:500}).addTo(map).bindTooltip('Lock '+l.number+' · '+l.name,{direction:'top'});
