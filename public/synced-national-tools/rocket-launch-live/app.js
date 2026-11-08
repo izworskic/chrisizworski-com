@@ -547,20 +547,24 @@
     const access = data.access || {};
     const florida=data.region?.id==='florida'?
       window.RocketFloridaAccess?.assess(data,state.floridaEvidence):null;
+    const safety=$('rl-access-safety');if(safety)safety.hidden=Boolean(florida);
     const floridaAnswer=$('rl-access-answer');
     if(floridaAnswer){
       floridaAnswer.replaceChildren();floridaAnswer.hidden=!florida;
       if(florida){
         floridaAnswer.dataset.state=florida.state;
-        floridaAnswer.appendChild(el('strong','',florida.chosen.length?
-          'Viewing starting points: '+florida.chosen.map(x=>x.name).join(' / '):
-          'No pad-specific starting point established'));
+        floridaAnswer.appendChild(el('strong','',florida.npsClosed?
+          'Playalinda restriction: choose an unrestricted public alternative':
+          'Before leaving: check access for the specific launch'));
         floridaAnswer.appendChild(el('p','',florida.note));
         floridaAnswer.appendChild(el('p','rl-access-source-age',florida.matched?
           'Florida source checked. NPS alerts last checked '+stamp(florida.sourceCheckedAt)+
           '. No launch-specific gate permission or parking is established.':
           'Live Florida access evidence is not verified. Listed locations are published possibilities, not current gate reports.'));
-        const detail=anchor(florida.detailUrl,'View this mission’s detailed Florida access and weather');
+        const nps=anchor('https://www.nps.gov/cana/planyourvisit/conditions.htm',
+          'Check NPS Playalinda closures and hours');
+        if(nps)floridaAnswer.appendChild(nps);
+        const detail=anchor(florida.detailUrl,'Compare all Florida sites, tickets and sky for this mission');
         if(detail)floridaAnswer.appendChild(detail);
         const ksc=florida.kscMatched?anchor(florida.kscUrl,'Read this mission’s KSC event notice'):null;
         if(ksc)floridaAnswer.appendChild(ksc);
