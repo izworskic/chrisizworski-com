@@ -46,8 +46,10 @@ function payload(region='florida',id=null,stale=false){
   {level:'assessed',label:'Fixture local NWS surface reference',
    detail:'Model reference only, not rocket visibility or launch GO',
    places:[{name:'Public waterfront',status:'ok',cloudStatus:'ok',cloudCoverPercent:40,
-    assessment:{label:'Sky-cover reference only',detail:'Not a visibility guarantee'},
-    period:{shortForecast:'Partly cloudy'}}]}:
+    assessment:{level:'fair',label:'Sky-cover reference only',detail:'Not a visibility guarantee'},
+    updatedAt:stamp(),period:{shortForecast:'Partly cloudy',
+     startTime:new Date(Date.parse(selected.net)-30*60000).toISOString(),
+     endTime:new Date(Date.parse(selected.net)+30*60000).toISOString()}}]}:
   {level:'unknown',label:'No precise target for a forecast',places:[],
    detail:'No launch-time NWS grid could be matched'};
  return {
