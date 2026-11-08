@@ -358,6 +358,7 @@
      if(!evidence)return;
      const card=btn.closest('.port-guide-card');
      if(!card)return;
+     guide.querySelectorAll('[data-port-select-harbor]').forEach(button=>button.setAttribute('aria-expanded',String(button===btn)));
      guide.querySelectorAll('[data-harbor-evidence-choices]').forEach(node=>{node.hidden=true});
      let panel=card.querySelector('[data-harbor-evidence-choices]');
      if(!panel){
@@ -391,7 +392,10 @@
        currentButton.type='button';currentButton.addEventListener('click',()=>chooseSeason(current.id,'current'));options.append(currentButton);
      }else{
        const read=text('a','Read current winter source ledger');
-       read.href='#winter-live';read.addEventListener('click',()=>document.dispatchEvent(new CustomEvent('layup:harbor-evidence-choice',{detail:{harborId,seasonId:current.id,kind:'current-ledger'}})));
+       read.href='#winter-live';read.addEventListener('click',()=>{
+         document.dispatchEvent(new CustomEvent('layup:harbor-evidence-choice',{detail:{harborId,seasonId:current.id,kind:'current-ledger'}}));
+         window.gtag?.('event','layup_harbor_evidence_choice',{harbor_id:harborId,season_id:current.id,evidence_kind:'current-ledger'});
+       });
        options.append(read);
      }
      evidence.history.slice(0,3).forEach(s=>{
