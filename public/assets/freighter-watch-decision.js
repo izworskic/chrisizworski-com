@@ -66,7 +66,10 @@ function publishedAccess(site,targetMs,now,windowEndMs=null){
    if(!fullWindowInside)return {level:'partial',label:'Only part of the ship window fits published hours',
      note:schedule+'The estimated passage window extends outside published park hours. The vessel may not pass before closing; do not assume the public park stays open for the full estimate. '+note};
  }
- return {level:'published',label:'Full modeled window within published hours',
+ return {level:'published',
+   label:Number.isFinite(windowEndMs)&&windowEndMs>targetMs
+     ?'Full modeled window within published hours'
+     :'Selected viewing hour within published hours',
    note:schedule+'This is not a live closure check. '+note};
 }
 function chooseHour(weather,when,window,now,zone){

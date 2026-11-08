@@ -147,6 +147,11 @@ const server=http.createServer((req,res)=>{
       assert.match(await page.textContent('#fwd-plan-title'),/beyond published park hours/);
       assert.match(await page.textContent('#fwd-plan-access'),/Only part of the ship window/);
       assert.match(await page.textContent('#fwd-plan-when'),/Do not expect the park to remain open/);
+      liveSoo={ok:true,checkedAt:iso(now),vessels:[],nextShip:{ok:true,pick:null,candidates:[],inLock:[]}};
+      await page.click('#fwd-refresh');
+      await page.waitForFunction(()=>document.querySelector('#fwd-visit-plan').dataset.verdict==='NO_CLOSE_REPORT');
+      assert.match(await page.textContent('#fwd-plan-access'),/Selected viewing hour within published hours/);
+      assert.doesNotMatch(await page.textContent('#fwd-plan-access'),/Full modeled window/);
       assert.equal(pageErrors.length,0,'no script errors after the closing-time conflict');
       assert.equal(pageErrors.length,0,'no script errors after changing region and time');
       await context.close();
