@@ -111,8 +111,24 @@ function check(value,message){if(!value)throw Error(message);}
     });
     check(railVisibility.found&&railVisibility.left>=-2&&railVisibility.right>=-2,
       size.name+': focused stop chip was hidden under horizontal rail '+JSON.stringify(railVisibility));
-    await page.locator('#circle-tour-tool-bridge').screenshot({path:path.join(out,size.name+'.png'),timeout:25000,animations:'disabled'});
-    report.screenshots.push(size.name+'.png');
+    // A real viewport capture verifies the actual fixed overlay behavior. A tall
+    // element screenshot can stitch fixed controls at arbitrary positions, even
+    // after the sheet is fully offscreen, so it is not sufficient evidence.
+    await page.locator('#ctb-decision').scrollIntoViewIfNeeded();
+    const sheetState=await page.evaluate(()=>{
+      const sheet=document.querySelector('#mobileTripSheet');
+      return {open:sheet.classList.contains('open'),top:sheet.getBoundingClientRect().top,viewport:innerHeight};
+    });
+    check(!sheetState.open&&sheetState.top>=sheetState.viewport-2,
+      size.name+': original mobile drawer is genuinely covering decision '+JSON.stringify(sheetState));
+    await page.screenshot({path:path.join(out,size.name+'-viewport.png'),animations:'disabled',timeout:25000});
+    // Isolated full-height design evidence masks only the existing, fixed
+    // original planner drawer/trigger during the screenshot. The live UI is unchanged.
+    await page.locator('#circle-tour-tool-bridge').screenshot({
+      path:path.join(out,size.name+'.png'),timeout:25000,animations:'disabled',
+      style:'#mobileTripSheet,#mobileTripBackdrop,#mobileTripTrigger{visibility:hidden!important}'
+    });
+    report.screenshots.push(size.name+'-viewport.png',size.name+'.png');
     report.cases.push({viewport:size.name,initial:count,focus:items,selectedTrip:selectedResults.length,overflow:false,contextUrl:true});
     await ctx.close();
   }
