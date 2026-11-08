@@ -176,10 +176,14 @@ const whenReady=page=>page.waitForFunction(id=>
    const page=await context.newPage(),errors=[];
    page.on('pageerror',e=>errors.push(e.message));
    await localLeaflet(page);
+   await page.route('https://unpkg.com/**',route=>route.abort()); // Test genuinely local Leaflet.
    await page.route('https://tile.openstreetmap.org/**',route=>route.abort());
    await page.route('https://*.basemaps.cartocdn.com/**',route=>route.abort());
    const response=await page.goto(base+'?region=florida&launchId='+A,{waitUntil:'domcontentloaded'});
    assert(response.status()===200,v.name+' public HTML HTTP failed');
+   await page.waitForFunction(()=>document.querySelector('#rl-coast-map')?.dataset.mapState==='ready');
+   assert(await page.locator('#rl-coast-map .leaflet-control-zoom-in').count()===1,
+     v.name+' actual Leaflet map controls did not load without the CDN');
    await whenReady(page);
    await page.waitForFunction(()=>window.vaq?.some(a=>a[0]==='event'&&a[1]?.name==='Rocket Flight Desk Exposed'));
    const metrics=()=>page.evaluate(()=>window.vaq?.filter(a=>a[0]==='event').map(a=>a[1])||[]);
@@ -289,7 +293,14 @@ const whenReady=page=>page.waitForFunction(id=>
    await page.route('https://*.basemaps.cartocdn.com/**',route=>route.abort());
    await page.goto(base+'?region=florida&launchId='+A,{waitUntil:'domcontentloaded'});
    await page.waitForFunction(()=>document.querySelector('#rl-map-expand')?.disabled===false&&
+     document.querySelector('#rl-coast-map')?.dataset.mapState==='ready'&&
      document.querySelector('#rl-coast-map')?.dataset.zoom,{timeout:15000});
+   assert(await page.locator('#rl-coast-map .leaflet-map-pane').count()===1,
+     width+' the real Leaflet map DOM did not mount');
+   assert(await page.locator('#rl-coast-map .leaflet-control-zoom-in').count()===1,
+     width+' zoom control missing while CDN blocked');
+   assert(!(await page.locator('#rl-coast-map').innerText()).includes('Loading the coastal atlas'),
+     width+' still shows loading placeholder');
    const map=page.locator('#rl-coast-map');
    await map.scrollIntoViewIfNeeded();
    const box=await map.boundingBox();
@@ -471,6 +482,12 @@ const whenReady=page=>page.waitForFunction(id=>
   const error=await errCtx.newPage();await localLeaflet(error);
   await error.goto(base,{waitUntil:'domcontentloaded'});
   await error.waitForFunction(()=>document.querySelector('#rl-flight-headline')?.textContent.includes('unavailable'));
+  assert((await error.locator('#rl-coast-map').getAttribute('data-map-state'))==='ready',
+    'Launch source outage must retain a real geographic map');
+  assert((await error.locator('#rl-atlas-status').innerText()).includes('Launch schedule unavailable'),
+    'Offline map did not distinguish approximate regions from live missions');
+  assert(!(await error.locator('#rl-coast-map').innerText()).includes('Loading the coastal atlas'),
+    'Launch outage left map in infinite loading state');
   assert(await error.locator('#rl-flight-locate').isDisabled(),'Source outage retained stale rocket focus');
   assert((await error.locator('#rl-flight-next-title').innerText()).includes('schedule cannot establish'),
     'Source outage claimed an available next mission or viewing clearance');
