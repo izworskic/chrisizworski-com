@@ -53,3 +53,16 @@ test('new Dead River source caveat remains research-only and contains the DNR au
   assert.match(html, /2022 Marquette Charter Township recreation-plan draft/);
   assert.doesNotMatch(html, /<script[^>]*type="application\/ld\+json"[^>]*>[\s\S]*?"@type":"TouristAttraction"/);
 });
+
+test('explorer links to source-only priority cases but never indexes them as attraction trips', () => {
+  const hub = fs.readFileSync('public/upper-peninsula-waterfalls/index.html','utf8');
+  const sitemap = fs.readFileSync('public/sitemap-up-waterfalls.xml','utf8');
+  assert.match(hub, /Important regional waterfalls not cleared for trip planning/);
+  for (const slug of ['dead-river-falls', 'alger-falls-highway-parking-review', 'au-train-falls']) {
+    const researchPath = '/upper-peninsula-waterfalls/research/' + slug + '/';
+    assert.ok(hub.includes(researchPath), researchPath);
+    assert.ok(!sitemap.includes('https://chrisizworski.com' + researchPath), researchPath);
+  }
+  assert.match(sitemap, /<loc>https:\/\/chrisizworski.com\/upper-peninsula-waterfalls\/<\/loc><lastmod>2026-11-08<\/lastmod>/);
+  assert.match(hub, /"dateModified":"2026-11-08"/);
+});
