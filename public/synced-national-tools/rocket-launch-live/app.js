@@ -238,8 +238,11 @@
       }).then(geo=>{
         if(geo?.type!=='FeatureCollection'||!Array.isArray(geo.features)||
            !geo.features.length)throw new Error('invalid-reference-geography');
+        // Explicit SVG: the mission pins prefer Canvas, but the coastline
+        // needs its own deterministic under-tile vector renderer.
+        const outlineRenderer=window.L.svg({pane:'rocket-reference-land'});
         window.L.geoJSON(geo,{
-          pane:'rocket-reference-land',interactive:false,
+          renderer:outlineRenderer,pane:'rocket-reference-land',interactive:false,
           style:{color:'#9db6ae',weight:1.15,opacity:1,
             fillColor:'#d0dfd4',fillOpacity:1}
         }).addTo(map);
