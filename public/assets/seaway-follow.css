@@ -1,0 +1,53 @@
+/* Follow the Freighter: selected-vessel journey, subordinate to live ship map.
+   No sticky overlays, map obstructions or generic full-screen page scaffolds. */
+.follow-list-button{margin:8px 15px 11px!important;width:calc(100% - 30px);display:block;background:#225e69;border-color:#225e69;color:#fff;font-size:12px;min-height:44px}
+.follow-list-button:hover{background:#174753}
+.follow-panel{border-top:5px solid #2c7780;border-bottom:1px solid #bbcfc9;background:#f0f5f0;padding:clamp(17px,2.6vw,28px);color:#173b44;scroll-margin-top:22px}
+.follow-panel>h2{font-size:clamp(28px,2.7vw,38px);margin:4px 0 7px;color:#153d49}
+.follow-kicker,.follow-eyebrow{font:800 10px/1.6 system-ui;letter-spacing:.14em;text-transform:uppercase;color:#487278}
+.follow-intro-copy{font:13px/1.6 system-ui;max-width:81ch;color:#527074}
+.follow-status{margin:11px 0 16px;font:12px/1.5 system-ui;padding:10px 14px;background:#fff8e9;border:1px solid #e6d5b8;color:#675239;border-radius:6px}
+.follow-head{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px 20px;padding:17px 0 14px;border-bottom:1px solid #bdcbc7}
+.follow-intro{flex:1 1 300px;min-width:0}
+.follow-intro h3{font-size:clamp(26px,2.4vw,33px);color:#173d48;overflow-wrap:anywhere;margin:4px 0}
+.follow-dateline{font-size:12px;color:#466a6e;line-height:1.6}
+.follow-fresh{border-radius:5px;border:1px solid #b8cdbd;background:#e2f0e6;padding:9px 13px;max-width:210px;font:12px/1.5 system-ui}
+.follow-fresh b,.follow-fresh small{display:block}
+.follow-fresh small{font-size:11px;color:#48665d;margin-top:2px}
+.follow-reading{display:grid;grid-template-columns:minmax(0,.84fr) minmax(0,1.16fr);gap:22px;padding:19px 0;border-bottom:1px solid #bccdc8}
+.follow-observation,.follow-corridor{min-width:0}
+.follow-observation>strong{font:500 clamp(21px,2.1vw,29px)/1.22 Georgia,serif;display:block;margin:5px 0 7px}
+.follow-observation>p{font-size:12px;color:#536c70;line-height:1.65}
+.follow-facts{margin:16px 0 0;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.follow-facts>div{padding:10px;background:#fff;border:1px solid #d4e0da;border-radius:6px;min-width:0}
+.follow-facts dt{font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:#547274;font-weight:800}
+.follow-facts dd{font-size:12px;font-weight:650;margin:3px 0 0;line-height:1.4;overflow-wrap:anywhere}
+.follow-corridor>p{font-size:12px;line-height:1.6;color:#537074;margin:6px 0 10px}
+.follow-rail{list-style:none;padding:0;margin:0;display:grid;gap:6px;grid-template-columns:repeat(5,minmax(0,1fr));}
+.follow-rail li{padding:10px 7px;min-width:0;border-radius:6px;background:#e1ebe7;border:1px solid #bacfc8;position:relative}
+.follow-rail li.is-current{background:#184e5a;color:white;border-color:#184e5a;box-shadow:inset 0 3px #d5b16b}
+.follow-rail-number{font:800 10px system-ui;color:#54757a;display:block;margin-bottom:4px}
+.follow-rail .is-current .follow-rail-number{color:#d0e1e4}
+.follow-rail strong{font:700 11px/1.36 system-ui;display:block;overflow-wrap:anywhere}
+.follow-rail small{display:block;color:#5b7473;font:10px/1.4 system-ui;margin-top:5px}
+.follow-rail .is-current small{color:#dbe7e7}
+.follow-actions{padding:19px 0 16px;border-bottom:1px solid #bccdc8}
+.follow-actions p:not(.follow-eyebrow){font-size:12px;line-height:1.6;color:#567177;margin:10px 0}
+.follow-action-row,.follow-next-links{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:11px 0}
+.follow-action-row button,.follow-action-row a{font-size:12px;min-height:44px;padding:9px 13px}
+.follow-beyond{margin:16px 0 3px}
+.follow-next-links a{font-size:12px;font-weight:750}
+.follow-panel a{color:#17657a;text-decoration:underline;text-underline-offset:3px}
+.follow-panel a:focus-visible,.follow-panel button:focus-visible{outline:3px solid #be8629;outline-offset:3px}
+@media(max-width:850px){.follow-reading{grid-template-columns:1fr}.follow-rail{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media(max-width:550px){
+ .follow-panel{padding:16px 13px}
+ .follow-rail{grid-template-columns:1fr;gap:5px}
+ .follow-rail li{display:grid;grid-template-columns:28px minmax(0,1fr);align-items:center;gap:3px 8px;padding:9px}
+ .follow-rail-number{grid-row:1/3;margin:0}
+ .follow-rail small{grid-column:2;margin:0}
+ .follow-facts{grid-template-columns:1fr 1fr}
+ .follow-action-row{align-items:stretch}
+ .follow-action-row>button,.follow-action-row>.button{flex:1 1 160px}
+}
+@media(prefers-reduced-motion:reduce){.follow-panel *{scroll-behavior:auto}}
