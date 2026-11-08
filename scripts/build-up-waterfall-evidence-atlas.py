@@ -170,8 +170,34 @@ def main() -> None:
         DEST.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         print(f"Wrote {DEST.relative_to(ROOT)}: {result['counts']}")
     elif args.check:
-        if not DEST.exists() or json.loads(DEST.read_text(encoding="utf-8")) != result:
-            raise SystemExit("Evidence Atlas output differs; run --write and inspect diff")
+        if not DEST.exists():
+            raise SystemExit("Evidence Atlas output missing; run --write")
+        actual = json.loads(DEST.read_text(encoding="utf-8"))
+        if actual != result:
+            def first_difference(expected, observed, prefix="root"):
+                if type(expected) is not type(observed):
+                    return f"{prefix}: expected type {type(expected).__name__}, got {type(observed).__name__}"
+                if isinstance(expected, dict):
+                    for key in expected:
+                        if key not in observed:
+                            return f"{prefix}.{key}: missing key"
+                        diff = first_difference(expected[key], observed[key], f"{prefix}.{key}")
+                        if diff:
+                            return diff
+                    extras = set(observed) - set(expected)
+                    if extras:
+                        return f"{prefix}: extra keys {sorted(extras)}"
+                elif isinstance(expected, list):
+                    if len(expected) != len(observed):
+                        return f"{prefix}: expected {len(expected)} records, got {len(observed)}"
+                    for i, (a, b) in enumerate(zip(expected, observed)):
+                        diff = first_difference(a, b, f"{prefix}[{i}]")
+                        if diff:
+                            return diff
+                elif expected != observed:
+                    return f"{prefix}: expected {str(expected)[:160]!r}, got {str(observed)[:160]!r}"
+                return None
+            raise SystemExit("Evidence Atlas output differs: " + str(first_difference(result, actual)))
         print(f"PASS Evidence Atlas generated record contract: {result['counts']}")
     else:
         print(json.dumps(result["counts"], indent=2))
