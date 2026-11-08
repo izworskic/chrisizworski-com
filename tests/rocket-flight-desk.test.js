@@ -15,6 +15,11 @@ const florida=[
 function data(region='florida',selected=florida[0],more={}){
  const regions=[{id:'florida',name:'Florida Space Coast',lat:28.58,lon:-80.61,launches:florida},
   {id:'texas',name:'Starbase',lat:25.997,lon:-97.157,launches:[]}];
+ if(selected&&!regions.some(r=>r.id===region&&r.launches.some(l=>l.id===selected.id))){
+   let entry=regions.find(r=>r.id===region);
+   if(!entry){entry={id:region,launches:[]};regions.push(entry);}
+   entry.launches.push(selected);
+ }
  return {ok:true,selectedRegion:region,selectedLaunchId:selected?.id||null,
   selectedLaunch:selected,region:{id:region,timezone:'America/New_York',authority:'https://www.nasa.gov/kennedy/',
    access:'https://www.nps.gov/cana/planyourvisit/rocket-launch-viewing.htm'},
@@ -55,7 +60,7 @@ test('stale snapshot, hold, closure and restricted region all block a positive v
  assert.equal(alaska.status,'access');assert.match(alaska.access,/No public/i);
 });
 test('a weather reference is not an approval, and source incompleteness is displayed',()=>{
- const d=desk.decide(data('florida',florida[0],{weather:{level:'assessed',places:[{status:'ok',period:{shortForecast:'Partly cloudy',startTime:'2026-11-12T19:00:00Z'}}]},coverage:{partial:true}}));
+ const d=desk.decide(data('florida',florida[0],{weather:{level:'assessed',places:[{status:'ok',cloudStatus:'ok',cloudCoverPercent:46,updatedAt:'2026-11-07T11:00:00Z',assessment:{level:'fair'},period:{shortForecast:'Partly cloudy',startTime:'2026-11-12T19:00:00Z',endTime:'2026-11-12T20:00:00Z'}}]},coverage:{partial:true}}));
  assert.match(d.sky,/not rocket GO/i);
  assert.match(d.source,/coverage incomplete/i);
  assert.equal(d.status,'review');
@@ -66,7 +71,7 @@ test('nominal partial weather with every NWS sample unavailable is not claimed a
            {status:'unavailable',period:null,cloudStatus:'unavailable'}]}}));
  assert.equal(d.sky,'No verified mission-time viewing forecast');
  const some=desk.decide(data('florida',florida[0],{weather:{level:'partial',
-   places:[{status:'ok',period:{shortForecast:'Cloudy',startTime:'2026-11-12T19:00:00Z'}},
+   places:[{status:'ok',cloudStatus:'ok',cloudCoverPercent:56,updatedAt:'2026-11-07T11:00:00Z',assessment:{level:'fair'},period:{shortForecast:'Cloudy',startTime:'2026-11-12T19:00:00Z',endTime:'2026-11-12T20:00:00Z'}},
            {status:'unavailable',period:null}]}}));
  assert.match(some.sky,/Partial NWS forecast/);
 });
@@ -109,7 +114,7 @@ test('mission switch dispatches stable selected UUID and a map handoff without a
  assert.equal(el('rl-flight-mission').textContent,florida[0].name);
  assert.equal(el('rl-flight-desk').dataset.launchId,ids[0]);
  assert.equal(el('rl-flight-desk').dataset.nextGate,'access');
- assert.match(el('rl-flight-next-title').textContent,/Verify the launch-day viewing arrangements/);
+ assert.match(el('rl-flight-next-title').textContent,/source-backed spectator option/i);
  assert.equal(el('rl-flight-specialist').hidden,true,'do not duplicate next regional CTA');
  assert.equal(el('rl-flight-mission-select').disabled,false);
  assert.equal(el('rl-flight-locate').disabled,false);
@@ -139,8 +144,8 @@ test('existing canonical, SEO/Person, photo credit and national map are preserve
  const app=fs.readFileSync(path.join(ROOT,'public/synced-national-tools/rocket-launch-live/app.js'),'utf8');
  assert.match(html,/canonical" href="https:\/\/chrisizworski\.com\/national-tools\/rocket-launch-live\//);
  assert.match(html,/https:\/\/chrisizworski\.com\/#person/);
- assert.match(html,/\/assets\/rocket-flight-desk\.js\?v=20261108-foundry-v1/);
- assert.match(html,/\/assets\/rocket-flight-desk\.css\?v=20261108-foundry-v1/);
+ assert.match(html,/\/assets\/rocket-flight-desk\.js\?v=20261108-foundry-v2/);
+ assert.match(html,/\/assets\/rocket-flight-desk\.css\?v=20261108-foundry-v2/);
  assert.match(html,/id="rl-coast-map"/);
  assert.match(html,/Photo: Senior Airman Kadielle Shaw/);
  assert.match(html,/id="rl-viewing"/);

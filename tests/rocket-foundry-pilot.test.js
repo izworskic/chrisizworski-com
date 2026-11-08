@@ -53,9 +53,9 @@ test('a precise Florida target still requires mission-specific public access con
  const d=model.nextCheck(data());
  assert.equal(d.gate,'access');
  assert.equal(d.source,'specialist');
- assert.equal(d.href,'/national-tools/space-coast-launch/');
- assert.match(d.headline,/viewing arrangements/i);
- assert.match(d.detail,/not admission/i);
+ assert.equal(d.href,'/national-tools/space-coast-launch/?launchId='+uuid+'&via=rocket-foundry&stage=access');
+ assert.match(d.headline,/source-backed spectator option/i);
+ assert.match(d.detail,/do not establish public mission viewing/i);
  assert.doesNotMatch(JSON.stringify(d),/go for launch|safe to travel|ticket available/i);
 });
 test('date/month/approximate hour -> official timing check; do not invent a launch hour',()=>{
@@ -64,7 +64,7 @@ test('date/month/approximate hour -> official timing check; do not invent a laun
   assert.equal(d.gate,'schedule');
   assert.equal(d.href,'https://www.vandenberg.spaceforce.mil/');
   assert.match(d.headline,/Confirm an exact launch hour/i);
-  assert.match(d.detail,/not enough to plan/i);
+  assert.match(d.detail,/cannot support a departure plan/i);
  }
 });
 test('stale or unavailable regional feed never offers GO and prioritizes source verification',()=>{
@@ -85,11 +85,11 @@ test('hold, scrub and actual Starbase city closure take precedence over a routin
  hold.selectedLaunch.status='Hold';
  assert.match(model.nextCheck(hold).headline,/updated launch attempt/i);
  hold.selectedLaunch.status='Scrub';
- assert.match(model.nextCheck(hold).detail,/prior arrival plan/i);
+ assert.match(model.nextCheck(hold).detail,/earlier arrival window/i);
  const closed=data('texas');closed.access={liveOfficialNotice:{state:'closed'}};
  assert.equal(model.nextCheck(closed).gate,'access');
  assert.match(model.nextCheck(closed).headline,/closure/i);
- assert.equal(model.nextCheck(closed).href,'/starbase-rocket-launch-viewing/');
+ assert.equal(model.nextCheck(closed).href,'/starbase-rocket-launch-viewing/?launchId='+uuid+'&via=rocket-foundry&stage=access');
 });
 test('restricted Pacific ranges never imply legal viewing at the military pad',()=>{
  for(const region of ['alaska','hawaii']){
@@ -97,7 +97,7 @@ test('restricted Pacific ranges never imply legal viewing at the military pad',(
   assert.equal(d.gate,'access');
   assert.equal(d.source,'specialist');
   assert.match(d.headline,/public viewing is allowed/i);
-  assert.match(d.detail,/Do not route to the pad/i);
+  assert.match(d.detail,/pad pin is not a public entrance/i);
  }
 });
 test('a missing mission does not imply the range has stopped flying',()=>{
@@ -105,7 +105,7 @@ test('a missing mission does not imply the range has stopped flying',()=>{
  d.selectedLaunch=null;d.selectedLaunchId=null;d.regions[0].launches=[];
  const n=model.nextCheck(d);
  assert.equal(n.gate,'schedule');
- assert.match(n.detail,/not confirmation the range is inactive/i);
+ assert.match(n.detail,/not evidence the range is inactive/i);
 });
 test('Foundry handoff is visible, linked, versioned and tracked without identity collection',()=>{
  const html=read('public/synced-national-tools/rocket-launch-live/index.html');
@@ -113,13 +113,106 @@ test('Foundry handoff is visible, linked, versioned and tracked without identity
  const js=read('public/assets/rocket-engagement-funnel.js');
  assert.match(html,/id="rl-flight-next"/);
  assert.match(html,/id="rl-flight-next-link"/);
- assert.match(html,/rocket-flight-desk\.js\?v=20261108-foundry-v1/);
- assert.match(html,/rocket-flight-desk\.css\?v=20261108-foundry-v1/);
- assert.match(html,/rocket-engagement-funnel\.js\?v=20261108-foundry-v1/);
+ assert.match(html,/rocket-flight-desk\.js\?v=20261108-foundry-v2/);
+ assert.match(html,/rocket-flight-desk\.css\?v=20261108-foundry-v2/);
+ assert.match(html,/rocket-engagement-funnel\.js\?v=20261108-foundry-v2/);
  assert.match(html,/https:\/\/chrisizworski.com\/#person/);
  assert.match(html,/id="rl-coast-map"/);
  assert.match(css,/@media\(max-width:700px\)/);
  assert.match(js,/rl-flight-next-link/);
  assert.doesNotMatch(js,/localStorage|sessionStorage|document\.cookie/);
  assert.equal((html.match(/src="\/_vercel\/insights\/script.js"/g)||[]).length,1);
+});
+const publicSite={id:'published-park',name:'Source-linked park',state:'candidate',
+  source:'https://www.nps.gov/cana/planyourvisit/rocket-launch-viewing.htm',
+  directionsAllowed:true};
+const currentSky={level:'assessed',places:[{id:'a',status:'ok',cloudStatus:'ok',
+  cloudCoverPercent:42,updatedAt:'2026-11-08T08:30:00Z',assessment:{level:'fair'},
+  period:{startTime:'2026-11-11T15:00:00Z',endTime:'2026-11-11T16:00:00Z',shortForecast:'Cloudy'}}]};
+test('documented public viewpoint advances to viewing options, then mission-time sky',()=>{
+ const d=data('virginia');d.selectedLaunch.net='2026-11-11T15:25:00Z';d.access={sites:[publicSite]};
+ const first=model.nextCheck(d);
+ assert.equal(first.gate,'viewing');
+ assert.match(first.detail,/not confirmed open/i);
+ assert.match(first.href,new RegExp('launchId='+uuid));
+ d.weather=currentSky;
+ const second=model.nextCheck(d);
+ assert.equal(second.gate,'sky');
+ assert.equal(second.href,'#rl-regional-sky');
+ assert.equal(second.destination,'spectator_weather');
+ assert.match(second.detail,/do not prove event admission/i);
+ assert.notEqual(first.href,second.href);
+});
+test('a stale, off-target or unsuitable NWS sample cannot advance to a sky decision',()=>{
+ const d=data('california');
+ d.selectedLaunch.net='2026-11-11T15:25:00Z';
+ d.access={sites:[publicSite]};
+ d.weather=currentSky;
+ assert.equal(model.nextCheck(d).gate,'sky');
+ d.weather={...currentSky,places:[{...currentSky.places[0],
+   period:{...currentSky.places[0].period,startTime:'2026-11-12T15:00:00Z',endTime:'2026-11-12T16:00:00Z'}}]};
+ assert.equal(model.nextCheck(d).gate,'viewing','a forecast for another target hour is not usable');
+ d.weather={...currentSky,places:[{...currentSky.places[0],
+   updatedAt:'2026-11-04T08:00:00Z'}]};
+ assert.equal(model.nextCheck(d).gate,'viewing','stale issue time cannot justify sky stage');
+ d.weather={...currentSky,places:[{...currentSky.places[0],
+   assessment:{level:'poor'}}]};
+ assert.equal(model.nextCheck(d).gate,'viewing','weak surface evidence is not a supported comparison');
+ d.selectedLaunch.net='2026-11-23T15:25:00Z';
+ d.weather=currentSky;
+ assert.equal(model.nextCheck(d).gate,'viewing','outside the seven-day NWS horizon');
+});
+test('KSC current exact event listing advances to admission choices, never a ticket claim',()=>{
+ const d=data();
+ const first=model.nextCheck(d,{kscEvent:'matched',kscLaunchId:uuid});
+ assert.equal(first.gate,'viewing');
+ assert.match(first.headline,/mission-linked viewing event/i);
+ assert.match(first.detail,/Tickets, actual admission/i);
+ const mismatched=model.nextCheck(d,{kscEvent:'matched',kscLaunchId:'33333333-3333-4333-8333-333333333333'});
+ assert.equal(mismatched.gate,'access');
+ const stale=model.nextCheck({...d,scheduleFreshness:'stale'},{kscEvent:'matched',kscLaunchId:uuid});
+ assert.equal(stale.gate,'schedule');
+});
+test('conflicting mission IDs or missing regional roster cannot silently display another launch',()=>{
+ const wrong=data();wrong.selectedLaunchId='11111111-1111-4111-8111-111111111111';
+ assert.equal(model.decide(wrong).launchId,null);
+ assert.equal(model.nextCheck(wrong).gate,'schedule');
+ const missing=data();missing.regions[0].launches=[];
+ assert.equal(model.decide(missing).launchId,null);
+ const wrongRegion=data('california');
+ wrongRegion.selectedLaunch.region='florida';
+ assert.equal(model.nextCheck(wrongRegion).gate,'schedule');
+});
+test('all six regional links preserve the selected mission, including static Vandenberg',()=>{
+ const paths=new Set();
+ for(const region of Object.keys(REGIONS)){
+  const d=model.nextCheck(data(region));
+  if(d.source==='specialist'){
+   const u=new URL(d.href,'https://chrisizworski.com');
+   assert.equal(u.searchParams.get('launchId'),uuid);
+   assert.equal(u.searchParams.get('via'),'rocket-foundry');
+   assert.equal(u.searchParams.get('stage'),d.gate);
+   paths.add(u.pathname);
+  }
+ }
+ assert.equal(paths.size,6,'all six regions have mission-bound specialist handoffs');
+ const california=model.regionalHref('california',uuid,'viewing');
+ assert.match(california,/vandenberg-rocket-launch-viewing\/\?launchId=/);
+ assert.equal(model.regionalHref('california','bad','viewing'),'/vandenberg-rocket-launch-viewing/');
+});
+test('destination instrumentation is loaded by all regional guides, not inferred from URLs',()=>{
+ const guides=[
+  'public/vandenberg-rocket-launch-viewing/index.html',
+  'public/synced-national-tools/space-coast-launch/index.html',
+  'public/starbase-rocket-launch-viewing/index.html',
+  'public/wallops-rocket-launch-viewing/index.html',
+  'public/kodiak-rocket-launch-viewing/index.html',
+  'public/barking-sands-rocket-launch-viewing/index.html'];
+ for(const p of guides)assert.match(read(p),/rocket-foundry-handoff\.js/);
+ const receipt=read('public/assets/rocket-foundry-handoff.js');
+ assert.match(receipt,/selectedLaunchId===requested/);
+ assert.match(receipt,/Rocket Foundry Mission Restored/);
+ assert.doesNotMatch(receipt,/localStorage|sessionStorage|document\.cookie/);
+ const old=read('public/synced-national-tools/rocket-launch-live/app.js');
+ assert.match(old,/vandenberg-rocket-launch-viewing\/'\)\?'california'/);
 });

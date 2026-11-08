@@ -21,7 +21,8 @@
   const SURFACES=new Set(['flight_desk','native_picker','map_marker','national_board','coast_picker','region_map','national_header','region_links','viewing_card','other']);
   const STATES=new Set(['review','timing','stale','hold','access','unknown','unavailable']);
   const OUTCOMES=new Set(['pad_marker_focused','coast_fallback','mission_request','locate_request']);
-  const DESTINATIONS=new Set(['regional_guide','official_access','viewing_options']);
+  const DESTINATIONS=new Set(['regional_guide','official_access','viewing_options','spectator_weather']);
+  const STAGES=new Set(['source','schedule','access','viewing','sky']);
   const PRECISION=new Set(['second','minute','hour','day','date-tbd','month','year']);
   const UUID=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
   const GUIDE_PATHS=Object.freeze({
@@ -34,7 +35,7 @@
   });
   const FIELDS=Object.freeze({
     region:REGIONS,surface:SURFACES,status:STATES,outcome:OUTCOMES,
-    destination:DESTINATIONS,precision:PRECISION
+    destination:DESTINATIONS,precision:PRECISION,stage:STAGES
   });
   const EVENTS=Object.freeze({
     exposed:['rocket_flight_desk_exposed','Rocket Flight Desk Exposed'],
@@ -42,7 +43,9 @@
     map:['rocket_map_engaged','Rocket Map Engaged'],
     coast:['rocket_coast_selected','Rocket Coast Selected'],
     next:['rocket_viewing_next_step','Rocket Viewing Next Step'],
-    unavailable:['rocket_schedule_unavailable','Rocket Schedule Unavailable']
+    unavailable:['rocket_schedule_unavailable','Rocket Schedule Unavailable'],
+    attempt:['rocket_foundry_handoff_attempt','Rocket Foundry Handoff Attempt'],
+    stage:['rocket_foundry_stage_opened','Rocket Foundry Evidence Opened']
   });
   function regionOf(v){return REGIONS.has(v)?v:'unknown';}
   function statusOf(v){return STATES.has(v)?v:'unknown';}
@@ -182,13 +185,23 @@
       const href=el.getAttribute('href')||'';
       let destination=null,surface='other';
       if(el.id==='rl-flight-next-link'&&desk.contains(el)){
+        // Intent is not restoration: the regional guide independently checks
+        // its loaded mission before recording the outcome.
+        const stage=el.dataset.evidenceStage;
         const nextKind=el.dataset.nextSource;
-        if(nextKind==='specialist'&&guideRegion(href,pageBase))
-          destination='regional_guide';
-        else if((nextKind==='authority'||nextKind==='nasa')&&
-          /^https:\/\/[a-z0-9.-]+\//i.test(href))
-          destination='official_access';
-        surface='flight_desk';
+        const trustedGuide=nextKind==='specialist'&&
+          guideRegion(href,pageBase)===current?.selectedRegion;
+        const trustedOfficial=(nextKind==='authority'||nextKind==='nasa')&&
+          /^https:\/\/[a-z0-9.-]+\//i.test(href);
+        const inPage=nextKind==='in_page'&&href==='#rl-regional-sky';
+        if(STAGES.has(stage)&&(trustedGuide||trustedOfficial||inPage)){
+          emit(win,inPage?'stage':'attempt',{
+            region:regionOf(current?.selectedRegion),surface:'flight_desk',
+            status:state(),stage,
+            destination:inPage?'spectator_weather':trustedGuide?'regional_guide':'official_access'
+          });
+        }
+        return;
       }else if(el.id==='rl-flight-specialist'&&guideRegion(href,pageBase)){
         destination='regional_guide';surface='flight_desk';
       }else if(el.id==='rl-flight-official'&&/^https:\/\//i.test(href)){

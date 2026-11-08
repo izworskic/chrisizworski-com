@@ -282,7 +282,8 @@
   state.data=data;
   state.rocketPins?.update(missions,picked?.id);
   frameMissionOrigins();
-  deepLink(picked?.id);
+  window.RocketFoundryHandoff?.loaded('virginia',picked?.id,picked?.name);
+   deepLink(picked?.id);
   const u=new URL(location.href);
   if(picked?.id&&UUID.test(picked.id))u.searchParams.set('launchId',picked.id);
   else u.searchParams.delete('launchId');

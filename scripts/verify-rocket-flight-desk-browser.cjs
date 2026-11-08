@@ -11,6 +11,7 @@ fs.mkdirSync(out,{recursive:true});
 const A='11111111-1111-4111-8111-111111111111';
 const B='22222222-2222-4222-8222-222222222222';
 const C='33333333-3333-4333-8333-333333333333';
+const D='44444444-4444-4444-8444-444444444444';
 const launches=[
  {id:A,region:'florida',name:'Fixture Florida rocket A',net:'2026-11-12T19:30:00Z',
   netPrecision:'minute',rocket:'Falcon 9',provider:'Fixture Operator',pad:'SLC-40',
@@ -23,10 +24,14 @@ const launches=[
  {id:C,region:'texas',name:'Fixture Texas Starship C',net:'2026-11-21T13:00:00Z',
   netPrecision:'minute',rocket:'Starship',provider:'Fixture Operator',pad:'Starbase launch pad',
   lat:25.997,lon:-97.157,scheduleConfidence:{level:'medium',label:'Target published',
+  detail:'Not launch GO'},status:'To Be Confirmed'},
+ {id:D,region:'texas',name:'Fixture non-default Starship D',net:'2026-11-24T13:00:00Z',
+  netPrecision:'minute',rocket:'Starship',provider:'Fixture Operator',pad:'Starbase pad',
+  lat:25.997,lon:-97.157,scheduleConfidence:{level:'medium',label:'Target published',
   detail:'Not launch GO'},status:'To Be Confirmed'}
 ];
 const mime={'.html':'text/html; charset=utf-8','.css':'text/css','.js':'application/javascript','.json':'application/json','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg'};
-let failedSource=false;
+let failedSource=false,removedMission=null;
 const assert=(ok,message)=>{if(!ok)throw Error(message)};
 const stamp=()=>new Date(Date.now()-60000).toISOString();
 function payload(region='florida',id=null,stale=false){
@@ -41,8 +46,10 @@ function payload(region='florida',id=null,stale=false){
   {level:'assessed',label:'Fixture local NWS surface reference',
    detail:'Model reference only, not rocket visibility or launch GO',
    places:[{name:'Public waterfront',status:'ok',cloudStatus:'ok',cloudCoverPercent:40,
-    assessment:{label:'Sky-cover reference only',detail:'Not a visibility guarantee'},
-    period:{shortForecast:'Partly cloudy'}}]}:
+    assessment:{level:'fair',label:'Sky-cover reference only',detail:'Not a visibility guarantee'},
+    updatedAt:stamp(),period:{shortForecast:'Partly cloudy',
+     startTime:new Date(Date.parse(selected.net)-30*60000).toISOString(),
+     endTime:new Date(Date.parse(selected.net)+30*60000).toISOString()}}]}:
   {level:'unknown',label:'No precise target for a forecast',places:[],
    detail:'No launch-time NWS grid could be matched'};
  return {
@@ -76,7 +83,7 @@ const server=http.createServer(async(req,res)=>{
   if(u.pathname==='/api/rocket-launch-usa'){
    if(failedSource)return send(503,{ok:false,error:'Fixture source unavailable'});
    const id=u.searchParams.get('launchId'),region=u.searchParams.get('region')||'florida';
-   if(id&&!launches.some(m=>m.id===id&&m.region===region))
+   if(id&&(id===removedMission||!launches.some(m=>m.id===id&&m.region===region)))
     return send(404,{ok:false,error:'Fixture mission no longer in bounded feed'});
    return send(200,payload(region,id,u.searchParams.get('stale')==='1'));
   }
@@ -142,9 +149,9 @@ const whenReady=page=>page.waitForFunction(id=>
     v.name+' hero mission picker disabled');
    assert(await page.locator('#rl-flight-locate').isEnabled(),
     v.name+' mapped mission focus disabled');
-   assert((await page.locator('#rl-flight-next-title').innerText()).includes('viewing arrangements'),
+   assert((await page.locator('#rl-flight-next-title').innerText()).includes('source-backed spectator option'),
     v.name+' Foundry next evidence is not an access check for precise Florida mission');
-   assert((await page.locator('#rl-flight-next-link').getAttribute('href'))==='/national-tools/space-coast-launch/',
+   assert((await page.locator('#rl-flight-next-link').getAttribute('href'))==='/national-tools/space-coast-launch/?launchId='+A+'&via=rocket-foundry&stage=access',
     v.name+' Foundry source handoff misroutes the selected coast');
    const first=await page.locator('#rl-flight-headline').evaluate(n=>n.getBoundingClientRect().top);
    assert(first>=0 && first<v.height,v.name+' first useful answer below phone viewport '+first);
@@ -177,19 +184,22 @@ const whenReady=page=>page.waitForFunction(id=>
      v.name+' reverse native choice was not attributed correctly');
    assert((await page.locator('#rl-flight-mission-select').inputValue())===A,
     v.name+' reversing native picker did not return A');
-   assert((await page.locator('#rl-flight-next-title').innerText()).includes('viewing arrangements'),
+   assert((await page.locator('#rl-flight-next-title').innerText()).includes('source-backed spectator option'),
     v.name+' next-check answer did not reverse from B to A');
    await page.locator('#rl-flight-locate').click();
    await page.waitForFunction(()=>window.vaq?.some(a=>a[0]==='event'&&a[1]?.name==='Rocket Map Engaged'));
    events=await metrics();
    assert(events.some(a=>a.name==='Rocket Map Engaged'&&a.data.surface==='flight_desk'&&
      a.data.outcome==='pad_marker_focused'),v.name+' rocket-map focus not measured');
-   await page.locator('#rl-flight-specialist').evaluate(a=>{
+   await page.locator('#rl-flight-next-link').evaluate(a=>{
      a.addEventListener('click',e=>e.preventDefault(),{once:true});a.click();
    });
    events=await metrics();
-   assert(events.some(a=>a.name==='Rocket Viewing Next Step'&&a.data.destination==='regional_guide'&&
-     a.data.surface==='flight_desk'),v.name+' regional guide handoff not measured');
+   assert(events.some(a=>a.name==='Rocket Foundry Handoff Attempt'&&
+     a.data.destination==='regional_guide'&&a.data.stage==='access'),
+     v.name+' new primary Foundry attempt was not distinguished from older links');
+   assert(!events.some(a=>a.name==='Rocket Foundry Mission Restored'),
+     v.name+' a click alone cannot certify mission restoration');
    assert(!JSON.stringify(events).includes(A)&&!JSON.stringify(events).includes(B),
      v.name+' analytics leaked a mission identifier');
    assert(events.filter(a=>a.name==='Rocket Flight Desk Exposed').length===1,
@@ -217,6 +227,67 @@ const whenReady=page=>page.waitForFunction(id=>
     mission:'A-B-A + native/hero sync',map:'focused',overflowPx:overflow,
     fontPx:computed,jsErrors:0});
    await context.close();
+  }
+  // Full browser handoff: a non-default national selection must be confirmed
+  // from the regional app's OWN loaded schedule; then return to national and
+  // reject a removed ID. Synthetic fixture values are never live launch facts.
+  for(const v of [{name:'phone390',width:390,height:844},
+    {name:'desktop1440',width:1440,height:900}]){
+    const context=await browser.newContext({viewport:{width:v.width,height:v.height},
+      reducedMotion:'reduce'});
+    const page=await context.newPage();
+    await localLeaflet(page);
+    await page.route('https://*.basemaps.cartocdn.com/**',route=>route.abort());
+    await page.route('https://tile.openstreetmap.org/**',route=>route.abort());
+    const roundTripErrors=[];
+    page.on('pageerror',error=>roundTripErrors.push(error.message));
+    await page.goto(base+'?region=texas&launchId='+C,{waitUntil:'domcontentloaded'});
+    await page.waitForFunction(id=>document.querySelector('#rl-flight-desk')?.dataset.launchId===id,C);
+    await page.locator('#rl-flight-mission-select').selectOption(D);
+    await page.waitForFunction(id=>document.querySelector('#rl-flight-desk')?.dataset.launchId===id,D);
+    const handoff=await page.locator('#rl-flight-next-link').getAttribute('href');
+    assert(handoff==='/starbase-rocket-launch-viewing/?launchId='+D+'&via=rocket-foundry&stage=access',
+      v.name+' national next action omitted exact non-default mission');
+    await Promise.all([
+      page.waitForURL(u=>u.pathname==='/starbase-rocket-launch-viewing/'&&
+        u.searchParams.get('launchId')===D,{timeout:15000}),
+      page.locator('#rl-flight-next-link').click()
+    ]);
+    await page.locator('#rocket-foundry-receipt[data-restoration="restored"]')
+      .waitFor({state:'visible',timeout:15000});
+    assert((await page.locator('#sb-mission-name').innerText()).includes('non-default Starship D'),
+      v.name+' destination receipt disagrees with regional loaded mission');
+    const backlink=await page.locator('#sb-national-link').getAttribute('href');
+    assert(new URL(backlink,base).searchParams.get('launchId')===D,
+      v.name+' return link did not preserve exact mission D');
+    await page.screenshot({path:path.join(out,v.name+'-regional-restored.png'),
+      animations:'disabled'});
+    report.screenshots.push(v.name+'-regional-restored.png');
+    await page.locator('#sb-national-link').click();
+    await page.waitForURL(u=>u.pathname==='/national-tools/rocket-launch-live/'&&
+      u.searchParams.get('launchId')===D,{timeout:15000});
+    await page.waitForFunction(id=>document.querySelector('#rl-flight-desk')?.dataset.launchId===id,D);
+    assert((await page.locator('#rl-flight-mission').innerText()).includes('non-default Starship D'),
+      v.name+' returned national flight desk silently reverted to C');
+    removedMission=D;
+    try{
+      await page.goto(new URL(handoff,base).href,{waitUntil:'domcontentloaded'});
+      await page.locator('#rocket-foundry-receipt[data-restoration="unavailable"]')
+        .waitFor({state:'visible',timeout:15000});
+      assert((await page.locator('#sb-mission-name').innerText()).includes('Fixture Texas Starship C'),
+        v.name+' fixture failed to exercise regional fallback to a NEW mission');
+      assert((await page.locator('#rocket-foundry-receipt').innerText()).includes('NEW selection'),
+        v.name+' fallback failed to explain removed mission');
+      const overflow=await page.evaluate(()=>
+        document.documentElement.scrollWidth-document.documentElement.clientWidth);
+      assert(overflow<=2,v.name+' regional receipt horizontal overflow '+overflow);
+    }finally{removedMission=null;}
+    assert(roundTripErrors.length===0,v.name+' linked journey JS errors: '+
+      roundTripErrors.join('; '));
+    report.cases.push({case:v.name+'-nondefault-regional-roundtrip',
+      stage:'national D → loaded Starbase D → national D → removed D explicitly unavailable',
+      restoredFrom:'actual loaded fixture response',removedId:'unavailable',overflowPx:0});
+    await context.close();
   }
   failedSource=true;
   const errCtx=await browser.newContext({viewport:{width:390,height:844}});

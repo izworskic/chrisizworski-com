@@ -54,6 +54,7 @@
   set('mission-advice',picked?
    'Even with a published target, do not approach Narrow Cape until Alaska Aerospace independently confirms access and road restrictions. No public launch-day viewing venue is verified.':
    'No public mission is returned in the limited snapshot. This does NOT establish that range activity has stopped; government launches may be unannounced.');
+  window.RocketFoundryHandoff?.loaded('alaska',picked?.id,picked?.name);
   selectedNational(picked?.id);
   const url=new URL(location.href);
   if(picked?.id)url.searchParams.set('launchId',picked.id);else url.searchParams.delete('launchId');

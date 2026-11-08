@@ -99,7 +99,8 @@
       url.startsWith('/starbase-rocket-launch-viewing/')?'texas':
       url.startsWith('/wallops-rocket-launch-viewing/')?'virginia':
       url.startsWith('/kodiak-rocket-launch-viewing/')?'alaska':
-      url.startsWith('/barking-sands-rocket-launch-viewing/')?'hawaii':null;
+      url.startsWith('/barking-sands-rocket-launch-viewing/')?'hawaii':
+      url.startsWith('/vandenberg-rocket-launch-viewing/')?'california':null;
     if (!region) return url;
     const selected = data?.selectedRegion === region ? data.selectedLaunchId : null;
     return selected && /^[0-9a-f-]{36}$/i.test(selected) ?
@@ -118,6 +119,7 @@
       r.id === 'virginia' ? 'Wallops public launch-viewing atlas · same mission' :
       r.id === 'alaska' ? 'Kodiak range access desk · same mission' :
       r.id === 'hawaii' ? 'Barking Sands Navy access desk · same mission' :
+      r.id === 'california' ? 'Vandenberg public viewing guide · same mission' :
       'Florida detailed viewer · same mission']);
     for (const [url, title] of links) {
       const a = anchor(url, title);
@@ -1008,8 +1010,12 @@
       state.kscEvidence={ok:false,selectedLaunchId:id,health:{status:'overdue'},
         timeline:null};
     }
-    if(state.data?.selectedLaunch?.id===id&&state.data?.region?.id==='florida')
+    if(state.data?.selectedLaunch?.id===id&&state.data?.region?.id==='florida'){
       renderKscMission(state.data);
+      document.dispatchEvent(new CustomEvent('rocket-viewing:ksc-evidence',
+        {detail:{region:'florida',launchId:id,
+          status:$('rl-ksc-official-viewing')?.dataset.status||'unknown'}}));
+    }
   }
 
   function renderOfficialEventCoverage(root,reconciliation,region){
@@ -1227,8 +1233,10 @@
     if (launchId) params.set('launchId', launchId);
     const url = API + (params.size ? '?' + params.toString() : '');
     $('rl-launch-select').disabled = true;
+    let responseStatus=0;
     try {
       const response = await fetch(url, { headers: { Accept: 'application/json' } });
+      responseStatus=response.status;
       const data = await response.json();
       if (sequence !== state.request) return;
       if (!response.ok || !data.ok) throw new Error(data.error || 'Launch data unavailable');
@@ -1250,6 +1258,8 @@
       document.dispatchEvent(new CustomEvent('rocket-truth:mission-selected',
         {detail:{launchId:null}}));
       document.dispatchEvent(new CustomEvent('rocket-viewing:data',{detail:null}));
+      document.dispatchEvent(new CustomEvent('rocket-viewing:failure',
+        {detail:{removed:responseStatus===404,region,reason:responseStatus===404?'removed':'unavailable'}}));
       chip($('rl-schedule-grade'), 'Schedule temporarily unavailable', 'unknown');
       renderVisuals(null);
       set('rl-watch-status', 'Media unavailable');

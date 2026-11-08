@@ -138,6 +138,19 @@ npm run verify:all
 
 The dedicated `Experience Foundry acceptance` PR workflow runs populated, empty, stale, expired, conflict and hostile-text scenarios for both recipes at 360/390/768/1440px; verifies selection/reversal, keyboard, no-JS, reduced-motion mode, overflow and script errors; and retains screenshots plus `results.json`. **Fixtures are explicitly synthetic.** They test mechanics, not current ships, wildlife or provider availability. Inspect screenshots and independently review real-data claims before releasing any product. Core unit tests are included in the existing full repo gate via `tests/*.test.js`.
 
+## Second-pass Foundry acceptance: connected decisions without generic interfaces
+
+The [Rocket Launch Live second pass](pilots/rocket-launch-live-second-pass.md) exposed four reusable defects in conventional planning: a superficially different but implausible competing design, a query string counted as connected state, an access-verification loop that never advanced with new evidence, and clicks counted as a successful visitor journey.
+
+All new plan packets now require:
+1. **Two plausible, safe designs:** compare first screen, meaningful choice, changed answer, map/media/evidence coupling, phone experience and costs. Neither can be a knowingly unsafe straw-man countdown. The best choice may preserve a distinctive existing product identity.
+2. **Loaded-state continuity:** enumerate linked and return journeys. One selected identifier must agree with actual destination data. Track missing IDs and A→B→A; a query string or click alone does not establish restoration.
+3. **Evidence progression:** explicitly model what changes when an unknown becomes supported, stale, conflicted or closed. Distinguish an original published rule from event-specific status. End perpetual "verify access" loops when a more useful supported question can be posed, without inventing evidence.
+4. **Privacy-safe measured actions:** separate the new primary action from older links, handoff attempt from destination-confirmed restoration, and both from an actual completed visitor decision. Use bounded categories rather than IDs, URLs or coordinates. Record no baseline as NOT AVAILABLE, not zero conversion.
+5. **Honest releases:** implementation, owner CI, inspected browser runs/screen widths, exact commit, preview, deployed SHA, independent public smoke and outcomes are separate approvals. A passing structural checker cannot claim CTR, revenue, safety, map availability or completion.
+
+These are **shared quality questions**, not a mandatory Pad/Shore/Sky interface. Mission-specific priorities, source rules and visuals remain in Rocket Launch Live; future tools should invent their own decision and composition.
+
 ## Completion boundaries
 
 Version 0.2 established the bounded preview workbench: discovery, custom planning packets, schema-v2 initialization, validation, deterministic preview builds, source-context displays and automated browser acceptance. It does **not** dynamically invent a design from any arbitrary question, gather primary observations, run agentic research, render third-party maps, publish, or measure traffic.
