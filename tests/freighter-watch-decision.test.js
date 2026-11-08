@@ -69,6 +69,15 @@ test('NWS alerts unavailable prevents a weather clearance',()=>{
  assert.equal(plan.code,'VERIFY_BEFORE_TRAVEL');
  assert.equal(plan.weather.level,'unverified');
 });
+
+test('fresh source-classified Soo in-lock vessel gives only an immediate nearby opportunity',()=>{
+ const inLock={...ship({speedKnots:0}),state:'in-lock',chamberName:'Poe Lock'};
+ const r=report({status:'in-lock',pick:null,inLock,observations:[inLock],when:'now'});
+ const plan=engine.recommendation(r,context('soo'),now);
+ assert.equal(plan.code,'LOCAL_IN_LOCK');
+ assert.match(plan.title,/reported in the locks now/);
+ assert.match(plan.when,/not a future arrival/);
+});
 test('near Port Huron moving commercial AIS yields only a local opportunistic look',()=>{
  const nearby=ship({lat:42.997,lon:-82.423,speedKnots:6,seen:iso(now-2*60000)});
  const r=report({status:'observed',pick:null,observations:[nearby]});
