@@ -18,7 +18,7 @@
   }
 })(typeof window==='object'?window:globalThis,function(){
   const REGIONS=new Set(['california','florida','texas','virginia','alaska','hawaii']);
-  const SURFACES=new Set(['flight_desk','native_picker','map_marker','national_board','coast_picker','region_map','national_header','region_links','viewing_card','other']);
+  const SURFACES=new Set(['flight_desk','schedule_roster','next_launch','native_picker','map_marker','national_board','coast_picker','region_map','national_header','region_links','viewing_card','other']);
   const STATES=new Set(['review','timing','stale','hold','access','unknown','unavailable']);
   const OUTCOMES=new Set(['pad_marker_focused','coast_fallback','mission_request','locate_request']);
   const DESTINATIONS=new Set(['regional_guide','official_access','viewing_options','spectator_weather']);
@@ -148,7 +148,9 @@
     // Emitted ONLY by the native hero selector, not a programmatic mission
     // default, URL deep link, or live data refresh.
     doc.addEventListener('rocket-experience:choose',e=>{
-      intent(e.detail?.launchId,e.detail?.region,'flight_desk');
+      const surface=['schedule_roster','next_launch'].includes(e.detail?.surface)?
+        e.detail.surface:'flight_desk';
+      intent(e.detail?.launchId,e.detail?.region,surface);
     });
     // The national map's callback signals a real popup mission choice.
     doc.addEventListener('rocket-experience:map-choose',e=>{

@@ -18,7 +18,7 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <link rel="stylesheet" href="/assets/rocket-map-pins.css?v=20261107-origin-v1">
 <link rel="stylesheet" href="/assets/rocket-flight-desk.css?v=20261108-foundry-v2">
-<link rel="stylesheet" href="/national-tools/rocket-launch-live/styles.css?v=20261108-florida-answer-v1">
+<link rel="stylesheet" href="/national-tools/rocket-launch-live/styles.css?v=20261108-schedule-first-v1">
 <link rel="stylesheet" href="/national-tools/assets/launch-truth-desk.css?v=20261102-truth-v2">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5D2V2W7HN"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-Y5D2V2W7HN');</script>
@@ -26,11 +26,11 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
 <script defer src="/assets/rocket-map-pins.js?v=20261107-origin-v1"></script>
 <script defer src="/assets/rocket-flight-desk.js?v=20261108-florida-answer-v1"></script>
-<script defer src="/assets/rocket-engagement-funnel.js?v=20261108-florida-answer-v1"></script>
+<script defer src="/assets/rocket-engagement-funnel.js?v=20261108-schedule-first-v1"></script>
 <script defer src="/_vercel/insights/script.js"></script>
 <script src="/assets/rocket-florida-access.js?v=20261108-visitor-v1" defer></script>
  <script src="/national-tools/rocket-launch-live/vandenberg.js?v=20261103-viewing-v1" defer></script>
-<script src="/national-tools/rocket-launch-live/app.js?v=20261108-florida-answer-v1" defer></script>
+<script src="/national-tools/rocket-launch-live/app.js?v=20261108-schedule-first-v1" defer></script>
 <script src="/national-tools/assets/launch-truth-desk.js?v=20261102-truth-v2" defer></script>
 </head>
 <body>
@@ -41,10 +41,47 @@
 </header>
 <main id="main-content" class="rl-page">
  <div class="rl-crumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/national-tools/">U.S. Tools</a><span aria-hidden="true">/</span>Rocket Launch Live USA</div>
+ <section class="rl-schedule-front" id="launch-schedule" aria-labelledby="rl-schedule-front-title">
+  <header class="rl-schedule-front-header">
+    <div><p class="rl-schedule-overline"><span class="rl-front-beacon" aria-hidden="true"></span> LIVE SCHEDULE DESK / UNITED STATES</p>
+      <h1 id="rl-schedule-front-title">Upcoming rocket launches.</h1>
+      <p>Find a mission first. Then see where you can actually watch it.</p></div>
+    <a class="rl-front-view-link" href="#choose-coast">Explore launch regions <span aria-hidden="true">↗</span></a>
+  </header>
+  <div class="rl-schedule-shell">
+    <article class="rl-front-feature" aria-labelledby="rl-front-next-title">
+      <div class="rl-front-feature-top"><span>01 / NEXT LISTED U.S. COASTAL LAUNCH</span><span id="rl-front-feature-region">Checking launch sites</span></div>
+      <div class="rl-front-orbit" aria-hidden="true"><span></span></div>
+      <div class="rl-front-next-copy">
+        <p class="rl-front-feature-label" id="rl-front-feature-vehicle">Checking mission roster</p>
+        <h2 id="rl-front-next-title">Checking the next launch…</h2>
+        <p id="rl-front-feature-pad">Published pad and mission evidence will appear here.</p>
+        <div class="rl-front-feature-time"><span id="rl-front-feature-date">Launch window not verified</span><strong id="rl-front-feature-clock">Time not confirmed</strong></div>
+        <div class="rl-front-countdown" aria-label="Time until next launch target">
+          <span class="rl-front-countdown-label">TARGET COUNTDOWN <small>Not a liftoff guarantee</small></span>
+          <strong id="rl-front-countdown-value" aria-live="off">Checking timing precision…</strong>
+        </div>
+        <p class="rl-front-feature-precision" id="rl-front-feature-precision">A scheduled target is not launch clearance.</p>
+        <button type="button" id="rl-front-feature-action" class="rl-front-plan" disabled>Plan where to watch this launch <span aria-hidden="true">↗</span></button>
+      </div>
+    </article>
+    <div class="rl-front-roster">
+      <div class="rl-front-roster-head"><div><span class="rl-front-smallcap">02 / FLIGHT ROSTER</span><h2>Find your mission</h2></div><span class="rl-front-timezone" id="rl-front-timezone">Times use your local clock</span></div>
+      <div class="rl-front-controls">
+        <label class="rl-front-search"><span class="rl-visually-hidden">Search rocket launches</span><input id="rl-front-search-input" type="search" placeholder="Search mission, rocket or pad" autocomplete="off"></label>
+        <label class="rl-front-region-filter"><span class="rl-visually-hidden">Filter by launch region</span><select id="rl-front-region-filter"><option value="all">All six regions</option><option value="california">California</option><option value="florida">Florida</option><option value="texas">Texas</option><option value="virginia">Virginia</option><option value="alaska">Alaska</option><option value="hawaii">Hawaiʻi</option></select></label>
+      </div>
+      <div class="rl-front-window" role="group" aria-label="Launch date window"><button type="button" data-window="all" aria-pressed="true">All listed</button><button type="button" data-window="10" aria-pressed="false">Next 10 days</button></div>
+      <div id="rl-front-launch-list" class="rl-front-launch-list" aria-live="polite"><p class="rl-front-wait">Checking the source-backed launch schedule…</p></div>
+      <div class="rl-front-roster-footer"><span id="rl-front-result-count">Waiting for published missions</span><span id="rl-front-source-status">Schedule data is being checked.</span></div>
+    </div>
+  </div>
+  <p class="rl-front-safety">Times are schedule targets, not confirmation of liftoff. This roster covers the six U.S. coastal visitor regions, not every launch worldwide or every military and sounding rocket.</p>
+ </section>
  <section class="rl-hero" aria-labelledby="rl-title">
    <div class="rl-hero-copy">
      <p class="rl-eyebrow"><span class="rl-pulse" aria-hidden="true"></span> USA launch intelligence <span class="rl-hero-separator">/</span> Atlantic · Pacific · Gulf</p>
-     <h1 id="rl-title">Find the rocket.<br><em>Know where to watch.</em></h1>
+     <h2 id="rl-title">Find the rocket.<br><em>Know where to watch.</em></h2>
      <p class="rl-lede">A launch on the calendar is not a viewing plan. Select a real mission, locate its pad, and check timing, public access, and the sky before you travel.</p>
      <div class="rl-flight-desk" id="rl-flight-desk" data-status="unavailable" data-launch-id="" aria-labelledby="rl-flight-mission">
        <div class="rl-flight-topline">

@@ -181,6 +181,13 @@ const whenReady=page=>page.waitForFunction(id=>
    const response=await page.goto(base+'?region=florida&launchId='+A,{waitUntil:'domcontentloaded'});
    assert(response.status()===200,v.name+' public HTML HTTP failed');
    await whenReady(page);
+   // The new first-screen answer is the schedule. The deeper flight desk only
+   // earns an exposure event once the visitor scrolls to it.
+   const frontTop=await page.locator('#rl-front-next-title').evaluate(n=>
+     n.getBoundingClientRect().top+window.scrollY);
+   assert(frontTop>=0 && frontTop<v.height,
+     v.name+' next listed launch missing from first viewport '+frontTop);
+   await page.locator('#rl-flight-desk').scrollIntoViewIfNeeded();
    await page.waitForFunction(()=>window.vaq?.some(a=>a[0]==='event'&&a[1]?.name==='Rocket Flight Desk Exposed'));
    const metrics=()=>page.evaluate(()=>window.vaq?.filter(a=>a[0]==='event').map(a=>a[1])||[]);
    let events=await metrics();
@@ -203,8 +210,9 @@ const whenReady=page=>page.waitForFunction(id=>
     v.name+' Foundry next evidence is not an access check for precise Florida mission');
    assert((await page.locator('#rl-flight-next-link').getAttribute('href'))==='/national-tools/space-coast-launch/?launchId='+A+'&via=rocket-foundry&stage=access',
     v.name+' Foundry source handoff misroutes the selected coast');
-   const first=await page.locator('#rl-flight-headline').evaluate(n=>n.getBoundingClientRect().top);
-   assert(first>=0 && first<v.height,v.name+' first useful answer below phone viewport '+first);
+   // Above-the-fold next mission was verified before scrolling to the detail desk.
+   assert((await page.locator('#rl-front-next-title').innerText()).includes('Fixture Florida rocket A'),
+    v.name+' schedule-first next launch not linked to source fixture');
    await page.locator('#rl-flight-mission-select').selectOption(B);
    await page.waitForFunction(id=>document.querySelector('#rl-flight-desk')?.dataset.launchId===id,B);
    events=await metrics();
@@ -273,7 +281,7 @@ const whenReady=page=>page.waitForFunction(id=>
      const preview=await page.locator('.rl-hero').screenshot({type:'jpeg',quality:28,animations:'disabled'});
      console.log('ROCKET_FLIGHT_DESK_PREVIEW_'+v.name+'='+preview.toString('base64'));
    }
-   report.cases.push({viewport:v.name,firstAnswerTop:first,
+   report.cases.push({viewport:v.name,firstAnswerTop:frontTop,
     mission:'A-B-A + native/hero sync',map:'focused',overflowPx:overflow,
     fontPx:computed,jsErrors:0});
    await context.close();
@@ -386,6 +394,61 @@ const whenReady=page=>page.waitForFunction(id=>
       restoredFrom:'actual loaded fixture response',removedId:'unavailable',overflowPx:0});
     await context.close();
   }
+  // Schedule-first UI: mobile + desktop visual evidence, filtering, local
+  // precision labels and end-to-end mission selection from the new roster.
+  for(const view of [{name:'roster-phone390',width:390,height:844},
+    {name:'roster-desktop1440',width:1440,height:900}]){
+    const context=await browser.newContext({viewport:{width:view.width,height:view.height},
+      reducedMotion:'reduce'});
+    const page=await context.newPage(),pageErrors=[];
+    page.on('pageerror',e=>pageErrors.push(e.message));
+    await localLeaflet(page);
+    await page.goto(base+'?region=florida&launchId='+A,{waitUntil:'domcontentloaded'});
+    await whenReady(page);
+    assert(await page.locator('#rl-front-mission-name').count()===0,
+      view.name+' unexpected alternate roster markup');
+    assert((await page.locator('#rl-front-next-title').innerText()).includes('Fixture Florida rocket A'),
+      view.name+' next launch was not populated from selected source');
+    assert(await page.locator('.rl-front-mission').count()===4,
+      view.name+' expected four fixture missions in national roster');
+    assert((await page.locator('.rl-front-mission').nth(1).innerText()).includes('Launch time TBD'),
+      view.name+' date-only Florida target was falsely given an exact hour');
+    const x=await page.evaluate(()=>Math.max(0,document.documentElement.scrollWidth-innerWidth));
+    assert(x<=2,view.name+' schedule-first layout horizontal overflow '+x);
+    const shot=view.name+'-schedule-first.png';
+    await page.locator('#launch-schedule').screenshot({
+      path:path.join(out,shot),animations:'disabled'});
+    report.screenshots.push(shot);
+    const designPreview=await page.locator('#launch-schedule').screenshot({
+      type:'jpeg',quality:32,animations:'disabled'});
+    console.log('ROCKET_SCHEDULE_PREVIEW_'+view.name+'='+designPreview.toString('base64'));
+    await page.locator('#rl-front-search-input').fill('Starship');
+    assert(await page.locator('.rl-front-mission').count()===2,
+      view.name+' rocket-name search failed');
+    const first=page.locator('.rl-front-mission').first();
+    await first.focus();
+    await first.press('Enter');
+    await page.waitForFunction(id=>document.querySelector('#rl-flight-desk')?.dataset.launchId===id,C);
+    assert((await page.locator('#rl-launch-select').inputValue())===C,
+      view.name+' roster choice failed to update existing mission selector');
+    assert(new URL(await page.url()).searchParams.get('region')==='texas',
+      view.name+' roster choice failed to update deep-link region');
+    await page.locator('#rl-front-region-filter').selectOption('florida');
+    assert(await page.locator('.rl-front-mission').count()===0,
+      view.name+' region filter did not intersect search correctly');
+    await page.locator('#rl-front-search-input').fill('');
+    assert(await page.locator('.rl-front-mission').count()===2,
+      view.name+' clearing search did not restore Florida list');
+    await page.locator('.rl-front-window [data-window="10"]').click();
+    assert((await page.locator('.rl-front-window [data-window="10"]')
+      .getAttribute('aria-pressed'))==='true',
+      view.name+' date-window control not activated');
+    assert(pageErrors.length===0,view.name+' new roster JS errors: '+pageErrors.join('; '));
+    report.cases.push({case:view.name,launchRows:4,search:'Starship matched 2',
+      keyboardSelection:'C via shared mission pipeline',overflowPx:x});
+    await context.close();
+  }
+
   failedSource=true;
   const errCtx=await browser.newContext({viewport:{width:390,height:844}});
   const error=await errCtx.newPage();await localLeaflet(error);
@@ -395,6 +458,10 @@ const whenReady=page=>page.waitForFunction(id=>
   assert((await error.locator('#rl-flight-next-title').innerText()).includes('schedule cannot establish'),
     'Source outage claimed an available next mission or viewing clearance');
   assert(await error.locator('#rl-flight-mission-select').isDisabled(),'Source outage retained launch menu');
+  assert((await error.locator('#rl-front-next-title').innerText()).includes('Schedule unavailable'),
+   'Source outage retained old national next-launch claim');
+  assert(await error.locator('#rl-front-feature-action').isDisabled(),
+   'Source outage retained an active launch planner link');
   report.cases.push({case:'source-outage',status:'unavailable; no source invented'});
   await errCtx.close();failedSource=false;
   const noCtx=await browser.newContext({javaScriptEnabled:false,viewport:{width:390,height:844}});
