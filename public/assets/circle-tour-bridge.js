@@ -169,6 +169,48 @@
     }
     if(!box.children.length)box.append(el('li','ctb-road-note','No official source links in this region; check the highway authority directly.'));
   }
+
+  // Sense of place is an interpretive layer, independent of the specialist's live/access evidence.
+  // Display only site-exact licensed records: never a generic landscape or AI-generated substitute.
+  function renderPlaceStory(model,host){
+    const story=root.CircleTourPlaceStoryData?.selectPlaceStory?.(model.stopId);
+    if(!story||story.placeId!==model.stopId||!Array.isArray(story.photos))return;
+    const section=el('section','ctb-place-story');
+    section.setAttribute('aria-label','Landscape and story of '+story.name);
+    section.append(el('p','ctb-place-kicker','THE PLACE BEHIND THE PLAN'));
+    const layout=el('div','ctb-place-layout'),gallery=el('div','ctb-place-gallery');
+    const validImage=url=>typeof url==='string'&&/^https:\/\/thumb\.wikimedia\.org\/wikipedia\/commons\/thumb\//.test(url);
+    const validSource=url=>typeof url==='string'&&/^https:\/\/commons\.wikimedia\.org\/wiki\/File:/.test(url);
+    for(const photo of story.photos.slice(0,2)){
+      if(photo.placeId!==model.stopId||photo.status!=='verified-licensed'||!validImage(photo.imageURL)
+        ||!validSource(photo.sourceURL)||!/^https:\/\/creativecommons\.org\//.test(photo.licenseURL))continue;
+      const figure=el('figure','ctb-place-photo');
+      const img=el('img');img.src=photo.imageURL;img.alt=photo.alt;
+      img.loading='lazy';img.decoding='async';img.width=photo.width||960;img.height=photo.height||720;
+      img.addEventListener('error',()=>{figure.remove();section.classList.add('ctb-place-image-failed');});
+      const caption=el('figcaption'),captionText=el('span','ctb-place-caption',photo.caption);
+      const credit=el('span','ctb-place-credit','Photo: ');
+      const artist=el('a','',photo.photographer);artist.href=photo.sourceURL;
+      artist.target='_blank';artist.rel='noopener noreferrer';
+      const license=el('a','',photo.licenseName);license.href=photo.licenseURL;
+      license.target='_blank';license.rel='noopener noreferrer';
+      credit.append(artist,document.createTextNode(' · '),license);
+      caption.append(captionText,credit);figure.append(img,caption);gallery.append(figure);
+    }
+    const prose=el('div','ctb-place-copy');
+    prose.append(el('h4','ctb-place-title',story.eyebrow),
+      el('p','ctb-place-prose',story.story),
+      el('p','ctb-place-character',story.character));
+    const why=el('p','ctb-place-why',story.why);prose.append(why);
+    const source=link('Read the park’s own description',story.sourceURL,'ctb-place-source');
+    prose.append(source);
+    if(gallery.children.length)layout.append(gallery);
+    layout.append(prose);section.append(layout);
+    section.append(el('p','ctb-place-disclosure','These are dated landscape photographs, not today’s weather, access or trail conditions.'));
+    host.append(section);
+    track('place-story-view',{stop:model.stopId,photoCount:gallery.children.length});
+  }
+
   function renderDecision(model){
     const host=$('ctb-decision');if(!host)return;
     host.replaceChildren();
@@ -226,6 +268,7 @@
       const stop=el('a','ctb-secondary-link','Use the original stop guide');
       stop.href='#stop-'+model.stopId;options.append(stop);host.append(options);
     }
+    renderPlaceStory(model,host);
     if(model.total>1){
       const nav=el('div','ctb-stage-navigation');
       const prev=el('button','ctb-nav-button','Previous planned stop');
