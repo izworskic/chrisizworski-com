@@ -187,7 +187,11 @@
       const figure=el('figure','ctb-place-photo');
       const img=el('img');img.src=photo.imageURL;img.alt=photo.alt;
       img.loading='lazy';img.decoding='async';img.width=photo.width||960;img.height=photo.height||720;
-      img.addEventListener('error',()=>{figure.remove();section.classList.add('ctb-place-image-failed');});
+      img.addEventListener('error',()=>{
+        figure.remove();
+        if(!gallery.children.length){gallery.remove();section.classList.add('ctb-place-image-failed');}
+        else if(gallery.children.length===1)gallery.classList.add('ctb-place-single-photo');
+      });
       const caption=el('figcaption'),captionText=el('span','ctb-place-caption',photo.caption);
       const credit=el('span','ctb-place-credit','Photo: ');
       const artist=el('a','',photo.photographer);artist.href=photo.sourceURL;
