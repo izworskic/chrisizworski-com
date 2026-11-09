@@ -26,7 +26,7 @@ run.diagnosis={
       startLine:460,endLine:478,observation:'The current next-check panel, collapsible alternatives and static field-guide fallback are already in place and must not be replaced by a decorative gallery.'},
     {id:'official-park-places',kind:'external',url:'https://www.ontarioparks.ca/park/sleepinggiant/activities',
       checkedAt:'2026-11-09T08:20:00-05:00',
-      limitation:'Published park activities and 21.8 km summit-route length; not today's trail access, travel time or live weather.',
+      limitation:'Published park activities and 21.8 km summit-route length; not current trail access, travel time or live weather.',
       observation:'The Top of the Giant requires a substantial return hike from parking, so its cliffs and nearby Sea Lion are materially different experiences.'},
     {id:'licensed-specific-photo',kind:'external',url:'https://commons.wikimedia.org/wiki/File:Old_Woman_Bay.jpg',
       checkedAt:'2026-11-09T08:20:00-05:00',
