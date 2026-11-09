@@ -82,3 +82,7 @@ Proof bundles retain `run.json`, `baseline.json`, `candidate.json`, the executed
 Keep the release record separate: browser/visual review, full owner CI, production deployment, public smoke and measured visitor outcomes each need their own evidence. Local replay leaves them explicitly unverified. A source-link click is not a completed trip plan. Analytics must distinguish the new interaction and its completion signal; low traffic is a limitation, not permission to fabricate uplift.
 
 After a real pilot, record reusable lessons in Foundry. Keep domain logic in the owning product and shared standards here. Repairs and creative enhancements can both be valuable, but name what was accomplished honestly. A packet, a checklist or a renderer preview is never the end of an improvement assignment.
+
+## Optional documentary storytelling pass
+
+For a physical place where better orientation is the selected opportunity, apply [Place & Story](PLACE_AND_STORY.md): verify photo-level subject and rights, research distinctive landforms and visitor scale, retain the existing real next action, then prove before/after identity and no-photo resilience. This adds no mandatory Foundry recipe or gallery template. Passing the replay is not proof that all external image URLs loaded in a real browser or that a visitor stayed longer.
