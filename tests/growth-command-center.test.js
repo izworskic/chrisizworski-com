@@ -57,6 +57,22 @@ test("page-attributed AdSense is not inferred from GSC clicks or GA4 traffic", (
   assert.equal(actual.rows[0].pageRpm, 30);
 });
 
+test("foreign AdSense URLs cannot contaminate site earnings or imply complete coverage", () => {
+  const csv = [
+    "Page URL,Estimated earnings,Page views",
+    url("soo-locks") + ",3.00,100",
+    "https://unrelated.example/other/,999.00,20000",
+  ].join("\n");
+  const result = engine.adsense(csv);
+  assert.equal(result.total, 3);
+  assert.equal(result.records.length, 1);
+  assert.equal(result.partialAttribution, true);
+  const report = engine.analyze({ adsense: result }, {
+    adsStart: "2026-11-01", adsEnd: "2026-11-01", adSenseComplete: true,
+  });
+  assert.equal(report.kpis.adsDaily, null);
+});
+
 test("GSC growth is withheld unless dates are equal-length and consecutive", () => {
   const current = engine.gsc("Top pages,Clicks,Impressions,CTR,Position\n" + url("soo-locks") + ",80,1800,4.4%,6");
   const previous = engine.gsc("Top pages,Clicks,Impressions,CTR,Position\n" + url("soo-locks") + ",40,900,4.4%,6");
