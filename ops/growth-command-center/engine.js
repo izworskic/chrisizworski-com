@@ -94,8 +94,8 @@
     return { records: records, dropped: dropped, kind: "gsc" };
   }
   function ga4(text) {
-    var d = getRows(text, [["page path", "page path and screen class", "landing page", "landing page  query string", "full page url", "page location", "page"], ["views", "screen page views", "sessions", "active users"]]);
-    var p = col(d.names, ["page path", "page path and screen class", "landing page", "landing page  query string", "full page url", "page location", "page"]);
+    var d = getRows(text, [["page path", "page path and screen class", "landing page", "landing page query string", "full page url", "page location", "page"], ["views", "screen page views", "sessions", "active users"]]);
+    var p = col(d.names, ["page path", "page path and screen class", "landing page", "landing page query string", "full page url", "page location", "page"]);
     var v = col(d.names, ["views", "screen page views"]), sessions = col(d.names, ["sessions"]);
     var active = col(d.names, ["active users"]), returning = col(d.names, ["returning users"]);
     var host = col(d.names, ["hostname", "host name"]);
