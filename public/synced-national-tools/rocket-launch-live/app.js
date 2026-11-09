@@ -5,7 +5,7 @@
   const KSC_OFFICIAL_API = '/api/space-coast-ksc-watch';
   const $ = id => document.getElementById(id);
   const validRegions = new Set(['california', 'florida', 'texas', 'virginia', 'alaska', 'hawaii']);
-  const state = { request: 0, data: null, map: null, markers: new Map(), rocketPins: null, regions: [], userFocusedMap: false, officialEvidence: null, officialEvidenceLoaded: false, kscEvidence: null, kscMissionId: null, kscRequest: 0, floridaEvidence: null, floridaRequest: 0, floridaController: null };
+  const state = { request: 0, data: null, scheduleFailed: false, map: null, markers: new Map(), rocketPins: null, regions: [], userFocusedMap: false, officialEvidence: null, officialEvidenceLoaded: false, kscEvidence: null, kscMissionId: null, kscRequest: 0, floridaEvidence: null, floridaRequest: 0, floridaController: null };
   const el = (tag, className, value) => {
     const n = document.createElement(tag);
     if (className) n.className = className;
@@ -13,6 +13,17 @@
     return n;
   };
   const set = (id, value) => { const n = $(id); if (n) n.textContent = value ?? '—'; };
+  function updateAtlasStatus(){
+    const offline=$('rl-coast-map')?.dataset.tiles==='reference-only';
+    const prefix=offline?'Online map tiles unavailable; Natural Earth coastlines shown. ':'';
+    const message=state.scheduleFailed?
+      'Launch schedule unavailable; only geographic reference regions are shown.':
+      state.data?
+        'Region circles are references, not public entrances. Rocket icons reflect the selected schedule source.':
+        'Reference launch regions. Checking mission data.';
+    set('rl-atlas-status',prefix+message);
+  }
+
   const safeUrl = url => typeof url === 'string' &&
     (/^https:\/\/[a-z0-9.-]+(?:\/|$)/i.test(url) || /^\/(?!\/)/.test(url));
   const anchor = (url, label, className) => {
@@ -300,12 +311,94 @@
       }
     }
   }
+  function mountMapTouchControls(map, root) {
+    const wrap=$('rl-map-wrap'),toggle=$('rl-map-expand'),details=$('rl-map-details');
+    if(!wrap||!toggle)return;
+    let expanded=false;
+    const updateZoom=()=>{root.dataset.zoom=String(map.getZoom());};
+    map.on('zoomend',updateZoom);
+    updateZoom();
+    const resize=()=>requestAnimationFrame(()=>map.invalidateSize({pan:false,animate:false}));
+    function setExpanded(next){
+      if(expanded===next)return;
+      expanded=next;
+      wrap.dataset.expanded=String(expanded);
+      document.documentElement.classList.toggle('rl-map-fullscreen',expanded);
+      toggle.textContent=expanded?'Close map':'Expand map';
+      toggle.setAttribute('aria-expanded',String(expanded));
+      toggle.setAttribute('aria-label',expanded?'Close full-screen map':'Expand map for easier zooming');
+      resize();
+    }
+    toggle.disabled=false;
+    toggle.setAttribute('aria-label','Expand map for easier zooming');
+    toggle.addEventListener('click',()=>setExpanded(!expanded));
+    document.addEventListener('keydown',event=>{
+      if(expanded&&event.key==='Escape'){
+        event.preventDefault();
+        setExpanded(false);
+        toggle.focus({preventScroll:true});
+      }
+    });
+    details?.addEventListener('click',()=>setExpanded(false));
+    window.addEventListener('pagehide',()=>setExpanded(false));
+  }
+  // The six geographic bounds already used by the Rocket pins provide a
+  // source-independent regional atlas. They never invent a mission, pad or
+  // viewing entrance when the launch-schedule API is unavailable.
+  function referenceMapRegions(){
+    const boxes=window.RocketMapPins?.BOX||{};
+    return [...validRegions].map(id=>{
+      const bounds=boxes[id];
+      if(!Array.isArray(bounds)||bounds.length!==4||
+         !bounds.every(Number.isFinite))return null;
+      const button=document.querySelector('.rl-region-btn[data-region="'+id+'"]');
+      return {
+        id,lat:(bounds[0]+bounds[1])/2,lon:(bounds[2]+bounds[3])/2,
+        name:button?.querySelector('small')?.textContent?.trim()||id,
+        coast:button?.querySelector('span')?.textContent?.trim()||'Coastal range'
+      };
+    }).filter(Boolean);
+  }
   function initMap() {
-    if (state.map || !window.L || !$('rl-coast-map') || !state.data?.regions?.length) return;
-    const root = $('rl-coast-map');
+    const root=$('rl-coast-map');
+    if(state.map||!root)return;
+    const regions=state.data?.regions?.length?state.data.regions:referenceMapRegions();
+    if(!window.L?.map){
+      root.dataset.mapState='unavailable';
+      root.replaceChildren(el('div','rl-map-fallback',
+        'The interactive map could not start. Use the coast buttons above while the map library is unavailable.'));
+      return;
+    }
     root.replaceChildren();
+    root.dataset.mapState='initializing';
     try {
-      const map = window.L.map(root, { scrollWheelZoom: false, zoomControl: true, preferCanvas: true });
+      const map = window.L.map(root, { scrollWheelZoom: false, zoomControl: true, preferCanvas: true, touchZoom: true, dragging: true, bounceAtZoomLimits: false, tapHold: false });
+      // Public-domain Natural Earth 1:110m coastline backup. It sits *behind*
+      // live raster tiles, cannot accept clicks, and contains no invented pads
+      // or visitor directions. When OSM/CARTO is blocked, a geographic map
+      // still appears instead of an empty gray canvas.
+      const referencePane=map.createPane('rocket-reference-land');
+      referencePane.style.zIndex='180'; // Leaflet tile pane is z-index 200.
+      referencePane.style.pointerEvents='none';
+      fetch('/assets/rocket-reference-land.geojson',{
+        cache:'force-cache',signal:AbortSignal.timeout(8000)
+      }).then(response=>{
+        if(!response.ok)throw new Error('reference-geography-unavailable');
+        return response.json();
+      }).then(geo=>{
+        if(geo?.type!=='FeatureCollection'||!Array.isArray(geo.features)||
+           !geo.features.length)throw new Error('invalid-reference-geography');
+        // Explicit SVG: the mission pins prefer Canvas, but the coastline
+        // needs its own deterministic under-tile vector renderer.
+        const outlineRenderer=window.L.svg({pane:'rocket-reference-land'});
+        window.L.geoJSON(geo,{
+          renderer:outlineRenderer,pane:'rocket-reference-land',interactive:false,
+          style:{color:'#719993',weight:1.3,opacity:1,
+            fillColor:'#eef0e2',fillOpacity:1}
+        }).addTo(map);
+        root.dataset.outline='ready';
+        updateAtlasStatus();
+      }).catch(()=>{root.dataset.outline='unavailable';});
       const osmCredit = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
       // Never request a keyless CARTO tile: as of 2026 those tiles return
       // an "API KEY REQUIRED" watermark even though the HTTP response is 200.
@@ -314,6 +407,20 @@
         maxZoom: 18, attribution: osmCredit
       }).addTo(map);
       root.dataset.tiles = 'osm-fallback';
+      let osmLoaded=false,osmErrors=0;
+      osm.on('tileload',()=>{
+        osmLoaded=true;
+        if(root.dataset.tiles!=='carto-keyed'){
+          root.dataset.tiles='osm-fallback';
+          updateAtlasStatus();
+        }
+      });
+      osm.on('tileerror',()=>{
+        if(++osmErrors>=2&&!osmLoaded&&root.dataset.tiles!=='carto-keyed'){
+          root.dataset.tiles='reference-only';
+          updateAtlasStatus();
+        }
+      });
       fetch('/api/carto-basemap-config', { credentials: 'same-origin', signal: AbortSignal.timeout(6500) })
         .then(response => response.ok ? response.json() : null)
         .then(config => {
@@ -329,6 +436,7 @@
             if (!confirmed && map.hasLayer(carto)) {
               confirmed = true;
               root.dataset.tiles = 'carto-keyed';
+              updateAtlasStatus();
               if (map.hasLayer(osm)) map.removeLayer(osm);
             }
           });
@@ -336,14 +444,15 @@
             if (++errors >= 2 && !confirmed) {
               if (map.hasLayer(carto)) map.removeLayer(carto);
               if (!map.hasLayer(osm)) osm.addTo(map);
-              root.dataset.tiles = 'osm-fallback';
+              root.dataset.tiles = osmLoaded?'osm-fallback':'reference-only';
+              updateAtlasStatus();
             }
           });
           carto.addTo(map);
         })
-        .catch(() => { root.dataset.tiles = 'osm-fallback'; });
+        .catch(() => { if(root.dataset.tiles!=='reference-only')root.dataset.tiles='osm-fallback';updateAtlasStatus(); });
       const bounds = [];
-      for (const r of state.data.regions) {
+      for (const r of regions) {
         if (!Number.isFinite(r.lat) || !Number.isFinite(r.lon)) continue;
         const circle = window.L.circleMarker([r.lat, r.lon], {
           radius: 8, fillColor: '#163f4b', fillOpacity: 1, color: '#fff', weight: 2
@@ -354,19 +463,29 @@
         bounds.push([r.lat, r.lon]);
       }
       if (bounds.length) map.fitBounds(bounds, { padding: [27, 27] });
+      else map.setView([38,-98],3,{animate:false});
       state.map = map;
+      mountMapTouchControls(map,root);
       state.rocketPins=window.RocketMapPins?.mount(map,{
         region:'all',
-        centers:window.RocketMapPins.centersOf(state.data.regions),
+        centers:window.RocketMapPins.centersOf(regions),
         onSelect:(id,region)=>{
           document.dispatchEvent(new CustomEvent('rocket-experience:map-choose',{detail:{launchId:id,region}}));
           state.userFocusedMap=true;void load(region,id);
-          $('rl-next-title')?.scrollIntoView({behavior:'smooth',block:'start'});
+          // Never steal page scroll during a map tap or pinch; the explicit
+          // 'View mission details' link below the map handles navigation.
         }
       });
-      state.rocketPins?.update(state.data.regions.flatMap(r=>r.launches||[]),state.data.selectedLaunchId);
+      state.rocketPins?.update(state.data?.regions?.flatMap(r=>r.launches||[])||[],state.data?.selectedLaunchId||null);
+      root.dataset.mapState='ready';
+      updateAtlasStatus();
     } catch (_) {
-      root.replaceChildren(el('div', 'rl-map-fallback', 'Map tiles unavailable. The coast buttons above remain fully functional.'));
+      root.dataset.mapState='unavailable';
+      state.map=null;
+      state.rocketPins=null;
+      $('rl-map-expand')?.setAttribute('disabled','');
+      root.replaceChildren(el('div','rl-map-fallback',
+        'The interactive map could not start. Select a coast above to continue.'));
     }
   }
   function renderMission(data) {
@@ -1468,12 +1587,19 @@
 
   function render(data) {
     state.data = data;
+    state.scheduleFailed=false;
     state.regions = data.regions || [];
     const floridaNav = $('rl-nav-florida');
     if (floridaNav) floridaNav.href = floridaSpecialistLink('/national-tools/space-coast-launch/',data);
     const texasNav = $('rl-nav-starbase');
     if (texasNav) texasNav.href = floridaSpecialistLink('/starbase-rocket-launch-viewing/',data);
     initMap();
+    for(const region of data.regions||[]){
+      const marker=state.markers.get(region.id);
+      if(marker&&Number.isFinite(region.lat)&&Number.isFinite(region.lon))
+        marker.setLatLng([region.lat,region.lon]);
+    }
+    updateAtlasStatus();
     state.rocketPins?.update(data.regions.flatMap(r=>r.launches||[]),data.selectedLaunchId);
     showRegion(data.region);
     renderMission(data);
@@ -1535,6 +1661,8 @@
       // schedule after this request has explicitly failed.
       state.rocketPins?.update([],null);
       state.data=null;
+      state.scheduleFailed=true;
+      updateAtlasStatus();
       renderFrontSchedule(null);
       document.dispatchEvent(new CustomEvent('rocket-truth:mission-selected',
         {detail:{launchId:null}}));
@@ -1568,6 +1696,12 @@
       set('rl-feed-health', 'Source check failed');
       set('rl-updated-at', 'Not verified');
       set('rl-schedule-coverage', err.message + ' Official NASA and launch-range pages linked below remain the primary authority.');
+      const mapRoot=$('rl-coast-map');
+      if(mapRoot&&!state.map){
+        mapRoot.dataset.mapState='source-unavailable';
+        mapRoot.replaceChildren(el('div','rl-map-fallback',
+          'The launch calendar is unavailable, so no current rocket locations can be shown. Use the coast buttons above and check official launch sources.'));
+      }
       const root = $('rl-national-board');
       if (root && !state.data) root.textContent = 'National provider temporarily unavailable. Recheck the official NASA, Space Force, Starbase and Alaska Aerospace launch notices.';
       $('rl-launch-select').disabled = true;
@@ -1626,6 +1760,7 @@
   state.userFocusedMap = Boolean(region);
   const launch = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
     initial.searchParams.get('launchId') || '') ? initial.searchParams.get('launchId') : null;
+  initMap(); // Geographic reference does not depend on live launch data.
   loadVisualCatalog();
   void loadOfficialEvidence();
   load(region, launch);
