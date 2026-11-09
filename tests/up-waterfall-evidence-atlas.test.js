@@ -51,12 +51,34 @@ test('every external observation and UP Travel label remains off the waterfall m
     }else{
       assert.ok(Number.isFinite(row.lat)&&Number.isFinite(row.lng),row.id);
       assert.ok(row.lat>44&&row.lat<49&&row.lng>-93&&row.lng< -82,row.id);
-      assert.match(row.mapRole,/not-arrival|not-parking/,row.id);
+      if(row.id==='guide:tahquamenon'){
+        assert.equal(row.publication,'multi-falls-planner');
+        assert.equal(row.mapRole,'multi-falls-day-use-reference-not-natural-waterfall-feature');
+      }else{
+        assert.match(row.mapRole,/not-arrival|not-parking/,row.id);
+      }
     }
   }
   assert.deepEqual(groups,{guide:80,gis:161,name:291,tourism:108});
   assert.equal(atlas.records.filter(x=>x.kind==='gis'&&x.relatedGuideId).length,69);
   assert.ok(atlas.records.some(x=>x.kind==='guide'&&x.relatedGuideId==='tahquamenon'&&x.linkedGisIds.length===2));
+});
+
+test('day-use coordinates never masquerade as either Tahquamenon waterfall, and filtered guide pins stay visible',()=>{
+  const guide=atlas.records.find(r=>r.id==='guide:tahquamenon');
+  assert.ok(guide);
+  assert.equal(guide.mapRole,'multi-falls-day-use-reference-not-natural-waterfall-feature');
+  assert.deepEqual(guide.linkedGisIds,[207,208]);
+  for(const id of guide.linkedGisIds){
+    const point=atlas.records.find(r=>r.id==='gis:'+id);
+    assert.ok(point&&Number.isFinite(point.lat)&&Number.isFinite(point.lng));
+    assert.notDeepEqual([guide.lat,guide.lng],[point.lat,point.lng],'visitor area is not a named waterfall');
+  }
+  assert.match(js,/arrivalReference/);
+  assert.match(js,/r\.mapRole==='natural-waterfall-feature-not-arrival'/);
+  assert.match(js,/shownGisIds/);
+  assert.match(js,/some\(id=>shownGisIds\.has\(id\)\)/);
+  assert.match(js,/4-20261109-map-truth/,'source snapshot fetch must be cache-versioned');
 });
 
 test('identity ambiguity is retained as research, not autocollapsed into public trips', () => {
