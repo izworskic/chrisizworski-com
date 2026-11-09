@@ -31,6 +31,8 @@ jobs:
         run: |
           node --check public/assets/circle-tour-place-story-data.js
           node --check public/assets/circle-tour-bridge.js
+          node --check experience-foundry/examples/circle-tour-place-story-improvement.mjs
+          node --check experience-foundry/examples/circle-tour-place-story-replay.cjs
           node --test tests/circle-tour-bridge.test.js
           node scripts/build-circle-tour-network.mjs --check
       - name: Capture source, assess assignment and prove genuine new visitor capability
