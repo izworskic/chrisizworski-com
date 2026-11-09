@@ -118,16 +118,16 @@
       caveat: active >= 0 || returning >= 0 ? "User counts summed by page are non-additive across pages." : null };
   }
   function adsense(text) {
-    var d = getRows(text, [["estimated earnings", "earnings", "estimated revenue"]]);
-    var e = col(d.names, ["estimated earnings", "earnings", "estimated revenue"]);
+    var d = getRows(text, [["estimated earnings", "earnings", "estimated revenue", "estimated earnings usd"]]);
+    var e = col(d.names, ["estimated earnings", "earnings", "estimated revenue", "estimated earnings usd"]);
     var p = col(d.names, ["page url", "url", "page", "page path", "requested url"]);
     var views = col(d.names, ["page views", "pageviews"]);
     var date = col(d.names, ["date", "day"]);
-    var site = col(d.names, ["site", "site url", "domain"]);
+    var site = col(d.names, ["site", "site url", "domain", "url channels"]);
     var rows = d.rows.filter(function (r) { return r.some(function (v) { return String(v).trim() !== ""; }); });
     var detail = rows.filter(function (r) { return !r.some(function (v) { return /^(grand )?total$/i.test(String(v).trim()); }); });
     var actual = detail.length ? detail : rows;
-    var by = new Map(), revenue = 0, valid = 0, dated = 0, dropped = 0;
+    var by = new Map(), revenue = 0, valid = 0, dated = 0, dropped = 0, totalPageviews = 0, pageviewRows = 0;
     actual.forEach(function (r) {
       var val = number(r[e]);
       if (val === null || val < 0) { dropped++; return; }
@@ -138,17 +138,19 @@
       var key = p < 0 ? null : page(r[p]);
       if (p >= 0 && !key) { dropped++; return; } // never add a foreign or unattributed URL to site earnings
       revenue += val; valid++;
+      var reportedViews = views < 0 ? null : number(r[views]);
+      if (reportedViews !== null && reportedViews >= 0) { totalPageviews += reportedViews; pageviewRows++; }
       if (date !== -1 && String(r[date] || "").trim()) dated++;
       if (key) {
         var old = by.get(key) || { page: key, earnings: 0, adPageviews: null };
         old.earnings += val;
-        var n = views < 0 ? null : number(r[views]);
+        var n = reportedViews;
         if (n !== null && n >= 0) old.adPageviews = (old.adPageviews || 0) + n;
         by.set(key, old);
       }
     });
     if (!valid) throw new Error("No valid first-party estimated earnings found.");
-    return { records: Array.from(by.values()), total: revenue, sitewide: p === -1,
+    return { records: Array.from(by.values()), total: revenue, totalPageviews: pageviewRows ? totalPageviews : null, sitewide: p === -1,
       partialAttribution: p !== -1 && dropped > 0, kind: "adsense", datedRows: dated, dropped: dropped };
   }
   function days(start, end) {
@@ -219,7 +221,9 @@
       kpis: { importedGscClicks: current ? sum(current.records, "clicks") : null,
         importedGscImpressions: current ? sum(current.records, "impressions") : null,
         importedGa4Views: analytics && analytics.records.some(function (r) { return r.views !== null; }) ? sum(analytics.records, "views") : null,
-        importedAdSenseEarnings: ads ? ads.total : null, adsDaily: reportingRevenue,
+        importedAdSenseEarnings: ads ? ads.total : null,
+        importedAdSensePageRpm: ads && ads.totalPageviews > 0 ? 1000 * ads.total / ads.totalPageviews : null,
+        adsDaily: reportingRevenue,
         dailyGap: reportingRevenue === null ? null : Math.max(0, 300 - reportingRevenue),
         pageAttributedRevenue: ads && !ads.sitewide && !ads.partialAttribution },
       sourceSummary: {
