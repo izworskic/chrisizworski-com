@@ -533,6 +533,10 @@ const whenReady=page=>page.waitForFunction(id=>
    'Source outage retained old national next-launch claim');
   assert(await error.locator('#rl-front-feature-action').isDisabled(),
    'Source outage retained an active launch planner link');
+  assert(await error.locator('#rl-access-quick a.rl-access-map').count()===0,
+   'Source outage must not retain old mission Google Maps links');
+  assert((await error.locator('#rl-access-quick').innerText()).includes('could not be verified'),
+   'Source outage must explain that viewing-site access is not established');
   report.cases.push({case:'source-outage',status:'unavailable; no source invented'});
   await errCtx.close();failedSource=false;
   const noCtx=await browser.newContext({javaScriptEnabled:false,viewport:{width:390,height:844}});
