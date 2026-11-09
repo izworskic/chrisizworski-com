@@ -310,7 +310,7 @@ test('source-specific geographic and seasonal non-equivalence gates survive futu
   const p=get(4474),b=get(5457),s=get(3701);
   assert.equal(p.assessment,'feature-identity-unresolved');
   assert.match(p.establishedStart,/Pinkerton (?:Hiking )?Trail/);
-  assert.match(p.officialFacts[0].fact,/1\.4 miles/);
+  assert.ok(p.officialFacts.some(x=>/1\.4 miles/.test(x.fact)),'official DNR creek crossing must remain documented regardless of evidence order');
   assert.match(p.falseEquivalence,/Traders Falls/);
   assert.ok(!p.references.some(x=>x.url.includes('maps/dir')));
   assert.equal(b.assessment,'remote-feature-confirmed-no-managed-route');
