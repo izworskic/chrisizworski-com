@@ -80,3 +80,7 @@ The first full pilot, **Tahquamenon Falls Visit Planner**, has been implemented 
 ## What this does NOT do
 
 It does not dynamically inject instructions into every ChatGPT conversation, automatically update other repositories, ensure a coding agent actually read a file, or replace actual human browser evaluation. The repository is the durable source of truth; use repository-scoped agent instructions and explicit cross-repository adoption. Read [multi-repo rollout](docs/MULTI_REPO_ADOPTION.md).
+
+## Optional Place & Story enhancement (2026-11-09)
+
+For authentic landscape, heritage or wildlife destinations, [Place & Story](docs/PLACE_AND_STORY.md) adds source-verified photography, credited image rights and interpretive context **after** the real visitor decision. It is an optional quality contract, not a mandatory hero/gallery or uniform design. The Circle Tour [three-park pilot](../../docs/experience-briefs/circle-tour-place-story-2026-11-09.md) demonstrates the owner-specific implementation.

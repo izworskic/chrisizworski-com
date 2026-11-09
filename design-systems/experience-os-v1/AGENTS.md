@@ -43,3 +43,7 @@ For any new canonical central-site tool, plan its Tools card, JSON-LD ItemList *
 Never invent live access, open trails, verified routes, measured drive times, scores, sensor freshness, weather certainty, or actual photo provenance. Do not copy other companies' UI assets, licensed map layers, or restricted trail data. No AI-generated place photograph masquerading as the destination. Preserve one canonical intent owner, visible creator identity, search indexing, and existing ads policy. No Redis added. No automatic geolocation or tracking. No unapproved production framework migration.
 
 **Cross-repo limit:** this root-level package is not automatically loaded by agents in sibling repositories. Add a small adopting `AGENTS.md`/supported harness pointer **in the owning repo** before claiming automatic retrieval there. See `docs/MULTI_REPO_ADOPTION.md`.
+
+## Optional Place & Story enhancement
+
+When a user specifically requests richer location photography, sense of place or interpretive narrative, read [Place & Story](docs/PLACE_AND_STORY.md) and the owning tool's photo standards. Curate exact location and license evidence; keep original visitor decisions, source truth, accessibility, canonical/ads and specialist boundaries. This pattern is optional, **not** a required page skin or a reason to add unrelated photos.

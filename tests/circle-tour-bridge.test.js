@@ -189,3 +189,43 @@ test('Foundry: no selected itinerary invites an explicit stop rather than invent
   assert.match(html,/id="ctb-compare"/);
   assert.match(html,/id="ctb-fallback"/);
 });
+
+
+test('Place & Story pilot has verified site-exact image rights, documentary context and a practical choice for each park',()=>{
+  const {stories,selectPlaceStory}=require('../public/assets/circle-tour-place-story-data.js');
+  assert.deepEqual(Object.keys(stories).sort(),['15','18','20']);
+  for(const id of ['15','18','20']){
+    const place=selectPlaceStory(id);
+    assert.equal(place.placeId,id);
+    assert.ok(place.story.length>=150,'interpretation should convey a distinctive real place');
+    assert.ok(place.character.length>=65,'visitor scale or access distinction required');
+    assert.match(place.sourceURL,/^https:\/\/(?:www\.ontarioparks\.ca|parks\.canada\.ca)\//);
+    assert.equal(place.photos.length,2);
+    assert.ok(ui.planNextDecision(committed,{selectedIds:[id]}).primary,'each story must support an actual existing visitor check');
+    for(const p of place.photos){
+      assert.equal(p.placeId,id);
+      assert.equal(p.status,'verified-licensed');
+      assert.match(p.imageURL,/^https:\/\/thumb\.wikimedia\.org\/wikipedia\/commons\/thumb\//);
+      assert.match(p.sourceURL,/^https:\/\/commons\.wikimedia\.org\/wiki\/File:/);
+      assert.match(p.licenseName,/^(CC0 1\.0|CC BY-SA 4\.0)$/);
+      assert.match(p.licenseURL,/^https:\/\/creativecommons\.org\//);
+      assert.ok(p.photographer.length>3&&p.alt.length>30&&p.caption.length>30);
+      assert.match(p.captureDate,/^20\d\d-\d\d-\d\d$/);
+      assert.ok(p.width>=600&&p.height>=500);
+    }
+  }
+  assert.equal(selectPlaceStory('11'),null,'no generic photo substituted for an unresearched park');
+  assert.equal(selectPlaceStory('__proto__'),null,'only own approved place IDs may resolve');
+});
+
+test('Place & Story script runs before decision renderer and remains within existing bridge only',()=>{
+  const html=readFileSync(path.join(root,'public/lake-superior-circle-tour/index.html'),'utf8');
+  const bridge=readFileSync(path.join(root,'public/assets/circle-tour-bridge.js'),'utf8');
+  assert.ok(html.indexOf('circle-tour-place-story-data.js')<html.indexOf('circle-tour-bridge.js'));
+  assert.match(bridge,/function renderPlaceStory\(model,host\)/);
+  assert.match(bridge,/renderPlaceStory\(model,host\)/);
+  assert.match(bridge,/img\.loading='lazy'/);
+  assert.match(bridge,/img\.addEventListener\('error'/);
+  assert.match(bridge,/place-story-source-open/);
+  assert.doesNotMatch(bridge,/place-story-view/,'rendering is not a measured on-screen photo view');
+});
