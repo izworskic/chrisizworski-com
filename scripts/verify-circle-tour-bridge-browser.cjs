@@ -178,6 +178,21 @@ function check(value,message){if(!value)throw Error(message);}
   report.cases.push({state:'map import unavailable',result:'independent specialist decision remains actionable'});
   await tileContext.close();
 
+  // A broken image CDN must drop empty photo slots and leave truthful text and the real action.
+  const photoFailureCtx=await browser.newContext({viewport:{width:390,height:844}});
+  const photoFailurePage=await photoFailureCtx.newPage();
+  await photoFailurePage.route('**/wikipedia/commons/thumb/**',route=>route.abort());
+  await photoFailurePage.goto(url+'?ctStop=15&ctTheme=parks',{waitUntil:'domcontentloaded',timeout:35000});
+  await photoFailurePage.waitForFunction(()=>document.querySelector('#ctb-decision .ctb-place-story')?.textContent.includes('Old Woman Bay'),null,{timeout:30000});
+  await photoFailurePage.locator('#ctb-decision .ctb-place-gallery').scrollIntoViewIfNeeded();
+  await photoFailurePage.waitForFunction(()=>document.querySelector('#ctb-decision .ctb-place-gallery')===null,null,{timeout:20000});
+  check((await photoFailurePage.locator('#ctb-decision .ctb-place-story').textContent()).includes('Nokomis'),
+    'Image failure suppressed the researched landscape narrative');
+  check(await photoFailurePage.locator('#ctb-decision .ctb-stage-primary').count()===1,
+    'Image failure hid the useful specialist next check');
+  report.cases.push({state:'photography source unavailable',result:'text and specialist action remain; empty photo frames removed'});
+  await photoFailureCtx.close();
+
   // Bridge failure must never take down original route, atlas or static backup.
   const context=await browser.newContext({viewport:{width:390,height:844}}),failPage=await context.newPage();
   await failPage.route('**/circle-tour-tool-catalog.json',route=>route.fulfill({status:503,body:'unavailable'}));
