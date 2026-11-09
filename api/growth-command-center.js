@@ -4,6 +4,7 @@ const { authorizeGscRequest } = require("../lib/gsc/github-actions-oidc.js");
 const { stateReady } = require("../lib/tool-state");
 
 module.exports = async function growthCommandCenter(req, res) {
+  res.setHeader("X-Robots-Tag", "noindex, nofollow, noarchive");
   secureHeaders(res);
   res.setHeader("Content-Type", "application/json; charset=utf-8");
   const view = String(req.query?.view || "report");
