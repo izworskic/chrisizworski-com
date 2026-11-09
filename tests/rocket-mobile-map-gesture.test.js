@@ -42,8 +42,8 @@ test('source-independent fallback keeps the expand button disabled without Leafl
 });
 
 test('map boots from same-origin Leaflet even when CDN and launch feed are inaccessible',()=>{
- assert.match(html,/href="\/assets\/vendor\/leaflet-1\.9\.4\.css\?v=20261108-local-map-v1"/);
- assert.match(html,/src="\/assets\/leaflet-1\.9\.4\.js\?v=20261108-local-map-v1"/);
+ assert.match(html,/href="\/assets\/vendor\/leaflet-1\.9\.4\.css\?v=20261109-rocket-map-v2"/);
+ assert.match(html,/src="\/assets\/leaflet-1\.9\.4\.js\?v=20261109-rocket-map-v2"/);
  assert.doesNotMatch(html,/unpkg\.com\/leaflet/);
  assert(fs.statSync(path.resolve(__dirname,'../public/assets/leaflet-1.9.4.js')).size>100000);
  assert(fs.statSync(path.resolve(__dirname,'../public/assets/vendor/leaflet-1.9.4.css')).size>10000);
