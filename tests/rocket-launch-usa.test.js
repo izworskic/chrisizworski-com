@@ -110,7 +110,30 @@ test('NASA Wallops Visitor Center stays event-specific, not assumed open after h
   assert.match(site.reason,/not automatically open/i);
   assert.equal(site.label,'NASA must announce launch-specific opening');
   assert.equal(site.directionsAllowed,false,
-    'Do not route visitors to Wallops until NASA verifies launch-specific opening');
+    'Do not promise a visitor-center launch entry or a route to restricted operations');
+  assert.equal(site.mapsLocationAllowed,true,
+    'NASA public visitor center must still be locatable on Google Maps, without promising launch entry');
+  assert.match(r.context,/Robert N\. Reed|Robert N\. Reed Downtown/);
+  assert.match(r.context,/Curtis Merritt Harbor/);
+  const alternatives=r.sites.filter(x=>x.id!=='wallops-visitor').map(x=>model.viewDecision(r,x,null));
+  assert.equal(alternatives.length,2);
+  assert.ok(alternatives.every(x=>x.mapsLocationAllowed && x.directionsAllowed),
+    'Two NASA-listed town waterfront alternatives should be publicly navigable');
+  for(const restrictedRegion of ['texas','alaska','hawaii']){
+    const base=model.REGIONS.find(x=>x.id===restrictedRegion);
+    for(const place of base.sites.filter(x=>x.kind==='range-restricted')){
+      assert.equal(model.viewDecision(base,place,null).mapsLocationAllowed,false,
+        'A restricted pad or access road must never get a map location action');
+    }
+  }
+  const california=model.REGIONS.find(x=>x.id==='california');
+  const surf=california.sites.find(x=>x.id==='surf-beach');
+  const afterHours=model.viewDecision(california,surf,
+    {net:'2026-11-03T02:21:00Z',netPrecision:'minute'});
+  assert.equal(afterHours.mapsLocationAllowed,false,'Closed-hours Surf Beach must not get a map action');
+  const florida=model.REGIONS.find(x=>x.id==='florida');
+  assert.equal(model.viewDecision(florida,florida.sites.find(x=>x.id==='ksc-visitor'),null).mapsLocationAllowed,false);
+  assert.equal(model.viewDecision(florida,florida.sites.find(x=>x.id==='playalinda-south'),null).mapsLocationAllowed,false);
 });
 test('Starbase official beach and road page parser separates general access from road advisory',()=>{
   const html='<html><body>'+('a'.repeat(1200))+
