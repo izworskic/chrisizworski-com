@@ -198,7 +198,7 @@ try{
   await page.locator('.ea-record').first().click();
   assert.match(await page.locator('#ea-detail').innerText(),/Linked GIS IDs/);
   assert.match(await page.locator('#ea-detail').innerText(),/207, 208/);
-  assert.match(await page.locator('#ea-detail').innerText(),/visitor day-use reference ONLY/);
+  assert.match(await page.locator('#ea-detail').innerText(),/Upper Falls day-use reference is deliberately omitted/);
   assert.equal(await page.locator('#ea-map .leaflet-interactive').count(),0,'day-use area may not be plotted as a waterfall');
   assert.equal(await page.locator('#ea-detail .ea-compare-btn').count(),2,'Upper and Lower Falls keep separate natural-feature identities');
   await page.locator('#ea-detail .ea-compare-btn').first().click();
