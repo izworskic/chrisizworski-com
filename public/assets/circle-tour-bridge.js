@@ -203,12 +203,12 @@
       el('p','ctb-place-character',story.character));
     const why=el('p','ctb-place-why',story.why);prose.append(why);
     const source=link('Read the park’s own description',story.sourceURL,'ctb-place-source');
+    source.addEventListener('click',()=>track('place-story-source-open',{stop:model.stopId}));
     prose.append(source);
     if(gallery.children.length)layout.append(gallery);
     layout.append(prose);section.append(layout);
     section.append(el('p','ctb-place-disclosure','These are dated landscape photographs, not today’s weather, access or trail conditions.'));
     host.append(section);
-    track('place-story-view',{stop:model.stopId,photoCount:gallery.children.length});
   }
 
   function renderDecision(model){
