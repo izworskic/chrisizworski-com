@@ -48,15 +48,15 @@ test('every external observation and UP Travel label remains off the waterfall m
       assert.equal(row.lng,null,row.id);
       assert.ok(!row.guidePath,row.id);
       assert.ok(row.mapRole.includes('no-geographic')||row.mapRole.includes('not-validated'),row.id);
+    }else if(row.id==='guide:tahquamenon'){
+      assert.equal(row.publication,'multi-falls-planner');
+      assert.equal(row.mapRole,'multi-falls-day-use-reference-not-natural-waterfall-feature');
+      assert.equal(row.lat,null,'day-use area is not a waterfall location');
+      assert.equal(row.lng,null,'day-use area is not a waterfall location');
     }else{
       assert.ok(Number.isFinite(row.lat)&&Number.isFinite(row.lng),row.id);
       assert.ok(row.lat>44&&row.lat<49&&row.lng>-93&&row.lng< -82,row.id);
-      if(row.id==='guide:tahquamenon'){
-        assert.equal(row.publication,'multi-falls-planner');
-        assert.equal(row.mapRole,'multi-falls-day-use-reference-not-natural-waterfall-feature');
-      }else{
-        assert.match(row.mapRole,/not-arrival|not-parking/,row.id);
-      }
+      assert.match(row.mapRole,/not-arrival|not-parking/,row.id);
     }
   }
   assert.deepEqual(groups,{guide:80,gis:161,name:291,tourism:108});
@@ -69,10 +69,12 @@ test('day-use coordinates never masquerade as either Tahquamenon waterfall, and 
   assert.ok(guide);
   assert.equal(guide.mapRole,'multi-falls-day-use-reference-not-natural-waterfall-feature');
   assert.deepEqual(guide.linkedGisIds,[207,208]);
+  assert.equal(guide.lat,null,'no day-use-area coordinates may be reused as fall latitude');
+  assert.equal(guide.lng,null,'no day-use-area coordinates may be reused as fall longitude');
   for(const id of guide.linkedGisIds){
     const point=atlas.records.find(r=>r.id==='gis:'+id);
     assert.ok(point&&Number.isFinite(point.lat)&&Number.isFinite(point.lng));
-    assert.notDeepEqual([guide.lat,guide.lng],[point.lat,point.lng],'visitor area is not a named waterfall');
+    assert.ok(Number.isFinite(point.lat)&&Number.isFinite(point.lng),'individual fall has its own source geographic point');
   }
   assert.match(js,/arrivalReference/);
   assert.match(js,/r\.mapRole==='natural-waterfall-feature-not-arrival'/);
