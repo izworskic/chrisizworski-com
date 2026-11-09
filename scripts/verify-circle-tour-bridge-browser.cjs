@@ -184,7 +184,7 @@ function check(value,message){if(!value)throw Error(message);}
   await photoFailurePage.route('**/wikipedia/commons/thumb/**',route=>route.abort());
   await photoFailurePage.goto(url+'?ctStop=15&ctTheme=parks',{waitUntil:'domcontentloaded',timeout:35000});
   await photoFailurePage.waitForFunction(()=>document.querySelector('#ctb-decision .ctb-place-story')?.textContent.includes('Old Woman Bay'),null,{timeout:30000});
-  await photoFailurePage.locator('#ctb-decision .ctb-place-gallery').scrollIntoViewIfNeeded();
+  await photoFailurePage.locator('#ctb-decision .ctb-place-story').scrollIntoViewIfNeeded();
   await photoFailurePage.waitForFunction(()=>document.querySelector('#ctb-decision .ctb-place-gallery')===null,null,{timeout:20000});
   check((await photoFailurePage.locator('#ctb-decision .ctb-place-story').textContent()).includes('Nokomis'),
     'Image failure suppressed the researched landscape narrative');
