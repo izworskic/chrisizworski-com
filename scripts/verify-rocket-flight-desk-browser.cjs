@@ -181,6 +181,13 @@ const whenReady=page=>page.waitForFunction(id=>
    const response=await page.goto(base+'?region=florida&launchId='+A,{waitUntil:'domcontentloaded'});
    assert(response.status()===200,v.name+' public HTML HTTP failed');
    await whenReady(page);
+   // The new first-screen answer is the schedule. The deeper flight desk only
+   // earns an exposure event once the visitor scrolls to it.
+   const frontTop=await page.locator('#rl-front-next-title').evaluate(n=>
+     n.getBoundingClientRect().top+window.scrollY);
+   assert(frontTop>=0 && frontTop<v.height,
+     v.name+' next listed launch missing from first viewport '+frontTop);
+   await page.locator('#rl-flight-desk').scrollIntoViewIfNeeded();
    await page.waitForFunction(()=>window.vaq?.some(a=>a[0]==='event'&&a[1]?.name==='Rocket Flight Desk Exposed'));
    const metrics=()=>page.evaluate(()=>window.vaq?.filter(a=>a[0]==='event').map(a=>a[1])||[]);
    let events=await metrics();
@@ -203,8 +210,7 @@ const whenReady=page=>page.waitForFunction(id=>
     v.name+' Foundry next evidence is not an access check for precise Florida mission');
    assert((await page.locator('#rl-flight-next-link').getAttribute('href'))==='/national-tools/space-coast-launch/?launchId='+A+'&via=rocket-foundry&stage=access',
     v.name+' Foundry source handoff misroutes the selected coast');
-   const first=await page.locator('#rl-front-next-title').evaluate(n=>n.getBoundingClientRect().top);
-   assert(first>=0 && first<v.height,v.name+' next listed mission below first viewport '+first);
+   // Above-the-fold next mission was verified before scrolling to the detail desk.
    assert((await page.locator('#rl-front-next-title').innerText()).includes('Fixture Florida rocket A'),
     v.name+' schedule-first next launch not linked to source fixture');
    await page.locator('#rl-flight-mission-select').selectOption(B);
