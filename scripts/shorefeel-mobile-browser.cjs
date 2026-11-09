@@ -10,7 +10,8 @@ const pages=[
  ['/great-lakes-water-temperature/','hub'],
  ['/lake-michigan-water-temperature/','lake'],
  ['/lake-michigan-water-temperature/grand-haven/','grand'],
- ['/lake-michigan-water-temperature/traverse-city/','traverse']
+ ['/lake-michigan-water-temperature/traverse-city/','traverse'],
+ ['/lake-huron-water-temperature/saginaw-bay/','saginaw']
 ];
 const sample={date:'2026-10-12',tempF:62.1},history=[{date:'2026-10-11',tempF:61.8},sample];
 const lakes=Object.fromEntries(['superior','michigan','huron','erie','ontario'].map(k=>[k,{status:'recent',latest:sample,history,trend7:null}]));
@@ -30,7 +31,7 @@ function bf(){
 }
 function fixture(url){
  const place=url.searchParams.get('place');
- return JSON.stringify({product:'ShoreFeel',lake:'michigan',lakes,local:place?{
+ const data={product:'ShoreFeel',lake:'michigan',lakes,local:place?{
   name:place,waterBody:place==='grand-haven'?'Lake Michigan off Grand Haven':'Grand Traverse Bay',stationId:place==='grand-haven'?'45029':'45020',
   stationName:'Test offshore buoy',lat:43.2,lon:-86.2,caveat:'Station is offshore, not the beach.',
   measurement:place==='traverse-city'?null:{tempF:60.8,observedAt:'2026-10-13T11:00:00.000Z'},
@@ -42,7 +43,23 @@ function fixture(url){
  normal:{date:'2026-10-12',tempF:57.1,deltaF:5},
  beachForecast:place==='grand-haven'?bf():place?{status:'unavailable',reason:'test'}:null,
  weatherNow:place?{startsAt:'2026-10-13T13:00:00-04:00',tempF:75,windMph:12,summary:'Sunny',daylight:true}:null,
- assessments:place?assessments:null,weatherWindow:place?{startsAt:'2026-10-13T13:00:00-04:00'}:null});
+ assessments:place?assessments:null,weatherWindow:place?{startsAt:'2026-10-13T13:00:00-04:00'}:null};
+ if(place==='saginaw-bay'){
+  const m={tempF:58.5,observedAt:'2026-10-13T12:00:00.000Z',sampleLat:43.702,sampleLon:-83.858,distanceKm:0,ageHours:1};
+  data.lake='huron';data.generatedAt='2026-10-13T13:00:00.000Z';
+  data.local={...data.local,stationId:'45163',stationName:'NOAA GLERL Saginaw Bay buoy',
+   lat:43.983,lon:-83.600,measurement:null,measurementStatus:'offline'};
+  data.water={kind:'satellite',tempF:m.tempF,observedAt:m.observedAt,label:'Inner bay satellite reference east of Bay City State Park',
+   where:'Inner Saginaw Bay',caveat:'NOAA surface pixel offshore; not a beach thermometer.',distanceKm:5,beach:'Bay City State Park beach'};
+  data.regionalSatellite={status:'recent',cells:[
+   {key:'inner-bay',label:'Inner Saginaw Bay',measurement:m},
+   {key:'west-bay',label:'West Saginaw Bay',measurement:{...m,tempF:60.1,sampleLat:43.799,sampleLon:-83.861}}]};
+  data.weatherNow={startsAt:'2026-10-13T13:00:00-04:00',tempF:63,windMph:14,summary:'Cloudy',daylight:true};
+  data.weatherWindows={swim:{startsAt:'2026-10-13T14:00:00-04:00'},family:null,paddle:null,relax:null};
+  data.assessments=assessments;
+  data.beachForecast=null;
+ }
+ return JSON.stringify(data);
 }
 const types={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'application/javascript; charset=utf-8','.jpg':'image/jpeg','.png':'image/png','.svg':'image/svg+xml'};
 const server=http.createServer((req,res)=>{
@@ -71,9 +88,34 @@ const server=http.createServer((req,res)=>{
     const ctx=await browser.newContext({viewport:{width,height},deviceScaleFactor:1,hasTouch:width<769,isMobile:width<769});
     const page=await ctx.newPage();
     // Deliberately simulate unavailable external media/tiles to test the fallback.
-    await page.route(/(?:upload\.wikimedia\.org|unpkg\.com|tile\.openstreetmap\.org)/,r=>r.abort());
+    await page.route(/(?:upload\.wikimedia\.org|unpkg\.com|tile\.openstreetmap\.org|basemaps\.cartocdn\.com)/,r=>r.abort());
     const errors=[];page.on('pageerror',e=>errors.push(e.message));
     await page.goto(base+route,{waitUntil:'load',timeout:18000});
+    if(key==='saginaw'){
+      await page.waitForFunction(()=>document.querySelector('#lead-temp')?.textContent==='58.5°F',null,{timeout:8000});
+      await page.waitForFunction(()=>window.L&&document.querySelector('#bay-map.leaflet-container'),null,{timeout:8000});
+      assert.match(await page.locator('#lead-source').textContent(),/NOAA satellite/);
+      assert.match(await page.locator('#buoy-status').textContent(),/no recent valid report/);
+      assert.match(await page.locator('#value-west-bay').textContent(),/60\.1°F/);
+      assert.equal(await page.locator('#value-buoy').textContent(),'Unavailable');
+      assert.ok(await page.locator('#bay-map .leaflet-marker-icon').count()>=3,'Map shows sample and buoy locations');
+      await page.locator('[data-point="west-bay"]').click();
+      assert.match(await page.locator('#selected-heading').textContent(),/Nayanquing/);
+      assert.match(await page.locator('#selected-reading').textContent(),/60\.1°F/);
+      await page.locator('[data-activity="paddle"]').click();
+      assert.match(await page.locator('#activity-heading').textContent(),/paddle/);
+      const dims=await page.evaluate(()=>({
+       documentWidth:document.documentElement.scrollWidth,bodyWidth:document.body.scrollWidth,viewport:innerWidth,
+       mapWidth:document.querySelector('#bay-map').getBoundingClientRect().width
+      }));
+      assert.ok(dims.documentWidth<=width+1&&dims.bodyWidth<=width+1,'Saginaw page must not scroll sideways: '+JSON.stringify(dims));
+      assert.ok(dims.mapWidth<=width+1,'Saginaw map exceeds viewport');
+      assert.equal(errors.length,0,'Saginaw JS errors: '+errors.join('; '));
+      if(width===375||width===1280)await page.screenshot({path:path.join(OUT,'saginaw-'+width+'.png'),fullPage:true});
+      audit.push({page:key,width,overflow:false,mapRendered:true,interaction:'passed'});
+      await ctx.close();
+      continue;
+    }
     await page.waitForFunction(()=>document.getElementById('data-status')?.textContent.includes('NOAA'),null,{timeout:7000});
     const detail=await page.evaluate(()=>{
      const photo=document.querySelector('.hero-photo');

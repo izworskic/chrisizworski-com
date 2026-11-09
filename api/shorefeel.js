@@ -18,6 +18,21 @@ function gridUrl(place){
   return 'https://apps.glerl.noaa.gov/erddap/griddap/GLSEA_ACSPO_GCS.csv?sst[last-3:1:last][('+lo(lats)+'):('+hi(lats)+')][('+lo(lons)+'):('+hi(lons)+')]';
 }
 
+
+/* Saginaw Bay spans two distinct shoreline sectors. A combined bounding box was
+ * much larger than either sample. Query two small NOAA boxes in parallel so one
+ * unavailable sector does not discard a valid observation from the other. The
+ * existing Lake Michigan requests retain their original behavior. */
+async function gridCellsFor(place,now){
+  if(!place.primaryCell){
+    return parseGLSEAGridCsv(await textResponse(gridUrl(place),4500),place.cells,now);
+  }
+  const replies=await Promise.allSettled(place.cells.map(c=>textResponse(gridUrl({cells:[c]}),4500)));
+  return Object.fromEntries(place.cells.map((c,i)=>[
+    c.key,replies[i].status==='fulfilled'?parseGLSEAGridCsv(replies[i].value,[c],now)[c.key]:null
+  ]));
+}
+
 const HEADERS={'User-Agent':'ChrisIzworski-ShoreFeel/1.1 (https://chrisizworski.com/great-lakes-water-temperature/)',Accept:'text/plain, text/csv, application/json'};
 async function textResponse(url,ms=4000){
   const r=await fetch(url,{headers:HEADERS,signal:AbortSignal.timeout(ms)});
@@ -113,7 +128,7 @@ module.exports=async function handler(req,res){
     textResponse(GLSEA_CSV,4500),
     place?textResponse('https://www.ndbc.noaa.gov/data/realtime2/'+place.station+'.txt',3700):Promise.resolve(null),
     place?weatherFor(place):Promise.resolve([]),
-    place?textResponse(gridUrl(place),4500):Promise.resolve(null)
+    place?gridCellsFor(place,now):Promise.resolve(null)
   ]);
 
   const primary=analysis.status==='fulfilled'?parseGLSEA(analysis.value,now):[];
@@ -138,7 +153,7 @@ module.exports=async function handler(req,res){
   const lakes=Object.fromEntries(Object.keys(LAKES).map(l=>[l,lakeSeries(rows,l,now)]));
 
   // Destination water first: the beach forecast needs the satellite cells.
-  const cells=place&&grid.status==='fulfilled'?parseGLSEAGridCsv(grid.value,place.cells,now):null;
+  const cells=place&&grid.status==='fulfilled'?grid.value:null;
   // Long-term normal and the beach forecast are independent; run them together.
   const latestDate=lakes[requested]?.latest?.date;
   const [ltRes,bfRes]=await Promise.allSettled([
