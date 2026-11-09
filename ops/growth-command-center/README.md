@@ -48,3 +48,8 @@ The test joins the normal npm test suite (tests/*.test.js).
 ## Future live integration gates
 
 An authenticated owner-only endpoint, a legitimate AdSense publisher earnings source, confirmed GA4 property and source windows, and acceptance tests must exist before automatically collecting revenue. Do not make the public static site expose protected earnings or the collector's CRON secret.
+
+## Automated owner dashboard
+
+The daily ingestion and password-protected hosted dashboard are documented in [AUTO_INGESTION.md](AUTO_INGESTION.md).
+Once the required production environment variables are configured, open `https://chrisizworski.com/api/growth-dashboard`, enter the owner credentials, and the latest stored GSC/GA4/AdSense snapshot will load automatically. The offline file and CSV import remain available for fallback. The hosted dashboard is intentionally unavailable until its separate owner password is configured.
