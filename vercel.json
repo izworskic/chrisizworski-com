@@ -4,6 +4,8 @@
   "buildCommand": "npm run build:site",
   "outputDirectory": "public",
   "functions": {
+    "api/growth-command-center.js": { "maxDuration": 60 },
+    "api/growth-dashboard.js": { "maxDuration": 10, "includeFiles": "ops/growth-command-center/Revenue-Command-Center.html" },
     "api/garden-seasonal-heat.js": {"maxDuration":25},
     "api/michigan-garden-pest-watch.js": {"maxDuration":25},
     "api/garden-pest-timing-lab.js": {"maxDuration":25},
