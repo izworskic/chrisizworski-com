@@ -212,5 +212,32 @@
     el("restore-file").value = "";
     dashboard();
   });
+  // Used only by the authenticated same-origin server dashboard. Offline CSV workflow is unchanged.
+  window.GrowthCommandCenter = {
+    loadAutoSnapshot: function (snapshot) {
+      if (!snapshot || snapshot.version !== 1 || !snapshot.sources || !snapshot.window)
+        throw new Error("Invalid automated report.");
+      var incoming = {};
+      Object.keys(ids).forEach(function (name) {
+        var source = snapshot.sources[name];
+        if (source != null) {
+          if (!Array.isArray(source.records) || source.records.length > 20000) throw new Error("Invalid source size: " + name);
+          source.records.forEach(function (record) {
+            if (!record || E.page(record.page) !== record.page) throw new Error("Invalid source URL: " + name);
+          });
+          if (name === "adsense" && (typeof source.total !== "number" || !Number.isFinite(source.total)))
+            throw new Error("Invalid automated AdSense total.");
+        }
+        incoming[name] = source || null;
+      });
+      sources = incoming;
+      setDates(snapshot.window);
+      Object.keys(ids).forEach(function (name) {
+        var item = sources[name];
+        status(name, item ? item.records.length + " rows (automatic)" : "Not connected", item ? "ready" : "");
+      });
+      dashboard();
+    }
+  };
   dashboard();
 })();
