@@ -18,7 +18,7 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <link rel="stylesheet" href="/assets/rocket-map-pins.css?v=20261107-origin-v1">
 <link rel="stylesheet" href="/assets/rocket-flight-desk.css?v=20261108-foundry-v2">
-<link rel="stylesheet" href="/national-tools/rocket-launch-live/styles.css?v=20261108-schedule-first-v1">
+<link rel="stylesheet" href="/national-tools/rocket-launch-live/styles.css?v=20261109-viewing-places-v1">
 <link rel="stylesheet" href="/national-tools/assets/launch-truth-desk.css?v=20261102-truth-v2">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5D2V2W7HN"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-Y5D2V2W7HN');</script>
@@ -30,7 +30,7 @@
 <script defer src="/_vercel/insights/script.js"></script>
 <script src="/assets/rocket-florida-access.js?v=20261108-visitor-v1" defer></script>
  <script src="/national-tools/rocket-launch-live/vandenberg.js?v=20261103-viewing-v1" defer></script>
-<script src="/national-tools/rocket-launch-live/app.js?v=20261108-schedule-first-v1" defer></script>
+<script src="/national-tools/rocket-launch-live/app.js?v=20261109-viewing-places-v1" defer></script>
 <script src="/national-tools/assets/launch-truth-desk.js?v=20261102-truth-v2" defer></script>
 </head>
 <body>
@@ -213,8 +213,9 @@
     </article>
     <article class="rl-decision rl-decision-secondary">
       <div class="rl-decision-top"><span>Visitor decision / 02</span><span class="rl-status" id="rl-access-grade">Check required</span></div>
-      <h3>Can I get to the viewing area?</h3>
-      <p id="rl-access-summary">Checking published public viewing locations for this selected launch.</p>
+      <h3>Where can I actually watch?</h3>
+      <p id="rl-access-summary">Finding real public viewing places, their restrictions and Google Maps links for this launch.</p>
+      <div id="rl-access-quick" class="rl-access-quick" role="region" aria-label="Where to watch this launch and Google Maps links" aria-live="polite"><p>Checking published public viewing places. A launch pad is not a public spectator destination.</p></div>
       <div id="rl-access-answer" class="rl-access-answer" role="status" aria-live="polite"></div>
       <p id="rl-access-safety" class="rl-small">A public viewing place is not the restricted pad. Access, tickets and launch-day security require separate evidence.</p>
       <div id="rl-official-notice" class="rl-official-notice" hidden></div>
