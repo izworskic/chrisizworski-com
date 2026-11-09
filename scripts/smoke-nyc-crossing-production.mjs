@@ -123,6 +123,15 @@ async function verifyOnce(attempt) {
   assert(data.routes.length === EXPECTED_IDS.length, `expected ${EXPECTED_IDS.length} crossings, got ${data.routes.length}`);
   const ids = data.routes.map(route => route.id);
   for (const id of EXPECTED_IDS) assert(ids.includes(id), `missing crossing ${id}`);
+  // NYC DOT tunnel links have no verified Mapbox probe. When their official
+  // measurements are missing, the visitor still needs an explicit explanation.
+  for (const id of ['queens-midtown', 'hugh-carey']) {
+    const route = data.routes.find(item => item.id === id);
+    if (route.etaState !== 'LIVE') {
+      assert(route.etaMinutes == null, `${id} unavailable route must not invent an ETA`);
+      assert(/Official NYC DOT crossing reading is unavailable/.test(route.trafficPending || ''), `${id} missing truthful unavailable-state explanation`);
+    }
+  }
 
   assert(['PARTIAL', 'UNAVAILABLE'].includes(data.trafficState), `unexpected trafficState ${data.trafficState}`);
   assert(['LIVE_CROSSING_CONDITIONS', 'COST_ONLY'].includes(data.recommendationState), `unexpected recommendationState ${data.recommendationState}`);
