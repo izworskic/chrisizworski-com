@@ -11,13 +11,13 @@ const text=(node,value)=>{node.textContent=String(value??'');return node;};
 const el=(tag,cls,content)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(content!==undefined)text(n,content);return n;};
 const safeUrl=value=>{try{const u=new URL(String(value),location.origin);return u.protocol==='https:'?u.href:null;}catch{return null;}};
 const safePath=value=>typeof value==='string'&&/^\/[a-z0-9\/-]+\/$/.test(value)?value:null;
-let records=[],shown=30,visible=[],selected=null,map=null,mapPins=null,selectedCompareMarker=null,officialComparisonLayer=null,officialComparisonEpoch=0,officialComparisonCache=null,baseLayer=null,usingFallback=false,baseErrors=0;
+let records=[],shown=30,visible=[],selected=null,map=null,mapPins=null,selectedCompareMarker=null,officialComparisonLayer=null,officialComparisonVisible=false,officialComparisonEpoch=0,officialComparisonCache=null,baseLayer=null,usingFallback=false,baseErrors=0;
 const guideLookup=new Map(),recordLookup=new Map();
 function resetSelection(){clearOfficialComparison();if(selectedCompareMarker&&map){map.removeLayer(selectedCompareMarker);selectedCompareMarker=null;}selected=null;text(detail,'');detail.append(el('p','ea-eyebrow','Source inspection'),el('h3','', 'Select a waterfall name'),el('p','', 'Names and mapped points carry different kinds of evidence. A location is not a public parking or hiking route.'));}
 function clearOfficialComparison(){
  officialComparisonEpoch++;
  if(officialComparisonLayer&&map)map.removeLayer(officialComparisonLayer);
- officialComparisonLayer=null;
+ officialComparisonLayer=null;officialComparisonVisible=false;
 }
 function detailRow(dl,label,value){if(value===null||value===undefined||value==='')return;dl.append(el('dt','',label),el('dd','',value));}
 function link(parent,label,href){const u=href?.startsWith('/')?safePath(href):safeUrl(href);if(!u)return;const a=el('a','',label);a.href=u;if(!u.startsWith('/')){a.target='_blank';a.rel='noopener noreferrer';}parent.append(a);}
@@ -206,10 +206,11 @@ function renderPins(){
 }
 
 async function revealOfficialComparison(button,results,status,recordId){
- if(officialComparisonLayer){
+ if(officialComparisonVisible){
    clearOfficialComparison();button.textContent='Compare federal names and DNR trail';
    button.setAttribute('aria-pressed','false');results.replaceChildren();
    status.textContent='Official geometry hidden. No navigation or waterfall route was generated.';
+   mapState.textContent='Official research overlay hidden; source-only waterfalls have no public-arrival pins.';
    return;
  }
  const epoch=++officialComparisonEpoch;button.disabled=true;
@@ -272,6 +273,7 @@ async function revealOfficialComparison(button,results,status,recordId){
    }else{
      status.textContent='Verified source distances shown. Map unavailable; no route or arrival has been inferred.';
    }
+   officialComparisonVisible=true;
    button.textContent='Hide official GIS comparison';
    button.setAttribute('aria-pressed','true');
  }catch(error){
