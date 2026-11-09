@@ -11,12 +11,18 @@ const text=(node,value)=>{node.textContent=String(value??'');return node;};
 const el=(tag,cls,content)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(content!==undefined)text(n,content);return n;};
 const safeUrl=value=>{try{const u=new URL(String(value),location.origin);return u.protocol==='https:'?u.href:null;}catch{return null;}};
 const safePath=value=>typeof value==='string'&&/^\/[a-z0-9\/-]+\/$/.test(value)?value:null;
-let records=[],shown=30,visible=[],selected=null,map=null,mapPins=null,selectedCompareMarker=null,baseLayer=null,usingFallback=false,baseErrors=0;
+let records=[],shown=30,visible=[],selected=null,map=null,mapPins=null,selectedCompareMarker=null,officialComparisonLayer=null,officialComparisonVisible=false,officialComparisonEpoch=0,officialComparisonCache=null,baseLayer=null,usingFallback=false,baseErrors=0;
 const guideLookup=new Map(),recordLookup=new Map();
-function resetSelection(){if(selectedCompareMarker&&map){map.removeLayer(selectedCompareMarker);selectedCompareMarker=null;}selected=null;text(detail,'');detail.append(el('p','ea-eyebrow','Source inspection'),el('h3','', 'Select a waterfall name'),el('p','', 'Names and mapped points carry different kinds of evidence. A location is not a public parking or hiking route.'));}
+function resetSelection(){clearOfficialComparison();if(selectedCompareMarker&&map){map.removeLayer(selectedCompareMarker);selectedCompareMarker=null;}selected=null;text(detail,'');detail.append(el('p','ea-eyebrow','Source inspection'),el('h3','', 'Select a waterfall name'),el('p','', 'Names and mapped points carry different kinds of evidence. A location is not a public parking or hiking route.'));}
+function clearOfficialComparison(){
+ officialComparisonEpoch++;
+ if(officialComparisonLayer&&map)map.removeLayer(officialComparisonLayer);
+ officialComparisonLayer=null;officialComparisonVisible=false;
+}
 function detailRow(dl,label,value){if(value===null||value===undefined||value==='')return;dl.append(el('dt','',label),el('dd','',value));}
 function link(parent,label,href){const u=href?.startsWith('/')?safePath(href):safeUrl(href);if(!u)return;const a=el('a','',label);a.href=u;if(!u.startsWith('/')){a.target='_blank';a.rel='noopener noreferrer';}parent.append(a);}
 function showDetail(r){
+ clearOfficialComparison();
  if(selectedCompareMarker&&map){map.removeLayer(selectedCompareMarker);selectedCompareMarker=null;}
  selected=r.id;text(detail,'');detail.append(el('p','ea-eyebrow',typeOf(r)+' · source record'),el('h3','',r.name));
  const caution=el('p','ea-decision',r.kind==='guide'?
@@ -70,6 +76,20 @@ function showDetail(r){
    box.append(evidence);
    box.append(el('p','ea-no-route','Research only. No new GPS coordinate, waterfall parking, legal walking route or trip-planning destination is authorized.'));
    detail.append(box);
+   if(r.listingId===4474){
+     const compare=el('section','ea-federal-compare');
+     compare.append(el('p','ea-eyebrow','Official GIS crosswalk · checked November 9, 2026'));
+     compare.append(el('h4','','Two USGS waterfalls. One DNR trail. No invented connection.'));
+     compare.append(el('p','','The federal Gazetteer identifies Pinkerton Falls and Traders Falls as distinct features. Compare their published natural-feature positions with Michigan DNR Pinkerton hiking-trail segments. This is a source-evidence map, NOT a destination map.'));
+     const btn=el('button','ea-compare-action','Compare federal names and DNR trail');
+     btn.type='button';btn.setAttribute('aria-pressed','false');
+     const results=el('div','ea-federal-results');
+     const info=el('p','ea-federal-state','Comparison is hidden. No visitor route, off-trail connector or parking point will be drawn.');
+     info.setAttribute('role','status');
+     btn.addEventListener('click',()=>{void revealOfficialComparison(btn,results,info,r.id);});
+     compare.append(btn,info,results);
+     detail.append(compare);
+   }
  }
  const dl=el('dl');detailRow(dl,'County',r.county||'Not confidently assigned');detailRow(dl,'River',r.river);
  detailRow(dl,'Area / town',r.place);detailRow(dl,'Source date',r.sourceReviewed);
@@ -183,6 +203,83 @@ function renderPins(){
  }
  const suffix=subset.length?' natural-feature dots. No name-only or tourism listing has been geocoded.':' geographic dots in these results. Unmapped names remain searchable.';
  mapState.textContent=subset.length+suffix;
+}
+
+async function revealOfficialComparison(button,results,status,recordId){
+ if(officialComparisonVisible){
+   clearOfficialComparison();button.textContent='Compare federal names and DNR trail';
+   button.setAttribute('aria-pressed','false');results.replaceChildren();
+   status.textContent='Official geometry hidden. No navigation or waterfall route was generated.';
+   mapState.textContent='Official research overlay hidden; source-only waterfalls have no public-arrival pins.';
+   return;
+ }
+ const epoch=++officialComparisonEpoch;button.disabled=true;
+ status.textContent='Loading reviewed USGS and Michigan DNR geography…';
+ try{
+   if(!officialComparisonCache){
+     const response=await fetch('/assets/up-waterfall-pinkerton-official-comparison.json',{cache:'force-cache'});
+     if(!response.ok)throw Error('Source data unavailable');
+     const data=await response.json();
+     if(data.schemaVersion!==1||data.sourceCheckedOn!=='2026-11-09'||
+       data.counts.federalDistinctNamedFalls!==2||data.counts.dnrApprovedHikingTrailSegments!==66||
+       data.counts.approvedWaterfallViewpointRoutes!==0||data.officialNamedFalls?.length!==2||
+       data.dnrHikingTrail?.segmentPolylines?.length!==66||data.mapRules?.publicWaterfallItineraryApproved!==false||
+       data.mapRules?.drawFootpathToFalls!==false||data.mapRules?.drawStraightLineConnectors!==false||
+       data.mapRules?.drawParkingMarkers!==false||data.mapRules?.drawUnverifiedThirdPartyPoints!==false||
+       data.mapRules?.tourismUnnamedFallsLinkedToNamedFeature!==false)throw Error('Unsafe source contract');
+     const ids=data.officialNamedFalls.map(x=>x.featureId).sort().join(',');
+     if(ids!=='1615029,2126322'||data.officialNamedFalls.some(x=>x.semanticRole!=='federal-geographic-feature-point-not-trailhead-or-viewpoint'||
+       !Array.isArray(x.coordinateLonLat)||x.coordinateLonLat.length!==2||
+       !x.coordinateLonLat.every(Number.isFinite)))throw Error('Unexpected feature identity');
+     if(data.dnrHikingTrail.segmentPolylines.some(x=>!Array.isArray(x.coordinatesLonLat)||
+       x.coordinatesLonLat.length<2||x.coordinatesLonLat.some(p=>p.length!==2||!p.every(Number.isFinite))))throw Error('Invalid DNR trail coordinates');
+     officialComparisonCache=data;
+   }
+   if(epoch!==officialComparisonEpoch||selected!==recordId)return;
+   const data=officialComparisonCache,plot=el('dl','ea-federal-measures');
+   for(const f of data.officialNamedFalls){
+     detailRow(plot,f.featureName+' · USGS '+f.featureId,Math.round(f.nearestDNRHikingTrailMeters)+' m straight-line to nearest DNR hiking trail segment. NOT walking distance.');
+   }
+   detailRow(plot,'Federal falls separation',(data.officialFallsStraightLineSeparationMeters/1000).toFixed(2)+' km between named geographic-feature points');
+   detailRow(plot,'DNR mapped trail',data.counts.dnrApprovedHikingTrailSegments+' approved segments · '+data.dnrHikingTrail.mappedSumOfSegmentMiles.toFixed(2)+' mapped mi (DNR brochure: '+data.dnrHikingTrail.dnrPrintedTrailMiles.toFixed(1)+' mi). GIS Open is not live road access.');
+   const example=el('p','','Independent Western U.P. brochure Traders Falls point differs by '+Math.round(data.independentLocationChecks.find(x=>x.sourceReliability==='independent-tourism').distanceFromFederalFeatureMeters)+' m from the federal Traders Falls point. Unverified directory points are deliberately excluded.');
+   const legend=el('p','ea-federal-legend','Research map: teal lines = DNR-approved Pinkerton hiking segments; two labeled circles = USGS natural waterfall feature points. No waterfall approaches, connectors or parking markers.');
+   const links=el('p','ea-federal-links');
+   link(links,'Examine USGS geographic names',data.provenance.usgsGazetteerLayer);
+   link(links,'Examine Michigan DNR hiking GIS',data.provenance.dnrGISLayer);
+   link(links,'DNR park map labeling Traders Falls',data.provenance.dnrBackcountryMap);
+   results.replaceChildren(plot,example,legend,links);
+   if(map&&typeof L!=='undefined'){
+     const group=L.layerGroup();const bounds=L.latLngBounds([]);
+     for(const seg of data.dnrHikingTrail.segmentPolylines){
+       const line=L.polyline(seg.coordinatesLonLat.map(p=>[p[1],p[0]]),{
+         color:'#226c62',weight:4,opacity:.85,interactive:false});
+       line.addTo(group);bounds.extend(line.getBounds());
+     }
+     for(const f of data.officialNamedFalls){
+       const isPinkerton=f.featureId===2126322;
+       const pin=L.circleMarker([f.coordinateLonLat[1],f.coordinateLonLat[0]],{
+         radius:9,color:isPinkerton?'#825533':'#3e597d',
+         weight:2.8,fillColor:isPinkerton?'#d09a61':'#8ba7cd',fillOpacity:.93});
+       const popup=el('div');popup.append(el('strong','',f.featureName+' · USGS '+f.featureId));
+       popup.append(el('p','','Federal geographic-feature point. Approximately '+Math.round(f.nearestDNRHikingTrailMeters)+' m straight line from the DNR hiking trail. No official waterfall-viewpoint route, parking or off-trail connection is established.'));
+       pin.bindPopup(popup);pin.addTo(group);bounds.extend(pin.getLatLng());
+     }
+     if(epoch!==officialComparisonEpoch||selected!==recordId)return;
+     officialComparisonLayer=group.addTo(map);
+     map.fitBounds(bounds.pad(.22),{animate:false,maxZoom:14});
+     status.textContent='Official-source comparison drawn: two federal falls, 66 DNR trail segments. No routes or parking pins.';
+     mapState.textContent='Official research overlay only · two federal waterfall points and 66 actual DNR trail segments; no walking connectors or arrival.';
+   }else{
+     status.textContent='Verified source distances shown. Map unavailable; no route or arrival has been inferred.';
+   }
+   officialComparisonVisible=true;
+   button.textContent='Hide official GIS comparison';
+   button.setAttribute('aria-pressed','true');
+ }catch(error){
+   if(epoch!==officialComparisonEpoch||selected!==recordId)return;
+   status.textContent='Official geometry cannot be verified or loaded. No substitute coordinates or routes are shown. Original DNR and USGS references remain in the investigation above.';
+ }finally{if(epoch===officialComparisonEpoch&&selected===recordId)button.disabled=false;}
 }
 async function load(){
  try{

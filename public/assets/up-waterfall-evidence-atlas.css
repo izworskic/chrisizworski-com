@@ -54,3 +54,33 @@
 .ea-access-dossier .ea-no-route{font-size:.85rem;color:#73533b;margin:12px 0 0}
 @media(max-width:950px){.ea-access-cases{grid-template-columns:1fr}.ea-access-cases article{min-height:0}}
 @media(max-width:560px){.ea-access-research{padding:19px 14px}.ea-access-context{grid-template-columns:1fr;gap:1px}.ea-access-context dd{margin-bottom:9px}.ea-access-dossier{padding:15px 11px}}
+
+/* Pinkerton source-to-trail test: factual geospatial distances, never a route schematic. */
+.ea-federal-preview{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;background:#ecf3f1;border:1px solid #a9c8bf;border-radius:12px;padding:12px;margin:0 0 20px}
+.ea-federal-preview>div{display:grid;align-content:center;gap:3px;padding:9px;border-right:1px solid #bad2c8;min-width:0}
+.ea-federal-preview>div:nth-child(3){border-right:0}
+.ea-federal-preview strong{font:normal clamp(1.4rem,2.5vw,2.2rem)/1 Georgia,serif;color:#13443d}
+.ea-federal-preview span{font-size:.75rem;color:#37584f;line-height:1.45}
+.ea-federal-preview>p{grid-column:1/-1;margin:2px 8px 6px;color:#466158;font-size:.83rem;line-height:1.6}
+.ea-federal-preview>p strong{font:inherit;font-weight:800;color:#2d4b41}
+.ea-federal-compare{border-radius:12px;background:#f6f5ed;border:1px solid #c9cbb5;padding:17px;margin:16px 0}
+.ea-federal-compare h4{margin:5px 0 9px;font:normal 1.3rem/1.25 Georgia,serif;color:#3e4e3e}
+.ea-federal-compare>p{font-size:.84rem;line-height:1.6;color:#4e614a}
+.ea-compare-action{border-radius:8px;border:1px solid #144a3e;background:#144a3e;color:#fff;min-height:44px;padding:10px 13px;font-size:.82rem;font-weight:780;cursor:pointer;margin:5px 0}
+.ea-compare-action:hover:not(:disabled){background:#0b392f}
+.ea-compare-action:disabled{opacity:.65;cursor:wait}
+.ea-federal-state{font-size:.79rem;color:#566554;padding-top:6px}
+.ea-federal-measures{display:grid;grid-template-columns:minmax(106px,135px) 1fr;gap:9px 11px;border-top:1px solid #c6ccb6;padding-top:12px;margin:15px 0}
+.ea-federal-measures dt{font-weight:800;font-size:.79rem;color:#315d4a}
+.ea-federal-measures dd{font-size:.82rem;color:#36534b;margin:0;line-height:1.5}
+.ea-federal-legend{padding:9px 12px;border-left:3px solid #287467;background:#e5eee8;color:#274d43!important;font-size:.82rem}
+.ea-federal-links{display:flex;flex-wrap:wrap;gap:7px 15px;margin:8px 0}
+.ea-federal-links a{font-size:.78rem;margin:0!important;text-decoration:underline}
+@media(max-width:600px){
+.ea-federal-preview{grid-template-columns:1fr;gap:0}
+.ea-federal-preview>div{grid-template-columns:minmax(64px,100px) 1fr;align-items:center;border-right:0;border-bottom:1px solid #bad2c8;padding:12px 8px}
+.ea-federal-preview>div:nth-child(3){border:0}
+.ea-federal-preview>p{grid-column:1;margin:8px 6px}
+.ea-federal-measures{grid-template-columns:1fr;gap:1px}
+.ea-federal-measures dd{margin-bottom:9px}
+}
