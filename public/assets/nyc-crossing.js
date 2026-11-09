@@ -21,23 +21,37 @@
     return d>0 ? ' · +'+d+' min vs '+reference : ' · '+Math.abs(d)+' min faster than '+reference;
   }
 
+  // Freshness is checked independently per 511NY source. A valid sign update
+  // does not establish that roadway incidents were fetched successfully.
+  const current511=stamp=>{
+    const time=Date.parse(stamp||'');
+    const age=Date.now()-time;
+    return Number.isFinite(time)&&age>=-60000&&age<=20*60000;
+  };
+
   function incidentStamp(info){
-    if(info?.state==='CACHE_UNAVAILABLE')return '511NY incident cache temporarily unavailable; live crossing times and tolls remain usable.';
-    if(info?.state==='NOT_CONFIGURED')return '511NY incidents not configured; live crossing times and tolls remain usable.';
-    const date=Date.parse(info?.eventsUpdatedAt||'');
-    if(!Number.isFinite(date))return '511NY incident feed awaiting its first verified cache refresh; no incident-clear claim is available.';
-    const age=Math.max(0,Math.round((Date.now()-date)/60000));
-    return '511NY reported incidents updated '+age+'m ago'+(info.state==='STALE'?' · cached / potentially stale':'');
+    if(current511(info?.eventsUpdatedAt)){
+      const age=Math.max(0,Math.round((Date.now()-Date.parse(info.eventsUpdatedAt))/60000));
+      return '511NY roadway advisories checked '+age+'m ago; coverage may be incomplete.';
+    }
+    return '511NY incident updates are not verified right now. Check <a href="https://511ny.org/" target="_blank" rel="noopener noreferrer">official 511NY conditions</a> for closures and road restrictions.';
   }
 
   function disruptionHtml(r,info){
-    if(!info?.updatedAt)return '';
     const d=r.disruption||{};
-    const count=d.incidentCount||0;
-    const events=(d.events||[]).slice(0,2).map(e=>'<div class="detail">'+escapeHtml(e.category||'Incident')+': '+escapeHtml(e.description||e.code)+'</div>').join('');
-    const signs=(d.signs||[]).slice(0,1).map(s=>'<div class="detail vms">VMS: '+escapeHtml(s.message)+'</div>').join('');
-    const incidentLabel=info.eventsUpdatedAt?count+' mapped 511NY incident'+(count===1?'':'s'):'Incident feed awaiting first update';
-    return '<div class="disruption"><strong>'+incidentLabel+'</strong>'+(d.signCount?' · '+d.signCount+' sign'+(d.signCount===1?'':'s'):'')+events+signs+'</div>';
+    const freshEvents=current511(info?.eventsUpdatedAt);
+    const freshSigns=current511(info?.signsUpdatedAt);
+    const eventItems=freshEvents&&Array.isArray(d.events)?d.events:[];
+    const signItems=freshSigns&&Array.isArray(d.signs)?d.signs:[];
+    // Empty incident lists are not an all-clear, and missing incident data
+    // must not create eleven identical placeholder cards.
+    if(!eventItems.length&&!signItems.length)return '';
+    const events=eventItems.slice(0,2).map(e=>'<div class="detail">'+escapeHtml(e.category||'Incident')+': '+escapeHtml(e.description||e.code)+'</div>').join('');
+    const signs=signItems.slice(0,1).map(s=>'<div class="detail vms">VMS: '+escapeHtml(s.message)+'</div>').join('');
+    const labels=[];
+    if(eventItems.length)labels.push(d.incidentCount+' mapped 511NY incident'+(d.incidentCount===1?'':'s'));
+    if(signItems.length)labels.push(d.signCount+' active highway sign'+(d.signCount===1?'':'s'));
+    return '<div class="disruption"><strong>'+labels.join(' · ')+'</strong>'+events+signs+'</div>';
   }
 
   function renderDeparture(info){
@@ -96,7 +110,7 @@
       (liveCount
         ? 'Official live measurements are used where available, with fixed Mapbox traffic probes filling selected source gaps. Segment lengths differ, so the tool will not falsely rank unlike crossing and approach times as a door-to-door fastest route.'
         : 'Official live measurements are unavailable right now. Toll and congestion-charge comparisons remain available.')+
-      '</p><p class="muted">'+incidentStamp(data.ny511)+'</p><p class="muted">511NY advisories add a caution penalty when comparable drive times exist; they do not replace live times or posted closure instructions.</p><p class="muted">Lowest road charge among eligible listed crossings: '+
+      '</p><p class="muted">'+incidentStamp(data.ny511)+'</p><p class="muted">Verified, current 511NY advisories may inform comparisons; they never replace live travel times or posted closure instructions.</p><p class="muted">Lowest road charge among eligible listed crossings: '+
       (data.lowestToll?data.lowestToll.name+' at '+money(data.lowestToll.cost.total):'not available')+'.</p>';
 
     results.innerHTML=data.routes.map(r=>{
