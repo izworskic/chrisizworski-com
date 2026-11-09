@@ -31,6 +31,21 @@ test("quoted CSV, empty revenue and corrupt CSV are handled without inventing va
   assert.equal(a.rows.length, 0);
 });
 
+test("real AdSense URL-channel report is correctly treated as site-level, with measured RPM", () => {
+  const csv = [
+    "URL channels,Page views,Impressions,Clicks,Page RPM (USD),Impression RPM (USD),Active View Viewable,Estimated earnings (USD)",
+    "chrisizworski.com,4359,14696,244,19.44,5.77,0.6027,84.73",
+  ].join("\n");
+  const source = engine.adsense(csv);
+  assert.equal(source.sitewide, true);
+  assert.equal(source.records.length, 0);
+  assert.equal(source.total, 84.73);
+  assert.equal(source.totalPageviews, 4359);
+  const report = engine.analyze({ adsense: source }, {});
+  assert.equal(report.kpis.adsDaily, null);
+  assert.ok(Math.abs(report.kpis.importedAdSensePageRpm - 19.44) < 0.01);
+});
+
 test("sitewide AdSense CSV can measure daily earnings only with explicit complete scope and dates", () => {
   const ad = engine.adsense("Date,Estimated earnings\n2026-11-01,12.20\n2026-11-02,16.80\nTotal,29.00");
   assert.equal(ad.total, 29);
