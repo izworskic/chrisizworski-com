@@ -23,7 +23,7 @@ const correctImages=ids.every(id=>{
   /^https:\/\/commons\.wikimedia\.org\/wiki\/File:/.test(p.sourceURL)&&
   /^(CC BY-SA 4\.0|CC0 1\.0)$/.test(p.licenseName)&&
   /^https:\/\/creativecommons\.org\//.test(p.licenseURL)&&
-  p.photographer.length>3&&p.alt.length>30&&p.caption.length>25&&p.captureDate.length===10));
+  p.photographer.length>3&&p.alt.length>30&&p.caption.length>25&&p.captureDate.length===10);
 record('three-park-photo-identity',correctImages,
  'Three exact-place catalog records with valid photo-level dates, authors, Commons sources, CC licenses and descriptive captions: '+correctImages);
 const placeFacts=ids.every(id=>{
