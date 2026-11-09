@@ -174,4 +174,5 @@ test("dashboard is served behind server auth and never stored in public/", () =>
   assert.match(api, /authorizeGscRequest/);
   assert.match(workflow, /Growth Command Center analytics/);
   assert.match(workflow, /--request POST/);
+  assert.match(workflow, /always\(\) && steps\.oidc\.outcome/, "Growth sources should still run if GSC fails");
 });
