@@ -741,7 +741,7 @@
       copy.appendChild(el('p','rl-access-quick-status',
         site.kind==='mission-confirm'?
           'NASA must announce the launch-viewing lawn opening for this mission. Free entry is first-come, with no guaranteed parking.' :
-          site.label || 'Launch-day access and parking not confirmed'));
+          site.reason || site.note || site.label || 'Launch-day access and parking not confirmed'));
       const links=el('div','rl-access-quick-links');
       const maps=anchor(siteMapHref(site),
         site.kind==='mission-confirm'?'Locate public visitor center on Google Maps':
