@@ -93,6 +93,154 @@
       root.appendChild(card);
     }
   }
+  // Schedule-first visitor surface. Use the SAME bounded national snapshot and
+  // mission selection pipeline as the decision desk, never a second feed.
+  const frontFilters = { query: '', region: 'all', window: 'all', next: null };
+  const visitorZone = (() => {
+    try { return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC'; }
+    catch { return 'UTC'; }
+  })();
+  const targetIsPrecise = launch => ['minute', 'second'].includes(launch?.netPrecision) &&
+    Number.isFinite(Date.parse(launch?.net || ''));
+  function frontSelectMission(region, launchId) {
+    if (!state.data?.regions?.some(r => r.id === region &&
+      (r.launches || []).some(l => l.id === launchId))) return;
+    document.dispatchEvent(new CustomEvent('rocket-experience:choose',
+      { detail: { region, launchId } }));
+    $('rl-flight-desk')?.scrollIntoView({
+      behavior: window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+      block: 'start'
+    });
+  }
+  function renderFrontCountdown() {
+    const node = $('rl-front-countdown-value');
+    if (!node) return;
+    const launch = frontFilters.next;
+    if (!launch || !targetIsPrecise(launch) || state.data?.scheduleFreshness === 'stale' ||
+      launch.sourceStale === true) {
+      node.textContent = launch ? 'No verified minute-level target' : 'Launch time not available';
+      return;
+    }
+    const ms = Date.parse(launch.net) - Date.now();
+    if (ms <= 0) {
+      node.textContent = 'Target time reached · recheck status';
+      return;
+    }
+    const seconds = Math.floor(ms / 1000);
+    const days = Math.floor(seconds / 86400);
+    const hours = Math.floor(seconds % 86400 / 3600);
+    const minutes = Math.floor(seconds % 3600 / 60);
+    const secs = seconds % 60;
+    node.textContent = [days + 'd', String(hours).padStart(2, '0') + 'h',
+      String(minutes).padStart(2, '0') + 'm', String(secs).padStart(2, '0') + 's'].join('  :  ');
+  }
+  function renderFrontSchedule(data) {
+    const list = $('rl-front-launch-list');
+    if (!list) return;
+    list.replaceChildren();
+    const regions = data?.regions || [];
+    const all = regions.flatMap(r => (r.launches || []).filter(l => l && l.id).map(l => ({ l, r })));
+    const byDate = (a, b) => {
+      const da = Date.parse(a.l.net || '');
+      const db = Date.parse(b.l.net || '');
+      return (Number.isFinite(da) ? da : Infinity) -
+        (Number.isFinite(db) ? db : Infinity);
+    };
+    all.sort(byDate);
+    const nextRegion = regions.find(r => r.id === data?.nationalNext?.region);
+    const featured = (data?.nationalNext && nextRegion)
+      ? { l: data.nationalNext, r: nextRegion }
+      : all[0] || null;
+    frontFilters.next = featured?.l || null;
+    set('rl-front-timezone', 'Launch times shown in your local zone · ' + visitorZone.replace(/_/g, ' '));
+    set('rl-front-feature-region', featured?.r.name || 'No mission selected');
+    set('rl-front-feature-vehicle', featured?.l.rocket || 'Launch schedule');
+    set('rl-front-next-title', featured?.l.name || (data ? 'No upcoming mission in this feed' : 'Schedule unavailable'));
+    set('rl-front-feature-pad', featured?.l.pad || 'Launch site not confirmed');
+    set('rl-front-feature-date', featured ? formattedDate(featured.l, visitorZone) : 'No published date');
+    set('rl-front-feature-clock', featured ? formattedTime(featured.l, visitorZone) : 'Time unavailable');
+    const stale = data?.scheduleFreshness === 'stale' || featured?.l.sourceStale === true;
+    set('rl-front-feature-precision', !data ?
+      'The schedule cannot be verified right now. Refer to the range authority.' :
+      stale ? 'Source observation overdue. Confirm the latest operator target.' :
+      featured ? (featured.l.scheduleConfidence?.label || 'Published schedule target') +
+        ' · This is not launch GO or viewing-site access.' :
+        'No mission in this bounded source sample. Check official range notices.');
+    const featureButton = $('rl-front-feature-action');
+    if (featureButton) {
+      featureButton.disabled = !featured || !data;
+      featureButton.onclick = featured && data ?
+        () => frontSelectMission(featured.r.id, featured.l.id) : null;
+    }
+    renderFrontCountdown();
+    const q = frontFilters.query.trim().toLocaleLowerCase();
+    const tenDays = Date.now() + 10 * 86400000;
+    const filtered = all.filter(({ l, r }) => {
+      if (frontFilters.region !== 'all' && r.id !== frontFilters.region) return false;
+      if (q && ![l.name, l.rocket, l.pad, r.name, r.subtitle]
+        .some(v => String(v || '').toLocaleLowerCase().includes(q))) return false;
+      if (frontFilters.window === '10') {
+        const net = Date.parse(l.net || '');
+        if (!Number.isFinite(net) || net < Date.now() - 60000 || net > tenDays ||
+          !['minute', 'second', 'hour', 'day'].includes(l.netPrecision)) return false;
+      }
+      return true;
+    });
+    if (!data) {
+      list.appendChild(el('p', 'rl-front-wait',
+        'The national launch feed is unavailable. No current mission schedule can be verified here.'));
+    } else if (!filtered.length) {
+      list.appendChild(el('p', 'rl-front-wait', all.length ?
+        'No missions match these filters. Try another region or date window.' :
+        'No upcoming launch was returned in this bounded source sample. That does not mean the ranges are inactive.'));
+    } else {
+      filtered.slice(0, 10).forEach(({ l, r }) => {
+        const item = el('button', 'rl-front-mission');
+        item.type = 'button';
+        item.dataset.selected = String(data.selectedLaunchId === l.id && data.selectedRegion === r.id);
+        const when = el('span', 'rl-front-mission-date');
+        when.appendChild(el('strong', '', formattedDate(l, visitorZone)));
+        when.appendChild(el('small', '', formattedTime(l, visitorZone)));
+        const body = el('span', 'rl-front-mission-copy');
+        body.appendChild(el('span', 'rl-front-mission-region', r.name + ' / ' + (l.rocket || 'Rocket not announced')));
+        body.appendChild(el('strong', 'rl-front-mission-name', l.name || 'Unnamed mission'));
+        body.appendChild(el('small', '', (l.pad || 'Pad unverified') + ' · ' +
+          (l.scheduleConfidence?.label || 'Schedule unverified')));
+        item.append(when, body, el('span', 'rl-front-mission-arrow', '↗'));
+        item.setAttribute('aria-label', 'Plan viewing for ' + (l.name || 'this launch') +
+          ' from ' + r.name + ', ' + formattedDate(l, visitorZone));
+        item.addEventListener('click', () => frontSelectMission(r.id, l.id));
+        list.appendChild(item);
+      });
+    }
+    set('rl-front-result-count', data ?
+      'Showing ' + Math.min(filtered.length, 10) + ' of ' + filtered.length +
+      ' matching missions' : 'Schedule currently unavailable');
+    set('rl-front-source-status', data ?
+      (data?.coverage?.partial ? 'Partial source coverage · ' : '') +
+      (data?.scheduleFreshness === 'stale' ? 'Schedule observation overdue · ' : '') +
+      'Observed ' + stamp(data.scheduleCheckedAt) : 'Official sources remain authoritative');
+  }
+  $('rl-front-search-input')?.addEventListener('input', event => {
+    frontFilters.query = event.target.value;
+    renderFrontSchedule(state.data);
+  });
+  $('rl-front-region-filter')?.addEventListener('change', event => {
+    frontFilters.region = event.target.value;
+    renderFrontSchedule(state.data);
+  });
+  document.querySelectorAll('.rl-front-window [data-window]').forEach(button => {
+    button.addEventListener('click', () => {
+      frontFilters.window = button.dataset.window;
+      document.querySelectorAll('.rl-front-window [data-window]').forEach(b =>
+        b.setAttribute('aria-pressed', String(b.dataset.window === frontFilters.window)));
+      renderFrontSchedule(state.data);
+    });
+  });
+  // A timer updates display only. It never changes published schedules or
+  // declares launch GO; it stops implying a live countdown after the target.
+  window.setInterval(renderFrontCountdown, 1000);
+
   function floridaSpecialistLink(url, data = state.data) {
     if (typeof url !== 'string') return url;
     const region = url.startsWith('/national-tools/space-coast-launch/')?'florida':
@@ -1266,6 +1414,7 @@
     renderOfficialEvidence(data);
     void loadKscMission(data);
     board();
+    renderFrontSchedule(data);
     document.dispatchEvent(new CustomEvent('rocket-viewing:data',{detail:data}));
     const coverage = data.coverage || {};
     set('rl-schedule-coverage',
@@ -1308,6 +1457,7 @@
       // schedule after this request has explicitly failed.
       state.rocketPins?.update([],null);
       state.data=null;
+      renderFrontSchedule(null);
       document.dispatchEvent(new CustomEvent('rocket-truth:mission-selected',
         {detail:{launchId:null}}));
       document.dispatchEvent(new CustomEvent('rocket-viewing:data',{detail:null}));
