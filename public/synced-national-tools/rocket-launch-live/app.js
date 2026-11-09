@@ -107,7 +107,9 @@
       (r.launches || []).some(l => l.id === launchId))) return;
     document.dispatchEvent(new CustomEvent('rocket-experience:choose',
       { detail: { region, launchId, surface } }));
-    $('rl-flight-desk')?.scrollIntoView({
+    // The roster promises a viewing plan; land on actual named places,
+    // not an introductory panel that makes visitors hunt for the answer.
+    ($('rl-access-decision') || $('rl-flight-desk'))?.scrollIntoView({
       behavior: window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
       block: 'start'
     });
