@@ -190,6 +190,10 @@ def build() -> dict:
 
 
 def first_difference(a, b, path="root"):
+    # JSON integer and floating-point encodings may represent the same exact value.
+    if (isinstance(a, (int, float)) and not isinstance(a, bool) and
+            isinstance(b, (int, float)) and not isinstance(b, bool) and a == b):
+        return None
     if type(a) is not type(b):
         return path + ": type differs"
     if isinstance(a, dict):
