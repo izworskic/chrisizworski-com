@@ -135,9 +135,10 @@
         var claimed = String(r[site]).trim();
         if (claimed !== HOST && claimed !== "www." + HOST && !claimed.includes("://" + HOST) && !claimed.includes("://www." + HOST)) { dropped++; return; }
       }
+      var key = p < 0 ? null : page(r[p]);
+      if (p >= 0 && !key) { dropped++; return; } // never add a foreign or unattributed URL to site earnings
       revenue += val; valid++;
       if (date !== -1 && String(r[date] || "").trim()) dated++;
-      var key = p < 0 ? null : page(r[p]);
       if (key) {
         var old = by.get(key) || { page: key, earnings: 0, adPageviews: null };
         old.earnings += val;
@@ -148,7 +149,7 @@
     });
     if (!valid) throw new Error("No valid first-party estimated earnings found.");
     return { records: Array.from(by.values()), total: revenue, sitewide: p === -1,
-      partialAttribution: p !== -1 && by.size < valid, kind: "adsense", datedRows: dated, dropped: dropped };
+      partialAttribution: p !== -1 && dropped > 0, kind: "adsense", datedRows: dated, dropped: dropped };
   }
   function days(start, end) {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(start || "") || !/^\d{4}-\d{2}-\d{2}$/.test(end || "")) return null;
@@ -213,7 +214,7 @@
     }).sort(function (a, b) { return b.score - a.score || (b.impressions || 0) - (a.impressions || 0); });
     var sum = function (items, field) { return items.reduce(function (v, r) { return v + (r[field] || 0); }, 0); };
     var adsDays = days(window.adsStart, window.adsEnd);
-    var reportingRevenue = ads && adsDays !== null && window.adSenseComplete === true ? ads.total / adsDays : null;
+    var reportingRevenue = ads && adsDays !== null && window.adSenseComplete === true && !ads.partialAttribution ? ads.total / adsDays : null;
     return { rows: rows, benchmarks: benchmarks, comparisonValid: validComparison,
       kpis: { importedGscClicks: current ? sum(current.records, "clicks") : null,
         importedGscImpressions: current ? sum(current.records, "impressions") : null,
