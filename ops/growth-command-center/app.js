@@ -122,7 +122,7 @@
     try { result = E.analyze(sources, dates()); }
     catch (err) { set("source-guidance", "Cannot analyze input: " + err.message); return; }
     set("earnings", result.kpis.importedAdSenseEarnings === null ? "Unavailable" : cash(result.kpis.importedAdSenseEarnings));
-    set("earnings-detail", sources.adsense ? (sources.adsense.sitewide ? "Site-level earnings; no page attribution" : "Revenue in imported URL rows") : "Requires actual AdSense export");
+    set("earnings-detail", sources.adsense ? (sources.adsense.sitewide ? "Site-level earnings; no page attribution" : "Revenue in imported URL rows") + (result.kpis.importedAdSensePageRpm === null ? "" : " · " + fmt(sources.adsense.totalPageviews) + " AdSense pageviews · " + cash(result.kpis.importedAdSensePageRpm) + " page RPM") : "Requires actual AdSense export");
     set("daily", cash(result.kpis.adsDaily));
     set("daily-detail", result.kpis.adsDaily === null ? "Needs complete-site confirmation and report dates" : "Reported AdSense earnings / " + E.days(dates().adsStart, dates().adsEnd) + " days");
     set("clicks", fmt(result.kpis.importedGscClicks));
