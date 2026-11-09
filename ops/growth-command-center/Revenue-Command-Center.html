@@ -242,7 +242,7 @@ section:not(.hero){padding:2.5rem 0 2.8rem;border-bottom:1px solid var(--line)}.
     }).sort(function (a, b) { return b.score - a.score || (b.impressions || 0) - (a.impressions || 0); });
     var sum = function (items, field) { return items.reduce(function (v, r) { return v + (r[field] || 0); }, 0); };
     var adsDays = days(window.adsStart, window.adsEnd);
-    var reportingRevenue = ads && adsDays !== null && window.adSenseComplete === true && !ads.partialAttribution ? ads.total / adsDays : null;
+    var reportingRevenue = ads && adsDays !== null && window.adSenseComplete === true && (ads.siteComplete === true || !ads.partialAttribution) ? ads.total / adsDays : null;
     return { rows: rows, benchmarks: benchmarks, comparisonValid: validComparison,
       kpis: { importedGscClicks: current ? sum(current.records, "clicks") : null,
         importedGscImpressions: current ? sum(current.records, "impressions") : null,
