@@ -180,6 +180,11 @@ test('Mapbox bridge probes are pinned through the intended crossings',()=>{
   assert.equal(MAPBOX_PROBES.williamsburg.scope,'CROSSING_APPROACH');
 });
 
+const queensboroGeojson={type:'LineString',coordinates:[
+  [-73.944306,40.752111],[-73.950,40.7549],[-73.954700,40.756900],
+  [-73.958,40.7585],[-73.963800,40.760300]
+]};
+
 test('Mapbox traffic response exposes current, typical and delay minutes',()=>{
   const route=normalizeMapboxResponse('queensboro',{
     code:'Ok',
@@ -187,7 +192,8 @@ test('Mapbox traffic response exposes current, typical and delay minutes',()=>{
     routes:[{
       duration:480,
       duration_typical:300,
-      distance:2600,
+      distance:5261.227,
+      geometry:queensboroGeojson,
       legs:[{incidents:[{description:'Lane restriction'}]},{incidents:[]}]
     }]
   },new Date('2026-10-06T23:00:00Z'));
@@ -197,8 +203,27 @@ test('Mapbox traffic response exposes current, typical and delay minutes',()=>{
   assert.equal(route.delayMinutes,3);
   assert.equal(route.baselineKind,'MAPBOX_TYPICAL_TRAFFIC');
   assert.equal(route.sourceName,'Mapbox live traffic routing');
-  assert.equal(route.mapboxDistanceMeters,2600);
+  assert.equal(route.mapboxDistanceMeters,5261);
   assert.equal(route.incident,'Lane restriction');
+});
+
+test('Queensboro slightly longer one-way approach is accepted only when bridge path is proven',()=>{
+  assert.equal(MAPBOX_PROBES.queensboro.maxDistanceMeters,5800);
+  const base={code:'Ok',waypoints:[{distance:2},{distance:2},{distance:2}],routes:[{
+    duration:600,duration_typical:540,distance:5261.227,geometry:queensboroGeojson,legs:[]
+  }]};
+  assert.equal(normalizeMapboxResponse('queensboro',base).mapboxDistanceMeters,5261);
+  assert.throws(()=>normalizeMapboxResponse('queensboro',{
+    ...base,routes:[{...base.routes[0],geometry:undefined}]
+  }),/geometry sanity failure/);
+  assert.throws(()=>normalizeMapboxResponse('queensboro',{
+    ...base,routes:[{...base.routes[0],geometry:{type:'LineString',coordinates:[
+      [-73.944,40.752],[-73.971,40.742],[-73.9638,40.7603]
+    ]}}]
+  }),/geometry sanity failure/);
+  assert.throws(()=>normalizeMapboxResponse('queensboro',{
+    ...base,routes:[{...base.routes[0],distance:6100}]
+  }),/route-distance sanity failure/);
 });
 
 test('Mapbox probe rejects routes that detour far beyond the fixed crossing corridor',()=>{
@@ -220,7 +245,7 @@ test('Mapbox accepts the repo-standard MAPBOX_TOKEN environment variable',async(
         json:async()=>({
           code:'Ok',
           waypoints:[{distance:1},{distance:1},{distance:1}],
-          routes:[{duration:300,duration_typical:360,distance:2400,legs:[]}]
+          routes:[{duration:300,duration_typical:360,distance:2400,geometry:queensboroGeojson,legs:[]}]
         })
       };
     }
@@ -232,7 +257,11 @@ test('Mapbox accepts the repo-standard MAPBOX_TOKEN environment variable',async(
     now:new Date('2026-10-06T23:00:00Z')
   });
   assert.ok(calls.some(url=>url.includes('access_token=repo-standard-token')));
-  assert.ok(['LIVE','PARTIAL'].includes(result.state));
+  const qUrl=calls.find(url=>url.includes('queensboro')||url.includes('-73.944306,40.752111'));
+  assert.ok(qUrl,'Queensboro request not made');
+  assert.match(qUrl,/overview=full/);
+  assert.match(qUrl,/geometries=geojson/);
+  assert.equal(result.state,'LIVE');
 });
 
 test('Mapbox accepts MAPBOX_KEY used by the Vercel project',async()=>{
@@ -246,7 +275,7 @@ test('Mapbox accepts MAPBOX_KEY used by the Vercel project',async()=>{
         json:async()=>({
           code:'Ok',
           waypoints:[{distance:1},{distance:1},{distance:1}],
-          routes:[{duration:300,duration_typical:360,distance:2400,legs:[]}]
+          routes:[{duration:300,duration_typical:360,distance:2400,geometry:queensboroGeojson,legs:[]}]
         })
       };
     }
@@ -258,7 +287,7 @@ test('Mapbox accepts MAPBOX_KEY used by the Vercel project',async()=>{
     now:new Date('2026-10-06T23:00:00Z')
   });
   assert.ok(calls.some(url=>url.includes('access_token=vercel-mapbox-key')));
-  assert.ok(['LIVE','PARTIAL'].includes(result.state));
+  assert.equal(result.state,'LIVE');
 });
 
 test('Mapbox failure diagnostics expose status without leaking the token',async()=>{
