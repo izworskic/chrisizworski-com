@@ -128,6 +128,82 @@ test('cache failures return safe timeout diagnostics without exposing credential
  assert.equal(poll.state,'CACHE_UNAVAILABLE');
  assert.equal(poll.reason,'CACHE_TIMEOUT');
 });
+test('partial 511NY poll identifies failed events separately from fresh signs without exposing request details',async()=>{
+ const w=mockWorld();
+ const onlyEventsFail=async(url,opts)=>{
+   if(String(url).startsWith('https://nysdot.carsprogram.org/')){
+     return {ok:false,status:503,json:async()=>({}),headers:{get:()=>null}};
+   }
+   return w.fetchImpl(url,opts);
+ };
+ const result=await refresh511({...w,fetchImpl:onlyEventsFail,now:at});
+ assert.equal(result.state,'PARTIAL');
+ assert.equal(result.eventsStatus,'UPSTREAM_HTTP_503');
+ assert.equal(result.signsStatus,'UPDATED');
+ assert.equal(result.eventsCount,null);
+ assert.equal(result.signsCount,1);
+ assert.doesNotMatch(JSON.stringify(result),/unit-user|unit-pass|carsprogram.org/);
+ const snapshot=await getCached511(w);
+ assert.equal(snapshot.state,'STALE');
+ assert.equal(snapshot.events.updatedAt,null);
+ assert.ok(snapshot.signs.updatedAt);
+});
+
+async function render511InBrowser(snapshot){
+ const vm=require('node:vm');
+ const src=fs.readFileSync(path.join(__dirname,'../public/assets/nyc-crossing.js'),'utf8');
+ const nodes=Object.fromEntries(['crossingForm','results','answer','trafficStatus','departureIntelligence'].map(id=>[
+   id,{innerHTML:'',textContent:'',className:'',addEventListener(){}}
+ ]));
+ class FormDataStub{*[Symbol.iterator](){}}
+ const browser={
+   document:{getElementById:id=>nodes[id],hidden:false},
+   Intl,Date,Math,URLSearchParams,FormData:FormDataStub,
+   fetch:async()=>({ok:true,json:async()=>snapshot}),
+   setInterval:()=>0,
+ };
+ vm.runInNewContext(src,browser);
+ await new Promise(resolve=>setImmediate(resolve));
+ return nodes;
+}
+
+test('sign-only 511NY refresh never repeats the incident-feed placeholder across crossing rows',async()=>{
+ const now=new Date().toISOString();
+ const snapshot=buildSnapshot({ny511:{
+   state:'STALE',updatedAt:now,
+   events:{updatedAt:null,items:[]},
+   signs:{updatedAt:now,items:[]},
+   crossings:{}
+ }});
+ const nodes=await render511InBrowser(snapshot);
+ assert.doesNotMatch(nodes.results.innerHTML,/Incident feed awaiting first update|mapped 511NY incident/);
+ assert.equal((nodes.answer.innerHTML.match(/511NY incident updates are not verified right now/g)||[]).length,1);
+ assert.match(nodes.answer.innerHTML,/https:\/\/511ny.org\//);
+ assert.equal((nodes.results.innerHTML.match(/class="disruption"/g)||[]).length,0);
+});
+
+test('fresh 511NY events and signs appear only on affected crossings; stale incidents are suppressed',async()=>{
+ const now=new Date().toISOString();
+ const sample={gwb:{
+   incidentCount:1,events:[{category:'Incident',description:'Verified roadway closure'}],
+   signCount:1,signs:[{message:'LEFT LANE CLOSED'}],penaltyPoints:12
+ }};
+ const live=buildSnapshot({ny511:{
+   state:'LIVE',updatedAt:now,events:{updatedAt:now},signs:{updatedAt:now},crossings:sample
+ }});
+ const fresh=await render511InBrowser(live);
+ assert.equal((fresh.results.innerHTML.match(/class="disruption"/g)||[]).length,1);
+ assert.match(fresh.results.innerHTML,/Verified roadway closure/);
+ assert.match(fresh.results.innerHTML,/LEFT LANE CLOSED/);
+ assert.doesNotMatch(fresh.results.innerHTML,/Incident feed awaiting first update/);
+ const stale=buildSnapshot({ny511:{
+   state:'STALE',updatedAt:now,events:{updatedAt:'2026-01-01T00:00:00Z'},signs:{updatedAt:now},crossings:sample
+ }});
+ const partial=await render511InBrowser(stale);
+ assert.doesNotMatch(partial.results.innerHTML,/Verified roadway closure|mapped 511NY incident/);
+ assert.match(partial.results.innerHTML,/LEFT LANE CLOSED/);
+});
+
 test('incident layer is additive and cannot fabricate incomparable fastest routes',()=>{
  const incident={state:'LIVE',updatedAt:new Date().toISOString(),events:{updatedAt:new Date().toISOString()},signs:{updatedAt:new Date().toISOString()},
  crossings:{gwb:{incidentCount:1,events:[{description:'Crash'}],penaltyPoints:7,signCount:0,signs:[]}}};
