@@ -31,6 +31,10 @@ try{
   assert.equal(await page.locator('#ea-map .leaflet-interactive').count(),0,'name-only source must not create map pins');
   await page.locator('#ea-search').fill('Pauls Falls');
   assert.match(await page.locator('#ea-count').innerText(),/1 source record matching/);
+  await page.locator('#ea-search').fill('Paul’s Falls');
+  assert.match(await page.locator('#ea-count').innerText(),/1 source record matching/,'curly possessive apostrophe must resolve');
+  await page.locator('#ea-search').fill("Paul's Falls");
+  assert.match(await page.locator('#ea-count').innerText(),/1 source record matching/,'straight possessive apostrophe must resolve');
   await page.locator('.ea-record').first().click();
   assert.match(await page.locator('#ea-detail').innerText(),/No verified geographic point/);
   assert.match(await page.locator('#ea-detail').innerText(),/County\s+Houghton/);
@@ -176,6 +180,15 @@ try{
    await page.locator('#ea-reset').click();
    assert.match(await page.locator('#ea-count').innerText(),/640 source records matching/);
  });
+ await run('mobile: guide points survive hidden or spelling-mismatched linked GIS records',async()=>{
+  await page.locator('#ea-reset').click();
+  for(const name of ['Manido Falls','Shining Cloud Falls','Lower Silver Falls','Potawatomi Falls']){
+    await page.locator('#ea-search').fill(name);
+    assert.ok(await page.locator('.ea-record').count()>0,'source must remain searchable: '+name);
+    assert.ok(await page.locator('#ea-map .leaflet-interactive').count()>0,'curated natural waterfall must not vanish: '+name);
+  }
+  await page.locator('#ea-reset').click();
+ });
  await run('mobile: source comparison works for existing curated waterfall',async()=>{
   await page.locator('#ea-reset').click();
   await page.locator('#ea-kind').selectOption('guide');
@@ -185,6 +198,12 @@ try{
   await page.locator('.ea-record').first().click();
   assert.match(await page.locator('#ea-detail').innerText(),/Linked GIS IDs/);
   assert.match(await page.locator('#ea-detail').innerText(),/207, 208/);
+  assert.match(await page.locator('#ea-detail').innerText(),/visitor day-use reference ONLY/);
+  assert.equal(await page.locator('#ea-map .leaflet-interactive').count(),0,'day-use area may not be plotted as a waterfall');
+  assert.equal(await page.locator('#ea-detail .ea-compare-btn').count(),2,'Upper and Lower Falls keep separate natural-feature identities');
+  await page.locator('#ea-detail .ea-compare-btn').first().click();
+  assert.match(await page.locator('#ea-detail').innerText(),/State GIS/);
+  assert.equal(await page.locator('#ea-map .leaflet-interactive').count(),1,'one independently mapped natural feature is shown on explicit inspection');
   assert.ok(await page.locator('#ea-detail a[href="/tahquamenon-falls/"]').count()>0);
   const bounds=await page.evaluate(()=>({w:window.innerWidth,s:document.documentElement.scrollWidth}));
   assert.ok(bounds.s<=bounds.w+2,'mobile horizontal overflow: '+bounds.s);
@@ -223,7 +242,7 @@ try{
  });
  await geoUnavailable.close();
  const offline=await browser.newPage({viewport:{width:390,height:844}});
- await offline.route('**/assets/up-waterfall-evidence-atlas.json',r=>r.fulfill({status:503,contentType:'text/plain',body:'Unavailable'}));
+ await offline.route('**/assets/up-waterfall-evidence-atlas.json*',r=>r.fulfill({status:503,contentType:'text/plain',body:'Unavailable'}));
  await offline.goto(base+'/upper-peninsula-waterfalls/atlas/',{waitUntil:'domcontentloaded',timeout:30000});
  await run('source outage fails closed without fabricated map points',async()=>{
   await offline.waitForFunction(()=>document.querySelector('#ea-count')?.textContent?.includes('Atlas data is unavailable'));
