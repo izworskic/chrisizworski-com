@@ -1,0 +1,48 @@
+{
+  "checkedAt": "2026-11-09T15:49:40.424Z",
+  "scope": "local static navigation; external scripts blocked; no live AIS/video or ad delivery claims",
+  "results": [
+    {
+      "width": 360,
+      "javaScriptEnabled": true,
+      "ais": "deliberate-503",
+      "navigation": "pass",
+      "tracking": "pass"
+    },
+    {
+      "width": 360,
+      "javaScriptEnabled": false,
+      "ais": "deliberate-503",
+      "navigation": "pass",
+      "tracking": "not-applicable"
+    },
+    {
+      "width": 390,
+      "javaScriptEnabled": true,
+      "ais": "deliberate-503",
+      "navigation": "pass",
+      "tracking": "pass"
+    },
+    {
+      "width": 390,
+      "javaScriptEnabled": false,
+      "ais": "deliberate-503",
+      "navigation": "pass",
+      "tracking": "not-applicable"
+    },
+    {
+      "width": 1440,
+      "javaScriptEnabled": true,
+      "ais": "deliberate-503",
+      "navigation": "pass",
+      "tracking": "pass"
+    },
+    {
+      "width": 1440,
+      "javaScriptEnabled": false,
+      "ais": "deliberate-503",
+      "navigation": "pass",
+      "tracking": "not-applicable"
+    }
+  ]
+}

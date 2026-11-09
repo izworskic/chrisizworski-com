@@ -25,7 +25,7 @@
 <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
-<link rel="stylesheet" href="/assets/freighter-tracker.css?v=20261103d">
+<link rel="stylesheet" href="/assets/freighter-tracker.css?v=20261109a">
 <link rel="stylesheet" href="/assets/gazette-latest.css">
 <script type="application/ld+json">{
   "@context": "https://schema.org",
@@ -51,7 +51,7 @@
       "applicationCategory": "TravelApplication",
       "operatingSystem": "Any web browser",
       "isAccessibleForFree": true,
-      "dateModified": "2026-11-03",
+      "dateModified": "2026-11-09",
       "inLanguage": "en-US",
       "author": {
         "@id": "https://chrisizworski.com/#person"
@@ -236,6 +236,15 @@
           <button class="map-tool" id="mapRefresh" type="button">Refresh vessels</button>
         </div>
       </div>
+
+      <nav class="watch-handoff" aria-label="Local ship-watching tools">
+        <p><strong>Watching from shore?</strong> Open the local view for the next passage, cameras and places to watch.</p>
+        <div class="context-actions">
+          <a class="context-link" href="/soo-locks/" data-track-tool="soo-locks" data-placement="tracker-map-watch">Soo Locks: approaching ships</a>
+          <a class="context-link" href="/duluth-canal-park/" data-track-tool="duluth-canal-park" data-placement="tracker-map-watch">Duluth: next passage &amp; cameras</a>
+          <a class="context-link" href="/welland-canal/" data-track-tool="welland-canal" data-placement="tracker-map-watch">Welland: Lake Erie to Lake Ontario</a>
+        </div>
+      </nav>
 
       <noscript>
         <p class="map-disclaimer">JavaScript is required for corridor switching. You can still use the <a href="https://ais.boatnerd.com/">BoatNerd Great Lakes map</a> or <a href="https://www.myshiptracking.com/">MyShipTracking</a>.</p>
