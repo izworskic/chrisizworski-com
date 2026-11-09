@@ -14,6 +14,12 @@ const FIXED_COORDINATES = {
   rfk: '-73.925666,40.799503;-73.927788,40.800378;-73.93128,40.79427',
   verrazzano: '-74.05227,40.60395;-74.04493,40.60628;-74.03916,40.60818',
 };
+// A representative Queensboro westbound line; synthetic geometry tests the
+// exact provider contract without pretending to be a measured traffic route.
+const QUEENSBORO_GEOJSON = { type:'LineString', coordinates:[
+  [-73.944306,40.752111],[-73.950,40.7549],[-73.954700,40.756900],
+  [-73.958,40.7585],[-73.963800,40.760300]
+] };
 const PROBE_IDS = Object.keys(FIXED_COORDINATES);
 const PROBE_COUNT = PROBE_IDS.length;
 const FIXED_BEARINGS = { manhattan: '340,45;340,45;', rfk: '300,45;300,45;210,60', verrazzano: '67,45;67,45;67,45' };
@@ -26,6 +32,7 @@ function routeBody(id = 'queensboro') {
       duration: id === 'queensboro' ? 480 : 240,
       duration_typical: 300,
       distance: { queensboro: 2600, williamsburg: 2400, manhattan: 1652, rfk: 1614, verrazzano: 1205 }[id],
+      ...(id === 'queensboro' ? { geometry: QUEENSBORO_GEOJSON } : {}),
       legs: [],
     }],
   };
@@ -60,6 +67,8 @@ function harness(respond = id => response(200, routeBody(id))) {
     assert.equal(parsed.searchParams.get('radiuses'), id === 'rfk' ? '50;30;50' : '200;120;200');
     assert.equal(parsed.searchParams.get('bearings'), FIXED_BEARINGS[id] || null, 'only new probes add inbound carriageway constraints');
     assert.equal(parsed.searchParams.get('alternatives'), 'false');
+    assert.equal(parsed.searchParams.get('overview'), id === 'queensboro' ? 'full' : 'false');
+    assert.equal(parsed.searchParams.get('geometries'), id === 'queensboro' ? 'geojson' : null);
     assert.equal(parsed.searchParams.get('depart_at'), 'now');
     h.requests.push({ id, options });
     return h.respond(id, options);
@@ -466,7 +475,7 @@ test('production smoke explicitly reports temporary outages as DEGRADED and only
 
 test('production smoke checks each fixed probe distance limit and finite typical baseline', async () => {
   const { evaluateMapboxHealth } = await import('../scripts/smoke-nyc-crossing-production.mjs');
-  for (const [id, distance] of [['queensboro', 5200], ['williamsburg', 1300], ['manhattan', 3501], ['rfk', 2501], ['verrazzano', 999]]) {
+  for (const [id, distance] of [['queensboro', 5801], ['williamsburg', 1300], ['manhattan', 3501], ['rfk', 2501], ['verrazzano', 999]]) {
     const data = smokeSnapshot('LIVE', 'live', PROBE_IDS);
     data.routes.find(route => route.id === id).probeDistanceMeters = distance;
     assert.throws(() => evaluateMapboxHealth(data), /probe distance invalid/);
