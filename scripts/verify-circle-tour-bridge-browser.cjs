@@ -39,6 +39,30 @@ function check(value,message){if(!value)throw Error(message);}
     });
     check(geometry.document<=geometry.viewport+2,size.name+': horizontal overflow '+JSON.stringify(geometry));
     check(geometry.bridge<=size.width,size.name+': connection layer wider than viewport');
+    // Sense-of-place photos and narration must follow the actual selected park,
+    // without changing the specialist tool, adding a second map or breaking mobile layout.
+    for(const sample of [
+      {stop:'15',name:'Lake Superior Provincial Park',clue:'Old Woman Bay'},
+      {stop:'20',name:'Sleeping Giant Provincial Park',clue:'Sea Lion'},
+      {stop:'18',name:'Pukaskwa National Park',clue:'Hattie Cove'}
+    ]){
+      await page.locator('#ctb-stop').selectOption(sample.stop);
+      const place=page.locator('#ctb-decision .ctb-place-story');
+      check(await place.count()===1,size.name+': missing story at stop '+sample.stop);
+      check((await place.getAttribute('aria-label')).includes(sample.name),size.name+': story does not match selected location');
+      check((await place.textContent()).includes(sample.clue),size.name+': place-specific geography missing');
+      check(await place.locator('img').count()===2,size.name+': expected exactly two licensed images');
+      check(await place.locator('a[href^="https://creativecommons.org/"]').count()===2,
+        size.name+': image license links missing');
+      const alts=await place.locator('img').evaluateAll(images=>images.map(img=>({
+        alt:img.alt,loading:img.loading,src:img.getAttribute('src'),decoding:img.decoding
+      })));
+      check(alts.every(x=>x.alt.length>30&&x.loading==='lazy'&&x.decoding==='async'&&x.src.startsWith('https://thumb.wikimedia.org/')),
+        size.name+': invalid rights-conscious photographic markup');
+    }
+    await page.locator('#ctb-stop').selectOption('11');
+    check(await page.locator('#ctb-decision .ctb-place-story').count()===0,
+      size.name+': unresearched stop inherited a different park photograph');
     await page.locator('#ctb-stop').selectOption('11');
     await page.locator('#ctb-theme').selectOption('water');
     await page.waitForFunction(()=>document.querySelector('#ctb-status')?.textContent.includes('approved connection'));
