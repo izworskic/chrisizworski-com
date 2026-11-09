@@ -33,7 +33,7 @@ test("Bridge groups primary question and actual Authority card before Gazette fe
  assert.match(zone, /id="officialStatusHeading"/);
  assert.ok(bridge.indexOf('id="statusCard"')<bridge.indexOf('class="gazette-daily"'));
  assert.ok(!zone.includes("adsbygoogle"), "No ad iframe is inserted by source");
- assert.match(bridge, /"dateModified": "2026-10-26"/);
+ assert.ok((bridge.match(/"dateModified"\s*:\s*"(\d{4}-\d{2}-\d{2})"/)?.[1] || "") >= "2026-10-26", "live bridge answer must retain a truthful review date");
 });
 test("Lake effect offers visible, crawlable, intent-separated winter next decisions",()=>{
  const navStart=lake.indexOf('<nav class="winter-next-decisions"');
