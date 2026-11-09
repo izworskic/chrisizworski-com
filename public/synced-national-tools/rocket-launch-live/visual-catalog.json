@@ -8,7 +8,7 @@
     "falcon-9": {
       "family": "Falcon 9",
       "provider": "SpaceX",
-      "title": "Falcon 9 and Crew Dragon at Cape Canaveral",
+      "title": "NASA’s SpaceX Crew-9 Falcon 9/Dragon Rollout at Space Launch C",
       "nasaId": "NHQ202409270003",
       "imageUrl": "https://images-assets.nasa.gov/image/NHQ202409270003/NHQ202409270003~medium.jpg",
       "sourceUrl": "https://images.nasa.gov/details/NHQ202409270003",
@@ -20,7 +20,7 @@
     "vulcan": {
       "family": "Vulcan Centaur",
       "provider": "United Launch Alliance",
-      "title": "Vulcan rocket at Cape Canaveral",
+      "title": "ULA Vulcan Rocket Unveiled at SLC-41",
       "nasaId": "KSC-20210826-PH-KLS01_0073",
       "imageUrl": "https://images-assets.nasa.gov/image/KSC-20210826-PH-KLS01_0073/KSC-20210826-PH-KLS01_0073~medium.jpg",
       "sourceUrl": "https://images.nasa.gov/details/KSC-20210826-PH-KLS01_0073",
@@ -32,7 +32,7 @@
     "starship": {
       "family": "Starship / Super Heavy",
       "provider": "SpaceX",
-      "title": "Starship flight test photographed from the International Space Station",
+      "title": "The launch of the SpaceX Starship 6 rocket seen from the space station",
       "nasaId": "iss072e220043",
       "imageUrl": "https://images-assets.nasa.gov/image/iss072e220043/iss072e220043~medium.jpg",
       "sourceUrl": "https://images.nasa.gov/details/iss072e220043",
@@ -57,7 +57,7 @@
   "payloads": {
     "escapade": {
       "name": "ESCAPADE",
-      "title": "ESCAPADE spacecraft during prelaunch processing",
+      "title": "ESCAPADE Unboxed at Astrotech",
       "nasaId": "KSC-20240822-PH-KLS01_0033",
       "imageUrl": "https://images-assets.nasa.gov/image/KSC-20240822-PH-KLS01_0033/KSC-20240822-PH-KLS01_0033~medium.jpg",
       "sourceUrl": "https://images.nasa.gov/details/KSC-20240822-PH-KLS01_0033",
@@ -67,13 +67,46 @@
     },
     "imap": {
       "name": "IMAP",
-      "title": "NASA IMAP spacecraft during assembly and processing",
+      "title": "NASA's IMAP Spacecraft Lift to Work Stand and Unbagging",
       "nasaId": "KSC-20250529-PH-AJN01_0065",
       "imageUrl": "https://images-assets.nasa.gov/image/KSC-20250529-PH-AJN01_0065/KSC-20250529-PH-AJN01_0065~medium.jpg",
       "sourceUrl": "https://images.nasa.gov/details/KSC-20250529-PH-AJN01_0065",
       "credit": "NASA/Amber Jean Notvest",
       "context": "NASA's IMAP spacecraft during ground processing in 2025; not a photo from a future launch.",
       "summary": "NASA's Interstellar Mapping and Acceleration Probe investigates the particles and boundaries of the heliosphere."
+    },
+    "europa-clipper": {
+      "name": "EUROPA CLIPPER",
+      "summary": "NASA's Europa Clipper investigates Jupiter's icy moon and whether it may have habitable conditions.",
+      "context": "NASA photo of this named spacecraft, from a past preparation or mission event, not a live camera.",
+      "matchType": "named-nasa-payload",
+      "nasaId": "PIA24321",
+      "title": "Europa Clipper Spacecraft (Illustration)",
+      "imageUrl": "https://images-assets.nasa.gov/image/PIA24321/PIA24321~medium.jpg",
+      "sourceUrl": "https://images.nasa.gov/details/PIA24321",
+      "credit": "NASA/JPL-Caltech"
+    },
+    "psyche": {
+      "name": "PSYCHE",
+      "summary": "NASA's Psyche spacecraft investigates a metal-rich asteroid.",
+      "context": "NASA photo of this named spacecraft, from a past preparation or mission event, not a live camera.",
+      "matchType": "named-nasa-payload",
+      "nasaId": "PIA23875",
+      "title": "Psyche Spacecraft (Artist's Concept)",
+      "imageUrl": "https://images-assets.nasa.gov/image/PIA23875/PIA23875~medium.jpg",
+      "sourceUrl": "https://images.nasa.gov/details/PIA23875",
+      "credit": "NASA/JPL-Caltech/ASU"
+    },
+    "pace": {
+      "name": "PACE",
+      "summary": "NASA's PACE satellite studies ocean ecology, aerosols and clouds.",
+      "context": "NASA photo of this named spacecraft, from a past preparation or mission event, not a live camera.",
+      "matchType": "named-nasa-payload",
+      "nasaId": "KSC-20231204-PH-KLS01_0004",
+      "title": "PACE Spacecraft Processing",
+      "imageUrl": "https://images-assets.nasa.gov/image/KSC-20231204-PH-KLS01_0004/KSC-20231204-PH-KLS01_0004~medium.jpg",
+      "sourceUrl": "https://images.nasa.gov/details/KSC-20231204-PH-KLS01_0004",
+      "credit": "NASA/Kim Shiflett"
     }
   }
 }
