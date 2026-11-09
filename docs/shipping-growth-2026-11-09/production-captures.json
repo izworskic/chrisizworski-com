@@ -1,0 +1,29 @@
+[
+  {
+    "url": "https://chrisizworski.com/great-lakes-freighter-tracking/",
+    "capturedAt": "2026-11-09T15:50:22.562Z",
+    "screenshot": "tracker-live.png",
+    "settled": true,
+    "state": "157 recent reports · All Great Lakes · checked 10:49 AM EST",
+    "detail": "SELECTED AIS REPORT\n\nALGOBERTA\nClose details\n\nLast reported 2 min ago · aishub · MMSI 316051091\n\nSpeed\n0.0 mph (0.0 kn)\nCourse\n192°\nAIS destination\nCAPCO\nReported length\n469 ft\n\nAIS is a reported position, not a confirmed arrival. Destination and vessel dimensions may be missing or outdated; never use this map for navigation.",
+    "errors": []
+  },
+  {
+    "url": "https://chrisizworski.com/welland-canal/",
+    "capturedAt": "2026-11-09T15:50:39.117Z",
+    "screenshot": "welland-viewing.png",
+    "settled": true,
+    "state": "1 recent vessel report near this lock",
+    "detail": null,
+    "errors": []
+  },
+  {
+    "url": "https://chrisizworski.com/duluth-canal-park/",
+    "capturedAt": "2026-11-09T15:50:56.083Z",
+    "screenshot": "duluth-monitor.png",
+    "settled": true,
+    "state": "11 nearby AIS reports · 0 supported passage candidates · 19 camera feeds / 15 sites · 3 viewing spots · checked 9:50 AM CT",
+    "detail": null,
+    "errors": []
+  }
+]

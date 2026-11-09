@@ -86,6 +86,11 @@ button,a{-webkit-tap-highlight-color:transparent}
 .context-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:17px}
 .context-link{display:inline-flex;align-items:center;justify-content:center;min-height:39px;padding:8px 12px;border:1px solid #b8c9cc;border-radius:4px;color:#145f6f;font-size:12px;font-weight:800;text-decoration:none}
 .context-link:hover{border-color:var(--lake);background:#eef8f9;color:#0a5060}
+.watch-handoff{padding:16px 22px;background:#f1f7f7;border-bottom:1px solid #c9d9dc;color:#25434c}
+.watch-handoff p{margin:0;font-size:14px;line-height:1.5}
+.watch-handoff .context-actions{margin-top:10px}
+.watch-handoff .context-link{min-height:44px;background:#fff;max-width:100%;text-align:center}
+.watch-handoff .context-link:focus-visible{outline:3px solid #a75217;outline-offset:3px}
 .conditions-panel{padding:25px 26px;background:#f4f8f7}
 .condition-source{margin:0 0 15px;color:#6a7b80;font-size:12px}
 .condition-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:15px}
