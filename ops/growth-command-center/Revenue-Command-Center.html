@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>Revenue Command Center | Owner Workbench</title>
+  <style>
+:root { color-scheme:light; --ink:#1e292c; --muted:#627076; --line:#dce2de; --paper:#f7f8f5; --white:#fff; --forest:#1d5a50; --dark:#102823; --lime:#d7e8b9; --amber:#946c26; font-family:Inter,"Segoe UI",system-ui,-apple-system,sans-serif; }
+*{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;background:var(--paper);color:var(--ink);line-height:1.5} a{color:inherit} a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #69a58e;outline-offset:2px}button,input,select{font:inherit} button{cursor:pointer}
+.skip{position:absolute;top:-100px;left:1rem;background:var(--lime);padding:.6rem 1rem;z-index:20}.skip:focus{top:1rem}
+.masthead{background:#112b26;color:#ebf0e9;border-bottom:1px solid #39564a}.mast-inner{max-width:1440px;margin:auto;padding:1rem 3.5vw;display:flex;justify-content:space-between;gap:1rem;align-items:center}.brand{display:flex;align-items:center;gap:.9rem}.brand-mark{font-weight:850;letter-spacing:-.09em;font-size:1.6rem}.brand-mark span{color:#a9d486}.brand-name{font-size:.69rem;font-weight:800;letter-spacing:.15em}.brand-name .dim{font-weight:500;color:#b0c1b9}.privacy{font-size:.66rem;letter-spacing:.12em;font-weight:650;color:#c4d6c5;white-space:nowrap}.live-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#a1d27d;vertical-align:middle;margin-right:.5rem}
+.layout{max-width:1440px;padding:0 3.5vw;margin:auto}.hero{background:var(--dark);color:#f3f7ec;margin:0 -3.5vw;padding:2.2rem 3.5vw 3.5rem;background-image:radial-gradient(ellipse at 84% 4%,rgba(110,158,133,.23),transparent 53%),linear-gradient(130deg,#112824,#1e4239)}.eyebrow{font-size:.64rem;letter-spacing:.18em;color:#afc9ad;display:flex;justify-content:space-between;gap:1rem;border-bottom:1px solid #557063;padding-bottom:.75rem}.hero-body{display:grid;grid-template-columns:1fr 340px;align-items:end;gap:3rem;padding-top:3.1rem}.overline{color:#b8d5b9;letter-spacing:.22em;font-size:.68rem;font-weight:800}.hero h1{font-weight:720;letter-spacing:-.065em;line-height:.98;font-size:clamp(3.3rem,6.2vw,6.6rem);margin:.7rem 0 1.3rem}.hero h1 em{font-style:normal;color:#b9d29e}.lede{max-width:670px;color:#ceddd1;font-size:1.04rem;line-height:1.7;margin:0}.northstar{background:#f0f4e5;border-radius:3px;color:#203a32;padding:1.55rem 1.6rem 1.4rem}.northstar>span,.northstar small{display:block;font-size:.67rem;letter-spacing:.13em;font-weight:750}.northstar strong{display:block;letter-spacing:-.07em;font-size:4rem;line-height:1.15;margin:.5rem 0}.northstar strong span{font-size:1.1rem;letter-spacing:-.025em;color:#60736b}.northstar small{letter-spacing:0;color:#53645f;font-size:.77rem;font-weight:500}.northstar .rule{height:1px;background:#cdd8ca;margin:1.3rem 0}.northstar p{font-size:.8rem;line-height:1.5;margin:0;color:#4f655b}
+section:not(.hero){padding:2.5rem 0 2.8rem;border-bottom:1px solid var(--line)}.section-heading{display:flex;gap:1.5rem;justify-content:space-between;align-items:end;margin-bottom:1.5rem}.section-heading>div{display:flex;align-items:baseline;gap:1rem}.section-heading>p{max-width:450px;color:var(--muted);font-size:.82rem;margin:0;text-align:right}.section-heading h2,.footer-grid h2{font-weight:700;letter-spacing:-.045em;font-size:clamp(1.6rem,2.5vw,2.2rem);margin:0}.section-number{color:var(--forest);font-size:.7rem;font-weight:800;letter-spacing:.1em}
+.sources{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.85rem}.source-card{background:white;border:1px solid var(--line);padding:1.1rem;min-height:208px;display:flex;flex-direction:column;gap:.45rem;cursor:pointer;transition:border-color .15s,box-shadow .15s}.source-card:hover,.source-card:focus-within{border-color:#548775;box-shadow:0 4px 20px #11302612}.source-top{display:flex;align-items:start;justify-content:space-between;gap:.5rem;min-height:2rem}.source-index{font-size:.58rem;letter-spacing:.09em;font-weight:800;color:var(--forest)}.source-flag{font-size:.6rem;color:#66736e;border:1px solid #dce4d9;padding:.1rem .32rem;white-space:nowrap}.source-flag.ready{background:#e4f1dc;color:#2e6550;border-color:#bad8ba}.source-flag.error{background:#fff1eb;color:#99482e;border-color:#ffd2bf}.source-card strong{font-size:1.23rem;letter-spacing:-.045em}.source-card>span:nth-last-of-type(2){font-size:.78rem;color:var(--muted);line-height:1.5}.file-cta{margin-top:auto;font-size:.78rem;font-weight:800;border-bottom:1px solid #9ea9a4;display:flex;justify-content:space-between;padding-top:.8rem;padding-bottom:.35rem}.source-card input[type=file],.restore input[type=file]{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.periods{margin-top:1.2rem;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}.period-pair{display:grid;grid-template-columns:1fr 1fr;gap:.6rem 1rem;background:#edf1eb;border:1px solid var(--line);padding:.85rem 1rem}.label-heading{font-size:.63rem;letter-spacing:.12em;font-weight:780;color:#526961}.period-pair .label-heading{grid-column:1/-1}.period-pair label{font-size:.69rem;font-weight:650;color:#53665e;display:flex;flex-direction:column;gap:.25rem}.period-pair input{border:1px solid #ced8d0;border-radius:2px;background:white;max-width:100%;padding:.45rem;font-size:.8rem;color:var(--ink)}.complete-check{display:flex;align-items:center;gap:.55rem;margin-top:1.25rem;font-size:.78rem}.complete-check input{accent-color:var(--forest);width:1rem;height:1rem}.source-guidance{font-size:.79rem;line-height:1.5;color:#6d6552;background:#f6f0df;border-left:3px solid #b59b55;margin:1rem 0 0;padding:.75rem 1rem}
+.kpis{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;gap:.85rem}.kpi{background:white;border:1px solid var(--line);padding:1.45rem 1.2rem;min-height:150px}.kpi.feature{background:#193e35;color:white}.kpi-tag{display:block;max-width:240px;line-height:1.5;font-size:.61rem;font-weight:800;letter-spacing:.085em;color:#62766e}.kpi.feature .kpi-tag{color:#b7cfc0}.kpi strong{display:block;font-size:clamp(1.5rem,2.3vw,2.5rem);line-height:1.15;letter-spacing:-.05em;margin:1rem 0 .35rem;font-weight:760;overflow-wrap:anywhere}.kpi small{color:#7e8983;font-size:.73rem}.kpi.feature small{color:#c4d5c8}.target-track{margin-top:1rem;background:#e8eee5;padding:1rem 1.25rem}.target-track>div:first-child{display:flex;align-items:center;justify-content:space-between;gap:1rem}.target-track>div:first-child>div{display:flex;flex-wrap:wrap;column-gap:1rem;align-items:baseline}.target-track #progress-text{font-size:.77rem;color:#64746a}.target-track #progress-percent{font-size:1rem;font-weight:800}.track{height:6px;background:#c9d5ca;margin-top:.9rem;overflow:hidden}.track span{display:block;width:0;height:100%;background:var(--forest);transition:width .3s}
+.recommendations{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.85rem}.decision{background:white;border:1px solid var(--line);padding:1.2rem;min-height:190px}.decision .sequence{color:var(--forest);font-size:.62rem;font-weight:850;letter-spacing:.13em}.decision h3{font-size:1.16rem;line-height:1.35;margin:.6rem 0 .45rem;letter-spacing:-.03em;overflow-wrap:anywhere}.decision p{font-size:.78rem;color:var(--muted);margin:.4rem 0}.decision .signal{color:#3b6554;font-size:.74rem;font-weight:700}.decision a{text-decoration-color:#a0b8a7;text-underline-offset:3px}.empty{padding:1.5rem;color:#78837e;font-size:.82rem}.recommendations>.empty{grid-column:1/-1;border:1px dashed var(--line)}
+.table-toolbar{display:flex;justify-content:space-between;gap:1rem;align-items:center;margin-bottom:1rem;flex-wrap:wrap}.filters{display:flex;gap:.35rem;flex-wrap:wrap}.filter{border:1px solid #cdd7cf;background:transparent;padding:.47rem .8rem;color:#52625d;font-size:.78rem;font-weight:700;border-radius:2px}.filter.active{background:#1d5a50;color:white;border-color:#1d5a50}.sort-control{font-size:.75rem;display:flex;align-items:center;gap:.5rem;color:#596c64}.sort-control select{border:1px solid #cdd7cf;background:white;color:#243f35;padding:.55rem;max-width:220px;font-size:.78rem}.table-scroller{overflow:auto;border:1px solid var(--line);background:white}table{border-collapse:collapse;width:100%;min-width:900px;text-align:left}th{font-size:.65rem;text-transform:uppercase;letter-spacing:.08em;color:#6a7970;background:#edf2ec;padding:1rem .75rem;white-space:nowrap}td{border-top:1px solid #e6ebe6;padding:.92rem .75rem;font-size:.8rem;vertical-align:top;font-variant-numeric:tabular-nums}tbody tr:hover{background:#f8faf5}.page-cell{min-width:270px;max-width:460px}.page-link{font-size:.82rem;font-weight:780;color:#20493c;text-decoration:none;overflow-wrap:anywhere}.page-link:hover{text-decoration:underline}.path-note{color:#677b70;font-size:.68rem;margin-top:.1rem}.action-note{margin-top:.5rem;font-size:.7rem;color:#69776f;line-height:1.5}.number-cell{text-align:right;white-space:nowrap}.strong-number{font-weight:760}.muted{color:#84928b}.positive{color:#2a7460}.negative{color:#a65539}.footnote{font-size:.73rem;color:#718077;max-width:1080px;line-height:1.65;margin:1rem 0 0}
+.footer-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:2rem;padding:2.5rem 0}.footer-grid article{padding:0 0 .5rem}.footer-grid h2{margin:.35rem 0 1rem}.footer-grid article p{font-size:.81rem;color:var(--muted);line-height:1.7}.integrity-item{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;padding:.65rem 0;border-bottom:1px solid var(--line);font-size:.8rem}.integrity-item strong{font-size:.74rem;text-align:right;font-weight:700}.integrity-item strong.warn{color:#956c25}.integrity-item strong.ready{color:#276b55}.actions{display:flex;gap:.55rem;flex-wrap:wrap}.actions button,.restore{display:inline-block;border:1px solid var(--forest);background:var(--forest);color:white;padding:.7rem .9rem;font-size:.76rem;font-weight:750;cursor:pointer;text-decoration:none}.actions .restore{background:white;color:var(--forest)}.actions .quiet{background:transparent;border-color:#c7d4cd;color:#6c7f72}.page-footer{display:flex;justify-content:space-between;gap:1rem;padding:1.4rem 0 2rem;color:#79877e;letter-spacing:.14em;font-size:.61rem;font-weight:750}
+@media(max-width:1080px){.sources{grid-template-columns:repeat(2,1fr)}.periods{grid-template-columns:1fr 1fr}.kpis{grid-template-columns:repeat(2,1fr)}.hero-body{grid-template-columns:1fr 280px;gap:1.5rem}.recommendations{grid-template-columns:1fr 1fr}}
+@media(max-width:700px){.mast-inner{padding:.85rem 4vw}.brand-name .dim,.privacy{display:none}.layout{padding:0 4vw}.hero{margin:0 -4vw;padding:1.5rem 4vw 2.4rem}.hero-body{display:block;padding-top:1.8rem}.hero h1{font-size:clamp(3rem,12vw,5rem)}.northstar{margin-top:1.8rem;padding:1.2rem}.northstar strong{font-size:3.3rem}.section-heading{display:block}.section-heading>p{text-align:left;margin-top:.7rem}.section-heading h2{font-size:1.65rem}.sources{grid-template-columns:1fr}.source-card{min-height:152px}.periods{grid-template-columns:1fr}.period-pair{grid-template-columns:1fr 1fr}.kpis{grid-template-columns:1fr 1fr}.kpi{min-height:137px;padding:1rem .9rem}.kpi strong{font-size:1.5rem}.kpi-tag{font-size:.56rem}.recommendations{grid-template-columns:1fr}.footer-grid{grid-template-columns:1fr;gap:1.5rem}.page-footer{display:block}.page-footer span{display:block;margin:.5rem 0}.sort-control{width:100%}.sort-control select{flex:1}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+
+</style>
+  <script>
+/* Revenue Command Center. Browser + Node, no dependencies. All inputs stay on the user's device. */
+(function (root, factory) {
+  var engine = factory();
+  if (typeof module === "object" && module.exports) module.exports = engine;
+  if (root) root.GrowthEngine = engine;
+})(typeof window !== "undefined" ? window : null, function () {
+  "use strict";
+  var HOST = "chrisizworski.com";
+  function parseCSV(text) {
+    var src = String(text || "").replace(/^\uFEFF/, "");
+    var first = src.split(/\r?\n/, 1)[0] || "";
+    var delimiter = first.indexOf("\t") !== -1 ? "\t" : ",";
+    var rows = [], row = [], field = "", quoted = false;
+    for (var i = 0; i < src.length; i++) {
+      var c = src[i];
+      if (c === '"') {
+        if (quoted && src[i + 1] === '"') { field += '"'; i++; }
+        else quoted = !quoted;
+      } else if (c === delimiter && !quoted) {
+        row.push(field); field = "";
+      } else if ((c === "\n" || c === "\r") && !quoted) {
+        if (c === "\r" && src[i + 1] === "\n") i++;
+        row.push(field); if (row.some(function (v) { return v.trim() !== ""; })) rows.push(row);
+        row = []; field = "";
+      } else field += c;
+    }
+    if (quoted) throw new Error("CSV contains an unmatched quote.");
+    row.push(field);
+    if (row.some(function (v) { return v.trim() !== ""; })) rows.push(row);
+    return rows;
+  }
+  function heading(s) { return String(s || "").toLowerCase().replace(/\s+/g, " ").replace(/[^a-z0-9 ]/g, "").trim(); }
+  function locate(rows, requiredGroups) {
+    for (var i = 0; i < Math.min(rows.length, 35); i++) {
+      var head = rows[i].map(heading);
+      if (requiredGroups.every(function (alternatives) { return alternatives.some(function (v) { return head.includes(v); }); })) {
+        return { start: i + 1, names: head };
+      }
+    }
+    throw new Error("Required column headers not found. Please use a Google export, not a screenshot.");
+  }
+  function col(names, options) {
+    for (var i = 0; i < options.length; i++) {
+      var at = names.indexOf(options[i]);
+      if (at !== -1) return at;
+    }
+    return -1;
+  }
+  function number(v) {
+    var s = String(v == null ? "" : v).trim();
+    if (!s || s === "-" || s === "—") return null;
+    var negative = /^\(.*\)$/.test(s);
+    var n = Number(s.replace(/[$£€,%()\s,]/g, ""));
+    return Number.isFinite(n) ? (negative ? -n : n) : null;
+  }
+  function page(raw) {
+    var s = String(raw || "").trim();
+    if (!s || /^(\(not set\)|not set|total|grand total)$/i.test(s)) return null;
+    try {
+      var u = new URL(/^https?:\/\//i.test(s) ? s : s.charAt(0) === "/" ? "https://" + HOST + s : "https://" + s);
+      var host = u.hostname.toLowerCase().replace(/^www\./, "");
+      if (host !== HOST && !host.endsWith("." + HOST)) return null;
+      var pathname = u.pathname.replace(/\/+/g, "/");
+      if (!pathname.endsWith("/")) pathname += "/";
+      return "https://" + host + pathname;
+    } catch (_) { return null; }
+  }
+  function getRows(text, types) {
+    var rows = parseCSV(text);
+    var loc = locate(rows, types);
+    return { rows: rows.slice(loc.start), names: loc.names };
+  }
+  function gsc(text) {
+    var d = getRows(text, [["top pages", "page", "pages", "url", "landing page"], ["clicks"], ["impressions"]]);
+    var ix = col(d.names, ["top pages", "page", "pages", "url", "landing page"]);
+    var clicks = col(d.names, ["clicks"]), impressions = col(d.names, ["impressions"]);
+    var pos = col(d.names, ["position", "average position"]);
+    var out = new Map(), dropped = 0;
+    d.rows.forEach(function (r) {
+      var url = page(r[ix]), c = number(r[clicks]), im = number(r[impressions]);
+      if (!url || c === null || im === null || c < 0 || im < 0) { dropped++; return; }
+      var prev = out.get(url) || { page: url, clicks: 0, impressions: 0, positionWeight: 0, positionImpressions: 0 };
+      prev.clicks += c; prev.impressions += im;
+      var p = pos < 0 ? null : number(r[pos]);
+      if (p !== null && p >= 0 && im > 0) { prev.positionWeight += p * im; prev.positionImpressions += im; }
+      out.set(url, prev);
+    });
+    var records = Array.from(out.values()).map(function (r) {
+      return { page: r.page, clicks: r.clicks, impressions: r.impressions,
+        ctr: r.impressions ? 100 * r.clicks / r.impressions : 0,
+        position: r.positionImpressions ? r.positionWeight / r.positionImpressions : null };
+    });
+    if (!records.length) throw new Error("No first-party page rows in this Search Console file.");
+    return { records: records, dropped: dropped, kind: "gsc" };
+  }
+  function ga4(text) {
+    var d = getRows(text, [["page path", "page path and screen class", "landing page", "landing page query string", "full page url", "page location", "page"], ["views", "screen page views", "sessions", "active users"]]);
+    var p = col(d.names, ["page path", "page path and screen class", "landing page", "landing page query string", "full page url", "page location", "page"]);
+    var v = col(d.names, ["views", "screen page views"]), sessions = col(d.names, ["sessions"]);
+    var active = col(d.names, ["active users"]), returning = col(d.names, ["returning users"]);
+    var host = col(d.names, ["hostname", "host name"]);
+    var out = new Map(), dropped = 0;
+    d.rows.forEach(function (r) {
+      var raw = String(r[p] || "");
+      if (raw.charAt(0) === "/" && host !== -1 && r[host] && String(r[host]).replace(/^www\./, "") !== HOST) { dropped++; return; }
+      var url = page(raw);
+      if (!url) { dropped++; return; }
+      var old = out.get(url) || { page: url, views: null, sessions: null, activeUsers: null, returningUsers: null };
+      [["views", v], ["sessions", sessions], ["activeUsers", active], ["returningUsers", returning]].forEach(function (entry) {
+        var n = entry[1] < 0 ? null : number(r[entry[1]]);
+        if (n !== null && n >= 0) old[entry[0]] = (old[entry[0]] || 0) + n;
+      });
+      out.set(url, old);
+    });
+    if (!out.size) throw new Error("No first-party page rows in this GA4 file.");
+    return { records: Array.from(out.values()), dropped: dropped, kind: "ga4",
+      dimension: d.names[p].indexOf("landing") !== -1 ? "landing" : "page",
+      caveat: active >= 0 || returning >= 0 ? "User counts summed by page are non-additive across pages." : null };
+  }
+  function adsense(text) {
+    var d = getRows(text, [["estimated earnings", "earnings", "estimated revenue", "estimated earnings usd"]]);
+    var e = col(d.names, ["estimated earnings", "earnings", "estimated revenue", "estimated earnings usd"]);
+    var p = col(d.names, ["page url", "url", "page", "page path", "requested url"]);
+    var views = col(d.names, ["page views", "pageviews"]);
+    var date = col(d.names, ["date", "day"]);
+    var site = col(d.names, ["site", "site url", "domain", "url channels"]);
+    var rows = d.rows.filter(function (r) { return r.some(function (v) { return String(v).trim() !== ""; }); });
+    var detail = rows.filter(function (r) { return !r.some(function (v) { return /^(grand )?total$/i.test(String(v).trim()); }); });
+    var actual = detail.length ? detail : rows;
+    var by = new Map(), revenue = 0, valid = 0, dated = 0, dropped = 0, totalPageviews = 0, pageviewRows = 0;
+    actual.forEach(function (r) {
+      var val = number(r[e]);
+      if (val === null || val < 0) { dropped++; return; }
+      if (site !== -1 && r[site]) {
+        var claimed = String(r[site]).trim();
+        if (claimed !== HOST && claimed !== "www." + HOST && !claimed.includes("://" + HOST) && !claimed.includes("://www." + HOST)) { dropped++; return; }
+      }
+      var key = p < 0 ? null : page(r[p]);
+      if (p >= 0 && !key) { dropped++; return; } // never add a foreign or unattributed URL to site earnings
+      revenue += val; valid++;
+      var reportedViews = views < 0 ? null : number(r[views]);
+      if (reportedViews !== null && reportedViews >= 0) { totalPageviews += reportedViews; pageviewRows++; }
+      if (date !== -1 && String(r[date] || "").trim()) dated++;
+      if (key) {
+        var old = by.get(key) || { page: key, earnings: 0, adPageviews: null };
+        old.earnings += val;
+        var n = reportedViews;
+        if (n !== null && n >= 0) old.adPageviews = (old.adPageviews || 0) + n;
+        by.set(key, old);
+      }
+    });
+    if (!valid) throw new Error("No valid first-party estimated earnings found.");
+    return { records: Array.from(by.values()), total: revenue, totalPageviews: pageviewRows ? totalPageviews : null, sitewide: p === -1,
+      partialAttribution: p !== -1 && dropped > 0, kind: "adsense", datedRows: dated, dropped: dropped };
+  }
+  function days(start, end) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(start || "") || !/^\d{4}-\d{2}-\d{2}$/.test(end || "")) return null;
+    var a = Date.parse(start + "T00:00:00Z"), b = Date.parse(end + "T00:00:00Z");
+    if (!Number.isFinite(a) || !Number.isFinite(b) || b < a) return null;
+    return Math.floor((b - a) / 86400000) + 1;
+  }
+  function comparable(w) {
+    var a = days(w.start, w.end), b = days(w.prevStart, w.prevEnd);
+    return a !== null && a === b && Date.parse(w.prevEnd + "T00:00:00Z") + 86400000 === Date.parse(w.start + "T00:00:00Z");
+  }
+  function bucket(n) {
+    if (n === null) return null;
+    return n <= 3 ? "1–3" : n <= 5 ? "4–5" : n <= 10 ? "6–10" : n <= 20 ? "11–20" : "21+";
+  }
+  function median(values) {
+    if (!values.length) return null;
+    var arr = values.slice().sort(function (a, b) { return a - b; });
+    var mid = Math.floor(arr.length / 2);
+    return arr.length % 2 ? arr[mid] : (arr[mid - 1] + arr[mid]) / 2;
+  }
+  function family(url) {
+    var path = new URL(url).pathname;
+    return /(freighter|soo-locks|welland|duluth|seaway|ballard-locks|ship-tracker)/i.test(path)
+      ? "Shipping" : /(snow|winter|ice-cave|freeze|ski|lake-effect|white-christmas)/i.test(path)
+      ? "Winter" : "Other";
+  }
+  function analyze(sources, window) {
+    sources = sources || {}; window = window || {};
+    var current = sources.gsc || null, previous = sources.previous || null;
+    var analytics = sources.ga4 || null, ads = sources.adsense || null;
+    var validComparison = Boolean(current && previous && comparable(window));
+    var currentMap = new Map((current ? current.records : []).map(function (r) { return [r.page, r]; }));
+    var prevMap = new Map((previous ? previous.records : []).map(function (r) { return [r.page, r]; }));
+    var gaMap = new Map((analytics ? analytics.records : []).map(function (r) { return [r.page, r]; }));
+    var adMap = new Map((ads ? ads.records : []).map(function (r) { return [r.page, r]; }));
+    var benchmarks = {};
+    ["1–3", "4–5", "6–10", "11–20", "21+"].forEach(function (id) {
+      var peers = Array.from(currentMap.values()).filter(function (r) { return r.impressions >= 100 && bucket(r.position) === id; }).map(function (r) { return r.ctr; });
+      benchmarks[id] = peers.length >= 3 ? median(peers) : null;
+    });
+    var urls = new Set([].concat(Array.from(currentMap.keys()), Array.from(gaMap.keys()), Array.from(adMap.keys())));
+    var rows = Array.from(urls).map(function (url) {
+      var g = currentMap.get(url), prev = prevMap.get(url), a = gaMap.get(url), ad = adMap.get(url);
+      var expected = g ? benchmarks[bucket(g.position)] : null;
+      var potential = g && expected !== null && g.impressions >= 100 && g.position > 3 && g.position <= 20
+        ? Math.max(0, Math.round(g.impressions * (expected - g.ctr) / 100)) : null;
+      var growth = validComparison && g && prev && prev.impressions >= 50 ? (g.impressions / prev.impressions - 1) * 100 : null;
+      var revenue = ad ? ad.earnings : null;
+      var metric = revenue !== null && ad.adPageviews > 0 ? 1000 * revenue / ad.adPageviews : null;
+      var action = "Gather matched source evidence";
+      if (potential !== null && potential >= 20) action = "Inspect page-filtered queries, title and search intent";
+      else if (growth !== null && growth <= -30) action = "Investigate decline, seasonality and indexing";
+      else if (revenue !== null && revenue > 0 && (a && a.views > 100)) action = "Protect earning experience; test return use";
+      else if (family(url) !== "Other" && g && g.impressions >= 150) action = "Improve useful next step and repeat visits";
+      var score = (potential || 0) * 2 + Math.min(g ? g.impressions / 50 : 0, 50) + (revenue !== null ? Math.min(revenue * 5, 50) : 0);
+      return { page: url, family: family(url), clicks: g ? g.clicks : null, impressions: g ? g.impressions : null,
+        ctr: g ? g.ctr : null, position: g ? g.position : null, expectedCtr: expected, potentialClicks: potential,
+        impressionChangePct: growth, views: a ? a.views : null, sessions: a ? a.sessions : null,
+        earnings: revenue, adPageviews: ad ? ad.adPageviews : null, pageRpm: metric,
+        action: action, score: score };
+    }).sort(function (a, b) { return b.score - a.score || (b.impressions || 0) - (a.impressions || 0); });
+    var sum = function (items, field) { return items.reduce(function (v, r) { return v + (r[field] || 0); }, 0); };
+    var adsDays = days(window.adsStart, window.adsEnd);
+    var reportingRevenue = ads && adsDays !== null && window.adSenseComplete === true && !ads.partialAttribution ? ads.total / adsDays : null;
+    return { rows: rows, benchmarks: benchmarks, comparisonValid: validComparison,
+      kpis: { importedGscClicks: current ? sum(current.records, "clicks") : null,
+        importedGscImpressions: current ? sum(current.records, "impressions") : null,
+        importedGa4Views: analytics && analytics.records.some(function (r) { return r.views !== null; }) ? sum(analytics.records, "views") : null,
+        importedAdSenseEarnings: ads ? ads.total : null,
+        importedAdSensePageRpm: ads && ads.totalPageviews > 0 ? 1000 * ads.total / ads.totalPageviews : null,
+        adsDaily: reportingRevenue,
+        dailyGap: reportingRevenue === null ? null : Math.max(0, 300 - reportingRevenue),
+        pageAttributedRevenue: ads && !ads.sitewide && !ads.partialAttribution },
+      sourceSummary: {
+        gsc: current ? current.records.length : null,
+        previous: previous ? previous.records.length : null,
+        ga4: analytics ? analytics.records.length : null,
+        adsense: ads ? ads.records.length : null
+      } };
+  }
+  return { parseCSV: parseCSV, gsc: gsc, ga4: ga4, adsense: adsense, page: page, days: days, comparable: comparable, analyze: analyze };
+});
+
+</script>
+  <script>
+(function () {
+  "use strict";
+  var E = window.GrowthEngine;
+  if (!E) throw new Error("GrowthEngine was not loaded.");
+  var sources = { gsc: null, previous: null, ga4: null, adsense: null };
+  var family = "All";
+  var sort = "score";
+  var ids = { gsc: "gsc-file", previous: "previous-file", ga4: "ga4-file", adsense: "adsense-file" };
+  var parsers = { gsc: E.gsc, previous: E.gsc, ga4: E.ga4, adsense: E.adsense };
+  var currency = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
+  var integer = new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 });
+  function el(id) { return document.getElementById(id); }
+  function set(id, value) { el(id).textContent = String(value); }
+  function cash(n) { return n === null || !Number.isFinite(n) ? "—" : currency.format(n); }
+  function fmt(n) { return n === null || !Number.isFinite(n) ? "—" : integer.format(n); }
+  function percent(n) { return n === null || !Number.isFinite(n) ? "—" : n.toFixed(2) + "%"; }
+  function status(name, message, type) {
+    var node = el(name + "-status");
+    node.textContent = message;
+    node.className = "source-flag" + (type ? " " + type : "");
+  }
+  function dates() {
+    return { start: el("from").value, end: el("to").value,
+      prevStart: el("prev-from").value, prevEnd: el("prev-to").value,
+      adsStart: el("ads-from").value, adsEnd: el("ads-to").value,
+      adSenseComplete: el("complete-site").checked };
+  }
+  function setDates(values) {
+    var map = { start: "from", end: "to", prevStart: "prev-from", prevEnd: "prev-to", adsStart: "ads-from", adsEnd: "ads-to" };
+    Object.keys(map).forEach(function (key) { el(map[key]).value = String(values[key] || ""); });
+    el("complete-site").checked = values.adSenseComplete === true;
+  }
+  function node(tag, cls, value) {
+    var out = document.createElement(tag);
+    if (cls) out.className = cls;
+    if (value != null) out.textContent = String(value);
+    return out;
+  }
+  function td(value, cls) {
+    var cell = node("td", cls || "", value);
+    return cell;
+  }
+  function displayName(url) {
+    try { var u = new URL(url); return u.pathname === "/" ? u.hostname : u.pathname.replace(/\/$/, "").split("/").pop().replace(/[-_]/g, " "); }
+    catch (_) { return url; }
+  }
+  function sourceSummary(result) {
+    var pieces = [];
+    if (sources.gsc) pieces.push("GSC " + sources.gsc.records.length + " pages");
+    if (sources.ga4) pieces.push("GA4 " + sources.ga4.records.length + " paths");
+    if (sources.adsense) pieces.push("AdSense " + (sources.adsense.sitewide ? "site-level" : "page-level") + " import");
+    if (!pieces.length) return "No data loaded. Import current GSC Pages.csv first; add verified AdSense earnings and GA4 metrics when available.";
+    if (sources.adsense && result.kpis.adsDaily === null) pieces.push("daily revenue withheld until reporting scope and dates are confirmed");
+    if (sources.previous && !result.comparisonValid) pieces.push("growth rates withheld: the GSC periods must be consecutive and equally long");
+    return pieces.join(" · ") + ".";
+  }
+  function addIntegrity(target, label, message, okay) {
+    var line = node("div", "integrity-item");
+    line.append(node("span", "", label), node("strong", okay ? "ready" : "warn", message));
+    target.append(line);
+  }
+  function integrity(result) {
+    var container = el("integrity"); container.replaceChildren();
+    addIntegrity(container, "Search evidence", sources.gsc ? sources.gsc.records.length + " URL rows" : "Not connected", Boolean(sources.gsc));
+    addIntegrity(container, "Organic period comparison", result.comparisonValid ? "Aligned 28/28 or equal-length periods" : "Not verified", result.comparisonValid);
+    addIntegrity(container, "GA4 page engagement", sources.ga4 ? sources.ga4.records.length + " paths · " + (sources.ga4.dimension === "landing" ? "landings" : "page views") : "Not connected", Boolean(sources.ga4));
+    addIntegrity(container, "AdSense earnings", sources.adsense ? "Measured export · " + (sources.adsense.sitewide ? "no URL attribution" : "page data") : "Not connected", Boolean(sources.adsense));
+    addIntegrity(container, "Sitewide daily revenue", result.kpis.adsDaily === null ? "Unverified" : "Scope confirmed", result.kpis.adsDaily !== null);
+    addIntegrity(container, "Returning visitors", sources.ga4 && sources.ga4.records.some(function (r) { return r.returningUsers !== null; }) ? "Explicit GA4 metric" : "Unavailable", Boolean(sources.ga4 && sources.ga4.records.some(function (r) { return r.returningUsers !== null; })));
+    if (sources.ga4 && sources.ga4.caveat) {
+      var p = node("p", "footnote", sources.ga4.caveat); container.append(p);
+    }
+    var note = node("p", "footnote", "All earnings are treated as USD: confirm AdSense account currency before interpreting dollars. GSC page-row totals may differ from Search Console's property total. GA4 exported rows may exclude low-volume pages.");
+    container.append(note);
+  }
+  function recommendations(rows) {
+    var area = el("recommendations"); area.replaceChildren();
+    if (!rows.length) { area.append(node("p", "empty", "Import current GSC pages or GA4 pages to identify existing tools.")); return; }
+    rows.slice(0, 3).forEach(function (r, i) {
+      var card = node("article", "decision");
+      card.append(node("span", "sequence", "INVESTIGATION 0" + (i + 1) + " / " + r.family.toUpperCase()));
+      var heading = node("h3");
+      var link = node("a", "", displayName(r.page));
+      link.href = r.page; link.target = "_blank"; link.rel = "noopener noreferrer"; heading.append(link);
+      card.append(heading, node("p", "", r.action));
+      var signal = r.potentialClicks !== null && r.potentialClicks >= 20
+        ? fmt(r.potentialClicks) + " peer-CTR gap clicks (not forecast)"
+        : r.earnings !== null ? cash(r.earnings) + " attributed earnings"
+        : r.impressions !== null ? fmt(r.impressions) + " search impressions" : fmt(r.views) + " GA4 views";
+      card.append(node("p", "signal", signal)); area.append(card);
+    });
+  }
+  function table(rows) {
+    var body = el("rows"); body.replaceChildren();
+    var list = rows.filter(function (r) { return family === "All" || r.family === family; });
+    list.sort(function (a, b) {
+      var av = a[sort], bv = b[sort];
+      return (bv == null ? -Infinity : bv) - (av == null ? -Infinity : av) || b.score - a.score;
+    });
+    if (!list.length) {
+      var r = node("tr"), cell = td("No pages in this selection. Import data or select another family.", "empty");
+      cell.colSpan = 7; r.append(cell); body.append(r); return;
+    }
+    list.slice(0, 150).forEach(function (record) {
+      var row = node("tr");
+      var title = td(null, "page-cell");
+      var link = node("a", "page-link", displayName(record.page));
+      link.href = record.page; link.target = "_blank"; link.rel = "noopener noreferrer";
+      title.append(link, node("div", "path-note", record.family + " / " + new URL(record.page).pathname), node("div", "action-note", record.action));
+      row.append(title);
+      row.append(td(fmt(record.clicks), "number-cell"));
+      row.append(td(fmt(record.impressions), "number-cell strong-number"));
+      row.append(td(percent(record.ctr) + " / " + (record.position === null ? "—" : record.position.toFixed(1)), "number-cell"));
+      row.append(td(fmt(record.views), "number-cell"));
+      row.append(td(cash(record.earnings), "number-cell strong-number"));
+      row.append(td(fmt(record.potentialClicks), "number-cell"));
+      body.append(row);
+    });
+  }
+  function dashboard() {
+    var result;
+    try { result = E.analyze(sources, dates()); }
+    catch (err) { set("source-guidance", "Cannot analyze input: " + err.message); return; }
+    set("earnings", result.kpis.importedAdSenseEarnings === null ? "Unavailable" : cash(result.kpis.importedAdSenseEarnings));
+    set("earnings-detail", sources.adsense ? (sources.adsense.sitewide ? "Site-level earnings; no page attribution" : "Revenue in imported URL rows") + (result.kpis.importedAdSensePageRpm === null ? "" : " · " + fmt(sources.adsense.totalPageviews) + " AdSense pageviews · " + cash(result.kpis.importedAdSensePageRpm) + " page RPM") : "Requires actual AdSense export");
+    set("daily", cash(result.kpis.adsDaily));
+    set("daily-detail", result.kpis.adsDaily === null ? "Needs complete-site confirmation and report dates" : "Reported AdSense earnings / " + E.days(dates().adsStart, dates().adsEnd) + " days");
+    set("clicks", fmt(result.kpis.importedGscClicks));
+    set("views", fmt(result.kpis.importedGa4Views));
+    if (result.kpis.adsDaily !== null) {
+      var frac = Math.min(result.kpis.adsDaily / 300, 1);
+      set("target-note", "Measured daily gap: " + cash(result.kpis.dailyGap) + ". No forecast is implied.");
+      set("progress-text", cash(result.kpis.adsDaily) + " observed per day");
+      set("progress-percent", (frac * 100).toFixed(1) + "%");
+      el("target-fill").style.width = (frac * 100).toFixed(1) + "%";
+    } else {
+      set("target-note", "Import a complete AdSense report to measure the gap.");
+      set("progress-text", "Pending actual AdSense data");
+      set("progress-percent", "—"); el("target-fill").style.width = "0";
+    }
+    set("source-guidance", sourceSummary(result));
+    integrity(result); recommendations(result.rows); table(result.rows);
+  }
+  Object.keys(ids).forEach(function (name) {
+    el(ids[name]).addEventListener("change", async function (event) {
+      var file = event.target.files && event.target.files[0]; if (!file) return;
+      status(name, "Reading…", "");
+      try {
+        if (file.size > 15 * 1024 * 1024) throw new Error("CSV is too large (15 MB maximum).");
+        var parsed = parsers[name](await file.text());
+        sources[name] = parsed;
+        status(name, parsed.records.length + " rows", "ready");
+      } catch (error) {
+        sources[name] = null;
+        status(name, "Invalid file", "error");
+        dashboard();
+        set("source-guidance", name.toUpperCase() + ": " + error.message);
+        return;
+      }
+      dashboard();
+    });
+  });
+  ["from", "to", "prev-from", "prev-to", "ads-from", "ads-to", "complete-site"].forEach(function (id) {
+    el(id).addEventListener("change", dashboard);
+  });
+  document.querySelectorAll(".filter").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      family = btn.dataset.family;
+      document.querySelectorAll(".filter").forEach(function (b) {
+        var selected = b === btn;
+        b.classList.toggle("active", selected);
+        b.setAttribute("aria-pressed", String(selected));
+      });
+      dashboard();
+    });
+  });
+  document.querySelector(".filter.active").setAttribute("aria-pressed", "true");
+  el("sort").addEventListener("change", function (event) { sort = event.target.value; dashboard(); });
+  el("save").addEventListener("click", function () {
+    if (!Object.values(sources).some(Boolean)) { set("source-guidance", "Import at least one verified CSV before saving a snapshot."); return; }
+    var snapshot = { version: 1, exportedAt: new Date().toISOString(), sources: sources, window: dates() };
+    var blob = new Blob([JSON.stringify(snapshot)], { type: "application/json" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a"); a.href = url; a.download = "PRIVATE-growth-command-center-" + new Date().toISOString().slice(0, 10) + ".json";
+    a.click(); URL.revokeObjectURL(url);
+  });
+  el("restore-file").addEventListener("change", async function (event) {
+    var file = event.target.files && event.target.files[0]; if (!file) return;
+    try {
+      if (file.size > 25 * 1024 * 1024) throw new Error("Snapshot exceeds 25 MB.");
+      var snapshot = JSON.parse(await file.text());
+      if (snapshot.version !== 1 || !snapshot.sources || !snapshot.window) throw new Error("Unsupported snapshot format.");
+      var restored = {};
+      Object.keys(ids).forEach(function (name) {
+        var source = snapshot.sources[name];
+        if (source != null) {
+          if (!Array.isArray(source.records) || source.records.length > 30000) throw new Error("Invalid source rows in snapshot.");
+          source.records.forEach(function (r) { if (!r || E.page(r.page) !== r.page) throw new Error("Snapshot has an invalid page URL."); });
+          if (name === "adsense" && (typeof source.total !== "number" || !Number.isFinite(source.total))) throw new Error("Snapshot revenue is invalid.");
+        }
+        restored[name] = source || null;
+      });
+      sources = restored; setDates(snapshot.window);
+      Object.keys(ids).forEach(function (name) { status(name, sources[name] ? sources[name].records.length + " rows" : "Not loaded", sources[name] ? "ready" : ""); });
+      dashboard();
+    } catch (error) { set("source-guidance", "Snapshot rejected: " + error.message); }
+  });
+  el("clear").addEventListener("click", function () {
+    sources = { gsc: null, previous: null, ga4: null, adsense: null };
+    setDates({});
+    Object.keys(ids).forEach(function (name) { el(ids[name]).value = ""; status(name, "Not loaded", ""); });
+    el("restore-file").value = "";
+    dashboard();
+  });
+  dashboard();
+})();
+
+</script>
+</head>
+<body>
+  <a class="skip" href="#workspace">Skip to dashboard</a>
+  <header class="masthead">
+    <div class="mast-inner">
+      <div class="brand"><span class="brand-mark" aria-hidden="true">CI<span>.</span></span><span class="brand-name">CHRIS IZWORSKI <span class="dim">/ PRIVATE OPERATIONS</span></span></div>
+      <div class="privacy"><span class="live-dot" aria-hidden="true"></span> LOCAL SESSION · NO UPLOADS · NO TRACKERS</div>
+    </div>
+  </header>
+  <main id="workspace" class="layout">
+    <section class="hero">
+      <div class="eyebrow"><span>OPERATIONS / 001</span><span>GROWTH INTELLIGENCE</span></div>
+      <div class="hero-body">
+        <div>
+          <p class="overline">FROM TRAFFIC TO EARNINGS</p>
+          <h1>Revenue<br><em>Command Center.</em></h1>
+          <p class="lede">Decide which existing tools deserve the next investment. Separate measured earnings from search opportunity, and never treat estimates as revenue.</p>
+        </div>
+        <div class="northstar"><span>THE NORTH STAR</span><strong>$300<span>/day</span></strong><small>Verified AdSense daily earnings target</small><div class="rule"></div><p id="target-note">Import a complete AdSense report to measure the gap.</p></div>
+      </div>
+    </section>
+    <section class="source-deck" aria-label="Data sources">
+      <div class="section-heading"><div><span class="section-number">01 /</span><h2>Connect the evidence</h2></div><p>Exports are read in this browser session. Nothing is sent to a server or committed to GitHub.</p></div>
+      <div class="sources">
+        <label class="source-card" for="gsc-file"><span class="source-top"><span class="source-index">A / GOOGLE SEARCH CONSOLE</span><span class="source-flag" id="gsc-status">Awaiting CSV</span></span><strong>Current pages</strong><span>Page URL, clicks, impressions, CTR and position</span><span class="file-cta">Choose GSC Pages.csv <span aria-hidden="true">↗</span></span><input id="gsc-file" type="file" accept=".csv,text/csv,.tsv,text/tab-separated-values"></label>
+        <label class="source-card" for="previous-file"><span class="source-top"><span class="source-index">B / COMPARISON</span><span class="source-flag" id="previous-status">Optional</span></span><strong>Previous pages</strong><span>Immediately preceding, equally long GSC period</span><span class="file-cta">Choose prior Pages.csv <span aria-hidden="true">↗</span></span><input id="previous-file" type="file" accept=".csv,text/csv,.tsv,text/tab-separated-values"></label>
+        <label class="source-card" for="ga4-file"><span class="source-top"><span class="source-index">C / GOOGLE ANALYTICS 4</span><span class="source-flag" id="ga4-status">Awaiting CSV</span></span><strong>Page engagement</strong><span>Page path with views, and sessions if available</span><span class="file-cta">Choose GA4 export <span aria-hidden="true">↗</span></span><input id="ga4-file" type="file" accept=".csv,text/csv,.tsv,text/tab-separated-values"></label>
+        <label class="source-card" for="adsense-file"><span class="source-top"><span class="source-index">D / GOOGLE ADSENSE</span><span class="source-flag" id="adsense-status">Awaiting CSV</span></span><strong>Actual earnings</strong><span>Estimated earnings; page URLs if attributed</span><span class="file-cta">Choose AdSense export <span aria-hidden="true">↗</span></span><input id="adsense-file" type="file" accept=".csv,text/csv,.tsv,text/tab-separated-values"></label>
+      </div>
+      <div class="periods">
+        <div class="period-pair"><span class="label-heading">CURRENT GSC & GA4 PERIOD</span><label>From <input id="from" type="date"></label><label>Through <input id="to" type="date"></label></div>
+        <div class="period-pair"><span class="label-heading">PRIOR GSC PERIOD</span><label>From <input id="prev-from" type="date"></label><label>Through <input id="prev-to" type="date"></label></div>
+        <div class="period-pair"><span class="label-heading">ADSENSE REPORT PERIOD</span><label>From <input id="ads-from" type="date"></label><label>Through <input id="ads-to" type="date"></label></div>
+      </div>
+      <label class="complete-check"><input id="complete-site" type="checkbox"> I confirm the AdSense export includes the complete <strong>chrisizworski.com</strong> site for the entered dates (no filters or truncated rows).</label>
+      <p class="source-guidance" id="source-guidance" role="status" aria-live="polite">No data loaded. For a trustworthy revenue-per-day number, import your complete AdSense report, set its dates and confirm the reporting scope.</p>
+    </section>
+    <section class="scoreboard" aria-label="Performance scoreboard">
+      <div class="section-heading"><div><span class="section-number">02 /</span><h2>What the numbers say</h2></div><p>Only measurable metrics appear. Missing values remain unavailable.</p></div>
+      <div class="kpis">
+        <article class="kpi feature"><span class="kpi-tag">ACTUAL ADSENSE EARNINGS / IMPORTED PERIOD</span><strong id="earnings">Unavailable</strong><small id="earnings-detail">Requires AdSense CSV</small></article>
+        <article class="kpi"><span class="kpi-tag">DAILY ADSENSE / VERIFIED SCOPE</span><strong id="daily">—</strong><small id="daily-detail">Needs complete site + dates</small></article>
+        <article class="kpi"><span class="kpi-tag">GOOGLE SEARCH CLICKS / IMPORTED PAGES</span><strong id="clicks">—</strong><small>GSC clicks, not GA4 sessions</small></article>
+        <article class="kpi"><span class="kpi-tag">GA4 VIEWS / IMPORTED PAGES</span><strong id="views">—</strong><small>Pageviews, not unique people</small></article>
+      </div>
+      <div class="target-track"><div><div><span class="label-heading">REVENUE TARGET PROGRESS</span><span id="progress-text">Pending actual AdSense data</span></div><span id="progress-percent">—</span></div><div class="track"><span id="target-fill"></span></div></div>
+    </section>
+    <section class="decisions">
+      <div class="section-heading"><div><span class="section-number">03 /</span><h2>Where to invest next</h2></div><p>Investigation priorities, not guaranteed increases or automatically approved SEO changes.</p></div>
+      <div class="recommendations" id="recommendations"><p class="empty">Import GSC pages to reveal the first evidence-backed decisions.</p></div>
+    </section>
+    <section class="inventory">
+      <div class="section-heading"><div><span class="section-number">04 /</span><h2>Tool performance</h2></div><p>Canonicals are grouped by actual URL, not invented tool names.</p></div>
+      <div class="table-toolbar">
+        <div class="filters" role="group" aria-label="Filter pages"><button class="filter active" data-family="All" type="button">All pages</button><button class="filter" data-family="Shipping" type="button">Shipping</button><button class="filter" data-family="Winter" type="button">Winter</button><button class="filter" data-family="Other" type="button">Other</button></div>
+        <label class="sort-control">Rank by <select id="sort"><option value="score">Investigation priority</option><option value="impressions">Search impressions</option><option value="earnings">Attributed earnings</option><option value="views">GA4 views</option><option value="potentialClicks">CTR opportunity</option></select></label>
+      </div>
+      <div class="table-scroller"><table><thead><tr><th scope="col">Page / next move</th><th scope="col">GSC clicks</th><th scope="col">Impressions</th><th scope="col">CTR / position</th><th scope="col">GA4 views</th><th scope="col">AdSense earnings</th><th scope="col">Potential clicks*</th></tr></thead><tbody id="rows"><tr><td colspan="7" class="empty">No files imported. All revenue and traffic fields are intentionally blank.</td></tr></tbody></table></div>
+      <p class="footnote">*Potential clicks are a descriptive CTR gap relative to the median of at least 3 same-position peers with 100+ impressions, when available. They are not forecasts. Comparisons require equal, consecutive periods. Only AdSense page-URL reports can attribute earnings to individual pages.</p>
+    </section>
+    <section class="footer-grid">
+      <article><span class="section-number">05 /</span><h2>Evidence integrity</h2><div id="integrity">Missing sources are not substituted with modeled revenue.</div></article>
+      <article><span class="section-number">06 /</span><h2>Keep your work</h2><p>Exports and calculations live only in this session. Save a private snapshot to reuse later. Do not add snapshots to this public repository.</p><div class="actions"><button type="button" id="save">Download private snapshot</button><label class="restore" for="restore-file">Open private snapshot<input type="file" accept=".json,application/json" id="restore-file"></label><button type="button" class="quiet" id="clear">Clear session</button></div><p class="footnote">Snapshots contain raw imported analytics and earnings. Store securely.</p></article>
+    </section>
+    <footer class="page-footer"><span>BUILT FOR DECISIONS. NOT DASHBOARD THEATER.</span><span>PRIVATE GROWTH OPERATIONS · VERSION 1.0</span></footer>
+  </main>
+</body>
+</html>
