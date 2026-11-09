@@ -97,6 +97,18 @@ test('A to B to A, native picker and national map preserve only confirmed explic
  assert.equal(JSON.stringify(h.va).includes(B),false);
 });
 
+test('schedule roster and featured countdown are separately attributed only after a verified selection',()=>{
+ const h=harness();h.expose();h.doc.fire('rocket-viewing:data',selection(A));
+ h.doc.fire('rocket-experience:choose',{launchId:B,region:'florida',surface:'schedule_roster'});
+ assert.equal(items(h,'Rocket Mission Selected').length,0);
+ h.doc.fire('rocket-viewing:data',selection(B));
+ assert.equal(items(h,'Rocket Mission Selected')[0].data.surface,'schedule_roster');
+ h.doc.fire('rocket-experience:choose',{launchId:A,region:'florida',surface:'next_launch'});
+ h.doc.fire('rocket-viewing:data',selection(A));
+ assert.equal(items(h,'Rocket Mission Selected')[1].data.surface,'next_launch');
+ assert.equal(JSON.stringify(h.va).includes(B),false,'selection must not leak raw mission ID');
+});
+
 test('failed selection or a blank source does not become a conversion',()=>{
  const h=harness();h.expose();h.doc.fire('rocket-viewing:data',selection(A));
  h.doc.fire('rocket-experience:choose',{launchId:B,region:'florida'});
