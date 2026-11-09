@@ -419,6 +419,9 @@ const whenReady=page=>page.waitForFunction(id=>
     await page.locator('#launch-schedule').screenshot({
       path:path.join(out,shot),animations:'disabled'});
     report.screenshots.push(shot);
+    const designPreview=await page.locator('#launch-schedule').screenshot({
+      type:'jpeg',quality:32,animations:'disabled'});
+    console.log('ROCKET_SCHEDULE_PREVIEW_'+view.name+'='+designPreview.toString('base64'));
     await page.locator('#rl-front-search-input').fill('Starship');
     assert(await page.locator('.rl-front-mission').count()===2,
       view.name+' rocket-name search failed');
