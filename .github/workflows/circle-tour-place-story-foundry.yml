@@ -1,0 +1,55 @@
+name: Circle Tour Place and Story · Foundry 0.3
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'public/assets/circle-tour-place-story-data.js'
+      - 'public/assets/circle-tour-bridge.*'
+      - 'public/lake-superior-circle-tour/index.html'
+      - 'tests/circle-tour-bridge.test.js'
+      - 'experience-foundry/examples/circle-tour-place-story-*.{mjs,cjs}'
+      - 'docs/experience-briefs/circle-tour-place-story*'
+      - 'design-systems/experience-os-v1/docs/PLACE_AND_STORY.md'
+      - 'experience-foundry/docs/PLACE_AND_STORY.md'
+      - '.github/workflows/circle-tour-place-story-foundry.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  story-proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Original Circle Tour contract and photo rights tests
+        run: |
+          node --check public/assets/circle-tour-place-story-data.js
+          node --check public/assets/circle-tour-bridge.js
+          node --test tests/circle-tour-bridge.test.js
+          node scripts/build-circle-tour-network.mjs --check
+      - name: Capture source, assess assignment and prove genuine new visitor capability
+        run: |
+          node experience-foundry/examples/circle-tour-place-story-improvement.mjs
+          node scripts/experience-foundry.mjs assess --run experience-foundry/drafts/circle-tour-place-story-pilot/run.json
+          node scripts/experience-foundry.mjs prove \
+            --run experience-foundry/drafts/circle-tour-place-story-pilot/run.json \
+            --out build/experience-foundry/circle-tour-place-story-proof
+          node scripts/experience-foundry.mjs assess \
+            --run experience-foundry/drafts/circle-tour-place-story-pilot/run.json \
+            --proof build/experience-foundry/circle-tour-place-story-proof/proof.json
+      - name: Retain immutable before-and-after evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: circle-tour-place-story-foundry-proof
+          path: |
+            experience-foundry/drafts/circle-tour-place-story-pilot/
+            build/experience-foundry/circle-tour-place-story-proof/
+          if-no-files-found: warn
+          retention-days: 7
