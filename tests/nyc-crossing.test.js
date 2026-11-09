@@ -51,6 +51,17 @@ test('missing live routes never create a fastest recommendation',()=>{
   assert.ok(s.routes.every(r=>r.etaMinutes===null));
 });
 
+test('unavailable Queens-Midtown and Hugh Carey traffic shows a truthful fallback explanation',()=>{
+  const snapshot=buildSnapshot({vehicle:{type:'car'},payment:'ny-ezpass'});
+  for(const id of ['queens-midtown','hugh-carey']){
+    const route=snapshot.routes.find(x=>x.id===id);
+    assert.equal(route.etaState,'UNAVAILABLE');
+    assert.equal(route.etaMinutes,null);
+    assert.match(route.trafficPending,/Official NYC DOT crossing reading is unavailable/);
+    assert.match(route.trafficPending,/511NY/);
+  }
+});
+
 test('commercial vehicles are prohibited from restricted NYC DOT bridges',()=>{
   const s=buildSnapshot({vehicle:{type:'large-truck'},payment:'ny-ezpass'});
   assert.equal(s.routes.find(r=>r.id==='brooklyn').eligibility.state,'PROHIBITED');
