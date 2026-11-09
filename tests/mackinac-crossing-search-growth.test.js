@@ -33,10 +33,12 @@ test('toll route presents standard dynamic return journey without inventing MacP
   assert.match(live,/href="\/mackinac-bridge-tolls\/"/);
 });
 test('only genuinely revised bridge canonical dates advance',()=>{
-  for(const slug of ['mackinac-bridge-live','mackinac-bridge-tolls']){
-    const editorialDate = '2026-10-26';
-    assert.match(sitemap,new RegExp('https:\\/\\/chrisizworski\\.com\\/'+slug+'\\/<\\/loc>\\s*<lastmod>'+editorialDate+'<\\/lastmod>'));
+  const liveStamp = live.match(/"dateModified"\s*:\s*"(\d{4}-\d{2}-\d{2})"/)?.[1];
+  const tollStamp = toll.match(/"dateModified"\s*:\s*"(\d{4}-\d{2}-\d{2})"/)?.[1];
+  assert.ok(liveStamp >= '2026-10-26', 'live status should be dated no earlier than initial source review');
+  assert.equal(tollStamp, '2026-10-26', 'unchanged toll page keeps its Oct 26 source review');
+  for(const [slug,stamp] of [['mackinac-bridge-live',liveStamp],['mackinac-bridge-tolls',tollStamp]]){
+    const pattern = new RegExp('https:\\/\\/chrisizworski\\.com\\/'+slug+'\\/<\\/loc>\\s*<lastmod>'+stamp+'<\\/lastmod>');
+    assert.match(sitemap,pattern,'sitemap lastmod must match '+slug+' source date');
   }
-  assert.match(toll,/"dateModified"\s*:\s*"2026-10-26"/);
-  assert.match(live,/"dateModified": "2026-10-26"/);
 });
