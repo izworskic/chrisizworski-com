@@ -109,3 +109,21 @@ test("command center remains outside public/, contains no analytics scripts and 
   assert.doesNotMatch(app, /localStorage|sessionStorage|fetch\(/);
   assert.match(app, /snapshot/);
 });
+
+
+test("standalone bundler emits one private, script-complete HTML document", () => {
+  const { execFileSync } = require("node:child_process");
+  const os = require("node:os");
+  const output = path.join(os.tmpdir(), "growth-command-center-ci-" + process.pid + ".html");
+  try {
+    execFileSync(process.execPath, ["scripts/build-growth-command-center.mjs", "--output=" + output],
+      { cwd: path.join(__dirname, ".."), stdio: "pipe" });
+    const bundled = fs.readFileSync(output, "utf8");
+    assert.match(bundled, /Revenue Command Center/);
+    assert.match(bundled, /window\.GrowthEngine/);
+    assert.match(bundled, /source-guidance/);
+    assert.doesNotMatch(bundled, /src="\.\/|href="\.\/|googletagmanager|adsbygoogle/);
+  } finally {
+    if (fs.existsSync(output)) fs.unlinkSync(output);
+  }
+});
