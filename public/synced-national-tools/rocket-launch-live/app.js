@@ -102,11 +102,11 @@
   })();
   const targetIsPrecise = launch => ['minute', 'second'].includes(launch?.netPrecision) &&
     Number.isFinite(Date.parse(launch?.net || ''));
-  function frontSelectMission(region, launchId) {
+  function frontSelectMission(region, launchId, surface = 'schedule_roster') {
     if (!state.data?.regions?.some(r => r.id === region &&
       (r.launches || []).some(l => l.id === launchId))) return;
     document.dispatchEvent(new CustomEvent('rocket-experience:choose',
-      { detail: { region, launchId } }));
+      { detail: { region, launchId, surface } }));
     $('rl-flight-desk')?.scrollIntoView({
       behavior: window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
       block: 'start'
@@ -170,7 +170,7 @@
     if (featureButton) {
       featureButton.disabled = !featured || !data;
       featureButton.onclick = featured && data ?
-        () => frontSelectMission(featured.r.id, featured.l.id) : null;
+        () => frontSelectMission(featured.r.id, featured.l.id, 'next_launch') : null;
     }
     renderFrontCountdown();
     const q = frontFilters.query.trim().toLocaleLowerCase();
