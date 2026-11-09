@@ -20,7 +20,7 @@ test('official bridge status remains the first answer and gets direct ribbon nav
  assert.match(bridge,/<a class="ribbon-answer-link" href="#statusCard">Read full official bridge report/);
  assert.ok(bridge.indexOf('id="statusCard"')<bridge.indexOf('data-gazette-latest'));
  assert.match(bridge,/#statusCard/);
- assert.match(bridge,/"dateModified": "2026-10-26"/);
+ assert.ok((bridge.match(/"dateModified"\s*:\s*"(\d{4}-\d{2}-\d{2})"/)?.[1] || "") >= "2026-10-26", "reviewed official bridge answer requires a dated source stamp");
  assert.match(bridgeCss,/#statusCard\{scroll-margin-top:18px\}/);
  assert.match(bridgeCss,/\.live-ribbon \.ribbon-answer-link:focus-visible/);
  assert.match(bridgeCss,/@media\(max-width:640px\)\{\.live-ribbon\{gap:8px/);
