@@ -573,6 +573,8 @@ button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid #dc7
 @media(max-width:460px){.rl-schedule-front-header{gap:8px;margin-bottom:13px}.rl-schedule-front-header h1{font-size:33px}.rl-front-view-link{padding:2px 0 7px}.rl-schedule-shell{border-radius:15px}.rl-front-feature{padding:21px;min-height:350px}.rl-front-feature-top{flex-wrap:wrap}.rl-front-next-copy{margin-top:26px}.rl-front-next-copy h2{font-size:32px}.rl-front-roster{padding:17px}.rl-front-roster-head{align-items:flex-start}.rl-front-timezone{font-size:9px;max-width:118px}.rl-front-controls{grid-template-columns:1fr}.rl-front-mission{grid-template-columns:92px minmax(0,1fr) 11px;gap:7px}.rl-front-mission-date strong{font-size:11px}.rl-front-mission-name{font-size:13px}.rl-front-countdown>strong{font-size:20px}.rl-front-roster-footer span:last-child{text-align:left}}
 
 /* Visitor-first access: the public-place answer lives where the question is asked. */
+.rl-access-decision{scroll-margin-top:24px}
+#rl-access-decision{scroll-margin-top:24px}
 .rl-access-quick{padding:14px 13px;border:1px solid #d1ded7;border-radius:13px;background:#f5f9f6;margin:11px 0 12px;min-width:0}
 .rl-access-quick-top{display:flex;flex-direction:column;gap:4px;padding-bottom:8px;border-bottom:1px solid #d9e7df}
 .rl-access-quick-label{font-size:10px;font-weight:800;color:#245d48;letter-spacing:.11em}
