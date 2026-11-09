@@ -55,6 +55,7 @@ const script = String.raw`<script>
 </script>`;
 
 module.exports = async function growthDashboard(req, res) {
+  res.setHeader("X-Robots-Tag", "noindex, nofollow, noarchive");
   secureHeaders(res);
   if (req.method !== "GET") return res.status(405).json({ error: "method-not-allowed" });
   if (!requireOwner(req, res)) return;
