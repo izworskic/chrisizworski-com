@@ -4,6 +4,8 @@
 **Visitor research surface:** `/upper-peninsula-waterfalls/atlas/` (noindex)  
 **Data:** `data/up-waterfall-three-priority-access-research-2026.json`  
 **Python output:** `public/assets/up-waterfall-evidence-atlas.json` schema 4  
+**November 9, 2026 update:** A primary USGS Gazetteer / DNR hiking-trail geographic crosswalk now **verifies that Pinkerton Falls (GNIS 2126322) and Traders Falls (GNIS 1615029) are two distinct federally named falls**, mapped 1.97 km apart. The official Pinkerton Trail is approximately **364 m** and **70 m** from those federal feature points respectively, as straight-line GIS proximity, **not visitor routes**. The DNR backcountry park map names Traders Falls. UP Travel's separately unnamed Pinkerton Creek cascade remains unassigned to either feature. See [November 9 official geographic crosswalk](UP_WATERFALL_PINKERTON_OFFICIAL_FEATURE_TRAIL_2026-11-09.md). No destination pins or new public-viewpoint rights were approved.
+
 **Status:** **PARTIAL**. Three primary-land-manager contextual access checks; zero verified continuous waterfall routes or additional visitor destinations.
 
 ## Decision and what is actually known
