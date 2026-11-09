@@ -111,7 +111,7 @@ function showDetail(r){
  }
  const arrivalReference=r.kind==='guide'&&r.mapRole==='multi-falls-day-use-reference-not-natural-waterfall-feature';
  detailRow(dl,'Map position',arrivalReference
-   ?'Upper Falls visitor day-use reference ONLY: '+r.lat.toFixed(5)+', '+r.lng.toFixed(5)+'. NOT the Upper or Lower waterfall and NOT a parking GPS.'
+   ?'No natural waterfall point is assigned to this combined guide. Its Upper Falls day-use reference is deliberately omitted from this map; inspect the two individually mapped falls below.'
    :Number.isFinite(r.lat)&&Number.isFinite(r.lng)
      ?'Natural feature only: '+r.lat.toFixed(5)+', '+r.lng.toFixed(5)
      :'No verified geographic point in this record');detail.append(dl);
