@@ -14,7 +14,7 @@
 
 ## Launch
 
-From a local checkout, open the file at ops/growth-command-center/index.html in Chrome, Edge or Firefox. No API key, internet connection, build step or server is necessary. Alternatively run:
+**Fastest option:** download the single file at ops/growth-command-center/Revenue-Command-Center.html, save it to your computer, and open it in Chrome, Edge or Firefox. No server or login is needed. Alternatively, from a local checkout, open ops/growth-command-center/index.html. No API key, internet connection or build step is necessary. Alternatively run:
 
     node scripts/build-growth-command-center.mjs
 
