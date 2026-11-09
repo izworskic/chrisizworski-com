@@ -301,7 +301,7 @@ async function revealOfficialComparison(button,results,status,recordId){
 }
 async function load(){
  try{
-  const response=await fetch('/assets/up-waterfall-evidence-atlas.json',{cache:'force-cache'});if(!response.ok)throw Error('Atlas unavailable');
+  const response=await fetch('/assets/up-waterfall-evidence-atlas.json?v=4-20261109-map-truth',{cache:'force-cache'});if(!response.ok)throw Error('Atlas unavailable');
   const payload=await response.json();
   if(payload.schemaVersion!==4||!Array.isArray(payload.records)||payload.records.length!==payload.counts.totalSourceRecords||payload.counts.totalSourceRecords!==640||payload.counts.priorityAccessInvestigations!==3)throw Error('Atlas contract mismatch');
   for(const r of payload.records){
