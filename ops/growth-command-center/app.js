@@ -153,7 +153,9 @@
       } catch (error) {
         sources[name] = null;
         status(name, "Invalid file", "error");
+        dashboard();
         set("source-guidance", name.toUpperCase() + ": " + error.message);
+        return;
       }
       dashboard();
     });
