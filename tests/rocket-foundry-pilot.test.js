@@ -115,7 +115,7 @@ test('Foundry handoff is visible, linked, versioned and tracked without identity
  assert.match(html,/id="rl-flight-next-link"/);
  assert.match(html,/rocket-flight-desk\.js\?v=20261108-florida-answer-v1/);
  assert.match(html,/rocket-flight-desk\.css\?v=20261108-foundry-v2/);
- assert.match(html,/rocket-engagement-funnel\.js\?v=20261108-florida-answer-v1/);
+ assert.match(html,/rocket-engagement-funnel\.js\?v=20261108-schedule-first-v1/);
  assert.match(html,/https:\/\/chrisizworski.com\/#person/);
  assert.match(html,/id="rl-coast-map"/);
  assert.match(css,/@media\(max-width:700px\)/);
