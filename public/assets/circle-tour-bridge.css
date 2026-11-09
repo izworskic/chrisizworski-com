@@ -92,9 +92,9 @@
 .ctb-place-photo{min-width:0;margin:0;border-radius:9px;overflow:hidden;background:#e2eae4;box-shadow:0 2px 7px rgba(24,48,35,.09)}
 .ctb-place-photo img{width:100%;height:clamp(145px,18vw,220px);object-fit:cover;display:block}
 .ctb-place-photo:first-child img{object-position:center 45%}
-.ctb-place-photo figcaption{padding:9px 10px 10px;font-size:10px;line-height:1.42;color:#405647;background:#edf2eb}
+.ctb-place-photo figcaption{padding:9px 10px 10px;font-size:12px;line-height:1.42;color:#405647;background:#edf2eb}
 .ctb-place-caption{display:block;margin-bottom:5px}
-.ctb-place-credit{display:block;font-size:10px}
+.ctb-place-credit{display:block;font-size:11px}
 .ctb-place-credit a{color:#255f44;text-decoration:underline;text-underline-offset:2px}
 .ctb-place-copy{min-width:0}
 .ctb-place-title{font-family:Georgia,'Times New Roman',serif;font-weight:normal;font-size:clamp(19px,2.15vw,26px);line-height:1.25;margin:0 0 10px;color:#1f4935}
@@ -105,7 +105,7 @@
 .ctb-place-disclosure{margin:11px 0 0!important;font-size:11px;line-height:1.5;color:#586c5c}
 .ctb-place-image-failed .ctb-place-copy{grid-column:1/-1}
 @media(max-width:800px){.ctb-place-layout{grid-template-columns:minmax(0,1fr)}.ctb-place-photo img{height:clamp(135px,30vw,230px)}}
-@media(max-width:440px){.ctb-place-story{margin-top:22px}.ctb-place-gallery{gap:6px;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)}.ctb-place-photo img{height:154px}.ctb-place-photo figcaption{padding:7px;font-size:9px}.ctb-place-credit{font-size:9px}.ctb-place-title{font-size:20px}.ctb-place-prose{font-size:13px}.ctb-place-character{font-size:12px}}
+@media(max-width:440px){.ctb-place-story{margin-top:22px}.ctb-place-gallery{gap:10px;grid-template-columns:minmax(0,1fr)}.ctb-place-photo img{height:185px}.ctb-place-photo:last-child img{height:140px}.ctb-place-photo figcaption{padding:10px;font-size:12px}.ctb-place-credit{font-size:12px}.ctb-place-title{font-size:20px}.ctb-place-prose{font-size:13px}.ctb-place-character{font-size:12px}}
 @media print{.ctb-place-gallery{break-inside:avoid}}
 
 .ctb-place-single-photo .ctb-place-photo{grid-column:1/-1}
