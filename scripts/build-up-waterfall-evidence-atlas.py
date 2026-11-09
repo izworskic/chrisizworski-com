@@ -147,7 +147,8 @@ def make() -> dict:
             "linkedGisIds": sorted(x["gisObjectId"] for x in gs),
             "identityStatus": "curated-guide-not-live-opening",
             "sourceReviewed": g.get("sourceReviewed") or src["curated"].get("reviewed"),
-            "mapRole": "natural-waterfall-feature-not-arrival",
+            "mapRole": ("multi-falls-day-use-reference-not-natural-waterfall-feature"
+                        if pub == "multi-falls-planner" else "natural-waterfall-feature-not-arrival"),
         })
     for g in gis:
         records.append({
