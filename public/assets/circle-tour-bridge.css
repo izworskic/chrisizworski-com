@@ -107,3 +107,5 @@
 @media(max-width:800px){.ctb-place-layout{grid-template-columns:minmax(0,1fr)}.ctb-place-photo img{height:clamp(135px,30vw,230px)}}
 @media(max-width:440px){.ctb-place-story{margin-top:22px}.ctb-place-gallery{gap:6px;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)}.ctb-place-photo img{height:154px}.ctb-place-photo figcaption{padding:7px;font-size:9px}.ctb-place-credit{font-size:9px}.ctb-place-title{font-size:20px}.ctb-place-prose{font-size:13px}.ctb-place-character{font-size:12px}}
 @media print{.ctb-place-gallery{break-inside:avoid}}
+
+.ctb-place-single-photo .ctb-place-photo{grid-column:1/-1}
