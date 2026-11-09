@@ -52,10 +52,12 @@ test('mobile explainer, updated assets and truthful incident outage state',()=>{
  assert.ok(css.includes('.quick-facts{display:grid'));
  assert.ok(css.includes('@media(max-width:760px){.quick-facts{grid-template-columns:minmax(0,1fr)}'));
  assert.ok(html.includes('nyc-crossing.css?v=20261107-intel1'));
- assert.ok(html.includes('nyc-crossing.js?v=20261107-intel1'));
- assert.ok(js.includes("info?.state==='CACHE_UNAVAILABLE'"));
- assert.ok(js.includes('incident cache temporarily unavailable'));
- assert.ok(js.includes('no incident-clear claim is available'));
+ assert.ok(html.includes('nyc-crossing.js?v=20261109-incident1'));
+ assert.ok(js.includes('current511(info?.eventsUpdatedAt)'));
+ assert.ok(js.includes('511NY incident updates are not verified right now'));
+ assert.ok(js.includes('official 511NY conditions'));
+ assert.doesNotMatch(js,/Incident feed awaiting first update/);
+ assert.doesNotMatch(js,/no incident-clear claim is available/);
  assert.doesNotMatch(js,/NY511_PASSWORD|NY511_USERNAME|nysdot\.carsprogram\.org/);
 });
 
