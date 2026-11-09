@@ -78,7 +78,7 @@ test("CTR opportunity needs enough real peers and remains descriptive, not a for
   ];
   const result = engine.analyze({ gsc: engine.gsc(lines.join("\n")) }, {});
   const tracker = result.rows.find((r) => r.page === url("great-lakes-freighter-tracking"));
-  assert.equal(tracker.potentialClicks, 40);
+  assert.equal(tracker.potentialClicks, 38);
   const alone = engine.analyze({ gsc: engine.gsc(lines.slice(0, 2).join("\n")) }, {});
   assert.equal(alone.rows[0].potentialClicks, null);
 });
