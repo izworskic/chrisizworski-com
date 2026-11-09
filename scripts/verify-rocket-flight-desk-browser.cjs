@@ -438,6 +438,10 @@ const whenReady=page=>page.waitForFunction(id=>
     await first.focus();
     await first.press('Enter');
     await page.waitForFunction(id=>document.querySelector('#rl-flight-desk')?.dataset.launchId===id,C);
+    const visibleAccess=await page.locator('#rl-access-decision').evaluate(n=>{
+      const r=n.getBoundingClientRect();return r.top<window.innerHeight&&r.bottom>0;
+    });
+    assert(visibleAccess,view.name+' selecting a mission must land on the public viewing decision');
     assert((await page.locator('#rl-launch-select').inputValue())===C,
       view.name+' roster choice failed to update existing mission selector');
     assert(new URL(await page.url()).searchParams.get('region')==='texas',
