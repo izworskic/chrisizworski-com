@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>Revenue Command Center | Owner Workbench</title>
+  <link rel="stylesheet" href="./style.css">
+  <script defer src="./engine.js"></script>
+  <script defer src="./app.js"></script>
+</head>
+<body>
+  <a class="skip" href="#workspace">Skip to dashboard</a>
+  <header class="masthead">
+    <div class="mast-inner">
+      <div class="brand"><span class="brand-mark" aria-hidden="true">CI<span>.</span></span><span class="brand-name">CHRIS IZWORSKI <span class="dim">/ PRIVATE OPERATIONS</span></span></div>
+      <div class="privacy"><span class="live-dot" aria-hidden="true"></span> LOCAL SESSION · NO UPLOADS · NO TRACKERS</div>
+    </div>
+  </header>
+  <main id="workspace" class="layout">
+    <section class="hero">
+      <div class="eyebrow"><span>OPERATIONS / 001</span><span>GROWTH INTELLIGENCE</span></div>
+      <div class="hero-body">
+        <div>
+          <p class="overline">FROM TRAFFIC TO EARNINGS</p>
+          <h1>Revenue<br><em>Command Center.</em></h1>
+          <p class="lede">Decide which existing tools deserve the next investment. Separate measured earnings from search opportunity, and never treat estimates as revenue.</p>
+        </div>
+        <div class="northstar"><span>THE NORTH STAR</span><strong>$300<span>/day</span></strong><small>Verified AdSense daily earnings target</small><div class="rule"></div><p id="target-note">Import a complete AdSense report to measure the gap.</p></div>
+      </div>
+    </section>
+    <section class="source-deck" aria-label="Data sources">
+      <div class="section-heading"><div><span class="section-number">01 /</span><h2>Connect the evidence</h2></div><p>Exports are read in this browser session. Nothing is sent to a server or committed to GitHub.</p></div>
+      <div class="sources">
+        <label class="source-card" for="gsc-file"><span class="source-top"><span class="source-index">A / GOOGLE SEARCH CONSOLE</span><span class="source-flag" id="gsc-status">Awaiting CSV</span></span><strong>Current pages</strong><span>Page URL, clicks, impressions, CTR and position</span><span class="file-cta">Choose GSC Pages.csv <span aria-hidden="true">↗</span></span><input id="gsc-file" type="file" accept=".csv,text/csv,.tsv,text/tab-separated-values"></label>
+        <label class="source-card" for="previous-file"><span class="source-top"><span class="source-index">B / COMPARISON</span><span class="source-flag" id="previous-status">Optional</span></span><strong>Previous pages</strong><span>Immediately preceding, equally long GSC period</span><span class="file-cta">Choose prior Pages.csv <span aria-hidden="true">↗</span></span><input id="previous-file" type="file" accept=".csv,text/csv,.tsv,text/tab-separated-values"></label>
+        <label class="source-card" for="ga4-file"><span class="source-top"><span class="source-index">C / GOOGLE ANALYTICS 4</span><span class="source-flag" id="ga4-status">Awaiting CSV</span></span><strong>Page engagement</strong><span>Page path with views, and sessions if available</span><span class="file-cta">Choose GA4 export <span aria-hidden="true">↗</span></span><input id="ga4-file" type="file" accept=".csv,text/csv,.tsv,text/tab-separated-values"></label>
+        <label class="source-card" for="adsense-file"><span class="source-top"><span class="source-index">D / GOOGLE ADSENSE</span><span class="source-flag" id="adsense-status">Awaiting CSV</span></span><strong>Actual earnings</strong><span>Estimated earnings; page URLs if attributed</span><span class="file-cta">Choose AdSense export <span aria-hidden="true">↗</span></span><input id="adsense-file" type="file" accept=".csv,text/csv,.tsv,text/tab-separated-values"></label>
+      </div>
+      <div class="periods">
+        <div class="period-pair"><span class="label-heading">CURRENT GSC & GA4 PERIOD</span><label>From <input id="from" type="date"></label><label>Through <input id="to" type="date"></label></div>
+        <div class="period-pair"><span class="label-heading">PRIOR GSC PERIOD</span><label>From <input id="prev-from" type="date"></label><label>Through <input id="prev-to" type="date"></label></div>
+        <div class="period-pair"><span class="label-heading">ADSENSE REPORT PERIOD</span><label>From <input id="ads-from" type="date"></label><label>Through <input id="ads-to" type="date"></label></div>
+      </div>
+      <label class="complete-check"><input id="complete-site" type="checkbox"> I confirm the AdSense export includes the complete <strong>chrisizworski.com</strong> site for the entered dates (no filters or truncated rows).</label>
+      <p class="source-guidance" id="source-guidance" role="status" aria-live="polite">No data loaded. For a trustworthy revenue-per-day number, import your complete AdSense report, set its dates and confirm the reporting scope.</p>
+    </section>
+    <section class="scoreboard" aria-label="Performance scoreboard">
+      <div class="section-heading"><div><span class="section-number">02 /</span><h2>What the numbers say</h2></div><p>Only measurable metrics appear. Missing values remain unavailable.</p></div>
+      <div class="kpis">
+        <article class="kpi feature"><span class="kpi-tag">ACTUAL ADSENSE EARNINGS / IMPORTED PERIOD</span><strong id="earnings">Unavailable</strong><small id="earnings-detail">Requires AdSense CSV</small></article>
+        <article class="kpi"><span class="kpi-tag">DAILY ADSENSE / VERIFIED SCOPE</span><strong id="daily">—</strong><small id="daily-detail">Needs complete site + dates</small></article>
+        <article class="kpi"><span class="kpi-tag">GOOGLE SEARCH CLICKS / IMPORTED PAGES</span><strong id="clicks">—</strong><small>GSC clicks, not GA4 sessions</small></article>
+        <article class="kpi"><span class="kpi-tag">GA4 VIEWS / IMPORTED PAGES</span><strong id="views">—</strong><small>Pageviews, not unique people</small></article>
+      </div>
+      <div class="target-track"><div><div><span class="label-heading">REVENUE TARGET PROGRESS</span><span id="progress-text">Pending actual AdSense data</span></div><span id="progress-percent">—</span></div><div class="track"><span id="target-fill"></span></div></div>
+    </section>
+    <section class="decisions">
+      <div class="section-heading"><div><span class="section-number">03 /</span><h2>Where to invest next</h2></div><p>Investigation priorities, not guaranteed increases or automatically approved SEO changes.</p></div>
+      <div class="recommendations" id="recommendations"><p class="empty">Import GSC pages to reveal the first evidence-backed decisions.</p></div>
+    </section>
+    <section class="inventory">
+      <div class="section-heading"><div><span class="section-number">04 /</span><h2>Tool performance</h2></div><p>Canonicals are grouped by actual URL, not invented tool names.</p></div>
+      <div class="table-toolbar">
+        <div class="filters" role="group" aria-label="Filter pages"><button class="filter active" data-family="All" type="button">All pages</button><button class="filter" data-family="Shipping" type="button">Shipping</button><button class="filter" data-family="Winter" type="button">Winter</button><button class="filter" data-family="Other" type="button">Other</button></div>
+        <label class="sort-control">Rank by <select id="sort"><option value="score">Investigation priority</option><option value="impressions">Search impressions</option><option value="earnings">Attributed earnings</option><option value="views">GA4 views</option><option value="potentialClicks">CTR opportunity</option></select></label>
+      </div>
+      <div class="table-scroller"><table><thead><tr><th scope="col">Page / next move</th><th scope="col">GSC clicks</th><th scope="col">Impressions</th><th scope="col">CTR / position</th><th scope="col">GA4 views</th><th scope="col">AdSense earnings</th><th scope="col">Potential clicks*</th></tr></thead><tbody id="rows"><tr><td colspan="7" class="empty">No files imported. All revenue and traffic fields are intentionally blank.</td></tr></tbody></table></div>
+      <p class="footnote">*Potential clicks are a descriptive CTR gap relative to the median of at least 3 same-position peers with 100+ impressions, when available. They are not forecasts. Comparisons require equal, consecutive periods. Only AdSense page-URL reports can attribute earnings to individual pages.</p>
+    </section>
+    <section class="footer-grid">
+      <article><span class="section-number">05 /</span><h2>Evidence integrity</h2><div id="integrity">Missing sources are not substituted with modeled revenue.</div></article>
+      <article><span class="section-number">06 /</span><h2>Keep your work</h2><p>Exports and calculations live only in this session. Save a private snapshot to reuse later. Do not add snapshots to this public repository.</p><div class="actions"><button type="button" id="save">Download private snapshot</button><label class="restore" for="restore-file">Open private snapshot<input type="file" accept=".json,application/json" id="restore-file"></label><button type="button" class="quiet" id="clear">Clear session</button></div><p class="footnote">Snapshots contain raw imported analytics and earnings. Store securely.</p></article>
+    </section>
+    <footer class="page-footer"><span>BUILT FOR DECISIONS. NOT DASHBOARD THEATER.</span><span>PRIVATE GROWTH OPERATIONS · VERSION 1.0</span></footer>
+  </main>
+</body>
+</html>
