@@ -55,6 +55,9 @@ for(const c of data.counties){
 const html=read('public/michigan-garden-pest-watch/index.html');
 const js=read('public/assets/garden-earworm-trap-desk.js');
 assert.ok(html.includes('id="earworm-trap-desk"'));
+assert.ok(html.includes('04 / MSU EXTENSION / MEASURED FIELD EVIDENCE / 2026 ARCHIVE'));
+assert.ok(html.indexOf('03 / THE WATCH LIST')<html.indexOf('04 / MSU EXTENSION'));
+assert.ok(html.indexOf('04 / MSU EXTENSION')<html.indexOf('05 / THE FORECAST WIRE'));
 assert.ok(html.includes('id="earworm-counties'.replace('earworm-counties','earworm-county-picker')));
 assert.ok(html.includes('id="earworm-chart"'));
 assert.ok(html.includes('id="earworm-detail"'));
