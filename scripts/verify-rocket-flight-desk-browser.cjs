@@ -4,7 +4,7 @@
 // evidence of an actual launch, public range access, or a good forecast.
 const fs=require('node:fs'),path=require('node:path'),http=require('node:http');
 const {chromium}=require('playwright');
-const {REGIONS}=require('../lib/rocket-launch-usa');
+const {REGIONS,regionalAccess}=require('../lib/rocket-launch-usa');
 const root=path.resolve(__dirname,'../public');
 const out=path.resolve(__dirname,'../artifacts/rocket-flight-desk-qa');
 fs.mkdirSync(out,{recursive:true});
@@ -12,6 +12,7 @@ const A='11111111-1111-4111-8111-111111111111';
 const B='22222222-2222-4222-8222-222222222222';
 const C='33333333-3333-4333-8333-333333333333';
 const D='44444444-4444-4444-8444-444444444444';
+const E='55555555-5555-4555-8555-555555555555';
 const launches=[
  {id:A,region:'florida',name:'Fixture Florida rocket A',net:'2026-11-12T19:30:00Z',
   netPrecision:'minute',rocket:'Falcon 9',provider:'Fixture Operator',pad:'SLC-40',
@@ -30,20 +31,27 @@ const launches=[
   lat:25.997,lon:-97.157,scheduleConfidence:{level:'medium',label:'Target published',
   detail:'Not launch GO'},status:'To Be Confirmed'}
 ];
+const wallopsFixture={id:E,region:'virginia',name:'Fixture Wallops research rocket E',
+ net:new Date(Date.now()+3*86400000).toISOString(),netPrecision:'minute',rocket:'Terrier Improved Malemute',
+ provider:'Fixture NASA',pad:'Wallops restricted launch range',lat:37.84,lon:-75.48,
+ scheduleConfidence:{level:'medium',label:'Target published',detail:'Fixture target, not a launch event opening'},
+ status:'To Be Confirmed'};
 const mime={'.html':'text/html; charset=utf-8','.css':'text/css','.js':'application/javascript','.json':'application/json','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg'};
 let failedSource=false,removedMission=null;
 let floridaRich=false,floridaMismatch=false,floridaNpsClosure=false;
+let wallopsScenario=false;
+const activeLaunches=()=>wallopsScenario?[...launches,wallopsFixture]:launches;
 const assert=(ok,message)=>{if(!ok)throw Error(message)};
 const stamp=()=>new Date(Date.now()-60000).toISOString();
 function payload(region='florida',id=null,stale=false){
  const r=REGIONS.find(x=>x.id===region)||REGIONS[1];
- const missions=launches.filter(x=>x.region===r.id);
+ const missions=activeLaunches().filter(x=>x.region===r.id);
  const picked=missions.find(x=>x.id===id)||missions[0]||null;
  const selected=floridaRich&&r.id==='florida'&&picked?{...picked,locationId:27}:picked;
  const regions=REGIONS.map(p=>({id:p.id,name:p.name,subtitle:p.subtitle,coast:p.coast,
   lat:p.lat,lon:p.lon,timezone:p.timezone,description:p.description,
   authority:p.authority,access:p.access,specialist:p.specialist||null,
-  launches:launches.filter(m=>m.region===p.id),feedState:'ok',feedTruncated:false}));
+  launches:activeLaunches().filter(m=>m.region===p.id),feedState:'ok',feedTruncated:false}));
  const weather=selected?.netPrecision==='minute'?
   {level:'assessed',label:'Fixture local NWS surface reference',
    detail:'Model reference only, not rocket visibility or launch GO',
@@ -86,7 +94,8 @@ function payload(region='florida',id=null,stale=false){
    timezone:r.timezone,description:r.description,authority:r.authority,
    access:r.access,specialist:r.specialist||null,context:r.context},
   regions,
-  access:{guidance:'Public access is not verified by a launch calendar. Read official range notices.',
+  access:wallopsScenario&&r.id==='virginia'?regionalAccess(r,selected):{
+   guidance:'Public access is not verified by a launch calendar. Read official range notices.',
    sites:floridaRich&&r.id==='florida'?floridaSites:[{id:'source-venue',name:'Official range viewing guidance',kind:'mission-confirm',
     source:r.access,reason:'Launch-day public entry must be verified separately.',
     label:'Event-specific permission unverified',state:'mission',directionsAllowed:false}]},
@@ -107,7 +116,7 @@ const server=http.createServer(async(req,res)=>{
   if(u.pathname==='/api/rocket-launch-usa'){
    if(failedSource)return send(503,{ok:false,error:'Fixture source unavailable'});
    const id=u.searchParams.get('launchId'),region=u.searchParams.get('region')||'florida';
-   if(id&&(id===removedMission||!launches.some(m=>m.id===id&&m.region===region)))
+   if(id&&(id===removedMission||!activeLaunches().some(m=>m.id===id&&m.region===region)))
     return send(404,{ok:false,error:'Fixture mission no longer in bounded feed'});
    return send(200,payload(region,id,u.searchParams.get('stale')==='1'));
   }
@@ -448,6 +457,64 @@ const whenReady=page=>page.waitForFunction(id=>
       keyboardSelection:'C via shared mission pipeline',overflowPx:x});
     await context.close();
   }
+
+  // The viewer asks WHERE, not which policy engine owns access. Test real
+  // published public places in the mission decision across desktop & phone.
+  wallopsScenario=true;
+  try {
+    for(const v of [{name:'wallops-map-phone390',width:390,height:844},
+      {name:'wallops-map-desktop1440',width:1440,height:900}]){
+      const context=await browser.newContext({viewport:{width:v.width,height:v.height},
+        reducedMotion:'reduce'}),page=await context.newPage(),errors=[];
+      page.on('pageerror',e=>errors.push(e.message));
+      await localLeaflet(page);
+      await page.goto(base+'?region=virginia&launchId='+E,{waitUntil:'domcontentloaded'});
+      await page.waitForFunction(id=>
+        document.querySelector('#rl-flight-desk')?.dataset.launchId===id,E);
+      await page.waitForFunction(()=>
+        document.querySelectorAll('#rl-access-quick .rl-access-map').length===3);
+      const summary=await page.locator('#rl-access-summary').innerText();
+      assert(summary.includes('Wallops viewing places'),v.name+' still shows abstract NASA policy');
+      const quick=await page.locator('#rl-access-quick').innerText();
+      for(const name of ['NASA Wallops Visitor Center','Robert N. Reed','Curtis Merritt Harbor']){
+        assert(quick.includes(name),v.name+' is missing the public place '+name);
+      }
+      assert(quick.includes('NASA must announce'),v.name+' falsely implies visitor-center admission');
+      const mapLinks=await page.locator('#rl-access-quick a.rl-access-map').evaluateAll(
+        nodes=>nodes.map(a=>a.href));
+      assert(mapLinks.length===3,v.name+' did not offer three public Google Maps places');
+      const queries=mapLinks.map(h=>{const u=new URL(h);assert(u.hostname==='www.google.com'&&
+        u.pathname==='/maps/search/'&&u.searchParams.get('api')==='1','Invalid Maps location link');
+        return u.searchParams.get('query');
+      });
+      assert(queries.some(q=>q.includes('175 Chincoteague Road')),
+        v.name+' NASA map link does not lead to the PUBLIC visitor center');
+      assert(queries.some(q=>/Robert Reed Waterfront Park/i.test(q)),
+        v.name+' town waterfront map link missing');
+      assert(queries.some(q=>/Curtis Merritt Harbor/i.test(q)),
+        v.name+' town harbor map link missing');
+      assert(!queries.some(q=>/Fulton|main gate|launch pad|Atlantic Rd/i.test(q)),
+        v.name+' map links may send someone into a restricted facility');
+      assert((await page.locator('#rl-access-quick a.rl-access-official').count())===3,
+        v.name+' official evidence missing for public locations');
+      const overflow=await page.evaluate(()=>
+        Math.max(0,document.documentElement.scrollWidth-document.documentElement.clientWidth));
+      assert(overflow<=2,v.name+' public view cards cause horizontal overflow '+overflow);
+      const shot=v.name+'-public-viewing-answer.png';
+      await page.locator('#rl-access-quick').screenshot({path:path.join(out,shot),animations:'disabled'});
+      report.screenshots.push(shot);
+      // The next mission/region must replace both access copy and links.
+      await page.locator('.rl-region-btn[data-region="florida"]').click();
+      await page.waitForFunction(id=>
+        document.querySelector('#rl-flight-desk')?.dataset.launchId===id,A);
+      assert(await page.locator('#rl-access-quick a.rl-access-map').count()===0,
+        v.name+' retained Wallops map links after switching regions');
+      assert(errors.length===0,v.name+' access card JS errors: '+errors.join('; '));
+      report.cases.push({case:v.name,publicSiteLinks:3,
+        missionBound:true,restrictedPadDirections:0,overflowPx:overflow});
+      await context.close();
+    }
+  } finally { wallopsScenario=false; }
 
   failedSource=true;
   const errCtx=await browser.newContext({viewport:{width:390,height:844}});
