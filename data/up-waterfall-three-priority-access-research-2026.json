@@ -26,11 +26,23 @@
       "reviewed": "2026-11-08",
       "assessment": "feature-identity-unresolved",
       "landManager": "Michigan Department of Natural Resources, Porcupine Mountains Wilderness State Park",
-      "asOfAccess": "trail-corridor-documented-waterfall-route-unverified",
+      "asOfAccess": "FEDERAL FEATURE IDENTITIES DISTINCT; DNR TRAIL PROXIMITY COMPUTED; UNNAMED WATERFALL IDENTITY AND VIEWPOINT ROUTES UNVERIFIED",
       "accessVerdict": "NO VERIFIED WATERFALL ROUTE",
-      "shortVerdict": "Pinkerton Trail crosses the creek. No official source establishes that the unnamed tourism cascade, GNIS-named Pinkerton Falls, and other Pinkerton Creek names are the same drop.",
+      "shortVerdict": "USGS directly confirms Pinkerton Falls (GNIS 2126322) and Traders Falls (GNIS 1615029) as distinct named features, approximately 1.97 km apart. A DNR backcountry map labels Traders Falls. The separately unnamed UP Travel cascade is still NOT uniquely identified, and there is no verified continuous waterfall-viewpoint route.",
       "seasonality": "Michigan DNR reports the South Boundary Road section serving the Pinkerton Trailhead closes to vehicles December 1 through late spring; this is a recurring policy, not a live road-status feed.",
       "officialFacts": [
+        {
+          "fact": "USGS October 2026 Gazetteer separately lists Pinkerton Falls (GNIS 2126322) and Traders Falls (GNIS 1615029), both Gogebic County natural features classified as Falls; federal points are approximately 1,971 m apart.",
+          "sourceId": "pinkerton-usgs-gazetteer"
+        },
+        {
+          "fact": "Michigan DNR public hiking-trail GIS returns 66 approved, nonmotorized-Open Pinkerton Trail segment records totaling approximately 2.434 mapped miles. The closest GIS trail segment is approximately 364 m from the USGS Pinkerton Falls point and 70 m from the USGS Traders Falls point. These are map proximities, NOT walkable routes or trail closures.",
+          "sourceId": "pinkerton-dnr-gis"
+        },
+        {
+          "fact": "A DNR-hosted Porcupine Mountains detailed backcountry map labels Traders Falls in the Pinkerton Trail area; it does not establish a signed waterfall-viewpoint spur or identify the unrelated unnamed UP Travel drop.",
+          "sourceId": "pinkerton-dnr-detailed-map"
+        },
         {
           "fact": "DNR's 2.6-mile Pinkerton Trail description divides South Boundary Road to Pinkerton Creek (1.4 miles) and Pinkerton Creek to Lake Superior Trail (1.2 miles).",
           "sourceId": "pinkerton-dnr-trails"
@@ -46,25 +58,29 @@
       ],
       "independentFacts": [
         {
+          "fact": "A Western U.P. waterfall brochure published in an April 2026 source location gives a Traders Falls point that differs by approximately 318 m from the USGS official Traders Falls point, despite being only about 37 m from DNR Pinkerton Trail geometry. It is useful context, not federal location authority.",
+          "sourceId": "pinkerton-western-brochure"
+        },
+        {
+          "fact": "Another independently published directory supplies Pinkerton Falls coordinates approximately 5.0 km from the federal point, and Traders Falls coordinates approximately 16.4 km from its federal point. These contradictory locations are rejected as destination/map pins.",
+          "sourceId": "pinkerton-thirdparty"
+        },
+        {
           "fact": "UP Travel describes an unnamed Pinkerton Creek cascade and an improved-trail time estimate without a separately verified natural-feature identification.",
           "sourceId": "pinkerton-uptravel"
         },
         {
           "fact": "Independent name compilations mention Pinkerton Falls in Gogebic County and associate a USGS GNIS identifier with the named feature; another independent travel directory also describes Traders Falls on Pinkerton Creek. These names do not prove the tourism listing describes the same drop.",
           "sourceId": "pinkerton-gnis-mirror"
-        },
-        {
-          "fact": "Published third-party Pinkerton Falls point estimates are inconsistent; no point is adopted to route travelers to the unnamed UP Travel cascade.",
-          "sourceId": "pinkerton-thirdparty"
         }
       ],
-      "establishedStart": "Park-published Pinkerton Trail at South Boundary Road, for the TRAIL only, seasonally accessible; not a waterfall-viewing route.",
-      "waterfallViewpoint": "Not established: no DNR-labeled Pinkerton waterfall viewpoint, spur, feature-to-trail crosswalk or verified continuous approach.",
-      "falseEquivalence": "The presence of an official trail crossing Pinkerton Creek does not establish that Pinkerton Falls, Traders Falls and UP Travel's unnamed drop describe the same location.",
+      "establishedStart": "Michigan DNR explicitly maps the approved Pinkerton Hiking Trail and describes a 2.6-mile trail with a creek crossing 1.4 miles from South Boundary Road. The public GIS geometry's 66 segments sum to 2.434 miles, a different map measurement. Neither is a verified walk to Pinkerton Falls or Traders Falls; seasonal road access restrictions apply.",
+      "waterfallViewpoint": "No DNR-approved continuous pedestrian route from the trail to a signed Pinkerton Falls viewpoint or precise Traders Falls viewpoint was verified. Approximate federal geographic-name points are 364 and 70 straight-line meters from the mapped trail, respectively. The unnamed UP Travel cascade lacks an official named-feature join.",
+      "falseEquivalence": "The two USGS-named natural waterfalls are CONFIRMED DISTINCT by separate GNIS feature IDs and coordinates about 1.97 km apart. UP Travel's unnamed cascade may or may not correspond to either; do not equate it with both, infer an off-trail spur, or treat Traders' trail proximity as public arrival.",
       "nextEvidence": [
-        "An official DNR geographic feature map or field designation locating the unnamed cascade relative to a specifically named waterfall.",
-        "A DNR-sourced continuous open trail/managed viewpoint from the permitted Pinkerton Trail corridor to that specific drop, if it exists.",
-        "Reconciling name variants and conflicting unofficial points without promoting any as an arrival."
+        "An official park source or surveyed evidence explicitly identifying the UP Travel 'Unnamed Falls on Pinkerton Creek' as federal Pinkerton Falls, Traders Falls, or a separately named/unnamed drop.",
+        "An official continuous legal pedestrian viewpoint trail/management statement for either of the two named falls; 70 m and 364 m GIS proximity values are not a hiking route.",
+        "Current approved parking, route/trail conditions and South Boundary Road access for a specific visit; DNR GIS 'Open' is not live recreation availability."
       ],
       "routeCleared": false,
       "newDestinationAuthorized": false,
@@ -113,8 +129,37 @@
           "url": "https://www.usgs.gov/us-board-on-geographic-names/what-geographic-names-information-system-gnis",
           "authority": "federal-method",
           "purpose": "Limits of GNIS point data"
+        },
+        {
+          "id": "pinkerton-usgs-gazetteer",
+          "label": "USGS October 2026 Gazetteer: two separate federal waterfall records",
+          "url": "https://carto.nationalmap.gov/arcgis/rest/services/geonames/MapServer/7",
+          "authority": "federal-primary",
+          "purpose": "Source for GNIS 2126322 and 1615029 distinct Falls identities and points"
+        },
+        {
+          "id": "pinkerton-dnr-gis",
+          "label": "Michigan DNR: public approved hiking trail GIS layer 2",
+          "url": "https://gisagodnr.state.mi.us/arcgis/rest/services/DNR/DNRTrailsOPENDATA/MapServer/2",
+          "authority": "land-manager",
+          "purpose": "66 official Pinkerton segments, statuses and geometry, not a waterfall-route approval"
+        },
+        {
+          "id": "pinkerton-dnr-detailed-map",
+          "label": "Michigan DNR: Porcupine Mountains backcountry map labeling Traders Falls",
+          "url": "https://www2.dnr.state.mi.us/ftp/forestry/tsreports/Maps/RASNorth/Porkiesavenzadecimaldegrees.pdf",
+          "authority": "land-manager",
+          "purpose": "DNR labels Traders Falls on a detailed park map, not signed point-to-point access"
+        },
+        {
+          "id": "pinkerton-western-brochure",
+          "label": "Western U.P.: 2026 waterfall brochure, Traders Falls point",
+          "url": "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf",
+          "authority": "independent-tourism",
+          "purpose": "Context for the Traders Falls location, not official arrival"
         }
-      ]
+      ],
+      "followupGISCheckedOn": "2026-11-09"
     },
     {
       "listingId": 5457,
@@ -306,5 +351,6 @@
         }
       ]
     }
-  ]
+  ],
+  "lastSupplementCheckedOn": "2026-11-09"
 }
