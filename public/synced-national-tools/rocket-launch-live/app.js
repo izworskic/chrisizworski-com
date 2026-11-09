@@ -107,7 +107,9 @@
       (r.launches || []).some(l => l.id === launchId))) return;
     document.dispatchEvent(new CustomEvent('rocket-experience:choose',
       { detail: { region, launchId, surface } }));
-    $('rl-flight-desk')?.scrollIntoView({
+    // The roster promises a viewing plan; land on actual named places,
+    // not an introductory panel that makes visitors hunt for the answer.
+    ($('rl-access-decision') || $('rl-flight-desk'))?.scrollIntoView({
       behavior: window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
       block: 'start'
     });
@@ -691,6 +693,76 @@
     set('rl-news-note',desk.note || 'Editorial reporting does not confirm the operator’s current launch target or weather approval.');
   }
 
+  // A Google Maps SEARCH to a documented PUBLIC place is location discovery,
+  // never mission admission, a reserved parking space or a drive to the pad.
+  function siteMapHref(site) {
+    if (!site || !site.address || typeof site.address !== 'string' ||
+      site.address.length > 240 || ['closed','restricted','hours'].includes(site.state) ||
+      ['range-restricted','specialist'].includes(site.kind)) return null;
+    const permitted = site.mapsLocationAllowed === true ||
+      (site.mapsLocationAllowed == null && site.directionsAllowed === true);
+    if (!permitted) return null;
+    // NASA's public Visitor Center can be found on a map even when the
+    // separate launch-viewing lawn has no confirmed opening for this mission.
+    if (site.kind === 'mission-confirm' &&
+      !(site.id === 'wallops-visitor' &&
+        site.address.toLowerCase().startsWith('175 chincoteague road,'))) return null;
+    return 'https://www.google.com/maps/search/?api=1&query=' +
+      encodeURIComponent(site.address);
+  }
+  function renderQuickViewingPlaces(data, cards) {
+    const root = $('rl-access-quick');
+    if (!root) return;
+    root.replaceChildren();
+    const region = data?.region?.id;
+    const selected = data?.selectedLaunch && data?.selectedLaunchId === data.selectedLaunch.id;
+    const places = (cards || []).filter(site => siteMapHref(site)).slice(0, 3);
+    const top = el('div','rl-access-quick-top');
+    top.append(el('span','rl-access-quick-label','DOCUMENTED PUBLIC VIEWING PLACES'),
+      el('small','',selected?'For your selected launch · entry not guaranteed':
+        'General regional choices · no event-specific entry confirmed'));
+    root.appendChild(top);
+    if (!places.length) {
+      root.appendChild(el('p','rl-access-quick-empty',
+        'No public viewing location with a safe map reference has been verified for this range. Do not navigate to the launch pad or a restricted gate.'));
+      const guide = anchor(floridaSpecialistLink(data?.region?.specialist,data),
+        'Read the regional public-access guide');
+      if (guide) root.appendChild(guide);
+      return;
+    }
+    const list=el('div','rl-access-quick-list');
+    places.forEach((site,index) => {
+      const item=el('article','rl-access-quick-item');
+      item.dataset.state=site.state||'verify';
+      const copy=el('div','rl-access-quick-copy');
+      copy.appendChild(el('span','rl-access-quick-number',String(index+1).padStart(2,'0')+
+        (site.kind==='mission-confirm'?' / OFFICIAL VIEWING VENUE':' / PUBLIC ALTERNATIVE')));
+      copy.appendChild(el('strong','rl-access-quick-name',site.name));
+      copy.appendChild(el('span','rl-access-quick-role',site.bestFor||site.role||
+        'Published public viewing location'));
+      copy.appendChild(el('p','rl-access-quick-status',
+        site.kind==='mission-confirm'?
+          'NASA must announce the launch-viewing lawn opening for this mission. Free entry is first-come, with no guaranteed parking.' :
+          site.reason || site.note || site.label || 'Launch-day access and parking not confirmed'));
+      const links=el('div','rl-access-quick-links');
+      const maps=anchor(siteMapHref(site),
+        site.kind==='mission-confirm'?'Locate public visitor center on Google Maps':
+          'Open Google Maps','rl-access-map');
+      const official=anchor(site.source,
+        site.kind==='mission-confirm'?'NASA launch-viewing rules':'Official viewing source',
+        'rl-access-official');
+      if(maps)links.appendChild(maps);
+      if(official)links.appendChild(official);
+      item.append(copy,links);
+      list.appendChild(item);
+    });
+    root.appendChild(list);
+    root.appendChild(el('p','rl-access-quick-caution',
+      region==='virginia'?
+      'Wallops: the NASA Visitor Center is at 175 Chincoteague Road, NOT the restricted base gate. Never wait or park on Route 175. Waterfront parking and any mission-specific closures still need checking.' :
+      'Map links locate published public places, not live parking or permission to enter. Check land-manager and launch-specific restrictions before departure.'));
+  }
+
   function renderAccess(data) {
     const access = data.access || {};
     const florida=data.region?.id==='florida'?
@@ -718,10 +790,12 @@
         if(ksc)floridaAnswer.appendChild(ksc);
       }
     }
+    const viewingCards=(florida?.cards?.length?florida.cards:access.sites)||[];
+    renderQuickViewingPlaces(data,viewingCards);
     const sites = $('rl-sites');
     if (sites) {
       sites.replaceChildren();
-      for (const s of (florida?.cards?.length?florida.cards:access.sites)||[]) {
+      for (const s of viewingCards) {
         const card = el('article', 'rl-site-card');
         card.dataset.state = s.state || 'verify';
         card.appendChild(el('span', 'rl-site-kicker', s.role || s.bestFor || 'Viewing area'));
@@ -733,10 +807,12 @@
           floridaSpecialistLink(s.source,data) : s.source,
           s.kind === 'specialist' ? 'Continue this mission in Florida' : 'Official / operator source', 'rl-mainlink');
         if (source) actions.appendChild(source);
-        if (s.directionsAllowed && s.address && s.state !== 'restricted' && s.state !== 'hours') {
-          const directions = anchor('https://www.google.com/maps/search/?api=1&query=' +
-            encodeURIComponent(s.address), 'Map location · verify entry');
-          if (directions) actions.appendChild(directions);
+        const mapHref=siteMapHref(s);
+        if (mapHref) {
+          const location=anchor(mapHref,
+            s.kind === 'mission-confirm' ? 'Google Maps · public visitor center (entry unverified)' :
+            'Open location in Google Maps · check access');
+          if (location) actions.appendChild(location);
         }
         card.appendChild(actions);
         sites.appendChild(card);
@@ -1435,6 +1511,8 @@
     if (launchId) params.set('launchId', launchId);
     const url = API + (params.size ? '?' + params.toString() : '');
     $('rl-launch-select').disabled = true;
+    $('rl-access-quick')?.replaceChildren(el('p','rl-access-quick-empty',
+      'Checking public viewing locations for the selected mission…'));
     let responseStatus=0;
     try {
       const response = await fetch(url, { headers: { Accept: 'application/json' } });
@@ -1471,6 +1549,8 @@
       $('rl-watch-general')?.replaceChildren();
       chip($('rl-access-grade'), 'Official access must be checked', 'unknown');
       $('rl-access-answer')?.replaceChildren();
+      $('rl-access-quick')?.replaceChildren(el('p','rl-access-quick-empty',
+        'The selected mission could not be verified. No current access or viewing-site opening is established. Use the official regional guide before making a trip.'));
       set('rl-access-summary','The selected mission could not be verified. No public viewing access can be confirmed.');
       chip($('rl-weather-grade'), 'No current forecast', 'unknown');
       set('rl-slip-brief','Delay comparisons unavailable until the mission and weather sources can be checked.');

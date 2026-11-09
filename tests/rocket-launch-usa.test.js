@@ -110,7 +110,30 @@ test('NASA Wallops Visitor Center stays event-specific, not assumed open after h
   assert.match(site.reason,/not automatically open/i);
   assert.equal(site.label,'NASA must announce launch-specific opening');
   assert.equal(site.directionsAllowed,false,
-    'Do not route visitors to Wallops until NASA verifies launch-specific opening');
+    'Do not promise a visitor-center launch entry or a route to restricted operations');
+  assert.equal(site.mapsLocationAllowed,true,
+    'NASA public visitor center must still be locatable on Google Maps, without promising launch entry');
+  assert.match(r.context,/Robert N\. Reed|Robert N\. Reed Downtown/);
+  assert.match(r.context,/Curtis Merritt Harbor/);
+  const alternatives=r.sites.filter(x=>x.id!=='wallops-visitor').map(x=>model.viewDecision(r,x,null));
+  assert.equal(alternatives.length,2);
+  assert.ok(alternatives.every(x=>x.mapsLocationAllowed && x.directionsAllowed),
+    'Two NASA-listed town waterfront alternatives should be publicly navigable');
+  for(const restrictedRegion of ['texas','alaska','hawaii']){
+    const base=model.REGIONS.find(x=>x.id===restrictedRegion);
+    for(const place of base.sites.filter(x=>x.kind==='range-restricted')){
+      assert.equal(model.viewDecision(base,place,null).mapsLocationAllowed,false,
+        'A restricted pad or access road must never get a map location action');
+    }
+  }
+  const california=model.REGIONS.find(x=>x.id==='california');
+  const surf=california.sites.find(x=>x.id==='surf-beach');
+  const afterHours=model.viewDecision(california,surf,
+    {net:'2026-11-03T02:21:00Z',netPrecision:'minute'});
+  assert.equal(afterHours.mapsLocationAllowed,false,'Closed-hours Surf Beach must not get a map action');
+  const florida=model.REGIONS.find(x=>x.id==='florida');
+  assert.equal(model.viewDecision(florida,florida.sites.find(x=>x.id==='ksc-visitor'),null).mapsLocationAllowed,false);
+  assert.equal(model.viewDecision(florida,florida.sites.find(x=>x.id==='playalinda-south'),null).mapsLocationAllowed,false);
 });
 test('Starbase official beach and road page parser separates general access from road advisory',()=>{
   const html='<html><body>'+('a'.repeat(1200))+
@@ -297,7 +320,7 @@ test('national launch atlas requests keyed CARTO tile URLs and retains functiona
   assert.match(endpoint,/CARTO_BASEMAP_PUBLIC_KEY/);
   const page=fs.readFileSync(path.resolve(__dirname,'../public/synced-national-tools/rocket-launch-live/index.html'),'utf8');
   assert.match(page,/Senior Airman Kadielle Shaw/);
-  assert.match(page,/rocket-launch-live\/app\.js\?v=20261108-schedule-first-v1/);
+  assert.match(page,/rocket-launch-live\/app\.js\?v=20261109-viewing-places-v1/);
 });
 
 
@@ -309,7 +332,7 @@ test('national Rocket Watch binds controls to selected mission and defers YouTub
   assert.match(html,/id="mission-watch"/);
   assert.match(html,/id="rl-watch-mission-videos"/);
   assert.match(html,/id="rl-watch-general"/);
-  assert.match(html,/rocket-launch-live\/styles\.css\?v=20261108-schedule-first-v1/);
+  assert.match(html,/rocket-launch-live\/styles\.css\?v=20261109-viewing-places-v1/);
   assert.match(js,/desk\?\.launchId === launch\.id/);
   assert.match(js,/data\.selectedRegion === 'florida'/);
   assert.match(js,/renderMediaDesk\(data\)/);
