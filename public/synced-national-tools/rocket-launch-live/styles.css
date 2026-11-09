@@ -24,7 +24,7 @@ button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid #dc7
 .rl-hero .rl-eyebrow{color:#bfd3c5;display:flex;gap:9px;align-items:center;flex-wrap:wrap}
 .rl-pulse{width:7px;height:7px;background:#f6ae7c;border-radius:100%;box-shadow:0 0 0 4px #f6ae7c24;display:inline-block}
 .rl-hero-separator{color:#839d9e;margin:0 4px}
-.rl-hero h2{font-family:var(--serif);color:white;font-size:clamp(36px,4.3vw,62px);line-height:1.08;letter-spacing:-.03em;margin:0 0 16px;font-weight:700}
+.rl-hero #rl-title{font-family:var(--serif);color:white;font-size:clamp(36px,4.3vw,62px);line-height:1.08;letter-spacing:-.03em;margin:0 0 16px;font-weight:700}
 .rl-hero h2 em{color:#efb590;font-style:normal}
 .rl-lede{font-size:clamp(15px,1.25vw,17px);line-height:1.66;color:#d3e0e1;max-width:670px;margin:0 0 19px}
 .rl-hero-actions{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
@@ -172,7 +172,7 @@ button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid #dc7
 .rl-crumb{padding:13px 0}
 .rl-hero{grid-template-columns:1fr;border-radius:16px;min-height:0}
 .rl-hero-copy{padding:25px 21px 20px}
-.rl-hero h2{font-size:37px}
+.rl-hero #rl-title{font-size:37px}
 .rl-hero .rl-lede{font-size:14px;line-height:1.55}
 .rl-hero-photo{height:160px;min-height:160px}
 .rl-hero-photo img{object-position:center 43%}
