@@ -281,7 +281,7 @@ const whenReady=page=>page.waitForFunction(id=>
      const preview=await page.locator('.rl-hero').screenshot({type:'jpeg',quality:28,animations:'disabled'});
      console.log('ROCKET_FLIGHT_DESK_PREVIEW_'+v.name+'='+preview.toString('base64'));
    }
-   report.cases.push({viewport:v.name,firstAnswerTop:first,
+   report.cases.push({viewport:v.name,firstAnswerTop:frontTop,
     mission:'A-B-A + native/hero sync',map:'focused',overflowPx:overflow,
     fontPx:computed,jsErrors:0});
    await context.close();
