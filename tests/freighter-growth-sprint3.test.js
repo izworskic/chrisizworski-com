@@ -21,6 +21,9 @@ test("Duluth separates an evidence-based live watch from a published later-ship 
   assert.match(duluth, /href="https:\/\/harborlookout\.com\/"[^>]*data-track-tool="duluth-harborlookout-forecast"/);
   assert.match(duluth, /href="#cameraMonitor"[^>]*data-track-tool="duluth-live-canal-camera"/);
   assert.match(duluth, /id="cameraMonitor"/);
+  assert.match(duluth, /<body data-analytics-page="duluth-canal-park">/);
+  assert.match(duluth, /src="\/_vercel\/insights\/script\.js"/);
+  assert.match(duluth, /src="\/assets\/tool-engagement\.js"/);
   assert.match(duluth, /Ships may change speed, berth or use the Superior Entry/);
   assert.match(duluth, /src="\/assets\/duluth-canal\.js[^"]*"/);
 });
