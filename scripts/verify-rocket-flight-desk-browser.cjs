@@ -399,7 +399,7 @@ const whenReady=page=>page.waitForFunction(id=>
   await page.waitForFunction(mismatch=>{
     const text=document.querySelector('#rl-access-answer')?.textContent||'';
     return mismatch?text.includes('another mission, so no access status was adopted'):
-      text.includes('Florida source checked.');
+      text.includes('Florida notices checked.');
   },scenario.mismatch,{timeout:18000});
   const summary=await page.locator('#rl-access-summary').innerText();
   assert(summary.includes('Titusville')&&summary.includes('Space View Park'),
@@ -411,7 +411,7 @@ const whenReady=page=>page.waitForFunction(id=>
   if(scenario.mismatch){
    assert(!(await page.locator('#rl-access-grade').innerText()).includes('NPS restriction'),
     'mission-mismatched beach closure leaked from another launch');
-   assert((await page.locator('#rl-access-answer').innerText()).includes('not verified'),
+   assert((await page.locator('#rl-access-answer').innerText()).includes('not confirmed'),
     'wrong mission must remain unresolved');
   }else if(scenario.closed){
    assert((await page.locator('#rl-access-grade').innerText()).includes('NPS restriction'),
@@ -419,7 +419,7 @@ const whenReady=page=>page.waitForFunction(id=>
    assert((await page.locator('#rl-sites .rl-site-card[data-state="closed"]').count())>=1,
     'closed Playalinda lot group was omitted');
   }else{
-   assert((await page.locator('#rl-access-grade').innerText()).includes('entry unverified'),
+   assert((await page.locator('#rl-access-grade').innerText()).includes('check access'),
     'source-checked park reported as open without mission confirmation');
   }
   const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
@@ -619,16 +619,16 @@ const whenReady=page=>page.waitForFunction(id=>
   await error.goto(base,{waitUntil:'domcontentloaded'});
   await error.waitForFunction(()=>document.querySelector('#rl-coast-map')?.dataset.outline==='ready',{timeout:15000});
   assert((await error.locator('#rl-coast-map').getAttribute('data-map-state'))==='ready','Source outage removed reference atlas');
-  assert((await error.locator('#rl-atlas-status').innerText()).includes('Launch schedule unavailable'),'Atlas still implied live rockets');
+  assert((await error.locator('#rl-atlas-status').innerText()).includes('launch calendar isn’t loading'),'Atlas still implied live rockets');
   assert(await error.locator('#rl-coast-map .leaflet-rocket-reference-land-pane path').count()>0,'Both tile providers blocked without coastline');
   await error.waitForFunction(()=>document.querySelector('#rl-coast-map')?.dataset.tiles==='reference-only',{timeout:12000});
-  assert((await error.locator('#rl-atlas-status').innerText()).includes('Natural Earth coastlines shown'),'No tile-failure explanation');
+  assert((await error.locator('#rl-atlas-status').innerText()).includes('coastlines are shown instead'),'No tile-failure explanation');
   await error.waitForFunction(()=>document.querySelector('#rl-flight-headline')?.textContent.includes('unavailable'));
   assert(await error.locator('#rl-flight-locate').isDisabled(),'Source outage retained stale rocket focus');
-  assert((await error.locator('#rl-flight-next-title').innerText()).includes('schedule cannot establish'),
+  assert((await error.locator('#rl-flight-next-title').innerText()).includes('confirm the next flight yet'),
     'Source outage claimed an available next mission or viewing clearance');
   assert(await error.locator('#rl-flight-mission-select').isDisabled(),'Source outage retained launch menu');
-  assert((await error.locator('#rl-front-next-title').innerText()).includes('Schedule unavailable'),
+  assert((await error.locator('#rl-front-next-title').innerText()).includes('Launch calendar unavailable'),
    'Source outage retained old national next-launch claim');
   assert(await error.locator('#rl-front-feature-action').isDisabled(),
    'Source outage retained an active launch planner link');
@@ -641,7 +641,7 @@ const whenReady=page=>page.waitForFunction(id=>
   const noCtx=await browser.newContext({javaScriptEnabled:false,viewport:{width:390,height:844}});
   const no=await noCtx.newPage();
   await no.goto(base,{waitUntil:'domcontentloaded'});
-  assert((await no.locator('#rl-flight-source').innerText()).includes('Source status is unavailable'),
+  assert((await no.locator('#rl-flight-source').innerText()).includes('Checking the launch calendar'),
    'No-JS HTML implies current rocket status');
   assert((await no.locator('.rl-flight-noscript a').count())===6,
    'No-JS lost the six region guides');
