@@ -1463,13 +1463,17 @@
     const feed=state.officialEvidence;
     const fresh=feed?.health==='recent';
     const records=Array.isArray(feed?.regions?.[region])?feed.regions[region]:[];
-    const good= fresh ? records.filter(s=>s.status==='retrieved'): [];
-    set('rl-evidence-status',good.length?
-      'Official updates available; launch-day access is not confirmed':
-      'Current official updates cannot be independently confirmed here');
-    set('rl-evidence-checked',good.length?
-      'Published information can change before liftoff. Check the official sources below immediately before leaving.':
-      'A missed automated check does not mean a launch is canceled or a viewing location is closed. Use the official links below.');
+    const good=fresh?records.filter(s=>s.status==='retrieved'):[];
+    const useful=new Set(['access-status','road-status','notice-check-required',
+      'scheduled-road-activity','schedule-status']);
+    const hasNotice=good.some(s=>(s.signals||[]).some(n=>useful.has(n.kind)&&
+      n.relevance!=='historical-only'&&n.relevance!=='unmatched-official-article'));
+    set('rl-evidence-status',hasNotice?
+      'Official notices worth reviewing before you go':
+      'Check the official launch and access authorities before you go');
+    set('rl-evidence-checked',hasNotice?
+      'These source-checked notices may change before liftoff. Confirm them with the publisher.':
+      'A missed source check or absent notice does not mean a launch is canceled or a viewing area is closed.');
 
     // These are source-registered destination URLs, not last-run scraper links.
     // A stale snapshot may still contain an obsolete subscription URL.
@@ -1493,8 +1497,6 @@
     // Never show an "unreachable source" card, a stale open condition,
     // a generic subscription as a mission announcement, or prior orders
     // as current road closures.
-    const useful=new Set(['access-status','road-status','notice-check-required',
-      'scheduled-road-activity','schedule-status']);
     let shown=0;
     for(const source of good){
       for(const notice of source.signals||[]){
