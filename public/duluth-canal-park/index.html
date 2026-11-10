@@ -26,7 +26,7 @@
     {"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},
     {"@type":"WebApplication","@id":"https://chrisizworski.com/duluth-canal-park/#app","name":"Duluth Canal Park Ship Watch","url":"https://chrisizworski.com/duluth-canal-park/","applicationCategory":"TravelApplication","operatingSystem":"Web","description":"Live vessel positions, mapped camera viewpoints and evidence-bounded anticipated Duluth Ship Canal passage windows for boat watchers and Canal Park visitors."},
     {"@type":"TouristAttraction","name":"Duluth Aerial Lift Bridge and Ship Canal","address":{"@type":"PostalAddress","addressLocality":"Duluth","addressRegion":"MN","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":46.7783,"longitude":-92.0908}},
-    {"@type":"WebPage","@id":"https://chrisizworski.com/duluth-canal-park/","url":"https://chrisizworski.com/duluth-canal-park/","name":"Duluth Ship Schedule & Live Canal Park Map","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"mainEntity":{"@id":"https://chrisizworski.com/duluth-canal-park/#app"},"dateModified":"2026-10-12","inLanguage":"en-US", "publisher": {"@id":"https://chrisizworski.com/#person"}},
+    {"@type":"WebPage","@id":"https://chrisizworski.com/duluth-canal-park/","url":"https://chrisizworski.com/duluth-canal-park/","name":"Duluth Ship Schedule & Live Canal Park Map","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"mainEntity":{"@id":"https://chrisizworski.com/duluth-canal-park/#app"},"dateModified":"2026-11-09","inLanguage":"en-US", "publisher": {"@id":"https://chrisizworski.com/#person"}},
     {"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://chrisizworski.com/tools/"},{"@type":"ListItem","position":3,"name":"Duluth Canal Park","item":"https://chrisizworski.com/duluth-canal-park/"}]}
   ]
 }
@@ -48,9 +48,21 @@ html{scroll-behavior:smooth}body{margin:0;font-family:Georgia,'Times New Roman',
 .ship-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:16px 0}.ship-card{background:#fff;border:1px solid #d9dfe0;border-radius:4px;padding:15px 16px}.ship-card-top{margin-bottom:4px}.ship-label{font:700 10px Arial,sans-serif;letter-spacing:.8px;text-transform:uppercase;color:#8c633e}.ship-card h3{margin:0 0 5px;font-size:18px;color:#1b5368}.ship-window{font-size:15px;font-weight:bold;color:#293d46}.ship-meta{font:12px/1.5 Arial,sans-serif;color:#707b80;margin:6px 0}.ship-why{font-size:13px;margin:8px 0}.map-jump{border:0;background:transparent;color:#1b6179;text-decoration:underline;text-underline-offset:3px;padding:0;font:700 12px Arial,sans-serif;cursor:pointer}.empty-state{border:1px dashed #bcc6c9;border-radius:4px;padding:15px;background:#fff;color:#59666c}.empty-state p{margin:5px 0 0;font-size:13px}
 .three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:17px 0}.place-card,.explain-card{background:#fff;border:1px solid #dedad2;border-radius:4px;padding:16px}.place-card h3,.explain-card h3{margin:0 0 6px;font-size:16px;color:#245b70}.place-card p,.explain-card p{font-size:13px;margin:0;color:#526066}.visual{margin:24px 0;border:1px solid #ddd8cf;background:#fff;border-radius:5px;overflow:hidden}.visual img{display:block;width:100%;max-height:455px;object-fit:cover;object-position:center}.visual figcaption{font:11px/1.5 Arial,sans-serif;color:#778186;padding:8px 11px;background:#f7f5ef}.source-list{display:grid;gap:9px;margin:14px 0}.source-item{background:#fff;border:1px solid #ddd9d1;border-radius:4px;padding:13px 14px}.source-item strong{display:block;color:#23586d;font-size:14px}.source-item span{display:block;font-size:12px;color:#6f797d;margin-top:3px}.faq h3{font-size:16px;color:#23586d;margin:22px 0 5px}.faq p{font-size:14px;margin:0}.footer{text-align:center;border-top:1px solid #e3ded6;padding:24px 18px 40px;color:#8a9295;font:12px/1.6 Arial,sans-serif}.footer a{color:#5f737a}
 @media(max-width:700px){.wrap{padding:24px 15px 46px}h1{font-size:30px}.lede{font-size:15px}.watch-card{padding:17px 15px}.watch-card h2{font-size:23px}.arrival-action{grid-template-columns:1fr}.arrival-label{grid-row:auto}.arrival-detail{grid-column:auto}.monitor-intro{display:block}.monitor-intro p{margin-top:7px}.monitor-summary,.ship-grid,.three{grid-template-columns:1fr}.monitor-card{min-height:0}#duluthVesselMap{height:430px}.map-toolbar{align-items:flex-start;flex-wrap:wrap}.hero-actions .button,.watch-actions .button{flex:1 1 145px}.monitor-controls .button{flex:1 1 115px}.camera-monitor-head{display:block}.camera-tabs{justify-content:flex-start;margin-top:10px}.camera-player{max-height:none}.visual img{max-height:360px}}
+
+/* Shipping growth: preserve the first AIS answer and make the longer-horizon schedule a clear separate action. */
+.published-arrivals{border:1px solid #a7c8d2;background:#f1f8f9;padding:16px 19px;margin:-9px 0 22px;border-radius:5px;display:grid;grid-template-columns:minmax(0,1.6fr) minmax(230px,1fr);gap:9px 22px;align-items:center}
+.published-arrivals__eyebrow{font:700 11px Arial,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:#23586d;margin:0 0 5px}
+.published-arrivals h2{font:normal 21px/1.2 Georgia,serif;color:#173f50;margin:0 0 8px}
+.published-arrivals p{font:14px/1.55 Arial,sans-serif;margin:0;color:#364f5a}
+.published-arrivals__links{display:grid;gap:8px}
+.published-arrivals__links a{border:1px solid #8bb3c0;border-radius:4px;background:#fff;padding:10px 12px;text-align:center;color:#154f66;font:700 13px/1.4 Arial,sans-serif;text-decoration:none}
+.published-arrivals__links a:hover,.published-arrivals__links a:focus-visible{background:#e3f0f4;text-decoration:underline;outline-offset:2px}
+.published-arrivals .published-arrivals__note{grid-column:1 / -1;font-size:12px;color:#536b74;border-top:1px solid #cddfe2;padding-top:7px}
+.shipping-season-followup{margin:10px 0 0;border-left:3px solid #3c7889;padding:10px 14px;background:#f1f8f9;color:#344f5c;font:14px/1.55 Arial,sans-serif}
+@media(max-width:700px){.published-arrivals{grid-template-columns:1fr;margin:0 0 21px;padding:14px}.published-arrivals__links a{min-height:44px}.published-arrivals h2{font-size:19px}}
 </style>
 </head>
-<body>
+<body data-analytics-page="duluth-canal-park">
 <header class="site-header"><a href="/">Chris Izworski</a></header>
 <nav class="nav" aria-label="Site navigation"><a href="/tools/">Tools</a><a href="/soo-locks/">Soo Locks</a><a href="/great-lakes-freighter-tracking/">Great Lakes ships</a><a href="/great-lakes-buoys/">Great Lakes buoys</a></nav>
 <div class="live-strip"><span id="liveDot" class="live-dot"></span><span>Duluth boat watcher monitor</span><strong id="updated">Checking fresh vessel reports…</strong></div>
@@ -69,6 +81,19 @@ html{scroll-behavior:smooth}body{margin:0;font-family:Georgia,'Times New Roman',
     <div class="watch-kicker">CHECKING LIVE AIS</div>
     <h2>Finding the best supported next Canal Park watch…</h2>
     <p>The page only publishes a passage window when fresh vessel position, motion and route evidence support it.</p>
+  </section>
+
+  <section class="published-arrivals" aria-labelledby="published-arrivals-title" id="published-arrivals">
+    <div>
+      <p class="published-arrivals__eyebrow">Duluth ship schedule · two kinds of evidence</p>
+      <h2 id="published-arrivals-title">Looking for a ship later today?</h2>
+      <p>The live watch above uses recent AIS evidence near the Duluth Ship Canal. <strong>No supported next passage does not mean no ships are scheduled today.</strong> For later arrivals and departures, use the independent published harbor forecast, then check the actual canal camera closer to the expected time.</p>
+    </div>
+    <div class="published-arrivals__links">
+      <a href="https://harborlookout.com/" target="_blank" rel="noopener noreferrer" data-track-tool="duluth-harborlookout-forecast" data-placement="duluth-published-arrivals">Published Duluth arrivals and departures &#8599;</a>
+      <a href="#cameraMonitor" data-track-tool="duluth-live-canal-camera" data-placement="duluth-published-arrivals">Confirm with the Canal Cam &#8595;</a>
+    </div>
+    <p class="published-arrivals__note">A published forecast is not a guaranteed bridge opening. Ships may change speed, berth or use the Superior Entry; AIS and camera coverage can be incomplete.</p>
   </section>
 
   <section id="live-map" class="section monitor-section" aria-labelledby="map-title">
@@ -182,6 +207,7 @@ html{scroll-behavior:smooth}body{margin:0;font-family:Georgia,'Times New Roman',
       <article class="place-card"><h3><a href="/soo-locks/">Soo Locks ships &amp; map</a></h3><p>See the same visitor-first pattern at the other major Great Lakes ship-watching choke point.</p></article>
       <article class="place-card"><h3><a href="/great-lakes-buoys/">Great Lakes buoy conditions</a></h3><p>Check lake conditions when weather and visibility are part of the day.</p></article>
     </div>
+    <p class="shipping-season-followup">Following the shipping season? <a href="/great-lakes-freighter-winter-layup/" data-track-tool="great-lakes-freighter-winter-layup" data-placement="duluth-shipping-season">Explore documented winter layup berths and ship stories</a>, or <a href="/welland-canal/" data-track-tool="welland-canal" data-placement="duluth-shipping-season">check ships and the official queue on the Welland Canal</a>. A reported AIS position alone does not confirm a winter layup or a future canal transit.</p>
   </section>
 
   <section class="section" aria-labelledby="north-shore-aurora-title">
@@ -191,6 +217,8 @@ html{scroll-behavior:smooth}body{margin:0;font-family:Georgia,'Times New Roman',
 </main>
 <footer class="footer">Independent visitor planning tool by <a href="/chris-izworski/">Chris Izworski</a>. Not affiliated with the Port of Duluth-Superior, U.S. Army Corps of Engineers, Harbor Lookout, Duluth Harbor Cam, Vibe with Mike or Open Waters.</footer>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script defer src="/_vercel/insights/script.js"></script>
+<script defer src="/assets/tool-engagement.js"></script>
 <script src="/assets/duluth-camera-network.js?v=20260925-direct4" defer></script>
 <script src="/assets/duluth-canal.js?v=20260925-ships1" defer></script>
 </body>
