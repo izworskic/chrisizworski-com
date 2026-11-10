@@ -36,12 +36,12 @@ record('three-distinct-landscapes',placeFacts,
  'Three separate park narratives and authoritative destination descriptions: '+placeFacts);
 const reactive=select('15')?.name==='Lake Superior Provincial Park'&&
  select('20')?.name==='Sleeping Giant Provincial Park'&&
- select('15')?.placeId==='15'&&select('11')===null&&
+ select('15')?.placeId==='15'&&select('24')===null&&
  script.includes('function renderPlaceStory(model,host)')&&
  script.includes('renderPlaceStory(model,host);')&&
  html.indexOf('circle-tour-place-story-data.js')<html.indexOf('circle-tour-bridge.js');
 record('reactive-place-renderer',!!reactive,
- 'Selected-stop source map and render wiring, including no false Pictured Rocks photo: '+!!reactive);
+ 'Selected-stop source map and render wiring, including no false Cascade River photo: '+!!reactive);
 const parkChecks=ids.every(id=>{
  const next=bridge.planNextDecision(catalog,{selectedIds:[id],theme:'parks'});
  return next?.kind==='next-check'&&next.stopId===id&&next.primary?.url?.startsWith('https://');
