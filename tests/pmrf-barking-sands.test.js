@@ -24,7 +24,7 @@ test('Hawaiʻi specialist uses one national schedule location with no shadow dat
  assert.match(js,/No upcoming Barking Sands launch/);
  assert.doesNotMatch(js,/ll\.thespacedevs\.com|launches\/upcoming|createClient\(|supabase|redis/i);
  assert.match(hubjs,/url\.startsWith\('\/barking-sands-rocket-launch-viewing\/'\)\?'hawaii'/);
- assert.match(hubjs,/Barking Sands Navy access desk · same mission/);
+ assert.match(hubjs,/Barking Sands access guide/);
 });
 test('static HTML answers the real access question without JS or linked-map survival',()=>{
  const title=page.match(/<title>([^<]+)<\/title>/)?.[1]||'';
