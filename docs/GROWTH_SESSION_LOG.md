@@ -1,3 +1,8 @@
+### 2026-11-09 — Sprint 3 production metadata follow-up: Duluth generator date drift
+
+- **Production issue:** PR #1608 rendered the new Duluth arrivals forecast/camera links, and Welland/Soo source-links were verified, but the Duluth SEO/social build-time scripts reset JSON-LD dateModified and sitemap lastmod to October 2, older than the source's reviewed November 9 edit.
+- **Fix:** Preserve source WebPage dateModified through both build-time tuners, derive sitemap lastmod from the same value, and run an isolated generator regression that deliberately substitutes a future fixture date. Existing Duluth query-specific title/description and social image remain unchanged. Full CI, public HTML audit and fresh production head inspection required before declaring closed.
+
 ### 2026-11-09 — Freighter Growth Engine sprint 3: complete the next port decision
 
 - **Existing demand:** Nov 9 private GSC export page totals (long interval): Soo 2,041 clicks / 39,185 impressions; fleet tracker 355 / 26,286; Welland 102 / 3,871; Duluth 16 / 3,169. No page-filtered query attribution, revenue or post-release uplift established.
