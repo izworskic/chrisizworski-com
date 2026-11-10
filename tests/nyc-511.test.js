@@ -1,7 +1,7 @@
 'use strict';
 const test=require('node:test');
 const assert=require('node:assert/strict');
-const {normalizeEvent,normalizeSign,matchCrossing,nextLink,getCached511,refresh511,EVENTS_URL,SIGNS_URL}=require('../lib/nyc-crossing/ny511');
+const {normalizeEvent,normalizeSign,matchCrossing,nextLink,getCached511,getPollHealth,refresh511,EVENTS_URL,EVENT_ROUTES,SIGNS_URL,eventsPage}=require('../lib/nyc-crossing/ny511');
 const {buildSnapshot}=require('../lib/nyc-crossing/engine');
 const fs=require('node:fs');
 const path=require('node:path');
@@ -29,6 +29,32 @@ test('routeId chooses corridor before proximity fallback; off-corridor points re
  assert.equal(matchCrossing('I-495',[40.761,-74.005]),'lincoln');
  assert.equal(matchCrossing('I-495',[40.744,-73.963]),'queens-midtown');
  assert.equal(matchCrossing('',[42.5,-75]),null);
+});
+test('current nested TMDD CARS Detail locations, geometry and full-report text match NYC crossings',()=>{
+ const nested={'event-id':'nested-1',headline:{category:'Incident',code:'Crash'},priority:2,
+   'update-time':'2026-11-10T09:03:00Z',
+   'full-report-texts':[{'report-medium':'CURRENT',description:'Right lane blocked'}],
+   details:[{'start-time':'2026-11-10T08:00:00Z','end-time':'2026-11-10T11:00:00Z',
+     locations:[{'route-designator':'I-495','primary-location':{'geo-location':{latitude:40.744,longitude:-73.963}}}]}]};
+ const r=normalizeEvent(nested,Date.parse('2026-11-10T09:30:00Z'));
+ assert.equal(r.crossingId,'queens-midtown');
+ assert.equal(r.description,'Right lane blocked');
+ assert.equal(r.updatedAt,'2026-11-10T09:03:00Z');
+ assert.equal(r.penaltyPoints,7);
+ assert.equal(normalizeEvent(nested,Date.parse('2026-11-10T11:01:00Z')),null);
+ const geo={...nested,details:[{locations:[]}],geometry:{type:'Point',coordinates:[-73.963,40.744]},routeId:'I-495'};
+ assert.equal(normalizeEvent(geo,Date.parse('2026-11-10T09:30:00Z')).crossingId,'queens-midtown');
+});
+test('route-designator filtered pagination retains crossing and rejects another source route',()=>{
+ for(const route of EVENT_ROUTES){
+   const page=eventsPage(route);
+   assert.equal(new URL(page).searchParams.get('routeDesignator'),route);
+   assert.equal(new URL(page).searchParams.get('offset'),'0');
+ }
+ const next=eventsPage('I-95').replace('offset=0','offset=200');
+ assert.equal(nextLink('<'+next+'>; rel="next"','I-95'),next);
+ assert.throws(()=>nextLink('<'+next+'>; rel="next"','I-278'),/route changed/);
+ assert.throws(()=>nextLink('<https://attacker.example/events>; rel="next"','I-95'),/origin/);
 });
 test('sign phases are matched and text is sanitized for display',()=>{
  const sign={id:'sign-12',status:'active',location:{latitude:40.761,longitude:-74.005,routeId:'I-495'},
@@ -60,8 +86,11 @@ function mockWorld(){
      }
      return {ok:true,json:async()=>({result})};
    }
-   if(String(url).startsWith('https://nysdot.carsprogram.org/')){
-     return {ok:true,json:async()=>[event],headers:{get:()=>null}};
+   if(String(url).startsWith(EVENTS_URL)){
+     const u=new URL(url);
+     assert(EVENT_ROUTES.includes(u.searchParams.get('routeDesignator')));
+     assert.equal(u.searchParams.get('limit'),'200');
+     return {ok:true,json:async()=>u.searchParams.get('routeDesignator')==='I-95'?[event]:[],headers:{get:()=>null}};
    }
    if(url===SIGNS_URL){
      return {ok:true,json:async()=>[{id:'s1',status:'active',location:{latitude:40.852,longitude:-73.955,routeId:'I-95'},
@@ -77,7 +106,7 @@ test('cron refresh stores successful feeds and subsequent reads contact Redis on
  const first=await refresh511({...w,now:at});
  assert.equal(first.state,'UPDATED');assert.equal(first.eventsCount,1);assert.equal(first.signsCount,1);
  const upstream=w.calls.filter(x=>x.url!==w.env.TOOL_STATE_URL);
- assert.equal(upstream.length,2);
+ assert.equal(upstream.length,EVENT_ROUTES.length+1);
  assert.ok(upstream.every(x=>x.headers.Authorization.startsWith('Basic ')));
  assert.ok(upstream.every(x=>!x.url.includes('unit-user')&&!x.url.includes('unit-pass')));
  const callsBefore=w.calls.length;
@@ -87,7 +116,7 @@ test('cron refresh stores successful feeds and subsequent reads contact Redis on
  assert.equal(cache.crossings.gwb.signCount,1);
  assert.equal(cache.crossings.gwb.penaltyPoints,7);
  assert.equal((await refresh511({...w,now:at})).state,'ALREADY_POLLED');
- assert.equal(w.calls.filter(x=>x.url!==w.env.TOOL_STATE_URL).length,2);
+ assert.equal(w.calls.filter(x=>x.url!==w.env.TOOL_STATE_URL).length,EVENT_ROUTES.length+1);
 });
 test('refresh excludes expired incidents but still fetches sign messages at a fixed clock',async()=>{
  const w=mockWorld();
@@ -142,6 +171,12 @@ test('partial 511NY poll identifies failed events separately from fresh signs wi
  assert.equal(result.signsStatus,'UPDATED');
  assert.equal(result.eventsCount,null);
  assert.equal(result.signsCount,1);
+ assert.equal(result.healthStored,true);
+ const health=await getPollHealth(w);
+ assert.equal(health.eventsStatus,'UPSTREAM_HTTP_503');
+ assert.equal(health.signsStatus,'UPDATED');
+ assert.equal(health.eventsCount,null);
+ assert.doesNotMatch(JSON.stringify(health),/unit-user|unit-pass|carsprogram.org|provider failed/);
  assert.doesNotMatch(JSON.stringify(result),/unit-user|unit-pass|carsprogram.org/);
  const snapshot=await getCached511(w);
  assert.equal(snapshot.state,'STALE');
@@ -167,6 +202,45 @@ async function render511InBrowser(snapshot){
  return nodes;
 }
 
+test('unsuccessful event cache writes never claim a current incident snapshot',async()=>{
+ const w=mockWorld();
+ const failingSet=async(url,opts)=>{
+   if(url===w.env.TOOL_STATE_URL){
+     const cmd=JSON.parse(opts.body);
+     if(cmd[0]==='SET'&&cmd[1]==='nyc:511ny:events:v1')
+       return {ok:true,json:async()=>({result:null})};
+   }
+   return w.fetchImpl(url,opts);
+ };
+ const report=await refresh511({...w,fetchImpl:failingSet,now:at});
+ assert.equal(report.state,'PARTIAL');
+ assert.equal(report.eventsStatus,'CACHE_WRITE_FAILED');
+ assert.equal(report.signsStatus,'UPDATED');
+ assert.equal((await getCached511(w)).events.updatedAt,null);
+});
+test('full CARS event page without pagination metadata is not cached as complete',async()=>{
+ const w=mockWorld();
+ const truncated=async(url,opts)=>{
+   if(String(url).startsWith(EVENTS_URL)&&new URL(url).searchParams.get('routeDesignator')==='I-95')
+     return {ok:true,json:async()=>Array.from({length:200},()=>event),headers:{get:()=>null}};
+   return w.fetchImpl(url,opts);
+ };
+ const report=await refresh511({...w,fetchImpl:truncated,now:at});
+ assert.equal(report.state,'PARTIAL');
+ assert.equal(report.eventsStatus,'PAGINATION_INCOMPLETE');
+ assert.equal((await getCached511(w)).events.updatedAt,null);
+});
+test('upstream authorization failure does not invent an empty incident list',async()=>{
+ const w=mockWorld();
+ const unauth=async(url,opts)=>{
+   if(String(url).startsWith(EVENTS_URL))return {ok:false,status:401,json:async()=>({})};
+   return w.fetchImpl(url,opts);
+ };
+ const report=await refresh511({...w,fetchImpl:unauth,now:at});
+ assert.equal(report.eventsStatus,'UPSTREAM_HTTP_401');
+ assert.equal((await getPollHealth(w)).eventsStatus,'UPSTREAM_HTTP_401');
+ assert.equal((await getCached511(w)).events.updatedAt,null);
+});
 test('sign-only 511NY refresh never repeats the incident-feed placeholder across crossing rows',async()=>{
  const now=new Date().toISOString();
  const snapshot=buildSnapshot({ny511:{
