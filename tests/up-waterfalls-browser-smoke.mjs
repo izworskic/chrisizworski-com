@@ -174,7 +174,7 @@ try{
     const closurePopup=page.locator('.leaflet-popup-content .waterfall-popup-cluster-link[href="/upper-peninsula-waterfalls/#black-river-waterfall-day"]');
     await closurePopup.waitFor();
     assert.match(await closurePopup.innerText(),/closure and alternative/);
-    assert.match(await page.locator('.leaflet-popup-content').innerText(),/closed|closure/i);
+    assert.match(await closurePopup.locator('xpath=..').innerText(),/closed|closure/i);
   });
   await run('B84 field guide to source-safe regional itinerary and back to selected map marker',async()=>{
     const detail=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
