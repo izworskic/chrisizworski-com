@@ -74,7 +74,7 @@ test('Florida KSC viewing bridge explicitly checks mission ID, calendar health, 
  assert.match(js,/A matched KSC event is not admission/);
  assert.match(js,/official-rss-exact-designation-and-local-date/);
  assert.match(html,/id="rl-ksc-official-viewing"/);
- assert.match(html,/20261108-florida-answer-v1/);
+ assert.match(html,/20261110-voice-v1/);
  assert.match(css,/\.rl-ksc-match\[hidden\]/);
  new vm.Script(js);
 });
