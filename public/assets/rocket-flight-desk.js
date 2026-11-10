@@ -193,7 +193,7 @@
       destination:authority?'official_access':'regional_guide'
     });
     if(!d.launchId)return official('schedule','Find the latest official launch announcement',
-      'The flight you were looking for is no longer on this calendar. It may have moved or disappeared from the feed; check the range before choosing another date.',
+      'The flight you were looking for is no longer on this calendar. It may have moved or disappeared from the feed; that does not mean the range has stopped launching. Check the range before choosing another date.',
       authority?'See the official range updates':'Read the regional source guidance');
     if(d.status==='stale'||d.status==='unavailable')return official('schedule',
       'Check whether the launch time has moved',
@@ -244,7 +244,7 @@
       spectatorSamples.length>0&&d.status!=='stale';
     if(weatherUsable&&publicCandidates.length>0)return {
       gate:'sky',headline:'Which viewing spot has a better sky?',
-      detail:'With a published launch time and known public viewing areas, you can compare nearby cloud forecasts. Fog, the flight path and venue restrictions still matter.',
+      detail:'With a published launch time and known public viewing areas, you can compare nearby cloud forecasts. Fog, the flight path and venue restrictions still matter; a weather forecast does not prove that a viewing site is open.',
       label:'Compare the viewing-area forecasts',href:'#rl-regional-sky',
       source:'in_page',destination:'spectator_weather'
     };
