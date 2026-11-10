@@ -15,9 +15,9 @@
   const set = (id, value) => { const n = $(id); if (n) n.textContent = value ?? '—'; };
   function updateAtlasStatus(){
     const offline=$('rl-coast-map')?.dataset.tiles==='reference-only';
-    const prefix=offline?'The map background isn't loading; coastlines are shown instead. ':'';
+    const prefix=offline?'The map background isn’t loading; coastlines are shown instead. ':'';
     const message=state.scheduleFailed?
-      'The launch calendar isn't loading, but you can still browse the launch sites.':
+      'The launch calendar isn’t loading, but you can still browse the launch sites.':
       state.data?
         'Region circles are references, not public entrances. Rocket icons reflect the selected schedule source.':
         'Reference launch regions. Checking mission data.';
@@ -95,7 +95,7 @@
       });
       else card.appendChild(el('p', 'rl-board-empty',
         r.feedState === 'unavailable' ?
-          'We couldn't refresh this region's launch calendar. Check the official range announcements.' :
+          'We couldn’t refresh this region’s launch calendar. Check the official range announcements.' :
           'No upcoming launch listed here right now. Smaller research and military flights may be announced elsewhere.'));
       const button = el('button', '', 'Explore ' + r.name);
       button.type = 'button';
@@ -174,7 +174,7 @@
     set('rl-front-feature-clock', featured ? formattedTime(featured.l, visitorZone) : 'Time unavailable');
     const stale = data?.scheduleFreshness === 'stale' || featured?.l.sourceStale === true;
     set('rl-front-feature-precision', !data ?
-      'We can't refresh the launch calendar right now. Check with the launch operator.' :
+      'We can’t refresh the launch calendar right now. Check with the launch operator.' :
       stale ? 'This launch listing may be out of date. Check the latest update from the operator.' :
       featured ? (featured.l.scheduleConfidence?.label || 'Current listed launch target') +
         ' · The countdown and viewing conditions may change.' :
@@ -201,7 +201,7 @@
     });
     if (!data) {
       list.appendChild(el('p', 'rl-front-wait',
-        'Our launch calendar isn't responding right now. Check the official operator before making plans.'));
+        'Our launch calendar isn’t responding right now. Check the official operator before making plans.'));
     } else if (!filtered.length) {
       list.appendChild(el('p', 'rl-front-wait', all.length ?
         'No launches match that search. Try another coast or a longer date range.' :
@@ -485,7 +485,7 @@
       state.rocketPins=null;
       $('rl-map-expand')?.setAttribute('disabled','');
       root.replaceChildren(el('div','rl-map-fallback',
-        'The map isn't loading. Choose a coast above to see its launches and viewing options.'));
+        'The map isn’t loading. Choose a coast above to see its launches and viewing options.'));
     }
   }
   function renderMission(data) {
@@ -501,7 +501,7 @@
     set('rl-date', launch ? formattedDate(launch, zone) : 'Date not confirmed');
     set('rl-time', launch ? formattedTime(launch, zone) : 'Liftoff time not announced');
     set('rl-schedule-detail',
-      (sourceStale?'This launch time hasn't been checked recently. ':'')+
+      (sourceStale?'This launch time hasn’t been checked recently. ':'')+
       (data.scheduleWarning?data.scheduleWarning+' ':'')+
       (c?.detail || (data.coverage.partial ?
         'Some public launch listings are unavailable right now; other flights may still be planned.' :
@@ -518,7 +518,7 @@
   }
 
   // Static NASA catalog is built by an independently tested Python source review.
-  // No NASA or launch-provider API requests are issued by the visitor's browser.
+  // No NASA or launch-provider API requests are issued by the visitor’s browser.
   const VISUAL_CATALOG = '/national-tools/rocket-launch-live/visual-catalog.json';
   const FAMILY_ORDER = ['falcon-9', 'starship', 'vulcan', 'new-glenn'];
   const NASA_IMAGE = /^https:\/\/images-assets\.nasa\.gov\/image\/[A-Za-z0-9_-]+\/[A-Za-z0-9_-]+~(?:small|medium|large|thumb)\.(?:jpg|jpeg|png|webp)$/i;
@@ -659,7 +659,7 @@
     if(state.data)renderVisuals(state.data);
   }
 
-  // Reuse the exact LL2 mission's sanitized media records from the shared collector.
+  // Reuse the exact LL2 mission’s sanitized media records from the shared collector.
   // These buttons never claim player health, pad alignment, range GO, or launch success.
   function renderMediaDesk(data) {
     const root = $('rl-watch-mission-videos');
@@ -704,7 +704,7 @@
             'listed as live at last check' :
             'live status not confirmed')));
       const source = anchor(camera ? item.siteUrl : item.url,
-        camera ? 'View this camera' : 'Watch on the publisher's site', 'rl-watch-link');
+        camera ? 'View this camera' : 'Watch on the publisher’s site', 'rl-watch-link');
       if (source) card.appendChild(source);
       const id = item.youtubeId;
       if (typeof id === 'string' && /^[A-Za-z0-9_-]{11}$/.test(id)) {
@@ -788,7 +788,7 @@
     const current=desk.status==='ok';
     set('rl-news-checked', current ?
       'Reporting updated ' + stamp(desk.checkedAt) :
-      'Spaceflight Now updates aren't loading right now');
+      'Spaceflight Now updates aren’t loading right now');
     const list=$('rl-news-stories');
     if(!list)return;
     list.replaceChildren();
@@ -808,8 +808,8 @@
     }
     if(!list.children.length)list.appendChild(el('p','rl-news-note',
       current ? 'No recent article tied to this flight is listed. You can still browse Spaceflight Now's launch coverage.' :
-        'Recent reporting couldn't load. That doesn't mean the launch has changed.'));
-    set('rl-news-note',desk.note || 'For the current liftoff time, check the operator's latest announcement.');
+        'Recent reporting couldn’t load. That doesn’t mean the launch has changed.'));
+    set('rl-news-note',desk.note || 'For the current liftoff time, check the operator’s latest announcement.');
   }
 
   // A Google Maps SEARCH to a documented PUBLIC place is location discovery,
@@ -821,7 +821,7 @@
     const permitted = site.mapsLocationAllowed === true ||
       (site.mapsLocationAllowed == null && site.directionsAllowed === true);
     if (!permitted) return null;
-    // NASA's public Visitor Center can be found on a map even when the
+    // NASA’s public Visitor Center can be found on a map even when the
     // separate launch-viewing lawn has no confirmed opening for this mission.
     if (site.kind === 'mission-confirm' &&
       !(site.id === 'wallops-visitor' &&
@@ -843,7 +843,7 @@
     root.appendChild(top);
     if (!places.length) {
       root.appendChild(el('p','rl-access-quick-empty',
-        'We don't have a public viewing spot to recommend for this flight. The launch pad and restricted gates are not public destinations.'));
+        'We don’t have a public viewing spot to recommend for this flight. The launch pad and restricted gates are not public destinations.'));
       const guide = anchor(floridaSpecialistLink(data?.region?.specialist,data),
         'Read the local viewing guide');
       if (guide) root.appendChild(guide);
@@ -868,7 +868,7 @@
         site.kind==='mission-confirm'?'Find the NASA Visitor Center on Google Maps':
           'Open Google Maps','rl-access-map');
       const official=anchor(site.source,
-        site.kind==='mission-confirm'?'NASA's viewing rules':'View official local rules',
+        site.kind==='mission-confirm'?'NASA’s viewing rules':'View official local rules',
         'rl-access-official');
       if(maps)links.appendChild(maps);
       if(official)links.appendChild(official);
@@ -879,7 +879,7 @@
     root.appendChild(el('p','rl-access-quick-caution',
       region==='virginia'?
       'For Wallops, navigate to the public NASA Visitor Center at 175 Chincoteague Road, not the base gate. Don't park or wait along Route 175. Check for launch-day closures and parking changes.' :
-      'These links show public places to consider, not reserved parking or a guarantee they're open for this launch. Check local rules before leaving.'));
+      'These links show public places to consider, not reserved parking or a guarantee they’re open for this launch. Check local rules before leaving.'));
   }
 
   function renderAccess(data) {
@@ -899,13 +899,13 @@
         floridaAnswer.appendChild(el('p','rl-access-source-age',florida.matched?
           'Florida notices checked. National Park Service updates last checked '+stamp(florida.sourceCheckedAt)+
           '. Parking and entry may still be restricted for this launch.':
-          'Florida access updates aren't confirmed right now. Check with the park or venue before making the drive.'));
+          'Florida access updates aren’t confirmed right now. Check with the park or venue before making the drive.'));
         const nps=anchor('https://www.nps.gov/cana/planyourvisit/conditions.htm',
           'Check Playalinda Beach hours and closures');
         if(nps)floridaAnswer.appendChild(nps);
         const detail=anchor(florida.detailUrl,'Compare Florida viewing spots, tickets and sky');
         if(detail)floridaAnswer.appendChild(detail);
-        const ksc=florida.kscMatched?anchor(florida.kscUrl,'See Kennedy's event details for this launch'):null;
+        const ksc=florida.kscMatched?anchor(florida.kscUrl,'See Kennedy’s event details for this launch'):null;
         if(ksc)floridaAnswer.appendChild(ksc);
       }
     }
@@ -924,7 +924,7 @@
         const actions = el('div', 'rl-site-actions');
         const source = anchor(s.kind === 'specialist' ?
           floridaSpecialistLink(s.source,data) : s.source,
-          s.kind === 'specialist' ? 'Explore this launch on Florida's guide' : 'Official viewing information', 'rl-mainlink');
+          s.kind === 'specialist' ? 'Explore this launch on Florida’s guide' : 'Official viewing information', 'rl-mainlink');
         if (source) actions.appendChild(source);
         const mapHref=siteMapHref(s);
         if (mapHref) {
@@ -943,7 +943,7 @@
         'No public launch viewing confirmed' : 'Check before you go',
       data.region.id === 'alaska' || data.region.id === 'hawaii' ? 'restricted' : florida ? florida.state : 'unknown');
     set('rl-access-summary', florida?.answer || access.guidance ||
-      'We can't confirm which viewing spots are open for this flight. Check the local authority.');
+      'We can’t confirm which viewing spots are open for this flight. Check the local authority.');
     const notice = $('rl-official-notice');
     const live = access.liveOfficialNotice;
     if (notice) {
@@ -966,7 +966,7 @@
     }
   }
   // The existing Florida source resolves mission-specific public sites and NPS
-  // restrictions. Do not block the national answer or admit another mission's
+  // restrictions. Do not block the national answer or admit another mission’s
   // conditions if a slow response races a selector change.
   async function loadFloridaEvidence(data){
     const seq=++state.floridaRequest;
@@ -1005,7 +1005,7 @@
       return;
     }
     set('rl-slip-brief',
-      (sourceStale?'The published launch time may be old, so we aren't comparing delayed weather yet. ':
+      (sourceStale?'The published launch time may be old, so we aren’t comparing delayed weather yet. ':
         forecast?.outlook+' ') +
       'These are imagined delays to help you plan, not an announcement that the launch has moved.');
     const buttons=[];
@@ -1048,7 +1048,7 @@
           point.assessment?.level==='poor'?
             'Weather hazards also indicated; do not favor this area solely for lower cloud cover.':
           !numeric?'NWS grid value missing, stale, or outside this forecast hour.':
-          point.status!=='forecast-hour'?'No hourly forecast for this time yet. We can't say what the sky will look like.':
+          point.status!=='forecast-hour'?'No hourly forecast for this time yet. We can’t say what the sky will look like.':
           (point.shortForecast||'Hourly surface forecast checked')+' · regional reference, not a pad sightline'));
         rows.appendChild(card);
       }
@@ -1100,7 +1100,7 @@
             p.cloudCoverPercent + '% forecast cloud cover' : 'Cloud cover not available'));
         card.appendChild(el('p', '', p.period?.shortForecast ?
           'NWS: ' + p.period.shortForecast + '. ' + (p.assessment?.detail || '') :
-          'The hourly forecast doesn't cover this launch time yet.'));
+          'The hourly forecast doesn’t cover this launch time yet.'));
         grid.appendChild(card);
       }
       root.appendChild(grid);
@@ -1109,7 +1109,7 @@
     if (compare) {
       const block = el('div', 'rl-sky-comparison');
       block.appendChild(el('strong', '', compare.label || 'Not enough data to compare'));
-      block.appendChild(el('p', '', compare.detail || 'We can't compare the viewing skies with the available forecast.'));
+      block.appendChild(el('p', '', compare.detail || 'We can’t compare the viewing skies with the available forecast.'));
       root.appendChild(block);
     }
     chip($('rl-weather-grade'),
@@ -1127,7 +1127,7 @@
       verified ? (forecast.level === 'elevated' ? 'poor' : forecast.level === 'watch' ? 'medium' : 'unknown') : 'unknown');
     set('rl-range-headline', forecast.label || 'Launch-pad weather forecast not available');
     set('rl-range-summary', forecast.detail ||
-      'We don't yet have a reliable forecast for the area around the launch pad.');
+      'We don’t yet have a reliable forecast for the area around the launch pad.');
     const readings = $('rl-range-readings');
     readings.replaceChildren();
     const metrics = [
@@ -1184,17 +1184,17 @@
         rail.appendChild(item);
       }
       timeline.appendChild(rail);
-    } else timeline.appendChild(el('p', '', 'There aren't enough hourly forecasts yet to show how conditions may change.'));
+    } else timeline.appendChild(el('p', '', 'There aren’t enough hourly forecasts yet to show how conditions may change.'));
     set('rl-range-provenance', (forecast.site?.name || 'Launch site') +
       ' · ' + (forecast.site?.approximation || 'Regional reference only') + '. ' +
       (forecast.forecastUpdatedAt ? 'NWS grid updated ' + stamp(forecast.forecastUpdatedAt) + '. ' :
         'Nearby weather forecast not available. ') +
       'Only the launch range and operator decide whether weather permits liftoff. ' +
-      'These public forecasts don't tell us the odds of a launch scrub.');
+      'These public forecasts don’t tell us the odds of a launch scrub.');
     const links = $('rl-range-links');
     links.replaceChildren();
     const official = anchor(forecast.officialUrl || data.region?.authority,
-      data.region?.id === 'florida' ? 'Florida's official launch forecast' : 'Official range and mission updates');
+      data.region?.id === 'florida' ? 'Florida’s official launch forecast' : 'Official range and mission updates');
     const nws = anchor(forecast.sourceUrl || 'https://www.weather.gov/', 'NWS forecast source');
     if (official) links.appendChild(official);
     if (nws) links.appendChild(nws);
@@ -1220,12 +1220,12 @@
         'weather concerns were not clearly listed') +
       '. Other hazards, including recovery and upper-level wind limits, may be outside this percentage.' :
       matched ? 'A mission-matched official document was found, but its violation percentage could not be safely extracted.' :
-      'No official 45th Weather Squadron forecast has been matched to this flight yet. That doesn't mean weather will be favorable.');
+      'No official 45th Weather Squadron forecast has been matched to this flight yet. That doesn’t mean weather will be favorable.');
     const latest = d.latestChange;
     set('rl-official-trend', story.changes ||
       (matched && latest ? latest.headline + '. ' + latest.detail +
       ' Detected ' + stamp(latest.detectedAt) + '.' :
-      'Earlier forecast updates aren't available for comparison yet.'));
+      'Earlier forecast updates aren’t available for comparison yet.'));
     const target = $('rl-official-source');
     target.replaceChildren();
     const official = matched && typeof d.officialUrl === 'string' &&
@@ -1365,14 +1365,14 @@
       if(link)root.appendChild(link);
     }else{
       root.dataset.status='unverified';
-      root.appendChild(el('h3','','Kennedy viewing isn't announced for this flight yet'));
+      root.appendChild(el('h3','','Kennedy viewing isn’t announced for this flight yet'));
       const overdue=health.status==='overdue'||health.status==='not-initialized'||!evidence.ok;
       root.appendChild(el('p','',overdue?
-        'Kennedy's latest event listing isn't available here. That doesn't mean viewing is closed.':
-        'We haven't found a Kennedy viewing event for this specific flight. Regular park hours don't guarantee launch viewing.'));
+        'Kennedy’s latest event listing isn’t available here. That doesn’t mean viewing is closed.':
+        'We haven’t found a Kennedy viewing event for this specific flight. Regular park hours don’t guarantee launch viewing.'));
       root.appendChild(el('p','rl-match-meta','Kennedy event listing checked: '+
         stamp(health.lastCalendarCheckedAt)+'.'));
-      const link=anchor(health.calendarUrl,'See Kennedy's launch events calendar');
+      const link=anchor(health.calendarUrl,'See Kennedy’s launch events calendar');
       if(link)root.appendChild(link);
     }
     const specialist=anchor(floridaSpecialistLink('/national-tools/space-coast-launch/',data),
@@ -1473,7 +1473,7 @@
       'Before you leave, check the range and local access');
     set('rl-evidence-checked',hasNotice?
       'These notices were checked recently, but things can change before liftoff.':
-      'Not seeing an update here doesn't mean the launch is off or a viewing spot is closed.');
+      'Not seeing an update here doesn’t mean the launch is off or a viewing spot is closed.');
 
     // These are source-registered destination URLs, not last-run scraper links.
     // A stale snapshot may still contain an obsolete subscription URL.
