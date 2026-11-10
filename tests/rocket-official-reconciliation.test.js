@@ -130,9 +130,9 @@ test('visitor panel uses selected UUID and rejects drift in official-vs-calendar
  assert.match(index,/id="rl-mission-official-match"/);
  assert.match(index,/20261108-florida-answer-v1/);
  assert.match(js,/m=>m\.launchId===launch\.id/);
- assert.match(js,/dateGap<=1/);
- assert.match(js,/No mission-specific official article matched/);
- assert.match(js,/This does not confirm liftoff time, ticket inventory/);
+ assert.match(js,/dateGap>1/);
+ assert.doesNotMatch(js,/No mission-specific official article matched/);
+ assert.match(js,/This verifies an announcement, not the launch time/);
  assert.match(css,/\.rl-mission-official-match\[data-status="matched"\]/);
  assert.match(py,/def reconcile\(/);
  assert.match(wf,/rocket_official_matcher\.py/);
