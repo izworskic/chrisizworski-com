@@ -1,0 +1,69 @@
+name: NYC Crossing Foundry improvement and browser proof
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'public/nyc-crossing/index.html'
+      - 'public/assets/nyc-crossing.js'
+      - 'public/assets/nyc-crossing.css'
+      - 'experience-foundry/pilots/nyc-crossing-*'
+      - 'tests/nyc-crossing-foundry-replay.cjs'
+      - 'scripts/verify-nyc-crossing-foundry-browser.cjs'
+      - '.github/workflows/nyc-crossing-foundry.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: nyc-foundry-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  foundry-proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 17
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify source and source-backed NYC regression contracts
+        run: |
+          node scripts/generate-nyc-toll-search-surface.mjs --check
+          node --test tests/nyc-crossing.test.js tests/nyc-511.test.js tests/nyc-million-impressions.test.js tests/nyc-crossing-mapbox-reliability.test.js
+      - name: Foundry 0.3 capture real committed NYC pre-change baseline
+        run: |
+          node scripts/experience-foundry.mjs improve \
+            --slug nyc-paired-crossing-decision \
+            --owner nyc-crossing \
+            --question "Can I compare two NYC crossings without false travel-time rankings?" \
+            --baseline f4870ae198dadefa70c9edb8456b1bf7a4217ddc \
+            --files public/assets/nyc-crossing.js,public/nyc-crossing/index.html,public/assets/nyc-crossing.css
+          node experience-foundry/pilots/nyc-crossing-complete.mjs
+          node scripts/experience-foundry.mjs assess --run experience-foundry/drafts/nyc-paired-crossing-decision/run.json
+      - name: Foundry replay with exact baseline and candidate source
+        run: |
+          node scripts/experience-foundry.mjs prove \
+            --run experience-foundry/drafts/nyc-paired-crossing-decision/run.json \
+            --out build/experience-foundry/nyc-paired-crossing-decision-proof
+          node scripts/experience-foundry.mjs assess \
+            --run experience-foundry/drafts/nyc-paired-crossing-decision/run.json \
+            --proof build/experience-foundry/nyc-paired-crossing-decision-proof/proof.json
+      - name: Install isolated Chromium automation harness
+        run: |
+          npm install --prefix /tmp/nyc-foundry-playwright --no-save --ignore-scripts playwright@1.58.2
+          echo "NODE_PATH=/tmp/nyc-foundry-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium-browser)" >> "$GITHUB_ENV"
+      - name: Verify real desktop, mobile, keyboard, A to B to A and adverse states
+        run: node scripts/verify-nyc-crossing-foundry-browser.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: nyc-crossing-foundry-proof
+          path: |
+            experience-foundry/drafts/nyc-paired-crossing-decision/
+            build/experience-foundry/nyc-paired-crossing-decision-proof/
+            artifacts/experience-foundry/nyc-*
+          if-no-files-found: warn
+          retention-days: 14
