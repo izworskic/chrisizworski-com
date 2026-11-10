@@ -62,7 +62,7 @@ html{scroll-behavior:smooth}body{margin:0;font-family:Georgia,'Times New Roman',
 @media(max-width:700px){.published-arrivals{grid-template-columns:1fr;margin:0 0 21px;padding:14px}.published-arrivals__links a{min-height:44px}.published-arrivals h2{font-size:19px}}
 </style>
 </head>
-<body>
+<body data-analytics-page="duluth-canal-park">
 <header class="site-header"><a href="/">Chris Izworski</a></header>
 <nav class="nav" aria-label="Site navigation"><a href="/tools/">Tools</a><a href="/soo-locks/">Soo Locks</a><a href="/great-lakes-freighter-tracking/">Great Lakes ships</a><a href="/great-lakes-buoys/">Great Lakes buoys</a></nav>
 <div class="live-strip"><span id="liveDot" class="live-dot"></span><span>Duluth boat watcher monitor</span><strong id="updated">Checking fresh vessel reports…</strong></div>
@@ -217,6 +217,8 @@ html{scroll-behavior:smooth}body{margin:0;font-family:Georgia,'Times New Roman',
 </main>
 <footer class="footer">Independent visitor planning tool by <a href="/chris-izworski/">Chris Izworski</a>. Not affiliated with the Port of Duluth-Superior, U.S. Army Corps of Engineers, Harbor Lookout, Duluth Harbor Cam, Vibe with Mike or Open Waters.</footer>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script defer src="/_vercel/insights/script.js"></script>
+<script defer src="/assets/tool-engagement.js"></script>
 <script src="/assets/duluth-camera-network.js?v=20260925-direct4" defer></script>
 <script src="/assets/duluth-canal.js?v=20260925-ships1" defer></script>
 </body>
