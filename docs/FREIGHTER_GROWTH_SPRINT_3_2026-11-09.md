@@ -31,7 +31,7 @@ A new combined ship tracker adds little beyond the established five-lake map, an
 
 - No AIS provider/API, ship arrival forecast model, map, camera engine, Redis, ad placement, canonical, title, index directive or newly invented content route.
 - Preserve visible author and canonical Person ID. Modified page and root sitemap dates stay aligned.
-- Existing tool-engagement attributes identify planned visitor-path events; they are **not evidence** GA4 or Vercel actually delivered them.
+- Duluth previously lacked the shared link-engagement and first-party Vercel Analytics scripts that Soo and Welland load. This sprint adds them, plus a Duluth page identifier, so new next-task clicks can be recorded. Attributes and script presence still do **not** prove GA4 or Vercel successfully delivered events; validate actual event records later.
 - Run new narrow regression, full repository verification, rendered public-page audit, preview and production deployment, then independently inspect fresh live HTML and the accessible direct links.
 - No claim about Google indexing or AdSense uplift from code deployment. Compare finalized, like-for-like 7/28-day GSC Web page+query windows after release; control for rank and shipping-season changes. Compare actual analytics events and AdSense earnings only when connected reports exist.
 
