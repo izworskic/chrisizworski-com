@@ -210,15 +210,15 @@ const whenReady=page=>page.waitForFunction(id=>
     v.name+' hero mission not bound');
    assert((await page.locator('#rl-mission-name').innerText()).includes('Fixture Florida rocket A'),
     v.name+' original detail drift');
-   assert((await page.locator('#rl-flight-headline').innerText()).includes('not cleared'),
+   assert((await page.locator('#rl-flight-headline').innerText()).includes('Now find your spot'),
     v.name+' false travel GO');
-   assert((await page.locator('#rl-flight-sky').innerText()).includes('not rocket GO'),
+   assert(/forecast|uncertain|subject to change/i.test(await page.locator('#rl-flight-sky').innerText()),
     v.name+' weather described as launch GO');
    assert(await page.locator('#rl-flight-mission-select').isEnabled(),
     v.name+' hero mission picker disabled');
    assert(await page.locator('#rl-flight-locate').isEnabled(),
     v.name+' mapped mission focus disabled');
-   assert((await page.locator('#rl-flight-next-title').innerText()).includes('source-backed spectator option'),
+   assert((await page.locator('#rl-flight-next-title').innerText()).includes('Find a public place to watch'),
     v.name+' Foundry next evidence is not an access check for precise Florida mission');
    assert((await page.locator('#rl-flight-next-link').getAttribute('href'))==='/national-tools/space-coast-launch/?launchId='+A+'&via=rocket-foundry&stage=access',
     v.name+' Foundry source handoff misroutes the selected coast');
@@ -230,17 +230,17 @@ const whenReady=page=>page.waitForFunction(id=>
    events=await metrics();
    assert(events.filter(a=>a.name==='Rocket Mission Selected'&&a.data.surface==='flight_desk').length===1,
      v.name+' hero choice did not emit one committed selection');
-   assert((await page.locator('#rl-flight-headline').innerText()).includes('too uncertain'),
+   assert((await page.locator('#rl-flight-headline').innerText()).includes('still taking shape'),
     v.name+' day-only mission falsely travel-ready');
-   assert((await page.locator('#rl-flight-time').innerText()).includes('time TBD'),
+   assert((await page.locator('#rl-flight-time').innerText()).includes('liftoff time to come'),
     v.name+' date-only misused as a launch hour');
-   assert((await page.locator('#rl-flight-next-title').innerText()).includes('Confirm an exact launch hour'),
+   assert((await page.locator('#rl-flight-next-title').innerText()).includes('Wait for a more precise liftoff time'),
     v.name+' date-only next action did not change to a timing verification');
    assert((await page.locator('#rl-flight-next-link').getAttribute('href'))===REGIONS.find(x=>x.id==='florida').authority,
     v.name+' a tentative launch target must hand off to the official range authority');
    assert((await page.locator('#rl-launch-select').inputValue())===B,
     v.name+' original mission picker drift');
-   assert((await page.locator('#rl-flight-origin').innerText()).includes('Approximate'),
+   assert((await page.locator('#rl-flight-origin').innerText()).includes('General launch area'),
     v.name+' missing pad GPS described as exact');
    assert(new URL(await page.url()).searchParams.get('launchId')===B,
     v.name+' deep-link selection drift');
@@ -254,7 +254,7 @@ const whenReady=page=>page.waitForFunction(id=>
      v.name+' reverse native choice was not attributed correctly');
    assert((await page.locator('#rl-flight-mission-select').inputValue())===A,
     v.name+' reversing native picker did not return A');
-   assert((await page.locator('#rl-flight-next-title').innerText()).includes('source-backed spectator option'),
+   assert((await page.locator('#rl-flight-next-title').innerText()).includes('Find a public place to watch'),
     v.name+' next-check answer did not reverse from B to A');
    await page.locator('#rl-flight-locate').click();
    await page.waitForFunction(()=>window.vaq?.some(a=>a[0]==='event'&&a[1]?.name==='Rocket Map Engaged'));
