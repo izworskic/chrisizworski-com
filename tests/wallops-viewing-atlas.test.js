@@ -100,7 +100,7 @@ test('route connects one Virginia specialist to central national mission IDs',()
  assert.match(api,/buildWallopsViewing\(selected,weather,now\)/);
  const nationalJs=read('public/synced-national-tools/rocket-launch-live/app.js');
  assert.match(nationalJs,/url\.startsWith\('\/wallops-rocket-launch-viewing\/'\)\?'virginia'/);
- assert.match(nationalJs,/Wallops public launch-viewing atlas · same mission/);
+ assert.match(nationalJs,/Wallops viewing spots for this launch/);
  assert.match(national,/id="rl-nav-wallops"/);
  assert.match(app,/URLSearchParams\(\{region:'virginia'\}\)/);
  assert.match(app,/launchId/);
