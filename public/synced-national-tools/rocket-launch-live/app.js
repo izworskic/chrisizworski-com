@@ -1504,6 +1504,20 @@
         const article=el('article','rl-evidence-notice');
         article.appendChild(el('strong','',notice.title));
         if(notice.detail)article.appendChild(el('p','',notice.detail));
+        // An official transport window is not itself a beach closure.
+        // Warn only if a fresh, minute-precise mission target actually overlaps.
+        const launch=data?.selectedLaunch;
+        if(notice.kind==='scheduled-road-activity'&&region==='texas'&&
+          data.scheduleFreshness==='recent'&&
+          ['minute','second'].includes(launch?.netPrecision)){
+          const target=Date.parse(launch.net||'');
+          const from=Date.parse(notice.windowStart||'');
+          const through=Date.parse(notice.windowEnd||'');
+          if(Number.isFinite(target)&&Number.isFinite(from)&&Number.isFinite(through)&&
+            target>=from&&target<=through)
+            article.appendChild(el('p','rl-evidence-change',
+              'Travel timing overlap: this city-listed movement window intersects the selected launch target. Check Highway 4 directly. It is not an active closure, launch approval or viewing permission.'));
+        }
         const a=anchor(notice.sourceUrl,'Read official notice');
         if(a)article.appendChild(a);
         article.appendChild(el('small','',
