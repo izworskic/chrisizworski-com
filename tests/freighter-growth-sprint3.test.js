@@ -53,7 +53,7 @@ test("Soo's proven schedule answer stays first and connects a reader to Duluth o
   assert.match(soo, /href="\/duluth-canal-park\/" data-track-tool="duluth-canal-park" data-placement="soo-locks-related"/);
   assert.match(soo, /href="\/welland-canal\/" data-track-tool="welland-canal" data-placement="soo-locks-related"/);
   assert.match(soo, /https:\/\/ais\.boatnerd\.com\/passage\/port\/soo-locks/);
-  assert.match(soo, /id="sooLiveMap"/);
+  assert.match(soo, /id="sooVesselMap"/);
 });
 
 test("shipping dates are truthful and sitemaps agree while identities and titles remain intact", () => {
