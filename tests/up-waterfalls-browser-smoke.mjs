@@ -156,12 +156,12 @@ try{
     assert.match(await page.locator('#keweenaw-waterfall-day [data-regional-feedback]').innerText(),/Winter precaution/);
     await page.locator('[data-regional-preset="keweenaw-parks"]').click();
     assert.equal(await page.locator('.day-sheet-stop').count(),2);
-    assert.match(await page.locator('#upfall-day-sheet .day-sheet-shared-arrival').last().innerText(),/TWO independent park arrivals/);
+    assert.match(await page.locator('#upfall-day-sheet .day-sheet-regional-note').innerText(),/TWO independent park arrivals/);
     await page.locator('#clear-list').click();
     await page.locator('#visit-date').fill('2027-06-15');
     await page.locator('[data-regional-preset="keweenaw-gorge"]').click();
     assert.equal(await page.locator('.day-sheet-stop').count(),3);
-    assert.match(await page.locator('#upfall-day-sheet .day-sheet-shared-arrival').last().innerText(),/Manganese Falls: no independently certified visitor parking coordinate/);
+    assert.match(await page.locator('#upfall-day-sheet .day-sheet-regional-note').innerText(),/Manganese Falls: no independently certified visitor parking coordinate/);
     assert.match(await page.locator('#keweenaw-waterfall-day [data-regional-feedback]').innerText(),/conditional research itinerary/);
     await page.screenshot({path:screenshots+'/keweenaw-regional-day-mobile.png',fullPage:true,animations:'disabled'});
     await page.locator('#clear-list').click();
@@ -181,7 +181,7 @@ try{
     }
     assert.doesNotMatch(await page.locator('#selected-list').innerText(),/Sandstone Falls/);
     assert.match(await page.locator('#black-river-waterfall-day [data-regional-feedback]').innerText(),/Sandstone Falls is CLOSED and omitted/);
-    assert.match(await page.locator('#upfall-day-sheet .day-sheet-shared-arrival').last().innerText(),/Forest Service May 2026/);
+    assert.match(await page.locator('#upfall-day-sheet .day-sheet-regional-note').innerText(),/Forest Service May 2026/);
     const dimensions=await page.evaluate(()=>({w:innerWidth,s:document.documentElement.scrollWidth}));
     assert.ok(dimensions.s<=dimensions.w+2,'Regional cluster caused horizontal overflow');
     await page.screenshot({path:screenshots+'/black-river-regional-day-mobile.png',fullPage:true,animations:'disabled'});
