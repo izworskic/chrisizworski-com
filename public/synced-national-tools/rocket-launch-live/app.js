@@ -1581,11 +1581,10 @@
     document.dispatchEvent(new CustomEvent('rocket-viewing:data',{detail:data}));
     const coverage = data.coverage || {};
     set('rl-schedule-coverage',
-      'Source: Launch Library 2 shared Postgres snapshot, observed ' +
-      stamp(data.scheduleCheckedAt) +
-      '. No upstream launch calendar calls from this visitor request. Two provider groups across seven location IDs. ' +
-      (coverage.partial ? 'At least one source group was unavailable, stale or truncated; not every mission is guaranteed present. ' : '') +
-      'This does not include every sounding rocket, military range test or far-future mission. Read each range’s official notice before traveling.');
+      'Calendar source: Launch Library 2. Last checked ' + stamp(data.scheduleCheckedAt) + '. ' +
+      'This guide follows six U.S. coastal launch regions. ' +
+      (coverage.partial ? 'Some flights may be missing because the latest calendar check was incomplete. ' : '') +
+      'Military tests and small research rockets may not appear here. Check the launch range’s latest announcement before you go.');
   }
   async function load(region, launchId) {
     const sequence = ++state.request;
