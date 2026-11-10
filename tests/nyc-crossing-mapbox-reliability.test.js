@@ -473,6 +473,37 @@ test('production smoke explicitly reports temporary outages as DEGRADED and only
   assert.throws(() => evaluateMapboxHealth(smokeSnapshot('LIVE', 'live', ['queensboro'])), /unavailable despite Mapbox LIVE/);
 });
 
+test('production smoke reports safely rejected overlong Queensboro alternate routes as DEGRADED without publishing an ETA',async()=>{
+  const { evaluateMapboxHealth, isSafelyRejectedQueensboroDetour } = await import('../scripts/smoke-nyc-crossing-production.mjs');
+  const reason = '4 of 5 fixed crossing probes returned usable live-traffic routes. '+
+    'queensboro: Mapbox route-distance sanity failure: crossing probe failed sanity checks (distance 9761.855 m; allowed 1200–5800 m) (19 ms, attempt 1); '+
+    'williamsburg: LIVE (14 ms, attempt 1); manhattan: LIVE (15 ms, attempt 1); '+
+    'rfk: LIVE (13 ms, attempt 1); verrazzano: LIVE (12 ms, attempt 1)';
+  const four = PROBE_IDS.filter(id=>id!=='queensboro');
+  const data = smokeSnapshot('PARTIAL', reason, four);
+  const queensboro = data.routes.find(item=>item.id==='queensboro');
+  assert.equal(queensboro.etaState,'UNAVAILABLE');
+  assert.equal(queensboro.etaMinutes,null);
+  assert.match(queensboro.trafficPending,/Mapbox/);
+  assert.equal(isSafelyRejectedQueensboroDetour(data),true);
+  assert.equal(evaluateMapboxHealth(data),'DEGRADED');
+  for(const bad of [
+    reason.replace('distance 9761.855','distance 5300'),
+    reason.replace('distance 9761.855','distance 25001'),
+    reason.replace('queensboro: Mapbox route-distance','williamsburg: Mapbox route-distance'),
+    reason.replace('rfk: LIVE','rfk: NoRoute'),
+    reason + '; manhattan: Mapbox waypoint snap failure'
+  ]) {
+    const invalid=smokeSnapshot('PARTIAL',bad,four);
+    assert.equal(isSafelyRejectedQueensboroDetour(invalid),false);
+    assert.throws(()=>evaluateMapboxHealth(invalid),/not a temporary third-party outage/);
+  }
+  const withFakeEta=smokeSnapshot('PARTIAL',reason,four);
+  withFakeEta.routes.find(item=>item.id==='queensboro').etaMinutes=9.7;
+  assert.equal(isSafelyRejectedQueensboroDetour(withFakeEta),false);
+  assert.throws(()=>evaluateMapboxHealth(withFakeEta),/not a temporary third-party outage/);
+});
+
 test('production smoke checks each fixed probe distance limit and finite typical baseline', async () => {
   const { evaluateMapboxHealth } = await import('../scripts/smoke-nyc-crossing-production.mjs');
   for (const [id, distance] of [['queensboro', 5801], ['williamsburg', 1300], ['manhattan', 3501], ['rfk', 2501], ['verrazzano', 999]]) {
