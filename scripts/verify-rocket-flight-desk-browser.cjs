@@ -573,7 +573,7 @@ const whenReady=page=>page.waitForFunction(id=>
       for(const name of ['NASA Wallops Visitor Center','Robert N. Reed','Curtis Merritt Harbor']){
         assert(quick.includes(name),v.name+' is missing the public place '+name);
       }
-      assert(quick.includes('NASA must announce'),v.name+' falsely implies visitor-center admission');
+      assert(quick.includes('NASA opens this viewing lawn only for certain launches'),v.name+' falsely implies visitor-center admission');
       const mapLinks=await page.locator('#rl-access-quick a.rl-access-map').evaluateAll(
         nodes=>nodes.map(a=>a.href));
       assert(mapLinks.length===3,v.name+' did not offer three public Google Maps places');
