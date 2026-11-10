@@ -1,7 +1,7 @@
 'use strict';
 const test=require('node:test');
 const assert=require('node:assert/strict');
-const {normalizeEvent,normalizeSign,matchCrossing,nextLink,getCached511,refresh511,EVENTS_URL,SIGNS_URL}=require('../lib/nyc-crossing/ny511');
+const {normalizeEvent,normalizeSign,matchCrossing,nextLink,getCached511,getPollHealth,refresh511,EVENTS_URL,EVENT_ROUTES,SIGNS_URL,eventsPage}=require('../lib/nyc-crossing/ny511');
 const {buildSnapshot}=require('../lib/nyc-crossing/engine');
 const fs=require('node:fs');
 const path=require('node:path');
@@ -60,8 +60,11 @@ function mockWorld(){
      }
      return {ok:true,json:async()=>({result})};
    }
-   if(String(url).startsWith('https://nysdot.carsprogram.org/')){
-     return {ok:true,json:async()=>[event],headers:{get:()=>null}};
+   if(String(url).startsWith(EVENTS_URL)){
+     const u=new URL(url);
+     assert(EVENT_ROUTES.includes(u.searchParams.get('routeDesignator')));
+     assert.equal(u.searchParams.get('limit'),'200');
+     return {ok:true,json:async()=>u.searchParams.get('routeDesignator')==='I-95'?[event]:[],headers:{get:()=>null}};
    }
    if(url===SIGNS_URL){
      return {ok:true,json:async()=>[{id:'s1',status:'active',location:{latitude:40.852,longitude:-73.955,routeId:'I-95'},
@@ -77,7 +80,7 @@ test('cron refresh stores successful feeds and subsequent reads contact Redis on
  const first=await refresh511({...w,now:at});
  assert.equal(first.state,'UPDATED');assert.equal(first.eventsCount,1);assert.equal(first.signsCount,1);
  const upstream=w.calls.filter(x=>x.url!==w.env.TOOL_STATE_URL);
- assert.equal(upstream.length,2);
+ assert.equal(upstream.length,EVENT_ROUTES.length+1);
  assert.ok(upstream.every(x=>x.headers.Authorization.startsWith('Basic ')));
  assert.ok(upstream.every(x=>!x.url.includes('unit-user')&&!x.url.includes('unit-pass')));
  const callsBefore=w.calls.length;
@@ -87,7 +90,7 @@ test('cron refresh stores successful feeds and subsequent reads contact Redis on
  assert.equal(cache.crossings.gwb.signCount,1);
  assert.equal(cache.crossings.gwb.penaltyPoints,7);
  assert.equal((await refresh511({...w,now:at})).state,'ALREADY_POLLED');
- assert.equal(w.calls.filter(x=>x.url!==w.env.TOOL_STATE_URL).length,2);
+ assert.equal(w.calls.filter(x=>x.url!==w.env.TOOL_STATE_URL).length,EVENT_ROUTES.length+1);
 });
 test('refresh excludes expired incidents but still fetches sign messages at a fixed clock',async()=>{
  const w=mockWorld();
@@ -142,6 +145,12 @@ test('partial 511NY poll identifies failed events separately from fresh signs wi
  assert.equal(result.signsStatus,'UPDATED');
  assert.equal(result.eventsCount,null);
  assert.equal(result.signsCount,1);
+ assert.equal(result.healthStored,true);
+ const health=await getPollHealth(w);
+ assert.equal(health.eventsStatus,'UPSTREAM_HTTP_503');
+ assert.equal(health.signsStatus,'UPDATED');
+ assert.equal(health.eventsCount,null);
+ assert.doesNotMatch(JSON.stringify(health),/unit-user|unit-pass|carsprogram.org|provider failed/);
  assert.doesNotMatch(JSON.stringify(result),/unit-user|unit-pass|carsprogram.org/);
  const snapshot=await getCached511(w);
  assert.equal(snapshot.state,'STALE');
