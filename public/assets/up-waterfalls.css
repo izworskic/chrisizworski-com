@@ -256,5 +256,4 @@
 .regional-cluster-footnote{margin:16px 0 0;font-size:.91rem;color:#3c5b51;line-height:1.57}
 @media(max-width:830px){.regional-cluster-grid{grid-template-columns:1fr}.regional-cluster-card{padding:16px}}
 @media(max-width:390px){.regional-cluster-actions{grid-template-columns:1fr}}
-@media print{.regional-cluster-actions{display:none}.day-sheet-regional-note{background:#ecf3ed;border-left:3px solid #54806a;padding:11px 14px;margin:8px 0 15px;color:#284e3f;border-radius:4px;font-size:.91rem}
-.regional-waterfall-clusters{background:white;box-shadow:none}}
+@media print{.regional-cluster-actions{display:none}.regional-waterfall-clusters{background:white;box-shadow:none}}
