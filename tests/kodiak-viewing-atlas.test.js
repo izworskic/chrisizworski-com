@@ -27,7 +27,7 @@ test('Kodiak specialty reuses national location 25 and single shared mission col
  assert.match(app,/region:'alaska'/);
  assert.doesNotMatch(app,/ll\.thespacedevs\.com|launches\/upcoming|\/api\/space-coast-launch/);
  assert.match(nationalApp,/url\.startsWith\('\/kodiak-rocket-launch-viewing\/'\)\?'alaska'/);
- assert.match(nationalApp,/Kodiak range access desk · same mission/);
+ assert.match(nationalApp,/Kodiak launch access guide/);
 });
 test('public park geography is NOT launch viewing permission or a navigable range entrance',()=>{
  assert.equal(atlas.schemaVersion,1);
