@@ -162,7 +162,7 @@
       showBearing();
     }catch(_){
       root.replaceChildren(el('p','rl-vandenberg-map-fallback',
-        'The map isn't loading, but you can still compare the viewing spots and their rules below.'));
+        'The map isn’t loading, but you can still compare the viewing spots and their rules below.'));
     }
   }
   function showBearing(){
@@ -200,12 +200,12 @@
     }else{
       label('rl-vandenberg-headline','Explore the public viewing spots');
       label('rl-vandenberg-explanation',state.data.status==='pad-geometry-unverified'?
-        'We don't have a confirmed pad location for this mission yet, so distances and directions aren't shown.':
+        'We don’t have a confirmed pad location for this mission yet, so distances and directions aren’t shown.':
         state.data.status==='schedule-overdue'?
-        'The launch time may have changed. Check the operator's latest update before choosing a spot.':
+        'The launch time may have changed. Check the operator’s latest update before choosing a spot.':
         state.data.status==='time-unverified'?
-        'The liftoff time is still tentative. Once it's set, we can compare opening hours and nearby skies.':
-        'We can't recommend a spot for this time yet. Check the official viewing notices for openings and closures.');
+        'The liftoff time is still tentative. Once it’s set, we can compare opening hours and nearby skies.':
+        'We can’t recommend a spot for this time yet. Check the official viewing notices for openings and closures.');
     }
     const scenario=currentScenario();
     for(const [index,{site,candidate}] of rows.entries()){
@@ -249,7 +249,7 @@
       }
       card.appendChild(el('p','rl-vandenberg-access',site.accessNote));
       const links=el('div','rl-vandenberg-actions');
-      const cited=safeLink(site.source,'Check this location's rules');
+      const cited=safeLink(site.source,'Check this location’s rules');
       if(cited)links.appendChild(cited);
       const osm=safeLink(site.osm,'See the area on a map');
       if(osm)links.appendChild(osm);
@@ -270,7 +270,7 @@
     const cases=state.data.scenarios||[];
     if(!cases.length){
       root.appendChild(el('span','rl-vandenberg-no-time',
-        'The launch time isn't precise enough yet to compare hours and weather.'));
+        'The launch time isn’t precise enough yet to compare hours and weather.'));
       return;
     }
     if(!cases.some(x=>x.offsetHours===state.offsetHours))state.offsetHours=0;
@@ -299,7 +299,7 @@
     if(state.data.closedViewingLocations?.length)
       label('rl-vandenberg-closed',
         state.data.closedViewingLocations.join(' · ')+
-        '. Explore Lompoc lists these as closed for launch viewing. Don't use them as spectator stops.');
+        '. Explore Lompoc lists these as closed for launch viewing. Don’t use them as spectator stops.');
     for(const button of document.querySelectorAll('#rl-vandenberg-intents button[data-intent]'))
       button.setAttribute('aria-pressed',state.intent===button.dataset.intent?'true':'false');
     renderTimes();
@@ -315,7 +315,7 @@
     });
   });
   // The national app dispatches only its already validated selected launch API
-  // response. Never reuse California site pins for another region's mission.
+  // response. Never reuse California site pins for another region’s mission.
   document.addEventListener('rocket-viewing:data',event=>{
     const data=event.detail;
     state.allLaunches=data?.selectedRegion==='california'?
