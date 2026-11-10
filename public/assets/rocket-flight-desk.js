@@ -117,7 +117,7 @@
       note='The calendar may only show a day or month. Wait for a more precise target before planning when to arrive.';
     }else{
       status='review';headline='The launch is on the calendar. Now find your spot.';
-      note='Find a public place with a good view, check its hours, then keep an eye on the countdown and weather.';
+      note='Find a public place with a good view, check its official access rules and hours, then keep an eye on the countdown and weather.';
     }
     const inRange=Number.isFinite(mission?.lat)&&Number.isFinite(mission?.lon)&&
       Boolean(root.RocketMapPins?.inRegion?.(region,mission.lat,mission.lon));
