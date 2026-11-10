@@ -193,24 +193,25 @@ test('Foundry: no selected itinerary invites an explicit stop rather than invent
 
 test('Place & Story pilot has verified site-exact image rights, documentary context and a practical choice for each park',()=>{
   const {stories,selectPlaceStory}=require('../public/assets/circle-tour-place-story-data.js');
-  assert.deepEqual(Object.keys(stories).sort((a,b)=>Number(a)-Number(b)),['3','6','11','15','18','20']);
-  for(const id of ['3','6','11','15','18','20']){
+  assert.deepEqual(Object.keys(stories).sort((a,b)=>Number(a)-Number(b)),['3','6','11','15','18','20','23','26','27']);
+  for(const id of ['3','6','11','15','18','20','23','26','27']){
     const place=selectPlaceStory(id);
     assert.equal(place.placeId,id);
     assert.ok(place.story.length>=150,'interpretation should convey a distinctive real place');
     assert.ok(place.character.length>=65,'visitor scale or access distinction required');
-    assert.ok(['www.ontarioparks.ca','parks.canada.ca','www.nps.gov','www.michigan.gov'].includes(new URL(place.sourceURL).hostname));
+    assert.ok(['www.ontarioparks.ca','parks.canada.ca','www.nps.gov','www.michigan.gov','www.dnr.state.mn.us','www.visitcookcounty.com'].includes(new URL(place.sourceURL).hostname));
     assert.equal(place.photos.length,2);
-    assert.ok(ui.planNextDecision(committed,{selectedIds:[id]}).primary,'each story must support an actual existing visitor check');
+    if(id==='26')assert.equal(ui.planNextDecision(committed,{selectedIds:[id]}).kind,'no-specialist','do not invent a Tettegouche tool');
+    else assert.ok(ui.planNextDecision(committed,{selectedIds:[id]}).primary,'approved specialist must still win');
     for(const p of place.photos){
       assert.equal(p.placeId,id);
       assert.equal(p.status,'verified-licensed');
       assert.match(p.imageURL,/^https:\/\/thumb\.wikimedia\.org\/wikipedia\/commons\/thumb\//);
       assert.match(p.sourceURL,/^https:\/\/commons\.wikimedia\.org\/wiki\/File:/);
-      assert.ok(['CC0 1.0','CC BY-SA 4.0','CC BY 2.0','CC BY-SA 3.0','Public domain (NPS)','Public domain (author dedication)'].includes(p.licenseName));
+      assert.ok(['CC0 1.0','CC BY-SA 4.0','CC BY 2.0','CC BY-SA 3.0','CC BY-SA 2.0','CC BY 4.0','Public domain (NPS)','Public domain (author dedication)'].includes(p.licenseName));
       assert.match(p.licenseURL,/^https:\/\/creativecommons\.org\//);
       assert.ok(p.photographer.length>3&&p.alt.length>30&&p.caption.length>30);
-      assert.match(p.captureDate,/^20\d\d-\d\d-\d\d$/);
+      assert.match(p.captureDate,/^(19|20)\d\d-\d\d-\d\d$/);
       assert.ok(p.width>=600&&p.height>=500);
     }
   }
@@ -240,4 +241,24 @@ test('new U.S. shore stories distinguish true places and visitor commitments',()
   assert.equal(ui.planNextDecision(committed,{selectedIds:[id]}).kind,'next-check');
  }
  assert.equal(selectPlaceStory('24'),null);
+});
+
+test('North Shore stories preserve real geography, distinct admission and no invented specialist',()=>{
+ const {selectPlaceStory}=require('../public/assets/circle-tour-place-story-data.js');
+ for(const [id,clues,sourceHost] of [
+  ['23',["Artist's Point","Gunflint Trail","harbor"],'www.visitcookcounty.com'],
+  ['26',['Shovel Point','High Falls','300 stairs'],'www.dnr.state.mn.us'],
+  ['27',['Pebble Beach','Minnesota Historical Society','separate'],'www.dnr.state.mn.us']
+ ]){
+  const story=selectPlaceStory(id),prose=story.story+' '+story.character;
+  assert.ok(story.story.length>=190&&story.character.length>=160);
+  for(const phrase of clues)assert.ok(prose.includes(phrase),'missing factual distinction: '+id+' '+phrase);
+  assert.equal(new URL(story.sourceURL).hostname,sourceHost);
+  assert.ok(story.photos.every(p=>p.placeId===id&&p.caption.endsWith('display cropped.')));
+  assert.ok(story.photos.every(p=>new URL(p.imageURL).hostname==='thumb.wikimedia.org'));
+ }
+ assert.equal(ui.planNextDecision(committed,{selectedIds:['26']}).primary,null);
+ assert.equal(ui.planNextDecision(committed,{selectedIds:['27']}).kind,'next-check');
+ assert.equal(selectPlaceStory('24'),null);
+ assert.equal(selectPlaceStory('25'),null);
 });

@@ -58,4 +58,39 @@ const puka=bridge.planNextDecision(catalog,{selectedIds:['18'],theme:'parks'});
 record('preserve-specialist-safety',puka?.primary?.url==='https://chrisizworski.com/pukaskwa-national-park/'&&
  bridge.safeToolUrl('https://unsafe.example/fake')==='', 
  'Pukaskwa specialist canonical and existing foreign-host rejection preserved.');
+
+const northIds=['23','26','27'];
+const northPhotos=northIds.every(id=>{
+ const story=select(id);
+ return story?.placeId===id&&story.photos?.length===2&&story.photos.every(p=>
+ p.placeId===id&&p.status==='verified-licensed'&&
+ p.imageURL.startsWith('https://thumb.wikimedia.org/wikipedia/commons/thumb/')&&
+ p.sourceURL.startsWith('https://commons.wikimedia.org/wiki/File:')&&
+ ['CC BY-SA 2.0','CC BY-SA 4.0','CC BY 4.0'].includes(p.licenseName)&&
+ p.licenseURL.startsWith('https://creativecommons.org/')&&
+ p.photographer.length>3&&p.alt.length>30&&p.caption.includes('display cropped.')&&
+ /^(19|20)\d\d-\d\d-\d\d$/.test(p.captureDate));
+});
+record('north-shore-photo-identity',northPhotos,
+ 'Six exact-place photographs with authors, licenses, dates, captions and Commons links: '+northPhotos);
+const northChoices=northIds.every(id=>{
+ const s=select(id);
+ return s&&s.story.length>190&&s.character.length>155&&s.why.length>85&&
+ ['www.visitcookcounty.com','www.dnr.state.mn.us'].includes(new URL(s.sourceURL).hostname);
+})&&select('23')?.character.includes('Gunflint Trail')&&
+ select('26')?.character.includes('300 stairs')&&
+ select('27')?.character.includes('Minnesota Historical Society');
+record('north-shore-distinct-visitor-choices',!!northChoices,
+ 'Town harbor vs inland trip, Shovel Point vs High Falls, DNR park vs MNHS lighthouse visit: '+!!northChoices);
+const none=bridge.planNextDecision(catalog,{selectedIds:['26']});
+const yes=bridge.planNextDecision(catalog,{selectedIds:['27']});
+const boundary=none.kind==='no-specialist'&&none.primary===null&&
+ yes.kind==='next-check'&&yes.primary?.url?.startsWith('https://');
+record('north-shore-specialist-preservation',boundary,
+ 'No fabricated specialist for Tettegouche; Split Rock retains independent approved specialist: '+boundary);
+const photoFree=select('24')===null&&select('25')===null&&
+ select('23')?.placeId==='23'&&select('27')?.placeId==='27';
+record('north-shore-no-photo-leakage',photoFree,
+ 'Unresearched neighbors have no false landscape photographs: '+photoFree);
+
 console.log(JSON.stringify({cases}));
