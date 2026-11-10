@@ -52,7 +52,7 @@ test('the visitor gets an image-rich mission explainer with honest matching boun
   assert.match(html,/id="rl-visual-rocket-photo"/);
   assert.match(html,/id="rl-visual-payload-photo"/);
   assert.match(html,/id="rl-visual-family-gallery"/);
-  assert.match(html,/NASA-credited archival photography/);
+  assert.match(html,/These NASA archive photos show the rocket family/);
   assert.match(html,/id="mission-watch"/);
   assert.match(html,/v=20261110-voice-v1/);
   assert.match(html,/rel="canonical" href="https:\/\/chrisizworski.com\/national-tools\/rocket-launch-live\/"/);
