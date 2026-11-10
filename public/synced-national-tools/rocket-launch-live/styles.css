@@ -463,41 +463,28 @@ html.rl-map-fullscreen,html.rl-map-fullscreen body{overflow:hidden!important;ove
 @media(max-width:610px){.rl-vandenberg{padding:15px;margin:10px 0;border-radius:13px}.rl-vandenberg-header{display:block}.rl-vandenberg-state{margin-top:12px}.rl-vandenberg-map{height:300px}.rl-vandenberg-buttons button{flex:1 0 auto}.rl-vandenberg-facts{gap:8px}.rl-vandenberg-card-top{flex-wrap:wrap}.rl-vandenberg-focus{margin-left:auto}}
 
 
-/* Source-governed evidence desk: never style an observation as range clearance. */
-.rl-official-evidence{scroll-margin-top:30px;margin:40px 0 64px}
-.rl-evidence-summary{background:#163d4a;color:#f4f8f6;border-radius:15px;padding:23px 26px;display:flex;justify-content:space-between;gap:28px;align-items:center}
-.rl-evidence-kicker{font-size:10px;letter-spacing:.13em;font-weight:800;color:#f5bf90;display:block;margin-bottom:8px}
-.rl-evidence-summary strong{font-family:var(--serif);font-size:clamp(19px,2.2vw,28px);display:block;line-height:1.32}
-.rl-evidence-summary p{font-size:12px;max-width:700px;color:#d1e4e3;line-height:1.65;margin:9px 0 0}
-.rl-evidence-legend{min-width:230px;display:grid;gap:7px}
-.rl-evidence-legend span{font-size:11px;background:#295462;border:1px solid #688b91;border-radius:4px;padding:6px 10px;font-weight:800;color:#e0efed}
-.rl-evidence-sources{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:16px}
-.rl-evidence-card{border:1px solid #cbd7d5;background:#fff;border-radius:12px;padding:21px;min-width:0}
-.rl-evidence-card[data-status="unavailable"]{border-color:#d9d0c6;background:#fcfaf6}
-.rl-evidence-card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px}
-.rl-evidence-card-head strong{font-size:14px;line-height:1.4}
-.rl-evidence-marker{flex-shrink:0;font-size:10px;padding:4px 8px;border:1px solid #b2c7c0;border-radius:20px;background:#eff7f4;color:#24574b;font-weight:800}
-.rl-evidence-marker[data-status="limited"]{background:#fff7eb;color:#865c20;border-color:#ddc19b}
-.rl-evidence-marker[data-status="unavailable"]{background:#f7f1ed;color:#8e4b33;border-color:#e1b6a4}
-.rl-evidence-signal{border-top:1px solid #e5ebe8;padding:13px 0 12px}
-.rl-evidence-signal .rl-evidence-type{font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#9a6240;display:block;margin-bottom:6px}
-.rl-evidence-signal strong{display:block;font-size:14px;line-height:1.4;color:#153c46}
-.rl-evidence-signal p,.rl-evidence-empty,.rl-evidence-change{font-size:12px;line-height:1.68;color:#52696b;margin:7px 0 9px}
-.rl-evidence-signal a,.rl-evidence-origin{font-size:12px;font-weight:800;color:#17637a}
-.rl-evidence-origin{display:inline-block;margin-top:8px;padding-top:10px;border-top:1px solid #e4e9e6}
-.rl-evidence-disclaimer{font-size:12px;color:#62746d;line-height:1.7;max-width:100ch;margin:14px 0 0}
-.rl-evidence-none{font-size:14px;margin:15px 0 0}
-@media(max-width:780px){
- .rl-evidence-summary{flex-direction:column;align-items:stretch}
- .rl-evidence-legend{min-width:0}
- .rl-evidence-sources{grid-template-columns:1fr}
-}
+/* Compact, visitor-first official update links. Raw source-monitor health stays in the API. */
+.rl-official-evidence{scroll-margin-top:30px;margin:34px 0 52px}
+.rl-evidence-summary{background:#edf4f0;color:#173f3d;border:1px solid #d0dfd5;border-radius:13px;padding:17px 21px}
+.rl-evidence-kicker{font-size:10px;letter-spacing:.11em;font-weight:800;color:#52766a;display:block;margin-bottom:7px}
+.rl-evidence-summary strong{font-family:var(--serif);font-size:clamp(18px,2vw,23px);display:block;line-height:1.35}
+.rl-evidence-summary p{font-size:13px;max-width:85ch;color:#526b61;line-height:1.58;margin:7px 0 0}
+.rl-evidence-sources{margin-top:13px;min-width:0}
+.rl-official-links{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+.rl-official-links a{display:inline-flex;align-items:center;justify-content:center;padding:10px 13px;min-height:44px;border:1px solid #b7d2c6;border-radius:8px;background:#fff;color:#185d55;font-weight:800;font-size:13px;text-decoration:underline;text-underline-offset:3px;line-height:1.35}
+.rl-official-links a:hover{border-color:#2e7b67;background:#f2faf5}
+.rl-official-links a:focus-visible{outline:3px solid #d18e44;outline-offset:3px}
+.rl-evidence-notice{border:1px solid #cbdbd1;border-left:3px solid #4f8c79;border-radius:9px;background:#fff;margin-top:12px;padding:13px 17px}
+.rl-evidence-notice strong{display:block;font-size:15px;color:#19473e;line-height:1.45}
+.rl-evidence-notice p{font-size:13px;color:#486357;line-height:1.56;margin:7px 0}
+.rl-evidence-notice a{display:inline-block;font-size:13px;font-weight:800;color:#196373;margin-top:5px}
+.rl-evidence-notice small{display:block;color:#657a70;font-size:11px;margin-top:8px;line-height:1.4}
+.rl-evidence-disclaimer{font-size:12px;color:#60746d;line-height:1.6;max-width:100ch;margin:12px 0 0}
 @media(max-width:460px){
- .rl-evidence-summary,.rl-evidence-card{padding:17px}
- .rl-evidence-card-head{flex-direction:column;gap:8px}
- .rl-evidence-legend{gap:4px}
+ .rl-evidence-summary{padding:14px 16px}
+ .rl-official-links{display:grid;grid-template-columns:1fr}
+ .rl-official-links a{justify-content:flex-start}
 }
-
 
 /* Event-specific evidence above the general land-manager source ledger. */
 .rl-mission-official-match{margin-top:14px;margin-bottom:18px;border:1px solid #d2b58b;border-left:5px solid #9c6a3b;background:#fcf8ef;padding:22px 25px;border-radius:9px;max-width:100%}
