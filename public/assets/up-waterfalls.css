@@ -257,3 +257,32 @@
 @media(max-width:830px){.regional-cluster-grid{grid-template-columns:1fr}.regional-cluster-card{padding:16px}}
 @media(max-width:390px){.regional-cluster-actions{grid-template-columns:1fr}}
 @media print{.regional-cluster-actions{display:none}.regional-waterfall-clusters{background:white;box-shadow:none}}
+
+
+/* B84: source-checked regional itinerary discovery, on map, hub and guide pages. */
+.fall-cluster-jump-nav{border:1px solid #cadbd4;border-radius:14px;padding:clamp(14px,2.2vw,22px);margin:12px 0 26px;background:#f1f5ee;color:#1e4639}
+.fall-cluster-jump-kicker,.fall-guide-region-kicker{font-size:.72rem;font-weight:850;letter-spacing:.11em;color:#436b4d;text-transform:uppercase;margin:0 0 7px}
+.fall-cluster-jump-intro h2{font:normal clamp(1.35rem,2.5vw,1.9rem)/1.22 Georgia,serif;color:#224738;margin:0 0 9px}
+.fall-cluster-jump-intro>p:last-child{max-width:87ch;line-height:1.58;margin:0 0 15px;font-size:.91rem}
+.fall-cluster-jump-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.fall-cluster-jump{display:flex;flex-direction:column;gap:7px;min-width:0;padding:15px;background:#fff;border:1px solid #d5e0d7;border-radius:10px;text-decoration:none;color:#244f40}
+.fall-cluster-jump:hover,.fall-cluster-jump:focus-visible{background:#e7f2e7;border-color:#407463}
+.fall-cluster-jump strong{font-size:.94rem;line-height:1.28}
+.fall-cluster-jump span{font-size:.83rem;line-height:1.4;color:#466055;flex:1}
+.fall-cluster-jump em{font-size:.78rem;color:#236656;font-weight:800;font-style:normal}
+.waterfall-card .fall-card-region-link{display:inline-block;border:1px solid #a7c1ac;border-radius:6px;padding:5px 8px;line-height:1.3;background:#eaf1e8;color:#275844;font-size:.82rem;font-weight:750}
+.waterfall-card .fall-card-region-link:hover{background:#d3e7db}
+.waterfall-popup-cluster-link{display:block;margin-top:9px;padding:7px 8px;background:#e5f0e7;border:1px solid #afc9ba;border-radius:5px;font-weight:800;color:#235f49}
+.waterfall-popup-cluster-note{font-size:.77rem;line-height:1.42;margin:5px 0!important;color:#426452}
+.fall-cluster-map-status{margin:9px 0 2px;padding:8px 10px;background:#e9f0e8;color:#244a3a;border-left:3px solid #47785d;border-radius:5px;font-size:.83rem;line-height:1.46}
+.fall-guide-region-bridge{margin:18px 0 22px;padding:clamp(14px,2.5vw,22px);border:1px solid #b5d0bd;border-radius:12px;background:#eff5ed;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(190px,.65fr);gap:7px 20px;align-items:center}
+.fall-guide-region-bridge h2{margin:0 0 7px;font:normal clamp(1.22rem,2vw,1.6rem)/1.24 Georgia,serif;color:#25513c}
+.fall-guide-region-bridge p{margin:0 0 8px;font-size:.9rem;line-height:1.5;color:#385e49}
+.fall-guide-region-actions{display:flex;flex-direction:column;gap:8px}
+.fall-guide-region-actions a{display:block;border-radius:7px;border:1px solid #8dae9b;padding:10px 11px;font-size:.89rem;font-weight:800;line-height:1.36;text-align:center;background:#fff;color:#265846;text-decoration:none}
+.fall-guide-region-actions a.fall-guide-region-primary{background:#235b46;color:#fff;border-color:#235b46}
+.fall-guide-region-actions a:hover{filter:brightness(.93)}
+.fall-guide-region-bridge .fall-guide-region-map-truth{grid-column:1/-1;border-top:1px solid #c8dccd;padding-top:8px;margin:3px 0 0;font-size:.8rem}
+@media(max-width:1050px){.fall-cluster-jump-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:650px){.fall-cluster-jump-grid,.fall-guide-region-bridge{grid-template-columns:1fr}.fall-guide-region-actions{flex-direction:row;flex-wrap:wrap}.fall-guide-region-actions a{flex:1 1 145px}.fall-cluster-jump-nav{padding:13px}.fall-cluster-jump{padding:12px}}
+@media print{.fall-cluster-jump-nav,.fall-guide-region-bridge{break-inside:avoid}.fall-guide-region-actions{display:none}}
