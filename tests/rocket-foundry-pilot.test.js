@@ -55,7 +55,7 @@ test('a precise Florida target still requires mission-specific public access con
  assert.equal(d.source,'specialist');
  assert.equal(d.href,'/national-tools/space-coast-launch/?launchId='+uuid+'&via=rocket-foundry&stage=access');
  assert.match(d.headline,/find a public place to watch/i);
- assert.match(d.detail,/may be closed/i);
+ assert.match(d.detail,/park or beach is closed/i);
  assert.doesNotMatch(JSON.stringify(d),/go for launch|safe to travel|ticket available/i);
 });
 test('date/month/approximate hour -> official timing check; do not invent a launch hour',()=>{
