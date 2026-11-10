@@ -126,7 +126,7 @@ test('mission switch dispatches stable selected UUID and a map handoff without a
  assert.equal(el('rl-flight-mission').textContent,florida[1].name);
  assert.equal(el('rl-flight-desk').dataset.launchId,ids[1]);
  assert.equal(el('rl-flight-desk').dataset.nextGate,'schedule');
- assert.match(el('rl-flight-next-title').textContent,/Confirm an exact launch hour/);
+ assert.match(el('rl-flight-next-title').textContent,/Wait for a more precise liftoff time/);
  assert.equal(el('rl-flight-specialist').hidden,false,'regional guide remains alternative to authority for tentative time');
  el('rl-flight-locate').listeners.click();
  assert.equal(events.at(-1).type,'rocket-experience:locate');
@@ -134,7 +134,7 @@ test('mission switch dispatches stable selected UUID and a map handoff without a
  mounted.render(data());
  assert.equal(el('rl-flight-desk').dataset.launchId,ids[0]);
  mounted.render(null);
- assert.match(el('rl-flight-next-title').textContent,/schedule cannot establish/);
+ assert.match(el('rl-flight-next-title').textContent,/can.t confirm the next flight/i);
  assert.equal(el('rl-flight-next-link').attrs.href,'https://www.nasa.gov/event-type/launch-schedule/');
  assert.equal(el('rl-flight-locate').disabled,true);
  assert.equal(el('rl-flight-mission-select').disabled,true);
