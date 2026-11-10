@@ -76,7 +76,7 @@
   const lead = node('p', 'day-sheet-lead');
   const sharedArrival = node('p', 'day-sheet-shared-arrival');
   sharedArrival.hidden = true;
-  const regionalNote = node('p', 'day-sheet-shared-arrival');
+  const regionalNote = node('p', 'day-sheet-regional-note');
   regionalNote.hidden = true;
   const entries = node('div', 'day-sheet-entries');
   const actions = node('div', 'day-sheet-actions');
