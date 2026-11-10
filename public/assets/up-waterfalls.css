@@ -224,6 +224,7 @@
 
 
 /* B83: Reusable waterfall regional choices; legible on 360px phones. */
+.day-sheet-regional-note{background:#ecf3ed;border-left:3px solid #54806a;padding:11px 14px;margin:8px 0 15px;color:#284e3f;border-radius:4px;font-size:.91rem}
 .regional-waterfall-clusters{margin:22px 0 32px;padding:clamp(16px,2.8vw,30px);border:1px solid #c4d7d3;border-radius:17px;background:#f0f5f1;color:#193d36;scroll-margin-top:20px}
 .regional-eyebrow,.regional-cluster-label{font-size:.74rem;font-weight:850;letter-spacing:.12em;text-transform:uppercase;color:#386e69;margin:0 0 7px}
 .regional-intro h2{font:normal clamp(1.72rem,3vw,2.32rem)/1.16 Georgia,serif;color:#1c463d;margin:0 0 9px}
@@ -255,4 +256,5 @@
 .regional-cluster-footnote{margin:16px 0 0;font-size:.91rem;color:#3c5b51;line-height:1.57}
 @media(max-width:830px){.regional-cluster-grid{grid-template-columns:1fr}.regional-cluster-card{padding:16px}}
 @media(max-width:390px){.regional-cluster-actions{grid-template-columns:1fr}}
-@media print{.regional-cluster-actions{display:none}.regional-waterfall-clusters{background:white;box-shadow:none}}
+@media print{.regional-cluster-actions{display:none}.day-sheet-regional-note{background:#ecf3ed;border-left:3px solid #54806a;padding:11px 14px;margin:8px 0 15px;color:#284e3f;border-radius:4px;font-size:.91rem}
+.regional-waterfall-clusters{background:white;box-shadow:none}}
