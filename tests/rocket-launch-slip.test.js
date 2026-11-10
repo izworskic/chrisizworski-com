@@ -74,7 +74,7 @@ test('no sensitive grids or misleading probability claims reach the user interfa
   const api=fs.readFileSync(path.join(__dirname,'../api/rocket-launch-usa.js'),'utf8');
   assert.match(html,/id="rl-slip-options"/);
   assert.match(html,/id="rl-slip-detail"/);
-  assert.match(html,/v=20261103-viewing-v1/);
+  assert.match(html,/v=20261110-voice-v1/);
   assert.match(js,/renderSlipForecast\(data\)/);
   assert.match(js,/button\.addEventListener\('click'/);
   assert.match(api,/places:publicPlaces/);
