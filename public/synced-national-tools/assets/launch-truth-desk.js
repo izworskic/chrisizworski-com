@@ -88,7 +88,7 @@
     root.dataset.status=status;
     set('lt-timestamp',data?.observedAt?
       'Schedule checked '+checked(data.observedAt,zone)+' · '+(status==='recent'?'Recently checked':'Check the operator before relying on this'):
-      'No scheduled source observation yet');
+      'No calendar update recorded yet');
     set('lt-headline',mismatched?
       'The launch time has changed since the last comparison':
       data?.headline||'No recent update tied to this flight');
@@ -104,11 +104,11 @@
       c.note||'There isn’t enough information to compare the two schedules.');
     const validTime=['minute','second'].includes(data?.netPrecision);
     const currentC=validTime&&cStatus==='aligned'&&c.otherTarget?
-      ' LL2: '+readable(data.net,zone,data.netPrecision)+
+      ' Launch Library 2: '+readable(data.net,zone,data.netPrecision)+
       ' · RocketLaunch.Live: '+readable(c.otherTarget,zone,data.netPrecision)+'.':'';
     if(currentC)set('lt-compare-note',(c.note||'')+currentC);
     if(validTime&&cStatus==='disagrees'&&c.otherTarget){
-      set('lt-compare-note','LL2: '+readable(data.net,zone,data.netPrecision)+
+      set('lt-compare-note','Launch Library 2: '+readable(data.net,zone,data.netPrecision)+
         '. RocketLaunch.Live: '+readable(c.otherTarget,zone,data.netPrecision)+
         '. Their published targets differ. Check the operator for the latest authoritative window.');
     }
@@ -127,8 +127,8 @@
           evt.field==='time-precision'?'More precise launch time posted':'Launch window moved';
         changes.appendChild(record(evt.field==='target-time'?'target-time':'event',
           'We noticed this change '+checked(evt.detectedAt,zone),heading,
-          was+' → '+is+'. This is a detected LL2 change, not a confirmed operator decision.',
-          evt.sourceUrl,'LL2 mission record'));
+          was+' → '+is+'. This change appeared on the public calendar, not in an official launch decision.',
+          evt.sourceUrl,'See the calendar entry'));
       }
       if(!changes.children.length)addEmpty(changes,
         status==='not-monitored'?'We’re not tracking changes for this flight yet.':
@@ -140,7 +140,7 @@
       const news=Array.isArray(data?.news)?data.news.slice(0,3):[];
       for(const update of updates){
         sources.appendChild(record('source-update',
-          'LL2 contributor update · '+checked(update.publishedAt,zone),
+          'Calendar contributor update · '+checked(update.publishedAt,zone),
           update.summary||'Published update',
           'A public calendar update, not an official launch approval. Check the linked source.',
           update.sourceUrl||'https://ll.thespacedevs.com/','Read the original update'));
@@ -164,8 +164,8 @@
     const failed=schedule.filter(row=>row.status!=='ok').length;
     const words=[data?.coverage ||
       'Launch schedules update frequently. Detailed news checks focus on a smaller group of upcoming flights.'];
-    if(failed)words.push(failed+' of '+schedule.length+' LL2 schedule source checks unavailable.');
-    if(data?.updatesStatus==='unavailable')words.push('LL2 update history unavailable.');
+    if(failed)words.push(failed+' of '+schedule.length+' launch-calendar checks could not be completed.');
+    if(data?.updatesStatus==='unavailable')words.push('Past calendar changes could not be checked.');
     if(data?.updatesStatus==='not-prioritized')words.push('Detailed schedule updates haven’t been checked for this flight yet.');
     if(data?.newsStatus==='unavailable')words.push('Related news couldn’t be checked right now.');
     if(data?.newsStatus==='not-prioritized')words.push('Looking for news tied to this flight.');
