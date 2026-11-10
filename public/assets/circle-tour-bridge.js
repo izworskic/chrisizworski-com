@@ -17,7 +17,7 @@
     '4': {question:'Make Ashland a lakeshore-and-murals break, or a longer Chequamegon Bay visit?',
       context:'Ashland has a historic Main Street, murals and a Lake Superior waterfront. Start with the local destination guide to choose what fits.',
       url:'https://www.visitashland.com/',sourceLabel:'Ashland visitor guide',
-      caution:'A regional visitor guide does not verify today's opening hours, reservations or shoreline conditions.'},
+      caution:'A regional visitor guide does not verify today’s opening hours, reservations or shoreline conditions.'},
     '17': {question:'Looking for an easy stop on Highway 17?',
       context:'White River’s Winnie the Pooh Park is a town-history stop near the tourist information centre, not a wilderness hike.',
       url:'https://www.whiteriver.ca/winnie-the-pooh-park',sourceLabel:'Township of White River park guide',
