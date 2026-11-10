@@ -165,13 +165,15 @@ try{
     await page.locator('#access').selectOption('all');
     const focused=await page.evaluate(()=>window.UPWaterfallFocus('eagle-river-falls'));
     assert.equal(focused,true);
-    await page.locator('.leaflet-popup-content .waterfall-popup-cluster-link').waitFor();
-    assert.equal(await page.locator('.leaflet-popup-content .waterfall-popup-cluster-link').getAttribute('href'),'/upper-peninsula-waterfalls/#keweenaw-waterfall-day');
+    const keweenawPopup=page.locator('.leaflet-popup-content .waterfall-popup-cluster-link[href="/upper-peninsula-waterfalls/#keweenaw-waterfall-day"]');
+    await keweenawPopup.waitFor();
+    assert.equal(await keweenawPopup.getAttribute('href'),'/upper-peninsula-waterfalls/#keweenaw-waterfall-day');
     assert.match(await page.locator('.leaflet-popup-content').innerText(),/waterfall pin|not visitor parking|parking/i);
     const closed=await page.evaluate(()=>window.UPWaterfallFocus('sandstone-falls'));
     assert.equal(closed,true);
-    await page.locator('.leaflet-popup-content .waterfall-popup-cluster-link').waitFor();
-    assert.match(await page.locator('.leaflet-popup-content .waterfall-popup-cluster-link').innerText(),/closure and alternative/);
+    const closurePopup=page.locator('.leaflet-popup-content .waterfall-popup-cluster-link[href="/upper-peninsula-waterfalls/#black-river-waterfall-day"]');
+    await closurePopup.waitFor();
+    assert.match(await closurePopup.innerText(),/closure and alternative/);
     assert.match(await page.locator('.leaflet-popup-content').innerText(),/closed|closure/i);
   });
   await run('B84 field guide to source-safe regional itinerary and back to selected map marker',async()=>{
