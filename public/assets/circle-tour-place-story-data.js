@@ -2,6 +2,132 @@
 (function(root){
  'use strict';
  const stories={
+  "23": {
+    "placeId": "23",
+    "name": "Grand Marais, Minnesota",
+    "eyebrow": "One foot in the harbor, the other on Superior's open shore",
+    "story": "Grand Marais curves around a sheltered Lake Superior harbor, with boats and a slender breakwater below its shops and cafés. At Artist's Point, dark rock reaches into the open lake; you can see how quickly the protected water gives way to exposed shore. North House Folk School and local galleries make this a rare Circle Tour stop where the lake, working craft and a walkable town all meet.",
+    "character": "A harbor and Artist's Point walk can fit into a short town stop. The Gunflint Trail leads far inland toward forest and canoe country, not to another overlook at the end of the harbor. Exposed rocks and the breakwater can be hazardous when wind, waves or ice build.",
+    "why": "Choose Grand Marais for a shore walk and village life. Plan the Gunflint as a separate inland outing rather than a quick detour.",
+    "sourceURL": "https://www.visitcookcounty.com/places-to-visit/grand-marais/",
+    "sourceLabel": "Visit Cook County Grand Marais guide",
+    "photos": [
+      {
+        "placeId": "23",
+        "imageURL": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7f/Artist_Point_1.jpg/960px-Artist_Point_1.jpg",
+        "sourceURL": "https://commons.wikimedia.org/wiki/File:Artist_Point_1.jpg",
+        "photographer": "Chris Light",
+        "licenseName": "CC BY-SA 4.0",
+        "licenseURL": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "alt": "Rocky shoreline at Artist Point, Grand Marais, Minnesota",
+        "caption": "Artist Point, photographed July 1985; archival landscape; display cropped.",
+        "cropPosition": "center",
+        "captureDate": "1985-07-13",
+        "status": "verified-licensed",
+        "width": 960,
+        "height": 641
+      },
+      {
+        "placeId": "23",
+        "imageURL": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cc/Grand_Marais_harbor_2020-07-31.jpg/960px-Grand_Marais_harbor_2020-07-31.jpg",
+        "sourceURL": "https://commons.wikimedia.org/wiki/File:Grand_Marais_harbor_2020-07-31.jpg",
+        "photographer": "August Schwerdfeger",
+        "licenseName": "CC BY 4.0",
+        "licenseURL": "https://creativecommons.org/licenses/by/4.0/",
+        "alt": "Aerial view over Grand Marais harbor and its breakwater into Lake Superior",
+        "caption": "Grand Marais harbor at sunset, photographed July 2020; display cropped.",
+        "cropPosition": "center",
+        "captureDate": "2020-07-31",
+        "status": "verified-licensed",
+        "width": 960,
+        "height": 640
+      }
+    ]
+  },
+  "26": {
+    "placeId": "26",
+    "name": "Tettegouche State Park",
+    "eyebrow": "The cliff path is not the waterfall trail",
+    "story": "Shovel Point edges above the open lake where Tettegouche's rocky headlands rise from the water. Boardwalks and stairs thread through northern forest toward a high view of the shoreline. Inland, the Baptism River gathers into High Falls between great walls of rock. These two scenes belong to one state park, but one is a cliff walk and the other is a considerably longer river hike.",
+    "character": "Minnesota DNR lists Shovel Point as a 1.2-mile outing with hills, uneven footing and about 300 stairs. From the visitor center, its recommended High Falls hike is about 3 miles round trip. DNR reopened a new High Falls pedestrian bridge on November 24, 2025, but that historical announcement does not confirm current trail conditions.",
+    "why": "Pick the shoreline for a shorter park visit. Give the river and High Falls a longer stretch of the day, and confirm trail access before setting out.",
+    "sourceURL": "https://www.dnr.state.mn.us/state-parks/itineraries/north-shore-waterfall-itinerary.html",
+    "sourceLabel": "Minnesota DNR North Shore waterfall itinerary",
+    "photos": [
+      {
+        "placeId": "26",
+        "imageURL": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cf/Shovel_Point_-_43930832234.jpg/960px-Shovel_Point_-_43930832234.jpg",
+        "sourceURL": "https://commons.wikimedia.org/wiki/File:Shovel_Point_-_43930832234.jpg",
+        "photographer": "Joe Passe",
+        "licenseName": "CC BY-SA 2.0",
+        "licenseURL": "https://creativecommons.org/licenses/by-sa/2.0/",
+        "alt": "Wooded rock headlands overlooking the blue waters of Lake Superior near Shovel Point",
+        "caption": "Shovel Point coast, photographed September 2018; display cropped.",
+        "cropPosition": "center",
+        "captureDate": "2018-09-09",
+        "status": "verified-licensed",
+        "width": 960,
+        "height": 540
+      },
+      {
+        "placeId": "26",
+        "imageURL": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9f/Tettegouche_State_Park.jpg/960px-Tettegouche_State_Park.jpg",
+        "sourceURL": "https://commons.wikimedia.org/wiki/File:Tettegouche_State_Park.jpg",
+        "photographer": "Mark Gustafson",
+        "licenseName": "CC BY-SA 4.0",
+        "licenseURL": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "alt": "High Falls of the Baptism River pouring across a rock ledge into a stony basin",
+        "caption": "High Falls, Baptism River, photographed August 2014; display cropped.",
+        "cropPosition": "center",
+        "captureDate": "2014-08-06",
+        "status": "verified-licensed",
+        "width": 960,
+        "height": 609
+      }
+    ]
+  },
+  "27": {
+    "placeId": "27",
+    "name": "Split Rock Lighthouse State Park",
+    "eyebrow": "The lighthouse above, the lake at your feet",
+    "story": "At Pebble Beach, waves wash a rounded-stone shore below Split Rock's dark cliff. The pale lighthouse looks small from there, perched above a great wall of rock. At the light station itself, the tower and keeper buildings recall the days when a beacon helped freighters navigate this coast. The beach perspective and the historic-site tour reveal different sides of the same headland.",
+    "character": "Minnesota DNR manages the state park, Pebble Beach and trails. The Minnesota Historical Society operates the lighthouse historic site, with separate hours and admission. A state-park vehicle permit does not buy a lighthouse tour, and historic-site admission is not a substitute for a park permit. Check the current opening calendar before planning indoor access.",
+    "why": "For the classic photograph, start with the park shoreline. For maritime history inside the station, consult the separately operated historic site.",
+    "sourceURL": "https://www.dnr.state.mn.us/state-parks/split-rock-lighthouse/things-to-do.html",
+    "sourceLabel": "Minnesota DNR Split Rock visitor guide",
+    "photos": [
+      {
+        "placeId": "27",
+        "imageURL": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/52/Split_Rock_from_Pebble_Beach.jpg/960px-Split_Rock_from_Pebble_Beach.jpg",
+        "sourceURL": "https://commons.wikimedia.org/wiki/File:Split_Rock_from_Pebble_Beach.jpg",
+        "photographer": "AriaJenesis",
+        "licenseName": "CC BY-SA 4.0",
+        "licenseURL": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "alt": "Split Rock Lighthouse above Lake Superior photographed from the park's Pebble Beach",
+        "caption": "Split Rock from Pebble Beach, photographed October 2025; display cropped.",
+        "cropPosition": "center",
+        "captureDate": "2025-10-17",
+        "status": "verified-licensed",
+        "width": 960,
+        "height": 1275
+      },
+      {
+        "placeId": "27",
+        "imageURL": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c9/Split_Rock_Lighthouse_on_Lake_Superior.jpg/960px-Split_Rock_Lighthouse_on_Lake_Superior.jpg",
+        "sourceURL": "https://commons.wikimedia.org/wiki/File:Split_Rock_Lighthouse_on_Lake_Superior.jpg",
+        "photographer": "Pam Hendel",
+        "licenseName": "CC BY-SA 4.0",
+        "licenseURL": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "alt": "Split Rock lighthouse and its high cliff seen beyond autumn foliage and Lake Superior",
+        "caption": "Split Rock headland and tower, photographed October 2015; display cropped.",
+        "cropPosition": "center",
+        "captureDate": "2015-10-25",
+        "status": "verified-licensed",
+        "width": 960,
+        "height": 640
+      }
+    ]
+  },
   "3": {
     "placeId": "3",
     "name": "Apostle Islands National Lakeshore",

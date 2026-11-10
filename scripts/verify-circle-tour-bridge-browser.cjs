@@ -47,7 +47,10 @@ function check(value,message){if(!value)throw Error(message);}
       {stop:'18',name:'Pukaskwa National Park',clue:'Hattie Cove'},
       {stop:'3',name:'Apostle Islands National Lakeshore',clue:'Devils Island'},
       {stop:'6',name:'Porcupine Mountains Wilderness State Park',clue:'Presque Isle River'},
-      {stop:'11',name:'Pictured Rocks National Lakeshore',clue:'Chapel Rock'}
+      {stop:'11',name:'Pictured Rocks National Lakeshore',clue:'Chapel Rock'},
+      {stop:'23',name:'Grand Marais, Minnesota',clue:'Artist'},
+      {stop:'26',name:'Tettegouche State Park',clue:'Shovel Point'},
+      {stop:'27',name:'Split Rock Lighthouse State Park',clue:'Pebble Beach'}
     ]){
       await page.locator('#ctb-stop').selectOption(sample.stop);
       const place=page.locator('#ctb-decision .ctb-place-story');
@@ -63,6 +66,17 @@ function check(value,message){if(!value)throw Error(message);}
       check(alts.every(x=>x.alt.length>30&&x.loading==='lazy'&&x.decoding==='async'&&x.src.startsWith('https://thumb.wikimedia.org/')),
         size.name+': invalid rights-conscious photographic markup');
     }
+    await page.locator('#ctb-stop').selectOption('26');
+    check(await page.locator('#ctb-decision .ctb-place-story').count()===1,
+      size.name+': Tettegouche story missing when no specialist is released');
+    check(await page.locator('#ctb-decision .ctb-stage-primary').count()===0,
+      size.name+': Tettegouche falsely gained a specialist');
+    await page.locator('#ctb-stop').selectOption('27');
+    check(await page.locator('#ctb-decision .ctb-stage-primary').count()===1,
+      size.name+': Split Rock lost the approved specialist');
+    await page.locator('#ctb-stop').selectOption('25');
+    check(await page.locator('#ctb-decision .ctb-place-story').count()===0,
+      size.name+': unresearched Lutsen stop inherited photographs');
     await page.locator('#ctb-stop').selectOption('24');
     check(await page.locator('#ctb-decision .ctb-place-story').count()===0,
       size.name+': unresearched stop inherited a different park photograph');

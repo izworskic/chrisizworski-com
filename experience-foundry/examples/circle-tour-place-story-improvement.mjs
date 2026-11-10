@@ -72,6 +72,11 @@ run.design={conceptId:'decision-anchored-field-note',
   reviewer:'Experience OS v1.2.1 site-specific editorial and visual research review, November 9, 2026',
   rationale:'The first concept preserves the proven practical answer while directly answering the missing sense-of-place task. It differs from Journey Atlas general inspiration because the photos and place distinction follow the exact current stop. An optional gallery drawer could be better for extended photo essays, not this compact bridge.'};
 run.scenarios=[
+
+ {id:'north-shore-photo-identity',role:'improvement',journey:'Select Grand Marais, Tettegouche and Split Rock Lighthouse and see two matching, attributed photos at each stop.',input:'Stop IDs 23, 26 and 27 and six Wikimedia Commons photo rights.',expected:'Each exact-place photo has a file-level author, source, license, dated caption and alt text.'},
+ {id:'north-shore-distinct-visitor-choices',role:'improvement',journey:'Choose between harbor and Gunflint road trip, Shovel Point and High Falls, Split Rock shore and historic tour.',input:'Minnesota DNR, Minnesota Historical Society and Visit Cook County source-backed visitor distinctions.',expected:'Each stop answers a practical choice without inventing current trail access, tickets or conditions.'},
+ {id:'north-shore-specialist-preservation',role:'preservation',journey:'Inspect Tettegouche and Split Rock specialist recommendations.',input:'Original current independent approval catalog for stops 26 and 27.',expected:'Tettegouche gains no invented specialist; approved Split Rock tool is unchanged.'},
+ {id:'north-shore-no-photo-leakage',role:'preservation',journey:'Switch from Split Rock to unresearched nearby stops 24 and 25, then return to Grand Marais.',input:'Four fixed Circle Tour stop IDs.',expected:'Photographs and text always follow only their actual stop; unresearched locations remain photo-free.'},
  {id:'three-park-photo-identity',role:'improvement',journey:'Select Lake Superior Provincial Park, Sleeping Giant and Pukaskwa in turn.',
   input:'Three fixed approved stop IDs 15, 20 and 18 in the current Circle Tour.',
   expected:'Exactly two distinct, exact-location image records per park with licenses, authors, dates, captions and allowed Commons links.'},
