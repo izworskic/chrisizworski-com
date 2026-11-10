@@ -750,7 +750,7 @@
     }
     if (desk.operator?.videoChannelUrl) {
       const channel=anchor(desk.operator.videoChannelUrl,
-        desk.operator.videoChannelLabel||'Operator's video channel',
+        desk.operator.videoChannelLabel||'Operator’s video channel',
         'rl-watch-operator');
       if(channel)general.appendChild(channel);
     }
@@ -807,7 +807,7 @@
       list.appendChild(card);
     }
     if(!list.children.length)list.appendChild(el('p','rl-news-note',
-      current ? 'No recent article tied to this flight is listed. You can still browse Spaceflight Now's launch coverage.' :
+      current ? 'No recent article tied to this flight is listed. You can still browse Spaceflight Now’s launch coverage.' :
         'Recent reporting couldn’t load. That doesn’t mean the launch has changed.'));
     set('rl-news-note',desk.note || 'For the current liftoff time, check the operator’s latest announcement.');
   }
@@ -878,7 +878,7 @@
     root.appendChild(list);
     root.appendChild(el('p','rl-access-quick-caution',
       region==='virginia'?
-      'For Wallops, navigate to the public NASA Visitor Center at 175 Chincoteague Road, not the base gate. Don't park or wait along Route 175. Check for launch-day closures and parking changes.' :
+      'For Wallops, navigate to the public NASA Visitor Center at 175 Chincoteague Road, not the base gate. Don’t park or wait along Route 175. Check for launch-day closures and parking changes.' :
       'These links show public places to consider, not reserved parking or a guarantee they’re open for this launch. Check local rules before leaving.'));
   }
 
@@ -1155,7 +1155,7 @@
     } else {
       signals.appendChild(el('p', '', verified ?
         'No standout concerns in the public surface forecast, but that does not mean the rocket is cleared to fly.' :
-        'The public forecast is incomplete. That's not a green light to launch.'));
+        'The public forecast is incomplete. That’s not a green light to launch.'));
     }
     const timeline = $('rl-range-timeline');
     timeline.replaceChildren();
