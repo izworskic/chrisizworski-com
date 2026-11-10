@@ -99,3 +99,16 @@ tr[hidden]{display:none}
 .snow-decision-paths span{font-size:.83rem;line-height:1.4;font-weight:400;color:var(--muted)}
 .heading-out .snow-decision-note{font-size:.84rem;line-height:1.5;margin:.75rem 0 0}
 @media(max-width:700px){.snow-decision-paths{grid-template-columns:1fr}.snow-decision-paths a{min-height:0}.heading-out{padding:.8rem}.town-shortcuts{gap:.35rem .45rem}}
+
+/* Sprint 5: source-dated storm shortcut, without additional ads or forecasts. */
+.storm-pulse{border-top:1px solid var(--line);padding:.65rem 0 .4rem;margin:.55rem 0 .3rem}
+.storm-pulse h3{margin:0 0 .15rem;font-size:.96rem;line-height:1.3}
+.storm-pulse>p{font-size:.78rem;line-height:1.4;color:var(--muted);margin:0 0 .5rem}
+.storm-pulse-list{display:flex;flex-wrap:wrap;gap:.4rem}
+.storm-pulse-list button{min-height:44px;flex:1 1 190px;text-align:left;display:flex;flex-direction:column;gap:2px;border:1px solid #b8cedd;background:#f8fbfd;border-radius:9px;padding:.45rem .6rem;color:var(--ink);cursor:pointer}
+.storm-pulse-list button:hover,.storm-pulse-list button:focus-visible{border-color:var(--snow);background:#eaf3f9;outline-offset:2px}
+.storm-pulse-list strong{font-size:.84rem;line-height:1.3}
+.storm-pulse-list span{color:var(--muted);font-size:.75rem;line-height:1.3}
+.snow-next-town{border-top:1px solid var(--line);padding-top:.55rem;margin:.65rem 0 0!important;font-size:.86rem}
+.snow-next-town a{font-weight:700;display:block}
+.snow-next-town span{display:block;color:var(--muted);font-size:.78rem;line-height:1.4;margin-top:.15rem}

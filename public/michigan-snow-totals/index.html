@@ -42,7 +42,7 @@
       "name": "Michigan Snow Totals Today: Live Map",
       "description": "Official National Weather Service snowfall reports for Michigan on a live map: search any town for its own report or the nearest ones, filter by region, and compare season snowfall at 52 NWS climate stations with the 1991-2020 normal.",
       "datePublished": "2026-09-26",
-      "dateModified": "2026-11-09",
+      "dateModified": "2026-11-10",
       "inLanguage": "en-US",
       "author": { "@id": "https://chrisizworski.com/#person" },
       "publisher": { "@id": "https://chrisizworski.com/#person" },
@@ -138,6 +138,11 @@
     <p id="snowSummary" class="summary" aria-live="polite">Loading the latest NWS snow reports for Michigan. Without JavaScript, read the reports directly from the <a href="https://mesonet.agron.iastate.edu/lsr/">Local Storm Report archive</a> or your <a href="https://www.weather.gov/">NWS office</a>.</p>
 
 
+    <section id="stormPulse" class="storm-pulse" aria-labelledby="stormPulseTitle" hidden>
+      <h3 id="stormPulseTitle">Largest individual snow reports in this time window</h3>
+      <p>These are reports from different places and times, not a single storm-total measurement. Select a place to check the original report and nearby observations.</p>
+      <div id="stormPulseList" class="storm-pulse-list"></div>
+    </section>
     <div id="alertList" class="alerts" aria-live="polite"></div>
 
     <nav id="headingOut" class="heading-out" aria-label="Choose the winter answer you need">

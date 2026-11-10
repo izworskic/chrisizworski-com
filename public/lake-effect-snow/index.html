@@ -12,7 +12,7 @@
 <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Snowfall_descending_on_the_Buffalo_Southtowns_%2827940598775%29.jpg/1280px-Snowfall_descending_on_the_Buffalo_Southtowns_%2827940598775%29.jpg"><meta property="og:image:alt" content="Historic wall of intense lake-effect snowfall advancing toward the Buffalo Southtowns in November 2014.">
 <meta name="twitter:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Snowfall_descending_on_the_Buffalo_Southtowns_%2827940598775%29.jpg/1280px-Snowfall_descending_on_the_Buffalo_Southtowns_%2827940598775%29.jpg">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Lake Effect Snow: Which Snowbelt Is Favored?"><meta name="twitter:description" content="Compare official forecasts, lake conditions and changing wind direction across the Great Lakes.">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski","author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"}},{"@type":"SoftwareApplication","@id":"https://chrisizworski.com/lake-effect-snow/#tool","name":"Great Lakes Lake-Effect Snow Decision Engine","url":"https://chrisizworski.com/lake-effect-snow/","operatingSystem":"Web","applicationCategory":"WeatherApplication","dateModified":"2026-10-28","author":{"@id":"https://chrisizworski.com/#person"},"description":"Snowbelt-level interpretation of official NWS hourly snow, wind and alert forecasts, contextualized with NOAA daily lakewide temperature and explicitly qualitative uncertainty.","publisher":{"@id":"https://chrisizworski.com/#person"},"creator":{"@id":"https://chrisizworski.com/#person"},"isAccessibleForFree":true}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski","author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"}},{"@type":"SoftwareApplication","@id":"https://chrisizworski.com/lake-effect-snow/#tool","name":"Great Lakes Lake-Effect Snow Decision Engine","url":"https://chrisizworski.com/lake-effect-snow/","operatingSystem":"Web","applicationCategory":"WeatherApplication","dateModified":"2026-11-10","author":{"@id":"https://chrisizworski.com/#person"},"description":"Snowbelt-level interpretation of official NWS hourly snow, wind and alert forecasts, contextualized with NOAA daily lakewide temperature and explicitly qualitative uncertainty.","publisher":{"@id":"https://chrisizworski.com/#person"},"creator":{"@id":"https://chrisizworski.com/#person"},"isAccessibleForFree":true}]}</script>
 <style>
 :root{color-scheme:light;--ink:#202b34;--muted:#556777;--paper:#f4f7f7;--line:#d2dfe5;--blue:#114e64;--sea:#087f85;--gold:#996516}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.6 system-ui,-apple-system,Segoe UI,sans-serif}a{color:var(--blue)}a:focus-visible,button:focus-visible,select:focus-visible{outline:3px solid #00899b;outline-offset:3px}
@@ -137,6 +137,8 @@ footer{border-top:1px solid var(--line);padding:24px 0;color:#526873;font-size:.
 .winter-next-grid a:focus-visible{outline:3px solid #b77918;outline-offset:3px}
 @media(max-width:980px){.winter-next-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:540px){.winter-next-grid{grid-template-columns:1fr}.winter-next-grid a{min-height:0}}
+.snow-forecast-crosscheck{display:flex;flex-wrap:wrap;align-items:center;gap:5px 14px;padding:12px 14px;margin:12px 0 18px;border:1px solid var(--line);border-radius:9px;background:#fff;font-size:.82rem}
+.snow-forecast-crosscheck strong{color:#183a4b}.snow-forecast-crosscheck a{font-weight:650}.snow-forecast-crosscheck span{color:var(--muted);flex-basis:100%;font-size:.75rem}
 </style>
 <link rel="stylesheet" href="https://national-snowpack-melt.vercel.app/assets/lake-effect-time-lens.css?v=20261101-1">
 <link rel="stylesheet" href="https://national-snowpack-melt.vercel.app/assets/lake-effect-geography.css?v=20261031-1">
@@ -159,6 +161,12 @@ footer{border-top:1px solid var(--line);padding:24px 0;color:#526873;font-size:.
 </div>
 </div></section>
 <div class="main shell">
+<nav class="snow-forecast-crosscheck" aria-label="After the lake-effect forecast">
+  <strong>Has the snow already fallen?</strong>
+  <a href="/michigan-snow-totals/">Find dated Michigan snowfall reports</a>
+  <a href="/michigan-snow-depth/">Check modeled snow on the ground</a>
+  <span>Forecast snowfall, observed snowfall and remaining snow depth are different evidence.</span>
+</nav>
 <div class="dashboard" id="dashboard" hidden>
 <section class="panel verdict"><span class="kicker" style="color:#4e7180">Lake-effect snow outlook · next 72 hours</span><h2 id="headline"></h2><p id="impact" class="signal"></p><p><strong>When to watch:</strong> <span id="timing-window">Not yet verified</span></p>
 <dl class="forecast-evidence" aria-label="What the official forecast supports">
