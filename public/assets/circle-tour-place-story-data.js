@@ -2,6 +2,132 @@
 (function(root){
  'use strict';
  const stories={
+  "3": {
+    "placeId": "3",
+    "name": "Apostle Islands National Lakeshore",
+    "eyebrow": "The shoreline is reached by road. The islands are reached by water.",
+    "story": "At Meyers Beach the sand and wooded shoreline offer a mainland beginning to the Apostle Islands. Kayakers prepare for the nearby mainland sea caves, while farther offshore the red sandstone walls at Devils Island hold another world of water-worn arches. Both are part of this landscape, but a roadside visit and a boat trip cannot be treated as the same outing.",
+    "character": "Meyers Beach can be reached by road for a beach visit or the demanding Lakeshore Trail. Devils Island is water access only. NPS says the national lakeshore islands have no roads; a cave photo is not permission to launch a boat or proof of calm conditions.",
+    "why": "This stop rewards choosing between a mainland pause and a deliberate day on the water.",
+    "sourceURL": "https://www.nps.gov/apis/planyourvisit/getting-to-the-islands.htm",
+    "sourceLabel": "NPS island-access and boating guidance",
+    "photos": [
+      {
+        "placeId": "3",
+        "imageURL": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/17/A_group_of_kayaks_resting_on_the_shore_and_a_people_getting_a_safety_talk_before_heading_out_to_the_sea_caves._(1bdb50e6-9d44-44e8-919d-fd0226f2ba93).JPG/960px-A_group_of_kayaks_resting_on_the_shore_and_a_people_getting_a_safety_talk_before_heading_out_to_the_sea_caves._(1bdb50e6-9d44-44e8-919d-fd0226f2ba93).JPG",
+        "sourceURL": "https://commons.wikimedia.org/wiki/File:A_group_of_kayaks_resting_on_the_shore_and_a_people_getting_a_safety_talk_before_heading_out_to_the_sea_caves._(1bdb50e6-9d44-44e8-919d-fd0226f2ba93).JPG",
+        "photographer": "National Park Service (NPGallery)",
+        "licenseName": "Public domain (NPS)",
+        "licenseURL": "https://creativecommons.org/publicdomain/mark/1.0/",
+        "alt": "Sea kayaks on Meyers Beach while a group gathers for a prelaunch safety briefing on Lake Superior",
+        "caption": "Guided sea-kayak briefing at Meyers Beach, August 2015; display cropped.",
+        "cropPosition": "center",
+        "captureDate": "2015-08-28",
+        "status": "verified-licensed",
+        "width": 960,
+        "height": 638
+      },
+      {
+        "placeId": "3",
+        "imageURL": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5d/Devils_Island_Seacaves_Lake_Superior.jpg/960px-Devils_Island_Seacaves_Lake_Superior.jpg",
+        "sourceURL": "https://commons.wikimedia.org/wiki/File:Devils_Island_Seacaves_Lake_Superior.jpg",
+        "photographer": "Royalbroil",
+        "licenseName": "CC BY-SA 3.0",
+        "licenseURL": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "alt": "Reddish layered sandstone arches and openings above Lake Superior at Devils Island sea caves",
+        "caption": "Devils Island sea caves, August 2012; no road access; display cropped.",
+        "cropPosition": "center",
+        "captureDate": "2012-08-10",
+        "status": "verified-licensed",
+        "width": 960,
+        "height": 639
+      }
+    ]
+  },
+  "6": {
+    "placeId": "6",
+    "name": "Porcupine Mountains Wilderness State Park",
+    "eyebrow": "A high lake overlook and a river in the old forest.",
+    "story": "The long curve of Lake of the Clouds sits below a rocky escarpment, ringed by unbroken-looking forest. Farther west the Presque Isle River tumbles over wide rocky ledges before reaching Lake Superior. These two landscapes belong to one state park but are not the same arrival. The view from above and the river's cascades reveal different scales of the Porkies.",
+    "character": "Michigan DNR identifies an accessible walkway and platform at Lake of the Clouds. The Presque Isle River scenic area has separate trail and viewpoint access, with conditions that can differ. Do not treat an archival river photograph as confirmation of a trail opening.",
+    "why": "Choose a high overlook or a waterfall visit with the actual access and walking involved, rather than assuming both are one short stop.",
+    "sourceURL": "https://www.michigan.gov/recsearch/parks/porkies",
+    "sourceLabel": "Michigan DNR park and scenic-area guide",
+    "photos": [
+      {
+        "placeId": "6",
+        "imageURL": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/db/Lake_of_the_Clouds%2C_Porcupine_Mountains%2C_MI_91233.jpg/960px-Lake_of_the_Clouds%2C_Porcupine_Mountains%2C_MI_91233.jpg",
+        "sourceURL": "https://commons.wikimedia.org/wiki/File:Lake_of_the_Clouds%2C_Porcupine_Mountains%2C_MI_91233.jpg",
+        "photographer": "Sharon Mollerus",
+        "licenseName": "CC BY 2.0",
+        "licenseURL": "https://creativecommons.org/licenses/by/2.0/",
+        "alt": "Forest-covered ridges surround the long blue Lake of the Clouds from its rocky escarpment overlook",
+        "caption": "Lake of the Clouds, photographed September 2023; display cropped.",
+        "cropPosition": "center",
+        "captureDate": "2023-09-01",
+        "status": "verified-licensed",
+        "width": 960,
+        "height": 540
+      },
+      {
+        "placeId": "6",
+        "imageURL": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3a/Gfp-michigan-porcupine-mountains-state-park-waterfall-at-presque-isle.jpg/960px-Gfp-michigan-porcupine-mountains-state-park-waterfall-at-presque-isle.jpg",
+        "sourceURL": "https://commons.wikimedia.org/wiki/File:Gfp-michigan-porcupine-mountains-state-park-waterfall-at-presque-isle.jpg",
+        "photographer": "Yinan Chen",
+        "licenseName": "Public domain (author dedication)",
+        "licenseURL": "https://creativecommons.org/publicdomain/mark/1.0/",
+        "alt": "Broad Presque Isle River waterfall pouring over a forested ledge in the Porcupine Mountains",
+        "caption": "Presque Isle River falls, photographed May 2014; display cropped.",
+        "cropPosition": "center",
+        "captureDate": "2014-05-28",
+        "status": "verified-licensed",
+        "width": 960,
+        "height": 640
+      }
+    ]
+  },
+  "11": {
+    "placeId": "11",
+    "name": "Pictured Rocks National Lakeshore",
+    "eyebrow": "A drive-to cliff view and a coastline earned on foot.",
+    "story": "At Miners Castle the bright sandstone rises from Lake Superior beside a sweep of deep-green forest, close to the road-accessible overlook. Chapel Rock, with its tree standing above the lake, lies farther along the shoreline. The two views are unmistakably Pictured Rocks, but their difference is practical as well as scenic: one begins with a short paved path, the other takes a substantial hike.",
+    "character": "NPS identifies Miners Castle as the only vehicle-accessible cliff overlook in the park. Chapel Rock and Chapel Beach are about 6.2 miles round trip from the trailhead; the full Chapel Loop is about 10.5 miles. Neither photograph establishes today's road or trail conditions.",
+    "why": "Do not make a ten-mile hike sound like an easy extra viewpoint after Miners Castle; each experience deserves an appropriate plan.",
+    "sourceURL": "https://www.nps.gov/piro/planyourvisit/hikes.htm",
+    "sourceLabel": "NPS official Pictured Rocks trail distances",
+    "photos": [
+      {
+        "placeId": "11",
+        "imageURL": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/62/Miners_Castle%2C_Pictured_Rocks_National_Lakeshore%2C_Michigan.jpg/960px-Miners_Castle%2C_Pictured_Rocks_National_Lakeshore%2C_Michigan.jpg",
+        "sourceURL": "https://commons.wikimedia.org/wiki/File:Miners_Castle%2C_Pictured_Rocks_National_Lakeshore%2C_Michigan.jpg",
+        "photographer": "rboed",
+        "licenseName": "CC BY 2.0",
+        "licenseURL": "https://creativecommons.org/licenses/by/2.0/",
+        "alt": "Miners Castle sandstone promontory above turquoise Lake Superior water with coastal pines",
+        "caption": "Miners Castle near the accessible overlooks, photographed June 2024; display cropped.",
+        "cropPosition": "center",
+        "captureDate": "2024-06-02",
+        "status": "verified-licensed",
+        "width": 960,
+        "height": 635
+      },
+      {
+        "placeId": "11",
+        "imageURL": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d7/Chapel_Rock_in_Pictured_Rocks_National_Lakeshore.jpg/960px-Chapel_Rock_in_Pictured_Rocks_National_Lakeshore.jpg",
+        "sourceURL": "https://commons.wikimedia.org/wiki/File:Chapel_Rock_in_Pictured_Rocks_National_Lakeshore.jpg",
+        "photographer": "GRMule",
+        "licenseName": "CC BY-SA 4.0",
+        "licenseURL": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "alt": "Chapel Rock sandstone column with a tree growing atop the formation beside Lake Superior",
+        "caption": "Chapel Rock, photographed May 2023; reached by a longer hike; display cropped.",
+        "cropPosition": "center",
+        "captureDate": "2023-05-25",
+        "status": "verified-licensed",
+        "width": 960,
+        "height": 723
+      }
+    ]
+  },
   "15": {
     "placeId": "15",
     "name": "Lake Superior Provincial Park",

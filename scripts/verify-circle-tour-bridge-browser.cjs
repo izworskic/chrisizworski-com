@@ -44,7 +44,10 @@ function check(value,message){if(!value)throw Error(message);}
     for(const sample of [
       {stop:'15',name:'Lake Superior Provincial Park',clue:'Old Woman Bay'},
       {stop:'20',name:'Sleeping Giant Provincial Park',clue:'Sea Lion'},
-      {stop:'18',name:'Pukaskwa National Park',clue:'Hattie Cove'}
+      {stop:'18',name:'Pukaskwa National Park',clue:'Hattie Cove'},
+      {stop:'3',name:'Apostle Islands National Lakeshore',clue:'Devils Island'},
+      {stop:'6',name:'Porcupine Mountains Wilderness State Park',clue:'Presque Isle River'},
+      {stop:'11',name:'Pictured Rocks National Lakeshore',clue:'Chapel Rock'}
     ]){
       await page.locator('#ctb-stop').selectOption(sample.stop);
       const place=page.locator('#ctb-decision .ctb-place-story');
@@ -60,7 +63,7 @@ function check(value,message){if(!value)throw Error(message);}
       check(alts.every(x=>x.alt.length>30&&x.loading==='lazy'&&x.decoding==='async'&&x.src.startsWith('https://thumb.wikimedia.org/')),
         size.name+': invalid rights-conscious photographic markup');
     }
-    await page.locator('#ctb-stop').selectOption('11');
+    await page.locator('#ctb-stop').selectOption('24');
     check(await page.locator('#ctb-decision .ctb-place-story').count()===0,
       size.name+': unresearched stop inherited a different park photograph');
     await page.locator('#ctb-stop').selectOption('11');
