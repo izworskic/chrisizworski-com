@@ -36,3 +36,7 @@ A new combined ship tracker adds little beyond the established five-lake map, an
 - No claim about Google indexing or AdSense uplift from code deployment. Compare finalized, like-for-like 7/28-day GSC Web page+query windows after release; control for rank and shipping-season changes. Compare actual analytics events and AdSense earnings only when connected reports exist.
 
 The intended outcome is less visitor dead-ending, not a guaranteed traffic or revenue increase.
+
+## Production follow-up: generated metadata integrity
+
+During the live readback of PR #1608, Duluth's new schedule and winter links rendered correctly, but the build-time script scripts/tune-duluth-discovery.mjs replaced the source WebPage dateModified and root sitemap lastmod with an obsolete October 2 date. The separate social tuner carried the same literal. This is not an accurate representation of the reviewed November 9 change. A dedicated follow-up preserves the source page's validated date through both generators and enforces parity with the published sitemap, while retaining the existing query-aligned search title and social-card treatment. tests/duluth-source-date-build.test.js executes the full tuners on a disposable fixture date to prevent recurrence. Production must be rechecked after that follow-up deploys.
