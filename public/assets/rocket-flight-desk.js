@@ -42,7 +42,7 @@
     return when?new Intl.DateTimeFormat('en-US',{dateStyle:'medium',timeStyle:'short'}).format(when):'Not available';
   }
   // Never promote weather from another launch hour or an aged NWS grid.
-  // The server's existing NWS adapter matches each hourly interval to the
+  // The server’s existing NWS adapter matches each hourly interval to the
   // selected NET; recheck that contract when deciding the visitor’s next step.
   function usableSkySamples(data) {
     const selected=data?.selectedLaunch;
@@ -92,8 +92,8 @@
     const hasUsefulTime=Boolean(mission&&PRECISE.has(precision)&&asDate(mission.net));
     let status,headline,note;
     if(feedUnavailable){
-      status='unavailable';headline='This coast's launch calendar is unavailable';
-      note='We can’t check this coast's schedule right now. The range may still have launches planned; check its official updates.';
+      status='unavailable';headline='This coast’s launch calendar is unavailable';
+      note='We can’t check this coast’s schedule right now. The range may still have launches planned; check its official updates.';
     }else if(!mission){
       status='unknown';headline='No upcoming launch listed for this coast';
       note='Smaller research flights and military launches don’t always appear on the public calendar.';
@@ -197,12 +197,12 @@
       authority?'See the official range updates':'Read the regional source guidance');
     if(d.status==='stale'||d.status==='unavailable')return official('schedule',
       'Check whether the launch time has moved',
-      'Our last calendar update may be old. Don't plan around that time until the operator confirms it.',
+      'Our last calendar update may be old. Don’t plan around that time until the operator confirms it.',
       authority?'See the latest range updates':'See the regional launch guide');
     const closed=region==='texas'&&data?.access?.liveOfficialNotice?.state==='closed';
     if(d.status==='hold'){
       if(closed)return handoff('access','Check the latest Starbase road and beach closures',
-        'The city has reported a closure. Don't drive toward the pad; check the notice and consider a legal waterfront spot.',
+        'The city has reported a closure. Don’t drive toward the pad; check the notice and consider a legal waterfront spot.',
         'See Starbase closures and viewing spots');
       return official('schedule','The countdown stopped. Watch for the next attempt.',
         'A scrub means the rocket isn’t lifting off at the earlier target time. Check for the next attempt before heading out.',
@@ -213,7 +213,7 @@
       authority?'Check the operator’s updates':'See the local viewing guide');
     if(['alaska','hawaii'].includes(region))return handoff('access',
       'Can you watch this launch in person?',
-      'This is an active restricted range, and we haven’t confirmed a public spectator area for this mission. Don't follow the pad pin onto base property.',
+      'This is an active restricted range, and we haven’t confirmed a public spectator area for this mission. Don’t follow the pad pin onto base property.',
       'Check public access at this range');
     const sites=Array.isArray(data?.access?.sites)?data.access.sites:[];
     const publicCandidates=sites.filter(s=>
@@ -233,7 +233,7 @@
           'Space View Park in Titusville and Jetty Park in Port Canaveral (pad identity not established)';
       return {
         gate:'viewing',headline:'Pick your place along the Florida coast',
-        detail:'Places to consider include '+names+'. Check each location's opening hours, parking and any launch-specific restrictions before setting out.',
+        detail:'Places to consider include '+names+'. Check each location’s opening hours, parking and any launch-specific restrictions before setting out.',
         label:'Compare Florida viewing spots',href:'#rl-viewing',
         source:'in_page',destination:'viewing_options'
       };
@@ -323,7 +323,7 @@
         if(d.official)official.href=d.official;
       }
       if(specialist){
-        // The Foundry's contextual next action already links to this regional
+        // The Foundry’s contextual next action already links to this regional
         // guide in access-gated states. Do not repeat the same destination
         // immediately underneath it as a second ambiguous call to action.
         specialist.hidden=!d.specialist||next.source==='specialist';
