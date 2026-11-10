@@ -68,15 +68,15 @@
       case 'aligned':return 'Both calendars list nearly the same launch time';
       case 'disagrees':return 'The launch calendars show different times';
       case 'precision-not-comparable':return 'At least one calendar has no exact liftoff time';
-      case 'identity-not-distinct':return 'Can't be sure both calendars mean the same flight';
+      case 'identity-not-distinct':return 'Can’t be sure both calendars mean the same flight';
       case 'ambiguous':return 'Multiple similar missions listed; comparison withheld';
-      case 'not-in-next-five':return 'This flight isn't in the other calendar's next five';
-      case 'snapshot-mismatch':return 'The latest launch time hasn't been cross-checked';
+      case 'not-in-next-five':return 'This flight isn’t in the other calendar’s next five';
+      case 'snapshot-mismatch':return 'The latest launch time hasn’t been cross-checked';
       case 'stale':return 'This comparison needs a fresh check';
       case 'historical-only':return 'Only an older schedule comparison is available';
       case 'awaiting-reconciliation':return 'Waiting for the next calendar comparison';
-      case 'source-unavailable':return 'The second launch calendar isn't responding';
-      default:return 'We can't compare launch times right now';
+      case 'source-unavailable':return 'The second launch calendar isn’t responding';
+      default:return 'We can’t compare launch times right now';
     }
   }
   function render(data){
@@ -100,8 +100,8 @@
     root.dataset.compare=cStatus;
     set('lt-compare-state',comparisonText({status:cStatus}));
     set('lt-compare-note',mismatched?
-      'The older comparison doesn't confirm the new launch time.':
-      c.note||'There isn't enough information to compare the two schedules.');
+      'The older comparison doesn’t confirm the new launch time.':
+      c.note||'There isn’t enough information to compare the two schedules.');
     const validTime=['minute','second'].includes(data?.netPrecision);
     const currentC=validTime&&cStatus==='aligned'&&c.otherTarget?
       ' LL2: '+readable(data.net,zone,data.netPrecision)+
@@ -131,8 +131,8 @@
           evt.sourceUrl,'LL2 mission record'));
       }
       if(!changes.children.length)addEmpty(changes,
-        status==='not-monitored'?'We're not tracking changes for this flight yet.':
-          'No schedule changes recorded here yet. It's still worth checking the operator near liftoff.');
+        status==='not-monitored'?'We’re not tracking changes for this flight yet.':
+          'No schedule changes recorded here yet. It’s still worth checking the operator near liftoff.');
     }
     if(sources){
       sources.replaceChildren();
@@ -156,7 +156,7 @@
         data?.status==='not-monitored'||data?.status==='not-returned'?
           'No fresh update tied to this flight. Check Spaceflight Now and the launch operator.':
           data?.updatesStatus==='not-prioritized'||data?.newsStatus==='not-prioritized'?
-          'The flight is listed, but we don't have recent stories or schedule-change history for it yet.':
+          'The flight is listed, but we don’t have recent stories or schedule-change history for it yet.':
           'No new schedule change or related news appeared in the latest check.');
     }
     const health=data?.sourceHealth||{};
@@ -166,13 +166,13 @@
       'Launch schedules update frequently. Detailed news checks focus on a smaller group of upcoming flights.'];
     if(failed)words.push(failed+' of '+schedule.length+' LL2 schedule source checks unavailable.');
     if(data?.updatesStatus==='unavailable')words.push('LL2 update history unavailable.');
-    if(data?.updatesStatus==='not-prioritized')words.push('Detailed schedule updates haven't been checked for this flight yet.');
-    if(data?.newsStatus==='unavailable')words.push('Related news couldn't be checked right now.');
+    if(data?.updatesStatus==='not-prioritized')words.push('Detailed schedule updates haven’t been checked for this flight yet.');
+    if(data?.newsStatus==='unavailable')words.push('Related news couldn’t be checked right now.');
     if(data?.newsStatus==='not-prioritized')words.push('Looking for news tied to this flight.');
     if(data?.sourceGroupComplete===false)
       words.push('Some launch listings may be missing from this calendar.');
-    if(health.rll?.status==='unavailable')words.push('The other calendar couldn't be checked.');
-    words.push('A matching calendar doesn't guarantee liftoff, open gates or clear skies.');
+    if(health.rll?.status==='unavailable')words.push('The other calendar couldn’t be checked.');
+    words.push('A matching calendar doesn’t guarantee liftoff, open gates or clear skies.');
     set('lt-source-health',words.join(' '));
   }
   async function load(detail){
@@ -197,8 +197,8 @@
       render(body);
     }catch(_){
       if(token!==sequence)return;
-      render({status:'unavailable',headline:'We can't load schedule updates right now',
-        story:'You can still check the flight's calendar entry and the operator. A failed update check doesn't mean the launch was delayed.'});
+      render({status:'unavailable',headline:'We can’t load schedule updates right now',
+        story:'You can still check the flight’s calendar entry and the operator. A failed update check doesn’t mean the launch was delayed.'});
     }
   }
   document.addEventListener('rocket-truth:mission-selected',event=>{
