@@ -2,6 +2,9 @@
   const $=id=>document.getElementById(id);
   const money=c=>c==null?'—':new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(c/100);
   const form=$('crossingForm'), results=$('results'), answer=$('answer'), status=$('trafficStatus');
+  const pairA=$('pairA'), pairB=$('pairB'), pairResult=$('pairResult');
+  const pairState={first:'queens-midtown',second:'queensboro'};
+  let currentSnapshot=null, pairOptionsKey=null;
   const escapeHtml=v=>String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
   function scopeLabel(scope){
@@ -54,6 +57,67 @@
     return '<div class="disruption"><strong>'+labels.join(' · ')+'</strong>'+events+signs+'</div>';
   }
 
+  // Crossing IDs come from the same API snapshot as the tolls and travel scope.
+  // A/B selection changes the answer locally, without another provider request.
+  function renderPair(data){
+    if(!pairA||!pairB||!pairResult)return;
+    const routes=Array.isArray(data?.routes)?data.routes:[];
+    if(routes.length<2){
+      pairResult.innerHTML='<p class="notice">Crossing comparison is unavailable. Refer to the published toll table and official 511NY conditions below.</p>';
+      return;
+    }
+    const ids=routes.map(r=>r.id).join(',');
+    if(ids!==pairOptionsKey){
+      const options=routes.map(r=>'<option value="'+escapeHtml(r.id)+'">'+escapeHtml(r.name)+'</option>').join('');
+      pairA.innerHTML=options;
+      pairB.innerHTML=options;
+      pairOptionsKey=ids;
+    }
+    if(!routes.some(r=>r.id===pairState.first))pairState.first=routes[0].id;
+    if(!routes.some(r=>r.id===pairState.second))pairState.second=routes[1].id;
+    pairA.value=pairState.first;
+    pairB.value=pairState.second;
+    if(pairState.first===pairState.second){
+      pairResult.innerHTML='<p class="notice">Choose two different crossings to compare the modeled charges and evidence.</p>';
+      return;
+    }
+    const first=routes.find(r=>r.id===pairState.first);
+    const second=routes.find(r=>r.id===pairState.second);
+    const carCard=(r,heading)=>{
+      const allowed=r.eligibility?.state==='ELIGIBLE';
+      const time=r.etaState==='LIVE'&&Number.isFinite(r.etaMinutes)
+        ? escapeHtml(r.etaMinutes)+' min · '+escapeHtml(scopeLabel(r.etaScope))
+        : 'Live measurement unavailable';
+      const source=r.etaState==='LIVE'
+        ? escapeHtml(r.trafficSourceName||'Live traffic source')+
+          (r.direction?' · '+escapeHtml(r.direction):'')+
+          (r.reportedAt?' · '+escapeHtml(r.reportedAt):'')
+        : escapeHtml(r.trafficPending||'No verified current segment time');
+      return '<article class="pair-card"><p class="pair-kicker">'+heading+'</p><h3>'+escapeHtml(r.name)+'</h3>'+
+        '<p class="pair-charge">'+money(r.cost?.total)+' <span>modeled road charge</span></p>'+
+        '<p class="detail">Crossing '+money(r.cost?.toll)+' · Zone '+money(r.cost?.zone)+
+        (r.cost?.credit?' · Credit −'+money(r.cost.credit):'')+'</p>'+
+        '<p class="pair-eligibility '+(allowed?'good':'caution')+'">Vehicle: '+escapeHtml(r.eligibility?.state||'REVIEW')+'</p>'+
+        '<p class="detail">'+escapeHtml(r.eligibility?.reason||'Verify posted restrictions.')+'</p>'+
+        '<p class="pair-time">'+time+'</p><p class="detail">'+source+'</p>'+
+        disruptionHtml(r,data.ny511)+
+        '<p><a href="'+escapeHtml(r.cameraUrl)+'" target="_blank" rel="noopener noreferrer">Check official 511NY map</a></p></article>';
+    };
+    const canCompare=first.eligibility?.state==='ELIGIBLE'&&second.eligibility?.state==='ELIGIBLE'&&
+      Number.isFinite(first.cost?.total)&&Number.isFinite(second.cost?.total);
+    let conclusion='Vehicle restrictions or missing road charges prevent a valid price comparison. Review both eligibility notices.';
+    if(canCompare){
+      const difference=first.cost.total-second.cost.total;
+      conclusion=difference===0
+        ? 'Same modeled road charge for these selections.'
+        : (difference<0?escapeHtml(first.name):escapeHtml(second.name))+
+          ' has '+money(Math.abs(difference))+' lower modeled road charges for the selected inputs.';
+    }
+    pairResult.innerHTML='<div class="pair-grid">'+carCard(first,'Option A')+carCard(second,'Option B')+'</div>'+
+      '<div class="pair-verdict"><strong>'+conclusion+'</strong>'+
+      '<p>These are crossing and congestion-zone charges, not complete-trip costs. Live times may cover different roadway lengths or directions, so they cannot establish which route is fastest. Confirm your actual route, restrictions and current incidents before driving.</p></div>';
+  }
+
   function renderDeparture(info){
     const target=$('departureIntelligence');
     if(!target)return;
@@ -99,6 +163,8 @@
   }
 
   function render(data){
+    currentSnapshot=data;
+    renderPair(data);
     renderDeparture(data.departure);
     const liveCount=data.routes.filter(r=>r.etaState==='LIVE').length;
     status.textContent=data.trafficState==='UNAVAILABLE'
@@ -138,13 +204,25 @@
       if(!res.ok) throw new Error('decision service '+res.status);
       render(await res.json());
     }catch(e){
+      currentSnapshot=null;
       status.textContent='Unable to load decision service';
       status.className='status off';
+      if(pairResult)pairResult.innerHTML='<p class="notice">Current comparisons are unavailable; no live travel-time or current toll claim can be verified. See the published rates and official sources below.</p>';
+      results.innerHTML='<tr role="row"><td role="cell" colspan="5">Current live comparison unavailable. See the published toll table below.</td></tr>';
+      answer.innerHTML='<h2>Live crossing comparison unavailable</h2><p>Check the official roadway feeds before driving. The published car toll guide remains available below.</p>';
       renderDeparture({state:'UNAVAILABLE',reason:'The comparison API is unavailable.'});
     }
   }
 
   form.addEventListener('submit',e=>{e.preventDefault();load()});
+  if(pairA)pairA.addEventListener('change',()=>{
+    pairState.first=pairA.value;
+    if(currentSnapshot)renderPair(currentSnapshot);
+  });
+  if(pairB)pairB.addEventListener('change',()=>{
+    pairState.second=pairB.value;
+    if(currentSnapshot)renderPair(currentSnapshot);
+  });
   load();
   setInterval(()=>{if(!document.hidden)load()},60000);
 })();
