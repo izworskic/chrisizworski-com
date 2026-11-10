@@ -83,7 +83,8 @@ Object.assign(image, {
 app.image = { '@id': SOCIAL_IMAGE_ID };
 page.primaryImageOfPage = { '@id': SOCIAL_IMAGE_ID };
 page.image = { '@id': SOCIAL_IMAGE_ID };
-page.dateModified = '2026-10-02';
+// Social-card metadata is not a content revision. Keep the reviewed source date.
+if (!/^\d{4}-\d{2}-\d{2}$/.test(String(page.dateModified || ''))) throw new Error('Duluth social tuning: missing valid source dateModified');
 
 const updatedJsonLd = `<script type="application/ld+json">\n${JSON.stringify(jsonLd, null, 2)}\n</script>`;
 html = html.replace(jsonLdMatch[0], updatedJsonLd);
