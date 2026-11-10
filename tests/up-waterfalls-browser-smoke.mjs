@@ -122,6 +122,32 @@ try{
     await page.locator('#visit-date').fill('2026-11-02');
   });
 
+  await run('B82 Presque Isle: one arrival, winter policy and conditional three-falls sheet',async()=>{
+    await page.locator('#clear-list').click();
+    await page.locator('#visit-date').fill('2027-01-15');
+    await page.locator('[data-presque-preset="circuit"]').click();
+    assert.equal(await page.locator('#upfall-day-sheet .day-sheet-stop').count(),0,'winter circuit must fail without adding records');
+    assert.match(await page.locator('#presque-isle-feedback').innerText(),/winter gorge-walk hold/);
+    await page.locator('[data-presque-preset="overlook"]').click();
+    assert.equal(await page.locator('#upfall-day-sheet .day-sheet-stop').count(),1,'winter arrival is conditional; shorter Nawadaha may be considered');
+    assert.match(await page.locator('#upfall-day-sheet').innerText(),/Nawadaha Falls/);
+    await page.locator('#clear-list').click();
+    await page.locator('#visit-date').fill('2027-06-15');
+    await page.locator('[data-presque-preset="circuit"]').click();
+    assert.equal(await page.locator('#upfall-day-sheet .day-sheet-stop').count(),3);
+    assert.match(await page.locator('.day-sheet-shared-arrival').innerText(),/ONE DNR scenic-area arrival/);
+    assert.match(await page.locator('.day-sheet-shared-arrival').innerText(),/West\/East River Trail repairs/);
+    for(const name of ['Nawadaha Falls','Manido Falls','Manabezho Falls'])
+      assert.match(await page.locator('#selected-list').innerText(),new RegExp(name));
+    assert.match(await page.locator('#presque-isle-feedback').innerText(),/NOT three separate vehicle stops/);
+    assert.equal(await page.locator('#presque-isle-outing a[href^="https://www.michigan.gov/recsearch/parks/porkies"]').count()>0,true);
+    const dimensions=await page.evaluate(()=>({w:innerWidth,s:document.documentElement.scrollWidth}));
+    assert.ok(dimensions.s<=dimensions.w+2,'Presque Isle panel horizontal overflow');
+    await page.screenshot({path:screenshots+'/presque-isle-outing-mobile.png',fullPage:true,animations:'disabled'});
+    await page.locator('#clear-list').click();
+    await page.locator('#visit-date').fill('2026-11-02');
+  });
+
   await run('visit lens: filter by 30-minute full on-site range and exclude agency closure',async()=>{
     await page.locator('#visit-region').selectOption('Pictured Rocks / Munising');
     await page.locator('#visit-budget').selectOption('30');
