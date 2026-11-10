@@ -52,7 +52,7 @@ test('national visitor gets a meaningful Florida location answer before expensiv
  assert.equal(a.matched,false);
  assert.deepEqual(a.chosen.map(c=>c.id),['space-view','rotary']);
  assert.match(a.answer,/Titusville/i);
- assert.match(a.note,/Playalinda opening is not verified/i);
+ assert.match(a.note,/Playalinda may close for a launch/i);
  assert.match(a.note,/ticket/i);
  assert.equal(a.state,'unknown');
  assert.equal(a.kscMatched,false);
@@ -75,7 +75,7 @@ test('Cape Canaveral mission prioritizes Port Canaveral, not a Kennedy pad or pr
 test('exact Florida source agreement improves answer but never declares public entry guaranteed',()=>{
  const a=model.assess(national(),detail());
  assert.equal(a.matched,true);
- assert.match(a.status,/entry unverified/i);
+ assert.match(a.status,/check access/i);
  assert.equal(a.chosen[0].name,'Space View Park');
  assert.match(a.note,/No launch-specific gate opening has been certified/i);
  assert.equal(a.npsClosed,false);
