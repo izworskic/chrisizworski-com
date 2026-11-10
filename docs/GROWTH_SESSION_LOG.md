@@ -1,3 +1,11 @@
+### 2026-11-09 — Winter traffic capture sprint 2 (review branch)
+
+- **Intent:** Strengthen an existing Google-visible winter answer, not launch more pages. Nov 9 Search Console export gives /michigan-snow-totals/ 1,876 impressions / 10 clicks / 0.53% CTR, but the page already has a query-specific title, observer-based report map and town search.
+- **Implementation:** Native 7-day town-report deep links for Marquette, Gaylord, Grand Rapids and Bay City; first-screen distinct handoffs to modeled on-ground snow, upcoming NWS-led lake-effect outlook and Christmas 2026 seasonal context; a collapsed historical 2025–26 station table that doesn't obscure current 2026–27. Existing observed-report data and source times are intact. Weather and ice safety distinctions remain explicit.
+- **Ownership:** No change in independently owned `izworskic/national-white-christmas` and no speculative search title rewrite. The ambiguous 'will it snow for christmas' query also overlaps an unrelated film; judge only weather-qualified intent. No ad, GIS, APIs, canonical, redirect, or new indexable route changes.
+- **Evidence/governance:** Details and evaluation in `docs/WINTER_TRAFFIC_CAPTURE_SPRINT_2_2026-11-09.md`; full repository/production validation required before release. Export metrics describe a longer interval and are not November-only or revenue.
+- **Release:** Under review, no deployment claim until merged and live page readback verified.
+
 ### 2026-11-08 — Retire Freighter Watch Desk without removing the established shore guide (PR pending)
 - **User decision:** The newly added Freighter Watch Desk did not meet expectations. Remove that tool and its standalone API, UI assets, tests, Foundry scripts/briefs and CI workflow.
 - **Preservation boundary:** `/great-lakes-ship-watching-spots/` predates the tool and remains a static, indexable six-place guide, with its original canonical, Person schema, FAQ, author/byline, sitemap entry, established inbound links, sources and direct specialist-tracker handoffs. The stable AIS/Soo/Duluth engines and other pages are unmodified.
