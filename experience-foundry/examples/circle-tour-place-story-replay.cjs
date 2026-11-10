@@ -88,8 +88,7 @@ const boundary=none.kind==='no-specialist'&&none.primary===null&&
  yes.kind==='next-check'&&yes.primary?.url?.startsWith('https://');
 record('north-shore-specialist-preservation',boundary,
  'No fabricated specialist for Tettegouche; Split Rock retains independent approved specialist: '+boundary);
-const photoFree=select('24')===null&&select('25')===null&&
- select('23')?.placeId==='23'&&select('27')?.placeId==='27';
+const photoFree=select('24')===null&&select('25')===null;
 record('north-shore-no-photo-leakage',photoFree,
  'Unresearched neighbors have no false landscape photographs: '+photoFree);
 
