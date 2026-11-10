@@ -74,6 +74,8 @@
   const heading = node('h4', '', 'Waterfall day sheet');
   const dateLabel = node('p', 'day-sheet-date');
   const lead = node('p', 'day-sheet-lead');
+  const sharedArrival = node('p', 'day-sheet-shared-arrival');
+  sharedArrival.hidden = true;
   const entries = node('div', 'day-sheet-entries');
   const actions = node('div', 'day-sheet-actions');
   const copyNotes = node('button', '', 'Copy trip notes');
@@ -85,7 +87,7 @@
   const sourceNote = node('p', 'day-sheet-footnote',
     'Source checks are snapshots, not live opening or road reports. Recheck each authority before leaving. ' +
     'Waterfall coordinates are not parking or navigable trails; roads, gates and weather can change.');
-  sheet.append(heading, dateLabel, lead, entries, actions, status, sourceNote);
+  sheet.append(heading, dateLabel, lead, sharedArrival, entries, actions, status, sourceNote);
   shortlist.appendChild(sheet);
   const day = () => validDate(dayInput?.value) ? dayInput.value : '';
   const chosen = () => ids.map(id => cards.get(id)).filter(Boolean);
@@ -100,6 +102,9 @@
   function render() {
     const selected = chosen();
     entries.replaceChildren();
+    const riverFalls = selected.filter(c => ['manabezho-falls', 'manido-falls', 'nawadaha-falls'].includes(c.dataset.id));
+    sharedArrival.hidden = riverFalls.length < 2;
+    sharedArrival.textContent = riverFalls.length >= 2 ? 'Presque Isle: these ' + riverFalls.length + ' named waterfall records share ONE DNR scenic-area arrival from County Road 519. This is a conditional walking circuit, not multiple car stops. Confirm West/East River Trail repairs and any closed sections on the park map.' : '';
     const regions = new Set(selected.map(c => c.dataset.region).filter(Boolean));
     const dayText = day() || 'Date not selected';
     dateLabel.textContent = 'Planned visit: ' + dayText + ' · ' + selected.length + ' of 6 stops';
@@ -151,7 +156,9 @@
       if (c.dataset.url?.startsWith('/') && !c.dataset.url.startsWith('//')) lines.push('Guide: ' + location.origin + c.dataset.url);
       return lines.join('\n');
     });
-    return [heading, ...body, 'Confirm all access and seasonal conditions before travel. No verified inter-stop drive times.'].join('\n\n');
+    const riverCount = chosen().filter(c => ['manabezho-falls', 'manido-falls', 'nawadaha-falls'].includes(c.dataset.id)).length;
+    const riverNote = riverCount >= 2 ? 'Presque Isle river outing: ' + riverCount + ' falls share ONE scenic-site arrival from County Road 519. Full loop opening and West/East River Trail repairs are NOT verified; never route between waterfall GIS points.' : '';
+    return [heading, riverNote, ...body, 'Confirm all access and seasonal conditions before travel. No verified inter-stop drive times.'].filter(Boolean).join('\n\n');
   }
   async function copy(value, description) {
     if (!value) return;
