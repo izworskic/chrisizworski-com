@@ -188,3 +188,36 @@
 .munising-day-status:focus{outline:2px solid #bc7428;outline-offset:2px}
 @media(max-width:780px){.munising-day-head,.munising-day-options,.munising-day-bottom{grid-template-columns:minmax(0,1fr)}.munising-day-options{gap:12px}.munising-day-option{padding:16px}.munising-day-cluster{padding:15px;margin:14px 0 20px}.munising-day-head h2{font-size:1.7rem}}
 @media print{.munising-day-button{display:none}.munising-day-cluster{box-shadow:none;break-inside:avoid}}
+
+
+/* B82 — one-day-use-area / three falls. Source-based, mobile first. */
+.presque-isle-outing{margin:22px 0 30px;padding:clamp(18px,2.7vw,30px);background:#f8f6ef;border:1px solid #d8d9cf;border-radius:16px;scroll-margin-top:20px}
+.presque-isle-header{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(250px,1fr);gap:22px;align-items:start}
+.presque-isle-kicker,.presque-isle-label{font-size:.75rem;font-weight:850;letter-spacing:.115em;text-transform:uppercase;color:#557045;margin:0 0 8px}
+.presque-isle-header h2{font:normal clamp(1.7rem,3vw,2.4rem)/1.14 Georgia,serif;color:#264333;margin:0 0 12px}
+.presque-isle-header p{line-height:1.6}
+.presque-isle-arrival{padding:15px 18px;border-left:4px solid #537963;background:#eaf0e7;border-radius:8px}
+.presque-isle-arrival strong{color:#284833}
+.presque-isle-arrival p{margin:6px 0;font-size:.9rem}
+.presque-isle-choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;margin-top:23px}
+.presque-isle-choice{min-width:0;padding:20px;border:1px solid #d3ded5;background:#fff;border-radius:11px;display:flex;flex-direction:column;gap:8px}
+.presque-isle-choice-top{display:flex;gap:13px;align-items:flex-start}
+.presque-isle-choice-number{background:#dbe8df;color:#294e3a;border-radius:100%;font-weight:800;width:36px;height:36px;display:grid;place-items:center;flex-shrink:0;font-size:.85rem}
+.presque-isle-choice h3{font:normal 1.4rem/1.22 Georgia,serif;color:#244336;margin:0}
+.presque-isle-choice .presque-isle-label{margin:2px 0 5px}
+.presque-isle-choice p{font-size:.91rem;color:#405d52;line-height:1.56;margin:5px 0}
+.presque-isle-choice p a{font-weight:750}
+.presque-isle-save{margin-top:auto;min-height:46px;padding:11px 16px;border:0;border-radius:7px;background:#285b49;color:#fff;font-weight:800;line-height:1.35}
+.presque-isle-save:hover{background:#194736}
+.presque-isle-fall-links{padding-left:24px;margin:4px 0 8px;font-size:.91rem;line-height:1.55;color:#405d52}
+.presque-isle-fall-links li+li{margin-top:4px}
+.presque-isle-fall-links a{font-weight:750}
+.presque-isle-choice p.presque-isle-limits{border-left:3px solid #af743c;padding:7px 12px;background:#fbf1e5;border-radius:4px;color:#58432d}
+.presque-isle-footer{border-top:1px solid #d5ddd3;padding-top:16px;margin-top:19px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.presque-isle-footer strong{color:#315244}
+.presque-isle-footer p{margin:6px 0;font-size:.88rem;color:#4a6257;line-height:1.56}
+.presque-isle-feedback{border-radius:7px;background:#e8f0e8;color:#265343;padding:10px 13px;margin:15px 0 0;font-size:.91rem}
+.presque-isle-feedback:focus{outline:2px solid #ad763f;outline-offset:2px}
+.day-sheet-shared-arrival{background:#ecf3ed;border-left:3px solid #54806a;padding:11px 14px;margin:8px 0 15px;color:#284e3f;border-radius:4px;font-size:.91rem}
+@media(max-width:760px){.presque-isle-header,.presque-isle-choices,.presque-isle-footer{grid-template-columns:minmax(0,1fr)}.presque-isle-outing{padding:16px}.presque-isle-choice{padding:15px}.presque-isle-header h2{font-size:1.75rem}.presque-isle-choices{gap:12px}}
+@media print{.presque-isle-save{display:none}.presque-isle-outing{box-shadow:none}}
