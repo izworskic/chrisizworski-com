@@ -33,7 +33,7 @@ REGIONS = ("california", "florida", "texas", "virginia", "alaska", "hawaii")
 # generalized search scraping, user's IP or guessed pad coordinates.
 SOURCES = (
     ("vandenberg-news", "california", "https://www.vandenberg.spaceforce.mil/News/", "news"),
-    ("vandenberg-alerts", "california", "https://public.govdelivery.com/accounts/USDODSFVANDENBERG/signup/41755", "alerts"),
+    ("vandenberg-alerts", "california", "https://public.govdelivery.com/accounts/USDODSFVANDENBERGPA/subscriber/new", "alerts"),
     ("canaveral-nps", "florida", "https://www.nps.gov/cana/planyourvisit/rocket-launch-viewing.htm", "policy"),
     ("ksc-viewing", "florida", "https://www.kennedyspacecenter.com/launches-and-events/see-a-launch/launch-viewing", "policy"),
     ("starbase-city", "texas", "https://www.starbase.texas.gov/beach-road-access", "access"),

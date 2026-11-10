@@ -148,13 +148,21 @@ t('Python batch uses only stdlib, bounded HTTPS official source registry, no LL2
 t('national desk is indexable and independent of mission schedule availability',()=>{
  a.match(index,/id="official-notice-desk"/);
  a.match(index,/id="rl-evidence-sources"/);
- a.match(index,/app\.js\?v=20261109-viewing-places-map-v2/);
+ a.match(index,/app\.js\?v=20261110-official-links-v1/);
  a.match(index,/<link rel="canonical" href="https:\/\/chrisizworski\.com\/national-tools\/rocket-launch-live\/">/);
  a.match(js,/OFFICIAL_EVIDENCE_API = '\/api\/rocket-official-notices'/);
  a.match(js,/renderOfficialEvidence\(data\)/);
  a.match(js,/void loadOfficialEvidence\(\)/);
- a.match(index,/Published now ≠ safe on launch day/);
- a.match(css,/\.rl-evidence-card/);
+ a.match(index,/Official launch and access updates/);
+ a.match(index,/id="rl-mission-official-match"[^>]+hidden/);
+ a.match(css,/\.rl-evidence-notice/);
+ a.match(js,/Get Vandenberg launch alerts/);
+ a.doesNotMatch(js,/Python source scan:|Source unreachable|renderOfficialEventCoverage/);
+ a.doesNotMatch(index,/Python evidence|SOURCE COVERAGE FOR YOUR COAST/);
+ a.match(py,/USDODSFVANDENBERGPA\/subscriber\/new/);
+ a.equal(SOURCES['vandenberg-alerts'][1],
+   'https://public.govdelivery.com/accounts/USDODSFVANDENBERGPA/subscriber/new');
+ a.doesNotMatch(py,/USDODSFVANDENBERG\/signup\/41755/);
  a.match(css,/@media\(max-width:460px\)/);
  a.doesNotMatch(js,/officialEvidence.*missionMatched|officialEvidence.*goForLaunch/i);
  new vm.Script(js);
