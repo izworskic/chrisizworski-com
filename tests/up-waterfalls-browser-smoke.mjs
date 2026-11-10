@@ -148,6 +148,59 @@ try{
     await page.locator('#visit-date').fill('2026-11-02');
   });
 
+  await run('B84 regional choice finder: all four jump links and 15 source-checked cards',async()=>{
+    assert.equal(await page.locator('#waterfall-day-choices .fall-cluster-jump').count(),4);
+    assert.equal(await page.locator('#results .fall-card-region-link').count(),15);
+    for(const id of ['munising-day','presque-isle-outing','keweenaw-waterfall-day','black-river-waterfall-day'])
+      assert.equal(await page.locator('#waterfall-day-choices a[href="#'+id+'"]').count(),1,id);
+    assert.equal(await page.locator('[data-id="sandstone-falls"] .fall-card-region-link').getAttribute('href'),'#black-river-waterfall-day');
+    assert.match(await page.locator('[data-id="sandstone-falls"] .fall-card-region-link').innerText(),/Closed/);
+    const dimensions=await page.evaluate(()=>({width:innerWidth,scroll:document.documentElement.scrollWidth}));
+    assert.ok(dimensions.scroll<=dimensions.width+2,'Regional jump nav causes mobile overflow');
+  });
+  await run('B84 map popup joins verified guide to regional plan without a fabricated parking point',async()=>{
+    await page.locator('#q').fill('');
+    await page.locator('#region').selectOption('all');
+    await page.locator('#effort').selectOption('all');
+    await page.locator('#access').selectOption('all');
+    const focused=await page.evaluate(()=>window.UPWaterfallFocus('eagle-river-falls'));
+    assert.equal(focused,true);
+    const keweenawPopup=page.locator('.leaflet-popup-content .waterfall-popup-cluster-link[href="/upper-peninsula-waterfalls/#keweenaw-waterfall-day"]');
+    await keweenawPopup.waitFor();
+    assert.equal(await keweenawPopup.getAttribute('href'),'/upper-peninsula-waterfalls/#keweenaw-waterfall-day');
+    assert.match(await page.locator('.leaflet-popup-content').innerText(),/waterfall pin|not visitor parking|parking/i);
+    const closed=await page.evaluate(()=>window.UPWaterfallFocus('sandstone-falls'));
+    assert.equal(closed,true);
+    const closurePopup=page.locator('.leaflet-popup-content .waterfall-popup-cluster-link[href="/upper-peninsula-waterfalls/#black-river-waterfall-day"]');
+    await closurePopup.waitFor();
+    assert.match(await closurePopup.innerText(),/closure and alternative/);
+    assert.match(await closurePopup.locator('xpath=..').innerText(),/closed|closure/i);
+  });
+  await run('B84 field guide to source-safe regional itinerary and back to selected map marker',async()=>{
+    const detail=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
+    try{
+      await detail.goto(base+'/upper-peninsula-waterfalls/eagle-river-falls/',{waitUntil:'domcontentloaded',timeout:30000});
+      assert.equal(await detail.locator('.fall-guide-region-bridge').count(),1);
+      assert.equal(await detail.locator('.fall-guide-region-primary').getAttribute('href'),'/upper-peninsula-waterfalls/#keweenaw-waterfall-day');
+      assert.equal(await detail.locator('.fall-guide-region-actions a[href*="focus=eagle-river-falls"]').count(),1);
+      await detail.locator('.fall-guide-region-primary').click();
+      await detail.waitForURL(/#keweenaw-waterfall-day$/);
+      assert.equal(await detail.locator('#keweenaw-waterfall-day').count(),1);
+      await detail.goto(base+'/upper-peninsula-waterfalls/eagle-river-falls/',{waitUntil:'domcontentloaded',timeout:30000});
+      await detail.locator('a[href="/upper-peninsula-waterfalls/?focus=eagle-river-falls#falls-map"]').click();
+      await detail.waitForURL(/focus=eagle-river-falls#falls-map$/);
+      await detail.waitForFunction(()=>document.getElementById('cluster-map-focus-status')?.textContent.includes('Eagle River Falls waterfall pin selected'),{timeout:15000});
+      assert.match(await detail.locator('.leaflet-popup-content').innerText(),/Eagle River Falls/);
+      assert.match(await detail.locator('#cluster-map-focus-status').innerText(),/NOT a parking or trailhead direction/);
+      const note=await detail.evaluate(()=>({w:innerWidth,s:document.documentElement.scrollWidth}));
+      assert.ok(note.s<=note.w+2,'field guide/map navigation caused horizontal overflow');
+      await detail.goto(base+'/upper-peninsula-waterfalls/sandstone-falls/',{waitUntil:'domcontentloaded',timeout:30000});
+      assert.match(await detail.locator('.fall-guide-region-bridge h2').innerText(),/Sandstone remains closed/);
+      assert.equal(await detail.locator('.fall-guide-region-primary').getAttribute('href'),'/upper-peninsula-waterfalls/#black-river-waterfall-day');
+    }finally{await detail.close();}
+    // Do not alter the ongoing primary-page filters, visit date or shortlist.
+  });
+  
   await run('B83: Keweenaw easy parks versus conditional Manganese gorge on mobile',async()=>{
     await page.locator('#clear-list').click();
     await page.locator('#visit-date').fill('2027-01-22');
