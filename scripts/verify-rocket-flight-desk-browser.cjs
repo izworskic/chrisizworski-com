@@ -411,7 +411,7 @@ const whenReady=page=>page.waitForFunction(id=>
   if(scenario.mismatch){
    assert(!(await page.locator('#rl-access-grade').innerText()).includes('NPS restriction'),
     'mission-mismatched beach closure leaked from another launch');
-   assert((await page.locator('#rl-access-answer').innerText()).includes('not confirmed'),
+   assert((await page.locator('#rl-access-answer').innerText()).includes('another mission, so no access status was adopted'),
     'wrong mission must remain unresolved');
   }else if(scenario.closed){
    assert((await page.locator('#rl-access-grade').innerText()).includes('NPS restriction'),
