@@ -11,6 +11,7 @@ const forecast = read('public/lake-effect-snow/index.html');
 const sitemap = read('public/sitemap-winter.xml');
 test('storm snapshot is dated official report evidence and empty states stay hidden', () => {
   assert.ok(reports.includes('id="stormPulse"') && reports.includes('not a single storm-total measurement'));
+  assert.ok(reports.indexOf('id="alertList"') < reports.indexOf('id="stormPulse"'), 'official alerts appear before the optional snapshot');
   assert.ok(logic.includes("if (rows.length < 2) { list.textContent = ''; panel.hidden = true; return; }"));
   assert.ok(logic.includes('rows.slice(0, 3)') && logic.includes('esc(stamp(r))'));
   assert.ok(logic.includes('renderSummary(rows); renderStormPulse(rows); renderAlerts();'));
