@@ -46,8 +46,8 @@
       "county": null,
       "river": null,
       "place": "Paradise / Newberry",
-      "lat": 46.582417,
-      "lng": -85.25455,
+      "lat": null,
+      "lng": null,
       "sourceUrl": "https://www.michigan.gov/recsearch/parks/tahquamenonfalls",
       "guidePath": "/tahquamenon-falls/",
       "publication": "multi-falls-planner",
@@ -59,7 +59,7 @@
       ],
       "identityStatus": "curated-guide-not-live-opening",
       "sourceReviewed": "2026-11-07",
-      "mapRole": "natural-waterfall-feature-not-arrival"
+      "mapRole": "multi-falls-day-use-reference-not-natural-waterfall-feature"
     },
     {
       "id": "guide:bond-falls",

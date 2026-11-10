@@ -48,6 +48,11 @@ test('every external observation and UP Travel label remains off the waterfall m
       assert.equal(row.lng,null,row.id);
       assert.ok(!row.guidePath,row.id);
       assert.ok(row.mapRole.includes('no-geographic')||row.mapRole.includes('not-validated'),row.id);
+    }else if(row.id==='guide:tahquamenon'){
+      assert.equal(row.publication,'multi-falls-planner');
+      assert.equal(row.mapRole,'multi-falls-day-use-reference-not-natural-waterfall-feature');
+      assert.equal(row.lat,null,'day-use area is not a waterfall location');
+      assert.equal(row.lng,null,'day-use area is not a waterfall location');
     }else{
       assert.ok(Number.isFinite(row.lat)&&Number.isFinite(row.lng),row.id);
       assert.ok(row.lat>44&&row.lat<49&&row.lng>-93&&row.lng< -82,row.id);
@@ -57,6 +62,25 @@ test('every external observation and UP Travel label remains off the waterfall m
   assert.deepEqual(groups,{guide:80,gis:161,name:291,tourism:108});
   assert.equal(atlas.records.filter(x=>x.kind==='gis'&&x.relatedGuideId).length,69);
   assert.ok(atlas.records.some(x=>x.kind==='guide'&&x.relatedGuideId==='tahquamenon'&&x.linkedGisIds.length===2));
+});
+
+test('day-use coordinates never masquerade as either Tahquamenon waterfall, and filtered guide pins stay visible',()=>{
+  const guide=atlas.records.find(r=>r.id==='guide:tahquamenon');
+  assert.ok(guide);
+  assert.equal(guide.mapRole,'multi-falls-day-use-reference-not-natural-waterfall-feature');
+  assert.deepEqual(guide.linkedGisIds,[207,208]);
+  assert.equal(guide.lat,null,'no day-use-area coordinates may be reused as fall latitude');
+  assert.equal(guide.lng,null,'no day-use-area coordinates may be reused as fall longitude');
+  for(const id of guide.linkedGisIds){
+    const point=atlas.records.find(r=>r.id==='gis:'+id);
+    assert.ok(point&&Number.isFinite(point.lat)&&Number.isFinite(point.lng));
+    assert.ok(Number.isFinite(point.lat)&&Number.isFinite(point.lng),'individual fall has its own source geographic point');
+  }
+  assert.match(js,/arrivalReference/);
+  assert.match(js,/r\.mapRole==='natural-waterfall-feature-not-arrival'/);
+  assert.match(js,/shownGisIds/);
+  assert.match(js,/some\(id=>shownGisIds\.has\(id\)\)/);
+  assert.match(js,/4-20261109-map-truth/,'source snapshot fetch must be cache-versioned');
 });
 
 test('identity ambiguity is retained as research, not autocollapsed into public trips', () => {

@@ -139,7 +139,8 @@ def make() -> dict:
             "id": "guide:" + g["id"], "kind": "guide", "name": g["name"],
             "county": counties[0] if len(counties) == 1 else None,
             "river": None, "place": g.get("place"),
-            "lat": g.get("lat"), "lng": g.get("lng"),
+            "lat": None if pub == "multi-falls-planner" else g.get("lat"),
+            "lng": None if pub == "multi-falls-planner" else g.get("lng"),
             "sourceUrl": g.get("source"),
             "guidePath": g.get("link") or "/upper-peninsula-waterfalls/" + g["id"] + "/",
             "publication": pub, "status": g.get("status"),
@@ -147,7 +148,8 @@ def make() -> dict:
             "linkedGisIds": sorted(x["gisObjectId"] for x in gs),
             "identityStatus": "curated-guide-not-live-opening",
             "sourceReviewed": g.get("sourceReviewed") or src["curated"].get("reviewed"),
-            "mapRole": "natural-waterfall-feature-not-arrival",
+            "mapRole": ("multi-falls-day-use-reference-not-natural-waterfall-feature"
+                        if pub == "multi-falls-planner" else "natural-waterfall-feature-not-arrival"),
         })
     for g in gis:
         records.append({
