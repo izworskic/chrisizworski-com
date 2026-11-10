@@ -88,6 +88,20 @@
     el.textContent = 'No snow has been reported anywhere in Michigan in the last 7 days.';
   }
 
+  // Uses only existing NWS Local Storm Report rows in the selected window.
+  // The rankings are observations of mixed durations, NOT storm totals.
+  function renderStormPulse(rows) {
+    var panel = $('stormPulse'), list = $('stormPulseList');
+    if (!panel || !list) return;
+    if (rows.length < 2) { list.textContent = ''; panel.hidden = true; return; }
+    list.innerHTML = rows.slice(0, 3).map(function (r) {
+      return '<button type="button" data-pulse-town="' + esc(C.baseTown(r.place)) + '">' +
+        '<strong>' + esc(C.inches(r.inches)) + ' · ' + esc(where(r)) + '</strong>' +
+        '<span>' + esc(stamp(r)) + ' · ' + esc(kind(r)) + '</span></button>';
+    }).join('');
+    panel.hidden = false;
+  }
+
   function renderAlerts() {
     var a = (state.data && state.data.alerts) || [];
     $('alertList').innerHTML = a.map(function (x) {
@@ -203,6 +217,14 @@
       if (result.place) html += stationLines(result.place.lat, result.place.lon);
       if (state.shareRow && !keepMap) focusRow(state.shareRow);
     }
+    // A checked town becomes an editable origin on the separate depth tool.
+    // This never converts observed snowfall into modeled snow on the ground.
+    if (state.town && result && (result.kind === 'town' || result.kind === 'nearby')) {
+      var origin = state.town.trim().slice(0, 60);
+      html += '<p class="snow-next-town"><a data-growth-cta="town-to-snow-depth" href="/michigan-snow-depth/?origin=' +
+        esc(encodeURIComponent(origin)) + '">Check snow still on the ground near ' + esc(origin) +
+        '</a><span>Snowfall reports are dated observations. The linked depth estimate is a separate NOAA model, checked against stations.</span></p>';
+    }
     if (html && state.town && !state.geo) {
       html += '<p class="saved-note">' + (fromSaved ? 'Your saved town. ' : 'Saved on this device for your next visit. ') + '<button type="button" class="linkish" id="forgetTown">Forget</button></p>';
     }
@@ -235,7 +257,7 @@
     var d = state.data; if (!d) return;
     var rows = visibleRows(), quiet = !(d.reports || []).length, mapRows = rows;
     if (quiet && d.lastSnow) mapRows = d.lastSnow.sameDay || [];
-    renderSummary(rows); renderAlerts(); renderChips(); renderTable(rows); renderMap(mapRows, fit); renderTown(fit);
+    renderSummary(rows); renderStormPulse(rows); renderAlerts(); renderChips(); renderTable(rows); renderMap(mapRows, fit); renderTown(fit);
     $('mapNote').textContent = quiet && d.lastSnow
       ? 'Showing the last day snow was reported, ' + C.when(d.lastSnow.reportedAt).replace(/,[^,]*$/, '') + ', because nothing has been reported in the last 7 days.'
       : 'Each dot is one official report, larger and darker for more snow. Tap a dot for the time, source and remark.';
@@ -273,6 +295,16 @@
   // ---- Events ----
   document.querySelectorAll('.windows button').forEach(function (b) {
     b.addEventListener('click', function () { state.window = b.getAttribute('data-window'); state.windowChosen = true; state.tableLimit = TABLE_STEP; render(true); });
+  });
+  $('stormPulse').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-pulse-town]'); if (!b) return;
+    var town = b.getAttribute('data-pulse-town'); if (!town) return;
+    state.town = town; state.geo = null; fromSaved = false;
+    $('townSearch').value = town; saveTown(town);
+    loadPlaces().then(function () {
+      render(false);
+      if (!$('townResult').hidden) $('townResult').scrollIntoView({ block: 'nearest' });
+    });
   });
   $('regionChips').addEventListener('click', function (e) {
     var b = e.target.closest('button'); if (!b) return;
