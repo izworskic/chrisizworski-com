@@ -1,13 +1,13 @@
 {
-  "date": "2026-11-09",
-  "updated": "2026-11-09T21:28:59.672Z",
-  "body": "The strongest modeled color is currently in Southwest Lower, estimated at 27% (past peak). Elsewhere, Southeast Lower is estimated at 27%; Central & Saginaw Bay is estimated at 16%. These percentages are seasonal model estimates, not counts of leaves observed on the ground.\n\nFall does not advance at the same rate across Michigan. The north-to-south spread runs from Western U.P. (10%) to Southeast Lower (27%). The short-range forecast near Southwest Lower calls for some rain in the next few days, highs near 58, lows near 36. Today's modeled estimate draws on regional climatology, recent weather, canopy camera anchor, MODIS canopy greenness; consult the source dates shown with the live readings before traveling.\n\nFor a closer look, the regional guide includes a drive such as Blue Star Highway along the Saugatuck dunes or a walk around The dune trails at P.J. Hoffmaster State Park. 8 regions are modeled as fading or beyond peak, so the best location will depend on your dates. Use the interactive map and date slider for place-by-place comparisons, and confirm current conditions locally if you are planning a long trip.",
+  "date": "2026-11-10",
+  "updated": "2026-11-10T18:43:16.928Z",
+  "body": "The strongest modeled color is currently in Southeast Lower, estimated at 21% (past peak). Elsewhere, Central & Saginaw Bay is estimated at 16%; Southwest Lower is estimated at 14%. These percentages are seasonal model estimates, not counts of leaves observed on the ground.\n\nFall does not advance at the same rate across Michigan. The north-to-south spread runs from Western U.P. (9%) to Southeast Lower (21%). The short-range forecast near Southeast Lower calls for some rain in the next few days, highs near 65, lows near 31. Today's modeled estimate draws on regional climatology, recent weather, canopy camera anchor, MODIS canopy greenness; consult the source dates shown with the live readings before traveling.\n\nFor a closer look, the regional guide includes a drive such as The Irish Hills along US-12 or a walk around The Waterloo-Pinckney Trail through Waterloo Rec Area. 8 regions are modeled as fading or beyond peak, so the best location will depend on your dates. Use the interactive map and date slider for place-by-place comparisons, and confirm current conditions locally if you are planning a long trip.",
   "generationMethod": "Deterministic model summary",
-  "conditionsUpdated": "2026-11-09T21:28:59.579Z",
+  "conditionsUpdated": "2026-11-10T18:43:16.839Z",
   "sourceEvidence": [
     {
       "region": "wup",
-      "modeledPercent": 10,
+      "modeledPercent": 9,
       "source": {
         "drivers": [
           "regional climatology",
@@ -18,13 +18,13 @@
         "anchorShiftDays": -10,
         "anchorConfidence": "low",
         "satelliteDate": "2026-10-16",
-        "satelliteAgeDays": 25,
-        "satelliteWeight": 0.8
+        "satelliteAgeDays": 26,
+        "satelliteWeight": 0.76
       }
     },
     {
       "region": "eup",
-      "modeledPercent": 10,
+      "modeledPercent": 9,
       "source": {
         "drivers": [
           "regional climatology",
@@ -35,13 +35,13 @@
         "anchorShiftDays": -10,
         "anchorConfidence": "low",
         "satelliteDate": "2026-10-16",
-        "satelliteAgeDays": 25,
-        "satelliteWeight": 0.8
+        "satelliteAgeDays": 26,
+        "satelliteWeight": 0.76
       }
     },
     {
       "region": "tip",
-      "modeledPercent": 10,
+      "modeledPercent": 9,
       "source": {
         "drivers": [
           "regional climatology",
@@ -52,13 +52,13 @@
         "anchorShiftDays": -10,
         "anchorConfidence": "low",
         "satelliteDate": "2026-10-16",
-        "satelliteAgeDays": 25,
-        "satelliteWeight": 0.8
+        "satelliteAgeDays": 26,
+        "satelliteWeight": 0.76
       }
     },
     {
       "region": "nwl",
-      "modeledPercent": 10,
+      "modeledPercent": 9,
       "source": {
         "drivers": [
           "regional climatology",
@@ -69,13 +69,13 @@
         "anchorShiftDays": -10,
         "anchorConfidence": "low",
         "satelliteDate": "2026-10-16",
-        "satelliteAgeDays": 25,
-        "satelliteWeight": 0.8
+        "satelliteAgeDays": 26,
+        "satelliteWeight": 0.76
       }
     },
     {
       "region": "nel",
-      "modeledPercent": 10,
+      "modeledPercent": 9,
       "source": {
         "drivers": [
           "regional climatology",
@@ -86,8 +86,8 @@
         "anchorShiftDays": -10,
         "anchorConfidence": "low",
         "satelliteDate": "2026-10-16",
-        "satelliteAgeDays": 25,
-        "satelliteWeight": 0.8
+        "satelliteAgeDays": 26,
+        "satelliteWeight": 0.76
       }
     },
     {
@@ -103,13 +103,13 @@
         "anchorShiftDays": -10,
         "anchorConfidence": "low",
         "satelliteDate": "2026-10-16",
-        "satelliteAgeDays": 25,
-        "satelliteWeight": 0.8
+        "satelliteAgeDays": 26,
+        "satelliteWeight": 0.76
       }
     },
     {
       "region": "swl",
-      "modeledPercent": 27,
+      "modeledPercent": 14,
       "source": {
         "drivers": [
           "regional climatology",
@@ -120,13 +120,13 @@
         "anchorShiftDays": -10,
         "anchorConfidence": "low",
         "satelliteDate": "2026-10-16",
-        "satelliteAgeDays": 25,
-        "satelliteWeight": 0.8
+        "satelliteAgeDays": 26,
+        "satelliteWeight": 0.76
       }
     },
     {
       "region": "sel",
-      "modeledPercent": 27,
+      "modeledPercent": 21,
       "source": {
         "drivers": [
           "regional climatology",
@@ -137,8 +137,8 @@
         "anchorShiftDays": -10,
         "anchorConfidence": "low",
         "satelliteDate": "2026-10-16",
-        "satelliteAgeDays": 25,
-        "satelliteWeight": 0.8
+        "satelliteAgeDays": 26,
+        "satelliteWeight": 0.76
       }
     }
   ],
