@@ -68,14 +68,14 @@ export function isSafelyRejectedQueensboroDetour(data) {
   if (data.mapboxState !== 'PARTIAL') return false;
   const reason = String(data.mapboxReason || '');
   if (!reason.startsWith('4 of 5 fixed crossing probes returned usable live-traffic routes.')) return false;
-  const match = /queensboro: Mapbox route-distance sanity failure: crossing probe failed sanity checks \\(distance ([\\d.]+) m; allowed ([\\d]+)–([\\d]+) m\\)/.exec(reason);
+  const match = /queensboro: Mapbox route-distance sanity failure: crossing probe failed sanity checks \(distance ([\d.]+) m; allowed ([\d]+)–([\d]+) m\)/.exec(reason);
   if (!match || (reason.match(/route-distance sanity failure/g) || []).length !== 1) return false;
   const [, rawDistance, rawMin, rawMax] = match;
   const probe = traffic.MAPBOX_PROBES.queensboro;
   const distance = Number(rawDistance);
   if (!Number.isFinite(distance) || distance <= probe.maxDistanceMeters || distance > 20000 ||
       Number(rawMin) !== probe.minDistanceMeters || Number(rawMax) !== probe.maxDistanceMeters) return false;
-  if (/NoRoute|NoSegment|normalization failure|geometry sanity failure|snap failure|HTTP\\s+[45]\\d{2}/i.test(reason)) return false;
+  if (/NoRoute|NoSegment|normalization failure|geometry sanity failure|snap failure|HTTP\s+[45]\d{2}/i.test(reason)) return false;
   const queensboro = data.routes?.find(route => route.id === 'queensboro');
   if (!queensboro || queensboro.etaState === 'LIVE' || queensboro.etaMinutes != null ||
       !/Mapbox/.test(queensboro.trafficPending || '')) return false;
