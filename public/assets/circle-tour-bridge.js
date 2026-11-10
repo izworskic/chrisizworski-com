@@ -7,6 +7,45 @@
   const THEMES=new Set(['all','parks','falls','water','ships','history','logistics','seasonal']);
   const ROAD_HOSTS=new Set(['511wi.gov','mdotjboss.state.mi.us','511on.ca','511mn.org']);
   const LIMIT=6;
+  // Exact-place primary-source handoffs for stops without a released independent tool.
+  // These are editorial references, NEVER specialist connections or live access reports.
+  const OFFICIAL_STOPS=Object.freeze({
+    '2': {question:'Would you rather stroll Wisconsin Point or spend time in the harbor?',
+      context:'Wisconsin Point has a long public beach and a lighthouse view. The City of Superior publishes the access rules and protection requirements.',
+      url:'https://superiorwi.gov/226/Wisconsin-Point',sourceLabel:'City of Superior Wisconsin Point guide',
+      caution:'The city guide is not a current beach advisory. Follow posted restrictions and check local water-quality notices before swimming.'},
+    '4': {question:'Make Ashland a lakeshore-and-murals break, or a longer Chequamegon Bay visit?',
+      context:'Ashland has a historic Main Street, murals and a Lake Superior waterfront. Start with the local destination guide to choose what fits.',
+      url:'https://www.visitashland.com/',sourceLabel:'Ashland visitor guide',
+      caution:'A regional visitor guide does not verify today's opening hours, reservations or shoreline conditions.'},
+    '17': {question:'Looking for an easy stop on Highway 17?',
+      context:'White River’s Winnie the Pooh Park is a town-history stop near the tourist information centre, not a wilderness hike.',
+      url:'https://www.whiteriver.ca/winnie-the-pooh-park',sourceLabel:'Township of White River park guide',
+      caution:'Check current visitor-centre hours and site notices with the township; this is not a live status check.'},
+    '19': {question:'A short Nipigon river walk, or the much longer clifftop trail?',
+      context:'The Township of Nipigon describes short shoreline sections and a rugged one-way recreation trail toward Red Rock. Choose your effort before setting off.',
+      url:'https://www.nipigon.net/play-explore/things-to-do/trails-walks/item/114-nipigon-river-recreation-trail',sourceLabel:'Township of Nipigon trail guide',
+      caution:'This is an official trail description, not confirmation of trail condition, a shuttle, or a safe return route.'},
+    '21': {question:'An accessible High Falls outing, or the much longer Middle Falls hike?',
+      context:'Minnesota DNR describes a one-mile round-trip paved/boardwalk route to High Falls, distinct from the demanding 4.5-mile Middle Falls hike.',
+      url:'https://www.dnr.state.mn.us/state-parks/grand-portage/things-to-do.html',sourceLabel:'Minnesota DNR Grand Portage guide',
+      caution:'Check the DNR’s latest visitor notices. A published route description is not a current trail-clearance report.'},
+    '24': {question:'See Cascade River’s falls from the river overlooks, or give the shore and forest more time?',
+      context:'The Cascade River drops through a rocky gorge toward Lake Superior; Minnesota DNR also describes shoreline and longer hiking choices.',
+      url:'https://www.dnr.state.mn.us/state-parks/virtual-tours/cascade-river/dialup.html',sourceLabel:'Minnesota DNR Cascade River overview',
+      caution:'This is a descriptive DNR virtual tour, not a current park alert. Check conditions and stay back from slippery cliff edges.'},
+    '25': {question:'A short view of the Temperance River gorge, or a longer Carlton Peak hike?',
+      context:'Minnesota DNR’s mapped guide distinguishes the short gorge trail from the steep, longer Carlton Peak route. Lutsen activities require their own operating check.',
+      url:'https://files.dnr.state.mn.us/maps/state_parks/spk00268.pdf',sourceLabel:'Minnesota DNR Temperance River map',
+      caution:'The published map is not a current trail or ski-lift status. DNR warns against swimming in the Temperance River.'},
+    '26': {question:'A short Shovel Point shoreline walk, or a longer trip to High Falls?',
+      context:'Minnesota DNR distinguishes the lakeshore viewpoints from the Baptism River waterfall routes at Tettegouche.',
+      url:'https://www.dnr.state.mn.us/state-parks/park.html?id=spk00269',sourceLabel:'Minnesota DNR Tettegouche park page',
+      caution:'Check current park alerts and trail notes; past bridge work or a published route does not prove every path is open today.'}
+  });
+  function officialStopGuide(stopId){
+    return Object.hasOwn(OFFICIAL_STOPS,String(stopId))?OFFICIAL_STOPS[String(stopId)]:null;
+  }
   function safeDate(v){
     if(typeof v!=='string'||!/^\d{4}-\d\d-\d\d$/.test(v))return '';
     const d=new Date(v+'T12:00:00Z');
@@ -104,7 +143,7 @@
     };
   }
 
-  const helpers={rankConnections,roadChecks,buildReturnHref,planNextDecision,safeDate,safeTheme,safeToolUrl,safeRoadUrl};
+  const helpers={rankConnections,roadChecks,buildReturnHref,planNextDecision,safeDate,safeTheme,safeToolUrl,safeRoadUrl,officialStopGuide,officialStops:OFFICIAL_STOPS};
   if(typeof module!=='undefined'&&module.exports)module.exports=helpers;
   if(!root?.document)return;
   const document=root.document,host=document.querySelector('[data-circle-tour-bridge]');
@@ -260,16 +299,30 @@
         host.append(el('p','ctb-stage-alt',model.alternatives.length+' other approved check'+(model.alternatives.length===1?'':'s')+' for this stop. Open “Other specialist checks” below to compare.'));
       }
     }else{
-      host.append(el('p','ctb-stage-question','No approved '+(model.theme==='all'?'specialist':'specialist for this interest')+' at this stop.'));
-      host.append(el('p','ctb-stage-unknown','This is a coverage gap, not evidence that the stop is closed, unsafe or uninteresting.'));
+      const guide=officialStopGuide(model.stopId);
+      if(guide){
+        host.append(el('p','ctb-stage-prefix','A GOOD PLACE TO START'));
+        host.append(el('p','ctb-stage-question',guide.question));
+        host.append(el('p','ctb-stage-explainer',guide.context));
+        host.append(el('p','ctb-stage-unknown',guide.caution));
+        host.append(el('p','ctb-stage-path','This is an official or local visitor reference, not one of our independent tools or a live access check.'));
+      }else{
+        host.append(el('p','ctb-stage-question','We do not have a connected guide for this interest at this stop.'));
+        host.append(el('p','ctb-stage-unknown','That does not mean the place is closed or uninteresting. The original stop guide remains available.'));
+      }
       const options=el('div','ctb-stage-actions');
+      if(guide){
+        const officialLink=link('Explore '+guide.sourceLabel,guide.url,'ctb-link ctb-stage-primary');
+        officialLink.addEventListener('click',()=>track('official-stop-source-open',{stop:model.stopId}));
+        options.append(officialLink);
+      }
       if(model.otherThemesAvailable){
         const reset=el('button','ctb-stage-reset','See other interests at this stop');
         reset.type='button';
         reset.addEventListener('click',()=>{state.theme='all';state.showAll=false;remember();render();track('interest-recovered',{stop:model.stopId});});
         options.append(reset);
       }
-      const stop=el('a','ctb-secondary-link','Use the original stop guide');
+      const stop=el('a','ctb-secondary-link','Read the full stop guide');
       stop.href='#stop-'+model.stopId;options.append(stop);host.append(options);
     }
     renderPlaceStory(model,host);

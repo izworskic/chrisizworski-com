@@ -229,3 +229,37 @@ test('Place & Story script runs before decision renderer and remains within exis
   assert.match(bridge,/place-story-source-open/);
   assert.doesNotMatch(bridge,/place-story-view/,'rendering is not a measured on-screen photo view');
 });
+
+test('eight unserved Circle Tour stops retain independently verified official-source handoffs',()=>{
+  const ids=['2','4','17','19','21','24','25','26'];
+  assert.deepEqual(Object.keys(ui.officialStops).sort((a,b)=>Number(a)-Number(b)),ids.sort((a,b)=>Number(a)-Number(b)));
+  const trusted=new Set(['superiorwi.gov','www.visitashland.com','www.whiteriver.ca',
+    'www.nipigon.net','www.dnr.state.mn.us','files.dnr.state.mn.us']);
+  for(const id of ids){
+    const decision=ui.planNextDecision(committed,{selectedIds:[id]});
+    assert.equal(decision.kind,'no-specialist','editorial links never become approved specialist tools');
+    assert.equal(decision.primary,null);
+    const guide=ui.officialStopGuide(id);
+    assert.ok(guide.question.length>35&&guide.context.length>80);
+    assert.ok(guide.caution.length>40);
+    const address=new URL(guide.url);
+    assert.equal(address.protocol,'https:');
+    assert.ok(trusted.has(address.hostname));
+    assert.ok(guide.sourceLabel.length>15);
+    assert.equal(committed.connections.some(x=>x.stopIds.includes(id)),false,
+      'official source does not mutate approved catalog coverage');
+  }
+  assert.equal(ui.officialStopGuide('11'),null,'existing specialist remains the first call');
+  assert.equal(ui.officialStopGuide('__proto__'),null);
+  assert.equal(ui.officialStopGuide('99'),null);
+});
+test('official-source fallback follows a no-tool state, never overrides a specialist',()=>{
+  const bridge=readFileSync(path.join(root,'public/assets/circle-tour-bridge.js'),'utf8');
+  const original=readFileSync(path.join(root,'public/lake-superior-circle-tour/index.html'),'utf8');
+  assert.match(bridge,/if\(model\.kind==='next-check'\)/);
+  assert.match(bridge,/const guide=officialStopGuide\(model\.stopId\)/);
+  assert.match(bridge,/official-stop-source-open/);
+  assert.match(bridge,/not one of our independent tools or a live access check/);
+  assert.equal((original.match(/class="stop-card"/g)||[]).length,31);
+  assert.match(original,/rel="canonical" href="https:\/\/chrisizworski\.com\/lake-superior-circle-tour\/"/);
+});
