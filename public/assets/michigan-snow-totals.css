@@ -81,3 +81,21 @@ tr[hidden]{display:none}
 @media (max-width:640px){.kicker{font-size:.7rem;margin-bottom:.2rem}h1{font-size:1.85rem;margin-bottom:.4rem}.lede{font-size:.98rem}.windows button{padding:.4rem .7rem;font-size:.82rem}.live-head h2{font-size:1.2rem}}
 .choices{display:flex;flex-wrap:wrap;gap:.4rem}.choices button{min-height:40px;padding:.35rem .8rem;font-size:.9rem}
 .saved-note{font-size:.82rem;color:var(--muted);margin-top:.5rem!important}.linkish{background:none;border:0;padding:0;color:var(--ice);text-decoration:underline;cursor:pointer;font:inherit}
+
+
+/* Winter search sprint: distinct next decisions, not extra ad or forecast claims. */
+.town-shortcuts{display:flex;align-items:center;flex-wrap:wrap;gap:.45rem .65rem;padding:0 .25rem;margin:-.35rem 0 1rem;font:600 .85rem/1.45 system-ui,sans-serif}
+.town-shortcuts__label{color:var(--muted)}
+.town-shortcuts a{display:inline-block;border-radius:99px;border:1px solid var(--line);background:#fff;color:var(--snow);padding:.35rem .7rem;min-height:38px;text-decoration:none}
+.town-shortcuts a:hover,.town-shortcuts a:focus-visible{background:#e7f1f6;text-decoration:underline;outline-offset:2px}
+.town-shortcuts__note{font-weight:400;font-size:.78rem;color:var(--muted);flex-basis:100%}
+.heading-out{border-left:5px solid var(--ice);background:#edf5f8;border-radius:10px;padding:1rem 1.1rem;margin:1rem 0 1.15rem}
+.heading-out h3{font-size:1.1rem;line-height:1.25;margin:0 0 .3rem}
+.heading-out>p{margin:.35rem 0 .65rem}
+.snow-decision-paths{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.55rem}
+.snow-decision-paths a{display:flex;flex-direction:column;gap:.35rem;min-height:112px;background:#fff;border:1px solid #b8cedd;border-radius:9px;padding:.8rem .85rem;color:var(--ink);text-decoration:none;transition:border-color .15s,background .15s}
+.snow-decision-paths a:hover,.snow-decision-paths a:focus-visible{border-color:var(--snow);background:#f7fcff;outline-offset:2px}
+.snow-decision-paths strong{font-size:.94rem;line-height:1.28;color:var(--snow);text-decoration:underline;text-underline-offset:2px}
+.snow-decision-paths span{font-size:.83rem;line-height:1.4;font-weight:400;color:var(--muted)}
+.heading-out .snow-decision-note{font-size:.84rem;line-height:1.5;margin:.75rem 0 0}
+@media(max-width:700px){.snow-decision-paths{grid-template-columns:1fr}.snow-decision-paths a{min-height:0}.heading-out{padding:.8rem}.town-shortcuts{gap:.35rem .45rem}}

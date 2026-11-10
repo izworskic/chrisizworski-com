@@ -42,7 +42,7 @@
       "name": "Michigan Snow Totals Today: Live Map",
       "description": "Official National Weather Service snowfall reports for Michigan on a live map: search any town for its own report or the nearest ones, filter by region, and compare season snowfall at 52 NWS climate stations with the 1991-2020 normal.",
       "datePublished": "2026-09-26",
-      "dateModified": "2026-10-25",
+      "dateModified": "2026-11-09",
       "inLanguage": "en-US",
       "author": { "@id": "https://chrisizworski.com/#person" },
       "publisher": { "@id": "https://chrisizworski.com/#person" },
@@ -113,6 +113,14 @@
       <div id="townResult" class="town-result" aria-live="polite" hidden></div>
       <button type="button" id="shareBtn" class="share" hidden>Share this report</button>
     </form>
+    <nav class="town-shortcuts" aria-label="Open seven-day snow reports for example Michigan towns">
+      <span class="town-shortcuts__label">Try recent reports near:</span>
+      <a href="/michigan-snow-totals/?town=Marquette&amp;window=168h">Marquette</a>
+      <a href="/michigan-snow-totals/?town=Gaylord&amp;window=168h">Gaylord</a>
+      <a href="/michigan-snow-totals/?town=Grand%20Rapids&amp;window=168h">Grand Rapids</a>
+      <a href="/michigan-snow-totals/?town=Bay%20City&amp;window=168h">Bay City</a>
+      <span class="town-shortcuts__note">Seven-day reported snowfall, not a local forecast. No nearby report does not mean no snow fell.</span>
+    </nav>
     <p class="lede">How much snow fell in your town, where it fell hardest, and how the season compares with normal, from the reports that trained spotters, CoCoRaHS and co-op observers, and National Weather Service staff send in during and after every storm.</p>
     <p class="byline">By <a href="/chris-izworski/" rel="author">Chris Izworski</a>, Bay City, Michigan</p>
   </section>
@@ -132,10 +140,16 @@
 
     <div id="alertList" class="alerts" aria-live="polite"></div>
 
-    <div id="headingOut" class="heading-out">
-      <p><strong>Heading out to ride or ski?</strong> Snowfall is what fell. A riding or skiing base is what is still on the ground.</p>
-      <p class="links"><a href="/national-tools/snow/">Snow depth now</a> <a href="/snowmobile/">Snowmobile trail conditions</a> <a href="/michigan-cross-country-skiing/">Cross-country ski trails</a></p>
-    </div>
+    <nav id="headingOut" class="heading-out" aria-label="Choose the winter answer you need">
+      <h3>After the snowfall report, which answer do you need?</h3>
+      <p>These are different measurements. Choose the one that matches your plan.</p>
+      <div class="snow-decision-paths">
+        <a href="/michigan-snow-depth/" data-growth-cta="snow-totals-to-michigan-depth"><strong>Where is snow on the ground?</strong><span>Modeled snow depth checked against stations, with documented public winter destinations and access caveats.</span></a>
+        <a href="/lake-effect-snow/" data-growth-cta="snow-totals-to-lake-effect"><strong>Where could it snow next?</strong><span>NWS-led snowbelt forecast and alerts for the next 72 hours, not a measured storm total.</span></a>
+        <a href="/national-tools/white-christmas/forecast/" data-growth-cta="snow-totals-to-christmas"><strong>Will there be snow at Christmas?</strong><span>Historical local snow-cover odds now; the December 25 forecast matters only when the date is close.</span></a>
+      </div>
+      <p class="snow-decision-note"><strong>Ready to go out?</strong> <a href="/snowmobile/">Check snowmobile trail status</a> or <a href="/michigan-cross-country-skiing/">check XC ski trails</a>. Recent snowfall alone does not establish a safe, open or groomed trail.</p>
+    </nav>
 
     <div id="regionChips" class="chips" role="group" aria-label="Filter by region"></div>
     <p id="regionTrails" class="region-trails" hidden></p>
@@ -165,8 +179,8 @@
         <tbody></tbody>
       </table>
     </div>
-    <details id="lastSeasonBox" open>
-      <summary>Last winter (2025-26): final season totals at 52 stations</summary>
+    <details id="lastSeasonBox">
+      <summary>Compare with last winter (2025-26): final season totals at 52 stations (expand historical data)</summary>
       <div class="table-wrap">
         <table id="lastSeasonTable">
           <thead><tr><th scope="col">Station</th><th scope="col">Region</th><th scope="col">Total (in.)</th><th scope="col">Normal (in.)</th><th scope="col">Of normal</th></tr></thead>
