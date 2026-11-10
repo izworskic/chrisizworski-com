@@ -63,6 +63,26 @@ function check(value,message){if(!value)throw Error(message);}
     await page.locator('#ctb-stop').selectOption('11');
     check(await page.locator('#ctb-decision .ctb-place-story').count()===0,
       size.name+': unresearched stop inherited a different park photograph');
+    // The eight gap stops get a trustworthy *official reference*, not a fabricated
+    // specialist card. It must follow the selected place on every viewport.
+    for(const [id,hostname] of [
+      ['2','superiorwi.gov'],['4','www.visitashland.com'],
+      ['17','www.whiteriver.ca'],['19','www.nipigon.net'],
+      ['21','www.dnr.state.mn.us'],['24','www.dnr.state.mn.us'],
+      ['25','files.dnr.state.mn.us'],['26','www.dnr.state.mn.us']
+    ]){
+      await page.locator('#ctb-stop').selectOption(id);
+      await page.locator('#ctb-theme').selectOption('all');
+      const decisionText=await page.locator('#ctb-decision').textContent();
+      check(decisionText.includes('A GOOD PLACE TO START')&&decisionText.includes('not one of our independent tools'),
+        size.name+': missing honest official-reference guidance at stop '+id);
+      const official=page.locator('#ctb-decision .ctb-stage-primary');
+      check(await official.count()===1,size.name+': missing sole official link at stop '+id);
+      check(new URL(await official.getAttribute('href')).hostname===hostname,
+        size.name+': wrong controlling source for stop '+id);
+      check(await page.locator('#ctb-results .ctb-entry').count()===0,
+        size.name+': published specialist registry polluted by source at stop '+id);
+    }
     await page.locator('#ctb-stop').selectOption('11');
     await page.locator('#ctb-theme').selectOption('water');
     await page.waitForFunction(()=>document.querySelector('#ctb-status')?.textContent.includes('approved connection'));
@@ -109,7 +129,7 @@ function check(value,message){if(!value)throw Error(message);}
     check((await page.locator('#ctb-decision .ctb-stage-title').textContent()).includes('Pukaskwa'),
       size.name+': A-B-A re-entry lost progression');
     await page.locator('#ctb-theme').selectOption('ships');
-    check((await page.locator('#ctb-decision').textContent()).includes('No approved specialist'),
+    check((await page.locator('#ctb-decision').textContent()).includes('We do not have a connected guide for this interest at this stop.'),
       size.name+': unsupported interest invented a result');
     await page.locator('#ctb-decision .ctb-stage-reset').click();
     check((await page.locator('#ctb-decision').textContent()).includes('ONE USEFUL NEXT CHECK'),
