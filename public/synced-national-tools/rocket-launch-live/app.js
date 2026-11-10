@@ -168,7 +168,7 @@
     set('rl-front-timezone', 'Launch times shown in your local zone · ' + visitorZone.replace(/_/g, ' '));
     set('rl-front-feature-region', featured?.r.name || 'Choose a launch');
     set('rl-front-feature-vehicle', featured?.l.rocket || 'Launch schedule');
-    set('rl-front-next-title', featured?.l.name || (data ? 'No upcoming launches listed' : 'Schedule unavailable'));
+    set('rl-front-next-title', featured?.l.name || (data ? 'No upcoming launches listed' : 'Launch calendar unavailable'));
     set('rl-front-feature-pad', featured?.l.pad || 'Launch pad not announced');
     set('rl-front-feature-date', featured ? formattedDate(featured.l, visitorZone) : 'Date not announced');
     set('rl-front-feature-clock', featured ? formattedTime(featured.l, visitorZone) : 'Time unavailable');
