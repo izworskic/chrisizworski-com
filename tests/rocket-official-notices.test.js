@@ -203,7 +203,7 @@ t('Starbase future transport windows are source-bound, dated and never launch pe
  a.match(js,/Heads up: a city-listed vehicle movement overlaps/);
  a.match(js,/data\.scheduleFreshness==='recent'/);
  a.match(js,/\['minute','second'\]\.includes\(launch\?\.netPrecision\)/);
- a.match(js,/not an active closure, launch approval or viewing permission/);
+ a.match(js,/not itself a road closure/);
  new vm.Script(js);
 });
 
@@ -260,7 +260,7 @@ t('visitor display never treats city transport timing as a closure or launch aut
  a.match(js,/notice\.kind==='scheduled-road-activity'/);
  a.match(js,/data\.scheduleFreshness==='recent'/);
  a.match(js,/target>=from&&target<=through/);
- a.match(js,/not an active closure, launch approval or viewing permission/);
+ a.match(js,/not itself a road closure/);
  a.match(index,/20261110-voice-v1/);
  a.match(workflow,/starbase-road-v1/);
  new vm.Script(js);
