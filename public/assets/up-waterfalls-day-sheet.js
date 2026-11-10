@@ -76,6 +76,8 @@
   const lead = node('p', 'day-sheet-lead');
   const sharedArrival = node('p', 'day-sheet-shared-arrival');
   sharedArrival.hidden = true;
+  const regionalNote = node('p', 'day-sheet-shared-arrival');
+  regionalNote.hidden = true;
   const entries = node('div', 'day-sheet-entries');
   const actions = node('div', 'day-sheet-actions');
   const copyNotes = node('button', '', 'Copy trip notes');
@@ -87,10 +89,23 @@
   const sourceNote = node('p', 'day-sheet-footnote',
     'Source checks are snapshots, not live opening or road reports. Recheck each authority before leaving. ' +
     'Waterfall coordinates are not parking or navigable trails; roads, gates and weather can change.');
-  sheet.append(heading, dateLabel, lead, sharedArrival, entries, actions, status, sourceNote);
+  sheet.append(heading, dateLabel, lead, sharedArrival, regionalNote, entries, actions, status, sourceNote);
   shortlist.appendChild(sheet);
   const day = () => validDate(dayInput?.value) ? dayInput.value : '';
   const chosen = () => ids.map(id => cards.get(id)).filter(Boolean);
+  // Always reconstruct these cautions from the actual saved stops, including shared-link hydration.
+  const regionalNotesFor = selected => {
+    const names = new Set(selected.map(c => c.dataset.id));
+    const notes = [];
+    const blackIds = ['great-conglomerate-falls','potawatomi-falls','gorge-falls','rainbow-falls'];
+    if (blackIds.some(id => names.has(id))) notes.push(
+      'Black River Scenic Byway: Forest Service May 2026–2027 repair project. Sandstone Falls is closed; Potawatomi and Gorge have partial platform closures, Rainbow is subject to work and Conglomerate has stair/tread warnings. These are SEPARATE signed CR-513 trailhead stops; not a certified full-open route. https://www.fs.usda.gov/r09/ottawa/alerts/black-river-waterfall-platforms-and-trails-undergoing-major-repairs');
+    if (names.has('manganese-falls')) notes.push(
+      'Keweenaw Manganese Falls: no independently certified visitor parking coordinate; choose a lawful safe off-road space on Manganese Road or skip. Deep unguarded gorge, short rustic walk.');
+    if (names.has('haven-falls') && names.has('eagle-river-falls')) notes.push(
+      'Keweenaw: Eagle River Bridge Park and Haven Falls Park are TWO independent park arrivals, not one connected trail or calculated driving route.');
+    return notes;
+  };
   const warningsFor = c => {
     const review = window.UPWaterfallVisitLens?.review(c.dataset.id);
     const all = (review?.notice || []).filter(s => !s.startsWith('No closure encoded for this stop'));
@@ -105,6 +120,9 @@
     const riverFalls = selected.filter(c => ['manabezho-falls', 'manido-falls', 'nawadaha-falls'].includes(c.dataset.id));
     sharedArrival.hidden = riverFalls.length < 2;
     sharedArrival.textContent = riverFalls.length >= 2 ? 'Presque Isle: these ' + riverFalls.length + ' named waterfall records share ONE DNR scenic-area arrival from County Road 519. This is a conditional walking circuit, not multiple car stops. Confirm West/East River Trail repairs and any closed sections on the park map.' : '';
+    const regionalNotes = regionalNotesFor(selected);
+    regionalNote.hidden = regionalNotes.length === 0;
+    regionalNote.textContent = regionalNotes.join(' ');
     const regions = new Set(selected.map(c => c.dataset.region).filter(Boolean));
     const dayText = day() || 'Date not selected';
     dateLabel.textContent = 'Planned visit: ' + dayText + ' · ' + selected.length + ' of 6 stops';
@@ -158,7 +176,7 @@
     });
     const riverCount = chosen().filter(c => ['manabezho-falls', 'manido-falls', 'nawadaha-falls'].includes(c.dataset.id)).length;
     const riverNote = riverCount >= 2 ? 'Presque Isle river outing: ' + riverCount + ' falls share ONE scenic-site arrival from County Road 519. Full loop opening and West/East River Trail repairs are NOT verified; never route between waterfall GIS points.' : '';
-    return [heading, riverNote, ...body, 'Confirm all access and seasonal conditions before travel. No verified inter-stop drive times.'].filter(Boolean).join('\n\n');
+    return [heading, riverNote, ...regionalNotesFor(chosen()), ...body, 'Confirm all access and seasonal conditions before travel. No verified inter-stop drive times.'].filter(Boolean).join('\n\n');
   }
   async function copy(value, description) {
     if (!value) return;
