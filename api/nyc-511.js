@@ -1,6 +1,6 @@
 'use strict';
 const { timingSafeEqual } = require('node:crypto');
-const { getCached511,refresh511 } = require('../lib/nyc-crossing/ny511');
+const { getCached511,getPollHealth,refresh511 } = require('../lib/nyc-crossing/ny511');
 
 function isAuthorized(req, env=process.env) {
   const secret=env.CRON_SECRET;
@@ -19,9 +19,9 @@ module.exports = async function handler(req,res){
     const refreshed=await refresh511();
     return res.status(200).json(refreshed);
   }
-  const snapshot=await getCached511();
-  // A read-only diagnostic of the same distributed cache consumed by /api/nyc-crossing.
-  // The normalized items intentionally contain no auth details or unrestricted feed payload.
-  return res.status(200).json(snapshot);
+  const [snapshot,pollHealth]=await Promise.all([getCached511(),getPollHealth()]);
+  // Public output contains only bounded per-source state, never credentials,
+  // upstream URLs, raw provider errors or unfiltered incidents.
+  return res.status(200).json({...snapshot,pollHealth});
 };
 module.exports.isAuthorized=isAuthorized;
