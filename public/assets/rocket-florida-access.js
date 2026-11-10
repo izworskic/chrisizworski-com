@@ -1,7 +1,7 @@
 'use strict';
 /* A visitor-facing projection of the existing national and Florida engines.
    This layer makes no independent access, weather, parking or launch claims.
-   Never import a different mission's forecast, park alert or KSC ticket. */
+   Never import a different mission’s forecast, park alert or KSC ticket. */
 (function(root,factory){
   const api=factory();
   if(typeof module==='object'&&module.exports)module.exports=api;
@@ -65,7 +65,7 @@
       'For Cape Canaveral launches, start with public waterfront spots near Port Canaveral.':
       padKind==='kennedy'?
       'For Kennedy launches, the Titusville waterfront is a good place to start looking.':
-      'The launch pad isn't confirmed yet. Compare public viewing spots on both sides of the Space Coast.';
+      'The launch pad isn’t confirmed yet. Compare public viewing spots on both sides of the Space Coast.';
     if(named)answer+=' '+named+(chosenCards.length>1?' are':' is')+' a published option'+(chosenCards.length>1?'s':'')+', not confirmed launch-day entry.';
     const beach=match?deck.playalinda:null;
     const npsChecked=match&&regional.accessSource?.verified===true&&beach?.npsVerified===true;
