@@ -221,3 +221,38 @@
 .day-sheet-shared-arrival{background:#ecf3ed;border-left:3px solid #54806a;padding:11px 14px;margin:8px 0 15px;color:#284e3f;border-radius:4px;font-size:.91rem}
 @media(max-width:760px){.presque-isle-header,.presque-isle-choices,.presque-isle-footer{grid-template-columns:minmax(0,1fr)}.presque-isle-outing{padding:16px}.presque-isle-choice{padding:15px}.presque-isle-header h2{font-size:1.75rem}.presque-isle-choices{gap:12px}}
 @media print{.presque-isle-save{display:none}.presque-isle-outing{box-shadow:none}}
+
+
+/* B83: Reusable waterfall regional choices; legible on 360px phones. */
+.regional-waterfall-clusters{margin:22px 0 32px;padding:clamp(16px,2.8vw,30px);border:1px solid #c4d7d3;border-radius:17px;background:#f0f5f1;color:#193d36;scroll-margin-top:20px}
+.regional-eyebrow,.regional-cluster-label{font-size:.74rem;font-weight:850;letter-spacing:.12em;text-transform:uppercase;color:#386e69;margin:0 0 7px}
+.regional-intro h2{font:normal clamp(1.72rem,3vw,2.32rem)/1.16 Georgia,serif;color:#1c463d;margin:0 0 9px}
+.regional-intro>p:last-child{max-width:95ch;line-height:1.55;margin:0 0 20px}
+.regional-cluster-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.regional-cluster-card{display:flex;flex-direction:column;min-width:0;background:#fffefa;border-radius:12px;border:1px solid #d0ddd7;padding:clamp(16px,2vw,23px)}
+.regional-cluster-card h3{font:normal 1.46rem/1.23 Georgia,serif;color:#23453f;margin:0 0 8px}
+.regional-cluster-card>p:not(.regional-cluster-label):not(.regional-feedback):not(.regional-cluster-caution){font-size:.92rem;line-height:1.54;margin:0 0 13px;color:#455c55}
+.regional-stops{counter-reset:regional;list-style:none;padding:0;margin:0 0 18px;display:flex;flex-direction:column}
+.regional-stops li{counter-increment:regional;position:relative;padding:12px 0 12px 39px;border-top:1px solid #e0ebe5;min-width:0}
+.regional-stops li:before{content:counter(regional);position:absolute;left:0;top:13px;width:27px;height:27px;display:grid;place-items:center;background:#e0ede6;color:#2c6656;border-radius:50%;font-size:.82rem;font-weight:800}
+.regional-stops li strong,.regional-stops li span{display:block}
+.regional-stops li strong a{color:#185d5b}
+.regional-stops li span{font-size:.88rem;line-height:1.54;color:#4c625c;margin-top:4px}
+.regional-stops li a{font-weight:750}
+.regional-stops li.regional-conditional{border-left:3px solid #bf8540;padding-left:36px;background:#fcf8ef}
+.regional-stops li.regional-conditional:before{left:6px}
+.regional-stops li.regional-closed{background:#fbece9;border-left:3px solid #a24d43;padding-left:36px}
+.regional-stops li.regional-closed:before{left:6px;background:#f3d6d2;color:#8d332d}
+.regional-cluster-actions{margin-top:auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.regional-cluster-actions button{min-width:0;min-height:50px;padding:10px;border:0;border-radius:8px;background:#1b655a;color:#fff;font-weight:800;font-size:.9rem;line-height:1.3}
+.regional-cluster-actions button:hover{background:#134a43}
+.regional-cluster-actions button.secondary{background:#e1ebe6;color:#19483e;border:1px solid #9dbaaa}
+.regional-cluster-actions button.secondary:hover{background:#cdded5}
+.regional-cluster-caution{font-size:.85rem;background:#f5efe3;border-left:3px solid #ab7e45;border-radius:5px;color:#544634;margin:12px 0 0;padding:9px 11px;line-height:1.5}
+.regional-feedback{font-size:.88rem;color:#275247;background:#eaf2ec;border-radius:6px;margin:10px 0 0;padding:9px 11px;line-height:1.5}
+.regional-feedback:focus{outline:2px solid #c78040;outline-offset:2px}
+.regional-primary-source{background:#f7f7ee;border-radius:7px;padding:8px 12px}
+.regional-cluster-footnote{margin:16px 0 0;font-size:.91rem;color:#3c5b51;line-height:1.57}
+@media(max-width:830px){.regional-cluster-grid{grid-template-columns:1fr}.regional-cluster-card{padding:16px}}
+@media(max-width:390px){.regional-cluster-actions{grid-template-columns:1fr}}
+@media print{.regional-cluster-actions{display:none}.regional-waterfall-clusters{background:white;box-shadow:none}}
