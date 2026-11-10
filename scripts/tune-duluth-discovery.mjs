@@ -76,6 +76,10 @@ const app = graph.find(node => node?.['@type'] === 'WebApplication' && node?.['@
 const place = graph.find(node => node?.['@type'] === 'TouristAttraction');
 const page = graph.find(node => node?.['@type'] === 'WebPage' && node?.['@id'] === CANONICAL);
 if (!person || !app || !place || !page) throw new Error('Duluth discovery patch: required JSON-LD nodes missing');
+// The source page owns its content review date. A build-time snippet/social refresh
+// must never roll it back to an earlier SEO experiment date.
+const sourceReviewDate = String(page.dateModified || '');
+if (!/^\d{4}-\d{2}-\d{2}$/.test(sourceReviewDate)) throw new Error('Duluth discovery patch: missing valid source dateModified');
 app.name = 'Duluth Ship Schedule Today, Live Cams & Map';
 app.description = 'Live Duluth ship schedule built from fresh AIS with anticipated Aerial Lift Bridge passage windows, vessel map, Canal Park live cameras and viewing spots.';
 app.isAccessibleForFree = true;
@@ -107,7 +111,7 @@ page.description = 'Duluth ship schedule today with live AIS, anticipated Aerial
 page.about = { '@id': `${CANONICAL}#place` };
 page.primaryImageOfPage = { '@id': SOCIAL_IMAGE_ID };
 page.image = { '@id': SOCIAL_IMAGE_ID };
-page.dateModified = '2026-10-02';
+page.dateModified = sourceReviewDate;
 const updatedJsonLd = `<script type="application/ld+json">\n${JSON.stringify(jsonLd, null, 2)}\n</script>`;
 html = html.replace(jsonLdMatch[0], updatedJsonLd);
 
@@ -189,7 +193,7 @@ let sitemap = fs.readFileSync(SITEMAP, 'utf8');
 const escapedCanonical = CANONICAL.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const existing = new RegExp(`\\s*<url>\\s*<loc>${escapedCanonical}<\\/loc>[\\s\\S]*?<\\/url>\\s*`, 'g');
 sitemap = sitemap.replace(existing, '\n');
-const sitemapEntry = `  <url>\n    <loc>${CANONICAL}</loc>\n    <lastmod>2026-10-02</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>0.9</priority>\n  </url>\n`;
+const sitemapEntry = `  <url>\n    <loc>${CANONICAL}</loc>\n    <lastmod>${sourceReviewDate}</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>0.9</priority>\n  </url>\n`;
 if (!sitemap.includes('</urlset>')) throw new Error('Duluth discovery patch: sitemap missing </urlset>');
 sitemap = sitemap.replace('</urlset>', `${sitemapEntry}</urlset>`);
 fs.writeFileSync(SITEMAP, sitemap);
@@ -238,5 +242,7 @@ if (verifyApp?.name !== 'Duluth Ship Schedule Today, Live Cams & Map') throw new
 if (verifyImage?.url !== SOCIAL_IMAGE || verifyImage?.width !== 1200 || verifyImage?.height !== 630) throw new Error('Duluth discovery verification failed: social ImageObject');
 if (verifyApp?.image?.['@id'] !== SOCIAL_IMAGE_ID) throw new Error('Duluth discovery verification failed: WebApplication image');
 if (verifyPage?.primaryImageOfPage?.['@id'] !== SOCIAL_IMAGE_ID) throw new Error('Duluth discovery verification failed: WebPage primary image');
+if (verifyPage?.dateModified !== sourceReviewDate) throw new Error('Duluth discovery verification failed: source dateModified was overwritten');
+if (!finalSitemap.includes('<loc>' + CANONICAL + '</loc>\n    <lastmod>' + sourceReviewDate + '</lastmod>')) throw new Error('Duluth discovery verification failed: sitemap lastmod differs from source date');
 
 console.log(`Duluth discovery treatment verified: ${TITLE} (${textLength(TITLE)} chars); meta ${textLength(DESCRIPTION)} chars; social card + X metadata + image schema verified; sitemap + inbound link present.`);
