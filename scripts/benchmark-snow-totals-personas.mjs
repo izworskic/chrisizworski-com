@@ -123,9 +123,9 @@ add('recreation', 4, 'snow-belt regions match the snowmobile tool county for cou
     return a === b;
   });
 });
-add('recreation', 5, 'the "fell is not on the ground" hand-off to depth, trails and XC sits above the map', () => {
+add('recreation', 5, 'distinct Michigan snow depth, lake-effect, Christmas and trail handoffs sit above the map', () => {
   const block = html.slice(idx('id="headingOut"'), idx('id="snowMap"'));
-  return idx('id="headingOut"') > 0 && ['/national-tools/snow/', '/snowmobile/', '/michigan-cross-country-skiing/'].every(h => block.includes(`href="${h}"`));
+  return idx('id="headingOut"') > 0 && ['/michigan-snow-depth/', '/lake-effect-snow/', '/national-tools/white-christmas/forecast/', '/snowmobile/', '/michigan-cross-country-skiing/'].every(h => block.includes(`href="${h}"`)) && /does not establish a safe, open or groomed trail/.test(block);
 });
 add('recreation', 4, 'every snow-belt region hands off to a snowmobile region page that exists', () =>
   core.REGIONS.slice(0, 6).every(r => r.trails.length && r.trails.every(t => exists('public' + t.href))));
