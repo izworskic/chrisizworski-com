@@ -1409,164 +1409,109 @@
     }
   }
 
-  function renderOfficialEventCoverage(root,reconciliation,region){
-    const records=(reconciliation?.sourceStatus||[]).filter(x=>x.region===region);
-    if(!records.length)return;
-    const sourceNames={
-      'vandenberg-launch-news':'Vandenberg newsroom',
-      'spaceforce-news-rss':'Federal Space Force RSS',
-      'wallops-range-blog':'NASA Wallops blog'
-    };
-    root.appendChild(el('p','rl-match-coverage',
-      'Official launch-announcement channels checked: '+records.map(x=>
-        (sourceNames[x.id]||x.id)+' '+(
-          x.status==='retrieved'?'retrieved':
-          x.status==='partial'?'partially checked':'unavailable'
-        )).join(' · ')+'. A retrieved source without an exact match is not a cancellation.'));
-  }
-
+  // Keep the signed Python source ledger and mission matching in the API.
+  // Visitors see only useful official announcements, independently verified
+  // access notices, and curated authority links—not collector failures.
   function renderOfficialMatch(data) {
     const root=$('rl-mission-official-match');
     if(!root)return;
     root.replaceChildren();
-    root.appendChild(el('span','rl-match-eyebrow','EVENT-SPECIFIC SOURCE RECONCILIATION'));
+    root.hidden=true;
     const rec=state.officialEvidence?.reconciliation;
     const launch=data?.selectedLaunch;
-    if(!launch?.id){
-      root.dataset.status='unknown';
-      root.appendChild(el('h3','','No mission selected'));
-      root.appendChild(el('p','','Choose a scheduled mission to compare its exact designation and local date with a published government or range-operator announcement.'));
-      return;
-    }
-    const fresh=state.officialEvidence?.health==='recent'&&
-      rec?.health!=='unavailable-or-stale'&&rec?.manifestCheckedAt&&
-      data.scheduleFreshness==='recent';
-    const match=fresh?rec?.matches?.find(m=>m.launchId===launch.id&&m.region===data.region?.id):null;
+    if(!launch?.id||
+      state.officialEvidence?.health!=='recent'||
+      rec?.health==='unavailable-or-stale'||
+      rec?.health==='schedule-unavailable'||
+      !rec?.manifestCheckedAt||data.scheduleFreshness!=='recent')return;
+    const match=rec?.matches?.find(m=>m.launchId===launch.id&&m.region===data.region?.id);
+    if(!match||!['exact-designation-and-local-date','official-rss-exact-designation-and-local-date'].includes(match.matchRule))return;
     const day=launchLocalDay(launch,data.region?.timezone);
-    const dateGap=match&&day&&match.officialEventDate?
+    const dateGap=day&&match.officialEventDate?
       Math.abs((Date.parse(day+'T12:00:00Z')-Date.parse(match.officialEventDate+'T12:00:00Z'))/86400000):Infinity;
-    if(match&&dateGap<=1&&['exact-designation-and-local-date','official-rss-exact-designation-and-local-date'].includes(match.matchRule)){
+    root.hidden=false;
+    if(dateGap>1){
+      root.dataset.status='unverified';
+      root.appendChild(el('h3','','Check the official launch date'));
+      root.appendChild(el('p','','The latest schedule and the matched government announcement give different dates. Check the operator before making plans.'));
+    }else{
       root.dataset.status='matched';
-      root.appendChild(el('h3','',match.matchRule==='official-rss-exact-designation-and-local-date'?
-        'Official Space Force RSS announcement matched':'Official event article matched to this mission'));
+      root.appendChild(el('span','rl-match-eyebrow','OFFICIAL LAUNCH ANNOUNCEMENT'));
+      root.appendChild(el('h3','','An official announcement matches this mission'));
       root.appendChild(el('p','rl-match-heading',match.noticeTitle));
-      const meta=el('p','rl-match-meta','Exact designation: '+match.missionMarker+
-        ' · Published event date: '+match.officialEventDate+
-        (match.publishedDate?' · Article published: '+match.publishedDate:' · Article publication date unavailable')+
-        ' · Matched at '+stamp(rec.checkedAt));
-      root.appendChild(meta);
+      root.appendChild(el('p','rl-match-meta',
+        'Official event date: '+match.officialEventDate+
+        (match.publishedDate?' · Article published: '+match.publishedDate:'')));
       root.appendChild(el('p','rl-match-caution',
-        (match.matchRule==='official-rss-exact-designation-and-local-date' ?
-          'The exact mission, future launch date and Vandenberg range are attested by an official Space Force RSS summary; the linked full article may be inaccessible. ' :
-          'The exact mission and launch date are present in the original official article. ')+
-        'This does not confirm liftoff time, ticket inventory, public viewing access, range safety GO, road opening or maritime clearance.'));
-      const link=anchor(match.articleUrl,'Read original official event article');
-      if(link)root.appendChild(link);
-      const changes=(rec.history||[]).filter(x=>x.launchId===launch.id).slice(0,2);
-      for(const change of changes)root.appendChild(el('p','rl-match-change',
-        change.type==='official-link-first-verified'?
-        'First verified official link recorded '+stamp(change.detectedAt)+'.':
-        'Official evidence changed '+stamp(change.detectedAt)+'. Recheck the latest operator announcement.'));
-      renderOfficialEventCoverage(root,rec,data.region?.id);
-      return;
+        'This verifies an announcement, not the launch time, spectator access, parking, tickets or range clearance.'));
     }
-    root.dataset.status='unverified';
-    root.appendChild(el('h3','','No mission-specific official article matched'));
-    const unavailable=state.officialEvidenceLoaded!==true||!rec||
-      rec.health==='schedule-unavailable'||rec.health==='unavailable-or-stale'||
-      data.scheduleFreshness!=='recent';
-    root.appendChild(el('p','',unavailable?
-      'One or more source or schedule observations are unavailable or overdue. No reliable mission-to-article comparison can be made.':
-      dateGap!==Infinity?
-      'The national mission target differs from the last matched official article date. Verify the current operator statement before planning travel.':
-      'This source scan found no unambiguous official article naming this exact mission inside a compatible launch window. A missing match does not mean the launch is canceled, unannounced, or inaccessible.'));
-    const official=anchor(data.region?.authority,'Check current range authority');
-    if(official)root.appendChild(official);
-    renderOfficialEventCoverage(root,rec,data.region?.id);
+    const link=anchor(match.articleUrl,'Read the official announcement');
+    if(link)root.appendChild(link);
   }
 
   function renderOfficialEvidence(data) {
-    const root = $('rl-evidence-sources');
-    if (!root) return;
+    const root=$('rl-evidence-sources');
+    if(!root)return;
     renderOfficialMatch(data);
     root.replaceChildren();
-    const current = data?.region?.id;
-    const feed = state.officialEvidence;
-    if (!current || !validRegions.has(current)) {
-      set('rl-evidence-status','Select a coast to inspect official evidence.');
+    const region=data?.region?.id;
+    if(!validRegions.has(region)){
+      set('rl-evidence-status','Choose a coast for its official notices.');
+      set('rl-evidence-checked','Viewing access and launch times must be checked with the responsible authorities.');
       return;
     }
-    const records = feed?.regions?.[current] || [];
-    if (!records.length) {
-      set('rl-evidence-status',state.officialEvidenceLoaded ?
-        'Official source snapshot unavailable · do not infer an open range':
-        'Awaiting the independently scheduled source check');
-      set('rl-evidence-checked',state.officialEvidenceLoaded ?
-        'No independently checked source snapshot is available. Follow the authority link in the coast panel; official access is unverified.' :
-        'The collector is loading. No source observation is assumed current.');
-      const fallback = el('p','rl-evidence-none',
-        'No verified event-specific evidence in this source desk. A launch calendar is not an access approval.');
-      root.appendChild(fallback);
-      const official = anchor(data.region?.authority,'Open the selected coast’s official launch authority');
-      if (official) root.appendChild(official);
-      return;
-    }
-    const fresh = feed.health === 'recent';
-    const available = records.filter(r=>r.status==='retrieved').length;
-    set('rl-evidence-status',fresh ?
-      available+' of '+records.length+' sources verified for this coast' :
-      'Official notice observations '+(feed.health==='late'?'overdue':'stale')+' · verify directly');
-    set('rl-evidence-checked','Python source scan: '+stamp(feed.checkedAt)+'. '+
-      'A check timestamp is not a launch-event date or authorization. '+(
-        fresh ? 'Published statuses are only valid at source-check time.' :
-        'Current access statements have been suppressed until the next successful refresh.'));
-    for (const src of records) {
-      const article = el('article','rl-evidence-card');
-      article.dataset.status=src.status;
-      const top=el('div','rl-evidence-card-head');
-      top.appendChild(el('strong','',officialName[src.id]||'Official regional source'));
-      const marker=el('span','rl-evidence-marker',
-        src.status==='unavailable'?'Source unreachable':
-          src.status==='limited'?'Partial parsing':
-            fresh?'Source retrieved':'Source overdue');
-      marker.dataset.status=src.status;
-      top.appendChild(marker);article.appendChild(top);
-      const signals=(src.signals||[]).slice(0,4);
-      if(!signals.length)article.appendChild(el('p','rl-evidence-empty',
-        src.status==='unavailable'?'Source could not be retrieved. No opening, closure or launch can be inferred.':
-        'No independently supported event-specific status extracted from this official page.'));
-      for (const notice of signals) {
-        const note=el('div','rl-evidence-signal');
-        note.appendChild(el('span','rl-evidence-type',
-          evidenceKind[notice.kind]||'Official-source observation'));
-        note.appendChild(el('strong','',notice.title));
-        note.appendChild(el('p','',notice.detail));
-        // A transport movement may affect travel planning, but is not a
-        // mayoral closure or mission launch authorization. Only compare
-        // intervals when both the city scan and precise LL2 target are fresh.
-        const launch=data?.selectedLaunch;
-        if(notice.kind==='scheduled-road-activity'&&current==='texas'&&fresh&&
-          data.scheduleFreshness==='recent'&&
-          ['minute','second'].includes(launch?.netPrecision)){
-          const target=Date.parse(launch.net||'');
-          const from=Date.parse(notice.windowStart||'');
-          const through=Date.parse(notice.windowEnd||'');
-          if(Number.isFinite(target)&&Number.isFinite(from)&&Number.isFinite(through)&&
-            target>=from&&target<=through){
-            const warning=el('p','rl-evidence-change',
-              'Travel timing overlap: this city-listed movement window overlaps the selected mission’s current published target time. Confirm Highway 4 conditions directly. This is not an active closure, launch approval or viewing permission.');
-            note.appendChild(warning);
-          }
-        }
-        const link=anchor(notice.sourceUrl,'Read original official source');
-        if(link)note.appendChild(link);
-        article.appendChild(note);
+    const feed=state.officialEvidence;
+    const fresh=feed?.health==='recent';
+    const records=Array.isArray(feed?.regions?.[region])?feed.regions[region]:[];
+    const good= fresh ? records.filter(s=>s.status==='retrieved'): [];
+    set('rl-evidence-status',good.length?
+      'Official updates available; launch-day access is not confirmed':
+      'Current official updates cannot be independently confirmed here');
+    set('rl-evidence-checked',good.length?
+      'Published information can change before liftoff. Check the official sources below immediately before leaving.':
+      'A missed automated check does not mean a launch is canceled or a viewing location is closed. Use the official links below.');
+
+    // These are source-registered destination URLs, not last-run scraper links.
+    // A stale snapshot may still contain an obsolete subscription URL.
+    const links=el('nav','rl-official-links');
+    links.setAttribute('aria-label','Official launch and access sources');
+    const seen=new Set();
+    const add=(url,label)=>{
+      if(!safeUrl(url)||seen.has(url))return;
+      seen.add(url);
+      const link=anchor(url,label,'rl-official-source-link');
+      if(link)links.appendChild(link);
+    };
+    if(region==='california')
+      add('https://public.govdelivery.com/accounts/USDODSFVANDENBERGPA/subscriber/new',
+        'Get Vandenberg launch alerts');
+    add(data.region?.authority,'Official range announcements');
+    add(data.region?.access,'Official public-access rules');
+    if(links.childElementCount)root.appendChild(links);
+
+    // Display only recently retrieved, substantive land-manager notices.
+    // Never show an "unreachable source" card, a stale open condition,
+    // a generic subscription as a mission announcement, or prior orders
+    // as current road closures.
+    const useful=new Set(['access-status','road-status','notice-check-required',
+      'scheduled-road-activity','schedule-status']);
+    let shown=0;
+    for(const source of good){
+      for(const notice of source.signals||[]){
+        if(shown>=2)break;
+        if(!useful.has(notice.kind)||notice.relevance==='historical-only'||
+          notice.relevance==='unmatched-official-article'||!notice.title)continue;
+        const article=el('article','rl-evidence-notice');
+        article.appendChild(el('strong','',notice.title));
+        if(notice.detail)article.appendChild(el('p','',notice.detail));
+        const a=anchor(notice.sourceUrl,'Read official notice');
+        if(a)article.appendChild(a);
+        article.appendChild(el('small','',
+          'Observed '+stamp(feed.checkedAt)+'; not a prediction of launch-day conditions.'));
+        root.appendChild(article);
+        shown++;
       }
-      if(src.changedSinceLastCheck===true)article.appendChild(el('p','rl-evidence-change',
-        'Normalized official evidence changed since the preceding successful scan; this does not establish a closure or a launch change.'));
-      const source=anchor(src.sourceUrl,'Open source for current rules','rl-evidence-origin');
-      if(source)article.appendChild(source);
-      root.appendChild(article);
+      if(shown>=2)break;
     }
   }
   async function loadOfficialEvidence() {
