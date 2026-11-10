@@ -1,3 +1,11 @@
+### 2026-11-09 — Freighter Growth Engine sprint 3: complete the next port decision
+
+- **Existing demand:** Nov 9 private GSC export page totals (long interval): Soo 2,041 clicks / 39,185 impressions; fleet tracker 355 / 26,286; Welland 102 / 3,871; Duluth 16 / 3,169. No page-filtered query attribution, revenue or post-release uplift established.
+- **Selected small, meaningful release:** Duluth keeps the fresh-AIS first answer but adds a visible, independently published Harbor Lookout arrivals link and a direct Canal Cam cross-check when no live candidate is supported. Its lower related area now connects visitors to dated winter layups and separate Welland information. Welland's existing official Seaway order-of-turn and lock viewer remain first, with direct links for the distinct tasks of five-lake tracking, documented layup, and port discovery. Soo's proven schedule first screen stays intact; only its lower related list gains a Duluth link.
+- **No duplicated infrastructure:** Retired Freighter Watch Desk remains retired. No new tool/route, no AIS or schedule-model changes, no title experiments, no ads/auth/Redis, no inferred passage appointments or layups.
+- **Quality/evaluation:** Regression in tests/freighter-growth-sprint3.test.js; full repository and public-page/production verification required before release status is confirmed. Historical outcomes and 7/28-day measurement rules in docs/FREIGHTER_GROWTH_SPRINT_3_2026-11-09.md.
+- **Release state at authoring:** Review branch; merge and production readback are required before labeling live.
+
 ### 2026-11-09 — Winter traffic capture sprint 2 (review branch)
 
 - **Intent:** Strengthen an existing Google-visible winter answer, not launch more pages. Nov 9 Search Console export gives /michigan-snow-totals/ 1,876 impressions / 10 clicks / 0.53% CTR, but the page already has a query-specific title, observer-based report map and town search.
