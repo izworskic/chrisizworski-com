@@ -423,3 +423,9 @@
   .map-lock-preview__step-buttons{width:100%}
   .map-lock-preview__step-buttons button{flex:1 1 112px}
 }
+
+
+/* Separate live vessel positions, documented winter berths and general port discovery. */
+.shipping-continuation{display:flex;flex-direction:column;gap:9px;margin-top:12px}
+.shipping-continuation a{display:block;padding:10px 11px;border-radius:6px;border:1px solid #b9cfd1;background:#f4fafb;color:#0c4b5e;font-size:14px;font-weight:700;line-height:1.4;text-decoration:none}
+.shipping-continuation a:hover,.shipping-continuation a:focus-visible{background:#e2f2f5;text-decoration:underline;outline-offset:2px}
