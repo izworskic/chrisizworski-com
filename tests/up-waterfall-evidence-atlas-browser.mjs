@@ -202,7 +202,7 @@ try{
   assert.equal(await page.locator('#ea-map .leaflet-interactive').count(),0,'day-use area may not be plotted as a waterfall');
   assert.equal(await page.locator('#ea-detail .ea-compare-btn').count(),2,'Upper and Lower Falls keep separate natural-feature identities');
   await page.locator('#ea-detail .ea-compare-btn').first().click();
-  assert.match(await page.locator('#ea-detail').innerText(),/State GIS/);
+  assert.match(await page.locator('#ea-detail').innerText(),/State GIS/i,'evidence type may render in uppercase under page typography');
   assert.equal(await page.locator('#ea-map .leaflet-interactive').count(),1,'one independently mapped natural feature is shown on explicit inspection');
   assert.ok(await page.locator('#ea-detail a[href="/tahquamenon-falls/"]').count()>0);
   const bounds=await page.evaluate(()=>({w:window.innerWidth,s:document.documentElement.scrollWidth}));

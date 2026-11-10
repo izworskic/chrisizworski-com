@@ -95,6 +95,33 @@ try{
     }finally{await trip.close();}
   });
 
+  await run('B81 Munising plans: source-gated 3-stop day, winter refusal and forest swap on mobile',async()=>{
+    await page.locator('#clear-list').click();
+    await page.locator('#visit-date').fill('2027-06-15');
+    await page.locator('[data-munising-preset="shoreline"]').click();
+    assert.equal(await page.locator('#upfall-day-sheet .day-sheet-stop').count(),3);
+    const shoreline=await page.locator('#selected-list').innerText();
+    for(const name of ['Wagner Falls','Miners Falls','Elliot Falls'])assert.match(shoreline,new RegExp(name));
+    assert.doesNotMatch(shoreline,/Munising Falls|Chapel Falls/);
+    assert.match(await page.locator('#munising-day-status').innerText(),/not verified driving access/i);
+    await page.locator('#clear-list').click();
+    await page.locator('#visit-date').fill('2027-01-15');
+    await page.locator('[data-munising-preset="shoreline"]').click();
+    assert.equal(await page.locator('#upfall-day-sheet .day-sheet-stop').count(),0,'winter plan must not save road-dependent falls');
+    assert.match(await page.locator('#munising-day-status').innerText(),/December 1.*March 31/);
+    await page.locator('#visit-date').fill('2027-06-15');
+    await page.locator('[data-munising-preset="forest"]').click();
+    assert.equal(await page.locator('#upfall-day-sheet .day-sheet-stop').count(),3);
+    const forest=await page.locator('#selected-list').innerText();
+    assert.match(forest,/Chapel Falls/);
+    assert.doesNotMatch(forest,/Elliot Falls|Munising Falls/);
+    const {width,scroll}=await page.evaluate(()=>({width:innerWidth,scroll:document.documentElement.scrollWidth}));
+    assert.ok(scroll<=width+2,'Munising day causes horizontal overflow');
+    await page.screenshot({path:screenshots+'/munising-day-mobile.png',fullPage:true,animations:'disabled'});
+    await page.locator('#clear-list').click();
+    await page.locator('#visit-date').fill('2026-11-02');
+  });
+
   await run('visit lens: filter by 30-minute full on-site range and exclude agency closure',async()=>{
     await page.locator('#visit-region').selectOption('Pictured Rocks / Munising');
     await page.locator('#visit-budget').selectOption('30');
