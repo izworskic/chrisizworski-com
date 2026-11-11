@@ -300,3 +300,68 @@ test('North Shore unserved stops distinguish source-verified hikes, resort opera
  assert.match(bridge,/const guide=officialStopGuide\(model\.stopId\)/);
  assert.match(bridge,/official-stop-source-open/);
 });
+
+test('eight stop arrival desk has researched destinations, source links and no invented coordinates',()=>{
+ const stopIds=['2','4','17','19','21','24','25','26'];
+ const expectedCounts={'2':1,'4':1,'17':1,'19':2,'21':1,'24':2,'25':2,'26':1};
+ const trusted=new Set(['www.superiorwi.gov','www.visitashland.com','www.whiteriver.ca','www.parcs.canada.ca',
+  'files.dnr.state.mn.us','olmwebservices.dot.state.mn.us','www.lutsen.com','www.dnr.state.mn.us']);
+ let addresses=0,lookups=0;
+ for(const id of stopIds){
+  const locations=ui.officialArrivals(id);
+  assert.equal(locations.length,expectedCounts[id]);
+  assert.equal(ui.planNextDecision(committed,{selectedIds:[id]}).kind,'no-specialist');
+  for(const item of locations){
+   assert.ok(item.label.length>=22&&item.note.length>=95);
+   assert.ok(item.sourceLabel.length>=25);
+   assert.ok(trusted.has(new URL(item.sourceUrl).hostname),item.sourceUrl);
+   assert.equal(new URL(item.sourceUrl).protocol,'https:');
+   assert.ok(['address','search'].includes(item.kind));
+   const url=new URL(ui.arrivalMapUrl(item));
+   assert.equal(url.protocol,'https:');
+   assert.equal(url.hostname,'www.google.com');
+   assert.equal(url.searchParams.get('api'),'1');
+   if(item.kind==='address'){
+    addresses++;
+    assert.equal(url.pathname,'/maps/dir/');
+    assert.equal(url.searchParams.get('destination'),item.destination);
+    assert.equal(url.searchParams.get('travelmode'),'driving');
+   }else{
+    lookups++;
+    assert.equal(url.pathname,'/maps/search/');
+    assert.equal(url.searchParams.get('query'),item.destination);
+    assert.ok(!url.searchParams.has('destination'),'unverified place is a search, not precise route directions');
+   }
+   assert.equal(url.searchParams.has('origin'),false,'never assume traveler current location');
+   assert.ok(!url.searchParams.has('destination_place_id'),'no fabricated Google place IDs');
+  }
+ }
+ assert.equal(addresses,4);
+ assert.equal(lookups,7);
+ assert.equal(ui.officialArrivals('11').length,0,'independent specialist still wins');
+ assert.equal(ui.officialArrivals('27').length,0);
+ assert.equal(ui.officialArrivals('__proto__').length,0);
+ assert.equal(ui.arrivalMapUrl({kind:'address',destination:'x'}),'');
+ assert.equal(ui.arrivalMapUrl({kind:'untrusted',destination:'Somewhere, ON'}),'');
+});
+test('North Shore arrival desk preserves park versus resort and the documented construction limit',()=>{
+ const nipigon=ui.officialArrivals('19');
+ assert.match(nipigon[0].note,/Marina/);
+ assert.match(nipigon[1].note,/Third Street/);
+ assert.match(nipigon[1].note,/return ride/);
+ const cascade=ui.officialArrivals('24');
+ assert.match(cascade[0].note,/construction in 2026/);
+ assert.match(cascade[0].note,/do not assume/);
+ assert.match(cascade[1].note,/not the same entrance/);
+ const temperance=ui.officialArrivals('25');
+ assert.match(temperance[0].note,/northeast side/);
+ assert.match(temperance[0].note,/not a surveyed parking pin/);
+ assert.match(temperance[1].destination,/467 Ski Hill Road/);
+ assert.match(temperance[1].sourceUrl,/lutsen\.com/);
+ assert.match(ui.officialArrivals('21')[0].destination,/9393 East Highway 61/);
+ assert.match(ui.officialArrivals('26')[0].destination,/5702 Highway 61/);
+ const bridge=readFileSync(path.join(root,'public/assets/circle-tour-bridge.js'),'utf8');
+ assert.match(bridge,/arrival-map-open/);
+ assert.match(bridge,/if\(guide\)\{/);
+ assert.match(bridge,/renderPlaceStory\(model,host\)/);
+});
