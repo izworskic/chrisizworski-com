@@ -21,7 +21,7 @@ test('Hawaiʻi specialist uses one national schedule location with no shadow dat
  assert.match(js,/\/api\/rocket-launch-usa/);
  assert.match(js,/region:'hawaii'/);
  assert.match(js,/data\.selectedLaunch\?\.region==='hawaii'/);
- assert.match(js,/No upcoming Barking Sands launch/);
+ assert.match(js,/No upcoming Barking Sands flight/);
  assert.doesNotMatch(js,/ll\.thespacedevs\.com|launches\/upcoming|createClient\(|supabase|redis/i);
  assert.match(hubjs,/url\.startsWith\('\/barking-sands-rocket-launch-viewing\/'\)\?'hawaii'/);
  assert.match(hubjs,/Barking Sands access guide/);
