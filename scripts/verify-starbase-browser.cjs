@@ -99,7 +99,7 @@ async function waitReady(page){
    await page.locator('#sb-mission-picker').selectOption(B);
    await page.waitForFunction(id=>new URL(location.href).searchParams.get('launchId')===id,B);
    assert(await page.locator('#sb-map .sb-restricted-pin').count()===0,v.name+' unknown pad hidden');
-   assert((await page.locator('#sb-selected-geometry').innerText()).includes('No mission-specific bearing'),v.name+' unknown bearing label');
+   assert((await page.locator('#sb-selected-geometry').innerText()).includes('no reliable distance or direction'),v.name+' unknown bearing label');
    await page.locator('#sb-mission-picker').selectOption(A);
    await page.waitForFunction(id=>new URL(location.href).searchParams.get('launchId')===id,A);
    assert(await page.locator('#sb-map .sb-restricted-pin').count()===1,v.name+' pad restored after B→A');
@@ -116,7 +116,7 @@ async function waitReady(page){
   const stale=await staleContext.newPage();await routeLeaflet(stale);
   await stale.goto(url+'?launchId=33333333-3333-4333-8333-333333333333',{waitUntil:'domcontentloaded'});
   await waitReady(stale);
-  assert((await stale.locator('#sb-mission-source').innerText()).includes('NEW selection'),
+  assert((await stale.locator('#sb-mission-source').innerText()).includes('A different mission is shown'),
    'Expired deep link must disclose replaced mission');
   scenarios.push({name:'expired-link',fallback:'disclosed, first bounded mission'});
   await staleContext.close();
