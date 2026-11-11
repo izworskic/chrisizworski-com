@@ -109,7 +109,7 @@ async function ready(page){
    await page.waitForFunction(id=>new URL(location.href).searchParams.get('launchId')===id,B);
    assert((await page.locator('#w-mission-type-tag').innerText()).includes('SUBORBITAL HASTE'),v.label+' HASTE distinct');
    assert(await page.locator('#w-map .w-restricted-marker').count()===0,v.label+' removed unknown pad');
-   assert((await page.locator('#w-selected-bearing').innerText()).includes('No verified'),v.label+' no invented bearings');
+   assert((await page.locator('#w-selected-bearing').innerText()).includes('The pad isn’t confirmed'),v.label+' no invented bearings');
    assert((await page.locator('#w-decision-title').innerText()).includes('LAUNCH HOUR UNVERIFIED'),v.label+' no coarse countdown');
    await page.locator('#w-mission-select').selectOption(A);
    await page.waitForFunction(id=>new URL(location.href).searchParams.get('launchId')===id,A);
