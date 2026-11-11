@@ -158,7 +158,7 @@ async function expectName(page,name){
    const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
    assert(overflow<=2,size.name+' horizontal overflow '+overflow);
    assert((await page.locator('#geo-map-status').innerText()).length>0,size.name+' GIS fallback text absent');
-   assert((await page.locator('#ksc-mission-viewing').innerText()).includes('Do not buy'),size.name+' unverified tickets warning');
+   assert((await page.locator('#ksc-mission-viewing').innerText()).includes('before buying tickets'),size.name+' unverified tickets warning');
    assert(errors.length===0,size.name+' JS exceptions '+errors.join('; '));
    const shot=size.name+'-florida-facilities.png';
    await page.locator('#florida-launch-facilities').screenshot({path:path.join(out,shot),animations:'disabled'});
