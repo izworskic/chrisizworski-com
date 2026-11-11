@@ -77,7 +77,7 @@ test('the map uses actual Leaflet pins, stable CARTO/OSM tiles, click selection,
 });
 
 test('map popups expose detailed guide sections, original venue evidence and access restrictions',()=>{
-  assert.match(script,/Read the full viewing notes/);
+  assert.match(script,/Read what to expect here/);
   assert.match(script,/place\.articleAnchor/);
   assert.match(script,/sceneLabel\(place\)/);
   assert.match(script,/place\.accessNote/);
@@ -98,7 +98,7 @@ test('the map remains non-blocking and safe when Leaflet, CARTO tiles or manifes
   assert.match(page,/href="#city-parks"/);
   assert.match(script,/if\(!window\.L\)/);
   assert.match(script,/if\(!checkManifest\(payload\)\)/);
-  assert.match(script,/Map currently unavailable/);
+  assert.match(script,/The map isn.t loading/);
   assert.match(script,/!response\.ok/);
   assert.doesNotMatch(script,/api\/rocket-launch-usa|api\.weather\.gov|ll\.thespacedevs|navigator\.geolocation|localStorage|sessionStorage|flightPath|trajectoryPoints/);
 });
