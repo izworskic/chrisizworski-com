@@ -147,7 +147,7 @@ function check(value,message){if(!value)throw Error(message);}
     check((await page.locator('#ctb-decision .ctb-stage-title').textContent()).includes('Pukaskwa'),
       size.name+': A-B-A re-entry lost progression');
     await page.locator('#ctb-theme').selectOption('ships');
-    check((await page.locator('#ctb-decision').textContent()).includes('No approved specialist'),
+    check((await page.locator('#ctb-decision').textContent()).includes('There is no connected guide for this interest'),
       size.name+': unsupported interest invented a result');
     await page.locator('#ctb-decision .ctb-stage-reset').click();
     check((await page.locator('#ctb-decision').textContent()).includes('ONE USEFUL NEXT CHECK'),
