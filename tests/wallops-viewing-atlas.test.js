@@ -108,19 +108,19 @@ test('route connects one Virginia specialist to central national mission IDs',()
 test('published Wallops page has one canonical, static source links and no launch promise',()=>{
  assert.equal((page.match(/rel="canonical"/g)||[]).length,1);
  assert.match(page,/https:\/\/chrisizworski\.com\/wallops-rocket-launch-viewing\//);
- assert.match(page,/No invented launch countdown/);
- assert.match(page,/A quiet public calendar is not a quiet launch range/);
+ assert.match(page,/Times can change/);
+ assert.match(page,/No launch listed\? Wallops may still be busy/);
  assert.match(page,/data-place="nasa-visitor"/);
  assert.match(page,/data-place="reed"/);
  assert.match(page,/data-place="harbor"/);
  assert.match(page,/id="w-mission-select" disabled/);
- assert.match(page,/Route 175 is not a viewing lot/);
- assert.match(page,/Assateague is not the fallback by default/);
+ assert.match(page,/Don.t stop on Route 175/);
+ assert.match(page,/Assateague can close for a launch/);
  assert.match(page,/not a current or actual launch photo/);
  assert.match(page,/Built by Chris Izworski/);
  const guides=read('public/guides/index.html');
  assert.match(guides,/data-field-guide="wallops-rocket-viewing"/);
  const map=read('public/sitemap.xml');
  assert.equal(map.split('https://chrisizworski.com/wallops-rocket-launch-viewing/').length-1,1);
- assert.match(map,/wallops-rocket-launch-viewing\/[^<]*<\/loc>\s*<lastmod>2026-11-03<\/lastmod>/);
+ assert.match(map,/wallops-rocket-launch-viewing\/[^<]*<\/loc>\s*<lastmod>2026-11-10<\/lastmod>/);
 });
