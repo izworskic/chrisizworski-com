@@ -66,11 +66,32 @@ function check(value,message){if(!value)throw Error(message);}
       check(alts.every(x=>x.alt.length>30&&x.loading==='lazy'&&x.decoding==='async'&&x.src.startsWith('https://thumb.wikimedia.org/')),
         size.name+': invalid rights-conscious photographic markup');
     }
+    // Eight stops with no independent specialist still give a useful sourced visitor choice.
+    for(const [id,hostname,secondaryCount] of [
+      ['2','www.superiorwi.gov',1],['4','www.visitashland.com',1],
+      ['17','whiteriver.ca',1],['19','www.nipigon.net',1],
+      ['21','www.dnr.state.mn.us',1],['24','www.dnr.state.mn.us',2],
+      ['25','files.dnr.state.mn.us',2],['26','www.dnr.state.mn.us',1]
+    ]){
+      await page.locator('#ctb-stop').selectOption(id);
+      await page.locator('#ctb-theme').selectOption('all');
+      const panel=page.locator('#ctb-decision');
+      check((await panel.textContent()).includes('MAKE THE MOST OF THIS STOP'),
+        size.name+': sourced visitor action absent at '+id);
+      const primary=panel.locator('.ctb-stage-primary');
+      check(await primary.count()===1,size.name+': official visitor link missing at '+id);
+      check(new URL(await primary.getAttribute('href')).hostname===hostname,
+        size.name+': wrong source domain at '+id);
+      check(await panel.locator('.ctb-stage-actions .ctb-secondary-link').count()===secondaryCount,
+        size.name+': expected original stop guide plus any additional official reference at '+id);
+      check(await page.locator('#ctb-results .ctb-entry').count()===0,
+        size.name+': false independent specialist card at '+id);
+    }
     await page.locator('#ctb-stop').selectOption('26');
     check(await page.locator('#ctb-decision .ctb-place-story').count()===1,
       size.name+': Tettegouche story missing when no specialist is released');
-    check(await page.locator('#ctb-decision .ctb-stage-primary').count()===0,
-      size.name+': Tettegouche falsely gained a specialist');
+    check(new URL(await page.locator('#ctb-decision .ctb-stage-primary').getAttribute('href')).hostname==='www.dnr.state.mn.us',
+      size.name+': official Tettegouche reference must stay on DNR host');
     await page.locator('#ctb-stop').selectOption('27');
     check(await page.locator('#ctb-decision .ctb-stage-primary').count()===1,
       size.name+': Split Rock lost the approved specialist');
@@ -126,7 +147,7 @@ function check(value,message){if(!value)throw Error(message);}
     check((await page.locator('#ctb-decision .ctb-stage-title').textContent()).includes('Pukaskwa'),
       size.name+': A-B-A re-entry lost progression');
     await page.locator('#ctb-theme').selectOption('ships');
-    check((await page.locator('#ctb-decision').textContent()).includes('No approved specialist'),
+    check((await page.locator('#ctb-decision').textContent()).includes('There is no connected guide for this interest'),
       size.name+': unsupported interest invented a result');
     await page.locator('#ctb-decision .ctb-stage-reset').click();
     check((await page.locator('#ctb-decision').textContent()).includes('ONE USEFUL NEXT CHECK'),
