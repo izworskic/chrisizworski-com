@@ -11,6 +11,7 @@ import json
 import pathlib
 import subprocess
 import sys
+from zoneinfo import ZoneInfo
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 DATES = ("2026-09-20", "2026-10-15", "2026-10-31",
@@ -78,8 +79,10 @@ def validate_date(iso):
 
 def main():
     validate_runtime()
-    count = sum(validate_date(iso) for iso in DATES)
-    print(f"PASS: Michigan page syntax + {count} modeled region-days across {len(DATES)} dates; "
+    today = dt.datetime.now(ZoneInfo("America/Detroit")).date().isoformat()
+    dates = list(DATES) + ([] if today in DATES else [today])
+    count = sum(validate_date(iso) for iso in dates)
+    print(f"PASS: Michigan page syntax + {count} modeled region-days across {len(dates)} dates; "
           "green satellite, delayed canopy and winter-rollover scenarios checked.")
 
 if __name__ == "__main__":
