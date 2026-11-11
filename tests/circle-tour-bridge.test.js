@@ -262,3 +262,41 @@ test('North Shore stories preserve real geography, distinct admission and no inv
  assert.equal(selectPlaceStory('24'),null);
  assert.equal(selectPlaceStory('25'),null);
 });
+
+test('eight original uncovered stops offer visitor source choices but never invented specialists',()=>{
+ const ids=['2','4','17','19','21','24','25','26'];
+ const allowed=new Set(['www.superiorwi.gov','www.visitashland.com','whiteriver.ca','www.nipigon.net','www.dnr.state.mn.us','files.dnr.state.mn.us','www.lutsen.com']);
+ assert.deepEqual(Object.keys(ui.officialStops).sort((a,b)=>Number(a)-Number(b)),ids.sort((a,b)=>Number(a)-Number(b)));
+ for(const id of ids){
+  const decision=ui.planNextDecision(committed,{selectedIds:[id]});
+  assert.equal(decision.kind,'no-specialist','an official link must not become an independent tool at '+id);
+  assert.equal(decision.primary,null);
+  assert.ok(!committed.connections.some(c=>c.stopIds.includes(id)),'source not part of the catalog');
+  const guide=ui.officialStopGuide(id);
+  assert.ok(guide.question.length>35&&guide.context.length>110&&guide.caution.length>68);
+  for(const link of [guide.url,...(guide.extraSources||[]).map(x=>x.url)]){
+   const url=new URL(link);
+   assert.equal(url.protocol,'https:');assert.ok(allowed.has(url.hostname));
+   assert.equal(url.username,'');assert.equal(url.password,'');
+  }
+ }
+ assert.equal(ui.officialStopGuide('11'),null);
+ assert.equal(ui.officialStopGuide('__proto__'),null);
+ assert.equal(ui.officialStopGuide('99'),null);
+});
+test('North Shore unserved stops distinguish source-verified hikes, resort operating checks and preserved page ownership',()=>{
+ const cascade=ui.officialStopGuide('24'),temperance=ui.officialStopGuide('25');
+ assert.match(cascade.context,/0\.5 mile/);
+ assert.match(cascade.context,/3\.5 miles/);
+ assert.match(cascade.extraSources[0].url,/spk00133\.pdf/);
+ assert.match(temperance.context,/0\.25 mile one-way/);
+ assert.match(temperance.context,/three miles one-way/);
+ assert.match(temperance.caution,/not to swim/);
+ assert.equal(temperance.extraSources[0].url,'https://www.lutsen.com/mountain-info/hours-of-operation');
+ const original=readFileSync(path.join(root,'public/lake-superior-circle-tour/index.html'),'utf8');
+ const bridge=readFileSync(path.join(root,'public/assets/circle-tour-bridge.js'),'utf8');
+ assert.equal((original.match(/class="stop-card"/g)||[]).length,31);
+ assert.match(bridge,/if\(model\.kind==='next-check'\)/);
+ assert.match(bridge,/const guide=officialStopGuide\(model\.stopId\)/);
+ assert.match(bridge,/official-stop-source-open/);
+});

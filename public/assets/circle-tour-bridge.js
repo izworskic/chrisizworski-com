@@ -7,6 +7,78 @@
   const THEMES=new Set(['all','parks','falls','water','ships','history','logistics','seasonal']);
   const ROAD_HOSTS=new Set(['511wi.gov','mdotjboss.state.mi.us','511on.ca','511mn.org']);
   const LIMIT=6;
+  // Visitor handoffs, not independent specialist tools or live access reports.
+  const OFFICIAL_STOPS=Object.freeze({
+    "2": {
+      "question": "Wisconsin Point beach, or a look around Superior's harbor?",
+      "context": "Wisconsin Point runs nearly three miles along Lake Superior. The city explains beach access, the protected dunes and which roads have overnight parking restrictions.",
+      "url": "https://www.superiorwi.gov/226/Wisconsin-Point",
+      "sourceLabel": "Visit Wisconsin Point and read beach rules",
+      "caution": "Before swimming, check current beach advisories. Follow posted access and parking restrictions."
+    },
+    "4": {
+      "question": "See Ashland's murals on foot, or explore more of Chequamegon Bay?",
+      "context": "Ashland's historic Main Street offers an eight-block outdoor mural walk. The local mural guide shows where to start and helps turn a quick town stop into a self-guided history walk.",
+      "url": "https://www.visitashland.com/murals/",
+      "sourceLabel": "Walk Ashland's downtown mural route",
+      "caution": "Outdoor murals may be visible year-round, but shops, guided tours and lakefront facilities have separate hours."
+    },
+    "17": {
+      "question": "Looking for a pleasant Highway 17 break in White River?",
+      "context": "Winnie the Pooh Park sits beside the famous bear statue and the town's visitor information centre. It's a small local-history stop near the highway, rather than a wilderness trail.",
+      "url": "https://whiteriver.ca/winnie-the-pooh-park",
+      "sourceLabel": "Explore White River's Winnie the Pooh Park",
+      "caution": "The park and the seasonal visitor information centre are different. Check office hours if you need staffed services."
+    },
+    "19": {
+      "question": "Just a short Nipigon river walk, or the trail all the way toward Red Rock?",
+      "context": "The township describes easy shoreline sections close to Nipigon and a rugged 10.1-kilometre one-way recreation trail. The full route requires more time and a separate return plan.",
+      "url": "https://www.nipigon.net/play-explore/things-to-do/trails-walks/item/114-nipigon-river-recreation-trail",
+      "sourceLabel": "Choose a section of the Nipigon River trail",
+      "caution": "Check for trail work and conditions before setting out. Do not assume a return shuttle or passable trail."
+    },
+    "21": {
+      "question": "High Falls on the easy path, or the longer hike to Middle Falls?",
+      "context": "Minnesota DNR describes a one-mile round-trip paved and boardwalk route to High Falls. Middle Falls is a challenging 4.5-mile round-trip hike, not a second roadside pullout.",
+      "url": "https://www.dnr.state.mn.us/state-parks/grand-portage/things-to-do.html",
+      "sourceLabel": "Compare Grand Portage's two falls",
+      "caution": "Published trail distances are not a report of current access. Follow DNR notices and on-site signs."
+    },
+    "24": {
+      "question": "A half-mile along Cascade Falls, or the longer climb up Lookout Mountain?",
+      "context": "Minnesota DNR maps the Cascade River Lower Loop at 0.5 mile and the steep Lookout Mountain Loop at 3.5 miles. The first follows the basalt gorge; the second climbs toward views of the Sawtooths.",
+      "url": "https://www.dnr.state.mn.us/state-parks/virtual-tours/cascade-river/dialup.html",
+      "sourceLabel": "Explore Cascade River's falls and overlooks",
+      "extraSources": [
+        {
+          "label": "See DNR trail distances and parking map (PDF)",
+          "url": "https://files.dnr.state.mn.us/maps/state_parks/spk00133.pdf"
+        }
+      ],
+      "caution": "The cliffs and river are slippery. These are published routes, not a current trail or parking status report."
+    },
+    "25": {
+      "question": "The short Temperance gorge, a Carlton Peak hike, or a Lutsen lift ride?",
+      "context": "Temperance River Gorge Trail is 0.25 mile one-way; Carlton Peak is a steep three miles one-way from the Highway 61 trailhead. Lutsen Mountains is a separate resort whose lifts and gondola have their own schedule.",
+      "url": "https://files.dnr.state.mn.us/maps/state_parks/spk00268.pdf",
+      "sourceLabel": "Compare Temperance River trails (DNR PDF)",
+      "extraSources": [
+        {
+          "label": "Check Lutsen Mountains operating hours",
+          "url": "https://www.lutsen.com/mountain-info/hours-of-operation"
+        }
+      ],
+      "caution": "Minnesota DNR warns not to swim in the Temperance River. The park map cannot confirm resort operations or today's trail conditions."
+    },
+    "26": {
+      "question": "Shovel Point cliffs, or the longer hike to Baptism River's High Falls?",
+      "context": "At Tettegouche, Shovel Point is about 1.2 miles round trip with many stairs, while the High Falls outing is about three miles round trip from the visitor center.",
+      "url": "https://www.dnr.state.mn.us/state-parks/itineraries/north-shore-waterfall-itinerary.html",
+      "sourceLabel": "Compare Tettegouche's hikes",
+      "caution": "An earlier bridge reopening is not proof every route is open today. Check posted park and trail alerts."
+    }
+  });
+  function officialStopGuide(id){return Object.hasOwn(OFFICIAL_STOPS,String(id))?OFFICIAL_STOPS[String(id)]:null;}
   function safeDate(v){
     if(typeof v!=='string'||!/^\d{4}-\d\d-\d\d$/.test(v))return '';
     const d=new Date(v+'T12:00:00Z');
@@ -104,7 +176,7 @@
     };
   }
 
-  const helpers={rankConnections,roadChecks,buildReturnHref,planNextDecision,safeDate,safeTheme,safeToolUrl,safeRoadUrl};
+  const helpers={rankConnections,roadChecks,buildReturnHref,planNextDecision,safeDate,safeTheme,safeToolUrl,safeRoadUrl,officialStopGuide,officialStops:OFFICIAL_STOPS};
   if(typeof module!=='undefined'&&module.exports)module.exports=helpers;
   if(!root?.document)return;
   const document=root.document,host=document.querySelector('[data-circle-tour-bridge]');
@@ -260,9 +332,27 @@
         host.append(el('p','ctb-stage-alt',model.alternatives.length+' other approved check'+(model.alternatives.length===1?'':'s')+' for this stop. Open “Other specialist checks” below to compare.'));
       }
     }else{
-      host.append(el('p','ctb-stage-question','No approved '+(model.theme==='all'?'specialist':'specialist for this interest')+' at this stop.'));
-      host.append(el('p','ctb-stage-unknown','This is a coverage gap, not evidence that the stop is closed, unsafe or uninteresting.'));
+      const guide=officialStopGuide(model.stopId);
+      if(guide){
+        host.append(el('p','ctb-stage-prefix','MAKE THE MOST OF THIS STOP'));
+        host.append(el('p','ctb-stage-question',guide.question));
+        host.append(el('p','ctb-stage-explainer',guide.context));
+        host.append(el('p','ctb-stage-unknown',guide.caution));
+      }else{
+        host.append(el('p','ctb-stage-question','There is no connected guide for this interest at this stop.'));
+        host.append(el('p','ctb-stage-unknown','The full stop guide below is still available; no missing specialist link implies a closure.'));
+      }
       const options=el('div','ctb-stage-actions');
+      if(guide){
+        const primary=link(guide.sourceLabel,guide.url,'ctb-link ctb-stage-primary');
+        primary.addEventListener('click',()=>track('official-stop-source-open',{stop:model.stopId}));
+        options.append(primary);
+        for(const item of guide.extraSources||[]){
+          const extra=link(item.label,item.url,'ctb-secondary-link');
+          extra.addEventListener('click',()=>track('official-stop-source-open',{stop:model.stopId}));
+          options.append(extra);
+        }
+      }
       if(model.otherThemesAvailable){
         const reset=el('button','ctb-stage-reset','See other interests at this stop');
         reset.type='button';
