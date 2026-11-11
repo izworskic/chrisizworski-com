@@ -62,7 +62,7 @@
     if(origin)actions.appendChild(origin);
     if(['surf-hours','college'].includes(place.kind)){
       const rules=safeExternal(place.accessSource,
-        place.kind==='surf-hours'?'Check the Navy/Space Force beach rules':'Check campus parking rules');
+        place.kind==='surf-hours'?'Check Space Force beach rules':'Check campus parking rules');
       if(rules)actions.appendChild(rules);
     }
     detail.append(label,title,caution,scene,access,actions);
