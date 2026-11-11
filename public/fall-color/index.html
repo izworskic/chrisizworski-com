@@ -78,7 +78,7 @@
         "height": 630
       },
       "datePublished": "2026-03-15",
-      "dateModified": "2026-10-28",
+      "dateModified": "2026-11-10",
       "author": {
         "@id": "https://chrisizworski.com/#person"
       },
@@ -874,7 +874,8 @@ function listNames(a){return a.length<=1?(a[0]||""):a.slice(0,-1).join(", ")+" a
 let LIVE=null;
 let LIVE_FRESHNESS=null;
 let LIVE_OFFSET={};   // r.id -> integer pct offset (live - predicted today)
-const now=new Date();
+// The Michigan field desk follows the Detroit calendar, not the visitor's timezone.
+const now=new Date(new Date().toLocaleString("en-US",{timeZone:"America/Detroit"}));
 const tm=now.getMonth()+1, td=now.getDate();
 function isFallReportSeason(m,d){return (m===8&&d>=20)||m===9||m===10||(m===11&&d<=15);}
 const inSeason=isFallReportSeason(tm,td);
@@ -892,6 +893,9 @@ const todayFromSep1=Math.floor((now.getTime()-SEP1.getTime())/86400000);
 // todayIdx follows that same arc, including negative August launch days, and is
 // null only outside the Aug 20-Nov 15 reporting window.
 const todayIdx=inSeason?todayFromSep1:null;
+// Once every region has passed its normal leaf-drop window, do not promote a
+// low remaining-color percentage into "mostly green" or a new peak forecast.
+const lateSeason=inSeason&&todayFromSep1>Math.max(...REGIONS.map(r=>dayIndex(...r.bare)));
 let selIdx=winterMode?98:todayFromSep1;   // winter begins on a muted, season-complete map
 let openBand=null;
 
@@ -913,10 +917,13 @@ function liveStageFor(r){
   const ti=Math.max(0,todayFromSep1);
   const pred=stageOf(r,ti);
   const adj=weatherAdjust(live&&live.weather);
-  const wAdj=stageOf(r,ti+adj.days);
+  const settled=ti>=pred.b+10;
+  const wAdj=settled?pred:stageOf(r,ti+adj.days);
   let pct=wAdj.pct, phase=wAdj.phase;
   const nd=live&&live.ndvi;
-  if(nd&&typeof nd.senescence==="number"&&daysSince(nd.date)<=30){
+  // Satellite greenness can come from evergreens, crops or stale composites.
+  // It cannot turn a bare November canopy back into green October foliage.
+  if(!settled&&!["down","bare","offseason"].includes(wAdj.phase)&&nd&&typeof nd.senescence==="number"&&daysSince(nd.date)<=30){
     const ns=ndviStage(nd.senescence);
     pct=Math.round(0.6*wAdj.pct+0.4*ns.pct);
     phase=(ns.phase==="falling"&&pct>=78)?"falling":wAdj.phase;
@@ -990,6 +997,7 @@ function fc(regionId){
 function renderLiveStrip(){
   const el=document.getElementById("liveStripBody");
   if(winterCalendar){el.textContent="Fall color season complete. The subdued map is a seasonal view; the next-fall preview uses typical timing, not live canopy or weather readings.";return;}
+  if(lateSeason){el.textContent="The main color peak has passed. Recent weather and satellite data can still refresh, but greenness is not evidence that autumn leaves remain on the trees. Check local reports for late oak, beech and tamarack color.";return;}
   if(!LIVE){el.textContent="Live feed unavailable just now. Use the seasonal planning baseline above and the regional season bands below; neither will invent a live reading.";return;}
   let canopy=[],lows=[],dt=null,froze=false;
   REGIONS.forEach(r=>{const v=LIVE[r.id];if(v){if(v.ndvi){canopy.push(v.ndvi.canopyPct);dt=v.ndvi.date;}if(v.weather){if(v.weather.lowestRecent!=null)lows.push(v.weather.lowestRecent);if(v.weather.frostRecent)froze=true;}}});
@@ -1019,20 +1027,37 @@ function renderStatewideStatus(){
     updated.hidden=true;
     return;
   }
+  if(lateSeason){
+    document.getElementById("statewideStatusLabel").textContent="Late-season outlook";
+    heading.textContent="Michigan's main fall-color peak has passed.";
+    body.textContent="The Upper Peninsula and much of the Lower Peninsula are beyond their usual peak windows. Some late oak, beech and lakeshore color may linger, with tamaracks turning gold in northern wetlands. This is a seasonal assessment, not a verified count of leaves. Check dated local reports before driving to a specific spot.";
+    if(LIVE_FRESHNESS){
+      const stamp=new Date(LIVE_FRESHNESS.updated);
+      updated.hidden=false;
+      updated.textContent="Model inputs refreshed "+stamp.toLocaleString("en-US",{timeZone:"America/Detroit",month:"short",day:"numeric",hour:"numeric",minute:"2-digit",timeZoneName:"short"});
+      updated.setAttribute("datetime",LIVE_FRESHNESS.updated);
+    }else{updated.hidden=true;}
+    return;
+  }
   if(!inSeason||!LIVE_FRESHNESS)return;
   const ranked=REGIONS.filter(r=>LIVE_FRESHNESS.regionIds.includes(r.id)).map(r=>({r,d:todayStage(r)})).sort((a,b)=>b.d.pct-a.d.pct);
+  if(!ranked.length)return;
   const lead=ranked[0];
   const peaks=ranked.filter(x=>x.d.phase==="peak"||x.d.pct>=85);
   if(peaks.length){
     heading.textContent=peaks.length===1
       ? peaks[0].r.name+" is estimated at or near peak."
       : "The model estimates peak color in "+listNames(peaks.slice(0,3).map(x=>x.r.name))+".";
-  }else if(lead.d.pct<20){
+  }else if(lead.d.pct<20&&["green","rising"].includes(lead.d.phase)){
     heading.textContent="The model estimates mostly green foliage. "+lead.r.name+" is leading the season.";
+  }else if(lead.d.pct<20){
+    heading.textContent="Peak color has passed in the reporting regions.";
   }else{
     heading.textContent=lead.r.name+" has the highest modeled color among reporting regions at about "+lead.d.pct+"%.";
   }
-  body.textContent="The model puts "+lead.r.name+" at about "+lead.d.pct+"% of peak, with its current peak window "+fmt(lead.d.ps)+" to "+fmt(lead.d.pe)+". Recent inputs are available for "+ranked.length+" of "+REGIONS.length+" regions; other regions retain seasonal estimates. Individual source dates appear below.";
+  body.textContent=lead.d.phase==="down"||lead.d.phase==="bare"||lead.d.phase==="offseason"
+    ? "The reported peak windows are behind us. Any remaining oak, beech or lakeshore color needs a dated local observation; a fresh weather feed is not a new foliage sighting."
+    : "The model puts "+lead.r.name+" at about "+lead.d.pct+"% of its seasonal progression, with a typical peak window "+fmt(lead.d.ps)+" to "+fmt(lead.d.pe)+". Model inputs are available for "+ranked.length+" of "+REGIONS.length+" regions; they do not confirm leaf color on the ground.";
   document.getElementById("statewideStatusLabel").textContent="Latest model estimate";
   const stamp=new Date(LIVE_FRESHNESS.updated);
   updated.hidden=false;
@@ -1237,7 +1262,7 @@ function renderDate(){
   else if(winterCalendar)note.textContent="Reviewing typical fall "+completedSeasonYear+" timing, not live observations.";
   else if(isToday()){
     if(LIVE&&todayIdx!==null)
-      note.innerHTML="Today's live color from canopy and weather. Slide right to project forward from where the season actually is.";
+      note.textContent=lateSeason?"Late-season model estimate, not a confirmed leaf observation. Review past dates or check local reports for lingering color.":"Today's modeled color from canopy and weather. Slide right for a seasonal projection.";
     else if(LIVE)
       note.innerHTML="Today, "+fmt(todayFromSep1)+". Color season opens in "+Math.abs(todayFromSep1)+" days. Slide right to preview the season.";
     else
@@ -1399,7 +1424,9 @@ function wireNear(){
 // ---- report ----
 function renderReport(j){
   const card=document.getElementById("reportCard");
-  if(!j||!j.body||!j.date||!inSeason){card.style.display="none";return;}
+  // Suppress earlier daily prose during the late-season handoff: a fresh
+  // generation timestamp does not validate its historical foliage claim.
+  if(!j||!j.body||!j.date||!inSeason||lateSeason){card.style.display="none";return;}
   const rd=new Date(j.date+"T12:00:00");
   if((Date.now()-rd.getTime())/86400000>2.5){card.style.display="none";return;}
   document.getElementById("reportDate").textContent=rd.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"});

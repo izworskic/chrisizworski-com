@@ -20,7 +20,15 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  seasonal-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify Michigan fall progression with Python
+        run: python3 scripts/verify_fall_color_season.py
+
   publish:
+    needs: seasonal-audit
     uses: ./.github/workflows/fall-color-writer-test.yml
     with:
       publish_github: true

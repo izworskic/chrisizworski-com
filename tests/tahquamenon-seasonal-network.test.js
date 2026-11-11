@@ -36,6 +36,6 @@ test('fall snapshot preserves regional climatology when live inputs fail',()=>{
   assert.ok(payload.regions.length>=8);
   const eup=payload.regions.find(region=>region.id==='eup');
   assert.ok(eup);
-  assert.ok(['green','rising','peak','falling','down'].includes(eup.phase));
+  assert.ok(['green','rising','peak','falling','down','bare','offseason'].includes(eup.phase));
   assert.equal(typeof eup.pct,'number');
 });
