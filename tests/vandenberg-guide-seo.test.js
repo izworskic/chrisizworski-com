@@ -27,7 +27,7 @@ test('the guide publishes exactly one, searchable, distinct canonical URL',()=>{
   assert.doesNotMatch(page,/<meta http-equiv="refresh"/i);
   assert.doesNotMatch(page,/rel="canonical" href="https:\/\/chrisizworski\.com\/national-tools\/rocket-launch-live\//);
   assert.ok(page.indexOf('<h1')>0);
-  assert.match(page,/Where to watch a <em>Vandenberg rocket launch<\/em>/);
+  assert.match(page,/Watch a <em>Vandenberg rocket launch<\/em>/);
 });
 
 test('core answers, all six venues and restrictions are published in HTML with JS disabled',()=>{
@@ -55,8 +55,8 @@ test('core answers, all six venues and restrictions are published in HTML with J
 test('search discovery is a single sitemap entry with truthful date and live static route',()=>{
   const occurrence=(sitemap.match(/<loc>https:\/\/chrisizworski\.com\/vandenberg-rocket-launch-viewing\/<\/loc>/g)||[]).length;
   assert.equal(occurrence,1,'Exactly one main sitemap URL');
-  assert.match(sitemap,/<loc>https:\/\/chrisizworski\.com\/vandenberg-rocket-launch-viewing\/<\/loc>\s*<lastmod>2026-11-04<\/lastmod>/);
-  assert.equal(page.match(/"dateModified":"2026-11-04"/g)?.length,2,
+  assert.match(sitemap,/<loc>https:\/\/chrisizworski\.com\/vandenberg-rocket-launch-viewing\/<\/loc>\s*<lastmod>2026-11-10<\/lastmod>/);
+  assert.equal(page.match(/"dateModified":"2026-11-10"/g)?.length,2,
     'Both published WebPage and Article need honest source modification dates');
   for(const filename of fs.readdirSync(path.join(root,'public')).filter(n=>/^sitemap.*\.xml$/.test(n)&&n!=='sitemap.xml'))
     assert.ok(!read('public/'+filename).includes(canonical),

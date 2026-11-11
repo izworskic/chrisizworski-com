@@ -58,7 +58,7 @@ test('the map is embedded immediately after the first answer, not buried below t
 test('the map uses actual Leaflet pins, stable CARTO/OSM tiles, click selection, and accessible focus',()=>{
   assert.match(page,/leaflet@1\.9\.4\/dist\/leaflet\.css/);
   assert.match(page,/leaflet@1\.9\.4\/dist\/leaflet\.js/);
-  assert.match(page,/guide-map\.js\?v=20261103-map-v2/);
+  assert.match(page,/guide-map\.js\?v=20261110-region-voice-v1/);
   assert.match(script,/window\.L\.map\(root/);
   assert.match(script,/window\.L\.marker\(\[p\.lat,p\.lon\]/);
   assert.match(script,/window\.L\.divIcon/);
@@ -77,14 +77,14 @@ test('the map uses actual Leaflet pins, stable CARTO/OSM tiles, click selection,
 });
 
 test('map popups expose detailed guide sections, original venue evidence and access restrictions',()=>{
-  assert.match(script,/Read the full viewing notes/);
+  assert.match(script,/Read what to expect here/);
   assert.match(script,/place\.articleAnchor/);
   assert.match(script,/sceneLabel\(place\)/);
   assert.match(script,/place\.accessNote/);
   assert.match(script,/place\.source/);
   assert.match(script,/place\.accessSource/);
-  assert.match(script,/Official beach rules/);
-  assert.match(script,/Official parking rules/);
+  assert.match(script,/Check Space Force beach rules/);
+  assert.match(script,/Check campus parking rules/);
   assert.match(page,/Surf Beach may close for launches/);
   assert.match(page,/Harris Grade Road/);
   assert.match(page,/Highway 246/);
@@ -98,7 +98,7 @@ test('the map remains non-blocking and safe when Leaflet, CARTO tiles or manifes
   assert.match(page,/href="#city-parks"/);
   assert.match(script,/if\(!window\.L\)/);
   assert.match(script,/if\(!checkManifest\(payload\)\)/);
-  assert.match(script,/Map currently unavailable/);
+  assert.match(script,/The map isn.t loading/);
   assert.match(script,/!response\.ok/);
   assert.doesNotMatch(script,/api\/rocket-launch-usa|api\.weather\.gov|ll\.thespacedevs|navigator\.geolocation|localStorage|sessionStorage|flightPath|trajectoryPoints/);
 });

@@ -150,7 +150,7 @@ test('browser media experience is user-initiated and retains active GIS, SEO and
   assert.match(html,/id="mission-media-stage-screen"/);
   assert.match(html,/id="mission-media-mission-list"/);
   assert.match(html,/id="mission-media-camera-list"/);
-  assert.match(html,/app\.js\?v=20261103-deck-v1/);
+  assert.match(html,/app\.js\?v=20261110-region-voice-v1/);
   assert.match(html,/viewing\.css\?v=20261103-deck-v1/);
   assert.match(js,/function renderMissionMedia\(/);
   assert.match(js,/renderMissionMedia\(d\.mediaDesk \|\| null\)/);
@@ -162,7 +162,7 @@ test('browser media experience is user-initiated and retains active GIS, SEO and
   assert.match(css,/\.mission-media-poster/);
   assert.match(css,/@media\(max-width:680px\)/);
   assert.match(html,/id="launch-day-pulse"/);
-  assert.match(html,/geo-map\.js\?v=20261101-repair1/);
+  assert.match(html,/geo-map\.js\?v=20261110-region-voice-v1/);
   assert.doesNotThrow(()=>new Function(js));
 });
 

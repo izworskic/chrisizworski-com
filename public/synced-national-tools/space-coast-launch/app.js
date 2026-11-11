@@ -53,7 +53,7 @@
     list.replaceChildren();
     if (!launches.length) {
       const row = element('div', 'row');
-      row.appendChild(element('strong', '', 'No upcoming Florida launch in the current feed.'));
+      row.appendChild(element('strong', '', 'No Florida launches listed right now. Check the operator for late announcements.'));
       list.appendChild(row);
       return;
     }
@@ -84,14 +84,14 @@
       const card = element('article', 'launch-weather-place');
       card.appendChild(element('h3', '', place.name));
       addChip(card, place.assessment?.level || 'unknown', place.assessment?.label || 'Unverified');
-      card.appendChild(element('p', '', place.assessment?.detail || 'Hourly forecast unavailable.'));
+      card.appendChild(element('p', '', place.assessment?.detail || 'No hourly sky forecast for this launch time yet.'));
       const short = place.period?.shortForecast;
       if (short) card.appendChild(element('p', 'small', 'NWS: ' + short + '. Forecast is near the viewing area, not the rocket flight path.'));
       if (Number.isInteger(place.cloudCoverPercent) && place.cloudStatus === 'ok') {
         card.appendChild(element('div', 'launch-cloud-number', place.cloudCoverPercent + '%'));
-        card.appendChild(element('p', 'small', 'Forecast sky covered by clouds near this area, from the NWS gridded forecast.'));
+        card.appendChild(element('p', 'small', 'Nearby NWS forecasts show cloud cover here. The rocket may still climb into clearer sky farther along its path.'));
       } else {
-        card.appendChild(element('p', 'small', 'No verified cloud-cover percentage for this mission and location.'));
+        card.appendChild(element('p', 'small', 'We don’t have a reliable cloud forecast for this spot and launch time yet.'));
       }
       if (place.forecastUpdatedAt) card.appendChild(element('p', 'small', 'NWS grid updated ' + new Date(place.forecastUpdatedAt).toLocaleString('en-US') + '.'));
       target.appendChild(card);
@@ -105,7 +105,7 @@
         new Date(d.checkedAt).toLocaleString('en-US',{timeZone:'America/New_York',
           dateStyle:'medium',timeStyle:'short'}) : 'recently') +
       ' · reporting is not launch control' :
-      'Spaceflight Now reporting source unavailable; launch schedule remains separate');
+      'Spaceflight Now stories aren’t loading right now. You can still check the launch calendar');
     const list=$('sfn-reporting-list');
     if(!list)return;
     list.replaceChildren();
@@ -119,24 +119,24 @@
       const when=Number.isFinite(+date)?date.toLocaleDateString('en-US',
         {month:'short',day:'numeric',year:'numeric'}):'Date unavailable';
       card.appendChild(element('p','sfn-reporting-date',
-        (story.match==='mission-identifier'?'Mission identified in reporting':
-          'Related rocket / payload reporting, not a mission confirmation') +
+        (story.match==='mission-identifier'?'This mission is mentioned in reporting':
+          'Related rocket or payload story, not an update on this exact flight') +
         ' · published ' + when));
       card.appendChild(link(story.url,story.title.slice(0,170)));
       card.appendChild(element('p','',
         story.match==='mission-identifier'?
-          'Read the original report for launch context and any developing details.':
-          'This article covers the provider and payload family; it may not describe the selected flight.'));
+          'Read the full story to see what the mission is about and why it matters.':
+          'This article may cover the rocket family rather than today’s particular launch.'));
       list.appendChild(card);
     }
     if(!list.children.length){
       list.appendChild(element('p','sfn-reporting-empty',
         active?
-          'No safely matched article appears in the recent editorial feed. Check the full Spaceflight Now schedule and mission archive for broader coverage.':
-          'The independent reporting source could not be checked. This is not evidence of a missing mission, delay, or scrub.'));
+          'No recent story tied to this exact flight is listed here. Look at Spaceflight Now for broader mission coverage.':
+          'The news feed isn’t loading. That doesn’t mean your launch has been delayed or scrubbed.'));
     }
     set('sfn-reporting-note',d.note ||
-      'Editorial reporting is a different evidence tier from Launch Library schedules, 45WS weather and official visitor access.');
+      'Reporting adds context, but launch times, weather decisions and visitor access come from the operators and agencies.');
   };
 
   const renderOfficialWeather = forecast => {
@@ -146,16 +146,16 @@
     if (display) display.dataset.stage = briefing.stage || 'unverified';
     set('fl-weather-story-title', briefing.headline || 'What does the weather mean for this mission?');
     set('fl-weather-story-lead', briefing.explanation || 'No mission-matched forecast has been verified.');
-    set('fl-weather-story-changes', briefing.changes || 'No previous verified forecast to compare.');
+    set('fl-weather-story-changes', briefing.changes || 'No earlier official forecast available to compare yet.');
     set('fl-weather-story-decision', briefing.decision ||
-      'Keep plans flexible and check the official launch operator.');
-    set('fl-weather-story-next', briefing.nextUpdate || 'No next official forecast issue time is confirmed.');
+      'Keep an eye on the operator’s updates. The countdown can still move.');
+    set('fl-weather-story-next', briefing.nextUpdate || 'Next official forecast update has not been announced.');
     const rules = $('fl-weather-story-rules');
     if (rules) {
       rules.replaceChildren();
       const items = Array.isArray(briefing.rules)?briefing.rules.slice(0,4):[];
       if(items.length){
-        rules.appendChild(element('h6','','Why these rules matter'));
+        rules.appendChild(element('h6','','Why this matters for liftoff'));
         for(const item of items){
           if(typeof item?.label!=='string'||typeof item?.explanation!=='string')continue;
           const details=element('details');
@@ -180,8 +180,8 @@
     set('fl-official-pov', hasPov ? d.povPercent + '% PoV' : 'Not verified');
     set('fl-official-concerns', valid && d.primaryConcerns?.length ?
       'Official primary concerns: ' + d.primaryConcerns.join(', ') + '.' :
-      valid ? 'The source did not provide clearly extractable primary concerns.' :
-        'No official weather concerns are verified for this current mission target.');
+      valid ? 'The official document did not clearly identify the main weather concerns.' :
+        'No official mission-specific weather concerns have been confirmed here yet.');
     const risks = d.additionalRisks || {};
     set('fl-official-risks', valid && Object.keys(risks).length ?
       'Other risks outside the quoted PoV may include: ' +
@@ -203,7 +203,7 @@
             {timeZone:'UTC',dateStyle:'medium',timeStyle:'short'}) + ' UTC.'));
       }
     } else change.appendChild(element('p','small',
-      'No verified revision can be shown for this selected mission.'));
+      'No earlier official forecast update is available for this flight.'));
     const history = $('fl-official-history');
     history.replaceChildren();
     if (valid && (d.timeline || []).length > 1) {
@@ -238,18 +238,18 @@
       '45th Weather Squadron forecast portal'));
     const monitor = d.health || {};
     if (monitor.checkedAt) links.appendChild(element('span','small',
-      'Source discovery checked ' + new Date(monitor.checkedAt).toLocaleString('en-US') +
+      'Official forecast search checked ' + new Date(monitor.checkedAt).toLocaleString('en-US') +
       ' · ' + (monitor.status || 'status unknown')));
     else links.appendChild(element('span','small',
-      'Official document monitor has no confirmed observation yet.'));
+      'We haven’t confirmed a current official mission forecast yet.'));
     const horizon = monitor.forecastWindow || {};
     if(horizon.candidates7Days===0 &&
       ['before-forecast-window','no-launches-in-21-days'].includes(horizon.status))
       links.appendChild(element('span','small',
         horizon.candidates21Days>0 ?
-        'No Florida launch is inside this monitor’s seven-day near-launch PDF check window; ' +
+        'No Florida launch is close enough for the seven-day official forecast check yet; ' +
           horizon.candidates21Days + ' scheduled mission(s) are within the 21-day lookahead.' :
-        'The launch schedule currently shows no Florida mission inside this monitor’s 21-day lookahead.'));
+        'No Florida launch falls within the 21-day official forecast lookahead right now.'));
     const agencySources = monitor.nasaSourceChecks || [];
     if(agencySources.some(x=>x.status==='unavailable'))
       links.appendChild(element('span','small',
@@ -259,10 +259,10 @@
     const blocked = direct.filter(x => x.status === 'unavailable').length;
     const linked = direct.reduce((n,x) => n + (x.links || 0),0);
     if (blocked) links.appendChild(element('span','small',
-      'Direct official-source checks unavailable: ' + blocked + ' of ' + direct.length +
+      'Couldn’t reach ' + blocked + ' of ' + direct.length +
       '. Forecast coverage may be incomplete.'));
     else if (direct.length && linked === 0) links.appendChild(element('span','small',
-      'Checked official pages supplied no forecast PDF links; Launch Library links remain a fallback.'));
+      'No mission forecast PDF was found on the official pages checked. We’ll keep linking to the operator.'));
     if (valid) links.appendChild(element('span','small',
       d.discoveredVia === '45ws-public-page' ? 'PDF discovered on a first-party weather page.' :
       d.discoveredVia === 'll2-update-link' ? 'PDF link discovered through Launch Library; document verified against official PDF bytes.' :
@@ -272,10 +272,10 @@
   const renderRangeWeather = forecast => {
     const d = forecast || {};
     const good = d.status === 'forecast';
-    set('fl-range-label', d.label || 'Launch-side conditions unavailable');
-    set('fl-range-explain', d.detail || 'No verified near-range forecast was returned for this mission.');
+    set('fl-range-label', d.label || 'Weather near the launch pad isn’t available yet');
+    set('fl-range-explain', d.detail || 'We don’t have a reliable forecast near this launch pad for the planned time.');
     const chip = $('fl-range-chip');
-    chip.textContent = good ? 'NWS forecast checked' : 'Launch-side forecast unverified';
+    chip.textContent = good ? 'NWS forecast checked' : 'Launch-pad forecast not confirmed';
     chip.dataset.state = good && d.level === 'elevated' ? 'poor' : 'unknown';
     const metrics = $('fl-range-metrics');
     metrics.replaceChildren();
@@ -301,8 +301,8 @@
         signals.appendChild(card);
       }
     } else signals.appendChild(element('p', 'small', good ?
-      'No major local surface signals passed screening thresholds. Flight weather remains unverified.' :
-      'The tool cannot verify sufficient current launch-side evidence.'));
+      'No standout concerns in the nearby surface forecast, but only the launch weather team can clear the rocket.' :
+      'We don’t have enough launch-day weather information to make a useful comparison yet.'));
     const timeline = $('fl-range-timeline');
     timeline.replaceChildren();
     const rows = (d.timeline || []).filter(r => r.level !== 'unknown');
@@ -327,12 +327,12 @@
         list.appendChild(item);
       }
       timeline.appendChild(list);
-    } else timeline.appendChild(element('p', 'small', 'No sufficiently verified forecast progression for the selected time.'));
+    } else timeline.appendChild(element('p', 'small', 'Not enough hourly forecast information to show how the weather may change.'));
     set('fl-range-provenance', (d.site?.name || 'Florida Space Coast') +
       ' · regional NWS reference, not an individual pad. ' +
       (d.forecastUpdatedAt ? 'Grid updated ' + new Date(d.forecastUpdatedAt).toLocaleString('en-US') + '. ' :
         'Current source age unavailable. ') +
-      'Only the official launch weather team can determine flight-rule violations and authorize launch.');
+      'Only the mission and range weather teams decide whether the rocket can fly.');
     const sources = $('fl-range-sources');
     sources.replaceChildren();
     sources.appendChild(link('https://www.patrick.spaceforce.mil/About-Us/Weather/',
@@ -354,7 +354,7 @@
     target.dataset.state = confirmed ? 'matched' : 'unverified';
     const meta = element('div', 'ksc-evidence-status');
     addChip(meta, confirmed ? 'candidate' : 'unknown',
-      confirmed ? 'Official mission listing matched' : 'Viewing announcement not verified');
+      confirmed ? 'Official mission listing matched' : 'Kennedy viewing not announced for this flight yet');
     if (ksc.checkedAt) {
       meta.appendChild(element('span', 'small',
         'Source checked ' + new Date(ksc.checkedAt).toLocaleString('en-US')));
@@ -363,9 +363,9 @@
       'Official KSC announcement checks refresh separately while this page is open.'));
     target.appendChild(meta);
     if (!confirmed) {
-      target.appendChild(element('h4', '', 'Do not buy a viewing ticket based on this schedule alone.'));
+      target.appendChild(element('h4', '', 'Check Kennedy’s launch event before buying tickets.'));
       target.appendChild(element('p', '',
-        'We could not match a current Kennedy Space Center viewing announcement to this exact mission. That does not mean there will be no viewing or that tickets are sold out. KSC publishes viewing options after official confirmation, sometimes close to launch.'));
+        'We haven’t found a current Kennedy viewing event for this specific rocket. That doesn’t mean tickets are sold out or viewing will not happen. Kennedy usually posts viewing options after official confirmation, sometimes close to launch.'));
       target.appendChild(link('https://www.kennedyspacecenter.com/launches-and-events/events-calendar/',
         'Check Kennedy’s official events calendar', 'launch-link official'));
       return;
@@ -382,7 +382,7 @@
       target.appendChild(warning);
     }
     target.appendChild(element('p', 'ksc-event-explanation',
-      'The operator lists these locations for this mission, with different entry and ticket conditions. The listing is not real-time ticket inventory, and the launch can still move.'));
+      'Kennedy lists these viewing areas for this mission. Each has its own ticket and entry rules. Availability may change, and so can the launch time.'));
     const list = element('div', 'ksc-venue-grid');
     for (const venue of ksc.venues || []) {
       const v = element('article', 'ksc-venue');
@@ -390,10 +390,10 @@
       v.appendChild(element('h5', '', venue.name || 'Viewing area'));
       const ticketNames = {
         'sold-out-on-page': 'Sold out on the published page',
-        'additional-ticket-listed': 'Additional ticket listed',
+        'additional-ticket-listed': 'Extra launch-viewing ticket listed',
         'package-listed': 'Launch package listed',
         'included-with-admission-listed': 'Listed with admission',
-        'details-not-verified': 'Ticket type not verified'
+        'details-not-verified': 'Ticket details not confirmed'
       };
       const safetyExcluded = venue.status === 'safety-exclusion';
       addChip(v, safetyExcluded || venue.status === 'sold-out-on-source' ? 'closed' :
@@ -408,7 +408,7 @@
       if (venue.checkInAt) v.appendChild(element('p', 'ksc-venue-time', 'Check-in: ' + venue.checkInAt));
       if (venue.busBoardingAt) v.appendChild(element('p', 'ksc-venue-time', 'Bus boarding: ' + venue.busBoardingAt));
       if (venue.transport === 'ksc-controlled-bus') {
-        v.appendChild(element('p', 'ksc-venue-transport', 'Behind NASA’s gates: use the assigned KSC bus. Do not drive to this viewing area.'));
+        v.appendChild(element('p', 'ksc-venue-transport', 'This viewing site is behind NASA’s gates. Use the assigned Kennedy bus; do not drive to the pad.'));
       } else if (venue.transport === 'ksc-bus-tour') {
         v.appendChild(element('p', 'ksc-venue-transport', 'Access via the Kennedy Space Center Bus Tour; confirm operating hours and first-come availability.'));
       }
@@ -451,7 +451,7 @@
     } else {
       panel.dataset.empty = 'true';
       panel.appendChild(element('h3', '', data.accessSource?.verified ? 'No closure alert detected in the checked feed' : 'NPS closure feed unavailable'));
-      panel.appendChild(element('p', '', 'This is not confirmation that Playalinda is open for the next launch. Check launch-specific restrictions and gate instructions.'));
+      panel.appendChild(element('p', '', 'No matching alert doesn’t mean Playalinda is open for your launch. Check park conditions and the posted gate rules.'));
     }
     const order = { candidate: 0, verify: 1, unknown: 2, closed: 3, ineligible: 4 };
     views.slice().sort((a, b) => (order[a.level] ?? 5) - (order[b.level] ?? 5))
@@ -463,14 +463,14 @@
         addChip(top, v.level, v.label);
         card.appendChild(top);
         card.appendChild(element('h3', '', v.name));
-        card.appendChild(element('p', 'launch-reason', v.reason || 'Site access is not confirmed.'));
+        card.appendChild(element('p', 'launch-reason', v.reason || 'Check this place’s launch-day hours and entry rules.'));
         card.appendChild(element('p', 'launch-note', v.summary));
         const actions = element('div', 'launch-venue-actions');
         if (v.source && v.source.startsWith('https://')) {
           actions.appendChild(link(v.source, 'Official access source', 'launch-link official'));
         }
         if (v.address && !['closed', 'ineligible'].includes(v.level)) {
-          actions.appendChild(link('https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(v.address), 'Directions · verify entry', 'launch-link'));
+          actions.appendChild(link('https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(v.address), 'Google Maps · check access before driving', 'launch-link'));
         }
         card.appendChild(actions);
         venues.appendChild(card);
@@ -491,7 +491,7 @@
     });
     if (!options.length) {
       const o = document.createElement('option');
-      o.textContent = 'No Florida launches in current feed';
+      o.textContent = 'No upcoming Florida flights listed here';
       o.value = '';
       select.appendChild(o);
       select.disabled = true;
@@ -522,7 +522,7 @@
       button.setAttribute('aria-pressed', selected.id === id ? 'true' : 'false');
       set('fl-' + id + '-count', facility ?
         (facility.countInFeed ? facility.countInFeed + ' upcoming in the bounded feed' :
-          'No upcoming mission in this feed') : 'Schedule unavailable');
+          'No upcoming Florida flight listed here') : 'Schedule unavailable');
       button.onclick = available ? () => {
         if (idOfNext !== active) {
           staleDeepLink = false;
@@ -530,14 +530,14 @@
         }
       } : null;
     }
-    set('fl-origin-name', selected.name || 'Florida launch facility unverified');
+    set('fl-origin-name', selected.name || 'Launch facility not confirmed for this flight');
     set('fl-origin-pad', selected.pad ?
       'Launch pad: ' + selected.pad + ' (restricted facility)' :
-      'Launch pad: not verified in this mission record');
+      'Launch pad not announced');
     set('fl-origin-context', selected.description ||
       'A launch schedule does not establish the correct Florida spaceport.');
     set('fl-origin-viewing', selected.viewing ||
-      'Public viewing, ticketed viewing and range access must be confirmed separately.');
+      'A launch pad on the calendar does not open a beach, ticketed venue or range gate.');
     set('fl-origin-rule-title', selected.padRule?.headline || 'No pad-specific access verified');
     set('fl-origin-rule-copy', selected.padRule?.note ||
       'Check the mission operator and Kennedy Space Center for current access details.');
@@ -548,8 +548,8 @@
       '/national-tools/rocket-launch-live/?region=florida' +
       (active && UUID_RE.test(active) ? '&launchId=' + encodeURIComponent(active) : '');
     set('fl-facility-hint', staleDeepLink ?
-      'The linked mission is no longer in the current schedule. Showing the next Florida launch instead. Verify the new mission before travel.' :
-      'Choose a facility with an upcoming mission to switch every mission-specific map and decision. No listed mission does not mean the range is inactive.');
+      'The flight you followed is no longer listed, so the next Florida flight is shown. Check the operator for news of your original mission.' :
+      'Choose Kennedy or Cape Canaveral to see its listed flights. No launch on this calendar does not mean the range is inactive.');
     const confidence = data.scheduleCheckedAt ?
       new Date(data.scheduleCheckedAt).toLocaleString('en-US',
         {dateStyle:'medium',timeStyle:'short',timeZone:'America/New_York'}) + ' ET' :
@@ -558,7 +558,7 @@
       'Shared launch-source observation: ' + confidence + '. ' +
       (network.unassignedCount ?
         network.unassignedCount + ' upcoming record(s) have an unverified Florida facility. ' : '') +
-      'Facility classification is not a ticket, road-entry or launch approval. Confirm with the official operator.');
+      'The facility tells you where the rocket starts, not whether you may enter. Check the operator and the venue.');
   };
   function syncMissionLink(launchId) {
     const url = new URL(location.href);
@@ -576,9 +576,9 @@
     const ready = !!(deck && deck.locationStatus === 'source-identified');
     panel.dataset.status = ready ? 'source-identified' : 'unverified';
     set('fl-deck-range', deck?.eyebrow ||
-      'Shared launch/access sources unavailable');
+      'Launch and viewing updates unavailable');
     set('fl-deck-headline', deck?.headline ||
-      'Viewing guidance unavailable — confirm the mission and pad with the operator.');
+      'We can’t confirm viewing options until the launch and pad are checked with the operator.');
     set('fl-deck-story', deck?.story ||
       'Without a verified mission, a geographical candidate is not a launch-day recommendation.');
     const cards = Array.isArray(deck?.cards) ? deck.cards : [];
@@ -606,12 +606,12 @@
           'PUBLISHED PUBLIC CANDIDATE' : 'CHECK ENTRY BEFORE TRAVEL') :
           'NO VERIFIED OPTION');
       set('fl-deck-' + kind + '-name', entry?.name ||
-        (kind === 'primary' ? 'No safe public starting point verified' :
-          'Public fallback not verified'));
+        (kind === 'primary' ? 'No public viewing spot confirmed yet' :
+          'Backup viewing spot not confirmed'));
       set('fl-deck-' + kind + '-reason', entry ?
         (entry.accessLabel + '. ' + entry.accessReason + ' ' + entry.parking) :
         (deck?.reason ||
-         'Do not treat a missing or restricted park as a verified place to view a rocket.'));
+         'A closed or unverified park is not a place to set up and watch a rocket.'));
       set('fl-deck-' + kind + '-pad', shortDistance(entry));
       set('fl-deck-' + kind + '-weather', weatherText(entry));
       const button = $('fl-deck-' + kind + '-map');
@@ -632,7 +632,7 @@
       'MISSION TICKETS UNVERIFIED');
     set('fl-deck-ticket-reason',
       ticket?.admission ||
-      'Check KSC mission-specific admission and viewing announcements directly.');
+      'Check Kennedy’s event page for this flight’s tickets and entry rules.');
     set('fl-deck-ticket-rule', ticket?.ruleNote ||
       'The Gantry excludes LC-39A and LC-39B launches. Other venue permissions depend on the exact mission.');
     const ticketButton = $('fl-deck-ticket-map');
@@ -647,19 +647,19 @@
     if (beachWrap) beachWrap.dataset.closed = beach?.excluded ? 'true' : 'false';
     set('fl-deck-beach-head', beach?.excluded ?
       'Playalinda: an NPS restriction is reported for the mapped reference lot' :
-      'Playalinda: conditional public beach, not a confirmed open gate');
+      'Playalinda: check the park gate before driving');
     set('fl-deck-beach-copy', beach ?
       (beach.accessLabel + '. ' + beach.accessReason + ' ' + beach.policy) :
-      'Current NPS closures and launch-day park access are unavailable. Check NPS before visiting.');
+      'Playalinda’s current closures aren’t available here. Check NPS before heading to the beach.');
     const note = deck?.decisionNote ||
-      'Live source data unavailable; published geography alone does not confirm access.';
+      'The map still shows the place, but we can’t confirm it is open for this launch.';
     const npsStamp = deck?.observation?.npsAlertCheckedAt ?
       ' NPS alert observation: ' + new Date(deck.observation.npsAlertCheckedAt)
         .toLocaleString('en-US',{timeZone:'America/New_York',dateStyle:'medium',timeStyle:'short'}) + ' ET.' :
       ' No verified NPS observation timestamp.';
     set('fl-deck-provenance',
       (data?.scheduleFreshness === 'stale' ?
-        'Schedule source is stale: reconfirm this mission before travel. ' : '') +
+        'The listed launch time may have changed. Check the operator before you leave. ' : '') +
       note + npsStamp);
   };
   const renderArrival = data => {
@@ -671,7 +671,7 @@
     panel.appendChild(element('h3', '', 'Playalinda: ' + (g.label || 'Confirm the park gate')));
     if (g.estimatedRoadRestrictionAt) {
       const when = new Date(g.estimatedRoadRestrictionAt);
-      panel.appendChild(element('strong', 'launch-gate-time', 'Policy-based T–30 estimate: ' +
+      panel.appendChild(element('strong', 'launch-gate-time', 'Estimated park-road cutoff from published policy: ' +
         when.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', timeZone: 'America/New_York', timeZoneName: 'short' })));
     }
     panel.appendChild(element('p', '', g.detail || 'Confirm the current park entrance policy.'));
@@ -697,9 +697,9 @@
     panel.dataset.state = v.level || 'unknown';
     panel.appendChild(element('strong', '', v.label || 'No sky comparison yet'));
     panel.appendChild(element('p', '', v.detail ||
-      'Select a precisely timed mission within the NWS forecast horizon to compare cloud forecasts.'));
+      'Once your rocket has a precise time within the forecast window, you can compare clouds at the viewing areas.'));
     if (v.winner) panel.appendChild(element('p', 'small',
-      'This is a relative cloud forecast, not a recommendation that a rocket will be visible from that location.'));
+      'Less cloud overhead can help, but it doesn’t guarantee you will see the rocket through its entire climb.'));
   };
   const kscStoryTime = iso => {
     const date = new Date(iso || '');
@@ -726,14 +726,14 @@
         '. Some mission pages could not be verified during that check.' :
         '. Scheduled checks target every 15 minutes, including overnight.') :
       health.status === 'overdue' ?
-        'The scheduled monitor has not completed a fresh check recently. Last confirmed KSC calendar check: ' +
+        'Kennedy’s last confirmed event check was ' +
           kscStoryTime(checked) + '. Verify directly with KSC before traveling.' :
-        'The independent watcher has not yet established its first successful official calendar check.';
+        'We haven’t completed a successful check of Kennedy’s event calendar yet.';
     const timeline = result?.timeline || {};
     const events = Array.isArray(timeline.events) ? timeline.events.slice(0, 20) : [];
     if (!events.length) {
       const empty = element('div', 'ksc-chronicle-empty');
-      empty.appendChild(element('strong', '', 'No verified viewing changes recorded for this mission yet.'));
+      empty.appendChild(element('strong', '', 'No change to Kennedy’s published viewing event recorded here yet.'));
       empty.appendChild(element('p', '', 'That is not evidence of no launch viewing. Official KSC instructions may not yet be published, or the monitor may still be establishing a history.'));
       empty.appendChild(link('https://www.kennedyspacecenter.com/launches-and-events/events-calendar/',
         'Read KSC’s official events calendar', 'launch-link'));
@@ -772,7 +772,7 @@
       const node = $('ksc-watch-health');
       if (node && sequence === loadSequence && activeMissionId === missionId) {
         node.dataset.status = 'overdue';
-        node.textContent = 'The stored official announcement timeline is temporarily unavailable. Check KSC directly for current instructions.';
+        node.textContent = 'Kennedy’s viewing update history isn’t loading. Check its official event page for the latest details.';
       }
     } finally {
       if (chronicleController === controller) chronicleController = null;
@@ -799,7 +799,7 @@
       set('launch-pulse-countdown','Not verified');
       set('launch-pulse-time-note',mission?.level==='overdue'?
         'The published target has passed; no launch outcome has been verified.':
-        'No verified exact upcoming target from a recent shared observation.');
+        'An exact upcoming launch time isn’t confirmed here yet.');
       return;
     }
     const m=Math.ceil((target-Date.now())/60000);
@@ -818,7 +818,7 @@
     if(e.type==='launch-pad')return 'Listed launch pad changed from '+
       (e.before||'unverified')+' to '+(e.after||'unverified')+'.';
     if(e.type==='window-start'||e.type==='window-end')return 'Published launch window changed; check current operator timing.';
-    if(e.type==='left-upcoming-list')return 'Mission disappeared from LL2 upcoming list. Scrub or launch outcome is NOT established.';
+    if(e.type==='left-upcoming-list')return 'The flight disappeared from the public upcoming list. That does not tell us whether it was scrubbed or launched.';
     return 'A schedule field was revised. Recheck the operator.';
   }
   function renderPulse(body){
@@ -829,27 +829,27 @@
     list.replaceChildren();
     if(!body?.ok||!mission){
       root.dataset.level='unknown';
-      set('launch-pulse-headline','Current mission observation unavailable');
-      set('launch-pulse-advice','The shared monitor has not verified this mission yet. Use the primary schedule and official launch operator; do not assume no change.');
+      set('launch-pulse-headline','Latest launch update unavailable');
+      set('launch-pulse-advice','We haven’t checked this flight’s latest public time yet. Check the operator before making plans.');
       set('launch-pulse-checked',body?.monitorCheckedAt?
         'Shared monitor last checked '+pulseEt(body.monitorCheckedAt)+
         '; this mission was not verified.' :
         'No verified scheduled observation available.');
       list.appendChild(element('p','launch-pulse-empty',
-        'No validated change history is available for this selected mission.'));
+        'We don’t have a trustworthy time-change history for this particular launch yet.'));
       renderPulseCountdown();
       return;
     }
     root.dataset.level=mission.level||'unknown';
     set('launch-pulse-headline',mission.label||'Check the schedule');
     const explanations={
-      stale:'Observation is overdue. We cannot confirm whether the scheduled time or status has changed.',
+      stale:'The last calendar check is old. The launch time or status may have changed.',
       scrub:'LL2 explicitly reports a scrub. Do not plan to view the previous attempt; confirm any new date with the operator.',
       hold:'LL2 explicitly reports a hold. The published target may no longer apply. Check the mission operator before leaving.',
       terminal:'LL2 shows a result, but this site does not independently verify launch outcome or flight telemetry.',
-      unknown:'This mission is no longer in the upcoming list. Do NOT assume a scrub, liftoff or success.',
-      overdue:'The target time passed without a verified outcome. Check the operator; do not assume a launch occurred.',
-      uncertain:'The date or hour is too coarse for a reliable departure decision.',
+      unknown:'This flight is no longer listed as upcoming. Check the operator; we can’t tell whether it launched or was scrubbed.',
+      overdue:'The planned time has passed. Check the operator; the countdown alone doesn’t prove liftoff.',
+      uncertain:'Only a rough launch date is listed. Wait for a real launch window before planning when to arrive.',
       planning:'A target time is published, but technical holds, weather or range decisions can change it without warning.',
       check:'Confirm official launch and viewing information before traveling.'
     };
@@ -857,13 +857,13 @@
     set('launch-pulse-checked',
       'LL2 last observed '+pulseEt(mission.checkedAt)+
       ' · '+(mission.freshness==='recent'?
-        'Scheduled check recent (not real-time)' :
+        'Public calendar checked recently' :
         'Scheduled check overdue')+
       ' · independent of KSC ticket and access information.');
     const events=Array.isArray(mission.events)?mission.events.slice(0,8):[];
     if(!events.length){
       list.appendChild(element('p','launch-pulse-empty',
-        'No verified schedule field changes have been recorded for this mission yet. This is not proof the schedule will hold.'));
+        'No published time change recorded here yet. Rockets can still slip at the last minute.'));
     }else{
       for(const event of events){
         const card=element('article','launch-pulse-event');

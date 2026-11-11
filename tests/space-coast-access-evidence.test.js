@@ -162,11 +162,11 @@ test('visitor map shows labeled, source-dated active NPS closure references with
   const css=fs.readFileSync(path.join(root,'viewing.css'),'utf8');
   assert.match(html,/id="geo-live-access"/);
   assert.match(html,/id="geo-current-closure-toggle"/);
-  assert.match(html,/geo-map\.js\?v=20261101-repair1/);
+  assert.match(html,/geo-map\.js\?v=20261110-region-voice-v1/);
   assert.match(js,/function renderLiveAccess\(/);
   assert.match(js,/function updateActiveClosureDisplay\(/);
   assert.match(js,/activeClosureLayer=L\.layerGroup/);
-  assert.match(js,/exact roadblock location is NOT established/i);
+  assert.match(js,/not the precise spot of a barricade/i);
   assert.match(js,/NOT a mapped walkway or safe walking distance/);
   assert.match(css,/\.geo-live-access/);
   assert.doesNotThrow(()=>new Function(js),

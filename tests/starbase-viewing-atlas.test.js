@@ -112,7 +112,7 @@ test('map and mission selection are wired, fail closed, and share launch UUID wi
  assert.match(js,/tile\.on\('tileerror'/);
  assert.match(js,/osm\.on\('tileerror'/);
  assert.match(js,/history\.replaceState/);
- assert.match(js,/source-referenced visitor/);
+ assert.match(js,/Three possible viewing areas are on the map/);
  assert.match(css,/@media\(max-width:720px\)/);
  assert.match(nationalJs,/starbase-rocket-launch-viewing/);
  assert.match(nationalJs,/floridaSpecialistLink\(r\.specialist\)/);

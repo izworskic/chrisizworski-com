@@ -93,8 +93,8 @@ async function ready(page){
    await ready(page);
    assert((await page.locator('#w-mission-name').innerText()).includes('Black Brant'),v.label+' mission A');
    assert((await page.locator('#w-mission-type-tag').innerText()).includes('SCIENTIFIC SOUNDING'),v.label+' sounding rocket class');
-   assert((await page.locator('#w-nasa-public-status').innerText()).includes('no public'),v.label+' public schedule separate');
-   assert((await page.locator('#w-nasa-range-status').innerText()).includes('accessible'),v.label+' NASA range separate');
+   assert((await page.locator('#w-nasa-public-status').innerText()).includes('No upcoming public launch'),v.label+' public schedule separate');
+   assert((await page.locator('#w-nasa-range-status').innerText()).includes('Range Blog checked'),v.label+' NASA range separate');
    assert((await page.locator('#w-decision-copy').innerText()).includes('has not verified'),v.label+' no false event opening');
    assert((await page.locator('#w-mission-time').innerText()).includes('target'),v.label+' exact target qualified');
    assert(await page.locator('#w-map .w-restricted-marker').count()===1,v.label+' restricted pad marker');
@@ -109,7 +109,7 @@ async function ready(page){
    await page.waitForFunction(id=>new URL(location.href).searchParams.get('launchId')===id,B);
    assert((await page.locator('#w-mission-type-tag').innerText()).includes('SUBORBITAL HASTE'),v.label+' HASTE distinct');
    assert(await page.locator('#w-map .w-restricted-marker').count()===0,v.label+' removed unknown pad');
-   assert((await page.locator('#w-selected-bearing').innerText()).includes('No verified'),v.label+' no invented bearings');
+   assert((await page.locator('#w-selected-bearing').innerText()).includes('The pad isn’t confirmed'),v.label+' no invented bearings');
    assert((await page.locator('#w-decision-title').innerText()).includes('LAUNCH HOUR UNVERIFIED'),v.label+' no coarse countdown');
    await page.locator('#w-mission-select').selectOption(A);
    await page.waitForFunction(id=>new URL(location.href).searchParams.get('launchId')===id,A);
@@ -129,7 +129,7 @@ async function ready(page){
   const stale=await expired.newPage();await routeLeaflet(stale);
   await stale.goto(base+'?launchId=33333333-3333-4333-8333-333333333333',{waitUntil:'domcontentloaded'});
   await ready(stale);
-  assert((await stale.locator('#w-mission-observed').innerText()).includes('NEW selection'),'Expired deep link not disclosed');
+  assert((await stale.locator('#w-mission-observed').innerText()).includes('a different mission is shown'),'Expired deep link not disclosed');
   scenarios.push({scenario:'expired-uuid',status:'disclosed'});
   await expired.close();
   sourceOutage=true;
@@ -138,7 +138,7 @@ async function ready(page){
   await offline.goto(base,{waitUntil:'domcontentloaded'});
   await offline.waitForFunction(()=>document.querySelectorAll('#w-map .w-public-marker').length===3,{timeout:14000});
   assert((await offline.locator('#w-mission-name').innerText()).includes('unavailable'),'Schedule outage unreported');
-  assert((await offline.locator('#w-decision-title').innerText()).includes('SOURCE UNAVAILABLE'),'Stale schedule promoted');
+  assert((await offline.locator('#w-decision-title').innerText()).includes('CALENDAR UNAVAILABLE'),'Stale schedule promoted');
   assert(await offline.locator('.w-place').count()===3,'Map outage lost three public site cards');
   scenarios.push({scenario:'schedule-outage',threeStaticSites:'retained',mission:'unverified'});
   await outage.close();sourceOutage=false;
@@ -146,8 +146,8 @@ async function ready(page){
   const bad=await browser.newContext({viewport:{width:390,height:844}});
   const officialPage=await bad.newPage();await routeLeaflet(officialPage);
   await officialPage.goto(base,{waitUntil:'domcontentloaded'});
-  await officialPage.waitForFunction(()=>document.querySelector('#w-nasa-public-status')?.textContent.includes('unavailable'),{timeout:14000});
-  assert(!(await officialPage.locator('#w-nasa-public-status').innerText()).includes('no public'),'Official outage mistaken for empty schedule');
+  await officialPage.waitForFunction(()=>document.querySelector('#w-nasa-public-status')?.textContent.includes('could not be checked'),{timeout:14000});
+  assert(!(await officialPage.locator('#w-nasa-public-status').innerText()).includes('No upcoming public launch'),'Official outage mistaken for empty schedule');
   scenarios.push({scenario:'NASA-official-outage',status:'unavailable-not-empty'});
   await bad.close();officialOutage=false;
   const noJs=await browser.newContext({viewport:{width:390,height:844},javaScriptEnabled:false});

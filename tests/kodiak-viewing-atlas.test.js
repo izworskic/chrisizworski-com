@@ -46,29 +46,29 @@ test('public park geography is NOT launch viewing permission or a navigable rang
   assert.match(place.source,/^https:\/\//);
   assert.ok(place.coordinateRole.length>55);
  }
- assert.match(index,/No independently confirmed, safe public launch-day viewing venue/);
- assert.match(index,/published Pasersaq cabin reference/);
- assert.match(index,/no driving directions to this marker/);
+ assert.match(index,/We have not verified a public viewing site for any specific launch/);
+ assert.match(index,/published cabin-area reference/);
+ assert.match(index,/No driving directions are provided/);
  assert.doesNotMatch(index+app,/maps\/dir\/|google\.com\/maps\/dir|Driving time to range/);
 });
 test('schedule preserves date precision, partial and stale states, and stale ID fallback',()=>{
  assert.match(app,/m\.netPrecision/);
- assert.match(app,/Date.*provisional/);
- assert.match(app,/not launch GO/);
+ assert.match(app,/exact launch time to come/);
+ assert.match(app,/launch is not approved by this listing/);
  assert.match(app,/scheduleFreshness==='stale'/);
  assert.match(app,/region\?\.feedState==='unavailable'/);
  assert.match(app,/response\.status===404&&id&&!expired/);
  assert.match(app,/Unannounced|unannounced|short-notice/i);
- assert.match(app,/No public mission|No upcoming Kodiak launch/);
- assert.match(index,/MISSION TRUTH \/ NOT AN ACCESS PERMIT/i);
+ assert.match(app,/No upcoming Kodiak flight/);
+ assert.match(index,/THE SELECTED FLIGHT \/ NOT A VIEWING PASS/i);
  assert.match(app,/data\.selectedLaunch\?\.region==='alaska'/);
 });
 test('map fails soft with CARTO key, OSM fallback, accessible cards and source provenance',()=>{
  assert.match(app,/fetch\('\/api\/carto-basemap-config'/);
  assert.match(app,/c\.key\?\.trim\(\)/);
  assert.match(app,/tile\.openstreetmap\.org/);
- assert.match(app,/Map tiles unavailable/);
- assert.match(app,/Official park and spaceport source links remain available/);
+ assert.match(app,/map background isn.t loading/);
+ assert.match(app,/official park and spaceport links beside it/);
  assert.match(app,/data\.schemaVersion!==1/);
  assert.match(app,/data\.places\.length!==2/);
  assert.match(index,/data-map-place="pasagshak"/);
@@ -89,18 +89,18 @@ test('source-backed road and range warnings are static even when API is down',()
  ];
  for(const source of sources)assert.ok(index.includes(source),source);
  assert.match(index,/1-833-PSCA-321/);
- assert.match(index,/not a live status feed/);
- assert.match(index,/State-park access is not rocket-viewing approval/);
+ assert.match(index,/We cannot confirm a road is open from this website/);
+ assert.match(index,/A park on the map is not permission to watch a rocket from the range/);
  assert.match(index,/government rocket launched without advance public announcement/);
- assert.match(index,/No digital “road open” claim/);
+ assert.match(index,/This page does not monitor a gate or report the road open in real time/);
  assert.doesNotMatch(app,/closureStatus\s*=\s*['"]open|roadState\s*=\s*['"]open/);
 });
 test('SEO and discovery point to one current canonical with bidirectional same-ID handoff',()=>{
  const url='https://chrisizworski.com/kodiak-rocket-launch-viewing/';
  assert.equal((sitemap.match(/<loc>https:\/\/chrisizworski\.com\/kodiak-rocket-launch-viewing\/<\/loc>/g)||[]).length,1);
- assert.match(sitemap,/<loc>https:\/\/chrisizworski\.com\/kodiak-rocket-launch-viewing\/<\/loc>\s*<lastmod>2026-11-05<\/lastmod>/);
+ assert.match(sitemap,/<loc>https:\/\/chrisizworski\.com\/kodiak-rocket-launch-viewing\/<\/loc>\s*<lastmod>2026-11-10<\/lastmod>/);
  assert.ok(index.includes('<link rel="canonical" href="'+url+'">'));
- assert.match(index,/"dateModified":"2026-11-05"/);
+ assert.match(index,/"dateModified":"2026-11-10"/);
  assert.match(index,/\/national-tools\/rocket-launch-live\/\?region=alaska/);
  assert.match(app,/launchId=/);
  assert.match(hub,/id="rl-nav-kodiak" href="\/kodiak-rocket-launch-viewing\/"/);

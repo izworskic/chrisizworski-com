@@ -21,7 +21,7 @@ test('Hawaiʻi specialist uses one national schedule location with no shadow dat
  assert.match(js,/\/api\/rocket-launch-usa/);
  assert.match(js,/region:'hawaii'/);
  assert.match(js,/data\.selectedLaunch\?\.region==='hawaii'/);
- assert.match(js,/No upcoming Barking Sands launch/);
+ assert.match(js,/No upcoming Barking Sands flight/);
  assert.doesNotMatch(js,/ll\.thespacedevs\.com|launches\/upcoming|createClient\(|supabase|redis/i);
  assert.match(hubjs,/url\.startsWith\('\/barking-sands-rocket-launch-viewing\/'\)\?'hawaii'/);
  assert.match(hubjs,/Barking Sands access guide/);
@@ -36,7 +36,7 @@ test('static HTML answers the real access question without JS or linked-map surv
  assert.match(page,/A recreation card is not a launch ticket/);
  assert.match(page,/Polihale State Park is not a verified fallback/);
  assert.match(page,/November 2026 notices list other Kauaʻi state parks/);
- assert.match(page,/does not authorize travel onto the range/);
+ assert.match(page,/does not provide launch-day viewing authorization/);
  assert.match(page,/not a modern navigational chart/);
  assert.ok(page.length>15000);
  assert.match(page,/data-mode="walk"/);
@@ -53,7 +53,7 @@ test('authoritative Navy beach and guest card source cannot become operational G
  assert.match(guestPolicy(guest).message,/not launch viewing/);
  assert.equal(guestPolicy('Visit the Navy').status,'unverified');
  assert.match(page,/Navy MWR guest card/);
- assert.match(page,/recreation guest card/);
+ assert.match(page,/guest-card privileges/);
 });
 test('DLNR closure parser is conservative and never fabricates a reopening',()=>{
  const closed='<p>11/2/26</p><h2>KAUAʻI</h2><p>Hā‘ena State Park has REOPENED. ALL OTHER KAUA‘I STATE PARKS REMAIN CLOSED.</p>';
@@ -87,7 +87,7 @@ test('official source desk uses fixed source hosts, independent failure, and no 
  assert.match(withError.evidence.beach.message,/Automated current-source retrieval failed/);
  assert.equal(HISTORICAL_NAVY.guest.status,'archived-policy-not-live');
  assert.doesNotMatch(HISTORICAL_NAVY.guest.message,/confirmed open|currently open/i);
- assert.match(js,/Navy automated refresh was blocked/);
+ assert.match(js,/Navy website could not be refreshed automatically/);
  assert.equal(withError.evidence.guest.status,'recreation-only-confirmed');
  assert.equal(withError.evidence.park.status,'source-unavailable');
  let status=0,body=null;
@@ -114,7 +114,7 @@ test('GIS manifest contains only general place references and correct conditiona
  assert.ok(Math.abs(z.polygonLatLon[0][1]+159.7883333333)<1e-6);
  assert.ok(Math.abs(z.polygonLatLon[3][1]+159.7466666667)<1e-6);
  assert.match(z.appliesTo,/STARS launch operations/);
- assert.match(page,/not necessarily active now/i);
+ assert.match(page,/not proof of a live closure today/i);
  assert.match(page,/33 CFR 165\.1406/);
  assert.doesNotMatch(page+js,/google\.com\/maps\/dir|maps\/dir\/|launchTrajectory|rangeGateDirections/);
 });
@@ -123,8 +123,8 @@ test('mobile map is optional, makes no route promise and fails safely',()=>{
  assert.match(js,/\/api\/carto-basemap-config/);
  assert.match(js,/tile\.openstreetmap\.org/);
  assert.match(js,/c\.key\.trim\(\)/);
- assert.match(js,/Map basemap unavailable/);
- assert.match(js,/Official source cards remain usable/);
+ assert.match(js,/map background isn.t loading/);
+ assert.match(js,/official links beside it/);
  assert.match(js,/date-tbd/);
  assert.match(js,/response\.status===404|r\.status===404/);
  assert.match(js,/scheduleFreshness==='stale'/);
@@ -138,9 +138,9 @@ test('discoverability, single canonical, hub handoff and transparent modificatio
  const route='/barking-sands-rocket-launch-viewing/',canonical='https://chrisizworski.com'+route;
  assert.equal((page.match(/rel="canonical"/g)||[]).length,1);
  assert.ok(page.includes('<link rel="canonical" href="'+canonical+'">'));
- assert.match(page,/"dateModified":"2026-11-05"/);
+ assert.match(page,/"dateModified":"2026-11-10"/);
  assert.equal((sitemap.match(/<loc>https:\/\/chrisizworski\.com\/barking-sands-rocket-launch-viewing\/<\/loc>/g)||[]).length,1);
- assert.match(sitemap,/<loc>https:\/\/chrisizworski\.com\/barking-sands-rocket-launch-viewing\/<\/loc>\s*<lastmod>2026-11-05<\/lastmod>/);
+ assert.match(sitemap,/<loc>https:\/\/chrisizworski\.com\/barking-sands-rocket-launch-viewing\/<\/loc>\s*<lastmod>2026-11-10<\/lastmod>/);
  assert.match(hub,/id="rl-nav-pmrf" href="\/barking-sands-rocket-launch-viewing\/"/);
  assert.match(hub,/app\.js\?v=20261110-voice-v1/);
  assert.match(js,/launchId=/);

@@ -12,10 +12,10 @@
  const local=(iso,opts={})=>{const date=new Date(iso||'');return Number.isFinite(+date)?
   date.toLocaleString('en-US',{timeZone:'America/Anchorage',month:'short',day:'numeric',year:'numeric',...opts}):'Not verified';};
  const timing=m=>{
-  if(!m||!m.net)return 'No target verified';
+  if(!m||!m.net)return 'Launch time not announced';
   if(!['minute','second','hour'].includes(m.netPrecision)){
    const p=m.netPrecision;
-   return (p==='year'?'Year':p==='month'?'Month':'Date')+' provisional · launch hour unverified ('+local(m.net)+')';
+   return (p==='year'?'Year':p==='month'?'Month':'Date')+' only · exact launch time to come ('+local(m.net)+')';
   }
   return local(m.net,{hour:'numeric',minute:'2-digit',timeZoneName:'short'})+
    (m.netPrecision==='hour'?' · hour approximate':' · scheduled target, not launch GO');
@@ -31,29 +31,29 @@
   const selected=data.selectedLaunch?.region==='alaska'?data.selectedLaunch:null;
   const select=$('mission-select');select.replaceChildren();
   for(const m of missions){const op=document.createElement('option');op.value=m.id;op.textContent=(m.name||'Kodiak mission')+' · '+timing(m);select.appendChild(op);}
-  if(!missions.length){const op=document.createElement('option');op.textContent='No Kodiak mission in bounded feed';op.value='';select.appendChild(op);}
+  if(!missions.length){const op=document.createElement('option');op.textContent='No upcoming Kodiak flight listed here';op.value='';select.appendChild(op);}
   select.disabled=!missions.length;
   if(selected&&missions.some(m=>m.id===selected.id))select.value=selected.id;
   else if(missions.length&&!select.value)select.value=missions[0].id;
   const picked=missions.find(m=>m.id===select.value)||null;
   state.rocketPins?.update(missions,picked?.id);
-  set('mission-name',picked?.name||'No upcoming Kodiak launch in this bounded feed');
+  set('mission-name',picked?.name||'No upcoming Kodiak flight listed here');
   set('mission-time',timing(picked));
   set('mission-pad',picked?.pad?picked.pad+' · restricted range, not an approach destination':'Restricted range · exact pad not verified');
-  set('mission-freshness',data.scheduleCheckedAt?local(data.scheduleCheckedAt,{hour:'numeric',minute:'2-digit',timeZoneName:'short'}):'Observation time unavailable');
+  set('mission-freshness',data.scheduleCheckedAt?local(data.scheduleCheckedAt,{hour:'numeric',minute:'2-digit',timeZoneName:'short'}):'Last calendar update unavailable');
   let note='';
-  if(expired)note+='The prior linked launch is no longer in this bounded snapshot; no outcome is inferred. ';
+  if(expired)note+='The flight you followed is no longer on this calendar. Check Alaska Aerospace for its status. ';
   note+=region?.feedState==='unavailable'?
-   'Kodiak feed unavailable. Check the operator directly. ':
-   'This is a bounded public collector, not every military or short-notice mission. ';
+   'The Kodiak calendar isn’t loading. Check Alaska Aerospace. ':
+   'This public calendar can miss government and short-notice flights. ';
   note+=data.scheduleFreshness==='stale'?
-   'The latest snapshot is stale. ':data.scheduleFreshness==='recent'?
-   'The schedule was recently observed, not cleared for flight. ':'Source freshness cannot be verified. ';
+   'The listed launch time may be out of date. ':data.scheduleFreshness==='recent'?
+   'The calendar was checked recently, but launch is not approved by this listing. ':'The last calendar update time is unknown. ';
   if(data.scheduleWarning)note+=data.scheduleWarning;
   set('feed-detail',note);
   set('mission-advice',picked?
-   'Even with a published target, do not approach Narrow Cape until Alaska Aerospace independently confirms access and road restrictions. No public launch-day viewing venue is verified.':
-   'No public mission is returned in the limited snapshot. This does NOT establish that range activity has stopped; government launches may be unannounced.');
+   'A rocket on the calendar doesn’t open Narrow Cape. Check Alaska Aerospace road and access notices before driving. We have not confirmed a public viewing area for this flight.':
+   'No upcoming launch is listed here. The range may still be active, and government flights might not be announced in advance.');
   window.RocketFoundryHandoff?.loaded('alaska',picked?.id,picked?.name);
   selectedNational(picked?.id);
   const url=new URL(location.href);
@@ -63,7 +63,7 @@
  async function loadMission(id,expired=false){
   const serial=++state.request,params=new URLSearchParams({region:'alaska'});
   if(id&&UUID.test(id))params.set('launchId',id);
-  $('mission-select').disabled=true;set('feed-detail','Checking the shared national launch snapshot…');
+  $('mission-select').disabled=true;set('feed-detail','Checking the next published Kodiak flight…');
   try{
    const response=await fetch(API+'?'+params.toString(),{headers:{Accept:'application/json'},signal:AbortSignal.timeout(12000)});
    if(serial!==state.request)return;
@@ -75,12 +75,12 @@
   }catch{
    if(serial!==state.request)return;
    state.data=null;state.rocketPins?.update([],null);
-   set('mission-name','Shared Kodiak schedule unavailable');
+   set('mission-name','Kodiak launch calendar unavailable');
    set('mission-time','Not verified');
    set('mission-pad','Restricted range · no visit directions');
    set('mission-freshness','Source unavailable');
-   set('feed-detail','National schedule unavailable. No launch or cancellation can be inferred.');
-   set('mission-advice','Confirm the mission with the operator. Do not use a previous target as permission to travel toward a road safety closure.');
+   set('feed-detail','The public launch calendar isn’t loading. That doesn’t mean a rocket launched or was cancelled.');
+   set('mission-advice','Check the operator for the latest flight and road update. Don’t use an old countdown as a reason to enter a restricted area.');
    const select=$('mission-select');select.replaceChildren();
    const op=document.createElement('option');op.textContent='Source unavailable';select.appendChild(op);select.disabled=true;
    selectedNational(null);
@@ -113,7 +113,7 @@
   document.querySelectorAll('.place').forEach(card=>{card.dataset.selected=card.id==='place-'+id?'true':'false';});
   document.querySelectorAll('[data-map-place]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.mapPlace===id?'true':'false'));
   if(focus&&state.map){state.map.panTo([place.lat,place.lon],{animate:false});state.pins.get(id)?.openPopup();}
-  set('map-status',place.coordinateRole+'. This is NOT an approved launch-day viewpoint or travel authorization.');
+  set('map-status',place.coordinateRole+'. This is not an approved launch-viewing spot or permission to drive toward the range.');
  }
  function pinIcon(p){return window.L.divIcon({className:'k-icon-wrap',html:'<span class="k-pin'+(p.kind==='restricted-range'?' is-range':'')+'">'+(p.kind==='restricted-range'?'!':'P')+'</span>',iconSize:[37,37],iconAnchor:[18,18]});}
  async function startMap(){
@@ -128,13 +128,13 @@
    const osm=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution,maxZoom:18}).addTo(map);
    state.osm=osm;
    osm.on('tileload',()=>{state.tiles=true;});
-   osm.on('tileerror',()=>{if(!state.tiles)set('map-status','Map tiles unavailable. Use the official source links in the place cards.');});
+   osm.on('tileerror',()=>{if(!state.tiles)set('map-status','The map background isn’t loading. Use the official park and spaceport links beside it.');});
    for(const p of places){
     const marker=L.marker([p.lat,p.lon],{icon:pinIcon(p),keyboard:true,title:p.name});
     const content=document.createElement('div');content.className='k-popup';
     const title=document.createElement('strong');title.textContent=p.name;
     const msg=document.createElement('p');msg.textContent=p.coordinateRole;
-    const link=document.createElement('a');link.href=p.access;link.textContent='Read official access rules';link.target='_blank';link.rel='noopener noreferrer';
+    const link=document.createElement('a');link.href=p.access;link.textContent='Check official access rules';link.target='_blank';link.rel='noopener noreferrer';
     content.append(title,msg,link);marker.bindPopup(content);marker.on('click',()=>choose(p.id,false));
     marker.addTo(map);state.pins.set(p.id,marker);
    }
@@ -145,7 +145,7 @@
    });
    state.rocketPins?.update(state.data?.regions?.find(r=>r.id==='alaska')?.launches||[],
      state.data?.selectedLaunchId);
-   set('map-status','Two source-backed geographic references. No launch-day parking, route, pad entrance, safety-zone perimeter or trajectory asserted.');
+   set('map-status','The public park and restricted spaceport are on the map for context. No launch parking, pad route or live closure is shown.');
    if(typeof ResizeObserver!=='undefined')new ResizeObserver(()=>map.invalidateSize()).observe(root);
    fetch('/api/carto-basemap-config',{signal:AbortSignal.timeout(5500)}).then(r=>r.ok?r.json():null).then(c=>{
     if(c?.provider!=='CARTO'||!c.key?.trim())return;
@@ -156,7 +156,7 @@
     carto.on('tileerror',()=>{if(++failures>2&&!loaded&&map.hasLayer(carto)){map.removeLayer(carto);if(!map.hasLayer(osm))osm.addTo(map);}});
     carto.addTo(map);
    }).catch(()=>{});
-  }catch{set('map-status','Interactive map unavailable. Official park and spaceport source links remain available.');if(button){button.disabled=false;button.textContent='Retry map';}}
+  }catch{set('map-status','The map isn’t loading. You can still follow the state park and Alaska Aerospace links.');if(button){button.disabled=false;button.textContent='Retry map';}}
  }
  $('load-map')?.addEventListener('click',()=>{void startMap();});
  document.querySelectorAll('[data-map-place]').forEach(b=>b.addEventListener('click',async()=>{

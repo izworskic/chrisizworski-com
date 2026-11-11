@@ -153,7 +153,7 @@ test('visitor page wires matching selected mission to safe CARTO map, but never 
   assert.match(html,/id="launch-geo-map"/);
   assert.match(html,/id="geo-choice-list"/);
   assert.match(html,/name="geo-intent" value="photo"/);
-  assert.match(html,/geo-map\.js\?v=20261101-repair1/);
+  assert.match(html,/geo-map\.js\?v=20261110-region-voice-v1/);
   assert.match(html,/id="geo-lot-grid"/);
   assert.match(html,/id="geo-road-toggle"/);
   assert.match(app,/space-coast:launch-loaded/);
@@ -162,7 +162,7 @@ test('visitor page wires matching selected mission to safe CARTO map, but never 
   assert.match(map,/fetch\('\/api\/carto-basemap-config'/);
   assert.match(map,/basemaps\.cartocdn\.com\/rastertiles\/voyager/);
   assert.match(map,/tile\.openstreetmap\.org/);
-  assert.match(map,/not the rocket’s flight path or a verified sightline/);
+  assert.match(map,/it cannot promise an unobstructed view of the rocket/);
   assert.match(map,/const directionsUrl/);
   assert.match(css,/\.geo-layout/);
   assert.match(map,/L\.polygon\(/);

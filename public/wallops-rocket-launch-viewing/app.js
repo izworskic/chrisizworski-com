@@ -13,10 +13,10 @@
  const state={request:0,data:null,places:[],profile:'first',site:'nasa-visitor',
   map:null,markers:new Map(),padMarker:null,bearingLine:null,rocketPins:null,tiles:false,leafletPromise:null};
  const profiles={
-  first:{order:['nasa-visitor','reed','harbor'],note:'Start with the NASA launch-viewing event if NASA explicitly opens its lawn for this mission. Otherwise investigate the downtown Chincoteague waterfront.'},
-  backup:{order:['reed','harbor','nasa-visitor'],note:'Town waterfronts are alternatives to investigate if the NASA Visitor Center is closed or full; launch parking and local access still require confirmation.'},
-  science:{order:['nasa-visitor','reed','harbor'],note:'NASA range audio and interpretive staff are the strongest educational setting, but the Visitor Center lawn must be opened for this specific launch.'},
-  photo:{order:['harbor','reed','nasa-visitor'],note:'Fishing harbors and tidal water add foreground character. Neither an exact flight path nor an unobstructed camera view is verified.'}
+  first:{order:['nasa-visitor','reed','harbor'],note:'If NASA opens the viewing lawn for this flight, it is a great place for range audio and a view over the marsh. Otherwise try the Chincoteague waterfronts.'},
+  backup:{order:['reed','harbor','nasa-visitor'],note:'The downtown waterfronts are worth considering if the NASA lawn is closed or full. Check local parking and any event restrictions.'},
+  science:{order:['nasa-visitor','reed','harbor'],note:'Want to hear Range Control while you watch? NASA’s Visitor Center is the place to check, but it opens for selected events only.'},
+  photo:{order:['harbor','reed','nasa-visitor'],note:'Harbor boats and tidal water give your photos a sense of place. Check the actual sightline; a map cannot promise an unobstructed rocket.'}
  };
  const external=(url,label)=>{if(typeof url!=='string'||!/^https:\/\//.test(url))return null;
   const a=document.createElement('a');a.href=url;a.textContent=label;a.target='_blank';a.rel='noopener noreferrer';return a};
@@ -24,28 +24,28 @@
   d.toLocaleString('en-US',{timeZone:'America/New_York',dateStyle:'medium',timeStyle:'short'})+' ET':'not verified'};
  const timing=(m)=>{
   const dt=new Date(m?.net||'');
-  if(!Number.isFinite(+dt))return 'No time verified';
+  if(!Number.isFinite(+dt))return 'Time not announced';
   const p=m?.netPrecision||'unknown';
-  if(['year','month','date-tbd'].includes(p))return 'Date provisional · no launch hour confirmed';
+  if(['year','month','date-tbd'].includes(p))return 'Date is tentative · exact liftoff time to come';
   const fmt={timeZone:['day','time-tbd'].includes(p)?'UTC':'America/New_York',
    year:'numeric',month:'short',day:'numeric'};
   if(['minute','second','hour'].includes(p)){fmt.hour='numeric';fmt.minute='2-digit';fmt.timeZoneName='short';}
   return new Intl.DateTimeFormat('en-US',fmt).format(dt)+
    (['minute','second'].includes(p)?' · scheduled target, not launch GO':' · launch hour not verified');
  };
- const noTime=()=>{set('w-mission-time','No precise launch target');set('w-mission-pad','Restricted pad unverified');};
+ const noTime=()=>{set('w-mission-time','Exact launch time not announced');set('w-mission-pad','Restricted pad unverified');};
  function updateOfficial(d){
   const schedule=d?.schedule||{},range=d?.range||{};
   const publicState=schedule.status==='no-public-listed'?
-   'NASA reports no public launch listed':schedule.status==='source-checked'?
-   'Official page retrieved · no future date matched':'Official check unavailable';
+   'No upcoming public launch listed by NASA':schedule.status==='source-checked'?
+   'NASA schedule checked · no matching future date':'NASA schedule could not be checked';
   set('w-nasa-public-status',publicState);
-  set('w-nasa-public-note',schedule.summary||'The NASA public list could not be confirmed. An empty LL2 list does not prove no operations.');
+  set('w-nasa-public-note',schedule.summary||'We couldn’t confirm NASA’s next public flight. An empty calendar doesn’t mean the range is inactive.');
   set('w-nasa-range-status',range.status==='source-checked'?
-   'Official Range Blog accessible':'Range notice check unavailable');
+   'NASA Range Blog checked':'Range Blog could not be checked');
   set('w-nasa-range-note',range.summary||
-   'Non-NASA launches and short-notice operations may be announced here separately.');
-  set('w-nasa-checked','Independent NASA source checks: public schedule '+stamp(schedule.checkedAt)+
+   'Science and partner flights may appear on NASA’s Range Blog instead of the public calendar.');
+  set('w-nasa-checked','NASA sources last checked: public schedule '+stamp(schedule.checkedAt)+
    ' · range blog '+stamp(range.checkedAt)+'. Neither is a visitor-center event authorization.');
  }
  async function loadOfficial(){
@@ -78,7 +78,7 @@
    const pop=document.createElement('div');pop.className='w-map-popup';
    const name=document.createElement('strong');name.textContent=p.name;pop.appendChild(name);
    const note=document.createElement('p');note.textContent=p.coordinateRole+
-    '. No confirmed current spectator entrance, launch-day parking or legal access.';pop.appendChild(note);
+    '. Check hours, parking and local restrictions before arriving. This pin is not a reserved viewing place.';pop.appendChild(note);
    const link=external(p.accessSource,'Check published venue rules');if(link)pop.appendChild(link);
    marker.bindPopup(pop);marker.on('click',()=>selectSite(p.id,false));
    marker.addTo(state.map);state.markers.set(p.id,marker);bounds.push([p.lat,p.lon]);
@@ -104,7 +104,7 @@
   state.padMarker=null;state.bearingLine=null;
   const pad=state.data?.wallopsViewing?.pad;
   if(!pad||!Number.isFinite(pad.lat)||!Number.isFinite(pad.lon)){
-   set('w-map-status','Mapped three public/official place references. The shared selected mission has no trusted launch-pad location; no geometry or flight-path claim.');
+   set('w-map-status','The three viewing places are on the map. This flight’s exact pad location is not confirmed, so no direction or flight path is shown.');
    return;
   }
   const marker=window.L.marker([pad.lat,pad.lon],{
@@ -112,14 +112,14 @@
     html:'<span class="w-pin w-pin-restricted">!</span>',iconSize:[38,38],iconAnchor:[19,19]})});
   const popup=document.createElement('div');popup.className='w-map-popup';
   const head=document.createElement('strong');head.textContent='RESTRICTED range pad: '+pad.name;
-  const p=document.createElement('p');p.textContent='Third-party mission GPS, not an entrance, viewing site, road route or predicted ascent track.';
+  const p=document.createElement('p');p.textContent='This is a restricted launch pad, not a visitor entrance or driving route. The line does not predict the rocket’s flight.';
   popup.append(head,p);marker.bindPopup(popup).addTo(state.map);state.padMarker=marker;
   const site=state.places.find(x=>x.id===state.site);
   if(site){
    state.bearingLine=window.L.polyline([[site.lat,site.lon],[pad.lat,pad.lon]],
     {color:'#b9783a',weight:3,opacity:.85,dashArray:'6 7',interactive:false}).addTo(state.map);
   }
-  set('w-map-status','Mapped three audited public place references and the mission-listed restricted pad. Dashed line is straight-line geographic direction only, never a rocket path or legal route.');
+  set('w-map-status','Three viewing areas and the restricted pad are mapped. The dashed line points toward the pad, not along a road or the rocket’s path.');
  }
  function loadLeaflet(){
   if(window.L?.map)return Promise.resolve(window.L);
@@ -183,29 +183,29 @@
   const site=state.places.find(s=>s.id===state.site);
   if(!site)return;
   set('w-selected-name',site.name);
-  set('w-selected-story',site.scene+' Geographic reference: '+site.coordinateRole+'.');
+  set('w-selected-story',site.scene+' Mapped location: '+site.coordinateRole+'.');
   const d=state.data?.wallopsViewing?.sites?.find(p=>p.id===site.id);
   set('w-selected-bearing',d?.geometry&&Number.isFinite(d.geometry.miles)&&
    Number.isFinite(d.geometry.bearingDegrees)?
    'Approximately '+d.geometry.miles.toFixed(1)+' miles from published place reference to mission-listed pad at '+d.geometry.bearingDegrees+'° '+d.geometry.bearingCardinal+
    ' in a STRAIGHT LINE. Not road distance, a rocket flight track or a proven sightline.':
-   'No verified mission-specific pad GPS: distance, direction and flight path are withheld.');
+   'The pad isn’t confirmed for this mission, so we can’t show a dependable distance or bearing.');
   set('w-selected-warning',site.id==='nasa-visitor'?
-   'This visitor-center lawn is a mission-specific NASA event, not an automatically open destination. Free entry does not guarantee a parking space.':
+   'NASA must announce the viewing lawn as open for this flight. Entry is free when offered, but parking is first-come.':
    'NASA names this public waterfront alternative, but current event parking, hours, access and direct sightline have not been verified.');
   const actions=$('w-selected-actions');actions.replaceChildren();
-  for(const [url,label]of [[site.accessSource,'Official launch viewing source'],
-   [site.geographicSource,'Published map coordinate source']]){
+  for(const [url,label]of [[site.accessSource,'Read the launch-viewing rules'],
+   [site.geographicSource,'See the map reference']]){
    const a=external(url,label);if(a)actions.appendChild(a);
   }
   // Source-verified public arrival only. Never offer GPS to the restricted range.
   if(site.id==='nasa-visitor'){
    const a=external('https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(site.navigation),
-    'Navigate to the NASA PUBLIC visitor center');
+    'Directions to NASA’s public Visitor Center');
    if(a)actions.appendChild(a);
   }else if(typeof site.navigation==='string'){
    const a=external('https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(site.navigation),
-    'Find the named town place (not parking)');
+    'Find this town waterfront on Google Maps');
    if(a)actions.appendChild(a);
   }
   for(const card of document.querySelectorAll('[data-place]'))card.dataset.active=card.dataset.place===site.id?'true':'false';
@@ -250,29 +250,29 @@
    picker.disabled=picker.options.length===0;
    if(picked&&UUID.test(picked.id))picker.value=picked.id;
   }else{
-   const option=document.createElement('option');option.value='';option.textContent='No upcoming Wallops missions in bounded national feed';
+   const option=document.createElement('option');option.value='';option.textContent='No upcoming Wallops flights listed here';
    picker.appendChild(option);picker.disabled=true;
   }
   const type=data.wallopsViewing?.missionType||{};
   set('w-mission-type-tag',(type.name||'Mission not classified').toUpperCase());
-  set('w-mission-name',picked?.name||'No upcoming Wallops launch in the shared bounded feed');
-  set('w-mission-time',picked?timing(picked):'No public launch time verified');
+  set('w-mission-name',picked?.name||'No upcoming Wallops flight listed here');
+  set('w-mission-time',picked?timing(picked):'Liftoff time not yet confirmed');
   set('w-mission-pad',picked?.pad?picked.pad+' · restricted launch facility':'Pad unverified; no public directions');
   set('w-mission-science',type.summary||
-   'No mission type or payload can be inferred from an empty national feed. Check NASA range announcements.');
+   'No rocket type is listed yet. Check NASA’s launch announcements to see what might fly next.');
   set('w-mission-observed',(wasExpired?
-   'The linked launch was removed from the bounded schedule. This is a NEW selection; no outcome for the old mission is inferred. ':'')+
-   'Shared calendar last observed '+stamp(data.scheduleCheckedAt)+'. '+
-   (data.scheduleFreshness==='stale'?'The snapshot is stale. Check the operator. ':
-    data.scheduleFreshness==='recent'?'Schedule is recently observed, not launch GO. ':'Source freshness not verified. ')+
+   'The flight you followed is no longer listed, so a different mission is shown. Check NASA for news about the earlier launch. ':'')+
+   'Calendar last checked '+stamp(data.scheduleCheckedAt)+'. '+
+   (data.scheduleFreshness==='stale'?'This launch time may be old. Check NASA. ':
+    data.scheduleFreshness==='recent'?'The calendar was checked recently, but liftoff is not guaranteed. ':'Last calendar update time not confirmed. ')+
    (data.scheduleWarning||''));
   const precise=picked&&['minute','second'].includes(picked.netPrecision);
-  set('w-decision-title',precise?'TRIP DECISION · CONFIRM EVENT OPENING':
+  set('w-decision-title',precise?'BEFORE YOU GO / CHECK NASA’S VIEWING EVENT':
    picked?'TRIP DECISION · LAUNCH HOUR UNVERIFIED':'TRIP DECISION · NO CURRENT LISTING');
   set('w-decision-copy',precise?
    'A launch target is published, but NASA has not verified this event’s Visitor Center opening in this tool. Confirm the NASA event notice, access, local restrictions and last-minute mission changes before traveling.':
-   picked?'The shared feed does not establish an exact launch hour. A date alone is not a travel countdown or evidence that NASA will open the Visitor Center.':
-   'No upcoming mission in the bounded third-party feed. That is not proof there are no range operations; check NASA’s public schedule and its separate Wallops Range Blog.');
+   picked?'We have a date but no exact launch time yet. Wait for NASA’s latest window and check whether the Visitor Center will open for this mission.':
+   'No upcoming flight is listed here right now. Smaller science flights or range operations may still be planned; check NASA’s schedule and Range Blog.');
   const clouds=Array.isArray(data.weather?.places)?data.weather.places:[];
   const sky=clouds.filter(p=>p.status==='ok'&&p.cloudStatus==='ok'&&Number.isInteger(p.cloudCoverPercent));
   set('w-sky-status',precise&&sky.length?
@@ -295,7 +295,7 @@
   const params=new URLSearchParams({region:'virginia'});
   if(id&&UUID.test(id))params.set('launchId',id);
   $('w-mission-select').disabled=true;
-  set('w-mission-observed','Checking the bounded shared launch schedule…');
+  set('w-mission-observed','Looking for upcoming Wallops flights…');
   try{
    const response=await fetch(NATIONAL+'?'+params,{headers:{Accept:'application/json'}});
    const data=await response.json();
@@ -306,12 +306,12 @@
   }catch{
    if(seq!==state.request)return;
    state.data=null;$('w-mission-select').disabled=true;
-   set('w-mission-name','Shared launch schedule unavailable');
+   set('w-mission-name','Wallops launch calendar unavailable');
    set('w-mission-type-tag','SOURCE UNAVAILABLE');noTime();
-   set('w-mission-observed','National snapshot could not be checked. The NASA public schedule and range blog are separate sources, not proof of an upcoming flight.');
-   set('w-mission-science','No flight class or payload can be inferred during a schedule outage.');
-   set('w-decision-title','TRIP DECISION · SOURCE UNAVAILABLE');
-   set('w-decision-copy','Do not travel based on an old countdown. Confirm any mission and launch-specific visitor opening directly with NASA.');
+   set('w-mission-observed','The national calendar isn’t loading right now. NASA’s own schedule and Range Blog are the best places to check.');
+   set('w-mission-science','We can’t tell which rocket is next until the schedule comes back.');
+   set('w-decision-title','BEFORE YOU GO / CALENDAR UNAVAILABLE');
+   set('w-decision-copy','Don’t plan the drive around an old countdown. Check NASA’s new launch time and whether the viewing lawn will open.');
    set('w-sky-status','NWS spectator weather unavailable');
    state.rocketPins?.update([],null);
    deepLink(null);selection();updatePad();

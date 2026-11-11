@@ -158,7 +158,7 @@ async function expectName(page,name){
    const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
    assert(overflow<=2,size.name+' horizontal overflow '+overflow);
    assert((await page.locator('#geo-map-status').innerText()).length>0,size.name+' GIS fallback text absent');
-   assert((await page.locator('#ksc-mission-viewing').innerText()).includes('Do not buy'),size.name+' unverified tickets warning');
+   assert((await page.locator('#ksc-mission-viewing').innerText()).includes('before buying tickets'),size.name+' unverified tickets warning');
    assert(errors.length===0,size.name+' JS exceptions '+errors.join('; '));
    const shot=size.name+'-florida-facilities.png';
    await page.locator('#florida-launch-facilities').screenshot({path:path.join(out,shot),animations:'disabled'});
@@ -179,7 +179,7 @@ async function expectName(page,name){
   assert(await staticPage.locator('#florida-launch-facilities a[href^="https://www.nps.gov/"]').count()===1,'No-JS NPS source missing');
   assert(await staticPage.locator('[data-fl-facility]:disabled').count()===2,'No-JS buttons must not claim data');
   assert(await staticPage.locator('#fl-deck-primary-map').isDisabled(),'No-JS plan falsely claims a destination');
-  assert((await staticPage.locator('#fl-deck-beach-copy').innerText()).includes('not a verified opening'),'No-JS NPS qualifier missing');
+  assert((await staticPage.locator('#fl-deck-beach-copy').innerText()).includes('it can close or fill'),'No-JS NPS qualifier missing');
   report.scenarios.push({name:'no-js',officialSources:'present',unsupportedControls:'disabled'});
   await noJs.close();
  }catch(e){report.errors.push(e.stack||String(e))}

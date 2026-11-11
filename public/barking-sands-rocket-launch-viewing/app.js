@@ -11,20 +11,20 @@ const UUID=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const $=id=>document.getElementById(id);
 const set=(id,value)=>{const n=$(id);if(n)n.textContent=value??'Unverified';};
 const modes={
- walk:{label:'PUBLIC BEACH RECREATION / CONDITIONAL',
-  title:'You may use only posted, designated public shoreline.',
-  desc:'Navy guidance permits walk-in recreation at designated beach areas from the northern or southern boundary. Restricted-area signs and the beachfront vegetation line control. This is not permission to enter federal property inland, drive on the beach, or watch a launch during a safety closure.',
-  facts:['Respect restricted signs','No vehicles on state beaches','No verified launch-viewing area'],
+ walk:{label:'BEACH RECREATION / READ THE SIGNS',
+  title:'Designated beaches can be open for recreation, not for launch viewing.',
+  desc:'The Navy allows walk-in recreation on certain marked beaches from the north or south boundaries. Stay within the signs and vegetation line. You cannot enter restricted federal property, drive on state beaches or remain during a safety closure.',
+  facts:['Stay inside the posted beach boundary','No vehicles on state beaches','No approved launch viewing confirmed'],
   links:[['https://cnrh.cnic.navy.mil/Installations/PMRF-Barking-Sands/Operations-and-Management/Beach-Access/','Navy designated shoreline policy']]},
- guest:{label:'CREDENTIALED MWR RECREATION / NOT FLIGHT AUTHORIZATION',
-  title:'A Navy MWR guest card adds recreational access, not launch viewing.',
-  desc:'The Navy describes guest-card access through the main gate to certain recreational facilities, generally between 5 a.m. and 10 p.m. except during heightened force-protection conditions. Applications require screening and a fee. A card does not grant access to pads, operations areas, restricted shoreline or a launch event.',
-  facts:['Application and background check','Recreation only','Force-protection restrictions prevail'],
+ guest:{label:'MWR GUEST CARD / RECREATION ONLY',
+  title:'A Navy guest card opens some recreation facilities, not the launch pad.',
+  desc:'The Navy describes access to some recreation facilities through its guest-card program, subject to hours, screening, fees and security conditions. A card does not give you launch-day access to operational areas, restricted beaches or the pad.',
+  facts:['Application and background check','Not a launch ticket','Force-protection restrictions prevail'],
   links:[['https://cnrh.cnic.navy.mil/Installations/PMRF-Barking-Sands/Resources/MWR-Guest-Pass-Program/','Navy guest-card requirements'],['https://cnrh.cnic.navy.mil/Installations/PMRF-Barking-Sands/','Navy Pass & ID: 808-335-4221']]},
- boat:{label:'MARITIME OPERATIONS / ACTIVE NOTICES REQUIRED',
-  title:'The sea is not an unrestricted launch-viewing parking lot.',
-  desc:'The Coast Guard defines a STARS-specific maritime safety area in 33 CFR 165.1406. It is closed when activated for designated operations by published or broadcast notice. This page has NOT verified that the zone is active or inactive today. Other Navy range hazards may also apply.',
-  facts:['Do not navigate by this map','Verify broadcast/local notices','No marine launch-viewing authorization'],
+ boat:{label:'ON THE WATER / CURRENT NOTICES REQUIRED',
+  title:'A boat is not a shortcut into a launch safety zone.',
+  desc:'For certain STARS operations, the Coast Guard may activate a maritime safety area. The rule is published, but we have not verified whether it is active today. Mariners must check current broadcasts and notices; other range hazards may exist.',
+  facts:['This map is not for navigation','Check current Coast Guard notices','No approved marine viewing area'],
   links:[['https://navcen.uscg.gov/local-notices-to-mariners-by-cg-district','Current Coast Guard LNM hub'],['https://www.ecfr.gov/current/title-33/chapter-I/subchapter-P/part-165/section-165.1406','33 CFR 165.1406 official text']]}
 };
 const state={data:null,request:0,atlas:null,map:null,pins:new Map(),polygon:null,rocketPins:null,tilesReady:false,leaflet:null,loadingMap:false,ruleShown:true};
@@ -53,7 +53,7 @@ function target(m){
  if(p==='month')return new Intl.DateTimeFormat('en-US',{timeZone:'UTC',year:'numeric',month:'long'}).format(dt)+' · month only';
  if(['day','date-tbd','time-tbd'].includes(p))return
   new Intl.DateTimeFormat('en-US',{timeZone:'UTC',year:'numeric',month:'short',day:'numeric'}).format(dt)+' · time not verified';
- if(!['hour','minute','second'].includes(p))return 'Precision unavailable; check operator';
+ if(!['hour','minute','second'].includes(p))return 'Exact launch time not announced';
  return time(m.net,{hour:'numeric',minute:'2-digit',timeZoneName:'short'})+
   (p==='hour'?' · hour approximate':' · scheduled target, not launch GO');
 }
@@ -67,29 +67,29 @@ function showMissions(data,expired=false){
  const missions=Array.isArray(region?.launches)?region.launches.filter(m=>UUID.test(m.id)):[];
  const select=$('mission-picker');select.replaceChildren();
  for(const m of missions){const opt=document.createElement('option');opt.value=m.id;opt.textContent=(m.name||'PMRF mission')+' · '+target(m);select.appendChild(opt);}
- if(!missions.length){const opt=document.createElement('option');opt.value='';opt.textContent='No upcoming PMRF mission in this bounded feed';select.appendChild(opt);}
+ if(!missions.length){const opt=document.createElement('option');opt.value='';opt.textContent='No upcoming Barking Sands flight listed here';select.appendChild(opt);}
  select.disabled=!missions.length;
  const pick=data.selectedLaunch?.region==='hawaii'?data.selectedLaunch:null;
  if(pick&&missions.some(m=>m.id===pick.id))select.value=pick.id;
  const selected=missions.find(m=>m.id===select.value)||null;
  state.rocketPins?.update(missions,selected?.id);
- set('mission-name',selected?.name||'No upcoming Barking Sands launch in this bounded feed');
+ set('mission-name',selected?.name||'No upcoming Barking Sands flight listed here');
  set('mission-time',target(selected));
  set('mission-facility',selected?.pad?selected.pad+' · restricted facility; no public pad directions':'PMRF military range · pad unverified');
- set('mission-observed',data.scheduleCheckedAt?time(data.scheduleCheckedAt,{hour:'numeric',minute:'2-digit',timeZoneName:'short'}):'Snapshot time unavailable');
+ set('mission-observed',data.scheduleCheckedAt?time(data.scheduleCheckedAt,{hour:'numeric',minute:'2-digit',timeZoneName:'short'}):'Calendar update time unavailable');
  const notes=[];
- if(expired)notes.push('The formerly linked launch disappeared from this bounded snapshot. Its outcome is unknown.');
- if(region?.feedState==='unavailable')notes.push('The Hawaii launch-location feed is unavailable.');
- else if(!missions.length)notes.push('No launch is returned in the selected source window. Unannounced military tests may still occur.');
- else notes.push('Third-party launch calendar. Check Navy notices; defense tests may be unpublished.');
- if(data.scheduleFreshness==='stale')notes.push('Schedule snapshot is stale.');
- else if(data.scheduleFreshness==='recent')notes.push('Schedule recently observed, not cleared for flight.');
- else notes.push('Schedule freshness unverified.');
+ if(expired)notes.push('A flight you followed has disappeared from the public calendar. Check the operator before assuming what happened.');
+ if(region?.feedState==='unavailable')notes.push('The Hawaiʻi launch calendar is not responding.');
+ else if(!missions.length)notes.push('No flight is listed here right now. Navy tests may still happen without appearing on this calendar.');
+ else notes.push('These are public calendar listings. Navy tests and range notices are separate.');
+ if(data.scheduleFreshness==='stale')notes.push('The calendar may be out of date.');
+ else if(data.scheduleFreshness==='recent')notes.push('The calendar was checked recently, but this is not launch clearance.');
+ else notes.push('Last calendar update time not confirmed.');
  if(data.scheduleWarning)notes.push(data.scheduleWarning);
  set('feed-note',notes.join(' '));
  set('mission-advice',selected?
-  'Launch target does not imply a public spectator venue. Confirm any official operational and shoreline restrictions separately; neither a guest card nor a beach policy is a launch ticket.':
-  'No mission in the bounded feed is NOT evidence of an open beach, inactive safety zone or canceled Navy operation.');
+  'A rocket on the calendar does not make the range a viewing destination. Check Navy shoreline rules and any operational closures. Neither a guest card nor ordinary beach access is a launch ticket.':
+  'Nothing listed here does not mean the beaches are open, the water is unrestricted or the Navy has canceled an operation.');
  window.RocketFoundryHandoff?.loaded('hawaii',selected?.id,selected?.name);
  network(selected?.id);
  const url=new URL(location.href);if(selected?.id)url.searchParams.set('launchId',selected.id);else url.searchParams.delete('launchId');
@@ -98,7 +98,7 @@ function showMissions(data,expired=false){
 async function loadMission(id,expired=false){
  const seq=++state.request,params=new URLSearchParams({region:'hawaii'});
  if(id&&UUID.test(id))params.set('launchId',id);
- $('mission-picker').disabled=true;set('feed-note','Checking the shared bounded national launch snapshot…');
+ $('mission-picker').disabled=true;set('feed-note','Looking for public Barking Sands launch announcements…');
  try{
   const r=await fetch(API+'?'+params.toString(),{headers:{Accept:'application/json'},signal:AbortSignal.timeout(13000)});
   if(seq!==state.request)return;
@@ -111,10 +111,10 @@ async function loadMission(id,expired=false){
   if(seq!==state.request)return;
   state.data=null;state.rocketPins?.update([],null);$('mission-picker').disabled=true;
   const sel=$('mission-picker');sel.replaceChildren();const op=document.createElement('option');op.textContent='Schedule unavailable';sel.appendChild(op);
-  set('mission-name','Shared launch schedule unavailable');set('mission-time','Not verified');
+  set('mission-name','Barking Sands calendar unavailable');set('mission-time','Not verified');
   set('mission-facility','Military range · no public pad directions');
-  set('mission-observed','Source unavailable');set('feed-note','The national snapshot could not be checked. No launch or cancellation can be inferred.');
-  set('mission-advice','Do not travel based on an old target or assume safe shoreline access. Consult official Navy and Coast Guard sources.');
+  set('mission-observed','Source unavailable');set('feed-note','We couldn’t refresh the launch calendar. That does not mean a test happened or was canceled.');
+  set('mission-advice','Don’t travel based on an old countdown. Check Navy shoreline updates and Coast Guard notices before heading toward the range.');
   network(null);
  }
 }
@@ -124,18 +124,18 @@ async function loadOfficial(){
   if(!r.ok)throw Error('source desk offline');
   const d=await r.json();if(!d?.ok||!d.evidence)throw Error('source desk incomplete');
   const labels={
-   beach:{'general-policy-retrieved':'General shoreline policy retrieved','unverified':'Changed or unverified','source-unavailable':'Official source unavailable','archived-policy-not-live':'2026-11-05 policy · live refresh blocked'},
-   guest:{'recreation-only-confirmed':'Recreation-only terms retrieved','unverified':'Changed or unverified','source-unavailable':'Official source unavailable','archived-policy-not-live':'2026-11-05 policy · live refresh blocked'},
-   park:{'published-closure':'Closure bulletin retrieved','unverified':'Closure/reopening not verified','source-unavailable':'Official source unavailable'}
+   beach:{'general-policy-retrieved':'Navy beach rules retrieved','unverified':'Changed or unverified','source-unavailable':'Official source unavailable','archived-policy-not-live':'2026-11-05 policy · live refresh blocked'},
+   guest:{'recreation-only-confirmed':'Navy guest-card rules retrieved','unverified':'Changed or unverified','source-unavailable':'Official source unavailable','archived-policy-not-live':'2026-11-05 policy · live refresh blocked'},
+   park:{'published-closure':'State park closure notice retrieved','unverified':'Park opening status not confirmed','source-unavailable':'Official source unavailable'}
   };
   for(const k of ['beach','guest','park']){const record=d.evidence[k]||{},value=labels[k][record.status]||'No verification';set('source-'+k,value);}
   const navyArchived=['beach','guest'].some(k=>d.evidence[k]?.status==='archived-policy-not-live');
-  set('source-checked','Official source requests attempted '+time(d.checkedAt,{hour:'numeric',minute:'2-digit',timeZoneName:'short'})+'. '+
-   (navyArchived?'Navy automated refresh was blocked; its displayed policy was independently reviewed November 5, 2026, not verified open now. ':'')+
-   'No source check is a live gate, beach or maritime-zone activation sensor.');
+  set('source-checked','Agency websites checked '+time(d.checkedAt,{hour:'numeric',minute:'2-digit',timeZoneName:'short'})+'. '+
+   (navyArchived?'The Navy website could not be refreshed automatically. The policy shown was reviewed November 5, 2026; it does not confirm a beach is open today. ':'')+
+   'These website checks cannot tell us whether a gate is open or an offshore safety area is active right now.');
  }catch{
   for(const k of ['beach','guest','park'])set('source-'+k,'Official check unavailable');
-  set('source-checked','Could not fetch the official source desk. Follow Navy, DLNR and Coast Guard links. No open-access inference is made.');
+  set('source-checked','Agency updates could not be checked here. Follow the Navy, Hawaiʻi DLNR and Coast Guard links before going; do not assume access is open.');
  }
 }
 async function loadAtlas(){
@@ -171,7 +171,7 @@ function locate(id,move=true){
  const point=state.atlas?.points?.find(p=>p.id===id);if(!point)return;
  for(const e of document.querySelectorAll('[data-place]'))e.setAttribute('aria-pressed',e.dataset.place===id?'true':'false');
  document.querySelectorAll('.place[id]').forEach(e=>e.dataset.selected=e.id==='place-'+id?'true':'false');
- set('map-status',point.coordinateRole+' This point is not permission to enter, drive or watch a launch.');
+ set('map-status',point.coordinateRole+' This marker is for orientation, not permission to drive, enter or watch a launch.');
  if(move&&state.map){state.map.panTo([point.lat,point.lon],{animate:false});state.pins.get(id)?.openPopup();}
 }
 function syncRule(){
@@ -179,8 +179,8 @@ function syncRule(){
  if(!state.map||!state.polygon)return;
  if(state.ruleShown&&!state.map.hasLayer(state.polygon))state.polygon.addTo(state.map);
  else if(!state.ruleShown&&state.map.hasLayer(state.polygon))state.map.removeLayer(state.polygon);
- set('map-status',state.ruleShown?'The STARS regulation area is illustrated. Activation is NOT checked; never navigate using this overlay.':
-  'Regulatory polygon hidden. Coast Guard and Navy restrictions still apply regardless of map visibility.');
+ set('map-status',state.ruleShown?'The published STARS safety area is shown, but we have not confirmed a live closure. Never navigate a boat using this map.':
+  'The offshore area is hidden on the map. Navy and Coast Guard rules still apply.');
 }
 async function startMap(){
  if(state.map||state.loadingMap)return;
@@ -192,7 +192,7 @@ async function startMap(){
   const osmCredit='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
   const osm=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:osmCredit}).addTo(map);
   osm.on('tileload',()=>{state.tilesReady=true;});
-  osm.on('tileerror',()=>{if(!state.tilesReady)set('map-status','Map basemap unavailable. Official source cards remain usable.');});
+  osm.on('tileerror',()=>{if(!state.tilesReady)set('map-status','The map background isn’t loading. You can still follow the official links beside it.');});
   const bounds=[];
   for(const p of d.points){
    const marker=L.marker([p.lat,p.lon],{icon:icon(p),keyboard:true,title:p.name});
@@ -205,7 +205,7 @@ async function startMap(){
   state.polygon=L.polygon(coords,{color:'#277da0',fillColor:'#4fa4c1',weight:2,fillOpacity:.18,dashArray:'5 6'});
   const popup=document.createElement('div');popup.className='p-popup';const strong=document.createElement('strong');
   strong.textContent='Conditional STARS maritime safety area';
-  const message=document.createElement('p');message.textContent='33 CFR 165.1406, OHD coordinates. NOT verified active. Not every PMRF hazard area and not navigation-grade geometry.';
+  const message=document.createElement('p');message.textContent='Published Coast Guard area; not confirmed active. This is not a nautical chart or a complete map of Navy hazards.';
   popup.append(strong,message);const anchor=external(d.maritimeRule.source,'Read governing rule');if(anchor)popup.append(anchor);
   state.polygon.bindPopup(popup);if(state.ruleShown)state.polygon.addTo(map);
   bounds.push(...coords);map.fitBounds(bounds,{padding:[24,24],maxZoom:11,animate:false});
@@ -228,7 +228,7 @@ async function startMap(){
   }).catch(()=>{});
  }catch{
   if(button){button.disabled=false;button.textContent='Retry coast map';}
-  set('map-status','Interactive map unavailable. The Navy beach rules, DLNR closure notice and Coast Guard regulation remain linked beside it.');
+  set('map-status','The map isn’t loading, but the Navy beach rules, DLNR park notice and Coast Guard regulation are still linked here.');
  }finally{state.loadingMap=false;}
 }
 document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>changeMode(b.dataset.mode)));

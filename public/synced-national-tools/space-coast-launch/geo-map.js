@@ -44,10 +44,10 @@
     return 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(nav.value);
   };
   const profileDescription = {
-    family: 'Start with parks whose managers list restrooms, open space or family facilities. No parking or unobstructed view is guaranteed.',
-    photo: 'Favor published riverfront, beach and pier locations; bearings describe the direction to the pad, not the rocket’s flight path or a verified sightline.',
-    close: 'Sort mapped public sites by approximate straight-line pad distance. Never confuse a closer site with an open site, a shorter drive, or a better view.',
-    'low-walk': 'Highlight published parking and on-site facilities, but the accessible route and exact spectator position still require operator confirmation.'
+    family: 'Looking for an easier wait with the family? Start with public parks that list restrooms or open space, then check launch-day parking and visibility.',
+    photo: 'A shoreline, beach or pier can give photographs a memorable foreground. The map points toward the pad; it cannot promise an unobstructed view of the rocket.',
+    close: 'Compare public places by distance to the pad. Closer isn’t always better: a full park, a closed road or an obstructed horizon can change everything.',
+    'low-walk': 'Find locations with published parking and facilities. Check accessibility details and the actual entrance with the venue before traveling.'
   };
   let current = null, profile = 'family', selected = null;
   let repairIntel = null, repairRequested = false, repairLoadError = false;
@@ -66,11 +66,11 @@
   }));
 
   function verdict(v) {
-    if (v?.level === 'closed') return 'Closure reported';
-    if (v?.level === 'ineligible') return 'Not eligible for this pad';
-    if (v?.level === 'candidate') return 'General public launch access documented';
-    if (v?.level === 'unknown') return 'Entry not verified';
-    return 'Check launch-day access';
+    if (v?.level === 'closed') return 'Park closure reported';
+    if (v?.level === 'ineligible') return 'Not available for this launch pad';
+    if (v?.level === 'candidate') return 'Public viewing mentioned in local sources';
+    if (v?.level === 'unknown') return 'Opening not confirmed';
+    return 'Check the venue before you go';
   }
   function scoring(p) {
     // Presentation order only; this is not a scored certainty of access.
@@ -144,8 +144,8 @@
     const row=node('p','geo-weather');
     if (!w || w.status!=='ok' || w.cloudStatus!=='ok' ||
         !Number.isInteger(w.cloudCoverPercent)) {
-      row.textContent='NWS site-specific sky comparison: ' +
-        (w?.status==='not-in-forecast-window'?'awaiting a precise launch time within seven days':'not verified for the selected launch window') + '.';
+      row.textContent='Viewing-area sky forecast: ' +
+        (w?.status==='not-in-forecast-window'?'waiting for a precise launch time within seven days':'not available for this launch window') + '.';
       row.dataset.state='unknown';
       return row;
     }
@@ -183,9 +183,9 @@
       say('geo-live-checked',data?.sourceStatus==='stale'?
         'NPS alert evidence is older than 90 minutes':'NPS alert feed could not be verified');
       say('geo-live-verdict',
-        'Do not assume Playalinda parking, road or beach access. Please check the National Park Service directly.');
+        'Playalinda’s entrance, lots and beaches can close around launches. Check the National Park Service before you drive.');
       desk.appendChild(node('p','geo-live-item',
-        'The official park alerts are not sufficiently fresh for a current closure comparison. Historical boardwalk lines remain visible as references only.'));
+        'The park alerts are too old to rely on right now. The map still shows where the boardwalks have been mapped, not whether they are open.'));
       return;
     }
     say('geo-live-checked','NPS alert feed checked '+officialDate(data.checkedAt));
@@ -195,14 +195,14 @@
     const any=closed.length||road||beach;
     container.dataset.state=any?'warning':'unconfirmed';
     say('geo-live-verdict',any?
-      'Current NPS closure notice: plan around restricted areas, not just launch timing.' :
-      'No matching numbered-lot or Eddy Creek closure in the checked NPS feed. This does NOT confirm access is open.');
+      'NPS is reporting a closure. Choose a different legal viewing spot and check the current instructions.' :
+      'The latest NPS alert check did not match these particular lots or Eddy Creek. That does not confirm the gates are open.');
     if(closed.length){
       const item=node('div','geo-live-item');
       item.dataset.state='closed';
       item.appendChild(node('strong','','Parking lots '+closed.join(', ')+' · NPS reports closed'));
       item.appendChild(node('p','',
-        'The red outlines on the map use actual NPS lot footprints. These are named closed parking facilities, not surveyed emergency barricades.'));
+        'Red outlines show the mapped parking lots named in the NPS closure. Barricades and police traffic controls may be elsewhere.'));
       desk.appendChild(item);
     }
     if(road){
@@ -210,7 +210,7 @@
       item.dataset.state='closed';
       item.appendChild(node('strong','','Road north of Eddy Creek · NPS reports closed'));
       item.appendChild(node('p','',
-        'The map traces an official road centerline from the historic Eddy Creek boardwalk reference northward. The exact roadblock location is NOT established.'));
+        'The map shows the published road alignment, not the precise spot of a barricade. Follow signs and NPS closure notices.'));
       desk.appendChild(item);
     }
     if(beach){
@@ -218,11 +218,11 @@
       item.dataset.state='closed';
       item.appendChild(node('strong','','Beach north of Eddy Creek boardwalk · NPS reports closed'));
       item.appendChild(node('p','',
-        'The named boardwalk is an official GIS landmark, not a precise beach exclusion polygon. Do not walk into closed beach areas.'));
+        'The boardwalk is a mapped landmark, not the exact boundary of a closed beach. Respect all posted closures.'));
       desk.appendChild(item);
     }
     if(!any)desk.appendChild(node('p','geo-live-item',
-      'No explicit matching parking, road or shoreline closure was returned during this check. Capacity limits, storm damage, NASA restrictions and additional posted closures remain possible.'));
+      'No matching closure appeared in the park alerts checked. Parking can still fill, a storm can damage a boardwalk, and NASA or park staff can close areas on launch day.'));
     const refs=node('div','geo-live-links');
     const seen=new Set();
     for(const n of data.evidenceNotices||[]) {
@@ -259,9 +259,9 @@
     if(!status||!list)return;
     list.replaceChildren();
     if(repairLoadError||!repairIntel||!Array.isArray(repairIntel.history)){
-      status.textContent='Official NPS publication feed unavailable';
+      status.textContent='Park Service updates could not be checked';
       const p=node('p','geo-repair-error',
-        'The repair-history feed could not be checked. A missing announcement does not mean a boardwalk is open or safe.');
+        'We couldn’t check recent boardwalk repair notices. That does not tell us whether a boardwalk is safe or open.');
       list.appendChild(p);
       if(isOfficialSource('https://www.nps.gov/cana/learn/news/'))
         list.appendChild(link('https://www.nps.gov/cana/learn/news/',
@@ -276,7 +276,7 @@
       'Reviewed NPS historical releases only · live publication metadata unavailable. Current physical condition remains unknown.';
     if(!repairIntel.history.length){
       list.appendChild(node('p','geo-repair-error',
-        'No applicable NPS publication records were available. Current boardwalk inspections and openings remain unverified.'));
+        'We didn’t find a current NPS repair notice for this spot. Check park signs and alerts before using the boardwalk.'));
       return;
     }
     for(const item of repairIntel.history.slice(0,4)){
@@ -349,16 +349,16 @@
     const lot=(current?.points||[]).find(p=>p.id===selected &&
       p.category==='beach-parking');
     const head=node('div','geo-boardwalk-heading');
-    head.appendChild(node('p','eyebrow','Lot-to-beach evidence · NPS GIS'));
+    head.appendChild(node('p','eyebrow','FROM THE LOT TO THE BEACH'));
     if(!lot) {
-      head.appendChild(node('h5','','Pick a numbered Playalinda lot'));
+      head.appendChild(node('h5','','Choose a Playalinda parking area'));
       head.appendChild(node('p','',
-        'Select any parking area to inspect its actual NPS mapped boardwalk. A geographic line is not a guarantee of an open or accessible pedestrian route.'));
+        'Pick a numbered lot to see the boardwalk mapped by NPS. Then check which paths are actually open and usable; a line on a map cannot tell you that.'));
       target.appendChild(head);
       return;
     }
     const boardwalk=(current?.boardwalks||[]).find(b=>b.matchingParkingLot===lot.number);
-    head.appendChild(node('h5','','Lot '+lot.number+' · Follow the evidence, not an invented trail'));
+    head.appendChild(node('h5','','Lot '+lot.number+' · See the mapped path, then check current access'));
     head.appendChild(node('p','',
       boardwalk ? 'NPS GIS identifies a boardwalk with the same number near this parking area. We can show the historic centerline without inventing any connector between your car and the start of that line.' :
       'No official matching boardwalk line is available for this numbered lot.'));
@@ -388,18 +388,18 @@
     }
     stage('01','Parking footprint',lot.level==='closed'?'warning':'unverified',
       lot.level==='closed'?'NPS closure reported for this parking area':
-        'Official location mapped · current entry not confirmed',
+        'Parking area mapped · check if open',
       'NPS public GIS maps the lot polygon, but reports its open-to-public attribute as unknown. The official park closure notice and NASA launch security can override normal access.');
     stage('02','Boardwalk over the dunes',
       ['official-closure','parking-restricted'].includes(boardwalk?.access?.status)?'warning':'unverified',
       boardwalk?('NPS mapped segment: approximately '+Math.round(boardwalk.segmentMeters*3.28084)+' ft'):
-        'No numbered boardwalk centerline verified',
+        'No matching boardwalk mapped for this lot',
       boardwalk?
         ('This is the GIS centerline length ONLY, not the complete walk from a parked car. '+boardwalk.access.detail+
         ' The NPS trail record was last edited '+new Date(boardwalk.sourceEditedAt).toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'})+'.'):
-        'Do not infer where to walk. Look for current park signs and instructions.');
+        'Don’t guess a walking route from the map. Use park signs and current directions.');
     stage('03','Beach viewing position','unverified',
-      'No verified walkable beach-viewing endpoint',
+      'No confirmed open path to a viewing place',
       (lot.accessibility?.beachRampInOfficialFaq?
         'The NPS FAQ lists an accessible beach ramp here, but today’s condition, gradients and continuity remain unknown. ':
         'The NPS FAQ does not specifically identify this lot as having an accessible beach ramp. ')+
@@ -557,15 +557,15 @@
   function render() {
     const geo = current;
     if (!geo || !Array.isArray(geo.points)) {
-      panel.replaceChildren(node('p','geo-choice-empty','The geographic inventory is unavailable; please use the official access links below.'));
-      say('geo-map-status','The map cannot verify locations right now. Existing official access links remain available.');
+      panel.replaceChildren(node('p','geo-choice-empty','The viewing map data isn’t loading. Follow the official venue links below.'));
+      say('geo-map-status','The map isn’t loading reliably. You can still check the listed locations and official entry rules.');
       return;
     }
     const pad = geo.pad;
-    say('geo-pad-label', pad ? pad.name : 'Precise launch pad not verified');
+    say('geo-pad-label', pad ? pad.name : 'Launch pad not yet confirmed');
     say('geo-pad-detail', pad ?
       'LL2 pad coordinates are matched to the selected mission, but this launch facility is restricted. Do not navigate there.' :
-      'No trusted Florida pad coordinate for this mission. Pad-distance comparisons are withheld.');
+      'The exact pad location isn’t confirmed for this flight, so we can’t compare distances yet.');
     const sorted = geo.points.slice().filter(p=>geoPointValid(p) && p.category!=='beach-parking')
       .sort((a,b)=>scoring(a)-scoring(b) || a.name.localeCompare(b.name));
     panel.replaceChildren();
@@ -577,7 +577,7 @@
     const unlocated = Array.isArray(geo.unlocated) ? geo.unlocated : [];
     if (unlocated.length) {
       const note = node('div','geo-unlocated');
-      note.appendChild(node('strong','','Not pinned until we verify a precise visitor position'));
+      note.appendChild(node('strong','','No map pin until the public entrance is confirmed'));
       note.appendChild(node('p','','Restricted ticketed launch-viewing sites and any unverified park position retain official access descriptions but no visitor GPS marker. All 13 numbered Playalinda lots now have NPS map polygons.'));
       const names = unlocated.map(x=>x.name).slice(0,6).join(' · ');
       note.appendChild(node('p','geo-unlocated-names',names));
@@ -597,12 +597,12 @@
         new Date(cutoff).toLocaleString('en-US',{timeZone:'America/New_York',
           month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'}) : null;
       const heading=policy.querySelector('strong');
-      if(heading)heading.textContent=road.label || 'Published NPS road-entry policy (not live status)';
+      if(heading)heading.textContent=road.label || 'Published park-road policy · not a live gate report';
       if (p) p.textContent = (geo.npsAlertsVerified ?
         'NPS official park alerts last checked ' + (meta || 'recently') + '. ' :
-        'Current NPS alerts are unverified. ') +
-        (threshold?'Schedule-based T−30 estimate: '+threshold+'. ':'No reliable exact T−30 deadline for this mission. ')+
-        (road.detail || geo.policy?.detail || 'Launch-specific gate access is never guaranteed.') +
+        'Current park alerts are not confirmed. ') +
+        (threshold?'Approximate road-entry cutoff from park policy: '+threshold+'. ':'No dependable park-entry cutoff time for this launch yet. ')+
+        (road.detail || geo.policy?.detail || 'Park gates and security restrictions can still change.') +
         ' The map overlays an NPS road centerline, NOT live gate status or a current closure order.';
       policy.dataset.level=road.level||'unknown';
     }
@@ -692,9 +692,9 @@
     })();
     try {await mapPromise;renderMapMarkers();}
     catch {
-      say('geo-map-status','Interactive map tiles unavailable. Locations, sources and safe navigation options remain listed beside the map.');
+      say('geo-map-status','The map background isn’t loading, but the public places, official links and directions remain listed.');
       screen.replaceChildren(node('div','geo-map-placeholder',
-        'Map could not load. Use the verified location cards and official directions; do not assume access.'));
+        'The map isn’t loading. You can still use the location cards and official directions, but check access before you go.'));
       mapPromise=null; map=null;
     }
   }
