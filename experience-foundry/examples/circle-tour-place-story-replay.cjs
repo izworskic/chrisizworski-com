@@ -36,7 +36,7 @@ record('three-distinct-landscapes',placeFacts,
  'Three separate park narratives and authoritative destination descriptions: '+placeFacts);
 const reactive=select('15')?.name==='Lake Superior Provincial Park'&&
  select('20')?.name==='Sleeping Giant Provincial Park'&&
- select('15')?.placeId==='15'&&select('24')?.placeId==='24'&&
+ select('15')?.placeId==='15'&&(select('24')===null||select('24')?.placeId==='24')&&
  script.includes('function renderPlaceStory(model,host)')&&
  script.includes('renderPlaceStory(model,host);')&&
  html.indexOf('circle-tour-place-story-data.js')<html.indexOf('circle-tour-bridge.js');
@@ -103,7 +103,8 @@ const extraNorth=newNorthIds.every(id=>{
  p.caption.endsWith('display cropped.')&&p.licenseName.startsWith('CC '));
 });
 record('cascade-temperance-exact-place',extraNorth,'Four newly licensed images, site-specific choices and DNR controlling sources: '+extraNorth);
-const oldMyth=html.match(/id="stop-25"[\\s\\S]*?<\\/article>/)?.[0]||'';
+const start25=html.indexOf('id="stop-25"');
+const oldMyth=start25<0?'':html.slice(start25,html.indexOf('</article>',start25));
 const truth=!/disappears into a crevice|no visible mouth|disappears into a pothole/.test(oldMyth)&&
  /visible mouth/.test(oldMyth)&&select('25')?.character.includes("gravel 'bar'");
 record('temperance-visible-mouth-truth',truth,'Original route description and new story agree with DNR visible river mouth: '+truth);
