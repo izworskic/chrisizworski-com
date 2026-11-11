@@ -83,8 +83,8 @@ test('map popups expose detailed guide sections, original venue evidence and acc
   assert.match(script,/place\.accessNote/);
   assert.match(script,/place\.source/);
   assert.match(script,/place\.accessSource/);
-  assert.match(script,/Official beach rules/);
-  assert.match(script,/Official parking rules/);
+  assert.match(script,/Check Space Force beach rules/);
+  assert.match(script,/Check campus parking rules/);
   assert.match(page,/Surf Beach may close for launches/);
   assert.match(page,/Harris Grade Road/);
   assert.match(page,/Highway 246/);
