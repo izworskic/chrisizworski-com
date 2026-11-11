@@ -413,7 +413,7 @@ export async function forecastFor(region, now) {
         source:'National Weather Service hourly forecast',
         issuedAt:hourly.properties.generatedAt || hourly.properties.updateTime || null,
         startsAt:periods[0].startTime, next24h:summarizePeriods(periods,24),
-        next72h:summarizePeriods(periods,72),next7Days:forecastDaily(periods),
+        next72h:summarizePeriods(periods,72),next7Days: forecastDaily(periods),
         limitation:'Forecast weather forcing, not ice thickness, cracks, sheet movement, or safe access.'
       };
     } catch (_) { /* Recover from a missing hourly product using the same NWS gridpoint. */ }
@@ -428,7 +428,7 @@ export async function forecastFor(region, now) {
     dataProduct:'official-nws-grid-fallback',
     issuedAt:grid.properties.updateTime,startsAt:periods[0].startTime,
     next24h:summarizePeriods(periods,24),
-    next72h:summarizePeriods(periods,72),next7Days:forecastDaily(periods),
+    next72h:summarizePeriods(periods,72),next7Days: forecastDaily(periods),
     limitation:'Official NWS gridded values are applied to their published time intervals. This is forecast weather forcing, not measured ice thickness, cracks, sheet movement, or safe access.'
   };
 }
