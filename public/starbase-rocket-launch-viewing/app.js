@@ -10,9 +10,9 @@
    padMarker:null,bearingLine:null,data:null,rocketPins:null,tilesReady:false,sourceAvailable:false};
  const allowedIds=new Set(['isla-blanca','zapata','lighthouse']);
  const profiles={
-  'first-time':{hint:'Start with the island county park most clearly documented for Starship viewing; expect queues and verify current gate access.',order:['isla-blanca','zapata','lighthouse']},
-  'no-causeway':{hint:'Mainland sites avoid the island crossing, but their current hours and launch-day sightlines are not independently verified.',order:['zapata','lighthouse','isla-blanca']},
-  history:{hint:'Port Isabel Lighthouse is a historical daytime addition, not an authorized launch-event grandstand.',order:['lighthouse','zapata','isla-blanca']}
+  'first-time':{hint:'Start at Isla Blanca County Park for a documented public viewing spot. Expect crowds for major flights and check parking before you go.',order:['isla-blanca','zapata','lighthouse']},
+  'no-causeway':{hint:'Want to skip the causeway? Look into mainland spots near Port Isabel, but check each place’s hours and actual view.',order:['zapata','lighthouse','isla-blanca']},
+  history:{hint:'The Port Isabel Lighthouse is worth visiting, but it has no confirmed special opening for a Starship launch.',order:['lighthouse','zapata','isla-blanca']}
  };
  const src=(url,label)=>{
   const a=document.createElement('a');a.href=url;a.textContent=label;
@@ -25,11 +25,11 @@
   set('sb-selected-context',site.scene+' '+site.accessNote);
   const d=state.data?.starbaseViewing?.sites?.find(x=>x.id===site.id);
   set('sb-selected-geometry',Number.isFinite(d?.padDistanceMiles)&&Number.isFinite(d?.padBearingDegrees)?
-   'Published place feature is '+d.padDistanceMiles.toFixed(1)+' miles in a straight line from the selected mission’s pad, at an approximate '+Math.round(d.padBearingDegrees)+'° bearing. This is not a road route, flight track or verified unobstructed view.':
-   'Launch pad coordinates unavailable or unverified. No mission-specific bearing or distance is claimed.');
+   'This place is roughly '+d.padDistanceMiles.toFixed(1)+' miles in a straight line from the selected mission’s pad, at an approximate '+Math.round(d.padBearingDegrees)+'° bearing. This is not a driving route or the rocket’s flight track or verified unobstructed view.':
+   'The pad location isn’t confirmed for this flight, so no reliable distance or direction is shown.');
   const actions=$('sb-selected-actions');actions.replaceChildren();
   if(site.accessSource?.startsWith('https://')) actions.appendChild(src(site.accessSource,'Check the land manager'));
-  if(site.geographicSource?.startsWith('https://'))actions.appendChild(src(site.geographicSource,'Published place coordinate source'));
+  if(site.geographicSource?.startsWith('https://'))actions.appendChild(src(site.geographicSource,'See the location source'));
   const cards=[...document.querySelectorAll('[data-site]')];
   for(const card of cards)card.dataset.active=card.dataset.site===site.id?'true':'false';
   for(const button of document.querySelectorAll('[data-site-select]')){
@@ -80,7 +80,7 @@
    const marker=window.L.marker([site.lat,site.lon],{icon:publicIcon(site.id===state.site)});
    const popup=document.createElement('div');
    const heading=document.createElement('strong');heading.textContent=site.name;popup.appendChild(heading);
-   const note=document.createElement('p');note.textContent='Published place feature, not an exact entrance or guaranteed launch-viewing spot.';popup.appendChild(note);
+   const note=document.createElement('p');note.textContent='This pin marks the general place, not a parking entrance or reserved launch-viewing spot.';popup.appendChild(note);
    if(site.accessSource?.startsWith('https://'))popup.appendChild(src(site.accessSource,'Check land manager'));
    marker.bindPopup(popup);marker.on('click',()=>chooseSite(site.id,false));
    marker.addTo(state.map);state.markers.set(site.id,marker);bounds.push([site.lat,site.lon]);
@@ -94,7 +94,7 @@
   state.padMarker=null;state.bearingLine=null;
   const pad=state.data?.starbaseViewing?.pad;
   if(!pad||!Number.isFinite(pad.lat)||!Number.isFinite(pad.lon)){
-   setMapStatus('Three source-referenced visitor places mapped. The selected mission lacks verified pad GPS; no straight-line bearing is shown.');
+   setMapStatus('Three possible viewing areas are on the map. We don’t have a confirmed pad location for this flight yet.');
    return;
   }
   const icon=window.L.divIcon({className:'sb-restricted-pin',iconSize:[18,18],iconAnchor:[9,9]});
@@ -102,7 +102,7 @@
   const popup=document.createElement('div');
   const head=document.createElement('strong');head.textContent='RESTRICTED launch pad — '+pad.name;
   popup.appendChild(head);
-  const p=document.createElement('p');p.textContent='Mission-source geographic reference only. No public access, directions or predicted rocket track.';popup.appendChild(p);
+  const p=document.createElement('p');p.textContent='This is a restricted launch pad, not a public route or a prediction of the rocket’s path.';popup.appendChild(p);
   marker.bindPopup(popup).addTo(state.map);state.padMarker=marker;
   const site=state.places.find(x=>x.id===state.site);
   // Intentional: only one straight-line comparison, never a route polyline.
@@ -110,14 +110,14 @@
    state.bearingLine=window.L.polyline([[site.lat,site.lon],[pad.lat,pad.lon]],
     {color:'#cb7644',weight:2,dashArray:'7 7',opacity:.85,interactive:false}).addTo(state.map);
   }
-  setMapStatus('Three public reference points and restricted mission pad mapped. Dashed line is a geometric reference, not a flight track or driving path.');
+  setMapStatus('The public places and restricted pad are on the map. The dashed line points toward the pad, not along the rocket’s path or a road.');
  }
  function setTileReady(){
   state.tilesReady=true;const root=$('sb-map');if(root)root.dataset.tiles='ready';
  }
  function initMap(){
   if(state.map||!window.L||!state.places.length){
-   if(!window.L)fallbackMap('Interactive mapping library unavailable.');
+   if(!window.L)fallbackMap('The map isn’t loading. The places and official access links are still listed below.');
    return;
   }
   try{
@@ -127,7 +127,7 @@
    const osm=window.L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',
     {maxZoom:19,attribution:credit}).addTo(map);
    osm.on('tileload',setTileReady);
-   osm.on('tileerror',()=>{if(!state.tilesReady)fallbackMap('Map imagery could not be loaded.');});
+   osm.on('tileerror',()=>{if(!state.tilesReady)fallbackMap('Map images aren’t loading. Try the listed places and official links instead.');});
    addPlacesToMap();displayPad();selection();
       state.rocketPins=window.RocketMapPins?.mount(map,{
        region:'texas',centers:{texas:{lat:25.997,lon:-97.157}},
@@ -159,11 +159,11 @@
    if(!payload.sites.every(x=>allowedIds.has(x.id)&&Number.isFinite(x.lat)&&Number.isFinite(x.lon)
       &&x.lat>25.8&&x.lat<26.2&&x.lon< -97&&x.lon> -97.5))throw Error('Untrusted place geometry');
    state.places=payload.sites;initMap();chooseSite(state.site,false);
-  }catch{fallbackMap('Source-verified geographic coordinates unavailable.');}
+  }catch{fallbackMap('Viewing-place coordinates aren’t loading. Check the official place links.');}
  }
  function fmtDate(iso,precision){
-  const d=new Date(iso||'');if(!Number.isFinite(+d))return 'Launch time not verified';
-  if(['month','year','date-tbd'].includes(precision))return 'Only a coarse date is listed; time TBD';
+  const d=new Date(iso||'');if(!Number.isFinite(+d))return 'Launch time not confirmed';
+  if(['month','year','date-tbd'].includes(precision))return 'Date is tentative; exact liftoff time to come';
   const opts={timeZone:'America/Chicago',year:'numeric',month:'short',day:'numeric'};
   if(['minute','second','hour'].includes(precision)){opts.hour='numeric';opts.minute='2-digit';opts.timeZoneName='short';}
   return new Intl.DateTimeFormat('en-US',opts).format(d)+(precision==='day'?' · launch hour TBD':' · target, not guaranteed');
@@ -194,24 +194,24 @@
    if(picked?.id)select.value=picked.id;
   }else{
    const option=document.createElement('option');option.value='';
-   option.textContent='No Starbase launch in bounded feed';select.appendChild(option);
+   option.textContent='No upcoming Starship flight listed here';select.appendChild(option);
    select.disabled=true;
   }
-  const caution=linkLost?'The linked launch is no longer listed; this is a NEW selection, not an outcome for the previous mission. ':'';
-  set('sb-mission-name',picked?.name||'No upcoming Starbase launch in the current bounded schedule');
-  set('sb-mission-time',picked?fmtDate(picked.net,picked.netPrecision):'No verified next launch window');
-  set('sb-mission-source',caution+'Schedule observed '+safeStamp(data.scheduleCheckedAt)+
-   '. '+(data.scheduleFreshness==='stale'?'Source snapshot stale. ':
-    data.scheduleFreshness==='recent'?'Cached schedule, not live launch control. ':'Freshness unverified. ')+
+  const caution=linkLost?'Your earlier flight is no longer listed. A different mission is shown; check SpaceX for the original flight’s status. ':'';
+  set('sb-mission-name',picked?.name||'No upcoming Starship flight listed here right now');
+  set('sb-mission-time',picked?fmtDate(picked.net,picked.netPrecision):'Next launch window not announced');
+  set('sb-mission-source',caution+'Calendar last checked '+safeStamp(data.scheduleCheckedAt)+
+   '. '+(data.scheduleFreshness==='stale'?'Launch timing may have changed. ':
+    data.scheduleFreshness==='recent'?'A calendar update is not a go-for-launch call. ':'Last update time unknown. ')+
     (data.scheduleWarning||'Always verify with SpaceX.'));
   set('sb-mission-pad',picked?.pad?
    'Listed pad: '+picked.pad+'. Restricted launch pad; no visitor directions.' :
-   'Pad not published or unverified. No pad GPS or bearing inferred.');
+   'The pad hasn’t been confirmed for this flight, so we can’t show a reliable bearing.');
   const notice=data.starbaseViewing?.accessNotice||{};
   const status=$('sb-access-status');status.dataset.state=notice.state||'unknown';
-  set('sb-access-label',notice.label||'Current official notice not confirmed');
-  set('sb-access-note',notice.detail||'No verified current beach/road information. Consult the city.');
-  set('sb-access-checked','Official city notice checked: '+safeStamp(notice.checkedAt));
+  set('sb-access-label',notice.label||'City beach and road notice not confirmed');
+  set('sb-access-note',notice.detail||'We don’t have a current city access update. Check Starbase’s road and beach page.');
+  set('sb-access-checked','City road and beach update checked: '+safeStamp(notice.checkedAt));
   const weather=data.weather||{};
   const sky=$('sb-sky-status');
   const checked=Array.isArray(weather.places)?weather.places:[];
@@ -219,12 +219,12 @@
   sky.dataset.state=good.length===2?'general-open':'unknown';
   set('sb-sky-label',good.length===2?
     'NWS cloud grids checked for two coastal areas':
-    'Mission-specific sky comparison not verified');
+    'No launch-time sky comparison yet');
   set('sb-sky-note',good.length===2?
     good.map(x=>x.name+': '+x.cloudCoverPercent+'% sky cover').join(' · ')+
     '. Local forecast; not launch approval or full flight visibility.':
-    'The launch timing or NWS forecast is missing, stale, or too far out. No clear-sky verdict is inferred.');
-  set('sb-sky-checked','Weather issue time: '+(good.length?good.map(x=>safeStamp(x.updatedAt)).join(' / '):'not verified'));
+    'The launch may still be too far away for an hourly forecast. We can’t say which shore will have clearer sky yet.');
+  set('sb-sky-checked','Weather forecast updated: '+(good.length?good.map(x=>safeStamp(x.updatedAt)).join(' / '):'not verified'));
   state.rocketPins?.update(options,picked?.id);
   window.RocketFoundryHandoff?.loaded('texas',picked?.id,picked?.name);
    deepLink(picked?.id);
@@ -238,7 +238,7 @@
   const seq=++state.request,query=new URLSearchParams({region:'texas'});
   if(id&&UUID.test(id))query.set('launchId',id);
   const select=$('sb-mission-picker');select.disabled=true;
-  set('sb-mission-source','Checking cached national schedule…');
+  set('sb-mission-source','Looking for the latest Starship flight…');
   try{
    const response=await fetch(API+'?'+query,{headers:{Accept:'application/json'}});
    const data=await response.json();
@@ -250,15 +250,15 @@
    showMission(data,fromExpired);
   }catch(error){
    if(seq!==state.request)return;
-   select.disabled=true;set('sb-mission-name','Launch schedule unavailable');
-   set('sb-mission-time','No current mission time can be confirmed');
-   set('sb-mission-source','Shared mission source not available. Use the official SpaceX schedule; no launch result inferred.');
+   select.disabled=true;set('sb-mission-name','Starship launch calendar unavailable');
+   set('sb-mission-time','No current liftoff target confirmed');
+   set('sb-mission-source','The launch calendar isn’t loading. Check SpaceX for the next flight; an outage here doesn’t mean a launch happened or was scrubbed.');
    set('sb-mission-pad','Pad coordinates and mission-specific bearings unavailable.');
    $('sb-access-status').dataset.state='unknown';
-   set('sb-access-label','Current beach status cannot be confirmed');
-   set('sb-access-note','The combined source request failed. Check the City of Starbase official notice directly.');
+   set('sb-access-label','Beach and road status unavailable');
+   set('sb-access-note','We can’t load the latest City of Starbase notice. Check its official beach and road updates before driving.');
    $('sb-sky-status').dataset.state='unknown';
-   set('sb-sky-label','Spectator weather unavailable');
+   set('sb-sky-label','Viewing-area forecast unavailable');
    deepLink(null);
    state.data=null;state.rocketPins?.update([],null);displayPad();selection();
   }
