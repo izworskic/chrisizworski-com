@@ -22,3 +22,9 @@ There is no verified AdSense revenue uplift or complete postrelease GSC comparis
 Run node scripts/audit-winter-growth-sprints-live.cjs. The script checks actual source payloads, not merely HTTP 200, and accepts valid zero-observation or off-season outcomes. It records artifacts/winter-sprints-production-health.json and exits unsuccessfully for required source failures. The audit workflow is PR-triggered for this check and available on manual dispatch. No production page, source engine, title, robots rule, ad or map is changed by this audit commit.
 
 Do not launch more growth sprints until source payload checks pass and a separate browser/mobile acceptance run verifies interactive UI.
+
+## Remediation confirmed after the first audit run
+
+The initial GitHub-hosted source audit failed 1/15 checks despite a healthy HTTP 200 from the Michigan Snow Depth ranking API: the browser Origin request lacked Access-Control-Allow-Origin. This is a real browser-readability defect that normal JSON ingestion cannot detect. It was repaired in its separate owner, izworskic/national-snowpack-melt PR #32, by sending Vary: Origin even on anonymous responses that Vercel might cache. After owner production deployment, the same GitHub production job was rerun and all 15/15 contracts passed, including matching cross-origin response headers. Owner deployment, verification and main-site audit release occurred November 11, 2026.
+
+The pull-request action now also triggers when affected winter and shipping routes/scripts/APIs change, rather than only when the audit script or document changes. It remains read-only, does not run an expensive monitoring schedule and does not claim that a map rendered correctly.
