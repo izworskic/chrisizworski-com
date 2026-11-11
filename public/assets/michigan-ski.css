@@ -133,3 +133,12 @@ body{background:#edf3f6;background-image:linear-gradient(180deg,#e6f0f5 0,#f6f9f
 @media(max-width:650px){.hero{padding:9px 0 3px}.hero h1{font-size:clamp(1.75rem,7.2vw,2.35rem)}.hero .answer{padding:9px 11px}
  .photo-reference-panel{padding:12px}.ski-photo-strip{gap:8px}.verified-photo-image{height:105px}.verified-photo figcaption{padding:6px}.verified-photo figcaption small{font-size:.61rem}
  .resort-context-photo{float:none;width:100%;max-width:285px;margin:0 0 12px}.resort-context-photo .verified-photo-image{height:155px}}
+
+/* Sprint 7: source-backed operator checks before forecasts and rankings. */
+.s7-ski-readiness{border-top:4px solid #226b84;background:#fbfdfe}
+.s7-ski-readiness>h2{margin:4px 0 11px}
+.s7-ski-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}
+.s7-ski-steps>div{padding:12px;border:1px solid #d6e5eb;background:#f1f8fb;border-radius:9px;min-width:0}
+.s7-ski-steps strong{display:block;font-size:.87rem;line-height:1.35;color:#16455f}
+.s7-ski-steps p{font-size:.79rem;line-height:1.45;margin:7px 0 0}
+@media(max-width:760px){.s7-ski-steps{grid-template-columns:1fr}}

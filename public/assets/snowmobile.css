@@ -190,3 +190,15 @@ button:focus-visible,select:focus-visible,a:focus-visible,summary:focus-visible{
 
 .route-junction{cursor:pointer}
 .route-junction:focus{stroke:#112f43;stroke-width:4}
+
+/* Sprint 7. Source hierarchy, not a made-up live riding status. */
+.s7-readiness{border-top:3px solid #326581}
+.s7-readiness>h2{margin:5px 0 7px}
+.s7-readiness-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px;margin:11px 0}
+.s7-readiness-steps>div{padding:12px;background:#f2f6f7;border:1px solid #d7e3e7;border-radius:8px;min-width:0}
+.s7-readiness-steps strong{display:block;font:700 .83rem/1.35 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#163d50}
+.s7-readiness-steps p{font-size:.79rem;line-height:1.5;margin:6px 0 0}
+.s7-permit-note{background:#e6eef2;border-left:3px solid #397086;padding:10px 13px;font-size:.81rem;line-height:1.55;margin:11px 0}
+.s7-region-check{border-top:3px solid #477687}
+.s7-region-check h2{margin:2px 0 7px}
+@media(max-width:750px){.s7-readiness-steps{grid-template-columns:1fr}}
