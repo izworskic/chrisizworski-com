@@ -89,7 +89,7 @@ test('source-backed road and range warnings are static even when API is down',()
  ];
  for(const source of sources)assert.ok(index.includes(source),source);
  assert.match(index,/1-833-PSCA-321/);
- assert.match(index,/not a live status feed/);
+ assert.match(index,/We cannot confirm a road is open from this website/);
  assert.match(index,/A park on the map is not permission to watch a rocket from the range/);
  assert.match(index,/government rocket launched without advance public announcement/);
  assert.match(index,/This page does not monitor a gate or report the road open in real time/);
