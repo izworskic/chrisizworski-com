@@ -36,12 +36,12 @@ record('three-distinct-landscapes',placeFacts,
  'Three separate park narratives and authoritative destination descriptions: '+placeFacts);
 const reactive=select('15')?.name==='Lake Superior Provincial Park'&&
  select('20')?.name==='Sleeping Giant Provincial Park'&&
- select('15')?.placeId==='15'&&select('24')===null&&
+ select('15')?.placeId==='15'&&select('24')?.placeId==='24'&&
  script.includes('function renderPlaceStory(model,host)')&&
  script.includes('renderPlaceStory(model,host);')&&
  html.indexOf('circle-tour-place-story-data.js')<html.indexOf('circle-tour-bridge.js');
 record('reactive-place-renderer',!!reactive,
- 'Selected-stop source map and render wiring, including no false Cascade River photo: '+!!reactive);
+ 'Selected-stop source map and render wiring, including true Cascade River source identity: '+!!reactive);
 const parkChecks=ids.every(id=>{
  const next=bridge.planNextDecision(catalog,{selectedIds:[id],theme:'parks'});
  return next?.kind==='next-check'&&next.stopId===id&&next.primary?.url?.startsWith('https://');
@@ -88,8 +88,26 @@ const boundary=none.kind==='no-specialist'&&none.primary===null&&
  yes.kind==='next-check'&&yes.primary?.url?.startsWith('https://');
 record('north-shore-specialist-preservation',boundary,
  'No fabricated specialist for Tettegouche; Split Rock retains independent approved specialist: '+boundary);
-const photoFree=select('24')===null&&select('25')===null;
+const photoFree=select('22')===null&&select('28')===null;
 record('north-shore-no-photo-leakage',photoFree,
- 'Unresearched neighbors have no false landscape photographs: '+photoFree);
+ 'Unresearched shore neighbors have no false landscape photographs: '+photoFree);
 
+const newNorthIds=['24','25'];
+const extraNorth=newNorthIds.every(id=>{
+ const s=select(id);
+ return s&&s.placeId===id&&s.story.length>220&&s.character.length>200&&s.why.length>90&&
+ new URL(s.sourceURL).hostname==='www.dnr.state.mn.us'&&s.photos.length===2&&
+ s.photos.every(p=>p.placeId===id&&p.status==='verified-licensed'&&
+ p.sourceURL.startsWith('https://commons.wikimedia.org/wiki/File:')&&
+ p.imageURL.startsWith('https://thumb.wikimedia.org/wikipedia/commons/thumb/')&&
+ p.caption.endsWith('display cropped.')&&p.licenseName.startsWith('CC '));
+});
+record('cascade-temperance-exact-place',extraNorth,'Four newly licensed images, site-specific choices and DNR controlling sources: '+extraNorth);
+const oldMyth=html.match(/id="stop-25"[\\s\\S]*?<\\/article>/)?.[0]||'';
+const truth=!/disappears into a crevice|no visible mouth|disappears into a pothole/.test(oldMyth)&&
+ /visible mouth/.test(oldMyth)&&select('25')?.character.includes("gravel 'bar'");
+record('temperance-visible-mouth-truth',truth,'Original route description and new story agree with DNR visible river mouth: '+truth);
+const arrivalTruth=bridge.officialArrivals('24')?.length===2&&bridge.officialArrivals('25')?.length===2&&
+ bridge.planNextDecision(catalog,{selectedIds:['25']}).primary===null;
+record('preserve-north-shore-arrival-and-tool-ownership',arrivalTruth,'No fabricated specialist and separate park/resort starting destinations: '+arrivalTruth);
 console.log(JSON.stringify({cases}));

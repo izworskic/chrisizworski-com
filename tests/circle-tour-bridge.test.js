@@ -193,15 +193,15 @@ test('Foundry: no selected itinerary invites an explicit stop rather than invent
 
 test('Place & Story pilot has verified site-exact image rights, documentary context and a practical choice for each park',()=>{
   const {stories,selectPlaceStory}=require('../public/assets/circle-tour-place-story-data.js');
-  assert.deepEqual(Object.keys(stories).sort((a,b)=>Number(a)-Number(b)),['3','6','11','15','18','20','23','26','27']);
-  for(const id of ['3','6','11','15','18','20','23','26','27']){
+  assert.deepEqual(Object.keys(stories).sort((a,b)=>Number(a)-Number(b)),['3','6','11','15','18','20','23','24','25','26','27']);
+  for(const id of ['3','6','11','15','18','20','23','24','25','26','27']){
     const place=selectPlaceStory(id);
     assert.equal(place.placeId,id);
     assert.ok(place.story.length>=150,'interpretation should convey a distinctive real place');
     assert.ok(place.character.length>=65,'visitor scale or access distinction required');
     assert.ok(['www.ontarioparks.ca','parks.canada.ca','www.nps.gov','www.michigan.gov','www.dnr.state.mn.us','www.visitcookcounty.com'].includes(new URL(place.sourceURL).hostname));
     assert.equal(place.photos.length,2);
-    if(id==='26')assert.equal(ui.planNextDecision(committed,{selectedIds:[id]}).kind,'no-specialist','do not invent a Tettegouche tool');
+    if(['24','25','26'].includes(id))assert.equal(ui.planNextDecision(committed,{selectedIds:[id]}).kind,'no-specialist','do not invent a Tettegouche tool');
     else assert.ok(ui.planNextDecision(committed,{selectedIds:[id]}).primary,'approved specialist must still win');
     for(const p of place.photos){
       assert.equal(p.placeId,id);
@@ -215,7 +215,7 @@ test('Place & Story pilot has verified site-exact image rights, documentary cont
       assert.ok(p.width>=600&&p.height>=500);
     }
   }
-  assert.equal(selectPlaceStory('24'),null,'no generic photo substituted for an unresearched park');
+  assert.equal(selectPlaceStory('22'),null,'no generic photo substituted for an unresearched harbor');
   assert.equal(selectPlaceStory('__proto__'),null,'only own approved place IDs may resolve');
 });
 
@@ -240,7 +240,7 @@ test('new U.S. shore stories distinguish true places and visitor commitments',()
   assert.ok(story.photos.every(p=>p.placeId===id&&p.caption.includes('display cropped.')));
   assert.equal(ui.planNextDecision(committed,{selectedIds:[id]}).kind,'next-check');
  }
- assert.equal(selectPlaceStory('24'),null);
+ assert.equal(selectPlaceStory('22'),null);
 });
 
 test('North Shore stories preserve real geography, distinct admission and no invented specialist',()=>{
@@ -259,8 +259,7 @@ test('North Shore stories preserve real geography, distinct admission and no inv
  }
  assert.equal(ui.planNextDecision(committed,{selectedIds:['26']}).primary,null);
  assert.equal(ui.planNextDecision(committed,{selectedIds:['27']}).kind,'next-check');
- assert.equal(selectPlaceStory('24'),null);
- assert.equal(selectPlaceStory('25'),null);
+ assert.ok(selectPlaceStory('24')&&selectPlaceStory('25'));
 });
 
 test('eight original uncovered stops offer visitor source choices but never invented specialists',()=>{
@@ -416,4 +415,32 @@ test('Experience OS: visitor interest, parking and operator claims remain source
   const source=readFileSync(path.join(root,'public/assets/circle-tour-bridge.js'),'utf8');
   assert.match(source,/selected\.setAttribute\('aria-live','polite'\)/);
   assert.match(source,/control\.setAttribute\('aria-pressed'/);
+});
+
+test('Cascade and Temperance source-verified stories stay distinct from resort and arrival choices',()=>{
+ const {selectPlaceStory}=require('../public/assets/circle-tour-place-story-data.js');
+ const cascade=selectPlaceStory('24'),temperance=selectPlaceStory('25');
+ assert.equal(cascade.name,'Cascade River State Park');
+ assert.equal(temperance.name,'Lutsen Mountains & Temperance River State Park');
+ for(const phrase of ['0.5-mile','3.5 miles','600 feet','Wayside','Superior Hiking Trail']){
+   assert.ok(cascade.character.includes(phrase),'missing Cascade decision: '+phrase);
+ }
+ for(const phrase of ['0.25 mile one-way','3-mile one-way','visible mouth','not disappearing','separately operated']){
+   assert.ok((temperance.story+' '+temperance.character).includes(phrase),'missing Temperance decision: '+phrase);
+ }
+ assert.equal(new URL(cascade.sourceURL).hostname,'www.dnr.state.mn.us');
+ assert.equal(new URL(temperance.sourceURL).hostname,'www.dnr.state.mn.us');
+ for(const s of [cascade,temperance]){
+  assert.equal(s.photos.length,2);
+  assert.ok(s.photos.every(p=>p.alt.length>30&&p.caption.endsWith('display cropped.')));
+ }
+ assert.equal(ui.planNextDecision(committed,{selectedIds:['24']}).primary,null);
+ assert.equal(ui.planNextDecision(committed,{selectedIds:['25']}).primary,null);
+ assert.equal(ui.officialArrivals('24').length,2,'park office and wayside remain distinct');
+ assert.equal(ui.officialArrivals('25').length,2,'state park and ski resort remain distinct');
+ const html=readFileSync(path.join(root,'public/lake-superior-circle-tour/index.html'),'utf8');
+ const c=html.match(/id="stop-25"[\s\S]*?<\/article>/)[0];
+ assert.doesNotMatch(c,/disappears into a crevice|no visible (?:river )?mouth|disappears into a pothole/);
+ assert.match(c,/visible (?:lake )?mouth|visible mouth/);
+ assert.equal(selectPlaceStory('22'),null,'unrelated harbors must not inherit park photos');
 });

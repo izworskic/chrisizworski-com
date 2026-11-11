@@ -2,6 +2,90 @@
 (function(root){
  'use strict';
  const stories={
+  "24": {
+    "placeId": "24",
+    "name": "Cascade River State Park",
+    "eyebrow": "A stair-step river on its way to Lake Superior",
+    "story": "The Cascade River descends from the forested Sawtooth hills through a deep, dark gorge to Lake Superior. From the river overlooks, whitewater pours over one rock shelf after another, with cedar and spruce closing in on either bank. Farther uphill, a hike toward Lookout Mountain opens the river valley and the distant lake into one broad view. Two very different North Shore landscapes begin in the same state park.",
+    "character": "Minnesota DNR maps the Cascade River Lower Loop as a 0.5-mile hike, and the steep Lookout Mountain Loop as 3.5 miles with about 600 feet of elevation gain. The historic Cascade River Wayside along Highway 61 and the park office are distinct arrival points. MnDOT reported wayside parking and pedestrian-crossing construction in 2026, and the Superior Hiking Trail Association reports separate Cascade River Loop reroute and tread work. A dated construction report does not establish today's parking or trail condition.",
+    "why": "For one hour, follow the short falls loop and listen to the river. For a longer hiking day, choose Lookout Mountain and verify the current trail and access notices first.",
+    "sourceURL": "https://www.dnr.state.mn.us/state-parks/virtual-tours/cascade-river/dialup.html",
+    "sourceLabel": "Minnesota DNR Cascade River park tour",
+    "photos": [
+      {
+        "placeId": "24",
+        "imageURL": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b8/Cascade_River_State_Park_Cascades.jpg/960px-Cascade_River_State_Park_Cascades.jpg",
+        "sourceURL": "https://commons.wikimedia.org/wiki/File:Cascade_River_State_Park_Cascades.jpg",
+        "photographer": "James B. Bleeker",
+        "licenseName": "CC BY-SA 3.0",
+        "licenseURL": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "alt": "Cascading waterfalls in a narrow rock channel at Cascade River State Park, Minnesota",
+        "caption": "The Cascades along the Cascade River, photographed September 2011; display cropped.",
+        "cropPosition": "center",
+        "captureDate": "2011-09-12",
+        "status": "verified-licensed",
+        "width": 960,
+        "height": 720
+      },
+      {
+        "placeId": "24",
+        "imageURL": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2b/Cascade_River_State_Park_Lookout.jpg/960px-Cascade_River_State_Park_Lookout.jpg",
+        "sourceURL": "https://commons.wikimedia.org/wiki/File:Cascade_River_State_Park_Lookout.jpg",
+        "photographer": "James B. Bleeker",
+        "licenseName": "CC BY-SA 3.0",
+        "licenseURL": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "alt": "A scenic rock and forest overlook within Cascade River State Park in northern Minnesota",
+        "caption": "A Cascade River State Park overlook, photographed September 2011; exact trail location unconfirmed; display cropped.",
+        "cropPosition": "center",
+        "captureDate": "2011-09-12",
+        "status": "verified-licensed",
+        "width": 960,
+        "height": 720
+      }
+    ]
+  },
+  "25": {
+    "placeId": "25",
+    "name": "Lutsen Mountains & Temperance River State Park",
+    "eyebrow": "A river gorge, a mountain climb and a separate resort",
+    "story": "Just inland from Lake Superior, the Temperance River folds into a narrow gorge with waterfalls, dark rock and potholes worn by swirling water. Below Highway 61 the river reaches the lake at a visible mouth. Far above the shore, Carlton Peak rises over forest and lake; nearby Lutsen Mountains is a separately operated resort, not another entrance to the state park. A half-hour by the gorge and a long climb into the Sawtooths should not be presented as the same outing.",
+    "character": "Minnesota DNR maps the Temperance River Gorge Trail as 0.25 mile one-way from the northeast-side Highway 61 parking area, while Carlton Peak is a strenuous 3-mile one-way hike from that trailhead. Do not swim in the Temperance River: the current and rock edges are dangerous. The river's name traditionally refers to its lack of a gravel 'bar' at the mouth, not disappearing water. Lutsen Mountains' lifts, scenic rides and operating calendar are administered by the resort, with separate location, admissions and seasonal schedules.",
+    "why": "Choose the gorge for a short stop beside the water, Carlton Peak for a demanding hike, or Lutsen Mountains for a separate resort outing. Check the park trail map and resort schedule before setting off.",
+    "sourceURL": "https://www.dnr.state.mn.us/state-parks/virtual-tour/temperance-river/dialup.html",
+    "sourceLabel": "Minnesota DNR Temperance River virtual tour",
+    "photos": [
+      {
+        "placeId": "25",
+        "imageURL": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cb/Temperance_River_falls_upstream.jpg/1280px-Temperance_River_falls_upstream.jpg",
+        "sourceURL": "https://commons.wikimedia.org/wiki/File:Temperance_River_falls_upstream.jpg",
+        "photographer": "Thesavagenorwegian",
+        "licenseName": "CC BY 4.0",
+        "licenseURL": "https://creativecommons.org/licenses/by/4.0/",
+        "alt": "Broad view of churning Temperance River whitewater descending over rocks upstream from the falls",
+        "caption": "Temperance River falls upstream from the gorge, photographed June 2020; display cropped.",
+        "cropPosition": "center",
+        "captureDate": "2020-06-15",
+        "status": "verified-licensed",
+        "width": 1280,
+        "height": 622
+      },
+      {
+        "placeId": "25",
+        "imageURL": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/13/Temperance_River_State_Park,_Minnesota_(37175740130).jpg/960px-Temperance_River_State_Park,_Minnesota_(37175740130).jpg",
+        "sourceURL": "https://commons.wikimedia.org/wiki/File:Temperance_River_State_Park,_Minnesota_(37175740130).jpg",
+        "photographer": "Tony Webster",
+        "licenseName": "CC BY-SA 2.0",
+        "licenseURL": "https://creativecommons.org/licenses/by-sa/2.0/",
+        "alt": "Forested Superior Hiking Trail corridor above the Temperance River in Minnesota",
+        "caption": "Superior Hiking Trail along the Temperance River, photographed September 2017; display cropped.",
+        "cropPosition": "center",
+        "captureDate": "2017-09-27",
+        "status": "verified-licensed",
+        "width": 960,
+        "height": 641
+      }
+    ]
+  },
   "23": {
     "placeId": "23",
     "name": "Grand Marais, Minnesota",

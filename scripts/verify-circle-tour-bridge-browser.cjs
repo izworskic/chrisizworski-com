@@ -49,6 +49,8 @@ function check(value,message){if(!value)throw Error(message);}
       {stop:'6',name:'Porcupine Mountains Wilderness State Park',clue:'Presque Isle River'},
       {stop:'11',name:'Pictured Rocks National Lakeshore',clue:'Chapel Rock'},
       {stop:'23',name:'Grand Marais, Minnesota',clue:'Artist'},
+      {stop:'24',name:'Cascade River State Park',clue:'Lookout Mountain'},
+      {stop:'25',name:'Lutsen Mountains & Temperance River State Park',clue:'Carlton Peak'},
       {stop:'26',name:'Tettegouche State Park',clue:'Shovel Point'},
       {stop:'27',name:'Split Rock Lighthouse State Park',clue:'Pebble Beach'}
     ]){
@@ -189,11 +191,14 @@ function check(value,message){if(!value)throw Error(message);}
     check(await page.locator('#ctb-decision .ctb-stage-primary').count()===1,
       size.name+': Split Rock lost the approved specialist');
     await page.locator('#ctb-stop').selectOption('25');
-    check(await page.locator('#ctb-decision .ctb-place-story').count()===0,
-      size.name+': unresearched Lutsen stop inherited photographs');
+    check(await page.locator('#ctb-decision .ctb-place-story').count()===1,
+      size.name+': Temperance and Lutsen are missing their exact-place story');
     await page.locator('#ctb-stop').selectOption('24');
+    check(await page.locator('#ctb-decision .ctb-place-story').count()===1,
+      size.name+': Cascade River is missing its exact-place story');
+    await page.locator('#ctb-stop').selectOption('22');
     check(await page.locator('#ctb-decision .ctb-place-story').count()===0,
-      size.name+': unresearched stop inherited a different park photograph');
+      size.name+': unrelated unresearched stop inherited another park photograph');
     await page.locator('#ctb-stop').selectOption('11');
     await page.locator('#ctb-theme').selectOption('water');
     await page.waitForFunction(()=>document.querySelector('#ctb-status')?.textContent.includes('approved connection'));
