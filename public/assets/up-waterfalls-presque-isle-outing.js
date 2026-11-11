@@ -52,8 +52,9 @@
   section.querySelectorAll('[data-presque-preset]').forEach(button=>button.addEventListener('click',()=>{
     const key=button.dataset.presquePreset;
     const result=assess(key,cards,currentIds(),input?.value||'');
-    if(!result.ok){setFeedback(result.reason);feedback.focus();return;}
+    if(!result.ok){window.UPWaterfallMetrics?.plan(key,'blocked',0);setFeedback(result.reason);feedback.focus();return;}
     for(const id of result.missing)cards.get(id).querySelector('.save').click();
+    window.UPWaterfallMetrics?.plan(key,result.missing.length?'added':'already_saved',result.missing.length);
     const sheet=document.getElementById('upfall-day-sheet'),opener=document.getElementById('open-day-sheet');
     if(sheet?.hidden&&opener)opener.click();
     setFeedback((key==='circuit'
