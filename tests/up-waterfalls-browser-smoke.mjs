@@ -14,6 +14,8 @@ async function run(name,fn){try{await fn();console.log('PASS '+name)}catch(e){fa
 try{
   const page=await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:1,isMobile:true,hasTouch:true});
   page.on('pageerror',err=>failures.push('Page JavaScript error: '+err.message));
+  // Test GA4 interactions using a local test double; never contact the real property.
+  await page.addInitScript(()=>{window.__upfallCaptured=[];window.gtag=(...args)=>window.__upfallCaptured.push(args);});
   await page.route('https://pagead2.googlesyndication.com/**',r=>r.abort());
   await page.goto(base+'/upper-peninsula-waterfalls/',{waitUntil:'domcontentloaded',timeout:30000});
   await page.locator('[data-fall]').first().waitFor();
@@ -201,6 +203,62 @@ try{
     // Do not alter the ongoing primary-page filters, visit date or shortlist.
   });
   
+  await run('B85 GA4: direct regional navigation and only genuine plan outcomes',async()=>{
+    await page.locator('#clear-list').click();
+    if(await page.locator('#upfall-day-sheet').evaluate(el=>!el.hidden))await page.locator('#open-day-sheet').click();
+    // Other smoke cases already clicked the sheet. Isolate events to THIS scenario.
+    await page.evaluate(()=>{window.__upfallCaptured=[];});
+    await page.locator('#visit-date').fill('2027-01-20');
+    await page.locator('#waterfall-day-choices a[href="#presque-isle-outing"]').click();
+    await page.locator('#q').fill('');
+    await page.locator('#region').selectOption('all');
+    await page.locator('#effort').selectOption('all');
+    await page.locator('#access').selectOption('all');
+    await page.locator('[data-id="eagle-river-falls"] .fall-card-region-link').click();
+    await page.locator('[data-presque-preset="circuit"]').click();
+    assert.match(await page.locator('#presque-isle-feedback').innerText(),/winter gorge-walk hold/);
+    assert.equal(await page.locator('.day-sheet-stop').count(),0,'blocked plan must add no stops');
+    await page.locator('[data-presque-preset="overlook"]').click();
+    assert.equal(await page.locator('.day-sheet-stop').count(),1);
+    await page.locator('[data-presque-preset="overlook"]').click();
+    await page.locator('#open-day-sheet').click(); // close auto-opened sheet
+    await page.locator('#open-day-sheet').click(); // manually open once
+    const tracked=await page.evaluate(()=>window.__upfallCaptured);
+    const nav=tracked.filter(x=>x[1]==='waterfall_region_open');
+    assert.ok(nav.some(x=>x[2].wf_region==='presque_isle'&&x[2].wf_surface==='hub_jump'));
+    assert.ok(nav.some(x=>x[2].wf_region==='keweenaw'&&x[2].wf_surface==='waterfall_card'));
+    const applied=tracked.filter(x=>x[1]==='waterfall_plan_apply');
+    assert.ok(applied.some(x=>x[2].wf_region==='presque_isle'&&x[2].wf_variant==='circuit'&&x[2].wf_outcome==='blocked'&&x[2].wf_stops_added===0));
+    assert.ok(applied.some(x=>x[2].wf_region==='presque_isle'&&x[2].wf_variant==='overlook'&&x[2].wf_outcome==='added'&&x[2].wf_stops_added===1));
+    assert.ok(applied.some(x=>x[2].wf_variant==='overlook'&&x[2].wf_outcome==='already_saved'&&x[2].wf_stops_added===0));
+    const opens=tracked.filter(x=>x[1]==='waterfall_day_sheet_action'&&x[2].wf_action==='sheet_open');
+    assert.equal(opens.length,1,'automatic programmatic sheet reveal must not inflate explicit opens');
+    assert.equal(opens[0][2].wf_stop_count,1);
+    assert.ok(tracked.every(x=>x[0]==='event'));
+    await page.locator('#clear-list').click();
+    await page.locator('#visit-date').fill('2026-11-02');
+  });
+  await run('B85 GA4: guide link and real map deep-link measure without URL/visitor details',async()=>{
+    const detail=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
+    try{
+      await detail.addInitScript(()=>{window.__upfallCaptured=[];window.gtag=(...args)=>window.__upfallCaptured.push(args);});
+      await detail.goto(base+'/upper-peninsula-waterfalls/haven-falls/',{waitUntil:'domcontentloaded',timeout:30000});
+      await detail.evaluate(()=>document.addEventListener('click',e=>{if(e.target.closest('.fall-guide-region-actions'))e.preventDefault();},true));
+      await detail.locator('.fall-guide-region-primary').click();
+      await detail.locator('.fall-guide-region-actions a[href*="?focus="]').click();
+      const ev=await detail.evaluate(()=>window.__upfallCaptured);
+      assert.ok(ev.some(x=>x[1]==='waterfall_region_open'&&x[2].wf_surface==='guide_bridge'&&x[2].wf_region==='keweenaw'));
+      assert.ok(ev.some(x=>x[1]==='waterfall_map_request'&&x[2].wf_surface==='guide_bridge'&&x[2].wf_region==='keweenaw'));
+      assert.ok(ev.every(x=>!('page_location' in x[2])&&!('travel_date' in x[2])&&!('visitor_id' in x[2])));
+      await detail.goto(base+'/upper-peninsula-waterfalls/?focus=haven-falls#falls-map',{waitUntil:'domcontentloaded',timeout:30000});
+      await detail.waitForFunction(()=>document.querySelector('#cluster-map-focus-status')?.textContent.includes('Haven Falls waterfall pin selected'),{timeout:15000});
+      const m=await detail.evaluate(()=>window.__upfallCaptured.filter(x=>x[1]==='waterfall_map_focus'));
+      assert.equal(m.length,1);
+      assert.equal(m[0][2].wf_region,'keweenaw');
+      assert.equal(m[0][2].wf_outcome,'selected');
+    }finally{await detail.close();}
+  });
+
   await run('B83: Keweenaw easy parks versus conditional Manganese gorge on mobile',async()=>{
     await page.locator('#clear-list').click();
     await page.locator('#visit-date').fill('2027-01-22');

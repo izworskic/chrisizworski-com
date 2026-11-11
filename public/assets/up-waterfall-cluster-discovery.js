@@ -62,6 +62,7 @@ if(focus&&cards.has(focus)){
    }
   }
   const shown=typeof window.UPWaterfallFocus==='function'&&window.UPWaterfallFocus(focus);
+  window.UPWaterfallMetrics?.mapFocus(focus,shown);
   const note=document.getElementById('cluster-map-focus-status');
   if(note)note.textContent=shown
     ? card.dataset.name+' waterfall pin selected. The marker is NOT a parking or trailhead direction; use the linked visitor guide for arrival.'
