@@ -48,3 +48,9 @@ Rebased onto green main `53ef82aa15a545c4d760c7512e84c988b1b605c8`, retaining th
 The November 9 export mentioned by newer sprint records spans a longer interval. It is not substituted for this release's explicitly dated 28-day baseline. No new search/revenue outcome claim.
 
 November 11 local release gate: all 60 `verify:all` steps passed in 82 seconds. Full `build:site`, built-template function audit, and seven browser scenarios passed. Production release and measured visitor outcomes remain unverified.
+
+## Production routing correction
+
+PR #1634 merged November 11 at `597293a9472ce302e1a9c3b69fad79398968f4a3` after explicit owner authorization, a passing 60-step combined-main check and green PR/preview checks. Live verification exposed the missing platform condition: the existing static `public/great-lakes-freighter-tracking/index.html` takes priority over a `vercel.json` rewrite. The public canonical served the new static template without reports, while `/api/freighter-page` returned actual dated reports with its intended noindex header. Existing browser tracking remained functional.
+
+[Vercel's configuration reference](https://vercel.com/docs/project-configuration/vercel-json) documents filesystem precedence. [Routing Middleware](https://vercel.com/docs/routing-middleware) runs before static cache/file resolution. The correction uses the already-matching middleware and native rewrite response header to select the existing HTML handler for exactly the slash/no-slash tracker routes. It preserves the earlier Pictured Rocks canonical redirect, does not fetch a second document, and leaves the static template available for build audits and the function bundle. Tests cover GET/HEAD, query preservation, preview host, canonical subdomain redirects, unrelated routes and an end-to-end middleware-to-renderer fixture. The public URL must be rechecked after deployment; local tests do not establish platform routing success.

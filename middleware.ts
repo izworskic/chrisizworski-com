@@ -348,6 +348,15 @@ export default async function middleware(request: Request) {
     return Response.redirect(canonical, 308);
   }
 
+  // Middleware runs before static-file resolution. A vercel.json rewrite alone
+  // loses to the existing public/.../index.html, bypassing the rendered reports.
+  if (url.pathname === '/great-lakes-freighter-tracking' ||
+      url.pathname === '/great-lakes-freighter-tracking/') {
+    url.pathname = '/api/freighter-page';
+    // Native Response equivalent of @vercel/edge rewrite(); no extra fetch.
+    return new Response(null, { headers: { 'x-middleware-rewrite': url.href } });
+  }
+
   if (
     url.pathname === LEGACY_NIAGARA ||
     url.pathname.startsWith(`${LEGACY_NIAGARA}/`) ||
