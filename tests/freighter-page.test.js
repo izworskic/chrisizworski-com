@@ -74,3 +74,20 @@ test('public route bundles its built HTML and API/preview routes remain noindex'
  assert.ok(config.headers.find(h=>h.source==='/api/(.*)').headers.some(h=>h.key==='X-Robots-Tag'&&h.value.includes('noindex')));
  assert.ok(config.headers.find(h=>h.has?.some(x=>x.type==='host'&&x.value.includes('vercel'))).headers.some(h=>h.key==='X-Robots-Tag'&&h.value.includes('noindex')));
 });
+
+
+test('AIS replacement tokens stay literal in reports, credits and bootstrap JSON',()=>{
+ for(const token of ['$&', '$`', "$'", '$$', '$1']){
+  const value='TEST '+token+' VESSEL';
+  const data=feed([vessel({name:value,destination:value,source:value})]);
+  data.attribution[0].credit=value;
+  const rendered=renderReports(html,data,now);
+  const seed=JSON.parse(rendered.match(/id="freighter-initial-reports">([\s\S]*?)<\/script>/)[1]);
+  for(const field of ['name','destination','source'])assert.equal(seed.vessels[0][field],value);
+  assert.equal(seed.attribution[0].credit,value);
+  assert.equal((rendered.match(/<ul id="freighterVessels">/g)||[]).length,1);
+  assert.equal((rendered.match(/<html\b/g)||[]).length,1);
+  assert.ok(rendered.includes('<strong>'+value.replace(/&/g,'&amp;').replace(/'/g,'&#39;')+'</strong>'));
+  assert.ok(rendered.includes('Source credits: '+value.replace(/&/g,'&amp;').replace(/'/g,'&#39;')));
+ }
+});
