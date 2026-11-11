@@ -39,6 +39,18 @@ test('NYSDOT no-active-reporting condition is never a real incident',()=>{
  assert.equal(closure.penaltyPoints,12);
 });
 
+test('stale police-activity records and open HOV operations cannot become live incidents',()=>{
+ const stale={...event(),headline:{category:'obstruction',code:'police activity'},
+   description:'I-278 bridge: police activity',priority:4,
+   'update-time':z('2025-09-24T11:47:43Z')};
+ assert.equal(normalizeEvent(stale,clock),null);
+ const benign={...event(),headline:{category:'obstruction',code:'police activity'},
+   description:'Verrazzano high occupancy lane open, no lane obstruction'};
+ assert.equal(normalizeEvent(benign,clock),null);
+ const current={...event(),headline:{category:'obstruction',code:'police activity'},
+   description:'Police response is blocking a lane near the crossing'};
+ assert.equal(normalizeEvent(current,clock).crossingId,'gwb');
+});
 test('active detail selection avoids future detail location and chooses current detail',()=>{
  const future={'start-time':z('2026-11-11T09:00:00Z'),
    'end-time':z('2026-11-11T12:00:00Z'),locations:[{
@@ -78,6 +90,21 @@ function world(){
  return {store,env,fetchImpl};
 }
 
+test('mixed cached CARS incidents remove stale HOV messages without erasing a verified closure',async()=>{
+ const w=world();
+ await refresh511({...w,now:clock});
+ const key='nyc:511ny:events:v1',record=JSON.parse(w.store.get(key));
+ const existing=record.items[0];
+ existing.category='closure';existing.code='closed';
+ record.items.push({...existing,id:'HOV-OPEN-2025',category:'obstruction',code:'police activity',
+   description:'Verrazzano high occupancy lane open',updatedAt:'2025-09-24T11:47:43.000Z'});
+ w.store.set(key,JSON.stringify(record));
+ const snapshot=await getCached511(w);
+ assert.ok(snapshot.events.updatedAt);
+ assert.equal(snapshot.events.items.length,1);
+ assert.equal(snapshot.crossings.gwb.incidentCount,1);
+ assert.equal(snapshot.events.items[0].id,existing.id);
+});
 test('fresh feed has dated current incidents; old invalid cache and pseudo-events do not surface',async()=>{
  const w=world(),report=await refresh511({...w,now:clock});
  assert.equal(report.eventsStatus,'UPDATED');
@@ -96,6 +123,7 @@ test('fresh feed has dated current incidents; old invalid cache and pseudo-event
  record.items[0].code='no active reporting';
  w.store.set(key,JSON.stringify(record));
  const pseudo=await getCached511(w);
- assert.equal(pseudo.events.updatedAt,null);
+ assert.ok(pseudo.events.updatedAt);
+ assert.equal(pseudo.events.items.length,0);
  assert.equal(pseudo.crossings.gwb.incidentCount,0);
 });
