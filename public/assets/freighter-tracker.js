@@ -106,6 +106,13 @@
   if (map) L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
   else {mapFrame.textContent = "Map unavailable; recent vessel reports are listed below.";mapFrame.parentElement.classList.add("map-stage-unavailable");}
   var reports = null, busy = false, lastFailed = false;
+  var initialReports = document.getElementById("freighter-initial-reports");
+  if(initialReports){
+    try {
+      var seed=JSON.parse(initialReports.textContent);
+      if(seed.ok && Array.isArray(seed.vessels) && Array.isArray(seed.attribution))reports=seed;
+    } catch (_) { /* Normal browser fetch remains available. */ }
+  }
   var vesselSearch = document.getElementById("freighterNameSearch");
   var vesselSearchStatus = document.getElementById("freighterSearchStatus");
   var searchAllButton = document.getElementById("freighterSearchAll");
@@ -217,6 +224,8 @@
   }
   function renderVessels() {
     if (!reports) return;
+    var initialCheck=document.getElementById("freighterInitialCheck");
+    if(initialCheck)initialCheck.hidden=true;
     var view=views[activeView], now=Date.now();
     var current=reports.vessels.filter(function(v){return recent(v,now) && (activeView === "overview" || inCorridor(v,activeView));});
     updateActivity(now);
@@ -463,4 +472,13 @@
   });
 
   selectView(selectedFromHash(), { updateHash: false, track: false });
+  // Seeded reports work immediately, including when the next refresh fails.
+  loadVessels();
+  function expireReports(){
+    if(!reports || document.hidden)return;
+    var now=Date.now(), fresh=reports.vessels.filter(function(v){return recent(v,now);});
+    if(fresh.length!==reports.vessels.length){reports.vessels=fresh;renderVessels();}
+  }
+  setInterval(expireReports,15000);
+  document.addEventListener("visibilitychange",expireReports);
 })();

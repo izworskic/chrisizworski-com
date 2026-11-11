@@ -1,8 +1,4 @@
-const { normalize } = require('../lib/soo-ais');
-const BBOX = [41, -93, 49, -76];
-// Three adjoining lake regions, 82 square degrees in one request, within the
-// documented 100-square-degree anonymous area cap. No unbounded map proxy.
-const BOXES = [[46, -93, 49, -84], [41, -88, 46, -81], [41, -81, 45, -76]];
+const { loadFreighterFeed } = require('../lib/freighter-feed');
 // Detroit's public decision surface has a hard 10-minute AIS freshness limit.
 // Admit only reports <=8 minutes old here so the specialist endpoint's own
 // 10-second hard-expiry cache plus the Detroit shell's bounded response cache
@@ -12,11 +8,7 @@ module.exports = async function handler(req, res) {
   res.setHeader('X-Robots-Tag', 'noindex, nofollow');
   if (req.method && req.method !== 'GET') { res.setHeader('Allow','GET'); return res.status(405).json({ok:false,error:'Method not allowed'}); }
   try {
-    const headers = {Accept:'application/geo+json,application/json','User-Agent':'GreatLakesShipTracker/1.0 (+https://chrisizworski.com/great-lakes-freighter-tracking/)'};
-    if (process.env.OPEN_WATERS_API_TOKEN) headers.Authorization = 'Bearer ' + process.env.OPEN_WATERS_API_TOKEN;
-    const upstream = await fetch('https://ais.openwaters.io/v1/vessels?' + BOXES.map(box => 'bbox=' + box.join(',')).join('&'), {headers,signal:AbortSignal.timeout(9000)});
-    if (!upstream.ok) throw new Error('AIS provider unavailable');
-    const data = normalize(await upstream.json(), Date.now(), BBOX);
+    const data = await loadFreighterFeed();
 
     // Detroit Outdoors asks a narrower question than the lake-wide tracker:
     // "is a freighter actually passing Detroit now?" A nearby ship that is

@@ -1,0 +1,57 @@
+{
+  "checkedAt": "2026-11-11T11:39:39.943Z",
+  "scope": "Local deterministic AIS fixtures. Map library loaded; external tiles blocked. No live AIS, ranking, revenue or production claim.",
+  "results": [
+    {
+      "width": 360,
+      "javaScriptEnabled": false,
+      "initialHTML": "two dated fixture reports",
+      "refreshOutage": "passed",
+      "expiry": "absolute report times shown",
+      "overflow": "passed"
+    },
+    {
+      "width": 360,
+      "javaScriptEnabled": true,
+      "initialHTML": "two dated fixture reports",
+      "refreshOutage": "passed",
+      "expiry": "passed",
+      "overflow": "passed"
+    },
+    {
+      "width": 390,
+      "javaScriptEnabled": false,
+      "initialHTML": "two dated fixture reports",
+      "refreshOutage": "passed",
+      "expiry": "absolute report times shown",
+      "overflow": "passed"
+    },
+    {
+      "width": 390,
+      "javaScriptEnabled": true,
+      "initialHTML": "two dated fixture reports",
+      "refreshOutage": "passed",
+      "expiry": "passed",
+      "overflow": "passed"
+    },
+    {
+      "width": 1440,
+      "javaScriptEnabled": false,
+      "initialHTML": "two dated fixture reports",
+      "refreshOutage": "passed",
+      "expiry": "absolute report times shown",
+      "overflow": "passed"
+    },
+    {
+      "width": 1440,
+      "javaScriptEnabled": true,
+      "initialHTML": "two dated fixture reports",
+      "refreshOutage": "passed",
+      "expiry": "passed",
+      "overflow": "passed"
+    },
+    {
+      "serverFeedOutage": "complete HTML, honest fallback, handoffs preserved"
+    }
+  ]
+}

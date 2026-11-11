@@ -4,6 +4,7 @@
   "buildCommand": "npm run build:site",
   "outputDirectory": "public",
   "functions": {
+    "api/freighter-page.js": {"includeFiles":"public/great-lakes-freighter-tracking/index.html","maxDuration":10},
     "api/growth-command-center.js": { "maxDuration": 60 },
     "api/growth-dashboard.js": { "maxDuration": 10, "includeFiles": "ops/growth-command-center/Revenue-Command-Center.html" },
     "api/garden-seasonal-heat.js": {"maxDuration":25},
@@ -770,6 +771,8 @@
     }
   ],
   "rewrites": [
+    {"source":"/great-lakes-freighter-tracking","destination":"/api/freighter-page"},
+    {"source":"/great-lakes-freighter-tracking/","destination":"/api/freighter-page"},
     {
       "source": "/living-garden",
       "destination": "https://garden.chrisizworski.com/living-garden"
