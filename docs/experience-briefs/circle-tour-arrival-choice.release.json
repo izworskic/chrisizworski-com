@@ -1,0 +1,160 @@
+{
+  "schemaVersion": "1.2",
+  "recordStatus": "draft",
+  "project": {
+    "slug": "circle-tour",
+    "ownerRepo": "izworskic/chrisizworski-com",
+    "canonical": "https://chrisizworski.com/lake-superior-circle-tour/",
+    "pageFile": "public/lake-superior-circle-tour/index.html",
+    "visitorDecision": "After choosing one of the eight Circle Tour source-backed stops, which documented starting place fits my outing, what is uncertain about the approach and what single map destination should I open?",
+    "primaryAction": "Choose Nipigon Marina or Red Rock, Cascade wayside or park office, or Temperance gorge or Lutsen resort when appropriate; read the selected source and then open only that arrival's map action."
+  },
+  "claims": [
+    {
+      "id": "nipigon-short-and-long",
+      "kind": "official-reference",
+      "subject": "route-guidance",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://www.parcs.canada.ca/amnc-nmca/on/super/activ/experiences/randonnees-hiking/nipigon",
+      "checkedDate": "2026-11-11",
+      "limitation": "Parks Canada identifies a 2.6-km Red Rock Lloyd's Lookout return hike and a 10.1-km one-way full trail. This does not establish currently open trails, transfer service or a guaranteed Google Maps match."
+    },
+    {
+      "id": "cascade-dayuse-distinction",
+      "kind": "official-reference",
+      "subject": "route-guidance",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://www.dnr.state.mn.us/state-parks/virtual-tours/cascade-river/dialup.html",
+      "checkedDate": "2026-11-11",
+      "limitation": "DNR describes the Lookout Mountain route from a day-use parking area. The separate park-office address is not proven to be that trailhead."
+    },
+    {
+      "id": "cascade-work-historical",
+      "kind": "official-reference",
+      "subject": "parking-rule",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://www.dot.state.mn.us/news/2026/05/27-d1-cascade.html",
+      "checkedDate": "2026-11-11",
+      "limitation": "May 2026 construction advisory only. It does not verify open or closed parking in November 2026 or at a future visit."
+    },
+    {
+      "id": "current-parking-unknown",
+      "kind": "unverified",
+      "subject": "park-access",
+      "state": "UNVERIFIED",
+      "sourceUrl": "https://www.dnr.state.mn.us/state-parks/park.html?id=spk00133",
+      "checkedDate": "2026-11-11",
+      "limitation": "The Circle Tour does not integrate live trail, parking, operator or traffic checks. Follow posted restrictions and official updates before travel."
+    },
+    {
+      "id": "named-google-map-search",
+      "kind": "editorial",
+      "subject": "other",
+      "state": "EDITORIAL",
+      "sourceUrl": "https://chrisizworski.com/lake-superior-circle-tour/",
+      "checkedDate": "2026-11-11",
+      "limitation": "A user-initiated Google Maps search for a named place, intersection or street is a convenience, not a surveyed parking pin or guarantee that the provider resolved the intended entrance."
+    }
+  ],
+  "decisionState": {
+    "selectedIdField": "model.stopId plus explicit entry index in state.arrivalChoices[stopId]",
+    "sourceOfTruth": "Original CircleTourPage selected stop/itinerary plus static source-reviewed officialArrivals catalog; chooseArrival is a pure bounded selector. No live parking data is ingested.",
+    "linkedSurfaces": [
+      "stop-answer",
+      "native-arrival-buttons",
+      "active-arrival-title-and-note",
+      "one-map-action",
+      "one-official-source",
+      "per-stop-share-url",
+      "original-stop-link",
+      "optional-place-story"
+    ],
+    "unavailableBehavior": "Unsupported theme hides unrelated park arrivals and offers explicit reset; one-source stops have no unnecessary selector; invalid ctArrival returns to default; no-JS and catalog failure retain original 31-stop guide and static links."
+  },
+  "scenarios": [
+    {
+      "kind": "initial",
+      "input": "Open stop 19 Nipigon with the default visit choice",
+      "expectedVisibleAnswer": "Nipigon Marina and its named-place map search are visible with one Parks Canada source; the alternative Red Rock choice is a native button, not a second competing map link.",
+      "sourceAndSafety": "Named searches cannot guarantee a precise lot or availability."
+    },
+    {
+      "kind": "alternative",
+      "input": "Select Red Rock with keyboard Enter",
+      "expectedVisibleAnswer": "The active title, 2.6-km return lookout versus 10.1-km one-way warning, map destination and official source change together without losing keyboard focus.",
+      "sourceAndSafety": "The trail is not certified open and a return ride must be independently planned for the full hike."
+    },
+    {
+      "kind": "reverse",
+      "input": "Select Red Rock, switch to Temperance, then return to Nipigon; reset to Marina",
+      "expectedVisibleAnswer": "Per-stop choice returns to Red Rock; reset returns to the Marina map. ctArrival stays paired with ctStop, and no option leaks to another park.",
+      "sourceAndSafety": "Sources and address-versus-search precision follow the active choice."
+    },
+    {
+      "kind": "no-js",
+      "input": "Disable JavaScript for the entire Circle Tour",
+      "expectedVisibleAnswer": "31 original stop cards, official road and independent specialist links remain readable; no fabricated selected parking claim.",
+      "sourceAndSafety": "The enhanced arrival selector itself is unavailable without JavaScript and does not replace the static original stop guide."
+    },
+    {
+      "kind": "no-tiles",
+      "input": "Block third-party map tiles and external map providers",
+      "expectedVisibleAnswer": "Destination notes, named source references, and selected arrival remain usable without live Google Maps imagery or an embedded map.",
+      "sourceAndSafety": "External Google map links are navigation handoffs; no route line or parking coordinate is drawn on the Circle Tour page."
+    },
+    {
+      "kind": "stale-data",
+      "input": "Block the static specialist catalog request or inspect a dated May 2026 Cascade notice",
+      "expectedVisibleAnswer": "Catalog error retains the original static guide, and a historical construction notice is not turned into a current parking status.",
+      "sourceAndSafety": "The absence of a current lot-level observation is explicit."
+    },
+    {
+      "kind": "interest-mismatch",
+      "input": "Select ships at Cascade River then recover to all interests",
+      "expectedVisibleAnswer": "The waterfall arrival desk is not shown for ships; the visitor can restore the documented park outings with a single reset.",
+      "sourceAndSafety": "No irrelevant source link is misrepresented as a ships specialist."
+    },
+    {
+      "kind": "invalid-url-state",
+      "input": "Open an arrival deep link with out-of-range or mismatched stop ID",
+      "expectedVisibleAnswer": "A bounded default arrival or no arrival appears without inventing a third starting area, while original trip state survives.",
+      "sourceAndSafety": "ctArrival alone never permits a different kind of map direction."
+    }
+  ],
+  "failures": {
+    "no-js": "Keep the original 31-stop route cards, static vetted source links, map and itinerary instructions; do not promise a client-selected parking destination.",
+    "no-tiles": "The active selected-arrival card remains a readable source-linked destination when the map provider or tile images are blocked.",
+    "no-image": "Photo failures remove only that Place & Story figure. The selected arrival decision and official map-source pair remain usable without photographs.",
+    "stale-data": "The approved static catalog failure reveals original fallback links; dated MnDOT works cannot assert a current lot closure or reopening."
+  },
+  "qa": {
+    "viewports": [
+      360,
+      390,
+      768,
+      1366,
+      1440
+    ],
+    "browserStatus": "PENDING",
+    "scopeNote": "PR Chromium must inspect at 360,390,768,1366,1440: one active start, keyboard focus, A-B-A stop choice, deep-link hydration, theme mismatch, photo isolation, map-source match, no overflow, no-JS, catalog failure. Run URL and independent screenshot review are not yet confirmed.",
+    "screenshotEvidence": []
+  },
+  "photos": [],
+  "release": {
+    "implemented": {
+      "status": "PENDING"
+    },
+    "verified": {
+      "status": "PENDING"
+    },
+    "deployed": {
+      "status": "NOT_VERIFIED"
+    },
+    "live": {
+      "status": "NOT_VERIFIED"
+    },
+    "measured": {
+      "status": "NOT_MEASURED"
+    }
+  }
+}

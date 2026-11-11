@@ -1,0 +1,61 @@
+name: Circle Tour Arrival Desk · Foundry 0.3 then Experience OS
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'public/assets/circle-tour-bridge.*'
+      - 'public/lake-superior-circle-tour/index.html'
+      - 'tests/circle-tour-bridge.test.js'
+      - 'scripts/verify-circle-tour-bridge-browser.cjs'
+      - 'experience-foundry/examples/circle-tour-arrival-choice-*.{mjs,cjs}'
+      - 'docs/experience-briefs/circle-tour-arrival-choice*'
+      - '.github/workflows/circle-tour-arrival-foundry.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: circle-tour-arrival-foundry-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  arrival-proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify original route and new arrival contract
+        run: |
+          node --check public/assets/circle-tour-bridge.js
+          node --check experience-foundry/examples/circle-tour-arrival-choice-improvement.mjs
+          node --check experience-foundry/examples/circle-tour-arrival-choice-replay.cjs
+          node --test tests/circle-tour-bridge.test.js
+          node scripts/build-circle-tour-network.mjs --check
+      - name: Foundry 0.3 - actual baseline, candidate proof and stale-check
+        run: |
+          node experience-foundry/examples/circle-tour-arrival-choice-improvement.mjs
+          node scripts/experience-foundry.mjs assess --run experience-foundry/drafts/circle-tour-arrival-choice/run.json
+          node scripts/experience-foundry.mjs prove \
+            --run experience-foundry/drafts/circle-tour-arrival-choice/run.json \
+            --out build/experience-foundry/circle-tour-arrival-choice-proof
+          node scripts/experience-foundry.mjs assess \
+            --run experience-foundry/drafts/circle-tour-arrival-choice/run.json \
+            --proof build/experience-foundry/circle-tour-arrival-choice-proof/proof.json
+      - name: Experience OS v1.2.1 - owner and source contract
+        run: |
+          node scripts/verify-experience-os-v1.2.mjs \
+            docs/experience-briefs/circle-tour-arrival-choice.release.json --check-site
+      - name: Retain Foundry before-after and Experience OS evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: circle-tour-arrival-foundry03-proof
+          path: |
+            experience-foundry/drafts/circle-tour-arrival-choice/
+            build/experience-foundry/circle-tour-arrival-choice-proof/
+          if-no-files-found: warn
+          retention-days: 7

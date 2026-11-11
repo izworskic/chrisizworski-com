@@ -365,3 +365,53 @@ test('North Shore arrival desk preserves park versus resort and the documented c
  assert.match(bridge,/if\(guide\)\{/);
  assert.match(bridge,/renderPlaceStory\(model,host\)/);
 });
+
+test('Foundry: arrival choice switches one map and shares state without leaking across stops',()=>{
+  const a=ui.chooseArrival('19',0),b=ui.chooseArrival('19',1);
+  assert.equal(a.stopId,'19');assert.equal(a.index,0);assert.equal(a.total,2);
+  assert.match(a.arrival.label,/Nipigon Marina/);
+  assert.match(b.arrival.label,/Red Rock/);
+  assert.match(b.arrival.note,/2.6 km return/);
+  assert.match(b.arrival.note,/10.1 km one way/);
+  assert.notEqual(a.mapUrl,b.mapUrl);
+  assert.equal(new URL(b.arrival.sourceUrl).hostname,'www.parcs.canada.ca');
+  assert.equal(new URL(b.mapUrl).pathname,'/maps/search/');
+  assert.equal(ui.chooseArrival('19',99).index,0);
+  assert.equal(ui.chooseArrival('25',-1).index,0);
+  assert.equal(ui.chooseArrival('24','bad').index,0);
+  assert.equal(ui.chooseArrival('11',1),null);
+  const url=new URL(ui.buildReturnHref('https://chrisizworski.com/lake-superior-circle-tour/?plan=19%2C25&direction=clockwise',
+    {focusStop:'19',arrivalChoices:{'19':1},theme:'all'}));
+  assert.equal(url.searchParams.get('ctStop'),'19');
+  assert.equal(url.searchParams.get('ctArrival'),'1');
+  assert.equal(url.searchParams.get('plan'),'19,25');
+  assert.equal(url.searchParams.get('direction'),'clockwise');
+  const next=new URL(ui.buildReturnHref(url.href,{focusStop:'25',arrivalChoices:{'19':1},theme:'all'}));
+  assert.equal(next.searchParams.get('ctStop'),'25');
+  assert.equal(next.searchParams.has('ctArrival'),false);
+  const again=new URL(ui.buildReturnHref(next.href,{focusStop:'19',arrivalChoices:{'19':1,'25':0},theme:'all'}));
+  assert.equal(again.searchParams.get('ctArrival'),'1');
+});
+test('Experience OS: visitor interest, parking and operator claims remain source-bounded',()=>{
+  assert.equal(ui.guideForInterest('25','ships'),null);
+  assert.equal(ui.guideForInterest('24','water'),null);
+  assert.ok(ui.guideForInterest('25','falls'));
+  assert.ok(ui.guideForInterest('4','history'));
+  assert.ok(ui.guideForInterest('19','water'));
+  assert.equal(ui.guideForInterest('__proto__','parks'),null);
+  const falls=ui.chooseArrival('24',0),office=ui.chooseArrival('24',1);
+  assert.notEqual(falls.mapUrl,office.mapUrl);
+  assert.match(falls.arrival.note,/construction in 2026/);
+  assert.match(office.arrival.note,/not the falls wayside/);
+  assert.match(office.arrival.note,/not a guaranteed Lookout Mountain trailhead/);
+  assert.equal(office.arrival.kind,'address');
+  assert.equal(falls.arrival.kind,'search');
+  const trail=ui.chooseArrival('25',0),resort=ui.chooseArrival('25',1);
+  assert.match(trail.arrival.label,/Temperance/);
+  assert.match(resort.arrival.label,/Lutsen Mountains/);
+  assert.match(resort.arrival.sourceUrl,/lutsen\.com/);
+  assert.equal(resort.arrival.destination,'467 Ski Hill Road, Lutsen, MN 55612, USA');
+  const source=readFileSync(path.join(root,'public/assets/circle-tour-bridge.js'),'utf8');
+  assert.match(source,/selected\.setAttribute\('aria-live','polite'\)/);
+  assert.match(source,/control\.setAttribute\('aria-pressed'/);
+});
