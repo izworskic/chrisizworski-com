@@ -11,7 +11,7 @@
 })(typeof globalThis==='object'?globalThis:this,function(){
  'use strict';
  const MODE_IDS=Object.freeze({
-  shore:['stop-2','stop-10','stop-11','stop-3'],
+  shore:['stop-2','stop-10','stop-11'],
   curtains:['stop-1','stop-3','stop-4'],
   falls:['stop-5','stop-6','stop-7','stop-9','stop-8'],
   easy:['stop-2','stop-3','stop-10','stop-11','stop-9'],
