@@ -146,7 +146,7 @@ async function ready(page){
   const bad=await browser.newContext({viewport:{width:390,height:844}});
   const officialPage=await bad.newPage();await routeLeaflet(officialPage);
   await officialPage.goto(base,{waitUntil:'domcontentloaded'});
-  await officialPage.waitForFunction(()=>document.querySelector('#w-nasa-public-status')?.textContent.includes('unavailable'),{timeout:14000});
+  await officialPage.waitForFunction(()=>document.querySelector('#w-nasa-public-status')?.textContent.includes('could not be checked'),{timeout:14000});
   assert(!(await officialPage.locator('#w-nasa-public-status').innerText()).includes('No upcoming public launch'),'Official outage mistaken for empty schedule');
   scenarios.push({scenario:'NASA-official-outage',status:'unavailable-not-empty'});
   await bad.close();officialOutage=false;
