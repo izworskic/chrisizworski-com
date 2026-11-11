@@ -1,0 +1,29 @@
+name: Winter sprint live-source health
+on:
+  pull_request:
+    paths:
+      - "scripts/audit-winter-growth-sprints-live.cjs"
+      - ".github/workflows/winter-sprint-live-health.yml"
+      - "docs/WINTER_SPRINTS_1_8_PRODUCTION_AUDIT_2026-11-11.md"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    name: Real production data, not merely HTTP 200
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Read-only audit of winter growth sprint APIs
+        run: node scripts/audit-winter-growth-sprints-live.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: winter-growth-production-health
+          path: artifacts/winter-sprints-production-health.json
+          if-no-files-found: warn
+          retention-days: 14
