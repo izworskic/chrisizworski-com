@@ -45,6 +45,60 @@ test('current nested TMDD CARS Detail locations, geometry and full-report text m
  const geo={...nested,details:[{locations:[]}],geometry:{type:'Point',coordinates:[-73.963,40.744]},routeId:'I-495'};
  assert.equal(normalizeEvent(geo,Date.parse('2026-11-10T09:30:00Z')).crossingId,'queens-midtown');
 });
+test('CARS ZonedDateTime epoch-millisecond objects format as ISO and gate future work',()=>{
+ const now=Date.parse('2026-11-10T20:30:00-05:00');
+ const incident={...event,'update-time':{time:now-15*60*1000,utcOffset:-18000,timeZoneId:'America/New_York'},
+   details:[{'start-time':{time:now-60*60*1000,utcOffset:-18000},
+     'end-time':{time:now+60*60*1000,utcOffset:-18000},locations:event.locations}]};
+ const current=normalizeEvent(incident,now);
+ assert.ok(current);
+ assert.equal(current.updatedAt,new Date(now-15*60*1000).toISOString());
+ assert.doesNotMatch(current.updatedAt,/\[object Object\]/);
+ const future=structuredClone(incident);
+ future.details[0]['start-time'].time=now+60*60*1000;
+ assert.equal(normalizeEvent(future,now),null);
+ const expired=structuredClone(incident);
+ expired.details[0]['end-time'].time=now-1;
+ assert.equal(normalizeEvent(expired,now),null);
+});
+test('planned reports, no-active-reporting status and future roadwork cannot create false bridge incidents',()=>{
+ const now=Date.parse('2026-11-11T01:30:00Z');
+ const base={...event,'update-time':{time:now-300000},details:[{'start-time':{time:now-3600000},'end-time':{time:now+3600000},locations:event.locations}]};
+ assert.equal(normalizeEvent({...base,category:'PLANNED'},now),null);
+ assert.equal(normalizeEvent({...base,category:'FORECAST'},now),null);
+ assert.equal(normalizeEvent({...base,status:'REOPENED'},now),null);
+ assert.equal(normalizeEvent({...base,headline:{category:'nysdot-road-conditions',code:'no active reporting'}},now),null);
+ assert.equal(normalizeEvent({...base,description:'I-95 no active reporting on roadway'},now),null);
+ assert.equal(normalizeEvent({...base,headline:{category:'obstruction',code:'police activity'},description:'High occupancy lane open on westbound bridge'},now),null);
+ const plannedReport={...base,'full-report-texts':[{'report-medium':'PLANNED',description:'Closure on Wednesday'}]};
+ assert.equal(normalizeEvent(plannedReport,now),null);
+});
+test('recurring construction appears only in its documented active occurrence',()=>{
+ const now=Date.parse('2026-11-11T01:30:00Z');
+ const detail={'start-time':{time:now-3600000},'end-time':{time:now+86400000},
+   'recurrent-times':[{'time-zone':'America/New_York',period:{'days-of-week':{bits:127}}}],
+   locations:event.locations};
+ const planned={...event,'update-time':{time:now-300000},headline:{category:'roadwork',code:'roadwork'},details:[detail]};
+ assert.equal(normalizeEvent(planned,now),null,'date range alone is not a 24-hour lane closure');
+ const future=structuredClone(planned);
+ future.details[0].scheduleOccurrences=[{startTime:{time:now+3600000},endTime:{time:now+7200000}}];
+ assert.equal(normalizeEvent(future,now),null);
+ const current=structuredClone(planned);
+ current.details[0].scheduleOccurrences=[{startTime:{time:now-900000},endTime:{time:now+900000}}];
+ const active=normalizeEvent(current,now);
+ assert.equal(active.crossingId,'gwb');
+ assert.equal(active.category,'roadwork');
+ const unknown=structuredClone(planned);
+ unknown.details[0].scheduleOccurrences=[{startTime:{time:'bad'},endTime:{time:now+900000}}];
+ assert.equal(normalizeEvent(unknown,now),null);
+});
+test('a seven-kilometer I-95 advisory must not masquerade as a George Washington Bridge event',()=>{
+ const near=event;
+ const distant={...event,locations:[{'route-designator':'I-95',
+   'primary-location':{'geo-location':{latitude:40.901,longitude:-73.950}}}]};
+ assert.equal(normalizeEvent(near,at).crossingId,'gwb');
+ assert.equal(normalizeEvent(distant,at),null);
+});
 test('route-designator filtered pagination retains crossing and rejects another source route',()=>{
  for(const route of EVENT_ROUTES){
    const page=eventsPage(route);
@@ -268,6 +322,8 @@ test('fresh 511NY events and signs appear only on affected crossings; stale inci
  const fresh=await render511InBrowser(live);
  assert.equal((fresh.results.innerHTML.match(/class="disruption"/g)||[]).length,1);
  assert.match(fresh.results.innerHTML,/Verified roadway closure/);
+ assert.match(fresh.results.innerHTML,/nearby 511NY road advisor/);
+ assert.doesNotMatch(fresh.results.innerHTML,/mapped 511NY incident/);
  assert.match(fresh.results.innerHTML,/LEFT LANE CLOSED/);
  assert.doesNotMatch(fresh.results.innerHTML,/Incident feed awaiting first update/);
  const stale=buildSnapshot({ny511:{
