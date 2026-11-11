@@ -162,7 +162,7 @@ test('visitor page wires matching selected mission to safe CARTO map, but never 
   assert.match(map,/fetch\('\/api\/carto-basemap-config'/);
   assert.match(map,/basemaps\.cartocdn\.com\/rastertiles\/voyager/);
   assert.match(map,/tile\.openstreetmap\.org/);
-  assert.match(map,/not the rocket’s flight path or a verified sightline/);
+  assert.match(map,/it cannot promise an unobstructed view of the rocket/);
   assert.match(map,/const directionsUrl/);
   assert.match(css,/\.geo-layout/);
   assert.match(map,/L\.polygon\(/);
