@@ -93,8 +93,8 @@ async function ready(page){
    await ready(page);
    assert((await page.locator('#w-mission-name').innerText()).includes('Black Brant'),v.label+' mission A');
    assert((await page.locator('#w-mission-type-tag').innerText()).includes('SCIENTIFIC SOUNDING'),v.label+' sounding rocket class');
-   assert((await page.locator('#w-nasa-public-status').innerText()).includes('no public'),v.label+' public schedule separate');
-   assert((await page.locator('#w-nasa-range-status').innerText()).includes('accessible'),v.label+' NASA range separate');
+   assert((await page.locator('#w-nasa-public-status').innerText()).includes('No upcoming public launch'),v.label+' public schedule separate');
+   assert((await page.locator('#w-nasa-range-status').innerText()).includes('Range Blog checked'),v.label+' NASA range separate');
    assert((await page.locator('#w-decision-copy').innerText()).includes('has not verified'),v.label+' no false event opening');
    assert((await page.locator('#w-mission-time').innerText()).includes('target'),v.label+' exact target qualified');
    assert(await page.locator('#w-map .w-restricted-marker').count()===1,v.label+' restricted pad marker');
@@ -147,7 +147,7 @@ async function ready(page){
   const officialPage=await bad.newPage();await routeLeaflet(officialPage);
   await officialPage.goto(base,{waitUntil:'domcontentloaded'});
   await officialPage.waitForFunction(()=>document.querySelector('#w-nasa-public-status')?.textContent.includes('unavailable'),{timeout:14000});
-  assert(!(await officialPage.locator('#w-nasa-public-status').innerText()).includes('no public'),'Official outage mistaken for empty schedule');
+  assert(!(await officialPage.locator('#w-nasa-public-status').innerText()).includes('No upcoming public launch'),'Official outage mistaken for empty schedule');
   scenarios.push({scenario:'NASA-official-outage',status:'unavailable-not-empty'});
   await bad.close();officialOutage=false;
   const noJs=await browser.newContext({viewport:{width:390,height:844},javaScriptEnabled:false});
