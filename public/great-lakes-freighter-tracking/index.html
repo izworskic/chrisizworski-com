@@ -51,7 +51,7 @@
       "applicationCategory": "TravelApplication",
       "operatingSystem": "Any web browser",
       "isAccessibleForFree": true,
-      "dateModified": "2026-11-09",
+      "dateModified": "2026-11-11",
       "inLanguage": "en-US",
       "author": {
         "@id": "https://chrisizworski.com/#person"
@@ -144,7 +144,7 @@
 <script defer src="/assets/tool-engagement.js"></script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-<script defer src="/assets/freighter-tracker.js?v=20261103e"></script>
+<script defer src="/assets/freighter-tracker.js?v=20261109a"></script>
 <script defer src="/assets/gazette-latest.js?v=20260920"></script>
 <link rel="stylesheet" href="/assets/detroit-network-teaser.css?v=20260921a">
 <script defer src="/assets/detroit-network-teaser.js?v=20260921a"></script>
@@ -257,7 +257,7 @@
         <div class="ship-story" id="ship-story" hidden></div>
         <p class="ship-inspector-note">AIS is a reported position, not a confirmed arrival. Destination and vessel dimensions may be missing or outdated; never use this map for navigation.</p>
       </section>
-      <section class="vessel-results" aria-labelledby="vessel-list-heading"><h3 id="vessel-list-heading">Find a Great Lakes freighter by name</h3><p>Search the latest available AIS vessel reports by ship name or MMSI, or choose a corridor above. Tap a name to find that ship on the map. Ship shapes show broad reported vessel types, with size based on reported length when available; they are not scale models or direction indicators. Blue means reported movement, amber means little or no movement, and gray means speed unavailable. Only reports less than 30 minutes old appear. A missing ship does not prove empty water.</p><ul id="freighterVessels"><li>Waiting for vessel reports…</li></ul><p id="freighterCredits"></p></section>
+      <section class="vessel-results" aria-labelledby="vessel-list-heading"><h3 id="vessel-list-heading">Find a Great Lakes freighter by name</h3><p>Search the latest available AIS vessel reports by ship name or MMSI, or choose a corridor above. Tap a name to find that ship on the map. Ship shapes show broad reported vessel types, with size based on reported length when available; they are not scale models or direction indicators. Blue means reported movement, amber means little or no movement, and gray means speed unavailable. Only reports less than 30 minutes old appear. A missing ship does not prove empty water.</p><noscript><p>The reports below are a timestamped snapshot. Reload for newer reports. Enable JavaScript to search, select a ship, or use the map.</p></noscript><ul id="freighterVessels"><li>Waiting for vessel reports…</li></ul><p id="freighterCredits"></p></section>
       <div class="tracker-context">
         <div class="corridor-panel">
           <p class="context-label" id="corridorLabel">Current map: All Great Lakes</p>
