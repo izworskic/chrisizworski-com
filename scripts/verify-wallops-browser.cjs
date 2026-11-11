@@ -129,7 +129,7 @@ async function ready(page){
   const stale=await expired.newPage();await routeLeaflet(stale);
   await stale.goto(base+'?launchId=33333333-3333-4333-8333-333333333333',{waitUntil:'domcontentloaded'});
   await ready(stale);
-  assert((await stale.locator('#w-mission-observed').innerText()).includes('NEW selection'),'Expired deep link not disclosed');
+  assert((await stale.locator('#w-mission-observed').innerText()).includes('a different mission is shown'),'Expired deep link not disclosed');
   scenarios.push({scenario:'expired-uuid',status:'disclosed'});
   await expired.close();
   sourceOutage=true;
@@ -138,7 +138,7 @@ async function ready(page){
   await offline.goto(base,{waitUntil:'domcontentloaded'});
   await offline.waitForFunction(()=>document.querySelectorAll('#w-map .w-public-marker').length===3,{timeout:14000});
   assert((await offline.locator('#w-mission-name').innerText()).includes('unavailable'),'Schedule outage unreported');
-  assert((await offline.locator('#w-decision-title').innerText()).includes('SOURCE UNAVAILABLE'),'Stale schedule promoted');
+  assert((await offline.locator('#w-decision-title').innerText()).includes('CALENDAR UNAVAILABLE'),'Stale schedule promoted');
   assert(await offline.locator('.w-place').count()===3,'Map outage lost three public site cards');
   scenarios.push({scenario:'schedule-outage',threeStaticSites:'retained',mission:'unverified'});
   await outage.close();sourceOutage=false;
