@@ -97,12 +97,37 @@ function check(value,message){if(!value)throw Error(message);}
       const desk=page.locator('#ctb-decision .ctb-arrivals');
       check(await desk.count()===1,size.name+': arrival desk missing at stop '+id);
       check((await desk.textContent()).includes('WHERE TO START'),size.name+': arrival desk unlabelled at '+id);
-      check(await desk.locator('.ctb-arrival').count()===expected,
-        size.name+': wrong verified arrival count at '+id);
+      check(await desk.locator('.ctb-arrival').count()===1,
+        size.name+': multiple destination cards compete at '+id);
+      const choices=desk.locator('.ctb-arrival-choice');
+      check(await choices.count()===(expected>1?expected:0),
+        size.name+': arrival choices missing at '+id);
+      check(await desk.locator('.ctb-arrival-map').count()===1,
+        size.name+': only the chosen starting point may have a map action');
+      if(expected>1){
+        check(await choices.first().getAttribute('aria-pressed')==='true',
+          size.name+': initial arrival choice not selected at '+id);
+        const oldMap=await desk.locator('.ctb-arrival-map').getAttribute('href');
+        await choices.last().focus();
+        await page.keyboard.press('Enter');
+        check(await choices.last().getAttribute('aria-pressed')==='true',
+          size.name+': keyboard choice not active at '+id);
+        check(await choices.last().evaluate(node=>document.activeElement===node),
+          size.name+': switching starting point lost keyboard focus at '+id);
+        check(await desk.locator('.ctb-arrival-map').getAttribute('href')!==oldMap,
+          size.name+': option did not change map destination at '+id);
+        check(new URL(page.url()).searchParams.get('ctArrival')==='1',
+          size.name+': active arrival not retained in shared URL');
+        await choices.first().click();
+        check(await desk.locator('.ctb-arrival-map').getAttribute('href')===oldMap,
+          size.name+': A-B-A did not restore original directions at '+id);
+        check(!new URL(page.url()).searchParams.has('ctArrival'),
+          size.name+': reset leaked a stale arrival parameter at '+id);
+      }
       const links=await desk.locator('.ctb-arrival-map').evaluateAll(nodes=>nodes.map(node=>({
         url:node.href,target:node.target,rel:node.rel
       })));
-      check(links.length===expected,size.name+': Google Maps link count wrong at '+id);
+      check(links.length===1,size.name+': selected map link missing at '+id);
       for(const link of links){
         const u=new URL(link.url);
         check(u.hostname==='www.google.com'&&['/maps/search/','/maps/dir/'].includes(u.pathname)&&u.searchParams.get('api')==='1',
@@ -110,12 +135,48 @@ function check(value,message){if(!value)throw Error(message);}
         check(link.target==='_blank'&&link.rel.includes('noopener'),
           size.name+': map link needs safe separate tab at '+id);
       }
-      check(await desk.locator('.ctb-arrival-source').count()===expected,
-        size.name+': arrival claim lacks underlying manager source at '+id);
+      check(await desk.locator('.ctb-arrival-source').count()===1,
+        size.name+': chosen arrival lacks one matching official source at '+id);
       const dimensions=await desk.evaluate(el=>({width:el.getBoundingClientRect().width,document:document.documentElement.scrollWidth,viewport:window.innerWidth}));
       check(dimensions.document<=dimensions.viewport+2,
         size.name+': arrival cards caused horizontal overflow at '+id);
     }
+    await page.locator('#ctb-stop').selectOption('19');
+    await page.locator('#ctb-theme').selectOption('all');
+    await page.locator('#ctb-decision .ctb-arrival-choice').last().click();
+    check((await page.locator('#ctb-decision .ctb-arrival-title').textContent()).includes('Red Rock'),
+      size.name+': selected Red Rock title missing');
+    check((await page.locator('#ctb-decision .ctb-arrival-note').textContent()).includes('2.6 km return'),
+      size.name+': Red Rock shorter lookout scale missing');
+    if([390,1440].includes(size.width)){
+      const screenshotName='arrival-red-rock-'+size.name+'.png';
+      await page.locator('#ctb-decision').screenshot({path:path.join(out,screenshotName)});
+      report.screenshots.push(screenshotName);
+    }
+    const chosenMap=await page.locator('#ctb-decision .ctb-arrival-map').getAttribute('href');
+    await page.locator('#ctb-stop').selectOption('25');
+    check((await page.locator('#ctb-decision .ctb-arrival-title').textContent()).includes('Temperance'),
+      size.name+': stale Red Rock choice leaked to Temperance');
+    check(!new URL(page.url()).searchParams.has('ctArrival'),
+      size.name+': previous stop left a stale arrival query parameter');
+    await page.locator('#ctb-stop').selectOption('19');
+    check(await page.locator('#ctb-decision .ctb-arrival-map').getAttribute('href')===chosenMap,
+      size.name+': returning to Nipigon lost visitor preference');
+    if(size.width===390){
+      const deep=await ctx.newPage();
+      await deep.goto(url+'?ctStop=19&ctArrival=1',{waitUntil:'domcontentloaded'});
+      await deep.waitForFunction(()=>document.querySelector('#ctb-decision .ctb-arrival-choice[aria-pressed="true"]'));
+      check((await deep.locator('#ctb-decision .ctb-arrival-title').textContent()).includes('Red Rock'),
+        size.name+': shared deep link did not restore Red Rock');
+      await deep.close();
+    }
+    await page.locator('#ctb-stop').selectOption('24');
+    await page.locator('#ctb-theme').selectOption('ships');
+    check(await page.locator('#ctb-decision .ctb-arrivals').count()===0,
+      size.name+': ships filter showed waterfall starting points');
+    await page.locator('#ctb-decision .ctb-stage-reset').click();
+    check(await page.locator('#ctb-decision .ctb-arrivals').count()===1,
+      size.name+': unsupported interest recovery lost the correct arrival');
     await page.locator('#ctb-stop').selectOption('27');
     check(await page.locator('#ctb-decision .ctb-arrivals').count()===0,
       size.name+': independent specialist was overwritten by arrival desk');

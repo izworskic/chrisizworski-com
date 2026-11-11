@@ -114,7 +114,8 @@
     ],
     "19": [
       {
-        "label": "Short walk · Nipigon Marina",
+        "label": "Nipigon Marina · shoreline walk",
+        "choiceLabel": "Nipigon Marina · easier shoreline",
         "kind": "search",
         "destination": "Nipigon Marina, Nipigon, Ontario, Canada",
         "note": "Parks Canada directs walkers to park at Nipigon Marina, then walk south across the road bridge to the trailhead. The near-river path is the shorter option.",
@@ -122,10 +123,11 @@
         "sourceLabel": "Parks Canada Nipigon-side trail directions"
       },
       {
-        "label": "Long trail or Lloyd's Lookout · Red Rock",
+        "label": "Red Rock · Lloyd's Lookout or full trail",
+        "choiceLabel": "Red Rock · lookout or full trail",
         "kind": "search",
         "destination": "Third Street, Red Rock, Ontario, Canada",
-        "note": "From Highway 11/17, follow Highway 628 toward Red Rock for about 7 km, then the signed left turn onto Third Street. The map search may locate the street, not the trailhead gate; verify signage and a return ride.",
+        "note": "Parks Canada lists Lloyd's Lookout as a 2.6 km return from Red Rock; the full trail to Nipigon is 10.1 km one way: arrange a return ride or shuttle before setting out. Take Highway 628 about 7 km, then the signed turn to Third Street. The map may resolve the street, not the trailhead gate.",
         "sourceUrl": "https://www.parcs.canada.ca/amnc-nmca/on/super/activ/experiences/randonnees-hiking/nipigon",
         "sourceLabel": "Parks Canada Red Rock trailhead directions"
       }
@@ -143,6 +145,7 @@
     "24": [
       {
         "label": "Cascade River Wayside · falls loop",
+        "choiceLabel": "Short falls walk · highway wayside",
         "kind": "search",
         "destination": "Cascade River Wayside, Highway 61, Lutsen, Minnesota, USA",
         "note": "The falls-side trailhead is at Highway 61 near the river, around milepost 99.9. MnDOT reported wayside parking and crossing construction in 2026. Check current barriers; do not assume either side is open.",
@@ -150,17 +153,19 @@
         "sourceLabel": "MnDOT dated Cascade Wayside construction notice"
       },
       {
-        "label": "Cascade River State Park · park entrance",
+        "label": "Cascade River State Park · park office",
+        "choiceLabel": "Park office · check longer hikes",
         "kind": "address",
         "destination": "3481 West Highway 61, Lutsen, MN 55612, USA",
-        "note": "This is the DNR's published park-office address, not the same entrance as the falls-side wayside. Check the DNR map before choosing a trail and parking area.",
+        "note": "This DNR park-office address is not the falls wayside and not the same entrance. It is not a guaranteed Lookout Mountain trailhead. DNR describes the Lookout hike from a day-use parking area: check the official map or ask staff where to start.",
         "sourceUrl": "https://files.dnr.state.mn.us/maps/state_parks/spk00133.pdf",
         "sourceLabel": "Minnesota DNR park map (2020)"
       }
     ],
     "25": [
       {
-        "label": "Temperance Gorge · Highway 61 northeast-side lot",
+        "label": "Temperance River · Highway 61 northeast-side lot",
+        "choiceLabel": "Gorge and Carlton Peak trails",
         "kind": "search",
         "destination": "Temperance River Gorge Trailhead parking, Highway 61, Schroeder, Minnesota, USA",
         "note": "The DNR starts both the 0.25-mile gorge trail and the Carlton Peak route at the Highway 61 lot on the northeast side of the river. Map search is not a surveyed parking pin: use the DNR diagram and roadside signs.",
@@ -169,6 +174,7 @@
       },
       {
         "label": "Lutsen Mountains · separate resort",
+        "choiceLabel": "Lutsen Mountains resort",
         "kind": "address",
         "destination": "467 Ski Hill Road, Lutsen, MN 55612, USA",
         "note": "The resort's own entrance is up Ski Hill Road, not at Temperance River. Lutsen advises gondola-base and overflow parking as directed by attendants; verify lift service before driving up.",
@@ -188,6 +194,23 @@
     ]
   });
   function officialArrivals(id){return Object.hasOwn(OFFICIAL_ARRIVALS,String(id))?OFFICIAL_ARRIVALS[String(id)]:[];}
+  // An external travel preference must not silently turn into a different kind of outing.
+  const OFFICIAL_INTERESTS=Object.freeze({
+    '2':['parks','water'],'4':['history'],'17':['history'],
+    '19':['parks','water'],'21':['parks','falls'],'24':['parks','falls'],
+    '25':['parks','falls'],'26':['parks','falls']
+  });
+  function guideForInterest(id,theme){
+    const guide=officialStopGuide(id),interest=safeTheme(theme);
+    return guide&&(interest==='all'||OFFICIAL_INTERESTS[String(id)]?.includes(interest))?guide:null;
+  }
+  function chooseArrival(id,index=0){
+    const locations=officialArrivals(id),n=Number(index);
+    if(!locations.length)return null;
+    const chosen=Number.isInteger(n)&&n>=0&&n<locations.length?n:0;
+    return {stopId:String(id),index:chosen,total:locations.length,arrival:locations[chosen],
+      mapUrl:arrivalMapUrl(locations[chosen])};
+  }
   function arrivalMapUrl(entry){
     if(!entry||!['address','search'].includes(entry.kind)||typeof entry.destination!=='string'
       ||entry.destination.length<10||entry.destination.length>180)return '';
@@ -250,6 +273,11 @@
     if(theme!=='all')url.searchParams.set('ctTheme',theme);else url.searchParams.delete('ctTheme');
     const focus=String(context.focusStop||'');
     if(STOPS.has(focus))url.searchParams.set('ctStop',focus);else url.searchParams.delete('ctStop');
+    // The arrival is meaningful only alongside its explicit Circle Tour stop.
+    const options=context.arrivalChoices||{},index=Object.hasOwn(options,focus)?Number(options[focus]):0;
+    const chosen=STOPS.has(focus)?chooseArrival(focus,index):null;
+    if(chosen&&chosen.total>1&&chosen.index>0)url.searchParams.set('ctArrival',String(chosen.index));
+    else url.searchParams.delete('ctArrival');
     return url.href;
   }
 
@@ -293,17 +321,23 @@
     };
   }
 
-  const helpers={rankConnections,roadChecks,buildReturnHref,planNextDecision,safeDate,safeTheme,safeToolUrl,safeRoadUrl,officialStopGuide,officialStops:OFFICIAL_STOPS,officialArrivals,arrivalMapUrl};
+  const helpers={rankConnections,roadChecks,buildReturnHref,planNextDecision,safeDate,safeTheme,safeToolUrl,safeRoadUrl,officialStopGuide,officialStops:OFFICIAL_STOPS,officialArrivals,arrivalMapUrl,chooseArrival,guideForInterest};
   if(typeof module!=='undefined'&&module.exports)module.exports=helpers;
   if(!root?.document)return;
   const document=root.document,host=document.querySelector('[data-circle-tour-bridge]');
   if(!host)return;
   const $=id=>document.getElementById(id);
-  const state={catalog:null,showAll:false,focusStop:'',date:'',theme:'all',region:'all',selectedIds:[]};
+  const state={catalog:null,showAll:false,focusStop:'',date:'',theme:'all',region:'all',selectedIds:[],arrivalChoices:Object.create(null)};
   const params=new URLSearchParams(root.location.search);
   state.focusStop=STOPS.has(params.get('ctStop'))?params.get('ctStop'):'';
   state.date=safeDate(params.get('ctDate'));
   state.theme=safeTheme(params.get('ctTheme'));
+  // Restore an explicitly shared arrival only if it belongs to the shared stop.
+  if(state.focusStop&&/^[1-9]\d*$/.test(params.get('ctArrival')||'')){
+    const requested=Number(params.get('ctArrival'));
+    if(chooseArrival(state.focusStop,requested)?.index===requested)
+      state.arrivalChoices[state.focusStop]=requested;
+  }
   function el(tag,cls,text){
     const n=document.createElement(tag);
     if(cls)n.className=cls;
@@ -449,7 +483,8 @@
         host.append(el('p','ctb-stage-alt',model.alternatives.length+' other approved check'+(model.alternatives.length===1?'':'s')+' for this stop. Open “Other specialist checks” below to compare.'));
       }
     }else{
-      const guide=officialStopGuide(model.stopId);
+      const guide=guideForInterest(model.stopId,model.theme);
+      const otherInterest=!!officialStopGuide(model.stopId)&&!guide;
       if(guide){
         host.append(el('p','ctb-stage-prefix','MAKE THE MOST OF THIS STOP'));
         host.append(el('p','ctb-stage-question',guide.question));
@@ -470,8 +505,8 @@
           options.append(extra);
         }
       }
-      if(model.otherThemesAvailable){
-        const reset=el('button','ctb-stage-reset','See other interests at this stop');
+      if(model.otherThemesAvailable||otherInterest){
+        const reset=el('button','ctb-stage-reset',otherInterest?'See other outings at this stop':'See other interests at this stop');
         reset.type='button';
         reset.addEventListener('click',()=>{state.theme='all';state.showAll=false;remember();render();track('interest-recovered',{stop:model.stopId});});
         options.append(reset);
@@ -485,21 +520,52 @@
           arrivalSection.setAttribute('aria-label','How to reach the starting point');
           arrivalSection.append(
             el('p','ctb-arrivals-label','WHERE TO START'),
-            el('p','ctb-arrivals-intro','Choose the right entrance before you drive. Maps can point to a street or landmark, not necessarily an available parking space.')
+            el('p','ctb-arrivals-intro','Choose a starting point. The map link and source follow your choice. A map search may show a street or landmark, not a guaranteed parking space.')
           );
-          const list=el('div','ctb-arrivals-grid');
-          for(const arrival of locations){
-            const card=el('div','ctb-arrival');
-            card.append(el('h4','ctb-arrival-title',arrival.label),el('p','ctb-arrival-note',arrival.note));
-            const actions=el('div','ctb-arrival-actions');
-            const map=link(arrival.kind==='address'?'Directions to published address':'Find starting area on Google Maps',
-              arrivalMapUrl(arrival),'ctb-link ctb-arrival-map');
-            map.addEventListener('click',()=>track('arrival-map-open',{stop:model.stopId,kind:arrival.kind}));
-            const source=link('Check starting point source',arrival.sourceUrl,'ctb-secondary-link ctb-arrival-source');
-            source.addEventListener('click',()=>track('arrival-source-open',{stop:model.stopId}));
-            actions.append(map,source);card.append(actions);list.append(card);
+          // Only one arrival is actionable at a time; the selector changes both
+          // the map destination and its controlling source, without moving keyboard focus.
+          const selected=el('div','ctb-arrival ctb-arrival-selected');
+          const choices=[];
+          if(locations.length>1){
+            const switcher=el('div','ctb-arrival-choices');
+            switcher.setAttribute('role','group');
+            switcher.setAttribute('aria-label','Choose a starting point for '+name);
+            locations.forEach((arrival,index)=>{
+              const choice=el('button','ctb-arrival-choice',arrival.choiceLabel||arrival.label);
+              choice.type='button';
+              choice.addEventListener('click',()=>{
+                state.arrivalChoices[model.stopId]=index;
+                state.focusStop=model.stopId;
+                remember();
+                showArrival(index);
+                track('arrival-choice',{stop:model.stopId,index});
+              });
+              choices.push(choice);switcher.append(choice);
+            });
+            arrivalSection.append(switcher);
           }
-          arrivalSection.append(list);host.append(arrivalSection);
+          const showArrival=index=>{
+            const chosen=chooseArrival(model.stopId,index);
+            if(!chosen)return;
+            for(const [i,control] of choices.entries())
+              control.setAttribute('aria-pressed',String(i===chosen.index));
+            selected.replaceChildren(
+              el('h4','ctb-arrival-title',chosen.arrival.label),
+              el('p','ctb-arrival-note',chosen.arrival.note)
+            );
+            const actions=el('div','ctb-arrival-actions');
+            const map=link(chosen.arrival.kind==='address'?'Directions to published address':'Find starting area on Google Maps',
+              chosen.mapUrl,'ctb-link ctb-arrival-map');
+            map.addEventListener('click',()=>track('arrival-map-open',{stop:model.stopId,kind:chosen.arrival.kind,index:chosen.index}));
+            const source=link('Check starting point source',chosen.arrival.sourceUrl,'ctb-secondary-link ctb-arrival-source');
+            source.addEventListener('click',()=>track('arrival-source-open',{stop:model.stopId,index:chosen.index}));
+            actions.append(map,source);selected.append(actions);
+          };
+          selected.setAttribute('aria-live','polite');
+          selected.setAttribute('aria-atomic','true');
+          arrivalSection.append(selected);
+          showArrival(state.arrivalChoices[model.stopId]||0);
+          host.append(arrivalSection);
         }
       }
     }
