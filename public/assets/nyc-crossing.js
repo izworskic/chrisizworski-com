@@ -52,7 +52,7 @@
     const events=eventItems.slice(0,2).map(e=>'<div class="detail">'+escapeHtml(e.category||'Incident')+': '+escapeHtml(e.description||e.code)+'</div>').join('');
     const signs=signItems.slice(0,1).map(s=>'<div class="detail vms">VMS: '+escapeHtml(s.message)+'</div>').join('');
     const labels=[];
-    if(eventItems.length)labels.push(d.incidentCount+' mapped 511NY incident'+(d.incidentCount===1?'':'s'));
+    if(eventItems.length)labels.push(d.incidentCount+' nearby 511NY road advisor'+(d.incidentCount===1?'y':'ies'));
     if(signItems.length)labels.push(d.signCount+' active highway sign'+(d.signCount===1?'':'s'));
     return '<div class="disruption"><strong>'+labels.join(' · ')+'</strong>'+events+signs+'</div>';
   }
@@ -176,7 +176,7 @@
       (liveCount
         ? 'Official live measurements are used where available, with fixed Mapbox traffic probes filling selected source gaps. Segment lengths differ, so the tool will not falsely rank unlike crossing and approach times as a door-to-door fastest route.'
         : 'Official live measurements are unavailable right now. Toll and congestion-charge comparisons remain available.')+
-      '</p><p class="muted">'+incidentStamp(data.ny511)+'</p><p class="muted">Verified, current 511NY advisories may inform comparisons; they never replace live travel times or posted closure instructions.</p><p class="muted">Lowest road charge among eligible listed crossings: '+
+      '</p><p class="muted">'+incidentStamp(data.ny511)+'</p><p class="muted">511NY reports may affect a nearby approach rather than the bridge itself. Always check posted signs and the official road map.</p><p class="muted">Lowest road charge among eligible listed crossings: '+
       (data.lowestToll?data.lowestToll.name+' at '+money(data.lowestToll.cost.total):'not available')+'.</p>';
 
     results.innerHTML=data.routes.map(r=>{
