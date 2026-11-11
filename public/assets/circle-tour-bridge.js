@@ -157,7 +157,7 @@
         "choiceLabel": "Park office · check longer hikes",
         "kind": "address",
         "destination": "3481 West Highway 61, Lutsen, MN 55612, USA",
-        "note": "This DNR park-office address is not the falls wayside. It is not a guaranteed Lookout Mountain trailhead. DNR describes the Lookout hike from a day-use parking area: check the official map or ask staff where to start.",
+        "note": "This DNR park-office address is not the falls wayside and not the same entrance. It is not a guaranteed Lookout Mountain trailhead. DNR describes the Lookout hike from a day-use parking area: check the official map or ask staff where to start.",
         "sourceUrl": "https://files.dnr.state.mn.us/maps/state_parks/spk00133.pdf",
         "sourceLabel": "Minnesota DNR park map (2020)"
       }
