@@ -127,7 +127,7 @@
         "choiceLabel": "Red Rock · lookout or full trail",
         "kind": "search",
         "destination": "Third Street, Red Rock, Ontario, Canada",
-        "note": "Parks Canada lists Lloyd's Lookout as a 2.6 km return from Red Rock; the full trail to Nipigon is 10.1 km one way and needs a return plan. Take Highway 628 about 7 km, then the signed turn to Third Street. The map may resolve the street, not the trailhead gate.",
+        "note": "Parks Canada lists Lloyd's Lookout as a 2.6 km return from Red Rock; the full trail to Nipigon is 10.1 km one way: arrange a return ride or shuttle before setting out. Take Highway 628 about 7 km, then the signed turn to Third Street. The map may resolve the street, not the trailhead gate.",
         "sourceUrl": "https://www.parcs.canada.ca/amnc-nmca/on/super/activ/experiences/randonnees-hiking/nipigon",
         "sourceLabel": "Parks Canada Red Rock trailhead directions"
       }
@@ -157,7 +157,7 @@
         "choiceLabel": "Park office · check longer hikes",
         "kind": "address",
         "destination": "3481 West Highway 61, Lutsen, MN 55612, USA",
-        "note": "This is the DNR's park-office address, not the falls wayside or a guaranteed Lookout Mountain trailhead. DNR describes the Lookout hike from a day-use parking area: check the official map or ask staff where to start.",
+        "note": "This DNR park-office address is not the falls wayside. It is not a guaranteed Lookout Mountain trailhead. DNR describes the Lookout hike from a day-use parking area: check the official map or ask staff where to start.",
         "sourceUrl": "https://files.dnr.state.mn.us/maps/state_parks/spk00133.pdf",
         "sourceLabel": "Minnesota DNR park map (2020)"
       }

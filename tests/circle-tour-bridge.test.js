@@ -297,7 +297,9 @@ test('North Shore unserved stops distinguish source-verified hikes, resort opera
  const bridge=readFileSync(path.join(root,'public/assets/circle-tour-bridge.js'),'utf8');
  assert.equal((original.match(/class="stop-card"/g)||[]).length,31);
  assert.match(bridge,/if\(model\.kind==='next-check'\)/);
- assert.match(bridge,/const guide=officialStopGuide\(model\.stopId\)/);
+ assert.match(bridge,/const guide=guideForInterest\(model\.stopId,model\.theme\)/);
+ assert.equal(ui.guideForInterest('24','ships'),null,'ships interest cannot promote a park source');
+ assert.ok(ui.guideForInterest('24','falls'),'original park choice remains reachable');
  assert.match(bridge,/official-stop-source-open/);
 });
 
