@@ -39,7 +39,7 @@ test('current nested TMDD CARS Detail locations, geometry and full-report text m
  const r=normalizeEvent(nested,Date.parse('2026-11-10T09:30:00Z'));
  assert.equal(r.crossingId,'queens-midtown');
  assert.equal(r.description,'Right lane blocked');
- assert.equal(r.updatedAt,'2026-11-10T09:03:00Z');
+ assert.equal(r.updatedAt,'2026-11-10T09:03:00.000Z');
  assert.equal(r.penaltyPoints,7);
  assert.equal(normalizeEvent(nested,Date.parse('2026-11-10T11:01:00Z')),null);
  const geo={...nested,details:[{locations:[]}],geometry:{type:'Point',coordinates:[-73.963,40.744]},routeId:'I-495'};
