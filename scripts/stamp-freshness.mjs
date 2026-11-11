@@ -130,6 +130,7 @@ const SITEMAPS = [
   "sitemap-manistee.xml",
   "sitemap-winter.xml",
   "sitemap-breakout-live.xml",
+  "sitemap-everyday-tools.xml",
   // Discover every root page sitemap so new specialist maps cannot escape this check.
   // Images and sitemap indexes are not page-date ledgers. Remote/delegated pages
   // have no dateByRoute entry here and remain their owning repository's responsibility.

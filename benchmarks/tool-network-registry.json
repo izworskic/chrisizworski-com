@@ -4934,9 +4934,65 @@
         "status": "unknown",
         "note": "Regional postrelease search demand and actual cross-tool conversion not established by the November 5 national GSC export."
       }
+    },
+    {
+      "id": "everyday-tools",
+      "name": "Everyday Calculators & Reference Tools",
+      "canonical": "https://chrisizworski.com/everyday-tools/",
+      "aliases": [
+        "https://chrisizworski.com/everyday-tools"
+      ],
+      "kind": "decision-engine",
+      "cluster": "planning",
+      "primaryIntent": "Everyday calculators for BMI and TDEE, air fryer cooking times, ingredient conversions, work shift hours, AP and final exam grades, Unicode fonts, and 5-letter word solvers",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "national"
+      ],
+      "personas": [
+        "everyday-planner",
+        "home-cook",
+        "student"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "new-canonical",
+        "intentSeparation": "Dedicated everyday consumer calculators and reference lookups across fitness, kitchen, time, academic grades, Unicode text, and word games; strictly non-outdoor and non-financial."
+      },
+      "searchEvidence": {
+        "status": "new-no-GSC",
+        "note": "Initial static export of 93 calculators and programmatic lookup pages under /everyday-tools/ on Nov 11, 2026; no GSC baseline yet."
+      },
+      "measurement": {
+        "search": "GSC Web URL/query performance over 7 and 28 days",
+        "product": "GA4 page_view and AdSense Auto Ads RPM across 6 calculator verticals",
+        "decisionWindowDays": 28,
+        "privacy": "All calculations run 100% client-side in the browser with no user data stored"
+      }
     }
   ],
   "relationships": [
+    {
+      "from": "everyday-tools",
+      "to": "living-garden",
+      "type": "sibling-discovery",
+      "strength": "optional",
+      "surface": "tools-catalog",
+      "reason": "Kitchen and home utility planners can explore year-round raised-bed and harvest planning."
+    },
     {
       "from": "winter-layup",
       "to": "ship-tracker",
