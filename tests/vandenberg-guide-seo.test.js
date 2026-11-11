@@ -27,7 +27,7 @@ test('the guide publishes exactly one, searchable, distinct canonical URL',()=>{
   assert.doesNotMatch(page,/<meta http-equiv="refresh"/i);
   assert.doesNotMatch(page,/rel="canonical" href="https:\/\/chrisizworski\.com\/national-tools\/rocket-launch-live\//);
   assert.ok(page.indexOf('<h1')>0);
-  assert.match(page,/Where to watch a <em>Vandenberg rocket launch<\/em>/);
+  assert.match(page,/Watch a <em>Vandenberg rocket launch<\/em>/);
 });
 
 test('core answers, all six venues and restrictions are published in HTML with JS disabled',()=>{
