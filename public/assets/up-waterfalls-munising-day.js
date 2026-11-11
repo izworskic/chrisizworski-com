@@ -52,8 +52,9 @@
     button.addEventListener('click', () => {
       const selected = [...cards.entries()].filter(([,card]) => card.querySelector('.save')?.getAttribute('aria-pressed') === 'true').map(([id]) => id);
       const assessment = assessPreset(button.dataset.munisingPreset, cards, selected, dayInput?.value || '');
-      if (!assessment.ok) { status.textContent = assessment.message; status.focus(); return; }
+      if (!assessment.ok) { window.UPWaterfallMetrics?.plan(button.dataset.munisingPreset,'blocked',0); status.textContent = assessment.message; status.focus(); return; }
       for (const id of assessment.missing) cards.get(id).querySelector('.save').click();
+      window.UPWaterfallMetrics?.plan(button.dataset.munisingPreset,assessment.missing.length?'added':'already_saved',assessment.missing.length);
       const sheet = document.getElementById('upfall-day-sheet');
       const reveal = document.getElementById('open-day-sheet');
       if (sheet?.hidden && reveal) reveal.click();
