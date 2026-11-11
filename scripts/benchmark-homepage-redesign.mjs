@@ -251,7 +251,7 @@ const combinedCss = html + '\n' + css;
 scoreItem('V_entry', 6, combinedCss.includes('Fraunces') && combinedCss.includes('#f5f4ed') && combinedCss.includes('1260px'), 'Cohesive Publication House aesthetic (1260px grid, #f5f4ed warm paper, Fraunces + DM Sans)');
 const primaryNavMatch = html.match(/<nav[^>]*aria-label="Primary[^"]*"[^>]*>([\s\S]*?)<\/nav>/i);
 const primaryNavLinks = primaryNavMatch ? (primaryNavMatch[1].match(/<a\b/gi) || []).length : 99;
-scoreItem('V_entry', 6, primaryNavLinks >= 5 && primaryNavLinks <= 8 && html.includes('aria-label="Verified entity and press dossier"'), `Two-Tier Masthead Navigation (Primary reader nav has ${primaryNavLinks} focused items + Secondary entity dossier strip)`);
+scoreItem('V_entry', 6, primaryNavLinks >= 5 && primaryNavLinks <= 7 && html.includes('aria-label="Verified entity and press dossier"'), `Two-Tier Masthead Navigation (Primary reader nav has ${primaryNavLinks} focused items + Secondary entity dossier strip)`);
 scoreItem('V_entry', 8, html.includes('id="living-atlas-map"') && html.includes('/assets/leaflet-1.9.4.js') && js.includes('ATLAS_PINS') && (html.match(/data-atlas-region=/g) || []).length >= 6, 'Interactive Leaflet + CARTO/OSM "Living Atlas" map with 14 GPS stations & 6 clickable corridors above the fold');
 
 // Dimension 4: V_media (15 pts) — Interactive Storytelling, Gazette Wire & Verified Photography
@@ -266,7 +266,7 @@ scoreItem('V_perf', 3, combinedCss.includes('prefers-reduced-motion: reduce') &&
 scoreItem('V_perf', 3, html.includes('class="hm-skip"') && html.includes('aria-live="polite"'), 'Skip-to-main link + ARIA live region for interactive filter announcements');
 
 const rawScore = items.reduce((sum, item) => sum + item.earned, 0);
-const navOverloadPenalty = primaryNavLinks > 8 ? Math.min(14, (primaryNavLinks - 7) * 2) : 0;
+const navOverloadPenalty = primaryNavLinks > 7 ? Math.min(14, (primaryNavLinks - 6) * 2) : 0;
 const hardLossPenalty = lossViolations.length * 25;
 const netScore = Math.max(0, rawScore - navOverloadPenalty - hardLossPenalty);
 

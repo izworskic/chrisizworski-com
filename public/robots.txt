@@ -27,4 +27,3 @@ Sitemap: https://chrisizworski.com/fall-color/destinations-sitemap.xml
 Sitemap: https://chrisizworski.com/sitemap-index.xml
 Sitemap: https://chrisizworski.com/national-tools/dark-sky/sitemap.xml
 Sitemap: https://chrisizworski.com/sitemap-up-waterfalls.xml
-Sitemap: https://chrisizworski.com/sitemap-everyday-tools.xml
