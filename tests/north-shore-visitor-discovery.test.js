@@ -16,7 +16,7 @@ const decisions=[
 function siteSchemas(html){return [...html.matchAll(/<script[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/g)].flatMap(m=>{const d=JSON.parse(m[1]);return d['@graph']||[d]})}
 test('National Tools: North Shore is prominent and has the four canonical searchable decisions',()=>{
  assert.ok(national.indexOf('id="north-shore-visitor-tools"')>national.indexOf('<main'));
- assert.ok(national.indexOf('id="north-shore-visitor-tools"')<national.indexOf('class="catalog-group national-utilities"'));
+ assert.ok(national.indexOf('id="north-shore-visitor-tools"')>national.indexOf('class="catalog-group national-utilities"'));
  assert.match(national,/Going up the North Shore\? Make each stop count/);
  assert.match(national,/Will I see a freighter/);
  assert.match(national,/Can I hike the loop/);

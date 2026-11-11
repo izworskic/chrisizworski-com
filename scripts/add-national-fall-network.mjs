@@ -72,7 +72,7 @@ if (regions.length !== 15 || destinations.length !== 4 || new Set(regions.map(x 
   throw new Error('National fall network: invalid regional catalog');
 }
 let html = fs.readFileSync(file, 'utf8');
-const anchor = '<section class="catalog-group national-utilities" data-catalog-group';
+const anchor = '<section class="regional-collections" data-catalog-group';
 if (html.includes(start) || html.includes(end)) {
   if (!html.includes(start) || !html.includes(end)) throw new Error('National fall network: one marker missing');
   const i = html.indexOf(start);
@@ -103,7 +103,7 @@ const afterFall = list.itemListElement.findIndex(x => x.url === 'https://chrisiz
 list.itemListElement.splice(afterFall < 0 ? list.itemListElement.length : afterFall + 1, 0, hubEntry);
 list.itemListElement.forEach((x, i) => { x.position = i + 1; });
 list.numberOfItems = list.itemListElement.length;
-page.dateModified = '2026-10-09';
+page.dateModified = '2026-11-11';
 const regionsId = 'https://chrisizworski.com/national-tools/#fall-network-regions';
 const regionList = {
   '@type': 'ItemList',
