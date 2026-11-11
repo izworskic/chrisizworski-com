@@ -60,6 +60,7 @@
     "selectedIdField": "model.stopId plus explicit entry index in state.arrivalChoices[stopId]",
     "sourceOfTruth": "Original CircleTourPage selected stop/itinerary plus static source-reviewed officialArrivals catalog; chooseArrival is a pure bounded selector. No live parking data is ingested.",
     "linkedSurfaces": [
+      "answer",
       "stop-answer",
       "native-arrival-buttons",
       "active-arrival-title-and-note",
