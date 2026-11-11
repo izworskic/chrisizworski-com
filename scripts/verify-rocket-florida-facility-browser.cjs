@@ -179,7 +179,7 @@ async function expectName(page,name){
   assert(await staticPage.locator('#florida-launch-facilities a[href^="https://www.nps.gov/"]').count()===1,'No-JS NPS source missing');
   assert(await staticPage.locator('[data-fl-facility]:disabled').count()===2,'No-JS buttons must not claim data');
   assert(await staticPage.locator('#fl-deck-primary-map').isDisabled(),'No-JS plan falsely claims a destination');
-  assert((await staticPage.locator('#fl-deck-beach-copy').innerText()).includes('not a verified opening'),'No-JS NPS qualifier missing');
+  assert((await staticPage.locator('#fl-deck-beach-copy').innerText()).includes('it can close or fill'),'No-JS NPS qualifier missing');
   report.scenarios.push({name:'no-js',officialSources:'present',unsupportedControls:'disabled'});
   await noJs.close();
  }catch(e){report.errors.push(e.stack||String(e))}
