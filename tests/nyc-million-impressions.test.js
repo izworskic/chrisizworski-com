@@ -52,7 +52,7 @@ test('mobile explainer, updated assets and truthful incident outage state',()=>{
  assert.ok(css.includes('.quick-facts{display:grid'));
  assert.ok(css.includes('@media(max-width:760px){.quick-facts{grid-template-columns:minmax(0,1fr)}'));
  assert.ok(html.includes('nyc-crossing.css?v=20261110-foundry1'));
- assert.ok(html.includes('nyc-crossing.js?v=20261110-foundry1'));
+ assert.ok(html.includes('nyc-crossing.js?v=20261110-advisory2'));
  assert.ok(js.includes('current511(info?.eventsUpdatedAt)'));
  assert.ok(js.includes('511NY incident updates are not verified right now'));
  assert.ok(js.includes('official 511NY conditions'));
