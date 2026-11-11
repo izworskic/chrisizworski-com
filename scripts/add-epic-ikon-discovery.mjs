@@ -24,7 +24,7 @@ if(!list.itemListElement.some(x=>x.url===url)){
 list.itemListElement.forEach((x,i)=>{x.position=i+1});
 list.numberOfItems=list.itemListElement.length;
 const page=graph.find(x=>x['@type']==='CollectionPage');
-if(page&&(!page.dateModified||page.dateModified<'2026-10-12'))page.dateModified='2026-10-12';
+if(page&&(!page.dateModified||page.dateModified<'2026-11-11'))page.dateModified='2026-11-11';
 html=html.replace(m[0],'<script type="application/ld+json">'+JSON.stringify(schema)+'</script>');
 html=html.replace(/(<p class="finder-count" id="finder-count" aria-live="polite">)\d+ tools shown(<\/p>)/,'$1'+list.numberOfItems+' tools shown$2');
 const cards=(html.match(/data-search-card/g)||[]);
