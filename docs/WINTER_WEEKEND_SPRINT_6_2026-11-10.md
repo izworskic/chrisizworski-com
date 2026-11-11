@@ -25,3 +25,7 @@ The 50-route `winter-hike-snowshoe-lab` stays research-only/noindex. This sprint
 Protect the canonical URL, schema entity count (12), the four visual doors and blueprint lessons, map/photos, sitemap, site-wide ads, and other tools. Run `node --test tests/winter-weekend-sprint6.test.js`, `npm run verify:all`, emitted-page audit, browser QA, and a production SHA check.
 
 The metric is qualified clicks and useful visitor handoffs, not assumed monetization. Compare post-release complete 7-day and 28-day GSC cohorts with season/event context, and use verified page-specific earnings only if such a source exists.
+
+### Route handoffs
+
+The quick cards reuse each existing Google Maps **base-town search** link and label it explicitly *not winter parking*. For Pictured Rocks alone, NPS publishes the Munising Falls Visitor Center routing address at **1505 Sand Point Road, Munising, MI 49862** (https://www.nps.gov/piro/planyourvisit/directions.htm). A separate map link on Munising's quick card routes to that published point but is labeled as an NPS address needing confirmation, **not** the nearby Sand Point Beach lot or the Munising Snowshoe Trail lot. No other destination is assigned an unverified winter trailhead point.

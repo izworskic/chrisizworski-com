@@ -129,6 +129,14 @@
       a(doc,links,'Full 2-day guide','#'+item.id).addEventListener('click',()=>doc.getElementById('wf-reset')?.click());
       const src=sourceLink(el);
       if(src)a(doc,links,src.label,src.href,true);
+      const baseMap=[...el.querySelectorAll('.wf-links a[href]')].find(link=>{
+        try { const url=new URL(link.href); return url.hostname==='www.google.com'&&url.pathname==='/maps/search/'; }
+        catch(_){ return false; }
+      });
+      if(baseMap)a(doc,links,'View base town (not winter parking)',baseMap.href,true);
+      // NPS-listed address is a real winter-access reference, not a trailhead.
+      if(item.id==='stop-1')a(doc,links,'NPS Munising Falls address (confirm access)',
+        'https://www.google.com/maps/dir/?api=1&destination=1505%20Sand%20Point%20Road%2C%20Munising%2C%20MI%2049862',true);
       a(doc,links,config.title,config.tool);
       if(kind==='xc')a(doc,links,'Nordic snow signals','https://xcski.chrisizworski.com/',true);
       if(kind==='ships')a(doc,links,'Winter layups','/great-lakes-freighter-winter-layup/');

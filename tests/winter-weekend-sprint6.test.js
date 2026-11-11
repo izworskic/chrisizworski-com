@@ -60,6 +60,9 @@ test('crawlable default and input/alert accessibility',()=>{
  assert.ok(html.includes('href="#stop-2"')&&html.includes('href="#stop-8"')&&html.includes('href="#stop-12"'));
  assert.ok(css.includes('.wkd-desk-form[hidden]')&&css.includes('@media(max-width:620px)'));
  assert.ok(js.includes('doc.getElementById(\'wf-reset\')?.click()'));
+ assert.ok(js.includes('View base town (not winter parking)'));
+ assert.ok(js.includes('NPS Munising Falls address (confirm access)'));
+ assert.ok(js.includes('1505%20Sand%20Point%20Road'));
  assert.ok(!js.includes('/michigan-snowshoe-conditions/'));
  assert.ok(!js.includes('/winter-hike-snowshoe-lab/'));
 });
