@@ -210,15 +210,15 @@ const whenReady=page=>page.waitForFunction(id=>
     v.name+' hero mission not bound');
    assert((await page.locator('#rl-mission-name').innerText()).includes('Fixture Florida rocket A'),
     v.name+' original detail drift');
-   assert((await page.locator('#rl-flight-headline').innerText()).includes('not cleared'),
+   assert((await page.locator('#rl-flight-headline').innerText()).includes('Now find your spot'),
     v.name+' false travel GO');
-   assert((await page.locator('#rl-flight-sky').innerText()).includes('not rocket GO'),
+   assert(/forecast|uncertain|subject to change/i.test(await page.locator('#rl-flight-sky').innerText()),
     v.name+' weather described as launch GO');
    assert(await page.locator('#rl-flight-mission-select').isEnabled(),
     v.name+' hero mission picker disabled');
    assert(await page.locator('#rl-flight-locate').isEnabled(),
     v.name+' mapped mission focus disabled');
-   assert((await page.locator('#rl-flight-next-title').innerText()).includes('source-backed spectator option'),
+   assert((await page.locator('#rl-flight-next-title').innerText()).includes('Find a public place to watch'),
     v.name+' Foundry next evidence is not an access check for precise Florida mission');
    assert((await page.locator('#rl-flight-next-link').getAttribute('href'))==='/national-tools/space-coast-launch/?launchId='+A+'&via=rocket-foundry&stage=access',
     v.name+' Foundry source handoff misroutes the selected coast');
@@ -230,17 +230,17 @@ const whenReady=page=>page.waitForFunction(id=>
    events=await metrics();
    assert(events.filter(a=>a.name==='Rocket Mission Selected'&&a.data.surface==='flight_desk').length===1,
      v.name+' hero choice did not emit one committed selection');
-   assert((await page.locator('#rl-flight-headline').innerText()).includes('too uncertain'),
+   assert((await page.locator('#rl-flight-headline').innerText()).includes('still taking shape'),
     v.name+' day-only mission falsely travel-ready');
-   assert((await page.locator('#rl-flight-time').innerText()).includes('time TBD'),
+   assert((await page.locator('#rl-flight-time').innerText()).includes('liftoff time to come'),
     v.name+' date-only misused as a launch hour');
-   assert((await page.locator('#rl-flight-next-title').innerText()).includes('Confirm an exact launch hour'),
+   assert((await page.locator('#rl-flight-next-title').innerText()).includes('Wait for a more precise liftoff time'),
     v.name+' date-only next action did not change to a timing verification');
    assert((await page.locator('#rl-flight-next-link').getAttribute('href'))===REGIONS.find(x=>x.id==='florida').authority,
     v.name+' a tentative launch target must hand off to the official range authority');
    assert((await page.locator('#rl-launch-select').inputValue())===B,
     v.name+' original mission picker drift');
-   assert((await page.locator('#rl-flight-origin').innerText()).includes('Approximate'),
+   assert((await page.locator('#rl-flight-origin').innerText()).includes('General launch area'),
     v.name+' missing pad GPS described as exact');
    assert(new URL(await page.url()).searchParams.get('launchId')===B,
     v.name+' deep-link selection drift');
@@ -254,7 +254,7 @@ const whenReady=page=>page.waitForFunction(id=>
      v.name+' reverse native choice was not attributed correctly');
    assert((await page.locator('#rl-flight-mission-select').inputValue())===A,
     v.name+' reversing native picker did not return A');
-   assert((await page.locator('#rl-flight-next-title').innerText()).includes('source-backed spectator option'),
+   assert((await page.locator('#rl-flight-next-title').innerText()).includes('Find a public place to watch'),
     v.name+' next-check answer did not reverse from B to A');
    await page.locator('#rl-flight-locate').click();
    await page.waitForFunction(()=>window.vaq?.some(a=>a[0]==='event'&&a[1]?.name==='Rocket Map Engaged'));
@@ -399,7 +399,7 @@ const whenReady=page=>page.waitForFunction(id=>
   await page.waitForFunction(mismatch=>{
     const text=document.querySelector('#rl-access-answer')?.textContent||'';
     return mismatch?text.includes('another mission, so no access status was adopted'):
-      text.includes('Florida source checked.');
+      text.includes('Florida notices checked.');
   },scenario.mismatch,{timeout:18000});
   const summary=await page.locator('#rl-access-summary').innerText();
   assert(summary.includes('Titusville')&&summary.includes('Space View Park'),
@@ -411,7 +411,7 @@ const whenReady=page=>page.waitForFunction(id=>
   if(scenario.mismatch){
    assert(!(await page.locator('#rl-access-grade').innerText()).includes('NPS restriction'),
     'mission-mismatched beach closure leaked from another launch');
-   assert((await page.locator('#rl-access-answer').innerText()).includes('not verified'),
+   assert((await page.locator('#rl-access-answer').innerText()).includes('another mission, so no access status was adopted'),
     'wrong mission must remain unresolved');
   }else if(scenario.closed){
    assert((await page.locator('#rl-access-grade').innerText()).includes('NPS restriction'),
@@ -419,7 +419,7 @@ const whenReady=page=>page.waitForFunction(id=>
    assert((await page.locator('#rl-sites .rl-site-card[data-state="closed"]').count())>=1,
     'closed Playalinda lot group was omitted');
   }else{
-   assert((await page.locator('#rl-access-grade').innerText()).includes('entry unverified'),
+   assert((await page.locator('#rl-access-grade').innerText()).includes('check access'),
     'source-checked park reported as open without mission confirmation');
   }
   const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
@@ -573,7 +573,7 @@ const whenReady=page=>page.waitForFunction(id=>
       for(const name of ['NASA Wallops Visitor Center','Robert N. Reed','Curtis Merritt Harbor']){
         assert(quick.includes(name),v.name+' is missing the public place '+name);
       }
-      assert(quick.includes('NASA must announce'),v.name+' falsely implies visitor-center admission');
+      assert(quick.includes('NASA opens this viewing lawn only for certain launches'),v.name+' falsely implies visitor-center admission');
       const mapLinks=await page.locator('#rl-access-quick a.rl-access-map').evaluateAll(
         nodes=>nodes.map(a=>a.href));
       assert(mapLinks.length===3,v.name+' did not offer three public Google Maps places');
@@ -619,16 +619,16 @@ const whenReady=page=>page.waitForFunction(id=>
   await error.goto(base,{waitUntil:'domcontentloaded'});
   await error.waitForFunction(()=>document.querySelector('#rl-coast-map')?.dataset.outline==='ready',{timeout:15000});
   assert((await error.locator('#rl-coast-map').getAttribute('data-map-state'))==='ready','Source outage removed reference atlas');
-  assert((await error.locator('#rl-atlas-status').innerText()).includes('Launch schedule unavailable'),'Atlas still implied live rockets');
+  assert((await error.locator('#rl-atlas-status').innerText()).includes('launch calendar isn’t loading'),'Atlas still implied live rockets');
   assert(await error.locator('#rl-coast-map .leaflet-rocket-reference-land-pane path').count()>0,'Both tile providers blocked without coastline');
   await error.waitForFunction(()=>document.querySelector('#rl-coast-map')?.dataset.tiles==='reference-only',{timeout:12000});
-  assert((await error.locator('#rl-atlas-status').innerText()).includes('Natural Earth coastlines shown'),'No tile-failure explanation');
+  assert((await error.locator('#rl-atlas-status').innerText()).includes('coastlines are shown instead'),'No tile-failure explanation');
   await error.waitForFunction(()=>document.querySelector('#rl-flight-headline')?.textContent.includes('unavailable'));
   assert(await error.locator('#rl-flight-locate').isDisabled(),'Source outage retained stale rocket focus');
-  assert((await error.locator('#rl-flight-next-title').innerText()).includes('schedule cannot establish'),
+  assert((await error.locator('#rl-flight-next-title').innerText()).includes('confirm the next flight yet'),
     'Source outage claimed an available next mission or viewing clearance');
   assert(await error.locator('#rl-flight-mission-select').isDisabled(),'Source outage retained launch menu');
-  assert((await error.locator('#rl-front-next-title').innerText()).includes('Schedule unavailable'),
+  assert((await error.locator('#rl-front-next-title').innerText()).includes('Launch calendar unavailable'),
    'Source outage retained old national next-launch claim');
   assert(await error.locator('#rl-front-feature-action').isDisabled(),
    'Source outage retained an active launch planner link');
@@ -641,7 +641,7 @@ const whenReady=page=>page.waitForFunction(id=>
   const noCtx=await browser.newContext({javaScriptEnabled:false,viewport:{width:390,height:844}});
   const no=await noCtx.newPage();
   await no.goto(base,{waitUntil:'domcontentloaded'});
-  assert((await no.locator('#rl-flight-source').innerText()).includes('Source status is unavailable'),
+  assert((await no.locator('#rl-flight-source').innerText()).includes('Checking the launch calendar'),
    'No-JS HTML implies current rocket status');
   assert((await no.locator('.rl-flight-noscript a').count())===6,
    'No-JS lost the six region guides');

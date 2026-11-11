@@ -27,7 +27,7 @@ test('Kodiak specialty reuses national location 25 and single shared mission col
  assert.match(app,/region:'alaska'/);
  assert.doesNotMatch(app,/ll\.thespacedevs\.com|launches\/upcoming|\/api\/space-coast-launch/);
  assert.match(nationalApp,/url\.startsWith\('\/kodiak-rocket-launch-viewing\/'\)\?'alaska'/);
- assert.match(nationalApp,/Kodiak range access desk · same mission/);
+ assert.match(nationalApp,/Kodiak launch access guide/);
 });
 test('public park geography is NOT launch viewing permission or a navigable range entrance',()=>{
  assert.equal(atlas.schemaVersion,1);
@@ -104,7 +104,7 @@ test('SEO and discovery point to one current canonical with bidirectional same-I
  assert.match(index,/\/national-tools\/rocket-launch-live\/\?region=alaska/);
  assert.match(app,/launchId=/);
  assert.match(hub,/id="rl-nav-kodiak" href="\/kodiak-rocket-launch-viewing\/"/);
- assert.match(hub,/app\.js\?v=20261110-official-links-v1/);
+ assert.match(hub,/app\.js\?v=20261110-voice-v1/);
  assert.match(guides,/data-field-guide="kodiak-rocket-access"/);
  assert.match(guides,/Beyond the Great Lakes <span>5 Guides/);
  assert.ok((guides.match(/data-field-guide="kodiak-rocket-access"/g)||[]).length===1);

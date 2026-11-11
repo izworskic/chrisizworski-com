@@ -1,7 +1,7 @@
 'use strict';
 /* A visitor-facing projection of the existing national and Florida engines.
    This layer makes no independent access, weather, parking or launch claims.
-   Never import a different mission's forecast, park alert or KSC ticket. */
+   Never import a different mission’s forecast, park alert or KSC ticket. */
 (function(root,factory){
   const api=factory();
   if(typeof module==='object'&&module.exports)module.exports=api;
@@ -45,13 +45,13 @@
       const state=current?.level==='closed'||current?.level==='ineligible'?'closed':
         current?.level==='candidate'?'candidate':'verify';
       const reason=current?.reason||s.reason||
-        'Published viewing location; launch-day access is not confirmed.';
+        'A public place to consider; check its hours and launch-day rules.';
       return {
         id:key,name:s.name,area:current?.area||'Florida Space Coast',
-        role:key===chosen[0]?'Starting point':key===chosen[1]?'Public alternative':
-          key.startsWith('playalinda')?'Conditional NPS beach':
-          key==='ksc-visitor'?'Ticketed visitor venue':'Additional public viewing area',
-        label:current?.label||s.label||'Launch-day access unconfirmed',
+        role:key===chosen[0]?'Good place to start':key===chosen[1]?'Another viewing option':
+          key.startsWith('playalinda')?'Beach with launch-day restrictions':
+          key==='ksc-visitor'?'Ticketed viewing area':'Another public viewing area',
+        label:current?.label||s.label||'Check if open for this launch',
         state,reason,source:isOfficial(current?.source)?current.source:
           isOfficial(s.source)?s.source:null,
         address:nonEmpty(current?.address)||nonEmpty(s.address),
@@ -62,10 +62,10 @@
     const chosenCards=chosen.map(k=>cards.find(s=>s.id===k)).filter(Boolean);
     const named=chosenCards.map(s=>s.name).join(' and ');
     let answer=padKind==='cape'?
-      'Cape Canaveral mission: start with public viewing locations near Port Canaveral.':
+      'For Cape Canaveral launches, start with public waterfront spots near Port Canaveral.':
       padKind==='kennedy'?
-      'Kennedy mission: start with public waterfront viewing in Titusville.':
-      'Florida pad not established: compare published public shoreline locations before choosing a coast.';
+      'For Kennedy launches, the Titusville waterfront is a good place to start looking.':
+      'The launch pad isn’t confirmed yet. Compare public viewing spots on both sides of the Space Coast.';
     if(named)answer+=' '+named+(chosenCards.length>1?' are':' is')+' a published option'+(chosenCards.length>1?'s':'')+', not confirmed launch-day entry.';
     const beach=match?deck.playalinda:null;
     const npsChecked=match&&regional.accessSource?.verified===true&&beach?.npsVerified===true;
@@ -76,14 +76,14 @@
       'NPS has reported a restriction affecting the referenced Playalinda viewing area. Do not use it without a new official opening notice.':
       npsChecked?
       'NPS alerts were checked for Playalinda, but no launch-specific gate opening has been certified. The park can fill or close for NASA operations.':
-      'Playalinda opening is not verified for this mission; the NPS can close lots and inbound roads for launch security.';
+      'Playalinda may close for a launch, including parking lots and the entrance road. Check the National Park Service before driving.';
     note+=' '+(kscMatched?
       'KSC lists a mission-linked viewing event. Tickets, venue admission and availability still require confirmation.':
       'KSC viewing requires an exact-mission announcement; normal visitor admission is not a launch-viewing ticket.');
     if(regional&&!match)note+=' The Florida detail response was stale, missing or for another mission, so no access status was adopted.';
     const status=npsClosed?'NPS restriction reported':
-      match?'Viewing candidates checked · entry unverified':
-      'Published viewing locations · live entry unknown';
+      match?'Public viewing spots found · check access':
+      'Known viewing spots · opening not confirmed';
     return {
       missionId:id,matched:Boolean(match),padKind,chosen:chosenCards,cards,
       status,state:npsClosed?'closed':'unknown',answer,note,
@@ -91,7 +91,7 @@
       npsClosed,kscMatched,
       kscUrl:kscMatched?regional.kscViewing.sourceUrl:null,
       detailUrl:'/national-tools/space-coast-launch/?launchId='+encodeURIComponent(id),
-      next:'Choose a public viewing location, then confirm its launch-day restrictions or ticket terms before departure.'
+      next:'Choose a public place to watch, then check its hours, parking and any launch-specific ticket or closure rules.'
     };
   }
   return Object.freeze({assess});

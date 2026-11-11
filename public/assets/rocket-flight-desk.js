@@ -28,22 +28,22 @@
   };
   function target(m,zone) {
     const date=asDate(m?.net);
-    if(!date)return 'Launch target not published';
+    if(!date)return 'Launch time not announced yet';
     const p=m.netPrecision;
-    if(p==='year')return new Intl.DateTimeFormat('en-US',{year:'numeric',timeZone:'UTC'}).format(date)+' · year only';
-    if(p==='month')return new Intl.DateTimeFormat('en-US',{month:'long',year:'numeric',timeZone:'UTC'}).format(date)+' · month only';
+    if(p==='year')return new Intl.DateTimeFormat('en-US',{year:'numeric',timeZone:'UTC'}).format(date)+' · year announced, date to come';
+    if(p==='month')return new Intl.DateTimeFormat('en-US',{month:'long',year:'numeric',timeZone:'UTC'}).format(date)+' · date still to come';
     const opts={timeZone:TIMED.has(p)?zone||'UTC':'UTC',month:'short',day:'numeric',year:'numeric'};
     if(TIMED.has(p)){opts.hour='numeric';opts.minute='2-digit';opts.timeZoneName='short';}
     const label=new Intl.DateTimeFormat('en-US',opts).format(date);
-    return label+(TIMED.has(p)?(p==='hour'?' · hour approximate':' · listed target, not launch GO'):' · time TBD');
+    return label+(TIMED.has(p)?(p==='hour'?' · hour approximate':' · launch time may change'):' · liftoff time to come');
   }
   function age(iso) {
     const when=asDate(iso);
     return when?new Intl.DateTimeFormat('en-US',{dateStyle:'medium',timeStyle:'short'}).format(when):'Not available';
   }
   // Never promote weather from another launch hour or an aged NWS grid.
-  // The server's existing NWS adapter matches each hourly interval to the
-  // selected NET; recheck that contract when deciding the visitor's next step.
+  // The server’s existing NWS adapter matches each hourly interval to the
+  // selected NET; recheck that contract when deciding the visitor’s next step.
   function usableSkySamples(data) {
     const selected=data?.selectedLaunch;
     const t=Date.parse(selected?.net||'');
@@ -92,62 +92,62 @@
     const hasUsefulTime=Boolean(mission&&PRECISE.has(precision)&&asDate(mission.net));
     let status,headline,note;
     if(feedUnavailable){
-      status='unavailable';headline='Regional launch feed unavailable';
-      note='The schedule does not establish whether range operations are taking place. Consult the official range.';
+      status='unavailable';headline='This coast’s launch calendar is unavailable';
+      note='We can’t check this coast’s schedule right now. The range may still have launches planned; check its official updates.';
     }else if(!mission){
-      status='unknown';headline='No scheduled mission in this bounded feed';
-      note='An empty public schedule is not proof that the range is inactive or a launch was cancelled.';
+      status='unknown';headline='No upcoming launch listed for this coast';
+      note='Smaller research flights and military launches don’t always appear on the public calendar.';
     }else if(snapshotStale){
-      status='stale';headline='Schedule check overdue';
-      note='This target may have changed. Recheck an official operator or range notice before making plans.';
+      status='stale';headline='This launch time may have changed';
+      note='The calendar hasn’t been refreshed recently. Check the operator’s latest launch announcement before you go.';
     }else if(sourceUnknown){
-      status='stale';headline='Schedule observation not verified';
-      note='The latest source age cannot be established. Confirm the current official mission target before a trip.';
+      status='stale';headline='We can’t confirm the latest launch time';
+      note='The calendar update time isn’t available. Check the launch operator before making plans.';
     }else if(hold){
-      status='hold';headline='Launch held or scrubbed';
-      note='Do not travel based on the previous target. Await a new official attempt window.';
+      status='hold';headline='Launch on hold or scrubbed';
+      note='The last countdown is no longer a reliable time to show up. Watch for a new launch attempt.';
     }else if(closed){
-      status='hold';headline='Beach closure reported by the official city source';
-      note='Boca Chica access is not confirmed for this launch. Read the dated city notice and find a legal alternative.';
+      status='hold';headline='Starbase reports a beach closure';
+      note='Boca Chica may be closed to spectators. Check the city’s dated notice and choose a legal public spot across the water.';
     }else if(uncertainAccess){
-      status='access';headline='A mission is listed; public launch viewing is not verified';
-      note='This is a restricted range. A rocket pin is not a route, permit or advertised spectator area.';
+      status='access';headline='A launch is listed, but public viewing is uncertain';
+      note='These ranges have restricted areas. The launch pad on a map isn’t a place you can drive to.';
     }else if(!hasUsefulTime){
-      status='timing';headline='The launch time is too uncertain for a travel plan';
-      note='A date-only, month-only or approximate-hour entry is not an arrival window.';
+      status='timing';headline='The launch time is still taking shape';
+      note='The calendar may only show a day or month. Wait for a more precise target before planning when to arrive.';
     }else{
-      status='review';headline='Target published; the viewing trip is not cleared';
-      note='Confirm official access, the latest operator target and the spectator sky before traveling.';
+      status='review';headline='The launch is on the calendar. Now find your spot.';
+      note='Find a public place with a good view, check its official access rules and hours, then keep an eye on the countdown and weather.';
     }
     const inRange=Number.isFinite(mission?.lat)&&Number.isFinite(mission?.lon)&&
       Boolean(root.RocketMapPins?.inRegion?.(region,mission.lat,mission.lon));
     const origin=mission?(inRange?
-      (mission.pad||'Published launch pad')+' · source-listed pad coordinate':
-      'Approximate launch region · exact pad GPS not confirmed'):'Launch origin not verified';
+      (mission.pad||'Launch pad')+' · pad location on the map':
+      'General launch area · exact pad not confirmed'):'Launch pad not listed';
     const weather=data.weather||{};
     // NWS can report a nominal "partial" envelope even when every individual
     // point lookup failed. Do not advertise an actual forecast without any
     // bounded mission-time location evidence.
     const usableWeather=usableSkySamples(data).length>0;
     const sky=hasUsefulTime&&!snapshotStale&&usableWeather&&weather.level==='assessed'?
-      'NWS spectator forecast available · not rocket GO':
+      'Viewing-area forecast available · launch still subject to change':
       hasUsefulTime&&!snapshotStale&&usableWeather&&weather.level==='partial'?
-        'Partial NWS forecast · visibility unverified':
-        'No verified mission-time viewing forecast';
-    const access=closed?'City reported beach closed · recheck dated notice':
-      uncertainAccess?'No public launch viewing venue verified':
-      region==='florida'?'Check mission-specific KSC tickets and NPS closures':
-      region==='virginia'?'NASA must announce the event-specific opening':
-      region==='california'?'Check base beach hours and launch exclusions':
-      'Official closures can override general beach access';
+        'Some local weather available · visibility still uncertain':
+        'No forecast yet for the scheduled launch hour';
+    const access=closed?'City reports a closure · check the latest notice':
+      uncertainAccess?'No confirmed public launch viewing area':
+      region==='florida'?'Check Kennedy tickets and Playalinda Beach closures':
+      region==='virginia'?'NASA must announce if the Visitor Center opens for this launch':
+      region==='california'?'Check Vandenberg beach hours and launch closures':
+      'Beach access may change during launch operations';
     return {
       status,headline,note,launchId:mission?.id||null,
-      region,regionName:REGION_NAMES[region],name:mission?.name||'No future launch in this feed',
-      when:mission?target(mission,data.region.timezone):'No mission target returned',
+      region,regionName:REGION_NAMES[region],name:mission?.name||'No upcoming launch listed',
+      when:mission?target(mission,data.region.timezone):'Launch date not listed',
       origin,access,sky,
-      source:'Third-party schedule last checked '+age(data.scheduleCheckedAt)+
-        (data.coverage?.partial?' · coverage incomplete':'')+
-        '. Not a launch authorization.',
+      source:'Public launch calendar checked '+age(data.scheduleCheckedAt)+
+        (data.coverage?.partial?' · some flights may be missing':'')+
+        '. Launch dates and times can move.',
       official:typeof data.region.access==='string'&&/^https:\/\/[a-z0-9.-]+\//i.test(data.region.access)?
         data.region.access:null,
       specialist:SPECIALISTS[region],
@@ -181,9 +181,9 @@
       destination:'regional_guide'
     });
     if(!region)return {
-      gate:'source',headline:'The schedule cannot establish a current launch',
-      detail:'No verified mission or range selection is available. NASA’s public list does not include every commercial or military range operation.',
-      label:'Open NASA’s public launch schedule',
+      gate:'source',headline:'We can’t confirm the next flight yet',
+      detail:'Choose a coast to see upcoming missions. Some military and smaller research flights aren’t listed on national calendars.',
+      label:'See NASA’s launch calendar',
       href:'https://www.nasa.gov/event-type/launch-schedule/',source:'nasa',destination:'official_access'
     };
     const rangeLink=authority||specialist;
@@ -192,29 +192,29 @@
       source:authority?'authority':'specialist',
       destination:authority?'official_access':'regional_guide'
     });
-    if(!d.launchId)return official('schedule','Check the range for an unlisted or removed mission',
-      'No current selected mission is verified in this bounded feed. An absent, removed or mismatched mission must not silently become a different launch. This is not evidence the range is inactive.',
-      authority?'Check the official range authority':'Read the regional source guidance');
+    if(!d.launchId)return official('schedule','Find the latest official launch announcement',
+      'The flight you were looking for is no longer on this calendar. It may have moved or disappeared from the feed; that does not mean the range has stopped launching. Check the range before choosing another date.',
+      authority?'See the official range updates':'Read the regional source guidance');
     if(d.status==='stale'||d.status==='unavailable')return official('schedule',
-      'Reconfirm the published mission target',
-      'The schedule is stale or unavailable. An old target, viewing notice or forecast is not current.',
-      authority?'Check the range authority':'Review regional source guidance');
+      'Check whether the launch time has moved',
+      'Our last calendar update may be old. Don’t plan around that time until the operator confirms it.',
+      authority?'See the latest range updates':'See the regional launch guide');
     const closed=region==='texas'&&data?.access?.liveOfficialNotice?.state==='closed';
     if(d.status==='hold'){
-      if(closed)return handoff('access','Check the dated Starbase beach and road closure',
-        'An official city closure is reported. It does not identify a legal replacement viewing site; read the notice and respect restrictions.',
-        'Read Starbase closure and alternative-place guidance');
-      return official('schedule','Wait for an updated launch attempt',
-        'A hold or scrub invalidates the earlier arrival window. Verify a new official target before departure.',
-        authority?'Check official range updates':'Read the regional source guidance');
+      if(closed)return handoff('access','Check the latest Starbase road and beach closures',
+        'The city has reported a closure. Don’t drive toward the pad; check the notice and consider a legal waterfront spot.',
+        'See Starbase closures and viewing spots');
+      return official('schedule','The countdown stopped. Watch for the next attempt.',
+        'A scrub means the rocket isn’t lifting off at the earlier target time. Check for the next attempt before heading out.',
+        authority?'See the range’s latest update':'Read the regional source guidance');
     }
-    if(d.status==='timing')return official('schedule','Confirm an exact launch hour first',
-      'A date-only, monthly or approximate-hour target cannot support a departure plan or a mission-time sky forecast.',
-      authority?'Check official mission notices':'Read the regional launch guide');
+    if(d.status==='timing')return official('schedule','Wait for a more precise liftoff time',
+      'A rough date is enough to get excited, not enough to pick an arrival time. Look for a published launch window.',
+      authority?'Check the operator’s updates':'See the local viewing guide');
     if(['alaska','hawaii'].includes(region))return handoff('access',
-      'Establish whether public viewing is allowed',
-      'This restricted range has no verified public spectator venue for this specific operation. A pad pin is not a public entrance.',
-      'Read restricted-range access guidance');
+      'Can you watch this launch in person?',
+      'This is an active restricted range, and we haven’t confirmed a public spectator area for this mission. Don’t follow the pad pin onto base property.',
+      'Check public access at this range');
     const sites=Array.isArray(data?.access?.sites)?data.access.sites:[];
     const publicCandidates=sites.filter(s=>
       s?.state==='candidate'&&s.directionsAllowed!==false&&
@@ -222,9 +222,9 @@
     const kscMatched=region==='florida'&&context.kscEvent==='matched'&&
       context.kscLaunchId===d.launchId;
     const venuesDocumented=publicCandidates.length>0||kscMatched;
-    if(!venuesDocumented)return handoff('access','Establish a source-backed spectator option',
-      'A listed launch and ordinary venue hours do not establish public mission viewing. The existing regional guide distinguishes access restrictions, closures and candidate viewpoints.',
-      'Compare documented regional access');
+    if(!venuesDocumented)return handoff('access','Find a public place to watch',
+      'The rocket may be flying even if the usual park or beach is closed. Our local guide shows known public spots and what to check before you go.',
+      'See public viewing options');
     if(region==='florida'&&publicCandidates.length){
       const names=data.selectedLaunch?.locationId===12?
         'Jetty Park in Port Canaveral and Space View Park in Titusville':
@@ -232,9 +232,9 @@
           'Space View Park and Rotary Riverfront Park in Titusville':
           'Space View Park in Titusville and Jetty Park in Port Canaveral (pad identity not established)';
       return {
-        gate:'viewing',headline:'Choose a public shoreline, not the launch pad',
-        detail:'Published Florida options include '+names+'. Your exact mission still needs launch-day access and parking checks. The page below compares places and reports available NPS/KSC evidence without assuming entry.',
-        label:'Compare Florida public viewing options',href:'#rl-viewing',
+        gate:'viewing',headline:'Pick your place along the Florida coast',
+        detail:'Places to consider include '+names+'. Check each location’s opening hours, parking and any launch-specific restrictions before setting out.',
+        label:'Compare Florida viewing spots',href:'#rl-viewing',
         source:'in_page',destination:'viewing_options'
       };
     }
@@ -243,17 +243,17 @@
     const weatherUsable=['assessed','partial'].includes(weather.level)&&
       spectatorSamples.length>0&&d.status!=='stale';
     if(weatherUsable&&publicCandidates.length>0)return {
-      gate:'sky',headline:'Compare the mission-time spectator sky',
-      detail:'The schedule is precise and documented public viewing candidates exist. NWS forecast samples now inform the next choice, but do not prove event admission, pad sightlines or visibility along the rocket’s flight path.',
-      label:'Compare NWS reference forecasts below',href:'#rl-regional-sky',
+      gate:'sky',headline:'Which viewing spot has a better sky?',
+      detail:'With a published launch time and known public viewing areas, you can compare nearby cloud forecasts. Fog, the flight path and venue restrictions still matter; a weather forecast does not prove that a viewing site is open.',
+      label:'Compare the viewing-area forecasts',href:'#rl-regional-sky',
       source:'in_page',destination:'spectator_weather'
     };
-    if(kscMatched)return handoff('viewing','KSC has published a mission-linked viewing event',
-      'An independently matched KSC event listing is supported. Tickets, actual admission, available viewing locations and any launch-specific closure remain unverified. Compare the options rather than assuming an open gate.',
-      'Compare Florida event and public viewing options');
-    return handoff('viewing','Compare documented public viewing candidates',
-      'Published places are mapped candidates, not confirmed open for this launch. No usable mission-time spectator forecast is established; inspect the local alternatives and their official restrictions.',
-      'Compare public viewpoints and access rules');
+    if(kscMatched)return handoff('viewing','Kennedy has announced viewing for this launch',
+      'Kennedy has a listing for this exact mission. Check ticket availability, entrance details, and any launch-day changes before buying or driving.',
+      'See Kennedy tickets and Florida viewing spots');
+    return handoff('viewing','Compare places to see the launch',
+      'These places appear in published viewing guides, but we haven’t confirmed they’re open for this flight. See your options and check the local rules.',
+      'See viewing spots and access notes');
   }
 
   function mount(doc) {
@@ -316,14 +316,14 @@
       }
       if(mapButton){
         mapButton.disabled=!d.launchId;
-        mapButton.setAttribute('aria-label',d.launchId?'Locate the selected launch '+d.name+' on the map':'No selected rocket location available');
+        mapButton.setAttribute('aria-label',d.launchId?'Locate the selected launch '+d.name+' on the map':'No launch location selected');
       }
       if(official){
         official.hidden=!d.official;
         if(d.official)official.href=d.official;
       }
       if(specialist){
-        // The Foundry's contextual next action already links to this regional
+        // The Foundry’s contextual next action already links to this regional
         // guide in access-gated states. Do not repeat the same destination
         // immediately underneath it as a second ambiguous call to action.
         specialist.hidden=!d.specialist||next.source==='specialist';
@@ -337,11 +337,11 @@
       picker.replaceChildren();
       if(!launches.length){
         const o=doc.createElement('option');o.value='';o.textContent=
-          data?'No mission in this region’s bounded feed':'Schedule unavailable';
+          data?'No upcoming launch listed here':'Launch calendar unavailable';
         picker.appendChild(o);picker.disabled=true;return;
       }
       for(const l of launches){
-        const o=doc.createElement('option');o.value=l.id;o.textContent=l.name||'Scheduled mission';
+        const o=doc.createElement('option');o.value=l.id;o.textContent=l.name||'Upcoming launch';
         picker.appendChild(o);
       }
       picker.disabled=false;
@@ -369,9 +369,9 @@
     doc.addEventListener('rocket-viewing:failure',event=>{
       render(null);
       if(event.detail?.removed===true){
-        set('rl-flight-headline','The selected mission is no longer listed');
-        set('rl-flight-note','This exact mission could not be restored. No different launch has been substituted. Check the official range for updates.');
-        set('rl-flight-next-title','Recheck this removed mission with the range');
+        set('rl-flight-headline','That mission is no longer on the calendar');
+        set('rl-flight-note','That flight has disappeared from the latest listings. We haven’t switched you to a different rocket; check the operator for a new date.');
+        set('rl-flight-next-title','Check the operator for an update');
       }
     });
     render(null);

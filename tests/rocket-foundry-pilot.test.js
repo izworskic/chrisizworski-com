@@ -54,8 +54,8 @@ test('a precise Florida target still requires mission-specific public access con
  assert.equal(d.gate,'access');
  assert.equal(d.source,'specialist');
  assert.equal(d.href,'/national-tools/space-coast-launch/?launchId='+uuid+'&via=rocket-foundry&stage=access');
- assert.match(d.headline,/source-backed spectator option/i);
- assert.match(d.detail,/do not establish public mission viewing/i);
+ assert.match(d.headline,/find a public place to watch/i);
+ assert.match(d.detail,/park or beach is closed/i);
  assert.doesNotMatch(JSON.stringify(d),/go for launch|safe to travel|ticket available/i);
 });
 test('date/month/approximate hour -> official timing check; do not invent a launch hour',()=>{
@@ -63,29 +63,29 @@ test('date/month/approximate hour -> official timing check; do not invent a laun
   const d=model.nextCheck(data('california',precision));
   assert.equal(d.gate,'schedule');
   assert.equal(d.href,'https://www.vandenberg.spaceforce.mil/');
-  assert.match(d.headline,/Confirm an exact launch hour/i);
-  assert.match(d.detail,/cannot support a departure plan/i);
+  assert.match(d.headline,/wait for a more precise liftoff time/i);
+  assert.match(d.detail,/look for a published launch window/i);
  }
 });
 test('stale or unavailable regional feed never offers GO and prioritizes source verification',()=>{
  const stale=model.nextCheck(data('florida','minute',{scheduleFreshness:'stale'}));
- assert.equal(stale.gate,'schedule');assert.match(stale.headline,/Reconfirm/);
+ assert.equal(stale.gate,'schedule');assert.match(stale.headline,/check whether the launch time has moved/i);
  const d=data();
  d.regions[0].feedState='unavailable';
  const unavailable=model.nextCheck(d);
  assert.equal(unavailable.gate,'schedule');
- assert.match(unavailable.detail,/stale|unavailable/i);
+ assert.match(unavailable.detail,/calendar update may be old/i);
  const noSource=model.nextCheck(null);
  assert.equal(noSource.gate,'source');
  assert.match(noSource.href,/nasa.gov/);
- assert.match(noSource.detail,/not include every/i);
+ assert.match(noSource.detail,/aren.t listed on national calendars/i);
 });
 test('hold, scrub and actual Starbase city closure take precedence over a routine viewing recommendation',()=>{
  const hold=data('virginia');
  hold.selectedLaunch.status='Hold';
- assert.match(model.nextCheck(hold).headline,/updated launch attempt/i);
+ assert.match(model.nextCheck(hold).headline,/countdown stopped/i);
  hold.selectedLaunch.status='Scrub';
- assert.match(model.nextCheck(hold).detail,/earlier arrival window/i);
+ assert.match(model.nextCheck(hold).detail,/earlier target time/i);
  const closed=data('texas');closed.access={liveOfficialNotice:{state:'closed'}};
  assert.equal(model.nextCheck(closed).gate,'access');
  assert.match(model.nextCheck(closed).headline,/closure/i);
@@ -96,8 +96,8 @@ test('restricted Pacific ranges never imply legal viewing at the military pad',(
   const d=model.nextCheck(data(region));
   assert.equal(d.gate,'access');
   assert.equal(d.source,'specialist');
-  assert.match(d.headline,/public viewing is allowed/i);
-  assert.match(d.detail,/pad pin is not a public entrance/i);
+  assert.match(d.headline,/watch this launch in person/i);
+  assert.match(d.detail,/pad pin onto base property/i);
  }
 });
 test('a missing mission does not imply the range has stopped flying',()=>{
@@ -105,7 +105,7 @@ test('a missing mission does not imply the range has stopped flying',()=>{
  d.selectedLaunch=null;d.selectedLaunchId=null;d.regions[0].launches=[];
  const n=model.nextCheck(d);
  assert.equal(n.gate,'schedule');
- assert.match(n.detail,/not evidence the range is inactive/i);
+ assert.match(n.detail,/does not mean the range has stopped launching/i);
 });
 test('Foundry handoff is visible, linked, versioned and tracked without identity collection',()=>{
  const html=read('public/synced-national-tools/rocket-launch-live/index.html');
@@ -113,7 +113,7 @@ test('Foundry handoff is visible, linked, versioned and tracked without identity
  const js=read('public/assets/rocket-engagement-funnel.js');
  assert.match(html,/id="rl-flight-next"/);
  assert.match(html,/id="rl-flight-next-link"/);
- assert.match(html,/rocket-flight-desk\.js\?v=20261108-florida-answer-v1/);
+ assert.match(html,/rocket-flight-desk\.js\?v=20261110-voice-v1/);
  assert.match(html,/rocket-flight-desk\.css\?v=20261108-foundry-v2/);
  assert.match(html,/rocket-engagement-funnel\.js\?v=20261108-schedule-first-v1/);
  assert.match(html,/https:\/\/chrisizworski.com\/#person/);
@@ -133,14 +133,14 @@ test('documented public viewpoint advances to viewing options, then mission-time
  const d=data('virginia');d.selectedLaunch.net='2026-11-11T15:25:00Z';d.access={sites:[publicSite]};
  const first=model.nextCheck(d);
  assert.equal(first.gate,'viewing');
- assert.match(first.detail,/not confirmed open/i);
+ assert.match(first.detail,/haven.t confirmed they.re open/i);
  assert.match(first.href,new RegExp('launchId='+uuid));
  d.weather=currentSky;
  const second=model.nextCheck(d);
  assert.equal(second.gate,'sky');
  assert.equal(second.href,'#rl-regional-sky');
  assert.equal(second.destination,'spectator_weather');
- assert.match(second.detail,/do not prove event admission/i);
+ assert.match(second.detail,/does not prove that a viewing site is open/i);
  assert.notEqual(first.href,second.href);
 });
 test('a stale, off-target or unsuitable NWS sample cannot advance to a sky decision',()=>{
@@ -166,8 +166,8 @@ test('KSC current exact event listing advances to admission choices, never a tic
  const d=data();
  const first=model.nextCheck(d,{kscEvent:'matched',kscLaunchId:uuid});
  assert.equal(first.gate,'viewing');
- assert.match(first.headline,/mission-linked viewing event/i);
- assert.match(first.detail,/Tickets, actual admission/i);
+ assert.match(first.headline,/Kennedy has announced viewing for this launch/i);
+ assert.match(first.detail,/Check ticket availability/i);
  const mismatched=model.nextCheck(d,{kscEvent:'matched',kscLaunchId:'33333333-3333-4333-8333-333333333333'});
  assert.equal(mismatched.gate,'access');
  const stale=model.nextCheck({...d,scheduleFreshness:'stale'},{kscEvent:'matched',kscLaunchId:uuid});

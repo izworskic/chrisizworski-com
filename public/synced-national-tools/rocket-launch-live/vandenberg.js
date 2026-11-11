@@ -39,13 +39,13 @@
     return scenario?.candidates?.find(x=>x.id===site.id)||null;
   }
   function statusWord(candidate){
-    if(!candidate)return 'Published candidate · hours not confirmed';
+    if(!candidate)return 'Known viewing area · check hours';
     const s=candidate.access?.state;
-    return s==='after-hours'?'Not usable at this modeled time':
-      s==='boundary'?'Sunset boundary · do not assume entry':
-      s==='time-unknown'?'Hours cannot be assessed':
-      candidate.forecast?.state==='hazard'?'Unfavorable conditions at nearest NWS forecast point':
-      'Candidate · check launch-day conditions';
+    return s==='after-hours'?'Not open at this launch time':
+      s==='boundary'?'May be closing around sunset':
+      s==='time-unknown'?'Hours need checking':
+      candidate.forecast?.state==='hazard'?'Nearby forecast shows poor conditions':
+      'Possible viewing spot · check launch-day access';
   }
   function estimate(site,candidate){
     // Preference ranking is relative and editorial, never an access or visibility score.
@@ -162,7 +162,7 @@
       showBearing();
     }catch(_){
       root.replaceChildren(el('p','rl-vandenberg-map-fallback',
-        'The map is not available. The sourced candidate cards and access warnings below remain usable.'));
+        'The map isn’t loading, but you can still compare the viewing spots and their rules below.'));
     }
   }
   function showBearing(){
@@ -191,21 +191,21 @@
     if(!rows.some(x=>x.site.id===state.selectedSite))state.selectedSite=rows[0]?.site.id||null;
     root.replaceChildren();
     const planning=state.data.status==='candidate-review'&&currentScenario();
-    label('rl-vandenberg-count',rows.length+' documented locations');
+    label('rl-vandenberg-count',rows.length+' places to consider');
     const eligible=rows.filter(x=>x.candidate&&!DANGER.has(x.candidate.access?.state)&&
       x.candidate.forecast?.state!=='hazard');
     if(planning&&eligible.length){
-      label('rl-vandenberg-headline','First to investigate: '+eligible[0].site.name);
-      label('rl-vandenberg-explanation','Ranked for your selected preference and available nearby NWS reference sky cover. NOT a confirmed open or unobstructed viewing spot. Compare the reasons below, and check official restrictions before traveling.');
+      label('rl-vandenberg-headline','Start by looking at: '+eligible[0].site.name);
+      label('rl-vandenberg-explanation','This place fits your preferences and the nearby weather forecast. It may still be closed or fogged in, so read the details and check the current rules before heading out.');
     }else{
-      label('rl-vandenberg-headline','Venue guide only: no defensible launch-time recommendation');
+      label('rl-vandenberg-headline','Explore the public viewing spots');
       label('rl-vandenberg-explanation',state.data.status==='pad-geometry-unverified'?
-        'The mission record does not verify a Vandenberg pad coordinate, so distance and bearing are withheld.':
+        'We don’t have a confirmed pad location for this mission yet, so distances and directions aren’t shown.':
         state.data.status==='schedule-overdue'?
-        'The launch schedule is overdue; a past target cannot support current travel decisions.':
+        'The launch time may have changed. Check the operator’s latest update before choosing a spot.':
         state.data.status==='time-unverified'?
-        'The launch day or time is only tentative. Site hours and cloud conditions cannot be judged yet.':
-        'No currently usable location is established for this modeled target. Check official viewing notices.');
+        'The liftoff time is still tentative. Once it’s set, we can compare opening hours and nearby skies.':
+        'We can’t recommend a spot for this time yet. Check the official viewing notices for openings and closures.');
     }
     const scenario=currentScenario();
     for(const [index,{site,candidate}] of rows.entries()){
@@ -230,32 +230,32 @@
       const facts=el('div','rl-vandenberg-facts');
       const geometry=site.padGeometry;
       const one=el('div','');
-      one.appendChild(el('small','', 'STRAIGHT LINE TO PAD'));
+      one.appendChild(el('small','', 'DIRECTION TO THE PAD'));
       one.appendChild(el('strong','',geometry?
         geometry.miles.toFixed(1)+' mi · '+compass(geometry.bearing)+' '+geometry.bearing+'°':
-        'Pad coordinates unverified'));
+        'Pad location not confirmed'));
       facts.appendChild(one);
       const two=el('div','');
-      two.appendChild(el('small','','NWS REFERENCE CLOUDS'));
+      two.appendChild(el('small','','NEARBY CLOUD FORECAST'));
       const forecast=candidate?.forecast;
       two.appendChild(el('strong','',forecast?.state==='reference-only'?
         forecast.cloud+'% · '+site.reference.name:
-        forecast?.state==='hazard'?'Unfavorable surface forecast':'Not verified for this time'));
+        forecast?.state==='hazard'?'Poor weather in the nearby forecast':'Forecast not ready for this hour'));
       facts.appendChild(two);
       card.appendChild(facts);
       if(forecast?.state==='reference-only'){
         card.appendChild(el('p','rl-vandenberg-proxy',
-          'NWS sample '+site.reference.miles.toFixed(1)+' mi away. A coastal marine layer or terrain can hide the launch even when total clouds look favorable.'));
+          'Weather reading '+site.reference.miles.toFixed(1)+' mi away. Fog and nearby hills can still block the rocket, even when the forecast looks clear.'));
       }
       card.appendChild(el('p','rl-vandenberg-access',site.accessNote));
       const links=el('div','rl-vandenberg-actions');
-      const cited=safeLink(site.source,'Venue/source details');
+      const cited=safeLink(site.source,'Check this location’s rules');
       if(cited)links.appendChild(cited);
-      const osm=safeLink(site.osm,'Mapped place center');
+      const osm=safeLink(site.osm,'See the area on a map');
       if(osm)links.appendChild(osm);
       if(candidate?.access?.directionsAllowed&&scenario&&state.data.status==='candidate-review'){
         const url='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(site.address);
-        const route=safeLink(url,'Find mapped place · verify entry','rl-vandenberg-directions');
+        const route=safeLink(url,'Find this place in Google Maps','rl-vandenberg-directions');
         if(route)links.appendChild(route);
       }
       card.appendChild(links);
@@ -270,7 +270,7 @@
     const cases=state.data.scenarios||[];
     if(!cases.length){
       root.appendChild(el('span','rl-vandenberg-no-time',
-        'No verified minute-level target. Timing-dependent decisions withheld.'));
+        'The launch time isn’t precise enough yet to compare hours and weather.'));
       return;
     }
     if(!cases.some(x=>x.offsetHours===state.offsetHours))state.offsetHours=0;
@@ -294,12 +294,12 @@
     if(!state.data){root.hidden=true;return;}
     root.hidden=false;
     label('rl-vandenberg-state',state.data.status==='candidate-review'?
-      'Mission pad + official place records':
-      'Limited: '+state.data.status.replace(/-/g,' '));
+      'Comparing viewing spots':
+      'Check launch details: '+state.data.status.replace(/-/g,' '));
     if(state.data.closedViewingLocations?.length)
       label('rl-vandenberg-closed',
         state.data.closedViewingLocations.join(' · ')+
-        '. Listed closed by Explore Lompoc; do not attempt a launch-viewing stop here.');
+        '. Explore Lompoc lists these as closed for launch viewing. Don’t use them as spectator stops.');
     for(const button of document.querySelectorAll('#rl-vandenberg-intents button[data-intent]'))
       button.setAttribute('aria-pressed',state.intent===button.dataset.intent?'true':'false');
     renderTimes();
@@ -315,7 +315,7 @@
     });
   });
   // The national app dispatches only its already validated selected launch API
-  // response. Never reuse California site pins for another region's mission.
+  // response. Never reuse California site pins for another region’s mission.
   document.addEventListener('rocket-viewing:data',event=>{
     const data=event.detail;
     state.allLaunches=data?.selectedRegion==='california'?

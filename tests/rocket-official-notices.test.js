@@ -148,7 +148,7 @@ t('Python batch uses only stdlib, bounded HTTPS official source registry, no LL2
 t('national desk is indexable and independent of mission schedule availability',()=>{
  a.match(index,/id="official-notice-desk"/);
  a.match(index,/id="rl-evidence-sources"/);
- a.match(index,/app\.js\?v=20261110-official-links-v1/);
+ a.match(index,/app\.js\?v=20261110-voice-v1/);
  a.match(index,/<link rel="canonical" href="https:\/\/chrisizworski\.com\/national-tools\/rocket-launch-live\/">/);
  a.match(js,/OFFICIAL_EVIDENCE_API = '\/api\/rocket-official-notices'/);
  a.match(js,/renderOfficialEvidence\(data\)/);
@@ -200,10 +200,10 @@ t('Starbase future transport windows are source-bound, dated and never launch pe
  spoof.regions.florida[0].signals.push({...road,sourceUrl:SOURCES['canaveral-nps'][1]});
  a.throws(()=>validateSnapshot(spoof,NOW),/signal-untrusted/);
  a.match(js,/scheduled-road-activity/);
- a.match(js,/Travel timing overlap/);
+ a.match(js,/Heads up: a city-listed vehicle movement overlaps/);
  a.match(js,/data\.scheduleFreshness==='recent'/);
  a.match(js,/\['minute','second'\]\.includes\(launch\?\.netPrecision\)/);
- a.match(js,/not an active closure, launch approval or viewing permission/);
+ a.match(js,/not itself a road closure/);
  new vm.Script(js);
 });
 
@@ -260,8 +260,8 @@ t('visitor display never treats city transport timing as a closure or launch aut
  a.match(js,/notice\.kind==='scheduled-road-activity'/);
  a.match(js,/data\.scheduleFreshness==='recent'/);
  a.match(js,/target>=from&&target<=through/);
- a.match(js,/not an active closure, launch approval or viewing permission/);
- a.match(index,/20261108-florida-answer-v1/);
+ a.match(js,/not itself a road closure/);
+ a.match(index,/20261110-voice-v1/);
  a.match(workflow,/starbase-road-v1/);
  new vm.Script(js);
 });

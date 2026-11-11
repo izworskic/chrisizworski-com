@@ -65,18 +65,18 @@
   };
   function comparisonText(item) {
     switch(item.status){
-      case 'aligned':return 'Target times agree within one minute';
-      case 'disagrees':return 'The two launch calendars disagree';
-      case 'precision-not-comparable':return 'Dates listed, exact times not comparable';
-      case 'identity-not-distinct':return 'Mission identity too ambiguous to compare';
-      case 'ambiguous':return 'Duplicate mission markers: not compared';
-      case 'not-in-next-five':return 'Not present in the other provider’s next five';
-      case 'snapshot-mismatch':return 'New target not yet reconciled';
-      case 'stale':return 'Last cross-check is now stale';
-      case 'historical-only':return 'Earlier source snapshot only';
-      case 'awaiting-reconciliation':return 'Next independent check pending';
-      case 'source-unavailable':return 'Other calendar unavailable';
-      default:return 'Cross-calendar comparison not verified';
+      case 'aligned':return 'Both calendars list nearly the same launch time';
+      case 'disagrees':return 'The launch calendars show different times';
+      case 'precision-not-comparable':return 'At least one calendar has no exact liftoff time';
+      case 'identity-not-distinct':return 'Can’t be sure both calendars mean the same flight';
+      case 'ambiguous':return 'Multiple similar missions listed; comparison withheld';
+      case 'not-in-next-five':return 'This flight isn’t in the other calendar’s next five';
+      case 'snapshot-mismatch':return 'The latest launch time hasn’t been cross-checked';
+      case 'stale':return 'This comparison needs a fresh check';
+      case 'historical-only':return 'Only an older schedule comparison is available';
+      case 'awaiting-reconciliation':return 'Waiting for the next calendar comparison';
+      case 'source-unavailable':return 'The second launch calendar isn’t responding';
+      default:return 'We can’t compare launch times right now';
     }
   }
   function render(data){
@@ -87,28 +87,28 @@
     if(mismatched)status='target-changed-after-check';
     root.dataset.status=status;
     set('lt-timestamp',data?.observedAt?
-      'Evidence checked '+checked(data.observedAt,zone)+' · '+(status==='recent'?'Current observation':'Check freshness before relying on it'):
-      'No scheduled source observation yet');
+      'Schedule checked '+checked(data.observedAt,zone)+' · '+(status==='recent'?'Recently checked':'Check the operator before relying on this'):
+      'No calendar update recorded yet');
     set('lt-headline',mismatched?
-      'The selected launch target has moved since the source check':
-      data?.headline||'No mission-matched source evidence available');
+      'The launch time has changed since the last comparison':
+      data?.headline||'No recent update tied to this flight');
     set('lt-explainer',mismatched?
-      'The time on the main launch card differs from the monitored snapshot. This evidence remains historical until the next scheduled comparison.':
-      data?.story||'The launch operator retains the authority to confirm operational status.');
+      'The time above is newer than this comparison. Check the operator while we wait for an updated cross-check.':
+      data?.story||'The operator has the final word on whether the rocket flies.');
     const c=data?.comparison||{};
     const cStatus=mismatched?'snapshot-mismatch':c.status||'unknown';
     root.dataset.compare=cStatus;
     set('lt-compare-state',comparisonText({status:cStatus}));
     set('lt-compare-note',mismatched?
-      'Do not treat the previous cross-source result as confirmation of the new target.':
-      c.note||'There is not enough source evidence for a second-calendar comparison.');
+      'The older comparison doesn’t confirm the new launch time.':
+      c.note||'There isn’t enough information to compare the two schedules.');
     const validTime=['minute','second'].includes(data?.netPrecision);
     const currentC=validTime&&cStatus==='aligned'&&c.otherTarget?
-      ' LL2: '+readable(data.net,zone,data.netPrecision)+
+      ' Launch Library 2: '+readable(data.net,zone,data.netPrecision)+
       ' · RocketLaunch.Live: '+readable(c.otherTarget,zone,data.netPrecision)+'.':'';
     if(currentC)set('lt-compare-note',(c.note||'')+currentC);
     if(validTime&&cStatus==='disagrees'&&c.otherTarget){
-      set('lt-compare-note','LL2: '+readable(data.net,zone,data.netPrecision)+
+      set('lt-compare-note','Launch Library 2: '+readable(data.net,zone,data.netPrecision)+
         '. RocketLaunch.Live: '+readable(c.otherTarget,zone,data.netPrecision)+
         '. Their published targets differ. Check the operator for the latest authoritative window.');
     }
@@ -122,17 +122,17 @@
           readable(evt.before,zone,data.netPrecision):evt.before||'Not listed';
         const is=evt.field==='target-time'?
           readable(evt.after,zone,data.netPrecision):evt.after||'Not listed';
-        const heading=evt.field==='target-time'?'Launch target revised':
-          evt.field==='ll2-status'?'Published status changed':
-          evt.field==='time-precision'?'Schedule precision changed':'Launch window changed';
+        const heading=evt.field==='target-time'?'Launch time changed':
+          evt.field==='ll2-status'?'Launch status changed':
+          evt.field==='time-precision'?'More precise launch time posted':'Launch window moved';
         changes.appendChild(record(evt.field==='target-time'?'target-time':'event',
-          'First detected '+checked(evt.detectedAt,zone),heading,
-          was+' → '+is+'. This is a detected LL2 change, not a confirmed operator decision.',
-          evt.sourceUrl,'LL2 mission record'));
+          'We noticed this change '+checked(evt.detectedAt,zone),heading,
+          was+' → '+is+'. This change appeared on the public calendar, not in an official launch decision.',
+          evt.sourceUrl,'See the calendar entry'));
       }
       if(!changes.children.length)addEmpty(changes,
-        status==='not-monitored'?'This launch is outside the currently sampled missions. No change history has been established.':
-          'No changes have been observed by this monitor yet. This does not prove the schedule has always been unchanged.');
+        status==='not-monitored'?'We’re not tracking changes for this flight yet.':
+          'No schedule changes recorded here yet. It’s still worth checking the operator near liftoff.');
     }
     if(sources){
       sources.replaceChildren();
@@ -140,39 +140,39 @@
       const news=Array.isArray(data?.news)?data.news.slice(0,3):[];
       for(const update of updates){
         sources.appendChild(record('source-update',
-          'LL2 contributor update · '+checked(update.publishedAt,zone),
+          'Calendar contributor update · '+checked(update.publishedAt,zone),
           update.summary||'Published update',
-          'Source-linked contributor record; not an official confirmation unless the linked operator independently supports it.',
-          update.sourceUrl||'https://ll.thespacedevs.com/','View cited source'));
+          'A public calendar update, not an official launch approval. Check the linked source.',
+          update.sourceUrl||'https://ll.thespacedevs.com/','Read the original update'));
       }
       for(const story of news){
         sources.appendChild(record('news',
           (story.newsSite||'Space news')+' · '+checked(story.publishedAt,zone),
-          story.title||'Article indexed to this mission',
-          'Spaceflight News API indexed this article to the selected launch ID. It can discuss multiple launches.',
+          story.title||'Article about this mission',
+          'This news story was linked to the mission, but it may also discuss other flights.',
           story.sourceUrl,'Read article'));
       }
       if(!sources.children.length)addEmpty(sources,
         data?.status==='not-monitored'||data?.status==='not-returned'?
-          'No current mission-linked source record. Check Spaceflight Now and the launch operator.':
+          'No fresh update tied to this flight. Check Spaceflight Now and the launch operator.':
           data?.updatesStatus==='not-prioritized'||data?.newsStatus==='not-prioritized'?
-          'This mission is in the full schedule ledger, but detailed news and contributor history have not been refreshed this cycle. This is not evidence that no reporting exists.':
-          'No qualifying update or launch-ID-indexed news was returned by the checked feeds.');
+          'The flight is listed, but we don’t have recent stories or schedule-change history for it yet.':
+          'No new schedule change or related news appeared in the latest check.');
     }
     const health=data?.sourceHealth||{};
     const schedule=Array.isArray(health.schedule)?health.schedule:[];
     const failed=schedule.filter(row=>row.status!=='ok').length;
     const words=[data?.coverage ||
-      'The national observer records every returned coastal launch; in-depth reporting checks rotate across priority missions.'];
-    if(failed)words.push(failed+' of '+schedule.length+' LL2 schedule source checks unavailable.');
-    if(data?.updatesStatus==='unavailable')words.push('LL2 update history unavailable.');
-    if(data?.updatesStatus==='not-prioritized')words.push('Contributor updates not checked for this mission in this cycle.');
-    if(data?.newsStatus==='unavailable')words.push('News matching unavailable.');
-    if(data?.newsStatus==='not-prioritized')words.push('Exact-ID news enrichment pending.');
+      'Launch schedules update frequently. Detailed news checks focus on a smaller group of upcoming flights.'];
+    if(failed)words.push(failed+' of '+schedule.length+' launch-calendar checks could not be completed.');
+    if(data?.updatesStatus==='unavailable')words.push('Past calendar changes could not be checked.');
+    if(data?.updatesStatus==='not-prioritized')words.push('Detailed schedule updates haven’t been checked for this flight yet.');
+    if(data?.newsStatus==='unavailable')words.push('Related news couldn’t be checked right now.');
+    if(data?.newsStatus==='not-prioritized')words.push('Looking for news tied to this flight.');
     if(data?.sourceGroupComplete===false)
-      words.push('The mission’s LL2 provider group is incomplete or truncated; more launches may exist.');
-    if(health.rll?.status==='unavailable')words.push('RocketLaunch.Live check unavailable.');
-    words.push('No agreement, absence, or reporting claims establish a launch GO, scrub, entry permission or favorable weather.');
+      words.push('Some launch listings may be missing from this calendar.');
+    if(health.rll?.status==='unavailable')words.push('The other calendar couldn’t be checked.');
+    words.push('A matching calendar doesn’t guarantee liftoff, open gates or clear skies.');
     set('lt-source-health',words.join(' '));
   }
   async function load(detail){
@@ -180,13 +180,13 @@
     selected=detail||null;
     const token=++sequence;
     if(!UUID.test(id||'')){
-      render({status:'not-monitored',headline:'Choose an upcoming mission to inspect the evidence',
-        story:'Mission history and news are linked to a specific launch ID.'});
+      render({status:'not-monitored',headline:'Choose a flight to see its update history',
+        story:'Each launch has its own changing schedule and news.'});
       return;
     }
     root.dataset.status='loading';
-    set('lt-headline','Checking independently collected launch evidence…');
-    set('lt-timestamp','Reading the scheduled Postgres observation…');
+    set('lt-headline','Checking what has changed for this flight…');
+    set('lt-timestamp','Loading the latest schedule comparison…');
     try{
       const r=await fetch(API+'?launchId='+encodeURIComponent(id),{
         headers:{Accept:'application/json'},signal:AbortSignal.timeout(9500)
@@ -197,14 +197,14 @@
       render(body);
     }catch(_){
       if(token!==sequence)return;
-      render({status:'unavailable',headline:'The evidence ledger could not be read',
-        story:'The launch schedule and original operator links remain available. A temporary source failure does not establish a delay or scrub.'});
+      render({status:'unavailable',headline:'We can’t load schedule updates right now',
+        story:'You can still check the flight’s calendar entry and the operator. A failed update check doesn’t mean the launch was delayed.'});
     }
   }
   document.addEventListener('rocket-truth:mission-selected',event=>{
     void load(event.detail);
   });
   // Let pages with no active mission explain the data before any selection.
-  render({status:'not-monitored',headline:'Choose a mission to open its source ledger',
-    story:'The ledger compares named missions; it never substitutes general rocket news for verified operational reports.'});
+  render({status:'not-monitored',headline:'Choose a launch to see what has changed',
+    story:'We track changes to the particular flight you choose, not random news about nearby launches.'});
 })();

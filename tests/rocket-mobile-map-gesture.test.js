@@ -38,7 +38,7 @@ test('source-independent fallback keeps the expand button disabled without Leafl
  const start=js.indexOf('function initMap()');
  const end=js.indexOf('function renderMission(',start);
  assert(start>=0&&end>start);
- assert.match(js.slice(start,end),/The interactive map could not start/);
+ assert.match(js.slice(start,end),/The map isn.t loading/);
 });
 
 test('map boots from same-origin Leaflet even when CDN and launch feed are inaccessible',()=>{
@@ -51,7 +51,7 @@ test('map boots from same-origin Leaflet even when CDN and launch feed are inacc
  assert.match(js,/RocketMapPins\?\.BOX/);
  assert.match(js,/initMap\(\); \/\/ Geographic reference does not depend on live launch data\./);
  assert.match(js,/dataset\.mapState='ready'/);
- assert.match(js,/Launch schedule unavailable; only geographic reference regions are shown/);
+ assert.match(js,/launch calendar isn.t loading, but you can still browse the launch sites/i);
  assert.match(js,/state\.rocketPins\?\.update\(\[\],null\)/);
  assert.match(html,/id="rl-atlas-status"/);
 });
@@ -68,5 +68,5 @@ test('offline coastline geography is public-domain, geographically bounded, and 
  assert.match(js,/\/assets\/rocket-reference-land\.geojson/);
  assert.match(js,/root\.dataset\.outline='ready'/);
  assert.match(js,/root\.dataset\.tiles='reference-only'/);
- assert.match(js,/Online map tiles unavailable; Natural Earth coastlines shown/);
+ assert.match(js,/map background isn.t loading; coastlines are shown instead/i);
 });
