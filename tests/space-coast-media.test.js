@@ -162,7 +162,7 @@ test('browser media experience is user-initiated and retains active GIS, SEO and
   assert.match(css,/\.mission-media-poster/);
   assert.match(css,/@media\(max-width:680px\)/);
   assert.match(html,/id="launch-day-pulse"/);
-  assert.match(html,/geo-map\.js\?v=20261101-repair1/);
+  assert.match(html,/geo-map\.js\?v=20261110-region-voice-v1/);
   assert.doesNotThrow(()=>new Function(js));
 });
 
