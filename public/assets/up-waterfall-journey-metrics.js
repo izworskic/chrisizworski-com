@@ -110,7 +110,7 @@
     const sheet=document.getElementById('upfall-day-sheet');
     if(!sheet)return;
     let action='';
-    if(button.id==='open-day-sheet'&&!sheet.hidden)action='sheet_open';
+    if(button.id==='open-day-sheet'&&event.isTrusted&&!sheet.hidden)action='sheet_open';
     else if(button.closest('.day-sheet-actions')){
       const name=button.textContent?.trim();
       if(name==='Copy trip notes')action='copy_notes_click';
