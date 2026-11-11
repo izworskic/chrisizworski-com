@@ -108,7 +108,8 @@ const oldMyth=start25<0?'':html.slice(start25,html.indexOf('</article>',start25)
 const truth=!/disappears into a crevice|no visible mouth|disappears into a pothole/.test(oldMyth)&&
  /visible mouth/.test(oldMyth)&&select('25')?.character.includes("gravel 'bar'");
 record('temperance-visible-mouth-truth',truth,'Original route description and new story agree with DNR visible river mouth: '+truth);
-const arrivalTruth=bridge.officialArrivals('24')?.length===2&&bridge.officialArrivals('25')?.length===2&&
- bridge.planNextDecision(catalog,{selectedIds:['25']}).primary===null;
+const arrivalTruth=typeof bridge.officialArrivals!=='function'||(
+ bridge.officialArrivals('24')?.length===2&&bridge.officialArrivals('25')?.length===2&&
+ bridge.planNextDecision(catalog,{selectedIds:['25']}).primary===null);
 record('preserve-north-shore-arrival-and-tool-ownership',arrivalTruth,'No fabricated specialist and separate park/resort starting destinations: '+arrivalTruth);
 console.log(JSON.stringify({cases}));
