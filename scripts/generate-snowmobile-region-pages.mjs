@@ -22,7 +22,7 @@ function pageFor(region) {
     '@context': 'https://schema.org',
     '@graph': [
       { '@type': 'Person', '@id': 'https://chrisizworski.com/#person', name: 'Chris Izworski', url: 'https://chrisizworski.com/' },
-      { '@type': 'WebPage', '@id': `${canonical}#page`, url: canonical, name: `${region.label} Snowmobile Trail Conditions`, description, inLanguage: 'en-US', primaryImageOfPage: {'@id':`${canonical}#primaryimage`}, mainEntity: {'@id':`${canonical}#planner`}, isPartOf: {'@id':'https://chrisizworski.com/snowmobile/#page'}, relatedLink: REGIONS.filter(r=>r.key!==region.key).map(r=>`https://chrisizworski.com/snowmobile/regions/${r.key}.html`), dateModified: region.key==='eastern-up'?'2026-10-19':'2026-10-05', author: {'@id':'https://chrisizworski.com/#person'}, publisher: {'@id':'https://chrisizworski.com/#person'} },
+      { '@type': 'WebPage', '@id': `${canonical}#page`, url: canonical, name: `${region.label} Snowmobile Trail Conditions`, description, inLanguage: 'en-US', primaryImageOfPage: {'@id':`${canonical}#primaryimage`}, mainEntity: {'@id':`${canonical}#planner`}, isPartOf: {'@id':'https://chrisizworski.com/snowmobile/#page'}, relatedLink: REGIONS.filter(r=>r.key!==region.key).map(r=>`https://chrisizworski.com/snowmobile/regions/${r.key}.html`), dateModified: '2026-11-11', author: {'@id':'https://chrisizworski.com/#person'}, publisher: {'@id':'https://chrisizworski.com/#person'} },
       ...discoveryGraph(region),
       { '@type': 'BreadcrumbList', itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://chrisizworski.com/' },
@@ -41,6 +41,14 @@ function pageFor(region) {
   <h1>${esc(region.label)} Snowmobile Trail Conditions</h1>
   <p class="lede">${esc(region.description)} This page reconciles official DNR trail geometry and temporary closures, observed snowfall, recent thaw/rain evidence and the NWS forecast${region.legacyCorridor ? ', plus two local club condition reports' : ''}. It will not call a trail GOOD from snow depth, an open status or a cold forecast alone.</p>
 
+  <section class="panel s7-region-check" aria-labelledby="s7-region-title"><div class="eyebrow">Before riding this ${esc(region.shortLabel)} corridor</div><h2 id="s7-region-title">Three checks the map cannot replace</h2>
+    <div class="s7-readiness-steps">
+      <div><strong>Designated route and closures</strong><p><a href="https://www.michigan.gov/dnr/things-to-do/snowmobiling/where" target="_blank" rel="noopener noreferrer">Inspect the official DNR trail map</a> and current closure notices. Map geometry is not proof that a route is rideable.</p></div>
+      <div><strong>Club report, date and exact reach</strong><p><a href="#local-planning-title">Review local reports for ${esc(region.shortLabel)}</a> and read their original timestamps. Club reports are manual evidence, not a regionwide grooming certification.</p></div>
+      <div><strong>Road and snow conditions</strong><p><a href="/michigan-snow-totals/">Observed NWS reports</a> and <a href="/lake-effect-snow/">forecast snowbands</a> are weather context, not a trail base. <a href="https://mdotjboss.state.mi.us/MiDrive/map" target="_blank" rel="noopener noreferrer">Check MiDrive before departure</a>.</p></div>
+    </div>
+    <p class="small">Dec. 1–Mar. 31 is the designated trail season, not a guarantee of opening or grooming. The <a href="/snowmobile/what-you-need/">2026–27 DNR permit is $65</a>. For a different kind of outing, <a href="/michigan-winter-weekends/#weekend-desk">compare winter weekend options</a>.</p>
+  </section>
   <article class="decision">
     <div class="status-row"><span id="status" class="status">CHECKING…</span><span id="score" class="score-of"></span></div>
     <div class="verdict-line"><div class="eyebrow">Worth loading the sleds?</div><div id="drive">Checking route evidence…</div></div>

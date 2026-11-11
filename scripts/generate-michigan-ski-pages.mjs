@@ -5,7 +5,7 @@ const require=createRequire(import.meta.url);
 const {RESORTS}=require('../lib/michigan-ski/resorts');
 const base='https://chrisizworski.com/michigan-ski-hills/';
 const P='https://chrisizworski.com/#person';
-const today='2026-10-14';
+const today='2026-11-11';
 
 // Curated geographically verified archival photography, NOT live conditions or forecasts.
 // License + authors verified against each Wikimedia Commons file's source page on 2026-10-15.
@@ -48,6 +48,8 @@ function pageShell({title,description,url,h1,subtitle,content,slug=null}){
  {'@type':'SoftwareApplication','@id':url+'#tool',name:h1,applicationCategory:'TravelApplication',operatingSystem:'Web',
  url,isAccessibleForFree:true,creator:{'@id':P},offers:{'@type':'Offer',price:0,priceCurrency:'USD'}}
  ];
+ const readiness=slug&&RESORTS.find(r=>r.slug===slug);
+ const readinessHtml=readiness?'<section class="panel s7-ski-readiness" aria-labelledby="s7-ski-title"><p class="eyebrow">Check the mountain before you leave</p><h2 id="s7-ski-title">Is '+esc(readiness.name)+' operating for your ski day?</h2><div class="s7-ski-steps"><div><strong>Latest operator report</strong><p><a href="'+esc(readiness.snow)+'" target="_blank" rel="noopener noreferrer">Read the official resort or trail report</a> and verify when its lift, run and grooming details were updated. A scraped status may not have a dated update.</p></div><div><strong>Tickets and sessions</strong><p><a href="'+esc(readiness.tickets)+'" target="_blank" rel="noopener noreferrer">Verify tickets at the resort</a>. Published references are not a booking quote or future lift guarantee.</p></div><div><strong>Snow and access</strong><p><a href="/michigan-snow-totals/">NWS observed snowfall</a> and <a href="/michigan-snow-depth/">modeled snow depth</a> are not a measured ski base. Check <a href="https://mdotjboss.state.mi.us/MiDrive/map" target="_blank" rel="noopener noreferrer">MDOT travel conditions</a>.</p></div></div><p class="small">Build a <a href="/michigan-winter-weekends/#weekend-desk">weather-resilient winter weekend</a> instead of booking solely for a forecast.</p></section>':'';
  const p=slug?' data-resort="'+esc(slug)+'"':'';
  return [
  '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">',
@@ -67,6 +69,7 @@ function pageShell({title,description,url,h1,subtitle,content,slug=null}){
  '<p class="hero-live" id="ski-hero-live" aria-live="polite">Saturday/Sunday forecasts · NWS point data</p>',
  '<p class="update" id="updated" aria-live="polite">Loading the latest official signals…</p></div>',
  '</div>',
+ readinessHtml,
  content,
  '<footer class="foot"><p>Conditions and ski operations can change quickly. NWS forecast, nearby snow observations, active alerts and resort-reported operations are distinct sources. A warning is never a promise of powder or safe travel.</p>',
  '<p>Built by <a rel="author" href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a> · © 2026 Chris Izworski · <a href="/michigan-ski-hills/">Michigan Ski Hills</a> · <a href="https://www.weather.gov/">National Weather Service</a></p></footer></main>',
@@ -121,6 +124,11 @@ function index(){
  const url=base;
  const links=RESORTS.map(r=>'<li><a href="/michigan-ski-hills/'+r.slug+'/">'+esc(r.name)+'</a> — '+esc(r.location)+' ('+esc(r.region.replaceAll('-',' '))+')</li>').join('');
  const html=[
+ '<section class="panel s7-ski-readiness" aria-labelledby="s7-ski-title"><p class="eyebrow">Before you commit to a ski day</p><h2 id="s7-ski-title">Three checks before you buy or drive</h2><div class="s7-ski-steps">',
+ '<div><strong>1 · Is the hill operating?</strong><p>The NWS does not report open lifts. Use each <a href="#resort-list">hill’s official mountain report</a>, confirm the report date, then check the date you want to ski.</p></div>',
+ '<div><strong>2 · What actually fell?</strong><p><a href="/michigan-snow-totals/">Dated NWS reports</a>, <a href="/michigan-snow-depth/">modeled snowpack</a> and resort-reported base depth are different observations. None guarantees groomed terrain.</p></div>',
+ '<div><strong>3 · Is the trip practical?</strong><p>Check current tickets and rentals directly with the operator and consult <a href="https://mdotjboss.state.mi.us/MiDrive/map" target="_blank" rel="noopener noreferrer">MDOT MiDrive</a>. A snow forecast is not a lift-opening announcement.</p></div>',
+ '</div><p class="small">Want a weekend with a bad-weather backup? <a href="/michigan-winter-weekends/#weekend-desk">Choose a Michigan winter base town</a>, or compare <a href="/michigan-cross-country-skiing/">Nordic trails and grooming sources</a>.</p></section>',
  '<section class="panel decision-workspace" id="ski-decision"><p class="eyebrow">01 / Powder Chase + Worth the Drive</p><h2>Find your best ski-day candidate</h2>',
  '<p>Decide whether to chase forecast snow, take the family, save on tickets or ski close to home. NWS conditions inform the shortlist; official operating status and actual checkout prices remain separate checks.</p>',
  '<div class="controls decision-filters"><label>What matters most?<select id="ski-goal"><option value="powder">Fresh snow / powder potential</option><option value="family">Family &amp; beginner terrain</option><option value="value">Ticket &amp; drive value</option><option value="local">Shortest drive</option></select></label>',

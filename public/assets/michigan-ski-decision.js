@@ -74,14 +74,16 @@ function recap(){
  const target=$('ski-decision-results');if(!target||!S.data)return;target.replaceChildren();
  const dt=chosenDayDate(),seasonMonth=new Date(S.data.generatedAt).getUTCMonth()+1;
  const offSeason=![11,12,1,2,3,4].includes(seasonMonth);
- const c=offSeason&&S.goal==='powder'?[]:candidates();
- const title=el('h3',null,offSeason?'Planning mode · not an open-slope recommendation':S.goal==='powder'?'Where the NWS snow forecast leads':S.goal==='family'?'Family-friendly planning shortlist':S.goal==='value'?'Day-ticket and drive-value shortlist':'Closest useful slopes');
+ const snapshotAge=Date.now()-Date.parse(S.data.generatedAt);
+ const stale=!Number.isFinite(snapshotAge)||snapshotAge < -60000||snapshotAge>2*3600000;
+ const c=stale||(offSeason&&S.goal==='powder')?[]:candidates();
+ const title=el('h3',null,stale?'Conditions snapshot too old for a shortlist':offSeason?'Planning mode · not an open-slope recommendation':S.goal==='powder'?'Where the NWS snow forecast leads':S.goal==='family'?'Family-friendly planning shortlist':S.goal==='value'?'Day-ticket and drive-value shortlist':'Closest useful slopes');
  const subtitle=el('p','note',dt?'Selected '+(S.day==='saturday'?'Saturday':'Sunday')+', '+dt+' · '+(S.origin==='detroit'?'Detroit metro':'Grand Rapids')+' departures · NWS forecasts may change.':'Upcoming date unavailable');
- const quick=$('ski-hero-live');if(quick)quick.textContent=(offSeason?'Early-season planning · no open-slope claim':'In-season comparison · verify resort operations')+
+ const quick=$('ski-hero-live');if(quick)quick.textContent=(stale?'Weather snapshot stale · no recommendation':offSeason?'Outside usual ski months · planning only':'Forecast comparison · verify resort lifts')+
  ' · '+(S.day==='saturday'?'Saturday':'Sunday')+' forecast · '+(S.origin==='detroit'?'Detroit metro':'Grand Rapids');
  put(target,title,subtitle);
  if(!c.length){
-  const msg=offSeason&&S.goal==='powder'?'Ski season is not established yet. Look at the NWS early-season cold-air watch below; forecast snow or cold temperatures do not mean lifts are open.':S.goal==='powder'?'No monitored hill has at least 0.5 inches of NWS grid snowfall in the selected window without a matched winter warning. This does not mean all of Michigan has no snow.':'No suitable hill can be ranked with current source evidence.';
+  const msg=stale?'This weather snapshot is older than two hours, missing or dated in the future. A stale forecast cannot justify a drive; use the official operator and weather source links below.':offSeason&&S.goal==='powder'?'Outside the usual skiing months: NWS cold and snowfall forecasts do not mean lifts are open.':S.goal==='powder'?'No monitored hill has at least 0.5 inches of NWS grid snowfall in the selected window without a matched winter warning. This does not mean all of Michigan has no snow.':'No suitable hill can be ranked with current source evidence.';
   put(target,el('p','event',msg));return;
  }
  const group=el('div','decision-candidates');c.slice(0,3).forEach((r,i)=>{
@@ -96,10 +98,12 @@ function recap(){
    for(const reason of explain(r))put(item,el('p','small',reason));
    const risk=sessionRisk(r);
    if(risk.length)put(item,el('p','risk-summary',risk.slice(0,2).join(' · ')));
+   put(item,el('p','small',published(r)?'Operator page at last check: '+r.official.lifts.open+' of '+r.official.lifts.total+' lifts shown. Original report update time is unverified; weekend operation must be confirmed.':'No independently parsed resort operating report is available. Check the operator before buying tickets or driving.'));
    const row=el('div','source-links'),btn=el('button','outline-button','Compare trip cost');
    btn.type='button';btn.addEventListener('click',()=>{S.compare=[r.slug,...S.compare.filter(s=>s!==r.slug)].slice(0,2);cost();$('ski-trip-cost')?.scrollIntoView({behavior:'smooth',block:'nearest'});});
-   put(row,btn,sourceLink('Full hill report ↗','/michigan-ski-hills/'+r.slug+'/'));put(item,row);put(group,item);
- });put(target,group,el('p','small',offSeason?'October forecast does not imply ski season has started. Resort opening dates and conditions remain unverified.':'These are comparative leads, not go/no-go statements. Check the current operating report, ticket checkout and road authorities before travel.'));
+   put(row,btn,sourceLink('Official hill / lift report ↗',r.official?.url||r.snow),
+     sourceLink('Full hill report ↗','/michigan-ski-hills/'+r.slug+'/'));put(item,row);put(group,item);
+ });put(target,group,el('p','small',offSeason?'Out-of-season forecasts do not establish open lifts or a ski season. Verify the operator first.':'These are comparative leads, not go/no-go statements. Check the current operating report, ticket checkout and road authorities before travel.'));
 }
 function summaryPrices(r){
  const adult=ticket(r),kid=childTicket(r),userQuote=S.quotes[r.slug],a=adult??userQuote??null;

@@ -24,7 +24,7 @@ test('no hero photo; factual archival image strip appears after decision and mat
  assert.ok(g.includes("photoFigure(r.slug)"));
  assert.ok(g.includes("photoFigure(k,'strip')"));
  assert.ok(i.indexOf('ski-photo-strip')>i.indexOf('ski-decision-results'));
- assert.ok(i.indexOf('ski-photo-strip')<i.indexOf('resort-list'));
+ assert.ok(i.indexOf('ski-photo-strip')<i.indexOf('<div id="resort-list"')); // Compare with actual ranking container, not the new cross-link anchor
  assert.ok(i.indexOf('ski-photo-strip')>i.indexOf('ski-decision-results'));
  for(const name of ['Boyne_Mountain.JPG','Crystal_Mountain_-_Cheers_Chair.jpg','Caberfae_Peaks.jpg','Looking_over_Lac_La_Belle.jpg'])assert.ok(g.includes(name));
  for(const term of ['CC BY-SA 3.0','CC BY-SA 4.0','creativecommons.org','Historical, not live'])assert.ok(g.includes(term),term);
@@ -40,7 +40,8 @@ test('map and graph respond to day selection and preserve keyboard operation',()
  const board=read('public/assets/michigan-ski.js');
  for(const k of ['snowChart(day)','selectedForecast(day)','snow-chart-row','ski-day-bar',"addEventListener('keydown'"])assert.ok(map.includes(k),k);
  assert.ok(map.includes("document.getElementById('ski-day')?.addEventListener('change',render)"));
- assert.ok(d.includes("offSeason&&S.goal==='powder'?[]:candidates()"));
+ assert.ok(d.includes("stale||(offSeason&&S.goal==='powder')?[]:candidates()")); // Fails closed for old/invalid forecasts
+ assert.ok(d.includes('snapshotAge>2*3600000'));
  assert.match(d,/function childTicket\(\)\{return null/);
  assert.ok(board.includes('hill-extra'));
  assert.ok(board.includes("document.dispatchEvent(new CustomEvent('michigan-ski:data'"));
