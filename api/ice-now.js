@@ -343,22 +343,93 @@ function summarizePeriods(periods, hours) {
     maxWindMph: Math.round(maxWind), strongestWindDirection: strongestDirection, forcing
   };
 }
-async function forecastFor(region, now) {
+
+/* NOAA/NWS gridpoint temperature intervals are a separate official forecast product.
+ * The /forecast/hourly wrapper sometimes returns HTTP 404 even while the underlying
+ * /gridpoints/{office}/{x},{y} grid is current. Do not silently lose the forecast.
+ * Each validTime applies to the hours in its stated duration; never interpolate gaps.
+ */
+function nwsGridpointUrl(url, hourly = false) {
+  return typeof url === 'string' &&
+    (hourly
+      ? /^https:\/\/api\.weather\.gov\/gridpoints\/[A-Z]{3}\/\d+,\d+\/forecast\/hourly$/.test(url)
+      : /^https:\/\/api\.weather\.gov\/gridpoints\/[A-Z]{3}\/\d+,\d+$/.test(url));
+}
+
+function nwsIntervals(field) {
+  const values = Array.isArray(field?.values) ? field.values : [];
+  return values.flatMap(row => {
+    const v = Number(row?.value);
+    if (row?.value === null || !Number.isFinite(v) || typeof row.validTime !== 'string') return [];
+    const match = row.validTime.match(/^(.+)\/P(?:(\d+)D)?(?:T(?:(\d+)H)?(?:(\d+)M)?)?$/);
+    if (!match) return [];
+    const from = Date.parse(match[1]);
+    const length = ((Number(match[2] || 0) * 24 + Number(match[3] || 0)) * 60 + Number(match[4] || 0)) * 60000;
+    if (!Number.isFinite(from) || length < 3600000 || length > 15 * 86400000) return [];
+    return {from, until:from + length, value:v};
+  });
+}
+
+function gridValueAt(intervals, timestamp) {
+  return intervals.find(r => r.from <= timestamp && timestamp < r.until)?.value ?? null;
+}
+
+export function forecastGridPeriods(grid, now = new Date()) {
+  const p = grid?.properties, update = Date.parse(p?.updateTime || '');
+  const at = now.getTime();
+  if (!Number.isFinite(update) || at - update > 24 * 3600000 || update - at > 2 * 60000) return [];
+  const tu = p?.temperature?.uom || p?.temperature?.unitCode;
+  if (tu !== 'wmoUnit:degC' && tu !== 'wmoUnit:degF') return [];
+  const temp = nwsIntervals(p.temperature),wind = nwsIntervals(p.windSpeed),dir = nwsIntervals(p.windDirection);
+  const wu = p?.windSpeed?.uom || p?.windSpeed?.unitCode;
+  const wscale = {'wmoUnit:km_h-1':0.621371,'wmoUnit:m_s-1':2.236936,'wmoUnit:mi_h-1':1,'wmoUnit:kn':1.15078}[wu];
+  const points = [];
+  const first = Math.ceil(at / 3600000) * 3600000;
+  for (let i = 0; i < 168; i++) {
+    const stamp = first + i * 3600000, c = gridValueAt(temp, stamp);
+    if (c === null) break; // An unobserved forecast interval ends the contiguous window.
+    const f = tu === 'wmoUnit:degC' ? c * 9/5 + 32 : c;
+    if (!Number.isFinite(f) || f < -100 || f > 150) break;
+    const speed = gridValueAt(wind,stamp),bearing = gridValueAt(dir,stamp);
+    const mph = speed === null || wscale === undefined || speed < 0 ? null : Math.round(speed * wscale);
+    const compass = Number.isFinite(bearing) ? ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'][Math.round(((bearing % 360) + 360) % 360 / 22.5) % 16] : null;
+    points.push({startTime:new Date(stamp).toISOString(),temperature:f,temperatureUnit:'F',
+      windSpeed:mph === null ? null : mph+' mph',windDirection:compass});
+  }
+  return points;
+}
+
+export async function forecastFor(region, now) {
   const [lat, lon] = region.forecast;
-  const point = await fetchJson('https://api.weather.gov/points/' + lat + ',' + lon,
-    { headers: { ...UA, Accept: 'application/geo+json' } });
-  const hourlyUrl = point && point.properties && point.properties.forecastHourly;
-  if (!hourlyUrl) return null;
-  const hourly = await fetchJson(hourlyUrl, { headers: { ...UA, Accept: 'application/geo+json' } });
-  const periods = hourly && hourly.properties && Array.isArray(hourly.properties.periods) ? hourly.properties.periods : [];
-  const first = periods[0] && periods[0].startTime ? periods[0].startTime : now.toISOString();
+  const headers = { ...UA, Accept: 'application/geo+json' };
+  const opts = {headers, signal:AbortSignal.timeout(7000)};
+  const point = await fetchJson('https://api.weather.gov/points/' + lat + ',' + lon,opts);
+  const hourlyUrl = point?.properties?.forecastHourly;
+  if (nwsGridpointUrl(hourlyUrl,true)) {
+    try {
+      const hourly = await fetchJson(hourlyUrl,{headers,signal:AbortSignal.timeout(7000)});
+      const periods = Array.isArray(hourly?.properties?.periods) ? hourly.properties.periods : [];
+      if (periods.length >= 72 && periods[0]?.startTime) return {
+        source:'National Weather Service hourly forecast',
+        issuedAt:hourly.properties.generatedAt || hourly.properties.updateTime || null,
+        startsAt:periods[0].startTime, next24h:summarizePeriods(periods,24),
+        next72h:summarizePeriods(periods,72),next7Days: forecastDaily(periods),
+        limitation:'Forecast weather forcing, not ice thickness, cracks, sheet movement, or safe access.'
+      };
+    } catch (_) { /* Recover from a missing hourly product using the same NWS gridpoint. */ }
+  }
+  const gridUrl = point?.properties?.forecastGridData;
+  if (!nwsGridpointUrl(gridUrl)) return null;
+  const grid = await fetchJson(gridUrl,{headers,signal:AbortSignal.timeout(7000)});
+  const periods = forecastGridPeriods(grid,now);
+  if (periods.length < 72) return null;
   return {
-    source: 'National Weather Service hourly forecast',
-    issuedAt: hourly && hourly.properties ? hourly.properties.generatedAt || hourly.properties.updateTime || null : null,
-    startsAt: first,
-    next24h: summarizePeriods(periods, 24), next72h: summarizePeriods(periods, 72),
-    next7Days: forecastDaily(periods),
-    limitation: 'This is forecast weather forcing, not a forecast of local ice thickness, cracks, movement, or safety.'
+    source:'National Weather Service gridded temperature and wind forecast',
+    dataProduct:'official-nws-grid-fallback',
+    issuedAt:grid.properties.updateTime,startsAt:periods[0].startTime,
+    next24h:summarizePeriods(periods,24),
+    next72h:summarizePeriods(periods,72),next7Days: forecastDaily(periods),
+    limitation:'Official NWS gridded values are applied to their published time intervals. This is forecast weather forcing, not measured ice thickness, cracks, sheet movement, or safe access.'
   };
 }
 
