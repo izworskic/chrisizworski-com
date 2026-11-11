@@ -155,7 +155,7 @@ test('front-end evidence desk uses exact NPS historical photo with source, is ac
   assert.match(html,/id="geo-repair-status"/);
   assert.match(html,/CANA_Playalinda_NewBoardwalk_3-3\.jpg/);
   assert.match(html,/Historical photograph, not an image of current conditions/);
-  assert.match(html,/geo-map\.js\?v=20261101-repair1/);
+  assert.match(html,/geo-map\.js\?v=20261110-region-voice-v1/);
   assert.match(map,/fetch\('\/api\/space-coast-boardwalk-repairs'/);
   assert.match(map,/function renderRepairHistory\(/);
   assert.match(map,/function showLotRepairEvidence\(/);
