@@ -205,6 +205,9 @@ try{
   
   await run('B85 GA4: direct regional navigation and only genuine plan outcomes',async()=>{
     await page.locator('#clear-list').click();
+    if(await page.locator('#upfall-day-sheet').evaluate(el=>!el.hidden))await page.locator('#open-day-sheet').click();
+    // Other smoke cases already clicked the sheet. Isolate events to THIS scenario.
+    await page.evaluate(()=>{window.__upfallCaptured=[];});
     await page.locator('#visit-date').fill('2027-01-20');
     await page.locator('#waterfall-day-choices a[href="#presque-isle-outing"]').click();
     await page.locator('#q').fill('');
