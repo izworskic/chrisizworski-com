@@ -71,7 +71,7 @@ test('official source desk uses fixed source hosts, independent failure, and no 
  [SOURCES.park]:'11/2/26 ALL OTHER KAUAʻI STATE PARKS REMAIN CLOSED'
  };
  const fetcher=async url=>({ok:true,headers:{get:()=>null},text:async()=>bodies[url]});
- const report=await readOfficial({fetcher,now:'2026-11-10T12:00:00Z'});
+ const report=await readOfficial({fetcher,now:'2026-11-05T12:00:00Z'});
  assert.equal(report.evidence.beach.status,'general-policy-retrieved');
  assert.equal(report.evidence.guest.status,'recreation-only-confirmed');
  assert.equal(report.evidence.park.status,'published-closure');
@@ -82,7 +82,7 @@ test('official source desk uses fixed source hosts, independent failure, and no 
  await assert.rejects(fetchOfficial('https://evil.example/closure',fetcher),/untrusted-source/);
  const withError=await readOfficial({fetcher:async url=>url===SOURCES.guest?{ok:true,headers:{get:()=>null},text:async()=>bodies[url]}:{ok:false,headers:{get:()=>null}}});
  assert.equal(withError.evidence.beach.status,'archived-policy-not-live');
- assert.equal(withError.evidence.beach.verifiedAt,'2026-11-10');
+ assert.equal(withError.evidence.beach.verifiedAt,'2026-11-05');
  assert.equal(withError.evidence.beach.sourceFetchedAt,null);
  assert.match(withError.evidence.beach.message,/Automated current-source retrieval failed/);
  assert.equal(HISTORICAL_NAVY.guest.status,'archived-policy-not-live');
@@ -92,7 +92,7 @@ test('official source desk uses fixed source hosts, independent failure, and no 
  assert.equal(withError.evidence.park.status,'source-unavailable');
  let status=0,body=null;
  const res={setHeader(){},status(n){status=n;return this;},json(v){body=v;return this;}};
- await createHandler({fetcher,now:'2026-11-10T12:00:00Z'})({method:'GET',query:{url:'https://evil.example'}},res);
+ await createHandler({fetcher,now:'2026-11-05T12:00:00Z'})({method:'GET',query:{url:'https://evil.example'}},res);
  assert.equal(status,200);assert.equal(body.evidence.park.status,'published-closure');
  await createHandler({fetcher})({method:'POST'},res);assert.equal(status,405);
 });
