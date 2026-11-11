@@ -37,16 +37,16 @@
   };
   const kind=place=>CATEGORIES.coast.has(place.kind)?'coast':'town';
   const visible=place=>state.filter==='all'||kind(place)===state.filter;
-  const sceneLabel=place=>place.kind==='park-sunset'?'Sunset closure':
-    place.kind==='surf-hours'?'8 a.m.–6 p.m. · closures possible':
-    place.kind==='college'?'Parking permit required':
-    'Park hours / event access unverified';
+  const sceneLabel=place=>place.kind==='park-sunset'?'Closes at sunset':
+    place.kind==='surf-hours'?'8 a.m.–6 p.m. · check launch restrictions':
+    place.kind==='college'?'Check campus parking rules':
+    'Check park hours and launch-day access';
 
   function noteSelection(place) {
     detail.replaceChildren();
     if(!place){
       detail.appendChild($('p','vg-map-selection-hint',
-        'Select a map pin or place to see its access restrictions and open the detailed guide.'));
+        'Choose a place to see what the view might be like and what access rules to check.'));
       return;
     }
     const label=$('span','vg-map-detail-kicker','SELECTED / '+place.pinLabel.toUpperCase());
@@ -55,14 +55,14 @@
     const scene=$('p','',place.scene);
     const access=$('p','vg-map-detail-access',place.accessNote);
     const actions=$('div','vg-map-detail-links');
-    const read=$('a','vg-map-read','Read the full viewing notes');
+    const read=$('a','vg-map-read','Read what to expect here');
     read.href='#'+place.articleAnchor;
     actions.appendChild(read);
-    const origin=safeExternal(place.source,'Local / official source');
+    const origin=safeExternal(place.source,'Read the local viewing source');
     if(origin)actions.appendChild(origin);
     if(['surf-hours','college'].includes(place.kind)){
       const rules=safeExternal(place.accessSource,
-        place.kind==='surf-hours'?'Official beach rules':'Official parking rules');
+        place.kind==='surf-hours'?'Check the Navy/Space Force beach rules':'Check campus parking rules');
       if(rules)actions.appendChild(rules);
     }
     detail.append(label,title,caution,scene,access,actions);
@@ -95,7 +95,7 @@
     });
     const shown=state.places.filter(visible);
     document.getElementById('vg-map-count').textContent=shown.length+
-      (shown.length===1?' documented location':' documented locations');
+      (shown.length===1?' documented location':' places to consider');
   }
 
   function select(id,how) {
@@ -158,7 +158,7 @@
     }).addTo(state.map);
     const popup=$('div','vg-map-popup');
     popup.append($('strong','',p.name),$('p','',sceneLabel(p)));
-    const view=$('a','','Read the guide section');
+    const view=$('a','','Read about this viewing spot');
     view.href='#'+p.articleAnchor;
     popup.appendChild(view);
     marker.bindPopup(popup);
@@ -222,7 +222,7 @@
   async function init(){
     if(!window.L){
       root.querySelector('.vg-map-placeholder span').textContent=
-        'The map library could not load. Use the six linked viewing sites next to the map.';
+        'The map isn’t loading, but the six viewing places and their access notes are still listed beside it.';
       return;
     }
     try{
@@ -252,8 +252,8 @@
     }catch(_){
       root.replaceChildren();
       const fallback=$('div','vg-map-placeholder');
-      fallback.append($('strong','','Map currently unavailable'),
-        $('span','','The six linked viewing locations and access warnings remain available beside the map and below.'));
+      fallback.append($('strong','','The map isn’t loading'),
+        $('span','','You can still compare all six Lompoc viewing areas and follow their official rules below.'));
       root.appendChild(fallback);
       root.dataset.mapReady='false';
     }
