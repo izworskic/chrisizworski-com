@@ -20,7 +20,7 @@ test("a stale satellite reading contributes nothing and says so", () => {
 });
 
 test("a fresh satellite reading does contribute", () => {
-  const s = snapshotFor(REGIONS[0], { ndvi: { senescence: 0.8, date: "2026-10-01", ageDays: 4 } }, null);
+  const s = snapshotFor(REGIONS[0], { ndvi: { senescence: 0.8, date: "2026-10-01", ageDays: 4 } }, null, new Date("2026-10-05T15:00:00Z"));
   assert.equal(s.source.satelliteWeight, 1);
   assert.ok(s.source.drivers.includes("MODIS canopy greenness"));
 });
@@ -57,4 +57,14 @@ test("offsetForSite refuses to guess before senescence starts", () => {
   }
   const early = _internal.offsetForSite(rows, 200, 2026);
   assert.equal(early.shift, null, "no offset before the canopy starts turning");
+});
+
+test("a green satellite pixel cannot restore northern October leaves in November", () => {
+  const s = snapshotFor(REGIONS[0], {
+    weather: { coolNights: 0, lowestRecent: 55, frostRecent: false },
+    ndvi: { senescence: 0, date: "2026-11-10", ageDays: 1, canopyPct: 100 },
+  }, { shift: -10, confidence: "good" }, new Date("2026-11-10T17:00:00Z"));
+  assert.ok(["bare", "offseason"].includes(s.phase));
+  assert.ok(s.pct <= 2);
+  assert.equal(s.source.satelliteWeight, 0);
 });
