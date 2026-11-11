@@ -64,8 +64,9 @@
     const panel=button.closest('[data-regional-cluster]');
     const status=panel?.querySelector('[data-regional-feedback]');
     const result=assess(key,cards,chosen(),date?.value||'');
-    if (!result.ok) {if(status){status.textContent=result.reason;status.focus();}return;}
+    if (!result.ok) {window.UPWaterfallMetrics?.plan(key,'blocked',0);if(status){status.textContent=result.reason;status.focus();}return;}
     for (const id of result.missing) cards.get(id).querySelector('.save').click();
+    window.UPWaterfallMetrics?.plan(key,result.missing.length?'added':'already_saved',result.missing.length);
     const sheet=document.getElementById('upfall-day-sheet'),reveal=document.getElementById('open-day-sheet');
     if (sheet?.hidden&&reveal) reveal.click();
     const description=key==='keweenaw-parks'
