@@ -1,0 +1,37 @@
+# Lake Superior Circle Tour: verified arrival desk for eight stop-guide gaps
+
+**Source review:** November 10, 2026. **Scope:** existing independent Circle Tour bridge only. **Visitor job:** having chosen an outing, know where to start driving and where not to park. No route planner, map data, first-party specialist, SEO or index changes.
+
+## Principle: distinguish official address from a map search
+
+This change ships eleven *text-based* Google Maps destinations. Exactly **four** contain official street addresses and use the Google Maps directions API. The other **seven** use the Google Maps *search* API and are explicitly described as named entrances, locations or streets, **not surveyed parking pins**. Search suggestions may be imperfect. No invented coordinates, Google Place IDs, access availability, route times or guaranteed parking.
+
+Each location carries: `label`, `destination`, `kind` (`address` or `search`), a useful `note`, official `sourceUrl`, and `sourceLabel`. The UI makes the distinction in the action label (“Directions to published address” versus “Find starting area on Google Maps”), retains a direct source link, and explains that the destination may be a street rather than a space. Link handling is click-only and safe new tab.
+
+## Eight stops and exact source grounding
+
+| Stop | Starting point and map resolution | Controlling evidence | Arrival reality |
+| --- | --- | --- | --- |
+| 2 Wisconsin Point, Superior | **Lot 1**, named search, not a geocoded lot pin | [City of Superior Wisconsin Point park rules](https://www.superiorwi.gov/226/Wisconsin-Point) | City restricts parking from 11 p.m. to 4 a.m. **beyond Lot 1** and requires designated parking/access. Check beach advisories before swimming. |
+| 4 Ashland murals | **Ellis Avenue and Main Street**, mapped intersection search | [Visit Ashland mural-walk start](https://www.visitashland.com/murals/), [downtown public parking map](https://www.visitashland.com/files/Downtown-Map-legal.pdf), [Bayfield County walk directions](https://www.bayfieldcounty.wi.gov/868/Directions-to-Trails) | Intersection marks the walking start, **not an assigned parking lot**. Map P symbols show free parking options nearby, subject to local signs. |
+| 17 White River, ON | **Winnie the Pooh Park**, named park search | [Township of White River park description](https://www.whiteriver.ca/winnie-the-pooh-park) | Park sits just off Highway 17 beside tourist information centre and bear statue. Office may have separate opening schedule. |
+| 19 Nipigon, ON | **Nipigon Marina**, named place search, **and Red Rock's Third Street**, street search | [Parks Canada trail directions](https://www.parcs.canada.ca/amnc-nmca/on/super/activ/experiences/randonnees-hiking/nipigon), [township trail guide](https://www.nipigon.net/play-explore/things-to-do/trails-walks/item/114-nipigon-river-recreation-trail) | From Nipigon Marina parking lot, walk south across road bridge. For the Red Rock end, Highway 628 for approximately 7 km then left onto Third Street. A street search is **not the exact trailhead gate**. Full trail one way; arrange return. |
+| 21 Grand Portage State Park | **9393 East Highway 61**, verified DNR address | [DNR Grand Portage 2025 park map and guide](https://files.dnr.state.mn.us/maps/state_parks/spk00173.pdf) | Park is also a highway rest area. Park at visitor centre; the one-mile High Falls trail begins there. Middle Falls branches before boardwalk, not another drivable stop. The 2025 DNR guide explicitly says no park vehicle permit for rest-area parking. |
+| 24 Cascade River State Park | **Cascade River Wayside on Highway 61**, named search, and **3481 West Highway 61**, separate DNR office address | [DNR Cascade River park map](https://files.dnr.state.mn.us/maps/state_parks/spk00133.pdf), [Superior Hiking Trail wayside milepost 99.9](https://superiorhiking.org/trail-section/caribou-river-wayside-to-lutsen/), [MnDOT May 27, 2026 construction notice](https://olmwebservices.dot.state.mn.us/news/2026/05/27-d1-cascade.html) | The riverside wayside and park office are **different arrivals**. In May 2026 MnDOT announced no lakeside parking during works and possible inland lot partial closure later in summer; it does not prove current closure or reopening. Follow contemporary barriers/agency updates. |
+| 25 Temperance River/Lutsen | **Highway 61 parking on northeast side of Temperance River**, named trailhead search; **467 Ski Hill Road**, verified resort address | [Minnesota DNR 2026 Temperance park map](https://files.dnr.state.mn.us/maps/state_parks/spk00268.pdf), [Lutsen operator physical address](https://www.lutsen.com/contact-us), [Lutsen parking FAQ](https://www.lutsen.com/faqs) | DNR says both gorge and Carlton Peak routes start from that northeast-side Highway 61 lot. Google name search may select a broader park. **Lutsen Mountains is separate**; base, roadside and overflow parking are operator-controlled. No swimming in the Temperance River. |
+| 26 Tettegouche State Park | **5702 Highway 61 Silver Bay**, DNR address | [Minnesota DNR park contact directory](https://www.dnr.state.mn.us/grants/recreation/transportation-grants.html), [DNR trail itinerary](https://www.dnr.state.mn.us/state-parks/itineraries/north-shore-waterfall-itinerary.html) | Visitor center is documented starting point for Shovel Point and the three-mile High Falls hike. Neither map nor photo asserts trail opening on a chosen date. |
+
+Google maps are provided for *navigation discovery*, not as proof that the map service correctly resolved every query or that parking will be available. The owner should periodically check the seven named map-search results as destination data changes; do not claim a verified exact pin for them.
+
+## Explicitly protected contracts
+
+- The original 31-stop planner, route/map, Journey Atlas, 22 approved specialist connections, original nine photo stories and associated licenses, original stop guide, no-JavaScript fallback, canonical/Person, sitemap and ads remain untouched.
+- The arrival desk is shown only in the **no-specialist** branch when an authoritative official guide exists. Existing specialist links always win. No GIS overlay is invented, no coordinates are extrapolated from maps, and no new standalone destination page is published.
+- Existing link tracking only records an **explicit outbound click** (`arrival-map-open` / `arrival-source-open`), never impressions or an unverified completed visit.
+- Node validation checks all eleven sources, exact route-versus-search semantics, absence of placeId/coords, and sensitive distinctions at Nipigon, Cascade, Temperance, Grand Portage and Tettegouche.
+- Chromium browser QA selects eight stops at 360,390,768,1366,1440, checking link counts, map host, HTTPS, rel=noopener, source evidence and no horizontal overflow. Then checks specialist priority and the original photo states.
+- Source documents are snapshots of **published directions**, not current access status. In particular, MnDOT's 2026 Cascade notice must be described as dated history. There is no claimed visit, checked routing ETA or parking-space guarantee.
+
+## Release
+
+Require exact-head Circle Tour browser QA, Foundry checks, full repository audit and Vercel preview before merge. After merge, read back the published bridge JS/CSS and ensure official arrivals, source links and new handlers reached production. Separate photo CDN loading from this task.

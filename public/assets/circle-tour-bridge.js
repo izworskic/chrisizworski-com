@@ -79,6 +79,123 @@
     }
   });
   function officialStopGuide(id){return Object.hasOwn(OFFICIAL_STOPS,String(id))?OFFICIAL_STOPS[String(id)]:null;}
+  // Researched arrival points. Name searches may resolve a general place or street,
+  // never a surveyed parking pin. Exact addresses originate with the land manager.
+  const OFFICIAL_ARRIVALS=Object.freeze({
+    "2": [
+      {
+        "label": "Wisconsin Point · Lot 1",
+        "kind": "search",
+        "destination": "Wisconsin Point Lot 1, Superior, Wisconsin, USA",
+        "note": "The city identifies Lot 1 as the threshold for its 11 p.m.–4 a.m. restriction farther along Wisconsin Point Road. Use designated access areas; confirm the actual lot entrance on signs.",
+        "sourceUrl": "https://www.superiorwi.gov/226/Wisconsin-Point",
+        "sourceLabel": "City of Superior access and parking rules"
+      }
+    ],
+    "4": [
+      {
+        "label": "Mural walk · Ellis Avenue at Main Street",
+        "kind": "search",
+        "destination": "Ellis Avenue and Main Street, Ashland, Wisconsin, USA",
+        "note": "Ashland's mural walk begins at Ellis and Main, then runs west through downtown. This is the walking start, not a reserved parking lot. The visitor map marks public parking areas.",
+        "sourceUrl": "https://www.visitashland.com/files/Downtown-Map-legal.pdf",
+        "sourceLabel": "Visit Ashland downtown parking map"
+      }
+    ],
+    "17": [
+      {
+        "label": "Winnie the Pooh Park · Highway 17",
+        "kind": "search",
+        "destination": "Winnie the Pooh Park, White River, Ontario, Canada",
+        "note": "The township places the park just off Highway 17 beside its tourist information centre and Winnie the Pooh statue. Follow the signed park driveway; office hours are separate.",
+        "sourceUrl": "https://www.whiteriver.ca/winnie-the-pooh-park",
+        "sourceLabel": "Township of White River park entrance"
+      }
+    ],
+    "19": [
+      {
+        "label": "Short walk · Nipigon Marina",
+        "kind": "search",
+        "destination": "Nipigon Marina, Nipigon, Ontario, Canada",
+        "note": "Parks Canada directs walkers to park at Nipigon Marina, then walk south across the road bridge to the trailhead. The near-river path is the shorter option.",
+        "sourceUrl": "https://www.parcs.canada.ca/amnc-nmca/on/super/activ/experiences/randonnees-hiking/nipigon",
+        "sourceLabel": "Parks Canada Nipigon-side trail directions"
+      },
+      {
+        "label": "Long trail or Lloyd's Lookout · Red Rock",
+        "kind": "search",
+        "destination": "Third Street, Red Rock, Ontario, Canada",
+        "note": "From Highway 11/17, follow Highway 628 toward Red Rock for about 7 km, then the signed left turn onto Third Street. The map search may locate the street, not the trailhead gate; verify signage and a return ride.",
+        "sourceUrl": "https://www.parcs.canada.ca/amnc-nmca/on/super/activ/experiences/randonnees-hiking/nipigon",
+        "sourceLabel": "Parks Canada Red Rock trailhead directions"
+      }
+    ],
+    "21": [
+      {
+        "label": "Grand Portage State Park · visitor center",
+        "kind": "address",
+        "destination": "9393 East Highway 61, Grand Portage, MN 55605, USA",
+        "note": "The DNR visitor-center/rest-area parking is the start for the one-mile High Falls walk. The Middle Falls trail branches before the boardwalk; do not drive toward the falls themselves.",
+        "sourceUrl": "https://files.dnr.state.mn.us/maps/state_parks/spk00173.pdf",
+        "sourceLabel": "Minnesota DNR Grand Portage visitor map (2025)"
+      }
+    ],
+    "24": [
+      {
+        "label": "Cascade River Wayside · falls loop",
+        "kind": "search",
+        "destination": "Cascade River Wayside, Highway 61, Lutsen, Minnesota, USA",
+        "note": "The falls-side trailhead is at Highway 61 near the river, around milepost 99.9. MnDOT reported wayside parking and crossing construction in 2026. Check current barriers; do not assume either side is open.",
+        "sourceUrl": "https://olmwebservices.dot.state.mn.us/news/2026/05/27-d1-cascade.html",
+        "sourceLabel": "MnDOT dated Cascade Wayside construction notice"
+      },
+      {
+        "label": "Cascade River State Park · park entrance",
+        "kind": "address",
+        "destination": "3481 West Highway 61, Lutsen, MN 55612, USA",
+        "note": "This is the DNR's published park-office address, not the same entrance as the falls-side wayside. Check the DNR map before choosing a trail and parking area.",
+        "sourceUrl": "https://files.dnr.state.mn.us/maps/state_parks/spk00133.pdf",
+        "sourceLabel": "Minnesota DNR park map (2020)"
+      }
+    ],
+    "25": [
+      {
+        "label": "Temperance Gorge · Highway 61 northeast-side lot",
+        "kind": "search",
+        "destination": "Temperance River Gorge Trailhead parking, Highway 61, Schroeder, Minnesota, USA",
+        "note": "The DNR starts both the 0.25-mile gorge trail and the Carlton Peak route at the Highway 61 lot on the northeast side of the river. Map search is not a surveyed parking pin: use the DNR diagram and roadside signs.",
+        "sourceUrl": "https://files.dnr.state.mn.us/maps/state_parks/spk00268.pdf",
+        "sourceLabel": "Minnesota DNR parking and trail map (2026)"
+      },
+      {
+        "label": "Lutsen Mountains · separate resort",
+        "kind": "address",
+        "destination": "467 Ski Hill Road, Lutsen, MN 55612, USA",
+        "note": "The resort's own entrance is up Ski Hill Road, not at Temperance River. Lutsen advises gondola-base and overflow parking as directed by attendants; verify lift service before driving up.",
+        "sourceUrl": "https://www.lutsen.com/faqs",
+        "sourceLabel": "Lutsen Mountains operator parking instructions"
+      }
+    ],
+    "26": [
+      {
+        "label": "Tettegouche · visitor center",
+        "kind": "address",
+        "destination": "5702 Highway 61, Silver Bay, MN 55614, USA",
+        "note": "Minnesota DNR's visitor center is the published starting point for the Shovel Point path and the roughly three-mile High Falls hike. Choose the trail after arrival and check alerts.",
+        "sourceUrl": "https://www.dnr.state.mn.us/state-parks/itineraries/north-shore-waterfall-itinerary.html",
+        "sourceLabel": "Minnesota DNR hiking itinerary and trailhead"
+      }
+    ]
+  });
+  function officialArrivals(id){return Object.hasOwn(OFFICIAL_ARRIVALS,String(id))?OFFICIAL_ARRIVALS[String(id)]:[];}
+  function arrivalMapUrl(entry){
+    if(!entry||!['address','search'].includes(entry.kind)||typeof entry.destination!=='string'
+      ||entry.destination.length<10||entry.destination.length>180)return '';
+    const query=encodeURIComponent(entry.destination);
+    return entry.kind==='address'
+      ?'https://www.google.com/maps/dir/?api=1&destination='+query+'&travelmode=driving'
+      :'https://www.google.com/maps/search/?api=1&query='+query;
+  }
   function safeDate(v){
     if(typeof v!=='string'||!/^\d{4}-\d\d-\d\d$/.test(v))return '';
     const d=new Date(v+'T12:00:00Z');
@@ -176,7 +293,7 @@
     };
   }
 
-  const helpers={rankConnections,roadChecks,buildReturnHref,planNextDecision,safeDate,safeTheme,safeToolUrl,safeRoadUrl,officialStopGuide,officialStops:OFFICIAL_STOPS};
+  const helpers={rankConnections,roadChecks,buildReturnHref,planNextDecision,safeDate,safeTheme,safeToolUrl,safeRoadUrl,officialStopGuide,officialStops:OFFICIAL_STOPS,officialArrivals,arrivalMapUrl};
   if(typeof module!=='undefined'&&module.exports)module.exports=helpers;
   if(!root?.document)return;
   const document=root.document,host=document.querySelector('[data-circle-tour-bridge]');
@@ -361,6 +478,30 @@
       }
       const stop=el('a','ctb-secondary-link','Use the original stop guide');
       stop.href='#stop-'+model.stopId;options.append(stop);host.append(options);
+      if(guide){
+        const locations=officialArrivals(model.stopId);
+        if(locations.length){
+          const arrivalSection=el('section','ctb-arrivals');
+          arrivalSection.setAttribute('aria-label','How to reach the starting point');
+          arrivalSection.append(
+            el('p','ctb-arrivals-label','WHERE TO START'),
+            el('p','ctb-arrivals-intro','Choose the right entrance before you drive. Maps can point to a street or landmark, not necessarily an available parking space.')
+          );
+          const list=el('div','ctb-arrivals-grid');
+          for(const arrival of locations){
+            const card=el('div','ctb-arrival');
+            card.append(el('h4','ctb-arrival-title',arrival.label),el('p','ctb-arrival-note',arrival.note));
+            const actions=el('div','ctb-arrival-actions');
+            const map=link(arrival.kind==='address'?'Directions to published address':'Find starting area on Google Maps',
+              arrivalMapUrl(arrival),'ctb-link ctb-arrival-map');
+            map.addEventListener('click',()=>track('arrival-map-open',{stop:model.stopId,kind:arrival.kind}));
+            const source=link('Check starting point source',arrival.sourceUrl,'ctb-secondary-link ctb-arrival-source');
+            source.addEventListener('click',()=>track('arrival-source-open',{stop:model.stopId}));
+            actions.append(map,source);card.append(actions);list.append(card);
+          }
+          arrivalSection.append(list);host.append(arrivalSection);
+        }
+      }
     }
     renderPlaceStory(model,host);
     if(model.total>1){

@@ -87,6 +87,38 @@ function check(value,message){if(!value)throw Error(message);}
       check(await page.locator('#ctb-results .ctb-entry').count()===0,
         size.name+': false independent specialist card at '+id);
     }
+    // Arrivals are named map searches or land-manager-published street addresses.
+    // No precise pin is invented, and the earlier practical official handoff survives.
+    for(const [id,expected] of [
+      ['2',1],['4',1],['17',1],['19',2],['21',1],['24',2],['25',2],['26',1]
+    ]){
+      await page.locator('#ctb-stop').selectOption(id);
+      await page.locator('#ctb-theme').selectOption('all');
+      const desk=page.locator('#ctb-decision .ctb-arrivals');
+      check(await desk.count()===1,size.name+': arrival desk missing at stop '+id);
+      check((await desk.textContent()).includes('WHERE TO START'),size.name+': arrival desk unlabelled at '+id);
+      check(await desk.locator('.ctb-arrival').count()===expected,
+        size.name+': wrong verified arrival count at '+id);
+      const links=await desk.locator('.ctb-arrival-map').evaluateAll(nodes=>nodes.map(node=>({
+        url:node.href,target:node.target,rel:node.rel
+      })));
+      check(links.length===expected,size.name+': Google Maps link count wrong at '+id);
+      for(const link of links){
+        const u=new URL(link.url);
+        check(u.hostname==='www.google.com'&&['/maps/search/','/maps/dir/'].includes(u.pathname)&&u.searchParams.get('api')==='1',
+          size.name+': untrusted or malformed map link at '+id);
+        check(link.target==='_blank'&&link.rel.includes('noopener'),
+          size.name+': map link needs safe separate tab at '+id);
+      }
+      check(await desk.locator('.ctb-arrival-source').count()===expected,
+        size.name+': arrival claim lacks underlying manager source at '+id);
+      const dimensions=await desk.evaluate(el=>({width:el.getBoundingClientRect().width,document:document.documentElement.scrollWidth,viewport:window.innerWidth}));
+      check(dimensions.document<=dimensions.viewport+2,
+        size.name+': arrival cards caused horizontal overflow at '+id);
+    }
+    await page.locator('#ctb-stop').selectOption('27');
+    check(await page.locator('#ctb-decision .ctb-arrivals').count()===0,
+      size.name+': independent specialist was overwritten by arrival desk');
     await page.locator('#ctb-stop').selectOption('26');
     check(await page.locator('#ctb-decision .ctb-place-story').count()===1,
       size.name+': Tettegouche story missing when no specialist is released');
