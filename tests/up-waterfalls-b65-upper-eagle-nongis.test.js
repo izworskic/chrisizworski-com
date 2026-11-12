@@ -104,7 +104,7 @@ test('B65: the existing bridge-side visitor guide distinguishes names without re
  assert.ok(lower.includes(slug));
  assert.match(lower,/Eagle River Bridge Park/);
  assert.match(lower,/which|Upper Eagle River Falls is not this waterfall/i);
- assert.match(lower,/dateModified":"2026-11-03"/);
+ assert.match(lower,/dateModified":"2026-11-12"/);
  assert.ok(lower.includes('"@id":"https://chrisizworski.com/#person"'));
  assert.ok(lower.includes('<link rel="canonical" href="https://chrisizworski.com/upper-peninsula-waterfalls/eagle-river-falls/">'));
  assert.ok(sitemap.includes('<loc>https://chrisizworski.com/upper-peninsula-waterfalls/eagle-river-falls/</loc><lastmod>2026-11-12</lastmod>'));
