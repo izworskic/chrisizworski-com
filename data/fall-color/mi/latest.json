@@ -1,9 +1,9 @@
 {
-  "date": "2026-11-11",
-  "updated": "2026-11-11T18:44:38.398Z",
+  "date": "2026-11-12",
+  "updated": "2026-11-12T18:59:41.160Z",
   "body": "Michigan's main fall-color peak has passed. The regional seasonal model now places the state beyond its usual peak windows; that is not a direct report of leaves observed today.\n\nSome oak, beech, tamarack, and sheltered lakeshore color can linger after the maple peak. Weather inputs refresh, but they cannot establish how many leaves remain on a particular trail or scenic drive.\n\nFor a late-season outing, check a dated report from the destination or land manager before traveling. The map's date slider still lets you review this year's usual peak windows or plan for next fall.",
   "generationMethod": "Deterministic model summary",
-  "conditionsUpdated": "2026-11-11T18:44:38.397Z",
+  "conditionsUpdated": "2026-11-12T18:59:41.158Z",
   "sourceEvidence": [
     {
       "region": "wup",
@@ -15,7 +15,7 @@
         "anchorShiftDays": 0,
         "anchorConfidence": "low",
         "satelliteDate": "2026-10-16",
-        "satelliteAgeDays": 27,
+        "satelliteAgeDays": 28,
         "satelliteWeight": 0
       }
     },
@@ -29,7 +29,7 @@
         "anchorShiftDays": 0,
         "anchorConfidence": "low",
         "satelliteDate": "2026-10-16",
-        "satelliteAgeDays": 27,
+        "satelliteAgeDays": 28,
         "satelliteWeight": 0
       }
     },
@@ -43,7 +43,7 @@
         "anchorShiftDays": 0,
         "anchorConfidence": "low",
         "satelliteDate": "2026-10-16",
-        "satelliteAgeDays": 27,
+        "satelliteAgeDays": 28,
         "satelliteWeight": 0
       }
     },
@@ -57,7 +57,7 @@
         "anchorShiftDays": 0,
         "anchorConfidence": "low",
         "satelliteDate": "2026-10-16",
-        "satelliteAgeDays": 27,
+        "satelliteAgeDays": 28,
         "satelliteWeight": 0
       }
     },
@@ -71,7 +71,7 @@
         "anchorShiftDays": 0,
         "anchorConfidence": "low",
         "satelliteDate": "2026-10-16",
-        "satelliteAgeDays": 27,
+        "satelliteAgeDays": 28,
         "satelliteWeight": 0
       }
     },
@@ -85,12 +85,28 @@
         "anchorShiftDays": 0,
         "anchorConfidence": "low",
         "satelliteDate": "2026-10-16",
-        "satelliteAgeDays": 27,
+        "satelliteAgeDays": 28,
         "satelliteWeight": 0
       }
     },
     {
       "region": "swl",
+      "modeledPercent": 8,
+      "source": {
+        "drivers": [
+          "regional climatology",
+          "recent weather",
+          "canopy camera anchor"
+        ],
+        "anchorShiftDays": -10,
+        "anchorConfidence": "low",
+        "satelliteDate": "2026-10-16",
+        "satelliteAgeDays": 28,
+        "satelliteWeight": 0
+      }
+    },
+    {
+      "region": "sel",
       "modeledPercent": 10,
       "source": {
         "drivers": [
@@ -101,25 +117,8 @@
         "anchorShiftDays": -10,
         "anchorConfidence": "low",
         "satelliteDate": "2026-10-16",
-        "satelliteAgeDays": 27,
+        "satelliteAgeDays": 28,
         "satelliteWeight": 0
-      }
-    },
-    {
-      "region": "sel",
-      "modeledPercent": 14,
-      "source": {
-        "drivers": [
-          "regional climatology",
-          "recent weather",
-          "canopy camera anchor",
-          "MODIS canopy greenness"
-        ],
-        "anchorShiftDays": -10,
-        "anchorConfidence": "low",
-        "satelliteDate": "2026-10-16",
-        "satelliteAgeDays": 27,
-        "satelliteWeight": 0.72
       }
     }
   ],
