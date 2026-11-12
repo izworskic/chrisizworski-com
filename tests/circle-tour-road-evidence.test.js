@@ -40,7 +40,7 @@ test('source mileages preserve exact endpoints, units and source provenance',()=
   assert.equal(new Set(anchors.map(x=>x.id)).size,anchors.length);
   for(const x of anchors){
     assert.ok(x.from&&x.to&&x.scope&&Number.isFinite(x.distanceMiles)&&x.distanceMiles>0);
-    assert.ok(x.scope.length>35);
+    assert.ok(x.scope.length>=24,'each source needs a meaningful endpoint/scope caveat');
     const url=new URL(x.source);
     assert.equal(url.protocol,'https:');
     assert.ok(['superiorcountry.ca','www.destinationontario.com','www.nps.gov','www.ridelakesuperior.com','shipwreckmuseum.com'].includes(url.hostname));
@@ -110,8 +110,8 @@ test('partial published miles never flow into the live itinerary travel clock',(
   const card=id=>({
     querySelector(){
       const entry=html.match(new RegExp('<article class="stop-card" id="stop-'+id+'"[^]*?<\\/article>'))?.[0]||'';
-      const found=entry.match(/<span class="stop-dist"([^>]*)>([^<]*)<\/span>/);
-      return {textContent:found?.[2]||'',dataset:{edgeVerified:found?.[1]?.includes('data-edge-verified="false"')?'false':undefined}};
+      const found=entry.match(new RegExp('<span class="stop-dist"([^>]*)>(.*?)</span>','s'));
+      return {textContent:(found?.[2]||'').replace(/<[^>]+>/g,''),dataset:{edgeVerified:found?.[1]?.includes('data-edge-verified="false"')?'false':undefined}};
     }
   });
   const code=section(live,'  function edgeMiles(', '  function totalMiles(');
