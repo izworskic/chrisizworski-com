@@ -39,6 +39,46 @@ function check(value,message){if(!value)throw Error(message);}
     });
     check(geometry.document<=geometry.viewport+2,size.name+': horizontal overflow '+JSON.stringify(geometry));
     check(geometry.bridge<=size.width,size.name+': connection layer wider than viewport');
+
+    // Source-backed road choices stay usable at each viewport, without hijacking the
+    // original 31-stop map or turning a published estimate into a verified ETA.
+    await page.waitForFunction(()=>document.querySelectorAll('#routeDayList .route-day').length===10,null,{timeout:30000});
+    check((await page.locator('#routePreviewMeta').textContent()).includes('1,358'),
+      size.name+': 10-day estimated total missing');
+    await page.locator('.preset-btn[data-preset="7"]').click();
+    check(await page.locator('#routeDayList .route-day').count()===7,
+      size.name+': 7-day route selection did not update');
+    check((await page.locator('#routePreviewMeta').textContent()).includes('1,359'),
+      size.name+': 7-day published mileage rounded into the wrong total');
+    const roadEvidence=page.locator('#routeDayList .route-road-evidence');
+    check(await roadEvidence.count()>=4,size.name+': sourced road-choice desk absent');
+    const keweenaw=page.locator('#routeDayList .route-day').nth(2).locator('.route-road-evidence');
+    await keweenaw.locator('summary').click();
+    check((await keweenaw.textContent()).includes('Brockway Mountain Drive'),
+      size.name+': Keweenaw route alternative is missing');
+    const copperLink=keweenaw.locator('a').filter({hasText:'Map Copper Harbor detour'});
+    check(await copperLink.count()===1,size.name+': distinct Copper Harbor route link missing');
+    check(new URL(await copperLink.getAttribute('href')).searchParams.get('waypoints').includes('Copper Harbor'),
+      size.name+': optional route did not include Copper Harbor');
+    const borderDay=page.locator('#routeDayList .route-day').last();
+    check((await borderDay.textContent()).includes('Road reality'),
+      size.name+': North Shore source disclosure missing');
+    const mapLink=borderDay.locator('a').filter({hasText:'Map the Hwy 61 driving corridor'});
+    check(await mapLink.count()===1,size.name+': core highway route not named honestly');
+    const points=new URL(await mapLink.getAttribute('href')).searchParams.get('waypoints');
+    check(points.includes('Pigeon River Border Crossing')&&points.includes('Grand Portage')
+      &&!points.includes('Tettegouche'),
+      size.name+': border/core towns incorrect or false park trailheads added');
+    const routeWidth=await page.evaluate(()=>({doc:document.documentElement.scrollWidth,viewport:innerWidth}));
+    check(routeWidth.doc<=routeWidth.viewport+2,size.name+': expanded road evidence overflow');
+    if([390,1440].includes(size.width)){
+      const screenshot='circle-road-reality-'+size.name+'.png';
+      await page.locator('.route-preview').screenshot({path:path.join(out,screenshot),timeout:25000});
+      report.screenshots.push(screenshot);
+    }
+    await page.locator('.preset-btn[data-preset="10"]').click();
+    check(await page.locator('#routeDayList .route-day').count()===10,
+      size.name+': returning to original balanced route failed');
     // Sense-of-place photos and narration must follow the actual selected park,
     // without changing the specialist tool, adding a second map or breaking mobile layout.
     for(const sample of [
