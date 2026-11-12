@@ -12,3 +12,5 @@ Limitations: Connected browsing allowed fresh DOM readbacks but not authenticate
 
 ## Additional repository gate problem discovered during audit
 The repository's freshness checker flagged the homepage as changed on November 11 while its JSON-LD WebPage dateModified and root sitemap still said October 25. This predates the audit branch and fails multiple CI gates. Update both to the actual November 11 content revision; do not alter homepage experience, head titles, ads, navigation or canonical. The new root-date parity test keeps this fixed.
+
+The homepage occurs in both the main and reputation sitemaps; synchronize both `lastmod` values to November 11. The repo's branded-search safeguard still requires specific owner approval before any homepage-file modification may merge.
