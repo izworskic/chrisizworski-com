@@ -6,14 +6,21 @@ const photos = JSON.parse(fs.readFileSync("data/up-waterfall-photo-provenance.js
 const sitemap = fs.readFileSync("public/sitemap-up-waterfalls.xml", "utf8");
 
 test("every published waterfall photo has uniquely identified subject, primary source and commercial-use license", () => {
-  assert.equal(photos.photos.length, 30);
+  assert.equal(photos.photos.length, 31);
   assert.equal(new Set(photos.photos.map(x => x.id)).size, photos.photos.length);
   assert.equal(new Set(photos.photos.map(x => x.imageUrl)).size, photos.photos.length);
-  assert.deepEqual(new Set(photos.photos.map(x => x.id)), new Set(["wagner-falls","bond-falls","miners-falls","sable-falls","munising-falls","spray-falls","mosquito-falls","agate-falls","manabezho-falls","nawadaha-falls","great-conglomerate-falls","potawatomi-falls","sandstone-falls","laughing-whitefish-falls","scott-falls","bridalveil-falls","elliot-falls","manido-falls","o-kun-de-kun-falls","gorge-falls","eagle-river-falls","houghton-douglass-falls","bonanza-falls","gabbro-falls","yondota-falls","lepisto-falls","jumbo-falls","canyon-falls","greenstone-falls","haven-falls"]));
+  assert.deepEqual(new Set(photos.photos.map(x => x.id)), new Set(["wagner-falls","bond-falls","miners-falls","sable-falls","munising-falls","spray-falls","mosquito-falls","agate-falls","manabezho-falls","nawadaha-falls","great-conglomerate-falls","potawatomi-falls","sandstone-falls","laughing-whitefish-falls","scott-falls","bridalveil-falls","elliot-falls","manido-falls","o-kun-de-kun-falls","gorge-falls","eagle-river-falls","houghton-douglass-falls","bonanza-falls","gabbro-falls","yondota-falls","lepisto-falls","jumbo-falls","canyon-falls","greenstone-falls","haven-falls","chapel-falls"]));
   for (const p of photos.photos) {
     assert.equal(p.role, "verified-guide-photo");
-    assert.match(p.imageUrl, /^https:\/\/(?:thumb|upload)\.wikimedia\.org\/wikipedia\/commons\//);
-    assert.ok(p.sourceUrl.startsWith("https://commons.wikimedia.org/wiki/File:"));
+    if(p.id === "chapel-falls") {
+      assert.equal(p.imageUrl, "https://www.nps.gov/piro/planyourvisit/images/ChapelFalls-crop.jpg?autorotate=false&maxwidth=960");
+      assert.equal(p.sourceUrl, "https://www.nps.gov/piro/planyourvisit/waterfalls.htm");
+      assert.equal(p.creator, "National Park Service");
+      assert.match(p.license, /^Public domain/);
+    } else {
+      assert.match(p.imageUrl, /^https:\/\/(?:thumb|upload)\.wikimedia\.org\/wikipedia\/commons\//);
+      assert.ok(p.sourceUrl.startsWith("https://commons.wikimedia.org/wiki/File:"));
+    }
     assert.match(p.license, /^(CC BY (?:2\.0|3\.0)|CC BY-SA (?:2\.0|3\.0|4\.0)|Public domain)/);
     assert.ok(p.identityEvidence.length > 45);
     assert.match(p.alt.toLowerCase(), new RegExp(p.name.toLowerCase().replaceAll(" ", "\\s+")));
@@ -28,8 +35,8 @@ test("named waterfall guide displays the correct source-credited picture and hon
     assert.match(html, /<meta name="robots" content="index,follow,max-image-preview:large">/);
     assert.ok(html.includes('<h1>'+p.name),p.id);
     assert.ok(html.includes('class="upfall-verified-photo"'),p.id);
-    assert.ok(html.includes('src="'+p.imageUrl+'"'),p.id);
-    assert.ok(html.includes('content="'+p.imageUrl+'"'),p.id+' OG image');
+    assert.ok(html.includes('src="'+p.imageUrl.replaceAll('&','&amp;')+'"'),p.id);
+    assert.ok(html.includes('content="'+p.imageUrl.replaceAll('&','&amp;')+'"'),p.id+' OG image');
     assert.ok(html.includes('alt="'+p.alt.replaceAll("&","&amp;")+'"'),p.id);
     assert.ok(html.includes('href="'+p.sourceUrl+'"'),p.id+' attribution');
     assert.ok(html.includes('href="'+p.licenseUrl+'"'),p.id+' license');
