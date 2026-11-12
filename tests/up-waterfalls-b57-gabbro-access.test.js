@@ -76,7 +76,7 @@ test('published guide preserves source, SEO and never sends visitors to natural 
  const json=JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
  assert.ok(json['@graph'].some(x=>x['@type']==='TouristAttraction'&&x.geo.latitude===46.502079));
  assert.ok(json['@graph'].some(x=>x['@type']==='Person'));
- assert.ok(sitemap.includes('<loc>'+url+'</loc><lastmod>2026-11-02</lastmod>'));
+ assert.ok(sitemap.includes('<loc>'+url+'</loc><lastmod>2026-11-12</lastmod>'));
  assert.equal((sitemap.match(/<loc>/g)||[]).length,78);
  assert.equal((hub.match(/<article class="waterfall-card"/g)||[]).length,80);
  const m=hub.match(/<article class="waterfall-card"[^>]*data-id="gabbro-falls"[\s\S]*?<\/article>/);
