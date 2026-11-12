@@ -35,8 +35,8 @@ test("named waterfall guide displays the correct source-credited picture and hon
     assert.match(html, /<meta name="robots" content="index,follow,max-image-preview:large">/);
     assert.ok(html.includes('<h1>'+p.name),p.id);
     assert.ok(html.includes('class="upfall-verified-photo"'),p.id);
-    assert.ok(html.includes('src="'+p.imageUrl+'"'),p.id);
-    assert.ok(html.includes('content="'+p.imageUrl+'"'),p.id+' OG image');
+    assert.ok(html.includes('src="'+p.imageUrl.replaceAll('&','&amp;')+'"'),p.id);
+    assert.ok(html.includes('content="'+p.imageUrl.replaceAll('&','&amp;')+'"'),p.id+' OG image');
     assert.ok(html.includes('alt="'+p.alt.replaceAll("&","&amp;")+'"'),p.id);
     assert.ok(html.includes('href="'+p.sourceUrl+'"'),p.id+' attribution');
     assert.ok(html.includes('href="'+p.licenseUrl+'"'),p.id+' license');
