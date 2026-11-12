@@ -273,7 +273,7 @@
     },
     northshore: {
       title:"Thunder Bay to Duluth: the Highway 61 corridor",
-      text:"Destination Ontario reports about 38 miles from Thunder Bay to Pigeon River. NPS places Grand Portage about 50 miles from Thunder Bay and 150 from Duluth; the complete scenic corridor is about 190 miles before optional park detours. The route link uses core towns and the border, not every park trailhead.",
+      text:"Destination Ontario reports about 38 miles from Thunder Bay to Pigeon River. NPS separately places Grand Portage about 50 miles from Thunder Bay and 150 from Duluth; another touring guide publishes about 190 miles Thunder Bay–Duluth. These are approximate references with different endpoints, not additive measured legs. The route link uses core towns and the border, not every park trailhead.",
       url:"https://www.destinationontario.com/en-ca/travel-resources/ontario-lake-superior-road-trip",
       source:"Destination Ontario · Pigeon River approach",
       check:"https://www.nps.gov/grpo/planyourvisit/directions.htm"
@@ -285,7 +285,7 @@
     if (ids.includes("8")) evidence.push(ROAD_EVIDENCE.keweenaw);
     if (ids.includes("11")) evidence.push(ROAD_EVIDENCE.pictured);
     if (ids.includes("31")) evidence.push(ROAD_EVIDENCE.whitefish);
-    if (ids.includes("17") && ids.includes("19")) evidence.push(ROAD_EVIDENCE.ontario17);
+    if (ids.length > 1 && ids.some(id => ["17","18","19"].includes(id))) evidence.push(ROAD_EVIDENCE.ontario17);
     if (isNorthShoreDay(ids)) evidence.push(ROAD_EVIDENCE.northshore);
     return evidence;
   }
