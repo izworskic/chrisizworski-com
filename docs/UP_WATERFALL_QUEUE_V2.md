@@ -18,6 +18,12 @@
 
 **Primary machine-readable truth:** `data/up-waterfall-reconciliation.json`, `data/up-waterfalls.json`, `data/up-waterfall-uptravel-indexed-listings-2026.json` and `public/assets/up-waterfall-evidence-atlas.json`. Recompute these counts from the files before each future release; historical batch notes are not a live counter.
 
+## November 12 follow-up: access and release evidence
+
+The follow-up review is recorded in [UP_WATERFALL_ACCESS_SOURCE_RELEASE_AUDIT_2026-11-12.md](UP_WATERFALL_ACCESS_SOURCE_RELEASE_AUDIT_2026-11-12.md). It adds Travel Marquette's documented 2025 decision to stop promoting the eroding Dead River gorge and distinguishes a private lodging operator's Alger Falls **guest-only** statement from public road access. The June 2026 EGLE Au Train emergency order and unresolved upper/lower owner routes still prevent verified visitor directions. All three remain research-only.
+
+The UP Travel directory still directly exposes only 12 verified cards of its reported 104; the other 92 membership records are **not** verified through the separate 108 indexed URLs. The later merged waterfall PR #1626 ran and passed GitHub verify, public audit, mobile/map smoke and SEO protection, superseding #1602's no-job failures. This is not an independent live-production click-through. The new source/access regression test protects the distinction in future builds.
+
 ## What changed from the previous queue
 
 The former queue text reported **96 pending GIS candidates** and prioritized first-time source discovery. The current November 7 reconciliation records **92 pending** and an `accessRouteAudit` plus `evidenceReviewed` on every pending GIS candidate. Repeating the same searches on the same access-blocked falls is now a low-value task. A "new source" must resolve a named open question or add independently checkable data.
