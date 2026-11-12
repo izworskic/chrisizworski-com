@@ -156,7 +156,8 @@
       return {
         day: Number(element.dataset.day),
         stops: element.dataset.stops.split(","),
-        miles: Number(element.dataset.miles),
+        miles: element.dataset.miles === undefined || element.dataset.miles.trim() === ""
+          ? null : Number(element.dataset.miles),
         summary: element.textContent.replace(label, "").trim(),
       };
     });
@@ -198,11 +199,39 @@
     return ids;
   }
 
+  // These are editorial day estimates, not map-provider routed distances.
+  // Fail closed on broken continuity, missing miles, or a loop that does not return to Duluth.
+  function publishedRouteMiles(route) {
+    if (!Array.isArray(route) || !route.length) return null;
+    let total = 0;
+    for (let index = 0; index < route.length; index++) {
+      const day = route[index];
+      if (!day || !Array.isArray(day.stops) || !day.stops.length
+        || day.stops.some(id => !/^([1-9]|[12][0-9]|3[01])$/.test(String(id)))
+        || !Number.isSafeInteger(day.miles) || day.miles < 0 || day.miles > 600
+        || (day.miles === 0 && day.stops[0] !== day.stops.at(-1))
+        || (index > 0 && route[index - 1].stops.at(-1) !== day.stops[0])) return null;
+      total += day.miles;
+    }
+    const first = route[0].stops[0], last = route.at(-1).stops.at(-1);
+    return (first === "1" && last === "30") || (first === "30" && last === "1") ? total : null;
+  }
+
   function renderRoutePreview() {
     const route = displayedItinerary();
     const directionLabel = activeDirection === "counterclockwise" ? "counterclockwise" : "clockwise";
     byId("routePreviewTitle").textContent = `${activePreset}-Day ${activePreset === "7" ? "Highlights" : activePreset === "10" ? "Balanced Route" : "Chris's Route"}`;
-    byId("routePreviewMeta").textContent = `A continuous ${directionLabel} loop from Duluth · approximately 1,358 published itinerary miles (verify detours and navigation)`;
+    const total = publishedRouteMiles(route);
+    const summary = byId("routePreviewMeta");
+    summary.replaceChildren(document.createTextNode(total === null
+      ? `A ${directionLabel} Duluth loop · mileage not reconciled; check daily directions. `
+      : `A ${directionLabel} Duluth loop · ~${total.toLocaleString("en-US")} mi from published day estimates, not a routed distance. The signed Circle Tour is about 1,300 mi; detours add mileage. `));
+    const official = document.createElement("a");
+    official.href = "https://superiorcountry.ca/touring/drive-and-rv-tours/lake-superior-circle-tour/";
+    official.target = "_blank";
+    official.rel = "noopener noreferrer";
+    official.textContent = "Official route reference";
+    summary.append(official);
     byId("usePresetRoute").textContent = `Use this ${activePreset}-day route`;
     byId("routeDetailLink").href = `#itin-${activePreset}`;
     byId("routeDetailLink").textContent = activeDirection === "clockwise"
@@ -219,7 +248,9 @@
       number.textContent = day.day;
       const copy = document.createElement("div");
       const heading = document.createElement("strong");
-      heading.textContent = day.miles ? `Day ${day.day} · ~${day.miles} mi` : `Day ${day.day} · stay day`;
+      heading.textContent = day.miles === 0 ? `Day ${day.day} · stay day`
+        : Number.isFinite(day.miles) && day.miles > 0 ? `Day ${day.day} · ~${day.miles} mi`
+        : `Day ${day.day} · mileage unverified`;
       const endpoints = document.createElement("span");
       endpoints.textContent = day.stops.length > 1 ? `${shortStopName(day.stops[0])} → ${shortStopName(day.stops.at(-1))}` : shortStopName(day.stops[0]);
       const directions = document.createElement("a");
@@ -229,6 +260,11 @@
       directions.textContent = day.stops.length > 1 ? "Open daily directions →" : "Open this stop in Google Maps →";
       directions.addEventListener("click", () => trackCircleTour("directions-open", {days: Number(activePreset), day: day.day, direction: activeDirection}));
       copy.append(heading, endpoints);
+      if (Number.isFinite(day.miles) && day.miles >= 250) {
+        const longDrive = document.createElement("small");
+        longDrive.textContent = "Long driving day. Choose one main outing and verify actual travel time.";
+        copy.append(document.createElement("br"), longDrive);
+      }
       if (activeDirection === "clockwise") {
         const note = document.createElement("small");
         note.textContent = "Reversed route; daily descriptions below are written counterclockwise.";
