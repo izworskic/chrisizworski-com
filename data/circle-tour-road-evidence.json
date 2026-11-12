@@ -1,0 +1,315 @@
+{
+  "schemaVersion": 1,
+  "reviewed": "2026-11-12",
+  "purpose": "Do not advertise published stop/day mileage as independently routed. Record all 30 adjacent itinerary edges and separately trace the exact endpoints of authoritative source mileages.",
+  "definitions": {
+    "published-estimate-unverified": "Stop card displays an editorial distance or no independently routed figure; not a certified door-to-door segment.",
+    "arrival-choice-unresolved": "A stop can mean multiple geographically distinct approaches; do not claim a single measured route.",
+    "partial-source-only": "Source mileage covers a different, explicitly named subsegment, not the entire adjacent Circle Tour stop-to-stop leg."
+  },
+  "edges": [
+    {
+      "from": "1",
+      "to": "2",
+      "fromName": "Duluth, Minnesota",
+      "toName": "Superior, Wisconsin",
+      "visitorCard": "📍 5 mi from Duluth",
+      "status": "published-estimate-unverified"
+    },
+    {
+      "from": "2",
+      "to": "3",
+      "fromName": "Superior, Wisconsin",
+      "toName": "Bayfield & Apostle Islands, Wisconsin",
+      "visitorCard": "📍 65 mi from Superior",
+      "status": "published-estimate-unverified"
+    },
+    {
+      "from": "3",
+      "to": "4",
+      "fromName": "Bayfield & Apostle Islands, Wisconsin",
+      "toName": "Ashland, Wisconsin",
+      "visitorCard": "📍 22 mi from Bayfield",
+      "status": "published-estimate-unverified"
+    },
+    {
+      "from": "4",
+      "to": "5",
+      "fromName": "Ashland, Wisconsin",
+      "toName": "Ironwood & Black River Corridor",
+      "visitorCard": "📍 80 mi from Ashland",
+      "status": "published-estimate-unverified"
+    },
+    {
+      "from": "5",
+      "to": "6",
+      "fromName": "Ironwood & Black River Corridor",
+      "toName": "Porcupine Mountains Wilderness State Park",
+      "visitorCard": "📍 Approx. 43 mi Ironwood to Lake of the Clouds (direct approach; Black River Harbor side trip extra). Published distance reference; verify driving route and seasonal park roads.",
+      "status": "published-estimate-unverified"
+    },
+    {
+      "from": "6",
+      "to": "7",
+      "fromName": "Porcupine Mountains Wilderness State Park",
+      "toName": "Ontonagon, Michigan",
+      "visitorCard": "📍 15 mi from Porkies",
+      "status": "published-estimate-unverified"
+    },
+    {
+      "from": "7",
+      "to": "8",
+      "fromName": "Ontonagon, Michigan",
+      "toName": "Keweenaw Peninsula, Copper Country",
+      "visitorCard": "📍 Houghton route; Copper Harbor adds a separate scenic detour",
+      "status": "arrival-choice-unresolved",
+      "blocker": "The Keweenaw stop represents Houghton/Copper Country, Copper Harbor and seasonal Brockway Mountain. One distance cannot describe all three."
+    },
+    {
+      "from": "8",
+      "to": "9",
+      "fromName": "Keweenaw Peninsula, Copper Country",
+      "toName": "L'Anse & Baraga, Michigan",
+      "visitorCard": "📍 45 mi from Houghton",
+      "status": "published-estimate-unverified"
+    },
+    {
+      "from": "9",
+      "to": "10",
+      "fromName": "L'Anse & Baraga, Michigan",
+      "toName": "Marquette, Michigan",
+      "visitorCard": "📍 60 mi from L'Anse",
+      "status": "published-estimate-unverified"
+    },
+    {
+      "from": "10",
+      "to": "11",
+      "fromName": "Marquette, Michigan",
+      "toName": "Pictured Rocks National Lakeshore",
+      "visitorCard": "📍 45 mi from Marquette",
+      "status": "published-estimate-unverified"
+    },
+    {
+      "from": "11",
+      "to": "12",
+      "fromName": "Pictured Rocks National Lakeshore",
+      "toName": "Tahquamenon Falls State Park",
+      "visitorCard": "📍 90 mi from Munising",
+      "status": "published-estimate-unverified"
+    },
+    {
+      "from": "12",
+      "to": "31",
+      "fromName": "Tahquamenon Falls State Park",
+      "toName": "Whitefish Point",
+      "visitorCard": "📍 11 mi north of Paradise via Whitefish Point Road (not from the falls)",
+      "status": "partial-source-only",
+      "blocker": "Museum confirms 11 miles Paradise to Whitefish Point, not Tahquamenon Falls to Whitefish Point."
+    },
+    {
+      "from": "31",
+      "to": "13",
+      "fromName": "Whitefish Point",
+      "toName": "Sault Ste. Marie, Michigan",
+      "visitorCard": "📍 Via Paradise from Whitefish Point; verify the onward road distance",
+      "status": "arrival-choice-unresolved",
+      "blocker": "The upstream stop is Whitefish Point; previous mileage referenced Tahquamenon instead. No independently routed Whitefish Point–Sault estimate."
+    },
+    {
+      "from": "13",
+      "to": "14",
+      "fromName": "Sault Ste. Marie, Michigan",
+      "toName": "Sault Ste. Marie, Ontario, Canada",
+      "visitorCard": "📍 1 mi, International Bridge",
+      "status": "published-estimate-unverified"
+    },
+    {
+      "from": "14",
+      "to": "15",
+      "fromName": "Sault Ste. Marie, Ontario, Canada",
+      "toName": "Lake Superior Provincial Park, Ontario",
+      "visitorCard": "📍 75 mi from Sault ON",
+      "status": "published-estimate-unverified"
+    },
+    {
+      "from": "15",
+      "to": "16",
+      "fromName": "Lake Superior Provincial Park, Ontario",
+      "toName": "Wawa, Ontario",
+      "visitorCard": "📍 55 mi from Lake Superior PP",
+      "status": "published-estimate-unverified"
+    },
+    {
+      "from": "16",
+      "to": "17",
+      "fromName": "Wawa, Ontario",
+      "toName": "White River, Ontario",
+      "visitorCard": "📍 65 mi from Wawa",
+      "status": "published-estimate-unverified"
+    },
+    {
+      "from": "17",
+      "to": "18",
+      "fromName": "White River, Ontario",
+      "toName": "Marathon & Pukaskwa National Park, Ontario",
+      "visitorCard": "📍 50 mi from White River",
+      "status": "published-estimate-unverified"
+    },
+    {
+      "from": "18",
+      "to": "19",
+      "fromName": "Marathon & Pukaskwa National Park, Ontario",
+      "toName": "Nipigon, Ontario",
+      "visitorCard": "📍 100 mi from Marathon",
+      "status": "published-estimate-unverified"
+    },
+    {
+      "from": "19",
+      "to": "20",
+      "fromName": "Nipigon, Ontario",
+      "toName": "Thunder Bay, Ontario",
+      "visitorCard": "📍 60 mi from Nipigon",
+      "status": "published-estimate-unverified"
+    },
+    {
+      "from": "20",
+      "to": "21",
+      "fromName": "Thunder Bay, Ontario",
+      "toName": "Pigeon River / Grand Portage State Park",
+      "visitorCard": "📍 ~38 mi from Thunder Bay to the Pigeon River border; park approach extra",
+      "status": "partial-source-only",
+      "blocker": "Destination Ontario confirms about 38 miles Thunder Bay to Pigeon River border; the state-park parking approach must not be conflated with the border."
+    },
+    {
+      "from": "21",
+      "to": "22",
+      "fromName": "Pigeon River / Grand Portage State Park",
+      "toName": "Grand Portage, Minnesota",
+      "visitorCard": "📍 5 mi from border",
+      "status": "published-estimate-unverified"
+    },
+    {
+      "from": "22",
+      "to": "23",
+      "fromName": "Grand Portage, Minnesota",
+      "toName": "Grand Marais, Minnesota",
+      "visitorCard": "📍 35 mi from Grand Portage",
+      "status": "published-estimate-unverified"
+    },
+    {
+      "from": "23",
+      "to": "24",
+      "fromName": "Grand Marais, Minnesota",
+      "toName": "Cascade River State Park",
+      "visitorCard": "📍 18 mi from Grand Marais",
+      "status": "published-estimate-unverified"
+    },
+    {
+      "from": "24",
+      "to": "25",
+      "fromName": "Cascade River State Park",
+      "toName": "Lutsen Mountains & Temperance River State Park",
+      "visitorCard": "📍 15 mi from Cascade River",
+      "status": "published-estimate-unverified"
+    },
+    {
+      "from": "25",
+      "to": "26",
+      "fromName": "Lutsen Mountains & Temperance River State Park",
+      "toName": "Tettegouche State Park",
+      "visitorCard": "📍 30 mi from Lutsen",
+      "status": "published-estimate-unverified"
+    },
+    {
+      "from": "26",
+      "to": "27",
+      "fromName": "Tettegouche State Park",
+      "toName": "Split Rock Lighthouse State Park",
+      "visitorCard": "📍 20 mi from Tettegouche",
+      "status": "published-estimate-unverified"
+    },
+    {
+      "from": "27",
+      "to": "28",
+      "fromName": "Split Rock Lighthouse State Park",
+      "toName": "Gooseberry Falls State Park",
+      "visitorCard": "📍 12 mi from Split Rock",
+      "status": "published-estimate-unverified"
+    },
+    {
+      "from": "28",
+      "to": "29",
+      "fromName": "Gooseberry Falls State Park",
+      "toName": "Two Harbors, Minnesota",
+      "visitorCard": "📍 25 mi from Gooseberry",
+      "status": "published-estimate-unverified"
+    },
+    {
+      "from": "29",
+      "to": "30",
+      "fromName": "Two Harbors, Minnesota",
+      "toName": "Duluth, Trip Complete",
+      "visitorCard": "📍 28 mi from Two Harbors",
+      "status": "published-estimate-unverified"
+    }
+  ],
+  "publishedDistanceAnchors": [
+    {
+      "id": "official-circle",
+      "from": "Official Circle Tour",
+      "to": "Official Circle Tour",
+      "distanceMiles": 1300,
+      "scope": "official approximate full-loop length; not our waypoint itinerary",
+      "source": "https://superiorcountry.ca/touring/drive-and-rv-tours/lake-superior-circle-tour/"
+    },
+    {
+      "id": "thunderbay-pigeon",
+      "from": "Thunder Bay",
+      "to": "Pigeon River border",
+      "distanceMiles": 38,
+      "scope": "destination Ontario approximation, not Grand Portage State Park entrance",
+      "source": "https://www.destinationontario.com/en-ca/travel-resources/ontario-lake-superior-road-trip"
+    },
+    {
+      "id": "duluth-grandportage",
+      "from": "Duluth",
+      "to": "Grand Portage National Monument",
+      "distanceMiles": 150,
+      "scope": "NPS approximate regional reference; Monument lot requires an approach",
+      "source": "https://www.nps.gov/grpo/planyourvisit/directions.htm"
+    },
+    {
+      "id": "thunderbay-grandportage",
+      "from": "Thunder Bay",
+      "to": "Grand Portage National Monument",
+      "distanceMiles": 50,
+      "scope": "NPS approximate regional reference",
+      "source": "https://www.nps.gov/grpo/planyourvisit/directions.htm"
+    },
+    {
+      "id": "duluth-thunderbay",
+      "from": "Duluth",
+      "to": "Thunder Bay",
+      "distanceMiles": 190,
+      "scope": "published baseline Highway 61 scenic road itinerary, without all selected park trailheads",
+      "source": "https://www.ridelakesuperior.com/itineraries/lake-superior-tour/duluth-mn-to-thunder-bay-on/"
+    },
+    {
+      "id": "paradise-whitefish",
+      "from": "Paradise",
+      "to": "Whitefish Point Shipwreck Museum",
+      "distanceMiles": 11,
+      "scope": "museum approach on Whitefish Point Road, not Tahquamenon-to-Whitefish full leg",
+      "source": "https://shipwreckmuseum.com/visit/admission-hours-location/"
+    },
+    {
+      "id": "pictured-h58",
+      "from": "M-28/H-58",
+      "to": "M-77/H-58 at Grand Marais",
+      "distanceMiles": 52,
+      "scope": "NPS highway intersection to intersection only, not Marquette-Munising or day route",
+      "source": "https://www.nps.gov/piro/planyourvisit/roadmileage.htm"
+    }
+  ],
+  "remaining": "Thirty full stop-to-stop road routes remain unverified by an actual directions provider. Source references verify the named subsegments only; road and border conditions must be checked at travel time."
+}
