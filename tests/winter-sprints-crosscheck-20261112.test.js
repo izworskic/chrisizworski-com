@@ -7,6 +7,8 @@ const read=p=>fs.readFileSync(path.join(__dirname,'..',p),'utf8');
 const script=read('public/assets/michigan-snow-totals.js');
 const snow=read('public/michigan-snow-totals/index.html');
 const weekend=read('public/michigan-winter-weekends/index.html');
+const homepage=read('public/index.html');
+const sitemap=read('public/sitemap.xml');
 
 test('original NWS product URL is allowlisted to HTTPS Iowa Mesonet or weather.gov only',()=>{
  const fragment=script.slice(script.indexOf('function originalReportUrl(raw) {'),script.indexOf('\n  function color('));
@@ -34,4 +36,9 @@ test('edited sprint pages retain their indexable canonicals, truthful review dat
  }
  assert.equal((weekend.match(/<article class="wf-story" id="stop-\d+"/g)||[]).length,12);
  assert.match(weekend,/Base-town routes reviewed October 28, 2026; weekend selector updated November 12, 2026/);
+});
+
+test('homepage November 11 edits have truthful matching JSON-LD and sitemap dates',()=>{
+ assert.ok(homepage.includes('"dateModified": "2026-11-11"'));
+ assert.ok(sitemap.includes('<loc>https://chrisizworski.com/</loc>\n    <lastmod>2026-11-11</lastmod>'));
 });

@@ -9,3 +9,6 @@ Sprint 6's footer had an ambiguous October 28 reviewed date after the November 1
 Advance only changed source pages and their existing sitemap entries. Preserve indexability, canonicals, maps, official feeds, photo assets, weather data and AdSense configuration. Update regression tests to follow actual page review dates.
 
 Limitations: Connected browsing allowed fresh DOM readbacks but not authenticated browser click automation. The source omission is confirmed by reading the live town detail and its table source link; passing CI and live production readback remain release requirements. This audit cannot yet attribute search or AdSense growth to any sprint.
+
+## Additional repository gate problem discovered during audit
+The repository's freshness checker flagged the homepage as changed on November 11 while its JSON-LD WebPage dateModified and root sitemap still said October 25. This predates the audit branch and fails multiple CI gates. Update both to the actual November 11 content revision; do not alter homepage experience, head titles, ads, navigation or canonical. The new root-date parity test keeps this fixed.
