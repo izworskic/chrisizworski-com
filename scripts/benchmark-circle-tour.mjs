@@ -39,7 +39,7 @@ section('Map and planner', 15, [
 
 section('Continuous route integrity', 10, [
   [has(map, '"31","13"'), 'Whitefish Point sits correctly before Soo'],
-  [has(html, 'approximately 1,358 route miles'), 'route mileage is explicit'],
+  [has(html, 'approximately 1,358 estimated itinerary miles') && has(html, 'approximately 1,359 estimated itinerary miles'), 'distinct editorial itinerary mileages are explicit'],
   [has(html, 'id="itin-7"') && has(html, 'id="itin-10"') && has(html, 'id="itin-15"'), 'written itineraries'],
   [has(core, 'google.com/maps/dir'), 'daily Google directions'],
   [has(core, 'Do not carry counterclockwise day prose') && has(core, 'original counterclockwise guide'), 'clockwise preview avoids mismatched narratives'],
