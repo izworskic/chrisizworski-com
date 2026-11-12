@@ -29,8 +29,9 @@ test('canonical, schema identity and sitemap stamps stay aligned', () => {
     assert.ok(html.includes('rel="canonical" href="https://chrisizworski.com/'+name+'/'));
     assert.ok(html.includes('name="robots" content="index,follow'));
     assert.ok(html.includes('https://chrisizworski.com/#person'));
-    assert.ok(html.includes('dateModified') && html.includes('2026-11-10'));
-    assert.ok(sitemap.includes('<loc>https://chrisizworski.com/'+name+'/</loc><lastmod>2026-11-10</lastmod>'));
+    const stamp = html.match(/"dateModified"\s*:\s*"(\d{4}-\d{2}-\d{2})"/)?.[1];
+    assert.ok(stamp && stamp >= '2026-11-10', name+' retains a truthful review date');
+    assert.ok(sitemap.includes('<loc>https://chrisizworski.com/'+name+'/</loc><lastmod>'+stamp+'</lastmod>'));
   }
   assert.ok(forecast.includes('Forecast snowfall, observed snowfall and remaining snow depth are different evidence.'));
   assert.ok(reports.includes('Michigan Snow Totals Today') && depth.includes('Where Is the Good Snow?'));

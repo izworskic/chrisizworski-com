@@ -69,8 +69,9 @@ test('crawlable default and input/alert accessibility',()=>{
 test('preserve canonical, person attribution, original URL and winter sitemap stamp',()=>{
  assert.ok(html.includes('rel="canonical" href="https://chrisizworski.com/michigan-winter-weekends/"'));
  assert.ok(html.includes('https://chrisizworski.com/#person'));
- assert.ok(html.includes('"dateModified":"2026-11-10"'));
- assert.ok(sitemap.includes('<loc>https://chrisizworski.com/michigan-winter-weekends/</loc><lastmod>2026-11-10</lastmod>'));
+ const stamp = html.match(/"dateModified":"(\d{4}-\d{2}-\d{2})"/)?.[1];
+ assert.ok(stamp && stamp >= '2026-11-10');
+ assert.ok(sitemap.includes('<loc>https://chrisizworski.com/michigan-winter-weekends/</loc><lastmod>'+stamp+'</lastmod>'));
  assert.equal((sitemap.match(/https:\/\/chrisizworski.com\/michigan-winter-weekends\//g)||[]).length,1);
  assert.ok(html.includes('/assets/michigan-winter-weekend-desk.js?v=20261110a'));
 });
