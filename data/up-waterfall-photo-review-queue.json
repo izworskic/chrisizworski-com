@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "reviewedAt": "2026-11-12",
   "catalogCount": 80,
-  "verifiedPhotoCount": 27,
-  "unphotographedCuratedCount": 53,
+  "verifiedPhotoCount": 30,
+  "unphotographedCuratedCount": 50,
   "method": "Diff of data/up-waterfalls.json IDs against data/up-waterfall-photo-provenance.json IDs. An unphotographed catalog entry is not the same as missing public-access research or an indexing defect.",
   "pending": [
     {
@@ -33,24 +33,6 @@
       "photoPriority": "priority-next",
       "accessStatusInCuratedCatalog": "verify",
       "officialVisitorSourceNotPhotoLicense": "https://www.nps.gov/places/chapel-falls.htm",
-      "photoVerificationRequirements": [
-        "named exact waterfall and tier",
-        "image content clearly shows named falls",
-        "attribution and original media source identified",
-        "documented commercial reuse permission or public domain",
-        "historic capture date accurate or explicitly unknown"
-      ],
-      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
-    },
-    {
-      "id": "canyon-falls",
-      "name": "Canyon Falls",
-      "region": "Central U.P.",
-      "publicGuidePath": "/upper-peninsula-waterfalls/canyon-falls/",
-      "photoStatus": "not-yet-verified",
-      "photoPriority": "priority-next",
-      "accessStatusInCuratedCatalog": "verify",
-      "officialVisitorSourceNotPhotoLicense": "https://northcountrytrail.org/files/chapters/pwc/PWC_47-58_Mar2024.pdf",
       "photoVerificationRequirements": [
         "named exact waterfall and tier",
         "image content clearly shows named falls",
@@ -141,24 +123,6 @@
       "photoPriority": "inventory-backlog",
       "accessStatusInCuratedCatalog": "verify",
       "officialVisitorSourceNotPhotoLicense": "https://deltacountymi.gov/parks/sac-bay-rapid-river-falls/",
-      "photoVerificationRequirements": [
-        "named exact waterfall and tier",
-        "image content clearly shows named falls",
-        "attribution and original media source identified",
-        "documented commercial reuse permission or public domain",
-        "historic capture date accurate or explicitly unknown"
-      ],
-      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
-    },
-    {
-      "id": "haven-falls",
-      "name": "Haven Falls",
-      "region": "Keweenaw Peninsula",
-      "publicGuidePath": "/upper-peninsula-waterfalls/haven-falls/",
-      "photoStatus": "not-yet-verified",
-      "photoPriority": "inventory-backlog",
-      "accessStatusInCuratedCatalog": "verify",
-      "officialVisitorSourceNotPhotoLicense": "https://www.keweenawcountyonline.org/docs/RecreationPlan.pdf",
       "photoVerificationRequirements": [
         "named exact waterfall and tier",
         "image content clearly shows named falls",
@@ -285,24 +249,6 @@
       "photoPriority": "priority-next",
       "accessStatusInCuratedCatalog": "seasonal",
       "officialVisitorSourceNotPhotoLicense": "https://www.uppermichiganwaterfalls.com/",
-      "photoVerificationRequirements": [
-        "named exact waterfall and tier",
-        "image content clearly shows named falls",
-        "attribution and original media source identified",
-        "documented commercial reuse permission or public domain",
-        "historic capture date accurate or explicitly unknown"
-      ],
-      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
-    },
-    {
-      "id": "greenstone-falls",
-      "name": "Greenstone Falls",
-      "region": "Western U.P.",
-      "publicGuidePath": "/upper-peninsula-waterfalls/greenstone-falls/",
-      "photoStatus": "not-yet-verified",
-      "photoPriority": "priority-next",
-      "accessStatusInCuratedCatalog": "verify",
-      "officialVisitorSourceNotPhotoLicense": "https://www.michigan.gov/recsearch/parks/porkies",
       "photoVerificationRequirements": [
         "named exact waterfall and tier",
         "image content clearly shows named falls",
