@@ -59,3 +59,25 @@ test("no false photograph or permission claims on access-restricted research pag
   assert.ok(css.includes(".upfall-verified-photo"));
   assert.ok(css.includes("object-fit:contain"));
 });
+
+test("photo coverage queue reconciles all curated waterfall IDs exactly once", () => {
+  const catalog=JSON.parse(fs.readFileSync("data/up-waterfalls.json", "utf8"));
+  const queue=JSON.parse(fs.readFileSync("data/up-waterfall-photo-review-queue.json","utf8"));
+  const ids=new Set(catalog.waterfalls.map(x => x.id));
+  const published=new Set(photos.photos.map(x => x.id));
+  const pending=new Set(queue.pending.map(x => x.id));
+  assert.equal(ids.size, 80);
+  assert.equal(queue.catalogCount, ids.size);
+  assert.equal(queue.verifiedPhotoCount, published.size);
+  assert.equal(queue.unphotographedCuratedCount, pending.size);
+  assert.equal(queue.unphotographedCuratedCount + queue.verifiedPhotoCount, ids.size);
+  assert.equal(pending.size, queue.pending.length);
+  for (const id of published) assert.ok(ids.has(id),"Published photo not in waterfall inventory: "+id);
+  for (const item of queue.pending) {
+    assert.ok(ids.has(item.id),"Unrecognized waterfall photo queue item: "+item.id);
+    assert.ok(!published.has(item.id),"Double counted waterfall photo: "+item.id);
+    assert.equal(item.photoStatus,"not-yet-verified");
+    assert.ok(!item.imageUrl && !item.photoRightsCleared, "Unreviewed queue row cannot provide published media");
+  }
+  for (const id of ids) assert.ok(published.has(id)||pending.has(id), "Missing photo source decision: "+id);
+});
