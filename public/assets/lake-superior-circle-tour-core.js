@@ -213,7 +213,12 @@
       return (stops.indexOf("20") < stops.indexOf("30") ? corridor : corridor.slice().reverse()).map(routePoint);
     }
     return stops.flatMap((id, index) => {
-      if (id !== "8" || options.viaCopperHarbor !== true) return [routePoint(id)];
+      if (id !== "8") return [routePoint(id)];
+      // A 15-day overnight in Copper Country (7 → 8) is Houghton. The
+      // following day's 8 → 9 → 10 begins at Copper Harbor, not Houghton.
+      const copperAtEndpoint = stops.includes("10") && (index === 0 || index === stops.length - 1);
+      if (copperAtEndpoint) return ["Copper Harbor, Michigan, USA"];
+      if (options.viaCopperHarbor !== true) return [routePoint(id)];
       const goingClockwise = index > 0 && stops[index - 1] === "9";
       return goingClockwise
         ? ["Copper Harbor, Michigan, USA", "Houghton, Michigan, USA"]
@@ -392,7 +397,9 @@
           status.rel = "noopener noreferrer";
           status.textContent = "Check the controlling road/park source";
           note.append(heading, copyText, official, document.createTextNode(" · "), status);
-          if (entry === ROAD_EVIDENCE.keweenaw) {
+          if (entry === ROAD_EVIDENCE.keweenaw && !(
+            day.stops.includes("10") && (day.stops[0] === "8" || day.stops.at(-1) === "8")
+          )) {
             const extra = document.createElement("a");
             extra.href = googleMapsUrl(day.stops, {viaCopperHarbor:true});
             extra.target = "_blank";
