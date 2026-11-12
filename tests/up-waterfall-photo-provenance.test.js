@@ -6,15 +6,15 @@ const photos = JSON.parse(fs.readFileSync("data/up-waterfall-photo-provenance.js
 const sitemap = fs.readFileSync("public/sitemap-up-waterfalls.xml", "utf8");
 
 test("every published waterfall photo has uniquely identified subject, primary source and commercial-use license", () => {
-  assert.equal(photos.photos.length, 27);
+  assert.equal(photos.photos.length, 30);
   assert.equal(new Set(photos.photos.map(x => x.id)).size, photos.photos.length);
   assert.equal(new Set(photos.photos.map(x => x.imageUrl)).size, photos.photos.length);
-  assert.deepEqual(new Set(photos.photos.map(x => x.id)), new Set(["wagner-falls","bond-falls","miners-falls","sable-falls","munising-falls","spray-falls","mosquito-falls","agate-falls","manabezho-falls","nawadaha-falls","great-conglomerate-falls","potawatomi-falls","sandstone-falls","laughing-whitefish-falls","scott-falls","bridalveil-falls","elliot-falls","manido-falls","o-kun-de-kun-falls","gorge-falls","eagle-river-falls","houghton-douglass-falls","bonanza-falls","gabbro-falls","yondota-falls","lepisto-falls","jumbo-falls"]));
+  assert.deepEqual(new Set(photos.photos.map(x => x.id)), new Set(["wagner-falls","bond-falls","miners-falls","sable-falls","munising-falls","spray-falls","mosquito-falls","agate-falls","manabezho-falls","nawadaha-falls","great-conglomerate-falls","potawatomi-falls","sandstone-falls","laughing-whitefish-falls","scott-falls","bridalveil-falls","elliot-falls","manido-falls","o-kun-de-kun-falls","gorge-falls","eagle-river-falls","houghton-douglass-falls","bonanza-falls","gabbro-falls","yondota-falls","lepisto-falls","jumbo-falls","canyon-falls","greenstone-falls","haven-falls"]));
   for (const p of photos.photos) {
     assert.equal(p.role, "verified-guide-photo");
     assert.match(p.imageUrl, /^https:\/\/(?:thumb|upload)\.wikimedia\.org\/wikipedia\/commons\//);
     assert.ok(p.sourceUrl.startsWith("https://commons.wikimedia.org/wiki/File:"));
-    assert.match(p.license, /^(CC BY (?:2\.0|3\.0)|CC BY-SA (?:3\.0|4\.0)|Public domain)/);
+    assert.match(p.license, /^(CC BY (?:2\.0|3\.0)|CC BY-SA (?:2\.0|3\.0|4\.0)|Public domain)/);
     assert.ok(p.identityEvidence.length > 45);
     assert.match(p.alt.toLowerCase(), new RegExp(p.name.toLowerCase().replaceAll(" ", "\\s+")));
     assert.ok(p.imageDate === "unknown" || p.imageDate <= photos.reviewed);
