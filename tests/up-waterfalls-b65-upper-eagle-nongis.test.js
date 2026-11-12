@@ -107,7 +107,7 @@ test('B65: the existing bridge-side visitor guide distinguishes names without re
  assert.match(lower,/dateModified":"2026-11-03"/);
  assert.ok(lower.includes('"@id":"https://chrisizworski.com/#person"'));
  assert.ok(lower.includes('<link rel="canonical" href="https://chrisizworski.com/upper-peninsula-waterfalls/eagle-river-falls/">'));
- assert.ok(sitemap.includes('<loc>https://chrisizworski.com/upper-peninsula-waterfalls/eagle-river-falls/</loc><lastmod>2026-11-03</lastmod>'));
+ assert.ok(sitemap.includes('<loc>https://chrisizworski.com/upper-peninsula-waterfalls/eagle-river-falls/</loc><lastmod>2026-11-12</lastmod>'));
  assert.ok(!sitemap.includes('/research/upper-eagle-river-ten-foot-falls/'));
  assert.ok(!source.some(x=>x.id==='upper-eagle-river-ten-foot-falls'));
 });
