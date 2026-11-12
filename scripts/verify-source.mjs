@@ -543,7 +543,7 @@ const committedDriftHashEntries = [
   ["/great-lakes-beaches/whitefish-point/", "1dfa103faf8c639a4235ba668a55393b17623793710471579ffb0eb7ccb11a20"],
   ["/great-lakes-beaches/wilderness-state-park/", "6341bdb514bd1ab07c01233bdc8442e2e84e320bcebe2ec7c182b23b19ab5bb1"],
   // Oct. 25 wildlife evidence update synchronizes Great Lakes Birding dateModified with sitemap lastmod. Pinned exact sitemap bytes; not a parity exemption.
-  ["/sitemap-reputation.xml", "88603a66a4d3075756c8f74aff47d141f525fa0123122e7d677566f2664df850"],
+  ["/sitemap-reputation.xml", "2a4595494b15680fa4fde24102a89c96803f24e7cb078888a9675c34848ede2a"],
   ["/zone-6a-planting-calendar/", "3b34180a82558e2df887dc238ad31dc8d1995e465b3e5d81972ddec260414565"],
 ];
 
