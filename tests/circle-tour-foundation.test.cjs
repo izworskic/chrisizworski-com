@@ -109,7 +109,7 @@ test('every published itinerary reconciles its day estimates, including clockwis
     const end = days === 7 ? html.indexOf('id="itin-10"',start)
       : days === 10 ? html.indexOf('id="itin-15"',start) : html.length;
     const block = html.slice(start,end);
-    return [...block.matchAll(/<div class="itin-day" data-day="(\\d+)" data-stops="([\\d,]+)" data-miles="(\\d+)"/g)]
+    return [...block.matchAll(/<div class="itin-day" data-day="([0-9]+)" data-stops="([0-9,]+)" data-miles="([0-9]+)"/g)]
       .map(([,day,stops,miles]) => ({day:Number(day),stops:stops.split(','),miles:Number(miles)}));
   };
   for (const [days,expected] of [[7,1359],[10,1358],[15,1358]]) {
@@ -129,7 +129,7 @@ test('every published itinerary reconciles its day estimates, including clockwis
   assert.equal(sum([]),null);
   assert.equal(sum([{stops:['1','30'],miles:0}]),null,'a travel day cannot have zero miles');
   assert.match(core,/Official route reference/);
-  assert.match(core,/superiorcountry\\.ca\\/touring\\/drive-and-rv-tours\\/lake-superior-circle-tour/);
-  assert.match(core,/Long driving day\\. Choose one main outing/);
+  assert.ok(core.includes('superiorcountry.ca/touring/drive-and-rv-tours/lake-superior-circle-tour/'));
+  assert.ok(core.includes('Long driving day. Choose one main outing'));
   assert.match(core,/mileage unverified/);
 });
