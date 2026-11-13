@@ -1,0 +1,910 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-11-12",
+  "catalogCount": 80,
+  "verifiedPhotoCount": 30,
+  "unphotographedCuratedCount": 50,
+  "method": "Diff of data/up-waterfalls.json IDs against data/up-waterfall-photo-provenance.json IDs. An unphotographed catalog entry is not the same as missing public-access research or an indexing defect.",
+  "pending": [
+    {
+      "id": "tahquamenon",
+      "name": "Tahquamenon Falls",
+      "region": "Eastern U.P.",
+      "publicGuidePath": "/tahquamenon-falls/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "hold-or-separate-experience",
+      "accessStatusInCuratedCatalog": "verify",
+      "officialVisitorSourceNotPhotoLicense": "https://www.michigan.gov/recsearch/parks/tahquamenonfalls",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "chapel-falls",
+      "name": "Chapel Falls",
+      "region": "Pictured Rocks / Munising",
+      "publicGuidePath": "/upper-peninsula-waterfalls/chapel-falls/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "priority-next",
+      "accessStatusInCuratedCatalog": "verify",
+      "officialVisitorSourceNotPhotoLicense": "https://www.nps.gov/places/chapel-falls.htm",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "rainbow-falls",
+      "name": "Rainbow Falls",
+      "region": "Western U.P.",
+      "publicGuidePath": "/upper-peninsula-waterfalls/rainbow-falls/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "priority-next",
+      "accessStatusInCuratedCatalog": "restricted",
+      "officialVisitorSourceNotPhotoLicense": "https://www.fs.usda.gov/r09/ottawa/recreation/black-river-harbor-recreation-area",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "upper-hungarian-falls",
+      "name": "Upper Hungarian Falls",
+      "region": "Western U.P.",
+      "publicGuidePath": "/upper-peninsula-waterfalls/upper-hungarian-falls/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "priority-next",
+      "accessStatusInCuratedCatalog": "verify",
+      "officialVisitorSourceNotPhotoLicense": "https://keweenawlandtrust.org/protected-lands/hungarian-falls-nature-area",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "lower-hungarian-falls",
+      "name": "Lower Hungarian Falls",
+      "region": "Western U.P.",
+      "publicGuidePath": "/upper-peninsula-waterfalls/lower-hungarian-falls/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "priority-next",
+      "accessStatusInCuratedCatalog": "verify",
+      "officialVisitorSourceNotPhotoLicense": "https://keweenawlandtrust.org/protected-lands/hungarian-falls-nature-area",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "fumee-falls",
+      "name": "Fumee Falls",
+      "region": "Central U.P.",
+      "publicGuidePath": "/upper-peninsula-waterfalls/fumee-falls/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "priority-next",
+      "accessStatusInCuratedCatalog": "seasonal",
+      "officialVisitorSourceNotPhotoLicense": "https://www.michigan.gov/mdot/travel/tourists/roadside-parks",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "rapid-river-falls-delta-county",
+      "name": "Rapid River Falls (Delta County)",
+      "region": "Central U.P.",
+      "publicGuidePath": "/upper-peninsula-waterfalls/rapid-river-falls-delta-county/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "inventory-backlog",
+      "accessStatusInCuratedCatalog": "verify",
+      "officialVisitorSourceNotPhotoLicense": "https://deltacountymi.gov/parks/sac-bay-rapid-river-falls/",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "silver-river-falls",
+      "name": "Silver River Falls",
+      "region": "Keweenaw Peninsula",
+      "publicGuidePath": "/upper-peninsula-waterfalls/silver-river-falls/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "priority-next",
+      "accessStatusInCuratedCatalog": "restricted",
+      "officialVisitorSourceNotPhotoLicense": "https://www.keweenawcountyonline.org/docs/RecreationPlan.pdf",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "pinnacle-falls",
+      "name": "Pinnacle Falls",
+      "region": "Central U.P.",
+      "publicGuidePath": "/upper-peninsula-waterfalls/pinnacle-falls/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "inventory-backlog",
+      "accessStatusInCuratedCatalog": "verify",
+      "officialVisitorSourceNotPhotoLicense": "https://yellowdogwatershed.org/pinnacle-falls-preserve/",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "yellow-dog-falls",
+      "name": "Yellow Dog Falls",
+      "region": "Central U.P.",
+      "publicGuidePath": "/upper-peninsula-waterfalls/yellow-dog-falls/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "priority-next",
+      "accessStatusInCuratedCatalog": "verify",
+      "officialVisitorSourceNotPhotoLicense": "https://yellowdogwatershed.org/land-protection-program/yellow-dog-river-community-forest/",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "kakabika-falls",
+      "name": "Kakabika Falls",
+      "region": "Western U.P.",
+      "publicGuidePath": "/upper-peninsula-waterfalls/kakabika-falls/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "inventory-backlog",
+      "accessStatusInCuratedCatalog": "verify",
+      "officialVisitorSourceNotPhotoLicense": "https://www.recreation.gov/camping/poi/238266",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "interstate-falls",
+      "name": "Interstate Falls",
+      "region": "Western U.P.",
+      "publicGuidePath": "/upper-peninsula-waterfalls/interstate-falls/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "inventory-backlog",
+      "accessStatusInCuratedCatalog": "verify",
+      "officialVisitorSourceNotPhotoLicense": "https://northwoodslandtrust.org/interstate-falls-2/",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "superior-falls",
+      "name": "Superior Falls",
+      "region": "Western U.P.",
+      "publicGuidePath": "/upper-peninsula-waterfalls/superior-falls/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "priority-next",
+      "accessStatusInCuratedCatalog": "verify",
+      "officialVisitorSourceNotPhotoLicense": "https://www.bayfieldcounty.wi.gov/370/Public-Access-Study-PDF",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "horseshoe-falls",
+      "name": "Horseshoe Falls",
+      "region": "Pictured Rocks / Munising",
+      "publicGuidePath": "/upper-peninsula-waterfalls/horseshoe-falls/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "priority-next",
+      "accessStatusInCuratedCatalog": "seasonal",
+      "officialVisitorSourceNotPhotoLicense": "https://www.uppermichiganwaterfalls.com/",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "nonesuch-falls",
+      "name": "Nonesuch Falls",
+      "region": "Western U.P.",
+      "publicGuidePath": "/upper-peninsula-waterfalls/nonesuch-falls/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "priority-next",
+      "accessStatusInCuratedCatalog": "verify",
+      "officialVisitorSourceNotPhotoLicense": "https://www.michigan.gov/recsearch/parks/porkies",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "little-union-gorge-falls",
+      "name": "Little Union Gorge Falls",
+      "region": "Western U.P.",
+      "publicGuidePath": "/upper-peninsula-waterfalls/little-union-gorge-falls/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "inventory-backlog",
+      "accessStatusInCuratedCatalog": "verify",
+      "officialVisitorSourceNotPhotoLicense": "https://www.michigan.gov/recsearch/parks/porkies",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "saxon-falls",
+      "name": "Saxon Falls",
+      "region": "Western U.P.",
+      "publicGuidePath": "/upper-peninsula-waterfalls/saxon-falls/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "inventory-backlog",
+      "accessStatusInCuratedCatalog": "verify",
+      "officialVisitorSourceNotPhotoLicense": "https://hydrorelicensing.com/saxon/",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "overlooked-falls",
+      "name": "Overlooked Falls",
+      "region": "Western U.P.",
+      "publicGuidePath": "/upper-peninsula-waterfalls/overlooked-falls/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "inventory-backlog",
+      "accessStatusInCuratedCatalog": "verify",
+      "officialVisitorSourceNotPhotoLicense": "https://www.michigan.gov/recsearch/parks/porkies",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "trap-falls",
+      "name": "Trap Falls",
+      "region": "Western U.P.",
+      "publicGuidePath": "/upper-peninsula-waterfalls/trap-falls/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "inventory-backlog",
+      "accessStatusInCuratedCatalog": "verify",
+      "officialVisitorSourceNotPhotoLicense": "https://www.michigan.gov/recsearch/parks/porkies",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "cascade-falls",
+      "name": "Cascade Falls",
+      "region": "Western U.P.",
+      "publicGuidePath": "/upper-peninsula-waterfalls/cascade-falls/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "inventory-backlog",
+      "accessStatusInCuratedCatalog": "verify",
+      "officialVisitorSourceNotPhotoLicense": "https://northcountrytrail.org/files/chapters/pwc/PWC_1-15_Dec2025.pdf",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "sand-portage-falls",
+      "name": "Sand Portage Falls",
+      "region": "Eastern U.P.",
+      "publicGuidePath": "/upper-peninsula-waterfalls/sand-portage-falls/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "inventory-backlog",
+      "accessStatusInCuratedCatalog": "verify",
+      "officialVisitorSourceNotPhotoLicense": "https://dnr.wisconsin.gov/topic/parks/menominee/recreation",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "quiver-falls",
+      "name": "Quiver Falls",
+      "region": "Eastern U.P.",
+      "publicGuidePath": "/upper-peninsula-waterfalls/quiver-falls/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "inventory-backlog",
+      "accessStatusInCuratedCatalog": "verify",
+      "officialVisitorSourceNotPhotoLicense": "https://dnr.wisconsin.gov/topic/parks/menominee/recreation",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "pemene-falls",
+      "name": "Pemene Falls",
+      "region": "Eastern U.P.",
+      "publicGuidePath": "/upper-peninsula-waterfalls/pemene-falls/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "inventory-backlog",
+      "accessStatusInCuratedCatalog": "verify",
+      "officialVisitorSourceNotPhotoLicense": "https://dnr.wisconsin.gov/topic/parks/menominee/recreation",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "misicot-falls",
+      "name": "Misicot Falls (Third Pier)",
+      "region": "Eastern U.P.",
+      "publicGuidePath": "/upper-peninsula-waterfalls/misicot-falls/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "inventory-backlog",
+      "accessStatusInCuratedCatalog": "verify",
+      "officialVisitorSourceNotPhotoLicense": "https://www.michigan.org/property/menominee-river-piers-gorge-scenic-hiking-trail",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "duppy-falls",
+      "name": "Duppy Falls",
+      "region": "Western U.P.",
+      "publicGuidePath": "/upper-peninsula-waterfalls/duppy-falls/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "inventory-backlog",
+      "accessStatusInCuratedCatalog": "verify",
+      "officialVisitorSourceNotPhotoLicense": "https://www.fs.usda.gov/r09/ottawa/recreation/duppy-falls",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "mex-i-min-e-falls",
+      "name": "Mex-i-min-e Falls",
+      "region": "Western U.P.",
+      "publicGuidePath": "/upper-peninsula-waterfalls/mex-i-min-e-falls/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "inventory-backlog",
+      "accessStatusInCuratedCatalog": "verify",
+      "officialVisitorSourceNotPhotoLicense": "https://www.fs.usda.gov/r09/ottawa/recreation/mex-i-min-e-falls",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "jacobs-falls",
+      "name": "Jacob's Falls",
+      "region": "Western U.P.",
+      "publicGuidePath": "/upper-peninsula-waterfalls/jacobs-falls/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "priority-next",
+      "accessStatusInCuratedCatalog": "verify",
+      "officialVisitorSourceNotPhotoLicense": "https://www.visitkeweenaw.com/outdoors/waterfalls/",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "manganese-falls",
+      "name": "Manganese Falls",
+      "region": "Western U.P.",
+      "publicGuidePath": "/upper-peninsula-waterfalls/manganese-falls/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "inventory-backlog",
+      "accessStatusInCuratedCatalog": "verify",
+      "officialVisitorSourceNotPhotoLicense": "https://www.visitkeweenaw.com/listing/manganese-falls/607/",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "wyandotte-falls",
+      "name": "Wyandotte Falls",
+      "region": "Western U.P.",
+      "publicGuidePath": "/upper-peninsula-waterfalls/wyandotte-falls/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "inventory-backlog",
+      "accessStatusInCuratedCatalog": "verify",
+      "officialVisitorSourceNotPhotoLicense": "https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/keweenawmi/KCVB_summer_waterfalls_brochure_20230517_WEB_LOW_1__15f13fff-fd1f-4b37-9438-cd0a32dbaf4a.pdf",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "rock-river-falls",
+      "name": "Rock River Falls",
+      "region": "Central U.P.",
+      "publicGuidePath": "/upper-peninsula-waterfalls/rock-river-falls/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "inventory-backlog",
+      "accessStatusInCuratedCatalog": "verify",
+      "officialVisitorSourceNotPhotoLicense": "https://northcountrytrail.org/files/chapters/mac/Segment%20Guide_NCTA%20Marquette%20Area%20Chapter-2023.pdf",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "morgan-falls",
+      "name": "Morgan Falls",
+      "region": "Central U.P.",
+      "publicGuidePath": "/upper-peninsula-waterfalls/morgan-falls/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "inventory-backlog",
+      "accessStatusInCuratedCatalog": "verify",
+      "officialVisitorSourceNotPhotoLicense": "https://www.travelmarquette.com/outdoor-adventure/waterfalls/",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "wright-street-falls",
+      "name": "Wright Street Falls",
+      "region": "Central U.P.",
+      "publicGuidePath": "/upper-peninsula-waterfalls/wright-street-falls/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "inventory-backlog",
+      "accessStatusInCuratedCatalog": "verify",
+      "officialVisitorSourceNotPhotoLicense": "https://www.travelmarquette.com/outdoor-adventure/waterfalls/",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "falls-river-trail",
+      "name": "Falls River Trail: Middle & Lower Falls",
+      "region": "Western U.P.",
+      "publicGuidePath": "/upper-peninsula-waterfalls/falls-river-trail/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "inventory-backlog",
+      "accessStatusInCuratedCatalog": "verify",
+      "officialVisitorSourceNotPhotoLicense": "https://www.baragacountytrails.org/trails/falls-river-trail",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "sturgeon-falls",
+      "name": "Sturgeon Falls",
+      "region": "Western U.P.",
+      "publicGuidePath": "/upper-peninsula-waterfalls/sturgeon-falls/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "inventory-backlog",
+      "accessStatusInCuratedCatalog": "verify",
+      "officialVisitorSourceNotPhotoLicense": "https://northcountrytrail.org/files/chapters/pwc/PWC_33-46_Apr2025.pdf",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "twin-waterfalls-memorial-preserve",
+      "name": "Memorial & Tannery Falls: Preserve Closure",
+      "region": "Pictured Rocks / Munising",
+      "publicGuidePath": "/upper-peninsula-waterfalls/twin-waterfalls-memorial-preserve/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "hold-or-separate-experience",
+      "accessStatusInCuratedCatalog": "closed",
+      "officialVisitorSourceNotPhotoLicense": "https://michigannature.org/index.cfm?action=listing&fuseaction=locationgallery&listing=171",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "power-house-falls",
+      "name": "Power House Falls",
+      "region": "Western U.P.",
+      "publicGuidePath": "/upper-peninsula-waterfalls/power-house-falls/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "inventory-backlog",
+      "accessStatusInCuratedCatalog": "verify",
+      "officialVisitorSourceNotPhotoLicense": "https://visitbaragacounty.com/activities/waterfalls/",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "lower-silver-falls",
+      "name": "Lower Silver Falls",
+      "region": "Western U.P.",
+      "publicGuidePath": "/upper-peninsula-waterfalls/lower-silver-falls/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "hold-or-separate-experience",
+      "accessStatusInCuratedCatalog": "research",
+      "officialVisitorSourceNotPhotoLicense": "https://www.baragacountytourism.org/Baraga_County_Waterfalls_Map.pdf",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "tibbets-falls",
+      "name": "Tibbets Falls",
+      "region": "Western U.P.",
+      "publicGuidePath": "/upper-peninsula-waterfalls/tibbets-falls/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "inventory-backlog",
+      "accessStatusInCuratedCatalog": "verify",
+      "officialVisitorSourceNotPhotoLicense": "https://northcountrytrail.org/files/chapters/pwc/PWC_33-46_Apr2025.pdf",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "little-garlic-falls",
+      "name": "Little Garlic Falls",
+      "region": "Central U.P.",
+      "publicGuidePath": "/upper-peninsula-waterfalls/little-garlic-falls/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "inventory-backlog",
+      "accessStatusInCuratedCatalog": "verify",
+      "officialVisitorSourceNotPhotoLicense": "https://northcountrytrail.org/files/chapters/mac/Segment%20Guide_NCTA%20Marquette%20Area%20Chapter-2023.pdf",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "trappers-falls",
+      "name": "Trappers Falls",
+      "region": "Western U.P.",
+      "publicGuidePath": "/upper-peninsula-waterfalls/trappers-falls/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "inventory-backlog",
+      "accessStatusInCuratedCatalog": "verify",
+      "officialVisitorSourceNotPhotoLicense": "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "explorers-falls",
+      "name": "Explorers Falls",
+      "region": "Western U.P.",
+      "publicGuidePath": "/upper-peninsula-waterfalls/explorers-falls/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "inventory-backlog",
+      "accessStatusInCuratedCatalog": "verify",
+      "officialVisitorSourceNotPhotoLicense": "https://explorewesternup.com/wp-content/uploads/2026/04/WaterfallMapBro_2022_Drft6-opt.pdf",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "shining-cloud-falls",
+      "name": "Shining Cloud Falls",
+      "region": "Western U.P.",
+      "publicGuidePath": "/upper-peninsula-waterfalls/shining-cloud-falls/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "inventory-backlog",
+      "accessStatusInCuratedCatalog": "verify",
+      "officialVisitorSourceNotPhotoLicense": "https://www.michigan.gov/recsearch/-/media/Project/Websites/recsearch/documents/MapsO-S/PMWSP-trail-descriptions.pdf?hash=E9680F7DEC943301EBCD637007AAAB8C&rev=3d600b0d32ff4a589c9038c1ec545465",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "big-erics-falls",
+      "name": "Big Eric's Falls",
+      "region": "Western U.P.",
+      "publicGuidePath": "/upper-peninsula-waterfalls/big-erics-falls/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "inventory-backlog",
+      "accessStatusInCuratedCatalog": "verify",
+      "officialVisitorSourceNotPhotoLicense": "https://www.michigan.gov/recsearch/sfcampgroundsa-m/BigEricsBridge",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "tioga-park-falls",
+      "name": "Tioga Park Falls (roadside cascades)",
+      "region": "Western U.P.",
+      "publicGuidePath": "/upper-peninsula-waterfalls/tioga-park-falls/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "inventory-backlog",
+      "accessStatusInCuratedCatalog": "seasonal",
+      "officialVisitorSourceNotPhotoLicense": "https://www.michigan.gov/mdot/news-outreach/pressreleases/2026/04/21/most-mdot-roadside-parks-reopening-april-28",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "carp-river-falls",
+      "name": "Carp River Falls",
+      "region": "Central U.P.",
+      "publicGuidePath": "/upper-peninsula-waterfalls/carp-river-falls/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "inventory-backlog",
+      "accessStatusInCuratedCatalog": "verify",
+      "officialVisitorSourceNotPhotoLicense": "https://www.travelmarquette.com/outdoor-adventure/waterfalls/",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "conglomerate-falls-gratiot",
+      "name": "Conglomerate Falls (Gratiot River)",
+      "region": "Keweenaw Peninsula",
+      "publicGuidePath": "/upper-peninsula-waterfalls/conglomerate-falls-gratiot/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "inventory-backlog",
+      "accessStatusInCuratedCatalog": "seasonal",
+      "officialVisitorSourceNotPhotoLicense": "https://keweenawnaturalareas.org/KNA/Conglomerate_Falls.html",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "boston-creek-cascades",
+      "name": "Boston Creek Cascades (Nature Area)",
+      "region": "Keweenaw Peninsula",
+      "publicGuidePath": "/upper-peninsula-waterfalls/boston-creek-cascades/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "inventory-backlog",
+      "accessStatusInCuratedCatalog": "verify",
+      "officialVisitorSourceNotPhotoLicense": "https://keweenawlandtrust.org/protected-lands/boston-creek-nature-area",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "middle-hungarian-falls",
+      "name": "Middle Hungarian Falls",
+      "region": "Western U.P.",
+      "publicGuidePath": "/upper-peninsula-waterfalls/middle-hungarian-falls/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "priority-next",
+      "accessStatusInCuratedCatalog": "verify",
+      "officialVisitorSourceNotPhotoLicense": "https://keweenawlandtrust.org/protected-lands/hungarian-falls-nature-area",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "wildcat-falls",
+      "name": "Wildcat Falls",
+      "region": "Western U.P.",
+      "publicGuidePath": "/upper-peninsula-waterfalls/wildcat-falls/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "inventory-backlog",
+      "accessStatusInCuratedCatalog": "verify",
+      "officialVisitorSourceNotPhotoLicense": "https://www.northwoodalliance.org/wildcat-falls",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    },
+    {
+      "id": "montreal-falls-keweenaw",
+      "name": "Montreal Falls (Keweenaw)",
+      "region": "Keweenaw Peninsula",
+      "publicGuidePath": "/upper-peninsula-waterfalls/montreal-falls-keweenaw/",
+      "photoStatus": "not-yet-verified",
+      "photoPriority": "inventory-backlog",
+      "accessStatusInCuratedCatalog": "verify",
+      "officialVisitorSourceNotPhotoLicense": "https://www.visitkeweenaw.com/blog/post/a-guide-to-visiting-the-keweenaws-montreal-falls/",
+      "photoVerificationRequirements": [
+        "named exact waterfall and tier",
+        "image content clearly shows named falls",
+        "attribution and original media source identified",
+        "documented commercial reuse permission or public domain",
+        "historic capture date accurate or explicitly unknown"
+      ],
+      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
+    }
+  ]
+}

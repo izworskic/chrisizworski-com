@@ -156,7 +156,12 @@
     let mileageCard = null;
     if ((ccwA + 1) % ROUTE_ORDER.length === ccwB) mileageCard = card(to);
     if ((ccwB + 1) % ROUTE_ORDER.length === ccwA) mileageCard = card(from);
-    const text = mileageCard?.querySelector('.stop-dist')?.textContent || '';
+    // Some stop cards describe only a border approach or a park spur, not
+    // the full distance from the preceding Circle Tour stop. Never turn
+    // those partial source facts into a synthetic arrival-time estimate.
+    const distance = mileageCard?.querySelector('.stop-dist');
+    if (distance?.dataset?.edgeVerified === 'false') return null;
+    const text = distance?.textContent || '';
     const match = text.match(/([\d,.]+)\s*mi/i);
     return match ? Number(match[1].replace(/,/g, '')) : null; // Never invent a 45-mile leg when the source has none.
   }

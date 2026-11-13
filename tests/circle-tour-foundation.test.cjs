@@ -95,7 +95,41 @@ test('historical 2026 notices do not promote themselves into 2027 live access', 
 });
 
 test('canonical and sitemap remain synchronized after substantive editorial corrections', () => {
-  assert.match(html, /"dateModified":"2026-11-08"/);
-  assert.match(sitemap, /<loc>https:\/\/chrisizworski\.com\/lake-superior-circle-tour\/<\/loc>\s*<lastmod>2026-11-08<\/lastmod>/);
+  assert.match(html, /"dateModified":"2026-11-12"/);
+  assert.match(sitemap, /<loc>https:\/\/chrisizworski\.com\/lake-superior-circle-tour\/<\/loc>\s*<lastmod>2026-11-12<\/lastmod>/);
   assert.equal((html.match(/class="stop-card"/g)||[]).length,31);
+});
+
+test('every published itinerary reconciles its day estimates, including clockwise and long-drive disclosure', () => {
+  const code = section(core, '  function publishedRouteMiles(', '  function renderRoutePreview(');
+  const sum = new Function(code + '\nreturn publishedRouteMiles;')();
+  const published = days => {
+    const start = html.indexOf('id="itin-' + days + '"');
+    assert.ok(start >= 0, 'published itinerary ' + days + ' exists');
+    const end = days === 7 ? html.indexOf('id="itin-10"',start)
+      : days === 10 ? html.indexOf('id="itin-15"',start) : html.length;
+    const block = html.slice(start,end);
+    return [...block.matchAll(/<div class="itin-day" data-day="([0-9]+)" data-stops="([0-9,]+)" data-miles="([0-9]+)"/g)]
+      .map(([,day,stops,miles]) => ({day:Number(day),stops:stops.split(','),miles:Number(miles)}));
+  };
+  for (const [days,expected] of [[7,1359],[10,1358],[15,1358]]) {
+    const route = published(days);
+    assert.equal(route.length,days,'all published days found');
+    assert.deepEqual(route.map(x=>x.day),Array.from({length:days},(_,i)=>i+1));
+    assert.equal(sum(route),expected,'actual sum, not one hardcoded 1,358-mile label');
+    const reversed=route.slice().reverse().map(x=>({...x,stops:x.stops.slice().reverse()}));
+    assert.equal(sum(reversed),expected,'reverse day order preserves mileage and continuity');
+    const broken=route.map(x=>({...x,stops:[...x.stops]}));
+    broken[1].stops[0]='31';
+    assert.equal(sum(broken),null,'unconnected days cannot masquerade as a measured loop');
+    const absent=route.map(x=>({...x}));
+    absent[1].miles=null;
+    assert.equal(sum(absent),null,'missing miles must not become a stay day');
+  }
+  assert.equal(sum([]),null);
+  assert.equal(sum([{stops:['1','30'],miles:0}]),null,'a travel day cannot have zero miles');
+  assert.match(core,/Official route reference/);
+  assert.ok(core.includes('superiorcountry.ca/touring/drive-and-rv-tours/lake-superior-circle-tour/'));
+  assert.ok(core.includes('Long driving day. Choose one main outing'));
+  assert.match(core,/mileage unverified/);
 });

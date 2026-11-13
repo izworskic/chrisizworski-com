@@ -232,6 +232,6 @@ test('both launch interfaces contain official evidence and preserve the canonica
   assert.match(fl,/id="fl-official-history"/);
   assert.match(national,/id="rl-official-value"/);
   assert.match(fl,/app\.js\?v=20261110-region-voice-v1/);
-  assert.match(national,/app\.js\?v=20261110-voice-v1/);
+  assert.match(national,/app\.js\?v=20261112-playalinda-vulcan/);
   assert.equal((national.match(/rel="canonical"/g)||[]).length,1);
 });
