@@ -51,12 +51,12 @@ test('trail numbers use separate LP and UP boundaries, never infer a physical co
  assert.equal(verifySite({id:28,name:'Snowmobile Trail LP 76',directionsNote:'M72 Blue Bear'}).grade,'SOURCE_CONFLICT','LP 76 must not match LP 7');
  assert.equal(verifySite({id:28,name:'Snowmobile Trail LP 7',directionsNote:'a different parking site'}).grade,'SOURCE_CONFLICT','road note changed');
  assert.equal(verifySite({id:28,name:'Snowmobile Trail LP 7',directionsNote:'M72 Blue Bear'}).grade,'DNR_MAP_PAIRED');
- assert.equal(verifySite({id:242,name:'Snowmobile Trail LP / Gaylord Gateway Trailhead',directionsNote:'Staging in winter'}).grade,'ASSET_ONLY','unpaired lot cannot be promoted');
+ assert.equal(verifySite({id:185,name:'Snowmobile Trail LP 992',directionsNote:'Snowmobile parking'}).grade,'ASSET_ONLY','unpaired lot cannot be promoted');
  assert.equal(verifySite({id:1025,name:'Snowmobile Trail LP / White Pine Trail State Park',directionsNote:'Cadillac'}).grade,'ASSET_ONLY');
 });
 test('Keweenaw and Houghton county maps without a confirmed pairing do not manufacture access',()=>{
  assert.equal(Object.values(SITES).some(v=>['Keweenaw','Houghton'].includes(v.county)),false);
- const out=reconcile([{id:242,name:'DNR snowmobile staging',directionsNote:'staging only'},{id:28,name:'Snowmobile Trail LP 7',directionsNote:'M72 Blue Bear'}]);
+ const out=reconcile([{id:185,name:'DNR snowmobile staging',directionsNote:'staging only'},{id:28,name:'Snowmobile Trail LP 7',directionsNote:'M72 Blue Bear'}]);
  assert.equal(out.length,2);
  assert.equal(out[0].accessEvidence.grade,'ASSET_ONLY');
  assert.equal(out[1].accessEvidence.grade,'DNR_MAP_PAIRED');
