@@ -221,5 +221,5 @@ test('Sections 02 and 04 render shared Playalinda decision with the compendium a
  assert.match(js,/florida\.playalinda\.checkedAt/);
  assert.match(js,/NPS 2026 Superintendent’s Compendium, §1\.5\(a\)\(n\)/);
  assert.match(html,/rocket-florida-access\.js\?v=20261112-playalinda-primary/);
- assert.match(html,/rocket-launch-live\/app\.js\?v=20261112-playalinda-vulcan/);
+ assert.match(html,/rocket-launch-live\/app\.js\?v=20261113-rust-national-v1/);
 });

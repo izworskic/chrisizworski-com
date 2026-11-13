@@ -148,7 +148,7 @@ t('Python batch uses only stdlib, bounded HTTPS official source registry, no LL2
 t('national desk is indexable and independent of mission schedule availability',()=>{
  a.match(index,/id="official-notice-desk"/);
  a.match(index,/id="rl-evidence-sources"/);
- a.match(index,/app\.js\?v=20261112-playalinda-vulcan/);
+ a.match(index,/app\.js\?v=20261113-rust-national-v1/);
  a.match(index,/<link rel="canonical" href="https:\/\/chrisizworski\.com\/national-tools\/rocket-launch-live\/">/);
  a.match(js,/OFFICIAL_EVIDENCE_API = '\/api\/rocket-official-notices'/);
  a.match(js,/renderOfficialEvidence\(data\)/);

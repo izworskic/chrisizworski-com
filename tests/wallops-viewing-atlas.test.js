@@ -122,5 +122,5 @@ test('published Wallops page has one canonical, static source links and no launc
  assert.match(guides,/data-field-guide="wallops-rocket-viewing"/);
  const map=read('public/sitemap.xml');
  assert.equal(map.split('https://chrisizworski.com/wallops-rocket-launch-viewing/').length-1,1);
- assert.match(map,/wallops-rocket-launch-viewing\/[^<]*<\/loc>\s*<lastmod>2026-11-10<\/lastmod>/);
+ assert.match(map,/wallops-rocket-launch-viewing\/[^<]*<\/loc>\s*<lastmod>2026-11-13<\/lastmod>/);
 });
