@@ -98,3 +98,36 @@ test('every adopting page loads the same skin version', () => {
   }
   assert.strictEqual(versions.size, 1);
 });
+
+const identity = fs.readFileSync(pub('assets', 'garden-tools', 'fvf-identity.css'), 'utf8');
+const IDENTITY_ONLY = ['seed-saving-lab'];
+
+test('identity stylesheet is static, self-hosted and only defines fvf- pieces', () => {
+  assert.ok(!/@import|https?:\/\//.test(identity));
+  for (const m of identity.matchAll(/url\("([^"]+)"\)/g)) {
+    assert.ok(fs.existsSync(pub(...m[1].split('/').filter(Boolean))), `missing ${m[1]}`);
+  }
+  const stray = identity
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/@font-face\{[^}]*\}/g, '')
+    .replace(/@media[^{]*\{/g, '')
+    .split('}')
+    .map((r) => r.split('{')[0].trim())
+    .filter(Boolean)
+    .flatMap((sel) => sel.split(','))
+    .filter((sel) => !/^(img)?\.fvf-/.test(sel.trim()));
+  assert.deepStrictEqual(stray, []);
+  assert.ok(!identity.includes(String.fromCharCode(8212)));
+});
+
+for (const slug of IDENTITY_ONLY) {
+  test(`${slug} keeps its own layout and carries the place line, seal and wordmark`, () => {
+    const html = fs.readFileSync(pub(slug, 'index.html'), 'utf8');
+    assert.ok(html.includes('/assets/garden-tools/fvf-identity.css'));
+    assert.ok(!html.includes('fvf-universe.css'), 'never both stylesheets');
+    assert.ok(!html.includes('class="fvfu"'));
+    assert.ok(html.includes('<p class="fvf-place">Bay City &middot; Zone 6a &middot; Saginaw Bay</p>'));
+    assert.ok(html.includes('freighter-view-farms-seal.webp" width="56" height="56"'));
+    assert.match(html, /class="fvf-wordmark"[^>]*>Freighter View Farms</);
+  });
+}

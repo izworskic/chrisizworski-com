@@ -75,6 +75,13 @@ rather than a new stylesheet link, and the edit avoids the head lines that open 
 lands: its new stylesheet should use the shared families, and the now-unused Google Fonts
 link on this page can be removed.
 
+## Identity-only pages
+
+Seed Saving Lab, leafcutter bees and the gardening hub each have a purpose-built layout, so
+they do not take `fvf-universe.css`. They load `fvf-identity.css` (1 KB: the three font
+faces, the place line, the seal and the wordmark, nothing else) and swap their own font
+stacks to Playfair Display and Instrument Sans in their own styles.
+
 ## Status
 
 - `/michigan-frost-dates/`: merged in PR #1664, deployed, public page and assets verified.
@@ -82,7 +89,8 @@ link on this page can be removed.
 - Soil temperature, planting calendar, tomatoes, seed starting, variety matchmaker: merged in
   PR #1667, deployed, public pages verified.
 - Seed saving guide, heirloom vs hybrid, native plants, seed libraries, last spring freeze,
-  companion planting, heirloom tomatoes: implemented, each checked in headless Chrome at
-  390 px. The seed libraries dark hero became a mist band so its title stays readable.
-- Remaining: Seed Saving Lab, leafcutter bees, the gardening hub, and the seal in the blog's
-  own header. No visitor outcome is claimed for any of this.
+  companion planting, heirloom tomatoes: merged in PR #1668, deployed, public pages verified.
+- `/seed-saving-lab/`: implemented, checked in headless Chrome at 390 and 1300 px. Its header
+  link to freighterviewfarms.com and its on-page nav are unchanged.
+- Remaining: leafcutter bees, the gardening hub, and the seal in the blog's own header.
+  No visitor outcome is claimed for any of this.
