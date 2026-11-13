@@ -49,6 +49,73 @@ def great_circle_miles(left, right):
     return 2 * EARTH_RADIUS_MILES * math.asin(min(1.0, math.sqrt(a)))
 
 
+def rust_geography(cards, locations):
+    """Optionally delegate all eligibility/geodesic decisions to the compiled Rust core.
+
+    An unset UP_WATERFALL_RUST_BINARY retains the byte-identical historical
+    Python generator. CI supplies the binary and requires full parity; a failed
+    Rust run never silently degrades to the Python implementation.
+    """
+    import os
+    import subprocess
+
+    binary = os.environ.get("UP_WATERFALL_RUST_BINARY")
+    if not binary:
+        return None
+    payload = "".join(
+        "\t".join((c["data-id"], c["data-lat"], c["data-lng"],
+                   c["data-status"], c.get("data-arrival-verified", "pending"))) + "\n"
+        for c in cards
+    )
+    completed = subprocess.run([binary], input=payload, text=True,
+                               capture_output=True, check=True)
+    verified = {}
+    edges = {row["id"]: [] for row in locations}
+    known = set(edges)
+    for line in completed.stdout.splitlines():
+        fields = line.split("\t")
+        if fields[0] == "ROW" and len(fields) == 3:
+            ident, flag = fields[1], fields[2]
+            if ident in verified or flag not in ("0", "1"):
+                raise ValueError("duplicate or invalid Rust waterfall eligibility")
+            verified[ident] = flag == "1"
+        elif fields[0] == "EDGE" and len(fields) == 4:
+            origin, target = fields[1], fields[2]
+            if origin not in known or target not in known or origin == target:
+                raise ValueError("Rust provided a closed, unknown or self-directed waterfall edge")
+            raw = float(fields[3])
+            if not math.isfinite(raw) or raw < 0 or raw > RADIUS_MILES:
+                raise ValueError("Rust provided an invalid geographic distance")
+            edges[origin].append((raw, target))
+        else:
+            raise ValueError("Unrecognized Rust waterfall engine output")
+    if set(verified) != {c["data-id"] for c in cards}:
+        raise ValueError("Rust did not classify every curated destination")
+    if {ident for ident, allowed in verified.items() if allowed} != known:
+        raise ValueError("Rust and published arrival-gate policy disagree")
+    by_id = {row["id"]: row for row in locations}
+    for origin in locations:
+        expected = {target["id"] for target in locations
+                    if target["id"] != origin["id"]
+                    and great_circle_miles(origin, target) <= RADIUS_MILES}
+        observed = {ident for _, ident in edges[origin["id"]]}
+        if expected != observed or len(edges[origin["id"]]) != len(observed):
+            raise ValueError("Rust nearby graph differs from reviewed source geography")
+        for raw, ident in edges[origin["id"]]:
+            if abs(raw - great_circle_miles(origin, by_id[ident])) > 0.00000001:
+                raise ValueError("Rust/Haversine distance parity failed")
+    result = {}
+    for origin in locations:
+        pairs = sorted(edges[origin["id"]], key=lambda item: (item[0], item[1]))
+        result[origin["id"]] = []
+        for raw, ident in pairs:
+            rounded = round(raw, 1)
+            result[origin["id"]].append(
+                {"id": ident, "miles": int(rounded) if rounded.is_integer() else rounded}
+            )
+    return result
+
+
 def build():
     source = json.loads(CATALOG.read_text(encoding="utf-8"))
     catalog = source["waterfalls"]
@@ -90,19 +157,21 @@ def build():
         })
     locations.sort(key=lambda row: row["id"])
     assert locations and excluded, "empty or ungated geographic index"
-    nearby = {}
-    for origin in locations:
-        matches = []
-        for target in locations:
-            if origin["id"] == target["id"]:
-                continue
-            distance = great_circle_miles(origin, target)
-            if distance <= RADIUS_MILES:
-                rounded = round(distance, 1)
-                miles = int(rounded) if rounded.is_integer() else rounded
-                matches.append((distance, target["id"], miles))
-        matches.sort(key=lambda item: (item[0], item[1]))
-        nearby[origin["id"]] = [{"id": ident, "miles": miles} for _, ident, miles in matches]
+    nearby = rust_geography(cards, locations)
+    if nearby is None:
+        nearby = {}
+        for origin in locations:
+            matches = []
+            for target in locations:
+                if origin["id"] == target["id"]:
+                    continue
+                distance = great_circle_miles(origin, target)
+                if distance <= RADIUS_MILES:
+                    rounded = round(distance, 1)
+                    miles = int(rounded) if rounded.is_integer() else rounded
+                    matches.append((distance, target["id"], miles))
+            matches.sort(key=lambda item: (item[0], item[1]))
+            nearby[origin["id"]] = [{"id": ident, "miles": miles} for _, ident, miles in matches]
 
     return {
         "schemaVersion": 1,
