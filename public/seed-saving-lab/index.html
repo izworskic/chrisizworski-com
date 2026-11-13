@@ -24,9 +24,9 @@
  --shadow:0 10px 30px rgba(63,84,70,.08),0 2px 6px rgba(63,84,70,.05);--r:20px
 }
 *{box-sizing:border-box}html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);line-height:1.6;font-size:16px}
+body{margin:0;background:var(--bg);font-family:"Instrument Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);line-height:1.6;font-size:16px}
 a{color:inherit}button,input,select{font:inherit;color:inherit}button{cursor:pointer}
-h1,h2,h3{font-family:Georgia,'Times New Roman',serif;font-weight:400;line-height:1.15;margin:0}p{margin:0}
+h1,h2,h3{font-family:"Playfair Display",Georgia,'Times New Roman',serif;font-weight:500;line-height:1.15;margin:0}p{margin:0}
 .wrap{width:min(1000px,calc(100% - 32px));margin:0 auto}
 .skip{position:absolute;top:-100px;left:1rem;padding:12px;background:#fff;z-index:100;border-radius:8px}.skip:focus{top:10px}
 :focus-visible{outline:3px solid #e2b26b;outline-offset:2px;border-radius:6px}
@@ -36,7 +36,7 @@ h1,h2,h3{font-family:Georgia,'Times New Roman',serif;font-weight:400;line-height
 .site-header{background:transparent}
 .topnav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 0}
 .brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-size:12px;font-weight:700;letter-spacing:.12em;line-height:1.3;color:var(--pine)}
-.brand-mark{display:flex;align-items:center;justify-content:center;width:40px;height:40px;flex:none;background:var(--sage-soft);color:var(--pine);border:1px solid #cfdccf;font-family:Georgia,serif;font-size:12px;letter-spacing:-2px;padding-right:2px;border-radius:50%}.brand-mark span{color:var(--clay)}
+.brand-mark{display:flex;align-items:center;justify-content:center;width:40px;height:40px;flex:none;background:var(--sage-soft);color:var(--pine);border:1px solid #cfdccf;font-family:"Playfair Display",Georgia,serif;font-size:12px;letter-spacing:-2px;padding-right:2px;border-radius:50%}.brand-mark span{color:var(--clay)}
 .brand small{display:block;font-size:10px;letter-spacing:.08em;color:var(--muted);font-weight:600;text-transform:uppercase}
 .nav-links{display:flex;gap:6px}.nav-links a{text-decoration:none;color:var(--pine);font-size:14px;font-weight:600;padding:8px 14px;border-radius:999px}.nav-links a:hover{background:var(--sage-soft)}
 .intro{padding:18px 0 30px;text-align:center}
@@ -49,7 +49,7 @@ h1,h2,h3{font-family:Georgia,'Times New Roman',serif;font-weight:400;line-height
 .picker label{display:block;font-weight:600;font-size:14px;margin-bottom:6px;color:#45524b}
 .picker select{width:100%;min-height:54px;font-size:17px;padding:10px 14px;border:1.5px solid #d9d4c4;border-radius:14px;background:#fff;transition:border-color .15s,box-shadow .15s}
 .picker select:hover{border-color:var(--sage)}.picker select:focus{border-color:var(--pine);box-shadow:0 0 0 4px var(--sage-soft);outline:none}
-.species{display:block;margin-top:6px;font-size:13px;color:var(--muted);min-height:20px}.species i{font-family:Georgia,serif}
+.species{display:block;margin-top:6px;font-size:13px;color:var(--muted);min-height:20px}.species i{font-family:"Playfair Display",Georgia,serif}
 .swap{width:50px;height:54px;border:1.5px solid #d9d4c4;border-radius:14px;background:#fff;font-size:20px;color:var(--pine);margin-bottom:26px;transition:transform .2s,background .15s}.swap:hover{background:var(--sage-soft);transform:rotate(180deg)}
 .pick-hint{margin:10px 0 0;font-size:14px;color:var(--muted)}.examples{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:14px;font-size:14px;color:var(--muted)}
 .chip-btn{border:1px solid #dcd6c6;background:#fff;border-radius:999px;padding:8px 14px;font-size:14px;min-height:40px;color:var(--pine);font-weight:600;transition:background .15s,border-color .15s}.chip-btn:hover{background:var(--sage-soft);border-color:var(--sage)}
@@ -60,7 +60,7 @@ h1,h2,h3{font-family:Georgia,'Times New Roman',serif;font-weight:400;line-height
 .yes .badge{color:#9a4426}.no .badge{color:#2f6345}.maybe .badge{color:var(--honey-ink)}.managed .badge,.same .badge{color:#38627c}
 .badge::before{content:"";width:9px;height:9px;border-radius:50%;background:currentColor}
 .answer h2{font-size:clamp(26px,4vw,34px);margin:12px 0 8px}
-.why{font-size:16px;color:#3c4842}.why i{font-family:Georgia,serif}
+.why{font-size:16px;color:#3c4842}.why i{font-family:"Playfair Display",Georgia,serif}
 .steps-title{margin:20px 0 8px;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#56635c}
 .steps{margin:0;padding-left:22px;display:grid;gap:8px}.steps li::marker{color:var(--sage)}
 .steps.options{list-style:none;padding:0;gap:10px}
@@ -74,11 +74,11 @@ h1,h2,h3{font-family:Georgia,'Times New Roman',serif;font-weight:400;line-height
 .answer-foot a{color:var(--pine)}
 .share-out{width:100%;margin-top:8px;padding:10px;border:1px solid #d9d4c4;border-radius:10px;font-size:13px;background:#fff}
 /* pair picture */
-.pair-viz{align-self:start;background:rgba(255,255,255,.7);border-radius:16px;padding:12px 14px;margin:0}.facts{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;margin:8px 0 2px;font-size:13px;border-top:1px solid rgba(0,0,0,.07);padding-top:10px}.facts dt{color:var(--muted)}.facts dd{margin:0;font-weight:600;color:var(--ink)}.facts i{font-family:Georgia,serif;font-weight:400}
+.pair-viz{align-self:start;background:rgba(255,255,255,.7);border-radius:16px;padding:12px 14px;margin:0}.facts{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;margin:8px 0 2px;font-size:13px;border-top:1px solid rgba(0,0,0,.07);padding-top:10px}.facts dt{color:var(--muted)}.facts dd{margin:0;font-weight:600;color:var(--ink)}.facts i{font-family:"Playfair Display",Georgia,serif;font-weight:400}
 .pair-viz svg{display:block;width:100%;height:auto}
-.pv-name{font:600 13px system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;fill:#2b3530}
-.pv-sp{font:italic 12px Georgia,serif;fill:#66736c}
-.pv-mid{font:600 12px system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;fill:#45524b}
+.pv-name{font:600 13px "Instrument Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;fill:#2b3530}
+.pv-sp{font:italic 12px "Playfair Display",Georgia,serif;fill:#66736c}
+.pv-mid{font:600 12px "Instrument Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;fill:#45524b}
 @media(prefers-reduced-motion:no-preference){.pollen-dot{animation:drift 2.4s ease-in-out infinite}.pollen-dot:nth-of-type(2){animation-delay:.8s}.pollen-dot:nth-of-type(3){animation-delay:1.6s}}
 @keyframes drift{0%{opacity:0;transform:translateX(-50px)}30%,70%{opacity:1}100%{opacity:0;transform:translateX(50px)}}
 /* refine */
@@ -99,9 +99,9 @@ h1,h2,h3{font-family:Georgia,'Times New Roman',serif;font-weight:400;line-height
 .dist-row input[type=number]{width:120px;min-height:44px;padding:8px 12px;border:1.5px solid #dcd6c6;border-radius:12px;font-size:16px;background:#fff}
 .dist-row input[type=range]{flex:1;min-width:180px;accent-color:var(--pine);height:28px}
 .dist-chart{display:block;width:100%;height:auto;margin-top:6px}
-.dc-tick{font:11px system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;fill:#7a8680}
-.dc-label{font:600 12px system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;fill:#2b3530}
-.dc-land{font:11px system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;fill:#8a958f}
+.dc-tick{font:11px "Instrument Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;fill:#7a8680}
+.dc-label{font:600 12px "Instrument Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;fill:#2b3530}
+.dc-land{font:11px "Instrument Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;fill:#8a958f}
 .dist-hint{display:block;font-size:13px;color:var(--muted);margin-top:4px}.dist-hint b{color:var(--ink)}
 /* sections */
 .section{padding:56px 0 8px}
@@ -117,27 +117,27 @@ h1,h2,h3{font-family:Georgia,'Times New Roman',serif;font-weight:400;line-height
 .garden-meta{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center;font-size:14px;color:var(--muted)}
 .garden-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px;margin-top:20px;align-items:start}
 .viz-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px}
-.viz-card h3{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-size:15px;font-weight:700;margin-bottom:2px}
+.viz-card h3{font-family:"Instrument Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-size:15px;font-weight:700;margin-bottom:2px}
 .viz-card .sub{font-size:13px;color:var(--muted);margin-bottom:8px}
 .legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:#4c5952;margin-bottom:6px}
 .legend span{display:inline-flex;align-items:center;gap:6px}.legend svg{flex:none}
 #pollen-web,#room-chart{display:block;width:100%;height:auto;overflow:visible}#room-chart{max-width:700px}
-.web-node circle{fill:#fff;stroke:#a9bcae;stroke-width:2}.web-node text{font:600 12px system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;fill:#2b3530}
+.web-node circle{fill:#fff;stroke:#a9bcae;stroke-width:2}.web-node text{font:600 12px "Instrument Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;fill:#2b3530}
 .web-node.active circle,.web-node:focus-visible circle{stroke:var(--pine);stroke-width:3;fill:var(--sage-soft)}
 .web-node,.web-hit{cursor:pointer;outline:none}
 .web-edge{transition:opacity .15s}.web.dim .web-edge{opacity:.15}.web.dim .web-edge.on{opacity:1}
 .web-hit{stroke:transparent;stroke-width:16;fill:none}
 .web-hit:focus-visible+.web-edge,.web-hit:hover+.web-edge{stroke-width:5}
 .bar-row{cursor:default}.bar-row .bar{fill:var(--bar)}.bar-row.cross .bar{fill:var(--bar-strong)}.bar-row:hover .bar,.bar-row:focus-visible .bar{fill:#2f5f7c}.bar-row{outline:none}
-.bar-row text{font:12px system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;fill:#3c4842}.bar-row .val{font-weight:700;fill:#2b3530}.bar-row .tag{fill:#5d6a63;font-weight:600}
-.bar-grid{stroke:var(--grid);stroke-width:1}.bar-axis{font:11px system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;fill:#7a8680}
+.bar-row text{font:12px "Instrument Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;fill:#3c4842}.bar-row .val{font-weight:700;fill:#2b3530}.bar-row .tag{fill:#5d6a63;font-weight:600}
+.bar-grid{stroke:var(--grid);stroke-width:1}.bar-axis{font:11px "Instrument Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;fill:#7a8680}
 .garden-results{display:grid;gap:14px}
-.group h3{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-size:14px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:8px;color:#45524b}
+.group h3{font-family:"Instrument Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-size:14px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:8px;color:#45524b}
 .group .count{display:inline-grid;place-content:center;min-width:24px;height:24px;border-radius:12px;color:#fff;font-size:12px;padding:0 6px;letter-spacing:0}
 .group.yes .count{background:var(--clay)}.group.maybe .count{background:var(--violet)}.group.no .count{background:var(--sage)}
 .pair{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:8px;transition:border-color .15s,box-shadow .15s}
 .pair.hl{border-color:var(--pine);box-shadow:0 0 0 3px var(--sage-soft)}
-.pair b{display:block}.pair small{display:block;color:var(--muted);font-size:13px}.pair small i{font-family:Georgia,serif}
+.pair b{display:block}.pair small{display:block;color:var(--muted);font-size:13px}.pair small i{font-family:"Playfair Display",Georgia,serif}
 .group.no summary{cursor:pointer;font-size:14px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;display:flex;align-items:center;gap:8px;padding:6px 0;color:#45524b;list-style:none}
 .group.no summary::-webkit-details-marker{display:none}.group.no summary::after{content:"Show ▾";margin-left:auto;font-size:13px;letter-spacing:0;text-transform:none;text-decoration:underline;color:var(--pine);font-weight:600}.group.no[open] summary::after{content:"Hide ▴"}
 .group.no .pair{grid-template-columns:1fr}
@@ -176,11 +176,13 @@ footer{background:#33493f;color:#dce6df;font-size:14px;padding:30px 0}.foot-grid
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
 </style>
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebApplication","name":"Cross-Pollination Explorer","applicationCategory":"EducationalApplication","operatingSystem":"Web","description":"Compare seed-saving plant species and explore seed isolation decisions","isAccessibleForFree":true,"dateModified":"2026-11-02","author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@type":"Organization","name":"Freighter View Farms","url":"https://freighterviewfarms.com/"},"url":"https://chrisizworski.com/seed-saving-lab/"}]}</script>
+<link rel="stylesheet" href="/assets/garden-tools/fvf-identity.css?v=20261113a">
 </head>
 <body>
 <a class="skip" href="#explorer">Skip to the checker</a>
+<p class="fvf-place">Bay City &middot; Zone 6a &middot; Saginaw Bay</p>
 <header class="site-header">
-  <div class="wrap topnav"><a class="brand" href="https://freighterviewfarms.com/"><span class="brand-mark" aria-hidden="true">F<span>V</span>F</span><span>FREIGHTER VIEW FARMS<small>Seed Saving Lab</small></span></a><nav class="nav-links" aria-label="On this page"><a href="#explorer">Two plants</a><a href="#whole-garden">Whole garden</a><a href="#field-notes">How crossing works</a></nav></div>
+  <div class="wrap topnav"><a class="brand fvf-brand" href="https://freighterviewfarms.com/"><img class="fvf-seal" src="/assets/garden-tools/freighter-view-farms-seal.webp" width="56" height="56" alt="" decoding="async"><span><span class="fvf-wordmark">Freighter View Farms</span><small>Seed Saving Lab</small></span></a><nav class="nav-links" aria-label="On this page"><a href="#explorer">Two plants</a><a href="#whole-garden">Whole garden</a><a href="#field-notes">How crossing works</a></nav></div>
 </header>
 <main>
  <section class="intro">
