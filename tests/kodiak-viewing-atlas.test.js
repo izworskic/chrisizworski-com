@@ -104,7 +104,7 @@ test('SEO and discovery point to one current canonical with bidirectional same-I
  assert.match(index,/\/national-tools\/rocket-launch-live\/\?region=alaska/);
  assert.match(app,/launchId=/);
  assert.match(hub,/id="rl-nav-kodiak" href="\/kodiak-rocket-launch-viewing\/"/);
- assert.match(hub,/app\.js\?v=20261112-playalinda-vulcan/);
+ assert.match(hub,/app\.js\?v=20261113-rust-national-v1/);
  assert.match(guides,/data-field-guide="kodiak-rocket-access"/);
  assert.match(guides,/Beyond the Great Lakes <span>5 Guides/);
  assert.ok((guides.match(/data-field-guide="kodiak-rocket-access"/g)||[]).length===1);
