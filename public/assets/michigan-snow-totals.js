@@ -20,6 +20,17 @@
 
   function $(id) { return document.getElementById(id); }
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+  // API URLs are untrusted input. Link only to HTTPS NWS text archives.
+  function originalReportUrl(raw) {
+    if (typeof raw !== 'string' || !raw.trim()) return '';
+    try {
+      var url = new URL(raw), host = url.hostname.toLowerCase();
+      if (url.protocol !== 'https:' || !(host === 'mesonet.agron.iastate.edu' || host === 'weather.gov' || host.endsWith('.weather.gov'))) return '';
+      return url.href;
+    } catch (_) { return ''; }
+  }
+
   function color(n) { return n >= 12 ? '#0b2540' : n >= 6 ? '#1d4f7a' : n >= 3 ? '#3a7fb8' : '#8fbde0'; }
   function dataNow() { return state.data ? Date.parse(state.data.generatedAt) : Date.now(); }
   function place(r) { return C.prettyPlace(r.place); }
@@ -41,7 +52,7 @@
   }
   function popup(r) {
     return '<b>' + esc(C.inches(r.inches)) + ' at ' + esc(where(r)) + '</b><br>' + esc(stamp(r)) + '<br>' + esc(kind(r)) +
-      (r.remark ? '<br><i>' + esc(r.remark) + '</i>' : '') + (r.productUrl ? '<br><a href="' + esc(r.productUrl) + '" rel="noopener">Original NWS report</a>' : '');
+      (r.remark ? '<br><i>' + esc(r.remark) + '</i>' : '') + (originalReportUrl(r.productUrl) ? '<br><a href="' + esc(originalReportUrl(r.productUrl)) + '" target="_blank" rel="noopener noreferrer">Original NWS report</a>' : '');
   }
   function renderMap(rows, fit) {
     initMap();
@@ -134,7 +145,7 @@
       return '<tr><td>' + (i + 1) + '</td><td class="in">' + esc(C.inches(r.inches)) + '<span class="tag">' + (r.measured ? 'measured' : 'estimated') + '</span></td>' +
         '<td>' + esc(where(r)) + (r.remark ? '<span class="rm">' + esc(r.remark) + '</span>' : '') + '</td>' +
         '<td>' + esc(C.when(r.reportedAt)) + '<span class="rm">' + esc(C.relTime(r.reportedAt, Date.now())) + '</span></td><td>' + esc(r.sourceLabel || C.sourceLabel(r.source)) +
-        (r.productUrl ? ' · <a href="' + esc(r.productUrl) + '" rel="noopener">NWS text</a>' : '') + '</td></tr>';
+        (originalReportUrl(r.productUrl) ? ' · <a href="' + esc(originalReportUrl(r.productUrl)) + '" target="_blank" rel="noopener noreferrer">NWS text</a>' : '') + '</td></tr>';
     }).join('');
     $('showAll').hidden = rows.length <= state.tableLimit;
     $('showAll').textContent = 'Show all ' + rows.length + ' places';
@@ -157,7 +168,8 @@
   }
   function reportLine(r, extra) {
     return '<li><strong>' + esc(C.inches(r.inches)) + '</strong> at ' + esc(where(r)) + (extra ? ', ' + esc(extra) : '') + ' <span class="when">' + esc(stamp(r)) + ', ' + esc(kind(r)) + '</span>' +
-      (r.remark ? '<span class="rm">' + esc(r.remark) + '</span>' : '') + '</li>';
+      (r.remark ? '<span class="rm">' + esc(r.remark) + '</span>' : '') +
+      (originalReportUrl(r.productUrl) ? ' <a class="snow-report-source" href="' + esc(originalReportUrl(r.productUrl)) + '" target="_blank" rel="noopener noreferrer">Original NWS report ↗</a>' : '') + '</li>';
   }
   function nearLines(list) {
     return '<ul class="near">' + list.map(function (n) { return reportLine(n.row, Math.round(n.miles) + ' mi ' + n.dir); }).join('') + '</ul>';
