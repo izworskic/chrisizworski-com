@@ -58,7 +58,7 @@ test('the map is embedded immediately after the first answer, not buried below t
 test('the map uses actual Leaflet pins, stable CARTO/OSM tiles, click selection, and accessible focus',()=>{
   assert.match(page,/leaflet@1\.9\.4\/dist\/leaflet\.css/);
   assert.match(page,/leaflet@1\.9\.4\/dist\/leaflet\.js/);
-  assert.match(page,/guide-map\.js\?v=20261110-region-voice-v1/);
+  assert.match(page,/guide-map\.js\?v=20261113-rust-v1/);
   assert.match(script,/window\.L\.map\(root/);
   assert.match(script,/window\.L\.marker\(\[p\.lat,p\.lon\]/);
   assert.match(script,/window\.L\.divIcon/);
