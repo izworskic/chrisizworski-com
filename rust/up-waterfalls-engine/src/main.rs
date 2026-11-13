@@ -74,7 +74,7 @@ fn parse(input: &str) -> Result<Vec<Fall>, String> {
             return Err(format!("line {}: unknown access classification", index + 1));
         }
         let arrival_verified = fields[4] == "verified";
-        if fields[4] != "verified" && fields[4] != "pending" {
+        if !matches!(fields[4], "verified" | "pending" | "closed" | "specialist") {
             return Err(format!("line {}: unknown arrival verification", index + 1));
         }
         falls.push(Fall {
