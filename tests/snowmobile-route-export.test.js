@@ -34,7 +34,7 @@ test('GPX 1.1 track has actual DNR vertex order, WGS84 lat/lon and separate junc
  assert.ok(!gpx.xml.includes('<next>'));
  assert.match(gpx.xml,/NOT a parking location or confirmed physical entrance/);
  assert.match(gpx.xml,/outside designated riding season/i);
- assert.match(gpx.xml,/Official DNR closure source was NOT verified/);
+ assert.match(gpx.xml,/current official DNR closure source was NOT verified/i);
  assert.match(gpx.xml,/<time>2026-11-13T20:00:00\.000Z<\/time>/);
  // Python's stdlib XML parser independently checks generated GPX syntax and order.
  const file='/tmp/snowmobile-gpx-schema-smoke.xml';
