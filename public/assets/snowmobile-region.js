@@ -368,7 +368,7 @@ async function loadParking(){
     }else{
       const time=body.sourceCheckedAt?new Date(body.sourceCheckedAt).toLocaleString('en-US',{dateStyle:'medium',timeStyle:'short'}):'source check time unavailable';
       const paired=PARKING_RESULTS.filter(x=>accessEvidence(x).grade==='DNR_MAP_PAIRED').length;
-      status.textContent=result.total+' DNR-listed public-owner parking assets are within 0.9 mi straight-line of mapped trails. '+paired+' of the displayed records have an independently matched DNR county-map parking/trail listing. Source checked '+time+'. No physical entrance, lot plowing or trailer capacity has been verified.';
+      status.textContent=result.total+' DNR-listed snowmobile parking assets (public-owner) are within 0.9 mi straight-line of mapped trails. '+paired+' of the displayed records have an independently matched DNR county-map parking/trail listing. Source checked '+time+'. No physical entrance, lot plowing or trailer capacity has been verified.';
       host.innerHTML=PARKING_RESULTS.map(parkingCard).join('');
       if(result.total>PARKING_RESULTS.length)host.innerHTML+='<p class="small">Showing '+PARKING_RESULTS.length+' of '+result.total+' nearby locations, with county-map-corroborated entries first. '+parkingSourceLink()+' for the full DNR inventory.</p>';
       drawParkingPins(PARKING_RESULTS);
