@@ -63,7 +63,7 @@ test('explorer links to source-only priority cases but never indexes them as att
     assert.ok(hub.includes(researchPath), researchPath);
     assert.ok(!sitemap.includes('https://chrisizworski.com' + researchPath), researchPath);
   }
-  const modified = hub.match(/"dateModified":"(\\d{4}-\\d{2}-\\d{2})"/);
+  const modified = hub.match(/"dateModified":"(\d{4}-\d{2}-\d{2})"/);
   assert.ok(modified, 'hub must publish a source-accurate dateModified');
   assert.ok(sitemap.includes('<loc>https://chrisizworski.com/upper-peninsula-waterfalls/</loc><lastmod>'+modified[1]+'</lastmod>'),
     'sitemap hub lastmod must equal actual page dateModified');
