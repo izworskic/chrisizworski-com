@@ -48,6 +48,27 @@ test('normalizes fresh AIS and preserves visitor-relevant static particulars', (
   assert.equal(data.attribution[0].credit, 'AISHub via Open Waters AIS');
 });
 
+test('yearless AIS ETA stays raw and never turns into a fictitious 2001 arrival', () => {
+  const rows = normalize(collection([
+    feature({ mmsi: 366904911, eta: '11-12 23:15' }),
+    feature({ mmsi: 366904912, eta: 'Nov 12 23:15' }),
+    feature({ mmsi: 366904913, eta: '2026-11-12T18:15:00-05:00' }),
+    feature({ mmsi: 366904914, eta: '2026-11-12 23:15' })
+  ]), NOW).vessels;
+  assert.equal(rows.length, 4);
+  for (const mmsi of ['366904911', '366904912', '366904914']) {
+    const eta = rows.find(row => row.mmsi === mmsi).eta;
+    assert.ok(eta.raw);
+    assert.equal(eta.iso, null, 'do not infer a date or timezone: ' + eta.raw);
+  }
+  assert.equal(rows.find(row => row.mmsi === '366904913').eta.iso, '2026-11-12T23:15:00.000Z');
+  // Ship-watching windows are derived from motion, not this self-reported ETA.
+  const candidate = buildCandidate(rows.find(row => row.mmsi === '366904911'), NOW);
+  assert.ok(candidate);
+  assert.equal(candidate.reportedEta.iso, null);
+  assert.ok(candidate.window.midpoint.startsWith('2026-09-25T'));
+});
+
 test('drops stale and invalid AIS rather than converting it into anticipated traffic', () => {
   const stale = feature({ seen: '2026-09-25T00:30:00Z' });
   const badMmsi = feature({ mmsi: '123' });
