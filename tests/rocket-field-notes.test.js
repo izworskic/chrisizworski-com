@@ -15,7 +15,7 @@ const sample=(region,rocket,id='66666666-6666-4666-8666-666666666666')=>({
   selectedLaunch:{id,region,rocket,name:'Example mission',mission:'Example payload'}
 });
 function fakeDocument(){
-  const items=new Map(),events={},storyState={};
+  const items=new Map(),events={},storyState={attributes:{},setAttribute(k,v){this.attributes[k]=v;}};
   const getElementById=id=>{
     if(!items.has(id))items.set(id,{
       id,textContent:'',hidden:false,href:'',attributes:{},
@@ -109,5 +109,5 @@ test('selecting a new region or mission replaces both stories, and failed source
   assert.equal(doc.getElementById('rl-place-note-source').hidden,true);
   assert.equal(doc.getElementById('rl-place-note-guide').hidden,true);
   assert.equal(doc.getElementById('rl-vehicle-note-source').hidden,true);
-  assert.equal(doc.storyState['data-region-story'],'none');
+  assert.equal(doc.storyState.attributes['data-region-story'],'none');
 });
