@@ -46,7 +46,7 @@ test('Rust preferences are actually wired to the on-page map and candidate choic
  for(const id of [0,1,2])assert.match(html,new RegExp('data-rust-priority="'+id+'"'));
  assert.match(html,/id="vg-rust-marine" type="checkbox"/);
  assert.match(html,/id="vg-rust-choice-link"/);
- assert.match(html,/guide-map\.js\?v=20261113-rust-v1/);
+ assert.match(html,/guide-map\.js\?v=20261113-rust-v2/);
  assert.match(html,/styles\.css\?v=20261113-rust-v1/);
  assert.match(client,/WebAssembly\.instantiate\(bytes,\{\}\)/);
  assert.match(client,/viewpoint-engine\.wasm\.b64/);

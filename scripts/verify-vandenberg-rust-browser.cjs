@@ -73,6 +73,8 @@ const mapStub=()=>{
         });
       assert.equal(await page.locator('#vg-rust-choices').isVisible(),true,name+' Rust panel should appear');
       assert.equal(await page.locator('#vg-rust-choices').getAttribute('data-engine'),'rust-wasm');
+      assert.equal(await page.locator('#vg-rust-choice-link').innerText(),'Ocean Beach Park',name+' coastal-first default');
+      await page.locator('[data-rust-priority="0"]').click();
       assert.equal(await page.locator('#vg-rust-choice-link').innerText(),'Riverbend Park',name+' family ranking');
       assert.equal((await page.locator('#vg-map-places button').count()),6,name+' six published venues');
       await page.locator('[data-rust-priority="1"]').click();
