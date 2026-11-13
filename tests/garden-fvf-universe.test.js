@@ -100,7 +100,7 @@ test('every adopting page loads the same skin version', () => {
 });
 
 const identity = fs.readFileSync(pub('assets', 'garden-tools', 'fvf-identity.css'), 'utf8');
-const IDENTITY_ONLY = ['seed-saving-lab'];
+const IDENTITY_ONLY = ['seed-saving-lab', 'leafcutter-bees'];
 
 test('identity stylesheet is static, self-hosted and only defines fvf- pieces', () => {
   assert.ok(!/@import|https?:\/\//.test(identity));
