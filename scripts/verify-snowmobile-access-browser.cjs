@@ -68,6 +68,19 @@ const geometry={type:'FeatureCollection',features:[
    await page.waitForFunction(()=>document.querySelector('#parkingStatus')?.textContent?.includes('data unavailable'),{timeout:12000});
    assert.equal(await page.locator('#parkingResults .parking-card').count(),0,'upstream failure cannot leave stale parking suggestions');
    console.log('PASS '+label+' DNR pairing, unsupported-lot caveat, directions, route separation, responsive cards, 503 reset');
+   const keweenawResponse=await page.goto('http://127.0.0.1:'+server.address().port+'/snowmobile/regions/keweenaw-copper-country.html',{waitUntil:'domcontentloaded',timeout:30000});
+   assert.equal(keweenawResponse.status(),200);
+   await page.waitForFunction(()=>document.querySelectorAll('#clubStaging .club-staging-card').length===5,{timeout:15000});
+   const clubText=await page.locator('#clubStaging').innerText();
+   assert.match(clubText,/56953 Osceola Road/);
+   assert.match(clubText,/Overnight parking permitted/);
+   assert.match(clubText,/No overnight parking/);
+   assert.match(clubText,/Do not park in front of the chain-link fence/);
+   assert.equal(await page.locator('#clubStaging [data-club-staging]').count(),5);
+   assert.ok((await page.locator('#clubStaging [data-club-staging="calumet"]').getAttribute('href')).includes('56953%20Osceola%20Road'));
+   assert.equal(await page.locator('#routeStops').isHidden(),true,'club staging cannot create a route stop');
+   console.log('PASS '+label+' Keweenaw official club staging rules and source-backed address directions');
+
    await context.close();
   }
  }finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}
