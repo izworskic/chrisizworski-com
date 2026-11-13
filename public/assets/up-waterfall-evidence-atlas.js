@@ -210,7 +210,10 @@ function renderPins(){
  // Only replace a guide pin when the linked GIS feature is actually visible.
  // A combined visitor-area reference (Tahquamenon) is never a natural waterfall pin.
  const shownGisIds=new Set(visible.filter(r=>r.kind==='gis'&&Number.isFinite(r.lat)&&Number.isFinite(r.lng)).map(r=>r.gisObjectId));
- const subset=visible.filter(r=>Number.isFinite(r.lat)&&Number.isFinite(r.lng)&&
+ const native=window.UPWaterfallEvidenceRust?.atlas?.()||null;
+ const subset=visible.filter(r=>native?
+     native.canPlot(r,shownGisIds,kind.value):
+     Number.isFinite(r.lat)&&Number.isFinite(r.lng)&&
      (r.kind==='gis'||(r.kind==='guide'&&r.mapRole==='natural-waterfall-feature-not-arrival'&&
        (kind.value==='guide'||!(r.linkedGisIds||[]).some(id=>shownGisIds.has(id))))));
  for(const r of subset){
@@ -320,6 +323,11 @@ async function load(){
   const counties=[...new Set(records.map(r=>r.county).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
   for(const c of counties){const opt=el('option','',c+' County');opt.value=c;county.append(opt);}
   initMap();applyFilters();
+  // Atlas still renders without WASM. Activate Rust only after validating all
+  // 640 existing source records and shadowed-GIS marker cases.
+  window.UPWaterfallEvidenceRust?.loadAtlas?.(records)?.then(engine=>{
+    if(engine)renderPins();
+  });
  }catch(e){text(count,'Atlas data is unavailable; the verified waterfall trip planner is still accessible.');text(list,'');const p=el('p','', 'Could not load or verify the research catalog. No replacement names or coordinates have been invented.');link(p,'Use curated waterfall guides','/upper-peninsula-waterfalls/');list.append(p);text(mapRoot,'Map withheld because source records could not be validated.');more.hidden=true;}
 }
 search.addEventListener('input',applyFilters);kind.addEventListener('change',applyFilters);county.addEventListener('change',applyFilters);
