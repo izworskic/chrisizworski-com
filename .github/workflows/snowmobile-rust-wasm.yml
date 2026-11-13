@@ -1,0 +1,62 @@
+name: Snowmobile Rust WASM parity
+on:
+  push:
+    branches:
+      - feature/snowmobile-rust-routing-20261113
+    paths:
+      - rust/snowmobile-routing/**
+      - lib/snowmobile/**
+      - scripts/build-snowmobile-rust.cjs
+      - scripts/verify-snowmobile-rust.cjs
+      - tests/snowmobile-rust.test.js
+      - .github/workflows/snowmobile-rust-wasm.yml
+  pull_request:
+    paths:
+      - rust/snowmobile-routing/**
+      - lib/snowmobile/**
+      - scripts/build-snowmobile-rust.cjs
+      - scripts/verify-snowmobile-rust.cjs
+      - tests/snowmobile-rust.test.js
+      - .github/workflows/snowmobile-rust-wasm.yml
+permissions:
+  contents: write
+
+jobs:
+  wasm-parity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned Rust compiler and WASM target
+        run: |
+          rustup toolchain install 1.90.0 --profile minimal
+          rustup target add wasm32-unknown-unknown --toolchain 1.90.0
+      - name: Native Rust unit tests
+        run: |
+          rustc +1.90.0 --edition=2021 --test rust/snowmobile-routing/src/lib.rs -o /tmp/snowmobile-rust-tests
+          /tmp/snowmobile-rust-tests --test-threads=1
+      - name: Produce real WebAssembly from Rust source
+        run: |
+          rustc +1.90.0 --edition=2021 --crate-type cdylib --target wasm32-unknown-unknown             -C opt-level=z -C codegen-units=1 -C lto=fat -C panic=abort             -C link-arg=--export-memory -C strip=symbols             -o /tmp/snowmobile-routing.wasm rust/snowmobile-routing/src/lib.rs
+          node scripts/build-snowmobile-rust.cjs --wasm=/tmp/snowmobile-routing.wasm
+      - name: Verify binary, ABI, closure-aware routes and parity
+        run: |
+          node scripts/verify-snowmobile-rust.cjs --wasm=/tmp/snowmobile-routing.wasm
+          node --test tests/snowmobile-routing.test.js tests/snowmobile-rust.test.js
+          node scripts/benchmark-snowmobile.mjs --check
+      - name: Check binary remains reproducible on PR
+        if: github.event_name == 'pull_request'
+        run: git diff --exit-code -- lib/snowmobile/rust-binary.mjs
+      - name: Commit compiler-generated binary on feature push
+        if: github.event_name == 'push'
+        run: |
+          if ! git diff --quiet -- lib/snowmobile/rust-binary.mjs; then
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add lib/snowmobile/rust-binary.mjs
+            git commit -m "build(snowmobile): pin verified Rust routing WASM bytes"
+            git push origin HEAD:refs/heads/feature/snowmobile-rust-routing-20261113
+          fi
