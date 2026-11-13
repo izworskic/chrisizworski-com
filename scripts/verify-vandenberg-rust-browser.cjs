@@ -55,7 +55,20 @@ const mapStub=()=>{
       await page.route('https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',route=>route.fulfill({status:200,body:'',contentType:'text/css'}));
       const response=await page.goto(url,{waitUntil:'domcontentloaded',timeout:30000});
       assert.equal(response.status(),200);
-      await page.waitForFunction(()=>document.querySelector('#vg-viewing-map')?.dataset.rust==='ready',{timeout:16000});
+      await page.waitForFunction(()=>document.querySelector('#vg-viewing-map')?.dataset.rust==='ready',null,{timeout:10000})
+        .catch(async error=>{
+          const diagnostic=await page.evaluate(()=>({
+            mapReady:document.querySelector('#vg-viewing-map')?.dataset.mapReady,
+            rust:document.querySelector('#vg-viewing-map')?.dataset.rust,
+            mapMarkup:document.querySelector('#vg-viewing-map')?.textContent?.slice(0,350),
+            leaflet:!!window.L,
+            guideLoaded:!!document.querySelector('#vg-map-places button'),
+            controls:!!document.getElementById('vg-rust-choices'),
+            wasmNative:typeof WebAssembly,
+            wasmUrl:'/vandenberg-rocket-launch-viewing/viewpoint-engine.wasm.b64'
+          }));
+          throw new Error(name+' Rust/WASM did not initialize: '+JSON.stringify({diagnostic,pageErrors:errors,original:String(error)}));
+        });
       assert.equal(await page.locator('#vg-rust-choices').isVisible(),true,name+' Rust panel should appear');
       assert.equal(await page.locator('#vg-rust-choices').getAttribute('data-engine'),'rust-wasm');
       assert.equal(await page.locator('#vg-rust-choice-link').innerText(),'Riverbend Park',name+' family ranking');
