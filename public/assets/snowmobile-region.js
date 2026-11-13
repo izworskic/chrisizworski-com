@@ -5,6 +5,7 @@ let ROUTE_MODE=false,ROUTE_POINTS=[],ROUTE_MARKERS=[],ROUTE_LINE=null;
 let JUNCTIONS_BY_ID=new Map();
 const ROUTE_CLICK_EVENTS=new WeakSet();
 let ROUTE_REQUEST_ID=0,ROUTE_ABORT=null;
+let LAST_ROUTE_EXPORT=null;
 function track(name,params={}){try{if(typeof window.gtag==='function')window.gtag('event',name,params)}catch{}}
 function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 function bandClass(b){return b==='CLOSED'||b==='POOR'?'bad':b==='MARGINAL'||b==='OFF_SEASON'||b==='UNKNOWN'?'warn':b==='EXCELLENT'||b==='GOOD'?'good':''}
@@ -196,7 +197,7 @@ function routeModeButton(){return $('#routeModeToggle');}
 function routeResultHost(){return $('#routeResult');}
 const ROUTE_MARK_COLOR='#e8a33d';
 let ROUTE_BUSY=false;
-function invalidateRoute(){ROUTE_REQUEST_ID++;if(ROUTE_ABORT)ROUTE_ABORT.abort();ROUTE_ABORT=null;ROUTE_BUSY=false;if(ROUTE_LINE){ROUTE_LINE.remove();ROUTE_LINE=null;}const host=routeResultHost();if(host){host.hidden=true;host.innerHTML='';}}
+function invalidateRoute(){LAST_ROUTE_EXPORT=null;ROUTE_REQUEST_ID++;if(ROUTE_ABORT)ROUTE_ABORT.abort();ROUTE_ABORT=null;ROUTE_BUSY=false;if(ROUTE_LINE){ROUTE_LINE.remove();ROUTE_LINE=null;}const host=routeResultHost();if(host){host.hidden=true;host.innerHTML='';}}
 function clearRoutePoints(){invalidateRoute();for(const m of ROUTE_MARKERS)m?.remove?.();ROUTE_MARKERS=[];ROUTE_POINTS=[];const search=$('#junctionSearch');if(search)search.value='';}
 function setRouteHint(text,on=true){for(const id of ['routeHint','mapRouteHint']){const el=$('#'+id);if(el){el.hidden=!on;el.textContent=text;}}}
 function routeAvailable(){
@@ -281,6 +282,48 @@ function routeResultHtml(route){
   const segments=(route.segments||[]).map(s=>`<li>${esc(s.trailNetwork||s.segmentId)} · ${esc(s.band||'UNKNOWN')}${Number.isFinite(s.score)?` · ${esc(s.score)}/100`:' · surface unverified'}</li>`).join('');
   return `${evidenceLine}<div class="route-headline"><strong>${esc(route.distanceMiles)} mi total</strong> · about ${esc(formatDuration(route.estimatedMinutes))}</div><div class="small">${esc(route.stopCount||2)} stops · ${esc(route.segmentsTraversed)} unique DNR segments · assumed ${esc(route.assumedAvgMph)} mph average</div>${worstLine}${closedNote}${legs?`<h3>Your route, leg by leg</h3><ol class="route-legs">${legs}</ol>`:''}${segments?`<details><summary>Trail condition evidence along the route</summary><ul>${segments}</ul></details>`:''}<div class="small route-truth-inline">${esc(route.truth||'')}</div>`;
 }
+// Exports only a successful, currently selected DNR route. Parking assets
+// and club staging addresses are intentionally absent from these GPX tracks.
+function routeExportUi(){
+ return '<div class="route-export-panel ui" aria-label="Save computed trail route"><div><h3>Take your trail plan with you</h3><p>Download the computed DNR trail centerline as GPX for a compatible GPS app, or copy the ride summary. The file does not include an offline map or a connection from trailer parking.</p></div>'+
+ '<div class="route-export-actions"><button type="button" id="downloadRouteGpx">Download GPX track</button><button type="button" id="copyRouteSummary" class="secondary-btn">Copy ride summary</button></div>'+
+ '<p class="small route-export-warning">Planning only. Recheck official DNR closures, trail signs, snow conditions and permissions before riding. A GPX file is not turn-by-turn guidance or permission to cross a road or property.</p>'+
+ '<p class="small" id="routeExportStatus" role="status" aria-live="polite"></p><div id="routeExportFallback"></div></div>';
+}
+function exportStatus(message){const el=$('#routeExportStatus');if(el)el.textContent=message;}
+function downloadRouteGpx(){
+ if(!LAST_ROUTE_EXPORT||!window.SnowmobileRouteExport){exportStatus('Build a complete mapped route before exporting.');return;}
+ let objectUrl=null;
+ try{
+  const file=window.SnowmobileRouteExport.createGpx(LAST_ROUTE_EXPORT);
+  if(!window.URL?.createObjectURL||!window.Blob)throw new Error('File downloads are unavailable in this browser.');
+  const blob=new Blob([file.xml],{type:'application/gpx+xml;charset=utf-8'});
+  objectUrl=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=objectUrl;a.download=file.filename;a.style.display='none';document.body.appendChild(a);a.click();a.remove();
+  const revokeUrl=objectUrl;setTimeout(()=>URL.revokeObjectURL(revokeUrl),30000);
+  exportStatus('GPX download requested. Check your downloads, then import the file in a GPX-compatible map app. Download offline basemaps separately.');
+  track('snowmobile_route_gpx_export',{region:LAST_ROUTE_EXPORT.region,vertices:file.vertexCount,stops:file.stopCount});
+ }catch(error){
+  if(objectUrl)URL.revokeObjectURL(objectUrl);
+  exportStatus('GPX could not be exported: '+String(error?.message||error));
+ }
+}
+async function copyRouteSummary(){
+ if(!LAST_ROUTE_EXPORT||!window.SnowmobileRouteExport){exportStatus('Build a complete mapped route before copying.');return;}
+ try{
+  const summary=window.SnowmobileRouteExport.summary(LAST_ROUTE_EXPORT);
+  if(navigator.clipboard?.writeText){
+   await navigator.clipboard.writeText(summary);
+   exportStatus('Ride summary copied. It is a planning note, not a verified riding recommendation.');
+  }else{
+   const fallback=$('#routeExportFallback');if(!fallback)throw Error('Clipboard unavailable');
+   fallback.innerHTML='<label for="routeExportText">Select and copy your ride summary</label><textarea id="routeExportText" readonly rows="6"></textarea>';
+   const text=fallback.querySelector('textarea');text.value=summary;text.focus();text.select();
+   exportStatus('Use your device Copy command to copy the selected summary.');
+  }
+  track('snowmobile_route_summary_copy',{region:LAST_ROUTE_EXPORT.region,stops:LAST_ROUTE_EXPORT.stops.length});
+ }catch(error){exportStatus('Copy unavailable: '+String(error?.message||error));}
+}
 async function computeRoute(){
   const host=routeResultHost();if(!host||!DATA||ROUTE_POINTS.length<2||ROUTE_BUSY||!ROUTE_MODE)return;
   invalidateRoute();ROUTE_BUSY=true;syncRouteControls();setRouteHint('Building your route through all selected stops…');host.hidden=false;host.innerHTML='<p>Building your route along official DNR trails…</p>';
@@ -288,7 +331,11 @@ async function computeRoute(){
   const points=ROUTE_POINTS.map(p=>`${p.lat.toFixed(5)},${p.lng.toFixed(5)}`).join(';');
   try{
     const r=await fetch(`/api/snowmobile-route?region=${encodeURIComponent(DATA.key)}&points=${encodeURIComponent(points)}`,{signal:controller.signal});const j=await r.json();if(requestId!==ROUTE_REQUEST_ID)return;if(!r.ok)throw new Error(j.error||j.detail||String(r.status));
-    host.innerHTML=(j.closureVerification===true?'':'<p><strong>Distance planning only.</strong> Current closure verification is unavailable. Confirm access with DNR before riding.</p>')+(DATA.season?.active===false?'<p><strong>Off-season:</strong> this is a future-trip plan, not permission to ride now.</p>':'')+routeResultHtml(j.route);
+    const exportContext={route:j.route,stops:ROUTE_POINTS.map(p=>({lat:p.lat,lng:p.lng,label:p.label})),region:DATA.key,generatedAt:j.generatedAt,closureVerified:j.closureVerification===true,seasonActive:DATA.season?.active===true};
+    const rejected=window.SnowmobileRoutePicker?.routeEvidence(j.route,{closureVerified:j.closureVerification===true,seasonActive:DATA.season?.active===true})?.inconsistentClosedSegment===true;
+    const canExport=!rejected&&window.SnowmobileRouteExport?.validate(j.route,exportContext.stops)?.ok===true;
+    LAST_ROUTE_EXPORT=canExport?exportContext:null;
+    host.innerHTML=(j.closureVerification===true?'':'<p><strong>Distance planning only.</strong> Current closure verification is unavailable. Confirm access with DNR before riding.</p>')+(DATA.season?.active===false?'<p><strong>Off-season:</strong> this is a future-trip plan, not permission to ride now.</p>':'')+routeResultHtml(j.route)+(canExport?routeExportUi():'');
     if(j.route?.routable&&MAP&&window.L&&!window.SnowmobileRoutePicker?.routeEvidence(j.route,{closureVerified:j.closureVerification===true,seasonActive:DATA.season?.active===true})?.inconsistentClosedSegment&&j.route.geometry?.coordinates?.length>1){const latlngs=j.route.geometry.coordinates.map(([lon,lat])=>[lat,lon]);ROUTE_LINE=L.polyline(latlngs,{color:ROUTE_MARK_COLOR,weight:6,opacity:.95,dashArray:'1 8',lineCap:'round',interactive:false}).addTo(MAP);try{MAP.fitBounds(ROUTE_LINE.getBounds(),{padding:[25,25]});}catch{}}
     ROUTE_BUSY=false;setRouteMode(false);setRouteHint(j.route?.routable?'Route built. Edit stops to adjust it, or Start over for a new route.':'These stops could not form a complete route. Edit stops or undo the last stop.');scrollRouteElement(host);track('snowmobile_route_computed',{region:DATA.key,routable:Boolean(j.route?.routable),stop_count:ROUTE_POINTS.length,miles:j.route?.distanceMiles??null});
   }catch(e){if(requestId!==ROUTE_REQUEST_ID)return;host.innerHTML=`<p><strong>Route unavailable.</strong> ${esc(e.name==='AbortError'?'The request timed out. Your stops are saved; choose Build route to retry.':e.message||'Please try again.')}</p>`;ROUTE_BUSY=false;setRouteMode(true);setRouteHint('Your stops are saved. Choose Build route to retry, or edit your stops.');track('snowmobile_route_error',{region:DATA.key,message:String(e.message||e).slice(0,120)});}
@@ -382,6 +429,8 @@ async function loadParking(){
 
 document.addEventListener('input',e=>{if(e.target?.id==='junctionSearch')renderJunctionMatches();});
 document.addEventListener('click',e=>{
+  if(e.target?.id==='downloadRouteGpx'){downloadRouteGpx();return;}
+  if(e.target?.id==='copyRouteSummary'){copyRouteSummary();return;}
   if(e.target?.id==='loadParking')loadParking();
   const accessSearch=e.target?.closest?.('[data-parking-trail]');
   if(accessSearch){
