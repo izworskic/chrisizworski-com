@@ -53,7 +53,7 @@ test('trail junctions remain exactly map-selectable DNR endpoints; closures and 
  const nearB=[B[0]+0.00006,B[1]+0.00005];
  const geometry=fc([
   feat('one',A,B),feat('two',nearB,C),
-  feat('closed',[C,[-85.01,44.03]],{band:'CLOSED'}),
+  feat('closed',C,[-85.01,44.03],{band:'CLOSED'}),
   feat('line-crossing',[-85.01,44.015],[-84.99,44.015])
  ]);
  const graph=buildTrailGraph(geometry);
