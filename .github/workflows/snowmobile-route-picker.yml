@@ -9,6 +9,7 @@ on:
       - scripts/generate-snowmobile-region-pages.mjs
       - scripts/benchmark-snowmobile.mjs
       - tests/snowmobile-junction-picker.test.js
+      - tests/snowmobile-route-ui.test.js
       - .github/workflows/snowmobile-route-picker.yml
 permissions:
   contents: read
@@ -25,7 +26,7 @@ jobs:
         run: |
           node --check public/assets/snowmobile-junction-picker.js
           node --check public/assets/snowmobile-region.js
-          node --test tests/snowmobile-junction-picker.test.js tests/snowmobile-routing.test.js tests/snowmobile-rust.test.js
+          node --test tests/snowmobile-junction-picker.test.js tests/snowmobile-route-ui.test.js tests/snowmobile-routing.test.js tests/snowmobile-rust.test.js
       - name: Ensure generated region pages match the authoritative template
         run: |
           node scripts/generate-snowmobile-region-pages.mjs
