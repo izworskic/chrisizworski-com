@@ -46,7 +46,7 @@ const SITES=Object.freeze({
   // Official county maps inspected 2026-11-13; explicit parking-legend entries.
   798:{county:'Chippewa',trail:['UP489'],location:'South Turkey Farm Road north of Glen Cove Road',check:['Turkey Farm','Glen Cove'],mapRef:'UP489[2]'},
   325:{county:'Alger',trail:['UP8','UP88'],location:'North side of Adams Trail east of H-58',check:['Adams Trail','H 58'],mapRef:'UP8, UP88[1]'},
-  275:{county:'Cheboygan',trail:['LP7','LP9'],location:'Mackinaw City east side of Nicolet Street near Mackinaw Crossings Drive',check:['Nicolet','Mackinaw Crossings'],mapRef:'LP7, LP9[1]'},
+  275:{county:'Cheboygan',trail:['LP7','LP9'],trailNameAlias:'North Central State Trail',location:'Mackinaw City east side of Nicolet Street near Mackinaw Crossings Drive',check:['Nicolet','Mackinaw Crossings'],mapRef:'LP7, LP9[1]'},
   1473:{county:'Cheboygan',trail:['LP7'],location:'Indian River east of South State Highway at White Road',check:['State Highway','White Road'],mapRef:'LP7[2]'},
   730:{county:'Lake',trail:['LP344W','LP344E'],location:'North side of West 16th Street east of South James Road',check:['16th Street','James'],mapRef:'LP344W, LP344E[2]'},
   84:{county:'Wexford',trail:['LP6'],location:'West side of US 131 Business Route, south of US-131',check:['US 131 BR','US 131'],mapRef:'LP6[1]'},
@@ -86,7 +86,7 @@ function verifySite(site){
  const ev=SITES[site?.id];
  if(!ev)return {grade:'ASSET_ONLY',reason:'DNR parking asset only; no reviewed county-map parking entry paired to this record',trailCodes:[],countyMap:null};
  const map=COUNTY_MAPS[ev.county],nameCodes=codes(site.name),description=norm(site.directionsNote);
- const codeMatches=ev.trail.every(code=>nameCodes.has(code));
+ const codeMatches=ev.trail.every(code=>nameCodes.has(code))||(ev.trailNameAlias&&norm(site.name).includes(norm(ev.trailNameAlias)));
  const roadMatches=ev.check.every(token=>description.includes(norm(token)));
  if(!codeMatches||!roadMatches)return {
    grade:'SOURCE_CONFLICT',reason:'County-map pairing no longer agrees with the live DNR asset description; do not use as a verified staging location',
