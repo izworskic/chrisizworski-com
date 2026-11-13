@@ -48,7 +48,7 @@
   };
   const jsPlot=(r,shadowed,guideOnly)=>{
     if(!jsRecordSafe(r))return false;
-    return r.kind==='gis'||r.kind==='guide'&&role(r)===1&&(guideOnly||!shadowed);
+    return Boolean(r.kind==='gis'||r.kind==='guide'&&role(r)===1&&(guideOnly||!shadowed));
   };
   async function loadAtlas(records){
     if(atlasActive)return atlasActive;
