@@ -23,6 +23,7 @@
     if(m?.locationId!==12||!/\bVulcan\b/i.test([m?.rocket,m?.name].join(' '))||
        !/\bLV[-\s]?01\b/i.test(missionText)||
        !/(?:SLC[\s-]*41|Space Launch Complex[\s-]*41)/i.test(m?.pad||'')||
+       /hold|scrub|cancel|success|in flight/i.test(m?.status||'')||
        !['minute','second'].includes(m?.netPrecision)||
        !Number.isFinite(net)||new Date(net).toISOString().slice(0,10)!=='2026-11-13')return null;
     const south=matched?regional?.viewpoints?.find(v=>v.id==='playalinda-south'):null;
