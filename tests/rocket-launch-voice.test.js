@@ -40,7 +40,7 @@ test('editorial changes preserve the trusted mission and public viewing journey'
   assert.match(html,/<link rel="canonical" href="https:\/\/chrisizworski\.com\/national-tools\/rocket-launch-live\/"/);
   assert.match(html,/"dateModified":"2026-11-10"/);
   assert.match(html,/https:\/\/chrisizworski\.com\/#person/);
-  assert.match(html,/app\.js\?v=20261112-playalinda-vulcan/);
+  assert.match(html,/app\.js\?v=20261113-rust-national-v1/);
   assert.match(html,/rocket-flight-desk\.js\?v=20261110-voice-v1/);
   assert.match(html,/launch-truth-desk\.js\?v=20261110-voice-v1/);
   assert.match(html,/vandenberg\.js\?v=20261110-voice-v1/);
