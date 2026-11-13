@@ -1,0 +1,74 @@
+/* Freighter View Farms garden universe.
+   One shared look for the garden tools on chrisizworski.com and the garden blog at
+   freighterviewfarms.com: the blog's Playfair Display and Instrument Sans, its seal and
+   masthead, a softened ink and harbor teal, and the tools' green, gold and clay answer
+   colors, which carry meaning and stay as they are.
+   Opt in per page: add class "fvfu" to <body> and load this file after garden-kit.css.
+   Static only. No script, no build step. Palette record: docs/GARDEN_FVF_UNIVERSE.md */
+
+@font-face{font-family:"Playfair Display";font-style:normal;font-weight:400 900;font-display:swap;src:url("/assets/garden-tools/fonts/playfair-display-latin-wght-normal.woff2") format("woff2")}
+@font-face{font-family:"Playfair Display";font-style:italic;font-weight:400 900;font-display:swap;src:url("/assets/garden-tools/fonts/playfair-display-latin-wght-italic.woff2") format("woff2")}
+@font-face{font-family:"Instrument Sans";font-style:normal;font-weight:400 700;font-display:swap;src:url("/assets/garden-tools/fonts/instrument-sans-latin-wght-normal.woff2") format("woff2")}
+
+body.fvfu{
+  --fvfu-ink:#22302c;          /* softened from the blog's pure black */
+  --fvfu-muted:#5a6661;
+  --fvfu-paper:#fffdf8;        /* cream, shared with the garden kit cards */
+  --fvfu-mist:#e9f0ec;         /* the blog's nav band, warmed toward sage */
+  --fvfu-line:#e4ddcd;
+  --fvfu-teal:#1f6f78;         /* the blog's teal accent, one step quieter */
+  --fvfu-teal-deep:#17565d;
+  --fvfu-pine:#3f6b55;         /* garden kit green: actions and "go" answers */
+  --fvfu-display:"Playfair Display",Georgia,"Times New Roman",serif;
+  --fvfu-body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  background:var(--fvfu-paper);
+  color:var(--fvfu-ink);
+  font-family:var(--fvfu-body);
+}
+
+/* Type */
+body.fvfu h1,body.fvfu h2,body.fvfu h3{font-family:var(--fvfu-display);font-weight:600;color:var(--fvfu-ink);letter-spacing:-.005em}
+body.fvfu h1{line-height:1.15}
+body.fvfu h2{line-height:1.2}
+body.fvfu .gk{font-family:var(--fvfu-body);--gk-ink:var(--fvfu-ink);--gk-cream:#fff}
+body.fvfu .gk h2,body.fvfu .gk h3,body.fvfu .gk .gk-title{font-family:var(--fvfu-display);font-weight:600;color:var(--fvfu-ink)}
+body.fvfu .sub,body.fvfu .note,body.fvfu .src,body.fvfu .credit{color:var(--fvfu-muted)}
+
+/* Links: teal for reading, pine stays on tool actions */
+body.fvfu a{color:var(--fvfu-teal)}
+body.fvfu a:hover{color:var(--fvfu-teal-deep)}
+body.fvfu .gk a{color:var(--fvfu-pine)}
+body.fvfu .gk a.gk-btn{color:#fff}
+body.fvfu a:focus-visible{outline:3px solid #9cc3a8;outline-offset:2px}
+
+/* Tables and quiet panels */
+body.fvfu th{background:var(--fvfu-mist);color:var(--fvfu-ink);border-color:var(--fvfu-line)}
+body.fvfu td{border-color:var(--fvfu-line)}
+body.fvfu tr:nth-child(even) td{background:#fbf9f3}
+body.fvfu .answer-card{background:var(--fvfu-mist);border-left-color:var(--fvfu-pine);color:var(--fvfu-ink)}
+body.fvfu .tool-strip{background:#fff;border-color:var(--fvfu-line)}
+
+/* Masthead: the blog's three bands */
+.fvfu-place{margin:0;padding:8px 20px;background:var(--fvfu-ink);color:var(--fvfu-paper);font-size:13px;font-weight:500;letter-spacing:.02em;text-align:center}
+body.fvfu .site-header{display:flex;align-items:center;justify-content:center;gap:14px;padding:18px 20px 16px;background:var(--fvfu-paper);border-bottom:0;text-align:left}
+.fvfu-seal{flex:0 0 auto;width:60px;height:60px;display:block}
+.fvfu-seal img{width:60px;height:60px;display:block}
+.fvfu-brand{min-width:0}
+body.fvfu .fvfu-wordmark{margin:0;font-family:var(--fvfu-display);font-style:italic;font-weight:600;font-size:27px;line-height:1.1;letter-spacing:0}
+body.fvfu .fvfu-wordmark a{color:var(--fvfu-ink);text-decoration:none}
+body.fvfu .site-header .site-title{margin:3px 0 0;font-size:14px;letter-spacing:0;color:var(--fvfu-muted)}
+body.fvfu .site-header .site-title a{color:var(--fvfu-ink);text-decoration:underline;text-decoration-color:#b9c4bd;text-underline-offset:3px}
+body.fvfu .site-nav{display:flex;flex-wrap:wrap;justify-content:center;gap:2px 4px;padding:6px 12px;background:var(--fvfu-mist);border-bottom:1px solid var(--fvfu-line);font-size:13px;font-weight:500;letter-spacing:.04em;text-transform:uppercase}
+body.fvfu .site-nav a{display:inline-flex;align-items:center;min-height:44px;margin:0;padding:0 10px;color:var(--fvfu-ink);text-decoration:none}
+body.fvfu .site-nav a:hover{color:var(--fvfu-teal-deep);text-decoration:underline;text-underline-offset:4px}
+
+@media(max-width:480px){
+  body.fvfu .site-header{gap:12px;padding:14px 16px 12px;justify-content:flex-start}
+  .fvfu-seal,.fvfu-seal img{width:52px;height:52px}
+  body.fvfu .fvfu-wordmark{font-size:23px}
+  body.fvfu .site-nav{justify-content:flex-start;font-size:12.5px}
+}
+@media print{
+  .fvfu-place{display:none}
+  body.fvfu{background:#fff}
+}
