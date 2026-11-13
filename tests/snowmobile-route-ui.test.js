@@ -2,21 +2,24 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
+import {createRequire} from 'node:module';
+const require=createRequire(import.meta.url);
+const JunctionPicker=require('../public/assets/snowmobile-junction-picker.js');
 const source=readFileSync(new URL('../public/assets/snowmobile-region.js',import.meta.url),'utf8');
 function harness(){
  const elements=new Map();
- for(const id of ['map','routeModeToggle','routeHint','mapRouteHint','routeResult','clearRoute','buildRoute','undoRoute','editRoute','routeStops'])elements.set('#'+id,{hidden:false,innerHTML:'',textContent:'',style:{},setAttribute(){},scrollIntoView(){this.scrolled=true;}});
- const features=[];const mapEvents={};let markers=0;
- const map={setView(){return this;},once(){},on(name,fn){mapEvents[name]=fn;},getContainer(){return elements.get('#map');},fitBounds(){},closePopup(){},};
+ for(const id of ['map','routeModeToggle','routeHint','mapRouteHint','routeResult','clearRoute','buildRoute','undoRoute','editRoute','routeStops','junctionSearch','junctionMatches','junctionSearchStatus','clearJunctionSearch','closeRouteLoop','mapMoveToggle'])elements.set('#'+id,{hidden:false,innerHTML:'',textContent:'',style:{},setAttribute(){},scrollIntoView(){this.scrolled=true;},focus(){this.focused=true;},value:''});
+ const features=[];const mapEvents={},events={};let markers=0;
+ const map={setView(){return this;},once(){},on(name,fn){mapEvents[name]=fn;},getContainer(){return elements.get('#map');},fitBounds(){},closePopup(){},panTo(){return this;},dragging:{enable(){this.active=true;},disable(){this.active=false;}}};
  const L={map(){return map;},tileLayer(){return{addTo(){}};},geoJSON(fc,opts){for(const f of fc.features){const layer={feature:f,handlers:{},bindPopup(){return this;},on(name,fn){this.handlers[name]=fn;return this;}};opts.onEachFeature?.(f,layer);features.push(layer);}return{addTo(){return this;},getBounds(){},remove(){}};},circleMarker(){markers++;return{addTo(){return this;},remove(){}};},polyline(){return{addTo(){return this;},getBounds(){},remove(){}};}};
  // Loading the page is kept pending; each test supplies its own map fixture.
- const context=vm.createContext({document:{querySelector:s=>elements.get(s),addEventListener(){}},window:{L,matchMedia:()=>({matches:true})},L,fetch:(_url,options)=>new Promise((_resolve,reject)=>options?.signal.addEventListener('abort',()=>reject(Object.assign(new Error('Aborted'),{name:'AbortError'})))),AbortController,setTimeout,clearTimeout,URLSearchParams,console});
+ const context=vm.createContext({document:{querySelector:s=>elements.get(s),addEventListener(name,fn){events[name]=fn;}},window:{L,matchMedia:()=>({matches:true}),SnowmobileJunctionPicker:JunctionPicker},L,fetch:(_url,options)=>new Promise((_resolve,reject)=>options?.signal.addEventListener('abort',()=>reject(Object.assign(new Error('Aborted'),{name:'AbortError'})))),AbortController,setTimeout,clearTimeout,URLSearchParams,console});
  vm.runInContext(source,context);
  const fixture={routeJunctions:{type:'FeatureCollection',features:[44.7,44.8,44.9,45].map((lat,i)=>({type:'Feature',geometry:{type:'Point',coordinates:[-84.7,lat]},properties:{id:'n'+i,component:i===3?1:0,label:'Trail A'}}))},key:'grayling-gaylord',scoredGeometry:{features:[{properties:{id:'trail-a'},geometry:{type:'LineString',coordinates:[[-84.7,44.7],[-84.7,44.8]]}}]}};
  context.fixture=fixture;
  const run=s=>vm.runInContext(s,context);
  const tap=lat=>features.find(l=>l.feature.geometry.type==='Point'&&l.feature.geometry.coordinates[1]===lat).handlers.click({latlng:{lat:0,lng:0},originalEvent:{}});
- return {run,context,elements,features,mapEvents,tap,get markers(){return markers;}};
+ return {run,context,elements,features,mapEvents,events,map,tap,get markers(){return markers;}};
 }
 test('junction dots select exact nodes and a bubbled event cannot select twice',()=>{
  const h=harness();h.run('DATA=fixture;drawMap(DATA);toggleRouteMode();');
@@ -91,4 +94,59 @@ test('unmarked taps, adjacent duplicate dots, and disconnected dots cannot add b
  h.tap(44.8);h.tap(44.7);assert.equal(h.run('ROUTE_POINTS.length'),3);
  assert.equal(h.run('ROUTE_POINTS[0].lat'),44.7);assert.equal(h.run('ROUTE_POINTS[0].lng'),-84.7);
  h.run('clearRoute();');
+});
+
+test('search picker adds official junction stops and excludes disconnected networks',()=>{
+ const h=harness();
+ h.run('DATA=fixture;JUNCTION_INDEX=window.SnowmobileJunctionPicker.createIndex(DATA.routeJunctions);drawMap(DATA);toggleRouteMode();');
+ h.elements.get('#junctionSearch').value='Trail A';
+ h.events.input({target:{id:'junctionSearch'}});
+ assert.match(h.elements.get('#junctionMatches').innerHTML,/data-junction-id="n0"/);
+ const choose=id=>h.events.click({target:{id:'',closest:()=>({disabled:false,dataset:{junctionId:id}})}});
+ choose('n0');
+ assert.equal(h.run('ROUTE_POINTS.length'),1);
+ assert.match(h.elements.get('#junctionSearchStatus').textContent,/same connected trail network/);
+ assert.doesNotMatch(h.elements.get('#junctionMatches').innerHTML,/data-junction-id="n3"/);
+ choose('n1');
+ assert.equal(h.run('ROUTE_POINTS.length'),2);
+ assert.equal(h.elements.get('#closeRouteLoop').disabled,false);
+ h.events.click({target:{id:'closeRouteLoop',closest:()=>null}});
+ assert.equal(h.run('ROUTE_POINTS.length'),3);
+ assert.equal(h.run('ROUTE_POINTS[2].junctionId'),'n0');
+ assert.equal(h.elements.get('#closeRouteLoop').disabled,true,'loop cannot add identical adjacent stop');
+ h.run('clearRoute();');
+});
+
+test('text planner builds route with no Leaflet map and never claims trail surface is verified',async()=>{
+ const h=harness();
+ h.context.window.L=undefined;
+ h.run('DATA=fixture;JUNCTION_INDEX=window.SnowmobileJunctionPicker.createIndex(DATA.routeJunctions);drawMap(DATA);toggleRouteMode();');
+ assert.match(h.elements.get('#map').innerHTML,/interactive map is unavailable/);
+ const choose=id=>h.events.click({target:{id:'',closest:()=>({disabled:false,dataset:{junctionId:id}})}});
+ choose('n0');choose('n1');
+ assert.equal(h.run('ROUTE_POINTS.length'),2);
+ h.context.fetch=async()=>({ok:true,json:async()=>({closureVerification:false,route:{
+   routable:true,distanceMiles:3,estimatedMinutes:6,assumedAvgMph:30,stopCount:2,
+   segmentsTraversed:1,segments:[],segmentIds:['one'],trailsVia:['Trail A'],
+   closedSegmentsExcludedFromRegion:0,
+   geometry:{type:'LineString',coordinates:[[-84.7,44.7],[-84.7,44.8]]}
+ }})});
+ h.run('computeRoute();');await new Promise(r=>setImmediate(r));
+ assert.match(h.elements.get('#routeResult').innerHTML,/Distance planning only/);
+ assert.match(h.elements.get('#routeResult').innerHTML,/3 mi total/);
+ assert.equal(h.run('ROUTE_MODE'),false);
+ h.run('clearRoute();');
+ assert.equal(h.run('ROUTE_POINTS.length'),0);
+});
+
+test('phone move-map control toggles drag without changing selected stops',()=>{
+ const h=harness();
+ h.run('DATA=fixture;drawMap(DATA);');
+ const button=h.elements.get('#mapMoveToggle');
+ let state='false';button.getAttribute=()=>state;button.setAttribute=(_key,value)=>{state=value;};
+ h.events.click({target:{id:'mapMoveToggle',getAttribute:()=>state,setAttribute:(_k,v)=>{state=v;},textContent:'',closest:()=>null}});
+ assert.equal(h.map.dragging.active,true);
+ h.events.click({target:{id:'mapMoveToggle',getAttribute:()=>state,setAttribute:(_k,v)=>{state=v;},textContent:'',closest:()=>null}});
+ assert.equal(h.map.dragging.active,false);
+ assert.equal(h.run('ROUTE_POINTS.length'),0);
 });
