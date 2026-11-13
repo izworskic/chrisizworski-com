@@ -15,13 +15,15 @@
   if(root)root.SnowmobileAccessEvidence=api;
 })(typeof window==='object'?window:null,function(){
 'use strict';
-const MAP_ROOT='https://www2.dnr.state.mi.us/publications/pdfs/forestslandwater/_Archived/SnowmobileTrailMaps/countymaps/snowmobile_';
+const MAP_ROOT='https://www.michigandnr.com/Publications/PDFS/ForestsLandWater/SnowmobileTrailMaps/countymaps/snowmobile_';
 const COUNTY_MAPS=Object.freeze({
   Crawford:{url:MAP_ROOT+'crawford.pdf',published:'2026-03-02'},
   Otsego:{url:MAP_ROOT+'otsego.pdf',published:'2026-03-02'},
   Lake:{url:MAP_ROOT+'lake.pdf',published:'2026-03-02'},
   Wexford:{url:MAP_ROOT+'wexford.pdf',published:'2026-03-02'},
-  Chippewa:{url:MAP_ROOT+'chippewa.pdf',published:'2026-08-25'}
+  Chippewa:{url:MAP_ROOT+'chippewa.pdf',published:'2026-02-10'},
+  Cheboygan:{url:MAP_ROOT+'cheboygan.pdf',published:'2026-03-02'},
+  Alger:{url:MAP_ROOT+'alger.pdf',published:'2026-02-09'}
 });
 // Notes below reflect the exact road/intersection descriptions printed in
 // the official PDF Parking legend. Each entry must be rechecked if its DNR
@@ -40,7 +42,16 @@ const SITES=Object.freeze({
   781:{county:'Wexford',trail:['LP35'],location:'Northwest of East 48.5 and South 33 roads',check:['48.5','33'],mapRef:'LP35[3]'},
   231:{county:'Chippewa',trail:['UP45'],location:'South side of M-123, west of North Beaver Road',check:['M-123','Beaver'],mapRef:'UP45[1]'},
   66:{county:'Chippewa',trail:['UP493'],location:'East side of Maxton Road, northeast of Maxton Cut Across Road',check:['Maxton Road','Maxton Cut Across'],mapRef:'UP493[3]'},
-  702:{county:'Chippewa',trail:['UP510'],location:'North side of Bass Cove Road',check:['Bass Cove'],mapRef:'UP510[4]'}
+  702:{county:'Chippewa',trail:['UP510'],location:'North side of Bass Cove Road',check:['Bass Cove'],mapRef:'UP510[4]'},
+  // Official county maps inspected 2026-11-13; explicit parking-legend entries.
+  798:{county:'Chippewa',trail:['UP489'],location:'South Turkey Farm Road north of Glen Cove Road',check:['Turkey Farm','Glen Cove'],mapRef:'UP489[2]'},
+  325:{county:'Alger',trail:['UP8','UP88'],location:'North side of Adams Trail east of H-58',check:['Adams Trail','H 58'],mapRef:'UP8, UP88[1]'},
+  275:{county:'Cheboygan',trail:['LP7','LP9'],location:'Mackinaw City east side of Nicolet Street near Mackinaw Crossings Drive',check:['Nicolet','Mackinaw Crossings'],mapRef:'LP7, LP9[1]'},
+  1473:{county:'Cheboygan',trail:['LP7'],location:'Indian River east of South State Highway at White Road',check:['State Highway','White Road'],mapRef:'LP7[2]'},
+  730:{county:'Lake',trail:['LP344W','LP344E'],location:'North side of West 16th Street east of South James Road',check:['16th Street','James'],mapRef:'LP344W, LP344E[2]'},
+  84:{county:'Wexford',trail:['LP6'],location:'West side of US 131 Business Route, south of US-131',check:['US 131 BR','US 131'],mapRef:'LP6[1]'},
+  795:{county:'Wexford',trail:['LP638','LP373'],location:'East side of Caberfae Road north of M-55',check:['Caberfae','M 55'],mapRef:'LP638, LP373[2]'},
+  1059:{county:'Wexford',trail:['LP37'],location:'West side of 23 Road south of West 32.5 Road',check:['23 Road','32.5'],mapRef:'LP37[4]'}
 });
 function norm(s){return String(s||'').toLowerCase().replace(/[^a-z0-9]/g,'');}
 function codes(name){
@@ -48,7 +59,30 @@ function codes(name){
  for(const m of txt.matchAll(/\b(LP|UP)\s*0*(\d{1,4})([EW]?)\b/g))out.add(m[1]+Number(m[2])+m[3]);
  return out;
 }
+// In addition to county-map references, a named public trailhead can be
+// corroborated by the local owner/manager and destination bureau. It is NOT
+// automatically a GPS-verified route edge, nor proof of current winter access.
+const PUBLIC_STAGING=Object.freeze({
+  242:{
+    name:'Gaylord Gateway Trailhead',
+    source:'https://cityofgaylord.com/wp-content/uploads/2024/02/City-of-Gaylord-Recreation-Plan.pdf',
+    operator:'https://www.gaylordmichigan.net/pick-your-season/winter/snowmobile/',
+    facilities:'Otsego County-managed DNR trailhead. City recreation plan documents car-and-trailer parking and year-round restrooms. Gaylord tourism identifies the downtown North Central State Trail trailhead on the north side of M-32.',
+    verification:'Source-backed public staging description; current plowing, parking vacancy, permitted crossing and trailer capacity are not verified.'
+  }
+});
+function publicStagingEvidence(site){
+ const ref=PUBLIC_STAGING[site?.id];
+ if(!ref)return null;
+ if(!/gaylord gateway trailhead/i.test(site?.name||'')||!/parking\s*&\s*staging\s+in\s+winter/i.test(site?.directionsNote||'')){
+   return {grade:'SOURCE_CONFLICT',reason:'DNR Gateway asset wording changed; public-operator corroboration requires rechecking',trailCodes:[],countyMap:null};
+ }
+ return {grade:'OPERATOR_PAIRED',reason:ref.verification,trailCodes:[],countyMap:null,
+   operatorSource:ref.operator,publicSource:ref.source,locationNote:ref.facilities,
+   facilityName:ref.name};
+}
 function verifySite(site){
+ const staging=publicStagingEvidence(site);if(staging)return staging;
  const ev=SITES[site?.id];
  if(!ev)return {grade:'ASSET_ONLY',reason:'DNR parking asset only; no reviewed county-map parking entry paired to this record',trailCodes:[],countyMap:null};
  const map=COUNTY_MAPS[ev.county],nameCodes=codes(site.name),description=norm(site.directionsNote);
@@ -68,5 +102,5 @@ function verifySite(site){
 function reconcile(sites){
  return (Array.isArray(sites)?sites:[]).map(site=>({...site,accessEvidence:verifySite(site)}));
 }
-return Object.freeze({COUNTY_MAPS,SITES,codes,verifySite,reconcile});
+return Object.freeze({COUNTY_MAPS,SITES,PUBLIC_STAGING,codes,verifySite,reconcile});
 });
