@@ -91,6 +91,9 @@ async function ready(page){
    const load=await page.goto(base+'?launchId='+A,{waitUntil:'domcontentloaded',timeout:30000});
    assert(load.status()===200,v.label+' page HTTP');
    await ready(page);
+   await page.waitForFunction(()=>document.querySelector('#w-place-list')?.dataset.decisionEngine==='rust-wasm', {timeout:12000});
+   assert(await page.locator('#w-place-list').getAttribute('data-decision-engine')==='rust-wasm',
+     v.label+' preference ordering must use the compiled Rust engine');
    assert((await page.locator('#w-mission-name').innerText()).includes('Black Brant'),v.label+' mission A');
    assert((await page.locator('#w-mission-type-tag').innerText()).includes('SCIENTIFIC SOUNDING'),v.label+' sounding rocket class');
    assert((await page.locator('#w-nasa-public-status').innerText()).includes('No upcoming public launch'),v.label+' public schedule separate');
