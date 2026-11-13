@@ -8,6 +8,12 @@
   const LAUNCH_DAY_SCHEDULE_REFRESH_MS = 5 * 60 * 1000;
   const KSC_REFRESH_MS = 5 * 60 * 1000;
   const SCHEDULE_REFRESH_MS = 45 * 60 * 1000;
+  let rustPlanning=null,latestCutoffEvidence=null;
+  void window.RocketPlanningRust?.load().then(engine=>{
+    if(!engine)return;
+    rustPlanning=engine;
+    if(latestCutoffEvidence)renderRustCutoff(latestCutoffEvidence);
+  });
   const $ = id => document.getElementById(id);
   const set = (id, text) => { const node = $(id); if (node) node.textContent = text == null ? '—' : String(text); };
   const element = (tag, className, value) => {
@@ -662,7 +668,36 @@
         'The listed launch time may have changed. Check the operator before you leave. ' : '') +
       note + npsStamp);
   };
+  const renderRustCutoff = data => {
+    latestCutoffEvidence=data;
+    const panel=$('fl-rust-gate-reference');
+    if(!panel)return;
+    if(!rustPlanning){
+      panel.textContent='The selected-mission cutoff is not confirmed here. Check the latest NPS notice before traveling.';
+      return;
+    }
+    panel.dataset.decisionEngine='rust-wasm';
+    const cutoff=Date.parse(data?.arrivalGuidance?.estimatedRoadRestrictionAt||'');
+    const scheduleFresh=data?.scheduleFreshness!=='stale'&&
+      Number.isFinite(Date.parse(data?.scheduleCheckedAt||''));
+    const state=rustPlanning.floridaCutoffState(
+      data?.next?.netPrecision,scheduleFresh,Number.isFinite(cutoff),cutoff,Date.now());
+    if(state===0){
+      panel.textContent='No sufficiently precise, fresh launch target and source-backed estimated entry cutoff are available. Verify with NPS.';
+      return;
+    }
+    const when=new Date(cutoff).toLocaleString('en-US',{
+      timeZone:'America/New_York',dateStyle:'medium',timeStyle:'short',timeZoneName:'short'
+    });
+    panel.textContent=state===3?
+      'The estimated inbound cutoff ('+when+') has passed for the currently listed target. A delay may change it. Check NPS before attempting entry.':
+      state===2?
+      'Within one hour of the estimated NPS inbound cutoff ('+when+'). The park may close earlier. Check official NPS access notices.':
+      'Estimated NPS inbound cutoff for this selected target: '+when+
+      '. This is a planning reference, not verification that the beach or gate is open.';
+  };
   const renderArrival = data => {
+    renderRustCutoff(data);
     const panel = $('launch-arrival');
     if (!panel) return;
     panel.replaceChildren();
@@ -1236,6 +1271,7 @@
       renderOfficialWeather(null);
       renderIndependentReporting(null);
       renderFloridaDeck(null);
+      renderRustCutoff(null);
       set('launch-access-checked', 'Live access data could not be checked.');
       const arrival = $('launch-arrival');
       if (arrival) arrival.textContent = 'Launch-day Playalinda entrance policy could not be evaluated. Check the official NPS page before travel.';
