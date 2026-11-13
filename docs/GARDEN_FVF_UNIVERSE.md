@@ -91,7 +91,10 @@ stacks to Playfair Display and Instrument Sans in their own styles.
 - Seed saving guide, heirloom vs hybrid, native plants, seed libraries, last spring freeze,
   companion planting, heirloom tomatoes: merged in PR #1668, deployed, public pages verified.
 - `/seed-saving-lab/`: merged in PR #1673, deployed, public page verified.
-- `/leafcutter-bees/`: implemented, checked in headless Chrome at 390 and 1300 px. The name
-  link to the home page stays in the header; heading tracking tuned for Georgia was eased.
-- Remaining: the gardening hub and the seal in the blog's own header.
-  No visitor outcome is claimed for any of this.
+- `/leafcutter-bees/`: merged in PR #1674, deployed, public page verified.
+- `/michigan-gardening/`: implemented, checked in headless Chrome at 390 and 1300 px. The
+  publication masthead, authority ribbon and footer keep the site's own fonts and links; the
+  garden content below takes the shared type, and the seal and wordmark sit above the title.
+  `garden-hub.css`, `season-story.css`, `garden-welcome.css` and `garden-kit.css` now lead
+  their font stacks with the shared families.
+- Remaining: the seal in the blog's own header. No visitor outcome is claimed for any of this.
