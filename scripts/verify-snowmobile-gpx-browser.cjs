@@ -61,7 +61,7 @@ const fixture={region:'grayling-gaylord',route,closureVerification:false,generat
    const xml=fs.readFileSync(await download.path(),'utf8');
    assert.equal((xml.match(/<trkpt /g)||[]).length,3);
    assert.equal((xml.match(/<wpt /g)||[]).length,2);
-   assert.ok(xml.includes('Official DNR closure source was NOT verified'));
+   assert.ok(/current official DNR closure source was NOT verified/i.test(xml));
    assert.ok(xml.includes('NOT a parking location or confirmed physical entrance'));
    assert.match(await page.locator('#routeExportStatus').innerText(),/download requested/i);
    await page.evaluate(()=>Object.defineProperty(navigator,'clipboard',{configurable:true,value:{writeText:async text=>{window.__rideCopy=text;}}}));
