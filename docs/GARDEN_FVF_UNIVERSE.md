@@ -90,7 +90,8 @@ stacks to Playfair Display and Instrument Sans in their own styles.
   PR #1667, deployed, public pages verified.
 - Seed saving guide, heirloom vs hybrid, native plants, seed libraries, last spring freeze,
   companion planting, heirloom tomatoes: merged in PR #1668, deployed, public pages verified.
-- `/seed-saving-lab/`: implemented, checked in headless Chrome at 390 and 1300 px. Its header
-  link to freighterviewfarms.com and its on-page nav are unchanged.
-- Remaining: leafcutter bees, the gardening hub, and the seal in the blog's own header.
+- `/seed-saving-lab/`: merged in PR #1673, deployed, public page verified.
+- `/leafcutter-bees/`: implemented, checked in headless Chrome at 390 and 1300 px. The name
+  link to the home page stays in the header; heading tracking tuned for Georgia was eased.
+- Remaining: the gardening hub and the seal in the blog's own header.
   No visitor outcome is claimed for any of this.
