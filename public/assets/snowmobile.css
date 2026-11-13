@@ -229,3 +229,26 @@ button:focus-visible,select:focus-visible,a:focus-visible,summary:focus-visible{
 .map-interaction button:focus-visible{outline:3px solid #247bad;outline-offset:2px}
 .map-unavailable{padding:38px 20px;max-width:54ch;margin:auto;color:#315466;text-align:center;font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 @media(max-width:640px){.route-toolbar{position:static}.route-controls button{min-height:44px}}
+
+/* Parking is DNR-listed field-asset evidence, not an automatically routable stop. */
+.parking-planner{margin:18px 0 5px;padding:16px;background:#f6f5f8;border:1px solid #d7d0e1;border-radius:11px;font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.parking-planner h3{margin:0 0 6px;font:700 20px/1.2 Georgia,"Times New Roman",serif;color:#35284b}
+.parking-planner>div:first-child p{margin:6px 0 10px;max-width:65ch}
+.parking-load{min-height:46px;background:#4e3b73;border:1px solid #4e3b73;border-radius:8px;color:white;padding:10px 16px;font:700 14px/1.3 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;cursor:pointer}
+.parking-load:disabled{opacity:.6;cursor:wait}
+#parkingStatus{color:#40334e;margin:11px 0}
+.parking-results{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.parking-card{min-width:0;background:#fff;border:1px solid #d8cfe4;border-radius:9px;padding:14px;box-shadow:0 1px 2px #1c193014}
+.parking-card-top{display:flex;justify-content:space-between;align-items:start;flex-wrap:wrap;gap:7px}
+.parking-card-top strong{font:700 15px/1.35 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#282039;overflow-wrap:anywhere}
+.parking-card-top span{font-size:11px;color:#625874;white-space:nowrap}
+.parking-card p{margin:8px 0 0}
+.parking-distance{font-weight:600;color:#3c345b;font-size:13px}
+.parking-location-note{color:#303945}
+.parking-disclaimer{color:#685873;font-size:12px}
+.parking-actions{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.parking-actions a,.parking-map-focus{min-height:42px;display:inline-flex;align-items:center;justify-content:center;border:1px solid #4e3b73;border-radius:7px;padding:8px 11px;background:#4e3b73;color:white;text-decoration:none;font-size:13px;font-weight:700;cursor:pointer}
+.parking-map-focus{background:white;color:#4e3b73}
+.parking-planner .parking-caveat{margin:14px 0 0;color:#4c4358;font-size:12px;max-width:82ch}
+.parking-planner :is(a,button):focus-visible{outline:3px solid #247bad;outline-offset:2px}
+@media(max-width:680px){.parking-results{grid-template-columns:1fr}.parking-planner{padding:12px}.parking-actions a,.parking-map-focus{flex:1}}
