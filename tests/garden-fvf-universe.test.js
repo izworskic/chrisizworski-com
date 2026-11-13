@@ -46,3 +46,21 @@ for (const slug of ADOPTED) {
     }
   });
 }
+
+test('Pest Watch shares the type, seal and place line but keeps its own layout', () => {
+  const html = fs.readFileSync(pub('michigan-garden-pest-watch', 'index.html'), 'utf8');
+  assert.ok(html.includes('<p class="fvf-place">Bay City &middot; Zone 6a &middot; Saginaw Bay</p>'));
+  assert.ok(html.includes('freighter-view-farms-seal.webp" width="56" height="56"'));
+  assert.ok(html.includes('<a class="fvf-wordmark" href="/michigan-gardening/">Freighter View Farms</a>'));
+  assert.ok(html.includes('Garden field notes by <a href="/">Chris Izworski</a>'));
+  assert.ok(html.includes('<header class="masthead">') && html.includes('<main id="watchdesk">'));
+  assert.ok(!html.includes('class="fvfu"'), 'Pest Watch does not take the generic page skin');
+  for (const file of ['garden-pest-watch.css', 'garden-earworm-trap-desk.css', 'garden-pest-python-fieldbook.css']) {
+    const sheet = fs.readFileSync(pub('assets', file), 'utf8');
+    assert.ok(!/Fraunces|DM Sans/.test(sheet), `${file} uses the shared families`);
+  }
+  const main = fs.readFileSync(pub('assets', 'garden-pest-watch.css'), 'utf8');
+  for (const m of main.matchAll(/url\("([^"]+\.woff2)"\)/g)) {
+    assert.ok(fs.existsSync(pub(...m[1].split('/').filter(Boolean))), `missing ${m[1]}`);
+  }
+});

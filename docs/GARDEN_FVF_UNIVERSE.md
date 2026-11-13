@@ -63,7 +63,20 @@ Contrast on paper: ink 13.5:1, teal 5.7:1, pine 6.0:1, muted `#5a6661` 5.9:1.
 This is a shared identity layer, not a page template. Layouts, interactions and each tool's
 own composition are not standardized by it.
 
+## Pest Watch (November 13, 2026)
+
+Owner asked for Pest Watch to join now rather than last. It keeps its purpose-built layout,
+paper, answer colors and every control. It takes the place line, the seal and wordmark in its
+existing `header.masthead`, and Playfair Display and Instrument Sans in place of Fraunces and
+DM Sans across its three stylesheets. Heading tracking that was tuned for Fraunces was eased,
+because Playfair at -.05em ran words together. The rules live in `garden-pest-watch.css`
+rather than a new stylesheet link, and the edit avoids the head lines that open PR #1500
+(cabbage maggot validation) changes, so that PR still merges cleanly. Follow-up after #1500
+lands: its new stylesheet should use the shared families, and the now-unused Google Fonts
+link on this page can be removed.
+
 ## Status
 
-Pilot implemented and checked in headless Chrome at 390 and 1440 px. Not yet deployed and
-not yet verified on the public site. No visitor outcome is claimed.
+- `/michigan-frost-dates/`: merged in PR #1664, deployed, public page and assets verified.
+- `/michigan-garden-pest-watch/`: implemented, checked in headless Chrome at 390 and 1440 px.
+- Remaining pages: not started. No visitor outcome is claimed for any of this.
