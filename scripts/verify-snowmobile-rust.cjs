@@ -25,7 +25,7 @@ edge(0,0,1,1);edge(1,1,2,1);edge(2,0,2,7);
 assert.equal(exp.sm_solve(3,3,0,2),2);
 assert.deepEqual([read(0),read(1)],[0,1]);
 assert.equal(exp.sm_solve(3,3,2,0),2);
-assert.deepEqual([dv.getUint32(out,true),dv.getUint32(out+4,true)],[0x80000001,0x80000000]);
+assert.deepEqual([read(0),read(1)],[0x80000001,0x80000000]);
 assert.equal(exp.sm_solve(3,1,0,2),-1);
 edge(0,0,1,-9);assert.equal(exp.sm_solve(2,1,0,1),-2);
 console.log('PASS: actual Rust/WASM binary, ABI, reverse routes, disconnections, input validation, source parity');
