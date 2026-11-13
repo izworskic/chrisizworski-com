@@ -278,7 +278,7 @@ test('both launch experiences have source ledger, valid local assets and safe mi
     assert.match(html,/id="launch-truth-desk"/);
     assert.match(html,/id="lt-changes"/);
     assert.match(html,/id="lt-sources"/);
-    assert.match(html,/assets\/launch-truth-desk.js\?v=202611(?:02-truth-v2|10-voice-v1)/);
+    assert.match(html,/assets\/launch-truth-desk.js\?v=202611(?:02-truth-v2|10-voice-v1|13-shift-alert-v1)/);
     assert.match(html,/assets\/launch-truth-desk.css\?v=20261102-truth-v2/);
     assert.equal((html.match(/rel="canonical"/g)||[]).length,1);
   }
