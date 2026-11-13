@@ -11,6 +11,13 @@ const ADOPTED = [
   'zone-6a-planting-calendar',
   'when-to-plant-tomatoes-michigan',
   'seed-starting-guide',
+  'heirloom-seed-saving-guide',
+  'heirloom-vs-hybrid-seeds',
+  'michigan-native-plants',
+  'michigan-seed-libraries',
+  'michigan-last-spring-freeze',
+  'companion-planting-zone-6a',
+  'heirloom-tomatoes-michigan',
 ];
 
 test('shared garden skin is static, self-hosted and scoped to opted-in pages', () => {
@@ -43,7 +50,8 @@ for (const slug of ADOPTED) {
     assert.match(html, /<body class="fvfu"/);
     const kit = html.indexOf('/assets/garden-tools/garden-kit.css');
     const skin = html.indexOf('/assets/garden-tools/fvf-universe.css');
-    assert.ok(kit > -1 && skin > kit, 'skin loads after the garden kit');
+    assert.ok(skin > kit, 'skin loads after the garden kit when the page uses the kit');
+    assert.ok(skin > html.lastIndexOf('</style>'), 'skin loads after the page styles');
     assert.ok(html.includes('Bay City &middot; Zone 6a &middot; Saginaw Bay'));
     assert.ok(html.includes('freighter-view-farms-seal.webp" width="60" height="60"'));
     assert.match(html, /<p class="site-title">[^<]*<a href="\/">Chris Izworski<\/a><\/p>/);
