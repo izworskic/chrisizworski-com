@@ -111,8 +111,7 @@ ${region.key==='eastern-up'?'<section class="panel"><h2>Munising winter ice view
 <script src="/assets/snowmobile-parking.js?v=20261113-dnr-parking-1"></script>
 <script src="/assets/snowmobile-access-evidence.js?v=20261113-access-1"></script>
 ${stagingScript}<script src="/assets/snowmobile-region.js?v=20261113-access-1"></script>
-${localDeskScript}
-${cameraScript}
+${localDeskScript}${cameraScript}
 </body></html>`;
 }
 
