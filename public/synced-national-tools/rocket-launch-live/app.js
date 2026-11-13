@@ -939,7 +939,10 @@
         const actions = el('div', 'rl-site-actions');
         const source = anchor(s.kind === 'specialist' ?
           floridaSpecialistLink(s.source,data) : s.source,
-          s.kind === 'specialist' ? 'Explore this launch on Florida’s guide' : 'Official viewing information', 'rl-mainlink');
+          s.kind === 'specialist' ? 'Explore this launch on Florida’s guide' :
+          (florida?.playalinda&&s.id==='playalinda-south')?
+            'NPS 2026 Superintendent’s Compendium, §1.5(a)(n)' :
+            'Official viewing information', 'rl-mainlink');
         if (source) actions.appendChild(source);
         // Same source, verdict and checked time as the Section 02 access answer.
         const mapHref=siteMapHref(s);
