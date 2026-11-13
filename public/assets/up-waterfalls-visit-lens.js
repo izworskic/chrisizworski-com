@@ -162,5 +162,5 @@ date.addEventListener('change',()=>document.dispatchEvent(new Event('upfall:revi
 render();
 // Hydrate Rust after the HTML-first planner renders. Every card/month/time
 // budget is validated before Rust may influence a visitor recommendation.
-window.UPWaterfallsRust?.load?.(cards,guidance,hasOfficialEvidence,duration).then(engine=>{if(engine)render();});
+window.UPWaterfallsRust?.load?.(cards,guidance,hasOfficialEvidence,duration)?.then(engine=>{if(engine)render();});
 })();
