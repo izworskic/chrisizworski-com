@@ -11,7 +11,7 @@
  const IDS=new Set(['nasa-visitor','reed','harbor']),$=id=>document.getElementById(id);
  const set=(id,value)=>{const node=$(id);if(node)node.textContent=value??'Not verified'};
  const state={request:0,data:null,places:[],profile:'first',site:'nasa-visitor',
-  map:null,markers:new Map(),padMarker:null,bearingLine:null,rocketPins:null,tiles:false,leafletPromise:null};
+  map:null,markers:new Map(),padMarker:null,bearingLine:null,rocketPins:null,tiles:false,leafletPromise:null,rust:null};
  const profiles={
   first:{order:['nasa-visitor','reed','harbor'],note:'If NASA opens the viewing lawn for this flight, it is a great place for range audio and a view over the marsh. Otherwise try the Chincoteague waterfronts.'},
   backup:{order:['reed','harbor','nasa-visitor'],note:'The downtown waterfronts are worth considering if the NASA lawn is closed or full. Check local parking and any event restrictions.'},
@@ -177,6 +177,7 @@
     typeof x.geographicSource==='string'&&x.geographicSource.startsWith('https://')))throw Error('Invalid geography');
    state.places=v;
    await initMap();selectSite(state.site,false);
+   void enableRustPreferences();
   }catch{mapFallback('Public location geometry unavailable.');}
  }
  function selection(){
@@ -221,13 +222,23 @@
   const marker=state.markers.get(id);
   if(marker&&state.map&&move)state.map.panTo(marker.getLatLng(),{animate:false});
  }
+ async function enableRustPreferences(){
+  // Source-checked region IDs and every Rust profile must match before activation.
+  const engine=await window.RocketRustViewing?.load('wallops',state.places.map(x=>x.id));
+  if(!engine)return;
+  state.rust=engine;
+  const list=$('w-place-list');if(list)list.dataset.decisionEngine='rust-wasm';
+  changeProfile(state.profile);
+ }
  function changeProfile(p){
   if(!profiles[p])return;
   state.profile=p;set('w-profile-note',profiles[p].note);
-  const container=$('w-place-list');for(const id of profiles[p].order){
+  const container=$('w-place-list');
+  const order=state.rust?.order(p)||profiles[p].order;
+  for(const id of order){
    const card=container.querySelector('[data-place="'+id+'"]');if(card)container.appendChild(card);
   }
-  selectSite(profiles[p].order[0]);
+  selectSite(order[0]);
  }
  function deepLink(id){
   const tail=id&&UUID.test(id)?'&launchId='+encodeURIComponent(id):'';

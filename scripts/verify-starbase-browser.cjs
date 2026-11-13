@@ -85,6 +85,9 @@ async function waitReady(page){
    const response=await page.goto(url+'?launchId='+A,{waitUntil:'domcontentloaded',timeout:30000});
    assert(response.status()===200,v.name+' HTTP');
    await waitReady(page);
+   await page.waitForFunction(()=>document.querySelector('#sb-place-list')?.dataset.decisionEngine==='rust-wasm', {timeout:12000});
+   assert(await page.locator('#sb-place-list').getAttribute('data-decision-engine')==='rust-wasm',
+     v.name+' preference ordering must use the compiled Rust engine');
    assert((await page.locator('#sb-mission-name').innerText()).includes('Fixture Starship A'),v.name+' mission A');
    assert((await page.locator('#sb-access-label').innerText()).includes('beach generally open'),v.name+' city notice scoped');
    assert((await page.locator('#sb-access-note').innerText()).includes('NOT an authorized launch'),v.name+' no beach-open implication');

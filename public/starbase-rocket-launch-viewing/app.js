@@ -7,7 +7,7 @@
  const UUID=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
  const $=id=>document.getElementById(id),set=(id,value)=>{const x=$(id);if(x)x.textContent=value??'Not verified'};
  const state={request:0,places:[],site:'isla-blanca',profile:'first-time',map:null,markers:new Map(),
-   padMarker:null,bearingLine:null,data:null,rocketPins:null,tilesReady:false,sourceAvailable:false};
+   padMarker:null,bearingLine:null,data:null,rocketPins:null,tilesReady:false,sourceAvailable:false,rust:null};
  const allowedIds=new Set(['isla-blanca','zapata','lighthouse']);
  const profiles={
   'first-time':{hint:'Start at Isla Blanca County Park for a documented public viewing spot. Expect crowds for major flights and check parking before you go.',order:['isla-blanca','zapata','lighthouse']},
@@ -52,14 +52,22 @@
   const marker=state.markers.get(id);
   if(marker&&state.map&&move)state.map.panTo(marker.getLatLng(),{animate:false});
  }
+ async function enableRustPreferences(){
+  const engine=await window.RocketRustViewing?.load('starbase',state.places.map(x=>x.id));
+  if(!engine)return;
+  state.rust=engine;
+  const list=$('sb-place-list');if(list)list.dataset.decisionEngine='rust-wasm';
+  changeProfile(state.profile);
+ }
  function changeProfile(profile){
   if(!profiles[profile])return;
   state.profile=profile;set('sb-profile-reason',profiles[profile].hint);
   const list=$('sb-place-list');
-  for(const id of profiles[profile].order){
+  const order=state.rust?.order(profile)||profiles[profile].order;
+  for(const id of order){
    const card=$(id);if(card)list.appendChild(card);
   }
-  chooseSite(profiles[profile].order[0],true);
+  chooseSite(order[0],true);
  }
  function publicIcon(selected){
   return window.L.divIcon({className:'sb-public-pin'+(selected?' is-selected':''),
@@ -159,6 +167,7 @@
    if(!payload.sites.every(x=>allowedIds.has(x.id)&&Number.isFinite(x.lat)&&Number.isFinite(x.lon)
       &&x.lat>25.8&&x.lat<26.2&&x.lon< -97&&x.lon> -97.5))throw Error('Untrusted place geometry');
    state.places=payload.sites;initMap();chooseSite(state.site,false);
+   void enableRustPreferences();
   }catch{fallbackMap('Viewing-place coordinates aren’t loading. Check the official place links.');}
  }
  function fmtDate(iso,precision){
