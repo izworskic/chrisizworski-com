@@ -2,21 +2,24 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
+import {createRequire} from 'node:module';
+const require=createRequire(import.meta.url);
+const Picker=require('../public/assets/snowmobile-route-picker.js');
 const source=readFileSync(new URL('../public/assets/snowmobile-region.js',import.meta.url),'utf8');
 function harness(){
  const elements=new Map();
- for(const id of ['map','routeModeToggle','routeHint','mapRouteHint','routeResult','clearRoute','buildRoute','undoRoute','editRoute','routeStops'])elements.set('#'+id,{hidden:false,innerHTML:'',textContent:'',style:{},setAttribute(){},scrollIntoView(){this.scrolled=true;}});
- const features=[];const mapEvents={};let markers=0;
- const map={setView(){return this;},once(){},on(name,fn){mapEvents[name]=fn;},getContainer(){return elements.get('#map');},fitBounds(){},closePopup(){},};
+ for(const id of ['map','routeModeToggle','routeHint','mapRouteHint','routeResult','clearRoute','buildRoute','undoRoute','editRoute','routeStops','junctionSearch','junctionSearchResults','closeRouteLoop','mapMoveToggle'])elements.set('#'+id,{hidden:false,innerHTML:'',textContent:'',style:{},setAttribute(){},scrollIntoView(){this.scrolled=true;},value:'',focus(){this.focused=true;}});
+ const features=[];const mapEvents={},events={};let markers=0;
+ const map={setView(){return this;},once(){},on(name,fn){mapEvents[name]=fn;},getContainer(){return elements.get('#map');},fitBounds(){},closePopup(){},panTo(){return this;},dragging:{enable(){this.enabled=true;},disable(){this.enabled=false;}}};
  const L={map(){return map;},tileLayer(){return{addTo(){}};},geoJSON(fc,opts){for(const f of fc.features){const layer={feature:f,handlers:{},bindPopup(){return this;},on(name,fn){this.handlers[name]=fn;return this;}};opts.onEachFeature?.(f,layer);features.push(layer);}return{addTo(){return this;},getBounds(){},remove(){}};},circleMarker(){markers++;return{addTo(){return this;},remove(){}};},polyline(){return{addTo(){return this;},getBounds(){},remove(){}};}};
  // Loading the page is kept pending; each test supplies its own map fixture.
- const context=vm.createContext({document:{querySelector:s=>elements.get(s),addEventListener(){}},window:{L,matchMedia:()=>({matches:true})},L,fetch:(_url,options)=>new Promise((_resolve,reject)=>options?.signal.addEventListener('abort',()=>reject(Object.assign(new Error('Aborted'),{name:'AbortError'})))),AbortController,setTimeout,clearTimeout,URLSearchParams,console});
+ const context=vm.createContext({document:{querySelector:s=>elements.get(s),addEventListener(name,fn){events[name]=fn;}},window:{L,matchMedia:()=>({matches:true}),SnowmobileRoutePicker:Picker},L,fetch:(_url,options)=>new Promise((_resolve,reject)=>options?.signal.addEventListener('abort',()=>reject(Object.assign(new Error('Aborted'),{name:'AbortError'})))),AbortController,setTimeout,clearTimeout,URLSearchParams,console});
  vm.runInContext(source,context);
  const fixture={routeJunctions:{type:'FeatureCollection',features:[44.7,44.8,44.9,45].map((lat,i)=>({type:'Feature',geometry:{type:'Point',coordinates:[-84.7,lat]},properties:{id:'n'+i,component:i===3?1:0,label:'Trail A'}}))},key:'grayling-gaylord',scoredGeometry:{features:[{properties:{id:'trail-a'},geometry:{type:'LineString',coordinates:[[-84.7,44.7],[-84.7,44.8]]}}]}};
  context.fixture=fixture;
  const run=s=>vm.runInContext(s,context);
  const tap=lat=>features.find(l=>l.feature.geometry.type==='Point'&&l.feature.geometry.coordinates[1]===lat).handlers.click({latlng:{lat:0,lng:0},originalEvent:{}});
- return {run,context,elements,features,mapEvents,tap,get markers(){return markers;}};
+ return {run,context,elements,features,mapEvents,events,map,tap,get markers(){return markers;}};
 }
 test('junction dots select exact nodes and a bubbled event cannot select twice',()=>{
  const h=harness();h.run('DATA=fixture;drawMap(DATA);toggleRouteMode();');
@@ -35,7 +38,7 @@ test('junction dots select exact nodes and a bubbled event cannot select twice',
 test('unavailable geometry does not enter endpoint selection',()=>{
  const h=harness();h.run('toggleRouteMode();');
  assert.equal(h.run('ROUTE_MODE'),false);assert.equal(h.elements.get('#routeModeToggle').disabled,true);
- assert.match(h.elements.get('#mapRouteHint').textContent,/Loading trail map/);
+ assert.match(h.elements.get('#mapRouteHint').textContent,/Loading (?:DNR junctions|trail map)/);
  h.run('DATA={scoredGeometry:{features:[]}};toggleRouteMode();');
  assert.match(h.elements.get('#mapRouteHint').textContent,/unavailable/);
 });
@@ -91,4 +94,55 @@ test('unmarked taps, adjacent duplicate dots, and disconnected dots cannot add b
  h.tap(44.8);h.tap(44.7);assert.equal(h.run('ROUTE_POINTS.length'),3);
  assert.equal(h.run('ROUTE_POINTS[0].lat'),44.7);assert.equal(h.run('ROUTE_POINTS[0].lng'),-84.7);
  h.run('clearRoute();');
+});
+
+test('text search can select and plan a mapped route when Leaflet is absent',async()=>{
+ const h=harness();h.context.window.L=undefined;
+ h.run('DATA=fixture;drawMap(DATA);toggleRouteMode();');
+ assert.match(h.elements.get('#map').innerHTML,/interactive map is unavailable/);
+ assert.equal(h.elements.get('#junctionSearch').disabled,false);
+ h.elements.get('#junctionSearch').value='Trail A';
+ h.events.input({target:{id:'junctionSearch'}});
+ assert.match(h.elements.get('#junctionSearchResults').innerHTML,/data-junction-choice="n0"/);
+ h.run("selectSearchedJunction('n0');selectSearchedJunction('n1');");
+ assert.equal(h.run('ROUTE_POINTS.length'),2);
+ const loop=h.elements.get('#closeRouteLoop');assert.equal(loop.disabled,false);
+ h.events.click({target:{id:'closeRouteLoop',closest:()=>null}});
+ assert.equal(h.run('ROUTE_POINTS.length'),3);
+ assert.equal(h.run('ROUTE_POINTS[2].junctionId'),'n0');
+ h.context.fetch=async()=>({ok:true,json:async()=>({closureVerification:false,route:{
+  routable:true,distanceMiles:4,estimatedMinutes:8,assumedAvgMph:30,stopCount:3,segmentsTraversed:2,
+  segments:[],segmentIds:['one','two'],trailsVia:['Trail A'],closedSegmentsExcludedFromRegion:0,
+  geometry:{type:'LineString',coordinates:[[-84.7,44.7],[-84.7,44.8],[-84.7,44.7]]}
+ }})});
+ h.run('computeRoute();');await new Promise(r=>setImmediate(r));
+ assert.match(h.elements.get('#routeResult').innerHTML,/Distance planning only/);
+ assert.match(h.elements.get('#routeResult').innerHTML,/4 mi total/);
+ assert.equal(h.run('ROUTE_MODE'),false);
+ h.run('clearRoute();');
+ assert.equal(h.run('ROUTE_POINTS.length'),0);
+});
+
+test('mobile drag control is opt-in and does not reset the chosen route',()=>{
+ const h=harness();h.run('DATA=fixture;drawMap(DATA);toggleRouteMode();');
+ h.tap(44.7);const before=h.run('ROUTE_POINTS.length');
+ let pressed='false';
+ const target={id:'mapMoveToggle',closest:()=>null,getAttribute:()=>pressed,
+  setAttribute(_key,value){pressed=value;},textContent:''};
+ h.events.click({target});assert.equal(pressed,'true');assert.equal(h.map.dragging.enabled,true);
+ h.events.click({target});assert.equal(pressed,'false');assert.equal(h.map.dragging.enabled,false);
+ assert.equal(h.run('ROUTE_POINTS.length'),before);
+ h.run('clearRoute();');
+});
+
+test('all seven generated regions retain search and provide the same new mobile controls',()=>{
+ const regions=['eastern-up','keweenaw-copper-country','central-western-up','grayling-gaylord','northeast-sunrise','northwest-michigan','west-michigan'];
+ for(const region of regions){
+  const html=readFileSync(new URL('../public/snowmobile/regions/'+region+'.html',import.meta.url),'utf8');
+  for(const marker of ['id="junctionSearch"','id="closeRouteLoop"','id="mapMoveToggle"','/assets/snowmobile-route-picker.js','/assets/snowmobile-region.js']){
+   assert.ok(html.includes(marker),region+': '+marker);
+  }
+  assert.match(html,/rel="canonical"/);
+  assert.ok(html.includes('google-adsense-account'));
+ }
 });
