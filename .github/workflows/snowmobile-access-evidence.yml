@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - public/assets/snowmobile-access-evidence.js
+      - public/assets/snowmobile-club-staging.js
       - public/assets/snowmobile-region.js
       - public/assets/snowmobile.css
       - public/snowmobile/regions/**
@@ -24,6 +25,7 @@ jobs:
       - name: Parse browser and shared DNR access code
         run: |
           node --check public/assets/snowmobile-access-evidence.js
+          node --check public/assets/snowmobile-club-staging.js
           node --check public/assets/snowmobile-region.js
           node --check scripts/verify-snowmobile-access-browser.cjs
       - name: Validate 14 parking/county-map reconciliations and existing routing
