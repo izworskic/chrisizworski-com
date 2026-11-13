@@ -69,6 +69,7 @@
     "benchmark:white-christmas-indexing": "node scripts/verify-white-christmas-indexing.mjs",
     "benchmark:shoshone-journey": "node scripts/benchmark-shoshone-journey.mjs",
     "benchmark:snowmobile": "node scripts/benchmark-snowmobile.mjs --check",
+    "benchmark:snowmobile-routing": "node scripts/benchmark-snowmobile-routing.mjs --check",
     "benchmark:mackinac-island": "node scripts/benchmark-mackinac-island-live.mjs --check",
     "benchmark:mackinac-personas": "node scripts/benchmark-mackinac-personas.mjs --check",
     "benchmark:mackinac-trip-duration": "node scripts/benchmark-mackinac-trip-duration.mjs --check",
