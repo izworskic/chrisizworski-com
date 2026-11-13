@@ -135,3 +135,85 @@ test('the actual page visibly owns Florida answer and uses exact mission checks 
  assert.match(funnel,/viewing_options/);
  assert.doesNotMatch(js,/Redis|Supabase|localStorage/);
 });
+
+function vulcanFixture(){
+ const n=national(12);
+ Object.assign(n.selectedLaunch,{
+   name:'Vulcan VC6L | Amazon Leo (LV-01)',mission:'Amazon Leo (LV-01)',
+   rocket:'Vulcan VC6L',pad:'SLC-41',net:'2026-11-13T17:54:00Z',
+   netPrecision:'minute'
+ });
+ const d=detail();
+ d.next={...n.selectedLaunch};
+ d.floridaViewingDeck.facility='cape';
+ d.accessSource.checkedAt='2026-11-12T21:00:00Z';
+ d.viewpoints=d.viewpoints.map(v=>v.id==='playalinda-south'?
+   {...v,level:'verify',label:'Security access not yet confirmed'}:v);
+ d.viewpoints.push({id:'playalinda-north',level:'closed',label:'Closed by NPS'});
+ d.parkAlerts=[{
+   title:'Playalinda District: Parking Lot #8-13',category:'Closure',
+   description:'Main Playalinda road north of Eddy Creek, parking lots 8-13 and beach north of Eddy Creek closed.'
+ }];
+ return {n,d};
+}
+test('Vulcan LV-01: both sections use one NPS-verified yes for lots 4–7, never lots 8–13',()=>{
+ const {n,d}=vulcanFixture(),a=model.assess(n,d);
+ assert.equal(a.matched,true);
+ assert.equal(a.playalinda.state,'open');
+ assert.equal(a.playalinda.cutoffAt,'2026-11-13T17:24:00.000Z');
+ assert.match(a.playalinda.cutoffLabel,/12:24 PM EST/);
+ assert.match(a.answer,/Yes — Playalinda Beach lots 4–7/);
+ assert.match(a.playalinda.note,/Park vistas are closed/i);
+ assert.match(a.playalinda.note,/parking area #1 south for one-quarter mile/);
+ assert.match(a.playalinda.note,/road north of Eddy Creek/i);
+ assert.match(a.playalinda.note,/Jetty Park is the alternate/i);
+ assert.equal(a.npsClosed,false,'closed Lot 8 must not close lots 4–7');
+ assert.equal(a.cards.find(c=>c.id==='playalinda-south').label,a.playalinda.headline);
+ assert.equal(a.cards.find(c=>c.id==='playalinda-south').state,'candidate');
+ assert.equal(a.cards.find(c=>c.id==='playalinda-south').source,a.playalinda.source);
+ assert.equal(a.cards.find(c=>c.id==='playalinda-south').directionsAllowed,false);
+ assert.equal(a.cards.find(c=>c.id==='jetty').name,'Jetty Park');
+ assert.equal(a.playalinda.checkedAt,d.accessSource.checkedAt);
+ assert.match(a.playalinda.source,/nps\.gov\/cana\/learn\/management\/superintendent-s-compendium/);
+});
+test('Vulcan Playalinda source failures or new lot 4–7 restrictions cannot produce YES',()=>{
+ let {n,d}=vulcanFixture();
+ d.viewpoints=d.viewpoints.map(v=>v.id==='playalinda-south'?
+   {...v,level:'closed',label:'Closed by NPS'}:v);
+ let a=model.assess(n,d);
+ assert.equal(a.playalinda.state,'closed');
+ assert.equal(a.npsClosed,true);
+ assert.equal(a.cards.find(c=>c.id==='playalinda-south').state,'closed');
+ ({n,d}=vulcanFixture());
+ d.accessSource.verified=false;
+ a=model.assess(n,d);
+ assert.equal(a.playalinda.state,'verify');
+ assert.equal(a.playalinda.checkedAt,null);
+ assert.doesNotMatch(a.answer,/Yes —/);
+ ({n,d}=vulcanFixture());
+ d.selectedLaunchId=OTHER;
+ a=model.assess(n,d);
+ assert.equal(a.playalinda.state,'verify');
+ assert.doesNotMatch(a.answer,/Yes —/);
+});
+test('Vulcan cutoff follows changed mission time and never leaks to other missions',()=>{
+ const {n,d}=vulcanFixture();
+ n.selectedLaunch.net='2026-11-13T18:00:00Z';
+ d.next.net=n.selectedLaunch.net;
+ let a=model.assess(n,d);
+ assert.match(a.playalinda.cutoffLabel,/12:30 PM EST/);
+ n.selectedLaunch.name='Another Vulcan mission';
+ n.selectedLaunch.mission='Different mission';
+ a=model.assess(n,d);
+ assert.equal(a.playalinda,null);
+});
+test('Sections 02 and 04 render shared Playalinda decision with the compendium and checked time',()=>{
+ const js=fs.readFileSync(path.join(root,'public/synced-national-tools/rocket-launch-live/app.js'),'utf8');
+ const html=fs.readFileSync(path.join(root,'public/synced-national-tools/rocket-launch-live/index.html'),'utf8');
+ assert.match(js,/florida\.playalinda\?\.headline/);
+ assert.match(js,/s\.id==='playalinda-south'/);
+ assert.match(js,/florida\.playalinda\.checkedAt/);
+ assert.match(js,/NPS 2026 Superintendent’s Compendium, §1\.5\(a\)\(n\)/);
+ assert.match(html,/rocket-florida-access\.js\?v=20261112-playalinda-vulcan/);
+ assert.match(html,/rocket-launch-live\/app\.js\?v=20261112-playalinda-vulcan/);
+});
