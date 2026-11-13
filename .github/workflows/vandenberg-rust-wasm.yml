@@ -37,6 +37,13 @@ jobs:
           printf '\n' >> /tmp/viewpoint-engine.wasm.b64
       - name: Verify exported functions and source parity with Vandenberg inventory
         run: node scripts/verify-vandenberg-rust-wasm.cjs --wasm=/tmp/vandenberg_viewing.wasm
+      - name: Install Playwright driver for responsive Rust browser verification
+        run: |
+          npm install --prefix /tmp/vandenberg-rust-browser --no-save --ignore-scripts playwright@1.58.2
+          echo "NODE_PATH=/tmp/vandenberg-rust-browser/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium-browser)" >> "$GITHUB_ENV"
+      - name: Verify actual Rust module in 390px and desktop browsers, including failure fallbacks
+        run: node scripts/verify-vandenberg-rust-browser.cjs
       - name: Upload build output for initial commit and source verification
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
