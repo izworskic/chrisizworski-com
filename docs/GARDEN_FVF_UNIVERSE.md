@@ -78,5 +78,9 @@ link on this page can be removed.
 ## Status
 
 - `/michigan-frost-dates/`: merged in PR #1664, deployed, public page and assets verified.
-- `/michigan-garden-pest-watch/`: implemented, checked in headless Chrome at 390 and 1440 px.
-- Remaining pages: not started. No visitor outcome is claimed for any of this.
+- `/michigan-garden-pest-watch/`: merged in PR #1666, deployed, public page verified.
+- Soil temperature, planting calendar, tomatoes, seed starting, variety matchmaker:
+  implemented, each checked in headless Chrome at 390 px. The matchmaker keeps its own
+  centered masthead and takes the seal, wordmark and shared colors.
+- Remaining: the inline-styled guides, Seed Saving Lab, leafcutter bees, the gardening hub.
+  No visitor outcome is claimed for any of this.
