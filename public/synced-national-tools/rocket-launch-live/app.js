@@ -107,11 +107,21 @@
   // Schedule-first visitor surface. Use the SAME bounded national snapshot and
   // mission selection pipeline as the decision desk, never a second feed.
   const frontFilters = { query: '', region: 'all', window: 'all', next: null };
+  let rustPlanning=null;
+  void window.RocketPlanningRust?.load().then(engine=>{
+    if(!engine)return;  // The original roster and countdown continue in JS.
+    rustPlanning=engine;
+    const roster=$('rl-front-launch-list');
+    if(roster)roster.dataset.decisionEngine='rust-wasm';
+    if(state.data)renderFrontSchedule(state.data);
+  });
   const visitorZone = (() => {
     try { return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC'; }
     catch { return 'UTC'; }
   })();
-  const targetIsPrecise = launch => ['minute', 'second'].includes(launch?.netPrecision) &&
+  const targetIsPrecise = launch =>
+    (rustPlanning ? rustPlanning.timePrecise(launch?.netPrecision) :
+      ['minute','second'].includes(launch?.netPrecision)) &&
     Number.isFinite(Date.parse(launch?.net || ''));
   function frontSelectMission(region, launchId, surface = 'schedule_roster') {
     if (!state.data?.regions?.some(r => r.id === region &&
@@ -187,15 +197,21 @@
     }
     renderFrontCountdown();
     const q = frontFilters.query.trim().toLocaleLowerCase();
-    const tenDays = Date.now() + 10 * 86400000;
+    const now = Date.now();
+    const tenDays = now + 10 * 86400000;
     const filtered = all.filter(({ l, r }) => {
       if (frontFilters.region !== 'all' && r.id !== frontFilters.region) return false;
       if (q && ![l.name, l.rocket, l.pad, r.name, r.subtitle]
         .some(v => String(v || '').toLocaleLowerCase().includes(q))) return false;
       if (frontFilters.window === '10') {
         const net = Date.parse(l.net || '');
-        if (!Number.isFinite(net) || net < Date.now() - 60000 || net > tenDays ||
-          !['minute', 'second', 'hour', 'day'].includes(l.netPrecision)) return false;
+        // Rust applies the existing 60-second grace and ten-day bound.
+        // The literal original predicate remains the strict no-WASM fallback.
+        const fits=rustPlanning ?
+          rustPlanning.tenDayVisible(l.netPrecision,net,now) :
+          Number.isFinite(net)&&net>=now-60000&&net<=tenDays&&
+          ['minute', 'second', 'hour', 'day'].includes(l.netPrecision);
+        if(!fits)return false;
       }
       return true;
     });
