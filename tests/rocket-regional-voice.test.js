@@ -24,7 +24,7 @@ for(const site of sites){
     assert.ok(html.includes(site.authority),site.name+' authoritative external source');
     assert.ok(html.includes('href="https://chrisizworski.com/'+site.slug+'/">'),site.name+' canonical');
     assert.ok(html.includes('/national-tools/rocket-launch-live/'),site.name+' national mission handoff');
-    assert.ok(html.includes(site.name==='Vandenberg'?'20261113-rust-v1':'20261110-region-voice-v1'),site.name+' changed client copy must bust cache');
+    assert.ok(html.includes(site.name==='Vandenberg'?'20261113-rust-v2':'20261110-region-voice-v1'),site.name+' changed client copy must bust cache');
     assert.doesNotThrow(()=>new Function(js),site.name+' dynamic guide parses as JavaScript');
     if(site.name!=='Florida'){
       assert.ok(html.includes('"dateModified":"'+(site.name==='Vandenberg'?'2026-11-13':'2026-11-10')+'"'),site.name+' truthful structured metadata');
