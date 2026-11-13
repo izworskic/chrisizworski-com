@@ -173,6 +173,12 @@ test('Vulcan LV-01: both sections use one NPS-verified yes for lots 4–7, never
  assert.equal(a.cards.find(c=>c.id==='playalinda-south').source,a.playalinda.source);
  assert.equal(a.cards.find(c=>c.id==='playalinda-south').directionsAllowed,false);
  assert.equal(a.cards.find(c=>c.id==='jetty').name,'Jetty Park');
+ assert.equal(a.cards[0].id,'playalinda-south');
+ assert.equal(a.cards[1].id,'jetty');
+ assert.match(a.cards[0].role,/NPS viewing choice/);
+ assert.match(a.cards[1].role,/Alternate/);
+ assert.match(a.answer,/Jetty Park is the alternate/);
+ assert.doesNotMatch(a.answer,/start with public waterfront spots/);
  assert.equal(a.playalinda.checkedAt,d.accessSource.checkedAt);
  assert.match(a.playalinda.source,/nps\.gov\/cana\/learn\/management\/superintendent-s-compendium/);
 });
@@ -214,6 +220,6 @@ test('Sections 02 and 04 render shared Playalinda decision with the compendium a
  assert.match(js,/s\.id==='playalinda-south'/);
  assert.match(js,/florida\.playalinda\.checkedAt/);
  assert.match(js,/NPS 2026 Superintendent’s Compendium, §1\.5\(a\)\(n\)/);
- assert.match(html,/rocket-florida-access\.js\?v=20261112-playalinda-vulcan/);
+ assert.match(html,/rocket-florida-access\.js\?v=20261112-playalinda-primary/);
  assert.match(html,/rocket-launch-live\/app\.js\?v=20261112-playalinda-vulcan/);
 });

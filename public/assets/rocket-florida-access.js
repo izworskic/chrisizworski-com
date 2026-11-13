@@ -82,9 +82,12 @@
     const chosen=match&&['cape','kennedy'].includes(deck.facility)&&
       Array.isArray(deck.cards)&&deck.cards.length?
       deck.cards.filter(s=>PUBLIC.has(s.id)).slice(0,2).map(s=>s.id):fallback;
-    const ids=[...new Set([...chosen,'jetty','space-view','playalinda-south','ksc-visitor'])].slice(0,6);
-    const fine=match?new Map(regional.viewpoints.map(s=>[s.id,s])):new Map();
     const playalinda=vulcanPlayalindaDecision(national,regional,match);
+    // When NPS supports lots 4–7, show that destination first and Jetty as
+    // the backup. Unverified/closed beach access never gets promoted.
+    const priority=playalinda?.state==='open'?['playalinda-south','jetty']:[];
+    const ids=[...new Set([...priority,...chosen,'jetty','space-view','playalinda-south','ksc-visitor'])].slice(0,6);
+    const fine=match?new Map(regional.viewpoints.map(s=>[s.id,s])):new Map();
     const cards=ids.map(key=>{
       const s=byId.get(key),detail=fine.get(key);
       if(!s)return null;
@@ -95,7 +98,9 @@
         'A public place to consider; check its hours and launch-day rules.';
       const card={
         id:key,name:s.name,area:current?.area||'Florida Space Coast',
-        role:key===chosen[0]?'Good place to start':key===chosen[1]?'Another viewing option':
+        role:playalinda?.state==='open'&&key==='playalinda-south'?'NPS viewing choice':
+          playalinda?.state==='open'&&key==='jetty'?'Alternate · check park pass and hours':
+          key===chosen[0]?'Good place to start':key===chosen[1]?'Another viewing option':
           key.startsWith('playalinda')?'Beach with launch-day restrictions':
           key==='ksc-visitor'?'Ticketed viewing area':'Another public viewing area',
         label:current?.label||s.label||'Check if open for this launch',
@@ -118,8 +123,12 @@
       padKind==='kennedy'?
       'For Kennedy launches, the Titusville waterfront is a good place to start looking.':
       'The launch pad isn’t confirmed yet. Compare public viewing spots on both sides of the Space Coast.';
-    if(named)answer+=' '+named+(chosenCards.length>1?' are':' is')+' a published option'+(chosenCards.length>1?'s':'')+', not confirmed launch-day entry.';
-    if(playalinda)answer=playalinda.headline+'. '+answer+' Jetty Park is the alternate.';
+    if(named)answer+=' '+named+(chosenCards.length>1?
+      ' are published options':' is a published option')+', not confirmed launch-day entry.';
+    if(playalinda)answer=playalinda.headline+'. '+
+      (playalinda.state==='open'?'Use a designated beach parking lot and enter before '+
+      playalinda.cutoffLabel+'. ':'Check current NPS restrictions before entering the park. ')+
+      'Jetty Park is the alternate; check its pass and hours.';
     const beach=match?deck.playalinda:null;
     const npsChecked=match&&regional.accessSource?.verified===true&&beach?.npsVerified===true;
     // The old summary used Lot 8 as a proxy: its closure must not close lots 4–7.
