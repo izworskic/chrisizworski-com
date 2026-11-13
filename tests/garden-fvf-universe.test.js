@@ -5,7 +5,13 @@ const path = require('node:path');
 
 const pub = (...p) => path.join(__dirname, '..', 'public', ...p);
 const css = fs.readFileSync(pub('assets', 'garden-tools', 'fvf-universe.css'), 'utf8');
-const ADOPTED = ['michigan-frost-dates'];
+const ADOPTED = [
+  'michigan-frost-dates',
+  'michigan-soil-temperature',
+  'zone-6a-planting-calendar',
+  'when-to-plant-tomatoes-michigan',
+  'seed-starting-guide',
+];
 
 test('shared garden skin is static, self-hosted and scoped to opted-in pages', () => {
   assert.ok(!/@import|https?:\/\//.test(css), 'no third-party requests from the skin');
@@ -63,4 +69,24 @@ test('Pest Watch shares the type, seal and place line but keeps its own layout',
   for (const m of main.matchAll(/url\("([^"]+\.woff2)"\)/g)) {
     assert.ok(fs.existsSync(pub(...m[1].split('/').filter(Boolean))), `missing ${m[1]}`);
   }
+});
+
+test('Variety Matchmaker keeps its own masthead and joins the shared look', () => {
+  const html = fs.readFileSync(pub('heirloom-variety-matchmaker', 'index.html'), 'utf8');
+  assert.match(html, /<body class="fvfu"/);
+  assert.ok(html.indexOf('fvf-universe.css') > html.indexOf('garden-kit.css'));
+  assert.ok(html.includes('Bay City &middot; Zone 6a &middot; Saginaw Bay'));
+  assert.ok(html.includes('freighter-view-farms-seal.webp" width="60" height="60"'));
+  assert.ok(html.includes('<h1>Heirloom Variety Matchmaker</h1>'));
+  assert.ok(html.includes('<a href="https://chrisizworski.com/">Chris Izworski</a>'));
+});
+
+test('every adopting page loads the same skin version', () => {
+  const versions = new Set();
+  for (const slug of [...ADOPTED, 'heirloom-variety-matchmaker']) {
+    const m = fs.readFileSync(pub(slug, 'index.html'), 'utf8').match(/fvf-universe\.css\?v=([0-9a-z]+)/);
+    assert.ok(m, `${slug} loads the skin`);
+    versions.add(m[1]);
+  }
+  assert.strictEqual(versions.size, 1);
 });
