@@ -102,7 +102,7 @@ test('search picker adds official junction stops and excludes disconnected netwo
  h.elements.get('#junctionSearch').value='Trail A';
  h.events.input({target:{id:'junctionSearch'}});
  assert.match(h.elements.get('#junctionMatches').innerHTML,/data-junction-id="n0"/);
- const choose=id=>h.events.click({target:{id:'',closest:()=>({disabled:false,dataset:{junctionId:id}})}});
+ const choose=id=>h.events.click({target:{id:'',closest:selector=>selector==='[data-junction-id]'?{disabled:false,dataset:{junctionId:id}}:null}});
  choose('n0');
  assert.equal(h.run('ROUTE_POINTS.length'),1);
  assert.match(h.elements.get('#junctionSearchStatus').textContent,/same connected trail network/);
@@ -122,7 +122,7 @@ test('text planner builds route with no Leaflet map and never claims trail surfa
  h.context.window.L=undefined;
  h.run('DATA=fixture;JUNCTION_INDEX=window.SnowmobileJunctionPicker.createIndex(DATA.routeJunctions);drawMap(DATA);toggleRouteMode();');
  assert.match(h.elements.get('#map').innerHTML,/interactive map is unavailable/);
- const choose=id=>h.events.click({target:{id:'',closest:()=>({disabled:false,dataset:{junctionId:id}})}});
+ const choose=id=>h.events.click({target:{id:'',closest:selector=>selector==='[data-junction-id]'?{disabled:false,dataset:{junctionId:id}}:null}});
  choose('n0');choose('n1');
  assert.equal(h.run('ROUTE_POINTS.length'),2);
  h.context.fetch=async()=>({ok:true,json:async()=>({closureVerification:false,route:{
