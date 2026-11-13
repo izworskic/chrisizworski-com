@@ -198,3 +198,21 @@ img{max-width:100%}
 @media(max-width:760px){.vg-map-toolbar{padding:12px;align-items:flex-start}.vg-map-layout{grid-template-columns:1fr}.vg-viewing-map{height:340px}.vg-map-side{border-left:0;border-top:1px solid #ccdbd7}.vg-map-places{max-height:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));padding:10px}.vg-map-place{min-height:63px}.vg-map-place-arrow{display:none}.vg-map-selection{min-height:100px;margin:10px}.vg-map-heading{margin-bottom:17px}.vg-map-after{padding:15px}.vg-map-legend{font-size:10px}.vg-map-filters{width:100%}.vg-map-filters button{flex:1}}
 @media(max-width:440px){.vg-map-places{grid-template-columns:1fr}.vg-viewing-map{height:305px}.vg-map-legend{gap:8px}.vg-map-side-heading{display:block}.vg-map-side-heading span{display:block;margin-top:4px}}
 @media(prefers-reduced-motion:reduce){.vg-map-place{transition:none}.vg-map-icon span{transition:none}}
+
+/* Vandenberg Rust/WASM viewer priorities; hidden until verified WASM loads. */
+.vg-rust-choices{padding:20px 22px;background:#f6f7f2;border:1px solid #ccdcd6;border-bottom:0;display:grid;gap:12px}
+.vg-rust-choices[hidden]{display:none}
+.vg-rust-lead{display:flex;gap:26px;justify-content:space-between;align-items:center}
+.vg-rust-lead>div:first-child{max-width:500px}
+.vg-rust-lead strong{display:block;font:400 24px/1.2 "DM Serif Display",Georgia,serif;color:#183e49}
+.vg-rust-lead p:not(.vg-eyebrow){font-size:12px;line-height:1.6;color:#4b6570;margin:6px 0 0}
+.vg-rust-controls{display:flex;flex-wrap:wrap;gap:7px;max-width:540px}
+.vg-rust-controls button{background:#fff;border:1px solid #adc7c0;color:#214c59;font-size:12px;font-weight:800;padding:10px 13px;border-radius:8px;min-height:44px;cursor:pointer}
+.vg-rust-controls button[aria-pressed=true]{background:#174f60;color:#fff;border-color:#174f60}
+.vg-rust-fog{display:flex;align-items:center;gap:11px;font-size:12px;font-weight:750;color:#375a62;line-height:1.55;cursor:pointer}
+.vg-rust-fog input{width:18px;height:18px;accent-color:#174f60;flex-shrink:0}
+.vg-rust-outcome{display:flex;flex-wrap:wrap;align-items:baseline;gap:5px 13px;border-top:1px solid #d4dfd9;padding-top:13px;color:#334f59;font-size:12px}
+.vg-rust-outcome a{font:400 21px/1.2 "DM Serif Display",Georgia,serif;color:#165365;font-weight:400}
+.vg-rust-outcome span:last-child{color:#6f4834}
+.vg-rust-context{font-size:11px;color:#637880;line-height:1.6;margin:0}
+@media(max-width:760px){.vg-rust-lead{display:block}.vg-rust-controls{margin-top:13px}.vg-rust-choices{padding:17px}.vg-rust-outcome{display:block}.vg-rust-outcome>*{display:block;margin-top:6px}}

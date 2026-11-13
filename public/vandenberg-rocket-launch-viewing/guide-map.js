@@ -15,7 +15,7 @@
   const buttons=document.getElementById('vg-map-filters');
   if(!root||!list||!detail||!buttons)return;
 
-  const state={map:null,places:[],markers:new Map(),filter:'all',active:null};
+  const state={map:null,places:[],markers:new Map(),filter:'all',active:null,rust:null,priority:0,marineConcern:0};
   const CATEGORIES={coast:new Set(['park-sunset','surf-hours']),
     town:new Set(['college','city-park'])};
   const COLOR={coast:'#d27a43',town:'#176a78'};
@@ -36,7 +36,16 @@
     }catch(_){return null;}
   };
   const kind=place=>CATEGORIES.coast.has(place.kind)?'coast':'town';
-  const visible=place=>state.filter==='all'||kind(place)===state.filter;
+  // Once loaded, Rust owns category filtering and relative comparison scoring.
+  // Before then, the original map remains usable without WebAssembly.
+  const visible=place=>{
+    if(state.rust){
+      const index=state.places.indexOf(place);
+      const group=state.filter==='coast'?1:state.filter==='town'?2:0;
+      return index>=0&&state.rust.vg_visible(index,group)===1;
+    }
+    return state.filter==='all'||kind(place)===state.filter;
+  };
   const sceneLabel=place=>place.kind==='park-sunset'?'Closes at sunset':
     place.kind==='surf-hours'?'8 a.m.–6 p.m. · check launch restrictions':
     place.kind==='college'?'Check campus parking rules':
@@ -90,8 +99,11 @@
 
   function rows(){
     list.replaceChildren();
-    state.places.forEach((p,i)=>{
-      if(visible(p))list.appendChild(makeRow(p,i));
+    const ordered=state.rust?[...state.places].sort((a,b)=>
+      state.rust.vg_rank(state.places.indexOf(b),state.priority,state.marineConcern)-
+      state.rust.vg_rank(state.places.indexOf(a),state.priority,state.marineConcern)):state.places;
+    ordered.forEach(p=>{
+      if(visible(p))list.appendChild(makeRow(p,state.places.indexOf(p)));
     });
     const shown=state.places.filter(visible);
     document.getElementById('vg-map-count').textContent=shown.length+
@@ -140,7 +152,7 @@
     }
     buttons.querySelectorAll('button[data-map-filter]').forEach(btn=>
       btn.setAttribute('aria-pressed',String(btn.dataset.mapFilter===value)));
-    rows();noteSelection(state.places.find(p=>p.id===state.active)||null);
+    rows();updateRustComparison();noteSelection(state.places.find(p=>p.id===state.active)||null);
     fitVisible();
   }
 
@@ -219,6 +231,79 @@
     return true;
   }
 
+  const priorityLabels=['A family outing','Photographing the climb','Closer to the coast'];
+  const cautionText={
+    1:'Ocean Park closes at dusk; parking and launch access can change.',
+    2:'Surf Beach lists 8 a.m.–6 p.m.; launch and wildlife closures can override those hours.',
+    3:'College parking permits apply. A particular launch-day campus opening is unverified.',
+    4:'Check park hours and events. Town parks do not promise a view of the launch pad.'
+  };
+
+  function updateRustComparison(){
+    const panel=document.getElementById('vg-rust-choices');
+    if(!panel||!state.rust)return;
+    panel.hidden=false;
+    panel.dataset.engine='rust-wasm';
+    const ordered=[...state.places].sort((a,b)=>
+      state.rust.vg_rank(state.places.indexOf(b),state.priority,state.marineConcern)-
+      state.rust.vg_rank(state.places.indexOf(a),state.priority,state.marineConcern));
+    const preferred=ordered.find(visible);
+    if(!preferred)return;
+    const index=state.places.indexOf(preferred);
+    const intro=document.getElementById('vg-rust-choice-intro');
+    const link=document.getElementById('vg-rust-choice-link');
+    const caution=document.getElementById('vg-rust-choice-caution');
+    const context=document.getElementById('vg-rust-choice-context');
+    if(!intro||!link||!caution||!context)return;
+    intro.textContent='First place to investigate for '+priorityLabels[state.priority].toLowerCase()+':';
+    link.textContent=preferred.name;
+    link.href='#'+preferred.articleAnchor;
+    caution.textContent=cautionText[state.rust.vg_caution(index)]||'Access must be checked with the land manager.';
+    context.textContent=state.marineConcern?
+      'Coastal fog is a concern you entered, not a measured condition. Compare inland alternatives if the shoreline is socked in.':
+      'This compares the six published site profiles, not their current openings or your launch’s weather.';
+    panel.querySelectorAll('[data-rust-priority]').forEach(button=>
+      button.setAttribute('aria-pressed',String(Number(button.dataset.rustPriority)===state.priority)));
+  }
+
+  async function initRust(){
+    const panel=document.getElementById('vg-rust-choices');
+    if(!panel||typeof WebAssembly==='undefined'||typeof atob!=='function')return;
+    try{
+      const response=await fetch('/vandenberg-rocket-launch-viewing/viewpoint-engine.wasm.b64',{
+        credentials:'same-origin',signal:AbortSignal.timeout(7000)
+      });
+      if(!response.ok)throw new Error('Rust module unavailable');
+      const encoded=(await response.text()).trim();
+      if(encoded.length>250000||!/^[a-zA-Z0-9+/]+=*$/.test(encoded))
+        throw new Error('Invalid Rust module');
+      const bytes=Uint8Array.from(atob(encoded),c=>c.charCodeAt(0));
+      const {instance}=await WebAssembly.instantiate(bytes,{});
+      const wasm=instance.exports;
+      if(wasm.vg_engine_version?.()!==1||wasm.vg_site_count?.()!==state.places.length||
+         !['vg_rank','vg_visible','vg_caution'].every(key=>typeof wasm[key]==='function'))
+        throw new Error('Rust ABI does not match published venues');
+      state.rust=wasm;
+      panel.querySelectorAll('[data-rust-priority]').forEach(button=>{
+        button.addEventListener('click',()=>{
+          state.priority=Number(button.dataset.rustPriority);
+          updateRustComparison();rows();
+        });
+      });
+      const fog=document.getElementById('vg-rust-marine');
+      fog?.addEventListener('change',()=>{
+        state.marineConcern=fog.checked?1:0;
+        updateRustComparison();rows();
+      });
+      updateRustComparison();rows();
+      root.dataset.rust='ready';
+    }catch(_){
+      // A browser, network, content-security or WASM failure cannot break the map.
+      // The complete six-venue HTML guide and original JS map are still available.
+      root.dataset.rust='unavailable';
+    }
+  }
+
   async function init(){
     if(!window.L){
       root.querySelector('.vg-map-placeholder span').textContent=
@@ -247,9 +332,12 @@
       });
       fitVisible();
       root.dataset.mapReady='true';
+      // This is progressive enhancement: the map is ready without the Rust module.
+      initRust();
       // Adjust dimensions after the first layout pass without timers.
       requestAnimationFrame(()=>state.map.invalidateSize(false));
-    }catch(_){
+    }catch(error){
+      if(window.__VG_RUST_QA_DEBUG===true)root.dataset.mapQaError=String(error).slice(0,180);
       root.replaceChildren();
       const fallback=$('div','vg-map-placeholder');
       fallback.append($('strong','','The map isn’t loading'),
