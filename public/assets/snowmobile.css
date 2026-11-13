@@ -279,3 +279,17 @@ button:focus-visible,select:focus-visible,a:focus-visible,summary:focus-visible{
 .club-staging-card a{display:inline-block;color:#124e72;font-size:13px;font-weight:700;padding:8px 0}
 .club-staging-source{color:#465d6b;max-width:80ch}
 @media(max-width:650px){.club-staging-grid{grid-template-columns:1fr}}
+
+/* Export only a completed, DNR-backed trail route, never parking-to-trail legs. */
+.route-export-panel{margin:16px 0 0;padding:15px;border:1px solid #bed5dd;background:#f0f6f7;border-radius:10px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.route-export-panel h3{font:700 18px/1.3 Georgia,"Times New Roman",serif;margin:0 0 5px;color:#18475d}
+.route-export-panel p{margin:7px 0;max-width:72ch;color:#34515d;font-size:13px}
+.route-export-actions{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0}
+.route-export-actions button{padding:11px 15px;min-height:46px;border-radius:8px;border:1px solid #174d66;background:#174d66;color:white;font:700 14px/1.3 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;cursor:pointer}
+.route-export-actions button.secondary-btn{border:1px solid #174d66;background:white;color:#174d66}
+.route-export-panel .route-export-warning{color:#704a1f;background:#fcf4e6;border-left:3px solid #b27b2a;padding:9px 11px;font-size:12px}
+.route-export-panel #routeExportStatus{color:#19465c;min-height:18px}
+#routeExportFallback label{display:block;font-weight:650;font-size:13px;margin-bottom:5px}
+#routeExportFallback textarea{width:100%;min-height:118px;border:1px solid #9bb9c6;border-radius:6px;padding:9px;font-size:13px;resize:vertical;color:#1c303a}
+.route-export-panel button:focus-visible{outline:3px solid #e19c28;outline-offset:3px}
+@media(max-width:640px){.route-export-panel{padding:12px}.route-export-actions{display:grid;grid-template-columns:1fr}.route-export-actions button{width:100%;min-height:48px}}
