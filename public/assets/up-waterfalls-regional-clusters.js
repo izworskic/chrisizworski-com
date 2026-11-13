@@ -19,7 +19,7 @@
       return { valid:false, dated:false, snow:false, message:'Enter a real travel date in the waterfall planner.' };
     return { valid:true, dated:true, snow:m===12||m<=3, message:'Road maintenance, parking availability, construction and trail conditions are not checked in real time.' };
   }
-  function assess(key,cards,selected,date) {
+  function legacyAssess(key,cards,selected,date) {
     const ids=PRESETS[key],policy=datePolicy(date);
     if (!ids) return {ok:false,reason:'Unknown regional day plan.',missing:[]};
     if (!policy.valid) return {ok:false,reason:policy.message,missing:[]};
@@ -43,9 +43,22 @@
     return {ok:true,missing,reason:policy.message,
       researchOnly:key==='black-river-corridor'||key==='keweenaw-gorge'};
   }
+  // Native Rust makes the final add-to-day-sheet decision, but the existing
+  // source-verified JS decision remains an independent safety oracle.
+  // Any disagreement fails closed instead of authorizing a new visitor route.
+  function assess(key,cards,selected,date){
+    const baseline=legacyAssess(key,cards,selected,date);
+    const native=typeof window!=='undefined'?window.UPWaterfallEvidenceRust?.region?.():null;
+    if(!native)return baseline;
+    const code=native.decide(key,cards,selected,date);
+    if((code===1)!==baseline.ok)
+      return {ok:false,reason:'The regional access rules could not be reconciled. No stops were added; use the original land-manager guides.',missing:[]};
+    return {...baseline,decisionEngine:'rust-wasm'};
+  }
   if (typeof module!=='undefined'&&module.exports) module.exports={PRESETS,RESTRICTED,datePolicy,assess};
   if (typeof document==='undefined') return;
   const cards=new Map([...document.querySelectorAll('[data-fall][data-id]')].map(c=>[c.dataset.id,c]));
+  window.UPWaterfallEvidenceRust?.loadRegion?.(PRESETS,RESTRICTED,datePolicy,legacyAssess,cards)?.then(()=>{});
   const date=document.getElementById('visit-date');
   const chosen=()=>[...cards.entries()].filter(([,c])=>c.querySelector('.save')?.getAttribute('aria-pressed')==='true').map(([id])=>id);
   function updateAdvisory() {
