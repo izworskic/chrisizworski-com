@@ -109,7 +109,7 @@ ${region.key==='eastern-up'?'<section class="panel"><h2>Munising winter ice view
 <script src="/assets/snowmobile-comparison.js?v=20261005-trip-compare-1"></script>
 <script src="/assets/snowmobile-route-picker.js?v=20261113-junction-search-1"></script>
 <script src="/assets/snowmobile-parking.js?v=20261113-dnr-parking-1"></script>
-<script src="/assets/snowmobile-access-evidence.js?v=20261113-access-1"></script>
+<script src="/assets/snowmobile-access-evidence.js?v=20261113-staging-2"></script>
 ${stagingScript}<script src="/assets/snowmobile-route-export.js?v=20261113-gpx-1"></script>
 <script src="/assets/snowmobile-region.js?v=20261113-gpx-1"></script>
 ${localDeskScript}${cameraScript}
