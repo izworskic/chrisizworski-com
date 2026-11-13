@@ -95,6 +95,10 @@ const summary=[];
    await page.waitForSelector('.pair-card');
    await page.locator('[name="vehicle"]').selectOption('large-truck');
    await page.locator('#crossingForm button[type=submit]').click();
+   // The submit awaits a fresh asynchronous API response. Do not assert on
+   // the previous car comparison before the restricted-vehicle cards render.
+   await page.waitForFunction(() => /Vehicle:\s*(PROHIBITED|REVIEW)/.test(
+     document.querySelector('#pairResult')?.textContent || ''), null, {timeout:15000});
    const vehicle=await page.locator('#pairResult').innerText();
    assert.match(vehicle,/PROHIBITED|REVIEW/);
    assert.match(vehicle,/prevent a valid price comparison|must be reviewed/);
