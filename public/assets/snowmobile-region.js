@@ -199,7 +199,10 @@ let ROUTE_BUSY=false;
 function invalidateRoute(){ROUTE_REQUEST_ID++;if(ROUTE_ABORT)ROUTE_ABORT.abort();ROUTE_ABORT=null;ROUTE_BUSY=false;if(ROUTE_LINE){ROUTE_LINE.remove();ROUTE_LINE=null;}const host=routeResultHost();if(host){host.hidden=true;host.innerHTML='';}}
 function clearRoutePoints(){invalidateRoute();for(const m of ROUTE_MARKERS)m?.remove?.();ROUTE_MARKERS=[];ROUTE_POINTS=[];const search=$('#junctionSearch');if(search)search.value='';}
 function setRouteHint(text,on=true){for(const id of ['routeHint','mapRouteHint']){const el=$('#'+id);if(el){el.hidden=!on;el.textContent=text;}}}
-function routeAvailable(){return JUNCTIONS_BY_ID.size>0&&!!DATA?.routeJunctions?.features?.length;}
+function routeAvailable(){
+  if(!JUNCTIONS_BY_ID.size&&DATA?.routeJunctions?.features?.length)JUNCTIONS_BY_ID=new Map(DATA.routeJunctions.features.filter(f=>typeof f?.properties?.id==='string'&&f?.geometry?.type==='Point').map(f=>[f.properties.id,f]));
+  return JUNCTIONS_BY_ID.size>0&&!!DATA?.routeJunctions?.features?.length;
+}
 function renderJunctionMatches(){
   const input=$('#junctionSearch'),host=$('#junctionSearchResults');
   if(!input||!host)return;
