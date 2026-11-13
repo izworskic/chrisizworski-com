@@ -892,14 +892,24 @@
       floridaAnswer.replaceChildren();floridaAnswer.hidden=!florida;
       if(florida){
         floridaAnswer.dataset.state=florida.state;
-        floridaAnswer.appendChild(el('strong','',florida.npsClosed?
-          'Playalinda may be closed for this launch':
-          'Before you go, check launch-day access'));
+        floridaAnswer.appendChild(el('strong','',florida.playalinda?.headline||
+          (florida.npsClosed?'Playalinda lots 4–7 have a reported restriction':
+          'Before you go, check launch-day access')));
         floridaAnswer.appendChild(el('p','',florida.note));
-        floridaAnswer.appendChild(el('p','rl-access-source-age',florida.matched?
-          'Florida notices checked. National Park Service updates last checked '+stamp(florida.sourceCheckedAt)+
-          '. Parking and entry may still be restricted for this launch.':
-          'Florida access updates aren’t confirmed right now. Check with the park or venue before making the drive.'));
+        floridaAnswer.appendChild(el('p','rl-access-source-age',florida.playalinda?
+          (florida.playalinda.checkedAt?
+            'NPS Canaveral alerts checked '+stamp(florida.playalinda.checkedAt)+
+            '. Published rules permit viewing at lots 4–7 unless park staff or NASA impose another closure.':
+            'Current NPS Canaveral alert status could not be verified. Check official notices before leaving.'):
+          florida.matched?
+            'Florida notices checked. National Park Service updates last checked '+stamp(florida.sourceCheckedAt)+
+            '. Parking and entry may still be restricted for this launch.':
+            'Florida access updates aren’t confirmed right now. Check with the park or venue before making the drive.'));
+        if(florida.playalinda){
+          const rules=anchor(florida.playalinda.source,
+            'NPS 2026 Superintendent’s Compendium, §1.5(a)(n)');
+          if(rules)floridaAnswer.appendChild(rules);
+        }
         const nps=anchor('https://www.nps.gov/cana/planyourvisit/conditions.htm',
           'Check Playalinda Beach hours and closures');
         if(nps)floridaAnswer.appendChild(nps);
@@ -921,11 +931,17 @@
         card.appendChild(el('h3', '', s.name));
         card.appendChild(el('span', 'rl-site-status', s.label || 'Check opening and parking'));
         card.appendChild(el('p', '', s.reason || 'Check the local venue for any launch-day restrictions.'));
+        if(florida?.playalinda&&s.id==='playalinda-south'){
+          card.appendChild(el('small','rl-access-source-age',florida.playalinda.checkedAt?
+            'NPS Canaveral alerts checked '+stamp(florida.playalinda.checkedAt):
+            'Current NPS alert check unavailable; do not assume entry.'));
+        }
         const actions = el('div', 'rl-site-actions');
         const source = anchor(s.kind === 'specialist' ?
           floridaSpecialistLink(s.source,data) : s.source,
           s.kind === 'specialist' ? 'Explore this launch on Florida’s guide' : 'Official viewing information', 'rl-mainlink');
         if (source) actions.appendChild(source);
+        // Same source, verdict and checked time as the Section 02 access answer.
         const mapHref=siteMapHref(s);
         if (mapHref) {
           const location=anchor(mapHref,
