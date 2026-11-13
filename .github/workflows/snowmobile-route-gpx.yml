@@ -1,0 +1,42 @@
+name: Snowmobile DNR route GPX and mobile browser gate
+on:
+  pull_request:
+    paths:
+      - public/assets/snowmobile-route-export.js
+      - public/assets/snowmobile-region.js
+      - public/assets/snowmobile.css
+      - public/snowmobile/regions/**
+      - scripts/generate-snowmobile-region-pages.mjs
+      - scripts/verify-snowmobile-gpx-browser.cjs
+      - tests/snowmobile-route-export.test.js
+      - .github/workflows/snowmobile-route-gpx.yml
+permissions:
+  contents: read
+jobs:
+  verified-gpx:
+    runs-on: ubuntu-latest
+    timeout-minutes: 17
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Parse browser and GPX source
+        run: |
+          node --check public/assets/snowmobile-route-export.js
+          node --check public/assets/snowmobile-region.js
+          node --check scripts/verify-snowmobile-gpx-browser.cjs
+      - name: Test standards-compliant GPX XML, source warnings and route invariants
+        run: |
+          node --test tests/snowmobile-route-export.test.js tests/snowmobile-route-ui.test.js tests/snowmobile-route-ux.test.js tests/snowmobile-rust.test.js tests/snowmobile-parking.test.js tests/snowmobile-access-evidence.test.js
+      - name: Verify generated seven region pages and no SEO or ad drift
+        run: |
+          node scripts/generate-snowmobile-region-pages.mjs
+          git diff --exit-code -- public/snowmobile/regions/
+      - name: Set up real Chrome for mobile and desktop downloads
+        run: |
+          npm install --prefix /tmp/snowmobile-gpx-browser --no-save --ignore-scripts playwright@1.58.2
+          echo "NODE_PATH=/tmp/snowmobile-gpx-browser/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium-browser)" >> "$GITHUB_ENV"
+      - name: Verify actual download and failure behavior on 390px and desktop
+        run: node scripts/verify-snowmobile-gpx-browser.cjs
