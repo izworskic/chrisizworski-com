@@ -1,0 +1,33 @@
+name: U.P. waterfalls Rust source and proximity parity
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'rust/up-waterfalls-engine/**'
+      - 'scripts/build-up-waterfalls-nearby.py'
+      - 'scripts/verify-up-waterfalls-rust.cjs'
+      - 'public/assets/up-waterfalls-nearby.json'
+      - 'data/up-waterfalls.json'
+      - 'public/upper-peninsula-waterfalls/index.html'
+      - '.github/workflows/up-waterfalls-rust.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-safe-rust:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+      - name: Install repository-compatible Rust toolchain
+        run: |
+          rustup toolchain install 1.90.0 --profile minimal
+          rustup default 1.90.0
+      - name: Compile and test real Rust engine against all 80 curated records
+        run: node scripts/verify-up-waterfalls-rust.cjs
+      - name: Preserve nearby browser contract and access source protections
+        run: |
+          node --test tests/up-waterfalls-b59-nearby-python.test.js tests/up-waterfalls-visit-lens.test.js tests/up-waterfall-source-coverage-gates.test.js tests/up-waterfalls.test.js
