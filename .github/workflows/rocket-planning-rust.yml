@@ -1,0 +1,46 @@
+name: Rocket national and Florida Rust planning
+on:
+  pull_request:
+    paths:
+      - 'rust/rocket-planning-core/**'
+      - 'public/assets/rocket-planning-*'
+      - 'public/synced-national-tools/rocket-launch-live/**'
+      - 'public/synced-national-tools/space-coast-launch/**'
+      - 'scripts/verify-rocket-planning-rust.cjs'
+      - 'tests/rocket-planning-rust.test.js'
+      - '.github/workflows/rocket-planning-rust.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  rust-planning:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Install pinned Rust and browser target
+        run: |
+          rustup toolchain install 1.90.0 --profile minimal
+          rustup target add wasm32-unknown-unknown --toolchain 1.90.0
+      - name: Run Rust source unit tests
+        run: |
+          rustc +1.90.0 --edition=2021 --test rust/rocket-planning-core/src/lib.rs -o /tmp/rp-tests
+          /tmp/rp-tests
+      - name: Compile real browser WebAssembly
+        run: |
+          rustc +1.90.0 --edition=2021 --crate-type cdylib \
+            --target wasm32-unknown-unknown -C opt-level=z \
+            -C codegen-units=1 -C lto=fat -C panic=abort -C strip=symbols \
+            -o /tmp/rocket-planning-core.wasm rust/rocket-planning-core/src/lib.rs
+          echo ROCKET_PLANNING_RUST_B64_BEGIN
+          base64 -w0 /tmp/rocket-planning-core.wasm
+          printf '\nROCKET_PLANNING_RUST_B64_END\n'
+      - name: Verify real WASM exports, safe gate states and pinned binary reproducibility
+        run: node scripts/verify-rocket-planning-rust.cjs --wasm=/tmp/rocket-planning-core.wasm
+      - name: Test full browser-facing Rust contract
+        run: node --test tests/rocket-planning-rust.test.js
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: rocket-planning-rust-wasm
+          path: /tmp/rocket-planning-core.wasm
+          if-no-files-found: error
+          retention-days: 7
