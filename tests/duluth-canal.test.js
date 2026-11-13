@@ -53,9 +53,11 @@ test('yearless AIS ETA stays raw and never turns into a fictitious 2001 arrival'
     feature({ mmsi: 366904911, eta: '11-12 23:15' }),
     feature({ mmsi: 366904912, eta: 'Nov 12 23:15' }),
     feature({ mmsi: 366904913, eta: '2026-11-12T18:15:00-05:00' }),
-    feature({ mmsi: 366904914, eta: '2026-11-12 23:15' })
+    feature({ mmsi: 366904914, eta: '2026-11-12 23:15' }),
+    feature({ mmsi: 366904915, eta: '   ' })
   ]), NOW).vessels;
-  assert.equal(rows.length, 4);
+  assert.equal(rows.length, 5);
+  assert.equal(rows.find(row => row.mmsi === '366904915').eta, null);
   for (const mmsi of ['366904911', '366904912', '366904914']) {
     const eta = rows.find(row => row.mmsi === mmsi).eta;
     assert.ok(eta.raw);
