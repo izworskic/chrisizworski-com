@@ -18,7 +18,7 @@ function fakeDocument(){
   const items=new Map(),events={},storyState={attributes:{},setAttribute(k,v){this.attributes[k]=v;}};
   const getElementById=id=>{
     if(!items.has(id))items.set(id,{
-      id,textContent:'',hidden:false,href:'',attributes:{},
+      id,textContent:'',hidden:false,href:'',attributes:{},dataset:{},
       setAttribute(k,v){this.attributes[k]=v;},
       removeAttribute(k){delete this.attributes[k];},
       closest(selector){return selector==='[data-region-story]'?storyState:null;}
