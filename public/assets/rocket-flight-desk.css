@@ -124,3 +124,16 @@
 /* Distinct evidence states remain legible without introducing a generic readiness dial. */
 .rl-flight-desk[data-next-gate="viewing"] .rl-flight-next{box-shadow:inset 3px 0 0 #b4d4af}
 .rl-flight-desk[data-next-gate="sky"] .rl-flight-next{box-shadow:inset 3px 0 0 #8fb9df}
+
+/* A time change is important, not an alarm or a launch-clearance badge. */
+.rl-launch-change-alert{margin:14px 0 18px;padding:15px 17px;background:#fff0dc;color:#24384a;
+  border:1px solid #deb68d;border-radius:9px;box-shadow:inset 4px 0 0 #b66a34}
+.rl-launch-change-alert[hidden]{display:none!important}
+.rl-launch-change-title{display:block;font:800 17px/1.35 var(--sans);color:#673b21}
+.rl-launch-change-alert p{margin:8px 0 0;font:500 14px/1.5 var(--sans);color:#304452}
+.rl-launch-change-alert .rl-launch-change-times{font-weight:700;color:#253746}
+.rl-launch-change-alert .rl-launch-change-caution{font-size:12px;color:#5c5147}
+.rl-launch-change-alert a{display:inline-block;margin:9px 18px 0 0;font:700 13px/1.4 var(--sans);
+  text-underline-offset:3px;color:#174f73}
+.rl-launch-change-alert a:focus-visible{outline:3px solid #174f73;outline-offset:4px}
+@media(max-width:560px){.rl-launch-change-alert{padding:13px}.rl-launch-change-alert p{font-size:13px}}
