@@ -11,12 +11,13 @@ const b=JSON.parse(fs.readFileSync(path.join(root,'benchmarks/nyc-million-impres
 const graph=JSON.parse(html.split('<script type="application/ld+json">')[1].split('</script>')[0])['@graph'];
 
 test('NYC SERP promises match one indexable canonical intent',()=>{
- const title=(html.match(/<title>([^<]+)<\/title>/)||[])[1];
+ const title=(html.match(/<title>([^<]+)<\/title>/)||[])[1]?.replace(/&amp;/g,'&');
  const desc=(html.match(/<meta name="description" content="([^"]+)"/)||[])[1];
  assert.ok(title&&title.length<=60,title);
  assert.ok(desc&&desc.length<=158,desc);
  assert.match(title,/NYC Bridge/);
  assert.match(title,/Chris Izworski/);
+ assert.match(title,/Toll Calculator 2026/,'Title must match the verified 2026 rate table');
  assert.match(desc,/tolls.*congestion pricing.*live crossing times/i);
  assert.ok(html.includes('<link rel="canonical" href="https://chrisizworski.com/nyc-crossing/">'));
  assert.ok(html.includes('<meta name="robots" content="index,follow'));
