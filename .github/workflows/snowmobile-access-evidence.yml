@@ -1,0 +1,42 @@
+name: Snowmobile source-backed parking-to-trail audit
+on:
+  pull_request:
+    paths:
+      - public/assets/snowmobile-access-evidence.js
+      - public/assets/snowmobile-region.js
+      - public/assets/snowmobile.css
+      - public/snowmobile/regions/**
+      - scripts/generate-snowmobile-region-pages.mjs
+      - scripts/verify-snowmobile-access-browser.cjs
+      - tests/snowmobile-access-evidence.test.js
+      - .github/workflows/snowmobile-access-evidence.yml
+permissions:
+  contents: read
+jobs:
+  access-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Parse browser and shared DNR access code
+        run: |
+          node --check public/assets/snowmobile-access-evidence.js
+          node --check public/assets/snowmobile-region.js
+          node --check scripts/verify-snowmobile-access-browser.cjs
+      - name: Validate 14 parking/county-map reconciliations and existing routing
+        run: |
+          node --test tests/snowmobile-access-evidence.test.js tests/snowmobile-parking.test.js tests/snowmobile-route-ui.test.js tests/snowmobile-route-ux.test.js tests/snowmobile-rust.test.js
+      - name: Rebuild and verify seven regional templates
+        run: |
+          node scripts/generate-snowmobile-region-pages.mjs
+          git diff --exit-code -- public/snowmobile/regions/
+      - name: Install isolated Playwright browser driver
+        run: |
+          npm install --prefix /tmp/snowmobile-access-browser --no-save --ignore-scripts playwright@1.58.2
+          echo "NODE_PATH=/tmp/snowmobile-access-browser/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium-browser)" >> "$GITHUB_ENV"
+      - name: Test real mobile and desktop interactions including source outage
+        run: node scripts/verify-snowmobile-access-browser.cjs
