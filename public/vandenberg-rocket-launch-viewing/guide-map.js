@@ -143,7 +143,7 @@
     }
     buttons.querySelectorAll('button[data-map-filter]').forEach(btn=>
       btn.setAttribute('aria-pressed',String(btn.dataset.mapFilter===value)));
-    rows();noteSelection(state.places.find(p=>p.id===state.active)||null);
+    rows();updateRustComparison();noteSelection(state.places.find(p=>p.id===state.active)||null);
     fitVisible();
   }
 
@@ -238,7 +238,8 @@
     const ordered=[...state.places].sort((a,b)=>
       state.rust.vg_rank(state.places.indexOf(b),state.priority,state.marineConcern)-
       state.rust.vg_rank(state.places.indexOf(a),state.priority,state.marineConcern));
-    const preferred=ordered[0];
+    const preferred=ordered.find(visible);
+    if(!preferred)return;
     const index=state.places.indexOf(preferred);
     const intro=document.getElementById('vg-rust-choice-intro');
     const link=document.getElementById('vg-rust-choice-link');
@@ -250,7 +251,7 @@
     link.href='#'+preferred.articleAnchor;
     caution.textContent=cautionText[state.rust.vg_caution(index)]||'Access must be checked with the land manager.';
     context.textContent=state.marineConcern?
-      'You selected a coastal-fog concern. The comparison shifts toward inland alternatives, but does not know which skies are clear.':
+      'Coastal fog is a concern you entered, not a measured condition. Compare inland alternatives if the shoreline is socked in.':
       'This compares the six published site profiles, not their current openings or your launch’s weather.';
     panel.querySelectorAll('[data-rust-priority]').forEach(button=>
       button.setAttribute('aria-pressed',String(Number(button.dataset.rustPriority)===state.priority)));
