@@ -1,0 +1,33 @@
+name: Snowmobile mobile route resilience
+on:
+  pull_request:
+    paths:
+      - public/assets/snowmobile-region.js
+      - public/assets/snowmobile.css
+      - public/snowmobile/regions/**
+      - scripts/generate-snowmobile-region-pages.mjs
+      - tests/snowmobile-route-ui.test.js
+      - .github/workflows/snowmobile-mobile-ux.yml
+permissions:
+  contents: read
+jobs:
+  mobile-route:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate route JS and event-driven selection tests
+        run: |
+          node --check public/assets/snowmobile-region.js
+          node --test tests/snowmobile-route-ui.test.js tests/snowmobile-route-ux.test.js tests/snowmobile-routing.test.js tests/snowmobile-rust.test.js
+      - name: Validate generated seven-region parity
+        run: |
+          node scripts/generate-snowmobile-region-pages.mjs
+          git diff --exit-code -- public/snowmobile/regions/
+      - name: Existing routing benchmarks and safety gates
+        run: |
+          node scripts/benchmark-snowmobile-routing.mjs --check
+          node scripts/benchmark-snowmobile.mjs --check
