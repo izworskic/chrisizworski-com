@@ -249,13 +249,13 @@ function syncRouteControls(){
   if(loop){loop.hidden=n<2;loop.disabled=!ROUTE_MODE||ROUTE_BUSY||n<2||n>=12||start?.junctionId===last?.junctionId;}
   if(MAP)MAP.getContainer().style.cursor=ROUTE_MODE&&!ROUTE_BUSY?'pointer':'';updateJunctionStyles();renderJunctionMatches();
 }
-function updateRouteAvailability(){syncRouteControls();if(!routeAvailable())setRouteHint(DATA?'Trail route planning is unavailable: no selectable junctions were found in the current mapped, nonclosed trail network. Use the official DNR trail maps below.':'Loading trail map…');else if(!ROUTE_POINTS.length)setRouteHint(ROUTE_MODE?'Tap a blue junction dot to choose your start.':'Blue dots mark selectable junctions and trail ends. Choose Plan a route, or tap a dot to start.');}
+function updateRouteAvailability(){syncRouteControls();if(!routeAvailable())setRouteHint(DATA?'Current mapped DNR junctions are unavailable. Verify the official DNR trail map before planning.':'Loading DNR junctions…');else if(!ROUTE_POINTS.length)setRouteHint(ROUTE_MODE?'Search a DNR trail junction or tap a blue map dot for your start.':'Search mapped DNR junctions or choose Plan a route to select map dots.');}
 function scrollRouteElement(el){el?.scrollIntoView?.({block:'nearest',behavior:window.matchMedia?.('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});}
 function setRouteMode(on){ROUTE_MODE=on;syncRouteControls();}
 // The main button always starts a fresh draft. It never toggles ambiguously.
-function toggleRouteMode(){if(!routeAvailable()){updateRouteAvailability();return;}clearRoutePoints();setRouteMode(true);setRouteHint('Tap a blue junction dot to choose your start.');track('snowmobile_route_mode_start',{region:DATA?.key||'unknown'});}
+function toggleRouteMode(){if(!routeAvailable()){updateRouteAvailability();return;}clearRoutePoints();setRouteMode(true);setRouteHint('Search a DNR junction or tap a blue map dot to choose your start.');track('snowmobile_route_mode_start',{region:DATA?.key||'unknown'});}
 function clearRoute(){clearRoutePoints();setRouteMode(false);updateRouteAvailability();track('snowmobile_route_cleared',{region:DATA?.key||'unknown'});}
-function draftHint(){setRouteHint(ROUTE_POINTS.length<2?(ROUTE_POINTS.length?'Start selected. Tap another blue junction dot for your next stop or finish.':'Tap a blue junction dot to choose your start.'):`${ROUTE_POINTS.length} stops selected. Tap another blue dot or choose Build route.`);}
+function draftHint(){setRouteHint(ROUTE_POINTS.length<2?(ROUTE_POINTS.length?'Start selected. Search or tap another mapped junction for your next stop.':'Search a DNR junction or tap a blue map dot to choose your start.'):`${ROUTE_POINTS.length} stops selected. Search another junction or choose Build route.`);}
 function undoRoute(){if(!ROUTE_POINTS.length||ROUTE_BUSY)return;invalidateRoute();ROUTE_POINTS.pop();ROUTE_MARKERS.pop()?.remove();setRouteMode(true);draftHint();}
 function editRoute(){if(!ROUTE_POINTS.length)return;invalidateRoute();setRouteMode(true);draftHint();}
 function onMapClick(e){
