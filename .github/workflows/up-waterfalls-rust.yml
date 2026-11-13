@@ -4,8 +4,14 @@ on:
     branches: [main]
     paths:
       - 'rust/up-waterfalls-engine/**'
+      - 'rust/up-waterfalls-visitability/**'
       - 'scripts/build-up-waterfalls-nearby.py'
       - 'scripts/verify-up-waterfalls-rust.cjs'
+      - 'scripts/verify-up-waterfalls-visitability-rust.cjs'
+      - 'public/assets/up-waterfalls-rust.js'
+      - 'public/assets/up-waterfalls-visit-lens.js'
+      - 'public/assets/up-waterfalls-visitability.wasm.b64'
+      - 'public/sitemap-up-waterfalls.xml'
       - 'public/assets/up-waterfalls-nearby.json'
       - 'data/up-waterfalls.json'
       - 'public/upper-peninsula-waterfalls/index.html'
@@ -26,8 +32,22 @@ jobs:
         run: |
           rustup toolchain install 1.90.0 --profile minimal
           rustup default 1.90.0
+          rustup target add wasm32-unknown-unknown --toolchain 1.90.0
       - name: Compile and test real Rust engine against all 80 curated records
         run: node scripts/verify-up-waterfalls-rust.cjs
+      - name: Compile actual visitability Rust/WebAssembly and Rust unit tests
+        run: |
+          rustc --edition=2021 --test rust/up-waterfalls-visitability/src/lib.rs -o /tmp/up-waterfalls-visitability-tests
+          /tmp/up-waterfalls-visitability-tests
+          rustc --edition=2021 --crate-type cdylib --target wasm32-unknown-unknown \
+            -C opt-level=z -C codegen-units=1 -C lto=fat -C panic=abort -C strip=symbols \
+            -o /tmp/up-waterfalls-visitability.wasm rust/up-waterfalls-visitability/src/lib.rs
+          echo UP_WATERFALL_VISITABILITY_WASM_B64_BEGIN
+          base64 -w0 /tmp/up-waterfalls-visitability.wasm
+          echo
+          echo UP_WATERFALL_VISITABILITY_WASM_B64_END
+      - name: Verify 960 waterfall month/access cases and pinned compiled WASM
+        run: node scripts/verify-up-waterfalls-visitability-rust.cjs --wasm=/tmp/up-waterfalls-visitability.wasm
       - name: Preserve nearby browser contract and access source protections
         run: |
           node --test tests/up-waterfalls-b59-nearby-python.test.js tests/up-waterfalls-visit-lens.test.js tests/up-waterfall-source-coverage-gates.test.js tests/up-waterfalls.test.js
