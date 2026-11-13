@@ -142,7 +142,7 @@ test('discoverability, single canonical, hub handoff and transparent modificatio
  assert.equal((sitemap.match(/<loc>https:\/\/chrisizworski\.com\/barking-sands-rocket-launch-viewing\/<\/loc>/g)||[]).length,1);
  assert.match(sitemap,/<loc>https:\/\/chrisizworski\.com\/barking-sands-rocket-launch-viewing\/<\/loc>\s*<lastmod>2026-11-10<\/lastmod>/);
  assert.match(hub,/id="rl-nav-pmrf" href="\/barking-sands-rocket-launch-viewing\/"/);
- assert.match(hub,/app\.js\?v=20261110-voice-v1/);
+ assert.match(hub,/app\.js\?v=20261112-playalinda-vulcan/);
  assert.match(js,/launchId=/);
  assert.match(guides,/data-field-guide="barking-sands-rocket-access"/);
  assert.match(guides,/Beyond the Great Lakes <span>5 Guides/);
