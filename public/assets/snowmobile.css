@@ -202,3 +202,19 @@ button:focus-visible,select:focus-visible,a:focus-visible,summary:focus-visible{
 .s7-region-check{border-top:3px solid #477687}
 .s7-region-check h2{margin:2px 0 7px}
 @media(max-width:750px){.s7-readiness-steps{grid-template-columns:1fr}}
+
+/* Trail-junction finder: a keyboard/touch alternative to dense map dots. */
+.junction-find{margin:12px 0 10px;padding:13px 14px;background:#f3f8fa;border:1px solid #c7d9e2;border-radius:9px}
+.junction-find label{display:block;margin:0 0 6px;font:700 .89rem/1.35 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#163d50}
+.junction-find input{display:block;width:100%;max-width:570px;min-height:46px;border:1px solid #91aebd;border-radius:7px;background:white;color:#173747;padding:10px 12px;font:inherit}
+.junction-find input:disabled{background:#edf0f1;color:#58656b}
+.junction-search-results{margin-top:8px;font-size:.83rem;line-height:1.45;color:#3a5462}
+.junction-count{margin:0 0 8px}
+.junction-choices{max-height:216px;overflow-y:auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;padding:2px}
+.junction-choice{display:flex;flex-direction:column;gap:3px;align-items:flex-start;justify-content:center;min-height:48px;padding:9px 11px;background:white;color:#143d55;border:1px solid #abc5d3;border-radius:7px;text-align:left;font:inherit;cursor:pointer;overflow-wrap:anywhere}
+.junction-choice:hover,.junction-choice:focus-visible{background:#e3f2f5;border-color:#39778c}
+.junction-choice span{font-size:.77rem;color:#4c6270}
+.route-evidence{display:grid;gap:6px;padding:13px 15px;margin:12px 0;background:#f2f6f8;border:1px solid #c1d7df;border-left:4px solid #326581;border-radius:7px;font: .84rem/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.route-evidence strong{color:#173b4c}
+.route-evidence span{display:block}
+@media(max-width:640px){.junction-choices{grid-template-columns:1fr;max-height:240px}.junction-find{padding:11px}.route-evidence{padding:11px}}
