@@ -5,6 +5,13 @@ on:
     paths:
       - 'rust/up-waterfalls-engine/**'
       - 'rust/up-waterfalls-visitability/**'
+      - 'rust/up-waterfalls-atlas-regional/**'
+      - 'public/assets/up-waterfalls-evidence-rust.js'
+      - 'public/assets/up-waterfalls-atlas-regional.wasm.b64'
+      - 'public/assets/up-waterfall-evidence-atlas.js'
+      - 'public/assets/up-waterfalls-regional-clusters.js'
+      - 'public/upper-peninsula-waterfalls/atlas/index.html'
+      - 'scripts/verify-up-waterfalls-atlas-regional-rust.cjs'
       - 'scripts/build-up-waterfalls-nearby.py'
       - 'scripts/verify-up-waterfalls-rust.cjs'
       - 'scripts/verify-up-waterfalls-visitability-rust.cjs'
@@ -48,6 +55,19 @@ jobs:
           echo UP_WATERFALL_VISITABILITY_WASM_B64_END
       - name: Verify 960 waterfall month/access cases and pinned compiled WASM
         run: node scripts/verify-up-waterfalls-visitability-rust.cjs --wasm=/tmp/up-waterfalls-visitability.wasm
+      - name: Compile evidence Atlas / regional Rust core and genuine WASM
+        run: |
+          rustc --edition=2021 --test rust/up-waterfalls-atlas-regional/src/lib.rs -o /tmp/up-waterfalls-atlas-regional-tests
+          /tmp/up-waterfalls-atlas-regional-tests
+          rustc --edition=2021 --crate-type cdylib --target wasm32-unknown-unknown \
+            -C opt-level=z -C codegen-units=1 -C lto=fat -C panic=abort -C strip=symbols \
+            -o /tmp/up-waterfalls-atlas-regional.wasm rust/up-waterfalls-atlas-regional/src/lib.rs
+          echo UP_WATERFALL_ATLAS_WASM_B64_BEGIN
+          base64 -w0 /tmp/up-waterfalls-atlas-regional.wasm
+          echo
+          echo UP_WATERFALL_ATLAS_WASM_B64_END
+      - name: Assert 640-record atlas safety, GIS suppression and 4 regional decision gates
+        run: node scripts/verify-up-waterfalls-atlas-regional-rust.cjs --wasm=/tmp/up-waterfalls-atlas-regional.wasm
       - name: Preserve nearby browser contract and access source protections
         run: |
-          node --test tests/up-waterfalls-b59-nearby-python.test.js tests/up-waterfalls-visit-lens.test.js tests/up-waterfall-source-coverage-gates.test.js tests/up-waterfalls.test.js
+          node --test tests/up-waterfalls-b59-nearby-python.test.js tests/up-waterfalls-visit-lens.test.js tests/up-waterfall-source-coverage-gates.test.js tests/up-waterfalls.test.js tests/up-waterfall-evidence-atlas.test.js tests/up-waterfalls-regional-clusters.test.js
