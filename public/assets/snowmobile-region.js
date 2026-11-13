@@ -2,6 +2,7 @@ const $=s=>document.querySelector(s);
 const ORIGIN_NAMES={'43.5945,-83.8889':'Bay City','43.4195,-83.9508':'Saginaw','43.6156,-84.2472':'Midland','42.7325,-84.5555':'Lansing','42.9634,-85.6681':'Grand Rapids','42.3314,-83.0458':'Detroit','44.7631,-85.6206':'Traverse City'};
 let DATA=null,MAP=null,LAYER=null,CLOSURE_LAYER=null,SNOW_LAYER=null,CLOSURES=null,JUNCTION_LAYER=null;
 let ROUTE_MODE=false,ROUTE_POINTS=[],ROUTE_MARKERS=[],ROUTE_LINE=null;
+let JUNCTIONS_BY_ID=new Map();
 const ROUTE_CLICK_EVENTS=new WeakSet();
 let ROUTE_REQUEST_ID=0,ROUTE_ABORT=null;
 function track(name,params={}){try{if(typeof window.gtag==='function')window.gtag('event',name,params)}catch{}}
@@ -168,6 +169,8 @@ function driveVerdict(d){
 function mapBandColor(b){return b==='CLOSED'?'#5f2c2a':b==='POOR'?'#a33b32':b==='MARGINAL'?'#b76b1c':b==='FAIR'?'#93641d':b==='GOOD'?'#1f6b46':b==='EXCELLENT'?'#135f3a':'#8a948e'}
 function drawMap(d){
   const fc=d.scoredGeometry;if(!window.L||!fc)return;
+  // Exact route endpoints only. Crossing lines never create new selectable dots.
+  JUNCTIONS_BY_ID=new Map((d.routeJunctions?.features||[]).filter(f=>typeof f.properties?.id==='string'&&f.geometry?.type==='Point').map(f=>[f.properties.id,f]));
   if(!MAP){const center=d.mapCenter||[44.9,-85.6];MAP=L.map('map',{scrollWheelZoom:false}).setView(center,d.legacyCorridor?9:8);MAP.once('movestart',()=>track('snowmobile_map_interaction',{action:'move'}));L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'© OpenStreetMap contributors'}).addTo(MAP);MAP.on('click',onMapClick)}
   if(LAYER)LAYER.remove(); if(CLOSURE_LAYER)CLOSURE_LAYER.remove();
   LAYER=L.geoJSON(fc,{style:f=>{const p=f.properties||{};return {weight:p.band==='CLOSED'?7:5,opacity:.9,color:mapBandColor(p.band)}},onEachFeature:(f,l)=>{const p=f.properties||{};const title=p.trailNetwork||p.id||'DNR trail segment';const band=p.band||'DNR DESIGNATED';const score=Number.isFinite(p.score)?` · ${p.score}/100`:'';const why=Array.isArray(p.reasons)&&p.reasons.length?`<br>${esc(p.reasons[0])}`:'';const status=p.officialStatus?`<br>DNR snowmobile status: ${esc(p.officialStatus)}`:'';const groom=p.groomType?`<br>Grooming type: ${esc(p.groomType)} · ${esc(p.groomingSponsor||'sponsor not stated')}`:`<br>${esc(p.groomingSponsor||'Grooming sponsor not stated')}`;l.bindPopup(`<strong>${esc(title)}</strong><br>${esc(band)}${score}${status}${groom}${why}`,{autoPan:false});l.on('click',e=>{if(ROUTE_MODE)onMapClick(e);else track('snowmobile_segment_open',{segment:String(p.id||title),band:String(p.band||'unknown')});})}}).addTo(MAP);
@@ -193,9 +196,39 @@ function routeResultHost(){return $('#routeResult');}
 const ROUTE_MARK_COLOR='#e8a33d';
 let ROUTE_BUSY=false;
 function invalidateRoute(){ROUTE_REQUEST_ID++;if(ROUTE_ABORT)ROUTE_ABORT.abort();ROUTE_ABORT=null;ROUTE_BUSY=false;if(ROUTE_LINE){ROUTE_LINE.remove();ROUTE_LINE=null;}const host=routeResultHost();if(host){host.hidden=true;host.innerHTML='';}}
-function clearRoutePoints(){invalidateRoute();for(const m of ROUTE_MARKERS)m.remove();ROUTE_MARKERS=[];ROUTE_POINTS=[];}
+function clearRoutePoints(){invalidateRoute();for(const m of ROUTE_MARKERS)m.remove();ROUTE_MARKERS=[];ROUTE_POINTS=[];const search=$('#junctionSearch');if(search)search.value='';}
 function setRouteHint(text,on=true){for(const id of ['routeHint','mapRouteHint']){const el=$('#'+id);if(el){el.hidden=!on;el.textContent=text;}}}
 function routeAvailable(){return !!(MAP&&DATA?.routeJunctions?.features?.length);}
+function renderJunctionMatches(){
+  const input=$('#junctionSearch'),host=$('#junctionSearchResults');
+  if(!input||!host)return;
+  const ready=routeAvailable()&&Boolean(window.SnowmobileRoutePicker);
+  input.disabled=!ready;
+  if(!ready){host.textContent='Junction search is unavailable until official DNR route points load.';return;}
+  const query=input.value.trim();
+  if(query.length<2){host.textContent='Enter at least two letters or digits from a trail name or number.';return;}
+  const matches=window.SnowmobileRoutePicker.findJunctions(DATA.routeJunctions.features,query,ROUTE_POINTS[0]?.component,8);
+  if(!matches.length){host.textContent=ROUTE_POINTS.length?'No matching junction on the connected network of your first stop. Clear the route to choose another network.':'No selectable mapped junction matches. Try a different trail name or number.';return;}
+  host.innerHTML='<p class="small junction-count">Showing up to eight matching mapped junctions. Select one to add a stop.</p><div class="junction-choices">'+
+    matches.map(f=>{
+      const [lon,lat]=f.geometry.coordinates,label=String(f.properties.label||'Mapped trail junction');
+      return '<button class="junction-choice" type="button" data-junction-choice="'+esc(f.properties.id)+'"><strong>'+esc(label)+'</strong><span>Near '+esc(lat.toFixed(3))+', '+esc(lon.toFixed(3))+' · Add stop</span></button>';
+    }).join('')+'</div>';
+}
+function selectSearchedJunction(id){
+  const f=JUNCTIONS_BY_ID.get(id);
+  if(!f||!routeAvailable())return;
+  if(ROUTE_POINTS[0]&&f.properties.component!==ROUTE_POINTS[0].component){
+    setRouteHint('The requested junction is disconnected from your start. Choose another junction or start a new route.');return;
+  }
+  if(!ROUTE_MODE){if(ROUTE_POINTS.length)editRoute();else setRouteMode(true);}
+  const [lon,lat]=f.geometry.coordinates,latlng={lat,lng:lon};
+  if(MAP.panTo)MAP.panTo([lat,lon],{animate:false});
+  onMapClick({latlng,junction:f.properties});
+  const input=$('#junctionSearch');if(input)input.value='';
+  renderJunctionMatches();
+  track('snowmobile_junction_search_select',{region:DATA?.key||'unknown',stop_count:ROUTE_POINTS.length});
+}
 function updateJunctionStyles(){
   const component=ROUTE_POINTS[0]?.component;
   JUNCTION_LAYER?.eachLayer?.(l=>{const p=l.feature.properties,connected=component===undefined||p.component===component;l.setStyle?.({radius:ROUTE_MODE?8:6,fillColor:connected?'#176d9c':'#9caaaF',fillOpacity:connected?1:.5});const el=l.getElement?.();if(el){el.setAttribute('role','button');el.setAttribute('tabindex',ROUTE_MODE&&connected?'0':'-1');el.setAttribute('aria-label',p.label+' — '+(connected?'Add route stop':'Not connected to your start'));if(!el.dataset.routeKeyBound){el.dataset.routeKeyBound='1';el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();onMapClick({latlng:l.getLatLng(),junction:p,originalEvent:e});}});}}});
@@ -208,7 +241,7 @@ function syncRouteControls(){
   const edit=$('#editRoute');if(edit)edit.hidden=ROUTE_MODE||!n||ROUTE_BUSY;
   const clear=$('#clearRoute');if(clear)clear.hidden=!n&&!ROUTE_MODE;
   const list=$('#routeStops');if(list){list.hidden=!n;list.innerHTML=ROUTE_POINTS.map((p,i)=>`<li>${i===0?'Start':`Stop ${i+1}`} · ${esc(p.label||`${p.lat.toFixed(4)}, ${p.lng.toFixed(4)}`)}</li>`).join('');}
-  if(MAP)MAP.getContainer().style.cursor=ROUTE_MODE&&!ROUTE_BUSY?'pointer':'';updateJunctionStyles();
+  if(MAP)MAP.getContainer().style.cursor=ROUTE_MODE&&!ROUTE_BUSY?'pointer':'';updateJunctionStyles();renderJunctionMatches();
 }
 function updateRouteAvailability(){syncRouteControls();if(!routeAvailable())setRouteHint(DATA?'Trail route planning is unavailable: no selectable junctions were found in the current mapped, nonclosed trail network. Use the official DNR trail maps below.':'Loading trail map…');else if(!ROUTE_POINTS.length)setRouteHint(ROUTE_MODE?'Tap a blue junction dot to choose your start.':'Blue dots mark selectable junctions and trail ends. Choose Plan a route, or tap a dot to start.');}
 function scrollRouteElement(el){el?.scrollIntoView?.({block:'nearest',behavior:window.matchMedia?.('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});}
@@ -235,9 +268,12 @@ function routeResultHtml(route){
   if(!route.routable)return `<p><strong>No complete route drawn.</strong> ${esc(route.reason||'Your stops are not connected by mapped, open trail.')}</p><p class="small">Use Edit stops or Undo last stop to adjust your route.</p>`;
   const worst=route.worstSegmentOnRoute;const worstLine=worst&&Number.isFinite(worst.score)?`<div class="small">Weakest scored segment: <span class="badge ${bandClass(worst.band)}">${esc(worst.band)}</span> ${esc(worst.trailNetwork||worst.segmentId)} · ${esc(worst.score)}/100. Unscored segments remain unverified.</div>`:'<div class="small">Trail conditions are unverified. Mapped distance does not establish ride quality.</div>';
   const closedNote=route.closedSegmentsExcludedFromRegion?`<div class="small">${route.closedSegmentsExcludedFromRegion} known closed segments excluded from routing.</div>`:'';
+  const evidence=window.SnowmobileRoutePicker?.routeEvidence(route,{closureVerified:DATA?.closures?.verified===true,seasonActive:DATA?.season?.active===true});
+  if(evidence?.inconsistentClosedSegment)return '<p><strong>Route rejected.</strong> A closed trail was found in the route response. Verify the official DNR map.</p>';
+  const evidenceLine=evidence?`<div class="route-evidence"><strong>Distance planning, not a ride recommendation.</strong><span>${evidence.unverifiedSegments} of ${route.segments?.length||0} traversed parts have no verified condition score.</span><span>${evidence.closureVerified?'Official DNR closure feed checked; other restrictions may still apply.':'Current DNR closure verification unavailable. Do not infer trail access.'}</span><span>${evidence.seasonActive?'In-season dates alone do not establish rideability.':'Outside designated riding season. This is a future-trip plan only.'}</span></div>`:'';
   const legs=(route.legs||[]).map(l=>`<li><strong>Stop ${l.fromStop} → ${l.toStop}:</strong> ${esc(l.distanceMiles)} mi · about ${esc(formatDuration(l.estimatedMinutes))}<br>${esc(l.trailsVia.join(' → '))}<br><span class="small">Junction snap: ${esc(l.startSnapMiles)} mi at start, ${esc(l.endSnapMiles)} mi at finish.</span></li>`).join('');
   const segments=(route.segments||[]).map(s=>`<li>${esc(s.trailNetwork||s.segmentId)} · ${esc(s.band||'UNKNOWN')}${Number.isFinite(s.score)?` · ${esc(s.score)}/100`:' · surface unverified'}</li>`).join('');
-  return `<div class="route-headline"><strong>${esc(route.distanceMiles)} mi total</strong> · about ${esc(formatDuration(route.estimatedMinutes))}</div><div class="small">${esc(route.stopCount||2)} stops · ${esc(route.segmentsTraversed)} unique DNR segments · assumed ${esc(route.assumedAvgMph)} mph average</div>${worstLine}${closedNote}${legs?`<h3>Your route, leg by leg</h3><ol class="route-legs">${legs}</ol>`:''}${segments?`<details><summary>Trail condition evidence along the route</summary><ul>${segments}</ul></details>`:''}<div class="small route-truth-inline">${esc(route.truth||'')}</div>`;
+  return `${evidenceLine}<div class="route-headline"><strong>${esc(route.distanceMiles)} mi total</strong> · about ${esc(formatDuration(route.estimatedMinutes))}</div><div class="small">${esc(route.stopCount||2)} stops · ${esc(route.segmentsTraversed)} unique DNR segments · assumed ${esc(route.assumedAvgMph)} mph average</div>${worstLine}${closedNote}${legs?`<h3>Your route, leg by leg</h3><ol class="route-legs">${legs}</ol>`:''}${segments?`<details><summary>Trail condition evidence along the route</summary><ul>${segments}</ul></details>`:''}<div class="small route-truth-inline">${esc(route.truth||'')}</div>`;
 }
 async function computeRoute(){
   const host=routeResultHost();if(!host||!DATA||ROUTE_POINTS.length<2||ROUTE_BUSY||!ROUTE_MODE)return;
@@ -247,12 +283,14 @@ async function computeRoute(){
   try{
     const r=await fetch(`/api/snowmobile-route?region=${encodeURIComponent(DATA.key)}&points=${encodeURIComponent(points)}`,{signal:controller.signal});const j=await r.json();if(requestId!==ROUTE_REQUEST_ID)return;if(!r.ok)throw new Error(j.error||j.detail||String(r.status));
     host.innerHTML=(j.closureVerification===true?'':'<p><strong>Distance planning only.</strong> Current closure verification is unavailable. Confirm access with DNR before riding.</p>')+(DATA.season?.active===false?'<p><strong>Off-season:</strong> this is a future-trip plan, not permission to ride now.</p>':'')+routeResultHtml(j.route);
-    if(j.route?.routable&&j.route.geometry?.coordinates?.length>1){const latlngs=j.route.geometry.coordinates.map(([lon,lat])=>[lat,lon]);ROUTE_LINE=L.polyline(latlngs,{color:ROUTE_MARK_COLOR,weight:6,opacity:.95,dashArray:'1 8',lineCap:'round',interactive:false}).addTo(MAP);try{MAP.fitBounds(ROUTE_LINE.getBounds(),{padding:[25,25]});}catch{}}
+    if(j.route?.routable&&!window.SnowmobileRoutePicker?.routeEvidence(j.route,{closureVerified:j.closureVerification===true,seasonActive:DATA.season?.active===true})?.inconsistentClosedSegment&&j.route.geometry?.coordinates?.length>1){const latlngs=j.route.geometry.coordinates.map(([lon,lat])=>[lat,lon]);ROUTE_LINE=L.polyline(latlngs,{color:ROUTE_MARK_COLOR,weight:6,opacity:.95,dashArray:'1 8',lineCap:'round',interactive:false}).addTo(MAP);try{MAP.fitBounds(ROUTE_LINE.getBounds(),{padding:[25,25]});}catch{}}
     ROUTE_BUSY=false;setRouteMode(false);setRouteHint(j.route?.routable?'Route built. Edit stops to adjust it, or Start over for a new route.':'These stops could not form a complete route. Edit stops or undo the last stop.');scrollRouteElement(host);track('snowmobile_route_computed',{region:DATA.key,routable:Boolean(j.route?.routable),stop_count:ROUTE_POINTS.length,miles:j.route?.distanceMiles??null});
   }catch(e){if(requestId!==ROUTE_REQUEST_ID)return;host.innerHTML=`<p><strong>Route unavailable.</strong> ${esc(e.name==='AbortError'?'The request timed out. Your stops are saved; choose Build route to retry.':e.message||'Please try again.')}</p>`;ROUTE_BUSY=false;setRouteMode(true);setRouteHint('Your stops are saved. Choose Build route to retry, or edit your stops.');track('snowmobile_route_error',{region:DATA.key,message:String(e.message||e).slice(0,120)});}
   finally{clearTimeout(timer);if(requestId===ROUTE_REQUEST_ID){ROUTE_ABORT=null;ROUTE_BUSY=false;syncRouteControls();}}
 }
+document.addEventListener('input',e=>{if(e.target?.id==='junctionSearch')renderJunctionMatches();});
 document.addEventListener('click',e=>{
+  const choice=e.target?.closest?.('[data-junction-choice]');if(choice){selectSearchedJunction(choice.getAttribute('data-junction-choice'));return;}
   if(e.target?.id==='toggleSnowDepth')toggleSnowDepth();if(e.target?.id==='routeModeToggle')toggleRouteMode();if(e.target?.id==='clearRoute')clearRoute();if(e.target?.id==='buildRoute')computeRoute();if(e.target?.id==='undoRoute')undoRoute();if(e.target?.id==='editRoute')editRoute();
   if(e.target?.id==='checkDrive'){const v=$('#originPreset')?.value;if(v)checkOrigin(v,ORIGIN_NAMES[v]||'Selected origin')}
   if(e.target?.id==='useMyLocation'){
