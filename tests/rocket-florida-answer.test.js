@@ -203,6 +203,7 @@ test('Vulcan cutoff follows changed mission time and never leaks to other missio
  let a=model.assess(n,d);
  assert.match(a.playalinda.cutoffLabel,/12:30 PM EST/);
  n.selectedLaunch.name='Another Vulcan mission';
+ n.selectedLaunch.mission='Different mission';
  a=model.assess(n,d);
  assert.equal(a.playalinda,null);
 });
