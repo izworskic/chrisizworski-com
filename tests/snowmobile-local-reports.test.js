@@ -1,0 +1,130 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {createRequire} from 'node:module';
+import {readFileSync} from 'node:fs';
+const require=createRequire(import.meta.url);
+const desk=require('../lib/snowmobile/local-reports.cjs');
+const api=require('../api/snowmobile-local-reports.js');
+const nov=new Date('2026-11-13T21:00:00.000Z');
+const dec=new Date('2026-12-15T20:00:00.000Z');
+const html=(condition,reportDate,groomed)=>`<html><nav>Groomer Reports</nav><section><h1>Example Snowmobile Trail Report</h1><ul><li>Trail Condition: ${condition}</li><li>Last Groomed: ${groomed}</li><li>Reported On: ${reportDate} @ 8:04am</li></ul><h2>Groomer Report</h2><p>Older posts: GREAT conditions in January 2024, not live.</p></section></html>`;
+const stale=html('Excellent','March 12th, 2026','January 01st, 1970');
+const current=html('Good','December 15th, 2026','December 14th, 2026');
+
+test('eighteen source URLs resolve to six separate geographically scoped MISORVA rosters',()=>{
+ const keys=['eastern-up','keweenaw-copper-country','central-western-up','northeast-sunrise','northwest-michigan','west-michigan'];
+ assert.deepEqual(Object.keys(desk.CLUBS),keys);
+ const urls=new Set();
+ for(const key of keys){
+  const records=desk.roster(key);
+  assert.equal(records.length,3,key);
+  for(const r of records){
+    assert.ok(r.name.length>3&&r.scope.length>4,key);
+    assert.match(r.url,/^https:\/\/misorva\.org\/trail-reports\/[a-z0-9-]+\/$/);
+    assert.equal(urls.has(r.url),false,'duplicate regional source '+r.url);
+    urls.add(r.url);
+  }
+ }
+ assert.equal(urls.size,18);
+ assert.equal(desk.roster('grayling-gaylord'),null,'existing legacy corridor preserved');
+ assert.equal(desk.roster('../eastern-up'),null);
+});
+test('structured MISORVA published date is different from source fetch/check date',()=>{
+ const p=desk.extractHtml(stale);
+ assert.deepEqual(p,{condition:'Excellent',reportedAt:'2026-03-12',lastGroomedAt:null});
+ assert.equal(desk.freshState(p.reportedAt,nov),'STALE');
+ assert.equal(desk.dayAge(p.reportedAt,nov)>200,true);
+ assert.equal(desk.localDay(nov),'2026-11-13');
+ assert.equal(desk.parseDate('January 01st, 1970'),null,'1970 groom date is placeholder');
+ assert.equal(desk.parseDate('February 30th, 2026'),null);
+ assert.equal(desk.parseDate('March 15th, 2026'),'2026-03-15');
+ assert.equal(desk.extractHtml('<html>Unstructured but excellent groomer report</html>'),null);
+});
+test('stale excellent cannot be used as a current surface observation or grooming record',()=>{
+ const r=desk.buildReport(desk.roster('eastern-up')[0],desk.extractHtml(stale),nov);
+ assert.equal(r.state,'STALE');
+ assert.equal(r.reportedAt,'2026-03-12');
+ assert.equal(r.condition,null);
+ assert.equal(r.lastGroomedAt,null);
+ assert.equal(r.groomingFreshness,'NOT_CURRENT');
+ assert.equal(r.scope,'LOCAL_ONLY');
+ assert.match(r.advisory,/does not override DNR closure/);
+ assert.ok(!('rideScore'in r)&&!('open'in r)&&!('recommended'in r));
+});
+test('pre-season recent structured report cannot become riding advice',()=>{
+ const p=desk.extractHtml(html('Excellent','November 13th, 2026','November 13th, 2026'));
+ const r=desk.buildReport(desk.roster('west-michigan')[0],p,nov);
+ assert.equal(r.state,'RECENT');
+ assert.equal(r.reportedAt,'2026-11-13');
+ assert.equal(r.condition,null,'do not suggest excellent riding before Dec 1');
+ assert.equal(r.groomingFreshness,'NOT_CURRENT');
+});
+test('in-season dated club condition is scoped to one club, without changing DNR routing',()=>{
+ const p=desk.extractHtml(current);
+ const r=desk.buildReport(desk.roster('west-michigan')[0],p,dec);
+ assert.equal(r.state,'RECENT');
+ assert.equal(r.condition,'Good');
+ assert.equal(r.groomingFreshness,'RECENT');
+ assert.equal(r.lastGroomedAt,'2026-12-14');
+ assert.equal(r.scope,'LOCAL_ONLY');
+ assert.ok(!('closureState'in r)&&!('routeState'in r));
+});
+test('reject future report and grooming dates and unsupported condition labels',()=>{
+ const p=desk.extractHtml(html('Superb','December 15th, 2026','December 15th, 2026'));
+ assert.equal(p.condition,null);
+ const r=desk.buildReport(desk.roster('west-michigan')[0],p,nov);
+ assert.equal(r.state,'UNDATED');
+ assert.equal(r.reportedAt,null);assert.equal(r.condition,null);assert.equal(r.lastGroomedAt,null);
+ assert.equal(desk.parseDate('April 31st, 2026'),null);
+});
+test('independent per-club source failure never creates optimistic conditions',async()=>{
+ const records=desk.roster('northeast-sunrise');
+ const fake=async url=>url===records[1].url?Promise.reject(Error('source down')):{ok:true,text:async()=>stale};
+ const result=await desk.checkRegion('northeast-sunrise',nov,fake);
+ assert.equal(result.reports.length,3);
+ assert.equal(result.reports[1].state,'UNAVAILABLE');
+ assert.equal(result.reports[1].condition,null);
+ assert.equal(result.reports[0].state,'STALE');
+ assert.equal(result.totals.available,2);
+ assert.equal(result.totals.recent,0);
+ assert.equal(result.checkedAt,nov.toISOString());
+ assert.ok(result.sourceDirectory.includes('misorva.org'));
+});
+test('report parser only accepts structured header, not words in archived narrative',()=>{
+ const s=html('See Report Below','March 12th, 2026','January 01st, 1970').replace('Groomer Report</h2>','Groomer Report</h2><p>Excellent in March');
+ const r=desk.extractHtml(s);
+ assert.equal(r.condition,null);
+ assert.equal(r.reportedAt,'2026-03-12');
+});
+function res(){return {status(v){this.code=v;return this;},setHeader(k,v){(this.headers||={})[k]=v;},json(v){this.payload=v;return this;}}}
+test('the report API requires a known region and never alters main DNR route payload',async()=>{
+ const original=globalThis.fetch;
+ api._test.clearCache();
+ try{
+  const invalid=res();await api({method:'GET',query:{region:'../../admin'}},invalid);assert.equal(invalid.code,400);
+  const post=res();await api({method:'POST',query:{region:'west-michigan'}},post);assert.equal(post.code,405);
+  globalThis.fetch=async()=>({ok:true,text:async()=>stale});
+  const reply=res();await api({method:'GET',query:{region:'west-michigan'}},reply);
+  assert.equal(reply.code,200);assert.equal(reply.payload.totals.monitored,3);
+  assert.equal(reply.payload.totals.recent,0);
+  for(const r of reply.payload.reports){assert.equal(r.condition,null);assert.equal(r.scope,'LOCAL_ONLY');}
+  assert.equal(reply.headers['X-Robots-Tag'],'noindex, nofollow');
+ }finally{globalThis.fetch=original;api._test.clearCache();}
+});
+test('all six generated region pages have a local desk and the original corridor stays unchanged',()=>{
+ const generator=readFileSync(new URL('../scripts/generate-snowmobile-region-pages.mjs',import.meta.url),'utf8');
+ const core=readFileSync(new URL('../public/assets/snowmobile-region.js',import.meta.url),'utf8');
+ for(const region of Object.keys(desk.CLUBS)){
+  const html=readFileSync(new URL('../public/snowmobile/regions/'+region+'.html',import.meta.url),'utf8');
+  for(const marker of ['id="localClubDesk"','id="localClubReports"','/assets/snowmobile-local-reports.js','/assets/snowmobile-region.js','id="parkingPlanner"','id="routePlanner"','google-adsense-account']){
+   assert.ok(html.includes(marker),region+' missing '+marker);
+  }
+  assert.match(html,/rel="canonical"/);
+  assert.ok(html.includes('condition report does not override DNR closures'));
+ }
+ const corridor=readFileSync(new URL('../public/snowmobile/regions/grayling-gaylord.html',import.meta.url),'utf8');
+ assert.ok(!corridor.includes('id="localClubDesk"'));
+ assert.ok(!corridor.includes('/assets/snowmobile-local-reports.js'));
+ assert.ok(generator.includes('localDeskBlock'));
+ assert.ok(!core.includes('localClubDesk'),'legacy rendering and routing untouched');
+});
