@@ -1,10 +1,10 @@
 {
   "schemaVersion": "rockhounding-glos-offshore-event-history-v1",
   "source": "GLOS_SEAGULL_OBS_140_SPOT_1361",
-  "calculatedAtUTC": "2026-11-13T07:59:56.355Z",
-  "recordCount": 5731,
+  "calculatedAtUTC": "2026-11-13T20:29:46.688Z",
+  "recordCount": 5706,
   "latestObservedAt": "2026-11-12T23:46:01Z",
-  "latestAgeHours": 8.23,
+  "latestAgeHours": 20.73,
   "sourceStatus": "STALE_OBSERVATIONS",
   "thresholdM": 1,
   "thresholdMeaning": "DESCRIPTIVE_OFFSHORE_GROUPING_NOT_NWS_HAZARD",
@@ -372,7 +372,7 @@
   "canClaimBeachSafety": false,
   "canInferHarborWaveHeight": false,
   "hazardSnapshot": {
-    "checkedAtUTC": "2026-11-13T07:59:56.355Z",
+    "checkedAtUTC": "2026-11-13T20:29:46.688Z",
     "status": "ACTIVE",
     "matchedAlertEvents": [
       {
@@ -396,10 +396,10 @@
   },
   "photoFreeLakePulse": {
     "schemaVersion": "rockhounding-photo-free-offshore-pulse-v1",
-    "computedAtUTC": "2026-11-13T07:59:56.355Z",
+    "computedAtUTC": "2026-11-13T20:29:46.688Z",
     "station": "SPOT-1361",
-    "sourceRows": 5731,
-    "originalWaveSampleFromUTC": "2026-07-16T08:16:01Z",
+    "sourceRows": 5706,
+    "originalWaveSampleFromUTC": "2026-07-16T20:46:01Z",
     "originalWaveSampleThroughUTC": "2026-11-12T23:46:01Z",
     "observationFreshness": "STALE_OBSERVATIONS",
     "currentOffshoreObservedStatus": "STALE_OFFSHORE_DATA",
@@ -903,11 +903,11 @@
     "canPublishCollectingWindow": false,
     "canTransferIntoBayshoreHarbor": false
   },
-  "sourceQueryStartUTC": "2026-11-09T07:59:56Z",
-  "sourceQueryEndUTC": "2026-11-13T07:59:56Z",
-  "sourceRecordCount": 176,
+  "sourceQueryStartUTC": "2026-11-09T20:29:46Z",
+  "sourceQueryEndUTC": "2026-11-13T20:29:46Z",
+  "sourceRecordCount": 151,
   "rejectedOriginalRows": 0,
-  "originalCsvSha256": "43a381a1d55c2787e4b9d678542ac06e7a54a91a76930a7baf9fb45cbd8d7f4c",
+  "originalCsvSha256": "3ea16e9193a56db38ee24fc1472ffbd072d45e64b18fc91fd9683056442659b8",
   "sourceUrl": "https://seagull-erddap.glos.org/erddap/tabledap/obs_140.csv",
   "observedWaveEventsNotModeledForecasts": true,
   "dailyObservationsNotIndependentStorms": true,
