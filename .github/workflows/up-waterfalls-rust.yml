@@ -44,7 +44,8 @@ jobs:
             -o /tmp/up-waterfalls-visitability.wasm rust/up-waterfalls-visitability/src/lib.rs
           echo UP_WATERFALL_VISITABILITY_WASM_B64_BEGIN
           base64 -w0 /tmp/up-waterfalls-visitability.wasm
-          printf '\\nUP_WATERFALL_VISITABILITY_WASM_B64_END\\n'
+          echo
+          echo UP_WATERFALL_VISITABILITY_WASM_B64_END
       - name: Verify 960 waterfall month/access cases and pinned compiled WASM
         run: node scripts/verify-up-waterfalls-visitability-rust.cjs --wasm=/tmp/up-waterfalls-visitability.wasm
       - name: Preserve nearby browser contract and access source protections
