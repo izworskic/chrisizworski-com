@@ -59,6 +59,35 @@ try{
     }finally{await fallback.close();}
   });
 
+  await run('real Rust/WebAssembly regional day-sheet gate keeps winter closure and six-stop restrictions',async()=>{
+    await page.waitForFunction(()=>window.UPWaterfallEvidenceRust?.region?.()?.engine==='rust-wasm',{timeout:15000});
+    const result=await page.evaluate(()=>{
+      const native=window.UPWaterfallEvidenceRust.region();
+      const cards=new Map([...document.querySelectorAll('[data-fall][data-id]')].map(c=>[c.dataset.id,c]));
+      return {
+        engine:native.engine,
+        winter:native.decide('keweenaw-gorge',cards,[],'2027-01-15'),
+        spring:native.decide('keweenaw-gorge',cards,[],'2027-05-20'),
+        noDate:native.decide('black-river-corridor',cards,[],''),
+        overbook:native.decide('black-river-corridor',cards,['x','y','z'], '2027-05-20'),
+        conditional:native.decide('black-river-corridor',cards,[], '2027-05-20')
+      };
+    });
+    assert.deepEqual(result,{engine:'rust-wasm',winter:4,spring:1,noDate:3,overbook:5,conditional:1});
+  });
+  await run('regional planner still works when shared Rust/WASM cannot load',async()=>{
+    const fallback=await browser.newPage({viewport:{width:390,height:844}});
+    try{
+      await fallback.route('**/assets/up-waterfalls-atlas-regional.wasm.b64',route=>route.abort());
+      await fallback.goto(base+'/upper-peninsula-waterfalls/',{waitUntil:'domcontentloaded',timeout:30000});
+      await fallback.locator('[data-regional-preset="keweenaw-gorge"]').waitFor();
+      assert.equal(await fallback.evaluate(()=>window.UPWaterfallEvidenceRust?.region?.()?.engine||'javascript-fallback'),'javascript-fallback');
+      await fallback.locator('#visit-date').fill('2027-01-15');
+      await fallback.locator('[data-regional-preset="keweenaw-gorge"]').click();
+      assert.match(await fallback.locator('[data-regional-cluster] [data-regional-feedback]').first().innerText(),/Winter precaution|winter/i);
+      assert.equal(await fallback.locator('#upfall-day-sheet .day-sheet-stop').count(),0);
+    }finally{await fallback.close();}
+  });
   await run('existing Tahquamenon planner owns two source waterfall identities',async()=>{
     assert.equal(await page.locator('[data-id="tahquamenon"][data-gis-multi-oid="207,208"]').count(),1);
     assert.equal(await page.locator('[data-id="tahquamenon"] a[href="/tahquamenon-falls/"]').count()>0,true);
