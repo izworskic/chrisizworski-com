@@ -49,7 +49,7 @@ const referencePlot=(r,shadow,guideOnly)=>referenceSafe(r)&&
    assert.equal(valid,true,'unsafe published source '+r.id);
    for(const shadow of [0,1])for(const guideOnly of [0,1]){
      assert.equal(e.wa_plot(K[r.kind],ROLE[r.mapRole],coordinates(r),shadow,guideOnly)===1,
-       referencePlot(r,shadow,guideOnly),'map pin '+r.id);
+       Boolean(referencePlot(r,shadow,guideOnly)),'map pin '+r.id);
      comparisons++;
    }
    const replaced=(r.linkedGisIds||[]).some(x=>gisIds.has(x))?1:0;
