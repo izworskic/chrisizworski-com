@@ -43,6 +43,9 @@ const intentionalRetirements = new Set([
 ]);
 
 const intentionalChanges = new Set([
+  // Nov 13 2026: owner-approved Freighter View Farms shared masthead and skin on the garden guides (docs/GARDEN_FVF_UNIVERSE.md). Body copy is unchanged.
+  "/heirloom-vs-hybrid-seeds/",
+  "/michigan-native-plants/",
   // Oct 29: owner-corrected Prepared start date and identity context.
   "/chris-izworski-911/",
   // Oct 26: owner-approved lake-effect forecast → winter-decision cards added to source while the clean snapshot predates this release. Existing page audits remain active.\n  "/lake-effect-snow/",\n  // Oct 26: verified Bridge live ribbon answer-jump CSS intentionally differs from older live crawl snapshot; no ad styling changes.

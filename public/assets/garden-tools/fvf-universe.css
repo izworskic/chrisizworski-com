@@ -84,3 +84,8 @@ body.fvfu .nav-strip a{display:inline-flex;align-items:center;min-height:44px;pa
 body.fvfu .nav-strip a:hover{background:transparent;color:var(--fvfu-teal-deep);text-decoration:underline;text-underline-offset:4px}
 body.fvfu .mm-name{font-family:var(--fvfu-display);font-weight:600;color:var(--fvfu-ink)}
 body.fvfu .lede,body.fvfu .gardener-note{font-family:var(--fvfu-body);color:var(--fvfu-ink)}
+
+/* Seed libraries: the dark hero becomes a mist band so the title reads in the shared ink */
+body.fvfu .hero{background:var(--fvfu-mist);color:var(--fvfu-ink);padding:40px 24px 36px}
+body.fvfu .hero .eyebrow{color:var(--fvfu-pine)}
+body.fvfu .hero .sub{color:var(--fvfu-muted)}

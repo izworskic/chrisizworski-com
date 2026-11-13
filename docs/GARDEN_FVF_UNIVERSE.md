@@ -79,8 +79,10 @@ link on this page can be removed.
 
 - `/michigan-frost-dates/`: merged in PR #1664, deployed, public page and assets verified.
 - `/michigan-garden-pest-watch/`: merged in PR #1666, deployed, public page verified.
-- Soil temperature, planting calendar, tomatoes, seed starting, variety matchmaker:
-  implemented, each checked in headless Chrome at 390 px. The matchmaker keeps its own
-  centered masthead and takes the seal, wordmark and shared colors.
-- Remaining: the inline-styled guides, Seed Saving Lab, leafcutter bees, the gardening hub.
-  No visitor outcome is claimed for any of this.
+- Soil temperature, planting calendar, tomatoes, seed starting, variety matchmaker: merged in
+  PR #1667, deployed, public pages verified.
+- Seed saving guide, heirloom vs hybrid, native plants, seed libraries, last spring freeze,
+  companion planting, heirloom tomatoes: implemented, each checked in headless Chrome at
+  390 px. The seed libraries dark hero became a mist band so its title stays readable.
+- Remaining: Seed Saving Lab, leafcutter bees, the gardening hub, and the seal in the blog's
+  own header. No visitor outcome is claimed for any of this.
