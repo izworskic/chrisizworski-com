@@ -198,7 +198,7 @@ let ROUTE_BUSY=false;
 function invalidateRoute(){ROUTE_REQUEST_ID++;if(ROUTE_ABORT)ROUTE_ABORT.abort();ROUTE_ABORT=null;ROUTE_BUSY=false;if(ROUTE_LINE){ROUTE_LINE.remove();ROUTE_LINE=null;}const host=routeResultHost();if(host){host.hidden=true;host.innerHTML='';}}
 function clearRoutePoints(){invalidateRoute();for(const m of ROUTE_MARKERS)m?.remove?.();ROUTE_MARKERS=[];ROUTE_POINTS=[];}
 function setRouteHint(text,on=true){for(const id of ['routeHint','mapRouteHint']){const el=$('#'+id);if(el){el.hidden=!on;el.textContent=text;}}}
-function routeAvailable(){return JUNCTION_INDEX.length>0;}
+function routeAvailable(){return Array.isArray(DATA?.routeJunctions?.features)&&DATA.routeJunctions.features.some(f=>f?.geometry?.type==='Point');}
 // Search is confined to already published, closure-filtered DNR router nodes.
 // Every result is labeled as a mapped junction, not a verified trailhead.
 function renderJunctionMatches(){
