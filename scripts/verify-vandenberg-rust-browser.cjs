@@ -51,6 +51,7 @@ const mapStub=()=>{
       const page=await context.newPage(),errors=[];
       page.on('pageerror',e=>errors.push(e.message));
       await page.addInitScript(mapStub);
+      await page.addInitScript(()=>{window.__VG_RUST_QA_DEBUG=true;});
       await page.route('https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',route=>route.fulfill({status:200,body:'',contentType:'text/javascript'}));
       await page.route('https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',route=>route.fulfill({status:200,body:'',contentType:'text/css'}));
       const response=await page.goto(url,{waitUntil:'domcontentloaded',timeout:30000});
@@ -60,6 +61,7 @@ const mapStub=()=>{
           const diagnostic=await page.evaluate(()=>({
             mapReady:document.querySelector('#vg-viewing-map')?.dataset.mapReady,
             rust:document.querySelector('#vg-viewing-map')?.dataset.rust,
+            mapError:document.querySelector('#vg-viewing-map')?.dataset.mapQaError,
             mapMarkup:document.querySelector('#vg-viewing-map')?.textContent?.slice(0,350),
             leaflet:!!window.L,
             guideLoaded:!!document.querySelector('#vg-map-places button'),
