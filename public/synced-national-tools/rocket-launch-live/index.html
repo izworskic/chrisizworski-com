@@ -17,14 +17,16 @@
 <link rel="stylesheet" href="/assets/vendor/leaflet-1.9.4.css?v=20261109-rocket-map-v2">
 <link rel="stylesheet" href="/assets/rocket-map-pins.css?v=20261107-origin-v1">
 <link rel="stylesheet" href="/assets/rocket-flight-desk.css?v=20261108-foundry-v2">
+<link rel="stylesheet" href="/assets/rocket-field-notes.css?v=20261113-place-vehicle-v1">
 <link rel="stylesheet" href="/national-tools/rocket-launch-live/styles.css?v=20261110-official-links-v1">
 <link rel="stylesheet" href="/national-tools/assets/launch-truth-desk.css?v=20261102-truth-v2">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5D2V2W7HN"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-Y5D2V2W7HN');</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://chrisizworski.com/national-tools/rocket-launch-live/#webpage","url":"https://chrisizworski.com/national-tools/rocket-launch-live/","name":"Rocket Launch Live USA: When and Where to Watch","description":"Upcoming U.S. rocket launches, public viewing locations, launch windows and weather guidance for six coastal regions.","dateModified":"2026-11-10","author":{"@id":"https://chrisizworski.com/#person"},"about":[{"@type":"Thing","name":"Rocket launch viewing"},{"@type":"Thing","name":"U.S. coastal spaceports"}]},{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"U.S. Tools","item":"https://chrisizworski.com/national-tools/"},{"@type":"ListItem","position":3,"name":"Rocket Launch Live USA","item":"https://chrisizworski.com/national-tools/rocket-launch-live/"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://chrisizworski.com/national-tools/rocket-launch-live/#webpage","url":"https://chrisizworski.com/national-tools/rocket-launch-live/","name":"Rocket Launch Live USA: When and Where to Watch","description":"Upcoming U.S. rocket launches, public viewing locations, launch windows and weather guidance for six coastal regions.","dateModified":"2026-11-13","author":{"@id":"https://chrisizworski.com/#person"},"about":[{"@type":"Thing","name":"Rocket launch viewing"},{"@type":"Thing","name":"U.S. coastal spaceports"}]},{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"U.S. Tools","item":"https://chrisizworski.com/national-tools/"},{"@type":"ListItem","position":3,"name":"Rocket Launch Live USA","item":"https://chrisizworski.com/national-tools/rocket-launch-live/"}]}]}</script>
 <script src="/assets/leaflet-1.9.4.js?v=20261109-rocket-map-v2" defer></script>
 <script defer src="/assets/rocket-map-pins.js?v=20261107-origin-v1"></script>
 <script defer src="/assets/rocket-flight-desk.js?v=20261110-voice-v1"></script>
+<script defer src="/assets/rocket-field-notes.js?v=20261113-place-vehicle-v1"></script>
 <script defer src="/assets/rocket-engagement-funnel.js?v=20261108-schedule-first-v1"></script>
 <script defer src="/_vercel/insights/script.js"></script>
 <script src="/assets/rocket-florida-access.js?v=20261112-playalinda-primary" defer></script>
@@ -192,6 +194,21 @@
        <div id="rl-region-links" class="rl-region-links"></div>
      </div>
    </div>
+   <aside class="rl-place-story" id="rl-place-story" data-region-story="none" aria-labelledby="rl-place-note-title">
+     <div class="rl-place-main">
+       <span class="rl-place-kicker">A launch-watcher’s field notes / the coast</span>
+       <h3 id="rl-place-note-title">Every launch coast has its own story</h3>
+       <p id="rl-place-note-copy">The Atlantic shoreline, the Pacific hills, the Texas coast and Virginia marshes can make the same countdown feel entirely different. Choose a coast above to explore what makes it special.</p>
+       <div class="rl-place-links">
+         <a id="rl-place-note-guide" hidden></a>
+         <a id="rl-place-note-source" target="_blank" rel="noopener noreferrer" hidden></a>
+       </div>
+     </div>
+     <div class="rl-place-aside">
+       <div><h4>What to notice</h4><p id="rl-place-note-watch">Select a launch region to see what the landscape can reveal—and what the horizon may hide.</p></div>
+       <div><h4>Before heading out</h4><p id="rl-place-note-check">A beautiful viewpoint is not automatically a permitted place to watch. Follow the region’s official access guidance.</p></div>
+     </div>
+   </aside>
  </section>
 
  <section class="rl-section rl-mission-section" aria-labelledby="rl-next-title">
@@ -324,6 +341,21 @@
        </div>
      </article>
    </div>
+   <section class="rl-vehicle-notes" id="rl-vehicle-field-notes" data-vehicle-family="unknown" aria-labelledby="rl-vehicle-note-title">
+     <div class="rl-vehicle-notes-header">
+       <div><span class="rl-vehicle-notes-kicker">A launch-watcher’s field notes / the rocket</span>
+         <h3 id="rl-vehicle-note-title">What should you watch for after liftoff?</h3>
+         <p id="rl-vehicle-note-intro" class="rl-vehicle-note-intro">Choose a flight with a named rocket to explore its engines, stages and possible recovery. We won’t guess the vehicle from a mission title.</p>
+       </div>
+       <a id="rl-vehicle-note-source" class="rl-vehicle-source" target="_blank" rel="noopener noreferrer" hidden></a>
+     </div>
+     <div class="rl-vehicle-beats">
+       <div class="rl-vehicle-beat"><span class="rl-vehicle-beat-n">01 / IGNITION</span><h4 id="rl-vehicle-beat-1-title">The bright first moments</h4><p id="rl-vehicle-beat-1-copy">Watch the rocket clear the horizon. Engine sound can arrive later than the light.</p></div>
+       <div class="rl-vehicle-beat"><span class="rl-vehicle-beat-n">02 / THE CLIMB</span><h4 id="rl-vehicle-beat-2-title">The long climb</h4><p id="rl-vehicle-beat-2-copy">Stages and flight paths vary by rocket and mission.</p></div>
+       <div class="rl-vehicle-beat"><span class="rl-vehicle-beat-n">03 / WHAT'S NEXT</span><h4 id="rl-vehicle-beat-3-title">The next chapter</h4><p id="rl-vehicle-beat-3-copy">For a specific landing, separation or test objective, look for the operator’s mission plan.</p></div>
+     </div>
+     <p class="rl-vehicle-note-foot">These are typical features of a rocket family, not a prediction of the selected flight’s outcome. The operator’s published mission plan is the source for exact sequence and recovery details.</p>
+   </section>
    <div class="rl-visual-gallery-head">
       <div><h3>Recognize the rockets</h3><p>From Falcon 9 to sounding rockets, get familiar with the machines behind the launches. Photos show the rocket family, not necessarily this specific flight.</p></div>
       <span>NASA-credited archival images</span>
