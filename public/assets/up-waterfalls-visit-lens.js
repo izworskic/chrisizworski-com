@@ -75,15 +75,21 @@ function gather(){
  const valid=Number.isFinite(parsed.valueOf());
  const when=valid?parsed:new Date();
  const limit=budget.value==='all'?Infinity:Number(budget.value);
+ const native=window.UPWaterfallsRust?.current?.()||null;
  const active=cards.filter(c=>!c.hidden);
  // An M-28 park-side view and an unfinished falls overlook should not be unsolicited hiking recommendations.
  // Visitors specifically searching those names may inspect them with the explicit limitations intact.
  const searched=(document.getElementById('q')?.value||'').trim().toLowerCase();
  const explicitOnly=new Set(['scott-falls','houghton-douglass-falls']);
- const qualifying=active.map(c=>({c,effort:duration(c),access:guidance(c,when)})).filter(x=>
+ const qualifying=active.map(c=>{
+  const effort=duration(c), access=guidance(c,when);
+  const p=native?.policy(c,when);
+  return {c,effort,access:p?{...access,excluded:p.excluded,level:p.level}:access};
+ }).filter(x=>
   (!explicitOnly.has(x.c.dataset.id)||(searched&&x.c.dataset.name.toLowerCase().includes(searched)))&&!x.access.excluded&&
- (Number.isFinite(limit)?x.effort.max!==null&&x.effort.max<=limit:true));
+ (native?native.budgetAllows(x.effort.max,limit):(Number.isFinite(limit)?x.effort.max!==null&&x.effort.max<=limit:true)));
  qualifying.sort((x,y)=>{
+  if(native)return native.compare(x,y);
   const rank=x=>x.access.level==='check'?0:1;
   return rank(x)-rank(y)||(hasOfficialEvidence(y.c)?1:0)-(hasOfficialEvidence(x.c)?1:0)||
    (x.effort.max??999)-(y.effort.max??999)||x.c.dataset.name.localeCompare(y.c.dataset.name);
@@ -151,7 +157,10 @@ region.addEventListener('change',()=>{lensRegion.value=region.value;render();});
 for(const id of ['visit-budget','visit-date','effort','access'])document.getElementById(id)?.addEventListener('change',render);
 document.getElementById('q')?.addEventListener('input',render);
 document.addEventListener('upfall:selected',e=>{const id=e.detail?.id;if(!id||!picks.querySelector('[data-visit-pick="'+id+'"]'))return;selectedId=id;render();});
-window.UPWaterfallVisitLens={review(id){const card=cards.find(c=>c.dataset.id===id);const when=new Date((date.value||localISO())+'T12:00:00');return card?guidance(card,Number.isFinite(when.valueOf())?when:new Date()):null;},travelDate(){return date.value;}};
+window.UPWaterfallVisitLens={review(id){const card=cards.find(c=>c.dataset.id===id);const when=new Date((date.value||localISO())+'T12:00:00');return card?guidance(card,Number.isFinite(when.valueOf())?when:new Date()):null;},travelDate(){return date.value;},engine(){return window.UPWaterfallsRust?.current?.()?.engine||'javascript-fallback';}};
 date.addEventListener('change',()=>document.dispatchEvent(new Event('upfall:review-updated')));
 render();
+// Hydrate Rust after the HTML-first planner renders. Every card/month/time
+// budget is validated before Rust may influence a visitor recommendation.
+window.UPWaterfallsRust?.load?.(cards,guidance,hasOfficialEvidence,duration).then(engine=>{if(engine)render();});
 })();
