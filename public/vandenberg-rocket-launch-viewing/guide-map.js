@@ -327,7 +327,8 @@
       initRust();
       // Adjust dimensions after the first layout pass without timers.
       requestAnimationFrame(()=>state.map.invalidateSize(false));
-    }catch(_){
+    }catch(error){
+      if(window.__VG_RUST_QA_DEBUG===true)root.dataset.mapQaError=String(error).slice(0,180);
       root.replaceChildren();
       const fallback=$('div','vg-map-placeholder');
       fallback.append($('strong','','The map isn’t loading'),
