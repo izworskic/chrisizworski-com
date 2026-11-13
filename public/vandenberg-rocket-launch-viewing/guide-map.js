@@ -36,7 +36,16 @@
     }catch(_){return null;}
   };
   const kind=place=>CATEGORIES.coast.has(place.kind)?'coast':'town';
-  // Once loaded, Rust owns category filtering and relative comparison scoring.\n  // Before then, the original map remains usable without WebAssembly.\n  const visible=place=>{\n    if(state.rust){\n      const index=state.places.indexOf(place);\n      const group=state.filter==='coast'?1:state.filter==='town'?2:0;\n      return index>=0&&state.rust.vg_visible(index,group)===1;\n    }\n    return state.filter==='all'||kind(place)===state.filter;\n  };
+  // Once loaded, Rust owns category filtering and relative comparison scoring.
+  // Before then, the original map remains usable without WebAssembly.
+  const visible=place=>{
+    if(state.rust){
+      const index=state.places.indexOf(place);
+      const group=state.filter==='coast'?1:state.filter==='town'?2:0;
+      return index>=0&&state.rust.vg_visible(index,group)===1;
+    }
+    return state.filter==='all'||kind(place)===state.filter;
+  };
   const sceneLabel=place=>place.kind==='park-sunset'?'Closes at sunset':
     place.kind==='surf-hours'?'8 a.m.–6 p.m. · check launch restrictions':
     place.kind==='college'?'Check campus parking rules':
