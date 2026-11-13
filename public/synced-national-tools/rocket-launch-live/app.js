@@ -14,8 +14,10 @@
   };
   const set = (id, value) => { const n = $(id); if (n) n.textContent = value ?? '—'; };
   function updateAtlasStatus(){
-    const offline=$('rl-coast-map')?.dataset.tiles==='reference-only';
-    const prefix=offline?'The map background isn’t loading; coastlines are shown instead. ':'';
+    const tiles=$('rl-coast-map')?.dataset.tiles;
+    const offline=tiles==='reference-only';
+    const prefix=offline?'The map background isn’t loading; coastlines are shown instead. ':
+      tiles==='pending'?'The map background is still loading. ':'';
     const message=state.scheduleFailed?
       'The launch calendar isn’t loading, but you can still browse the launch sites.':
       state.data?
@@ -422,8 +424,19 @@
       const osm = window.L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 18, attribution: osmCredit
       }).addTo(map);
-      root.dataset.tiles = 'osm-fallback';
-      let osmLoaded=false,osmErrors=0;
+      // Do not call a blocked OSM request an outage while keyed CARTO
+      // is still being checked. A first-load screenshot can otherwise show
+      // a false offline warning that vanishes when CARTO finishes loading.
+      root.dataset.tiles = 'pending';
+      let osmLoaded=false,osmErrors=0,cartoPending=true;
+      window.setTimeout(()=>{
+        // If both providers are stalled rather than returning errors,
+        // the public-domain coastlines remain a truthful working fallback.
+        if(!osmLoaded&&root.dataset.tiles!=='carto-keyed'){
+          root.dataset.tiles='reference-only';
+          updateAtlasStatus();
+        }
+      },10000);
       osm.on('tileload',()=>{
         osmLoaded=true;
         if(root.dataset.tiles!=='carto-keyed'){
@@ -432,7 +445,7 @@
         }
       });
       osm.on('tileerror',()=>{
-        if(++osmErrors>=2&&!osmLoaded&&root.dataset.tiles!=='carto-keyed'){
+        if(++osmErrors>=2&&!osmLoaded&&!cartoPending&&root.dataset.tiles!=='carto-keyed'){
           root.dataset.tiles='reference-only';
           updateAtlasStatus();
         }
@@ -440,7 +453,14 @@
       fetch('/api/carto-basemap-config', { credentials: 'same-origin', signal: AbortSignal.timeout(6500) })
         .then(response => response.ok ? response.json() : null)
         .then(config => {
-          if (config?.provider !== 'CARTO' || typeof config.key !== 'string' || !config.key.trim()) return;
+          if (config?.provider !== 'CARTO' || typeof config.key !== 'string' || !config.key.trim()){
+            cartoPending=false;
+            if(!osmLoaded&&osmErrors>=2){
+              root.dataset.tiles='reference-only';
+              updateAtlasStatus();
+            }
+            return;
+          }
           const keyedUrl = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=' +
             encodeURIComponent(config.key.trim());
           const carto = window.L.tileLayer(keyedUrl, {
@@ -451,6 +471,7 @@
           carto.on('tileload', () => {
             if (!confirmed && map.hasLayer(carto)) {
               confirmed = true;
+              cartoPending=false;
               root.dataset.tiles = 'carto-keyed';
               updateAtlasStatus();
               if (map.hasLayer(osm)) map.removeLayer(osm);
@@ -458,6 +479,7 @@
           });
           carto.on('tileerror', () => {
             if (++errors >= 2 && !confirmed) {
+              cartoPending=false;
               if (map.hasLayer(carto)) map.removeLayer(carto);
               if (!map.hasLayer(osm)) osm.addTo(map);
               root.dataset.tiles = osmLoaded?'osm-fallback':'reference-only';
@@ -466,7 +488,15 @@
           });
           carto.addTo(map);
         })
-        .catch(() => { if(root.dataset.tiles!=='reference-only')root.dataset.tiles='osm-fallback';updateAtlasStatus(); });
+        .catch(() => {
+          cartoPending=false;
+          // An OSM layer existing is not evidence that even one tile loaded.
+          // Preserve the coastline fallback when the config is inaccessible.
+          if(root.dataset.tiles!=='carto-keyed'){
+            root.dataset.tiles=osmLoaded?'osm-fallback':'reference-only';
+          }
+          updateAtlasStatus();
+        });
       const bounds = [];
       for (const r of regions) {
         if (!Number.isFinite(r.lat) || !Number.isFinite(r.lon)) continue;
