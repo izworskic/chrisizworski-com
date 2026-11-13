@@ -1,25 +1,32 @@
 name: Snowmobile Rust WASM parity
 on:
   push:
-    branches:
-      - feature/snowmobile-rust-routing-20261113
+    branches: [main]
     paths:
-      - rust/snowmobile-routing/**
-      - lib/snowmobile/**
-      - scripts/build-snowmobile-rust.cjs
-      - scripts/verify-snowmobile-rust.cjs
-      - tests/snowmobile-rust.test.js
-      - .github/workflows/snowmobile-rust-wasm.yml
+      - 'rust/snowmobile-routing/**'
+      - 'lib/snowmobile/**'
+      - 'public/assets/snowmobile-region.js'
+      - 'public/assets/snowmobile-route-picker.js'
+      - 'scripts/build-snowmobile-rust.cjs'
+      - 'scripts/verify-snowmobile-rust.cjs'
+      - 'scripts/benchmark-snowmobile-routing.mjs'
+      - 'tests/snowmobile-rust.test.js'
+      - 'tests/snowmobile-route-ux.test.js'
+      - '.github/workflows/snowmobile-rust-wasm.yml'
   pull_request:
     paths:
-      - rust/snowmobile-routing/**
-      - lib/snowmobile/**
-      - scripts/build-snowmobile-rust.cjs
-      - scripts/verify-snowmobile-rust.cjs
-      - tests/snowmobile-rust.test.js
-      - .github/workflows/snowmobile-rust-wasm.yml
+      - 'rust/snowmobile-routing/**'
+      - 'lib/snowmobile/**'
+      - 'public/assets/snowmobile-region.js'
+      - 'public/assets/snowmobile-route-picker.js'
+      - 'scripts/build-snowmobile-rust.cjs'
+      - 'scripts/verify-snowmobile-rust.cjs'
+      - 'scripts/benchmark-snowmobile-routing.mjs'
+      - 'tests/snowmobile-rust.test.js'
+      - 'tests/snowmobile-route-ux.test.js'
+      - '.github/workflows/snowmobile-rust-wasm.yml'
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   wasm-parity:
@@ -45,18 +52,9 @@ jobs:
       - name: Verify binary, ABI, closure-aware routes and parity
         run: |
           node scripts/verify-snowmobile-rust.cjs --wasm=/tmp/snowmobile-routing.wasm
-          node --test tests/snowmobile-routing.test.js tests/snowmobile-rust.test.js
+          node --check public/assets/snowmobile-region.js
+          node --test tests/snowmobile-routing.test.js tests/snowmobile-rust.test.js tests/snowmobile-route-ux.test.js
           node scripts/benchmark-snowmobile.mjs --check
-      - name: Check binary remains reproducible on PR
-        if: github.event_name == 'pull_request'
+          node scripts/benchmark-snowmobile-routing.mjs --check
+      - name: Assert shipped WASM matches pinned Rust 1.90.0 build
         run: git diff --exit-code -- lib/snowmobile/rust-binary.mjs
-      - name: Commit compiler-generated binary on feature push
-        if: github.event_name == 'push'
-        run: |
-          if ! git diff --quiet -- lib/snowmobile/rust-binary.mjs; then
-            git config user.name 'github-actions[bot]'
-            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-            git add lib/snowmobile/rust-binary.mjs
-            git commit -m "build(snowmobile): pin verified Rust routing WASM bytes"
-            git push origin HEAD:refs/heads/feature/snowmobile-rust-routing-20261113
-          fi
