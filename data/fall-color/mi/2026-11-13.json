@@ -1,0 +1,125 @@
+{
+  "date": "2026-11-13",
+  "updated": "2026-11-13T18:36:05.863Z",
+  "body": "Michigan's main fall-color peak has passed. The regional seasonal model now places the state beyond its usual peak windows; that is not a direct report of leaves observed today.\n\nSome oak, beech, tamarack, and sheltered lakeshore color can linger after the maple peak. Weather inputs refresh, but they cannot establish how many leaves remain on a particular trail or scenic drive.\n\nFor a late-season outing, check a dated report from the destination or land manager before traveling. The map's date slider still lets you review this year's usual peak windows or plan for next fall.",
+  "generationMethod": "Deterministic model summary",
+  "conditionsUpdated": "2026-11-13T18:36:05.860Z",
+  "sourceEvidence": [
+    {
+      "region": "wup",
+      "modeledPercent": 0,
+      "source": {
+        "drivers": [
+          "regional climatology"
+        ],
+        "anchorShiftDays": 0,
+        "anchorConfidence": "low",
+        "satelliteDate": "2026-10-16",
+        "satelliteAgeDays": 29,
+        "satelliteWeight": 0
+      }
+    },
+    {
+      "region": "eup",
+      "modeledPercent": 0,
+      "source": {
+        "drivers": [
+          "regional climatology"
+        ],
+        "anchorShiftDays": 0,
+        "anchorConfidence": "low",
+        "satelliteDate": "2026-10-16",
+        "satelliteAgeDays": 29,
+        "satelliteWeight": 0
+      }
+    },
+    {
+      "region": "tip",
+      "modeledPercent": 0,
+      "source": {
+        "drivers": [
+          "regional climatology"
+        ],
+        "anchorShiftDays": 0,
+        "anchorConfidence": "low",
+        "satelliteDate": "2026-10-16",
+        "satelliteAgeDays": 29,
+        "satelliteWeight": 0
+      }
+    },
+    {
+      "region": "nwl",
+      "modeledPercent": 0,
+      "source": {
+        "drivers": [
+          "regional climatology"
+        ],
+        "anchorShiftDays": 0,
+        "anchorConfidence": "low",
+        "satelliteDate": "2026-10-16",
+        "satelliteAgeDays": 29,
+        "satelliteWeight": 0
+      }
+    },
+    {
+      "region": "nel",
+      "modeledPercent": 0,
+      "source": {
+        "drivers": [
+          "regional climatology"
+        ],
+        "anchorShiftDays": 0,
+        "anchorConfidence": "low",
+        "satelliteDate": "2026-10-16",
+        "satelliteAgeDays": 29,
+        "satelliteWeight": 0
+      }
+    },
+    {
+      "region": "cen",
+      "modeledPercent": 2,
+      "source": {
+        "drivers": [
+          "regional climatology"
+        ],
+        "anchorShiftDays": 0,
+        "anchorConfidence": "low",
+        "satelliteDate": "2026-10-16",
+        "satelliteAgeDays": 29,
+        "satelliteWeight": 0
+      }
+    },
+    {
+      "region": "swl",
+      "modeledPercent": 2,
+      "source": {
+        "drivers": [
+          "regional climatology"
+        ],
+        "anchorShiftDays": 0,
+        "anchorConfidence": "low",
+        "satelliteDate": "2026-10-16",
+        "satelliteAgeDays": 29,
+        "satelliteWeight": 0
+      }
+    },
+    {
+      "region": "sel",
+      "modeledPercent": 8,
+      "source": {
+        "drivers": [
+          "regional climatology",
+          "recent weather",
+          "canopy camera anchor"
+        ],
+        "anchorShiftDays": -10,
+        "anchorConfidence": "low",
+        "satelliteDate": "2026-10-16",
+        "satelliteAgeDays": 29,
+        "satelliteWeight": 0
+      }
+    }
+  ],
+  "publisher": "Chris Izworski",
+  "disclosure": "Automated summary composed from regional fall-color model estimates and weather inputs, published by Chris Izworski without generative AI. This is not a firsthand field report; compare current regional readings and their source dates."
+}
