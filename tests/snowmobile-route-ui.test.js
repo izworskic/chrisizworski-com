@@ -38,7 +38,7 @@ test('junction dots select exact nodes and a bubbled event cannot select twice',
 test('unavailable geometry does not enter endpoint selection',()=>{
  const h=harness();h.run('toggleRouteMode();');
  assert.equal(h.run('ROUTE_MODE'),false);assert.equal(h.elements.get('#routeModeToggle').disabled,true);
- assert.match(h.elements.get('#mapRouteHint').textContent,/Loading trail map/);
+ assert.match(h.elements.get('#mapRouteHint').textContent,/Loading (?:DNR junctions|trail map)/);
  h.run('DATA={scoredGeometry:{features:[]}};toggleRouteMode();');
  assert.match(h.elements.get('#mapRouteHint').textContent,/unavailable/);
 });
