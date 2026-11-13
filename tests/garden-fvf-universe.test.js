@@ -23,7 +23,7 @@ test('shared garden skin is static, self-hosted and scoped to opted-in pages', (
     .flatMap((sel) => sel.split(','))
     .filter((sel) => !/^(body\.fvfu|\.fvfu-)/.test(sel.trim()));
   assert.deepStrictEqual(unscoped, [], 'every rule is scoped to body.fvfu or a fvfu- class');
-  assert.ok(!css.includes('—'), 'no em dashes');
+  assert.ok(!css.includes(String.fromCharCode(8212)), 'no long dashes');
 });
 
 test('answer colors keep their meaning: the skin never repaints garden kit states', () => {
