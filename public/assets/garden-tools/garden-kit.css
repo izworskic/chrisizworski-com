@@ -1,5 +1,5 @@
 /* Garden tool kit styles: the soft, answer-first look shared with the Seed Saving Lab. */
-.gk{--gk-ink:#26302b;--gk-muted:#5f6a64;--gk-pine:#3f6b55;--gk-sage:#7fa58a;--gk-sage-soft:#e8f0ea;--gk-clay:#c4623f;--gk-clay-soft:#fbece5;--gk-violet:#8a6fc4;--gk-gold:#d9a64a;--gk-line:#e4ddcd;--gk-cream:#fffdf8;color:var(--gk-ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.55}
+.gk{--gk-ink:#26302b;--gk-muted:#5f6a64;--gk-pine:#3f6b55;--gk-sage:#7fa58a;--gk-sage-soft:#e8f0ea;--gk-clay:#c4623f;--gk-clay-soft:#fbece5;--gk-violet:#8a6fc4;--gk-gold:#d9a64a;--gk-line:#e4ddcd;--gk-cream:#fffdf8;color:var(--gk-ink);font-family:"Instrument Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.55}
 .gk *{box-sizing:border-box}
 .gk a{color:var(--gk-pine)}.gk a.gk-btn{color:#fff;text-decoration:none}
 .gk-card{background:var(--gk-cream);border:1px solid var(--gk-line);border-radius:20px;padding:22px;margin:18px 0 10px;box-shadow:0 1px 2px rgba(40,50,40,.04),0 8px 28px rgba(40,50,40,.05)}
@@ -20,7 +20,7 @@
 .gk-badge{display:inline-flex;align-items:center;gap:6px;background:#fff;border-radius:999px;padding:4px 12px;font-size:13px;font-weight:700;color:var(--gk-pine)}
 .gk-badge::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
 .gk-answer.wait .gk-badge{color:#8a5a00}.gk-answer.no .gk-badge{color:#9a3f22}.gk-answer.info .gk-badge{color:#3a5577}
-.gk-answer h2,.gk-answer h3.gk-title{font-family:Georgia,"Times New Roman",serif;font-weight:400;font-size:28px;line-height:1.2;margin:10px 0 8px;color:var(--gk-ink)}
+.gk-answer h2,.gk-answer h3.gk-title{font-family:"Playfair Display",Georgia,"Times New Roman",serif;font-weight:400;font-size:28px;line-height:1.2;margin:10px 0 8px;color:var(--gk-ink)}
 .gk-answer p{margin:0 0 10px;font-size:16px}
 .gk-steps{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:8px}
 .gk-steps li{background:rgba(255,255,255,.75);border-radius:12px;padding:10px 12px;font-size:15px}

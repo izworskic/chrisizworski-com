@@ -131,3 +131,19 @@ for (const slug of IDENTITY_ONLY) {
     assert.match(html, /class="fvf-wordmark"[^>]*>Freighter View Farms</);
   });
 }
+
+test('gardening hub: garden content takes the shared type, site chrome keeps its own', () => {
+  const html = fs.readFileSync(pub('michigan-gardening', 'index.html'), 'utf8');
+  assert.ok(html.includes('/assets/garden-tools/fvf-identity.css'));
+  assert.ok(!html.includes('fvf-universe.css'));
+  assert.ok(html.includes('body.hm-page{--hm-display:"Playfair Display",Georgia,serif;--hm-body:"Instrument Sans"'));
+  assert.ok(html.includes(".hm-authority-ribbon,.hm-masthead,.hm-footer{--hm-display:'Fraunces'"), 'publication masthead and footer keep their fonts');
+  assert.ok(html.includes('<p class="hm-brand-title"><a href="/">Chris Izworski</a></p>'), 'site masthead untouched');
+  assert.ok(html.includes('freighter-view-farms-seal.webp" width="56" height="56"'));
+  assert.ok(html.includes('<span class="fvf-wordmark">Freighter View Farms</span>'));
+  assert.ok(html.includes('<h1>Michigan Gardening Tools</h1>'));
+  for (const file of ['garden-hub.css', 'season-story.css', 'garden-welcome.css', 'garden-kit.css']) {
+    const sheet = fs.readFileSync(pub('assets', 'garden-tools', file), 'utf8');
+    assert.ok(!/(^|[^"y],|[:\s])Georgia,serif/.test(sheet.replace(/"Playfair Display",Georgia/g, '')), `${file} leads serif stacks with the shared display face`);
+  }
+});

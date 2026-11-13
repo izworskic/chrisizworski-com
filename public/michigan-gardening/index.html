@@ -44,7 +44,7 @@
         "@id": "https://chrisizworski.com/#person"
       },
       "description": "A curated set of Michigan Zone 6a gardening guides covering planting calendars, frost dates, heirloom tomatoes, seed saving, and companion planting.",
-      "dateModified": "2026-11-03",
+      "dateModified": "2026-11-13",
       "hasPart": [
         {
           "@type": "Article",
@@ -239,12 +239,12 @@ a:hover { text-decoration: underline; }
 /* ─── START-HERE DECISION STRIP ─── */
 .start-here{margin-top:34px;background:var(--hm-surface,#fffefa);border:1px solid var(--border);border-top:4px solid var(--green);border-radius:10px;padding:26px 28px;box-shadow:var(--hm-shadow,0 10px 28px -12px rgba(24,46,42,.12))}
 .start-here .eyebrow{font:700 .72rem/1.2 var(--hm-body,sans-serif);text-transform:uppercase;letter-spacing:.13em;color:var(--lighter);margin-bottom:6px}
-.start-here h2{font:500 clamp(1.45rem,2.3vw,1.9rem)/1.2 var(--hm-display,'Fraunces',Georgia,serif);color:var(--text);margin-bottom:8px}
+.start-here h2{font:500 clamp(1.45rem,2.3vw,1.9rem)/1.2 var(--hm-display,'Fraunces',"Playfair Display",Georgia,serif);color:var(--text);margin-bottom:8px}
 .start-here>p{font:400 .95rem/1.6 var(--hm-body,sans-serif);color:var(--muted);max-width:780px}
 .start-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:18px}
 .start-card{display:flex;flex-direction:column;border:1px solid var(--border);border-top:3px solid var(--green);border-radius:8px;padding:18px 20px;background:var(--hm-paper,#f5f4ed);color:var(--text);transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease}
 .start-card:hover{text-decoration:none;border-color:var(--green);background:#fffefa;transform:translateY(-2px);box-shadow:var(--hm-shadow-hover)}
-.start-card strong{display:block;font:500 1.12rem/1.28 var(--hm-display,'Fraunces',Georgia,serif);color:var(--text);margin-bottom:6px}
+.start-card strong{display:block;font:500 1.12rem/1.28 var(--hm-display,'Fraunces',"Playfair Display",Georgia,serif);color:var(--text);margin-bottom:6px}
 .start-card span{display:block;color:var(--hm-ink-soft,#354c47);font:400 .86rem/1.58 var(--hm-body,sans-serif)}
 @media(max-width:1024px){.start-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:680px){.start-grid{grid-template-columns:1fr}}
@@ -443,8 +443,8 @@ a:hover { text-decoration: underline; }
 /* What to Plant Now */
 .pn-top{width:min(1260px,calc(100% - 36px));max-width:1260px;margin:28px auto 20px;background:var(--hm-surface,#fffefa);color:var(--text);text-align:left;padding:28px 32px;border:1px solid var(--border);border-top:4px solid var(--green);border-radius:10px;box-shadow:var(--hm-shadow,0 10px 28px -12px rgba(24,46,42,.12))}
 .pn-eyebrow{font:700 .73rem/1.2 var(--hm-body,sans-serif);text-transform:uppercase;letter-spacing:.14em;color:var(--lighter);margin-bottom:8px}
-.pn-top h1{font:500 clamp(2.1rem,3.6vw,3rem)/1.08 var(--hm-display,'Fraunces',Georgia,serif);letter-spacing:-.025em;margin:0 0 10px;max-width:none;color:var(--text)}
-.pn-lede{font:400 1.08rem/1.55 var(--hm-display,'Fraunces',Georgia,serif);font-style:italic;color:var(--hm-ink-soft,#354c47);max-width:none;margin:0}
+.pn-top h1{font:500 clamp(2.1rem,3.6vw,3rem)/1.08 var(--hm-display,'Fraunces',"Playfair Display",Georgia,serif);letter-spacing:-.025em;margin:0 0 10px;max-width:none;color:var(--text)}
+.pn-lede{font:400 1.08rem/1.55 var(--hm-display,'Fraunces',"Playfair Display",Georgia,serif);font-style:italic;color:var(--hm-ink-soft,#354c47);max-width:none;margin:0}
 .pn-wrap{width:min(1260px,calc(100% - 36px));max-width:1260px;margin:0 auto;padding:0}
 .pn-group{margin-top:12px}.pn-group h3{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#4e5b54;margin:0 0 4px}
 .pn-group p{margin:0;font-size:15px}
@@ -458,14 +458,19 @@ a:hover { text-decoration: underline; }
 .pn-sources{margin-top:14px;font-size:14px}.pn-sources summary{cursor:pointer;font-weight:650;color:var(--green)}
 .pn-sources blockquote{margin:6px 0 10px;padding-left:12px;border-left:3px solid #d7d0bf;color:#45524b}
 .pn-credit{font-size:12.5px;color:#6b746f;margin:14px 0 0}
-.pn-more{margin:24px 0 34px;background:var(--hm-surface,#fffefa);border:1px solid var(--border);border-radius:10px;padding:20px 24px}.pn-soil-link{display:block;font-size:13px;margin-top:4px}.pn-now{display:inline-block;margin-left:8px;border-radius:999px;background:#e3efe6;color:#2f5a43;font-size:12px;font-weight:700;padding:1px 8px}.pn-more h2{font:500 1.35rem/1.25 var(--hm-display,'Fraunces',Georgia,serif);color:var(--text);margin:0 0 10px}.pn-more ul{margin:0;padding-left:18px;columns:2;column-gap:28px}.pn-more li{margin:5px 0}
+.pn-more{margin:24px 0 34px;background:var(--hm-surface,#fffefa);border:1px solid var(--border);border-radius:10px;padding:20px 24px}.pn-soil-link{display:block;font-size:13px;margin-top:4px}.pn-now{display:inline-block;margin-left:8px;border-radius:999px;background:#e3efe6;color:#2f5a43;font-size:12px;font-weight:700;padding:1px 8px}.pn-more h2{font:500 1.35rem/1.25 var(--hm-display,'Fraunces',"Playfair Display",Georgia,serif);color:var(--text);margin:0 0 10px}.pn-more ul{margin:0;padding-left:18px;columns:2;column-gap:28px}.pn-more li{margin:5px 0}
 @media(max-width:680px){.pn-top{padding:22px 20px}.pn-lede{font-size:.98rem}.pn-more ul{columns:1}}
-.garden-thermal{border:1px solid #d1dbc9;border-radius:10px;background:#f6f8f1;margin:13px 0 18px;color:#293e31}.garden-thermal>summary{padding:15px 18px;cursor:pointer;display:block;list-style:none}.garden-thermal>summary::-webkit-details-marker{display:none}.garden-thermal>summary::before{content:'+';float:right;font-size:1.15rem;font-weight:700;color:#20573f}.garden-thermal[open]>summary::before{content:'−'}.garden-thermal-tag{font:700 .68rem system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#526a45;display:block;margin-bottom:4px}.garden-thermal>summary strong{font:600 1.09rem Georgia,serif;color:#254a35;display:block}.garden-thermal>summary small{font-size:.78rem;line-height:1.5;color:#46574b;display:block;margin-top:4px}.garden-thermal-body{padding:3px 18px 16px}.garden-thermal-body>p{font-size:.82rem;color:#3b5648}.garden-thermal-body>button{border:1px solid #23553d;color:#fff;background:#23553d;border-radius:7px;padding:11px 15px;font-weight:800;cursor:pointer}.garden-thermal-body>button:focus-visible{outline:3px solid #f3ac4c;outline-offset:3px}.garden-thermal-body>button:disabled{opacity:.6;cursor:progress}.garden-thermal-results{padding:12px 14px;background:#fff;border:1px solid #d1dbc9;border-radius:7px;margin:10px 0;color:#244a35;font-size:.86rem;line-height:1.6}.garden-thermal-results strong{color:#1d5339;font-size:1.08rem}.garden-thermal-source{font-size:.75rem!important;line-height:1.5}.garden-thermal-source a{color:#1b6741}@media(max-width:550px){.garden-thermal{margin-left:0;margin-right:0}.garden-thermal>summary,.garden-thermal-body{padding-left:12px;padding-right:12px}}
+.garden-thermal{border:1px solid #d1dbc9;border-radius:10px;background:#f6f8f1;margin:13px 0 18px;color:#293e31}.garden-thermal>summary{padding:15px 18px;cursor:pointer;display:block;list-style:none}.garden-thermal>summary::-webkit-details-marker{display:none}.garden-thermal>summary::before{content:'+';float:right;font-size:1.15rem;font-weight:700;color:#20573f}.garden-thermal[open]>summary::before{content:'−'}.garden-thermal-tag{font:700 .68rem "Instrument Sans",system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#526a45;display:block;margin-bottom:4px}.garden-thermal>summary strong{font:600 1.09rem "Playfair Display",Georgia,serif;color:#254a35;display:block}.garden-thermal>summary small{font-size:.78rem;line-height:1.5;color:#46574b;display:block;margin-top:4px}.garden-thermal-body{padding:3px 18px 16px}.garden-thermal-body>p{font-size:.82rem;color:#3b5648}.garden-thermal-body>button{border:1px solid #23553d;color:#fff;background:#23553d;border-radius:7px;padding:11px 15px;font-weight:800;cursor:pointer}.garden-thermal-body>button:focus-visible{outline:3px solid #f3ac4c;outline-offset:3px}.garden-thermal-body>button:disabled{opacity:.6;cursor:progress}.garden-thermal-results{padding:12px 14px;background:#fff;border:1px solid #d1dbc9;border-radius:7px;margin:10px 0;color:#244a35;font-size:.86rem;line-height:1.6}.garden-thermal-results strong{color:#1d5339;font-size:1.08rem}.garden-thermal-source{font-size:.75rem!important;line-height:1.5}.garden-thermal-source a{color:#1b6741}@media(max-width:550px){.garden-thermal{margin-left:0;margin-right:0}.garden-thermal>summary,.garden-thermal-body{padding-left:12px;padding-right:12px}}
+/* Freighter View Farms shared garden identity (docs/GARDEN_FVF_UNIVERSE.md): garden content takes the shared type; the site masthead, ribbon and footer keep the publication's own. */
+body.hm-page{--hm-display:"Playfair Display",Georgia,serif;--hm-body:"Instrument Sans",system-ui,-apple-system,sans-serif}
+.hm-authority-ribbon,.hm-masthead,.hm-footer{--hm-display:'Fraunces',Georgia,serif;--hm-body:'DM Sans',system-ui,-apple-system,sans-serif;font-family:var(--hm-body)}
+.pn-brand{margin-bottom:14px}
 </style>
 <link rel="stylesheet" href="/assets/garden-tools/garden-kit.css">
-<link rel="stylesheet" href="/assets/garden-tools/season-story.css?v=20261101c">
-<link rel="stylesheet" href="/assets/garden-tools/garden-hub.css?v=20261103p">
-<link rel="stylesheet" href="/assets/garden-tools/garden-welcome.css?v=20261101a">
+<link rel="stylesheet" href="/assets/garden-tools/season-story.css?v=20261113a">
+<link rel="stylesheet" href="/assets/garden-tools/garden-hub.css?v=20261113a">
+<link rel="stylesheet" href="/assets/garden-tools/garden-welcome.css?v=20261113a">
+<link rel="stylesheet" href="/assets/garden-tools/fvf-identity.css?v=20261113a">
 
 
 
@@ -535,7 +540,7 @@ a:hover { text-decoration: underline; }
 <!-- WHAT TO PLANT NOW -->
 <div class="pn-top">
   <div class="breadcrumb"><a href="/">Home</a> &rsaquo; Michigan Gardening Tools</div>
-  <div class="pn-eyebrow">Freighter View Farms &middot; Michigan</div>
+  <div class="fvf-brand pn-brand"><span class="fvf-seal"><img src="/assets/garden-tools/freighter-view-farms-seal.webp" width="56" height="56" alt="" decoding="async"></span><div><span class="fvf-wordmark">Freighter View Farms</span><span class="fvf-byline">Bay City &middot; Zone 6a &middot; Saginaw Bay</span></div></div>
   <h1>Michigan Gardening Tools</h1>
   <p class="pn-lede">A little help for the questions that come up between the seed packet and the harvest basket.</p>
 </div>
