@@ -15,7 +15,7 @@
   const buttons=document.getElementById('vg-map-filters');
   if(!root||!list||!detail||!buttons)return;
 
-  const state={map:null,places:[],markers:new Map(),filter:'all',active:null,rust:null,priority:0,marineConcern:0};
+  const state={map:null,places:[],markers:new Map(),filter:'all',active:null,rust:null,priority:2,marineConcern:0};
   const CATEGORIES={coast:new Set(['park-sunset','surf-hours']),
     town:new Set(['college','city-park'])};
   const COLOR={coast:'#d27a43',town:'#176a78'};
