@@ -138,9 +138,9 @@ test('discoverability, single canonical, hub handoff and transparent modificatio
  const route='/barking-sands-rocket-launch-viewing/',canonical='https://chrisizworski.com'+route;
  assert.equal((page.match(/rel="canonical"/g)||[]).length,1);
  assert.ok(page.includes('<link rel="canonical" href="'+canonical+'">'));
- assert.match(page,/"dateModified":"2026-11-10"/);
+ assert.match(page,/"dateModified":"2026-11-13"/);
  assert.equal((sitemap.match(/<loc>https:\/\/chrisizworski\.com\/barking-sands-rocket-launch-viewing\/<\/loc>/g)||[]).length,1);
- assert.match(sitemap,/<loc>https:\/\/chrisizworski\.com\/barking-sands-rocket-launch-viewing\/<\/loc>\s*<lastmod>2026-11-10<\/lastmod>/);
+ assert.match(sitemap,/<loc>https:\/\/chrisizworski\.com\/barking-sands-rocket-launch-viewing\/<\/loc>\s*<lastmod>2026-11-13<\/lastmod>/);
  assert.match(hub,/id="rl-nav-pmrf" href="\/barking-sands-rocket-launch-viewing\/"/);
  assert.match(hub,/app\.js\?v=20261113-rust-national-v1/);
  assert.match(js,/launchId=/);

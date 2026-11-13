@@ -27,13 +27,40 @@ const modes={
   facts:['This map is not for navigation','Check current Coast Guard notices','No approved marine viewing area'],
   links:[['https://navcen.uscg.gov/local-notices-to-mariners-by-cg-district','Current Coast Guard LNM hub'],['https://www.ecfr.gov/current/title-33/chapter-I/subchapter-P/part-165/section-165.1406','33 CFR 165.1406 official text']]}
 };
-const state={data:null,request:0,atlas:null,map:null,pins:new Map(),polygon:null,rocketPins:null,tilesReady:false,leaflet:null,loadingMap:false,ruleShown:true};
+const state={data:null,request:0,atlas:null,map:null,pins:new Map(),polygon:null,rocketPins:null,tilesReady:false,leaflet:null,loadingMap:false,ruleShown:true,rust:null,mode:'walk',agencyEvidence:null};
 const external=(href,label)=>{
  if(typeof href!=='string'||!/^https:\/\/[a-z0-9.-]+(?:\/|$)/i.test(href))return null;
  const a=document.createElement('a');a.href=href;a.target='_blank';a.rel='noopener noreferrer';a.textContent=label;return a;
 };
+function renderRustAccess(){
+ const panel=$('pmrf-rust-access');
+ if(!panel||!state.rust)return;
+ const evidence=state.agencyEvidence||{};
+ const policy=state.mode==='walk'?
+   evidence.beach?.status==='general-policy-retrieved':
+   state.mode==='guest'?
+   evidence.guest?.status==='recreation-only-confirmed':false;
+ const classification=state.rust.pmrfModeState(state.mode,policy);
+ if(classification===1){
+   panel.textContent='Rust source check: Navy general beach-recreation policy retrieved. This does not confirm an open beach today or public launch-viewing permission.';
+ }else if(classification===2){
+   panel.textContent='Rust source check: Navy MWR guest-card recreation policy retrieved. Guest privileges do not include range access or any launch-viewing authorization.';
+ }else if(classification===3){
+   panel.textContent='Rust source check: current Coast Guard broadcast and range notices are required for a boating decision. This website does not verify a safety zone is inactive or authorize a marine viewing position.';
+ }else{
+   panel.textContent='Rust source check: current applicable agency evidence is missing or unverified. Do not infer entry, beach access or launch-viewing permission.';
+ }
+ panel.dataset.decisionEngine='rust-wasm';
+ panel.hidden=false;
+}
+async function enableRustAccess(){
+ const engine=await window.RocketRangeRust?.load('pmrf',['pmrf-range','polihale-park']);
+ if(!engine)return;
+ state.rust=engine;renderRustAccess();
+}
 function changeMode(name){
  const m=modes[name];if(!m)return;
+ state.mode=name;renderRustAccess();
  set('mode-label',m.label);set('mode-title',m.title);set('mode-desc',m.desc);
  const facts=$('mode-facts');facts.replaceChildren();
  for(const value of m.facts){const s=document.createElement('span');s.textContent=value;facts.appendChild(s);}
@@ -123,6 +150,7 @@ async function loadOfficial(){
   const r=await fetch(OFFICIAL,{headers:{Accept:'application/json'},signal:AbortSignal.timeout(16000)});
   if(!r.ok)throw Error('source desk offline');
   const d=await r.json();if(!d?.ok||!d.evidence)throw Error('source desk incomplete');
+  state.agencyEvidence=d.evidence;renderRustAccess();
   const labels={
    beach:{'general-policy-retrieved':'Navy beach rules retrieved','unverified':'Changed or unverified','source-unavailable':'Official source unavailable','archived-policy-not-live':'2026-11-05 policy · live refresh blocked'},
    guest:{'recreation-only-confirmed':'Navy guest-card rules retrieved','unverified':'Changed or unverified','source-unavailable':'Official source unavailable','archived-policy-not-live':'2026-11-05 policy · live refresh blocked'},
@@ -134,6 +162,7 @@ async function loadOfficial(){
    (navyArchived?'The Navy website could not be refreshed automatically. The policy shown was reviewed November 5, 2026; it does not confirm a beach is open today. ':'')+
    'These website checks cannot tell us whether a gate is open or an offshore safety area is active right now.');
  }catch{
+  state.agencyEvidence=null;renderRustAccess();
   for(const k of ['beach','guest','park'])set('source-'+k,'Official check unavailable');
   set('source-checked','Agency updates could not be checked here. Follow the Navy, Hawaiʻi DLNR and Coast Guard links before going; do not assume access is open.');
  }
@@ -240,4 +269,5 @@ $('mission-picker')?.addEventListener('change',e=>{if(UUID.test(e.target.value))
 const requested=new URL(location.href).searchParams.get('launchId');
 void loadMission(requested&&UUID.test(requested)?requested:null);
 void loadOfficial();
+void enableRustAccess();
 })();

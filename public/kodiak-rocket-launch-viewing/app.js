@@ -8,7 +8,7 @@
  const UUID=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
  const $=id=>document.getElementById(id);
  const set=(id,v)=>{const node=$(id);if(node)node.textContent=v??'Not verified';};
- const state={places:[],map:null,pins:new Map(),osm:null,tiles:false,loading:null,request:0,data:null,rocketPins:null};
+ const state={places:[],map:null,pins:new Map(),osm:null,tiles:false,loading:null,request:0,data:null,rocketPins:null,rust:null,selection:'pasagshak'};
  const local=(iso,opts={})=>{const date=new Date(iso||'');return Number.isFinite(+date)?
   date.toLocaleString('en-US',{timeZone:'America/Anchorage',month:'short',day:'numeric',year:'numeric',...opts}):'Not verified';};
  const timing=m=>{
@@ -108,8 +108,32 @@
    script.onerror=()=>reject(Error('Map library failed'));document.head.appendChild(script);
   });return state.loading;
  }
+ function renderRustPlace(id){
+  const panel=$('k-rust-place-status');
+  if(!panel||!state.rust)return;
+  const kind=state.rust.placeClass(id);
+  if(kind===1){
+    panel.textContent='Pasagshak is a published recreation-area reference, not an approved launch viewpoint. Verify road closures and park access with the managing agencies.';
+  }else if(kind===2){
+    panel.textContent='Restricted working launch range. Do not use the spaceport map reference as an approach, spectator viewpoint, parking location or invitation to enter.';
+  }else return;
+  panel.dataset.decisionEngine='rust-wasm';
+  panel.hidden=false;
+ }
+ async function enableRust(){
+  try{
+   const places=await loadPlaces();
+   const engine=await window.RocketRangeRust?.load('kodiak',places.map(p=>p.id));
+   if(!engine)return;
+   state.rust=engine;
+   renderRustPlace(state.selection);
+  }catch(_){
+   // Original source-linked HTML and map remain usable if Rust is blocked.
+  }
+ }
  function choose(id,focus=true){
   const place=state.places.find(x=>x.id===id);if(!place)return;
+  state.selection=id;renderRustPlace(id);
   document.querySelectorAll('.place').forEach(card=>{card.dataset.selected=card.id==='place-'+id?'true':'false';});
   document.querySelectorAll('[data-map-place]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.mapPlace===id?'true':'false'));
   if(focus&&state.map){state.map.panTo([place.lat,place.lon],{animate:false});state.pins.get(id)?.openPopup();}
@@ -165,4 +189,5 @@
  $('mission-select')?.addEventListener('change',e=>{if(UUID.test(e.target.value))void loadMission(e.target.value);});
  const id=new URL(location.href).searchParams.get('launchId');
  void loadMission(id&&UUID.test(id)?id:null);
+ void enableRust();
 })();
