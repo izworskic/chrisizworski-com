@@ -65,3 +65,11 @@ source/asset parity passes, full route tests pass, and the PR checks are green.
   NOT fabricated hand-coded WASM.
 - Rust on its own is not an SEO improvement or evidence of faster pages.
   Compare observed API latency and route completion after release.
+
+## Final validation checklist
+
+The PR must contain the compiler-generated nonempty `rust-binary.mjs` payload.
+A fresh PR check must compare it byte-for-byte with Rust 1.90.0 output,
+run both routing test suites and the existing snowmobile benchmark.
+A separate agent branch verification check guards broader repository tests.
+If any check fails, leave the PR open and preserve the deployed JS route.
