@@ -98,9 +98,9 @@ test('source-backed road and range warnings are static even when API is down',()
 test('SEO and discovery point to one current canonical with bidirectional same-ID handoff',()=>{
  const url='https://chrisizworski.com/kodiak-rocket-launch-viewing/';
  assert.equal((sitemap.match(/<loc>https:\/\/chrisizworski\.com\/kodiak-rocket-launch-viewing\/<\/loc>/g)||[]).length,1);
- assert.match(sitemap,/<loc>https:\/\/chrisizworski\.com\/kodiak-rocket-launch-viewing\/<\/loc>\s*<lastmod>2026-11-10<\/lastmod>/);
+ assert.match(sitemap,/<loc>https:\/\/chrisizworski\.com\/kodiak-rocket-launch-viewing\/<\/loc>\s*<lastmod>2026-11-13<\/lastmod>/);
  assert.ok(index.includes('<link rel="canonical" href="'+url+'">'));
- assert.match(index,/"dateModified":"2026-11-10"/);
+ assert.match(index,/"dateModified":"2026-11-13"/);
  assert.match(index,/\/national-tools\/rocket-launch-live\/\?region=alaska/);
  assert.match(app,/launchId=/);
  assert.match(hub,/id="rl-nav-kodiak" href="\/kodiak-rocket-launch-viewing\/"/);
