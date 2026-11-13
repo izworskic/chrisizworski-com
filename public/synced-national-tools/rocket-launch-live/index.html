@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://basemaps.cartocdn.com">
 <link rel="stylesheet" href="/assets/vendor/leaflet-1.9.4.css?v=20261109-rocket-map-v2">
 <link rel="stylesheet" href="/assets/rocket-map-pins.css?v=20261107-origin-v1">
-<link rel="stylesheet" href="/assets/rocket-flight-desk.css?v=20261108-foundry-v2">
+<link rel="stylesheet" href="/assets/rocket-flight-desk.css?v=20261113-shift-alert-v1">
 <link rel="stylesheet" href="/assets/rocket-field-notes.css?v=20261113-place-vehicle-v1">
 <link rel="stylesheet" href="/national-tools/rocket-launch-live/styles.css?v=20261110-official-links-v1">
 <link rel="stylesheet" href="/national-tools/assets/launch-truth-desk.css?v=20261102-truth-v2">
@@ -33,7 +33,7 @@
  <script src="/national-tools/rocket-launch-live/vandenberg.js?v=20261110-voice-v1" defer></script>
 <script src="/assets/rocket-planning-rust.js?v=20261113-network-v1" defer></script>
 <script src="/national-tools/rocket-launch-live/app.js?v=20261113-rust-national-v1" defer></script>
-<script src="/national-tools/assets/launch-truth-desk.js?v=20261110-voice-v1" defer></script>
+<script src="/national-tools/assets/launch-truth-desk.js?v=20261113-shift-alert-v1" defer></script>
 </head>
 <body>
 <a class="rl-skip" href="#main-content">Skip to upcoming launches</a>
@@ -95,6 +95,7 @@
          <strong id="rl-flight-headline" role="status" aria-live="polite">Finding your rocket…</strong>
          <p id="rl-flight-note">A launch time is just the start. The right place to stand, local weather, and launch-day restrictions matter too.</p>
        </div>
+       <aside id="rl-launch-change-alert" class="rl-launch-change-alert" role="status" aria-live="polite" hidden></aside>
        <div class="rl-flight-picker">
          <label for="rl-flight-mission-select">Which launch are you watching?</label>
          <select id="rl-flight-mission-select" disabled aria-label="Select a mission on the chosen launch coast">
