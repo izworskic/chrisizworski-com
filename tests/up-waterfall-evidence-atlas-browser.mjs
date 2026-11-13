@@ -17,6 +17,22 @@ try{
  page.on('pageerror',e=>errors.push('Unhandled Atlas JS error: '+e.message));
  await page.goto(base+'/upper-peninsula-waterfalls/atlas/',{waitUntil:'domcontentloaded',timeout:30000});
  await page.locator('.ea-record').first().waitFor({timeout:20000});
+ await run('mobile: real Rust Evidence Atlas gates 640 sources and suppresses duplicate GIS points',async()=>{
+  await page.waitForFunction(()=>window.UPWaterfallEvidenceRust?.atlas?.()?.engine==='rust-wasm',{timeout:20000});
+  assert.equal(await page.evaluate(()=>window.UPWaterfallEvidenceRust.atlas().engine),'rust-wasm');
+  const decisions=await page.evaluate(()=>{
+    const r=window.UPWaterfallEvidenceRust.atlas();
+    const data=window.__upfallAtlasTestData;
+    return {
+      name:r.canPlot({kind:'name',mapRole:'no-geographic-point',lat:null,lng:null},new Set(),'all'),
+      tourism:r.canPlot({kind:'tourism',mapRole:'tourism-index-no-geographic-point-or-arrival',lat:null,lng:null},new Set(),'all'),
+      umbrella:r.canPlot({kind:'guide',mapRole:'multi-falls-day-use-reference-not-natural-waterfall-feature',lat:null,lng:null},new Set(),'all'),
+      shadow:r.canPlot({kind:'guide',mapRole:'natural-waterfall-feature-not-arrival',lat:46.4,lng:-89.1,linkedGisIds:[27]},new Set([27]),'all'),
+      guideOnly:r.canPlot({kind:'guide',mapRole:'natural-waterfall-feature-not-arrival',lat:46.4,lng:-89.1,linkedGisIds:[27]},new Set([27]),'guide')
+    };
+  });
+  assert.deepEqual(decisions,{name:false,tourism:false,umbrella:false,shadow:false,guideOnly:true});
+ });
  await run('mobile: 640 source records are available without claiming 640 waterfalls',async()=>{
   assert.match(await page.locator('#ea-count').innerText(),/640 source records matching/);
   assert.match(await page.locator('.ea-hero').innerText(),/Not every name has a trail/);
@@ -241,6 +257,17 @@ try{
    assert.equal(await geoUnavailable.locator('.ea-compare-action').getAttribute('aria-pressed'),'false');
  });
  await geoUnavailable.close();
+ const rustMissing=await browser.newPage({viewport:{width:390,height:844}});
+ await rustMissing.route('**/assets/up-waterfalls-atlas-regional.wasm.b64',route=>route.abort());
+ await rustMissing.goto(base+'/upper-peninsula-waterfalls/atlas/',{waitUntil:'domcontentloaded',timeout:30000});
+ await run('blocked Rust module preserves source-only evidence atlas and no invented map points',async()=>{
+   await rustMissing.locator('.ea-record').first().waitFor({timeout:15000});
+   assert.equal(await rustMissing.evaluate(()=>window.UPWaterfallEvidenceRust?.atlas?.()?.engine||'javascript-fallback'),'javascript-fallback');
+   await rustMissing.locator('#ea-kind').selectOption('name');
+   assert.match(await rustMissing.locator('#ea-count').innerText(),/291 source records matching/);
+   assert.equal(await rustMissing.locator('#ea-map .leaflet-interactive').count(),0);
+ });
+ await rustMissing.close();
  const offline=await browser.newPage({viewport:{width:390,height:844}});
  await offline.route('**/assets/up-waterfall-evidence-atlas.json*',r=>r.fulfill({status:503,contentType:'text/plain',body:'Unavailable'}));
  await offline.goto(base+'/upper-peninsula-waterfalls/atlas/',{waitUntil:'domcontentloaded',timeout:30000});
