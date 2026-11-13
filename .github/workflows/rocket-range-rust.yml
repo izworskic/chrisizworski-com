@@ -1,0 +1,46 @@
+name: Kodiak and PMRF Rust access scope
+on:
+  pull_request:
+    paths:
+      - 'rust/rocket-range-access/**'
+      - 'public/assets/rocket-range-*'
+      - 'public/kodiak-rocket-launch-viewing/**'
+      - 'public/barking-sands-rocket-launch-viewing/**'
+      - 'scripts/verify-rocket-range-rust.cjs'
+      - 'tests/rocket-range-rust.test.js'
+      - '.github/workflows/rocket-range-rust.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  range-access-rust:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Install pinned Rust and browser target
+        run: |
+          rustup toolchain install 1.90.0 --profile minimal
+          rustup target add wasm32-unknown-unknown --toolchain 1.90.0
+      - name: Test source-level Rust access safeguards
+        run: |
+          rustc +1.90.0 --edition=2021 --test rust/rocket-range-access/src/lib.rs -o /tmp/rocket-range-tests
+          /tmp/rocket-range-tests
+      - name: Compile real Rust/WebAssembly
+        run: |
+          rustc +1.90.0 --edition=2021 --crate-type cdylib \
+            --target wasm32-unknown-unknown -C opt-level=z \
+            -C codegen-units=1 -C lto=fat -C panic=abort -C strip=symbols \
+            -o /tmp/rocket-range-access.wasm rust/rocket-range-access/src/lib.rs
+          echo ROCKET_RANGE_RUST_B64_BEGIN
+          base64 -w0 /tmp/rocket-range-access.wasm
+          printf '\nROCKET_RANGE_RUST_B64_END\n'
+      - name: Verify real WASM ABI, official land classifications and asset parity
+        run: node scripts/verify-rocket-range-rust.cjs --wasm=/tmp/rocket-range-access.wasm
+      - name: Test page integration and issued binary
+        run: node --test tests/rocket-range-rust.test.js
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: rocket-range-access-wasm
+          path: /tmp/rocket-range-access.wasm
+          if-no-files-found: error
+          retention-days: 7
