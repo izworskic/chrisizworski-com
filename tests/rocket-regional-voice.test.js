@@ -24,20 +24,14 @@ for(const site of sites){
     assert.ok(html.includes(site.authority),site.name+' authoritative external source');
     assert.ok(html.includes('href="https://chrisizworski.com/'+site.slug+'/">'),site.name+' canonical');
     assert.ok(html.includes('/national-tools/rocket-launch-live/'),site.name+' national mission handoff');
-    const versions={
-      Florida:'20261113-rust-florida-v1',
-      Vandenberg:'20261113-rust-v2',
-      Wallops:'20261113-rust-network-v1',
-      Starbase:'20261113-rust-network-v1',
-      Kodiak:'20261113-rust-access-v1',
-      'Barking Sands':'20261113-rust-access-v1'
-    };
-    const cacheVersion=versions[site.name];
+    const cacheVersion=site.name==='Vandenberg'?'20261113-rust-v2':
+      site.name==='Wallops'||site.name==='Starbase'?'20261113-rust-network-v1':
+      site.name==='Florida'?'20261113-rust-florida-v1':'20261113-rust-access-v1';
     assert.ok(html.includes(cacheVersion),site.name+' changed client copy must bust cache');
     assert.doesNotThrow(()=>new Function(js),site.name+' dynamic guide parses as JavaScript');
     if(site.name!=='Florida'){
-      assert.ok(html.includes('"dateModified":"'+'2026-11-13'+'"'),site.name+' truthful structured metadata');
-      assert.ok(sitemap.includes('<loc>https://chrisizworski.com/'+site.slug+'/</loc>\n    <lastmod>'+'2026-11-13'+'</lastmod>'),site.name+' sitemap lastmod');
+      assert.ok(html.includes('"dateModified":"'+(['Vandenberg','Wallops','Starbase','Kodiak','Barking Sands'].includes(site.name)?'2026-11-13':'2026-11-10')+'"'),site.name+' truthful structured metadata');
+      assert.ok(sitemap.includes('<loc>https://chrisizworski.com/'+site.slug+'/</loc>\n    <lastmod>'+(['Vandenberg','Wallops','Starbase','Kodiak','Barking Sands'].includes(site.name)?'2026-11-13':'2026-11-10')+'</lastmod>'),site.name+' sitemap lastmod');
     }
   });
 }

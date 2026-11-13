@@ -38,11 +38,16 @@ test('dynamic answers speak to the spectator and still acknowledge uncertainty',
 });
 test('editorial changes preserve the trusted mission and public viewing journey',()=>{
   assert.match(html,/<link rel="canonical" href="https:\/\/chrisizworski\.com\/national-tools\/rocket-launch-live\/"/);
-  assert.match(html,/"dateModified":"2026-11-10"/);
+  assert.match(html,/"dateModified":"2026-11-13"/);
   assert.match(html,/https:\/\/chrisizworski\.com\/#person/);
   assert.match(html,/app\.js\?v=20261113-rust-national-v1/);
   assert.match(html,/rocket-flight-desk\.js\?v=20261110-voice-v1/);
-  assert.match(html,/launch-truth-desk\.js\?v=20261110-voice-v1/);
+  assert.match(html,/launch-truth-desk\.js\?v=20261113-shift-alert-v1/);
+  assert.match(html,/id="rl-launch-change-alert"[^>]*hidden/);
+  assert.match(history,/function renderLaunchChange\(/);
+  assert.match(history,/data\?\.status!=='recent'/);
+  assert.match(history,/A launch-calendar contributor reports:/);
+  assert.match(history,/A calendar change does not confirm liftoff or public access/);
   assert.match(html,/vandenberg\.js\?v=20261110-voice-v1/);
   assert.match(app,/siteMapHref\(site\)/);
   assert.match(app,/data\.scheduleFreshness==='recent'/);

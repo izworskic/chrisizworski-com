@@ -79,6 +79,55 @@
       default:return 'We can’t compare launch times right now';
     }
   }
+  // The mission-change note borrows the existing, independently bounded
+  // scheduled truth report. It is never another source of launch clearance.
+  function renderLaunchChange(data, zone, mismatched) {
+    const notice=$('rl-launch-change-alert');
+    if(!notice)return;
+    notice.replaceChildren();
+    notice.hidden=true;
+    if(mismatched||data?.status!=='recent'||!UUID.test(selected?.launchId||'')||
+       data?.selectedLaunchId!==selected.launchId)return;
+    const target=Date.parse(data.net||''),selectedTarget=Date.parse(selected.net||'');
+    const observed=Date.parse(data.observedAt||'');
+    if(!Number.isFinite(target)||!Number.isFinite(selectedTarget)||
+       target!==selectedTarget||!Number.isFinite(observed))return;
+    const shifts=(Array.isArray(data.timeline)?data.timeline:[])
+      .filter(evt=>{
+        if(evt?.kind!=='schedule-field-change'||evt.field!=='target-time')return false;
+        const before=Date.parse(evt.before||''),after=Date.parse(evt.after||'');
+        const detected=Date.parse(evt.detectedAt||'');
+        return Number.isFinite(before)&&after===target&&Number.isFinite(detected)&&
+          Math.abs(after-before)>=60000&&detected<=observed&&
+          observed-detected<=7*86400000;
+      })
+      .sort((a,b)=>Date.parse(b.detectedAt)-Date.parse(a.detectedAt));
+    const shift=shifts[0];
+    if(!shift)return;
+    notice.appendChild(node('strong','rl-launch-change-title','This launch has moved'));
+    notice.appendChild(node('p','rl-launch-change-times',
+      'Earlier target: '+readable(shift.before,zone,data.netPrecision)+
+      '. New target: '+readable(shift.after,zone,data.netPrecision)+'.'));
+    const contributor=(Array.isArray(data.updates)?data.updates:[]).find(update=>{
+      const published=Date.parse(update?.publishedAt||'');
+      const detected=Date.parse(shift.detectedAt);
+      return update?.kind==='ll2-contributor-update'&&
+        typeof update.summary==='string'&&update.summary.length<=200&&
+        safeUrl(update.sourceUrl)&&Number.isFinite(published)&&
+        Math.abs(published-detected)<48*3600000&&published<=observed+60000;
+    });
+    if(contributor){
+      notice.appendChild(node('p','rl-launch-change-report',
+        'A launch-calendar contributor reports: '+contributor.summary));
+      const link=anchor(contributor.sourceUrl,'Read the linked report');
+      if(link)notice.appendChild(link);
+    }
+    notice.appendChild(node('p','rl-launch-change-caution',
+      'Check the launch operator before traveling. A calendar change does not confirm liftoff or public access.'));
+    const original=anchor(shift.sourceUrl,'See the updated calendar');
+    if(original)notice.appendChild(original);
+    notice.hidden=false;
+  }
   function render(data){
     const zone=selected?.timezone||'America/New_York';
     let status=data?.status||'not-monitored';
@@ -95,6 +144,7 @@
     set('lt-explainer',mismatched?
       'The time above is newer than this comparison. Check the operator while we wait for an updated cross-check.':
       data?.story||'The operator has the final word on whether the rocket flies.');
+    renderLaunchChange(data,zone,mismatched);
     const c=data?.comparison||{};
     const cStatus=mismatched?'snapshot-mismatch':c.status||'unknown';
     root.dataset.compare=cStatus;
@@ -179,6 +229,8 @@
     const id=detail?.launchId;
     selected=detail||null;
     const token=++sequence;
+    const prior=$('rl-launch-change-alert');
+    if(prior){prior.hidden=true;prior.replaceChildren();}
     if(!UUID.test(id||'')){
       render({status:'not-monitored',headline:'Choose a flight to see its update history',
         story:'Each launch has its own changing schedule and news.'});
