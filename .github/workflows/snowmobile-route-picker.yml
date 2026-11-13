@@ -1,0 +1,34 @@
+name: Snowmobile route-picker quality gate
+on:
+  pull_request:
+    paths:
+      - public/assets/snowmobile-region.js
+      - public/assets/snowmobile-junction-picker.js
+      - public/assets/snowmobile.css
+      - public/snowmobile/regions/**
+      - scripts/generate-snowmobile-region-pages.mjs
+      - scripts/benchmark-snowmobile.mjs
+      - tests/snowmobile-junction-picker.test.js
+      - .github/workflows/snowmobile-route-picker.yml
+permissions:
+  contents: read
+jobs:
+  route-picker:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Parse scripts and test picker contracts
+        run: |
+          node --check public/assets/snowmobile-junction-picker.js
+          node --check public/assets/snowmobile-region.js
+          node --test tests/snowmobile-junction-picker.test.js tests/snowmobile-routing.test.js tests/snowmobile-rust.test.js
+      - name: Ensure generated region pages match the authoritative template
+        run: |
+          node scripts/generate-snowmobile-region-pages.mjs
+          git diff --exit-code -- public/snowmobile/regions/
+      - name: Existing snowmobile safety benchmark
+        run: node scripts/benchmark-snowmobile.mjs --check
