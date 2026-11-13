@@ -33,7 +33,7 @@ function validate(route,stops){
  if(coords.length<2||coords.length>MAX_VERTICES||!coords.every(c=>Array.isArray(c)&&c.length===2&&inMichigan(c[0],c[1])))return {ok:false,reason:'DNR track geometry is missing, too large, or contains invalid coordinates.'};
  if(!Number.isFinite(route.distanceMiles)||route.distanceMiles<=0||route.distanceMiles>2000)return {ok:false,reason:'Route distance is invalid.'};
  if(!Array.isArray(route.segments)||!route.segments.length)return {ok:false,reason:'Segment evidence is unavailable.'};
- if(route.segments.some(s=>/\bCLOSED\b/i.test(String(s?.band||s?.legalState||s?.status||''))))return {ok:false,reason:'A known closed trail segment was found in the route. Export blocked.'};
+ if(route.segments.some(s=>[s?.band,s?.legalState,s?.status].some(v=>/closed/i.test(String(v??'')))))return {ok:false,reason:'A known closed trail segment was found in the route. Export blocked.'};
  if(!Array.isArray(stops)||stops.length<2||stops.length>MAX_STOPS)return {ok:false,reason:'Choose 2–12 mapped DNR junctions.'};
  const checked=stops.map(point);
  if(checked.some(p=>!p))return {ok:false,reason:'A selected trail junction has invalid coordinates.'};
