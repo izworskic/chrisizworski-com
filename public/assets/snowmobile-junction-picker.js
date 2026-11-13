@@ -16,7 +16,7 @@
     const seen=new Set(),out=[];
     for(const f of Array.isArray(featureCollection?.features)?featureCollection.features:[]){
       const c=f?.geometry?.coordinates,p=f?.properties||{};
-      if(f.geometry?.type!=='Point'||!Array.isArray(c)||c.length!==2)continue;
+      if(f?.geometry?.type!=='Point'||!Array.isArray(c)||c.length!==2)continue;
       const [lon,lat]=c,id=String(p.id??'');
       if(!Number.isFinite(lon)||!Number.isFinite(lat)||Math.abs(lat)>90||Math.abs(lon)>180||!id||seen.has(id)||!Number.isInteger(p.component))continue;
       seen.add(id);
