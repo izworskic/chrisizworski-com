@@ -70,3 +70,13 @@ test('offline coastline geography is public-domain, geographically bounded, and 
  assert.match(js,/root\.dataset\.tiles='reference-only'/);
  assert.match(js,/map background isn.t loading; coastlines are shown instead/i);
 });
+
+test('basemap reports a real fallback only after tiles fail, not while CARTO is still pending',()=>{
+ assert.match(html,/app\\.js\\?v=20261113-rust-national-v1-map-tiles-v2/);
+ assert.match(js,/root\\.dataset\\.tiles = 'pending'/);
+ assert.match(js,/let osmLoaded=false,osmErrors=0,cartoPending=true/);
+ assert.match(js,/!osmLoaded&&!cartoPending&&root\\.dataset\\.tiles!=='carto-keyed'/);
+ assert.match(js,/root\\.dataset\\.tiles=osmLoaded\\?'osm-fallback':'reference-only'/);
+ assert.match(js,/window\\.setTimeout\\(\\(\\)=>\\{/);
+ assert.match(js,/map background isn.t loading; coastlines are shown instead/i);
+});
