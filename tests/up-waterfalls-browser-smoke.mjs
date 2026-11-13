@@ -26,6 +26,39 @@ try{
     assert.ok(await page.locator('#geographic-research').count()===1);
     for(const id of ['mosquito-falls','elliot-falls','manido-falls','bridalveil-falls'])assert.equal(await page.locator('[data-id="'+id+'"]').count(),1);
   });
+  await run('Rust/WASM visitability is active after 960-source-case browser parity gate',async()=>{
+    await page.waitForFunction(()=>window.UPWaterfallVisitLens?.engine?.()==='rust-wasm',{timeout:15000});
+    assert.equal(await page.evaluate(()=>window.UPWaterfallVisitLens.engine()),'rust-wasm');
+    const policies=await page.evaluate(()=>{
+      const rust=window.UPWaterfallsRust.current();
+      const card=id=>document.querySelector('[data-fall][data-id="'+id+'"]');
+      return {
+        closed:rust.policy(card('munising-falls'),new Date(2027,5,15)),
+        bondWinter:rust.policy(card('bond-falls'),new Date(2027,0,15)),
+        bondSummer:rust.policy(card('bond-falls'),new Date(2027,6,15)),
+        unknown:rust.policy(card('tahquamenon'),new Date(2027,6,15))
+      };
+    });
+    assert.equal(policies.closed.excluded,true);
+    assert.equal(policies.unknown.excluded,true,'specialist arrival is not an unverified waterfall parking route');
+    assert.equal(policies.bondWinter.level,'extra-check');
+    assert.equal(policies.bondSummer.level,'extra-check','the seasonal source caution remains even in summer');
+    await page.locator('#visit-budget').selectOption('30');
+    assert.match(await page.locator('#visit-baseline').innerText(),/at most 30 minutes PER STOP/);
+    await page.locator('#visit-budget').selectOption('60');
+  });
+  await run('Waterfall planner survives a blocked Rust module without declaring trails open',async()=>{
+    const fallback=await browser.newPage({viewport:{width:390,height:844}});
+    try {
+      await fallback.route('**/assets/up-waterfalls-visitability.wasm.b64',r=>r.abort());
+      await fallback.goto(base+'/upper-peninsula-waterfalls/',{waitUntil:'domcontentloaded',timeout:30000});
+      await fallback.locator('#visit-verdict').waitFor();
+      await fallback.waitForFunction(()=>window.UPWaterfallVisitLens?.engine?.()==='javascript-fallback');
+      assert.match(await fallback.locator('#visit-verdict').innerText(),/not confirmed-open trips/);
+      assert.equal(await fallback.locator('[data-visit-pick="munising-falls"]').count(),0);
+    }finally{await fallback.close();}
+  });
+
   await run('existing Tahquamenon planner owns two source waterfall identities',async()=>{
     assert.equal(await page.locator('[data-id="tahquamenon"][data-gis-multi-oid="207,208"]').count(),1);
     assert.equal(await page.locator('[data-id="tahquamenon"] a[href="/tahquamenon-falls/"]').count()>0,true);
