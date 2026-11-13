@@ -4,6 +4,7 @@ import {readFileSync} from 'node:fs';
 import {createRequire} from 'node:module';
 const require=createRequire(import.meta.url);
 const {SITES,COUNTY_MAPS,codes,verifySite,reconcile}=require('../public/assets/snowmobile-access-evidence.js');
+const club=require('../public/assets/snowmobile-club-staging.js');
 
 // Snapshots transcribed from actual public DNR parking FeatureServer/6
 // on 2026-11-13; independent of the hand-audited county-map table.
@@ -81,4 +82,31 @@ test('seven regional pages load evidence script and preserve canonical, Ads, ind
  assert.ok(client.includes('accessEvidence'));
  assert.ok(!client.includes('ROUTE_POINTS.push(site)'),'no parking-to-trail route edge permitted');
  assert.ok(!client.includes('JUNCTIONS_BY_ID.set(site'),'parking must not join official trail graph');
+});
+
+test('Keweenaw has five club-published staging addresses with truth-preserving overnight and trail limits',()=>{
+ assert.equal(club.PLACES.length,5);
+ const calumet=club.PLACES.find(p=>p.id==='calumet');
+ assert.equal(calumet.address,'56953 Osceola Road, Calumet, MI 49913, USA');
+ assert.equal(calumet.trail,'17');
+ assert.equal(calumet.overnight,'YES');
+ for(const id of ['eagle-harbor','south-range']){
+   const item=club.PLACES.find(p=>p.id===id);
+   assert.equal(item.overnight,'NO');
+ }
+ for(const p of club.PLACES){
+   assert.match(club.directionsUrl(p),/^https:\/\/www.google.com\/maps\/dir\/\?api=1&destination=/);
+   assert.ok(club.directionsUrl(p).includes(encodeURIComponent(p.address)));
+   assert.ok(p.access&&p.parking);
+ }
+ assert.equal(club.directionsUrl({id:'not-listed'}),null);
+ assert.match(club.SOURCE,/keweenawsnowmobileclub\.com\/faq/);
+ const keweenaw=readFileSync(new URL('../public/snowmobile/regions/keweenaw-copper-country.html',import.meta.url),'utf8');
+ const generator=readFileSync(new URL('../scripts/generate-snowmobile-region-pages.mjs',import.meta.url),'utf8');
+ assert.ok(keweenaw.includes('id="clubStaging"'));
+ assert.ok(keweenaw.indexOf('/assets/snowmobile-club-staging.js')<keweenaw.indexOf('/assets/snowmobile-region.js'));
+ assert.ok(generator.includes('id="clubStaging"'));
+ for(const other of ['eastern-up','grayling-gaylord','west-michigan']){
+   assert.ok(!readFileSync(new URL('../public/snowmobile/regions/'+other+'.html',import.meta.url),'utf8').includes('id="clubStaging"'));
+ }
 });
