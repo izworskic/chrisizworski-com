@@ -304,6 +304,7 @@ function accessEvidence(site){
 function accessLabel(site){
   const e=accessEvidence(site);
   if(e.grade==='DNR_MAP_PAIRED')return 'DNR county-map parking / trail pairing';
+  if(e.grade==='OPERATOR_PAIRED')return 'Public trailhead independently documented';
   if(e.grade==='SOURCE_CONFLICT')return 'DNR records need reconciliation';
   return 'DNR parking asset only';
 }
@@ -313,9 +314,10 @@ function drawParkingPins(sites){
   const group=L.layerGroup();
   for(const site of sites){
     const url=window.SnowmobileParking?.directionsUrl(site),e=accessEvidence(site);
-    const pin=L.circleMarker([site.lat,site.lon],{radius:9,color:'#fff',weight:2,fillColor:e.grade==='DNR_MAP_PAIRED'?'#245c80':'#70509d',fillOpacity:.97});
+    const pin=L.circleMarker([site.lat,site.lon],{radius:9,color:'#fff',weight:2,fillColor:(e.grade==='DNR_MAP_PAIRED'||e.grade==='OPERATOR_PAIRED')?'#245c80':'#70509d',fillOpacity:.97});
     const popup='<strong>'+esc(site.name)+'</strong><p>'+esc(accessLabel(site))+'. Access from this lot to a legal trail has not been field-verified.</p>'+
       (e.countyMap?'<a href="'+esc(e.countyMap)+'" target="_blank" rel="noopener">Official county trail and parking map</a><br>':'')+
+      (e.publicSource?'<a href="'+esc(e.publicSource)+'" target="_blank" rel="noopener">City public trailhead inventory</a><br>':'')+
       (url?'<a href="'+url+'" target="_blank" rel="noopener">Driving directions to parking pin</a>':'');
     pin.bindPopup?.(popup);pin.addTo(group);
   }
@@ -327,13 +329,17 @@ function parkingCard(site){
   const nearby=Number.isFinite(site.nearMiles)?site.nearMiles.toFixed(2)+' mi straight-line from the nearest mapped trail':'Trail proximity not established';
   const code=e.grade==='DNR_MAP_PAIRED'?e.trailCodes.join(', '):'';
   const paired=e.grade==='DNR_MAP_PAIRED';
+  const operator=e.grade==='OPERATOR_PAIRED';
   const published=e.published?e.published:'date not recorded';
   const tier='<div class="access-evidence-status '+(paired?'access-paired':e.grade==='SOURCE_CONFLICT'?'access-conflict':'access-unpaired')+'"><strong>'+esc(accessLabel(site))+'</strong>'+
     (paired?'<span>Official county map identifies parking for '+esc(code)+' · map updated '+esc(published)+'</span>':
+    operator?'<span>City recreation inventory documents trailer parking; local tourism confirms the downtown trailhead. Not an inspected winter entrance.</span>':
     '<span>'+(e.grade==='SOURCE_CONFLICT'?'Live asset and reviewed map descriptions disagree; use the DNR map directly.':'No second-source parking/trail pairing established for this record.')+'</span>')+'</div>';
   const mapRef=e.countyMap?'<a href="'+esc(e.countyMap)+'" target="_blank" rel="noopener" data-parking-map="'+site.id+'">DNR '+esc(e.county||'county')+' parking map</a>':'';
+  const operatorLinks=e.operatorSource&&e.publicSource?'<a href="'+esc(e.publicSource)+'" target="_blank" rel="noopener">City parking facilities</a><a href="'+esc(e.operatorSource)+'" target="_blank" rel="noopener">Gaylord riding and crossing rules</a>':'';
   const trailLookup=paired?'<button type="button" class="parking-trail-search" data-parking-trail="'+esc(e.trailCodes[0])+'">Find '+esc(e.trailCodes[0])+' route junctions</button>':'';
   const checkNote=paired?'<p class="parking-access-note">'+esc(e.locationNote)+'. This is an official parking-to-trail <em>map listing</em>, not a surveyed or legally verified connection from the lot. Confirm signs, current restrictions and a lawful approach on arrival.</p>':
+    operator?'<p class="parking-access-note">'+esc(e.locationNote)+' Current plowing, open access, and legal crossings require checks immediately before riding.</p>':
     '<p class="parking-access-note">This is a DNR-listed parking location near a mapped trail, not proof of a trail entrance. Confirm the lot, approach and permissions with DNR or the local groomer.</p>';
   const season=DATA?.season?.active===false?'<p class="parking-season-note">Off-season: not authorization to ride.</p>':
     DATA?.closures?.verified!==true?'<p class="parking-season-note">Current closure checks incomplete; verify directly with DNR.</p>':'';
@@ -341,7 +347,7 @@ function parkingCard(site){
     tier+'<p class="parking-distance">Approximately '+esc(nearby)+' ('+esc(site.nearTrail||'DNR trail')+')</p>'+
     comment+checkNote+season+
     '<div class="parking-actions">'+(url?'<a href="'+url+'" target="_blank" rel="noopener" data-parking-directions="'+site.id+'">Drive to parking pin</a>':'')+
-    mapRef+trailLookup+(MAP?'<button type="button" class="parking-map-focus" data-parking-focus="'+site.id+'">Show on map</button>':'')+'</div></article>';
+    mapRef+operatorLinks+trailLookup+(MAP?'<button type="button" class="parking-map-focus" data-parking-focus="'+site.id+'">Show on map</button>':'')+'</div></article>';
 }
 async function loadParking(){
   const status=$('#parkingStatus'),host=$('#parkingResults'),button=$('#loadParking');
@@ -359,7 +365,7 @@ async function loadParking(){
     const result=window.SnowmobileParking.nearParking(body.sites,DATA.scoredGeometry,80,.9);
     const reviewed=window.SnowmobileAccessEvidence?.reconcile(result.matches)||result.matches.map(site=>({...site,accessEvidence:{grade:'ASSET_ONLY',trailCodes:[]}}));
     reviewed.sort((a,b)=>{
-      const rank=e=>accessEvidence(e).grade==='DNR_MAP_PAIRED'?0:accessEvidence(e).grade==='ASSET_ONLY'?1:2;
+      const rank=e=>accessEvidence(e).grade==='OPERATOR_PAIRED'?0:accessEvidence(e).grade==='DNR_MAP_PAIRED'?1:accessEvidence(e).grade==='ASSET_ONLY'?2:3;
       return rank(a)-rank(b)||a.nearMiles-b.nearMiles||a.id-b.id;
     });
     PARKING_RESULTS=reviewed.slice(0,40);
@@ -367,10 +373,10 @@ async function loadParking(){
       status.innerHTML='No DNR snowmobile parking records matched within 0.9 straight-line mile of this region’s mapped trail lines. This does not mean there is no parking. '+parkingSourceLink()+'.';
     }else{
       const time=body.sourceCheckedAt?new Date(body.sourceCheckedAt).toLocaleString('en-US',{dateStyle:'medium',timeStyle:'short'}):'source check time unavailable';
-      const paired=PARKING_RESULTS.filter(x=>accessEvidence(x).grade==='DNR_MAP_PAIRED').length;
-      status.textContent=result.total+' DNR-listed snowmobile parking assets (public-owner) are within 0.9 mi straight-line of mapped trails. '+paired+' of the displayed records have an independently matched DNR county-map parking/trail listing. Source checked '+time+'. No physical entrance, lot plowing or trailer capacity has been verified.';
+      const paired=PARKING_RESULTS.filter(x=>['DNR_MAP_PAIRED','OPERATOR_PAIRED'].includes(accessEvidence(x).grade)).length;
+      status.textContent=result.total+' DNR-listed snowmobile parking assets (public-owner) are within 0.9 mi straight-line of mapped trails. '+paired+' of the displayed records have independently corroborated county-map or public-trailhead evidence. Source checked '+time+'. No physical entrance, lot plowing or trailer capacity has been verified.';
       host.innerHTML=PARKING_RESULTS.map(parkingCard).join('');
-      if(result.total>PARKING_RESULTS.length)host.innerHTML+='<p class="small">Showing '+PARKING_RESULTS.length+' of '+result.total+' nearby locations, with county-map-corroborated entries first. '+parkingSourceLink()+' for the full DNR inventory.</p>';
+      if(result.total>PARKING_RESULTS.length)host.innerHTML+='<p class="small">Showing '+PARKING_RESULTS.length+' of '+result.total+' nearby locations, with source-corroborated public trailheads and county-map entries first. '+parkingSourceLink()+' for the full DNR inventory.</p>';
       drawParkingPins(PARKING_RESULTS);
     }
     track('snowmobile_parking_source_checked',{region:DATA.key,source_records:body.sourceRecords,regional_matches:result.total});

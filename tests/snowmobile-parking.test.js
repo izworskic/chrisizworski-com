@@ -42,6 +42,10 @@ test('DNR field asset must explicitly designate snowmobiles, public ownership an
  assert.equal(normalizeParking(mk(34,-84,95)),null);
  assert.equal(normalizeParking({...mk(35,...pos),geometry:{type:'LineString',coordinates:[pos,pos]}}),null);
  assert.ok(normalizeParking(mk(36,...pos,{OWNEDBY:'Municipal'})));
+ assert.equal(normalizeParking(mk(1038,...pos,{COMMENTS:'Snowmobile Parking Unsure of Location per KIM K'})),null,'DNR warns its parking coordinates are uncertain');
+ assert.equal(normalizeParking(mk(766,...pos,{DESCRIP:'<Null>',COMMENTS:'Snowmobile Parking'})),null,'null DNR parking title is not a navigable trailhead');
+ assert.equal(normalizeParking(mk(1471,...pos,{DESCRIP:'<Null>',COMMENTS:'Snowmobile Parking'})),null);
+ assert.equal(normalizeParking(mk(48,...pos,{COMMENTS:'Snowmobile Parking - Location Unknown'})),null);
 });
 
 test('incomplete GIS feed cannot be presented as complete parking inventory',()=>{

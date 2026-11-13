@@ -17,7 +17,8 @@ const server=http.createServer((req,res)=>{
 });
 const sites=[
  {id:28,lat:44.6625778531048,lon:-84.7672618993167,name:'Snowmobile Trail LP 7',directionsNote:'Snowmobile Parking / ORV Parking NW of Int of M72 and South Blue Bear Trail'},
- {id:242,lat:45.0281285882645,lon:-84.6782500186266,name:'Snowmobile Trail LP / Gaylord Gateway Trailhead',directionsNote:'Snowmobile Parking & Staging in winter. Heated restrooms.'}
+ {id:242,lat:45.0281285882645,lon:-84.6782500186266,name:'Snowmobile Trail LP / Gaylord Gateway Trailhead',directionsNote:'Snowmobile Parking & Staging in winter. Heated restrooms.'},
+ {id:185,lat:45.029,lon:-84.677,name:'Snowmobile Trail LP 992',directionsNote:'Snowmobile Parking at Henry Street'}
 ];
 const body={sites,sourceRecords:127,sourceCheckedAt:'2026-11-13T20:20:00.000Z',accessStatus:'NOT_VERIFIED'};
 const geometry={type:'FeatureCollection',features:[
@@ -49,12 +50,17 @@ const geometry={type:'FeatureCollection',features:[
      MAP=null;
    },geometry);
    await page.locator('#loadParking').click();
-   await page.waitForFunction(()=>document.querySelectorAll('#parkingResults .parking-card').length===2,{timeout:12000});
+   await page.waitForFunction(()=>document.querySelectorAll('#parkingResults .parking-card').length===3,{timeout:12000});
    const cards=await page.locator('#parkingResults .parking-card').allTextContents();
-   assert.match(cards[0],/DNR county-map parking \/ trail pairing/);
-   assert.match(cards[0],/LP7/);
-   assert.match(cards[0],/not a surveyed or legally verified connection/);
-   assert.match(cards[1],/DNR parking asset only/);
+   assert.match(cards[0],/Public trailhead independently documented/);
+   assert.match(cards[0],/City recreation inventory documents trailer parking/);
+   assert.match(cards[0],/Current plowing.*open access/);
+   assert.match(cards[1],/DNR county-map parking \/ trail pairing/);
+   assert.match(cards[1],/LP7/);
+   assert.match(cards[1],/not a surveyed or legally verified connection/);
+   assert.match(cards[2],/DNR parking asset only/);
+   assert.match(await page.locator('a[href*="cityofgaylord.com"]').first().getAttribute('href'),/Recreation-Plan\.pdf$/);
+   assert.match(await page.locator('a[href*="gaylordmichigan.net"]').first().getAttribute('href'),/snowmobile/);
    assert.ok((await page.locator('a[data-parking-directions="28"]').getAttribute('href')).includes('44.662578,-84.767262'));
    assert.match(await page.locator('a[data-parking-map="28"]').getAttribute('href'),/snowmobile_crawford\.pdf$/);
    await page.locator('button[data-parking-trail="LP7"]').click();
