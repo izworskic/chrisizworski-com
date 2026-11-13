@@ -419,4 +419,6 @@ async function load(){
   try{const r=await fetch(`/api/snowmobile?region=${encodeURIComponent(key)}&v=20261005-junction-dots-5`);const payload=await r.json();if(!r.ok)throw new Error(payload.detail||payload.error||r.status);const d={...payload.region,season:payload.season,sources:payload.sources,generatedAt:payload.generatedAt,truthBoundary:payload.truthBoundary,operational:payload.operational};render(d);inheritTrip();}
   catch(e){$('#status').textContent='DATA UNAVAILABLE';$('#drive').innerHTML='<strong>No ride recommendation.</strong> Live source verification failed, so the page is not substituting guessed conditions.';updateRouteAvailability();setRouteHint('Trail route planning is unavailable while the source data cannot be loaded. Use the official DNR trail maps below.');const segHead=$('#segments'); if(segHead)segHead.innerHTML='<p>'+esc(e.message)+'</p>';}
 }
+const clubHost=$('#clubStaging');
+if(clubHost&&window.SnowmobileClubStaging)window.SnowmobileClubStaging.render(clubHost);
 load();
