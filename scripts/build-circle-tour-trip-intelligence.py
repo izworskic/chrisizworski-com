@@ -22,6 +22,7 @@ ROOT = Path(__file__).resolve().parents[1]
 HUB = ROOT / "public/lake-superior-circle-tour/index.html"
 LEDGER = ROOT / "data/circle-tour-road-evidence.json"
 VISUALS = ROOT / "data/circle-tour-visual-story.json"
+TRAVELER = ROOT / "data/circle-tour-traveler-stops.json"
 OUT = ROOT / "public/lake-superior-circle-tour/10-day/index.html"
 CANONICAL = "https://chrisizworski.com/lake-superior-circle-tour/10-day/"
 VERSION = "2026-11-14"
@@ -115,6 +116,96 @@ def extract(source: str, ledger: dict) -> list[dict]:
     if days[-1]["complete"]:
         raise ValueError("Border-to-park mileage incorrectly promoted into full road distance")
     return days
+
+
+
+def extract_traveler_presets(source: str, ledger: dict, catalog: dict) -> dict:
+    """Build a factual 7/10/15-day comparison from already published route day cards.
+
+    No new distances or roads are generated. The UI must never promise that
+    user-selected constraints magically change an editorial overnight itinerary.
+    """
+    if catalog.get("version") != 1 or catalog.get("routeStart") != "Duluth, Minnesota":
+        raise ValueError("Unsupported traveler catalog or start-point claim")
+    if catalog.get("routeDirection") != "counterclockwise":
+        raise ValueError("Traveler plan must use the published counterclockwise source")
+    cards = catalog.get("stops", {})
+    stays = catalog.get("overnightBases", {})
+    edges = {(r["from"], r["to"]): r for r in ledger["edges"]}
+    order = [ledger["edges"][0]["from"]] + [e["to"] for e in ledger["edges"]]
+    if len(order) != 31 or len(set(order)) != 31:
+        raise ValueError("Source stop order changed; cannot publish preference itineraries")
+    for stop, card in cards.items():
+        if stop not in order or not card.get("interests") or not set(card["interests"]) <= {"hiking", "waterfalls", "shipwatch", "scenery"}:
+            raise ValueError("Specialist activity has an invalid route stop or interests: " + stop)
+        href = card.get("toolUrl", "")
+        if not href.startswith("/") and href != "https://picturedrocks.chrisizworski.com/":
+            raise ValueError("Unreviewed external specialist link: " + href)
+        if href.startswith("/") and href not in source:
+            local = ROOT / "public" / href.lstrip("/") / "index.html"
+            if not local.is_file():
+                raise ValueError("Specialist tool absent from original hub and repository: " + href)
+        if len(card.get("toolAction", "")) < 18 or len(card.get("caution", "")) < 18:
+            raise ValueError("Specialist tool lacks a useful visitor decision")
+    expected = {7: 1359, 10: 1358, 15: 1358}
+    result = {}
+    for length in (7, 10, 15):
+        start = source.find('id="itin-' + str(length) + '"')
+        if start < 0:
+            raise ValueError("Missing published " + str(length) + "-day route")
+        end = source.find('id="itin-' + str({7:10, 10:15}.get(length, -1)) + '"', start + 2) if length != 15 else len(source)
+        if end < start:
+            raise ValueError("Cannot locate next route section")
+        panel = source[start:end]
+        found = re.findall(
+            r'<div class="itin-day" data-day="(\d+)" data-stops="([\d,]+)" data-miles="(\d+)">'
+            r'<span class="day-label">[\s\S]*?</span>([\s\S]*?)</div>', panel
+        )
+        if len(found) != length:
+            raise ValueError("Expected exactly " + str(length) + " published days, not " + str(len(found)))
+        prev = None
+        days = []
+        for rawday, rawstops, rawmiles, rawsummary in found:
+            number = int(rawday)
+            ids = rawstops.split(",")
+            miles = int(rawmiles)
+            if number != len(days)+1 or any(stop not in order for stop in ids) or (prev and ids[0] != prev):
+                raise ValueError("Published travel day is disconnected: " + str(length))
+            pairs = list(zip(ids, ids[1:]))
+            if any(order.index(a)+1 != order.index(b) for a,b in pairs):
+                raise ValueError("Invalid published route adjacency: " + str(length))
+            if miles == 0 and len(ids) != 1:
+                raise ValueError("Zero-mile stay must be one source stop")
+            if miles > 600:
+                raise ValueError("Out-of-bounds published daily mileage")
+            endpoint = ids[-1]
+            if endpoint not in stays:
+                raise ValueError("No reviewed overnight area for day ending at stop " + endpoint)
+            partial = [a+"→"+b for a,b in pairs if edges[(a,b)]["status"] in ("partial-source-only", "arrival-choice-unresolved")]
+            crossings = sum(1 for a,b in pairs if (a,b) in (("13","14"), ("20","21")))
+            if crossings > 1:
+                raise ValueError("Unexpected second border on one day")
+            highlights = [stop for stop in ids if stop in cards]
+            days.append({
+                "day":number,"stops":ids,"miles":miles,
+                "driveAllowanceHours":round(miles / 47 * 1.2, 2),
+                "routeSummary":html.unescape(re.sub(r"<[^>]+>", "", rawsummary)).strip(),
+                "overnightArea":stays[endpoint],
+                "highlights":highlights,
+                "complete":not partial,"incompleteLegs":partial,
+                "borderReserveMinutes":45 * crossings,
+                "seasonalSensitive":any(x in {"3","6","8","11","12","15","18","20","27","28"} for x in ids),
+                "basis":"published-day-estimate-not-a-routed-ETA"
+            })
+            prev = ids[-1]
+        if sum(d["miles"] for d in days) != expected[length] or days[0]["stops"][0] != "1" or days[-1]["stops"][-1] != "30":
+            raise ValueError("Editorial mileage or Duluth loop changed: "+str(length))
+        if days[-1]["complete"]:
+            raise ValueError("Border-to-Grand-Portage approach falsely completed for "+str(length))
+        result[str(length)] = {"days":days, "totalEditorialMiles":expected[length]}
+    return {"version":1,"reviewed":catalog["reviewed"],"start":catalog["routeStart"],
+            "direction":"counterclockwise","options":result,
+            "specialists":cards,"sourceNotes":catalog["notes"]}
 
 
 def validate_visuals(visual: dict, hub: str) -> None:
@@ -243,7 +334,7 @@ footer{border-top:1px solid var(--border);padding:24px 0;font-size:14px;color:va
 """
 
 
-def render(data: list[dict], ledger: dict, visual: dict) -> str:
+def render(data: list[dict], ledger: dict, visual: dict, traveler: dict) -> str:
     rows = []
     for d in data:
         story = visual["days"][str(d["day"])]
@@ -275,6 +366,7 @@ def render(data: list[dict], ledger: dict, visual: dict) -> str:
     }, separators=(",", ":"), ensure_ascii=False).replace("<", "\\u003c")
     sources = "".join(f'<li><a href="{esc(url)}" rel="noopener noreferrer">{esc(title)}</a></li>' for title, url in SOURCE_LINKS)
     embedded = json.dumps({"version": VERSION, "days": data, "basis": "source-bounded editorial mileage"}, separators=(",", ":"), ensure_ascii=False).replace("<", "\\u003c")
+    traveler_embedded = json.dumps(traveler, separators=(",", ":"), ensure_ascii=False).replace("<", "\\u003c")
     rendered = "\n".join(rows)
     jump = " ".join(f'<a href="#day-{i}">Day {i}</a>' for i in range(1, 11))
     hero = photo_html(visual["hero"], hero=True)
@@ -359,7 +451,9 @@ def main() -> None:
     days = extract(source, ledger)
     visual = json.loads(VISUALS.read_text(encoding="utf8"))
     validate_visuals(visual, source)
-    output = render(days, ledger, visual)
+    traveler_catalog = json.loads(TRAVELER.read_text(encoding='utf8'))
+    traveler = extract_traveler_presets(source, ledger, traveler_catalog)
+    output = render(days, ledger, visual, traveler)
     if args.check:
         if not OUT.exists() or OUT.read_text(encoding="utf8") != output:
             raise SystemExit("Circle Tour 10-day static page is missing or stale")
