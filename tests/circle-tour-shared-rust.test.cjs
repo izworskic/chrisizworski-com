@@ -46,6 +46,9 @@ test('31 source stop identities preserve Whitefish Point at 31 between 12 and 13
  assert.equal(new Set(engine.ORDER).size,31);
  assert.deepEqual(engine.ORDER.slice(10,15),['11','12','31','13','14']);
  assert.equal(engine.engine(),'js-parity');
+ assert.equal(engine.feasibility({miles:303,availableHours:9,visitHours:1,evidenceComplete:true}).code,2);
+ assert.equal(engine.feasibility({miles:192,availableHours:12,visitHours:1,evidenceComplete:false}).code,4);
+ assert.equal(engine.feasibility({miles:87,availableHours:9,visitHours:2,evidenceComplete:true,seasonalHold:true}).code,5);
 });
 test('all 31 directed neighbors are recognized only when source miles are published',()=>{
  for(const direction of ['counterclockwise','clockwise'])for(let i=0;i<31;i++){
@@ -59,10 +62,13 @@ test('all 31 directed neighbors are recognized only when source miles are publis
  }
 });
 test('unknown/partial legs never become 45-mile invented driving legs',()=>{
- for(const segment of [['7','8'],['12','31'],['31','13'],['20','21']]){
+ for(const segment of [['20','21']]){
    assert.equal(guard(segment).ok,false,segment.join(' to '));
  }
  assert.equal(guard(['2','4']).ok,false,'skipped unsupported road leg');
+ assert.equal(guard(['7','8']).ok,true,'Houghton gateway only, not Copper Harbor');
+ assert.equal(guard(['12','31']).ok,true,'Upper Falls via Paradise to museum, not every park entrance');
+ assert.equal(guard(['31','13']).ok,true,'Whitefish to Sault city route estimate');
  assert.equal(guard(['4','5','6','7']).ok,true);
  assert.equal(guard(['7','6','5','4'],'clockwise').ok,true);
  assert.equal(guard(['1','30'],'clockwise').ok,true,'Duluth aliases are zero-distance identity');

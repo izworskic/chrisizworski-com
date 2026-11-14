@@ -135,6 +135,40 @@
     return {ok:true,reason:'Editorial mileage checked; traffic, weather, roads and border access remain unverified.',
       engine:native?'rust-wasm':'js-parity',miles:sum,borderMinutes:reserve};
   }
+
+  // Feasibility is a bounded editorial DAY allowance, never a road route or
+  // an opening/closure decision. Missing leg evidence wins over apparent spare
+  // hours; a winter-sensitive experience is held for park-source verification.
+  function feasibility({miles,availableHours,visitHours,borderMinutes=0,
+    evidenceComplete=false,seasonalHold=false}={}){
+    const inputs=[miles,availableHours,visitHours,borderMinutes];
+    let code=0;
+    if(inputs.every(Number.isFinite)&&miles>=0&&miles<=600&&availableHours>0&&
+      availableHours<=24&&visitHours>=0&&visitHours<=24&&
+      borderMinutes>=0&&borderMinutes<=720&&
+      typeof evidenceComplete==='boolean'&&typeof seasonalHold==='boolean'){
+      const remaining=availableHours-(miles/47*1.2+visitHours+borderMinutes/60);
+      code=!evidenceComplete?4:seasonalHold?5:remaining<0?3:remaining<.75?2:1;
+    }
+    const baseline=code;
+    if(native){
+      try{
+        const result=native.ct_feasibility(...inputs,evidenceComplete?1:0,seasonalHold?1:0);
+        if(result!==baseline){native=null;code=0;}
+      }catch{native=null;code=0;}
+    }
+    const labels={
+      0:'Planning data unavailable',
+      1:'Reasonable allowance, not a live ETA',
+      2:'Tight day: little spare time',
+      3:'Over budget: simplify the day',
+      4:'Arrival clock withheld: a road leg remains incomplete',
+      5:'Verify seasonal park access before committing'
+    };
+    return {code,label:labels[code],engine:native?'rust-wasm':'js-parity',
+      remainingHours:code===1||code===2||code===3
+        ?Math.round((availableHours-(miles/47*1.2+visitHours+borderMinutes/60))*10)/10:null};
+  }
   async function activate(){
     if(loading)return loading;
     if(!root||!root.fetch||!root.WebAssembly||!root.atob)return null;
@@ -146,8 +180,8 @@
       const bytes=Uint8Array.from(root.atob(b64),c=>c.charCodeAt(0));
       if(bytes[0]!==0||bytes[1]!==97||bytes[2]!==115||bytes[3]!==109)return null;
       const e=(await root.WebAssembly.instantiate(bytes,{})).instance.exports;
-      if(e.ct_version?.()!==1||e.it_version?.()!==1||
-        !['ct_leg','ct_published_day','ct_border','ct_drive'].every(x=>typeof e[x]==='function'))
+      if(e.ct_version?.()!==2||e.it_version?.()!==1||
+        !['ct_leg','ct_published_day','ct_border','ct_drive','ct_feasibility'].every(x=>typeof e[x]==='function'))
         return null;
       for(let i=0;i<ORDER.length;i++)for(const direction of ['counterclockwise','clockwise']){
         const nextId=ORDER[(i+(direction==='counterclockwise'?1:30))%31];
@@ -171,7 +205,7 @@
     })().catch(()=>null);
     return loading;
   }
-  const api=Object.freeze({ORDER,evidenceMiles,verifyPreset,auditSegment,activate,
+  const api=Object.freeze({ORDER,evidenceMiles,verifyPreset,auditSegment,feasibility,activate,
     engine:()=>native?'rust-wasm':'js-parity'});
   if(typeof module!=='undefined'&&module.exports)module.exports=api;
   if(root){root.CircleTourRust=api;void activate();}

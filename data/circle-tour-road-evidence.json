@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-12",
+  "reviewed": "2026-11-14",
   "purpose": "Do not advertise published stop/day mileage as independently routed. Record all 30 adjacent itinerary edges and separately trace the exact endpoints of authoritative source mileages.",
   "definitions": {
-    "published-estimate-unverified": "Stop card displays an editorial distance or no independently routed figure; not a certified door-to-door segment.",
+    "published-estimate-unverified": "Editorial or source-bounded gateway approximate mileage; NOT a certified continuous road route, public parking, access authorization or live travel time.",
     "arrival-choice-unresolved": "A stop can mean multiple geographically distinct approaches; do not claim a single measured route.",
     "partial-source-only": "Source mileage covers a different, explicitly named subsegment, not the entire adjacent Circle Tour stop-to-stop leg."
   },
@@ -61,9 +61,19 @@
       "to": "8",
       "fromName": "Ontonagon, Michigan",
       "toName": "Keweenaw Peninsula, Copper Country",
-      "visitorCard": "📍 Houghton route; Copper Harbor adds a separate scenic detour",
-      "status": "arrival-choice-unresolved",
-      "blocker": "The Keweenaw stop represents Houghton/Copper Country, Copper Harbor and seasonal Brockway Mountain. One distance cannot describe all three."
+      "visitorCard": "📍 Approx. 52 mi Ontonagon to Houghton gateway; Copper Harbor/Brockway side trips add mileage.",
+      "status": "published-estimate-unverified",
+      "planningGateway": {
+        "miles": 52,
+        "start": "Ontonagon town",
+        "end": "Houghton city gateway",
+        "type": "road-network estimate",
+        "source": "https://upper-michigan.com/guide/lodging/where-to-stay-in-houghton.html",
+        "corroboration": "https://home.nps.gov/kewe/two-day-porcupine-mountains.htm",
+        "caveat": "A 52-mi Ontonagon–Houghton road estimate does not include Copper Harbor, Quincy Mine, Brockway Mountain or Isle Royale ferry access. Route via M-38 and M-26; inspect current navigation.",
+        "reviewed": "2026-11-14",
+        "use": "source-described gateway planning only; not certified road mileage, arrival or park access"
+      }
     },
     {
       "from": "8",
@@ -102,18 +112,38 @@
       "to": "31",
       "fromName": "Tahquamenon Falls State Park",
       "toName": "Whitefish Point",
-      "visitorCard": "📍 11 mi north of Paradise via Whitefish Point Road (not from the falls)",
-      "status": "partial-source-only",
-      "blocker": "Museum confirms 11 miles Paradise to Whitefish Point, not Tahquamenon Falls to Whitefish Point."
+      "visitorCard": "📍 Approx. 25 mi Upper Falls to Whitefish Point via Paradise (14 + 11 mi from two independent sources); Lower Falls extra.",
+      "status": "published-estimate-unverified",
+      "planningGateway": {
+        "miles": 25,
+        "start": "Tahquamenon Upper Falls via M-123",
+        "end": "Whitefish Point museum via Paradise",
+        "type": "two-source additive approximate mileage",
+        "source": "https://www.michigan.gov/dnr/-/media/Project/Websites/dnr/Documents/PRD/MgtPlans/Tahq_GMP_Appendices.pdf",
+        "corroboration": "https://shipwreckmuseum.com/visit/admission-hours-location/",
+        "caveat": "DNR notes the Upper Falls 14 miles from Paradise; museum notes Whitefish Point 11 miles north of Paradise. Approximate additive distance, not a measurement from every parking entrance.",
+        "reviewed": "2026-11-14",
+        "use": "source-described gateway planning only; not certified road mileage, arrival or park access"
+      }
     },
     {
       "from": "31",
       "to": "13",
       "fromName": "Whitefish Point",
       "toName": "Sault Ste. Marie, Michigan",
-      "visitorCard": "📍 Via Paradise from Whitefish Point; verify the onward road distance",
-      "status": "arrival-choice-unresolved",
-      "blocker": "The upstream stop is Whitefish Point; previous mileage referenced Tahquamenon instead. No independently routed Whitefish Point–Sault estimate."
+      "visitorCard": "📍 Approx. 73 mi Whitefish Point to Sault Ste. Marie via Paradise (OSRM route estimate); Soo Locks side trip extra.",
+      "status": "published-estimate-unverified",
+      "planningGateway": {
+        "miles": 73,
+        "start": "Whitefish Point museum",
+        "end": "Sault Ste. Marie city gateway",
+        "type": "road-network estimate",
+        "source": "https://upper-michigan.com/guide/lodging/where-to-stay-in-sault-ste-marie.html",
+        "corroboration": "https://shipwreckmuseum.com/visit/admission-hours-location/",
+        "caveat": "OSRM base drive to Sault city ~73mi; museum validates the M-123/Paradise approach but the Point Iroquois shore alternate is a distinct route. Confirm city or Soo Locks destination.",
+        "reviewed": "2026-11-14",
+        "use": "source-described gateway planning only; not certified road mileage, arrival or park access"
+      }
     },
     {
       "from": "13",
@@ -178,7 +208,13 @@
       "toName": "Pigeon River / Grand Portage State Park",
       "visitorCard": "📍 ~38 mi from Thunder Bay to the Pigeon River border; park approach extra",
       "status": "partial-source-only",
-      "blocker": "Destination Ontario confirms about 38 miles Thunder Bay to Pigeon River border; the state-park parking approach must not be conflated with the border."
+      "blocker": "Destination Ontario confirms about 38 miles Thunder Bay to Pigeon River border; the state-park parking approach must not be conflated with the border.",
+      "sourceReview": {
+        "reviewed": "2026-11-14",
+        "borderCorridorMiles": 38,
+        "source": "https://www.destinationontario.com/en-ca/travel-resources/ontario-lake-superior-road-trip",
+        "limitation": "38 miles stops at the Pigeon River border. Grand Portage State Park approach and official crossing wait are separate. No end-to-end leg for a timed park visit."
+      }
     },
     {
       "from": "21",
@@ -309,7 +345,40 @@
       "distanceMiles": 52,
       "scope": "NPS highway intersection to intersection only, not Marquette-Munising or day route",
       "source": "https://www.nps.gov/piro/planyourvisit/roadmileage.htm"
+    },
+    {
+      "id": "ct-gateway-7-8",
+      "from": "Ontonagon town",
+      "to": "Houghton city gateway",
+      "distanceMiles": 52,
+      "scope": "A 52-mi Ontonagon–Houghton road estimate does not include Copper Harbor, Quincy Mine, Brockway Mountain or Isle Royale ferry access. Route via M-38 and M-26; inspect current navigation.",
+      "source": "https://upper-michigan.com/guide/lodging/where-to-stay-in-houghton.html",
+      "corroboration": "https://home.nps.gov/kewe/two-day-porcupine-mountains.htm",
+      "reviewed": "2026-11-14",
+      "kind": "road-network estimate"
+    },
+    {
+      "id": "ct-gateway-12-31",
+      "from": "Tahquamenon Upper Falls via M-123",
+      "to": "Whitefish Point museum via Paradise",
+      "distanceMiles": 25,
+      "scope": "DNR notes the Upper Falls 14 miles from Paradise; museum notes Whitefish Point 11 miles north of Paradise. Approximate additive distance, not a measurement from every parking entrance.",
+      "source": "https://www.michigan.gov/dnr/-/media/Project/Websites/dnr/Documents/PRD/MgtPlans/Tahq_GMP_Appendices.pdf",
+      "corroboration": "https://shipwreckmuseum.com/visit/admission-hours-location/",
+      "reviewed": "2026-11-14",
+      "kind": "two-source additive approximate mileage"
+    },
+    {
+      "id": "ct-gateway-31-13",
+      "from": "Whitefish Point museum",
+      "to": "Sault Ste. Marie city gateway",
+      "distanceMiles": 73,
+      "scope": "OSRM base drive to Sault city ~73mi; museum validates the M-123/Paradise approach but the Point Iroquois shore alternate is a distinct route. Confirm city or Soo Locks destination.",
+      "source": "https://upper-michigan.com/guide/lodging/where-to-stay-in-sault-ste-marie.html",
+      "corroboration": "https://shipwreckmuseum.com/visit/admission-hours-location/",
+      "reviewed": "2026-11-14",
+      "kind": "road-network estimate"
     }
   ],
-  "remaining": "Thirty full stop-to-stop road routes remain unverified by an actual directions provider. Source references verify the named subsegments only; road and border conditions must be checked at travel time."
+  "remaining": "Three previously partial legs now have independently scoped approximate gateway planning distances. Pigeon River crossing to Grand Portage park approach remains unverified; all 30 road legs lack live routed ETA, actual parking evidence and current access authorization."
 }

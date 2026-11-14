@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const RELEASE = '2026-11-08';
+  const RELEASE = '2026-11-14';
 
   function addStyles() {
     if (document.getElementById('circle-tour-current-style')) return;

@@ -30,20 +30,20 @@ test('30 contiguous published road legs are audited without promoting estimates 
   assert.ok(ledger.edges.every(x=>['published-estimate-unverified','arrival-choice-unresolved','partial-source-only'].includes(x.status)));
   assert.ok(ledger.edges.every(x=>!('verifiedFullLegMiles' in x)&&!('eta' in x)));
   assert.equal(ledger.edges.find(x=>x.to==='21').status,'partial-source-only');
-  assert.equal(ledger.edges.find(x=>x.to==='31').status,'partial-source-only');
-  assert.equal(ledger.edges.find(x=>x.to==='8').status,'arrival-choice-unresolved');
-  assert.equal(ledger.edges.find(x=>x.to==='13').status,'arrival-choice-unresolved');
+  assert.equal(ledger.edges.find(x=>x.to==='31').status,'published-estimate-unverified');
+  assert.equal(ledger.edges.find(x=>x.to==='8').status,'published-estimate-unverified');
+  assert.equal(ledger.edges.find(x=>x.to==='13').status,'published-estimate-unverified');
 });
 test('source mileages preserve exact endpoints, units and source provenance',()=>{
   const anchors=ledger.publishedDistanceAnchors;
-  assert.equal(anchors.length,7);
+  assert.equal(anchors.length,10);
   assert.equal(new Set(anchors.map(x=>x.id)).size,anchors.length);
   for(const x of anchors){
     assert.ok(x.from&&x.to&&x.scope&&Number.isFinite(x.distanceMiles)&&x.distanceMiles>0);
     assert.ok(x.scope.length>=24,'each source needs a meaningful endpoint/scope caveat');
     const url=new URL(x.source);
     assert.equal(url.protocol,'https:');
-    assert.ok(['superiorcountry.ca','www.destinationontario.com','www.nps.gov','www.ridelakesuperior.com','shipwreckmuseum.com'].includes(url.hostname));
+    assert.ok(['superiorcountry.ca','www.destinationontario.com','www.nps.gov','www.ridelakesuperior.com','shipwreckmuseum.com','upper-michigan.com','www.michigan.gov'].includes(url.hostname));
   }
   assert.equal(anchors.find(x=>x.id==='thunderbay-pigeon').distanceMiles,38);
   assert.equal(anchors.find(x=>x.id==='paradise-whitefish').distanceMiles,11);
@@ -116,18 +116,19 @@ test('partial published miles never flow into the live itinerary travel clock',(
   });
   const code=section(live,'  function edgeMiles(', '  function totalMiles(');
   const get=new Function('card','ROUTE_ORDER',code+'\nreturn edgeMiles;')(card,order);
-  assert.equal(get('12','31'),null,'Paradise-to-museum 11 miles is not Tahquamenon-to-Whitefish');
+  assert.equal(get('12','31'),25,'Upper Falls–Paradise–Whitefish is independently composed, not all park entrances');
   assert.equal(get('20','21'),null,'38 miles to border is not a park parking guarantee');
-  assert.equal(get('31','13'),null,'Whitefish-to-Sault full mileage is unverified');
+  assert.equal(get('31','13'),73,'Whitefish–Sault city gateway estimate, not a live route');
+  assert.equal(get('7','8'),52,'Ontonagon to Houghton gateway does not include Copper Harbor');
   assert.equal(get('5','6'),43,'existing explicit Ironwood-to-Lake-of-the-Clouds reference remains');
   assert.equal(get('1','30'),0,'same-city closing seam remains zero');
-  assert.equal((html.match(/data-edge-verified="false"/g)||[]).length,4);
+  assert.equal((html.match(/data-edge-verified="false"/g)||[]).length,1);
 });
 test('Circle Tour page and sitemap indicate actual November source correction',()=>{
-  assert.match(html,/"dateModified":"2026-11-12"/);
-  assert.match(sitemap,/<loc>https:\/\/chrisizworski\.com\/lake-superior-circle-tour\/<\/loc>\s*<lastmod>2026-11-12<\/lastmod>/);
+  assert.match(html,/"dateModified":"2026-11-14"/);
+  assert.match(sitemap,/<loc>https:\/\/chrisizworski\.com\/lake-superior-circle-tour\/<\/loc>\s*<lastmod>2026-11-14<\/lastmod>/);
   assert.match(html,/~38 mi from Thunder Bay to the Pigeon River border; park approach extra/);
-  assert.match(html,/11 mi north of Paradise via Whitefish Point Road/);
+  assert.match(html,/25 mi Upper Falls to Whitefish Point via Paradise/);
   assert.doesNotMatch(html,/115 mi from Thunder Bay/);
   assert.doesNotMatch(html,/71 mi NE of Tahquamenon/);
   assert.equal((html.match(/class="stop-card"/g)||[]).length,31);

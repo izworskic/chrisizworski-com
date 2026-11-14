@@ -12,6 +12,13 @@ on:
       - 'public/assets/lake-superior-circle-tour-live-day.js'
       - 'rust/shared-itinerary/src/lib.rs'
       - 'tests/circle-tour-shared-rust.test.cjs'
+      - 'tests/circle-tour-road-evidence.test.js'
+      - 'tests/circle-tour-trip-intelligence.test.cjs'
+      - 'scripts/build-circle-tour-trip-intelligence.py'
+      - 'data/circle-tour-road-evidence.json'
+      - 'public/sitemap.xml'
+      - 'package.json'
+      - 'public/assets/circle-tour-trip-feasibility.js'
       - 'public/assets/circle-tour-tool-catalog.json'
       - 'config/circle-tour-tool-connections.json'
       - 'lib/circle-tour-network.mjs'
@@ -41,7 +48,9 @@ jobs:
       - name: Prove approved catalog is fresh, strictly scoped and deterministic
         run: |
           node scripts/build-circle-tour-network.mjs --check
-          node --test tests/circle-tour-bridge.test.js tests/circle-tour-foundation.test.cjs tests/circle-tour-shared-rust.test.cjs
+          python3 scripts/build-circle-tour-trip-intelligence.py
+          python3 scripts/build-circle-tour-trip-intelligence.py --check
+          node --test tests/circle-tour-bridge.test.js tests/circle-tour-foundation.test.cjs tests/circle-tour-shared-rust.test.cjs tests/circle-tour-trip-intelligence.test.cjs tests/circle-tour-road-evidence.test.js
           node scripts/experience-foundry.mjs connections --owner pictured-rocks
       - name: Install isolated pinned Chromium harness
         run: |
