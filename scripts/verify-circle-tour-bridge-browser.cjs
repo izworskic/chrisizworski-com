@@ -42,6 +42,25 @@ function check(value,message){if(!value)throw Error(message);}
 
     // Source-backed road choices stay usable at each viewport, without hijacking the
     // original 31-stop map or turning a published estimate into a verified ETA.
+    await page.waitForFunction(()=>window.CircleTourRust?.engine?.()==='rust-wasm',null,{timeout:20000});
+    const native=await page.evaluate(()=>{
+      const e=window.CircleTourRust;
+      const cards=id=>document.getElementById('stop-'+id);
+      const days=[...document.querySelectorAll('#itin-10 .itin-day')].map(el=>({
+        stops:el.dataset.stops.split(','),miles:Number(el.dataset.miles)
+      }));
+      return {
+        engine:e.engine(),stops:e.ORDER.length,
+        ironwood:e.evidenceMiles('5','6'),
+        withheld:e.evidenceMiles('7','8'),
+        total:e.verifyPreset(days,1358,'counterclockwise'),
+        stale:e.verifyPreset(days,1358,'clockwise')
+      };
+    });
+    check(native.engine==='rust-wasm'&&native.stops===31&&native.ironwood===43&&
+      native.withheld===null&&native.total===1358&&native.stale===null,
+      size.name+': real shared Rust Circle Tour source/parity gate unavailable '+JSON.stringify(native));
+    report.cases.push({state:size.name+' Rust itinerary core',result:'31 stop parity, incomplete legs withheld, published route retained'});
     await page.waitForFunction(()=>document.querySelectorAll('#routeDayList .route-day').length===10,null,{timeout:30000});
     check((await page.locator('#routePreviewMeta').textContent()).includes('1,358'),
       size.name+': 10-day estimated total missing');
@@ -378,6 +397,25 @@ function check(value,message){if(!value)throw Error(message);}
   check(await failPage.locator('article.stop-card').count()===31,'catalog failure broke original route');
   report.cases.push({state:'catalog failure',result:'static fallback and 31 stops retained'});
   await context.close();
+
+  // Native WASM must be optional, but its absence cannot reclassify a missing
+  // road segment, zero out a border reserve, or change the original mileages.
+  const rustFallbackCtx=await browser.newContext({viewport:{width:390,height:844}});
+  const rustFallback=await rustFallbackCtx.newPage();
+  await rustFallback.route('**/assets/shared-itinerary.wasm.b64*',route=>route.abort());
+  await rustFallback.goto(url,{waitUntil:'domcontentloaded',timeout:35000});
+  await rustFallback.waitForFunction(()=>!!window.CircleTourRust?.activate,null,{timeout:30000});
+  await rustFallback.evaluate(()=>window.CircleTourRust.activate());
+  check(await rustFallback.evaluate(()=>window.CircleTourRust.engine())==='js-parity',
+    'blocked WASM did not activate independent JS source oracle');
+  await rustFallback.waitForFunction(()=>document.querySelector('#routePreviewMeta')?.textContent.includes('1,358'),
+    null,{timeout:30000});
+  check(await rustFallback.evaluate(()=>window.CircleTourRust.evidenceMiles('7','8'))===null,
+    'blocked WASM invented an unverified road distance');
+  check(await rustFallback.locator('article.stop-card').count()===31,
+    'blocked WASM removed original source stop cards');
+  report.cases.push({state:'shared WASM unavailable',result:'JS source evidence, 31 stops and published estimate retained'});
+  await rustFallbackCtx.close();
 
   const noJs=await browser.newContext({javaScriptEnabled:false,viewport:{width:390,height:844}}),staticPage=await noJs.newPage();
   await staticPage.goto(url,{waitUntil:'domcontentloaded',timeout:35000});

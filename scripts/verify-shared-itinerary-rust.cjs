@@ -46,6 +46,50 @@ for(let saved=0;saved<=8;saved++)for(let regions=0;regions<=8;regions++){
  const expected=saved<1||saved>6||regions<1||regions>saved?0:regions>1?2:1;
  assert.equal(e.it_sheet(saved,regions),expected);checked++;
 }
+
+const circle=require('../public/assets/circle-tour-rust-itinerary.js');
+assert.equal(e.ct_version(),1);
+for(const key of ['ct_leg','ct_published_day','ct_border','ct_drive'])
+ assert.equal(typeof e[key],'function',key);
+const order=circle.ORDER.map(Number);
+assert.equal(order.length,31);
+for(let direction=0;direction<=1;direction++)for(let i=0;i<31;i++)
+ for(let j=0;j<31;j++)for(const proof of [0,1])
+ for(const miles of [-1,0,1,43,600,601,NaN]){
+  const a=order[i],b=order[j],next=order[(i+(direction===0?1:30))%31];
+  const alias=(a===1&&b===30)||(a===30&&b===1);
+  const expected=proof===1&&b===next&&Number.isFinite(miles)&&
+    (alias?miles===0:miles>0&&miles<=600)?1:0;
+  assert.equal(e.ct_leg(a,b,direction,miles,proof),expected,
+    [a,b,direction,miles,proof].join('/'));checked++;
+ }
+for(const first of [0,1,3,12,31,30,32])for(const last of [0,1,3,12,31,30,32])
+ for(const mile of [-1,0,1,87,87.5,600,601,NaN])for(const count of [0,1,2,11,31,32]){
+  const firstValid=order.includes(first),lastValid=order.includes(last);
+  const expected=firstValid&&lastValid&&count>=1&&count<=31&&
+    Number.isSafeInteger(mile)&&mile>=0&&mile<=600&&
+    (mile===0?(first===last&&count===1):(first!==last&&count>1))?1:0;
+  assert.equal(e.ct_published_day(first,last,mile,count),expected);
+  checked++;
+ }
+for(const available of [0,1,2])for(const wait of [-1,0,14,45,360,361,NaN])
+ for(const allowance of [-1,0,14,45,360,361,NaN]){
+   const expected=available<=1&&Number.isFinite(allowance)&&allowance>=0&&allowance<=360&&
+     (available===0?allowance===45:Number.isFinite(wait)&&wait>=0&&wait<=360&&wait===allowance)?1:0;
+   assert.equal(e.ct_border(available,wait,allowance),expected);
+   checked++;
+ }
+for(const miles of [-1,0,1,47,600,Infinity,NaN])
+ for(const hours of [0,1,1.2,47/47*1.2,600/47*1.2,NaN])
+ for(const stay of [0,1,2]){
+   const expected=stay<=1&&Number.isFinite(miles)&&Number.isFinite(hours)&&
+     miles>=0&&hours>=0&&miles<=10000&&hours<=500&&
+     (stay===1?(miles===0&&hours===0):Math.abs(hours-miles/47*1.2)<=0.000001)?1:0;
+   assert.equal(e.ct_drive(miles,hours,stay),expected);
+   checked++;
+ }
+console.log('Circle Tour source/WASM topology, mileage and border cases validated.');
+
 // Pin the exact build artifact before promoting native runtime. This guards
 // against source/binary drift and mislabeled JavaScript-only "Rust" releases.
 const pin=path.join(root,'public/assets/shared-itinerary.wasm.b64');
