@@ -51,7 +51,9 @@
   root.querySelectorAll('[data-munising-preset]').forEach(button => {
     button.addEventListener('click', () => {
       const selected = [...cards.entries()].filter(([,card]) => card.querySelector('.save')?.getAttribute('aria-pressed') === 'true').map(([id]) => id);
-      const assessment = assessPreset(button.dataset.munisingPreset, cards, selected, dayInput?.value || '');
+      const key=button.dataset.munisingPreset;
+      const original=assessPreset(key,cards,selected,dayInput?.value||'');
+      const assessment=window.SharedItineraryEngine?.vetoApproved?.(original,{ids:PRESETS[key],cards,selected,date:dayInput?.value||'',season:2})||original;
       if (!assessment.ok) { window.UPWaterfallMetrics?.plan(button.dataset.munisingPreset,'blocked',0); status.textContent = assessment.message; status.focus(); return; }
       for (const id of assessment.missing) cards.get(id).querySelector('.save').click();
       window.UPWaterfallMetrics?.plan(button.dataset.munisingPreset,assessment.missing.length?'added':'already_saved',assessment.missing.length);

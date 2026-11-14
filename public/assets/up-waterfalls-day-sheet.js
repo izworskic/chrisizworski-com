@@ -39,7 +39,8 @@
   function allowedSharedStop(card) {
     return Boolean(card && idPattern.test(card.dataset.id || '') &&
       card.dataset.arrivalVerified === 'verified' &&
-      !['closed', 'research'].includes(card.dataset.status));
+      !['closed', 'research'].includes(card.dataset.status) &&
+      (typeof window==='undefined'||!window.SharedItineraryEngine||window.SharedItineraryEngine.candidate(card)));
   }
   // Pure policy functions are also tested with Node without a DOM.
   if (typeof module !== 'undefined' && module.exports) module.exports = { parkingDirections, shareUrl, allowedSharedStop, validDate };

@@ -59,6 +59,41 @@ try{
     }finally{await fallback.close();}
   });
 
+  await run('shared Rust itinerary is really active and vetoes unsafe visitor days',async()=>{
+    await page.waitForFunction(()=>window.SharedItineraryEngine?.engine?.()==='rust-wasm',{timeout:15000});
+    const result=await page.evaluate(()=>{
+      const e=window.SharedItineraryEngine;
+      const cards=new Map([...document.querySelectorAll('[data-fall][data-id]')].map(c=>[c.dataset.id,c]));
+      const ids=['wagner-falls','miners-falls','elliot-falls'];
+      return {
+        engine:e.engine(),
+        summer:e.assess({ids,cards,date:'2027-06-15',season:2}).ok,
+        winter:e.assess({ids,cards,date:'2027-01-15',season:2}).ok,
+        closed:e.assess({ids:['munising-falls'],cards,date:'2027-06-15',season:0}).ok,
+        six:e.assess({ids,cards,selected:ids,date:'2027-06-15',season:2}).ok,
+        radius:e.nearbyEligible(cards.get('miners-falls'),10,10),
+        crossRegion:e.sheetKind(3,2)
+      };
+    });
+    assert.deepEqual(result,{engine:'rust-wasm',summer:true,winter:false,closed:false,six:true,radius:true,crossRegion:2});
+  });
+  await run('shared itinerary remains source-safe when the compiled WASM request is blocked',async()=>{
+    const fallback=await browser.newPage({viewport:{width:390,height:844}});
+    try{
+      await fallback.route('**/assets/shared-itinerary.wasm.b64',route=>route.abort());
+      await fallback.goto(base+'/upper-peninsula-waterfalls/',{waitUntil:'domcontentloaded',timeout:30000});
+      await fallback.locator('[data-fall]').first().waitFor();
+      const result=await fallback.evaluate(()=>{
+        const e=window.SharedItineraryEngine;
+        const cards=new Map([...document.querySelectorAll('[data-fall][data-id]')].map(c=>[c.dataset.id,c]));
+        return {engine:e.engine(),
+          winter:e.assess({ids:['wagner-falls','miners-falls'],cards,date:'2027-01-15',season:2}).ok,
+          closed:e.assess({ids:['munising-falls'],cards,date:'2027-06-01',season:0}).ok};
+      });
+      assert.deepEqual(result,{engine:'js-parity',winter:false,closed:false});
+    }finally{await fallback.close();}
+  });
+
   await run('real Rust/WebAssembly regional day-sheet gate keeps winter closure and six-stop restrictions',async()=>{
     await page.waitForFunction(()=>window.UPWaterfallEvidenceRust?.region?.()?.engine==='rust-wasm',{timeout:15000});
     const result=await page.evaluate(()=>{
