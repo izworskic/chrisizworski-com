@@ -156,6 +156,8 @@
       loadLiveLevel();
     }
     await import('/assets/lake-superior-circle-tour-live-day.js?v=20260930-1');
+    // Independent day-budget UI, backed by Python evidence and Rust parity.
+    await import('/assets/circle-tour-feasibility-ui.js?v=20261114');
   }
 
   boot();
