@@ -3,7 +3,7 @@
   "reviewed": "2026-11-14",
   "reviewMethod": "Photographer-owned geotags or exact image descriptions, NPS original accession/USFWS original Flickr, Commons archived license snapshots, plus visual preview where accessible.",
   "hosting": "Wikimedia Commons hosted thumbnails or one verified small original; per-page attribution and license, without cloning file bytes into repo.",
-  "scope": "40 name/location-matched waterfall photographs with direct author and reuse-license evidence; 40 pending or withheld; exact Little Union River gorge scene added November 14.",
+  "scope": "42 verified exact-site subject/source/reuse-cleared photographs out of 80 curated guides, 38 remaining; Nonesuch licensed photographer and official Kakabika USFS photo newly verified.",
   "restrictions": [
     "Never download/reuse general Michigan.gov photography solely because it is a state site; use its documented approved portfolio or obtain permission.",
     "Do not publish photos with All Rights Reserved, CC NC, no derivatives without exact compliant use, or unverifiable subject identity.",
@@ -807,6 +807,44 @@
       "caption": "Small mossy cascades in the Little Union River gorge, photographed by Shadowmeld Photography in July 2015.",
       "alt": "Little Union Gorge Falls water flowing over mossy rocks within the Little Union River gorge in Michigan's Porcupine Mountains.",
       "licenseChanges": "Displayed as the exact Commons-hosted 960px scaled image, proportional, without editorial crop or retouch; source image is part of the multi-cascade Little Union gorge, not an access claim.",
+      "role": "verified-guide-photo"
+    },
+    {
+      "id": "nonesuch-falls",
+      "name": "Nonesuch Falls",
+      "page": "public/upper-peninsula-waterfalls/nonesuch-falls/index.html",
+      "imageUrl": "https://live.staticflickr.com/65535/52105545410_d512e133c4_b.jpg",
+      "sourceUrl": "https://www.flickr.com/photos/76767740@N08/52105545410/",
+      "originalSource": "https://www.flickr.com/photos/76767740@N08/52105545410/",
+      "creator": "Curtis Abert",
+      "license": "CC BY 2.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+      "imageDate": "2022-05-24",
+      "width": 1024,
+      "height": 768,
+      "identityEvidence": "Flickr uploader Curtis Abert self-identifies this exact 2022 photograph DSCN6903 as 'Nonesuch Falls' and publicly geotags it to Nonesuch, Carp Lake Township, Michigan. The curated guide points to the Nonesuch Mine waterfall on Little Iron River in Porcupine Mountains State Park. This avoids generic Porcupine Mountains waterfall imagery. The author's file visibly lists CC BY 2.0, permits commercial re-use with attribution, date May 24 2022; this Flickr 'b' derivative has verified true 1024 x 768 dimensions.",
+      "caption": "Nonesuch Falls on the Little Iron River in the Porcupine Mountains, photographed by Curtis Abert in May 2022.",
+      "alt": "Nonesuch Falls flowing through stepped rocky ledges on the Little Iron River in Michigan's Porcupine Mountains.",
+      "licenseChanges": "Original photographer's Flickr 1024px rendition, no crop, recoloring or edits; image owner, license and source directly linked.",
+      "role": "verified-guide-photo"
+    },
+    {
+      "id": "kakabika-falls",
+      "name": "Kakabika Falls",
+      "page": "public/upper-peninsula-waterfalls/kakabika-falls/index.html",
+      "imageUrl": "https://live.staticflickr.com/4417/36539912553_0bd3bba3db_b.jpg",
+      "sourceUrl": "https://www.flickr.com/photos/ottawanf/36539912553/",
+      "originalSource": "https://www.flickr.com/photos/ottawanf/36539912553/",
+      "creator": "US Forest Service · Randi Ellsworth",
+      "license": "Public domain — US Forest Service official-duty photograph",
+      "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
+      "imageDate": "2017-09-18",
+      "width": 1024,
+      "height": 683,
+      "identityEvidence": "Official Ottawa National Forest Flickr account captions staff photo 170918-FS-Ottawa-RE-022 as 'Take a stroll along the river and check out Kakabika Falls on the Bessemer Ranger District.' Camera EXIF credits 'Forest Service photo by Randi Ellsworth', and the Flickr page explicitly displays 'Public Domain Work'. The guide concerns Kakabika Falls on the Cisco Branch Ontonagon River in the Bessemer Ranger District, matching the photo's USFS identity. Actual Flickr 1024px original derivative 1024 x 683 checked; no assertion of live access.",
+      "caption": "Kakabika Falls in the Ottawa National Forest, photographed by U.S. Forest Service employee Randi Ellsworth in September 2017.",
+      "alt": "Kakabika Falls spilling across low rocky ledges and bends on the Cisco Branch Ontonagon River.",
+      "licenseChanges": "Agency's public-domain staff original, unmodified 1024px Flickr rendition, explicitly credited with original USFS Flickr source and public-domain statement.",
       "role": "verified-guide-photo"
     }
   ]
