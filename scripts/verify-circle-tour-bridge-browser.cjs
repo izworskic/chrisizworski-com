@@ -463,6 +463,55 @@ function check(value,message){if(!value)throw Error(message);}
     await guide.locator('#day-7').screenshot({path:path.join(out,shot),animations:'disabled'});
     report.screenshots.push(shot);
 
+
+    // Visitor frustration flow: August, ten days, Pictured Rocks, hiking and
+    // waterfalls, but no more than five hours of sample wheel time per day.
+    await guide.waitForFunction(()=>window.CircleTourTraveler&&
+      document.querySelector('#ct-personalize')?.dataset.js==='on'&&
+      document.querySelectorAll('#ct-prefer-timeline .ct-personal-day').length===10,
+      null,{timeout:15000});
+    check((await guide.locator('#ct-prefer-summary').textContent()).includes('Days 7, 9'),
+      'ten-day five-hour itinerary did not flag the two long driving days');
+    check(await guide.locator('#ct-prefer-timeline .ct-personal-day[data-state="unverified"]').count()===1,
+      'Pigeon River source gap was converted into a guaranteed arrival');
+    check(await guide.locator('#ct-prefer-alternate button').count()===1,
+      'fifteen-day published alternative not offered');
+    check(await guide.locator('#ct-prefer-timeline a[href="https://picturedrocks.chrisizworski.com/"]').count()>=1,
+      'must-see Pictured Rocks was not linked to its existing tool');
+    const photos=guide.locator('#ct-prefer-timeline .ct-personal-photo img');
+    check(await photos.count()>=5,'personalized plan lacks actual destination photography');
+    await photos.first().scrollIntoViewIfNeeded();
+    await guide.waitForFunction(()=>{
+      const img=document.querySelector('#ct-prefer-timeline .ct-personal-photo img');
+      return img?.complete&&img.naturalWidth>=200;
+    },null,{timeout:15000});
+    const preview='circle-traveler-plan-'+width+'.png';
+    await guide.locator('#ct-prefer-summary').screenshot({path:path.join(out,preview),animations:'disabled'});
+    report.screenshots.push(preview);
+    await guide.locator('#ct-prefer-days').selectOption('15');
+    check(await guide.locator('#ct-prefer-timeline .ct-personal-day').count()===15,
+      'fifteen-day route did not render source-reconciled overnight areas');
+    check((await guide.locator('#ct-prefer-summary').textContent()).includes('No published day exceeds'),
+      'fifteen-day route was wrongly promoted into a five-hour overload');
+    check((await guide.locator('#ct-prefer-map').getAttribute('href')).includes('itinerary=15'),
+      'alternative did not link to the actual 15-day source route');
+    check((await guide.locator('#ct-prefer-share').inputValue()).includes('ct_days=15'),
+      'shareable link failed to preserve chosen published route');
+    await guide.locator('#ct-prefer-drive').selectOption('4');
+    check((await guide.locator('#ct-prefer-summary').textContent()).includes('Days 14, 15'),
+      'four-hour driving cap must flag the northern and border-to-Duluth days');
+    await guide.locator('#ct-prefer-month').selectOption('1');
+    check((await guide.locator('#ct-prefer-summary').textContent()).includes('seasonal'),
+      'winter itinerary needs season-sensitive road and park checks');
+    check(await guide.locator('#ct-prefer-timeline .ct-personal-day[data-state="unverified"]').count()===1,
+      'month change incorrectly approved an unverified road approach');
+    const personalWidth=await guide.evaluate(()=>({
+      viewport:innerWidth,document:document.documentElement.scrollWidth}));
+    check(personalWidth.document<=personalWidth.viewport+2,
+      'personalized itinerary causes horizontal mobile scrolling');
+    report.cases.push({state:width+'px traveler preferences',result:
+      '7/10/15 source routes, 5h cap, 4h conflict, seasonal gate, local photos, shareable preferences and original tools'});
+
     check((await guide.title()).includes('10-Day Itinerary'),'10-day search title missing');
     check(await guide.locator('link[rel="canonical"]').getAttribute('href')===
       'https://chrisizworski.com/lake-superior-circle-tour/10-day/','incorrect canonical');
@@ -509,6 +558,10 @@ function check(value,message){if(!value)throw Error(message);}
   check(await staticGuide.locator('#day-7 .day-photo img').getAttribute('src')===
     '/assets/circle-tour/photos/day-07-tahquamenon.jpg',
     'no-JS photo must not depend on external Wikimedia runtime');
+  check((await staticGuide.locator('#ct-prefer-summary').textContent()).includes('five-hour'),
+    'no-JS static traveler explanation missing');
+  check(await staticGuide.locator('.ct-personal-controls').isHidden(),
+    'inert no-JS controls must not be shown');
   await staticGuide.close();
 
   report.cases.push({state:'no JavaScript',result:'canonical independent links and all 31 stop cards visible'});
