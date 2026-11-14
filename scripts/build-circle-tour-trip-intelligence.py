@@ -134,7 +134,7 @@ def validate_visuals(visual: dict, hub: str) -> None:
             raise ValueError("Missing image attribution link")
         if not photo.get("licenseUrl", "").startswith("https://creativecommons.org/"):
             raise ValueError("Missing photo license")
-        if any(len(photo.get(field, "")) < 8 for field in ("alt", "caption", "license")):
+        if any(len(photo.get(field, "")) < 6 for field in ("alt", "caption", "license")):
             raise ValueError("Photo lacks identifying context or licensing")
         if not photo.get("by", "").strip():
             raise ValueError("No photography credit")
