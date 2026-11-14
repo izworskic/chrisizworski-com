@@ -48,8 +48,8 @@ for(let saved=0;saved<=8;saved++)for(let regions=0;regions<=8;regions++){
 }
 
 const circle=require('../public/assets/circle-tour-rust-itinerary.js');
-assert.equal(e.ct_version(),1);
-for(const key of ['ct_leg','ct_published_day','ct_border','ct_drive'])
+assert.equal(e.ct_version(),2);
+for(const key of ['ct_leg','ct_published_day','ct_border','ct_drive','ct_day_budget'])
  assert.equal(typeof e[key],'function',key);
 const order=circle.ORDER.map(Number);
 assert.equal(order.length,31);
@@ -89,6 +89,24 @@ for(const miles of [-1,0,1,47,600,Infinity,NaN])
    checked++;
  }
 console.log('Circle Tour source/WASM topology, mileage and border cases validated.');
+
+// Editorial whole-day feasibility is not an independently measured ETA.
+for(const miles of [-1,0,23,87,146,192,217,303,600,601,NaN,Infinity])
+ for(const minutes of [0,180,360,480,540,660,960,1000])
+ for(const visit of [0,60,90,150,600,601])
+ for(const border of [0,14,45,180,181])
+ for(const basis of [0,1,2,3]){
+   let expected=0;
+   if(basis===0)expected=4;
+   else if((basis===1||basis===2)&&Number.isFinite(miles)&&miles>=0&&miles<=600&&
+     minutes>=180&&minutes<=960&&visit<=600&&border<=180){
+     const remaining=minutes-(miles/47*1.2*60+visit+border);
+     expected=remaining<0?3:remaining<120?2:1;
+   }
+   assert.equal(e.ct_day_budget(miles,minutes,visit,border,basis),expected,
+     [miles,minutes,visit,border,basis].join('/'));checked++;
+ }
+console.log('Circle Tour Rust feasibility budget parity verified against independent JavaScript oracle.');
 
 // Pin the exact build artifact before promoting native runtime. This guards
 // against source/binary drift and mislabeled JavaScript-only "Rust" releases.
