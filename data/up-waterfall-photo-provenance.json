@@ -3,7 +3,7 @@
   "reviewed": "2026-11-14",
   "reviewMethod": "Photographer-owned geotags or exact image descriptions, NPS original accession/USFWS original Flickr, Commons archived license snapshots, plus visual preview where accessible.",
   "hosting": "Wikimedia Commons hosted thumbnails or one verified small original; per-page attribution and license, without cloning file bytes into repo.",
-  "scope": "42 verified exact-site subject/source/reuse-cleared photographs out of 80 curated guides, 38 remaining; Nonesuch licensed photographer and official Kakabika USFS photo newly verified.",
+  "scope": "44 verified named waterfall photographs with exact subject, source and commercial-reuse rights, 36 pending or held, adding Horseshoe Falls and agency Mex-i-min-e Falls on Nov 14.",
   "restrictions": [
     "Never download/reuse general Michigan.gov photography solely because it is a state site; use its documented approved portfolio or obtain permission.",
     "Do not publish photos with All Rights Reserved, CC NC, no derivatives without exact compliant use, or unverifiable subject identity.",
@@ -845,6 +845,44 @@
       "caption": "Kakabika Falls in the Ottawa National Forest, photographed by U.S. Forest Service employee Randi Ellsworth in September 2017.",
       "alt": "Kakabika Falls spilling across low rocky ledges and bends on the Cisco Branch Ontonagon River.",
       "licenseChanges": "Agency's public-domain staff original, unmodified 1024px Flickr rendition, explicitly credited with original USFS Flickr source and public-domain statement.",
+      "role": "verified-guide-photo"
+    },
+    {
+      "id": "horseshoe-falls",
+      "name": "Horseshoe Falls",
+      "page": "public/upper-peninsula-waterfalls/horseshoe-falls/index.html",
+      "imageUrl": "https://live.staticflickr.com/65535/54027627971_a697771fc6_b.jpg",
+      "sourceUrl": "https://www.flickr.com/photos/181920661@N03/54027627971/",
+      "originalSource": "https://www.flickr.com/photos/181920661@N03/54027627971/",
+      "creator": "Joseph Gage",
+      "license": "CC BY-SA 2.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
+      "imageDate": "2024-09-21",
+      "width": 1024,
+      "height": 683,
+      "identityEvidence": "Joseph Gage published his personally photographed image as 'Horseshoe Falls, Munising, MI 49862' on Flickr with commercial-reuse-compatible CC BY-SA 2.0. Geotag 46°24'12.84 N, 86°38'32.49 W is within about 80 metres of the catalog Horseshoe Falls in Munising at 602 Bell Avenue; EXIF creation 2024-09-21, Flickr 1024×683 rendition verified. This is the privately operated Horseshoe Falls attraction, not closed Munising Falls or NPS-managed Miners Falls. Admission and seasonal closure warning remain unchanged.",
+      "caption": "Horseshoe Falls at the privately operated Munising garden attraction, photographed by Joseph Gage in September 2024.",
+      "alt": "Horseshoe Falls at a landscaped private waterfall attraction in Munising, Michigan, photographed in summer greenery.",
+      "licenseChanges": "Flickr original 1024px rendition, no crop, recoloring or retouch; name, CC BY-SA 2.0 and original source linked.",
+      "role": "verified-guide-photo"
+    },
+    {
+      "id": "mex-i-min-e-falls",
+      "name": "Mex-i-min-e Falls",
+      "page": "public/upper-peninsula-waterfalls/mex-i-min-e-falls/index.html",
+      "imageUrl": "https://live.staticflickr.com/4213/35037511610_90df139503_b.jpg",
+      "sourceUrl": "https://www.flickr.com/photos/ottawanf/35037511610/",
+      "originalSource": "https://www.flickr.com/photos/ottawanf/35037511610/",
+      "creator": "Ottawa National Forest",
+      "license": "Public domain — US Forest Service official photograph",
+      "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
+      "imageDate": "2016-08-30",
+      "width": 1024,
+      "height": 768,
+      "identityEvidence": "Official Ottawa National Forest Flickr account explicitly titles the photo 'Mex-i-min-e Falls 2' and Flickr labels the exact file 'Public Domain Work'. Captured August 30 2016 and officially posted June 20 2017, this is the national-forest waterfall on the Middle Branch Ontonagon River visited from Burned Dam campground. The original 1024×768 derivative was checked from Flickr itself. A photograph does not guarantee forest-road or campground opening or infer safe trail conditions.",
+      "caption": "Mex-i-min-e Falls along the Middle Branch Ontonagon River, photographed by Ottawa National Forest in August 2016.",
+      "alt": "Mex-i-min-e Falls flowing through tiered rock shelves on the Middle Branch Ontonagon River in Ottawa National Forest.",
+      "licenseChanges": "Unmodified 1024px Flickr agency photograph, agency's own Public Domain Work designation and original file link preserved.",
       "role": "verified-guide-photo"
     }
   ]
