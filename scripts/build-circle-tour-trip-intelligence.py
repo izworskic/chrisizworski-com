@@ -125,11 +125,17 @@ def validate_visuals(visual: dict, hub: str) -> None:
     if len({photo["src"] for photo in photos}) != 11:
         raise ValueError("Every itinerary day needs its own place-specific licensed photo")
     for photo in photos:
-        if not photo.get("src", "").startswith((
-            "https://commons.wikimedia.org/wiki/Special:FilePath/",
-            "https://thumb.wikimedia.org/wikipedia/commons/thumb/",
-        )):
-            raise ValueError("Photo must use an approved Wikimedia Commons source")
+        src = photo.get("src", "")
+        if not src.startswith("/assets/circle-tour/photos/") or not src.endswith(".jpg"):
+            raise ValueError("Photo must be a locally served JPEG thumbnail")
+        asset = ROOT / "public" / src.lstrip("/")
+        if not asset.is_file() or asset.stat().st_size < 5000:
+            raise ValueError("Missing or abnormally small locally hosted photo: " + src)
+        with asset.open("rb") as stream:
+            if stream.read(3) != b"\\xff\\xd8\\xff":
+                raise ValueError("Photo asset is not a valid JPEG: " + src)
+        if not photo.get("sourceSrc", "").startswith("https://"):
+            raise ValueError("Original Wikimedia source not recorded")
         if not photo.get("file", "").startswith("https://commons.wikimedia.org/wiki/File:"):
             raise ValueError("Missing image attribution link")
         if not photo.get("licenseUrl", "").startswith("https://creativecommons.org/"):
@@ -163,7 +169,7 @@ def photo_html(photo: dict, hero: bool = False) -> str:
             f'width="960" height="640" src="{esc(photo["src"])}" alt="{esc(photo["alt"])}">'
             f'<figcaption>{esc(photo["caption"])} '
             f'<span class="photo-credit">Photo: <a href="{esc(photo["file"])}" rel="noopener noreferrer" target="_blank">{esc(photo["by"])}</a>'
-            f' · <a href="{esc(photo["licenseUrl"])}" rel="noopener noreferrer" target="_blank">{esc(photo["license"])}</a></span></figcaption></figure>')
+            f' · <a href="{esc(photo["licenseUrl"])}" rel="noopener noreferrer" target="_blank">{esc(photo["license"])}</a> · optimized thumbnail</span></figcaption></figure>')
 
 
 def tools_html(day: int, tools: list[dict]) -> str:
