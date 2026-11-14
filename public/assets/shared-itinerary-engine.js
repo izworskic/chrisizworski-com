@@ -73,8 +73,11 @@
       return {ok:false,missing:[],reason:HOLD[0]};
     const picked=new Set(selected);
     const missing=[...new Set(ids)].filter(id=>!picked.has(id));
-    const everyValid=ids.length>0 && ids.every(id=>ID.test(id)&&
+    const proposedValid=ids.length>0 && ids.every(id=>ID.test(id)&&
       candidate(cards.get(id))&&Boolean(cards.get(id)?.querySelector?.('.save')));
+    const savedValid=[...picked].every(id=>ID.test(id)&&
+      candidate(cards.get(id))&&Boolean(cards.get(id)?.querySelector?.('.save')));
+    const everyValid=proposedValid&&savedValid;
     const {state,month}=calendar(date);
     const code=planCode(picked.size,missing.length,everyValid?1:0,state,month,season);
     return code===1 ? {ok:true,missing,reason:'Use the original guide and agency sources; no route, current opening or drive time was computed.',engine:native?'rust-wasm':'js-parity'}
