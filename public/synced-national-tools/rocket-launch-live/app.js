@@ -193,7 +193,52 @@
     node.textContent = [days + 'd', String(hours).padStart(2, '0') + 'h',
       String(minutes).padStart(2, '0') + 'm', String(secs).padStart(2, '0') + 's'].join('  :  ');
   }
+  // Just launched: the newest launch outcome from the last 24 hours, as the
+  // public launch calendar reports it. Never inferred from a missing listing.
+  const JUST_WORDS={
+    success:['Just launched','Launch successful','Watch the replay on '],
+    'payload-deployed':['Just launched','Payload deployed','Watch the replay on '],
+    'in-flight':['Flying now','In flight now','Follow it live on '],
+    failure:['Launch update','Launch failure reported','Read the update on '],
+    'partial-failure':['Launch update','Partial failure reported','Read the update on ']
+  };
+  function sinceLiftoff(iso){
+    const mins=Math.max(0,Math.floor((Date.now()-Date.parse(iso))/60000));
+    return mins<1?'moments ago':mins<60?mins+' min ago':Math.floor(mins/60)+' hr ago';
+  }
+  function renderJustLaunched(data){
+    const box=$('rl-just-launched');
+    if(!box)return;
+    const list=(data?.recentLaunches||[]).filter(r=>JUST_WORDS[r.outcome]&&
+      Number.isFinite(Date.parse(r.net))&&Date.now()-Date.parse(r.net)<=24*3600000);
+    box.hidden=!list.length;
+    if(!list.length)return;
+    const r=list[0],w=JUST_WORDS[r.outcome];
+    box.dataset.outcome=r.outcome;
+    set('rl-just-kicker',w[0]+' · '+sinceLiftoff(r.net));
+    set('rl-just-title',r.name||'Launch');
+    const when=new Intl.DateTimeFormat(undefined,{timeZone:visitorZone,month:'short',day:'numeric',
+      hour:'numeric',minute:'2-digit',timeZoneName:'short'}).format(new Date(r.net));
+    set('rl-just-line',w[1]+' · '+(r.regionName?'from '+r.regionName+' · ':'')+'lifted off '+when);
+    const actions=$('rl-just-actions');
+    actions.replaceChildren();
+    const op=r.operator?.url?anchor(r.operator.url,w[2]+(r.operator.short||'the launch company')+'’s site','rl-just-cta'):null;
+    if(op)actions.appendChild(op);
+    const checked=Date.parse(data.scheduleCheckedAt||'');
+    set('rl-just-note','Status from the public launch calendar (Launch Library 2)'+
+      (Number.isFinite(checked)?', checked '+new Intl.DateTimeFormat(undefined,{timeZone:visitorZone,
+        hour:'numeric',minute:'2-digit',timeZoneName:'short'}).format(new Date(checked)):'')+
+      (r.sourceStale?'. Our calendar check is overdue, so this may have changed since.':'.'));
+    const more=$('rl-just-more');
+    more.replaceChildren();
+    for(const x of list.slice(1,3)){
+      const ww=JUST_WORDS[x.outcome];
+      more.appendChild(el('li','',x.name+' · '+ww[1]+' · '+sinceLiftoff(x.net)));
+    }
+    more.hidden=list.length<2;
+  }
   function renderFrontSchedule(data) {
+    renderJustLaunched(data);
     const list = $('rl-front-launch-list');
     if (!list) return;
     list.replaceChildren();

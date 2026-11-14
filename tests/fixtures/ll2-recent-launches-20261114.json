@@ -1,0 +1,568 @@
+{
+ "note": "Real Launch Library 2 v2.3 records captured 2026-11-14 for just-launched tests. Images stripped.",
+ "starship": {
+  "id": "0f867f0c-5422-4d44-93b8-d7faaae7019b",
+  "url": "https://ll.thespacedevs.com/2.3.0/launches/0f867f0c-5422-4d44-93b8-d7faaae7019b/?format=json",
+  "name": "Starship | Starlink Group 31-2 (Starship Flight 15)",
+  "status": {
+   "id": 9,
+   "name": "Payload Deployed",
+   "abbrev": "Deployed",
+   "description": "Deployment of the payload(s) has been confirmed."
+  },
+  "last_updated": "2026-11-14T10:48:08Z",
+  "net": "2026-11-13T22:47:36Z",
+  "net_precision": {
+   "id": 0,
+   "name": "Second",
+   "abbrev": "SEC",
+   "description": "The T-0 is accurate to the second."
+  },
+  "window_start": "2026-11-13T22:45:00Z",
+  "window_end": "2026-11-14T00:00:00Z",
+  "probability": null,
+  "launch_service_provider": {
+   "response_mode": "list",
+   "id": 121,
+   "url": "https://ll.thespacedevs.com/2.3.0/agencies/121/?format=json",
+   "name": "SpaceX",
+   "abbrev": "SpX",
+   "type": {
+    "id": 3,
+    "name": "Commercial"
+   }
+  },
+  "rocket": {
+   "id": 9138,
+   "configuration": {
+    "response_mode": "list",
+    "id": 522,
+    "url": "https://ll.thespacedevs.com/2.3.0/launcher_configurations/522/?format=json",
+    "name": "Starship",
+    "families": [
+     {
+      "response_mode": "list",
+      "id": 156,
+      "name": "Starship"
+     }
+    ],
+    "full_name": "Starship V3",
+    "variant": "V3"
+   }
+  },
+  "mission": {
+   "id": 7737,
+   "name": "Starlink Group 31-2 (Starship Flight 15)",
+   "type": "Communications",
+   "description": "15th test flight of the two-stage Starship launch vehicle and 4th flight of Starship V3. Second Starship flight to deploy satellites (a group of Starlink satellites known as Starlink Group 31-2) into stable Low Earth Orbit and first ever to attempt returning the Starship 2nd stage back to the launch site.\r\n\r\nThe ship is expected to fly at an altitude approximately 275 km above Earth and complete approximately 14 orbits around the planet for more than 22 hours, with the ship expected to attempt returning back to Starbase, Texas on its launch pad by pad arms catching.\r\n\r\nThe booster\u2019s primary test objective on Flight 15 will be executing a successful launch, ascent, stage separation, boostback burn, and landing by pad arms catching. This will also be the 1st Starship V3 booster to attempt returning to its launch site.\r\n\r\nStarship will deliver 26 Starlink V3 satellites to orbit for the second time, which aim to greatly expand the network's capacity and user speeds. Each Starlink V3 satellite will add 1 Tbps of capacity to the constellation. 3 of the satellites have been modified with a suite of cameras to scan Starship\u2019s heatshield and transmit imagery down to operators.",
+   "orbit": {
+    "id": 8,
+    "name": "Low Earth Orbit",
+    "abbrev": "LEO",
+    "celestial_body": {
+     "response_mode": "list",
+     "id": 1,
+     "name": "Earth"
+    }
+   },
+   "agencies": [
+    {
+     "response_mode": "normal",
+     "id": 121,
+     "url": "https://ll.thespacedevs.com/2.3.0/agencies/121/?format=json",
+     "name": "SpaceX",
+     "abbrev": "SpX",
+     "type": {
+      "id": 3,
+      "name": "Commercial"
+     },
+     "featured": true,
+     "country": [
+      {
+       "id": 2,
+       "name": "United States of America",
+       "alpha_2_code": "US",
+       "alpha_3_code": "USA",
+       "nationality_name": "American",
+       "nationality_name_composed": "Americano"
+      }
+     ],
+     "description": "Space Exploration Technologies Corp., known as SpaceX, is an American aerospace manufacturer and space transport services company headquartered in Hawthorne, California. It was founded in 2002 by entrepreneur Elon Musk with the goal of reducing space transportation costs and enabling the colonization of Mars. SpaceX operates from many pads, on the East Coast of the US they operate from SLC-40 at Cape Canaveral Space Force Station and historic LC-39A at Kennedy Space Center. They also operate from SLC-4E at Vandenberg Space Force Base, California, usually for polar launches. Another launch site is being developed at Boca Chica, Texas.",
+     "administrator": "CEO: Elon Musk",
+     "founding_year": 2002,
+     "launchers": "Falcon | Starship",
+     "spacecraft": "Dragon",
+     "parent": null,
+     "logo": {
+      "id": 186,
+      "name": "SpaceX logo",
+      "image_url": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/images/spacex_logo_20220826094919.png",
+      "thumbnail_url": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/images/255bauto255d__image_thumbnail_20240305185138.png",
+      "credit": "SpaceX",
+      "license": {
+       "id": 5,
+       "name": "CC BY-NC 2.0",
+       "priority": 1,
+       "link": "https://creativecommons.org/licenses/by-nc/2.0/"
+      },
+      "single_use": true,
+      "variants": []
+     },
+     "social_logo": {
+      "id": 94,
+      "name": "SpaceX social logo",
+      "image_url": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/images/spacex_social_l_image_20260407054626.jpg",
+      "thumbnail_url": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/images/spacex_social_l_image_thumbnail_20260407054626.jpeg",
+      "credit": "SpaceX",
+      "license": {
+       "id": 5,
+       "name": "CC BY-NC 2.0",
+       "priority": 1,
+       "link": "https://creativecommons.org/licenses/by-nc/2.0/"
+      },
+      "single_use": true,
+      "variants": []
+     },
+     "total_launch_count": 746,
+     "consecutive_successful_launches": 230,
+     "successful_launches": 730,
+     "failed_launches": 15,
+     "pending_launches": 136,
+     "consecutive_successful_landings": 0,
+     "successful_landings": 690,
+     "failed_landings": 30,
+     "attempted_landings": 719,
+     "successful_landings_spacecraft": 63,
+     "failed_landings_spacecraft": 3,
+     "attempted_landings_spacecraft": 68,
+     "successful_landings_payload": 1,
+     "failed_landings_payload": 0,
+     "attempted_landings_payload": 1,
+     "info_url": "https://www.spacex.com/",
+     "social_media_links": [
+      {
+       "id": 427,
+       "social_media": {
+        "id": 3,
+        "name": "Homepage",
+        "url": null,
+        "logo": null
+       },
+       "url": "https://www.spacex.com/"
+      },
+      {
+       "id": 428,
+       "social_media": {
+        "id": 1,
+        "name": "X",
+        "url": "https://x.com",
+        "logo": {
+         "id": 2320,
+         "name": "X logo",
+         "image_url": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/images/x_logo_image_20250211191027.jpg",
+         "thumbnail_url": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/images/x_logo_image_thumbnail_20250211191027.jpeg",
+         "credit": "X",
+         "license": {
+          "id": 1,
+          "name": "Unknown",
+          "priority": 9,
+          "link": null
+         },
+         "single_use": true,
+         "variants": []
+        }
+       },
+       "url": "https://x.com/spacex/"
+      },
+      {
+       "id": 429,
+       "social_media": {
+        "id": 6,
+        "name": "Youtube",
+        "url": "https://www.youtube.com/",
+        "logo": {
+         "id": 2356,
+         "name": "YouTube logo",
+         "image_url": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/images/youtube_logo_image_20250321073112.png",
+         "thumbnail_url": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/images/youtube_logo_image_thumbnail_20250321073112.png",
+         "credit": "YouTube",
+         "license": {
+          "id": 1,
+          "name": "Unknown",
+          "priority": 9,
+          "link": null
+         },
+         "single_use": true,
+         "variants": []
+        }
+       },
+       "url": "https://www.youtube.com/@spacex"
+      },
+      {
+       "id": 430,
+       "social_media": {
+        "id": 4,
+        "name": "LinkedIn",
+        "url": "https://www.linkedin.com/",
+        "logo": {
+         "id": 2321,
+         "name": "LinkedIn logo",
+         "image_url": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/images/linkedin_logo_image_20250211191111.png",
+         "thumbnail_url": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/images/linkedin_logo_image_thumbnail_20250211191112.png",
+         "credit": "LinkedIn",
+         "license": {
+          "id": 1,
+          "name": "Unknown",
+          "priority": 9,
+          "link": null
+         },
+         "single_use": true,
+         "variants": []
+        }
+       },
+       "url": "https://www.linkedin.com/company/spacex/"
+      }
+     ]
+    }
+   ]
+  },
+  "pad": {
+   "id": 235,
+   "url": "https://ll.thespacedevs.com/2.3.0/pads/235/?format=json",
+   "active": true,
+   "agencies": [
+    {
+     "response_mode": "normal",
+     "id": 121,
+     "url": "https://ll.thespacedevs.com/2.3.0/agencies/121/?format=json",
+     "name": "SpaceX",
+     "abbrev": "SpX",
+     "type": {
+      "id": 3,
+      "name": "Commercial"
+     },
+     "featured": true,
+     "country": [
+      {
+       "id": 2,
+       "name": "United States of America",
+       "alpha_2_code": "US",
+       "alpha_3_code": "USA",
+       "nationality_name": "American",
+       "nationality_name_composed": "Americano"
+      }
+     ],
+     "description": "Space Exploration Technologies Corp., known as SpaceX, is an American aerospace manufacturer and space transport services company headquartered in Hawthorne, California. It was founded in 2002 by entrepreneur Elon Musk with the goal of reducing space transportation costs and enabling the colonization of Mars. SpaceX operates from many pads, on the East Coast of the US they operate from SLC-40 at Cape Canaveral Space Force Station and historic LC-39A at Kennedy Space Center. They also operate from SLC-4E at Vandenberg Space Force Base, California, usually for polar launches. Another launch site is being developed at Boca Chica, Texas.",
+     "administrator": "CEO: Elon Musk",
+     "founding_year": 2002,
+     "launchers": "Falcon | Starship",
+     "spacecraft": "Dragon",
+     "parent": null,
+     "logo": {
+      "id": 186,
+      "name": "SpaceX logo",
+      "image_url": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/images/spacex_logo_20220826094919.png",
+      "thumbnail_url": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/images/255bauto255d__image_thumbnail_20240305185138.png",
+      "credit": "SpaceX",
+      "license": {
+       "id": 5,
+       "name": "CC BY-NC 2.0",
+       "priority": 1,
+       "link": "https://creativecommons.org/licenses/by-nc/2.0/"
+      },
+      "single_use": true,
+      "variants": []
+     },
+     "social_logo": {
+      "id": 94,
+      "name": "SpaceX social logo",
+      "image_url": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/images/spacex_social_l_image_20260407054626.jpg",
+      "thumbnail_url": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/images/spacex_social_l_image_thumbnail_20260407054626.jpeg",
+      "credit": "SpaceX",
+      "license": {
+       "id": 5,
+       "name": "CC BY-NC 2.0",
+       "priority": 1,
+       "link": "https://creativecommons.org/licenses/by-nc/2.0/"
+      },
+      "single_use": true,
+      "variants": []
+     }
+    }
+   ],
+   "name": "Orbital Launch Pad 2",
+   "description": "The second launch and landing pad of the full version of the combined SpaceX Starship and Superheavy booster. To be first used for launch in 2025 with version 3 of Starship and the Superheavy booster.\r\n\r\nThe launch mount itself is named Orbital Launch Mount B.",
+   "info_url": null,
+   "map_url": "https://www.google.com/maps?q=25.996770,-97.157990",
+   "latitude": 25.99677,
+   "longitude": -97.15799,
+   "country": {
+    "id": 2,
+    "name": "United States of America",
+    "alpha_2_code": "US",
+    "alpha_3_code": "USA",
+    "nationality_name": "American",
+    "nationality_name_composed": "Americano"
+   },
+   "total_launch_count": 4,
+   "orbital_launch_attempt_count": 2,
+   "fastest_turnaround": "P46DT9H58M37S",
+   "location": {
+    "response_mode": "normal",
+    "id": 143,
+    "url": "https://ll.thespacedevs.com/2.3.0/locations/143/?format=json",
+    "name": "SpaceX Starbase, TX, USA",
+    "celestial_body": {
+     "response_mode": "normal",
+     "id": 1,
+     "name": "Earth",
+     "type": {
+      "id": 1,
+      "name": "Planet"
+     },
+     "diameter": 12742000.0,
+     "mass": 5.972168e+24,
+     "gravity": 9.80655,
+     "length_of_day": "1 00:00:00",
+     "atmosphere": true,
+     "description": "Earth is the third planet from the Sun and the only astronomical object known to harbor life.",
+     "total_attempted_launches": 7661,
+     "successful_launches": 7103,
+     "failed_launches": 558,
+     "total_attempted_landings": 1387,
+     "successful_landings": 1337,
+     "failed_landings": 50
+    },
+    "active": true,
+    "country": {
+     "id": 2,
+     "name": "United States of America",
+     "alpha_2_code": "US",
+     "alpha_3_code": "USA",
+     "nationality_name": "American",
+     "nationality_name_composed": "Americano"
+    },
+    "description": "Starbase is an industrial complex for Starship rockets and the headquarters of the American aerospace manufacturer company SpaceX. Located near Brownsville, Texas, United States, it has been under construction since the late 2010s by SpaceX. Starbase is composed of a spaceport near the Gulf of Mexico, a production facility at the Boca Chica village, and a small structure test site along the Texas State Highway 4.",
+    "longitude": -97.157,
+    "latitude": 25.997,
+    "timezone_name": "America/Chicago",
+    "total_launch_count": 24,
+    "total_landing_count": 14
+   }
+  }
+ },
+ "falcon9": {
+  "id": "6aa7b90b-e5ed-45d8-a52e-04fbf399d178",
+  "url": "https://ll.thespacedevs.com/2.3.0/launches/6aa7b90b-e5ed-45d8-a52e-04fbf399d178/?format=json",
+  "name": "Falcon 9 Block 5 | USSF-627",
+  "status": {
+   "id": 3,
+   "name": "Launch Successful",
+   "abbrev": "Success",
+   "description": "The launch vehicle successfully inserted its payload(s) into the target orbit(s)."
+  },
+  "last_updated": "2026-11-12T07:02:47Z",
+  "net": "2026-11-12T04:36:30Z",
+  "net_precision": {
+   "id": 0,
+   "name": "Second",
+   "abbrev": "SEC",
+   "description": "The T-0 is accurate to the second."
+  },
+  "window_start": "2026-11-12T02:35:00Z",
+  "window_end": "2026-11-12T06:35:00Z",
+  "probability": null,
+  "launch_service_provider": {
+   "response_mode": "list",
+   "id": 121,
+   "url": "https://ll.thespacedevs.com/2.3.0/agencies/121/?format=json",
+   "name": "SpaceX",
+   "abbrev": "SpX",
+   "type": {
+    "id": 3,
+    "name": "Commercial"
+   }
+  },
+  "rocket": {
+   "id": 9288,
+   "configuration": {
+    "response_mode": "list",
+    "id": 164,
+    "url": "https://ll.thespacedevs.com/2.3.0/launcher_configurations/164/?format=json",
+    "name": "Falcon 9",
+    "families": [
+     {
+      "response_mode": "list",
+      "id": 1,
+      "name": "Falcon"
+     },
+     {
+      "response_mode": "list",
+      "id": 176,
+      "name": "Falcon 9"
+     }
+    ],
+    "full_name": "Falcon 9 Block 5",
+    "variant": "Block 5"
+   }
+  },
+  "mission": {
+   "id": 7887,
+   "name": "USSF-627",
+   "type": "Government/Top Secret",
+   "description": "A classified mission for the United States Space Force. It is possibly a batch of classified LEO satellites based on SpaceX\u2019s Starshield satellite bus, based on locations of rocket stage drop zones being exact fits with previous Starlink Group 15 launches.",
+   "orbit": {
+    "id": 8,
+    "name": "Low Earth Orbit",
+    "abbrev": "LEO",
+    "celestial_body": {
+     "response_mode": "list",
+     "id": 1,
+     "name": "Earth"
+    }
+   },
+   "agencies": [
+    {
+     "response_mode": "normal",
+     "id": 1041,
+     "url": "https://ll.thespacedevs.com/2.3.0/agencies/1041/?format=json",
+     "name": "United States Space Force",
+     "abbrev": "USSF",
+     "type": {
+      "id": 1,
+      "name": "Government"
+     },
+     "featured": false,
+     "country": [
+      {
+       "id": 2,
+       "name": "United States of America",
+       "alpha_2_code": "US",
+       "alpha_3_code": "USA",
+       "nationality_name": "American",
+       "nationality_name_composed": "Americano"
+      }
+     ],
+     "description": "The United States Space Force (USSF) is the space service branch of the U.S. Armed Forces, one of the eight U.S. uniformed services.",
+     "administrator": "Chief of Space Operations: Gen. Douglas Schiess",
+     "founding_year": 2019,
+     "launchers": "",
+     "spacecraft": "",
+     "parent": null,
+     "logo": {
+      "id": 194,
+      "name": "United States Space Force logo",
+      "image_url": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/images/united2520states2520space2520force_logo_20221102113048.png",
+      "thumbnail_url": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/images/255bauto255d__image_thumbnail_20240305185155.png",
+      "credit": "USSF",
+      "license": {
+       "id": 17,
+       "name": "Department of Defense Image Use Policy",
+       "priority": 6,
+       "link": "https://www.dimoc.mil/resources/limitations/"
+      },
+      "single_use": true,
+      "variants": []
+     },
+     "social_logo": {
+      "id": 2472,
+      "name": "United States Space Force social logo",
+      "image_url": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/images/united_states_s_image_20250916065613.jpg",
+      "thumbnail_url": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/images/united_states_s_image_thumbnail_20250916065613.jpeg",
+      "credit": "USSF",
+      "license": {
+       "id": 17,
+       "name": "Department of Defense Image Use Policy",
+       "priority": 6,
+       "link": "https://www.dimoc.mil/resources/limitations/"
+      },
+      "single_use": true,
+      "variants": []
+     },
+     "total_launch_count": 0,
+     "consecutive_successful_launches": 0,
+     "successful_launches": 0,
+     "failed_launches": 0,
+     "pending_launches": 0,
+     "consecutive_successful_landings": 0,
+     "successful_landings": 0,
+     "failed_landings": 0,
+     "attempted_landings": 0,
+     "successful_landings_spacecraft": 0,
+     "failed_landings_spacecraft": 0,
+     "attempted_landings_spacecraft": 0,
+     "successful_landings_payload": 0,
+     "failed_landings_payload": 0,
+     "attempted_landings_payload": 0,
+     "info_url": "https://www.spaceforce.mil/",
+     "social_media_links": []
+    }
+   ]
+  },
+  "pad": {
+   "id": 16,
+   "url": "https://ll.thespacedevs.com/2.3.0/pads/16/?format=json",
+   "active": true,
+   "agencies": [],
+   "name": "Space Launch Complex 4E",
+   "description": "Space Launch Complex 4 East (SLC-4E) is a launch site at Vandenberg Space Force Base, California, U.S.\r\n\r\nThe pad was previously used by Atlas and Titan rockets between 1963 and 2005. The pad was built for use by Atlas-Agena rockets, but was later rebuilt to handle Titan rockets.",
+   "info_url": null,
+   "map_url": "https://www.google.com/maps?q=34.632,-120.611",
+   "latitude": 34.632,
+   "longitude": -120.611,
+   "country": {
+    "id": 2,
+    "name": "United States of America",
+    "alpha_2_code": "US",
+    "alpha_3_code": "USA",
+    "nationality_name": "American",
+    "nationality_name_composed": "Americano"
+   },
+   "total_launch_count": 308,
+   "orbital_launch_attempt_count": 308,
+   "fastest_turnaround": "P2DT7H48M21S",
+   "location": {
+    "response_mode": "normal",
+    "id": 11,
+    "url": "https://ll.thespacedevs.com/2.3.0/locations/11/?format=json",
+    "name": "Vandenberg SFB, CA, USA",
+    "celestial_body": {
+     "response_mode": "normal",
+     "id": 1,
+     "name": "Earth",
+     "type": {
+      "id": 1,
+      "name": "Planet"
+     },
+     "diameter": 12742000.0,
+     "mass": 5.972168e+24,
+     "gravity": 9.80655,
+     "length_of_day": "1 00:00:00",
+     "atmosphere": true,
+     "description": "Earth is the third planet from the Sun and the only astronomical object known to harbor life.",
+     "total_attempted_launches": 7661,
+     "successful_launches": 7103,
+     "failed_launches": 558,
+     "total_attempted_landings": 1387,
+     "successful_landings": 1337,
+     "failed_landings": 50
+    },
+    "active": true,
+    "country": {
+     "id": 2,
+     "name": "United States of America",
+     "alpha_2_code": "US",
+     "alpha_3_code": "USA",
+     "nationality_name": "American",
+     "nationality_name_composed": "Americano"
+    },
+    "description": "Vandenberg Space Force Base is a United States Space Force Base in Santa Barbara County, California. Established in 1941, Vandenberg Space Force Base is a space launch base, launching spacecraft from the Western Range, and also performs missile testing. The United States Space Force's Space Launch Delta 30 serves as the host delta for the base, equivalent to an Air Force air base wing. In addition to its military space launch mission, Vandenberg Space Force Base also hosts space launches for civil and commercial space entities, such as NASA and SpaceX.",
+    "longitude": -120.52023,
+    "latitude": 34.75133,
+    "timezone_name": "America/Los_Angeles",
+    "total_launch_count": 924,
+    "total_landing_count": 37
+   }
+  }
+ }
+}

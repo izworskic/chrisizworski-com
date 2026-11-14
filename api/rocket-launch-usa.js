@@ -9,7 +9,7 @@ const { readWeatherState, missionForecast } = require('../lib/space-coast-offici
 const { editorialDesk } = require('../lib/spaceflight-now-editorial');
 const { readNationalSchedule } = require('../lib/rocket-launch-national');
 const { slipWindows } = require('../lib/rocket-launch-slip');
-const { buildMediaDesk } = require('../lib/space-coast-media');
+const { buildMediaDesk, operatorDirectory } = require('../lib/space-coast-media');
 const { buildVandenbergViewing } = require('../lib/vandenberg-viewing');
 const { buildStarbaseViewing } = require('../lib/starbase-viewing');
 const { buildWallopsViewing } = require('../lib/wallops-viewing');
@@ -236,6 +236,13 @@ return async function handler(req, res) {
         regionId: region.id, now
       }) : null,
       nationalNext: schedule.launches[0] || null,
+      // Just launched: outcomes from the last 24 hours, newest first, as the
+      // public calendar reports them. Never inferred from a missing listing.
+      recentLaunches: (schedule.recentLaunches || []).slice(0, 6).map(r => {
+        const home = REGIONS.find(x => x.id === r.region);
+        return { ...r, regionName: home?.name || null, timezone: home?.timezone || null,
+          operator: operatorDirectory(r.provider) };
+      }),
       region: {
         id: region.id, name: region.name, subtitle: region.subtitle, coast: region.coast,
         timezone: region.timezone, description: region.description,

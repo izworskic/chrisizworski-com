@@ -642,3 +642,16 @@ html.rl-map-fullscreen,html.rl-map-fullscreen body{overflow:hidden!important;ove
 .rl-front-outcome{display:inline-block;margin-top:10px;font-weight:800;color:#f6c29f;text-decoration:underline;text-underline-offset:3px}
 .rl-front-outcome[hidden]{display:none}
 .rl-front-outcome:focus-visible{outline:3px solid #f4a77d;outline-offset:2px}
+/* Just launched: newest outcome from the last 24 hours. */
+.rl-just{margin:0 0 14px;padding:16px 18px;border-radius:16px;background:#fff6ee;border:1px solid #f1c9a8;border-left:6px solid #e07a3f;min-width:0}
+.rl-just[hidden]{display:none}
+.rl-just[data-outcome="failure"],.rl-just[data-outcome="partial-failure"]{background:#f4f6f7;border-color:#cdd6da;border-left-color:#6b7f88}
+.rl-just-kicker{margin:0 0 4px;font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#a6501d}
+.rl-just[data-outcome="failure"] .rl-just-kicker,.rl-just[data-outcome="partial-failure"] .rl-just-kicker{color:#45575f}
+.rl-just h2{margin:0 0 6px;font-size:clamp(19px,2.4vw,24px);line-height:1.25;color:#10252e;overflow-wrap:anywhere}
+.rl-just-line{margin:0 0 10px;font-weight:700;color:#2a3f47;overflow-wrap:anywhere}
+.rl-just-actions{display:flex;flex-wrap:wrap;gap:8px}
+.rl-just-cta{display:inline-block;background:#10252e;color:#fff;font-weight:800;padding:10px 16px;border-radius:9px;text-decoration:none}
+.rl-just-cta:focus-visible{outline:3px solid #f4a77d;outline-offset:2px}
+.rl-just-note{margin:10px 0 0;font-size:12px;color:#5b6d74}
+.rl-just-more{margin:10px 0 0;padding:10px 0 0 18px;border-top:1px solid #f1d8c4;font-size:13px;color:#2a3f47}
