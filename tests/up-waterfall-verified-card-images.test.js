@@ -12,9 +12,9 @@ const byId=new Map(cards.map(m=>[m[1],m[0]]));
 test('verified waterfall photo previews appear only for fully attributed named waterfall guides',()=>{
  assert.equal(cards.length,80);
  assert.equal(byId.size,80);
- assert.equal(photos.length,42);
- assert.equal(queue.pending.length,38);
- assert.equal((html.match(/class="upfall-card-preview"/g)||[]).length,42);
+ assert.equal(photos.length,44);
+ assert.equal(queue.pending.length,36);
+ assert.equal((html.match(/class="upfall-card-preview"/g)||[]).length,44);
  const verified=new Set(photos.map(p=>p.id));
  for(const p of photos){
    const c=byId.get(p.id);
