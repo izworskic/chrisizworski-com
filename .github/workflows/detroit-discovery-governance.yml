@@ -66,4 +66,6 @@ jobs:
           node --test tests/detroit-growth-surfaces.test.js tests/detroit-discovery-governance.test.js
           node scripts/benchmark-tool-network-registry.mjs --check
           node scripts/report-detroit-discovery.mjs --check
+          python3 scripts/build-circle-tour-trip-intelligence.py
+          python3 scripts/build-circle-tour-trip-intelligence.py --check
           node scripts/audit-sitemap-canonicals.mjs --check
