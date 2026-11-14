@@ -27,6 +27,7 @@ function parsePoint(value){
   return {lat,lon};
 }
 
+const {routeClubEvidence}=require('../lib/snowmobile/route-club-sources.cjs');
 module.exports=async function(req,res){
   res.setHeader('Access-Control-Allow-Origin','*');
   if(req.method!=='GET'&&req.method!=='HEAD'){res.setHeader('Allow','GET, HEAD');return fail(res,{error:'Method not allowed'},405);}
@@ -55,7 +56,7 @@ module.exports=async function(req,res){
       generatedAt:result.payload.generatedAt,
       season:result.payload.season,
       engine:'deterministic-dijkstra',
-      route
+      route:{...route,clubEvidence:routeClubEvidence(route,built.scoredGeometry)}
     });
   }catch(error){
     return fail(res,{error:'Route planning unavailable',detail:String(error?.message||error)},503);
