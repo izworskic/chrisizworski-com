@@ -48,8 +48,8 @@ for(let saved=0;saved<=8;saved++)for(let regions=0;regions<=8;regions++){
 }
 
 const circle=require('../public/assets/circle-tour-rust-itinerary.js');
-assert.equal(e.ct_version(),1);
-for(const key of ['ct_leg','ct_published_day','ct_border','ct_drive'])
+assert.equal(e.ct_version(),2);
+for(const key of ['ct_leg','ct_published_day','ct_border','ct_drive','ct_feasibility'])
  assert.equal(typeof e[key],'function',key);
 const order=circle.ORDER.map(Number);
 assert.equal(order.length,31);
