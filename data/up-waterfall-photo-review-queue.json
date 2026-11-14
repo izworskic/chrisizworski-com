@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "reviewedAt": "2026-11-14",
   "catalogCount": 80,
-  "verifiedPhotoCount": 44,
-  "unphotographedCuratedCount": 36,
+  "verifiedPhotoCount": 45,
+  "unphotographedCuratedCount": 35,
   "method": "Diff of data/up-waterfalls.json IDs against data/up-waterfall-photo-provenance.json IDs. An unphotographed catalog entry is not the same as missing public-access research or an indexing defect.",
   "pending": [
     {
@@ -123,24 +123,6 @@
       "photoPriority": "inventory-backlog",
       "accessStatusInCuratedCatalog": "verify",
       "officialVisitorSourceNotPhotoLicense": "https://northwoodslandtrust.org/interstate-falls-2/",
-      "photoVerificationRequirements": [
-        "named exact waterfall and tier",
-        "image content clearly shows named falls",
-        "attribution and original media source identified",
-        "documented commercial reuse permission or public domain",
-        "historic capture date accurate or explicitly unknown"
-      ],
-      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
-    },
-    {
-      "id": "superior-falls",
-      "name": "Superior Falls",
-      "region": "Western U.P.",
-      "publicGuidePath": "/upper-peninsula-waterfalls/superior-falls/",
-      "photoStatus": "not-yet-verified",
-      "photoPriority": "priority-next",
-      "accessStatusInCuratedCatalog": "verify",
-      "officialVisitorSourceNotPhotoLicense": "https://www.bayfieldcounty.wi.gov/370/Public-Access-Study-PDF",
       "photoVerificationRequirements": [
         "named exact waterfall and tier",
         "image content clearly shows named falls",
