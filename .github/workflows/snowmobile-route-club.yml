@@ -1,0 +1,39 @@
+name: Snowmobile DNR route groomer attribution
+on:
+  pull_request:
+    paths:
+      - lib/snowmobile/route-club-sources.cjs
+      - api/snowmobile-route.js
+      - public/assets/snowmobile-region.js
+      - public/assets/snowmobile.css
+      - public/snowmobile/regions/**
+      - scripts/generate-snowmobile-region-pages.mjs
+      - tests/snowmobile-route-club-sources.test.js
+      - .github/workflows/snowmobile-route-club.yml
+permissions:
+  contents: read
+jobs:
+  route-club-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Parse route evidence code and exact groomer roster
+        run: |
+          node --check lib/snowmobile/route-club-sources.cjs
+          node --check api/snowmobile-route.js
+          node --check public/assets/snowmobile-region.js
+      - name: Verify official sponsor matching, route-only sources, and existing routing
+        run: |
+          node --test tests/snowmobile-route-club-sources.test.js tests/snowmobile-route-ui.test.js tests/snowmobile-route-ux.test.js tests/snowmobile-local-reports.test.js tests/snowmobile-parking.test.js tests/snowmobile-access-evidence.test.js
+      - name: Regenerate and diff all seven region pages
+        run: |
+          node scripts/generate-snowmobile-region-pages.mjs
+          git diff --exit-code -- public/snowmobile/regions/
+      - name: Preserve snowmobile routing performance
+        run: |
+          node scripts/benchmark-snowmobile-routing.mjs --check
+          node scripts/benchmark-snowmobile.mjs --check
