@@ -314,3 +314,15 @@
 .hero .upfall-photo-preview-note{max-width:none;margin:10px 0 0;color:#d6eae3;font-size:.75rem}
 @media(max-width:640px){.upfall-photo-preview-grid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding-bottom:6px}.upfall-photo-preview-card{flex:0 0 min(80vw,330px);scroll-snap-align:start}.upfall-photo-preview-link img{height:185px}}
 @media(prefers-reduced-motion:reduce){.upfall-photo-preview-grid{scroll-behavior:auto}}
+
+/* A small, authentic picture alongside access-first waterfall results.
+   Uncropped 40-source image previews stay lazy; no fallback photos appear for unverified entries. */
+.waterfall-card .upfall-card-preview{float:right;width:122px;margin:2px 0 8px 12px;padding:0}
+.waterfall-card .upfall-card-preview>a{display:block;border-radius:8px;overflow:hidden;background:#e5ebe8}
+.waterfall-card .upfall-card-preview img{width:100%;height:89px;object-fit:contain;display:block}
+.waterfall-card .upfall-card-preview figcaption{font-size:.63rem;line-height:1.35;color:var(--sub);margin-top:3px;overflow-wrap:anywhere}
+.waterfall-card .upfall-card-preview figcaption a{color:#285954;text-decoration:underline;text-underline-offset:1px}
+.waterfall-card .upfall-card-preview>a:focus-visible{outline:3px solid #297e76;outline-offset:2px}
+.waterfall-card .arrival-details{clear:both}
+.waterfall-card::after{content:"";display:block;clear:both}
+@media(max-width:440px){.waterfall-card .upfall-card-preview{width:108px;margin-left:8px}.waterfall-card .upfall-card-preview img{height:79px}}
