@@ -119,7 +119,7 @@ def extract(source: str, ledger: dict) -> list[dict]:
 
 
 
-def extract_traveler_presets(source: str, ledger: dict, catalog: dict) -> dict:
+def extract_traveler_presets(source: str, ledger: dict, catalog: dict, visual: dict) -> dict:
     """Build a factual 7/10/15-day comparison from already published route day cards.
 
     No new distances or roads are generated. The UI must never promise that
@@ -135,6 +135,15 @@ def extract_traveler_presets(source: str, ledger: dict, catalog: dict) -> dict:
     order = [ledger["edges"][0]["from"]] + [e["to"] for e in ledger["edges"]]
     if len(order) != 31 or len(set(order)) != 31:
         raise ValueError("Source stop order changed; cannot publish preference itineraries")
+    # Reuse already self-hosted, attribution-verified destination images.
+    # Never attach a photograph of a different park to an unrelated stop.
+    photo_matches = {"1":"hero","3":"1","6":"2","8":"4","10":"5",
+                     "11":"6","12":"7","15":"8","18":"9","27":"10","30":"hero"}
+    cards = {key:dict(value) for key,value in cards.items()}
+    for stop, photo_day in photo_matches.items():
+        if stop in cards:
+            cards[stop]["photo"] = (visual["hero"] if photo_day == "hero"
+                                      else visual["days"][photo_day]["photo"])
     for stop, card in cards.items():
         if stop not in order or not card.get("interests") or not set(card["interests"]) <= {"hiking", "waterfalls", "shipwatch", "scenery"}:
             raise ValueError("Specialist activity has an invalid route stop or interests: " + stop)
@@ -452,7 +461,7 @@ def main() -> None:
     visual = json.loads(VISUALS.read_text(encoding="utf8"))
     validate_visuals(visual, source)
     traveler_catalog = json.loads(TRAVELER.read_text(encoding='utf8'))
-    traveler = extract_traveler_presets(source, ledger, traveler_catalog)
+    traveler = extract_traveler_presets(source, ledger, traveler_catalog, visual)
     output = render(days, ledger, visual, traveler)
     if args.check:
         if not OUT.exists() or OUT.read_text(encoding="utf8") != output:
