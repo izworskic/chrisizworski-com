@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "reviewedAt": "2026-11-12",
   "catalogCount": 80,
-  "verifiedPhotoCount": 30,
-  "unphotographedCuratedCount": 50,
+  "verifiedPhotoCount": 31,
+  "unphotographedCuratedCount": 49,
   "method": "Diff of data/up-waterfalls.json IDs against data/up-waterfall-photo-provenance.json IDs. An unphotographed catalog entry is not the same as missing public-access research or an indexing defect.",
   "pending": [
     {
@@ -15,24 +15,6 @@
       "photoPriority": "hold-or-separate-experience",
       "accessStatusInCuratedCatalog": "verify",
       "officialVisitorSourceNotPhotoLicense": "https://www.michigan.gov/recsearch/parks/tahquamenonfalls",
-      "photoVerificationRequirements": [
-        "named exact waterfall and tier",
-        "image content clearly shows named falls",
-        "attribution and original media source identified",
-        "documented commercial reuse permission or public domain",
-        "historic capture date accurate or explicitly unknown"
-      ],
-      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
-    },
-    {
-      "id": "chapel-falls",
-      "name": "Chapel Falls",
-      "region": "Pictured Rocks / Munising",
-      "publicGuidePath": "/upper-peninsula-waterfalls/chapel-falls/",
-      "photoStatus": "not-yet-verified",
-      "photoPriority": "priority-next",
-      "accessStatusInCuratedCatalog": "verify",
-      "officialVisitorSourceNotPhotoLicense": "https://www.nps.gov/places/chapel-falls.htm",
       "photoVerificationRequirements": [
         "named exact waterfall and tier",
         "image content clearly shows named falls",
