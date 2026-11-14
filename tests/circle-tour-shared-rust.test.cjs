@@ -53,7 +53,9 @@ test('all 31 directed neighbors are recognized only when source miles are publis
    const legacyMiles=legacy.edgeMiles(from,to);
    assert.equal(engine.evidenceMiles(from,to,stopCard),legacyMiles,from+' '+to);
    const pass=Number.isFinite(legacyMiles);
-   assert.equal(guard([from,to],direction).ok,pass,from+' to '+to+' '+direction);
+   const crossesSault=(from==='13'&&to==='14')||(from==='14'&&to==='13');
+   const reserve=crossesSault?[{name:'Sault Ste. Marie',available:false,waitMinutes:0,allowanceMinutes:45}]:[];
+   assert.equal(guard([from,to],direction,reserve).ok,pass,from+' to '+to+' '+direction);
  }
 });
 test('unknown/partial legs never become 45-mile invented driving legs',()=>{
