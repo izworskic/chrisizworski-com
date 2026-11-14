@@ -427,6 +427,31 @@ function check(value,message){if(!value)throw Error(message);}
     const response=await guide.goto(url+'10-day/',{waitUntil:'domcontentloaded',timeout:35000});
     check(response.status()===200,'10-day static page not served');
     check(await guide.locator('article.day').count()===10,'10-day source-rendered day cards missing');
+    check(await guide.locator('article.day .day-photo img').count()===10,
+      '10-day page lost destination photographs');
+    check(await guide.locator('.hero-photo img').count()===1,
+      'photo-led introduction must precede the mileage analysis');
+    check(await guide.locator('.day-tools').count()===10,
+      'dedicated tool handoffs missing from one or more trip days');
+    check(await guide.locator('.photo-credit a').count()===22,
+      'photography author or Creative Commons license links missing');
+    check(await guide.locator('#day-1 .day-tools a[href="/apostle-islands/"]').count()===1,
+      'Bayfield did not link directly to the Apostle Islands tool');
+    check(await guide.locator('#day-6 .day-tools a[href="https://picturedrocks.chrisizworski.com/"]').count()===1,
+      'Munising did not link to its actual Pictured Rocks planner');
+    check(await guide.locator('#day-7 .day-tools a[href="/tahquamenon-falls/"]').count()===1,
+      'Tahquamenon park planner handoff missing');
+    check(await guide.locator('#day-10 .day-tools a[href="/gooseberry-falls/"]').count()===1,
+      'North Shore visitor tool handoff missing');
+    const dayPhotos=await guide.locator('.day-photo img').evaluateAll(photos=>
+      photos.map(p=>({alt:p.alt,src:p.getAttribute('src'),
+        w:p.getBoundingClientRect().width,figure:p.closest('figure')?.querySelector('figcaption')?.textContent})));
+    check(dayPhotos.every(p=>p.alt.length>=25&&p.src.startsWith('https://')&&p.w>150&&p.figure.includes('Photo:')),
+      'day photography not described, credited or visible at viewport '+width);
+    const shot='circle-tour-ten-day-photo-tools-'+width+'.png';
+    await guide.locator('#day-7').screenshot({path:path.join(out,shot),animations:'disabled'});
+    report.screenshots.push(shot);
+
     check((await guide.title()).includes('10-Day Itinerary'),'10-day search title missing');
     check(await guide.locator('link[rel="canonical"]').getAttribute('href')===
       'https://chrisizworski.com/lake-superior-circle-tour/10-day/','incorrect canonical');
@@ -464,6 +489,14 @@ function check(value,message){if(!value)throw Error(message);}
   check(await staticPage.locator('#ctb-fallback').isVisible(),'no-JS fallback not visible');
   check(await staticPage.locator('#ctb-fallback a').count()>=8,'no-JS specialist and highway handoffs missing');
   check(await staticPage.locator('article.stop-card').count()===31,'no-JS original itinerary lost');
+  const staticGuide=await noJs.newPage();
+  await staticGuide.goto(url+'10-day/',{waitUntil:'domcontentloaded',timeout:35000});
+  check(await staticGuide.locator('article.day').count()===10&&
+    await staticGuide.locator('.day-photo img').count()===10&&
+    await staticGuide.locator('.day-tools a').count()>=20,
+    'no-JS visitor guide lost photos or specialist tool links');
+  await staticGuide.close();
+
   report.cases.push({state:'no JavaScript',result:'canonical independent links and all 31 stop cards visible'});
   await noJs.close();
   fs.writeFileSync(path.join(out,'report.json'),JSON.stringify(report,null,2));
