@@ -1,0 +1,189 @@
+{
+  "version": 1,
+  "reviewed": "2026-11-14",
+  "purpose": "Visitor preference hints are selected only from stops already on each published 7/10/15 day. Not an alternate road routing model, overnight reservation, traffic estimate, verified opening, or claim a visit fits automatically.",
+  "routeStart": "Duluth, Minnesota",
+  "routeDirection": "counterclockwise",
+  "overnightBases": {
+    "1": "Duluth, Minnesota",
+    "3": "Bayfield, Wisconsin",
+    "6": "Silver City / Porcupine Mountains area, Michigan",
+    "7": "Ontonagon, Michigan",
+    "8": "Houghton, Michigan",
+    "9": "L'Anse / Baraga, Michigan",
+    "10": "Marquette, Michigan",
+    "11": "Munising, Michigan",
+    "13": "Sault Ste. Marie, Michigan",
+    "14": "Sault Ste. Marie, Ontario",
+    "15": "Lake Superior Provincial Park corridor (verify seasonal lodging)",
+    "16": "Wawa, Ontario",
+    "18": "Marathon / Pukaskwa area, Ontario",
+    "20": "Thunder Bay, Ontario",
+    "30": "Duluth, Minnesota",
+    "31": "Paradise / Whitefish Point area, Michigan"
+  },
+  "stops": {
+    "1": {
+      "label": "Duluth, Minnesota",
+      "interests": [
+        "shipwatch"
+      ],
+      "toolUrl": "/duluth-canal-park/",
+      "toolAction": "See Duluth ship traffic and canal-camera context",
+      "caution": "A good first evening by the canal; actual vessel passages are not guaranteed"
+    },
+    "3": {
+      "label": "Bayfield / Apostle Islands",
+      "interests": [
+        "hiking",
+        "scenery"
+      ],
+      "toolUrl": "/apostle-islands/",
+      "toolAction": "Compare island cruises, trails and kayaking",
+      "caution": "Water access depends on weather, operators and schedules"
+    },
+    "5": {
+      "label": "Black River / Ironwood",
+      "interests": [
+        "waterfalls"
+      ],
+      "toolUrl": "/upper-peninsula-waterfalls/",
+      "toolAction": "Choose a realistic Upper Peninsula waterfall outing",
+      "caution": "Extra waterfall walks and side roads must be counted separately"
+    },
+    "6": {
+      "label": "Porcupine Mountains",
+      "interests": [
+        "hiking",
+        "waterfalls"
+      ],
+      "toolUrl": "/porcupine-mountains/",
+      "toolAction": "Choose an overlook or trail by available time",
+      "caution": "Park roads and trail access require current confirmation"
+    },
+    "8": {
+      "label": "Keweenaw Peninsula",
+      "interests": [
+        "hiking",
+        "scenery"
+      ],
+      "toolUrl": "/northern-lights-michigan/keweenaw/",
+      "toolAction": "Consider a night-sky opportunity near the Copper Country",
+      "caution": "Copper Harbor and Brockway Mountain add distance beyond the Houghton gateway"
+    },
+    "10": {
+      "label": "Marquette waterfront",
+      "interests": [
+        "shipwatch",
+        "scenery"
+      ],
+      "toolUrl": "/great-lakes-freighter-tracking/",
+      "toolAction": "See reported freighter positions near the ore coast",
+      "caution": "An ore dock view is not a guarantee a vessel will arrive"
+    },
+    "11": {
+      "label": "Pictured Rocks",
+      "interests": [
+        "hiking",
+        "scenery"
+      ],
+      "toolUrl": "https://picturedrocks.chrisizworski.com/",
+      "toolAction": "Choose a cliff viewpoint, hike or boat experience",
+      "caution": "Boat schedules, trails and park conditions are separate decisions"
+    },
+    "12": {
+      "label": "Tahquamenon Falls",
+      "interests": [
+        "waterfalls",
+        "hiking"
+      ],
+      "toolUrl": "/tahquamenon-falls/",
+      "toolAction": "Choose Upper or Lower Falls and check access",
+      "caution": "The falls and Whitefish Point are separate stops, not one stop"
+    },
+    "13": {
+      "label": "Soo Locks",
+      "interests": [
+        "shipwatch"
+      ],
+      "toolUrl": "/soo-locks/",
+      "toolAction": "Check recorded lock activity before planning a ship-watching stop",
+      "caution": "Lock traffic and vessel passages are not guaranteed"
+    },
+    "15": {
+      "label": "Lake Superior Provincial Park",
+      "interests": [
+        "hiking",
+        "scenery"
+      ],
+      "toolUrl": "/lake-superior-provincial-park/",
+      "toolAction": "Compare Old Woman Bay and longer park walks",
+      "caution": "Different trailheads and day-use areas have different operating conditions"
+    },
+    "18": {
+      "label": "Pukaskwa / Marathon",
+      "interests": [
+        "hiking",
+        "scenery"
+      ],
+      "toolUrl": "/pukaskwa-national-park/",
+      "toolAction": "Judge whether Hattie Cove fits the day",
+      "caution": "The park entrance is a detour, not the roadside Marathon stop"
+    },
+    "20": {
+      "label": "Thunder Bay / Sleeping Giant",
+      "interests": [
+        "hiking",
+        "scenery"
+      ],
+      "toolUrl": "/sleeping-giant-provincial-park/",
+      "toolAction": "Plan a separate Sleeping Giant hike, if time allows",
+      "caution": "The park is a significant outing from Thunder Bay, not a quick waterfront stop"
+    },
+    "23": {
+      "label": "Grand Marais North Shore",
+      "interests": [
+        "scenery",
+        "hiking"
+      ],
+      "toolUrl": "/lake-superior-circle-tour/",
+      "toolAction": "Use the full map to decide where to pause on Highway 61",
+      "caution": "Choose a short stop and protect the border-to-Duluth drive"
+    },
+    "27": {
+      "label": "Split Rock Lighthouse",
+      "interests": [
+        "scenery",
+        "shipwatch"
+      ],
+      "toolUrl": "/split-rock-lighthouse-visit/",
+      "toolAction": "Compare lighthouse grounds and history options",
+      "caution": "Admission, interiors and park access need separate checks"
+    },
+    "28": {
+      "label": "Gooseberry Falls",
+      "interests": [
+        "waterfalls",
+        "hiking"
+      ],
+      "toolUrl": "/gooseberry-falls/",
+      "toolAction": "Pick the waterfall walk that suits the remaining day",
+      "caution": "Leave enough time for parking and daylight"
+    },
+    "30": {
+      "label": "Duluth Canal Park",
+      "interests": [
+        "shipwatch"
+      ],
+      "toolUrl": "/duluth-canal-park/",
+      "toolAction": "Finish at the ship canal and check reported passages",
+      "caution": "Vessel arrival times and bridge lifts may change"
+    }
+  },
+  "notes": {
+    "driving": "Original whole-day itinerary miles / 47 mph × 1.2. Editorial time allowance, not live routing.",
+    "crossing": "Reserve 45 minutes only when official passenger wait is unavailable; it is not an observed wait. Drive caps measure wheel-time allowance separately from the border reserve.",
+    "winter": "Winter-sensitive park experiences require independent seasonal verification. The planner must not infer a closure or guaranteed opening.",
+    "notEnoughTime": "Offer an existing longer published itinerary rather than inventing a roadside overnight or dividing unsourced road miles."
+  }
+}
