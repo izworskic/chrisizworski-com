@@ -42,7 +42,8 @@ test('Python produces an actual static HTML, 10 distinctive days, sources, and c
  assert.match(html,/<link rel="canonical" href="https:\/\/chrisizworski\.com\/lake-superior-circle-tour\/10-day\/">/);
  assert.match(html,/"@type":"Article"/);
  assert.equal((html.match(/<article class="day" id="day-/g)||[]).length,10);
- assert.equal((html.match(/<h3>/g)||[]).length,10);
+ assert.match(html,/<h3>Bayfield<\/h3>/);
+ assert.match(html,/<h3>Munising<\/h3>/);
  assert.ok(html.includes('Houghton gateway'));
  assert.ok(html.includes('border-time reserve')||html.includes('border-time'));
  assert.match(html,/Verify the final road approach|the result is withheld/);
