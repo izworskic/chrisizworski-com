@@ -400,6 +400,25 @@
     const borderAllowances = borderAllowancesForSegment(segment);
     const borderMinutes = borderMinutesForSegment(segment);
     const borderUnknown = borderAllowances.some((crossing) => !crossing.available);
+    // A second, Rust-backed source contract checks all original route legs,
+    // border reserves and driving allowance. It may veto but cannot invent a leg.
+    const sharedAudit = window.CircleTourRust?.auditSegment?.({
+      segment,direction:document.querySelector('.direction-btn.active')?.dataset.direction||'counterclockwise',
+      routeMiles,driveHours,borderAllowances,borderMinutes,borderUnknown,
+      getEdgeMiles:edgeMiles,getCard:card
+    });
+    if(sharedAudit && !sharedAudit.ok){
+      currentPlan=null;
+      renderTodayPlan();
+      const block=document.createElement('div');
+      block.className='ct-plan-call';
+      const strong=document.createElement('strong');
+      strong.textContent='The route evidence needs another check. ';
+      block.append(strong,document.createTextNode(sharedAudit.reason+' The original published itineraries and official road links remain available below.'));
+      $('ctTodayOutput').replaceChildren(block);
+      renderSignals();
+      return null;
+    }
     const transitHours = driveHours + borderMinutes / 60;
     const stopBudget = Math.max(0, hours - transitHours - 0.5);
 
