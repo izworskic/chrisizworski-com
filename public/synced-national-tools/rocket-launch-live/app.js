@@ -946,7 +946,7 @@
           (florida.playalinda.checkedAt?
             'NPS Canaveral alerts checked '+stamp(florida.playalinda.checkedAt)+
             '. Published rules permit viewing at lots 4–7 unless park staff or NASA impose another closure.':
-            'Current NPS Canaveral alert status could not be verified. Check official notices before leaving.'):
+            'NPS 2026 standing launch rules apply. Current additional alerts have not been checked; review posted changes before travel.'):
           florida.matched?
             'Florida notices checked. National Park Service updates last checked '+stamp(florida.sourceCheckedAt)+
             '. Parking and entry may still be restricted for this launch.':
@@ -980,7 +980,7 @@
         if(florida?.playalinda&&s.id==='playalinda-south'){
           card.appendChild(el('small','rl-access-source-age',florida.playalinda.checkedAt?
             'NPS Canaveral alerts checked '+stamp(florida.playalinda.checkedAt):
-            'Current NPS alert check unavailable; do not assume entry.'));
+            'NPS 2026 standing launch rules apply. Check current notices for changes.'));
         }
         const actions = el('div', 'rl-site-actions');
         const source = anchor(s.kind === 'specialist' ?
