@@ -427,6 +427,16 @@ a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}
         <button class="route-use" id="usePresetRoute" type="button">Use this 10-day route</button>
         <a class="route-detail" id="routeDetailLink" href="#itin-10">Read the full itinerary</a>
       </div>
+      <details class="cti-feasibility" id="cti-feasibility" data-preset="10">
+        <summary>Will the driving and sightseeing fit in your day?</summary>
+        <p class="cti-caution">Check a practical time budget against the existing published day-mile estimates. This is not a live navigation time or a park-opening verdict.</p>
+        <div class="cti-controls">
+          <label>Hours available<select id="cti-hours"><option value="8">8 hours</option><option value="9" selected>9 hours</option><option value="11">11 hours</option></select></label>
+          <label>One longer experience<select id="cti-visit"><option value="60">1 hour</option><option value="90" selected>1.5 hours</option><option value="150">2.5 hours</option></select></label>
+          <label>Travel season<select id="cti-season"><option value="summer">Summer</option><option value="fall">Fall</option><option value="winter">Winter</option></select></label>
+        </div>
+        <div id="cti-results" class="cti-output" aria-live="polite"><p>For verified sources and all ten days, <a href="/lake-superior-circle-tour/10-day/">read the detailed 10-day itinerary</a>.</p></div>
+      </details>
     </aside>
   </div>
   <p class="planner-note">The map is a planning overview, not turn-by-turn navigation. Daily direction links open Google Maps; confirm road, weather, park, and <a href="#planning-essentials">border conditions</a> before departure. The map loads only when it nears your screen, and no account is required.</p>
