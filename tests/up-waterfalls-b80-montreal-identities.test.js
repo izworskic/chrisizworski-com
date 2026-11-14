@@ -37,7 +37,7 @@ test('B80 Montreal public approach is Fish Cove, map point is never vehicle park
  assert.doesNotMatch(pages.montreal,/google.com\/maps\/dir\//);
  assert.match(pages.montreal,/2026\/11\/06\/dnr-tnc-protect-public-access/);
  const ld=JSON.parse(pages.montreal.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1])['@graph'];
- assert.equal(ld.find(x=>x['@type']==='WebPage').dateModified,'2026-11-07');
+ assert.equal(ld.find(x=>x['@type']==='WebPage').dateModified,'2026-11-14'); // Historic photo updated, legal Fish Cove approach preserved.
  assert.ok(pages.montreal.includes('rel="canonical" href="https://chrisizworski.com/upper-peninsula-waterfalls/montreal-falls-keweenaw/"'));
  assert.match(pages.montreal,/name="twitter:card"/);assert.match(pages.montreal,/property="og:title"/);
 });
