@@ -280,7 +280,21 @@ function routeResultHtml(route){
   const evidenceLine=evidence?`<div class="route-evidence"><strong>Distance planning, not a ride recommendation.</strong><span>${evidence.unverifiedSegments} of ${route.segments?.length||0} traversed parts have no verified condition score.</span><span>${evidence.closureVerified?'Official DNR closure feed checked; other restrictions may still apply.':'Current DNR closure verification unavailable. Do not infer trail access.'}</span><span>${evidence.seasonActive?'In-season dates alone do not establish rideability.':'Outside designated riding season. This is a future-trip plan only.'}</span></div>`:'';
   const legs=(route.legs||[]).map(l=>`<li><strong>Stop ${l.fromStop} → ${l.toStop}:</strong> ${esc(l.distanceMiles)} mi · about ${esc(formatDuration(l.estimatedMinutes))}<br>${esc(l.trailsVia.join(' → '))}<br><span class="small">Junction snap: ${esc(l.startSnapMiles)} mi at start, ${esc(l.endSnapMiles)} mi at finish.</span></li>`).join('');
   const segments=(route.segments||[]).map(s=>`<li>${esc(s.trailNetwork||s.segmentId)} · ${esc(s.band||'UNKNOWN')}${Number.isFinite(s.score)?` · ${esc(s.score)}/100`:' · surface unverified'}</li>`).join('');
-  return `${evidenceLine}<div class="route-headline"><strong>${esc(route.distanceMiles)} mi total</strong> · about ${esc(formatDuration(route.estimatedMinutes))}</div><div class="small">${esc(route.stopCount||2)} stops · ${esc(route.segmentsTraversed)} unique DNR segments · assumed ${esc(route.assumedAvgMph)} mph average</div>${worstLine}${closedNote}${legs?`<h3>Your route, leg by leg</h3><ol class="route-legs">${legs}</ol>`:''}${segments?`<details><summary>Trail condition evidence along the route</summary><ul>${segments}</ul></details>`:''}<div class="small route-truth-inline">${esc(route.truth||'')}</div>`;
+  // The route API joins traversed DNR segment IDs to the official DNR
+  // TrailGrooming field. It never assigns a club by regional proximity.
+  const club=route.clubEvidence,clubSources=Array.isArray(club?.sources)?club.sources.slice(0,12):[];
+  const clubLinks=clubSources.filter(s=>/^https:\/\/misorva\.org\/trail-reports\/[a-z0-9-]+\/$/.test(String(s?.url||''))).map(s=>
+    '<li><a href="'+esc(s.url)+'" target="_blank" rel="noopener" data-route-club="'+esc(s.name)+'">'+esc(s.name)+'</a> <span class="small">DNR grooming sponsor for '+esc(s.matchedSegmentCount)+' traversed mapped segment'+(s.matchedSegmentCount===1?'':'s')+'</span></li>'
+  ).join('');
+  const unmapped=Number.isInteger(club?.unmappedSegments)?club.unmappedSegments:0;
+  const routeClubLine=club?.method==='OFFICIAL_DNR_GROOMING_SPONSOR'?
+    '<section class="route-club-sources ui" aria-label="Official groomer contacts for this mapped route"><h3>Which clubs work on this route?</h3>'+
+    '<p>Michigan DNR identifies the grooming sponsor on individual trail segments. These are source links for the segments you actually selected, not a region-wide snow report or a live grooming guarantee.</p>'+
+    (clubLinks?'<ul>'+clubLinks+'</ul>':'<p><strong>No monitored club report matched these trail segments.</strong> Use the DNR trail map and the local club directory for this stretch.</p>')+
+    (unmapped?'<p class="small">'+esc(unmapped)+' mapped segment'+(unmapped===1?' has':'s have')+' no independently matched club-report link here. Their condition and grooming remain unknown.</p>':'')+
+    '<p class="small"><strong>Check report dates.</strong> A groomer assignment does not mean the trail was groomed today, and no club report can override a DNR closure. <a href="https://misorva.org/trail-report/" target="_blank" rel="noopener">All club reports</a>.</p></section>':'';
+
+  return `${evidenceLine}<div class="route-headline"><strong>${esc(route.distanceMiles)} mi total</strong> · about ${esc(formatDuration(route.estimatedMinutes))}</div><div class="small">${esc(route.stopCount||2)} stops · ${esc(route.segmentsTraversed)} unique DNR segments · assumed ${esc(route.assumedAvgMph)} mph average</div>${worstLine}${closedNote}${routeClubLine}${legs?`<h3>Your route, leg by leg</h3><ol class="route-legs">${legs}</ol>`:''}${segments?`<details><summary>Trail condition evidence along the route</summary><ul>${segments}</ul></details>`:''}<div class="small route-truth-inline">${esc(route.truth||'')}</div>`;
 }
 // Exports only a successful, currently selected DNR route. Parking assets
 // and club staging addresses are intentionally absent from these GPX tracks.
