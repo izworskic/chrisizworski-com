@@ -6,10 +6,10 @@ const photos = JSON.parse(fs.readFileSync("data/up-waterfall-photo-provenance.js
 const sitemap = fs.readFileSync("public/sitemap-up-waterfalls.xml", "utf8");
 
 test("every published waterfall photo has uniquely identified subject, primary source and commercial-use license", () => {
-  assert.equal(photos.photos.length, 33);
+  assert.equal(photos.photos.length, 37);
   assert.equal(new Set(photos.photos.map(x => x.id)).size, photos.photos.length);
   assert.equal(new Set(photos.photos.map(x => x.imageUrl)).size, photos.photos.length);
-  assert.deepEqual(new Set(photos.photos.map(x => x.id)), new Set(["wagner-falls","bond-falls","miners-falls","sable-falls","munising-falls","spray-falls","mosquito-falls","agate-falls","manabezho-falls","nawadaha-falls","great-conglomerate-falls","potawatomi-falls","sandstone-falls","laughing-whitefish-falls","scott-falls","bridalveil-falls","elliot-falls","manido-falls","o-kun-de-kun-falls","gorge-falls","eagle-river-falls","houghton-douglass-falls","bonanza-falls","gabbro-falls","yondota-falls","lepisto-falls","jumbo-falls","canyon-falls","greenstone-falls","haven-falls","chapel-falls","middle-hungarian-falls","wright-street-falls"]));
+  assert.deepEqual(new Set(photos.photos.map(x => x.id)), new Set(["wagner-falls","bond-falls","miners-falls","sable-falls","munising-falls","spray-falls","mosquito-falls","agate-falls","manabezho-falls","nawadaha-falls","great-conglomerate-falls","potawatomi-falls","sandstone-falls","laughing-whitefish-falls","scott-falls","bridalveil-falls","elliot-falls","manido-falls","o-kun-de-kun-falls","gorge-falls","eagle-river-falls","houghton-douglass-falls","bonanza-falls","gabbro-falls","yondota-falls","lepisto-falls","jumbo-falls","canyon-falls","greenstone-falls","haven-falls","chapel-falls","middle-hungarian-falls","wright-street-falls","rainbow-falls","upper-hungarian-falls","lower-hungarian-falls","montreal-falls-keweenaw"]));
   for (const p of photos.photos) {
     assert.equal(p.role, "verified-guide-photo");
     if(p.id === "chapel-falls") {
@@ -25,7 +25,11 @@ test("every published waterfall photo has uniquely identified subject, primary s
     assert.ok(p.identityEvidence.length > 45);
     assert.match(p.alt.toLowerCase(), new RegExp(p.name.toLowerCase().replaceAll(" ", "\\s+")));
     assert.ok(p.imageDate === "unknown" || p.imageDate <= photos.reviewed);
-    assert.ok(p.width >= 640 && p.height >= 400);
+    if (p.id === "lower-hungarian-falls") {
+      // The exact-tier, licensed original is only 544x749; show it uncropped rather than invent detail.
+      assert.equal(p.width,544);
+      assert.equal(p.height,749);
+    } else assert.ok(p.width >= 640 && p.height >= 400);
   }
 });
 
@@ -33,7 +37,7 @@ test("named waterfall guide displays the correct source-credited picture and hon
   for (const p of photos.photos) {
     const html=fs.readFileSync(p.page,"utf8");
     assert.match(html, /<meta name="robots" content="index,follow,max-image-preview:large">/);
-    assert.ok(html.includes('<h1>'+p.name),p.id);
+    assert.ok(html.includes('<h1>'+p.name) || (p.id === 'montreal-falls-keweenaw' && html.includes('<h1>Montreal Falls:')),p.id);
     assert.ok(html.includes('class="upfall-verified-photo"'),p.id);
     assert.ok(html.includes('src="'+p.imageUrl.replaceAll('&','&amp;')+'"'),p.id);
     assert.ok(html.includes('content="'+p.imageUrl.replaceAll('&','&amp;')+'"'),p.id+' OG image');
@@ -44,7 +48,7 @@ test("named waterfall guide displays the correct source-credited picture and hon
     assert.ok(html.includes('historical scene, not current conditions'), p.id+" photograph must not imply real-time conditions");
     assert.ok(html.includes(p.creator),p.id+' photo author should be visibly credited');
     assert.ok(html.includes('historical scene, not current conditions'),p.id);
-    const expectedRevision = ["middle-hungarian-falls","wright-street-falls"].includes(p.id) ? "2026-11-14" : "2026-11-12";
+    const expectedRevision = ["middle-hungarian-falls","wright-street-falls","rainbow-falls","upper-hungarian-falls","lower-hungarian-falls","montreal-falls-keweenaw"].includes(p.id) ? "2026-11-14" : "2026-11-12";
     assert.ok(html.includes('"dateModified":"'+expectedRevision+'"'),p.id);
     assert.ok(sitemap.includes('<loc>https://chrisizworski.com/upper-peninsula-waterfalls/'+p.id+'/</loc><lastmod>'+expectedRevision+'</lastmod>'),p.id);
     for (const other of photos.photos.filter(x=>x.id!==p.id))assert.ok(!html.includes('src="'+other.imageUrl+'"'),p.id+' must not borrow '+other.id+' photo');
