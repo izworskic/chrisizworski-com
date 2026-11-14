@@ -42,7 +42,7 @@
      '. A source-check time is not a trail observation date.'+(conflicts?' <strong>'+conflicts+' report header/narrative date conflict'+(conflicts===1?'':'s')+' requires manual review.</strong>':'');
    track('snowmobile_club_desk_loaded',{region,monitored:data.reports.length,recent:current});
   }catch{
-   status.innerHTML='Local club postings could not be checked. Verify conditions directly in the <a href="https://misorva.org/trail-report/" target="_blank" rel="noopener">MISORVA groomer directory</a> and the <a href="https://www.michigan.gov/dnr/things-to-do/snowmobiling/where" target="_blank" rel="noopener">Michigan DNR official map</a>. No local surface evidence has been inferred.';
+   status.innerHTML='Local club postings could not be checked. Verify conditions directly in the <a href="https://misorva.org/trail-report/" target="_blank" rel="noopener">MISORVA groomer directory</a>'+ (region==='keweenaw-copper-country'?' or the <a href="https://www.keweenawsnowmobileclub.com/trail-conditions/" target="_blank" rel="noopener">Keweenaw Snowmobile Club trail conditions</a>':'') +' and the <a href="https://www.michigan.gov/dnr/things-to-do/snowmobiling/where" target="_blank" rel="noopener">Michigan DNR official map</a>. No local surface evidence has been inferred.';
    list.innerHTML='';track('snowmobile_club_desk_error',{region});
   }finally{clearTimeout(timeout)}
  }
