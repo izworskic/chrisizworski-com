@@ -14,6 +14,12 @@ on:
       - 'public/upper-peninsula-waterfalls/index.html'
       - 'scripts/verify-shared-itinerary-rust.cjs'
       - 'tests/shared-itinerary-engine.test.cjs'
+      - 'public/assets/circle-tour-rust-itinerary.js'
+      - 'public/assets/lake-superior-circle-tour-core.js'
+      - 'public/assets/lake-superior-circle-tour-live-day.js'
+      - 'public/assets/lake-superior-circle-tour.js'
+      - 'tests/circle-tour-shared-rust.test.cjs'
+      - 'scripts/verify-circle-tour-bridge-browser.cjs'
       - '.github/workflows/shared-itinerary-rust.yml'
   workflow_dispatch:
 permissions:
@@ -51,4 +57,5 @@ jobs:
         run: |
           node --test tests/shared-itinerary-engine.test.cjs tests/up-waterfalls-day-sheet.test.js \
             tests/up-waterfalls-munising-day.test.js tests/up-waterfalls-presque-isle-outing.test.js \
-            tests/up-waterfalls-regional-clusters.test.js tests/up-waterfalls-b59-nearby-python.test.js
+            tests/up-waterfalls-regional-clusters.test.js tests/up-waterfalls-b59-nearby-python.test.js \
+            tests/circle-tour-shared-rust.test.cjs tests/circle-tour-foundation.test.cjs
