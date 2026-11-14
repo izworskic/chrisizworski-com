@@ -132,7 +132,7 @@ def validate_visuals(visual: dict, hub: str) -> None:
         if not asset.is_file() or asset.stat().st_size < 5000:
             raise ValueError("Missing or abnormally small locally hosted photo: " + src)
         with asset.open("rb") as stream:
-            if stream.read(3) != b"\\xff\\xd8\\xff":
+            if stream.read(3) != bytes((255, 216, 255)):
                 raise ValueError("Photo asset is not a valid JPEG: " + src)
         if not photo.get("sourceSrc", "").startswith("https://"):
             raise ValueError("Original Wikimedia source not recorded")
