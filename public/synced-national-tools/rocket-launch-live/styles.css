@@ -613,3 +613,24 @@ html.rl-map-fullscreen,html.rl-map-fullscreen body{overflow:hidden!important;ove
 .rl-slip-tag{display:block;margin-top:4px;font-size:11px;font-weight:800;letter-spacing:.02em;color:#2d5d4f}
 .rl-slip-tag[data-trend="2"],.rl-slip-tag[data-trend="4"]{color:#a14d1c}
 .rl-slip-choice[aria-pressed="true"] .rl-slip-tag{color:#f4c9a8}
+/* Launch day at a glance: answers first, each row jumps to its section. */
+.rl-glance{margin-top:18px;padding-top:16px;border-top:1px solid rgba(255,255,255,.18);min-width:0}
+.rl-glance h3{margin:0 0 10px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#f4b48c}
+.rl-glance-for{margin:0 0 10px;font-size:12px;color:#cfe0e4}
+.rl-glance ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:minmax(0,1fr);gap:6px}
+@media(min-width:700px){.rl-glance ul{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.rl-glance a{display:flex;flex-direction:column;gap:2px;min-width:0;padding:9px 12px;border-radius:8px;background:rgba(255,255,255,.07);color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.1)}
+.rl-glance a:hover{background:rgba(255,255,255,.13)}
+.rl-glance a:focus-visible{outline:3px solid #f4a77d;outline-offset:2px}
+.rl-glance-k{font-size:11px;font-weight:700;color:#b9d2d8;text-transform:uppercase;letter-spacing:.06em}
+.rl-glance-v{font-size:14px;font-weight:700;line-height:1.35;overflow-wrap:anywhere}
+.rl-glance a[data-tone="warn"] .rl-glance-v{color:#f6c29f}
+/* Folded secondary detail: content stays in the page and in search, closed by default. */
+.rl-fold{margin:14px 0;border:1px solid #c9dad5;border-radius:10px;background:#fbfdfc}
+.rl-fold-summary{cursor:pointer;list-style:none;padding:14px 16px;font-weight:800;color:#174d42;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.rl-fold-summary::-webkit-details-marker{display:none}
+.rl-fold-summary::after{content:"+";font-size:20px;line-height:1;color:#2d6a5c}
+.rl-fold[open]>.rl-fold-summary::after{content:"\2212"}
+.rl-fold-summary:focus-visible{outline:3px solid #f4a77d;outline-offset:2px;border-radius:10px}
+.rl-fold[open]{padding-bottom:12px}
+.rl-fold[open]>:not(summary){margin-left:12px;margin-right:12px}

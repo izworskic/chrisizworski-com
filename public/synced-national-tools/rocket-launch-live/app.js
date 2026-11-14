@@ -1061,7 +1061,7 @@
   void window.RocketLaunchWeatherRust?.load().then(engine=>{
     if(!engine)return;
     skyTrendRust=engine;
-    if(state.data)renderSlipForecast(state.data);
+    if(state.data){renderSlipForecast(state.data);renderGlance(state.data);}
   });
   const SLIP_TAG={1:'Clearer',2:'Cloudier',3:'Same sky',4:'One spot holds'};
   function skyTrendSentence(t){
@@ -1082,6 +1082,71 @@
     }
     return null;
   }
+  // Launch day at a glance: one short value per question, each row jumping to
+  // the section that answers it. Uses only data this page already loaded.
+  function renderGlance(data){
+    const box=$('rl-glance');
+    if(!box)return;
+    const launch=data.selectedLaunch,featured=data.nationalNext;
+    const forLine=$('rl-glance-for');
+    if(forLine){
+      const other=launch&&featured&&launch.id!==featured.id;
+      forLine.hidden=!other;
+      forLine.textContent=other?'For your selected flight: '+launch.name:'';
+    }
+    const put=(id,text,tone)=>{
+      const v=$(id);if(!v)return;
+      v.textContent=text;
+      const a=v.closest('a');
+      if(a){if(tone)a.dataset.tone=tone;else delete a.dataset.tone;}
+    };
+    const sites=Array.isArray(data.access?.sites)?data.access.sites.length:0;
+    put('rl-glance-where',sites?sites+' public spots, with directions':
+      'Public viewing places near '+(data.region?.name||'the launch site'));
+    const places=(data.weather?.places||[]).filter(p=>p.cloudStatus==='ok'&&Number.isInteger(p.cloudCoverPercent));
+    if(places.length){
+      const lo=Math.min(...places.map(p=>p.cloudCoverPercent)),hi=Math.max(...places.map(p=>p.cloudCoverPercent));
+      const words=places[0].period?.shortForecast;
+      put('rl-glance-sky',(words?words+', ':'')+(lo===hi?lo+'% cloud':lo+' to '+hi+'% cloud'),
+        places.some(p=>p.assessment?.level==='poor')||lo>=70?'warn':'');
+    }else put('rl-glance-sky','Not forecast yet for this time');
+    const o=data.officialLaunchWeather||{};
+    if(data.region?.id==='florida'){
+      put('rl-glance-official',
+        o.status==='mission-matched-current'&&Number.isInteger(o.povPercent)?
+          o.povPercent+'% chance a launch weather rule is broken':
+        o.weatherStory?.officialPageUrl?'Open the official 45th Weather Squadron forecast':
+        'No official forecast posted yet');
+    }else{
+      put('rl-glance-official',data.launchWeather?.status==='forecast'?'Near-pad forecast checked':'Near-pad forecast not available');
+    }
+    const scen=data.weather?.slip?.scenarios||[];
+    const trend=skyTrendRust&&scen.length?skyTrendRust.trend(scen):null;
+    const slipWords={3:'Same sky if it slips',1:'Clearer if it slips',4:'One spot holds up better',2:'Cloudier if it slips'};
+    put('rl-glance-slip',trend&&slipWords[trend.verdict]?
+      slipWords[trend.verdict]+(trend.verdict===2||trend.verdict===4?' '+trend.firstOffset+' hr':''):
+      scen.length?'Compare 1, 3 and 6 hour delays':'Needs an hourly forecast',
+      trend&&(trend.verdict===2||trend.verdict===4)?'warn':'');
+    const m=data.mediaDesk||{};
+    put('rl-glance-watch',m.primaryVideo?'Launch stream listed':
+      (m.cameras||[]).length?(m.cameras.length+' spaceport camera'+(m.cameras.length===1?'':'s')):
+      'Streams and cameras');
+    put('rl-glance-status',launch?.status||'Check the change log');
+  }
+  // A jump link into a folded section opens it, so no answer is ever behind a
+  // link that lands on a closed box.
+  function revealHash(hash){
+    const id=(hash||'').replace(/^#/,'');
+    if(!/^[A-Za-z][\w-]*$/.test(id))return;
+    const target=document.getElementById(id);
+    for(let d=target?.closest('details');d;d=d.parentElement?.closest('details'))d.open=true;
+  }
+  document.addEventListener('click',e=>{
+    const a=e.target.closest?.('a[href^="#"]');
+    if(a)revealHash(a.getAttribute('href'));
+  });
+  window.addEventListener('hashchange',()=>revealHash(location.hash));
+  if(location.hash)revealHash(location.hash);
   function renderSlipForecast(data) {
     const root=$('rl-slip-options'),detail=$('rl-slip-detail');
     if (!root || !detail) return;
@@ -1686,6 +1751,7 @@
     void loadFloridaEvidence(data);
     renderWeather(data);
     renderSlipForecast(data);
+    renderGlance(data);
     renderLaunchWeather(data);
     renderOfficial45ws(data);
     renderOfficialEvidence(data);
