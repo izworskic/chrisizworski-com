@@ -44,7 +44,7 @@ test('planner supports real trip actions without storing personal data', () => {
 });
 
 test('November season rollover preserves the adaptive Circle Tour and refuses stale access assumptions', () => {
-  assert.match(page, /const RELEASE = '2026-11-08'/);
+  assert.match(page, /const RELEASE = '2026-11-14'/);
   assert.match(page, /lake-superior-circle-tour-live-day\.js\?v=20260930-1/);
   assert.match(page, /sourceSeasonIsCurrent/);
   assert.match(page, /Last verified schedule: August 1–October 18, 2026/);
