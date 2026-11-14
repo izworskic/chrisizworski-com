@@ -51,8 +51,11 @@ test('closed, research-only, unverified, absent and malformed stops cannot enter
  assert.equal(sheet.allowedSharedStop(card('wagner-falls',{status:'closed'})),false);
 });
 test('at most six unique stops; proposed additions are all-or-nothing',()=>{
- assert.equal(engine.assess({ids,cards,selected:['a','b','c','d'],date:'2027-06-01'}).ok,false);
- assert.equal(engine.assess({ids,cards,selected:['a','b','c'],date:'2027-06-01'}).ok,true);
+ const additional=new Map(cards);
+ for(const id of ['a','b','c','d'])additional.set(id,card(id));
+ assert.equal(engine.assess({ids,cards:additional,selected:['a','b','c','d'],date:'2027-06-01'}).ok,false);
+ assert.equal(engine.assess({ids,cards:additional,selected:['a','b','c'],date:'2027-06-01'}).ok,true);
+ assert.equal(engine.assess({ids,cards,selected:['unlisted-stale-id'],date:'2027-06-01'}).ok,false);
  const selected=['wagner-falls','miners-falls'];
  assert.deepEqual(engine.assess({ids,cards,selected,date:'2027-06-01'}).missing,['elliot-falls']);
  assert.equal(engine.vetoApproved({ok:true,missing:ids},{ids,cards,selected:['a','b','c','d'],date:'2027-06-01'}).ok,false);
