@@ -15,6 +15,11 @@ on:
       - 'scripts/verify-shared-itinerary-rust.cjs'
       - 'tests/shared-itinerary-engine.test.cjs'
       - 'public/assets/circle-tour-rust-itinerary.js'
+      - 'public/assets/circle-tour-feasibility-ui.js'
+      - 'public/assets/circle-tour-trip-intelligence.json'
+      - 'public/lake-superior-circle-tour/10-day/index.html'
+      - 'scripts/build-circle-tour-trip-intelligence.py'
+      - 'tests/circle-tour-trip-intelligence.test.cjs'
       - 'public/assets/lake-superior-circle-tour-core.js'
       - 'public/assets/lake-superior-circle-tour-live-day.js'
       - 'public/assets/lake-superior-circle-tour.js'
@@ -58,4 +63,4 @@ jobs:
           node --test tests/shared-itinerary-engine.test.cjs tests/up-waterfalls-day-sheet.test.js \
             tests/up-waterfalls-munising-day.test.js tests/up-waterfalls-presque-isle-outing.test.js \
             tests/up-waterfalls-regional-clusters.test.js tests/up-waterfalls-b59-nearby-python.test.js \
-            tests/circle-tour-shared-rust.test.cjs tests/circle-tour-foundation.test.cjs
+            tests/circle-tour-shared-rust.test.cjs tests/circle-tour-foundation.test.cjs tests/circle-tour-trip-intelligence.test.cjs
