@@ -156,6 +156,15 @@ test('the report API requires a known region and never alters main DNR route pay
   assert.equal(reply.headers['X-Robots-Tag'],'noindex, nofollow');
  }finally{globalThis.fetch=original;api._test.clearCache();}
 });
+test('report-desk client version changes when new source-date safety logic ships',()=>{
+ const version='/assets/snowmobile-local-reports.js?v=20261113-source-date-audit-3';
+ const generator=readFileSync(new URL('../scripts/generate-snowmobile-region-pages.mjs',import.meta.url),'utf8');
+ assert.ok(generator.includes(version));
+ for(const region of Object.keys(desk.CLUBS)){
+   const html=readFileSync(new URL('../public/snowmobile/regions/'+region+'.html',import.meta.url),'utf8');
+   assert.ok(html.includes(version),region+' must load source-date audit client, not the old cached version');
+ }
+});
 test('all six generated region pages have a local desk and the original corridor stays unchanged',()=>{
  const generator=readFileSync(new URL('../scripts/generate-snowmobile-region-pages.mjs',import.meta.url),'utf8');
  const core=readFileSync(new URL('../public/assets/snowmobile-region.js',import.meta.url),'utf8');
