@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 1,
+  "reviewedOn": "2026-11-14",
+  "route": "31 numbered stops; 7-, 10- and 15-day published editorial estimates; not live routing",
+  "sourceGaps": [
+    {
+      "from": "7",
+      "to": "8",
+      "status": "partial",
+      "corridor": "Ontonagon to Keweenaw / Houghton",
+      "editorialNote": "The Ontonagon–Houghton segment is not independently sourced end-to-end; Copper Harbor is a separate scenic byway detour. The Michigan DOT 47-mile Copper Country Trail must not be used as Ontonagon–Houghton mileage.",
+      "references": [
+        {
+          "name": "Michigan DOT Copper Country Trail",
+          "url": "https://www.michigan.gov/mdot/-/media/Project/Websites/MDOT/Travel/Tourists/Byways/Pure-Michigan-Byways-Driving-Guide.pdf?rev=840ea95f4a854d2dbf29438215c4bc1c"
+        },
+        {
+          "name": "Visit Keweenaw Circle Tour guidance",
+          "url": "https://www.visitkeweenaw.com/blog/post/your-lake-superior-circle-tour-guide-to-the-keweenaw/"
+        }
+      ]
+    },
+    {
+      "from": "12",
+      "to": "31",
+      "status": "partial",
+      "corridor": "Tahquamenon Falls to Whitefish Point via Paradise",
+      "editorialNote": "The museum verifies 11 miles from Paradise to Whitefish Point and describes an approximately 20-minute drive from Tahquamenon Falls, but not a single measured entrance-to-entrance distance. Do not mislabel the Paradise spur as the whole leg.",
+      "references": [
+        {
+          "name": "Great Lakes Shipwreck Historical Society official arrival directions",
+          "url": "https://shipwreckmuseum.com/visit/admission-hours-location/"
+        }
+      ]
+    },
+    {
+      "from": "31",
+      "to": "13",
+      "status": "partial",
+      "corridor": "Whitefish Point to Sault Ste. Marie, MI, via Paradise",
+      "editorialNote": "The museum gives the official road approach from Sault Ste. Marie and approximately 1 hour 10 minutes travel, but not an independently checked road-mile total between these exact stop entrances.",
+      "references": [
+        {
+          "name": "Great Lakes Shipwreck Historical Society official arrival directions",
+          "url": "https://shipwreckmuseum.com/visit/admission-hours-location/"
+        }
+      ]
+    },
+    {
+      "from": "20",
+      "to": "21",
+      "status": "partial",
+      "corridor": "Thunder Bay to Pigeon River crossing, then Grand Portage State Park approach",
+      "editorialNote": "The city tourism authority confirms Highway 61 and a border drive of less than an hour, but the park arrival and crossing are not the same point. The ~38-mile border-only editorial reference must not become a verified park approach.",
+      "references": [
+        {
+          "name": "Visit Thunder Bay arrival information",
+          "url": "https://www.visitthunderbay.com/plan-your-trip/know-before-you-go/"
+        }
+      ]
+    }
+  ],
+  "dayNotes": {
+    "1": {
+      "overnight": "Bayfield, Wisconsin",
+      "experience": "Pick a short harbor stroll or a booked Apostle Islands experience; do not assume the lake is suitable for a boat tour.",
+      "decision": "Start in Duluth and settle into Bayfield. Saving a longer island excursion for a separate day makes this opening leg more enjoyable.",
+      "source": "https://www.nps.gov/apis/planyourvisit/index.htm",
+      "sourceLabel": "Apostle Islands NPS planning"
+    },
+    "2": {
+      "overnight": "Porcupine Mountains / Silver City, Michigan",
+      "experience": "Aim for one accessible Lake of the Clouds viewpoint rather than stacking several remote Black River waterfall hikes.",
+      "decision": "The Black River and Porcupine Mountains detours pull away from the shore road. Verify the actual park entrance and return drive before committing to a late afternoon arrival.",
+      "source": "https://www.michigan.gov/dnr/places/v-centers/porcupine-mountains",
+      "sourceLabel": "Porcupine Mountains state-park visitor desk"
+    },
+    "3": {
+      "overnight": "Ontonagon, Michigan",
+      "experience": "Use the short driving day to experience the Porcupine Mountains more fully.",
+      "decision": "This is the recovery day missing from many seven-day tours. Choose a walk suited to your abilities and leave time to reach your actual overnight lodging.",
+      "source": "https://www.michigan.gov/dnr/places/v-centers/porcupine-mountains",
+      "sourceLabel": "Porcupine Mountains visitor information"
+    },
+    "4": {
+      "overnight": "L'Anse / Baraga, Michigan",
+      "experience": "Choose Quincy Mine, the Copper Harbor scenic drive, or Brockway Mountain if it is open and reachable.",
+      "decision": "The published day includes a Copper Country loop, not one verified point-to-point Houghton mileage. Copper Harbor is a major detour, and seasonal scenic roads need an independent check.",
+      "source": "https://www.visitkeweenaw.com/blog/post/your-lake-superior-circle-tour-guide-to-the-keweenaw/",
+      "sourceLabel": "Visit Keweenaw route explanation"
+    },
+    "5": {
+      "overnight": "Marquette, Michigan",
+      "experience": "Walk Presque Isle Park and leave time to watch the ore docks or explore downtown.",
+      "decision": "A lighter transfer day is worth protecting. It gives room for shoreline walks and food stops instead of trying to turn every mile into a timed attraction.",
+      "source": "https://www.travelmarquette.com/",
+      "sourceLabel": "Travel Marquette visitor guide"
+    },
+    "6": {
+      "overnight": "Munising, Michigan",
+      "experience": "Choose a Pictured Rocks cruise or a park trail, subject to current openings, bookings and lake conditions.",
+      "decision": "A short transit leg does not make a long hike and a boat tour interchangeable. Plan around the experience you actually want, then confirm the operator's schedule.",
+      "source": "https://www.nps.gov/piro/planyourvisit/conditions.htm",
+      "sourceLabel": "Pictured Rocks NPS conditions"
+    },
+    "7": {
+      "overnight": "Sault Ste. Marie, Michigan",
+      "experience": "Prioritize Tahquamenon Falls or Whitefish Point for an extended visit; do not promise both plus a complete Soo Locks visit.",
+      "decision": "The Paradise–Whitefish Point spur and the return toward Sault Ste. Marie lack one validated door-to-door road mileage. The 217-mile day total is a published itinerary estimate, not verified live navigation.",
+      "source": "https://shipwreckmuseum.com/visit/admission-hours-location/",
+      "sourceLabel": "Whitefish Point official arrival directions"
+    },
+    "8": {
+      "overnight": "Wawa, Ontario",
+      "experience": "Choose one longer Lake Superior Provincial Park stop, such as Old Woman Bay or an appropriate accessible hike.",
+      "decision": "The Sault international crossing may add time. The planner reserves 45 minutes when an observed passenger wait is unavailable; that is a buffer, not an official wait or guarantee of entry.",
+      "source": "https://www.ontarioparks.ca/park/lakesuperior/alerts",
+      "sourceLabel": "Ontario Parks alerts"
+    },
+    "9": {
+      "overnight": "Thunder Bay, Ontario",
+      "experience": "Use White River or Nipigon as short breaks; consider a longer stop only if the day is running ahead.",
+      "decision": "The longest 10-day transfer is a classic trip-planning trap. A 303-mile published estimate already consumes most of a nine-hour sightseeing day before fuel, meals and unpredictable weather.",
+      "source": "https://511on.ca/",
+      "sourceLabel": "Ontario 511"
+    },
+    "10": {
+      "overnight": "Duluth, Minnesota",
+      "experience": "Choose one North Shore state park, or a shorter visit plus a walk in Grand Marais.",
+      "decision": "This final leg includes the Pigeon River border crossing. The published 192-mile day estimate is not proof of every park approach; the 45-minute crossing reserve is unverified when current waits are absent.",
+      "source": "https://www.visitthunderbay.com/plan-your-trip/know-before-you-go/",
+      "sourceLabel": "Visit Thunder Bay border gateway"
+    }
+  }
+}
