@@ -22,6 +22,7 @@ ROOT = Path(__file__).resolve().parents[1]
 HUB = ROOT / "public/lake-superior-circle-tour/index.html"
 LEDGER = ROOT / "data/circle-tour-road-evidence.json"
 VISUALS = ROOT / "data/circle-tour-visual-story.json"
+TRAVELER = ROOT / "data/circle-tour-traveler-stops.json"
 OUT = ROOT / "public/lake-superior-circle-tour/10-day/index.html"
 CANONICAL = "https://chrisizworski.com/lake-superior-circle-tour/10-day/"
 VERSION = "2026-11-14"
@@ -115,6 +116,106 @@ def extract(source: str, ledger: dict) -> list[dict]:
     if days[-1]["complete"]:
         raise ValueError("Border-to-park mileage incorrectly promoted into full road distance")
     return days
+
+
+
+def extract_traveler_presets(source: str, ledger: dict, catalog: dict, visual: dict) -> dict:
+    """Build a factual 7/10/15-day comparison from already published route day cards.
+
+    No new distances or roads are generated. The UI must never promise that
+    user-selected constraints magically change an editorial overnight itinerary.
+    """
+    if catalog.get("version") != 1 or catalog.get("routeStart") != "Duluth, Minnesota":
+        raise ValueError("Unsupported traveler catalog or start-point claim")
+    if catalog.get("routeDirection") != "counterclockwise":
+        raise ValueError("Traveler plan must use the published counterclockwise source")
+    cards = catalog.get("stops", {})
+    stays = catalog.get("overnightBases", {})
+    edges = {(r["from"], r["to"]): r for r in ledger["edges"]}
+    order = [ledger["edges"][0]["from"]] + [e["to"] for e in ledger["edges"]]
+    if len(order) != 31 or len(set(order)) != 31:
+        raise ValueError("Source stop order changed; cannot publish preference itineraries")
+    # Reuse already self-hosted, attribution-verified destination images.
+    # Never attach a photograph of a different park to an unrelated stop.
+    photo_matches = {"1":"hero","3":"1","6":"2","8":"4","10":"5",
+                     "11":"6","12":"7","15":"8","18":"9","27":"10","30":"hero"}
+    cards = {key:dict(value) for key,value in cards.items()}
+    for stop, photo_day in photo_matches.items():
+        if stop in cards:
+            cards[stop]["photo"] = (visual["hero"] if photo_day == "hero"
+                                      else visual["days"][photo_day]["photo"])
+    for stop, card in cards.items():
+        if stop not in order or not card.get("interests") or not set(card["interests"]) <= {"hiking", "waterfalls", "shipwatch", "scenery"}:
+            raise ValueError("Specialist activity has an invalid route stop or interests: " + stop)
+        href = card.get("toolUrl", "")
+        if not href.startswith("/") and href != "https://picturedrocks.chrisizworski.com/":
+            raise ValueError("Unreviewed external specialist link: " + href)
+        if href.startswith("/") and href not in source:
+            local = ROOT / "public" / href.lstrip("/") / "index.html"
+            if not local.is_file():
+                raise ValueError("Specialist tool absent from original hub and repository: " + href)
+        if len(card.get("toolAction", "")) < 18 or len(card.get("caution", "")) < 18:
+            raise ValueError("Specialist tool lacks a useful visitor decision")
+    expected = {7: 1359, 10: 1358, 15: 1358}
+    result = {}
+    for length in (7, 10, 15):
+        start = source.find('id="itin-' + str(length) + '"')
+        if start < 0:
+            raise ValueError("Missing published " + str(length) + "-day route")
+        end = source.find('id="itin-' + str({7:10, 10:15}.get(length, -1)) + '"', start + 2) if length != 15 else len(source)
+        if end < start:
+            raise ValueError("Cannot locate next route section")
+        panel = source[start:end]
+        found = re.findall(
+            r'<div class="itin-day" data-day="(\d+)" data-stops="([\d,]+)" data-miles="(\d+)">'
+            r'<span class="day-label">[\s\S]*?</span>([\s\S]*?)</div>', panel
+        )
+        if len(found) != length:
+            raise ValueError("Expected exactly " + str(length) + " published days, not " + str(len(found)))
+        prev = None
+        days = []
+        for rawday, rawstops, rawmiles, rawsummary in found:
+            number = int(rawday)
+            ids = rawstops.split(",")
+            miles = int(rawmiles)
+            if number != len(days)+1 or any(stop not in order for stop in ids) or (prev and ids[0] != prev):
+                raise ValueError("Published travel day is disconnected: " + str(length))
+            pairs = list(zip(ids, ids[1:]))
+            if any(order.index(a)+1 != order.index(b) for a,b in pairs):
+                raise ValueError("Invalid published route adjacency: " + str(length))
+            if miles == 0 and len(ids) != 1:
+                raise ValueError("Zero-mile stay must be one source stop")
+            if miles > 600:
+                raise ValueError("Out-of-bounds published daily mileage")
+            endpoint = ids[-1]
+            if endpoint not in stays:
+                raise ValueError("No reviewed overnight area for day ending at stop " + endpoint)
+            partial = [a+"→"+b for a,b in pairs if edges[(a,b)]["status"] in ("partial-source-only", "arrival-choice-unresolved")]
+            crossings = sum(1 for a,b in pairs if (a,b) in (("13","14"), ("20","21")))
+            if crossings > 1:
+                raise ValueError("Unexpected second border on one day")
+            # Do not recommend yesterday's departure stop twice, except stay days.
+            highlights = [stop for stop in (ids if len(ids) == 1 else ids[1:]) if stop in cards]
+            days.append({
+                "day":number,"stops":ids,"miles":miles,
+                "driveAllowanceHours":round(miles / 47 * 1.2, 2),
+                "routeSummary":html.unescape(re.sub(r"<[^>]+>", "", rawsummary)).strip(),
+                "overnightArea":stays[endpoint],
+                "highlights":highlights,
+                "complete":not partial,"incompleteLegs":partial,
+                "borderReserveMinutes":45 * crossings,
+                "seasonalSensitive":any(x in {"3","6","8","11","12","15","18","20","27","28"} for x in ids),
+                "basis":"published-day-estimate-not-a-routed-ETA"
+            })
+            prev = ids[-1]
+        if sum(d["miles"] for d in days) != expected[length] or days[0]["stops"][0] != "1" or days[-1]["stops"][-1] != "30":
+            raise ValueError("Editorial mileage or Duluth loop changed: "+str(length))
+        if days[-1]["complete"]:
+            raise ValueError("Border-to-Grand-Portage approach falsely completed for "+str(length))
+        result[str(length)] = {"days":days, "totalEditorialMiles":expected[length]}
+    return {"version":1,"reviewed":catalog["reviewed"],"start":catalog["routeStart"],
+            "direction":"counterclockwise","options":result,
+            "specialists":cards,"sourceNotes":catalog["notes"]}
 
 
 def validate_visuals(visual: dict, hub: str) -> None:
@@ -243,7 +344,77 @@ footer{border-top:1px solid var(--border);padding:24px 0;font-size:14px;color:va
 """
 
 
-def render(data: list[dict], ledger: dict, visual: dict) -> str:
+
+STYLES += """
+/* Live, constraint-driven visitor decisions. Keep source stories and 10 photos. */
+.ct-personalize{background:#f0f6f2;border:1px solid #c5d6cc;border-radius:14px;padding:23px;margin:30px 0 38px;scroll-margin-top:20px}
+.ct-personalize .eyebrow{display:block;margin-bottom:10px}
+.ct-personalize h2{max-width:780px}
+.ct-personal-intro{max-width:800px}
+.ct-personal-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 18px;margin:19px 0}
+.ct-personal-controls>label{display:flex;flex-direction:column;gap:8px}
+.ct-personal-controls select{width:100%;min-width:0}
+.ct-personal-choices{grid-column:1/-1;border:1px solid #c9ded2;border-radius:8px;padding:12px 16px;display:flex;flex-wrap:wrap;gap:12px 25px}
+.ct-personal-choices legend{padding:0 6px;font-weight:750}
+.ct-personal-choices label{display:flex;gap:8px;align-items:center;font-size:14px;font-weight:650}
+.ct-personal-choices input{width:17px;height:17px;accent-color:#155b67}
+.ct-personal-summary{border-left:4px solid #236e5c;background:#fff;padding:16px 20px;margin:18px 0}
+.ct-personal-summary h3{font:600 24px/1.3 Georgia,serif}
+.ct-personal-summary p{margin:8px 0}
+.ctp-warning{color:#854a19;font-weight:650;font-size:14px}
+.ct-personal-alternate{background:#e3efea;padding:14px 17px;border-radius:8px;margin:16px 0}
+.ct-personal-alternate p{font-size:15px;margin:6px 0}
+.ct-plan-button{cursor:pointer;background:#155b67;border:0;color:white;border-radius:6px;padding:10px 15px;font-weight:700;margin-top:6px}
+.ct-personal-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:20px 0}
+.ct-personal-actions>a{font-size:15px;font-weight:750}
+.ct-personal-day-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:20px 0}
+.ct-personal-day{background:#fff;border:1px solid #d0e0d6;border-radius:10px;padding:17px}
+.ct-personal-day[data-state="over"],.ct-personal-day[data-state="unverified"]{border-left:4px solid #b77839}
+.ct-personal-day-head{display:flex;flex-wrap:wrap;gap:7px;justify-content:space-between;align-items:start}
+.ct-personal-day h4{font:600 20px/1.3 Georgia,serif;margin:0 0 7px}
+.ct-personal-state{font-size:12px;background:#eff5f1;border-radius:20px;padding:4px 8px;font-weight:750}
+.ct-personal-day[data-state="over"] .ct-personal-state,.ct-personal-day[data-state="unverified"] .ct-personal-state{background:#fdf0e5}
+.ct-personal-stops{font-size:14px;color:#4a6259}
+.ct-personal-miles{font-size:13px;color:#405c51}
+.ct-personal-note{font-size:13px;color:#6a5140}
+.ct-personal-day-body{display:flex;gap:14px;align-items:start;margin:16px 0}
+.ct-personal-photo{width:145px;flex:none;margin:0}
+.ct-personal-photo img{width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;border-radius:7px;display:block}
+.ct-personal-photo figcaption{font-size:10px;line-height:1.45;margin:5px 0}
+.ct-personal-advice{min-width:0;flex:1;font-size:14px}
+.ct-personal-advice ul{margin:8px 0;padding-left:18px}
+.ct-personal-advice li{margin:8px 0}
+.ct-personal-advice li a{display:block;font-weight:750}
+.ct-personal-advice small{display:block;color:#465f54;line-height:1.4}
+.ct-personal-day>a:last-child{font-size:13px;font-weight:700}
+.ct-personal-share{display:flex;flex-wrap:wrap;gap:8px;margin:13px 0}
+.ct-personal-share input{min-width:0;flex:1 1 250px;max-width:100%;background:#fff;border:1px solid #9eb5a9;border-radius:5px;padding:10px}
+.ct-personal-share button{padding:10px 14px;cursor:pointer;border:1px solid #155b67;border-radius:5px;background:#155b67;color:#fff;font-weight:700}
+.ct-personalize .ct-personal-footnote{font-size:13px;color:#4b6558}
+#ct-personalize:not([data-js="on"]) .ct-personal-controls{display:none}
+@media(max-width:790px){
+ .ct-personal-controls{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .ct-personal-day-grid{grid-template-columns:1fr}
+}
+@media(max-width:480px){
+ .ct-personalize{padding:16px;margin:20px 0}
+ .ct-personal-controls{grid-template-columns:1fr}
+ .ct-personal-day-body{flex-direction:column}
+ .ct-personal-photo{width:100%;max-width:260px}
+ .ct-personal-day h4{font-size:19px}
+}
+@media print{
+ header,main > :not(#plan-your-trip),footer{display:none!important}
+ .ct-personalize{border:0;padding:0;margin:0;background:#fff}
+ .ct-personal-controls,.ct-personal-share,.ct-personal-actions,.ct-plan-button{display:none!important}
+ .ct-personal-day-grid{display:block}
+ .ct-personal-day{break-inside:avoid;margin:12px 0}
+ .ct-personal-photo img{max-height:100px}
+}
+"""
+
+
+def render(data: list[dict], ledger: dict, visual: dict, traveler: dict) -> str:
     rows = []
     for d in data:
         story = visual["days"][str(d["day"])]
@@ -275,6 +446,12 @@ def render(data: list[dict], ledger: dict, visual: dict) -> str:
     }, separators=(",", ":"), ensure_ascii=False).replace("<", "\\u003c")
     sources = "".join(f'<li><a href="{esc(url)}" rel="noopener noreferrer">{esc(title)}</a></li>' for title, url in SOURCE_LINKS)
     embedded = json.dumps({"version": VERSION, "days": data, "basis": "source-bounded editorial mileage"}, separators=(",", ":"), ensure_ascii=False).replace("<", "\\u003c")
+    traveler_embedded = json.dumps(traveler, separators=(",", ":"), ensure_ascii=False).replace("<", "\\u003c")
+    sample = traveler["options"]["10"]["days"]
+    constrained = [str(day["day"]) for day in sample if day["driveAllowanceHours"] > 5]
+    example_warning = ("Under a five-hour sample driving limit, days " + ", ".join(constrained) +
+                       " run too long. The final Pigeon River park approach still needs verification." if constrained else
+                       "The original ten-day itinerary remains an editorial plan, not turn-by-turn navigation.")
     rendered = "\n".join(rows)
     jump = " ".join(f'<a href="#day-{i}">Day {i}</a>' for i in range(1, 11))
     hero = photo_html(visual["hero"], hero=True)
@@ -300,7 +477,8 @@ def render(data: list[dict], ledger: dict, visual: dict) -> str:
 <h1>Lake Superior Circle Tour: ten days along the wild shore</h1>
 <p class="lead">Watch a freighter slip beneath Duluth's lift bridge. Walk the copper-colored cliffs of Pictured Rocks. Hear the big water at Tahquamenon, then follow Ontario's granite shore toward Thunder Bay.</p>
 <p>This is the <strong>day-by-day trip I'd build around</strong>: one good experience at a time, overnight towns you can picture, and the tools to decide what makes sense on the day you're there. You can't see every park in ten days. That's the point of choosing well.</p>
-<div class="buttons"><a class="button" href="#ten-days">Explore the ten days</a>
+<div class="buttons"><a class="button" href="#plan-your-trip">Build a trip around your time</a>
+<a class="button secondary" href="#ten-days">Read the ten-day field guide</a>
 <a class="button secondary" href="/lake-superior-circle-tour/?itinerary=10&amp;direction=counterclockwise#itin-10">Open the interactive Circle Tour map</a></div>
 </div>{hero}</section>
 <section class="summary-grid" aria-label="At a glance">
@@ -312,6 +490,43 @@ def render(data: list[dict], ledger: dict, visual: dict) -> str:
 <p><strong>Choose the experience, then use the right tool.</strong> Each day below pairs a real place and photograph with tools already built for that stretch of shore. Follow the planner links for current available observations, park-specific trade-offs and official sources. Day 9 is a long travel day; Day 10 includes a border crossing.</p>
 <p><a href="/lake-superior-circle-tour/">Need a different pace? Explore the full 7-, 10-, and 15-day itineraries.</a></p>
 </section>
+<section class="ct-personalize" id="plan-your-trip" aria-labelledby="ct-prefer-heading">
+<div id="ct-personalize" data-js="none">
+<span class="eyebrow">Make this your trip · Source-checked planning</span>
+<h2 id="ct-prefer-heading">How much driving are you willing to trade for time at the lake?</h2>
+<p class="ct-personal-intro">Tell the planner how long you have, when you're traveling and what you love. It compares <strong>the actual 7-, 10-, and 15-day published routes</strong>, recommends places from those specific days, and points you to the tools that answer the next question. No fabricated extra road legs or lodging reservations.</p>
+<p><strong>Starting point:</strong> Duluth, Minnesota · Counterclockwise Lake Superior loop. To choose another start or direction, use the <a href="/lake-superior-circle-tour/">full 31-stop route map</a>.</p>
+<div class="ct-personal-controls" role="group" aria-label="Your travel preferences">
+<label for="ct-prefer-days">Days you have<select id="ct-prefer-days"><option value="7">7 days</option><option value="10" selected>10 days</option><option value="15">15 days</option></select></label>
+<label for="ct-prefer-drive">Maximum sample driving per day<select id="ct-prefer-drive"><option value="4">4 hours</option><option value="5" selected>5 hours</option><option value="6">6 hours</option><option value="8">8 hours</option></select></label>
+<label for="ct-prefer-month">Month of travel<select id="ct-prefer-month"><option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8" selected>August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select></label>
+<fieldset class="ct-personal-choices"><legend>What makes this trip worth taking?</legend>
+<label><input type="checkbox" id="ct-prefer-hiking" checked>Hiking</label>
+<label><input type="checkbox" id="ct-prefer-waterfalls" checked>Waterfalls</label>
+<label><input type="checkbox" id="ct-prefer-shipwatch">Freighters and maritime history</label>
+<label><input type="checkbox" id="ct-prefer-pictured" checked>Pictured Rocks is a must-see</label>
+</fieldset></div>
+<div class="ct-personal-summary" id="ct-prefer-summary" aria-live="polite">
+<h3>See where your preferences meet the road</h3>
+<p>{esc(example_warning)}</p>
+<p>Without JavaScript, the ten-day photograph-rich field guide below and <a href="/lake-superior-circle-tour/">the full route map</a> are still available.</p></div>
+<div class="ct-personal-alternate" id="ct-prefer-alternate">
+<p>The 15-day published route spreads the long northern Ontario stretch across two days, although it still needs independent road-approach and park-access checks.</p></div>
+<div class="ct-personal-actions">
+<a id="ct-prefer-map" href="/lake-superior-circle-tour/?itinerary=10&amp;direction=counterclockwise#itin-10">Open the original ten-day route and all 31 stops on the map</a>
+</div>
+<div class="ct-personal-day-grid" id="ct-prefer-timeline" aria-label="Your source-linked travel days">
+<p>The complete ten-day route with photographs, overnight suggestions and specialist tools is below. <a href="#ten-days">Browse the field guide.</a></p>
+</div>
+<div class="ct-personal-share">
+<input id="ct-prefer-share" readonly aria-label="Shareable itinerary preference link" value="https://chrisizworski.com/lake-superior-circle-tour/10-day/#plan-your-trip">
+<button type="button" id="ct-prefer-copy">Copy trip link</button>
+<button type="button" id="ct-prefer-print">Print my plan</button>
+</div>
+<p class="ct-personal-footnote" id="ct-prefer-copy-status">The page remains readable without JavaScript. Interactive controls require a modern browser.</p>
+<p class="ct-personal-footnote">Driving figures are conservative editorial allowances, not traffic forecasts. Crossing reserves are unverified when official waits are absent. All parks, lodging, boat tours, border requirements and roads must be checked independently. No purchase or booking is made.</p>
+</div></section>
+
 <section id="ten-days" aria-labelledby="days-title">
 <h2 id="days-title">Ten days. Ten different stretches of shoreline.</h2>
 <p>From harbor towns to quiet bays, here's where I'd focus my time. The stop choices and photographs are destination-specific, not today's live conditions. Open a linked tool when a decision depends on current access or observations.</p>
@@ -342,8 +557,11 @@ def render(data: list[dict], ledger: dict, visual: dict) -> str:
 <footer>Compiled by <a href="https://chrisizworski.com/#person">Chris Izworski</a>. Destination photography is credited beside each image. Route decisions and linked tools are editorial; confirm current conditions with the source. Updated November 14, 2026.</footer>
 </main>
 <script id="ct-intelligence-days" type="application/json">{embedded}</script>
+<script id="ct-traveler-presets" type="application/json">{traveler_embedded}</script>
 <script defer src="/assets/circle-tour-rust-itinerary.js?v=20261114-3"></script>
 <script defer src="/assets/circle-tour-trip-feasibility.js?v=20261114-1"></script>
+<script defer src="/assets/circle-tour-traveler-engine.js?v=20261114-1"></script>
+<script defer src="/assets/circle-tour-traveler-ui.js?v=20261114-1"></script>
 </body></html>
 """
 
@@ -359,7 +577,9 @@ def main() -> None:
     days = extract(source, ledger)
     visual = json.loads(VISUALS.read_text(encoding="utf8"))
     validate_visuals(visual, source)
-    output = render(days, ledger, visual)
+    traveler_catalog = json.loads(TRAVELER.read_text(encoding='utf8'))
+    traveler = extract_traveler_presets(source, ledger, traveler_catalog, visual)
+    output = render(days, ledger, visual, traveler)
     if args.check:
         if not OUT.exists() or OUT.read_text(encoding="utf8") != output:
             raise SystemExit("Circle Tour 10-day static page is missing or stale")
