@@ -320,7 +320,10 @@
     const route = displayedItinerary();
     const directionLabel = activeDirection === "counterclockwise" ? "counterclockwise" : "clockwise";
     byId("routePreviewTitle").textContent = `${activePreset}-Day ${activePreset === "7" ? "Highlights" : activePreset === "10" ? "Balanced Route" : "Chris's Route"}`;
-    const total = publishedRouteMiles(route);
+    const editorialTotal = publishedRouteMiles(route);
+    const total = window.CircleTourRust?.verifyPreset
+      ? window.CircleTourRust.verifyPreset(route, editorialTotal, activeDirection)
+      : editorialTotal;
     const summary = byId("routePreviewMeta");
     summary.replaceChildren(document.createTextNode(total === null
       ? `A ${directionLabel} Duluth loop · mileage not reconciled; check daily directions. `
