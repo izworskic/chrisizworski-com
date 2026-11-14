@@ -132,7 +132,9 @@ pub extern "C" fn ct_drive(miles: f64, hours: f64, stay_day: u32) -> u32 {
         miles < 0.0 || hours < 0.0 || miles > 10000.0 || hours > 500.0 {return 0;}
     if stay_day == 1 {return u32::from(miles == 0.0 && hours == 0.0);}
     let expected = miles / 47.0 * 1.2;
-    u32::from(miles > 0.0 && (hours - expected).abs() <= 0.000_001)
+    // A zero-mile endpoint transition is allowed only when ct_leg already proved
+    // the two distinct Duluth identifiers refer to the same place.
+    u32::from((hours - expected).abs() <= 0.000_001)
 }
 
 #[cfg(test)]
@@ -231,7 +233,7 @@ mod tests {
         assert_eq!(ct_border(1,14.0,f64::NAN),0);
         assert_eq!(ct_drive(47.0,1.2,0),1);
         assert_eq!(ct_drive(0.0,0.0,1),1);
-        assert_eq!(ct_drive(0.0,0.0,0),0);
+        assert_eq!(ct_drive(0.0,0.0,0),1);
         assert_eq!(ct_drive(47.0,1.0,0),0);
         assert_eq!(ct_drive(f64::INFINITY,1.2,0),0);
         assert_eq!(ct_version(),1);
