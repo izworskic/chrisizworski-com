@@ -49,7 +49,7 @@
   function assess(key,cards,selected,date){
     const baseline=legacyAssess(key,cards,selected,date);
     const native=typeof window!=='undefined'?window.UPWaterfallEvidenceRust?.region?.():null;
-    if(!native)return window.SharedItineraryEngine?.vetoApproved?.(baseline,{ids:PRESETS[key],cards,selected,date,season:(key==='keweenaw-gorge'||key==='black-river-corridor')?1:0})||baseline;
+    if(!native)return (typeof window!=='undefined'?window.SharedItineraryEngine?.vetoApproved?.(baseline,{ids:PRESETS[key],cards,selected,date,season:(key==='keweenaw-gorge'||key==='black-river-corridor')?1:0}):null)||baseline;
     const code=native.decide(key,cards,selected,date);
     if((code===1)!==baseline.ok)
       return {ok:false,reason:'The regional access rules could not be reconciled. No stops were added; use the original land-manager guides.',missing:[]};
