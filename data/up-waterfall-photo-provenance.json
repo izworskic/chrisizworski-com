@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-12",
+  "reviewed": "2026-11-14",
   "reviewMethod": "Photographer-owned geotags or exact image descriptions, NPS original accession/USFWS original Flickr, Commons archived license snapshots, plus visual preview where accessible.",
   "hosting": "Wikimedia Commons hosted thumbnails or one verified small original; per-page attribution and license, without cloning file bytes into repo.",
-  "scope": "31 named waterfall guides have individual photo and reuse-source verification; remaining items unphotographed or deliberately held.",
+  "scope": "33 named waterfall photographs with exact subject/creator/reuse provenance; others pending or held.",
   "restrictions": [
     "Never download/reuse general Michigan.gov photography solely because it is a state site; use its documented approved portfolio or obtain permission.",
     "Do not publish photos with All Rights Reserved, CC NC, no derivatives without exact compliant use, or unverifiable subject identity.",
@@ -632,6 +632,45 @@
       "caption": "Chapel Falls descending into the forested basin at Pictured Rocks National Lakeshore, photographed by the National Park Service.",
       "alt": "Chapel Falls plunging down a tall layered sandstone face within dense green forest at Pictured Rocks.",
       "licenseChanges": "Image displayed as NPS-provided maxwidth 960 derivative; no creative crop or color adjustment.",
+      "role": "verified-guide-photo"
+    },
+    {
+      "id": "middle-hungarian-falls",
+      "name": "Middle Hungarian Falls",
+      "page": "public/upper-peninsula-waterfalls/middle-hungarian-falls/index.html",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2e/Middle_falls.jpg",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Middle_falls.jpg",
+      "originalSource": "https://commons.wikimedia.org/wiki/File:Middle_falls.jpg",
+      "creator": "Fondycardinals",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "imageDate": "unknown",
+      "displayDate": "capture date unverified",
+      "width": 750,
+      "height": 972,
+      "identityEvidence": "The photographer's Commons file is titled Middle falls.jpg and categorized as Hungarian Falls, visually identical to their separately titled Hungarian Falls, Middle Falls.png. Both show the broad middle sandstone drop and its large leaning boulder, unlike the separate shallow Upper Falls. Original upload date does not verify capture date; foliage suggests the scene was not photographed when it was uploaded.",
+      "caption": "Middle Hungarian Falls on Dover Creek, photographed by Fondycardinals.",
+      "alt": "Middle Hungarian Falls tumbling over a sandstone ledge into a sheltered pool beside a slanted boulder.",
+      "licenseChanges": "No retouching or crop; display the original 750px Wikimedia image, avoiding the alternative PNG's black matte.",
+      "role": "verified-guide-photo"
+    },
+    {
+      "id": "wright-street-falls",
+      "name": "Wright Street Falls",
+      "page": "public/upper-peninsula-waterfalls/wright-street-falls/index.html",
+      "imageUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/81/Dead_River_Wright_Street_Falls_Marquette_Michigan_2024-09-22.jpg/960px-Dead_River_Wright_Street_Falls_Marquette_Michigan_2024-09-22.jpg",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Dead_River_Wright_Street_Falls_Marquette_Michigan_2024-09-22.jpg",
+      "originalSource": "https://commons.wikimedia.org/wiki/File:Dead_River_Wright_Street_Falls_Marquette_Michigan_2024-09-22.jpg",
+      "creator": "Tim Kiser",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "imageDate": "2024-09-22",
+      "width": 960,
+      "height": 640,
+      "identityEvidence": "Tim Kiser's image names Wright Street Falls on the Dead River under the Forestville penstock at 46.565699,-87.445481, about 25 meters from the site's natural feature pin. Photographic features match the industrial penstock and rocky urban cascade, not upstream McClure Gorge. Wikimedia uploader licensing says CC BY 4.0, although legacy EXIF attribution mentions CC BY-SA 4.0; visibly credit the photographer and current Commons license.",
+      "caption": "Wright Street Falls beneath Marquette's historic hydropower penstock, photographed by Tim Kiser in September 2024.",
+      "alt": "Wright Street Falls rushing through rock beneath a long hydroelectric penstock supported on concrete piers.",
+      "licenseChanges": "Unmodified Commons 960px derivative; author attribution and licensing linked.",
       "role": "verified-guide-photo"
     }
   ]
