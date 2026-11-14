@@ -17,6 +17,10 @@ on:
       - 'scripts/build-circle-tour-trip-intelligence.py'
       - 'data/circle-tour-road-evidence.json'
       - 'data/circle-tour-visual-story.json'
+      - 'data/circle-tour-traveler-stops.json'
+      - 'public/assets/circle-tour-traveler-engine.js'
+      - 'public/assets/circle-tour-traveler-ui.js'
+      - 'tests/circle-tour-traveler-planner.test.cjs'
       - 'public/sitemap.xml'
       - 'package.json'
       - 'public/assets/circle-tour-trip-feasibility.js'
@@ -51,7 +55,7 @@ jobs:
           node scripts/build-circle-tour-network.mjs --check
           python3 scripts/build-circle-tour-trip-intelligence.py
           python3 scripts/build-circle-tour-trip-intelligence.py --check
-          node --test tests/circle-tour-bridge.test.js tests/circle-tour-foundation.test.cjs tests/circle-tour-shared-rust.test.cjs tests/circle-tour-trip-intelligence.test.cjs tests/circle-tour-road-evidence.test.js
+          node --test tests/circle-tour-bridge.test.js tests/circle-tour-foundation.test.cjs tests/circle-tour-shared-rust.test.cjs tests/circle-tour-trip-intelligence.test.cjs tests/circle-tour-road-evidence.test.js tests/circle-tour-traveler-planner.test.cjs
           node scripts/experience-foundry.mjs connections --owner pictured-rocks
       - name: Install isolated pinned Chromium harness
         run: |
