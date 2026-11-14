@@ -662,8 +662,8 @@
       }else{
         visualPhoto(payloadHost,null,'No NASA-credited photo matched to this specific payload.');
         set('rl-visual-payload-story',
-          'Launch Library identifies this mission, but an independently cleared NASA photo of its payload has not been matched. That is not evidence the payload lacks public imagery.');
-        set('rl-visual-payload-evidence','Payload photography is not inferred from another mission or a similar satellite.');
+          'There is no NASA photo we can confirm shows this exact payload, so none is shown. Photos may exist elsewhere; check the operator.');
+        set('rl-visual-payload-evidence','We never swap in a photo of a different mission or a similar satellite.');
         const operator=anchor(data?.mediaDesk?.operator?.url||data?.region?.authority,
           'Check operator or range for mission details');
         if(operator)payloadLinks.appendChild(operator);
@@ -1433,7 +1433,8 @@
     const portal = openForecast ? null : anchor(OFFICIAL_45WS_FORECASTS, '45WS weather portal');
     if (portal) target.appendChild(portal);
     if (d.health?.checkedAt) target.appendChild(el('small', '',
-      'Discovery checked ' + stamp(d.health.checkedAt) + ' · ' + d.health.status));
+      'Last checked for an official forecast ' + stamp(d.health.checkedAt) +
+      (d.health.status === 'overdue' ? ' (later than usual)' : '')));
     const horizon = d.health?.forecastWindow || {};
     if(horizon.candidates7Days===0 &&
        ['before-forecast-window','no-launches-in-21-days'].includes(horizon.status))
@@ -1443,18 +1444,19 @@
         horizon.candidates21Days + ' within the 21-day lookahead.' :
         'No Florida launch is close enough for the official forecast search yet.'));
     if((d.health?.nasaSourceChecks || []).some(x=>x.status==='unavailable'))
-      target.appendChild(el('small','','NASA weather-report source checks were partly unavailable.'));
+      target.appendChild(el('small','','NASA’s mission blogs could not all be checked this time.'));
     const upstream = (d.health?.sourceChecks || []).filter(x =>
       ['45ws-home','45ws-forecast-support','45ws-sitemap','45ws-parent-weather'].includes(x.id));
     const unavailable = upstream.filter(x => x.status === 'unavailable').length;
     if (unavailable) target.appendChild(el('small','',
-      'Direct official-page checks unavailable: ' + unavailable + ' of ' + upstream.length +
-      '. Coverage is incomplete.'));
+      unavailable === upstream.length ?
+        'The squadron’s website turns away automated checks, so this page cannot read its forecast. Use the forecast link above.' :
+        'Some of the squadron’s pages could not be read this time.'));
     else if (upstream.length && !upstream.some(x => x.links > 0))
-      target.appendChild(el('small','','Official pages listed no forecast PDFs during the last check.'));
+      target.appendChild(el('small','','At the last check the squadron had not posted a forecast for this flight.'));
     if (matched) target.appendChild(el('small','',
-      d.discoveredVia === '45ws-public-page' ? 'Discovered on a first-party weather page.' :
-      'Official PDF verified; link discovery does not establish forecast coverage.'));
+      d.discoveredVia === '45ws-public-page' ? 'Read from the squadron’s own forecast page.' :
+      'Read from the squadron’s official forecast document.'));
   }
 
   function syncUrl(r, l) {
