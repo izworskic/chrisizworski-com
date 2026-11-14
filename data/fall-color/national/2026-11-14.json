@@ -1,0 +1,39 @@
+{
+  "date": "2026-11-14",
+  "updated": "2026-11-14T17:13:53.817Z",
+  "briefings": {
+    "new-england": "Season has passed; snow showers expected this weekend across traditional foliage routes.",
+    "great-smoky-mountains": "Past peak timing with mostly sunny conditions; limited color remains on Newfound Gap Road and Cades Cove Loop.",
+    "colorado-aspens": "Well past traditional window; snow showers forecast on Maroon Creek Road and Kebler Pass.",
+    "adirondacks": "Season concluded; heavy snow showers likely this weekend on mountain drives.",
+    "north-shore-superior": "Well past traditional window; live weather data unavailable for this weekend.",
+    "ozarks": "Lingering color possible under mostly sunny skies; Scenic Byway 7 and Pig Trail remain accessible.",
+    "eastern-sierra": "Season ended; mostly sunny conditions this weekend on Bishop Creek Canyon and June Lake Loop.",
+    "wasatch": "Past peak; snow likely this weekend on Alpine Loop and Guardsman Pass.",
+    "columbia-river-gorge": "Past traditional timing with light rain expected; Historic Highway conditions warrant caution.",
+    "door-county": "Season largely finished; mostly cloudy skies with minimal rain this weekend.",
+    "poconos": "Well past peak; mostly cloudy conditions with low precipitation on Delaware Water Gap corridor.",
+    "texas-hill-country": "Within traditional window with promising timing; slight rain chance this weekend on FM-337 and Lost Maples approach.",
+    "west-virginia-highlands": "Season concluded; slight snow shower chance on Highland Scenic Highway and Corridor H.",
+    "catskills": "Past peak timing; chance of snow showers this weekend on Catskill Mountains Scenic Byway.",
+    "shenandoah": "Season finished; scattered rain showers possible on Skyline Drive this weekend."
+  },
+  "method": "AI-generated model summary",
+  "evidenceRegions": [
+    "new-england",
+    "great-smoky-mountains",
+    "colorado-aspens",
+    "adirondacks",
+    "north-shore-superior",
+    "ozarks",
+    "eastern-sierra",
+    "wasatch",
+    "columbia-river-gorge",
+    "door-county",
+    "poconos",
+    "texas-hill-country",
+    "west-virginia-highlands",
+    "catskills",
+    "shenandoah"
+  ]
+}
