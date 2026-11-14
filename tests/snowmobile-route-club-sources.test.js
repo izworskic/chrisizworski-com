@@ -95,7 +95,7 @@ test('the actual snowmobile route UI renders source citations from the API with 
  vm.runInContext(source,context);
  const route={routable:true,distanceMiles:5,estimatedMinutes:10,assumedAvgMph:30,stopCount:2,segmentsTraversed:2,segmentIds:['a','b'],
   segments:[{segmentId:'a',trailNetwork:'UP 8',band:'UNKNOWN',score:null}],legs:[],closedSegmentsExcludedFromRegion:0,
-  clubEvidence:routeClubEvidence(route(['a','b']),geom([['a','1714 Snow Sault Snowmobile Association'],['b','Not Groomed']]))};
+  clubEvidence:routeClubEvidence({routable:true,segmentIds:['a','b']},geom([['a','1714 Snow Sault Snowmobile Association'],['b','Not Groomed']]))};
  const html=context.routeResultHtml(route);
  assert.match(html,/Which clubs work on this route/);
  assert.match(html,/Sault Snowmobile Association/);
@@ -104,7 +104,7 @@ test('the actual snowmobile route UI renders source citations from the API with 
  assert.match(html,/no club report can override a DNR closure/);
  assert.doesNotMatch(html,/Groomed today/);
  assert.doesNotMatch(html,/confirmed open/);
- const empty=context.routeResultHtml({...route,clubEvidence:routeClubEvidence(route(['b']),geom([['b','Not Groomed']]))});
+ const empty=context.routeResultHtml({...route,clubEvidence:routeClubEvidence({routable:true,segmentIds:['b']},geom([['b','Not Groomed']]))});
  assert.match(empty,/No monitored club report matched/);
  const unlinked=context.routeResultHtml({...route,clubEvidence:null});
  assert.doesNotMatch(unlinked,/Which clubs work on this route/);
