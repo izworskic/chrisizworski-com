@@ -240,8 +240,8 @@
       /^https:\/\/www\.nasa\.gov\/blogs\/[a-z0-9_-]+\/20\d\d\/\d\d\/\d\d\/[a-z0-9-]+\/$/.test(d.agencyWeather.sourceUrl||'')){
       links.appendChild(link(d.agencyWeather.sourceUrl,'Read NASA’s dated mission weather report'));
     }
-    links.appendChild(link('https://www.patrick.spaceforce.mil/About-Us/Weather/',
-      '45th Weather Squadron forecast portal'));
+    links.appendChild(link('https://45thweathersquadron.nebula.spaceforce.mil/pages/launchForecastSupport.html',
+      '45th Weather Squadron launch forecasts'));
     const monitor = d.health || {};
     if (monitor.checkedAt) links.appendChild(element('span','small',
       'Official forecast search checked ' + new Date(monitor.checkedAt).toLocaleString('en-US') +

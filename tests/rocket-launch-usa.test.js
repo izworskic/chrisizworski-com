@@ -332,7 +332,7 @@ test('national Rocket Watch binds controls to selected mission and defers YouTub
   assert.match(html,/id="mission-watch"/);
   assert.match(html,/id="rl-watch-mission-videos"/);
   assert.match(html,/id="rl-watch-general"/);
-  assert.match(html,/rocket-launch-live\/styles\.css\?v=20261110-official-links-v1/);
+  assert.match(html,/rocket-launch-live\/styles\.css\?v=20261114-launch-day-weather-v1/);
   assert.match(js,/desk\?\.launchId === launch\.id/);
   assert.match(js,/data\.selectedRegion === 'florida'/);
   assert.match(js,/renderMediaDesk\(data\)/);
@@ -340,4 +340,13 @@ test('national Rocket Watch binds controls to selected mission and defers YouTub
   assert.match(js,/play\.addEventListener\('click'/);
   assert.doesNotMatch(html,/youtube-nocookie\.com\/embed/);
   assert.match(css,/\.rl-watch-shell/);
+});
+
+test('Florida forecasts the same two spectator grids as the Florida engine',()=>{
+  const {REGIONS}=require('../lib/rocket-launch-usa');
+  const fl=REGIONS.find(r=>r.id==='florida');
+  assert.deepEqual(fl.weatherPoints.map(p=>p.id),['titusville','port-canaveral']);
+  const engine=require('node:fs').readFileSync(require('node:path').join(__dirname,'../api/space-coast-launch.js'),'utf8');
+  for(const p of fl.weatherPoints)
+    assert.ok(engine.includes('lat: '+p.lat+', lon: '+p.lon),'coordinates must match the Florida engine for '+p.id);
 });

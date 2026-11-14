@@ -80,10 +80,45 @@ test('day-only schedule is never treated as launch-weather timing',()=>{
 test('monitor outage is not confused with a weather forecast',()=>{
   const overdue=buildWeatherStory(mission,{...base,health:{status:'overdue'}},NOW);
   assert.equal(overdue.stage,'monitor-overdue');
-  assert.match(overdue.nextUpdate,/weather portal/);
+  assert.match(overdue.nextUpdate,/official launch forecast/);
+  assert.match(overdue.headline,/official forecast/);
 });
 test('no source in forecast window stays explicitly unverified',()=>{
   const story=buildWeatherStory(mission,base,NOW);
   assert.equal(story.stage,'no-verified-forecast');
   assert.match(story.explanation,/cannot be interpreted as favorable/);
+});
+
+const {FORECAST_PAGE,firstPartyBlocked}=require('../lib/space-coast-weather-story');
+const blockedChecks=[
+  {id:'45ws-home',status:'unavailable',links:0},
+  {id:'45ws-forecast-support',status:'unavailable',links:0},
+  {id:'45ws-sitemap',status:'unavailable',links:0},
+  {id:'45ws-parent-weather',status:'unavailable',links:0}];
+test('a blocked squadron site sends visitors to the official forecast page',()=>{
+  const story=buildWeatherStory(mission,{...base,health:{...base.health,status:'partial',sourceChecks:blockedChecks}},NOW);
+  assert.equal(story.stage,'official-site-blocked');
+  assert.equal(story.officialPageUrl,FORECAST_PAGE);
+  assert.match(story.explanation,/not because the weather looks good or bad/);
+});
+test('one readable squadron page is not reported as blocked',()=>{
+  const mixed=blockedChecks.map(x=>x.id==='45ws-home'?{...x,status:'checked-no-links'}:x);
+  assert.equal(firstPartyBlocked({sourceChecks:mixed}),false);
+  assert.equal(buildWeatherStory(mission,{...base,health:{...base.health,sourceChecks:mixed}},NOW).stage,
+    'no-verified-forecast');
+});
+test('launch-week stages carry the official page; distant and verified stages do not',()=>{
+  assert.equal(buildWeatherStory(mission,base,NOW).officialPageUrl,FORECAST_PAGE);
+  assert.equal(buildWeatherStory(mission,{...base,health:{status:'overdue'}},NOW).officialPageUrl,FORECAST_PAGE);
+  const far={...mission,net:'2026-11-20T12:00:00Z'};
+  assert.equal(buildWeatherStory(far,base,NOW).officialPageUrl,undefined);
+  const verified=buildWeatherStory(mission,{...base,status:'mission-matched-current',povPercent:10,
+    officialUrl:'https://45thweathersquadron.nebula.spaceforce.mil/assets/LaunchForecasts/x.pdf'},NOW);
+  assert.equal(verified.officialPageUrl,undefined);
+});
+test('story copy keeps the network ban on em dashes',()=>{
+  for(const s of [buildWeatherStory(mission,base,NOW),
+    buildWeatherStory(mission,{...base,health:{status:'overdue'}},NOW),
+    buildWeatherStory(mission,{...base,health:{status:'partial',sourceChecks:blockedChecks}},NOW)])
+    assert.doesNotMatch(JSON.stringify(s),/\u2014/);
 });

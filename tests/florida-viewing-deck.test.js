@@ -110,5 +110,5 @@ test('rendered Florida page preserves its canonical and admits public source unc
  assert.match(map,/space-coast:focus-point/);
  assert.match(map,/public-viewpoint','ticketed-entry/);
  assert.match(page,/viewing\.css\?v=20261103-deck-v1/);
- assert.match(page,/app\.js\?v=20261113-rust-florida-v1/);
+ assert.match(page,/app\.js\?v=20261113-rust-florida-v1-weather-link-20261114/);
 });

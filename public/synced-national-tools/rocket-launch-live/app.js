@@ -1265,6 +1265,7 @@
     if (nws) links.appendChild(nws);
   }
 
+  const OFFICIAL_45WS_FORECASTS = 'https://45thweathersquadron.nebula.spaceforce.mil/pages/launchForecastSupport.html';
   function renderOfficial45ws(data) {
     const box = $('rl-official-wrap');
     if (!box) return;
@@ -1279,7 +1280,11 @@
     const matched = d.status === 'mission-matched-current';
     const numeric = matched && Number.isInteger(d.povPercent);
     set('rl-official-title', d.label || 'Official launch forecast not yet available');
-    set('rl-official-value', numeric ? d.povPercent + '% PoV' : 'Unverified');
+    // Inside launch week the engine supplies the squadron's own forecast page.
+    const forecastPage = !matched && story.officialPageUrl === OFFICIAL_45WS_FORECASTS ?
+      story.officialPageUrl : null;
+    set('rl-official-value', numeric ? d.povPercent + '% PoV' :
+      forecastPage ? 'Not read here' : 'Unverified');
     set('rl-official-detail', numeric ?
       'The official forecast lists: ' + (d.primaryConcerns?.join(', ') ||
         'weather concerns were not clearly listed') +
@@ -1297,13 +1302,15 @@
       /^https:\/\/45thweathersquadron\.nebula\.spaceforce\.mil\/assets\/LaunchForecasts\//.test(d.officialUrl) ?
       anchor(d.officialUrl,'Read the official forecast PDF') : null;
     if (official) target.appendChild(official);
+    const openForecast = forecastPage ?
+      anchor(forecastPage, 'Open the official launch forecast', 'rl-official-open') : null;
+    if (openForecast) target.appendChild(openForecast);
     if(d.agencyWeather?.status==='nasa-reported-current' &&
       /^https:\/\/www\.nasa\.gov\/blogs\/[a-z0-9_-]+\/20\d\d\/\d\d\/\d\d\/[a-z0-9-]+\/$/.test(d.agencyWeather.sourceUrl||'')){
       const report = anchor(d.agencyWeather.sourceUrl,'NASA mission weather report');
       if(report) target.appendChild(report);
     }
-    const portal = anchor('https://www.patrick.spaceforce.mil/About-Us/Weather/',
-      '45WS weather portal');
+    const portal = openForecast ? null : anchor(OFFICIAL_45WS_FORECASTS, '45WS weather portal');
     if (portal) target.appendChild(portal);
     if (d.health?.checkedAt) target.appendChild(el('small', '',
       'Discovery checked ' + stamp(d.health.checkedAt) + ' · ' + d.health.status));

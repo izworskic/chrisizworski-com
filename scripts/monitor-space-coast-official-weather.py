@@ -47,13 +47,32 @@ def download(url, limit, accept="application/pdf,application/json;q=0.9"):
         "User-Agent": UA,
     })
     with OPENER.open(request, timeout=12) as response:
+        check_response(response)
         length = int(response.headers.get("Content-Length") or 0)
         if length > limit:
             raise ValueError("oversized-source")
         raw = response.read(limit + 1)
     if len(raw) > limit:
         raise ValueError("oversized-source")
+    if not raw:
+        raise ValueError("empty-source")
     return raw
+
+
+def check_response(response):
+    """Refuse bot-challenge and non-200 answers as real content.
+
+    The 45WS site sits behind AWS WAF. Automated requests get HTTP 202 with an
+    empty body and ``x-amzn-waf-action: challenge``. urllib treats any 2xx as
+    success, so without this check a blocked page was recorded as
+    "checked-no-links", which told visitors the official pages listed no
+    forecast when the monitor never saw the pages at all.
+    """
+    status = getattr(response, "status", None) or response.getcode()
+    if response.headers.get("x-amzn-waf-action"):
+        raise ValueError("bot-challenge")
+    if status != 200:
+        raise ValueError("unexpected-status-%s" % status)
 
 
 def get_json(url):

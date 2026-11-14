@@ -76,7 +76,8 @@ def mission_marker(value):
         (r"\bnrol[-\s]*(\d{2,3})\b", "nrol"),
         (r"\bus[sf]{2}[-\s]*(\d{2,3})\b", "ussf"),
         (r"\bm[-\s]*power[-\s]*([a-z0-9-]{1,4})\b", "mpower"),
-        (r"\bamazon\s+leo\b.{0,35}\b((?:la|ka|kf)[-\s]*\d{2})\b", "amazon-leo"),
+        # LA = Atlas V, KA/KF = Falcon 9, LV = Vulcan (Amazon Leo LV-01 onward).
+        (r"\bamazon\s+leo\b.{0,35}\b((?:la|ka|kf|lv)[-\s]*\d{2})\b", "amazon-leo"),
     )
     for pattern, label in rules:
         match = re.search(pattern, text)
