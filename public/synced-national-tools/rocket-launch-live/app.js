@@ -82,7 +82,7 @@
         const item = el('div', 'rl-board-item');
         item.appendChild(el('strong', '', l.name || 'Next flight'));
         item.appendChild(el('span', '', formattedDate(l, r.timezone) +
-          ' · ' + formattedTime(l, r.timezone) + ' · ' + (l.scheduleConfidence?.label || 'Time not confirmed')));
+          ' · ' + formattedTime(l, r.timezone) + ' · ' + timingLabel(l)));
         const locate=el('button','rl-map-locate','Find the pad on the map');
         locate.type='button';
         locate.dataset.region=r.id;
@@ -125,6 +125,20 @@
     (rustPlanning ? rustPlanning.timePrecise(launch?.netPrecision) :
       ['minute','second'].includes(launch?.netPrecision)) &&
     Number.isFinite(Date.parse(launch?.net || ''));
+  // Once a precise target time has passed, the calendar's "Go" label is no
+  // longer an answer: the flight launched, is holding or scrubbed. Say so
+  // until the next calendar refresh removes or reschedules it.
+  const PASSED_LABEL='Target time passed · check outcome';
+  const targetPassed = launch => targetIsPrecise(launch) && Date.parse(launch.net) <= Date.now();
+  const timingLabel = (launch, fallback = 'Time not confirmed') =>
+    targetPassed(launch) ? PASSED_LABEL : (launch?.scheduleConfidence?.label || fallback);
+  function outcomeLink(launch){
+    const desk=state.data?.mediaDesk;
+    const op=desk&&desk.launchId===launch?.id?desk.operator:null;
+    if(op?.url)return {url:op.url,text:'Did it fly? Check '+(op.short||'the launch company')+'’s site'};
+    const region=(state.data?.regions||[]).find(r=>(r.launches||[]).some(l=>l.id===launch?.id));
+    return region?.authority?{url:region.authority,text:'Did it fly? Check the launch range'}:null;
+  }
   function frontSelectMission(region, launchId, surface = 'schedule_roster') {
     if (!state.data?.regions?.some(r => r.id === region &&
       (r.launches || []).some(l => l.id === launchId))) return;
@@ -147,10 +161,30 @@
       return;
     }
     const ms = Date.parse(launch.net) - Date.now();
+    const outcome = $('rl-front-outcome');
     if (ms <= 0) {
-      node.textContent = 'Target time has passed · check launch status';
+      const mins = Math.floor(-ms / 60000);
+      node.textContent = mins < 1 ? 'Liftoff time reached' :
+        mins < 120 ? 'Liftoff time passed ' + mins + ' min ago' :
+        'Liftoff time passed ' + Math.floor(mins / 60) + ' hr ago';
+      const link = outcomeLink(launch);
+      if (outcome && link && outcome.dataset.launchId !== launch.id) {
+        outcome.href = link.url; outcome.textContent = link.text;
+        outcome.target = '_blank'; outcome.rel = 'noopener noreferrer';
+        outcome.dataset.launchId = launch.id;
+      }
+      if (outcome) outcome.hidden = !link;
+      // "If it slips" is about a launch that has not happened; retire it.
+      const trendBox = $('rl-slip-trend');
+      if (trendBox && state.data?.selectedLaunchId === launch.id) trendBox.hidden = true;
+      if (!node.dataset.passed) {
+        node.dataset.passed = '1';
+        set('rl-front-feature-precision', 'This was the scheduled liftoff time. The calendar has not caught up yet, so check whether it flew, is holding or scrubbed.');
+      }
       return;
     }
+    if (outcome) outcome.hidden = true;
+    delete node.dataset.passed;
     const seconds = Math.floor(ms / 1000);
     const days = Math.floor(seconds / 86400);
     const hours = Math.floor(seconds % 86400 / 3600);
@@ -188,7 +222,9 @@
     set('rl-front-feature-precision', !data ?
       'We can’t refresh the launch calendar right now. Check with the launch operator.' :
       stale ? 'This launch listing may be out of date. Check the latest update from the operator.' :
-      featured ? (featured.l.scheduleConfidence?.label || 'Current listed launch target') +
+      featured && targetPassed(featured.l) ?
+        'This was the scheduled liftoff time. The calendar has not caught up yet, so check whether it flew, is holding or scrubbed.' :
+      featured ? timingLabel(featured.l, 'Current listed launch target') +
         ' · The countdown and viewing conditions may change.' :
         'No upcoming flight listed here. Check the launch range for other announcements.');
     const featureButton = $('rl-front-feature-action');
@@ -235,8 +271,7 @@
         const body = el('span', 'rl-front-mission-copy');
         body.appendChild(el('span', 'rl-front-mission-region', r.name + ' / ' + (l.rocket || 'Rocket not named')));
         body.appendChild(el('strong', 'rl-front-mission-name', l.name || 'Mission name not announced'));
-        body.appendChild(el('small', '', (l.pad || 'Pad not announced') + ' · ' +
-          (l.scheduleConfidence?.label || 'Time not confirmed')));
+        body.appendChild(el('small', '', (l.pad || 'Pad not announced') + ' · ' + timingLabel(l)));
         item.append(when, body, el('span', 'rl-front-mission-arrow', '↗'));
         item.setAttribute('aria-label', 'Plan viewing for ' + (l.name || 'this launch') +
           ' from ' + r.name + ', ' + formattedDate(l, visitorZone));
@@ -1144,7 +1179,8 @@
       m.operator?.short&&m.launchId===launch?.id?'Stream on '+m.operator.short+'’s site':
       (m.cameras||[]).length?(m.cameras.length+' spaceport camera'+(m.cameras.length===1?'':'s')):
       'Streams and cameras');
-    put('rl-glance-status',launch?.status||'Check the change log');
+    put('rl-glance-status',launch&&targetPassed(launch)?PASSED_LABEL:(launch?.status||'Check the change log'),
+      launch&&targetPassed(launch)?'warn':'');
   }
   // A jump link into a folded section opens it, so no answer is ever behind a
   // link that lands on a closed box.
@@ -1192,7 +1228,7 @@
         forecast?.outlook+' ') +
       'These are imagined delays to help you plan, not an announcement that the launch has moved.');
     const trendBox=$('rl-slip-trend');
-    const trend=!sourceStale&&skyTrendRust?skyTrendRust.trend(safe):null;
+    const trend=!sourceStale&&skyTrendRust&&!(data.selectedLaunch&&targetPassed(data.selectedLaunch))?skyTrendRust.trend(safe):null;
     const trendText=trend?skyTrendSentence(trend):null;
     if(trendBox){
       trendBox.hidden=!trendText;

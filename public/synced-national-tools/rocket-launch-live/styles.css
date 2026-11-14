@@ -639,3 +639,6 @@ html.rl-map-fullscreen,html.rl-map-fullscreen body{overflow:hidden!important;ove
 .rl-watch-operator-cta:focus-visible{outline:3px solid #fff;outline-offset:2px}
 .rl-hero.rl-hero-no-photo{grid-template-columns:1fr;min-height:0}
 .rl-hero-photo[hidden]{display:none}
+.rl-front-outcome{display:inline-block;margin-top:10px;font-weight:800;color:#f6c29f;text-decoration:underline;text-underline-offset:3px}
+.rl-front-outcome[hidden]{display:none}
+.rl-front-outcome:focus-visible{outline:3px solid #f4a77d;outline-offset:2px}
