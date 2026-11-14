@@ -35,7 +35,7 @@ def published_days(source: str, duration: int) -> list[dict]:
         fail("missing itinerary " + str(duration))
     block = source[start:stop]
     matches = re.findall(
-        r'<div class="itin-day" data-day="(\\d+)" data-stops="([\\d,]+)" data-miles="(\\d+)"',
+        r'<div class="itin-day" data-day="(\d+)" data-stops="([\d,]+)" data-miles="(\d+)"',
         block,
     )
     days = [
@@ -65,7 +65,7 @@ def reconcile(source: str, evidence: dict) -> dict:
         fail("ten individual visitor decisions are required")
     for gap in evidence["sourceGaps"]:
         to = gap["to"]
-        card = re.search(r'id="stop-' + re.escape(to) + r'"[\\s\\S]*?</article>', source)
+        card = re.search(r'id="stop-' + re.escape(to) + r'"[\s\S]*?</article>', source)
         if not card or not re.search(r'<span class="stop-dist" data-edge-verified="false"', card.group()):
             fail("a partial corridor was silently treated as an approved mileage: " + to)
         if gap.get("status") != "partial" or not gap.get("references"):
