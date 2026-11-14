@@ -53,13 +53,13 @@ function check(value,message){if(!value)throw Error(message);}
       return {
         engine:e.engine(),stops:e.ORDER.length,
         ironwood:e.evidenceMiles('5','6'),
-        withheld:e.evidenceMiles('7','8'),
+        houghton:e.evidenceMiles('7','8'),withheld:e.evidenceMiles('20','21'),
         total:e.verifyPreset(days,1358,'counterclockwise'),
         stale:e.verifyPreset(days,1358,'clockwise')
       };
     });
     check(native.engine==='rust-wasm'&&native.stops===31&&native.ironwood===43&&
-      native.withheld===null&&native.total===1358&&native.stale===null,
+      native.houghton===52&&native.withheld===null&&native.total===1358&&native.stale===null,
       size.name+': real shared Rust Circle Tour source/parity gate unavailable '+JSON.stringify(native));
     report.cases.push({state:size.name+' Rust itinerary core',result:'31 stop parity, incomplete legs withheld, published route retained'});
     await page.waitForFunction(()=>document.querySelectorAll('#routeDayList .route-day').length===10,null,{timeout:30000});
@@ -411,7 +411,7 @@ function check(value,message){if(!value)throw Error(message);}
     'blocked WASM did not activate independent JS source oracle');
   await rustFallback.waitForFunction(()=>document.querySelector('#routePreviewMeta')?.textContent.includes('1,358'),
     null,{timeout:30000});
-  check(await rustFallback.evaluate(()=>window.CircleTourRust.evidenceMiles('7','8'))===null,
+  check(await rustFallback.evaluate(()=>window.CircleTourRust.evidenceMiles('20','21'))===null,
     'blocked WASM invented an unverified road distance');
   check(await rustFallback.locator('article.stop-card').count()===31,
     'blocked WASM removed original source stop cards');
