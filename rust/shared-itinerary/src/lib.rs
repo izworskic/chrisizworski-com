@@ -107,7 +107,7 @@ pub extern "C" fn ct_leg(from: u32, to: u32, direction: u32, miles: f64, evidenc
 pub extern "C" fn ct_published_day(first: u32, last: u32, miles: f64, stop_count: u32) -> u32 {
     if ct_position(first).is_none() || ct_position(last).is_none() ||
         stop_count == 0 || stop_count > 31 || !miles.is_finite() ||
-        miles < 0.0 || miles > 600.0 || miles.fract() != 0.0 {return 0;}
+        miles < 0.0 || miles > 600.0 || (miles as u32) as f64 != miles {return 0;}
     if miles == 0.0 {return u32::from(first == last && stop_count == 1);}
     u32::from(first != last && stop_count > 1)
 }
