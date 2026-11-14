@@ -135,6 +135,27 @@
     return {ok:true,reason:'Editorial mileage checked; traffic, weather, roads and border access remain unverified.',
       engine:native?'rust-wasm':'js-parity',miles:sum,borderMinutes:reserve};
   }
+  // This is a time-budget *advisory*, not a source of road distances.
+  // It works from independently published whole-day estimates. Neither a
+  // positive result nor a seasonal label means a park is open or reachable.
+  function budgetOracle(miles,minutes,visit,border,basis){
+    if(basis===0)return 4;
+    if(![1,2].includes(basis)||!Number.isFinite(miles)||miles<0||miles>600||
+      !Number.isInteger(minutes)||minutes<180||minutes>960||
+      !Number.isInteger(visit)||visit<0||visit>600||
+      !Number.isInteger(border)||border<0||border>180)return 0;
+    const balance=minutes-(miles/47*1.2*60+visit+border);
+    return balance<0?3:balance<120?2:1;
+  }
+  function fitDay({miles,minutes=540,visit=90,border=0,basis=1}={}){
+    const oracle=budgetOracle(miles,minutes,visit,border,basis);
+    if(!native)return oracle;
+    try{
+      const actual=native.ct_day_budget(miles,minutes,visit,border,basis);
+      if(actual===oracle)return actual;
+      native=null;return 0; // native discrepancy never promotes an outing
+    }catch{native=null;return 0;}
+  }
   async function activate(){
     if(loading)return loading;
     if(!root||!root.fetch||!root.WebAssembly||!root.atob)return null;
@@ -146,8 +167,8 @@
       const bytes=Uint8Array.from(root.atob(b64),c=>c.charCodeAt(0));
       if(bytes[0]!==0||bytes[1]!==97||bytes[2]!==115||bytes[3]!==109)return null;
       const e=(await root.WebAssembly.instantiate(bytes,{})).instance.exports;
-      if(e.ct_version?.()!==1||e.it_version?.()!==1||
-        !['ct_leg','ct_published_day','ct_border','ct_drive'].every(x=>typeof e[x]==='function'))
+      if(e.ct_version?.()!==2||e.it_version?.()!==1||
+        !['ct_leg','ct_published_day','ct_border','ct_drive','ct_day_budget'].every(x=>typeof e[x]==='function'))
         return null;
       for(let i=0;i<ORDER.length;i++)for(const direction of ['counterclockwise','clockwise']){
         const nextId=ORDER[(i+(direction==='counterclockwise'?1:30))%31];
@@ -167,11 +188,16 @@
       ])if((e.ct_border(b.available?1:0,b.waitMinutes,b.allowanceMinutes)===1)!==borderOracle(b))return null;
       for(const [m,h,stay] of [[0,0,true],[0,0,false],[47,1.2,false],[47,1,false],[NaN,0,false]])
         if((e.ct_drive(m,h,stay?1:0)===1)!==driveOracle(m,h,stay))return null;
+      for(const [m,h,visit,border,basis] of [
+        [87,540,90,0,1],[303,540,90,0,1],[192,540,90,45,1],
+        [0,540,90,0,1],[90,540,90,0,0],[NaN,540,90,0,1],
+        [47,480,150,45,2],[47,90,90,0,1]
+      ])if(e.ct_day_budget(m,h,visit,border,basis)!==budgetOracle(m,h,visit,border,basis))return null;
       native=e;return 'rust-wasm';
     })().catch(()=>null);
     return loading;
   }
-  const api=Object.freeze({ORDER,evidenceMiles,verifyPreset,auditSegment,activate,
+  const api=Object.freeze({ORDER,evidenceMiles,verifyPreset,auditSegment,fitDay,activate,
     engine:()=>native?'rust-wasm':'js-parity'});
   if(typeof module!=='undefined'&&module.exports)module.exports=api;
   if(root){root.CircleTourRust=api;void activate();}
