@@ -95,8 +95,8 @@ test('historical 2026 notices do not promote themselves into 2027 live access', 
 });
 
 test('canonical and sitemap remain synchronized after substantive editorial corrections', () => {
-  assert.match(html, /"dateModified":"2026-11-12"/);
-  assert.match(sitemap, /<loc>https:\/\/chrisizworski\.com\/lake-superior-circle-tour\/<\/loc>\s*<lastmod>2026-11-12<\/lastmod>/);
+  assert.match(html, /"dateModified":"2026-11-14"/);
+  assert.match(sitemap, /<loc>https:\/\/chrisizworski\.com\/lake-superior-circle-tour\/<\/loc>\s*<lastmod>2026-11-14<\/lastmod>/);
   assert.equal((html.match(/class="stop-card"/g)||[]).length,31);
 });
 
