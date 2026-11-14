@@ -80,7 +80,7 @@ fn ct_position(id: u32) -> Option<usize> {
     CIRCLE.iter().position(|&candidate| candidate == id)
 }
 #[no_mangle]
-pub extern "C" fn ct_version() -> u32 { 1 }
+pub extern "C" fn ct_version() -> u32 { 2 }
 
 // Direction: 0 counterclockwise, 1 clockwise. Evidence 1 means the existing
 // published distance from a source-reviewed stop card; none other is trusted.
@@ -135,6 +135,30 @@ pub extern "C" fn ct_drive(miles: f64, hours: f64, stay_day: u32) -> u32 {
     // A zero-mile endpoint transition is allowed only when ct_leg already proved
     // the two distinct Duluth identifiers refer to the same place.
     u32::from((hours - expected).abs() <= 0.000_001)
+}
+
+// Advisory feasibility for an EDITORIAL whole-day mileage estimate, never a road ETA.
+// Basis: 1 = existing published day estimate; 2 = fully reconciled road evidence.
+// 0 invalid, 1 at least two hours of buffer, 2 under two hours buffer,
+// 3 over sample budget, 4 withheld (no independently reviewed mileage basis).
+// The driving multiplier only models a budget. It cannot grant park entry,
+// authorise border transit, estimate real traffic, or infer missing road legs.
+#[no_mangle]
+pub extern "C" fn ct_day_budget(
+    miles: f64, day_minutes: u32, visit_minutes: u32, border_minutes: u32, basis: u32
+) -> u32 {
+    if basis == 0 { return 4; }
+    if basis > 2 || !miles.is_finite() || miles < 0.0 || miles > 600.0
+        || day_minutes < 180 || day_minutes > 960
+        || visit_minutes > 600 || border_minutes > 180 {
+        return 0;
+    }
+    let required = (miles / 47.0 * 1.2 * 60.0) +
+        (visit_minutes + border_minutes) as f64;
+    let remaining = day_minutes as f64 - required;
+    if remaining < 0.0 { 3 }
+    else if remaining < 120.0 { 2 }
+    else { 1 }
 }
 
 #[cfg(test)]
@@ -222,6 +246,22 @@ mod tests {
         assert_eq!(ct_published_day(1,3,87.5,3),0);
         assert_eq!(ct_published_day(1,3,f64::NAN,3),0);
         assert_eq!(ct_published_day(1,3,601.0,3),0);
+    }
+
+    #[test]
+    fn circle_day_budget_never_promotes_unknown_mileage() {
+        assert_eq!(ct_day_budget(87.0,540,90,0,1),1);
+        assert_eq!(ct_day_budget(303.0,540,90,0,1),3);
+        assert_eq!(ct_day_budget(303.0,660,90,0,1),2);
+        assert_eq!(ct_day_budget(303.0,480,150,45,1),3);
+        assert_eq!(ct_day_budget(192.0,540,90,45,1),2);
+        assert_eq!(ct_day_budget(0.0,540,90,0,1),1);
+        assert_eq!(ct_day_budget(0.0,540,90,0,0),4);
+        assert_eq!(ct_day_budget(f64::NAN,540,90,0,1),0);
+        assert_eq!(ct_day_budget(87.0,540,90,0,0),4);
+        assert_eq!(ct_day_budget(87.0,540,90,0,3),0);
+        assert_eq!(ct_day_budget(87.0,90,90,0,1),0);
+        assert_eq!(ct_version(),2);
     }
 
     #[test]
