@@ -3,7 +3,7 @@
   "reviewed": "2026-11-14",
   "reviewMethod": "Photographer-owned geotags or exact image descriptions, NPS original accession/USFWS original Flickr, Commons archived license snapshots, plus visual preview where accessible.",
   "hosting": "Wikimedia Commons hosted thumbnails or one verified small original; per-page attribution and license, without cloning file bytes into repo.",
-  "scope": "39 exact waterfall photos source/reuse verified, 41 pending or held; new: Lower Hungarian and Lower Montreal Falls, preserving other Nov 14 photographs.",
+  "scope": "40 name/location-matched waterfall photographs with direct author and reuse-license evidence; 40 pending or withheld; exact Little Union River gorge scene added November 14.",
   "restrictions": [
     "Never download/reuse general Michigan.gov photography solely because it is a state site; use its documented approved portfolio or obtain permission.",
     "Do not publish photos with All Rights Reserved, CC NC, no derivatives without exact compliant use, or unverifiable subject identity.",
@@ -789,6 +789,24 @@
       "caption": "Lower Montreal Falls photographed at night by RomanKahler in August 2017; this is not a recommendation for nighttime hiking.",
       "alt": "Montreal Falls Keweenaw lower cascade descending toward Lake Superior in a historical nighttime scene.",
       "licenseChanges": "Source image rendered uncropped, without retouching or fictitious upscale; photographer and licence linked by the image.",
+      "role": "verified-guide-photo"
+    },
+    {
+      "id": "little-union-gorge-falls",
+      "name": "Little Union Gorge Falls",
+      "page": "public/upper-peninsula-waterfalls/little-union-gorge-falls/index.html",
+      "imageUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a2/Little_Union_River_Mossy_Falls_Wide-View_PLC-WF-16.jpg/960px-Little_Union_River_Mossy_Falls_Wide-View_PLC-WF-16.jpg",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Little_Union_River_Mossy_Falls_Wide-View_PLC-WF-16.jpg",
+      "creator": "Shadowmeld Photography",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "imageDate": "2015-07-04",
+      "width": 960,
+      "height": 606,
+      "identityEvidence": "Photographer Shadowmeld Photography explicitly identifies the original as a wide view of mossy falls on the Little Union River in Porcupine Mountains Wilderness State Park, from the photographer's Little Union River gorge series (PLC-WF-9/10/13/16). The guide describes the series of small Little Union River gorge cascades on the Union Mine interpretive loop, not a specific tall named plunge or a certified parking/viewpoint. Photographer self-published original July 4 2015 under CC BY-SA 4.0; source image is 3492×2206 and exact scaled Commons rendition is 960×606. File image subject is the gorge cascades, not a surveyed trail segment.",
+      "caption": "Small mossy cascades in the Little Union River gorge, photographed by Shadowmeld Photography in July 2015.",
+      "alt": "Little Union Gorge Falls water flowing over mossy rocks within the Little Union River gorge in Michigan's Porcupine Mountains.",
+      "licenseChanges": "Displayed as the exact Commons-hosted 960px scaled image, proportional, without editorial crop or retouch; source image is part of the multi-cascade Little Union gorge, not an access claim.",
       "role": "verified-guide-photo"
     }
   ]
