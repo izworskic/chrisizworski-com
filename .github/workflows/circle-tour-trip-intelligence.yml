@@ -1,0 +1,44 @@
+name: Circle Tour Python source and 10-day search guide
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'data/circle-tour-trip-intelligence.json'
+      - 'scripts/build-circle-tour-trip-intelligence.py'
+      - 'public/assets/circle-tour-trip-intelligence.json'
+      - 'public/lake-superior-circle-tour/10-day/**'
+      - 'public/lake-superior-circle-tour/index.html'
+      - 'public/assets/circle-tour-feasibility-ui.js'
+      - 'public/assets/circle-tour-rust-itinerary.js'
+      - 'tests/circle-tour-trip-intelligence.test.cjs'
+      - '.github/workflows/circle-tour-trip-intelligence.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-and-search:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Reconcile 31 source stops, publish 7/10/15-day budgets and server-rendered 10-day guide
+        run: python3 scripts/build-circle-tour-trip-intelligence.py --emit-build-artifacts
+      - name: Ensure published Python artifacts are committed and reproducible
+        run: |
+          git ls-files --error-unmatch public/assets/circle-tour-trip-intelligence.json
+          git ls-files --error-unmatch public/lake-superior-circle-tour/10-day/index.html
+          git diff --exit-code -- public/assets/circle-tour-trip-intelligence.json public/lake-superior-circle-tour/10-day/index.html
+          python3 scripts/build-circle-tour-trip-intelligence.py --check
+      - name: Verify published itineraries, factual source gaps and Rust policy fallback
+        run: |
+          node --check public/assets/circle-tour-feasibility-ui.js
+          node --check public/assets/circle-tour-rust-itinerary.js
+          node --test tests/circle-tour-trip-intelligence.test.cjs tests/circle-tour-shared-rust.test.cjs tests/circle-tour-foundation.test.cjs
