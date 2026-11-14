@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "reviewedAt": "2026-11-14",
   "catalogCount": 80,
-  "verifiedPhotoCount": 33,
-  "unphotographedCuratedCount": 47,
+  "verifiedPhotoCount": 37,
+  "unphotographedCuratedCount": 43,
   "method": "Diff of data/up-waterfalls.json IDs against data/up-waterfall-photo-provenance.json IDs. An unphotographed catalog entry is not the same as missing public-access research or an indexing defect.",
   "pending": [
     {
@@ -15,60 +15,6 @@
       "photoPriority": "hold-or-separate-experience",
       "accessStatusInCuratedCatalog": "verify",
       "officialVisitorSourceNotPhotoLicense": "https://www.michigan.gov/recsearch/parks/tahquamenonfalls",
-      "photoVerificationRequirements": [
-        "named exact waterfall and tier",
-        "image content clearly shows named falls",
-        "attribution and original media source identified",
-        "documented commercial reuse permission or public domain",
-        "historic capture date accurate or explicitly unknown"
-      ],
-      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
-    },
-    {
-      "id": "rainbow-falls",
-      "name": "Rainbow Falls",
-      "region": "Western U.P.",
-      "publicGuidePath": "/upper-peninsula-waterfalls/rainbow-falls/",
-      "photoStatus": "not-yet-verified",
-      "photoPriority": "priority-next",
-      "accessStatusInCuratedCatalog": "restricted",
-      "officialVisitorSourceNotPhotoLicense": "https://www.fs.usda.gov/r09/ottawa/recreation/black-river-harbor-recreation-area",
-      "photoVerificationRequirements": [
-        "named exact waterfall and tier",
-        "image content clearly shows named falls",
-        "attribution and original media source identified",
-        "documented commercial reuse permission or public domain",
-        "historic capture date accurate or explicitly unknown"
-      ],
-      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
-    },
-    {
-      "id": "upper-hungarian-falls",
-      "name": "Upper Hungarian Falls",
-      "region": "Western U.P.",
-      "publicGuidePath": "/upper-peninsula-waterfalls/upper-hungarian-falls/",
-      "photoStatus": "not-yet-verified",
-      "photoPriority": "priority-next",
-      "accessStatusInCuratedCatalog": "verify",
-      "officialVisitorSourceNotPhotoLicense": "https://keweenawlandtrust.org/protected-lands/hungarian-falls-nature-area",
-      "photoVerificationRequirements": [
-        "named exact waterfall and tier",
-        "image content clearly shows named falls",
-        "attribution and original media source identified",
-        "documented commercial reuse permission or public domain",
-        "historic capture date accurate or explicitly unknown"
-      ],
-      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
-    },
-    {
-      "id": "lower-hungarian-falls",
-      "name": "Lower Hungarian Falls",
-      "region": "Western U.P.",
-      "publicGuidePath": "/upper-peninsula-waterfalls/lower-hungarian-falls/",
-      "photoStatus": "not-yet-verified",
-      "photoPriority": "priority-next",
-      "accessStatusInCuratedCatalog": "verify",
-      "officialVisitorSourceNotPhotoLicense": "https://keweenawlandtrust.org/protected-lands/hungarian-falls-nature-area",
       "photoVerificationRequirements": [
         "named exact waterfall and tier",
         "image content clearly shows named falls",
@@ -825,24 +771,6 @@
       "photoPriority": "inventory-backlog",
       "accessStatusInCuratedCatalog": "verify",
       "officialVisitorSourceNotPhotoLicense": "https://www.northwoodalliance.org/wildcat-falls",
-      "photoVerificationRequirements": [
-        "named exact waterfall and tier",
-        "image content clearly shows named falls",
-        "attribution and original media source identified",
-        "documented commercial reuse permission or public domain",
-        "historic capture date accurate or explicitly unknown"
-      ],
-      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
-    },
-    {
-      "id": "montreal-falls-keweenaw",
-      "name": "Montreal Falls (Keweenaw)",
-      "region": "Keweenaw Peninsula",
-      "publicGuidePath": "/upper-peninsula-waterfalls/montreal-falls-keweenaw/",
-      "photoStatus": "not-yet-verified",
-      "photoPriority": "inventory-backlog",
-      "accessStatusInCuratedCatalog": "verify",
-      "officialVisitorSourceNotPhotoLicense": "https://www.visitkeweenaw.com/blog/post/a-guide-to-visiting-the-keweenaws-montreal-falls/",
       "photoVerificationRequirements": [
         "named exact waterfall and tier",
         "image content clearly shows named falls",
