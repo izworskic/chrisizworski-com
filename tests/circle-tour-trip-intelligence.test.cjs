@@ -70,6 +70,7 @@ test('single canonical and truthful sitemap dates, hub remains unchanged in ads 
 });
 
 
+const escapedForHtml=s=>s.replace(/&/g,'&amp;').replace(/'/g,'&#x27;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 test('interpretive ten-day guide has unique, properly attributed destination photography, no repeated mileage sales pitch',()=>{
  const page=fs.readFileSync(generated,'utf8');
  const story=JSON.parse(fs.readFileSync('data/circle-tour-visual-story.json','utf8'));
@@ -90,8 +91,8 @@ test('interpretive ten-day guide has unique, properly attributed destination pho
    const day=story.days[String(i)];
    assert.ok(day.photo.by&&day.photo.licenseUrl.startsWith('https://creativecommons.org/'));
    assert.ok(page.includes(day.photo.file.replace(/&/g,'&amp;')));
-   assert.ok(page.includes(day.fieldNote.replace(/&/g,'&amp;')));
-   assert.ok(page.includes(day.focus.replace(/&/g,'&amp;')));
+   assert.ok(page.includes(escapedForHtml(day.fieldNote)),'Missing day field note '+i);
+   assert.ok(page.includes(escapedForHtml(day.focus)),'Missing day decision '+i);
    assert.ok(page.includes('id="day-'+i+'"'));
    assert.ok(day.tools.every(x=>page.includes(x.url.replace(/&/g,'&amp;'))));
  }
