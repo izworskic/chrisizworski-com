@@ -1,0 +1,297 @@
+{
+  "version": 1,
+  "updated": "2026-11-14",
+  "note": "All 11 source-verified Creative Commons/public-domain photographs are stored locally as optimized JPEG thumbnails, linked to their original Wikimedia Commons file and photographer/license. The sourceSrc is an archival provenance field, not a runtime dependency. No image implies current road or park conditions.",
+  "hero": {
+    "src": "/assets/circle-tour/photos/hero-duluth.jpg",
+    "alt": "A large Great Lakes freighter approaching Duluth's ship canal and the harbor lighthouse",
+    "by": "Chris Light",
+    "file": "https://commons.wikimedia.org/wiki/File:Duluth_Ship_Canal-Lighthouse-1000_footer.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "caption": "Duluth's ship canal: the working lake is part of the journey.",
+    "sourceSrc": "https://commons.wikimedia.org/wiki/Special:FilePath/Duluth%20Ship%20Canal-Lighthouse-1000%20footer.jpg?width=960"
+  },
+  "days": {
+    "1": {
+      "strap": "Harbors and islands",
+      "focus": "Which Bayfield experience will you actually have time for?",
+      "fieldNote": "Begin where the freighters pass beneath Duluth's lift bridge. By evening, the coast has traded ore docks for the quiet harbors of Bayfield, where distant islands rise just above the horizon.",
+      "photo": {
+        "src": "/assets/circle-tour/photos/day-01-apostle-islands.jpg",
+        "alt": "Red sandstone caves on an Apostle Islands shore",
+        "by": "DataThread",
+        "file": "https://commons.wikimedia.org/wiki/File:Apostle_Islands_Sea_Caves.jpg",
+        "license": "CC BY 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+        "caption": "Apostle Islands sea caves; reaching them depends on conditions and the experience you book.",
+        "sourceSrc": "https://commons.wikimedia.org/wiki/Special:FilePath/Apostle%20Islands%20Sea%20Caves.jpg?width=1000"
+      },
+      "tools": [
+        {
+          "url": "/apostle-islands/",
+          "name": "Apostle Islands Explorer",
+          "why": "Compare cruises, kayaking and land-based stops"
+        },
+        {
+          "url": "/duluth-canal-park/",
+          "name": "Duluth Canal Park live",
+          "why": "See ship-watching options before leaving the harbor"
+        }
+      ]
+    },
+    "2": {
+      "strap": "Waterfalls and old forest",
+      "focus": "Choose a waterfall approach or the Lake of the Clouds overlook.",
+      "fieldNote": "The south shore turns from bays to iron country. In the Porkies, the mountains begin to crowd the shore and the forest feels older, darker, and farther from town.",
+      "photo": {
+        "src": "/assets/circle-tour/photos/day-02-porkies-overlook.jpg",
+        "alt": "Lake of the Clouds bordered by autumn forests in the Porcupine Mountains",
+        "by": "Stevenliuyi",
+        "file": "https://commons.wikimedia.org/wiki/File:Lake_of_the_Clouds_in_Fall.jpg",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "caption": "Lake of the Clouds is a signature overlook; road access must be checked for your season.",
+        "sourceSrc": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/71/Lake_of_the_Clouds_in_Fall.jpg/960px-Lake_of_the_Clouds_in_Fall.jpg"
+      },
+      "tools": [
+        {
+          "url": "/porcupine-mountains/",
+          "name": "Porcupine Mountains planner",
+          "why": "Choose a walk, viewpoint and realistic park approach"
+        },
+        {
+          "url": "/fall-color/upper-peninsula-fall-color/",
+          "name": "Upper Peninsula fall color",
+          "why": "Check autumn timing if your trip is in September or October"
+        }
+      ]
+    },
+    "3": {
+      "strap": "A day that isn't a race",
+      "focus": "Spend the morning in the Porkies instead of adding another highway leg.",
+      "fieldNote": "Give the lake room to change its mind. A calm shoreline at breakfast may be rolling with surf by afternoon. Today is about the sound of water below the trees, not checking off more highway markers.",
+      "photo": {
+        "src": "/assets/circle-tour/photos/day-03-porkies-shore.jpg",
+        "alt": "Rocky Lake Superior shoreline in Porcupine Mountains Wilderness State Park",
+        "by": "Yinan Chen",
+        "file": "https://commons.wikimedia.org/wiki/File:Gfp-michigan-porcupine-mountains-state-park-shoreline-of-superior.jpg",
+        "license": "Public domain",
+        "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
+        "caption": "The Lake Superior shoreline within the Porkies; not a trail access confirmation.",
+        "sourceSrc": "https://commons.wikimedia.org/wiki/Special:FilePath/Gfp-michigan-porcupine-mountains-state-park-shoreline-of-superior.jpg?width=960"
+      },
+      "tools": [
+        {
+          "url": "/porcupine-mountains/",
+          "name": "Porkies hiking and access",
+          "why": "Pick a trail that fits the time and current park conditions"
+        },
+        {
+          "url": "/fall-color/upper-peninsula-fall-color/",
+          "name": "UP fall-color conditions",
+          "why": "See where the colors are if you're traveling in fall"
+        }
+      ]
+    },
+    "4": {
+      "strap": "Copper Country",
+      "focus": "Mining history or Copper Harbor? Pick your priority.",
+      "fieldNote": "The Keweenaw is the peninsula that keeps going when you think you've reached the end. Old mine buildings, rocky coves, and the long view from Brockway Mountain deserve more than a drive-through.",
+      "photo": {
+        "src": "/assets/circle-tour/photos/day-04-keweenaw.jpg",
+        "alt": "Copper Harbor and Lake Superior from Brockway Mountain Drive in Michigan's Keweenaw Peninsula",
+        "by": "Alan Wilcox",
+        "file": "https://commons.wikimedia.org/wiki/File:Copper_Harbor_from_BWMD.jpg",
+        "license": "CC0 1.0",
+        "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "caption": "Copper Harbor from Brockway Mountain Drive; the scenic road may be seasonal.",
+        "sourceSrc": "https://commons.wikimedia.org/wiki/Special:FilePath/Copper%20Harbor%20from%20BWMD.jpg?width=960"
+      },
+      "tools": [
+        {
+          "url": "/northern-lights-michigan/keweenaw/",
+          "name": "Keweenaw aurora outlook",
+          "why": "Check night-sky viewing conditions if you stay overnight"
+        },
+        {
+          "url": "/isle-royale-ferry/",
+          "name": "Isle Royale ferry planner",
+          "why": "Investigate a separate island trip, not a stop you can squeeze into this day"
+        }
+      ]
+    },
+    "5": {
+      "strap": "The iron-ore coast",
+      "focus": "Leave time to explore Marquette's waterfront.",
+      "fieldNote": "In Marquette, Lake Superior meets an old ore town. Walk the rocky Presque Isle shoreline, then look toward the huge ore docks. The harbor makes more sense when you see how this region's mines reached the water.",
+      "photo": {
+        "src": "/assets/circle-tour/photos/day-05-marquette.jpg",
+        "alt": "Rugged Lake Superior shore near Presque Isle Park in Marquette, Michigan",
+        "by": "The ed17",
+        "file": "https://commons.wikimedia.org/wiki/File:Shoreline_near_Presque_Isle,_Marquette,_MI.jpg",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "caption": "Presque Isle Park is worth exploring even when no freighter is approaching.",
+        "sourceSrc": "https://commons.wikimedia.org/wiki/Special:FilePath/Shoreline%20near%20Presque%20Isle%2C%20Marquette%2C%20MI.jpg?width=960"
+      },
+      "tools": [
+        {
+          "url": "/great-lakes-freighter-tracking/",
+          "name": "Great Lakes freighter tracker",
+          "why": "Check recent AIS vessel reports near ore ports"
+        },
+        {
+          "url": "/freighters/",
+          "name": "Freighter Central",
+          "why": "Explore ports, ship stories, and places to watch"
+        }
+      ]
+    },
+    "6": {
+      "strap": "The sandstone coast",
+      "focus": "Choose Pictured Rocks by water or by trail.",
+      "fieldNote": "Here the cliffs turn the color of copper and brick, with springs painting dark streaks down the sandstone. Pictured Rocks is not a single viewpoint. The cruise and the trail offer different experiences, and weather can change both.",
+      "photo": {
+        "src": "/assets/circle-tour/photos/day-06-pictured-rocks.jpg",
+        "alt": "Sandstone cliffs and teal water at Miners Castle in Pictured Rocks National Lakeshore",
+        "by": "National Park Service",
+        "file": "https://commons.wikimedia.org/wiki/File:Calm_summer_day_at_Miners_Castle_(31924797-119d-4ca9-b4ec-933447d0d9d3).JPG",
+        "license": "Public domain",
+        "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
+        "caption": "Miners Castle in calm weather; cruise and trail access need separate checks.",
+        "sourceSrc": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/ce/Calm_summer_day_at_Miners_Castle_%2831924797-119d-4ca9-b4ec-933447d0d9d3%29.JPG/960px-Calm_summer_day_at_Miners_Castle_%2831924797-119d-4ca9-b4ec-933447d0d9d3%29.JPG"
+      },
+      "tools": [
+        {
+          "url": "https://picturedrocks.chrisizworski.com/",
+          "name": "Pictured Rocks trip planner",
+          "why": "Choose trails, overlooks, and boat-based experiences"
+        },
+        {
+          "url": "/lake-superior-circle-tour/#stop-11",
+          "name": "Pictured Rocks stop guide",
+          "why": "Open source-backed visit notes in the full tour"
+        }
+      ]
+    },
+    "7": {
+      "strap": "Falls, shipwrecks and locks",
+      "focus": "One deep stop beats three hurried ones.",
+      "fieldNote": "Tahquamenon's amber water is loud enough to feel beneath your feet. Farther north, Whitefish Point remembers the ships the lake never returned. By evening, the Soo Locks bring the same shipping story back to life.",
+      "photo": {
+        "src": "/assets/circle-tour/photos/day-07-tahquamenon.jpg",
+        "alt": "Amber-colored water spilling across Tahquamenon Upper Falls",
+        "by": "Mojnsen",
+        "file": "https://commons.wikimedia.org/wiki/File:Tahquamenon_Falls_2024.jpg",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "caption": "Tahquamenon Upper Falls; allow time for distinct Whitefish Point and Soo visits.",
+        "sourceSrc": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d2/Tahquamenon_Falls_2024.jpg/960px-Tahquamenon_Falls_2024.jpg"
+      },
+      "tools": [
+        {
+          "url": "/tahquamenon-falls/",
+          "name": "Tahquamenon Falls live planner",
+          "why": "Compare the Upper and Lower Falls and park conditions"
+        },
+        {
+          "url": "/soo-locks/",
+          "name": "Soo Locks live ship watch",
+          "why": "Look for reported lock activity before your visit"
+        },
+        {
+          "url": "/edmund-fitzgerald/",
+          "name": "Edmund Fitzgerald history",
+          "why": "Understand the shipwreck coast before Whitefish Point"
+        }
+      ]
+    },
+    "8": {
+      "strap": "Ontario's wild shore",
+      "focus": "Old Woman Bay or a longer park walk?",
+      "fieldNote": "Beyond Sault Ste. Marie, granite outcrops cut through the forest and the road bends around coves that barely appear on a highway map. This is the part of the drive where you want an unhurried stop by the water.",
+      "photo": {
+        "src": "/assets/circle-tour/photos/day-08-old-woman-bay.jpg",
+        "alt": "Broad sandy beach under green cliffs at Old Woman Bay in Lake Superior Provincial Park",
+        "by": "Beckettlc",
+        "file": "https://commons.wikimedia.org/wiki/File:Old_Woman_Bay.jpg",
+        "license": "CC0 1.0",
+        "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "caption": "Old Woman Bay on Lake Superior's Ontario shoreline.",
+        "sourceSrc": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/13/Old_Woman_Bay.jpg/960px-Old_Woman_Bay.jpg"
+      },
+      "tools": [
+        {
+          "url": "/lake-superior-provincial-park/",
+          "name": "Lake Superior Provincial Park explorer",
+          "why": "Find a visit that fits the park's different access points"
+        },
+        {
+          "url": "/sault-ste-marie-border-wait-time/",
+          "name": "Sault border wait tool",
+          "why": "Check available official crossing data and its freshness"
+        }
+      ]
+    },
+    "9": {
+      "strap": "The long northern run",
+      "focus": "Protect the drive and choose one stop in the north.",
+      "fieldNote": "The northern shore is immense. The highway sometimes climbs inland, leaving the open water hidden behind ridges and spruce forest. The quiet of Hattie Cove is worth a separate visit when the schedule allows it.",
+      "photo": {
+        "src": "/assets/circle-tour/photos/day-09-pukaskwa.jpg",
+        "alt": "Rocky coastline and evergreen forest at Hattie Cove in Pukaskwa National Park",
+        "by": "Andre Carrotflower",
+        "file": "https://commons.wikimedia.org/wiki/File:20150708_-_30_-_Pukaskwa_National_Park,_Ont._-_Mouth_of_Hattie_Cove_as_seen_from_Southern_Headland_Trail.jpg",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "caption": "Hattie Cove is a worthwhile detour, not a promise it fits the long transit day.",
+        "sourceSrc": "https://commons.wikimedia.org/wiki/Special:FilePath/20150708%20-%2030%20-%20Pukaskwa%20National%20Park%2C%20Ont.%20-%20Mouth%20of%20Hattie%20Cove%20as%20seen%20from%20Southern%20Headland%20Trail.jpg?width=960"
+      },
+      "tools": [
+        {
+          "url": "/pukaskwa-national-park/",
+          "name": "Pukaskwa visit planner",
+          "why": "Assess whether a hike or shoreline side trip fits"
+        },
+        {
+          "url": "/sleeping-giant-provincial-park/",
+          "name": "Sleeping Giant trail explorer",
+          "why": "Consider a separate Thunder Bay day, not an extra stop on a packed driving day"
+        }
+      ]
+    },
+    "10": {
+      "strap": "Minnesota's waterfall coast",
+      "focus": "Choose one North Shore stop before Duluth.",
+      "fieldNote": "After the border, waterfalls and headlands appear all along the North Shore. Split Rock stands over the shore like a sentinel. Decide whether you want a lighthouse visit or a waterfall walk, then return to Duluth without racing the light.",
+      "photo": {
+        "src": "/assets/circle-tour/photos/day-10-split-rock.jpg",
+        "alt": "Split Rock Lighthouse above a rocky Minnesota Lake Superior headland",
+        "by": "Randen Pederson",
+        "file": "https://commons.wikimedia.org/wiki/File:Split_Rock_Lighthouse_-_Lake_Superior_MN.jpg",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+        "caption": "Split Rock Lighthouse, archival cropped photograph; ticketed history and park trails differ.",
+        "sourceSrc": "https://commons.wikimedia.org/wiki/Special:FilePath/Split%20Rock%20Lighthouse%20-%20Lake%20Superior%20MN.jpg?width=960"
+      },
+      "tools": [
+        {
+          "url": "/gooseberry-falls/",
+          "name": "Gooseberry Falls walk planner",
+          "why": "Pick a waterfall loop by time and conditions"
+        },
+        {
+          "url": "/split-rock-lighthouse-visit/",
+          "name": "Split Rock visitor guide",
+          "why": "Separate lighthouse tickets from shore walks"
+        },
+        {
+          "url": "/duluth-canal-park/",
+          "name": "Duluth arrival and ship watch",
+          "why": "Finish at the harbor and check reported ship passages"
+        }
+      ]
+    }
+  }
+}
