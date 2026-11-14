@@ -316,7 +316,7 @@
 @media(prefers-reduced-motion:reduce){.upfall-photo-preview-grid{scroll-behavior:auto}}
 
 /* A small, authentic picture alongside access-first waterfall results.
-   Uncropped 40-source image previews stay lazy; no fallback photos appear for unverified entries. */
+   Uncropped licensed image previews stay lazy; no fallback photos appear for unverified entries. */
 .waterfall-card .upfall-card-preview{float:right;width:122px;margin:2px 0 8px 12px;padding:0}
 .waterfall-card .upfall-card-preview>a{display:block;border-radius:8px;overflow:hidden;background:#e5ebe8}
 .waterfall-card .upfall-card-preview img{width:100%;height:89px;object-fit:contain;display:block}
