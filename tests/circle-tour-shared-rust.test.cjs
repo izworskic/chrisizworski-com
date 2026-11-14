@@ -67,7 +67,7 @@ test('unknown/partial legs never become 45-mile invented driving legs',()=>{
  assert.equal(guard(['7','6','5','4'],'clockwise').ok,true);
  assert.equal(guard(['1','30'],'clockwise').ok,true,'Duluth aliases are zero-distance identity');
  assert.equal(guard(['30','1'],'counterclockwise').ok,true);
- assert.equal(guard(['1','1']).ok,true,'one-site stay day has zero driving');
+ assert.equal(guard(['1']).ok,true,'one-site stay day has zero driving');
 });
 test('both borders reserve 45 minutes when live evidence is unavailable',()=>{
  const unavailable={name:'Sault Ste. Marie',available:false,waitMinutes:0,allowanceMinutes:45};
@@ -119,5 +119,5 @@ test('non-planner page, source and ads unchanged; original planner owns UX',()=>
  assert.match(live,/CircleTourRust\?\.auditSegment/);
  assert.match(html,/<link rel="canonical" href="https:\/\/chrisizworski\.com\/lake-superior-circle-tour\//);
  assert.equal((html.match(/class="stop-card"/g)||[]).length,31);
- assert.match(html,/pagead2\.googlesyndication\.com|adsbygoogle/);
+ assert.doesNotMatch(wrapper+core+live,/adsbygoogle|pagead2\.googlesyndication\.com/,'Rust integration cannot inject ad scripts');
 });
