@@ -2,6 +2,7 @@
 const test=require('node:test');
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
+const cp=require('node:child_process');
 const html=fs.readFileSync('public/upper-peninsula-waterfalls/index.html','utf8');
 const css=fs.readFileSync('public/assets/up-waterfalls.css','utf8');
 const photos=JSON.parse(fs.readFileSync('data/up-waterfall-photo-provenance.json','utf8')).photos;
@@ -12,9 +13,9 @@ const byId=new Map(cards.map(m=>[m[1],m[0]]));
 test('verified waterfall photo previews appear only for fully attributed named waterfall guides',()=>{
  assert.equal(cards.length,80);
  assert.equal(byId.size,80);
- assert.equal(photos.length,44);
- assert.equal(queue.pending.length,36);
- assert.equal((html.match(/class="upfall-card-preview"/g)||[]).length,44);
+ assert.equal(photos.length,queue.verifiedPhotoCount);
+ assert.equal(queue.pending.length,queue.unphotographedCuratedCount);
+ assert.equal((html.match(/class="upfall-card-preview"/g)||[]).length,photos.length);
  const verified=new Set(photos.map(p=>p.id));
  for(const p of photos){
    const c=byId.get(p.id);
@@ -44,4 +45,10 @@ test('compact photo previews do not remove visitor controls or map workflow',()=
  assert.ok(html.includes('pagead2.googlesyndication.com'));
  assert.ok(html.includes('rel="canonical" href="https://chrisizworski.com/upper-peninsula-waterfalls/"'));
  assert.equal((html.match(/class="upfall-photo-preview-card"/g)||[]).length,3,'keep hero gallery');
+});
+
+test('verified-photo card HTML remains deterministically synchronized with the vetted registry',()=>{
+ const verify=cp.spawnSync(process.execPath,['scripts/sync-up-waterfall-photo-cards.mjs','--check'],{encoding:'utf8',timeout:15000});
+ assert.equal(verify.status,0,verify.stderr||verify.stdout);
+ assert.match(verify.stdout,/Waterfall photo card previews current:/);
 });
