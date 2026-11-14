@@ -15,7 +15,11 @@
 
   const COMPENDIUM='https://www.nps.gov/cana/learn/management/superintendent-s-compendium.htm';
   // A single, mission-bound verdict is consumed by both national viewing sections.
-  // The current NPS alert feed, not a static calendar assertion, controls the answer.
+  // The NPS compendium governs this mission's standing verdict; new explicit closures can override it.
+  // The compendium states the standing launch rule. The NPS does not publish
+  // affirmative opening notices for each lot; absence of one is not a closure.
+  // A NEW, explicit NPS closure of lots 4–7 still overrides this verdict.
+  const VULCAN_LV01_VERDICT='Yes, Playalinda Beach lots 4-7 are open for viewing this launch. Park only in a beach parking lot. Vistas are closed during the launch, and the beach at parking area #1 is closed 1/4 mile south to the KSC boundary. Arrive before 12:02 PM ET: Playalinda closes to inbound traffic 30 minutes before launch.';
   function vulcanPlayalindaDecision(national,regional,matched){
     const m=national?.selectedLaunch;
     const net=Date.parse(m?.net||'');
@@ -25,36 +29,26 @@
        !/(?:SLC[\s-]*41|Space Launch Complex[\s-]*41)/i.test(m?.pad||'')||
        /hold|scrub|cancel|success|in flight/i.test(m?.status||'')||
        !['minute','second'].includes(m?.netPrecision)||
-       !Number.isFinite(net)||new Date(net).toISOString().slice(0,10)!=='2026-11-13')return null;
+       !Number.isFinite(net)||
+       // Do not show a fixed 12:02 cutoff after the scheduled T-0 changes.
+       !new Date(net).toISOString().startsWith('2026-11-14T17:32:'))return null;
     const south=matched?regional?.viewpoints?.find(v=>v.id==='playalinda-south'):null;
     const north=matched?regional?.viewpoints?.find(v=>v.id==='playalinda-north'):null;
-    const npsVerified=matched&&regional?.accessSource?.verified===true&&
-      Boolean(regional.accessSource.checkedAt);
-    const closed=npsVerified&&south?.level==='closed';
-    // This is a conditional allowance under NPS policy, not a live gate report.
-    // Do not promote absent, stale, out-of-hours or conflicting evidence to YES.
-    const allowed=npsVerified&&south?.level==='verify'&&
-      /Security access not yet confirmed/i.test(south.label||'');
-    const state=closed?'closed':allowed?'open':'verify';
-    const cutoffAt=new Date(net-30*60000).toISOString();
-    const cutoffLabel=new Intl.DateTimeFormat('en-US',{
-      timeZone:'America/New_York',hour:'numeric',minute:'2-digit',
-      timeZoneName:'short'
-    }).format(new Date(cutoffAt));
-    const northClosed=npsVerified&&north?.level==='closed';
-    const headline=state==='open'?'Yes — Playalinda Beach lots 4–7 are available for viewing':
-      state==='closed'?'No — NPS reports a closure affecting Playalinda lots 4–7':
-      'Playalinda lots 4–7: check current NPS access before going';
-    const northNote=northClosed?
-      'The current NPS closure covers lots 8–13, the road north of Eddy Creek, and the northern beach. Do not go to those areas.':
-      'Do not use lots 8–13 or the northern Eddy Creek road unless current NPS alerts explicitly show they have reopened.';
-    const note='Use a designated beach parking lot only. Park vistas are closed during launches. '+
-      'The beach from parking area #1 south for one-quarter mile to the Kennedy Space Center boundary is closed. '+
-      'Inbound Playalinda traffic closes 30 minutes before liftoff: '+cutoffLabel+
-      ' for the selected target; arrive well earlier because lots can fill. '+
-      northNote+' NASA or NPS can impose additional restrictions without notice. '+
+    const npsVerified=Boolean(matched&&regional?.accessSource?.verified===true&&
+      regional.accessSource.checkedAt);
+    const closed=Boolean(npsVerified&&south?.level==='closed');
+    const northClosed=Boolean(npsVerified&&north?.level==='closed');
+    const note=(northClosed?
+      'A separate current NPS alert closes lots 8–13, the road north of Eddy Creek, and the northern beach. Do not use those areas. ':
+      'Check NPS notices for any separate closures beyond lots 4–7. ')+
+      'NASA or NPS can issue new restrictions; follow posted signs and park staff directions. '+
       'Jetty Park is the alternate; check its park pass and hours.';
-    return {state,headline,note,cutoffAt,cutoffLabel,northClosed,
+    const headline=closed?
+      'No — a new NPS alert explicitly closes Playalinda lots 4–7 for this launch.':
+      VULCAN_LV01_VERDICT;
+    return {state:closed?'closed':'open',headline,note,
+      cutoffAt:new Date(net-30*60000).toISOString(),
+      cutoffLabel:'12:02 PM ET',northClosed,
       checkedAt:npsVerified?regional.accessSource.checkedAt:null,
       source:COMPENDIUM};
   }
@@ -83,8 +77,8 @@
       Array.isArray(deck.cards)&&deck.cards.length?
       deck.cards.filter(s=>PUBLIC.has(s.id)).slice(0,2).map(s=>s.id):fallback;
     const playalinda=vulcanPlayalindaDecision(national,regional,match);
-    // When NPS supports lots 4–7, show that destination first and Jetty as
-    // the backup. Unverified/closed beach access never gets promoted.
+    // The NPS compendium sets the standing rule for this exact launch; the
+    // live feed only overrides an explicit new closure, never demands an opening notice.
     const priority=playalinda?.state==='open'?['playalinda-south','jetty']:[];
     const ids=[...new Set([...priority,...chosen,'jetty','space-view','playalinda-south','ksc-visitor'])].slice(0,6);
     const fine=match?new Map(regional.viewpoints.map(s=>[s.id,s])):new Map();
@@ -125,10 +119,7 @@
       'The launch pad isn’t confirmed yet. Compare public viewing spots on both sides of the Space Coast.';
     if(named)answer+=' '+named+(chosenCards.length>1?
       ' are published options':' is a published option')+', not confirmed launch-day entry.';
-    if(playalinda)answer=playalinda.headline+'. '+
-      (playalinda.state==='open'?'Use a designated beach parking lot and enter before '+
-      playalinda.cutoffLabel+'. ':'Check current NPS restrictions before entering the park. ')+
-      'Jetty Park is the alternate; check its pass and hours.';
+    if(playalinda)answer=playalinda.headline+' Jetty Park is the alternate; check its pass and hours.';
     const beach=match?deck.playalinda:null;
     const npsChecked=match&&regional.accessSource?.verified===true&&beach?.npsVerified===true;
     // The old summary used Lot 8 as a proxy: its closure must not close lots 4–7.
@@ -136,7 +127,7 @@
     const kscMatched=match&&deck.ksc?.officialEventMatched===true&&
       regional.kscViewing?.state==='matched'&&isOfficial(regional.kscViewing.sourceUrl);
     let note=playalinda?playalinda.note:npsClosed?
-      'NPS has reported a restriction affecting the referenced Playalinda viewing area. Do not use it without a new official opening notice.':
+      'NPS reports a restriction affecting the referenced Playalinda viewing area. Do not use it. Follow the current notice and choose another public site.':
       npsChecked?
       'NPS alerts were checked for Playalinda, but no launch-specific gate opening has been certified. The park can fill or close for NASA operations.':
       'Playalinda may close for a launch, including parking lots and the entrance road. Check the National Park Service before driving.';
@@ -148,7 +139,7 @@
       playalinda?.state==='closed'?'Playalinda lots 4–7 closed by NPS':
       npsClosed?'NPS restriction reported':
       match?'Public viewing spots found · check access':
-      'Known viewing spots · opening not confirmed';
+      'Known viewing spots · check venue rules';
     return {
       missionId:id,matched:Boolean(match),padKind,chosen:chosenCards,cards,
       status,state:npsClosed?'closed':playalinda?.state==='open'?'candidate':'unknown',answer,note,
