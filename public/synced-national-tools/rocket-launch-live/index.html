@@ -18,7 +18,7 @@
 <link rel="stylesheet" href="/assets/rocket-map-pins.css?v=20261107-origin-v1">
 <link rel="stylesheet" href="/assets/rocket-flight-desk.css?v=20261113-shift-alert-v1">
 <link rel="stylesheet" href="/assets/rocket-field-notes.css?v=20261113-place-vehicle-v1">
-<link rel="stylesheet" href="/national-tools/rocket-launch-live/styles.css?v=20261114-launch-day-weather-v1-sky-trend">
+<link rel="stylesheet" href="/national-tools/rocket-launch-live/styles.css?v=20261114-launch-day-weather-v1-sky-trend-glance">
 <link rel="stylesheet" href="/national-tools/assets/launch-truth-desk.css?v=20261102-truth-v2">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5D2V2W7HN"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-Y5D2V2W7HN');</script>
@@ -33,7 +33,7 @@
  <script src="/national-tools/rocket-launch-live/vandenberg.js?v=20261110-voice-v1" defer></script>
 <script src="/assets/rocket-planning-rust.js?v=20261113-network-v1" defer></script>
 <script src="/assets/rocket-launch-weather-rust.js?v=20261114-sky-trend-v1" defer></script>
-<script src="/national-tools/rocket-launch-live/app.js?v=20261113-rust-national-v1-map-tiles-v2-playalinda-fixed-20261114-weather-link-sky-trend" defer></script>
+<script src="/national-tools/rocket-launch-live/app.js?v=20261113-rust-national-v1-map-tiles-v2-playalinda-fixed-20261114-weather-link-sky-trend-glance" defer></script>
 <script src="/national-tools/assets/launch-truth-desk.js?v=20261113-shift-alert-v1" defer></script>
 </head>
 <body>
@@ -66,6 +66,18 @@
         </div>
         <p class="rl-front-feature-precision" id="rl-front-feature-precision">Launch dates can change, even on the day.</p>
         <button type="button" id="rl-front-feature-action" class="rl-front-plan" disabled>Where to watch &amp; directions <span aria-hidden="true">↗</span></button>
+        <nav class="rl-glance" id="rl-glance" aria-labelledby="rl-glance-title">
+          <h3 id="rl-glance-title">Launch day at a glance</h3>
+          <p class="rl-glance-for" id="rl-glance-for" hidden></p>
+          <ul>
+            <li><a href="#rl-access-decision"><span class="rl-glance-k">Where to stand</span><span class="rl-glance-v" id="rl-glance-where">Public viewing places</span></a></li>
+            <li><a href="#rl-regional-sky"><span class="rl-glance-k">Sky at liftoff</span><span class="rl-glance-v" id="rl-glance-sky">Viewing forecast</span></a></li>
+            <li><a href="#launch-weather"><span class="rl-glance-k">Launch weather</span><span class="rl-glance-v" id="rl-glance-official">Official and near-pad forecast</span></a></li>
+            <li><a href="#rl-slip-lab"><span class="rl-glance-k">If it slips</span><span class="rl-glance-v" id="rl-glance-slip">Delay what-ifs</span></a></li>
+            <li><a href="#mission-watch"><span class="rl-glance-k">Watch online</span><span class="rl-glance-v" id="rl-glance-watch">Streams and cameras</span></a></li>
+            <li><a href="#launch-truth-desk"><span class="rl-glance-k">Status and changes</span><span class="rl-glance-v" id="rl-glance-status">Time change log</span></a></li>
+          </ul>
+        </nav>
       </div>
     </article>
     <div class="rl-front-roster">
@@ -343,6 +355,7 @@
        </div>
      </article>
    </div>
+   <details class="rl-fold" id="rl-fold-rockets"><summary class="rl-fold-summary"><span>Rocket field notes and how to recognize each rocket</span></summary>
    <section class="rl-vehicle-notes" id="rl-vehicle-field-notes" data-vehicle-family="unknown" aria-labelledby="rl-vehicle-note-title">
      <div class="rl-vehicle-notes-header">
        <div><span class="rl-vehicle-notes-kicker">A launch-watcher’s field notes / the rocket</span>
@@ -364,6 +377,8 @@
    </div>
    <div id="rl-visual-family-gallery" class="rl-visual-gallery"><p>Loading rocket photos…</p></div>
    <p class="rl-visual-ethics">Image credits and source links are shown with every photograph. NASA's archive may also contain copyrighted contractor images; the collector excludes those from automatic display. No NASA or launch-operator endorsement is implied. <a href="https://www.nasa.gov/nasa-brand-center/images-and-media/" target="_blank" rel="noopener noreferrer">NASA media-use guidance</a>.</p>
+   </details>
+  
  </section>
 
  <section class="lt-desk" id="launch-truth-desk" data-launch-truth-context="national" data-status="loading" aria-labelledby="launch-truth-title">
@@ -380,12 +395,14 @@
       <strong id="lt-compare-state">Checking…</strong>
       <p id="lt-compare-note">A matching date is not a guarantee the rocket flies.</p></div>
   </div>
-  <div class="lt-grid">
+  <details class="rl-fold" id="rl-fold-history"><summary class="rl-fold-summary"><span>Full change log and where each update came from</span></summary>
+   <div class="lt-grid">
     <div class="lt-track"><h3>How has the launch time moved?</h3><p class="lt-hint">Changes we noticed on public calendars, not official countdown events.</p>
       <div id="lt-changes" class="lt-items"><p>Looking for changes…</p></div></div>
     <div class="lt-track"><h3>Where did the update come from?</h3><p class="lt-hint">Published updates and reporting tied to this particular mission.</p>
       <div id="lt-sources" class="lt-items"><p>Checking the reports…</p></div></div>
   </div>
+   </details>
   <footer class="lt-foot"><p id="lt-source-health">Public calendars do not list every military or research launch.</p>
     <div class="lt-links">
       <a href="https://ll.thespacedevs.com/" target="_blank" rel="noopener noreferrer">Launch Library</a>
@@ -473,7 +490,10 @@
 
 
   <p>For California launches, the <a href="/vandenberg-rocket-launch-viewing/">Vandenberg launch-viewing field guide</a> covers Ocean Park, Surf Beach, Allan Hancock College and other places around Lompoc. Use this page for the mission and weather.</p>
-  <div id="rl-sites" class="rl-site-grid" aria-live="polite"><p>Finding the places to watch…</p></div>
+  <details class="rl-fold" id="rl-fold-sites"><summary class="rl-fold-summary"><span>Compare every viewing place, with directions</span></summary>
+   <div id="rl-sites" class="rl-site-grid" aria-live="polite"><p>Finding the places to watch…</p></div>
+   </details>
+  
   <div id="rl-regional-sky" class="rl-sky" aria-live="polite"></div>
 
   <section class="rl-slip-lab" id="rl-slip-lab" aria-labelledby="rl-slip-title">
@@ -494,9 +514,12 @@
 
  <section class="rl-section rl-schedule-all" id="all-coasts" aria-labelledby="rl-calendar-title">
   <div class="rl-section-head"><div><p class="rl-eyebrow">05 / MORE LAUNCHES</p><h2 id="rl-calendar-title">What else is launching?</h2></div><p>Browse upcoming flights by launch site. Some small research rockets and defense launches are announced outside the main public calendars.</p></div>
-  <div id="rl-national-board" class="rl-board" aria-live="polite">
+  <details class="rl-fold" id="rl-fold-coasts"><summary class="rl-fold-summary"><span>Show upcoming launches on every coast</span></summary>
+   <div id="rl-national-board" class="rl-board" aria-live="polite">
     <p>Looking for flights from all six regions…</p>
   </div>
+   </details>
+  
   <p id="rl-schedule-coverage" class="rl-schedule-coverage">Checking schedule availability…</p>
  </section>
 
