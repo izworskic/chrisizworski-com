@@ -5,6 +5,13 @@ on:
     paths:
       - 'public/lake-superior-circle-tour/index.html'
       - 'public/assets/circle-tour-bridge.*'
+      - 'public/assets/circle-tour-rust-itinerary.js'
+      - 'public/assets/shared-itinerary.wasm.b64'
+      - 'public/assets/lake-superior-circle-tour.js'
+      - 'public/assets/lake-superior-circle-tour-core.js'
+      - 'public/assets/lake-superior-circle-tour-live-day.js'
+      - 'rust/shared-itinerary/src/lib.rs'
+      - 'tests/circle-tour-shared-rust.test.cjs'
       - 'public/assets/circle-tour-tool-catalog.json'
       - 'config/circle-tour-tool-connections.json'
       - 'lib/circle-tour-network.mjs'
@@ -34,7 +41,7 @@ jobs:
       - name: Prove approved catalog is fresh, strictly scoped and deterministic
         run: |
           node scripts/build-circle-tour-network.mjs --check
-          node --test tests/circle-tour-bridge.test.js tests/circle-tour-foundation.test.cjs
+          node --test tests/circle-tour-bridge.test.js tests/circle-tour-foundation.test.cjs tests/circle-tour-shared-rust.test.cjs
           node scripts/experience-foundry.mjs connections --owner pictured-rocks
       - name: Install isolated pinned Chromium harness
         run: |
