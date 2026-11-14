@@ -19,6 +19,13 @@ on:
       - 'public/assets/lake-superior-circle-tour-live-day.js'
       - 'public/assets/lake-superior-circle-tour.js'
       - 'tests/circle-tour-shared-rust.test.cjs'
+      - 'tests/circle-tour-road-evidence.test.js'
+      - 'tests/circle-tour-trip-intelligence.test.cjs'
+      - 'scripts/build-circle-tour-trip-intelligence.py'
+      - 'data/circle-tour-road-evidence.json'
+      - 'public/sitemap.xml'
+      - 'package.json'
+      - 'public/assets/circle-tour-trip-feasibility.js'
       - 'scripts/verify-circle-tour-bridge-browser.cjs'
       - '.github/workflows/shared-itinerary-rust.yml'
   workflow_dispatch:
@@ -53,6 +60,11 @@ jobs:
           echo SHARED_ITINERARY_WASM_B64_END
       - name: Test compiled Rust against independent JavaScript contract
         run: node scripts/verify-shared-itinerary-rust.cjs --wasm=/tmp/shared-itinerary.wasm
+      - name: Generate and source-audit the crawlable Circle Tour itinerary
+        run: |
+          python3 scripts/build-circle-tour-trip-intelligence.py
+          python3 scripts/build-circle-tour-trip-intelligence.py --check
+          node --test tests/circle-tour-road-evidence.test.js tests/circle-tour-trip-intelligence.test.cjs
       - name: Test existing destination and day-sheet policies
         run: |
           node --test tests/shared-itinerary-engine.test.cjs tests/up-waterfalls-day-sheet.test.js \
