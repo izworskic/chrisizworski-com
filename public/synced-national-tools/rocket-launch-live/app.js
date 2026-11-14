@@ -1148,6 +1148,18 @@
   }
   // A jump link into a folded section opens it, so no answer is ever behind a
   // link that lands on a closed box.
+  // The hero photo is hotlinked from media.defense.gov, which can refuse the
+  // request (HTTP 403, blocked by the browser). Never leave an empty photo box.
+  (function guardHeroPhoto(){
+    const img=document.querySelector('.rl-hero-photo img');
+    if(!img)return;
+    const hide=()=>{
+      const fig=img.closest('figure');if(fig)fig.hidden=true;
+      img.closest('.rl-hero')?.classList.add('rl-hero-no-photo');
+    };
+    if(img.complete&&img.naturalWidth===0)hide();
+    else img.addEventListener('error',hide,{once:true});
+  })();
   function revealHash(hash){
     const id=(hash||'').replace(/^#/,'');
     if(!/^[A-Za-z][\w-]*$/.test(id))return;
