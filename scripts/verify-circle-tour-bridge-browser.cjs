@@ -446,8 +446,19 @@ function check(value,message){if(!value)throw Error(message);}
     const dayPhotos=await guide.locator('.day-photo img').evaluateAll(photos=>
       photos.map(p=>({alt:p.alt,src:p.getAttribute('src'),
         w:p.getBoundingClientRect().width,figure:p.closest('figure')?.querySelector('figcaption')?.textContent})));
-    check(dayPhotos.every(p=>p.alt.length>=25&&p.src.startsWith('https://')&&p.w>150&&p.figure.includes('Photo:')),
+    check(dayPhotos.every(p=>p.alt.length>=25&&p.src.startsWith('/assets/circle-tour/photos/')&&p.w>150&&p.figure.includes('Photo:')),
       'day photography not described, credited or visible at viewport '+width);
+    // A DOM image element alone is not proof that the photo actually rendered.
+    // Self-hosted thumbnails must complete with real pixels before screenshots.
+    await guide.locator('#day-7 .day-photo img').scrollIntoViewIfNeeded();
+    await guide.waitForFunction(()=>{
+      const image=document.querySelector('#day-7 .day-photo img');
+      return image?.complete&&image.naturalWidth>=200&&image.naturalHeight>=140;
+    },null,{timeout:10000});
+    await guide.waitForFunction(()=>{
+      const image=document.querySelector('.hero-photo img');
+      return image?.complete&&image.naturalWidth>=200&&image.naturalHeight>=140;
+    },null,{timeout:10000});
     const shot='circle-tour-ten-day-photo-tools-'+width+'.png';
     await guide.locator('#day-7').screenshot({path:path.join(out,shot),animations:'disabled'});
     report.screenshots.push(shot);
@@ -495,6 +506,9 @@ function check(value,message){if(!value)throw Error(message);}
     await staticGuide.locator('.day-photo img').count()===10&&
     await staticGuide.locator('.day-tools a').count()>=20,
     'no-JS visitor guide lost photos or specialist tool links');
+  check(await staticGuide.locator('#day-7 .day-photo img').getAttribute('src')===
+    '/assets/circle-tour/photos/day-07-tahquamenon.jpg',
+    'no-JS photo must not depend on external Wikimedia runtime');
   await staticGuide.close();
 
   report.cases.push({state:'no JavaScript',result:'canonical independent links and all 31 stop cards visible'});
