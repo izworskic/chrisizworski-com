@@ -434,7 +434,6 @@ function check(value,message){if(!value)throw Error(message);}
     await guide.waitForFunction(()=>document.querySelector('#day-10 .day-state')?.dataset.code==='4',null,{timeout:20000});
     check(await guide.locator('#day-10 .day-state').getAttribute('data-code')==='4',
       'unverified Pigeon River park approach was promoted into a timed arrival');
-    await guide.locator('#ct-hours').selectOption('7').catch(()=>null); // 7 is not an offered editorial budget.
     await guide.locator('#ct-hours').selectOption('8');
     check(await guide.locator('#day-9 .day-state').getAttribute('data-code')==='3',
       'long Ontario driving day should exceed an eight-hour budget');
