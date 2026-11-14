@@ -128,3 +128,42 @@ test('image sitemap advertises the original winter hero and locally hosted ship 
  assert.doesNotMatch(owned,/<image:(?:title|caption|geo_location|license)>/,'no deprecated Google image-sitemap tags');
  assert.equal((owned.match(/<image:loc>/g)||[]).length,5);
 });
+
+test('every published vessel source uses Article schema, never Vehicle or Product',()=>{
+ const rootDir=path.join(root,'public/great-lakes-freighter-winter-layup/vessels');
+ const folders=fs.readdirSync(rootDir,{withFileTypes:true})
+   .filter(d=>d.isDirectory()&&fs.existsSync(path.join(rootDir,d.name,'index.html')))
+   .map(d=>d.name).sort();
+ assert.deepEqual(folders,bios.profiles.map(p=>p.id).sort(),'inspect every published vessel page');
+ for(const slug of folders){
+  const html=fs.readFileSync(path.join(rootDir,slug,'index.html'),'utf8');
+  const matches=[...html.matchAll(/<script type="application\/ld\+json">([^<]+)<\/script>/g)];
+  assert.equal(matches.length,1,'one structured-data script on '+slug);
+  const data=JSON.parse(matches[0][1]);
+  const graph=data['@graph'];
+  assert.ok(Array.isArray(graph),'schema graph on '+slug);
+  const web=graph.find(node=>node['@type']==='WebPage');
+  const article=graph.find(node=>node['@type']==='Article');
+  const person=graph.find(node=>node['@type']==='Person');
+  const crumbs=graph.find(node=>node['@type']==='BreadcrumbList');
+  const url='https://chrisizworski.com/great-lakes-freighter-winter-layup/vessels/'+slug+'/';
+  assert.ok(web&&article&&person&&crumbs,'retain editorial, identity and breadcrumb schema on '+slug);
+  assert.deepEqual(web.mainEntity,{'@id':url+'#article'});
+  assert.equal(article['@id'],url+'#article');
+  assert.deepEqual(article.mainEntityOfPage,{'@id':url+'#page'});
+  assert.deepEqual(article.author,{'@id':'https://chrisizworski.com/#person'});
+  assert.ok(article.headline.includes(bios.profiles.find(p=>p.id===slug).name));
+  assert.equal(article.dateModified,web.dateModified);
+  const scan=value=>{
+   if(Array.isArray(value)){for(const item of value)scan(item);return;}
+   if(!value||typeof value!=='object')return;
+   const types=[].concat(value['@type']||[]);
+   assert.ok(!types.some(type=>type==='Vehicle'||type==='Product'),'commercial schema on '+slug);
+   for(const key of Object.keys(value)){
+    assert.ok(!['offers','review','aggregateRating'].includes(key),'fabricated commercial attribute on '+slug);
+    scan(value[key]);
+   }
+  };
+  scan(data);
+ }
+});
