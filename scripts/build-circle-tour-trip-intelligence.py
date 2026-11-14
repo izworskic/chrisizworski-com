@@ -276,7 +276,7 @@ def render(data: list[dict], ledger: dict, visual: dict) -> str:
 <html lang="en-US"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lake Superior Circle Tour: 10-Day Itinerary &amp; Stops</title>
-<meta name="description" content="Discover a 10-day Lake Superior Circle Tour with day-by-day photos, overnight towns, real park and freighter tools, and practical decisions from Duluth through Ontario.">
+<meta name="description" content="Lake Superior Circle Tour in 10 days: photos, overnight towns, park and freighter tools, and daily stop choices from Duluth through Ontario.">
 <link rel="canonical" href="{CANONICAL}">
 <meta name="author" content="Chris Izworski">
 <meta property="og:type" content="article">
