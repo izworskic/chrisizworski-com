@@ -3,7 +3,7 @@
   "reviewed": "2026-11-14",
   "reviewMethod": "Photographer-owned geotags or exact image descriptions, NPS original accession/USFWS original Flickr, Commons archived license snapshots, plus visual preview where accessible.",
   "hosting": "Wikimedia Commons hosted thumbnails or one verified small original; per-page attribution and license, without cloning file bytes into repo.",
-  "scope": "44 verified named waterfall photographs with exact subject, source and commercial-reuse rights, 36 pending or held, adding Horseshoe Falls and agency Mex-i-min-e Falls on Nov 14.",
+  "scope": "45 verified and source-licensed exact waterfall guide photographs; 35 pending or on hold. New photo: lower tier of Superior Falls, Montreal River, distinct from upstream Saxon Falls.",
   "restrictions": [
     "Never download/reuse general Michigan.gov photography solely because it is a state site; use its documented approved portfolio or obtain permission.",
     "Do not publish photos with All Rights Reserved, CC NC, no derivatives without exact compliant use, or unverifiable subject identity.",
@@ -883,6 +883,25 @@
       "caption": "Mex-i-min-e Falls along the Middle Branch Ontonagon River, photographed by Ottawa National Forest in August 2016.",
       "alt": "Mex-i-min-e Falls flowing through tiered rock shelves on the Middle Branch Ontonagon River in Ottawa National Forest.",
       "licenseChanges": "Unmodified 1024px Flickr agency photograph, agency's own Public Domain Work designation and original file link preserved.",
+      "role": "verified-guide-photo"
+    },
+    {
+      "id": "superior-falls",
+      "name": "Superior Falls",
+      "page": "public/upper-peninsula-waterfalls/superior-falls/index.html",
+      "imageUrl": "https://live.staticflickr.com/65535/53993293230_0a69202faa_b.jpg",
+      "sourceUrl": "https://www.flickr.com/photos/76767740@N08/53993293230/",
+      "originalSource": "https://www.flickr.com/photos/76767740@N08/53993293230/",
+      "creator": "Curtis Abert",
+      "license": "CC BY 2.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+      "imageDate": "2024-09-10",
+      "width": 1024,
+      "height": 768,
+      "identityEvidence": "Photographer Curtis Abert explicitly describes this photo DSCN8740 as 'Lower Superior Falls, Montreal River between Wisconsin and Michigan.' Capture date September 10, 2024 and CC BY 2.0 reuse license are shown on the author's own Flickr source; the lower tier is within the same named Superior Falls complex as the Michigan-side hydroelectric visitor route. Distinct from Saxon Falls upstream and different from Upper Superior Falls photographed separately by the same creator.",
+      "caption": "Lower Superior Falls on the Michigan–Wisconsin border's Montreal River, photographed by Curtis Abert in September 2024.",
+      "alt": "Superior Falls at the lower Montreal River cascade, with water plunging between rock ledges near Lake Superior.",
+      "licenseChanges": "Original photographer's 1024×768 Flickr rendition displayed proportionally, without cropping or retouching; licensed image is a past scene, not evidence of current route opening.",
       "role": "verified-guide-photo"
     }
   ]
