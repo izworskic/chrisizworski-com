@@ -1055,6 +1055,33 @@
   }
   // These are NWS *hypothetical delayed target* samples, not a launch forecast.
   // No extra calls: all four cases come with the existing regional weather API.
+  // Rust/WASM sky trend: does a 1, 3 or 6 hour slip change the view at each
+  // spot? Rust decides; this only words the answer. Absent engine = no line.
+  let skyTrendRust=null;
+  void window.RocketLaunchWeatherRust?.load().then(engine=>{
+    if(!engine)return;
+    skyTrendRust=engine;
+    if(state.data)renderSlipForecast(state.data);
+  });
+  const SLIP_TAG={1:'Clearer',2:'Cloudier',3:'Same sky',4:'One spot holds'};
+  function skyTrendSentence(t){
+    const pct=n=>n===window.RocketLaunchWeatherRust?.UNKNOWN_CLOUD?'unknown':n+'%';
+    const change=s=>s.hazard?s.name+': rain or storms appear':s.name+' '+pct(s.from)+' to '+pct(s.to);
+    const spots=t.windows[t.firstOffset]?.spots||[];
+    const when='+'+t.firstOffset+' hr';
+    const partial=t.unknownWindows?' (for the delays that have an hourly forecast)':'';
+    if(t.verdict===3)return 'Holding steady: if the launch slips 1, 3 or 6 hours, the forecast sky at both spots stays about the same'+partial+'.';
+    if(t.verdict===2)return 'A delay could cost you the view. By '+when+', both spots turn cloudier: '+spots.map(change).join('; ')+'.';
+    if(t.verdict===4){
+      const worse=spots.find(s=>s.code===2),other=spots.find(s=>s.code!==2);
+      return worse&&other?'If it slips to '+when+', '+other.name+' holds up better. '+change(worse)+'.':null;
+    }
+    if(t.verdict===1){
+      const clear=spots.filter(s=>s.code===1);
+      return clear.length?'A delay would not hurt the view. By '+when+' the sky clears at '+clear.map(change).join('; ')+'.':null;
+    }
+    return null;
+  }
   function renderSlipForecast(data) {
     const root=$('rl-slip-options'),detail=$('rl-slip-detail');
     if (!root || !detail) return;
@@ -1065,6 +1092,7 @@
     const sourceStale=data.scheduleFreshness==='stale'||forecast?.sourceOverdue===true;
     if (!safe.length) {
       set('rl-slip-brief','We need a more precise launch time and enough hourly weather data to compare possible delays.');
+      if($('rl-slip-trend'))$('rl-slip-trend').hidden=true;
       detail.appendChild(el('p','rl-slip-empty',
         'These are only forecast possibilities. Keep watching the operator for any real delay.'));
       return;
@@ -1073,6 +1101,14 @@
       (sourceStale?'The published launch time may be old, so we aren’t comparing delayed weather yet. ':
         forecast?.outlook+' ') +
       'These are imagined delays to help you plan, not an announcement that the launch has moved.');
+    const trendBox=$('rl-slip-trend');
+    const trend=!sourceStale&&skyTrendRust?skyTrendRust.trend(safe):null;
+    const trendText=trend?skyTrendSentence(trend):null;
+    if(trendBox){
+      trendBox.hidden=!trendText;
+      trendBox.textContent=trendText||'';
+      if(trendText){trendBox.dataset.engine='rust-wasm';trendBox.dataset.verdict=String(trend.verdict);}
+    }
     const buttons=[];
     const timeLabel=iso=>{
       const parsed=Date.parse(iso||'');
@@ -1133,6 +1169,12 @@
       button.appendChild(el('strong','',scenario.offsetHours===0?'Scheduled':
         '+'+scenario.offsetHours+' hr'));
       button.appendChild(el('small','',timeLabel(scenario.targetAt)));
+      const windowCode=trendText?trend.windows[scenario.offsetHours]?.code:0;
+      if(SLIP_TAG[windowCode]){
+        const tag=el('span','rl-slip-tag',SLIP_TAG[windowCode]);
+        tag.dataset.trend=String(windowCode);
+        button.appendChild(tag);
+      }
       button.addEventListener('click',()=>update(index));
       root.appendChild(button);buttons.push(button);
     }

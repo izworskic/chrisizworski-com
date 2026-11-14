@@ -1,0 +1,46 @@
+name: Rocket launch-day sky trend Rust
+on:
+  pull_request:
+    paths:
+      - 'rust/rocket-launch-weather/**'
+      - 'public/assets/rocket-launch-weather*'
+      - 'public/synced-national-tools/rocket-launch-live/**'
+      - 'public/synced-national-tools/space-coast-launch/**'
+      - 'scripts/verify-rocket-launch-weather-rust.cjs'
+      - 'tests/rocket-launch-weather-rust.test.js'
+      - '.github/workflows/rocket-launch-weather-rust.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  rust-sky-trend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Install pinned Rust and browser target
+        run: |
+          rustup toolchain install 1.90.0 --profile minimal
+          rustup target add wasm32-unknown-unknown --toolchain 1.90.0
+      - name: Run Rust source unit tests
+        run: |
+          rustc +1.90.0 --edition=2021 --test rust/rocket-launch-weather/src/lib.rs -o /tmp/lw-tests
+          /tmp/lw-tests
+      - name: Compile real browser WebAssembly
+        run: |
+          rustc +1.90.0 --edition=2021 --crate-type cdylib \
+            --target wasm32-unknown-unknown -C opt-level=z \
+            -C codegen-units=1 -C lto=fat -C panic=abort -C strip=symbols \
+            -o /tmp/rocket-launch-weather.wasm rust/rocket-launch-weather/src/lib.rs
+          echo ROCKET_LAUNCH_WEATHER_RUST_B64_BEGIN
+          base64 -w0 /tmp/rocket-launch-weather.wasm
+          printf '\nROCKET_LAUNCH_WEATHER_RUST_B64_END\n'
+      - name: Verify real WASM exports, unknown guards and pinned binary reproducibility
+        run: node scripts/verify-rocket-launch-weather-rust.cjs --wasm=/tmp/rocket-launch-weather.wasm
+      - name: Test full browser-facing Rust contract
+        run: node --test tests/rocket-launch-weather-rust.test.js
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: rocket-launch-weather-rust-wasm
+          path: /tmp/rocket-launch-weather.wasm
+          if-no-files-found: error
+          retention-days: 7
