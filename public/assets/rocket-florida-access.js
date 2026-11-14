@@ -15,7 +15,7 @@
 
   const COMPENDIUM='https://www.nps.gov/cana/learn/management/superintendent-s-compendium.htm';
   // A single, mission-bound verdict is consumed by both national viewing sections.
-  // The current NPS alert feed, not a static calendar assertion, controls the answer.
+  // The NPS compendium governs this mission's standing verdict; new explicit closures can override it.
   // The compendium states the standing launch rule. The NPS does not publish
   // affirmative opening notices for each lot; absence of one is not a closure.
   // A NEW, explicit NPS closure of lots 4–7 still overrides this verdict.
