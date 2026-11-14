@@ -26,6 +26,7 @@ const initial=planner.settings({
  interests:params.has('ct_focus')?params.get('ct_focus').split(','):['hiking','waterfalls'],
  pictured:params.has('ct_pictured')?params.get('ct_pictured')!=='0':true
 });
+host.dataset.js='on';
 el.days.value=String(initial.days);el.drive.value=String(initial.maxDrive);
 el.month.value=String(initial.month);el.pictured.checked=initial.pictured;
 for(const [key,check] of focus)check.checked=initial.interests.includes(key);
