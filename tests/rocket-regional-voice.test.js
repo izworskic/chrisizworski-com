@@ -26,7 +26,7 @@ for(const site of sites){
     assert.ok(html.includes('/national-tools/rocket-launch-live/'),site.name+' national mission handoff');
     const cacheVersion=site.name==='Vandenberg'?'20261113-rust-v2':
       site.name==='Wallops'||site.name==='Starbase'?'20261113-rust-network-v1':
-      site.name==='Florida'?'20261113-rust-florida-v1':'20261113-rust-access-v1';
+      site.name==='Florida'?'20261113-rust-florida-v1-weather-link-20261114':'20261113-rust-access-v1';
     assert.ok(html.includes(cacheVersion),site.name+' changed client copy must bust cache');
     assert.doesNotThrow(()=>new Function(js),site.name+' dynamic guide parses as JavaScript');
     if(site.name!=='Florida'){

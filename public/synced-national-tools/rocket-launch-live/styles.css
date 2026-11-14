@@ -275,6 +275,8 @@ html.rl-map-fullscreen,html.rl-map-fullscreen body{overflow:hidden!important;ove
 #rl-official-source{display:flex;flex-direction:column;align-items:center;gap:8px}
 #rl-official-source a{font-weight:800;color:#174d42;font-size:12px}
 #rl-official-source small{font-size:11px;color:#53695d;overflow-wrap:anywhere}
+#rl-official-source a.rl-official-open{display:inline-block;background:#174d42;color:#fff;font-size:14px;padding:11px 16px;border-radius:8px;text-decoration:none;text-align:center}
+#rl-official-source a.rl-official-open:focus-visible{outline:3px solid #f4a77d;outline-offset:2px}
 @media(max-width:700px){.rl-official-45ws{grid-template-columns:1fr}.rl-official-value{text-align:left;align-items:flex-start}}
 
 

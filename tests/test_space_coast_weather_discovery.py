@@ -164,5 +164,58 @@ class IndependentWeatherDiscoveryTest(unittest.TestCase):
         self.assertEqual(out["verified"],1)
 
 
+class _FakeResponse:
+    def __init__(self, status, headers=None, body=b""):
+        self.status, self.headers, self._body = status, headers or {}, body
+
+    def getcode(self):
+        return self.status
+
+    def read(self, _limit=None):
+        return self._body
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *_):
+        return False
+
+
+class BlockedSourceAndVulcanTests(unittest.TestCase):
+    def test_waf_challenge_is_unavailable_not_checked(self):
+        # 45WS answers automated requests with 202 + x-amzn-waf-action: challenge.
+        waf = _FakeResponse(202, {"x-amzn-waf-action": "challenge", "Content-Length": "0"})
+        with patch.object(worker.OPENER, "open", return_value=waf):
+            with self.assertRaises(ValueError):
+                worker.download(BASE, 1000, "text/html")
+        with patch.object(worker.OPENER, "open", return_value=waf):
+            _, reports = inspect_sources([], worker.download, worker.official_pdf_url)
+        self.assertEqual({r["status"] for r in reports}, {"unavailable"})
+        self.assertEqual(sum(r["links"] for r in reports), 0)
+
+    def test_non_200_and_empty_bodies_are_rejected(self):
+        for response in (_FakeResponse(202, {}, b"<html></html>"),
+                         _FakeResponse(200, {}, b"")):
+            with patch.object(worker.OPENER, "open", return_value=response):
+                with self.assertRaises(ValueError):
+                    worker.download(BASE, 1000, "text/html")
+
+    def test_ok_page_still_downloads(self):
+        page = _FakeResponse(200, {"Content-Length": "13"}, b"<html></html>")
+        with patch.object(worker.OPENER, "open", return_value=page):
+            self.assertEqual(worker.download(BASE, 1000, "text/html"), b"<html></html>")
+
+    def test_vulcan_amazon_leo_flight_codes_match(self):
+        self.assertEqual(mission_marker("Vulcan VC6L | Amazon Leo (LV-01)"), "amazon-leo:lv-01")
+        pdf = ("https://" + OFFICIAL + "/assets/LaunchForecasts/"
+               "Vulcan%20Amazon%20Leo%20LV-01%20L-1%20Forecast%20-%2014%20Nov%20Launch.pdf")
+        mission = {"id": "ef9850ad-1096-425b-9d27-f7bbd186e61a",
+                   "name": "Vulcan VC6L | Amazon Leo (LV-01)", "net": "2026-11-14T17:32:30Z"}
+        matches = match_direct_candidates([pdf], [mission], worker.official_pdf_url)
+        self.assertEqual(matches, {mission["id"]: [pdf]})
+        # Atlas codes keep working.
+        self.assertEqual(mission_marker("Atlas V 551 | Amazon Leo (LA-04)"), "amazon-leo:la-04")
+
+
 if __name__ == "__main__":
     unittest.main()
