@@ -8,7 +8,8 @@ const server=http.createServer(async(req,res)=>{
   try {
     const uri=new URL(req.url,'http://127.0.0.1');
     if(uri.pathname.startsWith('/api/')){res.writeHead(503,{'Content-Type':'application/json'});res.end('{}');return;}
-    const rel=uri.pathname==='/lake-superior-circle-tour/'?'/lake-superior-circle-tour/index.html':uri.pathname;
+    const rel=uri.pathname==='/lake-superior-circle-tour/'?'/lake-superior-circle-tour/index.html':
+      uri.pathname==='/lake-superior-circle-tour/10-day/'?'/lake-superior-circle-tour/10-day/index.html':uri.pathname;
     const file=path.resolve(root,'.'+rel);
     if(!file.startsWith(root+path.sep)){res.writeHead(403);res.end();return;}
     const st=await fs.promises.stat(file).catch(()=>null);
@@ -416,6 +417,48 @@ function check(value,message){if(!value)throw Error(message);}
     'blocked WASM removed original source stop cards');
   report.cases.push({state:'shared WASM unavailable',result:'JS source evidence, 31 stops and published estimate retained'});
   await rustFallbackCtx.close();
+
+
+  // First dedicated crawlable itinerary: the server returns complete Article
+  // content without JS, while the client uses the real expanded Rust ABI.
+  for(const width of [390,1366]){
+    const guideCtx=await browser.newContext({viewport:{width,height:844}});
+    const guide=await guideCtx.newPage();
+    const response=await guide.goto(url+'10-day/',{waitUntil:'domcontentloaded',timeout:35000});
+    check(response.status()===200,'10-day static page not served');
+    check(await guide.locator('article.day').count()===10,'10-day source-rendered day cards missing');
+    check((await guide.title()).includes('10-Day Itinerary'),'10-day search title missing');
+    check(await guide.locator('link[rel="canonical"]').getAttribute('href')===
+      'https://chrisizworski.com/lake-superior-circle-tour/10-day/','incorrect canonical');
+    await guide.waitForFunction(()=>window.CircleTourRust?.engine?.()==='rust-wasm',null,{timeout:20000});
+    await guide.waitForFunction(()=>document.querySelector('#day-10 .day-state')?.dataset.code==='4',null,{timeout:20000});
+    check(await guide.locator('#day-10 .day-state').getAttribute('data-code')==='4',
+      'unverified Pigeon River park approach was promoted into a timed arrival');
+    await guide.locator('#ct-hours').selectOption('7').catch(()=>null); // 7 is not an offered editorial budget.
+    await guide.locator('#ct-hours').selectOption('8');
+    check(await guide.locator('#day-9 .day-state').getAttribute('data-code')==='3',
+      'long Ontario driving day should exceed an eight-hour budget');
+    await guide.locator('#ct-season').selectOption('winter');
+    check(await guide.locator('#day-7 .day-state').getAttribute('data-code')==='5',
+      'winter-sensitive park itinerary must prompt verification');
+    check(await guide.locator('#day-10 .day-state').getAttribute('data-code')==='4',
+      'winter advisory must not override incomplete road evidence');
+    const viewport=await guide.evaluate(()=>({wide:document.documentElement.scrollWidth,screen:innerWidth}));
+    check(viewport.wide<=viewport.screen+2,'new itinerary causes mobile horizontal overflow');
+    report.cases.push({state:width+'px 10-day search page',result:'canonical, 10 source-rendered days, real Rust budget and incomplete-leg veto'});
+    await guideCtx.close();
+  }
+  const noRustGuideCtx=await browser.newContext({viewport:{width:390,height:844}});
+  const noRustGuide=await noRustGuideCtx.newPage();
+  await noRustGuide.route('**/assets/shared-itinerary.wasm.b64*',route=>route.abort());
+  await noRustGuide.goto(url+'10-day/',{waitUntil:'domcontentloaded',timeout:35000});
+  await noRustGuide.waitForFunction(()=>document.querySelector('#day-10 .day-state')?.dataset.code==='4',null,{timeout:20000});
+  check(await noRustGuide.evaluate(()=>window.CircleTourRust.engine())==='js-parity',
+    'missing WASM did not preserve independent source-safe 10-day itinerary');
+  check(await noRustGuide.locator('article.day').count()===10,
+    'missing WASM removed crawlable editorial days');
+  report.cases.push({state:'10-day wasm blocked',result:'source-rendered days and source-safe JS feasibility survive'});
+  await noRustGuideCtx.close();
 
   const noJs=await browser.newContext({javaScriptEnabled:false,viewport:{width:390,height:844}}),staticPage=await noJs.newPage();
   await staticPage.goto(url,{waitUntil:'domcontentloaded',timeout:35000});
