@@ -80,7 +80,7 @@ fn ct_position(id: u32) -> Option<usize> {
     CIRCLE.iter().position(|&candidate| candidate == id)
 }
 #[no_mangle]
-pub extern "C" fn ct_version() -> u32 { 1 }
+pub extern "C" fn ct_version() -> u32 { 2 }
 
 // Direction: 0 counterclockwise, 1 clockwise. Evidence 1 means the existing
 // published distance from a source-reviewed stop card; none other is trusted.
@@ -135,6 +135,36 @@ pub extern "C" fn ct_drive(miles: f64, hours: f64, stay_day: u32) -> u32 {
     // A zero-mile endpoint transition is allowed only when ct_leg already proved
     // the two distinct Duluth identifiers refer to the same place.
     u32::from((hours - expected).abs() <= 0.000_001)
+}
+
+
+// Circle Tour day-feasibility policy. All inputs are editorial planning budgets,
+// not route-network ETA or public-access status. A withheld leg wins over any
+// apparently comfortable numerical budget; winter-sensitive visits need a new
+// source check, not a made-up seasonal closure.
+// 0 invalid, 1 comfortable (>=45 min unallocated), 2 tight, 3 exceeds budget,
+// 4 a source leg is incomplete, 5 chosen seasonal experience needs verification.
+#[no_mangle]
+pub extern "C" fn ct_feasibility(
+    published_miles: f64, day_hours: f64, planned_visit_hours: f64,
+    border_reserve_minutes: f64, has_all_planning_legs: u32,
+    seasonal_experience_check: u32
+) -> u32 {
+    if has_all_planning_legs > 1 || seasonal_experience_check > 1 ||
+        !published_miles.is_finite() || !day_hours.is_finite() ||
+        !planned_visit_hours.is_finite() || !border_reserve_minutes.is_finite() ||
+        published_miles < 0.0 || published_miles > 600.0 ||
+        day_hours <= 0.0 || day_hours > 24.0 ||
+        planned_visit_hours < 0.0 || planned_visit_hours > 24.0 ||
+        border_reserve_minutes < 0.0 || border_reserve_minutes > 720.0 { return 0; }
+    if has_all_planning_legs == 0 { return 4; }
+    if seasonal_experience_check == 1 { return 5; }
+    let allowance = published_miles / 47.0 * 1.2 +
+        planned_visit_hours + border_reserve_minutes / 60.0;
+    let remaining = day_hours - allowance;
+    if remaining < 0.0 { return 3; }
+    if remaining < 0.75 { return 2; }
+    1
 }
 
 #[cfg(test)]
@@ -225,6 +255,19 @@ mod tests {
     }
 
     #[test]
+    fn circle_day_feasibility_holds_unknown_roads_and_winter_sources() {
+        assert_eq!(ct_feasibility(87.0, 9.0, 2.0, 0.0, 1, 0),1);
+        assert_eq!(ct_feasibility(303.0, 9.0, 1.0, 0.0, 1, 0),2);
+        assert_eq!(ct_feasibility(303.0, 7.0, 1.0, 0.0, 1, 0),3);
+        assert_eq!(ct_feasibility(192.0, 12.0, 1.0, 45.0, 0, 0),4);
+        assert_eq!(ct_feasibility(87.0, 12.0, 1.0, 0.0, 1, 1),5);
+        assert_eq!(ct_feasibility(0.0, 9.0, 4.0, 0.0, 1, 0),1);
+        assert_eq!(ct_feasibility(f64::NAN, 9.0, 1.0, 0.0, 1, 0),0);
+        assert_eq!(ct_feasibility(87.0, 0.0, 1.0, 0.0, 1, 0),0);
+        assert_eq!(ct_version(),2);
+    }
+
+    #[test]
     fn circle_border_wait_and_drive_guard() {
         assert_eq!(ct_border(0,f64::NAN,45.0),1);
         assert_eq!(ct_border(0,0.0,0.0),0);
@@ -236,7 +279,7 @@ mod tests {
         assert_eq!(ct_drive(0.0,0.0,0),1);
         assert_eq!(ct_drive(47.0,1.0,0),0);
         assert_eq!(ct_drive(f64::INFINITY,1.2,0),0);
-        assert_eq!(ct_version(),1);
+        assert_eq!(ct_version(),2);
     }
 
 }
