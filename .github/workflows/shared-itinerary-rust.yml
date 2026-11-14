@@ -23,6 +23,7 @@ on:
       - 'tests/circle-tour-trip-intelligence.test.cjs'
       - 'scripts/build-circle-tour-trip-intelligence.py'
       - 'data/circle-tour-road-evidence.json'
+      - 'data/circle-tour-visual-story.json'
       - 'public/sitemap.xml'
       - 'package.json'
       - 'public/assets/circle-tour-trip-feasibility.js'

@@ -45,7 +45,7 @@ test('Python produces an actual static HTML, 10 distinctive days, sources, and c
  assert.equal((html.match(/<h3>/g)||[]).length,10);
  assert.ok(html.includes('Houghton gateway'));
  assert.ok(html.includes('border-time reserve')||html.includes('border-time'));
- assert.match(html,/Driving clock held|Clock estimate held|Driving clock withheld/);
+ assert.match(html,/Verify the final road approach|the result is withheld/);
  assert.match(html,/id="ct-intelligence-days"/);
  assert.match(html,/circle-tour-trip-feasibility\.js/);
  assert.doesNotMatch(html,/Product|Vehicle|offers|aggregateRating/);
@@ -67,4 +67,57 @@ test('single canonical and truthful sitemap dates, hub remains unchanged in ads 
  const page=fs.readFileSync(generated,'utf8');
  assert.equal((page.match(/rel="canonical"/g)||[]).length,1);
  assert.doesNotMatch(page,/adsbygoogle|pagead2\.googlesyndication\.com/);
+});
+
+
+const escapedForHtml=s=>s.replace(/&/g,'&amp;').replace(/'/g,'&#x27;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+test('interpretive ten-day guide has unique, properly attributed destination photography, no repeated mileage sales pitch',()=>{
+ const page=fs.readFileSync(generated,'utf8');
+ const story=JSON.parse(fs.readFileSync('data/circle-tour-visual-story.json','utf8'));
+ assert.equal(Object.keys(story.days).length,10);
+ assert.equal((page.match(/<figure class="day-photo">/g)||[]).length,10);
+ assert.equal((page.match(/<figure class="hero-photo">/g)||[]).length,1);
+ assert.ok(story.hero.src.startsWith('/assets/circle-tour/photos/'));
+ assert.ok(fs.statSync('public'+story.hero.src).size>5000,'Missing self-hosted hero photograph');
+ assert.equal((page.match(/<figcaption>/g)||[]).length,11);
+ assert.equal((page.match(/class="photo-credit"/g)||[]).length,11);
+ assert.equal((page.match(/loading="lazy" decoding="async" referrerpolicy="no-referrer"/g)||[]).length,10);
+ assert.equal((page.match(/loading="eager" fetchpriority="high"/g)||[]).length,1);
+ assert.equal(new Set([story.hero.src,...Object.values(story.days).map(d=>d.photo.src)]).size,11);
+ assert.equal((page.match(/What do the mileage numbers actually tell me/g)||[]).length,1);
+ assert.doesNotMatch(page,/What does the mileage prove|DAY 0\d · \d+ PUBLISHED MILES/);
+ assert.match(page,/Ten days\. Ten different stretches of shoreline/);
+ assert.match(page,/The whole shore, in one loop/);
+ assert.match(page,/45-minute border-time allowance/);
+ for(let i=1;i<=10;i++){
+   const day=story.days[String(i)];
+   assert.ok(day.photo.by&&day.photo.licenseUrl.startsWith('https://creativecommons.org/'));
+   assert.ok(day.photo.src.startsWith('/assets/circle-tour/photos/'));
+   const jpeg=fs.readFileSync('public'+day.photo.src);
+   assert.ok(jpeg.length>5000,'Locally served photo too small '+day.photo.src);
+   assert.deepEqual([...jpeg.subarray(0,3)],[255,216,255],'Not a real JPEG');
+   assert.ok(day.photo.sourceSrc.startsWith('https://'),'Lost original source image URL');
+
+   assert.ok(page.includes(day.photo.file.replace(/&/g,'&amp;')));
+   assert.ok(page.includes(escapedForHtml(day.fieldNote)),'Missing day field note '+i);
+   assert.ok(page.includes(escapedForHtml(day.focus)),'Missing day decision '+i);
+   assert.ok(page.includes('id="day-'+i+'"'));
+   assert.ok(day.tools.every(x=>page.includes(x.url.replace(/&/g,'&amp;'))));
+ }
+});
+test('ten days link to actual existing visitor tools rather than generic official-source links',()=>{
+ const page=fs.readFileSync(generated,'utf8');
+ assert.equal((page.match(/class="day-tools"/g)||[]).length,10);
+ const urls=[
+   '/apostle-islands/','/duluth-canal-park/','/porcupine-mountains/',
+   '/northern-lights-michigan/keweenaw/','/great-lakes-freighter-tracking/',
+   'https://picturedrocks.chrisizworski.com/','/tahquamenon-falls/',
+   '/soo-locks/','/lake-superior-provincial-park/','/sault-ste-marie-border-wait-time/',
+   '/pukaskwa-national-park/','/gooseberry-falls/',
+   '/split-rock-lighthouse-visit/'
+ ];
+ for(const url of urls)assert.ok(page.includes('href="'+url+'"'),'Missing companion tool '+url);
+ assert.match(page,/Use the tools for this stop/);
+ assert.match(page,/Things to do|Choose|Explore|Pick|Compare/i);
+ assert.doesNotMatch(page,/adsbygoogle|pagead2\.googlesyndication/);
 });
