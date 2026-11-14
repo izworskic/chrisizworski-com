@@ -89,6 +89,30 @@ for(const miles of [-1,0,1,47,600,Infinity,NaN])
    checked++;
  }
 console.log('Circle Tour source/WASM topology, mileage and border cases validated.');
+for(const miles of [-1,0,87,192,303,600,601,NaN])
+ for(const hours of [0,7,8,9,10,24,25])
+ for(const visit of [-1,0,1,2,3,25])
+ for(const border of [-1,0,14,45,90,721])
+ for(const evidence of [0,1,2])for(const winter of [0,1,2]){
+   let expected=0;
+   if(evidence<=1&&winter<=1&&[miles,hours,visit,border].every(Number.isFinite)&&
+      miles>=0&&miles<=600&&hours>0&&hours<=24&&visit>=0&&visit<=24&&
+      border>=0&&border<=720){
+     const spare=hours-(miles/47*1.2+visit+border/60);
+     expected=evidence===0?4:winter===1?5:spare<0?3:spare<.75?2:1;
+   }
+   assert.equal(e.ct_feasibility(miles,hours,visit,border,evidence,winter),expected,
+     ['ct-feasibility',miles,hours,visit,border,evidence,winter].join('/'));
+   if(evidence<=1&&winter<=1){
+     assert.equal(circle.feasibility({
+       miles,availableHours:hours,visitHours:visit,borderMinutes:border,
+       evidenceComplete:evidence===1,seasonalHold:winter===1
+     }).code,expected);
+   }
+   checked++;
+ }
+console.log('Circle Tour day feasibility Rust WASM and independent JS oracle cases passed.');
+
 
 // Pin the exact build artifact before promoting native runtime. This guards
 // against source/binary drift and mislabeled JavaScript-only "Rust" releases.
