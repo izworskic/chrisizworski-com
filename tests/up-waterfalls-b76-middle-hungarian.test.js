@@ -85,7 +85,7 @@ test('B76 middle guide, hub and sitemap add exactly one distinct indexable water
  assert.equal(list.itemListElement.length,78);
  assert.equal(list.itemListElement.filter(x=>x.name==='Middle Hungarian Falls').length,1);
  assert.equal((sitemap.match(/<loc>/g)||[]).length,78);
- assert.match(sitemap,/middle-hungarian-falls\/<\/loc><lastmod>2026-11-07/);
+ assert.match(sitemap,/middle-hungarian-falls\/<\/loc><lastmod>2026-11-14<\/lastmod>/);
 });
 test('B76 Python nearby index includes only the independently identified waterfall point, never the parking position',()=>{
  assert.deepEqual(near.counts,{curated:80,eligible:71,excluded:9});

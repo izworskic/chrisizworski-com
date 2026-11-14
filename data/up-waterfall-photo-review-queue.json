@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "reviewedAt": "2026-11-12",
+  "reviewedAt": "2026-11-14",
   "catalogCount": 80,
-  "verifiedPhotoCount": 31,
-  "unphotographedCuratedCount": 49,
+  "verifiedPhotoCount": 33,
+  "unphotographedCuratedCount": 47,
   "method": "Diff of data/up-waterfalls.json IDs against data/up-waterfall-photo-provenance.json IDs. An unphotographed catalog entry is not the same as missing public-access research or an indexing defect.",
   "pending": [
     {
@@ -547,24 +547,6 @@
       "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
     },
     {
-      "id": "wright-street-falls",
-      "name": "Wright Street Falls",
-      "region": "Central U.P.",
-      "publicGuidePath": "/upper-peninsula-waterfalls/wright-street-falls/",
-      "photoStatus": "not-yet-verified",
-      "photoPriority": "inventory-backlog",
-      "accessStatusInCuratedCatalog": "verify",
-      "officialVisitorSourceNotPhotoLicense": "https://www.travelmarquette.com/outdoor-adventure/waterfalls/",
-      "photoVerificationRequirements": [
-        "named exact waterfall and tier",
-        "image content clearly shows named falls",
-        "attribution and original media source identified",
-        "documented commercial reuse permission or public domain",
-        "historic capture date accurate or explicitly unknown"
-      ],
-      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
-    },
-    {
       "id": "falls-river-trail",
       "name": "Falls River Trail: Middle & Lower Falls",
       "region": "Western U.P.",
@@ -825,24 +807,6 @@
       "photoPriority": "inventory-backlog",
       "accessStatusInCuratedCatalog": "verify",
       "officialVisitorSourceNotPhotoLicense": "https://keweenawlandtrust.org/protected-lands/boston-creek-nature-area",
-      "photoVerificationRequirements": [
-        "named exact waterfall and tier",
-        "image content clearly shows named falls",
-        "attribution and original media source identified",
-        "documented commercial reuse permission or public domain",
-        "historic capture date accurate or explicitly unknown"
-      ],
-      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
-    },
-    {
-      "id": "middle-hungarian-falls",
-      "name": "Middle Hungarian Falls",
-      "region": "Western U.P.",
-      "publicGuidePath": "/upper-peninsula-waterfalls/middle-hungarian-falls/",
-      "photoStatus": "not-yet-verified",
-      "photoPriority": "priority-next",
-      "accessStatusInCuratedCatalog": "verify",
-      "officialVisitorSourceNotPhotoLicense": "https://keweenawlandtrust.org/protected-lands/hungarian-falls-nature-area",
       "photoVerificationRequirements": [
         "named exact waterfall and tier",
         "image content clearly shows named falls",
