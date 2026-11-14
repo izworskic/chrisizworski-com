@@ -3,7 +3,7 @@
   "reviewed": "2026-11-14",
   "reviewMethod": "Photographer-owned geotags or exact image descriptions, NPS original accession/USFWS original Flickr, Commons archived license snapshots, plus visual preview where accessible.",
   "hosting": "Wikimedia Commons hosted thumbnails or one verified small original; per-page attribution and license, without cloning file bytes into repo.",
-  "scope": "37 individually verified named waterfall photographs, 43 not yet confirmed or held",
+  "scope": "39 exact waterfall photos source/reuse verified, 41 pending or held; new: Lower Hungarian and Lower Montreal Falls, preserving other Nov 14 photographs.",
   "restrictions": [
     "Never download/reuse general Michigan.gov photography solely because it is a state site; use its documented approved portfolio or obtain permission.",
     "Do not publish photos with All Rights Reserved, CC NC, no derivatives without exact compliant use, or unverifiable subject identity.",
@@ -751,6 +751,45 @@
       "licenseChanges": "Unretouched Commons 960px derivative; explicit original author and public domain attribution retained.",
       "role": "verified-guide-photo",
       "page": "public/upper-peninsula-waterfalls/pemene-falls/index.html"
+    },
+    {
+      "id": "lower-hungarian-falls",
+      "name": "Lower Hungarian Falls",
+      "page": "public/upper-peninsula-waterfalls/lower-hungarian-falls/index.html",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/74/Lower_falls.jpg",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Lower_falls.jpg",
+      "originalSource": "https://upload.wikimedia.org/wikipedia/commons/7/74/Lower_falls.jpg",
+      "creator": "Fondycardinals",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "imageDate": "unknown",
+      "displayDate": "capture date unknown; Commons 2017 upload",
+      "width": 544,
+      "height": 749,
+      "identityEvidence": "Self-published Commons image Lower falls.jpg by Fondycardinals, explicitly described by uploader as 'the lower waterfalls of the Hungarian Falls,' categorized under Hungarian Falls with separately labeled upper and middle tiers. The original photo has only 544 × 749 pixels; publisher grants CC BY-SA 4.0. Publisher file date in October 2017 does not certify the photograph capture day.",
+      "caption": "The lower plunge of Hungarian Falls in the Dover Creek gorge, photographed by Fondycardinals.",
+      "alt": "Lower Hungarian Falls dropping down sandstone rock into the steep forested Dover Creek gorge.",
+      "licenseChanges": "Source image rendered uncropped, without retouching or fictitious upscale; photographer and licence linked by the image.",
+      "role": "verified-guide-photo"
+    },
+    {
+      "id": "montreal-falls-keweenaw",
+      "name": "Montreal Falls (Keweenaw)",
+      "page": "public/upper-peninsula-waterfalls/montreal-falls-keweenaw/index.html",
+      "imageUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/70/Montreal_Falls_at_Night.jpg/960px-Montreal_Falls_at_Night.jpg",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Montreal_Falls_at_Night.jpg",
+      "originalSource": "https://upload.wikimedia.org/wikipedia/commons/7/70/Montreal_Falls_at_Night.jpg",
+      "creator": "RomanKahler",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "imageDate": "2017-08-14",
+      "width": 960,
+      "height": 1438,
+      "identityEvidence": "Creator RomanKahler explicitly identifies own Commons photograph as Lower Montreal Falls at Night, original 1205 × 1805, dated August 14 2017, under CC BY-SA 4.0; Commons categorizes it under Waterfalls in Michigan. The named lower tier corresponds to the Keweenaw page's actual lower-falls trip, not the Montreal River on the WI/MI border. A historical night photograph does not certify safe nighttime trail or legal driving access.",
+      "caption": "Lower Montreal Falls photographed at night by RomanKahler in August 2017; this is not a recommendation for nighttime hiking.",
+      "alt": "Montreal Falls Keweenaw lower cascade descending toward Lake Superior in a historical nighttime scene.",
+      "licenseChanges": "Source image rendered uncropped, without retouching or fictitious upscale; photographer and licence linked by the image.",
+      "role": "verified-guide-photo"
     }
   ]
 }
