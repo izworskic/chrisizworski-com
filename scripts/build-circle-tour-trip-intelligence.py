@@ -194,7 +194,8 @@ def extract_traveler_presets(source: str, ledger: dict, catalog: dict, visual: d
             crossings = sum(1 for a,b in pairs if (a,b) in (("13","14"), ("20","21")))
             if crossings > 1:
                 raise ValueError("Unexpected second border on one day")
-            highlights = [stop for stop in ids if stop in cards]
+            # Do not recommend yesterday's departure stop twice, except stay days.
+            highlights = [stop for stop in (ids if len(ids) == 1 else ids[1:]) if stop in cards]
             days.append({
                 "day":number,"stops":ids,"miles":miles,
                 "driveAllowanceHours":round(miles / 47 * 1.2, 2),
