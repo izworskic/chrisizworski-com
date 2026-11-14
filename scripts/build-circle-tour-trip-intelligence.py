@@ -150,7 +150,7 @@ def render(data: list[dict], ledger: dict) -> str:
     return f"""<!DOCTYPE html>
 <html lang="en-US"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Lake Superior Circle Tour: 10-Day Itinerary &amp; Overnight Stops</title>
+<title>Lake Superior Circle Tour: 10-Day Itinerary &amp; Stops</title>
 <meta name="description" content="Plan Lake Superior's 10-day Circle Tour with 10 overnight bases, 31 mapped stops, realistic time budgets and honest road-mileage cautions. No account needed.">
 <link rel="canonical" href="{CANONICAL}">
 <meta name="author" content="Chris Izworski">
