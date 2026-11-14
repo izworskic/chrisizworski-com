@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "reviewedAt": "2026-11-14",
   "catalogCount": 80,
-  "verifiedPhotoCount": 39,
-  "unphotographedCuratedCount": 41,
+  "verifiedPhotoCount": 40,
+  "unphotographedCuratedCount": 40,
   "method": "Diff of data/up-waterfalls.json IDs against data/up-waterfall-photo-provenance.json IDs. An unphotographed catalog entry is not the same as missing public-access research or an indexing defect.",
   "pending": [
     {
@@ -193,24 +193,6 @@
       "publicGuidePath": "/upper-peninsula-waterfalls/nonesuch-falls/",
       "photoStatus": "not-yet-verified",
       "photoPriority": "priority-next",
-      "accessStatusInCuratedCatalog": "verify",
-      "officialVisitorSourceNotPhotoLicense": "https://www.michigan.gov/recsearch/parks/porkies",
-      "photoVerificationRequirements": [
-        "named exact waterfall and tier",
-        "image content clearly shows named falls",
-        "attribution and original media source identified",
-        "documented commercial reuse permission or public domain",
-        "historic capture date accurate or explicitly unknown"
-      ],
-      "releaseRule": "Do not insert media, maps, or parking claims without independently clearing photo identity and rights"
-    },
-    {
-      "id": "little-union-gorge-falls",
-      "name": "Little Union Gorge Falls",
-      "region": "Western U.P.",
-      "publicGuidePath": "/upper-peninsula-waterfalls/little-union-gorge-falls/",
-      "photoStatus": "not-yet-verified",
-      "photoPriority": "inventory-backlog",
       "accessStatusInCuratedCatalog": "verify",
       "officialVisitorSourceNotPhotoLicense": "https://www.michigan.gov/recsearch/parks/porkies",
       "photoVerificationRequirements": [
