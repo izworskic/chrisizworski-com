@@ -226,7 +226,7 @@ test('Sections 02 and 04 render shared Playalinda decision with unchanged ads',(
   assert.match(js,/florida\.playalinda\.checkedAt/);
   assert.match(js,/NPS 2026 Superintendent’s Compendium, §1\.5\(a\)\(n\)/);
   assert.match(html,/rocket-florida-access\.js\?v=20261114-vulcan-fixed-v1/);
-  assert.match(html,/rocket-launch-live\/app\.js\?v=20261113-rust-national-v1-map-tiles-v2-playalinda-fixed-20261114-weather-link-sky-trend-glance/);
+  assert.match(html,/rocket-launch-live\/app\.js\?v=20261113-rust-national-v1-map-tiles-v2-playalinda-fixed-20261114-weather-link-sky-trend-glance-operator/);
   assert.doesNotMatch(modelJs,/Security access not yet confirmed|opening not confirmed|do not assume entry/i);
   assert.doesNotMatch(js,/do not assume entry/i);
 });

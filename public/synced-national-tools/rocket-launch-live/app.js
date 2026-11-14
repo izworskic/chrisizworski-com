@@ -782,8 +782,20 @@
     }
     const videos = Array.isArray(desk.videos) ? desk.videos.slice(0, 5) : [];
     if (videos.length) videos.forEach(item => root.appendChild(videoCard(item, false)));
-    else root.appendChild(el('p', 'rl-watch-empty',
-      'No webcast linked to this flight yet. The operator may announce one as launch day approaches.'));
+    else {
+      // No stream on the calendar yet. Launch companies post their own
+      // streams, often only shortly before liftoff, so send people there.
+      const op=desk.operator;
+      const go=op?.url?anchor(op.url,'Watch on '+(op.short||'the launch company')+'’s site','rl-watch-operator-cta'):null;
+      if(go){
+        const box=el('div','rl-watch-operator-first');
+        box.appendChild(el('p','rl-watch-empty','No stream is listed on the public launch calendar yet. '+
+          (op.short||'The launch company')+' posts its own launch stream, often only shortly before liftoff.'));
+        box.appendChild(go);
+        root.appendChild(box);
+      }else root.appendChild(el('p', 'rl-watch-empty',
+        'No webcast linked to this flight yet. The operator may announce one as launch day approaches.'));
+    }
     const cameras = data.selectedRegion === 'florida' && Array.isArray(desk.cameras) ?
       desk.cameras : [];
     if (cameras.length) cameras.forEach(item => general.appendChild(videoCard(item, true)));
@@ -1129,6 +1141,7 @@
       trend&&(trend.verdict===2||trend.verdict===4)?'warn':'');
     const m=data.mediaDesk||{};
     put('rl-glance-watch',m.primaryVideo?'Launch stream listed':
+      m.operator?.short&&m.launchId===launch?.id?'Stream on '+m.operator.short+'’s site':
       (m.cameras||[]).length?(m.cameras.length+' spaceport camera'+(m.cameras.length===1?'':'s')):
       'Streams and cameras');
     put('rl-glance-status',launch?.status||'Check the change log');
