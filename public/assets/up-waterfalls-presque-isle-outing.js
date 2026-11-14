@@ -51,7 +51,8 @@
   }
   section.querySelectorAll('[data-presque-preset]').forEach(button=>button.addEventListener('click',()=>{
     const key=button.dataset.presquePreset;
-    const result=assess(key,cards,currentIds(),input?.value||'');
+    const selected=currentIds(),original=assess(key,cards,selected,input?.value||'');
+    const result=window.SharedItineraryEngine?.vetoApproved?.(original,{ids:PRESETS[key],cards,selected,date:input?.value||'',season:key==='circuit'?1:0})||original;
     if(!result.ok){window.UPWaterfallMetrics?.plan(key,'blocked',0);setFeedback(result.reason);feedback.focus();return;}
     for(const id of result.missing)cards.get(id).querySelector('.save').click();
     window.UPWaterfallMetrics?.plan(key,result.missing.length?'added':'already_saved',result.missing.length);
