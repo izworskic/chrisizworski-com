@@ -127,7 +127,7 @@
     const kscMatched=match&&deck.ksc?.officialEventMatched===true&&
       regional.kscViewing?.state==='matched'&&isOfficial(regional.kscViewing.sourceUrl);
     let note=playalinda?playalinda.note:npsClosed?
-      'NPS reports a restriction affecting the referenced Playalinda viewing area. Follow the current notice and choose another public site.':
+      'NPS reports a restriction affecting the referenced Playalinda viewing area. Do not use it. Follow the current notice and choose another public site.':
       npsChecked?
       'NPS alerts were checked for Playalinda, but no launch-specific gate opening has been certified. The park can fill or close for NASA operations.':
       'Playalinda may close for a launch, including parking lots and the entrance road. Check the National Park Service before driving.';
