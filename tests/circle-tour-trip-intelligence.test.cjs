@@ -77,6 +77,8 @@ test('interpretive ten-day guide has unique, properly attributed destination pho
  assert.equal(Object.keys(story.days).length,10);
  assert.equal((page.match(/<figure class="day-photo">/g)||[]).length,10);
  assert.equal((page.match(/<figure class="hero-photo">/g)||[]).length,1);
+ assert.ok(story.hero.src.startsWith('/assets/circle-tour/photos/'));
+ assert.ok(fs.statSync('public'+story.hero.src).size>5000,'Missing self-hosted hero photograph');
  assert.equal((page.match(/<figcaption>/g)||[]).length,11);
  assert.equal((page.match(/class="photo-credit"/g)||[]).length,11);
  assert.equal((page.match(/loading="lazy" decoding="async" referrerpolicy="no-referrer"/g)||[]).length,10);
@@ -90,6 +92,12 @@ test('interpretive ten-day guide has unique, properly attributed destination pho
  for(let i=1;i<=10;i++){
    const day=story.days[String(i)];
    assert.ok(day.photo.by&&day.photo.licenseUrl.startsWith('https://creativecommons.org/'));
+   assert.ok(day.photo.src.startsWith('/assets/circle-tour/photos/'));
+   const jpeg=fs.readFileSync('public'+day.photo.src);
+   assert.ok(jpeg.length>5000,'Locally served photo too small '+day.photo.src);
+   assert.deepEqual([...jpeg.subarray(0,3)],[255,216,255],'Not a real JPEG');
+   assert.ok(day.photo.sourceSrc.startsWith('https://'),'Lost original source image URL');
+
    assert.ok(page.includes(day.photo.file.replace(/&/g,'&amp;')));
    assert.ok(page.includes(escapedForHtml(day.fieldNote)),'Missing day field note '+i);
    assert.ok(page.includes(escapedForHtml(day.focus)),'Missing day decision '+i);
