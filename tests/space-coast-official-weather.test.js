@@ -81,12 +81,24 @@ test('a one-day launch slip never inherits the previous primary-window PoV',()=>
   assert.notEqual(p.status,'mission-matched-current');
   assert.equal(p.officialUrl,null);
 });
-test('an overdue monitor cannot continue presenting an old official PoV as current',()=>{
+test('an old official PoV is never presented as current, whatever the monitor label',()=>{
   const first=model.ingest(state(),{discoveryStatus:'ok',inspected:1,verified:1,reports:[report()],failed:0},[mission],NOW);
+  // Three hours on: a normal gap between real GitHub runs, so not "overdue",
+  // but the PDF was not re-verified and must not be shown as current.
   const p=model.missionForecast(mission,first.state,NOW+3*3600000);
-  assert.equal(p.health.status,'overdue');
+  assert.equal(p.health.status,'ok');
   assert.equal(p.povPercent,null);
   assert.notEqual(p.status,'mission-matched-current');
+  const late=model.missionForecast(mission,first.state,NOW+13*3600000);
+  assert.equal(late.health.status,'overdue');
+  assert.equal(late.povPercent,null);
+});
+test('overdue means the monitor missed its real schedule, not one hourly slot',()=>{
+  const first=model.ingest(state(),{discoveryStatus:'ok',inspected:1,verified:0,reports:[],failed:0},[mission],NOW);
+  assert.equal(model.HEALTH_OVERDUE_MS,12*3600000);
+  assert.equal(model.FRESH_MS,90*60000);
+  assert.equal(model.publicHealth(first.state,NOW+11*3600000).status,'ok');
+  assert.equal(model.publicHealth(first.state,NOW+12*3600000+1).status,'overdue');
 });
 test('a healthy monitor cannot reuse an unrefreshed mission PDF',()=>{
   const first=model.ingest(state(),{discoveryStatus:'ok',inspected:1,verified:1,failed:0,reports:[report()]},[mission],NOW);
@@ -106,7 +118,7 @@ test('old and incorrect monitoring sources cannot publish a probability',()=>{
   assert.equal(first.accepted,0);
   assert.equal(first.rejected,1);
   assert.equal(model.missionForecast(mission,first.state,NOW).povPercent,null);
-  assert.equal(model.publicHealth(first.state,NOW+2*3600000).status,'overdue');
+  assert.equal(model.publicHealth(first.state,NOW+13*3600000).status,'overdue');
 });
 test('discovery route and source-health status cannot be injected through the API',()=>{
   const clean = model.cleanSourceHealth([
