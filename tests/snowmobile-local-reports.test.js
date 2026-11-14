@@ -11,21 +11,21 @@ const html=(condition,reportDate,groomed)=>`<html><nav>Groomer Reports</nav><sec
 const stale=html('Excellent','March 12th, 2026','January 01st, 1970');
 const current=html('Good','December 15th, 2026','December 14th, 2026');
 
-test('eighteen source URLs resolve to six separate geographically scoped MISORVA rosters',()=>{
+test('nineteen verified sources resolve to six geographically scoped operator rosters',()=>{
  const keys=['eastern-up','keweenaw-copper-country','central-western-up','northeast-sunrise','northwest-michigan','west-michigan'];
  assert.deepEqual(Object.keys(desk.CLUBS),keys);
  const urls=new Set();
  for(const key of keys){
   const records=desk.roster(key);
-  assert.equal(records.length,3,key);
+  assert.equal(records.length,key==='keweenaw-copper-country'?4:3,key);
   for(const r of records){
     assert.ok(r.name.length>3&&r.scope.length>4,key);
-    assert.match(r.url,/^https:\/\/misorva\.org\/trail-reports\/[a-z0-9-]+\/$/);
+    assert.ok(/^https:\/\/misorva\.org\/trail-reports\/[a-z0-9-]+\/$/.test(r.url)||r.url==='https://www.keweenawsnowmobileclub.com/trail-conditions/',key+': '+r.url);
     assert.equal(urls.has(r.url),false,'duplicate regional source '+r.url);
     urls.add(r.url);
   }
  }
- assert.equal(urls.size,18);
+ assert.equal(urls.size,19);
  assert.equal(desk.roster('grayling-gaylord'),null,'existing legacy corridor preserved');
  assert.equal(desk.roster('../eastern-up'),null);
 });
@@ -96,6 +96,51 @@ test('report parser only accepts structured header, not words in archived narrat
  assert.equal(r.condition,null);
  assert.equal(r.reportedAt,'2026-03-12');
 });
+test('an old dated groomer narrative vetoes a newer structured wrapper timestamp',()=>{
+ const source=desk.roster('eastern-up')[0];
+ const conflicting='<html><h1>Sault Snowmobile Association Trail Report</h1><ul><li>Trail Condition: Good</li><li>Last Groomed: November 12th, 2026</li><li>Reported On: November 13th, 2026 @ 2:04pm</li></ul><h2>Groomer Report</h2><p>1/13/25 – all trails are now opened and groomed. This 2025 text is NOT a report for 2026.</p></html>';
+ const parsed=desk.extractHtml(conflicting);
+ assert.equal(parsed.reportedAt,'2026-11-13');
+ assert.equal(parsed.narrativeAt,'2025-01-13');
+ const report=desk.buildReport(source,parsed,nov);
+ assert.equal(report.state,'DATE_CONFLICT');
+ assert.equal(report.dateConflict,true);
+ assert.equal(report.condition,null,'old narrative cannot become an in-season GOOD result');
+ assert.equal(report.groomingFreshness,'NOT_CURRENT','conflicting club timestamp must veto current grooming');
+ assert.equal(report.reportedAt,'2026-11-13','retain auditable source header');
+ assert.equal(report.narrativeAt,'2025-01-13','retain contradictory narrative date');
+ const result=desk.extractHtml(conflicting.replace('1/13/25','11/12/26'));
+ assert.equal(result.narrativeAt,'2026-11-12');
+ assert.equal(desk.buildReport(source,result,nov).state,'RECENT','near-date narrative must not be vetoed');
+});
+test('official Keweenaw club season-ending page is dated local context, never legal open status',()=>{
+ const source=desk.roster('keweenaw-copper-country')[0];
+ assert.equal(source.url,'https://www.keweenawsnowmobileclub.com/trail-conditions/');
+ assert.equal(source.kind,'direct-club');
+ const html='<html><nav>Trail Conditions</nav><h2>Trail Conditions</h2><p>4/1/26</p><p>The season has ended. All trails north of Calumet are closed until spring breakup.</p></html>';
+ const parsed=desk.extractKeweenawHtml(html);
+ assert.deepEqual(parsed,{condition:null,reportedAt:'2026-04-01',lastGroomedAt:null});
+ const report=desk.buildReport(source,parsed,nov);
+ assert.equal(report.state,'STALE');
+ assert.equal(report.condition,null);
+ assert.equal(report.groomingFreshness,'NOT_CURRENT');
+ assert.ok(!('legalOpen'in report)&&!('rideScore'in report));
+ assert.equal(desk.extractKeweenawHtml('<html><p>Trail Conditions: summer says all open</p></html>'),null);
+ assert.equal(desk.parseNumericDate('2/30/26'),null);
+ assert.equal(desk.parseNumericDate('1/13/25'),'2025-01-13');
+});
+test('source reconciliation produces a distinct date-conflict count and does not treat it as recent',async()=>{
+ const records=desk.roster('eastern-up');
+ const conflicting=html('Good','November 13th, 2026','November 13th, 2026').replace('Older posts: GREAT conditions in January 2024','1/13/25 – all trails are now open');
+ const fake=async()=>({ok:true,text:async()=>conflicting});
+ const result=await desk.checkRegion('eastern-up',nov,fake);
+ assert.equal(result.totals.monitored,3);
+ assert.equal(result.totals.conflicts,3);
+ assert.equal(result.totals.recent,0);
+ assert.equal(result.totals.stale,3);
+ for(const r of result.reports)assert.equal(r.state,'DATE_CONFLICT');
+});
+
 function res(){return {status(v){this.code=v;return this;},setHeader(k,v){(this.headers||={})[k]=v;},json(v){this.payload=v;return this;}}}
 test('the report API requires a known region and never alters main DNR route payload',async()=>{
  const original=globalThis.fetch;

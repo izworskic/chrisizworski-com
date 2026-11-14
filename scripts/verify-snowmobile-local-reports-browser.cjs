@@ -51,6 +51,17 @@ const fixture={region:'eastern-up',checkedAt:'2026-11-13T21:00:00Z',reports,tota
    assert.equal(await page.locator('#routeStops').isHidden(),true,'local reports must not create route stops');
    const bbox=await page.locator('#localClubReports .club-wire-card').first().boundingBox();
    assert.ok(bbox&&bbox.x>=0&&bbox.x+bbox.width<=width+3,name+' report cards exceed viewport');
+   // A recently stamped wrapper over last year's narrative must not show
+   // a green/current condition. The visitor must see both dates.
+   await page.unroute('**/api/snowmobile-local-reports**');
+   const conflictFixture={...fixture,reports:fixture.reports.map((r,i)=>i===0?{...r,state:'DATE_CONFLICT',reportedAt:'2026-11-13',reportAgeDays:0,narrativeAt:'2025-01-13',dateConflict:true,condition:null,groomingFreshness:'NOT_CURRENT'}:r),totals:{...fixture.totals,recent:1,stale:1,conflicts:1}};
+   await page.route('**/api/snowmobile-local-reports**',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(conflictFixture)}));
+   await page.reload({waitUntil:'domcontentloaded',timeout:30000});
+   await page.waitForFunction(()=>document.querySelector('#localClubReports .club-wire-card')?.textContent?.includes('Report header and narrative dates disagree'),{timeout:15000});
+   const flagged=await page.locator('#localClubReports .club-wire-card').first().innerText();
+   assert.match(flagged,/Older narrative date: Jan 13, 2025/);
+   assert.doesNotMatch(flagged,/Club condition:\\s*Good/,'conflicting source must never appear as current GOOD');
+   assert.match(await page.locator('#localClubStatus').innerText(),/report header\/narrative date conflict requires manual review/i);
    // Induce an upstream error after reload, ensure no guessed stale HTML.
    await page.unroute('**/api/snowmobile-local-reports**');
    await page.route('**/api/snowmobile-local-reports**',route=>route.fulfill({status:503,contentType:'application/json',body:'{"error":"MISORVA down"}'}));
