@@ -30,7 +30,7 @@ function render(data){
  if(!current){status.textContent='Choose a waterfall to see geographically nearby destinations.';return;}
  const miles=Number(radius.value);
  const index=new Map(data.locations.map(x=>[x.id,x]));
- const matches=(data.nearby[current.id]||[]).filter(x=>x.miles<=miles&&index.has(x.id)&&cards.has(x.id));
+ const matches=(data.nearby[current.id]||[]).filter(x=>x.miles<=miles&&index.has(x.id)&&cards.has(x.id)&&(!window.SharedItineraryEngine||window.SharedItineraryEngine.nearbyEligible(cards.get(x.id),x.miles,miles)));
  status.textContent=matches.length+' curated waterfall'+(matches.length===1?'':'s')+' within '+miles+' straight-line miles of '+current.name+'. These are geographic leads, not a driving itinerary or open-trail report.';
  if(!matches.length){output.appendChild(element('p','nearby-empty','No other access-reviewed stops appear in this radius. Try 50 miles or choose another waterfall.'));return;}
  for(const match of matches.slice(0,6)){
