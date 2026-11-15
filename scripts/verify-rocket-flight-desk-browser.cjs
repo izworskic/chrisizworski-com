@@ -396,39 +396,31 @@ const whenReady=page=>page.waitForFunction(id=>
   await page.route('https://*.basemaps.cartocdn.com/**',route=>route.abort());
   await page.goto(base+'?region=florida&launchId='+A,{waitUntil:'domcontentloaded'});
   await page.waitForFunction(id=>document.querySelector('#rl-flight-desk')?.dataset.launchId===id,A);
-  await page.waitForFunction(mismatch=>{
-    const text=document.querySelector('#rl-access-answer')?.textContent||'';
-    return mismatch?text.includes('another mission, so no access status was adopted'):
-      text.includes('Florida notices checked.');
-  },scenario.mismatch,{timeout:18000});
-  const summary=await page.locator('#rl-access-summary').innerText();
-  assert(summary.includes('Titusville')&&summary.includes('Space View Park'),
-    scenario.name+' still substitutes an engine description for an answer');
+  // Fixture A flies from SLC-40, so the standing NPS Playalinda rule
+  // (public/assets/playalinda-rule.js) decides access as fixed text. A live
+  // NPS closure or a mismatched regional response must not change it.
+  const VERDICT='Yes, Playalinda Beach lots 4-7 are open for viewing this launch. Park only in a beach parking lot. Vistas are closed during the launch, and the beach at parking area #1 is closed 1/4 mile south to the KSC boundary. Arrive before 2:00 PM EST: Playalinda closes to inbound traffic 30 minutes before launch.';
+  await page.waitForFunction(v=>(document.querySelector('#rl-access-answer')?.textContent||'').includes(v),
+    VERDICT,{timeout:18000});
+  const summary=await page.locator('#rl-access-summary').textContent();
+  assert(summary.includes(VERDICT)&&summary.includes('Jetty Park is the alternate'),
+    scenario.name+' summary lost the standing Playalinda verdict');
   assert((await page.locator('#rl-flight-next-link').getAttribute('href'))==='#rl-viewing',
     scenario.name+' should compare choices on national tool');
   assert(!(await page.locator('#rl-access-grade').innerText()).includes('engine'),
     scenario.name+' leaked technical implementation as visitor status');
-  if(scenario.mismatch){
-   assert(!(await page.locator('#rl-access-grade').innerText()).includes('NPS restriction'),
-    'mission-mismatched beach closure leaked from another launch');
-   assert((await page.locator('#rl-access-answer').innerText()).includes('another mission, so no access status was adopted'),
-    'wrong mission must remain unresolved');
-  }else if(scenario.closed){
-   assert((await page.locator('#rl-access-grade').innerText()).includes('NPS restriction'),
-    'NPS closure did not control Florida access response');
-   assert((await page.locator('#rl-sites .rl-site-card[data-state="closed"]').count())>=1,
-    'closed Playalinda lot group was omitted');
-  }else{
-   assert((await page.locator('#rl-access-grade').innerText()).includes('check access'),
-    'source-checked park reported as open without mission confirmation');
-  }
+  assert((await page.locator('#rl-access-grade').innerText()).includes('arrive before 2:00 PM EST'),
+    scenario.name+' status chip lost the computed cutoff');
+  const playalindaCard=page.locator('#rl-sites .rl-site-card').filter({hasText:'Playalinda'}).first();
+  assert((await playalindaCard.textContent()).includes(VERDICT),scenario.name+' Playalinda card verdict differs');
+  assert(!/security access not yet confirmed|opening not confirmed|do not assume entry|cutoff is not confirmed/i
+    .test(await page.locator('body').innerText()),scenario.name+' Playalinda hedging returned');
   const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
   assert(overflow<=2,scenario.name+' overflow '+overflow);
   const screenshot=scenario.name+'-access-decision.png';
   await page.locator('.rl-decision-grid').screenshot({path:path.join(out,screenshot),animations:'disabled'});
   report.screenshots.push(screenshot);
-  report.cases.push({case:scenario.name,evidence:scenario.mismatch?'mismatch-discarded':
-    scenario.closed?'official-closure-applied':'entry-remains-unverified',overflowPx:overflow});
+  report.cases.push({case:scenario.name,evidence:'standing-nps-rule',overflowPx:overflow});
   await context.close();
  }
  floridaRich=false;floridaNpsClosure=false;floridaMismatch=false;
