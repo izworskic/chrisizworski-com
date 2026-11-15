@@ -185,3 +185,16 @@ test('route-specific closure verification fails closed on a missing or stale rou
  assert.match(h.elements.get('#routeResult').innerHTML,/Route data assembled:/);
  assert.doesNotMatch(h.elements.get('#routeResult').innerHTML,/Official DNR closure feed checked; other restrictions/);
 });
+
+test('stale region must not show a forecast window or cached segment scores',()=>{
+ const h=harness();
+ const outlook={innerHTML:''},sections={innerHTML:''};
+ h.elements.set('#outlookCards',outlook);h.elements.set('#corridorSections',sections);
+ h.context.window.SnowmobileComparison={bundleFresh:()=>false};
+ h.run("renderOutlook({season:{active:true},route:{score:90},timing:{best:{name:'Tonight',score:95},windows:[{name:'Tonight',score:95}]}})");
+ assert.match(outlook.innerHTML,/Weather timing unavailable/);
+ assert.doesNotMatch(outlook.innerHTML,/95\/100 weather window/);
+ h.run("renderSections({legacyCorridor:true,sections:[{label:'Grayling',score:99,band:'GOOD'}]})");
+ assert.match(sections.innerHTML,/Segment conditions stale/);
+ assert.doesNotMatch(sections.innerHTML,/99\/100/);
+});
