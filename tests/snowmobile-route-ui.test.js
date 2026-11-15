@@ -165,10 +165,10 @@ test('evidence receipt keeps stale or absent surface evidence separate from offi
 test('fresh report receipt identifies dated local sources without promising grooming',()=>{
  const h=harness(),host={innerHTML:''};h.elements.set('#trustReceipt',host);
  h.context.window.SnowmobileComparison={bundleFresh:()=>true};
- h.run("renderTrustReceipt({season:{active:true},closures:{verified:true},route:{routeState:'OK',score:70},legacyCorridor:true,reports:{grayling:{reportedAt:'2026-11-13T15:00:00Z',freshness:{state:'RECENT'}},gaylord:{reportedAt:null,freshness:{state:'UNKNOWN'}}},weather:{generatedAt:'2026-11-14T12:00:00Z'}})");
+ h.run("renderTrustReceipt({season:{active:true},closures:{verified:true},route:{routeState:'OK',score:70},legacyCorridor:true,reports:{grayling:{reportedAt:'2026-11-13T15:00:00Z',reportedRaw:'Nov 13 2026',freshness:{state:'RECENT'}},gaylord:{reportedAt:null,freshness:{state:'UNKNOWN'}}},weather:{generatedAt:'2026-11-14T12:00:00Z'}})");
  assert.match(host.innerHTML,/DNR FEED CHECKED/);
  assert.match(host.innerHTML,/LOCAL EVIDENCE SCORED/);
- assert.match(host.innerHTML,/Grayling:/);
+ assert.match(host.innerHTML,/Grayling: Nov 13 2026/);
  assert.match(host.innerHTML,/Gaylord: date unavailable/);
  assert.match(host.innerHTML,/Grooming on your exact route/);
  assert.match(host.innerHTML,/NOT FIELD VERIFIED/);
