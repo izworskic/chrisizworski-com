@@ -42,8 +42,9 @@ function render(d){
   $('#grooming').textContent=d.grooming?.label||'Not verified';
   $('#forecastSnow').textContent=forecastSnowLabel(d);
   $('#routeStatus').textContent=routeStatusLabel(d);
-  $('#sourceAge').textContent=new Date(d.generatedAt).toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});
+  $('#sourceAge').textContent=formatEvidenceTime(d.generatedAt);
   $('#sourceLine').textContent=sourceLine(d);
+  renderTrustReceipt(d);
   $('#drive').innerHTML=active?driveVerdict(d):'<strong>Not a riding verdict yet.</strong> In-season condition scoring activates Dec. 1.';
   const sn=$('#seasonNote'); if(sn)sn.hidden=active;
   renderSections(d);renderOutlook(d);renderWhy(d);renderContradictions(d);
@@ -100,7 +101,58 @@ function agoTime(iso){
   if(!iso)return'no dated source timestamp';const min=Math.max(0,Math.round((Date.now()-new Date(iso).getTime())/60000));
   if(!Number.isFinite(min))return'timestamp unknown';if(min<2)return'just now';if(min<60)return`${min}m ago`;const h=Math.round(min/60);if(h<48)return`${h}h ago`;return`${Math.round(h/24)}d ago`;
 }
-function sourceLine(d){const s=d.sourceSummary;if(!s)return'Source freshness unavailable';return `${s.label||((s.decisionFeedCount||0)+' decision feeds')} · newest dated evidence ${agoTime(s.newestDatedSource)}`}
+function sourceLine(d){
+  const s=d.sourceSummary;
+  if(!s)return'Source coverage unavailable — check original reports and DNR notices';
+  return (s.label||((s.decisionFeedCount||0)+' decision feeds'))+' · A data fetch is not a trail observation';
+}
+function formatEvidenceTime(iso){
+  const value=Date.parse(String(iso||''));
+  if(!Number.isFinite(value)||value>Date.now()+300000)return'date unavailable';
+  return new Intl.DateTimeFormat('en-US',{timeZone:'America/Detroit',month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'}).format(new Date(value));
+}
+function trustTile(title,state,detail,url,linkText){
+  return '<article class="corridor-section"><span>'+esc(title)+'</span><strong>'+esc(state)+'</strong><small>'+esc(detail)+'</small>'+
+    (url?'<a href="'+esc(url)+'" target="_blank" rel="noopener">'+esc(linkText||'Check original source')+'</a>':'')+'</article>';
+}
+// Independent evidence receipt. Fetch freshness does not imply surface-report freshness.
+function renderTrustReceipt(d){
+  const host=$('#trustReceipt');if(!host)return;
+  const fresh=window.SnowmobileComparison?.bundleFresh(d)===true;
+  const active=d.season?.active===true;
+  const closure=d.closures?.verified===true;
+  const broken=d.route?.routeState==='ROUTE_BROKEN';
+  const dnrState=!fresh?'STALE / UNKNOWN':!closure?'NOT VERIFIED':broken?'MATCHED CLOSURE':'DNR FEED CHECKED';
+  const dnrDetail=!fresh?'This region bundle is too old to confirm current restrictions.':
+    !closure?'The official temporary-closure layer was not confirmed; do not presume an open trail.':
+    broken?'An official closure matched a required mapped segment; do not follow this corridor.':
+    'No matched closure in the fetched layer. This does not clear every route, sign or access restriction.';
+  const reports=d.legacyCorridor?[['Grayling',d.reports?.grayling],['Gaylord',d.reports?.gaylord]]:[];
+  const reportDates=reports.map(function(pair){
+    const report=pair[1];
+    return pair[0]+': '+(report?.reportedAt?formatEvidenceTime(report.reportedAt):'date unavailable')+
+      ' ('+String(report?.freshness?.state||'freshness unknown').toLowerCase()+')';
+  }).join('; ');
+  const hasScore=active&&fresh&&closure&&Number.isFinite(d.route?.score)&&!broken;
+  const surfaceState=!active?'OUT OF SEASON':!fresh?'STALE / UNKNOWN':hasScore?'LOCAL EVIDENCE SCORED':'NO VERIFIED ROUTE SCORE';
+  const surfaceDetail=!active?'Designated season starts December 1. Older club reports do not describe today.':
+    !fresh?'The bundle has aged out. Do not reuse its condition score.':
+    hasScore?'A local surface report supports the displayed score; verify its date and coverage. '+reportDates:
+    d.legacyCorridor?'Current verified surface coverage is incomplete. '+reportDates:
+    'This region has local club links, but no current route-wide surface evidence used to score the trails.';
+  const weatherAvailable=weatherPoints(d).length>0;
+  const weatherState=!fresh?'NOT CURRENT':weatherAvailable?'WEATHER CONTEXT ONLY':'NOT VERIFIED';
+  const weatherDetail=weatherAvailable&&fresh?'NWS weather can flag rain, thaw and incoming snow. It cannot verify a groomed trail base.':
+    'Current NWS weather evidence is unavailable here. Never infer surface quality from a forecast.';
+  host.innerHTML='<h2>What is actually verified?</h2>'+
+    '<p class="small">This is a source receipt, not a field inspection. The timestamp above is when our data was assembled, <strong>not</strong> when a club checked the trail. Check individual report dates before towing.</p>'+
+    '<div class="corridor-sections">'+
+    trustTile('Official DNR restrictions',dnrState,dnrDetail,'https://www.michigan.gov/dnr/things-to-do/snowmobiling/where','Open official trail map')+
+    trustTile('Local trail surface',surfaceState,surfaceDetail,'https://www.michigan.gov/dnr/things-to-do/snowmobiling/trail-reports','Check dated club reports')+
+    trustTile('Grooming on your exact route','NOT FIELD VERIFIED','A named DNR grooming sponsor is a contact, not proof of recent grooming. Check the dated report covering your actual trail.','https://misorva.org/trail-report/','Find the responsible club')+
+    trustTile('Snowfall and thaw',weatherState,weatherDetail,'https://www.weather.gov/','Check NWS')+
+    '</div><p class="small"><strong>Still to confirm:</strong> trail signage and local restrictions, actual surface conditions, and whether <a href="#parkingPlanner">trailer parking</a> is plowed, permitted and connected. Recheck when you arrive.</p>';
+}
 function routeStatusLabel(d){
   if(!d.season?.active)return'Off season';
   if(d.route?.routeState==='ROUTE_BROKEN')return'Official closure matched';
@@ -270,12 +322,12 @@ function onMapClick(e){
   invalidateRoute();const marker=MAP&&window.L?L.circleMarker(e.latlng,{radius:9,color:'#2a1c0a',weight:2,fillColor:ROUTE_MARK_COLOR,fillOpacity:.95,interactive:false}).addTo(MAP):null;
   ROUTE_MARKERS.push(marker);ROUTE_POINTS.push({...e.latlng,junctionId:e.junction.id,component:e.junction.component,label:e.junction.label});marker?.bindTooltip?.(String(ROUTE_POINTS.length),{permanent:true,direction:'top',className:'route-stop-label'});syncRouteControls();draftHint();
 }
-function routeResultHtml(route){
+function routeResultHtml(route,verification={}){
   if(!route)return '<p><strong>Route unavailable.</strong> The routing service did not return a usable result.</p>';
   if(!route.routable)return `<p><strong>No complete route drawn.</strong> ${esc(route.reason||'Your stops are not connected by mapped, open trail.')}</p><p class="small">Use Edit stops or Undo last stop to adjust your route.</p>`;
   const worst=route.worstSegmentOnRoute;const worstLine=worst&&Number.isFinite(worst.score)?`<div class="small">Weakest scored segment: <span class="badge ${bandClass(worst.band)}">${esc(worst.band)}</span> ${esc(worst.trailNetwork||worst.segmentId)} · ${esc(worst.score)}/100. Unscored segments remain unverified.</div>`:'<div class="small">Trail conditions are unverified. Mapped distance does not establish ride quality.</div>';
   const closedNote=route.closedSegmentsExcludedFromRegion?`<div class="small">${route.closedSegmentsExcludedFromRegion} known closed segments excluded from routing.</div>`:'';
-  const evidence=window.SnowmobileRoutePicker?.routeEvidence(route,{closureVerified:DATA?.closures?.verified===true,seasonActive:DATA?.season?.active===true});
+  const evidence=window.SnowmobileRoutePicker?.routeEvidence(route,{closureVerified:verification.closureVerified===true,seasonActive:verification.seasonActive===true});
   if(evidence?.inconsistentClosedSegment)return '<p><strong>Route rejected.</strong> A closed trail was found in the route response. Verify the official DNR map.</p>';
   const evidenceLine=evidence?`<div class="route-evidence"><strong>Distance planning, not a ride recommendation.</strong><span>${evidence.unverifiedSegments} of ${route.segments?.length||0} traversed parts have no verified condition score.</span><span>${evidence.closureVerified?'Official DNR closure feed checked; other restrictions may still apply.':'Current DNR closure verification unavailable. Do not infer trail access.'}</span><span>${evidence.seasonActive?'In-season dates alone do not establish rideability.':'Outside designated riding season. This is a future-trip plan only.'}</span></div>`:'';
   const legs=(route.legs||[]).map(l=>`<li><strong>Stop ${l.fromStop} → ${l.toStop}:</strong> ${esc(l.distanceMiles)} mi · about ${esc(formatDuration(l.estimatedMinutes))}<br>${esc(l.trailsVia.join(' → '))}<br><span class="small">Junction snap: ${esc(l.startSnapMiles)} mi at start, ${esc(l.endSnapMiles)} mi at finish.</span></li>`).join('');
@@ -345,12 +397,15 @@ async function computeRoute(){
   const points=ROUTE_POINTS.map(p=>`${p.lat.toFixed(5)},${p.lng.toFixed(5)}`).join(';');
   try{
     const r=await fetch(`/api/snowmobile-route?region=${encodeURIComponent(DATA.key)}&points=${encodeURIComponent(points)}`,{signal:controller.signal});const j=await r.json();if(requestId!==ROUTE_REQUEST_ID)return;if(!r.ok)throw new Error(j.error||j.detail||String(r.status));
-    const exportContext={route:j.route,stops:ROUTE_POINTS.map(p=>({lat:p.lat,lng:p.lng,label:p.label})),region:DATA.key,generatedAt:j.generatedAt,closureVerified:j.closureVerification===true,seasonActive:DATA.season?.active===true};
-    const rejected=window.SnowmobileRoutePicker?.routeEvidence(j.route,{closureVerified:j.closureVerification===true,seasonActive:DATA.season?.active===true})?.inconsistentClosedSegment===true;
+    const routeFresh=window.SnowmobileComparison?.bundleFresh({generatedAt:j.generatedAt})===true;
+    const routeClosureVerified=routeFresh&&j.closureVerification===true;
+    const routeSeasonActive=j.season?.active===true;
+    const exportContext={route:j.route,stops:ROUTE_POINTS.map(p=>({lat:p.lat,lng:p.lng,label:p.label})),region:DATA.key,generatedAt:j.generatedAt,closureVerified:routeClosureVerified,seasonActive:routeSeasonActive};
+    const rejected=window.SnowmobileRoutePicker?.routeEvidence(j.route,{closureVerified:routeClosureVerified,seasonActive:routeSeasonActive})?.inconsistentClosedSegment===true;
     const canExport=!rejected&&window.SnowmobileRouteExport?.validate(j.route,exportContext.stops)?.ok===true;
     LAST_ROUTE_EXPORT=canExport?exportContext:null;
-    host.innerHTML=(j.closureVerification===true?'':'<p><strong>Distance planning only.</strong> Current closure verification is unavailable. Confirm access with DNR before riding.</p>')+(DATA.season?.active===false?'<p><strong>Off-season:</strong> this is a future-trip plan, not permission to ride now.</p>':'')+routeResultHtml(j.route)+(canExport?routeExportUi():'');
-    if(j.route?.routable&&MAP&&window.L&&!window.SnowmobileRoutePicker?.routeEvidence(j.route,{closureVerified:j.closureVerification===true,seasonActive:DATA.season?.active===true})?.inconsistentClosedSegment&&j.route.geometry?.coordinates?.length>1){const latlngs=j.route.geometry.coordinates.map(([lon,lat])=>[lat,lon]);ROUTE_LINE=L.polyline(latlngs,{color:ROUTE_MARK_COLOR,weight:6,opacity:.95,dashArray:'1 8',lineCap:'round',interactive:false}).addTo(MAP);try{MAP.fitBounds(ROUTE_LINE.getBounds(),{padding:[25,25]});}catch{}}
+    host.innerHTML=(routeClosureVerified?'':'<p><strong>Distance planning only.</strong> Current closure verification is unavailable, old or failed. Confirm access with DNR before riding.</p>')+(!routeSeasonActive?'<p><strong>Off-season:</strong> this is a future-trip plan, not permission to ride now.</p>':'')+'<p class="small"><strong>Route data assembled:</strong> '+esc(formatEvidenceTime(j.generatedAt))+' (not a trail inspection or club report date).</p>'+routeResultHtml(j.route,{closureVerified:routeClosureVerified,seasonActive:routeSeasonActive})+(canExport?routeExportUi():'');
+    if(j.route?.routable&&MAP&&window.L&&!window.SnowmobileRoutePicker?.routeEvidence(j.route,{closureVerified:routeClosureVerified,seasonActive:routeSeasonActive})?.inconsistentClosedSegment&&j.route.geometry?.coordinates?.length>1){const latlngs=j.route.geometry.coordinates.map(([lon,lat])=>[lat,lon]);ROUTE_LINE=L.polyline(latlngs,{color:ROUTE_MARK_COLOR,weight:6,opacity:.95,dashArray:'1 8',lineCap:'round',interactive:false}).addTo(MAP);try{MAP.fitBounds(ROUTE_LINE.getBounds(),{padding:[25,25]});}catch{}}
     ROUTE_BUSY=false;setRouteMode(false);setRouteHint(j.route?.routable?'Route built. Edit stops to adjust it, or Start over for a new route.':'These stops could not form a complete route. Edit stops or undo the last stop.');scrollRouteElement(host);track('snowmobile_route_computed',{region:DATA.key,routable:Boolean(j.route?.routable),stop_count:ROUTE_POINTS.length,miles:j.route?.distanceMiles??null});
   }catch(e){if(requestId!==ROUTE_REQUEST_ID)return;host.innerHTML=`<p><strong>Route unavailable.</strong> ${esc(e.name==='AbortError'?'The request timed out. Your stops are saved; choose Build route to retry.':e.message||'Please try again.')}</p>`;ROUTE_BUSY=false;setRouteMode(true);setRouteHint('Your stops are saved. Choose Build route to retry, or edit your stops.');track('snowmobile_route_error',{region:DATA.key,message:String(e.message||e).slice(0,120)});}
   finally{clearTimeout(timer);if(requestId===ROUTE_REQUEST_ID){ROUTE_ABORT=null;ROUTE_BUSY=false;syncRouteControls();}}
