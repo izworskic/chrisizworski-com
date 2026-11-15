@@ -1,0 +1,164 @@
+{
+  "version": 1,
+  "reviewed": "2026-11-14",
+  "routeStart": "1",
+  "routeEnd": "30",
+  "overnights": {
+    "3": {
+      "label": "Bayfield, Wisconsin",
+      "directionsQuery": "Bayfield, Wisconsin, USA",
+      "kind": "gateway",
+      "caution": "Good walking waterfront and boat departure area; confirm operator sailing and lodging"
+    },
+    "4": {
+      "label": "Ashland, Wisconsin",
+      "directionsQuery": "Ashland, Wisconsin, USA",
+      "kind": "gateway",
+      "caution": "Reasonable overnight services; confirm accommodations"
+    },
+    "5": {
+      "label": "Ironwood, Michigan",
+      "directionsQuery": "Ironwood, Michigan, USA",
+      "kind": "gateway",
+      "caution": "Roadside lodging base for western Upper Peninsula stops"
+    },
+    "6": {
+      "label": "Silver City / Porcupine Mountains area",
+      "directionsQuery": "Silver City, Michigan, USA",
+      "kind": "limited",
+      "caution": "Small accommodation area; park lodging and season require direct checks"
+    },
+    "7": {
+      "label": "Ontonagon, Michigan",
+      "directionsQuery": "Ontonagon, Michigan, USA",
+      "kind": "gateway",
+      "caution": "Town base for Porkies; private stays not confirmed"
+    },
+    "8": {
+      "label": "Copper Harbor, Michigan",
+      "directionsQuery": "Copper Harbor, Michigan, USA",
+      "kind": "limited",
+      "caution": "Actual mapped stop is Copper Harbor, not Houghton; limited/seasonal lodging and a real Keweenaw detour"
+    },
+    "9": {
+      "label": "L'Anse / Baraga, Michigan",
+      "directionsQuery": "L'Anse, Michigan, USA",
+      "kind": "gateway",
+      "caution": "L'Anse / Baraga service communities; check availability"
+    },
+    "10": {
+      "label": "Marquette, Michigan",
+      "directionsQuery": "Marquette, Michigan, USA",
+      "kind": "gateway",
+      "caution": "Useful harbor town with lodging and food"
+    },
+    "11": {
+      "label": "Munising, Michigan",
+      "directionsQuery": "Munising, Michigan, USA",
+      "kind": "gateway",
+      "caution": "Pictured Rocks gateway; operator bookings and seasonal demand matter"
+    },
+    "12": {
+      "label": "Paradise / Tahquamenon Falls area",
+      "directionsQuery": "Paradise, Michigan, USA",
+      "kind": "limited",
+      "caution": "Falls are in the park, lodging is in Paradise or nearby; check hours and distance"
+    },
+    "13": {
+      "label": "Sault Ste. Marie, Michigan",
+      "directionsQuery": "Sault Ste. Marie, Michigan, USA",
+      "kind": "gateway",
+      "caution": "U.S. side overnight; use live lock reports separately"
+    },
+    "14": {
+      "label": "Sault Ste. Marie, Ontario",
+      "directionsQuery": "Sault Ste. Marie, Ontario, Canada",
+      "kind": "gateway",
+      "caution": "Canada side overnight; official border crossing requirements apply"
+    },
+    "15": {
+      "label": "Lake Superior Provincial Park / Agawa corridor",
+      "directionsQuery": "Agawa Bay, Ontario, Canada",
+      "kind": "limited",
+      "caution": "Camping/park-based options can be seasonal and unavailable; no town lodging promised"
+    },
+    "16": {
+      "label": "Wawa, Ontario",
+      "directionsQuery": "Wawa, Ontario, Canada",
+      "kind": "gateway",
+      "caution": "Highway 17 overnight town after the eastern Superior shore"
+    },
+    "17": {
+      "label": "White River, Ontario",
+      "directionsQuery": "White River, Ontario, Canada",
+      "kind": "limited",
+      "caution": "Small Highway 17 community; independently confirm suitable overnight facilities"
+    },
+    "18": {
+      "label": "Marathon, Ontario",
+      "directionsQuery": "Marathon, Ontario, Canada",
+      "kind": "gateway",
+      "caution": "Highway 17 overnight town; Pukaskwa day-use access is a separate detour"
+    },
+    "19": {
+      "label": "Nipigon, Ontario",
+      "directionsQuery": "Nipigon, Ontario, Canada",
+      "kind": "gateway",
+      "caution": "Service-town candidate along Highway 17; confirm lodging"
+    },
+    "20": {
+      "label": "Thunder Bay, Ontario",
+      "directionsQuery": "Thunder Bay, Ontario, Canada",
+      "kind": "gateway",
+      "caution": "Regional overnight center; Sleeping Giant is a separate extended trip"
+    },
+    "22": {
+      "label": "Grand Portage, Minnesota",
+      "directionsQuery": "Grand Portage, Minnesota, USA",
+      "kind": "limited",
+      "caution": "Smaller overnight area; Grand Portage State Park is not a roadside hotel"
+    },
+    "23": {
+      "label": "Grand Marais, Minnesota",
+      "directionsQuery": "Grand Marais, Minnesota, USA",
+      "kind": "gateway",
+      "caution": "North Shore lodging town; reservations can be seasonal"
+    },
+    "25": {
+      "label": "Tofte / Lutsen area",
+      "directionsQuery": "Tofte, Minnesota, USA",
+      "kind": "gateway",
+      "caution": "North Shore lodging corridor; not the exact Temperance park entrance"
+    },
+    "26": {
+      "label": "Silver Bay / Tettegouche area",
+      "directionsQuery": "Silver Bay, Minnesota, USA",
+      "kind": "gateway",
+      "caution": "Town nearby Tettegouche park; park parking is a separate location"
+    },
+    "29": {
+      "label": "Two Harbors, Minnesota",
+      "directionsQuery": "Two Harbors, Minnesota, USA",
+      "kind": "gateway",
+      "caution": "North Shore overnight area within reach of Duluth"
+    },
+    "30": {
+      "label": "Duluth, Minnesota",
+      "directionsQuery": "Duluth, Minnesota, USA",
+      "kind": "gateway",
+      "caution": "Trip-end city, not a required additional lodging booking"
+    }
+  },
+  "requiredExperiences": {
+    "picturedRocks": {
+      "stop": "11",
+      "recommendedVisitHours": 3
+    },
+    "porcupineMountains": {
+      "stop": "6",
+      "recommendedVisitHours": 2
+    }
+  },
+  "stopNote": "These are overnight areas and planning stops, not hotels, campsite bookings, guaranteed vacancies, or verified park facilities. The 15th stop and the Keweenaw can have seasonal/limited lodging.",
+  "validation": "All ids must occur in the 31-stop published OSM trace, in counterclockwise order; no new road legs."
+}
