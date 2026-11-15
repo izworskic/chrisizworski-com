@@ -136,97 +136,97 @@ test('the actual page visibly owns Florida answer and uses exact mission checks 
  assert.doesNotMatch(js,/Redis|Supabase|localStorage/);
 });
 
-function vulcanFixture(){
+function vulcanFixture(net='2026-11-15T17:11:30Z'){
   const n=national(12);
   Object.assign(n.selectedLaunch,{
     name:'Vulcan VC6L | Amazon Leo (LV-01)',mission:'Amazon Leo (LV-01)',
-    rocket:'Vulcan VC6L',pad:'SLC-41',net:'2026-11-14T17:32:30Z',
-    netPrecision:'minute'
+    rocket:'Vulcan VC6L',pad:'Space Launch Complex 41',net,
+    netPrecision:'second',status:'Go for Launch'
   });
   const d=detail();
   d.next={...n.selectedLaunch};
   d.floridaViewingDeck.facility='cape';
-  d.accessSource.checkedAt='2026-11-13T21:00:00Z';
-  // No affirmative opening notice exists; the national verdict must not require one.
+  d.accessSource.checkedAt='2026-11-15T01:52:30Z';
+  // No affirmative opening notice exists; the verdict must not require one.
   d.viewpoints=d.viewpoints.map(v=>v.id==='playalinda-south'?
     {...v,level:'unknown',label:'No NPS opening notice published'}:v);
   d.viewpoints.push({id:'playalinda-north',level:'closed',label:'Closed by NPS'});
-  d.parkAlerts=[{
-    title:'Playalinda District: Parking Lot #8-13',category:'Closure',
-    description:'Main Playalinda road north of Eddy Creek, parking lots 8-13 and beach north of Eddy Creek closed.'
-  }];
   return {n,d};
 }
-const VERDICT='Yes, Playalinda Beach lots 4-7 are open for viewing this launch. Park only in a beach parking lot. Vistas are closed during the launch, and the beach at parking area #1 is closed 1/4 mile south to the KSC boundary. Arrive before 12:02 PM ET: Playalinda closes to inbound traffic 30 minutes before launch.';
-test('Nov 14 Vulcan LV-01: sections 02 and 04 use exactly the standing NPS verdict',()=>{
-  const {n,d}=vulcanFixture(),a=model.assess(n,d);
-  assert.equal(a.matched,true);
+const verdict=cutoff=>'Yes, Playalinda Beach lots 4-7 are open for viewing this launch. Park only in a beach parking lot. Vistas are closed during the launch, and the beach at parking area #1 is closed 1/4 mile south to the KSC boundary. Arrive before '+cutoff+': Playalinda closes to inbound traffic 30 minutes before launch.';
+const HEDGES=/security access not yet confirmed|opening not confirmed|do not assume entry|cutoff is not confirmed|not confirmed launch-day entry|no launch-specific gate opening/i;
+function assertVerdict(a,cutoff){
+  const v=verdict(cutoff);
   assert.equal(a.playalinda.state,'open');
-  assert.equal(a.playalinda.cutoffAt,'2026-11-14T17:02:30.000Z');
-  assert.equal(a.playalinda.cutoffLabel,'12:02 PM ET');
-  assert.equal(a.playalinda.headline,VERDICT);
-  assert.ok(a.answer.includes(VERDICT),'section 02 verdict differs');
-  assert.equal(a.cards.find(c=>c.id==='playalinda-south').label,VERDICT,'section 04 verdict differs');
-  assert.doesNotMatch(a.playalinda.note,/opening not confirmed|security access not yet confirmed|do not assume entry/i);
-  assert.match(a.playalinda.note,/road north of Eddy Creek/i);
-  assert.match(a.playalinda.note,/Jetty Park is the alternate/i);
-  assert.equal(a.npsClosed,false,'closure of lots 8–13 must not close lots 4–7');
-  assert.equal(a.cards.find(c=>c.id==='playalinda-south').state,'candidate');
-  assert.equal(a.cards.find(c=>c.id==='playalinda-south').source,a.playalinda.source);
-  assert.equal(a.cards.find(c=>c.id==='playalinda-south').directionsAllowed,false);
+  assert.equal(a.playalinda.cutoffLabel,cutoff);
+  assert.equal(a.playalinda.headline,v);
+  assert.ok(a.answer.startsWith(v),'section 02 verdict differs');
+  const card=a.cards.find(c=>c.id==='playalinda-south');
+  assert.equal(card.label,v,'section 04 verdict differs');
+  assert.equal(card.state,'candidate');
+  assert.equal(card.directionsAllowed,false);
   assert.deepEqual(a.cards.slice(0,2).map(c=>c.id),['playalinda-south','jetty']);
-  assert.match(a.cards[0].role,/NPS viewing choice/);
   assert.match(a.cards[1].role,/Alternate/);
   assert.match(a.answer,/Jetty Park is the alternate/);
-  assert.equal(a.playalinda.checkedAt,d.accessSource.checkedAt);
+  assert.match(a.playalinda.note,/Jetty Park is the alternate/);
+  for(const text of [a.answer,a.note,a.status,card.label,card.reason])
+    assert.doesNotMatch(text,HEDGES);
   assert.match(a.playalinda.source,/nps\.gov\/cana\/learn\/management\/superintendent-s-compendium/);
+}
+test('Vulcan LV-01 Sun Nov 15 12:11 PM EST: fixed NPS verdict with an 11:41 AM EST cutoff',()=>{
+  const {n,d}=vulcanFixture(),a=model.assess(n,d);
+  assertVerdict(a,'11:41 AM EST');
+  assert.equal(a.playalinda.cutoffAt,'2026-11-15T16:41:30.000Z');
+  assert.equal(a.status,'Playalinda lots 4-7 open · arrive before 11:41 AM EST');
+  assert.equal(a.npsClosed,false);
 });
-test('a missing opening notice or NPS fetch does not overturn the published launch rule',()=>{
-  let {n,d}=vulcanFixture(),a=model.assess(n,d);
-  assert.equal(a.playalinda.headline,VERDICT);
-  d.accessSource.verified=false;
-  a=model.assess(n,d);
-  assert.equal(a.playalinda.state,'open');
-  assert.equal(a.playalinda.checkedAt,null);
-  assert.equal(a.playalinda.headline,VERDICT);
-  // Regional API unavailable / delayed: the standing rule still renders.
-  d.selectedLaunchId=OTHER;
-  a=model.assess(n,d);
-  assert.equal(a.matched,false);
-  assert.equal(a.playalinda.headline,VERDICT);
-  assert.equal(a.cards[0].label,VERDICT);
+test('the cutoff follows a slip or scrub with no other change',()=>{
+  for(const [net,cutoff] of [['2026-11-14T17:32:30Z','12:02 PM EST'],
+    ['2026-11-16T17:00:00Z','11:30 AM EST'],['2026-11-17T00:15:00Z','6:45 PM EST'],
+    ['2026-07-01T14:00:00Z','9:30 AM EDT']]){
+    const {n,d}=vulcanFixture(net);
+    assertVerdict(model.assess(n,d),cutoff);
+  }
 });
-test('explicit new NPS closure affecting lots 4–7 overrides the fixed policy verdict',()=>{
+test('the verdict is fixed text: no live NPS check, notice or regional match can change it',()=>{
   const {n,d}=vulcanFixture();
-  d.viewpoints=d.viewpoints.map(v=>v.id==='playalinda-south'?
-    {...v,level:'closed',label:'Closed by NPS'}:v);
+  const closed={...d,viewpoints:d.viewpoints.map(v=>v.id==='playalinda-south'?
+    {...v,level:'closed',label:'Closed by NPS'}:v)};
+  for(const regional of [null,d,{...d,accessSource:{verified:false,checkedAt:null}},
+    {...d,selectedLaunchId:OTHER},{ok:false},closed])
+    assertVerdict(model.assess(n,regional),'11:41 AM EST');
+});
+test('every SLC-41 and LC-39A launch gets the verdict; other pads do not',()=>{
+  for(const [pad,loc] of [['Space Launch Complex 41',12],['SLC-41',12],
+    ['Launch Complex 39A',27],['LC-39A',27]]){
+    const n=national(loc);
+    Object.assign(n.selectedLaunch,{pad,net:'2026-11-20T03:05:00Z',netPrecision:'minute'});
+    assertVerdict(model.assess(n,null),'9:35 PM EST');
+  }
+  for(const pad of ['Space Launch Complex 40','Launch Complex 39B','Space Launch Complex 37B','SLC-410']){
+    const n=national(12);n.selectedLaunch.pad=pad;
+    assert.equal(model.assess(n,null).playalinda,null,pad);
+  }
+});
+test('an approximate launch time does not invent an exact cutoff',()=>{
+  const {n,d}=vulcanFixture();
+  n.selectedLaunch.netPrecision='hour';
   const a=model.assess(n,d);
-  assert.equal(a.playalinda.state,'closed');
-  assert.equal(a.npsClosed,true);
-  assert.equal(a.cards.find(c=>c.id==='playalinda-south').state,'closed');
-  assert.doesNotMatch(a.answer,/Yes, Playalinda Beach lots 4-7 are open/);
+  assert.equal(a.playalinda.cutoffLabel,null);
+  assert.match(a.playalinda.headline,/Arrive before the inbound cutoff: Playalinda closes to inbound traffic 30 minutes before launch\.$/);
+  assert.doesNotMatch(a.answer,HEDGES);
 });
-test('fixed cutoff is suppressed if Vulcan launch slips or mission changes',()=>{
-  const {n,d}=vulcanFixture();
-  n.selectedLaunch.net='2026-11-14T17:34:00Z';
-  d.next.net=n.selectedLaunch.net;
-  let a=model.assess(n,d);
-  assert.equal(a.playalinda,null,'rescheduled mission must not show the old 12:02 cutoff');
-  n.selectedLaunch.name='Another Vulcan mission';
-  n.selectedLaunch.mission='Different mission';
-  a=model.assess(n,d);
-  assert.equal(a.playalinda,null);
-});
-test('Sections 02 and 04 render shared Playalinda decision with unchanged ads',()=>{
+test('Sections 02 and 04 render the shared Playalinda verdict with no live-check wording and unchanged ads',()=>{
   const js=fs.readFileSync(path.join(root,'public/synced-national-tools/rocket-launch-live/app.js'),'utf8');
   const html=fs.readFileSync(path.join(root,'public/synced-national-tools/rocket-launch-live/index.html'),'utf8');
   const modelJs=fs.readFileSync(path.join(root,'public/assets/rocket-florida-access.js'),'utf8');
   assert.match(js,/florida\.playalinda\?\.headline/);
   assert.match(js,/s\.id==='playalinda-south'/);
-  assert.match(js,/florida\.playalinda\.checkedAt/);
   assert.match(js,/NPS 2026 Superintendent’s Compendium, §1\.5\(a\)\(n\)/);
-  assert.match(html,/rocket-florida-access\.js\?v=20261114-vulcan-fixed-v1/);
-  assert.match(html,/rocket-launch-live\/app\.js\?v=20261113-rust-national-v1-map-tiles-v2-playalinda-fixed-20261114-weather-link-sky-trend-glance-operator-plain-hero-liftoff-just/);
-  assert.doesNotMatch(modelJs,/Security access not yet confirmed|opening not confirmed|do not assume entry/i);
+  assert.doesNotMatch(js,/florida\.playalinda\.checkedAt/);
+  assert.doesNotMatch(modelJs,/VULCAN|LV-01|12:02|vulcanPlayalinda/);
+  assert.match(html,/rocket-florida-access\.js\?v=20261115-playalinda-rule-v1/);
+  assert.match(html,/rocket-launch-live\/app\.js\?v=20261113-rust-national-v1-map-tiles-v2-playalinda-fixed-20261114-weather-link-sky-trend-glance-operator-plain-hero-liftoff-just-playalinda-rule/);
+  assert.doesNotMatch(modelJs,/security access not yet confirmed|opening not confirmed|do not assume entry|cutoff is not confirmed/i);
   assert.doesNotMatch(js,/do not assume entry/i);
 });
