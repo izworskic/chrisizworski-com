@@ -67,7 +67,8 @@ function pageFor(region) {
       <li>Grooming: <span id="grooming">Loading</span></li>
       <li>Forecast snow: <span id="forecastSnow">Loading</span></li>
     </ul></details>
-    <div class="source-strip"><span id="sourceLine">Checking evidence feeds…</span><span>Page updated <strong id="sourceAge">—</strong></span></div>
+    <div class="source-strip"><span id="sourceLine">Checking evidence feeds…</span><span>Data assembled <strong id="sourceAge">—</strong></span></div>
+    <section class="panel" id="trustReceipt" aria-label="Independent snowmobile evidence checks"><h2>What is actually verified?</h2><p>Live evidence has not loaded. Do not rely on this page for a riding decision until you check the <a href="https://www.michigan.gov/dnr/things-to-do/snowmobiling/where">official DNR map and restrictions</a> and <a href="https://www.michigan.gov/dnr/things-to-do/snowmobiling/trail-reports">dated local trail reports</a>. Fetch time does not mean a trail inspection occurred.</p></section>
     <div class="origin-check">
       <div class="origin-head"><div><span>Personalize the trip</span><strong>Worth the drive from where you are?</strong></div><span class="small ui">Routes to ${esc(region.hubTown)}; trailhead travel is additional.</span></div>
       <div class="origin-controls">
@@ -111,7 +112,7 @@ ${region.key==='eastern-up'?'<section class="panel"><h2>Munising winter ice view
 <script src="/assets/snowmobile-parking.js?v=20261113-dnr-parking-1"></script>
 <script src="/assets/snowmobile-access-evidence.js?v=20261113-staging-2"></script>
 ${stagingScript}<script src="/assets/snowmobile-route-export.js?v=20261113-gpx-1"></script>
-<script src="/assets/snowmobile-region.js?v=20261113-groomer-route-1"></script>
+<script src="/assets/snowmobile-region.js?v=20261114-trust-receipt-1"></script>
 ${localDeskScript}${cameraScript}
 </body></html>`;
 }
