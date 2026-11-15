@@ -298,6 +298,8 @@ function showFallback(message) {
 }
 
 try {
+  // Show the requested day and source caveat even if the basemap CDN fails.
+  addDayFocusPanel();
   addMapLibreCss();
   maplibreApi = await import(MAPLIBRE_MODULE);
   map = new maplibreApi.Map({
