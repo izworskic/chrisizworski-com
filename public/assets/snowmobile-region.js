@@ -130,7 +130,7 @@ function renderTrustReceipt(d){
   const reports=d.legacyCorridor?[['Grayling',d.reports?.grayling],['Gaylord',d.reports?.gaylord]]:[];
   const reportDates=reports.map(function(pair){
     const report=pair[1];
-    return pair[0]+': '+(report?.reportedAt?formatEvidenceTime(report.reportedAt):'date unavailable')+
+    return pair[0]+': '+(report?.reportedRaw||'date unavailable')+
       ' ('+String(report?.freshness?.state||'freshness unknown').toLowerCase()+')';
   }).join('; ');
   const hasScore=active&&fresh&&closure&&Number.isFinite(d.route?.score)&&!broken;
