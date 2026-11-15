@@ -32,15 +32,15 @@ function recentWeatherLabel(d){
 }
 function render(d){
   DATA=d; JUNCTIONS_BY_ID=new Map((d.routeJunctions?.features||[]).filter(f=>typeof f?.properties?.id==='string'&&f?.geometry?.type==='Point').map(f=>[f.properties.id,f]));
-  const r=d.route||{}; const active=d.season?.active;
-  $('#status').textContent=!window.SnowmobileComparison.bundleFresh(d)?'DATA STALE':active?(r.routeState==='ROUTE_BROKEN'?'ROUTE BROKEN':r.band||'UNKNOWN'):'OFF-SEASON';
-  $('#status').className='status '+bandClass(window.SnowmobileComparison.bundleFresh(d)&&active?r.band:'UNKNOWN');
-  $('#score').textContent=window.SnowmobileComparison.bundleFresh(d)&&Number.isFinite(r.score)?`· ${r.score}/100`:'';
-  $('#best').textContent=active?bestWindow(d):'Season opens Dec. 1';
-  $('#risk').textContent=active?risk(d):'No current riding score';
-  $('#confidence').textContent=`${r.confidence??'—'}/100`;
-  $('#grooming').textContent=d.grooming?.label||'Not verified';
-  $('#forecastSnow').textContent=forecastSnowLabel(d);
+  const r=d.route||{}; const active=d.season?.active; const fresh=window.SnowmobileComparison.bundleFresh(d);
+  $('#status').textContent=!fresh?'DATA STALE':active?(r.routeState==='ROUTE_BROKEN'?'ROUTE BROKEN':r.band||'UNKNOWN'):'OFF-SEASON';
+  $('#status').className='status '+bandClass(fresh&&active?r.band:'UNKNOWN');
+  $('#score').textContent=fresh&&active&&Number.isFinite(r.score)?`· ${r.score}/100`:'';
+  $('#best').textContent=!fresh?'Evidence too old':active?bestWindow(d):'Season opens Dec. 1';
+  $('#risk').textContent=!fresh?'Current risk unverified':active?risk(d):'No current riding score';
+  $('#confidence').textContent=fresh&&active&&Number.isFinite(r.confidence)?`${r.confidence}/100`:'Not current';
+  $('#grooming').textContent=fresh?(d.grooming?.label||'Not verified'):'Not current';
+  $('#forecastSnow').textContent=fresh?forecastSnowLabel(d):'Not current';
   $('#routeStatus').textContent=routeStatusLabel(d);
   $('#sourceAge').textContent=formatEvidenceTime(d.generatedAt);
   $('#sourceLine').textContent=sourceLine(d);
@@ -48,7 +48,7 @@ function render(d){
   $('#drive').innerHTML=active?driveVerdict(d):'<strong>Not a riding verdict yet.</strong> In-season condition scoring activates Dec. 1.';
   const sn=$('#seasonNote'); if(sn)sn.hidden=active;
   renderSections(d);renderOutlook(d);renderWhy(d);renderContradictions(d);
-  const segs=(d.segments||[]).filter(s=>Number.isFinite(s.score)||s.veto||s.band==='UNKNOWN').sort((a,b)=>(a.score??999)-(b.score??999)).slice(0,10);
+  const segs=(fresh?d.segments||[]:[]).filter(s=>Number.isFinite(s.score)||s.veto||s.band==='UNKNOWN').sort((a,b)=>(a.score??999)-(b.score??999)).slice(0,10);
   const segHead=$('#segments');
   if(segHead)segHead.innerHTML=segs.length?segs.map(s=>`<div class="segment"><div><span class="badge ${bandClass(s.band)}">${esc(s.band)}</span> <strong>${esc(s.trailNetwork||s.id)}</strong></div><div class="small">${esc(s.groomingSponsor||'Grooming sponsor not stated')} · ${s.miles?esc(s.miles.toFixed(1))+' mi':'length not stated'} · ${esc(s.surface||'surface unknown')}</div><div>${esc((s.reasons||[])[0]||'No condition explanation available.')}</div></div>`).join(''):(active?'<p>No verified segment condition is available.</p>':'<p>Off-season: segments are listed by DNR status only.</p>');
   const evidence=$('#reports');
@@ -154,6 +154,7 @@ function renderTrustReceipt(d){
     '</div><p class="small"><strong>Still to confirm:</strong> trail signage and local restrictions, actual surface conditions, and whether <a href="#parkingPlanner">trailer parking</a> is plowed, permitted and connected. Recheck when you arrive.</p>';
 }
 function routeStatusLabel(d){
+  if(!window.SnowmobileComparison.bundleFresh(d))return'Closure data stale';
   if(!d.season?.active)return'Off season';
   if(d.route?.routeState==='ROUTE_BROKEN')return'Official closure matched';
   if(d.route?.legalVerification==='CURRENT_LAYER_CHECKED')return'No matched DNR closure';
@@ -174,6 +175,7 @@ function renderContradictions(d){
 }
 function renderWhy(d){
   const host=$('#whyList');if(!host)return;const reasons=[];
+  if(!window.SnowmobileComparison.bundleFresh(d)){host.innerHTML='<li>Region data has aged out. Recheck the DNR and dated local club reports; no current verdict is available.</li>';return;}
   if(!d.season?.active)reasons.push('No riding score is issued outside Michigan’s designated Dec. 1–Mar. 31 snowmobile season.');
   else{
     if(d.route?.critical?.reasons?.[0])reasons.push(`Weakest required segment: ${d.route.critical.reasons[0]}`);
@@ -192,6 +194,7 @@ function renderWhy(d){
 }
 function renderOutlook(d){
   const host=$('#outlookCards');if(!host)return;
+  if(!window.SnowmobileComparison.bundleFresh(d)){host.innerHTML='<article class="outlook-card"><strong>Weather timing unavailable</strong><p>The region data is too old to suggest a current riding window. Check fresh NWS forecasts and trail reports.</p></article>';return;}
   if(!d.season?.active){host.innerHTML='<article class="outlook-card"><strong>Pre-season</strong><p>The 72-hour riding-window rank activates Dec. 1. Weather can still be viewed below without turning off-season conditions into a snowmobile recommendation.</p></article>';return}
   const rows=(d.timing?.windows||[]).slice(0,6);
   const caveat=!Number.isFinite(d.route?.score)?'<div class="small"><strong>Trail surface unverified:</strong> this ranks weather timing only.</div>':'';
@@ -201,7 +204,7 @@ function bestWindow(d){const b=d.timing?.best;if(!b)return'Weather window not ve
 function renderSections(d){
   const wrap=$('#corridor-sections-wrap');if(!d.legacyCorridor){if(wrap)wrap.hidden=true;return}if(wrap)wrap.hidden=false;
   const host=$('#corridorSections');if(!host)return;
-  host.innerHTML=(d.sections||[]).map(s=>{const score=Number.isFinite(s.score)?`${s.score}/100`:'—';const state=s.band||s.routeState||'UNKNOWN';const critical=s.critical?.reasons?.[0]||(!d.season?.active?'Scoring activates Dec. 1.':'No verified surface condition available.');return `<article class="corridor-section"><span>${esc(s.label)}</span><strong class="${bandClass(state)}">${esc(state)}</strong><b>${score}</b><small>${esc(critical)}</small></article>`}).join('')||'<div class="corridor-section">No corridor summary available.</div>';
+  host.innerHTML=!window.SnowmobileComparison.bundleFresh(d)?'<div class="corridor-section"><strong>Segment conditions stale</strong><small>Check fresh local reports; cached quality scores are withheld.</small></div>':(d.sections||[]).map(s=>{const score=Number.isFinite(s.score)?`${s.score}/100`:'—';const state=s.band||s.routeState||'UNKNOWN';const critical=s.critical?.reasons?.[0]||(!d.season?.active?'Scoring activates Dec. 1.':'No verified surface condition available.');return `<article class="corridor-section"><span>${esc(s.label)}</span><strong class="${bandClass(state)}">${esc(state)}</strong><b>${score}</b><small>${esc(critical)}</small></article>`}).join('')||'<div class="corridor-section">No corridor summary available.</div>';
 }
 function risk(d){
   const c=d.route?.critical;if(c?.band==='CLOSED')return'Official closure on required segment';if(Number.isFinite(c?.score)&&c.score<40)return'Weak required segment';
