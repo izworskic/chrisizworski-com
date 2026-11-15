@@ -53,7 +53,7 @@ function segment(trace,nights,i,j,settings){
  return {from:trace.route[i],to:stop,fromIndex:i,toIndex:j,
   stops,overnight,traceMiles:ROUND(traced),planningMiles:ROUND(cushionMiles),
   driveHours:ROUND(drive),rawDriveHours:drive,borderReserves:crossings,
-  borderReserveHours:ROUND(crossings*BORDER_RESERVE_HOURS),
+  borderReserveHours:crossings*BORDER_RESERVE_HOURS,
   experienceHours:visit+bonus+restBonus,
   hasPicturedRocks:pictured,hasPorkies:porkies,
   incompleteParkApproach:partial,withinCap:drive<=settings.maxDrive+1e-9,
