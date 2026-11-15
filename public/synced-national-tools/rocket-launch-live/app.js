@@ -1035,10 +1035,7 @@
           'Before you go, check launch-day access')));
         floridaAnswer.appendChild(el('p','',florida.note));
         floridaAnswer.appendChild(el('p','rl-access-source-age',florida.playalinda?
-          (florida.playalinda.checkedAt?
-            'NPS Canaveral alerts checked '+stamp(florida.playalinda.checkedAt)+
-            '. Published rules permit viewing at lots 4–7 unless park staff or NASA impose another closure.':
-            'NPS 2026 standing launch rules apply. Current additional alerts have not been checked; review posted changes before travel.'):
+          'Standing NPS launch rule. The arrival time moves with the launch time if the launch slips.':
           florida.matched?
             'Florida notices checked. National Park Service updates last checked '+stamp(florida.sourceCheckedAt)+
             '. Parking and entry may still be restricted for this launch.':
@@ -1048,7 +1045,7 @@
             'NPS 2026 Superintendent’s Compendium, §1.5(a)(n)');
           if(rules)floridaAnswer.appendChild(rules);
         }
-        const nps=anchor('https://www.nps.gov/cana/planyourvisit/conditions.htm',
+        const nps=florida.playalinda?null:anchor('https://www.nps.gov/cana/planyourvisit/conditions.htm',
           'Check Playalinda Beach hours and closures');
         if(nps)floridaAnswer.appendChild(nps);
         const detail=anchor(florida.detailUrl,'Compare Florida viewing spots, tickets and sky');
@@ -1069,11 +1066,6 @@
         card.appendChild(el('h3', '', s.name));
         card.appendChild(el('span', 'rl-site-status', s.label || 'Check opening and parking'));
         card.appendChild(el('p', '', s.reason || 'Check the local venue for any launch-day restrictions.'));
-        if(florida?.playalinda&&s.id==='playalinda-south'){
-          card.appendChild(el('small','rl-access-source-age',florida.playalinda.checkedAt?
-            'NPS Canaveral alerts checked '+stamp(florida.playalinda.checkedAt):
-            'NPS 2026 standing launch rules apply. Check current notices for changes.'));
-        }
         const actions = el('div', 'rl-site-actions');
         const source = anchor(s.kind === 'specialist' ?
           floridaSpecialistLink(s.source,data) : s.source,
@@ -1082,7 +1074,7 @@
             'NPS 2026 Superintendent’s Compendium, §1.5(a)(n)' :
             'Official viewing information', 'rl-mainlink');
         if (source) actions.appendChild(source);
-        // Same source, verdict and checked time as the Section 02 access answer.
+        // Same source and verdict as the Section 02 access answer.
         const mapHref=siteMapHref(s);
         if (mapHref) {
           const location=anchor(mapHref,
