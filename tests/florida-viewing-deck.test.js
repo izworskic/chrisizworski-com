@@ -103,12 +103,14 @@ test('rendered Florida page preserves its canonical and admits public source unc
  assert.match(page,/id="florida-viewing-plan"/);
  assert.match(page,/id="fl-deck-primary-map" type="button" disabled/);
  assert.match(page,/id="fl-deck-ticket-map" type="button" disabled/);
- assert.match(page,/Playalinda Beach: a conditional fourth option/);
+ assert.match(page,/Playalinda Beach: lots 4-7 open for SLC-41 and LC-39A launches/);
+ assert.doesNotMatch(page,/cutoff is not confirmed|opening not confirmed|do not assume entry|security access not yet confirmed/i);
  assert.match(js,/renderFloridaDeck\(d\)/);
  assert.match(js,/renderFloridaDeck\(null\)/);
  assert.match(js,/space-coast:focus-point/);
  assert.match(map,/space-coast:focus-point/);
  assert.match(map,/public-viewpoint','ticketed-entry/);
  assert.match(page,/viewing\.css\?v=20261103-deck-v1/);
- assert.match(page,/app\.js\?v=20261113-rust-florida-v1-weather-link-20261114/);
+ assert.match(page,/app\.js\?v=20261113-rust-florida-v1-weather-link-20261114-playalinda-rule/);
+ assert.ok(page.indexOf('/assets/playalinda-rule.js')>-1&&page.indexOf('/assets/playalinda-rule.js')<page.indexOf('space-coast-launch/app.js'),'shared rule must load first');
 });
