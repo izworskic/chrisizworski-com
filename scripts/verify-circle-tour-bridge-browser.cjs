@@ -513,6 +513,12 @@ function check(value,message){if(!value)throw Error(message);}
       '7/10/15 source routes, 5h cap, 4h conflict, seasonal gate, local photos, shareable preferences and original tools'});
 
 
+    // The legacy preset QA above intentionally switched to 15 days, 4 hours,
+    // and winter. Restore the user's default scenario before testing ten days.
+    await guide.locator('#ct-prefer-days').selectOption('10');
+    await guide.locator('#ct-prefer-drive').selectOption('5');
+    await guide.locator('#ct-prefer-month').selectOption('8');
+
     // The adaptive overnight solver must actually redistribute stopovers.
     await guide.waitForFunction(()=>document.querySelector('#ct-optimized')?.dataset.rendered==='true',null,{timeout:15000});
     check(await guide.locator('#ct-opt-nights .ct-opt-day').count()===10,
