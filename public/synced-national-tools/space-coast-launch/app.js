@@ -39,7 +39,7 @@
     return new Intl.DateTimeFormat('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', timeZone: zone }).format(d);
   };
   // Standing NPS Playalinda rule (public/assets/playalinda-rule.js), shared
-  // with Rocket Launch Live. Fixed text for SLC-41 and LC-39A launches; never
+  // with Rocket Launch Live. Fixed text for SLC-40, SLC-41 and LC-39A launches; never
   // gated on a live NPS alert check. Cutoff follows the displayed launch time.
   const playalindaRule = data => window.PlayalindaRule?.decide(data?.next, 'America/New_York') || null;
   const timeFormat = (iso, precision) => {
@@ -1322,7 +1322,7 @@
       const comparison = $('launch-sky-compare');
       if (comparison) comparison.textContent = 'Current sky comparison unavailable. Do not assume a clear line of sight.';
       const panel = $('launch-nps-alert');
-      if (panel) panel.textContent = 'Launch details could not be loaded. During SLC-41 and LC-39A launches, Playalinda Beach lots 4-7 are open for viewing under the NPS Superintendent’s Compendium; the park closes to inbound traffic 30 minutes before launch.';
+      if (panel) panel.textContent = 'Launch details could not be loaded. During SLC-40, SLC-41 and LC-39A launches, Playalinda Beach lots 4-7 are open for viewing under the NPS Superintendent’s Compendium; the park closes to inbound traffic 30 minutes before launch.';
       const kscPanel = $('ksc-mission-viewing');
       if (kscPanel) kscPanel.textContent = 'KSC mission viewing could not be verified. Check the official KSC calendar before purchasing admission.';
     }

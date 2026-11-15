@@ -20,9 +20,9 @@ test('the cutoff follows the launch time with no manual edit',()=>{
   assert.equal(rule.decide(vulcan('2026-11-16T18:01:00Z')).cutoffLabel,'12:31 PM EST');
   assert.equal(rule.decide(vulcan('2026-07-04T14:00:00Z')).cutoffLabel,'9:30 AM EDT');
 });
-test('only SLC-41 and LC-39A trigger the rule; approximate times get no invented cutoff',()=>{
-  for(const pad of ['SLC-41','LC-39A','Launch Complex 39A','Space Launch Complex 41'])assert.ok(rule.applies(pad),pad);
-  for(const pad of ['Space Launch Complex 40','Launch Complex 39B','SLC-410',''])assert.ok(!rule.applies(pad),pad);
+test('only SLC-40, SLC-41 and LC-39A trigger the rule; approximate times get no invented cutoff',()=>{
+  for(const pad of ['SLC-40','Space Launch Complex 40','SLC-41','LC-39A','Launch Complex 39A','Space Launch Complex 41'])assert.ok(rule.applies(pad),pad);
+  for(const pad of ['Launch Complex 39B','Space Launch Complex 37B','Launch Complex 36A','SLC-410','SLC-400',''])assert.ok(!rule.applies(pad),pad);
   const approx=rule.decide({pad:'LC-39A',net:'2026-11-20T15:00:00Z',netPrecision:'hour'});
   assert.equal(approx.cutoffLabel,null);
   assert.match(approx.headline,/Arrive before the inbound cutoff: Playalinda closes/);

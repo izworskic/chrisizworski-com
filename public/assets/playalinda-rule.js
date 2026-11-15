@@ -23,7 +23,8 @@
   const CLOSED_BEACH_LOT=1;
   const INBOUND_CUTOFF_MINUTES=30;
   const ALTERNATE='Jetty Park is the alternate; check its park pass and hours.';
-  const PAD=/(?:\bSLC[\s-]*41\b|Space Launch Complex[\s-]*41\b|\bLC[\s-]*39A\b|Launch Complex[\s-]*39A\b)/i;
+  // SLC-40, SLC-41 (Cape Canaveral SFS) and LC-39A (KSC).
+  const PAD=/(?:\bSLC[\s-]*4[01]\b|Space Launch Complex[\s-]*4[01]\b|\bLC[\s-]*39A\b|Launch Complex[\s-]*39A\b)/i;
   const EXACT=new Set(['minute','second']);
 
   const applies=pad=>PAD.test(String(pad||''));
