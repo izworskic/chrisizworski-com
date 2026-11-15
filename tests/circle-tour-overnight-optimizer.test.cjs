@@ -127,7 +127,7 @@ test('build-generated page embeds immutable source data and the actual overnight
  const html=fs.readFileSync('public/lake-superior-circle-tour/10-day/index.html','utf8');
  assert.match(html,/id="ct-road-trace-data"/);
  assert.match(html,/id="ct-overnight-source"/);
- assert.match(html,/id="ct-opt-days"/.replace('ct-opt-days','ct-opt-nights'));
+ assert.match(html,/id="ct-opt-nights"/);
  assert.match(html,/circle-tour-overnight-optimizer\.js/);
  assert.match(html,/circle-tour-overnight-ui\.js/);
  assert.equal((html.match(/<figure class="day-photo">/g)||[]).length,10);
