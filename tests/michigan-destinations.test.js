@@ -134,3 +134,10 @@ test('Torch Lake photograph degrades to licensed alternate without a blank card'
   assert.match(js, /img\.addEventListener\('error', switchImage/);
   assert.match(js, /sourceLink\.href = img\.dataset\.fallbackFile/);
 });
+
+test('destination photos load through the Commons thumbnail host, never a rate-limited direct original', () => {
+  // upload.wikimedia.org originals answer hotlinks with HTTP 429; the Torch Lake
+  // hero failed on mobile this way. thumb.wikimedia.org serves the same file.
+  assert.doesNotMatch(html, /<img src="https:\/\/upload\.wikimedia\.org\//);
+  assert.equal((html.match(/thumb\/8\/85\/Michigan%27s_Torch_Lake_Swimming\.jpg\/960px-/g) || []).length, 2);
+});
