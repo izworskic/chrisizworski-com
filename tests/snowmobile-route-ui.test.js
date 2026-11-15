@@ -146,3 +146,42 @@ test('all seven generated regions retain search and provide the same new mobile 
   assert.ok(html.includes('google-adsense-account'));
  }
 });
+
+test('evidence receipt keeps stale or absent surface evidence separate from official feeds',()=>{
+ const h=harness();
+ const host={innerHTML:''};h.elements.set('#trustReceipt',host);
+ h.context.window.SnowmobileComparison={bundleFresh:()=>false};
+ h.run("renderTrustReceipt({season:{active:true},closures:{verified:true},route:{routeState:'OK',score:95},legacyCorridor:false,weather:{generatedAt:'2026-11-14T12:00:00Z'}})");
+ assert.match(host.innerHTML,/STALE \/ UNKNOWN/);
+ assert.match(host.innerHTML,/NOT FIELD VERIFIED/);
+ assert.doesNotMatch(host.innerHTML,/LOCAL EVIDENCE SCORED/);
+ assert.match(host.innerHTML,/not a field inspection/);
+ h.context.window.SnowmobileComparison={bundleFresh:()=>true};
+ h.run("renderTrustReceipt({season:{active:true},closures:{verified:false},route:{routeState:'OK',score:null},legacyCorridor:false})");
+ assert.match(host.innerHTML,/NOT VERIFIED/);
+ assert.match(host.innerHTML,/NO VERIFIED ROUTE SCORE/);
+ assert.doesNotMatch(host.innerHTML,/DNR FEED CHECKED/);
+});
+test('fresh report receipt identifies dated local sources without promising grooming',()=>{
+ const h=harness(),host={innerHTML:''};h.elements.set('#trustReceipt',host);
+ h.context.window.SnowmobileComparison={bundleFresh:()=>true};
+ h.run("renderTrustReceipt({season:{active:true},closures:{verified:true},route:{routeState:'OK',score:70},legacyCorridor:true,reports:{grayling:{reportedAt:'2026-11-13T15:00:00Z',freshness:{state:'RECENT'}},gaylord:{reportedAt:null,freshness:{state:'UNKNOWN'}}},weather:{generatedAt:'2026-11-14T12:00:00Z'}})");
+ assert.match(host.innerHTML,/DNR FEED CHECKED/);
+ assert.match(host.innerHTML,/LOCAL EVIDENCE SCORED/);
+ assert.match(host.innerHTML,/Grayling:/);
+ assert.match(host.innerHTML,/Gaylord: date unavailable/);
+ assert.match(host.innerHTML,/Grooming on your exact route/);
+ assert.match(host.innerHTML,/NOT FIELD VERIFIED/);
+});
+test('route-specific closure verification fails closed on a missing or stale route timestamp',async()=>{
+ const h=harness();let payload;
+ h.context.window.SnowmobileComparison={bundleFresh:()=>false};
+ h.context.fetch=async()=>({ok:true,json:async()=>payload});
+ h.run('DATA=fixture;drawMap(DATA);toggleRouteMode();');
+ h.tap(44.7);h.tap(44.8);
+ payload={generatedAt:'2026-11-13T00:00:00Z',closureVerification:true,season:{active:true},route:{routable:false,reason:'disconnected'}};
+ h.run('computeRoute();');await new Promise(r=>setImmediate(r));
+ assert.match(h.elements.get('#routeResult').innerHTML,/Current closure verification is unavailable, old or failed/);
+ assert.match(h.elements.get('#routeResult').innerHTML,/Route data assembled:/);
+ assert.doesNotMatch(h.elements.get('#routeResult').innerHTML,/Official DNR closure feed checked; other restrictions/);
+});
