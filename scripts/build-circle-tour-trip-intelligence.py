@@ -23,6 +23,8 @@ HUB = ROOT / "public/lake-superior-circle-tour/index.html"
 LEDGER = ROOT / "data/circle-tour-road-evidence.json"
 VISUALS = ROOT / "data/circle-tour-visual-story.json"
 TRAVELER = ROOT / "data/circle-tour-traveler-stops.json"
+ROAD_TRACE = ROOT / "data/circle-tour-road-trace-v1.json"
+NIGHT_OPTIONS = ROOT / "data/circle-tour-overnight-options-v1.json"
 OUT = ROOT / "public/lake-superior-circle-tour/10-day/index.html"
 CANONICAL = "https://chrisizworski.com/lake-superior-circle-tour/10-day/"
 VERSION = "2026-11-14"
@@ -414,7 +416,36 @@ STYLES += """
 """
 
 
-def render(data: list[dict], ledger: dict, visual: dict, traveler: dict) -> str:
+
+STYLES += """
+.ct-optimized{border-radius:12px;background:#fff;padding:19px 18px;border:1px solid #bbd7c8;margin:18px 0 27px}
+.ct-optimized h3{font-size:clamp(22px,2.4vw,28px);margin:5px 0 8px}
+.ct-optimized-summary{padding:12px 15px;background:#e8f2ec;border-left:4px solid #23745c;margin:14px 0}
+.ct-optimized-summary p{font-size:15px;margin:6px 0}
+.ct-optimized-days{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:17px 0}
+.ct-opt-day{border:1px solid #d9e5dd;border-radius:9px;padding:14px;background:#f9fbf8}
+.ct-opt-day[data-caution="true"]{border-left:4px solid #a87635}
+.ct-opt-head{display:flex;align-items:flex-start;justify-content:space-between;gap:9px}
+.ct-opt-head h4{font:600 19px/1.3 Georgia,serif;margin:0}
+.ct-opt-metric{font-size:13px;white-space:nowrap;font-weight:800;background:#ddecdf;border-radius:13px;padding:4px 9px}
+.ct-opt-metric[data-over="true"]{background:#f5ded2}
+.ct-opt-photo{margin:10px 0}
+.ct-opt-photo img{display:block;width:100%;height:auto;aspect-ratio:2/1;object-fit:cover;border-radius:7px}
+.ct-opt-photo figcaption{font-size:11px;line-height:1.45}
+.ct-opt-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:10px 0}
+.ct-opt-actions a{font-size:13px;font-weight:800;padding:6px 10px;border-radius:6px;background:#e6f1ed}
+.ct-opt-meta{font-size:13px;color:#436458}
+.ct-opt-day ul{margin:8px 0 6px;padding-left:18px}
+.ct-opt-day li{font-size:13px}
+.ct-opt-caution{color:#76502d;font-size:12px;font-weight:650}
+.ct-optimized-source{font-size:12px;color:#526b5e}
+.ct-original-heading{font-size:19px;margin:18px 0 8px}
+@media(max-width:780px){.ct-optimized-days{grid-template-columns:1fr}}
+@media(max-width:480px){.ct-optimized{padding:14px}.ct-opt-head{flex-direction:column}.ct-opt-metric{white-space:normal}}
+@media print{.ct-opt-actions{display:none}.ct-optimized-days{display:block}.ct-opt-day{break-inside:avoid;margin:10px 0}}
+"""
+
+def render(data: list[dict], ledger: dict, visual: dict, traveler: dict, route_trace: dict, overnights: dict) -> str:
     rows = []
     for d in data:
         story = visual["days"][str(d["day"])]
@@ -447,6 +478,8 @@ def render(data: list[dict], ledger: dict, visual: dict, traveler: dict) -> str:
     sources = "".join(f'<li><a href="{esc(url)}" rel="noopener noreferrer">{esc(title)}</a></li>' for title, url in SOURCE_LINKS)
     embedded = json.dumps({"version": VERSION, "days": data, "basis": "source-bounded editorial mileage"}, separators=(",", ":"), ensure_ascii=False).replace("<", "\\u003c")
     traveler_embedded = json.dumps(traveler, separators=(",", ":"), ensure_ascii=False).replace("<", "\\u003c")
+    road_embedded = json.dumps(route_trace, separators=(",", ":"), ensure_ascii=False).replace("<", "\\u003c")
+    nights_embedded = json.dumps(overnights, separators=(",", ":"), ensure_ascii=False).replace("<", "\\u003c")
     sample = traveler["options"]["10"]["days"]
     constrained = [str(day["day"]) for day in sample if day["driveAllowanceHours"] > 5]
     example_warning = ("Under a five-hour sample driving limit, days " + ", ".join(constrained) +
@@ -506,6 +539,19 @@ def render(data: list[dict], ledger: dict, visual: dict, traveler: dict) -> str:
 <label><input type="checkbox" id="ct-prefer-shipwatch">Freighters and maritime history</label>
 <label><input type="checkbox" id="ct-prefer-pictured" checked>Pictured Rocks is a must-see</label>
 </fieldset></div>
+<section class="ct-optimized" id="ct-optimized" aria-labelledby="ct-opt-heading">
+<span class="eyebrow">Route suggestions based on the complete lake road trace</span>
+<h3 id="ct-opt-heading">Suggested overnight stops for your trip</h3>
+<p>The map already contains a simplified OpenStreetMap-derived road trace. This planner uses that trace to redistribute overnight stops around your driving limit, preserving an overnight near Pictured Rocks when you select it. Actual route mileage and travel time remain to be checked in a navigation service before booking.</p>
+<div id="ct-opt-summary" class="ct-optimized-summary" role="status" aria-live="polite">
+<p>Optimized stopovers require JavaScript. The original published itinerary and photography are available below.</p>
+</div>
+<div id="ct-opt-nights" class="ct-optimized-days" aria-label="Suggested overnight route"></div>
+<div id="ct-opt-alternate" class="ct-optimized-alternate"></div>
+<p class="ct-optimized-source"><strong>How it works:</strong> The road-trace coordinates are a simplified, previously published OpenStreetMap-derived map line, not a road-routing response. Day allowances add a disclosed 15% planning cushion and assume 45 mph. This is an intentionally cautious scheduling comparison, not a reliable speed, travel-time, lodging, or park-access prediction. Crossings have a separate unverified 45-minute reserve; actual delays may differ. <a href="https://www.openstreetmap.org/copyright" rel="noopener noreferrer">OpenStreetMap contributors and ODbL</a>.</p>
+</section>
+
+<h3 class="ct-original-heading">Compare with the original published route</h3>
 <div class="ct-personal-summary" id="ct-prefer-summary" aria-live="polite">
 <h3>See where your preferences meet the road</h3>
 <p>{esc(example_warning)}</p>
@@ -558,10 +604,14 @@ def render(data: list[dict], ledger: dict, visual: dict, traveler: dict) -> str:
 </main>
 <script id="ct-intelligence-days" type="application/json">{embedded}</script>
 <script id="ct-traveler-presets" type="application/json">{traveler_embedded}</script>
+<script id="ct-road-trace-data" type="application/json">{road_embedded}</script>
+<script id="ct-overnight-source" type="application/json">{nights_embedded}</script>
 <script defer src="/assets/circle-tour-rust-itinerary.js?v=20261114-3"></script>
 <script defer src="/assets/circle-tour-trip-feasibility.js?v=20261114-1"></script>
 <script defer src="/assets/circle-tour-traveler-engine.js?v=20261114-1"></script>
 <script defer src="/assets/circle-tour-traveler-ui.js?v=20261114-1"></script>
+<script defer src="/assets/circle-tour-overnight-optimizer.js?v=20261114-1"></script>
+<script defer src="/assets/circle-tour-overnight-ui.js?v=20261114-1"></script>
 </body></html>
 """
 
@@ -579,7 +629,28 @@ def main() -> None:
     validate_visuals(visual, source)
     traveler_catalog = json.loads(TRAVELER.read_text(encoding='utf8'))
     traveler = extract_traveler_presets(source, ledger, traveler_catalog, visual)
-    output = render(days, ledger, visual, traveler)
+    trace = json.loads(ROAD_TRACE.read_text(encoding='utf8'))
+    overnight_options = json.loads(NIGHT_OPTIONS.read_text(encoding='utf8'))
+    expected_route = [ledger["edges"][0]["from"]] + [e["to"] for e in ledger["edges"]]
+    if trace.get("version") != 1 or trace.get("reviewed") != VERSION or trace.get("route") != expected_route:
+        raise ValueError("Overnight trace must match all 31 source-verified stop identities")
+    if len(trace.get("legs", [])) != 30 or len(trace.get("match", [])) != 31:
+        raise ValueError("Overnight trace has missing geometry or segment evidence")
+    for idx, leg in enumerate(trace["legs"]):
+        if leg["from"] != expected_route[idx] or leg["to"] != expected_route[idx+1]:
+            raise ValueError("Overnight road trace disconnected")
+        if leg.get("traceMiles", 0) <= 0:
+            raise ValueError("Missing OSM trace length")
+        if leg["status"] not in ("simplified-road-trace", "incomplete-park-approach"):
+            raise ValueError("Unexpected confidence upgrade to exact routing")
+        if (leg["status"] == "incomplete-park-approach") != (leg["from"] == "20" and leg["to"] == "21"):
+            raise ValueError("Pigeon River approach must remain explicitly incomplete")
+    if overnight_options.get("version") != 1 or overnight_options.get("reviewed") != VERSION:
+        raise ValueError("Overnight town catalog must be versioned and reviewed")
+    for stop_id, entry in overnight_options.get("overnights", {}).items():
+        if stop_id not in expected_route[1:] or not entry.get("directionsQuery"):
+            raise ValueError("Overnight candidate must lie on the real loop")
+    output = render(days, ledger, visual, traveler, trace, overnight_options)
     if args.check:
         if not OUT.exists() or OUT.read_text(encoding="utf8") != output:
             raise SystemExit("Circle Tour 10-day static page is missing or stale")

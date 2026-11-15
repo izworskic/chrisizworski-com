@@ -1,3 +1,4 @@
+import {readDayFocus,featureForDay,focusBounds} from "/assets/circle-tour-map-day-focus.mjs";
 const MAPLIBRE_VERSION = "6.3.0";
 const MAPLIBRE_MODULE = `https://cdn.jsdelivr.net/npm/maplibre-gl@${MAPLIBRE_VERSION}/dist/maplibre-gl.mjs`;
 const MAPLIBRE_CSS = `https://cdn.jsdelivr.net/npm/maplibre-gl@${MAPLIBRE_VERSION}/dist/maplibre-gl.css`;
@@ -36,6 +37,33 @@ let selectedStopId = null;
 let gatewayPopup = null;
 let filterState = {region: window.circleTourRegion || "all", activity: window.circleTourActivity || "all"};
 let presetState = readPresetState();
+
+const DAY_FOCUS = readDayFocus(window.location.search,ROUTE_ORDER);
+const DAY_FOCUS_FEATURE = DAY_FOCUS?
+  featureForDay(DAY_FOCUS,ROUTE_ORDER,STOP_COORDINATES,ROUTE_GEOMETRY):null;
+function addDayFocusPanel(){
+ if(!DAY_FOCUS_FEATURE||!DAY_FOCUS)return;
+ const frame=document.querySelector('.map-frame');
+ if(!frame||document.getElementById('ct-map-day-focus'))return;
+ const panel=document.createElement('section');
+ panel.id='ct-map-day-focus';panel.className='ct-map-day-focus';
+ panel.setAttribute('aria-label','Selected personalized Circle Tour driving day');
+ const h=document.createElement('strong');
+ const start=cardData(DAY_FOCUS.from).name,end=cardData(DAY_FOCUS.to).name;
+ h.textContent=(DAY_FOCUS.day?'Selected Day '+DAY_FOCUS.day+' · ':'Selected route stretch · ')+start+' to '+end;
+ const text=document.createElement('p');
+ text.textContent='The highlighted line is a simplified OpenStreetMap-based roadway trace, not current navigation, park entrance access or verified driving mileage. Check actual road directions and local park notices.';
+ const button=document.createElement('a');
+ button.href='/lake-superior-circle-tour/10-day/#plan-your-trip';
+ button.textContent='Return to your personalized overnight plan';
+ panel.append(h,text,button);
+ frame.parentNode.insertBefore(panel,frame);
+ const css=document.createElement('style');
+ css.id='ct-map-day-focus-css';
+ css.textContent='.ct-map-day-focus{margin:0 0 14px;padding:13px 17px;background:#f4f8ee;border-left:5px solid #d4a434;border-radius:7px;color:#203a32}.ct-map-day-focus strong{font-size:17px;display:block}.ct-map-day-focus p{font-size:13px;line-height:1.55;margin:7px 0}.ct-map-day-focus a{font-size:13px;font-weight:750;color:#205e50}';
+ document.head.append(css);
+}
+
 
 function readPresetState() {
   const days = Number(document.querySelector(".preset-btn.active")?.dataset.preset || 10);
@@ -270,6 +298,8 @@ function showFallback(message) {
 }
 
 try {
+  // Show the requested day and source caveat even if the basemap CDN fails.
+  addDayFocusPanel();
   addMapLibreCss();
   maplibreApi = await import(MAPLIBRE_MODULE);
   map = new maplibreApi.Map({
@@ -293,6 +323,7 @@ try {
 
   map.on("load", () => {
     window.clearTimeout(loadTimeout);
+    addDayFocusPanel();
     map.addSource("route-overview", {type: "geojson", data: {type:"Feature", geometry:{type:"LineString", coordinates:ROUTE_GEOMETRY}, properties:{}}});
     map.addSource("day-routes", {type: "geojson", data: dayRouteFeatures()});
     map.addSource("circle-stops", {type: "geojson", data: stopFeatures()});
@@ -300,6 +331,23 @@ try {
     map.addLayer({id:"route-shadow",type:"line",source:"route-overview",paint:{"line-color":"#ffffff","line-width":8,"line-opacity":0.9}});
     map.addLayer({id:"route-line",type:"line",source:"route-overview",paint:{"line-color":"#294f3c","line-width":5,"line-opacity":0.72}});
     map.addLayer({id:"day-route-lines",type:"line",source:"day-routes",paint:{"line-color":["get","color"],"line-width":3,"line-opacity":0.95}});
+
+    if(DAY_FOCUS_FEATURE){
+      // Source geometry is intentionally highlighted in a distinct color;
+      // we DO NOT draw a fake navigable route or infer missing park approaches.
+      map.addSource('ct-selected-day',{type:'geojson',data:DAY_FOCUS_FEATURE});
+      map.addLayer({id:'ct-selected-day-outline',type:'line',source:'ct-selected-day',
+        paint:{'line-color':'#ffffff','line-width':11,'line-opacity':0.96}});
+      map.addLayer({id:'ct-selected-day-line',type:'line',source:'ct-selected-day',
+        paint:{'line-color':'#b88017','line-width':7,'line-opacity':0.98}});
+      const bounds=focusBounds(DAY_FOCUS_FEATURE);
+      if(bounds){
+        map.fitBounds(bounds,{padding:window.innerWidth<600?50:100,
+          maxZoom:10,duration:window.matchMedia('(prefers-reduced-motion: reduce)').matches?0:700});
+      }
+      page.track('overnight-map-day-focus',{from:DAY_FOCUS.from,to:DAY_FOCUS.to,day:DAY_FOCUS.day});
+    }
+
     map.addLayer({
       id:"stop-circles",type:"circle",source:"circle-stops",filter:["==",["get","visible"],1],
       paint:{
@@ -372,6 +420,7 @@ window.addEventListener("circle-tour:preset-change", (event) => {
 window.addEventListener("circle-tour:stop-open", (event) => selectStop(String(event.detail.id), {move: false}));
 
 window.CircleTourMap = {
+  focusOvernightDay: ()=>DAY_FOCUS_FEATURE,
   focusStop: selectStop,
   focusMackinacGateway: () => openGatewayPopup({move: true, measure: true}),
 };

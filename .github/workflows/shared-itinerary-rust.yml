@@ -25,6 +25,13 @@ on:
       - 'data/circle-tour-road-evidence.json'
       - 'data/circle-tour-visual-story.json'
       - 'data/circle-tour-traveler-stops.json'
+      - 'data/circle-tour-road-trace-v1.json'
+      - 'data/circle-tour-overnight-options-v1.json'
+      - 'public/assets/circle-tour-overnight-optimizer.js'
+      - 'public/assets/circle-tour-overnight-ui.js'
+      - 'public/assets/circle-tour-map-day-focus.mjs'
+      - 'public/assets/lake-superior-circle-tour-map.js'
+      - 'tests/circle-tour-overnight-optimizer.test.cjs'
       - 'public/assets/circle-tour-traveler-engine.js'
       - 'public/assets/circle-tour-traveler-ui.js'
       - 'tests/circle-tour-traveler-planner.test.cjs'
@@ -69,7 +76,7 @@ jobs:
         run: |
           python3 scripts/build-circle-tour-trip-intelligence.py
           python3 scripts/build-circle-tour-trip-intelligence.py --check
-          node --test tests/circle-tour-road-evidence.test.js tests/circle-tour-trip-intelligence.test.cjs tests/circle-tour-traveler-planner.test.cjs
+          node --test tests/circle-tour-road-evidence.test.js tests/circle-tour-trip-intelligence.test.cjs tests/circle-tour-traveler-planner.test.cjs tests/circle-tour-overnight-optimizer.test.cjs
       - name: Test existing destination and day-sheet policies
         run: |
           node --test tests/shared-itinerary-engine.test.cjs tests/up-waterfalls-day-sheet.test.js \

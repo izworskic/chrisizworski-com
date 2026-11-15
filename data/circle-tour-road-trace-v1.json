@@ -1,0 +1,477 @@
+{
+  "version": 1,
+  "reviewed": "2026-11-14",
+  "basis": "Archived simplified OpenStreetMap-based road geometry already published on chrisizworski.com. Trace arithmetic follows published consecutive coordinate vertices. This is a planning approximation, NOT verified turn-by-turn road-routing, a live ETA, a tested road connection, or park entrance validation.",
+  "license": "Road topology originating from OpenStreetMap contributors; Open Database License (ODbL). Map uses OpenFreeMap basemap separately.",
+  "disclosures": {
+    "traceMiles": "Cumulative haversine between sequential points in the archived road trace; simplified polylines can underestimate bends, approach mileage, junction and trailhead detours.",
+    "planningBuffer": "An openly declared discretionary time/distance cushion may be applied to the trace estimate; it is not a verified adjustment factor.",
+    "border": "Border wait not known from this static source; show a separate planning reserve and verify official crossing requirements.",
+    "park": "The trace omits some precise park entries; local park drive/parking distances and opening permissions remain unverified.",
+    "lodging": "Overnight town or area is an option to investigate; availability, lodging legality, park operating season, and booking are not verified."
+  },
+  "route": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11",
+    "12",
+    "31",
+    "13",
+    "14",
+    "15",
+    "16",
+    "17",
+    "18",
+    "19",
+    "20",
+    "21",
+    "22",
+    "23",
+    "24",
+    "25",
+    "26",
+    "27",
+    "28",
+    "29",
+    "30"
+  ],
+  "match": [
+    {
+      "id": "1",
+      "geometryIndex": 0,
+      "deviationMiles": 0
+    },
+    {
+      "id": "2",
+      "geometryIndex": 1,
+      "deviationMiles": 0.005
+    },
+    {
+      "id": "3",
+      "geometryIndex": 12,
+      "deviationMiles": 0.012
+    },
+    {
+      "id": "4",
+      "geometryIndex": 16,
+      "deviationMiles": 0.002
+    },
+    {
+      "id": "5",
+      "geometryIndex": 20,
+      "deviationMiles": 0.001
+    },
+    {
+      "id": "6",
+      "geometryIndex": 25,
+      "deviationMiles": 1.764
+    },
+    {
+      "id": "7",
+      "geometryIndex": 28,
+      "deviationMiles": 0.004
+    },
+    {
+      "id": "8",
+      "geometryIndex": 36,
+      "deviationMiles": 0.002
+    },
+    {
+      "id": "9",
+      "geometryIndex": 44,
+      "deviationMiles": 0.003
+    },
+    {
+      "id": "10",
+      "geometryIndex": 49,
+      "deviationMiles": 0.002
+    },
+    {
+      "id": "11",
+      "geometryIndex": 54,
+      "deviationMiles": 0.037
+    },
+    {
+      "id": "12",
+      "geometryIndex": 63,
+      "deviationMiles": 0.27
+    },
+    {
+      "id": "31",
+      "geometryIndex": 68,
+      "deviationMiles": 0.013
+    },
+    {
+      "id": "13",
+      "geometryIndex": 74,
+      "deviationMiles": 0.021
+    },
+    {
+      "id": "14",
+      "geometryIndex": 75,
+      "deviationMiles": 0.027
+    },
+    {
+      "id": "15",
+      "geometryIndex": 83,
+      "deviationMiles": 0.03
+    },
+    {
+      "id": "16",
+      "geometryIndex": 87,
+      "deviationMiles": 0
+    },
+    {
+      "id": "17",
+      "geometryIndex": 95,
+      "deviationMiles": 0.004
+    },
+    {
+      "id": "18",
+      "geometryIndex": 98,
+      "deviationMiles": 0.157
+    },
+    {
+      "id": "19",
+      "geometryIndex": 115,
+      "deviationMiles": 0.004
+    },
+    {
+      "id": "20",
+      "geometryIndex": 122,
+      "deviationMiles": 0.001
+    },
+    {
+      "id": "21",
+      "geometryIndex": 127,
+      "deviationMiles": 0.274
+    },
+    {
+      "id": "22",
+      "geometryIndex": 128,
+      "deviationMiles": 0.001
+    },
+    {
+      "id": "23",
+      "geometryIndex": 131,
+      "deviationMiles": 0.012
+    },
+    {
+      "id": "24",
+      "geometryIndex": 132,
+      "deviationMiles": 0.032
+    },
+    {
+      "id": "25",
+      "geometryIndex": 133,
+      "deviationMiles": 0.031
+    },
+    {
+      "id": "26",
+      "geometryIndex": 134,
+      "deviationMiles": 0.038
+    },
+    {
+      "id": "27",
+      "geometryIndex": 135,
+      "deviationMiles": 0.072
+    },
+    {
+      "id": "28",
+      "geometryIndex": 136,
+      "deviationMiles": 0.015
+    },
+    {
+      "id": "29",
+      "geometryIndex": 137,
+      "deviationMiles": 0.007
+    },
+    {
+      "id": "30",
+      "geometryIndex": 138,
+      "deviationMiles": 0.843
+    }
+  ],
+  "legs": [
+    {
+      "from": "1",
+      "to": "2",
+      "fromGeometryIndex": 0,
+      "toGeometryIndex": 1,
+      "traceMiles": 4.6,
+      "snapDeviationMiles": 0.005,
+      "status": "simplified-road-trace"
+    },
+    {
+      "from": "2",
+      "to": "3",
+      "fromGeometryIndex": 1,
+      "toGeometryIndex": 12,
+      "traceMiles": 76.6,
+      "snapDeviationMiles": 0.012,
+      "status": "simplified-road-trace"
+    },
+    {
+      "from": "3",
+      "to": "4",
+      "fromGeometryIndex": 12,
+      "toGeometryIndex": 16,
+      "traceMiles": 20.5,
+      "snapDeviationMiles": 0.012,
+      "status": "simplified-road-trace"
+    },
+    {
+      "from": "4",
+      "to": "5",
+      "fromGeometryIndex": 16,
+      "toGeometryIndex": 20,
+      "traceMiles": 37.3,
+      "snapDeviationMiles": 0.002,
+      "status": "simplified-road-trace"
+    },
+    {
+      "from": "5",
+      "to": "6",
+      "fromGeometryIndex": 20,
+      "toGeometryIndex": 25,
+      "traceMiles": 42.2,
+      "snapDeviationMiles": 1.764,
+      "status": "simplified-road-trace"
+    },
+    {
+      "from": "6",
+      "to": "7",
+      "fromGeometryIndex": 25,
+      "toGeometryIndex": 28,
+      "traceMiles": 22,
+      "snapDeviationMiles": 1.764,
+      "status": "simplified-road-trace"
+    },
+    {
+      "from": "7",
+      "to": "8",
+      "fromGeometryIndex": 28,
+      "toGeometryIndex": 36,
+      "traceMiles": 90,
+      "snapDeviationMiles": 0.004,
+      "status": "simplified-road-trace"
+    },
+    {
+      "from": "8",
+      "to": "9",
+      "fromGeometryIndex": 36,
+      "toGeometryIndex": 44,
+      "traceMiles": 73.8,
+      "snapDeviationMiles": 0.003,
+      "status": "simplified-road-trace"
+    },
+    {
+      "from": "9",
+      "to": "10",
+      "fromGeometryIndex": 44,
+      "toGeometryIndex": 49,
+      "traceMiles": 59.1,
+      "snapDeviationMiles": 0.003,
+      "status": "simplified-road-trace"
+    },
+    {
+      "from": "10",
+      "to": "11",
+      "fromGeometryIndex": 49,
+      "toGeometryIndex": 54,
+      "traceMiles": 40.6,
+      "snapDeviationMiles": 0.037,
+      "status": "simplified-road-trace"
+    },
+    {
+      "from": "11",
+      "to": "12",
+      "fromGeometryIndex": 54,
+      "toGeometryIndex": 63,
+      "traceMiles": 102.4,
+      "snapDeviationMiles": 0.27,
+      "status": "simplified-road-trace"
+    },
+    {
+      "from": "12",
+      "to": "31",
+      "fromGeometryIndex": 63,
+      "toGeometryIndex": 68,
+      "traceMiles": 34.9,
+      "snapDeviationMiles": 0.27,
+      "status": "simplified-road-trace"
+    },
+    {
+      "from": "31",
+      "to": "13",
+      "fromGeometryIndex": 68,
+      "toGeometryIndex": 74,
+      "traceMiles": 70.8,
+      "snapDeviationMiles": 0.021,
+      "status": "simplified-road-trace"
+    },
+    {
+      "from": "13",
+      "to": "14",
+      "fromGeometryIndex": 74,
+      "toGeometryIndex": 75,
+      "traceMiles": 1.9,
+      "snapDeviationMiles": 0.027,
+      "status": "simplified-road-trace"
+    },
+    {
+      "from": "14",
+      "to": "15",
+      "fromGeometryIndex": 75,
+      "toGeometryIndex": 83,
+      "traceMiles": 77.5,
+      "snapDeviationMiles": 0.03,
+      "status": "simplified-road-trace"
+    },
+    {
+      "from": "15",
+      "to": "16",
+      "fromGeometryIndex": 83,
+      "toGeometryIndex": 87,
+      "traceMiles": 50.8,
+      "snapDeviationMiles": 0.03,
+      "status": "simplified-road-trace"
+    },
+    {
+      "from": "16",
+      "to": "17",
+      "fromGeometryIndex": 87,
+      "toGeometryIndex": 95,
+      "traceMiles": 54.5,
+      "snapDeviationMiles": 0.004,
+      "status": "simplified-road-trace"
+    },
+    {
+      "from": "17",
+      "to": "18",
+      "fromGeometryIndex": 95,
+      "toGeometryIndex": 98,
+      "traceMiles": 53.3,
+      "snapDeviationMiles": 0.157,
+      "status": "simplified-road-trace"
+    },
+    {
+      "from": "18",
+      "to": "19",
+      "fromGeometryIndex": 98,
+      "toGeometryIndex": 115,
+      "traceMiles": 104.8,
+      "snapDeviationMiles": 0.157,
+      "status": "simplified-road-trace"
+    },
+    {
+      "from": "19",
+      "to": "20",
+      "fromGeometryIndex": 115,
+      "toGeometryIndex": 122,
+      "traceMiles": 67.3,
+      "snapDeviationMiles": 0.004,
+      "status": "simplified-road-trace"
+    },
+    {
+      "from": "20",
+      "to": "21",
+      "fromGeometryIndex": 122,
+      "toGeometryIndex": 127,
+      "traceMiles": 36.2,
+      "snapDeviationMiles": 0.274,
+      "status": "incomplete-park-approach"
+    },
+    {
+      "from": "21",
+      "to": "22",
+      "fromGeometryIndex": 127,
+      "toGeometryIndex": 128,
+      "traceMiles": 4.7,
+      "snapDeviationMiles": 0.274,
+      "status": "simplified-road-trace"
+    },
+    {
+      "from": "22",
+      "to": "23",
+      "fromGeometryIndex": 128,
+      "toGeometryIndex": 131,
+      "traceMiles": 34.1,
+      "snapDeviationMiles": 0.012,
+      "status": "simplified-road-trace"
+    },
+    {
+      "from": "23",
+      "to": "24",
+      "fromGeometryIndex": 131,
+      "toGeometryIndex": 132,
+      "traceMiles": 9.2,
+      "snapDeviationMiles": 0.032,
+      "status": "simplified-road-trace"
+    },
+    {
+      "from": "24",
+      "to": "25",
+      "fromGeometryIndex": 132,
+      "toGeometryIndex": 133,
+      "traceMiles": 19.5,
+      "snapDeviationMiles": 0.032,
+      "status": "simplified-road-trace"
+    },
+    {
+      "from": "25",
+      "to": "26",
+      "fromGeometryIndex": 133,
+      "toGeometryIndex": 134,
+      "traceMiles": 21.2,
+      "snapDeviationMiles": 0.038,
+      "status": "simplified-road-trace"
+    },
+    {
+      "from": "26",
+      "to": "27",
+      "fromGeometryIndex": 134,
+      "toGeometryIndex": 135,
+      "traceMiles": 12.4,
+      "snapDeviationMiles": 0.072,
+      "status": "simplified-road-trace"
+    },
+    {
+      "from": "27",
+      "to": "28",
+      "fromGeometryIndex": 135,
+      "toGeometryIndex": 136,
+      "traceMiles": 6.2,
+      "snapDeviationMiles": 0.072,
+      "status": "simplified-road-trace"
+    },
+    {
+      "from": "28",
+      "to": "29",
+      "fromGeometryIndex": 136,
+      "toGeometryIndex": 137,
+      "traceMiles": 12.7,
+      "snapDeviationMiles": 0.015,
+      "status": "simplified-road-trace"
+    },
+    {
+      "from": "29",
+      "to": "30",
+      "fromGeometryIndex": 137,
+      "toGeometryIndex": 138,
+      "traceMiles": 26,
+      "snapDeviationMiles": 0.843,
+      "status": "simplified-road-trace"
+    }
+  ],
+  "traceTotalMiles": 1267.1,
+  "note": "The scenic traced road loop is not equivalent to the 1,358 or 1,359 miles published for the editorial presets. Do not conflate those totals or show a traced sum as a GPS route total."
+}
