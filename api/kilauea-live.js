@@ -110,7 +110,7 @@ function extractLatestMessage(text) {
 
 function extractDailyUpdate(text) {
   const full = String(text);
-  const idx = full.search(/HAWAIIAN VOLCANO OBSERVATORY (?:DAILY )?UPDATE/i);
+  const idx = full.search(/HAWAIIAN VOLCANO OBSERVATORY (?:(?:DAILY )?UPDATE|STATUS REPORT|VOLCANIC ACTIVITY NOTICE)/i);
   const body = idx >= 0 ? full.slice(idx) : full;
   const observedAt = parseUsDateFromText(body);
   return { observedAt, text: body.slice(0, 24000) };
@@ -123,12 +123,14 @@ async function loadHvo() {
   let message = null;
 
   try {
-    const [dailyResponse, messageResponse] = await Promise.all([
-      fetchWithTimeout(HVO_UPDATES_URL, { headers: { Accept: 'text/html' } }),
-      fetchWithTimeout(HVO_MESSAGES_URL, { headers: { Accept: 'text/html' } })
+    const results = await Promise.allSettled([
+      fetchWithTimeout(HVO_UPDATES_URL, { headers: { Accept: 'text/html' } }).then(r => r.text()),
+      fetchWithTimeout(HVO_MESSAGES_URL, { headers: { Accept: 'text/html' } }).then(r => r.text())
     ]);
-    daily = extractDailyUpdate(cleanText(await dailyResponse.text()).slice(0, 80000));
-    message = extractLatestMessage(cleanText(await messageResponse.text()).slice(0, 50000));
+    if (results[0].status === 'fulfilled') daily = extractDailyUpdate(cleanText(results[0].value).slice(0, 80000));
+    else errors.push(`HVO update: ${results[0].reason.message}`);
+    if (results[1].status === 'fulfilled') message = extractLatestMessage(cleanText(results[1].value).slice(0, 50000));
+    else errors.push(`HVO messages: ${results[1].reason.message}`);
   } catch (err) {
     errors.push(`USGS current pages: ${err.message}`);
   }
@@ -136,7 +138,7 @@ async function loadHvo() {
   const dailyLooksOfficial = Boolean(
   daily?.observedAt &&
   daily?.text?.length > 120 &&
-  /HAWAIIAN VOLCANO OBSERVATORY (?:DAILY )?UPDATE/i.test(daily.text)
+  /HAWAIIAN VOLCANO OBSERVATORY (?:(?:DAILY )?UPDATE|STATUS REPORT|VOLCANIC ACTIVITY NOTICE)/i.test(daily.text)
 );
 if (dailyLooksOfficial) {
     const dailyTime = new Date(daily.observedAt).getTime();
@@ -147,7 +149,7 @@ if (dailyLooksOfficial) {
     const messageActivity = newerMessage ? classifyActivity(newerMessage.text) : null;
     const messageForecast = newerMessage ? classifyForecastability(newerMessage.text) : null;
     return {
-      source: { name: 'USGS Hawaiian Volcano Observatory', status: 'ok', fetchedAt, observedAt, url: HVO_UPDATES_URL, note: newerMessage ? 'A newer HVO short message controls current activity; the daily update supplies background context.' : 'Latest HVO daily update.' },
+      source: { name: 'USGS Hawaiian Volcano Observatory', status: 'ok', fetchedAt, observedAt, url: HVO_UPDATES_URL, note: newerMessage ? 'A newer HVO short message controls current activity; the daily update supplies background context.' : 'Latest official HVO update or status report.' },
       eruption: {
         text,
         observedAt,
