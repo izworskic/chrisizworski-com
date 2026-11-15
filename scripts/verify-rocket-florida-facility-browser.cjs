@@ -147,6 +147,9 @@ async function expectName(page,name){
    assert((await page.locator('#fl-deck-primary-name').innerText()).includes('Jetty Park'),size.name+' southern park');
    assert((await page.locator('#fl-deck-ticket-tag').innerText()).includes('UNVERIFIED'),size.name+' no automatic KSC ticket');
    assert((await page.locator('#fl-deck-beach-copy').innerText()).includes('30 minutes'),size.name+' NPS inbound cutoff');
+   // SLC-40: same standing NPS Playalinda rule, 18:00Z launch minus 30 min.
+   assert((await page.locator('#fl-deck-beach-copy').innerText()).includes('Yes, Playalinda Beach lots 4-7 are open for viewing this launch.'),size.name+' SLC-40 Playalinda verdict');
+   assert((await page.locator('#fl-rust-gate-reference').innerText()).includes('12:30 PM EST'),size.name+' SLC-40 Playalinda cutoff');
    await page.locator('[data-fl-facility="kennedy"]').click();
    await expectName(page,'Kennedy Space Center');
    await page.waitForFunction(id=>new URL(location.href).searchParams.get('launchId')===id,KSC);

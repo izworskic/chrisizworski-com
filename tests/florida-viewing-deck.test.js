@@ -103,7 +103,7 @@ test('rendered Florida page preserves its canonical and admits public source unc
  assert.match(page,/id="florida-viewing-plan"/);
  assert.match(page,/id="fl-deck-primary-map" type="button" disabled/);
  assert.match(page,/id="fl-deck-ticket-map" type="button" disabled/);
- assert.match(page,/Playalinda Beach: lots 4-7 open for SLC-41 and LC-39A launches/);
+ assert.match(page,/Playalinda Beach: lots 4-7 open for SLC-40, SLC-41 and LC-39A launches/);
  assert.doesNotMatch(page,/cutoff is not confirmed|opening not confirmed|do not assume entry|security access not yet confirmed/i);
  assert.match(js,/renderFloridaDeck\(d\)/);
  assert.match(js,/renderFloridaDeck\(null\)/);

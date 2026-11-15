@@ -196,14 +196,14 @@ test('the verdict is fixed text: no live NPS check, notice or regional match can
     {...d,selectedLaunchId:OTHER},{ok:false},closed])
     assertVerdict(model.assess(n,regional),'11:41 AM EST');
 });
-test('every SLC-41 and LC-39A launch gets the verdict; other pads do not',()=>{
-  for(const [pad,loc] of [['Space Launch Complex 41',12],['SLC-41',12],
+test('every SLC-40, SLC-41 and LC-39A launch gets the verdict; other pads do not',()=>{
+  for(const [pad,loc] of [['Space Launch Complex 40',12],['SLC-40',12],['Space Launch Complex 41',12],['SLC-41',12],
     ['Launch Complex 39A',27],['LC-39A',27]]){
     const n=national(loc);
     Object.assign(n.selectedLaunch,{pad,net:'2026-11-20T03:05:00Z',netPrecision:'minute'});
     assertVerdict(model.assess(n,null),'9:35 PM EST');
   }
-  for(const pad of ['Space Launch Complex 40','Launch Complex 39B','Space Launch Complex 37B','SLC-410']){
+  for(const pad of ['Launch Complex 39B','Space Launch Complex 37B','Launch Complex 36A','SLC-410']){
     const n=national(12);n.selectedLaunch.pad=pad;
     assert.equal(model.assess(n,null).playalinda,null,pad);
   }
