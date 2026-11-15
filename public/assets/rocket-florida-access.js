@@ -4,48 +4,22 @@
    no independent access, weather, parking or launch claims.
    Never import a different mission’s forecast, park alert or KSC ticket. */
 (function(root,factory){
-  const api=factory();
+  const rule=typeof module==='object'&&module.exports?
+    require('./playalinda-rule.js'):root.PlayalindaRule;
+  const api=factory(rule);
   if(typeof module==='object'&&module.exports)module.exports=api;
   else root.RocketFloridaAccess=api;
-})(typeof globalThis!=='undefined'?globalThis:this,function(){
+})(typeof globalThis!=='undefined'?globalThis:this,function(rule){
   const PUBLIC=new Set(['space-view','rotary','parrish','jetty']);
   const VALID=new Set(['candidate','verify','unknown','closed','ineligible']);
   const UUID=/^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i;
   const isOfficial=url=>typeof url==='string'&&/^https:\/\/(?:www\.)?(?:brevardfl\.gov|nps\.gov|portcanaveral\.com|kennedyspacecenter\.com)(?:\/|$)/i.test(url);
   const nonEmpty=t=>typeof t==='string'&&t.trim()?t:null;
 
-  const COMPENDIUM='https://www.nps.gov/cana/learn/management/superintendent-s-compendium.htm';
-  // Standing rule, NPS Superintendent's Compendium 2026, section 1.5(a)(n).
-  // During a launch the closed Playalinda District areas are the park vistas
-  // and the beach at parking area #1 (closed 1/4 mile south to the KSC
-  // boundary). Beach parking lots 4-7 are not closed, so they are open for
-  // viewing, and Playalinda closes to inbound traffic 30 minutes before launch.
-  // NPS publishes only closures, never per-launch openings, so this verdict is
-  // fixed text and is not gated on any live alert or notice check.
-  const PLAYALINDA_PAD=/(?:\bSLC[\s-]*41\b|Space Launch Complex[\s-]*41\b|\bLC[\s-]*39A\b|Launch Complex[\s-]*39A\b)/i;
-  const INBOUND_CUTOFF_MS=30*60000;
-  const playalindaVerdict=cutoff=>'Yes, Playalinda Beach lots 4-7 are open for viewing this launch. '+
-    'Park only in a beach parking lot. Vistas are closed during the launch, and the beach at '+
-    'parking area #1 is closed 1/4 mile south to the KSC boundary. '+
-    (cutoff?'Arrive before '+cutoff+':':'Arrive before the inbound cutoff:')+
-    ' Playalinda closes to inbound traffic 30 minutes before launch.';
-  // Same formatter as the page's displayed launch time (formattedTime in app.js).
-  function cutoffLabel(net,precision,zone){
-    if(!Number.isFinite(net)||!['minute','second'].includes(precision))return null;
-    try{
-      return new Intl.DateTimeFormat('en-US',{timeZone:zone||'America/New_York',
-        hour:'numeric',minute:'2-digit',timeZoneName:'short'}).format(new Date(net-INBOUND_CUTOFF_MS));
-    }catch{return null;}
-  }
+  // Standing NPS Playalinda launch rule, shared with Space Coast Launch
+  // (public/assets/playalinda-rule.js). Fixed text, never gated on a live check.
   function playalindaDecision(national){
-    const m=national?.selectedLaunch;
-    if(!PLAYALINDA_PAD.test(m?.pad||''))return null;
-    const net=Date.parse(m?.net||'');
-    const label=cutoffLabel(net,m?.netPrecision,national?.region?.timezone);
-    return {state:'open',headline:playalindaVerdict(label),
-      note:'Jetty Park is the alternate; check its park pass and hours.',
-      cutoffAt:label?new Date(net-INBOUND_CUTOFF_MS).toISOString():null,
-      cutoffLabel:label,source:COMPENDIUM};
+    return rule?rule.decide(national?.selectedLaunch,national?.region?.timezone):null;
   }
   function assess(national,regional) {
     const mission=national?.selectedLaunch;

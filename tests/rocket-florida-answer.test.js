@@ -225,7 +225,8 @@ test('Sections 02 and 04 render the shared Playalinda verdict with no live-check
   assert.match(js,/NPS 2026 Superintendent’s Compendium, §1\.5\(a\)\(n\)/);
   assert.doesNotMatch(js,/florida\.playalinda\.checkedAt/);
   assert.doesNotMatch(modelJs,/VULCAN|LV-01|12:02|vulcanPlayalinda/);
-  assert.match(html,/rocket-florida-access\.js\?v=20261115-playalinda-rule-v1/);
+  assert.match(html,/rocket-florida-access\.js\?v=20261115-playalinda-rule-v2/);
+  assert.ok(html.indexOf('/assets/playalinda-rule.js')>-1&&html.indexOf('/assets/playalinda-rule.js')<html.indexOf('rocket-florida-access.js'),'shared rule must load first');
   assert.match(html,/rocket-launch-live\/app\.js\?v=20261113-rust-national-v1-map-tiles-v2-playalinda-fixed-20261114-weather-link-sky-trend-glance-operator-plain-hero-liftoff-just-playalinda-rule/);
   assert.doesNotMatch(modelJs,/security access not yet confirmed|opening not confirmed|do not assume entry|cutoff is not confirmed/i);
   assert.doesNotMatch(js,/do not assume entry/i);

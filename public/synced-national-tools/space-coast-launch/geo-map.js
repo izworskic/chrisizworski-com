@@ -55,6 +55,15 @@
   const boardwalkSegments = new Map();
   let markers = new Map(), leafletPromise = null, mapPromise = null, lastMissionId = null;
   let rocketPins=null,scheduledLaunches=[];
+  // Standing NPS Playalinda rule for the selected launch (playalinda-rule.js).
+  // Fixed text for SLC-41 / LC-39A; never gated on the live alert feed.
+  let playalindaRule=null;
+  function applyPlayalindaRule(geo,rule){
+    if(!geo||!rule||!Array.isArray(geo.points))return geo;
+    const R=window.PlayalindaRule;
+    return {...geo,points:geo.points.map(p=>p.category==='beach-parking'&&R.isOpenLot(p.number)?
+      {...p,level:'candidate',npsStandingRule:true,activeNpsClosure:null}:p)};
+  }
   const options = document.querySelectorAll('input[name="geo-intent"]');
   function updateExplanation() { say('geo-intent-explainer', profileDescription[profile]); }
   options.forEach(r => r.addEventListener('change', () => {
@@ -66,10 +75,14 @@
   }));
 
   function verdict(v) {
+    if (v?.npsStandingRule) return 'Open for viewing this launch (NPS rule)';
+    if (playalindaRule && v?.category === 'beach-parking' &&
+        Number(v.number) === window.PlayalindaRule?.CLOSED_BEACH_LOT)
+      return 'Beach here closed during the launch';
     if (v?.level === 'closed') return 'Park closure reported';
     if (v?.level === 'ineligible') return 'Not available for this launch pad';
     if (v?.level === 'candidate') return 'Public viewing mentioned in local sources';
-    if (v?.level === 'unknown') return 'Opening not confirmed';
+    if (v?.level === 'unknown') return 'Check the venue before you go';
     return 'Check the venue before you go';
   }
   function scoring(p) {
@@ -178,6 +191,18 @@
     const data=current?.liveAccess;
     if(!container||!desk)return;
     desk.replaceChildren();
+    if(playalindaRule) {
+      container.dataset.state='open';
+      say('geo-live-checked','Standing NPS launch rule · '+playalindaRule.sourceLabel);
+      say('geo-live-verdict',playalindaRule.headline);
+      desk.appendChild(node('p','geo-live-item',playalindaRule.note));
+      const refs=node('div','geo-live-links');
+      const a=document.createElement('a');
+      a.href=playalindaRule.source;a.target='_blank';a.rel='noopener noreferrer';
+      a.textContent=playalindaRule.sourceLabel;
+      refs.appendChild(a);desk.appendChild(refs);
+      return;
+    }
     if(!data || data.sourceStatus!=='fresh') {
       container.dataset.state='unknown';
       say('geo-live-checked',data?.sourceStatus==='stale'?
@@ -597,6 +622,14 @@
         new Date(cutoff).toLocaleString('en-US',{timeZone:'America/New_York',
           month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'}) : null;
       const heading=policy.querySelector('strong');
+      if(playalindaRule){
+        if(heading)heading.textContent=playalindaRule.cutoffLabel?
+          'Playalinda closes to inbound traffic at '+playalindaRule.cutoffLabel:
+          'Playalinda closes to inbound traffic 30 minutes before launch';
+        if(p)p.textContent='Inbound traffic stops 30 minutes before launch ('+playalindaRule.sourceLabel+
+          '). Beach lots 4-7 stay open for viewing; vistas and the beach at parking area #1 close. The map shows the NPS road centerline.';
+        policy.dataset.level='open';
+      }else{
       if(heading)heading.textContent=road.label || 'Published park-road policy · not a live gate report';
       if (p) p.textContent = (geo.npsAlertsVerified ?
         'NPS official park alerts last checked ' + (meta || 'recently') + '. ' :
@@ -605,6 +638,7 @@
         (road.detail || geo.policy?.detail || 'Park gates and security restrictions can still change.') +
         ' The map overlays an NPS road centerline, NOT live gate status or a current closure order.';
       policy.dataset.level=road.level||'unknown';
+      }
     }
     renderPlayalindaLots();
     renderLiveAccess();
@@ -939,14 +973,16 @@
   document.addEventListener('space-coast:launch-loaded',event=>{
     const d=event.detail;
     if(!d || !d.geographicViewing) {
-      current=null;scheduledLaunches=[];rocketPins?.update([],null);render();return;
+      current=null;playalindaRule=null;scheduledLaunches=[];rocketPins?.update([],null);render();return;
     }
     if(d.selectedLaunchId!==lastMissionId)selected=null;
     lastMissionId=d.selectedLaunchId;
     scheduledLaunches=(Array.isArray(d.launches)?d.launches:[])
       .map(m=>({...m,region:'florida'}));
     rocketPins?.update(scheduledLaunches,lastMissionId);
-    current=d.geographicViewing;
+    const mission=scheduledLaunches.find(m=>m.id===lastMissionId)||null;
+    playalindaRule=window.PlayalindaRule?.decide(mission,'America/New_York')||null;
+    current=applyPlayalindaRule(d.geographicViewing,playalindaRule);
     render();
     loadRepairHistoryOnce();
   });

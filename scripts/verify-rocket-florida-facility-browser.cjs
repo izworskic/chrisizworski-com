@@ -152,6 +152,11 @@ async function expectName(page,name){
    await page.waitForFunction(id=>new URL(location.href).searchParams.get('launchId')===id,KSC);
    assert((await page.locator('#mission-name').innerText()).includes('Fixture Kennedy launch'),size.name+' reverse mission sync');
    assert((await page.locator('#fl-deck-primary-name').innerText()).includes('Space View Park'),size.name+' reverse site sync');
+   // LC-39A: standing NPS Playalinda rule, cutoff = 18:00Z launch minus 30 min.
+   assert((await page.locator('#fl-deck-beach-copy').innerText()).includes('Yes, Playalinda Beach lots 4-7 are open for viewing this launch.'),size.name+' Playalinda standing verdict');
+   assert((await page.locator('#fl-deck-beach-copy').innerText()).includes('Arrive before 12:30 PM EST'),size.name+' Playalinda computed cutoff');
+   assert((await page.locator('#fl-rust-gate-reference').innerText()).includes('12:30 PM EST'),size.name+' Playalinda cutoff panel');
+   assert(!/cutoff is not confirmed|opening not confirmed|do not assume entry|security access not yet confirmed/i.test(await page.locator('body').innerText()),size.name+' Playalinda hedging returned');
    const deckShot=size.name+'-pad-to-shore.png';
    await page.locator('#florida-viewing-plan').screenshot({path:path.join(out,deckShot),animations:'disabled'});
    report.screenshots.push(deckShot);
@@ -179,7 +184,7 @@ async function expectName(page,name){
   assert(await staticPage.locator('#florida-launch-facilities a[href^="https://www.nps.gov/"]').count()===1,'No-JS NPS source missing');
   assert(await staticPage.locator('[data-fl-facility]:disabled').count()===2,'No-JS buttons must not claim data');
   assert(await staticPage.locator('#fl-deck-primary-map').isDisabled(),'No-JS plan falsely claims a destination');
-  assert((await staticPage.locator('#fl-deck-beach-copy').innerText()).includes('it can close or fill'),'No-JS NPS qualifier missing');
+  assert((await staticPage.locator('#fl-deck-beach-copy').innerText()).includes('lots 4-7 stay open for viewing'),'No-JS NPS standing rule missing');
   report.scenarios.push({name:'no-js',officialSources:'present',unsupportedControls:'disabled'});
   await noJs.close();
  }catch(e){report.errors.push(e.stack||String(e))}

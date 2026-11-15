@@ -38,6 +38,10 @@
     const zone = ['day', 'date-tbd'].includes(precision) ? 'UTC' : 'America/New_York';
     return new Intl.DateTimeFormat('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', timeZone: zone }).format(d);
   };
+  // Standing NPS Playalinda rule (public/assets/playalinda-rule.js), shared
+  // with Rocket Launch Live. Fixed text for SLC-41 and LC-39A launches; never
+  // gated on a live NPS alert check. Cutoff follows the displayed launch time.
+  const playalindaRule = data => window.PlayalindaRule?.decide(data?.next, 'America/New_York') || null;
   const timeFormat = (iso, precision) => {
     if (!iso || !['second', 'minute', 'hour'].includes(precision)) return 'Launch time not announced';
     const d = new Date(iso);
@@ -439,14 +443,25 @@
     addChip(flags, 'candidate', count('candidate') + ' public candidate' + (count('candidate') === 1 ? '' : 's'));
     if (count('closed') > 0) addChip(flags, 'closed', count('closed') + ' closure' + (count('closed') === 1 ? '' : 's'));
     if (count('ineligible') > 0) addChip(flags, 'ineligible', count('ineligible') + ' pad restriction' + (count('ineligible') === 1 ? '' : 's'));
-    addChip(flags, data.accessSource?.verified ? 'candidate' : 'unknown', data.accessSource?.verified ? 'NPS alerts checked' : 'NPS access unverified');
+    const rule = playalindaRule(data);
+    if (rule) addChip(flags, 'candidate', 'Playalinda lots 4-7 open');
+    else addChip(flags, data.accessSource?.verified ? 'candidate' : 'unknown', data.accessSource?.verified ? 'NPS alerts checked' : 'NPS access unverified');
     const checked = data.accessSource?.checkedAt;
-    set('launch-access-checked', checked ?
+    set('launch-access-checked', rule ?
+      'Playalinda lots 4-7: standing NPS launch rule, ' + rule.sourceLabel + '.' :
+      checked ?
       'NPS alerts checked ' + new Date(checked).toLocaleString('en-US') +
       '. A park alert is not an official launch-specific security clearance.' :
       'Current access-source time unavailable.');
     const activeClosures = (data.parkAlerts || []).filter(a => /closure/i.test(a.category || ''));
-    if (activeClosures.length) {
+    if (rule) {
+      panel.dataset.empty = 'false';
+      panel.dataset.state = 'open';
+      panel.appendChild(element('h3', '', 'Playalinda Beach lots 4-7 are open for viewing this launch'));
+      panel.appendChild(element('p', '', rule.headline));
+      panel.appendChild(element('p', 'small', rule.note));
+      panel.appendChild(link(rule.source, rule.sourceLabel, 'launch-link official'));
+    } else if (activeClosures.length) {
       panel.dataset.empty = 'false';
       panel.appendChild(element('h3', '', 'Active NPS closure'));
       activeClosures.forEach(a => {
@@ -460,7 +475,12 @@
       panel.appendChild(element('p', '', 'No matching alert doesn’t mean Playalinda is open for your launch. Check park conditions and the posted gate rules.'));
     }
     const order = { candidate: 0, verify: 1, unknown: 2, closed: 3, ineligible: 4 };
-    views.slice().sort((a, b) => (order[a.level] ?? 5) - (order[b.level] ?? 5))
+    const shown = rule ? views.map(v => v.id === 'playalinda-south' ? {
+      ...v, level: 'candidate', label: 'Lots 4-7 open for viewing',
+      reason: rule.headline, summary: rule.note, source: rule.source
+    } : v) : views;
+    shown.slice().sort((a, b) => (rule ? (b.id === 'playalinda-south') - (a.id === 'playalinda-south') : 0) ||
+      (order[a.level] ?? 5) - (order[b.level] ?? 5))
       .forEach(v => {
         const card = element('article', 'launch-venue');
         card.dataset.state = v.level || 'unknown';
@@ -649,14 +669,20 @@
           { detail: { id:ticket.mapId } })) : null;
     }
     const beach = deck?.playalinda || null;
+    const beachRule = playalindaRule(data);
     const beachWrap = document.querySelector('#florida-viewing-plan .fl-deck-conditions');
-    if (beachWrap) beachWrap.dataset.closed = beach?.excluded ? 'true' : 'false';
+    if (beachWrap) beachWrap.dataset.closed = !beachRule && beach?.excluded ? 'true' : 'false';
+    if (beachRule) {
+      set('fl-deck-beach-head', 'Playalinda Beach lots 4-7: open for viewing this launch');
+      set('fl-deck-beach-copy', beachRule.headline + ' ' + beachRule.note);
+    } else {
     set('fl-deck-beach-head', beach?.excluded ?
       'Playalinda: an NPS restriction is reported for the mapped reference lot' :
       'Playalinda: check the park gate before driving');
     set('fl-deck-beach-copy', beach ?
       (beach.accessLabel + '. ' + beach.accessReason + ' ' + beach.policy) :
       'Playalinda’s current closures aren’t available here. Check NPS before heading to the beach.');
+    }
     const note = deck?.decisionNote ||
       'The map still shows the place, but we can’t confirm it is open for this launch.';
     const npsStamp = deck?.observation?.npsAlertCheckedAt ?
@@ -672,8 +698,16 @@
     latestCutoffEvidence=data;
     const panel=$('fl-rust-gate-reference');
     if(!panel)return;
+    const rule=playalindaRule(data);
+    if(rule){
+      panel.dataset.decisionEngine='nps-standing-rule';
+      panel.textContent=rule.cutoffLabel?
+        'Playalinda closes to inbound traffic at '+rule.cutoffLabel+', 30 minutes before launch.':
+        'Playalinda closes to inbound traffic 30 minutes before launch.';
+      return;
+    }
     if(!rustPlanning){
-      panel.textContent='The selected-mission cutoff is not confirmed here. Check the latest NPS notice before traveling.';
+      panel.textContent='Playalinda closes to inbound traffic about 30 minutes before launch under NPS policy.';
       return;
     }
     panel.dataset.decisionEngine='rust-wasm';
@@ -701,6 +735,16 @@
     const panel = $('launch-arrival');
     if (!panel) return;
     panel.replaceChildren();
+    const rule = playalindaRule(data);
+    if (rule) {
+      panel.dataset.state = 'open';
+      panel.appendChild(element('h3', '', rule.cutoffLabel ?
+        'Playalinda: arrive before ' + rule.cutoffLabel : 'Playalinda: arrive before the inbound cutoff'));
+      panel.appendChild(element('p', '', rule.headline));
+      panel.appendChild(element('p', 'small', rule.note));
+      panel.appendChild(link(rule.source, rule.sourceLabel, 'launch-link official'));
+      return;
+    }
     const g = data.arrivalGuidance || {};
     panel.dataset.state = g.level || 'unknown';
     panel.appendChild(element('h3', '', 'Playalinda: ' + (g.label || 'Confirm the park gate')));
@@ -1278,7 +1322,7 @@
       const comparison = $('launch-sky-compare');
       if (comparison) comparison.textContent = 'Current sky comparison unavailable. Do not assume a clear line of sight.';
       const panel = $('launch-nps-alert');
-      if (panel) panel.textContent = 'NPS live closures unavailable. Do not assume Playalinda access.';
+      if (panel) panel.textContent = 'Launch details could not be loaded. During SLC-41 and LC-39A launches, Playalinda Beach lots 4-7 are open for viewing under the NPS Superintendent’s Compendium; the park closes to inbound traffic 30 minutes before launch.';
       const kscPanel = $('ksc-mission-viewing');
       if (kscPanel) kscPanel.textContent = 'KSC mission viewing could not be verified. Check the official KSC calendar before purchasing admission.';
     }
