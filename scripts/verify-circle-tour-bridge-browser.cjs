@@ -3,7 +3,7 @@ const http=require('node:http'),fs=require('node:fs'),path=require('node:path');
 const {chromium}=require('playwright');
 const root=path.resolve(__dirname,'../public'),out=path.resolve(__dirname,'../artifacts/circle-tour-bridge');
 fs.mkdirSync(out,{recursive:true});
-const types={'.html':'text/html; charset=utf-8','.css':'text/css','.js':'application/javascript','.json':'application/json'};
+const types={'.html':'text/html; charset=utf-8','.css':'text/css','.js':'application/javascript','.mjs':'application/javascript','.json':'application/json'};
 const server=http.createServer(async(req,res)=>{
   try {
     const uri=new URL(req.url,'http://127.0.0.1');
@@ -512,6 +512,48 @@ function check(value,message){if(!value)throw Error(message);}
     report.cases.push({state:width+'px traveler preferences',result:
       '7/10/15 source routes, 5h cap, 4h conflict, seasonal gate, local photos, shareable preferences and original tools'});
 
+
+    // The adaptive overnight solver must actually redistribute stopovers.
+    await guide.waitForFunction(()=>document.querySelector('#ct-optimized')?.dataset.rendered==='true',null,{timeout:15000});
+    check(await guide.locator('#ct-opt-nights .ct-opt-day').count()===10,
+      'overnight solver failed to create ten travel days from archived source roads');
+    check((await guide.locator('#ct-opt-summary').textContent()).includes('OpenStreetMap'),
+      'trace source and no-live-navigation disclosure missing');
+    check(await guide.locator('#ct-opt-nights a[data-ct-map-day]').count()===10,
+      'not every optimized day opens its own map-highlighted road stretch');
+    check(await guide.locator('#ct-opt-nights a').filter({hasText:'Check actual driving directions'}).count()===10,
+      'Google Maps check is missing from an overnight day');
+    check(await guide.locator('#ct-opt-nights .ct-opt-photo img').count()>=4,
+      'optimized travel days lost actual credited local photography');
+    check((await guide.locator('#ct-opt-nights a[data-ct-map-day]').first().getAttribute('href')).includes('ct_from=1'),
+      'first personalized day does not use the real Duluth start');
+    check(await guide.locator('#ct-opt-nights .ct-opt-day').last().getAttribute('data-to')==='30',
+      'optimized route must finish the continuous Duluth loop');
+    // A common traveler frustration: day-specific map must select a
+    // real source segment rather than show an unrelated full-lake route.
+    if(width===390){
+      const dayHref=await guide.locator('#ct-opt-nights a[data-ct-map-day]').first().getAttribute('href');
+      const focused=await browser.newContext({viewport:{width:390,height:844}});
+      const mapPage=await focused.newPage();
+      const dayUrl=new URL(dayHref,url);
+      check(dayUrl.searchParams.has('ct_from')&&dayUrl.searchParams.has('ct_to'),
+        'day-specific map link lacks its actual route endpoints');
+      await mapPage.goto(dayUrl.toString(),{waitUntil:'domcontentloaded',timeout:35000});
+      await mapPage.locator('#circleTourMap').scrollIntoViewIfNeeded();
+      await mapPage.waitForFunction(()=>document.querySelector('#ct-map-day-focus')!==null&&
+        window.CircleTourMap?.focusOvernightDay?.()!==null,null,{timeout:30000});
+      check(await mapPage.locator('#ct-map-day-focus').isVisible(),
+        'map does not explain the highlighted day or source caveats');
+      const picked=await mapPage.evaluate(()=>window.CircleTourMap.focusOvernightDay());
+      check(picked.properties.from===dayUrl.searchParams.get('ct_from')&&
+        picked.properties.to===dayUrl.searchParams.get('ct_to')&&
+        picked.geometry.coordinates.length>=2,
+        'focused map day was not traced on the published source geometry');
+      report.cases.push({state:'individual overnight day opens on map',
+        result:'selected source-trace segment, park/ETA caveat, responsive overlay'});
+      await focused.close();
+    }
+
     check((await guide.title()).includes('10-Day Itinerary'),'10-day search title missing');
     check(await guide.locator('link[rel="canonical"]').getAttribute('href')===
       'https://chrisizworski.com/lake-superior-circle-tour/10-day/','incorrect canonical');
@@ -562,6 +604,8 @@ function check(value,message){if(!value)throw Error(message);}
     'no-JS static traveler explanation missing');
   check(await staticGuide.locator('.ct-personal-controls').isHidden(),
     'inert no-JS controls must not be shown');
+  check((await staticGuide.locator('#ct-opt-summary').textContent()).includes('require JavaScript'),
+    'non-JS optimized itinerary has no truthful fallback');
   await staticGuide.close();
 
   report.cases.push({state:'no JavaScript',result:'canonical independent links and all 31 stop cards visible'});
