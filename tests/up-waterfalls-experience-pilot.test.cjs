@@ -32,7 +32,7 @@ test('keeps all destination cards, source-verified photographs and safety warnin
     assert.ok(p&&h.includes(p.creator),'verified image attribution '+id);
   }
   assert.match(h,/Marker = waterfall\/attraction/);
-  assert.match(h,/NOT a validated trailhead or parking pin/);
+  assert.match(h,/<strong>not<\\/strong> a validated trailhead or parking pin/);
   assert.match(h,/Nothing here verifies today's road, gate or trail status/);
   assert.match(h,/Munising Falls is closed/);
   assert.match(h,/Check parking source/);
