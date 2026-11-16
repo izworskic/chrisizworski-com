@@ -64,3 +64,16 @@ test('mobile map precedes long results; retains touch targets and source proof',
   assert.doesNotMatch(css,/display:none/);
   assert.doesNotMatch(css,/touch-action:none/);
 });
+
+test('waterfall map uses visitor-facing labels while preserving required tile attribution',()=>{
+  const map=fs.readFileSync('public/assets/up-waterfalls.js','utf8');
+  assert.match(h,/<p>Explore the waterfall map<\/p>/);
+  assert.match(h,/Loading the map\. Waterfall guides and official sources are available below\./);
+  assert.doesNotMatch(h,/Waterfalls · CARTO basemap|Loading the keyed basemap/);
+  assert.match(map,/Map ready\. Pins mark waterfalls, not visitor parking\./);
+  assert.doesNotMatch(map,/CARTO basemap loaded with the configured public key|OpenStreetMap basemap in use|CARTO map tiles unavailable/);
+  // The provider attribution and tile configuration must remain in map internals.
+  assert.match(map,/attribution:'&copy; OpenStreetMap contributors &copy; CARTO'/);
+  assert.match(map,/fetch\('\/api\/carto-basemap-config'/);
+  assert.match(map,/tile\.openstreetmap\.org/);
+});

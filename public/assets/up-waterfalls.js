@@ -9,7 +9,7 @@ function addFallback(){
  if(baseLayer)map.removeLayer(baseLayer);
  const layer=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:17,attribution:'&copy; OpenStreetMap contributors'});
  let errors=0;
- layer.on('tileload',()=>baseMessage('OpenStreetMap basemap in use. Waterfall pins still mark natural features, not parking.'));
+ layer.on('tileload',()=>baseMessage('Map ready. Pins mark waterfalls, not visitor parking.'));
  layer.on('tileerror',()=>{if(++errors>=3)baseMessage('Map tiles could not load. The waterfall profiles and official sources remain available below.');});
  baseLayer=layer.addTo(map);
 }
@@ -24,8 +24,8 @@ async function configureBasemap(){
   const url='https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png?key='+encodeURIComponent(cfg.key.trim());
   const layer=L.tileLayer(url,{maxZoom:17,subdomains:'abcd',attribution:'&copy; OpenStreetMap contributors &copy; CARTO'});
   let errors=0;
-  layer.on('tileload',()=>baseMessage('CARTO basemap loaded with the configured public key. Waterfall markers are not parking locations.'));
-  layer.on('tileerror',()=>{if(++errors>=3){baseMessage('CARTO map tiles unavailable. Switching to OpenStreetMap.');addFallback();}});
+  layer.on('tileload',()=>baseMessage('Map ready. Pins mark waterfalls, not visitor parking.'));
+  layer.on('tileerror',()=>{if(++errors>=3){baseMessage('Map background unavailable. Trying another map view.');addFallback();}});
   baseLayer=layer.addTo(map);
  }catch{addFallback();}
  finally{clearTimeout(timer);}
