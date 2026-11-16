@@ -12,7 +12,7 @@ test('B55 waterfall decision desk: visible before map and retains 75 source guid
  assert.equal((html.match(/<article class="waterfall-card" data-fall /g)||[]).length,80);
  assert.ok(index>0&&index<html.indexOf('id="falls-map"'));
  for(const id of ['visit-region','visit-budget','visit-date','visit-verdict','visit-picks','visit-selection','visit-baseline'])assert.ok(html.includes('id="'+id+'"'),'missing '+id);
- assert.match(html,/Explore 80 waterfall destinations and scenic stops/);assert.match(html,/80 curated waterfall profiles/);
+ assert.match(html,/Explore 80 waterfall destinations and scenic stops/);assert.match(html,/80 waterfalls and scenic stops to explore/);
  assert.match(html,/https:\/\/chrisizworski.com\/upper-peninsula-waterfalls\//);
  assert.match(html,/Built by/);assert.match(html,/id="show-geo-candidates"/);
  assert.match(html,/assets\/up-waterfalls-visit-lens.js/);
