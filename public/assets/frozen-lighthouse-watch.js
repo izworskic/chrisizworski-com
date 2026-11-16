@@ -27,7 +27,8 @@
   const air=Number.isFinite(h.airF)?Math.round(h.airF)+' F':'unknown air';
   const water=Number.isFinite(h.waterF)?Math.round(h.waterF)+' F':'unknown water';
   const direction=h.score===null?'direction unavailable':h.reason.includes('offshore')?'offshore or cross-shore':'onshore sector '+Math.round(pier.onshoreBearing)+' degrees';
-  return wind+' '+windMph+', '+direction+', '+air+' air, '+water+' water. '+(h.reason||'');
+  const gust=Number.isFinite(h.gustMph)?', gust '+Math.round(h.gustMph)+' mph':', gust not reported';
+  return wind+' '+windMph+gust+', '+direction+', '+air+' air, '+water+' water. '+(h.reason||'');
  }
  function setTop(data){
   checked.textContent='Calculated '+time(data.generatedAt)+'. Forecasts and observations below have independent issue times.';
