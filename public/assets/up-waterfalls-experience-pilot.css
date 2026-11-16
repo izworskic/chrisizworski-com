@@ -94,6 +94,18 @@
 .up-waterfall-hub.waterfall-experience-pilot #falls-map{
   scroll-margin-top:18px;
 }
+/* The DOM is map first for keyboard and assistive technology. Desktop gets the
+   familiar results-left/map-right visual layout through explicit grid placement. */
+@media(min-width:901px){
+  .up-waterfall-hub.waterfall-experience-pilot .explorer .control-panel{
+    grid-column:1;
+    grid-row:1;
+  }
+  .up-waterfall-hub.waterfall-experience-pilot .explorer .map-card{
+    grid-column:2;
+    grid-row:1;
+  }
+}
 @media(max-width:900px){
   .up-waterfall-hub.waterfall-experience-pilot .visit-head{
     grid-template-columns:1fr;
@@ -102,9 +114,7 @@
     display:flex;
     flex-direction:column;
   }
-  /* The actual Leaflet map, not the 80-card list, comes first on narrow screens. */
-  .up-waterfall-hub.waterfall-experience-pilot .explorer .map-card{order:0}
-  .up-waterfall-hub.waterfall-experience-pilot .explorer .control-panel{order:1}
+  /* Native map-first document order preserves reading and tab order on mobile. */
   .up-waterfall-hub.waterfall-experience-pilot .explorer .map{
     height:min(54vh,460px);
     min-height:320px;
