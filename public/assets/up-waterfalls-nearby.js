@@ -27,12 +27,12 @@ function syncSaveButtons(){
 function render(data){
  const current=data.locations.find(x=>x.id===origin.value);
  output.replaceChildren();
- if(!current){status.textContent='Choose a waterfall to see geographically nearby destinations.';return;}
+ if(!current){status.textContent='Choose a waterfall to discover others nearby.';return;}
  const miles=Number(radius.value);
  const index=new Map(data.locations.map(x=>[x.id,x]));
  const matches=(data.nearby[current.id]||[]).filter(x=>x.miles<=miles&&index.has(x.id)&&cards.has(x.id)&&(!window.SharedItineraryEngine||window.SharedItineraryEngine.nearbyEligible(cards.get(x.id),x.miles,miles)));
- status.textContent=matches.length+' curated waterfall'+(matches.length===1?'':'s')+' within '+miles+' straight-line miles of '+current.name+'. These are geographic leads, not a driving itinerary or open-trail report.';
- if(!matches.length){output.appendChild(element('p','nearby-empty','No other access-reviewed stops appear in this radius. Try 50 miles or choose another waterfall.'));return;}
+ status.textContent=matches.length+' more waterfall'+(matches.length===1?'':'s')+' within '+miles+' miles of '+current.name+' as the crow flies. Open each guide for the route in.';
+ if(!matches.length){output.appendChild(element('p','nearby-empty','No other waterfalls with visitor guides appear this close. Try 50 miles or choose another waterfall.'));return;}
  for(const match of matches.slice(0,6)){
   const target=index.get(match.id),original=cards.get(match.id);
   const item=element('article','nearby-stop');
@@ -40,7 +40,7 @@ function render(data){
   const label=element('p','nearby-distance',match.miles.toFixed(1)+' miles straight-line · '+target.region);
   const title=element('h3');const guide=element('a','',target.name);guide.href=target.url;title.appendChild(guide);
   const extra=target.id==='gabbro-falls'?'Resort visitor parking and winter walking access are not established. Confirm directly with Snowriver. ':['potawatomi-falls','gorge-falls','rainbow-falls','great-conglomerate-falls'].includes(target.id)?'Black River construction affects specific trails and platforms. ':'';
-  const review=element('p','nearby-note',(original.dataset.statusLabel||'Check conditions')+' · '+(target.status==='seasonal'?'Seasonal arrival restrictions apply. ':target.status==='restricted'?'Partial access restrictions apply. ':'')+extra+'Check the source before travel.');
+  const review=element('p','nearby-note',(original.dataset.statusLabel||'Check conditions')+' · '+(target.status==='seasonal'?'Seasonal arrival restrictions apply. ':target.status==='restricted'?'Partial access restrictions apply. ':'')+extra+'Check the park details before you go.');
   const actions=element('div','nearby-actions');
   const locate=element('button','nearby-map-action','Show waterfall on map');locate.type='button';
   locate.addEventListener('click',()=>{
@@ -66,10 +66,10 @@ function render(data){
    existing.click();
    syncSaveButtons();
   });
-  actions.append(locate,save,link('Arrival evidence',target.source));
+  actions.append(locate,save,link('Park & trail details',target.source));
   item.append(label,title,review,actions);output.appendChild(item);
  }
- if(matches.length>6)output.appendChild(element('p','nearby-overflow','Showing the six nearest of '+matches.length+'. Expand the radius or choose a different anchor to explore more.'));
+ if(matches.length>6)output.appendChild(element('p','nearby-overflow','Showing the six closest of '+matches.length+'. Try a larger radius or choose another waterfall to find more.'));
  syncSaveButtons();
 }
 async function init(){
@@ -83,11 +83,11 @@ async function init(){
   vetted.sort((a,b)=>a.name.localeCompare(b.name));
   for(const x of vetted){const option=document.createElement('option');option.value=x.id;option.textContent=x.name;origin.appendChild(option);}
   origin.value=vetted.some(x=>x.id==='wagner-falls')?'wagner-falls':vetted[0].id;
-  counts.textContent=vetted.length+' source-reviewed, eligible stops from '+data.counts.curated+' curated destinations. Geographic index reviewed '+data.reviewed+'.';
+  counts.textContent=vetted.length+' waterfalls with documented approaches to explore. Distances are straight-line miles, not driving distances. Updated '+data.reviewed+'.';
   origin.disabled=false;radius.disabled=false;
   origin.addEventListener('change',()=>render(data));radius.addEventListener('change',()=>render(data));render(data);
  }catch{
-  status.textContent='Nearby comparison data could not be verified. Use the full source-backed waterfall list and interactive map below instead.';
+  status.textContent='Nearby waterfall suggestions aren't available right now. You can still explore every waterfall on the main map.';
   output.replaceChildren();
  }
 }
