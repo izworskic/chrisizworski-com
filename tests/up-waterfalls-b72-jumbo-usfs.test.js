@@ -69,7 +69,7 @@ test('B72 visitor pages and generated indexes retain source gates',()=>{
  assert.doesNotMatch(guide,/maps\/dir\//);
  assert.match(research,/noindex,follow/);assert.match(research,/NEW B72 FINDING/);
  assert.match(hub,/data-id="jumbo-falls" data-gis-oid="29"/);
- assert.match(hub,/80 curated visitor destinations/);
+ assert.match(hub,/Explore 80 waterfall destinations and scenic stops/);
  assert.match(hub,/data-lat="46.44963" data-lng="-88.91278"/);
  assert.equal((sitemap.match(/<loc>/g)||[]).length,78);
  assert.equal((sitemap.match(/upper-peninsula-waterfalls\/jumbo-falls\//g)||[]).length,1);
