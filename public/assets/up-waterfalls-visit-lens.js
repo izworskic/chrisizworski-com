@@ -66,7 +66,7 @@ function guidance(c,when){
  if(['potawatomi-falls','gorge-falls','sandstone-falls','rainbow-falls','great-conglomerate-falls'].includes(name)){
   notice.push('Black River trail/platform construction has location-specific restrictions through the agency notice.');
  }
- if(!notice.length)notice.push('This could be a good stop for your day. Check the park's latest trail and road notes before heading out.');
+ if(!notice.length)notice.push('This could be a good stop for your day. Check the latest park trail and road notes before heading out.');
  const materialCaution=notice.some(text=>!text.startsWith('No closure encoded for this stop'));
  return {excluded:false,level:materialCaution||status==='seasonal'||status==='restricted'?'extra-check':'check',notice};
 }
