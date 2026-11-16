@@ -326,3 +326,10 @@
 .waterfall-card .arrival-details{clear:both}
 .waterfall-card::after{content:"";display:block;clear:both}
 @media(max-width:440px){.waterfall-card .upfall-card-preview{width:108px;margin-left:8px}.waterfall-card .upfall-card-preview img{height:79px}}
+
+/* Archival place context is explicitly NOT verified falls photography. */
+.upfall-context-photo{max-width:760px;margin:16px 0 22px;padding:9px;background:#f0f4f1;border:1px solid var(--line);border-radius:10px}
+.upfall-context-photo img{display:block;width:100%;height:auto;max-height:440px;object-fit:contain;border-radius:5px}
+.upfall-context-photo figcaption{font-size:.8rem;line-height:1.55;margin:9px 5px 4px;color:var(--sub)}
+.upfall-context-photo figcaption strong{color:var(--deep)}
+.upfall-context-photo a{color:var(--deep);text-decoration:underline;text-underline-offset:2px}
