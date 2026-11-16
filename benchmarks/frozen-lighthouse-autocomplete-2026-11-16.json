@@ -1,0 +1,1087 @@
+{
+  "label": "Google autocomplete demand proxy, not GSC and not search volumes",
+  "pulledOn": "2026-11-16",
+  "sources": [
+    "https://suggestqueries.google.com/complete/search?client=firefox"
+  ],
+  "batchId": "batch_45903e691451498c86205a01c77131e9",
+  "method": "Four seeds each alphabet-expanded a through z and expanded for today, this weekend, this week, right now",
+  "seeds": [
+    "frozen lighthouse",
+    "ice covered lighthouse",
+    "st joseph lighthouse ice",
+    "lighthouse ice michigan"
+  ],
+  "requests": 120,
+  "failures": 0,
+  "uniqueSuggestions": 122,
+  "relevantSuggestions": [
+    "ice age lighthouse",
+    "ice breaker lighthouse",
+    "ice breaker lighthouse tarkov",
+    "frozen lighthouse cleveland",
+    "frozen lighthouse chicago",
+    "frozen custard lighthouse point",
+    "ice covered lighthouse michigan",
+    "frozen sea lighthouse in dalian china",
+    "frozen lighthouse lake erie",
+    "lighthouse ice fishing",
+    "ice fishing lighthouse tip up light",
+    "lighthouse frozen yogurt klamath falls",
+    "frozen lighthouse great lakes",
+    "frozen lighthouse grand haven",
+    "frozen south haven lighthouse",
+    "frozen lighthouse in michigan",
+    "frozen lighthouse in lake michigan",
+    "frozen lighthouse in maine",
+    "frozen lighthouse in st joseph michigan",
+    "frozen lighthouse in cleveland",
+    "frozen over lighthouse in michigan",
+    "picture of frozen lighthouse in michigan",
+    "frozen lighthouse st joseph michigan",
+    "frozen st joseph lighthouse",
+    "frozen st joe lighthouse",
+    "frozen lighthouse lake michigan",
+    "frozen lighthouse lake superior",
+    "frozen lighthouse lake michigan today",
+    "frozen lake lighthouse simcity",
+    "ice lighthouse lake michigan",
+    "lighthouse ice long branch",
+    "lighthouse frozen over lake michigan",
+    "simcity buildit frozen lake lighthouse",
+    "frozen lighthouse michigan",
+    "frozen lighthouse michigan 2026",
+    "frozen lighthouse michigan 2025",
+    "frozen lighthouse maine",
+    "ice lighthouse michigan",
+    "ice monster lighthouse",
+    "lighthouse ice nj",
+    "frozen lighthouse on lake michigan",
+    "frozen lighthouse ohio",
+    "lighthouse frozen over",
+    "ice on lighthouse on lake michigan",
+    "ice on lighthouse",
+    "st joseph frozen lighthouse on lake michigan",
+    "frozen lighthouse photo",
+    "michigan frozen lighthouse pictures",
+    "frozen yogurt lighthouse point",
+    "whit's frozen custard lighthouse point menu",
+    "whit's frozen custard lighthouse point reviews",
+    "whit's frozen custard lighthouse point",
+    "lighthouse ice red bank",
+    "ice rink lighthouse point fl",
+    "ice rink lighthouse point",
+    "ice skating lighthouse point",
+    "ice storm lighthouse",
+    "lighthouse ice sculpture",
+    "lighthouse theatre frozen",
+    "frozen waves lighthouse",
+    "lighthouse frozen yogurt",
+    "ice covered lighthouse in michigan",
+    "lighthouse covered in ice",
+    "cleveland lighthouse covered in ice",
+    "maine lighthouse covered in ice",
+    "ludington lighthouse covered in ice",
+    "chicago lighthouse covered in ice",
+    "lighthouse ices near me",
+    "ice covered lighthouse lake michigan",
+    "ice covered lighthouse on lake michigan",
+    "lighthouse covered with ice",
+    "michigan lighthouse covered with ice",
+    "lighthouse in michigan after ice storm",
+    "lighthouse covered in ice michigan",
+    "michigan city lighthouse ice",
+    "lake michigan ice covered lighthouse",
+    "lighthouse covered in ice in michigan",
+    "lighthouse in michigan ice",
+    "st joseph lighthouse michigan ice",
+    "michigan lighthouse ice monster",
+    "michigan lighthouse ice over",
+    "ice on michigan lighthouse",
+    "michigan lighthouse ice storm",
+    "st joseph lighthouse covered in ice",
+    "st joseph michigan lighthouse covered in ice",
+    "st joseph lighthouse in ice",
+    "st joseph lighthouse ice",
+    "st joseph lighthouse ice pictures",
+    "st joseph lighthouse ice 2026",
+    "st joseph michigan lighthouse ice",
+    "st joseph lighthouse with ice"
+  ],
+  "results": [
+    {
+      "seed": "frozen lighthouse",
+      "suffix": "a",
+      "status": "ok",
+      "suggestions": [
+        "ice age lighthouse",
+        "lighthouse not working",
+        "frozen explained",
+        "lighthouse drink recipe",
+        "do lighthouse keepers live in the lighthouse"
+      ]
+    },
+    {
+      "seed": "frozen lighthouse",
+      "suffix": "b",
+      "status": "ok",
+      "suggestions": [
+        "ice breaker lighthouse",
+        "ice breaker lighthouse tarkov",
+        "frozen explained",
+        "lighthouse not working",
+        "lighthouse drink recipe"
+      ]
+    },
+    {
+      "seed": "frozen lighthouse",
+      "suffix": "c",
+      "status": "ok",
+      "suggestions": [
+        "frozen lighthouse cleveland",
+        "frozen lighthouse chicago",
+        "frozen custard lighthouse point",
+        "lighthouse ice cream",
+        "lighthouse ice cream long branch",
+        "lighthouse ice cream red bank",
+        "lighthouse ice cream nj",
+        "ice covered lighthouse michigan",
+        "lighthouse ice cream belford",
+        "lighthouse ice cream ocean beach"
+      ]
+    },
+    {
+      "seed": "frozen lighthouse",
+      "suffix": "d",
+      "status": "ok",
+      "suggestions": [
+        "lighthouse frozen pizza dough",
+        "frozen sea lighthouse in dalian china",
+        "lighthouse not working",
+        "lighthouse discount code"
+      ]
+    },
+    {
+      "seed": "frozen lighthouse",
+      "suffix": "e",
+      "status": "ok",
+      "suggestions": [
+        "frozen lighthouse lake erie",
+        "lighthouse ice cream hours",
+        "lighthouse not working",
+        "do lighthouse keepers live in the lighthouse",
+        "frozen explained"
+      ]
+    },
+    {
+      "seed": "frozen lighthouse",
+      "suffix": "f",
+      "status": "ok",
+      "suggestions": [
+        "lighthouse ice fishing",
+        "ice fishing lighthouse tip up light",
+        "lighthouse frozen yogurt klamath falls",
+        "frozen or froze",
+        "frozen explained"
+      ]
+    },
+    {
+      "seed": "frozen lighthouse",
+      "suffix": "g",
+      "status": "ok",
+      "suggestions": [
+        "frozen lighthouse great lakes",
+        "frozen lighthouse grand haven",
+        "frozen gold hours",
+        "frozen explained"
+      ]
+    },
+    {
+      "seed": "frozen lighthouse",
+      "suffix": "h",
+      "status": "ok",
+      "suggestions": [
+        "frozen lighthouse grand haven",
+        "frozen south haven lighthouse",
+        "lighthouse not working",
+        "lighthouse drink recipe",
+        "do lighthouse keepers live in the lighthouse",
+        "lighthouse happy hour",
+        "lighthouse ice cream hours"
+      ]
+    },
+    {
+      "seed": "frozen lighthouse",
+      "suffix": "i",
+      "status": "ok",
+      "suggestions": [
+        "frozen lighthouse in michigan",
+        "frozen lighthouse in lake michigan",
+        "frozen lighthouse in maine",
+        "frozen lighthouse in st joseph michigan",
+        "frozen lighthouse in cleveland",
+        "frozen over lighthouse in michigan",
+        "frozen sea lighthouse in dalian china",
+        "lighthouse freezes in michigan",
+        "picture of frozen lighthouse in michigan",
+        "lighthouse not working"
+      ]
+    },
+    {
+      "seed": "frozen lighthouse",
+      "suffix": "j",
+      "status": "ok",
+      "suggestions": [
+        "frozen lighthouse st joseph michigan",
+        "frozen st joseph lighthouse",
+        "frozen st joe lighthouse",
+        "lighthouse not working",
+        "do lighthouse keepers live in the lighthouse",
+        "frozen cast ski lift",
+        "little lighthouse jobs",
+        "frozen explained"
+      ]
+    },
+    {
+      "seed": "frozen lighthouse",
+      "suffix": "k",
+      "status": "ok",
+      "suggestions": [
+        "lighthouse frozen yogurt klamath falls",
+        "do lighthouse keepers live in the lighthouse",
+        "lighthouse drink recipe",
+        "lighthouse not working",
+        "frozen explained"
+      ]
+    },
+    {
+      "seed": "frozen lighthouse",
+      "suffix": "l",
+      "status": "ok",
+      "suggestions": [
+        "frozen lighthouse lake michigan",
+        "frozen lighthouse lake erie",
+        "frozen lighthouse lake superior",
+        "frozen lighthouse lake michigan today",
+        "frozen lake lighthouse simcity",
+        "ice lighthouse lake michigan",
+        "frozen lighthouse great lakes",
+        "lighthouse ice long branch",
+        "lighthouse frozen over lake michigan",
+        "simcity buildit frozen lake lighthouse"
+      ]
+    },
+    {
+      "seed": "frozen lighthouse",
+      "suffix": "m",
+      "status": "ok",
+      "suggestions": [
+        "frozen lighthouse michigan",
+        "frozen lighthouse michigan 2026",
+        "frozen lighthouse michigan 2025",
+        "frozen lighthouse maine",
+        "ice lighthouse michigan",
+        "frozen lighthouse lake michigan",
+        "frozen lighthouse lake michigan today",
+        "icy michigan lighthouse",
+        "lighthouse freezes michigan",
+        "ice monster lighthouse"
+      ]
+    },
+    {
+      "seed": "frozen lighthouse",
+      "suffix": "n",
+      "status": "ok",
+      "suggestions": [
+        "lighthouse ice nj",
+        "lighthouse not working",
+        "lighthouse drink recipe",
+        "lighthouse ice cream hours",
+        "little lighthouse jobs",
+        "do lighthouse keepers live in the lighthouse"
+      ]
+    },
+    {
+      "seed": "frozen lighthouse",
+      "suffix": "o",
+      "status": "ok",
+      "suggestions": [
+        "frozen lighthouse on lake michigan",
+        "frozen lighthouse ohio",
+        "lighthouse frozen over",
+        "lighthouse frozen over lake michigan",
+        "frozen over lighthouse in michigan",
+        "ice on lighthouse on lake michigan",
+        "ice on lighthouse",
+        "lighthouse freezes over michigan",
+        "lighthouse freezes over",
+        "st joseph frozen lighthouse on lake michigan"
+      ]
+    },
+    {
+      "seed": "frozen lighthouse",
+      "suffix": "p",
+      "status": "ok",
+      "suggestions": [
+        "frozen lighthouse photo",
+        "lighthouse frozen pizza",
+        "lighthouse frozen pizza dough",
+        "lighthouse frozen pizza michigan",
+        "michigan frozen lighthouse pictures",
+        "frozen custard lighthouse point",
+        "frozen yogurt lighthouse point",
+        "whit's frozen custard lighthouse point menu",
+        "whit's frozen custard lighthouse point reviews",
+        "whit's frozen custard lighthouse point"
+      ]
+    },
+    {
+      "seed": "frozen lighthouse",
+      "suffix": "q",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "frozen lighthouse",
+      "suffix": "r",
+      "status": "ok",
+      "suggestions": [
+        "lighthouse ice red bank",
+        "ice rink lighthouse point fl",
+        "ice rink lighthouse point",
+        "lighthouse not working",
+        "frozen explained",
+        "lighthouse drink recipe",
+        "frozen cast ski lift",
+        "do lighthouse keepers live in the lighthouse"
+      ]
+    },
+    {
+      "seed": "frozen lighthouse",
+      "suffix": "right now",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "frozen lighthouse",
+      "suffix": "s",
+      "status": "ok",
+      "suggestions": [
+        "frozen lighthouse st joseph michigan",
+        "frozen sea lighthouse in dalian china",
+        "frozen lighthouse lake superior",
+        "frozen lake lighthouse simcity",
+        "ice skating lighthouse point",
+        "ice storm lighthouse",
+        "lighthouse ice sculpture",
+        "lighthouse not working",
+        "do lighthouse keepers live in the lighthouse",
+        "lighthouse drink recipe"
+      ]
+    },
+    {
+      "seed": "frozen lighthouse",
+      "suffix": "t",
+      "status": "ok",
+      "suggestions": [
+        "frozen lighthouse lake michigan today",
+        "lighthouse theatre frozen",
+        "frozen explained",
+        "frozen or froze",
+        "frozen cast ski lift",
+        "frozen location"
+      ]
+    },
+    {
+      "seed": "frozen lighthouse",
+      "suffix": "this week",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "frozen lighthouse",
+      "suffix": "this weekend",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "frozen lighthouse",
+      "suffix": "today",
+      "status": "ok",
+      "suggestions": [
+        "frozen lighthouse lake michigan today",
+        "lighthouse not working",
+        "frozen live show near me",
+        "lighthouse timings"
+      ]
+    },
+    {
+      "seed": "frozen lighthouse",
+      "suffix": "u",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "frozen lighthouse",
+      "suffix": "v",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "frozen lighthouse",
+      "suffix": "w",
+      "status": "ok",
+      "suggestions": [
+        "frozen waves lighthouse",
+        "lighthouse not working",
+        "do lighthouse keepers live in the lighthouse",
+        "what lighthouse was used in the movie the lighthouse",
+        "frozen cast ski lift"
+      ]
+    },
+    {
+      "seed": "frozen lighthouse",
+      "suffix": "x",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "frozen lighthouse",
+      "suffix": "y",
+      "status": "ok",
+      "suggestions": [
+        "lighthouse frozen yogurt",
+        "lighthouse frozen yogurt klamath falls",
+        "frozen yogurt lighthouse point",
+        "lighthouse not working",
+        "frozen cast ski lift",
+        "frozen explained",
+        "lighthouse drink recipe",
+        "do lighthouse keepers live in the lighthouse"
+      ]
+    },
+    {
+      "seed": "frozen lighthouse",
+      "suffix": "z",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "ice covered lighthouse",
+      "suffix": "a",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "ice covered lighthouse",
+      "suffix": "b",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "ice covered lighthouse",
+      "suffix": "c",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "ice covered lighthouse",
+      "suffix": "d",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "ice covered lighthouse",
+      "suffix": "e",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "ice covered lighthouse",
+      "suffix": "f",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "ice covered lighthouse",
+      "suffix": "g",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "ice covered lighthouse",
+      "suffix": "h",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "ice covered lighthouse",
+      "suffix": "i",
+      "status": "ok",
+      "suggestions": [
+        "ice covered lighthouse in michigan",
+        "lighthouse covered in ice",
+        "cleveland lighthouse covered in ice",
+        "maine lighthouse covered in ice",
+        "ludington lighthouse covered in ice",
+        "chicago lighthouse covered in ice",
+        "lighthouse ices near me"
+      ]
+    },
+    {
+      "seed": "ice covered lighthouse",
+      "suffix": "j",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "ice covered lighthouse",
+      "suffix": "k",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "ice covered lighthouse",
+      "suffix": "l",
+      "status": "ok",
+      "suggestions": [
+        "ice covered lighthouse lake michigan",
+        "lighthouse ice cream hours"
+      ]
+    },
+    {
+      "seed": "ice covered lighthouse",
+      "suffix": "m",
+      "status": "ok",
+      "suggestions": [
+        "ice covered lighthouse michigan",
+        "ice covered lighthouse lake michigan"
+      ]
+    },
+    {
+      "seed": "ice covered lighthouse",
+      "suffix": "n",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "ice covered lighthouse",
+      "suffix": "o",
+      "status": "ok",
+      "suggestions": [
+        "ice covered lighthouse on lake michigan",
+        "lighthouse ices near me"
+      ]
+    },
+    {
+      "seed": "ice covered lighthouse",
+      "suffix": "p",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "ice covered lighthouse",
+      "suffix": "q",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "ice covered lighthouse",
+      "suffix": "r",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "ice covered lighthouse",
+      "suffix": "right now",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "ice covered lighthouse",
+      "suffix": "s",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "ice covered lighthouse",
+      "suffix": "t",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "ice covered lighthouse",
+      "suffix": "this week",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "ice covered lighthouse",
+      "suffix": "this weekend",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "ice covered lighthouse",
+      "suffix": "today",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "ice covered lighthouse",
+      "suffix": "u",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "ice covered lighthouse",
+      "suffix": "v",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "ice covered lighthouse",
+      "suffix": "w",
+      "status": "ok",
+      "suggestions": [
+        "lighthouse covered with ice",
+        "michigan lighthouse covered with ice",
+        "lighthouse ices near me"
+      ]
+    },
+    {
+      "seed": "ice covered lighthouse",
+      "suffix": "x",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "ice covered lighthouse",
+      "suffix": "y",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "ice covered lighthouse",
+      "suffix": "z",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "lighthouse ice michigan",
+      "suffix": "a",
+      "status": "ok",
+      "suggestions": [
+        "lighthouse in michigan after ice storm",
+        "lighthouse ice cream hours"
+      ]
+    },
+    {
+      "seed": "lighthouse ice michigan",
+      "suffix": "b",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "lighthouse ice michigan",
+      "suffix": "c",
+      "status": "ok",
+      "suggestions": [
+        "lighthouse covered in ice michigan",
+        "michigan city lighthouse ice",
+        "lake michigan ice covered lighthouse",
+        "lighthouse ice cream hours"
+      ]
+    },
+    {
+      "seed": "lighthouse ice michigan",
+      "suffix": "d",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "lighthouse ice michigan",
+      "suffix": "e",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "lighthouse ice michigan",
+      "suffix": "f",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "lighthouse ice michigan",
+      "suffix": "g",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "lighthouse ice michigan",
+      "suffix": "h",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "lighthouse ice michigan",
+      "suffix": "i",
+      "status": "ok",
+      "suggestions": [
+        "lighthouse covered in ice in michigan",
+        "lighthouse in michigan ice",
+        "lighthouse in michigan after ice storm",
+        "lighthouse ice cream hours"
+      ]
+    },
+    {
+      "seed": "lighthouse ice michigan",
+      "suffix": "j",
+      "status": "ok",
+      "suggestions": [
+        "st joseph lighthouse michigan ice"
+      ]
+    },
+    {
+      "seed": "lighthouse ice michigan",
+      "suffix": "k",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "lighthouse ice michigan",
+      "suffix": "l",
+      "status": "ok",
+      "suggestions": [
+        "ice lighthouse lake michigan",
+        "ice covered lighthouse lake michigan",
+        "largest lighthouse in michigan",
+        "biggest lighthouse in michigan",
+        "lighthouse ice cream hours"
+      ]
+    },
+    {
+      "seed": "lighthouse ice michigan",
+      "suffix": "m",
+      "status": "ok",
+      "suggestions": [
+        "michigan lighthouse ice monster",
+        "largest lighthouse in michigan",
+        "biggest lighthouse in michigan"
+      ]
+    },
+    {
+      "seed": "lighthouse ice michigan",
+      "suffix": "n",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "lighthouse ice michigan",
+      "suffix": "o",
+      "status": "ok",
+      "suggestions": [
+        "michigan lighthouse ice over",
+        "ice on michigan lighthouse",
+        "largest lighthouse in michigan",
+        "biggest lighthouse in michigan",
+        "lighthouse ice cream hours"
+      ]
+    },
+    {
+      "seed": "lighthouse ice michigan",
+      "suffix": "p",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "lighthouse ice michigan",
+      "suffix": "q",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "lighthouse ice michigan",
+      "suffix": "r",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "lighthouse ice michigan",
+      "suffix": "right now",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "lighthouse ice michigan",
+      "suffix": "s",
+      "status": "ok",
+      "suggestions": [
+        "michigan lighthouse ice storm",
+        "lighthouse in michigan after ice storm",
+        "st joseph lighthouse michigan ice",
+        "lighthouse ice cream hours"
+      ]
+    },
+    {
+      "seed": "lighthouse ice michigan",
+      "suffix": "t",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "lighthouse ice michigan",
+      "suffix": "this week",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "lighthouse ice michigan",
+      "suffix": "this weekend",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "lighthouse ice michigan",
+      "suffix": "today",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "lighthouse ice michigan",
+      "suffix": "u",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "lighthouse ice michigan",
+      "suffix": "v",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "lighthouse ice michigan",
+      "suffix": "w",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "lighthouse ice michigan",
+      "suffix": "x",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "lighthouse ice michigan",
+      "suffix": "y",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "lighthouse ice michigan",
+      "suffix": "z",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "st joseph lighthouse ice",
+      "suffix": "a",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "st joseph lighthouse ice",
+      "suffix": "b",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "st joseph lighthouse ice",
+      "suffix": "c",
+      "status": "ok",
+      "suggestions": [
+        "st joseph lighthouse covered in ice",
+        "st joseph michigan lighthouse covered in ice"
+      ]
+    },
+    {
+      "seed": "st joseph lighthouse ice",
+      "suffix": "d",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "st joseph lighthouse ice",
+      "suffix": "e",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "st joseph lighthouse ice",
+      "suffix": "f",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "st joseph lighthouse ice",
+      "suffix": "g",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "st joseph lighthouse ice",
+      "suffix": "h",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "st joseph lighthouse ice",
+      "suffix": "i",
+      "status": "ok",
+      "suggestions": [
+        "st joseph lighthouse in ice",
+        "st joseph michigan lighthouse covered in ice"
+      ]
+    },
+    {
+      "seed": "st joseph lighthouse ice",
+      "suffix": "j",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "st joseph lighthouse ice",
+      "suffix": "k",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "st joseph lighthouse ice",
+      "suffix": "l",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "st joseph lighthouse ice",
+      "suffix": "m",
+      "status": "ok",
+      "suggestions": [
+        "st joseph lighthouse michigan ice",
+        "st joseph michigan lighthouse covered in ice"
+      ]
+    },
+    {
+      "seed": "st joseph lighthouse ice",
+      "suffix": "n",
+      "status": "ok",
+      "suggestions": [
+        "st joseph lighthouse ice",
+        "st joseph lighthouse ice pictures",
+        "st joseph lighthouse ice 2026",
+        "st joseph michigan lighthouse ice",
+        "st joseph lighthouse covered in ice",
+        "st joseph michigan lighthouse covered in ice"
+      ]
+    },
+    {
+      "seed": "st joseph lighthouse ice",
+      "suffix": "o",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "st joseph lighthouse ice",
+      "suffix": "p",
+      "status": "ok",
+      "suggestions": [
+        "st joseph lighthouse ice pictures"
+      ]
+    },
+    {
+      "seed": "st joseph lighthouse ice",
+      "suffix": "q",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "st joseph lighthouse ice",
+      "suffix": "r",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "st joseph lighthouse ice",
+      "suffix": "right now",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "st joseph lighthouse ice",
+      "suffix": "s",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "st joseph lighthouse ice",
+      "suffix": "t",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "st joseph lighthouse ice",
+      "suffix": "this week",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "st joseph lighthouse ice",
+      "suffix": "this weekend",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "st joseph lighthouse ice",
+      "suffix": "today",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "st joseph lighthouse ice",
+      "suffix": "u",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "st joseph lighthouse ice",
+      "suffix": "v",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "st joseph lighthouse ice",
+      "suffix": "w",
+      "status": "ok",
+      "suggestions": [
+        "st joseph lighthouse with ice"
+      ]
+    },
+    {
+      "seed": "st joseph lighthouse ice",
+      "suffix": "x",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "st joseph lighthouse ice",
+      "suffix": "y",
+      "status": "ok",
+      "suggestions": []
+    },
+    {
+      "seed": "st joseph lighthouse ice",
+      "suffix": "z",
+      "status": "ok",
+      "suggestions": []
+    }
+  ]
+}
