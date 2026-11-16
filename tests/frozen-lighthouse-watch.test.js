@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {LIGHTS,overlandPR,intensity,degreesFrom,onshore,scoreHour,bestWindow,persistence,isFresh} from '../lib/frozen-lighthouse.mjs';
+import {LIGHTS,MARINE_ZONES,overlandPR,intensity,degreesFrom,onshore,scoreHour,bestWindow,persistence,isFresh} from '../lib/frozen-lighthouse.mjs';
 import handler,{parseGLSEA,normalizeStation,forecastHours,iceContext,evaluatePier,pickWater} from '../api/lighthouse-ice.js';
 
 const clock=Date.now();
@@ -40,6 +40,19 @@ test('all lights have USCG identifiers, coordinates and a lake-facing onshore di
  assert.equal(degreesFrom('WSW'),247.5);
  assert.equal(degreesFrom('east'),null);
  assert.equal(onshore(null,270),false);
+});
+
+test('all nine piers map to official lake marine zones including harbor boundaries',()=>{
+ const allowed=new Set(['LMZ843','LMZ844','LMZ845','LMZ846','LMZ847','LMZ849','LMZ346']);
+ assert.equal(Object.keys(MARINE_ZONES).length,LIGHTS.length);
+ for(const pier of LIGHTS){
+  assert.ok(Array.isArray(MARINE_ZONES[pier.id]));
+  assert.ok(MARINE_ZONES[pier.id].length>=1);
+  assert.ok(MARINE_ZONES[pier.id].every(z=>allowed.has(z)));
+ }
+ assert.deepEqual(MARINE_ZONES['st-joseph-outer'],['LMZ843','LMZ844']);
+ assert.deepEqual(MARINE_ZONES['frankfort'],['LMZ346']);
+ assert.deepEqual(MARINE_ZONES['holland'],['LMZ845','LMZ846']);
 });
 
 test('gate and ice suppression precede any icing category',()=>{
@@ -121,7 +134,7 @@ test('the single API fails each external signal independently and never invents 
   assert.equal(out.headers.get('x-robots-tag'),'noindex, nofollow');
   const json=await out.json();assert.equal(json.piers.length,9);
   assert.equal(nIce,1);
-  assert.equal(nAlerts,9);
+  assert.equal(nAlerts,7);
   assert.equal(nHourly,8);
   assert.equal(json.piers.every(p=>p.alerts.status==='unavailable'),true);
   assert.equal(json.piers.every(p=>p.ice.pct===null),true);
