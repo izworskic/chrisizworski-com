@@ -70,7 +70,7 @@ export function forecastHours(json,now){
   const windMph=mph(x.windSpeed),windFrom=degreesFrom(x.windDirection);
   return {startTime:x.startTime,airF:airF!==null&&Number.isFinite(airF)?Math.round(airF):null,
    windMph,windFrom,windDirection:x.windDirection||null,
-   gustMph:null,shortForecast:x.shortForecast||'',
+   gustMph:mph(x.windGust??x.windGusts),shortForecast:x.shortForecast||'',
    isDaytime:x.isDaytime===true};
  });
  return {updatedAt:updated,hours:data};
