@@ -12,7 +12,7 @@ test('B55 waterfall decision desk: visible before map and retains 75 source guid
  assert.equal((html.match(/<article class="waterfall-card" data-fall /g)||[]).length,80);
  assert.ok(index>0&&index<html.indexOf('id="falls-map"'));
  for(const id of ['visit-region','visit-budget','visit-date','visit-verdict','visit-picks','visit-selection','visit-baseline'])assert.ok(html.includes('id="'+id+'"'),'missing '+id);
- assert.match(html,/80 curated visitor destinations/);assert.match(html,/80 curated waterfall profiles/);
+ assert.match(html,/Explore 80 waterfall destinations and scenic stops/);assert.match(html,/80 curated waterfall profiles/);
  assert.match(html,/https:\/\/chrisizworski.com\/upper-peninsula-waterfalls\//);
  assert.match(html,/Built by/);assert.match(html,/id="show-geo-candidates"/);
  assert.match(html,/assets\/up-waterfalls-visit-lens.js/);
@@ -24,9 +24,9 @@ test('B55 conservative full-visit time gate and source-scoped closure safety',()
  assert.match(lens,/const duration=c=>/);
  assert.match(lens,/status==='closed'/);assert.match(lens,/status==='research'/);
  assert.match(lens,/c.dataset.arrivalVerified!=='verified'/);
- assert.match(lens,/current road, gate and trail status remain unconfirmed/);
- assert.match(lens,/not confirmed-open trips/);
- assert.match(lens,/Travel between U.P. regions is NOT included/);
+ assert.match(lens,/Check the park's latest trail and road notes/);
+ assert.match(lens,/check each park guide for current conditions/);
+ assert.match(lens,/driving between U.P. regions is a separate part of the day/);
  for(const url of ['michigan.gov/recsearch/parks/porkies','michigan.gov/recsearch/parks/bondfalls','fs.usda.gov/r09/ottawa/alerts/black-river','nps.gov/places/munising-falls'])assert.ok(lens.includes(url));
  assert.match(map,/UPWaterfallFocus/);assert.match(map,/upfall:selected/);
  assert.match(map,/\/api\/carto-basemap-config/);assert.match(map,/tile.openstreetmap.org/);
@@ -37,7 +37,7 @@ test('B55 conservative full-visit time gate and source-scoped closure safety',()
  assert.match(css,/\.dot\.research/);
 });
 test('B55 publish no invented trip times or new guide URLs',()=>{
- assert.ok(html.includes('Travel time and weather are not calculated.'));
+ assert.ok(html.includes('Allow extra time for driving, weather, and the unexpected stop along the way.'));
  assert.ok(!lens.includes('travelmode=driving'));
  assert.ok(!html.includes('href="/upper-peninsula-waterfalls/visitability-lens/"'));
  for(const c of data){assert.ok(c.id&&c.source,'curated source record incomplete');}
