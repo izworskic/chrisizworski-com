@@ -1,4 +1,4 @@
-import {LIGHTS,mph,degreesFrom,scoreHour,bestWindow,persistence,isFresh} from '../lib/frozen-lighthouse.mjs';
+import {LIGHTS,MARINE_ZONES,mph,degreesFrom,scoreHour,bestWindow,persistence,isFresh} from '../lib/frozen-lighthouse.mjs';
 
 export const config={runtime:'edge'};
 const UA={'User-Agent':'FrozenLighthouseWatch/1.0 (chrisizworski.com/frozen-lighthouses-michigan/; public weather research)','Accept':'application/geo+json, application/json'};
@@ -9,6 +9,7 @@ const SOURCE={
  lakeTemperature:'https://coastwatch.glerl.noaa.gov/statistics/average-surface-water-temperature-glsea/',
  ice:'https://chrisizworski.com/michigan-ice/',
  weather:'https://api.weather.gov/',
+ marineZones:'https://www.weather.gov/marine/greatlakestext',
  waves:null
 };
 const GRACE_MS=3600000;
@@ -85,15 +86,35 @@ async function nwsForecast(pier,now){
  if(!forecast)throw Error('NWS forecast unavailable or stale');
  return {...forecast,endpoint:hourly};
 }
-async function nwsAlerts(pier,now){
- const url='https://api.weather.gov/alerts/active?point='+pier.lat.toFixed(4)+'%2C'+pier.lon.toFixed(4);
- const j=await requestJson(url,6500);
- const asOf=j?.updated||null;
- if(!isFresh(asOf,now,3)||!Array.isArray(j.features))throw Error('Alerts unavailable or stale');
- return {updatedAt:asOf,events:j.features.map(f=>({
-  name:f.properties?.event||'',headline:f.properties?.headline||'',
-  endsAt:f.properties?.ends||null,uri:f.id||null
- })).filter(e=>/freezing spray/i.test(e.name))};
+// Look up official nearshore marine zones, including paired zones at harbor boundaries.
+// Point alerts on the shoreline can select a land forecast zone and miss marine spray.
+async function nwsMarineAlerts(pier,now,zoneCache){
+ const zones=MARINE_ZONES[pier.id]||[];
+ if(!zones.length)return {status:'unavailable',zones,updatedAt:null,events:[]};
+ const records=await Promise.all(zones.map(zone=>{
+  if(!zoneCache.has(zone)){
+   const url='https://api.weather.gov/alerts/active?zone='+zone;
+   zoneCache.set(zone,requestJson(url,6500).then(j=>{
+    const updatedAt=j?.updated||null;
+    if(!isFresh(updatedAt,now,3)||!Array.isArray(j.features))throw Error('Stale marine alert observation');
+    return {zone,updatedAt,events:j.features.filter(f=>/freezing spray/i.test(f.properties?.event||'')).map(f=>({
+     name:f.properties?.event||'',headline:f.properties?.headline||'',
+     endsAt:f.properties?.ends||null,uri:f.id||null,zone
+    }))};
+   }).catch(()=>null));
+  }
+  return zoneCache.get(zone);
+ }));
+ const valid=records.filter(Boolean);
+ if(!valid.length)return {status:'unavailable',zones,updatedAt:null,events:[]};
+ const dedup=new Map();
+ for(const group of valid)for(const event of group.events){
+  const key=event.uri||event.name+' '+event.endsAt;
+  if(!dedup.has(key))dedup.set(key,event);
+ }
+ return {status:valid.length===zones.length?'complete':'partial',zones,
+  updatedAt:valid.map(x=>x.updatedAt).sort()[0],
+  events:[...dedup.values()]};
 }
 export function iceContext(json,now){
  const observedAt=json?.cover?.observedAt;
@@ -134,12 +155,13 @@ export function evaluatePier(pier,forecast,water,ice,alerts,now){
 export default async function handler(req){
  const now=Date.now();
  const blank={status:'unavailable',updatedAt:null,events:[]};
+ const zoneCache=new Map();
  const [water,ice]=await Promise.all([waterSources(now),getIce(req,now)]);
  const forecastCache=new Map();
  const lookup=async pier=>{
   const key=pier.town==='St. Joseph'?'st-joseph':pier.id;
   if(!forecastCache.has(key))forecastCache.set(key,nwsForecast(pier,now).catch(()=>null));
-  const [forecast,alerts]=await Promise.all([forecastCache.get(key),nwsAlerts(pier,now).catch(()=>blank)]);
+  const [forecast,alerts]=await Promise.all([forecastCache.get(key),nwsMarineAlerts(pier,now,zoneCache).catch(()=>blank)]);
   return evaluatePier(pier,forecast,pickWater(pier,water),ice,alerts,now);
  };
  const piers=await Promise.all(LIGHTS.map(lookup));
