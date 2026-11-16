@@ -26,6 +26,13 @@ try{
     assert.ok(await page.locator('#geographic-research').count()===1);
     for(const id of ['mosquito-falls','elliot-falls','manido-falls','bridalveil-falls'])assert.equal(await page.locator('[data-id="'+id+'"]').count(),1);
   });
+  await run('visitor map choices include direct Google Maps feature views',async()=>{
+    const candidates=page.locator('#visit-picks [data-visit-pick] .waterfall-google-link');
+    assert.ok(await candidates.count()>0,'visit matcher should show a Google Maps link next to Locate on map');
+    const href=await candidates.first().getAttribute('href');
+    assert.match(href,/^https:\/\/www\.google\.com\/maps\/search\/\?api=1&query=/);
+    assert.doesNotMatch(href,/maps\/dir|destination=/,'waterfall feature is not a driving destination');
+  });
   await run('Rust/WASM visitability is active after 960-source-case browser parity gate',async()=>{
     await page.waitForFunction(()=>window.UPWaterfallVisitLens?.engine?.()==='rust-wasm',{timeout:15000});
     assert.equal(await page.evaluate(()=>window.UPWaterfallVisitLens.engine()),'rust-wasm');
@@ -148,9 +155,13 @@ try{
     await page.locator('#nearby-radius').selectOption('10');
     assert.match(await page.locator('#nearby-status').innerText(),/within 10 miles/);
     assert.equal(await page.locator('[data-nearby-id="miners-falls"]').count(),1);
+    const google=page.locator('[data-nearby-id="miners-falls"] .waterfall-google-link');
+    assert.equal(await google.count(),1);
+    assert.match(await google.getAttribute('href'),/^https:\/\/www\.google\.com\/maps\/search\/\?api=1&query=/);
     assert.equal(await page.locator('[data-nearby-id="munising-falls"]').count(),0,'closed waterfall cannot be suggested');
     await page.locator('[data-nearby-id="miners-falls"] .nearby-map-action').click();
     assert.match(await page.locator('.leaflet-popup-content').innerText(),/Miners Falls/);
+    assert.equal(await page.locator('.leaflet-popup-content .waterfall-google-link').count(),1,'map popup needs an external location view');
     await page.locator('[data-nearby-id="miners-falls"] .nearby-save-action').click();
     assert.match(await page.locator('#selected-list').innerText(),/Miners Falls/);
     await page.locator('#clear-list').click();

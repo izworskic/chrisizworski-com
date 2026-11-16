@@ -108,6 +108,14 @@ function gather(){
 }
 let selectedId=null;
 function textEl(tag,value,className){const el=document.createElement(tag);if(className)el.className=className;el.textContent=value;return el;}
+function googleLocation(c){
+ const lat=Number(c.dataset.lat),lng=Number(c.dataset.lng);
+ if(!Number.isFinite(lat)||!Number.isFinite(lng)||Math.abs(lat)>90||Math.abs(lng)>180)return null;
+ const a=document.createElement('a');a.className='waterfall-google-link';a.href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(lat+','+lng);
+ a.target='_blank';a.rel='noopener noreferrer';a.textContent='Google Maps location';
+ a.setAttribute('aria-label','View '+c.dataset.name+' map location in Google Maps, not driving directions');
+ return a;
+}
 function sourceLink(c){const link=document.createElement('a');link.href=c.dataset.arrivalSource||c.dataset.url;link.rel='noopener noreferrer';link.target='_blank';link.textContent='See park and access details';return link;}
 function render(){
  const data=gather();picks.replaceChildren();
@@ -140,7 +148,9 @@ function render(){
    if(typeof window.UPWaterfallFocus==='function')window.UPWaterfallFocus(id);
    else c.scrollIntoView({block:'nearest',behavior:'auto'});
   });
-  row.append(focus,sourceLink(c));
+  row.append(focus);
+  const google=googleLocation(c);if(google)row.appendChild(google);
+  row.appendChild(sourceLink(c));
   card.append(head,title,time,why);if(remaining.length)card.appendChild(checks);card.appendChild(row);picks.appendChild(card);
  });
  if(selectedId&&!data.chosen.some(x=>x.c.dataset.id===selectedId)){

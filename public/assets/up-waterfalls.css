@@ -333,3 +333,9 @@
 .upfall-context-photo figcaption{font-size:.8rem;line-height:1.55;margin:9px 5px 4px;color:var(--sub)}
 .upfall-context-photo figcaption strong{color:var(--deep)}
 .upfall-context-photo a{color:var(--deep);text-decoration:underline;text-underline-offset:2px}
+
+/* Google Maps opens the natural feature for orientation, not a vehicle route. */
+.waterfall-google-link{display:inline-flex;align-items:center;min-height:40px;max-width:100%;font-size:.82rem;font-weight:750;color:#185365;text-decoration:underline;text-underline-offset:3px;overflow-wrap:anywhere}
+.waterfall-google-link:focus-visible{outline:3px solid #117d7a;outline-offset:3px;border-radius:3px}
+.detail-google-maps-link{margin:12px 0 6px}
+.detail-google-maps-link .waterfall-google-link{min-height:44px}

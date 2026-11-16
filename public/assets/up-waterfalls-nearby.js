@@ -13,6 +13,13 @@ const cards=new Map([...document.querySelectorAll('[data-fall][data-id]')].map(c
 const element=(tag,cls,copy)=>{const node=document.createElement(tag);if(cls)node.className=cls;if(copy!==undefined)node.textContent=copy;return node;};
 const idsafe=id=>/^[a-z0-9-]+$/.test(id);
 function link(label,href){const a=element('a','',label);a.href=href;a.target='_blank';a.rel='noopener noreferrer';return a;}
+function googleLocation(c){
+ const lat=Number(c.dataset.lat),lng=Number(c.dataset.lng);
+ if(!Number.isFinite(lat)||!Number.isFinite(lng)||Math.abs(lat)>90||Math.abs(lng)>180)return null;
+ const a=link('Google Maps location','https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(lat+','+lng));
+ a.className='waterfall-google-link';a.setAttribute('aria-label','View '+c.dataset.name+' map location in Google Maps, not driving directions');
+ return a;
+}
 function syncSaveButtons(){
  // The six-stop planner is authoritative, including when stops are cleared elsewhere.
  for(const item of output.querySelectorAll('[data-nearby-id]')){
@@ -66,7 +73,9 @@ function render(data){
    existing.click();
    syncSaveButtons();
   });
-  actions.append(locate,save,link('Park & trail details',target.source));
+  actions.append(locate);
+  const google=googleLocation(original);if(google)actions.appendChild(google);
+  actions.append(save,link('Park & trail details',target.source));
   item.append(label,title,review,actions);output.appendChild(item);
  }
  if(matches.length>6)output.appendChild(element('p','nearby-overflow','Showing the six closest of '+matches.length+'. Try a larger radius or choose another waterfall to find more.'));
