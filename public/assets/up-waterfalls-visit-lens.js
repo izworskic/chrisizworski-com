@@ -37,8 +37,8 @@ function guidance(c,when){
  const name=c.dataset.id,status=c.dataset.status,month=when.getMonth()+1;
  if(status==='closed')return {excluded:true,notice:['Agency-reported closure; verify before any future trip.'],level:'closed'};
  if(status==='research'||c.dataset.arrivalVerified!=='verified')return {excluded:true,notice:['Complete legal waterfall approach is not verified.'],level:'unverified'};
- if(status==='restricted')notice.push('Partial restrictions in the source record; check exactly which viewpoint is affected.');
- if(status==='seasonal')notice.push('Vehicle or foot access is seasonal. Opening today is not established.');
+ if(status==='restricted')notice.push('Part of the trail or viewpoint has restrictions. See the park notice for details.');
+ if(status==='seasonal')notice.push('The way in changes with the season. Check park access dates before you go.');
  if(name==='gabbro-falls'){
   notice.push('Gabbro is on Snowriver resort property. Confirm designated waterfall-visitor parking, non-guest terms and bridge-side footpath with the owner before traveling.');
   if(month>=11||month<=4)notice.push('Snowriver ski-season operations do not certify winter waterfall pedestrian access; stay off active ski runs and unapproved service roads.');
@@ -66,7 +66,7 @@ function guidance(c,when){
  if(['potawatomi-falls','gorge-falls','sandstone-falls','rainbow-falls','great-conglomerate-falls'].includes(name)){
   notice.push('Black River trail/platform construction has location-specific restrictions through the agency notice.');
  }
- if(!notice.length)notice.push('No closure encoded for this stop, but current road, gate and trail status remain unconfirmed.');
+ if(!notice.length)notice.push('This could be a good stop for your day. Check the park's latest trail and road notes before heading out.');
  const materialCaution=notice.some(text=>!text.startsWith('No closure encoded for this stop'));
  return {excluded:false,level:materialCaution||status==='seasonal'||status==='restricted'?'extra-check':'check',notice};
 }
@@ -107,24 +107,24 @@ function gather(){
 }
 let selectedId=null;
 function textEl(tag,value,className){const el=document.createElement(tag);if(className)el.className=className;el.textContent=value;return el;}
-function sourceLink(c){const link=document.createElement('a');link.href=c.dataset.arrivalSource||c.dataset.url;link.rel='noopener noreferrer';link.target='_blank';link.textContent='Check original arrival source';return link;}
+function sourceLink(c){const link=document.createElement('a');link.href=c.dataset.arrivalSource||c.dataset.url;link.rel='noopener noreferrer';link.target='_blank';link.textContent='See park and access details';return link;}
 function render(){
  const data=gather();picks.replaceChildren();
  const longRange=data.when.getFullYear()>2027||(data.when.getFullYear()===2027&&data.when.getMonth()>5);
- const preface=longRange?'The selected date is beyond this source review period; treat all restrictions as historical. ':'';
- const singular=data.qualifying.length===1?'profile':'profiles';
- verdict.textContent=preface+data.qualifying.length+' '+singular+' match your active region, filters and full on-site time budget. These are places to investigate, not confirmed-open trips.';
- baseline.textContent=data.limit===Infinity?'On-site time: any. Travel between U.P. regions is NOT included.':
-  'On-site time: at most '+data.limit+' minutes PER STOP, using the high end of each published range. Driving, parking delays and changing conditions are extra.';
+ const preface=longRange?'Your travel date is beyond the latest access notes in this guide. Check fresh park updates. ':'';
+ const singular=data.qualifying.length===1?'waterfall stop fits':'waterfall stops fit';
+ verdict.textContent=preface+data.qualifying.length+' '+singular+' your region and time on foot. Explore the choices below, then check each park guide for current conditions.';
+ baseline.textContent=data.limit===Infinity?'Take your time at the falls; driving between U.P. regions is a separate part of the day.':
+  'Allow up to '+data.limit+' minutes at each waterfall, plus time for the drive and changing weather.';
  const iso=data.valid?date.value:'your selected travel day';
  if(!data.chosen.length){
-  const empty=textEl('div','No supported match for '+iso+'. Try a longer visit, another region or fewer filters. A missing match is not a closure notice.','visit-empty');picks.appendChild(empty);
-  currentSelection.textContent='No selected waterfall. Original park/source links remain in the full list.';return;
+  const empty=textEl('div','No waterfall stops match those choices for '+iso+'. Try a different region or allow more time on the trail.','visit-empty');picks.appendChild(empty);
+  currentSelection.textContent='Choose a waterfall to see it on the map, with trail details in its guide.';return;
  }
  data.chosen.forEach(({c,effort,access})=>{
   const id=c.dataset.id,card=document.createElement('article');card.className='visit-pick';card.dataset.visitPick=id;
   if(selectedId===id)card.classList.add('is-selected');
-  const head=textEl('p','FALLS TO CONSIDER · '+c.dataset.region,'visit-kicker');
+  const head=textEl('p','WATERFALLS TO EXPLORE · '+c.dataset.region,'visit-kicker');
   const title=document.createElement('h3');const guide=document.createElement('a');guide.href=c.dataset.url;guide.textContent=c.dataset.name;title.appendChild(guide);
   const time=textEl('p','On site: '+(effort.text||'published time unavailable')+' · '+safeText(c.dataset.statusLabel),'visit-meta');
   const why=textEl('p',access.notice[0],'visit-why');
@@ -144,12 +144,12 @@ function render(){
  });
  if(selectedId&&!data.chosen.some(x=>x.c.dataset.id===selectedId)){
   selectedId=null;
-  currentSelection.textContent='Previous stop no longer fits these filters. Select a current match or use the full list.';
+  currentSelection.textContent='That waterfall no longer matches your choices. Pick another or browse the full map.';
  }else if(selectedId){
   const item=data.chosen.find(x=>x.c.dataset.id===selectedId);
-  currentSelection.textContent='Map focus: '+item.c.dataset.name+'. The pin marks the waterfall, not visitor parking.';
+  currentSelection.textContent='Now looking at '+item.c.dataset.name+'. Open the guide for the trailhead and parking details.';
  }else{
-  currentSelection.textContent=lensRegion.value==='all'?'These examples may be hundreds of miles apart. Choose a region before building one day of stops.':'Choose a stop to focus the map; its arrival source remains the authority.';
+  currentSelection.textContent=lensRegion.value==='all'?'These falls may be far apart. Choose a region to keep your day closer to home base.':'Choose a waterfall to find it on the map, then open its visitor guide.';
  }
 }
 lensRegion.addEventListener('change',()=>{region.value=lensRegion.value;region.dispatchEvent(new Event('change',{bubbles:true}));render();});
