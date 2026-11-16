@@ -44,7 +44,7 @@ try{
     assert.equal(policies.bondWinter.level,'extra-check');
     assert.equal(policies.bondSummer.level,'extra-check','the seasonal source caution remains even in summer');
     await page.locator('#visit-budget').selectOption('30');
-    assert.match(await page.locator('#visit-baseline').innerText(),/at most 30 minutes PER STOP/);
+    assert.match(await page.locator('#visit-baseline').innerText(),/up to 30 minutes at each waterfall/);
     await page.locator('#visit-budget').selectOption('60');
   });
   await run('Waterfall planner survives a blocked Rust module without declaring trails open',async()=>{
@@ -54,7 +54,7 @@ try{
       await fallback.goto(base+'/upper-peninsula-waterfalls/',{waitUntil:'domcontentloaded',timeout:30000});
       await fallback.locator('#visit-verdict').waitFor();
       await fallback.waitForFunction(()=>window.UPWaterfallVisitLens?.engine?.()==='javascript-fallback');
-      assert.match(await fallback.locator('#visit-verdict').innerText(),/not confirmed-open trips/);
+      assert.match(await fallback.locator('#visit-verdict').innerText(),/check each park guide for current conditions/);
       assert.equal(await fallback.locator('[data-visit-pick="munising-falls"]').count(),0);
     }finally{await fallback.close();}
   });
