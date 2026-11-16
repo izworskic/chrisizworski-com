@@ -74,7 +74,7 @@ test('B64: public guide is discoverable exactly once and explains seasonal gate,
  assert.equal((sitemap.match(/<loc>/g)||[]).length,78);
  assert.match(hub,/data-id="conglomerate-falls-gratiot" data-gis-oid="136"/);
  assert.match(hub,/data-arrival-verified="verified"/);
- assert.match(hub,/80 curated visitor destinations/);
+ assert.match(hub,/Explore 80 waterfall destinations and scenic stops/);
  assert.match(original,/noindex,follow/);
  assert.match(original,/OLDER “NOT CLEARED” ACCESS FINDING HAS BEEN SUPERSEDED/);
  assert.ok(original.includes('/upper-peninsula-waterfalls/conglomerate-falls-gratiot/'));

@@ -53,8 +53,8 @@ test('B75 curated Boston public nature trail changes only non-GIS inventory',()=
 test('B75 map never makes the reserve centre a waterfall/trailhead/parking coordinate',()=>{
  assert.match(hub,/data-id="boston-creek-cascades"/);
  assert.match(hub,/data-point-role="preserve-centre"/);
- assert.match(hub,/80 curated visitor destinations/);
- assert.match(hub,/80 curated waterfall profiles/);
+ assert.match(hub,/Explore 80 waterfall destinations and scenic stops/);
+ assert.match(hub,/80 waterfalls and scenic stops to explore/);
  assert.match(guide,/<meta name="robots" content="index,follow,max-image-preview:large">/);
  assert.match(guide,/rel="canonical" href="https:\/\/chrisizworski.com\/upper-peninsula-waterfalls\/boston-creek-cascades\//);
  assert.match(guide,/data-role="preserve-centre"/);

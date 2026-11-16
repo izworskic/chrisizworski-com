@@ -23,8 +23,8 @@ test('hero previews feature exactly three real, unique waterfall photos with gui
     assert.ok(hub.includes('href="'+esc(p.licenseUrl)+'"'),'license '+id);
     assert.ok(hub.includes(p.creator),'creator '+id);
   }
-  assert.ok(hub.includes('Historic photographs, cropped only in these previews.'));
-  assert.ok(hub.includes('See each guide for the full photograph'));
+  assert.ok(hub.includes('These photographs show the real falls.'));
+  assert.ok(hub.includes('Open a guide for the full view, the trail in'));
 });
 
 test('photo treatment keeps main map, protected SEO and ads unchanged in their original layout',()=>{

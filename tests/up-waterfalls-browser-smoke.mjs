@@ -44,7 +44,7 @@ try{
     assert.equal(policies.bondWinter.level,'extra-check');
     assert.equal(policies.bondSummer.level,'extra-check','the seasonal source caution remains even in summer');
     await page.locator('#visit-budget').selectOption('30');
-    assert.match(await page.locator('#visit-baseline').innerText(),/at most 30 minutes PER STOP/);
+    assert.match(await page.locator('#visit-baseline').innerText(),/up to 30 minutes at each waterfall/);
     await page.locator('#visit-budget').selectOption('60');
   });
   await run('Waterfall planner survives a blocked Rust module without declaring trails open',async()=>{
@@ -54,7 +54,7 @@ try{
       await fallback.goto(base+'/upper-peninsula-waterfalls/',{waitUntil:'domcontentloaded',timeout:30000});
       await fallback.locator('#visit-verdict').waitFor();
       await fallback.waitForFunction(()=>window.UPWaterfallVisitLens?.engine?.()==='javascript-fallback');
-      assert.match(await fallback.locator('#visit-verdict').innerText(),/not confirmed-open trips/);
+      assert.match(await fallback.locator('#visit-verdict').innerText(),/check each park guide for current conditions/);
       assert.equal(await fallback.locator('[data-visit-pick="munising-falls"]').count(),0);
     }finally{await fallback.close();}
   });
@@ -146,7 +146,7 @@ try{
     await page.waitForFunction(()=>document.querySelector('#nearby-origin')?.disabled===false,{timeout:15000});
     await page.locator('#nearby-origin').selectOption('wagner-falls');
     await page.locator('#nearby-radius').selectOption('10');
-    assert.match(await page.locator('#nearby-status').innerText(),/10 straight-line miles/);
+    assert.match(await page.locator('#nearby-status').innerText(),/within 10 miles/);
     assert.equal(await page.locator('[data-nearby-id="miners-falls"]').count(),1);
     assert.equal(await page.locator('[data-nearby-id="munising-falls"]').count(),0,'closed waterfall cannot be suggested');
     await page.locator('[data-nearby-id="miners-falls"] .nearby-map-action').click();
@@ -404,7 +404,7 @@ try{
     assert.equal(await page.locator('[data-visit-pick="wagner-falls"]').count(),1);
     assert.equal(await page.locator('[data-visit-pick="munising-falls"]').count(),0);
     assert.equal(await page.locator('[data-visit-pick="chapel-falls"]').count(),0);
-    assert.match(await page.locator('#visit-baseline').innerText(),/high end|at most 30/i);
+    assert.match(await page.locator('#visit-baseline').innerText(),/up to 30 minutes at each waterfall/i);
   });
   await run('visit lens: winter Bond source caution and reversibility',async()=>{
     await page.locator('#visit-region').selectOption('Western U.P.');
@@ -448,7 +448,7 @@ try{
   });
   await run('visit lens: future dates identify superseded historic source window',async()=>{
     await page.locator('#visit-date').fill('2028-02-10');
-    assert.match(await page.locator('#visit-verdict').innerText(),/beyond this source review period|historical/i);
+    assert.match(await page.locator('#visit-verdict').innerText(),/beyond the latest access notes/i);
     await page.locator('#visit-date').fill('2026-11-02');
   });
   await run('visit lens: 360px and 1440px layout has no horizontal overflow',async()=>{
@@ -465,7 +465,7 @@ try{
     try{
       await staticPage.goto(base+'/upper-peninsula-waterfalls/',{waitUntil:'domcontentloaded'});
       assert.equal(await staticPage.locator('[data-fall]').count(),expectedFalls);
-      assert.match(await staticPage.locator('.visit-noscript').innerText(),/requires JavaScript/);
+      assert.match(await staticPage.locator('.visit-noscript').innerText(),/full waterfall list/);
       assert.ok(await staticPage.locator('a[href="https://www.michigan.gov/recsearch/parks/porkies"]').count()>=1);
     }finally{await staticPage.close();}
   });

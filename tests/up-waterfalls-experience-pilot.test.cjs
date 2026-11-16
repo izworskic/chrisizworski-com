@@ -33,10 +33,10 @@ test('keeps all destination cards, source-verified photographs and safety warnin
     const p=photos.find(photo=>photo.id===id);
     assert.ok(p&&h.includes(p.creator),'verified image attribution '+id);
   }
-  assert.match(h,/Marker = waterfall\/attraction/);
-  assert.ok(h.includes('<strong>not</strong> a validated trailhead or parking pin'));
-  assert.match(h,/Nothing here verifies today's road, gate or trail status/);
-  assert.match(h,/Munising Falls is closed/);
+  assert.match(h,/Explore 80 waterfall destinations and scenic stops/);
+  assert.ok(h.includes('open its guide for the walk, parking, and what to expect along the way'));
+  assert.match(h,/Access notices were checked November 2, 2026/);
+  assert.match(h,/Munising Falls remains closed/);
   assert.match(h,/Check parking source/);
 });
 
