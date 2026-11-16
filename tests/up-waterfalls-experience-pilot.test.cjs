@@ -15,6 +15,7 @@ test('map-first reader order, without a JavaScript-dependent reshuffle',()=>{
   assert.ok(at('id="visit-lens"') < at('class="explorer"'));
   assert.ok(at('class="explorer"') < at('id="falls-map"'));
   assert.ok(at('id="falls-map"') < at('id="results"'), 'Map must precede results in the actual DOM');
+  assert.match(h,/<a class="pill-link" href="#falls-map">Explore the waterfall map<\/a>/);
   assert.ok(at('id="falls-map"') < at('class="upfall-photo-preview"'));
   assert.ok(at('class="upfall-photo-preview"') < at('id="waterfall-day-choices"'));
   assert.ok(at('id="waterfall-day-choices"') < at('id="munising-day"'));
