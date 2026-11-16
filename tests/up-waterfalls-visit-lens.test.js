@@ -44,3 +44,28 @@ test('B55 publish no invented trip times or new guide URLs',()=>{
  assert.ok(!html.includes('href="/upper-peninsula-waterfalls/visitability-lens/"'));
  for(const c of data){assert.ok(c.id&&c.source,'curated source record incomplete');}
 });
+
+test('every waterfall map action offers Google Maps feature viewing, separate from verified parking directions',()=>{
+ const near=fs.readFileSync('public/assets/up-waterfalls-nearby.js','utf8');
+ const detail=fs.readFileSync('public/assets/up-fall-detail.js','utf8');
+ const styles=fs.readFileSync('public/assets/up-waterfalls.css','utf8');
+ for(const [name,source] of [['visit matcher',lens],['nearby falls',near],['interactive map',map],['individual guide',detail]]){
+  assert.match(source,/google\.com\/maps\/search\//,name+' must link to a geographic Google Maps view');
+  assert.match(source,/encodeURIComponent\(/,name+' must safely encode the known feature coordinate');
+  assert.match(source,/noopener noreferrer/,name+' must protect external navigation');
+ }
+ assert.match(lens,/row\.appendChild\(google\)/);
+ assert.match(near,/actions\.appendChild\(google\)/);
+ assert.match(map,/p\.appendChild\(google\)/);
+ assert.match(detail,/insertAdjacentElement\('afterend',paragraph\)/);
+ assert.doesNotMatch(lens,/google\.com\/maps\/dir\//);
+ assert.doesNotMatch(near,/google\.com\/maps\/dir\//);
+ assert.doesNotMatch(detail,/google\.com\/maps\/dir\//);
+ assert.match(map,/Google Maps directions to verified visitor parking/);
+ assert.match(map,/c\.dataset\.arrivalVerified==='verified'/);
+ assert.match(styles,/\.waterfall-google-link:focus-visible/);
+ const guideDir='public/upper-peninsula-waterfalls';
+ const mappedGuides=fs.readdirSync(guideDir,{withFileTypes:true}).filter(e=>e.isDirectory()).map(e=>guideDir+'/'+e.name+'/index.html').filter(p=>fs.existsSync(p)&&fs.readFileSync(p,'utf8').includes('id="mini-map"'));
+ assert.ok(mappedGuides.length>=60,'shared link must cover the mapped waterfall guide pages');
+ for(const filename of mappedGuides)assert.match(fs.readFileSync(filename,'utf8'),/\/assets\/up-fall-detail\.js/,filename+' must load the shared Google Maps location-link implementation');
+});
