@@ -22,6 +22,8 @@ on:
       - 'public/assets/up-waterfalls-nearby.json'
       - 'data/up-waterfalls.json'
       - 'public/upper-peninsula-waterfalls/index.html'
+      - 'public/assets/up-waterfalls-experience-pilot.css'
+      - 'tests/up-waterfalls-experience-pilot.test.cjs'
       - '.github/workflows/up-waterfalls-rust.yml'
   workflow_dispatch:
 permissions:
@@ -70,4 +72,4 @@ jobs:
         run: node scripts/verify-up-waterfalls-atlas-regional-rust.cjs --wasm=/tmp/up-waterfalls-atlas-regional.wasm
       - name: Preserve nearby browser contract and access source protections
         run: |
-          node --test tests/up-waterfalls-b59-nearby-python.test.js tests/up-waterfalls-visit-lens.test.js tests/up-waterfall-source-coverage-gates.test.js tests/up-waterfalls.test.js tests/up-waterfall-evidence-atlas.test.js tests/up-waterfalls-regional-clusters.test.js
+          node --test tests/up-waterfalls-b59-nearby-python.test.js tests/up-waterfalls-visit-lens.test.js tests/up-waterfalls-experience-pilot.test.cjs tests/up-waterfall-hub-photo-gallery.test.js tests/up-waterfall-source-coverage-gates.test.js tests/up-waterfalls.test.js tests/up-waterfall-evidence-atlas.test.js tests/up-waterfalls-regional-clusters.test.js
