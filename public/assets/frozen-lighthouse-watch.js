@@ -95,15 +95,18 @@
   card.append(line('GLERL ice:',pier.ice.coverage==='lakewide-only'?
    pier.ice.pct+'% Lake Michigan lakewide on '+time(pier.ice.observedAt)+'; pier pack ice unknown.':
    'Current regional ice status unavailable. Do not assume open water.'));
-  if(pier.alerts?.status==='unavailable'){
-   card.append(line('NWS freezing spray alert:','Alert feed unavailable or stale.'));
-  }else if(pier.alerts?.events?.length){
+  const zones=(pier.alerts?.zones||[]).join(', ')||'unverified marine zone';
+  if(pier.alerts?.events?.length){
    const box=node('p','official-alert'),event=pier.alerts.events[0];
-   box.textContent='NWS freezing spray alert: '+event.name+'. Issued feed updated '+time(pier.alerts.updatedAt)+'. ';
+   box.textContent='NWS '+event.name+' for '+zones+'. Alert feed updated '+time(pier.alerts.updatedAt)+'. '+(pier.alerts.status==='partial'?'Other adjacent zone status is unknown. ':'');
    if(/^https:\/\/api\.weather\.gov\//.test(event.uri||''))box.append(sourceAnchor(event.uri,'Read official alert'));
    card.append(box);
-  }else card.append(line('NWS freezing spray alert:','No active event in the queried feed as of '+time(pier.alerts?.updatedAt)+'. This is not an all-clear.'));
-  const safety=node('p','card-safety','Never walk on icy or wave-swept piers. View from shore.');
+  }else if(pier.alerts?.status!=='complete'){
+   card.append(line('NWS freezing spray alert:','Marine zone coverage ('+zones+') is missing, stale or incomplete. No all-clear can be inferred.'));
+  }else{
+   card.append(line('NWS freezing spray alert:','No active event in marine '+zones+' as of '+time(pier.alerts.updatedAt)+'. This is not an all-clear.'));
+  }
+    const safety=node('p','card-safety','Never walk on icy or wave-swept piers. View from shore.');
   card.append(safety);
   const details=node('details','pier-details'),summary=node('summary','','Inspect 72 forecast hours');
   details.append(summary);chart(pier,details);card.append(details);
