@@ -72,8 +72,8 @@ test('B76 middle guide, hub and sitemap add exactly one distinct indexable water
  assert.match(guide,/Middle Falls/);
  assert.match(hub,/data-id="middle-hungarian-falls"/);
  assert.match(hub,/data-parking-lat="47.173159" data-parking-lng="-88.444743"/);
- assert.match(hub,/80 curated visitor destinations/);
- assert.match(hub,/80 curated waterfall profiles/);
+ assert.match(hub,/Explore 80 waterfall destinations and scenic stops/);
+ assert.match(hub,/80 waterfalls and scenic stops to explore/);
  for(const id of ['upper-hungarian-falls','lower-hungarian-falls']){
    assert.match(read('public/upper-peninsula-waterfalls/'+id+'/index.html'),/href="\/upper-peninsula-waterfalls\/middle-hungarian-falls\/"/);
  }
