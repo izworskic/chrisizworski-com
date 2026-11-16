@@ -58,8 +58,9 @@ test('gate and ice suppression precede any icing category',()=>{
 });
 
 test('missing NWS hours and stale issue date do not create a live forecast',()=>{
- const p={properties:{updateTime:iso(-1),periods:[{startTime:iso(1),endTime:iso(2),temperature:14,temperatureUnit:'F',windSpeed:'26 mph',windDirection:wind}]}};
+ const p={properties:{updateTime:iso(-1),periods:[{startTime:iso(1),endTime:iso(2),temperature:14,temperatureUnit:'F',windSpeed:'26 mph',windGust:'37 mph',windDirection:wind}]}};
  assert.equal(forecastHours(p,clock).hours.length,1);
+ assert.equal(forecastHours(p,clock).hours[0].gustMph,37);
  assert.equal(forecastHours({...p,properties:{...p.properties,updateTime:iso(-9)}},clock),null);
  assert.equal(forecastHours({...p,properties:{...p.properties,periods:null}},clock),null);
  assert.equal(forecastHours({...p,properties:{...p.properties,periods:[{startTime:iso(1),temperature:null,temperatureUnit:'F',windSpeed:'26 mph',windDirection:wind}]}},clock).hours[0].airF,null);
