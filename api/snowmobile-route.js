@@ -3,6 +3,9 @@
  *
  * Multi-stop: GET /api/snowmobile-route?region=<key>&points=lat,lon;lat,lon;lat,lon
  * GET /api/snowmobile-route?region=<key>&from=lat,lon&to=lat,lon
+ * Loop finder: GET /api/snowmobile-route?region=<key>&loop=lat,lon&miles=<5-300>
+ *   Closed rides from one junction near a requested mileage. Same graph,
+ *   same closure filter, same cache; see lib/snowmobile/loops.mjs.
  *
  * Finds the shortest legally-ridable path between two points along one
  * region's official DNR trail geometry. Reuses the exact same scored
@@ -36,6 +39,32 @@ module.exports=async function(req,res){
   const from=parsePoint(req.query?.from);
   const to=parsePoint(req.query?.to);
   if(!regionParam)return fail(res,{error:'Provide region=<key>'},400);
+  if(req.query?.loop!==undefined){
+    const start=parsePoint(req.query.loop),miles=Number(req.query?.miles);
+    if(!start)return fail(res,{error:'Provide loop=lat,lon'},400);
+    if(!/^\d{1,3}(\.\d{1,2})?$/.test(String(req.query?.miles??''))||miles<5||miles>300)return fail(res,{error:'Provide miles as a number from 5 to 300'},400);
+    try{
+      const {computeRegionDetail}=await import('../lib/snowmobile/build-region.mjs');
+      const {findLoops}=await import('../lib/snowmobile/loops.mjs');
+      const result=await computeRegionDetail(regionParam);
+      if(!result.ok)return fail(res,result.body,result.status);
+      const built=result.payload.region;
+      if(built.error)return fail(res,{error:'Region trail data is unavailable right now',detail:built.error},503);
+      const loops=findLoops(built.scoredGeometry,{lat:start.lat,lon:start.lon,targetMiles:miles});
+      if(Array.isArray(loops.options))loops.options=loops.options.map(option=>({...option,clubEvidence:routeClubEvidence(option,built.scoredGeometry)}));
+      res.setHeader('Cache-Control','public, s-maxage=300, stale-while-revalidate=900');
+      return send(res,{
+        region:regionParam,loop:start,miles,
+        closureVerification:built.closures?.verified===true,
+        generatedAt:result.payload.generatedAt,
+        season:result.payload.season,
+        engine:'deterministic-loop-search',
+        loops
+      });
+    }catch(error){
+      return fail(res,{error:'Loop planning unavailable',detail:String(error?.message||error)},503);
+    }
+  }
   if(points&&(points.length<2||points.length>12||points.some(p=>!p)))return fail(res,{error:'Provide points as 2–12 lat,lon pairs separated by semicolons'},400);
   if(!points&&!from)return fail(res,{error:'Provide from=lat,lon'},400);
   if(!points&&!to)return fail(res,{error:'Provide to=lat,lon'},400);
