@@ -45,7 +45,11 @@ test('hub nav and card links remain static HTML; map popup script loads after ma
  assert.equal((page.match(/class="fall-card-region-link"/g)||[]).length,15);
  assert.equal((page.match(/id="cluster-map-focus-status"/g)||[]).length,1);
  assert.ok(page.indexOf('/assets/up-waterfall-cluster-discovery.js')>page.indexOf('/assets/up-waterfalls.js'));
- assert.ok(page.indexOf('id="waterfall-day-choices"')<page.indexOf('id="visit-lens"'));
+ // Experience OS map-first pilot: discovery itineraries follow the actual map and decision desk.
+ // Regional cards and their canonical targets remain static HTML and do not depend on JS.
+ assert.ok(page.indexOf('id="visit-lens"')<page.indexOf('class="explorer"'));
+ assert.ok(page.indexOf('class="explorer"')<page.indexOf('id="waterfall-day-choices"'));
+ for(const cluster of CLUSTERS)assert.ok(page.indexOf('id="waterfall-day-choices"')<page.indexOf('id="'+cluster.id+'"'));
  assert.match(page,/<link rel="canonical" href="https:\/\/chrisizworski\.com\/upper-peninsula-waterfalls\/"/);
  assert.match(css,/\.fall-cluster-jump-nav/);
  assert.match(css,/\.fall-guide-region-bridge/);
