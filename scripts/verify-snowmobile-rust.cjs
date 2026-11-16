@@ -28,4 +28,15 @@ assert.equal(exp.sm_solve(3,3,2,0),2);
 assert.deepEqual([read(0),read(1)],[0x80000001,0x80000000]);
 assert.equal(exp.sm_solve(3,1,0,2),-1);
 edge(0,0,1,-9);assert.equal(exp.sm_solve(2,1,0,1),-2);
-console.log('PASS: actual Rust/WASM binary, ABI, reverse routes, disconnections, input validation, source parity');
+// Loop finder exports (loop ABI v1): square 0-1-2-3-0 plus a spur 2-4.
+assert.equal(exp.sm_loop_abi_version(),1);
+const loopOut=exp.sm_loop_ptr()>>>0,loopWord=i=>new DataView(exp.memory.buffer).getUint32(loopOut+i*4,true);
+assert.ok(exp.sm_loop_words()>=8&&loopOut+exp.sm_loop_words()*4<=exp.memory.buffer.byteLength);
+edge(0,0,1,1);edge(1,1,2,1);edge(2,2,3,1);edge(3,3,0,1);edge(4,2,4,3);
+assert.equal(exp.sm_loops(5,5,0,4,3),2);
+assert.deepEqual([0,1,2,3,4,5,6].map(loopWord),[2,0,4,0,1,2,3],'the square is the 4 mile loop');
+assert.deepEqual([7,8,9,10,11,12].map(loopWord),[1,4,0,1,0x80000001,0x80000000],'out-and-back to the 2 mile junction');
+assert.equal(exp.sm_loops(5,5,0,0,3),-2);
+assert.equal(exp.sm_loops(5,5,9,4,3),-2);
+assert.equal(exp.sm_loops(5,5,0,4,4),-2);
+console.log('PASS: actual Rust/WASM binary, ABI, reverse routes, disconnections, input validation, loop finder, source parity');

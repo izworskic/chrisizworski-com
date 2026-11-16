@@ -325,3 +325,31 @@ button:focus-visible,select:focus-visible,a:focus-visible,summary:focus-visible{
 .route-club-sources li .small{color:#375363}
 .route-club-sources a:focus-visible{outline:3px solid #237fb2;outline-offset:2px}
 @media(max-width:680px){.route-club-sources{margin:12px 0;padding:12px 13px}}
+/* Loop finder (snowmobile-loop-finder.js): one start junction, one ride length, a few closed rides to compare. */
+.loop-finder{margin:12px 0 10px;padding:0;background:#fbf6ec;border:1px solid #dcc79f;border-radius:9px}
+.loop-finder>summary{cursor:pointer;padding:13px 14px;min-height:46px;font:700 .95rem/1.35 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#5a3d12}
+.loop-finder>summary:focus-visible{outline:3px solid #e19c28;outline-offset:2px}
+.loop-finder[open]>summary{border-bottom:1px solid #e6d6b6}
+.loop-finder>*:not(summary){margin-left:14px;margin-right:14px}
+.loop-finder>p{max-width:72ch;font-size:.88rem;color:#4a3a22}
+.loop-form{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:14px;margin-top:10px;margin-bottom:10px}
+.loop-field label{display:block;margin:0 0 6px;font:700 .89rem/1.35 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#5a3d12}
+.loop-field input{display:block;width:100%;min-height:46px;border:1px solid #b99d68;border-radius:7px;background:#fff;color:#2f2413;padding:10px 12px;font:inherit}
+.loop-field input:disabled{background:#efebe3;color:#6b6252}
+.loop-start-chosen{font-weight:700;color:#5a3d12}
+.loop-presets{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.loop-presets button{min-height:44px;padding:8px 14px;border-radius:7px;border:1px solid #8a6a2c;background:#fff;color:#5a3d12;font:700 13px/1.2 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;cursor:pointer}
+.loop-presets button[aria-pressed="true"]{background:#5a3d12;color:#fff}
+.loop-actions{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px}
+.loop-actions button{min-height:46px;padding:11px 16px;border-radius:8px;border:1px solid #5a3d12;background:#5a3d12;color:#fff;font:700 14px/1.3 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;cursor:pointer}
+.loop-actions button.secondary-btn{background:#fff;color:#5a3d12}
+.loop-actions button:disabled{background:#cfc6b6;border-color:#cfc6b6;color:#5d5648;cursor:not-allowed}
+.loop-options{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:9px;margin-top:10px;margin-bottom:10px}
+.loop-options[hidden]{display:none}
+.loop-option{display:flex;flex-direction:column;gap:3px;align-items:flex-start;min-height:48px;padding:11px 12px;text-align:left;background:#fff;color:#2f2413;border:2px solid #cdb788;border-radius:8px;font:inherit;cursor:pointer}
+.loop-option strong{font:700 1rem/1.3 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#3f2b0c}
+.loop-option span{font-size:.8rem;color:#55472f}
+.loop-option[aria-checked="true"]{border-color:#5a3d12;background:#fff3d9;box-shadow:inset 4px 0 0 #e8a33d}
+.loop-option:hover,.loop-option:focus-visible,.loop-presets button:focus-visible,.loop-actions button:focus-visible,.loop-field input:focus-visible{outline:3px solid #e19c28;outline-offset:2px}
+.loop-truth{padding-bottom:12px;color:#5d4a26}
+@media(max-width:640px){.loop-form{grid-template-columns:1fr}.loop-actions{display:grid;grid-template-columns:1fr}.loop-actions button{width:100%;min-height:48px}.loop-options{grid-template-columns:1fr}}

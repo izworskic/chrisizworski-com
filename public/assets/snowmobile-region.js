@@ -6,6 +6,8 @@ let JUNCTIONS_BY_ID=new Map();
 const ROUTE_CLICK_EVENTS=new WeakSet();
 let ROUTE_REQUEST_ID=0,ROUTE_ABORT=null;
 let LAST_ROUTE_EXPORT=null;
+// Loop finder controller (snowmobile-loop-finder.js). It shares the one map plan and export slot with the stop-by-stop planner.
+let LOOPS=null;
 function track(name,params={}){try{if(typeof window.gtag==='function')window.gtag('event',name,params)}catch{}}
 function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 function bandClass(b){return b==='CLOSED'||b==='POOR'?'bad':b==='MARGINAL'||b==='OFF_SEASON'||b==='UNKNOWN'?'warn':b==='EXCELLENT'||b==='GOOD'?'good':''}
@@ -252,7 +254,7 @@ function routeModeButton(){return $('#routeModeToggle');}
 function routeResultHost(){return $('#routeResult');}
 const ROUTE_MARK_COLOR='#e8a33d';
 let ROUTE_BUSY=false;
-function invalidateRoute(){LAST_ROUTE_EXPORT=null;ROUTE_REQUEST_ID++;if(ROUTE_ABORT)ROUTE_ABORT.abort();ROUTE_ABORT=null;ROUTE_BUSY=false;if(ROUTE_LINE){ROUTE_LINE.remove();ROUTE_LINE=null;}const host=routeResultHost();if(host){host.hidden=true;host.innerHTML='';}}
+function invalidateRoute(){LAST_ROUTE_EXPORT=null;ROUTE_REQUEST_ID++;if(ROUTE_ABORT)ROUTE_ABORT.abort();ROUTE_ABORT=null;ROUTE_BUSY=false;if(ROUTE_LINE){ROUTE_LINE.remove();ROUTE_LINE=null;}const host=routeResultHost();if(host){host.hidden=true;host.innerHTML='';}LOOPS?.planCleared();}
 function clearRoutePoints(){invalidateRoute();for(const m of ROUTE_MARKERS)m?.remove?.();ROUTE_MARKERS=[];ROUTE_POINTS=[];const search=$('#junctionSearch');if(search)search.value='';}
 function setRouteHint(text,on=true){for(const id of ['routeHint','mapRouteHint']){const el=$('#'+id);if(el){el.hidden=!on;el.textContent=text;}}}
 function routeAvailable(){
@@ -305,7 +307,7 @@ function syncRouteControls(){
   if(loop){loop.hidden=n<2;loop.disabled=!ROUTE_MODE||ROUTE_BUSY||n<2||n>=12||start?.junctionId===last?.junctionId;}
   if(MAP)MAP.getContainer().style.cursor=ROUTE_MODE&&!ROUTE_BUSY?'pointer':'';updateJunctionStyles();renderJunctionMatches();
 }
-function updateRouteAvailability(){syncRouteControls();if(!routeAvailable())setRouteHint(DATA?'Current mapped DNR junctions are unavailable. Verify the official DNR trail map before planning.':'Loading DNR junctions…');else if(!ROUTE_POINTS.length)setRouteHint(ROUTE_MODE?'Search a DNR trail junction or tap a blue map dot for your start.':'Search mapped DNR junctions or choose Plan a route to select map dots.');}
+function updateRouteAvailability(){syncRouteControls();LOOPS?.refresh();if(!routeAvailable())setRouteHint(DATA?'Current mapped DNR junctions are unavailable. Verify the official DNR trail map before planning.':'Loading DNR junctions…');else if(!ROUTE_POINTS.length)setRouteHint(ROUTE_MODE?'Search a DNR trail junction or tap a blue map dot for your start.':'Search mapped DNR junctions or choose Plan a route to select map dots.');}
 function scrollRouteElement(el){el?.scrollIntoView?.({block:'nearest',behavior:window.matchMedia?.('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});}
 function setRouteMode(on){ROUTE_MODE=on;syncRouteControls();}
 // The main button always starts a fresh draft. It never toggles ambiguously.
@@ -349,7 +351,7 @@ function routeResultHtml(route,verification={}){
     (unmapped?'<p class="small">'+esc(unmapped)+' mapped segment'+(unmapped===1?' has':'s have')+' no independently matched club-report link here. Their condition and grooming remain unknown.</p>':'')+
     '<p class="small"><strong>Check report dates.</strong> A groomer assignment does not mean the trail was groomed today, and no club report can override a DNR closure. <a href="https://misorva.org/trail-report/" target="_blank" rel="noopener">All club reports</a>.</p></section>':'';
 
-  return `${evidenceLine}<div class="route-headline"><strong>${esc(route.distanceMiles)} mi total</strong> · about ${esc(formatDuration(route.estimatedMinutes))}</div><div class="small">${esc(route.stopCount||2)} stops · ${esc(route.segmentsTraversed)} unique DNR segments · assumed ${esc(route.assumedAvgMph)} mph average</div>${worstLine}${closedNote}${routeClubLine}${legs?`<h3>Your route, leg by leg</h3><ol class="route-legs">${legs}</ol>`:''}${segments?`<details><summary>Trail condition evidence along the route</summary><ul>${segments}</ul></details>`:''}<div class="small route-truth-inline">${esc(route.truth||'')}</div>`;
+  return `${evidenceLine}<div class="route-headline"><strong>${esc(route.distanceMiles)} mi total</strong> · about ${esc(formatDuration(route.estimatedMinutes))}</div><div class="small">${route.kind&&window.SnowmobileLoopFinder?.kindLabel(route.kind)?esc(window.SnowmobileLoopFinder.kindLabel(route.kind))+(route.repeatedMiles>=0.05?' · '+esc(route.repeatedMiles)+' mi ridden twice':''):esc(route.stopCount||2)+' stops'} · ${esc(route.segmentsTraversed)} unique DNR segments · assumed ${esc(route.assumedAvgMph)} mph average</div>${worstLine}${closedNote}${routeClubLine}${legs?`<h3>Your route, leg by leg</h3><ol class="route-legs">${legs}</ol>`:''}${segments?`<details><summary>Trail condition evidence along the route</summary><ul>${segments}</ul></details>`:''}<div class="small route-truth-inline">${esc(route.truth||'')}</div>`;
 }
 // Exports only a successful, currently selected DNR route. Parking assets
 // and club staging addresses are intentionally absent from these GPX tracks.
@@ -505,8 +507,42 @@ async function loadParking(){
   }finally{if(button)button.disabled=false;}
 }
 
-document.addEventListener('input',e=>{if(e.target?.id==='junctionSearch')renderJunctionMatches();});
+// Loop finder: draw one server-computed closed ride in the same map plan and
+// export slot the stop-by-stop planner uses, so only one plan is ever shown.
+function showLoopPlan({option,payload,start,halfwayLabel,userInitiated}){
+  const host=routeResultHost();if(!host||!DATA||!window.SnowmobileLoopFinder)return;
+  clearRoutePoints();setRouteMode(false);
+  const fresh=window.SnowmobileComparison?.bundleFresh({generatedAt:payload.generatedAt})===true;
+  const closureVerified=fresh&&payload.closureVerification===true,seasonActive=payload.season?.active===true;
+  const stops=window.SnowmobileLoopFinder.exportStops(option,start,halfwayLabel);
+  const rejected=window.SnowmobileRoutePicker?.routeEvidence(option,{closureVerified,seasonActive})?.inconsistentClosedSegment===true;
+  const canExport=!rejected&&window.SnowmobileRouteExport?.validate(option,stops)?.ok===true;
+  LAST_ROUTE_EXPORT=canExport?{route:option,stops,region:DATA.key,generatedAt:payload.generatedAt,closureVerified,seasonActive}:null;
+  host.hidden=false;
+  host.innerHTML=(closureVerified?'':'<p><strong>Distance planning only.</strong> Current closure verification is unavailable, old or failed. Confirm access with DNR before riding.</p>')+(!seasonActive?'<p><strong>Off-season:</strong> this is a future-trip plan, not permission to ride now.</p>':'')+'<p class="small"><strong>Loop start and finish:</strong> '+esc(start.label)+'. <strong>Route data assembled:</strong> '+esc(formatEvidenceTime(payload.generatedAt))+' (not a trail inspection or club report date).</p>'+routeResultHtml(option,{closureVerified,seasonActive})+(canExport?routeExportUi():'');
+  if(MAP&&window.L&&!rejected){
+    const latlngs=option.geometry.coordinates.map(([lon,lat])=>[lat,lon]);
+    ROUTE_LINE=L.polyline(latlngs,{color:ROUTE_MARK_COLOR,weight:6,opacity:.95,dashArray:'1 8',lineCap:'round',interactive:false}).addTo(MAP);
+    const marker=L.circleMarker([start.lat,start.lon],{radius:9,color:'#2a1c0a',weight:2,fillColor:ROUTE_MARK_COLOR,fillOpacity:.95,interactive:false}).addTo(MAP);
+    marker.bindTooltip?.('Start',{permanent:true,direction:'top',className:'route-stop-label'});ROUTE_MARKERS.push(marker);
+    try{MAP.fitBounds(ROUTE_LINE.getBounds(),{padding:[25,25]});}catch{}
+  }
+  setRouteHint('Loop drawn on the map. Choose another loop option to compare, or Plan a route to pick your own stops.');
+  if(userInitiated)scrollRouteElement($('#map'));
+}
+function clearLoopPlan(){clearRoutePoints();updateRouteAvailability();}
+if(window.SnowmobileLoopFinder)LOOPS=window.SnowmobileLoopFinder.createController({
+  doc:document,getData:()=>DATA,esc,track,
+  findJunctions:(features,query,component,limit)=>window.SnowmobileRoutePicker?window.SnowmobileRoutePicker.findJunctions(features,query,component,limit):[],
+  junctionById:id=>{routeAvailable();return JUNCTIONS_BY_ID.get(id)||null;},
+  showPlan:showLoopPlan,clearPlan:clearLoopPlan,
+  fetchJson:async(url,signal)=>{const r=await fetch(url,{signal});return {ok:r.ok,json:await r.json()};}
+});
+document.addEventListener('keydown',e=>{LOOPS?.handleKey(e);});
+
+document.addEventListener('input',e=>{if(LOOPS?.handleInput(e))return;if(e.target?.id==='junctionSearch')renderJunctionMatches();});
 document.addEventListener('click',e=>{
+  if(LOOPS?.handleClick(e))return;
   if(e.target?.id==='downloadRouteGpx'){downloadRouteGpx();return;}
   if(e.target?.id==='copyRouteSummary'){copyRouteSummary();return;}
   if(e.target?.id==='loadParking')loadParking();

@@ -4,6 +4,9 @@ on:
     paths:
       - public/assets/snowmobile-route-export.js
       - public/assets/snowmobile-region.js
+      - public/assets/snowmobile-loop-finder.js
+      - lib/snowmobile/loops.mjs
+      - scripts/verify-snowmobile-loop-browser.cjs
       - public/assets/snowmobile.css
       - public/snowmobile/regions/**
       - scripts/generate-snowmobile-region-pages.mjs
@@ -40,3 +43,5 @@ jobs:
           echo "CHROME_PATH=$(command -v google-chrome || command -v chromium-browser)" >> "$GITHUB_ENV"
       - name: Verify actual download and failure behavior on 390px and desktop
         run: node scripts/verify-snowmobile-gpx-browser.cjs
+      - name: Verify the loop finder in real Chrome at 360, 390, 768 and 1440 px
+        run: node scripts/verify-snowmobile-loop-browser.cjs

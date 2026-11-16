@@ -113,12 +113,12 @@ test('the actual snowmobile route UI renders source citations from the API with 
 test('all seven public regions load the changed source-aware client, keeping canonical, advertising and route tools',()=>{
  const regions=['eastern-up','keweenaw-copper-country','central-western-up','grayling-gaylord','northeast-sunrise','northwest-michigan','west-michigan'];
  const generator=readFileSync(new URL('../scripts/generate-snowmobile-region-pages.mjs',import.meta.url),'utf8');
- assert.match(generator,/groomer-route-1/);
+ assert.match(generator,/loop-finder-1/); // asset cache key moves forward whenever the shared client or stylesheet changes
  const api=readFileSync(new URL('../api/snowmobile-route.js',import.meta.url),'utf8');
  assert.match(api,/routeClubEvidence\(route,built\.scoredGeometry\)/);
  for(const key of regions){
   const html=readFileSync(new URL('../public/snowmobile/regions/'+key+'.html',import.meta.url),'utf8');
-  for(const marker of ['snowmobile-region.js?v=20261114-trust-receipt-1','snowmobile.css?v=20261113-groomer-route-1','id="routePlanner"','id="parkingPlanner"','google-adsense-account'])assert.ok(html.includes(marker),key+': '+marker);
+  for(const marker of ['snowmobile-region.js?v=20261115-loop-finder-1','snowmobile.css?v=20261115-loop-finder-1','id="routePlanner"','id="parkingPlanner"','google-adsense-account'])assert.ok(html.includes(marker),key+': '+marker);
   assert.match(html,/rel="canonical"/);
  }
 });
