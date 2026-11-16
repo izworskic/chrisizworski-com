@@ -77,7 +77,10 @@ test('B59 every neighbor edge uses straight-line Haversine geography, and all ne
 test('B59 visible UX remains source-linked and accessible, with existing trip planner intact',()=>{
  for(const id of ['nearby-lab','nearby-origin','nearby-radius','nearby-results','nearby-status','nearby-source-count'])assert.ok(hub.includes('id="'+id+'"'),id);
  assert.ok(hub.indexOf('id="visit-lens"')<hub.indexOf('id="nearby-lab"'));
- assert.ok(hub.indexOf('id="nearby-lab"')<hub.indexOf('class="explorer"'));
+ // Map-first Experience OS: the real map precedes the deeper proximity research lab.
+ // The lab retains its controls, source-only eligibility, and shortlist context.
+ assert.ok(hub.indexOf('class="explorer"')<hub.indexOf('id="nearby-lab"'));
+ assert.ok(hub.indexOf('id="falls-map"')<hub.indexOf('id="nearby-lab"'));
  assert.match(hub,/assets\/up-waterfalls-nearby\.js/);
  const modified=hub.match(/dateModified":"(\d{4}-\d{2}-\d{2})"/);
  assert.ok(modified,"hub needs a dateModified value");
