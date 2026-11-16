@@ -14,6 +14,7 @@ test('map-first reader order, without a JavaScript-dependent reshuffle',()=>{
   assert.match(h,/<link rel="stylesheet" href="\/assets\/up-waterfalls.css"><link rel="stylesheet" href="\/assets\/up-waterfalls-experience-pilot.css">/);
   assert.ok(at('id="visit-lens"') < at('class="explorer"'));
   assert.ok(at('class="explorer"') < at('id="falls-map"'));
+  assert.ok(at('id="falls-map"') < at('id="results"'), 'Map must precede results in the actual DOM');
   assert.ok(at('id="falls-map"') < at('class="upfall-photo-preview"'));
   assert.ok(at('class="upfall-photo-preview"') < at('id="waterfall-day-choices"'));
   assert.ok(at('id="waterfall-day-choices"') < at('id="munising-day"'));
@@ -52,8 +53,10 @@ test('preserves essential SEO, analytics, ads and Rust-backed planner connection
 test('mobile map precedes long results; retains touch targets and source proof',()=>{
   assert.match(css,/@media\(max-width:900px\)/);
   assert.match(css,/\.explorer\s*\{\s*display:flex;/);
-  assert.match(css,/\.map-card\{order:0\}/);
-  assert.match(css,/\.control-panel\{order:1\}/);
+  assert.match(css,/@media\(min-width:901px\)/);
+  assert.match(css,/\.control-panel\{\s*grid-column:1;/);
+  assert.match(css,/\.map-card\{\s*grid-column:2;/);
+  assert.doesNotMatch(css,/order:\s*[01]/,'CSS visual reordering breaks keyboard order');
   assert.match(css,/min-height:44px/);
   assert.match(css,/\.upfall-photo-preview-card figcaption a/);
   assert.doesNotMatch(css,/display:none/);
