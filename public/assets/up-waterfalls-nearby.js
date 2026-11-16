@@ -87,7 +87,7 @@ async function init(){
   origin.disabled=false;radius.disabled=false;
   origin.addEventListener('change',()=>render(data));radius.addEventListener('change',()=>render(data));render(data);
  }catch{
-  status.textContent='Nearby waterfall suggestions aren't available right now. You can still explore every waterfall on the main map.';
+  status.textContent='Nearby waterfall suggestions are not available right now. You can still explore every waterfall on the main map.';
   output.replaceChildren();
  }
 }
