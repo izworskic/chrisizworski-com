@@ -33,7 +33,7 @@ test('B78 all inventory, curator, nearby Python and sitemap counts agree without
  assert.deepEqual(near.counts,{curated:80,eligible:71,excluded:9});
  assert.deepEqual(near.locations.filter(x=>x.id==='wildcat-falls').map(x=>[x.lat,x.lng]),[[46.346173,-89.292236]]);
  assert.ok(near.nearby['wildcat-falls'].some(x=>x.id==='bond-falls'));
- assert.match(hub,/80 curated visitor destinations/);assert.match(hub,/80 curated waterfall profiles/);
+ assert.match(hub,/Explore 80 waterfall destinations and scenic stops/);assert.match(hub,/80 waterfalls and scenic stops to explore/);
  assert.equal((hub.match(/data-id="wildcat-falls"/g)||[]).length,1);
  assert.equal((sm.match(/<loc>/g)||[]).length,78);
  assert.ok(sm.includes('wildcat-falls/</loc><lastmod>2026-11-07</lastmod>'));
