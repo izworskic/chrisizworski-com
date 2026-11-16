@@ -24,7 +24,7 @@ test('B55 conservative full-visit time gate and source-scoped closure safety',()
  assert.match(lens,/const duration=c=>/);
  assert.match(lens,/status==='closed'/);assert.match(lens,/status==='research'/);
  assert.match(lens,/c.dataset.arrivalVerified!=='verified'/);
- assert.match(lens,/Check the park's latest trail and road notes/);
+ assert.match(lens,/Check the latest park trail and road notes/);
  assert.match(lens,/check each park guide for current conditions/);
  assert.match(lens,/driving between U.P. regions is a separate part of the day/);
  for(const url of ['michigan.gov/recsearch/parks/porkies','michigan.gov/recsearch/parks/bondfalls','fs.usda.gov/r09/ottawa/alerts/black-river','nps.gov/places/munising-falls'])assert.ok(lens.includes(url));
