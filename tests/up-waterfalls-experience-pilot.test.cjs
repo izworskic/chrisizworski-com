@@ -56,7 +56,8 @@ test('mobile map precedes long results; retains touch targets and source proof',
   assert.match(css,/@media\(min-width:901px\)/);
   assert.match(css,/\.control-panel\{\s*grid-column:1;/);
   assert.match(css,/\.map-card\{\s*grid-column:2;/);
-  assert.doesNotMatch(css,/order:\s*[01]/,'CSS visual reordering breaks keyboard order');
+  // Match the CSS property, not the substring of border:1.
+  assert.doesNotMatch(css,/(?:^|[;{])\s*order\s*:\s*[01](?:;|})/m,'CSS visual reordering breaks keyboard order');
   assert.match(css,/min-height:44px/);
   assert.match(css,/\.upfall-photo-preview-card figcaption a/);
   assert.doesNotMatch(css,/display:none/);
