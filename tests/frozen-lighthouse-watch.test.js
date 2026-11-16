@@ -7,7 +7,8 @@ const clock=Date.now();
 const iso=(hours=0)=>new Date(clock+hours*3600000).toISOString();
 const first=LIGHTS[0];
 const midYear=new Date(clock).getUTCFullYear();
-const dayOfYear=Math.ceil((Date.UTC(midYear,new Date(clock).getUTCMonth(),new Date(clock).getUTCDate())-Date.UTC(midYear,0,1))/86400000)+1;
+const observedDay=new Date(clock-(new Date(clock).getUTCHours()<13?24:0)*3600000);
+const dayOfYear=Math.floor((Date.UTC(observedDay.getUTCFullYear(),observedDay.getUTCMonth(),observedDay.getUTCDate())-Date.UTC(observedDay.getUTCFullYear(),0,1))/86400000)+1;
 const civil=iso().slice(0,16).replace('T',' ');
 const wind='WNW';
 
