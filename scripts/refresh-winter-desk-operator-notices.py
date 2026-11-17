@@ -11,6 +11,7 @@ import argparse
 import datetime as dt
 import hashlib
 import html
+from html.parser import HTMLParser
 import json
 import pathlib
 import re
@@ -50,9 +51,27 @@ def verified_url(url):
     except (TypeError,ValueError):
         return False
 
+class VisibleText(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.hidden=0
+        self.chunks=[]
+    def handle_starttag(self,tag,attrs):
+        if tag in ("script","style","template"):
+            self.hidden+=1
+    def handle_endtag(self,tag):
+        if tag in ("script","style","template"):
+            self.hidden=max(0,self.hidden-1)
+    def handle_data(self,data):
+        if not self.hidden:
+            self.chunks.append(data)
+
 def normalize(value):
-    value=html.unescape(re.sub(r"<[^>]*>"," ",value))
-    return re.sub(r"\s+"," ",value).casefold().strip()
+    if "<" in value:
+        parser=VisibleText()
+        parser.feed(value)
+        value=" ".join(parser.chunks)
+    return re.sub(r"\s+"," ",html.unescape(value)).casefold().strip()
 
 def probe(rule,checked):
     url=rule["sourceUrl"]
@@ -114,6 +133,7 @@ def main():
         sample["places"]["munising-snowshoe"]["isClosed"]=True
         assert not validate(sample)
         assert normalize("<b>Munising  </b>Falls")=="munising falls"
+        assert normalize("<script>fake closed route</script><p>actual open page</p>")=="actual open page"
         assert not verified_url("https://attacker.example/redirect")
         print("PASS official notice source identity and no-inferred-access fixtures")
         return
