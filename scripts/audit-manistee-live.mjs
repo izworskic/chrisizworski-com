@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import fs from 'node:fs/promises';
+import hydro from '../api/manistee-river-hydrography.js';
 
 const sites=['04123500','04124000','04124200','04125550','04125460'];
 const names=['Manistee River','Pine River','Bear Creek','Little Manistee River'];
@@ -19,7 +20,6 @@ async function getJson(url,label){
   }
   throw new Error(`${label} unavailable after two attempts: ${String(lastError?.message||lastError)}`);
 }
-function prop(properties={},lower,alias){return properties[lower]??properties[alias]??null;}
 
 try{
   const usgs=new URL('https://waterservices.usgs.gov/nwis/iv/');
@@ -33,18 +33,11 @@ try{
   artifact.checks.gauges={expected:sites,returned:[...returnedSites].sort(),missing:missingSites};
   if(missingSites.length)throw new Error(`USGS missing configured active sites: ${missingSites.join(', ')}`);
 
-  const nhd=new URL('https://hydro.nationalmap.gov/arcgis/rest/services/nhd/MapServer/6/query');
-  nhd.searchParams.set('where',names.map(n=>`gnis_name='${n}'`).join(' OR '));
-  nhd.searchParams.set('geometry','-86.35,44.02,-84.68,44.95');
-  nhd.searchParams.set('geometryType','esriGeometryEnvelope');
-  nhd.searchParams.set('inSR','4326');
-  nhd.searchParams.set('spatialRel','esriSpatialRelIntersects');
-  nhd.searchParams.set('outFields','gnis_name,reachcode,fcode');
-  nhd.searchParams.set('returnGeometry','true');
-  nhd.searchParams.set('outSR','4326');
-  nhd.searchParams.set('f','geojson');
-  const hydroPayload=await getJson(nhd,'USGS NHD');
-  const returnedNames=new Set((hydroPayload?.features||[]).map(f=>prop(f?.properties,'gnis_name','GNIS_NAME')).filter(Boolean));
+  // Exercise the same authoritative NHD query and completeness logic that powers
+  // the Manistee field map and read-only route API. No alternate data source.
+  const hydroPayload=await hydro.fetchHydrography();
+  if(hydroPayload.sourceCompleteness!=='complete-retrieved-set')throw new Error('USGS NHD incomplete retrieval');
+  const returnedNames=new Set((hydroPayload.features||[]).map(f=>f.properties?.name).filter(Boolean));
   const missingNames=names.filter(name=>!returnedNames.has(name));
   const invalidGeometry=(hydroPayload?.features||[]).filter(f=>!f.geometry||!['LineString','MultiLineString'].includes(f.geometry.type)).length;
   artifact.checks.hydrography={expected:names,returned:[...returnedNames].sort(),featureCount:hydroPayload?.features?.length||0,missing:missingNames,invalidGeometry};
