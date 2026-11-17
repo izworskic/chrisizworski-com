@@ -338,3 +338,13 @@ td.in{font-size:var(--v-type-18)}
   .snow-selected-report .selected-nearby{padding:var(--v-space-12) var(--v-space-16);background:var(--v-surface);border-radius:var(--v-radius-sm)}
   .snow-selected-report .selected-nearby p:first-child{margin-top:0}
 }
+
+/* Distinguish evidence links by shape, underline and weight, never by blue alone. */
+.snow-selected-report .selected-source-actions a,
+.snow-selected-report .near a{
+  color:var(--v-accent-5);
+  text-decoration:underline;
+  text-decoration-thickness:2px;
+  text-underline-offset:3px;
+  font-weight:800;
+}
