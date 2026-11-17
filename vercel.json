@@ -81,7 +81,10 @@
       "maxDuration": 20
     },
     "api/manistee-river-hydrography.js": {
-      "maxDuration": 20
+      "maxDuration": 25
+    },
+    "api/manistee-float-v1.js": {
+      "maxDuration": 25
     },
     "api/manistee-river-weather.js": {
       "maxDuration": 20
