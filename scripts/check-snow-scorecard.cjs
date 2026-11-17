@@ -176,7 +176,7 @@ function serveHtml(req, res, live, season) {
       const violations=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa']).analyze();
       const serious=violations.violations.filter(v=>['critical','serious'].includes(v.impact));
       evidence.a11y.push({width,violations:violations.violations.map(v=>({id:v.id,impact:v.impact,nodes:v.nodes.length,help:v.help})),seriousCount:serious.length});
-      assert.equal(serious.length,0,'No serious or critical WCAG AA violations at '+width+': '+JSON.stringify(serious.map(v=>v.id)));
+      assert.equal(serious.length,0,'No serious or critical WCAG AA violations at '+width+': '+JSON.stringify(serious.map(v=>({id:v.id,nodes:v.nodes.map(n=>({target:n.target,summary:n.failureSummary,html:n.html?.slice(0,220)}))}))));
       assert.equal(errors.length,0,'No page errors: '+errors.join('; '));
       evidence.viewports.push({width,scrollWidth,header,peakFont,mapAfter,rankCount,barWidths,liveCount,realTiles,filteredMarkerCount,performance:perf,errors});
       await context.close();
