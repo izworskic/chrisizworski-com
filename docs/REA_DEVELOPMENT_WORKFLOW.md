@@ -1,47 +1,43 @@
-# REA development workflow
+# REA on-demand development research
 
-REA (Reverse Engineer Anything) is an optional, local MCP research tool for coding agents working on this repository. It helps investigate existing software and interaction patterns using evidence. It does not run on the public site, in Vercel, or in CI.
+REA (Reverse Engineer Anything) is an optional investigation tool for coding agents. **Do not launch, install, connect, or use REA unless the owner explicitly asks to use REA for a particular task.** Continue normal research and development without it.
 
 Official source: https://github.com/morluto/rea
 
-Pinned MCP package: `rea-agents@6.9.0` (official release dated November 12, 2026).
+Reviewed release: `rea-agents@6.9.0`, published November 12, 2026.
 
-## Connect your agents
+## Run only for a requested investigation
 
-REA requires Node.js compatible with the pinned package, currently Node.js `^22.23.4 || ^24.22.1 || >=26.12.1`, plus npm.
+There is deliberately **no repository-level `.mcp.json` registration**, no persistent agent connection, and no `rea-agents` production or development dependency. Merely opening this repository or launching Claude Code, Codex, or another agent must not start REA.
 
-**Claude Code:** The repository's `.mcp.json` defines the `rea` MCP server for this project using `npx -y rea-agents@6.9.0 mcp`. Review that file and the package provenance before approving the project MCP server in Claude Code. Restart or reconnect Claude Code after approving the server. No global registration is needed for this project. Do not separately register another `rea` server for the same Claude Code session.
+When asked to "use REA" or "run REA", first define the exact permitted investigation and confirm the machine's Node.js meets the selected release's engine requirement: `^22.23.4 || ^24.22.1 || >=26.12.1`.
 
-**Codex and other clients:** REA's project-level Claude Code registration is not a Codex registration. Run the official, reviewed setup on your development machine, outside the repository:
+Run REA's CLI as a one-off, pinned command from the development machine, without installing a persistent MCP server:
 
 ```bash
-npx rea-agents@6.9.0 setup --client codex --dry-run
-npx rea-agents@6.9.0 setup --client codex
+npx -y rea-agents@6.9.0 analyze-javascript-application /absolute/path/to/app --json
 ```
 
-Inspect the proposed configuration and approve only the change you want. Restart Codex after setup. Other supported clients can be selected through the same setup interface. If REA is already registered in a client, inspect the current entry before installing another. All these changes are local to your development environment, not committed repository dependencies.
+This is an upstream-supported example for a locally available JavaScript application directory or ASAR. Replace the path with the actual authorized target. Other tasks require the corresponding [documented CLI command](https://github.com/morluto/rea/blob/main/docs/getting-started/cli.md). Do not assume that a CLI command supports an arbitrary URL or browser inspection.
 
-For diagnostic help, consult the upstream [installation and readiness guide](https://github.com/morluto/rea/blob/main/docs/getting-started/installation.md) and [client configuration guide](https://github.com/morluto/rea/blob/main/docs/getting-started/client-configuration.md). Pin a reviewed official release rather than automatically following `latest` in a persistent server configuration.
+For a task that specifically needs REA's MCP tools instead of the CLI, request an explicit, session-scoped registration or run a reviewed setup only for the named client. Do not commit a persistent registration to this repo, and do not silently change user-level agent configuration. After that investigation, stop the process and remove any temporary registration. Consult the upstream [client configuration guide](https://github.com/morluto/rea/blob/main/docs/getting-started/client-configuration.md) for the client's actual setup and removal instructions.
 
-## Use it when the investigation is worth the complexity
+## Evidence and implementation standards
 
-REA fits a research step, not the default implementation path. Good examples for this site are investigating a legally accessible map interaction, understanding a browser-side visualization's module boundaries, or examining a malfunctioning locally available JavaScript bundle.
+1. Work only on authorized targets; respect licenses, access controls, privacy and credentials. Never bypass protection mechanisms.
+2. State what was directly observed, what remains inferred, and the limitations of the analysis.
+3. Propose original implementations. Do not copy proprietary source, presentation, imagery or branding from another product.
+4. Develop changes only in the authoritative owning repository, with its AGENTS.md instructions, Experience OS requirements, accessibility, search integrity, ads, and source provenance safeguards.
+5. Use real browser tests for mobile and interactive acceptance. Run the owning repository's full CI gate. REA evidence is not proof of behavior, deployment or visitor improvement.
 
-1. Choose a permitted target and a narrow technical question. Respect license terms, site rules, credentials, privacy, and access controls. Do not attempt to bypass protection mechanisms.
-2. Ask the coding agent for an evidence record: what it directly observed, what it inferred, source locations when available, uncertainty, and constraints.
-3. Compare at least two original implementations suitable for our users and our codebase. Do not copy another product's proprietary source, branding, content, assets, or distinctive presentation.
-4. Implement and verify in the **authoritative owning repository**. Preserve AGENTS.md, Experience OS, field guide quality, accessibility, mobile behavior, ads, canonical URLs, and source-integrity contracts.
-5. Use existing browser interaction tests for interaction and mobile acceptance. REA analysis is not a substitute for browser testing or for verified factual content. Run the owning repository's full CI gate before merge.
+Example invocation for the coding agent:
 
-Example assignment:
+> Use REA for this one investigation: inspect the locally available JavaScript application at [authorized path], explain its observed event flow and module boundaries, and compare two original implementations for our tool. Use the pinned one-off CLI. Do not install or register REA persistently.
 
-> Investigate the public interaction pattern for [specific map or visualization] where inspection is permitted. Explain the observed event flow, rendering model, and mobile interaction evidence. Distinguish observations from guesses. Propose two distinct approaches for our own visitor-facing tool, then build and test the stronger original approach without reusing unlicensed material.
+## Non-negotiable boundaries
 
-## Operational boundaries
-
-- No `rea-agents` dependency in `package.json`, package lock, build scripts, API routes, cron jobs, or Vercel deployment.
-- No REA CLI call in `verify:all`, source generation, or production.
-- The local MCP process can read files and launch analysis helpers. Only enable it in a trusted workspace, review installation prompts, and avoid handing it secrets or private data.
-- The agent may transmit tool output to its model provider. Treat target data accordingly.
-- If REA is unavailable, development continues without it. Never claim analysis was run or verified unless it actually ran.
-- This integration applies to this repository's developer environment. Extracted specialist repositories retain their own configuration and ownership boundaries.
+- **Opt-in only:** no auto-start, auto-setup, auto-invocation, background service, agent registration, recurring job or default design workflow.
+- No REA commands in `package.json`, `verify:all`, the Vercel build, API routes, cron jobs or production.
+- Never send sensitive or private inputs to an analysis service without authorization; agent outputs may go to the configured model provider.
+- If REA cannot run, explain why. Do not pretend it was used.
+- Extracted specialist repositories continue to own their own source and instructions.
