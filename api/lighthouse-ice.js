@@ -1,4 +1,4 @@
-import {LIGHTS,MARINE_ZONES,mph,degreesFrom,scoreHour,bestWindow,persistence,isFresh} from '../lib/frozen-lighthouse.mjs';
+import {LIGHTS,MARINE_ZONES,mph,degreesFrom,scoreHour,bestWindow,persistence,isFresh,conditionWindows} from '../lib/frozen-lighthouse.mjs';
 
 export const config={runtime:'edge'};
 const UA={'User-Agent':'FrozenLighthouseWatch/1.0 (chrisizworski.com/frozen-lighthouses-michigan/; public weather research)','Accept':'application/geo+json, application/json'};
@@ -135,7 +135,7 @@ export function evaluatePier(pier,forecast,water,ice,alerts,now){
  if(!forecast)return {
   id:pier.id,name:pier.name,town:pier.town,lightList:pier.listNumber,
   lat:pier.lat,lon:pier.lon,onshoreBearing:Math.round(pier.onshoreBearing),
-  available:false,reason:'NWS hourly forecast is missing or stale',hours:[],best:null,
+  available:false,reason:'NWS hourly forecast is missing or stale',hours:[],best:null,windows:[],coverage:{forecastHours:0,evaluatedHours:0,unknownHours:0},
   water:water||null,ice,alerts,forecastIssuedAt:null,asOf:new Date(now).toISOString()
  };
  const hours=forecast.hours.map(h=>{
@@ -148,7 +148,7 @@ export function evaluatePier(pier,forecast,water,ice,alerts,now){
  return {id:pier.id,name:pier.name,town:pier.town,lightList:pier.listNumber,lat:pier.lat,lon:pier.lon,
   onshoreBearing:Math.round(pier.onshoreBearing),available:!missingWater&&hours.length>0,
   reason:missingWater?'No fresh water temperature; cannot compute icing intensity':hours.length?'':'No forecast hours available',
-  hours,best,persistence:persistence(hours,best),current:latest,
+  hours,best,windows:conditionWindows(hours),coverage:{forecastHours:hours.length,evaluatedHours:hours.filter(h=>Number.isFinite(h.score)).length,unknownHours:hours.filter(h=>h.score===null).length},persistence:persistence(hours,best),current:latest,
   water:water||null,ice,alerts,forecastIssuedAt:forecast.updatedAt,forecastEndpoint:forecast.endpoint,
   asOf:new Date(now).toISOString(),provisional:water?.kind==='lakewide-proxy'||ice.pct===null};
 }

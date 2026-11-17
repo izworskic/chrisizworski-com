@@ -1,0 +1,14 @@
+id|wind|air|water|direction|axis|ice|category|score
+cold_west|25|12|34|292.5|270|-|extreme|100
+east_wind|25|12|34|90|270|-|none|0
+warm_air|25|34|34|270|270|-|none|0
+weak_wind|12|12|34|270|270|-|none|0
+warm_water|25|12|42|270|270|-|none|0
+lakewide_ice|25|12|34|270|270|85|suppressed|0
+partial_ice|25|12|34|270|270|40|extreme|60
+cold_gale|40|0|33|250|270|0|extreme|100
+cross_shore|25|12|34|190|270|0|none|0
+sector_edge|15|31|39|325|270|0|light|25
+unknown_water|25|12|-|270|270|-|unknown|unknown
+unknown_wind|-|12|34|270|270|-|unknown|unknown
+invalid_ice|25|12|34|270|270|-1|unknown|unknown
