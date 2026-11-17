@@ -69,6 +69,6 @@ test('no launch status, official open verdict or mission route is moved into the
   for(const path of ['public/wallops-rocket-launch-viewing/index.html',
     'public/starbase-rocket-launch-viewing/index.html']){
     const html=read(path);
-    assert.match(html,/2026-11-13/);
+    assert.match(html,/2026-11-16/);
   }
 });
