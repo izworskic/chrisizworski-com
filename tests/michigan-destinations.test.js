@@ -30,6 +30,14 @@ test('20 unique Michigan destinations have complete crawlable summaries and coor
     assert.match(body, /class="trip-note"/, id);
     assert.match(body, /class="primary-link"/, id);
     assert.match(body, /Official visitor info/, id);
+    const mapped = body.match(/<a data-map-google-location href="([^"]+)" target="_blank" rel="noopener noreferrer">View destination area in Google Maps<\/a>/);
+    assert.ok(mapped, id + ' needs a no-JS Google Maps location link');
+    const url = new URL(mapped[1].replaceAll('&amp;', '&'));
+    assert.equal(url.origin, 'https://www.google.com', id);
+    assert.equal(url.pathname, '/maps/search/', id);
+    assert.equal(url.searchParams.get('api'), '1', id);
+    assert.equal(url.searchParams.get('query'), Number(lat) + ',' + Number(lng), id);
+    assert.ok(!url.href.includes('/maps/dir/'), 'a destination center is not a drive route ' + id);
   }
 });
 
@@ -45,7 +53,7 @@ test('indexing, creator identity, navigation, and search intent are protected', 
   assert.equal(nodes.find(x => x['@type'] === 'Person')?.['@id'], 'https://chrisizworski.com/#person');
   assert.equal(nodes.find(x => x['@type'] === 'CollectionPage')?.author?.['@id'], 'https://chrisizworski.com/#person');
   assert.equal(nodes.find(x => x['@type'] === 'ItemList')?.numberOfItems, 20);
-  assert.match(sitemap, /<loc>https:\/\/chrisizworski.com\/michigan-destinations\/<\/loc>\s*<lastmod>2026-11-14<\/lastmod>/);
+  assert.match(sitemap, /<loc>https:\/\/chrisizworski.com\/michigan-destinations\/<\/loc>\s*<lastmod>2026-11-16<\/lastmod>/);
   assert.match(tools, /href="\/michigan-destinations\/"/);
   const node = registry.tools.find(x => x.id === 'michigan-adventure-finder');
   assert.equal(node.canonical, 'https://chrisizworski.com/michigan-destinations/');
@@ -75,6 +83,10 @@ test('filters, CARTO map and graceful accessibility fallbacks are present', () =
   assert.match(html, /class="hero-gallery"/);
   assert.match(html, /class="mood-bar"/);
   assert.match(html, /id="map-status"/);
+  assert.match(html, /michigan-destinations\.js\?v=20261116-gmaps/);
+  assert.match(js, /card\.querySelector\('\[data-map-google-location\]'\)/);
+  assert.match(js, /View destination area in Google Maps/);
+  assert.doesNotMatch(html, /Connecting to CARTO using the configured public map key/);
   assert.equal((html.match(/class="destination-photo card"/g) || []).length, 20);
   assert.equal((html.match(/class="experience"/g) || []).length, 20);
   assert.ok(html.indexOf('id="map-section"') < html.indexOf('id="destinations"'), 'map must be alongside the browse feed, before the destination cards');
