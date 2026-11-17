@@ -37,6 +37,7 @@
     const requestedPlace=C.PLACES.find(p=>p.goal===state.goal);
     const access=C.routeAccess(state.routeDocument,requestedPlace,state,new Date());
     const blocked=access.blocks===true;
+    const reportsOpen=access.kind==='reported-open';
     const scopedBlock=blocked&&requestedPlace?{[requestedPlace.id]:{status:'closed',verified:true}}:{};
     const outcome=C.recommend(state,scopedBlock);
     const place=outcome.place;
@@ -44,7 +45,7 @@
     state.chosen=place.id;
     const match=outcome.kind==='candidate';
     $('quick-outing').textContent=blocked?'Access warning: '+place.title:match?place.title:'Reconsider this outing length';
-    $('quick-reason').textContent=blocked?access.message:match
+    $('quick-reason').textContent=(blocked||reportsOpen)?access.message:match
       ?place.short+'. Official access is not yet verified.'
       :outcome.reason;
     $('quick-source').href=place.conditions;
@@ -55,7 +56,7 @@
     $('stage-why').textContent=place.why;
     $('stage-length').textContent=place.length;
     $('stage-blocker').textContent=place.blocker;
-    $('stage-status').textContent=blocked?(access.kind==='conflict'?'Conflicting official access notices':'Official access restriction reported'):match?'Candidate outing. Current access not verified.':'Not a fit for your chosen outing length';
+    $('stage-status').textContent=blocked?(access.kind==='conflict'?'Conflicting official access notices':'Official access restriction reported'):reportsOpen?'Land manager reports access for the chosen day; recheck before traveling':match?'Candidate outing. Current access not verified.':'Not a fit for your chosen outing length';
     $('stage-status').className='access-status'+(match?'':' access-status--mismatch');
     $('stage-reason').textContent=blocked?access.message:match?access.message:outcome.reason;
     $('official-link').href=place.official;
@@ -138,7 +139,7 @@
     const access=C.routeAccess(state.routeDocument,selected,state,new Date());
     const block=access.blocks&&selected?{[selected.id]:{status:'closed',verified:true}}:{};
     const current=C.recommend(state,block);
-    if(current.kind==='candidate')$('quick-reason').textContent='No usable hourly forecast is available. Park access also needs a separate check.';
+    if(current.kind==='candidate'&&access.kind!=='reported-open')$('quick-reason').textContent='No usable hourly forecast is available. Park access also needs a separate check.';
     $('weather-head').textContent='Forecast not available';
     $('weather-sub').textContent=note;
     $('weather-issued').textContent='No confirmed NWS issue time';
@@ -160,7 +161,9 @@
     $('weather-hour-insight').hidden=false;
     $('weather-hours').replaceChildren();
     const advisoryHours=w.hours.filter(h=>h.kind==='advisory').length;
-    if(!$('stage-status').classList.contains('access-status--mismatch')){
+    const currentPlace=C.PLACES.find(p=>p.goal===state.goal);
+    const currentAccess=C.routeAccess(state.routeDocument,currentPlace,state,new Date());
+    if(!$('stage-status').classList.contains('access-status--mismatch')&&currentAccess.kind!=='reported-open'){
       $('quick-reason').textContent=advisoryHours
         ?'NWS flags '+advisoryHours+' forecast hours with weather concerns. Current park access remains unverified.'
         :'Hourly NWS forecast loaded. Park access still needs a separate official check.';
