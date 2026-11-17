@@ -20,6 +20,12 @@
  };
  const external=(url,label)=>{if(typeof url!=='string'||!/^https:\/\//.test(url))return null;
   const a=document.createElement('a');a.href=url;a.textContent=label;a.target='_blank';a.rel='noopener noreferrer';return a};
+ const mapsPlace=(site)=>{
+  // Only public place searches. The restricted Wallops pad never gets a map link.
+  if(!site||!IDS.has(site.id)||typeof site.navigation!=='string'||
+    !site.navigation.trim()||site.navigation.length>180)return null;
+  return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(site.navigation);
+ };
  const stamp=(iso)=>{const d=new Date(iso||'');return Number.isFinite(+d)?
   d.toLocaleString('en-US',{timeZone:'America/New_York',dateStyle:'medium',timeStyle:'short'})+' ET':'not verified'};
  const timing=(m)=>{
@@ -80,6 +86,7 @@
    const note=document.createElement('p');note.textContent=p.coordinateRole+
     '. Check hours, parking and local restrictions before arriving. This pin is not a reserved viewing place.';pop.appendChild(note);
    const link=external(p.accessSource,'Check published venue rules');if(link)pop.appendChild(link);
+   const google=external(mapsPlace(p),'View this place in Google Maps');if(google)pop.appendChild(google);
    marker.bindPopup(pop);marker.on('click',()=>selectSite(p.id,false));
    marker.addTo(state.map);state.markers.set(p.id,marker);bounds.push([p.lat,p.lon]);
   }
@@ -199,16 +206,8 @@
    [site.geographicSource,'See the map reference']]){
    const a=external(url,label);if(a)actions.appendChild(a);
   }
-  // Source-verified public arrival only. Never offer GPS to the restricted range.
-  if(site.id==='nasa-visitor'){
-   const a=external('https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(site.navigation),
-    'Directions to NASA’s public Visitor Center');
-   if(a)actions.appendChild(a);
-  }else if(typeof site.navigation==='string'){
-   const a=external('https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(site.navigation),
-    'Find this town waterfront on Google Maps');
-   if(a)actions.appendChild(a);
-  }
+  // Place search only. This is not a route to the restricted launch range.
+  const google=external(mapsPlace(site),'View this place in Google Maps');if(google)actions.appendChild(google);
   for(const card of document.querySelectorAll('[data-place]'))card.dataset.active=card.dataset.place===site.id?'true':'false';
   for(const btn of document.querySelectorAll('[data-choose]')){
    const yes=btn.dataset.choose===site.id;btn.setAttribute('aria-pressed',yes?'true':'false');
