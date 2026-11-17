@@ -151,7 +151,7 @@
     list.innerHTML = rows.slice(0, 3).map(function (r, index) {
       var inches = Math.max(0, Number(r.inches) || 0);
       var percent = (Math.min(100, inches / largest * 100)).toFixed(1);
-      return '<button type="button" data-pulse-town="' + esc(C.baseTown(r.place)) + '" data-pulse-rank="' + index + '" aria-pressed="' + String(reportKey(r) === state.selectedReportKey) + '">' +
+      return '<button type="button" data-pulse-rank="' + index + '" aria-pressed="' + String(reportKey(r) === state.selectedReportKey) + '">' +
         '<strong>' + esc(C.inches(r.inches)) + ' · ' + esc(where(r)) + '</strong>' +
         '<span>' + esc(stamp(r)) + ' · ' + esc(kind(r)) + '</span>' +
         '<span class="report-bar-track" aria-hidden="true"><span class="report-bar-fill" style="width:' + percent + '%;background:' + color(inches) + '"></span></span></button>';
