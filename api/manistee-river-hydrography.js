@@ -108,20 +108,25 @@ async function fetchNamedWaterway(name,options={}){
   throw new Error('USGS NHD page cap exceeded for '+name+'; no partial geometry may be returned');
 }
 async function fetchHydrography(options={}){
-  // Two concurrent named requests limit pressure on the official service.
+  // A route API requests only its selected river. The field map requests all.
+  const names=options.name ? [options.name] : NAMES;
+  if(names.some(name=>!NAMES.includes(name)))throw new Error('Unsupported river name');
   const groups=[];
-  for(let i=0;i<NAMES.length;i+=2){
-    const batch=await Promise.all(NAMES.slice(i,i+2).map(name=>fetchNamedWaterway(name,options)));
+  for(let i=0;i<names.length;i+=2){
+    const batch=await Promise.all(names.slice(i,i+2).map(name=>fetchNamedWaterway(name,options)));
     groups.push(...batch);
   }
   const features=groups.flat();
-  if(features.length<20)throw new Error('USGS NHD named flowline coverage unexpectedly small');
+  if(features.length<(options.name?1:20))throw new Error('USGS NHD named flowline coverage unexpectedly small');
   return {
     source:'USGS The National Map - National Hydrography Dataset',
     source_url:'https://hydro.nationalmap.gov/arcgis/rest/services/nhd/MapServer/6',
     fetched_at:new Date().toISOString(),
     bbox:BBOX.split(',').map(Number),
     retrieval:'source-named-paginated',
+    retrievalMode:options.name?'paged-single-waterway':'paged-full-basin',
+    requestedWaterways:names,
+    sourceCompleteness:'complete-retrieved-set',
     complete:true,
     type:'FeatureCollection',
     features
