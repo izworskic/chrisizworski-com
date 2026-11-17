@@ -66,6 +66,8 @@ try{
    assert.equal(design.colorScheme,'light');
    assert.ok(design.naturalWidth>=640,'historical photo must actually load, not just have an src');
    assert.equal(design.heroDisplay,'block');
+   await page.locator('.hero-photo img').scrollIntoViewIfNeeded();
+   await page.screenshot({path:path.join(screenshots,'hero-'+width+'.png'),animations:'disabled'});
   });
   await check('licensed location-specific gallery photos load at '+width+'px',async()=>{
    const images=page.locator('#winter-gallery .gallery-card img');
