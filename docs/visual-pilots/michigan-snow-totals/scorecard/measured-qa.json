@@ -1,6 +1,6 @@
 {
-  "checkedAt": "2026-11-17T13:59:19.794Z",
-  "runCommit": "c37fc338571afdb1006358ea50041bc584b76198",
+  "checkedAt": "2026-11-17T14:02:28.090Z",
+  "runCommit": "fb5d3dad8843177058f75a7a1d881b4f3782c68b",
   "viewports": [
     {
       "width": 360,
@@ -16,9 +16,9 @@
       ],
       "liveCount": 5,
       "performance": {
-        "domContentLoadedMs": 317,
-        "firstContentfulPaintMs": 268,
-        "answerReadyMs": 875
+        "domContentLoadedMs": 326,
+        "firstContentfulPaintMs": 312,
+        "answerReadyMs": 874
       },
       "errors": []
     },
@@ -36,9 +36,9 @@
       ],
       "liveCount": 5,
       "performance": {
-        "domContentLoadedMs": 154,
-        "firstContentfulPaintMs": 172,
-        "answerReadyMs": 338
+        "domContentLoadedMs": 129,
+        "firstContentfulPaintMs": 136,
+        "answerReadyMs": 271
       },
       "errors": []
     },
@@ -56,9 +56,9 @@
       ],
       "liveCount": 5,
       "performance": {
-        "domContentLoadedMs": 131,
-        "firstContentfulPaintMs": 136,
-        "answerReadyMs": 317
+        "domContentLoadedMs": 132,
+        "firstContentfulPaintMs": 132,
+        "answerReadyMs": 261
       },
       "errors": []
     },
@@ -76,9 +76,9 @@
       ],
       "liveCount": 5,
       "performance": {
-        "domContentLoadedMs": 137,
-        "firstContentfulPaintMs": 144,
-        "answerReadyMs": 332
+        "domContentLoadedMs": 119,
+        "firstContentfulPaintMs": 124,
+        "answerReadyMs": 255
       },
       "errors": []
     },
@@ -96,9 +96,9 @@
       ],
       "liveCount": 5,
       "performance": {
-        "domContentLoadedMs": 149,
-        "firstContentfulPaintMs": 160,
-        "answerReadyMs": 351
+        "domContentLoadedMs": 112,
+        "firstContentfulPaintMs": 120,
+        "answerReadyMs": 255
       },
       "errors": []
     }
@@ -143,7 +143,7 @@
   ],
   "slowDevice": {
     "answerVisible": true,
-    "paint": 968,
+    "paint": 960,
     "errors": []
   }
 }
