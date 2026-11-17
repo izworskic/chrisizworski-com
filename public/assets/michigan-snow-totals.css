@@ -300,3 +300,6 @@ td.in{font-size:var(--v-type-18)}
   .storm-pulse-list .report-bar-track{height:12px}
   #seasonLiveBars{padding:var(--v-space-12)}
 }
+
+/* Keyboard-visible focus for native horizontal overflow alternatives. */
+#regionChips:focus-visible,.table-wrap:focus-visible{outline:3px solid var(--v-accent-4);outline-offset:3px}
