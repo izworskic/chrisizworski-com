@@ -1,3 +1,10 @@
+### 2026-11-17 | Waterfall hub photo-wall correction
+- **Owner feedback:** The three-picture hero added in PR #1750 consumed the first screen and delayed access to the waterfall map. The design did not serve the page's primary task.
+- **Correction:** Removed the above-the-fold photo wall and its responsive CSS; the map-first page opening and trip planning controls are restored. Retained the verified waterfall-card photos, lower gallery, original image rights and all visitor information.
+- **Safeguards:** Added map-first regression assertions; unchanged Rust engines, map, access evidence, canonical, SEO metadata, ads and sitemap freshness.
+- **Status:** Correction PR, not a verified production release at this point. No traffic or revenue claims.
+- **Exactly one next action:** Confirm CI and waterfall browser smoke on the correction branch before merging.
+
 ### 2026-11-17 | U.P. waterfall main-page photo-led arrival, review branch
 - **Visitor issue:** The map-first hub has verified imagery, but the first screen remained text-led and did not show real waterfalls before asking visitors to plan.
 - **Change:** Three separate source-verified photographs of Manabezho, Wagner and Sable Falls now occupy a responsive editorial hero alongside existing map and trip links. Source and license are credited below each image. The established three-photo gallery remains below the map.
