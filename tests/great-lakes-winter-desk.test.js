@@ -143,3 +143,30 @@ test('map tile errors display a usable fallback rather than an unmarked blank ma
   assert.match(js,/basemap\.on\('tileerror'/);
   assert.match(js,/\$\('map-fallback'\)\.hidden=false/);
 });
+
+test('source scanner reachability never becomes an opening or safety verdict',()=>{
+  const place=D.getPlace('gooseberry-upper');
+  const now=new Date('2026-11-17T17:00:00Z');
+  const baseline={schemaVersion:1,accessVerified:false,places:{
+    [place.id]:{sourceUrl:place.conditions,reachability:'REACHED',operatorAccess:'NOT_DETERMINED',retrievedAt:'2026-11-17T16:30:00Z'}
+  }};
+  assert.equal(D.sourceReachability(baseline,place,now).kind,'reached');
+  assert.match(D.sourceReachability(baseline,place,now).message,/access remains unverified/);
+  assert.equal(D.sourceReachability({...baseline,accessVerified:true},place,now).kind,'unavailable');
+  const other={...baseline,places:{[place.id]:{...baseline.places[place.id],sourceUrl:'https://evil.example/'}}};
+  assert.equal(D.sourceReachability(other,place,now).kind,'unavailable');
+  const old={...baseline,places:{[place.id]:{...baseline.places[place.id],retrievedAt:'2026-11-15T16:00:00Z'}}};
+  assert.equal(D.sourceReachability(old,place,now).kind,'stale');
+  const future={...baseline,places:{[place.id]:{...baseline.places[place.id],retrievedAt:'2026-11-18T16:00:00Z'}}};
+  assert.equal(D.sourceReachability(future,place,now).kind,'stale');
+});
+
+test('source desk remains a separate live evidence dimension, not forecast-driven access',()=>{
+  const html=source('index.html'),js=source('app.js');
+  for(const id of ['source-direct','source-signal'])assert.ok(html.includes('id="'+id+'"'));
+  assert.match(js,/renderSourceDesk\(place\)/);
+  assert.match(js,/loadSourceDesk\(\)/);
+  assert.match(js,/sourceReachability\(state\.sourceDocument,place,new Date\(\)\)/);
+  assert.match(js,/No usable hourly forecast is available/);
+  assert.match(js,/\$\('stage-photo'\)!==img/);
+});
