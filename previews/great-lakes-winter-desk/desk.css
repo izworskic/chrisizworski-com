@@ -238,3 +238,10 @@ h1 em{font-weight:500;color:var(--rust)}
 .hour-choose{margin-top:auto;background:transparent;border:1px solid #7b9a9b;color:#284e59;padding:6px 4px;font-size:10px;font-weight:700;min-height:34px}
 .hour-choose:hover,.hour-choose[aria-pressed="true"]{background:#174c58;color:#fff;border-color:#174c58}
 .weather-hour-insight{border-left:3px solid #286c7a;padding:11px 13px;margin:7px 0 16px!important;background:#e5eeeb;color:#243f48!important;font-size:12px!important;line-height:1.55!important}
+
+/* Official-site reachability is independent from access permissions and weather. */
+.evidence-ribbon{display:flex;justify-content:space-between;align-items:center;gap:18px;border-top:1px solid #405c61;border-bottom:1px solid #405c61;padding:16px 0;margin:0 0 21px}
+.evidence-ribbon div{flex:1}
+.evidence-ribbon p{font-size:12px;line-height:1.5;color:#e6ebde;margin:7px 0 0}
+.evidence-ribbon a{font-size:12px;line-height:1.45;font-weight:700;color:#e4c69a;max-width:190px}
+@media(max-width:520px){.evidence-ribbon{flex-direction:column;align-items:flex-start;gap:9px}.evidence-ribbon a{max-width:none}}
