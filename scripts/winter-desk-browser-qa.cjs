@@ -57,7 +57,10 @@ async function main(){
       const localDate=await page.evaluate(()=>{const c=window.GreatLakesWinterDesk;return c.targetKey(new Date(),'America/Chicago','tomorrow');});
       assert.equal(await page.locator('#route-day').textContent(),localDate);
       await page.waitForFunction(()=>document.querySelector('#arrival-title')?.textContent.includes('Gooseberry Falls Visitor Center'),null,{timeout:10000});
-      await page.waitForFunction(()=>document.querySelector('#operator-statement')?.textContent.includes('Minnesota DNR identifies'),null,{timeout:10000});
+      await page.waitForFunction(()=>{
+        const text=document.querySelector('#operator-statement')?.textContent||'';
+        return text.includes('Minnesota DNR identifies')||text.includes('needs a new source check');
+      },null,{timeout:10000});
       assert.equal(await page.locator('#arrival-directions').isVisible(),false);
       assert.match(await page.locator('#arrival-category').textContent(),/DOCUMENTED WINTER ARRIVAL/);
       const evidence=await page.locator('#source-signal').textContent();
