@@ -4934,6 +4934,39 @@
         "status": "unknown",
         "note": "Regional postrelease search demand and actual cross-tool conversion not established by the November 5 national GSC export."
       }
+    },
+    {
+      "id": "frozen-lighthouse-watch",
+      "name": "Frozen Lighthouse Watch",
+      "canonical": "https://chrisizworski.com/frozen-lighthouses-michigan/",
+      "aliases": [],
+      "kind": "seasonal-live",
+      "cluster": "winter-water",
+      "primaryIntent": "Will Michigan pier lighthouses form freezing spray ice in the next 72 hours, and when",
+      "seasons": [
+        11,
+        12,
+        1,
+        2,
+        3
+      ],
+      "geographies": [
+        "lake-michigan-east-shore"
+      ],
+      "personas": [
+        "winter-photographer",
+        "lighthouse-visitor",
+        "weather-observer"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "new-canonical-pending-verified-launch"
+      },
+      "searchEvidence": {
+        "status": "autocomplete-proxy",
+        "pulledOn": "2026-11-16",
+        "note": "120 Google Suggest queries, not Search Console volume"
+      }
     }
   ],
   "relationships": [
@@ -7152,6 +7185,30 @@
       "strength": "essential",
       "surface": "regional-selected-mission",
       "reason": "Return from the hawaii viewing and access guide to the national mission UUID, timetable precision, source cross-checks and spectator-weather context."
+    },
+    {
+      "from": "frozen-lighthouse-watch",
+      "to": "michigan-ice",
+      "type": "conditions-context",
+      "strength": "strong",
+      "surface": "winter-ice",
+      "reason": "Lakewide pack ice and local snow or accumulated cold context are separate from freezing spray on a pier."
+    },
+    {
+      "from": "frozen-lighthouse-watch",
+      "to": "great-lakes-buoys",
+      "type": "source-context",
+      "strength": "optional",
+      "surface": "lake-conditions",
+      "reason": "Buoys provide open-water weather data but may be retrieved before freezing season."
+    },
+    {
+      "from": "lighthouses",
+      "to": "frozen-lighthouse-watch",
+      "type": "seasonal-decision-next",
+      "strength": "strong",
+      "surface": "lighthouse-directory",
+      "reason": "Historic light lists do not answer when freezing spray could accumulate on winter pier lights."
     }
   ],
   "cannibalizationGroups": [
