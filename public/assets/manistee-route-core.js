@@ -26,19 +26,66 @@ function nearestNode(graph,p){
   for(const k of graph.nodes){const c=graph.coordByKey.get(k),d=hav([p.lat,p.lon],[c[1],c[0]]);if(d<bestMiles){bestMiles=d;best=k;}}
   return {key:best,snapMiles:bestMiles};
 }
+// Binary minimum-distance heap keeps large NHD graphs responsive without
+// changing the original graph edges or shortest-distance definition.
 function routeGraph(graph,start,end){
-  const a=nearestNode(graph,start),b=nearestNode(graph,end);if(!a||!b||a.snapMiles>.8||b.snapMiles>.8)return null;
+  const a=nearestNode(graph,start),b=nearestNode(graph,end);
+  if(!a||!b||a.snapMiles>.8||b.snapMiles>.8)return null;
   const dist=new Map([[a.key,0]]),prev=new Map(),seen=new Set();
-  while(true){
-    let u=null,du=Infinity;
-    for(const [k,d] of dist)if(!seen.has(k)&&d<du){u=k;du=d;}
-    if(!u||u===b.key)break;seen.add(u);
-    for(const [v,w] of graph.edges.get(u)||[]){const nd=du+w;if(nd<(dist.get(v)??Infinity)){dist.set(v,nd);prev.set(v,u);}}
+  const heap=[];
+  function push(key,d){
+    let i=heap.length;
+    heap.push([d,key]);
+    while(i>0){
+      const p=Math.floor((i-1)/2);
+      if(heap[p][0]<=d)break;
+      heap[i]=heap[p];i=p;
+    }
+    heap[i]=[d,key];
+  }
+  function pop(){
+    const first=heap[0],last=heap.pop();
+    if(!heap.length)return first;
+    let i=0;
+    while(true){
+      const left=2*i+1,right=left+1;
+      if(left>=heap.length)break;
+      const child=right<heap.length&&heap[right][0]<heap[left][0]?right:left;
+      if(heap[child][0]>=last[0])break;
+      heap[i]=heap[child];i=child;
+    }
+    heap[i]=last;
+    return first;
+  }
+  push(a.key,0);
+  while(heap.length){
+    const [du,u]=pop();
+    if(seen.has(u)||du>(dist.get(u)??Infinity))continue;
+    if(u===b.key)break;
+    seen.add(u);
+    for(const [v,w] of graph.edges.get(u)||[]){
+      const nd=du+w;
+      if(nd<(dist.get(v)??Infinity)){
+        dist.set(v,nd);
+        prev.set(v,u);
+        push(v,nd);
+      }
+    }
   }
   if(!dist.has(b.key))return null;
-  const path=[];let cur=b.key;
-  while(cur){const c=graph.coordByKey.get(cur);path.push([c[1],c[0]]);if(cur===a.key)break;cur=prev.get(cur);}path.reverse();
+  const path=[];
+  let cur=b.key;
+  while(cur){
+    const c=graph.coordByKey.get(cur);
+    if(!c)return null;
+    path.push([c[1],c[0]]);
+    if(cur===a.key)break;
+    cur=prev.get(cur);
+  }
+  if(cur!==a.key)return null;
+  path.reverse();
   return {distance:dist.get(b.key),path,startSnap:a.snapMiles,endSnap:b.snapMiles};
 }
+
 return Object.freeze({hav,nodeKey,geometryLines,buildGraph,nearestNode,routeGraph});
 });
