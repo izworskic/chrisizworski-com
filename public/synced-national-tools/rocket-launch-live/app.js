@@ -21,8 +21,7 @@
     const message=state.scheduleFailed?
       'The launch calendar isn’t loading, but you can still browse the launch sites.':
       tiles==='reference-only'?
-        'The map background isn’t loading; coastlines are shown instead.':
-        !state.data?'Looking for upcoming launches…':'';
+        'The map background isn’t loading; coastlines are shown instead.':'';
     status.textContent=message;
     status.hidden=!message;
   }
