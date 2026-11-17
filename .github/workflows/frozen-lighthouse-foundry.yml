@@ -1,13 +1,9 @@
-name: Frozen lighthouse Experience Foundry review
+name: Lighthouse Foundry Source Replay
 on:
+  push:
+    branches: [feat/frozen-lighthouse-field-guide-visuals]
   pull_request:
-    paths:
-      - 'public/frozen-lighthouses-michigan/index.html'
-      - 'public/assets/frozen-lighthouse-desk.js'
-      - 'public/assets/frozen-lighthouse-field-guide.css'
-      - 'data/frozen-lighthouse-photography.json'
-      - 'experience-foundry/examples/lighthouse-visual-*.??s'
-      - '.github/workflows/frozen-lighthouse-foundry.yml'
+    branches: [main]
 jobs:
   foundry-proof:
     runs-on: ubuntu-latest
