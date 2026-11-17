@@ -6,9 +6,18 @@ const names=['Manistee River','Pine River','Bear Creek','Little Manistee River']
 const artifact={checkedAt:new Date().toISOString(),status:'fail',checks:{}};
 
 async function getJson(url,label){
-  const response=await fetch(url,{headers:{accept:'application/json, application/geo+json','user-agent':'ChrisIzworskiManisteeLiveAudit/1.0'},signal:AbortSignal.timeout(20000)});
-  if(!response.ok)throw new Error(`${label} returned ${response.status}`);
-  return response.json();
+  let lastError=null;
+  for(let attempt=1;attempt<=2;attempt++){
+    try{
+      const response=await fetch(url,{headers:{accept:'application/json, application/geo+json','user-agent':'ChrisIzworskiManisteeLiveAudit/1.0'},signal:AbortSignal.timeout(12000)});
+      if(!response.ok)throw new Error(`HTTP ${response.status}`);
+      return await response.json();
+    }catch(error){
+      lastError=error;
+      if(attempt<2)await new Promise(resolve=>setTimeout(resolve,350));
+    }
+  }
+  throw new Error(`${label} unavailable after two attempts: ${String(lastError?.message||lastError)}`);
 }
 function prop(properties={},lower,alias){return properties[lower]??properties[alias]??null;}
 
