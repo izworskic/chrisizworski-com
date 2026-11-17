@@ -257,3 +257,17 @@ h1 em{font-weight:500;color:var(--rust)}
 .route-policy{font-size:12px;line-height:1.6;color:#3b5759;margin:0 0 12px}
 .route-evidence a{font-size:12px;font-weight:700;color:#195868}
 @media(max-width:520px){.route-evidence{padding:15px 13px}.route-access{font-size:17px}}
+
+
+/* A distinct arrival task: name the actual parking area, not a vague park pin. */
+.arrival-desk{background:#e3ece6;color:var(--ink);padding:20px 22px;margin:16px 0 21px;border-left:4px solid #3c7378}
+.arrival-heading{display:flex;align-items:center;flex-wrap:wrap;justify-content:space-between;gap:8px}
+.arrival-heading .field-label{color:#446963;margin:0}
+.arrival-category{font-size:10px;line-height:1.35;letter-spacing:.05em;font-weight:700;color:#356b73}
+.arrival-desk h3{font-family:'Fraunces',Georgia,serif;font-size:24px;line-height:1.2;letter-spacing:-.02em;margin:13px 0 7px}
+.arrival-desk p{font-size:13px;line-height:1.6;color:#36565b;margin:0 0 8px}
+.arrival-desk .arrival-warning{background:rgba(214,176,116,.2);color:#684727;padding:9px 10px;margin:12px 0}
+.arrival-actions{display:flex;align-items:center;flex-wrap:wrap;gap:9px 16px;margin-top:11px}
+.arrival-actions a{font-size:12px;line-height:1.45;font-weight:700;color:#1b5b67}
+.arrival-actions a:hover{color:#9e593c}
+@media(max-width:520px){.arrival-desk{padding:17px 13px}.arrival-desk h3{font-size:21px}.arrival-category{font-size:9px}.arrival-actions{flex-direction:column;align-items:flex-start}}
