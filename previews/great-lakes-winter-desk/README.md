@@ -85,3 +85,35 @@ node --test tests/great-lakes-winter-desk.test.js
 ~~~
 
 The new Python check verifies source identity, exact route scope, evidence timestamps, date windows and record shape. It is not automated authentication of the land manager. The author must actually verify the source and keep the notice updated. **Never add simulated test notices to the production data file.**
+
+## Park arrival, parking and actual notice sources (2026-11-17)
+
+The desk now has a separately audited \`arrival-evidence.json\` for each exact outing:
+
+- **Gooseberry Upper Falls:** Minnesota DNR winter map locates the winter route at the visitor-center/DOT wayside parking area. The park address is 3206 Highway 61 East, Two Harbors, MN 55616. No vehicle permit is required at this particular lot. This is a *published winter arrival*, not a daily plow or available-space report. Source: https://files.dnr.state.mn.us/maps/state_parks/spk00172_winter.pdf
+- **Pictured Rocks marked snowshoe route:** NPS identifies the ski-trail parking lot near the end of East City Limits Road as the correct snowshoe arrival point, and says those lots are plowed in winter. The park's other winter roads can be unplowed or snowmobile-only. This is a seasonal statement, not a same-day plow report. Source: https://www.nps.gov/places/snowshoe-trail-piro.htm
+- **Apostle Islands Lakeshore Trail:** NPS identifies the Meyers Beach lot and exact street address, 90500 Meyers Beach Road, Bayfield, WI 54814. Its winter plowing/road opening is not established. It has parking fees and a 45-foot vehicle length limit. A Google Maps driving link may route to this operator-published lot address, not to a beach, sea cave, or moving target, and is accompanied by a strong winter access caveat. Sources: https://www.nps.gov/apis/planyourvisit/directions.htm and https://www.nps.gov/apis/planyourvisit/fees.htm
+
+The browser never substitutes a scenic feature pin for a trailhead or suggests driving on unplowed roads. Google Maps place searches remain available for all three; turn-by-turn directions are restricted to the exact published Meyers Beach street address. No fabricated coordinates are recorded.
+
+\`scripts/audit-winter-desk-arrival.py\` checks three route identities, official source hosts, the plowing classification, explicit unknown current access, and directions allowlisting.
+
+**Operator notice reconciliation:** \`scripts/refresh-winter-desk-operator-notices.py\` requests three specific official NPS/DNR pages and matches exact documented statements. The corresponding JSON is \`operator-notice-monitor.json\`. The November 17, 2026 run found all three:
+
+- DNR still describes the Upper Falls approach as the maintained winter walk
+- NPS lists the **different** Munising Falls Trail closed until further notice; this cannot close the marked snowshoe loop
+- NPS publishes a conditional closure policy for Meyers Beach when a park-wide severe-cold closure occurs; this is not evidence that the park is closed at this moment
+
+These are **source statement presence checks** only. The UI hides the statement when the fetched source changes, is inaccessible, or becomes older than 24 hours. It does not turn a page match, forecast, or adjacent closure into route access. The exact selected-date open/restricted/closed decision still requires human-verified, date-scoped evidence in \`route-access-evidence.json\`. That file correctly has zero current operating observations.
+
+Refresh and audit in the working tree before a reviewed publication build:
+
+~~~bash
+python3 scripts/refresh-winter-desk-operator-notices.py --self-test
+python3 scripts/refresh-winter-desk-operator-notices.py
+python3 scripts/audit-winter-desk-arrival.py --self-test
+python3 scripts/audit-winter-desk-route-access.py --self-test
+node --test tests/great-lakes-winter-desk.test.js
+~~~
+
+No background updater or live service has been enabled by this draft. Without an approved refresh process, the dated snapshot is short-lived by design. The user-facing page must say when the official source needs rechecking instead of suggesting that access has been verified.
