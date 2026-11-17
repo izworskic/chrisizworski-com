@@ -73,6 +73,7 @@
       body.innerHTML = '<tr><td colspan="5">The latest reports are unavailable. Use the linked NWS archive for source reports.</td></tr>';
     }
     if (state.map) { state.map.remove(); state.map = null; state.layer = null; }
+    if (state.data && !state.dataStale) renderSelectedReport(visibleRows());
   }
   function initMap() {
     if (state.map || state.mapUnavailable) return;
@@ -415,7 +416,7 @@
 
   // ---- Events ----
   document.querySelectorAll('.windows button').forEach(function (b) {
-    b.addEventListener('click', function () { state.window = b.getAttribute('data-window'); state.windowChosen = true; state.tableLimit = TABLE_STEP; render(true); });
+    b.addEventListener('click', function () { state.selectedReportKey = ''; state.window = b.getAttribute('data-window'); state.windowChosen = true; state.tableLimit = TABLE_STEP; render(true); });
   });
   $('stormPulse').addEventListener('click', function (e) {
     var b = e.target.closest('button[data-pulse-rank]'); if (!b) return;
@@ -426,7 +427,7 @@
   });
   $('regionChips').addEventListener('click', function (e) {
     var b = e.target.closest('button'); if (!b) return;
-    state.region = b.getAttribute('data-region') || null; state.tableLimit = TABLE_STEP; render(true); renderSeason();
+    state.selectedReportKey = ''; state.region = b.getAttribute('data-region') || null; state.tableLimit = TABLE_STEP; render(true); renderSeason();
   });
   $('showAll').addEventListener('click', function () { state.tableLimit = 100000; renderTable(visibleRows()); });
   $('townForm').addEventListener('submit', function (e) {
