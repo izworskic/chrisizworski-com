@@ -35,7 +35,7 @@
       "routePage": "https://www.nps.gov/apis/planyourvisit/hiking.htm",
       "conditionsPage": "https://www.nps.gov/apis/planyourvisit/conditions.htm",
       "policy": {
-        "text": "The Lakeshore Trail runs above the sandstone cliffs from Meyers Beach. Winter footing may be snow-packed or icy; lake-ice travel to the caves is a separate activity. Park-wide severe-cold closures can include Meyers Beach.",
+        "text": "The Lakeshore Trail follows the land above the sandstone cliffs. In winter it may be snow-packed, icy, or covered in deep snow; walking on lake ice to reach the caves is a separate activity.",
         "sourceUrl": "https://www.nps.gov/apis/planyourvisit/hiking.htm"
       },
       "observations": []
