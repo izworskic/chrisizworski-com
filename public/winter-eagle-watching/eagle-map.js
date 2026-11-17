@@ -79,7 +79,7 @@
     const s=byId.get(selectedId);if(!s)return;
     strong.textContent=s.name;sub.textContent=s.city+", "+s.state;
     const href=publicMapLink(s);google.hidden=!href;
-    if(href)google.href=href;else google.removeAttribute("href");
+    if(href)google.href=href;
     if(userLocation){
       const miles=Math.round(milesBetween({lat:userLocation.latitude,lon:userLocation.longitude},s));
       positionNote.hidden=false;positionNote.textContent="Your position (approx.) · "+miles+" mi straight-line to selected overlook. Not driving distance.";
