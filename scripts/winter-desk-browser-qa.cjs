@@ -91,13 +91,37 @@ async function main(){
     assert.match(await failure.locator('#quick-reason').textContent(),/No usable hourly forecast/i);
     assert.ok(await failure.locator('#conditions-link').getAttribute('href'));
     await failure.close();
+    // Synthetic closed-trail fixture is browser-only and never written to the
+    // actual route-access-evidence.json. A failed NWS fetch must not erase it.
+    const closedPage=await browser.newPage({viewport:{width:390,height:850}});
+    const D=require(path.resolve(__dirname,'../previews/great-lakes-winter-desk/core.js'));
+    const go=D.getPlace('gooseberry-upper'),targetDate=D.targetKey(new Date(),go.tz,'today');
+    const checkedAt=new Date().toISOString();
+    const closure={schemaVersion:1,operatorAccessReady:false,routes:{
+      [go.id]:{routeId:go.id,routePage:go.official,conditionsPage:go.conditions,
+        policy:{text:'The Upper Falls winter approach is the maintained walking route.',sourceUrl:go.official},
+        observations:[{
+          routeId:go.id,scope:'exact-route',reviewMethod:'human-official-notice',routeExplicit:true,
+          sourceUrl:go.conditions,sourceStatement:'Synthetic test-only operator closure naming the exact Upper Falls route.',
+          checkedAt,publishedAt:checkedAt,validFrom:targetDate,validThrough:targetDate,status:'closed'
+        }]
+      }
+    }};
+    await closedPage.route('**/route-access-evidence.json',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(closure)}));
+    await mockNws(closedPage,true);
+    await closedPage.goto(base,{waitUntil:'domcontentloaded'});
+    await closedPage.waitForFunction(()=>document.querySelector('#route-access')?.textContent.includes('reports this exact outing closed'),null,{timeout:10000});
+    assert.match(await closedPage.locator('#quick-outing').textContent(),/Access warning/);
+    assert.match(await closedPage.locator('#quick-reason').textContent(),/closed/);
+    assert.match(await closedPage.locator('#stage-status').textContent(),/access restriction/);
+    await closedPage.close();
     const noJs=await browser.newContext({javaScriptEnabled:false});
     const staticPage=await noJs.newPage();
     await staticPage.goto(base,{waitUntil:'domcontentloaded'});
     assert.match(await staticPage.locator('#stage-title').textContent(),/Upper Falls/);
     assert.match(await staticPage.locator('#official-link').getAttribute('href'),/^https:\/\//);
     await noJs.close();
-    console.log(JSON.stringify({status:'PASS',summary,failedSourceFallback:true,noJs:true,screenshots:screenshotDir},null,2));
+    console.log(JSON.stringify({status:'PASS',summary,failedSourceFallback:true,syntheticClosureNotOverridden:true,noJs:true,screenshots:screenshotDir},null,2));
   }finally{await browser.close();}
 }
 main().catch(err=>{console.error(err.stack);process.exit(1);});
