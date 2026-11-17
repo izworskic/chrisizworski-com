@@ -90,6 +90,20 @@ function serveHtml(req, res, live, season) {
       assert(rankCount>=2,'Top reports available with the recorded NWS data');
       assert(barWidths[0]===100 && barWidths.every((v,i)=>v>=0&&v<=100&&(i===0||v<=barWidths[i-1])),'Bars encode relative observed inches');
       assert(liveCount>=1 && /Current season/.test(seasonLabels),'Current-season bars populated from recorded ACIS');
+      const perf = await page.evaluate(() => {
+        const n = performance.getEntriesByType('navigation')[0];
+        const fcp = performance.getEntriesByName('first-contentful-paint')[0];
+        return {domContentLoadedMs:Math.round(n?.domContentLoadedEventEnd||0),firstContentfulPaintMs:Math.round(fcp?.startTime||0),answerReadyMs:Math.round(performance.now())};
+      });
+      if(width===390||width===1280) {
+        await page.evaluate(()=>window.scrollTo(0,0));
+        await page.screenshot({path:path.join(out,'enhanced-'+width+'.png'),animations:'disabled'});
+        await page.locator('#stormPulse').screenshot({path:path.join(out,'ranking-'+width+'.png'),animations:'disabled'});
+        await page.locator('#seasonLiveBars').screenshot({path:path.join(out,'season-'+width+'.png'),animations:'disabled'});
+      }
+      await page.locator('.windows button[data-window="24h"]').focus();
+      await page.keyboard.press('Space');
+      assert.equal(await page.locator('.windows button[data-window="24h"]').getAttribute('aria-pressed'),'true','Keyboard activates report window');
       await page.locator('.windows button[data-window="24h"]').click();
       assert.equal(await page.locator('.windows button[data-window="24h"]').getAttribute('aria-pressed'),'true');
       await page.locator('.windows button[data-window="168h"]').click();
@@ -104,14 +118,14 @@ function serveHtml(req, res, live, season) {
       assert(await page.locator('#headingOut a').first().isVisible());
       if(width===390||width===1280) {
         await page.evaluate(()=>window.scrollTo(0,0));
-        await page.screenshot({path:path.join(out,'enhanced-'+width+'.png'),animations:'disabled'});
+        await page.screenshot({path:path.join(out,'expanded-'+width+'.png'),animations:'disabled'});
       }
       const violations=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa']).analyze();
       const serious=violations.violations.filter(v=>['critical','serious'].includes(v.impact));
       evidence.a11y.push({width,violations:violations.violations.map(v=>({id:v.id,impact:v.impact,nodes:v.nodes.length,help:v.help})),seriousCount:serious.length});
       assert.equal(serious.length,0,'No serious or critical WCAG AA violations at '+width+': '+JSON.stringify(serious.map(v=>v.id)));
       assert.equal(errors.length,0,'No page errors: '+errors.join('; '));
-      evidence.viewports.push({width,scrollWidth,header,peakFont,mapAfter,rankCount,barWidths,liveCount,errors});
+      evidence.viewports.push({width,scrollWidth,header,peakFont,mapAfter,rankCount,barWidths,liveCount,performance:perf,errors});
       await context.close();
     }
     note('Mobile to desktop, reversibility, live source bars and serious/critical axe checks');
@@ -129,6 +143,7 @@ function serveHtml(req, res, live, season) {
         assert(await page.locator('.report-table-disclosure').evaluate(x=>x.open),'Full reports expand after map or API failure');
         assert(await page.locator('.map-fallback a').first().isVisible(),'Source archive link remains');
         assert((await page.locator('#mapNote').textContent()).includes('map could not load'),'Honest map failure message');
+        if(kind==='data') assert(!(await page.locator('#snowTable tbody').textContent()).includes('Loading reports.'),'Failure does not show stale Loading reports message');
         evidence.fallbacks[kind]='Map collapsed; archive and full report disclosure available';
       }
       if(kind==='tiles')await page.screenshot({path:path.join(out,'tiles-unavailable-390.png'),animations:'disabled'});
@@ -136,6 +151,17 @@ function serveHtml(req, res, live, season) {
       await context.close();
     }
     note('Tile failure, Leaflet failure, missing data, and no-JavaScript source path');
+    const {context:slowContext,page:slowPage,errors:slowErrors}=await setup(390);
+    const slowCdp=await slowContext.newCDPSession(slowPage);
+    await slowCdp.send('Network.emulateNetworkConditions',{offline:false,latency:250,downloadThroughput:120000,uploadThroughput:64000});
+    await slowPage.goto(base,{waitUntil:'domcontentloaded',timeout:30000});
+    await slowPage.waitForFunction(()=>Boolean(document.querySelector('.snow-peak-value')),{timeout:30000});
+    evidence.slowDevice={answerVisible:await slowPage.locator('.snow-peak-value').isVisible(),paint:await slowPage.evaluate(()=>Math.round(performance.getEntriesByName('first-contentful-paint')[0]?.startTime||0)),errors:slowErrors};
+    assert(evidence.slowDevice.answerVisible,'The first answer survives throttled mobile network');
+    assert.equal(slowErrors.length,0,'No errors on a throttled mobile connection');
+    await slowContext.close();
+    note('Throttled mobile response retains measured first answer');
+
     fs.writeFileSync(path.join(out,'measured-qa.json'),JSON.stringify(evidence,null,2)+'\n');
     console.log(JSON.stringify({pass:true,viewports:evidence.viewports.length,a11y:evidence.a11y,fallbacks:evidence.fallbacks},null,2));
   } finally { await browser.close(); await new Promise(resolve=>server.close(resolve)); }
