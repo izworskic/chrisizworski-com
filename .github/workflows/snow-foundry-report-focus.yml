@@ -30,6 +30,10 @@ jobs:
         run: |
           node scripts/experience-foundry.mjs prove --run experience-foundry/drafts/snow-observation-focus/run.json --out build/experience-foundry/snow-observation-focus-proof
           node scripts/experience-foundry.mjs assess --run experience-foundry/drafts/snow-observation-focus/run.json --proof build/experience-foundry/snow-observation-focus-proof/proof.json
+      - name: Verify Experience OS 1.2 release record and existing site discovery
+        run: node scripts/verify-experience-os-v1.2.mjs docs/experience-briefs/michigan-snow-totals-source-focus.release.json --check-site
+      - name: Validate Penpot-importable design source is well formed
+        run: python3 -c "import xml.etree.ElementTree as ET; ET.parse('docs/experience-briefs/snow-observation-focus.penpot.svg')"
       - name: Keep Foundry assignment and paired proof
         if: always()
         uses: actions/upload-artifact@v4
