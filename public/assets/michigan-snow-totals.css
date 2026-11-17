@@ -254,3 +254,22 @@ td.in{font-size:var(--v-type-18)}
 }
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition-duration:0s!important;animation-duration:0s!important}}
 @media(prefers-contrast:more){.snow-answer,.map-wrap,.season,.storm-pulse,.report-table-disclosure{outline:2px solid var(--v-accent-5)}}
+
+
+/* Purposeful pilot refinement after inspecting 390px and 1280px screenshots. */
+.answer-next{margin-top:var(--v-space-16);background:var(--v-paper);border-radius:var(--v-radius-sm);padding:var(--v-space-8) var(--v-space-12)}
+.answer-next>summary{font-size:var(--v-type-14);font-weight:800;color:var(--v-accent-5);padding:var(--v-space-8);min-height:44px;display:list-item;cursor:pointer}
+.answer-next .heading-out{margin:var(--v-space-8) 0 0;padding:var(--v-space-12);border:0;border-radius:var(--v-radius-sm);background:var(--v-surface);box-shadow:none}
+.answer-next .heading-out h3{font-size:var(--v-type-18)}
+.answer-next .snow-decision-paths{gap:var(--v-space-8)}
+.answer-next .snow-decision-paths a{padding:var(--v-space-12)}
+@media(min-width:900px){
+  .snow-answer{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(330px,.8fr);grid-template-areas:"head head" "eyebrow town" "summary town" "summary shortcuts" "summary links" "stamp links";column-gap:var(--v-space-32);row-gap:var(--v-space-8);align-items:start}
+  .snow-answer .live-head{grid-area:head;margin-bottom:var(--v-space-8)}
+  .snow-answer .answer-eyebrow{grid-area:eyebrow;margin:0}
+  .snow-answer #snowSummary{grid-area:summary}
+  .snow-answer #snowStamp{grid-area:stamp;margin:var(--v-space-12) 0 0}
+  .snow-answer .town{grid-area:town;margin:0}
+  .snow-answer .town-shortcuts{grid-area:shortcuts;margin:0}
+  .snow-answer .answer-next{grid-area:links;margin-top:0}
+}
