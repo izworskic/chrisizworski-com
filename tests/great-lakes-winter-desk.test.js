@@ -170,3 +170,14 @@ test('source desk remains a separate live evidence dimension, not forecast-drive
   assert.match(js,/No usable hourly forecast is available/);
   assert.match(js,/\$\('stage-photo'\)!==img/);
 });
+
+test('forecast date selection remains local across spring and autumn clock changes',()=>{
+  const spring=new Date('2027-03-14T04:30:00Z'); // March 13 11:30 PM Detroit time
+  assert.equal(D.dateKey(spring,'America/Detroit'),'2027-03-13');
+  assert.equal(D.targetKey(spring,'America/Detroit','tomorrow'),'2027-03-14');
+  assert.equal(D.targetKey(spring,'America/Detroit','third'),'2027-03-15');
+  const autumn=new Date('2026-11-01T04:30:00Z'); // November 1 12:30 AM Detroit time
+  assert.equal(D.dateKey(autumn,'America/Detroit'),'2026-11-01');
+  assert.equal(D.targetKey(autumn,'America/Detroit','tomorrow'),'2026-11-02');
+  assert.equal(D.targetKey(new Date('bad'),'America/Detroit','tomorrow'),null);
+});
