@@ -1,0 +1,51 @@
+{
+  "checkedAt": "2026-11-17T12:44:50.645Z",
+  "observations": [
+    {
+      "width": 360,
+      "viewport": 360,
+      "scrollWidth": 360,
+      "mapBelowAnswer": true,
+      "stickyHeader": true,
+      "summary": "In the last 72 hours, 1 place in Michigan reported snow to the National Weather Service. Largest: 1 in. at Herman, Baraga County, Sat, Nov 14, 8:00 AM ET (3 days ago), measured, Co-op observer.",
+      "mapTiles": 4,
+      "guideLinksAboveMap": true,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "viewport": 390,
+      "scrollWidth": 390,
+      "mapBelowAnswer": true,
+      "stickyHeader": true,
+      "summary": "In the last 72 hours, 1 place in Michigan reported snow to the National Weather Service. Largest: 1 in. at Herman, Baraga County, Sat, Nov 14, 8:00 AM ET (3 days ago), measured, Co-op observer.",
+      "mapTiles": 4,
+      "guideLinksAboveMap": true,
+      "errors": []
+    },
+    {
+      "width": 768,
+      "viewport": 768,
+      "scrollWidth": 768,
+      "mapBelowAnswer": true,
+      "stickyHeader": true,
+      "summary": "In the last 72 hours, 1 place in Michigan reported snow to the National Weather Service. Largest: 1 in. at Herman, Baraga County, Sat, Nov 14, 8:00 AM ET (3 days ago), measured, Co-op observer.",
+      "mapTiles": 12,
+      "guideLinksAboveMap": true,
+      "errors": []
+    },
+    {
+      "width": 1280,
+      "viewport": 1280,
+      "scrollWidth": 1280,
+      "mapBelowAnswer": true,
+      "stickyHeader": true,
+      "summary": "In the last 72 hours, 1 place in Michigan reported snow to the National Weather Service. Largest: 1 in. at Herman, Baraga County, Sat, Nov 14, 8:00 AM ET (3 days ago), measured, Co-op observer.",
+      "mapTiles": 18,
+      "guideLinksAboveMap": true,
+      "errors": []
+    }
+  ],
+  "noJavaScript": "PASS",
+  "reducedMotion": "PASS"
+}
