@@ -1,3 +1,11 @@
+### 2026-11-17 | U.P. waterfall main-page photo-led arrival, review branch
+- **Visitor issue:** The map-first hub has verified imagery, but the first screen remained text-led and did not show real waterfalls before asking visitors to plan.
+- **Change:** Three separate source-verified photographs of Manabezho, Wagner and Sable Falls now occupy a responsive editorial hero alongside existing map and trip links. Source and license are credited below each image. The established three-photo gallery remains below the map.
+- **Design review:** Experience OS 1.2.1 and Foundry improvement criteria applied to the visitor problem, three opportunities and two credible compositions. Reused the Penpot-inspired CSS pilot without claiming a Penpot edit. REA was not needed for this static photo treatment.
+- **Protected surfaces:** 80 destination cards, source-based access and closures, Leaflet/Rust engines, canonical/Person identity, ads and revenue settings are unchanged. Synchronized hub JSON-LD modification date and sitemap.
+- **Verification:** New rights-and-preservation regression assertions added. Full CI, browser visual QA, deploy and measured outcomes remain unverified at this write-up. No uplift claimed.
+- **Exactly one next action:** Check PR CI and examine its mobile and desktop rendered preview before Chris merges.
+
 ### 2026-11-16 | Rocket map caption simplified
 - **Visitor issue:** The national rocket map printed backend-style labels for region circles, rocket markers, uncertainty and the tile provider directly below the map.
 - **Fix:** A single useful instruction now guides visitors to choose a coast or select a rocket. The map shows a status message only for a failed schedule or missing background tiles. Exact-pad uncertainty remains available in marker popups, and provider credits remain in Leaflet's map attribution.

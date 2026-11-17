@@ -34,8 +34,8 @@ test('photo treatment keeps main map, protected SEO and ads unchanged in their o
   assert.match(hub,/id="falls-map"/);
   assert.match(hub,/id="shortlist"/);
   assert.match(hub,/rel="canonical" href="https:\/\/chrisizworski.com\/upper-peninsula-waterfalls\/"/);
-  assert.ok(hub.includes('"dateModified":"2026-11-14"'));
-  assert.ok(sitemap.includes('<loc>https://chrisizworski.com/upper-peninsula-waterfalls/</loc><lastmod>2026-11-14</lastmod>'));
+  assert.ok(hub.includes('"dateModified":"2026-11-17"'));
+  assert.ok(sitemap.includes('<loc>https://chrisizworski.com/upper-peninsula-waterfalls/</loc><lastmod>2026-11-17</lastmod>'));
   assert.match(css,/\.upfall-photo-preview-grid/);
   assert.match(css,/@media\(max-width:640px\)/);
   assert.match(hub,/<meta property="og:image"/);
