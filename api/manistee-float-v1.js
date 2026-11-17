@@ -99,6 +99,8 @@ function routeResponse(pair, result, payload, speedMph, includeGeometry = false)
       estimateOnly: true,
     },
     geometryFetchedAt: payload.fetched_at || null,
+    geometryRetrievalMode: payload.retrievalMode || null,
+    geometrySourceCompleteness: payload.sourceCompleteness || null,
     currentAccessVerified: false,
     navigabilityVerified: false,
     directionVerified: false,
@@ -143,8 +145,10 @@ module.exports = async function handler(req, res) {
     return res.status(200).end();
   }
   try {
-    const payload = await hydro.fetchHydrography();
     const waterwayName = pair.from.waterway === "pine" ? "Pine River" : "Manistee River";
+    const payload = await hydro.fetchHydrography({name:waterwayName});
+    if (payload.sourceCompleteness && payload.sourceCompleteness !== "complete-retrieved-set")
+      return json(res,503,{contract:CONTRACT,status:"unavailable",error:"INCOMPLETE_OFFICIAL_GEOMETRY"});
     const features = (payload.features || []).filter(f=>f.properties?.name===waterwayName);
     if (!features.length) return json(res,503,{contract:CONTRACT,status:"unavailable",error:"WATERWAY_GEOMETRY_MISSING"});
     const result = graph.routeGraph(graph.buildGraph(features),pair.from,pair.to);
