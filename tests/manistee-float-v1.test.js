@@ -30,6 +30,7 @@ function lineBetween(a,b,steps=24) {
 function sampleHydrography(a,b,waterway) {
   return {
     source:"USGS National Hydrography Dataset",
+    sourceCompleteness:"complete-retrieved-set",complete:true,
     fetched_at:"2026-11-17T00:00:00.000Z",
     features:[{type:"Feature",geometry:{type:"LineString",coordinates:lineBetween(a,b)},
       properties:{name:waterway}}],
@@ -98,7 +99,7 @@ test("unmatched geometry yields unavailable, never straight-line mileage",async(
   const b=data.places.find(p=>p.id==="pine-peterson");
   const orig=hydro.fetchHydrography;
   try{
-    hydro.fetchHydrography=async()=>({features:[],fetched_at:"2026-11-17T00:00:00Z"});
+    hydro.fetchHydrography=async()=>({features:[],complete:true,sourceCompleteness:"complete-retrieved-set",fetched_at:"2026-11-17T00:00:00Z"});
     let answer=await call({mode:"route",from:a.id,to:b.id});
     assert.equal(answer.code,503);
     assert.equal(answer.body.error,"WATERWAY_GEOMETRY_MISSING");
@@ -111,6 +112,16 @@ test("unmatched geometry yields unavailable, never straight-line mileage",async(
   }finally{
     hydro.fetchHydrography=orig;
   }
+});
+test("partial official source evidence never earns a route distance",async()=>{
+  const original=hydro.fetchHydrography;
+  try{
+    hydro.fetchHydrography=async()=>({complete:false,features:[{type:"Feature",geometry:{type:"LineString",coordinates:[[-85.7,44.15],[-85.8,44.2]]},properties:{name:"Pine River"}}]});
+    const result=await call({mode:"route",from:"pine-elm-flats",to:"pine-peterson"});
+    assert.equal(result.code,503);
+    assert.equal(result.body.error,"INCOMPLETE_OFFICIAL_GEOMETRY");
+    assert.equal("miles" in result.body,false);
+  }finally{hydro.fetchHydrography=original;}
 });
 test("HEAD does not call hydrography or return a body",async()=>{
   const a=data.places.find(p=>p.id==="pine-elm-flats");
