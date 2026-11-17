@@ -43,6 +43,9 @@ const intentionalRetirements = new Set([
 ]);
 
 const intentionalChanges = new Set([
+  // New lighthouse winter tool and a relevant directory handoff, November 2026.
+  "/frozen-lighthouses-michigan/",
+  "/great-lakes-lighthouses/",
   // Nov 13 2026: owner-approved Freighter View Farms shared masthead and skin on the garden guides (docs/GARDEN_FVF_UNIVERSE.md). Body copy is unchanged.
   "/heirloom-vs-hybrid-seeds/",
   "/michigan-native-plants/",
