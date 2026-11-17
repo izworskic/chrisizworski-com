@@ -117,3 +117,27 @@ After the initial source-reachability work, the visitor decision now has a separ
 - Chromium test passed at **360, 390, 768, 1440px** with real image/map loads, first-screen recommendation, same-session destination selection, no overflow or console errors, NWS failure, map-tile failure, no-JS fallback, and a **browser-only synthetic exact-route closure that could not be erased by an NWS failure**.
 - No production pages, ads, canonicals, tool registry, or sitemap modified. Draft PR #1752 remains unmerged.
 - **Next action:** Secure and review an authoritative date-specific operator access observation for each exact route before enabling any visitor-facing current "open" badge. In the absence of that evidence the visitor verdict must remain unknown.
+
+
+## Third engineering pass: official operator statements and winter parking, 2026-11-17
+
+Three distinct practical arrival decisions are now documented and tied to the selected field assignment:
+
+1. **Gooseberry Upper Falls, MN:** Minnesota DNR 2025 winter map gives visitor-center/DOT Wayside parking and short accessible winter Upper Falls approach. The park's address is 3206 Highway 61 East, Two Harbors, MN 55616. Vehicle permits are not required at the visitor center/DOT Wayside lot. Source: https://files.dnr.state.mn.us/maps/state_parks/spk00172_winter.pdf . Parking designation is source-backed, but no daily parking availability or plowing claim is made.
+2. **Pictured Rocks marked snowshoe loop, MI:** NPS states that the ski trail lot near the end of East City Limits Road is the official snowshoe staging lot and is plowed during winter. This is separate from unplowed park roads and the washed-out Munising Falls Trail. Source: https://www.nps.gov/places/snowshoe-trail-piro.htm . This is a seasonal plowing policy, not a same-day road status.
+3. **Apostle Islands overland Lakeshore Trail, WI:** NPS gives the named parking area and its address, 90500 Meyers Beach Road, Bayfield, WI 54814, plus a 45-foot maximum vehicle length and a day-use parking fee. Winter plowing is not confirmed and severe-cold closures may affect Meyers Beach. Sources: https://www.nps.gov/apis/planyourvisit/directions.htm and https://www.nps.gov/apis/planyourvisit/conditions.htm . Google Maps navigation uses the official street address, not a beach or an ice-cave point, with current access caveat.
+
+The new \`arrival-evidence.json\` is a reviewed, intentionally conservative data contract. \`scripts/audit-winter-desk-arrival.py\` rejects wrong sources, unsupported directions, invented current opening, or false claim of Meyers Beach plowing. The new visitor panel names the actual parking destination, fee/permit difference, relevant seasonal policy, and exact Google Maps role. A useful Gooseberry static HTML answer also remains when JavaScript is disabled.
+
+**Actual published operator statement reconciliation** now uses \`scripts/refresh-winter-desk-operator-notices.py\`, not an inferred status from HTTP 200. The worker retrieves specified official pages, normalizes only visible text (no hidden scripts/styles), and checks for one identified statement per route area:
+- Gooseberry Falls DNR: Upper Falls is the one maintained winter walking approach
+- Pictured Rocks NPS: adjacent Munising Falls Trail closed until further notice, explicitly **not** the marked snowshoe loop
+- Apostle Islands NPS: during a qualifying parkwide cold-weather closure, Meyers Beach area closes, **not** a current closure announcement
+
+All three exact statement anchors were matched to official pages at 2026-11-17T22:03:30Z. Versioned \`operator-notice-monitor.json\` contains checked time, scope, source and hashes, with an explicit \`NOT_DETERMINED\` operator access field. Browser output expires matched wording after 24 hours; failed or changed pages show a direct official-source check, never a fabricated reopening. No date-specific route openings are present in \`route-access-evidence.json\`.
+
+**Proof:** 27/27 targeted JavaScript tests, parking Python negative fixtures, official notice Python source/no-inferred-access fixtures, 60/60 site repository verification steps on the initial integration branch, and Chromium Playwright at 360/390/768/1440 with real photos and map tiles all passed. Browser acceptance exercised A to B to C to A choices, destination parking, notice language, missing NWS, missing basemap and a synthetic closure that remained blocked even when NWS failed. The current final reconciled commit is subject to final CI after syncing with main.
+
+**Launch boundary:** This remains a noindex draft. The monitor has repeatable refresh commands, but no unattended schedule, connected API or day-specific land-manager openings. Without a confirmed refresh workflow the statement snapshot becomes stale after 24 hours. Do not publish any open-now badge or imply that a designated parking area is necessarily accessible on the visitor's date. No ads, Tool Registry, canonicals, sitemap or production URLs changed; no GSC or revenue results claimed.
+
+**One next action:** Establish the approved low-cost source refresh and publication lifecycle for these monitored park pages, then complete authoritative exact-trail day-specific closure/open notices and winter arrival verification before the public release.
