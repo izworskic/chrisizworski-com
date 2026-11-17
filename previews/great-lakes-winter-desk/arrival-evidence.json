@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "reviewedOn": "2026-11-17",
+  "meaning": "Land-manager documented visitor arrival and parking policy. Not a confirmation that a road or lot is open or plowed on a future travel day.",
+  "places": {
+    "gooseberry-upper": {
+      "arrivalName": "Gooseberry Falls Visitor Center / DOT Wayside lot",
+      "arrivalAddress": "3206 Highway 61 East, Two Harbors, MN 55616, USA",
+      "arrivalKind": "verified-park-address",
+      "winterParkingEvidence": "designated-winter-arrival",
+      "winterParkingText": "Minnesota DNR's winter map directs visitors to park at the visitor center and use the short accessible Upper Falls approach. It does not guarantee a space or report today's lot conditions.",
+      "parkingFeeText": "No state park vehicle permit is required at the Visitor Center / DOT Wayside lot.",
+      "parkingNotes": "Use the visitor-center parking area. Other park lots have different permissions and maintenance; ice cleats are recommended on trails.",
+      "entranceSource": "https://files.dnr.state.mn.us/maps/state_parks/spk00172_winter.pdf",
+      "feeSource": "https://files.dnr.state.mn.us/maps/state_parks/spk00172_winter.pdf",
+      "officialConditions": "https://www.dnr.state.mn.us/trailconditions/index.html",
+      "googleSearch": "https://www.google.com/maps/search/?api=1&query=Gooseberry%20Falls%20Visitor%20Center%20Minnesota",
+      "directionsUrl": null,
+      "verifiedArrivalCoordinates": false,
+      "routeOpenToday": false
+    },
+    "munising-snowshoe": {
+      "arrivalName": "Pictured Rocks Ski Trail Parking Lot at East City Limits Road",
+      "arrivalAddress": "East City Limits Road, east of Munising, Michigan, USA",
+      "arrivalKind": "verified-named-trail-parking",
+      "winterParkingEvidence": "plowed-seasonal-policy",
+      "winterParkingText": "NPS directs snowshoers to the ski trail parking lot near the end of East City Limits Road, then a short walk to the blue-post loop. The NPS official Snowshoe Trail page identifies the trail parking lots as plowed in winter.",
+      "parkingFeeText": "Check the official park fee information before the trip; this evidence does not establish a parking fee exemption.",
+      "parkingNotes": "Do not substitute roads deep inside the park: most park roads are unplowed in winter. The parking description is a seasonal policy, not today's snowplow report.",
+      "entranceSource": "https://www.nps.gov/places/snowshoe-trail-piro.htm",
+      "feeSource": "https://www.nps.gov/piro/planyourvisit/fees.htm",
+      "officialConditions": "https://www.nps.gov/piro/planyourvisit/conditions.htm",
+      "googleSearch": "https://www.google.com/maps/search/?api=1&query=Pictured%20Rocks%20Ski%20Trail%20Parking%20East%20City%20Limits%20Road%20Munising%20Michigan",
+      "directionsUrl": null,
+      "verifiedArrivalCoordinates": false,
+      "routeOpenToday": false
+    },
+    "meyers-lakeshore": {
+      "arrivalName": "Meyers Beach Parking Area / Lakeshore Trailhead",
+      "arrivalAddress": "90500 Meyers Beach Road, Bayfield, WI 54814, USA",
+      "arrivalKind": "verified-street-address-and-lot",
+      "winterParkingEvidence": "winter-plowing-unknown",
+      "winterParkingText": "NPS identifies the Meyers Beach parking area and Lakeshore Trail entrance at 90500 Meyers Beach Road. Winter plowing and current road access have not been established from the source. Severe-weather closures may include Meyers Beach.",
+      "parkingFeeText": "NPS lists a day-use parking fee at Meyers Beach; check the official Fees & Passes page for current amounts and payment instructions.",
+      "parkingNotes": "Vehicle length may not exceed 45 feet. The route stays above the sandstone cliffs; park access is not authorization to walk onto Lake Superior ice.",
+      "entranceSource": "https://www.nps.gov/apis/planyourvisit/directions.htm",
+      "feeSource": "https://www.nps.gov/apis/planyourvisit/fees.htm",
+      "officialConditions": "https://www.nps.gov/apis/planyourvisit/conditions.htm",
+      "googleSearch": "https://www.google.com/maps/search/?api=1&query=90500%20Meyers%20Beach%20Road%20Bayfield%20WI%2054814",
+      "directionsUrl": "https://www.google.com/maps/dir/?api=1&destination=90500%20Meyers%20Beach%20Road%20Bayfield%20WI%2054814",
+      "verifiedArrivalCoordinates": false,
+      "routeOpenToday": false
+    }
+  }
+}
