@@ -128,7 +128,7 @@ function serveHtml(req, res, live, season) {
         await page.waitForFunction(()=>document.querySelector('#snowMap')?.hidden,{timeout:18000});
         assert(await page.locator('.report-table-disclosure').evaluate(x=>x.open),'Full reports expand after map or API failure');
         assert(await page.locator('.map-fallback a').first().isVisible(),'Source archive link remains');
-        assert(await page.locator('#mapNote').textContent()).includes('map could not load');
+        assert((await page.locator('#mapNote').textContent()).includes('map could not load'),'Honest map failure message');
         evidence.fallbacks[kind]='Map collapsed; archive and full report disclosure available';
       }
       if(kind==='tiles')await page.screenshot({path:path.join(out,'tiles-unavailable-390.png'),animations:'disabled'});
