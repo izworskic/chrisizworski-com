@@ -108,12 +108,13 @@
       1280,
       1440
     ],
-    "browserStatus": "PENDING",
-    "browserRun": "https://github.com/izworskic/chrisizworski-com/actions/runs/44107420984",
+    "browserStatus": "PASSED",
+    "browserRun": "https://github.com/izworskic/chrisizworski-com/actions/runs/44109907151",
     "screenshotEvidence": [
-      "https://github.com/izworskic/chrisizworski-com/actions/runs/44107420984/artifacts"
+      "https://github.com/izworskic/chrisizworski-com/actions/runs/44109907151/artifacts/14340835648",
+      "https://github.com/izworskic/chrisizworski-com/blob/improve/snow-visual-scorecard-20261117/docs/visual-pilots/michigan-snow-totals/scorecard/enhanced-390.png"
     ],
-    "scopeNote": "Last local-fixture Chromium proof passed before the final documentation and CSS refinements. Final-head run and in-person screen reader still outstanding. Live deployed site not verified."
+    "scopeNote": "Pass established at functional source commit bc3cae8c195414cb2d0f5ca19bb33cf0688f5634 (five widths; real tiles, source-selection A-B-A, blocked sources, no-JS, stale data and automated axe WCAG AA). This record update does not modify the rendered page. Manual screen-reader testing remains outstanding; live deployed page is not verified."
   },
   "photos": [],
   "release": {
@@ -123,7 +124,9 @@
       "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/pull/1755"
     },
     "verified": {
-      "status": "PENDING"
+      "status": "CONFIRMED",
+      "checkedDate": "2026-11-17",
+      "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/actions/runs/44109906946"
     },
     "deployed": {
       "status": "PENDING"
@@ -135,5 +138,5 @@
       "status": "NOT_MEASURED"
     }
   },
-  "verificationLimit": "This draft records source and fixture behavior, not independent current map reliability, actual Penpot MCP execution, live public deployment or post-release traffic gains."
+  "verificationLimit": "Repository and browser QA at functional source commit bc3cae8 are verified; manual assistive-technology review, Penpot MCP/REA integrations, Vercel READY, live current-source smoke and actual post-release traffic effects remain unverified."
 }
