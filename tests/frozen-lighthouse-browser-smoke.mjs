@@ -54,6 +54,7 @@ try{
   page.on('pageerror',e=>failures.push('JavaScript '+width+': '+e.message));
   await prepare(page);
   await check('light winter palette and real hero photograph at '+width+'px',async()=>{
+   await page.locator('.hero-photo img').evaluate(img=>img.decode());
    const design=await page.evaluate(()=>{
     const body=getComputedStyle(document.body);
     const hero=getComputedStyle(document.querySelector('.hero-photo img'));
