@@ -4,7 +4,7 @@ import hydro from '../api/manistee-river-hydrography.js';
 
 const sites=['04123500','04124000','04124200','04125550','04125460'];
 const names=['Manistee River','Pine River','Bear Creek','Little Manistee River'];
-const artifact={checkedAt:new Date().toISOString(),status:'fail',checks:{}};
+const artifact={checkedAt:new Date().toISOString(),status:'fail',phase:'starting',checks:{}};
 
 async function getJson(url,label){
   let lastError=null;
@@ -27,6 +27,7 @@ try{
   usgs.searchParams.set('sites',sites.join(','));
   usgs.searchParams.set('parameterCd','00010,00060,00065');
   usgs.searchParams.set('siteStatus','all');
+  artifact.phase='USGS Water Services gauges';
   const gaugePayload=await getJson(usgs,'USGS Water Services');
   const returnedSites=new Set((gaugePayload?.value?.timeSeries||[]).flatMap(s=>(s.sourceInfo?.siteCode||[]).map(c=>c.value)).filter(Boolean));
   const missingSites=sites.filter(id=>!returnedSites.has(id));
@@ -35,6 +36,7 @@ try{
 
   // Exercise the same authoritative NHD query and completeness logic that powers
   // the Manistee field map and read-only route API. No alternate data source.
+  artifact.phase='USGS NHD hydrography';
   const hydroPayload=await hydro.fetchHydrography();
   if(hydroPayload.sourceCompleteness!=='complete-retrieved-set')throw new Error('USGS NHD incomplete retrieval');
   const returnedNames=new Set((hydroPayload.features||[]).map(f=>f.properties?.name).filter(Boolean));
@@ -45,11 +47,13 @@ try{
   if(invalidGeometry)throw new Error(`NHD returned ${invalidGeometry} non-line feature(s)`);
   if((hydroPayload?.features?.length||0)<20)throw new Error('NHD flowline count unexpectedly small');
 
+  artifact.phase='complete';
   artifact.status='pass';
   console.log(`Manistee live audit PASS — ${returnedSites.size} USGS sites, ${hydroPayload.features.length} NHD flowline features, ${returnedNames.size} named waterways.`);
 }catch(error){
+  artifact.failedPhase=artifact.phase;
   artifact.error=String(error?.message||error);
-  console.error(`Manistee live audit FAIL — ${artifact.error}`);
+  console.error(`Manistee live audit FAIL at ${artifact.failedPhase}: ${artifact.error}`);
   process.exitCode=1;
 }finally{
   await fs.mkdir('artifacts',{recursive:true});
