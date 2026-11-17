@@ -127,3 +127,43 @@ jobs:
             ];
             const issue=await github.rest.issues.create({owner,repo,title,body:lines.join('\n')});
             core.info('Created source review issue #'+issue.data.number);
+
+
+  preview-browser-acceptance:
+    # Expensive visual proof runs on PRs or explicit manual checks, not twice daily.
+    if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
+    needs: contract
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install isolated browser for actual viewport and failure QA
+        run: |
+          mkdir -p /tmp/winter-playwright
+          npm install --prefix /tmp/winter-playwright --no-save --ignore-scripts playwright@1.58.2
+          PLAYWRIGHT_BROWSERS_PATH=/tmp/winter-playwright-browsers /tmp/winter-playwright/node_modules/.bin/playwright install --with-deps chromium
+      - name: Exercise four widths and failed weather and map scenarios
+        env:
+          NODE_PATH: /tmp/winter-playwright/node_modules
+          PLAYWRIGHT_BROWSERS_PATH: /tmp/winter-playwright-browsers
+          WINTER_DESK_BASE: http://127.0.0.1:8765/previews/great-lakes-winter-desk/
+          WINTER_DESK_SCREENSHOTS: ${{ runner.temp }}/winter-desk-browser
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/winter-desk-preview.log 2>&1 &
+          node scripts/winter-desk-browser-qa.cjs
+      - name: Retain actual viewport screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: winter-desk-browser-proof
+          path: ${{ runner.temp }}/winter-desk-browser/*.png
+          if-no-files-found: warn
+          retention-days: 7
