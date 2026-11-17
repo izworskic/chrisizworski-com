@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-17T21:56:34Z",
+  "generatedAt": "2026-11-17T22:03:30Z",
   "accessVerified": false,
   "meaning": "Exact official webpage statement presence only. No trail opening, closure, route safety or parking status is inferred.",
   "places": {
@@ -10,9 +10,9 @@
       "message": "Minnesota DNR identifies the Upper Falls approach as its maintained winter walking route. This is a route policy, not a current access report.",
       "operatorAccess": "NOT_DETERMINED",
       "state": "MATCHED",
-      "checkedAt": "2026-11-17T21:56:34Z",
+      "checkedAt": "2026-11-17T22:03:30Z",
       "sourceHttpStatus": 200,
-      "bodySha256": "21625e91200985be4839a8df5cf978f861dce5c4b190ce02d1fe33f80ef8e096"
+      "bodySha256": "8ca2ad9eff24fec4870714d8b928616e0f7e3a5c29d69bf297463ee429a0b17c"
     },
     "munising-snowshoe": {
       "sourceUrl": "https://www.nps.gov/places/munising-falls.htm",
@@ -20,7 +20,7 @@
       "message": "NPS lists the nearby Munising Falls Trail as closed until further notice. This does not close the separately marked snowshoe loop.",
       "operatorAccess": "NOT_DETERMINED",
       "state": "MATCHED",
-      "checkedAt": "2026-11-17T21:56:34Z",
+      "checkedAt": "2026-11-17T22:03:30Z",
       "sourceHttpStatus": 200,
       "bodySha256": "35cbc1c4b4de2670df92d5477dfce09c5a66ac72738b3134ced5d9ab0a7a558d"
     },
@@ -30,7 +30,7 @@
       "message": "NPS states that Meyers Beach closes during a parkwide severe-cold closure. This is a conditional policy, not confirmation of a closure today.",
       "operatorAccess": "NOT_DETERMINED",
       "state": "MATCHED",
-      "checkedAt": "2026-11-17T21:56:34Z",
+      "checkedAt": "2026-11-17T22:03:30Z",
       "sourceHttpStatus": 200,
       "bodySha256": "af401bc47bb06f02f50e92b2bf3c69afb4fb5d1956ed9120a7d63e340a3ccd35"
     }
