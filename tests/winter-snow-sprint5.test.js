@@ -15,7 +15,8 @@ test('storm snapshot is dated official report evidence and empty states stay hid
   assert.ok(logic.includes("if (rows.length < 2) { list.textContent = ''; panel.hidden = true; return; }"));
   assert.ok(logic.includes('rows.slice(0, 3)') && logic.includes('esc(stamp(r))'));
   assert.ok(logic.includes('renderSummary(rows); renderStormPulse(rows); renderAlerts();'));
-  assert.ok(logic.includes("data-pulse-town") && logic.includes("loadPlaces().then(function () {"));
+  assert.ok(logic.includes('data-pulse-rank') && logic.includes('selectReport(rows[index], false)'), 'ranked selection preserves the exact NWS observation instead of replacing it with a town lookup');
+  assert.ok(logic.includes('state.selectedReportKey = reportKey(r)') && logic.includes('originalReportUrl(found.productUrl)'), 'selected report has one source-backed identity');
 });
 test('recognized town carries into editable origin, never automatically declares snow', () => {
   assert.ok(logic.includes("result.kind === 'town' || result.kind === 'nearby'"));
