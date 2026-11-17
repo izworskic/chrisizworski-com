@@ -75,3 +75,17 @@ Google Maps actions are **place searches only**. No turn-by-turn directions or c
 Pre-publication: **HOLD**. A working, distinct prototype exists, with domain, audit, browser and first-screen evidence. Experience OS score is **NOT MEASURED as a complete release**, not an invented 90 or 100. Its separate distinctiveness veto has credible design and browser evidence, but final source and launch gates are not complete.
 
 Exactly one next action: **Wire dated official land-manager access observations into the existing closure-precedence model, with conflict/stale/no-data fixtures for all three outings, before approving a public release.**
+
+## Current-source second pass and additional browser proof
+
+New build head reviewed November 17, 2026. The previous first-pass findings are preserved above as history, and these newer checks supersede any older targeted-test count or not-run statement.
+
+- **Official source checker:** \`scripts/refresh-winter-desk-sources.py\` now fetches the three corresponding NPS and Minnesota DNR conditions URLs, records HTTP reachability, UTC retrieval time, final official URL allowlist, content-prefix hash and unknown operator access. All three returned HTTP 200 at 2026-11-17T21:04:50Z. That fact **never** determines whether a particular route is open, whether parking is plowed, or whether walking on lake ice is permitted. \`source-checks.json\` expires its reached indication after 24 hours; the program leaves access unverified.
+- **Source-state evidence:** New pure JavaScript validation rejects unknown schema, future/stale source checks, mismatched outing and condition URL, and any claim that a reachability snapshot establishes operator access. Weather and photo selection stale-state races now clear rather than inherit the previous outing's text.
+- **Calendar correctness:** Forecast selection now advances a calendar day in each place's local timezone, not 24 elapsed hours. Two tests cover spring and autumn DST boundaries.
+- **Current targeted tests:** 17 Node tests passed, no failures. Python source worker offline fixtures and Python evidence audit both passed.
+- **Independent full site gate:** \`npm run verify:all\` passed 60/60 stages on reconciled source baseline b88b2b5 (238 seconds) and again on source integration stage 7641472b (224 seconds). Current latest head includes DST and QA harness commits beyond that second full run, so this is not a claim of exact-head full CI.
+- **Reproducible browser harness:** \`scripts/winter-desk-browser-qa.cjs\` passed in Chromium on 360, 390, 768, 1440 pixels. Real image bytes and map tiles loaded, ten forecast hours displayed on the chosen forecast day, no horizontal overflow or JavaScript errors, location A/B/C/A selection stayed coherent, a simulated map failure showed the list fallback, NWS failure left official access links, and no-JavaScript HTML remained usable.
+- **Repo controls:** No public indexable route, canonicals, sitemap, ad configuration, Tool Registry entry or existing specialist tool changed. A source-check is not a release, and the user-facing tool is not live.
+- **Release state:** HOLD for actual operator-access observation integration, final photo rights audit, release scoring and production smoke. No CTR, ranking, task-completion or revenue uplift data is claimed.
+- **Exactly one next engineering action:** Add date-scoped operator-confirmed access/closure observations for each exact trail identity, with source conflicts unable to produce a positive "open" status. Keep a missing report as unknown.
