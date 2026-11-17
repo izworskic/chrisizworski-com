@@ -1,0 +1,30 @@
+name: Frozen lighthouse science parity
+on:
+  pull_request:
+    paths:
+      - 'api/lighthouse-ice.js'
+      - 'lib/frozen-lighthouse.mjs'
+      - 'tests/frozen-lighthouse-watch.test.js'
+      - 'benchmarks/frozen-lighthouse-physics-cases.tsv'
+      - 'scripts/audit-frozen-lighthouse-science.py'
+      - 'tools/frozen-lighthouse-audit.rs'
+      - '.github/workflows/frozen-lighthouse-physics.yml'
+jobs:
+  parity:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: dtolnay/rust-toolchain@stable
+      - name: JavaScript model cases
+        run: node --test tests/frozen-lighthouse-watch.test.js
+      - name: Python science audit
+        run: python3 scripts/audit-frozen-lighthouse-science.py
+      - name: Rust science audit
+        run: |
+          rustc --edition=2021 -O tools/frozen-lighthouse-audit.rs -o "$RUNNER_TEMP/frozen-lighthouse-audit"
+          "$RUNNER_TEMP/frozen-lighthouse-audit" benchmarks/frozen-lighthouse-physics-cases.tsv

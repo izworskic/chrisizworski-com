@@ -1,0 +1,41 @@
+name: Frozen lighthouse forecast desk browser acceptance
+on:
+  pull_request:
+    paths:
+      - 'public/frozen-lighthouses-michigan/index.html'
+      - 'public/assets/frozen-lighthouse*.js'
+      - 'tests/frozen-lighthouse-browser-smoke.mjs'
+      - '.github/workflows/frozen-lighthouse-browser.yml'
+jobs:
+  interactive-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install ephemeral Chromium test driver
+        run: |
+          npm install --prefix /tmp/lighthouse-playwright --no-save --package-lock=false playwright@1.56.1
+          if command -v google-chrome >/dev/null 2>&1; then
+            echo "LIGHTHOUSE_CHROME=$(command -v google-chrome)" >> "$GITHUB_ENV"
+          elif command -v chromium >/dev/null 2>&1; then
+            echo "LIGHTHOUSE_CHROME=$(command -v chromium)" >> "$GITHUB_ENV"
+          else
+            /tmp/lighthouse-playwright/node_modules/.bin/playwright install --with-deps chromium
+          fi
+      - name: Serve HTML and test mock forecast journey
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 --directory public >/tmp/lighthouse-http.log 2>&1 &
+          node tests/frozen-lighthouse-browser-smoke.mjs
+      - name: Save browser screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frozen-lighthouse-desk-screenshots
+          path: /tmp/lighthouse-browser-proof/*.png
+          if-no-files-found: ignore
+          retention-days: 7

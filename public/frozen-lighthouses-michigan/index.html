@@ -28,7 +28,73 @@ h1,h2,h3{font-family:Georgia,serif;font-weight:500;line-height:1.15}h1{font-size
 .methods{margin-top:58px;border-top:1px solid var(--border);padding-top:30px}.method-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}.method-cols article{border-left:3px solid #70bedf;padding-left:14px}.method-cols p{color:var(--muted);font-size:.94rem}.references{font-size:.9rem}.references li{margin:8px 0}.faq{border-bottom:1px solid var(--border);padding:14px 0}.faq p{max-width:900px;color:#d6e4ed}.footer{border-top:1px solid var(--border);padding:28px 0 45px;color:var(--muted);font-size:.9rem}
 @media(max-width:760px){.cards,.method-cols{grid-template-columns:1fr}.hero-inner{padding:35px 0 50px}.verdict{padding:19px}.pier-card{padding:18px}.hour-table{font-size:.69rem}.hour-table td,.hour-table th{padding:5px 2px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* Coast-wide forecast desk: a forecast navigator, not a map or an access guide. */
+.hero-inner{padding:44px 0 48px}.verdict{margin:28px 0 28px}
+.coast-desk{margin:20px 0 48px;border:1px solid #638298;border-radius:22px;overflow:hidden;background:#0b1c2b;box-shadow:0 24px 70px #020b1440}
+.desk-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;flex-wrap:wrap;padding:24px 28px 22px;background:linear-gradient(115deg,#20485e,#102c3e 60%,#1b3b50)}
+.desk-heading h2{margin:6px 0;font-size:clamp(1.65rem,3vw,2.6rem)}
+.desk-heading p{margin:5px 0;color:#d8e6f0;max-width:760px}
+.desk-key{display:flex;gap:14px;flex-wrap:wrap;font-size:.78rem;color:#d4e7f0}
+.desk-key span::before{content:'';display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;background:#8dd6ec}
+.desk-key span:nth-child(2)::before{background:#476678}
+.desk-key span:nth-child(3)::before{background:repeating-linear-gradient(45deg,#8ca6b7 0 2px,#2a4152 2px 4px)}
+.desk-layout{display:grid;grid-template-columns:minmax(230px,31%) minmax(0,1fr);min-width:0;max-width:100%}
+.desk-places{padding:22px 14px;background:#102737;border-right:1px solid #345263;min-width:0;max-width:100%}
+.desk-places h3{font-size:1.14rem;margin:0 8px 14px}
+.desk-places__hint{font-size:.76rem;margin:0 8px 15px;color:var(--muted)}
+.desk-lights{display:grid;gap:5px;min-width:0;max-width:100%}
+.desk-location{display:grid;width:100%;gap:1px;padding:12px 14px;border-radius:12px;border:1px solid transparent;background:transparent;text-align:left;color:var(--ink);min-width:0}
+.desk-location:hover{background:#234154}
+.desk-location[aria-pressed="true"]{background:#23495e;border-color:#85c8e2;box-shadow:inset 4px 0 #a6e6fa}
+.desk-location__town{font-size:1.01rem;font-weight:800}
+.desk-location__light{font-size:.75rem;color:#cfdee7;line-height:1.4}
+.desk-location__window{font-size:.72rem;color:#cadce8;margin-top:3px}
+.desk-location__state{font-size:.76rem;color:#a5e6fa;margin-top:3px}
+.desk-main{min-width:0;max-width:100%;width:100%;overflow-wrap:anywhere;padding:24px clamp(18px,3vw,34px) 30px}
+.desk-current{border-bottom:1px solid #375769;padding-bottom:16px}
+.desk-current .eyebrow{margin:0}
+.desk-current h3{font-size:clamp(1.4rem,2.5vw,2rem);margin:6px 0 12px}
+.desk-outcome{font-size:1.15rem;font-weight:800;color:#d0f2ff;margin:6px 0;overflow-wrap:anywhere}
+.desk-window{color:var(--muted);margin:7px 0}
+.desk-clock{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:22px 0 8px}
+.desk-clock strong{font-size:1.12rem}
+.desk-clock__tools{display:flex;align-items:center;gap:8px}
+.desk-step{padding:7px 12px;border-radius:9px;font-size:.88rem;min-width:42px}
+.desk-step:disabled{opacity:.4;cursor:not-allowed}
+.desk-slide{display:block;width:100%;margin:14px 0 12px;accent-color:#a4e8ff;min-height:26px;cursor:pointer}
+.desk-slide:disabled{cursor:not-allowed;opacity:.4}
+.desk-chart{display:flex;align-items:flex-end;gap:2px;height:135px;padding:12px 3px 0;border-bottom:1px solid #7192a6;background:linear-gradient(#27506940,#17374d18),repeating-linear-gradient(to top,transparent 0 27%,#7893a514 calc(27% + 1px))}
+.desk-bar{flex:1;min-width:2px;max-width:22px;background:#8fdaef;border-radius:3px 3px 0 0;transition:height .12s linear}
+.desk-bar--none{background:#456476}
+.desk-bar--missing{background:repeating-linear-gradient(45deg,#8ca6b7 0 3px,#213e52 3px 6px)}
+.desk-bar--current{outline:2px solid #f5d99b;outline-offset:1px;z-index:1}
+.desk-chart__note{font-size:.79rem;color:var(--muted);margin:9px 0 24px}
+.desk-hour-verdict{font-size:1.1rem;font-weight:800;margin:10px 0;color:#e4f8ff}
+.desk-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:14px 0}
+.desk-reading{padding:13px 14px;border:1px solid #3d6177;background:#132e40;border-radius:10px;min-width:0}
+.desk-reading dt{text-transform:uppercase;letter-spacing:.08em;font-size:.68rem;color:#b2cfe0}
+.desk-reading dd{font-size:1rem;font-weight:700;margin:5px 0 0;overflow-wrap:anywhere}
+.desk-hour-reason{color:#c7dce7;font-size:.88rem;margin:12px 0}
+.desk-provenance{margin-top:20px;padding:12px 15px;border-left:3px solid #77b7d0;background:#142c3b;font-size:.83rem;color:#c6dce8}
+.desk-provenance p{margin:8px 0}
+.desk-provenance .desk-alert{font-weight:800;color:#ffe0a4}
+.desk-provenance .desk-caution{font-weight:800;color:#ffe8bd}
+.desk-footer{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:18px}
+.desk-footer a{display:inline-block;text-decoration:none;border:1px solid #83aec4;border-radius:10px;padding:9px 14px;font-size:.88rem;font-weight:750}
+.desk-footer small{color:var(--muted);font-size:.75rem}
+.desk-empty{color:var(--muted);font-size:.9rem;padding:10px}
+@media(max-width:820px){.desk-layout{grid-template-columns:minmax(0,1fr)}.desk-places{border-right:0;border-bottom:1px solid #345263}.desk-lights{display:flex;overflow-x:auto;scroll-snap-type:x proximity;padding-bottom:10px;width:100%}.desk-location{flex:0 0 185px;scroll-snap-align:start}.desk-places__hint{margin-bottom:9px}}
+@media(max-width:500px){.desk-heading{padding:18px}.desk-main{padding:18px 16px 22px}.desk-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.desk-bar{min-width:1px}.desk-location{flex-basis:170px}.desk-clock strong{font-size:1rem}}
+@media(prefers-reduced-motion:reduce){.desk-bar{transition:none}.desk-lights{scroll-behavior:auto}}
+.lighthouse-appendix{border-top:1px solid var(--border);padding:16px 0;margin:18px 0 32px}
+.lighthouse-appendix>summary{font:700 clamp(1.1rem,2vw,1.42rem)/1.4 Georgia,serif;padding:13px 15px;cursor:pointer;border:1px solid #53758b;border-radius:12px;background:#163446;color:#d6f1fd}
+.lighthouse-appendix>summary:hover{background:#25495d}
+.lighthouse-appendix[open]>summary{margin-bottom:24px}
+@media(max-width:760px){.lighthouse-appendix>summary{font-size:1.2rem}}
+
 </style>
+<script defer src="/assets/frozen-lighthouse-desk.js"></script>
 <script defer src="/assets/frozen-lighthouse-watch.js"></script>
 </head><body>
 <header class="hero"><div class="wrap">
@@ -37,16 +103,49 @@ h1,h2,h3{font-family:Georgia,serif;font-weight:500;line-height:1.15}h1{font-size
 <h1>Frozen lighthouses in Michigan: will ice form this week?</h1>
 <p class="hero-sub">Nine verified Lake Michigan pier lights. Seventy-two forecast hours. The wind, air, water and ice signals behind those winter lighthouse photographs, with unknowns clearly marked.</p>
 <p class="warning"><strong>Never walk on icy or wave-swept piers. View from shore.</strong> The wind that makes the best ice also makes the pier deadly. The score describes possible ice buildup, never visitor safety.</p>
-<nav class="hero-nav" aria-label="Explore this watch"><a href="#watch">72-hour ice watch</a><a href="#method">Read the model</a><a href="#questions">Questions</a><a href="https://swmichigan.org/blog/st-joseph-frozen-lighthouses" target="_blank" rel="noopener noreferrer">Official St. Joseph camera guide</a></nav>
+<nav class="hero-nav" aria-label="Explore this watch"><a href="#forecast-desk">Explore the coastline</a><a href="#method">Read the model</a><a href="#questions">Questions</a><a href="https://swmichigan.org/blog/st-joseph-frozen-lighthouses" target="_blank" rel="noopener noreferrer">Official St. Joseph camera guide</a></nav>
 </div></div></header>
 <main class="wrap">
 <section id="watch" class="verdict"><p class="signal">Live source-based comparison</p><h2>Where could ice build over the next 72 hours?</h2>
 <p id="current-verdict" aria-live="polite">Checking NWS and NOAA sources. No forecast verdict has been issued yet.</p>
 <p id="feed-time">Waiting for the data issue time.</p><p id="source-status">Missing sources withhold the affected score. Unknown conditions are not zero icing.</p>
 <div class="actions"><button id="reload-icing" type="button">Check source status again</button><a href="https://www.weather.gov/greatlakes/michigantext" target="_blank" rel="noopener noreferrer">NWS Lake Michigan forecasts</a></div></section>
+
+<section id="forecast-desk" class="coast-desk" aria-labelledby="desk-heading">
+ <div class="desk-heading">
+  <div><p class="eyebrow">The Lake Michigan coast desk</p><h2 id="desk-heading">Choose a light. Explore the next 72 hours.</h2>
+   <p>Follow Lake Michigan's Michigan shoreline from St. Joseph to Frankfort, hour by hour. These bars describe possible freezing spray, not ice already on a lighthouse.</p></div>
+  <div class="desk-key" aria-label="Chart legend"><span>Spray signal</span><span>No gate crossing</span><span>Unknown</span></div>
+ </div>
+ <div class="desk-layout">
+  <aside class="desk-places" aria-label="Choose a lighthouse">
+   <h3>Follow the shoreline</h3><p class="desk-places__hint">South to north. Select a place to update the forecast and its evidence.</p>
+   <div id="coast-lights" class="desk-lights" role="group" aria-label="Lighthouse locations"><p class="desk-empty">Loading nine verified lights.</p></div>
+  </aside>
+  <div class="desk-main">
+   <div class="desk-current"><p class="eyebrow">Selected lighthouse</p><h3 id="desk-place">Waiting for the weather feed</h3>
+    <p id="desk-outcome" class="desk-outcome" aria-live="polite">No forecast verdict issued yet.</p>
+    <p id="desk-window" class="desk-window">A positive signal means only that spray ice could build, not that it has formed.</p>
+   </div>
+   <div class="desk-clock"><div><p class="eyebrow">Forecast hour</p><strong id="desk-time">No hour selected</strong></div>
+    <div class="desk-clock__tools"><button id="desk-previous" class="desk-step" type="button" aria-label="Previous forecast hour" disabled>&larr;</button>
+     <button id="desk-next" class="desk-step" type="button" aria-label="Next forecast hour" disabled>&rarr;</button></div>
+   </div>
+   <label for="desk-slider" class="muted">Move through issued forecast hours</label>
+   <input id="desk-slider" class="desk-slide" type="range" min="0" max="71" step="1" value="0" disabled aria-label="Selected forecast hour">
+   <div id="desk-chart" class="desk-chart" aria-label="Hour-by-hour spray indicator; readings follow" role="img"></div>
+   <p class="desk-chart__note">Each column is one issued hour. The outlined column matches the reading below. The scale is a relative vessel-icing indicator, not probability or ice thickness.</p>
+   <div id="desk-readings" aria-live="polite"><p class="desk-empty">Weather readings will appear after the source check.</p></div>
+   <div id="desk-provenance" class="desk-provenance"><p>Source and observation timestamps will appear here. Unknown conditions never count as clear weather.</p></div>
+   <div class="desk-footer"><a id="desk-maps" target="_blank" rel="noopener noreferrer">Locate lighthouse in Google Maps</a>
+    <small>Coordinates identify the light itself. They are not parking or pier-access directions.</small></div>
+  </div>
+ </div>
+</section>
+<details class="lighthouse-appendix"><summary>All nine lighthouse forecasts and source details</summary>
 <section aria-labelledby="piers-heading"><h2 id="piers-heading">The pier-by-pier watch</h2>
 <p class="section-sub">Read each light's strongest model window and why it is or is not forming. These are ice-building conditions, not pictures of existing ice. Expand each card for hourly evidence.</p>
-<div id="lighthouse-results" class="cards" aria-live="polite"><p class="muted">Loading verified forecast hours. A missing feed will show no invented index.</p></div></section>
+<div id="lighthouse-results" class="cards" aria-live="polite"><p class="muted">Loading verified forecast hours. A missing feed will show no invented index.</p></div></section></details>
 <section class="methods" id="method"><p class="eyebrow">Behind the numbers</p><h2>Four physical gates, one cautious estimate</h2>
 <div class="method-cols">
 <article><h3>Cold, water and wind</h3><p>Wind at least 15 mph, air below 32 F, water below about 40 F, and a direction that blows from Lake Michigan toward the pier. Missing any gate means no modeled spray buildup.</p></article>

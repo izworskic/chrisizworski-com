@@ -122,11 +122,13 @@
    setTop(data);
    host.replaceChildren();
    for(const pier of data.piers)host.append(card(pier));
+   window.dispatchEvent(new CustomEvent('frozen-lighthouse-ready',{detail:data}));
   }catch(_error){
    headline.textContent='Live icing readings are temporarily unavailable';
    checked.textContent='No fresh data timestamp could be confirmed.';
    sourceNote.textContent='A failed feed is not a low-risk or no-ice reading. Consult the official NWS marine forecast and view only from shore.';
    host.replaceChildren(node('p','feed-error','The source could not be verified. No hourly icing scores are displayed.'));
+   window.dispatchEvent(new Event('frozen-lighthouse-failed'));
   }
  }
  load();

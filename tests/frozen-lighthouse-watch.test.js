@@ -142,3 +142,40 @@ test('the single API fails each external signal independently and never invents 
   assert.ok(json.piers.every(p=>p.water?.kind==='lakewide-proxy'||p.water?.kind==='Holland-shore'));
  }finally{globalThis.fetch=original;}
 });
+
+
+test('contiguous possible-spray windows stop across missing and zero hours',async()=>{
+ const {conditionWindows}=await import('../lib/frozen-lighthouse.mjs');
+ const t=Date.parse(iso(1));
+ const at=i=>new Date(t+i*3600000).toISOString();
+ const list=[
+  {startTime:at(0),score:30},
+  {startTime:at(1),score:55},
+  {startTime:at(2),score:null},
+  {startTime:at(3),score:100},
+  {startTime:at(5),score:80},
+  {startTime:at(6),score:0},
+  {startTime:at(7),score:70}
+ ];
+ const runs=conditionWindows(list);
+ assert.deepEqual(runs.map(w=>w.hours),[2,1,1,1]);
+ assert.equal(runs[0].peakScore,55);
+ assert.equal(runs[0].peakTime,at(1));
+ assert.equal(runs[0].endTime,at(2));
+ assert.equal(runs[1].endTime,at(4));
+ assert.deepEqual(conditionWindows([{score:0,startTime:at(0)},{score:null,startTime:at(1)}]),[]);
+});
+
+test('independent Python and Rust boundary fixtures stay aligned with JavaScript',async()=>{
+ const {readFileSync}=await import('node:fs');
+ const content=readFileSync(new URL('../benchmarks/frozen-lighthouse-physics-cases.tsv',import.meta.url),'utf8');
+ const rows=content.trim().split(/\r?\n/).slice(1).map(row=>row.split('|'));
+ assert.ok(rows.length>=10);
+ const numeric=x=>x==='-'?null:Number(x);
+ for(const [id,wind,air,water,direction,axis,ice,category,score] of rows){
+  const actual=scoreHour({windMph:numeric(wind),airF:numeric(air),waterF:numeric(water),
+   windFrom:numeric(direction),icePct:numeric(ice)},{onshoreBearing:Number(axis)});
+  assert.equal(actual.category??'unknown',category,id);
+  assert.equal(actual.score===null?'unknown':String(actual.score),score,id);
+ }
+});
