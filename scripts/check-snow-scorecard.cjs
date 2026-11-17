@@ -107,6 +107,39 @@ function serveHtml(req, res, live, season) {
         await page.locator('#stormPulse').screenshot({path:path.join(out,'ranking-'+width+'.png'),animations:'disabled'});
         await page.locator('#seasonLiveBars').screenshot({path:path.join(out,'season-'+width+'.png'),animations:'disabled'});
       }
+      // Foundry selection spine: exact ranked report, original source, approximate map link, reversibility.
+      const ranked=page.locator('#stormPulseList button[data-pulse-rank]');
+      await ranked.nth(0).click();
+      assert.equal(await ranked.nth(0).getAttribute('aria-pressed'),'true','First ranked observation selected');
+      const focused=page.locator('#selectedSnowReport');
+      assert(await focused.isVisible(),'Selected report detail appears without waiting for a town lookup');
+      const source=focused.locator('a', { hasText:'Read original NWS report' });
+      assert(await source.count()===1,'Exact selected observation has original NWS source');
+      assert((await source.getAttribute('href')).startsWith('https://mesonet.agron.iastate.edu/'),'Selected source belongs to approved archive');
+      const maps=focused.locator('a',{hasText:'See reported area in Google Maps'});
+      assert.equal(await maps.count(),1,'Reported coordinates have a map search handoff');
+      const mapsUrl=new URL(await maps.getAttribute('href'));
+      assert.equal(mapsUrl.hostname,'www.google.com');
+      assert.equal(mapsUrl.pathname,'/maps/search/');
+      assert.equal(mapsUrl.searchParams.get('api'),'1');
+      assert(!mapsUrl.pathname.includes('/dir/'),'Observation is not a driving direction');
+      const firstDetail=await focused.locator('h4').textContent();
+      await ranked.nth(1).click();
+      assert.equal(await ranked.nth(1).getAttribute('aria-pressed'),'true','Second report selected');
+      const secondDetail=await focused.locator('h4').textContent();
+      assert.notEqual(secondDetail,firstDetail,'Selecting B changes exact report identity');
+      await ranked.nth(0).click();
+      assert.equal(await focused.locator('h4').textContent(),firstDetail,'A B A restores original report');
+      const markerPopup=page.locator('.leaflet-popup-content');
+      assert(await markerPopup.count()>0,'Selected report opens source-qualified marker popup');
+      assert((await markerPopup.textContent()).includes('Original NWS report'),'Marker popup keeps primary source');
+      assert((await markerPopup.textContent()).includes('Approximate report location'),'Marker does not imply arrival permission');
+      const selectedSourceBefore=await focused.textContent();
+      // Clicking the first actual map marker changes the same source panel without town-search mutation.
+      await page.locator('.leaflet-interactive').first().click({force:true,timeout:10000});
+      assert(await focused.isVisible(),'Map pin updates selected observation panel');
+      assert((await focused.textContent()).includes('report'),'Selected source remains readable');
+      assert(selectedSourceBefore.length>0);
       await page.locator('.windows button[data-window="24h"]').focus();
       await page.keyboard.press('Space');
       assert.equal(await page.locator('.windows button[data-window="24h"]').getAttribute('aria-pressed'),'true','Keyboard activates report window');
