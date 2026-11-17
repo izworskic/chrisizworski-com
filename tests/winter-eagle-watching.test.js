@@ -120,6 +120,7 @@ test('every eagle map selection offers the same vetted public-place Google link 
  assert.match(mapSource,/view\.textContent="View in Google Maps"/);
  assert.match(mapSource,/google\.hidden=!href/);
  assert.match(app,/mapOpen\.hidden=!placeHref/);
+ assert.match(app,/e\.target\.closest\("button,a"\)/);
  assert.match(app,/window\.EagleMap\?\.publicMapLink\?\.\(selected\)/);
  assert.match(page,/eagle-map\.js\?v=6/);
  assert.match(page,/app\.js\?v=15/);
