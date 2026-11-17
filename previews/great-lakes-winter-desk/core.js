@@ -207,9 +207,35 @@
     return result;
   }
 
+
+  function arrivalEvidence(document,place){
+    const fallback={kind:'unknown',title:'Arrival details need an official check.',
+      message:'Use the park information rather than an unverified navigation pin.',
+      searchUrl:place?safeGoogleUrl(place):null,arrivalUrl:place?.entrance||null,directionsUrl:null};
+    if(!place||document?.schemaVersion!==1||!document?.places)return fallback;
+    const data=document.places[place.id];
+    if(!data||data.officialConditions!==place.conditions||
+      typeof data.arrivalName!=='string'||typeof data.winterParkingText!=='string'||
+      data.routeOpenToday!==false||data.verifiedArrivalCoordinates!==false)return fallback;
+    const source=data.entranceSource;
+    if(typeof source!=='string'||!/^https:\/\/(?:www\.nps\.gov|www\.dnr\.state\.mn\.us|files\.dnr\.state\.mn\.us)\//.test(source))return fallback;
+    if(!['plowed-seasonal-policy','designated-winter-arrival','winter-plowing-unknown'].includes(data.winterParkingEvidence))return fallback;
+    if(!/^https:\/\/www\.google\.com\/maps\/search\/\?api=1&query=/.test(data.googleSearch||''))return fallback;
+    const safeDirections=data.arrivalKind==='verified-street-address-and-lot'&&
+      data.winterParkingEvidence==='winter-plowing-unknown'&&
+      /^https:\/\/www\.google\.com\/maps\/dir\/\?api=1&destination=90500%20Meyers%20Beach%20Road%20Bayfield%20WI%2054814$/.test(data.directionsUrl||'')
+      ?data.directionsUrl:null;
+    return {kind:data.winterParkingEvidence==='winter-plowing-unknown'?'verify-road':'seasonal-guide',
+      title:data.arrivalName,message:data.winterParkingText,notes:data.parkingNotes||'',
+      fee:data.parkingFeeText||'',address:data.arrivalAddress||'',
+      sourceUrl:source,feeSource:data.feeSource,searchUrl:data.googleSearch,
+      directionsUrl:safeDirections,arrivalUrl:place.entrance,
+      warning:'This is published arrival guidance, not confirmation of plowing, vehicle access, or a parking space on your selected day.'};
+  }
+
   function safeGoogleUrl(place){
     return /^https:\/\/www\.google\.com\/maps\/search\/\?api=1&query=/.test(place?.google||'')?place.google:null;
   }
   return {PLACES,GOALS,EFFORT_LABELS,SOURCE_REVIEWED,validPref,getPlace,recommend,
-    dateKey,targetKey,parseWind,classifyWeather,forecastWindow,sourceReachability,routeAccess,safeGoogleUrl};
+    dateKey,targetKey,parseWind,classifyWeather,forecastWindow,sourceReachability,routeAccess,arrivalEvidence,safeGoogleUrl};
 });
