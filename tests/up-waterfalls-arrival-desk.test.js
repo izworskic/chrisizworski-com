@@ -30,7 +30,7 @@ test('arrival decision is attached to the existing map without adding a hero or 
 });
 
 test('documented parking directions demand independently sourced entrance coordinates',()=>{
-  for(const id of ['wagner-falls','upper-hungarian-falls','lower-hungarian-falls']){
+  for(const id of ['wagner-falls','upper-hungarian-falls','middle-hungarian-falls','lower-hungarian-falls']){
     const el=tag(id);
     assert.match(el,/data-parking-lat="[\d.]+" data-parking-lng="[-\d.]+"/);
     assert.match(el,/data-parking-source="https:\/\//);
@@ -39,12 +39,16 @@ test('documented parking directions demand independently sourced entrance coordi
   assert.doesNotMatch(tag('bond-falls'),/data-parking-source=/);
   assert.doesNotMatch(tag('munising-falls'),/data-parking-source=/);
   assert.match(tag('munising-falls'),/data-status="closed"/);
-  assert.match(tag('scott-falls'),/data-arrival-verified="pending"/);
+  assert.match(tag('scott-falls'),/data-arrival-verified="verified"/);
+  assert.doesNotMatch(tag('scott-falls'),/data-parking-source=/);
+  assert.match(tag('scott-falls'),/Do not cross busy M-28/);
   assert.match(tag('tahquamenon'),/data-arrival-verified="specialist"/);
   assert.match(js,/d\.arrivalVerified !== 'verified'/);
   assert.match(js,/d\.status === 'closed'/);
   assert.match(js,/category\(card\) === 'unverified'/);
   assert.match(js,/d\.parkingSource/);
+  assert.match(js,/keweenawlandtrust\.org/);
+  assert.match(tag('saxon-falls'),/data-parking-source="https:\/\/ironcountyoutdoors\.org/);
   assert.match(js,/new URL\(url, window\.location\.origin\)/);
   assert.match(js,/Golf Course Road is seasonal and unplowed in winter/);
   assert.match(js,/month >= 11 \|\| month <= 4/);
