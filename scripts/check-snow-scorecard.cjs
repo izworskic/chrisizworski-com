@@ -3,6 +3,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const http = require('node:http');
+const { execFileSync } = require('node:child_process');
 const assert = require('node:assert/strict');
 const { chromium } = require('/tmp/snow-scorecard/node_modules/playwright');
 const AxeBuilder = require('/tmp/snow-scorecard/node_modules/@axe-core/playwright').default;
@@ -172,6 +173,43 @@ function serveHtml(req, res, live, season) {
     assert.equal(slowErrors.length,0,'No errors on a throttled mobile connection');
     await slowContext.close();
     note('Throttled mobile response retains measured first answer');
+
+    // Same recorded feed, same runner, comparable static HTML/CSS/JS revisions.
+    // This is a synthetic first-answer check, not real-user Core Web Vitals.
+    const baseCommit = '381153eeb958bf39c850dea232ed6f782b088e98';
+    const oldAsset = rel => execFileSync('git',['show',baseCommit+':'+rel],{encoding:'utf8',maxBuffer:1024*1024});
+    const oldHTML=oldAsset('public/michigan-snow-totals/index.html');
+    const oldCSS=oldAsset('public/assets/michigan-snow-totals.css');
+    const oldJS=oldAsset('public/assets/michigan-snow-totals.js');
+    async function sampleBaseline(mode) {
+      const {context,page,errors}=await setup(390);
+      if(mode==='before') {
+        await page.route('**/michigan-snow-totals/?*',route=>route.fulfill({status:200,contentType:'text/html',body:oldHTML}));
+        await page.route('**/assets/michigan-snow-totals.css',route=>route.fulfill({status:200,contentType:'text/css',body:oldCSS}));
+        await page.route('**/assets/michigan-snow-totals.js?*',route=>route.fulfill({status:200,contentType:'application/javascript',body:oldJS}));
+      }
+      await page.goto(base,{waitUntil:'domcontentloaded'});
+      await page.waitForFunction(()=>document.getElementById('snowSummary')?.textContent.includes('Largest'),null,{timeout:20000});
+      const perf=await page.evaluate(()=>({answerReadyMs:Math.round(performance.now()),fcpMs:Math.round(performance.getEntriesByName('first-contentful-paint')[0]?.startTime||0)}));
+      assert(!errors.length,'No source errors in '+mode+' comparison');
+      await context.close();
+      return {mode,...perf};
+    }
+    const traces=[];
+    for(let i=0;i<3;i++) {
+      const order=i%2===0?['before','after']:['after','before'];
+      for(const mode of order) traces.push(await sampleBaseline(mode));
+    }
+    const median=(arr)=>{const a=arr.slice().sort((x,y)=>x-y);return a[Math.floor(a.length/2)];};
+    const before=traces.filter(x=>x.mode==='before'),after=traces.filter(x=>x.mode==='after');
+    evidence.performanceComparison={
+      baselineCommit:baseCommit,scope:'Synthetic local server and recorded fixture, 390px Chromium, three paired runs per version',
+      before:{medianAnswerMs:median(before.map(x=>x.answerReadyMs)),medianFcpMs:median(before.map(x=>x.fcpMs)),jsBytes:Buffer.byteLength(oldJS)},
+      after:{medianAnswerMs:median(after.map(x=>x.answerReadyMs)),medianFcpMs:median(after.map(x=>x.fcpMs)),jsBytes:fs.statSync(path.join(root,'assets/michigan-snow-totals.js')).size},
+      samples:traces
+    };
+    note('Comparable three-pair synthetic first-answer baseline and updated renderer');
+
 
     fs.writeFileSync(path.join(out,'measured-qa.json'),JSON.stringify(evidence,null,2)+'\n');
     console.log(JSON.stringify({pass:true,viewports:evidence.viewports.length,a11y:evidence.a11y,fallbacks:evidence.fallbacks},null,2));
