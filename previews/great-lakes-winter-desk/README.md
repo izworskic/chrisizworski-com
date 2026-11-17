@@ -68,3 +68,20 @@ The script checks 360/390/768/1440px, real image and map loads, source IDs, A to
 - Penpot connector was not available in the working app; no claim an editable Penpot file was generated. Current design evidence is browser screenshots and source CSS.
 
 **Do not merge for public launch yet.** Build date-scoped, exact-trail official operator access/closure observations, reconcile conflicts, inspect final photographic source rights, and pass the latest full CI and browser release gate. Chris controls merge. No ads or SEO surfaces have been changed.
+
+## Exact-route access evidence, not an inferred park status
+
+\`route-access-evidence.json\` provides a separate record for each named winter outing. It contains a human-reviewed, permanent route-policy statement and an intentionally empty array of **date-scoped operating observations**. It is not a green "open now" display. The current browser shows named-route winter guidance and a clear unknown access state for the selected date.
+
+A future dated operator notice can be entered only when a reviewer has checked the official NPS/DNR page for that exact route. The observation fields are \`routeId\`, \`scope: exact-route\`, \`reviewMethod: human-official-notice\`, \`routeExplicit: true\`, \`sourceUrl\`, \`sourceStatement\`, \`checkedAt\`, \`publishedAt\`, \`validFrom\`, \`validThrough\`, and \`status\` (\`closed\`, \`restricted\` or \`open\`). Use an actual short operator statement, not invented free text. The reviewer must confirm that a park-wide notice actually applies to the named outing. Do **not** copy a notice about adjacent Munising Falls onto the separate snowshoe trail.
+
+The date and scope logic is implemented in \`core.js\`. It treats ambiguous or stale notices as unknown, blocks an exact-route closure or conflict, and never allows a weather report, generic park page reachability, or unrelated closure to establish a positive verdict. An "open" observation also needs a single named calendar day and a source checked within the last 12 hours. A report without an explicit operating date cannot be used to claim the route is open tomorrow.
+
+Before authorizing any new observation, run:
+
+~~~bash
+python3 scripts/audit-winter-desk-route-access.py --self-test
+node --test tests/great-lakes-winter-desk.test.js
+~~~
+
+The new Python check verifies source identity, exact route scope, evidence timestamps, date windows and record shape. It is not automated authentication of the land manager. The author must actually verify the source and keep the notice updated. **Never add simulated test notices to the production data file.**
