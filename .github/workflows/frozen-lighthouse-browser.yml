@@ -5,6 +5,12 @@ on:
       - 'public/frozen-lighthouses-michigan/index.html'
       - 'public/assets/frozen-lighthouse*.js'
       - 'tests/frozen-lighthouse-browser-smoke.mjs'
+      - 'tests/frozen-lighthouse-photos.test.js'
+      - 'public/assets/frozen-lighthouse-field-guide.css'
+      - 'data/frozen-lighthouse-photography.json'
+      - 'experience-foundry/examples/lighthouse-photo-foundry.mjs'
+      - 'experience-foundry/examples/lighthouse-visual-replay.cjs'
+      - 'docs/experience-briefs/frozen-lighthouse-snow-stone.release.json'
       - '.github/workflows/frozen-lighthouse-browser.yml'
 jobs:
   interactive-browser:
@@ -14,6 +20,8 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -31,6 +39,26 @@ jobs:
         run: |
           python3 -m http.server 8765 --bind 127.0.0.1 --directory public >/tmp/lighthouse-http.log 2>&1 &
           node tests/frozen-lighthouse-browser-smoke.mjs
+      - name: Verify licensed photo assets and Experience OS 1.2 record
+        run: |
+          node --test tests/frozen-lighthouse-photos.test.js
+          node scripts/verify-experience-os-v1.2.mjs docs/experience-briefs/frozen-lighthouse-snow-stone.release.json
+      - name: Run Foundry 0.3 real-baseline research and before-after proof
+        run: |
+          node experience-foundry/examples/lighthouse-photo-foundry.mjs
+          node scripts/experience-foundry.mjs assess --run experience-foundry/drafts/lighthouse-visual-field-guide-20261117/run.json
+          node scripts/experience-foundry.mjs prove --run experience-foundry/drafts/lighthouse-visual-field-guide-20261117/run.json --out build/experience-foundry/lighthouse-visual-field-guide-20261117
+          node scripts/experience-foundry.mjs assess --run experience-foundry/drafts/lighthouse-visual-field-guide-20261117/run.json --proof build/experience-foundry/lighthouse-visual-field-guide-20261117/proof.json
+      - name: Archive Foundry before-after evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frozen-lighthouse-foundry-proof
+          path: |
+            experience-foundry/drafts/lighthouse-visual-field-guide-20261117/
+            build/experience-foundry/lighthouse-visual-field-guide-20261117/
+          if-no-files-found: ignore
+          retention-days: 10
       - name: Save browser screenshots
         if: always()
         uses: actions/upload-artifact@v4
