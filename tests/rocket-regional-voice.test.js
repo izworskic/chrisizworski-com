@@ -25,13 +25,13 @@ for(const site of sites){
     assert.ok(html.includes('href="https://chrisizworski.com/'+site.slug+'/">'),site.name+' canonical');
     assert.ok(html.includes('/national-tools/rocket-launch-live/'),site.name+' national mission handoff');
     const cacheVersion=site.name==='Vandenberg'?'20261113-rust-v2':
-      site.name==='Wallops'||site.name==='Starbase'?'20261113-rust-network-v1':
+      site.name==='Wallops'||site.name==='Starbase'?'20261113-rust-network-v1-gmaps-20261116':
       site.name==='Florida'?'20261113-rust-florida-v1-weather-link-20261114':'20261113-rust-access-v1';
     assert.ok(html.includes(cacheVersion),site.name+' changed client copy must bust cache');
     assert.doesNotThrow(()=>new Function(js),site.name+' dynamic guide parses as JavaScript');
     if(site.name!=='Florida'){
-      assert.ok(html.includes('"dateModified":"'+(['Vandenberg','Wallops','Starbase','Kodiak','Barking Sands'].includes(site.name)?'2026-11-13':'2026-11-10')+'"'),site.name+' truthful structured metadata');
-      assert.ok(sitemap.includes('<loc>https://chrisizworski.com/'+site.slug+'/</loc>\n    <lastmod>'+(['Vandenberg','Wallops','Starbase','Kodiak','Barking Sands'].includes(site.name)?'2026-11-13':'2026-11-10')+'</lastmod>'),site.name+' sitemap lastmod');
+      assert.ok(html.includes('"dateModified":"'+(['Wallops','Starbase'].includes(site.name)?'2026-11-16':['Vandenberg','Kodiak','Barking Sands'].includes(site.name)?'2026-11-13':'2026-11-10')+'"'),site.name+' truthful structured metadata');
+      assert.ok(sitemap.includes('<loc>https://chrisizworski.com/'+site.slug+'/</loc>\n    <lastmod>'+(['Wallops','Starbase'].includes(site.name)?'2026-11-16':['Vandenberg','Kodiak','Barking Sands'].includes(site.name)?'2026-11-13':'2026-11-10')+'</lastmod>'),site.name+' sitemap lastmod');
     }
   });
 }

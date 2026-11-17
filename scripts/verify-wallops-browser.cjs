@@ -91,6 +91,13 @@ async function ready(page){
    const load=await page.goto(base+'?launchId='+A,{waitUntil:'domcontentloaded',timeout:30000});
    assert(load.status()===200,v.label+' page HTTP');
    await ready(page);
+   const google=page.locator('.w-place .w-google-place');
+   assert(await google.count()===3,v.label+' Google Maps link on each public site');
+   const externalUrls=await google.evaluateAll(nodes=>nodes.map(n=>n.href));
+   assert(externalUrls.every(url=>url.startsWith('https://www.google.com/maps/search/?api=1&query=')
+     &&!url.includes('/maps/dir/')),v.label+' only public place search, not pad routing');
+   assert(await page.locator('#w-selected-actions a[href*="google.com/maps/search/"]').count()===1,
+     v.label+' selected public place has Google Maps');
    await page.waitForFunction(()=>document.querySelector('#w-place-list')?.dataset.decisionEngine==='rust-wasm', {timeout:12000});
    assert(await page.locator('#w-place-list').getAttribute('data-decision-engine')==='rust-wasm',
      v.label+' preference ordering must use the compiled Rust engine');
@@ -106,6 +113,7 @@ async function ready(page){
    assert((await page.locator('#w-selected-name').innerText()).includes('Robert'),v.label+' town persona');
    await page.locator('label:has(input[value="photo"]) span').click();
    assert((await page.locator('#w-selected-name').innerText()).includes('Curtis'),v.label+' photo profile');
+   assert((await page.locator('#w-selected-actions a[href*="google.com/maps/search/"]').getAttribute('href')).includes('2246%20Curtis'),v.label+' harbor Google Maps link follows selection');
    await page.locator('label:has(input[value="first"]) span').click();
    assert((await page.locator('#w-selected-name').innerText()).includes('NASA Wallops'),v.label+' initial profile restored');
    await page.locator('#w-mission-select').selectOption(B);
@@ -143,6 +151,7 @@ async function ready(page){
   assert((await offline.locator('#w-mission-name').innerText()).includes('unavailable'),'Schedule outage unreported');
   assert((await offline.locator('#w-decision-title').innerText()).includes('CALENDAR UNAVAILABLE'),'Stale schedule promoted');
   assert(await offline.locator('.w-place').count()===3,'Map outage lost three public site cards');
+  assert(await offline.locator('.w-google-place').count()===3,'Schedule outage lost public Google Maps links');
   scenarios.push({scenario:'schedule-outage',threeStaticSites:'retained',mission:'unverified'});
   await outage.close();sourceOutage=false;
   officialOutage=true;

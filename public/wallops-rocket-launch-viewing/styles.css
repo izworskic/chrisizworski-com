@@ -17,3 +17,7 @@
 @media(max-width:760px){.w-header{align-items:start}.w-header nav{justify-content:flex-end}.w-hero{grid-template-columns:1fr}.w-hero-art{min-height:225px;max-height:245px}.w-truth,.w-mission-grid{grid-template-columns:1fr}.w-section-top{display:block}.w-source-link{display:inline-block;margin-top:10px}.w-place-list{grid-template-columns:1fr}.w-field-grid,.w-safety-grid{grid-template-columns:1fr}.w-place-detail,.w-network{display:block}.w-place-detail-actions,.w-network>a{display:inline-flex;margin-top:14px}.w-map{height:390px}.w-art-caption{bottom:9px}.w-hero-copy{padding:26px}}
 @media(max-width:430px){.w-header{display:block}.w-header nav{justify-content:flex-start;margin-top:12px;gap:10px 14px}.w-hero h1{font-size:40px}.w-result-stats{grid-template-columns:1fr}.w-personas label{flex:1 1 42%}.w-personas span{text-align:center;padding:9px 7px}.w-hero-art{height:200px;min-height:200px}.w-hero-actions a{flex:1 1 100%;text-align:center}.w-hero-micro span{font-size:9px}.w-truth{padding:16px}.w-place-detail{padding:15px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+
+/* Make the public-place Google Maps action easy to spot and tap. */
+.w-google-place{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 11px;border-radius:8px;text-underline-offset:3px}
+.w-google-place:focus-visible{outline:3px solid #d29541;outline-offset:3px}

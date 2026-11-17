@@ -18,6 +18,12 @@
   const a=document.createElement('a');a.href=url;a.textContent=label;
   a.target='_blank';a.rel='noopener noreferrer';return a;
  };
+ function mapsPlace(site){
+  // Public geographic feature only. Never link a launch pad or infer a parking entrance.
+  if(!site||!allowedIds.has(site.id)||!Number.isFinite(site.lat)||!Number.isFinite(site.lon)||
+   site.lat<=25.8||site.lat>=26.2||site.lon>=-97||site.lon<=-97.5)return null;
+  return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(site.lat+','+site.lon);
+ }
  function selection(){
   const site=state.places.find(x=>x.id===state.site);
   if(!site)return;
@@ -28,6 +34,7 @@
    'This place is roughly '+d.padDistanceMiles.toFixed(1)+' miles in a straight line from the selected mission’s pad, at an approximate '+Math.round(d.padBearingDegrees)+'° bearing. This is not a driving route or the rocket’s flight track or verified unobstructed view.':
    'The pad location isn’t confirmed for this flight, so no reliable distance or direction is shown.');
   const actions=$('sb-selected-actions');actions.replaceChildren();
+  const google=mapsPlace(site);if(google)actions.appendChild(src(google,'View this place in Google Maps'));
   if(site.accessSource?.startsWith('https://')) actions.appendChild(src(site.accessSource,'Check the land manager'));
   if(site.geographicSource?.startsWith('https://'))actions.appendChild(src(site.geographicSource,'See the location source'));
   const cards=[...document.querySelectorAll('[data-site]')];
@@ -90,6 +97,7 @@
    const heading=document.createElement('strong');heading.textContent=site.name;popup.appendChild(heading);
    const note=document.createElement('p');note.textContent='This pin marks the general place, not a parking entrance or reserved launch-viewing spot.';popup.appendChild(note);
    if(site.accessSource?.startsWith('https://'))popup.appendChild(src(site.accessSource,'Check land manager'));
+   const google=mapsPlace(site);if(google)popup.appendChild(src(google,'View this place in Google Maps'));
    marker.bindPopup(popup);marker.on('click',()=>chooseSite(site.id,false));
    marker.addTo(state.map);state.markers.set(site.id,marker);bounds.push([site.lat,site.lon]);
   }

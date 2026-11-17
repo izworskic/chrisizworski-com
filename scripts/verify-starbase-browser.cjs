@@ -85,6 +85,13 @@ async function waitReady(page){
    const response=await page.goto(url+'?launchId='+A,{waitUntil:'domcontentloaded',timeout:30000});
    assert(response.status()===200,v.name+' HTTP');
    await waitReady(page);
+   const publicGoogle=page.locator('.sb-place-card .sb-google-place');
+   assert(await publicGoogle.count()===3,v.name+' three public Google Maps choices');
+   const hrefs=await publicGoogle.evaluateAll(nodes=>nodes.map(n=>n.href));
+   assert(hrefs.every(url=>url.startsWith('https://www.google.com/maps/search/?api=1&query=')
+     &&!url.includes('/maps/dir/')),v.name+' no driving route to mapped feature');
+   assert(await page.locator('#sb-selected-actions a[href*="google.com/maps/search/"]').count()===1,
+     v.name+' selected public place has Google Maps');
    await page.waitForFunction(()=>document.querySelector('#sb-place-list')?.dataset.decisionEngine==='rust-wasm', {timeout:12000});
    assert(await page.locator('#sb-place-list').getAttribute('data-decision-engine')==='rust-wasm',
      v.name+' preference ordering must use the compiled Rust engine');
@@ -97,6 +104,7 @@ async function waitReady(page){
    assert((await page.locator('#sb-selected-name').innerText()).includes('Zapata'),v.name+' mainland persona');
    await page.locator('[data-site-select="lighthouse"]').click();
    assert((await page.locator('#sb-selected-name').innerText()).includes('Lighthouse'),v.name+' map-card selection');
+   assert((await page.locator('#sb-selected-actions a[href*="google.com/maps/search/"]').getAttribute('href')).includes('26.077984'),v.name+' Lighthouse map link follows selection');
    await page.locator('label:has(input[value="first-time"]) span').click();
    assert((await page.locator('#sb-selected-name').innerText()).includes('Isla Blanca'),v.name+' restore first-time');
    await page.locator('#sb-mission-picker').selectOption(B);
@@ -138,6 +146,7 @@ async function waitReady(page){
   const noJsPage=await noJs.newPage();
   await noJsPage.goto(url,{waitUntil:'domcontentloaded'});
   assert(await noJsPage.locator('.sb-place-card').count()===3,'No-JS lost static guides');
+  assert(await noJsPage.locator('.sb-google-place').count()===3,'No-JS lost Google Maps place links');
   assert(await noJsPage.locator('#sb-mission-picker').isDisabled(),'No-JS invented schedule');
   assert(await noJsPage.locator('.sb-sources a[href^="https://"]').count()>=6,'No-JS source ledger absent');
   scenarios.push({name:'no-js',staticCards:3,officialLinks:'present'});
