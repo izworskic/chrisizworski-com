@@ -1,3 +1,10 @@
+### 2026-11-16 | Rocket map caption simplified
+- **Visitor issue:** The national rocket map printed backend-style labels for region circles, rocket markers, uncertainty and the tile provider directly below the map.
+- **Fix:** A single useful instruction now guides visitors to choose a coast or select a rocket. The map shows a status message only for a failed schedule or missing background tiles. Exact-pad uncertainty remains available in marker popups, and provider credits remain in Leaflet's map attribution.
+- **Governance:** Source feeds, viewing access rules, public place directions, canonical, creator identity and ads unchanged. No claims of search growth or revenue uplift.
+- **Verification:** Source syntax and the new regression contract checked. Full CI and public deployment must be verified before release.
+- **Exactly one next action:** Run the full GitHub checks and review the map at phone and desktop widths before merging.
+
 ### 2026-11-16 | Rocket Launch Live public viewing plan, review branch
 - **Visitor task:** After selecting a mission, compare documented public places and pick one without confusing Google Maps discovery with launch-day opening or parking approval.
 - **Changes:** Responsive location selector and source-linked place dossier; retains one selected mission, the existing access rules, official notices, three quick links, and all six region guides. Keyboard A-to-B-to-A and cross-region clearing added to existing browser regression.

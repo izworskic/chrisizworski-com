@@ -14,16 +14,16 @@
   };
   const set = (id, value) => { const n = $(id); if (n) n.textContent = value ?? '—'; };
   function updateAtlasStatus(){
+    const status=$('rl-atlas-status');
+    if(!status)return;
     const tiles=$('rl-coast-map')?.dataset.tiles;
-    const offline=tiles==='reference-only';
-    const prefix=offline?'The map background isn’t loading; coastlines are shown instead. ':
-      tiles==='pending'?'The map background is still loading. ':'';
-    const message=state.scheduleFailed?
-      'The launch calendar isn’t loading, but you can still browse the launch sites.':
-      state.data?
-        'Region circles are references, not public entrances. Rocket icons reflect the selected schedule source.':
-        'Reference launch regions. Checking mission data.';
-    set('rl-atlas-status',prefix+message);
+    // Keep the normal map caption quiet. Only report a loading or failure state.
+    const alerts=[];
+    if(state.scheduleFailed)alerts.push('The launch calendar isn’t loading, but you can still browse the launch sites.');
+    if(tiles==='reference-only')alerts.push('The map background isn’t loading; coastlines are shown instead.');
+    const message=alerts.join(' ');
+    status.textContent=message;
+    status.hidden=!message;
   }
 
   const safeUrl = url => typeof url === 'string' &&

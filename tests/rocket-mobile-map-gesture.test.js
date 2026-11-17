@@ -80,3 +80,17 @@ test('basemap reports a real fallback only after tiles fail, not while CARTO is 
  assert.match(js,/window\.setTimeout\(\(\)=>\{/);
  assert.match(js,/map background isn.t loading; coastlines are shown instead/i);
 });
+
+test('map has a single useful instruction, not engineering labels or redundant basemap branding',()=>{
+ assert.match(html,/Choose a coast or select a rocket to see upcoming launches\./);
+ assert.match(html,/id="rl-atlas-status"[^>]*aria-live="polite" hidden/);
+ assert.match(html,/id="rl-map-details"/);
+ assert.doesNotMatch(html,/Rocket = launch location|Dashed rocket = approximate region|Coast navigation circles are not public entrances|CARTO \/ OpenStreetMap/);
+ assert.doesNotMatch(js,/Region circles are references, not public entrances|Rocket icons reflect the selected schedule source/);
+ assert.match(js,/status\.hidden=!message/);
+ assert.match(css,/\.rl-map-hint\{/);
+ // Leaflet still provides legally required map credits, not a second caption.
+ assert.match(js,/openstreetmap\.org\/copyright/);
+ assert.match(js,/carto\.com\/attributions/);
+ assert.match(js,/attribution: osmCredit/);
+});
