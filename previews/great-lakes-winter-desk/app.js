@@ -6,7 +6,7 @@
   const C=window.GreatLakesWinterDesk;
   if(!C)return;
   const $=id=>document.getElementById(id);
-  const state={goal:'falls',effort:'short',day:'today',chosen:'gooseberry-upper',request:0,weather:null,sourceDocument:null,routeDocument:null};
+  const state={goal:'falls',effort:'short',day:'today',chosen:'gooseberry-upper',request:0,weather:null,sourceDocument:null,routeDocument:null,arrivalDocument:null};
   const weatherCache=new Map();
   const mapState={map:null,markers:new Map()};
   const SAFE=new Set(['available','empty','stale','unknown']);
@@ -86,6 +86,7 @@
     $('last-research').textContent='Park source review: '+C.SOURCE_REVIEWED+'. Not a same-day access check.';
     renderSourceDesk(place);
     renderRouteEvidence(place,access);
+    renderArrival(place);
     $('trip-period').textContent='Forecast lens: '+niceDay();
     $('weather-point').textContent='NWS forecast point near '+place.region+'. Not measured on the trail.';
     $('weather-site').href='https://forecast.weather.gov/MapClick.php?lat='+place.weatherPoint.lat+'&lon='+place.weatherPoint.lon;
@@ -114,6 +115,33 @@
       state.routeDocument=null;
     }
     render();
+  }
+  function renderArrival(place){
+    const evidence=C.arrivalEvidence(state.arrivalDocument,place);
+    $('arrival-category').textContent=evidence.kind==='verify-road'?'WINTER ROAD ACCESS NOT CONFIRMED':
+      evidence.kind==='seasonal-guide'?'DOCUMENTED WINTER ARRIVAL':'CHECK THE PARK FIRST';
+    $('arrival-title').textContent=evidence.title;
+    $('arrival-address').textContent=evidence.address||'Exact winter parking address has not been verified.';
+    $('arrival-description').textContent=evidence.message;
+    $('arrival-fee').textContent=evidence.fee||'Check fees and parking restrictions on the official park site.';
+    $('arrival-warning').textContent=evidence.warning||'Current park access and parking conditions are not confirmed.';
+    $('arrival-find').href=evidence.searchUrl||place.entrance;
+    $('arrival-evidence-link').href=evidence.sourceUrl||place.entrance;
+    $('arrival-directions').hidden=!evidence.directionsUrl;
+    $('arrival-directions').href=evidence.directionsUrl||place.entrance;
+  }
+  async function loadArrivalEvidence(){
+    try{
+      const response=await fetch('./arrival-evidence.json',{cache:'no-store'});
+      if(!response.ok)throw Error('arrival evidence unavailable');
+      const data=await response.json();
+      if(data?.schemaVersion!==1)throw Error('invalid arrival record');
+      state.arrivalDocument=data;
+    }catch(_){
+      state.arrivalDocument=null;
+    }
+    const place=C.getPlace(state.chosen);
+    if(place)renderArrival(place);
   }
   function renderSourceDesk(place){
     $('source-direct').href=place.conditions;
@@ -283,7 +311,7 @@
       if(navigator.clipboard?.writeText)navigator.clipboard.writeText(message).then(()=>setStatus('Field note copied.')).catch(()=>setStatus('Copy unavailable; use the official links.'));
       else setStatus('Copy unavailable; use the official links.');
     });
-    initMap();render();loadSourceDesk();loadRouteEvidence();
+    initMap();render();loadSourceDesk();loadRouteEvidence();loadArrivalEvidence();
   }
   document.addEventListener('DOMContentLoaded',init);
 })();
