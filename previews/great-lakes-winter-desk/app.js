@@ -152,7 +152,9 @@
     $('weather-sub').textContent='Asking the National Weather Service for the hourly forecast near this destination.';
     $('weather-issued').textContent='Waiting for a source-issued timestamp';
     $('weather-hours').replaceChildren();
-    $('weather-hours').hidden=true;$('weather-unavailable').hidden=true;
+    $('weather-hours').hidden=true;
+    $('weather-hour-insight').hidden=true;
+    $('weather-unavailable').hidden=true;
     if(!navigator.onLine)return weatherUnknown('You appear to be offline.');
     const controller=new AbortController();
     const timeout=setTimeout(()=>controller.abort(),8000);
