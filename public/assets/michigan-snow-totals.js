@@ -15,7 +15,7 @@
   var state = {
     data: null, season: null, places: null, placesPromise: null,
     window: params.window || '24h', windowChosen: Boolean(params.window), region: params.region, town: params.town,
-    geo: null, shareRow: null, tableLimit: TABLE_STEP, map: null, layer: null, markers: {}, mapUnavailable: false, dataStale: false
+    geo: null, shareRow: null, tableLimit: TABLE_STEP, map: null, layer: null, markers: {}, mapUnavailable: false, dataStale: false, selectedReportKey: ''
   };
 
   function $(id) { return document.getElementById(id); }
@@ -30,6 +30,14 @@
       return url.href;
     } catch (_) { return ''; }
   }
+
+  // The coordinates are an observation reference, never a parking or arrival point.
+  function reportMapHref(r) {
+    var lat = Number(r && r.lat), lon = Number(r && r.lon);
+    if (!Number.isFinite(lat) || !Number.isFinite(lon) || lat < 41 || lat > 49 || lon < -91 || lon > -82) return '';
+    return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(lat.toFixed(4) + ',' + lon.toFixed(4));
+  }
+  function reportKey(r) { return [r.place, r.county, r.reportedAt].join('|'); }
 
   function color(n) { return n >= 12 ? '#17476f' : n >= 8 ? '#2671a4' : n >= 4 ? '#438dbb' : n >= 2 ? '#77b5dc' : '#b1d4ea'; }
   // The report endpoint can serve cached responses for up to 75 minutes.
@@ -81,7 +89,9 @@
   }
   function popup(r) {
     return '<b>' + esc(C.inches(r.inches)) + ' at ' + esc(where(r)) + '</b><br>' + esc(stamp(r)) + '<br>' + esc(kind(r)) +
-      (r.remark ? '<br><i>' + esc(r.remark) + '</i>' : '') + (originalReportUrl(r.productUrl) ? '<br><a href="' + esc(originalReportUrl(r.productUrl)) + '" target="_blank" rel="noopener noreferrer">Original NWS report</a>' : '');
+      (r.remark ? '<br><i>' + esc(r.remark) + '</i>' : '') +
+      (originalReportUrl(r.productUrl) ? '<br><a href="' + esc(originalReportUrl(r.productUrl)) + '" target="_blank" rel="noopener noreferrer">Original NWS report</a>' : '') +
+      (reportMapHref(r) ? '<br><a href="' + esc(reportMapHref(r)) + '" target="_blank" rel="noopener noreferrer">Reported area in Google Maps</a><br><small>Approximate report location, not a public entrance.</small>' : '');
   }
   function renderMap(rows, fit) {
     initMap();
@@ -90,7 +100,8 @@
     state.markers = {};
     rows.forEach(function (r) {
       var m = L.circleMarker([r.lat, r.lon], { radius: Math.max(5, Math.min(18, 4 + r.inches)), color: '#fff', weight: 1, fillColor: color(r.inches), fillOpacity: 0.9 })
-        .bindPopup(popup(r)).addTo(state.layer);
+.bindPopup(popup(r)).addTo(state.layer);
+      m.on('click', function () { selectReport(r, true); });
       state.markers[r.place + '|' + r.county] = m;
     });
     if (fit && rows.length) state.map.fitBounds(L.latLngBounds(rows.map(function (r) { return [r.lat, r.lon]; })).pad(0.25), { maxZoom: 9 });
@@ -136,15 +147,55 @@
     if (!panel || !list) return;
     if (rows.length < 2) { list.textContent = ''; panel.hidden = true; return; }
     var largest = Math.max(0.1, Number(rows[0].inches) || 0);
-    list.innerHTML = rows.slice(0, 3).map(function (r) {
+    list.innerHTML = rows.slice(0, 3).map(function (r, index) {
       var inches = Math.max(0, Number(r.inches) || 0);
       var percent = (Math.min(100, inches / largest * 100)).toFixed(1);
-      return '<button type="button" data-pulse-town="' + esc(C.baseTown(r.place)) + '">' +
+      return '<button type="button" data-pulse-town="' + esc(C.baseTown(r.place)) + '" data-pulse-rank="' + index + '" aria-pressed="' + String(reportKey(r) === state.selectedReportKey) + '">' +
         '<strong>' + esc(C.inches(r.inches)) + ' · ' + esc(where(r)) + '</strong>' +
         '<span>' + esc(stamp(r)) + ' · ' + esc(kind(r)) + '</span>' +
         '<span class="report-bar-track" aria-hidden="true"><span class="report-bar-fill" style="width:' + percent + '%;background:' + color(inches) + '"></span></span></button>';
     }).join('');
     panel.hidden = false;
+  }
+
+
+  // A selection has exactly one report identity across list, details and map.
+  // This keeps the original reported amount and observation time intact.
+  function renderSelectedReport(rows) {
+    var panel = $('selectedSnowReport');
+    if (!panel) return;
+    var found = rows.find(function (r) { return reportKey(r) === state.selectedReportKey; });
+    document.querySelectorAll('#stormPulseList button[data-pulse-rank]').forEach(function (b) {
+      var r = rows[Number(b.getAttribute('data-pulse-rank'))];
+      b.setAttribute('aria-pressed', String(Boolean(found && r && reportKey(r) === state.selectedReportKey)));
+    });
+    if (!found) {
+      state.selectedReportKey = '';
+      panel.hidden = true;
+      panel.textContent = '';
+      return;
+    }
+    var origin = originalReportUrl(found.productUrl), locationHref = reportMapHref(found);
+    var other = C.nearest(Number(found.lat), Number(found.lon), rows.filter(function (r) {
+      return reportKey(r) !== reportKey(found);
+    }), 2, 25);
+    panel.innerHTML = '<h4>Report detail: ' + esc(where(found)) + '</h4>' +
+      '<p><strong>' + esc(C.inches(found.inches)) + '</strong> reported ' + esc(stamp(found)) + '; ' + esc(kind(found)) + '.</p>' +
+      (found.remark ? '<p>' + esc(found.remark) + '</p>' : '') +
+      '<p class="selected-source-actions">' +
+      (origin ? '<a href="' + esc(origin) + '" target="_blank" rel="noopener noreferrer">Read original NWS report</a>' : '<span>Original NWS text not linked for this observation.</span>') +
+      (locationHref ? ' <a href="' + esc(locationHref) + '" target="_blank" rel="noopener noreferrer">See reported area in Google Maps</a>' : '') +
+      (!state.mapUnavailable ? ' <a href="#snowMap">See marked report on map</a>' : '') + '</p>' +
+      '<p class="selected-source-note">The reported coordinates are approximate. They are not a verified road entrance, parking place, or travel route.</p>' +
+      (other.length ? '<p><strong>Other reports within 25 miles</strong> in the selected period:</p>' + nearLines(other) :
+        '<p>No other report was found within 25 miles in this period. That does not mean no snow fell.</p>');
+    panel.hidden = false;
+  }
+  function selectReport(r, fromMap) {
+    if (!r || state.dataStale) return;
+    state.selectedReportKey = reportKey(r);
+    renderSelectedReport(visibleRows());
+    if (!fromMap && !state.mapUnavailable) focusRow(r);
   }
 
   function renderAlerts() {
@@ -303,7 +354,7 @@
     var d = state.data; if (!d || state.dataStale) return;
     var rows = visibleRows(), quiet = !(d.reports || []).length, mapRows = rows;
     if (quiet && d.lastSnow) mapRows = d.lastSnow.sameDay || [];
-    renderSummary(rows); renderStormPulse(rows); renderAlerts(); renderChips(); renderTable(rows); renderMap(mapRows, fit); renderTown(fit);
+    renderSummary(rows); renderStormPulse(rows); renderAlerts(); renderChips(); renderTable(rows); renderMap(mapRows, fit); renderSelectedReport(rows); renderTown(fit);
     if (!state.mapUnavailable) $('mapNote').textContent = quiet && d.lastSnow
       ? 'Showing the last day snow was reported, ' + C.when(d.lastSnow.reportedAt).replace(/,[^,]*$/, '') + ', because nothing has been reported in the last 7 days.'
       : 'Each dot is one official report, larger and darker for more snow. Tap a dot for the time, source and remark.';
@@ -367,14 +418,11 @@
     b.addEventListener('click', function () { state.window = b.getAttribute('data-window'); state.windowChosen = true; state.tableLimit = TABLE_STEP; render(true); });
   });
   $('stormPulse').addEventListener('click', function (e) {
-    var b = e.target.closest('button[data-pulse-town]'); if (!b) return;
-    var town = b.getAttribute('data-pulse-town'); if (!town) return;
-    state.town = town; state.geo = null; fromSaved = false;
-    $('townSearch').value = town; saveTown(town);
-    loadPlaces().then(function () {
-      render(false);
-      if (!$('townResult').hidden) $('townResult').scrollIntoView({ block: 'nearest' });
-    });
+    var b = e.target.closest('button[data-pulse-rank]'); if (!b) return;
+    var index = Number(b.getAttribute('data-pulse-rank'));
+    var rows = visibleRows();
+    if (!Number.isInteger(index) || index < 0 || index >= Math.min(rows.length, 3)) return;
+    selectReport(rows[index], false);
   });
   $('regionChips').addEventListener('click', function (e) {
     var b = e.target.closest('button'); if (!b) return;
@@ -416,6 +464,7 @@
       if (!d.ok) { $('snowSummary').textContent = 'The NWS snow report archive did not respond just now. Try again in a few minutes.'; mapFallback(); return; }
       if (olderThan(d.generatedAt, 2)) {
         state.dataStale = true;
+        state.selectedReportKey = '';
         var checked = Number.isFinite(Date.parse(d.generatedAt)) ? C.when(d.generatedAt) + ' ET' : 'an unknown time';
         $('snowSummary').textContent = 'The NWS report check is more than two hours old (last checked ' + checked + '). Current snowfall rankings are paused until a fresh source check is available. Use the linked original NWS report archive.';
         $('snowStamp').textContent = 'Observation feed outdated; the previous check cannot be treated as current snowfall.';
