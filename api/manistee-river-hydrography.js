@@ -57,7 +57,7 @@ async function fetchNhdPage(url,fetcher=fetch,allowMore=false){
   const response=await fetcher(url,{headers:{
     accept:'application/geo+json, application/json',
     'user-agent':'ChrisIzworskiManisteeFieldMap/1.0 (https://chrisizworski.com/manistee-river-map/)'
-  },signal:AbortSignal.timeout(10000)});
+  },signal:AbortSignal.timeout(allowMore?14000:5000)});
   if(!response.ok)throw new Error(`USGS NHD returned ${response.status}`);
   const payload=await response.json();
   if(payload?.error||!Array.isArray(payload?.features))
