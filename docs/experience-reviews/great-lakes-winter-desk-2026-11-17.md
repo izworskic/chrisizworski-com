@@ -89,3 +89,31 @@ New build head reviewed November 17, 2026. The previous first-pass findings are 
 - **Repo controls:** No public indexable route, canonicals, sitemap, ad configuration, Tool Registry entry or existing specialist tool changed. A source-check is not a release, and the user-facing tool is not live.
 - **Release state:** HOLD for actual operator-access observation integration, final photo rights audit, release scoring and production smoke. No CTR, ranking, task-completion or revenue uplift data is claimed.
 - **Exactly one next engineering action:** Add date-scoped operator-confirmed access/closure observations for each exact trail identity, with source conflicts unable to produce a positive "open" status. Keep a missing report as unknown.
+
+
+## Exact-route access phase, November 17, 2026
+
+After the initial source-reachability work, the visitor decision now has a separate **selected-day, exact-trail access evidence lane**. The first-screen source answer and official route evidence change together when the visitor chooses a new location or forecast day.
+
+### Source-grounded, named winter route policies
+- **Gooseberry Upper Falls:** Minnesota DNR explicitly identifies the Upper Falls approach as its only maintained winter walking trail. The longer waterfall circuits are not maintained winter walks. Source: https://www.dnr.state.mn.us/state-parks/gooseberry-falls/self-tour-waterfalls-walk.html
+- **Pictured Rocks marked snowshoe loop:** NPS documents 2.65 miles, blue posts, ski-trail parking near East City Limits Road, and prohibition on using adjacent groomed ski tracks for snowshoeing. Source: https://www.nps.gov/thingstodo/snowshoeing-at-pictured-rocks.htm . The separately closed **Munising Falls Trail** must not be interpreted as a closure of this snowshoe loop: https://www.nps.gov/places/munising-falls.htm
+- **Apostle Islands Lakeshore Trail:** NPS describes a rugged overland route from Meyers Beach, with potentially icy/snow-packed winter surfaces and steep, narrow sections. Ice-cave access via Lake Superior ice is separate and NPS controlled. Sources: https://www.nps.gov/apis/planyourvisit/hiking.htm and https://www.nps.gov/apis/planyourvisit/conditions.htm
+
+### Data contract and visitor safety
+- \`route-access-evidence.json\` contains three exact route identities, official URLs, sourced winter route guidance, and **zero claimed current openings or closures**. Empty observations are intentional, not a missing synthetic default.
+- \`core.js\` now resolves operator observations for a selected site and local calendar day. Status can be \`unknown\`, \`closed\`, \`restricted\`, \`reported-open\`, or \`conflict\` only when a human-reviewed exact-route and date-scoped official notice passes identity, timestamp, validity and source gates.
+- A closure or conflict blocks the candidate; unknown never becomes "open". Positive access cannot be inferred from the route guide, HTTP source reachability, park-wide statements, NWS weather, or a multi-day notice. A reported-open observation must specify exactly one day and be checked within 12 hours. Direct official recheck is still required before travel.
+- The UI has a separate route-evidence area with selected day, named policy, explanation and official route link. Blocked candidates use access-specific warning wording instead of saying the visitor chose the wrong outing length.
+- Weather failure cannot overwrite a valid access warning. A synthetic closure is injected only into a browser test, never the checked-in route data.
+- \`scripts/audit-winter-desk-route-access.py\` performs a separate Python provenance audit and rejects incorrect route identity, unsupported source domains, future/invalid date windows, and invented positive access records missing an exact scoped official notice. It does **not** verify the truth of any future quotation. A reviewer must inspect the official source.
+- Operator updates are **not yet continuously ingested**. The status for the three published routes remains unknown for an individual visit day unless a reviewed, dated official report is added. No live access verdict or automated authority granted to the system.
+
+### Verification
+- Node.js exact-route and date-selection tests: **21 pass**, zero failures.
+- Python route-access audit with negative fixtures: **PASS**, three routes, zero current operator observations and no open claims.
+- The existing source/provenance audit remains **PASS**.
+- Independent full site gate: all **60** stages passed on the pre-final access implementation head, with a subsequent exact-head run still required at the release gate.
+- Chromium test passed at **360, 390, 768, 1440px** with real image/map loads, first-screen recommendation, same-session destination selection, no overflow or console errors, NWS failure, map-tile failure, no-JS fallback, and a **browser-only synthetic exact-route closure that could not be erased by an NWS failure**.
+- No production pages, ads, canonicals, tool registry, or sitemap modified. Draft PR #1752 remains unmerged.
+- **Next action:** Secure and review an authoritative date-specific operator access observation for each exact route before enabling any visitor-facing current "open" badge. In the absence of that evidence the visitor verdict must remain unknown.
