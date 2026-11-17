@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="970" viewBox="0 0 1600 970" role="img" aria-labelledby="title desc"><title id="title">Snow Totals observation focus visual study</title><desc id="desc">Editable Penpot import SVG showing desktop and phone concepts with the original map, ranked reports and an exact source detail panel. No live measurements are depicted.</desc><rect x="0" y="0" width="1600" height="970" rx="0" fill="#f4f8fb" stroke="none" stroke-width="1"/>
+<text x="28" y="44" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="800" fill="#17476f">SNOW TOTALS | OBSERVATION FOCUS</text>
+<text x="28" y="70" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="400" fill="#526c80">Penpot-importable layout study, November 17, 2026. Illustrative labels, not live snowfall data.</text>
+<text x="28" y="112" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#132a3d">Desktop composition (1280px concept)</text>
+<text x="1170" y="112" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#132a3d">Phone composition (390px concept)</text>
+<rect x="28" y="134" width="1100" height="786" rx="16" fill="#ffffff" stroke="#d4e5f1" stroke-width="1"/>
+<rect x="28" y="134" width="1100" height="66" rx="16" fill="#ffffff" stroke="none" stroke-width="1"/>
+<text x="64" y="176" font-family="Inter, Arial, sans-serif" font-size="21" font-weight="800" fill="#132a3d">Chris Izworski</text>
+<text x="844" y="176" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#17476f">Home   Tools   Guides   Great Lakes</text>
+<rect x="52" y="216" width="1050" height="116" rx="16" fill="#eaf2f8" stroke="none" stroke-width="1"/>
+<text x="76" y="250" font-family="Inter, Arial, sans-serif" font-size="29" font-weight="800" fill="#132a3d">Michigan Snow Totals Today</text>
+<text x="76" y="280" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#425c70">Observed reports only. Time-scoped and issued by the NWS.</text>
+<rect x="666" y="235" width="94" height="39" rx="8" fill="#17476f" stroke="none" stroke-width="1"/>
+<text x="681" y="260" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">24h</text>
+<rect x="770" y="235" width="94" height="39" rx="8" fill="#fff" stroke="none" stroke-width="1"/>
+<text x="785" y="260" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#17476f">Yesterday</text>
+<rect x="874" y="235" width="94" height="39" rx="8" fill="#fff" stroke="none" stroke-width="1"/>
+<text x="889" y="260" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#17476f">72h</text>
+<rect x="978" y="235" width="94" height="39" rx="8" fill="#fff" stroke="none" stroke-width="1"/>
+<text x="993" y="260" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#17476f">7 days</text>
+<rect x="52" y="350" width="1050" height="126" rx="16" fill="#fff" stroke="#d4e5f1" stroke-width="1"/>
+<text x="76" y="381" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="800" fill="#17476f">LARGEST INDIVIDUAL REPORT</text>
+<text x="76" y="431" font-family="Inter, Arial, sans-serif" font-size="40" font-weight="800" fill="#17476f">Exact NWS inches</text>
+<text x="399" y="428" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#132a3d">Place, county, date and source</text>
+<rect x="793" y="370" width="283" height="84" rx="8" fill="#eaf2f8" stroke="none" stroke-width="1"/>
+<text x="809" y="401" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="700" fill="#132a3d">Find your town or county</text>
+<text x="809" y="430" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="500" fill="#4a5d6d">Search reports</text>
+<rect x="52" y="494" width="1050" height="193" rx="16" fill="#eaf2f8" stroke="none" stroke-width="1"/>
+<text x="76" y="527" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="700" fill="#17476f">Leaflet report map: existing verified observation points</text>
+<text x="76" y="555" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="400" fill="#4a5d6d">Map remains full width. No new basemap or inferred access destinations.</text>
+<path d="M76 573 L76 670" stroke="#d4e5f1" stroke-width="2" stroke-dasharray="5 7"/>
+<path d="M221 573 L221 670" stroke="#d4e5f1" stroke-width="2" stroke-dasharray="5 7"/>
+<path d="M366 573 L366 670" stroke="#d4e5f1" stroke-width="2" stroke-dasharray="5 7"/>
+<path d="M511 573 L511 670" stroke="#d4e5f1" stroke-width="2" stroke-dasharray="5 7"/>
+<path d="M656 573 L656 670" stroke="#d4e5f1" stroke-width="2" stroke-dasharray="5 7"/>
+<path d="M801 573 L801 670" stroke="#d4e5f1" stroke-width="2" stroke-dasharray="5 7"/>
+<path d="M946 573 L946 670" stroke="#d4e5f1" stroke-width="2" stroke-dasharray="5 7"/>
+<path d="M76 577 L1080 577" stroke="#d4e5f1" stroke-width="2" stroke-dasharray="5 7"/>
+<path d="M76 617 L1080 617" stroke="#d4e5f1" stroke-width="2" stroke-dasharray="5 7"/>
+<path d="M76 657 L1080 657" stroke="#d4e5f1" stroke-width="2" stroke-dasharray="5 7"/>
+<rect x="52" y="706" width="503" height="194" rx="16" fill="#ffffff" stroke="#d4e5f1" stroke-width="1"/>
+<text x="76" y="739" font-family="Inter, Arial, sans-serif" font-size="19" font-weight="700" fill="#132a3d">Ranked NWS observations</text>
+<text x="76" y="776" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="800" fill="#17476f">01</text>
+<rect x="120" y="766" width="365" height="15" rx="8" fill="#eaf2f8" stroke="none" stroke-width="1"/>
+<rect x="120" y="766" width="335" height="15" rx="8" fill="#17476f" stroke="none" stroke-width="1"/>
+<text x="76" y="811" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="800" fill="#17476f">02</text>
+<rect x="120" y="801" width="365" height="15" rx="8" fill="#eaf2f8" stroke="none" stroke-width="1"/>
+<rect x="120" y="801" width="245" height="15" rx="8" fill="#2671a4" stroke="none" stroke-width="1"/>
+<text x="76" y="846" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="800" fill="#17476f">03</text>
+<rect x="120" y="836" width="365" height="15" rx="8" fill="#eaf2f8" stroke="none" stroke-width="1"/>
+<rect x="120" y="836" width="155" height="15" rx="8" fill="#77b5dc" stroke="none" stroke-width="1"/>
+<rect x="573" y="706" width="529" height="194" rx="16" fill="#eaf2f8" stroke="none" stroke-width="1"/>
+<text x="595" y="738" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="800" fill="#17476f">SELECTED REPORT PROOF</text>
+<text x="595" y="768" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="600" fill="#132a3d">Exact place, timestamp, measured or estimated</text>
+<rect x="595" y="788" width="230" height="38" rx="8" fill="#ffffff" stroke="none" stroke-width="1"/>
+<text x="608" y="811" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#17476f">Original NWS text</text>
+<rect x="835" y="788" width="245" height="38" rx="8" fill="#ffffff" stroke="none" stroke-width="1"/>
+<text x="847" y="811" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#17476f">Approximate area on Maps</text>
+<text x="595" y="853" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#4a5d6d">Not a verified public entrance or parking location.</text>
+<rect x="1164" y="134" width="408" height="786" rx="16" fill="#ffffff" stroke="#d4e5f1" stroke-width="1"/>
+<rect x="1180" y="150" width="375" height="54" rx="8" fill="#ffffff" stroke="none" stroke-width="1"/>
+<text x="1200" y="186" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="800" fill="#132a3d">Chris Izworski</text>
+<text x="1180" y="232" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="800" fill="#132a3d">Michigan Snow Totals Today</text>
+<rect x="1180" y="250" width="375" height="189" rx="16" fill="#ffffff" stroke="#d4e5f1" stroke-width="1"/>
+<text x="1196" y="282" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="700" fill="#132a3d">NWS reported amounts</text>
+<rect x="1196" y="298" width="81" height="34" rx="8" fill="#17476f" stroke="none" stroke-width="1"/>
+<text x="1206" y="320" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#ffffff">24h</text>
+<rect x="1284" y="298" width="81" height="34" rx="8" fill="#eaf2f8" stroke="none" stroke-width="1"/>
+<text x="1294" y="320" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#17476f">Yesterday</text>
+<rect x="1372" y="298" width="81" height="34" rx="8" fill="#eaf2f8" stroke="none" stroke-width="1"/>
+<text x="1382" y="320" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#17476f">72h</text>
+<rect x="1460" y="298" width="81" height="34" rx="8" fill="#eaf2f8" stroke="none" stroke-width="1"/>
+<text x="1470" y="320" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#17476f">7 days</text>
+<text x="1196" y="381" font-family="Inter, Arial, sans-serif" font-size="40" font-weight="800" fill="#17476f">NWS inches</text>
+<text x="1196" y="416" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="700" fill="#132a3d">Place and source</text>
+<rect x="1180" y="455" width="375" height="139" rx="16" fill="#eaf2f8" stroke="none" stroke-width="1"/>
+<text x="1196" y="481" font-family="Inter, Arial, sans-serif" font-size="19" font-weight="800" fill="#132a3d">Report map</text>
+<text x="1196" y="508" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#4a5d6d">Existing Leaflet and filters</text>
+<path d="M1199 518 L1199 577" stroke="#d4e5f1" stroke-width="2" stroke-dasharray="5 7"/>
+<path d="M1299 518 L1299 577" stroke="#d4e5f1" stroke-width="2" stroke-dasharray="5 7"/>
+<path d="M1399 518 L1399 577" stroke="#d4e5f1" stroke-width="2" stroke-dasharray="5 7"/>
+<path d="M1499 518 L1499 577" stroke="#d4e5f1" stroke-width="2" stroke-dasharray="5 7"/>
+<rect x="1180" y="611" width="375" height="117" rx="16" fill="#ffffff" stroke="#d4e5f1" stroke-width="1"/>
+<text x="1196" y="641" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#132a3d">Top three reports</text>
+<rect x="1196" y="654" width="307" height="12" rx="8" fill="#17476f" stroke="none" stroke-width="1"/>
+<rect x="1196" y="674" width="242" height="12" rx="8" fill="#2671a4" stroke="none" stroke-width="1"/>
+<rect x="1196" y="694" width="177" height="12" rx="8" fill="#77b5dc" stroke="none" stroke-width="1"/>
+<rect x="1180" y="745" width="375" height="155" rx="16" fill="#eaf2f8" stroke="none" stroke-width="1"/>
+<text x="1196" y="774" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="800" fill="#17476f">Selected report detail</text>
+<text x="1196" y="800" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="500" fill="#132a3d">NWS source and approximate map search</text>
+<rect x="1196" y="824" width="164" height="36" rx="8" fill="#ffffff" stroke="none" stroke-width="1"/>
+<text x="1208" y="847" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#17476f">Read NWS text</text>
+<rect x="1370" y="824" width="169" height="36" rx="8" fill="#ffffff" stroke="none" stroke-width="1"/>
+<text x="1381" y="847" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#17476f">Locate report</text>
+<text x="1196" y="883" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#4a5d6d">No directions or access promise</text></svg>

@@ -283,3 +283,68 @@ td.in{font-size:var(--v-type-18)}
   .snow-answer .windows{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--v-space-4);overflow:visible}
   .snow-answer .windows button{white-space:normal;min-height:48px;min-width:0;line-height:1.15;padding:var(--v-space-8) var(--v-space-4)}
 }
+
+
+/* Scorecard follow-up: measured rank and station displays, no fabricated values. */
+#snowSummary .snow-peak{display:block;margin:var(--v-space-8) 0 var(--v-space-12)}
+#snowSummary .snow-peak-value{display:block;font-size:var(--v-type-56);line-height:1;letter-spacing:-.045em;font-weight:850;color:var(--v-accent-5);font-variant-numeric:tabular-nums}
+#snowSummary .snow-peak-place{display:block;font-size:var(--v-type-28);line-height:1.2;letter-spacing:-.02em;font-weight:800;color:var(--v-ink);overflow-wrap:anywhere}
+.storm-pulse-list .report-bar-track{display:block;grid-column:2 / -1;height:12px;width:100%;background:var(--v-accent-1);border-radius:var(--v-radius-sm);overflow:hidden}
+.storm-pulse-list .report-bar-fill{display:block;height:100%;border-radius:var(--v-radius-sm)}
+#snowMap[hidden],#seasonLiveBars[hidden]{display:none!important}
+#seasonLiveBars{background:var(--v-surface-soft);padding:var(--v-space-16);border-radius:var(--v-radius-sm)}
+#mapNote:not(:empty){max-width:84ch}
+@media(max-width:700px){
+  #snowSummary .snow-peak-value{font-size:var(--v-type-56)}
+  #snowSummary .snow-peak-place{font-size:var(--v-type-22)}
+  .storm-pulse-list .report-bar-track{height:12px}
+  #seasonLiveBars{padding:var(--v-space-12)}
+}
+
+/* Keyboard-visible focus for native horizontal overflow alternatives. */
+#regionChips:focus-visible,.table-wrap:focus-visible{outline:3px solid var(--v-accent-4);outline-offset:3px}
+
+/* Prevent the independent number and town columns stretching one another. */
+.snow-answer-columns{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--v-space-16)}
+.snow-answer-figures,.snow-answer-search{min-width:0}
+.snow-answer-figures .answer-eyebrow{margin:var(--v-space-12) 0 var(--v-space-8)}
+.snow-answer-figures #snowStamp{margin:var(--v-space-16) 0 0}
+.snow-answer-search .town{margin:0}
+.snow-answer-search .town-shortcuts{margin:var(--v-space-12) 0}
+.snow-answer-search .answer-next{margin:var(--v-space-12) 0 0}
+@media(min-width:900px){
+  .snow-answer{display:block}
+  .snow-answer .live-head{margin-bottom:var(--v-space-24)}
+  .snow-answer-columns{grid-template-columns:minmax(0,1.3fr) minmax(0,.83fr);gap:var(--v-space-32);align-items:start}
+  .snow-answer-figures{display:block}
+}
+
+/* Foundry report-focus: source-backed selection, not a new map or location engine. */
+.snow-selected-report[hidden]{display:none}
+.snow-selected-report{margin-top:var(--v-space-16);padding:var(--v-space-16);border-radius:var(--v-radius-sm);background:var(--v-accent-1)}
+.snow-selected-report h4{font-size:var(--v-type-18);line-height:1.35;margin:0 0 var(--v-space-8);color:var(--v-accent-5)}
+.snow-selected-report p{font-size:var(--v-type-14);line-height:1.6;margin:var(--v-space-8) 0}
+.snow-selected-report .selected-source-actions{display:flex;flex-wrap:wrap;gap:var(--v-space-8);align-items:center}
+.snow-selected-report .selected-source-actions a{display:inline-flex;align-items:center;min-height:44px;padding:var(--v-space-8) var(--v-space-12);background:var(--v-surface);border-radius:var(--v-radius-sm);color:var(--v-accent-5);font-weight:800;font-size:var(--v-type-14);text-decoration:underline;text-underline-offset:3px}
+.snow-selected-report .selected-source-actions a:hover{background:var(--v-accent-2)}
+.snow-selected-report .selected-source-note{color:var(--v-muted)}
+.snow-selected-report .near{font-size:var(--v-type-14)}
+.storm-pulse-list button[aria-pressed="true"]{background:var(--v-accent-1);outline:3px solid var(--v-accent-4);outline-offset:0}
+.storm-pulse-list button[aria-pressed="true"]::before{color:var(--v-accent-5)}
+
+@media(min-width:900px){
+  .snow-selected-report{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1fr);gap:var(--v-space-24);align-items:start}
+  .snow-selected-report .selected-primary,.snow-selected-report .selected-nearby{min-width:0}
+  .snow-selected-report .selected-nearby{padding:var(--v-space-12) var(--v-space-16);background:var(--v-surface);border-radius:var(--v-radius-sm)}
+  .snow-selected-report .selected-nearby p:first-child{margin-top:0}
+}
+
+/* Distinguish evidence links by shape, underline and weight, never by blue alone. */
+.snow-selected-report .selected-source-actions a,
+.snow-selected-report .near a{
+  color:var(--v-accent-5);
+  text-decoration:underline;
+  text-decoration-thickness:2px;
+  text-underline-offset:3px;
+  font-weight:800;
+}
