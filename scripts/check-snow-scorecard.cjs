@@ -87,6 +87,10 @@ function serveHtml(req, res, live, season) {
       assert(mapAfter,'Map follows the complete answer card');
       assert(sourceCount>=1);
       assert.equal(peakFont,56,'Numbers use the requested 56px visual scale');
+      await page.waitForFunction(()=>document.querySelectorAll('.leaflet-tile-loaded').length>0 || document.querySelector('#snowMap').hidden,null,{timeout:12000});
+      const realTiles=await page.locator('.leaflet-tile-loaded').count();
+      assert(realTiles>0,'Real map raster tiles must load in the normal browser scenario');
+      assert(!await page.locator('#snowMap').evaluate(el=>el.hidden),'Map remains visible with real tiles');
       assert(rankCount>=2,'Top reports available with the recorded NWS data');
       assert(barWidths[0]===100 && barWidths.every((v,i)=>v>=0&&v<=100&&(i===0||v<=barWidths[i-1])),'Bars encode relative observed inches');
       assert(liveCount>=1 && /Current season/.test(seasonLabels),'Current-season bars populated from recorded ACIS');
@@ -98,6 +102,7 @@ function serveHtml(req, res, live, season) {
       if(width===390||width===1280) {
         await page.evaluate(()=>window.scrollTo(0,0));
         await page.screenshot({path:path.join(out,'enhanced-'+width+'.png'),animations:'disabled'});
+        await page.locator('.map-wrap').screenshot({path:path.join(out,'map-'+width+'.png'),animations:'disabled'});
         await page.locator('#stormPulse').screenshot({path:path.join(out,'ranking-'+width+'.png'),animations:'disabled'});
         await page.locator('#seasonLiveBars').screenshot({path:path.join(out,'season-'+width+'.png'),animations:'disabled'});
       }
@@ -106,10 +111,16 @@ function serveHtml(req, res, live, season) {
       assert.equal(await page.locator('.windows button[data-window="24h"]').getAttribute('aria-pressed'),'true','Keyboard activates report window');
       await page.locator('.windows button[data-window="24h"]').click();
       assert.equal(await page.locator('.windows button[data-window="24h"]').getAttribute('aria-pressed'),'true');
+      const firstWindowText=await page.locator('#snowSummary').textContent();
       await page.locator('.windows button[data-window="168h"]').click();
       assert.equal(await page.locator('.windows button[data-window="168h"]').getAttribute('aria-pressed'),'true');
+      const seventhDayText=await page.locator('#snowSummary').textContent();
+      assert.notEqual(firstWindowText,seventhDayText,'Window switch changes the source-backed answer');
+      const initialMarkerCount=await page.locator('.leaflet-interactive').count();
       await page.locator('button[data-region="keweenaw"]').click();
       assert.equal(await page.locator('button[data-region="keweenaw"]').getAttribute('aria-pressed'),'true');
+      const filteredMarkerCount=await page.locator('.leaflet-interactive').count();
+      assert(filteredMarkerCount<initialMarkerCount,'Region filter changes the map evidence, not just button styling');
       await page.locator('button[data-region=""]').click();
       assert.equal(await page.locator('button[data-region=""]').getAttribute('aria-pressed'),'true');
       await page.locator('.report-table-disclosure summary').click();
@@ -125,7 +136,7 @@ function serveHtml(req, res, live, season) {
       evidence.a11y.push({width,violations:violations.violations.map(v=>({id:v.id,impact:v.impact,nodes:v.nodes.length,help:v.help})),seriousCount:serious.length});
       assert.equal(serious.length,0,'No serious or critical WCAG AA violations at '+width+': '+JSON.stringify(serious.map(v=>v.id)));
       assert.equal(errors.length,0,'No page errors: '+errors.join('; '));
-      evidence.viewports.push({width,scrollWidth,header,peakFont,mapAfter,rankCount,barWidths,liveCount,performance:perf,errors});
+      evidence.viewports.push({width,scrollWidth,header,peakFont,mapAfter,rankCount,barWidths,liveCount,realTiles,filteredMarkerCount,performance:perf,errors});
       await context.close();
     }
     note('Mobile to desktop, reversibility, live source bars and serious/critical axe checks');
