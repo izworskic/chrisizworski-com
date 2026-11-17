@@ -1,0 +1,139 @@
+{
+  "schemaVersion": "1.2",
+  "recordStatus": "draft",
+  "project": {
+    "slug": "michigan-snow-totals",
+    "ownerRepo": "izworskic/chrisizworski-com",
+    "canonical": "https://chrisizworski.com/michigan-snow-totals/",
+    "pageFile": "public/michigan-snow-totals/index.html",
+    "visitorDecision": "Identify the exact source-backed snowfall observation behind a reported top ranking, find it geographically and inspect its NWS text.",
+    "primaryAction": "Select one ranked NWS observation and read its original NWS report, or locate the approximate reported coordinates on a map without treating them as public access."
+  },
+  "claims": [
+    {
+      "id": "nws-local-storm-reports",
+      "kind": "official-reference",
+      "subject": "other",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://www.weather.gov/",
+      "checkedDate": "2026-11-17",
+      "limitation": "The National Weather Service publishes source observations; availability and completeness vary by reporting place and event. This page does not treat a lack of report as a lack of snow."
+    },
+    {
+      "id": "iem-archive-observation-provenance",
+      "kind": "editorial",
+      "subject": "other",
+      "state": "EDITORIAL",
+      "sourceUrl": "https://mesonet.agron.iastate.edu/lsr/",
+      "checkedDate": "2026-11-17",
+      "limitation": "The Iowa Environmental Mesonet archive carries NWS local storm reports, but the report's magnitude can cover differing accumulation durations. A 72-hour search window is not a 72-hour snow accumulation measurement."
+    },
+    {
+      "id": "reported-geometry-not-public-entrance",
+      "kind": "unverified",
+      "subject": "other",
+      "state": "UNVERIFIED",
+      "sourceUrl": "https://mesonet.agron.iastate.edu/lsr/",
+      "checkedDate": "2026-11-17",
+      "limitation": "Reported latitude and longitude indicate observation vicinity only and do not independently verify an address, safe route, parking or public access."
+    }
+  ],
+  "decisionState": {
+    "selectedIdField": "state.selectedReportKey built from source report place, county and reportedAt",
+    "sourceOfTruth": "Existing SnowCore window/region NWS rows and the site's original allowlisted productUrl; the selected key is derived from the same row as the Leaflet marker and ranked button.",
+    "linkedSurfaces": [
+      "answer",
+      "ranked-report-buttons",
+      "map-or-unavailable",
+      "source-panel",
+      "nearby-observation-list"
+    ],
+    "unavailableBehavior": "When a selected report falls outside a changed window/region, clear the selection; missing original text is explicitly labeled, missing map tiles reveal the source table, stale feeds suppress current claims."
+  },
+  "scenarios": [
+    {
+      "kind": "initial",
+      "input": "Open a 7-day report week with multiple NWS observations.",
+      "expectedVisibleAnswer": "The leading reported amount and timestamp appear above the map; no individual ranked report is selected until clicked.",
+      "sourceAndSafety": "All amounts are explicitly observed NWS reports of varying durations; the map is not an access map."
+    },
+    {
+      "kind": "alternative",
+      "input": "Select the second ranked NWS place with a native button or click a mapped circle marker.",
+      "expectedVisibleAnswer": "Report detail switches to the exact place, amount, observation age and allowlisted original NWS source, with a coordinate-only maps search when valid.",
+      "sourceAndSafety": "Reported coordinates are approximate and are not travel directions, parking or public entrances."
+    },
+    {
+      "kind": "reverse",
+      "input": "Select rank A, then B, then A, and switch the time window.",
+      "expectedVisibleAnswer": "The original source, identity, pressed state and location are restored for A; a different period clears the prior selection.",
+      "sourceAndSafety": "A place outside the new window is never presented as still selected or as current."
+    },
+    {
+      "kind": "no-js",
+      "input": "Disable JavaScript entirely.",
+      "expectedVisibleAnswer": "Original NWS archive link, season reference tables and guide answers remain readable; no interactive map or fabricated current observations.",
+      "sourceAndSafety": "No current snow estimate is invented without the NWS feed."
+    },
+    {
+      "kind": "no-tiles",
+      "input": "Block OSM map tiles and Leaflet script.",
+      "expectedVisibleAnswer": "A short map-unavailable message and opened source-linked report list replace the blank map region.",
+      "sourceAndSafety": "Failed map initialization does not imply anything about outdoor conditions or official report existence."
+    },
+    {
+      "kind": "stale-data",
+      "input": "Inject a cached NWS response aged three hours and ACIS season response aged forty hours.",
+      "expectedVisibleAnswer": "Current snowfall figures, rank selection and season comparison are suppressed, with original archive and historical context available.",
+      "sourceAndSafety": "Source ages are checked before presenting any current figure; no stale observation is described as new."
+    },
+    {
+      "kind": "missing-source",
+      "input": "Select a report without allowlisted productUrl or valid Michigan coordinates.",
+      "expectedVisibleAnswer": "Explicitly state original text unavailable and omit unsupported coordinate-map action while retaining report amount and time.",
+      "sourceAndSafety": "No guessed source URL or location is constructed."
+    }
+  ],
+  "failures": {
+    "no-js": "Original NWS Local Storm Report archive and current guide text remain in server-rendered HTML without any script.",
+    "no-tiles": "Collapse the map to a source-linked status and open the accessible full NWS report table.",
+    "no-image": "No photograph or new generated image is required for a report, so no missing photograph can hide the observation answer.",
+    "stale-data": "Stop showing current NWS ranking and season bar states after conservative source-age cutoffs, retaining historical references."
+  },
+  "qa": {
+    "viewports": [
+      360,
+      390,
+      768,
+      1280,
+      1440
+    ],
+    "browserStatus": "PENDING",
+    "browserRun": "https://github.com/izworskic/chrisizworski-com/actions/runs/44107420984",
+    "screenshotEvidence": [
+      "https://github.com/izworskic/chrisizworski-com/actions/runs/44107420984/artifacts"
+    ],
+    "scopeNote": "Last local-fixture Chromium proof passed before the final documentation and CSS refinements. Final-head run and in-person screen reader still outstanding. Live deployed site not verified."
+  },
+  "photos": [],
+  "release": {
+    "implemented": {
+      "status": "CONFIRMED",
+      "checkedDate": "2026-11-17",
+      "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/pull/1755"
+    },
+    "verified": {
+      "status": "PENDING"
+    },
+    "deployed": {
+      "status": "PENDING"
+    },
+    "live": {
+      "status": "NOT_VERIFIED"
+    },
+    "measured": {
+      "status": "NOT_MEASURED"
+    }
+  },
+  "verificationLimit": "This draft records source and fixture behavior, not independent current map reliability, actual Penpot MCP execution, live public deployment or post-release traffic gains."
+}
