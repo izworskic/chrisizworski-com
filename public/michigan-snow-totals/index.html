@@ -23,6 +23,7 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<link rel="stylesheet" href="/assets/visual-v1-tokens.css">
 <link rel="stylesheet" href="/assets/michigan-snow-totals.css">
 <script type="application/ld+json">
 {
@@ -102,6 +103,21 @@
   <section class="snow-hero">
     <p class="kicker">Official NWS snowfall totals · updated through the day</p>
     <h1>Michigan Snow Totals Today</h1>
+  </section>
+
+  <section class="live" aria-labelledby="live-title" data-no-ads>
+    <div class="snow-answer">
+    <div class="live-head">
+      <h2 id="live-title">Snow reported across Michigan</h2>
+      <div class="windows" role="group" aria-label="Time window">
+        <button type="button" data-window="24h" aria-pressed="true">24 hours</button>
+        <button type="button" data-window="48h" aria-pressed="false">Since yesterday</button>
+        <button type="button" data-window="72h" aria-pressed="false">72 h</button>
+        <button type="button" data-window="168h" aria-pressed="false">7 days</button>
+      </div>
+      <p class="answer-eyebrow">Largest reported snowfall and report status</p>
+    <p id="snowSummary" class="summary" aria-live="polite">Loading the latest NWS snow reports for Michigan. Without JavaScript, read the reports directly from the <a href="https://mesonet.agron.iastate.edu/lsr/">Local Storm Report archive</a> or your <a href="https://www.weather.gov/">NWS office</a>.</p>
+    <p id="snowStamp" class="stamp">Sources: NWS Local Storm Reports through the Iowa Environmental Mesonet archive, and active NWS alerts from api.weather.gov. Times are Eastern.</p>
     <form id="townForm" class="town" role="search" aria-label="Find your town">
       <label for="townSearch">How much snow did your town get?</label>
       <div class="town-row">
@@ -121,31 +137,38 @@
       <a href="/michigan-snow-totals/?town=Bay%20City&amp;window=168h">Bay City</a>
       <span class="town-shortcuts__note">Seven-day reported snowfall, not a local forecast. No nearby report does not mean no snow fell.</span>
     </nav>
-    <p class="lede">How much snow fell in your town, where it fell hardest, and how the season compares with normal, from the reports that trained spotters, CoCoRaHS and co-op observers, and National Weather Service staff send in during and after every storm.</p>
-    <p class="byline">By <a href="/chris-izworski/" rel="author">Chris Izworski</a>, Bay City, Michigan</p>
-  </section>
-
-  <section class="live" aria-labelledby="live-title" data-no-ads>
-    <div class="live-head">
-      <h2 id="live-title">Snow reported across Michigan</h2>
-      <div class="windows" role="group" aria-label="Time window">
-        <button type="button" data-window="24h" aria-pressed="true">24 hours</button>
-        <button type="button" data-window="48h" aria-pressed="false">Since yesterday</button>
-        <button type="button" data-window="72h" aria-pressed="false">72 h</button>
-        <button type="button" data-window="168h" aria-pressed="false">7 days</button>
-      </div>
     </div>
-    <p id="snowSummary" class="summary" aria-live="polite">Loading the latest NWS snow reports for Michigan. Without JavaScript, read the reports directly from the <a href="https://mesonet.agron.iastate.edu/lsr/">Local Storm Report archive</a> or your <a href="https://www.weather.gov/">NWS office</a>.</p>
 
+    <div class="map-wrap">
+      <div class="map-toolbar">
+        <h3>Where the reports came from</h3>
+    <div id="regionChips" class="chips" role="group" aria-label="Filter by region"></div>
+      </div>
+    <p id="regionTrails" class="region-trails" hidden></p>
+      <div id="snowMap" role="region" aria-label="Map of Michigan snowfall reports"></div>
+      <p id="mapNote" class="map-note">Each dot is one official report, larger and darker for more snow. Tap a dot for the time, source and remark.</p>
+      <p class="map-fallback">Prefer the source list? <a href="https://mesonet.agron.iastate.edu/lsr/">Read original NWS Local Storm Reports</a>.</p>
+      <noscript><style>#snowMap{display:none}</style><p class="map-fallback">The interactive map needs JavaScript. Current reports remain available from the <a href="https://mesonet.agron.iastate.edu/lsr/">NWS archive</a>.</p></noscript>
+    </div>
 
     <div id="alertList" class="alerts" aria-live="polite"></div>
-
     <section id="stormPulse" class="storm-pulse" aria-labelledby="stormPulseTitle" hidden>
       <h3 id="stormPulseTitle">Largest individual snow reports in this time window</h3>
       <p>These are reports from different places and times, not a single storm-total measurement. Select a place to see nearby observations and original NWS report text when the archive provides a link.</p>
       <div id="stormPulseList" class="storm-pulse-list"></div>
     </section>
 
+    <details class="report-table-disclosure">
+      <summary>Show every place and full report details</summary>
+    <div class="table-wrap">
+      <table id="snowTable">
+        <caption>Largest report from each place in the selected window</caption>
+        <thead><tr><th scope="col">#</th><th scope="col">Snow</th><th scope="col">Place</th><th scope="col">Reported</th><th scope="col">Source</th></tr></thead>
+        <tbody><tr><td colspan="5">Loading reports.</td></tr></tbody>
+      </table>
+    </div>
+    <button type="button" id="showAll" class="ghost" hidden>Show every place</button>
+    </details>
 
     <nav id="headingOut" class="heading-out" aria-label="Choose the winter answer you need">
       <h3>After the snowfall report, which answer do you need?</h3>
@@ -157,28 +180,26 @@
       </div>
       <p class="snow-decision-note"><strong>Ready to go out?</strong> <a href="/snowmobile/">Check snowmobile trail status</a> or <a href="/michigan-cross-country-skiing/">check XC ski trails</a>. Recent snowfall alone does not establish a safe, open or groomed trail.</p>
     </nav>
-
-    <div id="regionChips" class="chips" role="group" aria-label="Filter by region"></div>
-    <p id="regionTrails" class="region-trails" hidden></p>
-
-    <div class="map-wrap">
-      <div id="snowMap" role="region" aria-label="Map of Michigan snowfall reports"></div>
-      <p id="mapNote" class="map-note">Each dot is one official report, larger and darker for more snow. Tap a dot for the time, source and remark.</p>
+    <div class="snow-intro">
+    <p class="lede">How much snow fell in your town, where it fell hardest, and how the season compares with normal, from the reports that trained spotters, CoCoRaHS and co-op observers, and National Weather Service staff send in during and after every storm.</p>
+    <p class="byline">By <a href="/chris-izworski/" rel="author">Chris Izworski</a>, Bay City, Michigan</p>
     </div>
-    <div class="table-wrap">
-      <table id="snowTable">
-        <caption>Largest report from each place in the selected window</caption>
-        <thead><tr><th scope="col">#</th><th scope="col">Snow</th><th scope="col">Place</th><th scope="col">Reported</th><th scope="col">Source</th></tr></thead>
-        <tbody><tr><td colspan="5">Loading reports.</td></tr></tbody>
-      </table>
-    </div>
-    <button type="button" id="showAll" class="ghost" hidden>Show every place</button>
-    <p id="snowStamp" class="stamp">Sources: NWS Local Storm Reports through the Iowa Environmental Mesonet archive, and active NWS alerts from api.weather.gov. Times are Eastern.</p>
   </section>
 
   <section class="season" id="season" aria-labelledby="season-title" data-no-ads>
     <h2 id="season-title">Season snowfall so far, against normal</h2>
     <p id="seasonSummary" class="summary">Season totals add up daily snowfall since July 1 at 52 National Weather Service climate stations and compare each with its 1991-2020 normal for the same dates.</p>
+    <div class="season-bars" aria-label="Historical comparison of last winter's final snowfall against each station's normal">
+      <h3>Last winter's snowfall against normal</h3>
+      <p>Final 2025-26 totals at four NWS climate stations. Each dark bar shows the station's percentage of its own seasonal normal. The vertical marker is 100% of normal. This is historical context, not this season's current total.</p>
+      <div class="comparison"><strong>Herman, Upper Peninsula</strong><span class="value">176% <small>366.0 vs 207.8 in</small></span><div class="comparison-track" style="--bar:88%" role="img" aria-label="Herman, 366 inches, 176 percent of 207.8 inch seasonal normal"></div></div>
+      <div class="comparison"><strong>Marquette NWS office</strong><span class="value">141% <small>276.6 vs 196.8 in</small></span><div class="comparison-track" style="--bar:70.3%" role="img" aria-label="Marquette NWS office, 276.6 inches, 141 percent of 196.8 inch normal"></div></div>
+      <div class="comparison"><strong>Grand Rapids airport</strong><span class="value">97% <small>75.4 vs 77.6 in</small></span><div class="comparison-track" style="--bar:48.6%" role="img" aria-label="Grand Rapids airport, 75.4 inches, 97 percent of 77.6 inch normal"></div></div>
+      <div class="comparison"><strong>Detroit Metro airport</strong><span class="value">88% <small>39.5 vs 45.0 in</small></span><div class="comparison-track" style="--bar:43.9%" role="img" aria-label="Detroit Metro airport, 39.5 inches, 88 percent of 45 inch normal"></div></div>
+      <p class="season-bar-key"><strong>Reference line:</strong> 100% of station normal. Bar scale runs from 0% to 200%.</p>
+    </div>
+    <details class="season-data">
+      <summary>Show this season's station-by-station snowfall and normal</summary>
     <div id="seasonCurrent" class="table-wrap" hidden>
       <table id="seasonTable">
         <caption id="seasonCaption">This season</caption>
@@ -186,6 +207,7 @@
         <tbody></tbody>
       </table>
     </div>
+    </details>
     <details id="lastSeasonBox">
       <summary>Compare with last winter (2025-26): final season totals at 52 stations (expand historical data)</summary>
       <div class="table-wrap">
