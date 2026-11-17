@@ -2,6 +2,16 @@
 
 **Checkpoint: November 10, 2026.** This updates the earlier queue v2 to match the latest merged 80-destination, 640-observation evidence system. This is a research workflow, not visitor access certification.
 
+## November 17 access and production checkpoint
+
+The main 80-destination explorer is established. The next work is not a visual redesign. A newer [Au Train Township October 2026 DRAFT record](https://www.autraintownship.gov/wp-content/uploads/2026/11/autrain-minutes-October-2026-DRAFT-COMBINED.pdf) reports that dam options were still unresolved and physical work was unlikely before 2027. It does not resolve the June emergency order or authorize upper/lower waterfall approaches. The noindex Au Train research guide and the separate versioned source-gate ledger have been updated.
+
+Dead River still lacks documented complete private-corridor permission and an erosion-safe maintained visitor approach. Alger still lacks site-specific MDOT approval for public stopping, crossing and viewpoint. **No public route was cleared for any of the three.**
+
+The public waterfall page currently serves the compact map-first opening, all 80 curated cards and the existing gallery below the map. The new production Chromium workflow checks live 390px and 1440px interactions rather than treating local tests as live proof. UP Travel reported directory membership remains **12 directly observed of 104**, not 108/104 or a complete inventory.
+
+**Next action:** inspect the public-browser workflow results, then pursue new official access permissions or documented directory-page membership. Keep all unverified candidates source-only.
+
 ## Live source ledger (do not add overlapping counts)
 
 | Class | Verified inventory size | What the number means |

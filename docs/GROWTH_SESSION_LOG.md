@@ -1,3 +1,11 @@
+### 2026-11-17 | U.P. waterfalls source closure audit and production verification gate
+- **Visitor job:** Trust public parking and walk information, distinguish held access research from an open visitor destination, and verify that the map and trip planner actually work on the production site.
+- **New evidence:** October 2026 Au Train Township DRAFT minutes report Forest Lake Dam options were still under review and physical work unlikely before 2027. Separate November notice describes a Corps downstream river survey, not public waterfall trail clearance. Updated the noindex Au Train research page with these links and qualifications.
+- **Scope and counts:** Three priority held cases remain research-only; no parking pins, routes or new visitor destinations. UP Travel still reports 104 directory members but only 12 have direct verified membership; 108 separately indexed URL records remain a different source.
+- **Implementation:** Versioned three-case evidence checkpoint; regression test against accidental promotions; public-site Chromium audit on mobile and desktop measuring actual tile/marker readiness, search, save/clear, planner controls and noindex research pages. No hub redesign, hero photos, AdSense, SEO canonical or map/data changes.
+- **Evidence limits:** The live HTML was read, but the new real browser audit must run on GitHub before claiming interactive production verification. External agency records are not live access approval. No GSC, CTR or revenue outcome change inferred.
+- **Exactly one next action:** Review the new workflow's public-browser results, fix any observed defects, then review the PR without promoting blocked routes.
+
 ### 2026-11-17 | Waterfall hub photo-wall correction
 - **Owner feedback:** The three-picture hero added in PR #1750 consumed the first screen and delayed access to the waterfall map. The design did not serve the page's primary task.
 - **Correction:** Removed the above-the-fold photo wall and its responsive CSS; the map-first page opening and trip planning controls are restored. Retained the verified waterfall-card photos, lower gallery, original image rights and all visitor information.

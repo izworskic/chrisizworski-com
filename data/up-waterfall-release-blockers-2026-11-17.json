@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-11-17",
+  "purpose": "Three high-interest waterfall access decisions and known official evidence blockers. Not a published park status feed.",
+  "publicationPolicy": "No GIS point, tourism listing, old lot, general recreation status or engineering project authorizes public waterfall parking or a route.",
+  "cases": [
+    {
+      "id": "dead-river-falls",
+      "page": "public/upper-peninsula-waterfalls/research/dead-river-falls/index.html",
+      "decision": "research-only",
+      "routeCleared": false,
+      "newMapPinAuthorized": false,
+      "parkingPoint": null,
+      "routeGeometry": null,
+      "officialClosureClaimed": false,
+      "sourceBasis": [
+        {
+          "kind": "federal-historic",
+          "date": "2002",
+          "url": "https://archives.nmu.edu/govdocs/local/Dead_River/2002_Final_Environmental_Assessment_Dead_River_Hydroelectric_Project_FERC%20Project_No_10855-002_and_Marquette_Hydroelectric_Project_FERC_Project_No_2589-024.pdf",
+          "whatItEstablishes": "Historic McClure powerhouse gravel lot and informal trail extending onto private land; not present permission."
+        },
+        {
+          "kind": "local-record",
+          "date": "2025-02-19",
+          "url": "https://www.marquettetownship.org/sites/g/files/vyhlif6666/f/events/february_19_2025_board_packet.pdf",
+          "whatItEstablishes": "Travel Marquette stopped promoting the route due to erosion and management problems; not an official closure."
+        },
+        {
+          "kind": "state-current-policy",
+          "date": "undated",
+          "url": "https://www.michigan.gov/dnr/managing-resources/forestry/private/cf",
+          "whatItEstablishes": "Commercial Forest access does not establish public waterfall tourism hiking permission."
+        }
+      ],
+      "blockedGates": [
+        "Current owner/manager permission for the complete McClure gorge corridor",
+        "Current legal signed parking and maintained crossing",
+        "Visitor walk and erosion hazard determination"
+      ],
+      "nextAuthority": "McClure project operator and corridor parcel owner/land manager; written published route permission required"
+    },
+    {
+      "id": "au-train-falls",
+      "page": "public/upper-peninsula-waterfalls/research/au-train-falls/index.html",
+      "decision": "research-only",
+      "routeCleared": false,
+      "newMapPinAuthorized": false,
+      "parkingPoint": null,
+      "routeGeometry": null,
+      "officialClosureClaimed": false,
+      "sourceBasis": [
+        {
+          "kind": "state-dam-order",
+          "date": "2026-06-02",
+          "url": "https://www.autraintownship.gov/wp-content/uploads/2026/06/Au-Train-Dam-Emergency-Order-SOM.pdf",
+          "whatItEstablishes": "EGLE emergency dam-safety order; later rescission or completion is not established."
+        },
+        {
+          "kind": "local-draft-minutes",
+          "date": "2026-10",
+          "url": "https://www.autraintownship.gov/wp-content/uploads/2026/11/autrain-minutes-October-2026-DRAFT-COMBINED.pdf",
+          "whatItEstablishes": "Reported EGLE and engineers had not selected full/partial removal or another approach; work unlikely until 2027. Draft, not a final order or waterfall access clearance."
+        },
+        {
+          "kind": "local-public-notice",
+          "date": "2026-11",
+          "url": "https://www.autraintownship.gov/calendar/",
+          "whatItEstablishes": "Planned November 1 Corps survey covers lake and downstream river to Lake Superior, not a waterfall-viewpoint trail."
+        }
+      ],
+      "blockedGates": [
+        "Current EGLE order disposition and safety area",
+        "Current landowner permissions for upper and lower cascades",
+        "Legal parking at each tier and continuous verified pedestrian route"
+      ],
+      "nextAuthority": "EGLE dam safety and current upper/lower waterfall parcel managers; separate current access evidence required"
+    },
+    {
+      "id": "alger-falls",
+      "page": "public/upper-peninsula-waterfalls/research/alger-falls-highway-parking-review/index.html",
+      "decision": "research-only",
+      "routeCleared": false,
+      "newMapPinAuthorized": false,
+      "parkingPoint": null,
+      "routeGeometry": null,
+      "officialClosureClaimed": false,
+      "sourceBasis": [
+        {
+          "kind": "municipal-adopted-plan",
+          "date": "2024",
+          "url": "https://cityofmunising.org/wp-content/uploads/Munising_RecPlan_Adopted_2024.pdf",
+          "whatItEstablishes": "No safe public visitor parking at M-28/M-94 intersection in the adopted plan."
+        },
+        {
+          "kind": "county-adopted-plan",
+          "date": "2024",
+          "url": "https://cms2.revize.com/revize/algercounty/document_center/Dashboard/Plans/Alger%20County%205-Year%20Recreation%20Plan%202024-2029%20%28final%29.pdf",
+          "whatItEstablishes": "No approved safe public highway waterfall arrival route is established."
+        },
+        {
+          "kind": "highway-agency-contact-not-site-permission",
+          "date": "undated",
+          "url": "https://www.michigan.gov/mdot/about/regions/superior",
+          "whatItEstablishes": "Identifies responsible MDOT region but does not document an approved parking turnout."
+        }
+      ],
+      "blockedGates": [
+        "Site-specific MDOT-approved stopping/parking and safe road crossing",
+        "Public or owner-authorized viewpoint and continuous pedestrian approach"
+      ],
+      "nextAuthority": "Michigan Department of Transportation Superior Region and falls-side landowner; a general driving tip cannot clear these gates"
+    }
+  ],
+  "tourismMembership": {
+    "source": "https://www.uptravel.com/outdoors-recreation/waterfalls/",
+    "reportedDirectoryCount": 104,
+    "directlyObservedCards": 12,
+    "unverifiedReportedMembership": 92,
+    "independentSiteIndexSource": "data/up-waterfall-uptravel-indexed-listings-2026.json",
+    "indexedResearchListings": 108,
+    "warning": "Indexed URLs do not prove category directory membership and never imply visitor access."
+  },
+  "confidence": "Document-backed research decisions, not field-inspected current closures or opening notices"
+}
