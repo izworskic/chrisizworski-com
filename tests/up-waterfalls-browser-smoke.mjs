@@ -62,6 +62,16 @@ try{
     await choose.selectOption('wagner-falls');
     await page.locator('#visit-date').fill('2027-07-15');
   });
+  await run('arrival panel keeps 360px and tablet layout inside the viewport',async()=>{
+    for(const width of [360,768]){
+      await page.setViewportSize({width,height:844});
+      const dimensions=await page.evaluate(()=>({viewport:innerWidth,scroll:document.documentElement.scrollWidth}));
+      assert.ok(dimensions.scroll<=dimensions.viewport+2,'arrival desk overflow at '+width+'px: '+JSON.stringify(dimensions));
+      assert.ok(await page.locator('#arrival-choice').isVisible());
+      assert.ok(await page.locator('#arrival-actions a').count()>=2);
+    }
+    await page.setViewportSize({width:390,height:844});
+  });
   await run('arrival evidence remains usable when the interactive map library fails',async()=>{
     const offline=await browser.newPage({viewport:{width:390,height:844}});
     try{
