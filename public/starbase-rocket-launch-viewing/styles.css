@@ -24,3 +24,7 @@ main{max-width:1320px;margin:auto;padding:0 clamp(16px,3vw,34px) 55px}section{sc
 @media(max-width:720px){.sb-header{display:block}.sb-header nav{margin-top:9px}.sb-hero{grid-template-columns:1fr}.sb-hero-photo img{min-height:240px;max-height:320px}.sb-section-top{display:block}.sb-inline-link{margin-top:12px}.sb-mission-grid,.sb-status-duo{grid-template-columns:1fr}.sb-reading-grid{grid-template-columns:1fr}.sb-place-list{grid-template-columns:1fr}.sb-closed{grid-template-columns:1fr}.sb-range-badge{display:none}.sb-final{display:block}.sb-final>div:last-child{margin-top:13px}.sb-footer{display:block}.sb-footer nav{margin-top:9px}}
 @media(max-width:390px){.sb-hero h1{font-size:36px}.sb-hero-copy{padding:20px}.sb-map{height:360px}.sb-atlas{padding:14px}.sb-profiles label span{padding:9px 11px;font-size:12px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* Make the public-place Google Maps action easy to spot and tap. */
+.sb-google-place{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 11px;border-radius:8px;text-underline-offset:3px}
+.sb-google-place:focus-visible{outline:3px solid #d29541;outline-offset:3px}
