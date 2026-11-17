@@ -163,6 +163,28 @@ function serveHtml(req, res, live, season) {
       await context.close();
     }
     note('Tile failure, Leaflet failure, missing data, and no-JavaScript source path');
+
+    // Replaying a cached observation window as "current" is a false freshness claim.
+    const {context:staleContext,page:stalePage,errors:staleErrors}=await setup(390);
+    const staleLive={...live,generatedAt:new Date(now-3*3600e3).toISOString()};
+    const staleSeason={...season,generatedAt:new Date(now-40*3600e3).toISOString()};
+    await stalePage.route('**/api/michigan-snow-totals*',route=>{
+      const u=new URL(route.request().url());
+      return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(u.searchParams.get('view')==='season'?staleSeason:staleLive)});
+    });
+    await stalePage.goto(base,{waitUntil:'domcontentloaded'});
+    await stalePage.waitForFunction(()=>document.querySelector('#snowMap')?.hidden && document.querySelector('#seasonSummary')?.textContent.includes('36 hours'),null,{timeout:16000});
+    assert((await stalePage.locator('#snowSummary').textContent()).includes('more than two hours old'),'Stale observations are not described as current');
+    assert.equal(await stalePage.locator('.snow-peak-value').count(),0,'No false large current snow number from stale feed');
+    assert(await stalePage.locator('.windows button').first().isDisabled(),'Stale report time controls cannot reactivate outdated values');
+    assert(await stalePage.locator('#seasonLiveBars').evaluate(el=>el.hidden),'Stale current-season comparison hidden');
+    assert((await stalePage.locator('#snowTable tbody').textContent()).includes('unavailable'),'Source list does not pretend stale reports are current');
+    assert.equal(staleErrors.length,0,'Stale responses do not cause browser script errors');
+    evidence.fallbacks.stale='Old observation and season feeds do not create a current verdict; historical references and original NWS links remain';
+    await stalePage.screenshot({path:path.join(out,'stale-data-390.png'),animations:'disabled'});
+    await staleContext.close();
+    note('Age-expired NWS and ACIS cached responses suppress current claims');
+
     const {context:slowContext,page:slowPage,errors:slowErrors}=await setup(390);
     const slowCdp=await slowContext.newCDPSession(slowPage);
     await slowCdp.send('Network.emulateNetworkConditions',{offline:false,latency:250,downloadThroughput:120000,uploadThroughput:64000});
