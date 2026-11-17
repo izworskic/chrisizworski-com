@@ -23,7 +23,7 @@
       entrance:'https://www.dnr.state.mn.us/state-parks/park.html?id=spk00172',
       arrival:'Gooseberry Falls State Park Visitor Center, Minnesota',
       google:'https://www.google.com/maps/search/?api=1&query=Gooseberry%20Falls%20State%20Park%20Visitor%20Center%20Minnesota',
-      photo:'https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1e/Winter_falls_468.jpg/500px-Winter_falls_468.jpg',
+      photo:'https://thumb.wikimedia.org/wikipedia/commons/thumb/3/33/Winter_falls_468.jpg/960px-Winter_falls_468.jpg',
       photoPage:'https://commons.wikimedia.org/wiki/File:Winter_falls_468.jpg',
       photoCredit:'Chris Light / Wikimedia Commons, CC BY-SA 4.0, December 1982. Archived winter scene.',
       photoAlt:'Historic winter photograph of the Gooseberry River waterfall near the highway bridge',
