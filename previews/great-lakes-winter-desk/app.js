@@ -134,8 +134,11 @@
     if(place)renderSourceDesk(place);
   }
   function weatherUnknown(note){
-    const current=C.recommend(state);
-    if(current.kind==='candidate')$('quick-reason').textContent='No usable hourly forecast is available. Park access is also not verified.';
+    const selected=C.PLACES.find(p=>p.goal===state.goal);
+    const access=C.routeAccess(state.routeDocument,selected,state,new Date());
+    const block=access.blocks&&selected?{[selected.id]:{status:'closed',verified:true}}:{};
+    const current=C.recommend(state,block);
+    if(current.kind==='candidate')$('quick-reason').textContent='No usable hourly forecast is available. Park access also needs a separate check.';
     $('weather-head').textContent='Forecast not available';
     $('weather-sub').textContent=note;
     $('weather-issued').textContent='No confirmed NWS issue time';
