@@ -19,6 +19,7 @@
   const links = el('arrival-actions');
   const reviewed = el('arrival-reviewed');
   const choose = el('arrival-choose-hint');
+  const example = el('arrival-example');
   let selectedId = null;
   const safeLink = url => {
     try {
@@ -134,6 +135,7 @@
     const card = byId.get(id);
     if (!card) return false;
     render(card);
+    if (options.userChosen && example) example.hidden = true;
     if (options.scroll) {
       desk.scrollIntoView({block: 'nearest', behavior: 'auto'});
       if (options.focus) chooser.focus({preventScroll: true});
@@ -155,21 +157,21 @@
     button.setAttribute('aria-label', 'Check documented parking and trail approach for ' + card.dataset.name);
     button.addEventListener('click', () => {
       if (typeof window.UPWaterfallFocus === 'function') window.UPWaterfallFocus(card.dataset.id);
-      select(card.dataset.id, {scroll: true, focus: true});
+      select(card.dataset.id, {scroll: true, focus: true, userChosen: true});
     });
     slot.appendChild(button);
   });
   chooser.addEventListener('change', () => {
     const id = chooser.value;
     if (!id) { area.hidden = true; choose.hidden = false; selectedId = null; return; }
-    select(id);
+    select(id, {userChosen: true});
     // Keep the answer visible; a filter may currently hide this map pin.
     if (typeof window.UPWaterfallFocus === 'function') {
       window.UPWaterfallFocus(id);
       desk.scrollIntoView({block: 'nearest', behavior: 'auto'});
     }
   });
-  document.addEventListener('upfall:selected', event => select(event.detail?.id, {scroll: true}));
+  document.addEventListener('upfall:selected', event => select(event.detail?.id, {scroll: true, userChosen: true}));
   el('visit-date')?.addEventListener('change', () => { if (selectedId) select(selectedId); });
   window.UPWaterfallArrivalDesk = Object.freeze({select, parkingDirections: id => {
     const card = byId.get(id);
