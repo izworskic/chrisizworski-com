@@ -209,10 +209,12 @@ function initMap(forceNative=false){
  const glance=document.createElement("div");glance.className="native-map-glance";glance.setAttribute("aria-live","polite");
  const spotName=document.createElement("strong");const spotCity=document.createElement("span");
  const more=document.createElement("a");more.href="#location-details";more.textContent="See location details ↓";
- glance.append(spotName,spotCity,more);canvas.append(glance);
+ const mapOpen=document.createElement("a");mapOpen.textContent="View in Google Maps";
+ mapOpen.target="_blank";mapOpen.rel="noopener noreferrer";
+ glance.append(spotName,spotCity,more,mapOpen);canvas.append(glance);
  let dragging=false,atX=0,atY=0;
  holder.addEventListener("pointerdown",e=>{
-   if(e.target.closest("button"))return;
+   if(e.target.closest("button,a"))return;
    dragging=true;atX=e.clientX;atY=e.clientY;
    if(holder.setPointerCapture)holder.setPointerCapture(e.pointerId);
    holder.classList.add("dragging");
@@ -229,6 +231,9 @@ function initMap(forceNative=false){
  // Selecting a spot from the list makes that marker visible if zoomed.
  moveMapToSelected=()=>{
    spotName.textContent=selected.name;spotCity.textContent=selected.city+", "+selected.state;
+   const placeHref=window.EagleMap?.publicMapLink?.(selected);
+   mapOpen.hidden=!placeHref;
+   if(placeHref)mapOpen.href=placeHref;
    glance.style.left=Math.min(76,Math.max(24,lonPercent(selected.lon)))+"%";
    glance.style.top=latPercent(selected.lat).toFixed(3)+"%";
    glance.classList.toggle("below",latPercent(selected.lat)<45);

@@ -79,7 +79,7 @@ test('CARTO-ready map page keeps accessible local map fallback if MapLibre is bl
  const map=fs.readFileSync(path.join(root,'eagle-map.js'),'utf8');
  const svg=fs.readFileSync(path.join(root,'midwest-vector-map.svg'),'utf8');
  assert.ok(page.includes('maplibre-gl@5.16.0/dist/maplibre-gl.js'));
- assert.ok(page.includes('/winter-eagle-watching/eagle-map.js?v=5'));
+ assert.ok(page.includes('/winter-eagle-watching/eagle-map.js?v=6'));
  assert.ok(app.includes('window.EagleMap.init'));
  assert.ok(app.includes('updateMapMatches(matches)'));
  assert.ok(map.includes('CARTO_STYLE'));
@@ -95,4 +95,36 @@ test('CARTO-ready map page keeps accessible local map fallback if MapLibre is bl
  assert.ok(svg.includes('preserveAspectRatio="none"'));
  assert.ok(!app.includes('basemaps.cartocdn.com/light_all'));
  assert.ok(!app.includes('tile.openstreetmap.org/'));
+});
+
+test('every eagle map selection offers the same vetted public-place Google link in vector and fallback views',()=>{
+ const root=path.join(__dirname,'..','public','winter-eagle-watching');
+ const app=fs.readFileSync(path.join(root,'app.js'),'utf8');
+ const mapSource=fs.readFileSync(path.join(root,'eagle-map.js'),'utf8');
+ const page=fs.readFileSync(path.join(root,'index.html'),'utf8');
+ const mapApi=require('../public/winter-eagle-watching/eagle-map.js');
+ const curatorLinks=[...app.matchAll(/map:"(https:\/\/www\.google\.com\/maps\/search\/\?api=1&query=[^"]+)"/g)];
+ assert.equal(curatorLinks.length,19,'all 19 source-curated viewing locations need map links');
+ for(const [,href] of curatorLinks){
+  assert.equal(mapApi.publicMapLink({map:href}),href);
+  const url=new URL(href);
+  assert.equal(url.pathname,'/maps/search/');
+  assert.equal(url.searchParams.get('api'),'1');
+  assert.ok(url.searchParams.get('query'));
+ }
+ assert.equal(mapApi.publicMapLink({map:'https://www.google.com/maps/dir/?api=1&destination=42,-83'}),null);
+ assert.equal(mapApi.publicMapLink({map:'https://bad.example/maps/search/?api=1&query=42,-83'}),null);
+ assert.equal(mapApi.publicMapLink({map:'javascript:alert(1)'}),null);
+ assert.equal(mapApi.publicMapLink({map:'https://www.google.com/maps/search/?api=1'}),null);
+ assert.match(mapSource,/google\.textContent="View in Google Maps"/);
+ assert.match(mapSource,/view\.textContent="View in Google Maps"/);
+ assert.match(mapSource,/google\.hidden=!href/);
+ assert.match(app,/mapOpen\.hidden=!placeHref/);
+ assert.match(app,/e\.target\.closest\("button,a"\)/);
+ assert.match(app,/window\.EagleMap\?\.publicMapLink\?\.\(selected\)/);
+ assert.match(page,/eagle-map\.js\?v=6/);
+ assert.match(page,/app\.js\?v=15/);
+ assert.match(page,/id="directions"[^>]*>View in Google Maps/);
+ // Seney's map search uses the public trail-planning area, not its regional weather pin.
+ assert.ok(curatorLinks.some(([,href])=>href.includes('Seney+National+Wildlife+Refuge+Robinson+Road+trail')));
 });
