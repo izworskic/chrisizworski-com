@@ -63,6 +63,8 @@ const server=http.createServer((req,res)=>{
    const page=await context.newPage();await page.goto('http://127.0.0.1:4173/michigan-snow-totals/');
    assert(await page.locator('a[href="https://mesonet.agron.iastate.edu/lsr/"]').count()>0,'No NWS archive fallback');
    assert(await page.locator('noscript').count()>0,'No noscript map fallback');
+   await page.locator('.answer-next summary').click();
+   assert(await page.locator('#headingOut a').first().isVisible(),'Native disclosure unavailable without JavaScript');
    await context.close();
    fs.writeFileSync(path.join(evidence,'browser-qa.json'),JSON.stringify({checkedAt:new Date().toISOString(),observations,noJavaScript:'PASS',reducedMotion:'PASS'},null,2)+'\n');
    console.log(JSON.stringify(observations,null,2));
