@@ -131,9 +131,10 @@ jobs:
 
   preview-browser-acceptance:
     # Expensive visual proof runs on PRs or explicit manual checks, not twice daily.
+    # Pin 24.04: Playwright 1.58.2 cannot install its browser on Ubuntu 26.04.
     if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
     needs: contract
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 14
     steps:
       - uses: actions/checkout@v4
