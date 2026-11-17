@@ -18,10 +18,10 @@
     if(!status)return;
     const tiles=$('rl-coast-map')?.dataset.tiles;
     // Keep the normal map caption quiet. Only report a loading or failure state.
-    const message=state.scheduleFailed?
-      'The launch calendar isn’t loading, but you can still browse the launch sites.':
-      tiles==='reference-only'?
-        'The map background isn’t loading; coastlines are shown instead.':'';
+    const alerts=[];
+    if(state.scheduleFailed)alerts.push('The launch calendar isn’t loading, but you can still browse the launch sites.');
+    if(tiles==='reference-only')alerts.push('The map background isn’t loading; coastlines are shown instead.');
+    const message=alerts.join(' ');
     status.textContent=message;
     status.hidden=!message;
   }
