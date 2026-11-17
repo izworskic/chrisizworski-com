@@ -124,6 +124,9 @@
       .ct-map-live-tabs{display:flex;gap:5px;flex-wrap:wrap}.ct-map-live-tabs button{border:1px solid #cfd9d4;background:#fff;border-radius:12px;padding:4px 8px;font:11px Georgia,'Times New Roman',serif;color:#4c5d54;cursor:pointer}
       .ct-map-live-tabs button[aria-pressed="true"]{background:#173f50;color:#fff;border-color:#173f50}.ct-map-picks{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}
       .ct-map-pick{border:0;background:#e9f2ee;border-radius:3px;padding:5px 7px;font:11px Georgia,'Times New Roman',serif;color:#245b3b;cursor:pointer}
+      .ct-map-place{display:inline-flex;align-items:center;gap:3px;background:#e9f2ee;border-radius:3px;padding-right:5px}
+      .ct-map-google{display:inline-flex;align-items:center;min-height:44px;padding:4px 7px;font:700 11px Georgia,'Times New Roman',serif;color:#245b3b;text-decoration:underline;text-underline-offset:3px}
+      .ct-map-google:focus-visible{outline:3px solid #19604c;outline-offset:2px}
       .ct-map-pick.live:before{content:'●';color:#2f8b54;margin-right:5px}.ct-map-pick.warn:before{content:'●';color:#c28518;margin-right:5px}
       @media(max-width:980px){.ct-today-form{grid-template-columns:1fr 1fr 1fr}.ct-interest-wrap{grid-column:1/-1}.ct-build{grid-column:1/-1}}
       @media(max-width:850px){.ct-today{padding:0 12px 16px}.ct-today-form{padding:13px}.ct-today-output,.ct-intel{padding-left:13px;padding-right:13px}}
@@ -853,7 +856,7 @@
       article.className = 'ct-signal';
       article.dataset.signal = s.id;
       const stateLabel = s.state === 'live' ? 'LIVE' : s.state === 'warn' ? 'AFFECTING PLAN' : 'VERIFY';
-      article.innerHTML = `<div class="ct-signal-top"><span class="ct-signal-type">${escapeHtml(s.type)}</span><span class="ct-state ${escapeHtml(s.state)}">${stateLabel}</span></div><strong>${escapeHtml(s.title)}</strong><p>${escapeHtml(s.detail)}</p><div class="ct-signal-actions"><a href="${s.href}"${s.href.startsWith('http') ? ' target="_blank" rel="noopener"' : ''}>Open specialist →</a>${s.extraHref ? `<a href="${s.extraHref}">All crossings →</a>` : ''}${s.stopId ? `<button type="button" data-focus-stop="${s.stopId}">Show on map</button>` : ''}</div>`;
+      article.innerHTML = `<div class="ct-signal-top"><span class="ct-signal-type">${escapeHtml(s.type)}</span><span class="ct-state ${escapeHtml(s.state)}">${stateLabel}</span></div><strong>${escapeHtml(s.title)}</strong><p>${escapeHtml(s.detail)}</p><div class="ct-signal-actions"><a href="${s.href}"${s.href.startsWith('http') ? ' target="_blank" rel="noopener"' : ''}>Open specialist →</a>${s.extraHref ? `<a href="${s.extraHref}">All crossings →</a>` : ''}${s.stopId ? `<button type="button" data-focus-stop="${s.stopId}">Show on map</button>${page.mapLocationUrl?.(s.stopId) ? `<a href="${page.mapLocationUrl(s.stopId)}" target="_blank" rel="noopener noreferrer">Google Maps place →</a>` : ''}` : ''}</div>`;
       grid.appendChild(article);
     });
     grid.querySelectorAll('[data-focus-stop]').forEach((button) => {
@@ -884,7 +887,10 @@
       button.type = 'button';
       button.textContent = name(id).replace(/, (Michigan|Minnesota|Ontario.*)$/i,'');
       button.addEventListener('click', () => focusStop(id, `map-${mode}`));
-      picks.appendChild(button);
+      const wrap=document.createElement('span');wrap.className='ct-map-place';wrap.appendChild(button);
+      const href=page.mapLocationUrl?.(id);
+      if(href){const maps=document.createElement('a');maps.className='ct-map-google';maps.href=href;maps.target='_blank';maps.rel='noopener noreferrer';maps.textContent='Google Maps';maps.setAttribute('aria-label','Find '+name(id)+' area in Google Maps, not driving directions');wrap.appendChild(maps);}
+      picks.appendChild(wrap);
     });
   }
 

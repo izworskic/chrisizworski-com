@@ -179,7 +179,7 @@ test('All eight Welland lock profiles carry authored explanations and truth-labe
   assert.match(js,/img\.complete&&img\.naturalWidth===0/);
   assert.match(js,/img\.dataset\.photoToken/);
   assert.match(js,/if\(!triedRemote&&photo\.remote\)/);
-  assert.match(html,/welland-canal\.js\?v=20261013-lock-handoff1/);
+  assert.match(html,/welland-canal\.js\?v=20261116-google-public-places/);
   assert.match(html,/welland-canal\.css\?v=20261013-lock-handoff1/);
 });
 
@@ -334,7 +334,7 @@ test('Mobile lock preview docks below the ship map without covering vessel marke
   assert.match(js,/element\.classList\.toggle\('is-active',selected===key\)/);
   assert.doesNotMatch(js,/marker\.setIcon\(lockIcon/);
   assert.match(html,/welland-canal\.css\?v=20261013-lock-handoff1/);
-  assert.match(html,/welland-canal\.js\?v=20261013-lock-handoff1/);
+  assert.match(html,/welland-canal\.js\?v=20261116-google-public-places/);
 });
 
 

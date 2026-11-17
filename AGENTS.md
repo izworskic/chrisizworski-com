@@ -32,6 +32,10 @@ When the owner asks **"Use JOURNEY_ATLAS_V1"**, **"use my Journey Atlas template
 
 When the owner asks **"use my Field Guide design standard"**, **"FIELD_GUIDE_V1"** or **"the Michigan Adventure Finder design"**, first read [`design-systems/field-guide-v1/AGENTS.md`](design-systems/field-guide-v1/AGENTS.md) and its referenced specification. The self-contained, versioned system includes accessible HTML/CSS/JS starter, photographed destination cards, credits/licenses, map fallback and QA benchmark. Apply the *experience principles*, not cloned text or duplicated cards. Do not modify the existing advertising stack without a separate explicit request. The source folder is not a public route and not a separate GitHub repository.
 
+## Visitor Google Maps links, directions and source confidence (2026-11-16)
+
+For any visitor map or location card, use [the visitor Google Maps standard](docs/VISITOR_GOOGLE_MAPS_STANDARD.md). Put a Google Maps location search beside interactive map focus when a public geographic reference is grounded, including a no-script HTML fallback for essential destination cards. A place search is not a driving direction. Only provide turn-by-turn navigation to an independently verified arrival or parking entrance with an authoritative source. Never route to natural-feature pins, unverified trail junctions, restricted facilities or moving AIS positions. Preserve official source links, closures, mobile and keyboard access, and the existing ads and SEO contracts.
+
 # Working agreement for coding agents
 
 ## Search growth / revenue / Chris Izworski SERP handoff — October 9, 2026

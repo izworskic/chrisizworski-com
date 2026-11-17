@@ -434,18 +434,21 @@ function drawParkingPins(sites){
   if(!MAP||!window.L||!L.layerGroup||!L.circleMarker)return;
   const group=L.layerGroup();
   for(const site of sites){
-    const url=window.SnowmobileParking?.directionsUrl(site),e=accessEvidence(site);
+    const e=accessEvidence(site),view=window.SnowmobileParking?.locationUrl(site);
+    const url=['DNR_MAP_PAIRED','OPERATOR_PAIRED'].includes(e.grade)?window.SnowmobileParking?.directionsUrl(site):null;
     const pin=L.circleMarker([site.lat,site.lon],{radius:9,color:'#fff',weight:2,fillColor:(e.grade==='DNR_MAP_PAIRED'||e.grade==='OPERATOR_PAIRED')?'#245c80':'#70509d',fillOpacity:.97});
     const popup='<strong>'+esc(site.name)+'</strong><p>'+esc(accessLabel(site))+'. Access from this lot to a legal trail has not been field-verified.</p>'+
       (e.countyMap?'<a href="'+esc(e.countyMap)+'" target="_blank" rel="noopener">Official county trail and parking map</a><br>':'')+
       (e.publicSource?'<a href="'+esc(e.publicSource)+'" target="_blank" rel="noopener">City public trailhead inventory</a><br>':'')+
-      (url?'<a href="'+url+'" target="_blank" rel="noopener">Driving directions to parking pin</a>':'');
+      (view?'<a href="'+view+'" target="_blank" rel="noopener noreferrer">View DNR parking location in Google Maps</a><br>':'')+
+      (url?'<a href="'+url+'" target="_blank" rel="noopener noreferrer">Directions toward mapped parking; verify entrance</a>':'');
     pin.bindPopup?.(popup);pin.addTo(group);
   }
   group.addTo(MAP);PARKING_LAYER=group;
 }
 function parkingCard(site){
-  const url=window.SnowmobileParking?.directionsUrl(site),e=accessEvidence(site);
+  const e=accessEvidence(site),view=window.SnowmobileParking?.locationUrl(site);
+  const url=['DNR_MAP_PAIRED','OPERATOR_PAIRED'].includes(e.grade)?window.SnowmobileParking?.directionsUrl(site):null;
   const comment=site.directionsNote?'<p class="parking-location-note">'+esc(site.directionsNote)+'</p>':'';
   const nearby=Number.isFinite(site.nearMiles)?site.nearMiles.toFixed(2)+' mi straight-line from the nearest mapped trail':'Trail proximity not established';
   const code=e.grade==='DNR_MAP_PAIRED'?e.trailCodes.join(', '):'';
@@ -467,7 +470,8 @@ function parkingCard(site){
   return '<article class="parking-card"><div class="parking-card-top"><strong>'+esc(site.name)+'</strong><span>DNR asset #'+site.id+'</span></div>'+
     tier+'<p class="parking-distance">Approximately '+esc(nearby)+' ('+esc(site.nearTrail||'DNR trail')+')</p>'+
     comment+checkNote+season+
-    '<div class="parking-actions">'+(url?'<a href="'+url+'" target="_blank" rel="noopener" data-parking-directions="'+site.id+'">Drive to parking pin</a>':'')+
+    '<div class="parking-actions">'+(view?'<a href="'+view+'" target="_blank" rel="noopener noreferrer" data-parking-location="'+site.id+'">View DNR parking location in Google Maps</a>':'')+
+    (url?'<a href="'+url+'" target="_blank" rel="noopener noreferrer" data-parking-directions="'+site.id+'">Directions toward mapped parking</a>':'')+
     mapRef+operatorLinks+trailLookup+(MAP?'<button type="button" class="parking-map-focus" data-parking-focus="'+site.id+'">Show on map</button>':'')+'</div></article>';
 }
 async function loadParking(){

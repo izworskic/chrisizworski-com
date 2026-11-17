@@ -535,7 +535,13 @@
     }
   }
 
+  function mapLocationUrl(id) {
+    const query=byId(`stop-${String(id)}`)?.dataset.googleMapQuery;
+    return window.VisitorMapLinks?.placeSearch({role:'regional-reference',query}) || null;
+  }
+
   window.CircleTourPage = {
+    mapLocationUrl,
     addStop: addToTrip,
     removeStop: removeFromTrip,
     toggleStop(id) { TRIP.has(String(id)) ? removeFromTrip(id) : addToTrip(id); },
@@ -673,7 +679,7 @@
   };
 
   const mapFrame = document.querySelector(".map-frame");
-  const loadMap = () => import("/assets/lake-superior-circle-tour-map.js").catch(() => {
+  const loadMap = () => import("/assets/lake-superior-circle-tour-map.js?v=20261116-gmaps").catch(() => {
     byId("mapStatus").innerHTML = '<div class="map-unavailable"><strong>The interactive map could not load.</strong>Use the synchronized itinerary preview, Google Maps day links, and all 31 stop cards on this page.</div>';
   });
   if ("IntersectionObserver" in window) {

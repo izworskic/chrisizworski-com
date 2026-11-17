@@ -64,7 +64,7 @@ test('single canonical and truthful sitemap dates, hub remains unchanged in ads 
  assert.ok(sitemap.includes('https://chrisizworski.com/lake-superior-circle-tour/10-day/'));
  assert.equal((hub.match(/class="stop-card"/g)||[]).length,31);
  assert.match(hub,/route-detail" href="\/lake-superior-circle-tour\/10-day\/"/);
- assert.match(hub,/"dateModified":"2026-11-14"/);
+ assert.match(hub,/"dateModified":"2026-11-16"/);
  const page=fs.readFileSync(generated,'utf8');
  assert.equal((page.match(/rel="canonical"/g)||[]).length,1);
  assert.doesNotMatch(page,/adsbygoogle|pagead2\.googlesyndication\.com/);

@@ -126,6 +126,12 @@
       directions:'https://www.google.com/maps/search/?api=1&query=Lock+8+Gateway+Park+Port+Colborne',
       official:'https://www.portcolborne.ca/en/recreation-and-leisure/Parks__Pavilions__Trails__Fields_and_Green_Spaces.aspx'}
   };
+  function publicViewingUrl(id){
+    const source=WATCH_SPOTS[String(id)]?.directions;
+    if(!source)return null;
+    const query=new URL(source).searchParams.get('query');
+    return window.VisitorMapLinks?.placeSearch({role:'public-place',query}) || source;
+  }
   let activeWatchSpot='3';
   const $ = id => document.getElementById(id);
   const list = $('vesselList'), results = $('vesselCount'), status = $('liveStatus'), updated = $('lastUpdated'), select = $('lockSelect');
@@ -271,7 +277,8 @@
     $('shoreWatchPlace').textContent=spot.title;
     $('shoreWatchDescription').textContent=spot.description;
     $('shoreWatchPractical').textContent=spot.practical;
-    $('shoreWatchDirections').href=spot.directions;
+    $('shoreWatchDirections').href=publicViewingUrl(activeWatchSpot);
+    $('shoreWatchDirections').textContent='View public viewing place in Google Maps';
     $('shoreWatchOfficial').href=spot.official;
     const reports=recentNearSpot(activeWatchSpot),vessels=$('shoreWatchVessels');
     vessels.replaceChildren();
@@ -369,7 +376,11 @@
     $('lockMapHint').textContent=lock?'Selected '+lock.name+' · '+LOCK_QUICK[lock.id].cue:'Tap a numbered lock once to understand it';
     const focus=$('lockFocus');
     focus.replaceChildren();
-    if(lock)focus.append(el('strong',lock.name+' — '+lock.place),el('p',lock.note));
+    if(lock){
+      focus.append(el('strong',lock.name+' — '+lock.place),el('p',lock.note));
+      const url=publicViewingUrl(lock.id);
+      if(url){const a=el('a','View public viewing place in Google Maps','lock-public-google');a.href=url;a.target='_blank';a.rel='noopener noreferrer';focus.appendChild(a);}
+    }
     else focus.append(el('strong','Explore the eight locks'),el('p','Select a lock above or below the map. Closely spaced locks are grouped until you zoom in.'));
     renderList();
   }

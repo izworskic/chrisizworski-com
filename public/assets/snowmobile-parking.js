@@ -64,9 +64,16 @@ function nearParking(sites,geometry,limit=40,maxMiles=MAX_MILES){
   const cap=Math.min(80,Math.max(1,Number.isInteger(limit)?limit:40));
   return {matches:result.slice(0,cap),total:result.length};
 }
+function validParkingPoint(site){
+  return Number.isFinite(site?.lat)&&Number.isFinite(site?.lon)&&site.lat>=41&&site.lat<=49&&site.lon>=-91&&site.lon<=-82;
+}
+function locationUrl(site){
+  if(!validParkingPoint(site))return null;
+  return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(site.lat.toFixed(6)+','+site.lon.toFixed(6));
+}
 function directionsUrl(site){
-  if(!Number.isFinite(site?.lat)||!Number.isFinite(site?.lon)||site.lat<41||site.lat>49||site.lon< -91||site.lon> -82)return null;
+  if(!validParkingPoint(site))return null;
   return 'https://www.google.com/maps/dir/?api=1&destination='+site.lat.toFixed(6)+','+site.lon.toFixed(6);
 }
-return Object.freeze({nearParking,segmentDistanceMiles,directionsUrl});
+return Object.freeze({nearParking,segmentDistanceMiles,locationUrl,directionsUrl});
 });

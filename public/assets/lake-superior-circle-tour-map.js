@@ -213,6 +213,9 @@ function updateSelection(id) {
   const link = document.getElementById("mapStopLink");
   link.href = `#stop-${selectedStopId}`;
   link.textContent = "View full stop";
+  const google=document.getElementById('mapStopGoogleLink');
+  const url=page.mapLocationUrl?.(selectedStopId);
+  if(google){google.hidden=!url;if(url)google.href=url;}
   // Stop 11 owns the Pictured Rocks decision engine; expose it directly from the map.
   // Other pins keep the existing stop/detail controls without irrelevant tool links.
   let planner = document.getElementById("mapPicturedRocksPlanner");
