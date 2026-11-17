@@ -39,6 +39,11 @@
     if(!place)return;
     state.chosen=place.id;
     const match=outcome.kind==='candidate';
+    $('quick-outing').textContent=match?place.title:'Reconsider this outing length';
+    $('quick-reason').textContent=match
+      ?place.short+'. Official access is not yet verified.'
+      :outcome.reason;
+    $('quick-source').href=place.conditions;
     $('stage-region').textContent=place.label;
     $('stage-title').textContent=place.title;
     $('stage-short').textContent=place.short;
@@ -154,10 +159,17 @@
     }
     try{
       mapState.map=L.map(holder,{scrollWheelZoom:false,zoomControl:true}).setView([46.92,-90.1],6);
-      L.tileLayer('https://basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{
+      const basemap=L.tileLayer('https://basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{
         attribution:'&copy; OpenStreetMap contributors &copy; CARTO',
         maxZoom:18
       }).addTo(mapState.map);
+      let loaded=0,errors=0;
+      basemap.on('loading',()=>{loaded=0;errors=0;});
+      basemap.on('tileload',()=>{loaded++;$('map-fallback').hidden=true;});
+      basemap.on('tileerror',()=>{
+        errors++;
+        if(errors>=2&&loaded===0)$('map-fallback').hidden=false;
+      });
       C.PLACES.forEach(p=>{
         const mark=L.circleMarker([p.lat,p.lon],{radius:9,weight:3,color:'#152d39',fillColor:'#e7b76b',fillOpacity:1});
         mark.addTo(mapState.map).bindTooltip(p.region);
