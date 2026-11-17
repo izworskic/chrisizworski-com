@@ -233,7 +233,7 @@ function initMap(forceNative=false){
    spotName.textContent=selected.name;spotCity.textContent=selected.city+", "+selected.state;
    const placeHref=window.EagleMap?.publicMapLink?.(selected);
    mapOpen.hidden=!placeHref;
-   if(placeHref)mapOpen.href=placeHref;else mapOpen.removeAttribute("href");
+   if(placeHref)mapOpen.href=placeHref;
    glance.style.left=Math.min(76,Math.max(24,lonPercent(selected.lon)))+"%";
    glance.style.top=latPercent(selected.lat).toFixed(3)+"%";
    glance.classList.toggle("below",latPercent(selected.lat)<45);
