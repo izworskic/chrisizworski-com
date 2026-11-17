@@ -1,0 +1,118 @@
+{
+  "checkedAt": "2026-11-17T13:55:32.132Z",
+  "runCommit": "dd31fdeba0e7b8e875946f39342a898fb9ca4460",
+  "viewports": [
+    {
+      "width": 360,
+      "scrollWidth": 360,
+      "header": "sticky",
+      "peakFont": 56,
+      "mapAfter": true,
+      "rankCount": 3,
+      "barWidths": [
+        100,
+        86.3,
+        85.3
+      ],
+      "liveCount": 5,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "scrollWidth": 390,
+      "header": "sticky",
+      "peakFont": 56,
+      "mapAfter": true,
+      "rankCount": 3,
+      "barWidths": [
+        100,
+        86.3,
+        85.3
+      ],
+      "liveCount": 5,
+      "errors": []
+    },
+    {
+      "width": 768,
+      "scrollWidth": 768,
+      "header": "sticky",
+      "peakFont": 56,
+      "mapAfter": true,
+      "rankCount": 3,
+      "barWidths": [
+        100,
+        86.3,
+        85.3
+      ],
+      "liveCount": 5,
+      "errors": []
+    },
+    {
+      "width": 1280,
+      "scrollWidth": 1280,
+      "header": "sticky",
+      "peakFont": 56,
+      "mapAfter": true,
+      "rankCount": 3,
+      "barWidths": [
+        100,
+        86.3,
+        85.3
+      ],
+      "liveCount": 5,
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "scrollWidth": 1440,
+      "header": "sticky",
+      "peakFont": 56,
+      "mapAfter": true,
+      "rankCount": 3,
+      "barWidths": [
+        100,
+        86.3,
+        85.3
+      ],
+      "liveCount": 5,
+      "errors": []
+    }
+  ],
+  "a11y": [
+    {
+      "width": 360,
+      "violations": [],
+      "seriousCount": 0
+    },
+    {
+      "width": 390,
+      "violations": [],
+      "seriousCount": 0
+    },
+    {
+      "width": 768,
+      "violations": [],
+      "seriousCount": 0
+    },
+    {
+      "width": 1280,
+      "violations": [],
+      "seriousCount": 0
+    },
+    {
+      "width": 1440,
+      "violations": [],
+      "seriousCount": 0
+    }
+  ],
+  "fallbacks": {
+    "tiles": "Map collapsed; archive and full report disclosure available",
+    "leaflet": "Map collapsed; archive and full report disclosure available",
+    "data": "Map collapsed; archive and full report disclosure available",
+    "noJS": "Archive and native navigation available"
+  },
+  "assertions": [
+    "Mobile to desktop, reversibility, live source bars and serious/critical axe checks",
+    "Tile failure, Leaflet failure, missing data, and no-JavaScript source path"
+  ]
+}
