@@ -117,3 +117,30 @@ node --test tests/great-lakes-winter-desk.test.js
 ~~~
 
 No background updater or live service has been enabled by this draft. Without an approved refresh process, the dated snapshot is short-lived by design. The user-facing page must say when the official source needs rechecking instead of suggesting that access has been verified.
+
+
+## Automated official evidence watch and release gate
+
+The workflow is **.github/workflows/winter-field-evidence-watch.yml**. Its schedule activates only after this draft PR merges to main. Until then, it runs only pull-request verification. No site deployment or production data update is implied.
+
+**Cadence:** 05:17 and 17:17 UTC twice daily November-April, then every Tuesday at 17:17 UTC May-October. Standard-library Python checks three official conditions pages and three individually scoped park statements. The monitored statements are published policy, an adjacent-route closure, and a conditional cold-weather closure, **not** six observations that a trail is open.
+
+The monitor produces three dated GitHub Actions artifacts (14-day retention): **source-checks.json**, **operator-notice-monitor.json**, and **monitor-report.json**. SOURCE_SIGNALS_PRESENT indicates that all official pages were reached and all expected statements appeared in visible page text. REVIEW_REQUIRED flags outages, changed wording, stale observations or mismatched sources. A single open issue titled "Winter Field Desk: official park evidence needs review" is created on drift and not duplicated every run. A recovered source does not auto-close an existing editorial-review issue.
+
+**No automatic publishing:** The schedule uses contents: read only. It does not commit to main, overwrite checked-in snapshots, create a live public URL, authorize a route opening, trigger Vercel deployment or change ads. A reviewer must inspect official source evidence before promoting any artifact into the preview. The viewer itself continues to expire stale source statements after 24 hours and will fall back to direct official links.
+
+Operator and publication verification can be reproduced with:
+
+~~~bash
+python3 scripts/winter-desk-evidence-watch.py --live --out-dir /tmp/winter-desk-evidence
+cat /tmp/winter-desk-evidence/monitor-report.json
+python3 -m unittest discover -s tests -p 'test_winter_desk_evidence_watch.py' -v
+node scripts/winter-desk-release-gate.cjs --preview
+node scripts/winter-desk-release-gate.cjs --release
+~~~
+
+The preview release gate checks first-answer content, named-route and parking identities, noindex, static source fallbacks, and that no weather or official-page reachability is interpreted as operator access. The stricter release gate deliberately reports HOLD without route-specific, date-scoped operating evidence and a final human check of image rights, public route, canonical, site ad integration and production smoke. A HOLD is an honest review state, not a claim that the visitor-facing prototype has failed.
+
+Pull requests additionally run a **real Chromium browser acceptance** at 360, 390, 768 and 1440 pixels. It inspects destination selection, source and parking switching, original location photos, map tiles, failed weather and map services, synthetic closure precedence and JavaScript-off source fallbacks. This heavier browser job is *not* part of the twice-daily scheduled monitor, reducing cost.
+
+**Exactly one next engineering step:** create a reviewer-approved operating feed with dated notices for each exact trail and winter parking arrival point before any positive visitor access status or public launch. Do not substitute generic web availability or forecast data.
