@@ -130,7 +130,7 @@ function serveHtml(req, res, live, season) {
       assert.notEqual(secondDetail,firstDetail,'Selecting B changes exact report identity');
       await ranked.nth(0).click();
       assert.equal(await focused.locator('h4').textContent(),firstDetail,'A B A restores original report');
-      const markerPopup=page.locator('.leaflet-popup-content');
+      const markerPopup=page.locator('.leaflet-popup-content:visible').last();
       assert(await markerPopup.count()>0,'Selected report opens source-qualified marker popup');
       assert((await markerPopup.textContent()).includes('Original NWS report'),'Marker popup keeps primary source');
       assert((await markerPopup.textContent()).includes('Approximate report location'),'Marker does not imply arrival permission');
