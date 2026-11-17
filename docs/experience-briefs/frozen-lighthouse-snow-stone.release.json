@@ -129,10 +129,12 @@
       768,
       1440
     ],
-    "browserStatus": "PENDING",
-    "browserRun": null,
-    "screenshotEvidence": [],
-    "scopeNote": "Full mocked source, licensed local WebP actual image decode, photo selection, no-JS and mobile acceptance must be checked before review."
+    "browserStatus": "PASSED",
+    "browserRun": "https://github.com/izworskic/chrisizworski-com/actions/runs/44078541925",
+    "screenshotEvidence": [
+      "https://github.com/izworskic/chrisizworski-com/actions/runs/44078541925/artifacts"
+    ],
+    "scopeNote": "Chromium mock-data workflows passed 360, 390, 768 and 1440px: all three images decode, licensing and palette verified, gallery selection A-B-A, original forecast controls, no-JS, source failure and screenshots. Screenshots downloaded and inspected by the reviewer; fixture passes do not confirm live icing."
   },
   "photos": [
     {
@@ -167,7 +169,9 @@
       "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/commit/4716019db66280fcaa619e69ef63a948174a9e94"
     },
     "verified": {
-      "status": "PENDING"
+      "status": "CONFIRMED",
+      "checkedDate": "2026-11-17",
+      "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/actions/runs/44078541855"
     },
     "deployed": {
       "status": "PENDING"
@@ -179,5 +183,5 @@
       "status": "NOT_MEASURED"
     }
   },
-  "verificationLimit": "This is a dated photo-rights and release-review snapshot; neither archived images nor CI prove that a lighthouse is iced now or that a shore viewing area is accessible."
+  "verificationLimit": "Mock browser, Experience Foundry baseline-to-candidate proof, science preservation and full repository CI passed on 2026-11-17. The page is not yet merged or independently smoke-tested in public production; photographs are historical and forecast skill/CTR is unmeasured."
 }
