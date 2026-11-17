@@ -21,7 +21,7 @@ A failed OSM raster provider or Leaflet runtime collapses the 355px empty map an
 - Automated axe WCAG A/AA and WCAG 2.1/2.2 AA: zero reported violations at all five widths. This does **not** replace manual screen-reader testing.
 - 390px throttled network: answer remained visible, zero page errors, First Contentful Paint measured at about 968ms **in the synthetic local fixture test**. This is **not** field CWV or a real-user comparison.
 - Blocked tiles, blocked Leaflet, failed NWS API and no JavaScript: useful links and list/disclosure alternatives verified.
-- [Mobile initial screenshot](scorecard/enhanced-390.png), [desktop initial](scorecard/enhanced-1280.png), [mobile map](scorecard/map-390.png), [mobile ranked bars](scorecard/ranking-390.png), [mobile season comparison](scorecard/season-390.png). Expanded-state screenshots are separate.
+- [Mobile initial screenshot](scorecard/enhanced-390.png), [desktop initial](scorecard/enhanced-1280.png), [mobile map from the merged pilot](after-map-390.png), [mobile ranked bars](scorecard/ranking-390.png), [mobile season comparison](scorecard/season-390.png). Latest map interaction captures are retained with the browser run's screenshot artifact; expanded-state screenshots are separate.
 
 ## Scorecard evidence and remaining gap to 100
 
