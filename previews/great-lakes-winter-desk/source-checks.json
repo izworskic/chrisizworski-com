@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-11-17T21:04:50Z",
+  "meaning": "Official source reachability only. Does not verify winter access or route condition.",
+  "accessVerified": false,
+  "places": {
+    "gooseberry-upper": {
+      "sourceUrl": "https://www.dnr.state.mn.us/trailconditions/index.html",
+      "reachability": "REACHED",
+      "retrievedAt": "2026-11-17T21:04:50Z",
+      "httpStatus": 200,
+      "lastModifiedHeader": "Tue, 17 Nov 2026 21:04:51 GMT",
+      "bodyPrefixSha256": "440e17641a0d2f5581bbce55d74d5a6ef84cd5b9847539db306871b954970468",
+      "bodyTruncated": false,
+      "operatorAccess": "NOT_DETERMINED"
+    },
+    "munising-snowshoe": {
+      "sourceUrl": "https://www.nps.gov/piro/planyourvisit/conditions.htm",
+      "reachability": "REACHED",
+      "retrievedAt": "2026-11-17T21:04:50Z",
+      "httpStatus": 200,
+      "lastModifiedHeader": null,
+      "bodyPrefixSha256": "2479d4f41ded93e7b5bea4f08a273a1f3a05c8f0726796e53b65baa78f595b4b",
+      "bodyTruncated": false,
+      "operatorAccess": "NOT_DETERMINED"
+    },
+    "meyers-lakeshore": {
+      "sourceUrl": "https://www.nps.gov/apis/planyourvisit/conditions.htm",
+      "reachability": "REACHED",
+      "retrievedAt": "2026-11-17T21:04:50Z",
+      "httpStatus": 200,
+      "lastModifiedHeader": null,
+      "bodyPrefixSha256": "af401bc47bb06f02f50e92b2bf3c69afb4fb5d1956ed9120a7d63e340a3ccd35",
+      "bodyTruncated": false,
+      "operatorAccess": "NOT_DETERMINED"
+    }
+  }
+}
