@@ -12,6 +12,16 @@
  const CARTO_HOST="basemaps.cartocdn.com";
  const CARTO_STYLE="https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json";
  const FALLBACK_STYLE="https://tiles.openfreemap.org/styles/liberty";
+ function publicMapLink(site){
+  if(!site||typeof site.map!=="string")return null;
+  try{
+   const url=new URL(site.map);
+   if(url.protocol!=="https:"||url.hostname!=="www.google.com"||
+      url.pathname!=="/maps/search/"||url.searchParams.get("api")!=="1"||
+      !url.searchParams.get("query"))return null;
+   return url.href;
+  }catch{return null}
+ }
  const CARTO_DARK_STYLE="https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json";
  function cartoResourceUrl(url,key){
   if(!key||typeof url!=="string")return url;
@@ -48,7 +58,9 @@
   const overlay=document.createElement("div");overlay.className="eagle-map-overlay";overlay.setAttribute("aria-live","polite");
   const strong=document.createElement("strong");const sub=document.createElement("span");
   const link=document.createElement("a");link.href="#location-details";link.textContent="View access & trip details ↓";
-  overlay.append(strong,sub,link);holder.append(overlay);
+  const google=document.createElement("a");google.textContent="View in Google Maps";
+  google.target="_blank";google.rel="noopener noreferrer";
+  overlay.append(strong,sub,link,google);holder.append(overlay);
   const buttons=document.createElement("div");buttons.className="eagle-map-extra-controls";
   const all=document.createElement("button");all.type="button";all.textContent="View all";all.setAttribute("aria-label","Show all matching eagle watching spots");
   const focus=document.createElement("button");focus.type="button";focus.textContent="Focus spot";focus.setAttribute("aria-label","Zoom to the currently selected eagle watching destination");
@@ -66,6 +78,8 @@
   function updateOverlay(){
     const s=byId.get(selectedId);if(!s)return;
     strong.textContent=s.name;sub.textContent=s.city+", "+s.state;
+    const href=publicMapLink(s);google.hidden=!href;
+    if(href)google.href=href;else google.removeAttribute("href");
     if(userLocation){
       const miles=Math.round(milesBetween({lat:userLocation.latitude,lon:userLocation.longitude},s));
       positionNote.hidden=false;positionNote.textContent="Your position (approx.) · "+miles+" mi straight-line to selected overlook. Not driving distance.";
@@ -93,7 +107,14 @@
     const links=document.createElement("div");links.className="eagle-pin-links";
     const details=document.createElement("a");details.href="#location-details";details.textContent="Full spot guide ↓";
     const official=document.createElement("a");official.href=s.source||"#location-details";official.textContent="Official access ↗";official.target="_blank";official.rel="noopener";
-    links.append(details,official);card.append(links);
+    links.append(details,official);
+    const href=publicMapLink(s);
+    if(href){
+      const view=document.createElement("a");view.href=href;
+      view.textContent="View in Google Maps";view.target="_blank";view.rel="noopener noreferrer";
+      links.append(view);
+    }
+    card.append(links);
     const active=new MapGL.Popup({closeButton:true,closeOnClick:false,className:"eagle-pin-popup",offset:22,maxWidth:"300px"})
       .setLngLat([s.lon,s.lat]).setDOMContent(card).addTo(map);
     popup=active;
@@ -277,5 +298,5 @@
    }).catch(()=>{if(!retired)load(FALLBACK_STYLE,false)});
   return {select,filter,fitAll,focus:centerSelected,showUserLocation,getProvider:()=>provider,dispose:()=>{retired=true;stopTimer();clearPopup();if(map)map.remove()}};
  }
- return {init,cartoResourceUrl,placeData,CARTO_STYLE,CARTO_DARK_STYLE,FALLBACK_STYLE};
+ return {init,publicMapLink,cartoResourceUrl,placeData,CARTO_STYLE,CARTO_DARK_STYLE,FALLBACK_STYLE};
 });
