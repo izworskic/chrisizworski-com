@@ -29,7 +29,7 @@
       photoAlt:'Historic winter photograph of the Gooseberry River waterfall near the highway bridge',
       photoNote:'Archival winter view, not a photo of current ice or trail conditions.',
       weatherPoint:{lat:47.144,lon:-91.47},
-      supported:['short','half','full']
+      supported:['short','half']
     },
     {
       id:'munising-snowshoe', goal:'snowshoe', region:'Michigan Upper Peninsula',label:'MUNISING / MICHIGAN',
