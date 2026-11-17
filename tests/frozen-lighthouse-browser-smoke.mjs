@@ -53,6 +53,39 @@ try{
   const page=await browser.newPage({viewport:{width,height:850}});
   page.on('pageerror',e=>failures.push('JavaScript '+width+': '+e.message));
   await prepare(page);
+  await check('light winter palette and real hero photograph at '+width+'px',async()=>{
+   const design=await page.evaluate(()=>{
+    const body=getComputedStyle(document.body);
+    const hero=getComputedStyle(document.querySelector('.hero-photo img'));
+    const img=document.querySelector('.hero-photo img');
+    return {background:body.backgroundColor,colorScheme:body.colorScheme,
+      naturalWidth:img.naturalWidth,complete:img.complete,heroDisplay:hero.display};
+   });
+   assert.equal(design.background,'rgb(247, 246, 242)');
+   assert.equal(design.colorScheme,'light');
+   assert.ok(design.naturalWidth>=640,'historical photo must actually load, not just have an src');
+   assert.equal(design.heroDisplay,'block');
+  });
+  await check('licensed location-specific gallery photos load at '+width+'px',async()=>{
+   const images=page.locator('#winter-gallery .gallery-card img');
+   assert.equal(await images.count(),3);
+   for(let i=0;i<3;i++){
+    const photo=images.nth(i);
+    await photo.scrollIntoViewIfNeeded();
+    await photo.evaluate(img=>img.decode());
+    assert.ok(await photo.evaluate(img=>img.naturalWidth)>=640);
+   }
+   assert.equal(await page.locator('#winter-gallery figcaption a[href*="creativecommons.org"]').count(),3);
+   assert.equal(await page.locator('#winter-gallery figcaption a[href*="commons.wikimedia.org"]').count(),3);
+  });
+  await check('gallery chooses its own lighthouse forecast at '+width+'px',async()=>{
+   await page.locator('[data-select-lighthouse="holland"]').click();
+   assert.match(await page.locator('#desk-place').innerText(),/Holland/);
+   assert.equal(await page.locator('#coast-lights button[data-pier="holland"]').getAttribute('aria-pressed'),'true');
+   assert.equal(await page.locator('[data-select-lighthouse="holland"]').getAttribute('aria-current'),'true');
+   await page.locator('[data-select-lighthouse="st-joseph-outer"]').click();
+   assert.match(await page.locator('#desk-place').innerText(),/St. Joseph/);
+  });
   await check('no horizontal overflow at '+width+'px',async()=>{
    const [sw,cw]=await page.evaluate(()=>[document.documentElement.scrollWidth,document.documentElement.clientWidth]);
    assert.ok(sw<=cw+2,'overflow '+sw+' / '+cw);
