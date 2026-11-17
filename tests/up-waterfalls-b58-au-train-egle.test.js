@@ -75,7 +75,7 @@ test('B58: no tourist route is promoted while split ownership, upper lot sign an
 test('B58: noindex accessible research page gives named evidence and no unsafe directions',()=>{
  assert.match(guide,/name="robots" content="noindex,follow"/);
  assert.match(guide,/https:\/\/chrisizworski\.com\/#person/);
- assert.match(guide,/"dateModified":"2026-11-03"/);
+ assert.match(guide,/"dateModified":"2026-11-17"/);
  assert.match(guide,/EGLE.*emergency|emergency.*EGLE/i);
  assert.match(guide,/June 2,? 2026/i);
  assert.match(guide,/773\.43/);
