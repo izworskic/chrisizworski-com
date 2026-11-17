@@ -49,3 +49,32 @@ The **subsequent merged waterfall PR #1626**, head `c9c65b84c002da602a5e588f1957
 3. Obtain site-specific MDOT safe/public stopping and legal walking evidence for Alger Falls, or restrict to private guest-only sources without a public route.
 4. Compare remaining UP Travel category entries using **direct observations**, record stable listing ID and town/road text only as textual source provenance, review each identity against GIS/curated before publication.
 5. Run current-branch exact-head CI and one actual production browser/mobile smoke with pinned deployed SHA; do not mark live pass from CI alone.
+
+
+## November 17, 2026 source and production verification follow-up
+
+### Au Train Falls: newer township record, no route promotion
+
+The [Au Train Township October 2026 DRAFT board minutes](https://www.autraintownship.gov/wp-content/uploads/2026/11/autrain-minutes-October-2026-DRAFT-COMBINED.pdf) record the supervisor reporting that EGLE and project engineers were still weighing full or partial Forest Lake Dam removal or another option. The draft says physical work was unlikely before 2027. The bridge discussed in the same minutes was not tied to an approved Au Train Falls public approach. These are draft local meeting notes, not a revised EGLE order, verified project schedule or landowner access permission.
+
+The [township's November notice](https://www.autraintownship.gov/calendar/) states an Army Corps survey was expected to begin November 1, 2026 between Au Train Lake and the Lake Superior river mouth. Its geographical scope is downstream hydrology, not an upper/lower falls lot, trail reopening or state dam-order clearance. No updated state order rescission or separately owner-approved upper/lower walking and parking authorization was identified from these official sources. The Au Train research guide is updated, remains noindex, and keeps no public parking point.
+
+### Remaining held routes
+
+- Dead River Falls: no new public landowner corridor/easement or erosion-safe visitor path was established. Historic FERC lot and local tourism histories do not establish 2026 permission.
+- Alger Falls: no MDOT site-specific legal stopping/viewpoint approval was established. The general [MDOT Superior Region office page](https://www.michigan.gov/mdot/about/regions/superior) identifies an authority, not an approved highway turnout.
+- All three statuses are research-only, not route-cleared. An absence of verified visitor access is not an official declaration that every trail is closed.
+
+The versioned source-gate checkpoint is data/up-waterfall-release-blockers-2026-11-17.json. Tests reject attempts to place these cases on a public destination map or label directory URLs as certified arrivals.
+
+### UP Travel directory gap remains open
+
+The [UP Travel waterfall directory](https://www.uptravel.com/outdoors-recreation/waterfalls/) still reports 104 category entries, of which 12 source cards have directly observed membership. The independently indexed 108 retained URLs are a different collection. The remaining 92 category memberships are still not verified. The directory's dynamic pagination was not accessible through public page-text retrieval, and the available browser-action service requires a separate entitlement. No private endpoint workaround, guessing or inferred category membership is justified. No newly verified category listing was added in this checkpoint.
+
+### Production verification
+
+The public HTML at https://chrisizworski.com/upper-peninsula-waterfalls/ was fetched November 17, 2026 and exposes the map container, 80 curated waterfall result cards, selection controls, guide links and the original three-photo gallery after the map. The oversized top photo wall is absent. A public HTML fetch does not verify actual tiles, planner interactions or controls after scripts run.
+
+New GitHub Actions workflow at .github/workflows/up-waterfalls-production-audit.yml runs read-only Chromium against the live production domain at 390px and 1440px, checks a loaded tile and markers, Wagner Falls search, save/clear, visit-duration controls, Google Maps place-search links and three noindex held-case pages. It uploads screenshots and machine-readable results. Treat live behavior as verified only when that workflow completes successfully.
+
+**Next action:** inspect the production-browser workflow run, remedy genuine failures, and preserve held access verdicts until agency or owner evidence changes.

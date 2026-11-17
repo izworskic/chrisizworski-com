@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "reviewedOn": "2026-11-17",
+  "usage": "Historical editorial photography. Photos are not live observations or a forecast.",
+  "photos": [
+    {
+      "id": "st-joseph",
+      "placeIds": [
+        "st-joseph-outer",
+        "st-joseph-inner"
+      ],
+      "filename": "St. Joseph North Pier Inner Light winter takeover.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:St._Joseph_North_Pier_Inner_Light_winter_takeover.jpg",
+      "credit": "Don Ashley (DASH713)",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "observedDate": "2021-02-20",
+      "alt": "St. Joseph North Pier lights and catwalk covered in winter ice in a historical photograph",
+      "outputStem": "st-joseph-winter"
+    },
+    {
+      "id": "grand-haven",
+      "placeIds": [
+        "grand-haven"
+      ],
+      "filename": "Grand Haven MI Lighthouses in winter.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Grand_Haven_MI_Lighthouses_in_winter.jpg",
+      "credit": "Wayne Silver",
+      "license": "CC BY 2.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+      "observedDate": "2008-12-19",
+      "alt": "Grand Haven's red pier lights rising above frozen Lake Michigan and an ice-coated catwalk",
+      "outputStem": "grand-haven-winter"
+    },
+    {
+      "id": "holland",
+      "placeIds": [
+        "holland"
+      ],
+      "filename": "Big Red basking in the sunset glow - Flickr - rkramer62.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Big_Red_basking_in_the_sunset_glow_-_Flickr_-_rkramer62.jpg",
+      "credit": "Rachel Kramer",
+      "license": "CC BY 2.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+      "observedDate": "2014-02-22",
+      "alt": "Holland Harbor's Big Red lighthouse on a cold February sunset with ice along the harbor",
+      "outputStem": "holland-winter"
+    }
+  ]
+}

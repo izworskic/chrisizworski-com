@@ -26,7 +26,7 @@ function sample(id,index){
  });
  const groups=id==='st-joseph-outer'?[{startTime:timestamp(4),endTime:timestamp(8),hours:4,peakScore:80,peakTime:timestamp(4)}]:
   id==='frankfort'?[{startTime:timestamp(8),endTime:timestamp(11),hours:3,peakScore:80,peakTime:timestamp(8)}]:[];
- const names={'st-joseph-outer':'St. Joseph North Pierhead Light','frankfort':'Frankfort North Breakwater Light'};
+ const names={'st-joseph-outer':'St. Joseph North Pierhead Light','st-joseph-inner':'St. Joseph North Pier Inner Light','holland':'Holland Harbor South Pierhead Light (Big Red)','grand-haven':'Grand Haven South Pierhead Entrance Light','frankfort':'Frankfort North Breakwater Light'};
  return {id,name:names[id]||id.replaceAll('-',' '),town:id==='st-joseph-outer'?'St. Joseph':id==='frankfort'?'Frankfort':id,
   lightList:String(19000+index),lat:42.116+index*.3,lon:-86.49,onshoreBearing:270,
   available:true,reason:'',hours,windows:groups,coverage:{forecastHours:72,evaluatedHours:id==='frankfort'?71:72,unknownHours:id==='frankfort'?1:0},
@@ -53,6 +53,43 @@ try{
   const page=await browser.newPage({viewport:{width,height:850}});
   page.on('pageerror',e=>failures.push('JavaScript '+width+': '+e.message));
   await prepare(page);
+  await check('light winter palette and real hero photograph at '+width+'px',async()=>{
+   await page.locator('.hero-photo img').evaluate(img=>img.decode());
+   const design=await page.evaluate(()=>{
+    const body=getComputedStyle(document.body);
+    const hero=getComputedStyle(document.querySelector('.hero-photo img'));
+    const img=document.querySelector('.hero-photo img');
+    return {background:body.backgroundColor,colorScheme:body.colorScheme,
+      naturalWidth:img.naturalWidth,complete:img.complete,heroDisplay:hero.display};
+   });
+   assert.equal(design.background,'rgb(247, 246, 242)');
+   assert.equal(design.colorScheme,'light');
+   assert.ok(design.naturalWidth>=640,'historical photo must actually load, not just have an src');
+   assert.equal(design.heroDisplay,'block');
+   await page.locator('.hero-photo img').scrollIntoViewIfNeeded();
+   await page.screenshot({path:path.join(screenshots,'hero-'+width+'.png'),animations:'disabled'});
+  });
+  await check('licensed location-specific gallery photos load at '+width+'px',async()=>{
+   const images=page.locator('#winter-gallery .gallery-card img');
+   assert.equal(await images.count(),3);
+   for(let i=0;i<3;i++){
+    const photo=images.nth(i);
+    await photo.scrollIntoViewIfNeeded();
+    await photo.evaluate(img=>img.decode());
+    assert.ok(await photo.evaluate(img=>img.naturalWidth)>=640);
+   }
+   assert.equal(await page.locator('#winter-gallery figcaption a[href*="creativecommons.org"]').count(),3);
+   assert.equal(await page.locator('#winter-gallery figcaption a[href*="commons.wikimedia.org"]').count(),3);
+  });
+  await check('gallery chooses its own lighthouse forecast at '+width+'px',async()=>{
+   await page.locator('[data-select-lighthouse="holland"]').click();
+   assert.match(await page.locator('#desk-place').innerText(),/Holland/);
+   assert.equal(await page.locator('#coast-lights button[data-pier="holland"]').getAttribute('aria-pressed'),'true');
+   assert.equal(await page.locator('[data-select-lighthouse="holland"]').getAttribute('aria-current'),'true');
+   await page.locator('[data-select-lighthouse="st-joseph-outer"]').click();
+   assert.match(await page.locator('#desk-place').innerText(),/St. Joseph/);
+   assert.equal(await page.locator('#coast-lights button[data-pier="st-joseph-outer"]').getAttribute('aria-pressed'),'true');
+  });
   await check('no horizontal overflow at '+width+'px',async()=>{
    const [sw,cw]=await page.evaluate(()=>[document.documentElement.scrollWidth,document.documentElement.clientWidth]);
    assert.ok(sw<=cw+2,'overflow '+sw+' / '+cw);
@@ -141,7 +178,7 @@ try{
    await page.goto(base+'/frozen-lighthouses-michigan/',{waitUntil:'domcontentloaded'});
    assert.equal(await page.locator('h1').count(),1);
    assert.equal(await page.locator('.faq').count(),4);
-   assert.match(await page.locator('.warning').innerText(),/View from shore/);
+   assert.match(await page.locator('.warning').innerText(),/view from shore/i);
    assert.ok(await page.locator('a[href*="weather.gov"]').count()>0);
   }finally{await page.close();}
  });
