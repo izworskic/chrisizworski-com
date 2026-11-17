@@ -259,3 +259,48 @@ test('the visit-day access evidence updates with selection and cannot be inferre
   assert.match(js,/renderRouteEvidence\(place,access\)/);
   assert.match(js,/blocked\?access\.message/);
 });
+
+test('parking evidence distinguishes an NPS plowed lot, DNR winter parking, and Meyers unknown winter plowing',()=>{
+  const d=JSON.parse(fs.readFileSync(path.join(base,'arrival-evidence.json'),'utf8'));
+  assert.equal(d.schemaVersion,1);
+  const go=D.arrivalEvidence(d,D.getPlace('gooseberry-upper'));
+  assert.equal(go.kind,'seasonal-guide');
+  assert.match(go.title,/Visitor Center/);
+  assert.match(go.fee,/No state park vehicle permit/);
+  assert.equal(go.directionsUrl,null);
+  assert.match(go.sourceUrl,/files\.dnr\.state\.mn\.us/);
+  const mun=D.arrivalEvidence(d,D.getPlace('munising-snowshoe'));
+  assert.equal(mun.kind,'seasonal-guide');
+  assert.match(mun.title,/Ski Trail Parking/);
+  assert.match(mun.message,/plowed in winter/);
+  assert.equal(mun.directionsUrl,null);
+  const me=D.arrivalEvidence(d,D.getPlace('meyers-lakeshore'));
+  assert.equal(me.kind,'verify-road');
+  assert.match(me.message,/have not been established/);
+  assert.match(me.address,/90500 Meyers Beach Road/);
+  assert.match(me.directionsUrl,/maps\/dir/);
+  assert.match(me.warning,/not confirmation/);
+});
+test('untrusted arrival records fail closed instead of exposing invented directions',()=>{
+  const doc=JSON.parse(fs.readFileSync(path.join(base,'arrival-evidence.json'),'utf8'));
+  const place=D.getPlace('meyers-lakeshore');
+  assert.equal(D.arrivalEvidence({...doc,schemaVersion:99},place).kind,'unknown');
+  const bad=JSON.parse(JSON.stringify(doc));
+  bad.places['meyers-lakeshore'].routeOpenToday=true;
+  assert.equal(D.arrivalEvidence(bad,place).kind,'unknown');
+  const other=JSON.parse(JSON.stringify(doc));
+  other.places['meyers-lakeshore'].directionsUrl='https://www.google.com/maps/dir/?api=1&destination=frozen-lake-ice';
+  assert.equal(D.arrivalEvidence(other,place).directionsUrl,null);
+  const mismatch=JSON.parse(JSON.stringify(doc));
+  mismatch.places['meyers-lakeshore'].entranceSource='https://untrusted.example/parking';
+  assert.equal(D.arrivalEvidence(mismatch,place).kind,'unknown');
+});
+test('arrival desk updates without changing canonical or existing map roles',()=>{
+  const html=source('index.html'),js=source('app.js');
+  for(const id of ['arrival-title','arrival-address','arrival-description','arrival-fee','arrival-find','arrival-directions','arrival-evidence-link','arrival-warning'])
+    assert.ok(html.includes('id="'+id+'"'),id);
+  assert.match(js,/arrivalEvidence\(state\.arrivalDocument,place\)/);
+  assert.match(js,/loadArrivalEvidence\(\)/);
+  assert.match(js,/renderArrival\(place\)/);
+  assert.match(html,/robots" content="noindex,nofollow,noarchive"/);
+});
