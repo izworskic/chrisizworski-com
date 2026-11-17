@@ -6,7 +6,7 @@
   const C=window.GreatLakesWinterDesk;
   if(!C)return;
   const $=id=>document.getElementById(id);
-  const state={goal:'falls',effort:'short',day:'today',chosen:'gooseberry-upper',request:0,weather:null};
+  const state={goal:'falls',effort:'short',day:'today',chosen:'gooseberry-upper',request:0,weather:null,sourceDocument:null};
   const weatherCache=new Map();
   const mapState={map:null,markers:new Map()};
   const SAFE=new Set(['available','empty','stale','unknown']);
@@ -68,17 +68,18 @@
     img.loading='lazy';img.decoding='async';img.alt=place.photoAlt;
     img.src=place.photo;
     img.addEventListener('error',()=>{
-      if(state.chosen!==place.id)return;
+      if(state.chosen!==place.id||$('stage-photo')!==img)return;
       img.hidden=true;fallback.hidden=false;
     });
     img.addEventListener('load',()=>{
-      if(state.chosen!==place.id)return;
+      if(state.chosen!==place.id||$('stage-photo')!==img)return;
       img.hidden=false;fallback.hidden=true;
     });
     photo.replaceWith(img);
     fallback.hidden=true;
     $('assignment-flag').textContent=match?'FIELD ASSIGNMENT':'RECONSIDER THE DISTANCE';
     $('last-research').textContent='Park source review: '+C.SOURCE_REVIEWED+'. Not a same-day access check.';
+    renderSourceDesk(place);
     $('trip-period').textContent='Forecast lens: '+niceDay();
     $('weather-point').textContent='NWS forecast point near '+place.region+'. Not measured on the trail.';
     $('weather-site').href='https://forecast.weather.gov/MapClick.php?lat='+place.weatherPoint.lat+'&lon='+place.weatherPoint.lon;
@@ -87,7 +88,28 @@
     weatherFor(place);
     setStatus((match?'Viewing ':'Reviewing ')+place.title+'. '+(match?'Current park access still needs an official check.':'The requested effort does not fit this route.'));
   }
+  function renderSourceDesk(place){
+    $('source-direct').href=place.conditions;
+    const status=C.sourceReachability(state.sourceDocument,place,new Date());
+    $('source-signal').textContent=status.message+
+      (status.checkedAt?' Last automated request: '+new Date(status.checkedAt).toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZone:place.tz,timeZoneName:'short'})+'.':'');
+  }
+  async function loadSourceDesk(){
+    try{
+      const response=await fetch('./source-checks.json',{cache:'no-store'});
+      if(!response.ok)throw Error('source checks unavailable');
+      const data=await response.json();
+      if(data?.schemaVersion!==1||data.accessVerified!==false)throw Error('invalid evidence contract');
+      state.sourceDocument=data;
+    }catch(_){
+      state.sourceDocument=null;
+    }
+    const place=C.getPlace(state.chosen);
+    if(place)renderSourceDesk(place);
+  }
   function weatherUnknown(note){
+    const current=C.recommend(state);
+    if(current.kind==='candidate')$('quick-reason').textContent='No usable hourly forecast is available. Park access is also not verified.';
     $('weather-head').textContent='Forecast not available';
     $('weather-sub').textContent=note;
     $('weather-issued').textContent='No confirmed NWS issue time';
@@ -229,7 +251,7 @@
       if(navigator.clipboard?.writeText)navigator.clipboard.writeText(message).then(()=>setStatus('Field note copied.')).catch(()=>setStatus('Copy unavailable; use the official links.'));
       else setStatus('Copy unavailable; use the official links.');
     });
-    initMap();render();
+    initMap();render();loadSourceDesk();
   }
   document.addEventListener('DOMContentLoaded',init);
 })();
