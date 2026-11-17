@@ -36,7 +36,7 @@ When the owner asks **"use my Field Guide design standard"**, **"FIELD_GUIDE_V1"
 
 ## Optional REA investigation for developer research
 
-REA is an optional local MCP research tool, not a production dependency or permission to copy other products. When investigating software interaction patterns or browser-side visualizations, read [`docs/REA_DEVELOPMENT_WORKFLOW.md`](docs/REA_DEVELOPMENT_WORKFLOW.md) before using it. Require observed evidence, preserve lawful access and original implementations, and follow all existing owning-repository, Experience OS, browser acceptance, ads, search and CI gates. If REA is not connected, continue with ordinary tools; do not claim its analysis occurred.
+REA is available only when the owner explicitly requests REA for a specific investigation. Do not install, register, start or invoke it automatically for research, design, or routine development. Read [`docs/REA_DEVELOPMENT_WORKFLOW.md`](docs/REA_DEVELOPMENT_WORKFLOW.md) before running the pinned one-off CLI. Preserve lawful access, observed evidence, original implementations, and all existing owning-repository, Experience OS, browser acceptance, ads, search and CI gates. Otherwise, continue with ordinary tools.
 
 ## Search growth / revenue / Chris Izworski SERP handoff — October 9, 2026
 
