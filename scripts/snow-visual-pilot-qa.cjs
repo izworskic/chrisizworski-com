@@ -1,3 +1,4 @@
+// Final capture after spacing pass.
 #!/usr/bin/env node
 const http=require('node:http'),fs=require('node:fs'),path=require('node:path');
 const assert=require('node:assert/strict');
