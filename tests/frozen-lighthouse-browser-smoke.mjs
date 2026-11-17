@@ -26,7 +26,7 @@ function sample(id,index){
  });
  const groups=id==='st-joseph-outer'?[{startTime:timestamp(4),endTime:timestamp(8),hours:4,peakScore:80,peakTime:timestamp(4)}]:
   id==='frankfort'?[{startTime:timestamp(8),endTime:timestamp(11),hours:3,peakScore:80,peakTime:timestamp(8)}]:[];
- const names={'st-joseph-outer':'St. Joseph North Pierhead Light','frankfort':'Frankfort North Breakwater Light'};
+ const names={'st-joseph-outer':'St. Joseph North Pierhead Light','st-joseph-inner':'St. Joseph North Pier Inner Light','holland':'Holland Harbor South Pierhead Light (Big Red)','grand-haven':'Grand Haven South Pierhead Entrance Light','frankfort':'Frankfort North Breakwater Light'};
  return {id,name:names[id]||id.replaceAll('-',' '),town:id==='st-joseph-outer'?'St. Joseph':id==='frankfort'?'Frankfort':id,
   lightList:String(19000+index),lat:42.116+index*.3,lon:-86.49,onshoreBearing:270,
   available:true,reason:'',hours,windows:groups,coverage:{forecastHours:72,evaluatedHours:id==='frankfort'?71:72,unknownHours:id==='frankfort'?1:0},
@@ -86,6 +86,7 @@ try{
    assert.equal(await page.locator('[data-select-lighthouse="holland"]').getAttribute('aria-current'),'true');
    await page.locator('[data-select-lighthouse="st-joseph-outer"]').click();
    assert.match(await page.locator('#desk-place').innerText(),/St. Joseph/);
+   assert.equal(await page.locator('#coast-lights button[data-pier="st-joseph-outer"]').getAttribute('aria-pressed'),'true');
   });
   await check('no horizontal overflow at '+width+'px',async()=>{
    const [sw,cw]=await page.evaluate(()=>[document.documentElement.scrollWidth,document.documentElement.clientWidth]);
@@ -175,7 +176,7 @@ try{
    await page.goto(base+'/frozen-lighthouses-michigan/',{waitUntil:'domcontentloaded'});
    assert.equal(await page.locator('h1').count(),1);
    assert.equal(await page.locator('.faq').count(),4);
-   assert.match(await page.locator('.warning').innerText(),/View from shore/);
+   assert.match(await page.locator('.warning').innerText(),/view from shore/i);
    assert.ok(await page.locator('a[href*="weather.gov"]').count()>0);
   }finally{await page.close();}
  });
