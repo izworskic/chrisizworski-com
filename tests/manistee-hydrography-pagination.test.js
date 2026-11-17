@@ -23,6 +23,16 @@ test("page requests are constrained to official USGS named rivers and bounded of
   assert.throws(()=>queryUrl({name:"Unknown River"}));
   assert.throws(()=>queryUrl({name:"Pine River",page:MAX_PAGES}));
 });
+test("one temporary official service failure is retried without a new data source",async()=>{
+  let attempts=0;
+  const fetcher=async()=>{
+    attempts++;
+    return attempts===1?response([],502):response([feature("Manistee River",1)]);
+  };
+  const payload=await fetchNhdPage(queryUrl({name:"Manistee River",page:0}),fetcher,true);
+  assert.equal(attempts,2);
+  assert.equal(payload.features.length,1);
+});
 test("complete consecutive source pages are collected",async()=>{
   const urls=[];
   const fetcher=async url=>{
@@ -71,6 +81,6 @@ test("failed broad query can recover only from the same official USGS NHD layer"
   assert.equal(data.retrievalMode,"paged-official-recovery");
   assert.equal(data.sourceCompleteness,"complete-retrieved-set");
   assert.equal(data.features.length,4);
-  assert.equal(urls.length,5);
+  assert.equal(urls.length,6);
   assert.ok(urls.every(u=>new URL(u).hostname==="hydro.nationalmap.gov"));
 });
