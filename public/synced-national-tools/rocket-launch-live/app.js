@@ -1014,10 +1014,116 @@
       list.appendChild(item);
     });
     root.appendChild(list);
+    if (places.length > 1) {
+      const compare = el('a', 'rl-access-compare',
+        'Compare these places and choose your viewing plan');
+      compare.href = '#rl-spot-planner';
+      root.appendChild(compare);
+    }
     root.appendChild(el('p','rl-access-quick-caution',
       region==='virginia'?
       'For Wallops, navigate to the public NASA Visitor Center at 175 Chincoteague Road, not the base gate. Don’t park or wait along Route 175. Check for launch-day closures and parking changes.' :
       'These links show public places to consider, not reserved parking or a guarantee they’re open for this launch. Check local rules before leaving.'));
+  }
+
+  // A visitor's chosen public place is local UI state, not mission admission.
+  // Keep place, source and Google Maps destination bound to the same mission.
+  function renderSpotPlanner(data, cards) {
+    const root = $('rl-spot-planner');
+    if (!root) return;
+    root.replaceChildren();
+    const key = String(data?.selectedRegion || '') + ':' + String(data?.selectedLaunchId || '');
+    const candidates = (cards || []).filter(site => siteMapHref(site)).slice(0, 6);
+    const header = el('div', 'rl-spot-planner-header');
+    const copy = el('div', 'rl-spot-planner-intro');
+    copy.appendChild(el('span', 'rl-spot-planner-kicker', 'THE VIEWING PLAN / PUBLIC PLACES'));
+    copy.appendChild(el('h3', '', 'Choose your place on the coast'));
+    copy.appendChild(el('p', '',
+      'Start with a documented public location, then check its rules and route. A launch time does not guarantee an open viewing area.'));
+    header.appendChild(copy);
+    if (data?.selectedLaunch && data.selectedLaunchId &&
+        data.selectedLaunch.id === data.selectedLaunchId) {
+      header.appendChild(el('p', 'rl-spot-planner-mission',
+        'Selected flight: ' + (data.selectedLaunch.name || 'Mission not named')));
+    }
+    root.appendChild(header);
+    if (!candidates.length) {
+      const empty = el('div', 'rl-spot-planner-empty');
+      empty.appendChild(el('strong', '',
+        'No public viewing destination is verified for this coast.'));
+      empty.appendChild(el('p', '',
+        'The launch pad is not a visitor destination. Check the local authority before attempting a viewing trip.'));
+      const guide = anchor(floridaSpecialistLink(data?.region?.specialist, data),
+        'Read the regional access guide');
+      if (guide) empty.appendChild(guide);
+      root.appendChild(empty);
+      state.spotPlanner = {key, siteId: null};
+      return;
+    }
+    const grid = el('div', 'rl-spot-planner-grid');
+    const picker = el('div', 'rl-spot-planner-picker');
+    picker.setAttribute('role', 'group');
+    picker.setAttribute('aria-label', 'Compare documented public viewing locations');
+    const detail = el('div', 'rl-spot-planner-detail');
+    detail.id = 'rl-spot-planner-detail';
+    detail.setAttribute('aria-live', 'polite');
+    const buttons = [];
+    const idOf = site => String(site.id || site.name);
+    const previous = state.spotPlanner?.key === key ? state.spotPlanner.siteId : null;
+    function selectPlace(site) {
+      const id = site ? idOf(site) : null;
+      state.spotPlanner = {key, siteId: id};
+      for (const entry of buttons) {
+        const active = entry.id === id;
+        entry.button.dataset.selected = String(active);
+        entry.button.setAttribute('aria-pressed', String(active));
+      }
+      detail.replaceChildren();
+      if (!site) {
+        detail.appendChild(el('strong', 'rl-spot-planner-placeholder',
+          'Pick a place to see the details.'));
+        detail.appendChild(el('p', '',
+          'Each place has different access rules. Compare the public location and the official source before choosing where to go.'));
+        return;
+      }
+      detail.appendChild(el('span', 'rl-spot-planner-kicker', 'YOUR SELECTED VIEWING PLACE'));
+      detail.appendChild(el('h4', '', site.name));
+      detail.appendChild(el('p', 'rl-spot-planner-role', site.bestFor || site.role ||
+        'Public location to consider'));
+      detail.appendChild(el('p', 'rl-spot-planner-note',
+        site.reason || site.note || site.label ||
+        'Check posted rules, parking and access on launch day.'));
+      if (site.kind === 'mission-confirm') {
+        detail.appendChild(el('p', 'rl-spot-planner-caution',
+          'The visitor center location is public; its special launch-viewing area may not open for this mission.'));
+      } else {
+        detail.appendChild(el('p', 'rl-spot-planner-caution',
+          'A Google Maps location does not confirm parking, opening hours, or launch-day entry.'));
+      }
+      const actions = el('div', 'rl-spot-planner-actions');
+      const maps = anchor(siteMapHref(site), 'Find this place on Google Maps', 'rl-spot-planner-map');
+      const official = anchor(site.source, 'Read the official access rules', 'rl-spot-planner-source');
+      if (maps) actions.appendChild(maps);
+      if (official) actions.appendChild(official);
+      detail.appendChild(actions);
+      const check = el('a', 'rl-spot-planner-check', 'Check the launch-day access decision');
+      check.href = '#rl-access-decision';
+      detail.appendChild(check);
+    }
+    for (const site of candidates) {
+      const button = el('button', 'rl-spot-planner-option');
+      button.type = 'button';
+      button.dataset.selected = 'false';
+      button.setAttribute('aria-pressed', 'false');
+      button.appendChild(el('strong', '', site.name));
+      button.appendChild(el('small', '', site.bestFor || site.role || 'Public viewing location'));
+      button.addEventListener('click', () => selectPlace(site));
+      buttons.push({id: idOf(site), button});
+      picker.appendChild(button);
+    }
+    grid.append(picker, detail);
+    root.appendChild(grid);
+    selectPlace(candidates.find(site => idOf(site) === previous) || null);
   }
 
   function renderAccess(data) {
@@ -1056,6 +1162,7 @@
     }
     const viewingCards=(florida?.cards?.length?florida.cards:access.sites)||[];
     renderQuickViewingPlaces(data,viewingCards);
+    renderSpotPlanner(data,viewingCards);
     const sites = $('rl-sites');
     if (sites) {
       sites.replaceChildren();
@@ -1879,6 +1986,8 @@
     $('rl-launch-select').disabled = true;
     $('rl-access-quick')?.replaceChildren(el('p','rl-access-quick-empty',
       'Checking public viewing locations for the selected mission…'));
+    $('rl-spot-planner')?.replaceChildren(el('p', 'rl-spot-planner-empty',
+      'Checking public viewing places for the selected mission.'));
     let responseStatus=0;
     try {
       const response = await fetch(url, { headers: { Accept: 'application/json' } });
@@ -1917,6 +2026,9 @@
       $('rl-watch-general')?.replaceChildren();
       chip($('rl-access-grade'), 'Official access must be checked', 'unknown');
       $('rl-access-answer')?.replaceChildren();
+      state.spotPlanner = null;
+      $('rl-spot-planner')?.replaceChildren(el('p', 'rl-spot-planner-empty',
+        'The selected mission could not be verified. No current viewing plan is available. Check the official regional sources.'));
       $('rl-access-quick')?.replaceChildren(el('p','rl-access-quick-empty',
         'The selected mission could not be verified. No current access or viewing-site opening is established. Use the official regional guide before making a trip.'));
       set('rl-access-summary','The selected mission could not be verified. No public viewing access can be confirmed.');

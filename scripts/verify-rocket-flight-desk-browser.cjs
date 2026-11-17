@@ -548,7 +548,9 @@ const whenReady=page=>page.waitForFunction(id=>
   // published public places in the mission decision across desktop & phone.
   wallopsScenario=true;
   try {
-    for(const v of [{name:'wallops-map-phone390',width:390,height:844},
+    for(const v of [{name:'wallops-map-phone360',width:360,height:780},
+      {name:'wallops-map-phone390',width:390,height:844},
+      {name:'wallops-map-tablet768',width:768,height:960},
       {name:'wallops-map-desktop1440',width:1440,height:900}]){
       const context=await browser.newContext({viewport:{width:v.width,height:v.height},
         reducedMotion:'reduce'}),page=await context.newPage(),errors=[];
@@ -583,6 +585,37 @@ const whenReady=page=>page.waitForFunction(id=>
         v.name+' map links may send someone into a restricted facility');
       assert((await page.locator('#rl-access-quick a.rl-access-official').count())===3,
         v.name+' official evidence missing for public locations');
+
+      // Interactive spot choice follows the existing mission and public-place contracts.
+      const choiceButtons=page.locator('#rl-spot-planner .rl-spot-planner-option');
+      assert(await choiceButtons.count()===3,
+        v.name+' expected three documented places in the viewing planner');
+      assert((await page.locator('#rl-spot-planner-detail').innerText())
+        .includes('Pick a place'),v.name+' should not imply a recommended place');
+      await choiceButtons.nth(0).click();
+      assert((await choiceButtons.nth(0).getAttribute('aria-pressed'))==='true',
+        v.name+' first place was not selected');
+      let placeLink=await page.locator('#rl-spot-planner .rl-spot-planner-map').getAttribute('href');
+      assert(new URL(placeLink).searchParams.get('query').includes('175 Chincoteague Road'),
+        v.name+' selected place points to the wrong public destination');
+      await choiceButtons.nth(1).focus();
+      await page.keyboard.press('Enter');
+      assert((await choiceButtons.nth(1).getAttribute('aria-pressed'))==='true' &&
+        (await choiceButtons.nth(0).getAttribute('aria-pressed'))==='false',
+        v.name+' keyboard switch did not replace the chosen place');
+      placeLink=await page.locator('#rl-spot-planner .rl-spot-planner-map').getAttribute('href');
+      assert(/Robert Reed Waterfront Park/i.test(new URL(placeLink).searchParams.get('query')),
+        v.name+' chose the wrong map destination after switching');
+      await choiceButtons.nth(0).click();
+      placeLink=await page.locator('#rl-spot-planner .rl-spot-planner-map').getAttribute('href');
+      assert(new URL(placeLink).searchParams.get('query').includes('175 Chincoteague Road'),
+        v.name+' A to B to A did not restore the original place');
+      assert((await page.locator('#rl-spot-planner-detail').innerText())
+        .includes('may not open'),v.name+' lost launch-specific Wallops admission caveat');
+      const plannerShot=v.name+'-interactive-place-planner.png';
+      await page.locator('#rl-spot-planner').screenshot({path:path.join(out,plannerShot),animations:'disabled'});
+      report.screenshots.push(plannerShot);
+
       const overflow=await page.evaluate(()=>
         Math.max(0,document.documentElement.scrollWidth-document.documentElement.clientWidth));
       assert(overflow<=2,v.name+' public view cards cause horizontal overflow '+overflow);
@@ -595,6 +628,8 @@ const whenReady=page=>page.waitForFunction(id=>
         document.querySelector('#rl-flight-desk')?.dataset.launchId===id,A);
       assert(await page.locator('#rl-access-quick a.rl-access-map').count()===0,
         v.name+' retained Wallops map links after switching regions');
+      assert(await page.locator('#rl-spot-planner .rl-spot-planner-map').count()===0,
+        v.name+' retained a selected Wallops plan after switching regions');
       assert(errors.length===0,v.name+' access card JS errors: '+errors.join('; '));
       report.cases.push({case:v.name,publicSiteLinks:3,
         missionBound:true,restrictedPadDirections:0,overflowPx:overflow});

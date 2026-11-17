@@ -655,3 +655,46 @@ html.rl-map-fullscreen,html.rl-map-fullscreen body{overflow:hidden!important;ove
 .rl-just-cta:focus-visible{outline:3px solid #f4a77d;outline-offset:2px}
 .rl-just-note{margin:10px 0 0;font-size:12px;color:#5b6d74}
 .rl-just-more{margin:10px 0 0;padding:10px 0 0 18px;border-top:1px solid #f1d8c4;font-size:13px;color:#2a3f47}
+
+/* Rocket viewing place planner. Public locations only, never launch admission. */
+.rl-access-compare{display:inline-flex;align-items:center;margin:13px 0 2px;color:#174f43;font-size:12px;line-height:1.5;font-weight:800;text-underline-offset:3px}
+.rl-spot-planner{border:1px solid #bed0cd;border-radius:17px;background:#fff;margin:20px 0 25px;overflow:hidden;box-shadow:0 12px 32px #102c380c}
+.rl-spot-planner-header{display:flex;justify-content:space-between;align-items:start;gap:22px;padding:23px 25px 19px;background:#eaf2ee;border-bottom:1px solid #cbdcd5}
+.rl-spot-planner-intro{max-width:670px}
+.rl-spot-planner-kicker{display:block;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.115em;color:#255e50;line-height:1.5}
+.rl-spot-planner-header h3{font:700 clamp(21px,2.4vw,30px) var(--serif);line-height:1.16;letter-spacing:-.012em;color:#153b38;margin:7px 0 9px}
+.rl-spot-planner-header p{font-size:13px;line-height:1.55;color:#365950;margin:0}
+.rl-spot-planner-mission{flex:0 1 250px;max-width:280px;overflow-wrap:anywhere;font-weight:800;color:#1f5146!important}
+.rl-spot-planner-grid{display:grid;grid-template-columns:minmax(220px,.8fr) minmax(0,1.5fr);gap:0;min-width:0}
+.rl-spot-planner-picker{background:#f6f7f2;border-right:1px solid #d8e0db;padding:15px;display:flex;flex-direction:column;gap:7px}
+.rl-spot-planner-option{display:flex;flex-direction:column;align-items:start;width:100%;gap:5px;border:1px solid #d4e0d9;border-radius:10px;background:#fff;color:#1e4843;text-align:left;padding:13px 15px;min-height:62px;transition:background-color .12s ease,border-color .12s ease}
+.rl-spot-planner-option strong{font-size:14px;line-height:1.4;overflow-wrap:anywhere}
+.rl-spot-planner-option small{font-size:12px;color:#536f64;line-height:1.4}
+.rl-spot-planner-option:hover{background:#eff7f2;border-color:#43876f}
+.rl-spot-planner-option[data-selected="true"]{background:#183e3d;color:#fff;border-color:#183e3d;box-shadow:inset 4px 0 #f2b687}
+.rl-spot-planner-option[data-selected="true"] small{color:#d5e7e0}
+.rl-spot-planner-option:focus-visible{outline:3px solid #c77343;outline-offset:2px}
+.rl-spot-planner-detail{padding:25px clamp(18px,3vw,36px);display:flex;flex-direction:column;align-items:flex-start;justify-content:center;min-height:210px}
+.rl-spot-planner-detail h4{font:700 clamp(23px,2.7vw,32px) var(--serif);line-height:1.2;color:#123f3b;margin:7px 0 12px;overflow-wrap:anywhere}
+.rl-spot-planner-placeholder{font:700 22px var(--serif);color:#193e3a}
+.rl-spot-planner-detail p{color:#415a51;font-size:13px;line-height:1.62;margin:5px 0}
+.rl-spot-planner-detail p.rl-spot-planner-role{font-weight:800;color:#25584a}
+.rl-spot-planner-detail p.rl-spot-planner-caution{border-left:3px solid #b77a3b;background:#fbf5eb;color:#614828;padding:10px 13px;margin-top:14px}
+.rl-spot-planner-actions{display:flex;flex-wrap:wrap;gap:10px;margin:17px 0 12px}
+.rl-spot-planner-actions a{display:inline-flex;align-items:center;border-radius:9px;padding:12px 14px;min-height:44px;font-size:13px;line-height:1.35;font-weight:800}
+.rl-spot-planner-map{background:#215947;color:#fff;text-decoration:none}
+.rl-spot-planner-map:hover{background:#164332;color:#fff}
+.rl-spot-planner-source{border:1px solid #b8cec3;color:#215947;background:#fff}
+.rl-spot-planner-check{font-size:12px;font-weight:700;text-decoration:underline;line-height:1.5}
+.rl-spot-planner-empty{padding:24px;color:#435e52;font-size:13px;line-height:1.6}
+.rl-spot-planner-empty strong{display:block;color:#233f39;font-size:16px}
+.rl-spot-planner-empty a{font-weight:800}
+@media(max-width:720px){
+  .rl-spot-planner-header{padding:20px 18px;flex-direction:column;gap:9px}
+  .rl-spot-planner-grid{grid-template-columns:1fr}
+  .rl-spot-planner-picker{border-right:0;border-bottom:1px solid #d8e0db;display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));padding:12px}
+  .rl-spot-planner-detail{padding:20px 18px;min-height:180px}
+  .rl-spot-planner-mission{max-width:100%;flex:auto}
+}
+@media(max-width:390px){.rl-spot-planner-picker{grid-template-columns:1fr}.rl-spot-planner-option{min-height:56px}}
+@media(prefers-reduced-motion:reduce){.rl-spot-planner-option{transition:none}}
