@@ -152,3 +152,66 @@
     scroll-behavior:auto;
   }
 }
+
+
+/* Photo-led opening for the existing map-first U.P. waterfall experience.
+   Each scene is sourced from the verified waterfall photograph ledger. */
+.up-waterfall-hub.waterfall-experience-pilot .hero .wrap{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,.94fr);
+  gap:0 clamp(18px,3vw,42px);
+  align-items:start;
+}
+.up-waterfall-hub.waterfall-experience-pilot .hero .wrap>.eyebrow,
+.up-waterfall-hub.waterfall-experience-pilot .hero .wrap>h1,
+.up-waterfall-hub.waterfall-experience-pilot .hero .wrap>p,
+.up-waterfall-hub.waterfall-experience-pilot .hero .wrap>.quicknav{
+  grid-column:1;
+}
+.up-waterfall-hub.waterfall-experience-pilot .hero .wrap>.upfall-hero-photo-wall{
+  grid-column:2;
+  grid-row:1 / span 4;
+  align-self:center;
+  min-width:0;
+}
+.up-waterfall-hub.waterfall-experience-pilot .hero h1{
+  font-size:clamp(2.35rem,3.8vw,3.65rem);
+}
+.up-waterfall-hub.waterfall-experience-pilot .hero p{
+  font-size:1.01rem;
+}
+.upfall-hero-photo-wall{margin:0;min-width:0}
+.upfall-hero-photo-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.upfall-hero-photo-card{margin:0;min-width:0;background:#fffdf7;color:#17312f;border-radius:10px;overflow:hidden;box-shadow:0 12px 28px rgba(1,17,19,.18)}
+.upfall-hero-photo-card--lead{grid-column:1 / -1}
+.upfall-hero-photo-image{display:block;background:#d8e6df}
+.upfall-hero-photo-image img{display:block;width:100%;height:104px;object-fit:cover;object-position:center}
+.upfall-hero-photo-card--lead img{height:216px}
+.upfall-hero-photo-card figcaption{display:grid;align-content:start;gap:1px;padding:7px 10px 10px;font-size:.78rem;line-height:1.35}
+.upfall-hero-photo-card--lead figcaption{padding:9px 12px 10px}
+.upfall-hero-photo-title{font-family:Georgia,serif;font-size:1.08rem;line-height:1.2;font-weight:700;text-decoration:none;color:#143f3a}
+.upfall-hero-photo-title:hover{text-decoration:underline}
+.upfall-hero-photo-place{font-size:.75rem;color:#3e615c}
+.upfall-hero-photo-credit{font-size:.7rem;color:#405e5b;overflow-wrap:anywhere}
+.upfall-hero-photo-credit a{color:#145b56;text-decoration:underline;text-underline-offset:2px}
+.up-waterfall-hub.waterfall-experience-pilot .upfall-hero-photo-note{font-size:.72rem;color:#e4f2ed;margin:8px 0 0;line-height:1.45}
+.upfall-hero-photo-image:focus-visible,.upfall-hero-photo-title:focus-visible,.upfall-hero-photo-credit a:focus-visible{outline:3px solid #ffb45a;outline-offset:2px}
+@media(max-width:900px){
+  .up-waterfall-hub.waterfall-experience-pilot .hero .wrap{grid-template-columns:minmax(0,1fr) minmax(0,.9fr);gap:0 16px}
+  .up-waterfall-hub.waterfall-experience-pilot .hero h1{font-size:clamp(2.25rem,4.8vw,3rem)}
+  .upfall-hero-photo-card--lead img{height:180px}
+  .upfall-hero-photo-image img{height:92px}
+  .upfall-hero-photo-card figcaption{padding:7px 8px 8px}
+}
+@media(max-width:760px){
+  .up-waterfall-hub.waterfall-experience-pilot .hero .wrap{display:block}
+  .up-waterfall-hub.waterfall-experience-pilot .hero .wrap>.upfall-hero-photo-wall{margin-top:20px}
+  .up-waterfall-hub.waterfall-experience-pilot .hero h1{max-width:650px}
+  .upfall-hero-photo-card--lead img{height:clamp(170px,42vw,260px)}
+  .upfall-hero-photo-image img{height:clamp(90px,25vw,145px)}
+}
+@media(max-width:390px){
+  .upfall-hero-photo-card figcaption{padding:7px}
+  .upfall-hero-photo-credit{font-size:.66rem}
+  .upfall-hero-photo-title{font-size:.96rem}
+}
