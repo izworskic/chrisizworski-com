@@ -111,7 +111,7 @@ function report(features,names,mode){
     features,
   };
 }
-async function fetchHydrography(options={}){
+async function fetchHydrographyUncached(options={}){
   const fetcher=options.fetcher||fetch;
   if(options.name){
     const features=await fetchPagesForName(options.name,fetcher);
@@ -127,6 +127,40 @@ async function fetchHydrography(options={}){
     // Never fall back to straight-line geometry or a different unvalidated GIS source.
     const groups=await Promise.all(NAMES.map(name=>fetchPagesForName(name,fetcher)));
     return report(groups.flat(),NAMES,'paged-official-recovery');
+  }
+}
+
+// Keep a successful, source-complete hydrography response within one warm
+// function instance. This is an optimization, not a durable or cross-instance
+// source store. Expiry always forces another official-source fetch.
+const GEOMETRY_MEMORY_TTL_MS=6*60*60*1000;
+const geometryMemory=new Map();
+async function fetchHydrography(options={}){
+  if(options.name!==undefined&&!NAMES.includes(options.name))
+    throw new Error('Unsupported river name');
+  // Tests with custom source adapters are isolated unless explicitly testing
+  // the cache. Never reuse fixtures as production source responses.
+  if(options.fetcher&&options.cache!==true)return fetchHydrographyUncached(options);
+  const key=options.name||'full-basin';
+  const now=Date.now();
+  const current=geometryMemory.get(key);
+  if(current){
+    if(current.promise)return current.promise;
+    if(current.expiresAt>now)return current.payload;
+    geometryMemory.delete(key);
+  }
+  const promise=fetchHydrographyUncached(options);
+  geometryMemory.set(key,{promise});
+  try{
+    const payload=await promise;
+    if(payload.sourceCompleteness!=='complete-retrieved-set' ||
+       !Array.isArray(payload.features) || payload.features.length===0)
+      throw new Error('USGS NHD incomplete geometry cannot be cached');
+    geometryMemory.set(key,{payload,expiresAt:Date.now()+GEOMETRY_MEMORY_TTL_MS});
+    return payload;
+  }catch(error){
+    if(geometryMemory.get(key)?.promise===promise)geometryMemory.delete(key);
+    throw error;
   }
 }
 
@@ -152,4 +186,4 @@ module.exports=async function handler(req,res){
 };
 
 module.exports.fetchHydrography=fetchHydrography;
-module.exports._test={queryUrl,cleanGeoJson,property,NAMES,BBOX,PAGE_SIZE,MAX_PAGES,fetchNhdPage,fetchPagesForName};
+module.exports._test={queryUrl,cleanGeoJson,property,NAMES,BBOX,PAGE_SIZE,MAX_PAGES,fetchNhdPage,fetchPagesForName,GEOMETRY_MEMORY_TTL_MS,clearGeometryMemory:()=>geometryMemory.clear()};
