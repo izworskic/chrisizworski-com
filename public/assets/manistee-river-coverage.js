@@ -1,6 +1,12 @@
-(()=>{
+(function(root,factory){
 'use strict';
-const D=window.MANISTEE_FIELD_DATA;if(!D)return;
+const augment=factory();
+if(typeof module!=='undefined'&&module.exports)module.exports=augment;
+if(root&&root.MANISTEE_FIELD_DATA)augment(root.MANISTEE_FIELD_DATA);
+})(typeof window==='undefined'?null:window,function(){
+'use strict';
+return function addManisteeCoverage(D){
+if(!D)return D;
 const checked='2026-08-20';
 const paddleSource='https://www.traverseareapaddleclub.org/content.aspx?club_id=813410&module_id=58595&page_id=22';
 const upperLaunchSource='https://shorelinescout.com/michigan/kalkaska/manistee-river/';
@@ -107,4 +113,6 @@ D.coverage={
     {name:'Private livery landings',reason:'Operator-only/private landings are listed with the service but never converted into public put-in/take-out points.'}
   ]
 };
-})();
+return D;
+};
+});
