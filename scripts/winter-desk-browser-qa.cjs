@@ -52,12 +52,17 @@ async function main(){
       const original=await page.locator('#stage-title').textContent();
       assert.match(original,/Upper Falls/);
       assert.match(await page.locator('#quick-outing').textContent(),/Upper Falls/);
+      await page.waitForFunction(()=>document.querySelector('#route-policy')?.textContent.includes('Upper Falls'),null,{timeout:10000});
+      assert.match(await page.locator('#route-access').textContent(),/not confirmed/);
+      const localDate=await page.evaluate(()=>{const c=window.GreatLakesWinterDesk;return c.targetKey(new Date(),'America/Chicago','tomorrow');});
+      assert.equal(await page.locator('#route-day').textContent(),localDate);
       const evidence=await page.locator('#source-signal').textContent();
       assert.match(evidence,/unverified|out of date|No trustworthy|source check|source was|source could/i);
       for(const [goal,text] of [['snowshoe','blue posts'],['coast','sandstone'],['falls','Upper Falls']]){
         await page.locator('[data-goal="'+goal+'"]').click();
         assert.match((await page.locator('#stage-title').textContent()).toLowerCase(),new RegExp(text.toLowerCase()));
         assert.equal(await page.locator('[data-goal="'+goal+'"]').getAttribute('aria-pressed'),'true');
+        assert.equal(await page.locator('#route-policy-link').getAttribute('href'),await page.locator('#official-link').getAttribute('href'));
         await page.waitForFunction(()=>{const img=document.querySelector('#stage-photo');return img?.complete&&img.naturalWidth>0;},null,{timeout:10000});
         assert.equal(await page.locator('#stage-photo').evaluate(img=>img.complete&&img.naturalWidth>0),true,'real place photo');
         assert.match(await page.locator('#source-direct').getAttribute('href'),/^https:\/\/(?:www\.nps\.gov|www\.dnr\.state\.mn\.us)\//);
