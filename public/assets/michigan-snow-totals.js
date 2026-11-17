@@ -53,6 +53,10 @@
     $('mapNote').textContent = 'The map could not load. Open the full report list below or use the original NWS archive link.';
     var list = document.querySelector('.report-table-disclosure');
     if (list) list.open = true;
+    if (!state.data || !state.data.ok) {
+      var body = $('snowTable').querySelector('tbody');
+      body.innerHTML = '<tr><td colspan="5">The latest reports are unavailable. Use the linked NWS archive for source reports.</td></tr>';
+    }
     if (state.map) { state.map.remove(); state.map = null; state.layer = null; }
   }
   function initMap() {
@@ -99,7 +103,7 @@
       var top = rows[0];
       el.innerHTML = 'In ' + esc(windowLabel()) + ', <strong>' + rows.length + ' place' + (rows.length === 1 ? '' : 's') + ' in ' + esc(regionLabel()) + '</strong> reported snow to the National Weather Service. Largest reported amount: ' +
         '<span class="snow-peak"><strong class="snow-peak-value">' + esc(C.inches(top.inches)) + '</strong><span class="snow-peak-place">at ' + esc(where(top)) + '</span></span>' +
-        ', ' + esc(stamp(top)) + ', ' + esc(kind(top)) + '.';
+        '<span class="snow-report-context">Reported ' + esc(stamp(top)) + ', ' + esc(kind(top)) + '.</span>';
       return;
     }
     var week = C.rowsFor(d.reports || [], '168h', dataNow());
@@ -408,5 +412,5 @@
   fetch('/api/michigan-snow-totals?view=season', { headers: { Accept: 'application/json' } })
     .then(function (r) { return r.json(); })
     .then(function (s) { state.season = s; renderSeason(); if (state.data) renderTown(); })
-    .catch(function () {});
+    .catch(function () { $('seasonSummary').textContent = 'Current season station data did not load. Last winter\'s final totals remain available below.'; });
 })();
