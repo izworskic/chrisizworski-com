@@ -43,7 +43,7 @@
     if(!place)return;
     state.chosen=place.id;
     const match=outcome.kind==='candidate';
-    $('quick-outing').textContent=match?place.title:'Reconsider this outing length';
+    $('quick-outing').textContent=blocked?'Access warning: '+place.title:match?place.title:'Reconsider this outing length';
     $('quick-reason').textContent=blocked?access.message:match
       ?place.short+'. Official access is not yet verified.'
       :outcome.reason;
@@ -55,7 +55,7 @@
     $('stage-why').textContent=place.why;
     $('stage-length').textContent=place.length;
     $('stage-blocker').textContent=place.blocker;
-    $('stage-status').textContent=blocked?'Route access requires a different plan':match?'Candidate outing. Current access not verified.':'Not a fit for your chosen outing length';
+    $('stage-status').textContent=blocked?(access.kind==='conflict'?'Conflicting official access notices':'Official access restriction reported'):match?'Candidate outing. Current access not verified.':'Not a fit for your chosen outing length';
     $('stage-status').className='access-status'+(match?'':' access-status--mismatch');
     $('stage-reason').textContent=blocked?access.message:match?access.message:outcome.reason;
     $('official-link').href=place.official;
@@ -81,7 +81,7 @@
     });
     photo.replaceWith(img);
     fallback.hidden=true;
-    $('assignment-flag').textContent=match?'FIELD ASSIGNMENT':'RECONSIDER THE DISTANCE';
+    $('assignment-flag').textContent=blocked?'ACCESS REVIEW REQUIRED':match?'FIELD ASSIGNMENT':'CHANGE YOUR OUTING LENGTH';
     $('last-research').textContent='Park source review: '+C.SOURCE_REVIEWED+'. Not a same-day access check.';
     renderSourceDesk(place);
     renderRouteEvidence(place,access);
@@ -91,7 +91,7 @@
     renderButtons();
     updateMap();
     weatherFor(place);
-    setStatus((match?'Viewing ':'Reviewing ')+place.title+'. '+(match?'Current park access still needs an official check.':'The requested effort does not fit this route.'));
+    setStatus(place.title+'. '+(blocked?access.message:match?'Current park access needs an official check.':'Selected effort does not match this route.'));
   }
   function renderRouteEvidence(place,access){
     $('route-day').textContent=access.date||'Date unavailable';
