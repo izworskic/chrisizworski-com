@@ -57,10 +57,14 @@
     const d = card.dataset;
     if (category(card) === 'closed' || category(card) === 'unverified' || category(card) === 'specialist') return null;
     if (d.arrivalVerified !== 'verified' || !safeLink(d.parkingSource)) return null;
+    // Visitor entry coordinates must come from an agency or the managing land trust.
+    // A tourism listing or waterfall point never meets this driving gate.
+    const parkingHost = new URL(d.parkingSource).hostname.toLowerCase();
+    if (!['michigan.gov', 'www.michigan.gov', 'keweenawlandtrust.org', 'www.keweenawlandtrust.org'].includes(parkingHost)) return null;
     const lat = Number(d.parkingLat), lng = Number(d.parkingLng);
     if (!(lat > 44 && lat < 49 && lng > -93 && lng < -82)) return null;
     // The Land Trust calls Golf Course Road seasonal and unplowed in winter.
-    if (['upper-hungarian-falls', 'lower-hungarian-falls'].includes(d.id)) {
+    if (['upper-hungarian-falls', 'middle-hungarian-falls', 'lower-hungarian-falls'].includes(d.id)) {
       const month = currentMonth();
       if (month !== null && (month >= 11 || month <= 4)) return null;
     }
@@ -95,7 +99,7 @@
     }
     const notices = (window.UPWaterfallVisitLens?.review?.(d.id)?.notice || [])
       .filter(item => item && !/No closure encoded for this stop/.test(item));
-    if (['upper-hungarian-falls', 'lower-hungarian-falls'].includes(d.id)) {
+    if (['upper-hungarian-falls', 'middle-hungarian-falls', 'lower-hungarian-falls'].includes(d.id)) {
       const month = currentMonth();
       if (month !== null && (month >= 11 || month <= 4)) {
         notices.unshift('Golf Course Road is seasonal and unplowed in winter. The parking route is not offered for these months.');
