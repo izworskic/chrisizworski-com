@@ -115,3 +115,31 @@ test('photo rights and NPS archival caveats retained as data, not inferred from 
   assert.match(bay.why,/ice caves/);
   assert.equal(D.SOURCE_REVIEWED,'2026-11-17');
 });
+
+test('mobile first answer precedes controls and stays synchronized to selected outing',()=>{
+  const html=source('index.html'),js=source('app.js'),css=source('desk.css');
+  assert.match(html,/id="quick-outing"/);
+  assert.match(html,/id="quick-reason"/);
+  assert.match(html,/id="quick-source"/);
+  assert.ok(html.indexOf('id="quick-outing"')<html.indexOf('class="workbench"'));
+  assert.match(js,/\$\('quick-outing'\)\.textContent=/);
+  assert.match(js,/\$\('quick-source'\)\.href=place\.conditions/);
+  assert.match(css,/\.immediate-answer/);
+});
+
+test('the hourly forecast has an explicit accessible inspection control',()=>{
+  const html=source('index.html'),js=source('app.js');
+  assert.match(html,/id="weather-hour-insight"/);
+  assert.match(js,/inspect\.className='hour-choose'/);
+  assert.match(js,/inspect\.addEventListener\('click'/);
+  assert.match(js,/aria-pressed/);
+  assert.match(js,/NWS forecast, not observed trail conditions/);
+});
+
+test('map tile errors display a usable fallback rather than an unmarked blank map',()=>{
+  const html=source('index.html'),js=source('app.js');
+  assert.match(html,/id="map-fallback"/);
+  assert.match(html,/data-place="gooseberry-upper"/);
+  assert.match(js,/basemap\.on\('tileerror'/);
+  assert.match(js,/\$\('map-fallback'\)\.hidden=false/);
+});
