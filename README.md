@@ -30,4 +30,4 @@ See [MIGRATION.md](MIGRATION.md) for the staged cutover and rollback procedure a
 
 ## Developer research tools
 
-REA is available as an optional, pinned Claude Code project MCP server for investigating software and interaction patterns. For Codex setup, approvals, evidence standards and safety boundaries, see [REA development workflow](docs/REA_DEVELOPMENT_WORKFLOW.md). It does not run in the website build or Vercel.
+REA can be invoked explicitly for a one-off investigation; it is not installed, registered with Claude Code or Codex, or automatically run for routine development. See [REA on-demand research](docs/REA_DEVELOPMENT_WORKFLOW.md) for the pinned CLI, evidence requirements and safeguards. It does not run in the website build or Vercel.
