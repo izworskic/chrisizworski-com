@@ -15,7 +15,7 @@
   var state = {
     data: null, season: null, places: null, placesPromise: null,
     window: params.window || '24h', windowChosen: Boolean(params.window), region: params.region, town: params.town,
-    geo: null, shareRow: null, tableLimit: TABLE_STEP, map: null, layer: null, markers: {}, mapUnavailable: false
+    geo: null, shareRow: null, tableLimit: TABLE_STEP, map: null, layer: null, markers: {}, mapUnavailable: false, dataStale: false
   };
 
   function $(id) { return document.getElementById(id); }
@@ -32,6 +32,13 @@
   }
 
   function color(n) { return n >= 12 ? '#17476f' : n >= 8 ? '#2671a4' : n >= 4 ? '#438dbb' : n >= 2 ? '#77b5dc' : '#b1d4ea'; }
+  // The report endpoint can serve cached responses for up to 75 minutes.
+  // After two hours, suppress a current answer rather than replay old reports.
+  // The season endpoint may serve for up to 30 hours; allow 36 hours.
+  function olderThan(timestamp, hours) {
+    var issued = Date.parse(timestamp);
+    return !Number.isFinite(issued) || Date.now() - issued > hours * 3600e3 || issued - Date.now() > 2 * 3600e3;
+  }
   function dataNow() { return state.data ? Date.parse(state.data.generatedAt) : Date.now(); }
   function place(r) { return C.prettyPlace(r.place); }
   function where(r) { var c = C.countyLabel(r.county); return place(r) + (c ? ', ' + c : ''); }
@@ -45,15 +52,15 @@
 
   // ---- Map ----
   // When map tiles cannot load, use the full observation list instead.
-  function mapFallback() {
+  function mapFallback(message) {
     if (state.mapUnavailable) return;
     state.mapUnavailable = true;
     $('snowMap').hidden = true;
     $('snowMap').setAttribute('aria-hidden', 'true');
-    $('mapNote').textContent = 'The map could not load. Open the full report list below or use the original NWS archive link.';
+    $('mapNote').textContent = message || 'The map could not load. Open the full report list below or use the original NWS archive link.';
     var list = document.querySelector('.report-table-disclosure');
     if (list) list.open = true;
-    if (!state.data || !state.data.ok) {
+    if (!state.data || !state.data.ok || state.dataStale) {
       var body = $('snowTable').querySelector('tbody');
       body.innerHTML = '<tr><td colspan="5">The latest reports are unavailable. Use the linked NWS archive for source reports.</td></tr>';
     }
@@ -293,7 +300,7 @@
   }
 
   function render(fit) {
-    var d = state.data; if (!d) return;
+    var d = state.data; if (!d || state.dataStale) return;
     var rows = visibleRows(), quiet = !(d.reports || []).length, mapRows = rows;
     if (quiet && d.lastSnow) mapRows = d.lastSnow.sameDay || [];
     renderSummary(rows); renderStormPulse(rows); renderAlerts(); renderChips(); renderTable(rows); renderMap(mapRows, fit); renderTown(fit);
@@ -311,6 +318,13 @@
     var cur = s.season, sum = $('seasonSummary'), box = $('seasonCurrent'), last = $('lastSeasonBox'), liveBars = $('seasonLiveBars');
     var regionFilter = function (st) { return !state.region || st.region === state.region; };
     document.querySelectorAll('#lastSeasonTable tbody tr').forEach(function (tr) { tr.hidden = !regionFilter({ region: tr.getAttribute('data-region') }); });
+    if (olderThan(s.generatedAt, 36)) {
+      if (liveBars) liveBars.hidden = true;
+      box.hidden = true;
+      sum.textContent = 'The current-season station report was last checked more than 36 hours ago. Updated season comparisons are paused; last winter\'s historical figures remain below.';
+      last.open = true;
+      return;
+    }
     if (!cur) { if (liveBars) liveBars.hidden = true; sum.textContent = 'This season\'s station data did not load just now. Last winter\'s final totals are below.'; return; }
     var through = C.when(cur.through + 'T16:00:00Z').replace(/,[^,]*$/, '');
     if (!cur.anySnow) {
@@ -400,6 +414,15 @@
     .then(function (d) {
       state.data = d;
       if (!d.ok) { $('snowSummary').textContent = 'The NWS snow report archive did not respond just now. Try again in a few minutes.'; mapFallback(); return; }
+      if (olderThan(d.generatedAt, 2)) {
+        state.dataStale = true;
+        var checked = Number.isFinite(Date.parse(d.generatedAt)) ? C.when(d.generatedAt) + ' ET' : 'an unknown time';
+        $('snowSummary').textContent = 'The NWS report check is more than two hours old (last checked ' + checked + '). Current snowfall rankings are paused until a fresh source check is available. Use the linked original NWS report archive.';
+        $('snowStamp').textContent = 'Observation feed outdated; the previous check cannot be treated as current snowfall.';
+        document.querySelectorAll('.windows button').forEach(function (b) { b.disabled = true; });
+        mapFallback('The NWS observation feed is outdated, so the current map is hidden. Use the original NWS archive or the historical season reference below.');
+        return;
+      }
       // Open on the shortest window that has snow, so a quiet day still shows the latest storm.
       if (!state.windowChosen) {
         var first = C.WINDOWS.filter(function (k) { return d.windows[k] && d.windows[k].placeCount; })[0];
