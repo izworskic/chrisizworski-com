@@ -1,6 +1,7 @@
 "use strict";
 
-const field = require("../public/assets/manistee-river-data.js");
+const addCoverage = require("../public/assets/manistee-river-coverage.js");
+const field = addCoverage(require("../public/assets/manistee-river-data.js"));
 const graph = require("../public/assets/manistee-route-core.js");
 const hydro = require("./manistee-river-hydrography.js");
 
