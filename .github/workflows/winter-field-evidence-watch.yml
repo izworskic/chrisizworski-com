@@ -1,0 +1,129 @@
+name: Lake Superior winter field evidence watch
+
+# The scheduled workflow becomes active only after this draft PR is merged.
+# It saves audit artifacts and review issues. It never pushes to main.
+on:
+  schedule:
+    - cron: '17 5,17 * 11,12,1,2,3,4 *'
+    - cron: '17 17 * 5-10 2'
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - '.github/workflows/winter-field-evidence-watch.yml'
+      - 'scripts/winter-desk-evidence-watch.py'
+      - 'scripts/refresh-winter-desk-sources.py'
+      - 'scripts/refresh-winter-desk-operator-notices.py'
+      - 'scripts/audit-winter-desk-*.py'
+      - 'scripts/winter-desk-release-gate.cjs'
+      - 'tests/test_winter_desk_evidence_watch.py'
+      - 'tests/great-lakes-winter-desk.test.js'
+      - 'previews/great-lakes-winter-desk/**'
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: winter-field-official-evidence
+  cancel-in-progress: false
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Offline evidence and visitor safety contracts
+        run: |
+          python3 -m unittest discover -s tests -p 'test_winter_desk_evidence_watch.py' -v
+          python3 scripts/refresh-winter-desk-sources.py --self-test
+          python3 scripts/refresh-winter-desk-operator-notices.py --self-test
+          python3 scripts/audit-winter-desk-route-access.py --self-test
+          python3 scripts/audit-winter-desk-arrival.py --self-test
+          node --test tests/great-lakes-winter-desk.test.js
+          node scripts/winter-desk-release-gate.cjs --preview
+
+  official-source-monitor:
+    if: github.event_name != 'pull_request'
+    needs: contract
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Refresh six NPS and DNR evidence sources into temporary reports
+        env:
+          WINTER_EVIDENCE_DIR: ${{ runner.temp }}/winter-desk-evidence
+        run: |
+          python3 scripts/winter-desk-evidence-watch.py --live --out-dir "$WINTER_EVIDENCE_DIR"
+      - name: Report source state without a trail-access claim
+        if: always()
+        env:
+          WINTER_EVIDENCE_DIR: ${{ runner.temp }}/winter-desk-evidence
+        run: |
+          python3 - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json, os, pathlib
+          path=pathlib.Path(os.environ["WINTER_EVIDENCE_DIR"])/"monitor-report.json"
+          print("## Lake Superior winter official-source watch")
+          if not path.exists():
+              print("Monitor failed before writing a report. Inspect workflow logs.")
+          else:
+              doc=json.loads(path.read_text())
+              print("Result: **"+doc["state"]+"**")
+              print("This is not a live trail opening, parking, ice or closure certification.")
+              for row in doc["routes"]:
+                  print("- "+row["routeId"]+": "+row["conditions"]+" / "+row["operatorStatement"])
+          PY
+      - name: Retain official source report without a site deployment
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: winter-desk-official-evidence
+          path: ${{ runner.temp }}/winter-desk-evidence/*.json
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Deduplicate human review issues for unavailable or changed sources
+        if: always()
+        uses: actions/github-script@v7
+        env:
+          WINTER_EVIDENCE_DIR: ${{ runner.temp }}/winter-desk-evidence
+        with:
+          script: |
+            const fs=require('fs');
+            const path=require('path');
+            const p=path.join(process.env.WINTER_EVIDENCE_DIR,'monitor-report.json');
+            let report;
+            try{report=JSON.parse(fs.readFileSync(p,'utf8'));}
+            catch(_){report={state:'MONITOR_ERROR',requiresReview:true,routes:[],errors:['Report not written']};}
+            if(!report.requiresReview){core.info('Official source signals present. No publication changes.');return;}
+            const title='Winter Field Desk: official park evidence needs review';
+            const {owner,repo}=context.repo;
+            const open=await github.paginate(github.rest.issues.listForRepo,{owner,repo,state:'open',per_page:100});
+            const existing=open.find(i=>!i.pull_request&&i.title===title);
+            if(existing){core.warning('Human review issue already open: #'+existing.number);return;}
+            const lines=[
+              'The automated source watcher found changed or unreachable official evidence. **This is not a closure or reopening notice.**',
+              '',
+              'Watch status: '+report.state,
+              ...report.routes.filter(r=>r.needsReview).map(r=>'- '+r.routeId+': conditions '+r.conditions+', statement '+r.operatorStatement),
+              ...report.errors.map(e=>'- Source monitor error: '+e),
+              '',
+              'Check the named DNR/NPS page, specific winter route, parking and dates before changing public copy.',
+              'A missing webpage phrase cannot reopen a route or close an adjacent route. Never infer safe lake ice.',
+              'Only human-reviewed exact-route operating evidence can change the visit-day access verdict.',
+              'Workflow: '+context.serverUrl+'/'+owner+'/'+repo+'/actions/runs/'+context.runId
+            ];
+            const issue=await github.rest.issues.create({owner,repo,title,body:lines.join('\n')});
+            core.info('Created source review issue #'+issue.data.number);
