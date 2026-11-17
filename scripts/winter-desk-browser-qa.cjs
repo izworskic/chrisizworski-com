@@ -58,6 +58,7 @@ async function main(){
         await page.locator('[data-goal="'+goal+'"]').click();
         assert.match((await page.locator('#stage-title').textContent()).toLowerCase(),new RegExp(text.toLowerCase()));
         assert.equal(await page.locator('[data-goal="'+goal+'"]').getAttribute('aria-pressed'),'true');
+        await page.waitForFunction(()=>{const img=document.querySelector('#stage-photo');return img?.complete&&img.naturalWidth>0;},null,{timeout:10000});
         assert.equal(await page.locator('#stage-photo').evaluate(img=>img.complete&&img.naturalWidth>0),true,'real place photo');
         assert.match(await page.locator('#source-direct').getAttribute('href'),/^https:\/\/(?:www\.nps\.gov|www\.dnr\.state\.mn\.us)\//);
       }
