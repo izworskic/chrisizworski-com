@@ -1,3 +1,10 @@
+### 2026-11-16 | Rocket Launch Live public viewing plan, review branch
+- **Visitor task:** After selecting a mission, compare documented public places and pick one without confusing Google Maps discovery with launch-day opening or parking approval.
+- **Changes:** Responsive location selector and source-linked place dossier; retains one selected mission, the existing access rules, official notices, three quick links, and all six region guides. Keyboard A-to-B-to-A and cross-region clearing added to existing browser regression.
+- **Design/tools:** Two credible concepts compared; Penpot-importable SVG supplied. Penpot MCP and REA execution are not available in this chat, so neither is falsely claimed. REA remains on-demand only. No new live service, API, ad, canonical, tracking or revenue change.
+- **Verification:** Changed scripts parsed as JavaScript; full `npm run verify:all`, Playwright screenshots, CI, deployment and public verification remain pending. No impression, CTR or revenue uplift claimed.
+- **Exactly one next action:** Run the full repository CI and 390px/1440px viewing-planner browser fixture on the current review PR head, then address any failures before owner merge.
+
 ### 2026-11-11 — Freighter production routing correction after PR #1634
 - **Observed release:** Chris authorized merge; PR #1634 merged at `597293a9472ce302e1a9c3b69fad79398968f4a3`, Vercel production succeeded, and its tree matched the combined version that passed all 60 checks. The dollar-token review finding was fixed and its regression passed before merge.
 - **Live finding:** Canonical tracker HTTP 200 served the new static template, with one ad loader and preserved identity, but no initial report JSON. Direct `/api/freighter-page` HTTP 200 returned recent reports and retained noindex. This proved a filesystem-routing priority issue, not an AIS outage. Existing browser tracker continued to work; the initial-HTML enhancement was not active on the public URL.
