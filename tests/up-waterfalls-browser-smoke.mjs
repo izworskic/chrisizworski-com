@@ -77,7 +77,7 @@ try{
     try{
       await offline.route('**/assets/leaflet-1.9.4.js',route=>route.abort());
       await offline.goto(base+'/upper-peninsula-waterfalls/',{waitUntil:'domcontentloaded',timeout:30000});
-      await offline.locator('#arrival-choice option[value="wagner-falls"]').waitFor();
+      await offline.locator('#arrival-choice option[value="wagner-falls"]').waitFor({state:'attached'});
       assert.equal(await offline.locator('#arrival-choice').inputValue(),'wagner-falls');
       await offline.locator('#arrival-choice').selectOption('munising-falls');
       assert.match(await offline.locator('#arrival-verdict').innerText(),/closed/i);
