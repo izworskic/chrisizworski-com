@@ -1,0 +1,35 @@
+/*
+ * Visual V1: shared source tokens.
+ * Deployment mirror: public/assets/visual-v1-tokens.css
+ * Pilot owner: Michigan Snow Totals only. Do not apply to other tools.
+ */
+:root {
+  --v-type-14: 14px;
+  --v-type-16: 16px;
+  --v-type-18: 18px;
+  --v-type-22: 22px;
+  --v-type-28: 28px;
+  --v-type-40: 40px;
+  --v-type-56: 56px;
+  --v-space-4: 4px;
+  --v-space-8: 8px;
+  --v-space-12: 12px;
+  --v-space-16: 16px;
+  --v-space-24: 24px;
+  --v-space-32: 32px;
+  --v-space-48: 48px;
+  --v-radius-sm: 8px;
+  --v-radius-card: 16px;
+  --v-shadow-card: 0 5px 26px rgba(15, 44, 65, .065), 0 2px 7px rgba(15, 44, 65, .045);
+  --v-shadow-raised: 0 16px 42px rgba(15, 44, 65, .12), 0 4px 12px rgba(15, 44, 65, .06);
+  --v-ink: #132a3d;
+  --v-muted: #4a5d6d;
+  --v-paper: #f4f8fb;
+  --v-surface: #ffffff;
+  --v-surface-soft: #eaf2f8;
+  --v-accent-1: #e8f3fc;
+  --v-accent-2: #c4e1f2;
+  --v-accent-3: #77b5dc;
+  --v-accent-4: #2671a4;
+  --v-accent-5: #17476f;
+}
