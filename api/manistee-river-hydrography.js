@@ -41,6 +41,22 @@ function cleanGeoJson(payload){
   };
 }
 
+async function fetchHydrography(){
+    const response=await fetch(queryUrl(),{headers:{accept:'application/geo+json, application/json','user-agent':'ChrisIzworskiManisteeFieldMap/1.0 (https://chrisizworski.com/manistee-river-map/)'},signal:AbortSignal.timeout(10000)});
+    if(!response.ok)throw new Error(`USGS NHD returned ${response.status}`);
+    const payload=await response.json();
+    const geojson=cleanGeoJson(payload);
+    if(!geojson.features.length)throw new Error('USGS NHD returned no named Manistee-basin flowlines');
+    return {
+      source:'USGS The National Map — National Hydrography Dataset',
+      source_url:'https://hydro.nationalmap.gov/arcgis/rest/services/nhd/MapServer/6',
+      fetched_at:new Date().toISOString(),
+      bbox:BBOX.split(',').map(Number),
+      ...geojson
+    };
+
+}
+
 module.exports=async function handler(req,res){
   res.setHeader('Access-Control-Allow-Origin','*');
   res.setHeader('X-Robots-Tag','noindex, nofollow');
@@ -49,23 +65,14 @@ module.exports=async function handler(req,res){
     return res.status(405).json({error:'Method not allowed'});
   }
   try{
-    const response=await fetch(queryUrl(),{headers:{accept:'application/geo+json, application/json','user-agent':'ChrisIzworskiManisteeFieldMap/1.0 (https://chrisizworski.com/manistee-river-map/)'},signal:AbortSignal.timeout(10000)});
-    if(!response.ok)throw new Error(`USGS NHD returned ${response.status}`);
-    const payload=await response.json();
-    const geojson=cleanGeoJson(payload);
-    if(!geojson.features.length)throw new Error('USGS NHD returned no named Manistee-basin flowlines');
+    const payload=await fetchHydrography();
     res.setHeader('Cache-Control','public, s-maxage=86400, stale-while-revalidate=604800');
-    return res.status(200).json({
-      source:'USGS The National Map — National Hydrography Dataset',
-      source_url:'https://hydro.nationalmap.gov/arcgis/rest/services/nhd/MapServer/6',
-      fetched_at:new Date().toISOString(),
-      bbox:BBOX.split(',').map(Number),
-      ...geojson
-    });
+    return res.status(200).json(payload);
   }catch(error){
     res.setHeader('Cache-Control','no-store');
     return res.status(502).json({error:'USGS hydrography unavailable',detail:String(error?.message||error)});
   }
 };
 
+module.exports.fetchHydrography=fetchHydrography;
 module.exports._test={queryUrl,cleanGeoJson,property,NAMES,BBOX};
