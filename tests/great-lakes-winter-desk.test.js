@@ -54,7 +54,7 @@ test('named place maps are search-only and invalid navigation is rejected',()=>{
 
 test('forecast issue timestamp missing and stale disallow a positive weather summary',()=>{
   const now=new Date('2026-11-17T17:00:00Z');
-  assert.equal(D.forecastWindow(sample(undefined,[]),now,'America/Chicago','today').status,'stale');
+  assert.equal(D.forecastWindow(sample('2026-11-16T08:00:00Z',[]),now,'America/Chicago','today').status,'stale');
   assert.equal(D.forecastWindow({properties:{periods:[]}},now,'America/Chicago','today').status,'unknown');
   assert.equal(D.forecastWindow(sample('2026-11-16T14:00:00Z',[]),now,'America/Chicago','today').status,'stale');
   assert.equal(D.forecastWindow(sample('2026-11-18T14:00:00Z',[]),now,'America/Chicago','today').status,'stale');
