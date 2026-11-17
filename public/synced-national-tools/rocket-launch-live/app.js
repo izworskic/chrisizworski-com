@@ -1985,6 +1985,8 @@
     $('rl-launch-select').disabled = true;
     $('rl-access-quick')?.replaceChildren(el('p','rl-access-quick-empty',
       'Checking public viewing locations for the selected mission…'));
+    $('rl-spot-planner')?.replaceChildren(el('p', 'rl-spot-planner-empty',
+      'Checking public viewing places for the selected mission.'));
     let responseStatus=0;
     try {
       const response = await fetch(url, { headers: { Accept: 'application/json' } });
