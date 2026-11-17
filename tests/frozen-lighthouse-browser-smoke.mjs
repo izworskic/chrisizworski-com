@@ -104,11 +104,20 @@ try{
    assert.equal(await appendix.locator('.pier-card').count(),9);
    await page.locator('details.lighthouse-appendix > summary').click();
   });
+  await check('forecast graph explanation and time labels at '+width+'px',async()=>{
+   const note=await page.locator('#desk-chart-note').innerText();
+   assert.match(note,/not the chance of ice forming/);
+   assert.doesNotMatch(note,/vessel/i);
+   assert.equal(await page.locator('#desk-chart-axis span').count(),4);
+   assert.equal(await page.locator('#desk-chart .desk-bar').count(),72);
+   assert.match(await page.locator('#desk-chart').getAttribute('aria-label'),/missing evidence/);
+   assert.match(await page.locator('#desk-chart-axis span').first().innerText(),/\w{3}/);
+  });
   await check('forecast desk fits its actual visible bounds at '+width+'px',async()=>{
    const result=await page.evaluate(()=>{
     const shell=document.querySelector('.coast-desk');
     const edge=shell.getBoundingClientRect().right;
-    return ['.desk-layout','.desk-places','.desk-main','.desk-current','#desk-outcome','#desk-window','.desk-clock','.desk-chart','.desk-chart__note','#desk-readings','.desk-provenance','.desk-footer']
+    return ['.desk-layout','.desk-places','.desk-main','.desk-current','#desk-outcome','#desk-window','.desk-clock','.desk-graph-intro','.desk-chart','.desk-chart-axis','.desk-chart__note','#desk-readings','.desk-provenance','.desk-footer']
      .map(selector=>{
       const element=document.querySelector(selector);
       const box=element.getBoundingClientRect();
@@ -146,7 +155,7 @@ try{
    await check('missing hour remains unknown, not zero',async()=>{
     await setHour(page,20);
     assert.match(await page.locator('#desk-readings').innerText(),/Unknown from available evidence/);
-    assert.match(await page.locator('#desk-chart').getAttribute('aria-label'),/striped slots mean missing/);
+    assert.match(await page.locator('#desk-chart').getAttribute('aria-label'),/striped bars mean missing evidence/);
    });
    await check('selected time and location are shareable',async()=>{
     assert.match(page.url(),/[?&]light=frankfort/);

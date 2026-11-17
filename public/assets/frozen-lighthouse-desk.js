@@ -8,15 +8,17 @@
  const timeLabel=document.getElementById('desk-time');
  const slider=document.getElementById('desk-slider');
  const chart=document.getElementById('desk-chart');
+ const chartAxis=document.getElementById('desk-chart-axis');
  const readings=document.getElementById('desk-readings');
  const provenance=document.getElementById('desk-provenance');
  const maps=document.getElementById('desk-maps');
  const next=document.getElementById('desk-next');
  const previous=document.getElementById('desk-previous');
- if(!panel||!list||!title||!outcome||!slider||!chart||!readings)return;
+ if(!panel||!list||!title||!outcome||!slider||!chart||!chartAxis||!readings)return;
 
  const fmt=new Intl.DateTimeFormat('en-US',{timeZone:'America/Detroit',weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'});
  const short=new Intl.DateTimeFormat('en-US',{timeZone:'America/Detroit',weekday:'short',hour:'numeric',timeZoneName:'short'});
+ const chartTick=new Intl.DateTimeFormat('en-US',{timeZone:'America/Detroit',weekday:'short',hour:'numeric'});
  const when=iso=>{const t=Date.parse(iso||'');return Number.isFinite(t)?fmt.format(t):'Time not reported';};
  const compact=iso=>{const t=Date.parse(iso||'');return Number.isFinite(t)?short.format(t):'Time unknown';};
  const element=(tag,cls,content)=>{
@@ -82,12 +84,22 @@
  function renderChart(pier,index){
   chart.replaceChildren();
   chart.setAttribute('role','img');
-  chart.setAttribute('aria-label',pier.name+': '+pier.hours.length+' issued hourly forecast periods. Bars show relative possible spray only; striped slots mean missing inputs. Use the hour slider to read individual values.');
+  chart.setAttribute('aria-label',pier.name+': '+pier.hours.length+' forecast hours, ordered left to right. Taller red bars show stronger modeled conditions for freezing spray, gray bars mean conditions were not met, and striped bars mean missing evidence. The outlined bar is the selected hour. This does not show observed ice or probability.');
+  chartAxis.replaceChildren();
+  if(pier.hours.length){
+   const last=pier.hours.length-1;
+   for(const position of [0,Math.floor(pier.hours.length/3),Math.floor(2*pier.hours.length/3),last]){
+    const stamp=Date.parse(pier.hours[Math.min(position,last)].startTime||'');
+    chartAxis.append(element('span','',Number.isFinite(stamp)?chartTick.format(stamp):'Time unknown'));
+   }
+  }else{
+   chartAxis.append(element('span','','Forecast times unavailable'));
+  }
   for(let i=0;i<pier.hours.length;i++){
    const h=pier.hours[i],invalid=h.score===null;
    const b=element('span','desk-bar '+(invalid?'desk-bar--missing':h.score>0?'desk-bar--spray':'desk-bar--none')+(i===index?' desk-bar--current':''));
    b.style.height=(invalid?24:h.score===0?8:Math.max(12,Math.min(100,h.score)))+'%';
-   b.title=compact(h.startTime)+': '+(invalid?'unknown':h.score+'/100');
+   b.title=compact(h.startTime)+': '+(invalid?'weather evidence missing':h.score>0?'possible freezing spray signal '+h.score+'/100':'freezing-spray conditions not met');
    b.setAttribute('aria-hidden','true');
    chart.append(b);
   }
@@ -223,7 +235,7 @@
   windowText.textContent='Source connection failed. Please check the official NWS marine forecast.';
   timeLabel.textContent='No forecast hours loaded';
   slider.disabled=true;previous.disabled=true;next.disabled=true;
-  readings.replaceChildren();chart.replaceChildren();provenance.replaceChildren();
+  readings.replaceChildren();chart.replaceChildren();chartAxis.replaceChildren();provenance.replaceChildren();
   maps.removeAttribute('href');
  });
 })();
