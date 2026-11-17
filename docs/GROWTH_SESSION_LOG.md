@@ -1,3 +1,9 @@
+### 2026-11-17 | Great Lakes field assignment desk built in preview, production held
+- **Outcome:** Created a working, responsive Lake Superior three-outing Field Assignment Desk in `previews/great-lakes-winter-desk/` with a first-screen answer, goal and effort controls, NWS hourly forecast lens, Leaflet map, source-linked photos and park guidance. Prototype is noindex and not launched.
+- **Verification:** 14 Node tests passed, independent Python evidence audit passed, browser A/B/C/A selection and 360/390/768/1440 overflow checks passed. Three authentic photo URLs and map tiles loaded. Simulated NWS and map failure states retained usable source links; hourly forecast inspection changed the selected evidence. Full release verification and official access reconciliation remain outstanding.
+- **Design correction:** Inspected 390px browser screenshot and moved the live first answer ahead of controls. Experience OS, Foundry and Python OS used as standards rather than duplicating existing pages. No Rust runtime or Penpot connection introduced without technical value and availability.
+- **Next step:** Bind dated, authoritative land-manager access observations, validate failure/conflict paths, then finish full CI and public release review. Chris controls merging. PR https://github.com/izworskic/chrisizworski-com/pull/1752
+
 ### 2026-11-17 | Great Lakes winter experience network, Lake Superior evidence gate
 - **User value:** One specific cross-state winter outing to suit a visitor's activity and effort, with current official access and condition checks before choosing. No cloned Michigan destination or weekend page.
 - **Source audit:** Pictured Rocks official snowshoe route vs closed Munising Falls Trail; Apostle Islands overland Lakeshore Trail vs separately controlled ice-cave access; Gooseberry Upper Falls as only Minnesota DNR-maintained winter waterfall walking route. Checked official NPS and DNR sources November 17, 2026.
@@ -6,6 +12,13 @@
 - **GSC / AdSense:** NOT AVAILABLE in this research session; no ranking or revenue impact claimed.
 - **Known gaps:** Source snapshots and refresh service, exact winter entrance checks for all three, photo rights, browser tests, full repository CI and public deployment verification remain NOT VERIFIED.
 - **Next action:** Build one local source-status-aware field assignment with closure precedence and three location-specific visitor test scenarios, without opening an indexable URL.
+
+### 2026-11-17 | Waterfall hub photo-wall correction
+- **Owner feedback:** The three-picture hero added in PR #1750 consumed the first screen and delayed access to the waterfall map. The design did not serve the page's primary task.
+- **Correction:** Removed the above-the-fold photo wall and its responsive CSS; the map-first page opening and trip planning controls are restored. Retained the verified waterfall-card photos, lower gallery, original image rights and all visitor information.
+- **Safeguards:** Added map-first regression assertions; unchanged Rust engines, map, access evidence, canonical, SEO metadata, ads and sitemap freshness.
+- **Status:** Correction PR, not a verified production release at this point. No traffic or revenue claims.
+- **Exactly one next action:** Confirm CI and waterfall browser smoke on the correction branch before merging.
 
 ### 2026-11-17 | U.P. waterfall main-page photo-led arrival, review branch
 - **Visitor issue:** The map-first hub has verified imagery, but the first screen remained text-led and did not show real waterfalls before asking visitors to plan.

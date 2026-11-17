@@ -10,6 +10,12 @@ const photos=JSON.parse(fs.readFileSync('data/up-waterfall-photo-provenance.json
 const at=x=>h.indexOf(x);
 
 test('map-first reader order, without a JavaScript-dependent reshuffle',()=>{
+  // Preserve the map-first arrival, and keep the existing photos beneath the map.
+  assert.doesNotMatch(h, /class="upfall-hero-photo-wall"/);
+  assert.doesNotMatch(css, /upfall-hero-photo-grid/);
+  assert.equal((h.match(/class="upfall-photo-preview-card"/g)||[]).length,3);
+  assert.ok(at('id="falls-map"') < at('class="upfall-photo-preview"'));
+
   assert.match(h,/<body class="up-waterfall-hub waterfall-experience-pilot">/);
   assert.match(h,/<link rel="stylesheet" href="\/assets\/up-waterfalls.css"><link rel="stylesheet" href="\/assets\/up-waterfalls-experience-pilot.css">/);
   assert.ok(at('id="visit-lens"') < at('class="explorer"'));

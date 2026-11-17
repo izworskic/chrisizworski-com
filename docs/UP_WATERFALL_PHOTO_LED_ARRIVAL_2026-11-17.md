@@ -1,3 +1,5 @@
+> **Withdrawn November 17, 2026:** The owner rejected this photo-led hero because it pushed the map and planner down the page. The implementation was removed in the follow-up correction. The research and provenance notes below remain an archival record, not an active design recommendation.
+
 # Waterfall main-page photo-led arrival, November 17 2026
 
 ## The visitor problem
