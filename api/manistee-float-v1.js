@@ -147,7 +147,7 @@ module.exports = async function handler(req, res) {
   try {
     const waterwayName = pair.from.waterway === "pine" ? "Pine River" : "Manistee River";
     const payload = await hydro.fetchHydrography({name:waterwayName});
-    if (payload.complete !== true || payload.sourceCompleteness !== "complete-retrieved-set")
+    if (payload.sourceCompleteness !== "complete-retrieved-set")
       return json(res,503,{contract:CONTRACT,status:"unavailable",error:"INCOMPLETE_OFFICIAL_GEOMETRY"});
     const features = (payload.features || []).filter(f=>f.properties?.name===waterwayName);
     if (!features.length) return json(res,503,{contract:CONTRACT,status:"unavailable",error:"WATERWAY_GEOMETRY_MISSING"});
