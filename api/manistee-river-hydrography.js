@@ -53,7 +53,7 @@ function cleanGeoJson(payload){
   };
 }
 
-async function fetchNhdPage(url,fetcher=fetch){
+async function fetchNhdPage(url,fetcher=fetch,allowMore=false){
   const response=await fetcher(url,{headers:{
     accept:'application/geo+json, application/json',
     'user-agent':'ChrisIzworskiManisteeFieldMap/1.0 (https://chrisizworski.com/manistee-river-map/)'
@@ -62,7 +62,7 @@ async function fetchNhdPage(url,fetcher=fetch){
   const payload=await response.json();
   if(payload?.error||!Array.isArray(payload?.features))
     throw new Error('USGS NHD response is invalid or unavailable');
-  if(payload.exceededTransferLimit===true)
+  if(payload.exceededTransferLimit===true&&!allowMore)
     throw new Error('USGS NHD response incomplete: transfer limit exceeded');
   return payload;
 }
@@ -70,11 +70,13 @@ async function fetchPagesForName(name,fetcher=fetch){
   if(!NAMES.includes(name))throw new Error('Unsupported river name');
   const features=[];
   for(let page=0;page<MAX_PAGES;page++){
-    const payload=await fetchNhdPage(queryUrl({name,page}),fetcher);
+    const payload=await fetchNhdPage(queryUrl({name,page}),fetcher,true);
     const subset=cleanGeoJson(payload).features.filter(f=>f.properties.name===name);
     features.push(...subset);
     if(subset.length!==payload.features.length)throw new Error('Unexpected river feature in source page');
-    if(payload.features.length<PAGE_SIZE)return features;
+    if(payload.features.length<PAGE_SIZE&&payload.exceededTransferLimit!==true)return features;
+    if(payload.features.length<PAGE_SIZE&&payload.exceededTransferLimit===true)
+      throw new Error('USGS NHD paged response is marked incomplete');
   }
   throw new Error('USGS NHD river page limit reached: incomplete data');
 }
