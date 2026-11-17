@@ -56,6 +56,10 @@ async function main(){
       assert.match(await page.locator('#route-access').textContent(),/not confirmed/);
       const localDate=await page.evaluate(()=>{const c=window.GreatLakesWinterDesk;return c.targetKey(new Date(),'America/Chicago','tomorrow');});
       assert.equal(await page.locator('#route-day').textContent(),localDate);
+      await page.waitForFunction(()=>document.querySelector('#arrival-title')?.textContent.includes('Gooseberry Falls Visitor Center'),null,{timeout:10000});
+      await page.waitForFunction(()=>document.querySelector('#operator-statement')?.textContent.includes('Minnesota DNR identifies'),null,{timeout:10000});
+      assert.equal(await page.locator('#arrival-directions').isVisible(),false);
+      assert.match(await page.locator('#arrival-category').textContent(),/DOCUMENTED WINTER ARRIVAL/);
       const evidence=await page.locator('#source-signal').textContent();
       assert.match(evidence,/unverified|out of date|No trustworthy|source check|source was|source could/i);
       for(const [goal,text] of [['snowshoe','blue posts'],['coast','sandstone'],['falls','Upper Falls']]){
@@ -63,6 +67,18 @@ async function main(){
         assert.match((await page.locator('#stage-title').textContent()).toLowerCase(),new RegExp(text.toLowerCase()));
         assert.equal(await page.locator('[data-goal="'+goal+'"]').getAttribute('aria-pressed'),'true');
         assert.equal(await page.locator('#route-policy-link').getAttribute('href'),await page.locator('#official-link').getAttribute('href'));
+        const expectedArrival={snowshoe:'Pictured Rocks Ski Trail Parking',coast:'Meyers Beach Parking',falls:'Gooseberry Falls Visitor Center'};
+        await page.waitForFunction(expected=>document.querySelector('#arrival-title')?.textContent.includes(expected),expectedArrival[goal],{timeout:10000});
+        const notice=await page.locator('#operator-statement').textContent();
+        assert.ok(notice.length>25,'operator source note visible');
+        if(goal==='coast'){
+          assert.match(await page.locator('#arrival-category').textContent(),/WINTER ROAD ACCESS NOT CONFIRMED/);
+          assert.equal(await page.locator('#arrival-directions').isVisible(),true);
+          assert.match(await page.locator('#arrival-evidence-link').getAttribute('href'),/nps\.gov\/apis\/planyourvisit\/directions\.htm/);
+        }else{
+          assert.equal(await page.locator('#arrival-directions').isVisible(),false,'no premature driving directions');
+        }
+
         await page.waitForFunction(()=>{const img=document.querySelector('#stage-photo');return img?.complete&&img.naturalWidth>0;},null,{timeout:10000});
         assert.equal(await page.locator('#stage-photo').evaluate(img=>img.complete&&img.naturalWidth>0),true,'real place photo');
         assert.match(await page.locator('#source-direct').getAttribute('href'),/^https:\/\/(?:www\.nps\.gov|www\.dnr\.state\.mn\.us)\//);
@@ -121,7 +137,7 @@ async function main(){
     assert.match(await staticPage.locator('#stage-title').textContent(),/Upper Falls/);
     assert.match(await staticPage.locator('#official-link').getAttribute('href'),/^https:\/\//);
     await noJs.close();
-    console.log(JSON.stringify({status:'PASS',summary,failedSourceFallback:true,syntheticClosureNotOverridden:true,noJs:true,screenshots:screenshotDir},null,2));
+    console.log(JSON.stringify({status:'PASS',summary,verifiedArrivalSources:true,datedOfficialNoticeSnapshots:true,failedSourceFallback:true,syntheticClosureNotOverridden:true,noJs:true,screenshots:screenshotDir},null,2));
   }finally{await browser.close();}
 }
 main().catch(err=>{console.error(err.stack);process.exit(1);});
