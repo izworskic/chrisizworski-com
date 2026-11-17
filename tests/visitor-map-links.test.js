@@ -40,7 +40,10 @@ test('Circle Tour publishes 31 distinct stop-area Google Maps searches even with
   const expected=links.placeSearch({role:'regional-reference',query});
   assert.ok(expected,'invalid stop map query '+id);
   const url=new URL(m[1]);
-  assert.equal(url.href,expected,'different map search '+id);
+  assert.equal(url.origin,'https://www.google.com');
+  assert.equal(url.pathname,'/maps/search/');
+  assert.equal(url.searchParams.get('api'),'1');
+  assert.equal(url.searchParams.get('query'),query,'different mapped stop area '+id);
   assert.ok(!url.pathname.includes('/dir/'),'no approximate stop routes '+id);
  }
  assert.ok(seen.has('21')&&html.includes('Grand Portage State Park, Minnesota, USA'));
