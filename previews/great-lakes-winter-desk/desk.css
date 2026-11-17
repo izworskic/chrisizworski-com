@@ -233,3 +233,8 @@ h1 em{font-weight:500;color:var(--rust)}
   .immediate-answer strong{font-size:14px}
   .immediate-answer #quick-reason{font-size:11px;margin:4px 0}
 }
+
+/* The chart is explorable with keyboard, touch or mouse. */
+.hour-choose{margin-top:auto;background:transparent;border:1px solid #7b9a9b;color:#284e59;padding:6px 4px;font-size:10px;font-weight:700;min-height:34px}
+.hour-choose:hover,.hour-choose[aria-pressed="true"]{background:#174c58;color:#fff;border-color:#174c58}
+.weather-hour-insight{border-left:3px solid #286c7a;padding:11px 13px;margin:7px 0 16px!important;background:#e5eeeb;color:#243f48!important;font-size:12px!important;line-height:1.55!important}
