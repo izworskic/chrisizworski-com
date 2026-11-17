@@ -77,7 +77,9 @@ html.rl-map-fullscreen,html.rl-map-fullscreen body{overflow:hidden!important;ove
   right:max(12px,env(safe-area-inset-right))}
 
 .rl-map-fallback{display:grid;place-items:center;text-align:center;padding:24px;height:100%;color:#4b6661;font-size:13px}
-.rl-map-legend{padding:9px 15px;display:flex;justify-content:space-between;gap:8px;font-size:11px;color:#62756f;background:#f3f6f3}
+.rl-map-legend{padding:11px 15px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px 14px;font-size:12px;color:#435b55;background:#f3f6f3}
+.rl-map-hint{margin:0;flex:1 1 250px;line-height:1.5}
+.rl-atlas-status:not([hidden]){order:3;flex:1 0 100%;line-height:1.45;color:#526870}
 .rl-atlas-summary{padding:24px;background:#eff3ee;border-left:1px solid #d0dcd3}
 .rl-atlas-summary h3{font-family:var(--serif);font-size:30px;line-height:1.15;margin:0 0 13px}
 .rl-atlas-summary>p:not(.rl-eyebrow){line-height:1.66;font-size:14px;color:#42574e}
