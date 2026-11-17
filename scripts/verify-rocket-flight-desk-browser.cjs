@@ -612,6 +612,9 @@ const whenReady=page=>page.waitForFunction(id=>
         v.name+' A to B to A did not restore the original place');
       assert((await page.locator('#rl-spot-planner-detail').innerText())
         .includes('may not open'),v.name+' lost launch-specific Wallops admission caveat');
+      const plannerShot=v.name+'-interactive-place-planner.png';
+      await page.locator('#rl-spot-planner').screenshot({path:path.join(out,plannerShot),animations:'disabled'});
+      report.screenshots.push(plannerShot);
 
       const overflow=await page.evaluate(()=>
         Math.max(0,document.documentElement.scrollWidth-document.documentElement.clientWidth));
