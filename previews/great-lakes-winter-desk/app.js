@@ -93,6 +93,7 @@
     $('weather-issued').textContent='No confirmed NWS issue time';
     $('weather-hours').replaceChildren();
     $('weather-hours').hidden=true;
+    $('weather-hour-insight').hidden=true;
     $('weather-unavailable').hidden=false;
     $('weather-unavailable').textContent='Use the official NWS forecast link to check conditions before leaving. Weather does not establish park access.';
   }
@@ -105,7 +106,23 @@
     $('weather-issued').textContent='NWS issued '+new Date(w.issued).toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZone:place.tz,timeZoneName:'short'});
     $('weather-unavailable').hidden=true;
     $('weather-hours').hidden=false;
+    $('weather-hour-insight').hidden=false;
     $('weather-hours').replaceChildren();
+    const advisoryHours=w.hours.filter(h=>h.kind==='advisory').length;
+    if(!$('stage-status').classList.contains('access-status--mismatch')){
+      $('quick-reason').textContent=advisoryHours
+        ?'NWS flags '+advisoryHours+' forecast hours with weather concerns. Current park access remains unverified.'
+        :'Hourly NWS forecast loaded. Park access still needs a separate official check.';
+    }
+    function selectHour(index){
+      const h=w.hours[index];
+      if(!h)return;
+      document.querySelectorAll('.hour-choose').forEach((b,i)=>b.setAttribute('aria-pressed',String(i===index)));
+      const local=new Date(h.time).toLocaleString('en-US',{weekday:'short',hour:'numeric',timeZone:place.tz});
+      const temp=h.temperature===null?'temperature not reported':h.temperature+'°'+h.tempUnit;
+      const precip=h.precip===null?'precipitation percentage unavailable':h.precip+'% precipitation probability';
+      $('weather-hour-insight').textContent=local+': '+h.forecast+'. '+temp+', '+h.wind+', '+precip+'. NWS forecast, not observed trail conditions.';
+    }
     w.hours.forEach(h=>{
       const cell=document.createElement('li');
       const time=document.createElement('time');time.dateTime=h.time;
@@ -118,9 +135,14 @@
       const chance=document.createElement('small');chance.textContent=h.precip===null?'Precip n/a':h.precip+'% precip';
       const detail=document.createElement('span');detail.className='hour-note';detail.textContent=h.forecast+'; '+h.wind;
       const alert=document.createElement('span');alert.className='hour-indicator '+h.kind;alert.textContent=h.label;
-      cell.append(time,temp,bar,chance,detail,alert);
+      const inspect=document.createElement('button');
+      inspect.type='button';inspect.className='hour-choose';
+      inspect.setAttribute('aria-pressed','false');inspect.textContent='Inspect hour';
+      inspect.addEventListener('click',()=>selectHour(w.hours.indexOf(h)));
+      cell.append(time,temp,bar,chance,detail,alert,inspect);
       $('weather-hours').append(cell);
     });
+    selectHour(0);
   }
   async function weatherFor(place,force=false){
     const req=++state.request;
