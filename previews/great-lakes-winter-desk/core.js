@@ -158,9 +158,58 @@
       return {kind:'unavailable',message:'The last automated request could not retrieve this official source. Check it directly.',checkedAt:row.retrievedAt};
     return {kind:'unavailable',message:'The official source check has an unrecognized status.'};
   }
+
+  // Only a human-reviewed, source-linked notice naming the exact route and visit day
+  // can change the access verdict. A reachable source or favorable forecast cannot.
+  function routeAccess(document,place,prefs,now=new Date()){
+    const target=place?targetKey(now,place.tz,validPref(prefs).day):null;
+    const unknown=(reason,policy=null)=>({kind:'unknown',blocks:false,date:target,
+      message:reason,policy});
+    if(!place||!target||!document||document.schemaVersion!==1||document.operatorAccessReady!==false)
+      return unknown('No verified route-specific access update is available for your date.');
+    const record=document.routes?.[place.id];
+    if(!record||record.routeId!==place.id||record.routePage!==place.official||
+      record.conditionsPage!==place.conditions||!Array.isArray(record.observations))
+      return unknown('This route has no matching official access record.');
+    const policy=record.policy&&record.policy.sourceUrl===place.official&&
+      typeof record.policy.text==='string'&&record.policy.text.length<600
+      ?{text:record.policy.text,sourceUrl:record.policy.sourceUrl}:null;
+    const visits=record.observations.filter(e=>{
+      if(!e||e.routeId!==place.id||e.scope!=='exact-route'||e.reviewMethod!=='human-official-notice')return false;
+      if(!['open','closed','restricted'].includes(e.status)||!e.routeExplicit||
+        ![place.official,place.conditions].includes(e.sourceUrl))return false;
+      if(typeof e.sourceStatement!=='string'||e.sourceStatement.length<12||e.sourceStatement.length>240)return false;
+      if(typeof e.validFrom!=='string'||typeof e.validThrough!=='string'||
+        !/^\d{4}-\d{2}-\d{2}$/.test(e.validFrom)|| !/^\d{4}-\d{2}-\d{2}$/.test(e.validThrough)||
+        target<e.validFrom||target>e.validThrough)return false;
+      const checked=new Date(e.checkedAt).getTime(),published=new Date(e.publishedAt).getTime();
+      if(!Number.isFinite(checked)||!Number.isFinite(published))return false;
+      const age=(now.getTime()-checked)/3600000;
+      if(age< -0.1||age>24||published>now.getTime()+360000||published>checked+360000)return false;
+      // Positive access is never inferred for a multi-day notice. It must name the day.
+      if(e.status==='open'&&(e.validFrom!==target||e.validThrough!==target||age>12))return false;
+      return true;
+    });
+    if(!visits.length)return unknown('Published winter route guidance is available. Current access for '+target+' is not confirmed.',policy);
+    const states=new Set(visits.map(x=>x.status));
+    if(states.size>1)return {kind:'conflict',blocks:true,date:target,policy,
+      message:'Official route reports conflict for '+target+'. Do not rely on this outing until the land manager confirms access.',
+      notices:visits.map(x=>({status:x.status,url:x.sourceUrl,checkedAt:x.checkedAt}))};
+    const status=visits[0].status;
+    const result={kind:status==='open'?'reported-open':status,blocks:status!=='open',date:target,policy,
+      sourceUrl:visits[0].sourceUrl,checkedAt:visits[0].checkedAt,
+      notices:visits.map(x=>({status:x.status,url:x.sourceUrl,checkedAt:x.checkedAt}))};
+    result.message=status==='closed'
+      ?'The land manager reports this exact outing closed for '+target+'. Choose another outing.'
+      :status==='restricted'
+      ?'Official restrictions affect this route on '+target+'. Check the land manager before selecting it.'
+      :'An official notice reports this route open for '+target+'. Verify again immediately before traveling.';
+    return result;
+  }
+
   function safeGoogleUrl(place){
     return /^https:\/\/www\.google\.com\/maps\/search\/\?api=1&query=/.test(place?.google||'')?place.google:null;
   }
   return {PLACES,GOALS,EFFORT_LABELS,SOURCE_REVIEWED,validPref,getPlace,recommend,
-    dateKey,targetKey,parseWind,classifyWeather,forecastWindow,sourceReachability,safeGoogleUrl};
+    dateKey,targetKey,parseWind,classifyWeather,forecastWindow,sourceReachability,routeAccess,safeGoogleUrl};
 });
