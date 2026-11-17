@@ -41,7 +41,13 @@ test("public catalog reads the same access source as the field map",async()=>{
   assert.equal(result.body.contract,"manistee-float/v1");
   assert.equal(result.body.registryVersion,data.version);
   const access=data.places.filter(p=>p.type==="access"||p.type==="access-camp");
+  assert.ok(data.places.length>=53,"Expanded Manistee source corpus must be loaded");
+  assert.ok(access.length>=37,"Full coverage layer must be reflected in the API");
   assert.equal(result.body.access.length,access.length);
+  assert.equal(result.body.registryAuditDate,"2026-08-20");
+  const highBridge=result.body.access.find(point=>point.id==="high-bridge");
+  assert.equal(highBridge.accessCaution,"route-caution");
+  assert.match(highBridge.note,/washout|closure/i);
   for(const point of result.body.access) {
     const owner=access.find(p=>p.id===point.id);
     assert.ok(owner);
@@ -128,4 +134,12 @@ test("existing map continues to use the same pure engine and unchanged canonical
   assert.match(client,/ManisteeRouteCore\.buildGraph/);
   assert.match(core,/function routeGraph\(graph,start,end\)/);
   assert.doesNotMatch(client,/const dist=new Map\(\[\[a\.key,0\]\]\)/);
+});
+
+test("dateModified and sitemap remain honest for edited Manistee page",()=>{
+  const html=fs.readFileSync("public/manistee-river-map/index.html","utf8");
+  const xml=fs.readFileSync("public/sitemap-manistee.xml","utf8");
+  assert.match(html,/"dateModified":"2026-11-17"/);
+  assert.match(xml,/<lastmod>2026-11-17<\/lastmod>/);
+  assert.doesNotMatch(xml,/<\/lastmod>>/);
 });
