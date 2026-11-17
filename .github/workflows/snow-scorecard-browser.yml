@@ -1,7 +1,14 @@
 name: Michigan Snow Totals scorecard browser QA
 on:
+  pull_request:
+    paths:
+      - 'public/michigan-snow-totals/index.html'
+      - 'public/assets/michigan-snow-totals.js'
+      - 'public/assets/michigan-snow-totals.css'
+      - 'scripts/check-snow-scorecard.cjs'
+      - '.github/workflows/snow-scorecard-browser.yml'
   push:
-    branches: [improve/snow-visual-scorecard-20261117]
+    branches: [main]
     paths:
       - 'public/michigan-snow-totals/index.html'
       - 'public/assets/michigan-snow-totals.js'
@@ -10,7 +17,7 @@ on:
       - '.github/workflows/snow-scorecard-browser.yml'
   workflow_dispatch:
 permissions:
-  contents: write
+  contents: read
 jobs:
   scorecard:
     runs-on: ubuntu-latest
@@ -30,14 +37,6 @@ jobs:
           fi
       - name: Run five-width and failure-state browser acceptance
         run: node scripts/check-snow-scorecard.cjs
-      - name: Commit repeatable visual and accessibility evidence
-        if: success()
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/visual-pilots/michigan-snow-totals/scorecard/
-          git commit -m "Capture measured Snow Totals browser scorecard"
-          git push origin "HEAD:${{ github.ref_name }}"
       - name: Retain screenshots and findings
         if: always()
         uses: actions/upload-artifact@v4
