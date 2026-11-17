@@ -98,11 +98,16 @@
   }
   function dateKey(date,tz){
     if(!(date instanceof Date)||!Number.isFinite(date.valueOf()))return null;
-    return new Intl.DateTimeFormat('en-CA',{timeZone:tz,year:'numeric',month:'2-digit',day:'2-digit'}).format(date);
+    const parts=new Intl.DateTimeFormat('en-US',{timeZone:tz,year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(date);
+    const fields=Object.fromEntries(parts.map(p=>[p.type,p.value]));
+    return fields.year+'-'+fields.month+'-'+fields.day;
   }
   function targetKey(now,tz,day){
+    const current=dateKey(now,tz);
+    if(!current)return null;
     const shift=day==='tomorrow'?1:day==='third'?2:0;
-    return dateKey(new Date(now.getTime()+shift*86400000),tz);
+    const [year,month,dayOfMonth]=current.split('-').map(Number);
+    return new Date(Date.UTC(year,month-1,dayOfMonth+shift,12)).toISOString().slice(0,10);
   }
   function parseWind(value){
     if(typeof value!=='string')return null;
