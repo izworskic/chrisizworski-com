@@ -125,8 +125,8 @@ test('partial published miles never flow into the live itinerary travel clock',(
   assert.equal((html.match(/data-edge-verified="false"/g)||[]).length,1);
 });
 test('Circle Tour page and sitemap indicate actual November source correction',()=>{
-  assert.match(html,/"dateModified":"2026-11-14"/);
-  assert.match(sitemap,/<loc>https:\/\/chrisizworski\.com\/lake-superior-circle-tour\/<\/loc>\s*<lastmod>2026-11-14<\/lastmod>/);
+  assert.match(html,/"dateModified":"2026-11-16"/);
+  assert.match(sitemap,/<loc>https:\/\/chrisizworski\.com\/lake-superior-circle-tour\/<\/loc>\s*<lastmod>2026-11-16<\/lastmod>/);
   assert.match(html,/~38 mi from Thunder Bay to the Pigeon River border; park approach extra/);
   assert.match(html,/25 mi Upper Falls to Whitefish Point via Paradise/);
   assert.doesNotMatch(html,/115 mi from Thunder Bay/);
