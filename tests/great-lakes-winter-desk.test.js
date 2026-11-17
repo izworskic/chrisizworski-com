@@ -304,3 +304,44 @@ test('arrival desk updates without changing canonical or existing map roles',()=
   assert.match(js,/renderArrival\(place\)/);
   assert.match(html,/robots" content="noindex,nofollow,noarchive"/);
 });
+
+test('official notice monitoring keeps adjacent closure apart from the selected snowshoe loop',()=>{
+  const doc=JSON.parse(fs.readFileSync(path.join(base,'operator-notice-monitor.json'),'utf8'));
+  const now=new Date('2026-11-17T22:00:00Z');
+  assert.equal(doc.accessVerified,false);
+  assert.equal(doc.schemaVersion,1);
+  assert.equal(Object.keys(doc.places).length,3);
+  for(const place of D.PLACES){
+    const note=D.operatorNotice(doc,place,now);
+    assert.equal(note.kind,'statement-found');
+    assert.equal(note.routeAccess,'NOT_DETERMINED');
+    assert.match(note.sourceUrl,/^https:\/\/(?:www\.nps\.gov|www\.dnr\.state\.mn\.us)/);
+  }
+  const mun=D.operatorNotice(doc,D.getPlace('munising-snowshoe'),now);
+  assert.equal(mun.scope,'different-route-closure');
+  assert.match(mun.message,/does not close the separately marked snowshoe loop/);
+  assert.equal(D.routeAccess({schemaVersion:1,operatorAccessReady:false,routes:{}},D.getPlace('munising-snowshoe'),{day:'today'},now).kind,'unknown');
+});
+test('operator note changes or staleness cannot infer a route closure or a reopening',()=>{
+  const doc=JSON.parse(fs.readFileSync(path.join(base,'operator-notice-monitor.json'),'utf8'));
+  const now=new Date('2026-11-17T22:00:00Z');
+  const park=D.getPlace('meyers-lakeshore');
+  const bad=JSON.parse(JSON.stringify(doc));
+  bad.places['meyers-lakeshore'].state='REVIEW_REQUIRED';
+  assert.equal(D.operatorNotice(bad,park,now).kind,'needs-review');
+  const stale=JSON.parse(JSON.stringify(doc));
+  stale.places['meyers-lakeshore'].checkedAt='2026-11-15T12:00:00Z';
+  assert.equal(D.operatorNotice(stale,park,now).kind,'stale');
+  const changed=JSON.parse(JSON.stringify(doc));
+  changed.places['meyers-lakeshore'].sourceUrl='https://wrong.example/alerts';
+  assert.equal(D.operatorNotice(changed,park,now).kind,'unavailable');
+  assert.equal(D.operatorNotice({...doc,accessVerified:true},park,now).kind,'unavailable');
+});
+test('official notice and parking UI are synchronized to the same selected outing',()=>{
+  const html=source('index.html'),js=source('app.js');
+  assert.match(html,/id="operator-statement"/);
+  assert.match(html,/id="operator-link"/);
+  assert.match(js,/operatorNotice\(state\.noticeDocument,place,new Date\(\)\)/);
+  assert.match(js,/loadOperatorNotices\(\)/);
+  assert.match(js,/renderOperatorNotice\(place\)/);
+});
