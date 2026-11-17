@@ -331,3 +331,10 @@ td.in{font-size:var(--v-type-18)}
 .snow-selected-report .near{font-size:var(--v-type-14)}
 .storm-pulse-list button[aria-pressed="true"]{background:var(--v-accent-1);outline:3px solid var(--v-accent-4);outline-offset:0}
 .storm-pulse-list button[aria-pressed="true"]::before{color:var(--v-accent-5)}
+
+@media(min-width:900px){
+  .snow-selected-report{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1fr);gap:var(--v-space-24);align-items:start}
+  .snow-selected-report .selected-primary,.snow-selected-report .selected-nearby{min-width:0}
+  .snow-selected-report .selected-nearby{padding:var(--v-space-12) var(--v-space-16);background:var(--v-surface);border-radius:var(--v-radius-sm)}
+  .snow-selected-report .selected-nearby p:first-child{margin-top:0}
+}
