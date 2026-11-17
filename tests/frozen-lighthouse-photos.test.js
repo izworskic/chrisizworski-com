@@ -65,6 +65,21 @@ test('photo controls share existing forecast state without extra API requests',(
  assert.equal((page.match(/pagead2\.googlesyndication\.com\/pagead\/js\/adsbygoogle\.js/g)||[]).length,1);
 });
 
+test('forecast graph explains lighthouse spray signals without implying a vessel forecast or measured ice',()=>{
+ assert.match(page,/When could freezing spray form on this lighthouse\?/);
+ assert.match(page,/Each bar is one forecast hour/);
+ assert.match(page,/Conditions not met/);
+ assert.match(page,/Missing evidence/);
+ assert.match(page,/not the chance of ice forming or a measurement of ice already on the lighthouse/);
+ assert.match(page,/id="desk-chart-axis"/);
+ assert.doesNotMatch(page.match(/<p id="desk-chart-note"[^>]*>([^<]+)<\/p>/)?.[1]||'',/vessel/i);
+ assert.match(controller,/const chartTick=new Intl\.DateTimeFormat/);
+ assert.match(controller,/chartAxis\.replaceChildren\(\)/);
+ assert.match(controller,/chartTick\.format\(stamp\)/);
+ assert.match(controller,/weather evidence missing/);
+ assert.match(stylesheet,/\.desk-chart-axis\{/);
+});
+
 test('winter canonical remains singly indexed in the winter sitemap and stays in the Tools directory',()=>{
  const canonical='https://chrisizworski.com/frozen-lighthouses-michigan/';
  const winter=readFileSync(path.join(root,'public/sitemap-winter.xml'),'utf8');
