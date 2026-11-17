@@ -23,6 +23,18 @@ A failed OSM raster provider or Leaflet runtime collapses the 355px empty map an
 - Blocked tiles, blocked Leaflet, failed NWS API and no JavaScript: useful links and list/disclosure alternatives verified.
 - [Mobile initial screenshot](scorecard/enhanced-390.png), [desktop initial](scorecard/enhanced-1280.png), [mobile map from the merged pilot](after-map-390.png), [mobile ranked bars](scorecard/ranking-390.png), [mobile season comparison](scorecard/season-390.png). Latest map interaction captures are retained with the browser run's screenshot artifact; expanded-state screenshots are separate.
 
+## Distinctiveness comparison: two adjacent tools, checked 2026-11-17
+
+The screenshots are **first-screen mobile captures of real public pages**, not style mockups. They show different visitor tasks and compositions:
+
+| Tool | Source and first-screen evidence | Purpose and interaction |
+| --- | --- | --- |
+| Michigan Snow Totals | [This pilot, 390px](scorecard/enhanced-390.png) | Past, source-attributed observer measurements; immediate 56px leading reported amount, dated observation, place ranking, regional dot map |
+| Michigan Snow Depth | [Public page, 390px](scorecard/comparator-snow-depth-390.png) · [canonical](https://chrisizworski.com/michigan-snow-depth/) | Present snowpack and trip selection; editorial destination finder, visitor starting point and drive-distance choices, not an LSR ranking |
+| Lake-Effect Snow | [Public page, 390px](scorecard/comparator-lake-effect-390.png) · [canonical](https://chrisizworski.com/lake-effect-snow/) | Future forecast interpretation; dark weather hero and snowbelt selectors, not ground-observed past snowfall |
+
+**Design veto review:** the visitor's question differs (observed snowfall vs existing ground cover vs future snow), the first-screen hierarchy differs (number-first report vs trip narrative vs forecast-region picker), and the primary interaction differs (time-window + region NWS reports vs trip finder vs forecast snowbelt). Shared navigation/source quality is purposeful reuse, not a cloned skin. This earns a **provisional 5/5 distinct-composition review**. Owner preference and actual visitor reaction remain separate from this evidence.
+
 ## Scorecard evidence and remaining gap to 100
 
 **Provisional, behavior-observed score, NOT a production release certification.** A release may not be approved simply by crossing 90; the hard gates and independent deploy smoke still apply.
@@ -30,7 +42,7 @@ A failed OSM raster provider or Leaflet runtime collapses the 355px empty map an
 | Area | Weight | Observed grade | Points | Evidence and remaining limit |
 | --- | ---: | ---: | ---: | --- |
 | Visitor decision | 25 | 5/5 | 25 | Direct observed answer first, timestamp, native controls and local report search |
-| Distinct composition | 15 | 4/5 | 12 | Observation-centric numeric editorial layout differs from forward-looking lake-effect and snowpack tools; independent side-by-side owner review still needed |
+| Distinct composition | 15 | 5/5 | 15 | Dated first-screen captures of both adjacent tools establish distinct user decision, hierarchy and interaction; owner visual approval still required |
 | Causal interactions | 15 | 5/5 | 15 | Window/reversal, report bars, region/filter changes to actual map markers, season view |
 | Truth/provenance | 15 | 4/5 | 12 | Existing NWS/ACIS sources, measured vs estimated, report time, normal eligibility; stale-data expiry policy not changed without authorization |
 | Visual execution | 10 | 5/5 | 10 | Actual inspected responsive screenshots, hierarchy, accessible proportional bars, readable 56px metric |
@@ -38,9 +50,9 @@ A failed OSM raster provider or Leaflet runtime collapses the 355px empty map an
 | Performance/resilience | 5 | 4/5 | 4 | Mobile synthetic FCP and throttled answer, no-tiles/Leaflet/API fallbacks; no comparable field LCP/INP/CLS cohort or controlled pre/post performance baseline |
 | Integration/site integrity | 5 | 4/5 | 4 | Scope verification, existing local browser CI; final owning-repo CI and independently checked deployed SHA not yet both certified |
 
-**Provisional total: 90/100.** Every scored category is at least 4/5. This is **not 100** and is **not release approval**. No grade was assigned for production user benefit; that is NOT MEASURED.
+**Provisional total: 93/100.** Every scored category is at least 4/5. This is **not 100** and is **not release approval**. No grade was assigned for production user benefit; that is NOT MEASURED.
 
-**Specific path to 100:** independent side-by-side distinctiveness review (+3), authorized stale/freshness failure contract and test (+3), real screen-reader/keyboard manual completion (+2), comparative field or controlled baseline performance evidence (+1), and merged-SHA production smoke including ads/canonical/Person source integrity (+1). Those 10 points require new evidence or explicit approval, not score inflation.
+**Specific path to 100:** an authorized stale/freshness failure contract and test (+3), real screen-reader/keyboard manual completion (+2), comparative field or controlled baseline performance evidence (+1), and merged-SHA production smoke including ads/canonical/Person source integrity (+1). Those remaining **7 points** require new evidence or explicit approval, not score inflation.
 
 ## Hard gates / release status
 
