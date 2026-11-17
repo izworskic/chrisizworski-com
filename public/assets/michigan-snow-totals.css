@@ -283,3 +283,20 @@ td.in{font-size:var(--v-type-18)}
   .snow-answer .windows{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--v-space-4);overflow:visible}
   .snow-answer .windows button{white-space:normal;min-height:48px;min-width:0;line-height:1.15;padding:var(--v-space-8) var(--v-space-4)}
 }
+
+
+/* Scorecard follow-up: measured rank and station displays, no fabricated values. */
+#snowSummary .snow-peak{display:block;margin:var(--v-space-8) 0 var(--v-space-12)}
+#snowSummary .snow-peak-value{display:block;font-size:var(--v-type-56);line-height:1;letter-spacing:-.045em;font-weight:850;color:var(--v-accent-5);font-variant-numeric:tabular-nums}
+#snowSummary .snow-peak-place{display:block;font-size:var(--v-type-28);line-height:1.2;letter-spacing:-.02em;font-weight:800;color:var(--v-ink);overflow-wrap:anywhere}
+.storm-pulse-list .report-bar-track{display:block;grid-column:2 / -1;height:12px;width:100%;background:var(--v-accent-1);border-radius:var(--v-radius-sm);overflow:hidden}
+.storm-pulse-list .report-bar-fill{display:block;height:100%;border-radius:var(--v-radius-sm)}
+#snowMap[hidden],#seasonLiveBars[hidden]{display:none!important}
+#seasonLiveBars{background:var(--v-surface-soft);padding:var(--v-space-16);border-radius:var(--v-radius-sm)}
+#mapNote:not(:empty){max-width:84ch}
+@media(max-width:700px){
+  #snowSummary .snow-peak-value{font-size:var(--v-type-56)}
+  #snowSummary .snow-peak-place{font-size:var(--v-type-22)}
+  .storm-pulse-list .report-bar-track{height:12px}
+  #seasonLiveBars{padding:var(--v-space-12)}
+}
