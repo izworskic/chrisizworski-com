@@ -6,7 +6,7 @@
   const C=window.GreatLakesWinterDesk;
   if(!C)return;
   const $=id=>document.getElementById(id);
-  const state={goal:'falls',effort:'short',day:'today',chosen:'gooseberry-upper',request:0,weather:null,sourceDocument:null};
+  const state={goal:'falls',effort:'short',day:'today',chosen:'gooseberry-upper',request:0,weather:null,sourceDocument:null,routeDocument:null};
   const weatherCache=new Map();
   const mapState={map:null,markers:new Map()};
   const SAFE=new Set(['available','empty','stale','unknown']);
@@ -34,13 +34,17 @@
     });
   }
   function render(){
-    const outcome=C.recommend(state);
+    const requestedPlace=C.PLACES.find(p=>p.goal===state.goal);
+    const access=C.routeAccess(state.routeDocument,requestedPlace,state,new Date());
+    const blocked=access.blocks===true;
+    const scopedBlock=blocked&&requestedPlace?{[requestedPlace.id]:{status:'closed',verified:true}}:{};
+    const outcome=C.recommend(state,scopedBlock);
     const place=outcome.place;
     if(!place)return;
     state.chosen=place.id;
     const match=outcome.kind==='candidate';
     $('quick-outing').textContent=match?place.title:'Reconsider this outing length';
-    $('quick-reason').textContent=match
+    $('quick-reason').textContent=blocked?access.message:match
       ?place.short+'. Official access is not yet verified.'
       :outcome.reason;
     $('quick-source').href=place.conditions;
@@ -51,9 +55,9 @@
     $('stage-why').textContent=place.why;
     $('stage-length').textContent=place.length;
     $('stage-blocker').textContent=place.blocker;
-    $('stage-status').textContent=match?'Candidate outing. Current access not verified.':'Not a fit for your chosen outing length';
+    $('stage-status').textContent=blocked?'Route access requires a different plan':match?'Candidate outing. Current access not verified.':'Not a fit for your chosen outing length';
     $('stage-status').className='access-status'+(match?'':' access-status--mismatch');
-    $('stage-reason').textContent=match?'The activity and outing length fit the park route description. Check official access before you travel.':outcome.reason;
+    $('stage-reason').textContent=blocked?access.message:match?access.message:outcome.reason;
     $('official-link').href=place.official;
     $('conditions-link').href=place.conditions;
     $('arrival-link').href=place.entrance;
@@ -80,6 +84,7 @@
     $('assignment-flag').textContent=match?'FIELD ASSIGNMENT':'RECONSIDER THE DISTANCE';
     $('last-research').textContent='Park source review: '+C.SOURCE_REVIEWED+'. Not a same-day access check.';
     renderSourceDesk(place);
+    renderRouteEvidence(place,access);
     $('trip-period').textContent='Forecast lens: '+niceDay();
     $('weather-point').textContent='NWS forecast point near '+place.region+'. Not measured on the trail.';
     $('weather-site').href='https://forecast.weather.gov/MapClick.php?lat='+place.weatherPoint.lat+'&lon='+place.weatherPoint.lon;
@@ -87,6 +92,27 @@
     updateMap();
     weatherFor(place);
     setStatus((match?'Viewing ':'Reviewing ')+place.title+'. '+(match?'Current park access still needs an official check.':'The requested effort does not fit this route.'));
+  }
+  function renderRouteEvidence(place,access){
+    $('route-day').textContent=access.date||'Date unavailable';
+    $('route-access').textContent=access.message;
+    $('route-access').className='route-access'+(access.blocks?' route-access--blocked':'');
+    $('route-policy').textContent=access.policy?.text||
+      'No verified route-specific winter guidance is available from this snapshot.';
+    $('route-policy-link').href=access.policy?.sourceUrl||place.official;
+    $('route-policy-link').textContent='Read this route on the land manager site ↗';
+  }
+  async function loadRouteEvidence(){
+    try{
+      const response=await fetch('./route-access-evidence.json',{cache:'no-store'});
+      if(!response.ok)throw Error('route evidence unavailable');
+      const data=await response.json();
+      if(data?.schemaVersion!==1||data.operatorAccessReady!==false)throw Error('invalid route record');
+      state.routeDocument=data;
+    }catch(_){
+      state.routeDocument=null;
+    }
+    render();
   }
   function renderSourceDesk(place){
     $('source-direct').href=place.conditions;
@@ -251,7 +277,7 @@
       if(navigator.clipboard?.writeText)navigator.clipboard.writeText(message).then(()=>setStatus('Field note copied.')).catch(()=>setStatus('Copy unavailable; use the official links.'));
       else setStatus('Copy unavailable; use the official links.');
     });
-    initMap();render();loadSourceDesk();
+    initMap();render();loadSourceDesk();loadRouteEvidence();
   }
   document.addEventListener('DOMContentLoaded',init);
 })();
