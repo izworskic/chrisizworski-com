@@ -1,3 +1,12 @@
+### 2026-11-17 | Great Lakes winter experience network, Lake Superior evidence gate
+- **User value:** One specific cross-state winter outing to suit a visitor's activity and effort, with current official access and condition checks before choosing. No cloned Michigan destination or weekend page.
+- **Source audit:** Pictured Rocks official snowshoe route vs closed Munising Falls Trail; Apostle Islands overland Lakeshore Trail vs separately controlled ice-cave access; Gooseberry Upper Falls as only Minnesota DNR-maintained winter waterfall walking route. Checked official NPS and DNR sources November 17, 2026.
+- **Experience:** Two concepts evaluated. Choose one-outing evidence-led field desk rather than map-first duplicate, subject to visual browser proof. The evidence brief is `docs/experience-briefs/great-lakes-winter-adventure-lake-superior-pilot-2026-11-17.md`.
+- **Changes:** Research brief only; no published route, production behavior, weather API, ads, photography or schema modified. Development branch `research/great-lakes-winter-pilot-20261117`. Main Agent branch verification for `ada3f06` was green when inspected.
+- **GSC / AdSense:** NOT AVAILABLE in this research session; no ranking or revenue impact claimed.
+- **Known gaps:** Source snapshots and refresh service, exact winter entrance checks for all three, photo rights, browser tests, full repository CI and public deployment verification remain NOT VERIFIED.
+- **Next action:** Build one local source-status-aware field assignment with closure precedence and three location-specific visitor test scenarios, without opening an indexable URL.
+
 ### 2026-11-17 | U.P. waterfall main-page photo-led arrival, review branch
 - **Visitor issue:** The map-first hub has verified imagery, but the first screen remained text-led and did not show real waterfalls before asking visitors to plan.
 - **Change:** Three separate source-verified photographs of Manabezho, Wagner and Sable Falls now occupy a responsive editorial hero alongside existing map and trip links. Source and license are credited below each image. The established three-photo gallery remains below the map.
