@@ -59,6 +59,10 @@ const geometry={type:'FeatureCollection',features:[
    assert.match(cards[1],/LP7/);
    assert.match(cards[1],/not a surveyed or legally verified connection/);
    assert.match(cards[2],/DNR parking asset only/);
+   assert.equal(await page.locator('a[data-parking-location]').count(),3,'every DNR parking record must offer a Google Maps location view');
+   assert.equal(await page.locator('a[data-parking-directions]').count(),2,'only independently paired access evidence may offer driving');
+   assert.equal(await page.locator('a[data-parking-directions="185"]').count(),0,'unpaired parking cannot advertise driving');
+   assert.ok((await page.locator('a[data-parking-location="185"]').getAttribute('href')).includes('google.com/maps/search/'));
    assert.match(await page.locator('a[href*="cityofgaylord.com"]').first().getAttribute('href'),/Recreation-Plan\.pdf$/);
    assert.match(await page.locator('a[href*="gaylordmichigan.net"]').first().getAttribute('href'),/snowmobile/);
    assert.ok((await page.locator('a[data-parking-directions="28"]').getAttribute('href')).includes('44.662578,-84.767262'));
