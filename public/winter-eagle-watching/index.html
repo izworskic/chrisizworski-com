@@ -27,8 +27,8 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[
 {"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},
-{"@type":"WebApplication","@id":"https://chrisizworski.com/winter-eagle-watching/#app","url":"https://chrisizworski.com/winter-eagle-watching/","name":"Winter Bald Eagle Watching","applicationCategory":"TravelApplication","operatingSystem":"Any","description":"Public winter bald eagle viewing locations across the Midwest with National Weather Service hourly forecasts and dated source-linked counts where available.","isAccessibleForFree":true,"inLanguage":"en-US","dateModified":"2026-10-25","author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"}},
-{"@type":"WebPage","@id":"https://chrisizworski.com/winter-eagle-watching/#page","url":"https://chrisizworski.com/winter-eagle-watching/","name":"Winter Bald Eagle Watching | Chris Izworski","dateModified":"2026-10-25","author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"},"mainEntity":{"@id":"https://chrisizworski.com/winter-eagle-watching/#app"}},
+{"@type":"WebApplication","@id":"https://chrisizworski.com/winter-eagle-watching/#app","url":"https://chrisizworski.com/winter-eagle-watching/","name":"Winter Bald Eagle Watching","applicationCategory":"TravelApplication","operatingSystem":"Any","description":"Public winter bald eagle viewing locations across the Midwest with National Weather Service hourly forecasts and dated source-linked counts where available.","isAccessibleForFree":true,"inLanguage":"en-US","dateModified":"2026-11-16","author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"}},
+{"@type":"WebPage","@id":"https://chrisizworski.com/winter-eagle-watching/#page","url":"https://chrisizworski.com/winter-eagle-watching/","name":"Winter Bald Eagle Watching | Chris Izworski","dateModified":"2026-11-16","author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"},"mainEntity":{"@id":"https://chrisizworski.com/winter-eagle-watching/#app"}},
 {"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://chrisizworski.com/tools/"},{"@type":"ListItem","position":3,"name":"Winter Bald Eagle Watching","item":"https://chrisizworski.com/winter-eagle-watching/"}]},
 {"@type":"FAQPage","mainEntity":[
 {"@type":"Question","name":"Where can I see bald eagles gathering in winter?","acceptedAnswer":{"@type":"Answer","text":"Look for public overlooks near flowing open water, especially below dams on the Mississippi, Illinois and Wisconsin rivers. Viewing is not guaranteed; check current access and recent operator reports."}},
@@ -39,9 +39,9 @@
 </script>
 <script defer src="/winter-eagle-watching/planning.js?v=2"></script>
 <script defer src="https://unpkg.com/maplibre-gl@5.16.0/dist/maplibre-gl.js"></script>
-<script defer src="/winter-eagle-watching/eagle-map.js?v=5"></script>
+<script defer src="/winter-eagle-watching/eagle-map.js?v=6"></script>
 <script defer src="/assets/wildlife-field-evidence.js?v=1"></script>
-<script defer src="/winter-eagle-watching/app.js?v=14"></script>
+<script defer src="/winter-eagle-watching/app.js?v=15"></script>
 <script defer src="/winter-eagle-watching/flight-guide.js?v=1"></script>
 </head>
 <body>
@@ -167,7 +167,7 @@
 <div class="fact"><span>Open water now</span><strong id="open-water">Unconfirmed</strong><p>Weather cannot verify ice coverage.</p></div>
 <div class="fact"><span>Eagles here now</span><strong id="eagle-present">Unconfirmed</strong><p>Recent verified counts are separate.</p></div>
 </div><div class="notes"><h3>Why this spot?</h3><p id="why-water">Winter water and feeding habitat.</p><h3 id="where-look-label">Where to look</h3><p id="where-look">Stay at the public overlook and scan distant trees.</p><h3>Public access — verify before travel</h3><p id="access-note">Check operator access details before driving.</p></div>
-<div class="actions"><a id="directions" href="https://www.google.com/maps" target="_blank" rel="noopener" class="button">Directions ↗</a><a id="operator-link" href="https://www.fws.gov/refuge/detroit-river/visit-us" target="_blank" rel="noopener" class="button ghost">Operator &amp; access ↗</a><button type="button" id="saved-toggle" class="button ghost">Save spot</button><button type="button" id="copy-link" class="button ghost">Copy spot link</button></div>
+<div class="actions"><a id="directions" href="https://www.google.com/maps" target="_blank" rel="noopener" class="button">View in Google Maps ↗</a><a id="operator-link" href="https://www.fws.gov/refuge/detroit-river/visit-us" target="_blank" rel="noopener" class="button ghost">Operator &amp; access ↗</a><button type="button" id="saved-toggle" class="button ghost">Save spot</button><button type="button" id="copy-link" class="button ghost">Copy spot link</button></div>
 </article>
 <article class="panel panel-pad" aria-labelledby="weather-title"><div class="weather-head"><div><div class="eyebrow">Live NWS hourly forecast</div><h2 id="weather-title">What is the weather at this overlook?</h2></div><button type="button" class="refresh" id="refresh-weather">Refresh ↻</button></div>
 <p id="weather-status" class="lead" role="status" aria-live="polite">Checking local NWS forecast…</p>
