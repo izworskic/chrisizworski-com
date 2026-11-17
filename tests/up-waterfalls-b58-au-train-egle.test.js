@@ -92,13 +92,16 @@ test('B58: noindex accessible research page gives named evidence and no unsafe d
  assert.ok(guide.includes(EGLE));
  assert.ok(guide.includes(DNR));
  assert.ok(guide.includes(FERC));
+ assert.match(guide,/October 2026 draft board minutes/);
+ assert.match(guide,/physical work was not likely until 2027/);
+ assert.match(guide,/Both falls remain research-only/);
  assert.ok(!guide.includes('data-parking-lat='));
  assert.ok(!guide.includes('data-visit-lat='));
  assert.ok(!guide.includes('google.com/maps/dir'));
  assert.ok(!guide.includes('href="https://www.google.com/maps'));
  const ld=JSON.parse(guide.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
  assert.equal(ld['@type'],'WebPage');
- assert.equal(ld.dateModified,'2026-11-03');
+ assert.equal(ld.dateModified,'2026-11-17');
  assert.ok(!review.sourceLinks.some(x=>x.url.includes('google.com/maps/dir')));
 });
 test('B58: research counts and gated nearby alternatives remain stable',()=>{
