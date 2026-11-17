@@ -6,7 +6,7 @@
   const C=window.GreatLakesWinterDesk;
   if(!C)return;
   const $=id=>document.getElementById(id);
-  const state={goal:'falls',effort:'short',day:'today',chosen:'gooseberry-upper',request:0,weather:null,sourceDocument:null,routeDocument:null,arrivalDocument:null};
+  const state={goal:'falls',effort:'short',day:'today',chosen:'gooseberry-upper',request:0,weather:null,sourceDocument:null,routeDocument:null,arrivalDocument:null,noticeDocument:null};
   const weatherCache=new Map();
   const mapState={map:null,markers:new Map()};
   const SAFE=new Set(['available','empty','stale','unknown']);
@@ -87,6 +87,7 @@
     renderSourceDesk(place);
     renderRouteEvidence(place,access);
     renderArrival(place);
+    renderOperatorNotice(place);
     $('trip-period').textContent='Forecast lens: '+niceDay();
     $('weather-point').textContent='NWS forecast point near '+place.region+'. Not measured on the trail.';
     $('weather-site').href='https://forecast.weather.gov/MapClick.php?lat='+place.weatherPoint.lat+'&lon='+place.weatherPoint.lon;
@@ -142,6 +143,25 @@
     }
     const place=C.getPlace(state.chosen);
     if(place)renderArrival(place);
+  }
+  function renderOperatorNotice(place){
+    const observation=C.operatorNotice(state.noticeDocument,place,new Date());
+    $('operator-statement').textContent=observation.message;
+    $('operator-link').href=observation.sourceUrl||place.conditions;
+    $('operator-link').textContent=observation.kind==='statement-found'
+      ?'Read the operator statement on its official page ↗'
+      :'Check the latest official park notices ↗';
+  }
+  async function loadOperatorNotices(){
+    try{
+      const response=await fetch('./operator-notice-monitor.json',{cache:'no-store'});
+      if(!response.ok)throw Error('notice record unavailable');
+      const document=await response.json();
+      if(document?.schemaVersion!==1||document.accessVerified!==false)throw Error('invalid notice');
+      state.noticeDocument=document;
+    }catch(_){state.noticeDocument=null;}
+    const place=C.getPlace(state.chosen);
+    if(place)renderOperatorNotice(place);
   }
   function renderSourceDesk(place){
     $('source-direct').href=place.conditions;
@@ -311,7 +331,7 @@
       if(navigator.clipboard?.writeText)navigator.clipboard.writeText(message).then(()=>setStatus('Field note copied.')).catch(()=>setStatus('Copy unavailable; use the official links.'));
       else setStatus('Copy unavailable; use the official links.');
     });
-    initMap();render();loadSourceDesk();loadRouteEvidence();loadArrivalEvidence();
+    initMap();render();loadSourceDesk();loadRouteEvidence();loadArrivalEvidence();loadOperatorNotices();
   }
   document.addEventListener('DOMContentLoaded',init);
 })();
