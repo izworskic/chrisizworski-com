@@ -180,16 +180,17 @@
     var other = C.nearest(Number(found.lat), Number(found.lon), rows.filter(function (r) {
       return reportKey(r) !== reportKey(found);
     }), 2, 25);
-    panel.innerHTML = '<h4>Report detail: ' + esc(where(found)) + '</h4>' +
+    panel.innerHTML = '<div class="selected-primary"><h4>Report detail: ' + esc(where(found)) + '</h4>' +
       '<p><strong>' + esc(C.inches(found.inches)) + '</strong> reported ' + esc(stamp(found)) + '; ' + esc(kind(found)) + '.</p>' +
       (found.remark ? '<p>' + esc(found.remark) + '</p>' : '') +
       '<p class="selected-source-actions">' +
       (origin ? '<a href="' + esc(origin) + '" target="_blank" rel="noopener noreferrer">Read original NWS report</a>' : '<span>Original NWS text not linked for this observation.</span>') +
       (locationHref ? ' <a href="' + esc(locationHref) + '" target="_blank" rel="noopener noreferrer">See reported area in Google Maps</a>' : '') +
       (!state.mapUnavailable ? ' <a href="#snowMap">See marked report on map</a>' : '') + '</p>' +
-      '<p class="selected-source-note">The reported coordinates are approximate. They are not a verified road entrance, parking place, or travel route.</p>' +
+      '<p class="selected-source-note">The reported coordinates are approximate. They are not a verified road entrance, parking place, or travel route.</p></div>' +
+      '<div class="selected-nearby">' +
       (other.length ? '<p><strong>Other reports within 25 miles</strong> in the selected period:</p>' + nearLines(other) :
-        '<p>No other report was found within 25 miles in this period. That does not mean no snow fell.</p>');
+        '<p>No other report was found within 25 miles in this period. That does not mean no snow fell.</p>') + '</div>';
     panel.hidden = false;
   }
   function selectReport(r, fromMap) {
