@@ -1041,7 +1041,8 @@
     copy.appendChild(el('p', '',
       'Start with a documented public location, then check its rules and route. A launch time does not guarantee an open viewing area.'));
     header.appendChild(copy);
-    if (data?.selectedLaunch?.id === data?.selectedLaunchId) {
+    if (data?.selectedLaunch && data.selectedLaunchId &&
+        data.selectedLaunch.id === data.selectedLaunchId) {
       header.appendChild(el('p', 'rl-spot-planner-mission',
         'Selected flight: ' + (data.selectedLaunch.name || 'Mission not named')));
     }
