@@ -1,0 +1,41 @@
+name: Frozen lighthouse Experience Foundry review
+on:
+  pull_request:
+    paths:
+      - 'public/frozen-lighthouses-michigan/index.html'
+      - 'public/assets/frozen-lighthouse-desk.js'
+      - 'public/assets/frozen-lighthouse-field-guide.css'
+      - 'data/frozen-lighthouse-photography.json'
+      - 'experience-foundry/examples/lighthouse-visual-*.??s'
+      - '.github/workflows/frozen-lighthouse-foundry.yml'
+jobs:
+  foundry-proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Build real-baseline Foundry improvement run
+        run: node experience-foundry/examples/lighthouse-photo-foundry.mjs
+      - name: Assess research/design completeness
+        run: node scripts/experience-foundry.mjs assess --run experience-foundry/drafts/lighthouse-visual-field-guide-20261117/run.json
+      - name: Replay the same baseline and candidate cases
+        run: |
+          node scripts/experience-foundry.mjs prove --run experience-foundry/drafts/lighthouse-visual-field-guide-20261117/run.json --out build/experience-foundry/lighthouse-visual-field-guide-20261117
+          node scripts/experience-foundry.mjs assess --run experience-foundry/drafts/lighthouse-visual-field-guide-20261117/run.json --proof build/experience-foundry/lighthouse-visual-field-guide-20261117/proof.json
+      - name: Save replay evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frozen-lighthouse-foundry-proof
+          path: |
+            experience-foundry/drafts/lighthouse-visual-field-guide-20261117/
+            build/experience-foundry/lighthouse-visual-field-guide-20261117/
+          retention-days: 10
+          if-no-files-found: ignore
