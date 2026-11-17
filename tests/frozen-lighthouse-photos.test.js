@@ -64,3 +64,16 @@ test('photo controls share existing forecast state without extra API requests',(
  assert.match(page,/https:\/\/chrisizworski\.com\/#person/);
  assert.equal((page.match(/pagead2\.googlesyndication\.com\/pagead\/js\/adsbygoogle\.js/g)||[]).length,1);
 });
+
+test('winter canonical remains singly indexed in the winter sitemap and stays in the Tools directory',()=>{
+ const canonical='https://chrisizworski.com/frozen-lighthouses-michigan/';
+ const winter=readFileSync(path.join(root,'public/sitemap-winter.xml'),'utf8');
+ const general=readFileSync(path.join(root,'public/sitemap.xml'),'utf8');
+ const index=readFileSync(path.join(root,'public/sitemap-index.xml'),'utf8');
+ const tools=readFileSync(path.join(root,'public/tools/index.html'),'utf8');
+ assert.equal(winter.split('<loc>'+canonical+'</loc>').length-1,1,'winter sitemap owns exact canonical');
+ assert.equal(general.split('<loc>'+canonical+'</loc>').length-1,0,'do not duplicate the canonical in generic sitemap');
+ assert.ok(index.includes('sitemap-winter.xml'),'sitemap index must link the winter sitemap');
+ assert.ok(tools.includes('data-tool-id="frozen-lighthouse-watch"'));
+ assert.ok(tools.includes('href="/frozen-lighthouses-michigan/"'));
+});
