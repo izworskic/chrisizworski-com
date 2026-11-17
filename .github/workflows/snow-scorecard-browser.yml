@@ -1,0 +1,47 @@
+name: Michigan Snow Totals scorecard browser QA
+on:
+  push:
+    branches: [improve/snow-visual-scorecard-20261117]
+    paths:
+      - 'public/michigan-snow-totals/index.html'
+      - 'public/assets/michigan-snow-totals.js'
+      - 'public/assets/michigan-snow-totals.css'
+      - 'scripts/check-snow-scorecard.cjs'
+      - '.github/workflows/snow-scorecard-browser.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  scorecard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install isolated browser and WCAG checker
+        run: |
+          npm install --prefix /tmp/snow-scorecard --no-save --package-lock=false playwright@1.56.1 @axe-core/playwright@4.10.2
+          if command -v google-chrome >/dev/null 2>&1; then
+            echo "SNOW_CHROME=$(command -v google-chrome)" >> "$GITHUB_ENV"
+          else
+            /tmp/snow-scorecard/node_modules/.bin/playwright install --with-deps chromium
+          fi
+      - name: Run five-width and failure-state browser acceptance
+        run: node scripts/check-snow-scorecard.cjs
+      - name: Commit repeatable visual and accessibility evidence
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/visual-pilots/michigan-snow-totals/scorecard/
+          git commit -m "Capture measured Snow Totals browser scorecard"
+          git push origin "HEAD:${{ github.ref_name }}"
+      - name: Retain screenshots and findings
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: michigan-snow-totals-scorecard
+          path: docs/visual-pilots/michigan-snow-totals/scorecard/
+          retention-days: 14
