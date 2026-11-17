@@ -97,7 +97,19 @@
         card.querySelector('.primary-link')?.focus({preventScroll:true});
         map.closePopup();
       });
-      popup.append(title, caption, jump);
+      const actions = document.createElement('p');
+      actions.className = 'map-popup-actions';
+      actions.append(jump);
+      const publishedLocation = card.querySelector('[data-map-google-location]');
+      if (publishedLocation) {
+        const view = document.createElement('a');
+        view.href = publishedLocation.href;
+        view.textContent = 'View destination area in Google Maps';
+        view.target = '_blank';
+        view.rel = 'noopener noreferrer';
+        actions.append(document.createTextNode(' · '), view);
+      }
+      popup.append(title, caption, actions);
       const marker = window.L.marker([lat,lng], {icon,title:name}).bindPopup(popup).addTo(map);
       markers.push(marker);
       positions.push([lat,lng]);
@@ -130,18 +142,18 @@
       if (hasPainted || map._destinationTileLayer !== layer) return;
       hasPainted = true;
       tellMap(isFallback
-        ? 'OpenStreetMap basemap is displayed because CARTO is unavailable. Destination locations are unchanged.'
-        : 'CARTO map loaded with the configured Vercel public key. Select a pin to explore a place.',
+        ? 'Map ready. Choose a destination pin or open its location directly in Google Maps.'
+        : 'Map ready. Choose a destination pin for the field guide and its map location.',
         isFallback ? 'fallback' : 'ready');
     });
     layer.on('tileerror', () => {
       if (map._destinationTileLayer !== layer) return;
       if (++errorCount >= 2) {
         if (!isFallback) {
-          tellMap('CARTO tiles failed to load; switching to OpenStreetMap.', 'fallback');
+          tellMap('Trying another map background. You can still open each destination in Google Maps.', 'fallback');
           addMapTiles('https://tile.openstreetmap.org/{z}/{x}/{y}.png', true);
         } else {
-          tellMap('Map tiles are unavailable. All destination descriptions and direct links still work.', 'error');
+          tellMap('Map background unavailable. Destination descriptions and Google Maps links still work.', 'error');
         }
       }
     });
@@ -151,7 +163,7 @@
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 7500);
     try {
-      tellMap('Connecting to CARTO using the public key configured in Vercel…', 'pending');
+      tellMap('Loading the Michigan destination map…', 'pending');
       const response = await fetch('/api/carto-basemap-config', {
         method: 'GET', credentials: 'same-origin', signal: controller.signal
       });
@@ -164,7 +176,7 @@
         + encodeURIComponent(cfg.key.trim());
       addMapTiles(url, false);
     } catch (error) {
-      tellMap('CARTO unavailable. Loading OpenStreetMap instead; you can still select destinations.', 'fallback');
+      tellMap('Trying another map background. The destination list and location links are ready.', 'fallback');
       addMapTiles('https://tile.openstreetmap.org/{z}/{x}/{y}.png', true);
     } finally {
       clearTimeout(timeout);
