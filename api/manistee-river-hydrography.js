@@ -54,18 +54,35 @@ function cleanGeoJson(payload){
 }
 
 async function fetchNhdPage(url,fetcher=fetch,allowMore=false){
-  const response=await fetcher(url,{headers:{
-    accept:'application/geo+json, application/json',
-    'user-agent':'ChrisIzworskiManisteeFieldMap/1.0 (https://chrisizworski.com/manistee-river-map/)'
-  },signal:AbortSignal.timeout(allowMore?14000:5000)});
-  if(!response.ok)throw new Error(`USGS NHD returned ${response.status}`);
-  const payload=await response.json();
+  // Bounded transient retry stays within the earlier 10-second request budget.
+  // An invalid or incomplete source response is a hard failure, not retry data.
+  let payload=null;
+  for(let attempt=0;attempt<2;attempt++){
+    try{
+      const response=await fetcher(url,{headers:{
+        accept:'application/geo+json, application/json',
+        'user-agent':'ChrisIzworskiManisteeFieldMap/1.0 (https://chrisizworski.com/manistee-river-map/)'
+      },signal:AbortSignal.timeout(4500)});
+      if(!response.ok){
+        const error=new Error("USGS NHD returned "+response.status);
+        error.retryable=[429,502,503,504].includes(response.status);
+        throw error;
+      }
+      payload=await response.json();
+      break;
+    }catch(error){
+      if(attempt===1||!(error.retryable||error.name==='TimeoutError'||error.name==='AbortError'))
+        throw error;
+      await new Promise(resolve=>setTimeout(resolve,200));
+    }
+  }
   if(payload?.error||!Array.isArray(payload?.features))
     throw new Error('USGS NHD response is invalid or unavailable');
   if(payload.exceededTransferLimit===true&&!allowMore)
     throw new Error('USGS NHD response incomplete: transfer limit exceeded');
   return payload;
 }
+
 async function fetchPagesForName(name,fetcher=fetch){
   if(!NAMES.includes(name))throw new Error('Unsupported river name');
   const features=[];
