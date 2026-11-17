@@ -135,6 +135,8 @@ async function main(){
     const staticPage=await noJs.newPage();
     await staticPage.goto(base,{waitUntil:'domcontentloaded'});
     assert.match(await staticPage.locator('#stage-title').textContent(),/Upper Falls/);
+    assert.match(await staticPage.locator('#arrival-title').textContent(),/Gooseberry Falls Visitor Center/);
+    assert.match(await staticPage.locator('#arrival-evidence-link').getAttribute('href'),/spk00172_winter\.pdf/);
     assert.match(await staticPage.locator('#official-link').getAttribute('href'),/^https:\/\//);
     await noJs.close();
     console.log(JSON.stringify({status:'PASS',summary,verifiedArrivalSources:true,datedOfficialNoticeSnapshots:true,failedSourceFallback:true,syntheticClosureNotOverridden:true,noJs:true,screenshots:screenshotDir},null,2));
