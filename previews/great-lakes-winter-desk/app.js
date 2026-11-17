@@ -327,7 +327,13 @@
     $('refresh-weather').addEventListener('click',()=>weatherFor(C.getPlace(state.chosen),true));
     $('copy-plan').addEventListener('click',()=>{
       const p=C.getPlace(state.chosen);
-      const message=p.title+'\n'+p.length+'\nOfficial activity: '+p.official+'\nConditions: '+p.conditions+'\nCurrent access is not verified. Forecast weather is not trail status.';
+      const access=C.routeAccess(state.routeDocument,p,state,new Date());
+      const arrival=C.arrivalEvidence(state.arrivalDocument,p);
+      const message=p.title+'\n'+p.length+'\nVisit day: '+(access.date||'unavailable')+
+        '\nAccess: '+access.message+'\nArrival: '+arrival.title+
+        '\nParking: '+arrival.message+'\nOfficial activity: '+p.official+
+        '\nConditions: '+p.conditions+
+        '\nWeather is not a parking, route safety or lake-ice report.';
       if(navigator.clipboard?.writeText)navigator.clipboard.writeText(message).then(()=>setStatus('Field note copied.')).catch(()=>setStatus('Copy unavailable; use the official links.'));
       else setStatus('Copy unavailable; use the official links.');
     });
