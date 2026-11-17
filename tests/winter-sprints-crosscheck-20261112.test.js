@@ -27,7 +27,7 @@ test('storm shortcut has a real source link in its selected town/nearby results'
  assert.match(script.slice(script.indexOf('function popup('),script.indexOf('function renderMap(')),/originalReportUrl\(r\.productUrl\)/);
  assert.match(script.slice(script.indexOf('function renderTable('),script.indexOf('function loadPlaces(')),/originalReportUrl\(r\.productUrl\)/);
  assert.match(snow,/original NWS report text when the archive provides a link/);
- assert.match(snow,/michigan-snow-totals\.js\?v=20261117b/);
+ assert.match(snow,/michigan-snow-totals\.js\?v=20261117c/);
 });
 test('edited sprint pages retain their indexable canonicals, truthful review dates, 12 guides',()=>{
  for(const [html,slug] of [[snow,'michigan-snow-totals'],[weekend,'michigan-winter-weekends']]){
