@@ -303,3 +303,18 @@ td.in{font-size:var(--v-type-18)}
 
 /* Keyboard-visible focus for native horizontal overflow alternatives. */
 #regionChips:focus-visible,.table-wrap:focus-visible{outline:3px solid var(--v-accent-4);outline-offset:3px}
+
+/* Prevent the independent number and town columns stretching one another. */
+.snow-answer-columns{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--v-space-16)}
+.snow-answer-figures,.snow-answer-search{min-width:0}
+.snow-answer-figures .answer-eyebrow{margin:var(--v-space-12) 0 var(--v-space-8)}
+.snow-answer-figures #snowStamp{margin:var(--v-space-16) 0 0}
+.snow-answer-search .town{margin:0}
+.snow-answer-search .town-shortcuts{margin:var(--v-space-12) 0}
+.snow-answer-search .answer-next{margin:var(--v-space-12) 0 0}
+@media(min-width:900px){
+  .snow-answer{display:block}
+  .snow-answer .live-head{margin-bottom:var(--v-space-24)}
+  .snow-answer-columns{grid-template-columns:minmax(0,1.3fr) minmax(0,.83fr);gap:var(--v-space-32);align-items:start}
+  .snow-answer-figures{display:block}
+}
