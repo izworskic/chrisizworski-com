@@ -535,7 +535,13 @@
     }
   }
 
+  function mapLocationUrl(id) {
+    const query=byId(`stop-${String(id)}`)?.dataset.googleMapQuery;
+    return window.VisitorMapLinks?.placeSearch({role:'regional-reference',query}) || null;
+  }
+
   window.CircleTourPage = {
+    mapLocationUrl,
     addStop: addToTrip,
     removeStop: removeFromTrip,
     toggleStop(id) { TRIP.has(String(id)) ? removeFromTrip(id) : addToTrip(id); },
