@@ -135,6 +135,9 @@
   }else{
    windowText.textContent='No continuous spray window identified. '+c.evaluatedHours+' of '+c.forecastHours+' issued hours could be evaluated. Existing ice may still be present.';
   }
+  for(const link of document.querySelectorAll('a[data-select-lighthouse]')){
+   link.setAttribute('aria-current',String(link.dataset.selectLighthouse===pier.id));
+  }
   for(const button of list.querySelectorAll('button[data-pier]')){
    button.setAttribute('aria-pressed',String(button.dataset.pier===pier.id));
    const candidate=state.data.piers.find(p=>p.id===button.dataset.pier);
@@ -192,6 +195,15 @@
  slider.addEventListener('input',()=>selectHour(Number(slider.value)));
  previous.addEventListener('click',()=>selectHour(Number(slider.value)-1));
  next.addEventListener('click',()=>selectHour(Number(slider.value)+1));
+ document.querySelectorAll('a[data-select-lighthouse]').forEach(link=>{
+  link.addEventListener('click',()=>{
+   const id=link.dataset.selectLighthouse;
+   if(state.data?.piers?.some(p=>p.id===id)){
+    state.id=id;
+    render(true);
+   }
+  });
+ });
  window.addEventListener('frozen-lighthouse-ready',event=>{
   const incoming=event.detail;
   if(!incoming||!Array.isArray(incoming.piers))return;

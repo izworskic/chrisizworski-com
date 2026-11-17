@@ -1,0 +1,187 @@
+{
+  "schemaVersion": "1.2",
+  "recordStatus": "draft",
+  "project": {
+    "slug": "frozen-lighthouse-watch",
+    "ownerRepo": "izworskic/chrisizworski-com",
+    "canonical": "https://chrisizworski.com/frozen-lighthouses-michigan/",
+    "pageFile": "public/frozen-lighthouses-michigan/index.html",
+    "visitorDecision": "Decide which Lake Michigan pier lights may collect freezing spray in the next 72 hours and learn what each real place looks like without treating old photos as live conditions.",
+    "primaryAction": "Inspect the chosen lighthouse's 72-hour NWS/NOAA-based forecast, then check official marine forecasts and view only from shore."
+  },
+  "claims": [
+    {
+      "id": "nws-hourly-forecast-window",
+      "kind": "forecast",
+      "subject": "weather-context",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://api.weather.gov/",
+      "checkedDate": "2026-11-17",
+      "maxAgeMinutes": 360,
+      "limitation": "The NWS hourly product forecasts regional conditions, not observed ice or pier safety. This tool withholds stale or missing forecast evidence."
+    },
+    {
+      "id": "historic-st-joseph-photo",
+      "kind": "editorial",
+      "subject": "other",
+      "state": "EDITORIAL",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:St._Joseph_North_Pier_Inner_Light_winter_takeover.jpg",
+      "checkedDate": "2026-11-17",
+      "limitation": "Historical 2021 photograph, not a live camera; licensing allows reuse with creator credit and CC BY-SA attribution."
+    },
+    {
+      "id": "historic-grand-haven-photo",
+      "kind": "editorial",
+      "subject": "other",
+      "state": "EDITORIAL",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Grand_Haven_MI_Lighthouses_in_winter.jpg",
+      "checkedDate": "2026-11-17",
+      "limitation": "Historical 2008 photograph, not current ice evidence, with named creator and CC BY 2.0 rights."
+    },
+    {
+      "id": "historic-holland-photo",
+      "kind": "editorial",
+      "subject": "other",
+      "state": "EDITORIAL",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Big_Red_basking_in_the_sunset_glow_-_Flickr_-_rkramer62.jpg",
+      "checkedDate": "2026-11-17",
+      "limitation": "Historical February 2014 winter sunset photo, not proof of any present freezing spray."
+    },
+    {
+      "id": "pier-access-unverified",
+      "kind": "unverified",
+      "subject": "park-access",
+      "state": "UNVERIFIED",
+      "sourceUrl": "https://www.weather.gov/marine/greatlakestext",
+      "checkedDate": "2026-11-17",
+      "limitation": "A marine forecast does not determine open parking, stable pier surfaces, or permission to approach any lighthouse. Keep view-from-shore instructions."
+    }
+  ],
+  "decisionState": {
+    "selectedIdField": "piers[].id / state.id",
+    "sourceOfTruth": "Existing api/lighthouse-ice.js source-gated weather forecast, one native selected lighthouse ID and time in public/assets/frozen-lighthouse-desk.js; photo links only set the existing selection.",
+    "linkedSurfaces": [
+      "answer",
+      "coast-location-buttons",
+      "hour-timeline",
+      "weather-readings",
+      "forecast-sources",
+      "photo-archive-buttons",
+      "shareable-url",
+      "Google-Maps-light-locator"
+    ],
+    "unavailableBehavior": "If weather feed fails, show no live index and disable timeline and location map link. Historical photos retain archival captions and never become live observations."
+  },
+  "scenarios": [
+    {
+      "kind": "initial",
+      "input": "Open with default St. Joseph selection",
+      "expectedVisibleAnswer": "Read the source-gated weather answer beside a true historic St. Joseph ice photo, then see the bright coast-desk forecast.",
+      "sourceAndSafety": "Photo dated winter 2021; forecast issue time separate; safe viewing is from shore."
+    },
+    {
+      "kind": "alternative",
+      "input": "Select historic Grand Haven photograph",
+      "expectedVisibleAnswer": "Selected coast button, forecast detail and map light locator switch together to the Grand Haven ID.",
+      "sourceAndSafety": "Grand Haven winter photo is dated 2008 with CC credit; selected NWS hours remain forecasts."
+    },
+    {
+      "kind": "reverse",
+      "input": "Select Holland and return to St. Joseph using photo choices",
+      "expectedVisibleAnswer": "St. Joseph name, selected light, chart and hourly readings return without an old Holland response.",
+      "sourceAndSafety": "Archived images do not change forecast sources or imply current ice at either location."
+    },
+    {
+      "kind": "no-js",
+      "input": "Disable JavaScript in Chromium",
+      "expectedVisibleAnswer": "The historic images, linked credits, official NWS references, four FAQ explanations and safety warning remain readable.",
+      "sourceAndSafety": "No model score is fabricated without JavaScript; missing feed is visibly unknown."
+    },
+    {
+      "kind": "no-tiles",
+      "input": "Block external map tile providers",
+      "expectedVisibleAnswer": "All forecast selections, named locations, Google Maps lighthouse coordinate link and photographic credits remain usable.",
+      "sourceAndSafety": "This page does not contain an embedded map or parking directions and must not infer open approach routes."
+    },
+    {
+      "kind": "stale-data",
+      "input": "Block or expire the NWS forecast source",
+      "expectedVisibleAnswer": "The source fallback says no reliable verdict, blocks the timeline and never presents an all-clear for a pier.",
+      "sourceAndSafety": "The historical photo still loads but remains explicitly not live."
+    },
+    {
+      "kind": "no-photo",
+      "input": "Block locally served WebP images",
+      "expectedVisibleAnswer": "Legible editorial heading, source names, location links and forecast controls remain, without using another light's photo as a stand-in.",
+      "sourceAndSafety": "The missing image never becomes a current-camera result or a fabricated location match."
+    }
+  ],
+  "failures": {
+    "no-js": "Static image, source citations, four FAQs and explicit shore-access warning stay in HTML without any client forecast score.",
+    "no-tiles": "No tile map is required. Explicit lighthouse coordinate links remain external and are not parking directions.",
+    "no-image": "HTML photo subjects, dates and license captions plus link navigation remain present; a failed image does not cause false live-photo or wrong-light substitution.",
+    "stale-data": "Existing source-gated hourly engine fails closed, with a weather source link and disabled controls, never a reassuring zero icing verdict."
+  },
+  "qa": {
+    "viewports": [
+      360,
+      390,
+      768,
+      1440
+    ],
+    "browserStatus": "PASSED",
+    "browserRun": "https://github.com/izworskic/chrisizworski-com/actions/runs/44078541925",
+    "screenshotEvidence": [
+      "https://github.com/izworskic/chrisizworski-com/actions/runs/44078541925/artifacts"
+    ],
+    "scopeNote": "Chromium mock-data workflows passed 360, 390, 768 and 1440px: all three images decode, licensing and palette verified, gallery selection A-B-A, original forecast controls, no-JS, source failure and screenshots. Screenshots downloaded and inspected by the reviewer; fixture passes do not confirm live icing."
+  },
+  "photos": [
+    {
+      "depictedSubject": "St. Joseph North Pier Inner and Outer Lights surrounded by spray ice in a photographed February 2021 winter",
+      "author": "Don Ashley (DASH713)",
+      "license": "CC BY-SA 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:St._Joseph_North_Pier_Inner_Light_winter_takeover.jpg",
+      "creditUrl": "https://commons.wikimedia.org/wiki/File:St._Joseph_North_Pier_Inner_Light_winter_takeover.jpg",
+      "subjectMatch": "exact"
+    },
+    {
+      "depictedSubject": "Grand Haven South Pierhead lights and frozen breakwater photographed December 2008",
+      "author": "Wayne Silver",
+      "license": "CC BY 2.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Grand_Haven_MI_Lighthouses_in_winter.jpg",
+      "creditUrl": "https://commons.wikimedia.org/wiki/File:Grand_Haven_MI_Lighthouses_in_winter.jpg",
+      "subjectMatch": "exact"
+    },
+    {
+      "depictedSubject": "Holland Harbor Light (Big Red) photographed at a February 2014 winter sunset",
+      "author": "Rachel Kramer",
+      "license": "CC BY 2.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Big_Red_basking_in_the_sunset_glow_-_Flickr_-_rkramer62.jpg",
+      "creditUrl": "https://commons.wikimedia.org/wiki/File:Big_Red_basking_in_the_sunset_glow_-_Flickr_-_rkramer62.jpg",
+      "subjectMatch": "exact"
+    }
+  ],
+  "release": {
+    "implemented": {
+      "status": "CONFIRMED",
+      "checkedDate": "2026-11-17",
+      "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/commit/4716019db66280fcaa619e69ef63a948174a9e94"
+    },
+    "verified": {
+      "status": "CONFIRMED",
+      "checkedDate": "2026-11-17",
+      "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/actions/runs/44078541855"
+    },
+    "deployed": {
+      "status": "PENDING"
+    },
+    "live": {
+      "status": "PENDING"
+    },
+    "measured": {
+      "status": "NOT_MEASURED"
+    }
+  },
+  "verificationLimit": "Mock browser, Experience Foundry baseline-to-candidate proof, science preservation and full repository CI passed on 2026-11-17. The page is not yet merged or independently smoke-tested in public production; photographs are historical and forecast skill/CTR is unmeasured."
+}
