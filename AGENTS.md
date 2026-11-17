@@ -34,6 +34,10 @@ When the owner asks **"use my Field Guide design standard"**, **"FIELD_GUIDE_V1"
 
 # Working agreement for coding agents
 
+## Optional REA investigation for developer research
+
+REA is an optional local MCP research tool, not a production dependency or permission to copy other products. When investigating software interaction patterns or browser-side visualizations, read [`docs/REA_DEVELOPMENT_WORKFLOW.md`](docs/REA_DEVELOPMENT_WORKFLOW.md) before using it. Require observed evidence, preserve lawful access and original implementations, and follow all existing owning-repository, Experience OS, browser acceptance, ads, search and CI gates. If REA is not connected, continue with ordinary tools; do not claim its analysis occurred.
+
 ## Search growth / revenue / Chris Izworski SERP handoff — October 9, 2026
 
 For **any** search-growth, GSC, SEO, monetization, or national-tool-network development session, first read [`MILLION_IMPRESSIONS_PLAYBOOK.md`](MILLION_IMPRESSIONS_PLAYBOOK.md) and [`docs/GROWTH_SESSION_LOG.md`](docs/GROWTH_SESSION_LOG.md), then follow the existing search governance and owning-repository rules below. The owner-approved targets are **1,000,000 GSC Web impressions / 28 days**, **5% sitewide organic CTR (50,000 clicks / 28 days)** and growing **real revenue toward $50/day → $100/day → $300/day**, while preserving the Chris Izworski branded SERP/Person identity. These are targets, not measured achievements.
