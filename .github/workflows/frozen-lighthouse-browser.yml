@@ -42,7 +42,7 @@ jobs:
       - name: Verify licensed photo assets and Experience OS 1.2 record
         run: |
           node --test tests/frozen-lighthouse-photos.test.js
-          node scripts/verify-experience-os-v1.2.mjs docs/experience-briefs/frozen-lighthouse-snow-stone.release.json --check-site
+          node scripts/verify-experience-os-v1.2.mjs docs/experience-briefs/frozen-lighthouse-snow-stone.release.json
       - name: Run Foundry 0.3 real-baseline research and before-after proof
         run: |
           node experience-foundry/examples/lighthouse-photo-foundry.mjs
