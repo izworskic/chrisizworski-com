@@ -1,6 +1,6 @@
 {
-  "checkedAt": "2026-11-17T13:58:38.710Z",
-  "runCommit": "fc4128e0cb894b2324fb887bf1764620dab46096",
+  "checkedAt": "2026-11-17T13:59:19.794Z",
+  "runCommit": "c37fc338571afdb1006358ea50041bc584b76198",
   "viewports": [
     {
       "width": 360,
@@ -15,6 +15,11 @@
         85.3
       ],
       "liveCount": 5,
+      "performance": {
+        "domContentLoadedMs": 317,
+        "firstContentfulPaintMs": 268,
+        "answerReadyMs": 875
+      },
       "errors": []
     },
     {
@@ -30,6 +35,11 @@
         85.3
       ],
       "liveCount": 5,
+      "performance": {
+        "domContentLoadedMs": 154,
+        "firstContentfulPaintMs": 172,
+        "answerReadyMs": 338
+      },
       "errors": []
     },
     {
@@ -45,6 +55,11 @@
         85.3
       ],
       "liveCount": 5,
+      "performance": {
+        "domContentLoadedMs": 131,
+        "firstContentfulPaintMs": 136,
+        "answerReadyMs": 317
+      },
       "errors": []
     },
     {
@@ -60,6 +75,11 @@
         85.3
       ],
       "liveCount": 5,
+      "performance": {
+        "domContentLoadedMs": 137,
+        "firstContentfulPaintMs": 144,
+        "answerReadyMs": 332
+      },
       "errors": []
     },
     {
@@ -75,6 +95,11 @@
         85.3
       ],
       "liveCount": 5,
+      "performance": {
+        "domContentLoadedMs": 149,
+        "firstContentfulPaintMs": 160,
+        "answerReadyMs": 351
+      },
       "errors": []
     }
   ],
@@ -113,6 +138,12 @@
   },
   "assertions": [
     "Mobile to desktop, reversibility, live source bars and serious/critical axe checks",
-    "Tile failure, Leaflet failure, missing data, and no-JavaScript source path"
-  ]
+    "Tile failure, Leaflet failure, missing data, and no-JavaScript source path",
+    "Throttled mobile response retains measured first answer"
+  ],
+  "slowDevice": {
+    "answerVisible": true,
+    "paint": 968,
+    "errors": []
+  }
 }
