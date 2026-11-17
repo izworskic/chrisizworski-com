@@ -21,6 +21,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Check photo rights, optimized assets and Experience OS release record
+        run: |
+          node --test tests/frozen-lighthouse-photos.test.js
+          node scripts/verify-experience-os-v1.2.mjs docs/experience-briefs/frozen-lighthouse-snow-stone.release.json --check-site
       - name: Build real-baseline Foundry improvement run
         run: node experience-foundry/examples/lighthouse-photo-foundry.mjs
       - name: Assess research/design completeness
