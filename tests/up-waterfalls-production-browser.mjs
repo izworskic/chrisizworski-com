@@ -45,6 +45,9 @@ try{
         assert.ok(size.scroll<=size.width+2,'horizontal overflow '+size.scroll+' > '+size.width);
         return JSON.stringify(size);
       });
+      await page.evaluate(()=>scrollTo(0,0));
+      await page.screenshot({path:folder+'/hub-top-'+width+'.png',fullPage:false,animations:'disabled'});
+      await page.locator('#falls-map').screenshot({path:folder+'/map-'+width+'.png',animations:'disabled'});
       if(width===390){
         await check('public mobile waterfall search and save complete a useful round trip',async()=>{
           await page.locator('#q').fill('Wagner');
@@ -72,7 +75,7 @@ try{
           return 'time control works; place links are searches, not unverified driving routes';
         });
       }
-      await page.screenshot({path:folder+'/hub-'+width+'.png',fullPage:false,animations:'disabled'});
+      if(width===390)await page.screenshot({path:folder+'/hub-after-interaction-390.png',fullPage:false,animations:'disabled'});
     }finally{await page.close();}
   }
   const request=await browser.newContext();
