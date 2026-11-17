@@ -123,6 +123,7 @@ function serveHtml(req, res, live, season) {
       assert.equal(mapsUrl.pathname,'/maps/search/');
       assert.equal(mapsUrl.searchParams.get('api'),'1');
       assert(!mapsUrl.pathname.includes('/dir/'),'Observation is not a driving direction');
+      const townBefore=await page.locator('#townSearch').inputValue();
       const firstDetail=await focused.locator('h4').textContent();
       await ranked.nth(1).click();
       assert.equal(await ranked.nth(1).getAttribute('aria-pressed'),'true','Second report selected');
@@ -130,6 +131,9 @@ function serveHtml(req, res, live, season) {
       assert.notEqual(secondDetail,firstDetail,'Selecting B changes exact report identity');
       await ranked.nth(0).click();
       assert.equal(await focused.locator('h4').textContent(),firstDetail,'A B A restores original report');
+      assert.equal(await page.locator('#townSearch').inputValue(),townBefore,'Report selection does not silently change or save a home town');
+      if(width===390||width===1280) await focused.screenshot({path:path.join(out,'selected-report-'+width+'.png'),animations:'disabled'});
+
       const markerPopup=page.locator('.leaflet-popup-content:visible').last();
       assert(await markerPopup.count()>0,'Selected report opens source-qualified marker popup');
       assert((await markerPopup.textContent()).includes('Original NWS report'),'Marker popup keeps primary source');
@@ -143,6 +147,8 @@ function serveHtml(req, res, live, season) {
       await page.locator('.windows button[data-window="24h"]').focus();
       await page.keyboard.press('Space');
       assert.equal(await page.locator('.windows button[data-window="24h"]').getAttribute('aria-pressed'),'true','Keyboard activates report window');
+      assert.equal(await focused.isVisible(),false,'Changing the report period clears selected source and map focus');
+
       await page.locator('.windows button[data-window="24h"]').click();
       assert.equal(await page.locator('.windows button[data-window="24h"]').getAttribute('aria-pressed'),'true');
       const firstWindowText=await page.locator('#snowSummary').textContent();
@@ -153,6 +159,8 @@ function serveHtml(req, res, live, season) {
       const initialMarkerCount=await page.locator('.leaflet-interactive').count();
       await page.locator('button[data-region="keweenaw"]').click();
       assert.equal(await page.locator('button[data-region="keweenaw"]').getAttribute('aria-pressed'),'true');
+      assert.equal(await focused.isVisible(),false,'Changing the region clears the previous selected observation');
+
       const filteredMarkerCount=await page.locator('.leaflet-interactive').count();
       assert(filteredMarkerCount<initialMarkerCount,'Region filter changes the map evidence, not just button styling');
       await page.locator('button[data-region=""]').click();
