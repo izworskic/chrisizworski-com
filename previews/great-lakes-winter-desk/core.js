@@ -137,9 +137,25 @@
     }));
     return {status:hours.length?'available':'empty',note:hours.length?'NWS hourly forecast, not a trail or access report.':'No future daytime NWS periods for that day.',issued:update,day:key,hours};
   }
+  function sourceReachability(document,place,now=new Date()){
+    if(!place||!document||document.schemaVersion!==1||document.accessVerified!==false)
+      return {kind:'unavailable',message:'No trustworthy official-source scan is available.'};
+    const row=document.places?.[place.id];
+    if(!row||row.sourceUrl!==place.conditions||row.operatorAccess!=='NOT_DETERMINED')
+      return {kind:'unavailable',message:'This source check does not match the selected outing.'};
+    const checked=new Date(row.retrievedAt||NaN).getTime();
+    const age=(now.getTime()-checked)/3600000;
+    if(!Number.isFinite(age)||age< -0.2||age>24)
+      return {kind:'stale',message:'The source check is out of date. Read the park page directly.'};
+    if(row.reachability==='REACHED')
+      return {kind:'reached',message:'The official conditions page was reachable at the checked time. Trail access remains unverified.',checkedAt:row.retrievedAt};
+    if(row.reachability==='UNAVAILABLE')
+      return {kind:'unavailable',message:'The last automated request could not retrieve this official source. Check it directly.',checkedAt:row.retrievedAt};
+    return {kind:'unavailable',message:'The official source check has an unrecognized status.'};
+  }
   function safeGoogleUrl(place){
     return /^https:\/\/www\.google\.com\/maps\/search\/\?api=1&query=/.test(place?.google||'')?place.google:null;
   }
   return {PLACES,GOALS,EFFORT_LABELS,SOURCE_REVIEWED,validPref,getPlace,recommend,
-    dateKey,targetKey,parseWind,classifyWeather,forecastWindow,safeGoogleUrl};
+    dateKey,targetKey,parseWind,classifyWeather,forecastWindow,sourceReachability,safeGoogleUrl};
 });
