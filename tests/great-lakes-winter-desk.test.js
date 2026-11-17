@@ -181,3 +181,81 @@ test('forecast date selection remains local across spring and autumn clock chang
   assert.equal(D.targetKey(autumn,'America/Detroit','tomorrow'),'2026-11-02');
   assert.equal(D.targetKey(new Date('bad'),'America/Detroit','tomorrow'),null);
 });
+
+test('winter route policies are named and sourced but never converted to live access',()=>{
+  const data=JSON.parse(fs.readFileSync(path.join(base,'route-access-evidence.json'),'utf8'));
+  const now=new Date('2026-11-17T18:00:00Z');
+  assert.equal(data.schemaVersion,1);
+  assert.equal(data.operatorAccessReady,false);
+  for(const place of D.PLACES){
+    const row=data.routes[place.id];
+    assert.equal(row.routeId,place.id);
+    assert.equal(row.routePage,place.official);
+    assert.equal(row.conditionsPage,place.conditions);
+    assert.equal(row.policy.sourceUrl,place.official);
+    assert.equal(row.observations.length,0);
+    const status=D.routeAccess(data,place,{day:'today'},now);
+    assert.equal(status.kind,'unknown');
+    assert.equal(status.blocks,false);
+    assert.equal(status.policy.text,row.policy.text);
+    assert.match(status.message,/not confirmed/);
+  }
+});
+test('operator reports require exact route and visit day, stale positives are ignored',()=>{
+  const place=D.getPlace('munising-snowshoe');
+  const now=new Date('2026-11-17T18:00:00Z');
+  const day=D.targetKey(now,place.tz,'today');
+  const document=()=>({schemaVersion:1,operatorAccessReady:false,routes:{
+    [place.id]:{routeId:place.id,routePage:place.official,conditionsPage:place.conditions,observations:[]}
+  }});
+  const evidence=(status,overrides={})=>({
+    routeId:place.id,scope:'exact-route',reviewMethod:'human-official-notice',routeExplicit:true,
+    sourceUrl:place.conditions,sourceStatement:'Official notice specifically names the marked Pictured Rocks snowshoe trail.',
+    checkedAt:'2026-11-17T17:30:00Z',publishedAt:'2026-11-17T17:00:00Z',
+    validFrom:day,validThrough:day,status,...overrides
+  });
+  const closed=document();closed.routes[place.id].observations=[evidence('closed')];
+  assert.equal(D.routeAccess(closed,place,{day:'today'},now).kind,'closed');
+  assert.equal(D.routeAccess(closed,place,{day:'today'},now).blocks,true);
+  assert.equal(D.routeAccess(closed,place,{day:'tomorrow'},now).kind,'unknown');
+  const other=document();other.routes[place.id].observations=[evidence('closed',{routeId:'munising-falls'})];
+  assert.equal(D.routeAccess(other,place,{day:'today'},now).kind,'unknown');
+  const broad=document();broad.routes[place.id].observations=[evidence('closed',{scope:'park-wide'})];
+  assert.equal(D.routeAccess(broad,place,{day:'today'},now).kind,'unknown');
+  const old=document();old.routes[place.id].observations=[evidence('open',{checkedAt:'2026-11-15T16:00:00Z'})];
+  assert.equal(D.routeAccess(old,place,{day:'today'},now).kind,'unknown');
+  const range=document();range.routes[place.id].observations=[evidence('open',{validThrough:'2026-11-18'})];
+  assert.equal(D.routeAccess(range,place,{day:'today'},now).kind,'unknown');
+  const positive=document();positive.routes[place.id].observations=[evidence('open')];
+  assert.equal(D.routeAccess(positive,place,{day:'today'},now).kind,'reported-open');
+  const future=document();future.routes[place.id].observations=[evidence('closed',{publishedAt:'2026-11-18T16:00:00Z'})];
+  assert.equal(D.routeAccess(future,place,{day:'today'},now).kind,'unknown');
+});
+test('conflicting exact-route reports are a block, and forecast cannot reverse them',()=>{
+  const place=D.getPlace('meyers-lakeshore');
+  const now=new Date('2026-11-17T19:00:00Z');
+  const day=D.targetKey(now,place.tz,'today');
+  const row={routeId:place.id,routePage:place.official,conditionsPage:place.conditions,
+    observations:['open','closed'].map(status=>({
+      routeId:place.id,scope:'exact-route',reviewMethod:'human-official-notice',routeExplicit:true,
+      sourceUrl:place.conditions,sourceStatement:'Official operator says route specifically controlled on this selected date.',
+      checkedAt:'2026-11-17T18:30:00Z',publishedAt:'2026-11-17T18:00:00Z',
+      validFrom:day,validThrough:day,status
+    }))};
+  const record={schemaVersion:1,operatorAccessReady:false,routes:{[place.id]:row}};
+  const access=D.routeAccess(record,place,{day:'today'},now);
+  assert.equal(access.kind,'conflict');
+  assert.equal(access.blocks,true);
+  const outcome=D.recommend({goal:'coast',effort:'full'},{[place.id]:{status:'closed',verified:access.blocks}});
+  assert.equal(outcome.kind,'blocked');
+  assert.match(access.message,/conflict/);
+});
+test('the visit-day access evidence updates with selection and cannot be inferred from weather',()=>{
+  const html=source('index.html'),js=source('app.js');
+  for(const id of ['route-day','route-access','route-policy','route-policy-link'])
+    assert.ok(html.includes('id="'+id+'"'),id);
+  assert.match(js,/routeAccess\(state\.routeDocument,requestedPlace,state,new Date\(\)\)/);
+  assert.match(js,/loadRouteEvidence\(\)/);
+  assert.match(js,/renderRouteEvidence\(place,access\)/);
+  assert.match(js,/blocked\?access\.message/);
+});
