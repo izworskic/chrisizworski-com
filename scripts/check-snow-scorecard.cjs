@@ -1,0 +1,280 @@
+#!/usr/bin/env node
+// Snow Totals scorecard browser evidence. Fixture readings come from the site's recorded NWS and ACIS tests.
+const fs = require('node:fs');
+const path = require('node:path');
+const http = require('node:http');
+const { execFileSync } = require('node:child_process');
+const assert = require('node:assert/strict');
+const { chromium } = require('/tmp/snow-scorecard/node_modules/playwright');
+const AxeBuilder = require('/tmp/snow-scorecard/node_modules/@axe-core/playwright').default;
+const api = require('../api/michigan-snow-totals.js');
+const storm = require('../tests/fixtures/snow-lsr-2025-11-30-storm.json');
+const acis = require('../tests/fixtures/snow-acis-2025-07-01-to-2025-11-30.json');
+const root = path.resolve('public');
+const out = path.resolve('docs/visual-pilots/michigan-snow-totals/scorecard');
+fs.mkdirSync(out, { recursive: true });
+const now = Date.parse(storm.now);
+async function recordedApi(query) {
+  const oldFetch = global.fetch, oldNow = Date.now;
+  global.fetch = async url => {
+    const href = String(url);
+    const ok = data => ({ ok: true, status: 200, json: async () => data });
+    if (href.includes('mesonet.agron.iastate.edu')) return ok({ features: storm.properties.map(properties => ({ properties })) });
+    if (href.includes('api.weather.gov')) return ok({ features: [] });
+    if (href.includes('rcc-acis.org')) return ok(acis.response);
+    throw new Error('Unexpected provider ' + href);
+  };
+  Date.now = () => now;
+  try {
+    let status = 0, body;
+    await api({ method: 'GET', query, url: '/api/michigan-snow-totals?' + new URLSearchParams(query) }, {
+      setHeader() {},
+      status(c) { status = c; return this; },
+      json(data) { body = data; return this; }
+    });
+    assert.equal(status, 200);
+    assert.ok(body, 'The recorded API generated a response');
+    return body;
+  } finally { Date.now = oldNow; global.fetch = oldFetch; }
+}
+function serveHtml(req, res, live, season) {
+  const u = new URL(req.url, 'http://127.0.0.1');
+  if (u.pathname === '/api/michigan-snow-totals') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(u.searchParams.get('view') === 'season' ? season : live)); return;
+  }
+  const file = path.resolve(root, '.' + decodeURIComponent(u.pathname));
+  if (!file.startsWith(root + path.sep)) { res.writeHead(403).end(); return; }
+  const target = fs.existsSync(file) && fs.statSync(file).isDirectory() ? path.join(file,'index.html') : file;
+  if (!fs.existsSync(target)) { res.writeHead(404).end(); return; }
+  const ext = path.extname(target);
+  const types = { '.html':'text/html; charset=utf-8','.js':'text/javascript','.css':'text/css','.json':'application/json','.png':'image/png','.svg':'image/svg+xml' };
+  res.writeHead(200, { 'Content-Type': types[ext] || 'application/octet-stream' });
+  fs.createReadStream(target).pipe(res);
+}
+(async () => {
+  const [live, season] = await Promise.all([recordedApi({}), recordedApi({view:'season'})]);
+  assert(live.ok && live.reports?.length > 50, 'Recorded storm has many report places');
+  assert(season.season?.anySnow, 'Recorded ACIS season has snow');
+  const server = http.createServer((req, res) => serveHtml(req,res,live,season));
+  await new Promise(resolve => server.listen(4173,'127.0.0.1',resolve));
+  const browser = await chromium.launch({headless:true,executablePath:process.env.SNOW_CHROME||undefined,args:['--no-sandbox']});
+  const evidence = { checkedAt:new Date().toISOString(), runCommit:process.env.GITHUB_SHA||'local', viewports:[], a11y:[], fallbacks:{}, assertions:[] };
+  function note(s) { evidence.assertions.push(s); console.log('PASS '+s); }
+  const base = 'http://127.0.0.1:4173/michigan-snow-totals/?window=168h';
+  async function setup(width, opts={}) {
+    const context=await browser.newContext({viewport:{width,height:900},reducedMotion:'reduce',isMobile:width<=390,hasTouch:width<=390,javaScriptEnabled:opts.noJS!==true});
+    const page=await context.newPage();
+    const errors=[];
+    page.on('pageerror',error=>errors.push(error.message));
+    if(!opts.noJS) await page.addInitScript(frozen => { Date.now=()=>frozen; },now);
+    if(opts.blockTiles) await page.route(/tile\.openstreetmap\.org\//,route=>route.abort('failed'));
+    if(opts.blockLeaflet) await page.route('**/leaflet.js',route=>route.abort('failed'));
+    if(opts.blockData) await page.route('**/api/michigan-snow-totals*',route=>route.abort('failed'));
+    return {context,page,errors};
+  }
+  try {
+    for(const width of [360,390,768,1280,1440]) {
+      const {context,page,errors}=await setup(width);
+      await page.goto(base,{waitUntil:'domcontentloaded'});
+      await page.waitForFunction(()=>document.querySelector('.snow-peak-value') || /No snow|did not/.test(document.getElementById('snowSummary').textContent),null,{timeout:18000});
+      assert(await page.locator('.snow-peak-value').isVisible(),'Large measured figure appears');
+      const {scrollWidth,viewportWidth,header,peakFont,mapAfter,sourceCount,liveCount,rankCount,barWidths,seasonLabels}=await page.evaluate(()=>{
+        const answer=document.querySelector('.snow-answer').getBoundingClientRect(),map=document.querySelector('.map-wrap').getBoundingClientRect();
+        return {scrollWidth:document.documentElement.scrollWidth,viewportWidth:innerWidth,header:getComputedStyle(document.querySelector('.site-header')).position,peakFont:parseInt(getComputedStyle(document.querySelector('.snow-peak-value')).fontSize,10),mapAfter:map.top>=answer.bottom,sourceCount:document.querySelectorAll('a[href="https://mesonet.agron.iastate.edu/lsr/"]').length,liveCount:document.querySelectorAll('#seasonLiveBars .comparison').length,rankCount:document.querySelectorAll('#stormPulseList button').length,barWidths:[...document.querySelectorAll('#stormPulseList .report-bar-fill')].map(el=>parseFloat(el.style.width)),seasonLabels:document.querySelector('#seasonLiveBars')?.textContent.slice(0,90)};
+      });
+      assert(scrollWidth<=viewportWidth+1,'No overflow at '+width+' px');
+      assert.equal(header,'sticky');
+      assert(mapAfter,'Map follows the complete answer card');
+      assert(sourceCount>=1);
+      assert.equal(peakFont,56,'Numbers use the requested 56px visual scale');
+      await page.waitForFunction(()=>document.querySelectorAll('.leaflet-tile-loaded').length>0 || document.querySelector('#snowMap').hidden,null,{timeout:12000});
+      const realTiles=await page.locator('.leaflet-tile-loaded').count();
+      assert(realTiles>0,'Real map raster tiles must load in the normal browser scenario');
+      assert(!await page.locator('#snowMap').evaluate(el=>el.hidden),'Map remains visible with real tiles');
+      assert(rankCount>=2,'Top reports available with the recorded NWS data');
+      assert(barWidths[0]===100 && barWidths.every((v,i)=>v>=0&&v<=100&&(i===0||v<=barWidths[i-1])),'Bars encode relative observed inches');
+      assert(liveCount>=1 && /Current season/.test(seasonLabels),'Current-season bars populated from recorded ACIS');
+      const perf = await page.evaluate(() => {
+        const n = performance.getEntriesByType('navigation')[0];
+        const fcp = performance.getEntriesByName('first-contentful-paint')[0];
+        return {domContentLoadedMs:Math.round(n?.domContentLoadedEventEnd||0),firstContentfulPaintMs:Math.round(fcp?.startTime||0),answerReadyMs:Math.round(performance.now())};
+      });
+      if(width===390||width===1280) {
+        await page.evaluate(()=>window.scrollTo(0,0));
+        await page.screenshot({path:path.join(out,'enhanced-'+width+'.png'),animations:'disabled'});
+        await page.locator('.map-wrap').screenshot({path:path.join(out,'map-'+width+'.png'),animations:'disabled'});
+        await page.locator('#stormPulse').screenshot({path:path.join(out,'ranking-'+width+'.png'),animations:'disabled'});
+        await page.locator('#seasonLiveBars').screenshot({path:path.join(out,'season-'+width+'.png'),animations:'disabled'});
+      }
+      // Foundry selection spine: exact ranked report, original source, approximate map link, reversibility.
+      const ranked=page.locator('#stormPulseList button[data-pulse-rank]');
+      await ranked.nth(0).click();
+      assert.equal(await ranked.nth(0).getAttribute('aria-pressed'),'true','First ranked observation selected');
+      const focused=page.locator('#selectedSnowReport');
+      assert(await focused.isVisible(),'Selected report detail appears without waiting for a town lookup');
+      const source=focused.locator('a', { hasText:'Read original NWS report' });
+      assert(await source.count()===1,'Exact selected observation has original NWS source');
+      assert((await source.getAttribute('href')).startsWith('https://mesonet.agron.iastate.edu/'),'Selected source belongs to approved archive');
+      const maps=focused.locator('a',{hasText:'See reported area in Google Maps'});
+      assert.equal(await maps.count(),1,'Reported coordinates have a map search handoff');
+      const mapsUrl=new URL(await maps.getAttribute('href'));
+      assert.equal(mapsUrl.hostname,'www.google.com');
+      assert.equal(mapsUrl.pathname,'/maps/search/');
+      assert.equal(mapsUrl.searchParams.get('api'),'1');
+      assert(!mapsUrl.pathname.includes('/dir/'),'Observation is not a driving direction');
+      const townBefore=await page.locator('#townSearch').inputValue();
+      const firstDetail=await focused.locator('h4').textContent();
+      await ranked.nth(1).click();
+      assert.equal(await ranked.nth(1).getAttribute('aria-pressed'),'true','Second report selected');
+      const secondDetail=await focused.locator('h4').textContent();
+      assert.notEqual(secondDetail,firstDetail,'Selecting B changes exact report identity');
+      await ranked.nth(0).click();
+      assert.equal(await focused.locator('h4').textContent(),firstDetail,'A B A restores original report');
+      assert.equal(await page.locator('#townSearch').inputValue(),townBefore,'Report selection does not silently change or save a home town');
+      if(width===390||width===1280) await focused.screenshot({path:path.join(out,'selected-report-'+width+'.png'),animations:'disabled'});
+
+      const markerPopup=page.locator('.leaflet-popup-content:visible').last();
+      assert(await markerPopup.count()>0,'Selected report opens source-qualified marker popup');
+      assert((await markerPopup.textContent()).includes('Original NWS report'),'Marker popup keeps primary source');
+      assert((await markerPopup.textContent()).includes('Approximate report location'),'Marker does not imply arrival permission');
+      const selectedSourceBefore=await focused.textContent();
+      // Clicking the first actual map marker changes the same source panel without town-search mutation.
+      await page.locator('.leaflet-interactive').first().click({force:true,timeout:10000});
+      assert(await focused.isVisible(),'Map pin updates selected observation panel');
+      assert((await focused.textContent()).includes('report'),'Selected source remains readable');
+      assert(selectedSourceBefore.length>0);
+      await page.locator('.windows button[data-window="24h"]').focus();
+      await page.keyboard.press('Space');
+      assert.equal(await page.locator('.windows button[data-window="24h"]').getAttribute('aria-pressed'),'true','Keyboard activates report window');
+      assert.equal(await focused.isVisible(),false,'Changing the report period clears selected source and map focus');
+
+      await page.locator('.windows button[data-window="24h"]').click();
+      assert.equal(await page.locator('.windows button[data-window="24h"]').getAttribute('aria-pressed'),'true');
+      const firstWindowText=await page.locator('#snowSummary').textContent();
+      await page.locator('.windows button[data-window="168h"]').click();
+      assert.equal(await page.locator('.windows button[data-window="168h"]').getAttribute('aria-pressed'),'true');
+      const seventhDayText=await page.locator('#snowSummary').textContent();
+      assert.notEqual(firstWindowText,seventhDayText,'Window switch changes the source-backed answer');
+      const initialMarkerCount=await page.locator('.leaflet-interactive').count();
+      await page.locator('button[data-region="keweenaw"]').click();
+      assert.equal(await page.locator('button[data-region="keweenaw"]').getAttribute('aria-pressed'),'true');
+      assert.equal(await focused.isVisible(),false,'Changing the region clears the previous selected observation');
+
+      const filteredMarkerCount=await page.locator('.leaflet-interactive').count();
+      assert(filteredMarkerCount<initialMarkerCount,'Region filter changes the map evidence, not just button styling');
+      await page.locator('button[data-region=""]').click();
+      assert.equal(await page.locator('button[data-region=""]').getAttribute('aria-pressed'),'true');
+      await page.locator('.report-table-disclosure summary').click();
+      assert(await page.locator('#snowTable tbody tr').count()>2);
+      await page.locator('.answer-next summary').click();
+      assert(await page.locator('#headingOut a').first().isVisible());
+      if(width===390||width===1280) {
+        await page.evaluate(()=>window.scrollTo(0,0));
+        await page.screenshot({path:path.join(out,'expanded-'+width+'.png'),animations:'disabled'});
+      }
+      const violations=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa']).analyze();
+      const serious=violations.violations.filter(v=>['critical','serious'].includes(v.impact));
+      evidence.a11y.push({width,violations:violations.violations.map(v=>({id:v.id,impact:v.impact,nodes:v.nodes.length,help:v.help})),seriousCount:serious.length});
+      assert.equal(serious.length,0,'No serious or critical WCAG AA violations at '+width+': '+JSON.stringify(serious.map(v=>({id:v.id,nodes:v.nodes.map(n=>({target:n.target,summary:n.failureSummary,html:n.html?.slice(0,220)}))}))));
+      assert.equal(errors.length,0,'No page errors: '+errors.join('; '));
+      evidence.viewports.push({width,scrollWidth,header,peakFont,mapAfter,rankCount,barWidths,liveCount,realTiles,filteredMarkerCount,performance:perf,errors});
+      await context.close();
+    }
+    note('Mobile to desktop, reversibility, live source bars and serious/critical axe checks');
+    for(const kind of ['tiles','leaflet','data','noJS']) {
+      const o=kind==='tiles'?{blockTiles:true}:kind==='leaflet'?{blockLeaflet:true}:kind==='data'?{blockData:true}:{noJS:true};
+      const {context,page,errors}=await setup(390,o);
+      await page.goto(base,{waitUntil:'domcontentloaded'});
+      if(kind==='noJS') {
+        assert(await page.locator('noscript').count()>0,'No-JS map explanation is present');
+        await page.locator('.answer-next summary').click();
+        assert(await page.locator('#headingOut a').first().isVisible());
+        evidence.fallbacks[kind]='Archive and native navigation available';
+      }else{
+        await page.waitForFunction(()=>document.querySelector('#snowMap')?.hidden,{timeout:18000});
+        assert(await page.locator('.report-table-disclosure').evaluate(x=>x.open),'Full reports expand after map or API failure');
+        assert(await page.locator('.map-fallback a').first().isVisible(),'Source archive link remains');
+        assert((await page.locator('#mapNote').textContent()).includes('map could not load'),'Honest map failure message');
+        if(kind==='data') assert(!(await page.locator('#snowTable tbody').textContent()).includes('Loading reports.'),'Failure does not show stale Loading reports message');
+        evidence.fallbacks[kind]='Map collapsed; archive and full report disclosure available';
+      }
+      if(kind==='tiles')await page.screenshot({path:path.join(out,'tiles-unavailable-390.png'),animations:'disabled'});
+      assert.equal(errors.length,0,'No page errors in '+kind+' failure path: '+errors.join('; '));
+      await context.close();
+    }
+    note('Tile failure, Leaflet failure, missing data, and no-JavaScript source path');
+
+    // Replaying a cached observation window as "current" is a false freshness claim.
+    const {context:staleContext,page:stalePage,errors:staleErrors}=await setup(390);
+    const staleLive={...live,generatedAt:new Date(now-3*3600e3).toISOString()};
+    const staleSeason={...season,generatedAt:new Date(now-40*3600e3).toISOString()};
+    await stalePage.route('**/api/michigan-snow-totals*',route=>{
+      const u=new URL(route.request().url());
+      return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(u.searchParams.get('view')==='season'?staleSeason:staleLive)});
+    });
+    await stalePage.goto(base,{waitUntil:'domcontentloaded'});
+    await stalePage.waitForFunction(()=>document.querySelector('#snowMap')?.hidden && document.querySelector('#seasonSummary')?.textContent.includes('36 hours'),null,{timeout:16000});
+    assert((await stalePage.locator('#snowSummary').textContent()).includes('more than two hours old'),'Stale observations are not described as current');
+    assert.equal(await stalePage.locator('.snow-peak-value').count(),0,'No false large current snow number from stale feed');
+    assert(await stalePage.locator('.windows button').first().isDisabled(),'Stale report time controls cannot reactivate outdated values');
+    assert(await stalePage.locator('#seasonLiveBars').evaluate(el=>el.hidden),'Stale current-season comparison hidden');
+    assert((await stalePage.locator('#snowTable tbody').textContent()).includes('unavailable'),'Source list does not pretend stale reports are current');
+    assert.equal(staleErrors.length,0,'Stale responses do not cause browser script errors');
+    evidence.fallbacks.stale='Old observation and season feeds do not create a current verdict; historical references and original NWS links remain';
+    await stalePage.screenshot({path:path.join(out,'stale-data-390.png'),animations:'disabled'});
+    await staleContext.close();
+    note('Age-expired NWS and ACIS cached responses suppress current claims');
+
+    const {context:slowContext,page:slowPage,errors:slowErrors}=await setup(390);
+    const slowCdp=await slowContext.newCDPSession(slowPage);
+    await slowCdp.send('Network.emulateNetworkConditions',{offline:false,latency:250,downloadThroughput:120000,uploadThroughput:64000});
+    await slowPage.goto(base,{waitUntil:'domcontentloaded',timeout:30000});
+    await slowPage.waitForFunction(()=>Boolean(document.querySelector('.snow-peak-value')),{timeout:30000});
+    evidence.slowDevice={answerVisible:await slowPage.locator('.snow-peak-value').isVisible(),paint:await slowPage.evaluate(()=>Math.round(performance.getEntriesByName('first-contentful-paint')[0]?.startTime||0)),errors:slowErrors};
+    assert(evidence.slowDevice.answerVisible,'The first answer survives throttled mobile network');
+    assert.equal(slowErrors.length,0,'No errors on a throttled mobile connection');
+    await slowContext.close();
+    note('Throttled mobile response retains measured first answer');
+
+    // Same recorded feed, same runner, comparable static HTML/CSS/JS revisions.
+    // This is a synthetic first-answer check, not real-user Core Web Vitals.
+    const baseCommit = '381153eeb958bf39c850dea232ed6f782b088e98';
+    const oldAsset = rel => execFileSync('git',['show',baseCommit+':'+rel],{encoding:'utf8',maxBuffer:1024*1024});
+    const oldHTML=oldAsset('public/michigan-snow-totals/index.html');
+    const oldCSS=oldAsset('public/assets/michigan-snow-totals.css');
+    const oldJS=oldAsset('public/assets/michigan-snow-totals.js');
+    async function sampleBaseline(mode) {
+      const {context,page,errors}=await setup(390);
+      if(mode==='before') {
+        await page.route('**/michigan-snow-totals/?*',route=>route.fulfill({status:200,contentType:'text/html',body:oldHTML}));
+        await page.route('**/assets/michigan-snow-totals.css',route=>route.fulfill({status:200,contentType:'text/css',body:oldCSS}));
+        await page.route('**/assets/michigan-snow-totals.js?*',route=>route.fulfill({status:200,contentType:'application/javascript',body:oldJS}));
+      }
+      await page.goto(base,{waitUntil:'domcontentloaded'});
+      await page.waitForFunction(()=>document.getElementById('snowSummary')?.textContent.includes('Largest'),null,{timeout:20000});
+      const perf=await page.evaluate(()=>({answerReadyMs:Math.round(performance.now()),fcpMs:Math.round(performance.getEntriesByName('first-contentful-paint')[0]?.startTime||0)}));
+      assert(!errors.length,'No source errors in '+mode+' comparison');
+      await context.close();
+      return {mode,...perf};
+    }
+    const traces=[];
+    for(let i=0;i<3;i++) {
+      const order=i%2===0?['before','after']:['after','before'];
+      for(const mode of order) traces.push(await sampleBaseline(mode));
+    }
+    const median=(arr)=>{const a=arr.slice().sort((x,y)=>x-y);return a[Math.floor(a.length/2)];};
+    const before=traces.filter(x=>x.mode==='before'),after=traces.filter(x=>x.mode==='after');
+    evidence.performanceComparison={
+      baselineCommit:baseCommit,scope:'Synthetic local server and recorded fixture, 390px Chromium, three paired runs per version',
+      before:{medianAnswerMs:median(before.map(x=>x.answerReadyMs)),medianFcpMs:median(before.map(x=>x.fcpMs)),jsBytes:Buffer.byteLength(oldJS)},
+      after:{medianAnswerMs:median(after.map(x=>x.answerReadyMs)),medianFcpMs:median(after.map(x=>x.fcpMs)),jsBytes:fs.statSync(path.join(root,'assets/michigan-snow-totals.js')).size},
+      samples:traces
+    };
+    note('Comparable three-pair synthetic first-answer baseline and updated renderer');
+
+
+    fs.writeFileSync(path.join(out,'measured-qa.json'),JSON.stringify(evidence,null,2)+'\n');
+    console.log(JSON.stringify({pass:true,viewports:evidence.viewports.length,a11y:evidence.a11y,fallbacks:evidence.fallbacks},null,2));
+  } finally { await browser.close(); await new Promise(resolve=>server.close(resolve)); }
+})().catch(error=>{console.error(error);process.exitCode=1});

@@ -1,0 +1,45 @@
+name: Snow report Foundry paired proof
+on:
+  pull_request:
+    paths:
+      - 'experience-foundry/examples/snow-observation-focus-improvement.mjs'
+      - 'experience-foundry/examples/snow-observation-focus-replay.cjs'
+      - 'public/assets/michigan-snow-totals.js'
+      - 'public/michigan-snow-totals/index.html'
+      - '.github/workflows/snow-foundry-report-focus.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  prove:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Capture source baseline and complete Foundry assignment
+        run: |
+          node experience-foundry/examples/snow-observation-focus-improvement.mjs
+          node scripts/experience-foundry.mjs assess --run experience-foundry/drafts/snow-observation-focus/run.json
+      - name: Execute identical before and after evidence adapter
+        run: |
+          node scripts/experience-foundry.mjs prove --run experience-foundry/drafts/snow-observation-focus/run.json --out build/experience-foundry/snow-observation-focus-proof
+          node scripts/experience-foundry.mjs assess --run experience-foundry/drafts/snow-observation-focus/run.json --proof build/experience-foundry/snow-observation-focus-proof/proof.json
+      - name: Verify Experience OS 1.2 release record and existing site discovery
+        run: node scripts/verify-experience-os-v1.2.mjs docs/experience-briefs/michigan-snow-totals-source-focus.release.json --check-site
+      - name: Validate Penpot-importable design source is well formed
+        run: python3 -c "import xml.etree.ElementTree as ET; ET.parse('docs/experience-briefs/snow-observation-focus.penpot.svg')"
+      - name: Keep Foundry assignment and paired proof
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: snow-observation-foundry-evidence
+          path: |
+            experience-foundry/drafts/snow-observation-focus/
+            build/experience-foundry/snow-observation-focus-proof/
+          retention-days: 14

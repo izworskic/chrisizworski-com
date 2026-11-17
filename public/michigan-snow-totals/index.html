@@ -116,9 +116,13 @@
         <button type="button" data-window="168h" aria-pressed="false">7 days</button>
       </div>
     </div>
+    <div class="snow-answer-columns">
+      <div class="snow-answer-figures">
       <p class="answer-eyebrow">Largest reported snowfall and report status</p>
     <p id="snowSummary" class="summary" aria-live="polite">Loading the latest NWS snow reports for Michigan. Without JavaScript, read the reports directly from the <a href="https://mesonet.agron.iastate.edu/lsr/">Local Storm Report archive</a> or your <a href="https://www.weather.gov/">NWS office</a>.</p>
     <p id="snowStamp" class="stamp">Sources: NWS Local Storm Reports through the Iowa Environmental Mesonet archive, and active NWS alerts from api.weather.gov. Times are Eastern.</p>
+      </div>
+      <div class="snow-answer-search">
     <form id="townForm" class="town" role="search" aria-label="Find your town">
       <label for="townSearch">How much snow did your town get?</label>
       <div class="town-row">
@@ -151,12 +155,14 @@
       <p class="snow-decision-note"><strong>Ready to go out?</strong> <a href="/snowmobile/">Check snowmobile trail status</a> or <a href="/michigan-cross-country-skiing/">check XC ski trails</a>. Recent snowfall alone does not establish a safe, open or groomed trail.</p>
     </nav>
     </details>
+      </div>
+    </div>
     </div>
 
     <div class="map-wrap">
       <div class="map-toolbar">
         <h3>Where the reports came from</h3>
-    <div id="regionChips" class="chips" role="group" aria-label="Filter by region"></div>
+    <div id="regionChips" class="chips" role="group" aria-label="Filter by region" tabindex="0"></div>
       </div>
     <p id="regionTrails" class="region-trails" hidden></p>
       <div id="snowMap" role="region" aria-label="Map of Michigan snowfall reports"></div>
@@ -170,11 +176,12 @@
       <h3 id="stormPulseTitle">Largest individual snow reports in this time window</h3>
       <p>These are reports from different places and times, not a single storm-total measurement. Select a place to see nearby observations and original NWS report text when the archive provides a link.</p>
       <div id="stormPulseList" class="storm-pulse-list"></div>
+      <div id="selectedSnowReport" class="snow-selected-report" role="region" aria-label="Selected observation detail" aria-live="polite" hidden></div>
     </section>
 
     <details class="report-table-disclosure">
       <summary>Show every place and full report details</summary>
-    <div class="table-wrap">
+    <div class="table-wrap" tabindex="0">
       <table id="snowTable">
         <caption>Largest report from each place in the selected window</caption>
         <thead><tr><th scope="col">#</th><th scope="col">Snow</th><th scope="col">Place</th><th scope="col">Reported</th><th scope="col">Source</th></tr></thead>
@@ -194,6 +201,7 @@
   <section class="season" id="season" aria-labelledby="season-title" data-no-ads>
     <h2 id="season-title">Season snowfall so far, against normal</h2>
     <p id="seasonSummary" class="summary">Season totals add up daily snowfall since July 1 at 52 National Weather Service climate stations and compare each with its 1991-2020 normal for the same dates.</p>
+    <div id="seasonLiveBars" class="season-bars" aria-label="Current season snowfall compared with station normals" hidden></div>
     <div class="season-bars" aria-label="Historical comparison of last winter's final snowfall against each station's normal">
       <h3>Last winter's snowfall against normal</h3>
       <p>Final 2025-26 totals at four NWS climate stations. Each dark bar shows the station's percentage of its own seasonal normal. The vertical marker is 100% of normal. This is historical context, not this season's current total.</p>
@@ -205,7 +213,7 @@
     </div>
     <details class="season-data">
       <summary>Show this season's station-by-station snowfall and normal</summary>
-    <div id="seasonCurrent" class="table-wrap" hidden>
+    <div id="seasonCurrent" class="table-wrap" tabindex="0" hidden>
       <table id="seasonTable">
         <caption id="seasonCaption">This season</caption>
         <thead><tr><th scope="col">Station</th><th scope="col">Season so far</th><th scope="col">Normal to date</th><th scope="col">Of normal</th><th scope="col">First snow</th></tr></thead>
@@ -215,7 +223,7 @@
     </details>
     <details id="lastSeasonBox">
       <summary>Compare with last winter (2025-26): final season totals at 52 stations (expand historical data)</summary>
-      <div class="table-wrap">
+      <div class="table-wrap" tabindex="0">
         <table id="lastSeasonTable">
           <thead><tr><th scope="col">Station</th><th scope="col">Region</th><th scope="col">Total (in.)</th><th scope="col">Normal (in.)</th><th scope="col">Of normal</th></tr></thead>
           <tbody>
@@ -305,7 +313,7 @@
 
     <h2 id="first-snow">When does Michigan usually get its first snow?</h2>
     <p>Weeks earlier in the Upper Peninsula snow belt than downstate. Counting the first day with at least a tenth of an inch of snow at National Weather Service climate stations over the 1991-2020 seasons, the median first snow falls around October 14 at the Marquette NWS office near Negaunee, October 16 at Herman and October 22 at Sault Ste. Marie. Downstate it waits until about November 9 at the Grand Rapids airport and Houghton Lake, and November 20 at Detroit Metro Airport and the Saginaw-Bay City-Midland airport. Port Huron has the latest median of the stations measured, December 1. In an early year the first snow comes one to five weeks sooner than the median, and the earliest in those thirty seasons was September 22, at Herman and at Chatham near Munising. A first snow in October rarely lasts on still-warm ground, so it says little about the winter ahead. This page shows each season's first measurable snow as soon as a climate station records it.</p>
-    <div class="table-wrap">
+    <div class="table-wrap" tabindex="0">
       <table id="firstSnowTable">
         <caption>First measurable snow (0.1 in. or more), 1991-2020 seasons</caption>
         <thead><tr><th scope="col">Station</th><th scope="col">Region</th><th scope="col">Median date</th><th scope="col">Early to late year</th><th scope="col">Earliest</th></tr></thead>
@@ -356,7 +364,7 @@
 
     <h2 id="offices">Which NWS office reports snow for my part of Michigan?</h2>
     <p>Five National Weather Service forecast offices share Michigan, and each publishes the snow reports for its own counties. Each office also publishes the official daily climate reports for its cities.</p>
-    <div class="table-wrap">
+    <div class="table-wrap" tabindex="0">
       <table>
         <thead><tr><th scope="col">Office</th><th scope="col">Covers</th></tr></thead>
         <tbody>
@@ -399,6 +407,6 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script src="/assets/snow-totals-core.js" defer></script>
-<script src="/assets/michigan-snow-totals.js?v=20261112a" defer></script>
+<script src="/assets/michigan-snow-totals.js?v=20261117c" defer></script>
 </body>
 </html>

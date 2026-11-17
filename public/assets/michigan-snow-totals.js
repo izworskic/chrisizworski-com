@@ -15,7 +15,7 @@
   var state = {
     data: null, season: null, places: null, placesPromise: null,
     window: params.window || '24h', windowChosen: Boolean(params.window), region: params.region, town: params.town,
-    geo: null, shareRow: null, tableLimit: TABLE_STEP, map: null, layer: null, markers: {}
+    geo: null, shareRow: null, tableLimit: TABLE_STEP, map: null, layer: null, markers: {}, mapUnavailable: false, dataStale: false, selectedReportKey: ''
   };
 
   function $(id) { return document.getElementById(id); }
@@ -31,7 +31,22 @@
     } catch (_) { return ''; }
   }
 
-  function color(n) { return n >= 12 ? '#0b2540' : n >= 6 ? '#1d4f7a' : n >= 3 ? '#3a7fb8' : '#8fbde0'; }
+  // The coordinates are an observation reference, never a parking or arrival point.
+  function reportMapHref(r) {
+    var lat = Number(r && r.lat), lon = Number(r && r.lon);
+    if (!Number.isFinite(lat) || !Number.isFinite(lon) || lat < 41 || lat > 49 || lon < -91 || lon > -82) return '';
+    return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(lat.toFixed(4) + ',' + lon.toFixed(4));
+  }
+  function reportKey(r) { return [r.place, r.county, r.reportedAt].join('|'); }
+
+  function color(n) { return n >= 12 ? '#17476f' : n >= 8 ? '#2671a4' : n >= 4 ? '#438dbb' : n >= 2 ? '#77b5dc' : '#b1d4ea'; }
+  // The report endpoint can serve cached responses for up to 75 minutes.
+  // After two hours, suppress a current answer rather than replay old reports.
+  // The season endpoint may serve for up to 30 hours; allow 36 hours.
+  function olderThan(timestamp, hours) {
+    var issued = Date.parse(timestamp);
+    return !Number.isFinite(issued) || Date.now() - issued > hours * 3600e3 || issued - Date.now() > 2 * 3600e3;
+  }
   function dataNow() { return state.data ? Date.parse(state.data.generatedAt) : Date.now(); }
   function place(r) { return C.prettyPlace(r.place); }
   function where(r) { var c = C.countyLabel(r.county); return place(r) + (c ? ', ' + c : ''); }
@@ -44,15 +59,40 @@
   function visibleRows() { var rows = allRows(); return state.region ? rows.filter(function (r) { return r.region === state.region; }) : rows; }
 
   // ---- Map ----
+  // When map tiles cannot load, use the full observation list instead.
+  function mapFallback(message) {
+    if (state.mapUnavailable) return;
+    state.mapUnavailable = true;
+    $('snowMap').hidden = true;
+    $('snowMap').setAttribute('aria-hidden', 'true');
+    $('mapNote').textContent = message || 'The map could not load. Open the full report list below or use the original NWS archive link.';
+    var list = document.querySelector('.report-table-disclosure');
+    if (list) list.open = true;
+    if (!state.data || !state.data.ok || state.dataStale) {
+      var body = $('snowTable').querySelector('tbody');
+      body.innerHTML = '<tr><td colspan="5">The latest reports are unavailable. Use the linked NWS archive for source reports.</td></tr>';
+    }
+    if (state.map) { state.map.remove(); state.map = null; state.layer = null; }
+    if (state.data && !state.dataStale) renderSelectedReport(visibleRows());
+  }
   function initMap() {
-    if (state.map || typeof L === 'undefined') return;
-    state.map = L.map('snowMap', { scrollWheelZoom: false }).setView([44.9, -85.9], 6);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 12, attribution: '&copy; OpenStreetMap contributors' }).addTo(state.map);
-    state.layer = L.layerGroup().addTo(state.map);
+    if (state.map || state.mapUnavailable) return;
+    if (typeof L === 'undefined') { mapFallback(); return; }
+    try {
+      var loaded = 0, failed = 0;
+      state.map = L.map('snowMap', { scrollWheelZoom: false }).setView([44.9, -85.9], 6);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 12, attribution: '&copy; OpenStreetMap contributors' })
+        .on('tileload', function () { loaded++; })
+        .on('tileerror', function () { if (++failed >= 3 && !loaded) mapFallback(); })
+        .addTo(state.map);
+      state.layer = L.layerGroup().addTo(state.map);
+    } catch (_) { mapFallback(); }
   }
   function popup(r) {
     return '<b>' + esc(C.inches(r.inches)) + ' at ' + esc(where(r)) + '</b><br>' + esc(stamp(r)) + '<br>' + esc(kind(r)) +
-      (r.remark ? '<br><i>' + esc(r.remark) + '</i>' : '') + (originalReportUrl(r.productUrl) ? '<br><a href="' + esc(originalReportUrl(r.productUrl)) + '" target="_blank" rel="noopener noreferrer">Original NWS report</a>' : '');
+      (r.remark ? '<br><i>' + esc(r.remark) + '</i>' : '') +
+      (originalReportUrl(r.productUrl) ? '<br><a href="' + esc(originalReportUrl(r.productUrl)) + '" target="_blank" rel="noopener noreferrer">Original NWS report</a>' : '') +
+      (reportMapHref(r) ? '<br><a href="' + esc(reportMapHref(r)) + '" target="_blank" rel="noopener noreferrer">Reported area in Google Maps</a><br><small>Approximate report location, not a public entrance.</small>' : '');
   }
   function renderMap(rows, fit) {
     initMap();
@@ -61,7 +101,8 @@
     state.markers = {};
     rows.forEach(function (r) {
       var m = L.circleMarker([r.lat, r.lon], { radius: Math.max(5, Math.min(18, 4 + r.inches)), color: '#fff', weight: 1, fillColor: color(r.inches), fillOpacity: 0.9 })
-        .bindPopup(popup(r)).addTo(state.layer);
+.bindPopup(popup(r)).addTo(state.layer);
+      m.on('click', function () { selectReport(r, true); });
       state.markers[r.place + '|' + r.county] = m;
     });
     if (fit && rows.length) state.map.fitBounds(L.latLngBounds(rows.map(function (r) { return [r.lat, r.lon]; })).pad(0.25), { maxZoom: 9 });
@@ -79,8 +120,9 @@
     var d = state.data, el = $('snowSummary');
     if (rows.length) {
       var top = rows[0];
-      el.innerHTML = 'In ' + esc(windowLabel()) + ', <strong>' + rows.length + ' place' + (rows.length === 1 ? '' : 's') + ' in ' + esc(regionLabel()) + '</strong> reported snow to the National Weather Service. Largest: <strong>' +
-        esc(C.inches(top.inches)) + ' at ' + esc(where(top)) + '</strong>, ' + esc(stamp(top)) + ', ' + esc(kind(top)) + '.';
+      el.innerHTML = 'In ' + esc(windowLabel()) + ', <strong>' + rows.length + ' place' + (rows.length === 1 ? '' : 's') + ' in ' + esc(regionLabel()) + '</strong> reported snow to the National Weather Service. Largest reported amount: ' +
+        '<span class="snow-peak"><strong class="snow-peak-value">' + esc(C.inches(top.inches)) + '</strong><span class="snow-peak-place">at ' + esc(where(top)) + '</span></span>' +
+        '<span class="snow-report-context">Reported ' + esc(stamp(top)) + ', ' + esc(kind(top)) + '.</span>';
       return;
     }
     var week = C.rowsFor(d.reports || [], '168h', dataNow());
@@ -105,12 +147,57 @@
     var panel = $('stormPulse'), list = $('stormPulseList');
     if (!panel || !list) return;
     if (rows.length < 2) { list.textContent = ''; panel.hidden = true; return; }
-    list.innerHTML = rows.slice(0, 3).map(function (r) {
-      return '<button type="button" data-pulse-town="' + esc(C.baseTown(r.place)) + '">' +
+    var largest = Math.max(0.1, Number(rows[0].inches) || 0);
+    list.innerHTML = rows.slice(0, 3).map(function (r, index) {
+      var inches = Math.max(0, Number(r.inches) || 0);
+      var percent = (Math.min(100, inches / largest * 100)).toFixed(1);
+      return '<button type="button" data-pulse-rank="' + index + '" aria-pressed="' + String(reportKey(r) === state.selectedReportKey) + '">' +
         '<strong>' + esc(C.inches(r.inches)) + ' · ' + esc(where(r)) + '</strong>' +
-        '<span>' + esc(stamp(r)) + ' · ' + esc(kind(r)) + '</span></button>';
+        '<span>' + esc(stamp(r)) + ' · ' + esc(kind(r)) + '</span>' +
+        '<span class="report-bar-track" aria-hidden="true"><span class="report-bar-fill" style="width:' + percent + '%;background:' + color(inches) + '"></span></span></button>';
     }).join('');
     panel.hidden = false;
+  }
+
+
+  // A selection has exactly one report identity across list, details and map.
+  // This keeps the original reported amount and observation time intact.
+  function renderSelectedReport(rows) {
+    var panel = $('selectedSnowReport');
+    if (!panel) return;
+    var found = rows.find(function (r) { return reportKey(r) === state.selectedReportKey; });
+    document.querySelectorAll('#stormPulseList button[data-pulse-rank]').forEach(function (b) {
+      var r = rows[Number(b.getAttribute('data-pulse-rank'))];
+      b.setAttribute('aria-pressed', String(Boolean(found && r && reportKey(r) === state.selectedReportKey)));
+    });
+    if (!found) {
+      state.selectedReportKey = '';
+      panel.hidden = true;
+      panel.textContent = '';
+      return;
+    }
+    var origin = originalReportUrl(found.productUrl), locationHref = reportMapHref(found);
+    var other = C.nearest(Number(found.lat), Number(found.lon), rows.filter(function (r) {
+      return reportKey(r) !== reportKey(found);
+    }), 2, 25);
+    panel.innerHTML = '<div class="selected-primary"><h4>Report detail: ' + esc(where(found)) + '</h4>' +
+      '<p><strong>' + esc(C.inches(found.inches)) + '</strong> reported ' + esc(stamp(found)) + '; ' + esc(kind(found)) + '.</p>' +
+      (found.remark ? '<p>' + esc(found.remark) + '</p>' : '') +
+      '<p class="selected-source-actions">' +
+      (origin ? '<a href="' + esc(origin) + '" target="_blank" rel="noopener noreferrer">Read original NWS report</a>' : '<span>Original NWS text not linked for this observation.</span>') +
+      (locationHref ? ' <a href="' + esc(locationHref) + '" target="_blank" rel="noopener noreferrer">See reported area in Google Maps</a>' : '') +
+      (!state.mapUnavailable ? ' <a href="#snowMap">See marked report on map</a>' : '') + '</p>' +
+      '<p class="selected-source-note">The reported coordinates are approximate. They are not a verified road entrance, parking place, or travel route.</p></div>' +
+      '<div class="selected-nearby">' +
+      (other.length ? '<p><strong>Other reports within 25 miles</strong> in the selected period:</p>' + nearLines(other) :
+        '<p>No other report was found within 25 miles in this period. That does not mean no snow fell.</p>') + '</div>';
+    panel.hidden = false;
+  }
+  function selectReport(r, fromMap) {
+    if (!r || state.dataStale) return;
+    state.selectedReportKey = reportKey(r);
+    renderSelectedReport(visibleRows());
+    if (!fromMap && !state.mapUnavailable) focusRow(r);
   }
 
   function renderAlerts() {
@@ -266,11 +353,11 @@
   }
 
   function render(fit) {
-    var d = state.data; if (!d) return;
+    var d = state.data; if (!d || state.dataStale) return;
     var rows = visibleRows(), quiet = !(d.reports || []).length, mapRows = rows;
     if (quiet && d.lastSnow) mapRows = d.lastSnow.sameDay || [];
-    renderSummary(rows); renderStormPulse(rows); renderAlerts(); renderChips(); renderTable(rows); renderMap(mapRows, fit); renderTown(fit);
-    $('mapNote').textContent = quiet && d.lastSnow
+    renderSummary(rows); renderStormPulse(rows); renderAlerts(); renderChips(); renderTable(rows); renderMap(mapRows, fit); renderSelectedReport(rows); renderTown(fit);
+    if (!state.mapUnavailable) $('mapNote').textContent = quiet && d.lastSnow
       ? 'Showing the last day snow was reported, ' + C.when(d.lastSnow.reportedAt).replace(/,[^,]*$/, '') + ', because nothing has been reported in the last 7 days.'
       : 'Each dot is one official report, larger and darker for more snow. Tap a dot for the time, source and remark.';
     $('snowStamp').textContent = 'Checked ' + C.when(d.generatedAt) + ' ET. Sources: NWS Local Storm Reports via the Iowa Environmental Mesonet archive, and active NWS alerts from api.weather.gov.' + (d.degraded ? ' Some sources did not respond; figures may be incomplete.' : '');
@@ -281,12 +368,20 @@
   // ---- Season ----
   function renderSeason() {
     var s = state.season; if (!s) return;
-    var cur = s.season, sum = $('seasonSummary'), box = $('seasonCurrent'), last = $('lastSeasonBox');
+    var cur = s.season, sum = $('seasonSummary'), box = $('seasonCurrent'), last = $('lastSeasonBox'), liveBars = $('seasonLiveBars');
     var regionFilter = function (st) { return !state.region || st.region === state.region; };
     document.querySelectorAll('#lastSeasonTable tbody tr').forEach(function (tr) { tr.hidden = !regionFilter({ region: tr.getAttribute('data-region') }); });
-    if (!cur) { sum.textContent = 'This season\'s station data did not load just now. Last winter\'s final totals are below.'; return; }
+    if (olderThan(s.generatedAt, 36)) {
+      if (liveBars) liveBars.hidden = true;
+      box.hidden = true;
+      sum.textContent = 'The current-season station report was last checked more than 36 hours ago. Updated season comparisons are paused; last winter\'s historical figures remain below.';
+      last.open = true;
+      return;
+    }
+    if (!cur) { if (liveBars) liveBars.hidden = true; sum.textContent = 'This season\'s station data did not load just now. Last winter\'s final totals are below.'; return; }
     var through = C.when(cur.through + 'T16:00:00Z').replace(/,[^,]*$/, '');
     if (!cur.anySnow) {
+      if (liveBars) liveBars.hidden = true;
       sum.innerHTML = '<strong>No measurable snow yet this season</strong> at any of the ' + cur.stations.length + ' climate stations (since July 1, through ' + esc(through) + '). The first snow usually comes in mid-October in the Upper Peninsula snow belt and in November downstate; see the first-snow dates below. Last winter\'s final totals:';
       box.hidden = true; last.open = true;
       return;
@@ -294,6 +389,22 @@
     var f = cur.firstOfSeason;
     sum.innerHTML = cur.label + ' season through ' + esc(through) + '.' + (f ? ' First measurable snow: <strong>' + esc(C.inches(f.inches)) + ' at ' + esc(f.station) + '</strong> on ' + esc(C.when(f.date + 'T16:00:00Z').replace(/,[^,]*$/, '')) + '.' : '');
     var rows = cur.stations.filter(regionFilter).sort(function (a, b) { return b.total - a.total; });
+    if (liveBars) {
+      var complete = rows.filter(function (st) { return Number.isFinite(st.pctOfNormal) && Number.isFinite(st.normal) && st.normal >= 2; }).slice(0, 5);
+      liveBars.hidden = !complete.length;
+      liveBars.innerHTML = complete.length ? '<h3>Current season against normal</h3>' +
+        '<p>Percent of each station\'s normal through ' + esc(through) + '. The reference line is 100%; bars are capped at 200% on this visual scale, with exact values labeled.</p>' +
+        complete.map(function (st) {
+          var percent = Math.max(0, Number(st.pctOfNormal));
+          var width = (Math.min(200, percent) / 2).toFixed(1);
+          return '<div class="comparison"><strong>' + esc(st.name) + '</strong><span class="value">' + esc(percent) + '% <small>' +
+            esc(st.total.toFixed(1)) + ' vs ' + esc(st.normal.toFixed(1)) + ' in</small></span>' +
+            '<div class="comparison-track" style="--bar:' + width + '%" role="img" aria-label="' +
+            esc(st.name) + ': ' + esc(st.total.toFixed(1)) + ' inches, ' + esc(percent) +
+            ' percent of ' + esc(st.normal.toFixed(1)) + ' inches normal to date"></div></div>';
+        }).join('') + '<p class="season-bar-key">0 to 200% of normal; see the station table for every report.</p>' : '';
+    }
+
     $('seasonCaption').textContent = cur.label + ' season so far, ' + regionLabel();
     $('seasonTable').querySelector('tbody').innerHTML = rows.map(function (st) {
       var pct = st.pctOfNormal != null ? st.pctOfNormal + '%' + (st.missing ? '<span class="rm">' + st.missing + ' d missing</span>' : '') : esc(st.pctNote || 'n/a');
@@ -306,21 +417,18 @@
 
   // ---- Events ----
   document.querySelectorAll('.windows button').forEach(function (b) {
-    b.addEventListener('click', function () { state.window = b.getAttribute('data-window'); state.windowChosen = true; state.tableLimit = TABLE_STEP; render(true); });
+    b.addEventListener('click', function () { state.selectedReportKey = ''; state.window = b.getAttribute('data-window'); state.windowChosen = true; state.tableLimit = TABLE_STEP; render(true); });
   });
   $('stormPulse').addEventListener('click', function (e) {
-    var b = e.target.closest('button[data-pulse-town]'); if (!b) return;
-    var town = b.getAttribute('data-pulse-town'); if (!town) return;
-    state.town = town; state.geo = null; fromSaved = false;
-    $('townSearch').value = town; saveTown(town);
-    loadPlaces().then(function () {
-      render(false);
-      if (!$('townResult').hidden) $('townResult').scrollIntoView({ block: 'nearest' });
-    });
+    var b = e.target.closest('button[data-pulse-rank]'); if (!b) return;
+    var index = Number(b.getAttribute('data-pulse-rank'));
+    var rows = visibleRows();
+    if (!Number.isInteger(index) || index < 0 || index >= Math.min(rows.length, 3)) return;
+    selectReport(rows[index], false);
   });
   $('regionChips').addEventListener('click', function (e) {
     var b = e.target.closest('button'); if (!b) return;
-    state.region = b.getAttribute('data-region') || null; state.tableLimit = TABLE_STEP; render(true); renderSeason();
+    state.selectedReportKey = ''; state.region = b.getAttribute('data-region') || null; state.tableLimit = TABLE_STEP; render(true); renderSeason();
   });
   $('showAll').addEventListener('click', function () { state.tableLimit = 100000; renderTable(visibleRows()); });
   $('townForm').addEventListener('submit', function (e) {
@@ -355,7 +463,17 @@
     .then(function (r) { return r.json(); })
     .then(function (d) {
       state.data = d;
-      if (!d.ok) { $('snowSummary').textContent = 'The NWS snow report archive did not respond just now. Try again in a few minutes.'; initMap(); return; }
+      if (!d.ok) { $('snowSummary').textContent = 'The NWS snow report archive did not respond just now. Try again in a few minutes.'; mapFallback(); return; }
+      if (olderThan(d.generatedAt, 2)) {
+        state.dataStale = true;
+        state.selectedReportKey = '';
+        var checked = Number.isFinite(Date.parse(d.generatedAt)) ? C.when(d.generatedAt) + ' ET' : 'an unknown time';
+        $('snowSummary').textContent = 'The NWS report check is more than two hours old (last checked ' + checked + '). Current snowfall rankings are paused until a fresh source check is available. Use the linked original NWS report archive.';
+        $('snowStamp').textContent = 'Observation feed outdated; the previous check cannot be treated as current snowfall.';
+        document.querySelectorAll('.windows button').forEach(function (b) { b.disabled = true; });
+        mapFallback('The NWS observation feed is outdated, so the current map is hidden. Use the original NWS archive or the historical season reference below.');
+        return;
+      }
       // Open on the shortest window that has snow, so a quiet day still shows the latest storm.
       if (!state.windowChosen) {
         var first = C.WINDOWS.filter(function (k) { return d.windows[k] && d.windows[k].placeCount; })[0];
@@ -364,9 +482,9 @@
       if (state.places) fillTownList();
       (state.town ? loadPlaces() : Promise.resolve()).then(function () { render(Boolean(state.region)); });
     })
-    .catch(function () { $('snowSummary').textContent = 'Snow reports did not load just now. Try again in a few minutes.'; initMap(); });
+    .catch(function () { $('snowSummary').textContent = 'Snow reports did not load just now. Try again in a few minutes.'; mapFallback(); });
   fetch('/api/michigan-snow-totals?view=season', { headers: { Accept: 'application/json' } })
     .then(function (r) { return r.json(); })
     .then(function (s) { state.season = s; renderSeason(); if (state.data) renderTown(); })
-    .catch(function () {});
+    .catch(function () { $('seasonSummary').textContent = 'Current season station data did not load. Last winter\'s final totals remain available below.'; });
 })();

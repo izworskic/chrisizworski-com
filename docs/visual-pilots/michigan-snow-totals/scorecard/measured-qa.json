@@ -1,0 +1,149 @@
+{
+  "checkedAt": "2026-11-17T14:02:28.090Z",
+  "runCommit": "fb5d3dad8843177058f75a7a1d881b4f3782c68b",
+  "viewports": [
+    {
+      "width": 360,
+      "scrollWidth": 360,
+      "header": "sticky",
+      "peakFont": 56,
+      "mapAfter": true,
+      "rankCount": 3,
+      "barWidths": [
+        100,
+        86.3,
+        85.3
+      ],
+      "liveCount": 5,
+      "performance": {
+        "domContentLoadedMs": 326,
+        "firstContentfulPaintMs": 312,
+        "answerReadyMs": 874
+      },
+      "errors": []
+    },
+    {
+      "width": 390,
+      "scrollWidth": 390,
+      "header": "sticky",
+      "peakFont": 56,
+      "mapAfter": true,
+      "rankCount": 3,
+      "barWidths": [
+        100,
+        86.3,
+        85.3
+      ],
+      "liveCount": 5,
+      "performance": {
+        "domContentLoadedMs": 129,
+        "firstContentfulPaintMs": 136,
+        "answerReadyMs": 271
+      },
+      "errors": []
+    },
+    {
+      "width": 768,
+      "scrollWidth": 768,
+      "header": "sticky",
+      "peakFont": 56,
+      "mapAfter": true,
+      "rankCount": 3,
+      "barWidths": [
+        100,
+        86.3,
+        85.3
+      ],
+      "liveCount": 5,
+      "performance": {
+        "domContentLoadedMs": 132,
+        "firstContentfulPaintMs": 132,
+        "answerReadyMs": 261
+      },
+      "errors": []
+    },
+    {
+      "width": 1280,
+      "scrollWidth": 1280,
+      "header": "sticky",
+      "peakFont": 56,
+      "mapAfter": true,
+      "rankCount": 3,
+      "barWidths": [
+        100,
+        86.3,
+        85.3
+      ],
+      "liveCount": 5,
+      "performance": {
+        "domContentLoadedMs": 119,
+        "firstContentfulPaintMs": 124,
+        "answerReadyMs": 255
+      },
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "scrollWidth": 1440,
+      "header": "sticky",
+      "peakFont": 56,
+      "mapAfter": true,
+      "rankCount": 3,
+      "barWidths": [
+        100,
+        86.3,
+        85.3
+      ],
+      "liveCount": 5,
+      "performance": {
+        "domContentLoadedMs": 112,
+        "firstContentfulPaintMs": 120,
+        "answerReadyMs": 255
+      },
+      "errors": []
+    }
+  ],
+  "a11y": [
+    {
+      "width": 360,
+      "violations": [],
+      "seriousCount": 0
+    },
+    {
+      "width": 390,
+      "violations": [],
+      "seriousCount": 0
+    },
+    {
+      "width": 768,
+      "violations": [],
+      "seriousCount": 0
+    },
+    {
+      "width": 1280,
+      "violations": [],
+      "seriousCount": 0
+    },
+    {
+      "width": 1440,
+      "violations": [],
+      "seriousCount": 0
+    }
+  ],
+  "fallbacks": {
+    "tiles": "Map collapsed; archive and full report disclosure available",
+    "leaflet": "Map collapsed; archive and full report disclosure available",
+    "data": "Map collapsed; archive and full report disclosure available",
+    "noJS": "Archive and native navigation available"
+  },
+  "assertions": [
+    "Mobile to desktop, reversibility, live source bars and serious/critical axe checks",
+    "Tile failure, Leaflet failure, missing data, and no-JavaScript source path",
+    "Throttled mobile response retains measured first answer"
+  ],
+  "slowDevice": {
+    "answerVisible": true,
+    "paint": 960,
+    "errors": []
+  }
+}
