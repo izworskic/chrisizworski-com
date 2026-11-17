@@ -273,3 +273,13 @@ td.in{font-size:var(--v-type-18)}
   .snow-answer .town-shortcuts{grid-area:shortcuts;margin:0}
   .snow-answer .answer-next{grid-area:links;margin-top:0}
 }
+
+/* Final pilot pass: legible complete town prompt and one-row mobile time control. */
+@media(min-width:900px){
+  .snow-answer .town-row input{flex:1 1 100%}
+  .snow-answer .town-row button{flex:1}
+}
+@media(max-width:700px){
+  .snow-answer .windows{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--v-space-4);overflow:visible}
+  .snow-answer .windows button{white-space:normal;min-height:48px;min-width:0;line-height:1.15;padding:var(--v-space-8) var(--v-space-4)}
+}
