@@ -45,6 +45,7 @@ test('Circle Tour publishes 31 distinct stop-area Google Maps searches even with
  }
  assert.ok(seen.has('21')&&html.includes('Grand Portage State Park, Minnesota, USA'));
  assert.match(html,/id="mapStopGoogleLink"/);
+ assert.ok(html.includes("<noscript><style>.stop-card:not(.open) .stop-body{display:block}</style></noscript>"),"no-script stop cards must display the place links");
  assert.match(html,/visitor-map-links\.js/);
  assert.match(html,/lake-superior-circle-tour\.js\?v=20261116-gmaps/);
  const map=read('public/assets/lake-superior-circle-tour-map.js');
