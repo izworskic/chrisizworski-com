@@ -233,9 +233,29 @@
       warning:'This is published arrival guidance, not confirmation of plowing, vehicle access, or a parking space on your selected day.'};
   }
 
+
+  function operatorNotice(document,place,now=new Date()){
+    const fallback={kind:'unavailable',message:'The land manager notice snapshot needs a new source check.',sourceUrl:place?.conditions||place?.official||null};
+    if(!place||document?.schemaVersion!==1||document.accessVerified!==false)return fallback;
+    const row=document.places?.[place.id];
+    const expected={
+      'gooseberry-upper':{scope:'named-route-policy',sourceUrl:'https://www.dnr.state.mn.us/state-parks/gooseberry-falls/self-tour-waterfalls-walk.html'},
+      'munising-snowshoe':{scope:'different-route-closure',sourceUrl:'https://www.nps.gov/places/munising-falls.htm'},
+      'meyers-lakeshore':{scope:'conditional-area-closure-policy',sourceUrl:'https://www.nps.gov/apis/planyourvisit/conditions.htm'}
+    }[place.id];
+    if(!expected||!row||row.scope!==expected.scope||row.sourceUrl!==expected.sourceUrl||
+      row.operatorAccess!=='NOT_DETERMINED')return fallback;
+    const time=new Date(row.checkedAt||NaN).getTime(),age=(now.getTime()-time)/3600000;
+    if(!Number.isFinite(age)||age< -0.2||age>24)return {...fallback,kind:'stale',sourceUrl:row.sourceUrl};
+    if(row.state!=='MATCHED')return {...fallback,kind:'needs-review',sourceUrl:row.sourceUrl};
+    if(typeof row.message!=='string'||row.message.length<20||row.message.length>300)return fallback;
+    return {kind:'statement-found',message:row.message,sourceUrl:row.sourceUrl,scope:row.scope,
+      checkedAt:row.checkedAt,routeAccess:'NOT_DETERMINED'};
+  }
+
   function safeGoogleUrl(place){
     return /^https:\/\/www\.google\.com\/maps\/search\/\?api=1&query=/.test(place?.google||'')?place.google:null;
   }
   return {PLACES,GOALS,EFFORT_LABELS,SOURCE_REVIEWED,validPref,getPlace,recommend,
-    dateKey,targetKey,parseWind,classifyWeather,forecastWindow,sourceReachability,routeAccess,arrivalEvidence,safeGoogleUrl};
+    dateKey,targetKey,parseWind,classifyWeather,forecastWindow,sourceReachability,routeAccess,arrivalEvidence,operatorNotice,safeGoogleUrl};
 });
