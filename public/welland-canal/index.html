@@ -25,6 +25,11 @@
 <link rel="stylesheet" href="/assets/welland-canal.css?v=20261013-lock-handoff1">
 <link rel="stylesheet" href="/assets/welland-lock-sim.css?v=20261019-ships">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","name":"Chris Izworski","url":"https://chrisizworski.com/","publisher":{"@id":"https://chrisizworski.com/#person"}},{"@type":"WebPage","@id":"https://chrisizworski.com/welland-canal/#page","name":"Welland Canal Ship Tracker Today: Live Ships and Lock Schedule","url":"https://chrisizworski.com/welland-canal/","inLanguage":"en-CA","dateModified":"2026-11-09","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"},"mainEntity":{"@id":"https://chrisizworski.com/welland-canal/#app"}},{"@type":"WebApplication","@id":"https://chrisizworski.com/welland-canal/#app","name":"Welland Canal Ship Tracker, Live Lock Map and Schedule Guide","url":"https://chrisizworski.com/welland-canal/","description":"Track recently reported ships on the Welland Canal live AIS map, check the official Seaway lock order of turn and choose shore viewing spots at Locks 3, 7 and 8.","applicationCategory":"TravelApplication","operatingSystem":"Any browser","isAccessibleForFree":true,"creator":{"@id":"https://chrisizworski.com/#person"},"author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Freighter Central","item":"https://chrisizworski.com/freighters/"},{"@type":"ListItem","position":3,"name":"Welland Canal","item":"https://chrisizworski.com/welland-canal/"}]}]}</script>
+<style>
+.shore-watch__map-links{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 14px}
+.shore-watch__map-links a,.lock-public-google{display:inline-flex;align-items:center;min-height:44px;padding:8px 11px;border:1px solid #bed4d1;border-radius:6px;background:#edf5f1;color:#164e53;font-weight:700;text-decoration:underline;text-underline-offset:3px}
+.shore-watch__map-links a:focus-visible,.lock-public-google:focus-visible{outline:3px solid #157b8e;outline-offset:2px}
+</style>
 </head>
 <body data-analytics-page="welland-canal">
 <a href="#main" class="skip">Skip to canal map</a>
@@ -68,11 +73,16 @@
 <button type="button" class="shore-watch__choice" data-spot="7" aria-pressed="false"><span class="shore-watch__choice-tag">THE ENGINEERING VIEW</span><strong>Lock 7 <span>Thorold</span></strong><span>See the remarkable locks of the Niagara Escarpment climb</span><small id="shoreSignal7">Checking AIS coverage…</small></button>
 <button type="button" class="shore-watch__choice" data-spot="8" aria-pressed="false"><span class="shore-watch__choice-tag">THE LAKE ERIE END</span><strong>Lock 8 <span>Port Colborne</span></strong><span>A waterside park beside the unusually long regulating lock</span><small id="shoreSignal8">Checking AIS coverage…</small></button>
 </div>
+<div class="shore-watch__map-links" aria-label="Open public viewing places in Google Maps">
+<a data-shore-spot-google="3" href="https://www.google.com/maps/search/?api=1&amp;query=St%20Catharines%20Museum%20Welland%20Canals%20Centre" target="_blank" rel="noopener noreferrer">Google Maps: Lock 3 museum</a>
+<a data-shore-spot-google="7" href="https://www.google.com/maps/search/?api=1&amp;query=Lock%207%20Viewing%20Centre%2050%20Chapel%20St%20S%20Thorold" target="_blank" rel="noopener noreferrer">Google Maps: Lock 7 viewing centre</a>
+<a data-shore-spot-google="8" href="https://www.google.com/maps/search/?api=1&amp;query=Lock%208%20Gateway%20Park%20Port%20Colborne" target="_blank" rel="noopener noreferrer">Google Maps: Lock 8 Gateway Park</a>
+</div>
 <div class="shore-watch__verdict" aria-live="polite" aria-atomic="true">
 <div class="shore-watch__guidance"><span class="shore-watch__eyebrow">YOUR VIEWING PLAN</span><h4 id="shoreWatchPlace">Lock 3 · St. Catharines</h4><p id="shoreWatchDescription">Watch from the public viewing platform beside the museum, even if the canal is quiet.</p><p id="shoreWatchPractical" class="shore-watch__practical">1932 Welland Canals Parkway. Museum generally 9 a.m.–5 p.m. daily; confirm holidays and viewing access.</p></div>
 <div class="shore-watch__evidence"><span class="shore-watch__eyebrow">LATEST AIS NEAR THIS VIEW</span><strong id="shoreWatchStatus">Checking recent vessel reports…</strong><div id="shoreWatchVessels" class="shore-watch__vessels"></div><p class="shore-watch__truth">Reports from the past 30 minutes within about 2 km—not a ship passage appointment, live lock occupancy or wait-time prediction. Check the official Seaway queue before traveling.</p></div>
 </div>
-<div class="shore-watch__footer"><a id="shoreWatchDirections" href="https://www.google.com/maps/search/?api=1&amp;query=St+Catharines+Museum+Welland+Canals+Centre" target="_blank" rel="noopener noreferrer">Directions to public viewing ↗</a><a id="shoreWatchOfficial" href="https://www.stcatharines.ca/arts-culture-and-events/st-catharines-museum-and-welland-canals-centre/visiting-us/" target="_blank" rel="noopener noreferrer">Official visitor hours &amp; access ↗</a><button id="shoreWatchMap" type="button">Explore this lock on the map ↓</button></div>
+<div class="shore-watch__footer"><a id="shoreWatchDirections" href="https://www.google.com/maps/search/?api=1&amp;query=St+Catharines+Museum+Welland+Canals+Centre" target="_blank" rel="noopener noreferrer">View public viewing place in Google Maps</a><a id="shoreWatchOfficial" href="https://www.stcatharines.ca/arts-culture-and-events/st-catharines-museum-and-welland-canals-centre/visiting-us/" target="_blank" rel="noopener noreferrer">Official visitor hours &amp; access ↗</a><button id="shoreWatchMap" type="button">Explore this lock on the map ↓</button></div>
 </section>
 <div class="desk">
 <div class="panel">
@@ -289,7 +299,8 @@
 </div></main>
 <footer class="site-footer"><div class="footer-inner"><span>Independent Welland Canal ship-watching guide. Not affiliated with the St. Lawrence Seaway Management Corporation. For shore viewing only; not for navigation.</span><span>Built by <a href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a> · Updated October 13, 2026</span></div></footer>
 <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-<script defer src="/assets/welland-canal.js?v=20261013-lock-handoff1"></script>
+<script defer src="/assets/visitor-map-links.js"></script>
+<script defer src="/assets/welland-canal.js?v=20261116-google-public-places"></script>
 <script defer src="/assets/lock-ship-art.js?v=20261019-ships"></script>
 <script defer src="/assets/welland-lock-sim.js?v=20261019-ships"></script>
 <script defer src="/assets/tool-engagement.js"></script>
