@@ -40,6 +40,7 @@ const server=http.createServer((req,res)=>{
        const css=getComputedStyle(document.querySelector('.site-header'));
        return {viewport:innerWidth,scrollWidth:document.documentElement.scrollWidth,mapBelowAnswer:map.top>=answer.bottom-1,stickyHeader:css.position==='sticky',summary:document.getElementById('snowSummary').textContent.trim().slice(0,260),mapTiles:document.querySelectorAll('.leaflet-tile-loaded').length,guideLinksAboveMap:document.getElementById('headingOut').getBoundingClientRect().top<map.top};
      });
+     console.log('VISUAL_LAYOUT '+JSON.stringify(inspect));
      assert(inspect.scrollWidth<=width+2,'Document horizontal overflow at '+width+': '+JSON.stringify(inspect));
      assert(inspect.mapBelowAnswer,'Map not directly after answer at '+width);
      assert(inspect.stickyHeader,'Header not sticky');
