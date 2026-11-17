@@ -71,7 +71,7 @@ def audit(payload: dict, today: dt.date) -> dict:
             issues.append(f"{ident}: photo alt and archival/date note required")
         if p.get("effort") not in p.get("supported", []):
             issues.append(f"{ident}: default outing effort incompatible")
-        if not (-90 <= p.get("lon", -999) <= -80 and 40 <= p.get("lat", -999) <= 50):
+        if not (-94 <= p.get("lon", -999) <= -80 and 40 <= p.get("lat", -999) <= 50):
             issues.append(f"{ident}: mapped coordinates outside intended Great Lakes pilot")
     if goals != {"falls", "snowshoe", "coast"}:
         issues.append(f"pilot goals not independently covered: {sorted(str(x) for x in goals)}")
