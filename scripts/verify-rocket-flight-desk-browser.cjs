@@ -548,7 +548,9 @@ const whenReady=page=>page.waitForFunction(id=>
   // published public places in the mission decision across desktop & phone.
   wallopsScenario=true;
   try {
-    for(const v of [{name:'wallops-map-phone390',width:390,height:844},
+    for(const v of [{name:'wallops-map-phone360',width:360,height:780},
+      {name:'wallops-map-phone390',width:390,height:844},
+      {name:'wallops-map-tablet768',width:768,height:960},
       {name:'wallops-map-desktop1440',width:1440,height:900}]){
       const context=await browser.newContext({viewport:{width:v.width,height:v.height},
         reducedMotion:'reduce'}),page=await context.newPage(),errors=[];
