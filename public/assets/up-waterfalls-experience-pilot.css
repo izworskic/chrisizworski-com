@@ -181,6 +181,13 @@
   line-height:1.22;
   margin:0;
 }
+.up-waterfall-hub .upfall-arrival-example{
+  color:#4a615e;
+  font-size:.78rem;
+  line-height:1.4;
+  max-width:44ch;
+  margin:5px 0 0;
+}
 .up-waterfall-hub .upfall-arrival-head label{
   display:grid;
   gap:4px;
