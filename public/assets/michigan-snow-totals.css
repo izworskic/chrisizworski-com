@@ -318,3 +318,16 @@ td.in{font-size:var(--v-type-18)}
   .snow-answer-columns{grid-template-columns:minmax(0,1.3fr) minmax(0,.83fr);gap:var(--v-space-32);align-items:start}
   .snow-answer-figures{display:block}
 }
+
+/* Foundry report-focus: source-backed selection, not a new map or location engine. */
+.snow-selected-report[hidden]{display:none}
+.snow-selected-report{margin-top:var(--v-space-16);padding:var(--v-space-16);border-radius:var(--v-radius-sm);background:var(--v-accent-1)}
+.snow-selected-report h4{font-size:var(--v-type-18);line-height:1.35;margin:0 0 var(--v-space-8);color:var(--v-accent-5)}
+.snow-selected-report p{font-size:var(--v-type-14);line-height:1.6;margin:var(--v-space-8) 0}
+.snow-selected-report .selected-source-actions{display:flex;flex-wrap:wrap;gap:var(--v-space-8);align-items:center}
+.snow-selected-report .selected-source-actions a{display:inline-flex;align-items:center;min-height:44px;padding:var(--v-space-8) var(--v-space-12);background:var(--v-surface);border-radius:var(--v-radius-sm);color:var(--v-accent-5);font-weight:800;font-size:var(--v-type-14);text-decoration:underline;text-underline-offset:3px}
+.snow-selected-report .selected-source-actions a:hover{background:var(--v-accent-2)}
+.snow-selected-report .selected-source-note{color:var(--v-muted)}
+.snow-selected-report .near{font-size:var(--v-type-14)}
+.storm-pulse-list button[aria-pressed="true"]{background:var(--v-accent-1);outline:3px solid var(--v-accent-4);outline-offset:0}
+.storm-pulse-list button[aria-pressed="true"]::before{color:var(--v-accent-5)}
