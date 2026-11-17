@@ -214,7 +214,7 @@ function initMap(forceNative=false){
  glance.append(spotName,spotCity,more,mapOpen);canvas.append(glance);
  let dragging=false,atX=0,atY=0;
  holder.addEventListener("pointerdown",e=>{
-   if(e.target.closest("button"))return;
+   if(e.target.closest("button,a"))return;
    dragging=true;atX=e.clientX;atY=e.clientY;
    if(holder.setPointerCapture)holder.setPointerCapture(e.pointerId);
    holder.classList.add("dragging");
