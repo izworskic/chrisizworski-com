@@ -97,3 +97,15 @@ test('three journeys are distinct and route assumptions fail safely',()=>{
 });
 
 test('client JS parses in a real JavaScript compiler',()=>{const vm=require('node:vm');assert.doesNotThrow(()=>new vm.Script(js,{filename:'rideau-canal.js'}));});
+
+test('all 26 named lock locations lead to exact official profile pages',()=>{
+  assert.equal(d.lockLocations.filter(x=>x.profileUrlVerified).length,26);
+  assert.equal(new Set(d.lockLocations.map(x=>x.sourceUrl)).size,26);
+  for(const item of d.lockLocations){
+    assert.notEqual(item.sourceUrl,d.sourcePortal);
+    assert.match(item.sourceUrl,/^https:\/\/parks\.canada\.ca\/lhn-nhs\/on\/rideau\/visit\/posteeclusage-lockstation\/ecluse-lock-/);
+  }
+  assert.match(d.visitorOnly[0].sourceUrl,/\/ile-colonel-by-island$/);
+  assert.match(d.bridges.find(x=>x.id==='bridge-brass-point').sourceUrl,/\/pont-brass-point-bridge$/);
+  assert.match(d.lockLocations.find(x=>x.id==='smiths-falls-detached').sourceUrl,/\/-detached-detache$/);
+});
