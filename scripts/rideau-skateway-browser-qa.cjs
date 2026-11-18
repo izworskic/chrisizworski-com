@@ -94,6 +94,34 @@ async function run(){
   report.images.push(winterShot);
   report.scenarios.push({name:'fresh-winter-NCC-shaped-fixture',openingFixtureOnly:true,onlyOneReportedSection:true,clock:'2027-01-21T15:00:00Z'});
   await winter.close();
+  // Try the actual public NCC feed from a browser origin, without substituting
+  // archived statuses for a 2026-27 opening. Network errors are recorded as
+  // source delivery blockers; they are not converted into positive status.
+  const providerContext=await browser.newContext({viewport:{width:390,height:850}});
+  const providerPage=await providerContext.newPage();
+  await providerPage.goto(origin+'/rideau-canal-skateway/',{waitUntil:'domcontentloaded'});
+  const nccProbe=await providerPage.evaluate(async()=>{
+    const controller=new AbortController();
+    const timeout=setTimeout(()=>controller.abort(),15000);
+    const base='https://services2.arcgis.com/WLyMuW006nKOfa5Z/arcgis/rest/services/NCC_Rideau_Canal_Skateway_Ice_condition/FeatureServer/0';
+    const query=base+'/query?where=1%3D1&outFields=OBJECTID%2CID%2CFrom_%2CTo_%2CLength_KM%2CStatus&returnGeometry=false&returnCentroid=true&outSR=4326&f=json';
+    try{
+      const [metadata,inventory]=await Promise.all([base+'?f=json',query].map(async url=>{
+        const r=await fetch(url,{signal:controller.signal,mode:'cors',cache:'no-store'});
+        if(!r.ok)throw Error('NCC HTTP '+r.status);
+        return r.json();
+      }));
+      if(!Number.isFinite(metadata.editingInfo?.dataLastEditDate)||!Array.isArray(inventory.features))throw Error('Unexpected NCC JSON');
+      return {reachable:true,corsBrowserVerified:true,recordCount:inventory.features.length,
+        dataLastEdit:new Date(metadata.editingInfo.dataLastEditDate).toISOString(),
+        archiveNotReusedAsOpening:true};
+    }catch(e){return {reachable:false,corsBrowserVerified:false,issue:String(e?.message||e).slice(0,150)};}
+    finally{clearTimeout(timeout);}
+  });
+  report.externalNccBrowserReachability=nccProbe;
+  if(nccProbe.reachable)assert.equal(nccProbe.recordCount,14,'Actual NCC feed changed inventory: must reconcile it');
+  report.scenarios.push({name:'real-provider-browser-cors-probe',...nccProbe});
+  await providerContext.close();
   fs.writeFileSync(path.join(out,'report.json'),JSON.stringify(report,null,2));
   console.log('PASS: Skateway source failure, mobile, reversible section, Google Maps search and no-JS fallback. Current NCC source availability and public deployment are not implied.');
  }finally{await browser.close();server.close();}
