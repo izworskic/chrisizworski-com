@@ -1,0 +1,650 @@
+{
+  "schemaVersion": 1,
+  "checkedDate": "2026-11-17",
+  "authority": "Parks Canada",
+  "sourcePortal": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
+  "sourceCounting": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
+  "secondaryCountExplanation": "https://www.rideau-info.com/canal/locks/",
+  "navigationMaps": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/carte-map",
+  "season": {
+    "year": 2026,
+    "navigationEnded": "2026-10-12",
+    "status": "ended",
+    "futureYearHoursPublished": false,
+    "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/heures-hours"
+  },
+  "statedParksCanadaStationCount": 24,
+  "stationGroupMeaning": "23 groupings on the Ottawa to Kingston route, plus one Beveridges grouping at the Tay branch. Groups can have multiple independently named locks.",
+  "lockLocations": [
+    {
+      "id": "ottawa",
+      "kind": "lock-location",
+      "name": "Ottawa Locks",
+      "groupId": "ottawa",
+      "branch": "main",
+      "portalOrder": 1,
+      "chambers": 8,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/ecluse-lock-ottawa",
+      "profileVerified": true,
+      "visit": {
+        "address": "3 Canal Lane, Ottawa, Ontario, Canada",
+        "gps": "45°25'29\"N 75°41'42\"W",
+        "coordinates": {
+          "lat": 45.424722,
+          "lon": -75.695
+        },
+        "distanceOttawaKm": 0,
+        "summary": "Eight locks climb from the Ottawa River beneath Parliament Hill. The canal began here, and Ottawa grew around the chosen gateway.",
+        "interpretiveTip": "Walk the historic flight and look for the massive elevation change; the nearby Bytown Museum puts Colonel By's plan into context.",
+        "interests": [
+          "engineering",
+          "history"
+        ],
+        "timeBudgets": [
+          "short",
+          "half",
+          "day"
+        ],
+        "photo": {
+          "file": "Rideau Canal Locks, Ottawa (480403) (9450160730).jpg",
+          "credit": "Robert Linsdell",
+          "caption": "Ottawa's eight-lock flight, photographed in 2012",
+          "license": "CC BY 2.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+          "source": "https://commons.wikimedia.org/wiki/File:Rideau_Canal_Locks,_Ottawa_(480403)_(9450160730).jpg"
+        }
+      }
+    },
+    {
+      "id": "hartwells",
+      "kind": "lock-location",
+      "name": "Hartwells",
+      "groupId": "hartwells",
+      "branch": "main",
+      "portalOrder": 2,
+      "chambers": 2,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
+      "profileVerified": false
+    },
+    {
+      "id": "hogs-back",
+      "kind": "lock-location",
+      "name": "Hogs Back",
+      "groupId": "hogs-back",
+      "branch": "main",
+      "portalOrder": 3,
+      "chambers": 2,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
+      "profileVerified": false,
+      "guardChamberIncluded": true
+    },
+    {
+      "id": "black-rapids",
+      "kind": "lock-location",
+      "name": "Black Rapids",
+      "groupId": "black-rapids",
+      "branch": "main",
+      "portalOrder": 4,
+      "chambers": 1,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
+      "profileVerified": false
+    },
+    {
+      "id": "long-island",
+      "kind": "lock-location",
+      "name": "Long Island",
+      "groupId": "long-island",
+      "branch": "main",
+      "portalOrder": 5,
+      "chambers": 3,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
+      "profileVerified": false
+    },
+    {
+      "id": "burritts-rapids",
+      "kind": "lock-location",
+      "name": "Burritts Rapids",
+      "groupId": "burritts-rapids",
+      "branch": "main",
+      "portalOrder": 6,
+      "chambers": 1,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
+      "profileVerified": false
+    },
+    {
+      "id": "lower-nicholsons",
+      "kind": "lock-location",
+      "name": "Lower Nicholsons",
+      "groupId": "nicholsons",
+      "branch": "main",
+      "portalOrder": 7,
+      "chambers": 1,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
+      "profileVerified": false
+    },
+    {
+      "id": "upper-nicholsons",
+      "kind": "lock-location",
+      "name": "Upper Nicholsons",
+      "groupId": "nicholsons",
+      "branch": "main",
+      "portalOrder": 8,
+      "chambers": 1,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
+      "profileVerified": false
+    },
+    {
+      "id": "clowes",
+      "kind": "lock-location",
+      "name": "Clowes",
+      "groupId": "clowes",
+      "branch": "main",
+      "portalOrder": 9,
+      "chambers": 1,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
+      "profileVerified": false
+    },
+    {
+      "id": "merrickville",
+      "kind": "lock-location",
+      "name": "Merrickville",
+      "groupId": "merrickville",
+      "branch": "main",
+      "portalOrder": 10,
+      "chambers": 3,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/ecluse-lock-merrickville",
+      "profileVerified": true,
+      "visit": {
+        "address": "111A Main Street East, Merrickville-Wolford, Ontario, Canada",
+        "gps": "44°55'01\"N 75°50'07\"W",
+        "coordinates": {
+          "lat": 44.916944,
+          "lon": -75.835278
+        },
+        "distanceOttawaKm": 73.8,
+        "summary": "Three separate locks sit beside a historic mill village whose shops and streets reward a longer wander.",
+        "interpretiveTip": "Start at the locks, then explore the stone-built village and its history as Merrick's Mills.",
+        "interests": [
+          "village",
+          "history"
+        ],
+        "timeBudgets": [
+          "half",
+          "day"
+        ],
+        "photo": {
+          "file": "Merrickville Ontario 2010.jpg",
+          "credit": "Kenn Chaplin",
+          "caption": "The historic village of Merrickville, not a view of the lock chambers",
+          "license": "CC BY-SA 2.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
+          "source": "https://commons.wikimedia.org/wiki/File:Merrickville_Ontario_2010.jpg"
+        }
+      }
+    },
+    {
+      "id": "kilmarnock",
+      "kind": "lock-location",
+      "name": "Kilmarnock",
+      "groupId": "kilmarnock",
+      "branch": "main",
+      "portalOrder": 11,
+      "chambers": 1,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
+      "profileVerified": false
+    },
+    {
+      "id": "edmonds",
+      "kind": "lock-location",
+      "name": "Edmonds",
+      "groupId": "edmonds",
+      "branch": "main",
+      "portalOrder": 12,
+      "chambers": 1,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
+      "profileVerified": false
+    },
+    {
+      "id": "old-slys",
+      "kind": "lock-location",
+      "name": "Old Slys",
+      "groupId": "old-slys",
+      "branch": "main",
+      "portalOrder": 13,
+      "chambers": 2,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
+      "profileVerified": false
+    },
+    {
+      "id": "smiths-falls-combined",
+      "kind": "lock-location",
+      "name": "Smiths Falls Combined",
+      "groupId": "smiths-falls-combined",
+      "branch": "main",
+      "portalOrder": 14,
+      "chambers": 1,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/ecluse-lock-smiths-falls-combined-combine",
+      "profileVerified": true,
+      "visit": {
+        "address": "70 Confederation Drive, Smiths Falls, Ontario, Canada",
+        "gps": "44°53'48\"N 76°01'14\"W",
+        "coordinates": {
+          "lat": 44.896667,
+          "lon": -76.020556
+        },
+        "distanceOttawaKm": 96.8,
+        "summary": "The 1974 single combined lock replaced a flight of three and now makes the canal's highest single lift.",
+        "interpretiveTip": "Compare this modern single chamber with the hand-operated stone locks at older stations.",
+        "interests": [
+          "engineering",
+          "history"
+        ],
+        "timeBudgets": [
+          "short",
+          "half",
+          "day"
+        ]
+      }
+    },
+    {
+      "id": "smiths-falls-detached",
+      "kind": "lock-location",
+      "name": "Smiths Falls Detached",
+      "groupId": "smiths-falls-detached",
+      "branch": "main",
+      "portalOrder": 15,
+      "chambers": 1,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
+      "profileVerified": false
+    },
+    {
+      "id": "poonamalie",
+      "kind": "lock-location",
+      "name": "Poonamalie",
+      "groupId": "poonamalie",
+      "branch": "main",
+      "portalOrder": 16,
+      "chambers": 1,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
+      "profileVerified": false
+    },
+    {
+      "id": "lower-beveridges",
+      "kind": "lock-location",
+      "name": "Lower Beveridges",
+      "groupId": "beveridges",
+      "branch": "tay",
+      "portalOrder": 17,
+      "chambers": 1,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
+      "profileVerified": false
+    },
+    {
+      "id": "upper-beveridges",
+      "kind": "lock-location",
+      "name": "Upper Beveridges",
+      "groupId": "beveridges",
+      "branch": "tay",
+      "portalOrder": 18,
+      "chambers": 1,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
+      "profileVerified": false
+    },
+    {
+      "id": "narrows",
+      "kind": "lock-location",
+      "name": "Narrows",
+      "groupId": "narrows",
+      "branch": "main",
+      "portalOrder": 19,
+      "chambers": 1,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
+      "profileVerified": false
+    },
+    {
+      "id": "newboro",
+      "kind": "lock-location",
+      "name": "Newboro",
+      "groupId": "newboro",
+      "branch": "main",
+      "portalOrder": 20,
+      "chambers": 1,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/ecluse-lock-newboro",
+      "profileVerified": true,
+      "visit": {
+        "address": "10 Blockhouse Lane, Newboro, Ontario, Canada",
+        "gps": "44°38'44\"N 76°19'16\"W",
+        "coordinates": {
+          "lat": 44.645556,
+          "lon": -76.321111
+        },
+        "distanceOttawaKm": 140.8,
+        "summary": "The artificial canal cut through the ridge helped connect two lakes; a surviving blockhouse recalls the canal's defensive purpose.",
+        "interpretiveTip": "Look for the blockhouse and the channel that canal builders excavated through higher ground.",
+        "interests": [
+          "history",
+          "scenery"
+        ],
+        "timeBudgets": [
+          "half",
+          "day"
+        ]
+      }
+    },
+    {
+      "id": "chaffeys",
+      "kind": "lock-location",
+      "name": "Chaffeys",
+      "groupId": "chaffeys",
+      "branch": "main",
+      "portalOrder": 21,
+      "chambers": 1,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/ecluse-lock-chaffeys",
+      "profileVerified": true,
+      "visit": {
+        "address": "1723 Chaffeys Lock Road, Rideau Lakes, Ontario, Canada",
+        "gps": "44°34'44\"N 76°19'11\"W",
+        "coordinates": {
+          "lat": 44.578889,
+          "lon": -76.319722
+        },
+        "distanceOttawaKm": 148.7,
+        "summary": "A swing bridge, single lock, village services and trail access bring the quieter lake-country section of the Rideau together.",
+        "interpretiveTip": "The bridge and lock are close enough to compare road crossings with waterway movement.",
+        "interests": [
+          "scenery",
+          "village"
+        ],
+        "timeBudgets": [
+          "half",
+          "day"
+        ],
+        "photo": {
+          "file": "Chaffeys lock.jpg",
+          "credit": "D. Gordon E. Robertson",
+          "caption": "Chaffeys Lock, photographed in 2011",
+          "license": "CC BY-SA 3.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+          "source": "https://commons.wikimedia.org/wiki/File:Chaffeys_lock.jpg"
+        }
+      }
+    },
+    {
+      "id": "davis",
+      "kind": "lock-location",
+      "name": "Davis",
+      "groupId": "davis",
+      "branch": "main",
+      "portalOrder": 22,
+      "chambers": 1,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
+      "profileVerified": false
+    },
+    {
+      "id": "jones-falls",
+      "kind": "lock-location",
+      "name": "Jones Falls",
+      "groupId": "jones-falls",
+      "branch": "main",
+      "portalOrder": 23,
+      "chambers": 4,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/ecluse-lock-jones-falls",
+      "profileVerified": true,
+      "visit": {
+        "address": "182 Lock Road, Rideau Lakes, Ontario, Canada",
+        "gps": "44°32'44\"N 76°14'20\"W",
+        "coordinates": {
+          "lat": 44.545556,
+          "lon": -76.238889
+        },
+        "distanceOttawaKm": 159,
+        "summary": "Three locks rise in a staircase below a fourth chamber; nearby, the Great Stone Arch Dam shows how builders crossed rugged country.",
+        "interpretiveTip": "Make room to see both the lock flight and the arch dam. The height of the stonework tells the engineering story.",
+        "interests": [
+          "engineering",
+          "scenery",
+          "history"
+        ],
+        "timeBudgets": [
+          "half",
+          "day"
+        ],
+        "photo": {
+          "file": "Rideau Canal locks at Jones Falls (I0014758).jpg",
+          "credit": "Archives of Ontario, RG 65-35 (1952)",
+          "caption": "Historic photograph of Jones Falls locks, taken in 1952",
+          "license": "Open Government Licence – Ontario",
+          "licenseUrl": "https://www.ontario.ca/page/open-government-licence-ontario",
+          "source": "https://commons.wikimedia.org/wiki/File:Rideau_Canal_locks_at_Jones_Falls_(I0014758).jpg"
+        }
+      }
+    },
+    {
+      "id": "upper-brewers",
+      "kind": "lock-location",
+      "name": "Upper Brewers",
+      "groupId": "upper-brewers",
+      "branch": "main",
+      "portalOrder": 24,
+      "chambers": 2,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
+      "profileVerified": false
+    },
+    {
+      "id": "lower-brewers",
+      "kind": "lock-location",
+      "name": "Lower Brewers",
+      "groupId": "lower-brewers",
+      "branch": "main",
+      "portalOrder": 25,
+      "chambers": 1,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
+      "profileVerified": false
+    },
+    {
+      "id": "kingston-mills",
+      "kind": "lock-location",
+      "name": "Kingston Mills",
+      "groupId": "kingston-mills",
+      "branch": "main",
+      "portalOrder": 26,
+      "chambers": 4,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/ecluse-lock-kingston-mills",
+      "profileVerified": true,
+      "visit": {
+        "address": "563 Kingston Mills Road, Kingston, Ontario, Canada",
+        "gps": "44°17'33\"N 76°26'31\"W",
+        "coordinates": {
+          "lat": 44.2925,
+          "lon": -76.441944
+        },
+        "distanceOttawaKm": 195.2,
+        "summary": "A stone lock flight, detached fourth chamber, railway crossing and defensive blockhouse meet just above Kingston.",
+        "interpretiveTip": "Compare the rail bridge with the original canal structures: the site shows how transportation changed here.",
+        "interests": [
+          "engineering",
+          "history"
+        ],
+        "timeBudgets": [
+          "short",
+          "half",
+          "day"
+        ]
+      }
+    }
+  ],
+  "bridges": [
+    {
+      "id": "bridge-pretoria",
+      "kind": "bridge",
+      "name": "Pretoria Avenue Bridge",
+      "bridgeType": "vertical-lift",
+      "nearLockId": "ottawa",
+      "portalOrder": 1,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
+      "coordinates": null
+    },
+    {
+      "id": "bridge-hogs-back",
+      "kind": "bridge",
+      "name": "Hogs Back Bridge",
+      "bridgeType": "swing",
+      "nearLockId": "hogs-back",
+      "portalOrder": 2,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
+      "coordinates": null
+    },
+    {
+      "id": "bridge-long-island",
+      "kind": "bridge",
+      "name": "Long Island Bridge",
+      "bridgeType": "swing",
+      "nearLockId": "long-island",
+      "portalOrder": 3,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
+      "coordinates": null
+    },
+    {
+      "id": "bridge-burritts-rapids",
+      "kind": "bridge",
+      "name": "Burritts Rapids Bridge",
+      "bridgeType": "swing",
+      "nearLockId": "burritts-rapids",
+      "portalOrder": 4,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
+      "coordinates": null
+    },
+    {
+      "id": "bridge-upper-nicholsons",
+      "kind": "bridge",
+      "name": "Upper Nicholsons Bridge",
+      "bridgeType": "swing",
+      "nearLockId": "upper-nicholsons",
+      "portalOrder": 5,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
+      "coordinates": null
+    },
+    {
+      "id": "bridge-merrickville",
+      "kind": "bridge",
+      "name": "Merrickville Bridge",
+      "bridgeType": "swing",
+      "nearLockId": "merrickville",
+      "portalOrder": 6,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
+      "coordinates": null
+    },
+    {
+      "id": "bridge-kilmarnock",
+      "kind": "bridge",
+      "name": "Kilmarnock Bridge",
+      "bridgeType": "swing",
+      "nearLockId": "kilmarnock",
+      "portalOrder": 7,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
+      "coordinates": null
+    },
+    {
+      "id": "bridge-old-slys",
+      "kind": "bridge",
+      "name": "Old Slys Bridge",
+      "bridgeType": "swing",
+      "nearLockId": "old-slys",
+      "portalOrder": 8,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
+      "coordinates": null
+    },
+    {
+      "id": "bridge-abbott-street",
+      "kind": "bridge",
+      "name": "Abbott Street Bridge",
+      "bridgeType": "swing",
+      "nearLockId": "smiths-falls-combined",
+      "portalOrder": 9,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
+      "coordinates": null
+    },
+    {
+      "id": "bridge-beckwith-street-perth",
+      "kind": "bridge",
+      "name": "Beckwith Street Bridge (Perth)",
+      "bridgeType": "swing",
+      "nearLockId": "beveridges",
+      "portalOrder": 10,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
+      "coordinates": null
+    },
+    {
+      "id": "bridge-narrows",
+      "kind": "bridge",
+      "name": "Narrows Bridge",
+      "bridgeType": "swing",
+      "nearLockId": "narrows",
+      "portalOrder": 11,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
+      "coordinates": null
+    },
+    {
+      "id": "bridge-chaffeys",
+      "kind": "bridge",
+      "name": "Chaffeys Bridge",
+      "bridgeType": "swing",
+      "nearLockId": "chaffeys",
+      "portalOrder": 12,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
+      "coordinates": null
+    },
+    {
+      "id": "bridge-brass-point",
+      "kind": "bridge",
+      "name": "Brass Point Bridge",
+      "bridgeType": "swing",
+      "nearLockId": null,
+      "portalOrder": 13,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
+      "coordinates": null
+    },
+    {
+      "id": "bridge-lower-brewers",
+      "kind": "bridge",
+      "name": "Lower Brewers Bridge",
+      "bridgeType": "swing",
+      "nearLockId": "lower-brewers",
+      "portalOrder": 14,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
+      "coordinates": null
+    },
+    {
+      "id": "bridge-kingston-mills",
+      "kind": "bridge",
+      "name": "Kingston Mills Bridge",
+      "bridgeType": "swing",
+      "nearLockId": "kingston-mills",
+      "portalOrder": 15,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
+      "coordinates": null
+    }
+  ],
+  "visitorOnly": [
+    {
+      "id": "colonel-by-island",
+      "kind": "visitor-only",
+      "name": "Colonel By Island",
+      "branch": "main",
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
+      "coordinates": null
+    }
+  ],
+  "advisories": {
+    "officialNavigationMapNotForNavigation": true,
+    "paddlingChannelRouteNotAssumed": true,
+    "commercialRoutesNotLicenced": true
+  },
+  "notes": [
+    "All 26 named lock locations in the Parks Canada traveller portal are retained; Nicholsons and Beveridges each have separate upper/lower operational entries.",
+    "The historical 47-lock count includes the Hogs Back guard chamber and the two Tay Canal locks, while Smiths Falls Combined is one modern chamber.",
+    "Bridge list reflects named rows in the 2026 traveller portal, not a full authoritative inventory of every possible navigational crossing.",
+    "Only 7 individually verified official profile locations receive coordinates or visitor recommendations. Other entries remain in the text directory without inferred map pins.",
+    "The 2026 portal's shutdown records are historical and cannot establish 2027 operating status."
+  ]
+}
