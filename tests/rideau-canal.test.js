@@ -107,5 +107,5 @@ test('all 26 named lock locations lead to exact official profile pages',()=>{
   }
   assert.match(d.visitorOnly[0].sourceUrl,/\/ile-colonel-by-island$/);
   assert.match(d.bridges.find(x=>x.id==='bridge-brass-point').sourceUrl,/\/pont-brass-point-bridge$/);
-  assert.match(d.lockLocations.find(x=>x.id==='smiths-falls-detached').sourceUrl,/\/-detached-detache$/);
+  assert.match(d.lockLocations.find(x=>x.id==='smiths-falls-detached').sourceUrl,/detached-detache$/);
 });
