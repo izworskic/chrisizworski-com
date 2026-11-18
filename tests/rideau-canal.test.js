@@ -69,7 +69,8 @@ test('place photography is exact or clearly context-labelled, and licensed',()=>
   assert.match(js,/probe\.onerror/);
 });
 test('preview has safe metadata and preserves a no-script source directory',()=>{
-  assert.match(html,/<meta name="robots" content="noindex,follow">/);
+  assert.doesNotMatch(html,/<meta name="robots" content="noindex/);
+  assert.match(html,/rideau-canal\\\/#app/);
   assert.match(html,/rel="canonical" href="https:\/\/chrisizworski\.com\/rideau-canal\//);
   assert.ok(/<title>([^<]+)<\/title>/.exec(html)[1].length<=60);
   assert.ok(/<meta name="description" content="([^"]+)"/.exec(html)[1].length<=158);

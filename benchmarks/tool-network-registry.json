@@ -1,6 +1,6 @@
 {
   "version": "1.4.0",
-  "updated": "2026-11-08",
+  "updated": "2026-11-17",
   "objective": "Maintain one source of truth for how Chris Izworski tools own search intent, connect into visitor journeys, avoid cannibalization, and qualify future builds.",
   "rules": {
     "catalogCoverage": "Every first-party tool card on /tools/ must have a registry node.",
@@ -4967,6 +4967,49 @@
         "pulledOn": "2026-11-16",
         "note": "120 Google Suggest queries, not Search Console volume"
       }
+    },
+    {
+      "id": "rideau-canal",
+      "name": "Rideau Canal Trip Planner",
+      "canonical": "https://chrisizworski.com/rideau-canal/",
+      "aliases": [],
+      "kind": "source-audited-journey-planner",
+      "cluster": "trip-planning",
+      "primaryIntent": "plan a Rideau Canal historic lock visit, compare boating channel distances and choose officially published paddling itineraries",
+      "seasons": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "geographies": [
+        "ontario",
+        "rideau-canal",
+        "ottawa",
+        "kingston",
+        "perth"
+      ],
+      "personas": [
+        "historic-site-visitor",
+        "recreational-boater",
+        "paddler"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "new-canonical-pending-verified-launch"
+      },
+      "searchEvidence": {
+        "status": "primary-source-reviewed",
+        "note": "Parks Canada source data and two official paddle itineraries reviewed 2026-11-17. Keyword volumes and prelaunch GSC page/query records NOT AVAILABLE. Navigation ended 2026-10-12 and future 2027 hours unverified."
+      },
+      "measurement": {
+        "search": "GSC Web non-branded page and query at 7 and 28 days after confirmed indexing",
+        "product": "Anonymous mode, place and official-source handoff events where site's existing analytics permits",
+        "decisionWindowDays": 28,
+        "privacy": "No user geolocation, email, identity or precise location is required."
+      }
     }
   ],
   "relationships": [
@@ -7209,6 +7252,38 @@
       "strength": "strong",
       "surface": "lighthouse-directory",
       "reason": "Historic light lists do not answer when freezing spray could accumulate on winter pier lights."
+    },
+    {
+      "from": "rideau-canal",
+      "to": "welland-canal",
+      "type": "sibling-discovery",
+      "strength": "optional",
+      "surface": "canal-visitor",
+      "reason": "Visitors planning Rideau historic locks can compare Ontario's very different freighter-watching corridor."
+    },
+    {
+      "from": "welland-canal",
+      "to": "rideau-canal",
+      "type": "sibling-discovery",
+      "strength": "optional",
+      "surface": "canal-visitor",
+      "reason": "Canal enthusiasts can move from Welland ship viewing to Rideau heritage, sightseeing and paddling."
+    },
+    {
+      "from": "rideau-canal",
+      "to": "st-lawrence-seaway",
+      "type": "sibling-discovery",
+      "strength": "optional",
+      "surface": "waterways",
+      "reason": "The Seaway has commercial ship and lock viewing; the Rideau has heritage recreational travel and paddling."
+    },
+    {
+      "from": "st-lawrence-seaway",
+      "to": "rideau-canal",
+      "type": "sibling-discovery",
+      "strength": "optional",
+      "surface": "canal-visitor",
+      "reason": "Visitors comparing Ontario waterway systems can open Rideau's visitor-first route planner."
     }
   ],
   "cannibalizationGroups": [
