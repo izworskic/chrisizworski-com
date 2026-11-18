@@ -1,0 +1,248 @@
+{
+  "schemaVersion": "1.2",
+  "recordStatus": "draft",
+  "project": {
+    "slug": "rideau-canal",
+    "ownerRepo": "izworskic/chrisizworski-com",
+    "canonical": "https://chrisizworski.com/rideau-canal/",
+    "pageFile": "public/rideau-canal/index.html",
+    "visitorDecision": "Choose where to visit, cruise or paddle on the Rideau Canal using verified historic stops, channel chainage and official itinerary evidence.",
+    "primaryAction": "Choose Watch the Locks, Cruise or Paddle, inspect sourced places and constraints, then check Parks Canada seasonal notices before visiting."
+  },
+  "claims": [
+    {
+      "id": "station-and-chamber-inventory",
+      "kind": "official-reference",
+      "subject": "route-guidance",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
+      "checkedDate": "2026-11-17",
+      "limitation": "Parks Canada's 24 station groups and 47 locks do not mean each portal row is a distinct lockstation; bridge records and visitor-only sites are separate."
+    },
+    {
+      "id": "channel-reference-data",
+      "kind": "official-reference",
+      "subject": "route-guidance",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/navigation/donnees-navigation-data",
+      "checkedDate": "2026-11-17",
+      "limitation": "The channel distance table supplies reference chainage and documented bridges, not validated routes, vessel approvals or arrival estimates. Tay diversion reference has two nearby values."
+    },
+    {
+      "id": "paddle-route-published",
+      "kind": "official-reference",
+      "subject": "route-guidance",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/activ/pagaie-paddling",
+      "checkedDate": "2026-11-17",
+      "limitation": "The 12 km Tay and 39 km lake-country itineraries are trip descriptions, not licensed digital water tracks or proof launches are open today."
+    },
+    {
+      "id": "historic-season-end",
+      "kind": "official-reference",
+      "subject": "other",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/heures-hours",
+      "checkedDate": "2026-11-17",
+      "limitation": "2026 season ended; 2027 hours, last lockage and bridge openings cannot be inferred from historical hours."
+    },
+    {
+      "id": "current-lockstation-closure",
+      "kind": "official-notice",
+      "subject": "park-access",
+      "state": "SUPPORTED",
+      "accessScope": "Parks Canada Rideau Canal lockstation grounds and visitor facilities from Thanksgiving to Victoria Day",
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/",
+      "checkedDate": "2026-11-17",
+      "limitation": "Parks Canada warns lockstations are closed to the public and unmaintained in the non-navigation season. This says nothing about whether other municipal parks nearby are open."
+    },
+    {
+      "id": "future-passage-unknown",
+      "kind": "unverified",
+      "subject": "route-guidance",
+      "state": "UNVERIFIED",
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/navigation/donnees-navigation-data",
+      "checkedDate": "2026-11-17",
+      "limitation": "No current season operational status, 2027 lockage times, specific vessel clearances, navigable geometry or overnight availability is certified by this static planner."
+    },
+    {
+      "id": "image-rights",
+      "kind": "editorial",
+      "subject": "other",
+      "state": "EDITORIAL",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/Category:Canal_locks_on_the_Rideau_Canal",
+      "checkedDate": "2026-11-17",
+      "limitation": "Historic documentary photographs carry creator, exact location and license; none proves current access, staffing or conditions."
+    }
+  ],
+  "decisionState": {
+    "selectedIdField": "state.selectedPlaceId for audited stops; state.start/state.end and state.paddleRoute for distinct journey modes",
+    "sourceOfTruth": "Published mirrors of data/rideau-canal/locations.json and navigation-v2.json plus independent JS, Rust and Python source policies. Never inferred coordinates or live route clearance.",
+    "linkedSurfaces": [
+      "answer",
+      "mode-controls",
+      "visit-shortlist",
+      "cruise-stage-list",
+      "paddle-itinerary",
+      "selected-place-photo-credit",
+      "map-or-fallback",
+      "source-links",
+      "Google-Maps-place-links",
+      "shareable-url"
+    ],
+    "unavailableBehavior": "If inventory, source, map or photo fails, retain HTML list and Parks Canada links; never invent current access, vessel passage or route geometry."
+  },
+  "scenarios": [
+    {
+      "kind": "initial",
+      "input": "First load in visit mode with Ottawa Locks selected",
+      "expectedVisibleAnswer": "Display current seasonal closure and choose among three visit modes; show real source-backed Ottawa lock information.",
+      "sourceAndSafety": "Parks Canada authority is shown, and future 2027 operating hours remain unknown."
+    },
+    {
+      "kind": "alternative",
+      "input": "Change visit interest to villages, half day, then select Merrickville",
+      "expectedVisibleAnswer": "Suggest historic village sites, match map, place details and contextual village photo with exact caption.",
+      "sourceAndSafety": "A published location is not an approved parking entrance; Google Maps opens place search only."
+    },
+    {
+      "kind": "reverse",
+      "input": "Choose Chaffeys, Newboro and back to Chaffeys",
+      "expectedVisibleAnswer": "Restore selected stop, linked Parks profile, matching credited photo, Google Maps link and map marker.",
+      "sourceAndSafety": "An old photo load may not replace a new selected place."
+    },
+    {
+      "kind": "no-js",
+      "input": "Disable JavaScript on the canonical landing page",
+      "expectedVisibleAnswer": "Show seven sourced visitor stops and two official paddling itineraries as native HTML with all essential source links.",
+      "sourceAndSafety": "No JS-dependent status, maps, travel time or opening assertion appears."
+    },
+    {
+      "kind": "no-tiles",
+      "input": "Block CARTO and OSM tiles or Leaflet script",
+      "expectedVisibleAnswer": "Hide failed map and keep source-linked location list and Google Maps place-search actions.",
+      "sourceAndSafety": "No blank tile grid, invented parking link or fake route geometry."
+    },
+    {
+      "kind": "stale-data",
+      "input": "Open before 2027 hours are issued or block inventory fetch",
+      "expectedVisibleAnswer": "Retain historical planning and official source links; no live lock-status answer or positive passage assurance.",
+      "sourceAndSafety": "The 2026 archive never becomes an assumed 2027 schedule."
+    },
+    {
+      "kind": "cruise",
+      "input": "Choose Ottawa to Jones Falls at 6 km/h and inspect vessel dimensions",
+      "expectedVisibleAnswer": "Display 159 km channel distance with an arithmetic 26.5-hour underway-only example and documented intermediate lock/bridge entries.",
+      "sourceAndSafety": "Locks, waits, weather and overnight stops excluded; vessel checks never authorize passage."
+    },
+    {
+      "kind": "paddle",
+      "input": "Choose Perth to Beveridges, then Upper Brewers to Newboro",
+      "expectedVisibleAnswer": "Show 12 km one-day and 39 km two-day official trips, separate put-in/takeout place links and specific hazards.",
+      "sourceAndSafety": "The boating channel length never replaces Parks Canada's 39 km paddling itinerary."
+    },
+    {
+      "kind": "no-photo",
+      "input": "Block Wikimedia Commons images and change selected stops",
+      "expectedVisibleAnswer": "Keep correct text, official link and map/list state without a stale or falsely attributed image.",
+      "sourceAndSafety": "The same photo never masquerades as a different lock."
+    }
+  ],
+  "failures": {
+    "no-js": "The initial HTML contains seven linked, verified visitor destinations with Google Maps place searches and two Parks Canada route summaries.",
+    "no-tiles": "Hide map and expose source cards, exact place links and independent Google Maps search instead of a blank tile stage.",
+    "no-image": "Hide failed or slow photo and its entire visual panel; keep exact selected subject text and source. Asynchronous races never mismatch place and author.",
+    "stale-data": "2026 hours remain marked historic, lockstations closed during offseason, unknown 2027 schedule, and source-only estimates cannot imply clearance."
+  },
+  "qa": {
+    "viewports": [
+      360,
+      390,
+      768,
+      1440
+    ],
+    "browserStatus": "PENDING",
+    "browserRun": "https://github.com/izworskic/chrisizworski-com/actions/runs/44222223108",
+    "screenshotEvidence": [],
+    "scopeNote": "Cross-language policy and initial browser journeys passed. Final media-loaded, first-screen and full-site launch checks are pending on latest PR head. Screenshot review and actual public production remains separate."
+  },
+  "photos": [
+    {
+      "depictedSubject": "Ottawa's eight-lock flight, photographed in 2012",
+      "author": "Robert Linsdell",
+      "license": "CC BY 2.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Rideau_Canal_Locks,_Ottawa_(480403)_(9450160730).jpg",
+      "creditUrl": "https://commons.wikimedia.org/wiki/File:Rideau_Canal_Locks,_Ottawa_(480403)_(9450160730).jpg",
+      "subjectMatch": "exact"
+    },
+    {
+      "depictedSubject": "The historic village of Merrickville, not a view of the lock chambers",
+      "author": "Kenn Chaplin",
+      "license": "CC BY-SA 2.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Merrickville_Ontario_2010.jpg",
+      "creditUrl": "https://commons.wikimedia.org/wiki/File:Merrickville_Ontario_2010.jpg",
+      "subjectMatch": "contextual",
+      "disclosure": "The photograph shows Merrickville village streets, not a photograph of the lock chamber. The page must retain this caption."
+    },
+    {
+      "depictedSubject": "Smiths Falls Combined Lock, photographed August 2011",
+      "author": "D. Gordon E. Robertson",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Smiths_Falls_Combined_Lock.jpg",
+      "creditUrl": "https://commons.wikimedia.org/wiki/File:Smiths_Falls_Combined_Lock.jpg",
+      "subjectMatch": "exact"
+    },
+    {
+      "depictedSubject": "Newboro's single lock, photographed May 2012",
+      "author": "D. Gordon E. Robertson",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Newboro_lock.jpg",
+      "creditUrl": "https://commons.wikimedia.org/wiki/File:Newboro_lock.jpg",
+      "subjectMatch": "exact"
+    },
+    {
+      "depictedSubject": "Chaffeys Lock, photographed in 2011",
+      "author": "D. Gordon E. Robertson",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Chaffeys_lock.jpg",
+      "creditUrl": "https://commons.wikimedia.org/wiki/File:Chaffeys_lock.jpg",
+      "subjectMatch": "exact"
+    },
+    {
+      "depictedSubject": "Historic photograph of Jones Falls locks, taken in 1952",
+      "author": "Archives of Ontario, RG 65-35 (1952)",
+      "license": "Open Government Licence – Ontario",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Rideau_Canal_locks_at_Jones_Falls_(I0014758).jpg",
+      "creditUrl": "https://commons.wikimedia.org/wiki/File:Rideau_Canal_locks_at_Jones_Falls_(I0014758).jpg",
+      "subjectMatch": "exact"
+    },
+    {
+      "depictedSubject": "Upper Kingston Mills lock, photographed May 2012; one chamber of the lockstation",
+      "author": "D. Gordon E. Robertson",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Upper_Kingston_Mills_lock.jpg",
+      "creditUrl": "https://commons.wikimedia.org/wiki/File:Upper_Kingston_Mills_lock.jpg",
+      "subjectMatch": "exact"
+    }
+  ],
+  "release": {
+    "implemented": {
+      "status": "CONFIRMED",
+      "checkedDate": "2026-11-17",
+      "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/pull/1763"
+    },
+    "verified": {
+      "status": "PENDING"
+    },
+    "deployed": {
+      "status": "PENDING"
+    },
+    "live": {
+      "status": "PENDING"
+    },
+    "measured": {
+      "status": "NOT_MEASURED"
+    }
+  },
+  "verificationLimit": "The source and photo metadata are documented, but no verified deployed public commit, live traffic, current lock opening, safe paddling conditions or SEO uplift is claimed. Remains a draft release record."
+}
