@@ -147,7 +147,7 @@ Pull requests additionally run a **real Chromium browser acceptance** at 360, 39
 
 ## Human-reviewed source snapshot promotion
 
-The scheduled watcher produces artifacts only, never visitor-facing data or an automatic publication.
+The scheduled watcher produces artifacts only, never visitor-facing data or an automatic publication. Each successful scheduled source run now also attaches a separate unsigned human-review packet containing REVIEW.md, review.json, and approval-template.json. If sources change or fail, the packet is marked HOLD for review; no approval fields are filled automatically.
 To promote source HEALTH ONLY to the noindex preview, download the three files
 source-checks.json, operator-notice-monitor.json and monitor-report.json from the
 winter-desk-official-evidence GitHub Actions artifact into one temporary directory.
