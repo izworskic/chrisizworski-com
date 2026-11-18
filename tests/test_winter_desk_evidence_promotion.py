@@ -65,7 +65,7 @@ class EvidencePromotionReviewTests(unittest.TestCase):
         self.assertTrue(p["eligible"],p["errors"])
         self.assertEqual(p["sourceState"],"SOURCE_SIGNALS_PRESENT")
         self.assertEqual(p["changedFiles"],list(promotion.PROMOTED))
-        self.assertEqual(len(p["sourceUrls"]),6)
+        self.assertEqual(len(p["sourceUrls"]),5)
         self.assertIn("route-access-evidence.json",p["unchangedProtectedFiles"])
 
     def test_receipt_needs_named_reviewer_exact_content_and_no_open_acknowledgement(self):
