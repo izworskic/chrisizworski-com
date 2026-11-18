@@ -26,6 +26,65 @@ try{
     assert.ok(await page.locator('#geographic-research').count()===1);
     for(const id of ['mosquito-falls','elliot-falls','manido-falls','bridalveil-falls'])assert.equal(await page.locator('[data-id="'+id+'"]').count(),1);
   });
+  await run('arrival desk connects real parking, closure, seasonal road and no-route decisions',async()=>{
+    const choose=page.locator('#arrival-choice');
+    assert.equal(await choose.inputValue(),'wagner-falls');
+    assert.match(await page.locator('#arrival-verdict').innerText(),/public approach is documented/i);
+    assert.match(await page.locator('#arrival-parking').innerText(),/signed lot/i);
+    assert.match(await page.locator('#arrival-walk').innerText(),/0\.13 mile/i);
+    const drive=page.locator('#arrival-actions a[href*="/maps/dir/"]');
+    assert.equal(await drive.count(),1,'DNR-mapped Wagner lot should permit a sourced parking link');
+    assert.match(await drive.first().getAttribute('href'),/destination=46\.388944%2C-86\.648995/);
+    await choose.selectOption('munising-falls');
+    assert.match(await page.locator('#arrival-verdict').innerText(),/closed/i);
+    assert.equal(await drive.count(),0,'closed trail cannot offer a parking route');
+    await choose.selectOption('scott-falls');
+    assert.match(await page.locator('#arrival-walk').innerText(),/Do not cross busy M-28/i);
+    assert.equal(await drive.count(),0,'verified roadside viewpoint does not prove a precise parking entrance');
+    await choose.selectOption('saxon-falls');
+    assert.equal(await drive.count(),0,'tourism-only map source must not authorize precision routing');
+    await page.locator('#visit-date').fill('2027-02-15');
+    await choose.selectOption('middle-hungarian-falls');
+    assert.match(await page.locator('#arrival-watch').innerText(),/unplowed in winter/i);
+    assert.equal(await drive.count(),0,'do not route vehicles down an unplowed seasonal road');
+    await page.locator('#visit-date').fill('2027-07-15');
+    assert.equal(await drive.count(),1,'land-trust-mapped shared arrival may show cautious warm-season routing');
+    await choose.selectOption('tahquamenon');
+    assert.match(await page.locator('#arrival-verdict').innerText(),/different park arrivals/i);
+    assert.equal(await drive.count(),0,'Upper and Lower specialist visits are distinct');
+    await page.evaluate(()=>window.UPWaterfallFocus('bond-falls'));
+    assert.equal(await choose.inputValue(),'bond-falls','map focus should synchronize the arrival answer');
+    assert.equal(await drive.count(),0,'Bond Falls has no separately verified precision entrance point');
+    await page.locator('[data-id="agate-falls"] button.arrival-check').click();
+    assert.equal(await choose.inputValue(),'agate-falls','a card can explicitly choose arrival evidence');
+    assert.match(await page.locator('#arrival-verdict').innerText(),/restricted/i);
+    assert.equal(await drive.count(),0);
+    await choose.selectOption('wagner-falls');
+    await page.locator('#visit-date').fill('2027-07-15');
+  });
+  await run('arrival panel keeps 360px and tablet layout inside the viewport',async()=>{
+    for(const width of [360,768]){
+      await page.setViewportSize({width,height:844});
+      const dimensions=await page.evaluate(()=>({viewport:innerWidth,scroll:document.documentElement.scrollWidth}));
+      assert.ok(dimensions.scroll<=dimensions.viewport+2,'arrival desk overflow at '+width+'px: '+JSON.stringify(dimensions));
+      assert.ok(await page.locator('#arrival-choice').isVisible());
+      assert.ok(await page.locator('#arrival-actions a').count()>=2);
+    }
+    await page.setViewportSize({width:390,height:844});
+  });
+  await run('arrival evidence remains usable when the interactive map library fails',async()=>{
+    const offline=await browser.newPage({viewport:{width:390,height:844}});
+    try{
+      await offline.route('**/assets/leaflet-1.9.4.js',route=>route.abort());
+      await offline.goto(base+'/upper-peninsula-waterfalls/',{waitUntil:'domcontentloaded',timeout:30000});
+      await offline.locator('#arrival-choice option[value="wagner-falls"]').waitFor({state:'attached'});
+      assert.equal(await offline.locator('#arrival-choice').inputValue(),'wagner-falls');
+      await offline.locator('#arrival-choice').selectOption('munising-falls');
+      assert.match(await offline.locator('#arrival-verdict').innerText(),/closed/i);
+      assert.equal(await offline.locator('#arrival-actions a[href*="/maps/dir/"]').count(),0);
+      assert.match(await offline.locator('#falls-map').innerText(),/Map unavailable/i);
+    }finally{await offline.close();}
+  });
   await run('visitor map choices include direct Google Maps feature views',async()=>{
     const candidates=page.locator('#visit-picks [data-visit-pick] .waterfall-google-link');
     assert.ok(await candidates.count()>0,'visit matcher should show a Google Maps link next to Locate on map');
