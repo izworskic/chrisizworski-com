@@ -3,7 +3,8 @@
   'use strict';
   const $ = id => document.getElementById(id);
   const state = {mode:'visit',time:'short',interest:'engineering',selectedPlaceId:'ottawa',start:'ottawa',end:'jones-falls'};
-  const MAP_TILE = 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
+  const CARTO_TILE = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
+  const OSM_TILE = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
   let model, highlights=[], map=null, markers=new Map(), photoToken=0;
   const setText=(id,value)=>{const el=$(id);if(el)el.textContent=value;};
   function make(tag,cls,text){const node=document.createElement(tag);if(cls)node.className=cls;if(text!==undefined)node.textContent=text;return node;}
@@ -119,16 +120,52 @@
     });
     focusMap(p.id,false);
   }
-  function initMap(){
+  async function mapTileSource(){
+    const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),2500);
+    try{
+      const response=await fetch('/api/carto-basemap-config',{credentials:'same-origin',signal:controller.signal});
+      if(response.ok){
+        const config=await response.json();
+        if(config?.provider==='CARTO'&&typeof config.key==='string'&&config.key.trim()){
+          return {type:'carto',url:CARTO_TILE+'?key='+encodeURIComponent(config.key.trim()),attribution:'&copy; OpenStreetMap contributors &copy; CARTO'};
+        }
+      }
+    }catch(_){}
+    finally{clearTimeout(timer);}
+    return {type:'osm',url:OSM_TILE,attribution:'&copy; OpenStreetMap contributors'};
+  }
+  async function initMap(){
     const shell=$('map-shell'),fallback=$('map-fallback');
     const valid=highlights.filter(p=>p.visit?.coordinates);
     if(!window.L||!valid.length){shell.hidden=true;fallback.hidden=false;return;}
     try{
+      const source=await mapTileSource();
       map=L.map('rideau-map',{scrollWheelZoom:false,zoomControl:true}).setView([44.82,-76.0],8);
-      const layer=L.tileLayer(MAP_TILE,{maxZoom:17,attribution:'&copy; OpenStreetMap contributors &copy; CARTO'});
-      let tileFailures=0;
-      layer.on('tileerror',()=>{tileFailures++;if(tileFailures>=5)disableMap();});
-      layer.addTo(map);
+      let activeLayer=null,attempt=0;
+      function installTiles(chosen){
+        if(!map)return;
+        if(activeLayer)map.removeLayer(activeLayer);
+        attempt++;
+        const myAttempt=attempt;
+        let loaded=false,failures=0;
+        activeLayer=L.tileLayer(chosen.url,{maxZoom:17,attribution:chosen.attribution});
+        activeLayer.on('tileload',()=>{loaded=true;});
+        activeLayer.on('tileerror',()=>{
+          failures++;
+          if(failures>=5 && myAttempt===attempt){
+            if(chosen.type==='carto')installTiles({type:'osm',url:OSM_TILE,attribution:'&copy; OpenStreetMap contributors'});
+            else disableMap();
+          }
+        });
+        activeLayer.addTo(map);
+        setTimeout(()=>{
+          if(map&&myAttempt===attempt&&!loaded){
+            if(chosen.type==='carto')installTiles({type:'osm',url:OSM_TILE,attribution:'&copy; OpenStreetMap contributors'});
+            else disableMap();
+          }
+        },9500);
+      }
+      installTiles(source);
       const bounds=[];
       valid.forEach(p=>{
         const {lat,lon}=p.visit.coordinates;
