@@ -95,3 +95,5 @@ test('three journeys are distinct and route assumptions fail safely',()=>{
   assert.match(css,/@media\(max-width:600px\)/);
   assert.match(css,/@media\(prefers-reduced-motion:reduce\)/);
 });
+
+test('client JS parses in a real JavaScript compiler',()=>{const vm=require('node:vm');assert.doesNotThrow(()=>new vm.Script(js,{filename:'rideau-canal.js'}));});
