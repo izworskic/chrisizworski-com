@@ -1,0 +1,382 @@
+{
+  "schemaVersion": 2,
+  "compiledAt": "2026-11-17",
+  "navigationSource": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/navigation/donnees-navigation-data",
+  "technicalSource": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/navigation/points-retenir-navigation-facts",
+  "hoursSource": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/heures-hours",
+  "paddlingSource": "https://parks.canada.ca/lhn-nhs/on/rideau/activ/pagaie-paddling",
+  "distanceSemantics": "Official Ottawa-based navigation channel chainage, rounded to one decimal km. Not paddling geometry, nautical track, drive mileage or ETA.",
+  "navigationChartWarning": "Parks Canada visitor map is not a navigational chart. Use current CHS 1512/1513 and official NAVWARNs.",
+  "mainlineKmTotal": 202.1,
+  "tayJunctionKmFromOttawa": 110.4,
+  "tayJunctionUncertainty": "The technical table also marks a diversion to the Tay at 107.5 km; 110.4 km is its listed Tay Canal Entrance. A cross-branch distance is a reference-only estimate; verify charts.",
+  "mainline": [
+    {
+      "id": "ottawa",
+      "km": 0
+    },
+    {
+      "id": "hartwells",
+      "km": 6.7
+    },
+    {
+      "id": "hogs-back",
+      "km": 8.4
+    },
+    {
+      "id": "black-rapids",
+      "km": 15
+    },
+    {
+      "id": "long-island",
+      "km": 23.3
+    },
+    {
+      "id": "burritts-rapids",
+      "km": 64
+    },
+    {
+      "id": "lower-nicholsons",
+      "km": 69.4
+    },
+    {
+      "id": "upper-nicholsons",
+      "km": 69.7
+    },
+    {
+      "id": "clowes",
+      "km": 70.5
+    },
+    {
+      "id": "merrickville",
+      "km": 73.8
+    },
+    {
+      "id": "kilmarnock",
+      "km": 86.7
+    },
+    {
+      "id": "edmonds",
+      "km": 92.7
+    },
+    {
+      "id": "old-slys",
+      "km": 95.4
+    },
+    {
+      "id": "smiths-falls-combined",
+      "km": 96.8
+    },
+    {
+      "id": "smiths-falls-detached",
+      "km": 97.4
+    },
+    {
+      "id": "poonamalie",
+      "km": 101.1
+    },
+    {
+      "id": "narrows",
+      "km": 132.4
+    },
+    {
+      "id": "newboro",
+      "km": 140.8
+    },
+    {
+      "id": "chaffeys",
+      "km": 148.7
+    },
+    {
+      "id": "davis",
+      "km": 152
+    },
+    {
+      "id": "jones-falls",
+      "km": 159
+    },
+    {
+      "id": "upper-brewers",
+      "km": 176.5
+    },
+    {
+      "id": "lower-brewers",
+      "km": 179.3
+    },
+    {
+      "id": "kingston-mills",
+      "km": 195.2
+    },
+    {
+      "id": "kingston-causeway",
+      "km": 202.1
+    }
+  ],
+  "tay": [
+    {
+      "id": "lower-beveridges",
+      "km": 0.3
+    },
+    {
+      "id": "upper-beveridges",
+      "km": 0.9
+    },
+    {
+      "id": "perth-basin",
+      "km": 10
+    }
+  ],
+  "bridgeReference": [
+    {
+      "id": "pretoria",
+      "km": 2.6,
+      "branch": "main",
+      "type": "lift",
+      "clearanceClosedM": 3,
+      "clearanceOpenM": 7,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/navigation/donnees-navigation-data"
+    },
+    {
+      "id": "hogs-back",
+      "km": 8.4,
+      "branch": "main",
+      "type": "swing",
+      "clearanceClosedM": 2.9,
+      "clearanceOpenM": null,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/navigation/donnees-navigation-data"
+    },
+    {
+      "id": "long-island",
+      "km": 23.5,
+      "branch": "main",
+      "type": "swing",
+      "clearanceClosedM": 1.1,
+      "clearanceOpenM": null,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/navigation/donnees-navigation-data"
+    },
+    {
+      "id": "burritts-rapids",
+      "km": 65.1,
+      "branch": "main",
+      "type": "swing",
+      "clearanceClosedM": 3.2,
+      "clearanceOpenM": null,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/navigation/donnees-navigation-data"
+    },
+    {
+      "id": "upper-nicholsons",
+      "km": 69.7,
+      "branch": "main",
+      "type": "swing",
+      "clearanceClosedM": 3.6,
+      "clearanceOpenM": null,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/navigation/donnees-navigation-data"
+    },
+    {
+      "id": "merrickville",
+      "km": 74.2,
+      "branch": "main",
+      "type": "swing",
+      "clearanceClosedM": 2.9,
+      "clearanceOpenM": null,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/navigation/donnees-navigation-data"
+    },
+    {
+      "id": "kilmarnock",
+      "km": 86.7,
+      "branch": "main",
+      "type": "swing",
+      "clearanceClosedM": 2.9,
+      "clearanceOpenM": null,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/navigation/donnees-navigation-data"
+    },
+    {
+      "id": "old-slys",
+      "km": 95.6,
+      "branch": "main",
+      "type": "swing",
+      "clearanceClosedM": 2.2,
+      "clearanceOpenM": null,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/navigation/donnees-navigation-data"
+    },
+    {
+      "id": "abbot-street",
+      "km": 97.4,
+      "branch": "main",
+      "type": "swing",
+      "clearanceClosedM": 1.9,
+      "clearanceOpenM": null,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/navigation/donnees-navigation-data"
+    },
+    {
+      "id": "narrows",
+      "km": 132.4,
+      "branch": "main",
+      "type": "swing",
+      "clearanceClosedM": 1.2,
+      "clearanceOpenM": null,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/navigation/donnees-navigation-data"
+    },
+    {
+      "id": "chaffeys",
+      "km": 148.7,
+      "branch": "main",
+      "type": "swing",
+      "clearanceClosedM": 1.8,
+      "clearanceOpenM": null,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/navigation/donnees-navigation-data"
+    },
+    {
+      "id": "brass-point",
+      "km": 170,
+      "branch": "main",
+      "type": "swing",
+      "clearanceClosedM": 1.2,
+      "clearanceOpenM": null,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/navigation/donnees-navigation-data"
+    },
+    {
+      "id": "lower-brewers",
+      "km": 179.3,
+      "branch": "main",
+      "type": "swing",
+      "clearanceClosedM": 1.3,
+      "clearanceOpenM": null,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/navigation/donnees-navigation-data"
+    },
+    {
+      "id": "kingston-mills",
+      "km": 195,
+      "branch": "main",
+      "type": "swing",
+      "clearanceClosedM": 2.3,
+      "clearanceOpenM": null,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/navigation/donnees-navigation-data"
+    },
+    {
+      "id": "bronson-fixed",
+      "km": 5.5,
+      "branch": "main",
+      "type": "fixed",
+      "clearanceClosedM": 6.7,
+      "clearanceOpenM": null,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/navigation/donnees-navigation-data"
+    },
+    {
+      "id": "kars-fixed",
+      "km": 36.5,
+      "branch": "main",
+      "type": "fixed",
+      "clearanceClosedM": 6.7,
+      "clearanceOpenM": null,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/navigation/donnees-navigation-data"
+    },
+    {
+      "id": "becketts-fixed",
+      "km": 52.1,
+      "branch": "main",
+      "type": "fixed",
+      "clearanceClosedM": 6.7,
+      "clearanceOpenM": null,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/navigation/donnees-navigation-data"
+    },
+    {
+      "id": "sunbury-fixed",
+      "km": 177,
+      "branch": "main",
+      "type": "fixed",
+      "clearanceClosedM": 6.7,
+      "clearanceOpenM": null,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/navigation/donnees-navigation-data"
+    },
+    {
+      "id": "highway-401-fixed",
+      "km": 196,
+      "branch": "main",
+      "type": "fixed",
+      "clearanceClosedM": 6.7,
+      "clearanceOpenM": null,
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/navigation/donnees-navigation-data"
+    }
+  ],
+  "sizingAdvisory": {
+    "generalLockLengthM": 27.3,
+    "generalLockWidthM": 8.5,
+    "approxChannelDepthM": 1.5,
+    "minMainFixedClearanceM": 6.7,
+    "note": "Technical guidance is general and dimensions vary at stations. Water depths are never guaranteed; fully loaded draft, air clearance and other limitations require original charts and local confirmation."
+  },
+  "operationArchive": {
+    "seasonYear": 2026,
+    "seasonEnded": "2026-10-12",
+    "futureSeasonVerified": false,
+    "lastLockageBlueLineMinutesPerLock": 30,
+    "swingBridgeMinutesBeforeClose": 20,
+    "exception": "Last lockage is not a vessel transit duration or guaranteed entry. Hogs Back includes a guard chamber that may not be operated as a normal lock."
+  },
+  "paddling": [
+    {
+      "id": "tay-marsh",
+      "name": "Perth to Beveridges through Tay Marsh",
+      "officialDays": 1,
+      "officialKm": 12,
+      "from": {
+        "name": "Perth Basin",
+        "query": "Perth Basin, Perth, Ontario, Canada",
+        "kind": "official-put-in"
+      },
+      "to": {
+        "name": "Beveridges Lockstation",
+        "query": "Beveridges Locks, Port Elmsley, Ontario, Canada",
+        "kind": "official-take-out"
+      },
+      "routeKind": "Parks Canada curated trip, no digital water track",
+      "note": "Sheltered Tay marsh and winding canal. Current generally flows from Perth toward Beveridges. Avoid Beveridges Dam.",
+      "hazards": [
+        "Dams and waste weirs are exclusion areas",
+        "Verify lockage or approved portage with Parks Canada",
+        "Shuttle / return transportation is not provided"
+      ],
+      "overnight": "One-day route; confirm facilities before travel",
+      "highlights": [
+        "Perth historic buildings",
+        "Tay Marsh wetland",
+        "Beveridges two locks"
+      ],
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/activ/pagaie-paddling"
+    },
+    {
+      "id": "upper-brewers-newboro",
+      "name": "Upper Brewers to Newboro lake-country traverse",
+      "officialDays": 2,
+      "officialKm": 39,
+      "from": {
+        "name": "Upper Brewers Lockstation",
+        "query": "Upper Brewers Lockstation, Rideau Lakes, Ontario, Canada",
+        "kind": "official-put-in"
+      },
+      "to": {
+        "name": "Newboro Lockstation",
+        "query": "Newboro Lockstation, Ontario, Canada",
+        "kind": "official-take-out"
+      },
+      "routeKind": "Parks Canada curated trip, no digital water track",
+      "note": "Small lakes and forested shores via Jones Falls, Davis and Chaffeys; changing lake weather and powerboat wakes matter.",
+      "hazards": [
+        "Jones Falls portage climbs roughly 60 vertical feet if not locking through",
+        "Thunderstorms and wind can roughen the lakes",
+        "Dams, navigation-channel traffic and unexpected wake"
+      ],
+      "overnight": "Parks Canada identifies lockstation camping, subject to staffing, season and current rules",
+      "highlights": [
+        "Jones Falls historic lock flight",
+        "Davis Lock's quiet lake setting",
+        "Chaffeys Lock village",
+        "Newboro blockhouse"
+      ],
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/activ/pagaie-paddling"
+    }
+  ],
+  "status": "historic-planning-evidence-only",
+  "sourceChecked": "2026-11-17"
+}
