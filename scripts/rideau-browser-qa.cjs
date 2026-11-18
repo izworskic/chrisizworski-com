@@ -34,6 +34,13 @@ async function run(){
       assert.equal(await page.locator('#static-stops').isHidden(),true);
       assert.equal(await page.locator('[data-mode="visit"]').getAttribute('aria-pressed'),'true');
       assert.match(await page.locator('#feature-name').innerText(),/Ottawa Locks/);
+      const startChoice=await page.locator('[data-mode="visit"]').boundingBox();
+      const firstChoiceBottom=startChoice?Math.round(startChoice.y+startChoice.height):null;
+      assert.ok(firstChoiceBottom!==null,'Visitor mode not rendered');
+      if(width<=390)assert.ok(firstChoiceBottom<=795,'First visitor choice buried below the first screen: '+firstChoiceBottom+'px');
+      const openingShot=path.join(out,'rideau-first-screen-'+width+'.png');
+      await page.screenshot({path:openingShot,fullPage:false});
+      report.screenshots.push(openingShot);
       await page.locator('#interest').selectOption('village');
       await page.locator('#time-budget').selectOption('short');
       assert.match(await page.locator('#answer-title').innerText(),/No exact match/);

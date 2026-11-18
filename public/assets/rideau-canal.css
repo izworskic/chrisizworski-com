@@ -124,3 +124,13 @@ footer.site-footer a{color:#fff}
 .paddle-result h4{margin:14px 0 5px}
 .paddle-result ul{margin:0;padding-left:21px}
 @media(max-width:600px){#cruise-controls{grid-template-columns:1fr}.rideau-vessel,#channel-result{grid-column:1/-1}.vessel-fields{grid-template-columns:1fr 1fr}.paddle-context{padding:13px}.route-stage-list{max-height:none}}
+
+/* Phone-first priority: choices stay on the first screen, season caution remains readable. */
+.season span{display:block}.season details{margin-top:4px}.season summary{cursor:pointer;font-size:.85rem;font-weight:750;color:#165675}.season details p{margin:6px 0 0}.mode-list{margin-top:8px}
+@media(max-width:600px){
+  .site__inner{padding:9px 18px}.mast{padding:16px 0 13px}.mast .kicker{font-size:.68rem;letter-spacing:.11em;margin:0 0 5px}
+  .mast h1{font-size:clamp(2rem,8vw,2.35rem);line-height:1.05;margin:0 0 9px}.mast .lead{font-size:.94rem;line-height:1.4;margin-bottom:9px}
+  .season{font-size:.79rem;line-height:1.35;padding:9px 11px}.season strong{margin-bottom:3px}.season details{margin-top:3px}
+  .journey{padding-top:14px}.journey h2{font-size:1.45rem;line-height:1.15;margin-bottom:5px}.journey__header p{font-size:.8rem;margin:0 0 7px}
+  .mode-list{gap:5px;margin-top:7px}.mode{padding:8px 12px;min-height:52px;gap:0}.mode strong{font-size:.96rem}.mode small{font-size:.77rem;line-height:1.25}
+}
