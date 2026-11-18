@@ -124,10 +124,10 @@ def evaluate(data, contents, baseline, now=None):
         "sourceState": recomputed.get("state", "MONITOR_ERROR"),
         "candidateDigest": candidate_digest,
         "baselineDigest": baseline_digest,
-        "sourceUrls": sorted(
+        "sourceUrls": sorted(set(
             [source.get("places", {}).get(route, {}).get("sourceUrl", "") for route in ROUTES] +
             [notices.get("places", {}).get(route, {}).get("sourceUrl", "") for route in ROUTES]
-        ),
+        )),
         "candidateTime": report.get("checkedAt"),
         "changedFiles": [name for name in PROMOTED if contents[name] != baseline[name]],
         "unchangedProtectedFiles": ["route-access-evidence.json", "arrival-evidence.json"],
