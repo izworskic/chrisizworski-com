@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rideau Canal Trip Planner: Locks &amp; Paddling Routes</title>
+<meta name="description" content="Explore Rideau Canal locks, documented boating distances and two Parks Canada paddling trips. See maps, historic places and official sources.">
+<link rel="canonical" href="https://chrisizworski.com/rideau-canal/">
+<link rel="author" href="https://chrisizworski.com/chris-izworski/">
+<link rel="icon" href="/favicon.ico">
+<meta name="theme-color" content="#102e35">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Rideau Canal Trip Planner: Locks and Paddling">
+<meta property="og:description" content="A source-led visit planner for the historic Rideau Canal, Ottawa to Kingston.">
+<meta property="og:url" content="https://chrisizworski.com/rideau-canal/">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<link rel="stylesheet" href="/assets/rideau-canal.css?v=20261117-foundation">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski","publisher":{"@id":"https://chrisizworski.com/#person"}},{"@type":"WebPage","@id":"https://chrisizworski.com/rideau-canal/#page","url":"https://chrisizworski.com/rideau-canal/","name":"Rideau Canal Trip Planner: Locks and Paddling","dateModified":"2026-11-17","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"},"description":"Independent source-led planning preview for Rideau Canal visitors, not a navigation chart.","mainEntity":{"@id":"https://chrisizworski.com/rideau-canal/#app"}},{"@type":"WebApplication","@id":"https://chrisizworski.com/rideau-canal/#app","name":"Rideau Canal Trip Planner","url":"https://chrisizworski.com/rideau-canal/","description":"Source-verified historic stop explorer, navigation channel comparisons and two official paddling itineraries; not a nautical chart.","applicationCategory":"TravelApplication","operatingSystem":"Any web browser","isAccessibleForFree":true,"creator":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"}}]}</script>
+</head>
+<body data-analytics-page="rideau-canal">
+<a class="skip" href="#main">Skip to Rideau Canal explorer</a>
+<header class="site">
+<div class="site__inner">
+<a href="/" aria-label="Chris Izworski home">Chris Izworski <span aria-hidden="true">/</span> Waterways</a>
+<nav aria-label="Site navigation"><a href="/tools/">Explore tools</a><a href="/welland-canal/">Welland Canal</a><a href="/lake-superior-circle-tour/">Circle Tour</a></nav>
+</div>
+</header>
+<main id="main">
+<section class="mast" aria-labelledby="page-title">
+<div class="mast-grid">
+<div>
+<p class="kicker">A waterway field guide / Ottawa to Kingston</p>
+<h1 id="page-title">The Rideau Canal <em>in your own time.</em></h1>
+<p class="lead">From Ottawa's stone lock flight to the quiet lakes near Kingston. Choose your own way to explore this historic waterway.</p>
+<div class="season" role="note"><strong>Season check: navigation ended October 12, 2026.</strong><span>Lockstations are closed to the public for the off-season. Do not enter closed grounds. 2027 hours have not been verified.</span><details><summary>When can I visit?</summary><p>Parks Canada reports lockstations are unmaintained from Thanksgiving to Victoria Day. Current operations and future opening dates must be checked before traveling. <a href="https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation" target="_blank" rel="noopener noreferrer">Check official station notices.</a></p></details></div>
+</div>
+<aside class="mast-note" aria-label="Historic context">
+<span class="stat">1832</span>
+<p>The canal opened as an alternative military route between the Ottawa River and Lake Ontario. The lakes, rock cuts, masonry and hand-operated gates still tell its construction story.</p>
+<p>UNESCO World Heritage Site · <a href="https://whc.unesco.org/en/list/1221" target="_blank" rel="noopener noreferrer">Why it matters</a></p>
+</aside>
+</div>
+</section>
+<section class="journey" aria-labelledby="choose-title">
+<div class="journey__header"><div><p class="kicker">Your visit begins here</p><h2 id="choose-title">How will you experience the canal?</h2></div><p id="js-state" role="status" aria-live="polite">Source-linked visitor choices. Official operating conditions are checked separately.</p></div>
+<div id="static-stops">
+<p>Start with a historic lockstation. Parks Canada provides each site's location and visitor details. These are orientation links, not guaranteed open entrances, and there is no operating-hours claim for 2027.</p>
+<ol class="directory-list">
+<li><strong>Ottawa Locks:</strong> eight chambers beneath Parliament Hill. <a href="https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/ecluse-lock-ottawa">Official profile</a> · <a href="https://www.google.com/maps/search/?api=1&amp;query=3%20Canal%20Lane%2C%20Ottawa%2C%20Ontario%2C%20Canada">View in Google Maps</a></li>
+<li><strong>Merrickville:</strong> a three-lock station among the shops and heritage buildings of an old mill village. <a href="https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/ecluse-lock-merrickville">Official profile</a> · <a href="https://www.google.com/maps/search/?api=1&amp;query=111A%20Main%20Street%20East%2C%20Merrickville-Wolford%2C%20Ontario%2C%20Canada">View in Google Maps</a></li>
+<li><strong>Smiths Falls Combined:</strong> one large chamber replaced a flight of three in 1974. <a href="https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/ecluse-lock-smiths-falls-combined-combine">Official profile</a> · <a href="https://www.google.com/maps/search/?api=1&amp;query=70%20Confederation%20Drive%2C%20Smiths%20Falls%2C%20Ontario%2C%20Canada">View in Google Maps</a></li>
+<li><strong>Newboro:</strong> a historic blockhouse beside a navigational cut through high ground. <a href="https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/ecluse-lock-newboro">Official profile</a> · <a href="https://www.google.com/maps/search/?api=1&amp;query=10%20Blockhouse%20Lane%2C%20Newboro%2C%20Ontario%2C%20Canada">View in Google Maps</a></li>
+<li><strong>Chaffeys:</strong> a rural lock and swing bridge in lake country. <a href="https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/ecluse-lock-chaffeys">Official profile</a> · <a href="https://www.google.com/maps/search/?api=1&amp;query=1723%20Chaffeys%20Lock%20Road%2C%20Rideau%20Lakes%2C%20Ontario%2C%20Canada">View in Google Maps</a></li>
+<li><strong>Jones Falls:</strong> a flight of three lower chambers, an upper chamber and the remarkable Great Stone Arch Dam. <a href="https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/ecluse-lock-jones-falls">Official profile</a> · <a href="https://www.google.com/maps/search/?api=1&amp;query=182%20Lock%20Road%2C%20Rideau%20Lakes%2C%20Ontario%2C%20Canada">View in Google Maps</a></li>
+<li><strong>Kingston Mills:</strong> a historic lock flight, railway crossing and canal blockhouse. <a href="https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/ecluse-lock-kingston-mills">Official profile</a> · <a href="https://www.google.com/maps/search/?api=1&amp;query=563%20Kingston%20Mills%20Road%2C%20Kingston%2C%20Ontario%2C%20Canada">View in Google Maps</a></li>
+</ol>
+<p><strong>Published paddling trips:</strong> <a href="https://parks.canada.ca/lhn-nhs/on/rideau/activ/pagaie-paddling">Perth to Beveridges Locks via the Tay Canal (12 km, one day)</a>, and <a href="https://parks.canada.ca/lhn-nhs/on/rideau/activ/pagaie-paddling">Upper Brewers Locks to Newboro (39 km, two days)</a>. These are official itinerary distances, not navigation lines; lockstation and route access remain subject to official conditions.</p>
+</div>
+<div id="interactive" hidden>
+<div class="mode-list" role="group" aria-label="Choose a Rideau experience">
+<button class="mode" type="button" data-mode="visit" aria-pressed="true"><strong>Watch the locks</strong><small>Historic sites and villages by visit style</small></button>
+<button class="mode" type="button" data-mode="cruise" aria-pressed="false"><strong>Cruise the waterway</strong><small>Verified distances between known reference points</small></button>
+<button class="mode" type="button" data-mode="paddle" aria-pressed="false"><strong>Paddle a section</strong><small>Two Parks Canada itineraries with put-ins and takeouts</small></button>
+</div>
+<div class="workspace">
+<div class="work-left">
+<div id="visit-controls" class="controls">
+<label class="control" for="time-budget">Time available<select id="time-budget"><option value="short">One short stop</option><option value="half">Half-day outing</option><option value="day">Whole day exploring</option></select></label>
+<label class="control" for="interest">What draws you?<select id="interest"><option value="engineering">Historic engineering</option><option value="history">Early Canadian history</option><option value="village">Canal villages</option><option value="scenery">Lake country scenery</option></select></label>
+</div>
+<div id="cruise-controls" class="controls" hidden>
+<label class="control" for="cruise-from">Start lock or wharf<select id="cruise-from"></select></label>
+<label class="control" for="cruise-to">Destination<select id="cruise-to"></select></label>
+<label class="control" for="rideau-speed">Assumed underway pace<select id="rideau-speed"><option value="4">4 km/h (slow)</option><option value="6" selected>6 km/h (steady)</option><option value="8">8 km/h (planning example)</option></select></label>
+<label class="control" for="rideau-units">Show distance in<select id="rideau-units"><option value="km">Kilometres</option><option value="mi">Miles</option></select></label>
+<label class="control" for="rideau-trip-date">Intended departure date<input type="date" id="rideau-trip-date" min="2026-11-17"></label>
+<details class="rideau-vessel"><summary>Check vessel dimensions (optional)</summary>
+<div class="vessel-fields">
+<label for="rideau-length">Length (m)<input id="rideau-length" type="number" min=".1" max="200" step=".1" inputmode="decimal"></label>
+<label for="rideau-beam">Beam (m)<input id="rideau-beam" type="number" min=".1" max="200" step=".1" inputmode="decimal"></label>
+<label for="rideau-draft">Loaded draft (m)<input id="rideau-draft" type="number" min=".1" max="20" step=".1" inputmode="decimal"></label>
+<label for="rideau-air-draft">Height above water (m)<input id="rideau-air-draft" type="number" min=".1" max="50" step=".1" inputmode="decimal"></label>
+</div><p>These general references cannot establish a vessel will fit every lock, pass under each bridge, or have adequate depth.</p></details>
+<div id="channel-result" class="channel-result" aria-live="polite" hidden>
+<p class="kicker">Source-documented waterway planning</p><p id="channel-number" class="channel-number"></p><strong id="channel-label"></strong>
+<p id="channel-notes"></p>
+<p id="channel-scenario" class="channel-scenario"></p>
+<p id="channel-date" class="season-status"></p>
+<p id="channel-constraints" class="field-note"></p>
+<h4 id="channel-stops-label">Locks and bridges along this reach</h4>
+<ol id="channel-stops" class="route-stage-list"></ol>
+<div id="channel-bridge-list" class="route-bridges"></div>
+<a id="channel-source" href="https://parks.canada.ca/lhn-nhs/on/rideau/visit/navigation/donnees-navigation-data" target="_blank" rel="noopener noreferrer">Read Parks Canada's navigation data and current notices</a>
+</div>
+</div>
+<section id="paddle-context" class="paddle-context" hidden aria-labelledby="paddle-title">
+<p class="kicker">Two Parks Canada paddling journeys</p><h3 id="paddle-title">Choose a stretch of water</h3>
+<p>These are published trip ideas with named launch and takeout locations, not GPS tracks. Paddlers may follow shorelines rather than the marked boating channel.</p>
+<label class="control" for="rideau-paddle-route">Paddling journey<select id="rideau-paddle-route"></select></label>
+<div id="paddle-result" class="paddle-result" aria-live="polite">
+<strong id="paddle-name"></strong><div class="paddle-metrics"><span id="paddle-distance"></span><span id="paddle-days"></span></div>
+<p id="paddle-story"></p>
+<div id="paddle-map-links" class="feature__source"></div>
+<h4>What to notice</h4><ul id="paddle-highlights"></ul>
+<h4>What to check</h4><ul id="paddle-hazards"></ul>
+<p id="paddle-overnight"></p>
+<a id="paddle-official" href="https://parks.canada.ca/lhn-nhs/on/rideau/activ/pagaie-paddling" target="_blank" rel="noopener noreferrer">Read Parks Canada's original itinerary</a>
+</div>
+<p class="field-note">Never approach dams or waste weirs. Check wind, wake, portage, permits, season, access and charts. No condition or safe-water guarantee is supplied by this planner.</p>
+</section>
+<div class="answer" aria-live="polite"><span class="eyebrow">Your starting point</span><h3 id="answer-title">Choose a visit</h3><p id="answer-text" class="reason">Explore the canal with official sources.</p><span id="candidate-count" class="count"></span></div>
+<h3 id="candidate-title">Places worth your time</h3>
+<ul id="recommendations"></ul>
+</div>
+<div class="work-right">
+<article class="feature" id="selected-place" aria-labelledby="feature-name">
+<span class="region" id="feature-region">Rideau Canal</span><h3 id="feature-name">Ottawa Locks</h3>
+<p id="feature-explain"></p><p id="feature-tip"></p><p><strong>Official visitor location:</strong> <span id="feature-address"></span></p>
+<div class="feature__source" id="feature-links"></div>
+<section id="rideau-watch-guide" class="rideau-watch-guide" aria-labelledby="rideau-watch-title" hidden><p class="kicker">Best place to watch</p><h4 id="rideau-watch-title">See the lock for yourself</h4><p id="rideau-watch-intro"></p><div id="rideau-watch-options"></div><div id="rideau-watch-food" class="rideau-watch-food"></div><p class="rideau-watch-caution">These are published public-place suggestions, not verified parking entrances, walking directions, accessibility guarantees or current access notices. Check the source before visiting.</p></section>
+<figure id="feature-photo-wrap" class="feature__photo" hidden>
+<img id="feature-photo" alt="" loading="lazy" decoding="async" width="960" height="540">
+<figcaption><span id="feature-photo-caption"></span><span id="feature-photo-credit"></span></figcaption>
+</figure>
+</article>
+<div class="map-shell" id="map-shell" hidden><div id="rideau-map" aria-label="Map showing seven verified Rideau Canal lock locations"></div></div>
+<div class="map-fallback" id="map-fallback">The interactive map is unavailable. Use the official source and Google Maps place-search links in the selected location above.</div>
+<p class="map-foot">Select a lock to see sourced places to stand and what you can notice. Map pins identify lockstations, not overlook coordinates, parking entrances or walking routes. A Google Maps place search is not a driving route. <a href="https://parks.canada.ca/lhn-nhs/on/rideau/visit/carte-map" target="_blank" rel="noopener noreferrer">Official orientation map</a>.</p>
+<p class="field-note"><strong>Boating note:</strong> Parks Canada's general map is not a nautical chart. Check current Canadian Hydrographic Service charts 1512 and 1513, official notices, bridge clearance and vessel dimensions before navigation.</p>
+</div>
+</div>
+<div class="directory" aria-labelledby="directory-title">
+<p class="kicker">The full waterway inventory</p><h2 id="directory-title">Every named lock and bridge location</h2>
+<p>Some sites have more than one named lock, and the Tay Canal branches toward Perth. The official 24-lockstation figure is a grouping count, not the number of operational rows.</p>
+<p class="directory-note" id="directory-count"></p>
+<details><summary>See all official lock, bridge and visitor entries</summary>
+<table><thead><tr><th scope="col">Official name</th><th scope="col">Type</th><th scope="col">Waterway</th></tr></thead><tbody id="directory-body"></tbody></table>
+</details>
+</div>
+</div>
+</section>
+
+<section class="rideau-lab" id="inside-the-lock" aria-labelledby="lock-lab-title">
+  <div class="rideau-lab__intro">
+    <p class="kicker">Step inside the engineering</p>
+    <h2 id="lock-lab-title">How does a lock lift a boat?</h2>
+    <p>Picture a boat at the foot of the canal. Two pairs of gates make a watertight chamber, and gravity moves water until the boat reaches the next level. Try the five stages below. This is a teaching diagram, not a scale model of a specific lock.</p>
+  </div>
+  <div class="rideau-lab__layout">
+    <div class="rideau-lab__instrument">
+      <svg class="rideau-lock-diagram" viewBox="0 0 840 342" role="img" aria-labelledby="lock-drawing-title lock-drawing-desc">
+        <title id="lock-drawing-title">Cutaway of a Rideau-style lift lock</title>
+        <desc id="lock-drawing-desc">A boat moves from lower water at left into a stone chamber, rises as water enters, and exits to higher water at right. Manual steps and text explain gate and valve operation.</desc>
+        <defs><pattern id="rideau-stone" width="35" height="28" patternUnits="userSpaceOnUse"><path d="M0 14H35 M18 0V14 M0 14V28" fill="none" stroke="#b6b9ad" stroke-width="1.5"/></pattern></defs>
+        <rect width="840" height="342" fill="#f0f5f1"/>
+        <path d="M0 290V246H210V92H632V126H840V290Z" fill="#d6ded4"/>
+        <rect x="0" y="246" width="210" height="44" fill="#7fbbc6"/>
+        <rect x="632" y="128" width="208" height="162" fill="#7fbbc6"/>
+        <rect id="lock-lab-chamber-water" x="211" y="246" width="420" height="44" fill="#7fbbc6"/>
+        <path d="M0 290H840" stroke="#305864" stroke-width="5"/>
+        <rect x="183" y="88" width="28" height="214" fill="url(#rideau-stone)" stroke="#798f8b" stroke-width="3"/>
+        <rect x="630" y="125" width="28" height="177" fill="url(#rideau-stone)" stroke="#798f8b" stroke-width="3"/>
+        <rect x="212" y="290" width="418" height="16" fill="url(#rideau-stone)"/>
+        <rect id="lock-lab-lower-gate" x="200" y="133" width="12" height="157" rx="3" fill="#865d3d" stroke="#4c392a" stroke-width="3" opacity="0"/>
+        <rect id="lock-lab-upper-gate" x="625" y="119" width="12" height="171" rx="3" fill="#865d3d" stroke="#4c392a" stroke-width="3"/>
+        <g id="lock-lab-boat">
+          <path d="M300 229H434L416 250H319Z" fill="#b65f35" stroke="#583b29" stroke-width="3" stroke-linejoin="round"/>
+          <path d="M332 229V202H393V229" fill="#f9f5e9" stroke="#285260" stroke-width="3"/>
+          <rect x="352" y="207" width="24" height="13" rx="2" fill="#81b8c4"/>
+          <path d="M327 225H404" stroke="#f4d7ab" stroke-width="4"/>
+        </g>
+        <path d="M0 246H183 M658 128H840" stroke="#efffff" stroke-width="2" opacity=".8"/>
+        <text x="18" y="231" fill="#204958" font-size="18" font-weight="700">Lower water</text>
+        <text x="678" y="107" fill="#204958" font-size="18" font-weight="700">Higher water</text>
+        <text x="326" y="324" fill="#37535a" font-size="17" font-weight="700">Lock chamber</text>
+        <text x="165" y="65" fill="#37535a" font-size="15">Lower gates</text>
+        <text x="614" y="65" fill="#37535a" font-size="15">Upper gates</text>
+        <path d="M200 72V120 M633 72V114" stroke="#627879" stroke-width="2" stroke-dasharray="4 4"/>
+      </svg>
+      <p class="rideau-lab__diagram-note">Illustrative side view, not to scale. Water changes only when the gates are closed; the simulator does not model real lock dimensions, timing or boat handling.</p>
+      <div class="rideau-lab__controls" role="group" aria-label="Walk through the lock cycle">
+        <button type="button" id="lock-lab-back" disabled>Previous stage</button>
+        <button type="button" id="lock-lab-forward">Next stage</button>
+        <button type="button" id="lock-lab-reset">Start again</button>
+      </div>
+    </div>
+    <div class="rideau-lab__story">
+      <p class="rideau-lab__counter" id="lock-lab-counter">01 / 05</p>
+      <h3 id="lock-lab-step-title">Enter at the lower water level</h3>
+      <p id="lock-lab-step-text" aria-live="polite">The lower gates open when the water inside the chamber matches the water below. A boat enters slowly under the direction of lock staff.</p>
+      <ol id="lock-lab-chapters" class="rideau-lab__chapters">
+        <li aria-current="step">Enter from below</li><li>Close both gates</li><li>Let the water rise</li><li>Open the upper gates</li><li>Leave at the new level</li>
+      </ol>
+      <p class="rideau-lab__source">Parks Canada explains the real sequence in <a href="https://parks.canada.ca/lhn-nhs/on/rideau/visit/navigation/ecluser-lock-through" target="_blank" rel="noopener noreferrer">Locking through safely</a>. Real lock staff control all operations.</p>
+    </div>
+  </div>
+  <section class="rideau-diorama" aria-labelledby="rideau-diorama-title">
+    <div class="rideau-diorama__header"><div><p class="kicker">Explore the shape of the waterway</p><h3 id="rideau-diorama-title">Two lock flights, two solutions</h3><p>Look down on the sequence of chambers. Ottawa uses eight in a continuous staircase. Jones Falls has three lower chambers and a separate upper lock, with a remarkable stone dam nearby.</p></div>
+    <div class="rideau-diorama__buttons" role="group" aria-label="Choose a lock flight illustration"><button type="button" data-rideau-diorama="ottawa" aria-pressed="true">Ottawa: eight locks</button><button type="button" data-rideau-diorama="jones" aria-pressed="false">Jones Falls: four locks</button></div></div>
+    <figure><img id="rideau-diorama-image" loading="lazy" decoding="async" src="/assets/rideau-locks-ottawa-diagram.svg" width="1024" height="420" alt="Isometric schematic showing the eight successive chambers of Ottawa Locks"/><figcaption id="rideau-diorama-caption" aria-live="polite">Ottawa's eight chambers step from the Ottawa River to the canal above. This is an interpretive schematic, not a surveyed model. <a href="https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/ecluse-lock-ottawa">Read the official station profile.</a></figcaption></figure>
+  </section>
+  <div class="rideau-lab__film" aria-label="Recorded Parks Canada lock films">
+    <div><p class="kicker">Watch it happen</p><h3>From illustration to the real canal</h3><p>These are recorded Parks Canada films, not live cameras. A reliable public livestream of the lock chambers has not been verified.</p></div>
+    <div class="rideau-lab__film-actions">
+      <button type="button" data-rideau-film="pqRibZT_9Ls">Watch a lock passage (recorded)</button>
+      <button type="button" data-rideau-film="rHE4291qpWQ">See how lock gates are built (recorded)</button>
+    </div>
+    <div id="rideau-film-player" class="rideau-lab__player" hidden></div>
+    <p class="rideau-lab__film-links">No video player? <a href="https://www.youtube.com/watch?v=pqRibZT_9Ls" target="_blank" rel="noopener noreferrer">Watch the passage on YouTube</a> or <a href="https://www.youtube.com/watch?v=rHE4291qpWQ" target="_blank" rel="noopener noreferrer">watch gate construction</a>.</p>
+  </div>
+</section>
+
+<section class="foot-notes" aria-label="Rideau information and limitations">
+<h2>The canal is more than a straight line on a map</h2>
+<p>Builders used rivers, lakes, excavated cuts, dams and a chain of locks to cross eastern Ontario. Each stone chamber is part of a larger landscape. The tool focuses on understanding that landscape without pretending every visitor is operating a boat.</p>
+<details><summary>How many Rideau Canal locks are there?</summary><p>Parks Canada describes 24 lockstations and 47 locks including the Tay Canal. The operational index shows 26 individually named lock locations, including separate upper and lower sites at Nicholsons and Beveridges. Bridges and Colonel By Island are different kinds of entries, not additional locks. <a href="https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation">Official station index</a>.</p></details>
+<details><summary>What is a lockstation, and how is it different from a lock?</summary><p>A lock is a chamber used to raise or lower boats. A lockstation is the place where one or several chambers are operated. At Jones Falls, for example, four locks form one historic lockstation. <a href="https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/ecluse-lock-jones-falls">Jones Falls profile</a>.</p></details>
+<details><summary>Can I use this map to navigate a boat or kayak?</summary><p>No. Its pins locate official destinations, not a navigable track, depth, obstruction, wave or portage assessment. Use current charts, local conditions and Parks Canada's operational guidance. <a href="https://parks.canada.ca/lhn-nhs/on/rideau/visit/carte-map">Parks Canada orientation map</a>.</p></details>
+<details><summary>When does the canal open for the next season?</summary><p>The last verified 2026 navigation season ended October 12. This preview has not confirmed 2027 dates or live bridge/lock operations. Check Parks Canada's official <a href="https://parks.canada.ca/lhn-nhs/on/rideau/visit/heures-hours">hours page</a> closer to travel.</p></details>
+</section>
+</main>
+<footer class="site-footer"><div class="footer-inner"><span>Independent visitor planning preview. Not affiliated with Parks Canada. Not for nautical navigation.</span><span>Built by <a href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a> · Research checked November 17, 2026</span></div></footer>
+<script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script defer src="/assets/visitor-map-links.js"></script>
+<script defer src="/assets/rideau-journey-engine.js?v=20261117-policy"></script>
+<script defer src="/assets/rideau-lock-lab.js?v=20261118-interpretive"></script>
+<script defer src="/assets/rideau-canal.js?v=20261118-experience"></script>
+<script defer src="/assets/tool-engagement.js"></script>
+</body>
+</html>

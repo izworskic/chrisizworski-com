@@ -1,0 +1,45 @@
+name: Rideau Canal Field Desk browser acceptance
+on:
+  pull_request:
+    paths:
+      - 'data/rideau-canal/**'
+      - 'public/rideau-canal/**'
+      - 'public/assets/rideau-*'
+      - 'tests/rideau-canal.test.js'
+      - 'scripts/rideau-browser-qa.cjs'
+      - '.github/workflows/rideau-browser-qa.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: rideau-browser-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Source inventory and JS gates
+        run: node --test tests/rideau-canal.test.js
+      - name: Install isolated pinned Chromium test tools
+        run: |
+          npm install --prefix "$RUNNER_TEMP/rideau-playwright" --ignore-scripts --no-package-lock playwright@1.56.1
+          "$RUNNER_TEMP/rideau-playwright/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Run mobile, desktop and error browser journeys
+        env:
+          RIDEAU_QA_OUTPUT: artifacts/rideau-browser
+        run: RIDEAU_PLAYWRIGHT_MODULE="$RUNNER_TEMP/rideau-playwright/node_modules/playwright" node scripts/rideau-browser-qa.cjs
+      - name: Upload exact branch screenshots and QA report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rideau-field-desk-browser
+          path: artifacts/rideau-browser/
+          if-no-files-found: ignore
+          retention-days: 10

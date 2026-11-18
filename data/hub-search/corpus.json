@@ -903,6 +903,16 @@
    "href": "/welland-canal/"
   },
   {
+   "id": "rideau-canal",
+   "title": "Rideau Canal Trip Planner",
+   "tags": "boating travel planning ontario rideau-canal historic locks paddling kayaking",
+   "place": "",
+   "kind": "Historic waterway journeys",
+   "description": "Choose historic lockstations, compare documented boating distances and explore two Parks Canada paddling trips. Official operating hours must be checked separately.",
+   "months": "5,6,7,8,9,10",
+   "href": "/rideau-canal/"
+  },
+  {
    "id": "niagara-border",
    "title": "Niagara Border Wait Times Live — Peace, Rainbow & Lewiston",
    "tags": "planning live-data borders travel new-york ontario buffalo niagara",

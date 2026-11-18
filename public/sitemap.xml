@@ -1373,7 +1373,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
-  <url><loc>https://chrisizworski.com/st-lawrence-seaway/</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://chrisizworski.com/st-lawrence-seaway/</loc><lastmod>2026-11-17</lastmod></url>
   <url><loc>https://chrisizworski.com/eisenhower-lock/</loc><lastmod>2026-11-07</lastmod></url>
   <url>
     <loc>https://chrisizworski.com/apostle-islands/</loc>
@@ -1433,6 +1433,12 @@
   <url>
     <loc>https://chrisizworski.com/gooseberry-falls/</loc>
     <lastmod>2026-10-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://chrisizworski.com/rideau-canal/</loc>
+    <lastmod>2026-11-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>

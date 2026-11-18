@@ -1,3 +1,9 @@
+### 2026-11-18 | Rideau Canal experience release integration
+- **Visitor decision:** Three Rideau journey modes, a five-step lock operation, Ottawa and Jones Falls diagrams, source-grounded visitor viewing areas across seven highlighted lockstations and recorded Parks Canada films. No unverified live-camera or parking-direction claim.
+- **Change control:** PR #1772 merged into #1763; preserve the latest main Tools index, search corpus and sitemap. No advertising, publisher or canonical changes.
+- **Release evidence:** Rideau-specific checks passed before integration; full repository CI and production route verification remain required. No measured search or revenue uplift claimed.
+- **Next action:** Verify the integrated head, merge and independently smoke-test the canonical.
+
 ### 2026-11-18 | Winter Field Desk reviewed source-promotion safety
 - **Visitor decision:** The live three-destination Lake Superior winter desk still reports exact-trail access unknown. Date-scoped operator opening and winter parking availability remain unverified; the prototype stays noindex.
 - **Engineering:** Added two-phase Python source-health promotion tool with independent source and report reconciliation, five unique official webpages/six source roles, 3-hour timestamps, six page-content hashes, SHA-256 candidate and baseline locks, a source-linked REVIEW.md and explicit human receipt. Only source-checks.json and operator-notice-monitor.json are eligible for branch updates; route access and parking data cannot be modified by this tool. GitHub read-only source watch remains separate. Each scheduled GitHub source run additionally prepares an unsigned review packet artifact, never a signed approval or automatic promotion.

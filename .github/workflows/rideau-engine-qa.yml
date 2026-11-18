@@ -1,0 +1,46 @@
+name: Rideau Python Rust JS source and policy
+on:
+  pull_request:
+    paths:
+      - 'data/rideau-canal/**'
+      - 'public/assets/rideau-navigation.json'
+      - 'public/assets/rideau-journey-engine.js'
+      - 'scripts/verify-rideau-journeys.py'
+      - 'rust/rideau-journey/**'
+      - 'data/rideau-canal/watch-v1.json'
+      - 'public/assets/rideau-watch.json'
+      - 'public/assets/rideau-lock-lab.js'
+      - 'scripts/verify-rideau-experiences.py'
+      - 'tests/rideau-experiential.test.js'
+      - 'tests/rideau-journeys.test.js'
+      - '.github/workflows/rideau-engine-qa.yml'
+      - 'docs/experience-briefs/rideau-canal.release.json'
+      - 'benchmarks/tool-network-registry.json'
+      - 'public/tools/index.html'
+      - 'public/sitemap.xml'
+permissions:
+  contents: read
+concurrency:
+  group: rideau-engine-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  source-and-policy:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Python channel graph reconciliation and mirrors
+        run: python3 scripts/verify-rideau-journeys.py
+      - name: Python audited visitor viewpoints and mirrors
+        run: python3 scripts/verify-rideau-experiences.py
+      - name: Node route, paddle, interpretive instrument and source contracts
+        run: node --test tests/rideau-canal.test.js tests/rideau-journeys.test.js tests/rideau-experiential.test.js
+      - name: Independent native Rust calculation policy
+        run: cargo test --manifest-path rust/rideau-journey/Cargo.toml --offline
+      - name: Experience OS source and site integration evidence
+        run: node scripts/verify-experience-os-v1.2.mjs docs/experience-briefs/rideau-canal.release.json --check-site
