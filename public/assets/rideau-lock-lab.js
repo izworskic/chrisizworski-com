@@ -53,9 +53,9 @@
     }));
     render();
   }
-  if(root&&root.document){
-    if(root.document.readyState==='loading')root.document.addEventListener('DOMContentLoaded',()=>mount(root.document));
-    else mount(root.document);
+  if(typeof window==='object'&&window.document){
+    if(window.document.readyState==='loading')window.document.addEventListener('DOMContentLoaded',()=>mount(window.document));
+    else mount(window.document);
   }
   return Object.freeze({stages,model,clampStage,isValid,mount});
 });
