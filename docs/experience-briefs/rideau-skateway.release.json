@@ -133,17 +133,19 @@
       768,
       1440
     ],
-    "browserStatus": "PENDING",
-    "browserRun": "https://github.com/izworskic/chrisizworski-com/actions",
-    "screenshotEvidence": [],
-    "scopeNote": "Await final branch-head Chromium run and screenshot inspection; source metadata captured 2026-11-17. Real NCC client CORS delivery and public production are not yet verified."
+    "browserStatus": "PASSED",
+    "browserRun": "https://github.com/izworskic/chrisizworski-com/actions/runs/44302276718",
+    "screenshotEvidence": [
+      "https://github.com/izworskic/chrisizworski-com/actions/runs/44302276718/artifacts/14427061468"
+    ],
+    "scopeNote": "Chromium local-branch QA passed at 360/390/768/1440 px: source failure, current-shaped winter fixture, reverse selection, NCC section map, no-JS official links, and a real self-hosted 2025 photo rendered. Separate browser-origin NCC CORS probe reached the public official feed and returned all 14 sections, latest edited 2026-03-05. This verifies data delivery, NOT 2026-27 opening, deployed site or measured search performance."
   },
   "photos": [
     {
       "depictedSubject": "The Rideau Canal Skateway at Dow's Lake looking east on January 14, 2025",
       "author": "Ahunt (Wikimedia Commons photographer)",
       "license": "CC0 1.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Rideau%20Canal%20skating%206969.jpg?width=960",
+      "sourceUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Rideau_Canal_skating_6969.jpg/960px-Rideau_Canal_skating_6969.jpg",
       "creditUrl": "https://commons.wikimedia.org/wiki/File:Rideau_Canal_skating_6969.jpg",
       "subjectMatch": "exact"
     }
@@ -155,7 +157,9 @@
       "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/pull/1764"
     },
     "verified": {
-      "status": "PENDING"
+      "status": "CONFIRMED",
+      "checkedDate": "2026-11-18",
+      "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/actions/runs/44302276986"
     },
     "deployed": {
       "status": "PENDING"
@@ -167,5 +171,5 @@
       "status": "NOT_MEASURED"
     }
   },
-  "verificationLimit": "The page is a noindex draft. The official archive from March 2026 is not current, source status may change and neither source conditions nor a selected centroid confirms that an entrance is open or the ice is safe."
+  "verificationLimit": "Source and public CORS delivery verified on PR SHA 0ae1b1a3b3c968db993cfc06a83d4520b092c61a. Live NCC data remain archival as of March 2026 and do not confirm skating access for winter 2026-27. Draft is noindex, not deployed, not measured; maps show section centers rather than entrances or skating geometry."
 }
