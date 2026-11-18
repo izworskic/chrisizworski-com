@@ -1,0 +1,60 @@
+name: Hub search Rust WASM parity
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'rust/hub-search/**'
+      - 'public/assets/hub-search*'
+      - 'data/hub-search/**'
+      - 'scripts/build-hub-search.py'
+      - 'scripts/build-hub-search-rust.cjs'
+      - 'scripts/verify-hub-search-rust.cjs'
+      - 'tests/hub-search.test.js'
+      - 'public/tools/index.html'
+      - 'public/synced-national-tools/index.html'
+      - 'public/michigan-gardening/index.html'
+      - '.github/workflows/hub-search-rust-wasm.yml'
+  pull_request:
+    paths:
+      - 'rust/hub-search/**'
+      - 'public/assets/hub-search*'
+      - 'data/hub-search/**'
+      - 'scripts/build-hub-search.py'
+      - 'scripts/build-hub-search-rust.cjs'
+      - 'scripts/verify-hub-search-rust.cjs'
+      - 'tests/hub-search.test.js'
+      - 'public/tools/index.html'
+      - 'public/synced-national-tools/index.html'
+      - 'public/michigan-gardening/index.html'
+      - '.github/workflows/hub-search-rust-wasm.yml'
+permissions:
+  contents: read
+
+jobs:
+  wasm-parity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned Rust compiler and WASM target
+        run: |
+          rustup toolchain install 1.90.0 --profile minimal
+          rustup target add wasm32-unknown-unknown --toolchain 1.90.0
+      - name: Native Rust unit tests
+        run: |
+          rustc +1.90.0 --edition=2021 --test rust/hub-search/src/lib.rs -o /tmp/hub-search-tests
+          /tmp/hub-search-tests --test-threads=1
+      - name: Produce real WebAssembly from Rust source
+        run: |
+          rustc +1.90.0 --edition=2021 --crate-type cdylib --target wasm32-unknown-unknown \
+            -C opt-level=z -C codegen-units=1 -C lto=fat -C panic=abort -C strip=symbols \
+            -o /tmp/hub-search.wasm rust/hub-search/src/lib.rs
+      - name: Committed binary equals rustc output; Rust and JS rank identically on real cards
+        run: node scripts/verify-hub-search-rust.cjs --wasm=/tmp/hub-search.wasm
+      - name: Lexicon and corpus regenerate from current pages (Python)
+        run: python3 scripts/build-hub-search.py --check
+      - name: Relevance, wiring and parity tests
+        run: node --test tests/hub-search.test.js
