@@ -1,0 +1,51 @@
+name: Rideau Skateway official source and browser QA
+on:
+  pull_request:
+    paths:
+      - 'data/rideau-skateway/**'
+      - 'public/rideau-canal-skateway/**'
+      - 'public/assets/rideau-skateway*'
+      - 'scripts/verify-rideau-skateway.py'
+      - 'scripts/rideau-skateway-browser-qa.cjs'
+      - 'tests/rideau-skateway.test.js'
+      - '.github/workflows/rideau-skateway-qa.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: rideau-skateway-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  source-and-browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Reconcile NCC section and entrance source mirrors
+        run: python3 scripts/verify-rideau-skateway.py
+      - name: Static JS compiler and independent source policy tests
+        run: |
+          node --check public/assets/rideau-skateway.js
+          node --check public/assets/rideau-skateway-policy.js
+          node --test tests/rideau-skateway.test.js
+      - name: Install pinned isolated Chromium
+        run: |
+          npm install --prefix "$RUNNER_TEMP/skateway-playwright" --ignore-scripts --no-package-lock playwright@1.56.1
+          "$RUNNER_TEMP/skateway-playwright/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Inspect 360 390 768 and 1440px interactive fallback
+        env:
+          SKATEWAY_QA_OUTPUT: artifacts/rideau-skateway-browser
+        run: SKATEWAY_PLAYWRIGHT_MODULE="$RUNNER_TEMP/skateway-playwright/node_modules/playwright" node scripts/rideau-skateway-browser-qa.cjs
+      - name: Upload screenshots and source truth report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rideau-skateway-browser
+          path: artifacts/rideau-skateway-browser/
+          if-no-files-found: ignore
+          retention-days: 10
