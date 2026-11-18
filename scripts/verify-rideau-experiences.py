@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Verify published Rideau viewpoints without inventing entrance geometry."""
 import json
+import xml.etree.ElementTree as ET
 from pathlib import Path
 from urllib.parse import urlparse
 ROOT = Path(__file__).resolve().parents[1]
@@ -25,6 +26,7 @@ def check():
     for kind, chambers in (("ottawa", 8), ("jones-falls", 4)):
         file = ROOT / ("public/assets/rideau-locks-" + kind + "-diagram.svg")
         xml = file.read_text(encoding="utf-8")
+        assert ET.fromstring(xml).tag == "{http://www.w3.org/2000/svg}svg"
         assert xml.count("data-chamber=") == chambers
         assert "not to scale" in xml.lower()
         assert "svg" in xml and "source" not in file.name
