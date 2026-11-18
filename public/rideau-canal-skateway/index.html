@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rideau Canal Skateway Conditions &amp; Entrances | Ottawa</title>
+<meta name="description" content="See the NCC's section-by-section Rideau Canal Skateway reports and locate official entrances, transit, and parking. Unverified ice is never called open.">
+<meta name="robots" content="noindex,follow">
+<link rel="canonical" href="https://chrisizworski.com/rideau-canal-skateway/">
+<meta property="og:title" content="Rideau Canal Skateway: Section Conditions and Entrances">
+<meta property="og:description" content="A section-by-section Ottawa skating guide grounded in NCC reports, with honest freshness checks and entrance links.">
+<meta property="og:type" content="website"><meta property="og:url" content="https://chrisizworski.com/rideau-canal-skateway/">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebPage","@id":"https://chrisizworski.com/rideau-canal-skateway/#page","url":"https://chrisizworski.com/rideau-canal-skateway/","name":"Rideau Canal Skateway Conditions and Entrance Guide","description":"Check NCC ice condition reports for 14 Skateway sections and find official listed entrances and transit. Stale reports never count as open.","inLanguage":"en-US","author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@type":"WebSite","url":"https://chrisizworski.com/"}}]}</script>
+<link rel="preconnect" href="https://basemaps.cartocdn.com"><link rel="preconnect" href="https://commons.wikimedia.org">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<link rel="stylesheet" href="/assets/rideau-skateway.css?v=20261117-preview">
+</head>
+<body>
+<header class="site-header"><div class="site-inner"><a href="/" class="brand">Chris Izworski <span>/ Ottawa field guides</span></a><nav aria-label="Related places"><a href="/tools/">Explore tools</a><a href="https://ncc-ccn.gc.ca/places/skateway-ice-conditions" target="_blank" rel="noopener noreferrer">NCC official conditions</a></nav></div></header>
+<main>
+<div class="hero">
+ <p class="eyebrow">OTTAWA WINTER FIELD DESK</p>
+ <h1>Where can you skate on the <em>Rideau Canal?</em></h1>
+ <p class="lede">The canal is a different place in winter. When the ice is ready, you can skate between bridges, old stone walls and the heart of Ottawa. The National Capital Commission decides which sections open, and this desk shows what its latest report actually says.</p>
+ <div class="status-anchor" role="status" aria-live="polite">
+  <span class="small-label">OFFICIAL REPORT CHECK</span>
+  <strong id="overall-verdict">No current skating opening verified here</strong>
+  <p id="overall-story">The last audited NCC data are from March 4, 2026, when the 2025–26 season had ended. This is not evidence that any section is ready for the next season.</p>
+  <p class="source-time" id="source-time">NCC archival snapshot: March 4, 2026. Next skating season not yet verified.</p>
+  <a href="https://ncc-ccn.gc.ca/places/skateway-ice-conditions" target="_blank" rel="noopener noreferrer" class="official-link">Read current NCC ice conditions</a>
+ </div>
+</div>
+<section class="field-desk" aria-labelledby="desk-heading">
+ <div class="section-heading"><div><p class="eyebrow">YOUR SECTION</p><h2 id="desk-heading">Follow the canal, one stretch at a time</h2><p>Each point below represents an NCC ice section, not a staircase, parking spot or skating route.</p></div><a href="https://ncc-ccn.gc.ca/places/access-points-rideau-canal-skateway" target="_blank" rel="noopener noreferrer">Official entrance map</a></div>
+ <div class="filter-bar" id="filter-bar" hidden role="group" aria-label="Filter NCC ice sections">
+  <button type="button" data-filter="all" aria-pressed="true">All sections</button>
+  <button type="button" data-filter="open" aria-pressed="false">NCC-reported open</button>
+  <span id="filter-explain" role="status"></span>
+ </div>
+ <div id="interactive" class="desk-grid" hidden>
+  <div class="inventory"><h3>From the Rideau Locks to Hartwells</h3><div id="section-count" class="section-count"></div><ol id="section-list" aria-label="NCC Skateway sections"></ol></div>
+  <div class="selected-column">
+   <article class="selected" aria-labelledby="selected-title">
+    <span class="small-label">SELECTED NCC SECTION</span>
+    <h3 id="selected-title"></h3>
+    <div class="selected-status" id="selected-status"></div>
+    <p id="selected-description"></p>
+    <p id="selected-length" class="selected-length"></p>
+    <p class="source-time" id="selected-timestamp"></p>
+    <h4>Where to reach this stretch</h4><p class="access-disclaimer">Listed access names are from the NCC's directory. An entrance may be closed even if an ice section is open.</p>
+    <ul id="selected-access"></ul>
+    <p><a href="https://ncc-ccn.gc.ca/places/skateway-ice-conditions" target="_blank" rel="noopener noreferrer">Verify section status with NCC</a></p>
+   </article>
+   <div class="map-shell" id="map-shell" hidden><div id="skateway-map" aria-label="Map of 14 officially mapped skating section centroids"></div></div>
+   <div id="map-fallback" class="map-fallback">The section map is unavailable. Choose a section from the list and use NCC's official map for access.</div>
+   <p class="map-caption">Map markers are official ice-section centers, not places to enter the canal. No skating track or safe route is drawn.</p>
+  </div>
+ </div>
+ <div id="static-sections" class="static-sections">
+  <h3>Start with the official section list</h3>
+  <p>Official NCC ice status must be checked before traveling. The following names and lengths identify the winter Skateway's 14 published sections; they do not establish current ice access.</p>
+  <ol><li><a href="https://ncc-ccn.gc.ca/places/skateway-ice-conditions" target="_blank" rel="noopener noreferrer">Rideau to Mackenzie King</a><span>0.2 km. Historical segment inventory, not current skating status.</span></li>
+<li><a href="https://ncc-ccn.gc.ca/places/skateway-ice-conditions" target="_blank" rel="noopener noreferrer">Mackenzie King to Laurier</a><span>0.2 km. Historical segment inventory, not current skating status.</span></li>
+<li><a href="https://ncc-ccn.gc.ca/places/skateway-ice-conditions" target="_blank" rel="noopener noreferrer">Laurier to Somerset</a><span>0.42 km. Historical segment inventory, not current skating status.</span></li>
+<li><a href="https://ncc-ccn.gc.ca/places/skateway-ice-conditions" target="_blank" rel="noopener noreferrer">Somerset to Waverley</a><span>0.33 km. Historical segment inventory, not current skating status.</span></li>
+<li><a href="https://ncc-ccn.gc.ca/places/skateway-ice-conditions" target="_blank" rel="noopener noreferrer">Waverley to Concord</a><span>0.25 km. Historical segment inventory, not current skating status.</span></li>
+<li><a href="https://ncc-ccn.gc.ca/places/skateway-ice-conditions" target="_blank" rel="noopener noreferrer">Concord to Pretoria</a><span>0.65 km. Historical segment inventory, not current skating status.</span></li>
+<li><a href="https://ncc-ccn.gc.ca/places/skateway-ice-conditions" target="_blank" rel="noopener noreferrer">Pretoria to Fifth</a><span>0.8 km. Historical segment inventory, not current skating status.</span></li>
+<li><a href="https://ncc-ccn.gc.ca/places/skateway-ice-conditions" target="_blank" rel="noopener noreferrer">Patterson Creek</a><span>0.3 km. Historical segment inventory, not current skating status.</span></li>
+<li><a href="https://ncc-ccn.gc.ca/places/skateway-ice-conditions" target="_blank" rel="noopener noreferrer">Fifth to Lansdowne</a><span>0.7 km. Historical segment inventory, not current skating status.</span></li>
+<li><a href="https://ncc-ccn.gc.ca/places/skateway-ice-conditions" target="_blank" rel="noopener noreferrer">Lansdowne to Bank</a><span>0.45 km. Historical segment inventory, not current skating status.</span></li>
+<li><a href="https://ncc-ccn.gc.ca/places/skateway-ice-conditions" target="_blank" rel="noopener noreferrer">Bank to Bronson</a><span>1 km. Historical segment inventory, not current skating status.</span></li>
+<li><a href="https://ncc-ccn.gc.ca/places/skateway-ice-conditions" target="_blank" rel="noopener noreferrer">Bronson to Dow&#39;s Lake</a><span>0.2 km. Historical segment inventory, not current skating status.</span></li>
+<li><a href="https://ncc-ccn.gc.ca/places/skateway-ice-conditions" target="_blank" rel="noopener noreferrer">Dow&#39;s Lake Loop</a><span>1.7 km. Historical segment inventory, not current skating status.</span></li>
+<li><a href="https://ncc-ccn.gc.ca/places/skateway-ice-conditions" target="_blank" rel="noopener noreferrer">Dow&#39;s Lake to Library</a><span>0.6 km. Historical segment inventory, not current skating status.</span></li></ol>
+  <p><a href="https://ncc-ccn.gc.ca/places/skateway-ice-conditions" target="_blank" rel="noopener noreferrer">NCC section opening and ice-condition report</a></p>
+ </div>
+</section>
+<section class="access-field" aria-labelledby="access-heading">
+ <div><p class="eyebrow">FIND YOUR WAY THERE</p><h2 id="access-heading">Choose an entrance with a plan B</h2><p>The NCC lists entrances near rail stations and parking. Use its current map to check that a staircase or ramp actually reaches an open section. Parking descriptions are reference information, not guaranteed spaces or current prices.</p></div>
+ <ul class="access-list"><li><div class="access-name"><strong>Rideau</strong><span class="stepfree">NCC-listed universal access</span></div><p>O-Train: Rideau. Parking: Rideau Centre (paid).</p><a href="https://www.google.com/maps/search/?api=1&query=Rideau%20Canal%20Skateway%20Rideau%20entrance%20Ottawa%20Ontario%20Canada" target="_blank" rel="noopener noreferrer">Find this entrance in Google Maps</a></li>
+<li><div class="access-name"><strong>Mackenzie King West</strong><span class="stepfree">NCC-listed universal access</span></div><p>O-Train: Parliament. Parking: National Arts Centre, Ottawa City Hall and World Exchange Plaza (paid).</p><a href="https://www.google.com/maps/search/?api=1&query=Rideau%20Canal%20Skateway%20Mackenzie%20King%20West%20entrance%20Ottawa%20Ontario%20Canada" target="_blank" rel="noopener noreferrer">Find this entrance in Google Maps</a></li>
+<li><div class="access-name"><strong>Laurier East</strong></div><p>O-Train: Rideau / uOttawa. Parking: University of Ottawa (K) (paid).</p><a href="https://www.google.com/maps/search/?api=1&query=Rideau%20Canal%20Skateway%20Laurier%20East%20entrance%20Ottawa%20Ontario%20Canada" target="_blank" rel="noopener noreferrer">Find this entrance in Google Maps</a></li>
+<li><div class="access-name"><strong>Somerset East</strong></div><p>O-Train: uOttawa. Parking: University of Ottawa (K) (paid).</p><a href="https://www.google.com/maps/search/?api=1&query=Rideau%20Canal%20Skateway%20Somerset%20East%20entrance%20Ottawa%20Ontario%20Canada" target="_blank" rel="noopener noreferrer">Find this entrance in Google Maps</a></li>
+<li><div class="access-name"><strong>Concord</strong></div><p>O-Train: uOttawa. Parking: University of Ottawa (Mann) (paid).</p><a href="https://www.google.com/maps/search/?api=1&query=Rideau%20Canal%20Skateway%20Concord%20entrance%20Ottawa%20Ontario%20Canada" target="_blank" rel="noopener noreferrer">Find this entrance in Google Maps</a></li>
+<li><div class="access-name"><strong>Pretoria</strong></div><p>O-Train: No directly listed O-Train stop. Parking: O'Connor and Pretoria (paid).</p><a href="https://www.google.com/maps/search/?api=1&query=Rideau%20Canal%20Skateway%20Pretoria%20entrance%20Ottawa%20Ontario%20Canada" target="_blank" rel="noopener noreferrer">Find this entrance in Google Maps</a></li>
+<li><div class="access-name"><strong>Holmwood</strong><span class="stepfree">NCC-listed universal access</span></div><p>O-Train: No directly listed O-Train stop. Parking: Lansdowne (paid).</p><a href="https://www.google.com/maps/search/?api=1&query=Rideau%20Canal%20Skateway%20Holmwood%20entrance%20Ottawa%20Ontario%20Canada" target="_blank" rel="noopener noreferrer">Find this entrance in Google Maps</a></li>
+<li><div class="access-name"><strong>Fifth</strong></div><p>O-Train: No directly listed O-Train stop. Parking: Lansdowne (paid).</p><a href="https://www.google.com/maps/search/?api=1&query=Rideau%20Canal%20Skateway%20Fifth%20entrance%20Ottawa%20Ontario%20Canada" target="_blank" rel="noopener noreferrer">Find this entrance in Google Maps</a></li>
+<li><div class="access-name"><strong>Bronson</strong><span class="stepfree">NCC-listed universal access</span></div><p>O-Train: No directly listed O-Train stop. Parking: Carleton University P6 and P7 (paid).</p><a href="https://www.google.com/maps/search/?api=1&query=Rideau%20Canal%20Skateway%20Bronson%20entrance%20Ottawa%20Ontario%20Canada" target="_blank" rel="noopener noreferrer">Find this entrance in Google Maps</a></li>
+<li><div class="access-name"><strong>Dow&#39;s</strong><span class="stepfree">NCC-listed universal access</span></div><p>O-Train: Dow's Lake. Parking: Norman and Booth (paid).</p><a href="https://www.google.com/maps/search/?api=1&query=Rideau%20Canal%20Skateway%20Dow's%20entrance%20Ottawa%20Ontario%20Canada" target="_blank" rel="noopener noreferrer">Find this entrance in Google Maps</a></li>
+<li><div class="access-name"><strong>Library</strong></div><p>O-Train: Carleton. Parking: Carleton University 5A-B (paid).</p><a href="https://www.google.com/maps/search/?api=1&query=Rideau%20Canal%20Skateway%20Library%20entrance%20Ottawa%20Ontario%20Canada" target="_blank" rel="noopener noreferrer">Find this entrance in Google Maps</a></li></ul>
+ <p class="access-foot"><a href="https://ncc-ccn.gc.ca/places/access-points-rideau-canal-skateway" target="_blank" rel="noopener noreferrer">All NCC access points and universal entrance details</a>. NCC lists roughly 30 staircases and 5 universal access ramps, subject to current conditions and maintenance.</p>
+</section>
+<section class="winter-story" aria-labelledby="story-heading">
+ <div><p class="eyebrow">THE RIDEAU IN WINTER</p><h2 id="story-heading">A remarkable winter street through Ottawa</h2>
+ <p>During a good winter, the Rideau Canal Skateway extends about 7.8 kilometres. Some days only a few sections are open. On others, the canal becomes a long ribbon of people heading for an afternoon skate, a warm drink and the next bridge.</p>
+ <p>Unlike a weather forecast, an NCC opening is a managed decision. The crew measures ice, maintains the surface and closes sections when conditions change. Weather that looks cold enough is not permission to step onto the canal.</p>
+ <p>Dress for changing wind, confirm rental and washroom availability, and use the official entrances. In 2025–26, Patterson Creek's skating area had a separate bridge-rehabilitation closure. Do not assume that temporary closure carries into another season.</p>
+ <p><a href="https://ncc-ccn.gc.ca/places/rideau-canal-skateway" target="_blank" rel="noopener noreferrer">Read the NCC's full Skateway visitor guide</a></p></div>
+ <figure><img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Rideau%20Canal%20skating%206969.jpg?width=960" alt="Archival photograph of the Rideau Canal Skateway at Dow's Lake, looking east across the winter ice" loading="lazy" decoding="async" width="960" height="720">
+ <figcaption>Dow's Lake in winter, January 14, 2025. <a href="https://commons.wikimedia.org/wiki/File:Rideau_Canal_skating_6969.jpg" target="_blank" rel="noopener noreferrer">Credit: Ahunt, Wikimedia Commons (CC0 1.0)</a>. Archival image, not current ice evidence.</figcaption></figure>
+</section>
+<section class="evidence" aria-labelledby="evidence-heading"><h2 id="evidence-heading">How this desk decides what to show</h2>
+ <p>Live claims come only from all 14 NCC sections and the NCC's published last-edit time. The report must be no older than 18 hours, within the skating season, and structurally complete. Missing, future-dated or unfamiliar observations become <strong>unverified</strong>, never an inferred opening.</p>
+ <p>Sections marked Good, Very Good, Fair, Poor or Open may be displayed as NCC-reported skateable only while that complete official feed is recent. Snow Covered and Walking Only do not become skating openings. Source-defined condition categories are not personal ice-safety judgments.</p>
+ <p>This independent guide uses NCC information under the <a href="https://open.canada.ca/en/open-government-licence-canada" target="_blank" rel="noopener noreferrer">Open Government Licence - Canada</a>. Data source: <a href="https://open.canada.ca/data/dataset/05586948-c5ac-4de9-b9ef-a31020b0dc43" target="_blank" rel="noopener noreferrer">National Capital Commission Skateway Ice Conditions</a>. No endorsement by NCC or Parks Canada is implied.</p>
+ <p><strong>Source checked:</strong> November 17, 2026. <strong>Last archived edit:</strong> March 4, 2026 local Ottawa time. Browser-fetched observations are never stored as a visitor's location.</p>
+</section>
+</main>
+<footer class="site-footer"><div class="site-inner"><span>Independent visitor guide, not an official ice-safety service.</span><span>Built by <a href="/chris-izworski/">Chris Izworski</a></span></div></footer>
+<script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script defer src="/assets/rideau-skateway-policy.js?v=1"></script>
+<script defer src="/assets/rideau-skateway.js?v=1"></script>
+</body></html>

@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "sourceUrl": "https://ncc-ccn.gc.ca/places/access-points-rideau-canal-skateway",
+  "checkedOn": "2026-11-17",
+  "selectionMeaning": "Named official recommended entrances, not proof of current approach; Google Maps URLs are searches, not surveyed access pins",
+  "entrances": [
+    {
+      "name": "Rideau",
+      "transit": "Rideau",
+      "parking": "Rideau Centre (paid)",
+      "accessible": true,
+      "googleSearch": "https://www.google.com/maps/search/?api=1&query=Rideau%20Canal%20Skateway%20Rideau%20entrance%20Ottawa%20Ontario%20Canada"
+    },
+    {
+      "name": "Mackenzie King West",
+      "transit": "Parliament",
+      "parking": "National Arts Centre, Ottawa City Hall and World Exchange Plaza (paid)",
+      "accessible": true,
+      "googleSearch": "https://www.google.com/maps/search/?api=1&query=Rideau%20Canal%20Skateway%20Mackenzie%20King%20West%20entrance%20Ottawa%20Ontario%20Canada"
+    },
+    {
+      "name": "Laurier East",
+      "transit": "Rideau / uOttawa",
+      "parking": "University of Ottawa (K) (paid)",
+      "accessible": false,
+      "googleSearch": "https://www.google.com/maps/search/?api=1&query=Rideau%20Canal%20Skateway%20Laurier%20East%20entrance%20Ottawa%20Ontario%20Canada"
+    },
+    {
+      "name": "Somerset East",
+      "transit": "uOttawa",
+      "parking": "University of Ottawa (K) (paid)",
+      "accessible": false,
+      "googleSearch": "https://www.google.com/maps/search/?api=1&query=Rideau%20Canal%20Skateway%20Somerset%20East%20entrance%20Ottawa%20Ontario%20Canada"
+    },
+    {
+      "name": "Concord",
+      "transit": "uOttawa",
+      "parking": "University of Ottawa (Mann) (paid)",
+      "accessible": false,
+      "googleSearch": "https://www.google.com/maps/search/?api=1&query=Rideau%20Canal%20Skateway%20Concord%20entrance%20Ottawa%20Ontario%20Canada"
+    },
+    {
+      "name": "Pretoria",
+      "transit": "No directly listed O-Train stop",
+      "parking": "O'Connor and Pretoria (paid)",
+      "accessible": false,
+      "googleSearch": "https://www.google.com/maps/search/?api=1&query=Rideau%20Canal%20Skateway%20Pretoria%20entrance%20Ottawa%20Ontario%20Canada"
+    },
+    {
+      "name": "Holmwood",
+      "transit": "No directly listed O-Train stop",
+      "parking": "Lansdowne (paid)",
+      "accessible": true,
+      "googleSearch": "https://www.google.com/maps/search/?api=1&query=Rideau%20Canal%20Skateway%20Holmwood%20entrance%20Ottawa%20Ontario%20Canada"
+    },
+    {
+      "name": "Fifth",
+      "transit": "No directly listed O-Train stop",
+      "parking": "Lansdowne (paid)",
+      "accessible": false,
+      "googleSearch": "https://www.google.com/maps/search/?api=1&query=Rideau%20Canal%20Skateway%20Fifth%20entrance%20Ottawa%20Ontario%20Canada"
+    },
+    {
+      "name": "Bronson",
+      "transit": "No directly listed O-Train stop",
+      "parking": "Carleton University P6 and P7 (paid)",
+      "accessible": true,
+      "googleSearch": "https://www.google.com/maps/search/?api=1&query=Rideau%20Canal%20Skateway%20Bronson%20entrance%20Ottawa%20Ontario%20Canada"
+    },
+    {
+      "name": "Dow's",
+      "transit": "Dow's Lake",
+      "parking": "Norman and Booth (paid)",
+      "accessible": true,
+      "googleSearch": "https://www.google.com/maps/search/?api=1&query=Rideau%20Canal%20Skateway%20Dow's%20entrance%20Ottawa%20Ontario%20Canada"
+    },
+    {
+      "name": "Library",
+      "transit": "Carleton",
+      "parking": "Carleton University 5A-B (paid)",
+      "accessible": false,
+      "googleSearch": "https://www.google.com/maps/search/?api=1&query=Rideau%20Canal%20Skateway%20Library%20entrance%20Ottawa%20Ontario%20Canada"
+    }
+  ]
+}
