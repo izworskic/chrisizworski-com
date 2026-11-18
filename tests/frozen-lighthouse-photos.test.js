@@ -120,7 +120,11 @@ test('Michigan Tools puts Frozen Lighthouse Watch in Great Lakes weather and win
  assert.ok(persona>winter&&persona<featured,'winter decision desk links directly to watch');
  assert.match(tools.slice(persona,persona+850),/data-track-tool="frozen-lighthouse-watch"/);
  assert.match(tools.slice(persona,persona+850),/view from shore/);
- const schema=JSON.parse(tools.match(/<script type="application\\/ld\\+json">([\\s\\S]*?)<\\/script>/)[1]);
+ const scriptStart=tools.indexOf('<script type="application/ld+json">');
+ assert.ok(scriptStart>=0,'Tools ItemList script exists');
+ const jsonStart=scriptStart+'<script type="application/ld+json">'.length;
+ const jsonEnd=tools.indexOf('</script>',jsonStart);
+ const schema=JSON.parse(tools.slice(jsonStart,jsonEnd));
  const list=schema['@graph'].find(item=>item['@id']==='https://chrisizworski.com/tools/#toollist');
  assert.ok(list);
  const catalogCount=(tools.match(/class="tool-card"/g)||[]).length;
