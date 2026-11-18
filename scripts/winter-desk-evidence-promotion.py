@@ -207,6 +207,8 @@ def main():
         if candidate == PREVIEW.resolve() or PREVIEW.resolve() in candidate.parents:
             raise ValueError("Candidate must be external to tracked visitor preview")
         data, contents = read_bundle(candidate)
+        if any(not isinstance(value, dict) for value in data.values()):
+            raise ValueError("All three evidence documents must be JSON objects")
         baseline = {name: (PREVIEW / name).read_bytes() for name in PROMOTED}
         packet = evaluate(data, contents, baseline)
         if args.review_out:
@@ -223,6 +225,42 @@ def main():
                 "verifiedNoOpening": False, "approvalPhrase": PHRASE,
             }
             (target / "approval-template.json").write_text(json.dumps(template, indent=2) + "\n")
+            lines = [
+                "# Winter Field Desk source-health promotion review",
+                "",
+                "Status: **" + ("ELIGIBLE FOR HUMAN REVIEW" if packet["eligible"] else "HOLD") + "**",
+                "Candidate checked: " + str(packet["candidateTime"]),
+                "Candidate SHA-256: `" + packet["candidateDigest"] + "`",
+                "Baseline SHA-256: `" + packet["baselineDigest"] + "`",
+                "Changed files: " + (", ".join(packet["changedFiles"]) or "none"),
+                "",
+                "## Original official source pages to inspect",
+            ]
+            lines.extend("- " + url for url in packet["sourceUrls"])
+            lines.extend([
+                "",
+                "## Required human decision",
+                "Review each original source above and compare the two candidate JSON files",
+                "against the checked-in noindex preview. A page responding HTTP 200 or",
+                "containing a historical policy phrase does NOT establish today's trail",
+                "opening, safe ice, plowed parking or a closure of a different trail.",
+                "",
+                "If all observations are still accurate, fill in approval-template.json:",
+                "a real reviewer identity, UTC reviewedAt, verifiedNoOpening: true,",
+                "the exact source URL list, both SHA-256 hashes and the required phrase.",
+                "Then use the --apply --approval options on a non-main review branch.",
+                "Review the resulting two-file git diff and require an ordinary PR review.",
+                "This script does not authenticate the claimed reviewer identity.",
+                "",
+                "Never promote a changed or unavailable source as an opening. A HOLD",
+                "requires fresh source review, not an automated fallback.",
+                "",
+                "## Validation errors",
+            ])
+            lines.extend("- " + issue for issue in packet["errors"])
+            if not packet["errors"]:
+                lines.append("- None in automated evidence health checks")
+            (target / "REVIEW.md").write_text("\n".join(lines) + "\n")
         if args.apply:
             branch = writing_branch()
             if not branch or branch in ("main", "master"):
