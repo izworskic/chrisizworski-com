@@ -95,8 +95,8 @@
     setText('feature-tip',p.visit.interpretiveTip);
     setText('feature-address',p.visit.address);
     const links=$('feature-links');links.replaceChildren(officialLink(p));
-    const search=mapSearch(p);
-    if(search)links.append(sourceLink(search,'View in Google Maps'));
+    const search=mapSearch(p)||'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(p.visit.address);
+    links.append(sourceLink(search,'View in Google Maps'));
     const img=$('feature-photo'),wrap=$('feature-photo-wrap');
     wrap.hidden=true;img.removeAttribute('src');
     const token=++photoToken;const photo=p.visit.photo;
@@ -107,7 +107,7 @@
         if(token!==photoToken||state.selectedPlaceId!==p.id)return;
         img.src=probe.src;
         img.alt=photo.caption;
-        $('feature-photo-caption').textContent=photo.caption+' · '+photo.credit+' · '+photo.license+' · ';
+        $('feature-photo-caption').textContent=photo.caption+' · '+photo.credit+' · '+photo.license+' · Display cropped to 16:9 · ';
         const credit=$('feature-photo-credit');credit.replaceChildren(sourceLink(photo.source,'Source and author'),document.createTextNode(' · '),sourceLink(photo.licenseUrl,'Reuse terms'));
         wrap.hidden=false;
       };
@@ -140,7 +140,9 @@
     if(!window.L||!valid.length){shell.hidden=true;fallback.hidden=false;return;}
     try{
       const source=await mapTileSource();
+      shell.hidden=false;
       map=L.map('rideau-map',{scrollWheelZoom:false,zoomControl:true}).setView([44.82,-76.0],8);
+      map.invalidateSize({pan:false});
       let activeLayer=null,attempt=0;
       function installTiles(chosen){
         if(!map)return;
