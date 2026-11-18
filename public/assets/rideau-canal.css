@@ -181,3 +181,16 @@ footer.site-footer a{color:#fff}
 @media(max-width:850px){.rideau-lab__layout{grid-template-columns:minmax(0,1fr)}.rideau-lab__film{grid-template-columns:1fr}}
 @media(max-width:600px){.rideau-lab{padding-top:24px}.rideau-lab__instrument{padding:10px}.rideau-lab__story{padding:16px}.rideau-lab__controls button{flex:1 1 45%;font-size:.87rem}.rideau-watch-guide{padding:13px}.rideau-watch-stop .feature__source{gap:7px}}
 @media(prefers-reduced-motion:reduce){#lock-lab-chamber-water,#lock-lab-boat,#lock-lab-lower-gate,#lock-lab-upper-gate{transition:none!important}}
+
+.rideau-diorama{margin:26px 0 14px;border-top:1px solid var(--line);padding-top:24px}
+.rideau-diorama__header{display:flex;align-items:end;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.rideau-diorama__header>div:first-child{max-width:660px}
+.rideau-diorama__header h3{margin:0 0 6px}
+.rideau-diorama__header p{margin:6px 0 12px}
+.rideau-diorama__buttons{display:flex;gap:8px;flex-wrap:wrap}
+.rideau-diorama__buttons button{min-height:46px;padding:10px 13px;border:2px solid var(--deep);border-radius:8px;color:var(--deep);background:#fff;font:700 .89rem/1.2 system-ui}
+.rideau-diorama__buttons [aria-pressed=true]{background:var(--deep);color:#fff}
+.rideau-diorama figure{margin:18px 0 0}
+.rideau-diorama img{display:block;width:100%;height:auto;background:#e4ede9;border-radius:12px}
+.rideau-diorama figcaption{padding-top:8px;color:var(--muted);font-size:.88rem;line-height:1.45}
+@media(max-width:600px){.rideau-diorama__buttons{width:100%}.rideau-diorama__buttons button{flex:1 1 120px}.rideau-diorama img{aspect-ratio:1024/420;object-fit:contain}}

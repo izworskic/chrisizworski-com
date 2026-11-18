@@ -22,6 +22,12 @@ def check():
             assert urlparse(place["sourceUrl"]).netloc in ALLOWED
             assert not any(key in place for key in ("lat", "lon", "geometry", "directions", "parkingCoordinates"))
             count += 1
+    for kind, chambers in (("ottawa", 8), ("jones-falls", 4)):
+        file = ROOT / ("public/assets/rideau-locks-" + kind + "-diagram.svg")
+        xml = file.read_text(encoding="utf-8")
+        assert xml.count("data-chamber=") == chambers
+        assert "not to scale" in xml.lower()
+        assert "svg" in xml and "source" not in file.name
     return {"auditedStations": len(record["stations"]), "namedViewpointChoices": count,
             "verifiedParkingEntrances": 0, "liveCameraStreams": 0}
 if __name__ == "__main__":

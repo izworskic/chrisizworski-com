@@ -49,6 +49,16 @@ async function run(){
        assert.equal(await page.locator('#lock-lab-chamber-water').getAttribute('y'),'246');
        await page.locator('#lock-lab-reset').click();
        assert.match(await page.locator('#lock-lab-step-title').innerText(),/Enter at the lower water level/);
+       await page.locator('[data-rideau-diorama="jones"]').click();
+       assert.equal(await page.locator('#rideau-diorama-image').getAttribute('src'),'/assets/rideau-locks-jones-falls-diagram.svg');
+       assert.match(await page.locator('#rideau-diorama-caption').innerText(),/three lower locks/i);
+       await page.locator('[data-rideau-diorama="ottawa"]').click();
+       assert.equal(await page.locator('#rideau-diorama-image').getAttribute('src'),'/assets/rideau-locks-ottawa-diagram.svg');
+       if(width===390){
+         const dioramaShot=path.join(out,'rideau-dioramas-390.png');
+         await page.locator('.rideau-diorama').screenshot({path:dioramaShot,animations:'disabled'});
+         report.screenshots.push(dioramaShot);
+       }
        if(width===390){
          const labShot=path.join(out,'rideau-lock-cutaway-390.png');
          await page.locator('#inside-the-lock').screenshot({path:labShot,animations:'disabled'});

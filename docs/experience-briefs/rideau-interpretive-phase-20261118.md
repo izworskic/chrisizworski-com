@@ -40,3 +40,6 @@ New interaction syntax/source checks and workflow checks are required. Browser p
 
 ## Station-level extension
 All seven highlighted station IDs now provide at least one published visitor context. Only Ottawa and Jones Falls have independently described specific viewpoints/trails. The other five cite Parks Canada station visitor areas, parking amenities or self-guided trails, without inventing precise walking lines or entrances. Official profiles are the source and current access must be rechecked.
+
+## Educational station schematics
+Two optional static isometric diagrams are part of the lock-lab teaching experience. Ottawa shows eight sequential chambers; Jones Falls shows three lower and one separate upper chamber plus a separately identified Stone Arch Dam. They deliberately avoid inventing elevation, distance, site geometry, legal access or navigation. Both are tiny local SVG assets, manually selectable with native buttons, available without JavaScript by the first source. Not actual 3D digital twins, Blender models or physical water simulation. They illustrate relative chamber sequence, not a surveyed location plan.

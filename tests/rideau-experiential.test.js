@@ -57,3 +57,16 @@ test('interpretive copy is location-specific and site contracts remain unchanged
   assert.doesNotMatch(html,/youtube-nocookie\.com\/embed/);
   assert.ok(html.includes('/assets/rideau-lock-lab.js'));
 });
+
+test('two sourced lock-flight schematics are selectable without fabricated dimensions',()=>{
+  for(const kind of ['ottawa','jones']){
+    const file='public/assets/rideau-locks-'+(kind==='ottawa'?'ottawa':'jones-falls')+'-diagram.svg';
+    const graphic=fs.readFileSync(file,'utf8');
+    assert.match(graphic,/not to scale/i);
+    assert.match(graphic,/data-chamber=/);
+    assert.doesNotMatch(graphic,/current river depth|verified arrival|elevation meters/i);
+    assert.match(html,new RegExp('/assets/rideau-locks-'+(kind==='ottawa'?'ottawa':'jones-falls')+'-diagram.svg|data-rideau-diorama="'+kind+'"'));
+  }
+  assert.equal((fs.readFileSync('public/assets/rideau-locks-ottawa-diagram.svg','utf8').match(/data-chamber=/g)||[]).length,8);
+  assert.equal((fs.readFileSync('public/assets/rideau-locks-jones-falls-diagram.svg','utf8').match(/data-chamber=/g)||[]).length,4);
+});
