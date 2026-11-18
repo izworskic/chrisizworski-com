@@ -10,6 +10,7 @@
   const KEY='ciz:starred-tools:v1';
   const cardSel=section.dataset.cards||'[data-tool-id]';
   const titleSel=section.dataset.title||'a[href]';
+  const linkSel=section.dataset.link||titleSel;
   const list=section.querySelector('[data-stars-list]');
   const hint=section.querySelector('[data-stars-hint]');
   let store=null;
@@ -20,8 +21,8 @@
   const cards=()=>[...document.querySelectorAll(cardSel)];
   const byId=id=>cards().find(c=>c.dataset.toolId===id);
   const titleOf=c=>{const a=c.querySelector(titleSel);return a?a.textContent.replace(/\s+/g,' ').trim():c.dataset.toolId;};
-  const hrefOf=c=>{const a=c.querySelector(titleSel);return a?a.getAttribute('href'):'#';};
-  const track=(id,action)=>{if(typeof window.gtag==='function')window.gtag('event','tool_star',{tool_id:id,action,placement:'tools-directory'});};
+  const hrefOf=c=>{const a=c.querySelector(linkSel);return a?a.getAttribute('href'):'#';};
+  const track=(id,action)=>{if(typeof window.gtag==='function')window.gtag('event','tool_star',{tool_id:id,action,placement:section.dataset.placement||'tools-directory'});};
 
   function toggle(id){
     const ids=read();const at=ids.indexOf(id);

@@ -642,3 +642,38 @@ h1 {
   }
 }
 .directory-card.is-peak{border-color:var(--accent);box-shadow:inset 0 3px 0 var(--accent)}
+
+/* This-week desk (Nov 2026): worth checking now, starred tools, region jump menu, compact phone cards. */
+.peak-now,.starred-tools{margin:0 0 14px;padding:14px 18px;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+.peak-now h2,.starred-tools h2{margin:0 0 4px;font:700 .72rem/1.2 var(--hm-body,sans-serif);letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
+.peak-now__note{margin:0 0 6px;font-size:.82rem;color:var(--muted)}
+.peak-now__list{list-style:none;margin:0;padding:0}
+.peak-now__list li{border-top:1px solid var(--line)}.peak-now__list li:first-child{border-top:0}
+.peak-now__list a{display:flex;flex-direction:column;gap:2px;min-height:44px;justify-content:center;padding:8px 2px;text-decoration:none}
+.peak-title{font:600 1rem/1.3 var(--hm-display,Georgia,serif);color:var(--green-dark)}
+.peak-now__list a:hover .peak-title{text-decoration:underline}
+.peak-meta{font-size:.82rem;line-height:1.4;color:var(--muted)}
+.starred-tools__hint{margin:0;font-size:.86rem;color:var(--muted)}
+.starred-tools__list{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.starred-tools__list li{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;background:var(--green-soft);padding-left:13px}
+.starred-tools__list a{color:var(--green-dark);font-size:.86rem;padding:9px 0}
+.starred-tools__remove{border:0;background:none;min-width:40px;min-height:40px;border-radius:50%;cursor:pointer;color:var(--muted)}
+.region-jump{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:0 0 18px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+.region-jump strong{font:700 .66rem/1.2 var(--hm-body,sans-serif);letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-right:4px}
+.region-jump a{display:inline-flex;align-items:center;min-height:36px;padding:5px 12px;border:1px solid var(--line);border-radius:999px;color:var(--green-dark);font-size:.84rem;text-decoration:none;white-space:nowrap}
+.region-jump a:hover{background:var(--green-soft)}
+.catalog-group h2,.regional-collections h2{scroll-margin-top:64px}
+.directory-card.has-star{position:relative}.directory-card.has-star .card-top{padding-right:42px}
+.tool-star{position:absolute;top:6px;right:6px;width:44px;height:44px;border:0;background:none;border-radius:50%;font-size:1.3rem;line-height:1;color:var(--gold);cursor:pointer}
+.tool-star:hover{background:var(--green-soft)}.tool-star[aria-pressed="true"]{color:var(--green)}
+.tool-star:focus-visible,.starred-tools__remove:focus-visible,.region-jump a:focus-visible,.peak-now__list a:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+@media (max-width:680px){
+.peak-now,.starred-tools{padding:12px 14px}
+.region-jump{position:sticky;top:0;z-index:5;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;border-radius:0 0 8px 8px;margin:0 0 12px}
+.directory-card{padding:12px 14px}.card-top{margin-bottom:4px}
+.directory-card .description{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:.88rem;line-height:1.5;margin-bottom:6px}
+.directory-card .signals{display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;padding-top:6px;margin-bottom:8px}
+.primary-action{min-height:44px;padding:8px 12px;font-size:.82rem}
+.catalog-grid{gap:10px}
+.persona-picks{display:flex;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;gap:8px;margin-right:-12px;padding-bottom:2px}.persona-pick{flex:0 0 auto;white-space:nowrap}
+}
