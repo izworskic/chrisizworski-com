@@ -29,7 +29,7 @@ test('the demonstration is HTML-first, accessible and never claims to be live',(
 });
 test('viewpoint data is mirrored and never invents a walking geometry or entrance',()=>{
   assert.equal(fs.readFileSync('data/rideau-canal/watch-v1.json','utf8'),fs.readFileSync('public/assets/rideau-watch.json','utf8'));
-  assert.deepEqual(Object.keys(watch.stations).sort(),['jones-falls','ottawa']);
+  assert.deepEqual(Object.keys(watch.stations).sort(),['chaffeys','jones-falls','kingston-mills','merrickville','newboro','ottawa','smiths-falls-combined']);
   for(const s of Object.values(watch.stations)){
     assert.ok(s.intro&&s.foodSearch);
     for(const p of s.places){

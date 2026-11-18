@@ -3,7 +3,7 @@ Reviewed: 2026-11-18. Owner: izworskic/chrisizworski-com.
 Parent release: PR #1763. New phase is a stacked review, not production.
 
 ## Visitor task and diagnosis
-The original tool could locate and describe seven historic sites but could not demonstrate how a lock operates or distinguish a publicly described viewpoint from an ordinary lockstation place pin. The selected experience gives visitors a manual five-stage cutaway and a station-specific published viewpoint or trail, with a verified visitor-source handoff.
+The original tool could locate and describe seven historic sites but could not demonstrate how a lock operates or distinguish a publicly described viewpoint from an ordinary lockstation place pin. The selected experience gives visitors a manual five-stage cutaway and a station-specific published viewpoint, trail or visitor area, with a verified visitor-source handoff.
 
 ## Competing concepts
 A: full-screen WebGL/Blender model with camera animation, physical water simulation and a new runtime. Rich spatial appearance, but unverified gate dimensions and high mobile performance cost would delay a useful answer.
@@ -11,7 +11,7 @@ B: first build a source-backed SVG sectional instrument with manual steps, acces
 
 ## Three opportunities
 1. Replace static lock trivia with a causal rise/fill/open demonstration.
-2. Give selected Ottawa and Jones Falls stops concrete places to watch, with verified source and map searches that do not claim driving directions.
+2. Give selected all seven highlighted stops source-backed places to watch, with verified source and map searches that do not claim driving directions.
 3. Add a recorded real-world video handoff without confusing it with an unverified live webcam.
 
 ## Primary research and limitations
@@ -37,3 +37,6 @@ Existing HTML/CSS/JavaScript for a tiny static cutaway and five native steps, no
 
 ## Honest release
 New interaction syntax/source checks and workflow checks are required. Browser proof at 360/390/768/1440, mapped selection, real external source links and inspected screenshots remain to be verified on this exact stacked head. Live/public, analytics and search outcomes are not measured. Do not merge PR #1763 or this PR without owner review.
+
+## Station-level extension
+All seven highlighted station IDs now provide at least one published visitor context. Only Ottawa and Jones Falls have independently described specific viewpoints/trails. The other five cite Parks Canada station visitor areas, parking amenities or self-guided trails, without inventing precise walking lines or entrances. Official profiles are the source and current access must be rechecked.

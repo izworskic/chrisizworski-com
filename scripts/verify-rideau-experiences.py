@@ -11,11 +11,11 @@ def check():
     assert DATA.read_bytes() == PUBLIC.read_bytes(), "Published viewpoint data drifted from review"
     record = json.loads(DATA.read_text(encoding="utf-8"))
     assert record["schemaVersion"] == 1 and record["reviewed"] == "2026-11-18"
-    assert set(record["stations"]) == {"ottawa", "jones-falls"}
+    assert set(record["stations"]) == {"ottawa", "jones-falls", "merrickville", "smiths-falls-combined", "newboro", "chaffeys", "kingston-mills"}
     assert "no surveyed parking" in record["scope"].lower()
     count = 0
     for station in record["stations"].values():
-        assert len(station["places"]) >= 2
+        assert len(station["places"]) >= 1
         assert "search" in station["foodSearch"] or "near" in station["foodSearch"]
         for place in station["places"]:
             assert place["name"] and place["watch"] and place["approach"] and place["googleQuery"]

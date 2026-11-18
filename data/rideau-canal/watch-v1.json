@@ -52,6 +52,86 @@
       ],
       "foodSearch": "restaurants near Jones Falls Lockstation Rideau Lakes Ontario Canada",
       "foodText": "Search for nearby food before leaving: rural businesses may be spread out, and this guide does not verify their opening hours."
+    },
+    "merrickville": {
+      "intro": "Three lock chambers stand beside a village built around early mills. From the published visitor area, compare the canal stonework with the buildings on Main Street.",
+      "places": [
+        {
+          "id": "merrickville-station",
+          "name": "Merrickville lockstation and self-guided trail",
+          "watch": "Three lock chambers stand beside a village built around early mills. From the published visitor area, compare the canal stonework with the buildings on Main Street.",
+          "approach": "Parks Canada lists a self-guiding trail and parking at this lockstation. The exact trail alignment and parking entrance are not mapped by this guide.",
+          "googleQuery": "Merrickville Locks 111A Main Street East Merrickville Ontario Canada",
+          "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/ecluse-lock-merrickville",
+          "sourceKind": "parks-canada-lockstation-profile"
+        }
+      ],
+      "foodSearch": "restaurants near Merrickville Locks Ontario Canada",
+      "foodText": "Parks Canada identifies shops and restaurants around the village. Use the map search for current choices and hours."
+    },
+    "smiths-falls-combined": {
+      "intro": "Watch for the enormous single chamber that replaced a three-lock flight. Its lift is unlike the older stepped stations along the canal.",
+      "places": [
+        {
+          "id": "smiths-combined-visitor",
+          "name": "Smiths Falls Combined lock viewing area",
+          "watch": "Watch for the enormous single chamber that replaced a three-lock flight. Its lift is unlike the older stepped stations along the canal.",
+          "approach": "Parks Canada lists a self-guiding trail and limited visitor parking. The station location is not a verified entry to an individual viewpoint.",
+          "googleQuery": "Smiths Falls Combined Lock 70 Confederation Drive Smiths Falls Ontario Canada",
+          "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/ecluse-lock-smiths-falls-combined-combine",
+          "sourceKind": "parks-canada-lockstation-profile"
+        }
+      ],
+      "foodSearch": "cafes near Smiths Falls Combined Lock Ontario Canada",
+      "foodText": "Parks Canada notes shopping within walking distance; check current cafes and their hours separately."
+    },
+    "newboro": {
+      "intro": "Look at the single lock and think about the artificial cut built through the ridge between two lakes. It helped make the waterway continuous.",
+      "places": [
+        {
+          "id": "newboro-visitor",
+          "name": "Newboro lockstation visitor grounds",
+          "watch": "Look at the single lock and think about the artificial cut built through the ridge between two lakes. It helped make the waterway continuous.",
+          "approach": "Parks Canada lists visitor parking and picnic tables on the lockstation grounds. Access during the closed season is not established.",
+          "googleQuery": "Newboro Lock 10 Blockhouse Lane Newboro Ontario Canada",
+          "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/ecluse-lock-newboro",
+          "sourceKind": "parks-canada-lockstation-profile"
+        }
+      ],
+      "foodSearch": "food near Newboro Lock Newboro Ontario Canada",
+      "foodText": "The village has some services, but operating hours and exact walking approaches are not verified here."
+    },
+    "chaffeys": {
+      "intro": "A swing bridge sits above the lock, joining the roadside story to the waterside one. Watch how the two crossings share a narrow place.",
+      "places": [
+        {
+          "id": "chaffeys-visitor",
+          "name": "Chaffeys Lock visitor area",
+          "watch": "A swing bridge sits above the lock, joining the roadside story to the waterside one. Watch how the two crossings share a narrow place.",
+          "approach": "Parks Canada lists parking, a museum and local trails. This named-place search does not identify the best parking stall or a precise bridge viewpoint.",
+          "googleQuery": "Chaffeys Lock 1723 Chaffeys Lock Road Rideau Lakes Ontario Canada",
+          "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/ecluse-lock-chaffeys",
+          "sourceKind": "parks-canada-lockstation-profile"
+        }
+      ],
+      "foodSearch": "cafes near Chaffeys Lock Rideau Lakes Ontario Canada",
+      "foodText": "There are accommodations and services in the wider area. Search current food options before setting out."
+    },
+    "kingston-mills": {
+      "intro": "Three lower chambers, a turning basin, a fourth upper lock and the railway bridge tell you how transportation changed here.",
+      "places": [
+        {
+          "id": "kingston-mills-visitor",
+          "name": "Kingston Mills lockstation visitor area",
+          "watch": "Three lower chambers, a turning basin, a fourth upper lock and the railway bridge tell you how transportation changed here.",
+          "approach": "Parks Canada lists parking at the lockstation. The map link locates the public destination, not a surveyed viewing position beneath the railway.",
+          "googleQuery": "Kingston Mills Locks 563 Kingston Mills Road Kingston Ontario Canada",
+          "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/ecluse-lock-kingston-mills",
+          "sourceKind": "parks-canada-lockstation-profile"
+        }
+      ],
+      "foodSearch": "cafes near Kingston Mills Locks Kingston Ontario Canada",
+      "foodText": "Search for food toward Kingston; this page does not verify an on-site restaurant or opening hours."
     }
   }
 }
