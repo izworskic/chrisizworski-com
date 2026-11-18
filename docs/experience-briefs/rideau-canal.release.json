@@ -161,10 +161,12 @@
       768,
       1440
     ],
-    "browserStatus": "PENDING",
-    "browserRun": "https://github.com/izworskic/chrisizworski-com/actions/runs/44222223108",
-    "screenshotEvidence": [],
-    "scopeNote": "Cross-language policy and initial browser journeys passed. Final media-loaded, first-screen and full-site launch checks are pending on latest PR head. Screenshot review and actual public production remains separate."
+    "browserStatus": "PASSED",
+    "browserRun": "https://github.com/izworskic/chrisizworski-com/actions/runs/44223739881",
+    "screenshotEvidence": [
+      "https://github.com/izworskic/chrisizworski-com/actions/runs/44223739881/artifacts/14391184604"
+    ],
+    "scopeNote": "The 360/390/768/1440px local-source Chromium run passed, with loaded Commons photography and CARTO/OSM image tiles, no-JS, missing map, inventory failures, section selection and reverse journeys. Screenshots inspected at mobile and desktop. Public live smoke remains unverified."
   },
   "photos": [
     {
@@ -232,7 +234,9 @@
       "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/pull/1763"
     },
     "verified": {
-      "status": "PENDING"
+      "status": "CONFIRMED",
+      "checkedDate": "2026-11-17",
+      "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/actions/runs/44223739949"
     },
     "deployed": {
       "status": "PENDING"
@@ -244,5 +248,5 @@
       "status": "NOT_MEASURED"
     }
   },
-  "verificationLimit": "The source and photo metadata are documented, but no verified deployed public commit, live traffic, current lock opening, safe paddling conditions or SEO uplift is claimed. Remains a draft release record."
+  "verificationLimit": "The release was verified on PR SHA 229dde8b6619ddf83b0c25d5cd1527ceaed3b8d4. This record is not a public production deployment, current lock opening assurance, vessel passage authorization, safe paddling statement or measured SEO outcome."
 }
