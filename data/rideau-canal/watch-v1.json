@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "reviewed": "2026-11-18",
+  "scope": "Published named visitor places and interpretive walks; no surveyed parking entrances, directions, access approval or routing geometry",
+  "stations": {
+    "ottawa": {
+      "intro": "At Ottawa, step back to see the full eight-lock staircase, then get closer to understand what the lock staff are doing.",
+      "places": [
+        {
+          "id": "plaza-bridge",
+          "name": "Plaza Bridge overlook",
+          "watch": "Look north over the historic lock flight toward the Ottawa River. The changing height of each chamber is easier to understand from above.",
+          "approach": "Reach the public bridge by city sidewalks; this is an overlook, not a lockstation entrance or parking location.",
+          "googleQuery": "Plaza Bridge Ottawa Ontario Canada",
+          "sourceUrl": "https://ottawatourism.ca/en/ottawa-insider/best-places-to-photograph-this-summer-in-ottawa",
+          "sourceKind": "tourism-visitor-viewpoint"
+        },
+        {
+          "id": "canal-level",
+          "name": "Canal-level public walk",
+          "watch": "From the public paths by the canal, watch staff work the gates and the boats change levels during the navigation season.",
+          "approach": "Ottawa Tourism suggests descending from the bridge toward canal level. The exact accessible approach and current access must be confirmed on site.",
+          "googleQuery": "Bytown Museum Rideau Canal Locks Ottawa Ontario Canada",
+          "sourceUrl": "https://ottawatourism.ca/en/ottawa-insider/best-places-to-photograph-this-summer-in-ottawa",
+          "sourceKind": "tourism-visitor-viewpoint"
+        }
+      ],
+      "foodSearch": "cafes near Plaza Bridge Ottawa Ontario Canada",
+      "foodText": "Find a cafe nearby on the city map. Results are third-party listings, not personally verified dining recommendations."
+    },
+    "jones-falls": {
+      "intro": "Jones Falls rewards a little walking: you can compare the lock flight with the massive stone dam that made this crossing possible.",
+      "places": [
+        {
+          "id": "redpath-trail",
+          "name": "Redpath Trail loop",
+          "watch": "Follow the site's story from the long bridge past the flight locks, visitor centre, Sweeney House and Stone Arch Dam.",
+          "approach": "Parks Canada describes an approximately 1 km loop starting and ending at the main parking area. The published trail is not a verified GPS walking track.",
+          "googleQuery": "Jones Falls Lockstation 182 Lock Road Rideau Lakes Ontario Canada",
+          "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/activ/sentier-trail/jonesfalls",
+          "sourceKind": "parks-canada-walking-tour"
+        },
+        {
+          "id": "stone-arch-view",
+          "name": "Stone Arch Dam viewing platform",
+          "watch": "At the western end of the Stone Arch Dam, an interpretive panel and viewing platform help explain the scale of the stonework.",
+          "approach": "Reach it as part of Parks Canada's Jones Falls walking tour. Check the official site for closures or restrictions before setting out.",
+          "googleQuery": "Jones Falls Stone Arch Dam Rideau Lakes Ontario Canada",
+          "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/activ/sentier-trail/jonesfalls",
+          "sourceKind": "parks-canada-walking-tour"
+        }
+      ],
+      "foodSearch": "restaurants near Jones Falls Lockstation Rideau Lakes Ontario Canada",
+      "foodText": "Search for nearby food before leaving: rural businesses may be spread out, and this guide does not verify their opening hours."
+    }
+  }
+}

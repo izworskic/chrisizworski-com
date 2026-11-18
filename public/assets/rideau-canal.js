@@ -5,7 +5,7 @@
   const state = {mode:'visit',time:'short',interest:'engineering',selectedPlaceId:'ottawa',start:'ottawa',end:'jones-falls'};
   const CARTO_TILE = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
   const OSM_TILE = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-  let model, journeyGraph, highlights=[], map=null, markers=new Map(), photoToken=0;
+  let model, journeyGraph, highlights=[], watchGuides={}, map=null, markers=new Map(), photoToken=0;
   const Engine=window.RideauJourneyEngine;
   state.units='km';state.speed=6;state.paddleRoute='tay-marsh';state.date='';
   const setText=(id,value)=>{const el=$(id);if(el)el.textContent=value;};
@@ -99,6 +99,37 @@
       li.append(b);list.append(li);
     });
   }
+  function renderWatchGuide(place){
+    const container=$('rideau-watch-guide'), guide=watchGuides[place.id];
+    if(!guide||!Array.isArray(guide.places)||!guide.places.length){
+      container.hidden=true;
+      $('rideau-watch-options').replaceChildren();
+      $('rideau-watch-food').replaceChildren();
+      return;
+    }
+    container.hidden=false;
+    setText('rideau-watch-intro',guide.intro);
+    const list=$('rideau-watch-options');
+    list.replaceChildren();
+    for(const point of guide.places){
+      const card=make('article','rideau-watch-stop');
+      card.append(make('h5',null,point.name));
+      card.append(make('p',null,point.watch));
+      card.append(make('p','rideau-watch-approach',point.approach));
+      const links=make('div','feature__source');
+      const q=window.VisitorMapLinks?.placeSearch({role:'public-place',query:point.googleQuery})||
+        'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(point.googleQuery);
+      links.append(sourceLink(q,'Find this viewpoint in Google Maps'));
+      links.append(sourceLink(point.sourceUrl,'Read the visitor source'));
+      card.append(links);
+      list.append(card);
+    }
+    const food=$('rideau-watch-food');
+    food.replaceChildren(make('p',null,guide.foodText));
+    const query=window.VisitorMapLinks?.placeSearch({role:'public-place',query:guide.foodSearch})||
+      'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(guide.foodSearch);
+    food.append(sourceLink(query,'Search for nearby food'));
+  }
   function renderPlace(){
     const p=selected();if(!p)return;
     setText('feature-name',p.name);
@@ -109,6 +140,7 @@
     const links=$('feature-links');links.replaceChildren(officialLink(p));
     const search=mapSearch(p)||'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(p.visit.address);
     links.append(sourceLink(search,'View in Google Maps'));
+    renderWatchGuide(p);
     const img=$('feature-photo'),wrap=$('feature-photo-wrap');
     wrap.hidden=true;img.removeAttribute('src');
     const token=++photoToken;const photo=p.visit.photo;
@@ -291,10 +323,13 @@
   async function main(){
     const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),12000);
     try{
-      const [response,navResponse]=await Promise.all([
+      const [response,navResponse,watchResult]=await Promise.all([
         fetch('/assets/rideau-locations.json',{signal:controller.signal,cache:'default'}),
-        fetch('/assets/rideau-navigation.json',{signal:controller.signal,cache:'default'})
+        fetch('/assets/rideau-navigation.json',{signal:controller.signal,cache:'default'}),
+        fetch('/assets/rideau-watch.json',{signal:controller.signal,cache:'default'}).then(r=>r.ok?r.json():null).catch(()=>null)
       ]);
+      watchGuides=watchResult?.schemaVersion===1&&watchResult.stations?watchResult.stations:{};
+
       if(!response.ok||!navResponse.ok)throw Error('No reviewed inventory or navigation graph');
       const [data,nav]=await Promise.all([response.json(),navResponse.json()]);
       if(nav.schemaVersion!==2||!Array.isArray(nav.mainline)||nav.mainline.length!==25||!Engine)throw Error('Graph not reconciled');

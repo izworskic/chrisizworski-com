@@ -117,6 +117,7 @@
 <span class="region" id="feature-region">Rideau Canal</span><h3 id="feature-name">Ottawa Locks</h3>
 <p id="feature-explain"></p><p id="feature-tip"></p><p><strong>Official visitor location:</strong> <span id="feature-address"></span></p>
 <div class="feature__source" id="feature-links"></div>
+<section id="rideau-watch-guide" class="rideau-watch-guide" aria-labelledby="rideau-watch-title" hidden><p class="kicker">Best place to watch</p><h4 id="rideau-watch-title">See the lock for yourself</h4><p id="rideau-watch-intro"></p><div id="rideau-watch-options"></div><div id="rideau-watch-food" class="rideau-watch-food"></div><p class="rideau-watch-caution">These are published public-place suggestions, not verified parking entrances, walking directions, accessibility guarantees or current access notices. Check the source before visiting.</p></section>
 <figure id="feature-photo-wrap" class="feature__photo" hidden>
 <img id="feature-photo" alt="" loading="lazy" decoding="async" width="960" height="540">
 <figcaption><span id="feature-photo-caption"></span><span id="feature-photo-credit"></span></figcaption>
@@ -124,7 +125,7 @@
 </article>
 <div class="map-shell" id="map-shell" hidden><div id="rideau-map" aria-label="Map showing seven verified Rideau Canal lock locations"></div></div>
 <div class="map-fallback" id="map-fallback">The interactive map is unavailable. Use the official source and Google Maps place-search links in the selected location above.</div>
-<p class="map-foot">Map markers identify Parks Canada lock locations, not verified parking entrances. A Google Maps place search is not a driving route. <a href="https://parks.canada.ca/lhn-nhs/on/rideau/visit/carte-map" target="_blank" rel="noopener noreferrer">Official orientation map</a>.</p>
+<p class="map-foot">Select a lock to see sourced places to stand and what you can notice. Map pins identify lockstations, not overlook coordinates, parking entrances or walking routes. A Google Maps place search is not a driving route. <a href="https://parks.canada.ca/lhn-nhs/on/rideau/visit/carte-map" target="_blank" rel="noopener noreferrer">Official orientation map</a>.</p>
 <p class="field-note"><strong>Boating note:</strong> Parks Canada's general map is not a nautical chart. Check current Canadian Hydrographic Service charts 1512 and 1513, official notices, bridge clearance and vessel dimensions before navigation.</p>
 </div>
 </div>
@@ -138,6 +139,72 @@
 </div>
 </div>
 </section>
+
+<section class="rideau-lab" id="inside-the-lock" aria-labelledby="lock-lab-title">
+  <div class="rideau-lab__intro">
+    <p class="kicker">Step inside the engineering</p>
+    <h2 id="lock-lab-title">How does a lock lift a boat?</h2>
+    <p>Picture a boat at the foot of the canal. Two pairs of gates make a watertight chamber, and gravity moves water until the boat reaches the next level. Try the five stages below. This is a teaching diagram, not a scale model of a specific lock.</p>
+  </div>
+  <div class="rideau-lab__layout">
+    <div class="rideau-lab__instrument">
+      <svg class="rideau-lock-diagram" viewBox="0 0 840 342" role="img" aria-labelledby="lock-drawing-title lock-drawing-desc">
+        <title id="lock-drawing-title">Cutaway of a Rideau-style lift lock</title>
+        <desc id="lock-drawing-desc">A boat moves from lower water at left into a stone chamber, rises as water enters, and exits to higher water at right. Manual steps and text explain gate and valve operation.</desc>
+        <defs><pattern id="rideau-stone" width="35" height="28" patternUnits="userSpaceOnUse"><path d="M0 14H35 M18 0V14 M0 14V28" fill="none" stroke="#b6b9ad" stroke-width="1.5"/></pattern></defs>
+        <rect width="840" height="342" fill="#f0f5f1"/>
+        <path d="M0 290V246H210V92H632V126H840V290Z" fill="#d6ded4"/>
+        <rect x="0" y="246" width="210" height="44" fill="#7fbbc6"/>
+        <rect x="632" y="128" width="208" height="162" fill="#7fbbc6"/>
+        <rect id="lock-lab-chamber-water" x="211" y="246" width="420" height="44" fill="#7fbbc6"/>
+        <path d="M0 290H840" stroke="#305864" stroke-width="5"/>
+        <rect x="183" y="88" width="28" height="214" fill="url(#rideau-stone)" stroke="#798f8b" stroke-width="3"/>
+        <rect x="630" y="125" width="28" height="177" fill="url(#rideau-stone)" stroke="#798f8b" stroke-width="3"/>
+        <rect x="212" y="290" width="418" height="16" fill="url(#rideau-stone)"/>
+        <rect id="lock-lab-lower-gate" x="200" y="133" width="12" height="157" rx="3" fill="#865d3d" stroke="#4c392a" stroke-width="3" opacity="0"/>
+        <rect id="lock-lab-upper-gate" x="625" y="119" width="12" height="171" rx="3" fill="#865d3d" stroke="#4c392a" stroke-width="3"/>
+        <g id="lock-lab-boat">
+          <path d="M300 229H434L416 250H319Z" fill="#b65f35" stroke="#583b29" stroke-width="3" stroke-linejoin="round"/>
+          <path d="M332 229V202H393V229" fill="#f9f5e9" stroke="#285260" stroke-width="3"/>
+          <rect x="352" y="207" width="24" height="13" rx="2" fill="#81b8c4"/>
+          <path d="M327 225H404" stroke="#f4d7ab" stroke-width="4"/>
+        </g>
+        <path d="M0 246H183 M658 128H840" stroke="#efffff" stroke-width="2" opacity=".8"/>
+        <text x="18" y="231" fill="#204958" font-size="18" font-weight="700">Lower water</text>
+        <text x="678" y="107" fill="#204958" font-size="18" font-weight="700">Higher water</text>
+        <text x="326" y="324" fill="#37535a" font-size="17" font-weight="700">Lock chamber</text>
+        <text x="165" y="65" fill="#37535a" font-size="15">Lower gates</text>
+        <text x="614" y="65" fill="#37535a" font-size="15">Upper gates</text>
+        <path d="M200 72V120 M633 72V114" stroke="#627879" stroke-width="2" stroke-dasharray="4 4"/>
+      </svg>
+      <p class="rideau-lab__diagram-note">Illustrative side view, not to scale. Water changes only when the gates are closed; the simulator does not model real lock dimensions, timing or boat handling.</p>
+      <div class="rideau-lab__controls" role="group" aria-label="Walk through the lock cycle">
+        <button type="button" id="lock-lab-back" disabled>Previous stage</button>
+        <button type="button" id="lock-lab-forward">Next stage</button>
+        <button type="button" id="lock-lab-reset">Start again</button>
+      </div>
+    </div>
+    <div class="rideau-lab__story">
+      <p class="rideau-lab__counter" id="lock-lab-counter">01 / 05</p>
+      <h3 id="lock-lab-step-title">Enter at the lower water level</h3>
+      <p id="lock-lab-step-text" aria-live="polite">The lower gates open when the water inside the chamber matches the water below. A boat enters slowly under the direction of lock staff.</p>
+      <ol id="lock-lab-chapters" class="rideau-lab__chapters">
+        <li aria-current="step">Enter from below</li><li>Close both gates</li><li>Let the water rise</li><li>Open the upper gates</li><li>Leave at the new level</li>
+      </ol>
+      <p class="rideau-lab__source">Parks Canada explains the real sequence in <a href="https://parks.canada.ca/lhn-nhs/on/rideau/visit/navigation/ecluser-lock-through" target="_blank" rel="noopener noreferrer">Locking through safely</a>. Real lock staff control all operations.</p>
+    </div>
+  </div>
+  <div class="rideau-lab__film" aria-label="Recorded Parks Canada lock films">
+    <div><p class="kicker">Watch it happen</p><h3>From illustration to the real canal</h3><p>These are recorded Parks Canada films, not live cameras. A reliable public livestream of the lock chambers has not been verified.</p></div>
+    <div class="rideau-lab__film-actions">
+      <button type="button" data-rideau-film="pqRibZT_9Ls">Watch a lock passage (recorded)</button>
+      <button type="button" data-rideau-film="rHE4291qpWQ">See how lock gates are built (recorded)</button>
+    </div>
+    <div id="rideau-film-player" class="rideau-lab__player" hidden></div>
+    <p class="rideau-lab__film-links">No video player? <a href="https://www.youtube.com/watch?v=pqRibZT_9Ls" target="_blank" rel="noopener noreferrer">Watch the passage on YouTube</a> or <a href="https://www.youtube.com/watch?v=rHE4291qpWQ" target="_blank" rel="noopener noreferrer">watch gate construction</a>.</p>
+  </div>
+</section>
+
 <section class="foot-notes" aria-label="Rideau information and limitations">
 <h2>The canal is more than a straight line on a map</h2>
 <p>Builders used rivers, lakes, excavated cuts, dams and a chain of locks to cross eastern Ontario. Each stone chamber is part of a larger landscape. The tool focuses on understanding that landscape without pretending every visitor is operating a boat.</p>
@@ -151,7 +218,8 @@
 <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script defer src="/assets/visitor-map-links.js"></script>
 <script defer src="/assets/rideau-journey-engine.js?v=20261117-policy"></script>
-<script defer src="/assets/rideau-canal.js?v=20261117-journeys"></script>
+<script defer src="/assets/rideau-lock-lab.js?v=20261118-interpretive"></script>
+<script defer src="/assets/rideau-canal.js?v=20261118-experience"></script>
 <script defer src="/assets/tool-engagement.js"></script>
 </body>
 </html>
