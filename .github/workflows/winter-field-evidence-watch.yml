@@ -11,11 +11,13 @@ on:
     paths:
       - '.github/workflows/winter-field-evidence-watch.yml'
       - 'scripts/winter-desk-evidence-watch.py'
+      - 'scripts/winter-desk-evidence-promotion.py'
       - 'scripts/refresh-winter-desk-sources.py'
       - 'scripts/refresh-winter-desk-operator-notices.py'
       - 'scripts/audit-winter-desk-*.py'
       - 'scripts/winter-desk-release-gate.cjs'
       - 'tests/test_winter_desk_evidence_watch.py'
+      - 'tests/test_winter_desk_evidence_promotion.py'
       - 'tests/great-lakes-winter-desk.test.js'
       - 'previews/great-lakes-winter-desk/**'
 
@@ -44,6 +46,7 @@ jobs:
       - name: Offline evidence and visitor safety contracts
         run: |
           python3 -m unittest discover -s tests -p 'test_winter_desk_evidence_watch.py' -v
+          python3 -m unittest discover -s tests -p 'test_winter_desk_evidence_promotion.py' -v
           python3 scripts/refresh-winter-desk-sources.py --self-test
           python3 scripts/refresh-winter-desk-operator-notices.py --self-test
           python3 scripts/audit-winter-desk-route-access.py --self-test
