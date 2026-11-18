@@ -59,11 +59,12 @@
   }
   function renderCandidates(){
     const list=$('recommendations');list.replaceChildren();
-    const candidates=state.mode==='visit'?filtered():state.mode==='paddle'?highlights.filter(p=>['newboro','chaffeys'].includes(p.id)):highlights;
+    const exact=filtered();
+    const candidates=state.mode==='visit'?(exact.length?exact:highlights.filter(p=>p.visit.timeBudgets.includes(state.time))):state.mode==='paddle'?highlights.filter(p=>['newboro','chaffeys'].includes(p.id)):highlights;
     if(state.mode==='visit'){
       setText('candidate-count',candidates.length+' suggested '+(candidates.length===1?'stop':'stops')+' for this choice');
-      setText('answer-title',candidates.length?'Start with '+candidates[0].name:'No verified match for this combination');
-      setText('answer-text',candidates.length?'These are destination ideas, not a timed driving itinerary. Choose a location to see its exact evidence and official access information.':'Try a longer visit or a different interest. We are not inventing a short-stop route just to fill the list.');
+      setText('answer-title',exact.length?'Start with '+exact[0].name:'No exact match; consider these alternatives');
+      setText('answer-text',exact.length?'These are destination ideas, not a timed driving itinerary. Choose a location to see its exact evidence and official access information.':'No station in this time window is matched to that interest. The alternatives below fit your time category as editorial ideas, not verified timed routes.');
       if(candidates.length&&!candidates.some(p=>p.id===state.selectedPlaceId))state.selectedPlaceId=candidates[0].id;
     } else if(state.mode==='paddle'){
       setText('candidate-count','Two Parks Canada profiles document boat-launch facilities');
@@ -138,7 +139,8 @@
       });
       map.fitBounds(bounds,{padding:[30,30]});
       shell.hidden=false;fallback.hidden=true;
-      focusMap(state.selectedPlaceId,false);
+      const first=markers.get(state.selectedPlaceId);
+      first?.getElement()?.querySelector('.lock-pin')?.classList.add('active');
     }catch(_){disableMap();}
   }
   function disableMap(){
