@@ -9,6 +9,7 @@ on:
       - 'scripts/rideau-skateway-browser-qa.cjs'
       - 'tests/rideau-skateway.test.js'
       - '.github/workflows/rideau-skateway-qa.yml'
+      - 'docs/experience-briefs/rideau-skateway.release.json'
   workflow_dispatch:
 permissions:
   contents: read
@@ -28,6 +29,8 @@ jobs:
           node-version: '22'
       - name: Reconcile NCC section and entrance source mirrors
         run: python3 scripts/verify-rideau-skateway.py
+      - name: Experience OS source claims and fail-closed state record
+        run: node scripts/verify-experience-os-v1.2.mjs docs/experience-briefs/rideau-skateway.release.json
       - name: Static JS compiler and independent source policy tests
         run: |
           node --check public/assets/rideau-skateway.js
