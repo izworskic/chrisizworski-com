@@ -46,6 +46,15 @@ async function run(){
     const dimensions=await page.evaluate(()=>({viewport:document.documentElement.clientWidth,scrollWidth:document.documentElement.scrollWidth}));
     assert.ok(dimensions.scrollWidth<=dimensions.viewport+1,'Unexpected horizontal scroll: '+JSON.stringify(dimensions));
     assert.deepEqual(errors,[]);
+    if(width===390){
+      await page.locator('.winter-story img').scrollIntoViewIfNeeded();
+      await page.waitForFunction(()=>{const img=document.querySelector('.winter-story img');return img&&img.complete&&img.naturalWidth>=900;},null,{timeout:12000});
+      assert.equal(await page.locator('.winter-story img').getAttribute('src'),'/assets/rideau-skateway-dows-lake-2025.jpg');
+      const photoShot=path.join(out,'skateway-real-photo-390.png');
+      await page.screenshot({path:photoShot,fullPage:false});
+      report.images.push(photoShot);
+      report.scenarios.push({name:'real-dows-lake-2025-photo-loaded',localLicensedAsset:true,licence:'CC0 1.0',creditPresent:true});
+    }
     const shot=path.join(out,'skateway-'+width+'.png');
     await page.screenshot({path:shot,fullPage:true});report.images.push(shot);
     report.scenarios.push({width,sectionSelection:true,reverseSelection:true,sourceFailure:true,openFilterUnknown:true,noOverflow:true});
