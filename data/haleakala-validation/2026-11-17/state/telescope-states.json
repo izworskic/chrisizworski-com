@@ -1,0 +1,178 @@
+{
+  "ogg.clma.0m4a": [
+    {
+      "telescope": "ogg.clma.0m4a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Humidity",
+      "start": "2026-11-17T16:06:21Z",
+      "end": "2026-11-17T16:25:51.396000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Sky transparency too low: boltwood",
+      "start": "2026-11-17T16:25:51.396000Z",
+      "end": "2026-11-17T16:26:53.686000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Humidity",
+      "start": "2026-11-17T16:26:53.686000Z",
+      "end": "2026-11-17T16:38:49.792000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Boltwood detected rain",
+      "start": "2026-11-17T16:38:49.792000Z",
+      "end": "2026-11-17T16:40:25.835000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Boltwood detected rain. Enclosure: Interlocked(WEATHER,ENCLOSURE_FLAPPING)",
+      "start": "2026-11-17T16:40:25.835000Z",
+      "end": "2026-11-17T16:43:29.993000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Sky transparency too low: boltwood. Enclosure: Interlocked(WEATHER,ENCLOSURE_FLAPPING)",
+      "start": "2026-11-17T16:43:29.993000Z",
+      "end": "2026-11-17T16:56:21Z"
+    }
+  ],
+  "ogg.clma.0m4b": [
+    {
+      "telescope": "ogg.clma.0m4b",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Humidity",
+      "start": "2026-11-17T16:06:21Z",
+      "end": "2026-11-17T16:25:51.373000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4b",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Sky transparency too low: boltwood",
+      "start": "2026-11-17T16:25:51.373000Z",
+      "end": "2026-11-17T16:26:53.686000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4b",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Humidity",
+      "start": "2026-11-17T16:26:53.686000Z",
+      "end": "2026-11-17T16:38:49.788000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4b",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Boltwood detected rain",
+      "start": "2026-11-17T16:38:49.788000Z",
+      "end": "2026-11-17T16:40:25.856000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4b",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Boltwood detected rain. Enclosure: Interlocked(WEATHER,ENCLOSURE_FLAPPING)",
+      "start": "2026-11-17T16:40:25.856000Z",
+      "end": "2026-11-17T16:43:29.993000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4b",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Sky transparency too low: boltwood. Enclosure: Interlocked(WEATHER,ENCLOSURE_FLAPPING)",
+      "start": "2026-11-17T16:43:29.993000Z",
+      "end": "2026-11-17T16:56:21Z"
+    }
+  ],
+  "ogg.clma.0m4c": [
+    {
+      "telescope": "ogg.clma.0m4c",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Humidity",
+      "start": "2026-11-17T16:06:21Z",
+      "end": "2026-11-17T16:25:51.397000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4c",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Sky transparency too low: boltwood",
+      "start": "2026-11-17T16:25:51.397000Z",
+      "end": "2026-11-17T16:26:53.687000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4c",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Humidity",
+      "start": "2026-11-17T16:26:53.687000Z",
+      "end": "2026-11-17T16:38:49.766000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4c",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Boltwood detected rain",
+      "start": "2026-11-17T16:38:49.766000Z",
+      "end": "2026-11-17T16:40:25.856000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4c",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Boltwood detected rain. Enclosure: Interlocked(WEATHER,ENCLOSURE_FLAPPING)",
+      "start": "2026-11-17T16:40:25.856000Z",
+      "end": "2026-11-17T16:43:30.001000Z"
+    },
+    {
+      "telescope": "ogg.clma.0m4c",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Sky transparency too low: boltwood. Enclosure: Interlocked(WEATHER,ENCLOSURE_FLAPPING)",
+      "start": "2026-11-17T16:43:30.001000Z",
+      "end": "2026-11-17T16:56:21Z"
+    }
+  ],
+  "ogg.clma.2m0a": [
+    {
+      "telescope": "ogg.clma.2m0a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Humidity",
+      "start": "2026-11-17T16:06:21Z",
+      "end": "2026-11-17T16:25:51.447000Z"
+    },
+    {
+      "telescope": "ogg.clma.2m0a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Sky transparency too low: boltwood",
+      "start": "2026-11-17T16:25:51.447000Z",
+      "end": "2026-11-17T16:26:53.709000Z"
+    },
+    {
+      "telescope": "ogg.clma.2m0a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Humidity",
+      "start": "2026-11-17T16:26:53.709000Z",
+      "end": "2026-11-17T16:38:49.788000Z"
+    },
+    {
+      "telescope": "ogg.clma.2m0a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Boltwood detected rain",
+      "start": "2026-11-17T16:38:49.788000Z",
+      "end": "2026-11-17T16:40:25.832000Z"
+    },
+    {
+      "telescope": "ogg.clma.2m0a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Boltwood detected rain. Enclosure: Interlocked(WEATHER,ENCLOSURE_FLAPPING)",
+      "start": "2026-11-17T16:40:25.832000Z",
+      "end": "2026-11-17T16:43:29.994000Z"
+    },
+    {
+      "telescope": "ogg.clma.2m0a",
+      "event_type": "NOT_OK_TO_OPEN",
+      "event_reason": "Weather: Sky transparency too low: boltwood. Enclosure: Interlocked(WEATHER,ENCLOSURE_FLAPPING)",
+      "start": "2026-11-17T16:43:29.994000Z",
+      "end": "2026-11-17T16:56:21Z"
+    }
+  ]
+}

@@ -11,13 +11,14 @@ function addManisteeTool(){
   card.dataset.tags='planning fishing boating';
   card.dataset.months='4,5,6,7,8,9,10,11';
   card.dataset.manisteeTool='true';
+  card.dataset.toolId='manistee-river-map';
   card.innerHTML='<div class="tk">Live data<span class="tk-season" hidden> / in season now</span></div><div class="tool-title"><a href="/manistee-river-map/">Manistee River Field Map, Access, Camps, Live Gauges, and Trip Planner</a></div><div class="tool-desc">53 access points, camps, trails, landmarks and river stops across the Upper, Middle and Lower Manistee plus Pine River. Includes live USGS flow and temperature, put-in and takeout planning, guides and liveries, and Google directions.</div>';
   const first=grid.querySelector('.tool-card');
   if(first)first.after(card);else grid.appendChild(card);
   patchToolsSchema();
   syncToolsFinder();
   const search=document.getElementById('tool-search');
-  search?.addEventListener('input',syncToolsFinder);
+  search?.addEventListener(window.HubSearch?'hubsearch:change':'input',syncToolsFinder);
   document.querySelectorAll('.chip').forEach(ch=>ch.addEventListener('click',syncToolsFinder));
 }
 
@@ -59,7 +60,7 @@ function syncToolsFinder(){
     if(on)inSeason++;
     const tags=(card.dataset.tags||'').split(/\s+/);
     const filterOk=active==='all'||(active==='season'?on:tags.includes(active));
-    const searchOk=!q||card.textContent.toLowerCase().includes(q);
+    const searchOk=window.HubSearch?card.dataset.hubMatch!=='0':(!q||card.textContent.toLowerCase().includes(q));
     card.hidden=!(filterOk&&searchOk);
     if(!card.hidden)shown++;
   });

@@ -1,0 +1,523 @@
+/* Michigan Two-Season False-Spring Field Guide — Late-Winter / Early-Spring Thaw Palette */
+.wf.wf--thaw {
+  --wf-paper: #f3f6f8;
+  --wf-surface: #ffffff;
+  --wf-ink: #172a36;
+  --wf-muted: #4b616e;
+  --wf-accent: #1d5b6e;
+  --wf-copper: #a85a2a;
+  --wf-moss: #2d6a4f;
+  --wf-line: #dce4ea;
+  --wf-line-strong: #c2cfd9;
+}
+
+.wf--thaw .wf-eyebrow,
+.wf--thaw .wf-kicker {
+  color: var(--wf-copper);
+}
+
+.wf--thaw .wf-footer {
+  background: #172a36;
+}
+
+.fs-hero-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin: 18px 0 14px;
+}
+
+.wf .fs-hero-ctas .wf-primary {
+  margin-top: 0;
+  background: var(--wf-accent);
+  color: #ffffff !important;
+}
+
+.wf .fs-hero-ctas .wf-primary:hover {
+  background: #144352;
+  color: #ffffff !important;
+  text-decoration: none;
+}
+
+.wf .fs-secondary-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 15px;
+  min-height: 42px;
+  border-radius: 6px;
+  border: 1px solid var(--wf-line-strong);
+  background: var(--wf-surface);
+  color: var(--wf-ink);
+  font-weight: 600;
+  font-size: .84rem;
+  text-decoration: none;
+  transition: border-color .15s ease, background .15s ease;
+}
+
+.wf .fs-secondary-cta:hover {
+  border-color: var(--wf-accent);
+  background: var(--wf-paper);
+  color: var(--wf-accent);
+  text-decoration: none;
+}
+
+/* Override 2-column winter-field-guide.css story grid so editorial chapters stack cleanly */
+.wf--thaw .wf-story {
+  display: block;
+  padding: 22px 24px;
+  margin-bottom: 18px;
+  background: var(--wf-surface);
+  border: 1px solid var(--wf-line);
+  border-top: 3px solid var(--wf-accent);
+  border-radius: 8px;
+}
+
+.wf--thaw .wf-story > .wf-photo {
+  min-height: 260px;
+  height: 280px;
+  border-radius: 6px;
+  margin: 14px 0;
+}
+
+.wf--thaw .wf-story-head h2 {
+  margin-top: 4px;
+}
+
+.fs-hero-montage {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+
+@media (max-width: 780px) {
+  .fs-hero-montage {
+    grid-template-columns: 1fr;
+  }
+}
+
+.fs-split-box {
+  background: var(--wf-surface, #fff);
+  border: 1px solid var(--wf-line, #e2e8f0);
+  border-top: 4px solid var(--wf-accent, #1e4d3b);
+  border-radius: 10px;
+  padding: 24px;
+  margin: 24px 0 32px;
+  box-shadow: 0 6px 20px -12px rgba(15, 23, 42, .12);
+}
+
+.fs-zone-tabs {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin: 18px 0;
+}
+
+@media (max-width: 860px) {
+  .fs-zone-tabs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .fs-zone-tabs {
+    grid-template-columns: 1fr;
+  }
+}
+
+.fs-zone-btn {
+  text-align: left;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--wf-line-strong, #cbd5e1);
+  background: var(--wf-paper, #f8fafc);
+  color: var(--wf-ink, #0f172a);
+  cursor: pointer;
+  transition: border-color .15s ease, background .15s ease, transform .12s ease;
+}
+
+.fs-zone-btn:hover {
+  border-color: var(--wf-accent, #1e4d3b);
+  transform: translateY(-1px);
+}
+
+.fs-zone-btn.is-active {
+  background: var(--wf-accent, #1e4d3b);
+  border-color: var(--wf-accent, #1e4d3b);
+  color: #fff;
+}
+
+.fs-zone-btn strong {
+  display: block;
+  font-size: .92rem;
+  line-height: 1.25;
+}
+
+.fs-zone-btn span {
+  display: block;
+  font-size: .76rem;
+  opacity: .84;
+  margin-top: 3px;
+}
+
+.fs-zone-panel {
+  background: var(--wf-paper, #f8fafc);
+  border: 1px solid var(--wf-line, #e2e8f0);
+  border-radius: 8px;
+  padding: 18px 20px;
+}
+
+.fs-zone-panel-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--wf-line, #e2e8f0);
+  margin-bottom: 14px;
+}
+
+.fs-phase-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: .74rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  background: #e6f0ec;
+  color: #163d2e;
+}
+
+.fs-zone-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+@media (max-width: 720px) {
+  .fs-zone-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.fs-zone-cell {
+  background: var(--wf-surface, #fff);
+  border: 1px solid var(--wf-line, #e2e8f0);
+  border-radius: 6px;
+  padding: 12px 14px;
+  font-size: .88rem;
+  line-height: 1.5;
+}
+
+.fs-zone-cell strong {
+  display: block;
+  font-size: .74rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--wf-muted, #475569);
+  margin-bottom: 4px;
+}
+
+.fs-live-status {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  background: #fff;
+  border: 1px dashed var(--wf-line-strong, #cbd5e1);
+  font-size: .82rem;
+  color: var(--wf-muted, #475569);
+}
+
+.fs-filter-cluster {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--wf-line, #e2e8f0);
+}
+
+.fs-filter-btn {
+  padding: 7px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--wf-line-strong, #cbd5e1);
+  background: #fff;
+  color: var(--wf-ink, #0f172a);
+  font-size: .8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.fs-filter-btn.is-active {
+  background: var(--wf-ink, #0f172a);
+  border-color: var(--wf-ink, #0f172a);
+  color: #fff;
+}
+
+.fs-physics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin: 18px 0 34px;
+}
+
+@media (max-width: 980px) {
+  .fs-physics-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 580px) {
+  .fs-physics-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.fs-physics-card {
+  background: var(--wf-surface, #fff);
+  border: 1px solid var(--wf-line, #e2e8f0);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.fs-physics-badge {
+  display: inline-block;
+  font-size: .7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--wf-accent, #1e4d3b);
+  margin-bottom: 6px;
+}
+
+.fs-physics-card h3 {
+  font-size: 1.02rem;
+  margin: 0 0 8px;
+}
+
+.fs-physics-card p {
+  font-size: .86rem;
+  line-height: 1.55;
+  color: var(--wf-muted, #475569);
+  margin: 0;
+}
+
+.fs-specs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 14px 0;
+}
+
+@media (max-width: 720px) {
+  .fs-specs-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.fs-spec-item {
+  background: var(--wf-paper, #f8fafc);
+  border: 1px solid var(--wf-line, #e2e8f0);
+  border-radius: 6px;
+  padding: 8px 10px;
+}
+
+.fs-spec-label {
+  display: block;
+  font-size: .68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--wf-muted, #64748b);
+}
+
+.fs-spec-val {
+  display: block;
+  font-size: .84rem;
+  font-weight: 600;
+  color: var(--wf-ink, #0f172a);
+  margin-top: 2px;
+}
+
+.fs-field-pill {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: .72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  background: #eef2f6;
+  color: #1e293b;
+  margin-top: 6px;
+}
+
+.fs-log, .fs-briefing {
+  margin: 12px 0;
+  font-size: .92rem;
+  line-height: 1.62;
+}
+
+.fs-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--wf-line, #e2e8f0);
+}
+
+.wf .fs-card-cta {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  border-radius: 6px;
+  background: var(--wf-accent);
+  color: #ffffff !important;
+  font-size: .82rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.wf .fs-card-cta:hover {
+  background: #144352;
+  color: #ffffff !important;
+  text-decoration: none;
+}
+
+.wf .fs-tool-cta {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--wf-line-strong);
+  background: #ffffff;
+  color: var(--wf-ink);
+  font-size: .82rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.wf .fs-tool-cta:hover {
+  border-color: var(--wf-accent);
+  color: var(--wf-accent);
+  text-decoration: none;
+}
+
+.wf .fs-google-map-link {
+  display: inline-flex;
+  align-items: center;
+  font-size: .8rem;
+  color: var(--wf-muted);
+  text-decoration: underline;
+  margin-left: auto;
+}
+
+/* Upgraded Python-backed Week + AM/PM controls & 4-Zone Split Bar */
+.fs-controls-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin: 16px 0;
+  padding: 12px 14px;
+  background: var(--wf-paper, #f8fafc);
+  border: 1px solid var(--wf-line, #e2e8f0);
+  border-radius: 8px;
+}
+
+.fs-week-wrap {
+  flex: 1 1 280px;
+}
+
+.fs-week-wrap label {
+  display: flex;
+  justify-content: space-between;
+  font-size: .8rem;
+  font-weight: 700;
+  color: var(--wf-ink, #0f172a);
+  margin-bottom: 6px;
+}
+
+.fs-week-slider {
+  width: 100%;
+  accent-color: var(--wf-accent, #1e4d3b);
+  cursor: pointer;
+}
+
+.fs-tod-group {
+  display: inline-flex;
+  border: 1px solid var(--wf-line-strong, #cbd5e1);
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.fs-tod-btn {
+  padding: 8px 13px;
+  border: 0;
+  background: transparent;
+  color: var(--wf-ink, #0f172a);
+  font-size: .8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.fs-tod-btn.is-active {
+  background: var(--wf-ink, #0f172a);
+  color: #fff;
+}
+
+.fs-split-bars {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0 0 16px;
+}
+
+@media (max-width: 780px) {
+  .fs-split-bars {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.fs-bar-card {
+  background: #fff;
+  border: 1px solid var(--wf-line, #e2e8f0);
+  border-radius: 6px;
+  padding: 10px 12px;
+}
+
+.fs-bar-card small {
+  display: block;
+  font-size: .7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--wf-muted, #64748b);
+}
+
+.fs-bar-track {
+  height: 7px;
+  border-radius: 999px;
+  background: #e2e8f0;
+  margin: 7px 0 5px;
+  overflow: hidden;
+}
+
+.fs-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width .22s ease, background-color .22s ease;
+}
+
+.fs-bar-fill--deep-snow { background: #1d4ed8; }
+.fs-bar-fill--crust-window { background: #0284c7; }
+.fs-bar-fill--freeze-thaw { background: #d97706; }
+.fs-bar-fill--mud-breakup { background: #15803d; }
