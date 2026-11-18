@@ -58,6 +58,33 @@ async function run(){
   assert.equal(await p.locator('#static-sections ol li').count(),14);
   report.scenarios.push({name:'no-javascript',officialSourcesRemain:true});
   await nojs.close();
+  // Exercise an actual fresh, complete NCC-shaped report with a controlled winter clock.
+  // This does not claim the NCC really issued these fixture statuses.
+  const winter=await browser.newContext({viewport:{width:390,height:850}});
+  const oneOpen=JSON.parse(fs.readFileSync(path.resolve(__dirname,'../data/rideau-skateway/official-sections-v1.json'),'utf8'));
+  await winter.route('**/services2.arcgis.com/**',route=>{
+    const u=route.request().url();
+    const metadata={editingInfo:{dataLastEditDate:Date.parse('2027-01-21T13:00:00Z')}};
+    const features=oneOpen.sections.map(s=>({attributes:{OBJECTID:s.id,ID:s.id,From_:s.from,To_:s.to,Length_KM:s.id===11?'1.0 km':s.km+' km',Status:s.id===1?'Good':'Closed'}}));
+    const body=u.includes('/query?')?{features}:metadata;
+    return route.fulfill({status:200,contentType:'application/json',accessControlAllowOrigin:'*',body:JSON.stringify(body),headers:{'access-control-allow-origin':'*'}});
+  });
+  await winter.route('**/api/carto-basemap-config',r=>r.fulfill({status:503,body:'{}'}));
+  const fresh=await winter.newPage();
+  await fresh.clock.setFixedTime(new Date('2027-01-21T15:00:00Z'));
+  await fresh.goto(origin+'/rideau-canal-skateway/',{waitUntil:'domcontentloaded'});
+  await fresh.locator('#section-list button').first().waitFor({timeout:20000});
+  await fresh.waitForFunction(()=>document.getElementById('overall-verdict').textContent.includes('1 sections'),null,{timeout:15000});
+  assert.match(await fresh.locator('#overall-verdict').innerText(),/1 sections/);
+  assert.match(await fresh.locator('#source-time').innerText(),/passes freshness check/);
+  await fresh.locator('[data-filter="open"]').click();
+  assert.equal(await fresh.locator('#section-list button').count(),1);
+  assert.match(await fresh.locator('#selected-status').innerText(),/NCC reports: Good/);
+  const winterShot=path.join(out,'skateway-fixture-current-390.png');
+  await fresh.screenshot({path:winterShot,fullPage:false});
+  report.images.push(winterShot);
+  report.scenarios.push({name:'fresh-winter-NCC-shaped-fixture',openingFixtureOnly:true,onlyOneReportedSection:true,clock:'2027-01-21T15:00:00Z'});
+  await winter.close();
   fs.writeFileSync(path.join(out,'report.json'),JSON.stringify(report,null,2));
   console.log('PASS: Skateway source failure, mobile, reversible section, Google Maps search and no-JS fallback. Current NCC source availability and public deployment are not implied.');
  }finally{await browser.close();server.close();}
