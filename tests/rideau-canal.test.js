@@ -86,7 +86,7 @@ test('three journeys are distinct and route assumptions fail safely',()=>{
   for(const id of ['time-budget','interest','cruise-from','cruise-to','paddle-context','feature-name','map-fallback','directory-body'])assert.ok(html.includes('id="'+id+'"'));
   assert.match(js,/window\.VisitorMapLinks\.placeSearch/);
   assert.doesNotMatch(js,/verifiedDirections\(/);
-  assert.match(js,/Math\.abs\(from\.visit\.distanceOttawaKm-to\.visit\.distanceOttawaKm\)/);
+  assert.match(js,/Engine\\.planCruise\\(journeyGraph,model/);
   assert.match(js,/filter\(p=>p\.branch==='main'/);
   assert.match(js,/readUrl\(\)/);assert.match(js,/syncUrl\(\)/);
   assert.match(js,/tileerror/);

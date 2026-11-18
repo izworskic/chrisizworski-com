@@ -43,7 +43,7 @@ async function run(){
       await page.locator('[data-mode="cruise"]').click();
       assert.match(await page.locator('#channel-number').innerText(),/159\.0 km/);
       await page.locator('#cruise-to').selectOption('ottawa');
-      assert.match(await page.locator('#channel-number').innerText(),/Select two different stops/);
+      assert.match(await page.locator('#channel-number').innerText(),/Choose two distinct places/);
       await page.locator('#cruise-to').selectOption('jones-falls');
       assert.match(await page.locator('#channel-number').innerText(),/159\.0 km/);
       await page.locator('[data-mode="paddle"]').click();

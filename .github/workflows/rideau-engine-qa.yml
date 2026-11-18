@@ -1,0 +1,33 @@
+name: Rideau Python Rust JS source and policy
+on:
+  pull_request:
+    paths:
+      - 'data/rideau-canal/**'
+      - 'public/assets/rideau-navigation.json'
+      - 'public/assets/rideau-journey-engine.js'
+      - 'scripts/verify-rideau-journeys.py'
+      - 'rust/rideau-journey/**'
+      - 'tests/rideau-journeys.test.js'
+      - '.github/workflows/rideau-engine-qa.yml'
+permissions:
+  contents: read
+concurrency:
+  group: rideau-engine-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  source-and-policy:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Python channel graph reconciliation and mirrors
+        run: python3 scripts/verify-rideau-journeys.py
+      - name: Node route, paddle and source contracts
+        run: node --test tests/rideau-canal.test.js tests/rideau-journeys.test.js
+      - name: Independent native Rust calculation policy
+        run: cargo test --manifest-path rust/rideau-journey/Cargo.toml --offline

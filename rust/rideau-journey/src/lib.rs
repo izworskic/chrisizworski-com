@@ -1,7 +1,7 @@
 //! Deterministic Rideau source-distance and trip-policy kernel.
 //! This is a reference implementation for cross-language quality gates, NOT navigation.
 //! No routing geometry, live access permissions or calculated arrival times.
-#![no_std]
+// Native Rust policy kernel with the standard library for CI and portable debugging.
 
 /// 0 mainline; 1 Tay Canal; others are unsupported.
 pub fn channel_distance_dm(from_branch: u32, from_dm: u32, to_branch: u32, to_dm: u32, junction_main_dm: u32) -> Option<u32> {
