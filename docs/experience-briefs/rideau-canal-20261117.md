@@ -80,17 +80,20 @@ Proposed authority ladder: Parks Canada / Canadian Hydrographic Service / Canadi
 - Required tests: station grouping/count/branch; idempotent selected state; A -> B -> A and share-link recovery; no-JS source and place links; stale/2027 no-schedule state; unsupported length/draft/clearance; low-time-budget refusal; units; photo races/failure; maps missing; touch/keyboard; official no-navigation-map disclaimer; 360/390/768/1440px loaded-map browser screenshots; exact photo rights; full repository `npm run verify:all`; post-merge public smoke.
 - Experience OS score requirement: >=90 with each area >=4/5, distinctiveness veto separately, no unmeasured claimed passing grade.
 
-## Repository state and sequencing
-The current main branch's latest observed "Agent branch verification" was FAILED at commit `024aacc59de0f5d9aa44c2556bedfbfb3fc2fd65` (run https://github.com/izworskic/chrisizworski-com/actions/runs/44202481405). Three gate families failed: (a) guides inventory card count and a Python seasonal artifact test, (b) Michigan False Spring SERP title/description lengths, (c) freshness stamps for /guides/ and /tools/. A later data-only commit is on main; a passing full verification for that head has not been observed. Per root AGENTS.md, no Rideau feature PR or merge until main is repaired and reverified.
+## Repository state and implementation
+Main verification is now green: commit `4c63d5ac8323caefde8399585d96d0548ef7f327`, run https://github.com/izworskic/chrisizworski-com/actions/runs/44216834627. This cleared the previous red main blocker before Rideau development began.
 
-**Release slices after green main:**
-- Slice 1: audited station/chamber/bridge/visitor-stop inventory and tests, rights ledger, official source links.
-- Slice 2: distinct, source-led sightseeing desk, station selector, 6 verified anchors, photo and mobile map, source-aware first screen.
-- Slice 3: carefully scoped cruise segment planner with date, last-lockage and uncertainty handling.
-- Slice 4: curated paddling approach (not a clone of Kite Kingston), saved plans and dedicated QA.
-- Slice 5: only if sources support it, observational status checks and historical season archive. Separate skateway opportunity after keyword/demand validation.
+Implemented on `feature/rideau-canal-field-desk-20261117`:
+- `data/rideau-canal/locations.json`: 26 operational lock entries covering 24 grouped stations, 47 chambers, 15 separately named bridge entries, and one visitor-only island. Exact source-linked coordinates and interpretation for seven audited public-location profiles only.
+- `public/assets/rideau-locations.json`: byte-identical published mirror; parity pinned by tests.
+- `public/rideau-canal/index.html`: standalone noindex, source-first visit desk and fully readable JS-failure links, with declared canonical but no public launch/Tools card or sitemap yet.
+- `public/assets/rideau-canal.js`: visitor mode, time/interest choices, separate channel reference distance and paddling source mode, map/list/selected evidence, photo token protection, shareable state and map fallback.
+- `public/assets/rideau-canal.css`: distinct responsive page style with front-loaded choice.
+- `tests/rideau-canal.test.js`: inventory grouping, provenance, metadata, photography, route safety and script syntax gates.
 
-**Search hypothesis, not measured volume:** primary `/rideau-canal/` search intent should target what to see, how to visit and how to plan a Rideau Canal experience. The brand and official websites compete strongly; do not manufacture a traffic or revenue forecast. Semrush's keyword reports were unavailable on 2026-11-17 because no API units remain. No Rideau-specific GSC/AdSense baseline was verified. Measure comparable search windows only after publication.
+**Limitations:** Browser/visual acceptance, network-loaded map and Wikimedia photo bytes, all official profile coordinates beyond seven, 2027 hours, source ingestion rights for automated live operational status, source-approved paddle route legs, measured actual user demand and AdSense outcomes are NOT VERIFIED. The new page is a noindex preview, not a released canonical tool.
+
+**Next release gates:** confirm PR head against current main, run source and full repository CI, real 360/390/768/1440 browser journeys, image rights/loaded photo checks, and actual tiles/failed-network behavior. Only after QA and source validation should the noindex be removed and Tool Network registry, Tools card, ItemList, sitemap and contextual navigation be launched in one atomic reviewed change. Do not confuse a passing unit test with that future public release.
 
 ## Exactly one next implementation action
-After green main, create `data/rideau-canal/locations.json` and strict tests for official station, chamber, bridge and visitor-only grouping with the Tay Canal as a branch, plus a checked provenance record for every displayed place. No public route, first-screen design or source-derived distances should be shipped before this data foundation is reconciled.
+Run actual browser interaction and loaded-media QA against the noindex pilot, fix issues, and document evidence. Do not publish or claim a 90/100 score without observing the experiences.
