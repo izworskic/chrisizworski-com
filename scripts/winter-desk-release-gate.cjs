@@ -8,6 +8,7 @@ const fs=require('node:fs');
 const path=require('node:path');
 const root=path.resolve(__dirname,'..');
 const base=path.join(root,'previews/great-lakes-winter-desk');
+const published=path.join(root,'public/great-lakes-winter-field-desk');
 const ids=['gooseberry-upper','munising-snowshoe','meyers-lakeshore'];
 const args=new Set(process.argv.slice(2));
 const publicMode=args.has('--release');
@@ -24,6 +25,22 @@ try{
   const html=read('index.html'),core=read('core.js'),app=read('app.js');
   const arrival=json('arrival-evidence.json'),route=json('route-access-evidence.json');
   const conditions=json('source-checks.json'),notices=json('operator-notice-monitor.json');
+  const publishedHtml=fs.readFileSync(path.join(published,'index.html'),'utf8');
+  const pageGraph=JSON.parse((publishedHtml.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)||[])[1]||'{}');
+  const pageNodes=Array.isArray(pageGraph['@graph'])?pageGraph['@graph']:[];
+  const personId='https://chrisizworski.com/#person';
+  const person=pageNodes.find(node=>node['@type']==='Person'&&node['@id']===personId);
+  const page=pageNodes.find(node=>node['@type']==='WebPage'&&node['@id']==='https://chrisizworski.com/great-lakes-winter-field-desk/#page');
+  requireCheck(!!person&&person.name==='Chris Izworski'&&page?.author?.['@id']===personId&&page?.publisher?.['@id']===personId,
+    'published pilot contains Person graph and page author and publisher references');
+  requireCheck(/name="robots" content="noindex,nofollow,noarchive"/.test(publishedHtml)&&!/rel="canonical"|pagead2\.googlesyndication/i.test(publishedHtml),
+    'published research pilot remains noindex without canonical or injected ads');
+  requireCheck(/© 2026 Chris Izworski/.test(publishedHtml),'published pilot has visible credited footer');
+  for(const name of ['source-checks.json','operator-notice-monitor.json']){
+    requireCheck(read(name)===fs.readFileSync(path.join(published,name),'utf8'),
+      'reviewed '+name+' is identical in preview and published pilot');
+  }
+
   requireCheck(/name="robots" content="noindex,nofollow,noarchive"/.test(html),'preview remains intentionally noindex');
   requireCheck(!/rel="canonical"|pagead2\.googlesyndication/i.test(html),'no accidental canonical or ad insertion');
   requireCheck(/id="quick-outing"/.test(html)&&/id="route-access"/.test(html)&&/id="arrival-title"/.test(html),'real first-screen answer plus access and parking desk');

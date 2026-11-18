@@ -109,23 +109,66 @@ class EvidencePromotionReviewTests(unittest.TestCase):
         self.docs["monitor-report.json"]["routes"]=[]
         self.assertFalse(self.assessment()["eligible"])
 
-    def test_manual_copy_affects_only_two_source_health_files(self):
+    def prepare_targets(self, parent):
+        preview=parent/"preview"
+        published=parent/"public"
+        for target in (preview,published):
+            target.mkdir()
+            for name,content in self.base.items():
+                (target/name).write_bytes(content)
+            (target/"route-access-evidence.json").write_bytes(b"NO VERIFIED TRAIL ACCESS\\n")
+            (target/"arrival-evidence.json").write_bytes(b"NO VERIFIED WINTER PARKING\\n")
+        return preview,published
+
+    def test_manual_reviewed_copy_syncs_only_four_source_health_files(self):
         with tempfile.TemporaryDirectory() as folder:
-            dest=pathlib.Path(folder)
-            sentinel={"route-access-evidence.json":b"NO ROUTE ACCESS VERIFIED\n",
-                      "arrival-evidence.json":b"NO PARKING ACCESS VERIFIED\n"}
-            for name,content in {**self.base,**sentinel}.items():
-                (dest/name).write_bytes(content)
-            original=promotion.PREVIEW
+            preview,published=self.prepare_targets(pathlib.Path(folder))
+            original_preview,original_public=promotion.PREVIEW,promotion.PUBLIC
             try:
-                promotion.PREVIEW=dest
-                promotion.promote(self.raw)
+                promotion.PREVIEW, promotion.PUBLIC=preview,published
+                promotion.promote(self.raw,self.base)
             finally:
-                promotion.PREVIEW=original
+                promotion.PREVIEW,promotion.PUBLIC=original_preview,original_public
+            for directory in (preview,published):
+                for name in promotion.PROMOTED:
+                    self.assertEqual((directory/name).read_bytes(),self.raw[name])
+                self.assertEqual((directory/"route-access-evidence.json").read_bytes(),
+                                 b"NO VERIFIED TRAIL ACCESS\\n")
+                self.assertEqual((directory/"arrival-evidence.json").read_bytes(),
+                                 b"NO VERIFIED WINTER PARKING\\n")
+
+    def test_unreviewed_public_change_blocks_promotion_without_writes(self):
+        with tempfile.TemporaryDirectory() as folder:
+            preview,published=self.prepare_targets(pathlib.Path(folder))
+            (published/"source-checks.json").write_bytes(b'{"unreviewed":true}\\n')
+            original_preview,original_public=promotion.PREVIEW,promotion.PUBLIC
+            try:
+                promotion.PREVIEW,promotion.PUBLIC=preview,published
+                with self.assertRaisesRegex(ValueError,"Reviewed baseline differs"):
+                    promotion.promote(self.raw,self.base)
+            finally:
+                promotion.PREVIEW,promotion.PUBLIC=original_preview,original_public
             for name in promotion.PROMOTED:
-                self.assertEqual((dest/name).read_bytes(),self.raw[name])
-            for name,content in sentinel.items():
-                self.assertEqual((dest/name).read_bytes(),content)
+                self.assertEqual((preview/name).read_bytes(),self.base[name])
+            self.assertEqual((published/"source-checks.json").read_bytes(),b'{"unreviewed":true}\\n')
+            self.assertEqual((published/"operator-notice-monitor.json").read_bytes(),
+                             self.base["operator-notice-monitor.json"])
+
+    def test_unreviewed_preview_change_blocks_promotion_without_writes(self):
+        with tempfile.TemporaryDirectory() as folder:
+            preview,published=self.prepare_targets(pathlib.Path(folder))
+            (preview/"operator-notice-monitor.json").write_bytes(b'{"unreviewed":true}\\n')
+            original_preview,original_public=promotion.PREVIEW,promotion.PUBLIC
+            try:
+                promotion.PREVIEW,promotion.PUBLIC=preview,published
+                with self.assertRaisesRegex(ValueError,"Reviewed baseline differs"):
+                    promotion.promote(self.raw,self.base)
+            finally:
+                promotion.PREVIEW,promotion.PUBLIC=original_preview,original_public
+            for name in promotion.PROMOTED:
+                self.assertEqual((published/name).read_bytes(),self.base[name])
+            self.assertEqual((preview/"source-checks.json").read_bytes(),
+                             self.base["source-checks.json"])
 
     def test_file_receipt_digests_change_when_sources_or_baseline_change(self):
         before=self.assessment()

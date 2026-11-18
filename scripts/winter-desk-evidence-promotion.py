@@ -3,8 +3,8 @@
 
 The scheduled watch never writes site data. This manual command prepares a
 review packet, checks its integrity, and, with an explicit reviewer receipt,
-writes ONLY source-checks.json and operator-notice-monitor.json in the draft
-preview. It cannot author route-access or parking operating verdicts.
+writes ONLY the two source-health JSON files in both the tracked preview and
+published noindex pilot. It cannot author route-access or parking verdicts.
 """
 from __future__ import annotations
 
@@ -21,6 +21,7 @@ import tempfile
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 PREVIEW = ROOT / "previews" / "great-lakes-winter-desk"
+PUBLIC = ROOT / "public" / "great-lakes-winter-field-desk"
 FILES = ("source-checks.json", "operator-notice-monitor.json", "monitor-report.json")
 PROMOTED = FILES[:2]
 ROUTES = ("gooseberry-upper", "munising-snowshoe", "meyers-lakeshore")
@@ -166,22 +167,39 @@ def writing_branch():
         return None
 
 
-def promote(contents):
-    """Write only the two preview source files once all checks pass."""
-    for name in PROMOTED:
-        target = PREVIEW / name
-        if not target.is_file() or target.is_symlink():
-            raise ValueError("Unexpected target source file")
-    # Files are prepared before any replace, with no human claims added.
+def promote(contents, baseline):
+    """Stage two reviewed source-health files in preview and published pilot.
+
+    Only --apply calls this helper, after the signed human receipt and non-main
+    branch checks. Both targets must still match the reviewed baseline. The
+    scheduled watcher remains read-only and cannot call this function.
+    """
+    destinations = (PREVIEW, PUBLIC)
+    targets = []
+    for directory in destinations:
+        if not directory.is_dir() or directory.is_symlink():
+            raise ValueError("Missing or linked winter desk destination")
+        for name in PROMOTED:
+            target = directory / name
+            if not target.is_file() or target.is_symlink():
+                raise ValueError(f"Unexpected winter desk source target: {target}")
+            if target.read_bytes() != baseline[name]:
+                raise ValueError(
+                    f"Reviewed baseline differs from {directory.name}/{name}; "
+                    "refuse partial or unreviewed public synchronization")
+            targets.append((target, contents[name]))
+
+    # Prepare every replacement before changing either directory. These remain
+    # ordinary tracked-file edits for an independent pull-request review.
     temps = []
     try:
-        for name in PROMOTED:
-            fd, temp = tempfile.mkstemp(prefix=".winter-approved-", dir=PREVIEW)
+        for target, content in targets:
+            fd, temp = tempfile.mkstemp(prefix=".winter-approved-", dir=target.parent)
             with os.fdopen(fd, "wb") as handle:
-                handle.write(contents[name])
+                handle.write(content)
                 handle.flush()
                 os.fsync(handle.fileno())
-            temps.append((pathlib.Path(temp), PREVIEW / name))
+            temps.append((pathlib.Path(temp), target))
         for temp, target in temps:
             os.replace(temp, target)
     finally:
@@ -195,7 +213,7 @@ def main():
     parser.add_argument("--review-out", type=pathlib.Path)
     parser.add_argument("--approval", type=pathlib.Path)
     parser.add_argument("--apply", action="store_true",
-                        help="requires named reviewer receipt; writes only two preview source files")
+                        help="requires named reviewer receipt; syncs two reviewed source files to preview and noindex pilot")
     args = parser.parse_args()
     if args.apply and (not args.approval or args.review_out):
         parser.error("--apply needs --approval and cannot also --review-out")
@@ -249,7 +267,9 @@ def main():
                 "a real reviewer identity, UTC reviewedAt, verifiedNoOpening: true,",
                 "the exact source URL list, both SHA-256 hashes and the required phrase.",
                 "Then use the --apply --approval options on a non-main review branch.",
-                "Review the resulting two-file git diff and require an ordinary PR review.",
+                "The reviewed two source files update BOTH preview and public noindex",
+                "pilot copies in the same GitHub pull request, never by cron.",
+                "Review the resulting four-file git diff and require an ordinary PR review.",
                 "This script does not authenticate the claimed reviewer identity.",
                 "",
                 "Never promote a changed or unavailable source as an opening. A HOLD",
@@ -269,9 +289,10 @@ def main():
             faults = approve_receipt(receipt, packet, dt.datetime.now(dt.timezone.utc))
             if faults:
                 raise ValueError("; ".join(faults))
-            promote(contents)
+            promote(contents, baseline)
             packet["appliedToBranch"] = branch
-            packet["appliedFiles"] = list(PROMOTED)
+            packet["appliedFiles"] = [str(directory.relative_to(ROOT) / name)
+                                      for directory in (PREVIEW, PUBLIC) for name in PROMOTED]
         print(json.dumps(packet, indent=2))
         if not packet["eligible"]:
             return 2
