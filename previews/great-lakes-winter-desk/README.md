@@ -144,3 +144,45 @@ The preview release gate checks first-answer content, named-route and parking id
 Pull requests additionally run a **real Chromium browser acceptance** at 360, 390, 768 and 1440 pixels. It inspects destination selection, source and parking switching, original location photos, map tiles, failed weather and map services, synthetic closure precedence and JavaScript-off source fallbacks. This heavier browser job is *not* part of the twice-daily scheduled monitor, reducing cost.
 
 **Exactly one next engineering step:** create a reviewer-approved operating feed with dated notices for each exact trail and winter parking arrival point before any positive visitor access status or public launch. Do not substitute generic web availability or forecast data.
+
+## Human-reviewed source snapshot promotion
+
+The scheduled watcher produces artifacts only, never visitor-facing data or an automatic publication.
+To promote source HEALTH ONLY to the noindex preview, download the three files
+source-checks.json, operator-notice-monitor.json and monitor-report.json from the
+winter-desk-official-evidence GitHub Actions artifact into one temporary directory.
+
+Run a dry review on a clean checkout:
+
+    python3 scripts/winter-desk-evidence-watch.py --live --out-dir /tmp/winter-check
+    python3 scripts/winter-desk-evidence-promotion.py --candidate-dir /tmp/winter-check --review-out /tmp/winter-review
+
+The promotion auditor independently recomputes every source state and requires six
+official URLs, six source hashes, complete HTML, matching report rows, approved
+operator scope, no OPEN or CLOSED inference, and timestamps within three hours.
+Missing or changed source phrases cause HOLD, not an invented reopening.
+
+Review the six official URLs in the generated REVIEW.md, inspect the staged JSON
+against the checked-in preview, and complete approval-template.json with a real
+human reviewer, current UTC review timestamp, both exact SHA-256 digests and
+the explicit no-opening acknowledgement. A claimed identity in this local
+receipt is NOT authenticated by the script; require ordinary human PR review.
+
+On a named non-main review branch, after real source review only:
+
+    python3 scripts/winter-desk-evidence-promotion.py --candidate-dir /tmp/winter-check --approval /tmp/winter-review/approval-template.json --apply
+    git diff -- previews/great-lakes-winter-desk/source-checks.json previews/great-lakes-winter-desk/operator-notice-monitor.json
+
+The --apply command can update ONLY two source-health JSON files. It never
+updates route-access-evidence.json, arrival-evidence.json, public HTML, ads,
+canonicals, sitemap or the tool registry. Cron runs NEVER call --apply.
+An ordinary PR review and merge remain mandatory for any checked-in change.
+
+Safety regression:
+
+    python3 -m unittest discover -s tests -p 'test_winter_desk_evidence_promotion.py' -v
+    node scripts/winter-desk-release-gate.cjs --release
+
+The public release gate will remain HOLD until separately verified exact-date
+trail access and parking, photo rights and production URL/canonical/ad checks
+are approved. A fresh page-source check cannot authorize a visitor opening.
