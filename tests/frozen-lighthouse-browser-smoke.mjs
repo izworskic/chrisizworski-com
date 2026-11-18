@@ -104,6 +104,13 @@ try{
    assert.equal(await appendix.locator('.pier-card').count(),9);
    await page.locator('details.lighthouse-appendix > summary').click();
   });
+  await check('visitor copy uses plain language without hiding uncertain weather at '+width+'px',async()=>{
+   assert.match(await page.locator('.hero-sub').innerText(),/spray from Lake Michigan can freeze/i);
+   assert.match(await page.locator('.warning').innerText(),/View from shore/i);
+   assert.match(await page.locator('#desk-heading').innerText(),/72 hours/);
+   assert.match(await page.locator('#desk-readings').innerText(),/conditions for freezing spray/i);
+   assert.doesNotMatch(await page.locator('#desk-readings').innerText(),/Overland vessel-icing|onshore sector|spray gates met/i);
+  });
   await check('forecast graph explanation and time labels at '+width+'px',async()=>{
    const note=await page.locator('#desk-chart-note').innerText();
    assert.match(note,/not the chance of ice forming/);
@@ -139,9 +146,9 @@ try{
     assert.match(await page.locator('#desk-maps').getAttribute('href'),/^https:\/\/www\.google\.com\/maps\/search\/\?api=1&query=/);
     assert.equal(await page.locator('#coast-lights button[data-pier="frankfort"]').getAttribute('aria-pressed'),'true');
     await setHour(page,9);
-    assert.match(await page.locator('#desk-readings').innerText(),/index 80\/100/);
-    assert.match(await page.locator('#coast-lights button[data-pier="frankfort"] .desk-location__state').innerText(),/possible spray 80\/100/);
-    assert.match(await page.locator('#coast-lights button[data-pier="st-joseph-outer"] .desk-location__state').innerText(),/no modeled spray/);
+    assert.match(await page.locator('#desk-readings').innerText(),/Relative signal 80\/100/);
+    assert.match(await page.locator('#coast-lights button[data-pier="frankfort"] .desk-location__state').innerText(),/possible freezing spray, signal 80\/100/);
+    assert.match(await page.locator('#coast-lights button[data-pier="st-joseph-outer"] .desk-location__state').innerText(),/conditions not met/);
     const time=await page.locator('#desk-time').innerText();
     await page.locator('#coast-lights button[data-pier="st-joseph-outer"]').click();
     await page.locator('#coast-lights button[data-pier="frankfort"]').click();
@@ -154,7 +161,7 @@ try{
    });
    await check('missing hour remains unknown, not zero',async()=>{
     await setHour(page,20);
-    assert.match(await page.locator('#desk-readings').innerText(),/Unknown from available evidence/);
+    assert.match(await page.locator('#desk-readings').innerText(),/do not have enough readings/);
     assert.match(await page.locator('#desk-chart').getAttribute('aria-label'),/striped bars mean missing evidence/);
    });
    await check('selected time and location are shareable',async()=>{
@@ -176,7 +183,7 @@ try{
   const page=await browser.newPage();
   try{
    await prepare(page,true);
-   await page.locator('#desk-outcome').getByText('No reliable model verdict').waitFor();
+   await page.locator('#desk-outcome').getByText('No trustworthy forecast available right now').waitFor();
    assert.equal(await page.locator('#desk-slider').isDisabled(),true);
    assert.equal(await page.locator('#desk-maps').getAttribute('href'),null);
   }finally{await page.close();}

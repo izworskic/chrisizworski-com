@@ -1,0 +1,1768 @@
+{
+ "national": [
+  {
+   "id": "rocket-launch-usa",
+   "title": "Rocket Launch Live USA",
+   "tags": "rocket launch nasa spacex usa national atlas west coast east coast gulf pacific california vandenberg florida cape canaveral kennedy texas starbase wallops virginia kodiak alaska hawaii barking sands viewing schedule cloud closure",
+   "place": "Six launch regions · Atlantic, Pacific & Gulf",
+   "kind": "National rocket launch decision engine",
+   "description": "Choose the coast and a real mission. Compare schedule certainty, official range access, launch viewing places, and forecast sky cover when the timing is precise enough.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/national-tools/rocket-launch-live/"
+  },
+  {
+   "id": "rivers",
+   "title": "River Conditions",
+   "tags": "river stream gauge usgs flow stage flood fishing paddling water nearby",
+   "place": "Nearby monitored rivers · United States",
+   "kind": "Live river data",
+   "description": "Real-time hydrological status across America's waterways. Live USGS discharge rates, gauge heights, flood stages, and ten-year historical percentiles before you launch a drift boat or paddle.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/national-tools/rivers/"
+  },
+  {
+   "id": "coastal",
+   "title": "Beach & Coastal Conditions",
+   "tags": "coast coastal beach ocean lake swimming paddling boating rip risk waves wind tide",
+   "place": "Supported U.S. coasts and Great Lakes",
+   "kind": "Live coastal data",
+   "description": "Surf, swell, and shoreline safety across the Pacific, Atlantic, Gulf, and Great Lakes. Active NOAA rip-current advisories, water temperatures, wave period telemetry, and tidal cycles.",
+   "months": "4,5,6,7,8,9,10",
+   "href": "/national-tools/coastal/"
+  },
+  {
+   "id": "smoke",
+   "title": "Wildfire Smoke & Outdoor Air Window",
+   "tags": "air smoke wildfire pm2.5 aqi outdoors running hiking cleaner window",
+   "place": "United States",
+   "kind": "Live air window",
+   "description": "Pinpoint cleaner breathing windows amidst wildfire plumes. Real-time EPA AirNow PM2.5 concentrations paired with high-resolution HRRR smoke transport models and wind shifts.",
+   "months": "5,6,7,8,9,10",
+   "href": "/national-tools/smoke/"
+  },
+  {
+   "id": "snow",
+   "title": "Snowpack & Snowmelt Conditions",
+   "tags": "snow snowpack snowmelt swe winter ski mountains melt refreeze",
+   "place": "United States",
+   "kind": "Live snow data",
+   "description": "High-country winter snowpack and spring runoff dynamics. SNOTEL automated snow-water equivalent telemetry, settling depths, and thaw-refreeze cycles across Western and Northern ranges.",
+   "months": "1,2,3,4,5,11,12",
+   "href": "/national-tools/snow/"
+  },
+  {
+   "id": "epic-ikon-pass",
+   "title": "Epic vs Ikon Pass Blackout Checker",
+   "tags": "ski season winter epic ikon pass blackout date holiday vail aspen mountain snowmass reservation ski lift ticket access travel",
+   "place": "2026–27 · U.S. + Whistler",
+   "kind": "Ski pass decision",
+   "description": "Navigate resort access and pass restrictions with clarity. Real-time calendar of published blackout dates, shared-destination day allotments, and mandatory lift reservation rules across North America.",
+   "months": "1,2,3,4,5,10,11,12",
+   "href": "https://chrisizworski.com/epic-ikon-pass/"
+  },
+  {
+   "id": "aurora",
+   "title": "Aurora Tonight",
+   "tags": "aurora northern lights sky night photography alaska minnesota north dakota montana maine noaa kp clouds moon stargazing dark sky protected parks michigan access",
+   "place": "United States",
+   "kind": "Live sky conditions",
+   "description": "Dark-sky auroral oval tracking across the Northern Tier. Real-time NOAA Space Weather Kp geomagnetic readings paired with local cloud-cover satellite models and lunar phase brightness.",
+   "months": "1,2,3,4,8,9,10,11,12",
+   "href": "/national-tools/aurora/"
+  },
+  {
+   "id": "waterfall-window",
+   "title": "Waterfall Window",
+   "tags": "waterfall hiking flow trip travel river rain daylight united states",
+   "place": "Waterfalls across the United States",
+   "kind": "Trip comparison",
+   "description": "Time your canyon and mountain waterfall journeys for peak flow. Spring snowmelt hydrographs, USGS drainage basin runoff, and daylight trail windows across premier American cascades.",
+   "months": "3,4,5,6,7,8,9,10,11",
+   "href": "/national-tools/waterfalls/"
+  },
+  {
+   "id": "monarch",
+   "title": "Monarch Migration Live",
+   "tags": "monarch butterfly butterflies migration pollinator milkweed great lakes sightings weather spring fall",
+   "place": "North America",
+   "kind": "Live migration intelligence",
+   "description": "Track the multigenerational migration across North America. Real-time verified roost reports, nectar corridor phenology, flight wind vectors, and coastal concentration points.",
+   "months": "3,4,5,6,7,8,9,10",
+   "href": "https://chrisizworski.com/national-tools/monarch-migration-live"
+  },
+  {
+   "id": "bird-migration",
+   "title": "Bird Migration Morning Index",
+   "tags": "bird birds birding migration birdcast ebird radar nocturnal morning fallout warblers thrushes sparrows hotspot sightings weather near me united states",
+   "place": "United States",
+   "kind": "Live bird migration",
+   "description": "Overnight radar mass-migration returns and morning fallout potential. NEXRAD nocturnal bird density scans paired with dawn weather fronts and local eBird hotspot activity.",
+   "months": "3,4,5,6,8,9,10,11",
+   "href": "/national-tools/bird-migration/"
+  },
+  {
+   "id": "michigan-bloom-tracker",
+   "title": "Michigan Bloom Tracker 2027",
+   "tags": "michigan flowers bloom blossom tulip holland cherry traverse city grand rapids peony ann arbor mackinac lilacs lavender sunflowers mums october peak season map",
+   "place": "Michigan · 19 flower destinations",
+   "kind": "2027 seasonal bloom planning",
+   "description": "Explore 19 Michigan flower experiences across spring, summer and October, including apple orchards, tulips, wildflowers, lavender and sunflowers. Filter the interactive map and compare visitor logistics; current bloom needs verified dated observations.",
+   "months": "4,5,6,7,8,9,10",
+   "href": "https://phenology.chrisizworski.com/bloom-tracker"
+  },
+  {
+   "id": "wisconsin-bloom-tracker",
+   "title": "Wisconsin Bloom Tracker 2027",
+   "tags": "wisconsin flowers bloom blossom cherry door county madison arboretum lilacs lavender sunflower farm visit map 2027",
+   "place": "Wisconsin · 9 flower destinations",
+   "kind": "2027 regional bloom planning",
+   "description": "Door County blossoms, Madison lilacs, island lavender and summer flower fields, with a mapped visit guide, tickets, parking and official evidence links. The calendar is not a live bloom claim.",
+   "months": "4,5,6,7,8,9",
+   "href": "https://phenology.chrisizworski.com/wisconsin-bloom-tracker"
+  },
+  {
+   "id": "fall-color",
+   "title": "Fall Color Timing",
+   "tags": "fall color autumn foliage leaves travel nature seasonal weather",
+   "place": "United States",
+   "kind": "Seasonal timing",
+   "description": "Understand the historical autumn window and read current weather as separate context instead of inventing a precise live peak percentage.",
+   "months": "8,9,10,11",
+   "href": "/national-tools/fall-color/"
+  },
+  {
+   "id": "ice-out",
+   "title": "Lake Ice-Out Forecast",
+   "tags": "lake ice ice-out thaw open water winter spring boating fishing canada north america",
+   "place": "Northern United States and Canada",
+   "kind": "Seasonal lake forecast",
+   "description": "See the current lake-season state, a calibrated spring ice-out outlook, historical context, live thaw signals and satellite imagery.",
+   "months": "1,2,3,4,5",
+   "href": "https://chrisizworski.com/national-tools/ice-out/"
+  },
+  {
+   "id": "white-christmas",
+   "title": "White Christmas Odds",
+   "tags": "white christmas snow holiday winter seasonal probability travel",
+   "place": "United States",
+   "kind": "Seasonal odds",
+   "description": "Blend historical December 25 snow cover with seasonal and short-range signals at the appropriate lead time.",
+   "months": "10,11,12",
+   "href": "/national-tools/white-christmas/"
+  },
+  {
+   "id": "frost",
+   "title": "Frost Dates & Freeze Risk",
+   "tags": "garden frost freeze plants temperature spring fall climate cold",
+   "place": "United States",
+   "kind": "Climate + live risk",
+   "description": "See local spring and fall freeze probabilities alongside current official cold-weather context.",
+   "months": "2,3,4,5,8,9,10,11",
+   "href": "/national-tools/frost/"
+  },
+  {
+   "id": "planting",
+   "title": "Planting Calendar",
+   "tags": "garden planting vegetables flowers seeds transplant crop calendar frost",
+   "place": "United States",
+   "kind": "Crop planner",
+   "description": "Translate local freeze climatology into crop-specific seed-starting, direct-sowing and transplant windows.",
+   "months": "1,2,3,4,5,6,7,8,9,10",
+   "href": "/national-tools/planting/"
+  },
+  {
+   "id": "garden-water",
+   "title": "Garden Water",
+   "tags": "garden water watering irrigation plants rain evapotranspiration soil crop",
+   "place": "United States",
+   "kind": "Today’s garden decision",
+   "description": "Decide whether to water today from forecast rain and evapotranspiration, recent rainfall, soil context and crop stage.",
+   "months": "4,5,6,7,8,9,10",
+   "href": "/national-tools/garden-water/"
+  },
+  {
+   "id": "flight-tracker",
+   "title": "Flight Tracker — Where Is My Plane?",
+   "tags": "flight tracker plane aircraft airport flight number travel air",
+   "place": "Commercial flights",
+   "kind": "Live aircraft tracker",
+   "description": "Enter a commercial flight number and see the aircraft's latest reported position on an airport-to-airport map.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "https://chrisizworski.com/flight-tracker/"
+  },
+  {
+   "id": "agentbase",
+   "title": "AgentBase, Open Agent Instruction Registry",
+   "tags": "agentbase developer ai agents instructions prompts skills workflows mcp registry open source",
+   "place": "Open-source developer resources",
+   "kind": "Open developer registry",
+   "description": "Explore a CC0-licensed, MCP-compatible registry of agent instruction files, prompts, skills, workflows and safety filters.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "https://github.com/AgentBase1"
+  },
+  {
+   "id": "house-fit",
+   "title": "Can I Afford This House? True Monthly Cost",
+   "tags": "house home home buying buyer mortgage affordability true monthly cost property tax homeowners insurance pmi maintenance flood fema closing cost cash to close reality gap real estate",
+   "place": "United States · address-specific",
+   "kind": "Home-buying decision",
+   "description": "Enter the address, asking price and down payment. The tool prefills the latest daily 30-year conforming mortgage-rate average, then estimates the real monthly carrying cost and exposes the Reality Gap above the mortgage payment.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "https://chrisizworski.com/can-i-afford-this-house/"
+  },
+  {
+   "id": "nyc-crossing",
+   "title": "NYC Crossing Decision Engine",
+   "tags": "new york city nyc bridge tunnel crossing traffic toll congestion pricing manhattan queens brooklyn bronx driving commute route port authority mta nyc dot northeast great lakes lake superior duluth canal park minnesota superior wisconsin aerial lift bridge ships freighters boat watching michigan huron erie ontario water levels shoreline new york niagara maine acadia thunder hole cadillac mountain sunrise",
+   "place": "New York City · New York",
+   "kind": "Destination decision",
+   "description": "Compare live conditions across major NYC bridges and tunnels with tolls, Manhattan congestion pricing and vehicle eligibility before choosing a crossing.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "https://chrisizworski.com/nyc-crossing/"
+  },
+  {
+   "id": "lake-effect-snow",
+   "title": "Great Lakes Lake-Effect Snow Forecast",
+   "tags": "lake effect snow live radar snowbelt NWS MRMS NOAA winter alerts 850mb forecast charts Michigan Wisconsin Ohio Pennsylvania New York Lake Superior Lake Michigan Lake Huron Lake Erie Lake Ontario",
+   "place": "Michigan · Wisconsin · Ohio · Pennsylvania · New York",
+   "kind": "Live radar + snowbelt outlook",
+   "description": "Where the lake-effect squalls are setting up right now. High-resolution NOAA radar scans, boundary-layer wind trajectories, and 72-hour snowfall projections across 15 Great Lakes snowbelts.",
+   "months": "10,11,12,1,2,3,4",
+   "href": "/lake-effect-snow/"
+  },
+  {
+   "id": "niagara-border",
+   "title": "Niagara Border Wait Times",
+   "tags": "niagara border crossing canada new york ontario peace rainbow lewiston bridge wait northeast great lakes lake superior duluth canal park minnesota superior wisconsin aerial lift bridge ships freighters boat watching michigan huron erie ontario water levels shoreline new york niagara maine acadia thunder hole cadillac mountain sunrise",
+   "place": "New York · Ontario",
+   "kind": "Destination decision",
+   "description": "Direct crossing monitors for the lower Niagara frontier. Live vehicle queue times, commercial and NEXUS lane status, and bridge camera views across the Peace, Rainbow, and Lewiston–Queenston spans.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "https://chrisizworski.com/niagara-border-crossing/"
+  },
+  {
+   "id": "niagara-falls-today",
+   "title": "Niagara Falls Today · Best Visit Plan",
+   "tags": "niagara falls today attractions open boat cave winds maid mist journey behind falls 2 hours 4 hours 6 hours plan visiting usa canada viewpoints",
+   "place": "Niagara Falls · New York & Ontario",
+   "kind": "Visit planner",
+   "description": "Build a feasible 2-, 4-, or 6-hour Niagara Falls itinerary with dated attraction schedules, cutoff times and conservative travel buffers.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/niagara-falls-today/"
+  },
+  {
+   "id": "st-lawrence-seaway",
+   "title": "St. Lawrence Seaway Ships & Locks",
+   "tags": "st lawrence seaway ship tracker locks eisenhower massena iroquois montreal beauharnois thousand islands",
+   "place": "Montreal to Lake Ontario · Canada & New York",
+   "kind": "Live ship watch",
+   "description": "Explore recent ships, seven locks, public viewing plans, an interactive lock model and historical Seaway traffic charts.",
+   "months": "3,4,5,6,7,8,9,10,11,12",
+   "href": "/st-lawrence-seaway/"
+  },
+  {
+   "id": "welland-canal",
+   "title": "Welland Canal Ships & Locks Live",
+   "tags": "welland canal lock ship schedule freighter tracking st catharines thorold port colborne ontario niagara peninsula great lakes seaway ships ais lock 3 viewing",
+   "place": "Niagara Peninsula · Ontario",
+   "kind": "Live ship watch",
+   "description": "Explore all eight locks on a ship map, see recent AIS-reported vessels, and choose a public lock-viewing spot. Check official Seaway transits before going.",
+   "months": "3,4,5,6,7,8,9,10,11,12",
+   "href": "/welland-canal/"
+  },
+  {
+   "id": "old-sow",
+   "title": "Old Sow Whirlpool Viewing Window",
+   "tags": "old sow whirlpool maine new brunswick deer island eastport tide viewing northeast great lakes lake superior duluth canal park minnesota superior wisconsin aerial lift bridge ships freighters boat watching michigan huron erie ontario water levels shoreline new york niagara maine acadia thunder hole cadillac mountain sunrise",
+   "place": "Passamaquoddy Bay · Maine and New Brunswick",
+   "kind": "Destination decision",
+   "description": "Use the tide and viewing guide to plan an Old Sow visit. Timing guidance is a modeled viewing opportunity; verify local access and conditions.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "https://chrisizworski.com/old-sow-live/"
+  },
+  {
+   "id": "duluth-canal-park",
+   "title": "Duluth Ship Schedule Today & Canal Park Live Cams",
+   "tags": "duluth canal park lake superior minnesota superior wisconsin aerial lift bridge ship schedule ships freighters lakers live ais vessel map webcams cameras boat watching great lakes northeast great lakes northeast great lakes lake superior duluth canal park minnesota superior wisconsin aerial lift bridge ships freighters boat watching michigan huron erie ontario water levels shoreline new york niagara maine acadia thunder hole cadillac mountain sunrise",
+   "place": "Duluth Canal Park · Minnesota",
+   "kind": "Live ship watch",
+   "description": "See which supported ship matters next, its Aerial Lift Bridge passage window, live AIS position, mapped camera network, and the best Canal Park viewing spots.",
+   "months": "3,4,5,6,7,8,9,10,11,12",
+   "href": "https://chrisizworski.com/duluth-canal-park/"
+  },
+  {
+   "id": "split-rock-river-loop",
+   "title": "Split Rock River Loop: Bridge & Detour",
+   "tags": "split rock river loop superior hiking trail bridge underpass detour trail hike north shore two harbors minnesota",
+   "place": "Split Rock River · Minnesota North Shore",
+   "kind": "Hiking route and access",
+   "description": "Both trail sides have reopened, but the upper crossing has no bridge. Choose the official alternate or an out-and-back, not an assumed river ford.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/split-rock-river-loop/"
+  },
+  {
+   "id": "split-rock-lighthouse-visit",
+   "title": "Split Rock Lighthouse Tickets & Parking",
+   "tags": "split rock lighthouse minnesota north shore tickets hours admission parking state park 2026 memorial tower",
+   "place": "Split Rock Lighthouse · Minnesota",
+   "kind": "Admission decision",
+   "description": "Choose historic-site interior admission, historic grounds only, the state park viewpoint, or the Edmund Fitzgerald memorial. Parking and ticketing differ.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/split-rock-lighthouse-visit/"
+  },
+  {
+   "id": "isle-royale-ferry",
+   "title": "Isle Royale Ferry Cost, Schedule & Booking",
+   "tags": "grand portage isle royale ferry sea hunter iii voyageur ii windigo rock harbor day trip boat north shore minnesota island schedule fares price cost tickets booking reservation 2027",
+   "place": "Grand Portage, Minnesota · Windigo · Rock Harbor",
+   "kind": "Island ferry and itinerary",
+   "description": "Check Sea Hunter III and Voyageur II fares, sailing weekdays, departure times and official booking. See whether your Windigo day trip or Rock Harbor overnight works.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/isle-royale-ferry/"
+  },
+  {
+   "id": "lake-superior-circle-tour",
+   "title": "Lake Superior Circle Tour Map & Itinerary",
+   "tags": "lake superior circle tour route 7 day 10 day 15 day trip road map scenic itinerary minnesota north shore grand portage duluth",
+   "place": "Lake Superior · Minnesota, Wisconsin, Ontario & Michigan",
+   "kind": "Interactive road-trip map",
+   "description": "Plan a 7-, 10-, or 15-day Circle Tour. Explore 31 established stops, then use the North Shore visitor tools when you reach the Minnesota segment.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/lake-superior-circle-tour/"
+  },
+  {
+   "id": "great-lakes-levels",
+   "title": "Great Lakes Levels",
+   "tags": "great lakes lake superior michigan huron erie ontario water level shoreline erosion ohwm ordinary high water mark seiche storm property owner riparian northeast great lakes northeast great lakes lake superior duluth canal park minnesota superior wisconsin aerial lift bridge ships freighters boat watching michigan huron erie ontario water levels shoreline new york niagara maine acadia thunder hole cadillac mountain sunrise",
+   "place": "Great Lakes shoreline · U.S. & Canada",
+   "kind": "Live lake intelligence",
+   "description": "Read current lake levels against long-term context, then check shoreline erosion exposure, OHWM context, storm and seiche risk, and the six-month outlook for the five Great Lakes and supported sub-regions.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "https://greatlakeslevels.org/"
+  },
+  {
+   "id": "niagara-rainbow",
+   "title": "Niagara Falls Rainbow Predictor",
+   "tags": "niagara falls new york rainbow waterfall weather sun mist photography tourism northeast great lakes lake superior michigan huron erie ontario water levels shoreline new york niagara maine acadia thunder hole northeast great lakes lake superior duluth canal park minnesota superior wisconsin aerial lift bridge ships freighters boat watching michigan huron erie ontario water levels shoreline new york niagara maine acadia thunder hole cadillac mountain sunrise",
+   "place": "Niagara Falls · New York",
+   "kind": "Live viewing window",
+   "description": "Find the strongest daylight rainbow windows and the better viewpoint from current sun angle, wind-shifted mist and visibility.",
+   "months": "3,4,5,6,7,8,9,10",
+   "href": "/national-tools/niagara-rainbow/"
+  },
+  {
+   "id": "thunder-hole",
+   "title": "Thunder Hole Live",
+   "tags": "thunder hole acadia maine bar harbor northeast great lakes tide high tide ocean waves surf boom spray national park northeast great lakes lake superior duluth canal park minnesota superior wisconsin aerial lift bridge ships freighters boat watching michigan huron erie ontario water levels shoreline new york niagara maine acadia thunder hole cadillac mountain sunrise",
+   "place": "Acadia National Park · Maine",
+   "kind": "Live ocean timing",
+   "description": "See when Bar Harbor tide timing and offshore wave energy line up for the best chance of hearing Thunder Hole boom, with confidence and park-safety context kept separate.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "https://chrisizworski.com/national-tools/coastal/thunder-hole-live/"
+  },
+  {
+   "id": "cadillac-mountain-sunrise",
+   "title": "Cadillac Mountain Sunrise Planner",
+   "tags": "live destination decision acadia maine northeast cadillac mountain sunrise weather reservation northeast great lakes lake superior duluth canal park minnesota superior wisconsin aerial lift bridge ships freighters boat watching michigan huron erie ontario water levels shoreline new york niagara maine acadia thunder hole cadillac mountain sunrise",
+   "place": "Acadia National Park · Maine",
+   "kind": "Sunrise decision",
+   "description": "Plan a Cadillac Mountain sunrise with calculated sunrise time, NWS cloud signal, wind, and the Acadia vehicle-reservation rules that affect arrival.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/national-tools/cadillac-mountain-sunrise/"
+  },
+  {
+   "id": "maryland-bay-bridge",
+   "title": "Maryland Chesapeake Bay Bridge Live",
+   "tags": "maryland chesapeake bay bridge us 50 301 annapolis eastern shore toll wind restrictions traffic cameras mdta chart mid atlantic appalachia appalachian ohio valley mid atlantic maryland chesapeake bay annapolis eastern shore west virginia kentucky virginia north carolina blue ridge parkway",
+   "place": "Maryland · Chesapeake Bay",
+   "kind": "Destination decision",
+   "description": "Check MDTA wind restrictions, live Maryland CHART traffic and cameras, vehicle rules, planned work and eastbound tolls before crossing US 50/301.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "https://chrisizworski.com/chesapeake-bay-bridge-maryland/"
+  },
+  {
+   "id": "cbbt",
+   "title": "Chesapeake Bay Bridge-Tunnel",
+   "tags": "virginia chesapeake bay bridge tunnel toll wind restrictions crossing cbbt appalachia appalachian ohio valley mid atlantic maryland chesapeake bay annapolis eastern shore west virginia kentucky virginia north carolina blue ridge parkway",
+   "place": "Virginia · Chesapeake Bay",
+   "kind": "Destination decision",
+   "description": "Check crossing conditions, wind restrictions and tolls before driving between Virginia Beach and the Eastern Shore.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "https://chrisizworski.com/chesapeake-bay-bridge-tunnel/"
+  },
+  {
+   "id": "gauley",
+   "title": "Gauley Release Live",
+   "tags": "gauley west virginia river whitewater release paddler raft guest spectator photography summersville dam appalachia appalachian ohio valley west virginia kentucky virginia north carolina blue ridge parkway appalachia appalachian ohio valley mid atlantic maryland chesapeake bay annapolis eastern shore west virginia kentucky virginia north carolina blue ridge parkway",
+   "place": "Upper Gauley River · West Virginia",
+   "kind": "Live release intelligence",
+   "description": "Separate the published recreation schedule from observed release evidence, then follow the modeled Summersville Dam release pulse downstream only after live onset is confirmed.",
+   "months": "9,10",
+   "href": "https://chrisizworski.com/national-tools/gauley-release-live/"
+  },
+  {
+   "id": "cumberland-moonbow",
+   "title": "Cumberland Falls Moonbow Window",
+   "tags": "cumberland falls kentucky moonbow moon waterfall night photography mist river appalachia appalachian ohio valley west virginia kentucky virginia north carolina blue ridge parkway appalachia appalachian ohio valley mid atlantic maryland chesapeake bay annapolis eastern shore west virginia kentucky virginia north carolina blue ridge parkway",
+   "place": "Cumberland Falls · Kentucky",
+   "kind": "Live night window",
+   "description": "Get a GO/NO-GO decision, Moonbow Score, best viewing window, arrival time and confidence without presenting the result as a probability.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "https://national-cumberland-moonbow-4k27.vercel.app/cumberland-falls-moonbow"
+  },
+  {
+   "id": "blue-ridge-fall-color",
+   "title": "Blue Ridge Parkway Fall Color Live",
+   "tags": "blue ridge parkway fall color foliage leaves autumn virginia north carolina appalachia appalachian mountains scenic drive elevation asheville boone craggy gardens linville falls road closures appalachia appalachian ohio valley west virginia kentucky virginia north carolina blue ridge parkway appalachia appalachian ohio valley mid atlantic maryland chesapeake bay annapolis eastern shore west virginia kentucky virginia north carolina blue ridge parkway",
+   "place": "Blue Ridge Parkway · Virginia & North Carolina",
+   "kind": "Elevation-aware fall color",
+   "description": "See which Parkway corridor is the best modeled fall-color bet now, which elevation band is next over seven days, and whether weather stress or road closures change the trip.",
+   "months": "9,10,11",
+   "href": "/national-tools/fall-color/blue-ridge-parkway/"
+  },
+  {
+   "id": "sunshine-skyway",
+   "title": "Sunshine Skyway Bridge Live",
+   "tags": "florida tampa bay sunshine skyway bridge i-275 st petersburg bradenton toll wind closures traffic cameras fl511 southeast florida gulf atlantic red tide karenia space coast kennedy cape canaveral manatee",
+   "place": "Florida · Tampa Bay",
+   "kind": "Live bridge crossing decision",
+   "description": "Check Sunshine Skyway closures, FL511 traffic and camera video, wind context and current all-electronic tolls before crossing I-275 Tampa Bay.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "https://chrisizworski.com/sunshine-skyway-bridge/"
+  },
+  {
+   "id": "blue-spring",
+   "title": "Blue Spring Live",
+   "tags": "blue spring florida manatee wildlife water river park travel winter swimming southeast florida gulf atlantic southeast florida gulf atlantic red tide karenia space coast kennedy cape canaveral manatee",
+   "place": "Blue Spring State Park · Florida",
+   "kind": "Live wildlife visit",
+   "description": "See whether now is a good time to visit, which morning looks strongest for manatees and what to expect when you arrive.",
+   "months": "1,2,3,11,12",
+   "href": "https://chrisizworski.com/national-tools/blue-spring-live/"
+  },
+  {
+   "id": "florida-red-tide",
+   "title": "Florida Red Tide Live",
+   "tags": "southeast florida gulf atlantic red tide karenia brevis harmful algal bloom hab beach coast fwc sample sarasota tampa fort myers naples southeast florida gulf atlantic red tide karenia space coast kennedy cape canaveral manatee",
+   "place": "Florida Gulf & Atlantic coasts",
+   "kind": "Recent coastal samples",
+   "description": "Check the latest eight days of FWC Karenia brevis samples near a beach or coastal town, including when nearby sampling is too sparse to support a confident local read.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/national-tools/florida-red-tide/"
+  },
+  {
+   "id": "space-coast-launch",
+   "title": "Space Coast Launch Viewing",
+   "tags": "southeast florida space coast kennedy cape canaveral rocket launch viewing nasa spacex weather schedule southeast florida gulf atlantic red tide karenia space coast kennedy cape canaveral manatee",
+   "place": "Kennedy Space Center & Cape Canaveral · Florida",
+   "kind": "Launch + viewing window",
+   "description": "See the next Space Coast launch, how firm the schedule currently is, and whether local NWS hourly weather looks workable for viewing.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/national-tools/space-coast-launch/"
+  },
+  {
+   "id": "haleakala-sunrise",
+   "title": "Haleakalā Sunrise Conditions & Planner",
+   "tags": "live destination decision haleakala maui hawaii sunrise summit weather reservation hawaii maui haleakala sunrise summit weather reservation volcano island big island kilauea eruption lava hvo",
+   "place": "Haleakala National Park · Maui, Hawaii",
+   "kind": "Sunrise decision",
+   "description": "Plan Haleakalā sunrise with calculated summit sunrise time, NWS weather near 10,023 feet, and the year-round 3–7 a.m. reservation requirement.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/national-tools/haleakala-sunrise/"
+  },
+  {
+   "id": "kilauea-live",
+   "title": "Kīlauea Live",
+   "tags": "kilauea volcano hawaii hawaiʻi big island eruption lava halemaumau halemaʻumaʻu national park live viewing hvo nps weather vog air photography",
+   "place": "Hawaiʻi Volcanoes National Park · Hawaiʻi",
+   "kind": "Live volcano decision",
+   "description": "See what Kīlauea is doing now, whether the view is worth the trip, the best viewing window, and which public viewpoint fits current conditions.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/national-tools/kilauea-live/"
+  },
+  {
+   "id": "midwest-xc",
+   "title": "Midwest XC Ski Conditions",
+   "tags": "upper midwest midwest cross country ski skiing xc nordic michigan wisconsin minnesota snow trail grooming weekend storm winter upper midwest midwest michigan wisconsin minnesota cross country ski skiing xc nordic snow trail grooming weekend storm winter",
+   "place": "Michigan · Wisconsin · Minnesota",
+   "kind": "Midwest Nordic decision network",
+   "description": "Nordic trail conditions across the Northwoods and Upper Midwest. DNR and club grooming logs, live base depths, fresh powder snowfall, and skate-versus-classic track reports.",
+   "months": "1,2,3,11,12",
+   "href": "https://xcski.chrisizworski.com/midwest/"
+  },
+  {
+   "id": "melvin-price",
+   "title": "Melvin Price Live",
+   "tags": "melvin price locks alton illinois mississippi river tow barges vessels museum tour mississippi river great plains plains midwest nebraska iowa illinois",
+   "place": "Alton · Illinois",
+   "kind": "Live lock visit",
+   "description": "See current lock activity, approaching tows, river conditions, nearby vessels, weather and tour timing in one visitor-focused view.",
+   "months": "3,4,5,6,7,8,9,10,11",
+   "href": "https://chrisizworski.com/national-tools/melvin-price-live/"
+  },
+  {
+   "id": "fort-madison",
+   "title": "Fort Madison Live",
+   "tags": "fort madison iowa mississippi river swing bridge trains railroad rail bnsf amtrak southwest chief barges tow vessels mississippi river great plains plains midwest nebraska iowa illinois",
+   "place": "Fort Madison · Iowa",
+   "kind": "Live crossing intelligence",
+   "description": "See what reaches Fort Madison next: identified trains, named Mississippi tows, Southwest Chief timing, river stage and predicted swing-bridge interaction.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "https://chrisizworski.com/national-tools/fort-madison-live/"
+  },
+  {
+   "id": "platte-cranes",
+   "title": "Platte Crane Live",
+   "tags": "sandhill cranes birds birding migration nebraska platte river kearney grand island gibbon rowe sanctuary mississippi river great plains plains midwest nebraska iowa illinois",
+   "place": "Central Platte River · Nebraska",
+   "kind": "Live migration intelligence",
+   "description": "Use official survey counts first, a labeled between-survey model second, plus river conditions, movement weather and public viewing guidance.",
+   "months": "2,3,4",
+   "href": "https://chrisizworski.com/national-tools/platte-crane-live"
+  },
+  {
+   "id": "shoshone-falls",
+   "title": "Shoshone Falls Live",
+   "tags": "shoshone falls twin falls idaho waterfall snake river canyon mountain west high desert flow live camera photography rainbow dierkes lake road trip rockies rocky mountains colorado wyoming idaho mountain west high desert snake river shoshone falls trail ridge road rmnp yellowstone geyser elk rut rockies rocky mountains colorado wyoming idaho montana mountain west high desert snake river shoshone falls trail ridge road rmnp yellowstone geyser elk rut glacier going to the sun logan pass",
+   "place": "Shoshone Falls · Twin Falls, Idaho",
+   "kind": "Live waterfall decision",
+   "description": "Decide whether the falls are worth your drive from the official live view, source-aware Snake River context, park access, weather and the best practical viewing window.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/shoshone-falls/"
+  },
+  {
+   "id": "elk-rut",
+   "title": "Rocky Mountain Elk Rut Live",
+   "tags": "rocky mountain national park colorado elk rut bugling moraine park horseshoe park upper beaver meadows kawuneeche harbison wildlife fall september october rockies rocky mountains colorado mountain west rockies rocky mountains colorado wyoming mountain west trail ridge road rmnp yellowstone geyser elk rut rockies rocky mountains colorado wyoming idaho mountain west high desert snake river shoshone falls trail ridge road rmnp yellowstone geyser elk rut rockies rocky mountains colorado wyoming idaho montana mountain west high desert snake river shoshone falls trail ridge road rmnp yellowstone geyser elk rut glacier going to the sun logan pass",
+   "place": "Rocky Mountain National Park · Colorado",
+   "kind": "Live wildlife timing",
+   "description": "Experience the autumn rut in Rocky Mountain National Park. Dawn and dusk bugling windows, meadow staging zones from Moraine Park to Horseshoe Park, and timed-entry gate logistics.",
+   "months": "9,10",
+   "href": "https://chrisizworski.com/national-tools/elk-rut/"
+  },
+  {
+   "id": "trail-ridge-road",
+   "title": "Trail Ridge Road Live",
+   "tags": "rockies rocky mountains colorado rmnp trail ridge road alpine visitor center road status closure open weather timed entry estes park grand lake rockies rocky mountains colorado wyoming idaho montana mountain west high desert snake river shoshone falls trail ridge road rmnp yellowstone geyser elk rut glacier going to the sun logan pass",
+   "place": "Rocky Mountain National Park · Colorado",
+   "kind": "Official road status + alpine weather",
+   "description": "Alpine highway status across the Continental Divide. Official NPS gate open/closed alerts, 12,000-foot pass weather, wind gusts, and seasonal alpine closure status.",
+   "months": "5,6,7,8,9,10",
+   "href": "/national-tools/trail-ridge-road/"
+  },
+  {
+   "id": "yellowstone-geysers",
+   "title": "Yellowstone Geyser Timing",
+   "tags": "rockies rocky mountains yellowstone wyoming geyser old faithful castle daisy grand riverside great fountain eruption prediction window geysertimes nps rockies rocky mountains colorado wyoming idaho montana mountain west high desert snake river shoshone falls trail ridge road rmnp yellowstone geyser elk rut glacier going to the sun logan pass",
+   "place": "Yellowstone National Park · Wyoming",
+   "kind": "Current natural-event windows",
+   "description": "Witness the thermal pulse of the Yellowstone Caldera. Official NPS prediction intervals, eruption duration windows, and boardwalk trail alerts for Old Faithful, Grand, Castle, and Riverside.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/national-tools/yellowstone-geysers/"
+  },
+  {
+   "id": "going-to-the-sun-road-status",
+   "title": "Going-to-the-Sun Road Status",
+   "tags": "live destination decision glacier montana rockies going to the sun road logan pass road status rockies rocky mountains colorado wyoming idaho montana mountain west high desert snake river shoshone falls trail ridge road rmnp yellowstone geyser elk rut glacier going to the sun logan pass",
+   "place": "Glacier National Park · Montana",
+   "kind": "Mountain road crossing",
+   "description": "Traverse the Crown of the Continent. Live NPS alpine pass opening status, plowing progress through the Big Drift, vehicle size restrictions, and Logan Pass parking congestion.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/national-tools/going-to-the-sun-road-status/"
+  },
+  {
+   "id": "yellowstone-road-status",
+   "title": "Yellowstone Road Status Today",
+   "tags": "live destination decision yellowstone wyoming montana idaho rockies roads entrances old faithful canyon rockies rocky mountains colorado wyoming idaho montana mountain west high desert snake river shoshone falls trail ridge road rmnp yellowstone geyser elk rut glacier going to the sun logan pass",
+   "place": "Yellowstone · Wyoming / Montana / Idaho",
+   "kind": "Park route decision",
+   "description": "Real-time road reports across Yellowstone's Grand Loop. Construction delays, wildlife jams, seasonal gate openings, and winter oversnow travel requirements.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/national-tools/yellowstone-road-status/"
+  },
+  {
+   "id": "zion-narrows-conditions",
+   "title": "Zion Narrows Conditions Today",
+   "tags": "live destination decision zion utah southwest colorado plateau narrows virgin river hiking flash flood southwest colorado plateau utah arizona nevada zion grand canyon lake mead lake powell narrows boat ramp reservoir river",
+   "place": "Zion National Park · Utah",
+   "kind": "River + canyon decision",
+   "description": "Canyon safety and Virgin River hydrodynamics in Zion. Real-time USGS flow cubic-feet-per-second, flash flood hazard warnings, water temperature, and NPS permit thresholds.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/national-tools/zion-narrows-conditions/"
+  },
+  {
+   "id": "grand-canyon-access",
+   "title": "Grand Canyon Road & Rim Access Today",
+   "tags": "live destination decision grand canyon arizona southwest colorado plateau south rim north rim desert view road access southwest colorado plateau utah arizona nevada zion grand canyon lake mead lake powell narrows boat ramp reservoir river",
+   "place": "Grand Canyon National Park · Arizona",
+   "kind": "Road + rim access",
+   "description": "Navigating the South, Desert View, and North Rims of the Grand Canyon. Live NPS road conditions, shuttle operations, rim viewpoint access, and winter weather closures.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/national-tools/grand-canyon-access/"
+  },
+  {
+   "id": "lake-mead-access",
+   "title": "Lake Mead Boat Ramp Status Today",
+   "tags": "live destination decision lake mead nevada arizona southwest reservoir boat ramp launch water level southwest colorado plateau utah arizona nevada zion grand canyon lake mead lake powell narrows boat ramp reservoir river",
+   "place": "Lake Mead · Nevada / Arizona",
+   "kind": "Boat launch decision",
+   "description": "Desert boating logistics on Lake Mead. Current reservoir water elevations, active launch ramp depths, low-water hazards, and NPS marina access status.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/national-tools/lake-mead-access/"
+  },
+  {
+   "id": "lake-powell-ramp-status",
+   "title": "Lake Powell Boat Ramp Status",
+   "tags": "live destination decision lake powell utah arizona southwest colorado plateau boat ramp launch water level southwest colorado plateau utah arizona nevada zion grand canyon lake mead lake powell narrows boat ramp reservoir river",
+   "place": "Lake Powell · Utah / Arizona",
+   "kind": "Boat ramp decision",
+   "description": "Glen Canyon navigation and ramp accessibility. Real-time Lake Powell pool elevations, paved ramp usability, primitive launch limits, and NPS water-level thresholds.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/national-tools/lake-powell-ramp-status/"
+  },
+  {
+   "id": "yosemite-firefall",
+   "title": "Yosemite Firefall Live",
+   "tags": "yosemite california firefall horsetail fall el capitan waterfall sunset photography snowmelt clouds california sierra yosemite california sierra yosemite tioga road pass firefall",
+   "place": "Yosemite National Park · California",
+   "kind": "Live seasonal viewing intelligence",
+   "description": "The February twilight phenomenon at Horsetail Fall. High-elevation snowmelt runoff volume, clear western sunset horizon angles, and El Capitan viewing logistics.",
+   "months": "2",
+   "href": "/yosemite-firefall-live/"
+  },
+  {
+   "id": "tioga-road-status",
+   "title": "Tioga Road Status Today",
+   "tags": "live destination decision yosemite california sierra tioga road pass east west crossing california sierra yosemite tioga road pass firefall",
+   "place": "Yosemite National Park · California",
+   "kind": "Cross-Sierra road decision",
+   "description": "High Sierra passage across Yosemite's granite crest. Live NPS opening and closure status, winter snow-clearing updates, and 9,943-foot Tioga Pass driving conditions.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/national-tools/tioga-road-status/"
+  },
+  {
+   "id": "big-sur-highway-1",
+   "title": "Big Sur Highway 1 Closures & Drive Planner",
+   "tags": "california big sur pacific coast highway 1 pch closure landslide mud creek rocky creek carmel cambria coastal scenic road trip",
+   "place": "Big Sur · California Highway 1",
+   "kind": "California coast road planner",
+   "description": "The rugged Pacific edge of California Highway 1. Real-time Caltrans active slide repairs, one-way traffic controls, road reopenings, and coastal storm detour routes.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/national-tools/big-sur-highway-1/"
+  },
+  {
+   "id": "sierra-pass-status",
+   "title": "Sierra Nevada Pass Status & Crossing Planner",
+   "tags": "california sierra pass sonora ebbetts carson monitor tioga echo donner snow chains closures highway 108 4 88 89 120 50 interstate 80",
+   "place": "California · Sierra Nevada mountain roads",
+   "kind": "Sierra crossing planner",
+   "description": "Cross the granite spine of California. Live Caltrans highway alerts, chain controls, and seasonal opening/closure updates across Donner, Tioga, Sonora, Ebbetts, and Carson passes.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/national-tools/sierra-pass-status/"
+  },
+  {
+   "id": "oregon-coast",
+   "title": "Oregon Coast Tide and Viewing Decisions",
+   "tags": "oregon coast tide yaquina head haystack rock hug point thors well tidepool surf pacific northwest pnw washington oregon seattle puget sound columbia river salmon mount rainier paradise sunrise white river mowich",
+   "place": "Oregon Coast",
+   "kind": "Destination decision",
+   "description": "Tidal surges and rocky shoreline discoveries along Highway 101. Low-tide tidepool windows, sneaker wave advisories, and sea cave access for Yaquina Head, Haystack Rock, and Thor’s Well.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "https://chrisizworski.com/national-tools/coastal/oregon/"
+  },
+  {
+   "id": "ballard-locks",
+   "title": "Ballard Locks Live",
+   "tags": "ballard locks seattle washington ships vessels salmon fish tides ais tour camera walking pacific northwest pnw washington oregon seattle puget sound columbia river salmon pacific northwest pnw washington oregon seattle puget sound columbia river salmon mount rainier paradise sunrise white river mowich",
+   "place": "Seattle · Washington",
+   "kind": "Live destination suite",
+   "description": "Hiram M. Chittenden Locks live maritime operations. Ship canal chamber traffic, commercial vessel passages, underwater salmon ladder viewing, and Puget Sound tidal differences.",
+   "months": "4,5,6,7,8,9,10",
+   "href": "https://chrisizworski.com/ballard-locks/"
+  },
+  {
+   "id": "grand-coulee",
+   "title": "Grand Coulee Live",
+   "tags": "grand coulee washington dam hydropower lake roosevelt columbia river tours laser show reservoir pacific northwest pnw washington oregon seattle puget sound columbia river salmon pacific northwest pnw washington oregon seattle puget sound columbia river salmon mount rainier paradise sunrise white river mowich",
+   "place": "Grand Coulee Dam · Washington",
+   "kind": "Live dam visit",
+   "description": "Hydropower scale on the Columbia River. Real-time Lake Roosevelt elevations, spillway discharge rates, visitor center tours, and evening laser light show schedules.",
+   "months": "5,6,7,8,9,10",
+   "href": "https://chrisizworski.com/national-tools/grand-coulee/"
+  },
+  {
+   "id": "columbia-salmon",
+   "title": "Columbia Salmon Run Live",
+   "tags": "columbia river salmon fish counts bonneville the dalles john day mcnary fall chinook coho steelhead migration fish ladder pacific northwest pnw washington oregon pacific northwest pnw washington oregon seattle puget sound columbia river salmon pacific northwest pnw washington oregon seattle puget sound columbia river salmon mount rainier paradise sunrise white river mowich",
+   "place": "Columbia River · Oregon & Washington",
+   "kind": "Live salmon migration",
+   "description": "Track returning anadromous runs up the Pacific Northwest's greatest river. Daily fish ladder counts at Bonneville, The Dalles, and McNary dams for Chinook, Coho, and summer steelhead.",
+   "months": "3,4,5,6,7,8,9,10,11",
+   "href": "/national-tools/columbia-salmon-run/"
+  },
+  {
+   "id": "mount-rainier-road-status",
+   "title": "Mount Rainier Road Status Today",
+   "tags": "live destination decision mount rainier washington pacific northwest paradise sunrise white river mowich road pacific northwest pnw washington oregon seattle puget sound columbia river salmon mount rainier paradise sunrise white river mowich",
+   "place": "Mount Rainier · Washington",
+   "kind": "Mountain access decision",
+   "description": "Alpine access across the volcanic heights of Mount Rainier. NPS snowplowing status, tire chain requirements, and gate openings for Paradise, Sunrise, and Chinook Pass.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/national-tools/mount-rainier-road-status/"
+  }
+ ],
+ "tools": [
+  {
+   "id": "ausable-mayfly-hatches",
+   "title": "Au Sable Mayfly Hatch Predictor & Identification",
+   "tags": "nature planning fishing trout mayfly mayflies hatch hex au sable",
+   "place": "",
+   "kind": "Conditions & seasonal timing",
+   "description": "Match the hatch on the Holy Waters. Ten Au Sable mayflies identified with high-resolution wing and body profiles, real-time USGS river temperatures, and seasonal emergence windows from early Hendricksons to late-night Hex.",
+   "months": "4,5,6,7,8,9",
+   "href": "https://michigantroutreport.com/mayfly-hatches.html"
+  },
+  {
+   "id": "michigan-mayfly-hatches",
+   "title": "Michigan Mayfly Hatch Predictor",
+   "tags": "nature planning fishing trout mayfly mayflies hatch hex river",
+   "place": "",
+   "kind": "Conditions & seasonal timing",
+   "description": "Track emergence across Michigan's premier trout waters. Real-time USGS temperatures, barometric swings, and seasonal emergence curves for the Au Sable, Manistee, Pere Marquette, Muskegon, and Boardman.",
+   "months": "4,5,6,7,8,9",
+   "href": "https://michigantroutreport.com/michigan-mayfly-hatches.html"
+  },
+  {
+   "id": "trout-report",
+   "title": "Michigan Trout Report, Daily Stream Conditions and Flow",
+   "tags": "fishing",
+   "place": "",
+   "kind": "Live data",
+   "description": "Live conditions for more than 63 Michigan trout rivers: USGS flow, water temperature, and weather, with a daily fly and lure pick for the river in rotation. Updated every morning. Free.",
+   "months": "4,5,6,7,8,9",
+   "href": "https://michigantroutreport.com"
+  },
+  {
+   "id": "trout-map",
+   "title": "Michigan Trout Stream Map, Live Conditions and 310 Access Points",
+   "tags": "fishing",
+   "place": "",
+   "kind": "Live data",
+   "description": "An interactive map of Michigan trout water color-coded by today's fishing rating and built on live USGS gauge readings, with 310 DNR access points you can navigate to directly.",
+   "months": "4,5,6,7,8,9",
+   "href": "https://michigantroutreport.com/map.html"
+  },
+  {
+   "id": "trout-daily",
+   "title": "Michigan Trout Daily, One River Every Morning",
+   "tags": "fishing",
+   "place": "",
+   "kind": "Live data",
+   "description": "A written report on one Michigan trout river each morning: stream conditions, hatch notes, and fly fishing intelligence built on live USGS gauge data.",
+   "months": "4,5,6,7,8,9",
+   "href": "https://daily.michigantroutreport.com"
+  },
+  {
+   "id": "salmon-run",
+   "title": "Michigan Salmon and Steelhead Run Tracker, Live River Conditions",
+   "tags": "fishing",
+   "place": "",
+   "kind": "Live data",
+   "description": "A live tracker for Michigan's fall salmon and steelhead runs across seven rivers, including the Big Manistee below Tippy Dam, the Pere Marquette, and the Muskegon below Croton. Live USGS flow and water temperature drive a run status read for kings, coho, and steelhead, with river by river timing, technique, and access. Free.",
+   "months": "8,9,10,11",
+   "href": "https://michigantroutreport.com/salmon-run/"
+  },
+  {
+   "id": "saginaw-bay",
+   "title": "Saginaw Bay Report, Live Wind and Which Shore Is Fishable",
+   "tags": "fishing planning",
+   "place": "",
+   "kind": "Live data",
+   "description": "Saginaw Bay is shallow enough that wind decides everything, so this answers the two questions that actually matter: which zone is in the lee and comfortable, and which zone the water and bait are stacking onto. Live wind from three NOAA buoys, river flow and turbidity, and Lake Huron water level, across the Inner Bay, Lower Bay, and Eastern Bay. Free.",
+   "months": "4,5,6,7,8,9,10",
+   "href": "https://saginawbay.chrisizworski.com/"
+  },
+  {
+   "id": "whitetail",
+   "title": "Michigan Whitetail Report, Corn Harvest and Live Deer Conditions",
+   "tags": "hunting",
+   "place": "",
+   "kind": "Live data",
+   "description": "A live Michigan deer hunting conditions tracker across four regions, built on the one habitat variable most hunting apps ignore: the corn harvest. Standing corn is security cover, and when it comes down in October the local deer herd reorganizes. Pairs that with live National Weather Service pressure, three hour trend, and wind, plus computed rut timing. Free.",
+   "months": "9,10,11,12",
+   "href": "https://whitetail.chrisizworski.com/"
+  },
+  {
+   "id": "michigan-ice-caves",
+   "title": "Michigan Ice Caves: Are They Formed Yet?",
+   "tags": "ice caves eben frozen waterfalls grand island tahquamenon winter hiking munising",
+   "place": "",
+   "kind": "Winter field decision",
+   "description": "Winter trail conditions and ice curtain formation for the Eben Ice Caves, Grand Island, and Munising sandstone amphitheaters. Dated formation logs, freeze-thaw cycles, and snowshoe access before you make the snowbelt drive.",
+   "months": "11,12,1,2,3,4",
+   "href": "/michigan-ice-caves/"
+  },
+  {
+   "id": "frozen-lighthouse-watch",
+   "title": "Frozen Lighthouse Watch, Lake Michigan",
+   "tags": "winter photography lake-michigan lighthouse ice weather",
+   "place": "",
+   "kind": "Hourly forecast",
+   "description": "Will the St. Joseph lights or eight other Lake Michigan pier lights ice up this week? Compare 72 hourly NOAA and NWS freezing spray conditions, with source times and land-only viewing reminders.",
+   "months": "11,12,1,2,3",
+   "href": "/frozen-lighthouses-michigan/"
+  },
+  {
+   "id": "michigan-ice",
+   "title": "Michigan Ice Report, Accumulated Cold and Great Lakes Ice Cover",
+   "tags": "fishing",
+   "place": "",
+   "kind": "Live data",
+   "description": "Michigan ice conditions across six waters, tracked the way ice actually works: as accumulated cold rather than today's temperature. Shows accumulated freezing degree days against a ten year normal, NOAA satellite ice cover, and 54 years of Great Lakes ice climatology. Reports weather and satellite data, never ice safety. Free.",
+   "months": "12,1,2,3",
+   "href": "/michigan-ice/"
+  },
+  {
+   "id": "mackinac-ice-bridge",
+   "title": "Mackinac Island Christmas Tree Ice Bridge Watch",
+   "tags": "winter ice mackinac island weather nature history",
+   "place": "",
+   "kind": "Live data",
+   "description": "The winter crossing tradition across the Straits of Mackinac. Track NOAA daily satellite ice concentration, Straits freezing-degree days, and shore-ice anchoring from St. Ignace to Mackinac Island.",
+   "months": "12,1,2,3",
+   "href": "/mackinac-ice-bridge/"
+  },
+  {
+   "id": "phenology",
+   "title": "Michigan Phenology, Saginaw Bay and the Au Sable in Real Time",
+   "tags": "fishing hunting nature",
+   "place": "",
+   "kind": "Live data",
+   "description": "An interpreted read on the natural year across Saginaw Bay and northeastern Michigan: live river conditions, projected hatches, bird movement, and growing degree days.",
+   "months": "3,4,5,6,7,8,9,10",
+   "href": "https://phenology.chrisizworski.com"
+  },
+  {
+   "id": "great-lakes-mayflies",
+   "title": "Great Lakes Mayfly Atlas & Hatch Insights",
+   "tags": "nature planning great-lakes fishing mayfly mayflies hatch hexagenia",
+   "place": "",
+   "kind": "Conditions & seasonal timing",
+   "description": "The summer emergence atlas across all five Great Lakes. Offshore buoy water temperatures, sediment habitat maps, and historic hatch dates tracking the legendary Hexagenia limbata from Saginaw Bay to Green Bay.",
+   "months": "5,6,7,8",
+   "href": "https://michigantroutreport.com/great-lakes-mayflies.html"
+  },
+  {
+   "id": "lake-smoke",
+   "title": "Great Lakes Lake Smoke Forecast",
+   "tags": "nature planning great-lakes weather steam fog photography",
+   "place": "",
+   "kind": "Conditions & seasonal timing",
+   "description": "When sub-zero Arctic air meets the heat of the open Great Lakes. Live water-to-air thermal gradient tables, wind vectors, and dawn viewing outlooks across 15 coastal harbors from Duluth to Marquette.",
+   "months": "10,11,12,1,2,3",
+   "href": "https://phenology.chrisizworski.com/lake-smoke"
+  },
+  {
+   "id": "boat-launches",
+   "title": "Michigan Boat Launch Finder",
+   "tags": "boating planning",
+   "place": "",
+   "kind": "Public water access",
+   "description": "Find Michigan boat launches and compare access, facilities and nearby water context before heading out. Check live lake conditions alongside the access information, and verify local restrictions.",
+   "months": "4,5,6,7,8,9,10",
+   "href": "/michigan-boat-launches/"
+  },
+  {
+   "id": "duluth-canal-park",
+   "title": "Duluth Ship Schedule Today, Live Cams & Canal Park Watch",
+   "tags": "boating planning transportation",
+   "place": "",
+   "kind": "Live AIS + cameras",
+   "description": "See the next supported Duluth ship passage with fresh AIS, an Aerial Lift Bridge watch window, live vessel map, 19 mapped camera feeds, and the best Canal Park viewing spots.",
+   "months": "3,4,5,6,7,8,9,10,11,12",
+   "href": "/duluth-canal-park/"
+  },
+  {
+   "id": "st-lawrence-seaway",
+   "title": "St. Lawrence Seaway Ships & Locks",
+   "tags": "boating planning transportation great-lakes ships locks seaway canada new-york quebec ontario",
+   "place": "",
+   "kind": "Seaway ship watch",
+   "description": "Follow recent ships from Montreal toward Lake Ontario, explore seven locks with an interactive model and choose a documented public viewing spot.",
+   "months": "3,4,5,6,7,8,9,10,11,12",
+   "href": "/st-lawrence-seaway/"
+  },
+  {
+   "id": "welland-canal",
+   "title": "Welland Canal Ships Today — Live Map and Lock Guide",
+   "tags": "boating planning transportation great-lakes ships locks ontario",
+   "place": "",
+   "kind": "Eight-lock AIS map",
+   "description": "Locate recently reported ships near eight Welland Canal locks, select a viewing spot, and open official vessel transit and queue information.",
+   "months": "3,4,5,6,7,8,9,10,11,12",
+   "href": "/welland-canal/"
+  },
+  {
+   "id": "rideau-canal",
+   "title": "Rideau Canal Trip Planner",
+   "tags": "boating travel planning ontario rideau-canal historic locks paddling kayaking",
+   "place": "",
+   "kind": "Historic waterway journeys",
+   "description": "Choose historic lockstations, compare documented boating distances and explore two Parks Canada paddling trips. Official operating hours must be checked separately.",
+   "months": "5,6,7,8,9,10",
+   "href": "/rideau-canal/"
+  },
+  {
+   "id": "niagara-border",
+   "title": "Niagara Border Wait Times Live — Peace, Rainbow & Lewiston",
+   "tags": "planning live-data borders travel new-york ontario buffalo niagara",
+   "place": "",
+   "kind": "Live data",
+   "description": "Live border crossing wait times for the Peace Bridge, Rainbow Bridge, Lewiston–Queenston, and Whirlpool Rapids. Real-time commercial and passenger delays, NEXUS lane status, and bridge cameras across the Niagara River.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/niagara-border-crossing/"
+  },
+  {
+   "id": "border-waits",
+   "title": "Michigan Border Wait Times Live, All Five Crossings",
+   "tags": "planning transportation",
+   "place": "",
+   "kind": "Live official data",
+   "description": "Real-time border delay monitors for all five Michigan–Ontario international gateways: the Gordie Howe Bridge, Ambassador Bridge, Detroit–Windsor Tunnel, Blue Water Bridge, and Sault Ste. Marie. Live lane status, NEXUS lanes, and bridge approach cameras.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/michigan-border-wait-times/"
+  },
+  {
+   "id": "holiday-travel",
+   "title": "Holiday Travel Day Picker: Best Days to Fly or Drive",
+   "tags": "transportation travel planning thanksgiving christmas holiday flying driving",
+   "place": "",
+   "kind": "Holiday trip timing",
+   "description": "Choose Thanksgiving or Christmas, compare ranked travel days, national airport crowd history, flight delay context, better driving windows and estimated fuel costs.",
+   "months": "10,11,12,1",
+   "href": "/holiday-travel/"
+  },
+  {
+   "id": "mackinac-bridge",
+   "title": "Mackinac Bridge Conditions Live, Cameras, Wind Context, Traffic, and RV Guidance",
+   "tags": "boating planning",
+   "place": "",
+   "kind": "Live data",
+   "description": "The official Mackinac Bridge Authority crossing status comes first, with separate northbound and southbound cameras, NWS Straits radar, clearly labeled off-bridge NOAA observations, an hourly Mackinaw City approach forecast, RV and trailer rules, nearby Mi Drive events, driver assistance, tolls, shareable crossing reports, and a vehicle-specific Crossing Confidence label.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/mackinac-bridge-live/"
+  },
+  {
+   "id": "isle-royale-map",
+   "title": "Isle Royale Map Guide with NPS Portages",
+   "tags": "boating paddling",
+   "place": "",
+   "kind": "Planner",
+   "description": "All 16 official 2026 NPS portages with distance, terrain and both landings, plus campgrounds, docks, ferry routes and trails. Switch between map, satellite, USGS topo and NOAA nautical charts, and tap any feature for sourced detail.",
+   "months": "5,6,7,8,9,10",
+   "href": "/isle-royale-map/"
+  },
+  {
+   "id": "isle-royale-ferry",
+   "title": "Isle Royale Ferry Cost, Schedule & Booking (Grand Portage)",
+   "tags": "boating planning ferry schedule cost prices tickets booking",
+   "place": "",
+   "kind": "Planner",
+   "description": "Complete passage schedules, vessel rates, and crossing times for the Sea Hunter III and Voyageur II out of Grand Portage. Connect into Windigo or Rock Harbor across Lake Superior's open water with ranger station arrival advice.",
+   "months": "5,6,7,8,9",
+   "href": "/isle-royale-ferry/"
+  },
+  {
+   "id": "split-rock-river-loop",
+   "title": "Split Rock River Loop Bridge and Hiking Detour",
+   "tags": "hiking planning",
+   "place": "",
+   "kind": "Planner",
+   "description": "Both rebuilt trail sides are open but the bridge is still missing. Choose an official alternate or out-and-back route, inspect parking constraints and verify SHTA notices without an invented river-crossing clearance.",
+   "months": "4,5,6,7,8,9,10",
+   "href": "/split-rock-river-loop/"
+  },
+  {
+   "id": "split-rock-lighthouse-visit",
+   "title": "Split Rock Lighthouse Tickets, Parking & Memorial",
+   "tags": "history planning",
+   "place": "",
+   "kind": "Planner",
+   "description": "Know exactly which ticket covers the lighthouse, historic grounds or state park; separate the 2026 Edmund Fitzgerald memorial event and its parking rules from regular admission.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/split-rock-lighthouse-visit/"
+  },
+  {
+   "id": "gazette",
+   "title": "Great Lakes Gazette, Daily Maritime Brief",
+   "tags": "boating",
+   "place": "",
+   "kind": "Live data",
+   "description": "A daily newsletter updated automatically each morning with vessel movements, port reports, water levels across all five Great Lakes, and National Weather Service marine forecasts. Built on live AIS vessel tracking data and NOAA feeds. Free and updated every day during the navigation season.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/great-lakes-gazette/"
+  },
+  {
+   "id": "ship-tracker",
+   "title": "Great Lakes Ship Tracker Live, Freighters and AIS Map",
+   "tags": "boating",
+   "place": "",
+   "kind": "Live data",
+   "description": "A live lake-wide AIS vessel map with one-tap views for the Soo Locks, Mackinac, Duluth, Port Huron, Detroit, and Saginaw Bay, plus nearby NOAA conditions and named passage links.",
+   "months": "4,5,6,7,8,9,10,11",
+   "href": "/great-lakes-freighter-tracking/"
+  },
+  {
+   "id": "edmund-fitzgerald",
+   "title": "SS Edmund Fitzgerald, November 10 1975, The Wreck on Lake Superior",
+   "tags": "boating",
+   "place": "",
+   "kind": "Guide",
+   "description": "The complete history of the Edmund Fitzgerald, the largest freighter ever lost on the Great Lakes. The ship, the final voyage, the 29-man crew with hometowns and roles, the wreck site 17 miles from Whitefish Point, the July 4 1995 bell recovery, the Gordon Lightfoot song, the annual memorial ceremonies, and how to visit Whitefish Point today.",
+   "months": "11",
+   "href": "/edmund-fitzgerald/"
+  },
+  {
+   "id": "soo-locks",
+   "title": "Soo Locks Live Vessel Activity and Visitor Guide",
+   "tags": "boating planning",
+   "place": "",
+   "kind": "Live data",
+   "description": "Interactive live AIS vessel map at the Soo Locks in Sault Ste. Marie, Michigan. Real-time navigation season status, lock dimensions and history, the Poe replacement lock under construction, vessel category identification, and the visitor guide for watching transits at the busiest commercial lock complex in the world.",
+   "months": "3,4,5,6,7,8,9,10,11,12",
+   "href": "/soo-locks/"
+  },
+  {
+   "id": "shorefeel",
+   "title": "ShoreFeel: Great Lakes Water Temperature",
+   "tags": "water temperature beaches lakes swimming shoreline",
+   "place": "",
+   "kind": "Temperature and shore comfort",
+   "description": "How Lake Superior, Michigan, Huron, Erie, and Ontario feel right now. Daily NOAA surface water temperatures paired with shoreline wind, wave turbulence, and coastal chill indices from Grand Haven to Presque Isle.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/great-lakes-water-temperature/"
+  },
+  {
+   "id": "great-lakes-buoys",
+   "title": "Great Lakes Buoy Dashboard, Live Wave, Wind, and Water Conditions",
+   "tags": "boating fishing",
+   "place": "",
+   "kind": "Live data",
+   "description": "Live data from more than 100 NOAA buoys and coastal stations across all five Great Lakes. Wave height, wind speed and gusts, water temperature, and air pressure on an interactive dark-themed map with activity filters for fishing, kayaking, swimming, sailing, and diving. Geolocation-based distance ranking, 5-day sparkline history per station, and conditional cross-promotion to the rest of the Great Lakes tool network.",
+   "months": "4,5,6,7,8,9,10",
+   "href": "/great-lakes-buoys/"
+  },
+  {
+   "id": "beach-report",
+   "title": "Michigan Beach Report, Live Conditions, Closures, and Daily Summer Ranking",
+   "tags": "planning boating",
+   "place": "",
+   "kind": "Live official data",
+   "description": "Live Great Lakes beach conditions across 50 shoreline parks. Active EGLE BeachGuard water quality notices, NOAA nearshore wave heights, rip-current alerts, and morning swim ratings from Lake Michigan dunes to Lake Huron coves.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/great-lakes-beaches/"
+  },
+  {
+   "id": "great-lakes-levels",
+   "title": "Great Lakes Levels, Real-Time Water Levels and Shoreline Reference",
+   "tags": "boating",
+   "place": "",
+   "kind": "Live data",
+   "description": "Real-time water levels for all five Great Lakes with tools built for shoreline property owners: an anchor year comparator, sub-region erosion risk, OHWM and regulatory context, seiche and storm exposure, and a six-month outlook.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "https://greatlakeslevels.org"
+  },
+  {
+   "id": "michigan-adventure-finder",
+   "title": "Michigan Adventure Finder — Where Should You Go?",
+   "tags": "planning nature travel destinations adventure discovery trip weekend scenic waterfalls hiking paddling michigan upper peninsula",
+   "place": "",
+   "kind": "Michigan destination discovery",
+   "description": "Explore 20 real Michigan destinations with photography, a CARTO map, and season, activity, and region filters. Choose a place worth visiting, then follow its specialist planning tools and official access information before you go.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/michigan-destinations/"
+  },
+  {
+   "id": "upper-peninsula-waterfalls",
+   "title": "Upper Peninsula Waterfall Map & Trip Planner",
+   "tags": "waterfall waterfalls upper peninsula up michigan hike trip map pictured rocks trail photography",
+   "place": "",
+   "kind": "Map-first field guide",
+   "description": "Explore 200+ wild cascades across the sandstone country of the Upper Peninsula. Interactive topographic routing, trail difficulty, staircase counts, and seasonal spring-runoff conditions from Munising to the Black River.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/upper-peninsula-waterfalls/"
+  },
+  {
+   "id": "mackinac-island",
+   "title": "Mackinac Island Ferry Prices & Parking",
+   "tags": "planning transportation nature",
+   "place": "",
+   "kind": "Island trip planner",
+   "description": "Straits of Mackinac ferry schedules, dockside parking logistics, and ticket pricing between Mackinaw City, St. Ignace, and Mackinac Island. Compare Shepler’s and Star Line departures with mainland weather guidance.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/mackinac-island/ferry-planner/"
+  },
+  {
+   "id": "ferry-manitou",
+   "title": "Manitou Island Ferry Planner",
+   "tags": "manitou north south leland fishtown ferry sleeping bear dunes island camping ferry closure",
+   "place": "",
+   "kind": "",
+   "description": "Compare North and South Manitou, check the 2026 ferry suspension and unconfirmed restart, and prepare for a future island visit.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/manitou-island-ferry/"
+  },
+  {
+   "id": "great-lakes-ferries",
+   "title": "Great Lakes Ferry Planner Directory",
+   "tags": "ferry planning travel island great lakes transportation great-lakes-ferries",
+   "place": "",
+   "kind": "Great Lakes ferries",
+   "description": "The comprehensive navigator for Great Lakes island ferries and open-water crossings. Schedules, vehicle space, and passenger logistics for Mackinac Island, Beaver Island, Isle Royale, Put-in-Bay, and the S.S. Badger.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/great-lakes-ferries/"
+  },
+  {
+   "id": "ferry-put-in-bay",
+   "title": "Put-in-Bay Ferry Planner",
+   "tags": "ferry planning travel island great lakes transportation put-in-bay-ferry",
+   "place": "",
+   "kind": "Great Lakes ferries",
+   "description": "Lake Erie island crossings from Catawba and Port Clinton to South Bass Island. Compare Miller Ferry and Jet Express seasonal schedules, vehicle transport rules, dock parking, and passage times.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/put-in-bay-ferry/"
+  },
+  {
+   "id": "ferry-lake-express",
+   "title": "Lake Express Ferry Planner",
+   "tags": "ferry planning travel island great lakes transportation lake-michigan-ferry lake-express",
+   "place": "",
+   "kind": "Great Lakes ferries",
+   "description": "Published classic cabin fares, vehicle costs, time-zone changes and 2026 sailing windows.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/lake-michigan-ferry/lake-express/"
+  },
+  {
+   "id": "ferry-ss-badger",
+   "title": "S.S. Badger Ferry Planner",
+   "tags": "ferry planning travel island great lakes transportation lake-michigan-ferry ss-badger",
+   "place": "",
+   "kind": "Great Lakes ferries",
+   "description": "Four-hour seasonal car-ferry guidance, adult passenger prices and time-zone planning.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/lake-michigan-ferry/ss-badger/"
+  },
+  {
+   "id": "ferry-isle-royale",
+   "title": "Isle Royale Ferry Planner",
+   "tags": "ferry planning travel island great lakes transportation isle-royale-ferry",
+   "place": "",
+   "kind": "Great Lakes ferries",
+   "description": "Passage planner for the wilderness archipelago of Lake Superior. Schedules, crossing durations, and reservations for the Ranger III from Houghton, Isle Royale Queen IV from Copper Harbor, and Grand Portage vessels.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/isle-royale-ferry-comparison/"
+  },
+  {
+   "id": "ferry-chi-cheemaun",
+   "title": "Chi-Cheemaun Ferry Planner",
+   "tags": "ferry planning travel island great lakes transportation chi-cheemaun-ferry",
+   "place": "",
+   "kind": "Great Lakes ferries",
+   "description": "Seasonal Ontario car-ferry trip decisions, vehicle rules, and crossing logistics.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/chi-cheemaun-ferry/"
+  },
+  {
+   "id": "ferry-pelee",
+   "title": "Pelee Island Ferry Planner",
+   "tags": "ferry planning travel island great lakes transportation pelee-island-ferry",
+   "place": "",
+   "kind": "Great Lakes ferries",
+   "description": "Find the right 2026 mainland port and estimate Canadian ferry fares.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/pelee-island-ferry/"
+  },
+  {
+   "id": "ferry-beaver",
+   "title": "Beaver Island Ferry Planner",
+   "tags": "ferry planning travel island great lakes transportation beaver-island-ferry",
+   "place": "",
+   "kind": "Great Lakes ferries",
+   "description": "Open Lake Michigan passage from Charlevoix to St. James Harbor. Beaver Island Boat Company schedules, vehicle reservation requirements, baggage limits, and open-water crossing conditions.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/beaver-island-ferry/"
+  },
+  {
+   "id": "ferry-toronto",
+   "title": "Toronto Islands Ferry Planner",
+   "tags": "ferry planning travel island great lakes transportation toronto-islands-ferry",
+   "place": "",
+   "kind": "Great Lakes ferries",
+   "description": "Harbor crossing schedules and passenger access between downtown Toronto and the Toronto Islands. Centre Island, Hanlan’s Point, and Ward’s Island vessel departures with real-time seasonal sailing alerts.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/toronto-islands-ferry/"
+  },
+  {
+   "id": "ausable-field-map",
+   "title": "The Au Sable Field Map, 70 Verified Access Points, Campgrounds, and a Trip Planner",
+   "tags": "planning fishing",
+   "place": "",
+   "kind": "Planner",
+   "description": "An interactive map of Michigan's Au Sable River from Grayling to Lake Huron, with 70 verified locations: launches and liveries, fly shops and lodges, state and federal campgrounds including the impoundment camps, scenic overlooks, hiking and Shore-to-Shore horseback trails, and birding hotspots from loons to the Kirtland's warbler. Every card carries live USGS flow and weather, there is a float-time planner for the mainstem and its branches, activity filters for fishing, paddling, camping, birding and more, and notes on the steelhead and salmon water below Foote Dam.",
+   "months": "4,5,6,7,8,9",
+   "href": "https://ausable.chrisizworski.com/"
+  },
+  {
+   "id": "ausable-guide",
+   "title": "Au Sable River Guide, Float Times, Fishing, and Camping",
+   "tags": "planning fishing",
+   "place": "",
+   "kind": "Guide",
+   "description": "A planning guide to the Au Sable from Grayling to Lake Huron: the Holy Water and the river's segments, popular floats with paddle times, where to fish for trout, smallmouth, and the steelhead and salmon run below Foote, the state, federal, and impoundment campgrounds, birding from loons to the Kirtland's warbler, and answers to the questions people ask most.",
+   "months": "4,5,6,7,8,9",
+   "href": "/au-sable-river/"
+  },
+  {
+   "id": "outdoors-now",
+   "title": "Michigan Outdoors Now, Live-Condition Day Trip Planner",
+   "tags": "planning",
+   "place": "",
+   "kind": "Planner",
+   "description": "Start with a Michigan city or ZIP and get three outdoor day-trip plans ranked for forecast, air quality, drive time, interests, kids, dogs, and accessibility. Covers 27 curated destinations, uses live weather signals, requires no login, and does not save your location. Built by Chris Izworski. Free.",
+   "months": "4,5,6,7,8,9,10",
+   "href": "https://michiganoutdoorsnow.chrisizworski.com"
+  },
+  {
+   "id": "detroit-outdoors",
+   "title": "Detroit Outdoors Today, What’s Worth Doing Around Detroit",
+   "tags": "planning nature boating",
+   "place": "",
+   "kind": "Live opportunity desk",
+   "description": "Most outdoor tools wait for you to choose the activity. This one starts with the day: migration, calm-water windows, freighter traffic, sunset, night sky, fall color and park conditions can all compete for the same four-card short list. If nothing earns attention, it does not manufacture a recommendation. Built by Chris Izworski. Free.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/detroit-outdoors/"
+  },
+  {
+   "id": "outdoor-weekend",
+   "title": "Michigan Outdoor Weekend, Weekend Trip Planning Hub",
+   "tags": "planning",
+   "place": "",
+   "kind": "Planner",
+   "description": "A planning hub for Michigan weekends outside: hand-built guides for paddling, trout, fall color and the northern lights, wine country, and the Lake Superior shore. Each guide routes to the live tool behind it and to real state park and Recreation.gov reservations. Built by Chris Izworski. Free.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "https://weekend.chrisizworski.com"
+  },
+  {
+   "id": "petoskey-wine",
+   "title": "Petoskey Wine Region, a Routed Day Planner for Walloon Lake, Petoskey, Harbor Springs and Charlevoix",
+   "tags": "planning",
+   "place": "",
+   "kind": "Planner",
+   "description": "A day planner for the tasting rooms at the top of the mitt, inside the Tip of the Mitt appellation. Pick the places you want and it builds a routed, time-aware loop on real roads that respects posted hours, the time you spend at each stop, and the drive between them, with Petoskey stone beaches, the Tunnel of Trees, harbor towns and overlooks woven in. Built on a verified dataset of 25 tasting stops, including all 14 current Petoskey Wine Region trail members plus four distilleries and four breweries the wine trail does not list, and 27 places worth stopping between them. Hours are posted only where the venue publishes a weekly schedule; the rest say call ahead rather than guess. Free.",
+   "months": "5,6,7,8,9,10",
+   "href": "/petoskey-wine/"
+  },
+  {
+   "id": "tc-wine",
+   "title": "Traverse City Wine Country, a Routed Day Planner for the Wineries, Breweries, Cideries, and Distilleries",
+   "tags": "planning",
+   "place": "",
+   "kind": "Planner",
+   "description": "A day planner for the tasting rooms of the Traverse City area, across the Old Mission and Leelanau peninsulas. Choose the places you want to visit and it builds a routed, time-aware loop that respects real opening hours, the time you spend at each stop, and the drive between them, with beaches, hikes, and scenic overlooks woven in along the way. Sample starter days to begin from, a designated-driver mode, a shareable summary you can drop in a text, and a button that opens the whole loop in Google Maps. Built on a verified dataset of 77 venues: 43 wineries, 22 breweries, 7 distilleries, and 5 cideries. Free.",
+   "months": "5,6,7,8,9,10",
+   "href": "https://tcwine.chrisizworski.com/"
+  },
+  {
+   "id": "pictured-rocks",
+   "title": "Pictured Rocks Planner, Boat, Kayak, Hike, or Drive",
+   "tags": "planning",
+   "place": "",
+   "kind": "Planner",
+   "description": "A logistics-first planner for Pictured Rocks National Lakeshore. An interactive decision tool weighs your time, walking tolerance, water comfort, and who is coming, then hands you the right day: the boat cruise, a guided sea kayak trip, the 10-mile Chapel Loop, or the drive-and-stroll circuit. Covers the honest comparison between all four, the Munising versus Grand Marais lodging fork, reservation-only camping and the six-month backcountry permit window, entrance fees, where dogs can and cannot go, the south-wind biting fly problem, month-by-month timing, and current closures including the Munising Falls rebuild. Free.",
+   "months": "5,6,7,8,9,10",
+   "href": "https://picturedrocks.chrisizworski.com/"
+  },
+  {
+   "id": "estivant-pines",
+   "title": "Estivant Pines Trail Conditions & Hike Planner",
+   "tags": "planning nature",
+   "place": "",
+   "kind": "Planner",
+   "description": "A trailhead-first planner for Estivant Pines near Copper Harbor. It combines National Weather Service weather and alerts, daylight, a weather-based hiking window, official Michigan Nature Association route choices, access context, and seasonal fall-color timing without pretending to know unreported mud, blowdowns, parking, or closures.",
+   "months": "4,5,6,7,8,9,10",
+   "href": "/estivant-pines/"
+  },
+  {
+   "id": "tahquamenon",
+   "title": "Tahquamenon Falls Live, River Conditions and Park Planner",
+   "tags": "planning nature",
+   "place": "",
+   "kind": "Live data",
+   "description": "Live USGS river flow, same-date historical context, NWS weather and hazards, Upper versus Lower Falls guidance, an interactive park map, trails, campgrounds, brewery stops, paddling access, photo conditions, and time-based visit planning for Tahquamenon Falls State Park.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "https://chrisizworski.com/tahquamenon-falls/"
+  },
+  {
+   "id": "circle-tour",
+   "title": "Lake Superior Circle Tour, Stop-by-Stop Guide and Trip Planner",
+   "tags": "planning",
+   "place": "",
+   "kind": "Planner",
+   "description": "Complete guide to the 1,300-mile circumnavigation of Lake Superior. 31 major stops across Michigan, Wisconsin, Minnesota, and Ontario; freighter-watching notes at every port; three concrete itineraries (7, 10, and 14 days); live water-level data; and an interactive trip planner. Built from years of Great Lakes work, wilderness canoe trips on the Canadian north shore, and the freighter routes that pass Bay City on the way to the Soo Locks.",
+   "months": "6,7,8,9,10",
+   "href": "/lake-superior-circle-tour/"
+  },
+  {
+   "id": "gooseberry-falls",
+   "title": "Gooseberry Falls Waterfall Walk & Access Planner",
+   "tags": "planning minnesota north shore lake superior waterfall park hiking accessible winter weather gooseberry",
+   "place": "",
+   "kind": "Official-route planner",
+   "description": "Choose the Upper and Middle Falls route, Lower Falls loop, Fifth Falls hike or Lake Superior shore by time, walking preference and season. Regional NWS weather with clearly labeled access unknowns, DNR maps and parking guidance.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/gooseberry-falls/"
+  },
+  {
+   "id": "apostle-islands",
+   "title": "Apostle Islands Explorer — Sea Caves, Cruises & Islands",
+   "tags": "planning wisconsin lake superior kayaking caves ferry island",
+   "place": "",
+   "kind": "Field guide",
+   "description": "Choose a mainland cave hike, guided kayak outing, lighthouse cruise, Sand Island, Stockton Island, Madeline ferry or camping. Evidence-first access, source handoffs, 2026 construction notices and orientation map.",
+   "months": "5,6,7,8,9,10",
+   "href": "/apostle-islands/"
+  },
+  {
+   "id": "lake-superior-provincial-park",
+   "title": "Lake Superior Provincial Park Explorer — Stops & Trails",
+   "tags": "planning hiking park",
+   "place": "",
+   "kind": "Field guide",
+   "description": "Plan a Highway 17 stop with Agawa Rock, Old Woman Bay, Katherine Cove, Sand River and the park's major hikes. Compare on-site time, published parking/access evidence, permit information and dated Ontario Parks closures. Official site coordinates are not verified parking stalls; check current alerts before travel.",
+   "months": "5,6,7,8,9,10",
+   "href": "/lake-superior-provincial-park/"
+  },
+  {
+   "id": "pukaskwa-national-park",
+   "title": "Pukaskwa National Park Trail & Conditions Chooser",
+   "tags": "planning hiking lake superior ontario pukaskwa hattie cove boardwalk headland trail suspension bridge conditions",
+   "place": "",
+   "kind": "Dated official conditions",
+   "description": "Match eight real Parks Canada hikes to your time and effort, compare verified trail distances, and see dated official access reports including White River Suspension Bridge closures. Source observations are not live inspections.",
+   "months": "5,6,7,8,9,10",
+   "href": "/pukaskwa-national-park/"
+  },
+  {
+   "id": "sleeping-giant-provincial-park",
+   "title": "Sleeping Giant Provincial Park Trail Explorer",
+   "tags": "planning hiking lake superior ontario sleeping giant cycling trails park",
+   "place": "",
+   "kind": "Field guide",
+   "description": "Choose between six official Ontario Parks trails using complete return distances, verified bike-to-walk transitions and available-time limits. Four research-mapped trail outlines; no live trail-open, GPS parking or safety promises.",
+   "months": "5,6,7,8,9,10",
+   "href": "/sleeping-giant-provincial-park/"
+  },
+  {
+   "id": "xc-planning",
+   "title": "Michigan Cross-Country Skiing, Trails and Live Conditions",
+   "tags": "planning",
+   "place": "",
+   "kind": "Live data",
+   "description": "Start with the statewide planning guide to compare representative Michigan trail systems, classic and skate options, rentals, snowmaking, and the best source to verify each trail. Then open the live snow map for 48 northern Michigan trail systems when you are deciding whether today is worth the drive.",
+   "months": "12,1,2,3",
+   "href": "/michigan-cross-country-skiing/"
+  },
+  {
+   "id": "michigan-ski-hills",
+   "title": "Michigan Ski Hills: Worth the Drive This Weekend?",
+   "tags": "ski downhill snow lake effect resorts winter drive lift tickets",
+   "place": "",
+   "kind": "Live winter decision",
+   "description": "Ski hill snow reports across 18 northern Michigan and U.P. peaks. Live NWS lake-effect snow accumulation, fresh powder depths, terrain status, and highway drive times from Boyne Mountain to Mount Bohemia.",
+   "months": "11,12,1,2,3,4",
+   "href": "/michigan-ski-hills/"
+  },
+  {
+   "id": "lake-effect-snow",
+   "title": "Lake-Effect Snow: Which Snowbelt Is Favored?",
+   "tags": "lake effect snow Great Lakes snowbelt winter forecast warnings hourly live radar NOAA MRMS charts 850 mb Michigan Wisconsin Ohio Pennsylvania New York",
+   "place": "",
+   "kind": "Live radar + NWS 72-hour outlook",
+   "description": "Check 15 snowbelts in Michigan, Wisconsin, Ohio, Pennsylvania and New York. Explore live NWS radar playback, a 72-hour forecast, wind shifts, NOAA lake-to-air temperature charts and official alerts—without pretending to locate the next snowband.",
+   "months": "10,11,12,1,2,3,4",
+   "href": "/lake-effect-snow/"
+  },
+  {
+   "id": "michigan-snow-totals",
+   "title": "Michigan Snow Totals Today",
+   "tags": "snow winter weather",
+   "place": "",
+   "kind": "Live data",
+   "description": "How much snow your town got, from the official reports spotters, CoCoRaHS and co-op observers and National Weather Service staff send in during every storm. Search any town for its own report or the nearest ones, filter by region, 24-hour to 7-day views, NWS winter alerts, and season snowfall at 52 climate stations against normal.",
+   "months": "10,11,12,1,2,3,4",
+   "href": "/michigan-snow-totals/"
+  },
+  {
+   "id": "snowmobile",
+   "title": "Michigan Snowmobile Trail Conditions",
+   "tags": "planning snow winter",
+   "place": "",
+   "kind": "Live data",
+   "description": "Statewide decision support across seven Michigan regions. It keeps official DNR trail and closure data separate from club condition reports, grooming freshness and weather, then shows the weakest required segment instead of averaging problems away. Pick two points on a region's map to trace the real trail-following distance and time between them.",
+   "months": "12,1,2,3",
+   "href": "/snowmobile/"
+  },
+  {
+   "id": "morel-report",
+   "title": "Michigan Morel Report, Soil Warming South to North",
+   "tags": "nature planning",
+   "place": "",
+   "kind": "Live data",
+   "description": "Morels are triggered by soil temperature, not by a date, and that trigger crosses Michigan south to north over about five weeks. This tracks where the front edge is right now across five regions, using accumulated warmth measured against a ten year normal. Honest about its limits: Michigan has almost no public soil temperature stations, so soil is modelled from air temperature. No identification key and nobody's spots. Free.",
+   "months": "4,5,6",
+   "href": "https://morel.chrisizworski.com/"
+  },
+  {
+   "id": "shed-antler-search",
+   "title": "Michigan Shed Antler Search Conditions — Is This the Week?",
+   "tags": "nature hunting whitetail sheds shed antlers snow winter planning",
+   "place": "",
+   "kind": "NWS forecast · snow-cover field check",
+   "description": "Late-winter field conditions for scouting dropped whitetail antlers. NOAA snow-cover depth models, southern-slope melt rates, and low-disturbance habitat guidance across northern Michigan deer yards.",
+   "months": "1,2,3,4",
+   "href": "/michigan-shed-antlers/"
+  },
+  {
+   "id": "waterfowl-freeze-line",
+   "title": "Waterfowl Freeze-Line Tracker — Duck & Goose Movement Weather",
+   "tags": "nature birding wildlife duck ducks geese waterfowl migration winter weather wetlands",
+   "place": "",
+   "kind": "NWS freeze-pressure outlook · dated waterfowl observations",
+   "description": "Follow the autumn migration freeze-line down the Great Lakes and Mississippi Flyways. Daily 1-km satellite snow cover, shallow marsh ice-up data, and barometric wind shifts pushing mallards, divers, and Canada geese south.",
+   "months": "10,11,12,1,2,3",
+   "href": "/waterfowl-freeze-line/"
+  },
+  {
+   "id": "winter-eagle-watching",
+   "title": "Winter Bald Eagle Watching — Midwest Eagle Finder",
+   "tags": "nature birding wildlife photography planning winter eagles",
+   "place": "",
+   "kind": "Live NWS forecast · dated eagle counts",
+   "description": "Locate wintering bald eagles gathered along open Great Lakes tailwaters and coastal ice leads. Waterflow telemetry, freeze maps, and river access sites below hydro dams from the Au Sable to the St. Joseph.",
+   "months": "1,2,3,11,12",
+   "href": "/winter-eagle-watching/"
+  },
+  {
+   "id": "frosty-mornings",
+   "title": "Michigan Frosty Morning Predictor — Hoarfrost Outlook",
+   "tags": "nature planning frost hoarfrost frosty morning ice crystals photography winter",
+   "place": "",
+   "kind": "NWS dawn forecast · weather setup",
+   "description": "See which Michigan dawns favor frost-covered branches and fields. Compare cold, humid, calm, clear conditions at 12 Michigan forecast points, with NWS data, charts and a statewide map. Scores describe favorable weather, not confirmed hoarfrost.",
+   "months": "1,2,3,4,5,9,10,11,12",
+   "href": "https://phenology.chrisizworski.com/frosty-mornings"
+  },
+  {
+   "id": "firefly-tracker",
+   "title": "Michigan Firefly Emergence & Viewing Forecast",
+   "tags": "nature planning firefly fireflies lightning bugs summer",
+   "place": "",
+   "kind": "Conditions & seasonal timing",
+   "description": "Summer twilight emergence tracking for Photinus pyralis across Michigan meadows. Growing degree-day soil heat models, evening humidity indices, and optimal viewing windows from hardwood edges to river valleys.",
+   "months": "5,6,7,8",
+   "href": "https://phenology.chrisizworski.com/firefly-tracker"
+  },
+  {
+   "id": "hummingbird-tracker",
+   "title": "Michigan Hummingbird Arrival Tracker",
+   "tags": "nature garden planning hummingbirds migration feeders birding",
+   "place": "",
+   "kind": "Conditions & seasonal timing",
+   "description": "Spring ruby-throated hummingbird arrival waves across Michigan. Track northward migration fronts, nectar source phenology, feeder placement timing, and early-season frost precautions from the Ohio border to Lake Superior.",
+   "months": "4,5,6,8,9",
+   "href": "https://phenology.chrisizworski.com/hummingbird-tracker"
+  },
+  {
+   "id": "michigan-trillium",
+   "title": "Michigan Trillium Bloom Tracker",
+   "tags": "nature garden planning trillium wildflowers blooms spring",
+   "place": "",
+   "kind": "Conditions & seasonal timing",
+   "description": "Follow spring heat buildup, regional timing, flowering reports and seven-day weather context. Explore ten documented public trails and distinguish modeled readiness from confirmed blooms.",
+   "months": "4,5,6",
+   "href": "https://phenology.chrisizworski.com/michigan-trillium"
+  },
+  {
+   "id": "frog-chorus",
+   "title": "Michigan Frog Chorus Forecast & Sound Guide",
+   "tags": "nature planning frogs peepers sounds spring",
+   "place": "",
+   "kind": "Conditions & seasonal timing",
+   "description": "The acoustic calendar of spring wetlands. Track evening calling windows for wood frogs, spring peepers, and chorus frogs with soil-thaw temperatures, barometric rain triggers, and species audio soundscapes.",
+   "months": "3,4,5,6,7,8",
+   "href": "https://phenology.chrisizworski.com/frog-chorus"
+  },
+  {
+   "id": "woodcock-sky-dance",
+   "title": "Michigan Woodcock Sky Dance Forecast",
+   "tags": "nature planning birding woodcock timberdoodle dusk spring",
+   "place": "",
+   "kind": "Conditions & seasonal timing",
+   "description": "Find spring evening display windows using regional timing, sunset-based listening times and a seven-night weather outlook. Learn the peent call and aerial display sounds.",
+   "months": "3,4,5",
+   "href": "https://phenology.chrisizworski.com/woodcock-sky-dance"
+  },
+  {
+   "id": "salamander-migration",
+   "title": "Michigan Salamander Migration Tracker",
+   "tags": "nature planning salamanders big night rain spring",
+   "place": "",
+   "kind": "Conditions & seasonal timing",
+   "description": "Watch for warm-rain Big Night conditions with seven-night regional forecasts, spring timing and privacy-safe observation trends. Includes responsible viewing guidance.",
+   "months": "2,3,4,5",
+   "href": "https://phenology.chrisizworski.com/salamander-migration"
+  },
+  {
+   "id": "michigan-rockhounding",
+   "title": "Michigan Rockhounding Conditions for Agates, Petoskey Stones and Fossils",
+   "tags": "nature planning great-lakes beaches",
+   "place": "",
+   "kind": "Live data",
+   "description": "Which Michigan beach did the waves just turn over? After-storm conditions for 15 agate, Petoskey stone, Yooperlite and fossil spots from onshore wind, NOAA wave buoys and NWS alerts, with the collecting rules for each.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/michigan-rockhounding/"
+  },
+  {
+   "id": "maple-sap-run",
+   "title": "Michigan Maple Sap Run Forecast & Sugarhouse Guide",
+   "tags": "nature garden planning maple",
+   "place": "",
+   "kind": "Spring timing",
+   "description": "When should you tap maple trees? Compare 31 Michigan locations using NWS freeze/thaw forecasts, a seven-day sap-weather index, a statewide map and verified sugarhouse events and tours.",
+   "months": "1,2,3,4,5",
+   "href": "/michigan-maple-sap-run/"
+  },
+  {
+   "id": "aurora",
+   "title": "Northern Lights Michigan, Tonight's Aurora Forecast and Viewing Guide",
+   "tags": "nature planning",
+   "place": "",
+   "kind": "Live data",
+   "description": "Live NOAA SWPC three-day Kp index forecast for Michigan, tonight's viewing odds calculated from peak Kp, the dark-sky locations on Lake Superior and the Upper Peninsula that can actually see the aurora when it shows up, dark-sky park ratings, photography settings, and the geomagnetic storm science.",
+   "months": "1,2,3,9,10,11,12",
+   "href": "/northern-lights-michigan/"
+  },
+  {
+   "id": "fall-color",
+   "title": "Michigan Fall Color, a Live Peak Map, Forecast, and Rivers to Paddle Through the Color",
+   "tags": "nature planning",
+   "place": "",
+   "kind": "Live data",
+   "description": "Where Michigan's fall color is peaking right now, from the Upper Peninsula to the southern border, built on canopy camera readings and Open-Meteo weather. Region-by-region peak timing on an interactive dark map, a six-day forecast for each area, a color-near-you locator, a trip planner that matches a weekend and a mood to where the color is standing, eleven destination field guides from the Tunnel of Trees to the Au Sable, and a short note each day through the season. Free and updated daily.",
+   "months": "9,10",
+   "href": "/fall-color/"
+  },
+  {
+   "id": "bloom-tracker",
+   "title": "Michigan Bloom Tracker 2027 — What’s Blooming & When to Go",
+   "tags": "nature garden planning",
+   "place": "",
+   "kind": "Seasonal timing",
+   "description": "The unfolding flowering calendar across 19 premier Michigan botanical preserves, orchards, and wildflower trails. Blossom progression from Old Mission cherry groves and Holland tulips to U.P. woodland trilliums and autumn asters.",
+   "months": "4,5,6,7,8,9,10",
+   "href": "https://phenology.chrisizworski.com/bloom-tracker"
+  },
+  {
+   "id": "living-garden",
+   "title": "The Living Garden: Raised Beds Through the Seasons",
+   "tags": "garden raised bed square foot succession vegetable planting harvest journal planner crop rotation no account",
+   "place": "",
+   "kind": "Living raised-bed planner · year-round",
+   "description": "Design your own garden bed square by square, look ahead through spring, summer and autumn, and see whether a succession crop fits. Preserve actual harvest and failure notes on your device. No account required; estimated harvest dates are not guarantees. Explore the Michigan Gardening hub.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/living-garden/"
+  },
+  {
+   "id": "michigan-garden-pest-watch",
+   "title": "Michigan Garden Pest Watch: What to Scout This Week",
+   "tags": "garden gardening pest insects bugs disease squash cabbage tomato NWS scouting prevention organic IPM pollinator",
+   "place": "",
+   "kind": "Michigan garden scouting · all seasons",
+   "description": "Choose your crop and stage. Get a plain-English scouting task, official NWS weather cues when available, and low-impact prevention. Seasonal reference is not a live pest detection. Browse other Michigan garden tools.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/michigan-garden-pest-watch/"
+  },
+  {
+   "id": "leafcutter-bees",
+   "title": "Leafcutter Bees: Seasonal Care & Nesting Planner",
+   "tags": "nature garden gardening planning pollinator leafcutter bees nest houses seasonal cocoon",
+   "place": "",
+   "kind": "Garden bee care · year-round",
+   "description": "What should I do with my leafcutter bees this season? Explore the four-season nest journal, a Michigan ZIP-based NWS warmth outlook and USA-NPN growing-degree-day context, safe guidance for cocoons and bee houses, and Chris Izworski’s real Saginaw Bay garden photos. A forecast is not a confirmed emergence date. See Michigan gardening tools.",
+   "months": "1,2,3,4,5,6,7,8,9,10,11,12",
+   "href": "/leafcutter-bees/"
+  },
+  {
+   "id": "wisconsin-bloom-tracker",
+   "title": "Wisconsin Bloom Tracker 2027 — Cherry Blossoms, Lilacs & Flower Map",
+   "tags": "wisconsin cherry blossoms lilacs flowers lavender sunflowers garden trip planning",
+   "place": "",
+   "kind": "Wisconsin seasonal planning",
+   "description": "Wisconsin’s seasonal flower trails from Door County apple and cherry orchards to the UW–Madison lilac collections and Washington Island lavender fields. Peak bloom dates, trail logistics, and orchard field reports.",
+   "months": "4,5,6,7,8,9,10",
+   "href": "https://phenology.chrisizworski.com/wisconsin-bloom-tracker"
+  },
+  {
+   "id": "birding",
+   "title": "Michigan Birding Report, Real-Time Sightings Map and Species Guide",
+   "tags": "nature",
+   "place": "",
+   "kind": "Live data",
+   "description": "Live bird sightings mapped across Michigan and refreshed from eBird every 15 minutes: notable species alerts, Saginaw Bay hotspots, migration forecasts, and species profiles.",
+   "months": "3,4,5,8,9,10,11",
+   "href": "https://michiganbirdingreport.com"
+  },
+  {
+   "id": "birding-daily",
+   "title": "Michigan Birding Daily, County Reports with Live eBird Data",
+   "tags": "nature",
+   "place": "",
+   "kind": "Live data",
+   "description": "One Michigan county every morning: live eBird observations, notable sightings, National Weather Service conditions, and hotspot recommendations.",
+   "months": "3,4,5,8,9,10,11",
+   "href": "https://daily.michiganbirdingreport.com"
+  }
+ ],
+ "garden": [
+  {
+   "id": "/michigan-garden-pest-watch/",
+   "title": "Open Michigan Garden Pest Watch",
+   "tags": "garden pest pests insects bugs beetles tomato disease plant damage holes leaves squash vine borer corn earworm caterpillar aphid photo identification diagnose scouting treatment prevention",
+   "place": "",
+   "kind": "What’s damaging my plants?",
+   "description": "Compare evidence, see what to scout, and plan a sensible next step.",
+   "months": "",
+   "href": "/michigan-garden-pest-watch/"
+  },
+  {
+   "id": "#plant-now",
+   "title": "Plan my Michigan garden",
+   "tags": "plan planner my garden vegetable flower herbs sow",
+   "place": "",
+   "kind": "When should I plant?",
+   "description": "Choose your town and plants for a personal notebook.",
+   "months": "",
+   "href": "#plant-now"
+  },
+  {
+   "id": "/zone-6a-planting-calendar/",
+   "title": "Planting calendar",
+   "tags": "calendar schedule vegetables sow transplant",
+   "place": "",
+   "kind": "When should I plant?",
+   "description": "See the season for 47 plants at your frost station.",
+   "months": "",
+   "href": "/zone-6a-planting-calendar/"
+  },
+  {
+   "id": "/seed-starting-guide/",
+   "title": "When should I start seeds?",
+   "tags": "seed starting indoors lights seedlings",
+   "place": "",
+   "kind": "When should I plant?",
+   "description": "Work back from your frost date or zone.",
+   "months": "",
+   "href": "/seed-starting-guide/"
+  },
+  {
+   "id": "/michigan-frost-dates/",
+   "title": "When is frost likely?",
+   "tags": "frost freeze last first frost date protect plants",
+   "place": "",
+   "kind": "Is my garden ready?",
+   "description": "Explore spring freeze odds and fall frost references.",
+   "months": "",
+   "href": "/michigan-frost-dates/"
+  },
+  {
+   "id": "/michigan-soil-temperature/",
+   "title": "Is the soil warm enough?",
+   "tags": "soil temperature cold warm thermometer",
+   "place": "",
+   "kind": "Is my garden ready?",
+   "description": "Check the nearest available MSU soil station.",
+   "months": "",
+   "href": "/michigan-soil-temperature/"
+  },
+  {
+   "id": "/national-tools/frost/cover-plants-tonight/",
+   "title": "Should I cover my plants?",
+   "tags": "cover protect freeze tonight weather",
+   "place": "",
+   "kind": "Is my garden ready?",
+   "description": "Think through tonight’s frost risk.",
+   "months": "",
+   "href": "/national-tools/frost/cover-plants-tonight/"
+  },
+  {
+   "id": "/heirloom-variety-matchmaker/",
+   "title": "Find an heirloom variety",
+   "tags": "heirloom varieties choose match vegetables tomatoes peppers",
+   "place": "",
+   "kind": "What belongs in my garden?",
+   "description": "Match varieties to your space, season and goals.",
+   "months": "",
+   "href": "/heirloom-variety-matchmaker/"
+  },
+  {
+   "id": "/when-to-plant-tomatoes-michigan/",
+   "title": "Grow Michigan tomatoes",
+   "tags": "tomato tomatoes transplant planting michigan",
+   "place": "",
+   "kind": "What belongs in my garden?",
+   "description": "Timing, soil warmth and the patience they ask of us.",
+   "months": "",
+   "href": "/when-to-plant-tomatoes-michigan/"
+  },
+  {
+   "id": "/companion-planting-zone-6a/",
+   "title": "Plan what grows together",
+   "tags": "companion plants beds together combinations",
+   "place": "",
+   "kind": "What belongs in my garden?",
+   "description": "Explore companion planting with evidence behind it.",
+   "months": "",
+   "href": "/companion-planting-zone-6a/"
+  },
+  {
+   "id": "/seed-saving-lab/",
+   "title": "Will these plants cross?",
+   "tags": "seed saving cross pollination isolation",
+   "place": "",
+   "kind": "What can I carry into next year?",
+   "description": "Check crops before saving their seeds.",
+   "months": "",
+   "href": "/seed-saving-lab/"
+  },
+  {
+   "id": "/heirloom-seed-saving-guide/",
+   "title": "Save seeds from your garden",
+   "tags": "seed saving heirloom storage",
+   "place": "",
+   "kind": "What can I carry into next year?",
+   "description": "Start with the plants and seeds you love.",
+   "months": "",
+   "href": "/heirloom-seed-saving-guide/"
+  },
+  {
+   "id": "/national-tools/planting/garlic/",
+   "title": "When do I plant garlic?",
+   "tags": "garlic fall planting autumn cloves",
+   "place": "",
+   "kind": "What can I carry into next year?",
+   "description": "Make room for next summer’s harvest.",
+   "months": "",
+   "href": "/national-tools/planting/garlic/"
+  }
+ ]
+}

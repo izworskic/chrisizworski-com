@@ -135,12 +135,13 @@ h2.sh{font:500 clamp(1.45rem,2.3vw,1.9rem)/1.2 var(--hm-display);color:var(--hm-
 <meta name="twitter:image:alt" content="Chris Izworski gardening and Freighter View Farms preview image">
 <meta name="thumbnail" content="https://chrisizworski.com/assets/search/chris-izworski-gardening.jpg">
 <meta itemprop="image" content="https://chrisizworski.com/assets/search/chris-izworski-gardening.jpg">
+<link rel="stylesheet" href="/assets/hub-search.css?v=20261118">
 <script defer src="/_vercel/insights/script.js"></script>
 <script>window.si=window.si||function(){(window.siq=window.siq||[]).push(arguments)};</script>
 <script defer src="/_vercel/speed-insights/script.js"></script>
 <script defer src="/assets/tool-engagement.js"></script>
 <link rel="stylesheet" href="/assets/decision-network.css">
-<script defer src="/assets/decision-network.js"></script>
+<script defer src="/assets/decision-network.js?v=20261118"></script>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5D2V2W7HN"></script>
 <script>
@@ -299,7 +300,8 @@ h2.sh{font:500 clamp(1.45rem,2.3vw,1.9rem)/1.2 var(--hm-display);color:var(--hm-
 
 <div class="finder" id="finder" hidden>
   <label for="tool-search"><strong>Find a tool by place or activity</strong></label><label class="sr-only" for="tool-search">Search tools by name or topic</label>
-  <input type="search" id="tool-search" class="tool-search" placeholder="Search tools, for example ice, trout, aurora, frost" autocomplete="off" spellcheck="false">
+  <input type="search" id="tool-search" class="tool-search" data-hub-search="tools" placeholder="Search tools, for example ice, trout, aurora, frost" autocomplete="off" spellcheck="false">
+  <div class="hub-search-results" data-hub-search-results hidden></div>
   <div class="chips" role="group" aria-label="Filter tools by activity">
     <button type="button" class="chip is-on" data-filter="all" aria-pressed="true">All tools</button>
     <button type="button" class="chip" data-filter="season" aria-pressed="false">In season now</button>
@@ -1156,6 +1158,9 @@ h2.sh{font:500 clamp(1.45rem,2.3vw,1.9rem)/1.2 var(--hm-display);color:var(--hm-
 </section>
 </div>
 
+<script src="/assets/hub-search-lexicon.js?v=20261118"></script>
+<script src="/assets/hub-search-engine.js?v=20261118"></script>
+<script src="/assets/hub-search.js?v=20261118"></script>
 <script>
 (function(){
   'use strict';
@@ -1265,8 +1270,12 @@ h2.sh{font:500 clamp(1.45rem,2.3vw,1.9rem)/1.2 var(--hm-display);color:var(--hm-
       var tags=(c.getAttribute('data-tags')||'').split(/\s+/);
       if(tags.indexOf(active)===-1) return false;
     }
-    var q=(search.value||'').trim().toLowerCase();
-    if(q){ if(c.textContent.toLowerCase().indexOf(q)===-1) return false; }
+    // Shared hub search (hub-search.js) ranks and decides text matches when present.
+    if(window.HubSearch){ if(c.getAttribute('data-hub-match')==='0') return false; }
+    else {
+      var q=(search.value||'').trim().toLowerCase();
+      if(q){ if(c.textContent.toLowerCase().indexOf(q)===-1) return false; }
+    }
     return true;
   }
 
@@ -1304,9 +1313,10 @@ h2.sh{font:500 clamp(1.45rem,2.3vw,1.9rem)/1.2 var(--hm-display);color:var(--hm-
       apply();
     });
   });
-  search.addEventListener('input',apply);
+  search.addEventListener(window.HubSearch?'hubsearch:change':'input',apply);
   if(clear) clear.addEventListener('click',function(){
     search.value='';
+    if(window.HubSearch) window.HubSearch.run();
     var a=document.querySelector('.chip[data-filter="all"]');
     if(a) a.click();
   });

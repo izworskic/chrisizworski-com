@@ -17,7 +17,7 @@ function addManisteeTool(){
   patchToolsSchema();
   syncToolsFinder();
   const search=document.getElementById('tool-search');
-  search?.addEventListener('input',syncToolsFinder);
+  search?.addEventListener(window.HubSearch?'hubsearch:change':'input',syncToolsFinder);
   document.querySelectorAll('.chip').forEach(ch=>ch.addEventListener('click',syncToolsFinder));
 }
 
@@ -59,7 +59,7 @@ function syncToolsFinder(){
     if(on)inSeason++;
     const tags=(card.dataset.tags||'').split(/\s+/);
     const filterOk=active==='all'||(active==='season'?on:tags.includes(active));
-    const searchOk=!q||card.textContent.toLowerCase().includes(q);
+    const searchOk=window.HubSearch?card.dataset.hubMatch!=='0':(!q||card.textContent.toLowerCase().includes(q));
     card.hidden=!(filterOk&&searchOk);
     if(!card.hidden)shown++;
   });
