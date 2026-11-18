@@ -53,7 +53,8 @@
           "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
           "source": "https://commons.wikimedia.org/wiki/File:Rideau_Canal_Locks,_Ottawa_(480403)_(9450160730).jpg"
         }
-      }
+      },
+      "profileUrlVerified": true
     },
     {
       "id": "hartwells",
@@ -63,8 +64,9 @@
       "branch": "main",
       "portalOrder": 2,
       "chambers": 2,
-      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
-      "profileVerified": false
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/ecluse-lock-hartwells",
+      "profileVerified": false,
+      "profileUrlVerified": true
     },
     {
       "id": "hogs-back",
@@ -74,9 +76,10 @@
       "branch": "main",
       "portalOrder": 3,
       "chambers": 2,
-      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/ecluse-lock-hogs-back",
       "profileVerified": false,
-      "guardChamberIncluded": true
+      "guardChamberIncluded": true,
+      "profileUrlVerified": true
     },
     {
       "id": "black-rapids",
@@ -86,8 +89,9 @@
       "branch": "main",
       "portalOrder": 4,
       "chambers": 1,
-      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
-      "profileVerified": false
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/ecluse-lock-black-rapids",
+      "profileVerified": false,
+      "profileUrlVerified": true
     },
     {
       "id": "long-island",
@@ -97,8 +101,9 @@
       "branch": "main",
       "portalOrder": 5,
       "chambers": 3,
-      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
-      "profileVerified": false
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/ecluse-lock-long-island",
+      "profileVerified": false,
+      "profileUrlVerified": true
     },
     {
       "id": "burritts-rapids",
@@ -108,8 +113,9 @@
       "branch": "main",
       "portalOrder": 6,
       "chambers": 1,
-      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
-      "profileVerified": false
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/ecluse-lock-burritts-rapids",
+      "profileVerified": false,
+      "profileUrlVerified": true
     },
     {
       "id": "lower-nicholsons",
@@ -119,8 +125,9 @@
       "branch": "main",
       "portalOrder": 7,
       "chambers": 1,
-      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
-      "profileVerified": false
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/ecluse-lock-lower-nicholsons",
+      "profileVerified": false,
+      "profileUrlVerified": true
     },
     {
       "id": "upper-nicholsons",
@@ -130,8 +137,9 @@
       "branch": "main",
       "portalOrder": 8,
       "chambers": 1,
-      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
-      "profileVerified": false
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/ecluse-lock-upper-nicholsons",
+      "profileVerified": false,
+      "profileUrlVerified": true
     },
     {
       "id": "clowes",
@@ -141,8 +149,9 @@
       "branch": "main",
       "portalOrder": 9,
       "chambers": 1,
-      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
-      "profileVerified": false
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/ecluse-lock-clowes",
+      "profileVerified": false,
+      "profileUrlVerified": true
     },
     {
       "id": "merrickville",
@@ -180,7 +189,8 @@
           "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
           "source": "https://commons.wikimedia.org/wiki/File:Merrickville_Ontario_2010.jpg"
         }
-      }
+      },
+      "profileUrlVerified": true
     },
     {
       "id": "kilmarnock",
@@ -190,8 +200,9 @@
       "branch": "main",
       "portalOrder": 11,
       "chambers": 1,
-      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
-      "profileVerified": false
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/ecluse-lock-kilmarnock",
+      "profileVerified": false,
+      "profileUrlVerified": true
     },
     {
       "id": "edmonds",
@@ -201,8 +212,9 @@
       "branch": "main",
       "portalOrder": 12,
       "chambers": 1,
-      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
-      "profileVerified": false
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/ecluse-lock-edmonds",
+      "profileVerified": false,
+      "profileUrlVerified": true
     },
     {
       "id": "old-slys",
@@ -212,8 +224,9 @@
       "branch": "main",
       "portalOrder": 13,
       "chambers": 2,
-      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
-      "profileVerified": false
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/ecluse-lock-old-slys",
+      "profileVerified": false,
+      "profileUrlVerified": true
     },
     {
       "id": "smiths-falls-combined",
@@ -244,7 +257,8 @@
           "half",
           "day"
         ]
-      }
+      },
+      "profileUrlVerified": true
     },
     {
       "id": "smiths-falls-detached",
@@ -254,8 +268,9 @@
       "branch": "main",
       "portalOrder": 15,
       "chambers": 1,
-      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
-      "profileVerified": false
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/ecluse-lock-smiths-falls-detached-detache",
+      "profileVerified": false,
+      "profileUrlVerified": true
     },
     {
       "id": "poonamalie",
@@ -265,8 +280,9 @@
       "branch": "main",
       "portalOrder": 16,
       "chambers": 1,
-      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
-      "profileVerified": false
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/ecluse-lock-poonamalie",
+      "profileVerified": false,
+      "profileUrlVerified": true
     },
     {
       "id": "lower-beveridges",
@@ -276,8 +292,9 @@
       "branch": "tay",
       "portalOrder": 17,
       "chambers": 1,
-      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
-      "profileVerified": false
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/ecluse-lock-lower-beveridges",
+      "profileVerified": false,
+      "profileUrlVerified": true
     },
     {
       "id": "upper-beveridges",
@@ -287,8 +304,9 @@
       "branch": "tay",
       "portalOrder": 18,
       "chambers": 1,
-      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
-      "profileVerified": false
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/ecluse-lock-upper-beveridges",
+      "profileVerified": false,
+      "profileUrlVerified": true
     },
     {
       "id": "narrows",
@@ -298,8 +316,9 @@
       "branch": "main",
       "portalOrder": 19,
       "chambers": 1,
-      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
-      "profileVerified": false
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/ecluse-lock-narrows",
+      "profileVerified": false,
+      "profileUrlVerified": true
     },
     {
       "id": "newboro",
@@ -329,7 +348,8 @@
           "half",
           "day"
         ]
-      }
+      },
+      "profileUrlVerified": true
     },
     {
       "id": "chaffeys",
@@ -367,7 +387,8 @@
           "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
           "source": "https://commons.wikimedia.org/wiki/File:Chaffeys_lock.jpg"
         }
-      }
+      },
+      "profileUrlVerified": true
     },
     {
       "id": "davis",
@@ -377,8 +398,9 @@
       "branch": "main",
       "portalOrder": 22,
       "chambers": 1,
-      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
-      "profileVerified": false
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/ecluse-lock-davis",
+      "profileVerified": false,
+      "profileUrlVerified": true
     },
     {
       "id": "jones-falls",
@@ -417,7 +439,8 @@
           "licenseUrl": "https://www.ontario.ca/page/open-government-licence-ontario",
           "source": "https://commons.wikimedia.org/wiki/File:Rideau_Canal_locks_at_Jones_Falls_(I0014758).jpg"
         }
-      }
+      },
+      "profileUrlVerified": true
     },
     {
       "id": "upper-brewers",
@@ -427,8 +450,9 @@
       "branch": "main",
       "portalOrder": 24,
       "chambers": 2,
-      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
-      "profileVerified": false
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/ecluse-lock-upper-brewers",
+      "profileVerified": false,
+      "profileUrlVerified": true
     },
     {
       "id": "lower-brewers",
@@ -438,8 +462,9 @@
       "branch": "main",
       "portalOrder": 25,
       "chambers": 1,
-      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
-      "profileVerified": false
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/ecluse-lock-lower-brewers",
+      "profileVerified": false,
+      "profileUrlVerified": true
     },
     {
       "id": "kingston-mills",
@@ -470,7 +495,8 @@
           "half",
           "day"
         ]
-      }
+      },
+      "profileUrlVerified": true
     }
   ],
   "bridges": [
@@ -601,8 +627,9 @@
       "bridgeType": "type not yet verified",
       "nearLockId": null,
       "portalOrder": 13,
-      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
-      "coordinates": null
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/pont-brass-point-bridge",
+      "coordinates": null,
+      "profileUrlVerified": true
     },
     {
       "id": "bridge-lower-brewers",
@@ -631,8 +658,9 @@
       "kind": "visitor-only",
       "name": "Colonel By Island",
       "branch": "main",
-      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
-      "coordinates": null
+      "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/ile-colonel-by-island",
+      "coordinates": null,
+      "profileUrlVerified": true
     }
   ],
   "advisories": {
@@ -645,6 +673,7 @@
     "The historical 47-lock count includes the Hogs Back guard chamber and the two Tay Canal locks, while Smiths Falls Combined is one modern chamber.",
     "Bridge list reflects named rows in the 2026 traveller portal, not a full authoritative inventory of every possible navigational crossing.",
     "Only 7 individually verified official profile locations receive coordinates or visitor recommendations. Other entries remain in the text directory without inferred map pins.",
-    "The 2026 portal's shutdown records are historical and cannot establish 2027 operating status."
+    "The 2026 portal's shutdown records are historical and cannot establish 2027 operating status.",
+    "All 26 operational lock locations and Colonel By Island link to their individually opened Parks Canada profile pages, verified in the 2026-11-17 source audit. Profile URL verification does not imply verified visitor GPS, public access during closure, or permission to navigate."
   ]
 }
