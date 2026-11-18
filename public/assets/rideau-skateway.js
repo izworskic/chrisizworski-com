@@ -20,7 +20,7 @@
   if(!assessment)return;
   if(assessment.verified){
     const n=assessment.totals.reportedOpenSections;
-    set('overall-verdict',n>0?n+' sections in the latest NCC report list skating conditions':'NCC currently reports no skateable sections');
+    set('overall-verdict',n>0?n+' '+(n===1?'section':'sections')+' in the latest NCC report '+(n===1?'lists':'list')+' skating conditions':'NCC currently reports no skateable sections');
     set('overall-story',n>0?'NCC reports '+assessment.totals.reportedOpenKm.toFixed(2)+' km across those section records. This is an addition of published section lengths, not a single continuous route or a personal ice-safety clearance.':'The complete recent NCC report lists no sections with an opening or skating condition. Check its official page for updates.');
   }else{
     set('overall-verdict','No current skating opening verified here');

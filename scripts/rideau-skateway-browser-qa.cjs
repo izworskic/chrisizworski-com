@@ -67,15 +67,15 @@ async function run(){
     const metadata={editingInfo:{dataLastEditDate:Date.parse('2027-01-21T13:00:00Z')}};
     const features=oneOpen.sections.map(s=>({attributes:{OBJECTID:s.id,ID:s.id,From_:s.from,To_:s.to,Length_KM:s.id===11?'1.0 km':s.km+' km',Status:s.id===1?'Good':'Closed'}}));
     const body=u.includes('/query?')?{features}:metadata;
-    return route.fulfill({status:200,contentType:'application/json',accessControlAllowOrigin:'*',body:JSON.stringify(body),headers:{'access-control-allow-origin':'*'}});
+    return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(body),headers:{'access-control-allow-origin':'*'}});
   });
   await winter.route('**/api/carto-basemap-config',r=>r.fulfill({status:503,body:'{}'}));
   const fresh=await winter.newPage();
   await fresh.clock.setFixedTime(new Date('2027-01-21T15:00:00Z'));
   await fresh.goto(origin+'/rideau-canal-skateway/',{waitUntil:'domcontentloaded'});
   await fresh.locator('#section-list button').first().waitFor({timeout:20000});
-  await fresh.waitForFunction(()=>document.getElementById('overall-verdict').textContent.includes('1 sections'),null,{timeout:15000});
-  assert.match(await fresh.locator('#overall-verdict').innerText(),/1 sections/);
+  await fresh.waitForFunction(()=>document.getElementById('overall-verdict').textContent.includes('1 section'),null,{timeout:15000});
+  assert.match(await fresh.locator('#overall-verdict').innerText(),/1 section/);
   assert.match(await fresh.locator('#source-time').innerText(),/passes freshness check/);
   await fresh.locator('[data-filter="open"]').click();
   assert.equal(await fresh.locator('#section-list button').count(),1);
