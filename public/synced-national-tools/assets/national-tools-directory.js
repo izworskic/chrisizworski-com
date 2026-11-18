@@ -20,6 +20,25 @@
     if(label&&inSeason(card))label.hidden=false;
   });
 
+  // data-peak="MM-DD/MM-DD" marks the short window when a seasonal tool is the
+  // obvious answer (White Christmas before Dec 25). During it the card moves to the
+  // front of its grid, so nothing hand-dated has to be edited each season.
+  const now=new Date();
+  const todayKey=(now.getMonth()+1)*100+now.getDate();
+  function dayKey(text){const m=/^(\d{2})-(\d{2})$/.exec(text||'');return m?Number(m[1])*100+Number(m[2]):null;}
+  function inPeak(card){
+    const parts=(card.dataset.peak||'').split('/');
+    const start=dayKey(parts[0]),end=dayKey(parts[1]);
+    if(start===null||end===null)return false;
+    return start<=end?todayKey>=start&&todayKey<=end:todayKey>=start||todayKey<=end;
+  }
+  cards.filter(inPeak).reverse().forEach(card=>{
+    card.classList.add('is-peak');
+    const label=card.querySelector('.season-label');
+    if(label){label.textContent='Peak now';label.hidden=false;}
+    if(card.parentElement)card.parentElement.prepend(card);
+  });
+
   function apply(){
     const query=(search.value||'').trim().toLowerCase();
     document.querySelectorAll('[data-directory-context]').forEach(block=>{block.hidden=!!query||filter!=='all'||seasonOnly;});
