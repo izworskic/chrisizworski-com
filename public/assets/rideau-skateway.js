@@ -116,8 +116,9 @@
  async function initMap(){
    if(!window.L||!archive?.sections?.length){mapFailure();return;}
    try{
+     $('map-shell').hidden=false;$('map-fallback').hidden=true;
      map=L.map('skateway-map',{scrollWheelZoom:false,zoomControl:true}).setView([45.405,-75.69],12);
-     $('map-shell').hidden=false;$('map-fallback').hidden=true;map.invalidateSize({pan:false});
+     map.invalidateSize({pan:false});
      let attempts=0;
      const install=tile=>{
        if(!map)return;
