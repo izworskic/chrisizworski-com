@@ -1,6 +1,6 @@
 # Great Lakes Winter Field Assignment Desk
 
-**Status:** Noindex, unpublished Lake Superior pilot. This folder is not in public output or the Tools directory. It is a functioning source-led visitor prototype, not a current trail-access service.
+**Status:** Noindex Lake Superior research pilot, published at https://chrisizworski.com/great-lakes-winter-field-desk/ but deliberately excluded from the Tools directory and search index. This source preview remains separate from the public copy. It is not a current trail-access service.
 
 ## Visitor decision
 
@@ -171,12 +171,20 @@ receipt is NOT authenticated by the script; require ordinary human PR review.
 On a named non-main review branch, after real source review only:
 
     python3 scripts/winter-desk-evidence-promotion.py --candidate-dir /tmp/winter-check --approval /tmp/winter-review/approval-template.json --apply
-    git diff -- previews/great-lakes-winter-desk/source-checks.json previews/great-lakes-winter-desk/operator-notice-monitor.json
+    git diff -- previews/great-lakes-winter-desk/source-checks.json previews/great-lakes-winter-desk/operator-notice-monitor.json public/great-lakes-winter-field-desk/source-checks.json public/great-lakes-winter-field-desk/operator-notice-monitor.json
 
-The --apply command can update ONLY two source-health JSON files. It never
-updates route-access-evidence.json, arrival-evidence.json, public HTML, ads,
-canonicals, sitemap or the tool registry. Cron runs NEVER call --apply.
-An ordinary PR review and merge remain mandatory for any checked-in change.
+The --apply command updates ONLY the two source-health JSON files in BOTH
+previews/great-lakes-winter-desk/ and public/great-lakes-winter-field-desk/.
+It refuses to write if either source-health file in either destination differs
+from the exact baseline included in the human-reviewed receipt. This prevents
+a successful evidence promotion from leaving the published noindex pilot on a
+stale copy. All four changes must be reviewed together in the same PR.
+
+The command never updates route-access-evidence.json, arrival-evidence.json,
+public HTML, ads, canonicals, sitemap or the tool registry. Cron runs NEVER
+call --apply, the file promotion must occur on a non-main review branch,
+and a PR review and merge remain mandatory. Source health still does not
+establish dated route opening, safe ice or plowed parking.
 
 Safety regression:
 
