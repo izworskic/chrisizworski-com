@@ -157,12 +157,12 @@ Run a dry review on a clean checkout:
     python3 scripts/winter-desk-evidence-watch.py --live --out-dir /tmp/winter-check
     python3 scripts/winter-desk-evidence-promotion.py --candidate-dir /tmp/winter-check --review-out /tmp/winter-review
 
-The promotion auditor independently recomputes every source state and requires six
-official URLs, six source hashes, complete HTML, matching report rows, approved
+The promotion auditor independently recomputes every source state and requires five distinct
+official URLs across six source checks, six source hashes, complete HTML, matching report rows, approved
 operator scope, no OPEN or CLOSED inference, and timestamps within three hours.
 Missing or changed source phrases cause HOLD, not an invented reopening.
 
-Review the six official URLs in the generated REVIEW.md, inspect the staged JSON
+Review the five distinct official URLs in the generated REVIEW.md, inspect the staged JSON
 against the checked-in preview, and complete approval-template.json with a real
 human reviewer, current UTC review timestamp, both exact SHA-256 digests and
 the explicit no-opening acknowledgement. A claimed identity in this local
