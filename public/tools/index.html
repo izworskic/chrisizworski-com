@@ -113,6 +113,35 @@ h2.sh{font:500 clamp(1.45rem,2.3vw,1.9rem)/1.2 var(--hm-display);color:var(--hm-
 @media(min-width:1080px){section[aria-labelledby="tools-decision-title"] .decision-network__grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(min-width:641px) and (max-width:1079px){section[aria-labelledby="tools-decision-title"] .decision-network__grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+/* This-week desk (Nov 2026): search, monthly picks and starred tools first, then a compact catalog. */
+.tool-card.has-star{position:relative;padding-right:52px}
+.tool-star{position:absolute;top:8px;right:8px;width:44px;height:44px;border:0;background:none;border-radius:50%;font-size:1.35rem;line-height:1;color:var(--hm-copper);cursor:pointer}
+.tool-star:hover{background:var(--hm-paper)}
+.tool-star[aria-pressed="true"]{color:var(--hm-accent)}
+.tool-star:focus-visible,.starred-tools__remove:focus-visible{outline:2px solid var(--hm-accent);outline-offset:2px}
+.starred-tools{margin:0 0 18px;padding:12px 16px;border:1px solid var(--hm-line);border-radius:8px;background:var(--hm-surface)}
+.starred-tools h2{margin:0 0 4px;font:700 .71rem/1.2 var(--hm-body);letter-spacing:.1em;text-transform:uppercase;color:var(--hm-copper)}
+.starred-tools__hint{margin:0;font-size:.88rem;color:var(--hm-muted)}
+.starred-tools__list{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.starred-tools__list li{display:inline-flex;align-items:center;border:1px solid var(--hm-line-strong);border-radius:999px;background:var(--hm-paper);padding-left:13px}
+.starred-tools__list a{color:var(--hm-ink);font-size:.88rem;padding:9px 0}
+.starred-tools__remove{border:0;background:none;min-width:40px;min-height:40px;border-radius:50%;cursor:pointer;color:var(--hm-muted)}
+.season-desk .season-pick>p:not(.season-pick__label){display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+@media(max-width:720px){
+.season-desk{padding:14px 16px;margin:14px 0 16px}.season-desk h2{font-size:21px}.season-desk__intro{font-size:14px;margin-bottom:6px}
+.season-pick{padding:9px 0}.season-pick h3{font-size:16px;margin-bottom:3px}.season-pick>p:not(.season-pick__label){font-size:13px}
+.tool-grid{gap:10px}.tool-card{padding:12px 14px}.tool-card.has-star{padding-right:50px}.tk{margin-bottom:4px}
+.tool-title{font-size:1.04rem;margin-bottom:4px}
+.tool-desc{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:.86rem;line-height:1.5}
+.group-blurb{font-size:.9rem;margin-bottom:10px}h2.sh{margin-top:26px}
+.cluster-nav{position:sticky;top:0;z-index:5;flex-wrap:nowrap;overflow-x:auto;margin:10px 0;padding:8px 10px;border-radius:0 0 8px 8px;scrollbar-width:none}
+.cluster-nav a{white-space:nowrap}
+h2.sh{scroll-margin-top:64px}
+.finder .chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;margin-right:-12px}.finder .chip{white-space:nowrap;flex:0 0 auto}
+.season-desk__kicker{display:none}.season-desk__controls{margin:6px 0}.season-desk__controls label{width:auto!important;font-size:12px}.season-desk select{min-height:40px;padding:6px 10px}
+.season-pick__label{font-size:10px!important}.season-desk .season-pick a{text-underline-offset:2px}
+.tools-hero-kicker{font-size:.62rem;letter-spacing:.06em;margin-bottom:6px}.tools-hero-banner{padding:16px 18px}.tools-hero-banner .sub{font-size:.95rem;margin-top:6px}
+}
 </style>
 
 
@@ -183,7 +212,7 @@ h2.sh{font:500 clamp(1.45rem,2.3vw,1.9rem)/1.2 var(--hm-display);color:var(--hm-
   <div class="hm-shell hm-masthead__inner">
     <div class="hm-brand-group">
       <a href="/" aria-label="Chris Izworski Home">
-        <img class="hm-brand-avatar" src="/chris-izworski-portrait.jpg" alt="Chris Izworski" width="42" height="42">
+        <img class="hm-brand-avatar" src="/assets/search/chris-izworski-profile.png" alt="Chris Izworski" width="42" height="42">
       </a>
       <div class="hm-brand-copy">
         <p class="hm-brand-title"><a href="/">Chris Izworski</a></p>
@@ -209,6 +238,23 @@ h2.sh{font:500 clamp(1.45rem,2.3vw,1.9rem)/1.2 var(--hm-display);color:var(--hm-
 <p class="sub">Free live maps, forecasts, planners, calculators, and field guides for Michigan and the Great Lakes, built by Chris Izworski.</p>
 </div>
 
+<div class="finder" id="finder" hidden>
+  <label for="tool-search"><strong>Find a tool by place or activity</strong></label><label class="sr-only" for="tool-search">Search tools by name or topic</label>
+  <input type="search" id="tool-search" class="tool-search" data-hub-search="tools" placeholder="Search tools, for example ice, trout, aurora, frost" autocomplete="off" spellcheck="false">
+  <div class="hub-search-results" data-hub-search-results hidden></div>
+  <div class="chips" role="group" aria-label="Filter tools by activity">
+    <button type="button" class="chip is-on" data-filter="all" aria-pressed="true">All tools</button>
+    <button type="button" class="chip" data-filter="season" aria-pressed="false">In season now</button>
+    <button type="button" class="chip" data-filter="fishing" aria-pressed="false">Fishing</button>
+    <button type="button" class="chip" data-filter="hunting" aria-pressed="false">Hunting</button>
+    <button type="button" class="chip" data-filter="boating" aria-pressed="false">Boats and water</button>
+    <button type="button" class="chip" data-filter="planning" aria-pressed="false">Trip planning</button>
+    <button type="button" class="chip" data-filter="nature" aria-pressed="false">Nature watching</button>
+    <a href="/michigan-gardening/" class="chip" style="text-decoration:none">Gardening Tools &rarr;</a>
+  </div>
+  <p class="finder-count" id="finder-count" role="status" aria-live="polite"></p>
+</div>
+
 <section class="season-desk" data-seasonal-discovery aria-labelledby="season-desk-title">
   <p class="season-desk__kicker">The seasonal field desk · Michigan &amp; Great Lakes</p>
   <h2 id="season-desk-title" data-season-heading>Find your next outing or garden project</h2>
@@ -229,94 +275,11 @@ h2.sh{font:500 clamp(1.45rem,2.3vw,1.9rem)/1.2 var(--hm-display);color:var(--hm-
   <p class="season-desk__browse"><a href="/tools/#finder">Search the full tool collection</a> · <a href="/guides/#field-guides">Browse the field guides</a></p>
 </section>
 
-<section class="week-explorer" id="this-week" aria-labelledby="this-week-title">
-  <div class="week-header"><div>
-    <p class="week-eyebrow">A living calendar of outdoor opportunities</p>
-    <h2 id="this-week-title">Is this the week I should go?</h2>
-    <p class="week-intro">Five different outdoor questions; five distinct evidence standards. Compare favorable conditions, reasons to wait, and what would change the answer. These are not forecasts of wildlife appearances, antler shedding, sap flow or guaranteed finds.</p>
-  </div><div class="week-actions">
-    <label for="week-region">Local forecast region
-      <select id="week-region"><option value="bay-city">Bay City / Saginaw Bay</option><option value="traverse-city">Traverse City</option><option value="marquette">Marquette / Upper Peninsula</option></select>
-    </label>
-    <button id="week-refresh" type="button">Check live conditions</button>
-  </div></div>
-  <div class="week-grid"><article class="week-card" id="week-shed" aria-label="Shed antlers weekly planning">
-  <h3><a href="/michigan-shed-antlers/">Shed antlers</a></h3>
-  <span class="week-status" data-week-state data-grade="context">Planning context</span>
-  <div class="week-window-title" data-week-headline>Check this window</div>
-  <p data-week-reason>Snow can hide already-dropped sheds; don’t push wintering deer.</p>
-  <p class="week-change"><b>What changes the answer?</b><span data-week-trigger>Snow cover retreats enough for legal, low-disturbance walking.</span></p>
-  <p class="week-scope" data-week-scope>Search conditions, not antler-drop dates</p>
-  <p class="week-source" data-week-source>Open the dedicated tool for evidence and limitations.</p>
-  <p data-week-detail></p>
-  <a class="week-open" href="/michigan-shed-antlers/" data-placement="this-week" data-track-tool="shed-antler-search">Explore the full shed antlers tool &rarr;</a>
-</article>
-<article class="week-card" id="week-maple" aria-label="Maple sap weather weekly planning">
-  <h3><a href="/michigan-maple-sap-run/">Maple sap weather</a></h3>
-  <span class="week-status" data-week-state data-grade="context">Planning context</span>
-  <div class="week-window-title" data-week-headline>Check this window</div>
-  <p data-week-reason>A forecast signal alone cannot tell whether any tree is producing sap.</p>
-  <p class="week-change"><b>What changes the answer?</b><span data-week-trigger>Overnight freezing and daytime thawing return; verify tree readiness.</span></p>
-  <p class="week-scope" data-week-scope>Freeze/thaw, not measured sap flow</p>
-  <p class="week-source" data-week-source>Open the dedicated tool for evidence and limitations.</p>
-  <p data-week-detail></p>
-  <a class="week-open" href="/michigan-maple-sap-run/" data-placement="this-week" data-track-tool="maple-sap-run">Explore the full maple sap weather tool &rarr;</a>
-</article>
-<article class="week-card" id="week-rock" aria-label="Rockhounding weekly planning">
-  <h3><a href="/michigan-rockhounding/">Rockhounding</a></h3>
-  <span class="week-status" data-week-state data-grade="context">Planning context</span>
-  <div class="week-window-title" data-week-headline>Check this window</div>
-  <p data-week-reason>The wave engine evaluates the last 72 hours, not a literal seven-day rock forecast.</p>
-  <p class="week-change"><b>What changes the answer?</b><span data-week-trigger>Onshore winds work gravel, then waves ease and access is safe.</span></p>
-  <p class="week-scope" data-week-scope>Recently worked beaches, not finds</p>
-  <p class="week-source" data-week-source>Open the dedicated tool for evidence and limitations.</p>
-  <p data-week-detail></p>
-  <a class="week-open" href="/michigan-rockhounding/" data-placement="this-week" data-track-tool="michigan-rockhounding">Explore the full rockhounding tool &rarr;</a>
-</article>
-<article class="week-card" id="week-waterfowl" aria-label="Waterfowl freeze-line weekly planning">
-  <h3><a href="/waterfowl-freeze-line/">Waterfowl freeze-line</a></h3>
-  <span class="week-status" data-week-state data-grade="context">Planning context</span>
-  <div class="week-window-title" data-week-headline>Watch the next marsh freeze</div>
-  <p data-week-reason>Cold fronts can push ducks and geese from shallow marshes toward available open water, but counts require observation.</p>
-  <p class="week-change"><b>What changes the answer?</b><span data-week-trigger>Consecutive freezing hours, dated lake ice charts, and independently observed bird counts.</span></p>
-  <p class="week-scope" data-week-scope>Region-specific Midwest wetlands, not observed marsh ice</p>
-  <p class="week-source" data-week-source>NWS weather and NOAA ice context; the tracker separates forecasts from observations.</p>
-  <p data-week-detail></p>
-  <a class="week-open" href="/waterfowl-freeze-line/" data-placement="this-week" data-track-tool="waterfowl-freeze-line">Explore the full waterfowl freeze-line tool &rarr;</a>
-</article>
-<article class="week-card" id="week-eagle" aria-label="Winter eagle watching weekly planning">
-  <h3><a href="/winter-eagle-watching/">Winter eagle watching</a></h3>
-  <span class="week-status" data-week-state data-grade="context">Planning context</span>
-  <div class="week-window-title" data-week-headline>Check this window</div>
-  <p data-week-reason>Winter open-water feeding concentrations and aerial displays are different behaviors.</p>
-  <p class="week-change"><b>What changes the answer?</b><span data-week-trigger>Check open-water access, weather and dated reports at a public overlook.</span></p>
-  <p class="week-scope" data-week-scope>Weather and public viewing, not sightings</p>
-  <p class="week-source" data-week-source>Open the dedicated tool for evidence and limitations.</p>
-  <p data-week-detail></p>
-  <a class="week-open" href="/winter-eagle-watching/" data-placement="this-week" data-track-tool="winter-eagle-watching">Explore the full winter eagle watching tool &rarr;</a>
-</article></div>
-  <div class="week-meta"><span id="week-updated" role="status" aria-live="polite">Load live NWS, NOAA and shoreline conditions near this section. Eagle field guidance is interpretive.</span><span>Current season is context, not proof. <a href="/tools/#nature-tools">Explore the full tool library</a>.</span></div>
+<section class="starred-tools" data-tool-stars data-cards=".tool-card[data-tool-id]" data-title=".tool-title a" aria-labelledby="starred-tools-title" hidden>
+  <h2 id="starred-tools-title">Your tools</h2>
+  <p class="starred-tools__hint" data-stars-hint>Tap the star on any tool to keep it here. Saved only in this browser.</p>
+  <ul class="starred-tools__list" data-stars-list></ul>
 </section>
-
-<div class="finder" id="finder" hidden>
-  <label for="tool-search"><strong>Find a tool by place or activity</strong></label><label class="sr-only" for="tool-search">Search tools by name or topic</label>
-  <input type="search" id="tool-search" class="tool-search" data-hub-search="tools" placeholder="Search tools, for example ice, trout, aurora, frost" autocomplete="off" spellcheck="false">
-  <div class="hub-search-results" data-hub-search-results hidden></div>
-  <div class="chips" role="group" aria-label="Filter tools by activity">
-    <button type="button" class="chip is-on" data-filter="all" aria-pressed="true">All tools</button>
-    <button type="button" class="chip" data-filter="season" aria-pressed="false">In season now</button>
-    <button type="button" class="chip" data-filter="fishing" aria-pressed="false">Fishing</button>
-    <button type="button" class="chip" data-filter="hunting" aria-pressed="false">Hunting</button>
-    <button type="button" class="chip" data-filter="boating" aria-pressed="false">Boats and water</button>
-    <button type="button" class="chip" data-filter="planning" aria-pressed="false">Trip planning</button>
-    <button type="button" class="chip" data-filter="nature" aria-pressed="false">Nature watching</button>
-    <a href="/michigan-gardening/" class="chip" style="text-decoration:none">Gardening Tools &rarr;</a>
-  </div>
-  <p class="finder-count" id="finder-count" role="status" aria-live="polite"></p>
-</div>
-
-<div data-finder-context>
-<p>Chris Izworski builds these free tools to answer practical questions: Which Michigan–Ontario border crossing is shortest right now? Can I cross the Mackinac Bridge easily? Which ships are near the Soo Locks? Is the Au Sable fishable this morning? How much cold has Saginaw Bay accumulated? Where is Michigan fall color peaking? Are the northern lights worth chasing tonight? Where should a day trip go under today's conditions? Everything here is free and grouped by what you are actually doing, from fishing and hunting to transportation, boat watching, trip planning, and nature watching, with a dedicated hub for <a href="/michigan-gardening/">Michigan gardening and heirloom seed tools</a>. Use the finder to search the full library by name or topic, or switch to the in season filter to see what is most useful this month.</p>
 
 <nav class="cluster-nav" aria-label="Browse tool categories">
 <strong>Jump to</strong>
@@ -327,314 +290,6 @@ h2.sh{font:500 clamp(1.45rem,2.3vw,1.9rem)/1.2 var(--hm-display);color:var(--hm-
 <a href="/michigan-gardening/" data-track-cluster="gardening" data-placement="tools-jump">Michigan gardening &amp; seed tools hub &rarr;</a>
 </nav>
 
-<p class="measurement-note">For tools across the country, <a href="/national-tools/">browse U.S. tools and destination planners</a>.</p>
-
-
-
-<section class="decision-network" aria-labelledby="tools-decision-title"><div class="decision-network__head"><h2 id="tools-decision-title">What are you trying to do?</h2><p>Start with the decision, then move between tools without returning to a directory.</p></div><div class="decision-network__grid"><div class="decision-network__lane"><h3>Get on the water</h3><ul><li><a href="/michigan-boat-launches/" data-decision-network="boat-launches" data-lane="water" data-surface="tools">Find a boat launch<span>42 Great Lakes ramps and regional conditions</span></a></li><li><a href="/great-lakes-buoys/" data-decision-network="great-lakes-buoys" data-lane="water" data-surface="tools">Check the lake<span>Live NOAA/NDBC conditions</span></a></li><li><a href="/great-lakes-beaches/" data-decision-network="great-lakes-beaches" data-lane="water" data-surface="tools">Pick a beach<span>Beach-specific condition pages</span></a></li><li><a href="/isle-royale-map/" data-decision-network="isle-royale-canoe" data-lane="water" data-surface="tools">Explore Isle Royale<span>NPS portages, camps, docks, imagery</span></a></li><li><a href="https://greatlakeslevels.org/" data-decision-network="great-lakes-levels" data-lane="water" data-surface="tools">Check water levels<span>Great Lakes level intelligence</span></a></li></ul></div><div class="decision-network__lane"><h3>Watch the night sky</h3><ul><li><a href="/northern-lights-michigan/" data-decision-network="michigan-aurora" data-lane="night-sky" data-surface="tools">Northern Lights Michigan<span>Tonight’s statewide aurora forecast</span></a></li><li><a href="/national-tools/meteor-shower/" data-decision-network="meteor-shower" data-lane="night-sky" data-surface="tools">Meteor Shower Tonight<span>Active showers and viewing weather</span></a></li><li><a href="/national-tools/dark-sky/michigan/" data-decision-network="michigan-dark-sky" data-lane="night-sky" data-surface="tools">Michigan dark-sky parks<span>Places, park access and sky conditions</span></a></li><li><a href="/national-tools/dark-sky/midwest/" data-decision-network="midwest-dark-sky" data-lane="night-sky" data-surface="tools">Midwest dark-sky destinations<span>Explore parks across the region</span></a></li><li><a href="/national-tools/dark-sky/" data-decision-network="great-lakes-dark-sky" data-lane="night-sky" data-surface="tools">Great Lakes dark-sky sites<span>Explore the wider destination finder</span></a></li></ul><p class="decision-network__note">Check clouds and moonlight, then confirm park hours and access.</p></div><div class="decision-network__lane"><h3>Michigan aurora viewing guides</h3><ul><li><a href="/northern-lights-michigan/keweenaw/" data-decision-network="aurora-keweenaw" data-lane="aurora-guides" data-surface="tools">Keweenaw Peninsula<span>Copper Harbor and the Keweenaw</span></a></li><li><a href="/northern-lights-michigan/marquette/" data-decision-network="aurora-marquette" data-lane="aurora-guides" data-surface="tools">Marquette<span>Marquette-area aurora viewing</span></a></li><li><a href="/northern-lights-michigan/munising/" data-decision-network="aurora-munising" data-lane="aurora-guides" data-surface="tools">Munising<span>Pictured Rocks and the lakeshore</span></a></li><li><a href="/northern-lights-michigan/paradise-whitefish-point/" data-decision-network="aurora-paradise-whitefish-point" data-lane="aurora-guides" data-surface="tools">Paradise &amp; Whitefish Point<span>Eastern Lake Superior shore</span></a></li><li><a href="/northern-lights-michigan/mackinaw-city/" data-decision-network="aurora-mackinaw-city" data-lane="aurora-guides" data-surface="tools">Mackinaw City<span>Straits-area viewing</span></a></li><li><a href="/northern-lights-michigan/sleeping-bear-dunes/" data-decision-network="aurora-sleeping-bear-dunes" data-lane="aurora-guides" data-surface="tools">Sleeping Bear Dunes<span>Lake Michigan shoreline</span></a></li></ul><p class="decision-network__note">Regional signals and local cloud forecasts do not guarantee a sighting.</p></div>
-<div class="decision-network__lane"><h3>Follow ships</h3><p style="margin:4px 0 8px;font-size:.82rem"><a href="/freighters/">Freighter Central</a> · <a href="/soo-locks/plan-your-visit/">Plan a Soo Locks visit</a> · <a href="/great-lakes-ship-watching-spots/">Best ship-watching spots</a> · <a href="/mackinac-bridge-crossing-planner/">Plan a bridge crossing</a></p><ul><li><a href="/great-lakes-freighter-tracking/" data-decision-network="ship-tracker" data-lane="ships" data-surface="tools">Track ships<span>Lake-wide AIS map</span></a></li><li><a href="/soo-locks/" data-decision-network="soo-locks" data-lane="ships" data-surface="tools">Watch the Soo<span>Locks, vessel activity and visiting</span></a></li><li><a href="/great-lakes-gazette/" data-decision-network="gazette" data-lane="ships" data-surface="tools">Read the daily brief<span>Great Lakes shipping news</span></a></li></ul></div><div class="decision-network__lane"><h3>Explore maritime history</h3><ul><li><a href="/great-lakes-shipwrecks/" data-decision-network="shipwreck-explorer" data-lane="history" data-surface="tools">Explore shipwrecks<span>60+ documented wreck records</span></a></li><li><a href="/edmund-fitzgerald/" data-decision-network="edmund-fitzgerald" data-lane="history" data-surface="tools">Edmund Fitzgerald<span>Final voyage and crew</span></a></li><li><a href="/great-lakes-lighthouses/" data-decision-network="lighthouses" data-lane="history" data-surface="tools">Find lighthouses<span>Great Lakes lighthouse directory</span></a></li></ul></div><div class="decision-network__lane"><h3>Go outside in Michigan</h3><ul><li><a href="https://michiganbirdingreport.com" data-decision-network="birding" data-lane="outdoors" data-surface="tools">Birding now<span>Live sightings and migration</span></a></li><li><a href="https://michigantroutreport.com" data-decision-network="trout" data-lane="outdoors" data-surface="tools">Trout conditions<span>Live river conditions</span></a></li><li><a href="/fall-color/" data-decision-network="fall-color" data-lane="outdoors" data-surface="tools">Fall color<span>Peak map and forecast</span></a></li><li><a href="https://michiganoutdoorsnow.chrisizworski.com" data-decision-network="outdoors-now" data-lane="outdoors" data-surface="tools">Choose a day trip<span>Condition-driven outdoor planner</span></a></li><li><a href="https://chrisizworski.com/tahquamenon-falls/" data-decision-network="tahquamenon-falls-live" data-lane="outdoors" data-surface="tools">Tahquamenon Falls<span>Live river, trails, map &amp; visit planner</span></a></li></ul></div><div class="decision-network__lane"><h3>Time the garden</h3><ul><li><a href="/zone-6a-planting-calendar/" data-decision-network="planting-calendar" data-lane="garden" data-surface="tools">Planting calendar<span>47 crops and 78 Michigan stations</span></a></li><li><a href="/michigan-frost-dates/" data-decision-network="frost-dates" data-lane="garden" data-surface="tools">Frost dates<span>Michigan city and station timing</span></a></li><li><a href="/when-to-plant-tomatoes-michigan/" data-decision-network="tomatoes" data-lane="garden" data-surface="tools">Plant tomatoes<span>Michigan transplant timing</span></a></li></ul></div></div></section>
-<section class="winter-field-guide-shelf" id="field-guides-shelf" aria-labelledby="winter-field-guides-shelf-title" style="margin:20px 0 26px;background:#f7f8f5;border:1px solid #d7dfd8;border-top:4px solid #1d4e42;border-radius:6px;padding:18px 20px">
-  <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:14px">
-    <div>
-      <p style="color:#7c5439;font:700 11px/1.2 Arial,sans-serif;letter-spacing:.11em;text-transform:uppercase;margin:0 0 4px">Michigan &amp; Great Lakes Field Guides · Auto-calibrated by calendar month</p>
-      <h2 id="winter-field-guides-shelf-title" style="font-size:22px;line-height:1.25;color:#1b3d32;margin:0">Start with a destination field guide, then verify live conditions</h2>
-    </div>
-    <a href="/guides/#field-guides" style="font:700 12px/1.2 Arial,sans-serif;color:#1d4e42;white-space:nowrap">Open full Field Guides library (12 guides) &rarr;</a>
-  </div>
-  <div id="fg-shelf-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px">
-    <article data-fg-card data-fg-months="10,11,12,1,2,3" style="background:#fff;border:1px solid #dce5de;border-radius:5px;padding:12px 14px;display:flex;flex-direction:column;gap:5px">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><span style="font:700 10px/1.2 Arial,sans-serif;color:#6c5643;text-transform:uppercase;letter-spacing:.06em">12 Base Towns · Oct–Mar</span><span data-fg-badge hidden style="background:#1d4e42;color:#fff;font:700 9px/1.2 Arial,sans-serif;padding:2px 6px;border-radius:3px;text-transform:uppercase">In season</span></div>
-      <h3 style="font-size:15px;line-height:1.3;margin:0"><a href="/michigan-winter-weekends/" style="color:#183a30">Michigan Winter Weekend Getaways</a></h3>
-      <p style="font-size:12px;line-height:1.45;color:#55635d;margin:0">2-day itineraries, snowbelts &amp; no-snow indoor backups from Marquette to Traverse City &amp; Petoskey.</p>
-      <a href="/michigan-winter-weekends/" style="margin-top:auto;padding-top:4px;font:700 11.5px/1.2 Arial,sans-serif;color:#1d4e42">Plan a winter weekend &rarr;</a>
-    </article>
-    <article data-fg-card data-fg-months="10,11,12" style="background:#fff;border:1px solid #dce5de;border-radius:5px;padding:12px 14px;display:flex;flex-direction:column;gap:5px">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><span style="font:700 10px/1.2 Arial,sans-serif;color:#7a2e2e;text-transform:uppercase;letter-spacing:.06em">10 Holiday Towns · Oct–Dec</span><span data-fg-badge hidden style="background:#1d4e42;color:#fff;font:700 9px/1.2 Arial,sans-serif;padding:2px 6px;border-radius:3px;text-transform:uppercase">In season</span></div>
-      <h3 style="font-size:15px;line-height:1.3;margin:0"><a href="/michigan-white-christmas-escapes/" style="color:#183a30">Michigan White Christmas Escapes</a></h3>
-      <p style="font-size:12px;line-height:1.45;color:#55635d;margin:0">NOAA 1991–2020 snow odds (<span id="white-christmas-marquette-baseline">85%</span> Marquette to 45.7% Frankenmuth), ski snowmaking &amp; holiday lights.</p>
-      <a href="/michigan-white-christmas-escapes/" style="margin-top:auto;padding-top:4px;font:700 11.5px/1.2 Arial,sans-serif;color:#1d4e42">Compare Christmas towns &rarr;</a>
-    </article>
-    <article data-fg-card data-fg-months="10,11,12" style="background:#fff;border:1px solid #dce5de;border-radius:5px;padding:12px 14px;display:flex;flex-direction:column;gap:5px">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><span style="font:700 10px/1.2 Arial,sans-serif;color:#1c4e6c;text-transform:uppercase;letter-spacing:.06em">12 Early Snowbelts · Oct–Dec</span><span data-fg-badge hidden style="background:#1d4e42;color:#fff;font:700 9px/1.2 Arial,sans-serif;padding:2px 6px;border-radius:3px;text-transform:uppercase">In season</span></div>
-      <h3 style="font-size:15px;line-height:1.3;margin:0"><a href="/michigan-first-snow-adventures/" style="color:#183a30">Michigan First Snow Adventures</a></h3>
-      <p style="font-size:12px;line-height:1.45;color:#55635d;margin:0">Where winter arrives first: Lake Superior &amp; Gaylord snowbelts, 2–4&quot; grass-bed Nordic trails &amp; backups.</p>
-      <a href="/michigan-first-snow-adventures/" style="margin-top:auto;padding-top:4px;font:700 11.5px/1.2 Arial,sans-serif;color:#1d4e42">Find early snowbelts &rarr;</a>
-    </article>
-    <article data-fg-card data-fg-months="10,11,12" style="background:#fff;border:1px solid #dce5de;border-radius:5px;padding:12px 14px;display:flex;flex-direction:column;gap:5px">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><span style="font:700 10px/1.2 Arial,sans-serif;color:#8c4828;text-transform:uppercase;letter-spacing:.06em">12 Late-Fall Stops · Oct–Dec</span><span data-fg-badge hidden style="background:#1d4e42;color:#fff;font:700 9px/1.2 Arial,sans-serif;padding:2px 6px;border-radius:3px;text-transform:uppercase">In season</span></div>
-      <h3 style="font-size:15px;line-height:1.3;margin:0"><a href="/michigan-late-fall-adventures/" style="color:#183a30">Michigan Late-Fall &amp; November Guide</a></h3>
-      <p style="font-size:12px;line-height:1.45;color:#55635d;margin:0">Swollen U.P. waterfalls, post-gale agates &amp; Petoskey stones, fall steelhead &amp; sandhill cranes.</p>
-      <a href="/michigan-late-fall-adventures/" style="margin-top:auto;padding-top:4px;font:700 11.5px/1.2 Arial,sans-serif;color:#1d4e42">Explore November stops &rarr;</a>
-    </article>
-    <article data-fg-card data-fg-months="11,12,1,2,3" style="background:#fff;border:1px solid #dce5de;border-radius:5px;padding:12px 14px;display:flex;flex-direction:column;gap:5px">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><span style="font:700 10px/1.2 Arial,sans-serif;color:#1a4b69;text-transform:uppercase;letter-spacing:.06em">12 Harbors · Nov–Mar</span><span data-fg-badge hidden style="background:#1d4e42;color:#fff;font:700 9px/1.2 Arial,sans-serif;padding:2px 6px;border-radius:3px;text-transform:uppercase">In season</span></div>
-      <h3 style="font-size:15px;line-height:1.3;margin:0"><a href="/great-lakes-winter-freighter-guide/" style="color:#183a30">Winter Freighter &amp; Harbor Guide</a></h3>
-      <p style="font-size:12px;line-height:1.45;color:#55635d;margin:0">Public lock overlooks, Jan 15 Soo Locks closure, 1,000-footer winter layup berths &amp; USCG icebreakers.</p>
-      <a href="/great-lakes-winter-freighter-guide/" style="margin-top:auto;padding-top:4px;font:700 11.5px/1.2 Arial,sans-serif;color:#1d4e42">Open harbor guide &rarr;</a>
-    </article>
-    <article data-fg-card data-fg-months="11,12,1,2,3" style="background:#fff;border:1px solid #dce5de;border-radius:5px;padding:12px 14px;display:flex;flex-direction:column;gap:5px">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><span style="font:700 10px/1.2 Arial,sans-serif;color:#476d58;text-transform:uppercase;letter-spacing:.06em">18 Experiences · Nov–Mar</span><span data-fg-badge hidden style="background:#1d4e42;color:#fff;font:700 9px/1.2 Arial,sans-serif;padding:2px 6px;border-radius:3px;text-transform:uppercase">In season</span></div>
-      <h3 style="font-size:15px;line-height:1.3;margin:0"><a href="/michigan-winter-activities/" style="color:#183a30">Michigan Winter Activities</a></h3>
-      <p style="font-size:12px;line-height:1.45;color:#55635d;margin:0">Snowshoeing, frozen waterfalls, fat biking, skiing, Muskegon luge &amp; dark skies across both peninsulas.</p>
-      <a href="/michigan-winter-activities/" style="margin-top:auto;padding-top:4px;font:700 11.5px/1.2 Arial,sans-serif;color:#1d4e42">Open winter activities &rarr;</a>
-    </article>
-    <article data-fg-card data-fg-months="12,1,2,3" style="background:#fff;border:1px solid #dce5de;border-radius:5px;padding:12px 14px;display:flex;flex-direction:column;gap:5px">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><span style="font:700 10px/1.2 Arial,sans-serif;color:#326c7c;text-transform:uppercase;letter-spacing:.06em">11 Ice Wonders · Dec–Mar</span><span data-fg-badge hidden style="background:#1d4e42;color:#fff;font:700 9px/1.2 Arial,sans-serif;padding:2px 6px;border-radius:3px;text-transform:uppercase">In season</span></div>
-      <h3 style="font-size:15px;line-height:1.3;margin:0"><a href="/frozen-michigan/" style="color:#183a30">Frozen Michigan Field Guide</a></h3>
-      <p style="font-size:12px;line-height:1.45;color:#55635d;margin:0">Eben Ice Caves, Pictured Rocks curtains, Tahquamenon Falls &amp; Straits winter ice with safe access rules.</p>
-      <a href="/frozen-michigan/" style="margin-top:auto;padding-top:4px;font:700 11.5px/1.2 Arial,sans-serif;color:#1d4e42">Explore Frozen Michigan &rarr;</a>
-    </article>
-    <article data-fg-card data-fg-months="11,12,1,2,3" style="background:#fff;border:1px solid #dce5de;border-radius:5px;padding:12px 14px;display:flex;flex-direction:column;gap:5px">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><span style="font:700 10px/1.2 Arial,sans-serif;color:#285c44;text-transform:uppercase;letter-spacing:.06em">15 Systems · 50 Loops</span><span data-fg-badge hidden style="background:#1d4e42;color:#fff;font:700 9px/1.2 Arial,sans-serif;padding:2px 6px;border-radius:3px;text-transform:uppercase">In season</span></div>
-      <h3 style="font-size:15px;line-height:1.3;margin:0"><a href="/michigan-winter-trails/" style="color:#183a30">Michigan Winter Trails</a></h3>
-      <p style="font-size:12px;line-height:1.45;color:#55635d;margin:0">Audited DNR &amp; NPS snowshoe, cross-country ski, and fat-bike loops with track etiquette &amp; plow rules.</p>
-      <a href="/michigan-winter-trails/" style="margin-top:auto;padding-top:4px;font:700 11.5px/1.2 Arial,sans-serif;color:#1d4e42">Explore winter trails &rarr;</a>
-    </article>
-    <article data-fg-card data-fg-months="10,11,12,1,2,3,4" style="background:#fff;border:1px solid #dce5de;border-radius:5px;padding:12px 14px;display:flex;flex-direction:column;gap:5px">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><span style="font:700 10px/1.2 Arial,sans-serif;color:#6e2b3b;text-transform:uppercase;letter-spacing:.06em">18 Venues · 102 Crosswalk</span><span data-fg-badge hidden style="background:#1d4e42;color:#fff;font:700 9px/1.2 Arial,sans-serif;padding:2px 6px;border-radius:3px;text-transform:uppercase">In season</span></div>
-      <h3 style="font-size:15px;line-height:1.3;margin:0"><a href="/michigan-wine-cider-spirits/" style="color:#183a30">MI Wine, Cider &amp; Spirits</a></h3>
-      <p style="font-size:12px;line-height:1.45;color:#55635d;margin:0">Traverse City &amp; Petoskey wineries, cideries, and distilleries with heated igloos &amp; snowshoe loops.</p>
-      <a href="/michigan-wine-cider-spirits/" style="margin-top:auto;padding-top:4px;font:700 11.5px/1.2 Arial,sans-serif;color:#1d4e42">Explore tasting guide &rarr;</a>
-    </article>
-    <article data-fg-card data-fg-months="4,5,6,7,8,9,10,11" style="background:#fff;border:1px solid #dce5de;border-radius:5px;padding:12px 14px;display:flex;flex-direction:column;gap:5px">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><span style="font:700 10px/1.2 Arial,sans-serif;color:#255d54;text-transform:uppercase;letter-spacing:.06em">15 Beaches · Apr–Nov</span><span data-fg-badge hidden style="background:#1d4e42;color:#fff;font:700 9px/1.2 Arial,sans-serif;padding:2px 6px;border-radius:3px;text-transform:uppercase">In season</span></div>
-      <h3 style="font-size:15px;line-height:1.3;margin:0"><a href="/great-lakes-rockhounding-field-guide/" style="color:#183a30">Great Lakes Rockhound’s Field Guide</a></h3>
-      <p style="font-size:12px;line-height:1.45;color:#55635d;margin:0">15 agate, Petoskey, Yooperlite &amp; fossil beaches, stone ID photos, live wave badges &amp; 25-lb collecting rules.</p>
-      <a href="/great-lakes-rockhounding-field-guide/" style="margin-top:auto;padding-top:4px;font:700 11.5px/1.2 Arial,sans-serif;color:#1d4e42">Explore rock beaches &rarr;</a>
-    </article>
-    <article data-fg-card data-fg-months="5,6,7,8,9,10" style="background:#fff;border:1px solid #dce5de;border-radius:5px;padding:12px 14px;display:flex;flex-direction:column;gap:5px">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><span style="font:700 10px/1.2 Arial,sans-serif;color:#0c4a6e;text-transform:uppercase;letter-spacing:.06em">12 Archipelagos · May–Oct</span><span data-fg-badge hidden style="background:#1d4e42;color:#fff;font:700 9px/1.2 Arial,sans-serif;padding:2px 6px;border-radius:3px;text-transform:uppercase">In season</span></div>
-      <h3 style="font-size:15px;line-height:1.3;margin:0"><a href="/great-lakes-island-hopping-field-guide/" style="color:#183a30">Great Lakes Island-Hopper Guide</a></h3>
-      <p style="font-size:12px;line-height:1.45;color:#55635d;margin:0">12 ferry-access archipelagos, open-water crossing metrics, vehicle rules, pet bans &amp; personality matrix.</p>
-      <a href="/great-lakes-island-hopping-field-guide/" style="margin-top:auto;padding-top:4px;font:700 11.5px/1.2 Arial,sans-serif;color:#1d4e42">Explore island guide &rarr;</a>
-    </article>
-    <article data-fg-card data-fg-months="2,3,4,5" style="background:#fff;border:1px solid #dce5de;border-radius:5px;padding:12px 14px;display:flex;flex-direction:column;gap:5px">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><span style="font:700 10px/1.2 Arial,sans-serif;color:#1e3a1e;text-transform:uppercase;letter-spacing:.06em">12 Milestones · Feb–May</span><span data-fg-badge hidden style="background:#1d4e42;color:#fff;font:700 9px/1.2 Arial,sans-serif;padding:2px 6px;border-radius:3px;text-transform:uppercase">In season</span></div>
-      <h3 style="font-size:15px;line-height:1.3;margin:0"><a href="/michigan-spring-awakening-field-guide/" style="color:#183a30">Michigan Spring Awakening Guide</a></h3>
-      <p style="font-size:12px;line-height:1.45;color:#55635d;margin:0">Morels, sugarbushes, trilliums, vernal choruses, and an interactive 41.7°N–47.4°N Latitudinal Wave Scrubber.</p>
-      <a href="/michigan-spring-awakening-field-guide/" style="margin-top:auto;padding-top:4px;font:700 11.5px/1.2 Arial,sans-serif;color:#1d4e42">Explore spring guide &rarr;</a>
-    </article>
-    <article data-fg-card data-fg-months="2,3,4" style="background:#fff;border:1px solid #dce5de;border-radius:5px;padding:12px 14px;display:flex;flex-direction:column;gap:5px">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><span style="font:700 10px/1.2 Arial,sans-serif;color:#1e3a1e;text-transform:uppercase;letter-spacing:.06em">12 Chapters · Feb–Apr</span><span data-fg-badge hidden style="background:#1d4e42;color:#fff;font:700 9px/1.2 Arial,sans-serif;padding:2px 6px;border-radius:3px;text-transform:uppercase">In season</span></div>
-      <h3 style="font-size:15px;line-height:1.3;margin:0"><a href="/michigan-false-spring-field-guide/" style="color:#183a30">Michigan False-Spring Guide</a></h3>
-      <p style="font-size:12px;line-height:1.45;color:#55635d;margin:0">4-zone late-winter split: south-slope shed hunting, freeze-thaw sap runs, morning crust hikes &amp; mud traps.</p>
-      <a href="/michigan-false-spring-field-guide/" style="margin-top:auto;padding-top:4px;font:700 11.5px/1.2 Arial,sans-serif;color:#1d4e42">Explore false-spring guide &rarr;</a>
-    </article>
-    <article data-fg-card data-fg-months="5,6,7,8,9,10" style="background:#fff;border:1px solid #dce5de;border-radius:5px;padding:12px 14px;display:flex;flex-direction:column;gap:5px">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><span style="font:700 10px/1.2 Arial,sans-serif;color:#0369a1;text-transform:uppercase;letter-spacing:.06em">12 Preserves · May–Oct</span><span data-fg-badge hidden style="background:#1d4e42;color:#fff;font:700 9px/1.2 Arial,sans-serif;padding:2px 6px;border-radius:3px;text-transform:uppercase">In season</span></div>
-      <h3 style="font-size:15px;line-height:1.3;margin:0"><a href="/great-lakes-shipwreck-viewing-field-guide/" style="color:#183a30">Shipwreck Viewing Field Guide</a></h3>
-      <p style="font-size:12px;line-height:1.45;color:#55635d;margin:0">12 shallow Great Lakes shipwrecks in 5–25 ft of crystal-clear water visible by kayak, glass-bottom boat &amp; shore.</p>
-      <a href="/great-lakes-shipwreck-viewing-field-guide/" style="margin-top:auto;padding-top:4px;font:700 11.5px/1.2 Arial,sans-serif;color:#1d4e42">Explore shipwreck guide &rarr;</a>
-    </article>
-    <article data-fg-card data-fg-months="1,2,3,4,5,6,7,8,9,10,11,12" style="background:#fff;border:1px solid #dce5de;border-radius:5px;padding:12px 14px;display:flex;flex-direction:column;gap:5px">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><span style="font:700 10px/1.2 Arial,sans-serif;color:#6c5643;text-transform:uppercase;letter-spacing:.06em">12 Preserves &middot; Year-Round</span><span data-fg-badge hidden style="background:#1d4e42;color:#fff;font:700 9px/1.2 Arial,sans-serif;padding:2px 6px;border-radius:3px;text-transform:uppercase">In season</span></div>
-      <h3 style="font-size:15px;line-height:1.3;margin:0"><a href="/michigan-dark-sky-field-guide/" style="color:#183a30">Michigan After Dark Field Guide</a></h3>
-      <p style="font-size:12px;line-height:1.45;color:#55635d;margin:0">12 dark-sky preserves &amp; unobstructed Lake Superior &amp; Lake Huron beaches with horizon azimuth compasses, Bortle ratings &amp; night camera settings.</p>
-      <a href="/michigan-dark-sky-field-guide/" style="margin-top:auto;padding-top:4px;font:700 11.5px/1.2 Arial,sans-serif;color:#1d4e42">Explore dark sky guide &rarr;</a>
-    </article>
-    <article data-fg-card data-fg-months="4,5,6,7,8,9,10" style="background:#fff;border:1px solid #dce5de;border-radius:5px;padding:12px 14px;display:flex;flex-direction:column;gap:5px">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><span style="font:700 10px/1.2 Arial,sans-serif;color:#1d4e42;text-transform:uppercase;letter-spacing:.06em">14 Floats &middot; May–Oct</span><span data-fg-badge hidden style="background:#1d4e42;color:#fff;font:700 9px/1.2 Arial,sans-serif;padding:2px 6px;border-radius:3px;text-transform:uppercase">In season</span></div>
-      <h3 style="font-size:15px;line-height:1.3;margin:0"><a href="/michigan-rivers-field-guide/" style="color:#183a30">Michigan Rivers Field Guide</a></h3>
-      <p style="font-size:12px;line-height:1.45;color:#55635d;margin:0">14 iconic river floats with live USGS CFS flow badges, USFS permit rules, and livery shuttles.</p>
-      <a href="/michigan-rivers-field-guide/" style="margin-top:auto;padding-top:4px;font:700 11.5px/1.2 Arial,sans-serif;color:#1d4e42">Explore river guide &rarr;</a>
-    </article>
-    <article data-fg-card data-fg-months="1,2,3,4,5,6,7,8,9,10,11,12" style="background:#fff;border:1px solid #dce5de;border-radius:5px;padding:12px 14px;display:flex;flex-direction:column;gap:5px">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><span style="font:700 10px/1.2 Arial,sans-serif;color:#1e3f20;text-transform:uppercase;letter-spacing:.06em">12 Events &middot; All Year</span><span data-fg-badge hidden style="background:#1d4e42;color:#fff;font:700 9px/1.2 Arial,sans-serif;padding:2px 6px;border-radius:3px;text-transform:uppercase">In season</span></div>
-      <h3 style="font-size:15px;line-height:1.3;margin:0"><a href="/national-park-phenomena-field-guide/" style="color:#183a30">National Park Phenomenon Atlas</a></h3>
-      <p style="font-size:12px;line-height:1.45;color:#55635d;margin:0">12 narrow-window natural spectacles: Firefall, synchronous fireflies, elk rut, and geysers with live timeline scrubber.</p>
-      <a href="/national-park-phenomena-field-guide/" style="margin-top:auto;padding-top:4px;font:700 11.5px/1.2 Arial,sans-serif;color:#1d4e42">Explore phenomenon atlas &rarr;</a>
-    </article>
-    <article data-fg-card data-fg-months="4,5,6,7,8,9,10,11" style="background:#fff;border:1px solid #dce5de;border-radius:5px;padding:12px 14px;display:flex;flex-direction:column;gap:5px">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><span style="font:700 10px/1.2 Arial,sans-serif;color:#0f2942;text-transform:uppercase;letter-spacing:.06em">12 Drives &middot; Apr–Nov</span><span data-fg-badge hidden style="background:#1d4e42;color:#fff;font:700 9px/1.2 Arial,sans-serif;padding:2px 6px;border-radius:3px;text-transform:uppercase">In season</span></div>
-      <h3 style="font-size:15px;line-height:1.3;margin:0"><a href="/michigan-coastal-drives-field-guide/" style="color:#183a30">Michigan Coastal Drives Field Guide</a></h3>
-      <p style="font-size:12px;line-height:1.45;color:#55635d;margin:0">M-22, M-119 Tunnel of Trees, Brockway Mountain, US-2 &amp; US-23 with milepost turnouts, RV rules &amp; fall color waves.</p>
-      <a href="/michigan-coastal-drives-field-guide/" style="margin-top:auto;padding-top:4px;font:700 11.5px/1.2 Arial,sans-serif;color:#1d4e42">Explore coastal drives &rarr;</a>
-    </article>
-  </div>
-</section>
-<section class="winter-router" id="winter-task-router" aria-labelledby="winter-task-router-title">
-  <div class="winter-router-head">
-    <div><span class="winter-router-kicker">Michigan winter decision desk</span><h2 id="winter-task-router-title">Choose the winter question you are trying to answer</h2></div>
-    <p>Start with the decision, then move to the live signal that can actually answer it. The planning pages explain the place; the live tools tell you what the day looks like.</p>
-  </div>
-  <div class="winter-persona-grid">
-    <article class="winter-persona" data-winter-persona="skier">
-      <span>Cross-country skier</span><h3>I want to ski</h3>
-      <p>Choose the trail system first, then check whether the snow signal is worth chasing and confirm the latest grooming report.</p>
-      <div class="winter-sequence">Plan trail → live snow → groomer</div>
-      <div class="winter-persona-actions"><a class="primary" href="/michigan-cross-country-skiing/" data-track-tool="michigan-xc-planning" data-placement="winter-persona-skier">Plan Michigan XC →</a><a href="/michigan-winter-trails/" data-track-tool="michigan-winter-trails" data-placement="winter-persona-skier-guide">15-System Trail Guide →</a></div>
-    </article>
-    <article class="winter-persona" data-winter-persona="snowfall-checker">
-      <span>Anyone after a storm</span><h3>How much snow fell?</h3>
-      <p>See every official snowfall report in Michigan on one map, ranked by town with the time, whether it was measured, and the observer's own remark.</p>
-      <div class="winter-sequence">Pick the window → find your town → read the remark</div>
-      <div class="winter-persona-actions"><a class="primary" href="/michigan-snow-totals/" data-track-tool="michigan-snow-totals" data-placement="winter-persona-snowfall">Open snow totals →</a><a href="/michigan-first-snow-adventures/" data-track-tool="michigan-first-snow-adventures" data-placement="winter-persona-snowfall-guide">First Snow Field Guide →</a></div>
-    </article>
-    <article class="winter-persona" data-winter-persona="snowmobiler">
-      <span>Snowmobiler</span><h3>I want to ride</h3>
-      <p>Choose your region, then reconcile official closures, club condition reports, grooming freshness and the near-term thaw or snowfall signal, and trace a real trail-following route between two points.</p>
-      <div class="winter-sequence">Choose region → verify trail → plan the route</div>
-      <div class="winter-persona-actions"><a class="primary" href="/snowmobile/" data-track-tool="michigan-snowmobile" data-placement="winter-persona-snowmobile">Open snowmobile conditions →</a><a href="/snowmobile/#state-map" data-track-tool="michigan-snowmobile-map" data-placement="winter-persona-snowmobile-map">Statewide map →</a></div>
-    </article>
-    <article class="winter-persona" data-winter-persona="ice-checker">
-      <span>Ice angler / lake watcher</span><h3>I’m checking ice</h3>
-      <p>Pick the water, read accumulated cold and available remote ice context, then verify conditions locally before any on-ice decision.</p>
-      <div class="winter-sequence">Choose water → cold trend → local check</div>
-      <div class="winter-persona-actions"><a class="primary" href="/michigan-ice/" data-track-tool="michigan-ice" data-placement="winter-persona-ice">Open Michigan Ice →</a><a href="/michigan-ice/regions/saginaw-bay.html" data-track-tool="saginaw-bay-ice" data-placement="winter-persona-ice-saginaw">Saginaw Bay example →</a></div>
-    </article>
-    <article class="winter-persona" data-winter-persona="winter-day">
-      <span>Winter traveler</span><h3>I’m planning a winter weekend up north</h3>
-      <p>Check the drive before the activity. Bridge status and regional weather can change the trip even when the trail or lake looks promising.</p>
-      <div class="winter-sequence">Choose base town → crossing conditions → activity</div>
-      <div class="winter-persona-actions"><a class="primary" href="/michigan-winter-weekends/" data-track-tool="michigan-winter-weekends" data-placement="winter-persona-travel">12 Winter Weekend Towns →</a><a href="/mackinac-bridge-live/" data-track-tool="mackinac-bridge-live" data-placement="winter-persona-travel-bridge">Check Mackinac Bridge →</a></div>
-    </article>
-    <article class="winter-persona" data-winter-persona="undecided">
-      <span>Open-ended day planner</span><h3>I don’t know what’s worth doing</h3>
-      <p>Start with the conditions-driven day-trip planner, or jump into the full finder and filter the tool library by what is in season.</p>
-      <div class="winter-sequence">Conditions → best-fit activity → specialist tool</div>
-      <div class="winter-persona-actions"><a class="primary" href="https://michiganoutdoorsnow.chrisizworski.com" target="_blank" rel="noopener" data-track-tool="michigan-outdoors-now" data-placement="winter-persona-undecided">Open Michigan Outdoors Now ↗</a><a href="/michigan-winter-activities/" data-track-tool="michigan-winter-activities" data-placement="winter-persona-undecided-guide">18 Winter Experiences →</a></div>
-    </article>
-
-    <article class="winter-persona" data-winter-persona="find-snow">
-      <span>Snowshoer / holiday snow seeker</span><h3>Where is enough snow on the ground?</h3>
-      <p>Compare modeled depth with nearby station observations, then evaluate actual recreation destinations or Christmas-week snowbelt towns. Snow at a map pixel does not verify winter parking or safe access.</p>
-      <div class="winter-sequence">Snow depth → actual destination → verify access</div>
-      <div class="winter-persona-actions"><a class="primary" href="/michigan-snow-depth/" data-track-tool="michigan-snow-depth" data-placement="winter-persona-find-snow">Find good snow →</a><a href="/michigan-white-christmas-escapes/" data-track-tool="michigan-white-christmas-escapes" data-placement="winter-persona-white-christmas">White Christmas Escapes →</a></div>
-    </article>
-    <article class="winter-persona" data-winter-persona="lake-effect">
-      <span>Snowbelt watcher</span><h3>Where might lake-effect snow hit next?</h3>
-      <p>Compare NWS alerts, hourly snow forecasts, winds and lake temperatures. A forecast snowbelt is not a measured snowfall total or an exact band track.</p>
-      <div class="winter-sequence">Choose snowbelt → forecast window → observed follow-up</div>
-      <div class="winter-persona-actions"><a class="primary" href="/lake-effect-snow/" data-track-tool="lake-effect-snow" data-placement="winter-persona-lake-effect">Watch the snowbelt →</a><a href="/michigan-first-snow-adventures/" data-track-tool="michigan-first-snow-adventures" data-placement="winter-persona-lake-effect-guide">12 Early Snowbelts Guide →</a></div>
-    </article>
-    <article class="winter-persona" data-winter-persona="downhill">
-      <span>Downhill skier</span><h3>Which Michigan ski hill should I choose?</h3>
-      <p>Compare real ski areas and their terrain, then read official resort reports for current openings, lifts, grooming and snowmaking—not just regional weather.</p>
-      <div class="winter-sequence">Compare hills → official resort report → trip decision</div>
-      <div class="winter-persona-actions"><a class="primary" href="/michigan-ski-hills/" data-track-tool="michigan-ski-hills" data-placement="winter-persona-downhill">Compare ski hills →</a><a href="/lake-effect-snow/" data-track-tool="lake-effect-snow" data-placement="winter-persona-downhill-snowbelt">Upcoming snowbelt outlook →</a></div>
-    </article>
-    <article class="winter-persona" data-winter-persona="ice-caves">
-      <span>Winter waterfall explorer</span><h3>Are the ice caves forming yet?</h3>
-      <p>Check cold accumulation, formation evidence and each site's public access guidance. Beautiful ice formations are not a promise of safe trails or ice.</p>
-      <div class="winter-sequence">Formation evidence → site access → safe alternative</div>
-      <div class="winter-persona-actions"><a class="primary" href="/michigan-ice-caves/" data-track-tool="michigan-ice-caves" data-placement="winter-persona-ice-caves">Explore ice caves →</a><a href="/frozen-michigan/" data-track-tool="frozen-michigan" data-placement="winter-persona-ice-caves-guide">Frozen Michigan Guide →</a></div>
-    </article>
-    <article class="winter-persona" data-winter-persona="freighter-layup">
-      <span>Great Lakes freighter watcher</span><h3>Where are the freighters laying up?</h3>
-      <p>Follow dated harbor confirmations and vessel stories through winter. AIS silence or a stopped ship by itself does not prove layup.</p>
-      <div class="winter-sequence">Confirmed layup → vessel story → live AIS comparison</div>
-      <div class="winter-persona-actions"><a class="primary" href="/great-lakes-freighter-winter-layup/" data-track-tool="great-lakes-freighter-winter-layup" data-placement="winter-persona-layup">Track winter layups →</a><a href="/great-lakes-winter-freighter-guide/" data-track-tool="great-lakes-winter-freighter-guide" data-placement="winter-persona-layup-guide">12-Harbor Winter Guide →</a></div>
-    </article>
-  </div>
-</section>
-
-<section class="featured-tools" aria-labelledby="featured-tools-title">
-  <div class="featured-head">
-    <h2 id="featured-tools-title">Start with the live tools</h2>
-    <span>Free &middot; No account required</span>
-  </div>
-  <article class="detroit-spotlight" data-spotlight-tool="detroit-outdoors">
-    <div class="detroit-spotlight-copy">
-      <div class="feature-kicker">New &middot; Detroit / Southeast Michigan</div>
-      <h3><a href="/detroit-outdoors/" data-track-tool="detroit-outdoors" data-placement="tools-spotlight">Don’t pick an activity first. See what became worth doing.</a></h3>
-      <p><strong>Detroit Outdoors starts with what changed today.</strong> A freighter on the river. A migration push. Calm water. A sunset window. Fall color. A surprisingly good park afternoon.</p>
-      <p>It watches Southeast Michigan and surfaces the few things worth paying attention to now.</p>
-      <a class="spotlight-cta" href="/detroit-outdoors/" data-track-tool="detroit-outdoors" data-placement="tools-spotlight-cta">Open today’s Detroit board <span aria-hidden="true">&rarr;</span></a>
-    </div>
-    <a class="detroit-live-board" href="/detroit-outdoors/" data-track-tool="detroit-outdoors" data-placement="tools-spotlight-live-board" aria-label="Open the Detroit Outdoors live board" aria-live="polite">
-      <span class="detroit-live-kicker">Live board now</span>
-      <strong class="detroit-live-lead" id="detroit-tools-lead">Reading today’s Southeast Michigan opportunities…</strong>
-      <ol class="detroit-live-list" id="detroit-tools-board">
-        <li>Migration, water, freighter traffic, sky and seasonal windows can all compete here.</li>
-      </ol>
-      <span class="detroit-live-evidence" id="detroit-tools-evidence">Opening the live evidence…</span>
-      <span class="detroit-live-meta" id="detroit-tools-updated">Live preview from Detroit Outdoors Today</span>
-    </a>
-  </article>
-  <div class="feature-grid">
-    <article class="feature-card" data-featured-tool="michigan-border-wait-times">
-      <div class="feature-kicker">All five international crossings</div>
-      <h3><a href="/michigan-border-wait-times/" data-track-tool="michigan-border-wait-times" data-placement="tools-featured">Michigan Border Wait Times Live</a></h3>
-      <p>Compare Gordie Howe, Ambassador and the Detroit tunnel, then check Blue Water and the Upper Peninsula crossing with official waits, cameras, warnings and tolls.</p>
-      <a class="tool-cta" href="/michigan-border-wait-times/" data-track-tool="michigan-border-wait-times" data-placement="tools-featured">Compare border crossings <span aria-hidden="true">&rarr;</span></a>
-    </article>
-    <article class="feature-card" data-featured-tool="niagara-border-crossing">
-      <div class="feature-kicker">Live Niagara border decision</div>
-      <h3><a href="/niagara-border-crossing/" data-track-tool="niagara-border-crossing" data-placement="tools-featured">Niagara Border Wait Times Live</a></h3>
-      <p>Compare Peace, Rainbow, Whirlpool Rapids and Lewiston–Queenston using official directional waits, traveler eligibility and a conservative detour guardrail.</p>
-      <a class="tool-cta" href="/niagara-border-crossing/" data-track-tool="niagara-border-crossing" data-placement="tools-featured">Check Niagara waits <span aria-hidden="true">&rarr;</span></a>
-    </article>
-    <article class="feature-card" data-featured-tool="mackinac-bridge-live">
-      <div class="feature-kicker">Official crossing status</div>
-      <h3><a href="/mackinac-bridge-live/" data-track-tool="mackinac-bridge-live" data-placement="tools-featured">Mackinac Bridge Live</a></h3>
-      <p>Check the official crossing status, both cameras, NWS radar, approach wind, vehicle restrictions, tolls, and driver assistance.</p>
-      <a class="tool-cta" href="/mackinac-bridge-live/" data-track-tool="mackinac-bridge-live" data-placement="tools-featured">Check the bridge <span aria-hidden="true">&rarr;</span></a>
-    </article>
-    <article class="feature-card" data-featured-tool="michigan-outdoor-weekend">
-      <div class="feature-kicker">Weekend planning hub</div>
-      <h3><a href="https://weekend.chrisizworski.com" target="_blank" rel="noopener" data-track-tool="michigan-outdoor-weekend" data-placement="tools-featured">Michigan Outdoor Weekend</a></h3>
-      <p>Plan a Michigan weekend outside with hand-built guides that route to live conditions and real campsite reservations.</p>
-      <a class="tool-cta" href="https://weekend.chrisizworski.com" target="_blank" rel="noopener" data-track-tool="michigan-outdoor-weekend" data-placement="tools-featured">Plan a weekend <span aria-hidden="true">&rarr;</span></a>
-    </article>
-    <article class="feature-card" data-featured-tool="tahquamenon-falls-live">
-      <div class="feature-kicker">Live waterfall + park intelligence</div>
-      <h3><a href="https://chrisizworski.com/tahquamenon-falls/" data-track-tool="tahquamenon-falls-live" data-placement="tools-featured">Tahquamenon Falls Live</a></h3>
-      <p>See whether Tahquamenon is worth the drive right now, compare Upper and Lower Falls, check live river flow and trail weather, then build the visit on an interactive park map.</p>
-      <a class="tool-cta" href="https://chrisizworski.com/tahquamenon-falls/" data-track-tool="tahquamenon-falls-live" data-placement="tools-featured">Plan Tahquamenon <span aria-hidden="true">&rarr;</span></a>
-    </article>
-    <article class="feature-card" data-featured-tool="duluth-canal-park">
-      <div class="feature-kicker">Live Duluth ship watch</div>
-      <h3><a href="/duluth-canal-park/" data-track-tool="duluth-canal-park" data-placement="tools-featured">Duluth Ship Schedule &amp; Canal Park Live Cams</a></h3>
-      <p>See which Duluth ship matters next, its supported Aerial Lift Bridge passage window, live AIS position, camera network, and where to watch from Canal Park.</p>
-      <a class="tool-cta" href="/duluth-canal-park/" data-track-tool="duluth-canal-park" data-placement="tools-featured">Watch Duluth ships <span aria-hidden="true">&rarr;</span></a>
-    </article>
-    <article class="feature-card" data-featured-tool="soo-locks">
-      <div class="feature-kicker">Live vessel map</div>
-      <h3><a href="/soo-locks/" data-track-tool="soo-locks" data-placement="tools-featured">Soo Locks Live</a></h3>
-      <p>See AIS-equipped vessels near the Soo Locks, current navigation-season status, passage resources, and visitor information.</p>
-      <a class="tool-cta" href="/soo-locks/" data-track-tool="soo-locks" data-placement="tools-featured">Open the vessel map <span aria-hidden="true">&rarr;</span></a>
-    </article>
-    <article class="feature-card" data-featured-tool="up-north-michigan"><div class="feature-kicker">Five live reads, one screen</div><h3><a href="/up-north-michigan/" data-track-tool="up-north-michigan" data-placement="tools-featured">Up North Michigan</a></h3><p>The pre-trip check: aurora odds, fall colour stage, Mackinac Bridge wind, Great Lakes water and ice, each with a link to the tool behind it.</p><a class="tool-cta" href="/up-north-michigan/" data-track-tool="up-north-michigan" data-placement="tools-featured">Check before you go <span aria-hidden="true">&rarr;</span></a></article><article class="feature-card" data-featured-tool="northern-lights-michigan">
-      <div class="feature-kicker">Live NOAA forecast</div>
-      <h3><a href="/northern-lights-michigan/" data-track-tool="northern-lights-michigan" data-placement="tools-featured">Northern Lights Michigan</a></h3>
-      <p>Check the live Kp forecast, Michigan viewing odds, dark-sky locations, cloud considerations, and photography settings.</p>
-      <a class="tool-cta" href="/northern-lights-michigan/" data-track-tool="northern-lights-michigan" data-placement="tools-featured">Check tonight's forecast <span aria-hidden="true">&rarr;</span></a>
-    </article>
-    <article class="feature-card" data-featured-tool="great-lakes-buoys">
-      <div class="feature-kicker">Live lake conditions</div>
-      <h3><a href="/great-lakes-buoys/" data-track-tool="great-lakes-buoys" data-placement="tools-featured">Great Lakes Buoy Dashboard</a></h3>
-      <p>Explore reporting NOAA stations across all five lakes for waves, wind, water temperature, pressure, and activity guidance.</p>
-      <a class="tool-cta" href="/great-lakes-buoys/" data-track-tool="great-lakes-buoys" data-placement="tools-featured">View lake conditions <span aria-hidden="true">&rarr;</span></a>
-    </article>
-    <article class="feature-card" data-featured-tool="michigan-outdoors-now">
-      <div class="feature-kicker">Live-condition planner</div>
-      <h3><a href="https://michiganoutdoorsnow.chrisizworski.com" target="_blank" rel="noopener" data-track-tool="michigan-outdoors-now" data-placement="tools-featured">Michigan Outdoors Now</a></h3>
-      <p>Enter a Michigan city or ZIP and compare three day-trip plans ranked for forecast, drive time, interests, and group needs.</p>
-      <a class="tool-cta" href="https://michiganoutdoorsnow.chrisizworski.com" target="_blank" rel="noopener" data-track-tool="michigan-outdoors-now" data-placement="tools-featured">Plan an outdoor day <span aria-hidden="true">&rarr;</span></a>
-    </article>
-    <article class="feature-card" data-featured-tool="au-sable-field-map">
-      <div class="feature-kicker">Interactive river map</div>
-      <h3><a href="https://ausable.chrisizworski.com/" target="_blank" rel="noopener" data-track-tool="au-sable-field-map" data-placement="tools-featured">Au Sable Field Map</a></h3>
-      <p>Plan with 70 verified access points, campgrounds, live USGS flow, weather, activity filters, and float-time estimates.</p>
-      <a class="tool-cta" href="https://ausable.chrisizworski.com/" target="_blank" rel="noopener" data-track-tool="au-sable-field-map" data-placement="tools-featured">Open the river map <span aria-hidden="true">&rarr;</span></a>
-    </article>
-    <article class="feature-card" data-featured-tool="great-lakes-freighter-tracking">
-      <div class="feature-kicker">Live lake-wide AIS map</div>
-      <h3><a href="/great-lakes-freighter-tracking/" data-track-tool="great-lakes-freighter-tracking" data-placement="tools-featured">Great Lakes Ship Tracker Live</a></h3>
-      <p>Track AIS-equipped vessels across all five lakes, then jump to the Soo Locks, Mackinac, Duluth, Port Huron, Detroit, or Saginaw Bay.</p>
-      <a class="tool-cta" href="/great-lakes-freighter-tracking/" data-track-tool="great-lakes-freighter-tracking" data-placement="tools-featured">Open the ship map <span aria-hidden="true">&rarr;</span></a>
-    </article>
-  </div>
-</section>
-
-<p data-ballard-ctr-v1="tools-links"><strong>Seattle now:</strong> <a href="/ballard-locks/">Ballard Locks live visitor guide</a> · <a href="/ballard-locks/salmon-counts/">Latest Ballard Locks fish and salmon counts</a></p>
-<p>Planning beyond Michigan? <a href="/national-tools/">Browse U.S. outdoor tools for aurora, rivers, gardens and seasonal trips</a>.</p>
-<section class="finder" aria-labelledby="tools-evidence-title">
-<h2 id="tools-evidence-title">Know what the answer is based on</h2>
-<p>An observation describes what was measured; a forecast or model estimates what could happen; historical averages help plan a season. Open the specialist tool for its source details and available observation or forecast times. Missing or stale readings can change how useful the answer is.</p>
-<p>Check the linked official agency or operator for closures and access rules. Built and maintained by <a href="/chris-izworski/" rel="author">Chris Izworski</a>. <a href="/case-studies/">Read how the tools are built</a> and <a href="/citations/">browse source references</a>.</p>
-</section>
-</div>
 <section class="tool-group" id="outdoors-tools-group" aria-labelledby="outdoors-tools">
 <h2 class="sh" id="outdoors-tools">Michigan fishing and hunting tools</h2>
 <p class="group-blurb">Live water and field conditions for anglers and hunters. These pull real gauge, weather, and satellite data rather than repeating generic advice.</p>
@@ -1151,11 +806,395 @@ h2.sh{font:500 clamp(1.45rem,2.3vw,1.9rem)/1.2 var(--hm-display);color:var(--hm-
     </div>
   </div>
 </section>
+
+<section class="week-explorer" id="this-week" aria-labelledby="this-week-title">
+  <div class="week-header"><div>
+    <p class="week-eyebrow">A living calendar of outdoor opportunities</p>
+    <h2 id="this-week-title">Is this the week I should go?</h2>
+    <p class="week-intro">Five different outdoor questions; five distinct evidence standards. Compare favorable conditions, reasons to wait, and what would change the answer. These are not forecasts of wildlife appearances, antler shedding, sap flow or guaranteed finds.</p>
+  </div><div class="week-actions">
+    <label for="week-region">Local forecast region
+      <select id="week-region"><option value="bay-city">Bay City / Saginaw Bay</option><option value="traverse-city">Traverse City</option><option value="marquette">Marquette / Upper Peninsula</option></select>
+    </label>
+    <button id="week-refresh" type="button">Check live conditions</button>
+  </div></div>
+  <div class="week-grid"><article class="week-card" id="week-shed" aria-label="Shed antlers weekly planning">
+  <h3><a href="/michigan-shed-antlers/">Shed antlers</a></h3>
+  <span class="week-status" data-week-state data-grade="context">Planning context</span>
+  <div class="week-window-title" data-week-headline>Check this window</div>
+  <p data-week-reason>Snow can hide already-dropped sheds; don’t push wintering deer.</p>
+  <p class="week-change"><b>What changes the answer?</b><span data-week-trigger>Snow cover retreats enough for legal, low-disturbance walking.</span></p>
+  <p class="week-scope" data-week-scope>Search conditions, not antler-drop dates</p>
+  <p class="week-source" data-week-source>Open the dedicated tool for evidence and limitations.</p>
+  <p data-week-detail></p>
+  <a class="week-open" href="/michigan-shed-antlers/" data-placement="this-week" data-track-tool="shed-antler-search">Explore the full shed antlers tool &rarr;</a>
+</article>
+<article class="week-card" id="week-maple" aria-label="Maple sap weather weekly planning">
+  <h3><a href="/michigan-maple-sap-run/">Maple sap weather</a></h3>
+  <span class="week-status" data-week-state data-grade="context">Planning context</span>
+  <div class="week-window-title" data-week-headline>Check this window</div>
+  <p data-week-reason>A forecast signal alone cannot tell whether any tree is producing sap.</p>
+  <p class="week-change"><b>What changes the answer?</b><span data-week-trigger>Overnight freezing and daytime thawing return; verify tree readiness.</span></p>
+  <p class="week-scope" data-week-scope>Freeze/thaw, not measured sap flow</p>
+  <p class="week-source" data-week-source>Open the dedicated tool for evidence and limitations.</p>
+  <p data-week-detail></p>
+  <a class="week-open" href="/michigan-maple-sap-run/" data-placement="this-week" data-track-tool="maple-sap-run">Explore the full maple sap weather tool &rarr;</a>
+</article>
+<article class="week-card" id="week-rock" aria-label="Rockhounding weekly planning">
+  <h3><a href="/michigan-rockhounding/">Rockhounding</a></h3>
+  <span class="week-status" data-week-state data-grade="context">Planning context</span>
+  <div class="week-window-title" data-week-headline>Check this window</div>
+  <p data-week-reason>The wave engine evaluates the last 72 hours, not a literal seven-day rock forecast.</p>
+  <p class="week-change"><b>What changes the answer?</b><span data-week-trigger>Onshore winds work gravel, then waves ease and access is safe.</span></p>
+  <p class="week-scope" data-week-scope>Recently worked beaches, not finds</p>
+  <p class="week-source" data-week-source>Open the dedicated tool for evidence and limitations.</p>
+  <p data-week-detail></p>
+  <a class="week-open" href="/michigan-rockhounding/" data-placement="this-week" data-track-tool="michigan-rockhounding">Explore the full rockhounding tool &rarr;</a>
+</article>
+<article class="week-card" id="week-waterfowl" aria-label="Waterfowl freeze-line weekly planning">
+  <h3><a href="/waterfowl-freeze-line/">Waterfowl freeze-line</a></h3>
+  <span class="week-status" data-week-state data-grade="context">Planning context</span>
+  <div class="week-window-title" data-week-headline>Watch the next marsh freeze</div>
+  <p data-week-reason>Cold fronts can push ducks and geese from shallow marshes toward available open water, but counts require observation.</p>
+  <p class="week-change"><b>What changes the answer?</b><span data-week-trigger>Consecutive freezing hours, dated lake ice charts, and independently observed bird counts.</span></p>
+  <p class="week-scope" data-week-scope>Region-specific Midwest wetlands, not observed marsh ice</p>
+  <p class="week-source" data-week-source>NWS weather and NOAA ice context; the tracker separates forecasts from observations.</p>
+  <p data-week-detail></p>
+  <a class="week-open" href="/waterfowl-freeze-line/" data-placement="this-week" data-track-tool="waterfowl-freeze-line">Explore the full waterfowl freeze-line tool &rarr;</a>
+</article>
+<article class="week-card" id="week-eagle" aria-label="Winter eagle watching weekly planning">
+  <h3><a href="/winter-eagle-watching/">Winter eagle watching</a></h3>
+  <span class="week-status" data-week-state data-grade="context">Planning context</span>
+  <div class="week-window-title" data-week-headline>Check this window</div>
+  <p data-week-reason>Winter open-water feeding concentrations and aerial displays are different behaviors.</p>
+  <p class="week-change"><b>What changes the answer?</b><span data-week-trigger>Check open-water access, weather and dated reports at a public overlook.</span></p>
+  <p class="week-scope" data-week-scope>Weather and public viewing, not sightings</p>
+  <p class="week-source" data-week-source>Open the dedicated tool for evidence and limitations.</p>
+  <p data-week-detail></p>
+  <a class="week-open" href="/winter-eagle-watching/" data-placement="this-week" data-track-tool="winter-eagle-watching">Explore the full winter eagle watching tool &rarr;</a>
+</article></div>
+  <div class="week-meta"><span id="week-updated" role="status" aria-live="polite">Load live NWS, NOAA and shoreline conditions near this section. Eagle field guidance is interpretive.</span><span>Current season is context, not proof. <a href="/tools/#nature-tools">Explore the full tool library</a>.</span></div>
+</section>
+
+<div data-finder-context>
+<p>Chris Izworski builds these free tools to answer practical questions: Which Michigan–Ontario border crossing is shortest right now? Can I cross the Mackinac Bridge easily? Which ships are near the Soo Locks? Is the Au Sable fishable this morning? How much cold has Saginaw Bay accumulated? Where is Michigan fall color peaking? Are the northern lights worth chasing tonight? Where should a day trip go under today's conditions? Everything here is free and grouped by what you are actually doing, from fishing and hunting to transportation, boat watching, trip planning, and nature watching, with a dedicated hub for <a href="/michigan-gardening/">Michigan gardening and heirloom seed tools</a>. Use the finder to search the full library by name or topic, or switch to the in season filter to see what is most useful this month.</p>
+
+
+
+<p class="measurement-note">For tools across the country, <a href="/national-tools/">browse U.S. tools and destination planners</a>.</p>
+
+
+
+<section class="decision-network" aria-labelledby="tools-decision-title"><div class="decision-network__head"><h2 id="tools-decision-title">What are you trying to do?</h2><p>Start with the decision, then move between tools without returning to a directory.</p></div><div class="decision-network__grid"><div class="decision-network__lane"><h3>Get on the water</h3><ul><li><a href="/michigan-boat-launches/" data-decision-network="boat-launches" data-lane="water" data-surface="tools">Find a boat launch<span>42 Great Lakes ramps and regional conditions</span></a></li><li><a href="/great-lakes-buoys/" data-decision-network="great-lakes-buoys" data-lane="water" data-surface="tools">Check the lake<span>Live NOAA/NDBC conditions</span></a></li><li><a href="/great-lakes-beaches/" data-decision-network="great-lakes-beaches" data-lane="water" data-surface="tools">Pick a beach<span>Beach-specific condition pages</span></a></li><li><a href="/isle-royale-map/" data-decision-network="isle-royale-canoe" data-lane="water" data-surface="tools">Explore Isle Royale<span>NPS portages, camps, docks, imagery</span></a></li><li><a href="https://greatlakeslevels.org/" data-decision-network="great-lakes-levels" data-lane="water" data-surface="tools">Check water levels<span>Great Lakes level intelligence</span></a></li></ul></div><div class="decision-network__lane"><h3>Watch the night sky</h3><ul><li><a href="/northern-lights-michigan/" data-decision-network="michigan-aurora" data-lane="night-sky" data-surface="tools">Northern Lights Michigan<span>Tonight’s statewide aurora forecast</span></a></li><li><a href="/national-tools/meteor-shower/" data-decision-network="meteor-shower" data-lane="night-sky" data-surface="tools">Meteor Shower Tonight<span>Active showers and viewing weather</span></a></li><li><a href="/national-tools/dark-sky/michigan/" data-decision-network="michigan-dark-sky" data-lane="night-sky" data-surface="tools">Michigan dark-sky parks<span>Places, park access and sky conditions</span></a></li><li><a href="/national-tools/dark-sky/midwest/" data-decision-network="midwest-dark-sky" data-lane="night-sky" data-surface="tools">Midwest dark-sky destinations<span>Explore parks across the region</span></a></li><li><a href="/national-tools/dark-sky/" data-decision-network="great-lakes-dark-sky" data-lane="night-sky" data-surface="tools">Great Lakes dark-sky sites<span>Explore the wider destination finder</span></a></li></ul><p class="decision-network__note">Check clouds and moonlight, then confirm park hours and access.</p></div><div class="decision-network__lane"><h3>Michigan aurora viewing guides</h3><ul><li><a href="/northern-lights-michigan/keweenaw/" data-decision-network="aurora-keweenaw" data-lane="aurora-guides" data-surface="tools">Keweenaw Peninsula<span>Copper Harbor and the Keweenaw</span></a></li><li><a href="/northern-lights-michigan/marquette/" data-decision-network="aurora-marquette" data-lane="aurora-guides" data-surface="tools">Marquette<span>Marquette-area aurora viewing</span></a></li><li><a href="/northern-lights-michigan/munising/" data-decision-network="aurora-munising" data-lane="aurora-guides" data-surface="tools">Munising<span>Pictured Rocks and the lakeshore</span></a></li><li><a href="/northern-lights-michigan/paradise-whitefish-point/" data-decision-network="aurora-paradise-whitefish-point" data-lane="aurora-guides" data-surface="tools">Paradise &amp; Whitefish Point<span>Eastern Lake Superior shore</span></a></li><li><a href="/northern-lights-michigan/mackinaw-city/" data-decision-network="aurora-mackinaw-city" data-lane="aurora-guides" data-surface="tools">Mackinaw City<span>Straits-area viewing</span></a></li><li><a href="/northern-lights-michigan/sleeping-bear-dunes/" data-decision-network="aurora-sleeping-bear-dunes" data-lane="aurora-guides" data-surface="tools">Sleeping Bear Dunes<span>Lake Michigan shoreline</span></a></li></ul><p class="decision-network__note">Regional signals and local cloud forecasts do not guarantee a sighting.</p></div>
+<div class="decision-network__lane"><h3>Follow ships</h3><p style="margin:4px 0 8px;font-size:.82rem"><a href="/freighters/">Freighter Central</a> · <a href="/soo-locks/plan-your-visit/">Plan a Soo Locks visit</a> · <a href="/great-lakes-ship-watching-spots/">Best ship-watching spots</a> · <a href="/mackinac-bridge-crossing-planner/">Plan a bridge crossing</a></p><ul><li><a href="/great-lakes-freighter-tracking/" data-decision-network="ship-tracker" data-lane="ships" data-surface="tools">Track ships<span>Lake-wide AIS map</span></a></li><li><a href="/soo-locks/" data-decision-network="soo-locks" data-lane="ships" data-surface="tools">Watch the Soo<span>Locks, vessel activity and visiting</span></a></li><li><a href="/great-lakes-gazette/" data-decision-network="gazette" data-lane="ships" data-surface="tools">Read the daily brief<span>Great Lakes shipping news</span></a></li></ul></div><div class="decision-network__lane"><h3>Explore maritime history</h3><ul><li><a href="/great-lakes-shipwrecks/" data-decision-network="shipwreck-explorer" data-lane="history" data-surface="tools">Explore shipwrecks<span>60+ documented wreck records</span></a></li><li><a href="/edmund-fitzgerald/" data-decision-network="edmund-fitzgerald" data-lane="history" data-surface="tools">Edmund Fitzgerald<span>Final voyage and crew</span></a></li><li><a href="/great-lakes-lighthouses/" data-decision-network="lighthouses" data-lane="history" data-surface="tools">Find lighthouses<span>Great Lakes lighthouse directory</span></a></li></ul></div><div class="decision-network__lane"><h3>Go outside in Michigan</h3><ul><li><a href="https://michiganbirdingreport.com" data-decision-network="birding" data-lane="outdoors" data-surface="tools">Birding now<span>Live sightings and migration</span></a></li><li><a href="https://michigantroutreport.com" data-decision-network="trout" data-lane="outdoors" data-surface="tools">Trout conditions<span>Live river conditions</span></a></li><li><a href="/fall-color/" data-decision-network="fall-color" data-lane="outdoors" data-surface="tools">Fall color<span>Peak map and forecast</span></a></li><li><a href="https://michiganoutdoorsnow.chrisizworski.com" data-decision-network="outdoors-now" data-lane="outdoors" data-surface="tools">Choose a day trip<span>Condition-driven outdoor planner</span></a></li><li><a href="https://chrisizworski.com/tahquamenon-falls/" data-decision-network="tahquamenon-falls-live" data-lane="outdoors" data-surface="tools">Tahquamenon Falls<span>Live river, trails, map &amp; visit planner</span></a></li></ul></div><div class="decision-network__lane"><h3>Time the garden</h3><ul><li><a href="/zone-6a-planting-calendar/" data-decision-network="planting-calendar" data-lane="garden" data-surface="tools">Planting calendar<span>47 crops and 78 Michigan stations</span></a></li><li><a href="/michigan-frost-dates/" data-decision-network="frost-dates" data-lane="garden" data-surface="tools">Frost dates<span>Michigan city and station timing</span></a></li><li><a href="/when-to-plant-tomatoes-michigan/" data-decision-network="tomatoes" data-lane="garden" data-surface="tools">Plant tomatoes<span>Michigan transplant timing</span></a></li></ul></div></div></section>
+<section class="winter-field-guide-shelf" id="field-guides-shelf" aria-labelledby="winter-field-guides-shelf-title" style="margin:20px 0 26px;background:#f7f8f5;border:1px solid #d7dfd8;border-top:4px solid #1d4e42;border-radius:6px;padding:18px 20px">
+  <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:14px">
+    <div>
+      <p style="color:#7c5439;font:700 11px/1.2 Arial,sans-serif;letter-spacing:.11em;text-transform:uppercase;margin:0 0 4px">Michigan &amp; Great Lakes Field Guides · Auto-calibrated by calendar month</p>
+      <h2 id="winter-field-guides-shelf-title" style="font-size:22px;line-height:1.25;color:#1b3d32;margin:0">Start with a destination field guide, then verify live conditions</h2>
+    </div>
+    <a href="/guides/#field-guides" style="font:700 12px/1.2 Arial,sans-serif;color:#1d4e42;white-space:nowrap">Open full Field Guides library (12 guides) &rarr;</a>
+  </div>
+  <div id="fg-shelf-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px">
+    <article data-fg-card data-fg-months="10,11,12,1,2,3" style="background:#fff;border:1px solid #dce5de;border-radius:5px;padding:12px 14px;display:flex;flex-direction:column;gap:5px">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><span style="font:700 10px/1.2 Arial,sans-serif;color:#6c5643;text-transform:uppercase;letter-spacing:.06em">12 Base Towns · Oct–Mar</span><span data-fg-badge hidden style="background:#1d4e42;color:#fff;font:700 9px/1.2 Arial,sans-serif;padding:2px 6px;border-radius:3px;text-transform:uppercase">In season</span></div>
+      <h3 style="font-size:15px;line-height:1.3;margin:0"><a href="/michigan-winter-weekends/" style="color:#183a30">Michigan Winter Weekend Getaways</a></h3>
+      <p style="font-size:12px;line-height:1.45;color:#55635d;margin:0">2-day itineraries, snowbelts &amp; no-snow indoor backups from Marquette to Traverse City &amp; Petoskey.</p>
+      <a href="/michigan-winter-weekends/" style="margin-top:auto;padding-top:4px;font:700 11.5px/1.2 Arial,sans-serif;color:#1d4e42">Plan a winter weekend &rarr;</a>
+    </article>
+    <article data-fg-card data-fg-months="10,11,12" style="background:#fff;border:1px solid #dce5de;border-radius:5px;padding:12px 14px;display:flex;flex-direction:column;gap:5px">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><span style="font:700 10px/1.2 Arial,sans-serif;color:#7a2e2e;text-transform:uppercase;letter-spacing:.06em">10 Holiday Towns · Oct–Dec</span><span data-fg-badge hidden style="background:#1d4e42;color:#fff;font:700 9px/1.2 Arial,sans-serif;padding:2px 6px;border-radius:3px;text-transform:uppercase">In season</span></div>
+      <h3 style="font-size:15px;line-height:1.3;margin:0"><a href="/michigan-white-christmas-escapes/" style="color:#183a30">Michigan White Christmas Escapes</a></h3>
+      <p style="font-size:12px;line-height:1.45;color:#55635d;margin:0">NOAA 1991–2020 snow odds (<span id="white-christmas-marquette-baseline">85%</span> Marquette to 45.7% Frankenmuth), ski snowmaking &amp; holiday lights.</p>
+      <a href="/michigan-white-christmas-escapes/" style="margin-top:auto;padding-top:4px;font:700 11.5px/1.2 Arial,sans-serif;color:#1d4e42">Compare Christmas towns &rarr;</a>
+    </article>
+    <article data-fg-card data-fg-months="10,11,12" style="background:#fff;border:1px solid #dce5de;border-radius:5px;padding:12px 14px;display:flex;flex-direction:column;gap:5px">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><span style="font:700 10px/1.2 Arial,sans-serif;color:#1c4e6c;text-transform:uppercase;letter-spacing:.06em">12 Early Snowbelts · Oct–Dec</span><span data-fg-badge hidden style="background:#1d4e42;color:#fff;font:700 9px/1.2 Arial,sans-serif;padding:2px 6px;border-radius:3px;text-transform:uppercase">In season</span></div>
+      <h3 style="font-size:15px;line-height:1.3;margin:0"><a href="/michigan-first-snow-adventures/" style="color:#183a30">Michigan First Snow Adventures</a></h3>
+      <p style="font-size:12px;line-height:1.45;color:#55635d;margin:0">Where winter arrives first: Lake Superior &amp; Gaylord snowbelts, 2–4&quot; grass-bed Nordic trails &amp; backups.</p>
+      <a href="/michigan-first-snow-adventures/" style="margin-top:auto;padding-top:4px;font:700 11.5px/1.2 Arial,sans-serif;color:#1d4e42">Find early snowbelts &rarr;</a>
+    </article>
+    <article data-fg-card data-fg-months="10,11,12" style="background:#fff;border:1px solid #dce5de;border-radius:5px;padding:12px 14px;display:flex;flex-direction:column;gap:5px">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><span style="font:700 10px/1.2 Arial,sans-serif;color:#8c4828;text-transform:uppercase;letter-spacing:.06em">12 Late-Fall Stops · Oct–Dec</span><span data-fg-badge hidden style="background:#1d4e42;color:#fff;font:700 9px/1.2 Arial,sans-serif;padding:2px 6px;border-radius:3px;text-transform:uppercase">In season</span></div>
+      <h3 style="font-size:15px;line-height:1.3;margin:0"><a href="/michigan-late-fall-adventures/" style="color:#183a30">Michigan Late-Fall &amp; November Guide</a></h3>
+      <p style="font-size:12px;line-height:1.45;color:#55635d;margin:0">Swollen U.P. waterfalls, post-gale agates &amp; Petoskey stones, fall steelhead &amp; sandhill cranes.</p>
+      <a href="/michigan-late-fall-adventures/" style="margin-top:auto;padding-top:4px;font:700 11.5px/1.2 Arial,sans-serif;color:#1d4e42">Explore November stops &rarr;</a>
+    </article>
+    <article data-fg-card data-fg-months="11,12,1,2,3" style="background:#fff;border:1px solid #dce5de;border-radius:5px;padding:12px 14px;display:flex;flex-direction:column;gap:5px">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><span style="font:700 10px/1.2 Arial,sans-serif;color:#1a4b69;text-transform:uppercase;letter-spacing:.06em">12 Harbors · Nov–Mar</span><span data-fg-badge hidden style="background:#1d4e42;color:#fff;font:700 9px/1.2 Arial,sans-serif;padding:2px 6px;border-radius:3px;text-transform:uppercase">In season</span></div>
+      <h3 style="font-size:15px;line-height:1.3;margin:0"><a href="/great-lakes-winter-freighter-guide/" style="color:#183a30">Winter Freighter &amp; Harbor Guide</a></h3>
+      <p style="font-size:12px;line-height:1.45;color:#55635d;margin:0">Public lock overlooks, Jan 15 Soo Locks closure, 1,000-footer winter layup berths &amp; USCG icebreakers.</p>
+      <a href="/great-lakes-winter-freighter-guide/" style="margin-top:auto;padding-top:4px;font:700 11.5px/1.2 Arial,sans-serif;color:#1d4e42">Open harbor guide &rarr;</a>
+    </article>
+    <article data-fg-card data-fg-months="11,12,1,2,3" style="background:#fff;border:1px solid #dce5de;border-radius:5px;padding:12px 14px;display:flex;flex-direction:column;gap:5px">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><span style="font:700 10px/1.2 Arial,sans-serif;color:#476d58;text-transform:uppercase;letter-spacing:.06em">18 Experiences · Nov–Mar</span><span data-fg-badge hidden style="background:#1d4e42;color:#fff;font:700 9px/1.2 Arial,sans-serif;padding:2px 6px;border-radius:3px;text-transform:uppercase">In season</span></div>
+      <h3 style="font-size:15px;line-height:1.3;margin:0"><a href="/michigan-winter-activities/" style="color:#183a30">Michigan Winter Activities</a></h3>
+      <p style="font-size:12px;line-height:1.45;color:#55635d;margin:0">Snowshoeing, frozen waterfalls, fat biking, skiing, Muskegon luge &amp; dark skies across both peninsulas.</p>
+      <a href="/michigan-winter-activities/" style="margin-top:auto;padding-top:4px;font:700 11.5px/1.2 Arial,sans-serif;color:#1d4e42">Open winter activities &rarr;</a>
+    </article>
+    <article data-fg-card data-fg-months="12,1,2,3" style="background:#fff;border:1px solid #dce5de;border-radius:5px;padding:12px 14px;display:flex;flex-direction:column;gap:5px">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><span style="font:700 10px/1.2 Arial,sans-serif;color:#326c7c;text-transform:uppercase;letter-spacing:.06em">11 Ice Wonders · Dec–Mar</span><span data-fg-badge hidden style="background:#1d4e42;color:#fff;font:700 9px/1.2 Arial,sans-serif;padding:2px 6px;border-radius:3px;text-transform:uppercase">In season</span></div>
+      <h3 style="font-size:15px;line-height:1.3;margin:0"><a href="/frozen-michigan/" style="color:#183a30">Frozen Michigan Field Guide</a></h3>
+      <p style="font-size:12px;line-height:1.45;color:#55635d;margin:0">Eben Ice Caves, Pictured Rocks curtains, Tahquamenon Falls &amp; Straits winter ice with safe access rules.</p>
+      <a href="/frozen-michigan/" style="margin-top:auto;padding-top:4px;font:700 11.5px/1.2 Arial,sans-serif;color:#1d4e42">Explore Frozen Michigan &rarr;</a>
+    </article>
+    <article data-fg-card data-fg-months="11,12,1,2,3" style="background:#fff;border:1px solid #dce5de;border-radius:5px;padding:12px 14px;display:flex;flex-direction:column;gap:5px">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><span style="font:700 10px/1.2 Arial,sans-serif;color:#285c44;text-transform:uppercase;letter-spacing:.06em">15 Systems · 50 Loops</span><span data-fg-badge hidden style="background:#1d4e42;color:#fff;font:700 9px/1.2 Arial,sans-serif;padding:2px 6px;border-radius:3px;text-transform:uppercase">In season</span></div>
+      <h3 style="font-size:15px;line-height:1.3;margin:0"><a href="/michigan-winter-trails/" style="color:#183a30">Michigan Winter Trails</a></h3>
+      <p style="font-size:12px;line-height:1.45;color:#55635d;margin:0">Audited DNR &amp; NPS snowshoe, cross-country ski, and fat-bike loops with track etiquette &amp; plow rules.</p>
+      <a href="/michigan-winter-trails/" style="margin-top:auto;padding-top:4px;font:700 11.5px/1.2 Arial,sans-serif;color:#1d4e42">Explore winter trails &rarr;</a>
+    </article>
+    <article data-fg-card data-fg-months="10,11,12,1,2,3,4" style="background:#fff;border:1px solid #dce5de;border-radius:5px;padding:12px 14px;display:flex;flex-direction:column;gap:5px">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><span style="font:700 10px/1.2 Arial,sans-serif;color:#6e2b3b;text-transform:uppercase;letter-spacing:.06em">18 Venues · 102 Crosswalk</span><span data-fg-badge hidden style="background:#1d4e42;color:#fff;font:700 9px/1.2 Arial,sans-serif;padding:2px 6px;border-radius:3px;text-transform:uppercase">In season</span></div>
+      <h3 style="font-size:15px;line-height:1.3;margin:0"><a href="/michigan-wine-cider-spirits/" style="color:#183a30">MI Wine, Cider &amp; Spirits</a></h3>
+      <p style="font-size:12px;line-height:1.45;color:#55635d;margin:0">Traverse City &amp; Petoskey wineries, cideries, and distilleries with heated igloos &amp; snowshoe loops.</p>
+      <a href="/michigan-wine-cider-spirits/" style="margin-top:auto;padding-top:4px;font:700 11.5px/1.2 Arial,sans-serif;color:#1d4e42">Explore tasting guide &rarr;</a>
+    </article>
+    <article data-fg-card data-fg-months="4,5,6,7,8,9,10,11" style="background:#fff;border:1px solid #dce5de;border-radius:5px;padding:12px 14px;display:flex;flex-direction:column;gap:5px">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><span style="font:700 10px/1.2 Arial,sans-serif;color:#255d54;text-transform:uppercase;letter-spacing:.06em">15 Beaches · Apr–Nov</span><span data-fg-badge hidden style="background:#1d4e42;color:#fff;font:700 9px/1.2 Arial,sans-serif;padding:2px 6px;border-radius:3px;text-transform:uppercase">In season</span></div>
+      <h3 style="font-size:15px;line-height:1.3;margin:0"><a href="/great-lakes-rockhounding-field-guide/" style="color:#183a30">Great Lakes Rockhound’s Field Guide</a></h3>
+      <p style="font-size:12px;line-height:1.45;color:#55635d;margin:0">15 agate, Petoskey, Yooperlite &amp; fossil beaches, stone ID photos, live wave badges &amp; 25-lb collecting rules.</p>
+      <a href="/great-lakes-rockhounding-field-guide/" style="margin-top:auto;padding-top:4px;font:700 11.5px/1.2 Arial,sans-serif;color:#1d4e42">Explore rock beaches &rarr;</a>
+    </article>
+    <article data-fg-card data-fg-months="5,6,7,8,9,10" style="background:#fff;border:1px solid #dce5de;border-radius:5px;padding:12px 14px;display:flex;flex-direction:column;gap:5px">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><span style="font:700 10px/1.2 Arial,sans-serif;color:#0c4a6e;text-transform:uppercase;letter-spacing:.06em">12 Archipelagos · May–Oct</span><span data-fg-badge hidden style="background:#1d4e42;color:#fff;font:700 9px/1.2 Arial,sans-serif;padding:2px 6px;border-radius:3px;text-transform:uppercase">In season</span></div>
+      <h3 style="font-size:15px;line-height:1.3;margin:0"><a href="/great-lakes-island-hopping-field-guide/" style="color:#183a30">Great Lakes Island-Hopper Guide</a></h3>
+      <p style="font-size:12px;line-height:1.45;color:#55635d;margin:0">12 ferry-access archipelagos, open-water crossing metrics, vehicle rules, pet bans &amp; personality matrix.</p>
+      <a href="/great-lakes-island-hopping-field-guide/" style="margin-top:auto;padding-top:4px;font:700 11.5px/1.2 Arial,sans-serif;color:#1d4e42">Explore island guide &rarr;</a>
+    </article>
+    <article data-fg-card data-fg-months="2,3,4,5" style="background:#fff;border:1px solid #dce5de;border-radius:5px;padding:12px 14px;display:flex;flex-direction:column;gap:5px">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><span style="font:700 10px/1.2 Arial,sans-serif;color:#1e3a1e;text-transform:uppercase;letter-spacing:.06em">12 Milestones · Feb–May</span><span data-fg-badge hidden style="background:#1d4e42;color:#fff;font:700 9px/1.2 Arial,sans-serif;padding:2px 6px;border-radius:3px;text-transform:uppercase">In season</span></div>
+      <h3 style="font-size:15px;line-height:1.3;margin:0"><a href="/michigan-spring-awakening-field-guide/" style="color:#183a30">Michigan Spring Awakening Guide</a></h3>
+      <p style="font-size:12px;line-height:1.45;color:#55635d;margin:0">Morels, sugarbushes, trilliums, vernal choruses, and an interactive 41.7°N–47.4°N Latitudinal Wave Scrubber.</p>
+      <a href="/michigan-spring-awakening-field-guide/" style="margin-top:auto;padding-top:4px;font:700 11.5px/1.2 Arial,sans-serif;color:#1d4e42">Explore spring guide &rarr;</a>
+    </article>
+    <article data-fg-card data-fg-months="2,3,4" style="background:#fff;border:1px solid #dce5de;border-radius:5px;padding:12px 14px;display:flex;flex-direction:column;gap:5px">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><span style="font:700 10px/1.2 Arial,sans-serif;color:#1e3a1e;text-transform:uppercase;letter-spacing:.06em">12 Chapters · Feb–Apr</span><span data-fg-badge hidden style="background:#1d4e42;color:#fff;font:700 9px/1.2 Arial,sans-serif;padding:2px 6px;border-radius:3px;text-transform:uppercase">In season</span></div>
+      <h3 style="font-size:15px;line-height:1.3;margin:0"><a href="/michigan-false-spring-field-guide/" style="color:#183a30">Michigan False-Spring Guide</a></h3>
+      <p style="font-size:12px;line-height:1.45;color:#55635d;margin:0">4-zone late-winter split: south-slope shed hunting, freeze-thaw sap runs, morning crust hikes &amp; mud traps.</p>
+      <a href="/michigan-false-spring-field-guide/" style="margin-top:auto;padding-top:4px;font:700 11.5px/1.2 Arial,sans-serif;color:#1d4e42">Explore false-spring guide &rarr;</a>
+    </article>
+    <article data-fg-card data-fg-months="5,6,7,8,9,10" style="background:#fff;border:1px solid #dce5de;border-radius:5px;padding:12px 14px;display:flex;flex-direction:column;gap:5px">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><span style="font:700 10px/1.2 Arial,sans-serif;color:#0369a1;text-transform:uppercase;letter-spacing:.06em">12 Preserves · May–Oct</span><span data-fg-badge hidden style="background:#1d4e42;color:#fff;font:700 9px/1.2 Arial,sans-serif;padding:2px 6px;border-radius:3px;text-transform:uppercase">In season</span></div>
+      <h3 style="font-size:15px;line-height:1.3;margin:0"><a href="/great-lakes-shipwreck-viewing-field-guide/" style="color:#183a30">Shipwreck Viewing Field Guide</a></h3>
+      <p style="font-size:12px;line-height:1.45;color:#55635d;margin:0">12 shallow Great Lakes shipwrecks in 5–25 ft of crystal-clear water visible by kayak, glass-bottom boat &amp; shore.</p>
+      <a href="/great-lakes-shipwreck-viewing-field-guide/" style="margin-top:auto;padding-top:4px;font:700 11.5px/1.2 Arial,sans-serif;color:#1d4e42">Explore shipwreck guide &rarr;</a>
+    </article>
+    <article data-fg-card data-fg-months="1,2,3,4,5,6,7,8,9,10,11,12" style="background:#fff;border:1px solid #dce5de;border-radius:5px;padding:12px 14px;display:flex;flex-direction:column;gap:5px">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><span style="font:700 10px/1.2 Arial,sans-serif;color:#6c5643;text-transform:uppercase;letter-spacing:.06em">12 Preserves &middot; Year-Round</span><span data-fg-badge hidden style="background:#1d4e42;color:#fff;font:700 9px/1.2 Arial,sans-serif;padding:2px 6px;border-radius:3px;text-transform:uppercase">In season</span></div>
+      <h3 style="font-size:15px;line-height:1.3;margin:0"><a href="/michigan-dark-sky-field-guide/" style="color:#183a30">Michigan After Dark Field Guide</a></h3>
+      <p style="font-size:12px;line-height:1.45;color:#55635d;margin:0">12 dark-sky preserves &amp; unobstructed Lake Superior &amp; Lake Huron beaches with horizon azimuth compasses, Bortle ratings &amp; night camera settings.</p>
+      <a href="/michigan-dark-sky-field-guide/" style="margin-top:auto;padding-top:4px;font:700 11.5px/1.2 Arial,sans-serif;color:#1d4e42">Explore dark sky guide &rarr;</a>
+    </article>
+    <article data-fg-card data-fg-months="4,5,6,7,8,9,10" style="background:#fff;border:1px solid #dce5de;border-radius:5px;padding:12px 14px;display:flex;flex-direction:column;gap:5px">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><span style="font:700 10px/1.2 Arial,sans-serif;color:#1d4e42;text-transform:uppercase;letter-spacing:.06em">14 Floats &middot; May–Oct</span><span data-fg-badge hidden style="background:#1d4e42;color:#fff;font:700 9px/1.2 Arial,sans-serif;padding:2px 6px;border-radius:3px;text-transform:uppercase">In season</span></div>
+      <h3 style="font-size:15px;line-height:1.3;margin:0"><a href="/michigan-rivers-field-guide/" style="color:#183a30">Michigan Rivers Field Guide</a></h3>
+      <p style="font-size:12px;line-height:1.45;color:#55635d;margin:0">14 iconic river floats with live USGS CFS flow badges, USFS permit rules, and livery shuttles.</p>
+      <a href="/michigan-rivers-field-guide/" style="margin-top:auto;padding-top:4px;font:700 11.5px/1.2 Arial,sans-serif;color:#1d4e42">Explore river guide &rarr;</a>
+    </article>
+    <article data-fg-card data-fg-months="1,2,3,4,5,6,7,8,9,10,11,12" style="background:#fff;border:1px solid #dce5de;border-radius:5px;padding:12px 14px;display:flex;flex-direction:column;gap:5px">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><span style="font:700 10px/1.2 Arial,sans-serif;color:#1e3f20;text-transform:uppercase;letter-spacing:.06em">12 Events &middot; All Year</span><span data-fg-badge hidden style="background:#1d4e42;color:#fff;font:700 9px/1.2 Arial,sans-serif;padding:2px 6px;border-radius:3px;text-transform:uppercase">In season</span></div>
+      <h3 style="font-size:15px;line-height:1.3;margin:0"><a href="/national-park-phenomena-field-guide/" style="color:#183a30">National Park Phenomenon Atlas</a></h3>
+      <p style="font-size:12px;line-height:1.45;color:#55635d;margin:0">12 narrow-window natural spectacles: Firefall, synchronous fireflies, elk rut, and geysers with live timeline scrubber.</p>
+      <a href="/national-park-phenomena-field-guide/" style="margin-top:auto;padding-top:4px;font:700 11.5px/1.2 Arial,sans-serif;color:#1d4e42">Explore phenomenon atlas &rarr;</a>
+    </article>
+    <article data-fg-card data-fg-months="4,5,6,7,8,9,10,11" style="background:#fff;border:1px solid #dce5de;border-radius:5px;padding:12px 14px;display:flex;flex-direction:column;gap:5px">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><span style="font:700 10px/1.2 Arial,sans-serif;color:#0f2942;text-transform:uppercase;letter-spacing:.06em">12 Drives &middot; Apr–Nov</span><span data-fg-badge hidden style="background:#1d4e42;color:#fff;font:700 9px/1.2 Arial,sans-serif;padding:2px 6px;border-radius:3px;text-transform:uppercase">In season</span></div>
+      <h3 style="font-size:15px;line-height:1.3;margin:0"><a href="/michigan-coastal-drives-field-guide/" style="color:#183a30">Michigan Coastal Drives Field Guide</a></h3>
+      <p style="font-size:12px;line-height:1.45;color:#55635d;margin:0">M-22, M-119 Tunnel of Trees, Brockway Mountain, US-2 &amp; US-23 with milepost turnouts, RV rules &amp; fall color waves.</p>
+      <a href="/michigan-coastal-drives-field-guide/" style="margin-top:auto;padding-top:4px;font:700 11.5px/1.2 Arial,sans-serif;color:#1d4e42">Explore coastal drives &rarr;</a>
+    </article>
+  </div>
+</section>
+<section class="winter-router" id="winter-task-router" aria-labelledby="winter-task-router-title">
+  <div class="winter-router-head">
+    <div><span class="winter-router-kicker">Michigan winter decision desk</span><h2 id="winter-task-router-title">Choose the winter question you are trying to answer</h2></div>
+    <p>Start with the decision, then move to the live signal that can actually answer it. The planning pages explain the place; the live tools tell you what the day looks like.</p>
+  </div>
+  <div class="winter-persona-grid">
+    <article class="winter-persona" data-winter-persona="skier">
+      <span>Cross-country skier</span><h3>I want to ski</h3>
+      <p>Choose the trail system first, then check whether the snow signal is worth chasing and confirm the latest grooming report.</p>
+      <div class="winter-sequence">Plan trail → live snow → groomer</div>
+      <div class="winter-persona-actions"><a class="primary" href="/michigan-cross-country-skiing/" data-track-tool="michigan-xc-planning" data-placement="winter-persona-skier">Plan Michigan XC →</a><a href="/michigan-winter-trails/" data-track-tool="michigan-winter-trails" data-placement="winter-persona-skier-guide">15-System Trail Guide →</a></div>
+    </article>
+    <article class="winter-persona" data-winter-persona="snowfall-checker">
+      <span>Anyone after a storm</span><h3>How much snow fell?</h3>
+      <p>See every official snowfall report in Michigan on one map, ranked by town with the time, whether it was measured, and the observer's own remark.</p>
+      <div class="winter-sequence">Pick the window → find your town → read the remark</div>
+      <div class="winter-persona-actions"><a class="primary" href="/michigan-snow-totals/" data-track-tool="michigan-snow-totals" data-placement="winter-persona-snowfall">Open snow totals →</a><a href="/michigan-first-snow-adventures/" data-track-tool="michigan-first-snow-adventures" data-placement="winter-persona-snowfall-guide">First Snow Field Guide →</a></div>
+    </article>
+    <article class="winter-persona" data-winter-persona="snowmobiler">
+      <span>Snowmobiler</span><h3>I want to ride</h3>
+      <p>Choose your region, then reconcile official closures, club condition reports, grooming freshness and the near-term thaw or snowfall signal, and trace a real trail-following route between two points.</p>
+      <div class="winter-sequence">Choose region → verify trail → plan the route</div>
+      <div class="winter-persona-actions"><a class="primary" href="/snowmobile/" data-track-tool="michigan-snowmobile" data-placement="winter-persona-snowmobile">Open snowmobile conditions →</a><a href="/snowmobile/#state-map" data-track-tool="michigan-snowmobile-map" data-placement="winter-persona-snowmobile-map">Statewide map →</a></div>
+    </article>
+    <article class="winter-persona" data-winter-persona="ice-checker">
+      <span>Ice angler / lake watcher</span><h3>I’m checking ice</h3>
+      <p>Pick the water, read accumulated cold and available remote ice context, then verify conditions locally before any on-ice decision.</p>
+      <div class="winter-sequence">Choose water → cold trend → local check</div>
+      <div class="winter-persona-actions"><a class="primary" href="/michigan-ice/" data-track-tool="michigan-ice" data-placement="winter-persona-ice">Open Michigan Ice →</a><a href="/michigan-ice/regions/saginaw-bay.html" data-track-tool="saginaw-bay-ice" data-placement="winter-persona-ice-saginaw">Saginaw Bay example →</a></div>
+    </article>
+    <article class="winter-persona" data-winter-persona="winter-day">
+      <span>Winter traveler</span><h3>I’m planning a winter weekend up north</h3>
+      <p>Check the drive before the activity. Bridge status and regional weather can change the trip even when the trail or lake looks promising.</p>
+      <div class="winter-sequence">Choose base town → crossing conditions → activity</div>
+      <div class="winter-persona-actions"><a class="primary" href="/michigan-winter-weekends/" data-track-tool="michigan-winter-weekends" data-placement="winter-persona-travel">12 Winter Weekend Towns →</a><a href="/mackinac-bridge-live/" data-track-tool="mackinac-bridge-live" data-placement="winter-persona-travel-bridge">Check Mackinac Bridge →</a></div>
+    </article>
+    <article class="winter-persona" data-winter-persona="undecided">
+      <span>Open-ended day planner</span><h3>I don’t know what’s worth doing</h3>
+      <p>Start with the conditions-driven day-trip planner, or jump into the full finder and filter the tool library by what is in season.</p>
+      <div class="winter-sequence">Conditions → best-fit activity → specialist tool</div>
+      <div class="winter-persona-actions"><a class="primary" href="https://michiganoutdoorsnow.chrisizworski.com" target="_blank" rel="noopener" data-track-tool="michigan-outdoors-now" data-placement="winter-persona-undecided">Open Michigan Outdoors Now ↗</a><a href="/michigan-winter-activities/" data-track-tool="michigan-winter-activities" data-placement="winter-persona-undecided-guide">18 Winter Experiences →</a></div>
+    </article>
+
+    <article class="winter-persona" data-winter-persona="find-snow">
+      <span>Snowshoer / holiday snow seeker</span><h3>Where is enough snow on the ground?</h3>
+      <p>Compare modeled depth with nearby station observations, then evaluate actual recreation destinations or Christmas-week snowbelt towns. Snow at a map pixel does not verify winter parking or safe access.</p>
+      <div class="winter-sequence">Snow depth → actual destination → verify access</div>
+      <div class="winter-persona-actions"><a class="primary" href="/michigan-snow-depth/" data-track-tool="michigan-snow-depth" data-placement="winter-persona-find-snow">Find good snow →</a><a href="/michigan-white-christmas-escapes/" data-track-tool="michigan-white-christmas-escapes" data-placement="winter-persona-white-christmas">White Christmas Escapes →</a></div>
+    </article>
+    <article class="winter-persona" data-winter-persona="lake-effect">
+      <span>Snowbelt watcher</span><h3>Where might lake-effect snow hit next?</h3>
+      <p>Compare NWS alerts, hourly snow forecasts, winds and lake temperatures. A forecast snowbelt is not a measured snowfall total or an exact band track.</p>
+      <div class="winter-sequence">Choose snowbelt → forecast window → observed follow-up</div>
+      <div class="winter-persona-actions"><a class="primary" href="/lake-effect-snow/" data-track-tool="lake-effect-snow" data-placement="winter-persona-lake-effect">Watch the snowbelt →</a><a href="/michigan-first-snow-adventures/" data-track-tool="michigan-first-snow-adventures" data-placement="winter-persona-lake-effect-guide">12 Early Snowbelts Guide →</a></div>
+    </article>
+    <article class="winter-persona" data-winter-persona="downhill">
+      <span>Downhill skier</span><h3>Which Michigan ski hill should I choose?</h3>
+      <p>Compare real ski areas and their terrain, then read official resort reports for current openings, lifts, grooming and snowmaking—not just regional weather.</p>
+      <div class="winter-sequence">Compare hills → official resort report → trip decision</div>
+      <div class="winter-persona-actions"><a class="primary" href="/michigan-ski-hills/" data-track-tool="michigan-ski-hills" data-placement="winter-persona-downhill">Compare ski hills →</a><a href="/lake-effect-snow/" data-track-tool="lake-effect-snow" data-placement="winter-persona-downhill-snowbelt">Upcoming snowbelt outlook →</a></div>
+    </article>
+    <article class="winter-persona" data-winter-persona="ice-caves">
+      <span>Winter waterfall explorer</span><h3>Are the ice caves forming yet?</h3>
+      <p>Check cold accumulation, formation evidence and each site's public access guidance. Beautiful ice formations are not a promise of safe trails or ice.</p>
+      <div class="winter-sequence">Formation evidence → site access → safe alternative</div>
+      <div class="winter-persona-actions"><a class="primary" href="/michigan-ice-caves/" data-track-tool="michigan-ice-caves" data-placement="winter-persona-ice-caves">Explore ice caves →</a><a href="/frozen-michigan/" data-track-tool="frozen-michigan" data-placement="winter-persona-ice-caves-guide">Frozen Michigan Guide →</a></div>
+    </article>
+    <article class="winter-persona" data-winter-persona="freighter-layup">
+      <span>Great Lakes freighter watcher</span><h3>Where are the freighters laying up?</h3>
+      <p>Follow dated harbor confirmations and vessel stories through winter. AIS silence or a stopped ship by itself does not prove layup.</p>
+      <div class="winter-sequence">Confirmed layup → vessel story → live AIS comparison</div>
+      <div class="winter-persona-actions"><a class="primary" href="/great-lakes-freighter-winter-layup/" data-track-tool="great-lakes-freighter-winter-layup" data-placement="winter-persona-layup">Track winter layups →</a><a href="/great-lakes-winter-freighter-guide/" data-track-tool="great-lakes-winter-freighter-guide" data-placement="winter-persona-layup-guide">12-Harbor Winter Guide →</a></div>
+    </article>
+  </div>
+</section>
+
+<section class="featured-tools" aria-labelledby="featured-tools-title">
+  <div class="featured-head">
+    <h2 id="featured-tools-title">Start with the live tools</h2>
+    <span>Free &middot; No account required</span>
+  </div>
+  <article class="detroit-spotlight" data-spotlight-tool="detroit-outdoors">
+    <div class="detroit-spotlight-copy">
+      <div class="feature-kicker">New &middot; Detroit / Southeast Michigan</div>
+      <h3><a href="/detroit-outdoors/" data-track-tool="detroit-outdoors" data-placement="tools-spotlight">Don’t pick an activity first. See what became worth doing.</a></h3>
+      <p><strong>Detroit Outdoors starts with what changed today.</strong> A freighter on the river. A migration push. Calm water. A sunset window. Fall color. A surprisingly good park afternoon.</p>
+      <p>It watches Southeast Michigan and surfaces the few things worth paying attention to now.</p>
+      <a class="spotlight-cta" href="/detroit-outdoors/" data-track-tool="detroit-outdoors" data-placement="tools-spotlight-cta">Open today’s Detroit board <span aria-hidden="true">&rarr;</span></a>
+    </div>
+    <a class="detroit-live-board" href="/detroit-outdoors/" data-track-tool="detroit-outdoors" data-placement="tools-spotlight-live-board" aria-label="Open the Detroit Outdoors live board" aria-live="polite">
+      <span class="detroit-live-kicker">Live board now</span>
+      <strong class="detroit-live-lead" id="detroit-tools-lead">Reading today’s Southeast Michigan opportunities…</strong>
+      <ol class="detroit-live-list" id="detroit-tools-board">
+        <li>Migration, water, freighter traffic, sky and seasonal windows can all compete here.</li>
+      </ol>
+      <span class="detroit-live-evidence" id="detroit-tools-evidence">Opening the live evidence…</span>
+      <span class="detroit-live-meta" id="detroit-tools-updated">Live preview from Detroit Outdoors Today</span>
+    </a>
+  </article>
+  <div class="feature-grid">
+    <article class="feature-card" data-featured-tool="michigan-border-wait-times">
+      <div class="feature-kicker">All five international crossings</div>
+      <h3><a href="/michigan-border-wait-times/" data-track-tool="michigan-border-wait-times" data-placement="tools-featured">Michigan Border Wait Times Live</a></h3>
+      <p>Compare Gordie Howe, Ambassador and the Detroit tunnel, then check Blue Water and the Upper Peninsula crossing with official waits, cameras, warnings and tolls.</p>
+      <a class="tool-cta" href="/michigan-border-wait-times/" data-track-tool="michigan-border-wait-times" data-placement="tools-featured">Compare border crossings <span aria-hidden="true">&rarr;</span></a>
+    </article>
+    <article class="feature-card" data-featured-tool="niagara-border-crossing">
+      <div class="feature-kicker">Live Niagara border decision</div>
+      <h3><a href="/niagara-border-crossing/" data-track-tool="niagara-border-crossing" data-placement="tools-featured">Niagara Border Wait Times Live</a></h3>
+      <p>Compare Peace, Rainbow, Whirlpool Rapids and Lewiston–Queenston using official directional waits, traveler eligibility and a conservative detour guardrail.</p>
+      <a class="tool-cta" href="/niagara-border-crossing/" data-track-tool="niagara-border-crossing" data-placement="tools-featured">Check Niagara waits <span aria-hidden="true">&rarr;</span></a>
+    </article>
+    <article class="feature-card" data-featured-tool="mackinac-bridge-live">
+      <div class="feature-kicker">Official crossing status</div>
+      <h3><a href="/mackinac-bridge-live/" data-track-tool="mackinac-bridge-live" data-placement="tools-featured">Mackinac Bridge Live</a></h3>
+      <p>Check the official crossing status, both cameras, NWS radar, approach wind, vehicle restrictions, tolls, and driver assistance.</p>
+      <a class="tool-cta" href="/mackinac-bridge-live/" data-track-tool="mackinac-bridge-live" data-placement="tools-featured">Check the bridge <span aria-hidden="true">&rarr;</span></a>
+    </article>
+    <article class="feature-card" data-featured-tool="michigan-outdoor-weekend">
+      <div class="feature-kicker">Weekend planning hub</div>
+      <h3><a href="https://weekend.chrisizworski.com" target="_blank" rel="noopener" data-track-tool="michigan-outdoor-weekend" data-placement="tools-featured">Michigan Outdoor Weekend</a></h3>
+      <p>Plan a Michigan weekend outside with hand-built guides that route to live conditions and real campsite reservations.</p>
+      <a class="tool-cta" href="https://weekend.chrisizworski.com" target="_blank" rel="noopener" data-track-tool="michigan-outdoor-weekend" data-placement="tools-featured">Plan a weekend <span aria-hidden="true">&rarr;</span></a>
+    </article>
+    <article class="feature-card" data-featured-tool="tahquamenon-falls-live">
+      <div class="feature-kicker">Live waterfall + park intelligence</div>
+      <h3><a href="https://chrisizworski.com/tahquamenon-falls/" data-track-tool="tahquamenon-falls-live" data-placement="tools-featured">Tahquamenon Falls Live</a></h3>
+      <p>See whether Tahquamenon is worth the drive right now, compare Upper and Lower Falls, check live river flow and trail weather, then build the visit on an interactive park map.</p>
+      <a class="tool-cta" href="https://chrisizworski.com/tahquamenon-falls/" data-track-tool="tahquamenon-falls-live" data-placement="tools-featured">Plan Tahquamenon <span aria-hidden="true">&rarr;</span></a>
+    </article>
+    <article class="feature-card" data-featured-tool="duluth-canal-park">
+      <div class="feature-kicker">Live Duluth ship watch</div>
+      <h3><a href="/duluth-canal-park/" data-track-tool="duluth-canal-park" data-placement="tools-featured">Duluth Ship Schedule &amp; Canal Park Live Cams</a></h3>
+      <p>See which Duluth ship matters next, its supported Aerial Lift Bridge passage window, live AIS position, camera network, and where to watch from Canal Park.</p>
+      <a class="tool-cta" href="/duluth-canal-park/" data-track-tool="duluth-canal-park" data-placement="tools-featured">Watch Duluth ships <span aria-hidden="true">&rarr;</span></a>
+    </article>
+    <article class="feature-card" data-featured-tool="soo-locks">
+      <div class="feature-kicker">Live vessel map</div>
+      <h3><a href="/soo-locks/" data-track-tool="soo-locks" data-placement="tools-featured">Soo Locks Live</a></h3>
+      <p>See AIS-equipped vessels near the Soo Locks, current navigation-season status, passage resources, and visitor information.</p>
+      <a class="tool-cta" href="/soo-locks/" data-track-tool="soo-locks" data-placement="tools-featured">Open the vessel map <span aria-hidden="true">&rarr;</span></a>
+    </article>
+    <article class="feature-card" data-featured-tool="up-north-michigan"><div class="feature-kicker">Five live reads, one screen</div><h3><a href="/up-north-michigan/" data-track-tool="up-north-michigan" data-placement="tools-featured">Up North Michigan</a></h3><p>The pre-trip check: aurora odds, fall colour stage, Mackinac Bridge wind, Great Lakes water and ice, each with a link to the tool behind it.</p><a class="tool-cta" href="/up-north-michigan/" data-track-tool="up-north-michigan" data-placement="tools-featured">Check before you go <span aria-hidden="true">&rarr;</span></a></article><article class="feature-card" data-featured-tool="northern-lights-michigan">
+      <div class="feature-kicker">Live NOAA forecast</div>
+      <h3><a href="/northern-lights-michigan/" data-track-tool="northern-lights-michigan" data-placement="tools-featured">Northern Lights Michigan</a></h3>
+      <p>Check the live Kp forecast, Michigan viewing odds, dark-sky locations, cloud considerations, and photography settings.</p>
+      <a class="tool-cta" href="/northern-lights-michigan/" data-track-tool="northern-lights-michigan" data-placement="tools-featured">Check tonight's forecast <span aria-hidden="true">&rarr;</span></a>
+    </article>
+    <article class="feature-card" data-featured-tool="great-lakes-buoys">
+      <div class="feature-kicker">Live lake conditions</div>
+      <h3><a href="/great-lakes-buoys/" data-track-tool="great-lakes-buoys" data-placement="tools-featured">Great Lakes Buoy Dashboard</a></h3>
+      <p>Explore reporting NOAA stations across all five lakes for waves, wind, water temperature, pressure, and activity guidance.</p>
+      <a class="tool-cta" href="/great-lakes-buoys/" data-track-tool="great-lakes-buoys" data-placement="tools-featured">View lake conditions <span aria-hidden="true">&rarr;</span></a>
+    </article>
+    <article class="feature-card" data-featured-tool="michigan-outdoors-now">
+      <div class="feature-kicker">Live-condition planner</div>
+      <h3><a href="https://michiganoutdoorsnow.chrisizworski.com" target="_blank" rel="noopener" data-track-tool="michigan-outdoors-now" data-placement="tools-featured">Michigan Outdoors Now</a></h3>
+      <p>Enter a Michigan city or ZIP and compare three day-trip plans ranked for forecast, drive time, interests, and group needs.</p>
+      <a class="tool-cta" href="https://michiganoutdoorsnow.chrisizworski.com" target="_blank" rel="noopener" data-track-tool="michigan-outdoors-now" data-placement="tools-featured">Plan an outdoor day <span aria-hidden="true">&rarr;</span></a>
+    </article>
+    <article class="feature-card" data-featured-tool="au-sable-field-map">
+      <div class="feature-kicker">Interactive river map</div>
+      <h3><a href="https://ausable.chrisizworski.com/" target="_blank" rel="noopener" data-track-tool="au-sable-field-map" data-placement="tools-featured">Au Sable Field Map</a></h3>
+      <p>Plan with 70 verified access points, campgrounds, live USGS flow, weather, activity filters, and float-time estimates.</p>
+      <a class="tool-cta" href="https://ausable.chrisizworski.com/" target="_blank" rel="noopener" data-track-tool="au-sable-field-map" data-placement="tools-featured">Open the river map <span aria-hidden="true">&rarr;</span></a>
+    </article>
+    <article class="feature-card" data-featured-tool="great-lakes-freighter-tracking">
+      <div class="feature-kicker">Live lake-wide AIS map</div>
+      <h3><a href="/great-lakes-freighter-tracking/" data-track-tool="great-lakes-freighter-tracking" data-placement="tools-featured">Great Lakes Ship Tracker Live</a></h3>
+      <p>Track AIS-equipped vessels across all five lakes, then jump to the Soo Locks, Mackinac, Duluth, Port Huron, Detroit, or Saginaw Bay.</p>
+      <a class="tool-cta" href="/great-lakes-freighter-tracking/" data-track-tool="great-lakes-freighter-tracking" data-placement="tools-featured">Open the ship map <span aria-hidden="true">&rarr;</span></a>
+    </article>
+  </div>
+</section>
+
+<p data-ballard-ctr-v1="tools-links"><strong>Seattle now:</strong> <a href="/ballard-locks/">Ballard Locks live visitor guide</a> · <a href="/ballard-locks/salmon-counts/">Latest Ballard Locks fish and salmon counts</a></p>
+<p>Planning beyond Michigan? <a href="/national-tools/">Browse U.S. outdoor tools for aurora, rivers, gardens and seasonal trips</a>.</p>
+<section class="finder" aria-labelledby="tools-evidence-title">
+<h2 id="tools-evidence-title">Know what the answer is based on</h2>
+<p>An observation describes what was measured; a forecast or model estimates what could happen; historical averages help plan a season. Open the specialist tool for its source details and available observation or forecast times. Missing or stale readings can change how useful the answer is.</p>
+<p>Check the linked official agency or operator for closures and access rules. Built and maintained by <a href="/chris-izworski/" rel="author">Chris Izworski</a>. <a href="/case-studies/">Read how the tools are built</a> and <a href="/citations/">browse source references</a>.</p>
+</section>
+</div>
 </div>
 
 <script src="/assets/hub-search-lexicon.js?v=20261118"></script>
 <script src="/assets/hub-search-engine.js?v=20261118"></script>
 <script src="/assets/hub-search.js?v=20261118"></script>
+<script defer src="/assets/tool-stars.js?v=20261118"></script>
 <script>
 (function(){
   'use strict';
