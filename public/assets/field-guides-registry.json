@@ -452,6 +452,29 @@
         "/mackinac-bridge-live/",
         "/fall-color/"
       ]
+    },
+    {
+      "slug": "michigan-false-spring-field-guide",
+      "url": "/michigan-false-spring-field-guide/",
+      "title": "Michigan Two-Season False-Spring Field Guide",
+      "subtitle": "12 Transition Chapters · Thaw, Morning Crust, Maple Sap & Shed Antlers",
+      "status": "live",
+      "releaseWave": "Release 3: Late-Winter Transition (Feb–Apr)",
+      "stopCount": 12,
+      "activeMonths": [
+        2,
+        3,
+        4
+      ],
+      "seasonLabel": "Feb–Apr · False Spring & Thaw",
+      "summary": "Navigate Michigan's 8-week two-season split (Feb 15–Apr 10): 12 chapters covering south-slope shed hunting, freeze-thaw sugarbushes, 8 AM crust vs. 2 PM slush, late-season ice rot, and river-breakup wildlife.",
+      "connectedTools": [
+        "/michigan-shed-antlers/",
+        "/michigan-maple-sap-run/",
+        "/winter-hike-snowshoe-lab/",
+        "/michigan-snow-depth/",
+        "/winter-eagle-watching/"
+      ]
     }
   ],
   "plannedRoadmap": [
