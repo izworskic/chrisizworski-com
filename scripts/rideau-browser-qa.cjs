@@ -12,7 +12,7 @@ const server=http.createServer((req,res)=>{
   try{
     if(fs.statSync(file).isDirectory())file=path.join(file,'index.html');
     const ext=path.extname(file);
-    res.setHeader('Content-Type',({'.json':'application/json','.js':'application/javascript','.html':'text/html','.css':'text/css','.png':'image/png','.jpg':'image/jpeg'}[ext]||'application/octet-stream'));
+    res.setHeader('Content-Type',({'.json':'application/json','.js':'application/javascript','.html':'text/html','.css':'text/css','.png':'image/png','.jpg':'image/jpeg','.svg':'image/svg+xml'}[ext]||'application/octet-stream'));
     res.end(fs.readFileSync(file));
   }catch(_){res.writeHead(404);res.end('Not found');}
 });
@@ -50,9 +50,11 @@ async function run(){
        await page.locator('#lock-lab-reset').click();
        assert.match(await page.locator('#lock-lab-step-title').innerText(),/Enter at the lower water level/);
        await page.locator('[data-rideau-diorama="jones"]').click();
+       await page.waitForFunction(()=>{const i=document.getElementById('rideau-diorama-image');return i&&i.complete&&i.naturalWidth>=900;},null,{timeout:12000});
        assert.equal(await page.locator('#rideau-diorama-image').getAttribute('src'),'/assets/rideau-locks-jones-falls-diagram.svg');
        assert.match(await page.locator('#rideau-diorama-caption').innerText(),/three lower locks/i);
        await page.locator('[data-rideau-diorama="ottawa"]').click();
+       await page.waitForFunction(()=>{const i=document.getElementById('rideau-diorama-image');return i&&i.complete&&i.naturalWidth>=900;},null,{timeout:12000});
        assert.equal(await page.locator('#rideau-diorama-image').getAttribute('src'),'/assets/rideau-locks-ottawa-diagram.svg');
        if(width===390){
          const dioramaShot=path.join(out,'rideau-dioramas-390.png');
