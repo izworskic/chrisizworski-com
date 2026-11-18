@@ -62,6 +62,20 @@ async function run(){
       assert.match(await page.locator('#feature-name').innerText(),/Newboro/);
       await page.locator('#recommendations .stop-button').last().click();
       assert.match(await page.locator('#feature-name').innerText(),/Chaffeys/);
+      if(width===390){
+        await page.locator('#feature-photo-wrap').scrollIntoViewIfNeeded();
+        await page.waitForFunction(()=>{const img=document.getElementById('feature-photo');return img&&img.complete&&img.naturalWidth>=200&&!img.closest('[hidden]');},null,{timeout:20000});
+        await page.locator('#rideau-map').scrollIntoViewIfNeeded();
+        await page.waitForFunction(()=>[...document.querySelectorAll('#rideau-map img.leaflet-tile-loaded')].some(img=>img.complete&&img.naturalWidth>=200),null,{timeout:18000});
+        const media=await page.evaluate(()=>({photo:{loaded:document.getElementById('feature-photo').naturalWidth>200,
+          src:document.getElementById('feature-photo').currentSrc,credit:document.getElementById('feature-photo-credit').textContent},
+          tiles:[...document.querySelectorAll('#rideau-map img.leaflet-tile-loaded')].filter(img=>img.naturalWidth>=200).length}));
+        assert.ok(media.photo.credit.includes('Source and author'));
+        report.realCommonsPhotos={status:'loaded-in-Chromium',evidence:media.photo};
+        report.realExternalTiles={status:'loaded-in-Chromium',loadedTileImages:media.tiles};
+        const loadedShot=path.join(out,'rideau-map-and-photo-390.png');
+        await page.screenshot({path:loadedShot,fullPage:true});report.screenshots.push(loadedShot);
+      }
       await page.locator('.directory summary').click();
       assert.equal(await page.locator('#directory-body tr').count(),42);
       const metrics=await page.evaluate(()=>({documentWidth:document.documentElement.scrollWidth,viewportWidth:document.documentElement.clientWidth,description:getComputedStyle(document.querySelector('.lead')).fontSize}));
@@ -92,6 +106,14 @@ async function run(){
     assert.equal(await mapPage.locator('#map-shell').isHidden(),true);
     report.scenarios.push({name:'missing-map-script',sourceLinksRemain:true});
     await noMap.close();
+    const staticContext=await browser.newContext({viewport:{width:390,height:800},javaScriptEnabled:false});
+    const staticPage=await staticContext.newPage();
+    await staticPage.goto(origin+'/rideau-canal/',{waitUntil:'domcontentloaded'});
+    assert.equal(await staticPage.locator('#static-stops').isVisible(),true);
+    assert.equal(await staticPage.locator('#interactive').isHidden(),true);
+    assert.ok(await staticPage.locator('#static-stops a').count()>=14);
+    report.scenarios.push({name:'no-javascript',officialLinksRemain:true});
+    await staticContext.close();
     const keyCtx=await browser.newContext({viewport:{width:390,height:800}});
     let keyed=0;
     await keyCtx.route('**/api/carto-basemap-config',r=>r.fulfill({status:200,contentType:'application/json',body:'{"provider":"CARTO","key":"qa-only-public"}'}));
@@ -102,7 +124,7 @@ async function run(){
     report.scenarios.push({name:'keyed-provider-fallback',keyedTiles:keyed});
     await keyCtx.close();
     fs.writeFileSync(path.join(out,'report.json'),JSON.stringify(report,null,2));
-    console.log('PASS: Rideau browser interaction, no-data, missing-map and keyed-provider scenarios. Real tile and photo delivery remain unverified until separate public smoke.');
+    console.log('PASS: Rideau browser interaction, no-data, missing-map and keyed-provider scenarios. Browser loaded photo and map tile are asserted at 390px, but independent public production delivery still requires post-release smoke.');
   }finally{await browser.close();server.close();}
 }
 run().catch(e=>{console.error(e);server.close();process.exitCode=1;});
