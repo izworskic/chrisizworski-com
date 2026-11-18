@@ -72,11 +72,11 @@
     if(!path)return {ok:false,reason:'No verified connection'};
     const indexed=new Map((locations?.lockLocations||[]).map(r=>[r.id,r]));
     const touched=(graph.mainline||[]).filter(p=>inRanges(p.km,path.mainRanges)).map(p=>({...p,branch:'main'}))
-      .concat((graph.tay||[]).filter(p=>inRanges(p.km,path.tayRanges)).map(p=>({...p,branch:'tay'}))
+      .concat((graph.tay||[]).filter(p=>inRanges(p.km,path.tayRanges)).map(p=>({...p,branch:'tay'})))
       .filter(p=>indexed.has(p.id));
     touched.sort((x,y)=>x.branch===y.branch?x.km-y.km:(x.branch==='main'?-1:1));
     const lockSites=touched.map(p=>({...p,name:indexed.get(p.id).name,chambers:indexed.get(p.id).chambers,sourceUrl:indexed.get(p.id).sourceUrl,guardIncluded:!!indexed.get(p.id).guardChamberIncluded}));
-    if(a.branch===b.branch&&a.km>b.km)lockSites.reverse();
+    if((a.branch===b.branch&&a.km>b.km)||(a.branch==='tay'&&b.branch==='main'))lockSites.reverse();
     const bridges=(graph.bridgeReference||[]).filter(p=>inRanges(p.km,p.branch==='tay'?path.tayRanges:path.mainRanges));
     const speed=SPEEDS.includes(request.speedKmh)?request.speedKmh:null;
     const vessel=classifyVessel(graph,request.vessel);
