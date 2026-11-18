@@ -138,7 +138,7 @@
     "screenshotEvidence": [
       "https://github.com/izworskic/chrisizworski-com/actions/runs/44302276718/artifacts/14427061468"
     ],
-    "scopeNote": "Chromium local-branch QA passed at 360/390/768/1440 px: source failure, current-shaped winter fixture, reverse selection, NCC section map, no-JS official links, and a real self-hosted 2025 photo rendered. Separate browser-origin NCC CORS probe reached the public official feed and returned all 14 sections, latest edited 2026-03-05. This verifies data delivery, NOT 2026-27 opening, deployed site or measured search performance."
+    "scopeNote": "Audited 360/390/768/1440px browser journeys, no-JS and source failure, a fresh-dated simulated January fixture, loaded real locally hosted licensed photo, and browser CORS read of all 14 live NCC records. Actual NCC last update 2026-03-05 UTC was treated as archival and never promoted to current skating access. Live production deployment and search measurement not verified."
   },
   "photos": [
     {
@@ -159,7 +159,7 @@
     "verified": {
       "status": "CONFIRMED",
       "checkedDate": "2026-11-18",
-      "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/actions/runs/44302276986"
+      "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/actions/runs/44302276718"
     },
     "deployed": {
       "status": "PENDING"
@@ -171,5 +171,5 @@
       "status": "NOT_MEASURED"
     }
   },
-  "verificationLimit": "Source and public CORS delivery verified on PR SHA 0ae1b1a3b3c968db993cfc06a83d4520b092c61a. Live NCC data remain archival as of March 2026 and do not confirm skating access for winter 2026-27. Draft is noindex, not deployed, not measured; maps show section centers rather than entrances or skating geometry."
+  "verificationLimit": "The draft is verified on PR SHA 0ae1b1a3b3c968db993cfc06a83d4520b092c61a. NCC's 2026-03-05 source remains archived and does not prove skating access now. The feature is not deployed, indexed or measured. A section centroid is not a verified ice entrance."
 }
