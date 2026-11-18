@@ -1,0 +1,157 @@
+{
+  "schemaVersion": 1,
+  "snapshotChecked": "2026-11-17",
+  "snapshotPurpose": "audited locations and archived season status, never evidence of current ice",
+  "officialConditionPage": "https://ncc-ccn.gc.ca/places/skateway-ice-conditions",
+  "officialAccessPage": "https://ncc-ccn.gc.ca/places/access-points-rideau-canal-skateway",
+  "officialService": "https://services2.arcgis.com/WLyMuW006nKOfa5Z/arcgis/rest/services/NCC_Rideau_Canal_Skateway_Ice_condition/FeatureServer/0",
+  "officialDataset": "https://open.canada.ca/data/dataset/05586948-c5ac-4de9-b9ef-a31020b0dc43",
+  "license": "Open Government Licence - Canada",
+  "licenseUrl": "https://open.canada.ca/en/open-government-licence-canada",
+  "sourceLastEditUtc": "2026-03-05T03:02:37.286Z",
+  "dataStatus": "archived-2025-2026-season",
+  "lengthMeaning": "NCC supplied individual segment length, including the Dow's Lake Loop and Patterson Creek, which are not necessarily a single continuous skating route",
+  "positionMeaning": "NCC polygon centroids, not entry ramps, parking or a surveyed route",
+  "sections": [
+    {
+      "id": 1,
+      "from": "Rideau",
+      "to": "Mackenzie King",
+      "label": "Rideau to Mackenzie King",
+      "km": 0.2,
+      "lat": 45.423846,
+      "lon": -75.692657,
+      "archiveStatus": "Closed for the Season"
+    },
+    {
+      "id": 2,
+      "from": "Mackenzie King",
+      "to": "Laurier",
+      "label": "Mackenzie King to Laurier",
+      "km": 0.2,
+      "lat": 45.423016,
+      "lon": -75.690298,
+      "archiveStatus": "Closed for the Season"
+    },
+    {
+      "id": 3,
+      "from": "Laurier",
+      "to": "Somerset",
+      "label": "Laurier to Somerset",
+      "km": 0.42,
+      "lat": 45.421586,
+      "lon": -75.686917,
+      "archiveStatus": "Closed for the Season"
+    },
+    {
+      "id": 4,
+      "from": "Somerset",
+      "to": "Waverley",
+      "label": "Somerset to Waverley",
+      "km": 0.33,
+      "lat": 45.419741,
+      "lon": -75.682689,
+      "archiveStatus": "Closed for the Season"
+    },
+    {
+      "id": 5,
+      "from": "Waverley",
+      "to": "Concord",
+      "label": "Waverley to Concord",
+      "km": 0.25,
+      "lat": 45.418017,
+      "lon": -75.680594,
+      "archiveStatus": "Closed for the Season"
+    },
+    {
+      "id": 6,
+      "from": "Concord",
+      "to": "Pretoria",
+      "label": "Concord to Pretoria",
+      "km": 0.65,
+      "lat": 45.41437,
+      "lon": -75.682531,
+      "archiveStatus": "Closed for the Season"
+    },
+    {
+      "id": 7,
+      "from": "Pretoria",
+      "to": "Fifth",
+      "label": "Pretoria to Fifth",
+      "km": 0.8,
+      "lat": 45.407905,
+      "lon": -75.681727,
+      "archiveStatus": "Closed for the Season"
+    },
+    {
+      "id": 8,
+      "from": "Patterson Creek",
+      "to": "Patterson Creek",
+      "label": "Patterson Creek",
+      "km": 0.3,
+      "lat": 45.407757,
+      "lon": -75.682898,
+      "archiveStatus": "Closed for the Season"
+    },
+    {
+      "id": 9,
+      "from": "Fifth",
+      "to": "Lansdowne",
+      "label": "Fifth to Lansdowne",
+      "km": 0.7,
+      "lat": 45.40151,
+      "lon": -75.679779,
+      "archiveStatus": "Closed for the Season"
+    },
+    {
+      "id": 10,
+      "from": "Lansdowne",
+      "to": "Bank",
+      "label": "Lansdowne to Bank",
+      "km": 0.45,
+      "lat": 45.397097,
+      "lon": -75.681638,
+      "archiveStatus": "Closed for the Season"
+    },
+    {
+      "id": 11,
+      "from": "Bank",
+      "to": "Bronson",
+      "label": "Bank to Bronson",
+      "km": 1,
+      "lat": 45.39511,
+      "lon": -75.689691,
+      "archiveStatus": "Closed for the Season"
+    },
+    {
+      "id": 12,
+      "from": "Bronson",
+      "to": "Dow's Lake",
+      "label": "Bronson to Dow's Lake",
+      "km": 0.2,
+      "lat": 45.393521,
+      "lon": -75.697936,
+      "archiveStatus": "Closed for the Season"
+    },
+    {
+      "id": 13,
+      "from": "Dow's Lake Loop",
+      "to": "Dow's Lake Loop",
+      "label": "Dow's Lake Loop",
+      "km": 1.7,
+      "lat": 45.394546,
+      "lon": -75.702068,
+      "archiveStatus": "Closed for the Season"
+    },
+    {
+      "id": 14,
+      "from": "Dow's Lake",
+      "to": "Library",
+      "label": "Dow's Lake to Library",
+      "km": 0.6,
+      "lat": 45.388453,
+      "lon": -75.700576,
+      "archiveStatus": "Closed for the Season"
+    }
+  ]
+}
