@@ -803,16 +803,6 @@
    "href": "/michigan-ice-caves/"
   },
   {
-   "id": "frozen-lighthouse-watch",
-   "title": "Frozen Lighthouse Watch, Lake Michigan",
-   "tags": "winter photography lake-michigan lighthouse ice weather",
-   "place": "",
-   "kind": "Hourly forecast",
-   "description": "Will the St. Joseph lights or eight other Lake Michigan pier lights ice up this week? Compare 72 hourly NOAA and NWS freezing spray conditions, with source times and land-only viewing reminders.",
-   "months": "11,12,1,2,3",
-   "href": "/frozen-lighthouses-michigan/"
-  },
-  {
    "id": "michigan-ice",
    "title": "Michigan Ice Report, Accumulated Cold and Great Lakes Ice Cover",
    "tags": "fishing",
@@ -861,6 +851,16 @@
    "description": "When sub-zero Arctic air meets the heat of the open Great Lakes. Live water-to-air thermal gradient tables, wind vectors, and dawn viewing outlooks across 15 coastal harbors from Duluth to Marquette.",
    "months": "10,11,12,1,2,3",
    "href": "https://phenology.chrisizworski.com/lake-smoke"
+  },
+  {
+   "id": "frozen-lighthouse-watch",
+   "title": "Frozen Lighthouse Watch, Lake Michigan",
+   "tags": "winter photography lake-michigan lighthouse ice weather",
+   "place": "",
+   "kind": "Hourly forecast",
+   "description": "Watch the weather at nine Lake Michigan pier lights, from St. Joseph to Frankfort. See when cold winds could bring freezing spray in the next 72 hours, and enjoy the view from shore.",
+   "months": "11,12,1,2,3",
+   "href": "/frozen-lighthouses-michigan/"
   },
   {
    "id": "boat-launches",
