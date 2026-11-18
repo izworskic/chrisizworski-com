@@ -598,7 +598,7 @@
       "id": "bridge-brass-point",
       "kind": "bridge",
       "name": "Brass Point Bridge",
-      "bridgeType": "swing",
+      "bridgeType": "type not yet verified",
       "nearLockId": null,
       "portalOrder": 13,
       "sourceUrl": "https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation",
