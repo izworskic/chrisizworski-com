@@ -46,7 +46,9 @@
     cards.forEach(card=>{
       const haystack=((card.dataset.tags||'')+' '+(card.textContent||'')).toLowerCase();
       const personas=(card.dataset.personas||'').split(/\s+/);
-      const show=(!query||haystack.includes(query))
+      // Shared hub search (hub-search.js) ranks and decides text matches when present.
+      const textOk=window.HubSearch?card.dataset.hubMatch!=='0':(!query||haystack.includes(query));
+      const show=textOk
         &&(filter==='all'||personas.includes(filter))
         &&(!seasonOnly||inSeason(card));
       card.hidden=!show;
@@ -74,6 +76,6 @@
     seasonButton.setAttribute('aria-pressed',String(seasonOnly));
     apply();
   });
-  search.addEventListener('input',apply);
+  search.addEventListener(window.HubSearch?'hubsearch:change':'input',apply);
   apply();
 })();

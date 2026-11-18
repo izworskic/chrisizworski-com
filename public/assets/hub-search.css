@@ -1,0 +1,20 @@
+/* Hub search results panel. Inherits each page's type and link colour. */
+.hub-search-results{margin:10px 0 6px;padding:10px 12px 8px;border:1px solid rgba(0,0,0,.16);border-radius:6px;background:#fff;color:inherit;font-size:.95rem;line-height:1.4;min-width:0}
+.hub-search-results[hidden]{display:none}
+.hub-search-status{margin:0 0 6px;font-weight:600}
+.hub-search-top{list-style:none;margin:0;padding:0}
+.hub-search-top li{border-top:1px solid rgba(0,0,0,.08)}
+.hub-search-top li:first-child{border-top:0}
+.hub-search-top a{display:flex;flex-direction:column;gap:2px;min-height:44px;justify-content:center;padding:7px 6px;text-decoration:none;border-radius:4px}
+.hub-search-top a:hover .hub-search-title{text-decoration:underline}
+.hub-search-top a:focus-visible,.hub-search-link:focus-visible{outline:2px solid currentColor;outline-offset:2px}
+.hub-search-title{font-weight:600;overflow-wrap:anywhere}
+.hub-search-title mark{background:#fff0a8;color:inherit;padding:0 1px;border-radius:2px}
+.hub-search-meta{font-size:.85rem;color:#5d5d5d;overflow-wrap:anywhere}
+.hub-search-actions{display:flex;flex-wrap:wrap;gap:4px 14px;margin-top:4px}
+.hub-search-actions:empty{display:none}
+.hub-search-link{background:none;border:0;padding:8px 0;min-height:44px;font:inherit;font-weight:600;color:inherit;text-decoration:underline;cursor:pointer}
+.hub-search-tip{margin:2px 0;color:#5d5d5d}
+/* Inside a two-column search row: under both controls on wide screens, directly under the input once the row stacks. */
+.search-row>.hub-search-results{grid-column:1/-1;order:1;margin:0}
+@media (max-width:680px){.search-row>.hub-search-results{order:0}}
