@@ -256,7 +256,15 @@
           "short",
           "half",
           "day"
-        ]
+        ],
+        "photo": {
+          "file": "Smiths Falls Combined Lock.jpg",
+          "credit": "D. Gordon E. Robertson",
+          "caption": "Smiths Falls Combined Lock, photographed August 2011",
+          "license": "CC BY-SA 3.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+          "source": "https://commons.wikimedia.org/wiki/File:Smiths_Falls_Combined_Lock.jpg"
+        }
       },
       "profileUrlVerified": true
     },
@@ -347,7 +355,15 @@
         "timeBudgets": [
           "half",
           "day"
-        ]
+        ],
+        "photo": {
+          "file": "Newboro lock.jpg",
+          "credit": "D. Gordon E. Robertson",
+          "caption": "Newboro's single lock, photographed May 2012",
+          "license": "CC BY-SA 3.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+          "source": "https://commons.wikimedia.org/wiki/File:Newboro_lock.jpg"
+        }
       },
       "profileUrlVerified": true
     },
@@ -494,7 +510,15 @@
           "short",
           "half",
           "day"
-        ]
+        ],
+        "photo": {
+          "file": "Upper Kingston Mills lock.jpg",
+          "credit": "D. Gordon E. Robertson",
+          "caption": "Upper Kingston Mills lock, photographed May 2012; one chamber of the lockstation",
+          "license": "CC BY-SA 3.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+          "source": "https://commons.wikimedia.org/wiki/File:Upper_Kingston_Mills_lock.jpg"
+        }
       },
       "profileUrlVerified": true
     }
@@ -674,6 +698,7 @@
     "Bridge list reflects named rows in the 2026 traveller portal, not a full authoritative inventory of every possible navigational crossing.",
     "Only 7 individually verified official profile locations receive coordinates or visitor recommendations. Other entries remain in the text directory without inferred map pins.",
     "The 2026 portal's shutdown records are historical and cannot establish 2027 operating status.",
-    "All 26 operational lock locations and Colonel By Island link to their individually opened Parks Canada profile pages, verified in the 2026-11-17 source audit. Profile URL verification does not imply verified visitor GPS, public access during closure, or permission to navigate."
+    "All 26 operational lock locations and Colonel By Island link to their individually opened Parks Canada profile pages, verified in the 2026-11-17 source audit. Profile URL verification does not imply verified visitor GPS, public access during closure, or permission to navigate.",
+    "The 7 highlighted visitor locations have individually sourced Wikimedia Commons images with exact depicted subject, author, licence and crop notice. Photos are dated archival or documentary views, not current access evidence."
   ]
 }
