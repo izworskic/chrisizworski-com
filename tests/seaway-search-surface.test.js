@@ -88,7 +88,8 @@ test('Seaway sitemap index and robots point to live canonical collections withou
   assert.match(robots,/^Sitemap: https:\/\/chrisizworski\.com\/image-sitemap\.xml$/m);
   assert.equal((imageSitemap.match(/SEAWAY_IMAGE_SITEMAP:START/g)||[]).length,1);
   assert.equal((imageSitemap.match(/SEAWAY_IMAGE_SITEMAP:END/g)||[]).length,1);
-  assert.equal(new Set(Object.values(seo).map(v=>v.dateModified)).size,1,'this paired significant revision shipped together');
+  assert.ok(seo['st-lawrence-seaway'].dateModified >= seo['eisenhower-lock'].dateModified,
+    'The Seaway now contains a new Rideau visitor handoff; Eisenhower publication remains unchanged. Each sitemap and page must still match its own source-owned date.');
 });
 
 test('wrong-host copies of both Seaway pages redirect using the existing Pictured Rocks guard, not the primary host',()=>{
