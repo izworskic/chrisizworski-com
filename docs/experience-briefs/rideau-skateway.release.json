@@ -1,0 +1,171 @@
+{
+  "schemaVersion": "1.2",
+  "recordStatus": "draft",
+  "project": {
+    "slug": "rideau-canal-skateway",
+    "ownerRepo": "izworskic/chrisizworski-com",
+    "canonical": "https://chrisizworski.com/rideau-canal-skateway/",
+    "pageFile": "public/rideau-canal-skateway/index.html",
+    "visitorDecision": "Decide which section the NCC currently reports as skateable and locate an official-listed entrance without treating historical reports as current access permission.",
+    "primaryAction": "Select a section, inspect the NCC source time and current condition, then check the official entrance map before approaching the ice."
+  },
+  "claims": [
+    {
+      "id": "ncc-official-sections",
+      "kind": "official-reference",
+      "subject": "route-guidance",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://open.canada.ca/data/dataset/05586948-c5ac-4de9-b9ef-a31020b0dc43",
+      "checkedDate": "2026-11-17",
+      "limitation": "The 14 section polygons and lengths are official reference geometry, not public entrances, skating tracks or guaranteed continuity between opened portions."
+    },
+    {
+      "id": "ncc-report-refresh",
+      "kind": "official-reference",
+      "subject": "other",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://ncc-ccn.gc.ca/places/skateway-ice-conditions",
+      "checkedDate": "2026-11-17",
+      "limitation": "NCC typically updates reports twice daily when skating is open. Only complete recent source data may show reported conditions; changes can happen between browser requests."
+    },
+    {
+      "id": "ncc-official-entrances",
+      "kind": "official-reference",
+      "subject": "route-guidance",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://ncc-ccn.gc.ca/places/access-points-rideau-canal-skateway",
+      "checkedDate": "2026-11-17",
+      "limitation": "Eleven listed access points, five described as universally accessible, do not prove stairs, ramps, transit or parking will be available on an intended date."
+    },
+    {
+      "id": "next-season-unverified",
+      "kind": "unverified",
+      "subject": "park-access",
+      "state": "UNVERIFIED",
+      "sourceUrl": "https://ncc-ccn.gc.ca/places/skateway-ice-conditions",
+      "checkedDate": "2026-11-17",
+      "limitation": "The archived dataset was last modified 2026-03-05 UTC. It cannot be used to grant skating access for winter 2026-27."
+    },
+    {
+      "id": "photo-archive",
+      "kind": "editorial",
+      "subject": "other",
+      "state": "EDITORIAL",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Rideau_Canal_skating_6969.jpg",
+      "checkedDate": "2026-11-17",
+      "limitation": "A January 2025 photograph illustrates Dow's Lake, not current ice conditions, status or open entrance."
+    }
+  ],
+  "decisionState": {
+    "selectedIdField": "selection, an NCC integer section ID from 1 to 14",
+    "sourceOfTruth": "Live official public ArcGIS status and editingInfo.dataLastEditDate pass through RideauSkatewayPolicy.assess against the archived NCC audited 14-section reference. No weather-based opening model.",
+    "linkedSurfaces": [
+      "answer",
+      "section-choices",
+      "selected-section",
+      "map-or-fallback",
+      "entrance-links",
+      "source-and-time",
+      "shareable-url"
+    ],
+    "unavailableBehavior": "If NCC observations are stale, future-dated, incomplete or unreachable, the visitor sees no positive opening and can still use the 14 reference sections, official NCC map and current-condition links."
+  },
+  "scenarios": [
+    {
+      "kind": "initial",
+      "input": "Open page Nov 17 with last archived NCC source",
+      "expectedVisibleAnswer": "Show no current skating opening verified, official source actions and the audited 14 section directory.",
+      "sourceAndSafety": "March 2026 source edit must not imply November or winter 2026-27 skating access."
+    },
+    {
+      "kind": "alternative",
+      "input": "Select Bank to Bronson",
+      "expectedVisibleAnswer": "Update section name, physical length, corresponding NCC section marker, official relevant access names and Google Maps searches.",
+      "sourceAndSafety": "A section centroid never becomes an access ramp or a proven safe path."
+    },
+    {
+      "kind": "reverse",
+      "input": "Choose Rideau to Mackenzie King, then Bank to Bronson, then Rideau",
+      "expectedVisibleAnswer": "Restore one consistent section in selected panel, aria-current, URL and map marker.",
+      "sourceAndSafety": "Selection does not change source timestamps or fabricate a new skating report."
+    },
+    {
+      "kind": "no-js",
+      "input": "Disable JavaScript",
+      "expectedVisibleAnswer": "Keep 14 source-linked section names and direct NCC ice/access links in initial HTML.",
+      "sourceAndSafety": "No status from an earlier skating season is represented as today's opening."
+    },
+    {
+      "kind": "no-tiles",
+      "input": "Remove Leaflet or block tile provider",
+      "expectedVisibleAnswer": "Keep source-linked segment list, selected source panel, entrances and Google Maps place searches.",
+      "sourceAndSafety": "No empty map stage or invented route replaces an unavailable map."
+    },
+    {
+      "kind": "stale-data",
+      "input": "NCC metadata older than 18 hours, future-dated, missing or unknown section schema",
+      "expectedVisibleAnswer": "Show status unverified, omit all positive open counts and link directly to the NCC.",
+      "sourceAndSafety": "Old Good or Open statuses never authorize entry, even if old map markers exist."
+    },
+    {
+      "kind": "fresh-fixture",
+      "input": "Use complete NCC-shaped 14-section fixture with one Good report at simulated January 21, 2027 clock",
+      "expectedVisibleAnswer": "Show exactly one reported-open section under filtering with dated, explicitly sourced condition.",
+      "sourceAndSafety": "Fixture is a test and does not imply real NCC issuance or independent ice approval."
+    },
+    {
+      "kind": "no-photo",
+      "input": "Block Wikimedia image",
+      "expectedVisibleAnswer": "Keep section choices, maps, official statuses and entrance links without a broken condition panel.",
+      "sourceAndSafety": "Image is contextual 2025 scenery only; loaded image never used as evidence for current ice."
+    }
+  ],
+  "failures": {
+    "no-js": "Initial HTML presents the NCC status page, current access map, 14 documented section names and cautious planning copy; all important official links work without scripts.",
+    "no-tiles": "The static and dynamic selected-section list, current source result, source timestamp and official access links remain when the map is unavailable.",
+    "no-image": "The single archival photo can fail without affecting or delaying the ice status, selected section, official source or entrance search.",
+    "stale-data": "The pure source policy removes all opened-section claims if any NCC section is missing or the timestamp is older than 18 hours, in the future or outside the skating season."
+  },
+  "qa": {
+    "viewports": [
+      360,
+      390,
+      768,
+      1440
+    ],
+    "browserStatus": "PENDING",
+    "browserRun": "https://github.com/izworskic/chrisizworski-com/actions",
+    "screenshotEvidence": [],
+    "scopeNote": "Await final branch-head Chromium run and screenshot inspection; source metadata captured 2026-11-17. Real NCC client CORS delivery and public production are not yet verified."
+  },
+  "photos": [
+    {
+      "depictedSubject": "The Rideau Canal Skateway at Dow's Lake looking east on January 14, 2025",
+      "author": "Ahunt",
+      "license": "CC0 1.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Rideau%20Canal%20skating%206969.jpg?width=960",
+      "creditUrl": "https://commons.wikimedia.org/wiki/File:Rideau_Canal_skating_6969.jpg",
+      "subjectMatch": "exact"
+    }
+  ],
+  "release": {
+    "implemented": {
+      "status": "CONFIRMED",
+      "checkedDate": "2026-11-17",
+      "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/pull/1764"
+    },
+    "verified": {
+      "status": "PENDING"
+    },
+    "deployed": {
+      "status": "PENDING"
+    },
+    "live": {
+      "status": "PENDING"
+    },
+    "measured": {
+      "status": "NOT_MEASURED"
+    }
+  },
+  "verificationLimit": "The page is a noindex draft. The official archive from March 2026 is not current, source status may change and neither source conditions nor a selected centroid confirms that an entrance is open or the ice is safe."
+}
