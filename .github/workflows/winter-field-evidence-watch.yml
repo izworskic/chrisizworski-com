@@ -89,6 +89,33 @@ jobs:
               for row in doc["routes"]:
                   print("- "+row["routeId"]+": "+row["conditions"]+" / "+row["operatorStatement"])
           PY
+      - name: Prepare unsigned reviewer packet from source-health artifact
+        if: always()
+        env:
+          WINTER_EVIDENCE_DIR: ${{ runner.temp }}/winter-desk-evidence
+          WINTER_REVIEW_DIR: ${{ runner.temp }}/winter-desk-review
+        run: |
+          if [ ! -f "$WINTER_EVIDENCE_DIR/monitor-report.json" ]; then
+            echo 'No usable monitor report; reviewer will inspect the source issue.'
+            exit 0
+          fi
+          set +e
+          python3 scripts/winter-desk-evidence-promotion.py --candidate-dir "$WINTER_EVIDENCE_DIR" --review-out "$WINTER_REVIEW_DIR"
+          status=$?
+          set -e
+          if [ "$status" -eq 2 ]; then
+            echo 'Source evidence is on HOLD or incomplete; attach packet for human review if present.'
+          elif [ "$status" -ne 0 ]; then
+            exit "$status"
+          fi
+      - name: Keep unsigned human review checklist separate from source snapshot
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: winter-desk-unsigned-review-packet
+          path: ${{ runner.temp }}/winter-desk-review/*
+          if-no-files-found: warn
+          retention-days: 14
       - name: Retain official source report without a site deployment
         if: always()
         uses: actions/upload-artifact@v4
