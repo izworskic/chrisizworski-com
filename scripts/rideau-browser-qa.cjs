@@ -55,7 +55,7 @@ async function run(){
       assert.match(await page.locator('#channel-number').innerText(),/159\.0 km/);
       await page.locator('[data-mode="paddle"]').click();
       assert.equal(await page.locator('#recommendations .stop-button').count(),2);
-      assert.match(await page.locator('#answer-title').innerText(),/launch/);
+      assert.match(await page.locator('#answer-title').innerText(),/Explore a lock beyond your paddle/);
       await page.locator('#recommendations .stop-button').last().click();
       assert.match(await page.locator('#feature-name').innerText(),/Chaffeys/);
       await page.locator('#recommendations .stop-button').first().click();

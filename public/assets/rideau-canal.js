@@ -63,7 +63,7 @@
     $('visit-controls').hidden=state.mode!=='visit';
     $('cruise-controls').hidden=state.mode!=='cruise';
     $('paddle-context').hidden=state.mode!=='paddle';
-    $('candidate-title').textContent=state.mode==='visit'?'Places worth your time':state.mode==='cruise'?'Discover lockstations':'Nearby official launch locations';
+    $('candidate-title').textContent=state.mode==='visit'?'Places worth your time':state.mode==='cruise'?'Discover lockstations':'Other lock visits, not route legs';
     if(state.mode==='cruise')renderCruise();
     if(state.mode==='paddle')renderPaddle();
     renderCandidates();
@@ -80,9 +80,9 @@
       setText('answer-text',exact.length?'These are destination ideas, not a timed driving itinerary. Choose a location to see its exact evidence and official access information.':'No station in this time window is matched to that interest. The alternatives below fit your time category as editorial ideas, not verified timed routes.');
       if(candidates.length&&!candidates.some(p=>p.id===state.selectedPlaceId))state.selectedPlaceId=candidates[0].id;
     } else if(state.mode==='paddle'){
-      setText('candidate-count','Two Parks Canada profiles document boat-launch facilities');
-      setText('answer-title','Choose a launch to research, not a guessed paddle route');
-      setText('answer-text','The sites below have a documented boat launch. A complete paddling leg still needs independently verified takeout, portages, local conditions and a chart.');
+      setText('candidate-count','Two separate historic lock visits');
+      setText('answer-title','Explore a lock beyond your paddle');
+      setText('answer-text','Your selected Parks Canada paddling itinerary is above. The two lock profiles below are separate sightseeing ideas, not entrances or route legs for that itinerary.');
       if(!candidates.some(p=>p.id===state.selectedPlaceId))state.selectedPlaceId='newboro';
     }else{
       setText('candidate-count','Seven audited navigation reference points');
