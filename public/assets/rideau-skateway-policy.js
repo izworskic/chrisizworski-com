@@ -44,7 +44,8 @@
      const a=feature?.attributes||{},id=a.ID;
      if(!Number.isInteger(id)||id<1||id>14||byId.has(id))return {...unchanged,state:'partial',observedAt,reason:'The NCC returned duplicate or invalid section IDs.'};
      const ref=fallback.find(x=>x.id===id);
-     const lengthMatch=typeof a.Length_KM==='string'&&a.Length_KM.trim()===String(ref?.km)+' km';
+     const m=typeof a.Length_KM==='string'?a.Length_KM.trim().match(/^(\d+(?:\.\d+)?) km$/):null;
+     const lengthMatch=!!m&&Number.isFinite(Number(m[1]))&&Math.abs(Number(m[1])-ref.km)<0.00001;
      if(!ref||a.From_!==ref.from||a.To_!==ref.to||!lengthMatch||!normalizeStatus(a.Status)){
        return {...unchanged,state:'partial',observedAt,reason:'The NCC section names, distances or statuses changed. Read the official report.'};
      }
