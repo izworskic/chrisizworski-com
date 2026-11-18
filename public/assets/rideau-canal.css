@@ -96,3 +96,31 @@ footer.site-footer a{color:#fff}
 @media(max-width:900px){.mast-grid{grid-template-columns:1fr}.mast-note{display:none}.workspace{grid-template-columns:1fr}.work-right{display:flex;flex-direction:column}.feature{order:0}.map-shell{order:1}.map-foot{order:2}.field-note{order:3}}
 @media(max-width:600px){#cruise-controls .field-note,#channel-result{grid-column:1/-1}.site__inner{gap:10px}header.site nav{gap:14px;font-size:.83rem}.mode-list{grid-template-columns:1fr;gap:7px}.mode{min-height:62px;padding:11px 13px}.journey{padding-top:18px}.controls{display:grid;grid-template-columns:1fr 1fr}.control{min-width:0}.feature{padding:16px}.answer{padding:17px}.directory-list{columns:1}.directory th:nth-child(2),.directory td:nth-child(2){display:none}.map-shell{min-height:0}#rideau-map{height:320px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{scroll-behavior:auto!important;transition:none!important}}
+
+/* Distinct Rideau journey instruments rather than shared generic cards. */
+#cruise-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start;gap:12px}
+#cruise-controls[hidden]{display:none!important}
+#cruise-controls .control{min-width:0}
+.control input{min-width:0;min-height:46px;width:100%;background:#fff;border:1px solid #829d9a;color:var(--deep);border-radius:3px;padding:9px 12px}
+.rideau-vessel{grid-column:1/-1;border:1px solid var(--line);padding:13px;background:#fff}
+.rideau-vessel summary{font-weight:750;cursor:pointer;min-height:25px}
+.rideau-vessel p{font-size:.85rem;color:var(--muted)}
+.vessel-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding-top:12px}
+.vessel-fields label{display:flex;flex-direction:column;gap:3px;font-size:.82rem;font-weight:700}
+#channel-result{grid-column:1/-1}
+.channel-scenario{font-size:1.07rem;line-height:1.4;font-weight:650;border-top:1px solid var(--line);padding-top:12px}
+.season-status{color:#744322;font-weight:700}
+.route-stage-list{padding-left:20px;max-height:300px;overflow:auto}
+.route-stage-list li{padding:7px 0;border-bottom:1px solid var(--line)}
+.route-stage-list a{white-space:normal;font-size:.85rem}
+.route-bridges{font-size:.9rem}
+.route-bridges ul{max-height:170px;overflow:auto;padding-left:20px}
+.paddle-context{border:1px solid var(--line);padding:20px;margin-bottom:18px;background:#fff}
+.paddle-context .control{max-width:100%;margin:12px 0}
+.paddle-result{padding:14px;background:#edf3ee;border-left:3px solid var(--rust)}
+.paddle-result>strong{display:block;font:500 1.5rem/1.2 Georgia,serif}
+.paddle-metrics{display:flex;gap:10px;margin:10px 0}
+.paddle-metrics span{background:#fff;padding:6px 10px;border:1px solid var(--line);font-size:.84rem;font-weight:750}
+.paddle-result h4{margin:14px 0 5px}
+.paddle-result ul{margin:0;padding-left:21px}
+@media(max-width:600px){#cruise-controls{grid-template-columns:1fr}.rideau-vessel,#channel-result{grid-column:1/-1}.vessel-fields{grid-template-columns:1fr 1fr}.paddle-context{padding:13px}.route-stage-list{max-height:none}}

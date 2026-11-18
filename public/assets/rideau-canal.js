@@ -5,7 +5,9 @@
   const state = {mode:'visit',time:'short',interest:'engineering',selectedPlaceId:'ottawa',start:'ottawa',end:'jones-falls'};
   const CARTO_TILE = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
   const OSM_TILE = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-  let model, highlights=[], map=null, markers=new Map(), photoToken=0;
+  let model, journeyGraph, highlights=[], map=null, markers=new Map(), photoToken=0;
+  const Engine=window.RideauJourneyEngine;
+  state.units='km';state.speed=6;state.paddleRoute='tay-marsh';state.date='';
   const setText=(id,value)=>{const el=$(id);if(el)el.textContent=value;};
   function make(tag,cls,text){const node=document.createElement(tag);if(cls)node.className=cls;if(text!==undefined)node.textContent=text;return node;}
   const sourceLink=(url,label)=>{const a=make('a',null,label);a.href=url;a.target='_blank';a.rel='noopener noreferrer';return a;};
@@ -29,11 +31,13 @@
   function syncUrl(){
     const query=new URLSearchParams(location.search);
     query.set('mode',state.mode);
+    query.set('units',state.units);
     query.set('place',state.selectedPlaceId);
     if(state.mode==='visit'){query.set('time',state.time);query.set('interest',state.interest);}
     else{query.delete('time');query.delete('interest');}
-    if(state.mode==='cruise'){query.set('from',state.start);query.set('to',state.end);}
-    else{query.delete('from');query.delete('to');}
+    if(state.mode==='cruise'){query.set('from',state.start);query.set('to',state.end);query.set('speed',String(state.speed));if(state.date)query.set('date',state.date);}
+    else{query.delete('from');query.delete('to');query.delete('speed');query.delete('date');}
+    if(state.mode==='paddle')query.set('paddle',state.paddleRoute);else query.delete('paddle');
     history.replaceState(null,'',location.pathname+'?'+query.toString()+location.hash);
   }
   function readUrl(){
@@ -43,7 +47,13 @@
     if(['engineering','history','village','scenery'].includes(q.get('interest')))state.interest=q.get('interest');
     if(highlights.some(p=>p.id===q.get('place')))state.selectedPlaceId=q.get('place');
     if(highlights.some(p=>p.id===q.get('from')))state.start=q.get('from');
-    if(highlights.some(p=>p.id===q.get('to')))state.end=q.get('to');
+    const endpoints=(journeyGraph.mainline||[]).concat(journeyGraph.tay||[]).map(p=>p.id);
+    if(endpoints.includes(q.get('from')))state.start=q.get('from');
+    if(endpoints.includes(q.get('to')))state.end=q.get('to');
+    if(['km','mi'].includes(q.get('units')))state.units=q.get('units');
+    if([4,6,8].includes(Number(q.get('speed'))))state.speed=Number(q.get('speed'));
+    if(/^20[2-9][0-9]-[01][0-9]-[0-3][0-9]$/.test(q.get('date')||''))state.date=q.get('date');
+    if(journeyGraph.paddling.some(p=>p.id===q.get('paddle')))state.paddleRoute=q.get('paddle');
   }
   function applyMode(){
     document.querySelectorAll('[data-mode]').forEach(button=>{
@@ -53,7 +63,9 @@
     $('visit-controls').hidden=state.mode!=='visit';
     $('cruise-controls').hidden=state.mode!=='cruise';
     $('paddle-context').hidden=state.mode!=='paddle';
-    $('candidate-title').textContent=state.mode==='visit'?'Places worth your time':state.mode==='cruise'?'Plan a documented section':'Documented launch leads';
+    $('candidate-title').textContent=state.mode==='visit'?'Places worth your time':state.mode==='cruise'?'Discover lockstations':'Nearby official launch locations';
+    if(state.mode==='cruise')renderCruise();
+    if(state.mode==='paddle')renderPaddle();
     renderCandidates();
     renderPlace();
     syncUrl();
@@ -201,22 +213,69 @@
     }
   }
   function renderCruise(){
-    const from=highlights.find(p=>p.id===state.start),to=highlights.find(p=>p.id===state.end);
-    const outcome=$('channel-result');
-    if(!from||!to||from.id===to.id){
-      outcome.hidden=false;setText('channel-number','Select two different stops');setText('channel-label','No route calculated');
-      setText('channel-notes','Official chainage exists for the audited endpoints. Select a distinct start and end.');
+    const outcome=$('channel-result');outcome.hidden=false;
+    if(!Engine||!journeyGraph){setText('channel-number','Journey data unavailable');return;}
+    const field=(id)=>{const v=$(id)?.value;return v===''||v==null?null:Number(v);};
+    const plan=Engine.planCruise(journeyGraph,model,{from:state.start,to:state.end,speedKmh:state.speed,
+      vessel:{lengthM:field('rideau-length'),widthM:field('rideau-beam'),draftM:field('rideau-draft'),airDraftM:field('rideau-air-draft')}});
+    const list=$('channel-stops'),bridges=$('channel-bridge-list');list.replaceChildren();bridges.replaceChildren();
+    if(!plan.ok){
+      setText('channel-number','Choose two distinct places');setText('channel-label',plan.reason);
+      setText('channel-notes','No route or time calculated.');setText('channel-scenario','');
+      setText('channel-date','');setText('channel-constraints','');
       return;
     }
-    const km=Math.abs(from.visit.distanceOttawaKm-to.visit.distanceOttawaKm);
-    const a=Math.min(from.portalOrder,to.portalOrder),b=Math.max(from.portalOrder,to.portalOrder);
-    const between=model.lockLocations.filter(p=>p.branch==='main'&&p.portalOrder>a&&p.portalOrder<b);
-    outcome.hidden=false;
-    setText('channel-number',km.toFixed(1)+' km');
-    setText('channel-label',from.name+' to '+to.name+' / Parks Canada reference distance');
-    setText('channel-notes',between.length+' named lock locations between the two reference points. No travel time, bridge passage, draft or lockage schedule is implied. Actual boating requires current official charts and notices.');
-    state.selectedPlaceId=to.id;
-    renderPlace();renderCandidates();syncUrl();
+    const placeName=id=>model.lockLocations.find(x=>x.id===id)?.name||
+      ({'perth-basin':'Perth Basin','kingston-causeway':'Kingston La Salle Causeway'}[id]||id);
+    setText('channel-number',Engine.distance(plan.distanceKm,state.units));
+    setText('channel-label',placeName(state.start)+' to '+placeName(state.end));
+    setText('channel-notes',plan.interpretation==='branch-connection-estimate'
+      ?'Reference connection through the Tay Canal. The published table identifies two different Tay diversion distances. Confirm the actual channel path on charts.'
+      :'Published navigation-channel chainage. This is not a digital nautical route or a paddling distance.');
+    setText('channel-scenario',plan.underwayHours===null?'Choose a planning pace to model underway-only time.':
+      plan.underwayHours.toFixed(1)+' hours at '+plan.assumedSpeedKmh+' km/h if moving continuously. Excludes all locks, waits, bridges, weather and overnight stops. Not an arrival estimate.');
+    setText('channel-date',state.date?('Planning date '+state.date+': current operating hours not verified for this journey.'):('2026 season ended. 2027 navigation hours have not been verified.'));
+    setText('channel-constraints',plan.vessel.warnings.join(' ')+' The full route may have bridge clearances lower than the general canal reference. No passage approval is provided.');
+    for(const stop of plan.lockSites){
+      const li=make('li',null,stop.name+' ('+stop.chambers+' physical chamber'+(stop.chambers===1?'':'s')+')');
+      li.append(document.createTextNode('  '));
+      li.append(sourceLink(stop.sourceUrl,'Official lock profile'));
+      list.append(li);
+    }
+    if(!plan.lockSites.length)list.append(make('li',null,'No named lock location between these reference points. Other navigation obstacles may still exist.'));
+    const lead=make('p',null,plan.bridges.length+' documented bridge references in this reach. Clearance varies with bridge type and operation.');bridges.append(lead);
+    if(plan.bridges.length){
+      const ul=make('ul');
+      for(const bridge of plan.bridges){
+        const words=bridge.id.replace(/-/g,' ')+' ('+bridge.type+(bridge.clearanceClosedM!=null?', '+bridge.clearanceClosedM+' m closed/reference':'')+')';
+        const li=make('li',null,words+'  ');li.append(sourceLink(bridge.sourceUrl,'Source'));ul.append(li);
+      }
+      bridges.append(ul);
+    }
+    $('channel-source').href=plan.sourceUrl;
+    if(highlights.some(p=>p.id===state.end))state.selectedPlaceId=state.end;
+    renderPlace();syncUrl();
+  }
+  function renderPaddle(){
+    if(!Engine||!journeyGraph)return;
+    const plan=Engine.planPaddle(journeyGraph,state.paddleRoute);
+    if(!plan.ok){setText('paddle-name','Official itinerary unavailable');return;}
+    setText('paddle-name',plan.name);
+    setText('paddle-distance',Engine.distance(plan.km,state.units));
+    setText('paddle-days',plan.days===1?'One-day official itinerary':'Two-day official itinerary');
+    setText('paddle-story',plan.note);
+    setText('paddle-overnight',plan.overnight);
+    const links=$('paddle-map-links');links.replaceChildren();
+    for(const [site,label] of [[plan.putIn,'Put-in: '],[plan.takeOut,'Takeout: ']]){
+      const url=window.VisitorMapLinks?.placeSearch({role:'public-place',query:site.query})
+        ||'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(site.query);
+      links.append(sourceLink(url,label+site.name));
+    }
+    for(const [listId,items] of [['paddle-highlights',plan.highlights],['paddle-hazards',plan.hazards]]){
+      const ul=$(listId);ul.replaceChildren(...items.map(item=>make('li',null,item)));
+    }
+    $('paddle-official').href=plan.sourceUrl;
+    syncUrl();
   }
   function renderDirectory(){
     const body=$('directory-body');body.replaceChildren();
@@ -232,24 +291,40 @@
   async function main(){
     const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),12000);
     try{
-      const response=await fetch('/assets/rideau-locations.json',{signal:controller.signal,cache:'default'});
-      if(!response.ok)throw Error('No inventory');
-      const data=await response.json();
+      const [response,navResponse]=await Promise.all([
+        fetch('/assets/rideau-locations.json',{signal:controller.signal,cache:'default'}),
+        fetch('/assets/rideau-navigation.json',{signal:controller.signal,cache:'default'})
+      ]);
+      if(!response.ok||!navResponse.ok)throw Error('No reviewed inventory or navigation graph');
+      const [data,nav]=await Promise.all([response.json(),navResponse.json()]);
+      if(nav.schemaVersion!==2||!Array.isArray(nav.mainline)||nav.mainline.length!==25||!Engine)throw Error('Graph not reconciled');
+      journeyGraph=nav;
       if(!Array.isArray(data.lockLocations)||data.lockLocations.length!==26||!Array.isArray(data.bridges)||data.bridges.length!==15)throw Error('Inventory failed validation');
       model=data;highlights=data.lockLocations.filter(p=>p.visit);
       readUrl();
-      const opts=highlights.map(p=>{const x=make('option',null,p.name);x.value=p.id;return x;});
-      $('cruise-from').replaceChildren(...opts);
-      $('cruise-from').value=state.start;
-      $('cruise-to').replaceChildren(...highlights.map(p=>{const x=make('option',null,p.name);x.value=p.id;return x;}));
-      $('cruise-to').value=state.end;
+      const allEndpoints=journeyGraph.mainline.concat(journeyGraph.tay);
+      const labelFor=id=>model.lockLocations.find(p=>p.id===id)?.name||
+        ({'kingston-causeway':'Kingston La Salle Causeway','perth-basin':'Perth Basin'}[id]||id);
+      const opts=()=>allEndpoints.map(p=>{const x=make('option',null,labelFor(p.id));x.value=p.id;return x;});
+      $('cruise-from').replaceChildren(...opts());$('cruise-from').value=state.start;
+      $('cruise-to').replaceChildren(...opts());$('cruise-to').value=state.end;
+      $('rideau-speed').value=String(state.speed);
+      $('rideau-units').value=state.units;
+      $('rideau-trip-date').value=state.date;
+      $('rideau-paddle-route').replaceChildren(...journeyGraph.paddling.map(p=>{const o=make('option',null,p.name);o.value=p.id;return o;}));
+      $('rideau-paddle-route').value=state.paddleRoute;
       $('time-budget').value=state.time;
       $('interest').value=state.interest;
-      document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>{state.mode=b.dataset.mode;applyMode();if(state.mode==='cruise')renderCruise();}));
+      document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>{state.mode=b.dataset.mode;applyMode();}));
       $('time-budget').addEventListener('change',e=>{state.time=e.target.value;renderCandidates();renderPlace();syncUrl();});
       $('interest').addEventListener('change',e=>{state.interest=e.target.value;renderCandidates();renderPlace();syncUrl();});
       $('cruise-from').addEventListener('change',e=>{state.start=e.target.value;renderCruise();});
       $('cruise-to').addEventListener('change',e=>{state.end=e.target.value;renderCruise();});
+      $('rideau-speed').addEventListener('change',e=>{state.speed=Number(e.target.value);renderCruise();});
+      $('rideau-units').addEventListener('change',e=>{state.units=e.target.value;if(state.mode==='cruise')renderCruise();if(state.mode==='paddle')renderPaddle();});
+      $('rideau-trip-date').addEventListener('change',e=>{state.date=e.target.value;renderCruise();});
+      for(const id of ['rideau-length','rideau-beam','rideau-draft','rideau-air-draft'])$(id).addEventListener('input',renderCruise);
+      $('rideau-paddle-route').addEventListener('change',e=>{state.paddleRoute=e.target.value;renderPaddle();});
       $('static-stops').hidden=true;
       $('interactive').hidden=false;
       renderDirectory();applyMode();initMap();

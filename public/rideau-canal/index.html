@@ -55,6 +55,7 @@
 <li><strong>Jones Falls:</strong> a flight of three lower chambers, an upper chamber and the remarkable Great Stone Arch Dam. <a href="https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/ecluse-lock-jones-falls">Official profile</a> · <a href="https://www.google.com/maps/search/?api=1&amp;query=182%20Lock%20Road%2C%20Rideau%20Lakes%2C%20Ontario%2C%20Canada">View in Google Maps</a></li>
 <li><strong>Kingston Mills:</strong> a historic lock flight, railway crossing and canal blockhouse. <a href="https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/ecluse-lock-kingston-mills">Official profile</a> · <a href="https://www.google.com/maps/search/?api=1&amp;query=563%20Kingston%20Mills%20Road%2C%20Kingston%2C%20Ontario%2C%20Canada">View in Google Maps</a></li>
 </ol>
+<p><strong>Published paddling trips:</strong> <a href="https://parks.canada.ca/lhn-nhs/on/rideau/activ/pagaie-paddling">Perth to Beveridges Locks via the Tay Canal (12 km, one day)</a>, and <a href="https://parks.canada.ca/lhn-nhs/on/rideau/activ/pagaie-paddling">Upper Brewers Locks to Newboro (39 km, two days)</a>. These are official itinerary distances, not navigation lines; lockstation and route access remain subject to official conditions.</p>
 </div>
 <div id="interactive" hidden>
 <div class="mode-list" role="group" aria-label="Choose a Rideau experience">
@@ -69,14 +70,45 @@
 <label class="control" for="interest">What draws you?<select id="interest"><option value="engineering">Historic engineering</option><option value="history">Early Canadian history</option><option value="village">Canal villages</option><option value="scenery">Lake country scenery</option></select></label>
 </div>
 <div id="cruise-controls" class="controls" hidden>
-<label class="control" for="cruise-from">From<select id="cruise-from"></select></label>
-<label class="control" for="cruise-to">To<select id="cruise-to"></select></label>
-<p class="field-note">Distances compare official reference positions along the marked channel. They are not safe navigation directions or arrival estimates.</p>
+<label class="control" for="cruise-from">Start lock or wharf<select id="cruise-from"></select></label>
+<label class="control" for="cruise-to">Destination<select id="cruise-to"></select></label>
+<label class="control" for="rideau-speed">Assumed underway pace<select id="rideau-speed"><option value="4">4 km/h (slow)</option><option value="6" selected>6 km/h (steady)</option><option value="8">8 km/h (planning example)</option></select></label>
+<label class="control" for="rideau-units">Show distance in<select id="rideau-units"><option value="km">Kilometres</option><option value="mi">Miles</option></select></label>
+<label class="control" for="rideau-trip-date">Intended departure date<input type="date" id="rideau-trip-date" min="2026-11-17"></label>
+<details class="rideau-vessel"><summary>Check vessel dimensions (optional)</summary>
+<div class="vessel-fields">
+<label for="rideau-length">Length (m)<input id="rideau-length" type="number" min=".1" max="200" step=".1" inputmode="decimal"></label>
+<label for="rideau-beam">Beam (m)<input id="rideau-beam" type="number" min=".1" max="200" step=".1" inputmode="decimal"></label>
+<label for="rideau-draft">Loaded draft (m)<input id="rideau-draft" type="number" min=".1" max="20" step=".1" inputmode="decimal"></label>
+<label for="rideau-air-draft">Height above water (m)<input id="rideau-air-draft" type="number" min=".1" max="50" step=".1" inputmode="decimal"></label>
+</div><p>These general references cannot establish a vessel will fit every lock, pass under each bridge, or have adequate depth.</p></details>
 <div id="channel-result" class="channel-result" aria-live="polite" hidden>
-<p class="kicker">Reference distance</p><p id="channel-number" class="channel-number"></p><strong id="channel-label"></strong><small id="channel-notes"></small>
+<p class="kicker">Source-documented waterway planning</p><p id="channel-number" class="channel-number"></p><strong id="channel-label"></strong>
+<p id="channel-notes"></p>
+<p id="channel-scenario" class="channel-scenario"></p>
+<p id="channel-date" class="season-status"></p>
+<p id="channel-constraints" class="field-note"></p>
+<h4 id="channel-stops-label">Locks and bridges along this reach</h4>
+<ol id="channel-stops" class="route-stage-list"></ol>
+<div id="channel-bridge-list" class="route-bridges"></div>
+<a id="channel-source" href="https://parks.canada.ca/lhn-nhs/on/rideau/visit/navigation/donnees-navigation-data" target="_blank" rel="noopener noreferrer">Read Parks Canada's navigation data and current notices</a>
 </div>
 </div>
-<div id="paddle-context" class="field-note" hidden><strong>For paddlers:</strong> The marked channel is not necessarily the paddling route. The canal spans lakes and rivers with wakes, portages and open-water exposure. Always plan a route from actual takeout evidence, weather and appropriate charts. <a href="https://parks.canada.ca/lhn-nhs/on/rideau/activ/pagaie-paddling" target="_blank" rel="noopener noreferrer">Parks Canada's paddling guidance</a>.</div>
+<section id="paddle-context" class="paddle-context" hidden aria-labelledby="paddle-title">
+<p class="kicker">Two Parks Canada paddling journeys</p><h3 id="paddle-title">Choose a stretch of water</h3>
+<p>These are published trip ideas with named launch and takeout locations, not GPS tracks. Paddlers may follow shorelines rather than the marked boating channel.</p>
+<label class="control" for="rideau-paddle-route">Paddling journey<select id="rideau-paddle-route"></select></label>
+<div id="paddle-result" class="paddle-result" aria-live="polite">
+<strong id="paddle-name"></strong><div class="paddle-metrics"><span id="paddle-distance"></span><span id="paddle-days"></span></div>
+<p id="paddle-story"></p>
+<div id="paddle-map-links" class="feature__source"></div>
+<h4>What to notice</h4><ul id="paddle-highlights"></ul>
+<h4>What to check</h4><ul id="paddle-hazards"></ul>
+<p id="paddle-overnight"></p>
+<a id="paddle-official" href="https://parks.canada.ca/lhn-nhs/on/rideau/activ/pagaie-paddling" target="_blank" rel="noopener noreferrer">Read Parks Canada's original itinerary</a>
+</div>
+<p class="field-note">Never approach dams or waste weirs. Check wind, wake, portage, permits, season, access and charts. No condition or safe-water guarantee is supplied by this planner.</p>
+</section>
 <div class="answer" aria-live="polite"><span class="eyebrow">Your starting point</span><h3 id="answer-title">Choose a visit</h3><p id="answer-text" class="reason">Explore the canal with official sources.</p><span id="candidate-count" class="count"></span></div>
 <h3 id="candidate-title">Places worth your time</h3>
 <ul id="recommendations"></ul>
@@ -119,7 +151,8 @@
 <footer class="site-footer"><div class="footer-inner"><span>Independent visitor planning preview. Not affiliated with Parks Canada. Not for nautical navigation.</span><span>Built by <a href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a> · Research checked November 17, 2026</span></div></footer>
 <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script defer src="/assets/visitor-map-links.js"></script>
-<script defer src="/assets/rideau-canal.js?v=20261117-foundation"></script>
+<script defer src="/assets/rideau-journey-engine.js?v=20261117-policy"></script>
+<script defer src="/assets/rideau-canal.js?v=20261117-journeys"></script>
 <script defer src="/assets/tool-engagement.js"></script>
 </body>
 </html>
