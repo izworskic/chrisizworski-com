@@ -80,6 +80,61 @@ test('forecast graph explains lighthouse spray signals without implying a vessel
  assert.match(stylesheet,/\.desk-chart-axis\{/);
 });
 
+test('interpretive field-guide copy retains scientific thresholds, safety and matched FAQ structured data',()=>{
+ const faqStructured=JSON.parse(page.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
+ const faqItems=faqStructured['@graph'].find(item=>item['@type']==='FAQPage').mainEntity;
+ const visible=[...page.matchAll(/<section class="faq"><h3>([^<]+)<\/h3><p>([^<]+)<\/p><\/section>/g)];
+ assert.equal(visible.length,4);
+ assert.equal(faqItems.length,4);
+ visible.forEach((m,i)=>{
+  assert.equal(faqItems[i].name,m[1]);
+  assert.equal(faqItems[i].acceptedAnswer.text,m[2]);
+ });
+ for(const threshold of ['15 mph','32 F','40 F'])assert.ok(page.includes(threshold));
+ assert.match(page,/View from shore\. Never walk onto an icy or wave-swept pier\./);
+ assert.match(page,/not a live camera or proof of current ice or public access/);
+ assert.match(page,/not the chance of ice forming or a measurement of ice already on the lighthouse/);
+ assert.doesNotMatch(page,/relative vessel-icing indicator/i);
+ assert.match(page,/Originally developed for vessels|developed for ice that builds on vessels/);
+ assert.match(controller,/function plainReason\(reason\)/);
+ assert.match(controller,/plainReason\(h\.reason\)/);
+ const watch=readFileSync(path.join(root,'public/assets/frozen-lighthouse-watch.js'),'utf8');
+ assert.match(watch,/function plainReason\(reason\)/);
+ assert.match(watch,/plainReason\(h\.reason\)/);
+ assert.doesNotMatch(watch,/72 hourly icing potential index bars/);
+ assert.equal((page.match(/pagead2\.googlesyndication\.com\/pagead\/js\/adsbygoogle\.js/g)||[]).length,1);
+});
+
+test('Michigan Tools puts Frozen Lighthouse Watch in Great Lakes weather and winter decisions',()=>{
+ const tools=readFileSync(path.join(root,'public/tools/index.html'),'utf8');
+ const outdoors=tools.indexOf('id="outdoors-tools-group"');
+ const lakes=tools.indexOf('id="great-lakes-tools-group"');
+ const trips=tools.indexOf('id="trip-planners-group"');
+ const winter=tools.indexOf('id="winter-task-router"');
+ const featured=tools.indexOf('class="featured-tools"');
+ const card=tools.indexOf('data-tool-id="frozen-lighthouse-watch"');
+ assert.ok(outdoors>=0&&outdoors<lakes&&lakes<trips);
+ assert.ok(card>lakes&&card<trips,'catalog card belongs in Great Lakes weather, not fishing');
+ assert.equal((tools.match(/data-tool-id="frozen-lighthouse-watch"/g)||[]).length,1,'one canonical tool card');
+ const persona=tools.indexOf('data-winter-persona="lighthouse-ice"');
+ assert.ok(persona>winter&&persona<featured,'winter decision desk links directly to watch');
+ assert.match(tools.slice(persona,persona+850),/data-track-tool="frozen-lighthouse-watch"/);
+ assert.match(tools.slice(persona,persona+850),/view from shore/);
+ const scriptStart=tools.indexOf('<script type="application/ld+json">');
+ assert.ok(scriptStart>=0,'Tools ItemList script exists');
+ const jsonStart=scriptStart+'<script type="application/ld+json">'.length;
+ const jsonEnd=tools.indexOf('</script>',jsonStart);
+ const schema=JSON.parse(tools.slice(jsonStart,jsonEnd));
+ const list=schema['@graph'].find(item=>item['@id']==='https://chrisizworski.com/tools/#toollist');
+ assert.ok(list);
+ const catalogCount=(tools.match(/class="tool-card"/g)||[]).length;
+ assert.equal(list.numberOfItems,catalogCount);
+ assert.equal(list.itemListElement.length,catalogCount);
+ const matches=list.itemListElement.filter(entry=>entry.item.url==='https://chrisizworski.com/frozen-lighthouses-michigan/');
+ assert.equal(matches.length,1);
+ assert.match(matches[0].item.description,/nine Lake Michigan pier lights/);
+});
+
 test('winter canonical remains singly indexed in the winter sitemap and stays in the Tools directory',()=>{
  const canonical='https://chrisizworski.com/frozen-lighthouses-michigan/';
  const winter=readFileSync(path.join(root,'public/sitemap-winter.xml'),'utf8');

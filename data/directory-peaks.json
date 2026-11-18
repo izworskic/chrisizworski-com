@@ -1,0 +1,27 @@
+{
+  "_about": "Peak windows for directory cards (MM-DD/MM-DD, may wrap the new year; several windows allowed). A card in its window joins 'Worth checking now' on its directory with the note below. Keep notes short, factual and true every year. Apply with: python3 scripts/build-directory-peaks.py",
+  "national": {
+    "white-christmas": {"windows": ["11-15/12-25"], "note": "Christmas Day snow odds sharpen as forecasts come into range"},
+    "blue-spring": {"windows": ["11-15/03-15"], "note": "Manatee season: cold mornings bring them into the warm spring"},
+    "lake-effect-snow": {"windows": ["11-01/02-28"], "note": "Lake-effect snow season on the Great Lakes snowbelts"},
+    "epic-ikon-pass": {"windows": ["11-15/02-20"], "note": "Holiday and peak-weekend blackout dates fall in this stretch"},
+    "midwest-xc": {"windows": ["12-01/03-15"], "note": "Cross-country ski season across the Upper Midwest"},
+    "snow": {"windows": ["11-15/05-15"], "note": "Mountain snowpack builds through winter, then melts in spring"},
+    "yosemite-firefall": {"windows": ["02-08/02-28"], "note": "Horsetail Fall's firefall window is mid-to-late February"},
+    "platte-cranes": {"windows": ["02-20/04-10"], "note": "Sandhill cranes stage along Nebraska's Platte River"},
+    "ice-out": {"windows": ["03-01/05-15"], "note": "Spring ice-out season on northern lakes"},
+    "waterfall-window": {"windows": ["03-15/06-15"], "note": "Spring snowmelt drives peak waterfall flow"},
+    "michigan-bloom-tracker": {"windows": ["04-20/06-15"], "note": "Spring blossom and tulip season in Michigan"},
+    "wisconsin-bloom-tracker": {"windows": ["04-25/06-15"], "note": "Door County blossoms and spring lilacs"},
+    "bird-migration": {"windows": ["04-01/05-31", "09-01/10-31"], "note": "Peak spring and fall migration nights"},
+    "frost": {"windows": ["03-15/05-31", "09-01/11-10"], "note": "Last-frost and first-frost season for gardens"},
+    "planting": {"windows": ["03-01/06-10"], "note": "Seed-starting and spring planting windows"},
+    "garden-water": {"windows": ["06-01/08-31"], "note": "Summer heat makes watering decisions matter"},
+    "smoke": {"windows": ["06-15/10-15"], "note": "Western wildfire smoke season"},
+    "elk-rut": {"windows": ["09-01/10-15"], "note": "Elk bugling season in Rocky Mountain National Park"},
+    "gauley": {"windows": ["09-05/10-25"], "note": "Gauley Season scheduled dam releases"},
+    "fall-color": {"windows": ["09-15/10-31"], "note": "Autumn color moves south through the fall"},
+    "blue-ridge-fall-color": {"windows": ["10-01/11-05"], "note": "Blue Ridge Parkway color works down the elevations"},
+    "columbia-salmon": {"windows": ["08-15/10-15"], "note": "Fall chinook pass the Columbia River dams"}
+  }
+}

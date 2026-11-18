@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "editorialReviewDate": "2026-11-17",
+  "purpose": "Named route guidance and separately verified date-scoped operator observations. A published trail description is NOT a live access report.",
+  "operatorAccessReady": false,
+  "routes": {
+    "gooseberry-upper": {
+      "routeId": "gooseberry-upper",
+      "routeName": "Upper Falls winter walking approach",
+      "authority": "Minnesota DNR",
+      "routePage": "https://www.dnr.state.mn.us/state-parks/gooseberry-falls/self-tour-waterfalls-walk.html",
+      "conditionsPage": "https://www.dnr.state.mn.us/trailconditions/index.html",
+      "policy": {
+        "text": "The maintained winter walking route leads to Upper Falls. The longer summer waterfall circuits are not maintained winter walking routes.",
+        "sourceUrl": "https://www.dnr.state.mn.us/state-parks/gooseberry-falls/self-tour-waterfalls-walk.html"
+      },
+      "observations": []
+    },
+    "munising-snowshoe": {
+      "routeId": "munising-snowshoe",
+      "routeName": "Pictured Rocks marked snowshoe trail",
+      "authority": "National Park Service",
+      "routePage": "https://www.nps.gov/thingstodo/snowshoeing-at-pictured-rocks.htm",
+      "conditionsPage": "https://www.nps.gov/piro/planyourvisit/conditions.htm",
+      "policy": {
+        "text": "The official 2.65-mile snowshoe loop begins beyond the ski trail parking area at East City Limits Road. The adjacent groomed cross-country ski tracks are off-limits to snowshoes.",
+        "sourceUrl": "https://www.nps.gov/thingstodo/snowshoeing-at-pictured-rocks.htm"
+      },
+      "observations": []
+    },
+    "meyers-lakeshore": {
+      "routeId": "meyers-lakeshore",
+      "routeName": "Meyers Beach overland Lakeshore Trail",
+      "authority": "National Park Service",
+      "routePage": "https://www.nps.gov/apis/planyourvisit/hiking.htm",
+      "conditionsPage": "https://www.nps.gov/apis/planyourvisit/conditions.htm",
+      "policy": {
+        "text": "The Lakeshore Trail follows the land above the sandstone cliffs. In winter it may be snow-packed, icy, or covered in deep snow; walking on lake ice to reach the caves is a separate activity.",
+        "sourceUrl": "https://www.nps.gov/apis/planyourvisit/hiking.htm"
+      },
+      "observations": []
+    }
+  }
+}

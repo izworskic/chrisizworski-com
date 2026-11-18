@@ -21,6 +21,18 @@
  const chartTick=new Intl.DateTimeFormat('en-US',{timeZone:'America/Detroit',weekday:'short',hour:'numeric'});
  const when=iso=>{const t=Date.parse(iso||'');return Number.isFinite(t)?fmt.format(t):'Time not reported';};
  const compact=iso=>{const t=Date.parse(iso||'');return Number.isFinite(t)?short.format(t):'Time unknown';};
+ function plainReason(reason){
+  if(!reason)return 'This hour has no detailed weather explanation.';
+  if(reason.startsWith('All spray gates met'))return 'The wind, air and water readings line up for possible freezing spray. We cannot tell whether ice has formed.';
+  if(reason.includes('offshore or cross-shore'))return 'The wind is not coming in from the lake toward this pier.';
+  if(reason.startsWith('Wind below'))return 'The wind is below the 15 mph level this watch uses for freezing spray.';
+  if(reason==='Air at or above freezing')return 'The air is at or above freezing, so this watch does not show new spray ice forming.';
+  if(reason.startsWith('Source water temperature'))return 'The available water reading is 40 F or warmer, above this watch\'s threshold.';
+  if(reason.startsWith('Widespread lake ice'))return 'Widespread lake ice may be keeping waves from reaching this pier. Conditions right beside the lighthouse remain uncertain.';
+  if(reason.startsWith('Missing wind')||reason.startsWith('Formula inputs'))return 'One or more weather readings needed for this hour are missing or cannot be used.';
+  if(reason==='Invalid lake ice observation')return 'The latest lake ice reading could not be used.';
+  return 'The weather source did not provide a clear explanation for this hour.';
+ }
  const element=(tag,cls,content)=>{
   const el=document.createElement(tag);
   if(cls)el.className=cls;
@@ -51,19 +63,19 @@
  function selected(){return state.data?.piers?.find(p=>p.id===state.id)||null;}
  function firstWindow(pier){return pier.windows?.[0]||null;}
  function placeStatus(pier){
-  if(!pier.available)return 'Evidence incomplete';
+  if(!pier.available)return 'Not enough weather readings yet';
   const first=firstWindow(pier);
-  if(first)return 'Possible spray '+compact(first.startTime);
-  if(pier.hours?.some(h=>h.score===null))return 'Some hours unknown';
-  return 'No modeled spray window';
+  if(first)return 'Possible freezing spray '+compact(first.startTime);
+  if(pier.hours?.some(h=>h.score===null))return 'Some hours lack readings';
+  return 'No spray-ice weather forecast';
  }
  function hourStatus(pier,stamp){
   const hours=pier.hours||[];
-  if(!hours.length||!Number.isFinite(stamp))return 'Selected hour: forecast unknown';
+  if(!hours.length||!Number.isFinite(stamp))return 'This hour: no forecast available';
   const candidate=hours[nearest(hours,stamp)];
-  if(!candidate||Math.abs(Date.parse(candidate.startTime)-stamp)>3600000)return 'Selected hour: no matching forecast';
-  if(candidate.score===null)return 'Selected hour: evidence unknown';
-  return candidate.score>0?'Selected hour: possible spray '+candidate.score+'/100':'Selected hour: no modeled spray';
+  if(!candidate||Math.abs(Date.parse(candidate.startTime)-stamp)>3600000)return 'This hour: no matching forecast';
+  if(candidate.score===null)return 'This hour: missing weather readings';
+  return candidate.score>0?'This hour: possible freezing spray, signal '+candidate.score+'/100':'This hour: conditions not met';
  }
  function makeList(){
   list.replaceChildren();
@@ -76,7 +88,7 @@
    button.append(element('span','desk-location__town',p.town));
    button.append(element('span','desk-location__light',p.name));
    button.append(element('span','desk-location__window',placeStatus(p)));
-   button.append(element('span','desk-location__state','Selected hour: waiting'));
+   button.append(element('span','desk-location__state','Checking this hour'));
    button.addEventListener('click',()=>{state.id=p.id;render(true);});
    list.append(button);
   }
@@ -133,19 +145,19 @@
   const numberOfRuns=pier.windows?.length||0;
   const c=pier.coverage||{forecastHours:hours.length,evaluatedHours:hours.filter(x=>x.score!==null).length};
   if(!pier.available){
-   outcome.textContent='A forecast verdict is unavailable';
+   outcome.textContent='We do not have enough readings for this lighthouse yet';
   }else if(first){
-   outcome.textContent='Possible spray window beginning '+compact(first.startTime);
+   outcome.textContent='Weather for freezing spray could begin '+compact(first.startTime);
   }else if(c.evaluatedHours<c.forecastHours){
-   outcome.textContent='No window found in evaluated hours. Some hours are unknown.';
+   outcome.textContent='No freezing-spray window in the hours we could check. Some hours are missing.';
   }else{
-   outcome.textContent='No modeled spray window in the available forecast';
+   outcome.textContent='The forecast does not show the conditions needed for freezing spray';
   }
   if(first){
    const duration=first.hours===1?'1 consecutive forecast hour':first.hours+' consecutive forecast hours';
-   windowText.textContent='First window: '+compact(first.startTime)+' to '+compact(first.endTime)+'. '+duration+'. '+numberOfRuns+' separate possible-spray '+(numberOfRuns===1?'window':'windows')+' in the available period. The model cannot confirm ice already on the tower.';
+   windowText.textContent='First possible stretch: '+compact(first.startTime)+' to '+compact(first.endTime)+'. That is '+duration+' with weather favorable for freezing spray. We found '+numberOfRuns+' separate '+(numberOfRuns===1?'stretch':'stretches')+' in this forecast. Ice already on the tower must be checked visually.';
   }else{
-   windowText.textContent='No continuous spray window identified. '+c.evaluatedHours+' of '+c.forecastHours+' issued hours could be evaluated. Existing ice may still be present.';
+   windowText.textContent='We could check '+c.evaluatedHours+' of '+c.forecastHours+' forecast hours. None of those hours met all the conditions for new freezing spray. Ice may already be on the lighthouse, and any hours with missing data remain unknown.';
   }
   for(const link of document.querySelectorAll('a[data-select-lighthouse]')){
    link.setAttribute('aria-current',String(link.dataset.selectLighthouse===pier.id));
@@ -168,34 +180,34 @@
   renderChart(pier,idx);
   readings.replaceChildren();
   if(!h){
-   readings.append(element('p','desk-empty','NWS hourly evidence is unavailable or stale for this location.'));
+   readings.append(element('p','desk-empty','We do not have a current hourly weather forecast for this lighthouse.'));
   }else{
-   const label=h.score===null?'Unknown from available evidence':
-    h.score>0?'Possible freezing spray, index '+h.score+'/100':
-    h.category==='suppressed'?'Lakewide ice suppression, local spray unverified':'No modeled spray gate crossing';
+   const label=h.score===null?'We do not have enough readings for this hour':
+    h.score>0?'Freezing spray is possible. Relative signal '+h.score+'/100':
+    h.category==='suppressed'?'Lake ice may be blocking spray; conditions at this pier are unknown':'This hour does not meet the conditions for freezing spray';
    readings.append(element('p','desk-hour-verdict',label));
    const dl=element('dl','desk-metrics');
    dl.append(
     row('Wind from',h.windDirection?String(h.windDirection)+' / '+(Number.isFinite(h.windMph)?Math.round(h.windMph)+' mph':'speed unavailable'):'Direction unavailable'),
-    row('Air',Number.isFinite(h.airF)?Math.round(h.airF)+' F':'Unavailable'),
-    row('Water',Number.isFinite(h.waterF)?Math.round(h.waterF)+' F':'Unavailable'),
-    row('Lakewide ice',pier.ice?.coverage==='lakewide-only'?pier.ice.pct+'% (not local)':'Unavailable'),
-    row('Reported gust',Number.isFinite(h.gustMph)?Math.round(h.gustMph)+' mph':'Not reported')
+    row('Air temperature',Number.isFinite(h.airF)?Math.round(h.airF)+' F':'Unavailable'),
+    row('Water temperature',Number.isFinite(h.waterF)?Math.round(h.waterF)+' F':'Unavailable'),
+    row('Lake Michigan ice (lakewide)',pier.ice?.coverage==='lakewide-only'?pier.ice.pct+'% (not local)':'Unavailable'),
+    row('Wind gust',Number.isFinite(h.gustMph)?Math.round(h.gustMph)+' mph':'Not reported')
    );
-   readings.append(dl,element('p','desk-hour-reason',h.reason||'No reason supplied'));
+   readings.append(dl,element('p','desk-hour-reason',plainReason(h.reason)));
   }
   provenance.replaceChildren();
   const water=pier.water?pier.water.station+' at '+when(pier.water.observedAt):'Unavailable or stale';
-  provenance.append(element('p','', 'NWS issued: '+when(pier.forecastIssuedAt)+'. Water: '+water+'. '+(pier.water?.kind==='lakewide-proxy'?'Lakewide average is a proxy, not a reading at the pier.':'Coastal gauge is not a pier sensor.')));
+  provenance.append(element('p','', 'National Weather Service forecast issued '+when(pier.forecastIssuedAt)+'. Water reading: '+water+'. '+(pier.water?.kind==='lakewide-proxy'?'This is an average for the lake, not a reading at the pier.':'This gauge measures the coast, not the lighthouse pier.')));
   const alert=pier.alerts;
   if(alert?.events?.length){
-   provenance.append(element('p','desk-alert','NWS marine freezing spray alert: '+alert.events.map(e=>e.name).join('; ')+'. Check the official warning.'));
+   provenance.append(element('p','desk-alert','The National Weather Service has a freezing-spray alert for this area: '+alert.events.map(e=>e.name).join('; ')+'. Read the official warning.'));
   }else if(alert?.status!=='complete'){
-   provenance.append(element('p','desk-alert','Marine warning feed incomplete or unavailable. This is not an all-clear.'));
+   provenance.append(element('p','desk-alert','We could not check every marine warning for this area. Do not assume there are no warnings.'));
   }else{
-   provenance.append(element('p','', 'No active freezing spray alert in the checked marine zones at '+when(alert.updatedAt)+'. This is not an all-clear.'));
+   provenance.append(element('p','', 'No freezing-spray alert was listed for the marine zones checked as of '+when(alert.updatedAt)+'. That does not mean the pier is safe.'));
   }
-  provenance.append(element('p','desk-caution','View from shore. A wind-driven ice buildup signal says nothing about safe access.'));
+  provenance.append(element('p','desk-caution','Watch from shore and stay off icy or wave-swept piers. A weather signal cannot tell you whether the pier is safe.'));
   if(updateUrl)fixUrl();
  }
  function selectHour(index){
@@ -229,11 +241,11 @@
  });
  window.addEventListener('frozen-lighthouse-failed',()=>{
   state.data=null;
-  list.replaceChildren(element('p','desk-empty','The forecast feed could not be verified.'));
-  title.textContent='Hourly outlook unavailable';
-  outcome.textContent='No reliable model verdict';
-  windowText.textContent='Source connection failed. Please check the official NWS marine forecast.';
-  timeLabel.textContent='No forecast hours loaded';
+  list.replaceChildren(element('p','desk-empty','We could not get the latest weather readings.'));
+  title.textContent='Weather forecast unavailable';
+  outcome.textContent='No trustworthy forecast available right now';
+  windowText.textContent='We could not check the forecast. Please use the official National Weather Service marine forecast before heading out.';
+  timeLabel.textContent='No current hourly forecast';
   slider.disabled=true;previous.disabled=true;next.disabled=true;
   readings.replaceChildren();chart.replaceChildren();chartAxis.replaceChildren();provenance.replaceChildren();
   maps.removeAttribute('href');

@@ -152,3 +152,164 @@
     scroll-behavior:auto;
   }
 }
+
+/* A compact, factual arrival answer belongs with the real map, not in a hero gallery. */
+.up-waterfall-hub .upfall-arrival-desk{
+  padding:15px 16px 18px;
+  border-top:2px solid #a7c7bc;
+  background:#f8faf5;
+  color:#17312f;
+  line-height:1.5;
+}
+.up-waterfall-hub .upfall-arrival-head{
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:12px;
+}
+.up-waterfall-hub .upfall-arrival-eyebrow{
+  margin:0 0 4px;
+  font-size:.7rem;
+  font-weight:800;
+  letter-spacing:.11em;
+  color:#32645b;
+}
+.up-waterfall-hub .upfall-arrival-head h3{
+  font-family:Georgia,serif;
+  font-size:clamp(1.25rem,2vw,1.55rem);
+  line-height:1.22;
+  margin:0;
+}
+.up-waterfall-hub .upfall-arrival-example{
+  color:#4a615e;
+  font-size:.78rem;
+  line-height:1.4;
+  max-width:44ch;
+  margin:5px 0 0;
+}
+.up-waterfall-hub .upfall-arrival-head label{
+  display:grid;
+  gap:4px;
+  font-size:.8rem;
+  font-weight:700;
+  flex:0 1 245px;
+  min-width:0;
+}
+.up-waterfall-hub #arrival-choice{
+  min-height:44px;
+  width:100%;
+  max-width:100%;
+  border:1px solid #769d96;
+  border-radius:7px;
+  background:#fff;
+  color:#17312f;
+  padding:7px 10px;
+}
+.up-waterfall-hub .upfall-arrival-selected{
+  margin:14px 0 4px;
+  font-weight:800;
+  font-size:1.14rem;
+}
+.up-waterfall-hub .upfall-arrival-verdict{
+  margin:5px 0 12px;
+  font-weight:700;
+  padding-left:10px;
+  border-left:4px solid #307b67;
+  color:#143e37;
+}
+.up-waterfall-hub .upfall-arrival-desk[data-state="closed"] .upfall-arrival-verdict,
+.up-waterfall-hub .upfall-arrival-desk[data-state="unverified"] .upfall-arrival-verdict{
+  border-left-color:#a54e37;
+  color:#71311f;
+}
+.up-waterfall-hub .upfall-arrival-desk[data-state="restricted"] .upfall-arrival-verdict,
+.up-waterfall-hub .upfall-arrival-desk[data-state="seasonal"] .upfall-arrival-verdict{
+  border-left-color:#ad7a27;
+  color:#604516;
+}
+.up-waterfall-hub .upfall-arrival-steps{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+}
+.up-waterfall-hub .upfall-arrival-steps>div{
+  border-top:1px solid #c3d5cc;
+  padding-top:9px;
+  min-width:0;
+}
+.up-waterfall-hub .upfall-arrival-step-title{
+  font-size:.72rem;
+  letter-spacing:.07em;
+  text-transform:uppercase;
+  font-weight:800;
+  color:#345b53;
+  margin:0 0 4px;
+}
+.up-waterfall-hub .upfall-arrival-steps>div>p:last-child{
+  margin:0;
+  overflow-wrap:anywhere;
+  font-size:.91rem;
+}
+.up-waterfall-hub .upfall-arrival-watch{
+  margin-top:12px;
+  padding-top:8px;
+  border-top:1px solid #c3d5cc;
+}
+.up-waterfall-hub #arrival-watch{
+  padding-left:20px;
+  margin:5px 0 0;
+  font-size:.88rem;
+}
+.up-waterfall-hub #arrival-watch li+li{margin-top:5px}
+.up-waterfall-hub .upfall-arrival-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-top:14px;
+}
+.up-waterfall-hub .arrival-action{
+  min-height:40px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:6px;
+  padding:8px 11px;
+  font-size:.82rem;
+  font-weight:750;
+  text-decoration:none;
+  line-height:1.3;
+  background:#164d47;
+  color:#fff;
+}
+.up-waterfall-hub .arrival-action-outline{
+  background:transparent;
+  color:#164d47;
+  border:1px solid #8ca9a0;
+}
+.up-waterfall-hub .arrival-action-parking{
+  background:#e8d49a;
+  color:#342c15;
+}
+.up-waterfall-hub .upfall-arrival-review{
+  font-size:.76rem;
+  color:#4a615e;
+  margin:13px 0 0;
+}
+.up-waterfall-hub .arrival-check{
+  min-height:40px;
+  border:1px solid #8ca9a0;
+  border-radius:6px;
+  background:#f0f7f3;
+  color:#174e43;
+  font-size:.8rem;
+  font-weight:750;
+  padding:7px 10px;
+}
+.up-waterfall-hub .arrival-check:hover{background:#dfede5}
+@media(max-width:620px){
+  .up-waterfall-hub .upfall-arrival-desk{padding:12px}
+  .up-waterfall-hub .upfall-arrival-head label{flex-basis:100%}
+  .up-waterfall-hub .upfall-arrival-steps{grid-template-columns:1fr}
+  .up-waterfall-hub .upfall-arrival-actions .arrival-action{flex:1 1 100%}
+}

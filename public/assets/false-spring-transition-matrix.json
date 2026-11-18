@@ -1,0 +1,432 @@
+{
+  "version": "1.0.0",
+  "model": "python-intelligence-os-v1-solar-lag",
+  "weeks": [
+    {
+      "id": "2026-02-15",
+      "label": "Feb 15",
+      "dayOfYear": 46
+    },
+    {
+      "id": "2026-02-22",
+      "label": "Feb 22",
+      "dayOfYear": 53
+    },
+    {
+      "id": "2026-03-01",
+      "label": "Mar 1",
+      "dayOfYear": 60
+    },
+    {
+      "id": "2026-03-08",
+      "label": "Mar 8",
+      "dayOfYear": 67
+    },
+    {
+      "id": "2026-03-15",
+      "label": "Mar 15",
+      "dayOfYear": 74
+    },
+    {
+      "id": "2026-03-22",
+      "label": "Mar 22",
+      "dayOfYear": 81
+    },
+    {
+      "id": "2026-03-29",
+      "label": "Mar 29",
+      "dayOfYear": 88
+    },
+    {
+      "id": "2026-04-05",
+      "label": "Apr 5",
+      "dayOfYear": 95
+    }
+  ],
+  "zones": {
+    "southern-lower": {
+      "name": "Southern Lower",
+      "lat": 42.2,
+      "shedSite": "jackson",
+      "sapSite": "lansing",
+      "byWeek": {
+        "2026-02-15": {
+          "weekLabel": "Feb 15",
+          "solarNoonDeg": 34.5,
+          "code": "deep-snow",
+          "label": "Deep-Snow Holdout",
+          "score": 15,
+          "amGear": "Snowshoes + insulated winter boots; packed trails hold firm all day.",
+          "pmGear": "Snowshoes off-trail; microspikes on groomed hardpack.",
+          "sapStatus": "Dormant / too cold for sustained daytime thaw.",
+          "shedStatus": "Snowpack blankets ridges; avoid disturbing deer wintering yards."
+        },
+        "2026-02-22": {
+          "weekLabel": "Feb 22",
+          "solarNoonDeg": 36.9,
+          "code": "deep-snow",
+          "label": "Deep-Snow Holdout",
+          "score": 15,
+          "amGear": "Snowshoes + insulated winter boots; packed trails hold firm all day.",
+          "pmGear": "Snowshoes off-trail; microspikes on groomed hardpack.",
+          "sapStatus": "Dormant / too cold for sustained daytime thaw.",
+          "shedStatus": "Snowpack blankets ridges; avoid disturbing deer wintering yards."
+        },
+        "2026-03-01": {
+          "weekLabel": "Mar 1",
+          "solarNoonDeg": 39.5,
+          "code": "crust-window",
+          "label": "Morning Crust & Early Sap",
+          "score": 42,
+          "amGear": "Steel microspikes before 10:30 AM on boilerplate trail crust.",
+          "pmGear": "Snowshoes after 12:30 PM as top crust softens into slush.",
+          "sapStatus": "Early freeze-thaw spikes on sunny south-facing maple edges.",
+          "shedStatus": "South-facing oak benches begin melting bare; shaded woods remain covered."
+        },
+        "2026-03-08": {
+          "weekLabel": "Mar 8",
+          "solarNoonDeg": 42.2,
+          "code": "freeze-thaw",
+          "label": "Peak Freeze-Thaw & South-Slope Sheds",
+          "score": 72,
+          "amGear": "Microspikes for 8 AM refrozen ruts and icy creek crossings.",
+          "pmGear": "Waterproof mud boots + gaiters for thawed south slopes & ag edges.",
+          "sapStatus": "Prime sugarbush window (nights < 28\u00b0F, days > 40\u00b0F).",
+          "shedStatus": "Optimal south-slope & hedgerow visibility as snow retreats."
+        },
+        "2026-03-15": {
+          "weekLabel": "Mar 15",
+          "solarNoonDeg": 45.0,
+          "code": "freeze-thaw",
+          "label": "Peak Freeze-Thaw & South-Slope Sheds",
+          "score": 72,
+          "amGear": "Microspikes for 8 AM refrozen ruts and icy creek crossings.",
+          "pmGear": "Waterproof mud boots + gaiters for thawed south slopes & ag edges.",
+          "sapStatus": "Prime sugarbush window (nights < 28\u00b0F, days > 40\u00b0F).",
+          "shedStatus": "Optimal south-slope & hedgerow visibility as snow retreats."
+        },
+        "2026-03-22": {
+          "weekLabel": "Mar 22",
+          "solarNoonDeg": 47.8,
+          "code": "mud-breakup",
+          "label": "Mud, Bare Ground & Ice-Out",
+          "score": 94,
+          "amGear": "Waterproof boots; watch for black ice on shaded boardwalks at dawn.",
+          "pmGear": "Mud boots on paved rail-trails or dry oak ridges; stay off rutted singletrack.",
+          "sapStatus": "Late-stage / winding down as overnight lows stay above freezing and buds swell.",
+          "shedStatus": "Full bare-ground visibility before spring green-up."
+        },
+        "2026-03-29": {
+          "weekLabel": "Mar 29",
+          "solarNoonDeg": 50.6,
+          "code": "mud-breakup",
+          "label": "Mud, Bare Ground & Ice-Out",
+          "score": 94,
+          "amGear": "Waterproof boots; watch for black ice on shaded boardwalks at dawn.",
+          "pmGear": "Mud boots on paved rail-trails or dry oak ridges; stay off rutted singletrack.",
+          "sapStatus": "Late-stage / winding down as overnight lows stay above freezing and buds swell.",
+          "shedStatus": "Full bare-ground visibility before spring green-up."
+        },
+        "2026-04-05": {
+          "weekLabel": "Apr 5",
+          "solarNoonDeg": 53.4,
+          "code": "mud-breakup",
+          "label": "Mud, Bare Ground & Ice-Out",
+          "score": 94,
+          "amGear": "Waterproof boots; watch for black ice on shaded boardwalks at dawn.",
+          "pmGear": "Mud boots on paved rail-trails or dry oak ridges; stay off rutted singletrack.",
+          "sapStatus": "Late-stage / winding down as overnight lows stay above freezing and buds swell.",
+          "shedStatus": "Full bare-ground visibility before spring green-up."
+        }
+      }
+    },
+    "mid-michigan": {
+      "name": "Mid-Michigan & Bay",
+      "lat": 43.6,
+      "shedSite": "bay-city",
+      "sapSite": "bay-city",
+      "byWeek": {
+        "2026-02-15": {
+          "weekLabel": "Feb 15",
+          "solarNoonDeg": 33.1,
+          "code": "deep-snow",
+          "label": "Deep-Snow Holdout",
+          "score": 15,
+          "amGear": "Snowshoes + insulated winter boots; packed trails hold firm all day.",
+          "pmGear": "Snowshoes off-trail; microspikes on groomed hardpack.",
+          "sapStatus": "Dormant / too cold for sustained daytime thaw.",
+          "shedStatus": "Snowpack blankets ridges; avoid disturbing deer wintering yards."
+        },
+        "2026-02-22": {
+          "weekLabel": "Feb 22",
+          "solarNoonDeg": 35.5,
+          "code": "deep-snow",
+          "label": "Deep-Snow Holdout",
+          "score": 15,
+          "amGear": "Snowshoes + insulated winter boots; packed trails hold firm all day.",
+          "pmGear": "Snowshoes off-trail; microspikes on groomed hardpack.",
+          "sapStatus": "Dormant / too cold for sustained daytime thaw.",
+          "shedStatus": "Snowpack blankets ridges; avoid disturbing deer wintering yards."
+        },
+        "2026-03-01": {
+          "weekLabel": "Mar 1",
+          "solarNoonDeg": 38.1,
+          "code": "deep-snow",
+          "label": "Deep-Snow Holdout",
+          "score": 15,
+          "amGear": "Snowshoes + insulated winter boots; packed trails hold firm all day.",
+          "pmGear": "Snowshoes off-trail; microspikes on groomed hardpack.",
+          "sapStatus": "Dormant / too cold for sustained daytime thaw.",
+          "shedStatus": "Snowpack blankets ridges; avoid disturbing deer wintering yards."
+        },
+        "2026-03-08": {
+          "weekLabel": "Mar 8",
+          "solarNoonDeg": 40.8,
+          "code": "crust-window",
+          "label": "Morning Crust & Early Sap",
+          "score": 42,
+          "amGear": "Steel microspikes before 10:30 AM on boilerplate trail crust.",
+          "pmGear": "Snowshoes after 12:30 PM as top crust softens into slush.",
+          "sapStatus": "Early freeze-thaw spikes on sunny south-facing maple edges.",
+          "shedStatus": "South-facing oak benches begin melting bare; shaded woods remain covered."
+        },
+        "2026-03-15": {
+          "weekLabel": "Mar 15",
+          "solarNoonDeg": 43.6,
+          "code": "crust-window",
+          "label": "Morning Crust & Early Sap",
+          "score": 42,
+          "amGear": "Steel microspikes before 10:30 AM on boilerplate trail crust.",
+          "pmGear": "Snowshoes after 12:30 PM as top crust softens into slush.",
+          "sapStatus": "Early freeze-thaw spikes on sunny south-facing maple edges.",
+          "shedStatus": "South-facing oak benches begin melting bare; shaded woods remain covered."
+        },
+        "2026-03-22": {
+          "weekLabel": "Mar 22",
+          "solarNoonDeg": 46.4,
+          "code": "freeze-thaw",
+          "label": "Peak Freeze-Thaw & South-Slope Sheds",
+          "score": 72,
+          "amGear": "Microspikes for 8 AM refrozen ruts and icy creek crossings.",
+          "pmGear": "Waterproof mud boots + gaiters for thawed south slopes & ag edges.",
+          "sapStatus": "Prime sugarbush window (nights < 28\u00b0F, days > 40\u00b0F).",
+          "shedStatus": "Optimal south-slope & hedgerow visibility as snow retreats."
+        },
+        "2026-03-29": {
+          "weekLabel": "Mar 29",
+          "solarNoonDeg": 49.2,
+          "code": "freeze-thaw",
+          "label": "Peak Freeze-Thaw & South-Slope Sheds",
+          "score": 72,
+          "amGear": "Microspikes for 8 AM refrozen ruts and icy creek crossings.",
+          "pmGear": "Waterproof mud boots + gaiters for thawed south slopes & ag edges.",
+          "sapStatus": "Prime sugarbush window (nights < 28\u00b0F, days > 40\u00b0F).",
+          "shedStatus": "Optimal south-slope & hedgerow visibility as snow retreats."
+        },
+        "2026-04-05": {
+          "weekLabel": "Apr 5",
+          "solarNoonDeg": 52.0,
+          "code": "mud-breakup",
+          "label": "Mud, Bare Ground & Ice-Out",
+          "score": 94,
+          "amGear": "Waterproof boots; watch for black ice on shaded boardwalks at dawn.",
+          "pmGear": "Mud boots on paved rail-trails or dry oak ridges; stay off rutted singletrack.",
+          "sapStatus": "Late-stage / winding down as overnight lows stay above freezing and buds swell.",
+          "shedStatus": "Full bare-ground visibility before spring green-up."
+        }
+      }
+    },
+    "northern-lower": {
+      "name": "Northern Snowbelt",
+      "lat": 44.8,
+      "shedSite": "traverse-city",
+      "sapSite": "traverse-city",
+      "byWeek": {
+        "2026-02-15": {
+          "weekLabel": "Feb 15",
+          "solarNoonDeg": 31.9,
+          "code": "deep-snow",
+          "label": "Deep-Snow Holdout",
+          "score": 15,
+          "amGear": "Snowshoes + insulated winter boots; packed trails hold firm all day.",
+          "pmGear": "Snowshoes off-trail; microspikes on groomed hardpack.",
+          "sapStatus": "Dormant / too cold for sustained daytime thaw.",
+          "shedStatus": "Snowpack blankets ridges; avoid disturbing deer wintering yards."
+        },
+        "2026-02-22": {
+          "weekLabel": "Feb 22",
+          "solarNoonDeg": 34.3,
+          "code": "deep-snow",
+          "label": "Deep-Snow Holdout",
+          "score": 15,
+          "amGear": "Snowshoes + insulated winter boots; packed trails hold firm all day.",
+          "pmGear": "Snowshoes off-trail; microspikes on groomed hardpack.",
+          "sapStatus": "Dormant / too cold for sustained daytime thaw.",
+          "shedStatus": "Snowpack blankets ridges; avoid disturbing deer wintering yards."
+        },
+        "2026-03-01": {
+          "weekLabel": "Mar 1",
+          "solarNoonDeg": 36.9,
+          "code": "deep-snow",
+          "label": "Deep-Snow Holdout",
+          "score": 15,
+          "amGear": "Snowshoes + insulated winter boots; packed trails hold firm all day.",
+          "pmGear": "Snowshoes off-trail; microspikes on groomed hardpack.",
+          "sapStatus": "Dormant / too cold for sustained daytime thaw.",
+          "shedStatus": "Snowpack blankets ridges; avoid disturbing deer wintering yards."
+        },
+        "2026-03-08": {
+          "weekLabel": "Mar 8",
+          "solarNoonDeg": 39.6,
+          "code": "deep-snow",
+          "label": "Deep-Snow Holdout",
+          "score": 15,
+          "amGear": "Snowshoes + insulated winter boots; packed trails hold firm all day.",
+          "pmGear": "Snowshoes off-trail; microspikes on groomed hardpack.",
+          "sapStatus": "Dormant / too cold for sustained daytime thaw.",
+          "shedStatus": "Snowpack blankets ridges; avoid disturbing deer wintering yards."
+        },
+        "2026-03-15": {
+          "weekLabel": "Mar 15",
+          "solarNoonDeg": 42.4,
+          "code": "crust-window",
+          "label": "Morning Crust & Early Sap",
+          "score": 42,
+          "amGear": "Steel microspikes before 10:30 AM on boilerplate trail crust.",
+          "pmGear": "Snowshoes after 12:30 PM as top crust softens into slush.",
+          "sapStatus": "Early freeze-thaw spikes on sunny south-facing maple edges.",
+          "shedStatus": "South-facing oak benches begin melting bare; shaded woods remain covered."
+        },
+        "2026-03-22": {
+          "weekLabel": "Mar 22",
+          "solarNoonDeg": 45.2,
+          "code": "crust-window",
+          "label": "Morning Crust & Early Sap",
+          "score": 42,
+          "amGear": "Steel microspikes before 10:30 AM on boilerplate trail crust.",
+          "pmGear": "Snowshoes after 12:30 PM as top crust softens into slush.",
+          "sapStatus": "Early freeze-thaw spikes on sunny south-facing maple edges.",
+          "shedStatus": "South-facing oak benches begin melting bare; shaded woods remain covered."
+        },
+        "2026-03-29": {
+          "weekLabel": "Mar 29",
+          "solarNoonDeg": 48.0,
+          "code": "freeze-thaw",
+          "label": "Peak Freeze-Thaw & South-Slope Sheds",
+          "score": 72,
+          "amGear": "Microspikes for 8 AM refrozen ruts and icy creek crossings.",
+          "pmGear": "Waterproof mud boots + gaiters for thawed south slopes & ag edges.",
+          "sapStatus": "Prime sugarbush window (nights < 28\u00b0F, days > 40\u00b0F).",
+          "shedStatus": "Optimal south-slope & hedgerow visibility as snow retreats."
+        },
+        "2026-04-05": {
+          "weekLabel": "Apr 5",
+          "solarNoonDeg": 50.8,
+          "code": "freeze-thaw",
+          "label": "Peak Freeze-Thaw & South-Slope Sheds",
+          "score": 72,
+          "amGear": "Microspikes for 8 AM refrozen ruts and icy creek crossings.",
+          "pmGear": "Waterproof mud boots + gaiters for thawed south slopes & ag edges.",
+          "sapStatus": "Prime sugarbush window (nights < 28\u00b0F, days > 40\u00b0F).",
+          "shedStatus": "Optimal south-slope & hedgerow visibility as snow retreats."
+        }
+      }
+    },
+    "upper-peninsula": {
+      "name": "Upper Peninsula",
+      "lat": 46.5,
+      "shedSite": "marquette",
+      "sapSite": "marquette",
+      "byWeek": {
+        "2026-02-15": {
+          "weekLabel": "Feb 15",
+          "solarNoonDeg": 30.2,
+          "code": "deep-snow",
+          "label": "Deep-Snow Holdout",
+          "score": 15,
+          "amGear": "Snowshoes + insulated winter boots; packed trails hold firm all day.",
+          "pmGear": "Snowshoes off-trail; microspikes on groomed hardpack.",
+          "sapStatus": "Dormant / too cold for sustained daytime thaw.",
+          "shedStatus": "Snowpack blankets ridges; avoid disturbing deer wintering yards."
+        },
+        "2026-02-22": {
+          "weekLabel": "Feb 22",
+          "solarNoonDeg": 32.6,
+          "code": "deep-snow",
+          "label": "Deep-Snow Holdout",
+          "score": 15,
+          "amGear": "Snowshoes + insulated winter boots; packed trails hold firm all day.",
+          "pmGear": "Snowshoes off-trail; microspikes on groomed hardpack.",
+          "sapStatus": "Dormant / too cold for sustained daytime thaw.",
+          "shedStatus": "Snowpack blankets ridges; avoid disturbing deer wintering yards."
+        },
+        "2026-03-01": {
+          "weekLabel": "Mar 1",
+          "solarNoonDeg": 35.2,
+          "code": "deep-snow",
+          "label": "Deep-Snow Holdout",
+          "score": 15,
+          "amGear": "Snowshoes + insulated winter boots; packed trails hold firm all day.",
+          "pmGear": "Snowshoes off-trail; microspikes on groomed hardpack.",
+          "sapStatus": "Dormant / too cold for sustained daytime thaw.",
+          "shedStatus": "Snowpack blankets ridges; avoid disturbing deer wintering yards."
+        },
+        "2026-03-08": {
+          "weekLabel": "Mar 8",
+          "solarNoonDeg": 37.9,
+          "code": "deep-snow",
+          "label": "Deep-Snow Holdout",
+          "score": 15,
+          "amGear": "Snowshoes + insulated winter boots; packed trails hold firm all day.",
+          "pmGear": "Snowshoes off-trail; microspikes on groomed hardpack.",
+          "sapStatus": "Dormant / too cold for sustained daytime thaw.",
+          "shedStatus": "Snowpack blankets ridges; avoid disturbing deer wintering yards."
+        },
+        "2026-03-15": {
+          "weekLabel": "Mar 15",
+          "solarNoonDeg": 40.7,
+          "code": "deep-snow",
+          "label": "Deep-Snow Holdout",
+          "score": 15,
+          "amGear": "Snowshoes + insulated winter boots; packed trails hold firm all day.",
+          "pmGear": "Snowshoes off-trail; microspikes on groomed hardpack.",
+          "sapStatus": "Dormant / too cold for sustained daytime thaw.",
+          "shedStatus": "Snowpack blankets ridges; avoid disturbing deer wintering yards."
+        },
+        "2026-03-22": {
+          "weekLabel": "Mar 22",
+          "solarNoonDeg": 43.5,
+          "code": "deep-snow",
+          "label": "Deep-Snow Holdout",
+          "score": 15,
+          "amGear": "Snowshoes + insulated winter boots; packed trails hold firm all day.",
+          "pmGear": "Snowshoes off-trail; microspikes on groomed hardpack.",
+          "sapStatus": "Dormant / too cold for sustained daytime thaw.",
+          "shedStatus": "Snowpack blankets ridges; avoid disturbing deer wintering yards."
+        },
+        "2026-03-29": {
+          "weekLabel": "Mar 29",
+          "solarNoonDeg": 46.3,
+          "code": "crust-window",
+          "label": "Morning Crust & Early Sap",
+          "score": 42,
+          "amGear": "Steel microspikes before 10:30 AM on boilerplate trail crust.",
+          "pmGear": "Snowshoes after 12:30 PM as top crust softens into slush.",
+          "sapStatus": "Early freeze-thaw spikes on sunny south-facing maple edges.",
+          "shedStatus": "South-facing oak benches begin melting bare; shaded woods remain covered."
+        },
+        "2026-04-05": {
+          "weekLabel": "Apr 5",
+          "solarNoonDeg": 49.1,
+          "code": "freeze-thaw",
+          "label": "Peak Freeze-Thaw & South-Slope Sheds",
+          "score": 72,
+          "amGear": "Microspikes for 8 AM refrozen ruts and icy creek crossings.",
+          "pmGear": "Waterproof mud boots + gaiters for thawed south slopes & ag edges.",
+          "sapStatus": "Prime sugarbush window (nights < 28\u00b0F, days > 40\u00b0F).",
+          "shedStatus": "Optimal south-slope & hedgerow visibility as snow retreats."
+        }
+      }
+    }
+  }
+}

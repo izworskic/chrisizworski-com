@@ -492,6 +492,27 @@ body.hm-page{--hm-display:"Playfair Display",Georgia,serif;--hm-body:"Instrument
 <meta name="twitter:image:alt" content="Chris Izworski gardening and Freighter View Farms preview image">
 <meta name="thumbnail" content="https://chrisizworski.com/assets/search/chris-izworski-gardening.jpg">
 <meta itemprop="image" content="https://chrisizworski.com/assets/search/chris-izworski-gardening.jpg">
+<link rel="stylesheet" href="/assets/hub-search.css?v=20261118">
+<style>
+/* This-week desk (Nov 2026): search, this month's jobs and starred tools under the title. */
+.garden-desk{width:calc(100% - 36px);max-width:1260px;margin:16px auto 18px}
+.garden-desk #garden-find-wrap{margin:0 0 12px}
+.garden-month,.starred-tools{margin:0 0 14px;padding:12px 16px;border:1px solid var(--border,#dde2d9);border-radius:8px;background:#fff}
+.garden-month h2,.starred-tools h2{margin:0 0 4px;font:700 .72rem/1.2 var(--hm-body,sans-serif);letter-spacing:.1em;text-transform:uppercase;color:var(--lighter,#a36947)}
+.garden-month__list{list-style:none;margin:0;padding:0}
+.garden-month__list li{border-top:1px solid var(--border,#dde2d9);padding:9px 0;font-size:.95rem}.garden-month__list li:first-child{border-top:0}
+.garden-month__list a{color:var(--green-dark,#1b3f35);font-weight:600}
+.starred-tools__hint{margin:0;font-size:.88rem;color:var(--muted,#52675e)}
+.starred-tools__list{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.starred-tools__list li{display:inline-flex;align-items:center;border:1px solid var(--border,#dde2d9);border-radius:999px;background:var(--green-light,#eef4f1);padding-left:13px}
+.starred-tools__list a{color:var(--green-dark,#1b3f35);font-size:.88rem;padding:9px 0}
+.starred-tools__remove{border:0;background:none;min-width:40px;min-height:40px;border-radius:50%;cursor:pointer;color:var(--muted,#52675e)}
+.guide-card.has-star{position:relative}.guide-card.has-star .card-top{padding-right:44px}
+.tool-star{position:absolute;top:6px;right:6px;width:44px;height:44px;border:0;background:none;border-radius:50%;font-size:1.3rem;line-height:1;color:var(--lighter,#a36947);cursor:pointer;z-index:1}
+.tool-star:hover{background:var(--green-light,#eef4f1)}.tool-star[aria-pressed="true"]{color:var(--green,#28594b)}
+.tool-star:focus-visible,.starred-tools__remove:focus-visible{outline:2px solid var(--green,#28594b);outline-offset:2px}
+</style>
+
 <script defer src="/_vercel/insights/script.js"></script>
 <script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};</script>
 <script defer src="/_vercel/speed-insights/script.js"></script>
@@ -544,17 +565,14 @@ body.hm-page{--hm-display:"Playfair Display",Georgia,serif;--hm-body:"Instrument
   <h1>Michigan Gardening Tools</h1>
   <p class="pn-lede">A little help for the questions that come up between the seed packet and the harvest basket.</p>
 </div>
-<section class="garden-welcome" aria-labelledby="welcomeTitle">
- <div class="welcome-top"><div><p class="welcome-kicker">Freighter View Farms · A Michigan garden notebook</p><h2 id="welcomeTitle">Come see what’s growing.</h2><p>Every season has its own kind of garden work. Pick a season and wander a little, or go straight to the question on your mind.</p><a class="welcome-skip" href="#garden-questions">Find a tool now ↓</a></div>
- <div id="welcomePlaceForm" class="welcome-place" hidden><label for="welcomePlace">Your Michigan town or ZIP</label><div><input id="welcomePlace" list="pnTowns" autocomplete="off" placeholder="Bay City or 48706"><button id="welcomeApply" type="button">Set town</button></div><p id="welcomePlaceStatus" role="status" aria-live="polite"></p></div></div>
- <div class="welcome-seasons" id="welcomeSeasons" aria-label="Explore the gardening year" role="group" hidden><button type="button" data-welcome-season="winter" aria-pressed="false">Winter</button><button type="button" data-welcome-season="spring" aria-pressed="false">Spring</button><button type="button" data-welcome-season="summer" aria-pressed="false">Summer</button><button type="button" data-welcome-season="fall" aria-pressed="false">Fall</button></div>
- <div class="welcome-feature"><figure><img id="welcomeImage" src="/assets/garden-notebook/garden-harvest.webp" alt="Flower bulbs set into garden soil" width="900" height="600" decoding="async"><figcaption>From Chris’s garden notebook</figcaption></figure><div class="welcome-reading" aria-live="polite"><p class="welcome-kicker" id="welcomeSeasonLabel">A garden note</p><h3 id="welcomeSeasonTitle">The garden keeps a story in every season.</h3><p id="welcomeSeasonCopy">There is always something worth noticing, from the first seed trays to the last harvest.</p><p id="welcomeLocal" class="welcome-local">Choose a Michigan town in the planner for your local frost station.</p><div id="welcomeLinks" class="welcome-links"><a href="/michigan-frost-dates/">Explore Michigan frost dates →</a><a href="#plant-now">Open your garden planner →</a></div><p class="welcome-context">Seasonal ideas and historical frost references, not a live weather report. Your soil and forecast have the final say.</p></div></div>
- <div class="welcome-explore"><p>Take a closer look</p><nav aria-label="Explore the garden"><a href="/seed-starting-guide/"><span aria-hidden="true">✳</span> Seed trays</a><a id="welcomeSoil" href="/michigan-soil-temperature/"><span aria-hidden="true">◒</span> Soil</a><a href="/when-to-plant-tomatoes-michigan/"><span aria-hidden="true">●</span> Tomatoes</a><a href="/seed-saving-lab/"><span aria-hidden="true">✿</span> Flowers &amp; seeds</a><a href="/michigan-garden-pest-watch/"><span aria-hidden="true">◈</span> Garden pests</a></nav></div>
- <noscript><p class="welcome-context">Season choices and town lookup need JavaScript. The garden links and guides below still work.</p></noscript>
-</section>
+<div class="garden-desk">
+<div id="garden-find-wrap" class="garden-find" hidden><label for="garden-find">Search featured tools</label><input id="garden-find" data-hub-search="garden" type="search" placeholder="Try tomatoes, pests, frost or seeds" autocomplete="off"><div class="hub-search-results" data-hub-search-results hidden></div><p id="garden-find-status" role="status" aria-live="polite"></p></div>
+<section class="garden-month" data-garden-month aria-labelledby="garden-month-title" hidden><h2 id="garden-month-title">Garden jobs this month</h2><ul class="garden-month__list" data-garden-month-list></ul></section>
+<section class="starred-tools" data-tool-stars data-cards="article.guide-card" data-title="h3 a" data-id="href" data-placement="garden-hub" aria-labelledby="starred-tools-title" hidden><h2 id="starred-tools-title">Your garden tools</h2><p class="starred-tools__hint" data-stars-hint>Tap the star on any guide or tool below to keep it here. Saved only in this browser.</p><ul class="starred-tools__list" data-stars-list></ul></section>
+</div>
 <section class="garden-door" id="garden-questions" aria-labelledby="garden-door-title">
  <div class="garden-door-head"><div><p class="garden-door-kicker">From Freighter View Farms</p><h2 id="garden-door-title">What brings you to the garden today?</h2><p>Start with a question. We’ll help you find the right tool or guide.</p></div><a class="garden-all-guides" href="#gardening-tools-suite">Browse all garden guides ↓</a></div>
- <div id="garden-find-wrap" class="garden-find" hidden><label for="garden-find">Search featured tools</label><input id="garden-find" type="search" placeholder="Try tomatoes, pests, frost or seeds" autocomplete="off"><p id="garden-find-status" role="status" aria-live="polite"></p></div>
+ 
  <div class="garden-question-grid" id="garden-question-grid">
   <section class="garden-question garden-pest-feature" data-garden-category aria-labelledby="garden-pest-feature-heading">
    <div class="garden-pest-feature__story">
@@ -592,6 +610,15 @@ body.hm-page{--hm-display:"Playfair Display",Georgia,serif;--hm-body:"Instrument
  <p class="garden-outside">Our planning tools use 78 Michigan frost stations and MSU Extension guidance where available. Your soil, seed packet and forecast get the final say.</p>
  <p class="garden-outside">Gardening outside Michigan? <a href="/national-tools/planting/">Open the U.S. planting calendar</a>.</p>
 </section>
+<section class="garden-welcome" aria-labelledby="welcomeTitle">
+ <div class="welcome-top"><div><p class="welcome-kicker">Freighter View Farms · A Michigan garden notebook</p><h2 id="welcomeTitle">Come see what’s growing.</h2><p>Every season has its own kind of garden work. Pick a season and wander a little, or go straight to the question on your mind.</p><a class="welcome-skip" href="#garden-questions">Find a tool now ↓</a></div>
+ <div id="welcomePlaceForm" class="welcome-place" hidden><label for="welcomePlace">Your Michigan town or ZIP</label><div><input id="welcomePlace" list="pnTowns" autocomplete="off" placeholder="Bay City or 48706"><button id="welcomeApply" type="button">Set town</button></div><p id="welcomePlaceStatus" role="status" aria-live="polite"></p></div></div>
+ <div class="welcome-seasons" id="welcomeSeasons" aria-label="Explore the gardening year" role="group" hidden><button type="button" data-welcome-season="winter" aria-pressed="false">Winter</button><button type="button" data-welcome-season="spring" aria-pressed="false">Spring</button><button type="button" data-welcome-season="summer" aria-pressed="false">Summer</button><button type="button" data-welcome-season="fall" aria-pressed="false">Fall</button></div>
+ <div class="welcome-feature"><figure><img id="welcomeImage" src="/assets/garden-notebook/garden-harvest.webp" alt="Flower bulbs set into garden soil" width="900" height="600" decoding="async"><figcaption>From Chris’s garden notebook</figcaption></figure><div class="welcome-reading" aria-live="polite"><p class="welcome-kicker" id="welcomeSeasonLabel">A garden note</p><h3 id="welcomeSeasonTitle">The garden keeps a story in every season.</h3><p id="welcomeSeasonCopy">There is always something worth noticing, from the first seed trays to the last harvest.</p><p id="welcomeLocal" class="welcome-local">Choose a Michigan town in the planner for your local frost station.</p><div id="welcomeLinks" class="welcome-links"><a href="/michigan-frost-dates/">Explore Michigan frost dates →</a><a href="#plant-now">Open your garden planner →</a></div><p class="welcome-context">Seasonal ideas and historical frost references, not a live weather report. Your soil and forecast have the final say.</p></div></div>
+ <div class="welcome-explore"><p>Take a closer look</p><nav aria-label="Explore the garden"><a href="/seed-starting-guide/"><span aria-hidden="true">✳</span> Seed trays</a><a id="welcomeSoil" href="/michigan-soil-temperature/"><span aria-hidden="true">◒</span> Soil</a><a href="/when-to-plant-tomatoes-michigan/"><span aria-hidden="true">●</span> Tomatoes</a><a href="/seed-saving-lab/"><span aria-hidden="true">✿</span> Flowers &amp; seeds</a><a href="/michigan-garden-pest-watch/"><span aria-hidden="true">◈</span> Garden pests</a></nav></div>
+ <noscript><p class="welcome-context">Season choices and town lookup need JavaScript. The garden links and guides below still work.</p></noscript>
+</section>
+
 <details class="planner-door" id="plant-now">
  <summary><span>THE MICHIGAN PLANNER</span><strong>Plan your garden, plant by plant</strong><small>Open the interactive notebook for your town and the plants you grow.</small></summary>
  <div class="gk pn-wrap">
@@ -1031,7 +1058,11 @@ body.hm-page{--hm-display:"Playfair Display",Georgia,serif;--hm-body:"Instrument
   </div>
 </footer>
 
-<script src="/assets/garden-tools/garden-hub.js?v=20261101a"></script>
+<script src="/assets/hub-search-lexicon.js?v=20261118"></script>
+<script src="/assets/hub-search-engine.js?v=20261118"></script>
+<script src="/assets/hub-search.js?v=20261118"></script>
+<script defer src="/assets/tool-stars.js?v=20261118c"></script>
+<script src="/assets/garden-tools/garden-hub.js?v=20261118b"></script>
 <script src="/assets/garden-tools/garden-kit.js"></script>
 <script src="/assets/garden-tools/michigan-frost.js"></script>
 <script src="/assets/garden-tools/michigan-places.js"></script>
