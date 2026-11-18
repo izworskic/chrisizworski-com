@@ -68,9 +68,9 @@ test('place photography is exact or clearly context-labelled, and licensed',()=>
   assert.match(js,/token!==photoToken/);
   assert.match(js,/probe\.onerror/);
 });
-test('preview has safe metadata and preserves a no-script source directory',()=>{
+test('launch candidate has canonical metadata and no-script source directory',()=>{
   assert.doesNotMatch(html,/<meta name="robots" content="noindex/);
-  assert.match(html,/rideau-canal\\\/#app/);
+  assert.ok(html.includes('rideau-canal/#app'));
   assert.match(html,/rel="canonical" href="https:\/\/chrisizworski\.com\/rideau-canal\//);
   assert.ok(/<title>([^<]+)<\/title>/.exec(html)[1].length<=60);
   assert.ok(/<meta name="description" content="([^"]+)"/.exec(html)[1].length<=158);
