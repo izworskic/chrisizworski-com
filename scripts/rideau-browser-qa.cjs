@@ -12,7 +12,7 @@ const server=http.createServer((req,res)=>{
   try{
     if(fs.statSync(file).isDirectory())file=path.join(file,'index.html');
     const ext=path.extname(file);
-    res.setHeader('Content-Type',({'.json':'application/json','.js':'application/javascript','.html':'text/html','.css':'text/css','.png':'image/png','.jpg':'image/jpeg'}[ext]||'application/octet-stream'));
+    res.setHeader('Content-Type',({'.json':'application/json','.js':'application/javascript','.html':'text/html','.css':'text/css','.png':'image/png','.jpg':'image/jpeg','.svg':'image/svg+xml'}[ext]||'application/octet-stream'));
     res.end(fs.readFileSync(file));
   }catch(_){res.writeHead(404);res.end('Not found');}
 });
@@ -34,6 +34,38 @@ async function run(){
       assert.equal(await page.locator('#static-stops').isHidden(),true);
       assert.equal(await page.locator('[data-mode="visit"]').getAttribute('aria-pressed'),'true');
       assert.match(await page.locator('#feature-name').innerText(),/Ottawa Locks/);
+       assert.equal(await page.locator('#rideau-watch-guide').isVisible(),true);
+       assert.equal(await page.locator('#rideau-watch-options .rideau-watch-stop').count(),2);
+       assert.match(await page.locator('#rideau-watch-guide').innerText(),/Plaza Bridge/);
+       assert.equal(await page.locator('#rideau-film-player iframe').count(),0);
+       assert.match(await page.locator('#lock-lab-step-title').innerText(),/Enter at the lower water level/);
+       await page.locator('#lock-lab-forward').click();
+       assert.match(await page.locator('#lock-lab-step-title').innerText(),/Close the gates/);
+       await page.locator('#lock-lab-forward').click();
+       assert.match(await page.locator('#lock-lab-step-title').innerText(),/Water rises/);
+       assert.equal(await page.locator('#lock-lab-chamber-water').getAttribute('y'),'128');
+       assert.equal(await page.locator('#lock-lab-upper-gate').getAttribute('opacity'),'1');
+       await page.locator('#lock-lab-back').click();
+       assert.equal(await page.locator('#lock-lab-chamber-water').getAttribute('y'),'246');
+       await page.locator('#lock-lab-reset').click();
+       assert.match(await page.locator('#lock-lab-step-title').innerText(),/Enter at the lower water level/);
+       await page.locator('[data-rideau-diorama="jones"]').click();
+       await page.waitForFunction(()=>{const i=document.getElementById('rideau-diorama-image');return i&&i.complete&&i.naturalWidth>=900;},null,{timeout:12000});
+       assert.equal(await page.locator('#rideau-diorama-image').getAttribute('src'),'/assets/rideau-locks-jones-falls-diagram.svg');
+       assert.match(await page.locator('#rideau-diorama-caption').innerText(),/three lower locks/i);
+       await page.locator('[data-rideau-diorama="ottawa"]').click();
+       await page.waitForFunction(()=>{const i=document.getElementById('rideau-diorama-image');return i&&i.complete&&i.naturalWidth>=900;},null,{timeout:12000});
+       assert.equal(await page.locator('#rideau-diorama-image').getAttribute('src'),'/assets/rideau-locks-ottawa-diagram.svg');
+       if(width===390){
+         const dioramaShot=path.join(out,'rideau-dioramas-390.png');
+         await page.locator('.rideau-diorama').screenshot({path:dioramaShot,animations:'disabled'});
+         report.screenshots.push(dioramaShot);
+       }
+       if(width===390){
+         const labShot=path.join(out,'rideau-lock-cutaway-390.png');
+         await page.locator('#inside-the-lock').screenshot({path:labShot,animations:'disabled'});
+         report.screenshots.push(labShot);
+       }
       const startChoice=await page.locator('[data-mode="visit"]').boundingBox();
       const firstChoiceBottom=startChoice?Math.round(startChoice.y+startChoice.height):null;
       assert.ok(firstChoiceBottom!==null,'Visitor mode not rendered');
@@ -112,9 +144,31 @@ async function run(){
     assert.equal(await staticPage.locator('#static-stops').isVisible(),true);
     assert.equal(await staticPage.locator('#interactive').isHidden(),true);
     assert.ok(await staticPage.locator('#static-stops a').count()>=14);
-    report.scenarios.push({name:'no-javascript',officialLinksRemain:true});
+    assert.equal(await staticPage.locator('#inside-the-lock').isVisible(),true);
+     assert.match(await staticPage.locator('#inside-the-lock').innerText(),/gravity moves water/);
+     assert.ok(await staticPage.locator('#inside-the-lock a[href*="parks.canada.ca"]').count()>0);
+     report.scenarios.push({name:'no-javascript',officialLinksRemain:true,staticTeachingDiagram:true});
     await staticContext.close();
-    const keyCtx=await browser.newContext({viewport:{width:390,height:800}});
+    const missingWatch=await browser.newContext({viewport:{width:390,height:800}});
+     await missingWatch.route('**/assets/rideau-watch.json',r=>r.abort());
+     await missingWatch.route('**/api/carto-basemap-config',r=>r.fulfill({status:503,body:'{}'}));
+     const watchPage=await missingWatch.newPage();
+     await watchPage.goto(origin+'/rideau-canal/',{waitUntil:'domcontentloaded'});
+     await watchPage.locator('#recommendations .stop-button').first().waitFor();
+     assert.equal(await watchPage.locator('#rideau-watch-guide').isHidden(),true);
+     assert.equal(await watchPage.locator('#interactive').isVisible(),true);
+     assert.ok(await watchPage.locator('#feature-links a').count()>=2);
+     report.scenarios.push({name:'viewpoint-source-missing',originalStationCardRemains:true});
+     await missingWatch.close();
+     const motion=await browser.newContext({viewport:{width:390,height:800},reducedMotion:'reduce'});
+     const motionPage=await motion.newPage();
+     await motionPage.goto(origin+'/rideau-canal/',{waitUntil:'domcontentloaded'});
+     assert.equal(await motionPage.locator('#lock-lab-chamber-water').evaluate(e=>getComputedStyle(e).transitionDuration),'0s');
+     await motionPage.locator('#lock-lab-forward').click();
+     assert.match(await motionPage.locator('#lock-lab-step-title').innerText(),/Close the gates/);
+     report.scenarios.push({name:'reduced-motion',manualControlsRemain:true});
+     await motion.close();
+     const keyCtx=await browser.newContext({viewport:{width:390,height:800}});
     let keyed=0;
     await keyCtx.route('**/api/carto-basemap-config',r=>r.fulfill({status:200,contentType:'application/json',body:'{"provider":"CARTO","key":"qa-only-public"}'}));
     await keyCtx.route('**/*.basemaps.cartocdn.com/**',r=>{assert.equal(new URL(r.request().url()).searchParams.get('key'),'qa-only-public');keyed++;return r.abort();});

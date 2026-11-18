@@ -7,6 +7,11 @@ on:
       - 'public/assets/rideau-journey-engine.js'
       - 'scripts/verify-rideau-journeys.py'
       - 'rust/rideau-journey/**'
+      - 'data/rideau-canal/watch-v1.json'
+      - 'public/assets/rideau-watch.json'
+      - 'public/assets/rideau-lock-lab.js'
+      - 'scripts/verify-rideau-experiences.py'
+      - 'tests/rideau-experiential.test.js'
       - 'tests/rideau-journeys.test.js'
       - '.github/workflows/rideau-engine-qa.yml'
       - 'docs/experience-briefs/rideau-canal.release.json'
@@ -31,8 +36,10 @@ jobs:
           node-version: '22'
       - name: Python channel graph reconciliation and mirrors
         run: python3 scripts/verify-rideau-journeys.py
-      - name: Node route, paddle and source contracts
-        run: node --test tests/rideau-canal.test.js tests/rideau-journeys.test.js
+      - name: Python audited visitor viewpoints and mirrors
+        run: python3 scripts/verify-rideau-experiences.py
+      - name: Node route, paddle, interpretive instrument and source contracts
+        run: node --test tests/rideau-canal.test.js tests/rideau-journeys.test.js tests/rideau-experiential.test.js
       - name: Independent native Rust calculation policy
         run: cargo test --manifest-path rust/rideau-journey/Cargo.toml --offline
       - name: Experience OS source and site integration evidence
