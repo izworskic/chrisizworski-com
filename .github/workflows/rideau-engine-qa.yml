@@ -9,6 +9,10 @@ on:
       - 'rust/rideau-journey/**'
       - 'tests/rideau-journeys.test.js'
       - '.github/workflows/rideau-engine-qa.yml'
+      - 'docs/experience-briefs/rideau-canal.release.json'
+      - 'benchmarks/tool-network-registry.json'
+      - 'public/tools/index.html'
+      - 'public/sitemap.xml'
 permissions:
   contents: read
 concurrency:
@@ -31,3 +35,5 @@ jobs:
         run: node --test tests/rideau-canal.test.js tests/rideau-journeys.test.js
       - name: Independent native Rust calculation policy
         run: cargo test --manifest-path rust/rideau-journey/Cargo.toml --offline
+      - name: Experience OS source and site integration evidence
+        run: node scripts/verify-experience-os-v1.2.mjs docs/experience-briefs/rideau-canal.release.json --check-site
