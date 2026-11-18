@@ -10,6 +10,7 @@
   const KEY='ciz:starred-tools:v1';
   const cardSel=section.dataset.cards||'[data-tool-id]';
   const titleSel=section.dataset.title||'a[href]';
+  const linkSel=section.dataset.link||titleSel;
   const list=section.querySelector('[data-stars-list]');
   const hint=section.querySelector('[data-stars-hint]');
   let store=null;
@@ -18,10 +19,12 @@
   const read=()=>{try{const v=JSON.parse(store.getItem(KEY)||'[]');return Array.isArray(v)?v.filter(x=>typeof x==='string').slice(0,40):[];}catch{return[];}};
   const write=ids=>{try{store.setItem(KEY,JSON.stringify(ids));}catch{}};
   const cards=()=>[...document.querySelectorAll(cardSel)];
-  const byId=id=>cards().find(c=>c.dataset.toolId===id);
+  // data-id="href" keys cards without a tool id by their link (e.g. garden guide cards).
+  const idOf=c=>c.dataset.toolId||(section.dataset.id==='href'?(c.querySelector(linkSel)||{}).getAttribute?.('href')||'':'');
+  const byId=id=>cards().find(c=>idOf(c)===id);
   const titleOf=c=>{const a=c.querySelector(titleSel);return a?a.textContent.replace(/\s+/g,' ').trim():c.dataset.toolId;};
-  const hrefOf=c=>{const a=c.querySelector(titleSel);return a?a.getAttribute('href'):'#';};
-  const track=(id,action)=>{if(typeof window.gtag==='function')window.gtag('event','tool_star',{tool_id:id,action,placement:'tools-directory'});};
+  const hrefOf=c=>{const a=c.querySelector(linkSel);return a?a.getAttribute('href'):'#';};
+  const track=(id,action)=>{if(typeof window.gtag==='function')window.gtag('event','tool_star',{tool_id:id,action,placement:section.dataset.placement||'tools-directory'});};
 
   function toggle(id){
     const ids=read();const at=ids.indexOf(id);
@@ -30,7 +33,7 @@
   }
   function decorate(card){
     if(card.querySelector('.tool-star'))return;
-    const id=card.dataset.toolId;if(!id)return;
+    const id=idOf(card);if(!id)return;
     const b=document.createElement('button');
     b.type='button';b.className='tool-star';
     b.addEventListener('click',e=>{e.preventDefault();toggle(id);});
@@ -41,7 +44,8 @@
     const ids=read();
     for(const c of cards()){
       decorate(c);
-      const on=ids.includes(c.dataset.toolId);
+      if(!idOf(c))continue;
+      const on=ids.includes(idOf(c));
       const b=c.querySelector('.tool-star');
       b.setAttribute('aria-pressed',String(on));
       b.setAttribute('aria-label',(on?'Remove ':'Save ')+titleOf(c)+(on?' from your tools':' to your tools'));
@@ -54,7 +58,7 @@
       const a=document.createElement('a');a.href=hrefOf(c);a.textContent=titleOf(c);
       const rm=document.createElement('button');rm.type='button';rm.className='starred-tools__remove';
       rm.setAttribute('aria-label','Remove '+titleOf(c)+' from your tools');rm.textContent='✕';
-      rm.addEventListener('click',()=>toggle(c.dataset.toolId));
+      rm.addEventListener('click',()=>toggle(idOf(c)));
       li.append(a,rm);list.append(li);
     }
     list.hidden=saved.length===0;
@@ -63,6 +67,6 @@
   }
   render();
   // Cards added later (e.g. by decision-network.js) get a star too.
-  new MutationObserver(()=>{if(cards().some(c=>!c.querySelector('.tool-star')))render();})
+  new MutationObserver(()=>{if(cards().some(c=>idOf(c)&&!c.querySelector('.tool-star')))render();})
     .observe(document.querySelector('main')||document.body,{childList:true,subtree:true});
 })();

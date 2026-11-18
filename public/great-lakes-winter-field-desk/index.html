@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Great Lakes Winter Field Desk | Chris Izworski</title>
+<meta name="description" content="A noindex research pilot for choosing a winter outing along Lake Superior with official park sources and explicit access uncertainty.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://chrisizworski.com/#person",
+      "name": "Chris Izworski",
+      "url": "https://chrisizworski.com/"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://chrisizworski.com/great-lakes-winter-field-desk/#page",
+      "url": "https://chrisizworski.com/great-lakes-winter-field-desk/",
+      "name": "Great Lakes Winter Field Desk",
+      "description": "A noindex research pilot for planning a Lake Superior winter outing with official-source checks and unresolved access conditions.",
+      "inLanguage": "en-US",
+      "author": {"@id": "https://chrisizworski.com/#person"},
+      "publisher": {"@id": "https://chrisizworski.com/#person"}
+    }
+  ]
+}
+</script>
+<link rel="stylesheet" href="/assets/vendor/leaflet-1.9.4.css">
+<link rel="stylesheet" href="./desk.css">
+<script defer src="/assets/leaflet-1.9.4.js"></script>
+<script defer src="./core.js"></script>
+<script defer src="./app.js"></script>
+</head>
+<body>
+<a class="skip" href="#assignment">Skip to the winter assignment</a>
+<header class="masthead">
+  <div class="masthead-inner">
+    <a class="brand" href="/tools/">Chris Izworski <span>/ FIELD NOTES</span></a>
+    <div class="masthead-side"><span class="season-dot" aria-hidden="true"></span> GREAT LAKES / WINTER <span class="preview-indicator">RESEARCH PILOT</span></div>
+  </div>
+</header>
+<main>
+  <section class="opening" aria-labelledby="desk-headline">
+    <p class="overline"><span class="overline-number">01</span> YOUR NEXT DAY OUTSIDE <span class="line"></span> LAKE SUPERIOR SHORE</p>
+    <div class="opening-content">
+      <h1 id="desk-headline">Go where winter<br><em>has something to show you.</em></h1>
+      <div class="opening-right">
+        <p>One day. Three different landscapes. Choose the experience you're after and the time you have, then read the actual evidence before deciding to drive.</p>
+        <div class="immediate-answer" aria-label="Your current winter outing recommendation">
+          <p class="immediate-eyebrow">THE FIRST RECOMMENDATION</p>
+          <strong id="quick-outing">Gooseberry Falls: Upper Falls approach</strong>
+          <p id="quick-reason">A documented winter walking option. Current trail access is not confirmed.</p>
+          <a id="quick-source" target="_blank" rel="noopener noreferrer" href="https://www.dnr.state.mn.us/trailconditions/index.html">Check official conditions ↗</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="workbench">
+    <aside class="decision-panel" aria-labelledby="mission-label">
+      <p class="step-label"><span>02</span> CHOOSE YOUR FIELD ASSIGNMENT</p>
+      <h2 id="mission-label">What are you going out to see?</h2>
+      <div class="interests" role="group" aria-label="Choose an outdoor interest">
+        <button class="interest active" data-goal="falls" aria-pressed="true" type="button"><span class="interest-number">A</span><span class="interest-text"><strong>Waterfall country</strong><small>Short trails and a river of ice</small></span><span class="interest-arrow" aria-hidden="true">↗</span></button>
+        <button class="interest" data-goal="snowshoe" aria-pressed="false" type="button"><span class="interest-number">B</span><span class="interest-text"><strong>Into the snow woods</strong><small>Marked loops, quiet forest</small></span><span class="interest-arrow" aria-hidden="true">↗</span></button>
+        <button class="interest" data-goal="coast" aria-pressed="false" type="button"><span class="interest-number">C</span><span class="interest-text"><strong>Sandstone and Superior</strong><small>Ravines and cliffs, on land</small></span><span class="interest-arrow" aria-hidden="true">↗</span></button>
+      </div>
+      <div class="select-row">
+        <label for="effort">How much time outside?</label>
+        <select id="effort"><option value="short" selected>A short outing</option><option value="half">Half a day</option><option value="full">An extended outing</option></select>
+      </div>
+      <div class="select-row">
+        <label for="day">Which forecast day?</label>
+        <select id="day"><option value="today" selected>Today</option><option value="tomorrow">Tomorrow</option><option value="third">In two days</option></select>
+      </div>
+      <div class="decision-note"><span class="decision-note-mark">i</span><p>This is not a live trail-closure service. Weather can describe a possible outing, but the park manager determines access. Check their notices before traveling.</p></div>
+      <p class="decision-small">Research focus: Munising, Bayfield and Gooseberry Falls. No location tracking or account needed.</p>
+    </aside>
+
+    <div class="main-column">
+      <article class="assignment" id="assignment" aria-labelledby="stage-title">
+        <div class="assignment-top">
+          <span class="step-label invert"><span>03</span> YOUR ASSIGNMENT</span>
+          <span class="flag" id="assignment-flag">FIELD ASSIGNMENT</span>
+        </div>
+        <div class="assignment-hero">
+          <div class="assignment-heading">
+            <p id="stage-region" class="place-overline">GOOSEBERRY / MINNESOTA</p>
+            <h2 id="stage-title">Walk toward the Upper Falls</h2>
+            <p id="stage-short" class="stage-short">The short winter waterfall walk</p>
+            <p id="stage-description" class="stage-story">The Gooseberry River tumbles across a succession of ancient lava ledges. In winter, the walk toward Upper Falls keeps the waterfall experience close to the visitor center, without committing you to the longer and less-maintained paths.</p>
+          </div>
+          <figure class="stage-figure">
+            <img id="stage-photo" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/3/33/Winter_falls_468.jpg/960px-Winter_falls_468.jpg" loading="lazy" alt="Historic winter view of Gooseberry Falls waterfall" width="960" height="1200">
+            <div id="photo-missing" class="image-unavailable" hidden>Photo unavailable. The official source and visitor plan remain below.</div>
+            <figcaption><a id="photo-credit" href="https://commons.wikimedia.org/wiki/File:Winter_falls_468.jpg" target="_blank" rel="noopener noreferrer">Chris Light / Wikimedia Commons, CC BY-SA 4.0, December 1982.</a><span id="photo-note">Archival winter view, not today's ice or access.</span></figcaption>
+          </figure>
+        </div>
+        <div class="assignment-bottom">
+          <div class="verdict">
+            <div class="verdict-symbol" aria-hidden="true">?</div>
+            <div><p class="verdict-title" id="stage-status">Candidate outing. Current access not verified.</p><p id="stage-reason">The activity fits a published park route description. Check the official access information before heading out.</p></div>
+          </div>
+          <section class="evidence-ribbon" aria-label="Official park source check">
+            <div>
+              <span class="field-label">OFFICIAL SOURCE DESK</span>
+              <p id="source-signal">No recent automated source check is available. Official access is not confirmed.</p>
+            </div>
+            <a id="source-direct" href="https://www.dnr.state.mn.us/trailconditions/index.html" target="_blank" rel="noopener noreferrer">Open the park's latest conditions ↗</a>
+          </section>
+          <section class="route-evidence" aria-label="Named route access and winter guidance">
+            <div class="route-evidence-heading">
+              <span class="field-label">THE EXACT TRAIL / YOUR CHOSEN DAY</span>
+              <span id="route-day" class="route-day">Checking selected day</span>
+            </div>
+            <p id="route-access" class="route-access" aria-live="polite">Official access for this trail and day has not been confirmed.</p>
+            <p id="route-policy" class="route-policy">The land manager's published winter route guidance will appear here.</p>
+            <a id="route-policy-link" href="https://www.dnr.state.mn.us/state-parks/gooseberry-falls/self-tour-waterfalls-walk.html" target="_blank" rel="noopener noreferrer">Read the route's original park guidance ↗</a>
+          </section>
+          <div class="assignment-facts">
+            <div><span class="field-label">THE ROUTE</span><p id="stage-length">Short visitor-center approach, not the full Falls View Loop</p></div>
+            <div><span class="field-label">WHY THIS ONE</span><p id="stage-why">Minnesota DNR identifies the approach to Upper Falls as its only maintained winter waterfall walking trail. Its longer summer waterfall circuits are not that route.</p></div>
+            <div><span class="field-label">BEFORE YOU LEAVE</span><p id="stage-blocker">Confirm the current park notices and walking surface. The park guide is not a same-day report of plowing or ice.</p></div>
+          </div>
+          <section class="arrival-desk" aria-label="Winter arrival and parking information">
+            <div class="arrival-heading">
+              <p class="field-label">ARRIVE AT THE RIGHT PLACE</p>
+              <span id="arrival-category" class="arrival-category">DOCUMENTED WINTER ARRIVAL</span>
+            </div>
+            <h3 id="arrival-title">Gooseberry Falls Visitor Center / DOT Wayside lot</h3>
+            <p id="arrival-address">3206 Highway 61 East, Two Harbors, MN 55616, USA</p>
+            <p id="arrival-description">The Minnesota DNR winter map directs visitors to park at the visitor center for the Upper Falls walk. Today's plowing and parking spaces are not verified.</p>
+            <p id="arrival-fee">No state park vehicle permit is required at the Visitor Center / DOT Wayside lot.</p>
+            <p id="arrival-warning" class="arrival-warning">Current plowing and access must be checked with the land manager before traveling.</p>
+            <div class="operator-note" aria-label="Official operating notice source">
+              <p class="operator-eyebrow">LATEST LAND MANAGER NOTE</p>
+              <p id="operator-statement" aria-live="polite">Minnesota DNR identifies the Upper Falls approach as its maintained winter walking route. This is published route guidance, not a current access report.</p>
+              <a id="operator-link" href="https://www.dnr.state.mn.us/trailconditions/index.html" target="_blank" rel="noopener noreferrer">Review official park notice ↗</a>
+            </div>
+            <div class="arrival-actions">
+              <a id="arrival-find" href="https://www.google.com/maps/search/?api=1&amp;query=Gooseberry%20Falls%20Visitor%20Center%20Minnesota" target="_blank" rel="noopener noreferrer">Find official arrival area on Google Maps ↗</a>
+              <a id="arrival-directions" href="https://www.nps.gov/apis/planyourvisit/directions.htm" target="_blank" rel="noopener noreferrer" hidden>Directions to published parking address ↗</a>
+              <a id="arrival-evidence-link" href="https://files.dnr.state.mn.us/maps/state_parks/spk00172_winter.pdf" target="_blank" rel="noopener noreferrer">Verify park arrival source ↗</a>
+            </div>
+          </section>
+          <div class="action-row">
+            <a id="conditions-link" class="action-primary" target="_blank" rel="noopener noreferrer" href="https://www.dnr.state.mn.us/trailconditions/index.html">Check current park conditions <span aria-hidden="true">↗</span></a>
+            <a id="official-link" class="action-secondary" target="_blank" rel="noopener noreferrer" href="https://www.dnr.state.mn.us/state-parks/gooseberry-falls/self-tour-waterfalls-walk.html">Official trail details ↗</a>
+            <a id="arrival-link" class="action-secondary" target="_blank" rel="noopener noreferrer" href="https://www.dnr.state.mn.us/state-parks/park.html?id=spk00172">Park arrival information ↗</a>
+          </div>
+          <div class="utility-row">
+            <a id="maps-link" target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/search/?api=1&amp;query=Gooseberry%20Falls%20State%20Park%20Visitor%20Center%20Minnesota">Find this place on Google Maps (place search) ↗</a>
+            <button id="copy-plan" type="button">Copy field note</button>
+          </div>
+          <p class="source-age" id="last-research">Park source review: 2026-11-17. Not a same-day access check.</p>
+        </div>
+      </article>
+
+      <section class="weather-desk" aria-labelledby="weather-label">
+        <div class="weather-titleline">
+          <div>
+            <p class="step-label"><span>04</span> THE WEATHER LENS</p>
+            <h2 id="weather-label">What does the forecast actually say?</h2>
+            <p class="weather-caption" id="weather-point">NWS point near the Minnesota North Shore. Not measured on the trail.</p>
+          </div>
+          <button id="refresh-weather" type="button" class="refresh-button">Refresh forecast <span aria-hidden="true">↻</span></button>
+        </div>
+        <div class="weather-inner">
+          <div class="weather-stamp"><span id="trip-period">Forecast lens: today</span><span id="weather-issued">Waiting for an NWS issue time</span></div>
+          <h3 id="weather-head">Reading the forecast</h3>
+          <p id="weather-sub">Requesting the hourly forecast near this destination.</p>
+          <ol id="weather-hours" class="hours" aria-label="Hourly forecast summary" hidden></ol>
+          <p id="weather-hour-insight" class="weather-hour-insight" aria-live="polite" hidden>Select a forecast hour for details.</p>
+          <div id="weather-unavailable" class="weather-unavailable" hidden>Check the forecast directly with NWS.</div>
+          <p class="weather-clarification">Precipitation percentages are official NWS hourly forecast values, not a chance that a trail is passable or an ice formation exists.</p>
+          <a id="weather-site" target="_blank" rel="noopener noreferrer" href="https://forecast.weather.gov/">Open National Weather Service forecast ↗</a>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <section class="regional" aria-labelledby="map-heading">
+    <div class="regional-heading">
+      <div><p class="step-label"><span>05</span> THREE SHORELINES</p><h2 id="map-heading">The same lake. Three different days outside.</h2></div>
+      <p>Switch places here or in your assignment above. The place, photo, official sources, map marker and weather stay together.</p>
+    </div>
+    <div class="regional-grid">
+      <div class="map-frame">
+        <div id="coast-map" class="coast-map" aria-label="Three winter outdoor destinations around Lake Superior"></div>
+        <div id="map-fallback" class="map-fallback" hidden>Basemap unavailable. Choose a destination from the accessible list beside the map and use its official links.</div>
+      </div>
+      <div class="regional-list" role="group" aria-label="Select a featured destination">
+        <button data-place="gooseberry-upper" aria-pressed="true" class="place-pick active" type="button"><span>01 / MINNESOTA</span><strong>Gooseberry Falls</strong><small>Waterfalls · Maintained Upper Falls approach</small></button>
+        <button data-place="munising-snowshoe" aria-pressed="false" class="place-pick" type="button"><span>02 / MICHIGAN</span><strong>Pictured Rocks</strong><small>Snowshoes · Marked 2.65-mile forest loop</small></button>
+        <button data-place="meyers-lakeshore" aria-pressed="false" class="place-pick" type="button"><span>03 / WISCONSIN</span><strong>Meyers Beach</strong><small>Land trail · Rugged cliff-top approach</small></button>
+      </div>
+    </div>
+    <p class="map-note">Map dots are general visitor areas, not parking pins or winter access approvals. External Google Maps links are place searches, not driving directions.</p>
+  </section>
+</main>
+<footer class="footer"><span>© 2026 Chris Izworski / Great Lakes Winter Field Desk</span><span>Research pilot. Current access is not confirmed. Check the land manager before traveling.</span></footer>
+<div id="desk-status" class="sr-only" aria-live="polite"></div>
+<noscript><p class="noscript">JavaScript is off. The Gooseberry Falls assignment and official park links above still work. You can also check <a href="https://www.nps.gov/thingstodo/snowshoeing-at-pictured-rocks.htm">the Munising snowshoe route</a> and <a href="https://www.nps.gov/apis/planyourvisit/hiking.htm">Apostle Islands Lakeshore Trail</a> directly.</p></noscript>
+</body>
+</html>

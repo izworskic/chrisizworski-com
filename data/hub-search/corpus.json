@@ -803,16 +803,6 @@
    "href": "/michigan-ice-caves/"
   },
   {
-   "id": "frozen-lighthouse-watch",
-   "title": "Frozen Lighthouse Watch, Lake Michigan",
-   "tags": "winter photography lake-michigan lighthouse ice weather",
-   "place": "",
-   "kind": "Hourly forecast",
-   "description": "Will the St. Joseph lights or eight other Lake Michigan pier lights ice up this week? Compare 72 hourly NOAA and NWS freezing spray conditions, with source times and land-only viewing reminders.",
-   "months": "11,12,1,2,3",
-   "href": "/frozen-lighthouses-michigan/"
-  },
-  {
    "id": "michigan-ice",
    "title": "Michigan Ice Report, Accumulated Cold and Great Lakes Ice Cover",
    "tags": "fishing",
@@ -861,6 +851,16 @@
    "description": "When sub-zero Arctic air meets the heat of the open Great Lakes. Live water-to-air thermal gradient tables, wind vectors, and dawn viewing outlooks across 15 coastal harbors from Duluth to Marquette.",
    "months": "10,11,12,1,2,3",
    "href": "https://phenology.chrisizworski.com/lake-smoke"
+  },
+  {
+   "id": "frozen-lighthouse-watch",
+   "title": "Frozen Lighthouse Watch, Lake Michigan",
+   "tags": "winter photography lake-michigan lighthouse ice weather",
+   "place": "",
+   "kind": "Hourly forecast",
+   "description": "Watch the weather at nine Lake Michigan pier lights, from St. Joseph to Frankfort. See when cold winds could bring freezing spray in the next 72 hours, and enjoy the view from shore.",
+   "months": "11,12,1,2,3",
+   "href": "/frozen-lighthouses-michigan/"
   },
   {
    "id": "boat-launches",
@@ -1085,10 +1085,10 @@
   {
    "id": "upper-peninsula-waterfalls",
    "title": "Upper Peninsula Waterfall Map & Trip Planner",
-   "tags": "waterfall waterfalls upper peninsula up michigan hike trip map pictured rocks trail photography",
+   "tags": "waterfall waterfalls upper peninsula up michigan hike trip map pictured rocks trail photography parking arrival access day planner",
    "place": "",
-   "kind": "Map-first field guide",
-   "description": "Explore 200+ wild cascades across the sandstone country of the Upper Peninsula. Interactive topographic routing, trail difficulty, staircase counts, and seasonal spring-runoff conditions from Munising to the Black River.",
+   "kind": "Waterfall map and arrival desk",
+   "description": "Explore 80 curated U.P. waterfall and scenic-stop guides on an interactive map. The Arrival Desk separates documented visitor parking from waterfall locations, explains trail approaches and restrictions, and helps you build a source-checked day plan.",
    "months": "1,2,3,4,5,6,7,8,9,10,11,12",
    "href": "/upper-peninsula-waterfalls/"
   },
