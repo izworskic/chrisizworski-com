@@ -7,6 +7,7 @@
  if(!field||!wrap||!status)return;
  var categories=Array.prototype.slice.call(document.querySelectorAll('[data-garden-category]'));
  wrap.hidden=false;
+ if(window.HubSearch)return; // shared hub search ranks and filters these results
  field.addEventListener('input',function(){
   var terms=field.value.toLowerCase().trim().split(/\s+/).filter(Boolean),count=0;
   categories.forEach(function(section){var shown=0;Array.prototype.forEach.call(section.querySelectorAll('[data-garden-result]'),function(link){var hay=(link.textContent+' '+(link.getAttribute('data-terms')||'')).toLowerCase();var match=terms.every(function(term){return hay.indexOf(term)!==-1});link.hidden=!match;if(match){shown++;count++}});section.hidden=shown===0});

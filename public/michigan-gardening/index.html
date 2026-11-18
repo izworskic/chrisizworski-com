@@ -492,6 +492,7 @@ body.hm-page{--hm-display:"Playfair Display",Georgia,serif;--hm-body:"Instrument
 <meta name="twitter:image:alt" content="Chris Izworski gardening and Freighter View Farms preview image">
 <meta name="thumbnail" content="https://chrisizworski.com/assets/search/chris-izworski-gardening.jpg">
 <meta itemprop="image" content="https://chrisizworski.com/assets/search/chris-izworski-gardening.jpg">
+<link rel="stylesheet" href="/assets/hub-search.css?v=20261118">
 <script defer src="/_vercel/insights/script.js"></script>
 <script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};</script>
 <script defer src="/_vercel/speed-insights/script.js"></script>
@@ -554,7 +555,7 @@ body.hm-page{--hm-display:"Playfair Display",Georgia,serif;--hm-body:"Instrument
 </section>
 <section class="garden-door" id="garden-questions" aria-labelledby="garden-door-title">
  <div class="garden-door-head"><div><p class="garden-door-kicker">From Freighter View Farms</p><h2 id="garden-door-title">What brings you to the garden today?</h2><p>Start with a question. We’ll help you find the right tool or guide.</p></div><a class="garden-all-guides" href="#gardening-tools-suite">Browse all garden guides ↓</a></div>
- <div id="garden-find-wrap" class="garden-find" hidden><label for="garden-find">Search featured tools</label><input id="garden-find" type="search" placeholder="Try tomatoes, pests, frost or seeds" autocomplete="off"><p id="garden-find-status" role="status" aria-live="polite"></p></div>
+ <div id="garden-find-wrap" class="garden-find" hidden><label for="garden-find">Search featured tools</label><input id="garden-find" data-hub-search="garden" type="search" placeholder="Try tomatoes, pests, frost or seeds" autocomplete="off"><div class="hub-search-results" data-hub-search-results hidden></div><p id="garden-find-status" role="status" aria-live="polite"></p></div>
  <div class="garden-question-grid" id="garden-question-grid">
   <section class="garden-question garden-pest-feature" data-garden-category aria-labelledby="garden-pest-feature-heading">
    <div class="garden-pest-feature__story">
@@ -1031,7 +1032,10 @@ body.hm-page{--hm-display:"Playfair Display",Georgia,serif;--hm-body:"Instrument
   </div>
 </footer>
 
-<script src="/assets/garden-tools/garden-hub.js?v=20261101a"></script>
+<script src="/assets/hub-search-lexicon.js?v=20261118"></script>
+<script src="/assets/hub-search-engine.js?v=20261118"></script>
+<script src="/assets/hub-search.js?v=20261118"></script>
+<script src="/assets/garden-tools/garden-hub.js?v=20261118a"></script>
 <script src="/assets/garden-tools/garden-kit.js"></script>
 <script src="/assets/garden-tools/michigan-frost.js"></script>
 <script src="/assets/garden-tools/michigan-places.js"></script>

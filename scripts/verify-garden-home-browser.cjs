@@ -91,10 +91,16 @@ const assert=require('node:assert/strict');
    await page.locator('#garden-find').fill('');
    await page.screenshot({path:`artifacts/garden-home-browser/hub-${width}.png`,fullPage:true,animations:'disabled'});
    await page.locator('#garden-find').fill('tomatoes');
-   assert.match(await page.locator('#garden-find-status').innerText(),/featured tools found/);
+   // Shared hub search (PR #1766) reports in its own status line under the box.
+   assert.match(await page.locator('#hub-search-status').innerText(),/2 featured tools match/);
    assert.equal(await page.locator('[data-garden-result]:visible').count(),2);
+   // A query with one unknown word now shows the closest tools instead of a dead end.
    await page.locator('#garden-find').fill('nonexistent vegetable');
-   assert.match(await page.locator('#garden-find-status').innerText(),/0 featured tools/);
+   assert.match(await page.locator('#hub-search-status').innerText(),/Nothing matches every word/);
+   assert.ok(await page.locator('[data-garden-result]:visible').count()>0);
+   await page.locator('#garden-find').fill('xyzzy');
+   assert.match(await page.locator('#hub-search-status').innerText(),/No featured tools match/);
+   assert.equal(await page.locator('[data-garden-result]:visible').count(),0);
    await page.locator('#garden-find').fill('');
    await page.getByRole('link',{name:/Plan my Michigan garden/}).click();
    assert.notEqual(await page.locator('#plant-now').getAttribute('open'),null);
