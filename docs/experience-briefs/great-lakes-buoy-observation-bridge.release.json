@@ -1,0 +1,142 @@
+{
+  "schemaVersion": "1.2",
+  "recordStatus": "draft",
+  "project": {
+    "slug": "great-lakes-buoy-observation-bridge",
+    "ownerRepo": "izworskic/chrisizworski-com",
+    "canonical": "https://chrisizworski.com/great-lakes-buoys/",
+    "pageFile": "public/great-lakes-buoys/index.html",
+    "visitorDecision": "Compare two actual NOAA NDBC buoy observations, including their age, before independently consulting marine forecasts and warnings.",
+    "primaryAction": "Select two NDBC stations and inspect their individual official station reports and the NWS marine forecast."
+  },
+  "claims": [
+    {
+      "id": "ndbc-station-measurements",
+      "kind": "official-reference",
+      "subject": "observed-buoy-readings",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://www.ndbc.noaa.gov/faq/realtime.shtml",
+      "checkedDate": "2026-11-19",
+      "limitation": "NDBC station reports are time-stamped point observations with sensor-specific coverage, not marine forecasts or boating clearance."
+    },
+    {
+      "id": "significant-wave-definition",
+      "kind": "official-reference",
+      "subject": "significant-wave-height",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://www.weather.gov/marine/faq",
+      "checkedDate": "2026-11-19",
+      "limitation": "Wave-height reports at separate stations do not describe individual breaking waves, shoreline conditions or unobserved transit routes."
+    },
+    {
+      "id": "no-current-route-verdict",
+      "kind": "unverified",
+      "subject": "safe-boating-decision",
+      "state": "UNVERIFIED",
+      "sourceUrl": "https://www.weather.gov/marine/",
+      "checkedDate": "2026-11-19",
+      "limitation": "The page cannot establish that any craft, route or shoreline location is safe based only on two buoy measurements."
+    },
+    {
+      "id": "unavailable-wave-sensor",
+      "kind": "no-data",
+      "subject": "missing-wave-measurement",
+      "state": "NO_DATA",
+      "sourceUrl": "https://www.ndbc.noaa.gov/",
+      "checkedDate": "2026-11-19",
+      "limitation": "When one or both station wave sensors are unavailable, no numerical wave difference is displayed."
+    }
+  ],
+  "decisionState": {
+    "selectedIdField": "station.id for independent A and B selectors",
+    "sourceOfTruth": "The existing enriched NDBC /api/buoys station array and per-station obs_time; observation-bridge.js computes the paired view.",
+    "linkedSurfaces": [
+      "station-A-select",
+      "station-B-select",
+      "two-observed-instrument-panels",
+      "wave-comparison-message",
+      "source-and-freshness-line",
+      "station-list-compare-actions",
+      "existing-history-detail"
+    ],
+    "unavailableBehavior": "When API or map fails, preserve the static NOAA answer, a compact map fallback, the source-linked station list and explicit snapshot/older-report status."
+  },
+  "scenarios": [
+    {
+      "kind": "initial",
+      "input": "Select recent station 45029 and recent station 45005",
+      "expectedVisibleAnswer": "Compare each measured significant wave height and show the measured difference with both observation times and source links.",
+      "sourceAndSafety": "Neither measurement certifies a route, beach or boat departure."
+    },
+    {
+      "kind": "alternative",
+      "input": "Replace station 45029 with station 45187",
+      "expectedVisibleAnswer": "The A station measurements, relative bar and comparison message follow 45187; B stays 45005.",
+      "sourceAndSafety": "Selected IDs and observed times are independent; do not infer transit conditions."
+    },
+    {
+      "kind": "reverse",
+      "input": "Select 45029, change A to 45187, then return to 45029",
+      "expectedVisibleAnswer": "Restore the original 45029 to 45005 observed difference and each linked source.",
+      "sourceAndSafety": "Never retain a stale pair's value after selection."
+    },
+    {
+      "kind": "no-js",
+      "input": "Disable JavaScript entirely",
+      "expectedVisibleAnswer": "Existing authored NOAA static answer and NWS marine source are still readable; the new selectors are disabled.",
+      "sourceAndSafety": "No claim of live observations without the client data feed."
+    },
+    {
+      "kind": "no-tiles",
+      "input": "Block third-party Leaflet scripts and basemap tiles",
+      "expectedVisibleAnswer": "The map falls back to a compact source-linked station-list notice; selectors and list remain interactive.",
+      "sourceAndSafety": "Map failure cannot become inferred station geolocation or a blank 560px panel."
+    },
+    {
+      "kind": "stale-data",
+      "input": "Fail the API and use old inline snapshot",
+      "expectedVisibleAnswer": "Page explicitly labels saved snapshot, suppresses positive live advisories and refuses a current wave difference.",
+      "sourceAndSafety": "An old snapshot is never described as currently reporting."
+    }
+  ],
+  "failures": {
+    "no-js": "Retain SEO/HTML-first NOAA explanation and official station and marine forecast links without requiring JS.",
+    "no-tiles": "Collapse unavailable map and keep populated station list and paired observation controls.",
+    "no-image": "The experience is an instrument comparison with no new imagery or photographic assertion.",
+    "stale-data": "Show saved snapshot/older observations and avoid a positive advisory or confident wave difference."
+  },
+  "qa": {
+    "viewports": [
+      360,
+      390,
+      768,
+      1280,
+      1440
+    ],
+    "browserStatus": "PENDING",
+    "browserRun": null,
+    "screenshotEvidence": [],
+    "scopeNote": "Browser workflow now executes isolated NDBC fixtures and blocked-CDN tests; results must be verified at the exact head. Live CARTO tiles and production ads are not reproduced in the fixture."
+  },
+  "photos": [],
+  "release": {
+    "implemented": {
+      "status": "CONFIRMED",
+      "checkedDate": "2026-11-19",
+      "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/pull/1782"
+    },
+    "verified": {
+      "status": "PENDING"
+    },
+    "deployed": {
+      "status": "PENDING"
+    },
+    "live": {
+      "status": "PENDING"
+    },
+    "measured": {
+      "status": "NOT_MEASURED"
+    }
+  },
+  "verificationLimit": "This draft records the code and planned acceptance. Until exact-head browser CI and full repository CI are verified, do not mark release verified, deployed or live. A passing fixture does not prove public marine data, map tiles, CTR or revenue impact."
+}

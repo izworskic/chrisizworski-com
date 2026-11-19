@@ -1,0 +1,43 @@
+name: Great Lakes Buoys Observation Bridge browser acceptance
+on:
+  pull_request:
+    paths:
+      - 'public/great-lakes-buoys/**'
+      - 'tests/buoy-observation-bridge.test.js'
+      - 'scripts/buoy-observation-bridge-browser.cjs'
+      - '.github/workflows/buoy-observation-bridge-browser.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: buoy-bridge-browser-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Source and observation-time gates
+        run: node --test tests/buoy-observation-bridge.test.js
+      - name: Install isolated pinned Chromium test tools
+        run: |
+          npm install --prefix "$RUNNER_TEMP/buoy-playwright" --ignore-scripts --no-package-lock playwright@1.56.1
+          "$RUNNER_TEMP/buoy-playwright/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Run five viewports, A to B to A, API outage, blocked map, no JS
+        env:
+          BUOY_QA_OUTPUT: artifacts/buoy-observation-bridge
+        run: BUOY_PLAYWRIGHT_MODULE="$RUNNER_TEMP/buoy-playwright/node_modules/playwright" node scripts/buoy-observation-bridge-browser.cjs
+      - name: Upload exact-branch screenshots and QA result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: buoy-observation-bridge-browser
+          path: artifacts/buoy-observation-bridge/
+          if-no-files-found: ignore
+          retention-days: 10
