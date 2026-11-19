@@ -387,3 +387,31 @@ test('field-atlas puts a chart inside the selected outing without hiding evidenc
   assert.ok(!/font-size:\s*0/.test(css),'no collapsed text');
 });
 
+
+test('winter field map preserves three-location geography and selected waypoint',()=>{
+  const preview=source('app.js');
+  const published=fs.readFileSync(path.resolve(__dirname,'../public/great-lakes-winter-field-desk/app.js'),'utf8');
+  assert.equal(preview,published,'preview and public map scripts must match exactly');
+  const html=source('index.html');
+  const publicHtml=fs.readFileSync(path.resolve(__dirname,'../public/great-lakes-winter-field-desk/index.html'),'utf8');
+  for(const page of [html,publicHtml]){
+    assert.match(page,/id="map-overview"[^>]+type="button" hidden/);
+    assert.equal((page.match(/id="map-overview"/g)||[]).length,1);
+    assert.match(page,/data-place="gooseberry-upper"/);
+    assert.match(page,/data-place="munising-snowshoe"/);
+    assert.match(page,/data-place="meyers-lakeshore"/);
+    assert.match(page,/noindex,nofollow,noarchive/);
+  }
+  assert.match(preview,/L\.latLngBounds\(C\.PLACES\.map\(place=>\[place\.lat,place\.lon\]\)\)/);
+  assert.match(preview,/map\.fitBounds\(bounds,\{padding:\[30,30\],maxZoom:7,animate:false\}\)/);
+  assert.doesNotMatch(preview,/map\.flyTo\(/,'single-point flyTo would hide distant waypoints');
+  assert.match(preview,/active\.bringToFront\(\)/);
+  assert.match(preview,/new ResizeObserver\(\(\)=>\{/);
+  assert.match(preview,/\$\('map-overview'\)\.addEventListener\('click',\(\)=>showAllThree\(\)\)/);
+  assert.match(preview,/showAllThree\(\);\s*\}\s*function renderButtons/,'manual selection returns to the overview');
+  const css=source('desk.css');
+  const publicCss=fs.readFileSync(path.resolve(__dirname,'../public/great-lakes-winter-field-desk/desk.css'),'utf8');
+  assert.equal(css,publicCss);
+  assert.match(css,/\.chart-overview\{/);
+  assert.match(css,/\.chart-overview:focus-visible/);
+});
