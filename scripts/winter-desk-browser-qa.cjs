@@ -107,6 +107,7 @@ async function main(){
       assert.equal(await page.locator('[data-place="munising-snowshoe"]').getAttribute('aria-pressed'),'true');
       await page.locator('[data-place="gooseberry-upper"]').click();
       assert.match(await page.locator('#stage-title').textContent(),/Upper Falls/i);
+      await page.waitForFunction(()=>document.querySelectorAll('#coast-map .leaflet-tile-loaded').length>=2,null,{timeout:12000});
       const metrics=await page.evaluate(()=>({
         overflow:document.documentElement.scrollWidth>innerWidth,
         tiles:document.querySelectorAll('.leaflet-tile-loaded').length,
