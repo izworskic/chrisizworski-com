@@ -59,6 +59,27 @@ WINTER_DESK_BASE=http://127.0.0.1:8765/previews/great-lakes-winter-desk/ node sc
 
 The script checks 360/390/768/1440px, real image and map loads, source IDs, A to B to C to A state changes, failed maps, absent NWS weather and no-JavaScript fallback; it writes screenshots to \`/tmp/winter-desk-browser-qa/\` by default. It uses **mocked NWS responses** for repeatable browser coverage. Real-time NWS page reachability and official-current-access confirmation are separate checks.
 
+## Basemap recovery (November 18, 2026)
+
+The published noindex field desk and the preview now use the same map script.
+The Leaflet map displays the OpenStreetMap raster basemap immediately, then
+requests the existing same-origin `/api/carto-basemap-config` endpoint.
+Only a valid, explicitly **public** `CARTO_BASEMAP_PUBLIC_KEY` permits an optional
+CARTO Voyager raster request with `?key=` attached to every tile. Do not embed
+keys, make keyless CARTO requests or expose non-public configuration in HTML.
+
+The OSM layer remains visible until the keyed CARTO layer finishes an error-free
+visible tile batch. A failed config request, invalid key, failed CDN tiles or
+a later failed CARTO pan/zoom automatically uses the existing OSM layer. If
+neither provider loads, the original written destination list, Google Maps
+place searches and official park links remain available. This is a map delivery
+fallback, not permission to travel on a closed trail or frozen lake.
+
+Browser QA exercises ordinary imagery, a mocked public-key CARTO outage,
+complete dual-provider outage and mobile destination switching. Node tests
+prevent the two copies of the map script from drifting or reintroducing
+unkeyed CARTO URLs.
+
 ## Architecture and next release gate
 
 - HTML/CSS/vanilla JavaScript chosen because three named outings need no framework migration.
