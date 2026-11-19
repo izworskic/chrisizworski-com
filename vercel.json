@@ -1060,6 +1060,14 @@
       "destination": "https://maine-aurora-live.vercel.app/api/aurora"
     },
     {
+      "source": "/assets/river-specialist-handoff.js",
+      "destination": "https://national-rivers.vercel.app/assets/river-specialist-handoff.js"
+    },
+    {
+      "source": "/assets/paddle-window.js",
+      "destination": "https://national-rivers.vercel.app/assets/paddle-window.js"
+    },
+    {
       "source": "/api/national-rivers",
       "destination": "https://national-rivers.vercel.app/api/national-rivers"
     },
