@@ -1,3 +1,10 @@
+### 2026-11-19 | Spring Field Notebook Experience Investment
+- **Visitor job:** Choose a spring month and Michigan region, read an educational field cue, open the corresponding one of twelve existing source-backed chapters and check the relevant independent specialist tracker before a visit.
+- **Implementation:** Feature branch `feat/spring-field-notebook-20261119`; original photos, historical region/event data, canonical, Person and advertising preserved. Added month/region controls, a static April/Saginaw fallback, connected chapter handoff and regression tests. Rejected an invented live animated bloom map.
+- **Baseline/outcomes:** No current verified GSC or AdSense lift attributable to this feature; traffic, engagement, CTR and earned revenue NOT MEASURED.
+- **Release:** Source commits created; draft Experience OS record included. Exact-head full `npm run verify:all`, 360/390/768/1280/1440 browser screenshots, PR checks, production and public smoke NOT YET VERIFIED. Do not merge while red.
+- **Exactly one next action:** Run exact-head GitHub CI and responsive browser journey acceptance, repair any failures before owner release review.
+
 ### 2026-11-18 | Rocket Penpot Mission-to-Shore pilot
 - **Change:** Merged the opt-in Penpot integration PR #1775. Opened an isolated Rocket Launch Live design pilot with a noindex interactive Wallops place-choice preview, editable Penpot-import SVG, evidence brief and responsive browser QA. No production Rocket tool source or visitor route is changed.
 - **Visitor decision:** A selected mission should lead to a real, source-linked public location, not a confusing launch pad or a repeated warning banner. Prototype places are examples, not launch-day access or parking claims.
