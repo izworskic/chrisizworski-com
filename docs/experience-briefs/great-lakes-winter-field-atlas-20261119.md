@@ -61,6 +61,26 @@ Changed: only the two matching HTML pages, two matching CSS files, targeted Node
 
 Before views inspected: 390x844 and 1280x900 on the public baseline, November 19, 2026. After evidence must come from the PR preview or exact-head browser QA; do not count an emitted screenshot file without inspecting the render. Responsive targets: 360/390/768/1280/1440; chart tiles; text contrast; keyboard; reduced motion; A to B to A; denied/offline/weather/map failures; static no-JS fallback.
 
-**Release state at authoring:** source implementation only. CI, post-implementation screenshots, final Experience OS scored acceptance, production deploy and actual visitor improvement are **not yet verified**. The public pilot remains noindex. Explicit owner instruction is required to merge.
+## Post-implementation visual review (November 19)
+
+Actual Chromium QA screenshots were inspected from GitHub Actions run `44568716178`, including `desk-390.png`, `desk-1280.png`, `chart-390.png` and `chart-1280.png`. This proves rendered interface appearance on the tested localhost preview, not a public deployment. At 390px the first recommendation and all three activity choices start within the first phone viewport. The active choice is visually distinguished and the chart uses genuine loaded OSM raster tiles. At 1280px the selected destination's source-credited image, chart and list form a coherent trip-reading sequence. No synthetic illustration or change to mapped coordinates was introduced.
+
+The chart still has the existing selected-place zoom behavior, which may place a nonselected marker outside the current map viewport. The three-place list remains visible and usable. A future interaction investment could consider an all-three fit-to-bounds control after explicit authorization for JavaScript behavior changes.
+
+The first full-page screenshot captured a sticky sidebar at the prior test scroll position. A test-only follow-up now resets scroll before screenshot evidence; its exact-head rerun is required. Responsive/source/browser tests passed on the prior candidate commit, but results are not transferable to a new head without verification.
+
+### Experience OS acceptance ledger
+
+| Gate | Reviewed evidence | State |
+| --- | --- | --- |
+| First answer and next step | 390px capture and direct official conditions link | PASS in reviewed viewport |
+| Distinctiveness | Real destination dossier plus embedded chart, not Snow Totals magnitude cards or the Gooseberry single-place guide | PASS design review |
+| Maps and sources | Real raster map in Chromium, existing fallback list, exact official sources unchanged | PASS in reviewed viewport |
+| 390/1280 visual hierarchy | Inspected full page and chart screenshots | PASS, with noted map extent limitation |
+| Keyboard, no-JS, reduced motion, outages | Existing extended Chromium cases; new chart navigation also added to next run | Verify on current head |
+| WCAG AA measured contrast audit | No independent automated contrast scan | NOT MEASURED |
+| Production and measured visitor outcomes | No merge or post-deploy metrics | NOT VERIFIED |
+
+**Release state:** source implementation and reviewed earlier screenshots only. The current PR head requires final exact-head full CI, browser and public-output audit. The public pilot remains noindex. Explicit owner instruction is required to merge.
 
 **One next action:** verify the changed real-page screenshots and the exact-head full repository and browser gates, then offer the reviewed PR for owner decision.
