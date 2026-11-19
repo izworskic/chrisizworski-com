@@ -118,6 +118,11 @@
     state.activity=e.detail?.activity||'all';
     render();
   });
+  window.addEventListener('buoy-map-station-cleared',()=>{
+    state.stationId=null;
+    picker.value='';
+    render();
+  });
   window.addEventListener('buoy-stations-ready',e=>{
     const data=e.detail||{};
     state.stations=Array.isArray(data.stations)?data.stations:[];
