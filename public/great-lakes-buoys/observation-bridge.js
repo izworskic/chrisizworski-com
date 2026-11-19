@@ -39,7 +39,7 @@
   const selectB = document.getElementById('obStationB');
   const byId = id => state.stations.find(st => String(st.id) === String(id));
   const set = (id, value) => { const node = document.getElementById(id); if (node) node.textContent = value; };
-  const value = (v, digits) => finite(v) ? v.toFixed(digits) : '—';
+  const value = (v, digits) => finite(v) ? v.toFixed(digits) : '--';
   const observed = station => {
     if (!station || !station.obs_time || !Number.isFinite(Date.parse(station.obs_time))) return 'Observation time unavailable';
     return 'Observed ' + new Date(station.obs_time).toLocaleString('en-US', {month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZone:'America/Detroit',timeZoneName:'short'});
@@ -65,9 +65,9 @@
     const badge = document.getElementById('obAge' + id);
     badge.dataset.state = status;
     set('obWhen' + id, observed(station));
-    set('obWave' + id, station ? value(station.wave_ht_ft, 1) : '—');
-    set('obWind' + id, station ? value(station.wind_spd_kt, 0) : '—');
-    set('obWater' + id, station ? value(station.water_t_f, 0) : '—');
+    set('obWave' + id, station ? value(station.wave_ht_ft, 1) : '--');
+    set('obWind' + id, station ? value(station.wind_spd_kt, 0) : '--');
+    set('obWater' + id, station ? value(station.water_t_f, 0) : '--');
     const wave = station && finite(station.wave_ht_ft) ? Math.max(0, station.wave_ht_ft) : null;
     const otherWave = other && finite(other.wave_ht_ft) ? Math.max(0, other.wave_ht_ft) : null;
     const max = Math.max(wave || 0, otherWave || 0);
