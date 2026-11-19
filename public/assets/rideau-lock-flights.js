@@ -141,6 +141,18 @@
     function redraw(){
       const site=sites[state.site],i=state.selected[state.site];
       stage.innerHTML=renderSvg(state.site,i);
+      // A complete, non-interactive miniature supplies context for the magnified view.
+      // IDs in the two SVGs must remain unique, and only the large view is keyboard interactive.
+      const overview=get('rideau-flight-overview-graphic');
+      if(overview){
+        overview.innerHTML=renderSvg(state.site,i)
+          .replace('aria-labelledby="flight-drawing-title flight-drawing-desc"','aria-hidden="true" focusable="false"')
+          .replace('id="flight-drawing-title"','id="flight-overview-title"')
+          .replace('id="flight-drawing-desc"','id="flight-overview-desc"')
+          .replace(/tabindex="0"/g,'tabindex="-1"')
+          .replace(/role="button"/g,'role="presentation"');
+        get('rideau-flight-overview-count').textContent=site.name+': chamber '+(i+1)+' of '+site.locks.length;
+      }
       buttons.forEach(b=>b.setAttribute('aria-pressed',String(b.getAttribute('data-rideau-flight-site')===state.site)));
       get('rideau-flight-count').textContent='Chamber '+(i+1)+' of '+site.locks.length+' | Lock '+site.locks[i].number;
       get('rideau-flight-title').textContent=site.locks[i].label;
@@ -150,11 +162,35 @@
       get('rideau-flight-lift').textContent=site.lift+' combined lift';
       source.href=site.source;
       strip.replaceChildren();
+      strip.className='rideau-flight__chambers rideau-flight__chambers--'+site.id;
+      const guide=site.id==='ottawa'
+        ? ['River entry','Second','Third','Fourth','Fifth','Sixth','Seventh','Canal exit']
+        : ['Lower flight','Lower flight','Lower flight','Upper lock'];
       site.locks.forEach((lock,n)=>{
+        // A purposeful break makes Jones Falls visibly unlike Ottawa: the basin
+        // is open water, not a fifth lock or a shared gate.
+        if(site.id==='jones'&&n===3){
+          const basin=doc.createElement('span');
+          basin.className='rideau-flight__crossing';
+          basin.setAttribute('role','note');
+          basin.innerHTML='<span class="rideau-flight__crossing-water" aria-hidden="true">~~~~</span><strong>Turning basin</strong><small>Open water</small>';
+          strip.append(basin);
+        }
         const chip=doc.createElement('button');
-        chip.type='button';chip.textContent='Lock '+lock.number;
-        chip.setAttribute('aria-pressed',String(n===i));
+        chip.type='button';
         chip.className='rideau-flight__chip';
+        chip.setAttribute('aria-label','Lock '+lock.number+', chamber '+(n+1)+' of '+site.locks.length+': '+lock.label);
+        chip.setAttribute('aria-pressed',String(n===i));
+        chip.dataset.progress=n<i?'passed':n===i?'current':'ahead';
+        const node=doc.createElement('span');
+        node.className='rideau-flight__node';
+        node.textContent=String(lock.number);
+        node.setAttribute('aria-hidden','true');
+        const caption=doc.createElement('span');
+        caption.className='rideau-flight__chip-caption';
+        caption.textContent=guide[n];
+        caption.setAttribute('aria-hidden','true');
+        chip.append(node,caption);
         chip.addEventListener('click',()=>select(state.site,n));
         strip.append(chip);
       });
