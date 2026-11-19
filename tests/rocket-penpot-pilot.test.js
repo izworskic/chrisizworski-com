@@ -46,6 +46,8 @@ test('the design respects responsive focus, reduced-motion and readable source c
  assert.match(html,/button:focus-visible,a:focus-visible/);
  assert.match(html,/aria-live="polite" aria-atomic="true"/);
  assert.match(html,/Recheck the launch time and public access notices/);
+ assert.match(inline[1],/rules\.textContent=place\.ruleLabel/);
+ assert.match(html,/Check town notices/);
  assert.match(html,/rel="noopener noreferrer" target="_blank"/);
 });
 
