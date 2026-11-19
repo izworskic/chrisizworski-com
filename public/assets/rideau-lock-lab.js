@@ -51,27 +51,6 @@
       $('rideau-film-player').replaceChildren(frame);
       $('rideau-film-player').hidden=false;
     }));
-    const diagrams=Object.freeze({
-      ottawa:{src:'/assets/rideau-locks-ottawa-diagram.svg',alt:'Isometric schematic of the eight successive chambers at Ottawa Locks',
-        caption:"Ottawa's eight chambers step from the Ottawa River to the canal above. This is an interpretive schematic, not a surveyed model.",
-        url:'https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/ecluse-lock-ottawa'},
-      jones:{src:'/assets/rideau-locks-jones-falls-diagram.svg',alt:'Isometric schematic of three lower chambers and a separate upper chamber at Jones Falls',
-        caption:'At Jones Falls, three lower locks and a separate upper lock meet a waterway engineered around rugged ground. The nearby Stone Arch Dam is illustrated separately, not to scale.',
-        url:'https://parks.canada.ca/lhn-nhs/on/rideau/visit/posteeclusage-lockstation/ecluse-lock-jones-falls'}
-    });
-    const buttons=Array.from(doc.querySelectorAll('[data-rideau-diorama]'));
-    buttons.forEach(button=>button.addEventListener('click',()=>{
-      const key=button.getAttribute('data-rideau-diorama'),info=diagrams[key];
-      if(!info)return;
-      $('rideau-diorama-image').src=info.src;
-      $('rideau-diorama-image').alt=info.alt;
-      const caption=$('rideau-diorama-caption');
-      const link=doc.createElement('a');
-      link.href=info.url;
-      link.textContent='Read the official station profile.';
-      caption.replaceChildren(doc.createTextNode(info.caption+' '),link);
-      buttons.forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
-    }));
     render();
   }
   if(typeof window==='object'&&window.document){
