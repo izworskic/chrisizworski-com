@@ -76,7 +76,8 @@ jobs:
         run: |
           python3 scripts/build-circle-tour-trip-intelligence.py
           python3 scripts/build-circle-tour-trip-intelligence.py --check
-          node --test tests/circle-tour-road-evidence.test.js tests/circle-tour-trip-intelligence.test.cjs tests/circle-tour-traveler-planner.test.cjs tests/circle-tour-overnight-optimizer.test.cjs
+          # Both traveler and overnight suites read the same generated page; overnight regeneration must finish before parallel readers.
+          node --test --test-concurrency=1 tests/circle-tour-road-evidence.test.js tests/circle-tour-trip-intelligence.test.cjs tests/circle-tour-traveler-planner.test.cjs tests/circle-tour-overnight-optimizer.test.cjs
       - name: Test existing destination and day-sheet policies
         run: |
           node --test tests/shared-itinerary-engine.test.cjs tests/up-waterfalls-day-sheet.test.js \
