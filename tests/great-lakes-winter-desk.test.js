@@ -405,6 +405,8 @@ test('winter field map preserves three-location geography and selected waypoint'
   assert.match(preview,/L\.latLngBounds\(C\.PLACES\.map\(place=>\[place\.lat,place\.lon\]\)\)/);
   assert.match(preview,/map\.fitBounds\(bounds,\{padding:\[30,30\],maxZoom:7,animate:false\}\)/);
   assert.doesNotMatch(preview,/map\.flyTo\(/,'single-point flyTo would hide distant waypoints');
+  assert.match(preview,/zoomAnimation:false/,'avoid stale animated map coordinates during overview reset');
+  assert.match(preview,/map\.stop\(\)/,'stop an in-progress map movement before framing all points');
   assert.match(preview,/active\.bringToFront\(\)/);
   assert.match(preview,/new ResizeObserver\(\(\)=>\{/);
   assert.match(preview,/\$\('map-overview'\)\.addEventListener\('click',\(\)=>showAllThree\(\)\)/);
