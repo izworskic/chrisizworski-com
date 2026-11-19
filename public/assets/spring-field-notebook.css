@@ -12,6 +12,13 @@
   margin-bottom: 8px;
 }
 .wf--spring .wf-hero-spring-montage figure { height: 205px; }
+.sp-field-context {
+  max-width: 1040px;
+  padding-top: 10px;
+  padding-bottom: 29px;
+}
+.sp-field-context .wf-lede { max-width: 85ch; }
+.sp-field-context .sp-hero-ctas { margin-top: 12px; }
 .sp-field-notebook {
   margin-top: 12px;
   padding-top: clamp(18px, 3vw, 32px);
