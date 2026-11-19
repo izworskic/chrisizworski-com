@@ -53,7 +53,7 @@
     const isJones=id==='jones';
     const xs=isJones?[126,293,460,829]:[126,241,356,471,586,701,816,931];
     const ys=isJones?[370,325,280,214]:[370,341,312,283,254,225,196,167];
-    const widths=isJones?[150,150,150,164]:[105,105,105,105,105,105,105,105];
+    const widths=isJones?[167,167,150,164]:[115,115,115,115,115,115,115,115];
     return {xs,ys,widths,isJones};
   }
   function drawTree(x,y,k){
