@@ -58,6 +58,10 @@ async function main(){
         'shoreline chart is part of the current outing');
       assert.equal(await page.locator('.quick-chart').getAttribute('href'),'#map-heading');
       assert.equal(await page.locator('.chart-follow').getAttribute('href'),'#trip-readiness');
+      await page.locator('.quick-chart').click();
+      assert.equal(await page.evaluate(()=>location.hash),'#map-heading','map jump is actionable');
+      await page.locator('.chart-follow').click();
+      assert.equal(await page.evaluate(()=>location.hash),'#trip-readiness','chart returns to access and arrival details');
       const openingBounds=await page.evaluate(()=>({
         answer:document.querySelector('#quick-outing').getBoundingClientRect().top,
         choices:document.querySelector('#mission-label').getBoundingClientRect().top
@@ -119,6 +123,8 @@ async function main(){
       assert.ok(metrics.tiles>=2,'real map tiles');
       assert.equal(errors.length,0,'browser JavaScript errors');
       assert.equal(unkeyedCarto.length,0,'no unauthenticated CARTO raster tile requests');
+      await page.evaluate(()=>window.scrollTo(0,0));
+      await page.waitForTimeout(120);
       await page.screenshot({path:path.join(screenshotDir,'desk-'+width+'.png'),fullPage:true,animations:'disabled'});
       if(width===390||width===1280)await page.locator('.regional').screenshot({path:path.join(screenshotDir,'chart-'+width+'.png'),animations:'disabled'});
       summary.push({width,...metrics,errors});
