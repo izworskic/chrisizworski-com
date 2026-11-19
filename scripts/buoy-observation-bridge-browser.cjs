@@ -136,6 +136,8 @@ async function main(){
       // Missing Leaflet cannot steal the station list or leave 560px of blank map.
       assert.equal(await page.locator('.map-wrap.map-unavailable').count(),1);
       assert.match(await page.locator('.map-alt').innerText(),/Browse station list/);
+      const unavailableMap=await page.locator('.map-wrap.map-unavailable').boundingBox();
+      assert.ok(unavailableMap.height<210,'failed map must collapse into short list fallback, not a blank panel: '+unavailableMap.height);
       const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
       assert.ok(overflow<=1,'horizontal document overflow at '+width+': '+overflow);
       assert.deepEqual(exceptions,[], 'page JS exceptions at '+width);
