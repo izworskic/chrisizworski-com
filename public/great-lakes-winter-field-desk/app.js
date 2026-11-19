@@ -8,11 +8,19 @@
   const $=id=>document.getElementById(id);
   const state={goal:'falls',effort:'short',day:'today',chosen:'gooseberry-upper',request:0,weather:null,sourceDocument:null,routeDocument:null,arrivalDocument:null,noticeDocument:null};
   const weatherCache=new Map();
-  const mapState={map:null,markers:new Map()};
+  const mapState={map:null,markers:new Map(),lastChosen:null};
   const SAFE=new Set(['available','empty','stale','unknown']);
   const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const niceDay=()=>({today:'today',tomorrow:'tomorrow',third:'in two days'}[state.day]);
   function setStatus(msg){$('desk-status').textContent=msg;}
+  // Leaflet's fitBounds keeps all three shorelines visible on narrow screens.
+  // These are general visitor-area points, not verified winter parking pins.
+  function showAllThree(){
+    const map=mapState.map;
+    if(!map||mapState.markers.size!==C.PLACES.length)return;
+    const bounds=L.latLngBounds(C.PLACES.map(place=>[place.lat,place.lon]));
+    map.fitBounds(bounds,{padding:[30,30],maxZoom:7,animate:false});
+  }
   function selectGoal(goal){
     if(!Object.hasOwn(C.GOALS,goal))return;
     state.goal=goal;
@@ -20,6 +28,7 @@
     state.effort=candidate.effort;
     $('effort').value=state.effort;
     render();
+    showAllThree();
   }
   function renderButtons(){
     document.querySelectorAll('[data-goal]').forEach(btn=>{
@@ -309,9 +318,16 @@
         mapState.markers.set(p.id,mark);
       });
       holder.addEventListener('keydown',e=>{if(e.key==='Escape')holder.blur();});
+      // Reset the geographic framing when the chart changes size, without
+      // relying on an arbitrary single-place flyTo zoom level.
+      showAllThree();
       if('ResizeObserver' in window){
-        new ResizeObserver(()=>map.invalidateSize({pan:false})).observe(holder);
+        new ResizeObserver(()=>{
+          map.invalidateSize({pan:false});
+          showAllThree();
+        }).observe(holder);
       }
+      $('map-overview').hidden=false;
       async function upgradeToCarto(){
         const controller=new AbortController();
         const timeout=setTimeout(()=>controller.abort(),4500);
@@ -391,9 +407,15 @@
       marker.setStyle({radius:active?12:8,fillColor:active?'#d56a3a':'#e7b76b',weight:active?4:2});
     });
     const p=C.getPlace(state.chosen);
-    if(p)map.flyTo([p.lat,p.lon],7,{animate:!matchMedia('(prefers-reduced-motion: reduce)').matches,duration:0.6});
+    if(p&&mapState.lastChosen!==p.id){
+      mapState.lastChosen=p.id;
+      const active=mapState.markers.get(p.id);
+      if(active)active.bringToFront();
+      showAllThree();
+    }
   }
   function init(){
+    $('map-overview').addEventListener('click',()=>showAllThree());
     document.querySelectorAll('[data-goal]').forEach(btn=>btn.addEventListener('click',()=>selectGoal(btn.dataset.goal)));
     document.querySelectorAll('[data-place]').forEach(btn=>btn.addEventListener('click',()=>selectGoal(C.getPlace(btn.dataset.place).goal)));
     $('effort').addEventListener('change',e=>{state.effort=e.target.value;render();});
