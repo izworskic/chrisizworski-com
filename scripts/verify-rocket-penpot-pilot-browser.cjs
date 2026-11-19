@@ -25,10 +25,12 @@ async function run(){
    assert.match(await page.locator('#detail-title').innerText(),/NASA Wallops Visitor Center/);
    assert.match(await page.locator('#rules-link').getAttribute('href'),/nasa\.gov/);
    assert.match(decodeURIComponent(await page.locator('#maps-link').getAttribute('href')),/NASA Wallops Visitor Center/);
+   assert.match(await page.locator('#rules-link').innerText(),/NASA viewing guidance/);
    await choose('waterfront');
    assert.match(await page.locator('#detail-title').innerText(),/Robert Reed Waterfront Park/);
    assert.match(await page.locator('#rules-link').getAttribute('href'),/chincoteague-va\.gov/);
    assert.match(decodeURIComponent(await page.locator('#maps-link').getAttribute('href')),/Robert N Reed Sr Downtown Waterfront Park/);
+   assert.match(await page.locator('#rules-link').innerText(),/Check town notices/);
    await choose('harbor');
    assert.match(await page.locator('#detail-title').innerText(),/Curtis Merritt Harbor/);
    await choose('visitor');
