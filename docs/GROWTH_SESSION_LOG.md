@@ -1,3 +1,10 @@
+### 2026-11-18 | On-demand Penpot design skill and MCP setup
+- **Scope:** Source-only repository tooling in `feature/penpot-on-demand-skill-20261118`. Added explicit-use Penpot skills for Codex and Claude Code, public no-key hosted MCP configs for Codex, Claude Code and Cursor, setup instructions, and a source-level regression test.
+- **Intent:** Penpot is opt-in when the owner explicitly requests design work. Experience OS and Foundry still govern research, originality and release verification. GitHub remains the implementation source of truth.
+- **Security and limits:** No Penpot token committed; OAuth, open-file MCP session, first read-only inspection and any live design edit are **not verified**. The official Penpot AI Kit is optional and not bundled. No production tool, ads, SEO metadata, API or canonical was modified.
+- **Release state:** PR and CI pending; do not call this a working authenticated Penpot connection or a production release.
+- **Exactly one next action:** Verify full repository CI and obtain explicit Penpot MCP authorization in the owner's coding client before testing a real design session.
+
 ### 2026-11-18 | Rideau Canal experience release integration
 - **Visitor decision:** Three Rideau journey modes, a five-step lock operation, Ottawa and Jones Falls diagrams, source-grounded visitor viewing areas across seven highlighted lockstations and recorded Parks Canada films. No unverified live-camera or parking-direction claim.
 - **Change control:** PR #1772 merged into #1763; preserve the latest main Tools index, search corpus and sitemap. No advertising, publisher or canonical changes.
