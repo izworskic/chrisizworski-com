@@ -1,0 +1,4 @@
+# Penpot official hosted MCP. OAuth is completed in the user client, not GitHub.
+# This project config is loaded only when the Codex workspace is trusted.
+[mcp_servers.penpot]
+url = "https://design.penpot.app/mcp/stream"

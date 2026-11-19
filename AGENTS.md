@@ -1,3 +1,7 @@
+## Penpot design: on-demand only
+
+Only when Penpot is explicitly requested, use `.agents/skills/penpot-design/SKILL.md` (Codex) or `.claude/skills/penpot-design/SKILL.md` (Claude Code) and `docs/PENPOT_DESIGN_WORKFLOW.md`. The repository MCP URL is not a verified connection. Preserve owning-repository rules, Experience OS, Foundry, ads, SEO and CI gates. Never invoke Penpot automatically.
+
 ## EXPERIENCE_FOUNDRY — tool improvement cycle 0.3 (2026-11-08)
 
 When asked to improve tools with **Experience Foundry**, read [`experience-foundry/README.md`](experience-foundry/README.md) and [`experience-foundry/docs/IMPROVEMENT_CYCLE.md`](experience-foundry/docs/IMPROVEMENT_CYCLE.md). For an existing tool, default to `improve`, not a planning-only packet: capture its authoritative source baseline, diagnose the unfinished visitor task, investigate three opportunities, compare two credible concepts, implement the selected improvement, and use `prove` to replay the same visitor scenarios before and after. `assess` reports the next unresolved action and rejects stale proof. **A generated packet, documentation, source link or green existing tests alone is not a demonstrated tool improvement.** The agent is responsible for research, credible design review and actual implementation; the CLI does not invent designs or prove visual originality.

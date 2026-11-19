@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "penpot": {
+      "type": "http",
+      "url": "https://design.penpot.app/mcp/stream"
+    }
+  }
+}
