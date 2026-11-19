@@ -49,17 +49,37 @@ async function run(){
        assert.equal(await page.locator('#lock-lab-chamber-water').getAttribute('y'),'246');
        await page.locator('#lock-lab-reset').click();
        assert.match(await page.locator('#lock-lab-step-title').innerText(),/Enter at the lower water level/);
-       await page.locator('[data-rideau-diorama="jones"]').click();
-       await page.waitForFunction(()=>{const i=document.getElementById('rideau-diorama-image');return i&&i.complete&&i.naturalWidth>=900;},null,{timeout:12000});
-       assert.equal(await page.locator('#rideau-diorama-image').getAttribute('src'),'/assets/rideau-locks-jones-falls-diagram.svg');
-       assert.match(await page.locator('#rideau-diorama-caption').innerText(),/three lower locks/i);
-       await page.locator('[data-rideau-diorama="ottawa"]').click();
-       await page.waitForFunction(()=>{const i=document.getElementById('rideau-diorama-image');return i&&i.complete&&i.naturalWidth>=900;},null,{timeout:12000});
-       assert.equal(await page.locator('#rideau-diorama-image').getAttribute('src'),'/assets/rideau-locks-ottawa-diagram.svg');
+       assert.equal(await page.locator('#rideau-flight-enhanced').isVisible(),true);
+       assert.equal(await page.locator('#rideau-flight-fallback').isHidden(),true);
+       assert.equal(await page.locator('#rideau-flight-stage [data-chamber-index]').count(),8);
+       assert.match(await page.locator('#rideau-flight-count').innerText(),/Chamber 1 of 8/);
+       await page.locator('#rideau-flight-next').click();
+       assert.match(await page.locator('#rideau-flight-count').innerText(),/Lock 2/);
+       await page.locator('#rideau-flight-stage [data-chamber-index="4"]').focus();
+       await page.keyboard.press('Enter');
+       assert.match(await page.locator('#rideau-flight-count').innerText(),/Lock 5/);
+       assert.equal(await page.locator('#rideau-flight-chambers [aria-pressed="true"]').innerText(),'Lock 5');
+       await page.locator('[data-rideau-flight-site="jones"]').click();
+       assert.equal(await page.locator('#rideau-flight-stage [data-chamber-index]').count(),4);
+       assert.match(await page.locator('#rideau-flight-stage').innerText(),/TURNING BASIN/);
+       assert.match(await page.locator('#rideau-flight-overview').innerText(),/Three lower locks/);
+       await page.locator('#rideau-flight-chambers button').last().click();
+       assert.match(await page.locator('#rideau-flight-count').innerText(),/Lock 39/);
+       assert.match(await page.locator('#rideau-flight-story').innerText(),/turning basin/);
        if(width===390){
-         const dioramaShot=path.join(out,'rideau-dioramas-390.png');
-         await page.locator('.rideau-diorama').screenshot({path:dioramaShot,animations:'disabled'});
-         report.screenshots.push(dioramaShot);
+         const jonesShot=path.join(out,'rideau-jones-falls-elevation-390.png');
+         await page.locator('.rideau-diorama').screenshot({path:jonesShot,animations:'disabled'});
+         report.screenshots.push(jonesShot);
+       }
+       await page.locator('[data-rideau-flight-site="ottawa"]').click();
+       assert.match(await page.locator('#rideau-flight-count').innerText(),/Lock 5/);
+       await page.locator('#rideau-flight-reset').click();
+       assert.match(await page.locator('#rideau-flight-count').innerText(),/Chamber 1 of 8/);
+       assert.equal(await page.locator('#rideau-flight-prev').isDisabled(),true);
+       if(width===390){
+         const ottawaShot=path.join(out,'rideau-ottawa-elevation-390.png');
+         await page.locator('.rideau-diorama').screenshot({path:ottawaShot,animations:'disabled'});
+         report.screenshots.push(ottawaShot);
        }
        if(width===390){
          const labShot=path.join(out,'rideau-lock-cutaway-390.png');
@@ -147,7 +167,10 @@ async function run(){
     assert.equal(await staticPage.locator('#inside-the-lock').isVisible(),true);
      assert.match(await staticPage.locator('#inside-the-lock').innerText(),/gravity moves water/);
      assert.ok(await staticPage.locator('#inside-the-lock a[href*="parks.canada.ca"]').count()>0);
-     report.scenarios.push({name:'no-javascript',officialLinksRemain:true,staticTeachingDiagram:true});
+     assert.equal(await staticPage.locator('#rideau-flight-fallback').isVisible(),true);
+     assert.ok(await staticPage.locator('#rideau-flight-fallback img').count()===2);
+     assert.equal(await staticPage.locator('#rideau-flight-enhanced').isHidden(),true);
+     report.scenarios.push({name:'no-javascript',officialLinksRemain:true,staticTeachingDiagram:true,staticLockElevations:true});
     await staticContext.close();
     const missingWatch=await browser.newContext({viewport:{width:390,height:800}});
      await missingWatch.route('**/assets/rideau-watch.json',r=>r.abort());
@@ -166,7 +189,11 @@ async function run(){
      assert.equal(await motionPage.locator('#lock-lab-chamber-water').evaluate(e=>getComputedStyle(e).transitionDuration),'0s');
      await motionPage.locator('#lock-lab-forward').click();
      assert.match(await motionPage.locator('#lock-lab-step-title').innerText(),/Close the gates/);
-     report.scenarios.push({name:'reduced-motion',manualControlsRemain:true});
+     await motionPage.locator('[data-rideau-flight-site="jones"]').click();
+     await motionPage.locator('#rideau-flight-next').click();
+     assert.match(await motionPage.locator('#rideau-flight-count').innerText(),/Lock 41/);
+     assert.equal(await motionPage.locator('#rideau-flight-stage svg').evaluate(e=>getComputedStyle(e).transitionDuration),'0s');
+     report.scenarios.push({name:'reduced-motion',manualControlsRemain:true,flightSelectionWorks:true});
      await motion.close();
      const keyCtx=await browser.newContext({viewport:{width:390,height:800}});
     let keyed=0;
