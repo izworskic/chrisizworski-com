@@ -1,3 +1,11 @@
+### 2026-11-18 | Birds & Blooms discovery on Field Guides
+- **Visitor decision:** From the existing Field Guides page, choose between Michigan migration field stops and the Michigan flower-season planner. Both are linked directly from a visible spring field-tools row, with a return link from the Spring Awakening guide.
+- **Source ownership:** The Birding and Bloom tools remain on their independent canonical hosts. This site only adds ordinary HTML discovery links and seasonal badges; it does not duplicate their data or imply that a calendar window verifies birds, flowers, parking or public access.
+- **Change scope:** Two static companion tool cards on `/guides/`, collection anchor and relevant cross-links in the existing Spring Awakening card. The existing 22-guide count and tool/guide registry remain separate. No ads, canonical, Person identity, title, description, API or live-tool logic changes.
+- **Verification:** Regression tests added for direct, script-independent links, cross-links, seasonal handling and sitemap freshness. Full repository `verify:all` and GitHub PR workflow verification required prior to merge. No production deployment or measured search, CTR or revenue change claimed.
+- **Release status:** Review branch `feat/guides-birds-blooms-links-20261118`; not merged.
+- **Exactly one next action:** Complete repository verify:all and PR checks against the latest base before the owner decides on merging.
+
 ### 2026-11-18 | Rocket Penpot Mission-to-Shore pilot
 - **Change:** Merged the opt-in Penpot integration PR #1775. Opened an isolated Rocket Launch Live design pilot with a noindex interactive Wallops place-choice preview, editable Penpot-import SVG, evidence brief and responsive browser QA. No production Rocket tool source or visitor route is changed.
 - **Visitor decision:** A selected mission should lead to a real, source-linked public location, not a confusing launch pad or a repeated warning banner. Prototype places are examples, not launch-day access or parking claims.
