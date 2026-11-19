@@ -155,3 +155,9 @@
   .map-first-head label {display:block;width:100%;font-size:11px}
   .map-first-head select {min-height:40px;padding:8px 10px}
 }
+
+/* When Leaflet or the map provider fails, avoid a full-height blank map.
+   The station picker, dossier and full reporting list remain usable. */
+.water-desk .map-wrap.map-unavailable {height:auto!important;min-height:0!important;box-shadow:none}
+.water-desk .map-wrap.map-unavailable #buoyMap {height:auto!important;min-height:0!important}
+.water-desk .map-wrap.map-unavailable .map-legend {display:none}
