@@ -1,0 +1,65 @@
+name: Manistee float browser acceptance
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'api/manistee-float-v1.js'
+      - 'api/manistee-river-hydrography.js'
+      - 'public/manistee-river-map/**'
+      - 'public/assets/manistee-*.js'
+      - 'scripts/verify-manistee-float-browser.cjs'
+      - 'scripts/smoke-manistee-production.mjs'
+      - '.github/workflows/manistee-float-browser-acceptance.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'api/manistee-float-v1.js'
+      - 'api/manistee-river-hydrography.js'
+      - 'public/manistee-river-map/**'
+      - 'public/assets/manistee-*.js'
+      - 'scripts/verify-manistee-float-browser.cjs'
+      - 'scripts/smoke-manistee-production.mjs'
+      - '.github/workflows/manistee-float-browser-acceptance.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: manistee-browser-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  local-map-and-api:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install isolated browser dependencies
+        run: |
+          mkdir -p /tmp/manistee-browser
+          npm install --prefix /tmp/manistee-browser --no-save --ignore-scripts playwright@1.58.2 leaflet@1.9.4
+          echo "NODE_PATH=/tmp/manistee-browser/node_modules" >> "$GITHUB_ENV"
+          CHROME="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
+          if [ -n "$CHROME" ]; then
+            echo "CHROME_PATH=$CHROME" >> "$GITHUB_ENV"
+          else
+            /tmp/manistee-browser/node_modules/.bin/playwright install chromium
+          fi
+      - name: Verify production smoke syntax
+        run: node --check scripts/smoke-manistee-production.mjs
+      - name: Check actual Manistee map and read-only route API
+        run: node scripts/verify-manistee-float-browser.cjs
+      - name: Save browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: manistee-float-browser-acceptance
+          path: artifacts/manistee-float/
+          if-no-files-found: warn
+          retention-days: 7

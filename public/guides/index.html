@@ -21,7 +21,7 @@
       "name": "Guides | Chris Izworski, AI Operations and Zone 6a Michigan Gardening",
       "description": "Practical guides on AI deployment in public safety and Zone 6a Michigan gardening.",
       "author": { "@type": "Person", "@id": "https://chrisizworski.com/#person", "name": "Chris Izworski", "url": "https://chrisizworski.com/" },
-      "dateModified": "2026-11-17",
+      "dateModified": "2026-11-18",
       "inLanguage": "en-US"
     },
     {
@@ -55,9 +55,9 @@ h1.page-title{font:500 clamp(2.1rem,3.6vw,3rem)/1.08 var(--hm-display);letter-sp
 .guides-index-links span{font:600 .71rem/1 var(--hm-body);color:var(--hm-muted);background:var(--hm-paper-deep);padding:4px 8px;border-radius:999px}
 h2.section-head{font:500 clamp(1.5rem,2.4vw,1.95rem)/1.18 var(--hm-display);color:var(--hm-ink);margin:42px 0 12px;border-bottom:2px solid var(--hm-ink);padding-bottom:10px;letter-spacing:-.015em}
 #field-guides-list,.guides-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:16px}
-.guide-card{background:var(--hm-surface);border:1px solid var(--hm-line);border-top:3px solid var(--hm-accent);border-radius:8px;padding:22px;display:flex;flex-direction:column;justify-content:space-between;gap:14px;box-shadow:0 4px 14px -8px rgba(24,46,42,.08);transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease}
-.guide-card:hover{transform:translateY(-2px);box-shadow:var(--hm-shadow-hover);border-color:var(--hm-line-strong)}
-.guide-card:last-child{border-bottom:1px solid var(--hm-line)}
+.guide-card,.field-tool-card{background:var(--hm-surface);border:1px solid var(--hm-line);border-top:3px solid var(--hm-accent);border-radius:8px;padding:22px;display:flex;flex-direction:column;justify-content:space-between;gap:14px;box-shadow:0 4px 14px -8px rgba(24,46,42,.08);transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease}
+.guide-card:hover,.field-tool-card:hover{transform:translateY(-2px);box-shadow:var(--hm-shadow-hover);border-color:var(--hm-line-strong)}
+.guide-card:last-child,.field-tool-card:last-child{border-bottom:1px solid var(--hm-line)}
 .guide-title{font:500 1.2rem/1.28 var(--hm-display);margin-bottom:8px;color:var(--hm-ink)}
 .guide-title a{color:var(--hm-ink)}.guide-title a:hover{color:var(--hm-accent)}
 .guide-desc{font:400 .9rem/1.62 var(--hm-body);color:var(--hm-ink-soft)}
@@ -69,6 +69,11 @@ h2.section-head{font:500 clamp(1.5rem,2.4vw,1.95rem)/1.18 var(--hm-display);colo
 .fg-inseason{display:inline-block;font:700 .66rem/1.2 var(--hm-body);letter-spacing:.07em;text-transform:uppercase;padding:4px 9px;border-radius:4px;background:var(--hm-accent);color:#fff}
 .fg-tools{font:500 .78rem/1.5 var(--hm-body);color:var(--hm-muted);margin-top:12px;padding-top:10px;border-top:1px dashed var(--hm-line)}
 .fg-tools a{font-weight:700;color:var(--hm-accent)}
+.spring-tool-heading{font:500 clamp(1.2rem,2vw,1.5rem)/1.25 var(--hm-display);margin:24px 0 7px;color:var(--hm-ink)}
+.spring-tool-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin:14px 0 28px}
+.spring-tool-row .field-tool-card{border-top-color:var(--hm-copper)}
+.spring-tool-row .guide-desc{line-height:1.62}
+@media(max-width:680px){.spring-tool-row{grid-template-columns:1fr}}
 @media(max-width:1024px){#field-guides-list,.guides-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.guides-hero{grid-template-columns:1fr}}
 @media(max-width:680px){#field-guides-list,.guides-grid{grid-template-columns:1fr}.guides-hero{padding:22px 20px}}
 </style>
@@ -187,6 +192,7 @@ h2.section-head{font:500 clamp(1.5rem,2.4vw,1.95rem)/1.18 var(--hm-display);colo
     <h2>Browse by Collection</h2>
     <div class="guides-index-links">
       <a href="#field-guides">Michigan &amp; Seasonal Field Guides <span>22 Guides</span></a>
+      <a href="#birds-and-blooms">Birds &amp; Blooms Field Tools <span>2 Tools</span></a>
       <a href="#ai-operations">AI &amp; Public Safety Operations <span>3 Guides</span></a>
       <a href="#great-lakes-travel">Great Lakes Travel <span>27 Guides</span></a>
       <a href="#zone-6a-gardening">Zone 6a Michigan Gardening <span>11 Guides</span></a>
@@ -198,6 +204,32 @@ h2.section-head{font:500 clamp(1.5rem,2.4vw,1.95rem)/1.18 var(--hm-display);colo
 <h2 class="section-head" id="field-guides">Michigan &amp; Great Lakes Field Guides</h2>
 
 <p>Explore Michigan destinations and seasonal field guides, with ideas for where to go, what to do, and how to prepare. Many connect directly to the <a href="/tools/">live Michigan &amp; Great Lakes decision tools</a>. Guides in their peak calendar window are automatically badged below.</p>
+
+
+<section id="birds-and-blooms" aria-labelledby="birds-and-blooms-title">
+  <h3 class="spring-tool-heading" id="birds-and-blooms-title">Birds &amp; blooms: follow the season outdoors</h3>
+  <p>Spring unfolds differently along Michigan's lakes and inland woods. These companion tools help you choose a field stop and check fresh reports before you leave. Calendar timing is a starting point, not a sighting or bloom confirmation.</p>
+  <div class="spring-tool-row">
+    <article class="field-tool-card" data-field-guide="michigan-migration-field-tool" data-months="3,4,5,6,8,9,10" aria-labelledby="migration-field-tool-title">
+      <div>
+        <div class="fg-meta"><span class="fg-pill">Spring &amp; Fall Migration · 6 Corridors</span><span class="fg-inseason" data-fg-season hidden>In season now</span></div>
+        <h4 class="guide-title" id="migration-field-tool-title"><a href="https://michiganbirdingreport.com/migration">Michigan Bird Migration &amp; Field Stops</a></h4>
+        <p class="guide-desc">See where Michigan's migration weather looks promising, explore six birding field stops, and follow recent eBird reports. Use BirdCast to check actual radar movement before choosing tomorrow morning's outing.</p>
+        <div class="fg-tools">Start your day: <a href="https://michiganbirdingreport.com/migration">Migration field desk</a> &middot; <a href="https://dashboard.birdcast.info/region/US-MI">Michigan BirdCast radar</a></div>
+      </div>
+      <div class="guide-arrow"><a href="https://michiganbirdingreport.com/migration" aria-label="Explore Michigan Bird Migration and field stops">Explore the birding tool &rarr;</a></div>
+    </article>
+    <article class="field-tool-card" data-field-guide="michigan-blooms-field-tool" data-months="3,4,5,6,7,8,9,10" aria-labelledby="bloom-field-tool-title">
+      <div>
+        <div class="fg-meta"><span class="fg-pill">Michigan Flowers · March–October</span><span class="fg-inseason" data-fg-season hidden>In season now</span></div>
+        <h4 class="guide-title" id="bloom-field-tool-title"><a href="https://phenology.chrisizworski.com/bloom-tracker">Michigan Bloom Tracker &amp; Flower Calendar</a></h4>
+        <p class="guide-desc">Plan trips to tulips, cherry blossoms, peonies, lilacs and late-season flower gardens. Compare 19 destinations by month and find dated reports when available rather than guessing when the flowers peak.</p>
+        <div class="fg-tools">Plan a visit: <a href="https://phenology.chrisizworski.com/bloom-tracker">Bloom tracker &amp; calendar</a> &middot; <a href="/michigan-spring-awakening-field-guide/">Spring Awakening guide</a></div>
+      </div>
+      <div class="guide-arrow"><a href="https://phenology.chrisizworski.com/bloom-tracker" aria-label="Explore Michigan Bloom Tracker and flower calendar">Explore the bloom tool &rarr;</a></div>
+    </article>
+  </div>
+</section>
 
 <div id="field-guides-list">
 <div class="guide-card" data-months="5,6,7,8,9,10">
@@ -352,7 +384,7 @@ h2.section-head{font:500 clamp(1.5rem,2.4vw,1.95rem)/1.18 var(--hm-display);colo
     <div class="fg-meta"><span class="fg-pill">12 Milestones · Feb–May</span><span class="fg-inseason" data-fg-season hidden>In season now</span></div>
     <div class="guide-title"><a href="/michigan-spring-awakening-field-guide/">Michigan Spring Awakening &amp; Forager’s Field Guide: Morels, Sugarbushes, Trilliums &amp; Vernal Choruses</a></div>
     <div class="guide-desc">Northwoods naturalist guide to Michigan spring: morels, maple tapping, vernal pool amphibian choruses, trillium blankets, and an interactive 41.7°N to 47.4°N Latitudinal Wave Scrubber.</div>
-    <div class="fg-tools">Connected live tools: <a href="/michigan-maple-sap-run/">Maple Sap Weather</a> &middot; <a href="/michigan-soil-temperature/">Soil Temperature</a> &middot; <a href="https://morel.chrisizworski.com/" target="_blank" rel="noopener">Morel Report</a></div>
+    <div class="fg-tools">Connected live tools: <a href="/michigan-maple-sap-run/">Maple Sap Weather</a> &middot; <a href="/michigan-soil-temperature/">Soil Temperature</a> &middot; <a href="https://morel.chrisizworski.com/" target="_blank" rel="noopener">Morel Report</a> &middot; <a href="https://michiganbirdingreport.com/migration">Bird Migration</a> &middot; <a href="https://phenology.chrisizworski.com/bloom-tracker">Bloom Tracker</a></div>
   </div>
   <div class="guide-arrow"><a href="/michigan-spring-awakening-field-guide/">Explore &rarr;</a></div>
 </div>
