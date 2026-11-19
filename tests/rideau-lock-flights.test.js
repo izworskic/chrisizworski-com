@@ -59,7 +59,8 @@ test('the interactive selection is bounded and reversible, not a live operating 
 test('site identity, source links, ad and canonical contracts survive the redesign',()=>{
   assert.match(html,/https:\/\/chrisizworski\.com\/rideau-canal\//);
   assert.match(html,/https:\/\/chrisizworski\.com\/#person/);
-  assert.match(html,/google-adsense-account/);
+  assert.match(html,/data-analytics-page="rideau-canal"/);
+  assert.match(html,/\/assets\/tool-engagement\.js/);
   assert.match(html,/parks\.canada\.ca\/lhn-nhs\/on\/rideau/);
   assert.ok(!html.includes('data-rideau-diorama'));
   assert.match(html,/not to scale/i);
