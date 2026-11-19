@@ -37,7 +37,7 @@
 .ob-trace-key { margin:6px 0 16px !important; font-size:11px !important; color:#b6d2d6 !important; }
 .ob-measures { display:grid; grid-template-columns:1fr 1fr; gap:9px; }
 .ob-measure { padding:11px 10px; background:#214653; border-radius:9px; min-width:0; }
-.ob-measure span { display:block; font-size:11px; color:#bbd2d4; }
+.ob-measure > span { display:block; font-size:11px; color:#bbd2d4; }
 .ob-measure strong { display:block; margin-top:4px; font:650 24px/1.1 system-ui,sans-serif; color:#fff; font-variant-numeric:tabular-nums; }
 .ob-measure strong small { font:500 12px system-ui,sans-serif; color:#bdd5d7; }
 .ob-observed { margin:13px 0 0 !important; font-size:12px !important; color:#d0e2e4 !important; }
@@ -72,4 +72,12 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .ob-track span { transition:none; }
+}
+
+.station-row { grid-template-columns: 10px minmax(0,1fr) auto auto auto; }
+@media (max-width:670px) {
+  .station-row { grid-template-columns:10px minmax(0,1fr) auto; gap:8px; }
+  .station-row .sr-condition { text-align:right; }
+  .station-row .sr-link { display:none; }
+  .station-row [data-bridge-station] { grid-column:2 / 4; justify-self:start; }
 }
