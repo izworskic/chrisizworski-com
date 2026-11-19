@@ -516,3 +516,30 @@ html{scroll-padding-top:22px}
 @media(prefers-reduced-motion:reduce){
   .place-pick,.interest{transition:none}
 }
+
+/* Shoreline overview: explicit, keyboard-accessible reset after a manual map zoom. */
+.chart-actions{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  flex-wrap:wrap;
+  gap:10px 17px;
+}
+.chart-overview{
+  background:#f5f7ee;
+  border:1px solid #557b78;
+  border-radius:0;
+  color:#173f46;
+  font:700 12px/1.3 'DM Sans',sans-serif;
+  padding:11px 13px;
+  min-height:44px;
+  white-space:normal;
+  text-align:center;
+}
+.chart-overview:hover{background:#cbded6}
+.chart-overview:focus-visible{outline:3px solid #ad5b33;outline-offset:3px}
+@media(max-width:600px){
+  .chart-actions{width:100%;justify-content:space-between;align-items:center}
+  .chart-overview{flex:1 1 160px}
+  .chart-follow{flex:1 1 170px}
+}
