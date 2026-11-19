@@ -1,0 +1,45 @@
+name: Spring Field Notebook browser acceptance
+on:
+  pull_request:
+    paths:
+      - 'public/michigan-spring-awakening-field-guide/**'
+      - 'public/assets/michigan-spring-awakening-field-guide.js'
+      - 'public/assets/spring-field-notebook.css'
+      - 'tests/spring-field-notebook.test.js'
+      - 'scripts/spring-field-notebook-browser.cjs'
+      - '.github/workflows/spring-field-notebook-browser.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: spring-notebook-browser-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Spring guide source and interactive-state tests
+        run: node --test tests/michigan-spring-awakening-field-guide.test.js tests/spring-field-notebook.test.js
+      - name: Install isolated pinned Chromium acceptance tools
+        run: |
+          npm install --prefix "$RUNNER_TEMP/spring-playwright" --ignore-scripts --no-package-lock playwright@1.56.1
+          "$RUNNER_TEMP/spring-playwright/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Compare five widths and notebook interaction states
+        env:
+          SPRING_QA_OUTPUT: artifacts/spring-notebook-browser
+        run: SPRING_PLAYWRIGHT_MODULE="$RUNNER_TEMP/spring-playwright/node_modules/playwright" node scripts/spring-field-notebook-browser.cjs
+      - name: Upload phone and desktop screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: spring-field-notebook-browser
+          path: artifacts/spring-notebook-browser/
+          if-no-files-found: ignore
+          retention-days: 10
