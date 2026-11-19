@@ -37,7 +37,7 @@ class FakeNode {
   }
   getAttribute(key){return this.attributes[key] || null;}
   setAttribute(key,val){this.attributes[key]=String(val);}
-  removeAttribute(key){delete this.attributes[key];}
+  removeAttribute(key){delete this.attributes[key];if(Object.prototype.hasOwnProperty.call(this,key))delete this[key];}
   addEventListener(event,cb){this.listeners[event]=cb;}
   dispatch(event,payload={}){if(this.listeners[event])this.listeners[event](payload);}
   click(){this.dispatch('click');}
