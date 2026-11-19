@@ -559,6 +559,13 @@ function stationColor(s, activity) {
 }
 function highlightMapStation(id, pan) {
   selectedMapStationId = id ? String(id) : null;
+  const target = allStations.find(s => String(s.id) === selectedMapStationId);
+  if (pan && target && currentLake !== 'all' && target.lake !== currentLake) {
+    currentLake = 'all';
+    document.querySelectorAll('.lake-pill').forEach(p => p.classList.toggle('active',p.dataset.lake === 'all'));
+    renderMap(allStations);
+    renderList(allStations);
+  }
   markers.forEach(({marker,station}) => {
     const selected = selectedMapStationId === String(station.id);
     marker.setStyle({color:selected?'#102f41':'#273943',weight:selected?4:1.5,fillOpacity:selected?1:.92});
@@ -906,6 +913,11 @@ document.getElementById('lakePills').addEventListener('click', e => {
   document.querySelectorAll('.lake-pill').forEach(p => p.classList.remove('active'));
   btn.classList.add('active');
   currentLake = btn.dataset.lake;
+  const selected = allStations.find(s => String(s.id) === selectedMapStationId);
+  if (selected && currentLake !== 'all' && selected.lake !== currentLake) {
+    selectedMapStationId = null;
+    window.dispatchEvent(new Event('buoy-map-station-cleared'));
+  }
   renderMap(allStations);
   renderList(allStations);
 });
