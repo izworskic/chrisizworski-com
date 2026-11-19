@@ -215,6 +215,7 @@ h2.sh{font-size:21px;font-weight:normal;color:#2c5f2d;margin:34px 0 14px;border-
   .current-conditions{grid-template-columns:repeat(2,1fr)}
 }
 </style>
+<link rel="stylesheet" href="/great-lakes-buoys/observation-bridge.css?v=1">
 <script defer src="/_vercel/insights/script.js"></script>
 <script>window.si=window.si||function(){(window.siq=window.siq||[]).push(arguments)};</script>
 <script defer src="/_vercel/speed-insights/script.js"></script>
@@ -249,6 +250,55 @@ h2.sh{font-size:21px;font-weight:normal;color:#2c5f2d;margin:34px 0 14px;border-
 <section class="quick-answer" id="great-lakes-buoy-answer" aria-labelledby="great-lakes-buoy-answer-title">
   <h2 id="great-lakes-buoy-answer-title">Latest Great Lakes buoy conditions</h2>
   <p>Use the map or station list below to check the latest available NOAA/NDBC readings from Lakes Superior, Michigan, Huron, Erie, and Ontario. Each station shows wave height, wind and gusts, water temperature, air temperature, and pressure when that station reports them. Source observations are typically 5 to 30 minutes old, and this page refreshes its server-side feed every 10 minutes.</p>
+</section>
+
+<section class="observation-bridge" id="observationBridge" aria-labelledby="obBridgeTitle">
+  <div class="ob-head">
+    <div><span class="ob-kicker">Great Lakes · Observation Bridge</span><h2 id="obBridgeTitle">Put two buoys side by side</h2>
+    <p>Find out what two reporting stations actually measured. Change either station to compare waves, wind and water temperature, with each report's observation time alongside it.</p></div>
+    <span class="ob-status-key">NOAA NDBC · Observed, not forecast</span>
+  </div>
+  <div class="ob-deck">
+    <article class="ob-instrument" aria-labelledby="obNameA">
+  <label class="ob-input" for="obStationA">Station A · Choose an observation point
+    <select id="obStationA" disabled><option>Loading station observations</option></select>
+  </label>
+  <div class="ob-station-heading"><h3 id="obNameA">Awaiting station observations</h3><p id="obMetaA">Source: NOAA NDBC</p></div>
+  <div class="ob-reading">
+    <div><p class="ob-wave-label">Significant wave height</p><div class="ob-wave-number"><strong id="obWaveA">—</strong><small>feet</small></div></div>
+    <span class="ob-age" id="obAgeA" data-state="unknown">Time unknown</span>
+  </div>
+  <div class="ob-track" role="img" aria-label="Wave reading unavailable"><span id="obBarA"></span></div>
+  <p class="ob-trace-key">Bar length compares only these two reported wave heights</p>
+  <div class="ob-measures">
+    <div class="ob-measure"><span>Wind speed</span><strong><span id="obWindA">—</span> <small>kt</small></strong></div>
+    <div class="ob-measure"><span>Water temperature</span><strong><span id="obWaterA">—</span> <small>°F</small></strong></div>
+  </div>
+  <p class="ob-observed" id="obWhenA">Observation time unavailable</p>
+  <div class="ob-actions"><a id="obSourceA" href="https://www.ndbc.noaa.gov/" target="_blank" rel="noopener noreferrer">Official NDBC station</a><button type="button" id="obHistoryA" disabled>View 5-day history</button></div>
+</article>
+    <article class="ob-instrument" aria-labelledby="obNameB">
+  <label class="ob-input" for="obStationB">Station B · Choose an observation point
+    <select id="obStationB" disabled><option>Loading station observations</option></select>
+  </label>
+  <div class="ob-station-heading"><h3 id="obNameB">Awaiting station observations</h3><p id="obMetaB">Source: NOAA NDBC</p></div>
+  <div class="ob-reading">
+    <div><p class="ob-wave-label">Significant wave height</p><div class="ob-wave-number"><strong id="obWaveB">—</strong><small>feet</small></div></div>
+    <span class="ob-age" id="obAgeB" data-state="unknown">Time unknown</span>
+  </div>
+  <div class="ob-track" role="img" aria-label="Wave reading unavailable"><span id="obBarB"></span></div>
+  <p class="ob-trace-key">Bar length compares only these two reported wave heights</p>
+  <div class="ob-measures">
+    <div class="ob-measure"><span>Wind speed</span><strong><span id="obWindB">—</span> <small>kt</small></strong></div>
+    <div class="ob-measure"><span>Water temperature</span><strong><span id="obWaterB">—</span> <small>°F</small></strong></div>
+  </div>
+  <p class="ob-observed" id="obWhenB">Observation time unavailable</p>
+  <div class="ob-actions"><a id="obSourceB" href="https://www.ndbc.noaa.gov/" target="_blank" rel="noopener noreferrer">Official NDBC station</a><button type="button" id="obHistoryB" disabled>View 5-day history</button></div>
+</article>
+  </div>
+  <div class="ob-verdict" role="status" aria-live="polite"><strong>Reading the difference</strong><p id="obVerdict">Waiting for station reports. Use the existing map and full list below if the live feed is unavailable.</p></div>
+  <div class="ob-proof"><p id="obProvenance">The feed may be unavailable. Source details and station histories remain on the official <a href="https://www.ndbc.noaa.gov/" target="_blank" rel="noopener noreferrer">NDBC website</a>.</p>
+  <p>Wave height is a point observation, not the highest possible wave. Wind and water sensors may be missing independently. Offshore readings do not describe beach breaks or certify conditions for any boat or route. Check the <a href="https://www.weather.gov/marine/" target="_blank" rel="noopener noreferrer">NWS marine forecast and warnings</a> before going out.</p></div>
 </section>
 
 <p>This dashboard pulls real-time observations from reporting National Data Buoy Center (NDBC) buoys and coastal stations across the Great Lakes basin. The reporting total changes as stations are added, serviced, or seasonally retrieved. Wave height, wind speed and gusts, water temperature, air temperature, and barometric pressure appear wherever each station reports them. The map below renders the current set at once. Tap any buoy on the map to open a detail view with current conditions and a 5-day history of wave height, wind speed, water temperature, air temperature, and pressure. Use the activity filter to color-code stations by safety thresholds for your specific lake activity.</p>
@@ -550,6 +600,7 @@ function renderList(stations) {
         ${s.water_t_f != null ? Math.round(s.water_t_f) + '&deg;F' : ''}
       </div>
       <div class="sr-link">View &rarr;</div>
+      <button type="button" data-bridge-station="${s.id}" aria-label="Compare buoy ${s.id} in observation bridge">Compare</button>
     </div>
   `).join('');
   list.querySelectorAll('.station-row').forEach(row => {
@@ -750,6 +801,7 @@ function updateLegend(activity) {
 async function init() {
   // Try API first, fall back to inline snapshot
   let data = null;
+  let fromSnapshot = false;
   try {
     const r = await fetch('/api/buoys');
     if (r.ok) data = await r.json();
@@ -757,6 +809,7 @@ async function init() {
   if (!data || !data.stations) {
     try {
       data = JSON.parse(document.getElementById('snapshotData').textContent);
+      fromSnapshot = true;
       document.getElementById('liveStatus').textContent = 'Snapshot data loaded; live API offline';
     } catch {
       document.getElementById('liveStatus').textContent = 'Data unavailable';
@@ -765,6 +818,7 @@ async function init() {
   }
   
   allStations = data.stations.map(enrich);
+  window.dispatchEvent(new CustomEvent('buoy-stations-ready', {detail:{stations:allStations,source:fromSnapshot?'snapshot':'api',fetchedAt:data.fetched_at}}));
   
   // Update strip
   document.getElementById('liveStatus').textContent = data.count + ' stations reporting';
@@ -828,5 +882,6 @@ window.addEventListener('DOMContentLoaded', () => {
   setInterval(init, 10 * 60 * 1000);
 });
 </script>
+<script src="/great-lakes-buoys/observation-bridge.js?v=1"></script>
 </body>
 </html>
