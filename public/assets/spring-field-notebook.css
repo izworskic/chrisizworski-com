@@ -1,0 +1,210 @@
+/* Spring Field Notebook: an interpretive reading desk, not a weather or sighting forecast. */
+.wf--spring .wf-hero {
+  display: block;
+  padding-top: 18px;
+  padding-bottom: 12px;
+}
+.wf--spring .wf-intro { max-width: 1080px; }
+.wf--spring .wf-intro h1 { max-width: 24ch; font-size: clamp(2.05rem, 4vw, 3.6rem); }
+.wf--spring .wf-lede { max-width: 80ch; line-height: 1.5; }
+.wf--spring .wf-hero-spring-montage {
+  margin-top: 26px;
+  margin-bottom: 8px;
+}
+.wf--spring .wf-hero-spring-montage figure { height: 205px; }
+.sp-field-notebook {
+  margin-top: 12px;
+  padding-top: clamp(18px, 3vw, 32px);
+  padding-bottom: clamp(15px, 2vw, 22px);
+  border-top: 3px solid #4d7256;
+}
+.sp-notebook-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 17px;
+}
+.sp-notebook-heading h2 {
+  max-width: 30ch;
+  font-size: clamp(1.65rem, 2.8vw, 2.5rem);
+  color: #1b322b;
+}
+.sp-notebook-heading p:not(.wf-kicker) {
+  color: #3d5647;
+  max-width: 67ch;
+  font-size: .94rem;
+  margin-top: 6px;
+}
+.sp-notebook-model-link {
+  flex: 0 0 auto;
+  font-size: .8rem;
+  font-weight: 700;
+  text-decoration-thickness: 1px;
+}
+.sp-notebook-layout {
+  display: grid;
+  grid-template-columns: minmax(0, .69fr) minmax(0, 1.31fr);
+  gap: clamp(18px, 4vw, 52px);
+  background: #f3f2e9;
+  padding: clamp(18px, 3vw, 32px);
+  border-radius: 4px;
+  box-shadow: 0 8px 24px rgba(25,53,42,.055);
+}
+.sp-notebook-inputs { min-width: 0; }
+.sp-notebook-months {
+  border: 0;
+  margin: 0 0 20px;
+  padding: 0;
+  min-width: 0;
+}
+.sp-notebook-inputs legend,
+.sp-notebook-inputs label {
+  display: block;
+  font-size: .78rem;
+  font-weight: 800;
+  letter-spacing: .04em;
+  margin-bottom: 9px;
+  color: #284a35;
+}
+.sp-notebook-month-row {
+  display: grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  gap: 6px;
+}
+.sp-notebook-month-row button {
+  background: transparent;
+  border: 1px solid #a9baa8;
+  color: #244533;
+  min-height: 46px;
+  border-radius: 3px;
+  font-size: .87rem;
+  font-weight: 700;
+  padding: 8px 5px;
+}
+.sp-notebook-month-row button[aria-pressed=true] {
+  background: #284d35;
+  color: #fff;
+  border-color: #284d35;
+}
+.sp-notebook-month-row button:hover:not([aria-pressed=true]) { background: #e1e9dc; }
+.sp-notebook-inputs select {
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  border: 1px solid #9eae9d;
+  border-radius: 3px;
+  background: #fff;
+  color: #17392b;
+  padding: 8px 35px 8px 12px;
+  font-size: .91rem;
+}
+.sp-notebook-qualification {
+  font-size: .76rem;
+  color: #4d6357;
+  line-height: 1.5;
+  margin-top: 15px!important;
+}
+.sp-notebook-page {
+  min-width: 0;
+  border-left: 1px solid #b6c8b6;
+  padding-left: clamp(17px, 3vw, 38px);
+}
+.sp-notebook-issue {
+  font-size: .7rem;
+  font-weight: 800;
+  letter-spacing: .11em;
+  color: #4d664c;
+  text-transform: uppercase;
+  margin-bottom: 7px!important;
+}
+.sp-notebook-page h3 {
+  font-size: clamp(1.45rem, 2.35vw, 2.15rem);
+  color: #1e382a;
+  line-height: 1.2;
+  margin-bottom: 9px;
+}
+.sp-notebook-cue { color: #425a48; }
+.sp-notebook-section-label {
+  margin: 17px 0 7px!important;
+  text-transform: uppercase;
+  font-size: .69rem;
+  color: #65755f;
+  font-weight: 800;
+  letter-spacing: .1em;
+}
+.sp-notebook-page ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: field;
+}
+.sp-notebook-page li {
+  counter-increment: field;
+  display: flex;
+  align-items: baseline;
+  border-bottom: 1px solid #d6dfd2;
+  padding: 9px 0;
+  gap: 14px;
+  line-height: 1.4;
+}
+.sp-notebook-page li:before {
+  content: counter(field, decimal-leading-zero);
+  font: 700 .78rem var(--wf-body);
+  color: #64836b;
+  min-width: 23px;
+}
+.sp-notebook-page li a {
+  color: #214d34;
+  font-weight: 700;
+  font-size: .91rem;
+}
+.sp-notebook-verification {
+  margin-top: 17px;
+  padding-top: 13px;
+}
+.sp-notebook-verification span {
+  display: block;
+  color: #496146;
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: .69rem;
+  letter-spacing: .08em;
+}
+.sp-notebook-verification>a {
+  display: inline-block;
+  margin-top: 5px;
+  font-size: .95rem;
+  font-weight: 800;
+  color: #1f5834;
+  text-underline-offset: 4px;
+}
+.sp-notebook-verification p {
+  margin-top: 5px!important;
+  color: #526655;
+  font-size: .75rem;
+  line-height: 1.5;
+}
+@media(max-width:760px) {
+  .sp-notebook-heading { display: block; }
+  .sp-notebook-model-link { display: inline-block; margin-top: 10px; }
+  .sp-notebook-layout { grid-template-columns: minmax(0,1fr); gap: 16px; }
+  .sp-notebook-inputs { display: grid; grid-template-columns: 1fr; }
+  .sp-notebook-months { margin-bottom: 12px; }
+  .sp-notebook-page { border-left: 0; border-top: 1px solid #b6c8b6; padding: 17px 0 0; }
+  .wf--spring .wf-hero-spring-montage figure { height: 155px; }
+}
+@media(max-width:610px) {
+  .wf--spring .wf-hero { padding-bottom: 8px; }
+  .wf--spring .wf-intro h1 { font-size: clamp(1.95rem, 8vw, 2.6rem); }
+  .wf--spring .wf-hero-spring-montage {
+    grid-template-columns: repeat(3,minmax(0,1fr));
+    gap: 5px;
+  }
+  .wf--spring .wf-hero-spring-montage figure { height: 110px; min-height: 110px; }
+  .wf--spring .wf-hero-spring-montage figcaption { font-size: .53rem; padding: 14px 4px 4px; }
+  .sp-notebook-layout { padding: 17px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .sp-notebook-month-row button { transition: none; }
+}
