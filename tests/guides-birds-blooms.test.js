@@ -18,6 +18,8 @@ test('the two external spring field tools are real static links near the top of 
     assert.ok(block.includes('href="' + url + '"'), slug + ': direct, server-rendered tool link required');
     assert.ok(block.includes('aria-label='), 'links must be understandable out of context');
   }
+  assert.equal((block.match(/class="field-tool-card"/g) || []).length, 2, 'tools must use distinct cards so guide inventory stays unchanged');
+  assert.equal((block.match(/class="guide-card"/g) || []).length, 0, 'tools must not be counted as standalone guides');
   assert.match(block, /data-months="3,4,5,6,8,9,10"/);
   assert.match(block, /data-months="3,4,5,6,7,8,9,10"/);
   assert.ok(block.includes('data-fg-season hidden'), 'seasonal badges default to hidden when JS fails');
