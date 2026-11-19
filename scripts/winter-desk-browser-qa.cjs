@@ -58,16 +58,16 @@ async function main(){
         'shoreline chart is part of the current outing');
       assert.equal(await page.locator('.quick-chart').getAttribute('href'),'#map-heading');
       assert.equal(await page.locator('.chart-follow').getAttribute('href'),'#trip-readiness');
-      await page.locator('.quick-chart').click();
-      assert.equal(await page.evaluate(()=>location.hash),'#map-heading','map jump is actionable');
-      await page.locator('.chart-follow').click();
-      assert.equal(await page.evaluate(()=>location.hash),'#trip-readiness','chart returns to access and arrival details');
       const openingBounds=await page.evaluate(()=>({
         answer:document.querySelector('#quick-outing').getBoundingClientRect().top,
         choices:document.querySelector('#mission-label').getBoundingClientRect().top
       }));
       assert.ok(openingBounds.answer>=0&&openingBounds.answer<850,'first recommendation is visible on first screen');
       assert.ok(openingBounds.choices<850,'the activity choice begins on first screen');
+      await page.locator('.quick-chart').click();
+      assert.equal(await page.evaluate(()=>location.hash),'#map-heading','map jump is actionable');
+      await page.locator('.chart-follow').click();
+      assert.equal(await page.evaluate(()=>location.hash),'#trip-readiness','chart returns to access and arrival details');
       await page.locator('#day').selectOption('tomorrow');
       const original=await page.locator('#stage-title').textContent();
       assert.match(original,/Upper Falls/);
