@@ -62,7 +62,7 @@ async function main(){
       const exceptions=[];
       page.on('pageerror',e=>exceptions.push(e.message));
       await page.goto(base+'/great-lakes-buoys/',{waitUntil:'domcontentloaded'});
-      await page.waitForFunction(()=>document.getElementById('obWaveA').textContent!=='—',{timeout:15000});
+      await page.waitForFunction(()=>document.getElementById('obWaveA').textContent!=='--',{timeout:15000});
       assert.equal(await page.locator('#obStationA').inputValue(),'45029');
       assert.equal(await page.locator('#obStationB').inputValue(),'45005');
       const initial=await page.locator('#obVerdict').innerText();
