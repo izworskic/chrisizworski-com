@@ -267,7 +267,7 @@ h2.sh{font-size:21px;font-weight:normal;color:#2c5f2d;margin:34px 0 14px;border-
       <select id="mapStationPicker" disabled><option value="">Loading reporting stations</option></select>
     </label>
   </div>
-  <div class="map-section" id="station-map">
+  <div class="map-section" id="station-map" role="region" aria-label="Great Lakes NOAA buoy station map">
   <div class="map-wrap">
     <div id="buoyMap"></div>
     <div class="map-legend" id="mapLegend">
@@ -275,7 +275,7 @@ h2.sh{font-size:21px;font-weight:normal;color:#2c5f2d;margin:34px 0 14px;border-
     </div>
   </div>
 </div>
-  <noscript><style>.water-desk .map-wrap{height:auto!important;min-height:0!important}.water-desk #buoyMap{display:none!important}.water-desk .map-legend{display:none!important}</style><p class="map-no-script">The interactive map needs JavaScript. Open the <a href="https://www.ndbc.noaa.gov/" target="_blank" rel="noopener noreferrer">official NOAA station directory</a> to inspect reports.</p></noscript>
+  <noscript><style>.water-desk .map-wrap{height:auto!important;min-height:0!important}.water-desk #buoyMap{display:none!important}.water-desk .map-legend{display:none!important}.water-desk .filter-bar{display:none!important}</style><p class="map-no-script">The interactive map needs JavaScript. Open the <a href="https://www.ndbc.noaa.gov/" target="_blank" rel="noopener noreferrer">official NOAA station directory</a> to inspect reports.</p></noscript>
   <section class="map-dossier" id="mapDossier" aria-labelledby="mapStationTitle">
     <div class="map-dossier-head">
       <div><span class="water-desk-kicker">Station detail · Select any map marker</span><h3 id="mapStationTitle" tabindex="-1">Choose a buoy on the map</h3><p id="mapStationMeta">Each marker is a reporting point, not a forecast for an entire lake.</p></div>
