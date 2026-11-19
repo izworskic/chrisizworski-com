@@ -227,3 +227,60 @@ footer.site-footer a{color:#fff}
 @media(max-width:850px){.rideau-flight__detail{grid-template-columns:minmax(0,1fr)}.rideau-flight__controls{justify-content:flex-start}.rideau-flight__lift{text-align:left}}
 @media(max-width:600px){.rideau-diorama{margin-top:20px}.rideau-flight__diagram{padding:8px}.rideau-flight__stage svg{min-width:980px}.rideau-flight__switch button{flex:1 1 43%;padding:10px;max-width:none}.rideau-flight__switch button span{font-size:.78rem}.rideau-flight__chip{flex:1 1 75px}.rideau-flight__detail{padding:14px;gap:13px}.rideau-flight__narrative p:last-child{font-size:1rem}.rideau-flight__fallback figure{padding:6px;overflow-x:auto}.rideau-flight__fallback img{min-width:800px}}
 @media(prefers-reduced-motion:reduce){.rideau-flight__stage svg,.flight-chamber,.rideau-flight__scroll{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+/* Experience Investment: the whole flight first, then the selected chamber.
+   Unlike a card grid, this route follows connected gates and explicitly breaks at Jones Falls. */
+.rideau-flight__overview-panel{padding:17px clamp(12px,2.5vw,24px) 13px;margin:19px 0 12px;background:#e7eee7;border-top:4px solid #4e736f}
+.rideau-flight__overview-head{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:8px;margin:0 0 9px}
+.rideau-flight__overview-head>span{font:800 .75rem/1.2 system-ui,sans-serif;letter-spacing:.17em;color:#315957}
+.rideau-flight__overview-head strong{font:700 .93rem/1.2 system-ui,sans-serif;color:#214c50}
+.rideau-flight__overview-graphic{max-width:690px;margin:auto;pointer-events:none}
+.rideau-flight__overview-graphic svg{display:block;width:100%;height:auto;pointer-events:none}
+.rideau-flight__overview-panel>p{margin:10px 0 0;max-width:740px;color:#456262;font-size:.87rem;line-height:1.55}
+.rideau-flight__route-heading{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:7px;margin:17px 0 9px;font-size:.9rem;color:#284f54}
+.rideau-flight__route-heading strong{font:700 1rem/1.2 Georgia,serif}
+.rideau-flight__route-heading span{color:var(--muted);font-size:.81rem}
+.rideau-flight__chambers{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:0;position:relative;isolation:isolate;align-items:start;margin:0;padding:14px 12px 6px;border:1px solid #bdcec9;border-radius:12px;background:#f9fbf8}
+.rideau-flight__chambers:before{content:"";position:absolute;z-index:-1;top:37px;left:5%;right:5%;height:5px;border-radius:3px;background:#86aca9}
+.rideau-flight__chambers--jones{grid-template-columns:repeat(3,minmax(0,1fr)) minmax(70px,1.25fr) minmax(0,1fr)}
+.rideau-flight__chambers--jones:before{background:linear-gradient(90deg,#86aca9 0 52%,transparent 52% 83%,#86aca9 83% 100%)}
+.rideau-flight__chip{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0;min-height:78px;padding:0 3px;color:#23464c;border:0;border-radius:5px;background:transparent;cursor:pointer;font:700 .85rem/1.2 system-ui,sans-serif}
+.rideau-flight__node{display:grid;place-items:center;width:46px;height:46px;border-radius:50%;border:3px solid #5f8c87;color:#164c52;background:#f2f8f3;font-size:1rem;box-shadow:0 0 0 3px #f9fbf8;transition:background .16s ease,transform .16s ease}
+.rideau-flight__chip[data-progress=passed] .rideau-flight__node{background:#9abeb4;border-color:#396e6b;color:#123f47}
+.rideau-flight__chip[aria-pressed=true] .rideau-flight__node{background:#183e47;color:#fff;border-color:#183e47;box-shadow:0 0 0 4px #dcebe1,0 0 0 7px #456f69;transform:translateY(-2px)}
+.rideau-flight__chip-caption{font:650 .72rem/1.2 system-ui,sans-serif;color:#496763;max-width:100%;text-align:center}
+.rideau-flight__chip[aria-pressed=true] .rideau-flight__chip-caption{color:#143e48;font-weight:800}
+.rideau-flight__crossing{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:3px;min-width:0;padding:0 3px;text-align:center;color:#2e6873}
+.rideau-flight__crossing-water{display:grid;place-items:center;height:45px;width:100%;border-block:2px solid #4b969c;background:repeating-linear-gradient(165deg,#d4e9e8,#d4e9e8 9px,#b9d9d9 9px,#b9d9d9 14px);font:800 1.05rem/1 system-ui,sans-serif;letter-spacing:3px}
+.rideau-flight__crossing strong{font:800 .68rem/1.1 system-ui,sans-serif;text-transform:uppercase;letter-spacing:.04em}
+.rideau-flight__crossing small{font:600 .72rem/1.2 system-ui,sans-serif}
+.rideau-flight__chambers:before{z-index:0}
+.rideau-flight__chambers .rideau-flight__chip{position:relative;z-index:1;flex:none;border:0;background:transparent;color:#23464c}
+.rideau-flight__chambers .rideau-flight__chip[aria-pressed=true]{border:0;background:transparent;color:#123d45}
+.rideau-flight__crossing{position:relative;z-index:1}
+.rideau-flight__chambers .rideau-flight__chip:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+.rideau-flight__diagram{padding-bottom:17px}
+@media(max-width:600px){
+  .rideau-flight__overview-panel{padding:11px 9px 10px;margin:13px 0 9px}
+  .rideau-flight__overview-head>span{font-size:.66rem;letter-spacing:.1em}
+  .rideau-flight__overview-head strong{font-size:.82rem}
+  .rideau-flight__overview-panel>p{font-size:.78rem}
+  .rideau-flight__route-heading{margin:12px 0 8px}
+  .rideau-flight__chambers{padding:11px 3px 7px}
+  .rideau-flight__chambers:before{top:29px;left:7%;right:7%;height:4px}
+  .rideau-flight__chip{padding:0 1px;min-height:48px}
+  .rideau-flight__node{width:35px;height:35px;font-size:.83rem;border-width:2px;box-shadow:0 0 0 2px #f9fbf8}
+  .rideau-flight__chip-caption{display:none}
+  .rideau-flight__crossing{padding:0 1px}
+  .rideau-flight__crossing-water{height:35px;font-size:.83rem;letter-spacing:0}
+  .rideau-flight__crossing strong{font-size:.58rem}
+  .rideau-flight__crossing small{font-size:.62rem}
+}
+@media(prefers-reduced-motion:reduce){.rideau-flight__node{transition:none!important;transform:none!important}}
+
+/* A wide screen already shows the entire elevation. Keep the miniature only where the large drawing must pan. */
+@media(min-width:1120px){.rideau-flight__overview-panel{display:none}}
+@media(max-width:600px){
+  .rideau-diorama__header{width:100%;max-width:100%;min-width:0}
+  .rideau-diorama__header h3{max-width:100%;white-space:normal;overflow-wrap:break-word;font-size:clamp(1.3rem,5.5vw,1.6rem);line-height:1.18}
+}
