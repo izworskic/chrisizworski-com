@@ -1,0 +1,43 @@
+name: Rocket Penpot mission-to-shore pilot browser QA
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'docs/visual-pilots/rocket-launch-live/**'
+      - 'tests/rocket-penpot-pilot.test.js'
+      - 'scripts/verify-rocket-penpot-pilot-browser.cjs'
+      - '.github/workflows/rocket-penpot-pilot.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  chromium:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate isolated prototype and editable SVG source
+        run: |
+          node --test tests/rocket-penpot-pilot.test.js
+          python3 -c "import xml.etree.ElementTree as ET; ET.parse('docs/visual-pilots/rocket-launch-live/mission-to-shore.penpot.svg')"
+      - name: Install isolated pinned browser harness
+        run: |
+          mkdir -p /tmp/rocket-penpot-playwright
+          npm install --prefix /tmp/rocket-penpot-playwright --no-save --ignore-scripts playwright@1.58.2
+          echo "NODE_PATH=/tmp/rocket-penpot-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium-browser)" >> "$GITHUB_ENV"
+      - name: Check 360, 390, 768 and 1440 pixel views plus A-B-A and keyboard
+        run: node scripts/verify-rocket-penpot-pilot-browser.cjs
+      - name: Retain actual browser screenshots and report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rocket-penpot-pilot-screenshots
+          path: artifacts/rocket-penpot-pilot
+          if-no-files-found: warn
+          retention-days: 10

@@ -8,11 +8,20 @@
   const $=id=>document.getElementById(id);
   const state={goal:'falls',effort:'short',day:'today',chosen:'gooseberry-upper',request:0,weather:null,sourceDocument:null,routeDocument:null,arrivalDocument:null,noticeDocument:null};
   const weatherCache=new Map();
-  const mapState={map:null,markers:new Map()};
+  const mapState={map:null,markers:new Map(),lastChosen:null};
   const SAFE=new Set(['available','empty','stale','unknown']);
   const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const niceDay=()=>({today:'today',tomorrow:'tomorrow',third:'in two days'}[state.day]);
   function setStatus(msg){$('desk-status').textContent=msg;}
+  // Leaflet's fitBounds keeps all three shorelines visible on narrow screens.
+  // These are general visitor-area points, not verified winter parking pins.
+  function showAllThree(){
+    const map=mapState.map;
+    if(!map||mapState.markers.size!==C.PLACES.length)return;
+    const bounds=L.latLngBounds(C.PLACES.map(place=>[place.lat,place.lon]));
+    map.stop();
+    map.fitBounds(bounds,{padding:[30,30],maxZoom:7,animate:false});
+  }
   function selectGoal(goal){
     if(!Object.hasOwn(C.GOALS,goal))return;
     state.goal=goal;
@@ -20,6 +29,7 @@
     state.effort=candidate.effort;
     $('effort').value=state.effort;
     render();
+    showAllThree();
   }
   function renderButtons(){
     document.querySelectorAll('[data-goal]').forEach(btn=>{
@@ -279,32 +289,113 @@
   }
   function initMap(){
     const holder=$('coast-map');
+    const fallback=$('map-fallback');
     if(!holder||typeof L==='undefined'){
-      $('map-fallback').hidden=false;
+      fallback.hidden=false;
       return;
     }
     try{
-      mapState.map=L.map(holder,{scrollWheelZoom:false,zoomControl:true}).setView([46.92,-90.1],6);
-      const basemap=L.tileLayer('https://basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{
-        attribution:'&copy; OpenStreetMap contributors &copy; CARTO',
-        maxZoom:18
-      }).addTo(mapState.map);
-      let loaded=0,errors=0;
-      basemap.on('loading',()=>{loaded=0;errors=0;});
-      basemap.on('tileload',()=>{loaded++;$('map-fallback').hidden=true;});
-      basemap.on('tileerror',()=>{
-        errors++;
-        if(errors>=2&&loaded===0)$('map-fallback').hidden=false;
+      const map=L.map(holder,{scrollWheelZoom:false,zoomControl:true,zoomAnimation:false}).setView([46.92,-90.1],6);
+      mapState.map=map;
+      const osmCredit='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+      const osm=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
+        maxZoom:19,attribution:osmCredit
       });
+      let osmReady=false,cartoActive=false,osmCycleLoaded=0,osmCycleErrors=0;
+      osm.on('loading',()=>{osmCycleLoaded=0;osmCycleErrors=0;});
+      osm.on('tileload',()=>{osmReady=true;osmCycleLoaded++;fallback.hidden=true;});
+      osm.on('tileerror',()=>{osmCycleErrors++;});
+      osm.on('load',()=>{
+        if(osmCycleLoaded===0&&osmCycleErrors>0&&!cartoActive)fallback.hidden=false;
+      });
+      // Draw a working baseline immediately. The optional keyed upgrade never
+      // gets to replace this layer until its actual visible tiles finish loading.
+      osm.addTo(map);
+      setTimeout(()=>{if(!osmReady&&!cartoActive)fallback.hidden=false;},8500);
       C.PLACES.forEach(p=>{
         const mark=L.circleMarker([p.lat,p.lon],{radius:9,weight:3,color:'#152d39',fillColor:'#e7b76b',fillOpacity:1});
-        mark.addTo(mapState.map).bindTooltip(p.region);
+        mark.addTo(map).bindTooltip(p.region);
         mark.on('click',()=>selectGoal(p.goal));
         mapState.markers.set(p.id,mark);
       });
       holder.addEventListener('keydown',e=>{if(e.key==='Escape')holder.blur();});
+      // Reset the geographic framing when the chart changes size, without
+      // relying on an arbitrary single-place flyTo zoom level.
+      showAllThree();
+      if('ResizeObserver' in window){
+        new ResizeObserver(()=>{
+          map.invalidateSize({pan:false});
+          showAllThree();
+        }).observe(holder);
+      }
+      $('map-overview').hidden=false;
+      async function upgradeToCarto(){
+        const controller=new AbortController();
+        const timeout=setTimeout(()=>controller.abort(),4500);
+        let config;
+        try{
+          const response=await fetch('/api/carto-basemap-config',{
+            credentials:'same-origin',signal:controller.signal
+          });
+          if(!response.ok)return;
+          config=await response.json();
+        }catch(_){return;}
+        finally{clearTimeout(timeout);}
+        if(config?.provider!=='CARTO'||typeof config.key!=='string')return;
+        const key=config.key.trim();
+        if(!/^[A-Za-z0-9._~+-]{10,512}$/.test(key))return;
+        const url='https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key='+encodeURIComponent(key);
+        const carto=L.tileLayer(url,{
+          subdomains:'abcd',maxZoom:19,
+          attribution:osmCredit+' &copy; <a href="https://carto.com/attributions">CARTO</a>'
+        });
+        let loaded=0,errors=0,finished=false,cycleLoaded=0,cycleErrors=0;
+        let deadline;
+        function useOsm(){
+          cartoActive=false;
+          if(map.hasLayer(carto))map.removeLayer(carto);
+          if(!map.hasLayer(osm)){
+            osmReady=false;
+            osm.addTo(map);
+          }
+          fallback.hidden=osmReady;
+        }
+        function settle(expired=false){
+          if(finished)return;
+          finished=true;
+          clearTimeout(deadline);
+          // Only Leaflet's completed error-free load event can promote CARTO.
+          // A timer expiring after partial tile success is never proof of coverage.
+          if(!expired&&loaded>=2&&errors===0){
+            cartoActive=true;
+            map.removeLayer(osm);
+            fallback.hidden=true;
+          }else{
+            useOsm();
+          }
+        }
+        carto.on('loading',()=>{
+          if(finished){cycleLoaded=0;cycleErrors=0;}
+        });
+        carto.on('tileload',()=>{
+          if(!finished)loaded++;
+          else cycleLoaded++;
+        });
+        carto.on('tileerror',()=>{
+          if(!finished)errors++;
+          else cycleErrors++;
+        });
+        carto.on('load',()=>{
+          if(!finished)settle();
+          else if(cartoActive&&cycleErrors>0)useOsm();
+        });
+        carto.addTo(map);
+        deadline=setTimeout(()=>settle(true),7500);
+      }
+      upgradeToCarto();
     }catch(_){
-      $('map-fallback').hidden=false;holder.hidden=true;
+      fallback.hidden=false;
+      holder.hidden=true;
     }
   }
   function updateMap(){
@@ -317,9 +408,15 @@
       marker.setStyle({radius:active?12:8,fillColor:active?'#d56a3a':'#e7b76b',weight:active?4:2});
     });
     const p=C.getPlace(state.chosen);
-    if(p)map.flyTo([p.lat,p.lon],7,{animate:!matchMedia('(prefers-reduced-motion: reduce)').matches,duration:0.6});
+    if(p&&mapState.lastChosen!==p.id){
+      mapState.lastChosen=p.id;
+      const active=mapState.markers.get(p.id);
+      if(active)active.bringToFront();
+      showAllThree();
+    }
   }
   function init(){
+    $('map-overview').addEventListener('click',()=>showAllThree());
     document.querySelectorAll('[data-goal]').forEach(btn=>btn.addEventListener('click',()=>selectGoal(btn.dataset.goal)));
     document.querySelectorAll('[data-place]').forEach(btn=>btn.addEventListener('click',()=>selectGoal(C.getPlace(btn.dataset.place).goal)));
     $('effort').addEventListener('change',e=>{state.effort=e.target.value;render();});

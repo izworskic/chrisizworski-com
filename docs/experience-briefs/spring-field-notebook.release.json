@@ -1,0 +1,129 @@
+{
+  "schemaVersion": "1.2",
+  "recordStatus": "draft",
+  "project": {
+    "slug": "spring-field-notebook",
+    "ownerRepo": "izworskic/chrisizworski-com",
+    "canonical": "https://chrisizworski.com/michigan-spring-awakening-field-guide/",
+    "pageFile": "public/michigan-spring-awakening-field-guide/index.html",
+    "visitorDecision": "Choose a Michigan spring month and region to identify plausible seasonal wildlife and plants, then check current specialist evidence before going.",
+    "primaryAction": "Open the matching field chapter and current specialist tracker before planning a spring outing."
+  },
+  "claims": [
+    {
+      "id": "editorial-latitude-windows",
+      "kind": "editorial",
+      "subject": "other",
+      "state": "EDITORIAL",
+      "sourceUrl": "https://chrisizworski.com/michigan-spring-awakening-field-guide/",
+      "checkedDate": "2026-11-19",
+      "limitation": "Inherited editorial timing ranges are regional guideposts, not observed emergence dates, validated forecasts, or actual local growing conditions."
+    },
+    {
+      "id": "current-conditions-unverified",
+      "kind": "unverified",
+      "subject": "other",
+      "state": "UNVERIFIED",
+      "sourceUrl": "https://phenology.chrisizworski.com/bloom-tracker",
+      "checkedDate": "2026-11-19",
+      "limitation": "A link to a specialist tracker does not establish fresh observations, trail access, flowering status, or a safe and lawful outing."
+    },
+    {
+      "id": "wildlife-observations-unverified",
+      "kind": "unverified",
+      "subject": "other",
+      "state": "UNVERIFIED",
+      "sourceUrl": "https://phenology.chrisizworski.com/frog-chorus",
+      "checkedDate": "2026-11-19",
+      "limitation": "A seasonal field cue does not prove that frogs have begun calling or salamanders are migrating in a particular area."
+    }
+  ],
+  "decisionState": {
+    "selectedIdField": "selectedMonth and selectedLat (region-keyed latitude)",
+    "sourceOfTruth": "Existing LAT_ZONES and PHENOLOGY_EVENTS in public/assets/michigan-spring-awakening-field-guide.js; no new data source.",
+    "linkedSurfaces": [
+      "answer",
+      "month-buttons",
+      "region-select",
+      "latitude-scrubber",
+      "chapter-links",
+      "specialist-tracker"
+    ],
+    "unavailableBehavior": "The April/Mid-Michigan answer and three anchor links remain in initial HTML without JavaScript; specialist URLs remain available."
+  },
+  "scenarios": [
+    {
+      "kind": "initial",
+      "input": "April, Mid-Michigan",
+      "expectedVisibleAnswer": "Wood frog, peeper, salamander and woodcock chapter links and a Frog Chorus specialist handoff.",
+      "sourceAndSafety": "The cues are historical seasonal windows rather than observed local sightings."
+    },
+    {
+      "kind": "alternative",
+      "input": "May, Northern Lower Peninsula",
+      "expectedVisibleAnswer": "Woodland bloom and morel cues, matching source chapters and the Michigan Bloom Tracker link.",
+      "sourceAndSafety": "No mushroom flush, access permission or verified bloom is inferred from a month choice."
+    },
+    {
+      "kind": "reverse",
+      "input": "April Mid-Michigan, then May Upper Peninsula, then April Mid-Michigan",
+      "expectedVisibleAnswer": "Original chorus cue, matching chapters and Frog Chorus tracker return, including correct latitude and month selected.",
+      "sourceAndSafety": "Seasonal uncertainty remains visible under every selection."
+    },
+    {
+      "kind": "no-js",
+      "input": "Turn off JavaScript",
+      "expectedVisibleAnswer": "Default April and Mid-Michigan field note with links to three in-page chapters and Frog Chorus tracker remains readable.",
+      "sourceAndSafety": "The static note expressly disclaims live sightings and verified dates."
+    },
+    {
+      "kind": "no-tiles",
+      "input": "Block map tile scripts and requests",
+      "expectedVisibleAnswer": "All spring notebook decisions remain operable; it uses no map dependency.",
+      "sourceAndSafety": "The notebook contains no unverified parking map or imagined geographic track."
+    },
+    {
+      "kind": "stale-data",
+      "input": "Specialist tracker is unavailable or does not have current observations",
+      "expectedVisibleAnswer": "The spring guide retains editorial seasonal clues; no live or safety verdict is displayed by the notebook.",
+      "sourceAndSafety": "The static handoff does not imply the specialist currently contains timely evidence."
+    }
+  ],
+  "failures": {
+    "no-js": "Keep the default April/Mid-Michigan answer, three direct field chapter anchors and current-check link in server-rendered HTML.",
+    "no-tiles": "Do not require or construct a tile map; the notebook remains a list of scientific field clues and chapter links.",
+    "no-image": "The field notebook is legible without photos; its earlier three credited figures are an optional secondary section.",
+    "stale-data": "Do not infer live blooms or sightings; make the editorial timing qualifier permanent and leave specialist verification to its owner."
+  },
+  "qa": {
+    "viewports": [
+      360,
+      390,
+      768,
+      1280,
+      1440
+    ],
+    "browserStatus": "PENDING",
+    "screenshotEvidence": [],
+    "scopeNote": "Actual browser screenshots, responsive layout inspection, keyboard and photo loading remain NOT VERIFIED; CI must be inspected on the exact PR head."
+  },
+  "photos": [],
+  "release": {
+    "implemented": {
+      "status": "PENDING"
+    },
+    "verified": {
+      "status": "NOT_VERIFIED"
+    },
+    "deployed": {
+      "status": "NOT_VERIFIED"
+    },
+    "live": {
+      "status": "NOT_VERIFIED"
+    },
+    "measured": {
+      "status": "NOT_MEASURED"
+    }
+  },
+  "verificationLimit": "This is a draft structural release record, not a claim of checked browser layout, deployment, or measured visitor outcomes."
+}

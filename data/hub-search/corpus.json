@@ -903,6 +903,16 @@
    "href": "/welland-canal/"
   },
   {
+   "id": "rideau-canal",
+   "title": "Rideau Canal Trip Planner",
+   "tags": "boating travel planning ontario rideau-canal historic locks paddling kayaking",
+   "place": "",
+   "kind": "Historic waterway journeys",
+   "description": "Choose historic lockstations, compare documented boating distances and explore two Parks Canada paddling trips. Official operating hours must be checked separately.",
+   "months": "5,6,7,8,9,10",
+   "href": "/rideau-canal/"
+  },
+  {
    "id": "niagara-border",
    "title": "Niagara Border Wait Times Live — Peace, Rainbow & Lewiston",
    "tags": "planning live-data borders travel new-york ontario buffalo niagara",
@@ -1075,10 +1085,10 @@
   {
    "id": "upper-peninsula-waterfalls",
    "title": "Upper Peninsula Waterfall Map & Trip Planner",
-   "tags": "waterfall waterfalls upper peninsula up michigan hike trip map pictured rocks trail photography",
+   "tags": "waterfall waterfalls upper peninsula up michigan hike trip map pictured rocks trail photography parking arrival access day planner",
    "place": "",
-   "kind": "Map-first field guide",
-   "description": "Explore 200+ wild cascades across the sandstone country of the Upper Peninsula. Interactive topographic routing, trail difficulty, staircase counts, and seasonal spring-runoff conditions from Munising to the Black River.",
+   "kind": "Waterfall map and arrival desk",
+   "description": "Explore 80 curated U.P. waterfall and scenic-stop guides on an interactive map. The Arrival Desk separates documented visitor parking from waterfall locations, explains trail approaches and restrictions, and helps you build a source-checked day plan.",
    "months": "1,2,3,4,5,6,7,8,9,10,11,12",
    "href": "/upper-peninsula-waterfalls/"
   },

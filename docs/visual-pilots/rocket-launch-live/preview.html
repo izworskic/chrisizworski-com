@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Rocket Launch Live | Viewing place design pilot</title>
+<style>
+:root{color-scheme:light;--night:#112c39;--night2:#1a3c47;--ink:#19323b;--sea:#215b50;--cream:#f3f3eb;--paper:#fffefa;--edge:#d4e0d9;--clay:#cf774a;--muted:#59716d;--focus:#db8e53}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;color:var(--ink)}
+button,a{font:inherit}button{cursor:pointer}
+button:focus-visible,a:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+.shell{max-width:1160px;margin:0 auto;padding:35px 28px 60px}
+.pilot-note{font-size:12px;color:#426057;display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin:0 0 14px}
+.pilot-dot{width:7px;height:7px;background:var(--clay);border-radius:50%;display:inline-block}
+.mission{position:relative;isolation:isolate;overflow:hidden;background:var(--night);color:#fff;border-radius:22px 22px 0 0;padding:34px 42px 36px;display:grid;grid-template-columns:minmax(0,1fr) 230px;align-items:end;gap:26px}
+.mission:after{content:"";position:absolute;z-index:-1;right:115px;top:-120px;width:380px;height:380px;border:1px solid #9ac3c22b;border-radius:50%;box-shadow:0 0 0 62px #9ac3c213,0 0 0 124px #9ac3c207}
+.kicker{text-transform:uppercase;letter-spacing:.16em;font-size:11px;font-weight:800;color:#a8d5c5;margin:0 0 10px}
+h1{font-family:Georgia,serif;font-size:clamp(31px,4.5vw,55px);line-height:1.05;letter-spacing:-.035em;max-width:690px;margin:0 0 17px}
+.lede{font-size:15px;color:#d2e5e2;line-height:1.6;max-width:680px;margin:0}
+.mission-card{border-left:3px solid #e3a376;padding:5px 0 5px 16px}
+.mission-card small{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:#bed7d2;display:block;margin-bottom:7px}
+.mission-card strong{font-size:20px;font-family:Georgia,serif;display:block;margin-bottom:7px}
+.mission-card span{color:#bbd2ce;font-size:12px;line-height:1.5;display:block}
+.workspace{display:grid;grid-template-columns:minmax(260px,.8fr) minmax(0,1.2fr);background:var(--paper);border-radius:0 0 22px 22px;box-shadow:0 22px 70px #1b40321a;overflow:hidden;min-height:570px}
+.options{background:#e9efe9;padding:29px 25px 34px}
+.options>p{font-size:13px;color:#49665d;margin:6px 0 23px;line-height:1.5}
+.options h2{font:700 26px Georgia,serif;margin:0}
+.option-list{display:flex;flex-direction:column;gap:10px}
+.option{width:100%;text-align:left;padding:16px 16px 14px;min-height:91px;background:#fbfcf8;border:1px solid #cadbd3;border-radius:10px;display:flex;flex-direction:column;gap:8px;transition:background .16s ease}
+.option strong{font-size:15px;line-height:1.3;color:#173a36}
+.option span{font-size:12px;line-height:1.3;color:#57756a}
+.option:hover{border-color:#488175}
+.option[aria-pressed="true"]{background:var(--night2);border-color:var(--night2);box-shadow:inset 4px 0 #eea572}
+.option[aria-pressed="true"] strong{color:#fff}
+.option[aria-pressed="true"] span{color:#c5e1dc}
+.options-help{margin-top:23px!important;border-top:1px solid #cbdad1;padding-top:16px}
+.detail{padding:42px clamp(24px,4vw,55px);display:flex;flex-direction:column;justify-content:space-between;gap:22px}
+.detail-top{min-height:310px}
+.detail-eyebrow{text-transform:uppercase;letter-spacing:.17em;font-size:11px;font-weight:800;color:#367063;display:block;margin:0 0 20px}
+.detail h2{font:700 clamp(29px,3.1vw,43px)/1.12 Georgia,serif;letter-spacing:-.025em;margin:0 0 16px;max-width:610px}
+.detail-sub{color:#446359;line-height:1.6;font-size:15px;max-width:610px;margin:0 0 18px}
+.condition{background:#f7f0e6;border-left:3px solid var(--clay);color:#6b5036;padding:15px 17px;border-radius:2px 8px 8px 2px;line-height:1.5;font-size:13px;max-width:620px}
+.actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.cta{display:inline-flex;align-items:center;justify-content:center;min-height:46px;text-decoration:none;border-radius:8px;padding:11px 17px;font-weight:750;font-size:13px}
+.cta-primary{background:var(--sea);color:white}
+.cta-primary:hover{background:#184b40}
+.cta-secondary{color:var(--sea);background:white;border:1px solid #b4cec1}
+.cta-secondary:hover{background:#eaf2ec}
+.cta[hidden],.detail [hidden]{display:none!important}
+.detail-footer{padding-top:19px;border-top:1px solid #dae3dc;font-size:12px;color:#557065;line-height:1.6}
+.detail-footer strong{color:#21493e}
+.designtag{color:#657970;font-size:11px;margin-top:20px;line-height:1.5}
+@media(max-width:760px){.shell{padding:14px 10px 34px}.mission{grid-template-columns:1fr;padding:24px 21px 23px;gap:18px;border-radius:15px 15px 0 0}.mission-card{padding-left:11px}.mission-card strong{font-size:16px}.workspace{grid-template-columns:1fr;border-radius:0 0 15px 15px}.options{padding:22px 17px 14px}.options h2{font-size:23px}.options>p{margin-bottom:13px}.option-list{gap:8px}.option{min-height:58px;padding:12px 14px;gap:4px}.option strong{font-size:14px}.option span{font-size:11px}.options-help{display:none}.detail{padding:25px 20px;gap:20px}.detail-top{min-height:0}.detail h2{font-size:29px}.detail-sub{font-size:14px}.condition{font-size:12px}.cta{width:100%;justify-content:center}.detail-footer{font-size:12px}.designtag{font-size:10px}}
+@media(prefers-reduced-motion:reduce){.option{transition:none}}
+</style>
+</head>
+<body>
+<main class="shell">
+<p class="pilot-note"><span class="pilot-dot" aria-hidden="true"></span> Rocket Launch Live · Design research only · No live schedule or access verification</p>
+<section aria-label="Viewing plan prototype">
+<header class="mission">
+ <div><p class="kicker">Wallops Island, Virginia · Viewing field guide</p><h1>Find your place for liftoff.</h1><p class="lede">Explore public shoreline places, choose one to investigate, then check its access rules before setting out.</p></div>
+ <div class="mission-card"><small>Mission context</small><strong>Wallops example</strong><span>This prototype is not showing an actual launch time or admission status.</span></div>
+</header>
+<div class="workspace">
+ <aside class="options" aria-labelledby="options-title">
+  <h2 id="options-title">Places to consider</h2><p>Choose a place to see the next steps. These are not ranked.</p>
+  <div class="option-list" role="group" aria-label="Public location choices">
+   <button class="option" type="button" data-site="visitor" aria-pressed="false"><strong>NASA Wallops Visitor Center</strong><span>Spaceport visitor grounds · Special launch-day opening may be required</span></button>
+   <button class="option" type="button" data-site="waterfront" aria-pressed="false"><strong>Robert Reed Waterfront Park</strong><span>Town waterfront · Check local parking and notices</span></button>
+   <button class="option" type="button" data-site="harbor" aria-pressed="false"><strong>Curtis Merritt Harbor</strong><span>Harbor shoreline · Check public access before arrival</span></button>
+  </div>
+  <p class="options-help">Start with a place, not a launch pad. The map location is a reference, not admission.</p>
+ </aside>
+ <article class="detail" aria-live="polite" aria-atomic="true">
+  <div class="detail-top">
+   <span class="detail-eyebrow">Your next step</span>
+   <h2 id="detail-title">Choose a viewing place.</h2>
+   <p id="detail-description" class="detail-sub">Select a public location to see how to find it and which authority to check before you go.</p>
+   <div id="detail-condition" class="condition" hidden></div>
+  </div>
+  <div>
+   <div class="actions">
+    <a class="cta cta-primary" id="maps-link" href="#" rel="noopener noreferrer" target="_blank" hidden>Find this place on Google Maps</a>
+    <a class="cta cta-secondary" id="rules-link" href="#" rel="noopener noreferrer" target="_blank" hidden>Check local notices</a>
+   </div>
+   <p class="detail-footer"><strong>Before you drive:</strong> Recheck the launch time and public access notices. A place on a map is not an open gate.</p>
+  </div>
+ </article>
+</div>
+</section>
+<p class="designtag">Penpot-import handoff concept. Source production UI, API, map location contracts, AdSense and canonical are unchanged.</p>
+</main>
+<script>
+(()=>{'use strict';
+ const choices={
+ visitor:{title:'NASA Wallops Visitor Center',description:'A visitor-center setting near the range. NASA may open special launch viewing for particular missions, but an ordinary location listing does not establish event admission.',condition:'Check NASA\'s announcement for the exact mission. Special viewing may not be offered.',query:'NASA Wallops Visitor Center, 175 Chincoteague Road, Wallops Island, Virginia',ruleLabel:'Read NASA viewing guidance',rules:'https://www.nasa.gov/wallops/visitor-center/view-a-launch-from-nasa-wallops-visitor-center/'},
+ waterfront:{title:'Robert Reed Waterfront Park',description:'A waterfront place in Chincoteague to investigate as a public vantage point. Confirm the park and parking arrangements for the day you plan to visit.',condition:'Before you leave, check park access and parking. Your view will also depend on the launch and the sky.',query:'Robert N Reed Sr Downtown Waterfront Park, Chincoteague, Virginia',ruleLabel:'Check town notices',rules:'https://www.chincoteague-va.gov/'},
+ harbor:{title:'Curtis Merritt Harbor',description:'An alternative shoreline setting on Chincoteague. Check local parking rules and any event-specific access notices before travelling.',condition:'Confirm which parts of the harbor and parking areas are open to visitors before heading over.',query:'Curtis Merritt Harbor, Chincoteague, Virginia',ruleLabel:'Check town notices',rules:'https://www.chincoteague-va.gov/'}
+ };
+ const options=[...document.querySelectorAll('[data-site]')];
+ const title=document.getElementById('detail-title');
+ const description=document.getElementById('detail-description');
+ const condition=document.getElementById('detail-condition');
+ const maps=document.getElementById('maps-link');
+ const rules=document.getElementById('rules-link');
+ function select(key){
+  const place=choices[key];if(!place)return;
+  for(const b of options)b.setAttribute('aria-pressed',String(b.dataset.site===key));
+  title.textContent=place.title;description.textContent=place.description;
+  condition.textContent=place.condition;condition.hidden=false;
+  maps.href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(place.query);
+  rules.href=place.rules;rules.textContent=place.ruleLabel;maps.hidden=false;rules.hidden=false;
+ }
+ for(const b of options)b.addEventListener('click',()=>select(b.dataset.site));
+})();
+</script>
+</body>
+</html>

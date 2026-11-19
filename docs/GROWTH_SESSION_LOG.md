@@ -6,6 +6,41 @@
 - **Search and revenue:** No connected GSC or AdSense measurement was read for this development task. No click, impression, conversion or revenue gain is claimed. Existing Search strategy and ads remain unchanged.
 - **Exactly one next action:** restore verified upstream Manistee NHD source availability and rerun the failed live-source acceptance gate before any merge or deployment.
 
+### 2026-11-18 | Birds & Blooms discovery on Field Guides
+- **Visitor decision:** From the existing Field Guides page, choose between Michigan migration field stops and the Michigan flower-season planner. Both are linked directly from a visible spring field-tools row, with a return link from the Spring Awakening guide.
+- **Source ownership:** The Birding and Bloom tools remain on their independent canonical hosts. This site only adds ordinary HTML discovery links and seasonal badges; it does not duplicate their data or imply that a calendar window verifies birds, flowers, parking or public access.
+- **Change scope:** Two static companion tool cards on `/guides/`, collection anchor and relevant cross-links in the existing Spring Awakening card. The existing 22-guide count and tool/guide registry remain separate. No ads, canonical, Person identity, title, description, API or live-tool logic changes.
+- **Verification:** Regression tests added for direct, script-independent links, cross-links, seasonal handling and sitemap freshness. Full repository `verify:all` and GitHub PR workflow verification required prior to merge. No production deployment or measured search, CTR or revenue change claimed.
+- **Release status:** Review branch `feat/guides-birds-blooms-links-20261118`; not merged.
+- **Exactly one next action:** Complete repository verify:all and PR checks against the latest base before the owner decides on merging.
+
+### 2026-11-19 | Spring Field Notebook Experience Investment
+- **Visitor job:** Choose a spring month and Michigan region, read an educational field cue, open the corresponding one of twelve existing source-backed chapters and check the relevant independent specialist tracker before a visit.
+- **Implementation:** Feature branch `feat/spring-field-notebook-20261119`; original photos, historical region/event data, canonical, Person and advertising preserved. Added month/region controls, a static April/Saginaw fallback, connected chapter handoff and regression tests. Rejected an invented live animated bloom map.
+- **Baseline/outcomes:** No current verified GSC or AdSense lift attributable to this feature; traffic, engagement, CTR and earned revenue NOT MEASURED.
+- **Release:** Source commits created; draft Experience OS record included. Exact-head full `npm run verify:all`, 360/390/768/1280/1440 browser screenshots, PR checks, production and public smoke NOT YET VERIFIED. Do not merge while red.
+- **Exactly one next action:** Run exact-head GitHub CI and responsive browser journey acceptance, repair any failures before owner release review.
+
+### 2026-11-18 | Rocket Penpot Mission-to-Shore pilot
+- **Change:** Merged the opt-in Penpot integration PR #1775. Opened an isolated Rocket Launch Live design pilot with a noindex interactive Wallops place-choice preview, editable Penpot-import SVG, evidence brief and responsive browser QA. No production Rocket tool source or visitor route is changed.
+- **Visitor decision:** A selected mission should lead to a real, source-linked public location, not a confusing launch pad or a repeated warning banner. Prototype places are examples, not launch-day access or parking claims.
+- **Evidence limitation:** The owner reports Penpot is ready in their coding environment, but Penpot MCP tools are unavailable in this ChatGPT session. No native Penpot edit, live session inspection, production deployment, organic CTR or ad revenue result is claimed.
+- **Release status:** Isolated design branch; PR checks and responsive screenshots must pass before claiming test readiness; production implementation needs separate design review and explicit approval.
+- **Exactly one next action:** Open the committed Mission-to-Shore SVG in the Penpot-connected coding client as a new review page and inspect its desktop and mobile frames against the live Rocket tool before considering production edits.
+
+### 2026-11-18 | On-demand Penpot design skill and MCP setup
+- **Scope:** Source-only repository tooling in `feature/penpot-on-demand-skill-20261118`. Added explicit-use Penpot skills for Codex and Claude Code, public no-key hosted MCP configs for Codex, Claude Code and Cursor, setup instructions, and a source-level regression test.
+- **Intent:** Penpot is opt-in when the owner explicitly requests design work. Experience OS and Foundry still govern research, originality and release verification. GitHub remains the implementation source of truth.
+- **Security and limits:** No Penpot token committed; OAuth, open-file MCP session, first read-only inspection and any live design edit are **not verified**. The official Penpot AI Kit is optional and not bundled. No production tool, ads, SEO metadata, API or canonical was modified.
+- **Release state:** PR and CI pending; do not call this a working authenticated Penpot connection or a production release.
+- **Exactly one next action:** Verify full repository CI and obtain explicit Penpot MCP authorization in the owner's coding client before testing a real design session.
+
+### 2026-11-18 | Rideau Canal experience release integration
+- **Visitor decision:** Three Rideau journey modes, a five-step lock operation, Ottawa and Jones Falls diagrams, source-grounded visitor viewing areas across seven highlighted lockstations and recorded Parks Canada films. No unverified live-camera or parking-direction claim.
+- **Change control:** PR #1772 merged into #1763; preserve the latest main Tools index, search corpus and sitemap. No advertising, publisher or canonical changes.
+- **Release evidence:** Rideau-specific checks passed before integration; full repository CI and production route verification remain required. No measured search or revenue uplift claimed.
+- **Next action:** Verify the integrated head, merge and independently smoke-test the canonical.
+
 ### 2026-11-18 | Winter Field Desk reviewed source-promotion safety
 - **Visitor decision:** The live three-destination Lake Superior winter desk still reports exact-trail access unknown. Date-scoped operator opening and winter parking availability remain unverified; the prototype stays noindex.
 - **Engineering:** Added two-phase Python source-health promotion tool with independent source and report reconciliation, five unique official webpages/six source roles, 3-hour timestamps, six page-content hashes, SHA-256 candidate and baseline locks, a source-linked REVIEW.md and explicit human receipt. Only source-checks.json and operator-notice-monitor.json are eligible for branch updates; route access and parking data cannot be modified by this tool. GitHub read-only source watch remains separate. Each scheduled GitHub source run additionally prepares an unsigned review packet artifact, never a signed approval or automatic promotion.

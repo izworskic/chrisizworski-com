@@ -1,6 +1,6 @@
 # Great Lakes Winter Field Assignment Desk
 
-**Status:** Noindex, unpublished Lake Superior pilot. This folder is not in public output or the Tools directory. It is a functioning source-led visitor prototype, not a current trail-access service.
+**Status:** Noindex Lake Superior research pilot, published at https://chrisizworski.com/great-lakes-winter-field-desk/ but deliberately excluded from the Tools directory and search index. This source preview remains separate from the public copy. It is not a current trail-access service.
 
 ## Visitor decision
 
@@ -58,6 +58,27 @@ WINTER_DESK_BASE=http://127.0.0.1:8765/previews/great-lakes-winter-desk/ node sc
 ~~~
 
 The script checks 360/390/768/1440px, real image and map loads, source IDs, A to B to C to A state changes, failed maps, absent NWS weather and no-JavaScript fallback; it writes screenshots to \`/tmp/winter-desk-browser-qa/\` by default. It uses **mocked NWS responses** for repeatable browser coverage. Real-time NWS page reachability and official-current-access confirmation are separate checks.
+
+## Basemap recovery (November 18, 2026)
+
+The published noindex field desk and the preview now use the same map script.
+The Leaflet map displays the OpenStreetMap raster basemap immediately, then
+requests the existing same-origin `/api/carto-basemap-config` endpoint.
+Only a valid, explicitly **public** `CARTO_BASEMAP_PUBLIC_KEY` permits an optional
+CARTO Voyager raster request with `?key=` attached to every tile. Do not embed
+keys, make keyless CARTO requests or expose non-public configuration in HTML.
+
+The OSM layer remains visible until the keyed CARTO layer finishes an error-free
+visible tile batch. A failed config request, invalid key, failed CDN tiles or
+a later failed CARTO pan/zoom automatically uses the existing OSM layer. If
+neither provider loads, the original written destination list, Google Maps
+place searches and official park links remain available. This is a map delivery
+fallback, not permission to travel on a closed trail or frozen lake.
+
+Browser QA exercises ordinary imagery, a mocked public-key CARTO outage,
+complete dual-provider outage and mobile destination switching. Node tests
+prevent the two copies of the map script from drifting or reintroducing
+unkeyed CARTO URLs.
 
 ## Architecture and next release gate
 
@@ -171,12 +192,20 @@ receipt is NOT authenticated by the script; require ordinary human PR review.
 On a named non-main review branch, after real source review only:
 
     python3 scripts/winter-desk-evidence-promotion.py --candidate-dir /tmp/winter-check --approval /tmp/winter-review/approval-template.json --apply
-    git diff -- previews/great-lakes-winter-desk/source-checks.json previews/great-lakes-winter-desk/operator-notice-monitor.json
+    git diff -- previews/great-lakes-winter-desk/source-checks.json previews/great-lakes-winter-desk/operator-notice-monitor.json public/great-lakes-winter-field-desk/source-checks.json public/great-lakes-winter-field-desk/operator-notice-monitor.json
 
-The --apply command can update ONLY two source-health JSON files. It never
-updates route-access-evidence.json, arrival-evidence.json, public HTML, ads,
-canonicals, sitemap or the tool registry. Cron runs NEVER call --apply.
-An ordinary PR review and merge remain mandatory for any checked-in change.
+The --apply command updates ONLY the two source-health JSON files in BOTH
+previews/great-lakes-winter-desk/ and public/great-lakes-winter-field-desk/.
+It refuses to write if either source-health file in either destination differs
+from the exact baseline included in the human-reviewed receipt. This prevents
+a successful evidence promotion from leaving the published noindex pilot on a
+stale copy. All four changes must be reviewed together in the same PR.
+
+The command never updates route-access-evidence.json, arrival-evidence.json,
+public HTML, ads, canonicals, sitemap or the tool registry. Cron runs NEVER
+call --apply, the file promotion must occur on a non-main review branch,
+and a PR review and merge remain mandatory. Source health still does not
+establish dated route opening, safe ice or plowed parking.
 
 Safety regression:
 
