@@ -279,8 +279,12 @@ async function main(){
       assert.equal(geoState.nearby,3);
       assert.equal(await page.locator('#geoMapLink').isVisible(),true);
       assert.match(await page.locator('#geoFeedback').innerText(),/map is centered/);
-      // A second click should replace rather than accumulate a location marker.
+      // A second location request is asynchronous. Verify it completes and restores the button.
       await page.locator('#geoBtn').click();
+      await page.waitForFunction(() => {
+        const button=document.getElementById('geoBtn');
+        return !button.disabled && button.textContent.includes('Update my location');
+      },{timeout:10000});
       assert.equal(await page.locator('#geoBtn').isEnabled(),true);
       assert.equal(await page.locator('#geoResultList button').count(),3);
       assert.deepEqual(errors,[]);
