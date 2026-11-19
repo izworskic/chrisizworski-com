@@ -38,7 +38,10 @@ async function mockNws(page,failed=false){
 }
 async function main(){
   fs.mkdirSync(screenshotDir,{recursive:true});
-  const browser=await chromium.launch({headless:true,args:['--no-sandbox']});
+  const browser=await chromium.launch({
+    headless:true,args:['--no-sandbox'],
+    ...(process.env.WINTER_DESK_BROWSER_EXECUTABLE?{executablePath:process.env.WINTER_DESK_BROWSER_EXECUTABLE}:{})
+  });
   const summary=[];
   try{
     for(const width of [360,390,768,1440]){
