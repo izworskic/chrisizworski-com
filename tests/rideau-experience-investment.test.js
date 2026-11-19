@@ -58,5 +58,5 @@ test('experience investment scope protects source identities and avoids new depe
   assert.doesNotMatch(js,/fetch\(|WebGL|Three\.js|React/);
   for(const source of [html,js,css])assert.doesNotMatch(source,/[–—]/);
   assert.match(html,/\/assets\/rideau-lock-flights\.js\?v=20261119-investment/);
-  assert.match(html,/\/assets\/rideau-canal\.css\?v=20261119-investment/);
+  assert.match(html,/\/assets\/rideau-canal\.css\?v=20261119-lookout/);
 });
