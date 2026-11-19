@@ -34,11 +34,24 @@ try{
   artifact.checks.gauges={expected:sites,returned:[...returnedSites].sort(),missing:missingSites};
   if(missingSites.length)throw new Error(`USGS missing configured active sites: ${missingSites.join(', ')}`);
 
-  // Exercise the same authoritative NHD query and completeness logic that powers
-  // the Manistee field map and read-only route API. No alternate data source.
+  // Exercise all four actual route-API per-waterway retrievals, rather than
+  // starting with an expensive basin-wide query the route visitor does not use.
+  // Accept slower live USGS responses in CI; the public function still fails
+  // closed on its shorter request budget. Never substitute cached geometry.
   artifact.phase='USGS NHD hydrography';
-  const hydroPayload=await hydro.fetchHydrography();
-  if(hydroPayload.sourceCompleteness!=='complete-retrieved-set')throw new Error('USGS NHD incomplete retrieval');
+  const hydroGroups=await Promise.all(names.map(name=>
+    hydro.fetchHydrography({name,timeoutMs:11000})
+  ));
+  for(let i=0;i<hydroGroups.length;i++){
+    const group=hydroGroups[i];
+    if(group.sourceCompleteness!=='complete-retrieved-set'||
+       group.requestedWaterways.length!==1||
+       group.requestedWaterways[0]!==names[i]||
+       !group.features.length||
+       group.features.some(f=>f.properties?.name!==names[i]))
+      throw new Error('USGS NHD source-incomplete or wrong river: '+names[i]);
+  }
+  const hydroPayload={features:hydroGroups.flatMap(group=>group.features),sourceCompleteness:'complete-retrieved-set'};
   const returnedNames=new Set((hydroPayload.features||[]).map(f=>f.properties?.name).filter(Boolean));
   const missingNames=names.filter(name=>!returnedNames.has(name));
   const invalidGeometry=(hydroPayload?.features||[]).filter(f=>!f.geometry||!['LineString','MultiLineString'].includes(f.geometry.type)).length;
