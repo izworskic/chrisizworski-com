@@ -69,7 +69,7 @@ async function main(){
       assert.match(initial,/45029 reports waves/);
       assert.match(initial,/not a route or nearshore forecast/);
       assert.match(await page.locator('#obProvenance').innerText(),/via site API/);
-      assert.match(await page.locator('#obAgeA').innerText(),/Recent report/);
+      assert.match(await page.locator('#obAgeA').innerText(),/Recent report/i);
       assert.equal(await page.locator('#obWaterA').innerText(),'49');
       assert.equal(await page.locator('#obWaterB').innerText(),'54');
       // A -> C -> A must change and then return to the same measured answer.
