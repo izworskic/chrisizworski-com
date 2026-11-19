@@ -161,3 +161,29 @@
 .water-desk .map-wrap.map-unavailable {height:auto!important;min-height:0!important;box-shadow:none}
 .water-desk .map-wrap.map-unavailable #buoyMap {height:auto!important;min-height:0!important}
 .water-desk .map-wrap.map-unavailable .map-legend {display:none}
+
+/* Near-me results remain legible and keyboard-usable without map tiles. */
+.geo-feedback:empty {display:none}
+.geo-tool .geo-feedback {margin:10px 0 0;font:500 13px/1.5 system-ui,sans-serif;color:#284c55}
+.geo-tool .geo-distance-note {font:400 12px/1.4 system-ui,sans-serif;color:#516a6e;margin:0 0 8px}
+.geo-tool .geo-map-link {display:inline-block;font:750 13px/1.4 system-ui,sans-serif;text-decoration:underline;text-underline-offset:3px;color:#1b5f6a;margin-bottom:8px}
+.geo-tool .geo-map-link[hidden] {display:none!important}
+.geo-tool .geo-result-list li {display:block;padding:0}
+.geo-tool .gl-nearby-select {
+  border:0;background:transparent;color:#1b3d49;
+  width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;
+  text-align:left;align-items:center;gap:12px;padding:10px;
+  font:500 13px/1.4 system-ui,sans-serif;cursor:pointer;border-radius:6px;
+}
+.geo-tool .gl-nearby-select:hover {background:#e4eeea}
+.geo-tool .gl-nearby-select:focus-visible,.geo-tool #geoBtn:focus-visible,.geo-tool .geo-map-link:focus-visible {
+  outline:3px solid #ca8c3b;outline-offset:2px
+}
+.geo-tool .gl-nearby-select .gl-name {display:block;overflow-wrap:anywhere}
+.geo-tool .gl-nearby-select .gl-meta {overflow-wrap:anywhere}
+.geo-tool .gl-nearby-select .gl-dist {white-space:nowrap;font-variant-numeric:tabular-nums}
+.geo-tool #geoBtn[disabled] {opacity:.75;cursor:progress}
+@media(max-width:620px) {
+  .geo-tool {padding:14px 12px}
+  .geo-tool .gl-nearby-select {padding:10px 6px}
+}

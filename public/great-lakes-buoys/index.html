@@ -369,9 +369,12 @@ h2.sh{font-size:21px;font-weight:normal;color:#2c5f2d;margin:34px 0 14px;border-
 <div class="geo-tool">
   <h3>Find the buoys nearest to you</h3>
   <p>Share your location to get a distance-ranked list of all currently reporting stations. Useful for finding the closest reliable wave-height reading before a fishing trip, a paddle, or a launch.</p>
-  <button class="geo-btn" id="geoBtn">Use my location</button>
-  <div class="geo-result" id="geoResult">
+  <button class="geo-btn" id="geoBtn" type="button">Use my location</button>
+  <p class="geo-feedback" id="geoFeedback" role="status" aria-live="polite"></p>
+  <div class="geo-result" id="geoResult" aria-labelledby="geoResultTitle">
     <h4 id="geoResultTitle">Nearest stations</h4>
+    <p class="geo-distance-note">Straight-line distances, not distances by water. Check each observation time.</p>
+    <a class="geo-map-link" id="geoMapLink" href="#station-map" hidden>See your position on the map</a>
     <ul class="geo-result-list" id="geoResultList"></ul>
   </div>
 </div>
@@ -784,47 +787,132 @@ function closeModal() {
 function findMyBuoys() {
   const btn = document.getElementById('geoBtn');
   const result = document.getElementById('geoResult');
+  const feedback = document.getElementById('geoFeedback');
   const list = document.getElementById('geoResultList');
   const title = document.getElementById('geoResultTitle');
-  if (!navigator.geolocation) {
-    btn.textContent = 'Geolocation not available'; btn.disabled = true; return;
+  const mapLink = document.getElementById('geoMapLink');
+  if (btn.disabled) return;
+
+  // Device location is requested only after the visitor explicitly presses the button.
+  // Never transmit coordinates to our station API or store them in a URL.
+  result.classList.remove('show');
+  mapLink.hidden = true;
+  if (!allStations.length) {
+    feedback.textContent = 'Station observations are still loading. Try again when the stations appear.';
+    return;
   }
-  btn.textContent = 'Finding...'; btn.disabled = true;
-  navigator.geolocation.getCurrentPosition(pos => {
-    const {latitude:lat, longitude:lng} = pos.coords;
-    const withDist = allStations.map(s => ({...s, dist: haversine(lat, lng, s.lat, s.lng)})).sort((a,b) => a.dist - b.dist).slice(0, 10);
-    title.textContent = '10 closest buoys to ' + lat.toFixed(2) + ', ' + lng.toFixed(2);
-    list.innerHTML = withDist.map(s => `
-      <li data-sid="${s.id}">
-        <div>
-          <span class="gl-name">${s.name}</span>
-          <span class="gl-meta">${s.id} &middot; Lake ${s.lake} &middot; ${s.wave_ht_ft != null ? s.wave_ht_ft.toFixed(1) + ' ft waves' : 'no wave data'}</span>
-        </div>
-        <span class="gl-dist">${Math.round(s.dist)} mi</span>
-      </li>
-    `).join('');
-    list.querySelectorAll('li').forEach(li => {
-      li.addEventListener('click', () => {
-        const s = allStations.find(x => x.id === li.dataset.sid);
-        if (s) openDetail(s);
-      });
-    });
-    result.classList.add('show');
-    btn.textContent = 'Update location'; btn.disabled = false;
-    
-    if (userMarker) userMarker.remove();
-    if (buoyMap && typeof L !== 'undefined') {
-      userMarker = L.circleMarker([lat, lng], { radius: 9, fillColor: '#2c5f2d', color: '#fff', weight: 2.5, fillOpacity: 1 }).addTo(buoyMap);
-      userMarker.bindPopup('<b>Your location</b><br>' + lat.toFixed(3) + ', ' + lng.toFixed(3));
-      const bounds = L.latLngBounds([lat, lng]).extend(withDist.slice(0, 5).map(s => [s.lat, s.lng]));
-      buoyMap.fitBounds(bounds, { padding: [40, 40] });
+  if (!navigator.geolocation || !window.isSecureContext) {
+    feedback.textContent = 'This browser cannot share location here. Open this HTTPS page in your phone browser, or choose a buoy from the map or station list.';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Finding your location...';
+  feedback.textContent = 'Asking your device for its approximate location. You may need to allow location access for this website.';
+
+  function fail(error) {
+    btn.disabled = false;
+    btn.textContent = 'Try my location again';
+    if (error && error.code === 1) {
+      feedback.textContent = 'Location permission was denied. Allow location access for this site in your browser settings, then try again. You can also use the map or station picker.';
+    } else if (error && error.code === 3) {
+      feedback.textContent = 'Location request timed out. Check that Location is turned on for your device, then try again or choose a buoy from the map.';
+    } else {
+      feedback.textContent = 'Your device could not determine its location. Try again outside or with device Location enabled, or use the map instead.';
     }
-  }, err => {
-    btn.textContent = 'Location denied'; btn.disabled = false;
-    list.innerHTML = '<li><div>Location access denied. Use the map directly to browse stations.</div></li>';
-    title.textContent = 'Could not get location';
-    result.classList.add('show');
-  });
+  }
+
+  try {
+    navigator.geolocation.getCurrentPosition(position => {
+      const lat = position?.coords?.latitude;
+      const lng = position?.coords?.longitude;
+      if (!Number.isFinite(lat) || !Number.isFinite(lng) || Math.abs(lat) > 90 || Math.abs(lng) > 180) {
+        fail({ code: 2 });
+        return;
+      }
+
+      const nearest = allStations
+        .filter(s => Number.isFinite(s.lat) && Number.isFinite(s.lng))
+        .map(s => ({station:s, distance:haversine(lat, lng, s.lat, s.lng)}))
+        .filter(entry => Number.isFinite(entry.distance))
+        .sort((a,b) => a.distance - b.distance)
+        .slice(0,10);
+      btn.disabled = false;
+      btn.textContent = 'Update my location';
+      if (!nearest.length) {
+        feedback.textContent = 'Your location was found, but no station coordinates are available. Use the station list instead.';
+        return;
+      }
+
+      list.replaceChildren();
+      nearest.forEach(({station, distance}) => {
+        const li = document.createElement('li');
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'gl-nearby-select';
+        button.dataset.sid = String(station.id);
+        button.setAttribute('aria-label', 'Show station '+station.id+' on the map');
+
+        const details = document.createElement('span');
+        const name = document.createElement('strong');
+        name.className = 'gl-name';
+        name.textContent = station.name;
+        const meta = document.createElement('span');
+        meta.className = 'gl-meta';
+        meta.textContent = String(station.id) + ' · Lake ' + station.lake + ' · ' +
+          (Number.isFinite(station.wave_ht_ft) ? station.wave_ht_ft.toFixed(1) + ' ft measured waves' : 'no wave measurement');
+        details.append(name, meta);
+        const miles = document.createElement('span');
+        miles.className = 'gl-dist';
+        miles.textContent = Math.round(distance) + ' mi';
+        button.append(details, miles);
+        button.addEventListener('click', () => {
+          if (window.buoyMapFirst?.selectStation) {
+            window.buoyMapFirst.selectStation(String(station.id), 'picker');
+            document.getElementById('station-map')?.scrollIntoView({
+              behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+              block:'start'
+            });
+          } else {
+            openDetail(station);
+          }
+        });
+        li.append(button);
+        list.append(li);
+      });
+
+      const saved = document.getElementById('liveStatus')?.textContent?.includes('Saved snapshot');
+      title.textContent = saved ? 'Nearest stations from saved data' : 'Closest reporting stations';
+      result.classList.add('show');
+      feedback.textContent = saved
+        ? 'Your position was found. The live buoy feed is unavailable, so nearby station readings are from an older snapshot.'
+        : 'Your location was found. These are the closest stations with coordinates, not necessarily the closest with every working sensor.';
+
+      // Leaflet requires an array of coordinate PAIRS. Passing [lat,lng] directly
+      // to latLngBounds and a nested array to extend caused the old map action to fail.
+      if (buoyMap && typeof L !== 'undefined') {
+        try {
+          if (userMarker) userMarker.remove();
+          userMarker = L.circleMarker([lat,lng], {
+            radius: 9, fillColor: '#155f77', color: '#fff', weight: 2.5, fillOpacity: 1
+          }).addTo(buoyMap);
+          userMarker.bindPopup('Your location (from this device)');
+          const bounds = L.latLngBounds([
+            [lat,lng],
+            ...nearest.slice(0,5).map(({station}) => [station.lat,station.lng])
+          ]);
+          buoyMap.fitBounds(bounds, { padding:[32,32], maxZoom:9 });
+          mapLink.hidden = false;
+          feedback.textContent += ' The map is centered on your location and nearby stations.';
+        } catch (mapError) {
+          // Never hide a valid nearest-station list because the map failed to pan.
+          feedback.textContent += ' The map could not be recentered, but the nearby station list is available below.';
+        }
+      }
+    }, fail, { enableHighAccuracy:false, timeout:12000, maximumAge:60000 });
+  } catch (error) {
+    fail({ code: 2 });
+  }
 }
 
 // === Legend ===
