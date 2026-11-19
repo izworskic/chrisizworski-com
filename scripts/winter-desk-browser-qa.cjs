@@ -143,6 +143,8 @@ async function main(){
       // the three-place overview without changing the selected outing.
       await page.locator('#coast-map .leaflet-control-zoom-in').click();
       await page.locator('#map-overview').click();
+      // Let the browser apply SVG transforms before measuring the settled map.
+      await page.waitForTimeout(200);
       await assertThreeMapPinsInView(page,'manual map overview reset '+width+'px');
       assert.match(await page.locator('#stage-title').textContent(),/Upper Falls/i);
       await page.waitForFunction(()=>document.querySelectorAll('#coast-map .leaflet-tile-loaded').length>=2,null,{timeout:12000});
