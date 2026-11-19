@@ -26,8 +26,10 @@ permissions:
   issues: write
 
 concurrency:
-  group: winter-field-official-evidence
-  cancel-in-progress: false
+  # New PR commits supersede old browser checks, but scheduled evidence reads
+  # remain serialized on the main branch.
+  group: winter-field-official-evidence-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   contract:
@@ -180,7 +182,15 @@ jobs:
         run: |
           mkdir -p /tmp/winter-playwright
           npm install --prefix /tmp/winter-playwright --no-save --ignore-scripts playwright@1.58.2
-          PLAYWRIGHT_BROWSERS_PATH=/tmp/winter-playwright-browsers /tmp/winter-playwright/node_modules/.bin/playwright install --with-deps chromium
+          # Ubuntu runners normally ship Chrome. Prefer it over downloading
+          # another browser and apt dependencies on every small map PR.
+          if command -v google-chrome >/dev/null 2>&1; then
+            echo "WINTER_DESK_BROWSER_EXECUTABLE=$(command -v google-chrome)" >> "$GITHUB_ENV"
+          elif command -v chromium >/dev/null 2>&1; then
+            echo "WINTER_DESK_BROWSER_EXECUTABLE=$(command -v chromium)" >> "$GITHUB_ENV"
+          else
+            PLAYWRIGHT_BROWSERS_PATH=/tmp/winter-playwright-browsers /tmp/winter-playwright/node_modules/.bin/playwright install --with-deps chromium
+          fi
       - name: Exercise four widths and failed weather and map scenarios
         env:
           NODE_PATH: /tmp/winter-playwright/node_modules
