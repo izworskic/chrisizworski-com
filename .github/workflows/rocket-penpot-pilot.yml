@@ -22,7 +22,9 @@ jobs:
         with:
           node-version: '22'
       - name: Validate isolated prototype and editable SVG source
-        run: node --test tests/rocket-penpot-pilot.test.js
+        run: |
+          node --test tests/rocket-penpot-pilot.test.js
+          python3 -c "import xml.etree.ElementTree as ET; ET.parse('docs/visual-pilots/rocket-launch-live/mission-to-shore.penpot.svg')"
       - name: Install isolated pinned browser harness
         run: |
           mkdir -p /tmp/rocket-penpot-playwright
