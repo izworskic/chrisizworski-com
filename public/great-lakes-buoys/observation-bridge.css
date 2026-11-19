@@ -81,3 +81,11 @@
   .station-row .sr-link { display:none; }
   .station-row [data-bridge-station] { grid-column:2 / 4; justify-self:start; }
 }
+
+.map-wrap.map-unavailable { height:auto; min-height:120px; background:#e9f0ee; }
+.map-wrap.map-unavailable #buoyMap { height:auto; min-height:120px; }
+.map-wrap.map-unavailable .map-legend { display:none; }
+.map-alt { padding:22px 20px; font:14px/1.5 system-ui,sans-serif; color:#21404c; }
+.map-alt strong { font-size:17px; }
+.map-alt p { margin:6px 0 8px; }
+.map-alt a { color:#165d67; font-weight:700; text-decoration:underline; }
