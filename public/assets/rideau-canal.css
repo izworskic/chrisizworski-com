@@ -254,6 +254,10 @@ footer.site-footer a{color:#fff}
 .rideau-flight__crossing-water{display:grid;place-items:center;height:45px;width:100%;border-block:2px solid #4b969c;background:repeating-linear-gradient(165deg,#d4e9e8,#d4e9e8 9px,#b9d9d9 9px,#b9d9d9 14px);font:800 1.05rem/1 system-ui,sans-serif;letter-spacing:3px}
 .rideau-flight__crossing strong{font:800 .68rem/1.1 system-ui,sans-serif;text-transform:uppercase;letter-spacing:.04em}
 .rideau-flight__crossing small{font:600 .72rem/1.2 system-ui,sans-serif}
+.rideau-flight__chambers:before{z-index:0}
+.rideau-flight__chambers .rideau-flight__chip{position:relative;z-index:1;flex:none;border:0;background:transparent;color:#23464c}
+.rideau-flight__chambers .rideau-flight__chip[aria-pressed=true]{border:0;background:transparent;color:#123d45}
+.rideau-flight__crossing{position:relative;z-index:1}
 .rideau-flight__chambers .rideau-flight__chip:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
 .rideau-flight__diagram{padding-bottom:17px}
 @media(max-width:600px){
