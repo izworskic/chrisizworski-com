@@ -53,7 +53,7 @@ function cleanGeoJson(payload){
   };
 }
 
-async function fetchNhdPage(url,fetcher=fetch,allowMore=false){
+async function fetchNhdPage(url,fetcher=fetch,allowMore=false,timeoutMs=4500){
   // Bounded transient retry stays within the earlier 10-second request budget.
   // An invalid or incomplete source response is a hard failure, not retry data.
   let payload=null;
@@ -62,7 +62,7 @@ async function fetchNhdPage(url,fetcher=fetch,allowMore=false){
       const response=await fetcher(url,{headers:{
         accept:'application/geo+json, application/json',
         'user-agent':'ChrisIzworskiManisteeFieldMap/1.0 (https://chrisizworski.com/manistee-river-map/)'
-      },signal:AbortSignal.timeout(4500)});
+      },signal:AbortSignal.timeout(timeoutMs)});
       if(!response.ok){
         const error=new Error("USGS NHD returned "+response.status);
         error.retryable=[429,502,503,504].includes(response.status);
@@ -83,11 +83,11 @@ async function fetchNhdPage(url,fetcher=fetch,allowMore=false){
   return payload;
 }
 
-async function fetchPagesForName(name,fetcher=fetch){
+async function fetchPagesForName(name,fetcher=fetch,timeoutMs=4500){
   if(!NAMES.includes(name))throw new Error('Unsupported river name');
   const features=[];
   for(let page=0;page<MAX_PAGES;page++){
-    const payload=await fetchNhdPage(queryUrl({name,page}),fetcher,true);
+    const payload=await fetchNhdPage(queryUrl({name,page}),fetcher,true,timeoutMs);
     const subset=cleanGeoJson(payload).features.filter(f=>f.properties.name===name);
     features.push(...subset);
     if(subset.length!==payload.features.length)throw new Error('Unexpected river feature in source page');
@@ -113,19 +113,23 @@ function report(features,names,mode){
 }
 async function fetchHydrographyUncached(options={}){
   const fetcher=options.fetcher||fetch;
+  // A source acceptance run may allow slower official responses than the public
+  // serverless request. The exact dataset and completeness tests remain identical.
+  const timeoutMs=Number.isInteger(options.timeoutMs)&&options.timeoutMs>=1000&&options.timeoutMs<=12000
+    ?options.timeoutMs:4500;
   if(options.name){
-    const features=await fetchPagesForName(options.name,fetcher);
+    const features=await fetchPagesForName(options.name,fetcher,timeoutMs);
     return report(features,[options.name],'paged-single-waterway');
   }
   try{
-    const payload=await fetchNhdPage(queryUrl(),fetcher);
+    const payload=await fetchNhdPage(queryUrl(),fetcher,false,timeoutMs);
     // A result at the service's advertised 2000-record cap is not evidence of completeness.
     if(payload.features.length>=2000)throw new Error('USGS NHD unpaged response may be truncated');
     return report(cleanGeoJson(payload).features,NAMES,'original-complete-query');
   }catch(primaryError){
     // Retry from the same official NHD layer using page-bounded named-waterway queries.
     // Never fall back to straight-line geometry or a different unvalidated GIS source.
-    const groups=await Promise.all(NAMES.map(name=>fetchPagesForName(name,fetcher)));
+    const groups=await Promise.all(NAMES.map(name=>fetchPagesForName(name,fetcher,timeoutMs)));
     return report(groups.flat(),NAMES,'paged-official-recovery');
   }
 }
