@@ -36,6 +36,10 @@ async function run(){
    const rect=await notebook.boundingBox();
    assert.ok(rect && rect.y<420,'Notebook appears too far below heading at '+width+': '+rect?.y);
    const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth);
+   if(overflow>1){
+    const offenders=await page.evaluate(()=>Array.from(document.body.querySelectorAll('*')).map(el=>({tag:el.tagName,cls:String(el.className||'').slice(0,85),id:el.id,right:Math.round(el.getBoundingClientRect().right)})).filter(x=>x.right>innerWidth+2).sort((a,b)=>b.right-a.right).slice(0,15));
+    console.error('OVERFLOW '+width+'px viewport: '+JSON.stringify(offenders));
+   }
    assert.ok(overflow<=1,'Horizontal page overflow '+overflow+'px at '+width);
    assert.ok(await page.locator('#sp-notebook-chapters a').count()>=3);
    await page.locator('[data-sp-month="may"]').click();
