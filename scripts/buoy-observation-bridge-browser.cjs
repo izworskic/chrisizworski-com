@@ -171,6 +171,123 @@ async function main(){
       record('api-outage','PASS','snapshot disclosed, no positive live advisory, station list usable');
       await context.close();
     }
+    // Location allowed, map unavailable: nearest list must still work and be keyboard clickable.
+    {
+      const context=await browser.newContext({
+        viewport:{width:390,height:844},
+        geolocation:{latitude:43.8,longitude:-83.4},
+        permissions:['geolocation']
+      });
+      await context.route('**/*',r=>new URL(r.request().url()).hostname==='127.0.0.1'?r.continue():r.abort());
+      const page=await context.newPage();
+      const errors=[];
+      page.on('pageerror',e=>errors.push(e.message));
+      await page.goto(base+'/great-lakes-buoys/',{waitUntil:'domcontentloaded'});
+      await page.waitForFunction(()=>document.getElementById('obWaveA').textContent!=='--',{timeout:15000});
+      await page.locator('#geoBtn').click();
+      await page.locator('#geoResult.show').waitFor({timeout:10000});
+      assert.equal(await page.locator('#geoResultList button').count(),3);
+      assert.equal(await page.locator('#geoResultList button').first().getAttribute('data-sid'),'45187');
+      assert.equal(await page.locator('#geoBtn').isEnabled(),true);
+      assert.match(await page.locator('#geoFeedback').innerText(),/Your location was found/);
+      assert.equal(await page.locator('#geoMapLink').isVisible(),false);
+      await page.locator('#geoResultList button[data-sid="45187"]').click();
+      assert.equal(await page.locator('#mapStationPicker').inputValue(),'45187');
+      assert.match(await page.locator('#mapStationTitle').innerText(),/Saginaw Bay/);
+      assert.deepEqual(errors,[]);
+      await page.locator('.geo-tool').screenshot({path:path.join(output,'buoy-390-location-map-unavailable.png'),animations:'disabled'});
+      record('location-no-map','PASS','permission granted; sorted station list and map-first selection without Leaflet');
+      await context.close();
+    }
+    // Permission denied, timeout, and unavailable all return the button to a usable state.
+    {
+      const context=await browser.newContext({viewport:{width:390,height:844}});
+      await context.route('**/*',r=>new URL(r.request().url()).hostname==='127.0.0.1'?r.continue():r.abort());
+      const page=await context.newPage();
+      await page.addInitScript(()=>{
+        Object.defineProperty(navigator,'geolocation',{configurable:true,value:{
+          getCurrentPosition(_ok, fail, opts){
+            window.__lastGeoOptions=opts;
+            fail({code:1});
+          }
+        }});
+      });
+      await page.goto(base+'/great-lakes-buoys/',{waitUntil:'domcontentloaded'});
+      await page.waitForFunction(()=>document.getElementById('obWaveA').textContent!=='--',{timeout:15000});
+      await page.locator('#geoBtn').click();
+      assert.match(await page.locator('#geoFeedback').innerText(),/Location permission was denied/);
+      assert.equal(await page.locator('#geoBtn').isEnabled(),true);
+      assert.equal(await page.locator('#geoResult.show').count(),0);
+      assert.deepEqual(await page.evaluate(()=>window.__lastGeoOptions),
+        {enableHighAccuracy:false,timeout:12000,maximumAge:60000});
+      await page.evaluate(()=>{
+        Object.defineProperty(navigator,'geolocation',{configurable:true,value:{
+          getCurrentPosition(_ok, fail){fail({code:3});}
+        }});
+      });
+      await page.locator('#geoBtn').click();
+      assert.match(await page.locator('#geoFeedback').innerText(),/timed out/);
+      assert.equal(await page.locator('#geoBtn').isEnabled(),true);
+      await page.evaluate(()=>{
+        Object.defineProperty(navigator,'geolocation',{configurable:true,value:undefined});
+      });
+      await page.locator('#geoBtn').click();
+      assert.match(await page.locator('#geoFeedback').innerText(),/cannot share location/);
+      assert.equal(await page.locator('#geoBtn').isEnabled(),true);
+      record('location-errors','PASS','denied, timeout, unsupported, retry and finite browser request timeout');
+      await context.close();
+    }
+    // Actual Leaflet, not a mock. Inject the pinned JS/CSS locally; no remote tile dependency.
+    {
+      const leafletDir=process.env.BUOY_LEAFLET_DIR;
+      assert.ok(leafletDir && fs.existsSync(path.join(leafletDir,'leaflet.js')),
+        'Pinned Leaflet distribution must be available for the actual map bounds test');
+      const context=await browser.newContext({
+        viewport:{width:390,height:844},
+        geolocation:{latitude:43.8,longitude:-83.4},
+        permissions:['geolocation']
+      });
+      await context.route('**/*',r=>{
+        const u=new URL(r.request().url());
+        if(u.hostname==='127.0.0.1')return r.continue();
+        if(u.hostname==='unpkg.com' && /^\/leaflet@1\.9\.4\/dist\/leaflet\.(js|css)$/.test(u.pathname)){
+          const ext=u.pathname.endsWith('.css')?'css':'js';
+          return r.fulfill({
+            status:200,
+            contentType:ext==='css'?'text/css':'application/javascript',
+            headers:{'access-control-allow-origin':'*'},
+            body:fs.readFileSync(path.join(leafletDir,'leaflet.'+ext))
+          });
+        }
+        return r.abort();
+      });
+      const page=await context.newPage();
+      const errors=[];
+      page.on('pageerror',e=>errors.push(e.message));
+      await page.goto(base+'/great-lakes-buoys/',{waitUntil:'domcontentloaded'});
+      await page.waitForFunction(()=>Boolean(window.L && document.getElementById('buoyMap')._leaflet_id),{timeout:15000});
+      await page.locator('#geoBtn').click();
+      await page.locator('#geoResult.show').waitFor({timeout:10000});
+      const geoState=await page.evaluate(()=>({
+        markerAdded: Boolean(userMarker && buoyMap.hasLayer(userMarker)),
+        boundsValid: Boolean(userMarker && buoyMap.getBounds().contains(userMarker.getLatLng())),
+        center: buoyMap.getCenter(),
+        nearby: document.querySelectorAll('#geoResultList button').length
+      }));
+      assert.equal(geoState.markerAdded,true);
+      assert.equal(geoState.boundsValid,true);
+      assert.equal(geoState.nearby,3);
+      assert.equal(await page.locator('#geoMapLink').isVisible(),true);
+      assert.match(await page.locator('#geoFeedback').innerText(),/map is centered/);
+      // A second click should replace rather than accumulate a location marker.
+      await page.locator('#geoBtn').click();
+      assert.equal(await page.locator('#geoBtn').isEnabled(),true);
+      assert.equal(await page.locator('#geoResultList button').count(),3);
+      assert.deepEqual(errors,[]);
+      await page.locator('#station-map').screenshot({path:path.join(output,'buoy-390-location-real-leaflet.png'),animations:'disabled'});
+      record('location-real-map','PASS','actual Leaflet bounds, user marker, nearby results, repeat request');
+      await context.close();
+    }
     // No JavaScript must keep the original authored static answer and sources.
     {
       const context=await browser.newContext({javaScriptEnabled:false,viewport:{width:390,height:844}});
