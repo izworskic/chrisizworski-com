@@ -356,3 +356,34 @@ test('official notice and parking UI are synchronized to the same selected outin
   assert.match(js,/loadOperatorNotices\(\)/);
   assert.match(js,/renderOperatorNotice\(place\)/);
 });
+
+test('field-atlas puts a chart inside the selected outing without hiding evidence',()=>{
+  const html=source('index.html');
+  const publicHtml=fs.readFileSync(path.resolve(__dirname,'../public/great-lakes-winter-field-desk/index.html'),'utf8');
+  const css=source('desk.css');
+  const publicCss=fs.readFileSync(path.resolve(__dirname,'../public/great-lakes-winter-field-desk/desk.css'),'utf8');
+  assert.equal(css,publicCss,'preview and published atlas must share styles');
+  for(const page of [html,publicHtml]){
+    const opening=page.indexOf('id="quick-outing"');
+    const assignment=page.indexOf('class="assignment" id="assignment"');
+    const map=page.indexOf('class="regional" aria-labelledby="map-heading"');
+    const readiness=page.indexOf('id="trip-readiness"');
+    const weather=page.indexOf('class="weather-desk"');
+    assert.ok(opening>0&&opening<assignment&&assignment<map&&map<readiness&&readiness<weather,
+      'first answer, trip, map, evidence and weather stay in visitor order');
+    assert.match(page,/class="quick-chart" href="#map-heading"/);
+    assert.match(page,/class="chart-follow" href="#trip-readiness"/);
+    assert.match(page,/name="robots" content="noindex,nofollow,noarchive"/);
+    assert.match(page,/https:\/\/chrisizworski\.com\/#person/);
+    assert.equal((page.match(/id="coast-map"/g)||[]).length,1);
+    assert.equal((page.match(/id="stage-photo"/g)||[]).length,1);
+    assert.equal((page.match(/id="arrival-title"/g)||[]).length,1);
+    assert.equal((page.match(/data-place="/g)||[]).length,3);
+  }
+  assert.match(css,/Experience Investment 2026-11-19/);
+  assert.match(css,/\.regional\{[\s\S]*?width:100%/);
+  assert.match(css,/@media\(max-width:600px\)/);
+  assert.match(css,/@media\(prefers-reduced-motion:reduce\)/);
+  assert.ok(!/font-size:\s*0/.test(css),'no collapsed text');
+});
+
