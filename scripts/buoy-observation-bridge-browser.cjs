@@ -105,7 +105,8 @@ async function main(){
       // Choosing a station outside that filter reveals it on the full-basin map again.
       await page.selectOption('#mapStationPicker','45029');
       assert.match(await page.locator('#mapStationTitle').innerText(),/Holland buoy/);
-      assert.equal(await page.locator('[data-lake="all"]').getAttribute('class')?.includes('active'),true);
+      const lakeClass=await page.locator('[data-lake="all"]').getAttribute('class');
+      assert.ok(lakeClass && lakeClass.includes('active'), 'station picker must reset the lake filter');
       await page.locator('#mapStationCompare').click();
       assert.equal(await page.locator('#obStationA').inputValue(),'45029');
       await page.locator('[data-act="all"]').click();
