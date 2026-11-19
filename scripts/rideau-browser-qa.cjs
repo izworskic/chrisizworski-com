@@ -63,7 +63,7 @@ async function run(){
        await page.locator('#rideau-flight-stage [data-chamber-index="4"]').focus();
        await page.keyboard.press('Enter');
        assert.match(await page.locator('#rideau-flight-count').innerText(),/Lock 5/);
-       assert.equal(await page.locator('#rideau-flight-chambers [aria-pressed="true"]').innerText(),'Lock 5');
+       assert.match(await page.locator('#rideau-flight-chambers [aria-pressed="true"]').getAttribute('aria-label'),/Lock 5, chamber 5 of 8/);
        await page.locator('[data-rideau-flight-site="jones"]').click();
        assert.equal(await page.locator('#rideau-flight-stage [data-chamber-index]').count(),4);
        assert.equal(await page.locator('#rideau-flight-chambers button').count(),4);
