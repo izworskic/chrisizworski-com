@@ -126,3 +126,32 @@
 @media (prefers-reduced-motion: reduce) {
  .water-desk .pill {transition:none}
 }
+
+/* Phone priority: activity controls and the map, not three introductory text blocks.
+   Descriptive headings remain in the accessibility tree as visually hidden text. */
+@media (max-width:620px) {
+  .header {padding:7px 12px 6px}
+  .header .site-title {font-size:18px}
+  .nav {padding:3px 8px;font-size:12px;gap:0}
+  .nav a {margin:2px 6px}
+  .live-strip {padding:6px 7px;gap:5px;font-size:11px}
+  .live-strip .live-label,.live-strip .refresh-info {display:none}
+  .body .breadcrumb {display:none}
+  .body .sub {margin-bottom:9px}
+  .water-desk-head,.map-first-head > div {
+    position:absolute!important;
+    width:1px!important;
+    height:1px!important;
+    overflow:hidden!important;
+    clip-path:inset(50%)!important;
+    white-space:nowrap!important;
+    margin:0!important;
+    padding:0!important;
+  }
+  .water-desk .filter-bar {margin:2px 0 8px}
+  .water-desk .fb-label {margin-bottom:5px}
+  .water-desk .filter-help {display:none}
+  .map-first-head {margin:6px 0 9px;display:block}
+  .map-first-head label {display:block;width:100%;font-size:11px}
+  .map-first-head select {min-height:40px;padding:8px 10px}
+}
