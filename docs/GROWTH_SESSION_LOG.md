@@ -1,3 +1,10 @@
+### 2026-11-18 | Rocket Penpot Mission-to-Shore pilot
+- **Change:** Merged the opt-in Penpot integration PR #1775. Opened an isolated Rocket Launch Live design pilot with a noindex interactive Wallops place-choice preview, editable Penpot-import SVG, evidence brief and responsive browser QA. No production Rocket tool source or visitor route is changed.
+- **Visitor decision:** A selected mission should lead to a real, source-linked public location, not a confusing launch pad or a repeated warning banner. Prototype places are examples, not launch-day access or parking claims.
+- **Evidence limitation:** The owner reports Penpot is ready in their coding environment, but Penpot MCP tools are unavailable in this ChatGPT session. No native Penpot edit, live session inspection, production deployment, organic CTR or ad revenue result is claimed.
+- **Release status:** Isolated design branch; PR checks and responsive screenshots must pass before claiming test readiness; production implementation needs separate design review and explicit approval.
+- **Exactly one next action:** Open the committed Mission-to-Shore SVG in the Penpot-connected coding client as a new review page and inspect its desktop and mobile frames against the live Rocket tool before considering production edits.
+
 ### 2026-11-18 | On-demand Penpot design skill and MCP setup
 - **Scope:** Source-only repository tooling in `feature/penpot-on-demand-skill-20261118`. Added explicit-use Penpot skills for Codex and Claude Code, public no-key hosted MCP configs for Codex, Claude Code and Cursor, setup instructions, and a source-level regression test.
 - **Intent:** Penpot is opt-in when the owner explicitly requests design work. Experience OS and Foundry still govern research, originality and release verification. GitHub remains the implementation source of truth.
