@@ -19,6 +19,7 @@
     const map=mapState.map;
     if(!map||mapState.markers.size!==C.PLACES.length)return;
     const bounds=L.latLngBounds(C.PLACES.map(place=>[place.lat,place.lon]));
+    map.stop();
     map.fitBounds(bounds,{padding:[30,30],maxZoom:7,animate:false});
   }
   function selectGoal(goal){
@@ -294,7 +295,7 @@
       return;
     }
     try{
-      const map=L.map(holder,{scrollWheelZoom:false,zoomControl:true}).setView([46.92,-90.1],6);
+      const map=L.map(holder,{scrollWheelZoom:false,zoomControl:true,zoomAnimation:false}).setView([46.92,-90.1],6);
       mapState.map=map;
       const osmCredit='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
       const osm=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
