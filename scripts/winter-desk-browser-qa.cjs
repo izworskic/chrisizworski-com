@@ -44,7 +44,7 @@ async function main(){
   });
   const summary=[];
   try{
-    for(const width of [360,390,768,1440]){
+    for(const width of [360,390,768,1280,1440]){
       const page=await browser.newPage({viewport:{width,height:850},reducedMotion:'reduce'});
       const errors=[],unkeyedCarto=[];
       page.on('pageerror',e=>errors.push(e.message));
@@ -54,6 +54,16 @@ async function main(){
       await mockNws(page);
       await page.goto(base,{waitUntil:'domcontentloaded',timeout:30000});
       await page.waitForTimeout(1300);
+      assert.equal(await page.locator('.regional').evaluate(el=>el.closest('article')?.id),'assignment',
+        'shoreline chart is part of the current outing');
+      assert.equal(await page.locator('.quick-chart').getAttribute('href'),'#map-heading');
+      assert.equal(await page.locator('.chart-follow').getAttribute('href'),'#trip-readiness');
+      const openingBounds=await page.evaluate(()=>({
+        answer:document.querySelector('#quick-outing').getBoundingClientRect().top,
+        choices:document.querySelector('#mission-label').getBoundingClientRect().top
+      }));
+      assert.ok(openingBounds.answer>=0&&openingBounds.answer<850,'first recommendation is visible on first screen');
+      assert.ok(openingBounds.choices<850,'the activity choice begins on first screen');
       await page.locator('#day').selectOption('tomorrow');
       const original=await page.locator('#stage-title').textContent();
       assert.match(original,/Upper Falls/);
@@ -92,6 +102,11 @@ async function main(){
         assert.equal(await page.locator('#stage-photo').evaluate(img=>img.complete&&img.naturalWidth>0),true,'real place photo');
         assert.match(await page.locator('#source-direct').getAttribute('href'),/^https:\/\/(?:www\.nps\.gov|www\.dnr\.state\.mn\.us)\//);
       }
+      await page.locator('[data-place="munising-snowshoe"]').click();
+      assert.match(await page.locator('#stage-title').textContent(),/blue posts/i);
+      assert.equal(await page.locator('[data-place="munising-snowshoe"]').getAttribute('aria-pressed'),'true');
+      await page.locator('[data-place="gooseberry-upper"]').click();
+      assert.match(await page.locator('#stage-title').textContent(),/Upper Falls/i);
       const metrics=await page.evaluate(()=>({
         overflow:document.documentElement.scrollWidth>innerWidth,
         tiles:document.querySelectorAll('.leaflet-tile-loaded').length,
@@ -104,6 +119,7 @@ async function main(){
       assert.equal(errors.length,0,'browser JavaScript errors');
       assert.equal(unkeyedCarto.length,0,'no unauthenticated CARTO raster tile requests');
       await page.screenshot({path:path.join(screenshotDir,'desk-'+width+'.png'),fullPage:true,animations:'disabled'});
+      if(width===390||width===1280)await page.locator('.regional').screenshot({path:path.join(screenshotDir,'chart-'+width+'.png'),animations:'disabled'});
       summary.push({width,...metrics,errors});
       await page.close();
     }
