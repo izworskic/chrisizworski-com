@@ -25,7 +25,9 @@ const assets = {
   '/great-lakes-buoys/': ['public/great-lakes-buoys/index.html','text/html; charset=utf-8'],
   '/great-lakes-buoys/index.html': ['public/great-lakes-buoys/index.html','text/html; charset=utf-8'],
   '/great-lakes-buoys/observation-bridge.css': ['public/great-lakes-buoys/observation-bridge.css','text/css; charset=utf-8'],
-  '/great-lakes-buoys/observation-bridge.js': ['public/great-lakes-buoys/observation-bridge.js','text/javascript; charset=utf-8']
+  '/great-lakes-buoys/observation-bridge.js': ['public/great-lakes-buoys/observation-bridge.js','text/javascript; charset=utf-8'],
+  '/great-lakes-buoys/map-first.css': ['public/great-lakes-buoys/map-first.css','text/css; charset=utf-8'],
+  '/great-lakes-buoys/map-first.js': ['public/great-lakes-buoys/map-first.js','text/javascript; charset=utf-8']
 };
 const server = http.createServer((req,res)=>{
   const pathname = new URL(req.url,'http://127.0.0.1').pathname;
@@ -63,6 +65,53 @@ async function main(){
       page.on('pageerror',e=>exceptions.push(e.message));
       await page.goto(base+'/great-lakes-buoys/',{waitUntil:'domcontentloaded'});
       await page.waitForFunction(()=>document.getElementById('obWaveA').textContent!=='--',{timeout:15000});
+      // The first useful tool element is activity choice + map, not the comparison.
+      const mapIndex=await page.evaluate(()=>Array.from(document.querySelectorAll('body *')).filter(e=>e.id==='station-map'||e.id==='observationBridge').map(e=>e.id));
+      assert.deepEqual(mapIndex,['station-map','observationBridge']);
+      const mapPosition=await page.locator('#station-map').boundingBox();
+      const layout=await page.evaluate(()=>{
+        const selectors=['.header','.nav','.live-strip','.body','.breadcrumb','.page-title','.sub','#waterDesk','.water-desk-head','.filter-bar','.pill-row','.filter-help','.map-first-head','#station-map'];
+        return Object.fromEntries(selectors.map(k=>{
+          const e=document.querySelector(k);
+          if(!e)return [k,null];
+          const r=e.getBoundingClientRect(),styles=getComputedStyle(e);
+          return [k,{top:Math.round(r.top),height:Math.round(r.height),marginTop:styles.marginTop,marginBottom:styles.marginBottom}];
+        }));
+      });
+      if(width===360)console.log('MAP_FIRST_LAYOUT '+JSON.stringify(layout));
+      await page.screenshot({path:path.join(output,'buoy-'+width+'-before-layout-gate.png'),animations:'disabled'});
+      assert.ok(mapPosition.y<840,'map appears too late on first '+width+'px viewport: '+mapPosition.y);
+      assert.equal(await page.locator('#mapStationPicker').isEnabled(),true);
+      assert.match(await page.locator('#mapStationTitle').innerText(),/Choose a buoy/);
+      // Activity choice recolors the source map and updates the same selected station.
+      await page.locator('[data-act="kayaking"]').click();
+      assert.equal(await page.locator('[data-act="kayaking"]').getAttribute('aria-pressed'),'true');
+      assert.match(await page.locator('#filterHelp').innerText(),/screening|thresholds/i);
+      await page.selectOption('#mapStationPicker','45029');
+      assert.match(await page.locator('#mapStationTitle').innerText(),/Holland buoy/);
+      assert.match(await page.locator('#mapStationVerdict').innerText(),/screening thresholds/i);
+      assert.match(await page.locator('#mapStationSource').getAttribute('href'),/station=45029/);
+      await page.selectOption('#mapStationPicker','45187');
+      assert.match(await page.locator('#mapStationVerdict').innerText(),/Cannot evaluate/);
+      // Dispatch precisely the event a Leaflet marker fires, then test reversal.
+      await page.evaluate(()=>window.dispatchEvent(new CustomEvent('buoy-map-station-selected',{detail:{id:'45005',origin:'map'}})));
+      assert.match(await page.locator('#mapStationTitle').innerText(),/Western Lake Erie/);
+      await page.selectOption('#mapStationPicker','45029');
+      assert.match(await page.locator('#mapStationTitle').innerText(),/Holland buoy/);
+      // Filtering the list/map to a different lake must clear an invisible selection.
+      await page.locator('[data-lake="Erie"]').click();
+      assert.match(await page.locator('#mapStationTitle').innerText(),/Choose a buoy/);
+      assert.equal(await page.locator('#mapStationPicker').inputValue(),'');
+      // Choosing a station outside that filter reveals it on the full-basin map again.
+      await page.selectOption('#mapStationPicker','45029');
+      assert.match(await page.locator('#mapStationTitle').innerText(),/Holland buoy/);
+      const lakeClass=await page.locator('[data-lake="all"]').getAttribute('class');
+      assert.ok(lakeClass && lakeClass.includes('active'), 'station picker must reset the lake filter');
+      await page.locator('#mapStationCompare').click();
+      assert.equal(await page.locator('#obStationA').inputValue(),'45029');
+      await page.locator('[data-act="all"]').click();
+      assert.equal(await page.locator('[data-act="all"]').getAttribute('aria-pressed'),'true');
+      assert.equal(await page.locator('#obStationA').inputValue(),'45029');
       assert.equal(await page.locator('#obStationA').inputValue(),'45029');
       assert.equal(await page.locator('#obStationB').inputValue(),'45005');
       const initial=await page.locator('#obVerdict').innerText();
@@ -87,11 +136,14 @@ async function main(){
       // Missing Leaflet cannot steal the station list or leave 560px of blank map.
       assert.equal(await page.locator('.map-wrap.map-unavailable').count(),1);
       assert.match(await page.locator('.map-alt').innerText(),/Browse station list/);
+      const unavailableMap=await page.locator('.map-wrap.map-unavailable').boundingBox();
+      assert.ok(unavailableMap.height<210,'failed map must collapse into short list fallback, not a blank panel: '+unavailableMap.height);
       const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
       assert.ok(overflow<=1,'horizontal document overflow at '+width+': '+overflow);
       assert.deepEqual(exceptions,[], 'page JS exceptions at '+width);
       await page.screenshot({path:path.join(output,'buoy-'+width+'-initial.png'),animations:'disabled'});
       await page.locator('#observationBridge').screenshot({path:path.join(output,'buoy-'+width+'-bridge.png'),animations:'disabled'});
+      await page.locator('#waterDesk').screenshot({path:path.join(output,'buoy-'+width+'-map-first.png'),animations:'disabled'});
       record('viewport-'+width,'PASS','paired selection, A-C-A, station handoff, source age, map-free list and overflow');
       await context.close();
     }
@@ -109,6 +161,10 @@ async function main(){
       await page.waitForFunction(()=>document.getElementById('obProvenance').textContent.includes('Saved snapshot'),{timeout:15000});
       assert.match(await page.locator('#liveStatus').innerText(),/Saved snapshot; live readings unavailable/);
       assert.match(await page.locator('#obVerdict').innerText(),/older than two hours/);
+      await page.selectOption('#mapStationPicker','45029');
+      assert.match(await page.locator('#mapStationVerdict').innerText(),/Saved snapshot only/);
+      await page.locator('[data-act="kayaking"]').click();
+      assert.match(await page.locator('#mapStationVerdict').innerText(),/Saved snapshot only/);
       assert.equal(await page.locator('#smartCta.show').count(),0);
       assert.ok(await page.locator('#stationList .station-row').count()>0);
       await page.locator('#observationBridge').screenshot({path:path.join(output,'buoy-390-saved-snapshot.png'),animations:'disabled'});
@@ -123,6 +179,9 @@ async function main(){
       assert.equal(await page.locator('#great-lakes-buoy-answer').isVisible(),true);
       assert.match(await page.locator('#great-lakes-buoy-answer').innerText(),/NOAA\/NDBC readings/);
       assert.equal(await page.locator('#obStationA').isDisabled(),true);
+      assert.equal(await page.locator('#great-lakes-buoy-answer').isVisible(),true);
+      assert.equal(await page.locator('#mapStationPicker').isDisabled(),true);
+      assert.ok(await page.locator('.map-no-script').count()>0);
       assert.ok(await page.locator('a[href="https://www.weather.gov/marine/"]').count()>0);
       record('no-javascript','PASS','existing static answer and authoritative marine source preserved');
       await context.close();

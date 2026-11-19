@@ -216,6 +216,7 @@ h2.sh{font-size:21px;font-weight:normal;color:#2c5f2d;margin:34px 0 14px;border-
 }
 </style>
 <link rel="stylesheet" href="/great-lakes-buoys/observation-bridge.css?v=1">
+<link rel="stylesheet" href="/great-lakes-buoys/map-first.css?v=1">
 <script defer src="/_vercel/insights/script.js"></script>
 <script>window.si=window.si||function(){(window.siq=window.siq||[]).push(arguments)};</script>
 <script defer src="/_vercel/speed-insights/script.js"></script>
@@ -238,14 +239,67 @@ h2.sh{font-size:21px;font-weight:normal;color:#2c5f2d;margin:34px 0 14px;border-
 <div class="breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/tools/">Tools</a> &rsaquo; Great Lakes Buoys</div>
 
 <h1 class="page-title">Great Lakes Buoys Live: Waves, Wind &amp; Water Temperature</h1>
-<p class="sub">Live wave height, wind, and water temperature from reporting NOAA/NDBC stations across Lakes Superior, Michigan, Huron, Erie, and Ontario</p>
+<p class="sub">Check measured waves, wind and water temperature across all five Great Lakes.</p>
 
-<div class="byline">
-  <a href="/about/" aria-label="About Chris Izworski"><div class="byline-avatar">CI</div></a>
-  <div class="byline-meta">
-    Built and maintained by <a href="/about/">Chris Izworski</a> in Bay City, Michigan. Data via NOAA NDBC (refreshed every 10 minutes). See also <a href="/">my other Great Lakes tools</a>.
+<section class="water-desk" id="waterDesk" aria-labelledby="waterDeskHeading">
+  <div class="water-desk-head">
+    <div><span class="water-desk-kicker">Great Lakes · Water conditions</span>
+      <h2 id="waterDeskHeading">What are you heading out to do?</h2>
+      <p>Select an activity, then pick a buoy to see what it actually measured.</p>
+    </div>
+    <a class="water-desk-source" href="https://www.ndbc.noaa.gov/" target="_blank" rel="noopener noreferrer">NOAA NDBC observations</a>
+  </div>
+  <div class="filter-bar">
+  <div class="fb-label">Your activity changes the map</div>
+  <div class="pill-row" id="activityPills">
+    <button class="pill active" data-act="all" type="button" aria-pressed="true"><span class="pill-icon">&#127754;</span>All conditions <span class="pill-count" id="cnt-all">--</span></button>
+    <button class="pill" type="button" aria-pressed="false" data-act="fishing"><span class="pill-icon">&#127907;</span>Fishing <span class="pill-count" id="cnt-fishing">--</span></button>
+    <button class="pill" type="button" aria-pressed="false" data-act="kayaking"><span class="pill-icon">&#128676;</span>Kayaking <span class="pill-count" id="cnt-kayaking">--</span></button>
+    <button class="pill" type="button" aria-pressed="false" data-act="swimming"><span class="pill-icon">&#127946;</span>Swimming <span class="pill-count" id="cnt-swimming">--</span></button>
+    <button class="pill" type="button" aria-pressed="false" data-act="sailing"><span class="pill-icon">&#9973;</span>Sailing <span class="pill-count" id="cnt-sailing">--</span></button>
+    <button class="pill" type="button" aria-pressed="false" data-act="diving"><span class="pill-icon">&#129437;</span>Diving <span class="pill-count" id="cnt-diving">--</span></button>
+  </div>
+  <div class="filter-help" id="filterHelp">Pick an activity to see how recent station readings compare with its screening thresholds. These are not go/no-go safety advice.</div>
+</div>
+  <div class="map-first-head">
+    <div><h2>Explore the Great Lakes</h2><p>Tap a station to see its observations and compare another location.</p></div>
+    <label for="mapStationPicker">Find a buoy by name or station ID
+      <select id="mapStationPicker" disabled><option value="">Loading reporting stations</option></select>
+    </label>
+  </div>
+  <div class="map-section" id="station-map" role="region" aria-label="Great Lakes NOAA buoy station map">
+  <div class="map-wrap">
+    <div id="buoyMap"></div>
+    <div class="map-legend" id="mapLegend">
+      <div class="lg-title">Loading</div>
+    </div>
   </div>
 </div>
+  <noscript><style>.water-desk .map-wrap{height:auto!important;min-height:0!important}.water-desk #buoyMap{display:none!important}.water-desk .map-legend{display:none!important}.water-desk .filter-bar{display:none!important}</style><p class="map-no-script">The interactive map needs JavaScript. Open the <a href="https://www.ndbc.noaa.gov/" target="_blank" rel="noopener noreferrer">official NOAA station directory</a> to inspect reports.</p></noscript>
+  <section class="map-dossier" id="mapDossier" aria-labelledby="mapStationTitle">
+    <div class="map-dossier-head">
+      <div><span class="water-desk-kicker">Station detail · Select any map marker</span><h3 id="mapStationTitle" tabindex="-1">Choose a buoy on the map</h3><p id="mapStationMeta">Each marker is a reporting point, not a forecast for an entire lake.</p></div>
+      <span id="mapStationAge" class="map-dossier-age" data-state="unknown">No station selected</span>
+    </div>
+    <div class="map-dossier-body">
+      <div class="map-dossier-readings">
+        <div><span>Significant waves</span><strong id="mapStationWave">--</strong><small>ft</small></div>
+        <div><span>Wind</span><strong id="mapStationWind">--</strong><small>kt</small></div>
+        <div><span>Water</span><strong id="mapStationWater">--</strong><small>°F</small></div>
+      </div>
+      <div class="map-dossier-action">
+        <p id="mapStationVerdict" role="status" aria-live="polite">Tap a buoy or choose one from the list. We show missing data rather than filling in estimates.</p>
+        <p class="map-dossier-observed" id="mapStationObserved">Observation time not yet selected</p>
+        <div class="map-dossier-buttons">
+          <button id="mapStationHistory" type="button" disabled>See 5-day history</button>
+          <button id="mapStationCompare" type="button" disabled>Compare this buoy</button>
+          <a id="mapStationSource" href="https://www.ndbc.noaa.gov/" target="_blank" rel="noopener noreferrer">Official station source</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  <p class="water-desk-fineprint">Activity colors are a screening reference from dated point observations, not a boating clearance. Always check <a href="https://www.weather.gov/marine/" target="_blank" rel="noopener noreferrer">NWS marine forecasts and warnings</a>.</p>
+</section>
 
 <section class="quick-answer" id="great-lakes-buoy-answer" aria-labelledby="great-lakes-buoy-answer-title">
   <h2 id="great-lakes-buoy-answer-title">Latest Great Lakes buoy conditions</h2>
@@ -296,14 +350,10 @@ h2.sh{font-size:21px;font-weight:normal;color:#2c5f2d;margin:34px 0 14px;border-
   <div class="ob-actions"><a id="obSourceB" href="https://www.ndbc.noaa.gov/" target="_blank" rel="noopener noreferrer">Official NDBC station</a><button type="button" id="obHistoryB" disabled>View 5-day history</button></div>
 </article>
   </div>
-  <div class="ob-verdict" role="status" aria-live="polite"><strong>Reading the difference</strong><p id="obVerdict">Waiting for station reports. Use the existing map and full list below if the live feed is unavailable.</p></div>
+  <div class="ob-verdict" role="status" aria-live="polite"><strong>Reading the difference</strong><p id="obVerdict">Waiting for station reports. Use the map above or the full station list below when the live feed is unavailable.</p></div>
   <div class="ob-proof"><p id="obProvenance">The feed may be unavailable. Source details and station histories remain on the official <a href="https://www.ndbc.noaa.gov/" target="_blank" rel="noopener noreferrer">NDBC website</a>.</p>
   <p>Wave height is a point observation, not the highest possible wave. Wind and water sensors may be missing independently. Offshore readings do not describe beach breaks or certify conditions for any boat or route. Check the <a href="https://www.weather.gov/marine/" target="_blank" rel="noopener noreferrer">NWS marine forecast and warnings</a> before going out.</p></div>
 </section>
-
-<p>This dashboard pulls real-time observations from reporting National Data Buoy Center (NDBC) buoys and coastal stations across the Great Lakes basin. The reporting total changes as stations are added, serviced, or seasonally retrieved. Wave height, wind speed and gusts, water temperature, air temperature, and barometric pressure appear wherever each station reports them. The map below renders the current set at once. Tap any buoy on the map to open a detail view with current conditions and a 5-day history of wave height, wind speed, water temperature, air temperature, and pressure. Use the activity filter to color-code stations by safety thresholds for your specific lake activity.</p>
-
-<p>I built this because I could not find a single tool that shows all Great Lakes buoys on one map with multi-parameter filtering. The official NDBC maps are clunky, the lake-by-lake aggregators miss CMAN stations, and the marine weather apps do not let you filter by activity. This is the tool I wanted as a Saginaw Bay sailor, ice fisherman, and freighter watcher. Operationally, the page hits a serverless function I run on this domain that fetches NDBC every ten minutes server-side and aggregates the result, so the page loads with a single request regardless of how many buoys are reporting.</p>
 
 <h2 class="sh">Lake-by-Lake Summary</h2>
 <div class="lake-row" id="lakeRow">
@@ -314,32 +364,7 @@ h2.sh{font-size:21px;font-weight:normal;color:#2c5f2d;margin:34px 0 14px;border-
   <div class="lake-card"><div class="lk-name">Ontario</div><div class="lk-count" id="cntOntario">--</div><div class="lk-stats">stations reporting</div></div>
 </div>
 
-<h2 class="sh">Activity Filter</h2>
-<div class="filter-bar">
-  <div class="fb-label">Color-code stations by safe conditions for:</div>
-  <div class="pill-row" id="activityPills">
-    <button class="pill active" data-act="all"><span class="pill-icon">&#127754;</span>All conditions <span class="pill-count" id="cnt-all">--</span></button>
-    <button class="pill" data-act="fishing"><span class="pill-icon">&#127907;</span>Fishing <span class="pill-count" id="cnt-fishing">--</span></button>
-    <button class="pill" data-act="kayaking"><span class="pill-icon">&#128676;</span>Kayaking <span class="pill-count" id="cnt-kayaking">--</span></button>
-    <button class="pill" data-act="swimming"><span class="pill-icon">&#127946;</span>Swimming <span class="pill-count" id="cnt-swimming">--</span></button>
-    <button class="pill" data-act="sailing"><span class="pill-icon">&#9973;</span>Sailing <span class="pill-count" id="cnt-sailing">--</span></button>
-    <button class="pill" data-act="diving"><span class="pill-icon">&#129437;</span>Diving <span class="pill-count" id="cnt-diving">--</span></button>
-  </div>
-  <div class="filter-help" id="filterHelp">All conditions shown. Click a category to filter by safety thresholds for that activity.</div>
-</div>
-
 <div class="smart-cta" id="smartCta"></div>
-
-<h2 class="sh">Interactive Map</h2>
-<p style="font-size:13px;color:#666;margin-bottom:10px;font-style:italic">Tap any buoy on the map to view current conditions and 5-day sparkline history. Hover (on desktop) to preview the station name.</p>
-<div class="map-section">
-  <div class="map-wrap">
-    <div id="buoyMap"></div>
-    <div class="map-legend" id="mapLegend">
-      <div class="lg-title">Loading</div>
-    </div>
-  </div>
-</div>
 
 <div class="geo-tool">
   <h3>Find the buoys nearest to you</h3>
@@ -378,12 +403,6 @@ h2.sh{font-size:21px;font-weight:normal;color:#2c5f2d;margin:34px 0 14px;border-
   <div class="station-list" id="stationList"></div>
 </div>
 
-<div class="about-box">
-  <h3>About this tool</h3>
-  <p>I am <a href="/about/">Chris Izworski</a>, sales engineer at <a href="/chris-izworski-prepared/">Prepared</a> and former Bay County 911 Director from 2013 to 2022, then Saginaw County 911 Executive Director from 2022 to October 2025. I run a network of Great Lakes data tools from Bay City, Michigan, including the <a href="/great-lakes-gazette/">Great Lakes Gazette</a> daily freighter and vessel-movement brief, the <a href="https://greatlakeslevels.org">Great Lakes Level Intelligence</a> shoreline-property water-level dashboard, the <a href="https://michigantroutreport.com">Michigan Trout Report</a>, and the <a href="https://michiganbirdingreport.com">Michigan Birding Report</a>. This buoy dashboard joins the network. If you find it useful, the rest of <a href="/">my Great Lakes work</a> is collected on this site.</p>
-  <p>I serve on the board of <a href="/chris-izworski-save-our-shoreline/">Save Our Shoreline</a>, the Bay City riparian rights organization. I wrote about Great Lakes water levels and the 1986 high-water emergency for <a href="/chris-izworski-news-coverage/">several Michigan publications</a>. The buoy dashboard combines my interests in operational marine data, public-safety adjacent infrastructure, and the lakes themselves.</p>
-</div>
-
 <h2 class="sh">Activity Threshold Rules</h2>
 <p>The activity filter applies the following safety thresholds. These are my judgment calls based on standard marine guidance, not Coast Guard or NWS rules. When in doubt, defer to the actual forecast at <a href="https://www.weather.gov/marine/" target="_blank" rel="noopener">weather.gov/marine</a>.</p>
 
@@ -394,6 +413,7 @@ h2.sh{font-size:21px;font-weight:normal;color:#2c5f2d;margin:34px 0 14px;border-
 <p><strong>Diving:</strong> Waves under 3 feet. Visibility is the real diving constraint, and NDBC stations do not report visibility data consistently. Use the wave threshold as a proxy for surface conditions and check local dive shops for actual visibility.</p>
 
 <h2 class="sh">Data and Coverage</h2>
+<p class="source-owner">Maintained by <a href="/about/">Chris Izworski</a> in Bay City, Michigan. Buoy and coastal station observations come from NOAA NDBC.</p>
 <p>The station catalog combines open-water Great Lakes NDBC buoys with coastal CMAN stations on harbors, lighthouses, breakwaters, and shore-based towers across all five lakes. Reporting totals change as stations come online, go into maintenance, or are seasonally retrieved. The 45xxx open-water buoys are typically removed between November and December for winter maintenance and redeployed after ice clears in spring. Those open-water buoys are the Great Lakes stations most likely to report wave height consistently.</p>
 
 <p>The data feeds directly from NOAA NDBC at <a href="https://www.ndbc.noaa.gov" target="_blank" rel="noopener">ndbc.noaa.gov</a>. Refresh interval is 10 minutes server-side, observed values are typically 5 to 30 minutes old at the source. Wave height is in meters at the source and converted to feet for display. Wind is in meters per second at the source and converted to knots. Water temperature is in Celsius at the source and converted to Fahrenheit for display. Pressure is in hectopascals (same as millibars).</p>
@@ -478,6 +498,7 @@ let buoyMap = null;
 let markers = [];
 let userMarker = null;
 let nameMap = {};
+let selectedMapStationId = null;
 
 // === Unit conversions ===
 function msToKt(v) { return v == null ? null : v * 1.94384; }
@@ -507,33 +528,65 @@ function enrich(s) {
   };
 }
 
-// === Color by status for current activity ===
-function stationColor(s, activity) {
-  // Has insufficient data
-  if (activity !== 'all' && !s.wind_spd && !s.wave_ht && !s.water_t) return '#6b6b6b';
-  // Activity filter
-  if (activity === 'all') {
-    // For all, color by wave height severity
-    if (s.wave_ht_ft == null) return '#475766';
-    if (s.wave_ht_ft < 2) return '#5fc88f';
-    if (s.wave_ht_ft < 4) return '#d0c060';
-    if (s.wave_ht_ft < 6) return '#d09040';
-    return '#c04030';
-  }
-  return ACTIVITIES[activity].test(s) ? '#5fc88f' : '#c04030';
+// === Activity screens measure available, recent reports; they never certify a trip. ===
+const ACTIVITY_REQUIREMENTS = {
+  fishing:['wind_spd_kt','wave_ht_ft'],
+  kayaking:['wind_spd_kt','wave_ht_ft','water_t_f'],
+  swimming:['water_t_f','wave_ht_ft'],
+  sailing:['wind_spd_kt','wave_ht_ft'],
+  diving:['wave_ht_ft','water_t_f']
+};
+function recentObservation(s) {
+  const t = s && s.obs_time && Date.parse(s.obs_time);
+  const age = Date.now() - t;
+  return Number.isFinite(t) && age >= -10*60*1000 && age <= 2*60*60*1000;
 }
+function activityEvidence(s, activity) {
+  if (!recentObservation(s)) return 'unknown';
+  if (activity === 'all') return s.wave_ht_ft == null ? 'unknown' : 'within';
+  if (!ACTIVITY_REQUIREMENTS[activity] || ACTIVITY_REQUIREMENTS[activity].some(key => s[key] == null || !Number.isFinite(s[key]))) return 'unknown';
+  return ACTIVITIES[activity].test(s) ? 'within' : 'outside';
+}
+window.getBuoyActivityEvidence = activityEvidence;
+function stationColor(s, activity) {
+  const result = activityEvidence(s, activity);
+  if (result === 'unknown') return '#586773';
+  if (activity !== 'all') return result === 'within' ? '#2a9975' : '#c57437';
+  if (s.wave_ht_ft < 2) return '#2a9975';
+  if (s.wave_ht_ft < 4) return '#dec65c';
+  if (s.wave_ht_ft < 6) return '#dd9352';
+  return '#b85140';
+}
+function highlightMapStation(id, pan) {
+  selectedMapStationId = id ? String(id) : null;
+  const target = allStations.find(s => String(s.id) === selectedMapStationId);
+  if (pan && target && currentLake !== 'all' && target.lake !== currentLake) {
+    currentLake = 'all';
+    document.querySelectorAll('.lake-pill').forEach(p => p.classList.toggle('active',p.dataset.lake === 'all'));
+    renderMap(allStations);
+    renderList(allStations);
+  }
+  markers.forEach(({marker,station}) => {
+    const selected = selectedMapStationId === String(station.id);
+    marker.setStyle({color:selected?'#102f41':'#273943',weight:selected?4:1.5,fillOpacity:selected?1:.92});
+    marker.setRadius(selected ? (String(station.id).startsWith('45')?13:11) : (String(station.id).startsWith('45')?10:7));
+    if (selected && pan && buoyMap) buoyMap.panTo([station.lat,station.lng]);
+  });
+}
+window.highlightBuoyOnMap = highlightMapStation;
 
 // === Render map ===
 function renderMap(stations) {
   if (typeof L === 'undefined') {
     const box = document.querySelector('.map-wrap');
     box.classList.add('map-unavailable');
-    document.getElementById('buoyMap').innerHTML = '<div class="map-alt"><strong>Map is unavailable</strong><p>You can still compare observations above or browse all reporting stations below.</p><a href="#stationList">Browse station list</a></div>';
+    document.getElementById('buoyMap').innerHTML = '<div class="map-alt"><strong>Map is unavailable</strong><p>Use the station finder above or the reporting-station list below.</p><a href="#stationList">Browse station list</a></div>';
     return;
   }
   document.querySelector('.map-wrap').classList.remove('map-unavailable');
   if (!buoyMap) {
-    buoyMap = L.map('buoyMap', { scrollWheelZoom: false, minZoom: 4, maxZoom: 11 }).setView([45.5, -84.5], 5);
+    buoyMap = L.map('buoyMap', { scrollWheelZoom: false, minZoom: 3, maxZoom: 11 });
+    buoyMap.fitBounds([[41.1,-92.0],[49.3,-76.0]], {padding:[14,14],maxZoom:6});
     L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=cb1_2y8f_1_1ee5e3a872c91d0ebf5d7b88', {
       attribution: '&copy; OpenStreetMap &copy; CARTO',
       subdomains: 'abcd', maxZoom: 19
@@ -558,14 +611,15 @@ function renderMap(stations) {
       direction: 'top', offset: [0, -4], opacity: 0.95, className: 'buoy-tooltip'
     });
     
-    // Click anywhere on the marker opens the detail modal directly
-    marker.on('click', () => openDetail(s));
+    // One selection spine: map marker -> station dossier -> history or comparison.
+    marker.on('click', () => window.dispatchEvent(new CustomEvent('buoy-map-station-selected',{detail:{id:String(s.id),origin:'map'}})));
     
     // Cursor styling so users see it's clickable
     if (marker._path) marker._path.style.cursor = 'pointer';
     
     markers.push({marker, station: s});
   });
+  if (selectedMapStationId) highlightMapStation(selectedMapStationId, false);
 }
 
 // === Render summary cards and pill counts ===
@@ -578,7 +632,7 @@ function renderSummary(stations) {
   });
   
   Object.keys(ACTIVITIES).forEach(act => {
-    const cnt = stations.filter(s => ACTIVITIES[act].test(s)).length;
+    const cnt = act === 'all' ? stations.length : stations.filter(s => activityEvidence(s, act) === 'within').length;
     const el = document.getElementById('cnt-' + act);
     if (el) el.textContent = cnt;
   });
@@ -621,27 +675,16 @@ function renderList(stations) {
 // === Smart CTA ===
 function renderSmartCta(stations) {
   const cta = document.getElementById('smartCta');
-  const maxWave = Math.max(...stations.map(s => s.wave_ht_ft || 0));
-  const maxWind = Math.max(...stations.map(s => s.wind_spd_kt || 0));
-  const coldCount = stations.filter(s => s.water_t_f != null && s.water_t_f < 40).length;
-  const month = new Date().getUTCMonth();
-  const isWinter = month >= 10 || month <= 2;
-  
-  cta.classList.add('show');
+  const recent = stations.filter(recentObservation);
+  const waves = recent.filter(s => Number.isFinite(s.wave_ht_ft));
+  const winds = recent.filter(s => Number.isFinite(s.wind_spd_kt));
   cta.classList.remove('alert');
-  
-  if (maxWave > 8) {
-    cta.classList.add('alert');
-    cta.innerHTML = '<h3>Severe lake conditions</h3><div class="cta-headline">Open water is dangerous right now.</div><p>Peak wave height of <strong>' + maxWave.toFixed(1) + ' ft</strong> reported across the network with wind gusts up to <strong>' + Math.round(maxWind) + ' knots</strong>. November-grade conditions on at least one buoy. The <a href="/edmund-fitzgerald/">Edmund Fitzgerald page</a> covers what these storms can do. Stay off the water and watch from shore.</p>';
-  } else if (maxWave > 5) {
-    cta.innerHTML = '<h3>Elevated wave conditions</h3><div class="cta-headline">Big water on at least one lake.</div><p>Wave heights to <strong>' + maxWave.toFixed(1) + ' ft</strong> on open water. Small craft advisory territory. If you are headed out, stick to protected bays and harbors. See where the freighters are riding it out in the <a href="/great-lakes-gazette/">Great Lakes Gazette</a> daily brief.</p>';
-  } else if (isWinter && coldCount > 5) {
-    cta.innerHTML = '<h3>Winter conditions</h3><div class="cta-headline">Water temperatures near or below freezing.</div><p>The 45xxx open-water buoys are typically pulled for winter. Coastal stations continue reporting. For winter maritime context, the <a href="/soo-locks/">Soo Locks tool</a> tracks the navigation season closure and the <a href="/great-lakes-gazette/">Gazette</a> covers icebreaker activity.</p>';
-  } else if (maxWave < 2 && maxWind < 15) {
-    cta.innerHTML = '<h3>Calm across the basin</h3><div class="cta-headline">Good day to be on the water.</div><p>Light winds and small waves at most stations. Use the activity filter above to find stations safe for your trip. For trip planning beyond just conditions, the <a href="/lake-superior-circle-tour/">Lake Superior Circle Tour</a> and the <a href="https://michigantroutreport.com">Michigan Trout Report</a> are companion tools for the Great Lakes shoreline experience.</p>';
-  } else {
-    cta.innerHTML = '<h3>Mixed conditions</h3><div class="cta-headline">Check the activity filter for your specific plans.</div><p>Wave heights to <strong>' + maxWave.toFixed(1) + ' ft</strong>, peak wind <strong>' + Math.round(maxWind) + ' kt</strong>. Click an activity above to color-code stations for fishing, kayaking, sailing, swimming, or diving thresholds. The <a href="/great-lakes-gazette/">daily Gazette</a> tracks where freighters are working the lakes today.</p>';
-  }
+  if (!recent.length || (!waves.length && !winds.length)) { cta.classList.remove('show'); return; }
+  const wave = waves.length ? Math.max(...waves.map(s=>s.wave_ht_ft)) : null;
+  const wind = winds.length ? Math.max(...winds.map(s=>s.wind_spd_kt)) : null;
+  const format = (v,unit) => v === null ? 'no observations' : v.toFixed(1)+' '+unit;
+  cta.classList.add('show');
+  cta.innerHTML = '<h3>Recent reporting-station sample</h3><div class="cta-headline">'+recent.length+' stations observed within the past two hours</div><p>Highest reported significant wave height: <strong>'+format(wave,'ft')+'</strong> ('+waves.length+' stations with wave sensors). Highest reported wind speed: <strong>'+format(wind,'kt')+'</strong> ('+winds.length+' stations). These are individual observations, not a whole-lake maximum or boating forecast.</p>';
 }
 
 // === Open detail modal with sparklines ===
@@ -770,10 +813,12 @@ function findMyBuoys() {
     btn.textContent = 'Update location'; btn.disabled = false;
     
     if (userMarker) userMarker.remove();
-    userMarker = L.circleMarker([lat, lng], { radius: 9, fillColor: '#2c5f2d', color: '#fff', weight: 2.5, fillOpacity: 1 }).addTo(buoyMap);
-    userMarker.bindPopup('<b>Your location</b><br>' + lat.toFixed(3) + ', ' + lng.toFixed(3));
-    const bounds = L.latLngBounds([lat, lng]).extend(withDist.slice(0, 5).map(s => [s.lat, s.lng]));
-    buoyMap.fitBounds(bounds, { padding: [40, 40] });
+    if (buoyMap && typeof L !== 'undefined') {
+      userMarker = L.circleMarker([lat, lng], { radius: 9, fillColor: '#2c5f2d', color: '#fff', weight: 2.5, fillOpacity: 1 }).addTo(buoyMap);
+      userMarker.bindPopup('<b>Your location</b><br>' + lat.toFixed(3) + ', ' + lng.toFixed(3));
+      const bounds = L.latLngBounds([lat, lng]).extend(withDist.slice(0, 5).map(s => [s.lat, s.lng]));
+      buoyMap.fitBounds(bounds, { padding: [40, 40] });
+    }
   }, err => {
     btn.textContent = 'Location denied'; btn.disabled = false;
     list.innerHTML = '<li><div>Location access denied. Use the map directly to browse stations.</div></li>';
@@ -788,18 +833,18 @@ function updateLegend(activity) {
   if (activity === 'all') {
     legend.innerHTML = `
       <div class="lg-title">Wave height</div>
-      <div class="lg-row"><span class="lg-dot" style="background:#5fc88f"></span>Under 2 ft</div>
-      <div class="lg-row"><span class="lg-dot" style="background:#d0c060"></span>2 to 4 ft</div>
-      <div class="lg-row"><span class="lg-dot" style="background:#d09040"></span>4 to 6 ft</div>
-      <div class="lg-row"><span class="lg-dot" style="background:#c04030"></span>Over 6 ft</div>
-      <div class="lg-row"><span class="lg-dot" style="background:#475766"></span>No wave data</div>
+      <div class="lg-row"><span class="lg-dot" style="background:#2a9975"></span>Under 2 ft</div>
+      <div class="lg-row"><span class="lg-dot" style="background:#dec65c"></span>2 to 4 ft</div>
+      <div class="lg-row"><span class="lg-dot" style="background:#dd9352"></span>4 to 6 ft</div>
+      <div class="lg-row"><span class="lg-dot" style="background:#b85140"></span>Over 6 ft</div>
+      <div class="lg-row"><span class="lg-dot" style="background:#586773"></span>Missing or older data</div>
     `;
   } else {
     legend.innerHTML = `
       <div class="lg-title">${ACTIVITIES[activity].label} conditions</div>
-      <div class="lg-row"><span class="lg-dot" style="background:#5fc88f"></span>Safe</div>
-      <div class="lg-row"><span class="lg-dot" style="background:#c04030"></span>Unsafe / too rough</div>
-      <div class="lg-row"><span class="lg-dot" style="background:#6b6b6b"></span>Insufficient data</div>
+      <div class="lg-row"><span class="lg-dot" style="background:#2a9975"></span>Within screen</div>
+      <div class="lg-row"><span class="lg-dot" style="background:#c57437"></span>Outside screen</div>
+      <div class="lg-row"><span class="lg-dot" style="background:#586773"></span>Missing or older</div>
     `;
   }
 }
@@ -825,7 +870,6 @@ async function init() {
   }
   
   allStations = data.stations.map(enrich);
-  window.dispatchEvent(new CustomEvent('buoy-stations-ready', {detail:{stations:allStations,source:fromSnapshot?'snapshot':'api',fetchedAt:data.fetched_at}}));
   
   // Update strip
   document.getElementById('liveStatus').textContent = fromSnapshot ? 'Saved snapshot; live readings unavailable' : data.count + ' stations reporting';
@@ -841,21 +885,26 @@ async function init() {
     renderSmartCta(allStations);
   }
   updateLegend(currentActivity);
+  window.dispatchEvent(new CustomEvent('buoy-stations-ready', {detail:{stations:allStations,source:fromSnapshot?'snapshot':'api',fetchedAt:data.fetched_at}}));
 }
 
 // === Event handlers ===
 document.getElementById('activityPills').addEventListener('click', e => {
   const btn = e.target.closest('.pill');
   if (!btn) return;
-  document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
-  btn.classList.add('active');
+  document.querySelectorAll('.pill').forEach(p => {
+    const chosen = p === btn;
+    p.classList.toggle('active', chosen);
+    p.setAttribute('aria-pressed', String(chosen));
+  });
   currentActivity = btn.dataset.act;
   document.getElementById('filterHelp').textContent = currentActivity === 'all' ?
     'All conditions shown. Color-coded by wave height severity.' :
-    'Showing ' + ACTIVITIES[currentActivity].label + ' safety thresholds. Green = safe, red = unsafe, gray = insufficient data.';
+    'Reading '+ACTIVITIES[currentActivity].label.toLowerCase()+' conditions: green meets the screening thresholds, amber is outside, gray is missing or older. No color certifies a trip.';
   renderMap(allStations);
   renderList(allStations);
   updateLegend(currentActivity);
+  window.dispatchEvent(new CustomEvent('buoy-activity-changed',{detail:{activity:currentActivity}}));
 });
 
 document.getElementById('lakePills').addEventListener('click', e => {
@@ -864,6 +913,11 @@ document.getElementById('lakePills').addEventListener('click', e => {
   document.querySelectorAll('.lake-pill').forEach(p => p.classList.remove('active'));
   btn.classList.add('active');
   currentLake = btn.dataset.lake;
+  const selected = allStations.find(s => String(s.id) === selectedMapStationId);
+  if (selected && currentLake !== 'all' && selected.lake !== currentLake) {
+    selectedMapStationId = null;
+    window.dispatchEvent(new Event('buoy-map-station-cleared'));
+  }
   renderMap(allStations);
   renderList(allStations);
 });
@@ -894,5 +948,6 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 <script src="/great-lakes-buoys/observation-bridge.js?v=1"></script>
+<script src="/great-lakes-buoys/map-first.js?v=1"></script>
 </body>
 </html>
