@@ -69,6 +69,17 @@ async function main(){
       const mapIndex=await page.evaluate(()=>Array.from(document.querySelectorAll('body *')).filter(e=>e.id==='station-map'||e.id==='observationBridge').map(e=>e.id));
       assert.deepEqual(mapIndex,['station-map','observationBridge']);
       const mapPosition=await page.locator('#station-map').boundingBox();
+      const layout=await page.evaluate(()=>{
+        const selectors=['.header','.nav','.live-strip','.body','.breadcrumb','.page-title','.sub','#waterDesk','.water-desk-head','.filter-bar','.pill-row','.filter-help','.map-first-head','#station-map'];
+        return Object.fromEntries(selectors.map(k=>{
+          const e=document.querySelector(k);
+          if(!e)return [k,null];
+          const r=e.getBoundingClientRect(),styles=getComputedStyle(e);
+          return [k,{top:Math.round(r.top),height:Math.round(r.height),marginTop:styles.marginTop,marginBottom:styles.marginBottom}];
+        }));
+      });
+      if(width===360)console.log('MAP_FIRST_LAYOUT '+JSON.stringify(layout));
+      await page.screenshot({path:path.join(output,'buoy-'+width+'-before-layout-gate.png'),animations:'disabled'});
       assert.ok(mapPosition.y<840,'map appears too late on first '+width+'px viewport: '+mapPosition.y);
       assert.equal(await page.locator('#mapStationPicker').isEnabled(),true);
       assert.match(await page.locator('#mapStationTitle').innerText(),/Choose a buoy/);
