@@ -277,3 +277,10 @@ footer.site-footer a{color:#fff}
   .rideau-flight__crossing small{font-size:.62rem}
 }
 @media(prefers-reduced-motion:reduce){.rideau-flight__node{transition:none!important;transform:none!important}}
+
+/* A wide screen already shows the entire elevation. Keep the miniature only where the large drawing must pan. */
+@media(min-width:1120px){.rideau-flight__overview-panel{display:none}}
+@media(max-width:600px){
+  .rideau-diorama__header{width:100%;max-width:100%;min-width:0}
+  .rideau-diorama__header h3{max-width:100%;white-space:normal;overflow-wrap:break-word;font-size:clamp(1.3rem,5.5vw,1.6rem);line-height:1.18}
+}
