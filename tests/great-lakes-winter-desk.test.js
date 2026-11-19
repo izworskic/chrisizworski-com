@@ -149,7 +149,9 @@ test('winter field map requests keyed CARTO only and retains OSM as fallback',()
   assert.match(js,/tile\.openstreetmap\.org/);
   assert.match(js,/carto\.on\('tileerror'/);
   assert.match(js,/osm\.on\('tileerror'/);
-  assert.match(js,/if\(loaded>=2&&errors===0\)/);
+  assert.match(js,/if\\(!expired&&loaded>=2&&errors===0\\)/);
+  assert.match(js,/deadline=setTimeout\\(\\(\\)=>settle\\(true\\),7500\\)/);
+  assert.match(js,/cartoActive&&cycleErrors>0\\)useOsm\\(\\)/);
   assert.match(js,/fallback\.hidden=false/);
 });
 
