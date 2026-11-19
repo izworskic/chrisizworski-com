@@ -20,11 +20,33 @@
   function filtered(){
     return highlights.filter(p=>p.visit.timeBudgets.includes(state.time)&&p.visit.interests.includes(state.interest));
   }
+  function renderStationPicker(){
+    const strip=$('rideau-station-strip');
+    if(!strip)return;
+    strip.replaceChildren();
+    highlights.forEach((place,index)=>{
+      const button=make('button','rideau-station-chip');
+      button.type='button';
+      button.dataset.placeId=place.id;
+      button.setAttribute('aria-label','Explore '+place.name+' on the map');
+      button.append(make('span','rideau-station-number',String(index+1).padStart(2,'0')),make('span','rideau-station-name',place.name));
+      button.addEventListener('click',()=>choosePlace(place.id,true));
+      strip.append(button);
+    });
+    syncStationPicker();
+  }
+  function syncStationPicker(){
+    const strip=$('rideau-station-strip');
+    if(!strip)return;
+    strip.querySelectorAll('button[data-place-id]').forEach(button=>{
+      button.setAttribute('aria-pressed',String(button.dataset.placeId===state.selectedPlaceId));
+    });
+  }
   function choosePlace(id,focus=false){
     if(!highlights.some(p=>p.id===id))return;
     state.selectedPlaceId=id;
-    renderPlace();
     renderCandidates();
+    renderPlace();
     focusMap(id,focus);
     syncUrl();
   }
@@ -56,6 +78,8 @@
     if(journeyGraph.paddling.some(p=>p.id===q.get('paddle')))state.paddleRoute=q.get('paddle');
   }
   function applyMode(){
+    $('rideau-map-jump').hidden=state.mode!=='visit';
+    document.querySelector('.workspace').dataset.modeCurrent=state.mode;
     document.querySelectorAll('[data-mode]').forEach(button=>{
       const active=button.dataset.mode===state.mode;
       button.setAttribute('aria-pressed',String(active));
@@ -70,15 +94,20 @@
     renderPlace();
     syncUrl();
   }
+  function chooseFilteredDefault(){
+    const exact=filtered();
+    const candidates=exact.length?exact:highlights.filter(p=>p.visit.timeBudgets.includes(state.time));
+    if(candidates.length)state.selectedPlaceId=candidates[0].id;
+  }
   function renderCandidates(){
     const list=$('recommendations');list.replaceChildren();
     const exact=filtered();
     const candidates=state.mode==='visit'?(exact.length?exact:highlights.filter(p=>p.visit.timeBudgets.includes(state.time))):state.mode==='paddle'?highlights.filter(p=>['newboro','chaffeys'].includes(p.id)):highlights;
+    const outOfFilter=state.mode==='visit'&&!candidates.some(p=>p.id===state.selectedPlaceId)?highlights.find(p=>p.id===state.selectedPlaceId):null;
     if(state.mode==='visit'){
       setText('candidate-count',candidates.length+' suggested '+(candidates.length===1?'stop':'stops')+' for this choice');
-      setText('answer-title',exact.length?'Start with '+exact[0].name:'No exact match; consider these alternatives');
-      setText('answer-text',exact.length?'These are destination ideas, not a timed driving itinerary. Choose a location to see its exact evidence and official access information.':'No station in this time window is matched to that interest. The alternatives below fit your time category as editorial ideas, not verified timed routes.');
-      if(candidates.length&&!candidates.some(p=>p.id===state.selectedPlaceId))state.selectedPlaceId=candidates[0].id;
+      setText('answer-title',outOfFilter?'Exploring '+outOfFilter.name:exact.length?'Start with '+exact[0].name:'No exact match; consider these alternatives');
+      setText('answer-text',outOfFilter?'This map selection is outside your current visit filters. The suggested stops below still match the selected time and interests.':exact.length?'These are destination ideas, not a timed driving itinerary. Choose a location to see its exact evidence and official access information.':'No station in this time window is matched to that interest. The alternatives below fit your time category as editorial ideas, not verified timed routes.');
     } else if(state.mode==='paddle'){
       setText('candidate-count','Two separate historic lock visits');
       setText('answer-title','Explore a lock beyond your paddle');
@@ -89,10 +118,12 @@
       setText('answer-title','Compare official waterway distances');
       setText('answer-text','Choose endpoints to see their difference in Parks Canada channel chainage. This is not a route, travel time or lockage appointment.');
     }
-    candidates.forEach(p=>{
+    const displayed=outOfFilter?[outOfFilter,...candidates]:candidates;
+    displayed.forEach(p=>{
       const li=make('li');
       const b=make('button','stop-button');
       b.type='button';b.setAttribute('aria-current',String(p.id===state.selectedPlaceId));
+      if(outOfFilter&&p.id===outOfFilter.id)b.append(make('small','stop-filter-note','Selected on map · outside filters'));
       b.append(make('strong',null,p.name));
       b.append(make('span',null,state.mode==='cruise'?(p.visit.distanceOttawaKm.toFixed(1)+' km from Ottawa'):p.visit.summary));
       b.addEventListener('click',()=>choosePlace(p.id,true));
@@ -133,6 +164,8 @@
   function renderPlace(){
     const p=selected();if(!p)return;
     setText('feature-name',p.name);
+    setText('rideau-lookout-selection',p.name);
+    syncStationPicker();
     setText('feature-region',p.branch==='tay'?'Tay Canal branch':'Rideau Canal / documented stop');
     setText('feature-explain',p.visit.summary);
     setText('feature-tip',p.visit.interpretiveTip);
@@ -180,8 +213,9 @@
   }
   async function initMap(){
     const shell=$('map-shell'),fallback=$('map-fallback');
+    $('rideau-map-readiness').hidden=false;
     const valid=highlights.filter(p=>p.visit?.coordinates);
-    if(!window.L||!valid.length){shell.hidden=true;fallback.hidden=false;return;}
+    if(!window.L||!valid.length){shell.hidden=true;fallback.hidden=false;$('rideau-map-readiness').hidden=true;return;}
     try{
       const source=await mapTileSource();
       shell.hidden=false;
@@ -195,7 +229,7 @@
         const myAttempt=attempt;
         let loaded=false,failures=0;
         activeLayer=L.tileLayer(chosen.url,{maxZoom:17,attribution:chosen.attribution});
-        activeLayer.on('tileload',()=>{loaded=true;});
+        activeLayer.on('tileload',()=>{loaded=true; $('rideau-map-readiness').hidden=true;});
         activeLayer.on('tileerror',()=>{
           failures++;
           if(failures>=5 && myAttempt===attempt){
@@ -213,9 +247,9 @@
       }
       installTiles(source);
       const bounds=[];
-      valid.forEach(p=>{
+      valid.forEach((p,index)=>{
         const {lat,lon}=p.visit.coordinates;
-        const marker=L.marker([lat,lon],{title:p.name,icon:L.divIcon({className:'rideau-marker',html:'<span class="lock-pin">L</span>',iconSize:[32,32],iconAnchor:[16,16]})});
+        const marker=L.marker([lat,lon],{title:p.name,icon:L.divIcon({className:'rideau-marker',html:'<span class="lock-pin">'+(index+1)+'</span>',iconSize:[32,32],iconAnchor:[16,16]})});
         marker.addTo(map).on('click',()=>choosePlace(p.id,true));
         marker.bindTooltip(p.name,{direction:'top'});
         markers.set(p.id,marker);bounds.push([lat,lon]);
@@ -229,6 +263,7 @@
   function disableMap(){
     const shell=$('map-shell');shell.hidden=true;
     $('map-fallback').hidden=false;
+    $('rideau-map-readiness').hidden=true;
     if(map){try{map.remove();}catch(_){}}
     map=null;markers.clear();
   }
@@ -337,6 +372,7 @@
       if(!Array.isArray(data.lockLocations)||data.lockLocations.length!==26||!Array.isArray(data.bridges)||data.bridges.length!==15)throw Error('Inventory failed validation');
       model=data;highlights=data.lockLocations.filter(p=>p.visit);
       readUrl();
+      renderStationPicker();
       const allEndpoints=journeyGraph.mainline.concat(journeyGraph.tay);
       const labelFor=id=>model.lockLocations.find(p=>p.id===id)?.name||
         ({'kingston-causeway':'Kingston La Salle Causeway','perth-basin':'Perth Basin'}[id]||id);
@@ -351,8 +387,8 @@
       $('time-budget').value=state.time;
       $('interest').value=state.interest;
       document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>{state.mode=b.dataset.mode;applyMode();}));
-      $('time-budget').addEventListener('change',e=>{state.time=e.target.value;renderCandidates();renderPlace();syncUrl();});
-      $('interest').addEventListener('change',e=>{state.interest=e.target.value;renderCandidates();renderPlace();syncUrl();});
+      $('time-budget').addEventListener('change',e=>{state.time=e.target.value;chooseFilteredDefault();renderCandidates();renderPlace();syncUrl();});
+      $('interest').addEventListener('change',e=>{state.interest=e.target.value;chooseFilteredDefault();renderCandidates();renderPlace();syncUrl();});
       $('cruise-from').addEventListener('change',e=>{state.start=e.target.value;renderCruise();});
       $('cruise-to').addEventListener('change',e=>{state.end=e.target.value;renderCruise();});
       $('rideau-speed').addEventListener('change',e=>{state.speed=Number(e.target.value);renderCruise();});

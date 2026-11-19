@@ -34,6 +34,43 @@ async function run(){
       assert.equal(await page.locator('#static-stops').isHidden(),true);
       assert.equal(await page.locator('[data-mode="visit"]').getAttribute('aria-pressed'),'true');
       assert.match(await page.locator('#feature-name').innerText(),/Ottawa Locks/);
+      assert.equal(await page.locator('#rideau-lookout').count(),1);
+      assert.equal(await page.locator('#rideau-map-jump').isVisible(),true);
+      assert.equal(await page.locator('#rideau-lookout-selection').innerText(),'Ottawa Locks');
+      assert.equal(await page.locator('#rideau-station-strip button').count(),7);
+      assert.match(await page.locator('#rideau-station-strip [aria-pressed="true"]').innerText(),/Ottawa Locks/);
+      assert.equal(await page.locator('.workspace').getAttribute('data-mode-current'),'visit');
+      const spatialOrder=await page.evaluate(()=>{
+        const map=document.getElementById('rideau-lookout').getBoundingClientRect();
+        const detail=document.getElementById('selected-place').getBoundingClientRect();
+        const photo=document.getElementById('feature-photo-wrap').compareDocumentPosition(document.getElementById('rideau-watch-guide'));
+        return {mapBeforeDetail:map.top<detail.top,photoBeforeWatch:!!(photo&Node.DOCUMENT_POSITION_FOLLOWING)};
+      });
+      assert.equal(spatialOrder.mapBeforeDetail,true,'The map must lead the destination detail');
+      assert.equal(spatialOrder.photoBeforeWatch,true,'The real place photo should precede the long guide');
+      if(width===390||width===1280){
+        await page.locator('#rideau-map .rideau-marker').first().waitFor({timeout:16000});
+        await page.waitForFunction(()=>[...document.querySelectorAll('#rideau-map .leaflet-tile-loaded')].some(img=>img.complete&&img.naturalWidth>=150),null,{timeout:17000}).catch(()=>{});
+        const lookoutShot=path.join(out,'rideau-lookout-map-first-'+width+'.png');
+        await page.locator('#rideau-lookout').screenshot({path:lookoutShot,animations:'disabled'});
+        report.screenshots.push(lookoutShot);
+      }
+      await page.locator('#rideau-map .rideau-marker[title="Merrickville"]').click();
+      assert.equal(await page.locator('#feature-name').innerText(),'Merrickville');
+      assert.equal(await page.locator('#rideau-lookout-selection').innerText(),'Merrickville');
+      assert.match(await page.locator('#answer-title').innerText(),/Exploring Merrickville/);
+      assert.equal(await page.locator('#recommendations .stop-button[aria-current="true"]').count(),1);
+      assert.match(await page.locator('#recommendations .stop-button[aria-current="true"]').innerText(),/outside filters/i);
+      assert.equal(await page.locator('#candidate-count').innerText(),'3 suggested stops for this choice');
+      await page.locator('#rideau-station-strip [data-place-id="newboro"]').click();
+      assert.equal(await page.locator('#feature-name').innerText(),'Newboro');
+      assert.match(await page.locator('#rideau-station-strip [aria-pressed="true"]').innerText(),/Newboro/);
+      assert.equal(await page.locator('#rideau-lookout-selection').innerText(),'Newboro');
+      await page.locator('#interest').selectOption('engineering');
+      assert.equal(await page.locator('#feature-name').innerText(),'Ottawa Locks');
+      assert.equal(await page.locator('#rideau-lookout-selection').innerText(),'Ottawa Locks');
+      assert.equal(await page.locator('#recommendations .stop-button[aria-current="true"]').count(),1);
+
        assert.equal(await page.locator('#rideau-watch-guide').isVisible(),true);
        assert.equal(await page.locator('#rideau-watch-options .rideau-watch-stop').count(),2);
        assert.match(await page.locator('#rideau-watch-guide').innerText(),/Plaza Bridge/);
@@ -121,12 +158,16 @@ async function run(){
       await page.locator('#recommendations .stop-button').first().click();
       assert.match(await page.locator('#feature-name').innerText(),/Merrickville|Chaffeys/);
       await page.locator('[data-mode="cruise"]').click();
+      assert.equal(await page.locator('#rideau-map-jump').isHidden(),true);
+      assert.equal(await page.locator('.workspace').getAttribute('data-mode-current'),'cruise');
       assert.match(await page.locator('#channel-number').innerText(),/159\.0 km/);
       await page.locator('#cruise-to').selectOption('ottawa');
       assert.match(await page.locator('#channel-number').innerText(),/Choose two distinct places/);
       await page.locator('#cruise-to').selectOption('jones-falls');
       assert.match(await page.locator('#channel-number').innerText(),/159\.0 km/);
       await page.locator('[data-mode="paddle"]').click();
+      assert.equal(await page.locator('#rideau-map-jump').isHidden(),true);
+      assert.equal(await page.locator('.workspace').getAttribute('data-mode-current'),'paddle');
       assert.equal(await page.locator('#recommendations .stop-button').count(),2);
       assert.match(await page.locator('#answer-title').innerText(),/Explore a lock beyond your paddle/);
       await page.locator('#recommendations .stop-button').last().click();

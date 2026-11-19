@@ -284,3 +284,48 @@ footer.site-footer a{color:#fff}
   .rideau-diorama__header{width:100%;max-width:100%;min-width:0}
   .rideau-diorama__header h3{max-width:100%;white-space:normal;overflow-wrap:break-word;font-size:clamp(1.3rem,5.5vw,1.6rem);line-height:1.18}
 }
+
+/* Experience Investment: a map-first field locator, not a generic status dashboard. */
+.rideau-map-jump{display:inline-flex;align-items:center;gap:8px;margin:12px 0 4px;padding:9px 12px;min-height:44px;color:#165a70;background:#e7efe9;font-weight:750;text-decoration:underline;text-underline-offset:3px;border-radius:8px;font-size:.94rem}
+.rideau-map-jump[hidden]{display:none!important}
+.rideau-lookout{min-width:0;max-width:100%;margin-bottom:18px;padding:16px 16px 10px;background:#e6eeea;border-radius:16px}
+.rideau-lookout__heading .kicker{margin:0 0 2px;color:#9c4d2d;font-size:.72rem}
+.rideau-lookout__heading h3{margin:0 0 8px;font-size:clamp(1.4rem,2.2vw,1.85rem)}
+.rideau-lookout__selection{margin:0 0 12px;line-height:1.45;color:#37575b;font-size:.93rem}
+.rideau-lookout__selection strong{color:#123d46}
+.rideau-lookout .map-shell{overflow:hidden;border-radius:8px;border:0;background:#d6e6df}
+.rideau-lookout #rideau-map{height:330px}
+.rideau-lookout .map-fallback{background:#fff;border-left:4px solid #8e633e;font-size:.92rem;line-height:1.5}
+.rideau-lookout .map-foot{margin:10px 2px 4px;line-height:1.47;font-size:.83rem;color:#38575c}
+.rideau-lookout .map-foot a{color:#155e82}
+.work-right .feature{margin-bottom:18px}
+.feature__photo{margin:17px 0 20px}
+.feature__photo img{border-radius:8px}
+@media(min-width:1100px) and (min-height:820px){
+  .workspace[data-mode-current="visit"] .work-left{position:sticky;top:16px;align-self:start}
+}
+@media(max-width:900px){
+  .work-right{display:block}
+  .rideau-lookout,.work-right .feature,.work-right .field-note{order:initial}
+}
+@media(max-width:600px){
+  .rideau-lookout{padding:12px;margin-top:0}
+  .rideau-lookout #rideau-map{height:300px}
+  .rideau-lookout__selection span{display:block}
+  .rideau-map-jump{width:100%;justify-content:center}
+}
+.stop-filter-note{display:block;margin-bottom:3px;color:#8a4d31;font-size:.77rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em}
+
+/* Numbered station choices keep the map usable on a phone and without map tiles. */
+.rideau-map-readiness{padding:8px 10px;margin:8px 0 2px;color:#3c5d63;background:#f5f5ec;border-left:3px solid #b78151;font-size:.86rem;line-height:1.4}
+.rideau-map-readiness[hidden]{display:none!important}
+.rideau-station-picker{margin:12px 0 2px;min-width:0}
+.rideau-station-picker>p{margin:0 0 7px;font-weight:780;color:#244b54;font-size:.84rem}
+.rideau-station-strip{display:flex;gap:7px;max-width:100%;overflow-x:auto;overscroll-behavior-x:contain;padding:3px 1px 10px;scroll-snap-type:x proximity;scrollbar-width:thin;scrollbar-color:#74918e transparent}
+.rideau-station-chip{display:inline-flex;gap:7px;align-items:center;flex:0 0 auto;scroll-snap-align:start;min-height:44px;padding:8px 12px 8px 8px;background:#fff;border:1px solid #9eb6b0;border-radius:8px;color:#1b4650;font:750 .86rem/1.25 system-ui,sans-serif}
+.rideau-station-chip[aria-pressed=true]{background:#234f57;color:#fff;border-color:#234f57}
+.rideau-station-chip:focus-visible{outline:3px solid #ad6a39;outline-offset:2px}
+.rideau-station-number{display:inline-flex;width:28px;height:28px;align-items:center;justify-content:center;background:#e0eeeb;border-radius:50%;color:#204b52;font-size:.77rem;font-weight:850;flex-shrink:0}
+.rideau-station-chip[aria-pressed=true] .rideau-station-number{color:#214c55;background:#fff}
+.rideau-lookout .rideau-marker .lock-pin{font-weight:850;font-size:14px}
+@media(max-width:600px){.rideau-station-chip{min-height:48px}.rideau-map-readiness{font-size:.82rem}}

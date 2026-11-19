@@ -11,6 +11,9 @@ on:
       - 'public/assets/rideau-watch.json'
       - 'public/assets/rideau-lock-lab.js'
       - 'public/assets/rideau-lock-flights.js'
+      - 'public/assets/rideau-canal.js'
+      - 'public/assets/rideau-canal.css'
+      - 'tests/rideau-lookout-investment.test.js'
       - 'public/assets/rideau-locks-*-diagram.svg'
       - 'tests/rideau-lock-flights.test.js'
       - 'scripts/verify-rideau-experiences.py'
@@ -42,7 +45,7 @@ jobs:
       - name: Python audited visitor viewpoints and mirrors
         run: python3 scripts/verify-rideau-experiences.py
       - name: Node route, paddle, interpretive instrument and source contracts
-        run: node --test tests/rideau-canal.test.js tests/rideau-journeys.test.js tests/rideau-experiential.test.js tests/rideau-lock-flights.test.js
+        run: node --test tests/rideau-canal.test.js tests/rideau-journeys.test.js tests/rideau-experiential.test.js tests/rideau-lock-flights.test.js tests/rideau-lookout-investment.test.js
       - name: Independent native Rust calculation policy
         run: cargo test --manifest-path rust/rideau-journey/Cargo.toml --offline
       - name: Experience OS source and site integration evidence
