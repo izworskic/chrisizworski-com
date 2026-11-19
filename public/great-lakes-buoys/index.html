@@ -525,6 +525,13 @@ function stationColor(s, activity) {
 
 // === Render map ===
 function renderMap(stations) {
+  if (typeof L === 'undefined') {
+    const box = document.querySelector('.map-wrap');
+    box.classList.add('map-unavailable');
+    document.getElementById('buoyMap').innerHTML = '<div class="map-alt"><strong>Map is unavailable</strong><p>You can still compare observations above or browse all reporting stations below.</p><a href="#stationList">Browse station list</a></div>';
+    return;
+  }
+  document.querySelector('.map-wrap').classList.remove('map-unavailable');
   if (!buoyMap) {
     buoyMap = L.map('buoyMap', { scrollWheelZoom: false, minZoom: 4, maxZoom: 11 }).setView([45.5, -84.5], 5);
     L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=cb1_2y8f_1_1ee5e3a872c91d0ebf5d7b88', {
@@ -821,14 +828,18 @@ async function init() {
   window.dispatchEvent(new CustomEvent('buoy-stations-ready', {detail:{stations:allStations,source:fromSnapshot?'snapshot':'api',fetchedAt:data.fetched_at}}));
   
   // Update strip
-  document.getElementById('liveStatus').textContent = data.count + ' stations reporting';
-  document.getElementById('refreshInfo').textContent = '· fetched ' + fmtTime(data.fetched_at);
+  document.getElementById('liveStatus').textContent = fromSnapshot ? 'Saved snapshot; live readings unavailable' : data.count + ' stations reporting';
+  document.getElementById('refreshInfo').textContent = (fromSnapshot ? '· snapshot retrieved ' : '· fetched ') + fmtTime(data.fetched_at);
   
   // Render everything
   renderSummary(allStations);
   renderMap(allStations);
   renderList(allStations);
-  renderSmartCta(allStations);
+  if (fromSnapshot) {
+    document.getElementById('smartCta').classList.remove('show', 'alert');
+  } else {
+    renderSmartCta(allStations);
+  }
   updateLegend(currentActivity);
 }
 
