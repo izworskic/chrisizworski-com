@@ -38,7 +38,7 @@ test('both supported agents see the same explicit-use skill', () => {
   assert.match(codex, /owning GitHub repo/);
   assert.match(codex, /Never invent a connected Penpot file/);
   assert.match(codex, /No Penpot token/);
-  assert.match(codex, /do not automatically merge or deploy/);
+  assert.match(codex, /[Dd]o not automatically merge or deploy/);
 });
 
 test('the workflow remains source only, with separate authorization and Experience OS release gates', () => {
