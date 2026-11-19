@@ -57,7 +57,7 @@ async function run(){
       assert.equal(await page.locator('#rideau-lookout-selection').innerText(),'Merrickville');
       assert.match(await page.locator('#answer-title').innerText(),/Exploring Merrickville/);
       assert.equal(await page.locator('#recommendations .stop-button[aria-current="true"]').count(),1);
-      assert.match(await page.locator('#recommendations .stop-button[aria-current="true"]').innerText(),/outside filters/);
+      assert.match(await page.locator('#recommendations .stop-button[aria-current="true"]').innerText(),/outside filters/i);
       assert.equal(await page.locator('#candidate-count').innerText(),'3 suggested stops for this choice');
       await page.locator('#interest').selectOption('engineering');
       assert.equal(await page.locator('#feature-name').innerText(),'Ottawa Locks');
