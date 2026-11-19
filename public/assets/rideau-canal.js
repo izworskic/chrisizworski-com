@@ -23,8 +23,8 @@
   function choosePlace(id,focus=false){
     if(!highlights.some(p=>p.id===id))return;
     state.selectedPlaceId=id;
-    renderPlace();
     renderCandidates();
+    renderPlace();
     focusMap(id,focus);
     syncUrl();
   }
@@ -56,6 +56,8 @@
     if(journeyGraph.paddling.some(p=>p.id===q.get('paddle')))state.paddleRoute=q.get('paddle');
   }
   function applyMode(){
+    $('rideau-map-jump').hidden=state.mode!=='visit';
+    document.querySelector('.workspace').dataset.modeCurrent=state.mode;
     document.querySelectorAll('[data-mode]').forEach(button=>{
       const active=button.dataset.mode===state.mode;
       button.setAttribute('aria-pressed',String(active));
@@ -70,15 +72,20 @@
     renderPlace();
     syncUrl();
   }
+  function chooseFilteredDefault(){
+    const exact=filtered();
+    const candidates=exact.length?exact:highlights.filter(p=>p.visit.timeBudgets.includes(state.time));
+    if(candidates.length)state.selectedPlaceId=candidates[0].id;
+  }
   function renderCandidates(){
     const list=$('recommendations');list.replaceChildren();
     const exact=filtered();
     const candidates=state.mode==='visit'?(exact.length?exact:highlights.filter(p=>p.visit.timeBudgets.includes(state.time))):state.mode==='paddle'?highlights.filter(p=>['newboro','chaffeys'].includes(p.id)):highlights;
+    const outOfFilter=state.mode==='visit'&&!candidates.some(p=>p.id===state.selectedPlaceId)?highlights.find(p=>p.id===state.selectedPlaceId):null;
     if(state.mode==='visit'){
       setText('candidate-count',candidates.length+' suggested '+(candidates.length===1?'stop':'stops')+' for this choice');
-      setText('answer-title',exact.length?'Start with '+exact[0].name:'No exact match; consider these alternatives');
-      setText('answer-text',exact.length?'These are destination ideas, not a timed driving itinerary. Choose a location to see its exact evidence and official access information.':'No station in this time window is matched to that interest. The alternatives below fit your time category as editorial ideas, not verified timed routes.');
-      if(candidates.length&&!candidates.some(p=>p.id===state.selectedPlaceId))state.selectedPlaceId=candidates[0].id;
+      setText('answer-title',outOfFilter?'Exploring '+outOfFilter.name:exact.length?'Start with '+exact[0].name:'No exact match; consider these alternatives');
+      setText('answer-text',outOfFilter?'This map selection is outside your current visit filters. The suggested stops below still match the selected time and interests.':exact.length?'These are destination ideas, not a timed driving itinerary. Choose a location to see its exact evidence and official access information.':'No station in this time window is matched to that interest. The alternatives below fit your time category as editorial ideas, not verified timed routes.');
     } else if(state.mode==='paddle'){
       setText('candidate-count','Two separate historic lock visits');
       setText('answer-title','Explore a lock beyond your paddle');
@@ -89,10 +96,12 @@
       setText('answer-title','Compare official waterway distances');
       setText('answer-text','Choose endpoints to see their difference in Parks Canada channel chainage. This is not a route, travel time or lockage appointment.');
     }
-    candidates.forEach(p=>{
+    const displayed=outOfFilter?[outOfFilter,...candidates]:candidates;
+    displayed.forEach(p=>{
       const li=make('li');
       const b=make('button','stop-button');
       b.type='button';b.setAttribute('aria-current',String(p.id===state.selectedPlaceId));
+      if(outOfFilter&&p.id===outOfFilter.id)b.append(make('small','stop-filter-note','Selected on map · outside filters'));
       b.append(make('strong',null,p.name));
       b.append(make('span',null,state.mode==='cruise'?(p.visit.distanceOttawaKm.toFixed(1)+' km from Ottawa'):p.visit.summary));
       b.addEventListener('click',()=>choosePlace(p.id,true));
@@ -133,6 +142,7 @@
   function renderPlace(){
     const p=selected();if(!p)return;
     setText('feature-name',p.name);
+    setText('rideau-lookout-selection',p.name);
     setText('feature-region',p.branch==='tay'?'Tay Canal branch':'Rideau Canal / documented stop');
     setText('feature-explain',p.visit.summary);
     setText('feature-tip',p.visit.interpretiveTip);
@@ -351,8 +361,8 @@
       $('time-budget').value=state.time;
       $('interest').value=state.interest;
       document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>{state.mode=b.dataset.mode;applyMode();}));
-      $('time-budget').addEventListener('change',e=>{state.time=e.target.value;renderCandidates();renderPlace();syncUrl();});
-      $('interest').addEventListener('change',e=>{state.interest=e.target.value;renderCandidates();renderPlace();syncUrl();});
+      $('time-budget').addEventListener('change',e=>{state.time=e.target.value;chooseFilteredDefault();renderCandidates();renderPlace();syncUrl();});
+      $('interest').addEventListener('change',e=>{state.interest=e.target.value;chooseFilteredDefault();renderCandidates();renderPlace();syncUrl();});
       $('cruise-from').addEventListener('change',e=>{state.start=e.target.value;renderCruise();});
       $('cruise-to').addEventListener('change',e=>{state.end=e.target.value;renderCruise();});
       $('rideau-speed').addEventListener('change',e=>{state.speed=Number(e.target.value);renderCruise();});

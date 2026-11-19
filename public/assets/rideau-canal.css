@@ -284,3 +284,34 @@ footer.site-footer a{color:#fff}
   .rideau-diorama__header{width:100%;max-width:100%;min-width:0}
   .rideau-diorama__header h3{max-width:100%;white-space:normal;overflow-wrap:break-word;font-size:clamp(1.3rem,5.5vw,1.6rem);line-height:1.18}
 }
+
+/* Experience Investment: a map-first field locator, not a generic status dashboard. */
+.rideau-map-jump{display:inline-flex;align-items:center;gap:8px;margin:12px 0 4px;padding:9px 12px;min-height:44px;color:#165a70;background:#e7efe9;font-weight:750;text-decoration:underline;text-underline-offset:3px;border-radius:8px;font-size:.94rem}
+.rideau-map-jump[hidden]{display:none!important}
+.rideau-lookout{min-width:0;max-width:100%;margin-bottom:18px;padding:16px 16px 10px;background:#e6eeea;border-radius:16px}
+.rideau-lookout__heading .kicker{margin:0 0 2px;color:#9c4d2d;font-size:.72rem}
+.rideau-lookout__heading h3{margin:0 0 8px;font-size:clamp(1.4rem,2.2vw,1.85rem)}
+.rideau-lookout__selection{margin:0 0 12px;line-height:1.45;color:#37575b;font-size:.93rem}
+.rideau-lookout__selection strong{color:#123d46}
+.rideau-lookout .map-shell{overflow:hidden;border-radius:8px;border:0;background:#d6e6df}
+.rideau-lookout #rideau-map{height:330px}
+.rideau-lookout .map-fallback{background:#fff;border-left:4px solid #8e633e;font-size:.92rem;line-height:1.5}
+.rideau-lookout .map-foot{margin:10px 2px 4px;line-height:1.47;font-size:.83rem;color:#38575c}
+.rideau-lookout .map-foot a{color:#155e82}
+.work-right .feature{margin-bottom:18px}
+.feature__photo{margin:17px 0 20px}
+.feature__photo img{border-radius:8px}
+@media(min-width:1100px) and (min-height:820px){
+  .workspace[data-mode-current="visit"] .work-left{position:sticky;top:16px;align-self:start}
+}
+@media(max-width:900px){
+  .work-right{display:block}
+  .rideau-lookout,.work-right .feature,.work-right .field-note{order:initial}
+}
+@media(max-width:600px){
+  .rideau-lookout{padding:12px;margin-top:0}
+  .rideau-lookout #rideau-map{height:300px}
+  .rideau-lookout__selection span{display:block}
+  .rideau-map-jump{width:100%;justify-content:center}
+}
+.stop-filter-note{display:block;margin-bottom:3px;color:#8a4d31;font-size:.77rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em}
