@@ -114,8 +114,8 @@
     svg+='<path d="M16 '+g.ys[0]+'h'+(g.xs[0]-16)+'v63H0z" fill="#89bdc6" opacity=".95"/>';
     const last=g.ys.length-1,end=g.xs[last]+g.widths[last];
     svg+='<rect x="'+end+'" y="'+g.ys[last]+'" width="'+(1200-end)+'" height="72" fill="#89bdc6"/>';
-    svg+='<text x="24" y="'+(g.ys[0]-16)+'" font-size="18" font-weight="700" fill="#31545c">'+esc(site.lower)+'</text>';
-    svg+='<text x="'+(end-10)+'" y="'+(g.ys[last]-19)+'" font-size="18" font-weight="700" fill="#31545c">'+esc(site.upper)+'</text>';
+    svg+='<text x="24" y="'+(g.ys[0]-96)+'" font-size="18" font-weight="700" fill="#31545c">'+esc(site.lower)+'</text>';
+    svg+='<text x="1164" y="'+(g.ys[last]-19)+'" text-anchor="end" font-size="18" font-weight="700" fill="#31545c">'+esc(site.upper)+'</text>';
     if(g.isJones)svg+=drawBasin();
     for(let i=0;i<site.locks.length;i++)svg+=chamber(site,i,selected);
     svg+='<path d="M147 140h310" stroke="#b36d43" stroke-width="3" stroke-dasharray="8 7" marker-end="url(#flight-arrow)" fill="none"/>';
