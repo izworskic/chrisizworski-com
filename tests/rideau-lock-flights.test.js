@@ -67,3 +67,11 @@ test('site identity, source links, ad and canonical contracts survive the redesi
   assert.match(html,/not live lock levels/);
   assert.match(html,/not a scale model|not to scale/i);
 });
+
+test('connected chambers share a boundary, while Jones has a real turning-basin gap',()=>{
+  const o=api.geometry('ottawa'),j=api.geometry('jones');
+  for(let i=0;i<7;i++)assert.equal(o.xs[i]+o.widths[i],o.xs[i+1],'Ottawa lock '+(i+1)+' disconnected');
+  for(let i=0;i<2;i++)assert.equal(j.xs[i]+j.widths[i],j.xs[i+1],'Jones lower flight disconnected');
+  assert.equal(j.xs[2]+j.widths[2],610,'Jones basin begins after the three lower locks');
+  assert.ok(j.xs[3]-610>=180,'Jones upper lock must be detached by an open basin');
+});
