@@ -356,3 +356,64 @@ test('official notice and parking UI are synchronized to the same selected outin
   assert.match(js,/loadOperatorNotices\(\)/);
   assert.match(js,/renderOperatorNotice\(place\)/);
 });
+
+test('field-atlas puts a chart inside the selected outing without hiding evidence',()=>{
+  const html=source('index.html');
+  const publicHtml=fs.readFileSync(path.resolve(__dirname,'../public/great-lakes-winter-field-desk/index.html'),'utf8');
+  const css=source('desk.css');
+  const publicCss=fs.readFileSync(path.resolve(__dirname,'../public/great-lakes-winter-field-desk/desk.css'),'utf8');
+  assert.equal(css,publicCss,'preview and published atlas must share styles');
+  for(const page of [html,publicHtml]){
+    const opening=page.indexOf('id="quick-outing"');
+    const assignment=page.indexOf('class="assignment" id="assignment"');
+    const map=page.indexOf('class="regional" aria-labelledby="map-heading"');
+    const readiness=page.indexOf('id="trip-readiness"');
+    const weather=page.indexOf('class="weather-desk"');
+    assert.ok(opening>0&&opening<assignment&&assignment<map&&map<readiness&&readiness<weather,
+      'first answer, trip, map, evidence and weather stay in visitor order');
+    assert.match(page,/class="quick-chart" href="#map-heading"/);
+    assert.match(page,/class="chart-follow" href="#trip-readiness"/);
+    assert.match(page,/name="robots" content="noindex,nofollow,noarchive"/);
+    assert.match(page,/https:\/\/chrisizworski\.com\/#person/);
+    assert.equal((page.match(/id="coast-map"/g)||[]).length,1);
+    assert.equal((page.match(/id="stage-photo"/g)||[]).length,1);
+    assert.equal((page.match(/id="arrival-title"/g)||[]).length,1);
+    assert.equal((page.match(/data-place="/g)||[]).length,3);
+  }
+  assert.match(css,/Experience Investment 2026-11-19/);
+  assert.match(css,/\.regional\{[\s\S]*?width:100%/);
+  assert.match(css,/@media\(max-width:600px\)/);
+  assert.match(css,/@media\(prefers-reduced-motion:reduce\)/);
+  assert.ok(!/font-size:\s*0/.test(css),'no collapsed text');
+});
+
+
+test('winter field map preserves three-location geography and selected waypoint',()=>{
+  const preview=source('app.js');
+  const published=fs.readFileSync(path.resolve(__dirname,'../public/great-lakes-winter-field-desk/app.js'),'utf8');
+  assert.equal(preview,published,'preview and public map scripts must match exactly');
+  const html=source('index.html');
+  const publicHtml=fs.readFileSync(path.resolve(__dirname,'../public/great-lakes-winter-field-desk/index.html'),'utf8');
+  for(const page of [html,publicHtml]){
+    assert.match(page,/id="map-overview"[^>]+type="button" hidden/);
+    assert.equal((page.match(/id="map-overview"/g)||[]).length,1);
+    assert.match(page,/data-place="gooseberry-upper"/);
+    assert.match(page,/data-place="munising-snowshoe"/);
+    assert.match(page,/data-place="meyers-lakeshore"/);
+    assert.match(page,/noindex,nofollow,noarchive/);
+  }
+  assert.match(preview,/L\.latLngBounds\(C\.PLACES\.map\(place=>\[place\.lat,place\.lon\]\)\)/);
+  assert.match(preview,/map\.fitBounds\(bounds,\{padding:\[30,30\],maxZoom:7,animate:false\}\)/);
+  assert.doesNotMatch(preview,/map\.flyTo\(/,'single-point flyTo would hide distant waypoints');
+  assert.match(preview,/zoomAnimation:false/,'avoid stale animated map coordinates during overview reset');
+  assert.match(preview,/map\.stop\(\)/,'stop an in-progress map movement before framing all points');
+  assert.match(preview,/active\.bringToFront\(\)/);
+  assert.match(preview,/new ResizeObserver\(\(\)=>\{/);
+  assert.match(preview,/\$\('map-overview'\)\.addEventListener\('click',\(\)=>showAllThree\(\)\)/);
+  assert.match(preview,/showAllThree\(\);\s*\}\s*function renderButtons/,'manual selection returns to the overview');
+  const css=source('desk.css');
+  const publicCss=fs.readFileSync(path.resolve(__dirname,'../public/great-lakes-winter-field-desk/desk.css'),'utf8');
+  assert.equal(css,publicCss);
+  assert.match(css,/\.chart-overview\{/);
+  assert.match(css,/\.chart-overview:focus-visible/);
+});
