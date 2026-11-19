@@ -84,9 +84,9 @@ h1{font-family:Georgia,serif;font-size:clamp(31px,4.5vw,55px);line-height:1.05;l
   <div>
    <div class="actions">
     <a class="cta cta-primary" id="maps-link" href="#" rel="noopener noreferrer" target="_blank" hidden>Find this place on Google Maps</a>
-    <a class="cta cta-secondary" id="rules-link" href="#" rel="noopener noreferrer" target="_blank" hidden>Check the official source</a>
+    <a class="cta cta-secondary" id="rules-link" href="#" rel="noopener noreferrer" target="_blank" hidden>Check local notices</a>
    </div>
-   <p class="detail-footer"><strong>Before you drive:</strong> Recheck the launch time and public access notices. A scheduled flight does not establish that a beach, park or visitor center is open.</p>
+   <p class="detail-footer"><strong>Before you drive:</strong> Recheck the launch time and public access notices. A place on a map is not an open gate.</p>
   </div>
  </article>
 </div>
@@ -96,9 +96,9 @@ h1{font-family:Georgia,serif;font-size:clamp(31px,4.5vw,55px);line-height:1.05;l
 <script>
 (()=>{'use strict';
  const choices={
- visitor:{title:'NASA Wallops Visitor Center',description:'A visitor-center setting near the range. NASA may open special launch viewing for particular missions, but an ordinary location listing does not establish event admission.',condition:'Check NASA\'s announcement for the exact mission. Special viewing may not be offered.',query:'NASA Wallops Visitor Center, 175 Chincoteague Road, Wallops Island, Virginia',rules:'https://www.nasa.gov/wallops/visitor-center/view-a-launch-from-nasa-wallops-visitor-center/'},
- waterfront:{title:'Robert Reed Waterfront Park',description:'A waterfront place in Chincoteague to investigate as a public vantage point. Confirm the park and parking arrangements for the day you plan to visit.',condition:'This example does not establish an open parking lot, a clear sightline or a guaranteed launch view.',query:'Robert N Reed Sr Downtown Waterfront Park, Chincoteague, Virginia',rules:'https://www.chincoteague-va.gov/'},
- harbor:{title:'Curtis Merritt Harbor',description:'An alternative shoreline setting on Chincoteague. Check local parking rules and any event-specific access notices before travelling.',condition:'Public location information does not establish launch-day parking or unrestricted access.',query:'Curtis Merritt Harbor, Chincoteague, Virginia',rules:'https://www.chincoteague-va.gov/'}
+ visitor:{title:'NASA Wallops Visitor Center',description:'A visitor-center setting near the range. NASA may open special launch viewing for particular missions, but an ordinary location listing does not establish event admission.',condition:'Check NASA\'s announcement for the exact mission. Special viewing may not be offered.',query:'NASA Wallops Visitor Center, 175 Chincoteague Road, Wallops Island, Virginia',ruleLabel:'Read NASA viewing guidance',rules:'https://www.nasa.gov/wallops/visitor-center/view-a-launch-from-nasa-wallops-visitor-center/'},
+ waterfront:{title:'Robert Reed Waterfront Park',description:'A waterfront place in Chincoteague to investigate as a public vantage point. Confirm the park and parking arrangements for the day you plan to visit.',condition:'Before you leave, check park access and parking. Your view will also depend on the launch and the sky.',query:'Robert N Reed Sr Downtown Waterfront Park, Chincoteague, Virginia',ruleLabel:'Check town notices',rules:'https://www.chincoteague-va.gov/'},
+ harbor:{title:'Curtis Merritt Harbor',description:'An alternative shoreline setting on Chincoteague. Check local parking rules and any event-specific access notices before travelling.',condition:'Confirm which parts of the harbor and parking areas are open to visitors before heading over.',query:'Curtis Merritt Harbor, Chincoteague, Virginia',ruleLabel:'Check town notices',rules:'https://www.chincoteague-va.gov/'}
  };
  const options=[...document.querySelectorAll('[data-site]')];
  const title=document.getElementById('detail-title');
@@ -112,7 +112,7 @@ h1{font-family:Georgia,serif;font-size:clamp(31px,4.5vw,55px);line-height:1.05;l
   title.textContent=place.title;description.textContent=place.description;
   condition.textContent=place.condition;condition.hidden=false;
   maps.href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(place.query);
-  rules.href=place.rules;maps.hidden=false;rules.hidden=false;
+  rules.href=place.rules;rules.textContent=place.ruleLabel;maps.hidden=false;rules.hidden=false;
  }
  for(const b of options)b.addEventListener('click',()=>select(b.dataset.site));
 })();
