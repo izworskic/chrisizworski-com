@@ -136,12 +136,21 @@ test('the hourly forecast has an explicit accessible inspection control',()=>{
   assert.match(js,/NWS forecast, not observed trail conditions/);
 });
 
-test('map tile errors display a usable fallback rather than an unmarked blank map',()=>{
+test('winter field map requests keyed CARTO only and retains OSM as fallback',()=>{
   const html=source('index.html'),js=source('app.js');
+  const publicApp=fs.readFileSync(path.resolve(__dirname,'../public/great-lakes-winter-field-desk/app.js'),'utf8');
+  assert.equal(js,publicApp,'preview and public maps stay synchronized');
   assert.match(html,/id="map-fallback"/);
   assert.match(html,/data-place="gooseberry-upper"/);
-  assert.match(js,/basemap\.on\('tileerror'/);
-  assert.match(js,/\$\('map-fallback'\)\.hidden=false/);
+  assert.match(js,/fetch\('\/api\/carto-basemap-config'/);
+  assert.match(js,/credentials:'same-origin'/);
+  assert.match(js,/rastertiles\/voyager\/\{z\}\/\{x\}\/\{y\}\{r\}\.png\?key='\+encodeURIComponent\(key\)/);
+  assert.doesNotMatch(js,/cartocdn\.com\/light_all|cartocdn\.com[^\n]*\.png['"]/);
+  assert.match(js,/tile\.openstreetmap\.org/);
+  assert.match(js,/carto\.on\('tileerror'/);
+  assert.match(js,/osm\.on\('tileerror'/);
+  assert.match(js,/if\(loaded>=2&&errors===0\)/);
+  assert.match(js,/fallback\.hidden=false/);
 });
 
 test('source scanner reachability never becomes an opening or safety verdict',()=>{
