@@ -36,6 +36,29 @@ async function mockNws(page,failed=false){
     return route.fulfill({status:200,contentType:'application/geo+json',body:JSON.stringify(body)});
   });
 }
+async function assertThreeMapPinsInView(page,stage){
+  // A real Leaflet SVG marker must sit within the visible map viewport,
+  // rather than simply existing offscreen in the underlying DOM.
+  const result=await page.evaluate(()=>{
+    const host=document.querySelector('#coast-map');
+    const viewport=host.getBoundingClientRect();
+    const markers=[...host.querySelectorAll('.leaflet-overlay-pane path.leaflet-interactive')];
+    return {
+      count:markers.length,
+      pins:markers.map(el=>{
+        const box=el.getBoundingClientRect();
+        const x=(box.left+box.right)/2,y=(box.top+box.bottom)/2;
+        return {
+          x:Math.round(x-viewport.left),y:Math.round(y-viewport.top),
+          inside:x>=viewport.left+8&&x<=viewport.right-8&&y>=viewport.top+8&&y<=viewport.bottom-8
+        };
+      })
+    };
+  });
+  assert.equal(result.count,3,stage+' should render three actual Leaflet map markers');
+  assert.ok(result.pins.every(pin=>pin.inside),stage+' should show all three markers: '+JSON.stringify(result.pins));
+}
+
 async function main(){
   fs.mkdirSync(screenshotDir,{recursive:true});
   const browser=await chromium.launch({
@@ -44,7 +67,7 @@ async function main(){
   });
   const summary=[];
   try{
-    for(const width of [360,390,768,1440]){
+    for(const width of [360,390,768,1280,1440]){
       const page=await browser.newPage({viewport:{width,height:850},reducedMotion:'reduce'});
       const errors=[],unkeyedCarto=[];
       page.on('pageerror',e=>errors.push(e.message));
@@ -54,6 +77,23 @@ async function main(){
       await mockNws(page);
       await page.goto(base,{waitUntil:'domcontentloaded',timeout:30000});
       await page.waitForTimeout(1300);
+      await page.waitForFunction(()=>document.querySelectorAll('#coast-map .leaflet-overlay-pane path.leaflet-interactive').length===3,null,{timeout:10000});
+      await assertThreeMapPinsInView(page,'initial chart '+width+'px');
+      assert.equal(await page.locator('#map-overview').isVisible(),true,'overview reset is available with Leaflet');
+      assert.equal(await page.locator('.regional').evaluate(el=>el.closest('article')?.id),'assignment',
+        'shoreline chart is part of the current outing');
+      assert.equal(await page.locator('.quick-chart').getAttribute('href'),'#map-heading');
+      assert.equal(await page.locator('.chart-follow').getAttribute('href'),'#trip-readiness');
+      const openingBounds=await page.evaluate(()=>({
+        answer:document.querySelector('#quick-outing').getBoundingClientRect().top,
+        choices:document.querySelector('#mission-label').getBoundingClientRect().top
+      }));
+      assert.ok(openingBounds.answer>=0&&openingBounds.answer<850,'first recommendation is visible on first screen');
+      assert.ok(openingBounds.choices<850,'the activity choice begins on first screen');
+      await page.locator('.quick-chart').click();
+      assert.equal(await page.evaluate(()=>location.hash),'#map-heading','map jump is actionable');
+      await page.locator('.chart-follow').click();
+      assert.equal(await page.evaluate(()=>location.hash),'#trip-readiness','chart returns to access and arrival details');
       await page.locator('#day').selectOption('tomorrow');
       const original=await page.locator('#stage-title').textContent();
       assert.match(original,/Upper Falls/);
@@ -75,6 +115,7 @@ async function main(){
         await page.locator('[data-goal="'+goal+'"]').click();
         assert.match((await page.locator('#stage-title').textContent()).toLowerCase(),new RegExp(text.toLowerCase()));
         assert.equal(await page.locator('[data-goal="'+goal+'"]').getAttribute('aria-pressed'),'true');
+        await assertThreeMapPinsInView(page,'selected '+goal+' at '+width+'px');
         assert.equal(await page.locator('#route-policy-link').getAttribute('href'),await page.locator('#official-link').getAttribute('href'));
         const expectedArrival={snowshoe:'Pictured Rocks Ski Trail Parking',coast:'Meyers Beach Parking',falls:'Gooseberry Falls Visitor Center'};
         await page.waitForFunction(expected=>document.querySelector('#arrival-title')?.textContent.includes(expected),expectedArrival[goal],{timeout:10000});
@@ -92,6 +133,21 @@ async function main(){
         assert.equal(await page.locator('#stage-photo').evaluate(img=>img.complete&&img.naturalWidth>0),true,'real place photo');
         assert.match(await page.locator('#source-direct').getAttribute('href'),/^https:\/\/(?:www\.nps\.gov|www\.dnr\.state\.mn\.us)\//);
       }
+      await page.locator('[data-place="munising-snowshoe"]').click();
+      assert.match(await page.locator('#stage-title').textContent(),/blue posts/i);
+      assert.equal(await page.locator('[data-place="munising-snowshoe"]').getAttribute('aria-pressed'),'true');
+      await page.locator('[data-place="gooseberry-upper"]').click();
+      assert.match(await page.locator('#stage-title').textContent(),/Upper Falls/i);
+      await assertThreeMapPinsInView(page,'after map-list A-B-A '+width+'px');
+      // Manual zoom may narrow the geography; an explicit control restores
+      // the three-place overview without changing the selected outing.
+      await page.locator('#coast-map .leaflet-control-zoom-in').click();
+      await page.locator('#map-overview').click();
+      // Let the browser apply SVG transforms before measuring the settled map.
+      await page.waitForTimeout(200);
+      await assertThreeMapPinsInView(page,'manual map overview reset '+width+'px');
+      assert.match(await page.locator('#stage-title').textContent(),/Upper Falls/i);
+      await page.waitForFunction(()=>document.querySelectorAll('#coast-map .leaflet-tile-loaded').length>=2,null,{timeout:12000});
       const metrics=await page.evaluate(()=>({
         overflow:document.documentElement.scrollWidth>innerWidth,
         tiles:document.querySelectorAll('.leaflet-tile-loaded').length,
@@ -103,7 +159,10 @@ async function main(){
       assert.ok(metrics.tiles>=2,'real map tiles');
       assert.equal(errors.length,0,'browser JavaScript errors');
       assert.equal(unkeyedCarto.length,0,'no unauthenticated CARTO raster tile requests');
+      await page.evaluate(()=>window.scrollTo(0,0));
+      await page.waitForTimeout(120);
       await page.screenshot({path:path.join(screenshotDir,'desk-'+width+'.png'),fullPage:true,animations:'disabled'});
+      if(width===390||width===1280)await page.locator('.regional').screenshot({path:path.join(screenshotDir,'chart-'+width+'.png'),animations:'disabled'});
       summary.push({width,...metrics,errors});
       await page.close();
     }
