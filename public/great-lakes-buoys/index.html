@@ -216,6 +216,7 @@ h2.sh{font-size:21px;font-weight:normal;color:#2c5f2d;margin:34px 0 14px;border-
 }
 </style>
 <link rel="stylesheet" href="/great-lakes-buoys/observation-bridge.css?v=1">
+<link rel="stylesheet" href="/great-lakes-buoys/map-first.css?v=1">
 <script defer src="/_vercel/insights/script.js"></script>
 <script>window.si=window.si||function(){(window.siq=window.siq||[]).push(arguments)};</script>
 <script defer src="/_vercel/speed-insights/script.js"></script>
@@ -238,14 +239,67 @@ h2.sh{font-size:21px;font-weight:normal;color:#2c5f2d;margin:34px 0 14px;border-
 <div class="breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/tools/">Tools</a> &rsaquo; Great Lakes Buoys</div>
 
 <h1 class="page-title">Great Lakes Buoys Live: Waves, Wind &amp; Water Temperature</h1>
-<p class="sub">Live wave height, wind, and water temperature from reporting NOAA/NDBC stations across Lakes Superior, Michigan, Huron, Erie, and Ontario</p>
+<p class="sub">Check measured waves, wind and water temperature across all five Great Lakes.</p>
 
-<div class="byline">
-  <a href="/about/" aria-label="About Chris Izworski"><div class="byline-avatar">CI</div></a>
-  <div class="byline-meta">
-    Built and maintained by <a href="/about/">Chris Izworski</a> in Bay City, Michigan. Data via NOAA NDBC (refreshed every 10 minutes). See also <a href="/">my other Great Lakes tools</a>.
+<section class="water-desk" id="waterDesk" aria-labelledby="waterDeskHeading">
+  <div class="water-desk-head">
+    <div><span class="water-desk-kicker">Great Lakes · Water conditions</span>
+      <h2 id="waterDeskHeading">What are you heading out to do?</h2>
+      <p>Select an activity, then pick a buoy to see what it actually measured.</p>
+    </div>
+    <a class="water-desk-source" href="https://www.ndbc.noaa.gov/" target="_blank" rel="noopener noreferrer">NOAA NDBC observations</a>
+  </div>
+  <div class="filter-bar">
+  <div class="fb-label">Your activity changes the map</div>
+  <div class="pill-row" id="activityPills">
+    <button class="pill active" data-act="all" type="button" aria-pressed="true"><span class="pill-icon">&#127754;</span>All conditions <span class="pill-count" id="cnt-all">--</span></button>
+    <button class="pill" type="button" aria-pressed="false" data-act="fishing"><span class="pill-icon">&#127907;</span>Fishing <span class="pill-count" id="cnt-fishing">--</span></button>
+    <button class="pill" type="button" aria-pressed="false" data-act="kayaking"><span class="pill-icon">&#128676;</span>Kayaking <span class="pill-count" id="cnt-kayaking">--</span></button>
+    <button class="pill" type="button" aria-pressed="false" data-act="swimming"><span class="pill-icon">&#127946;</span>Swimming <span class="pill-count" id="cnt-swimming">--</span></button>
+    <button class="pill" type="button" aria-pressed="false" data-act="sailing"><span class="pill-icon">&#9973;</span>Sailing <span class="pill-count" id="cnt-sailing">--</span></button>
+    <button class="pill" type="button" aria-pressed="false" data-act="diving"><span class="pill-icon">&#129437;</span>Diving <span class="pill-count" id="cnt-diving">--</span></button>
+  </div>
+  <div class="filter-help" id="filterHelp">Pick an activity to see how recent station readings compare with its screening thresholds. These are not go/no-go safety advice.</div>
+</div>
+  <div class="map-first-head">
+    <div><h2>Explore the Great Lakes</h2><p>Tap a station to see its observations and compare another location.</p></div>
+    <label for="mapStationPicker">Find a buoy by name or station ID
+      <select id="mapStationPicker" disabled><option value="">Loading reporting stations</option></select>
+    </label>
+  </div>
+  <div class="map-section" id="station-map">
+  <div class="map-wrap">
+    <div id="buoyMap"></div>
+    <div class="map-legend" id="mapLegend">
+      <div class="lg-title">Loading</div>
+    </div>
   </div>
 </div>
+  <noscript><style>.water-desk .map-wrap{height:auto!important;min-height:0!important}.water-desk #buoyMap{display:none!important}.water-desk .map-legend{display:none!important}</style><p class="map-no-script">The interactive map needs JavaScript. Open the <a href="https://www.ndbc.noaa.gov/" target="_blank" rel="noopener noreferrer">official NOAA station directory</a> to inspect reports.</p></noscript>
+  <section class="map-dossier" id="mapDossier" aria-labelledby="mapStationTitle">
+    <div class="map-dossier-head">
+      <div><span class="water-desk-kicker">Station detail · Select any map marker</span><h3 id="mapStationTitle" tabindex="-1">Choose a buoy on the map</h3><p id="mapStationMeta">Each marker is a reporting point, not a forecast for an entire lake.</p></div>
+      <span id="mapStationAge" class="map-dossier-age" data-state="unknown">No station selected</span>
+    </div>
+    <div class="map-dossier-body">
+      <div class="map-dossier-readings">
+        <div><span>Significant waves</span><strong id="mapStationWave">--</strong><small>ft</small></div>
+        <div><span>Wind</span><strong id="mapStationWind">--</strong><small>kt</small></div>
+        <div><span>Water</span><strong id="mapStationWater">--</strong><small>°F</small></div>
+      </div>
+      <div class="map-dossier-action">
+        <p id="mapStationVerdict" role="status" aria-live="polite">Tap a buoy or choose one from the list. We show missing data rather than filling in estimates.</p>
+        <p class="map-dossier-observed" id="mapStationObserved">Observation time not yet selected</p>
+        <div class="map-dossier-buttons">
+          <button id="mapStationHistory" type="button" disabled>See 5-day history</button>
+          <button id="mapStationCompare" type="button" disabled>Compare this buoy</button>
+          <a id="mapStationSource" href="https://www.ndbc.noaa.gov/" target="_blank" rel="noopener noreferrer">Official station source</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  <p class="water-desk-fineprint">Activity colors are a screening reference from dated point observations, not a boating clearance. Always check <a href="https://www.weather.gov/marine/" target="_blank" rel="noopener noreferrer">NWS marine forecasts and warnings</a>.</p>
+</section>
 
 <section class="quick-answer" id="great-lakes-buoy-answer" aria-labelledby="great-lakes-buoy-answer-title">
   <h2 id="great-lakes-buoy-answer-title">Latest Great Lakes buoy conditions</h2>
@@ -296,14 +350,10 @@ h2.sh{font-size:21px;font-weight:normal;color:#2c5f2d;margin:34px 0 14px;border-
   <div class="ob-actions"><a id="obSourceB" href="https://www.ndbc.noaa.gov/" target="_blank" rel="noopener noreferrer">Official NDBC station</a><button type="button" id="obHistoryB" disabled>View 5-day history</button></div>
 </article>
   </div>
-  <div class="ob-verdict" role="status" aria-live="polite"><strong>Reading the difference</strong><p id="obVerdict">Waiting for station reports. Use the existing map and full list below if the live feed is unavailable.</p></div>
+  <div class="ob-verdict" role="status" aria-live="polite"><strong>Reading the difference</strong><p id="obVerdict">Waiting for station reports. Use the map above or the full station list below when the live feed is unavailable.</p></div>
   <div class="ob-proof"><p id="obProvenance">The feed may be unavailable. Source details and station histories remain on the official <a href="https://www.ndbc.noaa.gov/" target="_blank" rel="noopener noreferrer">NDBC website</a>.</p>
   <p>Wave height is a point observation, not the highest possible wave. Wind and water sensors may be missing independently. Offshore readings do not describe beach breaks or certify conditions for any boat or route. Check the <a href="https://www.weather.gov/marine/" target="_blank" rel="noopener noreferrer">NWS marine forecast and warnings</a> before going out.</p></div>
 </section>
-
-<p>This dashboard pulls real-time observations from reporting National Data Buoy Center (NDBC) buoys and coastal stations across the Great Lakes basin. The reporting total changes as stations are added, serviced, or seasonally retrieved. Wave height, wind speed and gusts, water temperature, air temperature, and barometric pressure appear wherever each station reports them. The map below renders the current set at once. Tap any buoy on the map to open a detail view with current conditions and a 5-day history of wave height, wind speed, water temperature, air temperature, and pressure. Use the activity filter to color-code stations by safety thresholds for your specific lake activity.</p>
-
-<p>I built this because I could not find a single tool that shows all Great Lakes buoys on one map with multi-parameter filtering. The official NDBC maps are clunky, the lake-by-lake aggregators miss CMAN stations, and the marine weather apps do not let you filter by activity. This is the tool I wanted as a Saginaw Bay sailor, ice fisherman, and freighter watcher. Operationally, the page hits a serverless function I run on this domain that fetches NDBC every ten minutes server-side and aggregates the result, so the page loads with a single request regardless of how many buoys are reporting.</p>
 
 <h2 class="sh">Lake-by-Lake Summary</h2>
 <div class="lake-row" id="lakeRow">
@@ -314,32 +364,7 @@ h2.sh{font-size:21px;font-weight:normal;color:#2c5f2d;margin:34px 0 14px;border-
   <div class="lake-card"><div class="lk-name">Ontario</div><div class="lk-count" id="cntOntario">--</div><div class="lk-stats">stations reporting</div></div>
 </div>
 
-<h2 class="sh">Activity Filter</h2>
-<div class="filter-bar">
-  <div class="fb-label">Color-code stations by safe conditions for:</div>
-  <div class="pill-row" id="activityPills">
-    <button class="pill active" data-act="all"><span class="pill-icon">&#127754;</span>All conditions <span class="pill-count" id="cnt-all">--</span></button>
-    <button class="pill" data-act="fishing"><span class="pill-icon">&#127907;</span>Fishing <span class="pill-count" id="cnt-fishing">--</span></button>
-    <button class="pill" data-act="kayaking"><span class="pill-icon">&#128676;</span>Kayaking <span class="pill-count" id="cnt-kayaking">--</span></button>
-    <button class="pill" data-act="swimming"><span class="pill-icon">&#127946;</span>Swimming <span class="pill-count" id="cnt-swimming">--</span></button>
-    <button class="pill" data-act="sailing"><span class="pill-icon">&#9973;</span>Sailing <span class="pill-count" id="cnt-sailing">--</span></button>
-    <button class="pill" data-act="diving"><span class="pill-icon">&#129437;</span>Diving <span class="pill-count" id="cnt-diving">--</span></button>
-  </div>
-  <div class="filter-help" id="filterHelp">All conditions shown. Click a category to filter by safety thresholds for that activity.</div>
-</div>
-
 <div class="smart-cta" id="smartCta"></div>
-
-<h2 class="sh">Interactive Map</h2>
-<p style="font-size:13px;color:#666;margin-bottom:10px;font-style:italic">Tap any buoy on the map to view current conditions and 5-day sparkline history. Hover (on desktop) to preview the station name.</p>
-<div class="map-section">
-  <div class="map-wrap">
-    <div id="buoyMap"></div>
-    <div class="map-legend" id="mapLegend">
-      <div class="lg-title">Loading</div>
-    </div>
-  </div>
-</div>
 
 <div class="geo-tool">
   <h3>Find the buoys nearest to you</h3>
@@ -378,12 +403,6 @@ h2.sh{font-size:21px;font-weight:normal;color:#2c5f2d;margin:34px 0 14px;border-
   <div class="station-list" id="stationList"></div>
 </div>
 
-<div class="about-box">
-  <h3>About this tool</h3>
-  <p>I am <a href="/about/">Chris Izworski</a>, sales engineer at <a href="/chris-izworski-prepared/">Prepared</a> and former Bay County 911 Director from 2013 to 2022, then Saginaw County 911 Executive Director from 2022 to October 2025. I run a network of Great Lakes data tools from Bay City, Michigan, including the <a href="/great-lakes-gazette/">Great Lakes Gazette</a> daily freighter and vessel-movement brief, the <a href="https://greatlakeslevels.org">Great Lakes Level Intelligence</a> shoreline-property water-level dashboard, the <a href="https://michigantroutreport.com">Michigan Trout Report</a>, and the <a href="https://michiganbirdingreport.com">Michigan Birding Report</a>. This buoy dashboard joins the network. If you find it useful, the rest of <a href="/">my Great Lakes work</a> is collected on this site.</p>
-  <p>I serve on the board of <a href="/chris-izworski-save-our-shoreline/">Save Our Shoreline</a>, the Bay City riparian rights organization. I wrote about Great Lakes water levels and the 1986 high-water emergency for <a href="/chris-izworski-news-coverage/">several Michigan publications</a>. The buoy dashboard combines my interests in operational marine data, public-safety adjacent infrastructure, and the lakes themselves.</p>
-</div>
-
 <h2 class="sh">Activity Threshold Rules</h2>
 <p>The activity filter applies the following safety thresholds. These are my judgment calls based on standard marine guidance, not Coast Guard or NWS rules. When in doubt, defer to the actual forecast at <a href="https://www.weather.gov/marine/" target="_blank" rel="noopener">weather.gov/marine</a>.</p>
 
@@ -394,6 +413,7 @@ h2.sh{font-size:21px;font-weight:normal;color:#2c5f2d;margin:34px 0 14px;border-
 <p><strong>Diving:</strong> Waves under 3 feet. Visibility is the real diving constraint, and NDBC stations do not report visibility data consistently. Use the wave threshold as a proxy for surface conditions and check local dive shops for actual visibility.</p>
 
 <h2 class="sh">Data and Coverage</h2>
+<p class="source-owner">Maintained by <a href="/about/">Chris Izworski</a> in Bay City, Michigan. Buoy and coastal station observations come from NOAA NDBC.</p>
 <p>The station catalog combines open-water Great Lakes NDBC buoys with coastal CMAN stations on harbors, lighthouses, breakwaters, and shore-based towers across all five lakes. Reporting totals change as stations come online, go into maintenance, or are seasonally retrieved. The 45xxx open-water buoys are typically removed between November and December for winter maintenance and redeployed after ice clears in spring. Those open-water buoys are the Great Lakes stations most likely to report wave height consistently.</p>
 
 <p>The data feeds directly from NOAA NDBC at <a href="https://www.ndbc.noaa.gov" target="_blank" rel="noopener">ndbc.noaa.gov</a>. Refresh interval is 10 minutes server-side, observed values are typically 5 to 30 minutes old at the source. Wave height is in meters at the source and converted to feet for display. Wind is in meters per second at the source and converted to knots. Water temperature is in Celsius at the source and converted to Fahrenheit for display. Pressure is in hectopascals (same as millibars).</p>
