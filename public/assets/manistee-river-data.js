@@ -1,4 +1,4 @@
-window.MANISTEE_FIELD_DATA = {
+const MANISTEE_FIELD_DATA = {
   version: '2026-08-20',
   bbox: [-86.35, 44.02, -84.68, 44.95],
   waterways: [
@@ -127,6 +127,10 @@ window.MANISTEE_FIELD_DATA = {
     speedMph:{upper:3.0,middle:2.7,lower:3.0,pine:2.8}
   }
 };
+
+// One canonical source for the browser and read-only server contract.
+if(typeof window!=='undefined')window.MANISTEE_FIELD_DATA=MANISTEE_FIELD_DATA;
+if(typeof module!=='undefined'&&module.exports)module.exports=MANISTEE_FIELD_DATA;
 
 // Optional decision layers are additive. The core source-backed map, access list,
 // live gauges and NHD planner remain usable if any enhancement fails to load.

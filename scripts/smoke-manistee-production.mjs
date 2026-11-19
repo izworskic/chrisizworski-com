@@ -120,6 +120,30 @@ try{
   assert(Array.isArray(weatherJson.alerts),'weather API alerts contract missing');
   assert(weatherJson.precipitation_context,'weather API precipitation context missing');
 
+  // The new v1 contract must ship with the same source-owned field map.
+  // Catalog and invalid-pair checks are source-independent and always testable.
+  assert(page.text.includes('/assets/manistee-route-core.js'),'shared Manistee routing asset missing from HTML');
+  const routeCore=await fetchText('/assets/manistee-route-core.js');
+  assert(routeCore.text.includes('function routeGraph(graph,start,end)'),'shared routing algorithm missing from public asset');
+  assert(routeCore.text.includes('function buildGraph(features)'),'shared network graph missing from public asset');
+
+  const floatCatalog=await fetchText('/api/manistee-float-v1?mode=access',{expectNoindex:true});
+  const floatData=JSON.parse(floatCatalog.text);
+  assert(floatData.contract==='manistee-float/v1','Manistee float API contract version mismatch');
+  assert(floatData.kind==='access-catalog','Manistee float API catalog missing');
+  assert(floatData.owner==='https://chrisizworski.com/manistee-river-map/','Float API does not point to its original field map');
+  assert(Array.isArray(floatData.access)&&floatData.access.length>=37,'Float API lacks the full existing landing inventory');
+  assert(floatData.access.every(p=>p.currentAccessVerified===false&&p.provenance?.url),'Float API provenance or open-status guard missing');
+  assert(floatData.access.find(p=>p.id==='high-bridge')?.accessCaution==='route-caution','High Bridge access caution missing from API');
+
+  const invalidPair=await fetch(new URL('/api/manistee-float-v1?mode=route&from=ccc&to=pine-peterson',ORIGIN),{
+    headers:{'user-agent':'ChrisIzworskiManisteeProductionSmoke/5.1'},signal:AbortSignal.timeout(15000)
+  });
+  assert(invalidPair.status===422,'New route API did not refuse cross-waterway request');
+  assert((invalidPair.headers.get('x-robots-tag')||'').includes('noindex'),'Route API error was not noindex');
+  const denied=await invalidPair.json();
+  assert(denied.contract==='manistee-float/v1'&&denied.error==='DIFFERENT_WATERWAYS','Cross-waterway refusal has the wrong contract');
+
   const hydro=await fetchText('/api/manistee-river-hydrography',{expectNoindex:true});
   const hydroJson=JSON.parse(hydro.text);
   assert(hydroJson.type==='FeatureCollection','hydrography API is not a FeatureCollection');

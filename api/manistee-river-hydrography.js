@@ -2,9 +2,14 @@ const NHD='https://hydro.nationalmap.gov/arcgis/rest/services/nhd/MapServer/6/qu
 const BBOX='-86.35,44.02,-84.68,44.95';
 const NAMES=['Manistee River','Pine River','Bear Creek','Little Manistee River'];
 
-function queryUrl(){
+const PAGE_SIZE=400;
+const MAX_PAGES=8;
+
+function queryUrl(options={}){
+  const name=options.name;
+  if(name!==undefined&&!NAMES.includes(name))throw new Error('Unsupported river name');
   const url=new URL(NHD);
-  url.searchParams.set('where',NAMES.map(n=>`gnis_name='${n.replaceAll("'","''")}'`).join(' OR '));
+  url.searchParams.set('where',(name?[name]:NAMES).map(n=>`gnis_name='${n.replaceAll("'","''")}'`).join(' OR '));
   url.searchParams.set('geometry',BBOX);
   url.searchParams.set('geometryType','esriGeometryEnvelope');
   url.searchParams.set('inSR','4326');
@@ -13,6 +18,13 @@ function queryUrl(){
   url.searchParams.set('returnGeometry','true');
   url.searchParams.set('outSR','4326');
   url.searchParams.set('f','geojson');
+  if(options.page!==undefined){
+    if(!Number.isInteger(options.page)||options.page<0||options.page>=MAX_PAGES)
+      throw new Error('Invalid river page');
+    url.searchParams.set('orderByFields','OBJECTID');
+    url.searchParams.set('resultOffset',String(options.page*PAGE_SIZE));
+    url.searchParams.set('resultRecordCount',String(PAGE_SIZE));
+  }
   return url.toString();
 }
 function property(properties={},lower,alias){
@@ -41,6 +53,121 @@ function cleanGeoJson(payload){
   };
 }
 
+async function fetchNhdPage(url,fetcher=fetch,allowMore=false,timeoutMs=4500){
+  // Bounded transient retry stays within the earlier 10-second request budget.
+  // An invalid or incomplete source response is a hard failure, not retry data.
+  let payload=null;
+  for(let attempt=0;attempt<2;attempt++){
+    try{
+      const response=await fetcher(url,{headers:{
+        accept:'application/geo+json, application/json',
+        'user-agent':'ChrisIzworskiManisteeFieldMap/1.0 (https://chrisizworski.com/manistee-river-map/)'
+      },signal:AbortSignal.timeout(timeoutMs)});
+      if(!response.ok){
+        const error=new Error("USGS NHD returned "+response.status);
+        error.retryable=[429,502,503,504].includes(response.status);
+        throw error;
+      }
+      payload=await response.json();
+      break;
+    }catch(error){
+      if(attempt===1||!(error.retryable||error.name==='TimeoutError'||error.name==='AbortError'))
+        throw error;
+      await new Promise(resolve=>setTimeout(resolve,200));
+    }
+  }
+  if(payload?.error||!Array.isArray(payload?.features))
+    throw new Error('USGS NHD response is invalid or unavailable');
+  if(payload.exceededTransferLimit===true&&!allowMore)
+    throw new Error('USGS NHD response incomplete: transfer limit exceeded');
+  return payload;
+}
+
+async function fetchPagesForName(name,fetcher=fetch,timeoutMs=4500){
+  if(!NAMES.includes(name))throw new Error('Unsupported river name');
+  const features=[];
+  for(let page=0;page<MAX_PAGES;page++){
+    const payload=await fetchNhdPage(queryUrl({name,page}),fetcher,true,timeoutMs);
+    const subset=cleanGeoJson(payload).features.filter(f=>f.properties.name===name);
+    features.push(...subset);
+    if(subset.length!==payload.features.length)throw new Error('Unexpected river feature in source page');
+    if(payload.features.length<PAGE_SIZE&&payload.exceededTransferLimit!==true)return features;
+    if(payload.features.length<PAGE_SIZE&&payload.exceededTransferLimit===true)
+      throw new Error('USGS NHD paged response is marked incomplete');
+  }
+  throw new Error('USGS NHD river page limit reached: incomplete data');
+}
+function report(features,names,mode){
+  if(!features.length)throw new Error('USGS NHD returned no named Manistee-basin flowlines');
+  return {
+    source:'USGS The National Map, National Hydrography Dataset',
+    source_url:'https://hydro.nationalmap.gov/arcgis/rest/services/nhd/MapServer/6',
+    fetched_at:new Date().toISOString(),
+    bbox:BBOX.split(',').map(Number),
+    sourceCompleteness:'complete-retrieved-set',
+    retrievalMode:mode,
+    requestedWaterways:names,
+    type:'FeatureCollection',
+    features,
+  };
+}
+async function fetchHydrographyUncached(options={}){
+  const fetcher=options.fetcher||fetch;
+  // A source acceptance run may allow slower official responses than the public
+  // serverless request. The exact dataset and completeness tests remain identical.
+  const timeoutMs=Number.isInteger(options.timeoutMs)&&options.timeoutMs>=1000&&options.timeoutMs<=12000
+    ?options.timeoutMs:4500;
+  if(options.name){
+    const features=await fetchPagesForName(options.name,fetcher,timeoutMs);
+    return report(features,[options.name],'paged-single-waterway');
+  }
+  try{
+    const payload=await fetchNhdPage(queryUrl(),fetcher,false,timeoutMs);
+    // A result at the service's advertised 2000-record cap is not evidence of completeness.
+    if(payload.features.length>=2000)throw new Error('USGS NHD unpaged response may be truncated');
+    return report(cleanGeoJson(payload).features,NAMES,'original-complete-query');
+  }catch(primaryError){
+    // Retry from the same official NHD layer using page-bounded named-waterway queries.
+    // Never fall back to straight-line geometry or a different unvalidated GIS source.
+    const groups=await Promise.all(NAMES.map(name=>fetchPagesForName(name,fetcher,timeoutMs)));
+    return report(groups.flat(),NAMES,'paged-official-recovery');
+  }
+}
+
+// Keep a successful, source-complete hydrography response within one warm
+// function instance. This is an optimization, not a durable or cross-instance
+// source store. Expiry always forces another official-source fetch.
+const GEOMETRY_MEMORY_TTL_MS=6*60*60*1000;
+const geometryMemory=new Map();
+async function fetchHydrography(options={}){
+  if(options.name!==undefined&&!NAMES.includes(options.name))
+    throw new Error('Unsupported river name');
+  // Tests with custom source adapters are isolated unless explicitly testing
+  // the cache. Never reuse fixtures as production source responses.
+  if(options.fetcher&&options.cache!==true)return fetchHydrographyUncached(options);
+  const key=options.name||'full-basin';
+  const now=Date.now();
+  const current=geometryMemory.get(key);
+  if(current){
+    if(current.promise)return current.promise;
+    if(current.expiresAt>now)return current.payload;
+    geometryMemory.delete(key);
+  }
+  const promise=fetchHydrographyUncached(options);
+  geometryMemory.set(key,{promise});
+  try{
+    const payload=await promise;
+    if(payload.sourceCompleteness!=='complete-retrieved-set' ||
+       !Array.isArray(payload.features) || payload.features.length===0)
+      throw new Error('USGS NHD incomplete geometry cannot be cached');
+    geometryMemory.set(key,{payload,expiresAt:Date.now()+GEOMETRY_MEMORY_TTL_MS});
+    return payload;
+  }catch(error){
+    if(geometryMemory.get(key)?.promise===promise)geometryMemory.delete(key);
+    throw error;
+  }
+}
+
 module.exports=async function handler(req,res){
   res.setHeader('Access-Control-Allow-Origin','*');
   res.setHeader('X-Robots-Tag','noindex, nofollow');
@@ -48,24 +175,19 @@ module.exports=async function handler(req,res){
     res.setHeader('Allow','GET, HEAD');
     return res.status(405).json({error:'Method not allowed'});
   }
+  if(req.method==='HEAD'){
+    res.setHeader('Cache-Control','public, s-maxage=3600');
+    return res.status(200).end();
+  }
   try{
-    const response=await fetch(queryUrl(),{headers:{accept:'application/geo+json, application/json','user-agent':'ChrisIzworskiManisteeFieldMap/1.0 (https://chrisizworski.com/manistee-river-map/)'},signal:AbortSignal.timeout(10000)});
-    if(!response.ok)throw new Error(`USGS NHD returned ${response.status}`);
-    const payload=await response.json();
-    const geojson=cleanGeoJson(payload);
-    if(!geojson.features.length)throw new Error('USGS NHD returned no named Manistee-basin flowlines');
+    const payload=await fetchHydrography();
     res.setHeader('Cache-Control','public, s-maxage=86400, stale-while-revalidate=604800');
-    return res.status(200).json({
-      source:'USGS The National Map — National Hydrography Dataset',
-      source_url:'https://hydro.nationalmap.gov/arcgis/rest/services/nhd/MapServer/6',
-      fetched_at:new Date().toISOString(),
-      bbox:BBOX.split(',').map(Number),
-      ...geojson
-    });
+    return res.status(200).json(payload);
   }catch(error){
     res.setHeader('Cache-Control','no-store');
     return res.status(502).json({error:'USGS hydrography unavailable',detail:String(error?.message||error)});
   }
 };
 
-module.exports._test={queryUrl,cleanGeoJson,property,NAMES,BBOX};
+module.exports.fetchHydrography=fetchHydrography;
+module.exports._test={queryUrl,cleanGeoJson,property,NAMES,BBOX,PAGE_SIZE,MAX_PAGES,fetchNhdPage,fetchPagesForName,GEOMETRY_MEMORY_TTL_MS,clearGeometryMemory:()=>geometryMemory.clear()};

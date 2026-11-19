@@ -136,7 +136,7 @@ section('Mobile, sharing & discovery',[
 ]);
 
 section('Graceful degradation',[
-  ok('Core coverage is additive',/const D=window\.MANISTEE_FIELD_DATA;if\(!D\)return/.test(coverageJs),true),
+  ok('Core coverage is additive',/if\(!D\)return D/.test(coverageJs)&&/if\(root&&root\.MANISTEE_FIELD_DATA\)augment\(root\.MANISTEE_FIELD_DATA\)/.test(coverageJs)&&/module\.exports=augment/.test(coverageJs),true),
   ok('Core works without persona/depth optional modules',!html.includes('manistee-river-personas.js')&&!html.includes('manistee-river-live-depth.js'),true),
   ok('Hydro outage leaves guide usable',/access points and guide still work/.test(js),true),
   ok('USGS outage leaves static tool usable',/Static access, hydrography and source links remain usable/.test(js),true),
