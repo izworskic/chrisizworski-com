@@ -1,6 +1,6 @@
-## Penpot design: on-demand only (2026-11-18)
+## Penpot design: on-demand only
 
-Only when the owner **explicitly requests Penpot**, load the repository's `penpot-design` skill (`.agents/skills/penpot-design/SKILL.md` for Codex, `.claude/skills/penpot-design/SKILL.md` for Claude Code) and `docs/PENPOT_DESIGN_WORKFLOW.md`. Do **not** run Penpot as part of ordinary coding, automatic Experience OS reviews, Foundry work, or background monitoring. The public MCP URL is registered for coding clients, but a real authenticated connection and open design file must be demonstrated before claiming Penpot inspection or edits. Experience OS, Foundry, owning-repository boundaries, ads, canonical/Person and CI safeguards remain authoritative. The official upstream Penpot AI Kit is optional and is not bundled by this skill.
+Only when Penpot is explicitly requested, use `.agents/skills/penpot-design/SKILL.md` (Codex) or `.claude/skills/penpot-design/SKILL.md` (Claude Code) and `docs/PENPOT_DESIGN_WORKFLOW.md`. The repository MCP URL is not a verified connection. Preserve owning-repository rules, Experience OS, Foundry, ads, SEO and CI gates. Never invoke Penpot automatically.
 
 ## EXPERIENCE_FOUNDRY — tool improvement cycle 0.3 (2026-11-08)
 
