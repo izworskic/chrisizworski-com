@@ -1,3 +1,9 @@
+## EXPERIENCE_INVESTMENT - purpose-built new tools and redesigns (2026-11-19)
+
+For a new substantial visitor-facing tool proposal, a major UI/design review, or an implementation request to refresh an existing tool, first use the repository skill at [.agents/skills/experience-investment/SKILL.md](.agents/skills/experience-investment/SKILL.md) (Codex) or [.claude/skills/experience-investment/SKILL.md](.claude/skills/experience-investment/SKILL.md) (Claude Code). Follow its shared decision lenses and review/delivery contract. Trigger automatically for significant new work; skip the full exercise for minor fixes. Pick visual form and technology from the specific visitor decision. The Michigan Snow Totals Visual V1 pilot is an example, **not** a site-wide page skin. Compare two materially different options and reject cloned layouts with only new colors, images or labels. When asked to implement, review then actually implement and verify; when asked for a proposal or review only, do not edit production.
+
+Experience OS v1.2.1, Foundry, owning-repository rules, real-browser QA, source facts, accessibility, ads, canonical/Person and full CI remain authoritative. This skill introduces no public route or deployment dependency. Penpot stays explicitly opt-in; do not invoke it without a Penpot request. Extracted independent tool repos must adopt the skill separately.
+
 ## Penpot design: on-demand only
 
 Only when Penpot is explicitly requested, use `.agents/skills/penpot-design/SKILL.md` (Codex) or `.claude/skills/penpot-design/SKILL.md` (Claude Code) and `docs/PENPOT_DESIGN_WORKFLOW.md`. The repository MCP URL is not a verified connection. Preserve owning-repository rules, Experience OS, Foundry, ads, SEO and CI gates. Never invoke Penpot automatically.
