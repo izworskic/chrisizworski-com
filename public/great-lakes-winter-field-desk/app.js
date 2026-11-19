@@ -343,13 +343,13 @@
           }
           fallback.hidden=osmReady;
         }
-        function settle(){
+        function settle(expired=false){
           if(finished)return;
           finished=true;
           clearTimeout(deadline);
-          // A completed, error-free tile batch is required before dropping the
-          // fallback: one successful tile does not establish full map coverage.
-          if(loaded>=2&&errors===0){
+          // Only Leaflet's completed error-free load event can promote CARTO.
+          // A timer expiring after partial tile success is never proof of coverage.
+          if(!expired&&loaded>=2&&errors===0){
             cartoActive=true;
             map.removeLayer(osm);
             fallback.hidden=true;
@@ -370,10 +370,10 @@
         });
         carto.on('load',()=>{
           if(!finished)settle();
-          else if(cartoActive&&cycleErrors>0&&cycleLoaded===0)useOsm();
+          else if(cartoActive&&cycleErrors>0)useOsm();
         });
         carto.addTo(map);
-        deadline=setTimeout(settle,7500);
+        deadline=setTimeout(()=>settle(true),7500);
       }
       upgradeToCarto();
     }catch(_){
