@@ -26,7 +26,7 @@ async function run(){
   for(const width of [360,390,768,1280,1440]){
    const ctx=await browser.newContext({viewport:{width,height:840},reducedMotion:'reduce'});
    // Screenshots measure our authored layout without relying on outside image or tag endpoints.
-   await ctx.route('**/*',r=>new URL(r.request().url).host==='127.0.0.1:'+new URL(origin).port?r.continue():r.abort());
+   await ctx.route('**/*',r=>new URL(r.request().url()).host==='127.0.0.1:'+new URL(origin).port?r.continue():r.abort());
    const page=await ctx.newPage(),errors=[];
    page.on('pageerror',e=>errors.push(e.message));
    await page.goto(origin,{waitUntil:'domcontentloaded'});
@@ -70,7 +70,7 @@ async function run(){
    await ctx.close();
   }
   const nj=await browser.newContext({javaScriptEnabled:false,viewport:{width:390,height:800}});
-  await nj.route('**/*',r=>new URL(r.request().url).host==='127.0.0.1:'+new URL(origin).port?r.continue():r.abort());
+  await nj.route('**/*',r=>new URL(r.request().url()).host==='127.0.0.1:'+new URL(origin).port?r.continue():r.abort());
   const noJs=await nj.newPage();
   await noJs.goto(origin,{waitUntil:'domcontentloaded'});
   assert.match(await noJs.locator('#sp-notebook-title').innerText(),/first chorus/i);
