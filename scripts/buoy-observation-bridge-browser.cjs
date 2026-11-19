@@ -87,6 +87,14 @@ async function main(){
       assert.match(await page.locator('#mapStationTitle').innerText(),/Western Lake Erie/);
       await page.selectOption('#mapStationPicker','45029');
       assert.match(await page.locator('#mapStationTitle').innerText(),/Holland buoy/);
+      // Filtering the list/map to a different lake must clear an invisible selection.
+      await page.locator('[data-lake="Erie"]').click();
+      assert.match(await page.locator('#mapStationTitle').innerText(),/Choose a buoy/);
+      assert.equal(await page.locator('#mapStationPicker').inputValue(),'');
+      // Choosing a station outside that filter reveals it on the full-basin map again.
+      await page.selectOption('#mapStationPicker','45029');
+      assert.match(await page.locator('#mapStationTitle').innerText(),/Holland buoy/);
+      assert.equal(await page.locator('[data-lake="all"]').getAttribute('class')?.includes('active'),true);
       await page.locator('#mapStationCompare').click();
       assert.equal(await page.locator('#obStationA').inputValue(),'45029');
       await page.locator('[data-act="all"]').click();
