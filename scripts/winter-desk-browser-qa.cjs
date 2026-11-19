@@ -43,8 +43,11 @@ async function main(){
   try{
     for(const width of [360,390,768,1440]){
       const page=await browser.newPage({viewport:{width,height:850},reducedMotion:'reduce'});
-      const errors=[];
+      const errors=[],unkeyedCarto=[];
       page.on('pageerror',e=>errors.push(e.message));
+      page.on('request',request=>{
+        if(/basemaps\\.cartocdn\\.com/.test(request.url())&&!new URL(request.url()).searchParams.get('key'))unkeyedCarto.push(request.url());
+      });
       await mockNws(page);
       await page.goto(base,{waitUntil:'domcontentloaded',timeout:30000});
       await page.waitForTimeout(1300);
@@ -96,16 +99,45 @@ async function main(){
       assert.equal(metrics.photoLoaded,true);
       assert.ok(metrics.tiles>=2,'real map tiles');
       assert.equal(errors.length,0,'browser JavaScript errors');
+      assert.equal(unkeyedCarto.length,0,'no unauthenticated CARTO raster tile requests');
       await page.screenshot({path:path.join(screenshotDir,'desk-'+width+'.png'),fullPage:true,animations:'disabled'});
       summary.push({width,...metrics,errors});
       await page.close();
     }
+    // A valid public key must reach CARTO tiles. When that CDN fails, the
+    // independently loaded OpenStreetMap map still serves visitor selection.
+    const keyed=await browser.newPage({viewport:{width:390,height:850}});
+    let keyedRequests=0;
+    await keyed.route('**/api/carto-basemap-config',route=>route.fulfill({
+      status:200,contentType:'application/json',
+      body:JSON.stringify({provider:'CARTO',key:'qa-public-map-key'})
+    }));
+    await keyed.route(/basemaps\.cartocdn\.com/,route=>{
+      const u=new URL(route.request().url());
+      assert.equal(u.searchParams.get('key'),'qa-public-map-key');
+      keyedRequests++;
+      return route.abort('failed');
+    });
+    await mockNws(keyed,true);
+    await keyed.goto(base,{waitUntil:'domcontentloaded'});
+    await keyed.waitForFunction(()=>document.querySelectorAll('.leaflet-tile-loaded').length>=2,null,{timeout:12000});
+    await keyed.waitForTimeout(900);
+    assert.ok(keyedRequests>0,'keyed CARTO requested before fallback');
+    assert.equal(await keyed.locator('#map-fallback').isVisible(),false,'OSM tiles remain usable when CARTO fails');
+    await keyed.locator('[data-place="meyers-lakeshore"]').click();
+    assert.match(await keyed.locator('#stage-title').textContent(),/sandstone|Meyers|shore/i);
+    await keyed.close();
+
     const failure=await browser.newPage({viewport:{width:390,height:850}});
-    await failure.route('https://basemaps.cartocdn.com/**',route=>route.abort('failed'));
+    await failure.route(/(?:basemaps\.cartocdn\.com|tile\.openstreetmap\.org)/,route=>route.abort('failed'));
+    await failure.route('**/api/carto-basemap-config',route=>route.fulfill({
+      status:200,contentType:'application/json',
+      body:JSON.stringify({provider:'CARTO',key:'qa-public-map-key'})
+    }));
     await mockNws(failure,true);
     await failure.goto(base,{waitUntil:'domcontentloaded'});
-    await failure.waitForTimeout(1800);
-    assert.equal(await failure.locator('#map-fallback').isVisible(),true,'map failure shows list fallback');
+    await failure.waitForFunction(()=>!document.querySelector('#map-fallback').hidden,null,{timeout:10000});
+    assert.equal(await failure.locator('#map-fallback').isVisible(),true,'both basemaps unavailable shows a source-linked list');
     assert.match(await failure.locator('#weather-head').textContent(),/not available/i);
     assert.match(await failure.locator('#quick-reason').textContent(),/No usable hourly forecast/i);
     assert.ok(await failure.locator('#conditions-link').getAttribute('href'));
