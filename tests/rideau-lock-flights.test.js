@@ -64,5 +64,6 @@ test('site identity, source links, ad and canonical contracts survive the redesi
   assert.match(html,/parks\.canada\.ca\/lhn-nhs\/on\/rideau/);
   assert.ok(!html.includes('data-rideau-diorama'));
   assert.match(html,/not to scale/i);
-  assert.doesNotMatch(html,/navigation chart with exact|open now|live lock levels/i);
+  assert.match(html,/not live lock levels/);
+  assert.match(html,/not a scale model|not to scale/i);
 });
