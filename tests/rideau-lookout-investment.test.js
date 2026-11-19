@@ -41,3 +41,16 @@ test('all three journey modes, the five-stage lab, SEO, ads, and season source r
   assert.match(html,/\/assets\/rideau-canal\.css\?v=20261119-lookout/);
   assert.doesNotMatch(js,/WebGL|React|navigator\.geolocation/);
 });
+
+test('map pins have stable numbered partners and map failure preserves named location choices',()=>{
+  assert.match(html,/id="rideau-station-strip"/);
+  assert.match(html,/id="rideau-map-readiness"/);
+  assert.match(js,/function renderStationPicker\(/);
+  assert.match(js,/function syncStationPicker\(/);
+  assert.match(js,/highlights\.forEach\(\(place,index\)=>/);
+  assert.match(js,/button\.dataset\.placeId=place\.id/);
+  assert.match(js,/button\.setAttribute\('aria-pressed'/);
+  assert.match(js,/html:'<span class="lock-pin">'\+\(index\+1\)\+'<\/span>'/);
+  assert.match(js,/loaded=true; \$\('rideau-map-readiness'\)\.hidden=true/);
+  assert.match(html,/Choose a named lockstation below/);
+});

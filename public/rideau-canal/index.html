@@ -122,7 +122,12 @@
     <p class="rideau-lookout__selection">Selected: <strong id="rideau-lookout-selection">Ottawa Locks</strong> <span>Choose a map pin to explore another historic stop.</span></p>
   </div>
   <div class="map-shell" id="map-shell" hidden><div id="rideau-map" aria-label="Map showing seven verified Rideau Canal lock locations"></div></div>
-<div class="map-fallback" id="map-fallback">The interactive map is unavailable. Use the official source and Google Maps place-search links in the selected location above.</div>
+  <p class="rideau-map-readiness" id="rideau-map-readiness" role="status">Map background loading. The lockstation choices below still work.</p>
+  <div class="rideau-station-picker">
+    <p id="rideau-station-picker-label">Lockstations from Ottawa toward Kingston</p>
+    <div id="rideau-station-strip" class="rideau-station-strip" role="group" aria-labelledby="rideau-station-picker-label"></div>
+  </div>
+<div class="map-fallback" id="map-fallback">The interactive map is unavailable. Choose a named lockstation below, then use the official source and Google Maps place-search links in its visitor guide.</div>
 <p class="map-foot">Select a lock to see sourced places to stand and what you can notice. Map pins identify lockstations, not overlook coordinates, parking entrances or walking routes. A Google Maps place search is not a driving route. <a href="https://parks.canada.ca/lhn-nhs/on/rideau/visit/carte-map" target="_blank" rel="noopener noreferrer">Official orientation map</a>.</p>
 </section>
 <article class="feature" id="selected-place" aria-labelledby="feature-name">

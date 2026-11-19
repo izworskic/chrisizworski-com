@@ -37,6 +37,8 @@ async function run(){
       assert.equal(await page.locator('#rideau-lookout').count(),1);
       assert.equal(await page.locator('#rideau-map-jump').isVisible(),true);
       assert.equal(await page.locator('#rideau-lookout-selection').innerText(),'Ottawa Locks');
+      assert.equal(await page.locator('#rideau-station-strip button').count(),7);
+      assert.match(await page.locator('#rideau-station-strip [aria-pressed="true"]').innerText(),/Ottawa Locks/);
       assert.equal(await page.locator('.workspace').getAttribute('data-mode-current'),'visit');
       const spatialOrder=await page.evaluate(()=>{
         const map=document.getElementById('rideau-lookout').getBoundingClientRect();
@@ -48,6 +50,7 @@ async function run(){
       assert.equal(spatialOrder.photoBeforeWatch,true,'The real place photo should precede the long guide');
       if(width===390||width===1280){
         await page.locator('#rideau-map .rideau-marker').first().waitFor({timeout:16000});
+        await page.waitForFunction(()=>[...document.querySelectorAll('#rideau-map .leaflet-tile-loaded')].some(img=>img.complete&&img.naturalWidth>=150),null,{timeout:17000}).catch(()=>{});
         const lookoutShot=path.join(out,'rideau-lookout-map-first-'+width+'.png');
         await page.locator('#rideau-lookout').screenshot({path:lookoutShot,animations:'disabled'});
         report.screenshots.push(lookoutShot);
@@ -59,6 +62,10 @@ async function run(){
       assert.equal(await page.locator('#recommendations .stop-button[aria-current="true"]').count(),1);
       assert.match(await page.locator('#recommendations .stop-button[aria-current="true"]').innerText(),/outside filters/i);
       assert.equal(await page.locator('#candidate-count').innerText(),'3 suggested stops for this choice');
+      await page.locator('#rideau-station-strip [data-place-id="newboro"]').click();
+      assert.equal(await page.locator('#feature-name').innerText(),'Newboro');
+      assert.match(await page.locator('#rideau-station-strip [aria-pressed="true"]').innerText(),/Newboro/);
+      assert.equal(await page.locator('#rideau-lookout-selection').innerText(),'Newboro');
       await page.locator('#interest').selectOption('engineering');
       assert.equal(await page.locator('#feature-name').innerText(),'Ottawa Locks');
       assert.equal(await page.locator('#rideau-lookout-selection').innerText(),'Ottawa Locks');

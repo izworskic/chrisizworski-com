@@ -42,3 +42,6 @@ States:
 
 ## Evidence requirements
 Browser 360/390/768/1280/1440 checks, including leaflet pin click outside filters, A -> B -> A after filter adjustment, screen-width overflow, keyboard selection, map tile/photo load and failure, no JS fallback. Capture new 390 and 1280 map-first screenshots; compare to the live baseline inspected earlier. Full npm run verify:all (via Agent branch verification), Rideau Python/Rust/JS and browser workflow, plus Vercel preview. Mark any unrun gate NOT VERIFIED, not passed. No measured CTR or revenue impact claim.
+
+## Screenshot-driven second pass
+The first green browser run (commit 333cb7b) exposed a gray/slow basemap in the first map-first screenshots. The original generic 'L' markers clustered around Smiths Falls and Jones Falls, making geographic selection unclear without hover. This second pass adds numbered 1-7 pins keyed to seven named source-backed buttons in the same order from Ottawa toward Kingston; it keeps the orientation map distinct from a driving or boating route. The buttons work before tiles load and during fallback. A transient loading message vanishes after the first tile. Updated browser acceptance waits for at least one tile before capturing the map-first 390/1280 comparison when available; absence of an external tile remains visible, not a false map success.

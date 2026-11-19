@@ -20,6 +20,28 @@
   function filtered(){
     return highlights.filter(p=>p.visit.timeBudgets.includes(state.time)&&p.visit.interests.includes(state.interest));
   }
+  function renderStationPicker(){
+    const strip=$('rideau-station-strip');
+    if(!strip)return;
+    strip.replaceChildren();
+    highlights.forEach((place,index)=>{
+      const button=make('button','rideau-station-chip');
+      button.type='button';
+      button.dataset.placeId=place.id;
+      button.setAttribute('aria-label','Explore '+place.name+' on the map');
+      button.append(make('span','rideau-station-number',String(index+1).padStart(2,'0')),make('span','rideau-station-name',place.name));
+      button.addEventListener('click',()=>choosePlace(place.id,true));
+      strip.append(button);
+    });
+    syncStationPicker();
+  }
+  function syncStationPicker(){
+    const strip=$('rideau-station-strip');
+    if(!strip)return;
+    strip.querySelectorAll('button[data-place-id]').forEach(button=>{
+      button.setAttribute('aria-pressed',String(button.dataset.placeId===state.selectedPlaceId));
+    });
+  }
   function choosePlace(id,focus=false){
     if(!highlights.some(p=>p.id===id))return;
     state.selectedPlaceId=id;
@@ -143,6 +165,7 @@
     const p=selected();if(!p)return;
     setText('feature-name',p.name);
     setText('rideau-lookout-selection',p.name);
+    syncStationPicker();
     setText('feature-region',p.branch==='tay'?'Tay Canal branch':'Rideau Canal / documented stop');
     setText('feature-explain',p.visit.summary);
     setText('feature-tip',p.visit.interpretiveTip);
@@ -190,8 +213,9 @@
   }
   async function initMap(){
     const shell=$('map-shell'),fallback=$('map-fallback');
+    $('rideau-map-readiness').hidden=false;
     const valid=highlights.filter(p=>p.visit?.coordinates);
-    if(!window.L||!valid.length){shell.hidden=true;fallback.hidden=false;return;}
+    if(!window.L||!valid.length){shell.hidden=true;fallback.hidden=false;$('rideau-map-readiness').hidden=true;return;}
     try{
       const source=await mapTileSource();
       shell.hidden=false;
@@ -205,7 +229,7 @@
         const myAttempt=attempt;
         let loaded=false,failures=0;
         activeLayer=L.tileLayer(chosen.url,{maxZoom:17,attribution:chosen.attribution});
-        activeLayer.on('tileload',()=>{loaded=true;});
+        activeLayer.on('tileload',()=>{loaded=true; $('rideau-map-readiness').hidden=true;});
         activeLayer.on('tileerror',()=>{
           failures++;
           if(failures>=5 && myAttempt===attempt){
@@ -223,9 +247,9 @@
       }
       installTiles(source);
       const bounds=[];
-      valid.forEach(p=>{
+      valid.forEach((p,index)=>{
         const {lat,lon}=p.visit.coordinates;
-        const marker=L.marker([lat,lon],{title:p.name,icon:L.divIcon({className:'rideau-marker',html:'<span class="lock-pin">L</span>',iconSize:[32,32],iconAnchor:[16,16]})});
+        const marker=L.marker([lat,lon],{title:p.name,icon:L.divIcon({className:'rideau-marker',html:'<span class="lock-pin">'+(index+1)+'</span>',iconSize:[32,32],iconAnchor:[16,16]})});
         marker.addTo(map).on('click',()=>choosePlace(p.id,true));
         marker.bindTooltip(p.name,{direction:'top'});
         markers.set(p.id,marker);bounds.push([lat,lon]);
@@ -239,6 +263,7 @@
   function disableMap(){
     const shell=$('map-shell');shell.hidden=true;
     $('map-fallback').hidden=false;
+    $('rideau-map-readiness').hidden=true;
     if(map){try{map.remove();}catch(_){}}
     map=null;markers.clear();
   }
@@ -347,6 +372,7 @@
       if(!Array.isArray(data.lockLocations)||data.lockLocations.length!==26||!Array.isArray(data.bridges)||data.bridges.length!==15)throw Error('Inventory failed validation');
       model=data;highlights=data.lockLocations.filter(p=>p.visit);
       readUrl();
+      renderStationPicker();
       const allEndpoints=journeyGraph.mainline.concat(journeyGraph.tay);
       const labelFor=id=>model.lockLocations.find(p=>p.id===id)?.name||
         ({'kingston-causeway':'Kingston La Salle Causeway','perth-basin':'Perth Basin'}[id]||id);
