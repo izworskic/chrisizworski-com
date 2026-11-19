@@ -14,7 +14,7 @@
 <meta property="og:description" content="A source-led visit planner for the historic Rideau Canal, Ottawa to Kingston.">
 <meta property="og:url" content="https://chrisizworski.com/rideau-canal/">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
-<link rel="stylesheet" href="/assets/rideau-canal.css?v=20261117-foundation">
+<link rel="stylesheet" href="/assets/rideau-canal.css?v=20261119-investment">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski","publisher":{"@id":"https://chrisizworski.com/#person"}},{"@type":"WebPage","@id":"https://chrisizworski.com/rideau-canal/#page","url":"https://chrisizworski.com/rideau-canal/","name":"Rideau Canal Trip Planner: Locks and Paddling","dateModified":"2026-11-17","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"},"description":"Independent source-led planning preview for Rideau Canal visitors, not a navigation chart.","mainEntity":{"@id":"https://chrisizworski.com/rideau-canal/#app"}},{"@type":"WebApplication","@id":"https://chrisizworski.com/rideau-canal/#app","name":"Rideau Canal Trip Planner","url":"https://chrisizworski.com/rideau-canal/","description":"Source-verified historic stop explorer, navigation channel comparisons and two official paddling itineraries; not a nautical chart.","applicationCategory":"TravelApplication","operatingSystem":"Any web browser","isAccessibleForFree":true,"creator":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"}}]}</script>
 </head>
 <body data-analytics-page="rideau-canal">
@@ -210,12 +210,18 @@
         <button type="button" data-rideau-flight-site="jones" aria-pressed="false"><strong>Jones Falls</strong><span>3 lower + basin + 1 upper</span></button>
       </div>
       <p id="rideau-flight-overview" class="rideau-flight__intro">Eight connected chambers climb directly from the Ottawa River.</p>
-      <p class="rideau-flight__swipe-hint">Explore the numbered chambers. On a phone, swipe the diagram sideways to follow the climb.</p>
+      <div class="rideau-flight__overview-panel" aria-label="The entire lock flight at a glance">
+        <div class="rideau-flight__overview-head"><span>THE WHOLE CLIMB</span><strong id="rideau-flight-overview-count">Ottawa: chamber 1 of 8</strong></div>
+        <div id="rideau-flight-overview-graphic" class="rideau-flight__overview-graphic" aria-hidden="true"></div>
+        <p>See the full arrangement first. The large drawing below follows your selected chamber; the connected route lets you jump to any step.</p>
+      </div>
+      <p class="rideau-flight__swipe-hint">Close-up of the selected chamber. Swipe the large drawing to explore the stonework, or choose a numbered stop along the connected route.</p>
       <div class="rideau-flight__diagram">
         <div id="rideau-flight-scroll" class="rideau-flight__scroll" tabindex="0" aria-label="Scrollable side elevation of the selected lock flight">
           <div id="rideau-flight-stage" class="rideau-flight__stage"></div>
         </div>
-        <div id="rideau-flight-chambers" class="rideau-flight__chambers" role="group" aria-label="Select a chamber"></div>
+        <div class="rideau-flight__route-heading"><strong>Follow the boat upstream</strong><span>Choose any lock on the route</span></div>
+        <div id="rideau-flight-chambers" class="rideau-flight__chambers" role="group" aria-label="Select a chamber in the lock flight"></div>
       </div>
       <div class="rideau-flight__detail">
         <div class="rideau-flight__narrative">
@@ -261,7 +267,7 @@
 <script defer src="/assets/visitor-map-links.js"></script>
 <script defer src="/assets/rideau-journey-engine.js?v=20261117-policy"></script>
 <script defer src="/assets/rideau-lock-lab.js?v=20261118-interpretive"></script>
-<script defer src="/assets/rideau-lock-flights.js?v=20261119-elevation"></script>
+<script defer src="/assets/rideau-lock-flights.js?v=20261119-investment"></script>
 <script defer src="/assets/rideau-canal.js?v=20261118-experience"></script>
 <script defer src="/assets/tool-engagement.js"></script>
 </body>
