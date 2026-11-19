@@ -18,6 +18,7 @@ test('historical notebook provides an honest static spring answer and keeps cano
   assert.equal((html.match(/<article class="wf-story"/g) || []).length, 12);
   assert.equal((html.match(/<figure class="wf-photo wf-hero-photo"/g) || []).length, 3);
   assert.ok(html.indexOf('id="spring-field-notebook"') < html.indexOf('class="wf-hero-spring-montage wf-shell"'));
+  assert.ok(html.indexOf('id="spring-field-notebook"') < html.indexOf('class="wf-lede"'), 'field decision must precede long essay');
   assert.match(html, /rel="canonical" href="https:\/\/chrisizworski\.com\/michigan-spring-awakening-field-guide\/"/);
   assert.match(html, /"author":\{"@id":"https:\/\/chrisizworski\.com\/#person"\}/);
   assert.match(css, /@media\(max-width:610px\)/);
