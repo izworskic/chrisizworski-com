@@ -53,10 +53,16 @@ async function run(){
        assert.equal(await page.locator('#rideau-flight-fallback').isHidden(),true);
        assert.equal(await page.locator('#rideau-flight-stage [data-chamber-index]').count(),8);
        assert.equal(await page.locator('#rideau-flight-overview-graphic svg').count(),1);
+       if(width>=1120)assert.equal(await page.locator('.rideau-flight__overview-panel').isHidden(),true);
+       else assert.equal(await page.locator('.rideau-flight__overview-panel').isVisible(),true);
+       if(width<=390){
+         const title=await page.locator('#rideau-diorama-title').evaluate(el=>({scroll:el.scrollWidth,visible:el.clientWidth}));
+         assert.ok(title.scroll<=title.visible+2,'Diorama title clipped at '+width);
+       }
        assert.equal(await page.locator('#rideau-flight-chambers button').count(),8);
        assert.equal(await page.locator('#rideau-flight-chambers .rideau-flight__node').count(),8);
        assert.equal(await page.locator('#rideau-flight-chambers .rideau-flight__crossing').count(),0);
-       assert.match(await page.locator('#rideau-flight-overview-count').innerText(),/Ottawa Locks: chamber 1 of 8/);
+       assert.match(await page.locator('#rideau-flight-overview-count').textContent(),/Ottawa Locks: chamber 1 of 8/);
        assert.match(await page.locator('#rideau-flight-count').innerText(),/Chamber 1 of 8/);
        await page.locator('#rideau-flight-next').click();
        assert.match(await page.locator('#rideau-flight-count').innerText(),/Lock 2/);
@@ -75,7 +81,7 @@ async function run(){
        await page.locator('#rideau-flight-chambers button').last().click();
        assert.match(await page.locator('#rideau-flight-count').innerText(),/Lock 39/);
        assert.match(await page.locator('#rideau-flight-story').innerText(),/turning basin/);
-       assert.match(await page.locator('#rideau-flight-overview-count').innerText(),/Jones Falls: chamber 4 of 4/);
+       assert.match(await page.locator('#rideau-flight-overview-count').textContent(),/Jones Falls: chamber 4 of 4/);
        if(width===390||width===1280){
          const jonesShot=path.join(out,'rideau-jones-falls-investment-'+width+'.png');
          await page.locator('.rideau-diorama').screenshot({path:jonesShot,animations:'disabled'});
@@ -88,7 +94,7 @@ async function run(){
        assert.equal(await page.locator('#rideau-flight-prev').isDisabled(),true);
        assert.equal(await page.locator('#rideau-flight-chambers button').count(),8);
        assert.equal(await page.locator('#rideau-flight-chambers [aria-pressed="true"]').count(),1);
-       assert.match(await page.locator('#rideau-flight-overview-count').innerText(),/Ottawa Locks: chamber 1 of 8/);
+       assert.match(await page.locator('#rideau-flight-overview-count').textContent(),/Ottawa Locks: chamber 1 of 8/);
        const flightBounds=await page.locator('.rideau-flight__chambers').evaluate(el=>({width:el.scrollWidth,visible:el.clientWidth}));
        assert.ok(flightBounds.width<=flightBounds.visible+2,'Route strip overflows horizontally at '+width);
        if(width===390||width===1280){
