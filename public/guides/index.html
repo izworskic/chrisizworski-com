@@ -55,9 +55,9 @@ h1.page-title{font:500 clamp(2.1rem,3.6vw,3rem)/1.08 var(--hm-display);letter-sp
 .guides-index-links span{font:600 .71rem/1 var(--hm-body);color:var(--hm-muted);background:var(--hm-paper-deep);padding:4px 8px;border-radius:999px}
 h2.section-head{font:500 clamp(1.5rem,2.4vw,1.95rem)/1.18 var(--hm-display);color:var(--hm-ink);margin:42px 0 12px;border-bottom:2px solid var(--hm-ink);padding-bottom:10px;letter-spacing:-.015em}
 #field-guides-list,.guides-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:16px}
-.guide-card{background:var(--hm-surface);border:1px solid var(--hm-line);border-top:3px solid var(--hm-accent);border-radius:8px;padding:22px;display:flex;flex-direction:column;justify-content:space-between;gap:14px;box-shadow:0 4px 14px -8px rgba(24,46,42,.08);transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease}
-.guide-card:hover{transform:translateY(-2px);box-shadow:var(--hm-shadow-hover);border-color:var(--hm-line-strong)}
-.guide-card:last-child{border-bottom:1px solid var(--hm-line)}
+.guide-card,.field-tool-card{background:var(--hm-surface);border:1px solid var(--hm-line);border-top:3px solid var(--hm-accent);border-radius:8px;padding:22px;display:flex;flex-direction:column;justify-content:space-between;gap:14px;box-shadow:0 4px 14px -8px rgba(24,46,42,.08);transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease}
+.guide-card:hover,.field-tool-card:hover{transform:translateY(-2px);box-shadow:var(--hm-shadow-hover);border-color:var(--hm-line-strong)}
+.guide-card:last-child,.field-tool-card:last-child{border-bottom:1px solid var(--hm-line)}
 .guide-title{font:500 1.2rem/1.28 var(--hm-display);margin-bottom:8px;color:var(--hm-ink)}
 .guide-title a{color:var(--hm-ink)}.guide-title a:hover{color:var(--hm-accent)}
 .guide-desc{font:400 .9rem/1.62 var(--hm-body);color:var(--hm-ink-soft)}
@@ -71,7 +71,7 @@ h2.section-head{font:500 clamp(1.5rem,2.4vw,1.95rem)/1.18 var(--hm-display);colo
 .fg-tools a{font-weight:700;color:var(--hm-accent)}
 .spring-tool-heading{font:500 clamp(1.2rem,2vw,1.5rem)/1.25 var(--hm-display);margin:24px 0 7px;color:var(--hm-ink)}
 .spring-tool-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin:14px 0 28px}
-.spring-tool-row .guide-card{border-top-color:var(--hm-copper)}
+.spring-tool-row .field-tool-card{border-top-color:var(--hm-copper)}
 .spring-tool-row .guide-desc{line-height:1.62}
 @media(max-width:680px){.spring-tool-row{grid-template-columns:1fr}}
 @media(max-width:1024px){#field-guides-list,.guides-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.guides-hero{grid-template-columns:1fr}}
@@ -210,7 +210,7 @@ h2.section-head{font:500 clamp(1.5rem,2.4vw,1.95rem)/1.18 var(--hm-display);colo
   <h3 class="spring-tool-heading" id="birds-and-blooms-title">Birds &amp; blooms: follow the season outdoors</h3>
   <p>Spring unfolds differently along Michigan's lakes and inland woods. These companion tools help you choose a field stop and check fresh reports before you leave. Calendar timing is a starting point, not a sighting or bloom confirmation.</p>
   <div class="spring-tool-row">
-    <article class="guide-card" data-field-guide="michigan-migration-field-tool" data-months="3,4,5,6,8,9,10" aria-labelledby="migration-field-tool-title">
+    <article class="field-tool-card" data-field-guide="michigan-migration-field-tool" data-months="3,4,5,6,8,9,10" aria-labelledby="migration-field-tool-title">
       <div>
         <div class="fg-meta"><span class="fg-pill">Spring &amp; Fall Migration · 6 Corridors</span><span class="fg-inseason" data-fg-season hidden>In season now</span></div>
         <h4 class="guide-title" id="migration-field-tool-title"><a href="https://michiganbirdingreport.com/migration">Michigan Bird Migration &amp; Field Stops</a></h4>
@@ -219,7 +219,7 @@ h2.section-head{font:500 clamp(1.5rem,2.4vw,1.95rem)/1.18 var(--hm-display);colo
       </div>
       <div class="guide-arrow"><a href="https://michiganbirdingreport.com/migration" aria-label="Explore Michigan Bird Migration and field stops">Explore the birding tool &rarr;</a></div>
     </article>
-    <article class="guide-card" data-field-guide="michigan-blooms-field-tool" data-months="3,4,5,6,7,8,9,10" aria-labelledby="bloom-field-tool-title">
+    <article class="field-tool-card" data-field-guide="michigan-blooms-field-tool" data-months="3,4,5,6,7,8,9,10" aria-labelledby="bloom-field-tool-title">
       <div>
         <div class="fg-meta"><span class="fg-pill">Michigan Flowers · March–October</span><span class="fg-inseason" data-fg-season hidden>In season now</span></div>
         <h4 class="guide-title" id="bloom-field-tool-title"><a href="https://phenology.chrisizworski.com/bloom-tracker">Michigan Bloom Tracker &amp; Flower Calendar</a></h4>
