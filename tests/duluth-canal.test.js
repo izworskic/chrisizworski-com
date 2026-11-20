@@ -232,7 +232,7 @@ test('camera monitor keeps verified mapped cameras and lazy-loads video', () => 
 test('Harbor Lookout is a lower-page schedule cross-check rather than a primary hero dependency', () => {
   const html = fs.readFileSync(path.join(__dirname, '../public/duluth-canal-park/index.html'), 'utf8');
   assert.match(html, /Schedule cross-check:/);
-  assert.match(html, /published Duluth arrival\/departure forecast/);
+  assert.match(html, /Harbor Lookout<\/a> publishes expected Duluth arrivals and departures/);
   assert.doesNotMatch(html, />Published ship forecast</);
   const hero = html.slice(html.indexOf('<div class="hero-actions">'), html.indexOf('</div>', html.indexOf('<div class="hero-actions">')) + 6);
   assert.doesNotMatch(hero, /harborlookout\.com/);
