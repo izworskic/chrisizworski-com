@@ -31,6 +31,10 @@ The skill picks visual form from visitor decisions and evidence: e.g. a report c
 
 Shared code should standardize accessibility, identity, source freshness, type legibility, performance, navigation and QA. The page's hierarchy, graphic treatment, story and interaction should be subject-specific. All designs still obey the Experience OS distinctiveness hard gate.
 
+## Technology Fit Review
+
+Every substantial PROPOSE, REVIEW or IMPLEMENT decision must include a [Technology Fit Review](../.agents/skills/experience-investment/references/TECHNOLOGY_FIT_REVIEW.md) before selecting a language or framework. Compare the actual owning repo's HTML/CSS, JavaScript/TypeScript, serverless code, Python, Rust/WASM and Java, then choose the smallest solution with a concrete user benefit. Reject unnecessary layers explicitly. New compute services or runtime migrations require measured bottlenecks or source/data requirements, with tests, estimated operating impact and a rollback path. For tiny visual-only changes, note that the existing stack is suitable and stop there.
+
 ## Integration with current systems
 
 - Experience OS v1.2.1 remains the research, interaction-truth and release-quality authority: design-systems/experience-os-v1/.
