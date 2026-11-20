@@ -28,7 +28,7 @@ test("100x benchmark reconciles to the supplied Search Console baseline", () => 
 test("priority search pages preserve canonicals, direct answers, and internal depth", () => {
   const checks = [
     ["when-to-plant-tomatoes-michigan", "When to Plant Tomatoes in Michigan: Dates by Region", "tomato-quick-answer"],
-    ["michigan-frost-dates", "Michigan Last Frost Dates by City: 2026 Planting Calendar", "frost-quick-answer"],
+    ["michigan-frost-dates", "Michigan Last Frost Dates by City: Frost Risk & Planting", "frost-quick-answer"],
     ["saginaw-bay-ecology", "How Deep Is Saginaw Bay? Depth, Ecology &amp; Fishing", "saginaw-depth-answer"],
     ["northern-lights-michigan", "Northern Lights Michigan Tonight: Verdict | Chris Izworski", "aurora-static-answer"],
     ["soo-locks", "Soo Locks Schedule Today: Ships &amp; Map | Chris Izworski", "soo-schedule-answer"],
