@@ -6,18 +6,31 @@
   "source": "/assets/freighter-layup-registry.json",
   "asOfPolicy": "Record as-of dates are not inferred arrival or departure dates.",
   "coverageNote": "A curated selection of documented vessel winters, not a full fleet census. Different seasons have different source coverage; record counts are not fleet totals.",
-  "recordCount": 14,
-  "uniqueVesselCount": 13,
+  "recordCount": 41,
+  "uniqueVesselCount": 27,
   "recurringKeys": [
-    "algoma-compass"
+    "algoma-buffalo",
+    "algoma-compass",
+    "algoma-equinox",
+    "algoma-harvester",
+    "alpena",
+    "american-century",
+    "baie-comeau",
+    "csl-tadoussac",
+    "edwin-h-gott",
+    "mark-w-barker",
+    "oakglen",
+    "paul-r-tregurtha",
+    "thunder-bay",
+    "whitefish-bay"
   ],
   "seasons": [
     {
       "id": "2025-26",
       "label": "Winter 2025–2026",
-      "recordCount": 12,
+      "recordCount": 27,
       "verifiedCount": 10,
-      "reportedCount": 2,
+      "reportedCount": 17,
       "harbors": [
         {
           "id": "superior",
@@ -30,8 +43,48 @@
           "records": 3
         },
         {
+          "id": "toledo",
+          "name": "Toledo, Ohio",
+          "records": 3
+        },
+        {
+          "id": "ashtabula",
+          "name": "Ashtabula, Ohio",
+          "records": 1
+        },
+        {
+          "id": "cleveland",
+          "name": "Cleveland, Ohio",
+          "records": 1
+        },
+        {
+          "id": "ecorse",
+          "name": "Ecorse, Michigan",
+          "records": 1
+        },
+        {
+          "id": "goderich",
+          "name": "Goderich, Ontario",
+          "records": 1
+        },
+        {
+          "id": "hamilton",
+          "name": "Hamilton, Ontario",
+          "records": 1
+        },
+        {
+          "id": "midland",
+          "name": "Midland, Ontario",
+          "records": 1
+        },
+        {
           "id": "milwaukee",
           "name": "Milwaukee, Wisconsin",
+          "records": 1
+        },
+        {
+          "id": "montreal",
+          "name": "Montreal, Quebec",
           "records": 1
         },
         {
@@ -40,12 +93,175 @@
           "records": 1
         },
         {
-          "id": "toledo",
-          "name": "Toledo, Ohio",
+          "id": "port-colborne",
+          "name": "Port Colborne, Ontario",
+          "records": 1
+        },
+        {
+          "id": "port-weller",
+          "name": "Port Weller, Ontario",
+          "records": 1
+        },
+        {
+          "id": "sarnia",
+          "name": "Sarnia, Ontario",
+          "records": 1
+        },
+        {
+          "id": "thunder-bay",
+          "name": "Thunder Bay, Ontario",
+          "records": 1
+        },
+        {
+          "id": "toronto",
+          "name": "Toronto, Ontario",
+          "records": 1
+        },
+        {
+          "id": "windsor",
+          "name": "Windsor, Ontario",
           "records": 1
         }
       ],
       "vessels": [
+        {
+          "id": "american-century",
+          "key": "american-century",
+          "name": "American Century",
+          "harborId": "ashtabula",
+          "harborName": "Ashtabula, Ohio",
+          "asOf": "2026-01-17",
+          "status": "reported_historical",
+          "evidenceClass": "community_report",
+          "source": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "title": "Winter Layup 2025-26 — seasonal fleet roster"
+          },
+          "events": [
+            {
+              "date": "2026-01-17",
+              "kind": "reported_arrival",
+              "description": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/"
+            }
+          ]
+        },
+        {
+          "id": "alpena",
+          "key": "alpena",
+          "name": "Alpena",
+          "harborId": "cleveland",
+          "harborName": "Cleveland, Ohio",
+          "asOf": "2026-01-08",
+          "status": "reported_historical",
+          "evidenceClass": "community_report",
+          "source": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "title": "Winter Layup 2025-26 — seasonal fleet roster"
+          },
+          "events": [
+            {
+              "date": "2026-01-08",
+              "kind": "reported_arrival",
+              "description": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/"
+            }
+          ]
+        },
+        {
+          "id": "mark-w-barker",
+          "key": "mark-w-barker",
+          "name": "Mark W. Barker",
+          "harborId": "ecorse",
+          "harborName": "Ecorse, Michigan",
+          "asOf": "2026-01-11",
+          "status": "reported_historical",
+          "evidenceClass": "community_report",
+          "source": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "title": "Winter Layup 2025-26 — seasonal fleet roster"
+          },
+          "events": [
+            {
+              "date": "2026-01-11",
+              "kind": "reported_arrival",
+              "description": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/"
+            }
+          ]
+        },
+        {
+          "id": "oakglen",
+          "key": "oakglen",
+          "name": "Oakglen",
+          "harborId": "goderich",
+          "harborName": "Goderich, Ontario",
+          "asOf": "2026-01-03",
+          "status": "reported_historical",
+          "evidenceClass": "community_report",
+          "source": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "title": "Winter Layup 2025-26 — seasonal fleet roster"
+          },
+          "events": [
+            {
+              "date": "2026-01-03",
+              "kind": "reported_arrival",
+              "description": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/"
+            }
+          ]
+        },
+        {
+          "id": "algoma-equinox",
+          "key": "algoma-equinox",
+          "name": "Algoma Equinox",
+          "harborId": "hamilton",
+          "harborName": "Hamilton, Ontario",
+          "asOf": "2026-01-13",
+          "status": "reported_historical",
+          "evidenceClass": "community_report",
+          "source": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "title": "Winter Layup 2025-26 — seasonal fleet roster"
+          },
+          "events": [
+            {
+              "date": "2026-01-13",
+              "kind": "reported_arrival",
+              "description": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/"
+            }
+          ]
+        },
+        {
+          "id": "thunder-bay",
+          "key": "thunder-bay",
+          "name": "Thunder Bay",
+          "harborId": "midland",
+          "harborName": "Midland, Ontario",
+          "asOf": "2026-01-13",
+          "status": "reported_historical",
+          "evidenceClass": "community_report",
+          "source": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "title": "Winter Layup 2025-26 — seasonal fleet roster"
+          },
+          "events": [
+            {
+              "date": "2026-01-13",
+              "kind": "reported_arrival",
+              "description": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/"
+            }
+          ]
+        },
         {
           "id": "stewart-j-cort",
           "key": "stewart-j-cort",
@@ -66,6 +282,29 @@
               "kind": "arrival",
               "description": "Wisconsin Marine Historical Society documented the Cort's arrival for winter layup in Milwaukee. The precise berth was not specified.",
               "source": "https://wmhs.org/stewart-j-cort-arrives-in-milwaukee/"
+            }
+          ]
+        },
+        {
+          "id": "algoma-bear",
+          "key": "algoma-bear",
+          "name": "Algoma Bear",
+          "harborId": "montreal",
+          "harborName": "Montreal, Quebec",
+          "asOf": "2026-01-14",
+          "status": "reported_historical",
+          "evidenceClass": "community_report",
+          "source": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "title": "Winter Layup 2025-26 — seasonal fleet roster"
+          },
+          "events": [
+            {
+              "date": "2026-01-14",
+              "kind": "reported_arrival",
+              "description": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/"
             }
           ]
         },
@@ -95,6 +334,75 @@
               "kind": "arrival",
               "description": "The Compass tied up for winter layup following a second day of harbor icebreaking.",
               "source": "https://waterfrontheritage.ca/the-algoma-compass-arrives-for-winter-layup/"
+            }
+          ]
+        },
+        {
+          "id": "algoma-buffalo",
+          "key": "algoma-buffalo",
+          "name": "Algoma Buffalo",
+          "harborId": "port-colborne",
+          "harborName": "Port Colborne, Ontario",
+          "asOf": "2026-01-13",
+          "status": "reported_historical",
+          "evidenceClass": "community_report",
+          "source": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "title": "Winter Layup 2025-26 — seasonal fleet roster"
+          },
+          "events": [
+            {
+              "date": "2026-01-13",
+              "kind": "reported_arrival",
+              "description": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/"
+            }
+          ]
+        },
+        {
+          "id": "algoma-harvester",
+          "key": "algoma-harvester",
+          "name": "Algoma Harvester",
+          "harborId": "port-weller",
+          "harborName": "Port Weller, Ontario",
+          "asOf": "2026-01-09",
+          "status": "reported_historical",
+          "evidenceClass": "community_report",
+          "source": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "title": "Winter Layup 2025-26 — seasonal fleet roster"
+          },
+          "events": [
+            {
+              "date": "2026-01-09",
+              "kind": "reported_arrival",
+              "description": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/"
+            }
+          ]
+        },
+        {
+          "id": "whitefish-bay",
+          "key": "whitefish-bay",
+          "name": "Whitefish Bay",
+          "harborId": "sarnia",
+          "harborName": "Sarnia, Ontario",
+          "asOf": "2026-01-19",
+          "status": "reported_historical",
+          "evidenceClass": "community_report",
+          "source": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "title": "Winter Layup 2025-26 — seasonal fleet roster"
+          },
+          "events": [
+            {
+              "date": "2026-01-19",
+              "kind": "reported_arrival",
+              "description": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/"
             }
           ]
         },
@@ -354,6 +662,29 @@
           ]
         },
         {
+          "id": "baie-comeau",
+          "key": "baie-comeau",
+          "name": "Baie Comeau",
+          "harborId": "thunder-bay",
+          "harborName": "Thunder Bay, Ontario",
+          "asOf": "2026-01-08",
+          "status": "reported_historical",
+          "evidenceClass": "community_report",
+          "source": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "title": "Winter Layup 2025-26 — seasonal fleet roster"
+          },
+          "events": [
+            {
+              "date": "2026-01-08",
+              "kind": "reported_arrival",
+              "description": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/"
+            }
+          ]
+        },
+        {
           "id": "american-spirit",
           "key": "american-spirit",
           "name": "American Spirit",
@@ -375,23 +706,280 @@
               "source": "https://maritime-executive.com/article/uscg-icebreakers-aid-great-lakes-shipping-as-arctic-front-ices-the-lakes"
             }
           ]
+        },
+        {
+          "id": "edwin-h-gott",
+          "key": "edwin-h-gott",
+          "name": "Edwin H. Gott",
+          "harborId": "toledo",
+          "harborName": "Toledo, Ohio",
+          "asOf": "2026-01-18",
+          "status": "reported_historical",
+          "evidenceClass": "community_report",
+          "source": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "title": "Winter Layup 2025-26 — seasonal fleet roster"
+          },
+          "events": [
+            {
+              "date": "2026-01-18",
+              "kind": "reported_arrival",
+              "description": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/"
+            }
+          ]
+        },
+        {
+          "id": "paul-r-tregurtha",
+          "key": "paul-r-tregurtha",
+          "name": "Paul R. Tregurtha",
+          "harborId": "toledo",
+          "harborName": "Toledo, Ohio",
+          "asOf": "2026-01-14",
+          "status": "reported_historical",
+          "evidenceClass": "community_report",
+          "source": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "title": "Winter Layup 2025-26 — seasonal fleet roster"
+          },
+          "events": [
+            {
+              "date": "2026-01-14",
+              "kind": "reported_arrival",
+              "description": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/"
+            }
+          ]
+        },
+        {
+          "id": "csl-tadoussac",
+          "key": "csl-tadoussac",
+          "name": "CSL Tadoussac",
+          "harborId": "toronto",
+          "harborName": "Toronto, Ontario",
+          "asOf": "2026-01-03",
+          "status": "reported_historical",
+          "evidenceClass": "community_report",
+          "source": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "title": "Winter Layup 2025-26 — seasonal fleet roster"
+          },
+          "events": [
+            {
+              "date": "2026-01-03",
+              "kind": "reported_arrival",
+              "description": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/"
+            }
+          ]
+        },
+        {
+          "id": "evans-spirit",
+          "key": "evans-spirit",
+          "name": "Evans Spirit",
+          "harborId": "windsor",
+          "harborName": "Windsor, Ontario",
+          "asOf": "2026-01-08",
+          "status": "reported_historical",
+          "evidenceClass": "community_report",
+          "source": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "title": "Winter Layup 2025-26 — seasonal fleet roster"
+          },
+          "events": [
+            {
+              "date": "2026-01-08",
+              "kind": "reported_arrival",
+              "description": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2025-26/"
+            }
+          ]
         }
       ]
     },
     {
       "id": "2024-25",
       "label": "Winter 2024–2025",
-      "recordCount": 2,
+      "recordCount": 14,
       "verifiedCount": 2,
-      "reportedCount": 0,
+      "reportedCount": 12,
       "harbors": [
+        {
+          "id": "montreal",
+          "name": "Montreal, Quebec",
+          "records": 2
+        },
         {
           "id": "owen-sound",
           "name": "Owen Sound, Ontario",
           "records": 2
+        },
+        {
+          "id": "port-colborne",
+          "name": "Port Colborne, Ontario",
+          "records": 2
+        },
+        {
+          "id": "cleveland",
+          "name": "Cleveland, Ohio",
+          "records": 1
+        },
+        {
+          "id": "ecorse",
+          "name": "Ecorse, Michigan",
+          "records": 1
+        },
+        {
+          "id": "midland",
+          "name": "Midland, Ontario",
+          "records": 1
+        },
+        {
+          "id": "sturgeon-bay",
+          "name": "Sturgeon Bay, Wisconsin",
+          "records": 1
+        },
+        {
+          "id": "superior",
+          "name": "Superior, Wisconsin",
+          "records": 1
+        },
+        {
+          "id": "thunder-bay",
+          "name": "Thunder Bay, Ontario",
+          "records": 1
+        },
+        {
+          "id": "toledo",
+          "name": "Toledo, Ohio",
+          "records": 1
+        },
+        {
+          "id": "toronto",
+          "name": "Toronto, Ontario",
+          "records": 1
         }
       ],
       "vessels": [
+        {
+          "id": "alpena",
+          "key": "alpena",
+          "name": "Alpena",
+          "harborId": "cleveland",
+          "harborName": "Cleveland, Ohio",
+          "asOf": "2025-01-07",
+          "status": "reported_historical",
+          "evidenceClass": "community_report",
+          "source": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "title": "Winter Layup 2024-25 — seasonal fleet roster"
+          },
+          "events": [
+            {
+              "date": "2025-01-07",
+              "kind": "reported_arrival",
+              "description": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/"
+            }
+          ]
+        },
+        {
+          "id": "mark-w-barker",
+          "key": "mark-w-barker",
+          "name": "Mark W. Barker",
+          "harborId": "ecorse",
+          "harborName": "Ecorse, Michigan",
+          "asOf": "2025-01-19",
+          "status": "reported_historical",
+          "evidenceClass": "community_report",
+          "source": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "title": "Winter Layup 2024-25 — seasonal fleet roster"
+          },
+          "events": [
+            {
+              "date": "2025-01-19",
+              "kind": "reported_arrival",
+              "description": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/"
+            }
+          ]
+        },
+        {
+          "id": "whitefish-bay",
+          "key": "whitefish-bay",
+          "name": "Whitefish Bay",
+          "harborId": "midland",
+          "harborName": "Midland, Ontario",
+          "asOf": "2025-01-07",
+          "status": "reported_historical",
+          "evidenceClass": "community_report",
+          "source": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "title": "Winter Layup 2024-25 — seasonal fleet roster"
+          },
+          "events": [
+            {
+              "date": "2025-01-07",
+              "kind": "reported_arrival",
+              "description": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/"
+            }
+          ]
+        },
+        {
+          "id": "algoma-equinox",
+          "key": "algoma-equinox",
+          "name": "Algoma Equinox",
+          "harborId": "montreal",
+          "harborName": "Montreal, Quebec",
+          "asOf": "2025-01-09",
+          "status": "reported_historical",
+          "evidenceClass": "community_report",
+          "source": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "title": "Winter Layup 2024-25 — seasonal fleet roster"
+          },
+          "events": [
+            {
+              "date": "2025-01-09",
+              "kind": "reported_arrival",
+              "description": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/"
+            }
+          ]
+        },
+        {
+          "id": "algoma-harvester",
+          "key": "algoma-harvester",
+          "name": "Algoma Harvester",
+          "harborId": "montreal",
+          "harborName": "Montreal, Quebec",
+          "asOf": "2025-01-09",
+          "status": "reported_historical",
+          "evidenceClass": "community_report",
+          "source": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "title": "Winter Layup 2024-25 — seasonal fleet roster"
+          },
+          "events": [
+            {
+              "date": "2025-01-09",
+              "kind": "reported_arrival",
+              "description": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/"
+            }
+          ]
+        },
         {
           "id": "algoma-compass",
           "key": "algoma-compass",
@@ -435,6 +1023,167 @@
               "kind": "arrival",
               "description": "Arrived at Owen Sound's east harbor side; CSL communications representative confirmed winter layup and general maintenance plans.",
               "source": "https://www.bayshorebroadcasting.ca/2024/12/31/large-cargo-ship-docks-in-owen-sound/"
+            }
+          ]
+        },
+        {
+          "id": "algoma-buffalo",
+          "key": "algoma-buffalo",
+          "name": "Algoma Buffalo",
+          "harborId": "port-colborne",
+          "harborName": "Port Colborne, Ontario",
+          "asOf": "2025-01-09",
+          "status": "reported_historical",
+          "evidenceClass": "community_report",
+          "source": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "title": "Winter Layup 2024-25 — seasonal fleet roster"
+          },
+          "events": [
+            {
+              "date": "2025-01-09",
+              "kind": "reported_arrival",
+              "description": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/"
+            }
+          ]
+        },
+        {
+          "id": "thunder-bay",
+          "key": "thunder-bay",
+          "name": "Thunder Bay",
+          "harborId": "port-colborne",
+          "harborName": "Port Colborne, Ontario",
+          "asOf": "2024-12-31",
+          "status": "reported_historical",
+          "evidenceClass": "community_report",
+          "source": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "title": "Winter Layup 2024-25 — seasonal fleet roster"
+          },
+          "events": [
+            {
+              "date": "2024-12-31",
+              "kind": "reported_arrival",
+              "description": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/"
+            }
+          ]
+        },
+        {
+          "id": "paul-r-tregurtha",
+          "key": "paul-r-tregurtha",
+          "name": "Paul R. Tregurtha",
+          "harborId": "sturgeon-bay",
+          "harborName": "Sturgeon Bay, Wisconsin",
+          "asOf": "2025-01-21",
+          "status": "reported_historical",
+          "evidenceClass": "community_report",
+          "source": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "title": "Winter Layup 2024-25 — seasonal fleet roster"
+          },
+          "events": [
+            {
+              "date": "2025-01-21",
+              "kind": "reported_arrival",
+              "description": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/"
+            }
+          ]
+        },
+        {
+          "id": "american-century",
+          "key": "american-century",
+          "name": "American Century",
+          "harborId": "superior",
+          "harborName": "Superior, Wisconsin",
+          "asOf": "2025-01-12",
+          "status": "reported_historical",
+          "evidenceClass": "community_report",
+          "source": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "title": "Winter Layup 2024-25 — seasonal fleet roster"
+          },
+          "events": [
+            {
+              "date": "2025-01-12",
+              "kind": "reported_arrival",
+              "description": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/"
+            }
+          ]
+        },
+        {
+          "id": "baie-comeau",
+          "key": "baie-comeau",
+          "name": "Baie Comeau",
+          "harborId": "thunder-bay",
+          "harborName": "Thunder Bay, Ontario",
+          "asOf": "2025-01-09",
+          "status": "reported_historical",
+          "evidenceClass": "community_report",
+          "source": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "title": "Winter Layup 2024-25 — seasonal fleet roster"
+          },
+          "events": [
+            {
+              "date": "2025-01-09",
+              "kind": "reported_arrival",
+              "description": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/"
+            }
+          ]
+        },
+        {
+          "id": "edwin-h-gott",
+          "key": "edwin-h-gott",
+          "name": "Edwin H. Gott",
+          "harborId": "toledo",
+          "harborName": "Toledo, Ohio",
+          "asOf": "2025-01-18",
+          "status": "reported_historical",
+          "evidenceClass": "community_report",
+          "source": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "title": "Winter Layup 2024-25 — seasonal fleet roster"
+          },
+          "events": [
+            {
+              "date": "2025-01-18",
+              "kind": "reported_arrival",
+              "description": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/"
+            }
+          ]
+        },
+        {
+          "id": "csl-tadoussac",
+          "key": "csl-tadoussac",
+          "name": "CSL Tadoussac",
+          "harborId": "toronto",
+          "harborName": "Toronto, Ontario",
+          "asOf": "2025-01-19",
+          "status": "reported_historical",
+          "evidenceClass": "community_report",
+          "source": {
+            "url": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/",
+            "publisher": "Great Lakes & Seaway Shipping Online (Boatnerd)",
+            "title": "Winter Layup 2024-25 — seasonal fleet roster"
+          },
+          "events": [
+            {
+              "date": "2025-01-19",
+              "kind": "reported_arrival",
+              "description": "Winter layup arrival date listed in the seasonal roster; community report, not independently verified here.",
+              "source": "https://www.boatnerd.com/vessel-passage/winter-layup-lists/2024-25/"
             }
           ]
         }
