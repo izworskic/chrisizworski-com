@@ -8,15 +8,15 @@ const html=fs.readFileSync(path.join(root,'great-lakes-freighter-winter-layup','
 const secure=s=>/^https:\/\/[^\s]+$/.test(s||'');
 test('source model includes the current winter with no historical vessel carryover',()=>{
  assert.deepEqual(model.validateRegistry(registry),[]);
- assert.deepEqual(model.totals(hist),{documented:12,confirmed:10,reported:2,harbors:5});
- assert.deepEqual(model.totals(old),{documented:2,confirmed:2,reported:0,harbors:1});
+ assert.deepEqual(model.totals(hist),{documented:27,confirmed:10,reported:17,harbors:18});
+ assert.deepEqual(model.totals(old),{documented:14,confirmed:2,reported:12,harbors:11});
  assert.deepEqual(upcoming.records,[]);
  assert.equal(upcoming.state,'upcoming_unconfirmed');
  assert.ok(seasons.length>=3);
 });
-test('thirteen watch harbors are approximate references, including Canada and Michigan',()=>{
- assert.equal(registry.harbors.length,13);
- for(const id of ['milwaukee','owen-sound','sturgeon-bay','superior','toledo','sarnia','port-colborne','hamilton','thunder-bay','erie-pa','cleveland','buffalo','escanaba'])assert.ok(registry.harbors.some(h=>h.id===id),id);
+test('watch harbors include archive ports and are never claimed as precise docks',()=>{
+ assert.equal(registry.harbors.length,21);
+ for(const id of ['milwaukee','owen-sound','sturgeon-bay','superior','toledo','sarnia','port-colborne','hamilton','thunder-bay','erie-pa','cleveland','buffalo','escanaba','montreal','toronto','goderich','ecorse','port-weller','midland','windsor','ashtabula'])assert.ok(registry.harbors.some(h=>h.id===id),id);
  for(const h of registry.harbors){assert.equal(h.coordinatePrecision,'approximate_harbor_reference_not_dock');assert.ok(Number.isFinite(h.lat)&&Number.isFinite(h.lon));assert.match(h.note,/\b(?:not|no|never|does not)\b/i);}
  assert.equal(registry.harbors.find(h=>h.id==='owen-sound').country,'CA');
 });
