@@ -48,6 +48,7 @@ test('tomato guide stays evergreen and exports one planting year', () => {
   assert.match(november.html, /<title>When to Plant Tomatoes in Michigan: Dates by Region<\/title>/);
   assert.doesNotMatch(november.html, /<h1>[^<]*2026/);
   assert.match(november.text('tSeason'), /Planning for 2027/);
+  assert.match(november.text('tTitle'), /plan your 2027 tomato season/);
   november.click('tIcs');
   const next = november.doc.downloads.at(-1);
   assert.match(next, /DTSTART;VALUE=DATE:202703/);
