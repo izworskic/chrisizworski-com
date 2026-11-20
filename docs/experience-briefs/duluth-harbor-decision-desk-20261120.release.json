@@ -1,0 +1,140 @@
+{
+  "schemaVersion": "1.2",
+  "recordStatus": "draft",
+  "project": {
+    "slug": "duluth-canal-park",
+    "ownerRepo": "izworskic/chrisizworski-com",
+    "canonical": "https://chrisizworski.com/duluth-canal-park/",
+    "pageFile": "public/duluth-canal-park/index.html",
+    "visitorDecision": "Choose whether to follow a near-term AIS-supported Canal Park passage or independently published later arrivals, then select a camera or public shoreline view.",
+    "primaryAction": "Open the next supported vessel on the live map, inspect the camera, or check later traffic in the separate published harbor forecast."
+  },
+  "claims": [
+    {
+      "id": "ais-watch-model-not-schedule",
+      "kind": "editorial",
+      "subject": "other",
+      "state": "EDITORIAL",
+      "sourceUrl": "https://chrisizworski.com/duluth-canal-park/",
+      "checkedDate": "2026-11-20",
+      "limitation": "The AIS engine publishes only qualified near-term candidate passage windows; it does not prove bridge opening or all scheduled harbor traffic."
+    },
+    {
+      "id": "published-forecast-not-confirmation",
+      "kind": "unverified",
+      "subject": "other",
+      "state": "UNVERIFIED",
+      "sourceUrl": "https://harborlookout.com/",
+      "checkedDate": "2026-11-20",
+      "limitation": "An independently published arrival or departure forecast is not confirmation a particular vessel will pass Canal Park or that it will pass at that time."
+    },
+    {
+      "id": "camera-provider-is-separate",
+      "kind": "official-reference",
+      "subject": "other",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://lsmma.com/content.aspx?club_id=605134&module_id=524613&page_id=22",
+      "checkedDate": "2026-11-20",
+      "limitation": "The operator's listed camera feeds do not guarantee an active stream, a specific camera angle, or vessel passage."
+    }
+  ],
+  "decisionState": {
+    "selectedIdField": "data.watchPick.mmsi, or no selected vessel when AIS evidence is insufficient",
+    "sourceOfTruth": "Existing /api/duluth-canal AIS candidate decision; independent Harbor Lookout link is never promoted into AIS evidence.",
+    "linkedSurfaces": [
+      "answer",
+      "near-term-watch",
+      "published-schedule",
+      "selected-vessel-map",
+      "camera-monitor",
+      "shore-view-list"
+    ],
+    "unavailableBehavior": "When AIS fails or there is no candidate, keep the independent published schedule and direct camera operator links visible; a missing map falls back to readable shore viewing cards."
+  },
+  "scenarios": [
+    {
+      "kind": "initial",
+      "input": "Fresh AIS returns one qualified arrival candidate",
+      "expectedVisibleAnswer": "The named vessel and evidence-bounded passage window appear first with map, camera and shore choice actions.",
+      "sourceAndSafety": "Do not call the vessel ETA official or guarantee bridge opening."
+    },
+    {
+      "kind": "alternative",
+      "input": "Fresh AIS returns no qualified next watch",
+      "expectedVisibleAnswer": "Explicit no-supported-passage message remains beside a link to later published harbor arrivals and departures.",
+      "sourceAndSafety": "No candidate is not interpreted as zero harbor traffic."
+    },
+    {
+      "kind": "reverse",
+      "input": "Select shore locations, camera, then return to next vessel",
+      "expectedVisibleAnswer": "Existing monitor controls can return from shore and camera views to the selected vessel if AIS remains current.",
+      "sourceAndSafety": "Existing map interaction should retain source age and cannot invent a fresh candidate."
+    },
+    {
+      "kind": "no-js",
+      "input": "Visitor disables JavaScript",
+      "expectedVisibleAnswer": "Published harbor forecast and operator camera links remain available in regular HTML.",
+      "sourceAndSafety": "No fabricated live timing appears without running the AIS client."
+    },
+    {
+      "kind": "no-tiles",
+      "input": "Leaflet is absent or unavailable",
+      "expectedVisibleAnswer": "Choose a shore view scrolls to the readable North Side, Park Point and Lakewalk descriptions.",
+      "sourceAndSafety": "A shore-card description is not a verified parking entrance or live bridge condition."
+    },
+    {
+      "kind": "stale-data",
+      "input": "AIS request fails after first successful response",
+      "expectedVisibleAnswer": "Existing retained-data warning remains; the independent published schedule never becomes a supported passage.",
+      "sourceAndSafety": "Previous AIS positions are not passed off as refreshed live traffic."
+    }
+  ],
+  "failures": {
+    "no-js": "Keep the independent Harbor Lookout forecast link and direct camera publisher link in static HTML with a clear notice that live AIS requires JavaScript.",
+    "no-tiles": "Expose readable shore-view choices and official visitor-center details even when Leaflet or basemap tiles do not render.",
+    "no-image": "Keep the vessel decision and source links without depending on the existing credited Great Lakes freighter photograph.",
+    "stale-data": "Retain explicit failed-refresh status and never create a new supported passage from an expired AIS report."
+  },
+  "qa": {
+    "viewports": [
+      360,
+      390,
+      768,
+      1280,
+      1440
+    ],
+    "browserStatus": "PENDING",
+    "screenshotEvidence": [],
+    "scopeNote": "Source and structural tests are added; actual 390/1280 before-after screenshots, keyboard and media/map browser checks have not been captured."
+  },
+  "photos": [
+    {
+      "sourceUrl": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Duluth%20Ship%20Canal-Lighthouse-1000%20footer.jpg",
+      "depictedSubject": "An ore freighter entering Duluth Ship Canal beneath the Aerial Lift Bridge.",
+      "author": "Chris Light",
+      "license": "CC BY-SA 4.0",
+      "creditUrl": "https://commons.wikimedia.org/wiki/File:Duluth_Ship_Canal-Lighthouse-1000_footer.jpg",
+      "subjectMatch": "exact"
+    }
+  ],
+  "release": {
+    "implemented": {
+      "status": "CONFIRMED",
+      "checkedDate": "2026-11-20",
+      "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/tree/feat/duluth-harbor-decision-desk-20261120"
+    },
+    "verified": {
+      "status": "NOT_VERIFIED"
+    },
+    "deployed": {
+      "status": "NOT_VERIFIED"
+    },
+    "live": {
+      "status": "NOT_VERIFIED"
+    },
+    "measured": {
+      "status": "NOT_MEASURED"
+    }
+  },
+  "verificationLimit": "Release stays draft. GitHub PR CI, full repository verify:all, screenshots, real camera/map tests, production deploy and measured CTR are not yet independently verified."
+}
