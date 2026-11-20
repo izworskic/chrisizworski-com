@@ -49,3 +49,23 @@ Independent nearshore measurements across seasons are necessary before Saginaw B
 ## Release gates
 
 Require the full npm run verify:all suite, ShoreFeel Chrome checks at 320/375/390/768/1024/1280/1440, source provenance, mobile overflow, keyboard navigation, canonical/sitemap metadata, and an actual preview API source check before merging. A passing Vercel build alone does not prove live NOAA water availability.
+
+## 2026-11-20 Experience Investment, IMPLEMENT recovery
+
+**Visitor job:** A Bay City State Park visitor must determine whether a recent nearby surface-temperature estimate exists, compare it to the outer-bay buoy, and understand the shoreline forecast without mistaking any reading for safe swimming.
+
+**Observed baseline:** The source recovery was absent on current `main`. The older #1551 branch included a source-led three-reference map and activity interpretation but hid actionable navigation below the hero, showed indefinite "Checking" text without JavaScript, and hardcoded a buoy recovery date. Actual browser screenshots were **NOT CAPTURED** in this connector-only recovery environment. Official NOAA station #45163 publicly states that it was recovered for the winter on September 29, 2026, verified November 20, 2026. NOAA GLSEA documentation describes satellite-derived daily surface analysis. Sources: https://www.ndbc.noaa.gov/station_page.php?station=45163 and https://coastwatch.glerl.noaa.gov/satellite-data-products/great-lakes-surface-environmental-analysis-glsea/.
+
+**Concept A, selected, evidence transect:** On a 390px phone, a cautious dated local answer and three plain-language paths precede a map of the inner-bay satellite sample, Nayanquing reference and far-offshore buoy. A source button changes selected evidence; when NOAA fails, it says not verified. Desktop keeps a compact map with adjacent location dossier. This is a provenance-first geographic explorer, not a generic weather dashboard.
+
+**Concept B, rejected, shoreline activity planner:** Put swim/paddle/family activities first, show an interpretive forecast with a small sourced map underneath. While appealing, without a directly measured beach value this falsely suggests an activity safety verdict, obscures uncertainty, and risks cloning the existing ShoreFeel Lake Michigan cards.
+
+**Comparable tools:** Existing Grand Haven ShoreFeel is one beach's water/weather advisory. Great Lakes Buoys compares instruments regionally. This page differs in its primary question, strict multi-sector source policy, three-point geographic evidence selection, and the explicit rule that an outer-bay buoy never becomes a Bay City State Park temperature.
+
+**Technology fit:** Keep semantic HTML/scoped CSS for first answer and offline source explanations, browser JavaScript/Leaflet for three synchronized source selections and source timestamps, existing Node ShoreFeel API/NOAA parser for data and caching behavior. Python is useful for *offline* independent GIS/source validation but adds no visitor runtime value; reject introducing Python service, Rust/WASM, Java, React, Redis, and new build tooling without benchmarked need.
+
+**Protected:** Canonical https://chrisizworski.com/lake-huron-water-temperature/saginaw-bay/; identity and existing site ads; authoritative NOAA/NWS inputs and timestamps; NDBC station status; missing-grid and stale-data failures; no implied measured swimming water, verified public water access or live safety score. A Google Maps link is to Bay City State Park, never to water pixel or offshore buoy coordinates.
+
+**Code changes:** Restored source-safe per-cell NOAA queries and strict buoy distance policy; restored page, evidence map, activity selectors and existing test; added explicit first-screen source/visit paths, readable unverified no-JavaScript values, current official source link, and mobile contrast/focus treatment.
+
+**Release:** Source changes are not browser evidence. Run `node --test tests/shorefeel-saginaw.test.js`, `npm run verify:all`, actual 360/390/768/1280/1440px responsive browser QA, source-stale/A-B-A selections, Vercel preview and NOAA failure injection. Do not merge without green full CI, measured browser result and public API integration checks. GSC, GA4, AdSense impact NOT MEASURED. Exactly one next action: verify the fresh PR head in CI and preview and correct any regressions before merging.
