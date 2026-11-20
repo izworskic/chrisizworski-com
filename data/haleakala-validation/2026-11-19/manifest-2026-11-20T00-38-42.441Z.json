@@ -1,0 +1,178 @@
+{
+  "schema_version": 2,
+  "case_date_hst": "2026-11-19",
+  "captured_at_utc": "2026-11-20T00:38:42.441Z",
+  "site": {
+    "code": "ogg",
+    "lat": 20.7069,
+    "lon": -156.2565,
+    "name": "LCO OGG Haleakala"
+  },
+  "sunrise": {
+    "utc": "2026-11-19T16:37:34.000Z",
+    "source": "https://api.sunrise-sunset.org/json?lat=20.7069&lng=-156.2565&date=2026-11-19&formatted=0"
+  },
+  "truth_window": {
+    "start_utc": "2026-11-19T16:07:34.000Z",
+    "end_utc": "2026-11-19T16:57:34.000Z",
+    "minutes_before": 30,
+    "minutes_after": 20
+  },
+  "errors": [],
+  "sources": {
+    "allsky": {
+      "archive_url": "https://lco.global/camera/ogg/allsky/archive/",
+      "frames": [
+        {
+          "timestamp_utc": "2026-11-19T16:10:12.000Z",
+          "file": "allsky/20261119-161012.jpg",
+          "bytes": 293733,
+          "sha256": "fc86db35b4a7f0cb4f2b7a7c367ade0e7f1aa8d8b44dc03f9b65006ed2028029",
+          "source_url": "https://s3.us-west-2.amazonaws.com/cameraview.lco.global/ogg/allsky/20261119-161012.jpg?AWSAccessKeyId=AKIA6FT4CXR4XGJMTB5P&Signature=cF%2FBzAEYUScJlniN9uC5KpdDEg4%3D&Expires=1795221524",
+          "final_url": "https://s3.us-west-2.amazonaws.com/cameraview.lco.global/ogg/allsky/20261119-161012.jpg?AWSAccessKeyId=AKIA6FT4CXR4XGJMTB5P&Signature=cF%2FBzAEYUScJlniN9uC5KpdDEg4%3D&Expires=1795221524"
+        },
+        {
+          "timestamp_utc": "2026-11-19T16:14:11.000Z",
+          "file": "allsky/20261119-161411.jpg",
+          "bytes": 287483,
+          "sha256": "f89685e9c2b280de5a010ced718b09a76f1d777d184250daab69530ecfe98bf2",
+          "source_url": "https://s3.us-west-2.amazonaws.com/cameraview.lco.global/ogg/allsky/20261119-161411.jpg?AWSAccessKeyId=AKIA6FT4CXR4XGJMTB5P&Signature=f7Dhxf3sCj0Y1iQnf8ZXwVk3%2F8s%3D&Expires=1795221524",
+          "final_url": "https://s3.us-west-2.amazonaws.com/cameraview.lco.global/ogg/allsky/20261119-161411.jpg?AWSAccessKeyId=AKIA6FT4CXR4XGJMTB5P&Signature=f7Dhxf3sCj0Y1iQnf8ZXwVk3%2F8s%3D&Expires=1795221524"
+        },
+        {
+          "timestamp_utc": "2026-11-19T16:18:13.000Z",
+          "file": "allsky/20261119-161813.jpg",
+          "bytes": 273163,
+          "sha256": "e15a13277da77a7595b4b9aef74dffdeb92c7374a7d83c349b1abe580bbb9680",
+          "source_url": "https://s3.us-west-2.amazonaws.com/cameraview.lco.global/ogg/allsky/20261119-161813.jpg?AWSAccessKeyId=AKIA6FT4CXR4XGJMTB5P&Signature=7FyxwFSRU%2BhFLhJFbNAOiLbfj7U%3D&Expires=1795221524",
+          "final_url": "https://s3.us-west-2.amazonaws.com/cameraview.lco.global/ogg/allsky/20261119-161813.jpg?AWSAccessKeyId=AKIA6FT4CXR4XGJMTB5P&Signature=7FyxwFSRU%2BhFLhJFbNAOiLbfj7U%3D&Expires=1795221524"
+        },
+        {
+          "timestamp_utc": "2026-11-19T16:22:14.000Z",
+          "file": "allsky/20261119-162214.jpg",
+          "bytes": 216137,
+          "sha256": "4f45f4cf1bb72c24e4e7ad0cfcac70c264521d8093e5bc88d75bc46611cf0f19",
+          "source_url": "https://s3.us-west-2.amazonaws.com/cameraview.lco.global/ogg/allsky/20261119-162214.jpg?AWSAccessKeyId=AKIA6FT4CXR4XGJMTB5P&Signature=fjdRd0S%2Br23EUMZnaJJPIAA2z9g%3D&Expires=1795221524",
+          "final_url": "https://s3.us-west-2.amazonaws.com/cameraview.lco.global/ogg/allsky/20261119-162214.jpg?AWSAccessKeyId=AKIA6FT4CXR4XGJMTB5P&Signature=fjdRd0S%2Br23EUMZnaJJPIAA2z9g%3D&Expires=1795221524"
+        },
+        {
+          "timestamp_utc": "2026-11-19T16:26:14.000Z",
+          "file": "allsky/20261119-162614.jpg",
+          "bytes": 159923,
+          "sha256": "a1f3a930c50bd1d0788ccdcd5ce342ff63ce7accaecc3cd9ef95adccea057794",
+          "source_url": "https://s3.us-west-2.amazonaws.com/cameraview.lco.global/ogg/allsky/20261119-162614.jpg?AWSAccessKeyId=AKIA6FT4CXR4XGJMTB5P&Signature=mA5bHf%2BuThtXplf7navQW4%2FTvAY%3D&Expires=1795221524",
+          "final_url": "https://s3.us-west-2.amazonaws.com/cameraview.lco.global/ogg/allsky/20261119-162614.jpg?AWSAccessKeyId=AKIA6FT4CXR4XGJMTB5P&Signature=mA5bHf%2BuThtXplf7navQW4%2FTvAY%3D&Expires=1795221524"
+        },
+        {
+          "timestamp_utc": "2026-11-19T16:30:13.000Z",
+          "file": "allsky/20261119-163013.jpg",
+          "bytes": 130906,
+          "sha256": "c4bbac25b9cacd4eb8439ba5d564227788b23cb90e03590f75cfe9b9ed8ac611",
+          "source_url": "https://s3.us-west-2.amazonaws.com/cameraview.lco.global/ogg/allsky/20261119-163013.jpg?AWSAccessKeyId=AKIA6FT4CXR4XGJMTB5P&Signature=OxaE6PJ2sHxnMyqvU0XmpBnID4M%3D&Expires=1795221524",
+          "final_url": "https://s3.us-west-2.amazonaws.com/cameraview.lco.global/ogg/allsky/20261119-163013.jpg?AWSAccessKeyId=AKIA6FT4CXR4XGJMTB5P&Signature=OxaE6PJ2sHxnMyqvU0XmpBnID4M%3D&Expires=1795221524"
+        },
+        {
+          "timestamp_utc": "2026-11-19T16:34:15.000Z",
+          "file": "allsky/20261119-163415.jpg",
+          "bytes": 108966,
+          "sha256": "75fe5eb7a8477471e6be538ef628ff904431aaafa8a67682be41b4eea26429d3",
+          "source_url": "https://s3.us-west-2.amazonaws.com/cameraview.lco.global/ogg/allsky/20261119-163415.jpg?AWSAccessKeyId=AKIA6FT4CXR4XGJMTB5P&Signature=hbvOYrka7VWnG4tk4rQfZWKchmw%3D&Expires=1795221524",
+          "final_url": "https://s3.us-west-2.amazonaws.com/cameraview.lco.global/ogg/allsky/20261119-163415.jpg?AWSAccessKeyId=AKIA6FT4CXR4XGJMTB5P&Signature=hbvOYrka7VWnG4tk4rQfZWKchmw%3D&Expires=1795221524"
+        },
+        {
+          "timestamp_utc": "2026-11-19T16:38:14.000Z",
+          "file": "allsky/20261119-163814.jpg",
+          "bytes": 123012,
+          "sha256": "6b63a58d23a904b06e0f76cb7d51b5805280d00e017f241e50410d50084d47da",
+          "source_url": "https://s3.us-west-2.amazonaws.com/cameraview.lco.global/ogg/allsky/20261119-163814.jpg?AWSAccessKeyId=AKIA6FT4CXR4XGJMTB5P&Signature=SwYlvy9p8%2FcH4MM%2B7luvEtce%2BiU%3D&Expires=1795221524",
+          "final_url": "https://s3.us-west-2.amazonaws.com/cameraview.lco.global/ogg/allsky/20261119-163814.jpg?AWSAccessKeyId=AKIA6FT4CXR4XGJMTB5P&Signature=SwYlvy9p8%2FcH4MM%2B7luvEtce%2BiU%3D&Expires=1795221524"
+        },
+        {
+          "timestamp_utc": "2026-11-19T16:42:14.000Z",
+          "file": "allsky/20261119-164214.jpg",
+          "bytes": 111797,
+          "sha256": "828e7410498a0fcfb2782f6a823248a00d71a7ee2b61dd1134eb11884ccd4abc",
+          "source_url": "https://s3.us-west-2.amazonaws.com/cameraview.lco.global/ogg/allsky/20261119-164214.jpg?AWSAccessKeyId=AKIA6FT4CXR4XGJMTB5P&Signature=hwBu4V2TwvuhhXKgcMRn42r%2BsQ4%3D&Expires=1795221524",
+          "final_url": "https://s3.us-west-2.amazonaws.com/cameraview.lco.global/ogg/allsky/20261119-164214.jpg?AWSAccessKeyId=AKIA6FT4CXR4XGJMTB5P&Signature=hwBu4V2TwvuhhXKgcMRn42r%2BsQ4%3D&Expires=1795221524"
+        },
+        {
+          "timestamp_utc": "2026-11-19T16:46:15.000Z",
+          "file": "allsky/20261119-164615.jpg",
+          "bytes": 106737,
+          "sha256": "0c82b4efcff586beb891eb471c6d5b569ea4c33c01e0ad5696cfdba816d4ffe5",
+          "source_url": "https://s3.us-west-2.amazonaws.com/cameraview.lco.global/ogg/allsky/20261119-164615.jpg?AWSAccessKeyId=AKIA6FT4CXR4XGJMTB5P&Signature=O8bFm2xagsXShRhUpksJfnCIPAo%3D&Expires=1795221524",
+          "final_url": "https://s3.us-west-2.amazonaws.com/cameraview.lco.global/ogg/allsky/20261119-164615.jpg?AWSAccessKeyId=AKIA6FT4CXR4XGJMTB5P&Signature=O8bFm2xagsXShRhUpksJfnCIPAo%3D&Expires=1795221524"
+        },
+        {
+          "timestamp_utc": "2026-11-19T16:50:15.000Z",
+          "file": "allsky/20261119-165015.jpg",
+          "bytes": 101097,
+          "sha256": "b3e10f23d21e5a3335f765fa3510ee2a32676148724e89faa399fb9f92ef34bf",
+          "source_url": "https://s3.us-west-2.amazonaws.com/cameraview.lco.global/ogg/allsky/20261119-165015.jpg?AWSAccessKeyId=AKIA6FT4CXR4XGJMTB5P&Signature=rIMiJBDHg%2BKV4wD7yvUij6n0Qyw%3D&Expires=1795221524",
+          "final_url": "https://s3.us-west-2.amazonaws.com/cameraview.lco.global/ogg/allsky/20261119-165015.jpg?AWSAccessKeyId=AKIA6FT4CXR4XGJMTB5P&Signature=rIMiJBDHg%2BKV4wD7yvUij6n0Qyw%3D&Expires=1795221524"
+        },
+        {
+          "timestamp_utc": "2026-11-19T16:54:15.000Z",
+          "file": "allsky/20261119-165415.jpg",
+          "bytes": 119895,
+          "sha256": "72a5bf6025fc006ffa9786bb02e443ba5a04936f85e63a5ef65dbf739066a48e",
+          "source_url": "https://s3.us-west-2.amazonaws.com/cameraview.lco.global/ogg/allsky/20261119-165415.jpg?AWSAccessKeyId=AKIA6FT4CXR4XGJMTB5P&Signature=Fk2aQOr4mk%2FcSMkuc0lRfPFRSB0%3D&Expires=1795221524",
+          "final_url": "https://s3.us-west-2.amazonaws.com/cameraview.lco.global/ogg/allsky/20261119-165415.jpg?AWSAccessKeyId=AKIA6FT4CXR4XGJMTB5P&Signature=Fk2aQOr4mk%2FcSMkuc0lRfPFRSB0%3D&Expires=1795221524"
+        }
+      ]
+    },
+    "boltwood-sky-minus-ambient-temperature": {
+      "file": "weather/boltwood-sky-minus-ambient-temperature.json",
+      "source_url": "https://weather-api.lco.global/query?site=ogg&datumname=Boltwood+Sky+Minus+Ambient+Temperature&start=2026-11-19T16%3A07%3A34Z&end=2026-11-19T16%3A57%3A34Z",
+      "observations": 4,
+      "sha256": "07b298e19b18f1de3590e0bbb0405d0db921eeeacdb5232db330ef8f69d0ef0b"
+    },
+    "weather-humidity-value": {
+      "file": "weather/weather-humidity-value.json",
+      "source_url": "https://weather-api.lco.global/query?site=ogg&datumname=Weather+Humidity+Value&start=2026-11-19T16%3A07%3A34Z&end=2026-11-19T16%3A57%3A34Z",
+      "observations": 4,
+      "sha256": "bb5142912cc061dece6e109fd31bd59eb130e11b8fa3183e339da278c1a6e3ab"
+    },
+    "weather-wind-speed-value": {
+      "file": "weather/weather-wind-speed-value.json",
+      "source_url": "https://weather-api.lco.global/query?site=ogg&datumname=Weather+Wind+Speed+Value&start=2026-11-19T16%3A07%3A34Z&end=2026-11-19T16%3A57%3A34Z",
+      "observations": 4,
+      "sha256": "658390114e448a6b6415e7f3c734d0689b9f9ac458b80aa74acc6c609070ffd5"
+    },
+    "weather-wind-direction-value": {
+      "file": "weather/weather-wind-direction-value.json",
+      "source_url": "https://weather-api.lco.global/query?site=ogg&datumname=Weather+Wind+Direction+Value&start=2026-11-19T16%3A07%3A34Z&end=2026-11-19T16%3A57%3A34Z",
+      "observations": 4,
+      "sha256": "46dee13aa53ca5e0f8bc8689e13ae2149037bf257d28aede37feeb8021110c43"
+    },
+    "weather-air-temperature-value": {
+      "file": "weather/weather-air-temperature-value.json",
+      "source_url": "https://weather-api.lco.global/query?site=ogg&datumname=Weather+Air+Temperature+Value&start=2026-11-19T16%3A07%3A34Z&end=2026-11-19T16%3A57%3A34Z",
+      "observations": 4,
+      "sha256": "f6e192e073cd1da650658d0009cf744ffa9e020779f8a17b89fd4e99efc5b68b"
+    },
+    "weather-barometric-pressure-value": {
+      "file": "weather/weather-barometric-pressure-value.json",
+      "source_url": "https://weather-api.lco.global/query?site=ogg&datumname=Weather+Barometric+Pressure+Value&start=2026-11-19T16%3A07%3A34Z&end=2026-11-19T16%3A57%3A34Z",
+      "observations": 4,
+      "sha256": "b53e840694f319b997f40e305d4a3ffe7b8e3a28ced9f26befe6995e4af21262"
+    },
+    "weather-sky-brightness-value": {
+      "file": "weather/weather-sky-brightness-value.json",
+      "source_url": "https://weather-api.lco.global/query?site=ogg&datumname=Weather+Sky+Brightness+Value&start=2026-11-19T16%3A07%3A34Z&end=2026-11-19T16%3A57%3A34Z",
+      "observations": 4,
+      "sha256": "b7655cb397b436bb1d824f5074688b551ccc5bee522fcaec7f1086f3bdabe8cd"
+    },
+    "telescope_states": {
+      "file": "state/telescope-states.json",
+      "source_url": "https://observe.lco.global/api/telescope_states/?site=ogg&start=2026-11-19T16%3A07%3A34Z&end=2026-11-19T16%3A57%3A34Z",
+      "sha256": "f79ea6f1f16cade09d7254f139a378ef71d169d16cc8387733fb61f65a2d3a1c"
+    }
+  },
+  "completeness": {
+    "allsky_frames": 12,
+    "weather_datums": 7,
+    "telescope_state": true
+  },
+  "validation_ready": true
+}
