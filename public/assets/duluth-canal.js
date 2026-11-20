@@ -121,7 +121,11 @@
     const actions = el('div', '', 'watch-actions');
     actions.append(
       button('Locate this ship', 'button compact', () => focusVessel(pick.mmsi)),
-      button('Open live camera', 'button secondary compact', () => openCameraMonitor(false))
+      button('Open live camera', 'button secondary compact', () => openCameraMonitor(false)),
+      button('Choose a shore view', 'button secondary compact', () => {
+        if (map && spotMarkers.size) focusAllWatchSpots();
+        else $('where-watch').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      })
     );
     card.append(
       el('div', 'BEST SUPPORTED WATCH', 'watch-kicker'),
