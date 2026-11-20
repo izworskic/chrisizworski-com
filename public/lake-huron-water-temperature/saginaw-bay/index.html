@@ -48,17 +48,19 @@
 <div class="wrap">
 <p class="bay-kicker">Lake Huron · Saginaw Bay · ShoreFeel 2.0 pilot</p>
 <h1>Saginaw Bay water temperature today</h1>
+<p class="bay-hero-prompt">Planning to visit the bay? Start with the nearest dated satellite evidence. The offshore buoy and whole-lake average describe different places.</p>
+<nav class="bay-quick-actions" aria-label="Explore Saginaw Bay observations"><a href="#bay-evidence">Compare the three sources</a><a href="#map-h">See the evidence map</a><a href="#experience-h">Plan a shoreline visit</a></nav>
 <div class="temperature-answer" id="content">
  <p id="hero-scope" class="temperature-answer-label">Bay City State Park shoreline · offshore reference, not a beach thermometer</p>
  <div class="answer-row">
-  <div id="lead-temp" class="temperature-answer-reading" data-answer aria-live="polite">Checking NOAA</div>
+  <div id="lead-temp" class="temperature-answer-reading" data-answer aria-live="polite">No current local reading verified</div>
   <div class="answer-band"><strong id="lead-band">Water exposure</strong><span id="lead-band-note">Local evidence is checked before a reading is displayed.</span></div>
  </div>
  <div id="lead-source" class="temperature-answer-when">NOAA satellite and NDBC data, when recent and valid</div>
  <details class="evidence"><summary>Where this water number comes from</summary>
   <p id="lead-caveat">Only a current satellite pixel near the Bay City State Park shoreline can be shown as local context. A lake average or distant buoy cannot be substituted for the beach.</p>
   <p id="huron-context">Whole-lake Lake Huron average is context only.</p>
-  <p><a href="https://coastwatch.glerl.noaa.gov/satellite-data-products/lake-surface-temperature/" rel="noopener noreferrer">NOAA GLSEA method</a> · <a href="https://www.ndbc.noaa.gov/station_page.php?station=45163" rel="noopener noreferrer">Station 45163</a></p>
+  <p><a href="https://coastwatch.glerl.noaa.gov/satellite-data-products/great-lakes-surface-environmental-analysis-glsea/" rel="noopener noreferrer">NOAA GLSEA method</a> · <a href="https://www.ndbc.noaa.gov/station_page.php?station=45163" rel="noopener noreferrer">Station 45163</a></p>
  </details>
 </div>
 <div class="hero-bottom"><span id="last-updated" role="status">Checking official sources</span><a href="#bay-evidence">Explore where the observations come from ↓</a></div>
@@ -70,13 +72,13 @@
  <p class="evidence-intro">Saginaw Bay is shallow and geographically varied. These are a pair of analyzed satellite water pixels and a separate offshore buoy location, <strong>not three beach thermometers</strong>. A reading is shown only when its original source is recent enough.</p>
  <div class="bay-metrics">
   <article class="bay-card"><span class="tagline">Inner-bay satellite reference</span><h3>Near Bay City State Park</h3>
-   <strong class="value" id="value-inner-bay">Checking</strong><div class="date" id="date-inner-bay">Source not yet verified</div><p>Satellite-derived open-water surface analysis east of the park. Not the temperature inside the swimming area.</p>
+   <strong class="value" id="value-inner-bay">Not verified</strong><div class="date" id="date-inner-bay">Source not yet verified</div><p>Satellite-derived open-water surface analysis east of the park. Not the temperature inside the swimming area.</p>
   </article>
   <article class="bay-card"><span class="tagline">Western-bay satellite reference</span><h3>Off Nayanquing Point</h3>
-   <strong class="value" id="value-west-bay">Checking</strong><div class="date" id="date-west-bay">Source not yet verified</div><p>Independent nearby pixel from a different sector of the bay. Not a marsh or viewing-platform water measurement.</p>
+   <strong class="value" id="value-west-bay">Not verified</strong><div class="date" id="date-west-bay">Source not yet verified</div><p>Independent nearby pixel from a different sector of the bay. Not a marsh or viewing-platform water measurement.</p>
   </article>
   <article class="bay-card"><span class="tagline">Physical sensor · seasonal</span><h3>NOAA Saginaw Bay buoy 45163</h3>
-   <strong class="value" id="value-buoy">Checking</strong><div class="date" id="date-buoy">Station may be offline for winter</div><p>The station is far offshore. NOAA reported that it was recovered September 29, 2026. Its reading is never relabeled as beach water.</p>
+   <strong class="value" id="value-buoy">Not verified</strong><div class="date" id="date-buoy">Station may be offline for winter</div><p>The station is far offshore. The station is seasonal; check its <a href="https://www.ndbc.noaa.gov/station_page.php?station=45163">NOAA status page</a> for the latest deployment information. Its reading is never relabeled as beach water.</p>
   </article>
  </div>
 </section>
@@ -140,7 +142,7 @@
 <p>No. Satellite values are NOAA analyses for offshore water pixels, normally updated daily, and may include older cloud-free passes or smoothing. Buoy 45163 is an instrument in the outer bay, not a shore sensor. If all local references are unavailable, ShoreFeel does not invent a Bay City State Park temperature.</p>
 <h3>Is there a 48-hour Saginaw Bay water forecast?</h3>
 <p>Not yet. The existing Lake Michigan pilot has experimental nearshore forecasts, but those results have not been validated for Saginaw Bay. No model estimate is marketed here as a local forecast until its error and uncertainty have been independently tested.</p>
-<h3>Where can I go?</h3>
+<h3>Where can I go?</h3><p><a href="https://www.google.com/maps/search/?api=1&amp;query=Bay%20City%20State%20Park%20Michigan" rel="noopener" target="_blank">Find Bay City State Park on Google Maps</a>. This is a public park location search, not a route to an offshore temperature sensor.</p>
 <p><a href="https://www.michigan.gov/recsearch/parks/baycity">Bay City State Park</a> has an established shoreline beach and accessible facilities. <a href="https://www.michigan.gov/dnr/things-to-do/hunting/where/wetland-wonders/nayanquing-point-swa">Nayanquing Point State Wildlife Area</a> is a managed wetland and wildlife-viewing area, not a substitute swimming destination. Observe local rules and seasonal access notices before visiting.</p>
 <h3>Original data and next steps</h3>
 <p class="bay-sources"><a href="https://coastwatch.glerl.noaa.gov/satellite-data-products/lake-surface-temperature/">NOAA Great Lakes surface-temperature analysis</a> · <a href="https://apps.glerl.noaa.gov/erddap/griddap/GLSEA_ACSPO_GCS.graph">NOAA satellite surface grid</a> · <a href="https://www.ndbc.noaa.gov/station_page.php?station=45163">NOAA Saginaw Bay buoy</a> · <a href="https://www.weather.gov/">National Weather Service forecasts</a> · <a href="/great-lakes-buoys/">Great Lakes buoy tool</a>.</p>
