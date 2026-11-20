@@ -372,6 +372,11 @@ tr:nth-child(even) td{background:#fbfaf7}
   function station(){return F.station(state.st)||F.station('bay-city')}
   function pct(p){return Math.round(p*100)+'%'}
   function cap(t){return t.charAt(0).toUpperCase()+t.slice(1)}
+  function seasonYear(st){
+    if(state.date!==null&&dateIn.value)return Number(dateIn.value.slice(0,4));
+    var a=F.anchors(st,'typical');
+    return new Date().getFullYear()+(K.today()>a.latest?1:0);
+  }
 
   function renderStation(st){
     var a=F.anchors(st,'typical');
@@ -444,7 +449,8 @@ tr:nth-child(even) td{background:#fbfaf7}
 
   function query(){var q=new URLSearchParams();q.set('station',state.st);if(state.date!==null)q.set('date',dateIn.value);return '?'+q.toString()}
   function render(){
-    var st=station(),d=state.date===null?K.today():state.date;
+    var st=station(),d=state.date===null?K.today():state.date,year=seasonYear(st);
+    el('frostSeason').textContent=(state.date===null?'Planning for spring '+year:'Checking '+K.fmt(d)+', '+year)+'. These are historical frost probabilities, not a live forecast.';
     renderStation(st);var t=renderRisk(st,d);drawStrip(st);
     el('frostLive').textContent=el('frostTitle').textContent+' '+t;
     if(window.history&&history.replaceState)history.replaceState(null,'',query()+location.hash);
@@ -452,7 +458,7 @@ tr:nth-child(even) td{background:#fbfaf7}
   function pick(slug){state.st=slug;sel.value=slug;render()}
   sel.addEventListener('change',function(){pick(sel.value)});
   dateIn.addEventListener('change',function(){state.date=K.fromISO(dateIn.value);render()});
-  el('icsBtn').addEventListener('click',function(){var st=station(),P=K.parse;K.ics([{from:P(st.p75),to:P(st.p75),title:'Frost risk easing: 3 springs in 4 still frost after today',note:st.n+' station.'},{from:P(st.p50),to:P(st.p50),title:'Typical last frost: half of springs frost after today',note:st.n+'. Hardy and half-hardy crops are fine; tender crops wait a little longer.'},{from:P(st.p25),to:P(st.p25),title:'Cautious date: tender crops can go out',note:'Only 1 spring in 4 frosts after today in '+st.n+'.'},{from:P(st.ff),to:P(st.ff),title:'Typical first fall frost',note:'Cover tender crops on clear, still nights around now. '+st.n+'.'}],'frost-dates-'+st.s+'.ics')});
+  el('icsBtn').addEventListener('click',function(){var st=station(),P=K.parse,year=seasonYear(st);K.ics([{from:P(st.p75),to:P(st.p75),title:'Frost risk easing: 3 springs in 4 still frost after today',note:st.n+' station.'},{from:P(st.p50),to:P(st.p50),title:'Typical last frost: half of springs frost after today',note:st.n+'. Hardy and half-hardy crops are fine; tender crops wait a little longer.'},{from:P(st.p25),to:P(st.p25),title:'Cautious date: about 1 in 4 springs still frost later',note:'Only 1 spring in 4 frosts after today in '+st.n+'.'},{from:P(st.ff),to:P(st.ff),title:'Typical first fall frost',note:'Cover tender crops on clear, still nights around now. '+st.n+'.'}],'frost-dates-'+st.s+'-'+year+'.ics',year)});
   el('shareBtn').addEventListener('click',function(){K.copyLink(location.origin+location.pathname+query()+'#frost-tool',el('shareBtn'),el('shareOut'))});
   var q=new URLSearchParams(location.search);
   if(F.station(q.get('station')))state.st=q.get('station');else if(F.station(q.get('city')))state.st=q.get('city');
