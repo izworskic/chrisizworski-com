@@ -149,6 +149,15 @@ async function run(){
       await hist.locator('#history-harbor').selectOption('all');
       check(await hist.locator('[data-history-season="2025-26"] [data-history-vessel]:visible').count()===27,
         size.name+': clearing harbor restores all twenty-seven records (A-to-B-to-A)');
+      await hist.locator('#history-confidence').selectOption('reported');
+      check(await hist.locator('[data-history-season="2025-26"] [data-history-vessel]:visible').count()===17,
+        size.name+': reported-only evidence filter shows 17 explicitly lower-confidence records');
+      await hist.locator('#history-confidence').selectOption('verified');
+      check(await hist.locator('[data-history-season="2025-26"] [data-history-vessel]:visible').count()===10,
+        size.name+': verified-only filter shows 10 independent source records');
+      await hist.locator('#history-confidence').selectOption('all');
+      check(await hist.locator('[data-history-season="2025-26"] [data-history-vessel]:visible').count()===27,
+        size.name+': confidence A-to-B-to-A resets the full historical set');
       check((await hist.locator('#history-selection').textContent()).includes('Not a total fleet count'),
         size.name+': history never presents sampled records as a complete fleet census');
       check(await hist.locator('a[href^="https://"]').count()>=14,
