@@ -26,7 +26,7 @@ check('Handoffs use symbolic analytics only',symbolicEvent&&!forbiddenAnalytics,
 const protectedTitles={
   'public/northern-lights-michigan/index.html':'Northern Lights Michigan Tonight: Verdict | Chris Izworski',
   'public/soo-locks/index.html':'Soo Locks Schedule Today: Ships &amp; Map | Chris Izworski',
-  'public/when-to-plant-tomatoes-michigan/index.html':'When to Plant Tomatoes in Michigan: 2026 Dates by Region',
+  'public/when-to-plant-tomatoes-michigan/index.html':'When to Plant Tomatoes in Michigan: Dates by Region',
   'public/michigan-frost-dates/index.html':'Michigan Last Frost Dates by City: 2026 Planting Calendar',
   'public/great-lakes-freighter-tracking/index.html':'Great Lakes Ship Tracker Live Now | Chris Izworski'
 };
