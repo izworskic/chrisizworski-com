@@ -375,7 +375,9 @@ tr:nth-child(even) td{background:#fbfaf7}
   function seasonYear(st){
     if(state.date!==null&&dateIn.value)return Number(dateIn.value.slice(0,4));
     var a=F.anchors(st,'typical');
-    return new Date().getFullYear()+(K.today()>a.latest?1:0);
+    // Keep this year's frost dates through the typical first fall frost.
+    // From the following day, prepare one complete spring-to-fall calendar for next year.
+    return new Date().getFullYear()+(K.today()>a.fall?1:0);
   }
 
   function renderStation(st){
@@ -450,7 +452,11 @@ tr:nth-child(even) td{background:#fbfaf7}
   function query(){var q=new URLSearchParams();q.set('station',state.st);if(state.date!==null)q.set('date',dateIn.value);return '?'+q.toString()}
   function render(){
     var st=station(),d=state.date===null?K.today():state.date,year=seasonYear(st);
-    el('frostSeason').textContent=(state.date===null?'Planning for spring '+year:'Checking '+K.fmt(d)+', '+year)+'. These are historical frost probabilities, not a live forecast.';
+    var a=F.anchors(st,'typical');
+    var seasonLabel=state.date!==null?'Checking '+K.fmt(d)+', '+year:
+      d>a.latest&&d<=a.fall?year+' growing season. The typical first fall frost is around '+st.ff:
+      'Planning for spring '+year;
+    el('frostSeason').textContent=seasonLabel+'. These are historical frost probabilities, not a live forecast.';
     renderStation(st);var t=renderRisk(st,d);drawStrip(st);
     el('frostLive').textContent=el('frostTitle').textContent+' '+t;
     if(window.history&&history.replaceState)history.replaceState(null,'',query()+location.hash);
