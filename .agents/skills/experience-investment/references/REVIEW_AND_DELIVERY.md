@@ -16,6 +16,7 @@
 - **Candidate A / B:** first 390px screen, meaningful action, composition, visual/data language, unknown/failure behavior, cost and why it differs.
 - **Selection:** benefit, effort level (small/medium/large), source confidence, key risk; avoid made-up numeric scores.
 - **Distinctiveness check:** name the two closest existing site tools and two demonstrated function-led differences. If only color/imagery changed, FAIL.
+- **Technology Fit Review:** inventory actual code and data engines; compare HTML/CSS, browser JS/TS, existing backend, Python, Rust and Java against measured visitor needs, complexity, ops/cost and failure behavior. Record keep/reject decisions, verification trigger and rollback; no stack-change mandate.
 - **Implementation scope:** touched files, preserved search-visible text and data/ads/SEO contracts, dependencies and budget effect.
 - **Proof:** before/after 390px and 1280px, actual 360/390/768/1440 responsive check, keyboard, no-JS, reduced-motion, error/source-stale/map/photo states as relevant, Experience OS QA scorecard, targeted and full CI. Use NOT MEASURED / NOT VERIFIED where appropriate.
 - **Release:** separate code committed, PR open, checks passed, merged, deployed, live-public verified and measured-outcome statuses. Include exact links/SHA; never conflate.
