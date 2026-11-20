@@ -182,7 +182,7 @@ async function run(){
       const boundsText=await page.evaluate(()=>document.querySelector('#layup-map')?.dataset.initialBounds||'');
       const bounds=boundsText.split('|').map(v=>v.split(',').map(Number));
       check(bounds.length===2&&bounds.every(b=>b.length===2&&b.every(Number.isFinite)),size.name+': map exposes real initial bounds');
-      check(bounds[0][0]>40&&bounds[1][0]<49.5&&bounds[0][1]<-91.5&&bounds[1][1]>-82,
+      check(bounds[0][0]>40&&bounds[1][0]<49.5&&bounds[0][1]<-91.5&&bounds[1][1]>-74,
         size.name+': Great Lakes rather than eastern-seaboard extent '+boundsText);
       const mapCenter=await page.evaluate(()=>document.querySelector('#layup-map')?.dataset.initialBounds);
       check(!!mapCenter,size.name+': initial map bounds verified');
