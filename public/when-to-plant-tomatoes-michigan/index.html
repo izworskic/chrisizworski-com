@@ -504,8 +504,13 @@ Sources: NOAA Climate Normals 1991&ndash;2020; <a href="https://www.canr.msu.edu
       badge='Late, but there is time';cls='gk-answer info';var left=P.a.fall-d;title=t+': still time for tomatoes, if you choose fast ones.';why='The first fall frost here usually comes around '+st.ff+', '+K.days(left)+' away. Pick a variety that ripens in under '+Math.max(45,left-10)+' days from transplant, and buy sturdy starts rather than seed.';
     }else{
       var before=d<P.a.fall&&d>P.out[0];badge=before?'Too late to plant':'Next season';cls='gk-answer info';
-      title=before?t+': too late to plant new tomatoes near '+st.n+' this year.':t+': tomato season is over near '+st.n+'.';
-      why=(before?'Plants already in the ground keep ripening until the first fall frost, around '+st.ff+'. Cover them on cold, clear nights. ':'')+'Next spring, start seeds indoors '+K.range(P.seed[0],P.seed[1])+' and plant out '+K.range(P.out[0],P.out[1])+'.';
+      if(!before&&state.date===null&&d>=P.a.fall){
+        title=st.n+': plan your '+seasonYear(P)+' tomato season.';
+        why='Start seeds indoors '+K.range(P.seed[0],P.seed[1])+' and plan to transplant '+K.range(P.out[0],P.out[1])+'. Warm soil and frost-free nights decide the actual planting day.';
+      }else{
+        title=before?t+': too late to plant new tomatoes near '+st.n+' this year.':t+': tomato season is over near '+st.n+'.';
+        why=(before?'Plants already in the ground keep ripening until the first fall frost, around '+st.ff+'. Cover them on cold, clear nights. ':'')+'Next spring, start seeds indoors '+K.range(P.seed[0],P.seed[1])+' and plant out '+K.range(P.out[0],P.out[1])+'.';
+      }
     }
     steps.unshift('Start seeds: '+K.range(P.seed[0],P.seed[1]),'Harden off: '+K.range(P.harden[0],P.harden[1]),'Plant out: '+K.range(P.out[0],P.out[1])+', once soil is 60°F');
     el('tCard').className=cls;el('tBadge').textContent=badge;el('tTitle').textContent=title;el('tWhy').textContent=why;
