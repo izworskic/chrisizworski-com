@@ -32,8 +32,8 @@ check("heirloom H1", heirloom.includes('<h1>Best Heirloom Tomatoes for Michigan<
 check("heirloom direct answer", heirloom.includes('<strong>Best heirloom tomatoes for Michigan:</strong>'));
 check("heirloom canonical", heirloom.includes('<link rel="canonical" href="https://chrisizworski.com/heirloom-tomatoes-michigan/">'));
 check("heirloom freshness matches sitemap", freshnessAgrees(heirloom, "/heirloom-tomatoes-michigan/"));
-check("tomato protected title", tomato.includes('<title>When to Plant Tomatoes in Michigan: 2026 Dates by Region</title>'));
-check("tomato protected H1", tomato.includes('<h1>When to Plant Tomatoes in Michigan: 2026 Dates by Region</h1>'));
+check("tomato evergreen title", tomato.includes('<title>When to Plant Tomatoes in Michigan: Dates by Region</title>'));
+check("tomato evergreen H1", tomato.includes('<h1>When to Plant Tomatoes in Michigan: Dates by Region</h1>'));
 check("frost protected title", frost.includes('<title>Michigan Last Frost Dates by City: 2026 Planting Calendar</title>'));
 check("frost protected H1", frost.includes('<h1>Michigan Last Frost Dates by City</h1>'));
 check("zone baseline", experiment.pages[0].baseline.impressions === 34 && experiment.pages[0].baseline.clicks === 0 && experiment.pages[0].baseline.averagePosition === 8.26);

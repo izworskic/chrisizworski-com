@@ -1,3 +1,11 @@
+### 2026-11-20 | Evergreen Michigan tomato planting guide
+- **Visitor decision:** Give Michigan gardeners a reliable typical planting window and a frost-station tomato check without implying the advice expires after the 2026 season.
+- **Change:** Removed the hard-coded 2026 search headline, H1, opening answer, and byline update claim on `/when-to-plant-tomatoes-michigan/`. Preserved canonical, author Person, ads, frost station data, answer controls, and internal links. The page now distinguishes climate guidance from a live forecast, links directly to MSU Extension's tomato guidance, and labels the planning year in the tool.
+- **Calendar and tests:** The shared .ics helper accepts an optional planting-season year. Tomato exports use one coherent season, including next spring after the current planting window closes. Updated protected-title tests and added 2027/2028 regression scenarios. Other garden tool calendar callers retain the existing default logic.
+- **Evidence:** November 20, 2026 live HTML review showed 2026 in title, H1 and quick answer. Michigan State University Extension guidance supports transplanting after frost and usually in late May. GSC impressions, CTR, AdSense outcomes: **NOT AVAILABLE** for this change. No traffic uplift assumed.
+- **Release status:** Changes authored on branch `fix/tomato-planting-evergreen-20261120`; complete repository CI, browser acceptance, PR merge, and public production verification not yet confirmed.
+- **Exactly one next action:** Run and pass the complete repository verification for the branch and review its exact-head PR checks before merging.
+
 ### 2026-11-20 | Duluth Canal Park interpretive copy after the two-horizon desk
 - **Visitor job:** Understand what a ship passage through Duluth looks like, choose a useful place to watch, and learn why the canal and Aerial Lift Bridge matter without losing the live or published-schedule decisions.
 - **Source grounding:** ASCE bridge history documents the 1871 canal cut through Minnesota Point, 1905 suspended ferry car, and the 1929-30 conversion to a vertical lift. Duluth Seaway Port Authority documents ore, coal, limestone and grain cargo plus free USACE maritime exhibits. Added direct links to both; no fabricated personal visit, current bridge opening or ship arrival.

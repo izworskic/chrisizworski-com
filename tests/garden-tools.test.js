@@ -43,6 +43,30 @@ test('tomato check: windows in order, readings decide go or wait', () => {
   assert.match(p.html, /id="tomato-quick-answer"/);
 });
 
+test('tomato guide stays evergreen and exports one planting year', () => {
+  const november = loadTool(f('when-to-plant-tomatoes-michigan'), { today: '2026-11-20', search: '?station=bay-city' });
+  assert.match(november.html, /<title>When to Plant Tomatoes in Michigan: Dates by Region<\/title>/);
+  assert.doesNotMatch(november.html, /<h1>[^<]*2026/);
+  assert.match(november.text('tSeason'), /Planning for 2027/);
+  assert.match(november.text('tTitle'), /plan your 2027 tomato season/);
+  november.click('tIcs');
+  const next = november.doc.downloads.at(-1);
+  assert.match(next, /DTSTART;VALUE=DATE:202703/);
+  assert.match(next, /DTSTART;VALUE=DATE:202705/);
+  assert.doesNotMatch(next, /DTSTART;VALUE=DATE:2026/);
+
+  const selected = loadTool(f('when-to-plant-tomatoes-michigan'), { today: '2026-11-20', search: '?station=bay-city&date=2028-05-27' });
+  assert.match(selected.text('tSeason'), /Planning for 2028/);
+  selected.click('tIcs');
+  const chosen = selected.doc.downloads.at(-1);
+  assert.match(chosen, /DTSTART;VALUE=DATE:202803/);
+  assert.match(chosen, /DTSTART;VALUE=DATE:202805/);
+  assert.doesNotMatch(chosen, /DTSTART;VALUE=DATE:2027/);
+
+  const spring = loadTool(f('when-to-plant-tomatoes-michigan'), { today: '2027-04-15' });
+  assert.match(spring.text('tSeason'), /Planning for 2027/);
+});
+
 test('seed starting guide: zone answer, own frost date, fixed zone 6a data', () => {
   const p = loadTool(f('seed-starting-guide'), { today: '2026-04-20' });
   assert.match(p.text('ssTitle'), /^Zone 6a:/);

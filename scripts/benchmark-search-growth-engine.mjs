@@ -44,7 +44,7 @@ check("Historical high-priority cohort retained; experiments are retired", froze
 const exactTitles = {
   "/northern-lights-michigan/": ["public/northern-lights-michigan/index.html", "Northern Lights Michigan Tonight: Verdict | Chris Izworski"],
   "/soo-locks/": ["public/soo-locks/index.html", "Soo Locks Schedule Today: Ships &amp; Map | Chris Izworski"],
-  "/when-to-plant-tomatoes-michigan/": ["public/when-to-plant-tomatoes-michigan/index.html", "When to Plant Tomatoes in Michigan: 2026 Dates by Region"],
+  "/when-to-plant-tomatoes-michigan/": ["public/when-to-plant-tomatoes-michigan/index.html", "When to Plant Tomatoes in Michigan: Dates by Region"],
   "/michigan-frost-dates/": ["public/michigan-frost-dates/index.html", "Michigan Last Frost Dates by City: 2026 Planting Calendar"],
   "/great-lakes-freighter-tracking/": ["public/great-lakes-freighter-tracking/index.html", "Great Lakes Ship Tracker Live Now | Chris Izworski"],
 };

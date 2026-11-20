@@ -19,8 +19,8 @@ test('gardening hub strengthens authority without rewriting protected page-one t
 
   assert.match(zone,/<title>Michigan Zone 6a Planting Calendar by City \| Chris Izworski<\/title>/);
   assert.match(zone,/<h1>Michigan Zone 6a Planting Calendar by City<\/h1>/);
-  assert.match(tomato,/<title>When to Plant Tomatoes in Michigan: 2026 Dates by Region<\/title>/);
-  assert.match(tomato,/<h1>When to Plant Tomatoes in Michigan: 2026 Dates by Region<\/h1>/);
+  assert.match(tomato,/<title>When to Plant Tomatoes in Michigan: Dates by Region<\/title>/);
+  assert.match(tomato,/<h1>When to Plant Tomatoes in Michigan: Dates by Region<\/h1>/);
   assert.match(heirloom,/<title>Best Heirloom Tomatoes for Michigan \| Chris Izworski<\/title>/);
   assert.match(heirloom,/<h1>Best Heirloom Tomatoes for Michigan<\/h1>/);
 });

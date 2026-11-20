@@ -103,7 +103,7 @@ const pageChecks = [
   {
     file: "public/when-to-plant-tomatoes-michigan/index.html",
     path: "/when-to-plant-tomatoes-michigan/",
-    title: "When to Plant Tomatoes in Michigan: 2026 Dates by Region",
+    title: "When to Plant Tomatoes in Michigan: Dates by Region",
     marker: 'id="tomato-quick-answer"',
   },
   {
