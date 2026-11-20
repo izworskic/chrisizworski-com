@@ -461,3 +461,7 @@ html:has(.layup-home){scroll-padding-bottom:var(--layup-anchor-reserve)}
 .layup-home .harbor-evidence-actions button,.layup-home .harbor-evidence-actions a{display:inline-flex;align-items:center;min-height:44px;max-width:100%;padding:.6rem .75rem;border-radius:8px;border:1px solid var(--lamp);color:var(--lamp);background:rgba(242,178,74,.08);font-size:.9rem;line-height:1.4;text-align:left;cursor:pointer;text-decoration:none}
 .layup-home .harbor-evidence-actions button:hover,.layup-home .harbor-evidence-actions a:hover{background:var(--lamp-soft);text-decoration:underline}
 @media(max-width:480px){.layup-home .harbor-evidence-actions{flex-direction:column}.layup-home .harbor-evidence-actions button,.layup-home .harbor-evidence-actions a{width:100%;justify-content:flex-start}}
+
+/* Source-confidence filtering is confined to the historical ledger, not the live harbor map. */
+.layup-home #history-confidence{display:block;margin-top:5px;border-radius:10px;color:var(--ice);background:#12293b;border:1px solid #537085;padding:10px 12px;min-height:44px;max-width:100%;width:min(280px,100%)}
+@media(max-width:620px){.layup-home #history-confidence{width:100%}}
