@@ -109,7 +109,7 @@ const pageChecks = [
   {
     file: "public/michigan-frost-dates/index.html",
     path: "/michigan-frost-dates/",
-    title: "Michigan Last Frost Dates by City: 2026 Planting Calendar",
+    title: "Michigan Last Frost Dates by City: Frost Risk & Planting",
     marker: 'id="frost-quick-answer"',
   },
   {
