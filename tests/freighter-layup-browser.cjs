@@ -90,7 +90,7 @@ async function run(){
        check(fit.actual>=fit.required,size.name+': untruncated '+id+' label '+JSON.stringify(fit));
       }
 
-      check(await page.locator(''#harbor-filter option').count()===19,size.name+': only five source-dated historical harbor choices; thirteen monitored areas are not claimed as layups');
+      check(await page.locator('#harbor-filter option').count()===19,size.name+': eighteen source-dated historical harbor choices, not current berth claims');
       check(await page.locator('.feature-story').count()===3,size.name+': three editorial stories');
       check(await page.locator('body.layup-home .hero h1').isVisible(),size.name+': hero storytelling');
       check(await page.locator('.hero-media img').evaluate(img=>img.complete && img.naturalWidth>0),size.name+': self-hosted winter freighter hero image');
@@ -113,7 +113,7 @@ async function run(){
       await page.locator('#ais-show-more').click();
       check(await page.locator('#ais-watch-list li').count()===8,size.name+': show fewer restores eight');
       await context.unroute('**/api/freighter-layup-live');
-      check(await page.locator(''.layup-pin').count()===18,size.name+': five historical harbor map markers');
+      check(await page.locator('.layup-pin').count()===18,size.name+': eighteen source-dated historical harbor map markers');
       check(await page.locator('.atlas-harbor-column').isHidden(),size.name+': no empty harbor notebook panel');
       await page.locator('.layup-pin').first().click();
       check(await page.locator('.atlas-harbor-column').isVisible(),size.name+': selected harbor details integrated into map');
@@ -135,11 +135,11 @@ async function run(){
       check(await hist.locator('[data-history-season="2024-25"]').isHidden(),size.name+': past year hidden only after JS enhancement');
       await hist.locator('[data-history-pick="2024-25"]').click();
       check(await hist.locator('[data-history-season="2024-25"] [data-history-vessel]:visible').count()===14,
-        size.name+': two source-backed entries when selecting 2024–25');
+        size.name+': fourteen source-backed entries when selecting 2024–25');
       check(await hist.locator('[data-history-pick="2024-25"]').getAttribute('aria-pressed')==='true',
         size.name+': year selection is keyboard/assistive accessible');
       await hist.locator('#history-harbor').selectOption('owen-sound');
-      check(await hist.locator('[data-history-season="2024-25"] [data-history-vessel]:visible').count()===14,
+      check(await hist.locator('[data-history-season="2024-25"] [data-history-vessel]:visible').count()===2,
         size.name+': Owen Sound shows both curated historic records');
       await hist.locator('[data-history-pick="2025-26"]').click();
       check(await hist.locator('#history-harbor').inputValue()==='all',size.name+': switching season clears incompatible harbor filter');
@@ -148,7 +148,7 @@ async function run(){
         size.name+': Superior narrows the selected winter to six documented ships');
       await hist.locator('#history-harbor').selectOption('all');
       check(await hist.locator('[data-history-season="2025-26"] [data-history-vessel]:visible').count()===27,
-        size.name+': clearing harbor restores all twelve records (A-to-B-to-A)');
+        size.name+': clearing harbor restores all twenty-seven records (A-to-B-to-A)');
       check((await hist.locator('#history-selection').textContent()).includes('Not a total fleet count'),
         size.name+': history never presents sampled records as a complete fleet census');
       check(await hist.locator('a[href^="https://"]').count()>=14,
@@ -182,8 +182,8 @@ async function run(){
       // Real browser runs local Leaflet and a deterministic missing-CARTO fallback.
       check(await page.evaluate(()=>Boolean(window.L&&document.querySelector('#layup-map .leaflet-pane'))),size.name+': Leaflet initialized');
       check(await page.locator('#layup-map .map-loading').count()===0,size.name+': map loading hint removed');
-      check(await page.locator('.ship-monogram').count()===27,size.name+': all twelve ships use consistent monogram tiles');
-      check((await page.locator('#count-note').textContent()).indexOf('12 sourced')===-1,size.name+': counts are not duplicated in roster');
+      check(await page.locator('.ship-monogram').count()===27,size.name+': all twenty-seven ships use consistent monogram tiles');
+      check((await page.locator('#count-note').textContent()).indexOf('27 sourced')===-1,size.name+': counts are not duplicated in roster');
       for(const ship of ['manitoulin','stewart-j-cort','algoma-compass','american-spirit']){
         const berth=await page.locator('[data-card="'+ship+'"] .berth').textContent();
         check(!/not verified|not documented|layup verified|winter 2025/i.test(berth),size.name+': concise berth label for '+ship);
@@ -210,7 +210,7 @@ async function run(){
 
       await page.locator('#season').selectOption('2024-25');
       check(await page.locator('[data-ship]').count()===14,size.name+': previous winter contains fourteen sourced records');
-      check(await page.locator('.layup-pin').count()===1,size.name+': one archived winter harbor');
+      check(await page.locator('.layup-pin').count()===11,size.name+': eleven documented archive harbors');
       await page.locator('[data-ship="algoma-compass"]').click();
       check(await page.locator('[data-winter="2025-26"]').count()===1,size.name+': historical cross-winter link');
       await page.locator('[data-winter="2025-26"]').click();
