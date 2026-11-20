@@ -5,20 +5,20 @@
   const ZONE = 'America/Chicago';
   const CANAL = [46.7783, -92.0908];
   const WATCH_SPOTS = [
-    { id: 'north', number: 1, name: 'North side / Visitor Center', lat: 46.779847, lon: -92.092464, note: 'Classic close-up viewing beside the Lake Superior Maritime Visitor Center.' },
-    { id: 'south', number: 2, name: 'South side / Park Point', lat: 46.778722, lon: -92.092028, note: 'South-breakwater side for a strong bridge-and-ship composition.' },
-    { id: 'lakewalk', number: 3, name: 'Canal Park / Lakewalk', lat: 46.780067, lon: -92.091333, note: 'Broader waterfront staging point at the Canal Park end of the Lakewalk.' }
+    { id: 'north', number: 1, name: 'North side / Visitor Center', lat: 46.779847, lon: -92.092464, note: 'North-side view beside the Maritime Visitor Center. Watch the bridge and the freighter hull from the public canal paths.' },
+    { id: 'south', number: 2, name: 'South side / Park Point', lat: 46.778722, lon: -92.092028, note: 'Park Point side: look back toward the bridge and Duluth waterfront for a wider ship photograph.' },
+    { id: 'lakewalk', number: 3, name: 'Canal Park / Lakewalk', lat: 46.780067, lon: -92.091333, note: 'Walk along the lakefront, then turn toward the canal when a supported ship window approaches.' }
   ];
   const CAMERAS = [
     {
       id: 'canal', name: 'Canal Cam — Maritime Visitor Center', shortName: 'Canal Cam', lat: 46.779861, lon: -92.092361,
       youtubeId: 'HPS48TMmNag', directUrl: 'https://www.youtube.com/live/HPS48TMmNag', operator: 'Duluth Harbor Cam',
-      note: 'Closest visual cross-check for the Duluth Ship Canal and Aerial Lift Bridge.'
+      note: 'See the canal and lift bridge from the Maritime Visitor Center roof. A live view is not a ship timetable.'
     },
     {
       id: 'lodge', name: 'Ship Cam — Lift Bridge Lodge', shortName: 'Ship Cam', lat: 46.7818492, lon: -92.0929547,
       youtubeId: 'H6cm5Hf-yFY', directUrl: 'https://www.youtube.com/live/H6cm5Hf-yFY', operator: 'Vibe with Mike',
-      note: 'A second nearby angle from the Canal Park side of the bridge.'
+      note: 'A second look at the harbor and bridge area from the Lift Bridge Lodge side.'
     }
   ];
 
@@ -82,9 +82,9 @@
   }
 
   function explainCandidate(c) {
-    if (c.evidenceType === 'harbor-motion') return 'Fresh AIS motion inside the harbor points toward the Duluth Ship Canal.';
-    if (c.evidenceType === 'lake-approach') return 'Fresh AIS motion on the lake side points toward the Duluth Ship Canal.';
-    return 'The vessel reports a Duluth destination and its current AIS motion points toward the canal.';
+    if (c.evidenceType === 'harbor-motion') return 'Inside the harbor, this ship’s recent course points toward the Duluth Ship Canal. Watch for a possible outward passage.';
+    if (c.evidenceType === 'lake-approach') return 'Out on Lake Superior, this ship is moving toward the canal entrance. Follow its position as it draws closer to the bridge.';
+    return 'This ship reports Duluth as its destination, and its recent course supports a possible passage through the ship canal.';
   }
 
   function scrollMap() {
@@ -100,10 +100,10 @@
     if (!pick) {
       card.className = 'watch-card quiet';
       card.append(
-        el('div', 'NEXT SHIP TO WATCH', 'watch-kicker'),
-        el('h2', 'No supported Canal Park passage to call yet.'),
-        el('p', 'That is not a zero-traffic report. The current AIS evidence does not support a useful passage window right now.'),
-        el('p', 'The monitor still gives you recent local vessel reports, both live camera locations and all three in-person watch spots.', 'watch-note')
+        el('div', 'LOOKING FOR A CANAL PASSAGE', 'watch-kicker'),
+        el('h2', 'No approaching ship confirmed for this watch yet.'),
+        el('p', 'That is not a zero-traffic report. Ships may be working elsewhere in the Duluth-Superior harbor or approaching later. Current AIS does not support a useful bridge-passage window.'),
+        el('p', 'Check the published harbor forecast for later arrivals, or open the cameras and viewing spots to get to know the canal while you wait.', 'watch-note')
       );
       return;
     }
@@ -128,11 +128,11 @@
       })
     );
     card.append(
-      el('div', 'BEST SUPPORTED WATCH', 'watch-kicker'),
+      el('div', 'NEXT SHIP WORTH WATCHING', 'watch-kicker'),
       el('h2', pick.name), heading, action, el('p', explainCandidate(pick), 'watch-why'), actions,
-      el('p', 'Aim to be at the canal before the start of the window. Ships can change speed, berth, destination or entrance; this is a planning window, not a bridge schedule.', 'watch-note')
+      el('p', 'For a shore-side view, arrive before the beginning of this window and watch the lift bridge and channel. A ship may slow, change berths or use another entrance, so this is a watching window, not a guaranteed bridge opening.', 'watch-note')
     );
-    if (failed) card.append(el('p', 'Live refresh failed; this card is retained from the previous successful check.', 'stale-warning'));
+    if (failed) card.append(el('p', 'Fresh ship reports are unavailable. This was the last successful watch, not a current passage prediction.', 'stale-warning'));
   }
 
   function candidateMeta(c) {
@@ -145,7 +145,7 @@
     const candidates = Array.isArray(data.candidates) ? data.candidates : [];
     if (!candidates.length) {
       const empty = el('div', '', 'empty-state');
-      empty.append(el('strong', 'Nothing supported yet.'), el('p', 'The estimator only publishes a ship when fresh position, motion and route evidence are strong enough to be useful.'));
+      empty.append(el('strong', 'No likely canal passage to list right now.'), el('p', 'Other ships may still be sailing or unloading around Duluth-Superior. We wait for a recent position and course toward this entrance before suggesting a watch.'));
       list.append(empty);
       return;
     }
@@ -180,16 +180,16 @@
           button('Locate next ship', 'map-jump', () => focusVessel(pick.mmsi))
         );
       } else {
-        next.append(el('strong', 'No supported passage yet', 'monitor-title'), el('span', 'Local AIS, cameras and watch locations remain useful.', 'monitor-detail'));
+        next.append(el('strong', 'No supported passage yet', 'monitor-title'), el('span', 'The harbor may still be active. Explore recent ships, cameras and shore viewpoints.', 'monitor-detail'));
       }
-      if (failed) next.append(el('span', 'Last successful AIS picture retained.', 'monitor-stale'));
+      if (failed) next.append(el('span', 'Last successful AIS check shown, not a live update.', 'monitor-stale'));
     }
     const visual = $('monitorVisual');
     if (visual) {
       visual.replaceChildren(
         el('div', 'VISUAL CHECK', 'monitor-kicker'),
         el('strong', '2 mapped live cameras', 'monitor-title'),
-        el('span', 'Canal Cam at the Maritime Visitor Center + Ship Cam at Lift Bridge Lodge.', 'monitor-detail'),
+        el('span', 'Watch the lift bridge from the Maritime Visitor Center roof, or see a second angle near Lift Bridge Lodge.', 'monitor-detail'),
         button('Focus cameras', 'map-jump', focusAllCameras)
       );
     }
@@ -198,7 +198,7 @@
       inPerson.replaceChildren(
         el('div', 'IN PERSON', 'monitor-kicker'),
         el('strong', '3 mapped watch spots', 'monitor-title'),
-        el('span', 'North side, Park Point and Lakewalk are tied to green numbered markers.', 'monitor-detail'),
+        el('span', 'Choose a close canal view, a full bridge photograph, or a Lakewalk stroll. Green map numbers match the places below.', 'monitor-detail'),
         button('Show watch spots', 'map-jump', focusAllWatchSpots)
       );
     }
@@ -555,13 +555,13 @@
         $('watchPick').className = 'watch-card quiet';
         $('watchPick').replaceChildren(
           el('div', 'LIVE DATA TEMPORARILY UNAVAILABLE', 'watch-kicker'),
-          el('h2', 'The cameras and watch locations still work.'),
-          el('p', 'The page will not substitute stale or invented vessel timing when the AIS feed is unavailable.'),
-          el('p', 'Harbor Lookout remains available below as a published schedule cross-check.', 'watch-note')
+          el('h2', 'The ship reports are quiet, but the canal is still here to explore.'),
+          el('p', 'AIS is unavailable right now, so we cannot recommend a current arrival window. That does not mean no ships are moving.'),
+          el('p', 'Check Harbor Lookout for expected arrivals or open the camera and shore-view sections to see the bridge and canal.', 'watch-note')
         );
-        $('anticipatedShips').replaceChildren(el('div', 'Anticipated ship estimates are unavailable until fresh AIS data returns.', 'empty-state'));
+        $('anticipatedShips').replaceChildren(el('div', 'A reliable watch list needs fresh AIS. Check the published harbor forecast while ship reports are unavailable.', 'empty-state'));
         renderMonitorSummary({ watchPick: null }, true);
-        $('mapStatus').textContent = 'Live vessel refresh unavailable. The 2 camera locations and 3 viewing spots remain available on the monitor. This is not a zero-traffic report.';
+        $('mapStatus').textContent = 'Fresh AIS is unavailable. You can still explore two camera locations and three shore-view spots. This is not a zero-traffic report.';
         $('liveDot').className = 'live-dot offline';
       }
     } finally {

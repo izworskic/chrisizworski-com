@@ -21,7 +21,8 @@ test('live and published evidence share the first decision desk without merging 
   assert.match(html.slice(start, deskEnd), /No supported next passage does not mean no ships are scheduled today/);
   assert.match(html.slice(start, deskEnd), /https:\/\/harborlookout\.com\//);
   assert.match(html.slice(start, deskEnd), /href="#cameraMonitor"/);
-  assert.match(html, /The page only publishes a passage window when fresh vessel position, motion and route evidence support it/);
+  assert.match(html, /Recent ship positions and course help us find a likely passage through the Duluth Ship Canal/);
+  assert.match(html, /No supported next passage does not mean no ships are scheduled today/);
 });
 
 test('mobile, map failure and no-script visitors retain a working next action', () => {
