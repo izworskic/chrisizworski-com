@@ -77,7 +77,7 @@ class EvidencePreservingArchive(unittest.TestCase):
         self.assertEqual(year["state"], "historical_snapshot")
         self.assertEqual(year["records"], [])
         self.assertIn("Empty", year["note"])
-        self.assertEqual(len(next(s for s in sync["seasons"] if s["id"] == "2025-26")["records"]), 12)
+        self.assertEqual(len(next(s for s in sync["seasons"] if s["id"] == "2025-26")["records"]), 27)
         self.assertEqual(synchronize(sync, ledger("2027-28", [
             {"season": "2026-27", "events": []},
         ]), now), sync)
@@ -141,7 +141,7 @@ class EvidencePreservingArchive(unittest.TestCase):
                          ["2029-30", "2028-29", "2027-28", "2026-27"])
         self.assertEqual([s["records"] for s in result["seasons"][:3]], [[], [], []])
         self.assertEqual(result["seasons"][3]["records"][0]["status"], "confirmed_historical")
-        self.assertEqual(sum(len(s["records"]) for s in result["seasons"]), 15)
+        self.assertEqual(sum(len(s["records"]) for s in result["seasons"]), 42)
 
 
 class PublicationConsistency(unittest.TestCase):
