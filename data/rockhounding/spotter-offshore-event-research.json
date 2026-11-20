@@ -1,10 +1,10 @@
 {
   "schemaVersion": "rockhounding-glos-offshore-event-history-v1",
   "source": "GLOS_SEAGULL_OBS_140_SPOT_1361",
-  "calculatedAtUTC": "2026-11-19T21:37:30.105Z",
-  "recordCount": 5704,
-  "latestObservedAt": "2026-11-18T23:46:01Z",
-  "latestAgeHours": 21.86,
+  "calculatedAtUTC": "2026-11-20T08:34:43.095Z",
+  "recordCount": 5730,
+  "latestObservedAt": "2026-11-19T23:46:01Z",
+  "latestAgeHours": 8.81,
   "sourceStatus": "STALE_OBSERVATIONS",
   "thresholdM": 1,
   "thresholdMeaning": "DESCRIPTIVE_OFFSHORE_GROUPING_NOT_NWS_HAZARD",
@@ -345,20 +345,9 @@
   "canClaimBeachSafety": false,
   "canInferHarborWaveHeight": false,
   "hazardSnapshot": {
-    "checkedAtUTC": "2026-11-19T21:37:30.105Z",
-    "status": "ACTIVE",
-    "matchedAlertEvents": [
-      {
-        "event": "Gale Warning",
-        "severity": "Moderate",
-        "expiresAtUTC": "2026-11-19T19:00:00-05:00"
-      },
-      {
-        "event": "Small Craft Advisory",
-        "severity": "Minor",
-        "expiresAtUTC": "2026-11-19T19:00:00-05:00"
-      }
-    ],
+    "checkedAtUTC": "2026-11-20T08:34:43.095Z",
+    "status": "CLEAR",
+    "matchedAlertEvents": [],
     "sources": [
       "https://api.weather.gov/alerts/active?zone=LSZ250",
       "https://api.weather.gov/alerts/active?zone=LSZ251",
@@ -369,17 +358,17 @@
   },
   "photoFreeLakePulse": {
     "schemaVersion": "rockhounding-photo-free-offshore-pulse-v1",
-    "computedAtUTC": "2026-11-19T21:37:30.105Z",
+    "computedAtUTC": "2026-11-20T08:34:43.095Z",
     "station": "SPOT-1361",
-    "sourceRows": 5704,
-    "originalWaveSampleFromUTC": "2026-07-22T21:46:01Z",
-    "originalWaveSampleThroughUTC": "2026-11-18T23:46:01Z",
+    "sourceRows": 5730,
+    "originalWaveSampleFromUTC": "2026-07-23T08:46:01Z",
+    "originalWaveSampleThroughUTC": "2026-11-19T23:46:01Z",
     "observationFreshness": "STALE_OBSERVATIONS",
     "currentOffshoreObservedStatus": "STALE_OFFSHORE_DATA",
     "archivedEventGroups": 12,
     "researchComparableEvents": 10,
-    "hazardSnapshotStatus": "ACTIVE",
-    "hazardEvidence": "ACTIVE_RELEVANT_NWS_ALERTS_CHECK_OFFICIAL_WARNINGS",
+    "hazardSnapshotStatus": "CLEAR",
+    "hazardEvidence": "NO_SELECTED_NWS_ALERTS_NOT_A_SHORE_SAFETY_CLEARANCE",
     "physicsExplanation": "Integral of observed significant-wave-height squared multiplied by observed mean-wave period over sampled hours; a relative measured offshore indicator, not energy flux or wave power.",
     "comparisonBaseline": "ONLY_STORMS_WITH_ACCEPTABLE_SENSOR_COVERAGE_IN_RETAINED_GLOS_ARCHIVE",
     "noPhysicalShorelineOutcomeCalibration": true,
@@ -818,11 +807,11 @@
     "canPublishCollectingWindow": false,
     "canTransferIntoBayshoreHarbor": false
   },
-  "sourceQueryStartUTC": "2026-11-15T21:37:30Z",
-  "sourceQueryEndUTC": "2026-11-19T21:37:30Z",
-  "sourceRecordCount": 149,
+  "sourceQueryStartUTC": "2026-11-16T08:34:43Z",
+  "sourceQueryEndUTC": "2026-11-20T08:34:43Z",
+  "sourceRecordCount": 175,
   "rejectedOriginalRows": 0,
-  "originalCsvSha256": "dde8e7d82e97cd596925065a4850d21e1a93960b567aa7c8f7622aff4a481fa8",
+  "originalCsvSha256": "9a7aa4a52efc21a70560af66786e25a3b667beb53d7a5b3d4a0f43b1b2282b51",
   "sourceUrl": "https://seagull-erddap.glos.org/erddap/tabledap/obs_140.csv",
   "observedWaveEventsNotModeledForecasts": true,
   "dailyObservationsNotIndependentStorms": true,
