@@ -103,3 +103,17 @@ test('Saginaw API keeps a valid inner-bay pixel when the west NOAA request fails
   assert.equal(b.water.tempF,56.2,'the regional comparison never changes the primary beach headline');
  }finally{global.fetch=oldFetch;}
 });
+
+test('experience source paths and offline fallbacks are honest before JavaScript',()=>{
+ const html=read('public/lake-huron-water-temperature/saginaw-bay/index.html');
+ const css=read('public/assets/shorefeel-saginaw.css');
+ assert.match(html,/class="bay-quick-actions"/);
+ for(const id of ['bay-evidence','map-h','experience-h'])assert.ok(html.includes('href="#'+id+'"'));
+ assert.match(html,/id="lead-temp"[^>]*>No current local reading verified/);
+ assert.ok(html.includes('id="value-inner-bay">Not verified'));
+ assert.ok(html.includes('id="value-buoy">Not verified'));
+ assert.ok(html.includes('https://www.google.com/maps/search/'));
+ assert.ok(html.includes('www.ndbc.noaa.gov/station_page.php?station=45163'));
+ assert.ok(html.includes('adsbygoogle.js?client=ca-pub-8222782620788075'));
+ assert.match(css,/\.bay-quick-actions a:focus-visible/);
+});
