@@ -24,7 +24,7 @@ test("Duluth separates an evidence-based live watch from a published later-ship 
   assert.match(duluth, /<body data-analytics-page="duluth-canal-park">/);
   assert.match(duluth, /src="\/_vercel\/insights\/script\.js"/);
   assert.match(duluth, /src="\/assets\/tool-engagement\.js"/);
-  assert.match(duluth, /Ships may change speed, berth or use the Superior Entry/);
+  assert.match(duluth, /A ship may slow for port operations, change berths, or enter through Superior instead/);
   assert.match(duluth, /src="\/assets\/duluth-canal\.js[^"]*"/);
 });
 
