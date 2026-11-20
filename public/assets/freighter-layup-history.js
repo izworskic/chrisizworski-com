@@ -10,9 +10,10 @@
     const panels = [...root.querySelectorAll('[data-history-season]')];
     const buttons = [...root.querySelectorAll('[data-history-pick]')];
     const harbor = root.querySelector('#history-harbor');
+    const confidence = root.querySelector('#history-confidence');
     const summary = root.querySelector('#history-selection');
     const empty = root.querySelector('#history-empty');
-    if (!panels.length || !buttons.length || !harbor || !summary || !empty) return;
+    if (!panels.length || !buttons.length || !harbor || !confidence || !summary || !empty) return;
     let activeSeason = panels[0].dataset.historySeason;
     // No nodes are fetched or injected here. All evidence is present in the HTML.
     function update() {
@@ -23,8 +24,9 @@
         const vessels = [...panel.querySelectorAll('[data-history-vessel]')];
         if (isSelected) allInSeason = vessels.length;
         vessels.forEach(v => {
-          const show = isSelected && (harbor.value === 'all' ||
-            v.dataset.historyHarbor === harbor.value);
+          const reported = Boolean(v.querySelector('.history-evidence.history-reported'));
+          const evidenceMatches = confidence.value === 'all' || (confidence.value === 'reported' ? reported : !reported);
+          const show = isSelected && (harbor.value === 'all' || v.dataset.historyHarbor === harbor.value) && evidenceMatches;
           v.hidden = !show;
           if (show) count += 1;
         });
@@ -38,7 +40,7 @@
       const year = selectedLabel ? selectedLabel.firstChild.textContent.trim() : activeSeason;
       const harborName = harbor.selectedOptions[0]?.textContent || 'all documented harbors';
       summary.textContent = year + ' · ' + count + ' of ' + allInSeason +
-        ' documented records shown · ' + harborName + '. Not a total fleet count.';
+        ' documented records shown · ' + harborName + ' · ' + confidence.selectedOptions[0].textContent + '. Not a total fleet count.';
       empty.hidden = count !== 0;
       empty.textContent = allInSeason===0
         ? 'No source-backed layup reports were collected for this winter. That does not prove the harbors were empty.'
@@ -50,6 +52,7 @@
       update();
     }));
     harbor.addEventListener('change', update);
+    confidence.addEventListener('change', update);
     root.dataset.historyEnhanced = 'true';
     update();
   }
