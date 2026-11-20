@@ -26,7 +26,7 @@
     {"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},
     {"@type":"WebApplication","@id":"https://chrisizworski.com/duluth-canal-park/#app","name":"Duluth Canal Park Ship Watch","url":"https://chrisizworski.com/duluth-canal-park/","applicationCategory":"TravelApplication","operatingSystem":"Web","description":"Live vessel positions, mapped camera viewpoints and evidence-bounded anticipated Duluth Ship Canal passage windows for boat watchers and Canal Park visitors."},
     {"@type":"TouristAttraction","name":"Duluth Aerial Lift Bridge and Ship Canal","address":{"@type":"PostalAddress","addressLocality":"Duluth","addressRegion":"MN","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":46.7783,"longitude":-92.0908}},
-    {"@type":"WebPage","@id":"https://chrisizworski.com/duluth-canal-park/","url":"https://chrisizworski.com/duluth-canal-park/","name":"Duluth Ship Schedule & Live Canal Park Map","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"mainEntity":{"@id":"https://chrisizworski.com/duluth-canal-park/#app"},"dateModified":"2026-11-09","inLanguage":"en-US", "publisher": {"@id":"https://chrisizworski.com/#person"}},
+    {"@type":"WebPage","@id":"https://chrisizworski.com/duluth-canal-park/","url":"https://chrisizworski.com/duluth-canal-park/","name":"Duluth Ship Schedule & Live Canal Park Map","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"mainEntity":{"@id":"https://chrisizworski.com/duluth-canal-park/#app"},"dateModified":"2026-11-20","inLanguage":"en-US", "publisher": {"@id":"https://chrisizworski.com/#person"}},
     {"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://chrisizworski.com/tools/"},{"@type":"ListItem","position":3,"name":"Duluth Canal Park","item":"https://chrisizworski.com/duluth-canal-park/"}]}
   ]
 }
@@ -60,6 +60,23 @@ html{scroll-behavior:smooth}body{margin:0;font-family:Georgia,'Times New Roman',
 .published-arrivals .published-arrivals__note{grid-column:1 / -1;font-size:12px;color:#536b74;border-top:1px solid #cddfe2;padding-top:7px}
 .shipping-season-followup{margin:10px 0 0;border-left:3px solid #3c7889;padding:10px 14px;background:#f1f8f9;color:#344f5c;font:14px/1.55 Arial,sans-serif}
 @media(max-width:700px){.published-arrivals{grid-template-columns:1fr;margin:0 0 21px;padding:14px}.published-arrivals__links a{min-height:44px}.published-arrivals h2{font-size:19px}}
+
+/* The two harbor horizons answer different visitor questions without inventing a timetable. */
+.harbor-horizons{display:grid;grid-template-columns:minmax(0,1.24fr) minmax(280px,.86fr);align-items:stretch;margin:16px 0 12px;overflow:hidden;border:1px solid #d6ddd9;border-radius:10px;background:#fff;box-shadow:0 12px 32px rgba(22,53,62,.09)}
+.harbor-horizons>.watch-card{min-width:0;margin:0;padding:23px 23px 21px;border:0;border-top:5px solid var(--lake2);border-radius:0;box-shadow:none}
+.harbor-horizons>.watch-card.quiet{border-top-color:#8a969b}
+.harbor-horizons>.watch-card .watch-kicker{color:#98502b}
+.harbor-horizons>.published-arrivals{min-width:0;margin:0;padding:24px 20px 20px;display:flex;flex-direction:column;align-items:stretch;justify-content:space-between;gap:15px;border:0;border-left:1px solid #d8d6cc;border-radius:0;background:#f6f3eb}
+.harbor-horizons .published-arrivals__eyebrow{color:#74542e}
+.harbor-horizons .published-arrivals__links{display:grid;grid-template-columns:1fr;gap:9px}
+.harbor-horizons .published-arrivals__links a{min-height:44px;display:flex;align-items:center;justify-content:center}
+.harbor-horizons .published-arrivals__links a:first-child{color:#fff;background:#164f64;border-color:#164f64}
+.harbor-horizons .published-arrivals__links a:first-child:hover,.harbor-horizons .published-arrivals__links a:first-child:focus-visible{background:#0c394c;color:#fff}
+.harbor-horizons .published-arrivals__note{grid-column:auto;border-color:#dbd5ca;color:#58636a}
+.harbor-horizons+.hero-actions{margin:8px 0 19px}
+.harbor-noscript{border-left:3px solid #a86d38;padding:10px 12px;background:#fff6eb;font:13px/1.55 Arial,sans-serif;color:#3b4449}
+@media(max-width:700px){.harbor-horizons{grid-template-columns:minmax(0,1fr);margin-top:12px}.harbor-horizons>.watch-card{padding:18px 16px 17px}.harbor-horizons>.published-arrivals{padding:17px 16px;border-left:0;border-top:1px solid #d8d6cc}.harbor-horizons+.hero-actions{margin:10px 0 17px}.harbor-horizons .published-arrivals__links a{min-height:46px}}
+@media(prefers-reduced-motion:reduce){.harbor-horizons *{scroll-behavior:auto}}
 </style>
 </head>
 <body data-analytics-page="duluth-canal-park">
@@ -70,14 +87,9 @@ html{scroll-behavior:smooth}body{margin:0;font-family:Georgia,'Times New Roman',
   <div class="breadcrumb"><a href="/">Home</a> › <a href="/tools/">Tools</a> › Duluth Canal Park</div>
   <h1>Duluth ship schedule &amp; Canal Park live watch</h1>
   <p class="lede">The boat-watcher question is simple: <strong>what ship matters next, where is it now, and can I see it?</strong> Fresh AIS builds the watch window; the monitor connects the selected vessel, other supported candidates, live cameras and the best places to stand.</p>
-  <div class="hero-actions">
-    <button id="refreshVessels" class="button" type="button">Refresh ships</button>
-    <a class="button secondary" href="#live-map">Boat watcher monitor</a>
-    <a class="button secondary" href="#cameraMonitor">Live cameras</a>
-    <a class="button secondary" href="#where-watch">Where to watch</a>
-  </div>
 
-  <section id="watchPick" class="watch-card" aria-live="polite">
+  <div class="harbor-horizons" aria-label="Duluth ship schedule choices">
+    <section id="watchPick" class="watch-card" aria-live="polite">
     <div class="watch-kicker">CHECKING LIVE AIS</div>
     <h2>Finding the best supported next Canal Park watch…</h2>
     <p>The page only publishes a passage window when fresh vessel position, motion and route evidence support it.</p>
@@ -85,9 +97,9 @@ html{scroll-behavior:smooth}body{margin:0;font-family:Georgia,'Times New Roman',
 
   <section class="published-arrivals" aria-labelledby="published-arrivals-title" id="published-arrivals">
     <div>
-      <p class="published-arrivals__eyebrow">Duluth ship schedule · two kinds of evidence</p>
-      <h2 id="published-arrivals-title">Looking for a ship later today?</h2>
-      <p>The live watch above uses recent AIS evidence near the Duluth Ship Canal. <strong>No supported next passage does not mean no ships are scheduled today.</strong> For later arrivals and departures, use the independent published harbor forecast, then check the actual canal camera closer to the expected time.</p>
+      <p class="published-arrivals__eyebrow">02 / Published harbor forecast</p>
+      <h2 id="published-arrivals-title">Ships expected later today</h2>
+      <p>The live watch uses recent AIS to identify near-term passages. <strong>No supported next passage does not mean no ships are scheduled today.</strong> Check the separate published arrivals and departures forecast for later traffic, then watch the Canal Cam closer to the expected time.</p>
     </div>
     <div class="published-arrivals__links">
       <a href="https://harborlookout.com/" target="_blank" rel="noopener noreferrer" data-track-tool="duluth-harborlookout-forecast" data-placement="duluth-published-arrivals">Published Duluth arrivals and departures &#8599;</a>
@@ -95,6 +107,15 @@ html{scroll-behavior:smooth}body{margin:0;font-family:Georgia,'Times New Roman',
     </div>
     <p class="published-arrivals__note">A published forecast is not a guaranteed bridge opening. Ships may change speed, berth or use the Superior Entry; AIS and camera coverage can be incomplete.</p>
   </section>
+  </div>
+  <div class="hero-actions">
+    <button id="refreshVessels" class="button" type="button">Refresh ships</button>
+    <a class="button secondary" href="#live-map">Boat watcher monitor</a>
+    <a class="button secondary" href="#cameraMonitor">Live cameras</a>
+    <a class="button secondary" href="#where-watch">Where to watch</a>
+  </div>
+
+  <noscript><p class="harbor-noscript">Live vessel reports need JavaScript. The published harbor forecast above and the <a href="https://www.duluthharborcam.com/p/canal-park-cams.html">Duluth Harbor Cam feeds</a> remain available.</p></noscript>
 
   <section id="live-map" class="section monitor-section" aria-labelledby="map-title">
     <div class="monitor-intro">
