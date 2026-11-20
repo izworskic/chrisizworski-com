@@ -33,6 +33,30 @@ test('frost dates: plain odds for a planting day, past-frost and fall answers', 
   assert.equal((p.html.match(/<tr data-n=/g) || []).length, 78, 'the full station table stays');
 });
 
+test('frost guide stays evergreen and calendar respects selected season', () => {
+  const november = loadTool(f('michigan-frost-dates'), { today: '2026-11-20', search: '?station=bay-city' });
+  assert.match(november.html, /<title>Michigan Last Frost Dates by City: Frost Risk & Planting<\/title>/);
+  assert.doesNotMatch(november.html, /<h1>[^<]*2026/);
+  assert.match(november.text('frostSeason'), /Planning for spring 2027/);
+  november.click('icsBtn');
+  const next = november.doc.downloads.at(-1);
+  assert.match(next, /DTSTART;VALUE=DATE:202704/);
+  assert.match(next, /DTSTART;VALUE=DATE:202710/);
+  assert.doesNotMatch(next, /DTSTART;VALUE=DATE:2026/);
+
+  const chosen = loadTool(f('michigan-frost-dates'), { today: '2026-11-20', search: '?station=bay-city&date=2028-05-12' });
+  assert.match(chosen.text('frostSeason'), /Checking May 12, 2028/);
+  assert.equal(chosen.text('riskBadge'), 'Some risk');
+  chosen.click('icsBtn');
+  const selected = chosen.doc.downloads.at(-1);
+  assert.match(selected, /DTSTART;VALUE=DATE:202804/);
+  assert.match(selected, /DTSTART;VALUE=DATE:202810/);
+  assert.doesNotMatch(selected, /DTSTART;VALUE=DATE:2027/);
+
+  const spring = loadTool(f('michigan-frost-dates'), { today: '2027-04-20' });
+  assert.match(spring.text('frostSeason'), /Planning for spring 2027/);
+});
+
 test('tomato check: windows in order, readings decide go or wait', () => {
   const p = loadTool(f('when-to-plant-tomatoes-michigan'), { today: '2026-05-20' });
   assert.match(p.text('tTitle'), /tomato planting time near Bay City/);

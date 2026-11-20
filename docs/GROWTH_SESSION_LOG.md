@@ -1,3 +1,12 @@
+### 2026-11-20 | Evergreen Michigan last frost guide
+- **Visitor decision:** A grower can select one of 78 Michigan frost stations and inspect historical spring frost odds for an actual planting day without mistaking the guide for an expired 2026 calendar.
+- **Change:** Removed fixed 2026 references from Michigan frost page title, search description, Open Graph, WebPage JSON-LD and introductory copy. Preserved station probabilities and their provenance, the 78 station table, existing canonical, Person identity, AdSense loader, and companion garden links.
+- **Season behavior:** Added an explicit year to the station date checker and used the shared optional year argument for calendar exports. When spring risk has passed, the default export plans the following spring as one coherent season. Explicit dates in URL and picker select that year's export. Historic probabilities remain an estimate, not a live forecast.
+- **Regression tests:** Added 2027 and 2028 selected-season scenarios, and changed frost title checks in growth and search benchmarks. dateModified/sitemap lastmod set to the date of this change. Historical source data modification date was not rewritten.
+- **Evidence:** Production baseline inspected November 20, 2026: header subtitle and SEO metadata still referred to 2026. No new GSC, AdSense or verified impact measurement is available. No CTR improvement claimed.
+- **Release:** Stacked source branch `fix/michigan-frost-evergreen-20261120` based on the still-open tomato evergreen branch, so shared search tests integrate cleanly. Full CI, browser verification, merge and public verification remain unconfirmed at authoring.
+- **Exactly one next action:** Pass all exact-head checks, merge the prerequisite tomato evergreen PR, then merge and verify this frost update.
+
 ### 2026-11-20 | Evergreen Michigan tomato planting guide
 - **Visitor decision:** Give Michigan gardeners a reliable typical planting window and a frost-station tomato check without implying the advice expires after the 2026 season.
 - **Change:** Removed the hard-coded 2026 search headline, H1, opening answer, and byline update claim on `/when-to-plant-tomatoes-michigan/`. Preserved canonical, author Person, ads, frost station data, answer controls, and internal links. The page now distinguishes climate guidance from a live forecast, links directly to MSU Extension's tomato guidance, and labels the planning year in the tool.
