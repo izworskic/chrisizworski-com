@@ -49,12 +49,13 @@
     } else fallback();
   }
 
-  // Calendar file: all-day events. Windows that have already ended this year go on next year.
-  function ics(events, name) {
+  // Calendar file: all-day events. When a season year is supplied, all related
+  // tasks stay in that same planting season instead of splitting across years.
+  function ics(events, name, seasonYear) {
     var now = new Date(), year = now.getFullYear(), t = today();
     var lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//chrisizworski.com//garden tools//EN', 'CALSCALE:GREGORIAN'];
     events.forEach(function (e, i) {
-      var y = e.to < t ? year + 1 : year;
+      var y = Number.isInteger(seasonYear) && seasonYear >= 2000 && seasonYear <= 2100 ? seasonYear : (e.to < t ? year + 1 : year);
       var start = toISO(e.from, y).replace(/-/g, ''), end = toISO(e.to + 1, e.to + 1 > 364 ? y + 1 : y).replace(/-/g, '');
       lines.push('BEGIN:VEVENT', 'UID:' + y + '-' + i + '-' + String(e.title).toLowerCase().replace(/[^a-z0-9]+/g, '-') + '@chrisizworski.com', 'DTSTAMP:' + year + '0101T000000Z', 'DTSTART;VALUE=DATE:' + start, 'DTEND;VALUE=DATE:' + end, 'SUMMARY:' + String(e.title).replace(/[,;]/g, '\\$&'), 'DESCRIPTION:' + String(e.note || '').replace(/[,;]/g, '\\$&').replace(/\n/g, '\\n'), 'END:VEVENT');
     });
