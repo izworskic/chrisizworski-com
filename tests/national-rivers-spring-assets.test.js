@@ -7,7 +7,7 @@ const sourcePages = require('../lib/public-tool-sources');
 const owner = 'https://national-rivers.vercel.app';
 
 test('extracted spring river assets route to their owning repository', () => {
-  const assets = ['river-specialist-handoff.js', 'paddle-window.js'];
+  const assets = ['river-specialist-handoff.js', 'paddle-window.js', 'river-experience.css', 'river-viz.js'];
   for (const name of assets) {
     const path = '/assets/' + name;
     const matches = vercel.rewrites.filter(rule => rule.source === path);
