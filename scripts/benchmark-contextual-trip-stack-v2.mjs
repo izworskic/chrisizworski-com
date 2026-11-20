@@ -27,7 +27,7 @@ const protectedTitles={
   'public/northern-lights-michigan/index.html':'Northern Lights Michigan Tonight: Verdict | Chris Izworski',
   'public/soo-locks/index.html':'Soo Locks Schedule Today: Ships &amp; Map | Chris Izworski',
   'public/when-to-plant-tomatoes-michigan/index.html':'When to Plant Tomatoes in Michigan: Dates by Region',
-  'public/michigan-frost-dates/index.html':'Michigan Last Frost Dates by City: 2026 Planting Calendar',
+  'public/michigan-frost-dates/index.html':'Michigan Last Frost Dates by City: Frost Risk & Planting',
   'public/great-lakes-freighter-tracking/index.html':'Great Lakes Ship Tracker Live Now | Chris Izworski'
 };
 let protectedOk=true;for(const [file,title] of Object.entries(protectedTitles)){const html=await read(file);if(!html.includes(`<title>${title}</title>`))protectedOk=false}
