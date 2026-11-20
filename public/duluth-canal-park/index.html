@@ -26,7 +26,7 @@
     {"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},
     {"@type":"WebApplication","@id":"https://chrisizworski.com/duluth-canal-park/#app","name":"Duluth Canal Park Ship Watch","url":"https://chrisizworski.com/duluth-canal-park/","applicationCategory":"TravelApplication","operatingSystem":"Web","description":"Live vessel positions, mapped camera viewpoints and evidence-bounded anticipated Duluth Ship Canal passage windows for boat watchers and Canal Park visitors."},
     {"@type":"TouristAttraction","name":"Duluth Aerial Lift Bridge and Ship Canal","address":{"@type":"PostalAddress","addressLocality":"Duluth","addressRegion":"MN","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":46.7783,"longitude":-92.0908}},
-    {"@type":"WebPage","@id":"https://chrisizworski.com/duluth-canal-park/","url":"https://chrisizworski.com/duluth-canal-park/","name":"Duluth Ship Schedule & Live Canal Park Map","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"mainEntity":{"@id":"https://chrisizworski.com/duluth-canal-park/#app"},"dateModified":"2026-11-09","inLanguage":"en-US", "publisher": {"@id":"https://chrisizworski.com/#person"}},
+    {"@type":"WebPage","@id":"https://chrisizworski.com/duluth-canal-park/","url":"https://chrisizworski.com/duluth-canal-park/","name":"Duluth Ship Schedule & Live Canal Park Map","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"mainEntity":{"@id":"https://chrisizworski.com/duluth-canal-park/#app"},"dateModified":"2026-11-20","inLanguage":"en-US", "publisher": {"@id":"https://chrisizworski.com/#person"}},
     {"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://chrisizworski.com/tools/"},{"@type":"ListItem","position":3,"name":"Duluth Canal Park","item":"https://chrisizworski.com/duluth-canal-park/"}]}
   ]
 }
@@ -60,6 +60,23 @@ html{scroll-behavior:smooth}body{margin:0;font-family:Georgia,'Times New Roman',
 .published-arrivals .published-arrivals__note{grid-column:1 / -1;font-size:12px;color:#536b74;border-top:1px solid #cddfe2;padding-top:7px}
 .shipping-season-followup{margin:10px 0 0;border-left:3px solid #3c7889;padding:10px 14px;background:#f1f8f9;color:#344f5c;font:14px/1.55 Arial,sans-serif}
 @media(max-width:700px){.published-arrivals{grid-template-columns:1fr;margin:0 0 21px;padding:14px}.published-arrivals__links a{min-height:44px}.published-arrivals h2{font-size:19px}}
+
+/* The two harbor horizons answer different visitor questions without inventing a timetable. */
+.harbor-horizons{display:grid;grid-template-columns:minmax(0,1.24fr) minmax(280px,.86fr);align-items:stretch;margin:16px 0 12px;overflow:hidden;border:1px solid #d6ddd9;border-radius:10px;background:#fff;box-shadow:0 12px 32px rgba(22,53,62,.09)}
+.harbor-horizons>.watch-card{min-width:0;margin:0;padding:23px 23px 21px;border:0;border-top:5px solid var(--lake2);border-radius:0;box-shadow:none}
+.harbor-horizons>.watch-card.quiet{border-top-color:#8a969b}
+.harbor-horizons>.watch-card .watch-kicker{color:#98502b}
+.harbor-horizons>.published-arrivals{min-width:0;margin:0;padding:24px 20px 20px;display:flex;flex-direction:column;align-items:stretch;justify-content:space-between;gap:15px;border:0;border-left:1px solid #d8d6cc;border-radius:0;background:#f6f3eb}
+.harbor-horizons .published-arrivals__eyebrow{color:#74542e}
+.harbor-horizons .published-arrivals__links{display:grid;grid-template-columns:1fr;gap:9px}
+.harbor-horizons .published-arrivals__links a{min-height:44px;display:flex;align-items:center;justify-content:center}
+.harbor-horizons .published-arrivals__links a:first-child{color:#fff;background:#164f64;border-color:#164f64}
+.harbor-horizons .published-arrivals__links a:first-child:hover,.harbor-horizons .published-arrivals__links a:first-child:focus-visible{background:#0c394c;color:#fff}
+.harbor-horizons .published-arrivals__note{grid-column:auto;border-color:#dbd5ca;color:#58636a}
+.harbor-horizons+.hero-actions{margin:8px 0 19px}
+.harbor-noscript{border-left:3px solid #a86d38;padding:10px 12px;background:#fff6eb;font:13px/1.55 Arial,sans-serif;color:#3b4449}
+@media(max-width:700px){.harbor-horizons{grid-template-columns:minmax(0,1fr);margin-top:12px}.harbor-horizons>.watch-card{padding:18px 16px 17px}.harbor-horizons>.published-arrivals{padding:17px 16px;border-left:0;border-top:1px solid #d8d6cc}.harbor-horizons+.hero-actions{margin:10px 0 17px}.harbor-horizons .published-arrivals__links a{min-height:46px}}
+@media(prefers-reduced-motion:reduce){.harbor-horizons *{scroll-behavior:auto}}
 </style>
 </head>
 <body data-analytics-page="duluth-canal-park">
@@ -69,7 +86,28 @@ html{scroll-behavior:smooth}body{margin:0;font-family:Georgia,'Times New Roman',
 <main class="wrap">
   <div class="breadcrumb"><a href="/">Home</a> › <a href="/tools/">Tools</a> › Duluth Canal Park</div>
   <h1>Duluth ship schedule &amp; Canal Park live watch</h1>
-  <p class="lede">The boat-watcher question is simple: <strong>what ship matters next, where is it now, and can I see it?</strong> Fresh AIS builds the watch window; the monitor connects the selected vessel, other supported candidates, live cameras and the best places to stand.</p>
+  <p class="lede"><strong>Watch a freighter enter Duluth from Lake Superior.</strong> The Aerial Lift Bridge rises above the narrow ship canal while the vessel passes between the piers. Find the next AIS-supported watch below, or check the published harbor forecast for later arrivals.</p>
+
+  <div class="harbor-horizons" aria-label="Duluth ship schedule choices">
+    <section id="watchPick" class="watch-card" aria-live="polite">
+    <div class="watch-kicker">CHECKING THE NEXT SHIP</div>
+    <h2>Looking for the next freighter at the bridge…</h2>
+    <p>Recent ship positions and course help us find a likely passage through the Duluth Ship Canal. A planning window appears when the evidence is strong enough; otherwise, check the harbor forecast beside this watch.</p>
+  </section>
+
+  <section class="published-arrivals" aria-labelledby="published-arrivals-title" id="published-arrivals">
+    <div>
+      <p class="published-arrivals__eyebrow">02 / Published harbor forecast</p>
+      <h2 id="published-arrivals-title">What ships might arrive later?</h2>
+      <p>Planning an afternoon beside the canal? Harbor Lookout lists expected ship arrivals and departures, including traffic beyond this live watch. <strong>No supported next passage does not mean no ships are scheduled today.</strong> Check the published forecast first, then use the Canal Cam as the expected time draws near.</p>
+    </div>
+    <div class="published-arrivals__links">
+      <a href="https://harborlookout.com/" target="_blank" rel="noopener noreferrer" data-track-tool="duluth-harborlookout-forecast" data-placement="duluth-published-arrivals">Published Duluth arrivals and departures &#8599;</a>
+      <a href="#cameraMonitor" data-track-tool="duluth-live-canal-camera" data-placement="duluth-published-arrivals">Confirm with the Canal Cam &#8595;</a>
+    </div>
+    <p class="published-arrivals__note">This is a working harbor, not a fixed timetable. A ship may slow for port operations, change berths, or enter through Superior instead. A published time does not guarantee an Aerial Lift Bridge opening.</p>
+  </section>
+  </div>
   <div class="hero-actions">
     <button id="refreshVessels" class="button" type="button">Refresh ships</button>
     <a class="button secondary" href="#live-map">Boat watcher monitor</a>
@@ -77,29 +115,12 @@ html{scroll-behavior:smooth}body{margin:0;font-family:Georgia,'Times New Roman',
     <a class="button secondary" href="#where-watch">Where to watch</a>
   </div>
 
-  <section id="watchPick" class="watch-card" aria-live="polite">
-    <div class="watch-kicker">CHECKING LIVE AIS</div>
-    <h2>Finding the best supported next Canal Park watch…</h2>
-    <p>The page only publishes a passage window when fresh vessel position, motion and route evidence support it.</p>
-  </section>
-
-  <section class="published-arrivals" aria-labelledby="published-arrivals-title" id="published-arrivals">
-    <div>
-      <p class="published-arrivals__eyebrow">Duluth ship schedule · two kinds of evidence</p>
-      <h2 id="published-arrivals-title">Looking for a ship later today?</h2>
-      <p>The live watch above uses recent AIS evidence near the Duluth Ship Canal. <strong>No supported next passage does not mean no ships are scheduled today.</strong> For later arrivals and departures, use the independent published harbor forecast, then check the actual canal camera closer to the expected time.</p>
-    </div>
-    <div class="published-arrivals__links">
-      <a href="https://harborlookout.com/" target="_blank" rel="noopener noreferrer" data-track-tool="duluth-harborlookout-forecast" data-placement="duluth-published-arrivals">Published Duluth arrivals and departures &#8599;</a>
-      <a href="#cameraMonitor" data-track-tool="duluth-live-canal-camera" data-placement="duluth-published-arrivals">Confirm with the Canal Cam &#8595;</a>
-    </div>
-    <p class="published-arrivals__note">A published forecast is not a guaranteed bridge opening. Ships may change speed, berth or use the Superior Entry; AIS and camera coverage can be incomplete.</p>
-  </section>
+  <noscript><p class="harbor-noscript">Live vessel reports need JavaScript. The published harbor forecast above and the <a href="https://www.duluthharborcam.com/p/canal-park-cams.html">Duluth Harbor Cam feeds</a> remain available.</p></noscript>
 
   <section id="live-map" class="section monitor-section" aria-labelledby="map-title">
     <div class="monitor-intro">
       <h2 id="map-title">Duluth boat watcher monitor</h2>
-      <p>One spatial picture for the next supported ship, other anticipated passages, recent local AIS reports, both live cameras and the three in-person watch positions.</p>
+      <p>Follow a ship from open Lake Superior toward the canal. The map separates likely bridge passages from other recently reported vessels and marks the cameras and public viewing areas. A ship dot alone does not mean it will pass the lift bridge.</p>
     </div>
     <div class="monitor-summary" aria-live="polite">
       <article id="monitorNext" class="monitor-card"><div class="monitor-kicker">NEXT WATCH</div><strong class="monitor-title">Checking live AIS…</strong></article>
@@ -126,7 +147,7 @@ html{scroll-behavior:smooth}body{margin:0;font-family:Georgia,'Times New Roman',
 
       <div id="cameraMonitor" class="camera-monitor" aria-live="polite">
         <div class="camera-monitor-head">
-          <div><div class="camera-kicker">VISUAL CROSS-CHECK</div><h3 id="cameraTitle">Canal Cam — Maritime Visitor Center</h3><p id="cameraContext">Closest visual cross-check for the Duluth Ship Canal and Aerial Lift Bridge. Feed operator: Duluth Harbor Cam.</p></div>
+          <div><div class="camera-kicker">VISUAL CROSS-CHECK</div><h3 id="cameraTitle">Canal Cam — Maritime Visitor Center</h3><p id="cameraContext">From the Maritime Visitor Center roof, look along the ship canal toward the bridge and Lake Superior. Feed operator: Duluth Harbor Cam.</p></div>
           <div class="camera-tabs" aria-label="Choose a live camera">
             <button class="camera-tab is-active" type="button" data-camera-id="canal" aria-pressed="true">Canal Cam</button>
             <button class="camera-tab" type="button" data-camera-id="lodge" aria-pressed="false">Ship Cam</button>
@@ -134,26 +155,26 @@ html{scroll-behavior:smooth}body{margin:0;font-family:Georgia,'Times New Roman',
         </div>
         <div id="cameraPlayer" class="camera-player"><div class="camera-placeholder"><strong>Canal Cam</strong><span>Live video stays unloaded until you ask for it.</span><button class="button" type="button" onclick="document.querySelector('[data-camera-id=\"canal\"]').click()">Load live camera</button></div></div>
         <div class="camera-monitor-actions"><a id="cameraDirect" href="https://www.youtube.com/live/HPS48TMmNag" target="_blank" rel="noopener">Open feed on YouTube →</a><button id="cameraOnMap" class="map-jump" type="button">Show camera on map</button></div>
-        <p class="camera-caveat">The streams are operated by their publishers. Pan, zoom, uptime and camera direction can change without notice, so video is a visual cross-check—not proof that a vessel will use the canal.</p>
+        <p class="camera-caveat">The cameras let you see the waterfront, not read a guaranteed ship schedule. Their operators may pan away, and streams sometimes go offline. Check the ship map for reported movement and the harbor forecast for later traffic.</p>
       </div>
     </div>
     <div id="sourceCredits" class="source-credits"></div>
-    <div class="monitor-note"><strong>Schedule cross-check:</strong> <a href="https://harborlookout.com/" target="_blank" rel="noopener">Harbor Lookout</a> remains useful for the published Duluth arrival/departure forecast and later traffic that is not yet strong enough to become an AIS-supported candidate here. The routine live-watch workflow no longer depends on leaving this page.</div>
+    <div class="monitor-note"><strong>Schedule cross-check:</strong> Want to know who may come through later? <a href="https://harborlookout.com/" target="_blank" rel="noopener">Harbor Lookout</a> publishes expected Duluth arrivals and departures. Return to this map and the Canal Cam when a vessel gets closer; this live watch only highlights passages supported by recent AIS.</div>
   </section>
 
   <section class="section" aria-labelledby="anticipated-title">
     <h2 id="anticipated-title">Anticipated ships</h2>
-    <p class="section-intro">This is the monitor’s short watch queue, not a copied schedule. Every card is backed by fresh AIS position, current motion and route evidence. Tap a card to find the same vessel on the map—even when it is still outside the 28-NM close-in harbor view.</p>
+    <p class="section-intro">These are the ships worth watching for a possible canal passage, based on recent positions, course and route evidence. Select a vessel to find it on the map, even when it is still well out on Lake Superior. Other Twin Ports ships may be moving without heading for this entrance.</p>
     <div id="anticipatedShips" class="ship-grid"><div class="empty-state">Building the current candidate set…</div></div>
   </section>
 
   <section id="where-watch" class="section" aria-labelledby="where-title">
     <h2 id="where-title">Where to watch at Canal Park</h2>
-    <p class="section-intro">The green 1–3 markers on the monitor match these cards. Pick the experience you want, then use <strong>Show on monitor</strong> to center the exact spot.</p>
+    <p class="section-intro">Each side of the canal tells a different part of the story. Choose a close look at the passing hull, a wider view of the bridge, or a Lakewalk stroll while you watch for approaching traffic. The green 1–3 markers match these places; choose <strong>Show on monitor</strong> to find one.</p>
     <div class="three">
-      <article class="place-card"><h3>North side / Visitor Center</h3><p>The classic close-up choice. You are beside the ship canal with the Lake Superior Maritime Visitor Center immediately at hand and an unobstructed look at vessels entering or leaving.</p></article>
-      <article class="place-card"><h3>South side / Park Point</h3><p>A strong bridge-and-ship composition from the opposite side of the canal. It is useful when the north-side crowd is heavy or photography matters more than being beside the museum.</p></article>
-      <article class="place-card"><h3>Canal Park / Lakewalk</h3><p>Best when you want a broader waterfront visit rather than waiting at the rail. Watch the live map, then move toward the canal as the supported window approaches.</p></article>
+      <article class="place-card"><h3>North side / Visitor Center</h3><p>Start here for a first ship watch. On the public canal side beside the Lake Superior Maritime Visitor Center, you can see the bridge, the piers and the towering hull of a vessel passing through. The free museum adds ship models, a pilot-house exhibit and the story of this working port.</p></article>
+      <article class="place-card"><h3>South side / Park Point</h3><p>Look back toward the Duluth waterfront from the other side of the canal. The bridge towers and moving lift span make a striking frame for a ship entering from the lake. It is a good choice for photographs that show the vessel and its setting together. Use marked public paths and observe posted restrictions.</p></article>
+      <article class="place-card"><h3>Canal Park / Lakewalk</h3><p>Make the ship watch part of a longer waterfront walk. Watch the lake, follow the movement of vessels on the map, and head toward the canal when a supported passage window approaches. This is the flexible choice when you are enjoying Canal Park rather than waiting beside the piers.</p></article>
     </div>
   </section>
 
@@ -162,22 +183,31 @@ html{scroll-behavior:smooth}body{margin:0;font-family:Georgia,'Times New Roman',
     <figcaption>A 1,000-foot ore boat passes under the Aerial Lift Bridge entering Duluth Harbor. Photo by Chris Light, licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>, via <a href="https://commons.wikimedia.org/wiki/File:Duluth_Ship_Canal-Lighthouse-1000_footer.jpg" target="_blank" rel="noopener">Wikimedia Commons</a>.</figcaption>
   </figure>
 
+  <section class="section" aria-labelledby="harbor-story-title">
+    <h2 id="harbor-story-title">What to look for when the bridge rises</h2>
+    <p class="section-intro">There is more to a Duluth ship passage than the vessel itself. Take a moment to read the place around it.</p>
+    <p><strong>Look across the canal.</strong> The channel was cut through Minnesota Point in 1871, opening a connection between Lake Superior and Duluth Harbor. That new route also separated Park Point from the city, setting the stage for the bridge you see today.</p>
+    <p><strong>Watch the bridge do its work.</strong> The first bridge carried people across in a suspended ferry car in 1905. It was converted to the vertical lift bridge in 1929–30 so road traffic could cross while the span could still rise out of the way for ships. The moving roadway is part of the show, not just a backdrop.</p>
+    <p><strong>Notice the working port.</strong> Duluth-Superior handles iron ore, grain, coal, limestone and other cargo. As a freighter passes the piers, compare its long hull with the bridge opening, and listen for a ship's horn if one sounds. You are watching cargo transportation at one of the Great Lakes' great gateways.</p>
+    <p class="source-credits">Background: <a href="https://www.asce.org/about-civil-engineering/history-and-heritage/historic-landmarks/duluth-aerial-lift-bridge/" target="_blank" rel="noopener noreferrer">American Society of Civil Engineers bridge history</a> and <a href="https://duluthport.com/about-us/frequently-asked-questions/" target="_blank" rel="noopener noreferrer">Duluth Seaway Port Authority</a>. These are historical and port references, not today's ship or bridge schedule.</p>
+  </section>
+
   <section class="section" aria-labelledby="how-title">
     <h2 id="how-title">How the anticipated-ship feature works</h2>
     <div class="three">
-      <article class="explain-card"><h3>1. Evidence first</h3><p>Only recent AIS reports are eligible. Stale positions, stopped ships without useful motion, bad coordinates and weak route evidence are removed before a visitor recommendation exists.</p></article>
-      <article class="explain-card"><h3>2. Build valid candidates</h3><p>The engine looks for a Duluth-bound vessel moving toward the canal, or a close-in harbor/lake vessel whose course points toward the canal. It models a broad passage window from current distance and speed.</p></article>
-      <article class="explain-card"><h3>3. Pick the useful next watch</h3><p>When several valid candidates exist, the decision layer chooses among those ships only. Near-term timing, evidence quality and visitor interest matter; it cannot invent another ship or rewrite a time window.</p></article>
+      <article class="explain-card"><h3>1. Evidence first</h3><p>Ships broadcast position and movement reports called AIS. We look for reports no more than 30 minutes old and set aside vessels whose information is too old or unclear to help you plan a canal visit.</p></article>
+      <article class="explain-card"><h3>2. Build valid candidates</h3><p>Next we look at the ship’s direction and reported destination. Is it actually heading toward the Duluth Ship Canal, or simply somewhere in the Twin Ports? Only a supported course becomes a possible bridge passage.</p></article>
+      <article class="explain-card"><h3>3. Pick the useful next watch</h3><p>If several ships qualify, we show the most useful near-term watch and a broad passage window. Distance and speed help set that window, but it can change as a ship slows, turns or waits for its berth.</p></article>
     </div>
-    <p class="section-intro"><strong>Why not just show an ETA?</strong> Because Duluth-Superior is an operating port, not an airline gate. Ship speeds, berths, weather, tug work and entrance choice can change. A wider, evidence-bounded window is more honest and more useful for a visitor deciding when to head to the canal.</p>
+    <p class="section-intro"><strong>Why a window instead of an exact arrival time?</strong> A freighter does not move like a train on a timetable. Weather, harbor traffic, dock assignments and the choice between the Duluth Ship Canal and Superior Entry can change its course. Treat the displayed window as a good time to begin looking, not a promised bridge opening.</p>
   </section>
 
   <section class="section" aria-labelledby="visitor-title">
     <h2 id="visitor-title">Visitor details that matter</h2>
     <div class="source-list">
-      <div class="source-item"><strong>Lake Superior Maritime Visitor Center</strong><span>600 Canal Park Drive, Duluth. The U.S. Army Corps of Engineers operates the free maritime visitor center beside the ship canal. Hours change seasonally; check the official page before planning around museum access.</span><a href="https://www.lrd.usace.army.mil/Missions/Recreation/Display/Article/3649015/lake-superior-maritime-visitor-center/" target="_blank" rel="noopener">Official visitor center details →</a></div>
+      <div class="source-item"><strong>Lake Superior Maritime Visitor Center</strong><span>600 Canal Park Drive, Duluth. The free U.S. Army Corps of Engineers museum is a useful companion to a ship watch, with Great Lakes shipping exhibits, ship models and pilot-house displays. Check the Corps for seasonal hours before planning a museum stop.</span><a href="https://www.lrd.usace.army.mil/Missions/Recreation/Display/Article/3649015/lake-superior-maritime-visitor-center/" target="_blank" rel="noopener">Official visitor center details →</a></div>
       <div class="source-item"><strong>Parking</strong><span>Public Canal Park parking is nearby and seasonal fees apply. The Corps notes that the closest public lot is roughly 100 feet from the Visitor Center.</span></div>
-      <div class="source-item"><strong>Bridge reality</strong><span>The Aerial Lift Bridge is part of an active navigation channel. Treat every watch time here as planning guidance and stay behind public barriers and posted restrictions.</span></div>
+      <div class="source-item"><strong>Bridge and canal</strong><span>This is an active shipping entrance and an operating roadway bridge. When a ship uses the canal, the roadway span lifts to clear the vessel. Give the bridge its working space, stay on public walkways and follow signs and barriers.</span></div>
     </div>
   </section>
 
@@ -193,19 +223,19 @@ html{scroll-behavior:smooth}body{margin:0;font-family:Georgia,'Times New Roman',
 
   <section class="section faq" aria-labelledby="faq-title">
     <h2 id="faq-title">Duluth ship-watching questions</h2>
-    <h3>When is the next ship coming under the Aerial Lift Bridge?</h3><p>The top card is the page’s best supported near-term watch based on fresh AIS. If it says there is no supported passage to call, do not interpret that as “no ships today.” The published Harbor Lookout forecast remains a useful later-traffic cross-check.</p>
-    <h3>Can the camera tell me whether the ship is coming?</h3><p>Use video to confirm what is visible around the canal right now, not as a schedule. The camera operator can pan or zoom elsewhere, and a vessel can still slow, berth or use the Superior Entry.</p>
-    <h3>How accurate is the anticipated passage window?</h3><p>It is intentionally a window. The estimate assumes the vessel broadly continues its recent speed and course. Commercial operations can change that quickly, so precision narrows only when a vessel is close to the canal and the evidence is stronger.</p>
-    <h3>Why might a Twin Ports vessel not pass Canal Park?</h3><p>The Duluth-Superior harbor has more than one entrance. A ship’s presence in the harbor or on western Lake Superior does not by itself prove it will use the Duluth Ship Canal, which is why the candidate engine requires route evidence.</p>
-    <h3>What is the best place for a first-time visitor?</h3><p>The north side of the ship canal near the Lake Superior Maritime Visitor Center is the simplest starting point: the canal, bridge, lighthouse and visitor center are together in one walkable place.</p>
+    <h3>When is the next ship coming under the Aerial Lift Bridge?</h3><p>Start with the live watch at the top. It names a ship and a passage window only when recent position and course reports support a likely Duluth Ship Canal passage. If there is no candidate yet, the harbor may still have later scheduled traffic. Check Harbor Lookout for that longer view.</p>
+    <h3>Can the camera tell me whether the ship is coming?</h3><p>Watch the Canal Cam for the bridge and ship canal as they appear now. If you see an approaching vessel, compare it with the AIS map. A camera cannot tell you the ship’s berth or guarantee its route, and its operator may move the view.</p>
+    <h3>How accurate is the anticipated passage window?</h3><p>It is a planning range based on recent movement, not an official lift-bridge appointment. A vessel may slow, stop or change direction as it nears port. If you want to see the passage in person, plan to be near the canal before the beginning of the window and check the live report again.</p>
+    <h3>Why might a Twin Ports vessel not pass Canal Park?</h3><p>Duluth and Superior share a working harbor with two lake entrances. A ship heading to a Superior dock may use the Superior Entry instead of passing the Aerial Lift Bridge. That is why the map does not label every nearby vessel as an expected Canal Park passage.</p>
+    <h3>What is the best place for a first-time visitor?</h3><p>Begin at the north side beside the Lake Superior Maritime Visitor Center. You can watch the bridge and canal from public paths, then step inside the museum to understand the freighters and harbor history. For a wider bridge-and-ship photograph, compare the Park Point side using the viewing locations on the map.</p>
   </section>
 
   <section class="section" aria-labelledby="more-title">
     <h2 id="more-title">Keep following the ship</h2>
     <div class="three">
-      <article class="place-card"><h3><a href="/great-lakes-freighter-tracking/">Great Lakes freighter tracking</a></h3><p>Move from one harbor decision to the broader Great Lakes vessel picture.</p></article>
-      <article class="place-card"><h3><a href="/soo-locks/">Soo Locks ships &amp; map</a></h3><p>See the same visitor-first pattern at the other major Great Lakes ship-watching choke point.</p></article>
-      <article class="place-card"><h3><a href="/great-lakes-buoys/">Great Lakes buoy conditions</a></h3><p>Check lake conditions when weather and visibility are part of the day.</p></article>
+      <article class="place-card"><h3><a href="/great-lakes-freighter-tracking/">Great Lakes freighter tracking</a></h3><p>Follow a vessel beyond Duluth and see where recent AIS reports place ships across the five Great Lakes.</p></article>
+      <article class="place-card"><h3><a href="/soo-locks/">Soo Locks ships &amp; map</a></h3><p>Follow Great Lakes traffic to the St. Marys River and learn how ships move between Lakes Superior and Huron.</p></article>
+      <article class="place-card"><h3><a href="/great-lakes-buoys/">Great Lakes buoy conditions</a></h3><p>See recent lake observations before a waterfront visit. Wind, waves and visibility can change the viewing experience.</p></article>
     </div>
     <p class="shipping-season-followup">Following the shipping season? <a href="/great-lakes-freighter-winter-layup/" data-track-tool="great-lakes-freighter-winter-layup" data-placement="duluth-shipping-season">Explore documented winter layup berths and ship stories</a>, or <a href="/welland-canal/" data-track-tool="welland-canal" data-placement="duluth-shipping-season">check ships and the official queue on the Welland Canal</a>. A reported AIS position alone does not confirm a winter layup or a future canal transit.</p>
   </section>

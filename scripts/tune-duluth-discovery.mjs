@@ -6,7 +6,7 @@ const TRACKER = 'public/great-lakes-freighter-tracking/index.html';
 const SITEMAP = 'public/sitemap.xml';
 const CANONICAL = 'https://chrisizworski.com/duluth-canal-park/';
 const TITLE = 'Duluth Ship Schedule Today & Live Cams | Chris Izworski';
-const DESCRIPTION = 'Duluth ship schedule today with live AIS, Aerial Lift Bridge passage windows, Canal Park cams, vessel map and the best places to watch.';
+const DESCRIPTION = 'Duluth ship schedule today: see the next AIS-supported passage window, check later published arrivals and departures, and watch Canal Park live cams.';
 const SOCIAL_IMAGE = 'https://chrisizworski.com/api/duluth-social-card';
 const SOCIAL_IMAGE_ID = `${CANONICAL}#primaryimage`;
 const SOCIAL_TITLE = 'Duluth Ship Schedule Today, Live Cams & Map';
@@ -121,39 +121,27 @@ html = replaceOnce(
   '<h1>Duluth ship schedule today &amp; Canal Park live cams</h1>',
   'H1'
 );
-html = replaceOnce(
-  html,
-  '<p class="lede">The boat-watcher question is simple: <strong>what ship matters next, where is it now, and can I see it?</strong> Fresh AIS builds the watch window; the monitor connects the selected vessel, other supported candidates, live cameras and the best places to stand.</p>',
-  '<p class="lede"><strong>Want to know what ship is coming through Duluth next?</strong> This live Duluth ship schedule uses fresh AIS to identify the best-supported next Aerial Lift Bridge passage, show its time window and location, and connect you to Canal Park live cams and the best places to watch.</p>',
-  'hero direct answer'
-);
+// Interpretive source copy is already query-aligned. Keep it intact in emitted HTML.
+const interpretiveLede = '<p class="lede"><strong>Watch a freighter enter Duluth from Lake Superior.</strong> The Aerial Lift Bridge rises above the narrow ship canal while the vessel passes between the piers. Find the next AIS-supported watch below, or check the published harbor forecast for later arrivals.</p>';
+if (!html.includes(interpretiveLede)) throw new Error('Duluth discovery patch: missing reviewed interpretive lead');
 html = replaceOnce(html, '>Boat watcher monitor</a>', '>Live ship map</a>', 'hero live map action');
 html = replaceOnce(html, '>Live cameras</a>', '>Canal Park live cams</a>', 'hero camera action');
 html = replaceOnce(html, '>Where to watch</a>', '>Where to watch ships</a>', 'hero viewing action');
-html = replaceOnce(html, '<div class="watch-kicker">CHECKING LIVE AIS</div>', '<div class="watch-kicker">CHECKING DULUTH SHIP TRAFFIC</div>', 'static watch kicker');
-html = replaceOnce(html, '<h2>Finding the best supported next Canal Park watch…</h2>', '<h2>Finding the next supported Aerial Lift Bridge passage…</h2>', 'static watch headline');
-html = replaceOnce(
-  html,
-  '<p>The page only publishes a passage window when fresh vessel position, motion and route evidence support it.</p>',
-  '<p>Fresh AIS is checking which ship is actually moving toward the Duluth Ship Canal now. A passage window appears only when the evidence is strong enough to be useful.</p>',
-  'static watch explanation'
-);
+if (!html.includes('<div class="watch-kicker">CHECKING THE NEXT SHIP</div>')) throw new Error('Duluth discovery patch: missing watch kicker');
+if (!html.includes('<h2>Looking for the next freighter at the bridge…</h2>')) throw new Error('Duluth discovery patch: missing watch loading headline');
+if (!html.includes('<p>Recent ship positions and course help us find a likely passage through the Duluth Ship Canal. A planning window appears when the evidence is strong enough; otherwise, check the harbor forecast beside this watch.</p>')) {
+  throw new Error('Duluth discovery patch: missing honest loading guidance');
+}
 html = replaceOnce(html, '<h2 id="map-title">Duluth boat watcher monitor</h2>', '<h2 id="map-title">Duluth ships live map &amp; Canal Park cameras</h2>', 'map H2');
-html = replaceOnce(
-  html,
-  '<p>One spatial picture for the next supported ship, other anticipated passages, recent local AIS reports, both live cameras and the three in-person watch positions.</p>',
-  '<p>Track the next supported ship, anticipated arrivals and departures, recent local AIS reports, the mapped camera network and three Canal Park viewing spots in one place.</p>',
-  'map intro'
-);
+if (!html.includes('<p>Follow a ship from open Lake Superior toward the canal. The map separates likely bridge passages from other recently reported vessels and marks the cameras and public viewing areas. A ship dot alone does not mean it will pass the lift bridge.</p>')) {
+  throw new Error('Duluth discovery patch: missing map interpretation');
+}
 html = replaceOnce(html, '<strong class="monitor-title">2 mapped live cameras</strong>', '<strong class="monitor-title">19 mapped camera feeds</strong>', 'static camera count');
 html = replaceOnce(html, '>Cameras</button>', '>Camera network</button>', 'camera network button');
 html = replaceOnce(html, '<h2 id="anticipated-title">Anticipated ships</h2>', '<h2 id="anticipated-title">Duluth ship arrivals &amp; departures to watch</h2>', 'anticipated H2');
-html = replaceOnce(
-  html,
-  '<p class="section-intro">This is the monitor’s short watch queue, not a copied schedule. Every card is backed by fresh AIS position, current motion and route evidence. Tap a card to find the same vessel on the map—even when it is still outside the 28-NM close-in harbor view.</p>',
-  '<p class="section-intro">This is a live watch queue built from fresh AIS, not a copied official timetable. Each card needs current position, motion and route evidence, and opens the same vessel on the map.</p>',
-  'anticipated intro'
-);
+if (!html.includes('<p class="section-intro">These are the ships worth watching for a possible canal passage, based on recent positions, course and route evidence.')) {
+  throw new Error('Duluth discovery patch: missing supported-ship explanation');
+}
 html = replaceOnce(html, '<h2 id="where-title">Where to watch at Canal Park</h2>', '<h2 id="where-title">Where to watch ships at Duluth Canal Park</h2>', 'where-to-watch H2');
 html = replaceOnce(html, '<h2 id="how-title">How the anticipated-ship feature works</h2>', '<h2 id="how-title">How this live Duluth ship schedule works</h2>', 'how H2');
 html = replaceOnce(html, '<h2 id="visitor-title">Visitor details that matter</h2>', '<h2 id="visitor-title">Plan a Canal Park ship-watching visit</h2>', 'visitor H2');
@@ -167,13 +155,13 @@ html = replaceOnce(
 fs.writeFileSync(PAGE, html);
 
 let client = fs.readFileSync(CLIENT, 'utf8');
-client = replaceOnce(client, "el('div', 'NEXT SHIP TO WATCH', 'watch-kicker')", "el('div', 'NEXT DULUTH SHIP TO WATCH', 'watch-kicker')", 'fallback watch kicker');
-client = replaceOnce(client, "el('h2', 'No supported Canal Park passage to call yet.')", "el('h2', 'No supported Aerial Lift Bridge passage to call yet.')", 'fallback watch headline');
+if (!client.includes("el('div', 'LOOKING FOR A CANAL PASSAGE', 'watch-kicker')")) throw new Error('Duluth discovery patch: missing no-candidate guidance');
+if (!client.includes("el('h2', 'No approaching ship confirmed for this watch yet.')")) throw new Error('Duluth discovery patch: missing honest no-candidate headline');
 client = replaceOnce(client, "el('span', 'Plan around', 'arrival-label')", "el('span', 'Passage window', 'arrival-label')", 'passage window label');
 client = replaceOnce(client, "button('Locate this ship', 'button compact'", "button('Track ship on live map', 'button compact'", 'primary map CTA');
 client = replaceOnce(client, "button('Open live camera', 'button secondary compact'", "button('Open Canal Park live cam', 'button secondary compact'", 'primary camera CTA');
-client = replaceOnce(client, "el('div', 'BEST SUPPORTED WATCH', 'watch-kicker')", "el('div', 'NEXT DULUTH SHIP TO WATCH', 'watch-kicker')", 'selected watch kicker');
-client = replaceOnce(client, "empty.append(el('strong', 'Nothing supported yet.')", "empty.append(el('strong', 'No Duluth passage supported yet.')", 'empty state');
+if (!client.includes("el('div', 'NEXT SHIP WORTH WATCHING', 'watch-kicker')")) throw new Error('Duluth discovery patch: missing current watch label');
+if (!client.includes("empty.append(el('strong', 'No likely canal passage to list right now.')")) throw new Error('Duluth discovery patch: missing no-ship explanation');
 client = replaceOnce(client, "selected ? 'NEXT WATCH' : c.direction === 'departure' ? 'Departure candidate' : 'Arrival candidate'", "selected ? 'NEXT DULUTH SHIP' : c.direction === 'departure' ? 'Duluth departure' : 'Duluth arrival'", 'candidate labels');
 client = replaceOnce(client, "next.replaceChildren(el('div', 'NEXT WATCH', 'monitor-kicker'))", "next.replaceChildren(el('div', 'NEXT DULUTH SHIP', 'monitor-kicker'))", 'monitor next label');
 client = replaceOnce(client, "el('strong', '2 mapped live cameras', 'monitor-title')", "el('strong', '2 primary live video views', 'monitor-title')", 'primary video copy');
@@ -218,10 +206,10 @@ const checks = [
   ['explicit X card image', finalHtml.includes(`<meta name="twitter:image" content="${SOCIAL_IMAGE}">`)],
   ['explicit X card alt', finalHtml.includes(`<meta name="twitter:image:alt" content="${SOCIAL_ALT}">`)],
   ['query-aligned H1', finalHtml.includes('<h1>Duluth ship schedule today &amp; Canal Park live cams</h1>')],
-  ['crawlable direct answer', finalHtml.includes('Want to know what ship is coming through Duluth next?')],
-  ['Aerial Lift Bridge intent', finalHtml.includes('Aerial Lift Bridge passage')],
+  ['crawlable direct answer', finalHtml.includes('Watch a freighter enter Duluth from Lake Superior.')],
+  ['Aerial Lift Bridge intent', finalHtml.includes('Aerial Lift Bridge') && finalHtml.includes('passage window')],
   ['camera intent', finalHtml.includes('Canal Park live cams')],
-  ['dynamic next-ship language', finalClient.includes('NEXT DULUTH SHIP TO WATCH')],
+  ['dynamic next-ship language', finalClient.includes('NEXT SHIP WORTH WATCHING')],
   ['contextual inbound link', finalTracker.includes('href="/duluth-canal-park/"')],
   ['sitemap exactly once', (finalSitemap.match(new RegExp(escapedCanonical, 'g')) || []).length === 1],
   ['no tracking junk', !/utm_source=chatgpt\.com/i.test(finalHtml + finalClient + finalTracker)]
