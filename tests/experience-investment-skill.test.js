@@ -65,3 +65,20 @@ test('root agent instructions route major new tools and redesigns to the skill w
   assert.match(claude, /Penpot, only when asked/);
   assert.match(copilot, /Penpot is opt-in/);
 });
+
+test('technology fit is mandatory but does not force new runtimes', () => {
+  const codex = read('.agents/skills/experience-investment/SKILL.md');
+  const claude = read('.claude/skills/experience-investment/SKILL.md');
+  const tech = read('.agents/skills/experience-investment/references/TECHNOLOGY_FIT_REVIEW.md');
+  const delivery = read('.agents/skills/experience-investment/references/REVIEW_AND_DELIVERY.md');
+  const guide = read('docs/EXPERIENCE_INVESTMENT_SKILL.md');
+  assert.equal(codex, claude);
+  for (const item of ['Technology Fit Review', 'TECHNOLOGY_FIT_REVIEW.md']) {
+    assert.ok(codex.includes(item) && guide.includes(item), item);
+  }
+  for (const language of ['HTML', 'JavaScript', 'Python', 'Rust', 'Java']) assert.ok(tech.includes(language), language);
+  assert.match(tech, /NOT MEASURED/);
+  assert.match(tech, /smallest capable stack|smallest practical option/i);
+  assert.match(delivery, /Technology Fit Review/);
+  assert.doesNotMatch(tech, /[–—]/);
+});
