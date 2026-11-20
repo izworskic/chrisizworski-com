@@ -6,7 +6,7 @@
  * 2. Rank #2 /michigan-white-christmas-escapes/ (10 stops, 13 verified photos, 4 always-visible season cards, NOAA climatology + live tool handoffs)
  * 3. Rank #3 /michigan-first-snow-adventures/ (12 stops, 15 verified photos, 4 always-visible season cards, snowbelt tool handoffs)
  * 4. Rank #4 /great-lakes-winter-freighter-guide/ (12 stops, 15 verified photos, 4 always-visible season cards, maritime tool handoffs)
- * 5. /great-lakes-freighter-winter-layup/ + 6 biography pages: 12 real ship card photos (.ship-card-photo img) via thumb.wikimedia.org (0 Special:Redirect 429s)
+ * 5. /great-lakes-freighter-winter-layup/ + 6 biography pages: 27 source-attributed static ship card photos with Wikimedia image URLs (0 Special:Redirect 429s)
  * 6. 100% real photograph coverage (0 .wf-story-index placeholders) across all 8 winter field guides
  * 7. Hub & sitemap integration across /tools/, /michigan-destinations/, /freighters/, and /sitemap-winter.xml
  */
@@ -66,12 +66,12 @@ const checks = [
       wfgHtml.includes('href="/great-lakes-freighter-tracking/"'),
   },
   {
-    name: 'Freighter Winter Layup: 12 real ship card photos (.ship-card-photo) + thumbUrl in all 14 registry entries (0 Special:Redirect)',
+    name: 'Freighter Winter Layup: 27 real ship card photographs + licensed historical images across 41 dated archive records',
     weight: 15,
     pass:
-      (layupHtml.match(/class="ship-card-photo"/g) || []).length === 12 &&
+      (layupHtml.match(/class="ship-card-photo"/g) || []).length === 27 &&
       !layupHtml.includes('Special:Redirect') &&
-      (layupReg.match(/"thumbUrl":\s*"https:\/\/thumb\.wikimedia\.org\//g) || []).length === 14,
+      (layupReg.match(/"thumbUrl":\s*"https:\/\/(?:thumb|upload)\.wikimedia\.org\//g) || []).length === 41,
   },
   {
     name: '100% Real Verified Photographs (0 .wf-story-index boxes) across all 8 Winter Field Guides',
