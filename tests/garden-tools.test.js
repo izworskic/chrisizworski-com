@@ -57,6 +57,35 @@ test('frost guide stays evergreen and calendar respects selected season', () => 
   assert.match(spring.text('frostSeason'), /Planning for spring 2027/);
 });
 
+test('frost planning rolls to next spring after local fall frost, not spring thaw', () => {
+  const summer = loadTool(f('michigan-frost-dates'), { today: '2027-06-10', search: '?station=bay-city' });
+  assert.match(summer.text('frostSeason'), /2027 growing season/);
+  assert.match(summer.text('frostSeason'), /typical first fall frost is around Oct 3/);
+  summer.click('icsBtn');
+  assert.match(summer.doc.downloads.at(-1), /DTSTART;VALUE=DATE:202704/);
+  assert.match(summer.doc.downloads.at(-1), /DTSTART;VALUE=DATE:202710/);
+
+  const before = loadTool(f('michigan-frost-dates'), { today: '2027-10-02', search: '?station=bay-city' });
+  assert.match(before.text('frostSeason'), /2027 growing season/);
+  const boundary = loadTool(f('michigan-frost-dates'), { today: '2027-10-03', search: '?station=bay-city' });
+  assert.match(boundary.text('frostSeason'), /2027 growing season/);
+
+  const following = loadTool(f('michigan-frost-dates'), { today: '2027-10-04', search: '?station=bay-city' });
+  assert.match(following.text('frostSeason'), /Planning for spring 2028/);
+  following.click('icsBtn');
+  const next = following.doc.downloads.at(-1);
+  assert.match(next, /DTSTART;VALUE=DATE:202804/);
+  assert.match(next, /DTSTART;VALUE=DATE:202810/);
+  assert.doesNotMatch(next, /DTSTART;VALUE=DATE:2027/);
+
+  const explicit = loadTool(f('michigan-frost-dates'), {
+    today: '2027-10-04', search: '?station=bay-city&date=2029-05-12'
+  });
+  assert.match(explicit.text('frostSeason'), /Checking May 12, 2029/);
+  explicit.click('icsBtn');
+  assert.match(explicit.doc.downloads.at(-1), /DTSTART;VALUE=DATE:202905/);
+});
+
 test('tomato check: windows in order, readings decide go or wait', () => {
   const p = loadTool(f('when-to-plant-tomatoes-michigan'), { today: '2026-05-20' });
   assert.match(p.text('tTitle'), /tomato planting time near Bay City/);

@@ -1,3 +1,9 @@
+### 2026-11-20 | Frost season year rollover after local fall frost
+- **Visitor job:** Keep the current year's Michigan frost calendar relevant through summer and early autumn, then automatically plan the next spring after the selected station's typical first fall frost. At Bay City this reference is Oct 3, so an Oct 4, 2027 visit prepares 2028.
+- **Implementation:** The station-aware frost page now uses its existing historical first fall frost anchor rather than the final recorded spring frost to choose a default planning year. The visible summer status reads as the current growing season instead of advertising spring dates that have already passed. Selected URL or date-picker years remain authoritative. .ics events still share one explicit year. No Python service, new build step, weather inference, source-data changes, canonical changes, or ad changes.
+- **Verification:** Added deterministic visitor scenarios for June 2027, Oct 2/3/4, 2027, 2028 calendar export and a user-specified 2029 date. CI and production checks are required before merge. No traffic or CTR benefit is claimed.
+- **Exactly one next action:** Pass exact-head full repository verification, merge this small PR, and confirm the public season label and calendar behavior.
+
 ### 2026-11-20 | Evergreen Michigan last frost guide
 - **Visitor decision:** A grower can select one of 78 Michigan frost stations and inspect historical spring frost odds for an actual planting day without mistaking the guide for an expired 2026 calendar.
 - **Change:** Removed fixed 2026 references from Michigan frost page title, search description, Open Graph, WebPage JSON-LD and introductory copy. Preserved station probabilities and their provenance, the 78 station table, existing canonical, Person identity, AdSense loader, and companion garden links.
