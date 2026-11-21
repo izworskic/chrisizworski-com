@@ -15,3 +15,8 @@ artifacts/experience-foundry/
 artifacts/playwright-qa/
 playwright-report/
 test-results/
+
+# Private ShoreFeel field instrumentation and captured scientific data
+research/shorefeel/private/
+.shorefeel-field/
+artifacts/shorefeel-field-pilot/
