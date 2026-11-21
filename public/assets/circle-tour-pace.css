@@ -1,0 +1,46 @@
+/* Route Rhythm: a day-by-day travel demand ribbon, not a second map or itinerary engine. */
+.ctpace{margin:18px 0 10px;padding:18px 0 20px;border-top:2px solid #d5e0dc;border-bottom:2px solid #d5e0dc;color:#213a3e}
+.ctpace-head{display:flex;align-items:end;justify-content:space-between;gap:18px;min-width:0}
+.ctpace-intro{min-width:0;max-width:690px}
+.ctpace-eyebrow{font:700 11px/1.5 Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#416d6f;margin:0 0 5px}
+.route-planner .ctpace h3{font:normal clamp(20px,2.3vw,30px)/1.2 Georgia,serif;color:#173a4b;margin:0 0 7px}
+.ctpace-intro>p:last-child{font-size:13px;line-height:1.6;color:#47585a;margin:0}
+.ctpace-hours{flex:0 0 164px;font:700 12px/1.4 Arial,sans-serif;color:#294a50}
+.ctpace-hours span{display:block;margin-bottom:5px}
+.ctpace-hours select{width:100%;min-height:45px;border:1px solid #7b9a98;border-radius:7px;padding:9px 12px;background:#fff;color:#163e44;font:600 15px Arial,sans-serif}
+.ctpace-verdict{font:15px/1.5 Georgia,serif;color:#183d4e;background:#e9f2f0;border-left:4px solid #468477;padding:12px 14px;margin:15px 0 10px}
+.ctpace-routes{display:grid;grid-template-columns:minmax(0,1fr)}
+.ctpace-route{min-width:0;padding:16px 1px 17px;border-top:1px solid #d9dfd9}
+.ctpace-route.is-selected{background:linear-gradient(90deg,rgba(228,238,233,.6),transparent 74%)}
+.ctpace-route-top{display:flex;justify-content:space-between;align-items:center;gap:12px;min-width:0}
+.ctpace-route-narrative{min-width:0}
+.ctpace-route-kicker{display:block;font:700 10px/1.4 Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#486a68}
+.ctpace-route h4{font:normal clamp(18px,2vw,23px)/1.25 Georgia,serif;color:#183e4c;margin:3px 0}
+.ctpace-route-narrative p{font-size:12px;line-height:1.5;color:#526365;margin:0}
+.ctpace-route-count{flex:0 0 150px;display:flex;align-items:baseline;gap:7px;justify-content:flex-end;text-align:right}
+.ctpace-route-count strong{font:600 30px/1 Arial,sans-serif;font-variant-numeric:tabular-nums;color:#215c65}
+.ctpace-route-count span{font:11px/1.4 Arial,sans-serif;color:#455b5d;max-width:94px}
+.ctpace-day-ribbon{display:grid;align-items:end;gap:5px;width:100%;height:46px;margin:9px 0 5px;border-bottom:2px solid #91a9a1}
+.ctpace-day{display:flex;align-items:end;justify-content:stretch;height:44px;min-width:0}
+.ctpace-day-bar{display:block;width:100%;min-height:5px;background:#74a8a1;border-radius:4px 4px 0 0}
+.ctpace-day-bar[data-over="true"]{background:#b66c42}
+.ctpace-route-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:0}
+.ctpace-route-detail{font:12px/1.5 Arial,sans-serif;color:#385356;min-width:0}
+.ctpace-preview{flex-shrink:0;min-height:44px;padding:9px 14px;border-radius:7px;border:1px solid #1b5661;background:#fff;color:#164653;font:700 12px/1.25 Arial,sans-serif;cursor:pointer}
+.ctpace-preview:hover,.ctpace-preview[aria-pressed="true"]{background:#194f5e;color:#fff}
+.ctpace-preview:focus-visible,.ctpace-hours select:focus-visible{outline:3px solid #ac6636;outline-offset:3px}
+.ctpace-method{font:12px/1.6 Arial,sans-serif;color:#506466;margin:13px 0 0}
+.ctpace-method a{text-decoration:underline}
+@media(max-width:650px){
+  .ctpace{padding:15px 0}
+  .ctpace-head{display:block}
+  .ctpace-hours{display:block;width:100%;margin-top:13px}
+  .ctpace-route{padding:14px 0 16px}
+  .ctpace-route-count{flex-basis:94px;gap:4px}
+  .ctpace-route-count strong{font-size:25px}
+  .ctpace-route-count span{font-size:10px}
+  .ctpace-route-bottom{align-items:stretch;flex-direction:column;gap:8px}
+  .ctpace-preview{width:100%}
+  .ctpace-day-ribbon{gap:3px}
+}
+@media print{.ctpace-preview,.ctpace-hours{display:none}.ctpace-route{break-inside:avoid}}
