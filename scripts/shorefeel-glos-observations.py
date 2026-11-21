@@ -112,9 +112,15 @@ def normalize(payload, *, start, end, now, provenance):
     if names != list(FIELDS) or not isinstance(units, list) or len(units) != len(FIELDS):
         raise ValueError("Unexpected GLOS variable selection")
     # Missing QC flag units vary across ERDDAP versions, so require only physical units.
+    unit_aliases = {
+        "wind_speed": {"m s-1", "m/s", "m s**-1"},
+        "wind_from_direction": {"degree", "degrees", "°"},
+    }
     for i in (0, 1, 2, 3, 5, 7):
-        if units[i] != UNITS[i]:
-            raise ValueError("Unexpected GLOS physical measurement unit: " + FIELDS[i])
+        valid = unit_aliases.get(FIELDS[i], {UNITS[i]})
+        if units[i] not in valid:
+            raise ValueError("Unexpected GLOS physical measurement unit: " +
+                             FIELDS[i] + " = " + repr(units[i]))
     if not isinstance(rows, list) or len(rows) > MAX_ROWS:
         raise ValueError("Unexpected GLOS row count")
     accepted = {}
