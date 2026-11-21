@@ -4,6 +4,7 @@
 const {LAKES,DESTINATIONS,SOURCE,parseGLSEA,parseGLSEACsv,parseLongTermAverage,parseGLSEAGridCsv,lakeSeries,parseNDBC,waterEvidence,weatherPeriods,nowPeriod,comfort,bestWeatherWindow}=require('../lib/shorefeel/engine.js');
 const BF=require('../lib/shorefeel/beach-forecast.js');
 const {beachFeel}=require('../lib/shorefeel/beach-feel.js');
+const {INLAND_BAY_COUNTY,marineAirFromNDBC,scenario}=require('../lib/shorefeel/physics.js');
 const BACKTEST=require('../data/shorefeel/backtest-2026-10.json');
 const {observations:NOAA_SNAPSHOT}=require('../data/shorefeel/last-verified-noaa-glsea.json');
 const GLSEA_CSV='https://apps.glerl.noaa.gov/erddap/tabledap/glsea_avgtemps_3.csv?Year%2CDay%2CSup%2CMich%2CHuron%2CErie%2COnt&Year%3E%3D2026';
@@ -46,10 +47,17 @@ async function jsonResponse(url,ms=3600){
 }
 async function weatherFor(place){
   const point=await jsonResponse('https://api.weather.gov/points/'+place.lat.toFixed(4)+','+place.lon.toFixed(4));
+  // Never silently use a marine forecast for a beach-air or inland reference.
+  if(place.expectType&&point?.properties?.type!==place.expectType)
+    throw new Error('NWS area forecast is not verified as land at the requested point');
   const href=point?.properties?.forecastHourly;
   if(typeof href!=='string'||!href.startsWith('https://api.weather.gov/'))throw new Error('missing official hourly forecast');
   const response=await jsonResponse(href);
-  return weatherPeriods(response?.properties?.periods||[]);
+  const props=point?.properties||{};
+  const grid=typeof props.gridId==='string'&&Number.isInteger(props.gridX)&&Number.isInteger(props.gridY)
+    ?{office:props.gridId,x:props.gridX,y:props.gridY,resolutionKm:2.5}
+    :null;
+  return {periods:weatherPeriods(response?.properties?.periods||[]),grid};
 }
 
 /* Beach-water forecast: measured level (satellite pixel / buoy) + NOAA lake-model change.
@@ -123,12 +131,14 @@ module.exports=async function handler(req,res){
   if(req.method==='HEAD')return res.status(200).end();
   const place=DESTINATIONS[placeKey]||null;
   const now=new Date();
-  const [analysis,alternative,nearby,forecast,grid]=await Promise.allSettled([
+  const [analysis,alternative,nearby,forecast,grid,inlandForecast,fixedMarine]=await Promise.allSettled([
     textResponse(SOURCE,4500),
     textResponse(GLSEA_CSV,4500),
     place?textResponse('https://www.ndbc.noaa.gov/data/realtime2/'+place.station+'.txt',3700):Promise.resolve(null),
-    place?weatherFor(place):Promise.resolve([]),
-    place?gridCellsFor(place,now):Promise.resolve(null)
+    place?weatherFor(place.forecastReference||place):Promise.resolve(null),
+    place?gridCellsFor(place,now):Promise.resolve(null),
+    placeKey==='saginaw-bay'?weatherFor(INLAND_BAY_COUNTY):Promise.resolve(null),
+    placeKey==='saginaw-bay'?textResponse('https://www.ndbc.noaa.gov/data/realtime2/SBLM4.txt',2600):Promise.resolve(null)
   ]);
 
   const primary=analysis.status==='fulfilled'?parseGLSEA(analysis.value,now):[];
@@ -174,10 +184,27 @@ module.exports=async function handler(req,res){
   const buoyStatus=!place?null:nearby.status==='fulfilled'?'reporting':nearby.reason?.status===404?'offline':'unavailable';
   const nearest=place&&nearby.status==='fulfilled'?parseNDBC(nearby.value,now):null;
   const water=place?waterEvidence(place,nearest,cells):null;
-  const periods=forecast.status==='fulfilled'?forecast.value:[];
+  const periods=forecast.status==='fulfilled'?forecast.value?.periods||[]:[];
   const current=nowPeriod(periods,now);
   const shorelineFeel=placeKey==='saginaw-bay'
     ?beachFeel(current,water,place.beach,place.cells.find(c=>c.key==='inner-bay'),now)
+    :null;
+  const seasonalMarineAir=placeKey==='saginaw-bay'&&nearby.status==='fulfilled'
+    ?marineAirFromNDBC(nearby.value,now):null;
+  const fixedStationAir=placeKey==='saginaw-bay'&&fixedMarine.status==='fulfilled'
+    ?marineAirFromNDBC(fixedMarine.value,now,{stationId:'SBLM4',
+      source:'NOAA NDBC Saginaw Bay Light #1 air temperature',
+      location:'Fixed lighthouse station in mid Saginaw Bay, about 20 km from the park beach'})
+    :null;
+  const observedMarineAir=fixedStationAir||seasonalMarineAir;
+  const inlandCurrent=placeKey==='saginaw-bay'&&inlandForecast.status==='fulfilled'
+    ?nowPeriod(inlandForecast.value?.periods||[],now):null;
+  const physicalScenarios=placeKey==='saginaw-bay'
+    ?scenario({beachWeather:current,inlandWeather:inlandCurrent,water,
+      beach:place.beach,waterReference:place.cells.find(c=>c.key==='inner-bay'),
+      marineAir:observedMarineAir,
+      shoreGrid:forecast.status==='fulfilled'?forecast.value?.grid:null,
+      inlandGrid:inlandForecast.status==='fulfilled'?inlandForecast.value?.grid:null},now)
     :null;
 
   const satellite=place?{
@@ -199,7 +226,7 @@ module.exports=async function handler(req,res){
     source:{name:'NOAA GLERL GLSEA 3',url:analysisUrl,mode:analysisMode,method:'Daily satellite-derived whole-lake surface mean; some pixels may use historical nearby passes or smoothing.'},
     lake:requested,lakes,normal,beachForecast,
     water:water?{...water,beach:place.beach.name}:null,
-    beachFeel:shorelineFeel,
+    beachFeel:shorelineFeel,shorelinePhysics:physicalScenarios,
     local,regionalSatellite:satellite,weatherNow:current,assessments,
     weatherWindow:windows?.relax||null,weatherWindows:windows,
     limitations:['Lakewide surface average is not a beach temperature and is never used as one.','A buoy reading represents its stated location and depth, not nearby sand or harbor water.','A satellite pixel is a daily offshore surface estimate, not a beach thermometer.','Comfort descriptions are qualitative and are not swim-safety determinations.'],

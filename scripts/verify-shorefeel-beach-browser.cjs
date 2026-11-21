@@ -9,6 +9,7 @@ const fs=require('node:fs');
 const path=require('node:path');
 const http=require('node:http');
 const {beachFeel}=require('../lib/shorefeel/beach-feel.js');
+const {scenario}=require('../lib/shorefeel/physics.js');
 
 const root=path.resolve(__dirname,'../public');
 const output=path.resolve(process.env.SHORE_QA_OUTPUT||'artifacts/shorefeel-beach-qa');
@@ -34,11 +35,14 @@ function fixture(){
  const water={kind:'satellite',tempF:58.5,observedAt:time,caveat:'NOAA offshore pixel is not a beach thermometer'};
  const beach={lat:43.6714,lon:-83.9068},cell={lat:43.702,lon:-83.858};
  const impact=beachFeel(weather,water,beach,cell);
+ const physics=scenario({beachWeather:weather,inlandWeather:{startsAt:time,tempF:86},
+   water,beach,waterReference:cell,
+   shoreGrid:{office:'DTX',x:100,y:60},inlandGrid:{office:'DTX',x:95,y:60}},new Date(time));
  const assessment=heading=>({heading,beach:'Cooler air is possible near the shore.',
   water:'Cold-water exposure is possible.',after:'Dry off after immersion.',
   decision:'Consult official safety and beach hazard information.'});
  return {product:'ShoreFeel',generatedAt:time,weatherNow:weather,water,
-  beachFeel:impact,lakes:{huron:{status:'recent',latest:{tempF:63,date:time.slice(0,10)}}},
+  beachFeel:impact,shorelinePhysics:physics,lakes:{huron:{status:'recent',latest:{tempF:63,date:time.slice(0,10)}}},
   local:{measurement:null},
   regionalSatellite:{cells:[
    {key:'inner-bay',measurement:{tempF:58.5,sampleLat:43.702,sampleLon:-83.858,observedAt:time}},
@@ -69,8 +73,13 @@ async function run(){
    assert.match(await page.locator('#lead-temp').innerText(),/°F/);
    assert.match(await page.locator('#lead-wind').innerText(),/12 mph from NE/);
    assert.match(await page.locator('#lead-water').innerText(),/58.5°F/);
-   assert.match(await page.locator('#lead-source').innerText(),/NWS forecast/);
+   assert.match(await page.locator('#lead-source').innerText(),/NWS land-side area forecast/);
    assert.match(await page.locator('#lead-band-note').innerText(),/No exact degree correction/);
+   await page.locator('details.shore-physics summary').click();
+   assert.match(await page.locator('#physics-forecast-contrast').innerText(),/-4\.0°F/);
+   assert.match(await page.locator('#physics-model-range').innerText(),/°F \(scenarios\)/);
+   assert.match(await page.locator('#physics-model-limits').innerText(),/not an actual beach forecast/i);
+   assert.match(await page.locator('#physics-grid-info').innerText(),/different 2\.5 km NWS forecast grid cells/i);
    assert.equal(await page.locator('#bay-map').getAttribute('data-basemap'),'openstreetmap');
    await page.locator('button[data-activity="swim"]').click();
    assert.match(await page.locator('#activity-heading').innerText(),/Swimming preparation/);
@@ -92,6 +101,8 @@ async function run(){
   await failure.goto(origin+'/lake-huron-water-temperature/saginaw-bay/',{waitUntil:'domcontentloaded'});
   await failure.waitForFunction(()=>document.querySelector('#lead-temp')?.textContent==='Beach feel unavailable',{timeout:12000});
   assert.match(await failure.locator('#lead-band-note').innerText(),/could not be retrieved/);
+  await failure.locator('details.shore-physics summary').click();
+  assert.match(await failure.locator('#physics-model-range').innerText(),/unavailable/);
   report.push({width:390,mode:'upstream-offline',result:'fail closed'});
   await offline.close();
   const noJs=await browser.newContext({viewport:{width:390,height:860},javaScriptEnabled:false});
@@ -101,6 +112,8 @@ async function run(){
   await pg.locator('details.evidence summary').click();
   assert.match(await pg.locator('#lead-caveat').innerText(),/not a thermometer on the sand/);
   assert.ok((await pg.locator('a[href*="weather.gov/apx/lake_breeze"]').count())>=1);
+  await pg.locator('details.shore-physics summary').click();
+  assert.match(await pg.locator('#physics-model-limits').innerText(),/not calibrated/);
   report.push({width:390,mode:'no-javascript',result:'readable source and limits'});
   await noJs.close();
   fs.writeFileSync(path.join(output,'report.json'),JSON.stringify({pass:true,journeys:report},null,2));

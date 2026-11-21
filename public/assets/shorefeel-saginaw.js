@@ -36,14 +36,38 @@ function renderLead(){
  put('lead-temp',weather?Math.round(feel.apparentF)+'°F':'Beach feel unavailable');
  put('lead-band',weather?feel.label:'Beach conditions unverified');
  put('lead-band-note',weather?feel.note:'A current NWS shoreline-area forecast is not available. We cannot infer beach air from water alone.');
- put('lead-source',weather?feel.apparentMethod+' · NWS forecast for '+date(feel.startsAt)+'. Not a measured sand-side temperature.':'No current verified beach-area forecast');
+ put('lead-source',weather?feel.apparentMethod+' · NWS land-side area forecast near the park at '+date(feel.startsAt)+'. Not a sand-side air measurement.':'No current verified beach-area forecast');
  put('lead-wind',weather&&Number.isFinite(feel.windMph)?Math.round(feel.windMph)+' mph'+(feel.windFrom?' from '+feel.windFrom:''):'Unavailable');
  put('lead-water',validWater?temp(water.tempF)+' · analyzed offshore':'Not verified');
  put('lead-humidity',weather&&Number.isFinite(feel.humidity)?Math.round(feel.humidity)+'%':'Unavailable');
  put('lake-influence-detail',weather?feel.dataLine:'Wind direction and water temperature will be compared when the NWS forecast is available.');
  put('lead-caveat',weather?feel.limitation:'NWS area air, nearby analyzed water and wind direction are different observations. There is no directly measured beach-air temperature here.');
- put('hero-scope',weather?'Bay City State Park · '+feel.apparentMethod+' (forecast, not a beach thermometer)':'Bay City State Park · no recent shoreline-area air forecast');
+ put('hero-scope',weather?'Bay City State Park · nearby land NWS forecast (~0.25 mile inland) · '+feel.apparentMethod:'Bay City State Park · no recent shoreline-area air forecast');
  put('last-updated',payload?.generatedAt?'Sources checked '+date(payload.generatedAt):'Unable to verify latest source');
+ const physics=payload?.shorelinePhysics;
+ const paired=physics?.paired,grid=physics?.gridRelationship;
+ put('physics-grid-info',grid?.description||'NWS grid source identities not available.');
+ const marine=physics?.independentMarineAir;
+ put('physics-marine-reference',marine&&Number.isFinite(marine.tempF)
+   ?marine.source+' · '+marine.tempF.toFixed(1)+'°F at '+date(marine.observedAt)+'. '+marine.location+'. This is offshore evidence, not an observation on the beach.'
+   :'No recent verified air thermometer report from Saginaw Bay Light #1 or seasonal NOAA buoy 45163. These offshore instruments are not beach thermometers.');
+ put('physics-forecast-contrast',paired
+   ?(paired.nwsDifferenceF>0?'+':'')+paired.nwsDifferenceF.toFixed(1)+'°F (shore vs inland)'
+   :'Comparison unavailable');
+ put('physics-forecast-note',paired
+   ?'NWS shore '+Math.round(paired.beachNwsF)+'°F · west Bay County '+Math.round(paired.inlandF)+'°F. Different gridded forecast cells, not independent thermometer measurements.'
+   :grid?.status==='same-grid'?'Both sites use the same NWS forecast cell. We will not present that as an observed shoreline difference.'
+   :'Two current NWS hourly forecasts with verified distinct cells are required; no inland difference is inferred.');
+ const modeled=physics?.status==='research-only';
+ put('physics-model-range',modeled
+   ?physics.lowF.toFixed(1)+'–'+physics.highF.toFixed(1)+'°F (scenarios)'
+   :'Research scenarios unavailable');
+ put('physics-model-note',modeled
+   ?physics.scenarioCount+' mathematical scenarios with NOAA inner-bay water '+physics.waterF.toFixed(1)+'°F, NWS inland air and onshore wind.'
+   :(physics?.reason||'The physics scenarios are only evaluated when source requirements are met.'));
+ put('physics-model-limits',modeled
+   ?'Not an actual beach forecast or statistical confidence interval. Hypothetical over-water travel 2, 5, 10 km; mixed-layer depth 20, 60, 150 m; heat transfer coefficient 0.0008, 0.0012, 0.002. These parameters are not locally measured. NOAA offshore air observations, when available, are a separate reference and do not calibrate this model.'
+   :'This model does not fill missing NOAA observations with guessed values. A beach-specific numeric correction needs actual shoreline measurements for calibration; no such validation is asserted.');
  const h=payload?.lakes?.huron;
  put('huron-context',h?.status==='recent'?'Lake Huron whole-lake water average: '+temp(h.latest.tempF)+' ('+h.latest.date+'). Not the beach air or local water.':'Lake Huron whole-lake surface analysis unavailable.');
 }
@@ -68,7 +92,7 @@ function renderEvidence(){
  put('buoy-status',local?.measurement?'Fresh offshore buoy observation · '+date(local.measurement.observedAt):'NOAA buoy 45163: no recent valid report; seasonal station.');
  put('shore-air',Number.isFinite(payload?.weatherNow?.tempF)?Math.round(payload.weatherNow.tempF)+'°F':'Unavailable');
  put('shore-wind',Number.isFinite(payload?.weatherNow?.windMph)?payload.weatherNow.windMph+' mph'+(payload.weatherNow.windDirection?' from '+payload.weatherNow.windDirection:''):'Unavailable');
- put('shore-forecast-time',payload?.weatherNow?.startsAt?'NWS hourly forecast for the Bay City State Park area · '+date(payload.weatherNow.startsAt):'NWS hourly forecast unavailable.');
+ put('shore-forecast-time',payload?.weatherNow?.startsAt?'NWS land-side hourly forecast near Bay City State Park · '+date(payload.weatherNow.startsAt):'NWS hourly forecast unavailable.');
  renderSelected();
 }
 function renderActivity(a){
@@ -137,6 +161,9 @@ async function load(){
   put('lead-source','Official forecast temporarily unavailable.');
   put('lead-wind','Unavailable');put('lead-water','Not verified');put('lead-humidity','Unavailable');
   put('lake-influence-detail','Without current weather, no beach temperature is inferred.');
+  put('physics-forecast-contrast','Comparison unavailable');put('physics-model-range','Research scenarios unavailable');
+  put('physics-forecast-note','NWS forecast data unavailable');put('physics-grid-info','NWS forecast grid metadata unavailable');
+  put('physics-marine-reference','Offshore NOAA air temperature unavailable');put('physics-model-note','NOAA or NWS source unavailable');
   put('lead-caveat','No inland or water-temperature reading is substituted for a beach thermometer.');
   put('last-updated','Latest data not verified');put('selected-source','Source unavailable');
   put('buoy-status','No verified buoy observation');
