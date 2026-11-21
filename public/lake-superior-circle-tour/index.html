@@ -351,6 +351,7 @@ a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}
 <script defer src="/assets/growth-cta.js"></script>
 <link rel="stylesheet" href="/assets/journey-atlas-v1.css">
 <link rel="stylesheet" href="/assets/circle-tour-bridge.css">
+<link rel="stylesheet" href="/assets/circle-tour-pace.css">
 <style>
 .stop-google-map{margin:14px 0 12px}
 .stop-google-map a{display:inline-flex;align-items:center;min-height:44px;padding:8px 12px;border:1px solid #b8c9bf;border-radius:5px;background:#f4f9f5;color:#214e37;font-weight:700;text-decoration:underline;text-underline-offset:3px}
@@ -387,6 +388,29 @@ a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}
     <a href="#segTabs" data-growth-cta="circle-tour-browse-stops">Browse all 31 stops</a>
     <a href="#journey-atlas">Explore experiences by time and interest</a>
   </div>
+  <section class="ctpace" id="circle-tour-pace" aria-labelledby="ctpace-heading">
+    <div class="ctpace-head">
+      <div class="ctpace-intro">
+        <p class="ctpace-eyebrow">Route Rhythm / compare the driving days</p>
+        <h3 id="ctpace-heading">How much of the day belongs to the road?</h3>
+        <p>From the freighters at Duluth to the granite headlands of Ontario, the best stops deserve time away from the windshield. Set a comfortable daily driving limit and see where each published itinerary asks for more.</p>
+      </div>
+      <label class="ctpace-hours" for="ctpace-hours"><span>My daily driving target</span>
+        <select id="ctpace-hours">
+          <option value="4">4 hours</option>
+          <option value="5" selected>5 hours</option>
+          <option value="6">6 hours</option>
+          <option value="7">7 hours</option>
+          <option value="8">8 hours</option>
+        </select>
+      </label>
+    </div>
+    <p class="ctpace-verdict" id="ctpace-verdict" role="status" aria-live="polite">At a rough 5-hour daily driving target, the 7-day itinerary has three longer road days, the 10-day itinerary has two, and the 15-day itinerary has none. The original written routes remain available below.</p>
+    <div class="ctpace-routes" id="ctpace-routes">
+      <p>Compare the full 7-, 10-, and 15-day itineraries below. This driving comparison is enhanced when JavaScript is available.</p>
+    </div>
+    <p class="ctpace-method">Each bar represents one published day. Road-time allowance is estimated from the published mileage at 47 mph with a 20% planning margin. This is <strong>not a routed ETA</strong> and does not account for visits, border waits, road conditions, or every park approach. <a href="#circle-tour-itineraries">Read the complete itineraries and road evidence</a> before making reservations.</p>
+  </section>
   <div class="planner-controls" aria-label="Map itinerary controls">
     <div class="preset-buttons" role="group" aria-label="Choose an itinerary">
       <button class="preset-btn" type="button" data-preset="7">7-Day Highlights</button>
@@ -1386,5 +1410,6 @@ a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}
 <script defer src="/assets/journey-atlas-v1.js"></script>
 <script defer src="/assets/circle-tour-place-story-data.js"></script>
 <script defer src="/assets/circle-tour-bridge.js"></script>
+<script defer src="/assets/circle-tour-pace.js?v=20261121"></script>
 </body>
 </html>
