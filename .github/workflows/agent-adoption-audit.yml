@@ -1,0 +1,32 @@
+name: Cross-repository agent adoption audit
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '13 12 * * 1'
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test the local audit contract
+        run: node --test tests/agent-adoption-audit.test.js
+      - name: Audit registered public repository entrypoints
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/audit-agent-adoption.mjs
+      - name: Retain read-only report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cross-repo-agent-adoption
+          path: artifacts/agent-adoption-audit.json
+          retention-days: 14
+          if-no-files-found: warn
