@@ -77,6 +77,9 @@ test('NWS parser preserves wind direction, humidity, and hourly forecast source'
  assert.equal(p[0].humidity,64);
  assert.equal(p[0].windMph,15);
  assert.equal(p[0].tempF,79);
+ const missing=weatherPeriods([{startTime:'2026-07-01T13:00:00Z',temperature:null,windSpeed:'Calm',relativeHumidity:{value:null}}]);
+ assert.equal(missing[0].tempF,null,'no zero-degree forecast invented');
+ assert.equal(missing[0].humidity,null,'no zero-humidity forecast invented');
 });
 
 test('pilot leads with beach feel while preserving separately sourced water, ads and geographic evidence',()=>{
