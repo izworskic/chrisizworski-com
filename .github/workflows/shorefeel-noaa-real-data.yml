@@ -5,6 +5,9 @@ on:
     paths:
       - 'scripts/shorefeel-pull-noaa-research.py'
       - 'tests/test_shorefeel_noaa_pull.py'
+      - 'tests/test_shorefeel_real_snapshots.py'
+      - 'research/shorefeel/noaa/**'
+      - 'docs/SHOREFEEL_REAL_NOAA_EVIDENCE_2026.md'
       - '.github/workflows/shorefeel-noaa-real-data.yml'
   workflow_dispatch:
 
@@ -27,7 +30,9 @@ jobs:
         with:
           python-version: '3.11'
       - name: Run offline source-range and NDBC quality tests
-        run: python3 -m unittest discover -s tests -p test_shorefeel_noaa_pull.py -v
+        run: |
+          python3 -m unittest discover -s tests -p test_shorefeel_noaa_pull.py -v
+          python3 -m unittest discover -s tests -p test_shorefeel_real_snapshots.py -v
       - name: Install pinned ecCodes Python bindings
         run: python3 -m pip install --disable-pip-version-check eccodes==2.50.1
       - name: Retrieve real NOAA archives across three 2026 seasons
