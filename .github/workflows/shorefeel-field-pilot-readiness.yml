@@ -1,0 +1,77 @@
+name: ShoreFeel Saginaw Bay field pilot source readiness
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/shorefeel-field-preflight.py'
+      - 'tests/test_shorefeel_field_preflight.py'
+      - 'scripts/shorefeel-nws-forecast-capture.py'
+      - 'tests/test_shorefeel_nws_forecast_capture.py'
+      - 'docs/SHOREFEEL_SAGINAW_FIELD_PILOT_20261121.md'
+      - '.github/workflows/shorefeel-field-pilot-readiness.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: shorefeel-field-pilot-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  source-and-instrument-readiness:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: ShoreFeel field, NOAA and GLOS scientific tests
+        run: python3 -m unittest discover -s tests -p 'test_shorefeel_*.py' -v
+      - name: Capture real NWS pre-issued shore and inland reference forecasts
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/shorefeel-field-pilot
+          python3 scripts/shorefeel-nws-forecast-capture.py \
+            --output artifacts/shorefeel-field-pilot/nws-issued.json
+          python3 - <<'PY'
+          import json
+          from datetime import datetime
+          p='artifacts/shorefeel-field-pilot/nws-issued.json'
+          data=json.load(open(p,encoding='utf-8'))
+          assert data['schema']=='shorefeel.nws-received-forecast.v1'
+          assert data['siteCount']==2
+          assert data['publicationAuthorized'] is False
+          assert data['beachAirMeasurementF'] is None
+          assert data['modelBeachF'] is None
+          for site in data['pointForecasts']:
+            assert site['futurePeriods']
+            for period in site['futurePeriods']:
+              issue=datetime.fromisoformat(period['nwsIssuedAt'].replace('Z','+00:00'))
+              valid=datetime.fromisoformat(period['validAt'].replace('Z','+00:00'))
+              assert issue < valid, 'Retrospective forecast not allowed'
+          print('ShoreFeel source capture',
+                json.dumps({'status':data['status'],
+                  'gridDistinct':data['distinctForecastGridCells'],
+                  'siteGridCells':[s['grid'] for s in data['pointForecasts']],
+                  'periodCounts':[len(s['futurePeriods']) for s in data['pointForecasts']],
+                  'publicationAuthorized':False},sort_keys=True))
+          PY
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned site dependencies
+        run: npm ci
+      - name: Full owner repository verification
+        run: npm run verify:all
+      - name: Retain non-private NWS research evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: shorefeel-prospective-nws-evidence
+          path: artifacts/shorefeel-field-pilot/nws-issued.json
+          if-no-files-found: ignore
+          retention-days: 14
