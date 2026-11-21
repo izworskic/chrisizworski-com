@@ -679,7 +679,7 @@
   };
 
   const mapFrame = document.querySelector(".map-frame");
-  const loadMap = () => import("/assets/lake-superior-circle-tour-map.js?v=20261116-gmaps").catch(() => {
+  const loadMap = () => import("/assets/lake-superior-circle-tour-map.js?v=20261121-layout").catch(() => {
     byId("mapStatus").innerHTML = '<div class="map-unavailable"><strong>The interactive map could not load.</strong>Use the synchronized itinerary preview, Google Maps day links, and all 31 stop cards on this page.</div>';
   });
   if ("IntersectionObserver" in window) {
