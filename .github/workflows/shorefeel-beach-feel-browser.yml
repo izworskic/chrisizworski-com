@@ -1,0 +1,46 @@
+name: ShoreFeel beach microclimate browser QA
+on:
+  pull_request:
+    paths:
+      - 'lib/shorefeel/**'
+      - 'api/shorefeel.js'
+      - 'public/assets/shorefeel-saginaw.*'
+      - 'public/lake-huron-water-temperature/saginaw-bay/**'
+      - 'tests/shorefeel-beach-feel.test.js'
+      - 'scripts/verify-shorefeel-beach-browser.cjs'
+      - '.github/workflows/shorefeel-beach-feel-browser.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: shorefeel-beach-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: NWS apparent-temperature and shore wind source tests
+        run: node --test tests/shorefeel-beach-feel.test.js tests/shorefeel-saginaw.test.js
+      - name: Install isolated pinned browser harness
+        run: |
+          npm install --prefix "$RUNNER_TEMP/shorefeel-playwright" --ignore-scripts --no-package-lock playwright@1.56.1
+          "$RUNNER_TEMP/shorefeel-playwright/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Run phone, desktop and no-data visits
+        env:
+          SHORE_QA_OUTPUT: artifacts/shorefeel-beach-qa
+        run: SHORE_PW_MODULE="$RUNNER_TEMP/shorefeel-playwright/node_modules/playwright" node scripts/verify-shorefeel-beach-browser.cjs
+      - name: Upload browser screenshots and evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: shorefeel-beach-qa
+          path: artifacts/shorefeel-beach-qa/
+          if-no-files-found: ignore
+          retention-days: 7
