@@ -38,10 +38,41 @@ test('synthetic field holdout metrics are paired and NEVER authorize publication
  assert.equal(result.holdout.maeImprovementF,2);
  assert.ok(result.holdout.windSectors.onshore>10);
  assert.ok(result.holdout.windSectors.offshore>10);
+ assert.equal(result.holdout.independentEvents,true);
+ assert.equal(result.holdout.eventLeakageCount,0);
+ assert.equal(result.holdout.byWindSector.onshore.nwsBeachBaseline.maeF,3);
+ assert.equal(result.holdout.byWindSector.onshore.physicsCandidate.maeF,1);
+ assert.equal(result.holdout.byWindSector.offshore.maeImprovementF,2);
+ assert.equal(result.holdout.byWindSector.alongshore.n,0);
+ assert.equal(result.holdout.byWindSector.alongshore.maeImprovementF,null);
  assert.equal(result.publicationAuthorized,false);
  assert.equal(result.automaticCalibration,false);
  assert.equal(result.modelLock.version,'synthetic-v1-lock');
 });
+test('weather event that crosses the training and holdout split blocks skill review',()=>{
+ const d=dataset();
+ const training=d.observations.find(r=>r.observedAt==='2026-07-16T08:00:00.000Z');
+ const withheld=d.observations.find(r=>r.observedAt==='2026-07-17T08:00:00.000Z');
+ assert.ok(training&&withheld);
+ withheld.eventId=training.eventId;
+ const r=fieldAudit(d,now);
+ assert.equal(r.status,'insufficient-field-evidence');
+ assert.equal(r.holdout.eventLeakageCount,1);
+ assert.equal(r.holdout.independentEvents,false);
+ assert.match(r.reason,/Training and holdout share weather event IDs/);
+ assert.equal(r.holdout.n,120,'error metrics may be described but not certified');
+ assert.equal(r.publicationAuthorized,false);
+});
+
+test('non-string event identifiers are not usable scientific grouping keys',()=>{
+ const d=dataset();
+ d.observations[0].eventId={accidental:'object'};
+ const r=fieldAudit(d,now);
+ assert.equal(r.rejected.missing,1);
+ assert.equal(r.sampleCount,247);
+ assert.equal(r.publicationAuthorized,false);
+});
+
 test('future, duplicate, conflict, post-issue, null air and missing forecasts fail closed',()=>{
  const d=dataset();
  const row=d.observations[0];
