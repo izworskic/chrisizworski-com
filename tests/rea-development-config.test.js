@@ -1,13 +1,16 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFile, stat } from 'node:fs/promises';
+import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 
 const root = path.resolve(import.meta.dirname, '..');
 const read = (name) => readFile(path.join(root, name), 'utf8');
 
 test('REA cannot auto-connect through this repository', async () => {
-  await assert.rejects(stat(path.join(root, '.mcp.json')), { code: 'ENOENT' });
+  const config = JSON.parse(await read('.mcp.json'));
+  const servers = config.mcpServers || {};
+  assert.ok(Object.keys(servers).every(name => !/\brea\b|rea-agents/i.test(name)));
+  assert.doesNotMatch(JSON.stringify(servers), /rea-agents/i);
 
   const pkg = JSON.parse(await read('package.json'));
   for (const section of ['dependencies', 'devDependencies', 'optionalDependencies']) {
