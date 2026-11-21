@@ -73,9 +73,35 @@ function renderActivity(a){
 function buildMap(){
  const host=id('bay-map');if(!host||!window.L)return;
  map=window.L.map(host,{scrollWheelZoom:false}).setView([43.81,-83.76],9);
- window.L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{
-  subdomains:'abcd',maxZoom:18,attribution:'&copy; OpenStreetMap contributors &copy; CARTO'
+ // Start with a reliable, attributed map. Never request CARTO tiles without a public key.
+ const osm=window.L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
+  maxZoom:18,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
  }).addTo(map);
+ host.dataset.basemap='openstreetmap';
+ // A public browser basemap key is supplied only by the existing same-origin endpoint.
+ // Leave OSM visible until the keyed CARTO tiles finish loading; on any tile error retain OSM.
+ fetch('/api/carto-basemap-config',{credentials:'same-origin',signal:AbortSignal.timeout(6500)})
+ .then(r=>r.ok?r.json():null).then(config=>{
+  if(!map||!config||config.provider!=='CARTO'||typeof config.key!=='string'||!config.key.trim())return;
+  const key=encodeURIComponent(config.key.trim());
+  const carto=window.L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png?key='+key,{
+   subdomains:'abcd',maxZoom:18,
+   attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+  });
+  let failed=false;
+  carto.on('tileerror',()=>{
+   if(failed)return;
+   failed=true;
+   if(map.hasLayer(carto))map.removeLayer(carto);
+   host.dataset.basemap='openstreetmap';
+  });
+  carto.on('load',()=>{
+   if(failed||!map.hasLayer(carto))return;
+   if(map.hasLayer(osm))map.removeLayer(osm);
+   host.dataset.basemap='carto';
+  });
+  carto.addTo(map);
+ }).catch(()=>{host.dataset.basemap='openstreetmap';});
  window.L.circleMarker([43.6714,-83.9068],{radius:7,weight:2,color:'#153e4e',fillColor:'#ffffff',fillOpacity:1})
  .addTo(map).bindPopup('<strong>Bay City State Park beach</strong><p>Public shoreline location; not a water-temperature instrument.</p><a href="https://www.michigan.gov/recsearch/parks/baycity" target="_blank" rel="noopener noreferrer">Park information</a>');
  points.forEach(p=>{
