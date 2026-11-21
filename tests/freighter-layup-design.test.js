@@ -30,9 +30,9 @@ test('design presentation is isolated from permanent vessel biography pages',()=
  assert.ok(css.includes('.layup-home .feature-grid'));
  assert.ok(css.includes('@media(max-width:580px)'));
 });
-test('all twelve crawlable ship names and five verified harbor names remain in source',()=>{
+test('all 27 crawlable ship names and 18 source-scoped harbors remain in the static HTML',()=>{
  const s=registry.seasons.find(x=>x.id==='2025-26');
- assert.equal(s.records.length,12);
+ assert.equal(s.records.length,27);
  for(const v of s.records)assert.ok(html.includes('<h3>'+v.name+'</h3>'),'static fallback '+v.name);
  for(const id of ['season','stat-ships','stat-harbors','stat-year','ship-search','harbor-filter','berth-filter','clear-filters','count-note'])assert.ok(html.includes('id="'+id+'"'),id);
 });

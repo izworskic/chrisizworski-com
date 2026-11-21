@@ -276,7 +276,7 @@
    const lat=footprint.map(h=>h.lat),lon=footprint.map(h=>h.lon);
    const bounds=footprint.length?
      [[Math.max(40.7,Math.min(...lat)-.7),Math.max(-93.6,Math.min(...lon)-1.05)],
-      [Math.min(49.1,Math.max(...lat)+.8),Math.min(-77.9,Math.max(...lon)+1.05)]]:
+      [Math.min(49.1,Math.max(...lat)+.8),Math.min(-71.6,Math.max(...lon)+1.05)]]:
      [[41.1,-93.1],[48.9,-78.0]];
    state.map.fitBounds(bounds,{padding:[24,24],maxZoom:6,animate:false});
    $('layup-map').dataset.initialBounds=bounds.map(p=>p.join(',')).join('|');

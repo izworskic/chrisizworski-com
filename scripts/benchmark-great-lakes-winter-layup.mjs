@@ -34,7 +34,7 @@ score(
   s25Photos === spec.dimensions.vesselPhotoCoverage.required2024_25VesselPhotos &&
     s26Photos === spec.dimensions.vesselPhotoCoverage.required2025_26VesselPhotos &&
     bioPhotos === spec.dimensions.vesselPhotoCoverage.requiredBiographyProfilesWithPhotos,
-  `2024-25 photos: ${s25Photos}/2, 2025-26 photos: ${s26Photos}/12, Biography pages with verified photo: ${bioPhotos}/6`
+  `2024-25 photos: ${s25Photos}/${s25?.records?.length || 0}, 2025-26 photos: ${s26Photos}/${s26?.records?.length || 0}, Biography pages with verified photo: ${bioPhotos}/6`
 );
 
 // 2. 100% Illustrated Breakout Cards on Home Page (20 pts)
