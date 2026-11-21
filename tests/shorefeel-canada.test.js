@@ -115,7 +115,7 @@ test('static Canada page preserves park links and explicit public-health paths w
  assert.equal((page.match(/class="shore-stop"/g)||[]).length,30);
  for(const item of catalog.locations){
   assert.ok(page.includes('data-slug="'+item.slug+'"'),item.slug);
-  assert.ok(page.includes('href="'+item.officialUrl+'"'),item.slug);
+  assert.ok(page.includes('href="'+item.officialUrl.replaceAll('&','&amp;')+'"'),item.slug);
   assert.ok(page.includes('data-advisory="'+item.advisory.url+'"'),item.slug);
  }
  assert.match(page,/rel="canonical" href="https:\/\/chrisizworski\.com\/great-lakes-beaches\/canada\//);
