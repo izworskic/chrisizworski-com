@@ -109,7 +109,7 @@ test('experience source paths and offline fallbacks are honest before JavaScript
  const css=read('public/assets/shorefeel-saginaw.css');
  assert.match(html,/class="bay-quick-actions"/);
  for(const id of ['bay-evidence','map-h','experience-h'])assert.ok(html.includes('href="#'+id+'"'));
- assert.match(html,/id="lead-temp"[^>]*>No current local reading verified/);
+ assert.match(html,/id="lead-temp"[^>]*>Checking beach feel/);
  assert.ok(html.includes('id="value-inner-bay">Not verified'));
  assert.ok(html.includes('id="value-buoy">Not verified'));
  assert.ok(html.includes('https://www.google.com/maps/search/'));
