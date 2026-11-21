@@ -7,6 +7,8 @@ on:
       - 'public/assets/shorefeel-saginaw.*'
       - 'public/lake-huron-water-temperature/saginaw-bay/**'
       - 'tests/shorefeel-beach-feel.test.js'
+      - 'tests/shorefeel-physics.test.js'
+      - 'tests/shorefeel-noaa-grid.test.js'
       - 'scripts/verify-shorefeel-beach-browser.cjs'
       - '.github/workflows/shorefeel-beach-feel-browser.yml'
   workflow_dispatch:
@@ -27,7 +29,7 @@ jobs:
         with:
           node-version: '22'
       - name: NWS apparent-temperature and shore wind source tests
-        run: node --test tests/shorefeel-beach-feel.test.js tests/shorefeel-saginaw.test.js tests/shorefeel-physics.test.js
+        run: node --test tests/shorefeel-beach-feel.test.js tests/shorefeel-saginaw.test.js tests/shorefeel-physics.test.js tests/shorefeel-noaa-grid.test.js
       - name: Install isolated pinned browser harness
         run: |
           npm install --prefix "$RUNNER_TEMP/shorefeel-playwright" --ignore-scripts --no-package-lock playwright@1.56.1
