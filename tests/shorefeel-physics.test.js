@@ -103,7 +103,7 @@ test('API/page integration preserves the forecast as first answer and research-o
  assert.match(api,/shorelinePhysics:physicalScenarios/);
  assert.match(api,/marineAirFromNDBC\(nearby\.value,now\)/);
  assert.match(api,/weatherFor\(INLAND_BAY_COUNTY\)/);
- assert.match(api,/SBLM4\\.txt/);
+ assert.match(api,/SBLM4\.txt/);
  assert.match(api,/shoreGrid:forecast\\.status/);
  assert.match(html,/id="physics-model-range"/);
  assert.match(html,/id="physics-forecast-contrast"/);
