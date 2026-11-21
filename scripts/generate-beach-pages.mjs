@@ -160,7 +160,7 @@ ${cameraStylesheet}  <script type="application/ld+json">${json(schema)}</script>
       <h1 id="page-title">${html(beach.name)}</h1>
       <p class="hero-lede">${html(beach.summary)}</p>
       <p class="hero-truth">${html(beach.access)} · ${html(beach.county)} County. NWS swim risk is a forecast, not the posted flag; live planning data is not a water-safety certification.</p>
-      <a class="shorefeel-jump" href="#at-the-beach">What will it feel like at the beach?</a>
+      <a class="shorefeel-jump" href="#at-the-beach">${beach.swimming === false ? "What will it feel like on the waterfront?" : "What will it feel like at the beach?"}</a>
     </div></div>
   </section>
   <p class="photo-credit">Site-wide beach report photo: <a href="https://www.nps.gov/media/photo/view.htm?id=E0B12B9C-69F2-47E7-9E7F-93F11623B476" rel="noopener">Sleeping Bear Dunes National Lakeshore, National Park Service</a> (public domain).</p>
@@ -183,9 +183,9 @@ ${cameraStylesheet}  <script type="application/ld+json">${json(schema)}</script>
 
 ${cameraSection}    <section class="section shorefeel-field-note" id="at-the-beach" aria-labelledby="shorefeel-heading">
       <div class="shorefeel-intro">
-        <p class="section-kicker">ShoreFeel · At the beach</p>
-        <h2 id="shorefeel-heading">What will it feel like at the beach?</h2>
-        <p>${html(beach.summary)} The open shore can feel different from the air behind the dunes, trees or nearby buildings. A breeze off the lake is worth watching, but the local wind direction has not been verified for a shoreline cooling estimate here.</p>
+        <p class="section-kicker">${beach.swimming === false ? "ShoreFeel · At the waterfront" : "ShoreFeel · At the beach"}</p>
+        <h2 id="shorefeel-heading">${beach.swimming === false ? "What will it feel like on the waterfront?" : "What will it feel like at the beach?"}</h2>
+        <p>${html(beach.summary)} ${beach.swimming === false ? "Along this riverfront, open ground may feel breezier than sheltered city streets. This location is not a designated swim beach and the nearby lake water data is not river water." : "The open shore can feel different from the air behind dunes, trees or nearby buildings. A breeze off the lake is worth watching, but local wind direction has not been verified for a shoreline cooling estimate here."}</p>
       </div>
       <div class="shorefeel-field-reading" data-shorefeel role="group" aria-label="Weather forecast and water evidence for ${html(beach.name)}">
         <div class="shorefeel-main">
