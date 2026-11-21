@@ -56,7 +56,7 @@ def safe_api_url(url, *, forecast=False):
         raise ValueError("NWS URL must be an unmodified secure api.weather.gov endpoint")
     if forecast and not (p.path.startswith("/gridpoints/") and
                          p.path.endswith("/forecast/hourly") and
-                         p.path.count("/") == 4):
+                         p.path.count("/") == 5):
         raise ValueError("Expected official NWS hourly gridpoint URL")
     return url
 
