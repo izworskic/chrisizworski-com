@@ -85,6 +85,17 @@ class GlosStationTests(unittest.TestCase):
         self.assertEqual(r2["coverage"]["conflictingRevision"], 1)
         self.assertEqual(r2["coverage"]["goodAirRows"], 0)
 
+    def test_erddap_provider_unit_aliases_and_aggregate_test_names(self):
+        x = fixture()
+        self.assertIn("air_temperature_aggregate_test", x["table"]["columnNames"])
+        self.assertIn("wind_speed_aggregate_test", x["table"]["columnNames"])
+        self.assertIn("wind_from_direction_aggregate_test", x["table"]["columnNames"])
+        x["table"]["columnUnits"][5] = "m/s"
+        x["table"]["columnUnits"][7] = "°"
+        r = self.check(payload=x)
+        self.assertEqual(r["coverage"]["goodAirAndWindRows"], 1)
+        self.assertEqual(r["observations"][0]["observedWindMph"], 8.95)
+
     def test_wrong_units_fail_closed_instead_of_fake_fahrenheit(self):
         x = fixture()
         x["table"]["columnUnits"][3] = "degree_C"
