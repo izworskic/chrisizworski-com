@@ -29,16 +29,25 @@ function band(t){
  return {key:'warm',name:'Warmer water',note:'Temperature alone never establishes swimming safety or water quality.'};
 }
 function renderLead(){
- const m=payload?.water,ok=Number.isFinite(m?.tempF),b=band(m?.tempF);
- const hero=id('bay-hero');if(hero)hero.dataset.band=b.key;
- put('lead-temp',ok?temp(m.tempF):'Not verified');
- put('lead-band',b.name);put('lead-band-note',b.note);
- put('lead-source',ok?(m.kind==='satellite'?'NOAA satellite surface analysis':'NOAA observed buoy')+' · '+date(m.observedAt):'No recent verified surface pixel at the Bay City reference');
- put('lead-caveat',ok?m.caveat:'We do not use the whole Lake Huron average or a distant seasonal buoy as the temperature at Bay City State Park.');
- put('hero-scope','Bay City State Park shoreline reference · '+(ok?'offshore, not at the beach':'local reading unavailable'));
- put('last-updated',payload?.generatedAt?'Checked '+date(payload.generatedAt):'Unable to verify latest source');
- const h=payload?.lakes?.huron;put('huron-context',h?.status==='recent'?'Lake Huron whole-lake average: '+temp(h.latest.tempF)+' ('+h.latest.date+'). Not the bay temperature.':'Lake Huron whole-lake surface analysis unavailable.');
+ const feel=payload?.beachFeel,weather=feel?.status==='forecast-based';
+ const water=payload?.water,validWater=Number.isFinite(water?.tempF);
+ const hero=id('bay-hero');
+ if(hero)hero.dataset.band=!weather?'none':feel.apparentF<50?'cold':feel.apparentF>=85?'warm':'cool';
+ put('lead-temp',weather?Math.round(feel.apparentF)+'°F':'Beach feel unavailable');
+ put('lead-band',weather?feel.label:'Beach conditions unverified');
+ put('lead-band-note',weather?feel.note:'A current NWS shoreline-area forecast is not available. We cannot infer beach air from water alone.');
+ put('lead-source',weather?feel.apparentMethod+' · NWS forecast for '+date(feel.startsAt)+'. Not a measured sand-side temperature.':'No current verified beach-area forecast');
+ put('lead-wind',weather&&Number.isFinite(feel.windMph)?Math.round(feel.windMph)+' mph'+(feel.windFrom?' from '+feel.windFrom:''):'Unavailable');
+ put('lead-water',validWater?temp(water.tempF)+' · analyzed offshore':'Not verified');
+ put('lead-humidity',weather&&Number.isFinite(feel.humidity)?Math.round(feel.humidity)+'%':'Unavailable');
+ put('lake-influence-detail',weather?feel.dataLine:'Wind direction and water temperature will be compared when the NWS forecast is available.');
+ put('lead-caveat',weather?feel.limitation:'NWS area air, nearby analyzed water and wind direction are different observations. There is no directly measured beach-air temperature here.');
+ put('hero-scope',weather?'Bay City State Park · '+feel.apparentMethod+' (forecast, not a beach thermometer)':'Bay City State Park · no recent shoreline-area air forecast');
+ put('last-updated',payload?.generatedAt?'Sources checked '+date(payload.generatedAt):'Unable to verify latest source');
+ const h=payload?.lakes?.huron;
+ put('huron-context',h?.status==='recent'?'Lake Huron whole-lake water average: '+temp(h.latest.tempF)+' ('+h.latest.date+'). Not the beach air or local water.':'Lake Huron whole-lake surface analysis unavailable.');
 }
+
 function renderSelected(){
  const p=points.find(x=>x.key===selected),e=evidence(selected);
  put('selected-heading',p.name);
@@ -58,7 +67,7 @@ function renderEvidence(){
  const local=payload?.local;
  put('buoy-status',local?.measurement?'Fresh offshore buoy observation · '+date(local.measurement.observedAt):'NOAA buoy 45163: no recent valid report; seasonal station.');
  put('shore-air',Number.isFinite(payload?.weatherNow?.tempF)?Math.round(payload.weatherNow.tempF)+'°F':'Unavailable');
- put('shore-wind',Number.isFinite(payload?.weatherNow?.windMph)?payload.weatherNow.windMph+' mph':'Unavailable');
+ put('shore-wind',Number.isFinite(payload?.weatherNow?.windMph)?payload.weatherNow.windMph+' mph'+(payload.weatherNow.windDirection?' from '+payload.weatherNow.windDirection:''):'Unavailable');
  put('shore-forecast-time',payload?.weatherNow?.startsAt?'NWS hourly forecast for the Bay City State Park area · '+date(payload.weatherNow.startsAt):'NWS hourly forecast unavailable.');
  renderSelected();
 }
@@ -123,8 +132,12 @@ async function load(){
   payload=await response.json();
   renderLead();renderEvidence();renderActivity('relax');
  }catch(e){
-  put('lead-temp','Not verified');put('lead-source','Official data temporarily unavailable.');
-  put('lead-caveat','No water temperature has been substituted or inferred.');
+  put('lead-temp','Beach feel unavailable');put('lead-band','Beach conditions unverified');
+  put('lead-band-note','Current NWS beach-area weather could not be retrieved.');
+  put('lead-source','Official forecast temporarily unavailable.');
+  put('lead-wind','Unavailable');put('lead-water','Not verified');put('lead-humidity','Unavailable');
+  put('lake-influence-detail','Without current weather, no beach temperature is inferred.');
+  put('lead-caveat','No inland or water-temperature reading is substituted for a beach thermometer.');
   put('last-updated','Latest data not verified');put('selected-source','Source unavailable');
   put('buoy-status','No verified buoy observation');
   renderActivity('relax');

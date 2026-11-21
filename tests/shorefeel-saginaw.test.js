@@ -109,7 +109,7 @@ test('experience source paths and offline fallbacks are honest before JavaScript
  const css=read('public/assets/shorefeel-saginaw.css');
  assert.match(html,/class="bay-quick-actions"/);
  for(const id of ['bay-evidence','map-h','experience-h'])assert.ok(html.includes('href="#'+id+'"'));
- assert.match(html,/id="lead-temp"[^>]*>No current local reading verified/);
+ assert.match(html,/id="lead-temp"[^>]*>Checking beach feel/);
  assert.ok(html.includes('id="value-inner-bay">Not verified'));
  assert.ok(html.includes('id="value-buoy">Not verified'));
  assert.ok(html.includes('https://www.google.com/maps/search/'));
@@ -129,7 +129,7 @@ test('Saginaw Bay basemap never requests unkeyed CARTO and survives key/tile fai
  assert.match(js,/carto\.on\('load'/);
  assert.match(js,/map\.removeLayer\(osm\)/);
  assert.match(js,/map\.removeLayer\(carto\)/);
- assert.match(html,/shorefeel-saginaw\.js\?v=20261121b/);
+ assert.match(html,/shorefeel-saginaw\.js\?v=20261121c/);
  assert.match(js,/if\(!map\.hasLayer\(osm\)\)osm\.addTo\(map\)/);
  assert.doesNotMatch(js,/tileLayer\('https:\/\/\{s\}\.basemaps\.cartocdn\.com\/light_all\/[^']+\.png'\s*,/);
 });
