@@ -1,0 +1,330 @@
+{
+  "version": "2026-11-21",
+  "region": "Ontario Canadian Great Lakes",
+  "weatherSource": "ECCC MSC GeoMet City Page Weather experimental, nearest validated city within 60 km; regional forecast, not on-sand reading",
+  "dataLicence": "Environment and Climate Change Canada Data Servers End-use Licence",
+  "lakeMichigan": "Lake Michigan has no Canadian coastline",
+  "swimmingStatus": "not-integrated",
+  "beaches": [
+    {
+      "slug": "pancake-bay",
+      "name": "Pancake Bay Provincial Park",
+      "lake": "Superior",
+      "province": "ON",
+      "country": "CA",
+      "city": "Batchawana Bay",
+      "lat": 46.969783,
+      "lon": -84.702083,
+      "coordinateNote": "Gatehouse reference from Ontario Parks maps, not exact beach access",
+      "coordinatesSource": "https://www.ontarioparks.ca/park/pancakebay/maps",
+      "parkUrl": "https://www.ontarioparks.ca/park/pancakebay",
+      "alertsUrl": "https://www.ontarioparks.ca/park/pancakebay/alerts",
+      "waterSafety": {
+        "name": "Ontario Parks beach sampling results",
+        "url": "https://www.ontarioparks.ca/beachresults",
+        "scope": "Ontario Parks monitored beaches only; results may be seasonal"
+      },
+      "story": "A long, pale arc of sand opens toward Whitefish Bay. Walk out from the forest to the waterline and the wind becomes easier to feel."
+    },
+    {
+      "slug": "batchawana-bay",
+      "name": "Batchawana Bay Provincial Park",
+      "lake": "Superior",
+      "province": "ON",
+      "country": "CA",
+      "city": "Batchawana Bay",
+      "lat": 46.944168,
+      "lon": -84.551017,
+      "coordinateNote": "Gatehouse reference from Ontario Parks maps, not exact swim-beach position",
+      "coordinatesSource": "https://www.ontarioparks.ca/park/batchawanabay/maps",
+      "parkUrl": "https://www.ontarioparks.ca/park/batchawanabay",
+      "alertsUrl": "https://www.ontarioparks.ca/park/batchawanabay/alerts",
+      "waterSafety": {
+        "name": "Ontario Parks beach sampling results",
+        "url": "https://www.ontarioparks.ca/beachresults",
+        "scope": "Ontario Parks monitored beaches only; results may be seasonal"
+      },
+      "story": "The sandy shore curves around a sheltered reach of Lake Superior. The water may look calm while the open bay still carries a cool breeze."
+    },
+    {
+      "slug": "agawa-bay",
+      "name": "Lake Superior Provincial Park, Agawa Bay",
+      "lake": "Superior",
+      "province": "ON",
+      "country": "CA",
+      "city": "Agawa Bay",
+      "lat": 47.33501,
+      "lon": -84.61621,
+      "coordinateNote": "Agawa Bay campground reference supplied by Ontario Parks, not a swimming-area pin",
+      "coordinatesSource": "https://www.ontarioparks.ca/park/lakesuperior/maps",
+      "parkUrl": "https://www.ontarioparks.ca/park/lakesuperior",
+      "alertsUrl": "https://www.ontarioparks.ca/park/lakesuperior/alerts",
+      "waterSafety": {
+        "name": "Ontario Parks beach sampling results",
+        "url": "https://www.ontarioparks.ca/beachresults",
+        "scope": "Ontario Parks monitored beaches only; results may be seasonal"
+      },
+      "story": "At Agawa Bay, Lake Superior spreads west beyond the campground's beach. A shoreline wind can change quickly in this exposed stretch of coast."
+    },
+    {
+      "slug": "neys",
+      "name": "Neys Provincial Park",
+      "lake": "Superior",
+      "province": "ON",
+      "country": "CA",
+      "city": "Marathon",
+      "lat": 48.78764,
+      "lon": -86.603851,
+      "coordinateNote": "Official park map gatehouse reference, not exact shoreline access",
+      "coordinatesSource": "https://www.ontarioparks.ca/park/neys/maps",
+      "parkUrl": "https://www.ontarioparks.ca/park/neys",
+      "alertsUrl": "https://www.ontarioparks.ca/park/neys/alerts",
+      "waterSafety": {
+        "name": "Ontario Parks beach sampling results",
+        "url": "https://www.ontarioparks.ca/beachresults",
+        "scope": "Ontario Parks monitored beaches only; results may be seasonal"
+      },
+      "story": "Neys meets the north shore with a broad sandy beach and protected forest. The open lake beyond the sand is a reminder to watch wind and wave conditions."
+    },
+    {
+      "slug": "pinery",
+      "name": "Pinery Provincial Park",
+      "lake": "Huron",
+      "province": "ON",
+      "country": "CA",
+      "city": "Grand Bend",
+      "lat": 43.24841,
+      "lon": -81.82342,
+      "coordinateNote": "Official park map gatehouse reference, not the beach",
+      "coordinatesSource": "https://www.ontarioparks.ca/park/pinery/maps",
+      "parkUrl": "https://www.ontarioparks.ca/park/pinery",
+      "alertsUrl": "https://www.ontarioparks.ca/park/pinery/alerts",
+      "waterSafety": {
+        "name": "Ontario Parks beach sampling results",
+        "url": "https://www.ontarioparks.ca/beachresults",
+        "scope": "Ontario Parks monitored beaches only; results may be seasonal"
+      },
+      "story": "Beyond the oak savanna and dunes, Lake Huron opens into a long horizon. Air behind the trees may not feel like air out on the beach."
+    },
+    {
+      "slug": "inverhuron",
+      "name": "Inverhuron Provincial Park",
+      "lake": "Huron",
+      "province": "ON",
+      "country": "CA",
+      "city": "Inverhuron",
+      "lat": 44.30039235,
+      "lon": -81.57963959,
+      "coordinateNote": "Official park map gatehouse reference, not beach entry",
+      "coordinatesSource": "https://www.ontarioparks.ca/park/inverhuron/maps",
+      "parkUrl": "https://www.ontarioparks.ca/park/inverhuron",
+      "alertsUrl": "https://www.ontarioparks.ca/park/inverhuron/alerts",
+      "waterSafety": {
+        "name": "Ontario Parks beach sampling results",
+        "url": "https://www.ontarioparks.ca/beachresults",
+        "scope": "Ontario Parks monitored beaches only; results may be seasonal"
+      },
+      "story": "A small sweep of sandy Lake Huron shoreline meets forest and dunes. On a windy day, the beach and nearby trails offer different degrees of shelter."
+    },
+    {
+      "slug": "awenda",
+      "name": "Awenda Provincial Park",
+      "lake": "Huron",
+      "province": "ON",
+      "country": "CA",
+      "city": "Penetanguishene",
+      "lat": 44.843699,
+      "lon": -80.002699,
+      "coordinateNote": "Official park map gatehouse reference, beaches lie elsewhere in park",
+      "coordinatesSource": "https://www.ontarioparks.ca/park/awenda/maps",
+      "parkUrl": "https://www.ontarioparks.ca/park/awenda",
+      "alertsUrl": "https://www.ontarioparks.ca/park/awenda/alerts",
+      "waterSafety": {
+        "name": "Ontario Parks beach sampling results",
+        "url": "https://www.ontarioparks.ca/beachresults",
+        "scope": "Ontario Parks monitored beaches only; results may be seasonal"
+      },
+      "story": "Georgian Bay is part of Lake Huron. Awenda's wooded uplands lead down toward a succession of beaches with changing exposure."
+    },
+    {
+      "slug": "wasaga-beach",
+      "name": "Wasaga Beach Provincial Park",
+      "lake": "Huron",
+      "province": "ON",
+      "country": "CA",
+      "city": "Wasaga Beach",
+      "lat": 44.4985,
+      "lon": -80.047283,
+      "coordinateNote": "Official Ontario Parks reference location, not a numbered beach entrance",
+      "coordinatesSource": "https://www.ontarioparks.ca/park/wasagabeach/maps",
+      "parkUrl": "https://www.ontarioparks.ca/park/wasagabeach",
+      "alertsUrl": "https://www.ontarioparks.ca/park/wasagabeach/alerts",
+      "waterSafety": {
+        "name": "Ontario Parks beach sampling results",
+        "url": "https://www.ontarioparks.ca/beachresults",
+        "scope": "Ontario Parks monitored beaches only; results may be seasonal"
+      },
+      "story": "Along the wide sands of southern Georgian Bay, the horizon and wind shape the visit. The air beside the water can differ from sheltered streets just inland."
+    },
+    {
+      "slug": "port-burwell",
+      "name": "Port Burwell Provincial Park",
+      "lake": "Erie",
+      "province": "ON",
+      "country": "CA",
+      "city": "Port Burwell",
+      "lat": 42.64713,
+      "lon": -80.812941,
+      "coordinateNote": "Official park map gatehouse reference, not a swimming-water measurement",
+      "coordinatesSource": "https://www.ontarioparks.ca/park/portburwell/maps",
+      "parkUrl": "https://www.ontarioparks.ca/park/portburwell",
+      "alertsUrl": "https://www.ontarioparks.ca/park/portburwell/alerts",
+      "waterSafety": {
+        "name": "Ontario Parks beach sampling results",
+        "url": "https://www.ontarioparks.ca/beachresults",
+        "scope": "Ontario Parks monitored beaches only; results may be seasonal"
+      },
+      "story": "A stretch of sandy Lake Erie coast lies beyond the park's wooded areas. Listen for the wind as you leave the trail and reach open sand."
+    },
+    {
+      "slug": "long-point",
+      "name": "Long Point Provincial Park",
+      "lake": "Erie",
+      "province": "ON",
+      "country": "CA",
+      "city": "Port Rowan",
+      "lat": 42.5834,
+      "lon": -80.3829,
+      "coordinateNote": "Official park map gatehouse reference, not the swim area",
+      "coordinatesSource": "https://www.ontarioparks.ca/park/longpoint/maps",
+      "parkUrl": "https://www.ontarioparks.ca/park/longpoint",
+      "alertsUrl": "https://www.ontarioparks.ca/park/longpoint/alerts",
+      "waterSafety": {
+        "name": "Ontario Parks beach sampling results",
+        "url": "https://www.ontarioparks.ca/beachresults",
+        "scope": "Ontario Parks monitored beaches only; results may be seasonal"
+      },
+      "story": "Long Point reaches into Lake Erie as a narrow spit of sand and habitat. Here lake weather can arrive from several directions across open water."
+    },
+    {
+      "slug": "turkey-point",
+      "name": "Turkey Point Provincial Park",
+      "lake": "Erie",
+      "province": "ON",
+      "country": "CA",
+      "city": "Turkey Point",
+      "lat": 42.700398,
+      "lon": -80.329666,
+      "coordinateNote": "Official park map gatehouse reference, not precise beach parking",
+      "coordinatesSource": "https://www.ontarioparks.ca/park/turkeypoint/maps",
+      "parkUrl": "https://www.ontarioparks.ca/park/turkeypoint",
+      "alertsUrl": "https://www.ontarioparks.ca/park/turkeypoint/alerts",
+      "waterSafety": {
+        "name": "Ontario Parks beach sampling results",
+        "url": "https://www.ontarioparks.ca/beachresults",
+        "scope": "Ontario Parks monitored beaches only; results may be seasonal"
+      },
+      "story": "Turkey Point sits by Lake Erie's north shore near a wooded escarpment. Watch how conditions change between shaded grounds and exposed shoreline."
+    },
+    {
+      "slug": "rondeau",
+      "name": "Rondeau Provincial Park",
+      "lake": "Erie",
+      "province": "ON",
+      "country": "CA",
+      "city": "Rondeau",
+      "lat": 42.32407146,
+      "lon": -81.84698045,
+      "coordinateNote": "Official park map gatehouse reference, not a monitored lake-water sample",
+      "coordinatesSource": "https://www.ontarioparks.ca/park/rondeau/maps",
+      "parkUrl": "https://www.ontarioparks.ca/park/rondeau",
+      "alertsUrl": "https://www.ontarioparks.ca/park/rondeau/alerts",
+      "waterSafety": {
+        "name": "Ontario Parks beach sampling results",
+        "url": "https://www.ontarioparks.ca/beachresults",
+        "scope": "Ontario Parks monitored beaches only; results may be seasonal"
+      },
+      "story": "Rondeau's narrow peninsula holds forest and marsh beside broad Lake Erie. Sun and wind on open beach can feel quite different from the shaded trails."
+    },
+    {
+      "slug": "sandbanks",
+      "name": "Sandbanks Provincial Park",
+      "lake": "Ontario",
+      "province": "ON",
+      "country": "CA",
+      "city": "Prince Edward County",
+      "lat": 43.91122,
+      "lon": -77.24169,
+      "coordinateNote": "Official park map gatehouse reference, not any one of the park's beaches",
+      "coordinatesSource": "https://www.ontarioparks.ca/park/sandbanks/maps",
+      "parkUrl": "https://www.ontarioparks.ca/park/sandbanks",
+      "alertsUrl": "https://www.ontarioparks.ca/park/sandbanks/alerts",
+      "waterSafety": {
+        "name": "Ontario Parks beach sampling results",
+        "url": "https://www.ontarioparks.ca/beachresults",
+        "scope": "Ontario Parks monitored beaches only; results may be seasonal"
+      },
+      "story": "High sand dunes, shallow bays and open Lake Ontario shoreline share this park. An onshore breeze can be especially noticeable above the water."
+    },
+    {
+      "slug": "presquile",
+      "name": "Presqu'ile Provincial Park",
+      "lake": "Ontario",
+      "province": "ON",
+      "country": "CA",
+      "city": "Brighton",
+      "lat": 44.0101,
+      "lon": -77.7416,
+      "coordinateNote": "Official park map gatehouse reference, not a designated beach access",
+      "coordinatesSource": "https://www.ontarioparks.ca/park/presquile/maps",
+      "parkUrl": "https://www.ontarioparks.ca/park/presquile",
+      "alertsUrl": "https://www.ontarioparks.ca/park/presquile/alerts",
+      "waterSafety": {
+        "name": "Ontario Parks beach sampling results",
+        "url": "https://www.ontarioparks.ca/beachresults",
+        "scope": "Ontario Parks monitored beaches only; results may be seasonal"
+      },
+      "story": "A long limestone-and-sand peninsula reaches into Lake Ontario. The beaches feel the open lake beyond the protected woods and marsh."
+    },
+    {
+      "slug": "darlington",
+      "name": "Darlington Provincial Park",
+      "lake": "Ontario",
+      "province": "ON",
+      "country": "CA",
+      "city": "Bowmanville",
+      "lat": 43.8755,
+      "lon": -78.777834,
+      "coordinateNote": "Official park map gatehouse reference, not a thermometer on the sand",
+      "coordinatesSource": "https://www.ontarioparks.ca/park/darlington/maps",
+      "parkUrl": "https://www.ontarioparks.ca/park/darlington",
+      "alertsUrl": "https://www.ontarioparks.ca/park/darlington/alerts",
+      "waterSafety": {
+        "name": "Ontario Parks beach sampling results",
+        "url": "https://www.ontarioparks.ca/beachresults",
+        "scope": "Ontario Parks monitored beaches only; results may be seasonal"
+      },
+      "story": "Lake Ontario stretches south from Darlington's shoreline. Even with a warm forecast in town, conditions can change where the land gives way to open water."
+    },
+    {
+      "slug": "north-beach",
+      "name": "North Beach Provincial Park",
+      "lake": "Ontario",
+      "province": "ON",
+      "country": "CA",
+      "city": "Consecon",
+      "lat": 43.953448,
+      "lon": -77.522129,
+      "coordinateNote": "Official park map gatehouse reference, not the exact beach entrance",
+      "coordinatesSource": "https://www.ontarioparks.ca/park/northbeach/maps",
+      "parkUrl": "https://www.ontarioparks.ca/park/northbeach",
+      "alertsUrl": "https://www.ontarioparks.ca/park/northbeach/alerts",
+      "waterSafety": {
+        "name": "Ontario Parks beach sampling results",
+        "url": "https://www.ontarioparks.ca/beachresults",
+        "scope": "Ontario Parks monitored beaches only; results may be seasonal"
+      },
+      "story": "An elongated beach meets Lake Ontario beside a quieter inland lagoon. The two sides of this narrow landscape need not feel the same in the wind."
+    }
+  ]
+}
