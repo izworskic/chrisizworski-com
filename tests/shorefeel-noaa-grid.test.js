@@ -22,16 +22,16 @@ function buoy(now){
 }
 test('NWS points grid identity and NOAA SBLM4 sensor have honest API provenance',async()=>{
  const original=global.fetch;
- let same=false,fixed=true;
+ let same=false,fixed=true,wrongMarine=false;
  const now=new Date();
  global.fetch=async target=>{
   const u=String(target);
-  if(u.includes('api.weather.gov/points/43.6714,-83.9068'))return makeResponse({
+  if(u.includes('api.weather.gov/points/43.6714,-83.9120'))return makeResponse({
    properties:{forecastHourly:'https://api.weather.gov/gridpoints/DTX/100,60/forecast/hourly',
-    gridId:'DTX',gridX:100,gridY:60}});
+    type:wrongMarine?'marine':'land',gridId:'DTX',gridX:100,gridY:60}});
   if(u.includes('api.weather.gov/points/43.6714,-84.1000'))return makeResponse({
    properties:{forecastHourly:'https://api.weather.gov/gridpoints/DTX/95,60/forecast/hourly',
-    gridId:'DTX',gridX:same?100:95,gridY:60}});
+    type:'land',gridId:'DTX',gridX:same?100:95,gridY:60}});
   if(u.includes('/gridpoints/DTX/100,60/forecast/hourly'))return makeResponse(hourly(82));
   if(u.includes('/gridpoints/DTX/95,60/forecast/hourly'))return makeResponse(hourly(86));
   if(u.includes('/SBLM4.txt'))return makeResponse(fixed?buoy(now):'',fixed);
@@ -60,5 +60,10 @@ test('NWS points grid identity and NOAA SBLM4 sensor have honest API provenance'
   const m=await call();
   assert.equal(m.shorelinePhysics.independentMarineAir,null);
   assert.equal(m.shorelinePhysics.gridRelationship.status,'same-grid');
+  wrongMarine=true;
+  const blocked=await call();
+  assert.equal(blocked.beachFeel.status,'unavailable','marine forecast is not beach air');
+  assert.equal(blocked.shorelinePhysics.status,'unavailable');
+  assert.equal(blocked.local.forecastStatus,'unavailable');
  }finally{global.fetch=original;}
 });
