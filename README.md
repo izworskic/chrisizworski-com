@@ -27,3 +27,5 @@ The source verifier compares unchanged pages and assets with the clean live-site
 Vercel preview hostnames intentionally send `X-Robots-Tag: noindex`, while custom domains remain indexable. `npm run verify:production-ready` validates that host split, confirms API routes remain `noindex`, and must pass before either live domain can be attached.
 
 See [MIGRATION.md](MIGRATION.md) for the staged cutover and rollback procedure and [SEO_PARITY.md](SEO_PARITY.md) for the search-preservation record.
+
+REA can be invoked explicitly for a one-off authorized investigation; it is not installed, registered with coding agents, or run during routine development. See [REA on-demand research](docs/REA_DEVELOPMENT_WORKFLOW.md). This workflow does not run in the site build or Vercel.
