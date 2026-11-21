@@ -472,3 +472,6 @@ npm test
 The one server dependency is `api/petoskey-route.js`, the road routing proxy the planner
 calls at `/api/petoskey-route`. Everything else is static. Do not edit files under
 `public/petoskey-wine/` directly; they will be overwritten on the next export.
+
+## Optional REA investigations only on request
+REA is available only when the owner explicitly requests REA for a specific investigation. Never install, register, start or invoke it automatically for research, design, or routine development. Read [the REA on-demand workflow](docs/REA_DEVELOPMENT_WORKFLOW.md) before a pinned one-off CLI invocation. Preserve licensed access, observed evidence, original implementations, owning repository, Experience Investment, browser, ads, SEO and CI checks. Otherwise continue with ordinary tools.
