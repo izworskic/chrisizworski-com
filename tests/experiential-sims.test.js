@@ -152,7 +152,13 @@ test('winter layup: the experience layer is wired in order and the home page kee
   const specs = JSON.parse(read('public/assets/freighter-fleet-specs.json'));
   const registry = JSON.parse(read('public/assets/freighter-layup-registry.json'));
   for (const season of registry.seasons) for (const v of season.records) assert.ok(specs.vessels[v.id], 'hull dimensions for ' + v.id);
-  for (const [id, v] of Object.entries(specs.vessels)) assert.ok(v.lengthFt > 600 && v.lengthFt <= 1013.5 && v.beamFt >= 70 && v.beamFt <= 105, id + ' is a plausible laker');
+  for (const [id, v] of Object.entries(specs.vessels)) {
+    assert.ok(v.lengthFt >= 450 && v.lengthFt <= 1013.5 && v.beamFt >= 65 && v.beamFt <= 105, id + ' has a plausible, source-dated working hull dimension');
+    assert.match(v.source, /^https:\/\//, id + ' has an original vessel-specification source');
+  }
+  assert.equal(specs.vessels.alpena.lengthFt, 520, 'Alpena was shortened when converted to cement service');
+  assert.ok(specs.vessels['evans-spirit'].lengthFt < 500, 'Evans Spirit is substantially shorter than 1,000-foot lakers');
+  assert.equal(specs.vessels['paul-r-tregurtha'].lengthFt, 1013.5, 'Tregurtha is the longest Great Lakes freighter');
 });
 
 test('winter layup: the hero only reflects ships the dated ledger places in berths', () => {
