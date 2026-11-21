@@ -55,6 +55,12 @@ jobs:
             console.log(JSON.stringify(['/great-lakes-beaches/'+beach.slug+'/',hash]));
           }
           console.log('SHOREFEEL_GUIDE_HASHES_END');
+          console.log('SHOREFEEL_ASSET_HASHES_START');
+          for(const file of ['beach-report.js','beach-report.css']){
+            const bytes=fs.readFileSync('public/assets/'+file);
+            console.log(JSON.stringify(['/assets/'+file,crypto.createHash('sha256').update(bytes).digest('hex')]));
+          }
+          console.log('SHOREFEEL_ASSET_HASHES_END');
           NODE
       - name: NWS apparent-temperature and shore wind source tests
         run: node --test tests/shorefeel-beach-feel.test.js tests/shorefeel-saginaw.test.js tests/shorefeel-physics.test.js tests/shorefeel-noaa-grid.test.js tests/shorefeel-field-validation.test.js
