@@ -93,6 +93,7 @@ function buildMap(){
    if(failed)return;
    failed=true;
    if(map.hasLayer(carto))map.removeLayer(carto);
+   if(!map.hasLayer(osm))osm.addTo(map);
    host.dataset.basemap='openstreetmap';
   });
   carto.on('load',()=>{
