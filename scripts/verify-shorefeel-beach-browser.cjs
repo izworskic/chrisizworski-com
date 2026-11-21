@@ -79,7 +79,7 @@ async function run(){
    assert.match(await page.locator('#physics-forecast-contrast').innerText(),/-4\.0°F/);
    assert.match(await page.locator('#physics-model-range').innerText(),/°F \(scenarios\)/);
    assert.match(await page.locator('#physics-model-limits').innerText(),/not an actual beach forecast/i);
-   assert.match(await page.locator('#physics-grid-info').innerText(),/different NWS forecast cells/i);
+   assert.match(await page.locator('#physics-grid-info').innerText(),/different 2\\.5 km NWS forecast grid cells/i);
    assert.equal(await page.locator('#bay-map').getAttribute('data-basemap'),'openstreetmap');
    await page.locator('button[data-activity="swim"]').click();
    assert.match(await page.locator('#activity-heading').innerText(),/Swimming preparation/);
