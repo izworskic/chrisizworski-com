@@ -24,6 +24,13 @@ on:
       - 'scripts/generate-beach-pages.mjs'
       - 'public/great-lakes-beaches/**'
       - 'tests/shorefeel-beach-network.test.js'
+      - 'tests/shorefeel-canada.test.js'
+      - 'lib/shorefeel/canada.js'
+      - 'api/shorefeel-canada.js'
+      - 'data/shorefeel-canada.json'
+      - 'public/assets/shorefeel-canada.*'
+      - 'scripts/generate-shorefeel-canada.mjs'
+      - 'scripts/verify-shorefeel-canada-browser.cjs'
       - 'tests/shorefeel-us-coast.test.js'
       - 'lib/shorefeel/us-coast.js'
       - 'api/shorefeel-us.js'
@@ -73,6 +80,8 @@ jobs:
         run: node --test tests/shorefeel-beach-feel.test.js tests/shorefeel-saginaw.test.js tests/shorefeel-physics.test.js tests/shorefeel-noaa-grid.test.js tests/shorefeel-field-validation.test.js
       - name: Great Lakes beach network data and integrity tests
         run: node --test tests/shorefeel-beach-network.test.js tests/beach-static.test.js
+      - name: Ontario Parks and ECCC Canadian weather contract tests
+        run: node --test tests/shorefeel-canada.test.js
       - name: US Great Lakes weather and state safety contract tests
         run: node --test tests/shorefeel-us-coast.test.js
       - uses: actions/setup-python@v5
@@ -96,11 +105,17 @@ jobs:
         env:
           SHORE_QA_OUTPUT: artifacts/shorefeel-beach-qa
         run: SHORE_PW_MODULE="$RUNNER_TEMP/shorefeel-playwright/node_modules/playwright" node scripts/verify-shorefeel-us-browser.cjs
+      - name: Ontario Canada park chapters, map failure and no-JS in Chromium
+        env:
+          SHORE_QA_OUTPUT: artifacts/shorefeel-canada-qa
+        run: SHORE_PW_MODULE="$RUNNER_TEMP/shorefeel-playwright/node_modules/playwright" node scripts/verify-shorefeel-canada-browser.cjs
       - name: Upload browser screenshots and evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: shorefeel-beach-qa
-          path: artifacts/shorefeel-beach-qa/
+          path: |
+            artifacts/shorefeel-beach-qa
+            artifacts/shorefeel-canada-qa/
           if-no-files-found: ignore
           retention-days: 7
