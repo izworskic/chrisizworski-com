@@ -50,7 +50,11 @@ async function weatherFor(place){
   const href=point?.properties?.forecastHourly;
   if(typeof href!=='string'||!href.startsWith('https://api.weather.gov/'))throw new Error('missing official hourly forecast');
   const response=await jsonResponse(href);
-  return weatherPeriods(response?.properties?.periods||[]);
+  const props=point?.properties||{};
+  const grid=typeof props.gridId==='string'&&Number.isInteger(props.gridX)&&Number.isInteger(props.gridY)
+    ?{office:props.gridId,x:props.gridX,y:props.gridY,resolutionKm:2.5}
+    :null;
+  return {periods:weatherPeriods(response?.properties?.periods||[]),grid};
 }
 
 /* Beach-water forecast: measured level (satellite pixel / buoy) + NOAA lake-model change.
@@ -124,13 +128,14 @@ module.exports=async function handler(req,res){
   if(req.method==='HEAD')return res.status(200).end();
   const place=DESTINATIONS[placeKey]||null;
   const now=new Date();
-  const [analysis,alternative,nearby,forecast,grid,inlandForecast]=await Promise.allSettled([
+  const [analysis,alternative,nearby,forecast,grid,inlandForecast,fixedMarine]=await Promise.allSettled([
     textResponse(SOURCE,4500),
     textResponse(GLSEA_CSV,4500),
     place?textResponse('https://www.ndbc.noaa.gov/data/realtime2/'+place.station+'.txt',3700):Promise.resolve(null),
     place?weatherFor(place):Promise.resolve([]),
     place?gridCellsFor(place,now):Promise.resolve(null),
-    placeKey==='saginaw-bay'?weatherFor(INLAND_BAY_COUNTY):Promise.resolve([])
+    placeKey==='saginaw-bay'?weatherFor(INLAND_BAY_COUNTY):Promise.resolve(null),
+    placeKey==='saginaw-bay'?textResponse('https://www.ndbc.noaa.gov/data/realtime2/SBLM4.txt',2600):Promise.resolve(null)
   ]);
 
   const primary=analysis.status==='fulfilled'?parseGLSEA(analysis.value,now):[];
@@ -176,19 +181,27 @@ module.exports=async function handler(req,res){
   const buoyStatus=!place?null:nearby.status==='fulfilled'?'reporting':nearby.reason?.status===404?'offline':'unavailable';
   const nearest=place&&nearby.status==='fulfilled'?parseNDBC(nearby.value,now):null;
   const water=place?waterEvidence(place,nearest,cells):null;
-  const periods=forecast.status==='fulfilled'?forecast.value:[];
+  const periods=forecast.status==='fulfilled'?forecast.value?.periods||[]:[];
   const current=nowPeriod(periods,now);
   const shorelineFeel=placeKey==='saginaw-bay'
     ?beachFeel(current,water,place.beach,place.cells.find(c=>c.key==='inner-bay'),now)
     :null;
-  const observedMarineAir=placeKey==='saginaw-bay'&&nearby.status==='fulfilled'
+  const seasonalMarineAir=placeKey==='saginaw-bay'&&nearby.status==='fulfilled'
     ?marineAirFromNDBC(nearby.value,now):null;
+  const fixedStationAir=placeKey==='saginaw-bay'&&fixedMarine.status==='fulfilled'
+    ?marineAirFromNDBC(fixedMarine.value,now,{stationId:'SBLM4',
+      source:'NOAA NDBC Saginaw Bay Light #1 air temperature',
+      location:'Fixed lighthouse station in mid Saginaw Bay, about 20 km from the park beach'})
+    :null;
+  const observedMarineAir=fixedStationAir||seasonalMarineAir;
   const inlandCurrent=placeKey==='saginaw-bay'&&inlandForecast.status==='fulfilled'
-    ?nowPeriod(inlandForecast.value,now):null;
+    ?nowPeriod(inlandForecast.value?.periods||[],now):null;
   const physicalScenarios=placeKey==='saginaw-bay'
     ?scenario({beachWeather:current,inlandWeather:inlandCurrent,water,
       beach:place.beach,waterReference:place.cells.find(c=>c.key==='inner-bay'),
-      marineAir:observedMarineAir},now)
+      marineAir:observedMarineAir,
+      shoreGrid:forecast.status==='fulfilled'?forecast.value?.grid:null,
+      inlandGrid:inlandForecast.status==='fulfilled'?inlandForecast.value?.grid:null},now)
     :null;
 
   const satellite=place?{
