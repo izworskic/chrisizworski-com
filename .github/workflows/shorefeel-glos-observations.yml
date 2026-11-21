@@ -30,6 +30,13 @@ jobs:
       - name: Unit tests for NOAA and GLOS measured-vs-modeled science
         run: |
           python3 -m unittest discover -s tests -p 'test_shorefeel_*.py' -v
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned site dependencies
+        run: npm ci
+      - name: Full repository source and scientific regression gate
+        run: npm run verify:all
       - name: Retrieve actual bounded GLOS Petoskey historical observations
         shell: bash
         run: |
