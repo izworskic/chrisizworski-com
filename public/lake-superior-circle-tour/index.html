@@ -177,6 +177,10 @@ a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}
 .map-shell{min-width:0}
 .map-frame{position:relative;height:clamp(380px,52vh,560px);overflow:hidden;border:1px solid #cfd8d0;border-radius:12px 12px 0 0;background:linear-gradient(145deg,#e8f2e8,#d9e8ef)}
 #circleTourMap{width:100%;height:100%}
+.preset-day-map-tools{position:absolute;top:8px;left:8px;right:54px;z-index:1;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px 8px;padding:4px 8px;background:#f8fbfa;border:1px solid #688b91;border-radius:8px;color:#103743;font:600 12px/1.4 system-ui,sans-serif}
+.preset-day-map-tools[hidden]{display:none}
+.preset-day-map-tools button,.route-day-actions button{padding:4px 8px;min-height:44px;border:1px solid #688b91;border-radius:6px;background:#fff;color:#124553;cursor:pointer;font:600 12px/1.4 system-ui,sans-serif}
+.route-day-actions{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;margin-top:4px}
 .map-loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:24px;text-align:center;color:#48604d;font-size:13px;line-height:1.7;background:linear-gradient(145deg,rgba(232,242,232,.96),rgba(217,232,239,.96));z-index:2}
 .map-loading.hidden{display:none}
 .map-unavailable{max-width:420px}
@@ -450,8 +454,12 @@ a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}
   </nav>
   <div class="planner-grid">
     <div class="map-shell">
-      <div class="map-frame">
+      <div class="map-frame" id="circleTourMapFrame" role="group" aria-label="Circle Tour route map" tabindex="-1">
         <div id="circleTourMap" role="application" aria-label="Interactive map of 31 Lake Superior Circle Tour stops"></div>
+        <div class="preset-day-map-tools" id="presetDayMapTools" hidden>
+          <span id="presetDayMapLabel" role="status"></span>
+          <button id="clearPresetDayMap" type="button">Show full loop</button>
+        </div>
         <div class="map-loading" id="mapStatus" role="status">
           <div class="map-unavailable"><strong>Loading the Circle Tour map…</strong>The complete 31-stop route and three itineraries remain available below if the map cannot load.</div>
         </div>
@@ -1475,7 +1483,7 @@ a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}
 </main>
 <footer class="footer">Route evidence reviewed November 14, 2026, Compiled by <a href="https://chrisizworski.com">Chris Izworski</a>, <a href="/tools/">Back to Tools</a></footer>
 <script defer src="/assets/visitor-map-links.js"></script>
-<script defer src="/assets/lake-superior-circle-tour.js?v=20261121-layout"></script>
+<script defer src="/assets/lake-superior-circle-tour.js?v=20261121-day-map"></script>
 <script defer src="/assets/journey-atlas-v1.js"></script>
 <script defer src="/assets/circle-tour-place-story-data.js"></script>
 <script defer src="/assets/circle-tour-bridge.js"></script>
