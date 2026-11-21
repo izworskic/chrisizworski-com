@@ -91,10 +91,11 @@
   .lock-watch .lw-verdict,.lock-watch .lw-board{padding-left:22px;padding-right:22px}
   .lock-watch .lw-dossier{margin-left:22px;margin-right:22px}
 }
-@media(max-width:400px){
+@media(max-width:480px){
   .lock-watch .lw-chips span{padding:8px 10px}
-  .lock-watch .lw-facts{grid-template-columns:minmax(0,1fr)}
-  .lock-watch .lw-facts dd{margin-bottom:4px}
+  .lock-watch .lw-facts{grid-template-columns:minmax(0,6.6em) minmax(0,1fr);gap:4px 10px;font-size:13px}
+  .lock-watch .lw-dossier{padding:12px 12px;margin-left:12px;margin-right:12px}
+  .lock-watch .lw-head,.lock-watch .lw-controls,.lock-watch .lw-verdict,.lock-watch .lw-board,.lock-watch .lw-legend{padding-left:14px;padding-right:14px}
 }
 @media(prefers-reduced-motion:reduce){.lock-watch *{transition:none!important;animation:none!important}}
 @media(max-width:480px){
