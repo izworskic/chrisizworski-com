@@ -1,13 +1,13 @@
 {
   "schemaVersion": "glwu-research-cycle-summary-v1",
-  "generatedAt": "2026-11-21T10:06:51.000Z",
+  "generatedAt": "2026-11-21T20:39:45.000Z",
   "status": "MULTIPLE_ISSUES_AVAILABLE_FOR_RESEARCH",
   "source": "NOAA_GLWU_MODEL_OUTPUT",
   "modelCycleCounts": {
     "500m-greatlakes": {
-      "cycles": 43,
-      "analysis": 43,
-      "issuedForecasts": 1912,
+      "cycles": 44,
+      "analysis": 44,
+      "issuedForecasts": 1960,
       "distinctCells": 1,
       "readyFor14DayBaseline": true
     }
@@ -33,8 +33,8 @@
     },
     "500m-greatlakes": {
       "grid": "500m-greatlakes",
-      "matchedPairs": 169,
-      "unmatchedForecastRows": 1743,
+      "matchedPairs": 172,
+      "unmatchedForecastRows": 1788,
       "matches": [
         {
           "issuedAt": "2026-11-01T06:00:00.000Z",
@@ -1549,6 +1549,15 @@
           "deltaM": -0.06
         },
         {
+          "issuedAt": "2026-11-19T18:00:00.000Z",
+          "validAt": "2026-11-21T18:00:00.000Z",
+          "cellId": "glwu:500m-greatlakes:46.68000:-85.98498",
+          "leadHours": 48,
+          "predictedWaveHeightM": 0.25,
+          "laterModelInitialHeightM": 0.23,
+          "deltaM": 0.02
+        },
+        {
           "issuedAt": "2026-11-20T06:00:00.000Z",
           "validAt": "2026-11-21T06:00:00.000Z",
           "cellId": "glwu:500m-greatlakes:46.68000:-85.98498",
@@ -1556,6 +1565,24 @@
           "predictedWaveHeightM": 0.26,
           "laterModelInitialHeightM": 0.32,
           "deltaM": -0.06
+        },
+        {
+          "issuedAt": "2026-11-20T06:00:00.000Z",
+          "validAt": "2026-11-21T18:00:00.000Z",
+          "cellId": "glwu:500m-greatlakes:46.68000:-85.98498",
+          "leadHours": 36,
+          "predictedWaveHeightM": 0.25,
+          "laterModelInitialHeightM": 0.23,
+          "deltaM": 0.02
+        },
+        {
+          "issuedAt": "2026-11-21T06:00:00.000Z",
+          "validAt": "2026-11-21T18:00:00.000Z",
+          "cellId": "glwu:500m-greatlakes:46.68000:-85.98498",
+          "leadHours": 12,
+          "predictedWaveHeightM": 0.24,
+          "laterModelInitialHeightM": 0.23,
+          "deltaM": 0.01
         }
       ],
       "leadBuckets": {
@@ -1565,9 +1592,9 @@
           "meanSignedChangeM": 0.01
         },
         "7-12h": {
-          "pairs": 33,
-          "meanAbsoluteChangeM": 0.0055,
-          "meanSignedChangeM": -0.0018
+          "pairs": 34,
+          "meanAbsoluteChangeM": 0.0056,
+          "meanSignedChangeM": -0.0015
         },
         "13-24h": {
           "pairs": 44,
@@ -1575,9 +1602,9 @@
           "meanSignedChangeM": -0.0036
         },
         "25-48h": {
-          "pairs": 83,
-          "meanAbsoluteChangeM": 0.0288,
-          "meanSignedChangeM": -0.0134
+          "pairs": 85,
+          "meanAbsoluteChangeM": 0.0286,
+          "meanSignedChangeM": -0.0126
         }
       },
       "comparison": "MODEL_FORECAST_VS_LATER_MODEL_INITIAL_SAME_FIXED_CELL",
