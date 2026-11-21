@@ -266,7 +266,8 @@ def compose(paired, issued, context, beach_meta, inland_meta, now=None):
             "waterTempF": pixel["tempF"] if pixel else None,
             "waterObservedAt": pixel["observedAt"] if pixel else None,
             "pixelDistanceKm": round(distance_km(beach_meta, pixel), 2) if pixel else None,
-            "isMeasuredNearshoreAir": True, "isOnSandThermometer": False,\n            "isValidatedForecast": False
+            "isMeasuredNearshoreAir": True, "isOnSandThermometer": False,
+            "isValidatedForecast": False
         })
         if not wsp or not sector:
             rejected["missingLocalWind"] += 1
