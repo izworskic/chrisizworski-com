@@ -69,7 +69,7 @@ export function applyBeachDetailSearchOverride(source, override) {
   html = html.replace(/("@type": "WebPage",[\s\S]*?"description": ")[^"]+("\s*,)/, `$1${escapeJson(override.description)}$2`);
   html = html.replace(/<h1 id="page-title">[^<]*<\/h1>/, `<h1 id="page-title">${escapeHtml(override.h1)}</h1>`);
   html = html.replace(/<p class="hero-lede">[^<]*<\/p>/, `<p class="hero-lede">${escapeHtml(override.firstAnswer)}</p>`);
-  html = html.replace(/"dateModified":\s*"\d{4}-\d{2}-\d{2}"/, '"dateModified": "2026-08-22"');
+  // Keep the generator dateModified for the actual current content release.
   return html;
 }
 
@@ -78,7 +78,7 @@ export function applyPicturedRocksPlannerLink(source, linkHtml) {
   const marker = /(<p>[^<]+Its report combines[\s\S]*?<\/p>)/;
   if (!marker.test(source)) return source;
   return source.replace(marker, `$1\n        ${linkHtml}`)
-    .replace(/"dateModified":\s*"\d{4}-\d{2}-\d{2}"/, '"dateModified": "2026-09-28"');
+    // The generator owns dateModified; preserve it after adding planner links.
 }
 
 for (const [slug, override] of Object.entries(BEACH_DETAIL_SEARCH_OVERRIDES)) {
