@@ -1,0 +1,6 @@
+---
+description: "Use shared Playwright browser QA for website interaction, map behavior, responsive layout and regression testing"
+alwaysApply: false
+---
+
+For tasks requiring Playwright or real-browser acceptance, load `.agents/skills/playwright-browser-qa/SKILL.md` and `docs/PLAYWRIGHT_BROWSER_QA_WORKFLOW.md`. Follow the owning AGENTS.md and existing tests; no default MCP registration, production dependency, or browser runtime is implied.

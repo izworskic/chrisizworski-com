@@ -9,3 +9,9 @@ scratch/
 build/experience-foundry/
 experience-foundry/drafts/
 artifacts/experience-foundry/
+
+# Temporary Playwright agent and test artifacts
+.playwright-cli/
+artifacts/playwright-qa/
+playwright-report/
+test-results/
