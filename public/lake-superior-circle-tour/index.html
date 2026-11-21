@@ -2,6 +2,7 @@
 <html lang="en-US">
 <head>
 <meta charset="UTF-8">
+<meta name="adsense-loader" content="defer">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lake Superior Circle Tour Map: 7–15 Days | Chris Izworski</title>
 <meta name="description" content="Use the interactive 1,300-mile Lake Superior Circle Tour map, compare 7-, 10-, and 15-day itineraries, and build a 31-stop trip without an account.">
@@ -19,10 +20,10 @@
 html{scroll-behavior:smooth}
 body{font-family:Georgia,'Times New Roman',serif;background:var(--tan);color:var(--text);line-height:1.75;font-size:15px}
 a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}
-.site-header{text-align:center;padding:24px 20px 16px;border-bottom:1px solid var(--border)}
-.site-header .site-title{font-size:20px;font-weight:normal;color:var(--green)}
-.site-nav{text-align:center;padding:10px 20px;border-bottom:1px solid var(--border);font-size:13px}
-.site-nav a{color:#5a5a5a;margin:0 8px}.site-nav a.active{color:var(--green);font-weight:bold}
+.site-header{display:flex;align-items:center;justify-content:space-between;gap:8px 24px;padding:6px max(16px,calc((100% - 1188px)/2));border-bottom:1px solid var(--border)}
+.site-header .site-title{font-size:18px;white-space:nowrap;color:var(--green)}
+.site-nav{display:flex;align-items:center;gap:14px;min-width:0;overflow-x:auto;font:13px/1.4 system-ui,sans-serif}
+.site-nav a{display:inline-flex;align-items:center;min-height:44px;color:#5a5a5a;white-space:nowrap}.site-nav a.active{color:var(--green);font-weight:bold}
 .hero{background:#103743;color:#f9fbf6}
 .hero-inner{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.13fr);align-items:stretch;max-width:1220px;margin:0 auto}
 .hero-copy{align-self:center;padding:clamp(24px,4vw,52px)}
@@ -248,9 +249,9 @@ a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}
   .mobile-trip-trigger span{font-size:11px;color:#cbe0d1}
 }
 @media(max-width:650px){
-  .site-header{padding:10px 14px}
-  .site-nav{display:flex;gap:14px;overflow-x:auto;padding:0 14px;text-align:left}
-  .site-nav a{display:inline-flex;align-items:center;white-space:nowrap;min-height:44px;margin:0}
+  .site-header{gap:12px;padding:3px 12px}
+  .site-header .site-title{font-size:15px}
+  .site-nav{gap:12px}
   .answer-facts{grid-template-columns:1fr}
   .route-planner{margin:0;padding:12px 14px 18px}
   .route-planner h2{margin-bottom:4px}
@@ -401,10 +402,13 @@ a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}
 <noscript><style>#circle-tour-pace .ctpace-hours,.planner-controls,.planner-grid,.planner-map-note,.route-preview-jump,.mobile-trip-trigger{display:none}.itin-panel{display:block}</style></noscript>
 </head>
 <body itemscope itemtype="https://schema.org/WebPage" data-analytics-page="lake-superior-circle-tour">
-<header class="site-header"><p class="site-title"><a href="/">Chris Izworski</a></p></header>
-<nav class="site-nav" aria-label="Site navigation">
+<header class="site-header">
+  <p class="site-title"><a href="/">Chris Izworski</a></p>
+  <nav class="site-nav" aria-label="Site navigation">
   <a href="/">Home</a><a href="/about/">About</a><a href="/start-here/">Start Here</a><a href="/tools/" class="active">Tools</a><a href="/press/">Press</a><a href="/media/">Media</a><a href="/timeline/">Timeline</a><a href="/citations/">Citations</a><a href="/case-studies/">Case Studies</a>
-</nav>
+  </nav>
+</header>
+<main id="circle-tour-content">
 <div class="hero">
   <div class="hero-inner">
     <div class="hero-copy">
@@ -1468,6 +1472,7 @@ a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}
     <div class="gl-related-card"><a href="https://chrisizworski.com/saginaw-bay-ecology/">Saginaw Bay Ecology</a><p>Fish, wildlife, water quality, and habitat data for Michigan's Saginaw Bay.</p></div>
   </div>
 </div>
+</main>
 <footer class="footer">Route evidence reviewed November 14, 2026, Compiled by <a href="https://chrisizworski.com">Chris Izworski</a>, <a href="/tools/">Back to Tools</a></footer>
 <script defer src="/assets/visitor-map-links.js"></script>
 <script defer src="/assets/lake-superior-circle-tour.js?v=20261121-layout"></script>
