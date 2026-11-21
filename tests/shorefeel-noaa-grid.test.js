@@ -50,7 +50,7 @@ test('NWS points grid identity and NOAA SBLM4 sensor have honest API provenance'
   assert.equal(d.shorelinePhysics.status,'insufficient-data','NOAA water still missing');
   assert.equal(d.shorelinePhysics.independentMarineAir.stationId,'SBLM4');
   assert.equal(d.shorelinePhysics.independentMarineAir.tempF,58.1);
-  assert.match(d.shorelinePhysics.independentMarineAir.location,/not the park beach/);
+  assert.match(d.shorelinePhysics.independentMarineAir.location,/20 km from the park beach/);
   same=true;
   const s=await call();
   assert.equal(s.shorelinePhysics.gridRelationship.status,'same-grid');
