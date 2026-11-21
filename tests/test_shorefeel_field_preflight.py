@@ -74,8 +74,8 @@ class PreflightBench(unittest.TestCase):
         self.assertEqual(r["coverage"]["rejected"]["first"]["conflict"], 1)
         self.assertEqual(r["coverage"]["rejected"]["second"]["flagged"], 1)
 
-    def test_clock_skew_larger_than_two_minutes_blocks_pairs(self):
-        r = self.audit(offset=3)
+    def test_clock_skew_over_two_minutes_to_every_sample_blocks_pairs(self):
+        r = self.audit(offset=2.5)
         self.assertEqual(r["coverage"]["paired"], 0)
         self.assertEqual(r["status"], "BENCH_INSUFFICIENT_OR_DISAGREES")
 
