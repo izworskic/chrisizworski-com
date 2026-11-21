@@ -1,0 +1,67 @@
+name: ShoreFeel GLOS observed shoreline research
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/shorefeel-glos-observations.py'
+      - 'tests/test_shorefeel_glos_observations.py'
+      - 'docs/SHOREFEEL_GLOS_OBSERVATIONS_20261121.md'
+      - '.github/workflows/shorefeel-glos-observations.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: shorefeel-glos-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  source-observations:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Unit tests for NOAA and GLOS measured-vs-modeled science
+        run: |
+          python3 -m unittest discover -s tests -p 'test_shorefeel_*.py' -v
+      - name: Retrieve actual bounded GLOS Petoskey historical observations
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/shorefeel-glos
+          python3 scripts/shorefeel-glos-observations.py \
+            --start 2022-06-01T12:00:00Z \
+            --end 2022-06-01T16:00:00Z \
+            > artifacts/shorefeel-glos/petoskey-2022-06-01-12-16z.json
+          python3 - <<'PY'
+          import json
+          p = 'artifacts/shorefeel-glos/petoskey-2022-06-01-12-16z.json'
+          data = json.load(open(p, encoding='utf-8'))
+          assert data['schema'] == 'shorefeel.glos-shore-observations.v1'
+          assert data['publicationAuthorized'] is False
+          assert data['calibrationAuthorized'] is False
+          assert data['shoreInlandGradientF'] is None
+          assert data['hasVerifiedBeachSandThermometer'] is False
+          print('Observed GLOS archive audit', json.dumps({
+            'status': data['status'],
+            'sourceUrl': data['sourceUrl'],
+            'earliest': data['firstAcceptedAt'],
+            'latest': data['latestAcceptedAt'],
+            'counts': data['coverage'],
+            'publicationAuthorized': data['publicationAuthorized']
+          }, sort_keys=True))
+          PY
+      - name: Preserve scientific QA and real-source audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: shorefeel-glos-observed-historical
+          path: artifacts/shorefeel-glos/
+          if-no-files-found: warn
+          retention-days: 14
