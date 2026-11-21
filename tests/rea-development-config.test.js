@@ -43,16 +43,18 @@ test('REA is a discoverable identical opt-in skill for Codex and Claude Code', a
   const rootClaude = await read('CLAUDE.md');
 
   assert.equal(codex, claude);
-  assert.match(codex, /^---\nname: rea\ndescription: "[^\n]+"\n---/);
-  assert.match(codex, /explicitly requests REA/);
-  assert.match(codex, /npx -y rea-agents@6\\.9\\.0 analyze-javascript-application/);
-  assert.match(codex, /Do not run \`npx rea-agents setup\`/);
-  assert.match(codex, /REA stays off by default/);
-  assert.match(codex, /not installed or running merely because/);
-  assert.match(agents, /\\.agents\\/skills\\/rea\\/SKILL\\.md/);
-  assert.match(agents, /\\.claude\\/skills\\/rea\\/SKILL\\.md/);
-  assert.match(guide, /Both skill files must remain identical/);
-  assert.match(copilot, /REA is explicit-use only/);
-  assert.match(rootClaude, /\\.claude\\/skills\\/rea\\/SKILL\\.md/);
-  for (const file of [codex, claude]) assert.doesNotMatch(file, /[–—]/);
+  assert.ok(codex.startsWith('---\nname: rea\ndescription: "'));
+  assert.ok(codex.includes('explicitly requests REA'));
+  assert.ok(codex.includes('npx -y rea-agents@6.9.0 analyze-javascript-application'));
+  assert.ok(codex.includes('Do not run `npx rea-agents setup`'));
+  assert.ok(codex.includes('REA stays off by default'));
+  assert.ok(codex.includes('not installed or running merely because'));
+  assert.ok(agents.includes('.agents/skills/rea/SKILL.md'));
+  assert.ok(agents.includes('.claude/skills/rea/SKILL.md'));
+  assert.ok(guide.includes('Both skill files must remain identical'));
+  assert.ok(copilot.includes('REA is explicit-use only'));
+  assert.ok(rootClaude.includes('.claude/skills/rea/SKILL.md'));
+  for (const file of [codex, claude]) {
+    assert.ok(!file.includes('–') && !file.includes('—'), 'avoid prohibited punctuation');
+  }
 });
