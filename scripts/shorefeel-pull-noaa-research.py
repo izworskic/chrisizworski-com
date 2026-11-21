@@ -168,9 +168,12 @@ def read_ndbc(station):
         measured.sort(reverse=True)
         air = next(((t, x) for t, x, w in measured if x is not None), None)
         wind = next(((t, w) for t, x, w in measured if w is not None), None)
+        fresh = (air is not None and
+                 dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=72) <= air[0] <= dt.datetime.now(dt.timezone.utc))
         return {"station": station, "sourceUrl": url,
                 "records": len(measured),
                 "airAvailable": air is not None,
+                "airFreshWithin72Hours": fresh,
                 "latestAirAt": air[0].isoformat().replace("+00:00", "Z") if air else None,
                 "latestAirC": air[1] if air else None,
                 "latestWindAt": wind[0].isoformat().replace("+00:00", "Z") if wind else None,
@@ -191,18 +194,26 @@ def run(day, cycle, lead):
         fields, blobs, idx_sha = download_fields(url, product, cycle_key, this_lead)
         archive = {"product": product, "url": url, "indexUrl": url + ".idx",
                    "indexSha256": idx_sha, "ranges": fields, "points": {}}
+        subset_sha = hashlib.sha256(b"".join(blobs[x] for x in ("temperature", "u", "v"))).hexdigest()
         for site, (lat, lon) in hindcast.SITES.items():
             archive["points"][site] = hindcast.extract(
                 sample_point(blobs, lat, lon), product=product,
-                site_id=site, source_url=url,
-                sha256=hashlib.sha256(b"".join(blobs[x] for x in ("temperature", "u", "v"))).hexdigest())
+                site_id=site, source_url=url, sha256=subset_sha)
         products.append(archive)
     records = [point for product in products for point in product["points"].values()]
+    # The original audit checks digest identity. Re-label the actual provenance
+    # before any JSON leaves the research run. We have NOT downloaded full GRIBs.
+    archive_audit = hindcast.audit(records)
+    for row in records:
+        row["selectedFieldsSha256"] = row.pop("sourceFileSha256")
+        row["sourceFileSha256"] = None
+        row["schema"] = "shorefeel.noaa-hindcast-subset.v1"
+    archive_audit["checksumScope"] = "selected indexed GRIB messages only, not full NOAA files"
     return {"schema": "shorefeel.noaa-real-hindcast-pull.v1",
             "sourceDate": f"{day[:4]}-{day[4:6]}-{day[6:8]}",
             "cycleUTC": f"{cycle:02d}:00",
             "modelSources": products,
-            "archiveAudit": hindcast.audit(records),
+            "archiveAudit": archive_audit,
             "offshoreStations": [read_ndbc("SBLM4"), read_ndbc("45163")],
             "fieldThermometersInstalled": False,
             "measuredBeachMinusInlandF": None,
