@@ -30,17 +30,22 @@ jobs:
         run: python3 -m unittest discover -s tests -p test_shorefeel_noaa_pull.py -v
       - name: Install pinned ecCodes Python bindings
         run: python3 -m pip install --disable-pip-version-check eccodes==2.50.1
-      - name: Retrieve real NOAA archived 19 November 2026 model fields
+      - name: Retrieve real NOAA archives across three 2026 seasons
         run: |
           mkdir -p artifacts/shorefeel-real-noaa
-          python3 scripts/shorefeel-pull-noaa-research.py --date 20261119 --cycle 12 --lead 1 > artifacts/shorefeel-real-noaa/2026-11-19-12z.json
-          python3 -m json.tool artifacts/shorefeel-real-noaa/2026-11-19-12z.json > /dev/null
-          cat artifacts/shorefeel-real-noaa/2026-11-19-12z.json
+          for d in 20260715 20260920 20261119; do
+            file="artifacts/shorefeel-real-noaa/${d:0:4}-${d:4:2}-${d:6:2}-12z.json"
+            python3 scripts/shorefeel-pull-noaa-research.py --date "$d" --cycle 12 --lead 1 > "$file"
+            python3 -m json.tool "$file" > /dev/null
+            echo "SHOREFEEL_RESEARCH_BEGIN $d"
+            cat "$file"
+            echo "SHOREFEEL_RESEARCH_END $d"
+          done
       - name: Retain verified source evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: shorefeel-real-noaa-20261119
+          name: shorefeel-real-noaa-2026-seasonal
           path: artifacts/shorefeel-real-noaa/
           if-no-files-found: warn
           retention-days: 30
