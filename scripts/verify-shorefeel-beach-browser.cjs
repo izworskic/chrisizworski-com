@@ -98,6 +98,7 @@ async function run(){
   const pg=await noJs.newPage();
   await pg.goto(origin+'/lake-huron-water-temperature/saginaw-bay/',{waitUntil:'domcontentloaded'});
   assert.match(await pg.locator('h1').innerText(),/feel like at the beach/);
+  await pg.locator('details.evidence summary').click();
   assert.match(await pg.locator('#lead-caveat').innerText(),/not a thermometer on the sand/);
   assert.ok((await pg.locator('a[href*="weather.gov/apx/lake_breeze"]').count())>=1);
   report.push({width:390,mode:'no-javascript',result:'readable source and limits'});
