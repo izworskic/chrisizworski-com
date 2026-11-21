@@ -37,9 +37,16 @@ for (const page of config.pages) {
   check(html.includes(`<title>${expectedTitle}</title>`) || html.includes(`<title>${page.title}</title>`), `${slug}: title drift`);
   check(html.includes(`<h1 id="page-title">${expectedH1}</h1>`) || html.includes(`<h1 id="page-title">${page.h1}</h1>`), `${slug}: H1 drift`);
   check(html.includes(`<link rel="canonical" href="https://chrisizworski.com${page.path}">`), `${slug}: canonical drift`);
+  // The Aug 2026 search experiment is a baseline, not a ceiling on honest
+  // later content updates. Preserve it while requiring current page freshness.
+  const modified = html.match(/"dateModified"\s*:\s*"(\d{4}-\d{2}-\d{2})"/)?.[1];
+  const current = Object.fromEntries(new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/Detroit', year: 'numeric', month: '2-digit', day: '2-digit',
+  }).formatToParts(new Date()).filter(part => part.type !== 'literal').map(part => [part.type, part.value]));
+  const today = `${current.year}-${current.month}-${current.day}`;
   check(
-    html.includes(`"dateModified": "${config.releaseDateModified}"`),
-    `${slug}: dateModified is not aligned to release (expected ${config.releaseDateModified})`,
+    Boolean(modified) && modified >= config.releaseDateModified && modified <= today,
+    `${slug}: dateModified must be at least the release baseline (${config.releaseDateModified}) and not in the future`,
   );
   check(html.includes('NWS swim risk is a forecast, not the posted flag'), `${slug}: posted-flag truth boundary missing`);
   check(overrideSource.includes(`'${slug}'`), `${slug}: durable generator override missing`);

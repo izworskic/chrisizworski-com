@@ -17,6 +17,13 @@ on:
       - 'tests/test_shorefeel_field_pair.py'
       - 'docs/SHOREFEEL_PHASE3_HINDCAST.md'
       - 'scripts/verify-shorefeel-beach-browser.cjs'
+      - 'scripts/verify-shorefeel-network-browser.cjs'
+      - 'api/beaches.js'
+      - 'public/assets/beach-report.js'
+      - 'public/assets/beach-report.css'
+      - 'scripts/generate-beach-pages.mjs'
+      - 'public/great-lakes-beaches/**'
+      - 'tests/shorefeel-beach-network.test.js'
       - '.github/workflows/shorefeel-beach-feel-browser.yml'
   workflow_dispatch:
 permissions:
@@ -35,8 +42,30 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Inventory exact changed-beach source hashes
+        run: |
+          node <<'NODE'
+          const fs=require('node:fs');
+          const crypto=require('node:crypto');
+          const catalog=JSON.parse(fs.readFileSync('data/beaches.json','utf8'));
+          console.log('SHOREFEEL_GUIDE_HASHES_START');
+          for(const beach of catalog.beaches){
+            const file='public/great-lakes-beaches/'+beach.slug+'/index.html';
+            const hash=crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+            console.log(JSON.stringify(['/great-lakes-beaches/'+beach.slug+'/',hash]));
+          }
+          console.log('SHOREFEEL_GUIDE_HASHES_END');
+          console.log('SHOREFEEL_ASSET_HASHES_START');
+          for(const file of ['beach-report.js','beach-report.css']){
+            const bytes=fs.readFileSync('public/assets/'+file);
+            console.log(JSON.stringify(['/assets/'+file,crypto.createHash('sha256').update(bytes).digest('hex')]));
+          }
+          console.log('SHOREFEEL_ASSET_HASHES_END');
+          NODE
       - name: NWS apparent-temperature and shore wind source tests
         run: node --test tests/shorefeel-beach-feel.test.js tests/shorefeel-saginaw.test.js tests/shorefeel-physics.test.js tests/shorefeel-noaa-grid.test.js tests/shorefeel-field-validation.test.js
+      - name: Great Lakes beach network data and integrity tests
+        run: node --test tests/shorefeel-beach-network.test.js tests/beach-static.test.js
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
@@ -50,6 +79,10 @@ jobs:
         env:
           SHORE_QA_OUTPUT: artifacts/shorefeel-beach-qa
         run: SHORE_PW_MODULE="$RUNNER_TEMP/shorefeel-playwright/node_modules/playwright" node scripts/verify-shorefeel-beach-browser.cjs
+      - name: Run Great Lakes beach field-note browser acceptance
+        env:
+          SHORE_QA_OUTPUT: artifacts/shorefeel-beach-qa
+        run: SHORE_PW_MODULE="$RUNNER_TEMP/shorefeel-playwright/node_modules/playwright" node scripts/verify-shorefeel-network-browser.cjs
       - name: Upload browser screenshots and evidence
         if: always()
         uses: actions/upload-artifact@v4

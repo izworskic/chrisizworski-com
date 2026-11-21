@@ -73,7 +73,8 @@ async function run(){
    assert.match(await page.locator('#lead-temp').innerText(),/°F/);
    assert.match(await page.locator('#lead-wind').innerText(),/12 mph from NE/);
    assert.match(await page.locator('#lead-water').innerText(),/58.5°F/);
-   assert.match(await page.locator('#lead-source').innerText(),/NWS land-side area forecast/);
+   assert.match(await page.locator('#lead-source').innerText(),/National Weather Service park-area forecast/);
+   assert.match(await page.locator('#hero-scope').innerText(),/At the beach · Bay City State Park/);
    assert.match(await page.locator('#lead-band-note').innerText(),/No exact degree correction/);
    await page.locator('details.shore-physics summary').click();
    assert.match(await page.locator('#physics-forecast-contrast').innerText(),/-4\.0°F/);

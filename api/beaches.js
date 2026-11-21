@@ -1,5 +1,6 @@
 const catalog = require("../data/beaches.json");
 const fallbackBuoys = require("../data/buoy-fallback.json");
+const { sourceUtc, beachConditions } = require("../lib/shorefeel/beach-network.js");
 const { mergeLatestWithStationMetadata, parseLatestObservations } = require("../lib/ndbc");
 const {
   chooseNearestStation,
@@ -142,6 +143,7 @@ async function fetchWeather(beaches) {
     return {
       current: {
         observed_at: location.current?.time || null,
+        valid_at_utc: sourceUtc(location.current?.time, location.utc_offset_seconds),
         temperature_f: location.current?.temperature_2m ?? null,
         apparent_temperature_f: location.current?.apparent_temperature ?? null,
         weather_code: location.current?.weather_code ?? null,
@@ -328,6 +330,7 @@ module.exports = async function handler(req, res) {
       url: "/great-lakes-beaches/" + beach.slug + "/",
       weather,
       lake_conditions: lakeConditions,
+      shore_feel: beachConditions(beach, weather, lakeConditions, now),
       water_quality: waterQuality,
       hazards,
       swim_risk: swimRisk,
