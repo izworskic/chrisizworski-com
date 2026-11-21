@@ -48,16 +48,16 @@ function reply(slug,missing=false){
   assert.match(await page.locator('#selected-name').innerText(),/Pancake Bay/);
   assert.match(await page.locator('#forecast-units').innerText(),/43°F/);
   assert.match(await page.locator('#source-note').innerText(),/Regional ECCC city forecast/);
-  await page.locator('[data-lake="Ontario"]').click();
+  await page.locator('.chapter-tabs button[data-lake="Ontario"]').click();
   await page.waitForFunction(()=>document.querySelector('#selected-name')?.textContent==='Sandbanks Provincial Park'&&document.querySelector('#forecast-air')?.textContent==='6°C');
   assert.match(await page.locator('#park-samples').getAttribute('href'),/ontarioparks.ca\/beachresults/);
   await page.locator('[data-select="presquile"]').click();
   await page.waitForFunction(()=>document.querySelector('#selected-name')?.textContent.includes("Presqu'ile"));
   assert.equal(await page.locator('[data-select="presquile"]').getAttribute('aria-pressed'),'true');
-  await page.locator('[data-lake="Huron"]').click();
+  await page.locator('.chapter-tabs button[data-lake="Huron"]').click();
   await page.waitForFunction(()=>document.querySelector('#selected-name')?.textContent.includes('Pinery'));
   assert.match(await page.locator('#selected-story').innerText(),/Lake Huron|dunes/i);
-  await page.locator('[data-lake="Superior"]').click();
+  await page.locator('.chapter-tabs button[data-lake="Superior"]').click();
   await page.waitForFunction(()=>document.querySelector('#selected-name')?.textContent==='Pancake Bay Provincial Park');
   await page.waitForFunction(()=>document.querySelector('#map-fallback')?.hidden===false,{timeout:17000});
   const metrics=await page.evaluate(()=>{
