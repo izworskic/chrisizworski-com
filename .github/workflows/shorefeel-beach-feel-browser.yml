@@ -42,6 +42,20 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Inventory exact changed-beach source hashes
+        run: |
+          node <<'NODE'
+          const fs=require('node:fs');
+          const crypto=require('node:crypto');
+          const catalog=JSON.parse(fs.readFileSync('data/beaches.json','utf8'));
+          console.log('SHOREFEEL_GUIDE_HASHES_START');
+          for(const beach of catalog.beaches){
+            const file='public/great-lakes-beaches/'+beach.slug+'/index.html';
+            const hash=crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+            console.log(JSON.stringify(['/great-lakes-beaches/'+beach.slug+'/',hash]));
+          }
+          console.log('SHOREFEEL_GUIDE_HASHES_END');
+          NODE
       - name: NWS apparent-temperature and shore wind source tests
         run: node --test tests/shorefeel-beach-feel.test.js tests/shorefeel-saginaw.test.js tests/shorefeel-physics.test.js tests/shorefeel-noaa-grid.test.js tests/shorefeel-field-validation.test.js
       - name: Great Lakes beach network data and integrity tests
