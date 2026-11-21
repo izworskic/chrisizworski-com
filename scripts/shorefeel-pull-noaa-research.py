@@ -14,6 +14,7 @@ import io
 import json
 import re
 import sys
+import tempfile
 from pathlib import Path
 from urllib.request import Request, urlopen
 
@@ -115,7 +116,11 @@ def sample_point(blobs, lat, lon):
     import eccodes
     messages = []
     for label in ("temperature", "u", "v"):
-        with io.BytesIO(blobs[label]) as binary:
+        # ecCodes reads a C file descriptor; io.BytesIO has no fileno().
+        # TemporaryFile avoids persistent GRIB files and cleans up on close.
+        with tempfile.TemporaryFile(mode="w+b") as binary:
+            binary.write(blobs[label])
+            binary.seek(0)
             gid = eccodes.codes_grib_new_from_file(binary)
             if gid is None:
                 raise ValueError("ecCodes could not decode NOAA GRIB2 field")
