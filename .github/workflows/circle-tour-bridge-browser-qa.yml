@@ -4,6 +4,9 @@ on:
     branches: [main]
     paths:
       - 'public/lake-superior-circle-tour/index.html'
+      - 'public/assets/circle-tour-pace.js'
+      - 'public/assets/circle-tour-pace.css'
+      - 'tests/circle-tour-pace.test.cjs'
       - 'public/assets/circle-tour-bridge.*'
       - 'public/assets/circle-tour-rust-itinerary.js'
       - 'public/assets/shared-itinerary.wasm.b64'
@@ -63,6 +66,7 @@ jobs:
           python3 scripts/build-circle-tour-trip-intelligence.py
           python3 scripts/build-circle-tour-trip-intelligence.py --check
           node --test tests/circle-tour-bridge.test.js tests/circle-tour-foundation.test.cjs tests/circle-tour-shared-rust.test.cjs tests/circle-tour-trip-intelligence.test.cjs tests/circle-tour-road-evidence.test.js tests/circle-tour-traveler-planner.test.cjs
+          node --test tests/circle-tour-pace.test.cjs
           node scripts/experience-foundry.mjs connections --owner pictured-rocks
       - name: Install isolated pinned Chromium harness
         run: |

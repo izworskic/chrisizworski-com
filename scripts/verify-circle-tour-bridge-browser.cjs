@@ -30,6 +30,35 @@ function check(value,message){if(!value)throw Error(message);}
     const response=await page.goto(url,{waitUntil:'domcontentloaded',timeout:35000});
     check(response.status()===200,size.name+': original route missing');
     await page.waitForFunction(()=>document.querySelector('#ctb-status')?.textContent.includes('approved connection'),null,{timeout:30000});
+    // Route Rhythm must change the actual published route decision, not only bar colors.
+    await page.waitForFunction(()=>document.querySelectorAll('#ctpace-routes [data-ctpace-route]').length===3,
+      null,{timeout:20000});
+    check((await page.locator('[data-ctpace-route="7"] .ctpace-route-count strong').textContent()).trim()==='3',
+      size.name+': 7-day five-hour overload count incorrect');
+    check((await page.locator('[data-ctpace-route="10"] .ctpace-route-count strong').textContent()).trim()==='2',
+      size.name+': 10-day five-hour overload count incorrect');
+    check((await page.locator('[data-ctpace-route="15"] .ctpace-route-count strong').textContent()).trim()==='0',
+      size.name+': 15-day five-hour overload count incorrect');
+    await page.locator('#ctpace-hours').selectOption('8');
+    check((await page.locator('#ctpace-verdict').textContent()).includes('Seven days'),
+      size.name+': eight-hour target did not change the route choice');
+    await page.locator('#ctpace-hours').selectOption('5');
+    await page.locator('[data-ctpace-preview="7"]').click();
+    await page.waitForFunction(()=>document.querySelector('.preset-btn[data-preset="7"]')?.getAttribute('aria-pressed')==='true',
+      null,{timeout:15000});
+    check(await page.locator('[data-ctpace-route="7"].is-selected').count()===1,
+      size.name+': route ribbon did not follow actual planner selection');
+    await page.locator('[data-ctpace-preview="10"]').click();
+    check(await page.locator('[data-ctpace-route="10"].is-selected').count()===1,
+      size.name+': returning to the balanced route left stale comparison state');
+    const paceWidth=await page.evaluate(()=>({doc:document.documentElement.scrollWidth,viewport:innerWidth}));
+    check(paceWidth.doc<=paceWidth.viewport+2,size.name+': route rhythm caused horizontal overflow '+JSON.stringify(paceWidth));
+    if(size.width===390||size.width===1440){
+      const capture='route-rhythm-'+size.name+'.png';
+      await page.locator('#circle-tour-pace').screenshot({path:path.join(out,capture),timeout:25000});
+      report.screenshots.push(capture);
+    }
+    report.cases.push({state:size.name+' route rhythm',result:'7/10/15 model, 5 to 8 hour target, preview A/B, overflow checked'});
     const count=await page.locator('#ctb-results .ctb-entry').count();
     check(count>0&&count<=6,size.name+': initial handoff results invalid '+count);
     check(await page.locator('article.stop-card').count()===31,size.name+': lost existing stop cards');
@@ -597,6 +626,10 @@ function check(value,message){if(!value)throw Error(message);}
   check(await staticPage.locator('#ctb-fallback').isVisible(),'no-JS fallback not visible');
   check(await staticPage.locator('#ctb-fallback a').count()>=8,'no-JS specialist and highway handoffs missing');
   check(await staticPage.locator('article.stop-card').count()===31,'no-JS original itinerary lost');
+  check((await staticPage.locator('#ctpace-verdict').textContent()).includes('15-day itinerary has none'),
+    'no-JS route rhythm explanation missing');
+  check(await staticPage.locator('#circle-tour-pace a[href="#circle-tour-itineraries"]').count()===1,
+    'no-JS route comparison lost the complete published-day link');
   const staticGuide=await noJs.newPage();
   await staticGuide.goto(url+'10-day/',{waitUntil:'domcontentloaded',timeout:35000});
   check(await staticGuide.locator('article.day').count()===10&&
