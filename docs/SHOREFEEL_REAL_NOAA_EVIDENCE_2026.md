@@ -19,7 +19,7 @@ The July morning park-grid contrast is slightly negative; September and November
 
 ## Source accountability and sample quality
 
-- HRRR official public archive: `https://noaa-hrrr-bdp-pds.s3.amazonaws.com/hrrr.YYYYMMDD/conus/hrrr.t12z.wrfsfcf01.grib2`. Forecast issued at 12 UTC and valid at 13 UTC. 3-km class model, 2-meter temperature and 10-meter winds.
+- HRRR official public archive: `https://noaa-hrrr-bdp-pds.s3.amazonaws.com/hrrr.YYYYMMDD/conus/hrrr.t12z.wrfsfcf01.grib2`. Forecast initialized at the 12 UTC model cycle and valid at 13 UTC; the exact archive publication time is not established by this sample. 3-km class model, 2-meter temperature and 10-meter winds.
 - URMA official public archive: `https://noaa-urma-pds.s3.amazonaws.com/urma2p5.YYYYMMDD/urma2p5.t12z.2dvaranl_ndfd.grb2_wexp`. Analysis valid 12 UTC, not a real-time forecast. 2.5-km class gridded analysis.
 - The bounded retrieval reads original NOAA `.idx` files, validates strict ordered GRIB message offsets and cycle metadata, then fetches *only* the 2-meter temperature and 10-meter U/V wind GRIB fields via HTTP Range requests. Each field has its own SHA-256, plus index SHA-256 and a digest over the three selected fields. **No full-GRIB-file checksum is claimed.**
 - Actual 2-meter grid air values come from ecCodes-decoded NOAA GRIB messages. All three dates yielded four accepted site/product records each, with no rejected or conflicting revisions. The JSON includes exact archive URL, UTC clock, forecast lead, nearest gridpoint latitude/longitude and distance, wind source direction and field hashes.
