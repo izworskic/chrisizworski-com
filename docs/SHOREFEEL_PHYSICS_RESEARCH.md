@@ -85,6 +85,58 @@ The Biggs/Graves lake-breeze index and subsequent Laird/Kristovich studies show 
 - Browser tests at phone and desktop, no-JS source text, NWS outages and full repository CI must pass before review.
 - Never change the actual first-screen NWS temperature based on this research-stage sweep.
 
+## Current extension: actual NWS grid identity and independent NOAA offshore air
+
+The live API now retains the NWS `gridId/gridX/gridY` for both locations, blocks a numeric "shore minus inland" difference when the points resolve to one 2.5 km cell, and refuses to run the 27 physics scenarios if either location's grid identity is unverified. This is stronger than merely comparing different URL coordinates. Distinct cell differences are still **two forecasts**, not two thermometers.
+
+The extra NOAA request is a bounded 2.6-second read of `https://www.ndbc.noaa.gov/data/realtime2/SBLM4.txt`, an official fixed lighthouse station in Saginaw Bay. Its measured air temperature is preferred over seasonal buoy 45163 when a valid recent `ATMP` report is present. Both are displayed only as **offshore** supporting observations. A missing or sentinel `ATMP` produces no reading. The existing park-area forecast and water-evidence map remain independent of both sources.
+
+## Field measurement validation harness (offline only)
+
+The `lib/shorefeel/field-validation.js` and `scripts/shorefeel-validate-field.cjs` additions provide an internal, deterministic scientific evaluation workflow. They are **not deployed as an API** and do not supply a public beach-air correction. Use:
+
+```bash
+node scripts/shorefeel-validate-field.cjs /path/to/measured-beach-airs.json
+```
+
+Input JSON contract:
+
+```json
+{
+  "units": "F",
+  "station": {
+    "type": "measured-beach-air",
+    "id": "YOUR-INDEPENDENT-SHORE-STATION-ID",
+    "lat": 43.6714,
+    "lon": -83.9068,
+    "sensorHeightM": 2,
+    "distanceFromShoreM": 80,
+    "radiationShielded": true
+  },
+  "modelVersion": "version-locked-before-the-holdout",
+  "modelLockedAt": "2027-06-01T00:00:00Z",
+  "holdoutStartsAt": "2027-07-01T00:00:00Z",
+  "observations": [
+    {
+      "observedAt": "2027-07-01T15:00:00Z",
+      "beachAirF": 72.5,
+      "nwsShoreF": 77.0,
+      "modelBeachF": 73.0,
+      "nwsIssuedAt": "2027-07-01T11:00:00Z",
+      "modelIssuedAt": "2027-07-01T11:00:00Z",
+      "windSector": "onshore",
+      "eventId": "lake-breeze-event-001"
+    }
+  ]
+}
+```
+
+**Example structure only: none of the numbers above represents a real measurement. Do not import it into the deployed tool.**
+
+The evaluator requires independent, radiation-shielded near-water air instrumentation with a documented sensor height, not offshore buoy data or gridded analyses. It checks future/invalid readings, stale or post-issued forecasts, duplicate/conflicting timestamps, missing fields, explicit wind regime, and a locked model before the holdout. It computes paired MAE/RMSE/bias for the unchanged NWS baseline and candidate on precisely the same held-out observations. At least 100 records over 14 days and 10 distinct events plus a held-out set of 40 records over 7 days and 5 events with both onshore and offshore cases are minimum **review gates only**, not evidence of scientific validity. No automatic model fitting, output publication, or performance certification is allowed, even if these counts are reached.
+
+Only the user-provided file is analyzed; no repository data archive, personal coordinates, new paid API, Redis, database or serverless endpoint is created. Real-world field permission, instrument calibration, sensor shading and model provenance still need independent inspection.
+
 ## Next research investment to achieve useful accuracy
 
 A practical real-beach forecast requires pairing **hourly in-situ 2-m beach-air thermometer readings** with at least one inland station, NWS/RTMA or HRRR hindcasts, NOAA inner-bay temperature, near-shore wind speed/direction, humidity, solar irradiance, and actual over-water fetch from shoreline geometry. Separate daylight lake-breeze onset from preexisting synoptic onshore wind. Use season-blocked or event-blocked training/validation to avoid leakage, compare bias/MAE/RMSE and empirical prediction interval coverage against the plain NWS beach-grid baseline. Only publish a calibrated central estimate, skill score or error bound if held-out beach observations substantiate it. Until then, prefer verified forecast contrasts and explicitly labeled physical scenarios.
