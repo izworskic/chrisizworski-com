@@ -1,0 +1,89 @@
+name: ShoreFeel online-only public weather evidence
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/shorefeel-glos-observations.py'
+      - 'tests/test_shorefeel_glos_observations.py'
+      - 'scripts/shorefeel-nws-forecast-capture.py'
+      - 'tests/test_shorefeel_nws_forecast_capture.py'
+      - 'scripts/shorefeel-online-coastal-contrast.py'
+      - 'tests/test_shorefeel_online_coastal_contrast.py'
+      - 'docs/SHOREFEEL_ONLINE_ONLY_DATA_20261121.md'
+      - '.github/workflows/shorefeel-online-only-evidence.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: shorefeel-online-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  online-evidence:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: ShoreFeel NOAA NWS and GLOS research tests
+        run: python3 -m unittest discover -s tests -p 'test_shorefeel_*.py' -v
+      - name: Fetch only public bounded weather observations and forecasts
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/shorefeel-online-only
+          python3 scripts/shorefeel-glos-observations.py \
+            --start 2022-06-01T12:00:00Z --end 2022-06-01T16:00:00Z \
+            > artifacts/shorefeel-online-only/glos-petoskey-historical.json
+          python3 scripts/shorefeel-nws-forecast-capture.py \
+            --output artifacts/shorefeel-online-only/nws-prospective.json
+          python3 scripts/shorefeel-online-coastal-contrast.py \
+            artifacts/shorefeel-online-only/nws-prospective.json \
+            > artifacts/shorefeel-online-only/shore-vs-inland-grids.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('artifacts/shorefeel-online-only')
+          glos=json.loads((root/'glos-petoskey-historical.json').read_text())
+          nws=json.loads((root/'nws-prospective.json').read_text())
+          coast=json.loads((root/'shore-vs-inland-grids.json').read_text())
+          assert glos['publicationAuthorized'] is False
+          assert glos['hasSameHourInlandObservation'] is False
+          assert glos['coverage']['goodAirRows'] >= 1, 'No QC-approved real coastal air observations'
+          assert nws['siteCount']==2
+          assert coast['schema']=='shorefeel.online-coastal-contrast.v1'
+          assert coast['publicationAuthorized'] is False
+          assert coast['beachSandTemperatureF'] is None
+          assert coast['quarterMileDifferenceF'] is None
+          assert coast['coverage']['pairedHours']>=1, 'No valid prospective official NWS grid comparisons'
+          print('SHOREFEEL_ONLINE_ONLY_REAL_SOURCES',json.dumps({
+            'glosAcceptedAir':glos['coverage']['goodAirRows'],
+            'glosAcceptedAirWind':glos['coverage']['goodAirAndWindRows'],
+            'nwsSiteCount':nws['siteCount'],
+            'distinctNwsGrids':nws['distinctForecastGridCells'],
+            'comparableHours':coast['coverage']['pairedHours'],
+            'shoreMinusInlandFirstHourF':coast['hours'][0]['shoreMinusInlandForecastF'],
+            'publishedBeachCorrection':coast['calibratedBeachCorrectionF']
+          },sort_keys=True))
+          PY
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned site dependencies
+        run: npm ci
+      - name: Complete site source verification
+        run: npm run verify:all
+      - name: Archive public weather research sample for review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: shorefeel-online-only-evidence
+          path: artifacts/shorefeel-online-only/
+          retention-days: 14
+          if-no-files-found: ignore
