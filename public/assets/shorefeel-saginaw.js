@@ -36,13 +36,13 @@ function renderLead(){
  put('lead-temp',weather?Math.round(feel.apparentF)+'°F':'Beach feel unavailable');
  put('lead-band',weather?feel.label:'Beach conditions unverified');
  put('lead-band-note',weather?feel.note:'A current NWS shoreline-area forecast is not available. We cannot infer beach air from water alone.');
- put('lead-source',weather?feel.apparentMethod+' · NWS land-side area forecast near the park at '+date(feel.startsAt)+'. Not a sand-side air measurement.':'No current verified beach-area forecast');
+ put('lead-source',weather?feel.apparentMethod+' · National Weather Service park-area forecast · '+date(feel.startsAt):'No current verified forecast at the beach');
  put('lead-wind',weather&&Number.isFinite(feel.windMph)?Math.round(feel.windMph)+' mph'+(feel.windFrom?' from '+feel.windFrom:''):'Unavailable');
  put('lead-water',validWater?temp(water.tempF)+' · analyzed offshore':'Not verified');
  put('lead-humidity',weather&&Number.isFinite(feel.humidity)?Math.round(feel.humidity)+'%':'Unavailable');
- put('lake-influence-detail',weather?feel.dataLine:'Wind direction and water temperature will be compared when the NWS forecast is available.');
+ put('lake-influence-detail',weather?feel.note:'The bay has a say in the weather here. Once the NWS forecast arrives, compare the wind with nearby water temperature before heading to the sand.');
  put('lead-caveat',weather?feel.limitation:'NWS area air, nearby analyzed water and wind direction are different observations. There is no directly measured beach-air temperature here.');
- put('hero-scope',weather?'Bay City State Park · nearby land NWS forecast (~0.25 mile inland) · '+feel.apparentMethod:'Bay City State Park · no recent shoreline-area air forecast');
+ put('hero-scope',weather?'At the beach · Bay City State Park · '+feel.apparentMethod:'At the beach · Bay City State Park · Forecast unavailable');
  put('last-updated',payload?.generatedAt?'Sources checked '+date(payload.generatedAt):'Unable to verify latest source');
  const physics=payload?.shorelinePhysics;
  const paired=physics?.paired,grid=physics?.gridRelationship;
