@@ -23,16 +23,40 @@ a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}
 .site-header .site-title{font-size:20px;font-weight:normal;color:var(--green)}
 .site-nav{text-align:center;padding:10px 20px;border-bottom:1px solid var(--border);font-size:13px}
 .site-nav a{color:#5a5a5a;margin:0 8px}.site-nav a.active{color:var(--green);font-weight:bold}
-.hero{background:#103743;color:#fff;padding:clamp(22px,4vw,46px) 24px;text-align:center}
-.hero h1{font-size:clamp(24px,4vw,44px);font-weight:normal;line-height:1.16;margin:0 auto 8px;max-width:26ch;text-wrap:balance}
-.hero-route{font:600 14px/1.5 system-ui,sans-serif;color:#d2e8ea}
+.hero{background:#103743;color:#f9fbf6}
+.hero-inner{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.13fr);align-items:stretch;max-width:1220px;margin:0 auto}
+.hero-copy{align-self:center;padding:clamp(24px,4vw,52px)}
+.hero h1{font-size:clamp(32px,4.1vw,54px);font-weight:normal;line-height:1.02;margin-bottom:12px;max-width:16ch;text-wrap:balance}
+.hero-deck{max-width:39ch;color:#e0eef0;font-size:clamp(15px,1.6vw,19px);line-height:1.5;margin-bottom:12px}
+.hero-route{font:600 13px/1.5 system-ui,sans-serif;color:#c1dce0;margin-bottom:14px}
 .hero-route span{margin:0 3px}
-.route-guide-intro{margin-top:24px;padding-top:18px;border-top:1px solid var(--border)}
-.route-guide-intro h3{font-size:20px;color:#103743}
-.route-guide-intro .tagline{max-width:82ch;margin:6px 0 14px}
-.route-stats{display:flex;flex-wrap:wrap;gap:8px 22px;margin:8px 0 14px;color:#24484f}
-.stat-pill .n{display:block;font-size:18px;font-variant-numeric:tabular-nums}
-.stat-pill .l{font:12px/1.4 system-ui,sans-serif}
+.hero-action{display:inline-flex;align-items:center;min-height:44px;padding:8px 16px;background:#f3d69b;color:#152e32;border-radius:8px;font:700 14px/1.35 system-ui,sans-serif}
+.hero a:focus-visible{outline:3px solid #f3d69b;outline-offset:4px}
+.hero-photo{position:relative;display:grid;grid-template-rows:1fr auto;min-width:0;min-height:250px;background:#214d56}
+.hero-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 47%;color:#f9fbf6}
+.hero-photo figcaption{position:relative;grid-row:2;display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px 14px;padding:7px 12px;background:#102d35;color:#f9fbf6;font:12px/1.5 system-ui,sans-serif}
+.hero-photo a{color:#f9fbf6;text-decoration:underline;text-underline-offset:2px}
+.route-guide-intro{margin-top:26px;padding-top:18px;border-top:1px solid var(--border)}
+.route-guide-intro h3{font-size:clamp(22px,3vw,30px);line-height:1.2;color:#103743}
+.route-guide-intro .tagline{max-width:76ch;margin:12px 0;color:#385153}
+.shore-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;list-style:none;margin:14px 0}
+.shore-list li{border-top:3px solid var(--shore);padding-top:7px;line-height:1.5}
+.shore-list small{display:block;font:700 12px/1.5 system-ui,sans-serif;color:#385153}
+.shore-list a{font-size:18px;color:#103743;text-decoration:underline;text-underline-offset:3px}
+.shore-list p{margin-top:4px}
+.pace-disclosure{margin-top:18px;border:1px solid #c7d5d2;border-radius:10px;background:#fff}
+.pace-disclosure>summary{padding:10px 16px;min-height:48px;cursor:pointer;color:#103743;font:700 14px/1.8 system-ui,sans-serif}
+.pace-disclosure .ctpace{margin:0 16px;border-bottom:0}
+#circle-tour-answer,#circle-tour-pace{scroll-margin-top:12px}
+@media(max-width:760px){
+  .hero-inner{grid-template-columns:1fr}
+  .hero-copy{padding:18px 16px}
+  .hero h1{max-width:20ch}
+  .hero-deck{margin-bottom:8px}
+  .hero-route{margin-bottom:10px}
+  .hero-photo{min-height:clamp(158px,44vw,222px)}
+  .shore-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+}
 .seg-tabs{display:flex;overflow-x:auto;border-bottom:2px solid var(--border);background:#fff;padding:0 16px;position:sticky;top:0;z-index:200;scrollbar-width:none}
 .seg-tabs::-webkit-scrollbar{display:none}
 .seg-tab{padding:11px 15px;font-size:13px;font-family:Georgia,serif;border:none;background:none;cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent;margin-bottom:-2px;color:#888;transition:all .15s}
@@ -132,7 +156,7 @@ a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}
 .footer{text-align:center;padding:18px;border-top:1px solid var(--border);font-size:12px;color:#ccc}
 @media(max-width:960px){.sidebar{display:none}.main-wrap{display:block}}
 @media(max-width:600px){.stop-name{font-size:15px}}
-@media print{.seg-tabs,.filter-bar,.sidebar,.add-btn,.stop-toggle,.site-nav,.gl-related,.footer,.faq-section,.qr-section,.planning-box,.route-stats{display:none!important}.stop-card .stop-body{display:block!important}.stop-card{break-inside:avoid}.main-wrap{display:block}}
+@media print{.seg-tabs,.filter-bar,.sidebar,.add-btn,.stop-toggle,.site-nav,.gl-related,.footer,.faq-section,.qr-section,.planning-box,.hero-photo{display:none!important}.stop-card .stop-body{display:block!important}.stop-card{break-inside:avoid}.main-wrap{display:block}}
 
 /* Route answer and interactive map */
 .route-planner{max-width:1220px;margin:0 auto;padding:18px 20px 22px;background:transparent;border:0;border-top:4px solid var(--green);border-radius:3px}
@@ -312,7 +336,8 @@ a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}
   .stop-body{display:block !important;border-top:1px solid #ccc}
   .hero{background:white !important;color:black !important;padding:16px 12px}
   .hero h1{color:black}
-  .hero-route{color:#333}
+  .hero-route,.hero-deck{color:#333}
+  .hero-photo,.hero-action{display:none}
   .stat-pill{border-color:#888;background:white !important;color:black !important}
   .stat-pill .l{color:#666 !important}
   .itin-panel{display:block !important;page-break-before:always}
@@ -381,11 +406,24 @@ a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}
   <a href="/">Home</a><a href="/about/">About</a><a href="/start-here/">Start Here</a><a href="/tools/" class="active">Tools</a><a href="/press/">Press</a><a href="/media/">Media</a><a href="/timeline/">Timeline</a><a href="/citations/">Citations</a><a href="/case-studies/">Case Studies</a>
 </nav>
 <div class="hero">
-  <h1>Lake Superior Circle Tour Map &amp; Itinerary Planner</h1>
-  <p class="hero-route">About 1,300 miles <span aria-hidden="true">·</span> 31 stops <span aria-hidden="true">·</span> 7 to 15 days</p>
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <h1>Lake Superior Circle Tour</h1>
+      <p class="hero-deck">Follow the lake from sandstone sea caves to the granite coves of Ontario. Pick the places you want to linger, then build the drive around them.</p>
+      <p class="hero-route">About 1,300 miles <span aria-hidden="true">·</span> 31 stops <span aria-hidden="true">·</span> 7 to 15 days</p>
+      <a class="hero-action" href="#circle-tour-answer" data-growth-cta="circle-tour-open-map">Open the map &amp; plan my route</a>
+    </div>
+    <figure class="hero-photo">
+      <img src="/assets/circle-tour/photos/day-06-pictured-rocks.jpg" width="500" height="375" fetchpriority="high" decoding="async" alt="Sandstone cliffs and teal water at Miners Castle in Pictured Rocks National Lakeshore">
+      <figcaption>
+        <a href="https://picturedrocks.chrisizworski.com/">Miners Castle, Pictured Rocks, Michigan</a>
+        <span><a href="https://commons.wikimedia.org/wiki/File:Calm_summer_day_at_Miners_Castle_(31924797-119d-4ca9-b4ec-933447d0d9d3).JPG">National Park Service</a> · <a href="https://creativecommons.org/publicdomain/mark/1.0/">Public domain</a></span>
+      </figcaption>
+    </figure>
+  </div>
 </div>
 <section class="route-planner" aria-labelledby="circle-tour-answer">
-  <h2 id="circle-tour-answer">Build your Lake Superior Circle Tour</h2>
+  <h2 id="circle-tour-answer" tabindex="-1">Circle Tour map &amp; itinerary planner</h2>
   <p class="route-answer">Seven days covers the highlights. Ten gives you time for more stops, and 15 leaves room for hikes and boat tours.</p>
   <div class="planner-controls" aria-label="Map itinerary controls">
     <div class="preset-buttons" role="group" aria-label="Choose an itinerary">
@@ -445,39 +483,15 @@ a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}
   </div>
   <p class="planner-note planner-map-note">The map is a planning overview, not turn-by-turn navigation. Daily direction links open Google Maps; confirm road, weather, park, and <a href="#planning-essentials">border conditions</a> before departure. The map loads only when it nears your screen, and no account is required.</p>
   <noscript><p class="planner-note"><strong>JavaScript is off.</strong> Read the complete <a href="#circle-tour-itineraries">7-, 10-, and 15-day itineraries</a> or <a href="#segTabs">browse all 31 stops</a>.</p></noscript>
-  <section class="ctpace" id="circle-tour-pace" aria-labelledby="ctpace-heading">
-    <div class="ctpace-head">
-      <div class="ctpace-intro">
-
-        <h3 id="ctpace-heading">How much of the day belongs to the road?</h3>
-        <p>From the freighters at Duluth to the granite headlands of Ontario, the best stops deserve time away from the windshield. Set a comfortable daily driving limit and see where each published itinerary asks for more.</p>
-      </div>
-      <label class="ctpace-hours" for="ctpace-hours"><span>My daily driving target</span>
-        <select id="ctpace-hours">
-          <option value="4">4 hours</option>
-          <option value="5" selected>5 hours</option>
-          <option value="6">6 hours</option>
-          <option value="7">7 hours</option>
-          <option value="8">8 hours</option>
-        </select>
-      </label>
-    </div>
-    <p class="ctpace-verdict" id="ctpace-verdict" role="status" aria-live="polite">At a rough 5-hour daily driving target, the 7-day itinerary has three longer road days, the 10-day itinerary has two, and the 15-day itinerary has none. The original written routes remain available below.</p>
-    <div class="ctpace-routes" id="ctpace-routes">
-      <p>Compare the full 7-, 10-, and 15-day itineraries below. This driving comparison is enhanced when JavaScript is available.</p>
-    </div>
-    <p class="ctpace-method">Each bar represents one published day. Road-time allowance is estimated from the published mileage at 47 mph with a 20% planning margin. This is <strong>not a routed ETA</strong> and does not account for visits, border waits, road conditions, or every park approach. <a href="#circle-tour-itineraries">Read the complete itineraries and road evidence</a> before making reservations.</p>
-  </section>
   <div class="route-guide-intro">
-    <h3>What you’ll see around the lake</h3>
-    <p class="tagline">Begin in Duluth, where freighters pass beneath the lift bridge. Follow Lake Superior past red sandstone, old copper ports, thundering waterfalls and the wild boreal shore of Ontario before coming home along Minnesota’s North Shore. This stop-by-stop Circle Tour guide brings together 31 major stops, freighter-watching notes at every port, 7-, 10-, and 15-day itineraries, live water-level data and ice-out timing for the Ontario lakes. Built from a Bay City, Michigan, Great Lakes perspective by <a href="/about/">Chris Izworski</a>, publisher of the <a href="https://gazette.chrisizworski.com">Great Lakes Gazette</a>.</p>
-    <div class="route-stats">
-      <div class="stat-pill"><span class="n">~1,300</span><span class="l">Total Miles</span></div>
-      <div class="stat-pill"><span class="n">31</span><span class="l">Major Stops</span></div>
-      <div class="stat-pill"><span class="n">240+</span><span class="l">Activities</span></div>
-      <div class="stat-pill"><span class="n">MI · WI · MN · ON</span><span class="l">4 States / Provinces</span></div>
-      <div class="stat-pill"><span class="n">7–15 Days</span><span class="l">Recommended</span></div>
-    </div>
+    <h3>Four shores, four good reasons to pull over</h3>
+    <ul class="shore-list">
+      <li style="--shore:var(--wi)"><small>Wisconsin</small><a href="/apostle-islands/">Apostle Islands</a><p>Base yourself in Bayfield for the sandstone sea caves. Choose between a cruise, a mainland trail, or time on the islands.</p></li>
+      <li style="--shore:var(--mi)"><small>Michigan</small><a href="https://picturedrocks.chrisizworski.com/">Pictured Rocks</a><p>Look down on Miners Castle from the bluff, or plan a boat trip to see the cliffs from the water.</p></li>
+      <li style="--shore:var(--on)"><small>Ontario</small><a href="/lake-superior-provincial-park/">Old Woman Bay</a><p>Pause at the beach beneath the headlands, then decide whether to set aside time for a longer park walk.</p></li>
+      <li style="--shore:var(--mn)"><small>Minnesota</small><a href="#stop-27">Split Rock Lighthouse</a><p>See the beacon above the bluff. Allow time for a shore walk or a separate visit to the historic site.</p></li>
+    </ul>
+    <p class="tagline">Chris Izworski, publisher of the <a href="https://gazette.chrisizworski.com">Great Lakes Gazette</a>, compiled the stop guides, freighter-watching notes, and itineraries from Bay City, Michigan.</p>
     <ul class="answer-facts">
       <li><strong>Route</strong>31 major stops around the full Lake Superior shoreline.</li>
       <li><strong>Direction</strong>This guide runs counterclockwise from Duluth, but you can start anywhere.</li>
@@ -488,6 +502,31 @@ a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}
       <a href="#journey-atlas">Explore experiences by time and interest</a>
     </div>
   </div>
+  <details class="pace-disclosure">
+    <summary>Compare daily drive times for all three routes</summary>
+    <section class="ctpace" id="circle-tour-pace" aria-labelledby="ctpace-heading">
+      <div class="ctpace-head">
+        <div class="ctpace-intro">
+          <h3 id="ctpace-heading">How much of the day belongs to the road?</h3>
+          <p>From the freighters at Duluth to the granite headlands of Ontario, the best stops deserve time away from the windshield. Set a comfortable daily driving limit and see where each published itinerary asks for more.</p>
+        </div>
+        <label class="ctpace-hours" for="ctpace-hours"><span>My daily driving target</span>
+          <select id="ctpace-hours">
+            <option value="4">4 hours</option>
+            <option value="5" selected>5 hours</option>
+            <option value="6">6 hours</option>
+            <option value="7">7 hours</option>
+            <option value="8">8 hours</option>
+          </select>
+        </label>
+      </div>
+      <p class="ctpace-verdict" id="ctpace-verdict" role="status" aria-live="polite">At a rough 5-hour daily driving target, the 7-day itinerary has three longer road days, the 10-day itinerary has two, and the 15-day itinerary has none. The original written routes remain available below.</p>
+      <div class="ctpace-routes" id="ctpace-routes">
+        <p>Compare the full 7-, 10-, and 15-day itineraries below. This driving comparison is enhanced when JavaScript is available.</p>
+      </div>
+      <p class="ctpace-method">Each bar represents one published day. Road-time allowance is estimated from the published mileage at 47 mph with a 20% planning margin. This is <strong>not a routed ETA</strong> and does not account for visits, border waits, road conditions, or every park approach. <a href="#circle-tour-itineraries">Read the complete itineraries and road evidence</a> before making reservations.</p>
+    </section>
+  </details>
 </section>
 <!-- INDEPENDENT CIRCLE TOUR BRIDGE: approved tool URLs only; original planner and all specialist sources stay intact. -->
 <section class="ctb-shell" id="circle-tour-tool-bridge" data-circle-tour-bridge aria-labelledby="ctb-heading">

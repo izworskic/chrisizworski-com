@@ -30,6 +30,13 @@ function check(value,message){if(!value)throw Error(message);}
     const response=await page.goto(url,{waitUntil:'domcontentloaded',timeout:35000});
     check(response.status()===200,size.name+': original route missing');
     await page.waitForFunction(()=>document.querySelector('#ctb-status')?.textContent.includes('approved connection'),null,{timeout:30000});
+    check(await page.locator('.hero-photo img').evaluate(img=>img.complete && img.naturalWidth>0),
+      size.name+': lead photo failed to load');
+    await page.getByRole('link',{name:'Open the map & plan my route'}).click();
+    check(new URL(page.url()).hash==='#circle-tour-answer',size.name+': lead map action missed the planner');
+    check(await page.locator('#circle-tour-pace').isHidden(),size.name+': drive comparison started expanded');
+    await page.getByRole('link',{name:'Compare drive times',exact:true}).click();
+    check(await page.locator('#circle-tour-pace').isVisible(),size.name+': drive-time link did not open comparison');
     // Route Rhythm must change the actual published route decision, not only bar colors.
     await page.waitForFunction(()=>document.querySelectorAll('#ctpace-routes [data-ctpace-route]').length===3,
       null,{timeout:20000});
@@ -626,6 +633,8 @@ function check(value,message){if(!value)throw Error(message);}
   check(await staticPage.locator('#ctb-fallback').isVisible(),'no-JS fallback not visible');
   check(await staticPage.locator('#ctb-fallback a').count()>=8,'no-JS specialist and highway handoffs missing');
   check(await staticPage.locator('article.stop-card').count()===31,'no-JS original itinerary lost');
+  await staticPage.getByText('Compare daily drive times for all three routes',{exact:true}).click();
+  check(await staticPage.locator('#ctpace-verdict').isVisible(),'no-JS disclosure did not open');
   check((await staticPage.locator('#ctpace-verdict').textContent()).includes('15-day itinerary has none'),
     'no-JS route rhythm explanation missing');
   check(await staticPage.locator('#circle-tour-pace a[href="#circle-tour-itineraries"]').count()===1,
