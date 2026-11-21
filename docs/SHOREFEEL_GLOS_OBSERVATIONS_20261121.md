@@ -55,7 +55,7 @@ python3 scripts/shorefeel-glos-observations.py \
 
 The date is supported by a source archived file listing: https://seagull-erddap.glos.org/erddap/files/PSP_archive/2022/ . It is **not evidence the exact four-hour window has any good readings**. The test is designed to return an explicit NO_QC_APPROVED_OBSERVATIONS status when no usable observation is present.
 
-The reproducible GitHub Actions workflow `.github/workflows/shorefeel-glos-observations.yml` runs Python science tests and retrieves that bounded real source window. Its JSON is retained in an ephemeral 14-day CI artifact. **Do not claim that external retrieval succeeded until the exact PR workflow and artifact have been checked.**
+The reproducible GitHub Actions workflow `.github/workflows/shorefeel-glos-observations.yml` runs Python science tests and retrieves that bounded real source window. Its JSON is retained in an ephemeral 14-day CI artifact. The exact successful source retrieval is documented below; each later sample remains independently gated.
 
 ## Distinction from previously developed paired-field engine
 
@@ -64,6 +64,12 @@ No GLOS station value is automatically ingested into the Saginaw Bay `fieldAudit
 Research questions this source can answer: Is there a real measured air/wind archive with usable timestamps, units and quality? What are its coverage gaps? Does an observed, older coastal meteorological feed behave as expected under source interruption and missing QC?
 
 Questions it **cannot** answer: What is the real beach temperature today? Is Bay City State Park 8F cooler than a quarter mile inland? Has the idealized parcel model beaten the NWS beach-area forecast?
+
+## Verified real-source evidence (not a beach correction)
+
+**Exact source test:** [GitHub Actions run 44937215800](https://github.com/izworskic/chrisizworski-com/actions/runs/44937215800) completed successfully on the branch at commit `8277e81a76eb00fa68c3955e9f4da878a4c78315` on 2026-11-21. The live, bounded ERDDAP request for **2022-06-01 12:00 to 16:00 UTC** returned 25 historical station rows: 23 air temperatures passed aggregate QC, and 21 of those also had passing wind speed and wind direction. Two air rows were rejected by QC; two otherwise accepted air records had unusable wind. There were no invalid timestamp/location rows, duplicate rows, or conflicting revisions in that four-hour result. A source JSON output was retained as a 14-day GitHub Actions artifact.
+
+This is **one four-hour historical test of remote retrieval**. It is not evidence of current 2026 availability, seasonal coverage, representativeness, paired shore/inland calibration, or better predictive skill. The 23 accepted readings are all from **one station** and the withheld two readings are not silently interpolated. The source query's current QARTOD variable names end in `_aggregate_test`; older descriptive metadata abbreviated them as `_aggregate`, and the real retrieval revealed the distinction. ERDDAP's physical-unit labels also use `m/s` and degree glyph/labels; the importer accepts only documented equivalent spellings.
 
 ## Evidence and release
 
