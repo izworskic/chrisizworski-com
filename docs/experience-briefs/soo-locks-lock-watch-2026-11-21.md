@@ -97,7 +97,18 @@ Title, meta description, H1, canonical, all JSON-LD (Person, WebPage, FAQPage, W
 | Performance and resilience | 5 | 4 | no new request; feed failure and season tested; field CWV NOT MEASURED |
 | Site integrity | 5 | 5 | full `verify:all` (see PR) |
 
-Total about 92/100, every area at least 4/5. Deployment, live public verification and visitor outcomes: NOT VERIFIED / NOT MEASURED.
+Total about 92/100, every area at least 4/5.
+
+## Release record
+
+| Stage | Status | Evidence |
+| --- | --- | --- |
+| Implemented | CONFIRMED | PR #1825 |
+| Verified | CONFIRMED | all PR checks green on `3706bc0c`, including Soo Locks Lock Watch browser QA run 44917688025 |
+| Merged | CONFIRMED | squash commit `5fba3ad0` |
+| Deployed | CONFIRMED | Vercel `dpl_8VJ2RQomSDqD2r3eFHha8zQHgH8a` READY, aliased to chrisizworski.com |
+| Live public check | CONFIRMED 2026-11-21 10:22 EST | real AIS: verdict named BURNS HARBOR 12:09 to 1:41 PM and G3 MARQUIS; real map tiles loaded; one Auto ads loader; SEO identity intact; no page errors at 390 or 1280 |
+| Visitor outcome | NOT MEASURED | needs a comparable post-release GSC / Vercel Analytics / AdSense window |
 
 ## Lesson
 
