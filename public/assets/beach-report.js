@@ -490,10 +490,38 @@
     track(placement === "daily" ? "Daily Pick Open" : "Beach Detail Open", { beach: beach.slug, placement: placement || "list" });
   }
 
+  function renderShoreFeel(beach) {
+    var host = document.querySelector("[data-shorefeel]");
+    if (!host) return;
+    var feel = beach && beach.shore_feel ? beach.shore_feel : {};
+    function set(name, value) {
+      var node = host.querySelector("[data-shorefeel-" + name + "]");
+      if (node) node.textContent = value;
+    }
+    var current = feel.status === "forecast-based";
+    var value = current && finite(feel.apparentF) ? feel.apparentF
+      : current && finite(feel.airF) ? feel.airF : null;
+    set("value", value === null ? "No recent forecast" : Math.round(value) + "°F");
+    set("method", value === null ? "Area weather unavailable"
+      : finite(feel.apparentF) ? "Modeled apparent temperature near the beach"
+      : "Modeled air temperature near the beach");
+    set("time", current && feel.validAt ? "Open-Meteo forecast valid " +
+      formatDate(feel.validAt) : "No verified recent weather-model timestamp");
+    set("heading", feel.heading || "Beach conditions unavailable");
+    set("narrative", feel.narrative || "Check a recent official weather forecast before your visit.");
+    set("wind", current && finite(feel.windMph)
+      ? "Forecast wind near the beach: " + Math.round(feel.windMph) + " mph"
+      : "Forecast wind unavailable");
+    set("water", feel.waterNote || "No current NOAA offshore water evidence is available.");
+    set("limit", feel.limitation || "No measured beach-air temperature is available.");
+    host.dataset.status = current ? "forecast" : "unavailable";
+  }
+
   function renderIndividual() {
     var container = document.querySelector("[data-beach-live]");
     if (!container || !state.beaches.length) return;
     var beach = state.beaches[0];
+    renderShoreFeel(beach);
     var quality = beach.water_quality || {};
     var swimRisk = beach.swim_risk || {};
     var postedFlag = beach.posted_flag || {};
@@ -581,6 +609,7 @@
     });
     var individual = document.querySelector("[data-beach-live]");
     if (individual) individual.innerHTML = errorHtml();
+    renderShoreFeel(null);
     var updated = byId("liveUpdated");
     if (updated) updated.textContent = "Live update unavailable";
   }
