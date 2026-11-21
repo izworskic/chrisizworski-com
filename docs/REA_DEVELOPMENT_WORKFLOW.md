@@ -8,7 +8,7 @@ Reviewed release: `rea-agents@6.9.0`, published November 12, 2026.
 
 ## Run only for a requested investigation
 
-There is deliberately **no repository-level `.mcp.json` registration**, no persistent agent connection, and no `rea-agents` production or development dependency. Merely opening this repository or launching Claude Code, Codex, or another agent must not start REA.
+The repository may have an `.mcp.json` for a separately approved service, but it deliberately has **no REA entry** in that file, no persistent REA agent connection, and no `rea-agents` production or development dependency. Merely opening this repository or launching Claude Code, Codex, or another agent must not start REA.
 
 When asked to "use REA" or "run REA", first define the exact permitted investigation and confirm the machine's Node.js meets the selected release's engine requirement: `^22.23.4 || ^24.22.1 || >=26.12.1`.
 
