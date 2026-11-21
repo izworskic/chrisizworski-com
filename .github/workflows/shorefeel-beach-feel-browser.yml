@@ -11,6 +11,11 @@ on:
       - 'tests/shorefeel-noaa-grid.test.js'
       - 'tests/shorefeel-field-validation.test.js'
       - 'scripts/shorefeel-validate-field.cjs'
+      - 'scripts/shorefeel-noaa-hindcast.py'
+      - 'scripts/shorefeel-field-pair.py'
+      - 'tests/test_shorefeel_noaa_hindcast.py'
+      - 'tests/test_shorefeel_field_pair.py'
+      - 'docs/SHOREFEEL_PHASE3_HINDCAST.md'
       - 'scripts/verify-shorefeel-beach-browser.cjs'
       - '.github/workflows/shorefeel-beach-feel-browser.yml'
   workflow_dispatch:
@@ -32,6 +37,11 @@ jobs:
           node-version: '22'
       - name: NWS apparent-temperature and shore wind source tests
         run: node --test tests/shorefeel-beach-feel.test.js tests/shorefeel-saginaw.test.js tests/shorefeel-physics.test.js tests/shorefeel-noaa-grid.test.js tests/shorefeel-field-validation.test.js
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Offline NOAA archive and paired logger scientific tests
+        run: python3 -m unittest discover -s tests -p 'test_shorefeel_*.py' -v
       - name: Install isolated pinned browser harness
         run: |
           npm install --prefix "$RUNNER_TEMP/shorefeel-playwright" --ignore-scripts --no-package-lock playwright@1.56.1
