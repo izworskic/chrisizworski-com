@@ -28,4 +28,4 @@ Vercel preview hostnames intentionally send `X-Robots-Tag: noindex`, while custo
 
 See [MIGRATION.md](MIGRATION.md) for the staged cutover and rollback procedure and [SEO_PARITY.md](SEO_PARITY.md) for the search-preservation record.
 
-REA can be invoked explicitly for a one-off authorized investigation; it is not installed, registered with coding agents, or run during routine development. See [REA on-demand research](docs/REA_DEVELOPMENT_WORKFLOW.md). This workflow does not run in the site build or Vercel.
+REA can be invoked explicitly for a one-off authorized investigation; it is not installed, registered with coding agents, or run during routine development. See [REA on-demand research](docs/REA_DEVELOPMENT_WORKFLOW.md) and the optional [REA skill](.agents/skills/rea/SKILL.md) for Codex (also mirrored for Claude Code). This workflow does not run in the site build or Vercel.

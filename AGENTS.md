@@ -4,6 +4,10 @@ For a new substantial visitor-facing tool proposal, a major UI/design review, or
 
 Experience OS v1.2.1, Foundry, owning-repository rules, real-browser QA, source facts, accessibility, ads, canonical/Person and full CI remain authoritative. This skill introduces no public route or deployment dependency. Penpot stays explicitly opt-in; do not invoke it without a Penpot request. Extracted independent tool repos must adopt the skill separately.
 
+## REA investigation skill: explicit owner request only (2026-11-21)
+
+For a specific owner-authorized reverse-engineering investigation, use `.agents/skills/rea/SKILL.md` (Codex) or `.claude/skills/rea/SKILL.md` (Claude Code), together with `docs/REA_DEVELOPMENT_WORKFLOW.md`. REA is **not** part of automatic Experience OS, Experience Investment, Foundry, Penpot, review, or CI workflows. Loading the skill does not install the runtime. Do not register an REA MCP server, run setup, or install a dependency by default. The pinned one-off CLI is permitted only for the explicitly named, authorized target and supported operation. Independent tool repos require their own adoption.
+
 ## Penpot design: on-demand only
 
 Only when Penpot is explicitly requested, use `.agents/skills/penpot-design/SKILL.md` (Codex) or `.claude/skills/penpot-design/SKILL.md` (Claude Code) and `docs/PENPOT_DESIGN_WORKFLOW.md`. The repository MCP URL is not a verified connection. Preserve owning-repository rules, Experience OS, Foundry, ads, SEO and CI gates. Never invoke Penpot automatically.

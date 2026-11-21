@@ -33,3 +33,26 @@ test('REA instructions require explicit invocation and pinned one-off CLI', asyn
   assert.match(claude, /only when explicitly requested/);
   assert.match(agents, /only when the owner explicitly requests REA/);
 });
+
+test('REA is a discoverable identical opt-in skill for Codex and Claude Code', async () => {
+  const codex = await read('.agents/skills/rea/SKILL.md');
+  const claude = await read('.claude/skills/rea/SKILL.md');
+  const agents = await read('AGENTS.md');
+  const guide = await read('docs/REA_DEVELOPMENT_WORKFLOW.md');
+  const copilot = await read('.github/copilot-instructions.md');
+  const rootClaude = await read('CLAUDE.md');
+
+  assert.equal(codex, claude);
+  assert.match(codex, /^---\nname: rea\ndescription: "[^\n]+"\n---/);
+  assert.match(codex, /explicitly requests REA/);
+  assert.match(codex, /npx -y rea-agents@6\\.9\\.0 analyze-javascript-application/);
+  assert.match(codex, /Do not run \`npx rea-agents setup\`/);
+  assert.match(codex, /REA stays off by default/);
+  assert.match(codex, /not installed or running merely because/);
+  assert.match(agents, /\\.agents\\/skills\\/rea\\/SKILL\\.md/);
+  assert.match(agents, /\\.claude\\/skills\\/rea\\/SKILL\\.md/);
+  assert.match(guide, /Both skill files must remain identical/);
+  assert.match(copilot, /REA is explicit-use only/);
+  assert.match(rootClaude, /\\.claude\\/skills\\/rea\\/SKILL\\.md/);
+  for (const file of [codex, claude]) assert.doesNotMatch(file, /[–—]/);
+});
