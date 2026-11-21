@@ -19,9 +19,9 @@ const feature={
 };
 const collection={type:'FeatureCollection',features:[feature]};
 const sample=()=>JSON.parse(JSON.stringify(collection));
-test('all 18 curated Canadian locations are unique, source-linked and only on actual Canadian Great Lakes',()=>{
- assert.equal(catalog.locations.length,18);
- assert.equal(bySlug.size,18);
+test('all 30 curated Canadian locations are unique, source-linked and only on actual Canadian Great Lakes',()=>{
+ assert.equal(catalog.locations.length,30);
+ assert.equal(bySlug.size,30);
  assert.deepEqual([...new Set(catalog.locations.map(x=>x.lake))].sort(),['Erie','Huron','Ontario','Superior']);
  for(const beach of catalog.locations){
   assert.equal(validBeach(beach),true,beach.slug);
@@ -33,6 +33,25 @@ test('all 18 curated Canadian locations are unique, source-linked and only on ac
   assert.match(beach.reference.precision,/not verified parking/i);
  }
  assert.match(catalog.doesNotCover,/Michigan/);
+});
+test('phase two: varied Canadian shorelines preserve location sources and the right local safety authority',()=>{
+ const counts=Object.fromEntries(['Superior','Huron','Erie','Ontario'].map(l=>[l,catalog.locations.filter(b=>b.lake===l).length]));
+ assert.deepEqual(counts,{Superior:7,Huron:9,Erie:6,Ontario:8});
+ for(const slug of ['batchawana-bay','old-woman-bay','terrace-bay-beach','awenda-georgian-bay',
+   'killbear-georgian-bay','kincardine-station-beach','bayfield-pier-beach','rondeau-erie-beach',
+   'turkey-point-beach','darlington-lake-ontario','toronto-bluffers-beach','toronto-cherry-beach']){
+  const beach=bySlug.get(slug);
+  assert.ok(beach,'Missing new shoreline '+slug);
+  assert.ok(beach.reference.sourceUrl.startsWith('https://'),slug);
+  assert.ok(beach.story.length>95,slug);
+  assert.equal(validBeach(beach),true,slug);
+ }
+ assert.ok(bySlug.get('terrace-bay-beach').advisory.url.includes('tbdhu.com/beaches'));
+ assert.match(bySlug.get('bayfield-pier-beach').advisory.url,/hpph.ca/);
+ assert.match(bySlug.get('kincardine-station-beach').advisory.url,/publichealthgreybruce.on.ca/);
+ assert.match(bySlug.get('toronto-bluffers-beach').advisory.url,/toronto.ca/);
+ assert.match(page,/30 Canadian shores on four Great Lakes/);
+ assert.match(fs.readFileSync(path.join(root,'public/great-lakes-beaches/index.html'),'utf8'),/30 Canadian ShoreFeel beaches/);
 });
 test('choose geographically nearest ECCC city point and do not substitute remote forecast',()=>{
  const far=sample().features[0];far.geometry.coordinates=[-89.5,42];far.properties.identifier='on-123';
@@ -93,10 +112,10 @@ test('user cannot supply an arbitrary URL and endpoint is never indexable',async
  }finally{global.fetch=original;}
 });
 test('static Canada page preserves park links and explicit public-health paths when JavaScript is off',()=>{
- assert.equal((page.match(/class="shore-stop"/g)||[]).length,18);
+ assert.equal((page.match(/class="shore-stop"/g)||[]).length,30);
  for(const item of catalog.locations){
   assert.ok(page.includes('data-slug="'+item.slug+'"'),item.slug);
-  assert.ok(page.includes('href="'+item.officialUrl+'"'),item.slug);
+  assert.ok(page.includes('href="'+item.officialUrl.replaceAll('&','&amp;')+'"'),item.slug);
   assert.ok(page.includes('data-advisory="'+item.advisory.url+'"'),item.slug);
  }
  assert.match(page,/rel="canonical" href="https:\/\/chrisizworski\.com\/great-lakes-beaches\/canada\//);
@@ -106,7 +125,7 @@ test('static Canada page preserves park links and explicit public-health paths w
  assert.match(page,/noscript/);
  assert.match(page,/data-lake-filter="Michigan"/);
  assert.match(fs.readFileSync(path.join(root,'public/sitemap-beaches.xml'),'utf8'),/great-lakes-beaches\/canada\//);
- assert.match(fs.readFileSync(path.join(root,'public/great-lakes-beaches/around-the-lakes/index.html'),'utf8'),/18 Canadian beaches/);
+ assert.match(fs.readFileSync(path.join(root,'public/great-lakes-beaches/around-the-lakes/index.html'),'utf8'),/30 Canadian beaches/);
 });
 test('Canada browser code uses text-only source data, cancels outdated requests, and retains map fallback',()=>{
  const js=fs.readFileSync(path.join(root,'public/assets/shorefeel-ca.js'),'utf8');
