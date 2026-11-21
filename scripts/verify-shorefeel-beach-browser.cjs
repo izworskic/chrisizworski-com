@@ -101,6 +101,7 @@ async function run(){
   await failure.goto(origin+'/lake-huron-water-temperature/saginaw-bay/',{waitUntil:'domcontentloaded'});
   await failure.waitForFunction(()=>document.querySelector('#lead-temp')?.textContent==='Beach feel unavailable',{timeout:12000});
   assert.match(await failure.locator('#lead-band-note').innerText(),/could not be retrieved/);
+  await failure.locator('details.shore-physics summary').click();
   assert.match(await failure.locator('#physics-model-range').innerText(),/unavailable/);
   report.push({width:390,mode:'upstream-offline',result:'fail closed'});
   await offline.close();
