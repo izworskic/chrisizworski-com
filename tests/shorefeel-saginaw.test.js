@@ -117,3 +117,18 @@ test('experience source paths and offline fallbacks are honest before JavaScript
  assert.ok(html.includes('adsbygoogle.js?client=ca-pub-8222782620788075'));
  assert.match(css,/\.bay-quick-actions a:focus-visible/);
 });
+
+test('Saginaw Bay basemap never requests unkeyed CARTO and survives key/tile failure',()=>{
+ const js=read('public/assets/shorefeel-saginaw.js');
+ const html=read('public/lake-huron-water-temperature/saginaw-bay/index.html');
+ assert.match(js,/fetch\('\/api\/carto-basemap-config'/);
+ assert.match(js,/tile\.openstreetmap\.org\/\{z\}\/\{x\}\/\{y\}\.png/);
+ assert.match(js,/config\.provider!==\x27CARTO\x27/);
+ assert.match(js,/basemaps\.cartocdn\.com\/light_all\/\{z\}\/\{x\}\/\{y\}\{r\}\.png\?key=/);
+ assert.match(js,/carto\.on\('tileerror'/);
+ assert.match(js,/carto\.on\('load'/);
+ assert.match(js,/map\.removeLayer\(osm\)/);
+ assert.match(js,/map\.removeLayer\(carto\)/);
+ assert.match(html,/shorefeel-saginaw\.js\?v=20261121a/);
+ assert.doesNotMatch(js,/tileLayer\('https:\/\/\{s\}\.basemaps\.cartocdn\.com\/light_all\/[^']+\.png'\s*,/);
+});
