@@ -1,0 +1,214 @@
+{
+  "archiveAudit": {
+    "accepted": 4,
+    "byProduct": {
+      "HRRR": 2,
+      "URMA": 2
+    },
+    "checksumScope": "selected indexed GRIB messages only, not full NOAA files",
+    "conflictingRevisions": 0,
+    "duplicates": 0,
+    "modelSkillClaim": false,
+    "pairs": [
+      {
+        "cycleAt": "2026-09-20T12:00:00Z",
+        "product": "HRRR",
+        "shoreMinusInlandF": 3.15,
+        "validAt": "2026-09-20T13:00:00Z"
+      },
+      {
+        "cycleAt": "2026-09-20T12:00:00Z",
+        "product": "URMA",
+        "shoreMinusInlandF": 1.29,
+        "validAt": "2026-09-20T12:00:00Z"
+      }
+    ],
+    "publishedBeachCorrectionF": null,
+    "rejected": 0,
+    "schema": "shorefeel.noaa-archive-audit.v1",
+    "status": "REQUIRES_FIELD_MEASUREMENTS"
+  },
+  "calibratedBeachAirEstimateF": null,
+  "calibrationAuthorized": false,
+  "cycleUTC": "12:00",
+  "fieldThermometersIndependentlyVerified": false,
+  "measuredBeachMinusInlandF": null,
+  "modelSources": [
+    {
+      "indexSha256": "c667309e690125386ea0f2373629605259ba72fe6e58fe57e89743fe455edbdd",
+      "indexUrl": "https://noaa-hrrr-bdp-pds.s3.amazonaws.com/hrrr.20260920/conus/hrrr.t12z.wrfsfcf01.grib2.idx",
+      "points": {
+        "park-land-grid": {
+          "calibrationEligibleAlone": false,
+          "cycleAt": "2026-09-20T12:00:00Z",
+          "forecastLeadHours": 1,
+          "gridDistanceKm": 0.975,
+          "gridLat": 43.66991,
+          "gridLon": -83.90006,
+          "isBeachAirMeasurement": false,
+          "kind": "model-forecast",
+          "product": "HRRR",
+          "schema": "shorefeel.noaa-hindcast-subset.v1",
+          "selectedFieldsSha256": "19e19389df2ea594ff8c9de3d99345be3d7801d9341f8e28d39408309bc388d5",
+          "site": "park-land-grid",
+          "siteLat": 43.6714,
+          "siteLon": -83.912,
+          "sourceFileSha256": null,
+          "sourceUrl": "https://noaa-hrrr-bdp-pds.s3.amazonaws.com/hrrr.20260920/conus/hrrr.t12z.wrfsfcf01.grib2",
+          "tempF": 64.43,
+          "validAt": "2026-09-20T13:00:00Z",
+          "windFromDeg": 25.9,
+          "windMps": 6.21
+        },
+        "west-bay-inland": {
+          "calibrationEligibleAlone": false,
+          "cycleAt": "2026-09-20T12:00:00Z",
+          "forecastLeadHours": 1,
+          "gridDistanceKm": 1.278,
+          "gridLat": 43.66297,
+          "gridLon": -84.0892,
+          "isBeachAirMeasurement": false,
+          "kind": "model-forecast",
+          "product": "HRRR",
+          "schema": "shorefeel.noaa-hindcast-subset.v1",
+          "selectedFieldsSha256": "19e19389df2ea594ff8c9de3d99345be3d7801d9341f8e28d39408309bc388d5",
+          "site": "west-bay-inland",
+          "siteLat": 43.6714,
+          "siteLon": -84.1,
+          "sourceFileSha256": null,
+          "sourceUrl": "https://noaa-hrrr-bdp-pds.s3.amazonaws.com/hrrr.20260920/conus/hrrr.t12z.wrfsfcf01.grib2",
+          "tempF": 61.28,
+          "validAt": "2026-09-20T13:00:00Z",
+          "windFromDeg": 21,
+          "windMps": 3.57
+        }
+      },
+      "product": "HRRR",
+      "ranges": {
+        "temperature": {
+          "end": 43937590,
+          "indexMessage": 71,
+          "length": 1169128,
+          "sha256": "5e867406cab6743b67ecfe04cce6d6e6420a90aea4f73caf79d9a077894012ce",
+          "start": 42768463
+        },
+        "u": {
+          "end": 52217404,
+          "indexMessage": 77,
+          "length": 2143472,
+          "sha256": "5b9eea1e2889b42b074464326f2e663478678709d798f47125fe89f776dcd0bb",
+          "start": 50073933
+        },
+        "v": {
+          "end": 54599019,
+          "indexMessage": 78,
+          "length": 2381615,
+          "sha256": "b5ac3eef6fde7246cd1daf21caaf674a3a38ca3c7624dc574cfee1ec2ab7b0a0",
+          "start": 52217405
+        }
+      },
+      "url": "https://noaa-hrrr-bdp-pds.s3.amazonaws.com/hrrr.20260920/conus/hrrr.t12z.wrfsfcf01.grib2"
+    },
+    {
+      "indexSha256": "ef02d85248bdaa8e66c23863245fce79d832a6a82a71d138f848c68ce60f61fb",
+      "indexUrl": "https://noaa-urma-pds.s3.amazonaws.com/urma2p5.20260920/urma2p5.t12z.2dvaranl_ndfd.grb2_wexp.idx",
+      "points": {
+        "park-land-grid": {
+          "calibrationEligibleAlone": false,
+          "cycleAt": "2026-09-20T12:00:00Z",
+          "forecastLeadHours": 0,
+          "gridDistanceKm": 1.107,
+          "gridLat": 43.67009,
+          "gridLon": -83.92564,
+          "isBeachAirMeasurement": false,
+          "kind": "gridded-analysis",
+          "product": "URMA",
+          "schema": "shorefeel.noaa-hindcast-subset.v1",
+          "selectedFieldsSha256": "a9b0c1ad262c50886a93ce4bd8089608e35c0d64219774228c03be2e192fe76c",
+          "site": "park-land-grid",
+          "siteLat": 43.6714,
+          "siteLon": -83.912,
+          "sourceFileSha256": null,
+          "sourceUrl": "https://noaa-urma-pds.s3.amazonaws.com/urma2p5.20260920/urma2p5.t12z.2dvaranl_ndfd.grb2_wexp",
+          "tempF": 61.75,
+          "validAt": "2026-09-20T12:00:00Z",
+          "windFromDeg": 28,
+          "windMps": 4.01
+        },
+        "west-bay-inland": {
+          "calibrationEligibleAlone": false,
+          "cycleAt": "2026-09-20T12:00:00Z",
+          "forecastLeadHours": 0,
+          "gridDistanceKm": 1.068,
+          "gridLat": 43.68056,
+          "gridLon": -84.10397,
+          "isBeachAirMeasurement": false,
+          "kind": "gridded-analysis",
+          "product": "URMA",
+          "schema": "shorefeel.noaa-hindcast-subset.v1",
+          "selectedFieldsSha256": "a9b0c1ad262c50886a93ce4bd8089608e35c0d64219774228c03be2e192fe76c",
+          "site": "west-bay-inland",
+          "siteLat": 43.6714,
+          "siteLon": -84.1,
+          "sourceFileSha256": null,
+          "sourceUrl": "https://noaa-urma-pds.s3.amazonaws.com/urma2p5.20260920/urma2p5.t12z.2dvaranl_ndfd.grb2_wexp",
+          "tempF": 60.46,
+          "validAt": "2026-09-20T12:00:00Z",
+          "windFromDeg": 18.6,
+          "windMps": 3.04
+        }
+      },
+      "product": "URMA",
+      "ranges": {
+        "temperature": {
+          "end": 20597871,
+          "indexMessage": 3,
+          "length": 5617636,
+          "sha256": "2511da3a6bdd08e195acdb36453e67091521a8386809502fa81341e7f5d04257",
+          "start": 14980236
+        },
+        "u": {
+          "end": 32301264,
+          "indexMessage": 5,
+          "length": 5617636,
+          "sha256": "01b43edc85acd0a75652522882f656a15895e208a1d2ab79bb9e6b86bfd1536f",
+          "start": 26683629
+        },
+        "v": {
+          "end": 37918900,
+          "indexMessage": 6,
+          "length": 5617636,
+          "sha256": "407acd3f8ee6c58be63ab77814d00345ca8aaefbabe54d5d38a0d34241c29f90",
+          "start": 32301265
+        }
+      },
+      "url": "https://noaa-urma-pds.s3.amazonaws.com/urma2p5.20260920/urma2p5.t12z.2dvaranl_ndfd.grb2_wexp"
+    }
+  ],
+  "offshoreStations": [
+    {
+      "airAvailable": false,
+      "airFreshWithin72Hours": false,
+      "isBeachAirMeasurement": false,
+      "latestAirAt": null,
+      "latestAirC": null,
+      "latestWindAt": "2026-11-21T03:00:00Z",
+      "latestWindMps": 0,
+      "records": 6490,
+      "sourceUrl": "https://www.ndbc.noaa.gov/data/realtime2/SBLM4.txt",
+      "station": "SBLM4",
+      "status": "OFFSHORE_CONTEXT_ONLY"
+    },
+    {
+      "error": "HTTPError",
+      "isBeachAirMeasurement": false,
+      "sourceUrl": "https://www.ndbc.noaa.gov/data/realtime2/45163.txt",
+      "station": "45163",
+      "status": "SOURCE_UNAVAILABLE"
+    }
+  ],
+  "publicationAuthorized": false,
+  "retrievedAtUTC": "2026-11-21T03:27:32.835425Z",
+  "schema": "shorefeel.noaa-real-hindcast-pull.v1",
+  "sourceDate": "2026-09-20"
+}

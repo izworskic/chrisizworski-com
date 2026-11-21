@@ -1,0 +1,56 @@
+name: ShoreFeel real NOAA archive research
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/shorefeel-pull-noaa-research.py'
+      - 'tests/test_shorefeel_noaa_pull.py'
+      - 'tests/test_shorefeel_real_snapshots.py'
+      - 'research/shorefeel/noaa/**'
+      - 'docs/SHOREFEEL_REAL_NOAA_EVIDENCE_2026.md'
+      - '.github/workflows/shorefeel-noaa-real-data.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: shorefeel-noaa-real-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  source-evidence:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run offline source-range and NDBC quality tests
+        run: |
+          python3 -m unittest discover -s tests -p test_shorefeel_noaa_pull.py -v
+          python3 -m unittest discover -s tests -p test_shorefeel_real_snapshots.py -v
+      - name: Install pinned ecCodes Python bindings
+        run: python3 -m pip install --disable-pip-version-check eccodes==2.50.1
+      - name: Retrieve real NOAA archives across three 2026 seasons
+        run: |
+          mkdir -p artifacts/shorefeel-real-noaa
+          for d in 20260715 20260920 20261119; do
+            file="artifacts/shorefeel-real-noaa/${d:0:4}-${d:4:2}-${d:6:2}-12z.json"
+            python3 scripts/shorefeel-pull-noaa-research.py --date "$d" --cycle 12 --lead 1 > "$file"
+            python3 -m json.tool "$file" > /dev/null
+            echo "SHOREFEEL_RESEARCH_BEGIN $d"
+            cat "$file"
+            echo "SHOREFEEL_RESEARCH_END $d"
+          done
+      - name: Retain verified source evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: shorefeel-real-noaa-2026-seasonal
+          path: artifacts/shorefeel-real-noaa/
+          if-no-files-found: warn
+          retention-days: 30
