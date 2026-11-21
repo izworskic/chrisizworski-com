@@ -18,6 +18,7 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
 <link rel="stylesheet" href="/assets/soo-lock-sim.css?v=20261019-ships">
+<link rel="stylesheet" href="/assets/soo-lock-watch.css?v=20261121">
 <link rel="stylesheet" href="/assets/growth-commercial.css">
 <link rel="stylesheet" href="/assets/affiliate-commerce.css">
 <link rel="stylesheet" href="/assets/gazette-latest.css">
@@ -281,6 +282,38 @@ figure.fig.hero{margin:6px 0 28px}
   <p class="next-ship-kicker" id="sooNextKicker">Next ship at the locks</p>
   <h2 id="soo-next-ship-heading">Checking which ship is heading for the locks&hellip;</h2>
   <div id="sooNextBody"><p>This reads the latest AIS reports along the St. Marys River, from Whitefish Bay to DeTour, and estimates when each approaching ship should reach the locks. If it does not load, use the <a href="#live-vessel-activity">live vessel map</a> or the sources below.</p></div>
+</section>
+
+<section class="lock-watch" id="soo-lock-watch" aria-labelledby="soo-lock-watch-title" data-no-ads>
+  <div class="lw-head">
+    <p class="lw-kicker">Lock Watch &middot; plan your platform time</p>
+    <h2 id="soo-lock-watch-title">Which ships pass while you are on the platform?</h2>
+    <p class="lw-intro">Tell it when you can reach the viewing platform and how long you can stay. Every ship the live AIS reports show heading for the locks is lined up against your visit, the posted park hours and daylight.</p>
+  </div>
+  <div class="lw-controls" data-lw-controls hidden>
+    <fieldset><legend>How soon can you get there?</legend><div class="lw-chips"><label><input type="radio" name="lw-start" value="0" checked><span>Now</span></label><label><input type="radio" name="lw-start" value="30"><span>30 min</span></label><label><input type="radio" name="lw-start" value="60"><span>1 hr</span></label><label><input type="radio" name="lw-start" value="90"><span>1½ hr</span></label><label><input type="radio" name="lw-start" value="120"><span>2 hr</span></label><label><input type="radio" name="lw-start" value="180"><span>3 hr</span></label><label><input type="radio" name="lw-start" value="240"><span>4 hr</span></label></div></fieldset>
+    <fieldset><legend>How long can you stay?</legend><div class="lw-chips"><label><input type="radio" name="lw-stay" value="45"><span>45 min</span></label><label><input type="radio" name="lw-stay" value="90" checked><span>1½ hr</span></label><label><input type="radio" name="lw-stay" value="180"><span>3 hr</span></label><label><input type="radio" name="lw-stay" value="240"><span>4 hr</span></label></div></fieldset>
+  </div>
+  <div class="lw-verdict" data-lw-verdict tabindex="-1" role="status" aria-live="polite">
+    <p class="lw-verdict-head">Line up live ship windows with your visit</p>
+    <p class="lw-verdict-detail">This planner needs JavaScript and the live AIS feed. Without them, open the <a href="https://ais.boatnerd.com/passage/port/soo-locks" target="_blank" rel="noopener">BoatNerd Soo passage list</a> for named ships and use the live vessel map below.</p>
+  </div>
+  <div class="lw-board" data-lw-board hidden>
+    <div class="lw-axis" data-lw-axis aria-hidden="true"></div>
+    <ol class="lw-rows" data-lw-rows aria-label="Ships in the latest reports, earliest first"></ol>
+  </div>
+  <p class="lw-legend" data-lw-legend hidden aria-hidden="true"><span class="lw-key" data-key="down"><i class="k-down"></i>Downbound window</span><span class="lw-key" data-key="up"><i class="k-up"></i>Upbound window</span><span class="lw-key" data-key="visit"><i class="k-visit"></i>Your visit</span><span class="lw-key" data-key="dark"><i class="k-dark"></i>Dark</span><span class="lw-key" data-key="closed"><i class="k-closed"></i>Outside park hours</span></p>
+  <div class="lw-dossier" data-lw-dossier hidden role="region" aria-labelledby="lw-dossier-title"></div>
+  <p class="lw-status" data-lw-status></p>
+  <details class="lw-hours">
+    <summary>Posted Soo Locks Park hours and the seasonal hotline</summary>
+    <ul>
+      <li>June, July and August: 9 a.m. to 10 p.m.</li>
+      <li>May, September and October: 9 a.m. to 9 p.m.</li>
+      <li>November through April: 9 a.m. to 6 p.m.</li>
+    </ul>
+    <p>The park is open year-round. The indoor Visitor Center is open May 1 to October 31, and park rangers maintain the boat-schedule hotline (906-202-1333) only while it is open. Source: <a href="https://www.lrd.usace.army.mil/Submit-ArticleCS/Recreation/Article/3833525/soo-locks-visitor-center/" target="_blank" rel="noopener">U.S. Army Corps of Engineers Soo Locks Visitor Center</a>, checked November 21, 2026. Sunrise and sunset are calculated for Sault Ste. Marie.</p>
+  </details>
 </section>
 
 <section class="schedule-answer" id="soo-schedule-answer" aria-labelledby="soo-schedule-heading">
@@ -627,7 +660,7 @@ figure.fig.hero{margin:6px 0 28px}
 </div>
 
 </div>
-<div class="footer">Bay City, Michigan &middot; Compiled by <a href="/chris-izworski/">Chris Izworski</a> &middot; Updated August 2026 &middot; <a href="/about/">About this site</a></div>
+<div class="footer">Bay City, Michigan &middot; Compiled by <a href="/chris-izworski/">Chris Izworski</a> &middot; Updated November 2026 &middot; <a href="/about/">About this site</a></div>
 <script>
 // Calculate live Soo Locks navigation season status
 (function(){
@@ -676,7 +709,8 @@ figure.fig.hero{margin:6px 0 28px}
 
 </script>
 <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-<script defer src="/assets/soo-ais.js?v=20260927"></script>
+<script defer src="/assets/soo-ais.js?v=20261121"></script>
+<script defer src="/assets/soo-lock-watch.js?v=20261121"></script>
 <script defer src="/assets/field-camera.js"></script>
 <section aria-label="How this tool was built" style="max-width:900px;margin:28px auto;padding:18px;overflow-wrap:anywhere"><p><a href="https://izworskic.github.io/projects/#soo-locks-method">See how channel distance becomes an arrival window</a>, with a worked example and public code. Built by <a href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a>.</p></section>
 <section aria-labelledby="soo-visit-companions" style="max-width:900px;margin:26px auto;padding:18px;border:1px solid #cbdad0;border-radius:8px"><h2 id="soo-visit-companions">Plan a visit around actual vessel activity</h2><p><a href="/soo-locks/plan-your-visit/">Plan your Soo Locks visit</a> with the official Visitor Center season, parking and realistic 45-, 90- and 180-minute itineraries. Or compare <a href="/great-lakes-ship-watching-spots/">Great Lakes freighter-watching viewpoints</a> for a broader shore trip.</p><p>Driving north from Lower Michigan via I-75? <a href="/mackinac-bridge-tolls/">Estimate the Mackinac Bridge toll for your vehicle and return trip</a> before heading to Sault Ste. Marie.</p></section>
