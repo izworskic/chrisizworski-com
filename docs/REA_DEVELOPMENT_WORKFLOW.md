@@ -6,6 +6,14 @@ Official source: https://github.com/morluto/rea
 
 Reviewed release: `rea-agents@6.9.0`, published November 12, 2026.
 
+## Repository skill entry points
+
+- Codex: `.agents/skills/rea/SKILL.md`
+- Claude Code: `.claude/skills/rea/SKILL.md`
+- GitHub Copilot: `.github/copilot-instructions.md` points to the Codex-compatible instructions.
+
+These are instructions only, not an installed REA runtime or an MCP registration. Both skill files must remain identical.
+
 ## Run only for a requested investigation
 
 The repository may have an `.mcp.json` for a separately approved service, but it deliberately has **no REA entry** in that file, no persistent REA agent connection, and no `rea-agents` production or development dependency. Merely opening this repository or launching Claude Code, Codex, or another agent must not start REA.
