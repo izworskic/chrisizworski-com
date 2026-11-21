@@ -72,6 +72,16 @@ class TestRealNoaaPull(unittest.TestCase):
                 M.download_fields(M.url_for("HRRR", "20261119", 12, 1),
                                   "HRRR", "2026111912", 1)
 
+    def test_eccodes_nearest_dict_and_tuple_shapes(self):
+        self.assertEqual(
+            M.nearest_fields({"lat": 43.6, "lon": 276.1, "value": 270.0,
+                              "distance": 0.6, "index": 1}),
+            (43.6, 276.1, 270.0))
+        self.assertEqual(M.nearest_fields((43.6, -83.9, 270.0, 0.6, 1)),
+                         (43.6, -83.9, 270.0))
+        with self.assertRaisesRegex(ValueError, "format"):
+            M.nearest_fields("lat")
+
     def test_ndbc_missing_values_not_promoted_to_air(self):
         sample = ("#YY MM DD hh mm WDIR WSPD GST WVHT DPD APD MWD PRES ATMP WTMP DEWP VIS PTDY TIDE\n"
                   "2026 11 19 23 40 130 6.2 7.2 MM MM MM MM MM MM MM MM MM MM MM\n")
