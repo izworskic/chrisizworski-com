@@ -63,6 +63,7 @@ class OnlineNwsCoastalContrast(unittest.TestCase):
     def test_old_or_different_forecast_issues_are_not_paired(self):
         x=example()
         x["pointForecasts"][1]["futurePeriods"][0]["nwsIssuedAt"]="2026-11-21T18:00:00Z"
+        x["pointForecasts"][1]["futurePeriods"][0]["sourceGeneratedAt"]="2026-11-21T17:55:00Z"
         self.assertEqual(self.run_result(x)["coverage"]["skipped"]["differentIssueWindows"],1)
     def test_conflicting_hour_excluded_not_overwritten(self):
         x=example()
