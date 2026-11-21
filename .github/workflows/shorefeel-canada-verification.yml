@@ -1,0 +1,64 @@
+name: ShoreFeel Canada Ontario release verification
+
+on:
+  pull_request:
+    paths:
+      - 'api/shorefeel-ca.js'
+      - 'data/shorefeel-canada-ontario.json'
+      - 'lib/shorefeel/canada.js'
+      - 'public/assets/shorefeel-ca.*'
+      - 'public/great-lakes-beaches/canada/**'
+      - 'scripts/generate-shorefeel-ca.mjs'
+      - 'scripts/verify-shorefeel-ca-browser.cjs'
+      - 'tests/shorefeel-canada.test.js'
+      - '.github/workflows/shorefeel-canada-verification.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: shorefeel-canada-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  canada-release:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 27
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install pinned site dependencies
+        run: npm ci
+      - name: Canada source and safety tests
+        run: node --test tests/shorefeel-canada.test.js
+      - name: Full source freshness SEO and page protections
+        run: npm run verify:all
+      - name: Production build and public output audit
+        run: npm run profile:build -- build-profile-shorefeel-canada.json
+      - name: Confirm Canada canonical sitemap and generated catalog
+        run: |
+          node -e "const fs=require('fs');const url='https://chrisizworski.com/great-lakes-beaches/canada/';const xml=fs.readFileSync('public/sitemap-beaches.xml','utf8');const page=fs.readFileSync('public/great-lakes-beaches/canada/index.html','utf8');if(!xml.includes('<loc>'+url+'</loc>')||!page.includes('rel=\"canonical\" href=\"'+url+'\"')||(page.match(/class=\"shore-stop\"/g)||[]).length!==18)process.exit(1);console.log('Canada canonical + 18 shores PASS')"
+      - name: Install isolated browser harness
+        run: |
+          npm install --prefix "$RUNNER_TEMP/shorefeel-canada-playwright" --ignore-scripts --no-package-lock playwright@1.56.1
+          "$RUNNER_TEMP/shorefeel-canada-playwright/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Real-browser Canada destinations and error fallback
+        env:
+          SHORE_QA_OUTPUT: artifacts/shorefeel-canada-qa
+        run: SHORE_PW_MODULE="$RUNNER_TEMP/shorefeel-canada-playwright/node_modules/playwright" node scripts/verify-shorefeel-ca-browser.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: shorefeel-canada-evidence
+          path: |
+            artifacts/shorefeel-canada-qa/
+            build-profile-shorefeel-canada.json
+          if-no-files-found: ignore
+          retention-days: 7

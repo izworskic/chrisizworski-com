@@ -1,0 +1,19 @@
+
+/* Distinct Canadian shore interpretation on top of the shared regional field desk. */
+:root{--ca-ink:#153c45;--ca-forest:#1d6a64;--ca-gold:#c89c56}
+.intro{position:relative;padding-top:52px;padding-bottom:34px}
+.intro .eyebrow{color:#286e63}
+.intro h1 em{border-color:#84b7a3}
+.safety-ribbon{background:#fff9ec;border-left-color:#a47c42}
+.field-report{border-top-color:#247264}
+.field-report h2,.field-report h3,.map-top h2,.interpret h2{color:#174e4a}
+.lake-picker button[aria-pressed=true]{background:#1b635c;border-color:#1b635c}
+.shore-stop button[aria-pressed=true]{border-left-color:#1b7463;background:#edf6ef}
+.source-tag{background:#e9f4ee;color:#246053}
+.authority-links a:first-child{background:#1d625a;border-color:#1d625a}
+.shore-marker{background:#237d6d}
+.shore-marker.selected{background:#c99750}
+.map-shell{background:linear-gradient(120deg,#d9e7e6,#f5f1e6)}
+.interpret{margin-top:48px}
+.interpret details a{font-weight:600}
+@media(max-width:720px){.intro{padding-top:27px}.field-report .source-scope{line-height:1.65}}

@@ -1,0 +1,353 @@
+{
+  "version": "2026-11-21",
+  "region": "Canadian Great Lakes / Ontario",
+  "forecast": "ECCC nearby city-page hourly forecast; not measured at the beach",
+  "license": "https://eccc-msc.github.io/open-data/licence/readme_en/",
+  "parkBeachResults": "https://www.ontarioparks.ca/beachresults",
+  "covers": "Superior, Huron (including Georgian Bay), Erie, Ontario",
+  "doesNotCover": "Lake Michigan has no Canadian shore",
+  "locations": [
+    {
+      "slug": "agawa-bay",
+      "name": "Agawa Bay, Lake Superior Provincial Park",
+      "lake": "Superior",
+      "province": "Ontario",
+      "country": "Canada",
+      "reference": {
+        "lat": 47.355,
+        "lon": -84.625,
+        "precision": "Approximate park or named beach vicinity; not verified parking, swim boundary, or thermometer placement"
+      },
+      "nearbyTown": "Wawa",
+      "officialUrl": "https://www.ontarioparks.ca/park/lakesuperior",
+      "advisory": {
+        "url": "https://www.ontarioparks.ca/beachresults",
+        "authority": "Ontario Parks beach monitoring"
+      },
+      "story": "A wide sweep of shingle and sand faces Lake Superior. When the wind moves off open water, the beach may feel very different from the wooded campground behind it."
+    },
+    {
+      "slug": "katherine-cove",
+      "name": "Katherine Cove, Lake Superior Provincial Park",
+      "lake": "Superior",
+      "province": "Ontario",
+      "country": "Canada",
+      "reference": {
+        "lat": 47.42,
+        "lon": -84.74,
+        "precision": "Approximate park or named beach vicinity; not verified parking, swim boundary, or thermometer placement"
+      },
+      "nearbyTown": "Wawa",
+      "officialUrl": "https://www.ontarioparks.ca/park/lakesuperior",
+      "advisory": {
+        "url": "https://www.ontarioparks.ca/beachresults",
+        "authority": "Ontario Parks beach monitoring"
+      },
+      "story": "The shoreline folds into a sheltered cove of clear water and rounded stone. Step beyond the trees and listen for the wind crossing the lake."
+    },
+    {
+      "slug": "pancake-bay",
+      "name": "Pancake Bay Provincial Park",
+      "lake": "Superior",
+      "province": "Ontario",
+      "country": "Canada",
+      "reference": {
+        "lat": 46.966,
+        "lon": -84.701,
+        "precision": "Approximate park or named beach vicinity; not verified parking, swim boundary, or thermometer placement"
+      },
+      "nearbyTown": "Batchawana Bay",
+      "officialUrl": "https://www.ontarioparks.ca/park/pancakebay",
+      "advisory": {
+        "url": "https://www.ontarioparks.ca/beachresults",
+        "authority": "Ontario Parks beach monitoring"
+      },
+      "story": "A long pale beach curves around Pancake Bay beneath coastal forest. In this sheltered bay, the lake's wide horizons and the air over the sand tell different parts of the weather story."
+    },
+    {
+      "slug": "neys-provincial-park",
+      "name": "Neys Provincial Park",
+      "lake": "Superior",
+      "province": "Ontario",
+      "country": "Canada",
+      "reference": {
+        "lat": 48.78,
+        "lon": -86.61,
+        "precision": "Approximate park or named beach vicinity; not verified parking, swim boundary, or thermometer placement"
+      },
+      "nearbyTown": "Marathon",
+      "officialUrl": "https://www.ontarioparks.ca/park/neys",
+      "advisory": {
+        "url": "https://www.ontarioparks.ca/beachresults",
+        "authority": "Ontario Parks beach monitoring"
+      },
+      "story": "On Ashburton Bay, broad sand lies beneath the rocky hills of Superior's north shore. Even a sunny day can bring a cool breath off the lake."
+    },
+    {
+      "slug": "pinery-provincial-park",
+      "name": "Pinery Provincial Park",
+      "lake": "Huron",
+      "province": "Ontario",
+      "country": "Canada",
+      "reference": {
+        "lat": 43.252,
+        "lon": -81.831,
+        "precision": "Approximate park or named beach vicinity; not verified parking, swim boundary, or thermometer placement"
+      },
+      "nearbyTown": "Grand Bend",
+      "officialUrl": "https://www.ontarioparks.ca/park/pinery",
+      "advisory": {
+        "url": "https://www.ontarioparks.ca/beachresults",
+        "authority": "Ontario Parks beach monitoring"
+      },
+      "story": "Walk through oak savanna and dunes, then emerge onto the open Lake Huron beach. Here the wind may change as abruptly as the landscape."
+    },
+    {
+      "slug": "inverhuron-provincial-park",
+      "name": "Inverhuron Provincial Park",
+      "lake": "Huron",
+      "province": "Ontario",
+      "country": "Canada",
+      "reference": {
+        "lat": 44.312,
+        "lon": -81.569,
+        "precision": "Approximate park or named beach vicinity; not verified parking, swim boundary, or thermometer placement"
+      },
+      "nearbyTown": "Tiverton",
+      "officialUrl": "https://www.ontarioparks.ca/park/inverhuron",
+      "advisory": {
+        "url": "https://www.ontarioparks.ca/beachresults",
+        "authority": "Ontario Parks beach monitoring"
+      },
+      "story": "Among dunes and young forest, Inverhuron's beach opens west toward Lake Huron sunsets. Open sand offers less shelter from a rising breeze."
+    },
+    {
+      "slug": "wasaga-beach",
+      "name": "Wasaga Beach Provincial Park",
+      "lake": "Huron",
+      "province": "Ontario",
+      "country": "Canada",
+      "reference": {
+        "lat": 44.509,
+        "lon": -80.016,
+        "precision": "Approximate park or named beach vicinity; not verified parking, swim boundary, or thermometer placement"
+      },
+      "nearbyTown": "Wasaga Beach",
+      "officialUrl": "https://www.ontarioparks.ca/park/wasagabeach",
+      "advisory": {
+        "url": "https://www.ontarioparks.ca/beachresults",
+        "authority": "Ontario Parks beach monitoring"
+      },
+      "story": "The long sand shore meets Georgian Bay, part of Lake Huron. Even with warm streets behind you, the air over the broad bay can set its own pace."
+    },
+    {
+      "slug": "sauble-beach",
+      "name": "Sauble Beach",
+      "lake": "Huron",
+      "province": "Ontario",
+      "country": "Canada",
+      "reference": {
+        "lat": 44.635,
+        "lon": -81.267,
+        "precision": "Approximate park or named beach vicinity; not verified parking, swim boundary, or thermometer placement"
+      },
+      "nearbyTown": "Sauble Beach",
+      "officialUrl": "https://southbrucepeninsula.com/parks-recreation-culture/parks-trails/sauble-beach/",
+      "advisory": {
+        "url": "https://publichealthgreybruce.on.ca/Your-Environment/Safe-Water/Recreational-Water",
+        "authority": "Grey Bruce Public Health"
+      },
+      "story": "Lake Huron spreads to the western horizon beyond this broad strand. The beach is not just the forecast in town: the lake and wind direction matter. Note that some nearby shore sections are known as Saugeen Beach; follow current local access rules."
+    },
+    {
+      "slug": "grand-bend-main-beach",
+      "name": "Grand Bend Main Beach",
+      "lake": "Huron",
+      "province": "Ontario",
+      "country": "Canada",
+      "reference": {
+        "lat": 43.31,
+        "lon": -81.767,
+        "precision": "Approximate park or named beach vicinity; not verified parking, swim boundary, or thermometer placement"
+      },
+      "nearbyTown": "Grand Bend",
+      "officialUrl": "https://www.lambtonshores.ca/explore-and-play/beaches/grand-bend-beach/",
+      "advisory": {
+        "url": "https://lambtonpublichealth.ca/health-info/beach-water-quality-surveillance/",
+        "authority": "Lambton Public Health"
+      },
+      "story": "On Lake Huron's eastern shore, the dune fringe gives way to a lively town beach. Watch the flags and wind before you decide how long to linger near the water."
+    },
+    {
+      "slug": "port-burwell",
+      "name": "Port Burwell Provincial Park",
+      "lake": "Erie",
+      "province": "Ontario",
+      "country": "Canada",
+      "reference": {
+        "lat": 42.64,
+        "lon": -80.807,
+        "precision": "Approximate park or named beach vicinity; not verified parking, swim boundary, or thermometer placement"
+      },
+      "nearbyTown": "Port Burwell",
+      "officialUrl": "https://www.ontarioparks.ca/park/portburwell",
+      "advisory": {
+        "url": "https://www.ontarioparks.ca/beachresults",
+        "authority": "Ontario Parks beach monitoring"
+      },
+      "story": "A wide sandy shoreline faces the open waters of Lake Erie. Wind and waves can change quickly here; a clear sky is not a swimming-safety report."
+    },
+    {
+      "slug": "long-point",
+      "name": "Long Point Provincial Park",
+      "lake": "Erie",
+      "province": "Ontario",
+      "country": "Canada",
+      "reference": {
+        "lat": 42.586,
+        "lon": -80.4,
+        "precision": "Approximate park or named beach vicinity; not verified parking, swim boundary, or thermometer placement"
+      },
+      "nearbyTown": "Port Rowan",
+      "officialUrl": "https://www.ontarioparks.ca/park/longpoint",
+      "advisory": {
+        "url": "https://www.ontarioparks.ca/beachresults",
+        "authority": "Ontario Parks beach monitoring"
+      },
+      "story": "The sandy peninsula stretches far into Lake Erie, with dunes, marsh and abundant birdlife. On an exposed shore, a breeze is part of the landscape."
+    },
+    {
+      "slug": "port-stanley-main",
+      "name": "Port Stanley Main Beach",
+      "lake": "Erie",
+      "province": "Ontario",
+      "country": "Canada",
+      "reference": {
+        "lat": 42.661,
+        "lon": -81.218,
+        "precision": "Approximate park or named beach vicinity; not verified parking, swim boundary, or thermometer placement"
+      },
+      "nearbyTown": "Port Stanley",
+      "officialUrl": "https://www.centralelgin.org/parks-recreation/beaches/",
+      "advisory": {
+        "url": "https://www.centralelgin.org/parks-recreation/beaches/beach-water-quality/",
+        "authority": "Municipality of Central Elgin"
+      },
+      "story": "Beyond the harbor, Port Stanley's wide sand faces Lake Erie. The breeze can be stronger by the water than among the village streets."
+    },
+    {
+      "slug": "bay-beach-crystal",
+      "name": "Bay Beach, Crystal Beach",
+      "lake": "Erie",
+      "province": "Ontario",
+      "country": "Canada",
+      "reference": {
+        "lat": 42.866,
+        "lon": -79.056,
+        "precision": "Approximate park or named beach vicinity; not verified parking, swim boundary, or thermometer placement"
+      },
+      "nearbyTown": "Crystal Beach",
+      "officialUrl": "https://www.forterie.ca/recreation-and-culture/bay-beach/",
+      "advisory": {
+        "url": "https://www.niagararegion.ca/living/water/beaches/default.aspx",
+        "authority": "Niagara Region Public Health"
+      },
+      "story": "The sandy north shore of eastern Lake Erie opens to a broad sweep of water. Before entering the lake, check both the wind and the Niagara Region's current beach results."
+    },
+    {
+      "slug": "sandbanks-lakeshore",
+      "name": "Sandbanks Provincial Park, Lakeshore Beach",
+      "lake": "Ontario",
+      "province": "Ontario",
+      "country": "Canada",
+      "reference": {
+        "lat": 43.917,
+        "lon": -77.229,
+        "precision": "Approximate park or named beach vicinity; not verified parking, swim boundary, or thermometer placement"
+      },
+      "nearbyTown": "Picton",
+      "officialUrl": "https://www.ontarioparks.ca/park/sandbanks",
+      "advisory": {
+        "url": "https://www.ontarioparks.ca/beachresults",
+        "authority": "Ontario Parks beach monitoring"
+      },
+      "story": "The great dune country of Prince Edward County meets Lake Ontario at Lakeshore Beach. Far across the water, the horizon gives no sign of how quickly an afternoon wind can shift."
+    },
+    {
+      "slug": "north-beach",
+      "name": "North Beach Provincial Park",
+      "lake": "Ontario",
+      "province": "Ontario",
+      "country": "Canada",
+      "reference": {
+        "lat": 43.952,
+        "lon": -77.526,
+        "precision": "Approximate park or named beach vicinity; not verified parking, swim boundary, or thermometer placement"
+      },
+      "nearbyTown": "Consecon",
+      "officialUrl": "https://www.ontarioparks.ca/park/northbeach",
+      "advisory": {
+        "url": "https://www.ontarioparks.ca/beachresults",
+        "authority": "Ontario Parks beach monitoring"
+      },
+      "story": "A slender sandy barrier separates Lake Ontario from North Bay. The open lakeside beach and sheltered bay shore may feel different on the same visit."
+    },
+    {
+      "slug": "presquile",
+      "name": "Presqu'ile Provincial Park",
+      "lake": "Ontario",
+      "province": "Ontario",
+      "country": "Canada",
+      "reference": {
+        "lat": 43.993,
+        "lon": -77.719,
+        "precision": "Approximate park or named beach vicinity; not verified parking, swim boundary, or thermometer placement"
+      },
+      "nearbyTown": "Brighton",
+      "officialUrl": "https://www.ontarioparks.ca/park/presquile",
+      "advisory": {
+        "url": "https://www.ontarioparks.ca/beachresults",
+        "authority": "Ontario Parks beach monitoring"
+      },
+      "story": "Dunes and marsh frame one of Lake Ontario's long sandy shores. Watch the weather move across the open lake, and listen for birds behind the beach."
+    },
+    {
+      "slug": "cobourg-victoria",
+      "name": "Victoria Park Beach, Cobourg",
+      "lake": "Ontario",
+      "province": "Ontario",
+      "country": "Canada",
+      "reference": {
+        "lat": 43.958,
+        "lon": -78.161,
+        "precision": "Approximate park or named beach vicinity; not verified parking, swim boundary, or thermometer placement"
+      },
+      "nearbyTown": "Cobourg",
+      "officialUrl": "https://www.cobourg.ca/parks-recreation-community/beach/",
+      "advisory": {
+        "url": "https://www.lakelandsph.ca/beachcheck",
+        "authority": "Lakelands Public Health"
+      },
+      "story": "From the lawns of Victoria Park, the shore opens to Lake Ontario. The water can be a welcome contrast to town heat, while the open beach brings its own wind."
+    },
+    {
+      "slug": "toronto-woodbine",
+      "name": "Woodbine Beach, Toronto",
+      "lake": "Ontario",
+      "province": "Ontario",
+      "country": "Canada",
+      "reference": {
+        "lat": 43.663,
+        "lon": -79.304,
+        "precision": "Approximate park or named beach vicinity; not verified parking, swim boundary, or thermometer placement"
+      },
+      "nearbyTown": "Toronto",
+      "officialUrl": "https://www.toronto.ca/explore-enjoy/parks-recreation/places-spaces/beaches-gardens-attractions/beaches/",
+      "advisory": {
+        "url": "https://www.toronto.ca/community-people/health-wellness-care/health-programs-advice/swim-water-safety/beach-water-quality/",
+        "authority": "City of Toronto"
+      },
+      "story": "City streets give way to open sand and Lake Ontario at Woodbine. The lakeshore can feel cooler than the nearby neighborhoods, but only a verified forecast belongs on the temperature card."
+    }
+  ]
+}
