@@ -40,7 +40,7 @@ async function main(){
   page.on('pageerror',err=>errors.push(String(err)));
   await page.goto(origin+'/great-lakes-beaches/canada/',{waitUntil:'domcontentloaded'});
   await page.waitForFunction(()=>document.querySelector('#report-temp')?.textContent==='2°C',{timeout:14000});
-  assert.equal(await page.locator('.shore-stop').count(),18);
+  assert.equal(await page.locator('.shore-stop').count(),30);
   assert.match(await page.locator('#report-name').innerText(),/Agawa Bay/);
   assert.match(await page.locator('#report-scope').innerText(),/20 km/);
   assert.match(await page.locator('#report-advisory').getAttribute('href'),/ontarioparks.ca\/beachresults/);
@@ -83,9 +83,9 @@ async function main(){
  await ctx.close();
  const noJs=await browser.newContext({viewport:{width:390,height:850},javaScriptEnabled:false});
  const plain=await noJs.newPage();await plain.goto(origin+'/great-lakes-beaches/canada/',{waitUntil:'domcontentloaded'});
- assert.equal(await plain.locator('.shore-stop').count(),18);
+ assert.equal(await plain.locator('.shore-stop').count(),30);
  assert.equal(await plain.locator('noscript').isVisible(),true);
- assert.equal(await plain.locator('.shore-stop>a[href^="https://"]').count(),18);
+ assert.equal(await plain.locator('.shore-stop>a[href^="https://"]').count(),30);
  await noJs.close();
  console.log(JSON.stringify({passed:true,screenSizes:output,staleData:'No fabricated temperature',noJs:'18 park links available'},null,2));
  }finally{if(browser)await browser.close();await new Promise(done=>server.close(done));}
