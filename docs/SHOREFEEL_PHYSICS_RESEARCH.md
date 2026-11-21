@@ -14,10 +14,11 @@ Closest tools: the existing all-five-lakes ShoreFeel water hub and Grand Haven w
 ## NOAA and NWS input sources
 
 1. **NWS hourly forecast for Bay City State Park** from the existing NOAA /points -> gridpoint forecastHourly contract. Air (F), relative humidity (%), wind speed (mph) and wind-from cardinal direction. A point forecast is not a thermometer.
-2. **NWS hourly forecast for an independently requested location 43.6714, -84.1000**, west Bay County. About 16 km west of the park, chosen to probe inland contrast. It may still be lake influenced and its grid may not resolve a small coastal microclimate. The two forecast period timestamps must align within one hour. Differences are forecast-to-forecast, never measured-to-measured.
+2. **NWS hourly forecast for an independently requested location 43.6714, -84.1000**, west Bay County. About 16 km west of the park, chosen to probe inland contrast. It may still be lake influenced and its grid may not resolve a small coastal microclimate. The two forecast period timestamps must align within one hour. Differences are forecast-to-forecast, never measured-to-measured. Both coordinates are checked against NOAA/NWS `/points` metadata (`gridId`, `gridX`, `gridY`). If both resolve to one NWS 2.5 km grid cell, or if grid identity is missing, the visitor sees **no independent shore/inland difference and no thermal-transfer scenarios**. Distinct grid cells are forecasts, not independent thermometers or proof of quarter-mile temperature gradients.
 3. **NOAA GLSEA ACSPO grid surface temperature** from inner Saginaw Bay, with a valid sample no older than 36 hours. The existing API uses a satellite-derived open-water grid pixel several kilometers east/northeast of the park, not shallows or a shoreline thermometer. No whole-lake mean substitution.
 4. **NOAA NDBC 45163 air temperature (ATMP)** parsed from the same already requested buoy realtime feed (Celsius to Fahrenheit). Freshness at most 6 hours. This instrument is in **outer Saginaw Bay, far offshore**. It is retained only as a physically independent observation and not used as an exact local beach air reading, a calibration target or a warming correction. Station is seasonal and will often be unavailable.
-5. **Later**: NOAA/NCEP HRRR hourly 3 km 2 m temperature, U/V wind components and boundary-layer height, plus NOAA RTMA 2.5 km hourly surface analysis for hindcast verification. Neither is yet fetched by the live engine. GRIB ingestion in Vercel would be large and unnecessary without a batch extraction/validation design.
+5. **NOAA NDBC SBLM4 Saginaw Bay Light #1**: optional, year-round fixed C-MAN lighthouse observation stream when `ATMP` is actually present. Official NDBC location approximately 43.810 N, 83.720 W, in mid Saginaw Bay roughly 20 km from Bay City State Park. The source has sometimes published missing ATMP values; an observation must pass validity and the 6-hour age gate. Prefer this nearer fixed marine platform over seasonal 45163 when both report. **Neither sensor is an on-sand thermometer or a calibrated beach response.**
+6. **Later**: NOAA/NCEP HRRR hourly 3 km 2 m temperature, U/V wind components and boundary-layer height, plus NOAA RTMA 2.5 km hourly surface analysis for hindcast verification. Neither is yet fetched by the live engine. GRIB ingestion in Vercel would be large and unnecessary without a batch extraction/validation design.
 
 ## Equations checked with Wolfram Language
 
@@ -72,6 +73,8 @@ The Biggs/Graves lake-breeze index and subsequent Laird/Kristovich studies show 
 - https://rapidrefresh.noaa.gov/hrrr/ : NOAA HRRR hourly 3 km model
 - https://www.ndbc.noaa.gov/faq/measdes.shtml : NDBC ATMP in deg C, observation headers and absent-value sentinels
 - https://www.ndbc.noaa.gov/station_page.php?station=45163 : Saginaw Bay seasonal offshore station
+- https://www.ndbc.noaa.gov/station_page.php?station=SBLM4 : Saginaw Bay Light #1 fixed station
+- https://github.com/weather-gov/api/blob/master/gridpoints.md : official NWS 2.5 km grid and /points provenance; two nearby points can share one cell
 - https://www.wpc.ncep.noaa.gov/html/heatindex_equation.shtml : NWS heat-index equation
 - https://www.weather.gov/safety/cold-faqs : NWS wind-chill equation and domain
 
