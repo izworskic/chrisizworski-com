@@ -1,0 +1,20 @@
+import {readFile,writeFile} from 'node:fs/promises';
+import path from 'node:path';
+const root=path.resolve(import.meta.dirname,'..');
+const source=JSON.parse(await readFile(path.join(root,'data/shorefeel-us-coast.json'),'utf8'));
+const pagePath=path.join(root,'public/great-lakes-beaches/around-the-lakes/index.html');
+const escape=v=>String(v??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'","&#39;");
+const a='<!-- shorefeel-us-list:start -->',z='<!-- shorefeel-us-list:end -->';
+if(!Array.isArray(source.beaches)||source.beaches.length===0)throw Error('No verified US shore catalog');
+const slugs=new Set();
+const rows=source.beaches.map(b=>{
+  if(slugs.has(b.slug))throw Error('Duplicate beach slug '+b.slug);slugs.add(b.slug);
+  if(!['Superior','Michigan','Erie','Ontario'].includes(b.lake)||!/^https:\/\//.test(b.parkUrl)||!/^https:\/\//.test(b.safety?.url))throw Error('Invalid source '+b.slug);
+  return `<li class="shore-stop" data-slug="${escape(b.slug)}" data-lake="${escape(b.lake)}" data-lat="${b.lat}" data-lon="${b.lon}" data-state="${escape(b.state)}" data-city="${escape(b.city)}" data-name="${escape(b.name)}" data-story="${escape(b.story)}" data-access-alert="${escape(b.accessAlert||'')}" data-coordinate-note="${escape(b.coordinateNote)}" data-safety-url="${escape(b.safety.url)}" data-safety-name="${escape(b.safety.name)}" data-park-url="${escape(b.parkUrl)}"><button type="button" data-select="${escape(b.slug)}" aria-pressed="false"><span class="shore-stop-name">${escape(b.name)}</span><span class="shore-stop-sub">${escape(b.city)}, ${escape(b.state)} · Lake ${escape(b.lake)}</span></button><a href="${escape(b.parkUrl)}" target="_blank" rel="noopener" aria-label="${escape(b.name)} official park page">Park details</a></li>`;
+});
+const html=await readFile(pagePath,'utf8');
+const start=html.indexOf(a),end=html.indexOf(z,start);
+if(start<0||end<0||html.indexOf(a,start+1)>=0)throw Error('Missing or duplicate shore list generator markers');
+const updated=html.slice(0,start+a.length)+'\n'+rows.join('\n')+'\n'+html.slice(end);
+if(updated!==html)await writeFile(pagePath,updated);
+console.log('Great Lakes US shoreline: '+rows.length+' source-backed places in '+new Set(source.beaches.map(b=>b.state)).size+' states');

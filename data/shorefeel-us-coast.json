@@ -1,0 +1,395 @@
+{
+  "version": "2026-11-21",
+  "region": "US Great Lakes outside Michigan",
+  "forecast": "NWS hourly land-area grid; not observed at the beach",
+  "coverage": {
+    "Michigan": "See /great-lakes-beaches/ for Michigan locations, including Lake Huron",
+    "Canada": "Not yet included"
+  },
+  "beaches": [
+    {
+      "slug": "park-point-beach-house",
+      "name": "Park Point Beach House",
+      "lake": "Superior",
+      "state": "MN",
+      "city": "Duluth",
+      "country": "US",
+      "lat": 46.722,
+      "lon": -92.04,
+      "forecastReference": {
+        "lat": 46.719,
+        "lon": -92.05,
+        "scope": "nearby NWS land-area grid"
+      },
+      "parkUrl": "https://duluthmn.gov/parks/parks-trails/parks-listing/park-point/",
+      "coordinateSource": "https://mnbeaches.org/beaches/park-point-beach-house/",
+      "coordinateNote": "Park Point Beach House shoreline reference, approximate; not a parking pin",
+      "story": "At Park Point, the city gives way to a long ribbon of sand between Duluth Harbor and Lake Superior. Wind off the open lake can feel strikingly different from sheltered streets.",
+      "accessAlert": null,
+      "safety": {
+        "name": "Minnesota Lake Superior Beach Monitoring Program",
+        "url": "https://mnbeaches.org/"
+      }
+    },
+    {
+      "slug": "big-bay-state-park",
+      "name": "Big Bay State Park",
+      "lake": "Superior",
+      "state": "WI",
+      "city": "La Pointe",
+      "country": "US",
+      "lat": 46.812,
+      "lon": -90.657,
+      "forecastReference": {
+        "lat": 46.807,
+        "lon": -90.665,
+        "scope": "nearby NWS land-area grid"
+      },
+      "parkUrl": "https://dnr.wisconsin.gov/topic/parks/bigbay",
+      "coordinateSource": "https://dnr.wisconsin.gov/topic/parks/bigbay/conditions",
+      "coordinateNote": "Approximate park shore reference; not a ferry dock or entrance",
+      "story": "Madeline Island's sandstone shore opens to Lake Superior. The beach and wooded boardwalk offer very different shelter from wind, even within a short walk.",
+      "accessAlert": "The park reports construction closures affecting the beach parking lot from September 8, 2026 through approximately June 30, 2027. Check current park conditions before travel.",
+      "safety": {
+        "name": "Wisconsin Beach Health",
+        "url": "https://apps.dnr.wi.gov/beachhealth/"
+      }
+    },
+    {
+      "slug": "kohler-andrae-state-park",
+      "name": "Kohler-Andrae State Park",
+      "lake": "Michigan",
+      "state": "WI",
+      "city": "Sheboygan",
+      "country": "US",
+      "lat": 43.682,
+      "lon": -87.715,
+      "forecastReference": {
+        "lat": 43.679,
+        "lon": -87.733,
+        "scope": "nearby NWS land-area grid"
+      },
+      "parkUrl": "https://dnr.wisconsin.gov/topic/parks/kohlerandrae",
+      "coordinateSource": "https://dnr.wisconsin.gov/topic/parks/kohlerandrae/conditions",
+      "coordinateNote": "Approximate lakefront reference, not an exact swim-area entrance",
+      "story": "Wooded trails and dune grasses give way to a long, open sweep of Lake Michigan. A breeze that barely stirs the pines may be more noticeable on the sand.",
+      "accessAlert": null,
+      "safety": {
+        "name": "Wisconsin Beach Health",
+        "url": "https://apps.dnr.wi.gov/beachhealth/"
+      }
+    },
+    {
+      "slug": "point-beach-state-forest",
+      "name": "Point Beach State Forest",
+      "lake": "Michigan",
+      "state": "WI",
+      "city": "Two Rivers",
+      "country": "US",
+      "lat": 44.2022,
+      "lon": -87.5187,
+      "forecastReference": {
+        "lat": 44.201,
+        "lon": -87.533,
+        "scope": "nearby NWS land-area grid"
+      },
+      "parkUrl": "https://dnr.wisconsin.gov/topic/parks/pointbeach",
+      "coordinateSource": "https://dnr.wisconsin.gov/topic/parks/pointbeach/recreation/water",
+      "coordinateNote": "Park-level reference, not an exact swim-area entrance",
+      "story": "Six miles of beach edge the forest. Where trees stop and open water begins, the breeze and the sounds of Lake Michigan become the weather story.",
+      "accessAlert": null,
+      "safety": {
+        "name": "Wisconsin Beach Health",
+        "url": "https://apps.dnr.wi.gov/beachhealth/"
+      }
+    },
+    {
+      "slug": "north-avenue-beach",
+      "name": "North Avenue Beach",
+      "lake": "Michigan",
+      "state": "IL",
+      "city": "Chicago",
+      "country": "US",
+      "lat": 41.91613,
+      "lon": -87.62723,
+      "forecastReference": {
+        "lat": 41.912,
+        "lon": -87.642,
+        "scope": "nearby NWS land-area grid"
+      },
+      "parkUrl": "https://www.chicagoparkdistrict.com/parks-facilities/north-avenue-beach",
+      "coordinateSource": "https://idph.illinois.gov/envhealth/ilbeaches/public/BeachDetail.aspx?BeachID=363",
+      "coordinateNote": "Illinois BeachGuard beach-center coordinate, not a parking pin",
+      "story": "The city skyline rises behind the sand, but the lake sets its own pace. A lake breeze can cool an exposed walk after a warm afternoon inland.",
+      "accessAlert": null,
+      "safety": {
+        "name": "Illinois BeachGuard",
+        "url": "https://idph.illinois.gov/envhealth/ilbeaches/public/"
+      }
+    },
+    {
+      "slug": "illinois-beach-north",
+      "name": "Illinois Beach State Park North Beach",
+      "lake": "Michigan",
+      "state": "IL",
+      "city": "Zion",
+      "country": "US",
+      "lat": 42.4753,
+      "lon": -87.79927,
+      "forecastReference": {
+        "lat": 42.47,
+        "lon": -87.812,
+        "scope": "nearby NWS land-area grid"
+      },
+      "parkUrl": "https://dnr.illinois.gov/parks/camp-like-a-pro/state-park-spotlight/adeline-jay-geo-karis-illinois-beach-state-park.html",
+      "coordinateSource": "https://idph.illinois.gov/envhealth/ilbeaches/public/BeachDetail.aspx?BeachID=349",
+      "coordinateNote": "Illinois BeachGuard beach-center coordinate, not a trailhead",
+      "story": "This rare stretch of natural Illinois lakefront carries dunes, wetland habitat and wide views over Lake Michigan. Leave the tree line and pay attention to the wind.",
+      "accessAlert": null,
+      "safety": {
+        "name": "Illinois BeachGuard",
+        "url": "https://idph.illinois.gov/envhealth/ilbeaches/public/"
+      }
+    },
+    {
+      "slug": "west-beach-indiana-dunes",
+      "name": "West Beach, Indiana Dunes National Park",
+      "lake": "Michigan",
+      "state": "IN",
+      "city": "Gary",
+      "country": "US",
+      "lat": 41.6226,
+      "lon": -87.2079,
+      "forecastReference": {
+        "lat": 41.619,
+        "lon": -87.212,
+        "scope": "nearby NWS land-area grid"
+      },
+      "parkUrl": "https://www.nps.gov/indu/planyourvisit/west-beach.htm",
+      "coordinateSource": "https://waterqualitydata.us/provider/STORET/21INBCH/21INBCH-SP_WB/",
+      "coordinateNote": "Indiana water-quality monitoring coordinate; the visitor entrance is elsewhere",
+      "story": "Climb toward the dunes and you can see how much shoreline the lake controls. The open beach is less sheltered than the woods and stairs behind it.",
+      "accessAlert": null,
+      "safety": {
+        "name": "Indiana IDEM BeachAlert",
+        "url": "https://portal.idem.in.gov/beachalert/"
+      }
+    },
+    {
+      "slug": "indiana-dunes-state-park",
+      "name": "Indiana Dunes State Park",
+      "lake": "Michigan",
+      "state": "IN",
+      "city": "Chesterton",
+      "country": "US",
+      "lat": 41.662319,
+      "lon": -87.064552,
+      "forecastReference": {
+        "lat": 41.657,
+        "lon": -87.067,
+        "scope": "nearby NWS land-area grid"
+      },
+      "parkUrl": "https://www.in.gov/dnr/state-parks/parks-lakes/indiana-dunes-state-park/",
+      "coordinateSource": "https://www.in.gov/beachesalert/",
+      "coordinateNote": "Indiana beach-monitoring station coordinate, not a parking pin",
+      "story": "Dune ridges rise beyond a wide sandy strand. Wind crossing Lake Michigan meets a landscape of exposed shore, protected hollows and forest.",
+      "accessAlert": null,
+      "safety": {
+        "name": "Indiana IDEM BeachAlert",
+        "url": "https://portal.idem.in.gov/beachalert/"
+      }
+    },
+    {
+      "slug": "edgewater-beach",
+      "name": "Edgewater Beach",
+      "lake": "Erie",
+      "state": "OH",
+      "city": "Cleveland",
+      "country": "US",
+      "lat": 41.48972,
+      "lon": -81.73889,
+      "forecastReference": {
+        "lat": 41.485,
+        "lon": -81.745,
+        "scope": "nearby NWS land-area grid"
+      },
+      "parkUrl": "https://www.clevelandmetroparks.com/parks/visit/parks/lakefront-reservation/edgewater-beach",
+      "coordinateSource": "https://www.clevelandmetroparks.com/parks/visit/activities/swimming/cleveland-metroparks-swimming-status",
+      "coordinateNote": "USGS shoreline monitoring coordinate; not an entrance",
+      "story": "Just beyond Cleveland's streets, the beach faces a broad stretch of Lake Erie. The open water and exposed sand can change how a day feels without changing the city forecast.",
+      "accessAlert": null,
+      "safety": {
+        "name": "Ohio BeachGuard",
+        "url": "https://odh.ohio.gov/know-our-programs/bathing-beach-monitoring/BeachGuard"
+      }
+    },
+    {
+      "slug": "maumee-bay-state-park",
+      "name": "Maumee Bay State Park",
+      "lake": "Erie",
+      "state": "OH",
+      "city": "Oregon",
+      "country": "US",
+      "lat": 41.68671,
+      "lon": -83.37076,
+      "forecastReference": {
+        "lat": 41.683,
+        "lon": -83.381,
+        "scope": "nearby NWS land-area grid"
+      },
+      "parkUrl": "https://ohiodnr.gov/go-and-do/plan-a-visit/find-a-property/maumee-bay-state-park",
+      "coordinateSource": "https://odh.ohio.gov/know-our-programs/bathing-beach-monitoring/BeachGuard",
+      "coordinateNote": "USGS park-water reference east of marina, not a beach entry or monitored swim-area pin",
+      "story": "Here Lake Erie meets marsh, meadow and shore. The western basin is shallow, and the experience may change quickly as clouds and wind pass across the bay.",
+      "accessAlert": null,
+      "safety": {
+        "name": "Ohio BeachGuard",
+        "url": "https://odh.ohio.gov/know-our-programs/bathing-beach-monitoring/BeachGuard"
+      }
+    },
+    {
+      "slug": "presque-isle-beach-6",
+      "name": "Presque Isle State Park, Beach 6",
+      "lake": "Erie",
+      "state": "PA",
+      "city": "Erie",
+      "country": "US",
+      "lat": 42.14528,
+      "lon": -80.1375,
+      "forecastReference": {
+        "lat": 42.14,
+        "lon": -80.143,
+        "scope": "nearby NWS land-area grid"
+      },
+      "parkUrl": "https://www.pa.gov/agencies/dcnr/recreation/where-to-go/state-parks/find-a-park/presque-isle-state-park/swimming",
+      "coordinateSource": "https://eriecountypa.gov/departments/health/services-and-programs/health-and-wellness/beach-water-testing-results/",
+      "coordinateNote": "USGS Beach 6 East monitoring reference; not a lifeguard or parking location",
+      "story": "On Presque Isle's sandy peninsula, Lake Erie is always close. The breeze you feel beyond the dunes may differ from conditions back in Erie.",
+      "accessAlert": "Swimming is permitted only at designated guarded areas when officially open. Check current staffed beaches and posted restrictions.",
+      "safety": {
+        "name": "Erie County Beach Water Testing",
+        "url": "https://eriecountypa.gov/departments/health/services-and-programs/health-and-wellness/beach-water-testing-results/"
+      }
+    },
+    {
+      "slug": "evangola-state-park",
+      "name": "Evangola State Park Beach",
+      "lake": "Erie",
+      "state": "NY",
+      "city": "Irving",
+      "country": "US",
+      "lat": 42.6086,
+      "lon": -79.1127,
+      "forecastReference": {
+        "lat": 42.604,
+        "lon": -79.106,
+        "scope": "nearby NWS land-area grid"
+      },
+      "parkUrl": "https://parks.ny.gov/visit/state-parks/evangola-state-park",
+      "coordinateSource": "https://beachadvisory.health.ny.gov/",
+      "coordinateNote": "New York State beach-program monitoring coordinate, not entrance",
+      "story": "A broad sandy shore runs beneath the Lake Erie sky. Notice what the wind is doing over open water before settling in for the afternoon.",
+      "accessAlert": null,
+      "safety": {
+        "name": "New York Coastal Beach Water Quality",
+        "url": "https://beachadvisory.health.ny.gov/"
+      }
+    },
+    {
+      "slug": "woodlawn-beach-state-park",
+      "name": "Woodlawn Beach State Park",
+      "lake": "Erie",
+      "state": "NY",
+      "city": "Hamburg",
+      "country": "US",
+      "lat": 42.7895,
+      "lon": -78.8524,
+      "forecastReference": {
+        "lat": 42.785,
+        "lon": -78.854,
+        "scope": "nearby NWS land-area grid"
+      },
+      "parkUrl": "https://parks.ny.gov/parks/woodlawnbeach/amenities-activities.aspx",
+      "coordinateSource": "https://beachadvisory.health.ny.gov/",
+      "coordinateNote": "New York beach-program monitoring coordinate, not entrance",
+      "story": "Near the eastern end of Lake Erie, the shore opens into sky and sand. A steady lake wind can make the air feel different than it does a few streets back.",
+      "accessAlert": null,
+      "safety": {
+        "name": "New York Coastal Beach Water Quality",
+        "url": "https://beachadvisory.health.ny.gov/"
+      }
+    },
+    {
+      "slug": "hamlin-beach-state-park",
+      "name": "Hamlin Beach State Park",
+      "lake": "Ontario",
+      "state": "NY",
+      "city": "Hamlin",
+      "country": "US",
+      "lat": 43.3673,
+      "lon": -77.961,
+      "forecastReference": {
+        "lat": 43.361,
+        "lon": -77.958,
+        "scope": "nearby NWS land-area grid"
+      },
+      "parkUrl": "https://parks.ny.gov/visit/state-parks/hamlin-beach-state-park",
+      "coordinateSource": "https://beachadvisory.health.ny.gov/",
+      "coordinateNote": "New York beach-monitoring reference, not precise parking location",
+      "story": "Lake Ontario stretches north from these broad beaches. A clear inland morning is only part of the story; the open water and the afternoon breeze matter here.",
+      "accessAlert": null,
+      "safety": {
+        "name": "New York Coastal Beach Water Quality",
+        "url": "https://beachadvisory.health.ny.gov/"
+      }
+    },
+    {
+      "slug": "fair-haven-beach-state-park",
+      "name": "Fair Haven Beach State Park",
+      "lake": "Ontario",
+      "state": "NY",
+      "city": "Fair Haven",
+      "country": "US",
+      "lat": 43.3445,
+      "lon": -76.6983,
+      "forecastReference": {
+        "lat": 43.339,
+        "lon": -76.697,
+        "scope": "nearby NWS land-area grid"
+      },
+      "parkUrl": "https://parks.ny.gov/visit/state-parks/fair-haven-beach-state-park",
+      "coordinateSource": "https://beachadvisory.health.ny.gov/",
+      "coordinateNote": "New York beach-monitoring reference; not a trail entrance",
+      "story": "High bluffs and sandy shoreline share a small corner of Lake Ontario. At water level you meet a different wind exposure than on paths above the beach.",
+      "accessAlert": null,
+      "safety": {
+        "name": "New York Coastal Beach Water Quality",
+        "url": "https://beachadvisory.health.ny.gov/"
+      }
+    },
+    {
+      "slug": "southwick-beach-state-park",
+      "name": "Southwick Beach State Park",
+      "lake": "Ontario",
+      "state": "NY",
+      "city": "Henderson",
+      "country": "US",
+      "lat": 43.7643,
+      "lon": -76.216,
+      "forecastReference": {
+        "lat": 43.758,
+        "lon": -76.214,
+        "scope": "nearby NWS land-area grid"
+      },
+      "parkUrl": "https://parks.ny.gov/visit/state-parks/southwick-beach-state-park",
+      "coordinateSource": "https://beachadvisory.health.ny.gov/",
+      "coordinateNote": "New York beach-monitoring reference; not an entrance",
+      "story": "Dunes, marshland and a long sand beach line the eastern shore of Lake Ontario. At the lake edge, wind and cloud cover change the rhythm of a visit.",
+      "accessAlert": "Consult the park for current parking, beach access and any seasonal notices.",
+      "safety": {
+        "name": "New York Coastal Beach Water Quality",
+        "url": "https://beachadvisory.health.ny.gov/"
+      }
+    }
+  ]
+}
