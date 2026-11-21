@@ -23,8 +23,8 @@ STATION = "Petoskey State Park Weather Station"
 OWNER = "Little Traverse Bay Bands of Odawa Indians"
 STATION_REF = {"lat": 45.407589, "lon": -84.912903}
 FIELDS = ("time", "longitude", "latitude", "air_temperature",
-          "air_temperature_aggregate", "wind_speed", "wind_speed_aggregate",
-          "wind_from_direction", "wind_from_direction_aggregate")
+          "air_temperature_aggregate_test", "wind_speed", "wind_speed_aggregate_test",
+          "wind_from_direction", "wind_from_direction_aggregate_test")
 UNITS = ("UTC", "degrees_east", "degrees_north", "K", None, "m s-1",
          None, "degree", None)
 LICENCE = ("The data may be used and redistributed for free but is not intended "
@@ -139,13 +139,13 @@ def normalize(payload, *, start, end, now, provenance):
             counts["invalidTimeOrCoordinates"] += 1
             continue
         k = row["air_temperature"]
-        if not qc_good(row["air_temperature_aggregate"]) or not valid_number(k, 213, 328):
+        if not qc_good(row["air_temperature_aggregate_test"]) or not valid_number(k, 213, 328):
             counts["badAirOrQuality"] += 1
             continue
         air_f = round((k - 273.15) * 9 / 5 + 32, 2)
         wind_mph = direction = None
-        if (qc_good(row["wind_speed_aggregate"]) and
-                qc_good(row["wind_from_direction_aggregate"]) and
+        if (qc_good(row["wind_speed_aggregate_test"]) and
+                qc_good(row["wind_from_direction_aggregate_test"]) and
                 valid_number(row["wind_speed"], 0, 60) and
                 valid_number(row["wind_from_direction"], 0, 360)):
             wind_mph = round(row["wind_speed"] * 2.2369362921, 2)
