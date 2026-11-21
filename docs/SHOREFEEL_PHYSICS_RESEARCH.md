@@ -85,6 +85,21 @@ The Biggs/Graves lake-breeze index and subsequent Laird/Kristovich studies show 
 - Browser tests at phone and desktop, no-JS source text, NWS outages and full repository CI must pass before review.
 - Never change the actual first-screen NWS temperature based on this research-stage sweep.
 
+## Correcting a source classification error uncovered during live NWS checks
+
+On November 21, 2026, NOAA's live `/points` responses showed that the original ShoreFeel waterfront coordinate `43.6714,-83.9068` was classified as **marine**, forecast zone `LHZ422`, NWS `DTX/32,93`. That is not a suitable source contract for a visitor's land-side air-feel estimate at Bay City State Park.
+
+A new forecast-only reference `43.6714,-83.9120`, about 0.42 km (roughly one quarter mile) west of the waterfront coordinate, is NWS-classified as **land**, zone `MIZ048`, grid `DTX/31,93`. The background inland reference `43.6714,-84.1000` is also land, grid `DTX/25,93`. These are actual NWS `/points` responses, not inferred grid cells.
+
+- Waterfront coordinate stays unchanged for geographic bearing, interpretation and beach water proximity.
+- Land-side point is used **only for NWS air/wind/humidity**. The API rejects unexpected non-land classifications rather than silently showing marine air as sand-side air.
+- This point is still roughly a quarter mile inland and represents a 2.5 km *forecast cell*, not the beach itself. It cannot resolve quarter-mile shoreline temperature gradients.
+- The authoritative live source records can be rechecked at:
+  - https://api.weather.gov/points/43.6714,-83.9068
+  - https://api.weather.gov/points/43.6714,-83.9120
+  - https://api.weather.gov/points/43.6714,-84.1000
+- Land and marine metadata are re-checked on request, with source status and cache constraints intact.
+
 ## Current extension: actual NWS grid identity and independent NOAA offshore air
 
 The live API now retains the NWS `gridId/gridX/gridY` for both locations, blocks a numeric "shore minus inland" difference when the points resolve to one 2.5 km cell, and refuses to run the 27 physics scenarios if either location's grid identity is unverified. This is stronger than merely comparing different URL coordinates. Distinct cell differences are still **two forecasts**, not two thermometers.
