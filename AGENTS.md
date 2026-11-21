@@ -4,6 +4,10 @@ For an explicit Playwright request, an interactive tool or map change, or a subs
 
 
 
+## Cross-repository agent adoption inventory (2026-11-21)
+
+For governance checks across independently owned tool repositories, run the read-only inventory at `scripts/audit-agent-adoption.mjs` and consult `docs/CROSS_REPO_AGENT_ADOPTION_AUDIT.md`. It checks checked-in agent entrypoints for references to the central Experience OS and Experience Investment sources; it does not prove those instructions were actually loaded or used. Unknown access is never a passing state. The scheduled audit reports findings only. Change an owning repository only through its own reviewed PR after reading its local AGENTS.md and tests. Do not copy central framework code or auto-merge sibling changes.
+
 ## EXPERIENCE_INVESTMENT - purpose-built new tools and redesigns (2026-11-19)
 
 For a new substantial visitor-facing tool proposal, a major UI/design review, or an implementation request to refresh an existing tool, first use the repository skill at [.agents/skills/experience-investment/SKILL.md](.agents/skills/experience-investment/SKILL.md) (Codex) or [.claude/skills/experience-investment/SKILL.md](.claude/skills/experience-investment/SKILL.md) (Claude Code). Follow its shared decision lenses and review/delivery contract. Trigger automatically for significant new work; skip the full exercise for minor fixes. Pick visual form and technology from the specific visitor decision. The Michigan Snow Totals Visual V1 pilot is an example, **not** a site-wide page skin. Compare two materially different options and reject cloned layouts with only new colors, images or labels. When asked to implement, review then actually implement and verify; when asked for a proposal or review only, do not edit production.
