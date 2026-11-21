@@ -25,7 +25,7 @@ New shoreline destinations:
 | Erie | Turkey Point Beach | https://www.ontarioparks.ca/park/turkeypoint | Ontario Parks | https://www.ontarioparks.ca/park/turkeypoint/maps |
 | Ontario | Darlington Provincial Park | https://www.ontarioparks.ca/park/darlington | Ontario Parks | https://www.ontarioparks.ca/park/darlington/maps |
 | Ontario | Bluffer's Beach, Toronto | https://www.toronto.ca/explore-enjoy/parks-recreation/places-spaces/beaches-gardens-attractions/beaches/ | City of Toronto | https://mapcarta.com/W43106675 |
-| Ontario | Cherry Beach, Toronto | https://www.toronto.ca/explore-enjoy/parks-recreation/places-spaces/beaches-gardens-attractions/beaches/ | City of Toronto | https://geonames.nrcan.gc.ca/ |
+| Ontario | Cherry Beach, Toronto | https://www.toronto.ca/explore-enjoy/parks-recreation/places-spaces/beaches-gardens-attractions/beaches/ | City of Toronto | https://geonames.nrcan.gc.ca/search-place-names/unique?id=FARWO |
 
 The named source authority is an **external page to check**, not a live ingestion or present-day water-quality verdict. Toronto's lifeguard/beach monitoring is seasonal. The Kincardine municipal beaches page links a Smart Beach Light program separately from Grey Bruce Public Health bacterial monitoring. An old Ontario Parks sample is never displayed as current.
 
