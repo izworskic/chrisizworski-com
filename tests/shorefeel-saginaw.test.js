@@ -9,6 +9,9 @@ const read=p=>fs.readFileSync(path.join(__dirname,'..',p),'utf8');
 test('Saginaw Bay uses Lake Huron, seasonal NOAA buoy 45163 and distinct spatial samples',()=>{
  const p=DESTINATIONS['saginaw-bay'];
  assert.ok(p);assert.equal(p.lake,'huron');assert.equal(p.station,'45163');
+ assert.equal(p.forecastReference.lon,-83.912);
+ assert.equal(p.forecastReference.expectType,'land');
+ assert.equal(p.beach.lon,-83.9068,'waterfront and forecast points stay distinct');
  assert.equal(p.primaryCell,'inner-bay');assert.equal(p.cells.length,2);
  assert.ok(p.cells.every(c=>c.maxKm<=4),'satellite pixels must be close to their disclosed reference coordinates');
  assert.match(p.stationCaveat,/seasonal/);
@@ -76,7 +79,7 @@ test('Saginaw API keeps a valid inner-bay pixel when the west NOAA request fails
   if(url.includes('glsea-temps_1024_3.dat'))return response(now.getUTCFullYear()+' '+ordinal+' 11 12 13 14 15 16');
   if(url.includes('glsea_avgtemps_3.csv'))return response('',false);
   if(url.includes('45163.txt'))return response('#YY MM DD hh mm WTMP\n'+ndbc);
-  if(url.includes('weather.gov/points/'))return response(JSON.stringify({properties:{forecastHourly:'https://api.weather.gov/gridpoints/DTX/42,32/forecast/hourly'}}));
+  if(url.includes('weather.gov/points/'))return response(JSON.stringify({properties:{forecastHourly:'https://api.weather.gov/gridpoints/DTX/42,32/forecast/hourly',type:'land'}}));
   if(url.includes('forecast/hourly'))return response(JSON.stringify({properties:{periods:[]}}));
   if(url.includes('GLSEA_ACSPO_GCS.csv?')){
     if(url.includes('(43.657)'))return response(row('43.6963251553103','-83.8564696472691','13.43'));
