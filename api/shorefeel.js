@@ -47,6 +47,9 @@ async function jsonResponse(url,ms=3600){
 }
 async function weatherFor(place){
   const point=await jsonResponse('https://api.weather.gov/points/'+place.lat.toFixed(4)+','+place.lon.toFixed(4));
+  // Never silently use a marine forecast for a beach-air or inland reference.
+  if(place.expectType&&point?.properties?.type!==place.expectType)
+    throw new Error('NWS area forecast is not verified as land at the requested point');
   const href=point?.properties?.forecastHourly;
   if(typeof href!=='string'||!href.startsWith('https://api.weather.gov/'))throw new Error('missing official hourly forecast');
   const response=await jsonResponse(href);
@@ -132,7 +135,7 @@ module.exports=async function handler(req,res){
     textResponse(SOURCE,4500),
     textResponse(GLSEA_CSV,4500),
     place?textResponse('https://www.ndbc.noaa.gov/data/realtime2/'+place.station+'.txt',3700):Promise.resolve(null),
-    place?weatherFor(place):Promise.resolve([]),
+    place?weatherFor(place.forecastReference||place):Promise.resolve(null),
     place?gridCellsFor(place,now):Promise.resolve(null),
     placeKey==='saginaw-bay'?weatherFor(INLAND_BAY_COUNTY):Promise.resolve(null),
     placeKey==='saginaw-bay'?textResponse('https://www.ndbc.noaa.gov/data/realtime2/SBLM4.txt',2600):Promise.resolve(null)
