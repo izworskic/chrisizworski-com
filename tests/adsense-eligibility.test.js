@@ -158,3 +158,15 @@ test('NYC Bridges is the only new route excluded from loader while ownership, GA
   assert.match(guide,/google-adsense-account/,'Publisher ownership meta remains');
   assert.match(guide,/<h1>NYC Bridges<\/h1>/);
 });
+
+test('the Circle Tour loads one standard AdSense script after parsing without changing other pages', () => {
+  const { applyAdSettings, pageExcluded, LOADER_SRC } = require('../lib/adsense-eligibility');
+  const page = fs.readFileSync(path.join(__dirname, '../public/lake-superior-circle-tour/index.html'), 'utf8');
+  const guide = fs.readFileSync(path.join(__dirname, '../public/lake-superior-circle-tour/10-day/index.html'), 'utf8');
+  const route = '/lake-superior-circle-tour/';
+  assert.equal(pageExcluded(route), false);
+  const output = applyAdSettings(applyAdSettings(page, route), route);
+  assert.equal((output.match(/adsbygoogle\.js/g) || []).length, 1);
+  assert.ok(output.includes(`<script defer src="${LOADER_SRC}" crossorigin="anonymous"></script>`));
+  assert.ok(applyAdSettings(guide, route + '10-day/').includes(`<script async src="${LOADER_SRC}" crossorigin="anonymous"></script>`));
+});
