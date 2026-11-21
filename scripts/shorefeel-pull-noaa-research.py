@@ -112,6 +112,15 @@ def download_fields(url, product, cycle_key, lead):
     return fields, blobs, hashlib.sha256(index_bytes).hexdigest()
 
 
+def nearest_fields(record):
+    """ecCodes >=2.50 returns point dicts; older bindings may yield tuples."""
+    if isinstance(record, dict):
+        return float(record["lat"]), float(record["lon"]), float(record["value"])
+    if isinstance(record, (tuple, list)) and len(record) >= 3:
+        return float(record[0]), float(record[1]), float(record[2])
+    raise ValueError("Unknown ecCodes nearest-point format")
+
+
 def sample_point(blobs, lat, lon):
     import eccodes
     messages = []
@@ -126,7 +135,7 @@ def sample_point(blobs, lat, lon):
                 raise ValueError("ecCodes could not decode NOAA GRIB2 field")
             try:
                 nearest = eccodes.codes_grib_find_nearest(gid, lat, lon)[0]
-                nlat, nlon, value, _, _ = nearest
+                nlat, nlon, value = nearest_fields(nearest)
                 fetch = lambda key: eccodes.codes_get(gid, key)
                 messages.append({
                     "shortName": str(fetch("shortName")),
