@@ -45,13 +45,19 @@ function renderLead(){
  put('hero-scope',weather?'Bay City State Park · '+feel.apparentMethod+' (forecast, not a beach thermometer)':'Bay City State Park · no recent shoreline-area air forecast');
  put('last-updated',payload?.generatedAt?'Sources checked '+date(payload.generatedAt):'Unable to verify latest source');
  const physics=payload?.shorelinePhysics;
- const paired=physics?.paired;
+ const paired=physics?.paired,grid=physics?.gridRelationship;
+ put('physics-grid-info',grid?.description||'NWS grid source identities not available.');
+ const marine=physics?.independentMarineAir;
+ put('physics-marine-reference',marine&&Number.isFinite(marine.tempF)
+   ?marine.source+' · '+marine.tempF.toFixed(1)+'°F at '+date(marine.observedAt)+'. '+marine.location+'. This is offshore evidence, not an observation on the beach.'
+   :'No recent verified air thermometer report from Saginaw Bay Light #1 or seasonal NOAA buoy 45163. These offshore instruments are not beach thermometers.');
  put('physics-forecast-contrast',paired
    ?(paired.nwsDifferenceF>0?'+':'')+paired.nwsDifferenceF.toFixed(1)+'°F (shore vs inland)'
    :'Comparison unavailable');
  put('physics-forecast-note',paired
-   ?'NWS shore '+Math.round(paired.beachNwsF)+'°F · west Bay County '+Math.round(paired.inlandF)+'°F. These are two area forecasts, not measured thermometers.'
-   :'Two current, aligned NWS hourly forecasts are required; no inland difference is inferred.');
+   ?'NWS shore '+Math.round(paired.beachNwsF)+'°F · west Bay County '+Math.round(paired.inlandF)+'°F. Different gridded forecast cells, not independent thermometer measurements.'
+   :grid?.status==='same-grid'?'Both sites use the same NWS forecast cell. We will not present that as an observed shoreline difference.'
+   :'Two current NWS hourly forecasts with verified distinct cells are required; no inland difference is inferred.');
  const modeled=physics?.status==='research-only';
  put('physics-model-range',modeled
    ?physics.lowF.toFixed(1)+'–'+physics.highF.toFixed(1)+'°F (scenarios)'
@@ -156,7 +162,8 @@ async function load(){
   put('lead-wind','Unavailable');put('lead-water','Not verified');put('lead-humidity','Unavailable');
   put('lake-influence-detail','Without current weather, no beach temperature is inferred.');
   put('physics-forecast-contrast','Comparison unavailable');put('physics-model-range','Research scenarios unavailable');
-  put('physics-forecast-note','NWS forecast data unavailable');put('physics-model-note','NOAA or NWS source unavailable');
+  put('physics-forecast-note','NWS forecast data unavailable');put('physics-grid-info','NWS forecast grid metadata unavailable');
+  put('physics-marine-reference','Offshore NOAA air temperature unavailable');put('physics-model-note','NOAA or NWS source unavailable');
   put('lead-caveat','No inland or water-temperature reading is substituted for a beach thermometer.');
   put('last-updated','Latest data not verified');put('selected-source','Source unavailable');
   put('buoy-status','No verified buoy observation');
