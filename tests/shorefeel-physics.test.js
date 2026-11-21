@@ -3,7 +3,7 @@ const {test}=require('node:test');
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const path=require('node:path');
-const {parcelTemperatureF,scenario,marineAirFromNDBC,INLAND_BAY_COUNTY,ASSUMPTIONS}
+const {parcelTemperatureF,scenario,marineAirFromNDBC,INLAND_BAY_COUNTY,ASSUMPTIONS,forecastGridRelationship}
   =require('../lib/shorefeel/physics.js');
 const now=new Date('2026-07-01T12:30:00Z');
 const beach={lat:43.6714,lon:-83.9068},inner={lat:43.702,lon:-83.858};
@@ -12,7 +12,8 @@ const coast=(v={})=>({startsAt:hour,tempF:82,windDirection:'NE',windMph:8,...v})
 const inland=(v={})=>({startsAt:hour,tempF:86,...v});
 const water=(v={})=>({kind:'satellite',observedAt:'2026-07-01T06:00:00Z',tempF:60,...v});
 const input=(v={})=>({beachWeather:coast(),inlandWeather:inland(),water:water(),
- beach,waterReference:inner,...v});
+ beach,waterReference:inner,shoreGrid:{office:'DTX',x:100,y:60},
+ inlandGrid:{office:'DTX',x:95,y:60},...v});
 test('Wolfram-checked exponential solution and temperature equilibrium',()=>{
  const t=parcelTemperatureF(86,60,5,60,0.0012);
  assert.ok(Math.abs(t-83.52577286893495)<1e-9);
@@ -66,6 +67,30 @@ test('NDBC air is independent offshore context: units, freshness, missing values
  assert.equal(marineAirFromNDBC('#YY MM DD hh mm ATMP\n2026 07 01 12 00 99.0',now),null);
  assert.equal(marineAirFromNDBC('#YY MM DD hh mm ATMP\n2026 13 01 12 00 12.0',now),null);
 });
+test('do not claim an inland-vs-beach air difference from one NWS cell or unverified grid identities',()=>{
+ const same={office:'DTX',x:100,y:60},different={office:'DTX',x:97,y:61};
+ assert.equal(forecastGridRelationship(same,same).status,'same-grid');
+ assert.equal(forecastGridRelationship(same,different).status,'distinct-grid');
+ assert.equal(forecastGridRelationship(null,different).status,'unverified');
+ for(const v of [{shoreGrid:same,inlandGrid:same},{shoreGrid:null},
+   {inlandGrid:undefined}]){
+  const p=scenario(input(v),now);
+  assert.equal(p.status,'insufficient-data');
+  assert.equal(p.paired,null);
+  assert.equal(p.noIndependentTemperatureDifference,true);
+  assert.equal(p.usableForPublicBeachTemperature,undefined);
+ }
+});
+test('separately identified NOAA fixed beacon air observations remain offshore context',()=>{
+ const raw='#YY MM DD hh mm ATMP\n2026 07 01 12 00 13.0';
+ const station={stationId:'SBLM4',source:'NOAA NDBC Saginaw Bay Light #1',
+  location:'Fixed station on Saginaw Bay, not Bay City State Park'};
+ const item=marineAirFromNDBC(raw,now,station);
+ assert.equal(item.stationId,'SBLM4');
+ assert.equal(item.tempF,55.4);
+ assert.match(item.location,/not Bay City State Park/);
+ assert.equal(marineAirFromNDBC('#YY MM DD hh mm ATMP\n2026 07 01 12 00 999.9',now,station),null);
+});
 test('independent Bay County reference is inland west of beach',()=>{
  assert.equal(INLAND_BAY_COUNTY.lat,beach.lat);
  assert.ok(INLAND_BAY_COUNTY.lon<beach.lon-.1);
@@ -78,6 +103,8 @@ test('API/page integration preserves the forecast as first answer and research-o
  assert.match(api,/shorelinePhysics:physicalScenarios/);
  assert.match(api,/marineAirFromNDBC\(nearby\.value,now\)/);
  assert.match(api,/weatherFor\(INLAND_BAY_COUNTY\)/);
+ assert.match(api,/SBLM4\\.txt/);
+ assert.match(api,/shoreGrid:forecast\\.status/);
  assert.match(html,/id="physics-model-range"/);
  assert.match(html,/id="physics-forecast-contrast"/);
  assert.match(html,/physics model is not calibrated against a beach thermometer/);
