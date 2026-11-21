@@ -26,5 +26,6 @@ test('Mackinac gateway exposes the bridge decisions without changing the Circle 
   assert.match(map, /\/mackinac-bridge-tolls\//);
   assert.match(map, /\/api\/mackinac/);
   assert.match(map, /map-gateway-open/);
-  assert.match(map, /bounds:\s*\[\[-92\.5,45\.62\],\[-84\.0,49\.3\]\]/);
+  assert.match(map, /const overviewBounds = \[\[-92\.5,45\.62\],\[-84\.0,49\.3\]\]/);
+  assert.match(map, /bounds: overviewBounds/);
 });

@@ -34,6 +34,8 @@ const page = window.CircleTourPage;
 let map;
 let maplibreApi = null;
 let selectedStopId = null;
+let focusedPresetDay = null;
+const overviewBounds = [[-92.5,45.62],[-84.0,49.3]];
 let gatewayPopup = null;
 let filterState = {region: window.circleTourRegion || "all", activity: window.circleTourActivity || "all"};
 let presetState = readPresetState();
@@ -195,6 +197,36 @@ function dayRouteFeatures() {
   };
 }
 
+function focusPresetDay(number) {
+  const day = presetState.itinerary.find(item => item.day === number);
+  focusedPresetDay = day?.day ?? null;
+  if (!map?.getLayer("day-route-lines")) return;
+
+  const toolbar = document.getElementById("presetDayMapTools");
+  toolbar.hidden = !day;
+  const duration = matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 450;
+  map.setPaintProperty("day-route-lines", "line-width", day
+    ? ["case", ["==", ["get", "day"], day.day], 6, 2] : 3);
+  map.setPaintProperty("day-route-lines", "line-opacity", day
+    ? ["case", ["==", ["get", "day"], day.day], 1, 0.28] : 0.95);
+  if (!day) {
+    map.fitBounds(overviewBounds, {padding: 34, duration});
+    return;
+  }
+
+  const from = cardData(day.stops[0]).name;
+  const to = cardData(day.stops.at(-1)).name;
+  const feature = dayRouteFeatures().features.find(item => item.properties.day === day.day);
+  document.getElementById("presetDayMapLabel").textContent = feature
+    ? `Day ${day.day} · ${from} to ${to}`
+    : `Day ${day.day} · Stay near ${from}`;
+  if (feature) {
+    map.fitBounds(focusBounds(feature), {padding: {top: 90, right: 38, bottom: 42, left: 38}, maxZoom: 9, duration});
+  } else {
+    map.easeTo({center: STOP_COORDINATES[day.stops[0]], zoom: 8, duration});
+  }
+}
+
 function refreshSources() {
   map?.getSource("circle-stops")?.setData(stopFeatures());
   map?.getSource("day-routes")?.setData(dayRouteFeatures());
@@ -308,7 +340,7 @@ try {
   map = new maplibreApi.Map({
     container: "circleTourMap",
     style: OPENFREEMAP_STYLE,
-    bounds: [[-92.5,45.62],[-84.0,49.3]],
+    bounds: overviewBounds,
     fitBoundsOptions: {padding: 34},
     cooperativeGestures: true,
     dragRotate: false,
@@ -389,6 +421,7 @@ try {
       map.on("mouseenter", layer, () => { map.getCanvas().style.cursor = "pointer"; });
       map.on("mouseleave", layer, () => { map.getCanvas().style.cursor = ""; });
     }
+    if (focusedPresetDay !== null) focusPresetDay(focusedPresetDay);
     status.classList.add("hidden");
     status.textContent = "";
   });
@@ -417,13 +450,20 @@ window.addEventListener("circle-tour:filter-change", (event) => {
   refreshSources();
 });
 window.addEventListener("circle-tour:preset-change", (event) => {
+  const hadFocus = focusedPresetDay !== null;
   presetState = event.detail;
   refreshSources();
+  if (hadFocus) focusPresetDay(null);
+});
+document.getElementById("clearPresetDayMap").addEventListener("click", () => {
+  focusPresetDay(null);
+  document.getElementById("circleTourMapFrame").focus({preventScroll: true});
 });
 window.addEventListener("circle-tour:stop-open", (event) => selectStop(String(event.detail.id), {move: false}));
 
 window.CircleTourMap = {
   focusOvernightDay: ()=>DAY_FOCUS_FEATURE,
+  focusPresetDay,
   focusStop: selectStop,
   focusMackinacGateway: () => openGatewayPopup({move: true, measure: true}),
 };

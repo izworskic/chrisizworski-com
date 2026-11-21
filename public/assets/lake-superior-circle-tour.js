@@ -143,7 +143,7 @@
       // Shared Rust source gates must be available before both route planners.
       // The adapter itself is nonblocking: a missing WASM keeps JS policy live.
       await import('/assets/circle-tour-rust-itinerary.js?v=20261114');
-      await import('/assets/lake-superior-circle-tour-core.js?v=20261121-layout');
+      await import('/assets/lake-superior-circle-tour-core.js?v=20261121-day-map');
     } finally {
       addStyles();
       updateStructuredData();

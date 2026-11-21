@@ -316,7 +316,10 @@
     return (first === "1" && last === "30") || (first === "30" && last === "1") ? total : null;
   }
 
+  let dayMapRequest = 0;
+
   function renderRoutePreview() {
+    dayMapRequest += 1;
     const route = displayedItinerary();
     const directionLabel = activeDirection === "counterclockwise" ? "counterclockwise" : "clockwise";
     byId("routePreviewTitle").textContent = `${activePreset}-Day ${activePreset === "7" ? "Highlights" : activePreset === "10" ? "Balanced Route" : "Chris's Route"}`;
@@ -374,7 +377,24 @@
         note.textContent = "Reversed route; daily descriptions below are written counterclockwise.";
         copy.append(document.createElement("br"), note);
       }
-      copy.append(document.createElement("br"), directions);
+      const actions = document.createElement("div");
+      actions.className = "route-day-actions";
+      const showDay = document.createElement("button");
+      showDay.type = "button";
+      showDay.dataset.mapDay = String(day.day);
+      showDay.textContent = "Show on map";
+      showDay.setAttribute("aria-label", `Show day ${day.day} on the Circle Tour map`);
+      showDay.setAttribute("aria-controls", "circleTourMap");
+      showDay.addEventListener("click", async () => {
+        const request = ++dayMapRequest;
+        const frame = byId("circleTourMapFrame");
+        frame.scrollIntoView({block: "nearest"});
+        frame.focus({preventScroll: true});
+        await loadMap();
+        if (request === dayMapRequest) window.CircleTourMap?.focusPresetDay(day.day);
+      });
+      actions.append(showDay, directions);
+      copy.append(actions);
       const roadNotes = roadEvidenceForDay(day);
       if (roadNotes.length) {
         const details = document.createElement("details");
@@ -679,7 +699,7 @@
   };
 
   const mapFrame = document.querySelector(".map-frame");
-  const loadMap = () => import("/assets/lake-superior-circle-tour-map.js?v=20261121-layout").catch(() => {
+  const loadMap = () => import("/assets/lake-superior-circle-tour-map.js?v=20261121-day-map").catch(() => {
     byId("mapStatus").innerHTML = '<div class="map-unavailable"><strong>The interactive map could not load.</strong>Use the synchronized itinerary preview, Google Maps day links, and all 31 stop cards on this page.</div>';
   });
   if ("IntersectionObserver" in window) {
