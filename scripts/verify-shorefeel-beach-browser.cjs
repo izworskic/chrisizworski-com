@@ -74,8 +74,8 @@ async function run(){
    assert.match(await page.locator('#lead-water').innerText(),/58.5°F/);
    assert.match(await page.locator('#lead-source').innerText(),/NWS forecast/);
    assert.match(await page.locator('#lead-band-note').innerText(),/No exact degree correction/);
-   assert.match(await page.locator('#physics-forecast-contrast').innerText(),/-4\\.0°F/);
-   assert.match(await page.locator('#physics-model-range').innerText(),/°F \\(scenarios\\)/);
+   assert.match(await page.locator('#physics-forecast-contrast').innerText(),/-4\.0°F/);
+   assert.match(await page.locator('#physics-model-range').innerText(),/°F \(scenarios\)/);
    assert.match(await page.locator('#physics-model-limits').innerText(),/not an actual beach forecast/i);
    assert.equal(await page.locator('#bay-map').getAttribute('data-basemap'),'openstreetmap');
    await page.locator('button[data-activity="swim"]').click();
