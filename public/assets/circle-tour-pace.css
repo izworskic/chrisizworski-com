@@ -44,3 +44,65 @@
   .ctpace-day-ribbon{gap:3px}
 }
 @media print{.ctpace-preview,.ctpace-hours{display:none}.ctpace-route{break-inside:avoid}}
+
+/* The Circle Tour's first screen is a travel desk, not a wall of bordered statistics. */
+body[data-analytics-page="lake-superior-circle-tour"] .hero{
+  text-align:left;padding:27px max(22px,calc((100vw - 1180px)/2)) 22px;
+  background:linear-gradient(112deg,#153b46 0%,#22515b 68%,#2e5960 100%)
+}
+body[data-analytics-page="lake-superior-circle-tour"] .hero h1{
+  max-width:900px;font-size:clamp(27px,3.3vw,43px);line-height:1.12;margin-bottom:10px
+}
+body[data-analytics-page="lake-superior-circle-tour"] .hero .tagline{
+  max-width:870px;margin:0 0 16px;color:#ebf3ef;font-size:14px;line-height:1.65
+}
+body[data-analytics-page="lake-superior-circle-tour"] .hero .route-stats{
+  justify-content:flex-start;gap:0
+}
+body[data-analytics-page="lake-superior-circle-tour"] .hero .stat-pill{
+  text-align:left;border:0;border-right:1px solid rgba(236,247,244,.3);
+  border-radius:0;background:none;padding:4px 17px 4px 0;margin-right:17px
+}
+body[data-analytics-page="lake-superior-circle-tour"] .hero .stat-pill:last-child{border-right:0}
+body[data-analytics-page="lake-superior-circle-tour"] .hero .stat-pill .n{
+  font:600 19px/1.2 Arial,sans-serif;color:#fff
+}
+body[data-analytics-page="lake-superior-circle-tour"] .hero .stat-pill .l{
+  font:700 10px/1.4 Arial,sans-serif;letter-spacing:.06em;color:#c5dfd9
+}
+.route-planner{margin:0 auto 17px;padding:20px 22px 26px;border:0;border-radius:0;background:#fff}
+.route-planner>h2{font-size:clamp(22px,2vw,28px);font-weight:normal;color:#164653}
+.route-planner>.route-answer{max-width:870px;color:#2f4b4b;font-size:15px;line-height:1.65;margin-bottom:9px}
+.answer-facts{border-top:1px solid #d8e4df;border-bottom:1px solid #d8e4df;padding:10px 0;margin-top:12px;gap:0}
+.answer-facts li{border:0;border-left:2px solid #a0c0b7;background:none;padding:2px 14px;color:#3d5453;font-size:12px}
+.answer-facts strong{color:#24515b}
+.answer-links a{border:0;border-radius:0;padding:6px 11px 6px 0;text-decoration:underline;text-underline-offset:3px;font-size:13px;color:#225d62}
+.planner-controls{border-top:0;padding-top:5px;margin-top:13px}
+.planner-controls .preset-btn,.planner-controls .direction-btn{min-height:44px;border-radius:7px;padding:10px 12px;font-size:13px}
+.planner-grid{gap:16px}
+.map-frame{border-radius:9px 9px 0 0;min-height:370px}
+.map-selection{border-radius:0 0 9px 9px}
+.map-selection-actions button,.map-selection-actions a{min-height:44px;display:inline-flex;align-items:center;border-radius:6px;font-size:12px}
+.route-preview{border-radius:9px;background:#f5f8f6;border-color:#cadbd4}
+.route-preview-head h3{font-size:19px;color:#204d56}
+.route-preview-meta{font-size:12px;line-height:1.55;color:#485d5b}
+.route-day{font-size:12px;line-height:1.5;padding:10px 8px;gap:10px}
+.route-day strong{font-size:13px;color:#244950;font-weight:bold}
+.route-day a{font-size:12px;white-space:normal;text-decoration:underline}
+.route-actions button,.route-actions a{min-height:44px;display:flex;align-items:center;justify-content:center;font-size:12px}
+@media(max-width:650px){
+  body[data-analytics-page="lake-superior-circle-tour"] .hero{padding:21px 16px 15px}
+  body[data-analytics-page="lake-superior-circle-tour"] .hero h1{font-size:26px}
+  body[data-analytics-page="lake-superior-circle-tour"] .hero .tagline{font-size:12px;line-height:1.5;margin-bottom:11px}
+  body[data-analytics-page="lake-superior-circle-tour"] .hero .route-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+  body[data-analytics-page="lake-superior-circle-tour"] .hero .stat-pill{margin:0;padding:0 6px 0 0}
+  body[data-analytics-page="lake-superior-circle-tour"] .hero .stat-pill .n{font-size:15px}
+  body[data-analytics-page="lake-superior-circle-tour"] .hero .stat-pill .l{font-size:9px}
+  .route-planner{padding:17px 15px 22px}
+  .route-planner>.route-answer{font-size:14px}
+  .answer-facts{grid-template-columns:minmax(0,1fr);gap:10px;padding:10px 0}
+  .answer-facts li{padding:0 10px;font-size:12px}
+  .planner-controls .preset-btn{flex:1;min-width:0;font-size:12px;padding:9px 7px}
+  .planner-controls .preset-buttons{width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+  .map-frame{height:390px;min-height:0}
+}
