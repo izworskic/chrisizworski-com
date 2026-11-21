@@ -105,19 +105,42 @@
     "stale-data": "Reports over 30 minutes old are already excluded by the engine; a failed refresh keeps earlier windows with an explicit note, and no data yields an unavailable verdict."
   },
   "qa": {
-    "viewports": [360, 390, 768, 1280, 1440],
-    "browserStatus": "PENDING",
-    "browserRun": null,
-    "screenshotEvidence": [],
-    "scopeNote": "Local Chromium run of tests/soo-lock-watch-browser.cjs passed on 2026-11-21 with a pinned clock and fixture; the PR's CI run URL is recorded after it completes."
+    "viewports": [
+      360,
+      390,
+      768,
+      1280,
+      1440
+    ],
+    "browserStatus": "PASSED",
+    "browserRun": "https://github.com/izworskic/chrisizworski-com/actions/runs/44917688025",
+    "screenshotEvidence": [
+      "https://github.com/izworskic/chrisizworski-com/actions/runs/44917688025/artifacts",
+      "https://github.com/izworskic/chrisizworski-com/tree/soo-locks-lock-watch/artifacts/soo-lock-watch/evidence"
+    ],
+    "scopeNote": "Fixture-based Chrome run with a pinned clock: 360/390/768/1280/1440, chips, A to B to A, Plan-around, keyboard, real Leaflet popup focus, feed 503, winter shutdown, summer hotline and no-JS. Also passed locally against npm run build:site output. Real map tiles and live AIS on production are NOT VERIFIED until after merge."
   },
   "photos": [],
   "release": {
-    "implemented": { "status": "PENDING" },
-    "verified": { "status": "PENDING" },
-    "deployed": { "status": "NOT_VERIFIED" },
-    "live": { "status": "NOT_VERIFIED" },
-    "measured": { "status": "NOT_MEASURED" }
+    "implemented": {
+      "status": "CONFIRMED",
+      "checkedDate": "2026-11-21",
+      "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/pull/1825"
+    },
+    "verified": {
+      "status": "CONFIRMED",
+      "checkedDate": "2026-11-21",
+      "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/actions/runs/44917687933"
+    },
+    "deployed": {
+      "status": "NOT_VERIFIED"
+    },
+    "live": {
+      "status": "NOT_VERIFIED"
+    },
+    "measured": {
+      "status": "NOT_MEASURED"
+    }
   },
   "note": "Draft until the PR's CI, an owner merge, a READY deployment for the merged SHA and an independent public check are each recorded."
 }
