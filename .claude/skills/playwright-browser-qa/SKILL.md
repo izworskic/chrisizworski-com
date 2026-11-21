@@ -37,9 +37,9 @@ playwright-cli -s=tool-qa screenshot --filename=artifacts/playwright-qa/desktop.
 playwright-cli -s=tool-qa close
 ~~~
 
-This example assumes a **locally started server** and an existing screenshot directory. Start a server only when needed, such as \`python3 -m http.server 8765 --bind 127.0.0.1 --directory public\`. Replace the root URL with the actual tool path. Use the snapshot to identify current element refs before clicking. Verify the visible result, not only that the click was accepted.
+This example assumes a **locally started server** and an existing screenshot directory. Start a server only when needed, such as `python3 -m http.server 8765 --bind 127.0.0.1 --directory public`. Replace the root URL with the actual tool path. Use the snapshot to identify current element refs before clicking. Verify the visible result, not only that the click was accepted.
 
-If the CLI is absent, check the [official installation instructions](https://github.com/microsoft/playwright-cli). With owner or environment permission, install \`@playwright/cli\` for the active agent environment, not the production dependency graph. Do not silently install globally, run untrusted page code, or edit MCP configuration. If no browser execution is possible, report **browser QA not run**. A GitHub file read is not a browser session.
+If the CLI is absent, check the [official installation instructions](https://github.com/microsoft/playwright-cli). With owner or environment permission, install `@playwright/cli` for the active agent environment, not the production dependency graph. Do not silently install globally, run untrusted page code, or edit MCP configuration. If no browser execution is possible, report **browser QA not run**. A GitHub file read is not a browser session.
 
 ## Required acceptance for a changed interactive experience
 
@@ -49,7 +49,7 @@ If the CLI is absent, check the [official installation instructions](https://git
 - For maps, verify tiles actually load, attribution is legible, pan/zoom does not scroll the page unexpectedly, marker/popup behavior, a source-backed arrival link, and a meaningful map-unavailable fallback. A map container existing is not proof that a map works.
 - Inspect console errors and failed requests. Distinguish harmless external failures from user-visible defects. Mock unstable external providers for deterministic CI, then verify live integrations separately when authorized.
 - Record the exact URL, environment, viewport, actions, expected and observed results, screenshots or traces, and test command. Use a redacted, short-lived artifact location.
-- Add or update a focused regression test for reproducible bugs. Run targeted tests, then \`npm run verify:all\` in the **owning** repository and check PR CI. Report each as passed, failed, or not run.
+- Add or update a focused regression test for reproducible bugs. Run targeted tests, then `npm run verify:all` in the **owning** repository and check PR CI. Report each as passed, failed, or not run.
 
 ## Nonnegotiable safety and scope
 
