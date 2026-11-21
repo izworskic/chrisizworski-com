@@ -210,12 +210,13 @@ def run(day, cycle, lead):
         row["schema"] = "shorefeel.noaa-hindcast-subset.v1"
     archive_audit["checksumScope"] = "selected indexed GRIB messages only, not full NOAA files"
     return {"schema": "shorefeel.noaa-real-hindcast-pull.v1",
+            "retrievedAtUTC": dt.datetime.now(dt.timezone.utc).isoformat().replace("+00:00", "Z"),
             "sourceDate": f"{day[:4]}-{day[4:6]}-{day[6:8]}",
             "cycleUTC": f"{cycle:02d}:00",
             "modelSources": products,
             "archiveAudit": archive_audit,
             "offshoreStations": [read_ndbc("SBLM4"), read_ndbc("45163")],
-            "fieldThermometersInstalled": False,
+            "fieldThermometersIndependentlyVerified": False,
             "measuredBeachMinusInlandF": None,
             "calibratedBeachAirEstimateF": None,
             "calibrationAuthorized": False,
