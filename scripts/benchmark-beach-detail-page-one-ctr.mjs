@@ -39,7 +39,7 @@ for (const page of config.pages) {
   check(html.includes(`<link rel="canonical" href="https://chrisizworski.com${page.path}">`), `${slug}: canonical drift`);
   // The Aug 2026 search experiment is a baseline, not a ceiling on honest
   // later content updates. Preserve it while requiring current page freshness.
-  const modified = html.match(/"dateModified"\\s*:\\s*"(\\d{4}-\\d{2}-\\d{2})"/)?.[1];
+  const modified = html.match(/"dateModified"\s*:\s*"(\d{4}-\d{2}-\d{2})"/)?.[1];
   const current = Object.fromEntries(new Intl.DateTimeFormat('en-US', {
     timeZone: 'America/Detroit', year: 'numeric', month: '2-digit', day: '2-digit',
   }).formatToParts(new Date()).filter(part => part.type !== 'literal').map(part => [part.type, part.value]));
