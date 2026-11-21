@@ -961,13 +961,12 @@
       if (currentPlan) setTimeout(() => buildTodayPlan({measure:false}), 0);
     }));
 
-    const mapShell = document.querySelector('.map-shell');
-    const frame = mapShell?.querySelector('.map-frame');
-    if (mapShell && frame) {
+    const mapTools = $('circleTourMapTools');
+    if (mapTools) {
       const controls = document.createElement('div');
       controls.className = 'ct-map-live';
       controls.innerHTML = `<div class="ct-map-live-head"><strong>Route intelligence</strong><span>Focus the map on what can change the day</span></div><div class="ct-map-live-tabs"><button type="button" data-map-mode="today" aria-pressed="true">Today</button><button type="button" data-map-mode="ships" aria-pressed="false">Ships</button><button type="button" data-map-mode="access" aria-pressed="false">Access / border</button><button type="button" data-map-mode="core" aria-pressed="false">Core live stops</button></div><div class="ct-map-picks" id="ctMapPicks"></div>`;
-      mapShell.insertBefore(controls, frame);
+      mapTools.append(controls);
       controls.querySelectorAll('[data-map-mode]').forEach((button) => {
         button.addEventListener('click', () => renderMapPicks(button.dataset.mapMode));
       });

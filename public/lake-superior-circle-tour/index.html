@@ -23,14 +23,16 @@ a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}
 .site-header .site-title{font-size:20px;font-weight:normal;color:var(--green)}
 .site-nav{text-align:center;padding:10px 20px;border-bottom:1px solid var(--border);font-size:13px}
 .site-nav a{color:#5a5a5a;margin:0 8px}.site-nav a.active{color:var(--green);font-weight:bold}
-.hero{background:linear-gradient(135deg,#0a2a3d 0%,#1a4a5c 50%,#0d3545 100%);color:#fff;padding:38px 24px 32px;text-align:center}
-.hero h1{font-size:26px;font-weight:normal;line-height:1.3;margin-bottom:8px}
-.hero .tagline{font-size:14px;color:#a8c8d8;max-width:700px;margin:0 auto 22px;line-height:1.8}
-.hero .tagline a{color:#7bc8e8}
-.route-stats{display:flex;justify-content:center;flex-wrap:wrap;gap:12px}
-.stat-pill{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:3px;padding:8px 16px;text-align:center}
-.stat-pill .n{font-size:20px;display:block}
-.stat-pill .l{font-size:11px;letter-spacing:.5px;text-transform:uppercase;color:#a8c8d8}
+.hero{background:#103743;color:#fff;padding:clamp(22px,4vw,46px) 24px;text-align:center}
+.hero h1{font-size:clamp(24px,4vw,44px);font-weight:normal;line-height:1.16;margin:0 auto 8px;max-width:26ch;text-wrap:balance}
+.hero-route{font:600 14px/1.5 system-ui,sans-serif;color:#d2e8ea}
+.hero-route span{margin:0 3px}
+.route-guide-intro{margin-top:24px;padding-top:18px;border-top:1px solid var(--border)}
+.route-guide-intro h3{font-size:20px;color:#103743}
+.route-guide-intro .tagline{max-width:82ch;margin:6px 0 14px}
+.route-stats{display:flex;flex-wrap:wrap;gap:8px 22px;margin:8px 0 14px;color:#24484f}
+.stat-pill .n{display:block;font-size:18px;font-variant-numeric:tabular-nums}
+.stat-pill .l{font:12px/1.4 system-ui,sans-serif}
 .seg-tabs{display:flex;overflow-x:auto;border-bottom:2px solid var(--border);background:#fff;padding:0 16px;position:sticky;top:0;z-index:200;scrollbar-width:none}
 .seg-tabs::-webkit-scrollbar{display:none}
 .seg-tab{padding:11px 15px;font-size:13px;font-family:Georgia,serif;border:none;background:none;cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent;margin-bottom:-2px;color:#888;transition:all .15s}
@@ -129,49 +131,49 @@ a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}
 .gl-related-card p{font-size:12px;color:#aaa;margin:0;line-height:1.5}
 .footer{text-align:center;padding:18px;border-top:1px solid var(--border);font-size:12px;color:#ccc}
 @media(max-width:960px){.sidebar{display:none}.main-wrap{display:block}}
-@media(max-width:600px){.hero h1{font-size:20px}.stop-name{font-size:15px}.route-stats{gap:8px}}
-@media print{.seg-tabs,.filter-bar,.sidebar,.add-btn,.stop-toggle,.site-nav,.gl-related,.footer,.faq-section,.qr-section,.planning-box,.hero .route-stats{display:none!important}.stop-card .stop-body{display:block!important}.stop-card{break-inside:avoid}.main-wrap{display:block}}
+@media(max-width:600px){.stop-name{font-size:15px}}
+@media print{.seg-tabs,.filter-bar,.sidebar,.add-btn,.stop-toggle,.site-nav,.gl-related,.footer,.faq-section,.qr-section,.planning-box,.route-stats{display:none!important}.stop-card .stop-body{display:block!important}.stop-card{break-inside:avoid}.main-wrap{display:block}}
 
 /* Route answer and interactive map */
-.route-planner{max-width:1220px;margin:18px auto;padding:20px 22px;background:#fff;border:1px solid var(--border);border-top:4px solid var(--green);border-radius:3px}
-.route-planner h2{font-size:21px;font-weight:normal;color:var(--green);margin-bottom:6px;line-height:1.35}
-.route-planner>.route-answer{font-size:14px;color:#3d3d3d;line-height:1.8;margin-bottom:11px;max-width:920px}
+.route-planner{max-width:1220px;margin:0 auto;padding:18px 20px 22px;background:transparent;border:0;border-top:4px solid var(--green);border-radius:3px}
+.route-planner h2{font-size:clamp(20px,2.6vw,28px);font-weight:normal;color:#103743;margin-bottom:6px;line-height:1.35}
+.route-planner>.route-answer{font-size:14px;color:#3d3d3d;line-height:1.5;margin-bottom:6px;max-width:920px}
 .answer-facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;list-style:none;margin:0 0 12px;padding:0}
 .answer-facts li{background:#fafaf8;border:1px solid #eee;padding:9px 11px;font-size:12px;line-height:1.6;color:#555}
 .answer-facts strong{display:block;color:#222;font-size:11px;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px}
 .answer-links{display:flex;flex-wrap:wrap;gap:7px}
 .answer-links a{display:inline-block;border:1px solid var(--green);border-radius:2px;padding:5px 10px;font-size:12px}
-.planner-controls{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:18px 0 10px;padding-top:14px;border-top:1px solid #eee}
+.planner-controls{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:0 0 10px;padding-top:14px;border-top:1px solid #d8e2e0;padding:10px 0 0}
 .preset-buttons,.direction-buttons{display:flex;gap:6px;flex-wrap:wrap}
-.preset-btn,.direction-btn{font-family:Georgia,serif;font-size:12px;padding:7px 11px;border:1px solid var(--border);border-radius:2px;background:#fafaf8;color:#555;cursor:pointer}
+.preset-btn,.direction-btn{font-family:Georgia,serif;font-size:12px;padding:7px 11px;border:1px solid var(--border);border-radius:8px;background:#fff;color:#183e46;cursor:pointer;min-height:44px;border-color:#9aafb0;font:600 13px/1.2 system-ui,sans-serif}
 .preset-btn:hover,.preset-btn.active,.direction-btn:hover,.direction-btn.active{background:var(--green);border-color:var(--green);color:#fff}
-.direction-control{display:flex;align-items:center;gap:7px;font-size:11px;color:#777;text-transform:uppercase;letter-spacing:.4px}
+.direction-control{display:flex;align-items:center;gap:7px;font-size:11px;color:#36535a;text-transform:uppercase;letter-spacing:.4px}
 .planner-grid{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(280px,.8fr);gap:12px;align-items:stretch}
 .map-shell{min-width:0}
-.map-frame{position:relative;height:clamp(380px,52vh,560px);overflow:hidden;border:1px solid #cfd8d0;border-radius:3px;background:linear-gradient(145deg,#e8f2e8,#d9e8ef)}
+.map-frame{position:relative;height:clamp(380px,52vh,560px);overflow:hidden;border:1px solid #cfd8d0;border-radius:12px 12px 0 0;background:linear-gradient(145deg,#e8f2e8,#d9e8ef)}
 #circleTourMap{width:100%;height:100%}
 .map-loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:24px;text-align:center;color:#48604d;font-size:13px;line-height:1.7;background:linear-gradient(145deg,rgba(232,242,232,.96),rgba(217,232,239,.96));z-index:2}
 .map-loading.hidden{display:none}
 .map-unavailable{max-width:420px}
 .map-unavailable strong{display:block;color:#234b29;font-size:15px;margin-bottom:4px}
-.map-selection{display:flex;gap:10px;align-items:center;min-height:58px;padding:9px 11px;border:1px solid var(--border);border-top:0;background:#fafaf8;font-size:12px;line-height:1.5}
+.map-selection{display:flex;gap:10px;align-items:center;min-height:58px;padding:10px 12px;border:1px solid var(--border);border-top:0;background:#fff;font-size:13px;line-height:1.5}
 .map-selection-copy{flex:1;min-width:0}
-.map-selection-copy strong{display:block;color:#333;font-size:13px}
+.map-selection-copy strong{display:block;color:#333;font-size:15px}
 .map-selection-actions{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
-.map-selection-actions button,.map-selection-actions a{font-family:Georgia,serif;font-size:11px;padding:5px 8px;border:1px solid var(--green);border-radius:2px;background:#fff;color:var(--green);cursor:pointer;white-space:nowrap}
+.map-selection-actions button,.map-selection-actions a{font-family:Georgia,serif;font-size:13px;padding:5px 8px;border:1px solid var(--green);border-radius:2px;background:#fff;color:var(--green);cursor:pointer;white-space:nowrap;min-height:44px;align-content:center}
 .map-selection-actions button.added{background:var(--green);color:#fff}
-.map-legend{display:flex;flex-wrap:wrap;gap:9px;margin-top:7px;font-size:10px;color:#777}
+.map-legend{display:flex;flex-wrap:wrap;gap:9px;margin-top:7px;font-size:12px;color:#465b5e}
 .map-legend span{display:flex;align-items:center;gap:4px}
 .legend-dot{width:8px;height:8px;border-radius:50%;display:inline-block}
-.route-preview{border:1px solid var(--border);border-radius:3px;background:#fafaf8;display:flex;flex-direction:column;min-height:0}
-.route-preview-head{padding:12px 13px 9px;border-bottom:1px solid var(--border)}
-.route-preview-head h3{font-size:16px;font-weight:normal;color:#333;line-height:1.35;margin-bottom:3px}
+.route-preview{border:1px solid var(--border);border-radius:12px;background:#f0f5f4;display:flex;flex-direction:column;min-height:0;align-self:start;border-color:#d8e2e0;min-width:0}
+.route-preview-head{padding:14px 15px 8px;border-bottom:1px solid var(--border);border:0}
+.route-preview-head h3{font-size:22px;font-weight:normal;color:#103743;line-height:1.35;margin-bottom:3px}
 .route-preview-meta{font-size:11px;color:#777;line-height:1.5}
-.route-day-list{padding:7px;overflow:auto;max-height:390px;flex:1}
-.route-day{display:grid;grid-template-columns:29px 1fr;gap:7px;padding:7px;border-bottom:1px solid #ece8e0;font-size:11px;line-height:1.45;color:#555}
+.route-day-list{padding:0 14px 8px;overflow:auto;max-height:390px;flex:1}
+.route-day{display:grid;grid-template-columns:29px 1fr;gap:7px;padding:9px 0;border-bottom:1px solid #ece8e0;font-size:13px;line-height:1.45;color:#555;border-color:#d8e2e0}
 .route-day:last-child{border-bottom:0}
 .route-day-number{width:27px;height:27px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-family:Arial,sans-serif;font-size:10px;font-weight:bold}
-.route-day strong{display:block;color:#333;font-size:12px;font-weight:normal}
+.route-day strong{display:block;color:#333;font-size:14px;font-weight:bold}
 .route-day a{font-size:10px;white-space:nowrap}
 .route-road-evidence{margin-top:8px;padding:7px 8px;border:1px solid #dcded3;border-radius:4px;background:#fff;max-width:100%}
 .route-road-evidence summary{cursor:pointer;color:#23543b;font-size:11px;font-weight:bold;line-height:1.4}
@@ -180,12 +182,22 @@ a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}
 .route-road-note strong{font-size:11px;font-weight:bold;color:#273a2d}
 .route-road-note p{font-size:11px;line-height:1.5;margin:3px 0}
 .route-road-evidence a{font-size:11px;white-space:normal;overflow-wrap:anywhere;text-decoration:underline}
-.route-actions{padding:10px;border-top:1px solid var(--border);display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.route-actions button,.route-actions a{font-family:Georgia,serif;font-size:12px;text-align:center;padding:7px 8px;border-radius:2px;cursor:pointer}
+.route-actions{padding:0 15px 10px;border-top:1px solid var(--border);display:flex;grid-template-columns:1fr 1fr;gap:6px 12px;flex-wrap:wrap;align-items:center;border:0}
+.route-actions button,.route-actions a{font-family:Georgia,serif;font-size:12px;text-align:center;padding:7px 8px;border-radius:2px;cursor:pointer;min-height:44px;align-content:center;font:600 13px/1.35 system-ui,sans-serif}
 .route-use{border:1px solid var(--green);background:var(--green);color:#fff}
 .route-detail{border:1px solid var(--green);background:#fff;color:var(--green)}
 .planner-note{font-size:11px;color:#777;line-height:1.65;margin-top:9px}
 .planner-note a{font-weight:bold}
+
+.planner-jumps{display:flex;flex-wrap:wrap;column-gap:18px;font:600 13px/1.4 system-ui,sans-serif}
+.planner-jumps a,.route-preview-jump{display:inline-flex;align-items:center;min-height:44px;text-decoration:underline;text-underline-offset:3px}
+.preset-btn.active,.direction-btn.active,.preset-btn:hover,.direction-btn:hover{background:#124553;border-color:#124553;color:#fff}
+.route-preview-meta,.planner-note{font-size:13px;color:#465b5e}
+.route-actions .route-use{padding:8px 14px;border-radius:8px;background:#124553;border-color:#124553}
+.route-actions .route-detail{border:0;background:none;text-decoration:underline;text-underline-offset:3px}
+.route-day a,.route-road-evidence summary,.route-road-note strong,.route-road-note p{font-size:12px}
+.route-planner :focus-visible{outline:2px solid #0e6081;outline-offset:2px}
+#circle-tour-pace,#routePreviewTitle{scroll-margin-top:16px}
 
 /* The desktop rail becomes a reachable bottom sheet on smaller screens. */
 .mobile-trip-trigger{display:none}
@@ -212,17 +224,20 @@ a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}
   .mobile-trip-trigger span{font-size:11px;color:#cbe0d1}
 }
 @media(max-width:650px){
+  .site-header{padding:10px 14px}
+  .site-nav{display:flex;gap:14px;overflow-x:auto;padding:0 14px;text-align:left}
+  .site-nav a{display:inline-flex;align-items:center;white-space:nowrap;min-height:44px;margin:0}
   .answer-facts{grid-template-columns:1fr}
-  .route-planner{margin:12px 10px;padding:15px 12px}
-  .route-planner h2{font-size:19px}
-  .planner-controls{align-items:flex-start}
+  .route-planner{margin:0;padding:12px 14px 18px}
+  .route-planner h2{margin-bottom:4px}
+  .planner-jumps{column-gap:12px}
+  .planner-controls{gap:6px;margin-bottom:0;align-items:flex-start}
   .preset-buttons{display:grid;grid-template-columns:repeat(3,1fr);width:100%}
-  .preset-btn{padding:8px 4px;font-size:11px}
+  .preset-btn{padding:7px 3px;font-size:12px}
   .direction-control{width:100%;justify-content:space-between}
   .map-frame{height:clamp(300px,42vh,390px)}
   .map-selection{align-items:flex-start;flex-direction:column}
   .map-selection-actions{justify-content:flex-start}
-  .route-actions{grid-template-columns:1fr}
 }
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
@@ -297,7 +312,7 @@ a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}
   .stop-body{display:block !important;border-top:1px solid #ccc}
   .hero{background:white !important;color:black !important;padding:16px 12px}
   .hero h1{color:black}
-  .hero .tagline{color:#333}
+  .hero-route{color:#333}
   .stat-pill{border-color:#888;background:white !important;color:black !important}
   .stat-pill .l{color:#666 !important}
   .itin-panel{display:block !important;page-break-before:always}
@@ -351,14 +366,14 @@ a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}
 <script defer src="/assets/growth-cta.js"></script>
 <link rel="stylesheet" href="/assets/journey-atlas-v1.css">
 <link rel="stylesheet" href="/assets/circle-tour-bridge.css">
-<link rel="stylesheet" href="/assets/circle-tour-pace.css">
+<link rel="stylesheet" href="/assets/circle-tour-pace.css?v=20261121-layout">
 <style>
 .stop-google-map{margin:14px 0 12px}
 .stop-google-map a{display:inline-flex;align-items:center;min-height:44px;padding:8px 12px;border:1px solid #b8c9bf;border-radius:5px;background:#f4f9f5;color:#214e37;font-weight:700;text-decoration:underline;text-underline-offset:3px}
 .stop-google-map a:focus-visible{outline:3px solid #135b46;outline-offset:3px}
 </style>
 <noscript><style>.stop-card:not(.open) .stop-body{display:block}</style></noscript>
-<noscript><style>#circle-tour-pace .ctpace-hours{display:none}</style></noscript>
+<noscript><style>#circle-tour-pace .ctpace-hours,.planner-controls,.planner-grid,.planner-map-note,.route-preview-jump,.mobile-trip-trigger{display:none}.itin-panel{display:block}</style></noscript>
 </head>
 <body itemscope itemtype="https://schema.org/WebPage" data-analytics-page="lake-superior-circle-tour">
 <header class="site-header"><p class="site-title"><a href="/">Chris Izworski</a></p></header>
@@ -367,51 +382,11 @@ a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}
 </nav>
 <div class="hero">
   <h1>Lake Superior Circle Tour Map &amp; Itinerary Planner</h1>
-  <p class="tagline">Begin in Duluth, where freighters pass beneath the lift bridge. Follow Lake Superior past red sandstone, old copper ports, thundering waterfalls and the wild boreal shore of Ontario before coming home along Minnesota’s North Shore. This stop-by-stop Circle Tour guide brings together 31 major stops, freighter-watching notes at every port, 7-, 10-, and 15-day itineraries, live water-level data and ice-out timing for the Ontario lakes. Built from a Bay City, Michigan, Great Lakes perspective by <a href="/about/">Chris Izworski</a>, publisher of the <a href="https://gazette.chrisizworski.com">Great Lakes Gazette</a>.</p>
-  <div class="route-stats">
-    <div class="stat-pill"><span class="n">~1,300</span><span class="l">Total Miles</span></div>
-    <div class="stat-pill"><span class="n">31</span><span class="l">Major Stops</span></div>
-    <div class="stat-pill"><span class="n">240+</span><span class="l">Activities</span></div>
-    <div class="stat-pill"><span class="n">MI · WI · MN · ON</span><span class="l">4 States / Provinces</span></div>
-    <div class="stat-pill"><span class="n">7–15 Days</span><span class="l">Recommended</span></div>
-  </div>
+  <p class="hero-route">About 1,300 miles <span aria-hidden="true">·</span> 31 stops <span aria-hidden="true">·</span> 7 to 15 days</p>
 </div>
 <section class="route-planner" aria-labelledby="circle-tour-answer">
   <h2 id="circle-tour-answer">Build your Lake Superior Circle Tour</h2>
-  <p class="route-answer"><strong>Plan on 7 to 15 days for the roughly 1,300-mile loop through Wisconsin, Michigan, Ontario, and Minnesota.</strong> Seven days covers the highlights, 10 days gives most travelers a balanced trip, and 15 days leaves room for hikes, boat tours, and unhurried stops.</p>
-  <section class="ctpace" id="circle-tour-pace" aria-labelledby="ctpace-heading">
-    <div class="ctpace-head">
-      <div class="ctpace-intro">
-        <p class="ctpace-eyebrow">Route Rhythm / compare the driving days</p>
-        <h3 id="ctpace-heading">How much of the day belongs to the road?</h3>
-        <p>From the freighters at Duluth to the granite headlands of Ontario, the best stops deserve time away from the windshield. Set a comfortable daily driving limit and see where each published itinerary asks for more.</p>
-      </div>
-      <label class="ctpace-hours" for="ctpace-hours"><span>My daily driving target</span>
-        <select id="ctpace-hours">
-          <option value="4">4 hours</option>
-          <option value="5" selected>5 hours</option>
-          <option value="6">6 hours</option>
-          <option value="7">7 hours</option>
-          <option value="8">8 hours</option>
-        </select>
-      </label>
-    </div>
-    <p class="ctpace-verdict" id="ctpace-verdict" role="status" aria-live="polite">At a rough 5-hour daily driving target, the 7-day itinerary has three longer road days, the 10-day itinerary has two, and the 15-day itinerary has none. The original written routes remain available below.</p>
-    <div class="ctpace-routes" id="ctpace-routes">
-      <p>Compare the full 7-, 10-, and 15-day itineraries below. This driving comparison is enhanced when JavaScript is available.</p>
-    </div>
-    <p class="ctpace-method">Each bar represents one published day. Road-time allowance is estimated from the published mileage at 47 mph with a 20% planning margin. This is <strong>not a routed ETA</strong> and does not account for visits, border waits, road conditions, or every park approach. <a href="#circle-tour-itineraries">Read the complete itineraries and road evidence</a> before making reservations.</p>
-  </section>
-  <ul class="answer-facts">
-    <li><strong>Route</strong>31 major stops around the full Lake Superior shoreline.</li>
-    <li><strong>Direction</strong>This guide runs counterclockwise from Duluth, but you can start anywhere.</li>
-    <li><strong>Border</strong>The full loop crosses the U.S.–Canada border at Pigeon River and Sault Ste. Marie.</li>
-  </ul>
-  <div class="answer-links">
-    <a href="#circle-tour-itineraries" data-growth-cta="circle-tour-choose-itinerary">Compare the 7-, 10-, and 15-day itineraries</a>
-    <a href="#segTabs" data-growth-cta="circle-tour-browse-stops">Browse all 31 stops</a>
-    <a href="#journey-atlas">Explore experiences by time and interest</a>
-  </div>
+  <p class="route-answer">Seven days covers the highlights. Ten gives you time for more stops, and 15 leaves room for hikes and boat tours.</p>
   <div class="planner-controls" aria-label="Map itinerary controls">
     <div class="preset-buttons" role="group" aria-label="Choose an itinerary">
       <button class="preset-btn" type="button" data-preset="7">7-Day Highlights</button>
@@ -426,6 +401,11 @@ a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}
       </div>
     </div>
   </div>
+  <nav class="planner-jumps" aria-label="Circle Tour planning options">
+    <a class="route-preview-jump" href="#routePreviewTitle">See daily route</a>
+    <a href="#circle-tour-pace">Compare drive times</a>
+    <a href="#segTabs" data-growth-cta="circle-tour-browse-stops">Browse 31 stops</a>
+  </nav>
   <div class="planner-grid">
     <div class="map-shell">
       <div class="map-frame">
@@ -448,22 +428,66 @@ a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}
         <span><i class="legend-dot" style="background:var(--on)"></i>Ontario</span>
         <span><i class="legend-dot" style="background:var(--mn)"></i>Minnesota</span>
       </div>
+      <div id="circleTourMapTools"></div>
     </div>
     <aside class="route-preview" aria-label="Selected itinerary preview">
       <div class="route-preview-head">
-        <h3 id="routePreviewTitle">10-Day Balanced Route</h3>
+        <h3 id="routePreviewTitle" tabindex="-1">10-Day Balanced Route</h3>
         <p class="route-preview-meta" id="routePreviewMeta">A continuous counterclockwise loop from Duluth · approximately 1,358 miles</p>
       </div>
-      <div class="route-day-list" id="routeDayList" aria-live="polite"></div>
       <div class="route-actions">
         <button class="route-use" id="usePresetRoute" type="button">Use this 10-day route</button>
         <a class="route-detail" id="routeDetailLink" href="#itin-10">Read the full itinerary</a>
         <a class="route-detail" href="/lake-superior-circle-tour/10-day/">Check the 10-day trip feasibility guide</a>
       </div>
+      <div class="route-day-list" id="routeDayList" aria-live="polite"></div>
     </aside>
   </div>
-  <p class="planner-note">The map is a planning overview, not turn-by-turn navigation. Daily direction links open Google Maps; confirm road, weather, park, and <a href="#planning-essentials">border conditions</a> before departure. The map loads only when it nears your screen, and no account is required.</p>
-  <noscript><p class="planner-note"><strong>JavaScript is off.</strong> Use the complete 7-, 10-, and 15-day written itineraries and all 31 stop cards below.</p></noscript>
+  <p class="planner-note planner-map-note">The map is a planning overview, not turn-by-turn navigation. Daily direction links open Google Maps; confirm road, weather, park, and <a href="#planning-essentials">border conditions</a> before departure. The map loads only when it nears your screen, and no account is required.</p>
+  <noscript><p class="planner-note"><strong>JavaScript is off.</strong> Read the complete <a href="#circle-tour-itineraries">7-, 10-, and 15-day itineraries</a> or <a href="#segTabs">browse all 31 stops</a>.</p></noscript>
+  <section class="ctpace" id="circle-tour-pace" aria-labelledby="ctpace-heading">
+    <div class="ctpace-head">
+      <div class="ctpace-intro">
+
+        <h3 id="ctpace-heading">How much of the day belongs to the road?</h3>
+        <p>From the freighters at Duluth to the granite headlands of Ontario, the best stops deserve time away from the windshield. Set a comfortable daily driving limit and see where each published itinerary asks for more.</p>
+      </div>
+      <label class="ctpace-hours" for="ctpace-hours"><span>My daily driving target</span>
+        <select id="ctpace-hours">
+          <option value="4">4 hours</option>
+          <option value="5" selected>5 hours</option>
+          <option value="6">6 hours</option>
+          <option value="7">7 hours</option>
+          <option value="8">8 hours</option>
+        </select>
+      </label>
+    </div>
+    <p class="ctpace-verdict" id="ctpace-verdict" role="status" aria-live="polite">At a rough 5-hour daily driving target, the 7-day itinerary has three longer road days, the 10-day itinerary has two, and the 15-day itinerary has none. The original written routes remain available below.</p>
+    <div class="ctpace-routes" id="ctpace-routes">
+      <p>Compare the full 7-, 10-, and 15-day itineraries below. This driving comparison is enhanced when JavaScript is available.</p>
+    </div>
+    <p class="ctpace-method">Each bar represents one published day. Road-time allowance is estimated from the published mileage at 47 mph with a 20% planning margin. This is <strong>not a routed ETA</strong> and does not account for visits, border waits, road conditions, or every park approach. <a href="#circle-tour-itineraries">Read the complete itineraries and road evidence</a> before making reservations.</p>
+  </section>
+  <div class="route-guide-intro">
+    <h3>What you’ll see around the lake</h3>
+    <p class="tagline">Begin in Duluth, where freighters pass beneath the lift bridge. Follow Lake Superior past red sandstone, old copper ports, thundering waterfalls and the wild boreal shore of Ontario before coming home along Minnesota’s North Shore. This stop-by-stop Circle Tour guide brings together 31 major stops, freighter-watching notes at every port, 7-, 10-, and 15-day itineraries, live water-level data and ice-out timing for the Ontario lakes. Built from a Bay City, Michigan, Great Lakes perspective by <a href="/about/">Chris Izworski</a>, publisher of the <a href="https://gazette.chrisizworski.com">Great Lakes Gazette</a>.</p>
+    <div class="route-stats">
+      <div class="stat-pill"><span class="n">~1,300</span><span class="l">Total Miles</span></div>
+      <div class="stat-pill"><span class="n">31</span><span class="l">Major Stops</span></div>
+      <div class="stat-pill"><span class="n">240+</span><span class="l">Activities</span></div>
+      <div class="stat-pill"><span class="n">MI · WI · MN · ON</span><span class="l">4 States / Provinces</span></div>
+      <div class="stat-pill"><span class="n">7–15 Days</span><span class="l">Recommended</span></div>
+    </div>
+    <ul class="answer-facts">
+      <li><strong>Route</strong>31 major stops around the full Lake Superior shoreline.</li>
+      <li><strong>Direction</strong>This guide runs counterclockwise from Duluth, but you can start anywhere.</li>
+      <li><strong>Border</strong>The full loop crosses the U.S.–Canada border at Pigeon River and Sault Ste. Marie.</li>
+    </ul>
+    <div class="answer-links">
+      <a href="#circle-tour-itineraries" data-growth-cta="circle-tour-choose-itinerary">Read the written itineraries</a>
+      <a href="#journey-atlas">Explore experiences by time and interest</a>
+    </div>
+  </div>
 </section>
 <!-- INDEPENDENT CIRCLE TOUR BRIDGE: approved tool URLs only; original planner and all specialist sources stay intact. -->
 <section class="ctb-shell" id="circle-tour-tool-bridge" data-circle-tour-bridge aria-labelledby="ctb-heading">
@@ -1407,7 +1431,7 @@ a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}
 </div>
 <footer class="footer">Route evidence reviewed November 14, 2026, Compiled by <a href="https://chrisizworski.com">Chris Izworski</a>, <a href="/tools/">Back to Tools</a></footer>
 <script defer src="/assets/visitor-map-links.js"></script>
-<script defer src="/assets/lake-superior-circle-tour.js?v=20261116-gmaps"></script>
+<script defer src="/assets/lake-superior-circle-tour.js?v=20261121-layout"></script>
 <script defer src="/assets/journey-atlas-v1.js"></script>
 <script defer src="/assets/circle-tour-place-story-data.js"></script>
 <script defer src="/assets/circle-tour-bridge.js"></script>

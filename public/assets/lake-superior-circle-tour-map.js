@@ -354,7 +354,7 @@ try {
     map.addLayer({
       id:"stop-circles",type:"circle",source:"circle-stops",filter:["==",["get","visible"],1],
       paint:{
-        "circle-radius":["case",["==",["get","selected"],1],10,["interpolate",["linear"],["zoom"],4.5,6,8,9]],
+        "circle-radius":["interpolate",["linear"],["zoom"],4.5,["case",["==",["get","selected"],1],10,6],8,["case",["==",["get","selected"],1],10,9]],
         "circle-color":["get","color"],
         "circle-stroke-color":["case",["==",["get","selected"],1],"#172d22",["get","dayColor"]],
         "circle-stroke-width":["case",["==",["get","selected"],1],4,2],
@@ -362,7 +362,7 @@ try {
     });
     map.addLayer({
       id:"stop-labels",type:"symbol",source:"circle-stops",filter:["==",["get","visible"],1],
-      layout:{"text-field":["to-string",["get","number"]],"text-size":10,"text-allow-overlap":true},
+      layout:{"text-field":["to-string",["get","number"]],"text-font":["Noto Sans Regular"],"text-size":10,"text-allow-overlap":true},
       paint:{"text-color":"#ffffff","text-halo-color":"rgba(0,0,0,.25)","text-halo-width":0.5}
     });
     map.addLayer({
@@ -375,7 +375,7 @@ try {
     });
     map.addLayer({
       id:"gateway-label",type:"symbol",source:"route-gateways",
-      layout:{"text-field":"Mackinac Bridge · gateway","text-size":11,"text-offset":[0,1.9],"text-anchor":"top","text-allow-overlap":false},
+      layout:{"text-field":"Mackinac Bridge · gateway","text-font":["Noto Sans Regular"],"text-size":11,"text-offset":[0,1.9],"text-anchor":"top","text-allow-overlap":false},
       paint:{"text-color":"#172d22","text-halo-color":"#ffffff","text-halo-width":1.5}
     });
 
