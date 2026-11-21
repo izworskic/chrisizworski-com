@@ -1,0 +1,93 @@
+#!/usr/bin/env node
+'use strict';
+// Controlled browser fixtures are not live ECCC data or beach measurements.
+const assert=require('node:assert/strict'),fs=require('node:fs'),http=require('node:http'),path=require('node:path');
+const {chromium}=require(process.env.SHORE_PW_MODULE||'playwright');
+const ROOT=path.resolve(__dirname,'../public'),OUT=path.resolve(process.env.SHORE_QA_OUTPUT||'artifacts/shorefeel-canada-qa');
+fs.mkdirSync(OUT,{recursive:true});
+const MIME={'.html':'text/html; charset=utf-8','.js':'application/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.jpg':'image/jpeg','.png':'image/png','.svg':'image/svg+xml'};
+const server=http.createServer((req,res)=>{
+ try{let url=new URL(req.url,'http://127.0.0.1'),file=path.resolve(ROOT,'.'+decodeURIComponent(url.pathname));
+ if(file!==ROOT&&!file.startsWith(ROOT+path.sep)){res.writeHead(403);return res.end();}
+ if(fs.statSync(file).isDirectory())file=path.join(file,'index.html');
+ res.writeHead(200,{'Content-Type':MIME[path.extname(file)]||'text/plain'});fs.createReadStream(file).pipe(res);
+ }catch{res.writeHead(404);res.end('Not found');}
+});
+function fixture(slug,missing=false){
+ const ts=new Date(Date.now()-10*60000).toISOString();
+ return missing?{status:'unavailable',beach:slug,reason:'No sufficiently local ECCC city forecast is available.'}:
+ {status:'forecast-based',beach:slug,temperatureC:5,temperatureF:41,apparentC:2,
+  method:'Calculated Canadian wind chill from ECCC forecast',windKmh:21,windDirection:'NW',
+  validAt:ts,forecastIssueAt:ts,forecastPlace:'Nearby ECCC town',forecastDistanceKm:20,
+  heading:'The breeze across the shoreline',note:'A cooler breeze near the water.',
+  isUpcoming:false,scope:'City forecast not an on-sand measurement'};
+}
+async function main(){
+ await new Promise(done=>server.listen(0,'127.0.0.1',done));
+ const origin='http://127.0.0.1:'+server.address().port;
+ let browser;
+ try{
+ browser=await chromium.launch({headless:true,args:['--no-sandbox']});
+ const output=[];
+ for(const width of [360,390,768,1280,1440]){
+  const ctx=await browser.newContext({viewport:{width,height:850},reducedMotion:'reduce'});
+  await ctx.route('**/api/shorefeel-ca?*',route=>{
+   const slug=new URL(route.request().url()).searchParams.get('beach');
+   return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(fixture(slug))});
+  });
+  await ctx.route('https://**/*',route=>route.abort());
+  const page=await ctx.newPage(),errors=[];
+  page.on('pageerror',err=>errors.push(String(err)));
+  await page.goto(origin+'/great-lakes-beaches/canada/',{waitUntil:'domcontentloaded'});
+  await page.waitForFunction(()=>document.querySelector('#report-temp')?.textContent==='2°C',{timeout:14000});
+  assert.equal(await page.locator('.shore-stop').count(),18);
+  assert.match(await page.locator('#report-name').innerText(),/Agawa Bay/);
+  assert.match(await page.locator('#report-scope').innerText(),/20 km/);
+  assert.match(await page.locator('#report-advisory').getAttribute('href'),/ontarioparks.ca\/beachresults/);
+  await page.getByRole('button',{name:'Erie',exact:true}).click();
+  await page.waitForFunction(()=>document.querySelector('#report-name')?.textContent?.includes('Port Burwell')&&document.querySelector('#report-temp')?.textContent==='2°C');
+  await page.locator('[data-select="bay-beach-crystal"]').click();
+  await page.waitForFunction(()=>document.querySelector('#report-name')?.textContent?.includes('Crystal Beach'));
+  assert.match(await page.locator('#report-advisory').getAttribute('href'),/niagararegion.ca/);
+  await page.getByRole('button',{name:'Ontario',exact:true}).click();
+  await page.locator('[data-select="toronto-woodbine"]').click();
+  await page.waitForFunction(()=>document.querySelector('#report-name')?.textContent?.includes('Woodbine'));
+  assert.match(await page.locator('#report-advisory').getAttribute('href'),/toronto.ca/);
+  await page.getByRole('button',{name:'Michigan',exact:true}).click();
+  assert.equal(await page.locator('#report-temp').innerText(),'Explore the U.S.');
+  assert.match(await page.locator('#report-park').getAttribute('href'),/around-the-lakes/);
+  await page.getByRole('button',{name:'Superior',exact:true}).click();
+  await page.waitForFunction(()=>document.querySelector('#report-temp')?.textContent==='2°C');
+  await page.waitForFunction(()=>document.querySelector('#map-fallback')?.hidden===false,{timeout:14000});
+  const metrics=await page.evaluate(()=>({
+   view:document.documentElement.clientWidth,scroll:document.documentElement.scrollWidth,
+   font:parseFloat(getComputedStyle(document.querySelector('.shore-stop-name')).fontSize),
+   mapHidden:document.querySelector('#shore-map').hidden
+  }));
+  assert.ok(metrics.scroll<=metrics.view+2,'Horizontal overflow '+width);
+  assert.ok(metrics.font>=14,'Small type '+width);
+  assert.ok(metrics.mapHidden,'Tile fallback must collapse a blank map');
+  assert.deepEqual(errors,[],'Browser runtime errors');
+  await page.screenshot({path:path.join(OUT,'canada-'+width+'.png'),fullPage:true});
+  output.push({width,...metrics});
+  await ctx.close();
+ }
+ const ctx=await browser.newContext({viewport:{width:390,height:850}});
+ await ctx.route('**/api/shorefeel-ca?*',route=>route.fulfill({status:200,contentType:'application/json',
+  body:JSON.stringify(fixture(new URL(route.request().url()).searchParams.get('beach'),true))}));
+ await ctx.route('https://**/*',route=>route.abort());
+ const page=await ctx.newPage();
+ await page.goto(origin+'/great-lakes-beaches/canada/',{waitUntil:'domcontentloaded'});
+ await page.waitForFunction(()=>document.querySelector('#report-temp')?.textContent==='Forecast unavailable');
+ assert.match(await page.locator('#report-scope').innerText(),/No nearest-town air value/);
+ await ctx.close();
+ const noJs=await browser.newContext({viewport:{width:390,height:850},javaScriptEnabled:false});
+ const plain=await noJs.newPage();await plain.goto(origin+'/great-lakes-beaches/canada/',{waitUntil:'domcontentloaded'});
+ assert.equal(await plain.locator('.shore-stop').count(),18);
+ assert.equal(await plain.locator('noscript').isVisible(),true);
+ assert.equal(await plain.locator('.shore-stop>a[href^="https://"]').count(),18);
+ await noJs.close();
+ console.log(JSON.stringify({passed:true,screenSizes:output,staleData:'No fabricated temperature',noJs:'18 park links available'},null,2));
+ }finally{if(browser)await browser.close();await new Promise(done=>server.close(done));}
+}
+main().catch(e=>{console.error(e);process.exitCode=1;});
