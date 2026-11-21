@@ -1,0 +1,31 @@
+name: Soo Locks Lock Watch browser QA
+on:
+  pull_request:
+    paths:
+      - 'public/soo-locks/index.html'
+      - 'public/assets/soo-ais.js'
+      - 'public/assets/soo-lock-watch.*'
+      - 'tests/soo-lock-watch*'
+      - '.github/workflows/soo-lock-watch-browser.yml'
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm install --no-save --no-package-lock playwright@1.56.1
+      - run: node tests/soo-lock-watch-browser.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: soo-lock-watch-browser
+          path: artifacts/soo-lock-watch/*.png
+          if-no-files-found: ignore
+          retention-days: 3

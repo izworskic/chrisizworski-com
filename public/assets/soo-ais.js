@@ -36,6 +36,9 @@
     return v.shipType >= 70 && v.shipType < 90 ? 9 : 6;
   }
   const directionText = d => d === 'upbound' ? 'Upbound from Lake Huron, heading up to Lake Superior' : d === 'downbound' ? 'Downbound from Lake Superior, heading to the lower lakes' : 'Direction not reported';
+  // USACE maintains the boat-schedule hotline only while the Visitor Center is open, May 1 to October 31.
+  const hotlineSeason = () => { const m = Number(new Date().toLocaleString('en-US', { month: 'numeric', timeZone: TZ })); return m >= 5 && m <= 10; };
+  const checkElsewhere = () => hotlineSeason() ? 'Call the hotline at 906-202-1333 or check the BoatNerd passage list below.' : 'Check the BoatNerd passage list below; the USACE boat hotline runs only May 1 to October 31.';
   const chamberWhere = chamber => chamber === 'poe' ? 'The Poe is the second chamber out from the viewing platform.' : 'The MacArthur is the chamber right below the viewing platform.';
 
   // ---- next-ship card ----
@@ -47,7 +50,7 @@
     if (failed && !n) {
       cardKicker.textContent = 'Next ship at the locks';
       cardHeading.textContent = 'Live ship reports are unavailable right now';
-      cardBody.append(text('p', 'Call the official boat hotline at 906-202-1333 while the Visitor Center is open, or check the BoatNerd passage list below.'));
+      cardBody.append(text('p', hotlineSeason() ? 'Call the official boat hotline at 906-202-1333 while the Visitor Center is open, or check the BoatNerd passage list below.' : 'Check the BoatNerd passage list below. The USACE boat hotline is maintained only while the Visitor Center is open, May 1 to October 31.'));
       return;
     }
     if (!n || !n.ok) {
@@ -76,7 +79,7 @@
     if (!pick) {
       cardKicker.textContent = 'Next ship at the locks';
       cardHeading.textContent = 'No ship is clearly heading for the locks right now';
-      cardBody.append(text('p', 'Nothing in reports under 30 minutes old shows a freighter moving toward the locks. That does not mean none is coming: ships wait at docks and anchorages, and AIS coverage has gaps. Call the hotline at 906-202-1333 or check the BoatNerd passage list below.'));
+      cardBody.append(text('p', 'Nothing in reports under 30 minutes old shows a freighter moving toward the locks. That does not mean none is coming: ships wait at docks and anchorages, and AIS coverage has gaps. ' + checkElsewhere()));
       return;
     }
     cardKicker.textContent = 'Next ship heading for the locks';
@@ -102,8 +105,10 @@
     const box = document.createElement('div'); box.className = 'next-ship-actions';
     const show = text('button', 'Show it on the live map'); show.type = 'button';
     show.addEventListener('click', () => focusShip(ship));
-    const hotline = text('a', 'Boat hotline 906-202-1333'); hotline.href = 'tel:+19062021333';
-    box.append(show, hotline);
+    let other;
+    if (hotlineSeason()) { other = text('a', 'Boat hotline 906-202-1333'); other.href = 'tel:+19062021333'; }
+    else { other = text('a', 'BoatNerd passage list \u2197'); other.href = 'https://ais.boatnerd.com/passage/port/soo-locks'; other.target = '_blank'; other.rel = 'noopener'; }
+    box.append(show, other);
     return box;
   }
   function focusShip(ship) {
@@ -155,6 +160,12 @@
     dot.className = 'vessel-map-status-dot' + (failed ? ' offline' : vessels.length ? ' live' : '');
     credits.textContent = 'Source credits: ' + data.attribution.map(a => a.credit).join(' · ');
     renderCard(data, failed);
+    share(data, failed);
+  }
+  // Hand each check to the Lock Watch planner (public/assets/soo-lock-watch.js).
+  function share(data, failed) {
+    window.SooAis.last = { data, failed };
+    try { document.dispatchEvent(new CustomEvent('soo-ais:data', { detail: window.SooAis.last })); } catch (_) { /* planner optional */ }
   }
   async function load() {
     if (busy) return;
@@ -169,6 +180,7 @@
         status.textContent = 'Vessel reports are temporarily unavailable. Try again or use the BoatNerd passage list below.'; dot.className = 'vessel-map-status-dot offline';
         list.replaceChildren(text('li', 'The feed did not return usable data. This is not a zero-traffic report.'));
         renderCard(null, true);
+        share(null, true);
       }
     } finally { busy = false; refresh.disabled = false; }
   }
@@ -187,6 +199,7 @@
     } else container.textContent = 'Map could not load. Recent vessel reports remain available in the list below.';
     if (previous) render(previous, false);
   }
+  window.SooAis = { focusShip, last: null };
   refresh.addEventListener('click', () => { startMap(); load(); });
   startPolling();
   if ('IntersectionObserver' in window) {

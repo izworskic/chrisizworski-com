@@ -1,0 +1,104 @@
+/* Soo Locks Lock Watch: the visit planner beside the next-ship card. */
+.lock-watch{margin:4px 0 26px;border:1px solid #c9d8dd;border-radius:6px;background:#fff;overflow:hidden;font-family:Georgia,'Times New Roman',serif}
+.lock-watch .lw-head{background:#0d3545;color:#e3eef3;padding:16px 18px 14px}
+.lock-watch .lw-kicker{margin:0 0 4px;font:700 11px/1.4 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#f2c46d}
+.lock-watch h2{margin:0 0 6px;font-size:21px;line-height:1.25;font-weight:normal;color:#fff}
+.lock-watch .lw-intro{margin:0;font-size:14px;line-height:1.6;color:#cfe0e8}
+.lock-watch .lw-controls{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;padding:14px 18px 4px;background:#f3f7f8;border-bottom:1px solid #dbe6ea}
+.lock-watch .lw-controls[hidden]{display:none}
+.lock-watch fieldset{border:0;margin:0;padding:0;min-width:0}
+.lock-watch legend{font:700 12px/1.4 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#33505b;margin:0 0 7px;padding:0}
+.lock-watch .lw-chips{display:flex;flex-wrap:wrap;gap:6px}
+.lock-watch .lw-chips label{position:relative;display:inline-flex}
+.lock-watch .lw-chips input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+.lock-watch .lw-chips span{display:inline-block;min-width:44px;min-height:36px;padding:8px 12px;border:1px solid #9fb8c1;border-radius:999px;background:#fff;color:#123c4a;font:600 13px/1.4 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;text-align:center;cursor:pointer}
+.lock-watch .lw-chips input:checked+span{background:#165d71;border-color:#165d71;color:#fff}
+.lock-watch .lw-chips input:focus-visible+span{outline:3px solid #f2a93b;outline-offset:2px}
+.lock-watch .lw-verdict{padding:14px 18px 6px;outline:none}
+.lock-watch .lw-verdict-head{margin:0 0 6px;font-size:19px;line-height:1.35;color:#12384a;font-weight:bold}
+.lock-watch .lw-status-match .lw-verdict-head{color:#1d5a26}
+.lock-watch .lw-status-in-lock-now .lw-verdict-head{color:#1d5a26}
+.lock-watch .lw-status-none .lw-verdict-head,.lock-watch .lw-status-no-ships .lw-verdict-head{color:#6a4a10}
+.lock-watch .lw-status-unavailable .lw-verdict-head,.lock-watch .lw-status-season-closed .lw-verdict-head{color:#7a2a24}
+.lock-watch .lw-verdict-detail{margin:0 0 8px;font-size:14px;line-height:1.6;color:#33403f}
+.lock-watch .lw-adjust{margin:2px 0 10px;font:700 13px/1.3 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;color:#fff;background:#165d71;border:1px solid #165d71;border-radius:4px;padding:9px 12px;cursor:pointer;min-height:40px}
+.lock-watch .lw-adjust:focus-visible,.lock-watch .lw-row-btn:focus-visible,.lock-watch .lw-primary:focus-visible,.lock-watch .lw-secondary:focus-visible{outline:3px solid #f2a93b;outline-offset:2px}
+.lock-watch .lw-link{display:inline-block;margin:0 0 10px;font:700 13px/1.4 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;color:#165d71;text-decoration:underline;text-underline-offset:3px}
+.lock-watch .lw-notes{margin:2px 0 8px;padding:0 0 0 18px;font-size:12.5px;line-height:1.55;color:#5a6668}
+.lock-watch .lw-notes li{margin:0 0 3px}
+.lock-watch .lw-board{padding:4px 18px 0}
+.lock-watch .lw-board[hidden],.lock-watch .lw-legend[hidden],.lock-watch .lw-dossier[hidden]{display:none}
+.lock-watch .lw-axis{position:relative;height:30px;margin:6px 0 2px}
+.lock-watch .lw-axis-track{position:absolute;inset:14px 0 0 0;height:14px;border-radius:3px;background:#e4eff3;overflow:visible}
+.lock-watch .lw-tick{position:absolute;top:-15px;transform:translateX(-50%);font:600 10.5px/1 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;color:#4d6670;white-space:nowrap;font-variant-numeric:tabular-nums}
+.lock-watch .lw-tick::after{content:'';position:absolute;left:50%;top:13px;width:1px;height:16px;background:#9fb8c1}
+.lock-watch .lw-now-tag{position:absolute;top:-15px;transform:translateX(-50%);font:800 10.5px/1 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;color:#b3261e;background:#fff;padding:0 2px}
+.lock-watch .lw-band{position:absolute;top:0;bottom:0}
+.lock-watch .lw-dark{background:rgba(13,53,69,.28)}
+.lock-watch .lw-closed{background:repeating-linear-gradient(135deg,rgba(90,90,90,.28) 0 3px,transparent 3px 7px)}
+.lock-watch .lw-visit{background:rgba(44,95,45,.16);box-shadow:inset 0 0 0 2px #2c5f2d;border-radius:2px}
+.lock-watch .lw-now{position:absolute;top:-3px;bottom:-3px;width:2px;margin-left:-1px;background:#b3261e}
+.lock-watch .lw-rows{list-style:none;margin:0;padding:0}
+.lock-watch .lw-row{margin:0;border-top:1px solid #e6eef1}
+.lock-watch .lw-row-btn{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;width:100%;padding:10px 6px 11px;background:none;border:0;border-left:4px solid transparent;text-align:left;cursor:pointer;font:inherit;color:inherit}
+.lock-watch .lw-row-btn:hover{background:#f5f9fa}
+.lock-watch .lw-row-btn[aria-pressed="true"]{background:#eef5f7;border-left-color:#165d71}
+.lock-watch .lw-row-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;min-width:0}
+.lock-watch .lw-dir{font-size:11px;color:#165d71}
+.lock-watch .lw-upbound .lw-dir{color:#9a5a0c}
+.lock-watch .lw-name{font-size:15px;color:#12384a;letter-spacing:.02em}
+.lock-watch .lw-size{font:600 12px/1.3 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;color:#5b6d72}
+.lock-watch .lw-when{font:700 13px/1.4 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;color:#12384a;white-space:nowrap;font-variant-numeric:tabular-nums;align-self:baseline}
+.lock-watch .lw-fit{grid-column:1/-1;font:500 12px/1.4 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;color:#4f5f63}
+.lock-watch .lw-fit-mostly .lw-fit,.lock-watch .lw-fit-now .lw-fit{color:#1d5a26;font-weight:700}
+.lock-watch .lw-track{grid-column:1/-1;position:relative;height:16px;margin-top:5px;border-radius:3px;background:#e4eff3;overflow:hidden}
+.lock-watch .lw-track .lw-now{top:0;bottom:0}
+.lock-watch .lw-bar{position:absolute;top:3px;bottom:3px;border-radius:999px;background:#165d71}
+.lock-watch .lw-upbound .lw-bar{background:#c0791a}
+.lock-watch .lw-fit-outside .lw-bar{opacity:.5}
+.lock-watch .lw-mid{position:absolute;top:1px;bottom:1px;width:2px;margin-left:-1px;background:#fff}
+.lock-watch .lw-inlock{position:absolute;top:2px;width:12px;height:12px;margin-left:-6px;border-radius:50%;background:#1d5a26;box-shadow:0 0 0 3px rgba(29,90,38,.25)}
+.lock-watch .lw-legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin:0;padding:8px 18px 4px;font:500 11.5px/1.4 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;color:#4f5f63}
+.lock-watch .lw-key[hidden]{display:none}
+.lock-watch .lw-key{display:inline-flex;align-items:center;gap:5px}
+.lock-watch .lw-key i{display:inline-block;width:18px;height:10px;border-radius:2px}
+.lock-watch .lw-key .k-down{background:#165d71;border-radius:999px}
+.lock-watch .lw-key .k-up{background:#c0791a;border-radius:999px}
+.lock-watch .lw-key .k-visit{background:rgba(44,95,45,.16);box-shadow:inset 0 0 0 2px #2c5f2d}
+.lock-watch .lw-key .k-dark{background:rgba(13,53,69,.28)}
+.lock-watch .lw-key .k-closed{background:repeating-linear-gradient(135deg,rgba(90,90,90,.35) 0 3px,#fff 3px 7px);border:1px solid #c7c7c7}
+.lock-watch .lw-dossier{margin:10px 18px 4px;padding:14px 16px;border:1px solid #cfdde2;border-left:4px solid #165d71;border-radius:0 5px 5px 0;background:#fbfdfd}
+.lock-watch .lw-dossier-kicker{margin:0 0 2px;font:700 11px/1.4 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#165d71}
+.lock-watch .lw-dossier-name{margin:0 0 8px;font-size:20px;line-height:1.25;color:#12384a}
+.lock-watch .lw-facts{display:grid;grid-template-columns:minmax(0,9.5em) minmax(0,1fr);gap:5px 12px;margin:0 0 10px;font-size:13.5px;line-height:1.5}
+.lock-watch .lw-facts dt{color:#5b6d72;font:600 12px/1.5 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif}
+.lock-watch .lw-facts dd{margin:0;color:#263234}
+.lock-watch .lw-actions{display:flex;flex-wrap:wrap;gap:8px}
+.lock-watch .lw-primary,.lock-watch .lw-secondary{flex:1 1 auto;min-height:40px;padding:9px 12px;border-radius:4px;font:700 13px/1.3 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;text-align:center;cursor:pointer;text-decoration:none}
+.lock-watch .lw-primary{background:#165d71;color:#fff;border:1px solid #165d71}
+.lock-watch .lw-secondary{background:#fff;color:#165d71;border:1px solid #165d71}
+.lock-watch .lw-secondary:hover{text-decoration:none;background:#eef5f7}
+.lock-watch .lw-note{margin:8px 0 0;font-size:12px!important;line-height:1.5;color:#5f6a6b!important}
+.lock-watch .lw-status{margin:6px 18px 0;font:500 11.5px/1.5 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;color:#5b6d72}
+.lock-watch .lw-status:empty{display:none}
+.lock-watch .lw-hours{margin:8px 18px 14px;font-size:13px;color:#3a4647}
+.lock-watch .lw-hours summary{cursor:pointer;font:700 12.5px/1.6 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;color:#165d71}
+.lock-watch .lw-hours ul{margin:6px 0 6px;padding-left:18px}
+.lock-watch .lw-hours p{margin:0;font-size:12.5px;color:#5b6d72}
+@media(min-width:720px){
+  .lock-watch .lw-controls{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:18px}
+  .lock-watch .lw-head{padding:18px 22px 16px}
+  .lock-watch .lw-verdict,.lock-watch .lw-board{padding-left:22px;padding-right:22px}
+  .lock-watch .lw-dossier{margin-left:22px;margin-right:22px}
+}
+@media(max-width:480px){
+  .lock-watch .lw-chips span{padding:8px 10px}
+  .lock-watch .lw-facts{grid-template-columns:minmax(0,6.6em) minmax(0,1fr);gap:4px 10px;font-size:13px}
+  .lock-watch .lw-dossier{padding:12px 12px;margin-left:12px;margin-right:12px}
+  .lock-watch .lw-head,.lock-watch .lw-controls,.lock-watch .lw-verdict,.lock-watch .lw-board,.lock-watch .lw-legend{padding-left:14px;padding-right:14px}
+}
+@media(prefers-reduced-motion:reduce){.lock-watch *{transition:none!important;animation:none!important}}
+@media(max-width:480px){
+  .lock-watch .lw-row-btn{grid-template-columns:minmax(0,1fr)}
+  .lock-watch .lw-when{white-space:normal}
+}

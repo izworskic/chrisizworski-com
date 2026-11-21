@@ -1,0 +1,146 @@
+{
+  "schemaVersion": "1.2",
+  "recordStatus": "draft",
+  "project": {
+    "slug": "soo-locks",
+    "ownerRepo": "izworskic/chrisizworski-com",
+    "canonical": "https://chrisizworski.com/soo-locks/",
+    "pageFile": "public/soo-locks/index.html",
+    "visitorDecision": "Decide when to be on the Soo Locks viewing platform and for how long, and which named ship to expect while there.",
+    "primaryAction": "Choose how soon you can get there and how long you can stay, then follow the verdict or tap the offered adjustment that covers the next ship window."
+  },
+  "claims": [
+    {
+      "id": "usace-posted-park-hours",
+      "kind": "official-reference",
+      "subject": "other",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://www.lrd.usace.army.mil/Submit-ArticleCS/Recreation/Article/3833525/soo-locks-visitor-center/",
+      "checkedDate": "2026-11-21",
+      "limitation": "Posted Soo Locks Park hours by month and the May 1 to October 31 Visitor Center season. They are not an open-now notice; security, construction and events can change access, and platform hours are not listed separately."
+    },
+    {
+      "id": "usace-hotline-season",
+      "kind": "official-reference",
+      "subject": "other",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://www.lrd.usace.army.mil/Submit-ArticleCS/Recreation/Article/3833525/soo-locks-visitor-center/",
+      "checkedDate": "2026-11-21",
+      "limitation": "USACE states rangers maintain the boat-schedule hotline only while the Visitor Center is open and it is not updated in winter. It never promised a ship time."
+    },
+    {
+      "id": "ais-arrival-windows",
+      "kind": "forecast",
+      "subject": "other",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://openwaters.io/ais/",
+      "checkedDate": "2026-11-21",
+      "maxAgeMinutes": 30,
+      "limitation": "Arrival windows are the existing lib/soo-locks-next.js estimate from each ship's latest AIS report (positions up to 30 minutes old). Ships can wait for a chamber or stop at a dock; ships still on open lake are outside the view. Not a lock schedule and not for navigation."
+    },
+    {
+      "id": "sault-sun-times",
+      "kind": "editorial",
+      "subject": "other",
+      "state": "EDITORIAL",
+      "sourceUrl": "https://www.weather-us.com/en/michigan-usa/sault-ste-marie-weather-november",
+      "checkedDate": "2026-11-21",
+      "limitation": "Sunrise and sunset are computed in the browser with the NOAA sunrise equation for Sault Ste. Marie; this third-party table is only the test reference (within three minutes). Darkness flags ignore twilight and cloud."
+    }
+  ],
+  "decisionState": {
+    "selectedIdField": "ship MMSI (lineup row data-ship-id)",
+    "sourceOfTruth": "nextShip.inLock and nextShip.candidates from /api/soo-ais (lib/soo-locks-next.js), unchanged; SooLockWatchCore.plan in public/assets/soo-lock-watch.js classifies them against the visit, posted hours and computed daylight.",
+    "linkedSurfaces": [
+      "answer",
+      "choice-controls",
+      "lineup-rows",
+      "selected-ship-dossier",
+      "live-map-focus"
+    ],
+    "unavailableBehavior": "If a selected ship drops out of the next report the selection returns to the best match for the visit. If the feed fails, retained windows are labelled as from the earlier check; with no data the verdict says reports are unavailable and links the BoatNerd passage list."
+  },
+  "scenarios": [
+    {
+      "kind": "initial",
+      "input": "Default: get there now, stay 1 1/2 hours, with EDWIN H. GOTT reported in the Poe Lock.",
+      "expectedVisibleAnswer": "Verdict leads with the ship in the Poe Lock right now and offers to plan around the next estimated window (BURNS HARBOR).",
+      "sourceAndSafety": "The in-chamber report age is shown; no exit time is invented."
+    },
+    {
+      "kind": "alternative",
+      "input": "Choose 2 hr, then tap the evening ALGOMA EQUINOX row.",
+      "expectedVisibleAnswer": "Verdict becomes Best bet: BURNS HARBOR; the evening ship's dossier says outside posted park hours and after dark.",
+      "sourceAndSafety": "Posted USACE hours and computed sunset are labelled as such; windows remain estimates."
+    },
+    {
+      "kind": "reverse",
+      "input": "Return selection from ALGOMA EQUINOX to BURNS HARBOR.",
+      "expectedVisibleAnswer": "The BURNS HARBOR dossier text is identical to before and exactly one row is pressed.",
+      "sourceAndSafety": "Same stable MMSI identity drives row, dossier and map focus."
+    },
+    {
+      "kind": "no-js",
+      "input": "Load the page with JavaScript disabled.",
+      "expectedVisibleAnswer": "Static explanation, BoatNerd passage list link and the posted park hours list remain; controls stay hidden.",
+      "sourceAndSafety": "No live ship claim is shown without the feed."
+    },
+    {
+      "kind": "no-tiles",
+      "input": "Tap Show it on the live map when map tiles or Leaflet are unavailable.",
+      "expectedVisibleAnswer": "The planner, verdict and dossier stay fully readable; the existing map client shows its own text fallback and vessel list.",
+      "sourceAndSafety": "The planner never depends on map tiles."
+    },
+    {
+      "kind": "stale-data",
+      "input": "AIS endpoint returns 503 on first load, or a refresh fails after a good load.",
+      "expectedVisibleAnswer": "First-load failure: Live ship reports are unavailable, so no visit can be lined up, with a BoatNerd link. Later failure: retained windows with a refresh-failed note.",
+      "sourceAndSafety": "A failed feed is never shown as an empty river."
+    }
+  ],
+  "failures": {
+    "no-js": "Static section keeps the explanation, the BoatNerd passage list link and the posted USACE park hours with source; the existing next-ship card and map keep their own fallbacks.",
+    "no-tiles": "The planner needs no tiles; map focus falls back to the existing vessel list and map-unavailable text below.",
+    "no-image": "The planner uses no photographs; the existing credited photos are unchanged.",
+    "stale-data": "Reports over 30 minutes old are already excluded by the engine; a failed refresh keeps earlier windows with an explicit note, and no data yields an unavailable verdict."
+  },
+  "qa": {
+    "viewports": [
+      360,
+      390,
+      768,
+      1280,
+      1440
+    ],
+    "browserStatus": "PASSED",
+    "browserRun": "https://github.com/izworskic/chrisizworski-com/actions/runs/44917688025",
+    "screenshotEvidence": [
+      "https://github.com/izworskic/chrisizworski-com/actions/runs/44917688025/artifacts",
+      "https://github.com/izworskic/chrisizworski-com/tree/soo-locks-lock-watch/artifacts/soo-lock-watch/evidence"
+    ],
+    "scopeNote": "Fixture-based Chrome run with a pinned clock: 360/390/768/1280/1440, chips, A to B to A, Plan-around, keyboard, real Leaflet popup focus, feed 503, winter shutdown, summer hotline and no-JS. Also passed locally against npm run build:site output. Real map tiles and live AIS on production are NOT VERIFIED until after merge."
+  },
+  "photos": [],
+  "release": {
+    "implemented": {
+      "status": "CONFIRMED",
+      "checkedDate": "2026-11-21",
+      "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/pull/1825"
+    },
+    "verified": {
+      "status": "CONFIRMED",
+      "checkedDate": "2026-11-21",
+      "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/actions/runs/44917687933"
+    },
+    "deployed": {
+      "status": "NOT_VERIFIED"
+    },
+    "live": {
+      "status": "NOT_VERIFIED"
+    },
+    "measured": {
+      "status": "NOT_MEASURED"
+    }
+  },
+  "note": "Draft until the PR's CI, an owner merge, a READY deployment for the merged SHA and an independent public check are each recorded."
+}
