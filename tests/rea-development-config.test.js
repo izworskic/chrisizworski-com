@@ -28,7 +28,7 @@ test('REA instructions require explicit invocation and pinned one-off CLI', asyn
 
   assert.match(doc, /Do not launch, install, connect, or use REA unless the owner explicitly asks/);
   assert.match(doc, /npx -y rea-agents@6\.9\.0 analyze-javascript-application/);
-  assert.match(doc, /no repository-level `\.mcp\.json` registration/);
+  assert.match(doc, /no REA entry/);
   assert.match(doc, /full CI gate/);
   assert.match(claude, /only when explicitly requested/);
   assert.match(agents, /only when the owner explicitly requests REA/);
