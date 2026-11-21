@@ -36,7 +36,8 @@ function fixture(){
  const beach={lat:43.6714,lon:-83.9068},cell={lat:43.702,lon:-83.858};
  const impact=beachFeel(weather,water,beach,cell);
  const physics=scenario({beachWeather:weather,inlandWeather:{startsAt:time,tempF:86},
-   water,beach,waterReference:cell},new Date(time));
+   water,beach,waterReference:cell,
+   shoreGrid:{office:'DTX',x:100,y:60},inlandGrid:{office:'DTX',x:95,y:60}},new Date(time));
  const assessment=heading=>({heading,beach:'Cooler air is possible near the shore.',
   water:'Cold-water exposure is possible.',after:'Dry off after immersion.',
   decision:'Consult official safety and beach hazard information.'});
@@ -77,6 +78,7 @@ async function run(){
    assert.match(await page.locator('#physics-forecast-contrast').innerText(),/-4\.0°F/);
    assert.match(await page.locator('#physics-model-range').innerText(),/°F \(scenarios\)/);
    assert.match(await page.locator('#physics-model-limits').innerText(),/not an actual beach forecast/i);
+   assert.match(await page.locator('#physics-grid-info').innerText(),/different NWS forecast cells/i);
    assert.equal(await page.locator('#bay-map').getAttribute('data-basemap'),'openstreetmap');
    await page.locator('button[data-activity="swim"]').click();
    assert.match(await page.locator('#activity-heading').innerText(),/Swimming preparation/);
