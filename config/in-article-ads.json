@@ -13,6 +13,12 @@
   "pageExceptions": [
     {
       "host": "chrisizworski.com",
+      "path": "/lake-superior-circle-tour",
+      "match": "exact",
+      "reason": "Owner reported four Auto ads stacked above the Circle Tour opening. Keep the map and route controls reachable. Review after AdSense Excluded areas can protect the opening."
+    },
+    {
+      "host": "chrisizworski.com",
       "path": "/lake-michigan-water-temperature",
       "match": "section",
       "reason": "Auto ads placed a 280-390 px unit inside the hero above the water temperature (hero 1,199 px tall on a phone). ShoreFeel's job is the first-screen answer. Review after AdSense Excluded areas protects the hero."
