@@ -66,7 +66,9 @@ function detailPage(beach) {
   const canonical = `https://chrisizworski.com/great-lakes-beaches/${beach.slug}/`;
   const description = detailDescription(beach);
   const title = detailTitle(beach.name);
-  const detailModified = beach.camera ? "2026-08-17" : catalog.version;
+  // ShoreFeel interpretive content was materially updated November 21, 2026.
+  // Keep page and sitemap dates aligned; stamp-freshness owns later revisions.
+  const detailModified = "2026-11-21";
   const nearby = nearbyBeaches(beach);
   const cameraStylesheet = beach.camera ? '  <link rel="stylesheet" href="/assets/field-camera.css">\n' : "";
   const cameraSection = beach.camera ? `    <section class="section" aria-labelledby="camera-heading">
@@ -290,7 +292,7 @@ const urls = [
     loc: `https://chrisizworski.com/great-lakes-beaches/${beach.slug}/`,
     priority: "0.7",
     changefreq: "daily",
-    lastmod: beach.camera ? "2026-08-17" : catalog.version,
+    lastmod: "2026-11-21",
   })),
 ];
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
