@@ -70,6 +70,9 @@ test('missing and distant NOAA water never becomes a beach-water thermometer',()
  assert.match(missing.waterNote,/No recent/);
  const distant=beachConditions(beach,weather(),water({distance_miles:55}),now);
  assert.match(distant.waterNote,/55 miles away/);
+ const riverfront=beachConditions({...beach,swimming:false},weather(),water(),now);
+ assert.equal(riverfront.waterF,null,'the Wenonah riverfront is not offshore Lake Huron water');
+ assert.match(riverfront.waterNote,/riverfront viewpoint/);
  assert.match(distant.limitation,/offshore stations/);
 });
 
@@ -94,6 +97,13 @@ test('all 50 generated pages retain original SEO and safety while exposing Shore
    assert.match(html,/not a beach thermometer/i);
    assert.doesNotMatch(html,/quarter.?mile/i,'new beach panels must not claim a measured quarter-mile offset');
  }
+});
+
+test('Wenonah is a riverfront stop rather than a swimming beach',()=>{
+ const html=fs.readFileSync(path.join(root,'public/great-lakes-beaches/wenonah-park/index.html'),'utf8');
+ assert.match(html,/What will it feel like on the waterfront/);
+ assert.match(html,/not a designated swim beach/);
+ assert.doesNotMatch(html,/What will it feel like at the beach/);
 });
 
 test('Saginaw pilot leads with at-the-beach framing but keeps NWS grid science',()=>{
