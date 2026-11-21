@@ -1,0 +1,50 @@
+name: ShoreFeel US region full release gate
+
+on:
+  pull_request:
+    paths:
+      - 'data/shorefeel-us-coast.json'
+      - 'lib/shorefeel/us-coast.js'
+      - 'api/shorefeel-us.js'
+      - 'public/assets/shorefeel-us.*'
+      - 'public/great-lakes-beaches/around-the-lakes/**'
+      - 'scripts/generate-shorefeel-us.mjs'
+      - 'scripts/verify-shorefeel-us-browser.cjs'
+      - 'tests/shorefeel-us-coast.test.js'
+      - '.github/workflows/shorefeel-us-region-verification.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+concurrency:
+  group: shorefeel-us-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify-us-release:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install pinned dependencies
+        run: npm ci
+      - name: Validate site-wide protected source and freshness
+        run: npm run verify:all
+      - name: Build final public output and audit published routes
+        run: npm run profile:build -- build-profile-shorefeel-us.json
+      - name: Assert regional canonical is in the built sitemap
+        run: |
+          node -e "const fs=require('fs');const x=fs.readFileSync('public/sitemap-beaches.xml','utf8');if(!x.includes('https://chrisizworski.com/great-lakes-beaches/around-the-lakes/'))process.exit(1);const html=fs.readFileSync('public/great-lakes-beaches/around-the-lakes/index.html','utf8');if(!html.includes('rel=\"canonical\" href=\"https://chrisizworski.com/great-lakes-beaches/around-the-lakes/\"'))process.exit(1);console.log('US ShoreFeel canonical and sitemap PASS')"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: shorefeel-us-build-profile
+          path: build-profile-shorefeel-us.json
+          if-no-files-found: ignore
+          retention-days: 7

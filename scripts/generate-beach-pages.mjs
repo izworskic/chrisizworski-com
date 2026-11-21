@@ -286,7 +286,8 @@ await writeFile(hubPath, hub);
 console.log(`Wrote crawlable index of ${catalog.beaches.length} beaches into the hub page.`);
 
 const urls = [
-  { loc: "https://chrisizworski.com/great-lakes-beaches/", priority: "0.9", changefreq: "daily", lastmod: "2026-08-10" },
+  { loc: "https://chrisizworski.com/great-lakes-beaches/", priority: "0.9", changefreq: "daily", lastmod: "2026-11-21" },
+  { loc: "https://chrisizworski.com/great-lakes-beaches/around-the-lakes/", priority: "0.7", changefreq: "monthly", lastmod: "2026-11-21" },
   { loc: "https://chrisizworski.com/best-michigan-beaches-today/", priority: "0.9", changefreq: "daily", lastmod: "2026-08-10" },
   ...catalog.beaches.map((beach) => ({
     loc: `https://chrisizworski.com/great-lakes-beaches/${beach.slug}/`,
