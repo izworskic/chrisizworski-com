@@ -15,6 +15,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from urllib.parse import quote
 from urllib.request import Request, urlopen
+from urllib.error import HTTPError
 
 SCHEMA = "shorefeel.glos-shore-observations.v1"
 SOURCE = "https://seagull-erddap.glos.org/erddap/tabledap/obs_127.json"
@@ -71,13 +72,19 @@ def fetch_window(start, end, now, fetcher=None):
                 "User-Agent": "ShoreFeelResearch/1.0 (https://chrisizworski.com/)",
                 "Accept": "application/json",
             })
-            with urlopen(req, timeout=18) as response:
-                if response.status != 200:
-                    raise ValueError("GLOS ERDDAP returned non-200 response")
-                raw = response.read(MAX_BYTES + 1)
-                if len(raw) > MAX_BYTES:
-                    raise ValueError("GLOS result exceeds bounded data size")
-                return json.loads(raw)
+            try:
+                with urlopen(req, timeout=18) as response:
+                    if response.status != 200:
+                        raise ValueError("GLOS ERDDAP returned non-200 response")
+                    raw = response.read(MAX_BYTES + 1)
+                    if len(raw) > MAX_BYTES:
+                        raise ValueError("GLOS result exceeds bounded data size")
+                    return json.loads(raw)
+            except HTTPError as exc:
+                # Do not retry a malformed query or hide provider evidence.
+                detail = exc.read(2048).decode("utf-8", errors="replace")
+                raise ValueError("GLOS ERDDAP HTTP " + str(exc.code) + ": " +
+                                 " ".join(detail.split())[:400]) from None
     payload = fetcher(url)
     return normalize(payload, start=start, end=end, now=now, provenance=url)
 
