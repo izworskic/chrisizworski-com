@@ -9,3 +9,6 @@ Read the repository root `AGENTS.md` before any change. Preserve authoritative e
 **Experience Investment:** For substantial new visitor tools, major UI reviews and requested redesigns, consult .agents/skills/experience-investment/SKILL.md and its reference guides. Choose a visitor-task-specific composition and meaningfully different interaction, rather than applying the Michigan Snow Totals style to every page. For proposals/reviews, do not edit code; when implementation is requested, follow research with actual source changes and browser/CI proof. Existing Experience OS, Foundry, owner, ads, SEO and Penpot opt-in rules remain authoritative.
 
 **REA is explicit-use only:** When the owner directly requests REA for a named, authorized investigation, consult `.agents/skills/rea/SKILL.md` and `docs/REA_DEVELOPMENT_WORKFLOW.md`. Do not auto-run REA, register MCP, add dependencies, or invoke it for routine Experience Investment, Foundry or Penpot work.
+
+
+**Playwright browser QA:** For Playwright requests and significant interactive, map or responsive UI work, read \`.github/skills/playwright-browser-qa/SKILL.md\` and \`docs/PLAYWRIGHT_BROWSER_QA_WORKFLOW.md\`. Use an executable browser for screenshots, state changes and console/network evidence, then targeted regression tests and full CI. No browser runtime or MCP server is installed by the skill alone.
