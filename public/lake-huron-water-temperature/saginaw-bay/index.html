@@ -65,6 +65,19 @@
   <div><span>Forecast humidity</span><strong id="lead-humidity">Checking</strong></div>
  </div>
  <p class="bay-feel-detail" id="lake-influence-detail">The air and water temperatures, together with wind direction, help show when the shoreline may feel different from inland.</p>
+ <section class="shore-physics" aria-labelledby="physics-heading">
+  <div class="shore-physics-heading"><span>Research model · two NOAA/NWS forecasts</span>
+   <h2 id="physics-heading">Is the beach cooler than inland?</h2>
+   <p>Compare the area's shoreline forecast with a second NWS forecast roughly 16 km west in Bay County. Both are model forecasts, not thermometers.</p>
+  </div>
+  <div class="shore-physics-values">
+   <div><span>Forecast shore minus inland</span><strong id="physics-forecast-contrast">Checking both NWS forecasts</strong>
+    <p id="physics-forecast-note">The two forecasts can describe different air masses, but may share the same weather grid.</p></div>
+   <div><span>Experimental water-to-air model</span><strong id="physics-model-range">Checking NOAA water and wind</strong>
+    <p id="physics-model-note">Shows a sensitivity range only when recent NOAA water, paired forecasts and onshore wind are available.</p></div>
+  </div>
+  <p class="shore-physics-limit" id="physics-model-limits">This physics model is not calibrated against a beach thermometer. Its assumed travel distance over water, heat-transfer coefficient and mixing depth are not observations. The range is not a confidence interval.</p>
+ </section>
  <details class="evidence"><summary>How do we estimate the beach feel?</summary>
   <p id="lead-caveat">The numeric temperature uses the NWS forecast near the park, not a thermometer on the sand. Wind chill or heat index can adjust that number, but the lake may make the actual beach cooler or warmer than the forecast. We do not invent a degree correction.</p>
   <p id="huron-context">Whole-lake Lake Huron average is context only.</p>
@@ -158,6 +171,6 @@
 </main>
 <footer class="foot"><div class="wrap"><p>ShoreFeel reports thermal conditions and data limitations, not safe swimming, ice safety or water quality. Source timestamps and geographic scope matter.</p><p><a href="/great-lakes-water-temperature/">All Great Lakes water temperatures</a> · <a href="/great-lakes-beaches/">Beach safety and advisories</a></p><p><a href="/chris-izworski/">Built by Chris Izworski</a></p></div></footer>
 <script defer src="/assets/leaflet-1.9.4.js"></script>
-<script defer src="/assets/shorefeel-saginaw.js?v=20261121c"></script>
+<script defer src="/assets/shorefeel-saginaw.js?v=20261121d"></script>
 </body>
 </html>
