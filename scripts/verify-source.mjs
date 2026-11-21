@@ -475,6 +475,7 @@ const intentionalChanges = new Set([
 // Pin their exact source hashes so the known drift passes without broadly exempting
 // the routes from future parity checks.
 const committedDriftHashEntries = [
+  // Nov 21 2026: SHA256-pinned shared ShoreFeel JS/CSS and 50 beach guides.
   // Nov 21 2026: reviewed 50 ShoreFeel interpretive beach guides, updated exact
   // body hashes after truthful dateModified/sitemap stamping. Preserve all other
   // live-snapshot parity protections until the next clean production crawl.
@@ -560,6 +561,8 @@ const committedDriftHashEntries = [
   ["/great-lakes-beaches/bay-city-state-park/", "9e68b8120ebcc3c8eef9f7a8397c9586089757992e6bc46fdec59882b44463ff"],
   ["/great-lakes-beaches/south-haven-north/", "e1f2803bdcb91efb96c74990dd202a9bfb28681546962843e2a683f4d3a29ff4"],
   ["/great-lakes-beaches/caseville-state-park/", "0d6b1ad107ab1d3ee7be4385a250bcec23e5bda8af577f00df8cb69e460847b0"],
+  ["/assets/beach-report.js", "60c91fe41e6bf7d063db615105510fad10966f2daa1cde28b1e409868ef68e60"],
+  ["/assets/beach-report.css", "932a446b7922f897ad2460a66fa0bdfb1945edf58dc45037a02712535d4e76da"],
 ];
 
 // A Map built from an array silently keeps the LAST value for a duplicate key, so a stale pin added
