@@ -42,11 +42,11 @@ test('phase two: varied Canadian shorelines preserve location sources and the ri
    'turkey-point-beach','darlington-lake-ontario','toronto-bluffers-beach','toronto-cherry-beach']){
   const beach=bySlug.get(slug);
   assert.ok(beach,'Missing new shoreline '+slug);
-  assert.match(beach.reference.sourceUrl,/^https:\\/\\//,slug);
+  assert.ok(beach.reference.sourceUrl.startsWith('https://'),slug);
   assert.ok(beach.story.length>95,slug);
   assert.equal(validBeach(beach),true,slug);
  }
- assert.match(bySlug.get('terrace-bay-beach').advisory.url,/tbdhu.com\\/beaches/);
+ assert.ok(bySlug.get('terrace-bay-beach').advisory.url.includes('tbdhu.com/beaches'));
  assert.match(bySlug.get('bayfield-pier-beach').advisory.url,/hpph.ca/);
  assert.match(bySlug.get('kincardine-station-beach').advisory.url,/publichealthgreybruce.on.ca/);
  assert.match(bySlug.get('toronto-bluffers-beach').advisory.url,/toronto.ca/);
