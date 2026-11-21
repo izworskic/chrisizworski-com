@@ -494,8 +494,9 @@
     var host = document.querySelector("[data-shorefeel]");
     if (!host) return;
     var feel = beach && beach.shore_feel ? beach.shore_feel : {};
+    var scope = host.closest(".shorefeel-field-note") || host;
     function set(name, value) {
-      var node = host.querySelector("[data-shorefeel-" + name + "]");
+      var node = scope.querySelector("[data-shorefeel-" + name + "]");
       if (node) node.textContent = value;
     }
     var current = feel.status === "forecast-based";
