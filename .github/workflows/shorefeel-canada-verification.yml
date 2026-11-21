@@ -1,0 +1,64 @@
+name: ShoreFeel Canada release verification
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'data/shorefeel-canada.json'
+      - 'lib/shorefeel/canada.js'
+      - 'api/shorefeel-canada.js'
+      - 'public/assets/shorefeel-canada.*'
+      - 'public/great-lakes-beaches/canada/**'
+      - 'scripts/generate-shorefeel-canada.mjs'
+      - 'scripts/verify-shorefeel-canada-browser.cjs'
+      - 'tests/shorefeel-canada.test.js'
+      - '.github/workflows/shorefeel-canada-verification.yml'
+      - 'scripts/generate-beach-pages.mjs'
+      - 'public/sitemap-beaches.xml'
+      - 'package.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+concurrency:
+  group: shorefeel-canada-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify-canada-release:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install pinned dependencies
+        run: npm ci
+      - name: Run every full repository validation, including source freshness and ad protections
+        run: npm run verify:all
+      - name: Build site, verify SEO and profile outputs
+        run: npm run profile:build -- build-profile-shorefeel-canada.json
+      - name: Assert Canada landing, source identity and sitemap
+        run: |
+          node <<'NODE'
+          const fs=require('node:fs');
+          const page=fs.readFileSync('public/great-lakes-beaches/canada/index.html','utf8');
+          const sitemap=fs.readFileSync('public/sitemap-beaches.xml','utf8');
+          const url='https://chrisizworski.com/great-lakes-beaches/canada/';
+          if(!page.includes('rel="canonical" href="'+url+'"'))throw Error('Missing Canada canonical');
+          if(!sitemap.includes('<loc>'+url+'</loc>'))throw Error('Missing Canada sitemap URL');
+          if((page.match(/class="park-item"/g)||[]).length!==16)throw Error('Canadian park list mismatch');
+          if(!page.includes('Environment and Climate Change Canada'))throw Error('Missing source attribution');
+          console.log('Canadian ShoreFeel public output and official-source protections PASS');
+          NODE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: shorefeel-canada-build-profile
+          path: build-profile-shorefeel-canada.json
+          if-no-files-found: ignore
+          retention-days: 7
