@@ -251,3 +251,32 @@ test('every main NOAA bridge is keyboard-accessible without tapping tightly clus
  assert.match(css,/\.bridge-picker/);
  assert.doesNotMatch(app,/window\.open\(|alert\(/);
 });
+
+test('AIS vessel illustrations reflect only reported category, size band and bounded course',()=>{
+ const kinds=[
+  {shipType:70,lengthMeters:242,course:90,kind:'cargo',widthClass:'large'},
+  {shipType:83,lengthMeters:105,course:0,kind:'tanker',widthClass:'medium'},
+  {shipType:31,lengthMeters:26,course:359.9,kind:'tug',widthClass:'small'},
+  {shipType:63,lengthMeters:75,course:180,kind:'passenger',widthClass:'small'},
+  {shipType:null,lengthMeters:null,course:null,kind:'unknown',widthClass:'not-reported'}
+ ];
+ for(const entry of kinds){
+  const icon=core.vesselVisual(entry);
+  assert.equal(icon.kind,entry.kind);
+  assert.equal(icon.widthClass,entry.widthClass);
+  assert.equal(icon.reportedCourseDegrees,entry.course);
+  assert.equal(icon.actualHullGeometryKnown,false);
+  assert.equal(icon.illustrationOnly,true);
+ }
+ assert.equal(core.vesselVisual({shipType:70,course:360}).reportedCourseDegrees,null);
+ assert.equal(core.vesselVisual({shipType:70,course:'90'}).reportedCourseDegrees,null);
+ const live=core.classifyLive({ok:true,checkedAt:'2026-11-22T13:59:59Z',vessels:[
+  {...v('2026-11-22T13:59:00Z'),course:190}
+ ]},now);
+ assert.equal(live.vessels[0].course,190);
+ assert.match(app,/function liveVesselIcon\(/);
+ assert.match(app,/mapPointIcon\('ship'\)/);
+ assert.match(app,/icon:liveVesselIcon\(v\)/);
+ assert.match(css,/\.cuyahoga-ship-marker/);
+ assert.match(page,/Vessel shapes use broad reported AIS categories/);
+});
