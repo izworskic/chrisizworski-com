@@ -17,6 +17,9 @@
   var HOUR = 60 * MIN;
   var BOATNERD = 'https://ais.boatnerd.com/passage/port/soo-locks';
   var USACE = 'https://www.lrd.usace.army.mil/Submit-ArticleCS/Recreation/Article/3833525/soo-locks-visitor-center/';
+  // NWS Gaylord (APX) grid cell for the Soo Locks, resolved from /points/46.4953,-84.3453 on 2026-11-22.
+  var NWS_POINT = 'https://api.weather.gov/points/46.4953,-84.3453';
+  var NWS_HOURLY = 'https://api.weather.gov/gridpoints/APX/65,131/forecast/hourly';
 
   // ---- time in Sault Ste. Marie ----
   var partsFormat = null;
@@ -220,8 +223,8 @@
     if (!opts.data || (opts.failed && !n) || !n || !n.ok) {
       out.status = 'unavailable';
       out.headline = 'Live ship reports are unavailable, so no visit can be lined up';
-      out.detail.push('This is not a report of an empty river. Check the BoatNerd Soo passage list' + (vc ? ' or call the boat hotline at 906-202-1333.' : '.'));
-      out.link = { href: BOATNERD, label: 'Open the BoatNerd Soo passage list \u2197' };
+      out.detail.push('This is not a report of an empty river.' + (vc ? ' Call the boat hotline at 906-202-1333, or see the other ways to check below.' : ' See the other ways to check below.'));
+      out.link = { href: '#soo-schedule-answer', label: 'Other ways to check \u2193' };
       return out;
     }
     var entries = [];
@@ -254,7 +257,7 @@
       out.headline = 'No ship is clearly heading for the locks in the latest reports';
       out.detail.push('Nothing in AIS reports under 30 minutes old shows a freighter moving toward the locks. That is not proof of an empty river: ships wait at docks and anchorages, and coverage has gaps.');
       out.detail.push(lookahead);
-      out.link = { href: BOATNERD, label: 'Open the BoatNerd Soo passage list \u2197' };
+      out.link = { href: '#soo-schedule-answer', label: 'Other ways to check \u2193' };
       return out;
     }
     if (!best) {
@@ -294,10 +297,56 @@
     return out;
   }
 
+  // Summarize the NWS hourly forecast periods that overlap a visit. Values are the
+  // forecaster's own numbers, never smoothed or blended; null when nothing covers the visit.
+  function visitWeather(props, visit, now) {
+    if (!props || !Array.isArray(props.periods)) return null;
+    var hours = props.periods.filter(function (p) {
+      var a = Date.parse(p.startTime), b = Date.parse(p.endTime);
+      return Number.isFinite(a) && Number.isFinite(b) && b > visit.start && a < visit.end;
+    });
+    if (!hours.length) return null;
+    var temps = hours.map(function (p) { return p.temperature; }).filter(Number.isFinite);
+    var pops = hours.map(function (p) { return p.probabilityOfPrecipitation && p.probabilityOfPrecipitation.value; }).filter(Number.isFinite);
+    var winds = hours.map(function (p) { var m = /(\d+)(?:\s*to\s*(\d+))?\s*mph/.exec(p.windSpeed || ''); return m ? { mph: Number(m[2] || m[1]), dir: p.windDirection } : null; }).filter(Boolean);
+    var strongest = winds.sort(function (a, b) { return b.mph - a.mph; })[0] || null;
+    var skies = [];
+    hours.forEach(function (p) { var f = p.shortForecast; if (f && skies.indexOf(f) < 0) skies.push(f); });
+    var issued = Date.parse(props.updateTime || props.generatedAt);
+    return {
+      lowF: temps.length ? Math.min.apply(null, temps) : null,
+      highF: temps.length ? Math.max.apply(null, temps) : null,
+      windMph: strongest ? strongest.mph : null, windDir: strongest ? strongest.dir : null,
+      maxPop: pops.length ? Math.max.apply(null, pops) : null,
+      skies: skies.slice(0, 2), hours: hours.length,
+      issued: Number.isFinite(issued) ? issued : null,
+      stale: Number.isFinite(issued) ? (now - issued) > 12 * HOUR : true
+    };
+  }
+  function weatherLine(w) {
+    if (!w) return null;
+    var t = w.lowF === null ? '' : w.lowF === w.highF ? w.lowF + '\u00B0F' : w.lowF + '\u2013' + w.highF + '\u00B0F';
+    var bits = [t, w.skies.join(', then ').toLowerCase(),
+      w.windMph !== null ? 'wind ' + (w.windDir ? w.windDir + ' ' : '') + 'up to ' + w.windMph + ' mph' : '',
+      w.maxPop !== null ? 'precipitation chance up to ' + w.maxPop + '%' : ''].filter(Boolean);
+    return bits.join(', ');
+  }
+
+  // The page's lock simulator offers a few real hulls. Pick a same-size stand-in for a live
+  // ship only when its reported size clearly matches one; otherwise leave the hull alone.
+  function simShipFor(s) {
+    var len = s && s.lengthFeet;
+    if (!s) return null;
+    if (s.sizeLabel === '1,000-footer' || (Number.isFinite(len) && len >= 900)) return 'tregurtha';
+    if (s.sizeLabel === 'ocean-going saltie') return 'saltie';
+    if (Number.isFinite(len) && len > 730) return 'anderson';
+    return null;
+  }
+
   var core = {
     TZ: TZ, SAULT: SAULT, BOATNERD: BOATNERD, USACE: USACE,
     zonedParts: zonedParts, zonedInstant: zonedInstant, parkHours: parkHours, visitorCenterOpen: visitorCenterOpen,
-    navigationSeason: navigationSeason, sunTimes: sunTimes, isDark: isDark, fitFor: fitFor, plan: plan,
+    navigationSeason: navigationSeason, sunTimes: sunTimes, isDark: isDark, fitFor: fitFor, plan: plan, simShipFor: simShipFor, visitWeather: visitWeather, weatherLine: weatherLine, NWS_HOURLY: NWS_HOURLY,
     clock: clock, clockZone: clockZone, duration: duration, directionLong: directionLong, chamberText: chamberText
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = core;
@@ -315,9 +364,10 @@
     rows: section.querySelector('[data-lw-rows]'),
     legend: section.querySelector('[data-lw-legend]'),
     dossier: section.querySelector('[data-lw-dossier]'),
-    status: section.querySelector('[data-lw-status]')
+    status: section.querySelector('[data-lw-status]'),
+    weather: section.querySelector('[data-lw-weather]')
   };
-  var state = { data: null, failed: false, selected: null, userSelected: false, plan: null };
+  var state = { data: null, failed: false, selected: null, userSelected: false, plan: null, wx: null, wxFailed: false, wxAt: 0 };
 
   function el(tag, cls, text) {
     var e = document.createElement(tag);
@@ -473,11 +523,45 @@
       if (root.SooAis && typeof root.SooAis.focusShip === 'function') root.SooAis.focusShip(s.raw);
       else { var m = document.getElementById('live-vessel-activity'); if (m) m.scrollIntoView(); }
     });
-    var bn = el('a', 'lw-secondary', 'BoatNerd Soo passage list ↗');
-    bn.href = BOATNERD; bn.target = '_blank'; bn.rel = 'noopener';
-    act.append(show, bn);
+    act.append(show);
+    if (document.getElementById('soo-lock-sim')) {
+      var lock = el('button', 'lw-secondary', 'Watch it lock through \u2193');
+      lock.type = 'button';
+      lock.addEventListener('click', function () { watchLock(s); });
+      act.append(lock);
+    }
     els.dossier.append(act);
     els.dossier.append(el('p', 'lw-note', 'An estimate from the ship’s latest AIS position, speed and river distance, not a lock schedule. Ships can wait for a chamber or stop at a dock. Not for navigation.'));
+  }
+
+  // Hand the selected ship to the page's lock simulator: direction, a same-size hull and a note.
+  function watchLock(s) {
+    var sim = document.getElementById('soo-lock-sim');
+    if (!sim) return;
+    function pickRadio(name, value) {
+      var r = value && sim.querySelector('input[name="' + name + '"][value="' + value + '"]');
+      if (!r) return null;
+      r.checked = true;
+      r.dispatchEvent(new Event('change', { bubbles: true }));
+      return r;
+    }
+    var dir = s.direction === 'upbound' ? 'up' : s.direction === 'downbound' ? 'down' : null;
+    pickRadio('lock-dir', dir);
+    var hull = pickRadio('lock-ship', simShipFor(s));
+    var standIn = hull && hull.parentNode.querySelector('b');
+    var size = s.lengthFeet ? s.lengthFeet.toLocaleString('en-US') + ' ft ' : '';
+    var note = sim.querySelector('[data-lock-live]');
+    if (note) {
+      var words = (dir ? (dir === 'up' ? 'Upbound, rising 21 ft to Lake Superior. ' : 'Downbound, dropping 21 ft toward Lake Huron. ') : '') +
+        (standIn ? 'Shown with the ' + standIn.textContent + ' as a same-size stand-in for this ' + size + 'ship. ' : 'Its reported size does not match one of these hulls, so pick the closest. ') +
+        (s.inLock || s.raw.lockCertain ? '' : 'In real life the lockmaster may assign either chamber. ');
+      note.replaceChildren(el('strong', null, 'Set up for ' + s.name + '. '), document.createTextNode(words + 'Press \u201CLock her through\u201D.'));
+      note.hidden = false;
+    }
+    var reduce = root.matchMedia && root.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    sim.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+    var play = sim.querySelector('[data-lock-play]');
+    if (play) play.focus({ preventScroll: true });
   }
 
   function renderVerdict(p) {
@@ -493,7 +577,8 @@
     }
     if (p.link) {
       var a = el('a', 'lw-link', p.link.label);
-      a.href = p.link.href; a.target = '_blank'; a.rel = 'noopener';
+      a.href = p.link.href;
+      if (/^https?:/.test(p.link.href)) { a.target = '_blank'; a.rel = 'noopener'; }
       els.verdict.append(a);
     }
     if (p.notes.length) {
@@ -550,11 +635,47 @@
       renderRows(r, p);
     }
     renderDossier(p);
+    renderWeather(p);
     if (els.status) {
       els.status.textContent = state.data && state.data.checkedAt
         ? 'Lined up from AIS reports checked ' + clockZone(Date.parse(state.data.checkedAt)) + (state.failed ? ' (latest refresh failed)' : '') + '.'
         : '';
     }
+  }
+
+  function renderWeather(p) {
+    if (!els.weather) return;
+    els.weather.replaceChildren();
+    if (p.status === 'season-closed' || p.status === 'loading') { els.weather.hidden = true; return; }
+    els.weather.hidden = false;
+    var head = el('strong', null, 'Platform weather, ' + clock(p.visit.start) + '\u2013' + clock(p.visit.end) + ': ');
+    if (!state.wx) {
+      els.weather.append(head, document.createTextNode(state.wxFailed ? 'the NWS forecast is unavailable right now.' : 'checking the NWS forecast\u2026'));
+      return;
+    }
+    var w = visitWeather(state.wx, p.visit, p.now);
+    if (!w) { els.weather.append(head, document.createTextNode('outside the NWS hourly forecast range.')); return; }
+    els.weather.append(head, document.createTextNode(weatherLine(w) + '. '));
+    var src = el('a', null, 'NWS hourly forecast');
+    src.href = 'https://forecast.weather.gov/MapClick.php?lat=46.4953&lon=-84.3453&FcstType=graphical';
+    src.target = '_blank'; src.rel = 'noopener';
+    els.weather.append(src, document.createTextNode(w.issued ? (w.stale ? ', last updated ' : ', updated ') + clockZone(w.issued) + dayWord(w.issued, p.now) + (w.stale ? ' (older than 12 hours)' : '') + '.' : '.'));
+  }
+  function getJson(url) {
+    var opts = { headers: { Accept: 'application/geo+json' } };
+    if (typeof AbortSignal !== 'undefined' && AbortSignal.timeout) opts.signal = AbortSignal.timeout(12000);
+    return fetch(url, opts).then(function (r) { if (!r.ok) throw Error('HTTP ' + r.status); return r.json(); });
+  }
+  function loadWeather() {
+    state.wxAt = Date.now();
+    getJson(NWS_HOURLY)
+      .catch(function () {
+        // The grid cell can move when NWS re-grids; look it up again before giving up.
+        return getJson(NWS_POINT).then(function (pt) { return getJson(pt.properties.forecastHourly); });
+      })
+      .then(function (j) { state.wx = j && j.properties; state.wxFailed = !state.wx; })
+      .catch(function () { state.wxFailed = true; })
+      .then(function () { if (state.plan) renderWeather(state.plan); });
   }
 
   function receive(detail) {
@@ -565,6 +686,8 @@
   }
 
   section.classList.add('lw-ready');
+  loadWeather();
+  setInterval(function () { if (!document.hidden && Date.now() - state.wxAt > 30 * MIN) loadWeather(); }, 5 * MIN);
   els.controls.hidden = false;
   section.addEventListener('change', function (e) {
     if (e.target && (e.target.name === 'lw-start' || e.target.name === 'lw-stay')) update();

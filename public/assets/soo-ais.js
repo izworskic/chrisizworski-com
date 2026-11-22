@@ -102,7 +102,7 @@
   const directionText = d => d === 'upbound' ? 'Upbound from Lake Huron, heading up to Lake Superior' : d === 'downbound' ? 'Downbound from Lake Superior, heading to the lower lakes' : 'Direction not reported';
   // USACE maintains the boat-schedule hotline only while the Visitor Center is open, May 1 to October 31.
   const hotlineSeason = () => { const m = Number(new Date().toLocaleString('en-US', { month: 'numeric', timeZone: TZ })); return m >= 5 && m <= 10; };
-  const checkElsewhere = () => hotlineSeason() ? 'Call the hotline at 906-202-1333 or check the BoatNerd passage list below.' : 'Check the BoatNerd passage list below; the USACE boat hotline runs only May 1 to October 31.';
+  const checkElsewhere = () => hotlineSeason() ? 'Call the hotline at 906-202-1333, or see the other ways to check further down this page.' : 'See the other ways to check further down this page; the USACE boat hotline runs only May 1 to October 31.';
   const chamberWhere = chamber => chamber === 'poe' ? 'The Poe is the second chamber out from the viewing platform.' : 'The MacArthur is the chamber right below the viewing platform.';
 
   // ---- next-ship card ----
@@ -114,7 +114,7 @@
     if (failed && !n) {
       cardKicker.textContent = 'Next ship at the locks';
       cardHeading.textContent = 'Live ship reports are unavailable right now';
-      cardBody.append(text('p', hotlineSeason() ? 'Call the official boat hotline at 906-202-1333 while the Visitor Center is open, or check the BoatNerd passage list below.' : 'Check the BoatNerd passage list below. The USACE boat hotline is maintained only while the Visitor Center is open, May 1 to October 31.'));
+      cardBody.append(text('p', hotlineSeason() ? 'Call the official boat hotline at 906-202-1333 while the Visitor Center is open, or see the other ways to check further down this page.' : 'See the other ways to check further down this page. The USACE boat hotline is maintained only while the Visitor Center is open, May 1 to October 31.'));
       return;
     }
     if (!n || !n.ok) {
@@ -171,7 +171,8 @@
     show.addEventListener('click', () => focusShip(ship));
     let other;
     if (hotlineSeason()) { other = text('a', 'Boat hotline 906-202-1333'); other.href = 'tel:+19062021333'; }
-    else { other = text('a', 'BoatNerd passage list \u2197'); other.href = 'https://ais.boatnerd.com/passage/port/soo-locks'; other.target = '_blank'; other.rel = 'noopener'; }
+    // Off season, the next step stays in the tool: line this ship up against a visit.
+    else { other = text('a', 'Plan your platform time \u2193'); other.href = '#soo-lock-watch'; }
     box.append(show, other);
     return box;
   }
@@ -254,7 +255,7 @@
     } catch (_) {
       if (previous) render(previous, true);
       else {
-        status.textContent = 'Vessel reports are temporarily unavailable. Try again or use the BoatNerd passage list below.'; dot.className = 'vessel-map-status-dot offline';
+        status.textContent = 'Vessel reports are temporarily unavailable. Try again, or see the other ways to check above the map.'; dot.className = 'vessel-map-status-dot offline';
         list.replaceChildren(text('li', 'The feed did not return usable data. This is not a zero-traffic report.'));
         renderCard(null, true);
         share(null, true);
