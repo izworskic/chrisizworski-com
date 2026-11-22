@@ -1780,12 +1780,12 @@ body[data-beach-report-page="detail"] .beach-detail-layout > *{
 /* Tie numeric prominence to the validated forecast state. Previous loading
    and no-data styles must never win the cascade after a successful update. */
 body[data-beach-report-page="detail"] .shorefeel-primary[data-status="forecast"] .shorefeel-main strong[data-shorefeel-value]{
-  font-size:clamp(64px,7vw,100px);
+  font-size:clamp(64px,7vw,100px) !important;
   line-height:1.02;
   font-variant-numeric:tabular-nums;
 }
 @media(max-width:700px){
   body[data-beach-report-page="detail"] .shorefeel-primary[data-status="forecast"] .shorefeel-main strong[data-shorefeel-value]{
-    font-size:clamp(65px,17vw,83px);
+    font-size:clamp(65px,17vw,83px) !important;
   }
 }
