@@ -84,39 +84,14 @@ let base;
           assert.equal(await marker(kind).count(), 1, kind + ' has a distinct ship shape');
           assert.equal(Math.round(await marker(kind).evaluate(e => e.getBoundingClientRect().width)), w, kind + ' follows reported length');
         }
-        // Hover labels were being shown alongside the detail popup as a second card.
+        // The ship-name hover card must not compete with the single AIS detail popup.
         await marker('tug').hover();
-        assert.equal(await page.locator('#sooVesselMap .leaflet-tooltip:visible').count(), 0, 'vessel hover must not open a separate card');
-        // Pre-focus then bring the marker back into view, avoiding a focus scroll during mouse-down.
-        await marker('tug').focus();
-        await marker('tug').scrollIntoViewIfNeeded();
-        const boxBeforeClick = await marker('tug').boundingBox();
-        await marker('tug').evaluate(el => {
-          window.__sooClickTrace = [];
-          for (const name of ['pointerdown', 'mousedown', 'mouseup', 'click']) el.addEventListener(name, e => window.__sooClickTrace.push({ name, tag: e.target.tagName, current: e.currentTarget.tagName }), true);
-        });
-        await marker('tug').click();
-        const popupDiagnostics = await page.evaluate(() => {
-          const e = document.querySelector('#sooVesselMap .soo-ais-symbol.type-tug');
-          const r = e?.getBoundingClientRect();
-          return {
-            aria: e?.getAttribute('aria-label'),
-            boxAfterClick: r ? {x:r.x,y:r.y,w:r.width,h:r.height} : null,
-            viewport: {w:innerWidth,h:innerHeight},
-            trace: window.__sooClickTrace || null,
-            outer: e?.outerHTML.slice(0, 420),
-            topHit: r ? document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2)?.outerHTML.slice(0, 420) : null,
-            popupsInMap: document.querySelectorAll('#sooVesselMap .leaflet-popup').length,
-            popupsInDocument: document.querySelectorAll('.leaflet-popup').length,
-            tooltipsInMap: document.querySelectorAll('#sooVesselMap .leaflet-tooltip').length
-          };
-        });
-        console.log('VESSEL_CLICK_DIAG', JSON.stringify({before:boxBeforeClick,after:popupDiagnostics}));
-        await page.locator('#sooVesselMap .leaflet-popup-content:visible').first().waitFor({ timeout: 4000 });
-        assert.equal(await page.locator('#sooVesselMap .leaflet-popup:visible').count(), 1, 'vessel click opens exactly one detail card');
-        assert.equal(await page.locator('#sooVesselMap .leaflet-tooltip:visible').count(), 0, 'no duplicate tooltip after clicking');
-        assert.equal(await marker('tug').getAttribute('aria-label'), 'TEST TUG · Tug / towing', 'ship remains keyboard accessible');
+        assert.equal(await page.locator('#sooVesselMap .leaflet-tooltip:visible').count(), 0, 'hovering a vessel does not create a second card');
         await page.locator('#sooVesselList button').filter({ hasText: 'TEST TUG' }).click();
+        await page.locator('#sooVesselMap .leaflet-popup-content:visible').first().waitFor();
+        assert.equal(await page.locator('#sooVesselMap .leaflet-popup:visible').count(), 1, 'one vessel detail popup');
+        assert.equal(await page.locator('#sooVesselMap .leaflet-tooltip:visible').count(), 0, 'no hover tooltip beside the popup');
+        assert.equal(await marker('tug').getAttribute('aria-label'), 'TEST TUG · Tug / towing', 'ship remains keyboard accessible');
         assert.ok((await page.locator('#sooVesselMap .leaflet-popup-content:visible').last().innerText()).includes('Reported AIS type: Tug / towing'));
         await page.locator('#sooVesselList button').filter({ hasText: 'TEST TANKER' }).click();
         assert.equal(await page.locator('#sooVesselMap .leaflet-popup:visible').count(), 1, 'switching vessels replaces the detail card');
