@@ -16,3 +16,9 @@ main{max-width:1250px;margin:auto;padding:0 22px 75px}
 @media(max-width:720px){.site-nav{padding:12px 18px}.site-nav nav a:not(:first-child){display:none}main{padding:0 16px 50px}.intro{padding-top:24px}.field-layout{display:flex;flex-direction:column}.field-left{display:contents}.lake-picker{order:0;max-width:100%}.lake-context{order:1}.field-right{display:contents}.field-report{order:2;width:100%}.field-left .list-heading{order:3;width:100%;margin-top:18px}.shore-list{order:4;width:100%}.map-section{order:5;width:100%}.field-report h2{font-size:31px}.field-report .answer{grid-template-columns:minmax(0,1fr) minmax(115px,.6fr)}.wind-trace{border-top:0;border-left:1px solid var(--line);padding:0 0 0 12px}#shore-map{height:315px}.interpret-columns{grid-template-columns:1fr;gap:13px}}
 @media(max-width:420px){.site-nav .brand{font-size:17px}.site-nav nav{gap:8px}.site-nav nav a{font-size:12px}.intro h1{font-size:33px}.field-report{padding:19px 17px}.field-report .answer{grid-template-columns:1fr}.wind-trace{border-left:0;border-top:1px solid var(--line);padding:11px 0 0}.answer strong{font-size:38px}.lake-picker button{flex:1 1 auto}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* Individual ShoreFeel is a destination, separate from the map selection control. */
+.shore-stop-links{display:flex;align-items:center;justify-content:flex-end;gap:9px;flex-wrap:wrap}
+.shore-stop-links>a{font-size:12px;white-space:nowrap;padding:7px 4px}
+.shore-stop-links>a:first-child{color:#075b66;font-weight:800;text-decoration-thickness:2px}
+@media(max-width:520px){.shore-stop{grid-template-columns:minmax(0,1fr) auto}.shore-stop-links{max-width:115px;gap:2px}.shore-stop-links>a{padding:5px 4px}}

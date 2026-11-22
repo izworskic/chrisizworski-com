@@ -85,7 +85,8 @@ async function main(){
  const plain=await noJs.newPage();await plain.goto(origin+'/great-lakes-beaches/canada/',{waitUntil:'domcontentloaded'});
  assert.equal(await plain.locator('.shore-stop').count(),18);
  assert.equal(await plain.locator('noscript').isVisible(),true);
- assert.equal(await plain.locator('.shore-stop>a[href^="https://"]').count(),18);
+ assert.equal(await plain.locator('.shore-stop .shore-stop-links > a[href^="https://"]').count(),18);
+  assert.equal(await plain.locator('.shore-stop .shore-stop-links > a[href^="/great-lakes-beaches/canada/"]').count(),18);
  await noJs.close();
  console.log(JSON.stringify({passed:true,screenSizes:output,staleData:'No fabricated temperature',noJs:'18 park links available'},null,2));
  }finally{if(browser)await browser.close();await new Promise(done=>server.close(done));}

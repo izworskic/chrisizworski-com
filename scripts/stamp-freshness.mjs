@@ -125,6 +125,7 @@ const SITEMAPS = [
   "sitemap.xml",
   "sitemap-ice-out.xml",
   "sitemap-beaches.xml",
+  "sitemap-shorefeel-beaches.xml",
   "sitemap-reputation.xml",
   "sitemap-fall.xml",
   "sitemap-manistee.xml",
