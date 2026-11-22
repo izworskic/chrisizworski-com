@@ -10,6 +10,7 @@ const origin='http://127.0.0.1:4179';
  const browser=await chromium.launch({headless:true,executablePath:process.env.CHROME_PATH||undefined,args:['--no-sandbox','--disable-dev-shm-usage']});
  const report={checked_at:new Date().toISOString(),sha:process.env.GITHUB_SHA||'local',scope:'Offline HTML fixture; live data, maps and ads not assessed',checks:[]};
  let criticalCount=0;
+ let adventureSeriousCount=0;
  try{
   for(const route of ['/michigan-destinations/','/michigan-snow-totals/']){
    for(const width of [390,1280]){
@@ -31,6 +32,7 @@ const origin='http://127.0.0.1:4179';
      const violations=scan.violations.map(v=>({id:v.id,impact:v.impact,nodes:v.nodes.length}));
      const critical=violations.filter(v=>v.impact==='critical');
      criticalCount+=critical.length;
+     if(route==='/michigan-destinations/') adventureSeriousCount+=violations.filter(v=>v.impact==='serious').length;
      report.checks.push({route,width,metadata,violations});
      console.log(route+' width='+width+' violations='+violations.length+' critical='+critical.length);
     }finally{await context.close();}
@@ -43,4 +45,5 @@ const origin='http://127.0.0.1:4179';
   fs.writeFileSync(path.join(dest,'axe-browser.json'),JSON.stringify(report,null,2)+'\n');
  }
  assert.equal(criticalCount,0,'No critical axe violations in the pilot main regions');
+ assert.equal(adventureSeriousCount,0,'No serious axe violations on the Adventure Finder pilot');
 })().catch(error=>{console.error(error);process.exitCode=1;});

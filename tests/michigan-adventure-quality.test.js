@@ -1,0 +1,27 @@
+'use strict';
+const test=require('node:test');
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const path=require('node:path');
+const read=p=>fs.readFileSync(path.join(__dirname,'..',p),'utf8');
+test('adventure map keeps small visible pin with a larger touch hit target',()=>{
+ const js=read('public/assets/michigan-destinations.js');
+ const css=read('public/assets/michigan-destinations.css');
+ assert.match(js,/iconSize: \[40,40\], iconAnchor: \[20,20\]/);
+ assert.match(css,/\.map-marker\{[^}]*left:11px;top:11px;width:18px;height:18px/);
+ assert.match(css,/\.destination-links a\{[^}]*min-height:32px/);
+ assert.match(css,/\.destination-links \.primary-link\{[^}]*min-height:36px/);
+});
+test('accessible colors and optional fonts preserve canonical, photos and source',()=>{
+ const html=read('public/michigan-destinations/index.html');
+ const css=read('public/assets/michigan-destinations.css');
+ assert.match(html,/rel="canonical" href="https:\/\/chrisizworski\.com\/michigan-destinations\/"/);
+ assert.match(html,/display=optional/);
+ assert.match(css,/\.experience span\{[^}]*color:#89502e/);
+ assert.match(css,/\.seasonal-journeys \.eyebrow\{color:#89502e\}/);
+ assert.doesNotMatch(css,/@import url\('https:\/\/fonts\.googleapis\.com/);
+ assert.equal((html.match(/class="destination"/g)||[]).length,20);
+ assert.ok((html.match(/class="photo-credit"/g)||[]).length>=20);
+ assert.match(read('lighthouserc.web-quality.cjs'),/cumulative-layout-shift/);
+ assert.match(read('scripts/verify-web-quality-browser.cjs'),/adventureSeriousCount/);
+});

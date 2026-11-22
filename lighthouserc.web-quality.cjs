@@ -14,6 +14,8 @@ module.exports={
    'meta-description':['error',{minScore:1}],
    'html-has-lang':['error',{minScore:1}],
    'is-crawlable':['error',{minScore:1}],
+   'cumulative-layout-shift':['error',{maxNumericValue:0.1}],
+   'target-size':['error',{minScore:1}],
    'categories:performance':['warn',{minScore:0.5}],
    'categories:accessibility':['warn',{minScore:0.8}],
    'categories:best-practices':['warn',{minScore:0.7}],

@@ -76,7 +76,7 @@
     markers.forEach(marker => map.removeLayer(marker));
     markers = [];
     const positions = [];
-    const icon = window.L.divIcon({className: '', html: '<span class="map-marker" aria-hidden="true"></span>', iconSize: [18,18], iconAnchor: [9,9]});
+    const icon = window.L.divIcon({className: '', html: '<span class="map-marker" aria-hidden="true"></span>', iconSize: [40,40], iconAnchor: [20,20]});
     visibleCards().forEach(card => {
       const lat = Number(card.dataset.lat), lng = Number(card.dataset.lng);
       if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
