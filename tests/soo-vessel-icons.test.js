@@ -57,7 +57,7 @@ test('reported AIS type and length drive distinct, proportionate outlines; unkno
 
 test('Soo page loads icon module before renderer; legend and accessible interactions remain', () => {
   const icon = page.indexOf('/assets/seaway-vessel-icons.js?v=20261108a');
-  const map = page.indexOf('/assets/soo-ais.js?v=20261122e');
+  const map = page.indexOf('/assets/soo-ais.js?v=20261122f');
   assert.ok(icon > -1 && map > icon);
   assert.match(page, /\/assets\/soo-vessel-icons\.css\?v=20261122/);
   assert.match(page, /id="sooVesselMap"/);

@@ -113,3 +113,45 @@ Total about 92/100, every area at least 4/5.
 ## Lesson
 
 A visitor's real constraint at a fixed viewing point is time: arrival, stay, opening hours and light. When an engine already produces arrival windows, the cheapest high-value move is to put the visitor's own visit on the same axis as the windows, not to add another map.
+
+## Addendum 2026-11-22: keep the visitor in the tool, and what the repository skills added
+
+**Owner request:** keep the BoatNerd passage list available without making it one of the first ways to leave the tool, and use any repository skill that can make the tool better.
+
+### BoatNerd: incorporate the job, not the data
+
+- **public-data-scout check (2026-11-22):** `ais.boatnerd.com/passage/port/soo-locks` returns only a JavaScript app shell. A fetch shows no list, API, feed, terms, licensing or data provider. Importing it would mean scraping a private app backend, which the skill rules out for production. The repository's own promotion notes also treat BoatNerd as a community to approach respectfully. Decision: do not copy or proxy BoatNerd data.
+- **The job is already in the tool.** The Lock Watch lineup is this page's own passage list: every ship in a chamber or heading for the locks in the latest AIS reports, with windows. BoatNerd becomes a credited cross-check after it.
+- **Where BoatNerd used to be an early exit, and what replaced it:**
+
+| Place | Before | Now |
+| --- | --- | --- |
+| Next-ship card, Nov to Apr | "BoatNerd passage list" button | "Plan your platform time" (in page) |
+| Lock Watch dossier | "BoatNerd Soo passage list" button | "Watch it lock through" (in page, see below) |
+| Lock Watch unavailable / no-ship verdict | link to BoatNerd | "Other ways to check" (in page) |
+| Lock Watch no-JS text | link to BoatNerd | link to "other ways to check" (BoatNerd itself needs JavaScript) |
+| Schedule sources, card 1 | "Open today's BoatNerd passage list" | "Open the Lock Watch lineup"; BoatNerd is a cross-check line after the three cards |
+| Lock Watch sources | none | one credited cross-check inside the collapsed "Posted park hours, sources and a cross-check" |
+
+BoatNerd's wider-map links below the live map and in the resources list are unchanged: a different job, far down the page. The `data-growth-cta="soo-passage-list"` id is kept for measurement continuity.
+
+### Skills reviewed
+
+| Skill | Used? | What it contributed |
+| --- | --- | --- |
+| experience-investment | yes | scoped the change to the visitor's next step; no redesign |
+| public-data-scout | yes | rejected BoatNerd scraping; vetted NWS hourly forecast (owner-published, CORS `*`, gridpoint APX/65,131 verified 2026-11-22, `updateTime` exposed) |
+| editorial-diagrams + interactive-2d-scenes | yes | the existing to-scale SVG lock simulator is the right explanatory structure; reused rather than adding PixiJS or a new diagram |
+| playwright-browser-qa | yes | browser acceptance extended (see below) |
+| design-reconnaissance | no | no restyle in scope |
+| rea | no | no architecture problem |
+| penpot-design, stitch-concept-review | no | explicit-request only |
+
+### Two in-tool additions
+
+1. **Watch it lock through.** The dossier hands the selected ship to the page's lock simulator. It sets the direction, picks a same-size stand-in hull only when the reported size clearly matches (1,000-footer to Paul R. Tregurtha; saltie to the Seaway saltie; 731 to 899 ft to Arthur M. Anderson; otherwise the hull is left alone), says so in a note, adds "the lockmaster may assign either chamber" when that is true, and focuses "Lock her through". The simulator itself is unchanged apart from the empty note slot.
+2. **Platform weather for your visit.** The browser reads the NWS hourly forecast for the Soo Locks grid cell (falling back to a fresh `/points` lookup if NWS re-grids). It quotes the low to high temperature, sky wording, strongest wind and highest precipitation chance across the hours that overlap the visit, with the forecast's update time. It is marked older than 12 hours when stale and says plainly when unavailable or out of range. Nothing is blended or invented. There is no server function and no added Vercel cost.
+
+### Verification (local)
+
+`tests/soo-lock-watch.test.js` 14/14. `tests/soo-lock-watch-browser.cjs` passed with a pinned clock and NWS fixture. It covers: no BoatNerd in the card, verdict or dossier; exactly one, inside the collapsed note; the first schedule source is in-page; weather text for two visits; simulator hand-off for a downbound 740 ft laker (Anderson, either-chamber note, focus on play) and an upbound 1,000-footer (Tregurtha); in-page verdict link and an explicit forecast-unavailable line when both feeds fail. The Foundry replay still shows 4 GAIN and 2 PRESERVED.
