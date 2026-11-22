@@ -172,13 +172,39 @@
    marker.on('click',()=>chooseBridge(bridge.id,false));
   }
  }
+
+ function liveVesselIcon(v){
+  const info=core.vesselVisual(v);
+  const widths={large:70,medium:58,small:44,'not-reported':48};
+  const width=widths[info.widthClass]||48;
+  const deck={
+   cargo:'<path d="M13 14V6H23V14M27 15h8m3 0h8m3 0h8" class="ship-deck"/>',
+   tanker:'<path d="M14 14V6H24V14M29 11h27M32 9v6m10-6v6m10-6v6" class="ship-deck"/>',
+   tug:'<path d="M19 16V6H39L45 16M27 6V2H32V6" class="ship-deck"/>',
+   passenger:'<path d="M12 15V7H56L62 15M17 10h4m5 0h4m5 0h4m5 0h4" class="ship-deck"/>',
+   unknown:'<path d="M17 15V9H32V15M35 13h12" class="ship-deck"/>'
+  }[info.kind];
+  // Default bow points right (east), so reported COG 90° is zero rotation.
+  // Vessel shapes and length bands are illustrative, not precise hull drawings.
+  const course=info.reportedCourseDegrees;
+  const rotate=course===null?'':(' style="transform:rotate('+(course-90).toFixed(1)+'deg)"');
+  const html='<span class="cuyahoga-ship-marker pin-vessel cuyahoga-ship-'+info.kind+' cuyahoga-ship-'+info.widthClass+
+    '"><svg viewBox="0 0 72 30" aria-hidden="true" focusable="false"'+rotate+
+    '><path d="M3 17H59L69 12L66 20L59 24H13Z" class="ship-hull"/>'+
+    deck+'</svg></span>';
+  return L.divIcon({className:'cuyahoga-vessel-icon',html,iconSize:[width,38],iconAnchor:[width/2,19]});
+ }
  function speedCopy(v){
   return v.speedKnots===null?'Speed not reported':v.speedKnots.toFixed(1)+' kn reported';
  }
  function selectShip(v){
   state.selectedShip=String(v.mmsi);
+  const visual=core.vesselVisual(v);
   replaceFocus('LATEST RECEIVED AIS / OBSERVATION',v.name,
-   'AIS position reported '+locClock.format(new Date(v.seen))+'. '+speedCopy(v)+'. This location is a report, not a bridge arrival estimate.',
+   'AIS position reported '+locClock.format(new Date(v.seen))+'. '+speedCopy(v)+'. '+visual.label+' (AIS type, if reported). '+
+   (visual.reportedLengthMeters===null?'Length not reported.':'Reported length '+Math.round(visual.reportedLengthMeters*3.28084)+' feet. ')+
+   (visual.reportedCourseDegrees===null?'Course over ground unavailable.':'Reported course over ground '+Math.round(visual.reportedCourseDegrees)+' degrees. ')+
+   'The ship symbol is illustrative; this is not a bridge arrival estimate.',
    [{label:'Open the full ship tracker ↗',url:'/great-lakes-freighter-tracking/'}],
    'MMSI '+v.mmsi+' · '+v.source+' · coordinates '+v.lat.toFixed(4)+', '+v.lon.toFixed(4)+'. Do not navigate by a public AIS map.');
   if(state.map)state.map.setView([v.lat,v.lon],15,{animate:false});
@@ -219,10 +245,10 @@
   for(const v of result.vessels){
    const item=escText('li',''),btn=escText('button','');
    btn.type='button';
-   btn.append(escText('strong',v.name),escText('small',speedCopy(v)+' · '+locClock.format(new Date(v.seen))));
+   btn.append(escText('strong',v.name),escText('small',core.vesselVisual(v).label+' · '+speedCopy(v)+' · '+locClock.format(new Date(v.seen))));
    btn.addEventListener('click',()=>selectShip(v));item.append(btn);list.append(item);
    if(mapGroup.ships && state.mode==='live'){
-    const marker=L.marker([v.lat,v.lon],{title:v.name,alt:v.name+' recent AIS report',icon:mapPointIcon('ship')}).addTo(mapGroup.ships);
+    const marker=L.marker([v.lat,v.lon],{title:v.name,alt:v.name+' recent AIS report',icon:liveVesselIcon(v)}).addTo(mapGroup.ships);
     marker.bindTooltip(v.name);
     marker.on('click',()=>selectShip(v));
    }
