@@ -300,7 +300,7 @@ const urls = [
   { loc: "https://chrisizworski.com/great-lakes-beaches/", priority: "0.9", changefreq: "daily", lastmod: "2026-11-22" },
   { loc: "https://chrisizworski.com/great-lakes-beaches/around-the-lakes/", priority: "0.7", changefreq: "monthly", lastmod: "2026-11-22" },
   { loc: "https://chrisizworski.com/great-lakes-beaches/canada/", priority: "0.7", changefreq: "monthly", lastmod: "2026-11-22" },
-  { loc: "https://chrisizworski.com/best-michigan-beaches-today/", priority: "0.9", changefreq: "daily", lastmod: "2026-08-10" },
+  { loc: "https://chrisizworski.com/best-michigan-beaches-today/", priority: "0.9", changefreq: "daily", lastmod: "2026-11-22" },
   ...catalog.beaches.map((beach) => ({
     loc: `https://chrisizworski.com/great-lakes-beaches/${beach.slug}/`,
     priority: "0.7",

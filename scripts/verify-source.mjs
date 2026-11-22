@@ -475,6 +475,8 @@ const intentionalChanges = new Set([
 // Pin their exact source hashes so the known drift passes without broadly exempting
 // the routes from future parity checks.
 const committedDriftHashEntries = [
+  // Nov 22 2026: SHA256 pin for edited seasonal ranking; retain live-source parity protection.
+  ["/best-michigan-beaches-today/", "de52dc392dde1496f25e8b3d30cf9e3fa729604a152621dcc855abeee7480554"],
   // Nov 21 2026: SHA256-pinned shared ShoreFeel JS/CSS and 50 beach guides.
   // Nov 21 2026: reviewed 50 ShoreFeel interpretive beach guides, updated exact
   // body hashes after truthful dateModified/sitemap stamping. Preserve all other
