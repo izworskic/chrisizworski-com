@@ -103,6 +103,15 @@
    return;
   }
   age.textContent=result.checkedAt?'Feed checked '+locClock.format(new Date(result.checkedAt)):'Source check not available';
+  const credits=$('ais-source-credits');
+  if(credits){
+   credits.replaceChildren();
+   if(result.attributions?.length)credits.append(escText('span','AIS upstream source credits: '+result.attributions.map(a=>a.credit).join(' · ')));
+   else credits.append(escText('span','Source-by-source AIS credit not returned in the current response.'));
+   const link=escText('a','Open Waters licensing and attribution ↗');
+   link.href='https://openwaters.io/ais/';link.target='_blank';link.rel='noopener noreferrer';
+   credits.append(document.createTextNode(' · '),link);
+  }
   if(result.state==='REPORTS_AVAILABLE'){
    readout.textContent=result.count+' fresh AIS '+(result.count===1?'report':'reports')+' within the Cuyahoga research area';
    status.textContent=result.reason;
