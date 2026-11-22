@@ -39,8 +39,8 @@ function routes(page,failedMap=false){
  const leaflet=path.join(moduleRoot,"leaflet/dist");
  page.route("**/unpkg.com/leaflet@1.9.4/dist/leaflet.js",route=>route.fulfill({contentType:"application/javascript",body:failedMap?"":fs.readFileSync(path.join(leaflet,"leaflet.js"))}));
  page.route("**/unpkg.com/leaflet@1.9.4/dist/leaflet.css",route=>route.fulfill({contentType:"text/css",body:fs.readFileSync(path.join(leaflet,"leaflet.css"))}));
- const tile=Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScL/nwAAAABJRU5ErkJggg==","base64");
- page.route("**/tile.openstreetmap.org/**",route=>route.fulfill({contentType:"image/png",body:tile}));
+ const tile=Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAIAAAD91JpzAAAAFklEQVR4nGN89vY5AwMDEwMDAwMDAwAg4QK+zQo9MQAAAABJRU5ErkJggg==","base64");
+ page.route(/^https:\/\/[abc]\.tile\.openstreetmap\.org\//,route=>route.fulfill({contentType:"image/png",body:tile}));
  page.route("**/www.nps.gov/**",route=>route.abort());
 }
 (async()=>{
@@ -81,7 +81,7 @@ function routes(page,failedMap=false){
   assert.equal(await page.locator("#parkwayMap").isVisible(),false);
   await page.close();
   const blocked=await browser.newPage({viewport:{width:390,height:844}});routes(blocked);
-  await blocked.route("**/tile.openstreetmap.org/**",route=>route.abort());
+  await blocked.route(/^https:\/\/[abc]\.tile\.openstreetmap\.org\//,route=>route.abort());
   await blocked.goto(base,{waitUntil:"domcontentloaded"});
   await blocked.locator("#parkwayMapFallback").waitFor({state:"visible",timeout:25000});
   assert.equal(await blocked.locator("#parkwayMap").isVisible(),false,"Blank basemap collapses");
