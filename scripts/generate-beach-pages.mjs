@@ -245,6 +245,10 @@ for (const beach of catalog.beaches) {
   await writeFile(path.join(directory, "index.html"), detailPage(beach));
 }
 
+// Apply protected title, H1, first-answer and Pictured Rocks linking after
+// generating the authoritative 50-place pages. Rebuilds must never erase the
+// approved search treatments or the park-wide planner's visitor pathway.
+await import("./apply-beach-detail-search-overrides.mjs");
 
 // --- Crawlable beach index on the hub page -------------------------------
 // The interactive explorer builds its list in the browser, so before this the
