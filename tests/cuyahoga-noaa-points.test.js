@@ -37,6 +37,8 @@ test('documented incident candidate preserves broadcast positions and refuses ET
  assert.equal(result.stats.lines,8);
  assert.equal(result.stats.matchedIdentity,7);
  assert.equal(result.stats.matchedTimeAndBox,5);
+ assert.equal(result.stats.outsideResearchBox,1);
+ assert.equal(result.stats.invalidPosition,0);
  assert.equal(result.tracks.length,1);
  assert.equal(result.audit.tracks[0].validUniquePoints,4);
  assert.equal(result.audit.tracks[0].maxGapMinutes,95);
