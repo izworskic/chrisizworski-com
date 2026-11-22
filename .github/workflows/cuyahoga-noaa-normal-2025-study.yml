@@ -16,14 +16,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Verify existing NOAA normalization
-        run: node --test tests/cuyahoga-ais-audit.test.js tests/cuyahoga-noaa-points.test.js tests/cuyahoga-observation-clusters.test.js tests/cuyahoga-bridge-proximity.test.js tests/cuyahoga-coast-pilot-brackets.test.js
+        run: node --test tests/cuyahoga-ais-audit.test.js tests/cuyahoga-noaa-points.test.js tests/cuyahoga-observation-clusters.test.js tests/cuyahoga-bridge-proximity.test.js tests/cuyahoga-coast-pilot-brackets.test.js tests/cuyahoga-bridge-backtest.test.js
       - name: Analyze independently photographed ordinary ship visits
         shell: bash
         run: |
           set -euo pipefail
           command -v zstd
           mkdir -p research-output
-          for spec in '2025-08-15 366938760 SAM_LAUD' '2025-08-21 368251670 MARK_W_BARKER'; do
+          for spec in '2025-07-07 368251670 MARK_W_BARKER' '2025-08-15 366938760 SAM_LAUD' '2025-08-21 368251670 MARK_W_BARKER'; do
             read -r day mmsi ship <<< "$spec"
             echo "::group::$ship $day"
             archive="$RUNNER_TEMP/ais-$day.csv.zst"
@@ -56,6 +56,16 @@ jobs:
             rm -f "$archive"
             echo "::endgroup::"
           done
+      - name: Backtest independent dates without crossing-time ground truth
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/cuyahoga-bridge-backtest.mjs \
+            --input "2025-07-07:research-output/MARK_W_BARKER-2025-07-07-coast-pilot-brackets.json" \
+            --input "2025-08-15:research-output/SAM_LAUD-2025-08-15-coast-pilot-brackets.json" \
+            --input "2025-08-21:research-output/MARK_W_BARKER-2025-08-21-coast-pilot-brackets.json" \
+            --out "research-output/cuyahoga-independent-date-backtest.json" \
+            | tee "research-output/cuyahoga-independent-date-backtest-summary.json"
       - name: Publish evidence inventory, not bridge times
         shell: bash
         run: |
@@ -63,6 +73,7 @@ jobs:
           node <<'NODE'
           const fs = require('node:fs');
           const cases = [
+            {date:'2025-07-07',ship:'MARK_W_BARKER',independent:'https://www.boatnerd.com/vessels/lakers/interlake-steamship/mark-w-barker/'},
             {date:'2025-08-15',ship:'SAM_LAUD',independent:'https://www.boatnerd.com/vessels/lakers/grand-river-navigation/sam-laud/'},
             {date:'2025-08-21',ship:'MARK_W_BARKER',independent:'https://www.boatnerd.com/vessels/lakers/interlake-steamship/mark-w-barker/'}
           ];
