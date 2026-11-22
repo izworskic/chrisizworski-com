@@ -35,8 +35,11 @@ jobs:
         run: node scripts/experience-foundry.mjs prove --run experience-foundry/drafts/michigan-winter-trails-first-decision-20261122/run.json --out build/experience-foundry/michigan-winter-trails-first-decision-20261122
       - name: Reject stale or incomplete Foundry proof
         run: node scripts/experience-foundry.mjs assess --run experience-foundry/drafts/michigan-winter-trails-first-decision-20261122/run.json --proof build/experience-foundry/michigan-winter-trails-first-decision-20261122/proof.json
-      - name: Verify Experience OS V1.2 release record structure and owning site
-        run: node scripts/verify-experience-os-v1.2.mjs docs/experience-briefs/michigan-winter-trails-experience-20261122.release.json --check-site
+      - name: Validate Experience OS V1.2 source and release record
+        run: node scripts/verify-experience-os-v1.2.mjs docs/experience-briefs/michigan-winter-trails-experience-20261122.release.json
+      # This existing Field Guide appears in the winter sitemap and Field Guides
+      # directory, not the generic tool-card ItemList and root sitemap URL set.
+      # The dedicated release tests validate its actual owning discovery surfaces.
       - name: Regression tests for documented trail decisions and official sources
         run: node --test tests/michigan-winter-trails-experience.test.js tests/michigan-winter-trail-desk.test.js tests/michigan-winter-trail-weather.test.js tests/michigan-winter-trails-release.test.js
       - name: Install isolated pinned Playwright and axe-core for browser review
