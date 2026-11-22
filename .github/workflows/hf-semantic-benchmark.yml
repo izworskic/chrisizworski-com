@@ -1,0 +1,58 @@
+name: HF Adventure Finder offline relevance experiment
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - ".github/workflows/hf-semantic-benchmark.yml"
+      - "scripts/run-adventure-semantic-embeddings.mjs"
+      - "scripts/evaluate-adventure-semantic-search.mjs"
+      - "scripts/fixtures/adventure-semantic-queries.json"
+      - "scripts/fixtures/adventure-semantic-holdout.json"
+      - "tests/hugging-face-capabilities.test.js"
+      - "tests/hf-semantic-pilot.test.js"
+      - "docs/HUGGING_FACE_CAPABILITY_ADOPTION_20261122.md"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: hf-semantic-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  offline-benchmark:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      HF_HUB_DISABLE_TELEMETRY: "1"
+      DO_NOT_TRACK: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Verify no-model scripts and skill parity
+        run: |
+          node --test tests/hugging-face-capabilities.test.js tests/hf-semantic-pilot.test.js
+          node scripts/evaluate-adventure-semantic-search.mjs --json > "$RUNNER_TEMP/hf-lexical-baseline.json"
+      - name: Install pinned runtime into ephemeral runner, not repository
+        run: |
+          mkdir -p "$RUNNER_TEMP/hf-adventure-runtime"
+          npm install --prefix "$RUNNER_TEMP/hf-adventure-runtime" --no-fund --no-audit --no-save --package-lock=false @huggingface/transformers@4.3.2
+          echo "HF_RUNTIME_DIR=$RUNNER_TEMP/hf-adventure-runtime" >> "$GITHUB_ENV"
+      - name: Calculate pinned quantized embeddings and evaluate both query cohorts
+        run: |
+          node scripts/run-adventure-semantic-embeddings.mjs --out "$RUNNER_TEMP/hf-adventure-output"
+      - name: Upload temporary evaluation artifacts for review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hf-adventure-semantic-evidence
+          path: |
+            ${{ runner.temp }}/hf-adventure-output/report.json
+            ${{ runner.temp }}/hf-adventure-output/summary.md
+            ${{ runner.temp }}/hf-adventure-output/vectors.json
+            ${{ runner.temp }}/hf-lexical-baseline.json
+          retention-days: 7
+          if-no-files-found: warn
