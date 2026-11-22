@@ -54,20 +54,20 @@ async def run():
                 raise AssertionError("Missing park manager handoff")
             await page.locator("#show-history").click()
             await page.locator("#history-controls").wait_for(state="visible")
-            await page.get_by_text("NOAA fix 1 of 434").wait_for(timeout=15000)
+            await page.get_by_text("NOAA fix 97 of 434").wait_for(timeout=15000)
             if await page.locator(".pin-vessel").count() != 0:
                 raise AssertionError("Live markers leaked into historical mode")
             await page.locator("#history-next").click()
-            await page.get_by_text("NOAA fix 2 of 434").wait_for()
+            await page.get_by_text("NOAA fix 98 of 434").wait_for()
             await page.locator("#voyage-select").select_option("laud-2025-08-15")
-            await page.get_by_text("NOAA fix 1 of 215").wait_for()
+            await page.get_by_text("NOAA fix 37 of 215").wait_for()
             await page.locator("#show-live").click()
             await page.get_by_text("BROWSER TEST SHIP", exact=True).first.wait_for()
             if await page.locator(".pin-historic").count():
                 raise AssertionError("Historic marker leaked into recent mode")
             # A -> B -> A history must reset to same previously selected vessel/day state.
             await page.locator("#show-history").click()
-            await page.get_by_text("NOAA fix 1 of 215").wait_for()
+            await page.get_by_text("NOAA fix 37 of 215").wait_for()
             overflow = await page.evaluate("document.documentElement.scrollWidth > window.innerWidth + 2")
             if overflow:
                 raise AssertionError(f"Horizontal page overflow at {width}px")
@@ -84,7 +84,10 @@ async def run():
         nojs = await browser.new_context(viewport={"width":390,"height":844}, java_script_enabled=False)
         page = await nojs.new_page()
         await page.goto(URL, wait_until="domcontentloaded")
-        await page.get_by_text("Interactive vessel markers require JavaScript").wait_for()
+        fallback = page.locator("#river-workbench noscript")
+        assert await fallback.count() == 1, "No no-JS HTML fallback in page"
+        assert "Interactive vessel markers require JavaScript" in (await fallback.text_content() or "")
+        await page.screenshot(path=str(OUT/"cuyahoga-390-nojs.png"), full_page=True)
         assert await page.locator("noscript a[href*='clevelandmetroparks']").count() == 4
         cases.append({"viewport":390,"javascript":False,"status":"PASS","fallbackParkLinks":4})
         await nojs.close()
