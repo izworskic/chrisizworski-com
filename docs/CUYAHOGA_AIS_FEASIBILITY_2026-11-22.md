@@ -30,7 +30,7 @@ Example locally supplied historical sample format:
 Run:
 
     node scripts/cuyahoga-ais-audit.mjs --snapshot local-snapshot.geojson --tracks normalized-tracks.json
-    node --test tests/cuyahoga-ais-audit.test.mjs
+    node --test tests/cuyahoga-ais-audit.test.js
 
 Do not commit raw AIS track archives, personal receiver identifiers or unreviewed downloaded data. The sample format is a test interface, not an assertion about NOAA's published file schema.
 
