@@ -45,6 +45,18 @@ jobs:
           fetch_layer \
             'https://spatial.usace.army.mil/opjarcgis/rest/services/eHydroPub/National_Channel_Framework/MapServer/0/query' \
             'usace-national-channel-lines.geojson'
+          fetch_layer \
+            'https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_berthing/MapServer/40/query' \
+            'noaa-enc-berthing-bridge-lines.geojson'
+          fetch_layer \
+            'https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_approach/MapServer/91/query' \
+            'noaa-enc-approach-bridge-lines.geojson'
+          fetch_layer \
+            'https://tims.dot.state.oh.us/ags/rest/services/Assets/Bridge_Inventory/MapServer/0/query' \
+            'odot-state-bridge-inventory.geojson'
+          fetch_layer \
+            'https://spatial.usace.army.mil/opjarcgis/rest/services/eHydroPub/National_Channel_Framework/MapServer/1/query' \
+            'usace-national-channel-area.geojson'
       - name: Reject unsupported coordinate certainty and summarize evidence
         shell: bash
         run: |
@@ -53,7 +65,11 @@ jobs:
           const fs=require('node:fs');
           const cases=[
             {owner:'NOAA Office of Coast Survey',service:'ENC Harbour Bridge_line 87',file:'noaa-enc-harbour-bridge-lines.geojson',url:'https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer/87'},
-            {owner:'US Army Corps of Engineers',service:'National Channel Framework ChannelLine 0',file:'usace-national-channel-lines.geojson',url:'https://spatial.usace.army.mil/opjarcgis/rest/services/eHydroPub/National_Channel_Framework/MapServer/0'}
+            {owner:'US Army Corps of Engineers',service:'National Channel Framework ChannelLine 0',file:'usace-national-channel-lines.geojson',url:'https://spatial.usace.army.mil/opjarcgis/rest/services/eHydroPub/National_Channel_Framework/MapServer/0'},
+            {owner:'NOAA Office of Coast Survey',service:'ENC Berthing Bridge_line 40',file:'noaa-enc-berthing-bridge-lines.geojson',url:'https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_berthing/MapServer/40'},
+            {owner:'NOAA Office of Coast Survey',service:'ENC Approach Bridge_line 91',file:'noaa-enc-approach-bridge-lines.geojson',url:'https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_approach/MapServer/91'},
+            {owner:'Ohio DOT',service:'Ohio Bridge Inventory 0',file:'odot-state-bridge-inventory.geojson',url:'https://tims.dot.state.oh.us/ags/rest/services/Assets/Bridge_Inventory/MapServer/0'},
+            {owner:'US Army Corps of Engineers',service:'National Channel Framework ChannelArea 1',file:'usace-national-channel-area.geojson',url:'https://spatial.usace.army.mil/opjarcgis/rest/services/eHydroPub/National_Channel_Framework/MapServer/1'}
           ];
           const summary={checkedAt:new Date().toISOString(),bbox:[41.44,-81.75,41.54,-81.65],bridgeCrossingTimeValidated:false,navigationalRouteCertified:false,sources:[]};
           for(const item of cases) {
