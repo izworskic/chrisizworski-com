@@ -1,0 +1,51 @@
+"use strict";
+const test=require("node:test");
+const assert=require("node:assert/strict");
+const fs=require("node:fs"),path=require("node:path");
+const read=p=>fs.readFileSync(path.join(__dirname,"..",p),"utf8");
+
+test("Parkway planner asks where first, then interests and time, then shows the decision",()=>{
+  const html=read("public/blue-ridge-parkway/index.html");
+  const js=read("public/assets/blue-ridge-parkway.js");
+  assert.match(html,/data-flow-step="1"/);
+  assert.match(html,/data-flow-step="2"/);
+  assert.ok(html.indexOf('data-flow-step="1"')<html.indexOf('data-flow-step="2"'));
+  assert.match(html,/id="flowStartNext"/);
+  assert.match(html,/id="flowBack"/);
+  assert.match(html,/id="flowEdit"/);
+  assert.match(html,/id="flowResultSummary"/);
+  assert.match(html,/<details class="flow-options"/);
+  assert.match(html,/<details class="flow-all-stops"/);
+  assert.match(html,/<details class="flow-why"/);
+  assert.ok(html.indexOf('id="roadAlertSection"')<html.indexOf('id="route-map"'),"road cautions precede sightseeing");
+  assert.match(js,/showFlowStep\(3\)/);
+  assert.match(js,/blue_ridge_flow_step/);
+  assert.match(js,/if\(!selectedInterests\(\)\.length\)/);
+  assert.doesNotMatch(js,/\}\);build\(\);\}\);/,"no unasked-for live route on DOM ready");
+});
+test("Gateway cards and time chips change original native controls instead of building a second route engine",()=>{
+ const html=read("public/blue-ridge-parkway/index.html");
+ const js=read("public/assets/blue-ridge-parkway.js");
+ assert.match(html,/id="gateway"/);
+ assert.match(html,/id="finish"/);
+ assert.match(html,/id="hours"/);
+ assert.match(html,/id="tripDate"/);
+ assert.match(html,/id="startTime"/);
+ assert.match(html,/data-gateway="cherokee"/);
+ assert.match(html,/data-hours="6"/);
+ assert.match(js,/syncFinishOptions\(\)/);
+ assert.match(js,/function syncHours\(/);
+ assert.match(js,/new URLSearchParams\(\{gateway:/);
+ const snapshot=read("public/assets/blue-ridge-parkway-breakout.js");
+ assert.match(snapshot,/blue-ridge:edit/);
+ assert.doesNotMatch(snapshot,/setTimeout\(\(\)=>\$\("buildDrive"\)\?\.click/);
+});
+test("Main page does not lose search identity, photo licensing, or road/status caveats",()=>{
+ const html=read("public/blue-ridge-parkway/index.html");
+ assert.match(html,/<link rel="canonical" href="https:\/\/chrisizworski\.com\/blue-ridge-parkway\/">/);
+ assert.match(html,/https:\/\/chrisizworski\.com\/#person/);
+ assert.match(html,/Photo: Robert Stephens/);
+ assert.match(html,/Official NPS road status/);
+ assert.match(html,/The Parkway line is for orientation, not a verified open or drivable route/);
+ assert.match(html,/class="planner-noscript"/);
+});
