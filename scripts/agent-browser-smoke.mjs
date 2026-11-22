@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 'use strict';
 
-const fs = require('node:fs');
-const path = require('node:path');
-const { spawnSync } = require('node:child_process');
+import fs from 'node:fs';
+import path from 'node:path';
+import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 
-const repoRoot = path.resolve(__dirname, '..');
+const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const artifactRoot = path.join(repoRoot, 'artifacts', 'agent-browser-qa');
 const allowedHosts = new Set(['chrisizworski.com', 'www.chrisizworski.com', 'localhost', '127.0.0.1']);
 
