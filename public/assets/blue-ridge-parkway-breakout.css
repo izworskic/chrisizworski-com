@@ -3,3 +3,165 @@
 @media(max-width:980px){.hero,.gateway-page-hero{grid-template-columns:1fr}.hero-card{min-height:260px}.snapshot-grid{grid-template-columns:repeat(2,1fr)}.form-grid{grid-template-columns:1fr 1fr}.decision-layout,.route-workspace{grid-template-columns:1fr}.condition-grid,.selected-stop-grid,.gateway-grid,.answer-grid{grid-template-columns:repeat(2,1fr)}.today-intel-head{align-items:start;flex-direction:column}.now-summary{max-width:720px}}
 @media(max-width:620px){.site-head{height:auto;min-height:60px;padding:13px 16px;align-items:flex-start}.nav{gap:11px;font-size:11px;flex-wrap:wrap;justify-content:flex-end}.page{padding:20px 14px 58px}.breadcrumb{margin-bottom:15px}.hero h1,.gateway-page-hero h1{font-size:41px;letter-spacing:-1px}.lede{font-size:16px}.hero-card{min-height:230px}.today-intel{padding:18px 14px;border-radius:14px}.today-intel h2{font-size:30px}.snapshot-grid{grid-template-columns:1fr}.snapshot-card{min-height:0}.intel-foot{flex-direction:column}.planner-top{padding:17px 15px 8px;align-items:start;flex-direction:column}.planner-form{padding:8px 15px 17px}.form-grid{grid-template-columns:1fr}.decision-card{padding:17px}.stat-grid{grid-template-columns:1fr 1fr}.stat:nth-child(2){border-right:0}.stat:nth-child(-n+2){border-bottom:1px solid var(--line)}#parkwayMap{height:390px}.condition-grid,.selected-stop-grid,.gateway-grid,.answer-grid,.alternatives,.field-grid,.source-grid,.route-shapes{grid-template-columns:1fr}.section-head{align-items:start;flex-direction:column}.section-head h2{font-size:25px}.gateway-cta{align-items:flex-start;flex-direction:column}.trip-technical summary{flex-direction:column}.gateway-live{min-height:0}.footer{padding:0 14px 40px}}
 @media print{.site-head,.live-strip,.planner,.quick-row,.decision-actions,.today-intel,.gateway-cta{display:none!important}.page{max-width:none;padding:0}.map-card{break-inside:avoid}body{background:#fff}}
+/* Photo-led Blue Ridge field desk. Scope to the main tool; preserve ads and all gateways. */
+body.brp-experience{--bg:#f3f3ee;--ink:#172b30;--muted:#536468;--green:#1c5853;--green2:#356f6b;--deep:#183842;--line:#d8dfda;--softgreen:#e9f3ee;--shadow:0 17px 42px rgba(27,52,50,.09);background:var(--bg)}
+.brp-experience .page{max-width:1240px;padding-top:20px}
+.brp-experience .breadcrumb{margin-bottom:13px}
+.brp-experience .hero{grid-template-columns:minmax(0,1.04fr) minmax(0,.96fr);gap:clamp(18px,3vw,40px);align-items:center}
+.brp-experience .hero>div:first-child{padding:12px 0}
+.brp-experience .hero .eyebrow{color:#556b68;letter-spacing:1.45px}
+.brp-experience .hero h1{font-size:clamp(40px,5.15vw,68px);line-height:1.035;letter-spacing:-1.9px;margin:11px 0 17px;color:#17363d}
+.brp-experience .lede{font-size:clamp(15px,1.4vw,18px);line-height:1.58;color:#3e5356;max-width:640px}
+.brp-experience .hero-actions{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin:20px 0 5px}
+.brp-experience .hero-actions .primary-link{min-height:49px;padding:12px 21px;background:#1d5b55;border-radius:8px;box-shadow:0 5px 18px rgba(24,78,73,.16);font-size:15px}
+.brp-experience .hero-nps-link{font-size:14px;font-weight:750;text-underline-offset:4px;color:#245b61}
+.brp-experience .hero-proof{margin-top:17px;gap:8px 15px}
+.brp-experience .proof{border:0;background:none;padding:0;color:#526b68;font-size:12px;font-weight:650;border-radius:0}
+.brp-experience .hero-card{min-height:355px;aspect-ratio:1.2;border-radius:18px;background:#1b4552;box-shadow:0 19px 40px rgba(30,48,50,.18)}
+.brp-experience .hero-card img{opacity:1}
+.brp-experience .hero-card:after{background:linear-gradient(180deg,transparent 55%,rgba(11,25,31,.05) 63%,rgba(11,25,31,.82) 100%)}
+.brp-experience .hero-card-copy{left:20px;right:20px;bottom:17px}
+.brp-experience .hero-card-copy span{color:#e6e9db;font-size:11px}
+.brp-experience .hero-card-copy strong{font:700 25px/1.16 Georgia,serif;max-width:350px;color:#fff}
+.brp-experience .hero-card-copy p,.brp-experience .hero-card-copy a{font-size:12px;color:#f1f3eb}
+.brp-experience .hero-card-copy a{text-decoration:underline;text-underline-offset:3px}
+.brp-experience .planner{margin:20px 0 26px;border:0;border-radius:18px;box-shadow:0 14px 45px rgba(28,58,54,.10);scroll-margin-top:15px}
+.brp-experience .planner-top{padding:22px 25px 12px;align-items:center}
+.brp-experience .planner-top h2{font-size:clamp(28px,3vw,36px);letter-spacing:-.5px;color:#19383c}
+.brp-experience .planner-top p{font-size:14px;line-height:1.5}
+.brp-experience .planner-form{padding:10px 25px 23px}
+.brp-experience .form-grid{gap:13px}
+.brp-experience .field label,.brp-experience .interest-label{font-size:11px;color:#47615b}
+.brp-experience .field input,.brp-experience .field select{height:48px;border:1px solid #b8c9c3;border-radius:8px;font-size:15px;background:#fdfefd}
+.brp-experience .field input:focus-visible,.brp-experience .field select:focus-visible,.brp-experience a:focus-visible,.brp-experience button:focus-visible,.brp-experience .interest-row input:focus-visible+span{outline:3px solid #c9853b;outline-offset:3px}
+.brp-experience .interest-row span{font-size:14px;padding:8px 12px;border-radius:8px}
+.brp-experience .planner-actions .primary-button{min-height:49px;padding:12px 21px;font-size:15px;background:#1d5b55}
+.brp-experience .quick-row{padding:13px 24px;gap:8px}
+.brp-experience .quick-gateway{font-size:14px;font-weight:650;padding:5px 7px}
+.brp-experience .planner-status{font-size:13px}
+.brp-experience .planner-noscript{margin:0;padding:14px 25px;background:#f6eee4;color:#533e2b;font-size:14px}
+.brp-experience .results .decision-layout{margin:8px 0 25px}
+.brp-experience .decision-card{border-top:5px solid #b77c3e}
+.brp-experience .stat strong{font-size:clamp(19px,2vw,24px);font-variant-numeric:tabular-nums}
+.brp-experience .decision-card,.brp-experience .reason-card,.brp-experience .planb-card{border-radius:14px}
+.brp-experience .today-intel{margin:30px 0 42px;background:#e2e9e4;color:#17383e;box-shadow:none;padding:24px;border-radius:18px}
+.brp-experience .today-intel:before{display:none}
+.brp-experience .today-intel .eyebrow{color:#3f675a}
+.brp-experience .today-intel h2{color:#17383e;font-size:clamp(27px,3.2vw,39px)}
+.brp-experience .now-summary{font-size:14px;color:#476061;line-height:1.5;max-width:390px}
+.brp-experience .snapshot-grid{gap:12px}
+.brp-experience .snapshot-card{background:#fff;border:0;border-radius:12px;min-height:250px;color:#253e42;padding:18px;box-shadow:0 5px 18px rgba(24,58,56,.06)}
+.brp-experience .snapshot-card[data-state="warn"]{background:#fff5e9;box-shadow:inset 0 0 0 1px #e3c9a7}
+.brp-experience .snapshot-kicker{color:#40615e;font-size:11px;letter-spacing:.5px}
+.brp-experience .snapshot-state{color:#245a54;border:1px solid #bfcec8;background:#eff5f0;font-size:10px}
+.brp-experience .snapshot-card[data-state="warn"] .snapshot-state{background:#fae6cd;color:#764b22;border-color:#e7c599}
+.brp-experience .snapshot-card h3{color:#163b43;font-size:22px;line-height:1.16}
+.brp-experience .snapshot-card p,.brp-experience .snapshot-route{color:#526366;font-size:14px;line-height:1.55}
+.brp-experience .snapshot-meta{font-size:12px}
+.brp-experience .snapshot-meta span{color:#49605c;border-color:#d5dfd9}
+.brp-experience .snapshot-actions{margin-top:auto;padding-top:14px;flex-wrap:wrap}
+.brp-experience .snapshot-actions button{background:#1d5b55;color:#fff;font-size:13px;border-radius:8px;padding:10px 12px;min-height:42px}
+.brp-experience .snapshot-actions a{color:#245e59;font-size:13px}
+.brp-experience .intel-foot{color:#46645d;font-size:12px}
+.brp-experience .map-card,.brp-experience .timeline-card{box-shadow:0 8px 26px rgba(24,58,56,.04)}
+@media(max-width:900px){
+  .brp-experience .hero{grid-template-columns:minmax(0,1fr)}
+  .brp-experience .hero>div:first-child{padding:0}
+  .brp-experience .hero-card{min-height:240px;aspect-ratio:2.2}
+  .brp-experience .planner-top{align-items:start}
+  .brp-experience .snapshot-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:600px){
+  .brp-experience .page{padding:12px 14px 60px}
+  .brp-experience .hero{gap:14px}
+  .brp-experience .hero h1{font-size:clamp(36px,10vw,46px);letter-spacing:-1.25px;line-height:1.05}
+  .brp-experience .lede{font-size:15px;line-height:1.55}
+  .brp-experience .hero-proof{gap:6px 10px;margin-top:12px}
+  .brp-experience .proof{font-size:11px}
+  .brp-experience .hero-actions{margin:16px 0 4px}
+  .brp-experience .hero-actions .primary-link{flex:1;min-width:140px}
+  .brp-experience .hero-nps-link{font-size:13px}
+  .brp-experience .hero-card{min-height:170px;aspect-ratio:1.95;border-radius:12px}
+  .brp-experience .hero-card-copy{left:13px;bottom:11px}
+  .brp-experience .hero-card-copy strong{font-size:19px}
+  .brp-experience .hero-card-copy p{font-size:11px}
+  .brp-experience .planner{margin:14px 0 20px}
+  .brp-experience .planner-top{padding:18px 17px 9px;display:block}
+  .brp-experience .planner-top h2{font-size:28px}
+  .brp-experience .planner-top p{margin-top:9px}
+  .brp-experience .planner-form{padding:10px 17px 17px}
+  .brp-experience .form-grid{grid-template-columns:minmax(0,1fr)!important}
+  .brp-experience .quick-row{padding:12px 17px}
+  .brp-experience .today-intel{padding:18px 15px;margin:25px 0 35px}
+  .brp-experience .today-intel-head{display:block}
+  .brp-experience .now-summary{max-width:none;margin-top:12px}
+  .brp-experience .snapshot-grid{grid-template-columns:minmax(0,1fr)}
+  .brp-experience .snapshot-card{min-height:0}
+  .brp-experience .snapshot-card p{font-size:14px}
+  .brp-experience .intel-foot{flex-direction:column}
+  .brp-experience .stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .brp-experience .stat:nth-child(2){border-right:0}
+  .brp-experience .stat:nth-child(-n+2){border-bottom:1px solid var(--line)}
+  .brp-experience .decision-card{padding:17px}
+}
+@media(prefers-reduced-motion:reduce){.brp-experience{scroll-behavior:auto}}
+
+/* Parkway Roadbook: selected map marker, field note and stop timeline */
+.brp-experience .stop-route-strip{display:flex;gap:9px;min-width:0;overflow-x:auto;scroll-snap-type:x proximity;padding:3px 0 11px;margin-bottom:5px}
+.brp-experience .stop-route-strip[hidden],.brp-experience .map-fallback[hidden]{display:none}
+.brp-experience .route-step{flex:0 0 auto;display:flex;align-items:center;gap:10px;min-width:170px;max-width:240px;border:1px solid #b6cdbf;border-radius:10px;background:#fff;padding:11px;text-align:left;color:#254d43;cursor:pointer;scroll-snap-align:start}
+.brp-experience .route-step.is-selected{background:#e4f1e9;border-color:#1c5853;box-shadow:inset 0 -3px #1c5853}
+.brp-experience .route-step-num{flex:0 0 30px;display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:#1c5853;color:#fff;font-weight:800}
+.brp-experience .route-step-copy{display:grid;gap:2px;min-width:0}
+.brp-experience .route-step-copy strong{font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.brp-experience .route-step-copy small{font-size:12px;color:#486b5c}
+.brp-experience .route-workspace{grid-template-columns:minmax(0,1.06fr) minmax(0,.94fr);align-items:start;gap:13px}
+.brp-experience .route-side{display:grid;grid-template-rows:auto minmax(0,1fr);gap:13px;min-width:0}
+.brp-experience .map-card,.brp-experience .timeline-card,.brp-experience .stop-focus{border:0;border-radius:14px;background:#fff;box-shadow:0 8px 28px rgba(23,49,45,.07);overflow:hidden}
+.brp-experience .map-head strong,.brp-experience .timeline-head strong{font-size:15px}
+.brp-experience .map-head span,.brp-experience .timeline-head span{font-size:12px}
+.brp-experience #parkwayMap{height:min(58vw,570px);min-height:375px;background:#e2ebe5}
+.brp-experience #parkwayMap[hidden]{display:none}
+.brp-experience .map-caption{padding:11px 16px;font-size:13px;color:#4d655c;line-height:1.55}
+.brp-experience .map-fallback{padding:16px;background:#edf4ee;color:#344f44;font-size:14px}
+.brp-experience #parkwayMap .number-pin.is-active{transform:scale(1.2);box-shadow:0 0 0 5px rgba(32,93,82,.24),0 5px 17px rgba(18,61,53,.36)}
+.brp-experience #parkwayMap .leaflet-marker-icon:focus-visible{outline:3px solid #b67b36;outline-offset:4px}
+.brp-experience .stop-focus{border-top:4px solid #ba8244;padding:22px}
+.brp-experience .stop-focus-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.brp-experience .stop-kicker{font-size:11px;font-weight:850;text-transform:uppercase;letter-spacing:.11em;color:#547669}
+.brp-experience .stop-milepost{background:#204e52;border-radius:7px;color:#fff;font-size:14px;font-variant-numeric:tabular-nums;padding:7px 10px;white-space:nowrap}
+.brp-experience .stop-focus h3{font-size:clamp(25px,2.9vw,35px);line-height:1.13;margin:14px 0;color:#1d4245;letter-spacing:-.4px}
+.brp-experience .stop-focus-facts{display:flex;flex-wrap:wrap;gap:6px 15px;font-size:13px;color:#536b62}
+.brp-experience .stop-focus-facts strong{color:#284d44;font-variant-numeric:tabular-nums}
+.brp-experience .stop-interpretation{font:400 16px/1.57 Georgia,serif;color:#2c4340;margin:17px 0 10px}
+.brp-experience .stop-match-note{font-size:13px;color:#4a675b;margin:0 0 13px}
+.brp-experience .stop-focus-links{display:flex;flex-wrap:wrap;gap:9px 17px}
+.brp-experience .stop-focus-links a{color:#1b5c55;font-size:14px;font-weight:750;text-underline-offset:3px}
+.brp-experience .stop-map-note{font-size:12px;color:#65766a;line-height:1.45;margin:10px 0}
+.brp-experience .stop-focus-nav{display:flex;justify-content:space-between;gap:10px;margin-top:16px}
+.brp-experience .stop-focus-nav button,.brp-experience .stop-map-action{min-height:43px;border:1px solid #bcd5c6;border-radius:8px;background:#e7f1ea;color:#23584d;padding:9px 12px;font-size:13px;font-weight:750;cursor:pointer}
+.brp-experience .stop-focus-nav button:disabled{opacity:.45;cursor:default}
+.brp-experience .route-side .timeline-card{max-height:485px;overflow:auto}
+.brp-experience .timeline-item{grid-template-columns:67px 18px minmax(0,1fr);padding:13px 5px}
+.brp-experience .timeline-item.is-selected{background:#eaf4ec;border-radius:8px}
+.brp-experience .timeline-time,.brp-experience .timeline-meta{font-size:12px}
+.brp-experience .timeline-stop-action{border:0;background:none;color:#245650;padding:2px 0;font:700 17px/1.2 Georgia,serif;text-align:left;cursor:pointer;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px}
+.brp-experience .timeline-stop-action.is-selected{color:#a36332}
+.brp-experience .timeline-copy p,.brp-experience .timeline-return{font-size:13px}
+.brp-experience .selected-stop-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.brp-experience .stop-detail-card{background:#fff;border-radius:14px;padding:20px;box-shadow:0 8px 23px rgba(26,65,55,.055);min-width:0}
+.brp-experience .stop-detail-card.is-selected{box-shadow:inset 0 0 0 2px #6a9278,0 8px 23px rgba(26,65,55,.055)}
+.brp-experience .stop-detail-head{display:flex;gap:12px;align-items:flex-start}
+.brp-experience .stop-detail-number{flex:0 0 35px;height:35px;border-radius:50%;background:#1f5a52;color:#fff;display:grid;place-items:center;font-weight:850}
+.brp-experience .stop-detail-title h3{margin:0 0 6px;font-size:23px;line-height:1.16;color:#194641}
+.brp-experience .stop-detail-meta{font-size:13px;color:#5c6f64}
+.brp-experience .stop-match-row{display:flex;gap:6px;flex-wrap:wrap;margin:13px 0}
+.brp-experience .stop-match{font-size:12px;background:#e7efe7;color:#355d4c;border-radius:6px;padding:5px 8px}
+.brp-experience .stop-detail-block{margin:12px 0}
+.brp-experience .stop-detail-block span{font-size:11px;letter-spacing:.07em;text-transform:uppercase;font-weight:850;color:#547267}
+.brp-experience .stop-detail-block p{font-size:14px;line-height:1.55;color:#374d46;margin:3px 0}
+.brp-experience .stop-map-action{margin-top:8px}
+@media(max-width:900px){.brp-experience .route-workspace{grid-template-columns:minmax(0,1fr)}.brp-experience .route-side .timeline-card{max-height:none;overflow:visible}.brp-experience #parkwayMap{height:420px;min-height:0}}
+@media(max-width:600px){.brp-experience #parkwayMap{height:330px}.brp-experience .stop-focus{padding:18px 16px}.brp-experience .selected-stop-grid{grid-template-columns:minmax(0,1fr)}.brp-experience .stop-detail-card{padding:17px}.brp-experience .route-step{min-width:160px;max-width:195px}}
+
+.brp-experience .brp-sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
