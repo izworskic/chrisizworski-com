@@ -50,6 +50,21 @@ test('timeout retries within bound but programming errors fail immediately',asyn
  await assert.rejects(fetchWithBoundedRetry('https://example.test',{},bad.options),/bad code/);
  assert.equal(bad.calls,1);
 });
+test('each attempt receives a fresh request signal after a transient failure',async()=>{
+ const signals=[];
+ const f=setup([502,200],{fetchImpl:async(_,init)=>{
+  signals.push(init.signal);
+  return response(signals.length===1?502:200);
+ }});
+ let builds=0;
+ const result=await fetchWithBoundedRetry('https://example.test',()=>({
+  signal:AbortSignal.timeout(500),attempt:++builds
+ }),f.options);
+ assert.equal(result.status,200);
+ assert.equal(builds,2);
+ assert.equal(signals.length,2);
+ assert.notEqual(signals[0],signals[1]);
+});
 test('bounded 429 and 504 retry, but only maximum three attempts',async()=>{
  const f=setup([429,504,200]);
  assert.equal((await fetchWithBoundedRetry('https://example.test',{},f.options)).status,200);
