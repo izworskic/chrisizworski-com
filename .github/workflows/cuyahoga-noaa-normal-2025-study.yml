@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Verify existing NOAA normalization
-        run: node --test tests/cuyahoga-ais-audit.test.js tests/cuyahoga-noaa-points.test.js tests/cuyahoga-observation-clusters.test.js tests/cuyahoga-bridge-proximity.test.js
+        run: node --test tests/cuyahoga-ais-audit.test.js tests/cuyahoga-noaa-points.test.js tests/cuyahoga-observation-clusters.test.js tests/cuyahoga-bridge-proximity.test.js tests/cuyahoga-coast-pilot-brackets.test.js
       - name: Analyze independently photographed ordinary ship visits
         shell: bash
         run: |
@@ -47,6 +47,12 @@ jobs:
               --references data/cuyahoga/bridge-observation-references.json \
               --out "research-output/$ship-$day-reference-proximity.json" \
               > "research-output/$ship-$day-reference-summary.json"
+            node scripts/cuyahoga-coast-pilot-brackets.mjs \
+              --input "$out" \
+              --coast-pilot data/cuyahoga/noaa-coast-pilot-bridge-references.json \
+              --odot data/cuyahoga/odot-bridge-inventory-points.json \
+              --out "research-output/$ship-$day-coast-pilot-brackets.json" \
+              > "research-output/$ship-$day-coast-pilot-brackets-summary.ndjson"
             rm -f "$archive"
             echo "::endgroup::"
           done
@@ -65,12 +71,15 @@ jobs:
           for (const item of cases) {
             const d = JSON.parse(fs.readFileSync('research-output/'+item.ship+'-'+item.date+'-observations.json', 'utf8'));
             const e = JSON.parse(fs.readFileSync('research-output/'+item.ship+'-'+item.date+'-reference-proximity.json', 'utf8'));
-            result.cases.push({date:item.date,vessel:item.ship,sourceEvidence:item.independent,stats:d.stats,tracks:d.audit.tracks,referenceEvidence:e.analyses});
+            const pilot = JSON.parse(fs.readFileSync('research-output/'+item.ship+'-'+item.date+'-coast-pilot-brackets.json', 'utf8'));
+            const pilotVessel = pilot.vessels[0] || {bridgeReferenceEvents:[]};
+            result.cases.push({date:item.date,vessel:item.ship,sourceEvidence:item.independent,stats:d.stats,tracks:d.audit.tracks,referenceEvidence:e.analyses,coastPilotEvidence:{status:'CHART_REFERENCE_ONLY_NOT_BRIDGE_CROSSING',bridgeEtasEnabled:pilot.futureArrivalPredictionEnabled,bridgeReferenceEvents:pilotVessel.bridgeReferenceEvents,sourceObservedReferenceIntervals:pilotVessel.sourceObservedReferenceIntervals}});
             summary.push('', '### '+item.ship+' ('+item.date+')',
               'Identity-matching NOAA records: '+d.stats.matchedIdentity,
               'Accepted study-area positions: '+d.stats.matchedTimeAndBox,
               'Outside study area: '+d.stats.outsideResearchBox,
               'Track gap assessment: '+JSON.stringify(d.audit.tracks),
+              'NOAA Coast Pilot: '+JSON.stringify({brackets:pilotVessel.bridgeReferenceEvents.filter(x=>x.bracket).map(x=>({id:x.id,mile:x.riverMile,at:x.bracket.nearestObservedAt,gap:x.bracket.bracketDurationMinutes,odot:x.crossAgency.status})),insufficient:pilotVessel.bridgeReferenceEvents.filter(x=>!x.bracket).map(x=>({id:x.id,status:x.status})),futureEtaEnabled:false}),
               'Bridge-area references only: '+JSON.stringify(e.analyses.map(x=>({mmsi:x.mmsi,checks:x.referenceChecks.map(y=>({id:y.referenceId,status:y.status,closestDistanceMeters:y.closestObservedDistanceMeters,episodes:y.episodes.map(z=>({at:z.nearestObservedAt,nearMeters:z.nearestObservedDistanceMeters}))})),observedOrder:x.observedOrder}))),
               'Independent visit evidence: '+item.independent);
           }
