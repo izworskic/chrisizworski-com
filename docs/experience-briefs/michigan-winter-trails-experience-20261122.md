@@ -73,3 +73,6 @@ docs/experience-briefs/michigan-winter-trails-experience-20261122.release.json
 - Visitor conversion, GSC and AdSense lift: NOT MEASURED.
 
 The release evidence record stays in draft until deployed/live status can actually be substantiated.
+
+**Catalog verifier scope:** The generic Experience OS --check-site helper assumes a data-tool-id card in the main Tools ItemList and direct membership in the root sitemap.xml. This established Field Guide is instead a Field Guides section article in public/tools/index.html with canonical membership in public/sitemap-winter.xml; the root /sitemap.xml does not hold its URL. Moving it would change an unrelated search architecture. Run the Experience OS structural validator without --check-site and retain the owning tests for actual field-guide internal links and the winter sitemap. This is a known applicability limit, not a claim that the generic site integration check passed.
+
