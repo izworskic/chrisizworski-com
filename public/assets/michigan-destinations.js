@@ -71,52 +71,110 @@
   function visibleCards() {
     return cards.filter(card => !card.hidden);
   }
-  function updateMap() {
+  // Group close-by positions at broad zoom levels so touch targets do not
+  // overlap. These are map-selection groups, not additional real destinations.
+  function renderMarkers() {
     if (!map) return;
     markers.forEach(marker => map.removeLayer(marker));
     markers = [];
-    const positions = [];
-    const icon = window.L.divIcon({className: '', html: '<span class="map-marker" aria-hidden="true"></span>', iconSize: [18,18], iconAnchor: [9,9]});
-    visibleCards().forEach(card => {
-      const lat = Number(card.dataset.lat), lng = Number(card.dataset.lng);
-      if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
-      const name = card.querySelector('h3').textContent.trim();
-      const loc = card.querySelector('.place').textContent.trim();
-      const popup = document.createElement('div');
-      popup.className = 'map-popup';
-      const title = document.createElement('h3');
-      title.textContent = name;
-      const caption = document.createElement('p');
-      caption.textContent = loc;
-      const jump = document.createElement('a');
-      jump.href = '#' + card.id;
-      jump.textContent = 'Read destination & trip links →';
-      jump.addEventListener('click', event => {
+
+    const items = visibleCards().map(card => ({
+      card, lat: Number(card.dataset.lat), lng: Number(card.dataset.lng)
+    })).filter(item => Number.isFinite(item.lat) && Number.isFinite(item.lng));
+    const pixels = items.map(item => map.project([item.lat, item.lng], map.getZoom()));
+    // Anchor groups to a real destination. Never chain neighboring points
+    // into one state-wide cluster at small zoom levels.
+    const groups = [];
+    items.forEach((item, index) => {
+      const pixel = pixels[index];
+      let nearest = null;
+      let distanceSq = 56 * 56;
+      for (const group of groups) {
+        const dx = pixel.x - group.anchor.x;
+        const dy = pixel.y - group.anchor.y;
+        const distance = dx * dx + dy * dy;
+        if (distance < distanceSq) {
+          nearest = group;
+          distanceSq = distance;
+        }
+      }
+      if (nearest) nearest.members.push(item);
+      else groups.push({anchor: pixel, members: [item]});
+    });
+
+    function storyLink(card, label) {
+      const link = document.createElement('a');
+      link.href = '#' + card.id;
+      link.textContent = label;
+      link.addEventListener('click', event => {
         event.preventDefault();
         card.scrollIntoView({behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start'});
         card.querySelector('.primary-link')?.focus({preventScroll:true});
         map.closePopup();
       });
-      const actions = document.createElement('p');
+      return link;
+    }
+
+    for (const {members: group} of groups) {
+      const first = group[0];
+      const popup = document.createElement('div');
+      popup.className = 'map-popup';
+      const heading = document.createElement('h3');
+      const caption = document.createElement('p');
+      const actions = document.createElement('div');
       actions.className = 'map-popup-actions';
-      actions.append(jump);
-      const publishedLocation = card.querySelector('[data-map-google-location]');
-      if (publishedLocation) {
-        const view = document.createElement('a');
-        view.href = publishedLocation.href;
-        view.textContent = 'View destination area in Google Maps';
-        view.target = '_blank';
-        view.rel = 'noopener noreferrer';
-        actions.append(document.createTextNode(' · '), view);
+
+      if (group.length === 1) {
+        const card = first.card;
+        const name = card.querySelector('h3').textContent.trim();
+        heading.textContent = name;
+        caption.textContent = card.querySelector('.place').textContent.trim();
+        actions.append(storyLink(card, 'Read destination and trip links'));
+        const locationLink = card.querySelector('[data-map-google-location]');
+        if (locationLink) {
+          const view = document.createElement('a');
+          view.href = locationLink.href;
+          view.textContent = 'View destination area in Google Maps';
+          view.target = '_blank';
+          view.rel = 'noopener noreferrer';
+          actions.append(document.createTextNode(' · '), view);
+        }
+      } else {
+        heading.textContent = group.length + ' nearby destinations';
+        caption.textContent = 'Grouped for easier selection. Choose a place to read its field guide.';
+        actions.classList.add('map-popup-group');
+        group.forEach(item => {
+          const name = item.card.querySelector('h3').textContent.trim();
+          actions.append(storyLink(item.card, name));
+        });
       }
-      popup.append(title, caption, actions);
-      const marker = window.L.marker([lat,lng], {icon,title:name}).bindPopup(popup).addTo(map);
-      markers.push(marker);
-      positions.push([lat,lng]);
-    });
+      popup.append(heading, caption, actions);
+
+      const multiple = group.length > 1;
+      const icon = window.L.divIcon({
+        className: '',
+        html: multiple
+          ? '<span class="map-cluster" aria-hidden="true">' + group.length + '</span>'
+          : '<span class="map-marker" aria-hidden="true"></span>',
+        iconSize: [40,40], iconAnchor: [20,20]
+      });
+      const title = multiple
+        ? group.length + ' nearby destinations. Open to choose.'
+        : first.card.querySelector('h3').textContent.trim();
+      // Anchor the group to an actual listed destination. It is not a new
+      // inferred place or an invented geographic centroid.
+      markers.push(window.L.marker([first.lat,first.lng],{icon,title}).bindPopup(popup).addTo(map));
+    }
+  }
+
+  function updateMap() {
+    if (!map) return;
+    const positions = visibleCards().map(card => [Number(card.dataset.lat),Number(card.dataset.lng)])
+      .filter(coords => coords.every(Number.isFinite));
     if (positions.length > 1) map.fitBounds(positions, {padding:[22,22], maxZoom:8});
     else if (positions.length === 1) map.setView(positions[0],8);
     else map.setView([44.6,-85.4],6);
+    renderMarkers();
     if (location) {
       if (userPin) map.removeLayer(userPin);
       userPin = window.L.circleMarker([location.lat, location.lng], {radius:7,color:'#155b67',fillColor:'#fefdf5',fillOpacity:1,weight:3}).addTo(map).bindPopup('Your approximate location — not stored by this page');
@@ -190,6 +248,7 @@
     try {
       mapEl.textContent = '';
       map = window.L.map(mapEl, {scrollWheelZoom:false, zoomControl:true}).setView([44.6,-85.4],6);
+      map.on('zoomend', renderMarkers);
       // DOMContentLoaded is early enough for interaction, but lazy photos and
       // Auto ads may settle layout afterward. Keep Leaflet's cached pixel size current.
       if (typeof ResizeObserver !== 'undefined') {
