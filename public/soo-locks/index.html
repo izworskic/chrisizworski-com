@@ -18,6 +18,7 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
 <link rel="stylesheet" href="/assets/soo-lock-sim.css?v=20261019-ships">
+<link rel="stylesheet" href="/assets/soo-vessel-icons.css?v=20261122">
 <link rel="stylesheet" href="/assets/soo-lock-watch.css?v=20261121">
 <link rel="stylesheet" href="/assets/growth-commercial.css">
 <link rel="stylesheet" href="/assets/affiliate-commerce.css">
@@ -386,7 +387,13 @@ figure.fig.hero{margin:6px 0 28px}
   <div class="vessel-map-stage">
     <div id="sooVesselMap" role="region" aria-label="Live AIS vessel map centered on the Soo Locks"></div>
   </div>
-  <div class="soo-vessel-results"><h3>Vessels near the locks</h3><p>Tap a name to find its last reported position. Blue markers indicate reported movement; amber markers indicate little or no movement; gray means speed is unavailable. Positions are received reports, not a guaranteed transit schedule.</p><ul id="sooVesselList"><li>Waiting for vessel reports...</li></ul><p id="sooAisCredits">Source: Open Waters AIS. Individual source credits appear with the reports.</p></div>
+  <p class="soo-vessel-map-note">Ship shapes show the type reported by AIS, with larger symbols for longer vessels. Select a ship to see its last reported position and details.</p>
+  <details class="soo-vessel-legend">
+    <summary>What do the ship shapes mean?</summary>
+    <div id="sooVesselLegend" class="soo-vessel-legend-items" role="group" aria-label="AIS vessel type symbols"></div>
+    <p>Each outline represents a reported AIS category. Symbol size follows a small, medium or large length band, not the physical scale of the map. If AIS provides no type, the vessel is shown as unknown. A muted hull can mean low or unavailable reported speed.</p>
+  </details>
+  <div class="soo-vessel-results"><h3>Vessels near the locks</h3><p>Tap a vessel name to find its last reported position. Shapes distinguish reported vessel types; larger symbols indicate longer reported lengths. Reported speed and observation age appear with each vessel. These are received positions, not a guaranteed transit schedule.</p><ul id="sooVesselList"><li>Waiting for vessel reports...</li></ul><p id="sooAisCredits">Source: Open Waters AIS. Individual source credits appear with the reports.</p></div>
   <div class="live-map-panel">
     <div class="live-map-kicker">Live Great Lakes AIS tracking</div>
     <h3>Need the wider Great Lakes traffic picture?</h3>
@@ -709,7 +716,8 @@ figure.fig.hero{margin:6px 0 28px}
 
 </script>
 <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-<script defer src="/assets/soo-ais.js?v=20261121"></script>
+<script defer src="/assets/seaway-vessel-icons.js?v=20261108a"></script>
+<script defer src="/assets/soo-ais.js?v=20261122"></script>
 <script defer src="/assets/soo-lock-watch.js?v=20261121"></script>
 <script defer src="/assets/field-camera.js"></script>
 <section aria-label="How this tool was built" style="max-width:900px;margin:28px auto;padding:18px;overflow-wrap:anywhere"><p><a href="https://izworskic.github.io/projects/#soo-locks-method">See how channel distance becomes an arrival window</a>, with a worked example and public code. Built by <a href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a>.</p></section>

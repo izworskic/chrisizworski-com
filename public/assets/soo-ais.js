@@ -12,6 +12,10 @@
   const cardBody = document.getElementById('sooNextBody');
   const cardNow = document.getElementById('sooNextNow');
   let map, layer, focusLayer, fitted = false, busy = false, mapStarted = false, polling = false, previous;
+  let selectedMarker = null;
+  const visibleMarkers = new Map();
+  // Shared local SVG silhouettes, also used by the Seaway map.
+  const Icons = window.SeawayVesselIcons;
   const TZ = 'America/Detroit';
   const title = v => v.name || 'Vessel ' + v.mmsi;
   const age = v => Math.max(0, Math.round((Date.now() - Date.parse(v.seen)) / 60000));
@@ -34,6 +38,45 @@
     const L = v.lengthMeters;
     if (Number.isFinite(L)) return L >= 298 ? 11 : L >= 190 ? 9 : L >= 90 ? 7 : 5;
     return v.shipType >= 70 && v.shipType < 90 ? 9 : 6;
+  }
+  function typeLabel(v) {
+    if (!Icons) return 'Type unknown';
+    const kind = Icons.classify(v);
+    return Icons.KINDS.find(item => item.kind === kind)?.label || 'Type unknown';
+  }
+  function shipIcon(v, selected = false) {
+    if (!Icons) return null;
+    const shape = Icons.icon(v, { zoom: map ? map.getZoom() : 13, selected });
+    const [w, h] = shape.size;
+    return L.divIcon({
+      className: shape.className + ' soo-ais-symbol',
+      html: shape.html, iconSize: shape.size,
+      iconAnchor: [w / 2, h / 2], popupAnchor: [0, -h / 2]
+    });
+  }
+  function addShipMarker(v, into, selected = false) {
+    const icon = shipIcon(v, selected);
+    // If the optional symbol module fails, the map still retains clickable AIS observations.
+    return icon ? L.marker([v.lat, v.lon], {
+      icon, keyboard: true, title: title(v) + ' · ' + typeLabel(v)
+    }).addTo(into) : L.circleMarker([v.lat, v.lon], {
+      radius: radius(v), color: '#fff', weight: 2,
+      fillColor: v.speedKnots === null ? '#64748b' : v.speedKnots > 0.5 ? '#146c86' : '#a6651e',
+      fillOpacity: 0.95
+    }).addTo(into);
+  }
+  function renderLegend() {
+    const target = document.getElementById('sooVesselLegend');
+    if (!target || !Icons) return;
+    target.replaceChildren();
+    for (const kind of Icons.KINDS) {
+      const item = text('span', '', 'soo-vessel-legend-item type-' + kind.kind);
+      const glyph = text('span', '', 'soo-vessel-legend-glyph');
+      glyph.setAttribute('aria-hidden', 'true');
+      glyph.innerHTML = Icons.svg(kind.kind); // Authored, static SVG paths, never provider markup.
+      item.append(glyph, text('span', kind.label));
+      target.append(item);
+    }
   }
   const directionText = d => d === 'upbound' ? 'Upbound from Lake Huron, heading up to Lake Superior' : d === 'downbound' ? 'Downbound from Lake Superior, heading to the lower lakes' : 'Direction not reported';
   // USACE maintains the boat-schedule hotline only while the Visitor Center is open, May 1 to October 31.
@@ -114,13 +157,19 @@
   function focusShip(ship) {
     startMap();
     container.scrollIntoView({ block: 'center', behavior: 'smooth' });
-    if (!map) return;
+    if (!map || !Number.isFinite(ship.lat) || !Number.isFinite(ship.lon)) return;
+    if (selectedMarker?.getElement()) selectedMarker.getElement()?.classList.remove('is-selected');
     focusLayer.clearLayers();
-    const m = L.circleMarker([ship.lat, ship.lon], { radius: 13, color: '#165d71', weight: 3, fillColor: '#fff', fillOpacity: 0.6 }).addTo(focusLayer);
-    m.bindPopup(text('strong', title(ship)));
+    const mmsi = String(ship.mmsi || ship.id || '');
+    const present = visibleMarkers.get(mmsi);
+    const observed = previous?.vessels?.find(v => String(v.mmsi) === mmsi);
+    const m = present?.marker || addShipMarker(observed || ship, focusLayer, true);
+    selectedMarker = m;
+    m.getElement()?.classList.add('is-selected');
+    if (!present) m.bindPopup(text('strong', title(ship)));
     const zoom = Number(ship.channelMilesToLocks) > 8 ? 11 : 14;
     map.setView([ship.lat, ship.lon], zoom);
-    // Re-centre once the smooth scroll settles, so the ship is not left at the map's edge.
+    // Re-centre once smooth scrolling settles.
     setTimeout(() => { map.invalidateSize(); map.setView([ship.lat, ship.lon], zoom); m.openPopup(); }, 600);
   }
 
@@ -130,26 +179,32 @@
     const inLock = new Map(((data.nextShip && data.nextShip.inLock) || []).map(s => [s.mmsi, s]));
     list.replaceChildren();
     if (layer) layer.clearLayers();
+    if (focusLayer) focusLayer.clearLayers();
+    visibleMarkers.clear();
+    selectedMarker = null;
     const points = [];
     vessels.forEach(v => {
       const content = document.createElement('div'); content.append(text('strong', title(v)));
       const size = sizeTag(v);
+      content.append(text('p', 'Reported AIS type: ' + typeLabel(v)));
       if (size) content.append(text('p', size));
+      else if (Number.isFinite(v.lengthMeters)) content.append(text('p', 'Reported length: ' + feet(v.lengthMeters)));
       if (inLock.has(v.mmsi)) content.append(text('p', 'In the ' + inLock.get(v.mmsi).chamberName + ' now'));
       content.append(text('p', details(v)), text('p', 'MMSI ' + v.mmsi));
       if (v.course !== null) content.append(text('p', 'Course ' + Math.round(v.course) + '°'));
       if (v.destination) content.append(text('p', 'Reported destination: ' + v.destination));
       let marker;
       if (map) {
-        marker = L.circleMarker([v.lat, v.lon], { radius: radius(v), color: '#fff', weight: 2, fillColor: v.speedKnots === null ? '#64748b' : v.speedKnots > 0.5 ? '#146c86' : '#a6651e', fillOpacity: 0.95 }).addTo(layer);
-        marker.bindTooltip(text('span', title(v)), { direction: 'top' }).bindPopup(content);
+        marker = addShipMarker(v, layer);
+        marker.bindTooltip(text('span', title(v) + ' · ' + typeLabel(v)), { direction: 'top' }).bindPopup(content);
+        visibleMarkers.set(String(v.mmsi), { marker, v });
         points.push([v.lat, v.lon]);
       }
       const item = document.createElement('li');
       if (marker) {
         const button = text('button', title(v)); button.type = 'button'; button.addEventListener('click', () => { map.setView([v.lat, v.lon], 15); marker.openPopup(); container.scrollIntoView({ block: 'center', behavior: 'smooth' }); }); item.append(button);
       } else item.append(text('strong', title(v)));
-      const extra = [inLock.has(v.mmsi) ? 'in the ' + inLock.get(v.mmsi).chamberName + ' now' : null, size].filter(Boolean).join(' · ');
+      const extra = [typeLabel(v), inLock.has(v.mmsi) ? 'in the ' + inLock.get(v.mmsi).chamberName + ' now' : null, size || feet(v.lengthMeters)].filter(Boolean).join(' · ');
       item.append(text('span', (extra ? extra + ' · ' : '') + details(v))); list.append(item);
     });
     if (!vessels.length) list.append(text('li', 'No reports less than 30 minutes old were returned for this area. This does not mean there are no ships.'));
@@ -196,11 +251,18 @@
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' }).addTo(map);
       layer = L.layerGroup().addTo(map);
       focusLayer = L.layerGroup().addTo(map);
+      map.on('zoomend', () => {
+        for (const { marker, v } of visibleMarkers.values()) {
+          const updated = shipIcon(v, marker === selectedMarker);
+          if (updated && marker.setIcon) marker.setIcon(updated);
+        }
+      });
     } else container.textContent = 'Map could not load. Recent vessel reports remain available in the list below.';
     if (previous) render(previous, false);
   }
   window.SooAis = { focusShip, last: null };
   refresh.addEventListener('click', () => { startMap(); load(); });
+  renderLegend();
   startPolling();
   if ('IntersectionObserver' in window) {
     const observer = new IntersectionObserver(entries => { if (entries.some(e => e.isIntersecting)) { observer.disconnect(); startMap(); } }, { rootMargin: '300px' });
