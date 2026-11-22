@@ -1,0 +1,214 @@
+/* Interactive Cuyahoga shore watch. Reuses existing AIS endpoint, only public NOAA archive and park sources. */
+(function(){
+ 'use strict';
+ const core=window.CuyahogaWatchCore;
+ const $=id=>document.getElementById(id);
+ if(!core){$('vessel-status').textContent='Interactive data is unavailable. Use the official source links below.';return;}
+ const state={mode:'live',parks:null,bridges:null,history:null,live:null,selectedParkId:null,map:null,historyIndex:0,historyId:'barker-2025-07-07',selectedShip:null};
+ const mapGroup={parks:null,bridges:null,ships:null,history:null,selected:null};
+ const locClock=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'});
+ const escText=(tag,text,className)=>{const e=document.createElement(tag);e.textContent=String(text??'');if(className)e.className=className;return e};
+ const el=(tag,attrs={})=>{const e=document.createElement(tag);for(const [k,v] of Object.entries(attrs))e.setAttribute(k,v);return e};
+ function replaceFocus(kicker,title,description,actions=[],note=''){
+  const panel=$('river-focus');
+  panel.replaceChildren(escText('p',kicker,'eyebrow'),escText('h3',title),escText('p',description));
+  if(actions.length){
+   const row=escText('div','','detail-actions');
+   for(const a of actions){const link=escText('a',a.label);link.href=a.url;link.target='_blank';link.rel='noopener noreferrer';row.append(link);}
+   panel.append(row);
+  }
+  if(note)panel.append(escText('p',note,'detail-small'));
+ }
+ function mapPointIcon(kind,content){
+  if(!window.L)return null;
+  const classes={park:'pin-park',bridge:'pin-bridge',ship:'pin-vessel',historic:'pin-historic'};
+  return L.divIcon({className:'',html:'<div class="map-pin '+(classes[kind]||classes.bridge)+'" style="width:30px;height:30px">'+(kind==='ship'?'&#9632;':kind==='historic'?'&#9679;':kind==='park'?'&#10003;': '&#9646;')+'</div>',iconSize:[30,30],iconAnchor:[15,15]});
+ }
+ function initMap(){
+  if(!window.L){
+   $('cuyahoga-map').querySelector('.map-loading').textContent='Map unavailable. The four official park links and AIS status below still work.';
+   return;
+  }
+  state.map=L.map('cuyahoga-map',{scrollWheelZoom:false,zoomControl:true,preferCanvas:true,worldCopyJump:false});
+  state.map.setView([41.493,-81.698],14);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
+  }).addTo(state.map);
+  $('cuyahoga-map').querySelector('.map-loading')?.remove();
+  for(const key of ['parks','bridges','ships','history','selected'])mapGroup[key]=L.layerGroup().addTo(state.map);
+  state.map.on('tileerror',function(){
+   $('map-heading').title='Some map tiles are unavailable. Public parks and text links remain usable.';
+  });
+ }
+ function plotParks(){
+  if(!state.parks)return;
+  for(const park of state.parks.spots){
+   const btn=document.querySelector('[data-park="'+park.id+'"]');
+   if(btn){
+    btn.addEventListener('click',()=>choosePark(park.id,true));
+    btn.title=park.suitability;
+   }
+   if(mapGroup.parks){
+    const marker=L.marker([park.lat,park.lon],{title:park.name,alt:park.name+' approximate park area',icon:mapPointIcon('park')}).addTo(mapGroup.parks);
+    marker.bindTooltip(park.name,{direction:'top'});
+    marker.on('click',()=>choosePark(park.id,false));
+   }
+  }
+ }
+ function choosePark(id,move){
+  const park=state.parks?.spots.find(p=>p.id===id);
+  if(!park)return;
+  state.selectedParkId=id;
+  for(const btn of document.querySelectorAll('[data-park]'))btn.setAttribute('aria-current',String(btn.dataset.park===id));
+  replaceFocus('PUBLIC SHORE WATCH / PARK MANAGER VERIFIED',park.name,park.experience,[
+   {label:'Official park details ↗',url:park.officialUrl},
+   {label:'Find the park on a map ↗',url:core.safeMapsQuery(park.name)}
+  ],'Map marker indicates an approximate park area, not a verified entrance or a promised ship sighting. Check the park manager for current access.');
+  if(move&&state.map)state.map.setView([park.lat,park.lon],15,{animate:false});
+ }
+ function plotBridges(){
+  if(!state.bridges||!mapGroup.bridges)return;
+  for(const bridge of state.bridges.bridges){
+   if(bridge.channel!=='main')continue;
+   const marker=L.marker([bridge.latitude,bridge.longitude],{title:bridge.name,alt:bridge.name+' NOAA approximate bridge reference',icon:mapPointIcon('bridge')}).addTo(mapGroup.bridges);
+   marker.bindTooltip(bridge.name+' · river mile '+bridge.riverMile);
+   marker.on('click',()=>{
+    const conflict=state.bridges.knownConflicts?.find(c=>c.id===bridge.id);
+    const caveat=conflict?' NOAA and federal bridge regulations list different mile positions for this bridge.':' No current lift, opening or exact vessel crossing time is verified.';
+    replaceFocus('NOAA COAST PILOT / REFERENCE ONLY',bridge.name,
+      'The Coast Pilot identifies this '+bridge.structureType+' structure at river mile '+bridge.riverMile+'. It provides a rounded geographic reference, not a measured span line.'+caveat,
+      [{label:'Open NOAA Coast Pilot ↗',url:state.bridges.sourceUrl}],
+      'The Coast Pilot describes bridge geography, not live bridge operation or a legal viewing entrance.');
+   });
+  }
+ }
+ function speedCopy(v){
+  return v.speedKnots===null?'Speed not reported':v.speedKnots.toFixed(1)+' kn reported';
+ }
+ function selectShip(v){
+  state.selectedShip=String(v.mmsi);
+  replaceFocus('LATEST RECEIVED AIS / OBSERVATION',v.name,
+   'AIS position reported '+locClock.format(new Date(v.seen))+'. '+speedCopy(v)+'. This location is a report, not a bridge arrival estimate.',
+   [{label:'Open the full ship tracker ↗',url:'/great-lakes-freighter-tracking/'}],
+   'MMSI '+v.mmsi+' · '+v.source+' · coordinates '+v.lat.toFixed(4)+', '+v.lon.toFixed(4)+'. Do not navigate by a public AIS map.');
+  if(state.map)state.map.setView([v.lat,v.lon],15,{animate:false});
+ }
+ function renderLive(){
+  const status=$('vessel-status'),list=$('live-vessels'),readout=$('live-readout'),age=$('source-age');
+  list.replaceChildren();
+  const result=state.live;
+  if(!result){
+   status.textContent='No live source has been loaded yet.';
+   readout.textContent='Live AIS status unavailable';
+   return;
+  }
+  age.textContent=result.checkedAt?'Feed checked '+locClock.format(new Date(result.checkedAt)):'Source check not available';
+  if(result.state==='REPORTS_AVAILABLE'){
+   readout.textContent=result.count+' fresh AIS '+(result.count===1?'report':'reports')+' within the Cuyahoga research area';
+   status.textContent=result.reason;
+  }else{
+   readout.textContent=result.state==='UNAVAILABLE'?'Live AIS source unavailable':'No confirmed fresh local AIS positions';
+   status.textContent=result.reason;
+  }
+  if(mapGroup.ships)mapGroup.ships.clearLayers();
+  if(!result.vessels.length){
+   list.append(escText('li',result.reason));return;
+  }
+  for(const v of result.vessels){
+   const item=escText('li',''),btn=escText('button','');
+   btn.type='button';
+   btn.append(escText('strong',v.name),escText('small',speedCopy(v)+' · '+locClock.format(new Date(v.seen))));
+   btn.addEventListener('click',()=>selectShip(v));item.append(btn);list.append(item);
+   if(mapGroup.ships){
+    const marker=L.marker([v.lat,v.lon],{title:v.name,alt:v.name+' recent AIS report',icon:mapPointIcon('ship')}).addTo(mapGroup.ships);
+    marker.bindTooltip(v.name);
+    marker.on('click',()=>selectShip(v));
+   }
+  }
+ }
+ async function getLive(){
+  const refresh=$('refresh-ais');refresh.disabled=true;
+  try{
+   const response=await fetch('/api/freighter-ais',{cache:'no-store',signal:AbortSignal.timeout(12000)});
+   if(!response.ok)throw Error('AIS HTTP failure');
+   const data=await response.json();
+   state.live=core.classifyLive(data,Date.now());
+  }catch(_){
+   state.live=core.classifyLive(null,Date.now());
+  }finally{
+   refresh.disabled=false;
+   renderLive();
+  }
+ }
+ function renderHistory(){
+  const scrub=$('history-scrubber'),report=$('history-report');
+  const result=core.historicView(state.history,state.historyId,state.historyIndex);
+  if(mapGroup.history)mapGroup.history.clearLayers();
+  if(mapGroup.selected)mapGroup.selected.clearLayers();
+  if(result.state!=='HISTORICAL'){
+   scrub.disabled=true;$('history-prev').disabled=true;$('history-next').disabled=true;
+   report.textContent=result.reason;return;
+  }
+  const v=result.voyage;state.historyIndex=result.index;
+  scrub.disabled=false;scrub.max=String(v.fixes.length-1);scrub.value=String(result.index);
+  $('history-prev').disabled=result.index<=0;
+  $('history-next').disabled=result.index>=v.fixes.length-1;
+  report.textContent='NOAA fix '+(result.index+1)+' of '+v.fixes.length+' · '+locClock.format(new Date(result.observedAt))+
+   ' · '+result.observed.lat.toFixed(5)+', '+result.observed.lon.toFixed(5)+'. Archived, not live.';
+  if(mapGroup.history){
+   const stride=Math.max(1,Math.ceil(v.fixes.length/100));
+   for(let i=0;i<v.fixes.length;i+=stride){
+    const pt=v.fixes[i];L.circleMarker([pt.lat,pt.lon],{radius:2.4,color:'#397d8e',weight:1,fillOpacity:.48}).addTo(mapGroup.history).bindTooltip(locClock.format(new Date(pt.seen))+' · archived NOAA fix');
+   }
+   const pt=result.observed;
+   const marker=L.marker([pt.lat,pt.lon],{title:v.name+' archived fix',icon:mapPointIcon('historic')}).addTo(mapGroup.selected);
+   marker.bindTooltip(v.name+' · '+locClock.format(new Date(pt.seen)));
+   if(state.map)state.map.panTo([pt.lat,pt.lon],{animate:false});
+  }
+ }
+ function changeMode(mode){
+  state.mode=mode;
+  const historic=mode==='historic';
+  $('show-live').classList.toggle('active',!historic);$('show-history').classList.toggle('active',historic);
+  $('show-live').setAttribute('aria-pressed',String(!historic));$('show-history').setAttribute('aria-pressed',String(historic));
+  $('history-controls').hidden=!historic;$('live-controls').hidden=historic;
+  if(mapGroup.ships){if(historic)mapGroup.ships.clearLayers();else renderLive();}
+  if(mapGroup.history)mapGroup.history.clearLayers();
+  if(mapGroup.selected)mapGroup.selected.clearLayers();
+  if(historic){
+   renderHistory();
+   replaceFocus('NOAA 2025 / ARCHIVED BROADCAST FIXES','The voyage is not a timetable',
+    'Move between dated AIS points to inspect actual reported locations. A pause, gap or second passage cannot be filled in by an animation.',
+    [{label:'Download original NOAA data ↗',url:'https://coast.noaa.gov/accessais/'}]);
+  }else{
+   replaceFocus('RECENT AIS / UNKNOWN ARRIVAL TIMES','Ships can stop between the bends',
+    'Select a vessel to read its latest reported timestamp, or choose a public park to plan a shore watch. No future arrival estimates are inferred.',
+    [{label:'Open full Great Lakes ship tracker ↗',url:'/great-lakes-freighter-tracking/'}]);
+  }
+ }
+ async function loadReferenceData(){
+  const safeGet=async url=>{const r=await fetch(url,{cache:'force-cache',signal:AbortSignal.timeout(12000)});if(!r.ok)throw Error('No public resource');return r.json()};
+  const results=await Promise.allSettled([
+    safeGet('/cuyahoga-freighter-watch/viewpoints.json'),
+    safeGet('/cuyahoga-freighter-watch/bridges.json'),
+    safeGet('/cuyahoga-freighter-watch/noaa-historical-2025.json')]);
+  const parks=results[0].status==='fulfilled'?results[0].value:null;
+  if(core.validCatalog(parks)){state.parks=parks;plotParks();}
+  else replaceFocus('PARK SOURCE UNAVAILABLE','Check Cleveland Metroparks','The park directory could not be verified. Use the official park manager links in the text below.');
+  const bridges=results[1].status==='fulfilled'?results[1].value:null;
+  if(bridges?.schemaVersion===1&&Array.isArray(bridges.bridges)){state.bridges=bridges;plotBridges();}
+  const history=results[2].status==='fulfilled'?results[2].value:null;
+  if(history?.schemaVersion===1&&history.observationKind==='NOAA_HISTORICAL_BROADCAST_FIXES')state.history=history;
+  if(state.mode==='historic')renderHistory();
+ }
+ function wire(){
+  $('show-live').addEventListener('click',()=>changeMode('live'));
+  $('show-history').addEventListener('click',()=>changeMode('historic'));
+  $('refresh-ais').addEventListener('click',getLive);
+  $('voyage-select').addEventListener('change',e=>{state.historyId=e.target.value;state.historyIndex=0;renderHistory();});
+  $('history-scrubber').addEventListener('input',e=>{state.historyIndex=Number(e.target.value);renderHistory();});
+  $('history-prev').addEventListener('click',()=>{state.historyIndex--;renderHistory();});
+  $('history-next').addEventListener('click',()=>{state.historyIndex++;renderHistory();});
+ }
+ initMap();wire();loadReferenceData();getLive();
+})();
