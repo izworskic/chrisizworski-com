@@ -48,3 +48,10 @@ npm run verify:all
 Dedicated `ShoreFeel beach microclimate browser QA` exercises actual Chromium phone 390px and desktop 1280px with explicitly synthetic API sources; checks report values, source failure, canonical, page layout, overflow and working discovery links. Existing Michigan and U.S. region acceptance still runs. Browser source mocks validate interaction and visual state **not** accuracy of upstream weather providers; scientific uncertainty remains.
 
 **Release:** PR remains unmerged until owner requests merge. Review actual browser screenshots, downstream build assertions and Vercel preview. Never alter Auto ads, canonical/Person contracts, Search Console, privacy, maps, official swimming safety or visitor source confidence to force a green build.
+
+## Final code review corrections for release
+
+- **Public access before weather:** For U.S. parks with a verified catalog `accessAlert`, every generated individual field note includes the escaped original notice beside the official park link. In particular Big Bay State Park retains its published beach-parking construction advisory. The warning remains visible without JavaScript.
+- **Canadian ECCC licence:** All Ontario individual field notes render attribution and a direct link to the Environment and Climate Change Canada Data Server End-use Licence, even if the API is unavailable or JavaScript is disabled. The existing API's original licence contract and the regional explorer remain unchanged.
+- The 34 static HTML pages are regenerated from the same catalog and generator, and tests require all 18 licence links and each nonempty U.S. park alert. Do not suppress these tests on publication.
+
