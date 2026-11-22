@@ -4,6 +4,13 @@
 @media(max-width:950px){.map-layout{grid-template-columns:minmax(0,1fr)}.action-rail{display:grid;grid-template-columns:1fr 1fr}.places{grid-column:span 2}.places #place-buttons{display:grid;grid-template-columns:1fr 1fr;gap:6px}.map-frame #cuyahoga-map{height:min(58vh,570px);min-height:410px}.lead{grid-template-columns:1fr}.lead-status{max-width:450px}.story{grid-template-columns:1fr;gap:8px}.source-grid{gap:15px}}
 @media(max-width:600px){.sitebar-note{display:none}.sitebar{padding:11px 14px}.sitebar .back{font-size:.74rem}.lead{padding:23px 16px 12px;gap:11px}.lead h1{font-size:clamp(2.55rem,12vw,4rem)}.lead-status{max-width:none}.map-layout{gap:10px}.map-header h2{font-size:1.6rem}.modes{width:100%}.mode{flex:1;font-size:.79rem}.workbench{padding:0 10px}.map-frame{border-radius:12px}.map-frame #cuyahoga-map{height:46vh;min-height:345px}.map-key{gap:8px;font-size:.64rem;padding:7px}.action-rail{grid-template-columns:1fr}.places{grid-column:auto}.places #place-buttons{display:block}.panel{padding:15px}.story,.sources{margin-top:35px}.story>div:last-child{font-size:1.04rem}.source-grid{grid-template-columns:1fr}.footer{flex-direction:column;align-items:start}.focus-panel{min-height:115px}.map-caveat{padding:12px 8px}}
 
+
+.bridge-picker{border-top:1px solid var(--line);margin:12px 0 0;padding:12px 2px 0}
+.bridge-picker summary{font-weight:760;font-size:.88rem;color:var(--river);cursor:pointer;min-height:40px;display:list-item;padding:6px}
+.bridge-picker[open] summary{margin-bottom:8px}
+.bridge-picker label{margin-top:4px}
+.bridge-picker select{max-width:100%;font-size:.83rem}
+
 /* Evidence stays beside the visitor's park decision; no extra alert stack. */
 .place-button .park-signal{display:block;font-size:.73rem;font-weight:700;color:#186371;margin-top:4px}
 .focus-action{display:inline-flex;margin:12px 0 0;background:#155b6b;color:#fff;border:0;border-radius:8px;padding:10px 14px;font-size:.85rem;font-weight:750;min-height:42px;align-items:center}
