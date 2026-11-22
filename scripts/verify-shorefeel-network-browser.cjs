@@ -102,11 +102,15 @@ function payload(place,mode){
 
     const info=await page.evaluate(()=>{
      const el=document.querySelector('.shorefeel-interpretation p');
-     return {viewport:document.documentElement.clientWidth,
+     const viewport=document.documentElement.clientWidth;
+     const oversized=[...document.querySelectorAll('body *')].map(e=>({el:e,r:e.getBoundingClientRect()}))
+      .filter(x=>x.r.width>0&&(x.r.right>viewport+2||x.r.left< -2))
+      .slice(0,12).map(x=>({node:x.el.tagName+'.'+String(x.el.className||'').slice(0,60),left:Math.round(x.r.left),right:Math.round(x.r.right)}));
+     return {viewport,
       pageWidth:document.documentElement.scrollWidth,
-      bodyPx:parseFloat(getComputedStyle(el).fontSize)};
+      bodyPx:parseFloat(getComputedStyle(el).fontSize),oversized};
     });
-    assert.ok(info.pageWidth<=info.viewport+2,'horizontal overflow at '+width+' '+place.slug);
+    assert.ok(info.pageWidth<=info.viewport+2,'horizontal overflow at '+width+' '+place.slug+' '+JSON.stringify(info.oversized));
     assert.ok(info.bodyPx>=14,'body prose needs readable size '+place.slug);
     assert.deepEqual(errors,[],'browser errors '+place.slug);
     await page.screenshot({path:path.join(out,'network-'+place.slug+'-'+width+'.png'),fullPage:true});
