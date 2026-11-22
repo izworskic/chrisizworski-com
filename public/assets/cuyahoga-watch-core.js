@@ -23,6 +23,7 @@
       .map(v=>({mmsi:String(v.mmsi),name:String(v.name||'Unidentified vessel').slice(0,110),
         lat:v.lat,lon:v.lon,seen:v.seen,
         speedKnots:numberInRange(v.speedKnots,0,100)?v.speedKnots:null,
+        course:numberInRange(v.course,0,359.9)?v.course:null,
         lengthMeters:numberInRange(v.lengthMeters,1,600)?v.lengthMeters:null,
         shipType:Number.isInteger(v.shipType)?v.shipType:null,
         source:String(v.source||'AIS report').slice(0,90)}))
@@ -74,6 +75,24 @@
     const k=Math.PI/180,dLat=(b.lat-a.lat)*k,dLon=(b.lon-a.lon)*k;
     const half=Math.sin(dLat/2)**2+Math.cos(a.lat*k)*Math.cos(b.lat*k)*Math.sin(dLon/2)**2;
     return EARTH_RADIUS_METERS*2*Math.asin(Math.min(1,Math.sqrt(half)))*MILES_PER_METER;
+  }
+
+  function vesselVisual(v){
+    const t=Number.isInteger(v?.shipType)?v.shipType:null;
+    const kind=t!==null&&t>=70&&t<80?'cargo':
+      t!==null&&t>=80&&t<90?'tanker':
+      t===31||t===32||t===52?'tug':
+      t!==null&&t>=60&&t<70?'passenger':'unknown';
+    const widthClass=typeof v?.lengthMeters==='number'&&Number.isFinite(v.lengthMeters)
+      ?v.lengthMeters>=200?'large':v.lengthMeters>=80?'medium':'small':'not-reported';
+    const course=numberInRange(v?.course,0,359.9)?v.course:null;
+    return {
+      kind,widthClass,reportedLengthMeters:numberInRange(v?.lengthMeters,1,600)?v.lengthMeters:null,
+      reportedCourseDegrees:course,
+      illustrationOnly:true,actualHullGeometryKnown:false,
+      label:{cargo:'Cargo vessel',tanker:'Tanker',tug:'Tug or towing vessel',
+        passenger:'Passenger vessel',unknown:'Vessel type not reported'}[kind]
+    };
   }
   function reportedMotion(v){
     if(!v||v.speedKnots===null||!numberInRange(v.speedKnots,0,100))
@@ -139,5 +158,5 @@
   function safeMapsQuery(name){
     return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(String(name||'')+', Cleveland, Ohio');
   }
-  return Object.freeze({REGION,inArea,recent,classifyLive,validCatalog,historyDay,historicView,firstRiverFixIndex,straightLineMiles,reportedMotion,parkObservation,historicParkMatch,bridgeNoticeContext,safeMapsQuery});
+  return Object.freeze({REGION,inArea,recent,classifyLive,validCatalog,historyDay,historicView,firstRiverFixIndex,straightLineMiles,vesselVisual,reportedMotion,parkObservation,historicParkMatch,bridgeNoticeContext,safeMapsQuery});
 });
