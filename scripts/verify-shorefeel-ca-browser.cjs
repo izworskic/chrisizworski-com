@@ -93,6 +93,61 @@ async function main(){
   output.push({width,...metrics});
   await ctx.close();
  }
+ // Unlike the blocked-tile fallback scenarios above, this exercises a working
+ // map with deterministic tile responses, including the actual Leaflet controls.
+ // No network calls to OpenStreetMap are made by this fixture.
+ const zoomCtx=await browser.newContext({
+  viewport:{width:390,height:850},isMobile:true,hasTouch:true,reducedMotion:'reduce'
+ });
+ const tile=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/pQAAAABJRU5ErkJggg==','base64');
+ await zoomCtx.route('https://**/*',route=>route.abort());
+ await zoomCtx.route('https://tile.openstreetmap.org/**',route=>route.fulfill({
+  status:200,contentType:'image/png',body:tile
+ }));
+ await zoomCtx.route('**/api/shorefeel-ca?*',route=>{
+  const slug=new URL(route.request().url()).searchParams.get('beach');
+  return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(fixture(slug))});
+ });
+ const zoomPage=await zoomCtx.newPage();
+ await zoomPage.goto(origin+'/great-lakes-beaches/canada/',{waitUntil:'domcontentloaded'});
+ await zoomPage.waitForFunction(()=>document.querySelector('#report-temp')?.textContent==='2°C');
+ await zoomPage.waitForFunction(()=>document.querySelector('#shore-map .leaflet-tile-loaded')!==null,{timeout:14000});
+ assert.equal(await zoomPage.locator('#map-fallback').isVisible(),false,'working tile layer must remain available');
+ const mapSurface=zoomPage.locator('#shore-map');
+ assert.equal(await mapSurface.evaluate(el=>el.classList.contains('leaflet-touch-zoom')),true,
+  'mobile map must register Leaflet two-finger touch zoom');
+ const zoomIn=zoomPage.locator('#shore-map .leaflet-control-zoom-in');
+ const zoomOut=zoomPage.locator('#shore-map .leaflet-control-zoom-out');
+ assert.ok(await zoomIn.isVisible(),'visible zoom-in control');
+ assert.ok(await zoomOut.isVisible(),'visible zoom-out control');
+ const readTileZoom=()=>zoomPage.evaluate(()=>{
+  const imgs=[...document.querySelectorAll('#shore-map img.leaflet-tile-loaded')];
+  return Math.max(-1,...imgs.map(img=>{
+   const m=new URL(img.src).pathname.match(/^\/(\d+)\//);
+   return m?Number(m[1]):-1;
+  }));
+ });
+ const before=await readTileZoom();
+ assert.ok(before>=0,'real map tile was loaded before zoom test');
+ await zoomIn.click();
+ await zoomPage.waitForFunction(before=>{
+  const imgs=[...document.querySelectorAll('#shore-map img.leaflet-tile-loaded')];
+  return imgs.some(img=>{
+   const m=new URL(img.src).pathname.match(/^\/(\d+)\//);
+   return m&&Number(m[1])>before;
+  });
+ },before,{timeout:10000});
+ await zoomOut.click();
+ await zoomPage.waitForFunction(before=>{
+  const imgs=[...document.querySelectorAll('#shore-map img.leaflet-tile-loaded')];
+  return imgs.some(img=>{
+   const m=new URL(img.src).pathname.match(/^\/(\d+)\//);
+   return m&&Number(m[1])===before;
+  });
+ },before,{timeout:10000});
+ assert.equal(await zoomPage.locator('#map-fallback').isVisible(),false);
+ await zoomPage.screenshot({path:path.join(OUT,'canada-mobile-working-map-zoom-390.png')});
+ await zoomCtx.close();
  const ctx=await browser.newContext({viewport:{width:390,height:850}});
  await ctx.route('**/api/shorefeel-ca?*',route=>route.fulfill({status:200,contentType:'application/json',
   body:JSON.stringify(fixture(new URL(route.request().url()).searchParams.get('beach'),true))}));
