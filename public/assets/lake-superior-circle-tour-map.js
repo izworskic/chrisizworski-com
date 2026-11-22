@@ -37,6 +37,7 @@ let selectedStopId = null;
 let focusedPresetDay = null;
 const overviewBounds = [[-92.5,45.62],[-84.0,49.3]];
 let gatewayPopup = null;
+let stopPopup = null;
 let filterState = {region: window.circleTourRegion || "all", activity: window.circleTourActivity || "all"};
 let presetState = readPresetState();
 
@@ -198,6 +199,7 @@ function dayRouteFeatures() {
 }
 
 function focusPresetDay(number) {
+  stopPopup?.popup.remove();
   const day = presetState.itinerary.find(item => item.day === number);
   focusedPresetDay = day?.day ?? null;
   if (!map?.getLayer("day-route-lines")) return;
@@ -231,6 +233,10 @@ function refreshSources() {
   map?.getSource("circle-stops")?.setData(stopFeatures());
   map?.getSource("day-routes")?.setData(dayRouteFeatures());
   if (selectedStopId) updateSelection(selectedStopId);
+  if (stopPopup) {
+    const selected = page.hasStop(stopPopup.id);
+    stopPopup.toggle.textContent = selected ? "Remove from my trip" : "Add to my trip";
+  }
 }
 
 function updateSelection(id) {
@@ -270,11 +276,79 @@ function updateSelection(id) {
 }
 
 function selectStop(id, {move = true, measure = false} = {}) {
+  if (stopPopup && stopPopup.id !== id) stopPopup.popup.remove();
   updateSelection(id);
   if (move && map) {
     map.easeTo({center: STOP_COORDINATES[id], zoom: Math.max(map.getZoom(), 7), duration: matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 550});
   }
   if (measure) page.track("map-marker-open", {stop: Number(id), days: presetState.days});
+}
+
+function openStopDetails(id) {
+  const card = document.getElementById(`stop-${id}`);
+  if (!card.classList.contains("open")) card.querySelector(".stop-header").click();
+  card.scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start"});
+  card.querySelector(".stop-main").focus({preventScroll: true});
+  page.track("map-stop-detail", {stop: Number(id)});
+}
+
+function openStopPopup(id) {
+  stopPopup?.popup.remove();
+  gatewayPopup?.remove();
+  selectStop(id, {move: false, measure: true});
+  const stop = cardData(id);
+  const content = document.createElement("div");
+  content.className = "circle-tour-stop-popup";
+  const title = document.createElement("strong");
+  title.textContent = stop.name;
+  const note = document.createElement("p");
+  const day = stopDay(id);
+  note.textContent = day ? `Day ${day} on the selected route` : "Circle Tour stop";
+  const details = document.createElement("a");
+  details.href = `#stop-${id}`;
+  details.textContent = "View stop guide";
+  details.addEventListener("click", (event) => {
+    event.preventDefault();
+    popup.remove();
+    openStopDetails(id);
+  });
+  const toggle = document.createElement("button");
+  toggle.type = "button";
+  toggle.addEventListener("click", () => page.toggleStop(id));
+  const actions = document.createElement("div");
+  actions.className = "circle-tour-stop-popup-actions";
+  actions.append(details, toggle);
+  content.append(title, note, actions);
+  const popup = new maplibreApi.Popup({offset: 12, closeButton: true, closeOnClick: false, maxWidth: "min(260px, 75vw)"})
+    .setLngLat(STOP_COORDINATES[id]).setDOMContent(content);
+  stopPopup = {id, popup, toggle};
+  popup.on("close", () => { if (stopPopup?.popup === popup) stopPopup = null; });
+  refreshSources();
+  popup.addTo(map);
+}
+
+function handleMapClick(event) {
+  const {x, y} = event.point;
+  if (map.queryRenderedFeatures(event.point, {layers: ["gateway-halo", "gateway-label"]}).length) {
+    openGatewayPopup({measure: true});
+    return;
+  }
+  const radius = 14;
+  const hits = map.queryRenderedFeatures([[x-radius, y-radius], [x+radius, y+radius]], {layers: ["stop-circles", "stop-labels"]});
+  let nearest = null;
+  let bestDistance = 22 ** 2;
+  for (const hit of hits) {
+    const id = String(hit.properties.id);
+    if (!STOP_COORDINATES[id]) continue;
+    const point = map.project(STOP_COORDINATES[id]);
+    const distance = (point.x-x) ** 2 + (point.y-y) ** 2;
+    if (distance < bestDistance) {
+      nearest = id;
+      bestDistance = distance;
+    }
+  }
+  if (nearest) openStopPopup(nearest);
+  else stopPopup?.popup.remove();
 }
 
 function gatewayPopupHtml() {
@@ -315,6 +389,7 @@ async function hydrateGatewayPopup() {
 
 function openGatewayPopup({move = true, measure = false} = {}) {
   if (!map || !maplibreApi) return;
+  stopPopup?.popup.remove();
   if (gatewayPopup) gatewayPopup.remove();
   gatewayPopup = new maplibreApi.Popup({offset: 18, closeButton: true, maxWidth: "310px"})
     .setLngLat(MACKINAC_GATEWAY.coordinates)
@@ -411,12 +486,11 @@ try {
       paint:{"text-color":"#172d22","text-halo-color":"#ffffff","text-halo-width":1.5}
     });
 
-    map.on("click", "stop-circles", (event) => selectStop(String(event.features[0].properties.id), {measure: true}));
+    map.on("click", handleMapClick);
     for (const layer of ["stop-circles", "stop-labels"]) {
       map.on("mouseenter", layer, () => { map.getCanvas().style.cursor = "pointer"; });
       map.on("mouseleave", layer, () => { map.getCanvas().style.cursor = ""; });
     }
-    map.on("click", "gateway-halo", () => openGatewayPopup({measure: true}));
     for (const layer of ["gateway-halo", "gateway-core", "gateway-label"]) {
       map.on("mouseenter", layer, () => { map.getCanvas().style.cursor = "pointer"; });
       map.on("mouseleave", layer, () => { map.getCanvas().style.cursor = ""; });
@@ -438,18 +512,18 @@ document.getElementById("mapStopToggle").addEventListener("click", () => {
 document.getElementById("mapStopLink").addEventListener("click", (event) => {
   if (!selectedStopId) return;
   event.preventDefault();
-  const card = document.getElementById(`stop-${selectedStopId}`);
-  if (!card.classList.contains("open")) card.querySelector(".stop-header").click();
-  card.scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start"});
-  page.track("map-stop-detail", {stop: Number(selectedStopId)});
+  stopPopup?.popup.remove();
+  openStopDetails(selectedStopId);
 });
 
 window.addEventListener("circle-tour:trip-change", refreshSources);
 window.addEventListener("circle-tour:filter-change", (event) => {
+  stopPopup?.popup.remove();
   filterState = event.detail;
   refreshSources();
 });
 window.addEventListener("circle-tour:preset-change", (event) => {
+  stopPopup?.popup.remove();
   const hadFocus = focusedPresetDay !== null;
   presetState = event.detail;
   refreshSources();
