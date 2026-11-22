@@ -12,3 +12,5 @@ First read the repository's `AGENTS.md`; it contains authoritative release, sear
 
 
 **Playwright browser QA:** For explicit Playwright requests and substantial interaction, map or responsive design changes, read `.claude/skills/playwright-browser-qa/SKILL.md` and `docs/PLAYWRIGHT_BROWSER_QA_WORKFLOW.md`. Use the CLI for actual browser observations and existing tests for repeatable regressions. Do not claim browser proof unless executed, add Playwright MCP by default, or merge without owner instruction.
+
+**Agent Browser investigation (opt-in):** For owner-authorized AI-driven browsing or interactive website diagnosis, read `.claude/skills/agent-browser-qa/SKILL.md` and `docs/AGENT_BROWSER_WORKFLOW.md`. Run the CLI only in an authorized shell with Chrome installed. Use `agent-browser skills get core` before an interactive session; prefer `scripts/agent-browser-smoke.mjs --dry-run` for preflight. Keep Playwright regressions, Experience OS and production safety. No paid cloud browser, default MCP or automatic merge.
