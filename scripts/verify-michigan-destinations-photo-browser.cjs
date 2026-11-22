@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 /*
- * Live Michigan Adventure Finder photography acceptance check.
+ * Michigan Adventure Finder photography and map browser acceptance check.
  * Tests actual scrolling into each destination, not offscreen element screenshots:
  * a screenshot of an offscreen lazy image can misleadingly show the CSS placeholder.
  * No user credentials, location permission, ad modifications or key logging.
@@ -58,14 +58,24 @@ async function runView(browser, viewport) {
   }
   const mapStatus=await page.locator('#map-status').innerText();
   const markerCount=await page.locator('.leaflet-marker-icon').count();
+  const groupCount=await page.locator('.map-cluster').count();
   const coveredCount=await page.locator('.leaflet-marker-icon').evaluateAll(nodes => nodes.reduce((sum,node)=>sum+(Number(node.querySelector('.map-cluster')?.textContent)||1),0));
   const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
-  const view={name,cardCount:count,photoCount:results.filter(x=>x.ok).length,markerCount,coveredCount,mapStatus,overflowPx:overflow,jsErrors};
+  const view={name,cardCount:count,photoCount:results.filter(x=>x.ok).length,markerCount,groupCount,coveredCount,mapStatus,overflowPx:overflow,jsErrors};
   report.views.push(view);
   report.outcomes.push(...results.map(x=>({...x,viewport:name})));
   if(overflow>2)report.errors.push(name+': horizontal overflow '+overflow+'px');
   if(jsErrors.length)report.errors.push(name+': JS errors '+jsErrors.slice(0,3).join('; '));
   if(coveredCount!==expected)report.errors.push(name+': map groups cover '+coveredCount+' rather than '+expected+' destinations');
+  if(viewport.width<600 && groupCount===0)report.errors.push(name+': no accessible broad-zoom map groups');
+  if(groupCount) {
+    // Verify the actual marker interaction opens named choices, not just a badge.
+    const group=page.locator('.leaflet-marker-icon').filter({has:page.locator('.map-cluster')}).first();
+    await group.click({timeout:9000});
+    const choices=await page.locator('.leaflet-popup .map-popup-group a[href^="#"]').count();
+    if(choices<2)report.errors.push(name+': grouped marker did not open multiple destination links');
+    await page.keyboard.press('Escape');
+  }
   if(!/^Map ready\. Choose a destination pin\b/.test(mapStatus))report.errors.push(name+': map did not report rendered tiles: '+mapStatus);
   await context.close();
 }

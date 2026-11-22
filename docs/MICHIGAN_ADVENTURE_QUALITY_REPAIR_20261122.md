@@ -9,3 +9,5 @@ The path-scoped Web Quality GitHub Action now checks zero serious axe failures o
 No new dependencies, map provider, images, data source, API, ads, SEO metadata or canonical page were introduced. This patch does not claim field Core Web Vitals improvement or verified production ad behavior.
 
 Broad-view marker grouping: nearby gauge-free destination pins are now grouped in Leaflet at zoom-dependent projected pixel separation. The group badge counts actual listed destinations; clicking shows named links to each original card. Group badges are anchored to a real member's coordinates, not a fabricated centroid. All cards and links remain in HTML when scripts or maps fail. The photo browser checks coverage of all twenty entries after grouping.
+
+The photography and marker workflow now tests the pull request's local HTML and assets, rather than accidentally testing the current production site. The browser verifies the visible grouping badge opens multiple destination story links. Live production image and tile availability remain a separate post-deploy check.

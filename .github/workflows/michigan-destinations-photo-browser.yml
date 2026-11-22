@@ -6,6 +6,7 @@ on:
       - 'public/michigan-destinations/**'
       - 'public/assets/michigan-destinations.*'
       - 'scripts/verify-michigan-destinations-photo-browser.cjs'
+      - 'scripts/web-quality-static-server.cjs'
       - '.github/workflows/michigan-destinations-photo-browser.yml'
   workflow_dispatch:
 permissions:
@@ -27,8 +28,16 @@ jobs:
           npm install --prefix /tmp/michigan-destinations-playwright --no-save --ignore-scripts playwright@1.58.2
           echo "NODE_PATH=/tmp/michigan-destinations-playwright/node_modules" >> "$GITHUB_ENV"
           echo "CHROME_PATH=$(command -v google-chrome || command -v chromium-browser)" >> "$GITHUB_ENV"
-      - name: Verify every destination image loads after real user scroll on desktop and mobile
-        run: node scripts/verify-michigan-destinations-photo-browser.cjs
+      - name: Verify PR-local destinations, map groups and images in Chromium
+        run: |
+          node scripts/web-quality-static-server.cjs &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for i in 1 2 3 4 5 6 7 8 9 10; do
+            if curl --fail --silent --output /dev/null http://127.0.0.1:4179/michigan-destinations/; then break; fi
+            sleep 1
+          done
+          MICHIGAN_DESTINATIONS_URL=http://127.0.0.1:4179/michigan-destinations/ node scripts/verify-michigan-destinations-photo-browser.cjs
       - name: Retain mobile and desktop photographs, map state, and report
         if: always()
         uses: actions/upload-artifact@v4

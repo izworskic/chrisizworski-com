@@ -12,6 +12,8 @@ test('adventure map keeps small visible pin with a larger touch hit target',()=>
  assert.match(js,/zoomend', renderMarkers/);
  assert.match(js,/nearby destinations\. Open to choose/);
  assert.match(read('scripts/verify-michigan-destinations-photo-browser.cjs'),/coveredCount!==expected/);
+ assert.match(read('.github/workflows/michigan-destinations-photo-browser.yml'),/MICHIGAN_DESTINATIONS_URL=http:\/\/127.0.0.1:4179/);
+ assert.match(read('scripts/verify-michigan-destinations-photo-browser.cjs'),/map-popup-group a/);
  assert.match(css,/\.map-marker\{[^}]*left:11px;top:11px;width:18px;height:18px/);
  assert.match(css,/\.destination-links a\{[^}]*min-height:32px/);
  assert.match(css,/\.destination-links \.primary-link\{[^}]*min-height:36px/);
