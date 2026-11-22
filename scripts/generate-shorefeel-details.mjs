@@ -66,6 +66,7 @@ function pageFor(b,region,all){
 </div></div></div>
 <p class="shore-guide" id="feel-guide">The forecast describes an area near ${h(name)}, not a measurement from the beach. Wind and sun may change how the shore feels.</p>
 <p class="shore-source"><strong>What this reading can tell you</strong><span id="feel-evidence">${sourceName} ${forecastKind}. No measured beach cooling adjustment or current swimming-area water temperature is available from this source.</span></p>
+${canada?'<p class="shore-attribution">Contains information licensed under the <a href="https://eccc-msc.github.io/open-data/licence/readme_en/" rel="noopener" target="_blank">Data Server End-use Licence</a> of Environment and Climate Change Canada.</p>':''}
 </section>
 <section class="shore-columns">
 <div><p class="eyebrow">Along the water</p><h2>What shapes this shore</h2>
@@ -73,6 +74,7 @@ function pageFor(b,region,all){
 <p class="shore-interpret">An open beach is not the same exposure as a wooded trail, parking lot or town street. ${h(sourceCaveat)} Compare the issued time and wind before you leave, then reassess the conditions you actually encounter.</p>
 </div>
 <div><p class="eyebrow">Before you go</p><h2>Check the place, not just the forecast</h2>
+${!canada&&b.accessAlert?'<p class="shore-access-notice" role="note"><strong>Park access notice:</strong> '+h(b.accessAlert)+'</p>':''}
 <div class="shore-actions">
 <a class="shore-action" href="${h(park)}" rel="noopener" target="_blank">Official park or beach details</a>
 <a class="shore-action" href="${h(advisory)}" rel="noopener" target="_blank">${h(authority)} advisories</a>
