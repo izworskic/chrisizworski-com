@@ -65,7 +65,7 @@ async function runView(browser, viewport) {
   if(overflow>2)report.errors.push(name+': horizontal overflow '+overflow+'px');
   if(jsErrors.length)report.errors.push(name+': JS errors '+jsErrors.slice(0,3).join('; '));
   if(markerCount<15)report.errors.push(name+': fewer than 15 location markers');
-  if(!/CARTO map loaded|OpenStreetMap/.test(mapStatus))report.errors.push(name+': map did not report rendered tiles: '+mapStatus);
+  if(!/^Map ready\. Choose a destination pin\b/.test(mapStatus))report.errors.push(name+': map did not report rendered tiles: '+mapStatus);
   await context.close();
 }
 (async ()=>{

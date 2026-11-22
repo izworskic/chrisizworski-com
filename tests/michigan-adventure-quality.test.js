@@ -19,6 +19,8 @@ test('accessible colors and optional fonts preserve canonical, photos and source
  assert.match(html,/display=optional/);
  assert.match(css,/\.experience span\{[^}]*color:#89502e/);
  assert.match(css,/\.seasonal-journeys \.eyebrow\{color:#89502e\}/);
+ assert.match(css,/\.editorial-note\{color:#53675e/);
+ assert.match(read('scripts/verify-michigan-destinations-photo-browser.cjs'),/Map ready/);
  assert.doesNotMatch(css,/@import url\('https:\/\/fonts\.googleapis\.com/);
  assert.equal((html.match(/class="destination"/g)||[]).length,20);
  assert.ok((html.match(/class="photo-credit"/g)||[]).length>=20);
