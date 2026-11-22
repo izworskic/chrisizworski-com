@@ -1,6 +1,9 @@
 /* Soo Locks AIS ship symbols. Uses the shared SeawayVesselIcons SVG paths.
    AIS type decides silhouette, validated length decides display band.
    Width is a readable screen symbol, never true nautical/map scale. */
+/* Keep Leaflet's zoomed tile panes inside the map stage; list buttons remain clickable. */
+.vessel-map-stage{overflow:hidden;isolation:isolate}
+.soo-vessel-results{position:relative;z-index:1}
 .soo-ais-symbol.leaflet-marker-icon{background:transparent;border:0;filter:drop-shadow(0 1px 2px #153f4a99)}
 .soo-ais-symbol svg{display:block;width:100%;height:100%;overflow:visible}
 .soo-ais-symbol:focus-visible{outline:3px solid #bd812c;outline-offset:3px}
