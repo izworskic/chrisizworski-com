@@ -148,7 +148,7 @@
 .trl .trl-desk-topline>span{font-size:.68rem;text-transform:uppercase;letter-spacing:.075em;color:#5c7364;font-weight:750}
 .trl .trl-desk-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
 .trl .trl-desk-controls label{display:grid;gap:6px;min-width:0;color:#315447;font-size:.74rem;font-weight:750}
-.trl .trl-desk-controls select{width:100%;min-width:0;min-height:45px;padding:8px 27px 8px 9px;background:#fff;border:1px solid #b5c8bd;border-radius:6px;color:#15382b;font:600 .81rem/1.3 inherit}
+.trl .trl-desk-controls select{width:100%;min-width:0;min-height:45px;padding:8px 27px 8px 9px;background:#fff;border:1px solid #b5c8bd;border-radius:6px;color:#15382b;font:600 .81rem/1.3 system-ui,sans-serif}
 .trl .trl-desk-verify{display:flex;align-items:flex-start;gap:10px;margin-top:12px;font-size:.78rem;line-height:1.4;font-weight:700;cursor:pointer;color:#284537}
 .trl .trl-desk-verify input{width:18px;height:18px;accent-color:#27644a;flex-shrink:0;margin-top:2px}
 .trl .trl-desk-verify small{display:block;color:#65766b;font-size:.71rem;font-weight:500;margin-top:2px}
