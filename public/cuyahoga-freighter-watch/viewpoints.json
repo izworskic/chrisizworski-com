@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "checkedOn": "2026-11-22",
+  "intent": "Public places to view freighters from land, not guaranteed sighting or bridge opening",
+  "coordinateKind": "general park reference point, not verified visitor entrance or exact waterside viewing position",
+  "verifiedSourceOwner": "Cleveland Metroparks",
+  "notLiveNotice": "Access, closures, parking and hours must be checked with the park manager before visiting. AIS reports do not guarantee a ship will pass.",
+  "spots": [
+    {
+      "id": "scranton",
+      "name": "Scranton Flats Pier",
+      "label": "Best for river bends",
+      "lat": 41.488136,
+      "lon": -81.694397,
+      "coordinateSource": "https://www.latlong.net/place/scranton-flats-cleveland-oh-usa-9230.html",
+      "coordinateNote": "Approximate Scranton Flats park reference, NOT independently mapped pier deck entrance",
+      "address": "Scranton Flats, 1851 Scranton Road, Cleveland, Ohio, United States",
+      "officialUrl": "https://www.clevelandmetroparks.com/parks/visit/parks/lakefront-reservation/scranton-flats-pier",
+      "evidence": "Metroparks specifically recommends this river observation deck for watching large cargo ships negotiate the bends.",
+      "experience": "Stand at the riverside observation deck below the Hope Memorial Bridge. The sharp bends make the ship's slow turn the spectacle. Keep clear of active docks and watch from designated public paths.",
+      "suitability": "River bend viewing",
+      "visitStatus": "PUBLIC_PARK_ACCESS_VERIFY_CURRENT_CLOSURES"
+    },
+    {
+      "id": "rivergate",
+      "name": "Rivergate Park",
+      "label": "Best for a long watch",
+      "lat": 41.48955,
+      "lon": -81.702,
+      "coordinateSource": "https://mapcarta.com/28470988",
+      "coordinateNote": "OpenStreetMap-derived park center, NOT a specific access gate",
+      "address": "1785 Merwin Avenue, Cleveland, Ohio 44113, United States",
+      "officialUrl": "https://www.clevelandmetroparks.com/parks/visit/parks/lakefront-reservation/rivergate-park",
+      "evidence": "Cleveland Metroparks lists public river views adjacent to Merwin's Wharf and day-use recreational boat slips.",
+      "experience": "Follow the public riverfront paths near Merwin's Wharf to see the working harbor at close range. Large cargo vessels share the water with rowers and smaller craft; remain on shore for watching.",
+      "suitability": "Riverside watching and food nearby",
+      "visitStatus": "PUBLIC_PARK_ACCESS_VERIFY_CURRENT_CLOSURES"
+    },
+    {
+      "id": "heritage",
+      "name": "Heritage Park",
+      "label": "Best for history and ships",
+      "lat": 41.49469,
+      "lon": -81.70352,
+      "coordinateSource": "https://mapcarta.com/28470986",
+      "coordinateNote": "OSM-derived park area point, NOT an entrance or a guaranteed waterside sightline",
+      "address": "Heritage Park, Cuyahoga River Flats, Cleveland, Ohio, United States",
+      "officialUrl": "https://www.clevelandmetroparks.com/parks/visit/parks/lakefront-reservation/heritage-park",
+      "evidence": "Metroparks confirms public parkland along the river adjacent to Canal Basin Park and new day-use slips.",
+      "experience": "The east-bank public park sits beside the old port district. Here the river's shipping role meets the earliest waterfront settlement landscape. Stay on park walks rather than crossing into private docks.",
+      "suitability": "History and riverfront walk",
+      "visitStatus": "PUBLIC_PARK_ACCESS_VERIFY_CURRENT_CLOSURES"
+    },
+    {
+      "id": "wendy",
+      "name": "Wendy Park",
+      "label": "Best for harbor entrance",
+      "lat": 41.49938,
+      "lon": -81.7134,
+      "coordinateSource": "https://mapcarta.com/28470984",
+      "coordinateNote": "OSM-derived park area point, NOT a pier or exact harbor-mouth viewing point",
+      "address": "2800 Whiskey Island Drive, Cleveland, Ohio 44102, United States",
+      "officialUrl": "https://www.clevelandmetroparks.com/parks/visit/parks/lakefront-reservation/wendy-park",
+      "evidence": "Metroparks public lakefront park on Whiskey Island near where the river enters Lake Erie, with accessible trail connections.",
+      "experience": "Choose the open shore near the river mouth when the lakefront, rather than the tight inland bends, is what you want to watch. Expect a wide harbor scene, not a guaranteed close approach.",
+      "suitability": "River mouth and lakefront",
+      "visitStatus": "PUBLIC_PARK_ACCESS_VERIFY_CURRENT_CLOSURES"
+    }
+  ]
+}

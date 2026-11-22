@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "checkedOn": "2026-11-22",
+  "sourcePolicy": "Curated published notice, never a live bridge opening feed",
+  "notices": [
+    {
+      "bridgeId": "eagle-280",
+      "bridgeName": "Eagle Avenue Bridge",
+      "recordType": "SCHEDULED_REMOVAL_NOT_CURRENT_LIVE_STATUS",
+      "source": "U.S. Coast Guard Great Lakes District, Local Notice to Mariners 37/2026, Cleveland Harbor, PDF p. 5",
+      "sourceUrl": "https://navcen.uscg.gov/sites/default/files/pdf/lnms/lnm09372026.pdf",
+      "sourcePublicationDate": "2026-09-16",
+      "sourceNoticeDated": "2026-04-21",
+      "projectUrl": "https://www.transportation.ohio.gov/travel/projects/118527",
+      "historicFederalRegulationUrl": "https://www.federalregister.gov/documents/2023/05/22/2023-10731/drawbridge-operation-regulation-cuyahoga-river-cleveland-oh",
+      "plannedWorkStart": "2027-01-18",
+      "plannedWorkEnd": "2027-03-04",
+      "scheduledWorkDescription": "The September 2026 Coast Guard notice schedules a fixed barge in the Eagle Avenue drawspan and removal work from January 18 through March 4, 2027. It does not establish the bridge's current opening state.",
+      "background": "Federal rulemaking described Eagle Avenue as long held in the raised position and slated for removal. It is not an ordinary active drawbridge-opening viewpoint.",
+      "actualCompletionVerified": false,
+      "currentOpenOrClosedVerified": false,
+      "expiresToHistoricalAfter": "2027-03-04",
+      "isARealTimeStatus": false
+    }
+  ]
+}
