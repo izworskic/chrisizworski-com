@@ -179,7 +179,7 @@
     const zoom = Number(ship.channelMilesToLocks) > 8 ? 11 : 14;
     map.setView([ship.lat, ship.lon], zoom);
     // Re-centre once smooth scrolling settles.
-    setTimeout(() => { map.invalidateSize(); map.setView([ship.lat, ship.lon], zoom); m.openPopup(); }, 600);
+    setTimeout(() => { map.invalidateSize(); map.setView([ship.lat, ship.lon], zoom); map.closePopup(); m.openPopup(); }, 600);
   }
 
   // ---- map and list ----
@@ -211,7 +211,7 @@
       }
       const item = document.createElement('li');
       if (marker) {
-        const button = text('button', title(v)); button.type = 'button'; button.addEventListener('click', () => { map.setView([v.lat, v.lon], 15); marker.openPopup(); container.scrollIntoView({ block: 'center', behavior: 'smooth' }); }); item.append(button);
+        const button = text('button', title(v)); button.type = 'button'; button.addEventListener('click', () => { map.setView([v.lat, v.lon], 15); map.closePopup(); marker.openPopup(); container.scrollIntoView({ block: 'center', behavior: 'smooth' }); }); item.append(button);
       } else item.append(text('strong', title(v)));
       const extra = [typeLabel(v), inLock.has(v.mmsi) ? 'in the ' + inLock.get(v.mmsi).chamberName + ' now' : null, size || feet(v.lengthMeters)].filter(Boolean).join(' · ');
       item.append(text('span', (extra ? extra + ' · ' : '') + details(v))); list.append(item);
@@ -260,6 +260,12 @@
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' }).addTo(map);
       layer = L.layerGroup().addTo(map);
       focusLayer = L.layerGroup().addTo(map);
+      // Keep at most one vessel detail card even when a second selection races a prior popup.
+      map.on('popupopen', event => {
+        map.eachLayer(other => {
+          if (other instanceof L.Popup && other !== event.popup) map.removeLayer(other);
+        });
+      });
       map.on('zoomend', () => {
         for (const { marker, v } of visibleMarkers.values()) {
           const updated = shipIcon(v, marker === selectedMarker);
