@@ -9,16 +9,6 @@
 .trl .trl-hero-montage .wf-photo img{object-fit:cover;object-position:center}
 .trl .trl-hero-montage .wf-photo figcaption{font-size:.51rem;padding:21px 8px 6px}
 
-.trl-signpost{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding-top:10px;padding-bottom:20px;border-top:1px solid var(--wf-line)}
-.trl-signpost>div{border-left:3px solid #7fb099;padding-left:12px;display:flex;flex-direction:column;gap:2px}
-.trl-signpost strong{color:#21523e;text-transform:uppercase;font-size:.68rem;letter-spacing:.08em}
-.trl-signpost span{color:#556c62;font-size:.77rem}
-
-.trl-closure{padding:17px 19px;border:1px solid #e4caa8;border-left:5px solid #af6538;background:#fcf8f1;border-radius:6px;display:flex;gap:26px;align-items:center;justify-content:space-between;margin-bottom:24px}
-.trl-closure h2{font-size:1.42rem;line-height:1.25;color:#5f3f28}
-.trl-closure p:not(.wf-eyebrow){font-size:.8rem;line-height:1.65;color:#725846;margin-top:7px}
-.trl-closure>a{flex-shrink:0;font-size:.76rem;font-weight:700}
-
 .trl-science{padding:22px 0 27px;border-top:1px solid #d4e2d9}
 .trl-science-head{display:flex;justify-content:space-between;align-items:end;gap:22px}
 .trl-science-head>p{max-width:460px;color:#586f64;font-size:.79rem}
@@ -47,7 +37,20 @@
 .trl .wf-controls label{flex:1 1 180px}
 .trl .wf-chip{font-size:.75rem}
 .trl .wf-map{height:415px}
-.trl .trl-map-caution{margin-top:12px;border-left:3px solid #a87553;background:#f3eee6;padding:10px 12px;font-size:.73rem;color:#654c3b;display:flex;flex-direction:column;gap:4px}
+/* Access notices belong at the map decision, not above the trail choices. */
+.trl .trl-access-disclosure{margin-top:10px;border-top:1px solid #d6e0d9;font-size:.76rem;line-height:1.5;color:#385445}
+.trl .trl-access-disclosure summary{display:flex;align-items:center;flex-wrap:wrap;column-gap:8px;row-gap:2px;cursor:pointer;min-height:42px;padding:9px 2px;color:#2b5841;list-style-position:inside}
+.trl .trl-access-disclosure summary::marker{color:#527c65}
+.trl .trl-access-disclosure summary::after{content:"+";font-weight:800;font-size:1.15rem;margin-left:auto;line-height:1}
+.trl .trl-access-disclosure[open] summary::after{content:"−"}
+.trl .trl-access-disclosure summary strong{font-size:.78rem}
+.trl .trl-access-disclosure summary span{font-size:.72rem;text-decoration:underline;text-underline-offset:2px}
+.trl .trl-access-disclosure summary:focus-visible{outline:3px solid #a26a22;outline-offset:2px}
+.trl .trl-access-disclosure .trl-access-body{border-left:3px solid #aa805a;margin:1px 0 11px;padding:4px 10px 4px 13px;background:#faf8f1}
+.trl .trl-access-disclosure .trl-access-body h3{font-size:.88rem;line-height:1.3;color:#4c4935;margin:10px 0 7px}
+.trl .trl-access-disclosure .trl-access-body p{font-size:.76rem;color:#455d50;line-height:1.55;margin:6px 0}
+.trl .trl-access-disclosure .trl-access-body a{color:#255b43;text-decoration:underline;font-weight:700}
+
 
 .trl .wf-story{min-height:295px}
 .trl .wf-story>.wf-photo{min-height:295px}
@@ -96,11 +99,6 @@
   .trl .wf-hero h1{font-size:clamp(2.45rem,9.5vw,3.35rem)}
   .trl .trl-hero-montage{width:100%;height:175px}
   .trl .trl-hero-montage .wf-scene{display:none}
-  .trl-signpost{display:flex;flex-direction:column;gap:7px}
-  .trl-signpost>div{display:grid;grid-template-columns:138px 1fr;align-items:baseline;padding:0 8px}
-  .trl-closure{display:block;padding:14px;margin-bottom:16px}
-  .trl-closure h2{font-size:1.23rem}
-  .trl-closure>a{display:inline-block;margin-top:10px}
   .trl-science{padding:16px 0}
   .trl-science-layout{grid-template-columns:1fr}
   .trl-use-selector{display:grid;grid-template-columns:1fr}
@@ -123,7 +121,6 @@
 @media(max-width:370px){
   .trl .wf-controls{grid-template-columns:1fr}
   .trl .wf-controls label:nth-child(3),.trl .wf-controls button{grid-column:1/-1}
-  .trl-signpost>div{display:flex;flex-direction:column;gap:0}
 }
 
 /* Visitor map handoff. No location is represented as guaranteed plowed winter parking. */
