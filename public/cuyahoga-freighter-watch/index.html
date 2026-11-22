@@ -31,14 +31,14 @@
   <div><p class="kicker">EXPLORE THE RIVER</p><h2 id="map-heading">One river. Many places to stand.</h2></div>
   <div class="modes" role="group" aria-label="Map evidence type">
    <button id="show-live" class="mode active" type="button" aria-pressed="true">Recent AIS</button>
-   <button id="show-history" class="mode" type="button" aria-pressed="false">2025 observed voyages</button>
+   <button id="show-history" class="mode" type="button" aria-pressed="false">2025 AIS history</button>
   </div>
  </div>
  <noscript><p class="js-fallback">Interactive vessel markers require JavaScript. You can still use the <a href="/great-lakes-freighter-tracking/">current Great Lakes ship tracker</a>, or choose a park below: <a href="https://www.clevelandmetroparks.com/parks/visit/parks/lakefront-reservation/scranton-flats-pier">Scranton Flats Pier</a>, <a href="https://www.clevelandmetroparks.com/parks/visit/parks/lakefront-reservation/rivergate-park">Rivergate Park</a>, <a href="https://www.clevelandmetroparks.com/parks/visit/parks/lakefront-reservation/heritage-park">Heritage Park</a>, <a href="https://www.clevelandmetroparks.com/parks/visit/parks/lakefront-reservation/wendy-park">Wendy Park</a>. Park managers provide current access information.</p></noscript>
  <div class="map-layout">
   <div class="map-column">
    <div class="map-frame">
-    <div id="cuyahoga-map" role="region" aria-label="Interactive map of Cleveland Cuyahoga River, bridge references, watch parks and optional historic or recent AIS positions" tabindex="0"><p class="map-loading">Map tiles are loading. The verified viewing places and vessel-status text remain available below.</p></div>
+    <div id="cuyahoga-map" role="region" aria-label="Interactive map of Cleveland Cuyahoga River, bridge references, watch parks and optional historic or recent AIS positions" tabindex="0"><p class="map-loading">Interactive map tiles appear when scripts and the map service load. Official park links are available below.</p></div>
     <div class="map-key" aria-label="Map legend"><span><i class="key-spot"></i>Public park area</span><span><i class="key-bridge"></i>NOAA bridge reference</span><span><i class="key-ship"></i>Reported ship fix</span></div>
    </div>
    <p class="map-caveat">Park pins are <strong>general park locations</strong>, not surveyed viewing decks or entrances. Bridge pins are rounded NOAA Coast Pilot reference coordinates, not confirmed crossing axes. This map is for shore watching, never navigation.</p>
@@ -54,9 +54,10 @@
     <p id="vessel-status" aria-live="polite">Checking the existing Great Lakes AIS feed…</p>
     <ul id="live-vessels" class="vessel-list" aria-label="Fresh river vessel positions"><li>A missing report does not mean the river is empty.</li></ul>
     <p class="source-note">Source: this site's existing <a href="/great-lakes-freighter-tracking/">Great Lakes AIS tracker</a>. Reports can be delayed or unavailable. No bridge arrival times are calculated.</p>
+    <p id="ais-source-credits" class="source-note" aria-label="AIS source attributions">Individual upstream source credits appear when the AIS report includes them. <a href="https://openwaters.io/ais/">Provider source and licensing information ↗</a></p>
    </section>
    <section id="history-controls" class="panel" hidden>
-    <h3>Follow a recorded voyage</h3>
+    <h3>Browse recorded ship positions</h3>
     <label for="voyage-select">Archived NOAA observations</label>
     <select id="voyage-select"><option value="barker-2025-07-07">Mark W. Barker · July 7, 2025</option><option value="laud-2025-08-15">Sam Laud · August 15, 2025</option><option value="barker-2025-08-21">Mark W. Barker · August 21, 2025</option></select>
     <label for="history-scrubber">Choose a recorded AIS fix</label>
