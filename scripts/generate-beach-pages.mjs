@@ -267,7 +267,8 @@ for (const beach of [...catalog.beaches].sort((a, b) => a.name.localeCompare(b.n
 }
 const indexHtml = [
   START,
-  '<section class="section" id="beachIndex" aria-labelledby="beach-index-heading">',
+  '<section class="section shorefeel-index" id="beachIndex" aria-labelledby="beach-index-heading">',
+  '<details class="beach-index-details"><summary>Browse the full 50-beach directory by lake</summary><div class="beach-index-body">',
   '<div class="section-head"><div><p class="section-kicker">Every beach</p>',
   `<h2 id="beach-index-heading">All ${catalog.beaches.length} Michigan beaches by lake</h2>`,
   '<p class="section-intro">Explore the lake that draws you in. Every beach has its own field note about the landscape, the feel of the air, and which official conditions to check before you go.</p>',
@@ -281,7 +282,7 @@ const indexHtml = [
         .join("") +
       "</ul>",
     ),
-  "</section>",
+  "</div></details></section>",
   END,
 ].join("\n");
 
@@ -290,7 +291,7 @@ let hub = await readFile(hubPath, "utf8");
 if (hub.includes(START)) {
   hub = hub.replace(new RegExp(`${START}[\\s\\S]*?${END}`), indexHtml);
 } else {
-  const anchor = '<section class="section" id="beachExplorer"';
+  const anchor = '<section class="section content-grid" id="methodology"';
   hub = hub.replace(anchor, `${indexHtml}\n${anchor}`);
 }
 await writeFile(hubPath, hub);

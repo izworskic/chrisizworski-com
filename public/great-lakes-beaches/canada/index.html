@@ -4,7 +4,7 @@
 <meta name="description" content="Explore 30 Canadian Great Lakes shores. Select a beach for Environment Canada hourly weather, a shoreline field note and official Ontario beach notices.">
 <link rel="canonical" href="https://chrisizworski.com/great-lakes-beaches/canada/">
 <meta name="author" content="Chris Izworski"><meta name="theme-color" content="#103c4c">
-<link rel="stylesheet" href="/assets/leaflet-1.9.4.css"><link rel="stylesheet" href="/assets/shorefeel-us.css"><link rel="stylesheet" href="/assets/shorefeel-ca.css">
+<link rel="stylesheet" href="/assets/leaflet-1.9.4.css"><link rel="stylesheet" href="/assets/shorefeel-us.css"><link rel="stylesheet" href="/assets/shorefeel-ca.css"><link rel="stylesheet" href="/assets/shorefeel-wayfinding.css">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://chrisizworski.com/great-lakes-beaches/canada/#page","url":"https://chrisizworski.com/great-lakes-beaches/canada/","name":"Canadian Great Lakes Beaches: ShoreFeel","dateModified":"2026-11-22","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"}},{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Great Lakes ShoreFeel","item":"https://chrisizworski.com/great-lakes-beaches/around-the-lakes/"},{"@type":"ListItem","position":3,"name":"Canadian Beaches","item":"https://chrisizworski.com/great-lakes-beaches/canada/"}]}]}</script>
 <script defer src="/_vercel/insights/script.js"></script><script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};</script></head>
 <body><a class="skip" href="#main-content">Skip to Canadian beach selection</a>
@@ -12,18 +12,32 @@
 <main id="main-content"><section class="intro"><p class="eyebrow">ShoreFeel · Canadian Great Lakes · Ontario</p>
 <h1>Follow the shoreline <em>into Canada.</em></h1>
 <p class="lead">Follow Ontario's lakes from Superior's rock coves to Georgian Bay pines, Lake Erie's sand and the beaches of Lake Ontario. As forest or town gives way to open water, the wind may tell a different story. Choose a shore, read the nearby Environment Canada forecast and the park's current notices, then discover what to watch for on arrival.</p>
-<div class="intro-route"><a href="/great-lakes-beaches/around-the-lakes/">Explore the U.S. Great Lakes shoreline</a><span aria-hidden="true"> · </span><span>30 Canadian shores on four Great Lakes</span></div></section>
-<div class="safety-ribbon"><strong>Weather is not a swimming advisory.</strong> ECCC's nearest city forecast is not an on-beach thermometer. Swimming flags, bacteria test results, access and waves have not been verified here. Follow official park and public-health notices.</div>
+<p class="intro-route">30 Canadian shores on four Great Lakes, all in Ontario</p>
+<nav class="shore-question-links" aria-label="What can ShoreFeel answer?">
+<a href="#shore-search">I know a beach</a>
+<a href="#shore-list">Help me choose</a>
+<a href="#swimSafety">Can I swim there?</a>
+</nav>
+<nav class="shore-region-tabs" aria-label="ShoreFeel regions">
+<a href="/great-lakes-beaches/">Michigan <span>50 beaches</span></a>
+<a href="/great-lakes-beaches/around-the-lakes/">Rest of U.S. <span>16 beaches</span></a>
+<a href="/great-lakes-beaches/canada/" aria-current="page">Ontario <span>30 beaches</span></a>
+</nav></section>
+<div class="safety-ribbon" id="swimSafety"><strong>Weather is not a swimming advisory.</strong> ECCC's nearest city forecast is not an on-beach thermometer. Swimming flags, bacteria test results, access and waves have not been verified here. Follow official park and public-health notices.</div>
 <section class="field-layout" aria-label="Explore Canadian Great Lakes beaches">
-<div class="field-left"><h2 class="visually-hidden">Choose a Great Lake</h2><div class="lake-picker" role="group" aria-label="Great Lake">
-<button type="button" data-lake-filter="Superior" aria-pressed="true">Superior</button>
+<div class="field-left"><label class="shore-search-wrap" for="shore-search">Find a beach or town
+<input id="shore-search" type="search" maxlength="100" autocomplete="off" placeholder="Try Chicago, Sandbanks, or Lake Erie…" aria-controls="shore-list" aria-describedby="shore-search-help">
+</label>
+<p class="shore-search-help" id="shore-search-help">Search this region, or choose a lake below.</p><h2 class="visually-hidden">Choose a Great Lake</h2><div class="lake-picker" role="group" aria-label="Great Lake">
+<button type="button" data-lake-filter="All" aria-pressed="true">All lakes</button>
+<button type="button" data-lake-filter="Superior" aria-pressed="false">Superior</button>
 <button type="button" data-lake-filter="Huron" aria-pressed="false">Huron</button>
 <button type="button" data-lake-filter="Erie" aria-pressed="false">Erie</button>
 <button type="button" data-lake-filter="Ontario" aria-pressed="false">Ontario</button>
 <button type="button" data-lake-filter="Michigan" aria-pressed="false">Michigan</button>
 </div>
-<p id="lake-context" class="lake-context">Lake Superior’s Canadian shore has long sand beaches, stony coves and immense stretches of open water.</p>
-<h3 class="list-heading">Choose a shoreline <span id="result-count">30 locations</span></h3><ul id="shore-list" class="shore-list">
+<p id="lake-context" class="lake-context">Explore all 30 Ontario shorelines, or choose the lake you want to visit.</p>
+<h3 class="list-heading">Choose a shoreline <span id="result-count" role="status">30 locations</span></h3><p id="shore-no-match" class="shore-no-match" role="status" hidden>No shorelines match. Try another town, lake, or <a href="/great-lakes-beaches/">Michigan beach</a>.</p><ul id="shore-list" class="shore-list">
 <!-- shorefeel-ca-list:start -->
 <li class="shore-stop" data-slug="agawa-bay" data-lake="Superior" data-lat="47.355" data-lon="-84.625" data-name="Agawa Bay, Lake Superior Provincial Park" data-nearby="Wawa" data-story="A wide sweep of shingle and sand faces Lake Superior. When the wind moves off open water, the beach may feel very different from the wooded campground behind it. Listen to the waves as the wooded campground opens onto Superior&#39;s shore. Compare the breeze among the trees with the air over the sand before choosing your place." data-source="Ontario Parks beach monitoring" data-advisory="https://www.ontarioparks.ca/beachresults" data-official="https://www.ontarioparks.ca/park/lakesuperior"><button data-select="agawa-bay" type="button" aria-pressed="false"><span class="shore-stop-name">Agawa Bay, Lake Superior Provincial Park</span><span class="shore-stop-sub">Wawa, Ontario · Lake Superior</span></button><span class="shore-stop-links"><a href="/great-lakes-beaches/canada/agawa-bay/">ShoreFeel</a><a href="https://www.ontarioparks.ca/park/lakesuperior" target="_blank" rel="noopener" aria-label="Agawa Bay, Lake Superior Provincial Park official park or municipality page">Park details</a></span></li>
 <li class="shore-stop" data-slug="katherine-cove" data-lake="Superior" data-lat="47.42" data-lon="-84.74" data-name="Katherine Cove, Lake Superior Provincial Park" data-nearby="Wawa" data-story="The shoreline folds into a sheltered cove of clear water and rounded stone. Step beyond the trees and listen for the wind crossing the lake. This cove invites a careful look at how rock headlands shape a shore. Some wind directions may be sheltered, others not. The actual waves tell today&#39;s story." data-source="Ontario Parks beach monitoring" data-advisory="https://www.ontarioparks.ca/beachresults" data-official="https://www.ontarioparks.ca/park/lakesuperior"><button data-select="katherine-cove" type="button" aria-pressed="false"><span class="shore-stop-name">Katherine Cove, Lake Superior Provincial Park</span><span class="shore-stop-sub">Wawa, Ontario · Lake Superior</span></button><span class="shore-stop-links"><a href="/great-lakes-beaches/canada/katherine-cove/">ShoreFeel</a><a href="https://www.ontarioparks.ca/park/lakesuperior" target="_blank" rel="noopener" aria-label="Katherine Cove, Lake Superior Provincial Park official park or municipality page">Park details</a></span></li>
@@ -59,7 +73,7 @@
 </ul>
 <noscript><div class="noscript"><p>All official park and municipality links above are available without JavaScript. Current weather needs scripting. For beach-water testing, consult <a href="https://www.ontarioparks.ca/beachresults">Ontario Parks beach results</a> or the local public-health unit. For weather, open <a href="https://weather.gc.ca/">Environment and Climate Change Canada</a>.</p></div></noscript>
 </div>
-<div class="field-right"><article class="field-report" aria-live="polite">
+<div class="field-right"><article class="field-report" id="field-report" aria-live="polite">
 <div class="report-top"><p class="eyebrow">A beach field note</p><span class="source-tag">Environment Canada forecast</span></div>
 <h2 id="report-name">Agawa Bay, Lake Superior Provincial Park</h2><p id="report-place" class="report-place">Ontario · Lake Superior</p>
 <div class="answer"><div><p class="answer-label">Nearby forecast air comfort</p><strong id="report-temp">Checking weather</strong><p id="report-method">ECCC city-page outlook, not an on-beach reading</p></div>
@@ -71,6 +85,7 @@
 <a id="report-advisory" href="https://www.ontarioparks.ca/beachresults" target="_blank" rel="noopener">Ontario Parks beach results</a>
 <a id="report-park" href="https://www.ontarioparks.ca/park/lakesuperior" target="_blank" rel="noopener">Official park page</a>
 <a id="report-maps" href="https://www.google.com/maps/search/?api=1&query=Agawa%20Bay%20Ontario" target="_blank" rel="noopener">View on Google Maps</a>
+<a id="report-detail" href="/great-lakes-beaches/canada/agawa-bay/">Read the complete field note</a>
 </div>
 <p class="source-scope" id="report-scope">A forecast for the nearest verified Environment Canada city area, not the sand. No current swimming status is displayed.</p></article>
 <section class="map-section" aria-labelledby="map-heading"><div class="map-top"><h2 id="map-heading">Along the Canadian shore</h2><p>Park vicinity references, not parking entrances</p></div><div class="map-shell"><div id="shore-map" role="region" aria-label="Map of selected Canadian Great Lakes beaches"></div><p id="map-fallback" hidden>The map is unavailable. The complete shoreline list and official park links above remain usable.</p></div></section>

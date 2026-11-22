@@ -18,6 +18,7 @@
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="manifest" href="/site.webmanifest">
   <link rel="stylesheet" href="/assets/beach-report.css">
+<link rel="stylesheet" href="/assets/shorefeel-wayfinding.css">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -145,6 +146,11 @@
             Near me
           </button>
         </div>
+        <nav class="shore-question-links" aria-label="Choose your beach question">
+          <a href="#heroBeachSearch">I know my beach</a>
+          <a href="#beachExplorer">Help me choose</a>
+          <a href="#swimSafety">Can I swim there?</a>
+        </nav>
       </div>
     </div>
   </section>
@@ -157,6 +163,11 @@
     </div>
   </div>
 
+<nav class="shore-region-tabs" aria-label="ShoreFeel regions">
+  <a href="/great-lakes-beaches/" aria-current="page">Michigan <span>50 beaches</span></a>
+  <a href="/great-lakes-beaches/around-the-lakes/">Rest of U.S. <span>16 beaches</span></a>
+  <a href="/great-lakes-beaches/canada/">Ontario <span>30 beaches</span></a>
+</nav>
   <main class="page-shell" id="main">
     <section class="section" aria-label="Season status">
       <div class="season-panel" id="seasonPanel">
@@ -179,35 +190,7 @@
       </div>
     </section>
 
-    <section class="section" aria-labelledby="daily-heading">
-      <div class="section-head">
-        <div>
-          <p class="section-kicker">Summer daily ranking</p>
-          <h2 id="daily-heading">Best Michigan beaches today</h2>
-          <p class="section-intro">Treat the beach ranking like a trip-planning map, not a swimming permission slip. It balances air comfort, rain, wind, recent lake observations, and destination character. Eligibility also requires no active matched closure, advisory, or relevant NWS alert plus an explicit current <strong>low NWS swim risk</strong>. Missing risk is never treated as low.</p>
-        </div>
-        <a href="/best-michigan-beaches-today/">How every beach ranks →</a>
-      </div>
-      <div class="daily-grid" id="dailyPicks" aria-live="polite">
-        <div class="skeleton" aria-hidden="true"></div><div class="skeleton" aria-hidden="true"></div><div class="skeleton" aria-hidden="true"></div>
-      </div>
-    </section>
-
-    <section class="section" aria-label="Beyond Michigan"><div class="method-card"><h2>Explore beyond Michigan</h2><p>New York's Lake Ontario beaches, the dunes of Wisconsin and Indiana, Chicago's city shoreline, Lake Superior's North Shore, and more. <a href="/great-lakes-beaches/around-the-lakes/">Explore Great Lakes ShoreFeel at 16 public shoreline locations outside Michigan</a>. Each place links to its own official beach advisory authority. <a href="/great-lakes-beaches/canada/">Cross the border to 30 Canadian ShoreFeel beaches</a>, with Environment Canada forecasts and Ontario authorities.</p></div></section>
-
-    <!-- beach-index:start -->
-<section class="section" id="beachIndex" aria-labelledby="beach-index-heading">
-<div class="section-head"><div><p class="section-kicker">Every beach</p>
-<h2 id="beach-index-heading">All 50 Michigan beaches by lake</h2>
-<p class="section-intro">Every beach has a different story in the wind. Open a ShoreFeel field note to meet the landscape, understand what the nearby forecast does and does not measure, and check official beach notices before your visit.</p>
-</div></div>
-<h3>Lake Michigan</h3><ul class="beach-index-list"><li><a href="/great-lakes-beaches/sleeping-bear-dunes-empire/">Empire Beach</a> <span>Leelanau County, Northwest Michigan</span></li><li><a href="/great-lakes-beaches/frankfort-beach/">Frankfort Beach</a> <span>Benzie County, Northwest Michigan</span></li><li><a href="/great-lakes-beaches/glen-arbor-area/">Glen Haven Beach</a> <span>Leelanau County, Northwest Michigan</span></li><li><a href="/great-lakes-beaches/grand-haven-state-park/">Grand Haven State Park</a> <span>Ottawa County, West Michigan</span></li><li><a href="/great-lakes-beaches/holland-state-park/">Holland State Park</a> <span>Ottawa County, West Michigan</span></li><li><a href="/great-lakes-beaches/ludington-state-park/">Ludington State Park</a> <span>Mason County, West Michigan</span></li><li><a href="/great-lakes-beaches/muskegon-state-park/">Muskegon State Park</a> <span>Muskegon County, West Michigan</span></li><li><a href="/great-lakes-beaches/new-buffalo-beach/">New Buffalo Beach</a> <span>Berrien County, Southwest Michigan</span></li><li><a href="/great-lakes-beaches/north-bar-lake/">North Bar Lake</a> <span>Leelanau County, Northwest Michigan</span></li><li><a href="/great-lakes-beaches/oval-beach/">Oval Beach</a> <span>Allegan County, West Michigan</span></li><li><a href="/great-lakes-beaches/pj-hoffmaster-state-park/">P.J. Hoffmaster State Park</a> <span>Muskegon County, West Michigan</span></li><li><a href="/great-lakes-beaches/pentwater-beach/">Pentwater Beach</a> <span>Oceana County, West Michigan</span></li><li><a href="/great-lakes-beaches/pere-marquette-park/">Pere Marquette Park</a> <span>Muskegon County, West Michigan</span></li><li><a href="/great-lakes-beaches/petoskey-state-park/">Petoskey State Park</a> <span>Emmet County, Northern Michigan</span></li><li><a href="/great-lakes-beaches/sleeping-bear-platte-river/">Platte River Point</a> <span>Benzie County, Northwest Michigan</span></li><li><a href="/great-lakes-beaches/saugatuck-dunes-state-park/">Saugatuck Dunes State Park</a> <span>Allegan County, West Michigan</span></li><li><a href="/great-lakes-beaches/silver-lake-state-park/">Silver Lake State Park</a> <span>Oceana County, West Michigan</span></li><li><a href="/great-lakes-beaches/south-haven-north/">South Haven North Beach</a> <span>Van Buren County, Southwest Michigan</span></li><li><a href="/great-lakes-beaches/stearns-park-beach/">Stearns Park Beach</a> <span>Mason County, West Michigan</span></li><li><a href="/great-lakes-beaches/tunnel-park-holland/">Tunnel Park</a> <span>Ottawa County, West Michigan</span></li><li><a href="/great-lakes-beaches/van-buren-state-park/">Van Buren State Park</a> <span>Van Buren County, Southwest Michigan</span></li><li><a href="/great-lakes-beaches/warren-dunes-state-park/">Warren Dunes State Park</a> <span>Berrien County, Southwest Michigan</span></li><li><a href="/great-lakes-beaches/wilderness-state-park/">Wilderness State Park</a> <span>Emmet County, Tip of the Mitt</span></li></ul>
-<h3>Lake Huron</h3><ul class="beach-index-list"><li><a href="/great-lakes-beaches/caseville-state-park/">Albert E. Sleeper State Park</a> <span>Huron County, Saginaw Bay</span></li><li><a href="/great-lakes-beaches/bay-city-state-park/">Bay City State Park</a> <span>Bay County, Saginaw Bay</span></li><li><a href="/great-lakes-beaches/bird-creek-county-park/">Bird Creek County Park</a> <span>Huron County, The Thumb</span></li><li><a href="/great-lakes-beaches/caseville-county-park/">Caseville County Park</a> <span>Huron County, Saginaw Bay</span></li><li><a href="/great-lakes-beaches/cheboygan-state-park/">Cheboygan State Park</a> <span>Cheboygan County, Tip of the Mitt</span></li><li><a href="/great-lakes-beaches/harrisville-state-park/">Harrisville State Park</a> <span>Alcona County, Sunrise Coast</span></li><li><a href="/great-lakes-beaches/lakeport-state-park/">Lakeport State Park</a> <span>St. Clair County, Blue Water</span></li><li><a href="/great-lakes-beaches/rogers-city-lakeside-park/">Lakeside Park Beach</a> <span>Presque Isle County, Northeast Michigan</span></li><li><a href="/great-lakes-beaches/oscoda-beach-park/">Oscoda Beach Park</a> <span>Iosco County, Sunrise Coast</span></li><li><a href="/great-lakes-beaches/hoeft-state-park/">P.H. Hoeft State Park</a> <span>Presque Isle County, Northeast Michigan</span></li><li><a href="/great-lakes-beaches/port-crescent-state-park/">Port Crescent State Park</a> <span>Huron County, The Thumb</span></li><li><a href="/great-lakes-beaches/sand-point-saginaw-bay/">Sand Point Beach</a> <span>Huron County, Saginaw Bay</span></li><li><a href="/great-lakes-beaches/tawas-point-state-park/">Tawas Point State Park</a> <span>Iosco County, Northeast Michigan</span></li><li><a href="/great-lakes-beaches/wenonah-park/">Wenonah Park</a> <span>Bay County, Saginaw Bay</span></li></ul>
-<h3>Lake Superior</h3><ul class="beach-index-list"><li><a href="/great-lakes-beaches/bete-grise/">Bete Grise Beach</a> <span>Keweenaw County, Keweenaw</span></li><li><a href="/great-lakes-beaches/black-river-harbor/">Black River Harbor Beach</a> <span>Gogebic County, Western Upper Peninsula</span></li><li><a href="/great-lakes-beaches/crisp-point/">Crisp Point Beach</a> <span>Luce County, Eastern Upper Peninsula</span></li><li><a href="/great-lakes-beaches/grand-marais-beach/">Grand Marais Bay Beach</a> <span>Alger County, Eastern Upper Peninsula</span></li><li><a href="/great-lakes-beaches/marquette-south-beach/">Marquette South Beach</a> <span>Marquette County, Marquette</span></li><li><a href="/great-lakes-beaches/mclain-state-park/">McLain State Park</a> <span>Houghton County, Keweenaw</span></li><li><a href="/great-lakes-beaches/miners-beach/">Miners Beach</a> <span>Alger County, Pictured Rocks</span></li><li><a href="/great-lakes-beaches/presque-isle-marquette/">Presque Isle Park</a> <span>Marquette County, Marquette</span></li><li><a href="/great-lakes-beaches/sand-point-pictured-rocks/">Sand Point Beach</a> <span>Alger County, Pictured Rocks</span></li><li><a href="/great-lakes-beaches/twelvemile-beach/">Twelvemile Beach</a> <span>Alger County, Pictured Rocks</span></li><li><a href="/great-lakes-beaches/whitefish-point/">Whitefish Point</a> <span>Chippewa County, Eastern Upper Peninsula</span></li></ul>
-<h3>Lake Erie</h3><ul class="beach-index-list"><li><a href="/great-lakes-beaches/luna-pier/">Luna Pier Beach</a> <span>Monroe County, Southeast Michigan</span></li><li><a href="/great-lakes-beaches/sterling-state-park/">Sterling State Park</a> <span>Monroe County, Southeast Michigan</span></li></ul>
-</section>
-<!-- beach-index:end -->
-<section class="section" id="beachExplorer" aria-labelledby="explorer-heading">
+    <section class="section" id="beachExplorer" aria-labelledby="explorer-heading">
       <div class="section-head">
         <div>
           <p class="section-kicker">Live all year</p>
@@ -244,13 +227,43 @@
       </div>
     </section>
 
-    <section class="section content-grid" id="methodology" aria-labelledby="methodology-heading">
+    <section class="section" aria-labelledby="daily-heading">
+      <div class="section-head">
+        <div>
+          <p class="section-kicker">Summer daily ranking</p>
+          <h2 id="daily-heading">Best Michigan beaches today</h2>
+          <p class="section-intro">Treat the beach ranking like a trip-planning map, not a swimming permission slip. It balances air comfort, rain, wind, recent lake observations, and destination character. Eligibility also requires no active matched closure, advisory, or relevant NWS alert plus an explicit current <strong>low NWS swim risk</strong>. Missing risk is never treated as low.</p>
+        </div>
+        <a href="/best-michigan-beaches-today/">How every beach ranks →</a>
+      </div>
+      <div class="daily-grid" id="dailyPicks" aria-live="polite">
+        <div class="skeleton" aria-hidden="true"></div><div class="skeleton" aria-hidden="true"></div><div class="skeleton" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <section class="section" aria-label="Beyond Michigan"><div class="method-card"><h2>Explore beyond Michigan</h2><p>New York's Lake Ontario beaches, the dunes of Wisconsin and Indiana, Chicago's city shoreline, Lake Superior's North Shore, and more. <a href="/great-lakes-beaches/around-the-lakes/">Explore Great Lakes ShoreFeel at 16 public shoreline locations outside Michigan</a>. Each place links to its own official beach advisory authority. <a href="/great-lakes-beaches/canada/">Cross the border to 30 Canadian ShoreFeel beaches</a>, with Environment Canada forecasts and Ontario authorities.</p></div></section>
+
+    
+<!-- beach-index:start -->
+<section class="section shorefeel-index" id="beachIndex" aria-labelledby="beach-index-heading">
+<details class="beach-index-details"><summary>Browse the full 50-beach directory by lake</summary><div class="beach-index-body">
+<div class="section-head"><div><p class="section-kicker">Every beach</p>
+<h2 id="beach-index-heading">All 50 Michigan beaches by lake</h2>
+<p class="section-intro">Explore the lake that draws you in. Every beach has its own field note about the landscape, the feel of the air, and which official conditions to check before you go.</p>
+</div></div>
+<h3>Lake Michigan</h3><ul class="beach-index-list"><li><a href="/great-lakes-beaches/sleeping-bear-dunes-empire/">Empire Beach</a> <span>Leelanau County, Northwest Michigan</span></li><li><a href="/great-lakes-beaches/frankfort-beach/">Frankfort Beach</a> <span>Benzie County, Northwest Michigan</span></li><li><a href="/great-lakes-beaches/glen-arbor-area/">Glen Haven Beach</a> <span>Leelanau County, Northwest Michigan</span></li><li><a href="/great-lakes-beaches/grand-haven-state-park/">Grand Haven State Park</a> <span>Ottawa County, West Michigan</span></li><li><a href="/great-lakes-beaches/holland-state-park/">Holland State Park</a> <span>Ottawa County, West Michigan</span></li><li><a href="/great-lakes-beaches/ludington-state-park/">Ludington State Park</a> <span>Mason County, West Michigan</span></li><li><a href="/great-lakes-beaches/muskegon-state-park/">Muskegon State Park</a> <span>Muskegon County, West Michigan</span></li><li><a href="/great-lakes-beaches/new-buffalo-beach/">New Buffalo Beach</a> <span>Berrien County, Southwest Michigan</span></li><li><a href="/great-lakes-beaches/north-bar-lake/">North Bar Lake</a> <span>Leelanau County, Northwest Michigan</span></li><li><a href="/great-lakes-beaches/oval-beach/">Oval Beach</a> <span>Allegan County, West Michigan</span></li><li><a href="/great-lakes-beaches/pj-hoffmaster-state-park/">P.J. Hoffmaster State Park</a> <span>Muskegon County, West Michigan</span></li><li><a href="/great-lakes-beaches/pentwater-beach/">Pentwater Beach</a> <span>Oceana County, West Michigan</span></li><li><a href="/great-lakes-beaches/pere-marquette-park/">Pere Marquette Park</a> <span>Muskegon County, West Michigan</span></li><li><a href="/great-lakes-beaches/petoskey-state-park/">Petoskey State Park</a> <span>Emmet County, Northern Michigan</span></li><li><a href="/great-lakes-beaches/sleeping-bear-platte-river/">Platte River Point</a> <span>Benzie County, Northwest Michigan</span></li><li><a href="/great-lakes-beaches/saugatuck-dunes-state-park/">Saugatuck Dunes State Park</a> <span>Allegan County, West Michigan</span></li><li><a href="/great-lakes-beaches/silver-lake-state-park/">Silver Lake State Park</a> <span>Oceana County, West Michigan</span></li><li><a href="/great-lakes-beaches/south-haven-north/">South Haven North Beach</a> <span>Van Buren County, Southwest Michigan</span></li><li><a href="/great-lakes-beaches/stearns-park-beach/">Stearns Park Beach</a> <span>Mason County, West Michigan</span></li><li><a href="/great-lakes-beaches/tunnel-park-holland/">Tunnel Park</a> <span>Ottawa County, West Michigan</span></li><li><a href="/great-lakes-beaches/van-buren-state-park/">Van Buren State Park</a> <span>Van Buren County, Southwest Michigan</span></li><li><a href="/great-lakes-beaches/warren-dunes-state-park/">Warren Dunes State Park</a> <span>Berrien County, Southwest Michigan</span></li><li><a href="/great-lakes-beaches/wilderness-state-park/">Wilderness State Park</a> <span>Emmet County, Tip of the Mitt</span></li></ul>
+<h3>Lake Huron</h3><ul class="beach-index-list"><li><a href="/great-lakes-beaches/caseville-state-park/">Albert E. Sleeper State Park</a> <span>Huron County, Saginaw Bay</span></li><li><a href="/great-lakes-beaches/bay-city-state-park/">Bay City State Park</a> <span>Bay County, Saginaw Bay</span></li><li><a href="/great-lakes-beaches/bird-creek-county-park/">Bird Creek County Park</a> <span>Huron County, The Thumb</span></li><li><a href="/great-lakes-beaches/caseville-county-park/">Caseville County Park</a> <span>Huron County, Saginaw Bay</span></li><li><a href="/great-lakes-beaches/cheboygan-state-park/">Cheboygan State Park</a> <span>Cheboygan County, Tip of the Mitt</span></li><li><a href="/great-lakes-beaches/harrisville-state-park/">Harrisville State Park</a> <span>Alcona County, Sunrise Coast</span></li><li><a href="/great-lakes-beaches/lakeport-state-park/">Lakeport State Park</a> <span>St. Clair County, Blue Water</span></li><li><a href="/great-lakes-beaches/rogers-city-lakeside-park/">Lakeside Park Beach</a> <span>Presque Isle County, Northeast Michigan</span></li><li><a href="/great-lakes-beaches/oscoda-beach-park/">Oscoda Beach Park</a> <span>Iosco County, Sunrise Coast</span></li><li><a href="/great-lakes-beaches/hoeft-state-park/">P.H. Hoeft State Park</a> <span>Presque Isle County, Northeast Michigan</span></li><li><a href="/great-lakes-beaches/port-crescent-state-park/">Port Crescent State Park</a> <span>Huron County, The Thumb</span></li><li><a href="/great-lakes-beaches/sand-point-saginaw-bay/">Sand Point Beach</a> <span>Huron County, Saginaw Bay</span></li><li><a href="/great-lakes-beaches/tawas-point-state-park/">Tawas Point State Park</a> <span>Iosco County, Northeast Michigan</span></li><li><a href="/great-lakes-beaches/wenonah-park/">Wenonah Park</a> <span>Bay County, Saginaw Bay</span></li></ul>
+<h3>Lake Superior</h3><ul class="beach-index-list"><li><a href="/great-lakes-beaches/bete-grise/">Bete Grise Beach</a> <span>Keweenaw County, Keweenaw</span></li><li><a href="/great-lakes-beaches/black-river-harbor/">Black River Harbor Beach</a> <span>Gogebic County, Western Upper Peninsula</span></li><li><a href="/great-lakes-beaches/crisp-point/">Crisp Point Beach</a> <span>Luce County, Eastern Upper Peninsula</span></li><li><a href="/great-lakes-beaches/grand-marais-beach/">Grand Marais Bay Beach</a> <span>Alger County, Eastern Upper Peninsula</span></li><li><a href="/great-lakes-beaches/marquette-south-beach/">Marquette South Beach</a> <span>Marquette County, Marquette</span></li><li><a href="/great-lakes-beaches/mclain-state-park/">McLain State Park</a> <span>Houghton County, Keweenaw</span></li><li><a href="/great-lakes-beaches/miners-beach/">Miners Beach</a> <span>Alger County, Pictured Rocks</span></li><li><a href="/great-lakes-beaches/presque-isle-marquette/">Presque Isle Park</a> <span>Marquette County, Marquette</span></li><li><a href="/great-lakes-beaches/sand-point-pictured-rocks/">Sand Point Beach</a> <span>Alger County, Pictured Rocks</span></li><li><a href="/great-lakes-beaches/twelvemile-beach/">Twelvemile Beach</a> <span>Alger County, Pictured Rocks</span></li><li><a href="/great-lakes-beaches/whitefish-point/">Whitefish Point</a> <span>Chippewa County, Eastern Upper Peninsula</span></li></ul>
+<h3>Lake Erie</h3><ul class="beach-index-list"><li><a href="/great-lakes-beaches/luna-pier/">Luna Pier Beach</a> <span>Monroe County, Southeast Michigan</span></li><li><a href="/great-lakes-beaches/sterling-state-park/">Sterling State Park</a> <span>Monroe County, Southeast Michigan</span></li></ul>
+</div></details></section>
+<!-- beach-index:end -->
+<section class="section content-grid" id="methodology" aria-labelledby="methodology-heading">
       <article class="content-section">
         <p class="section-kicker">Transparent by design</p>
         <h2 id="methodology-heading">What the Beach Day Score means</h2>
         <p>The 0–100 score answers one narrow question: <em>how promising does this beach look for an ordinary day trip?</em> It combines up to 25 points for air comfort, 20 for dry weather, 15 for wind, 12 for observed water temperature, 13 for observed waves, and 15 for the destination itself.</p>
         <p>A score is calculated only when the forecast includes air temperature, rain chance, and wind gusts and a NOAA observation no more than six hours old includes both water temperature and wave height. If any required input is missing, the score is N/A and the beach is excluded from the daily ranking. Because offshore stations can be far from a beach, every detail view names the station, its distance, and observation time.</p>
-        <h3>Official notices override the number</h3>
+        <h3 id="swimSafety">Official notices override the number</h3>
         <p>An active Michigan BeachGuard closure sets the score to zero. A contamination advisory caps it at 20. A high NWS swim risk caps it at 20; moderate caps it at 45. Relevant NWS Beach Hazards Statements, Special Weather or Marine Statements, severe warnings, and lakeshore alerts also limit the result and exclude a beach from the daily picks. The daily Surf Zone Forecast matters because moderate swim risk can exist without an active Beach Hazards Statement.</p>
         <p>The report checks both Michigan land alerts and Great Lakes marine areas. It filters Special Weather and Marine Statements for shoreline threats such as lightning, waterspouts, damaging winds, high waves, or dangerous currents; an unrelated statement or wildfire Red Flag Warning is not mislabeled as a swimming flag.</p>
         <div class="safety-note"><strong>Three separate truths:</strong> BeachGuard reports water-quality closures and advisories. “No active EGLE alert found” does not mean a recent water sample exists. NWS reports forecast swim risk and weather or marine alerts. The flag physically posted at the beach can change during the day and must be checked on arrival; an NWS “low” forecast is not a green posted flag.</div>
