@@ -71,6 +71,8 @@ function payload(place,mode){
     await page.goto(origin+'/great-lakes-beaches/'+place.slug+'/',{waitUntil:'domcontentloaded'});
     await page.waitForFunction(()=>document.querySelector('[data-shorefeel-value]')?.textContent==='86°F',
      {timeout:15000});
+    // Check the painted result, not the same event-loop tick as a source update.
+    await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
     const headline=await page.locator('#shorefeel-heading').innerText();
     assert.match(headline,place.swimming?/at the beach/i:/on the waterfront/i);
     assert.match(await page.locator('[data-shorefeel-method]').innerText(),/Modeled apparent temperature/i);
