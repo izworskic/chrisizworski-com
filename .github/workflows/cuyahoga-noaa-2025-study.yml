@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Verify offline research tests
-        run: node --test tests/cuyahoga-ais-audit.test.js tests/cuyahoga-noaa-points.test.js
+        run: node --test tests/cuyahoga-ais-audit.test.js tests/cuyahoga-noaa-points.test.js tests/cuyahoga-observation-clusters.test.js
       - name: Fetch one published NOAA CC0 research archive
         shell: bash
         run: |
@@ -42,6 +42,9 @@ jobs:
           node scripts/cuyahoga-ais-audit.mjs \
             --tracks "$RUNNER_TEMP/sunnanvik-noaa-observations.json" \
             > "$RUNNER_TEMP/noaa-secondary-audit.json"
+          node scripts/cuyahoga-observation-clusters.mjs \
+            --input "$RUNNER_TEMP/sunnanvik-noaa-observations.json" \
+            --output "$RUNNER_TEMP/noaa-position-clusters.json"
       - name: Record evidence not an ETA
         shell: bash
         run: |
@@ -60,6 +63,10 @@ jobs:
             '',
             'Matching observed position rows in coarse research box: ' + report.stats.matchedTimeAndBox,
             '',
+            'Outside coarse research box: ' + report.stats.outsideResearchBox,
+            '',
+            'Invalid position rows: ' + report.stats.invalidPosition,
+            '',
             'Unique MMSI groups: ' + report.tracks.length,
             '',
             'Per-group time-gap audit: ' + JSON.stringify(report.audit.tracks),
@@ -77,7 +84,8 @@ jobs:
           set -euo pipefail
           mkdir -p research-output
           cp "$RUNNER_TEMP/sunnanvik-noaa-observations.json" "$RUNNER_TEMP/noaa-audit-summary.json" \
-            "$RUNNER_TEMP/noaa-secondary-audit.json" "$RUNNER_TEMP/noaa-source-sha256.txt" research-output/
+            "$RUNNER_TEMP/noaa-secondary-audit.json" "$RUNNER_TEMP/noaa-position-clusters.json" \
+            "$RUNNER_TEMP/noaa-source-sha256.txt" research-output/
       - uses: actions/upload-artifact@v4
         with:
           name: cuyahoga-noaa-observed-study
