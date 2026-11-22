@@ -27,3 +27,6 @@
   .shore-question-links a{font-size:12px;min-height:37px;padding:7px 9px}
 }
 @media(prefers-reduced-motion:reduce){.shore-question-links a,.shore-region-tabs a{scroll-behavior:auto}}
+
+/* Regional explorer: a short place search remains before the answer on narrow phones. */
+@media(max-width:720px){.field-left .shore-search-wrap{order:0;width:100%}.field-left .shore-search-help{order:0;width:100%}.lake-picker{order:1}.lake-context{order:2}.field-report{order:3}.field-left .list-heading{order:4}.shore-no-match{order:5;width:100%}.shore-list{order:6}.map-section{order:7}}

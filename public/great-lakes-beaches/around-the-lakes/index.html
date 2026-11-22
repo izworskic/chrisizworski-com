@@ -14,6 +14,7 @@
 <meta name="theme-color" content="#103c4c">
 <link rel="stylesheet" href="/assets/leaflet-1.9.4.css">
 <link rel="stylesheet" href="/assets/shorefeel-us.css">
+<link rel="stylesheet" href="/assets/shorefeel-wayfinding.css">
 <link rel="icon" href="/favicon.ico">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://chrisizworski.com/great-lakes-beaches/around-the-lakes/#page","url":"https://chrisizworski.com/great-lakes-beaches/around-the-lakes/","name":"Great Lakes ShoreFeel: Weather at the Beach","description":"An interpretive selection of verified public US Great Lakes shores outside Michigan with nearby NWS forecasts and links to official swimming safety authorities.","dateModified":"2026-11-22","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"}},{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Michigan Beach Conditions","item":"https://chrisizworski.com/great-lakes-beaches/"},{"@type":"ListItem","position":3,"name":"Great Lakes ShoreFeel","item":"https://chrisizworski.com/great-lakes-beaches/around-the-lakes/"}]}]}</script>
 <script defer src="/_vercel/insights/script.js"></script>
@@ -28,21 +29,37 @@
 <p class="eyebrow">ShoreFeel · Beyond Michigan · Great Lakes</p>
 <h1>What will it feel like <em>at the beach?</em></h1>
 <p class="lead">Imagine leaving Duluth's harbor streets, a Chicago sidewalk or a dune trail and stepping onto the sand. The horizon opens, the wind shifts and the lake becomes part of the weather. Choose a shoreline, read the nearby National Weather Service forecast and discover what makes that place different before you go.</p>
-<div class="intro-route"><a href="/great-lakes-beaches/">Michigan's 50 shoreline guides</a><span aria-hidden="true"> · </span><span id="coverage">16 verified U.S. locations across four lakes</span><span aria-hidden="true"> · </span><a href="/great-lakes-beaches/canada/">30 Canadian beaches</a></div>
+<p class="intro-route" id="coverage">16 source-vetted U.S. shorelines beyond Michigan</p>
+<nav class="shore-question-links" aria-label="What can ShoreFeel answer?">
+<a href="#shore-search">I know a beach</a>
+<a href="#shore-list">Help me choose</a>
+<a href="#swimSafety">Can I swim there?</a>
+</nav>
+<nav class="shore-region-tabs" aria-label="ShoreFeel regions">
+<a href="/great-lakes-beaches/">Michigan <span>50 beaches</span></a>
+<a href="/great-lakes-beaches/around-the-lakes/" aria-current="page">Rest of U.S. <span>16 beaches</span></a>
+<a href="/great-lakes-beaches/canada/">Ontario <span>30 beaches</span></a>
+</nav>
 </section>
-<div class="safety-ribbon"><strong>A weather outlook is not a swim-safety report.</strong> No beach is labeled safe, open or recently tested here. Follow the posted signs and the correct state or park authority.</div>
+<div class="safety-ribbon" id="swimSafety"><strong>A weather outlook is not a swim-safety report.</strong> No beach is labeled safe, open or recently tested here. Follow the posted signs and the correct state or park authority.</div>
 <section class="field-layout" aria-label="Choose a Great Lakes shore">
 <div class="field-left">
+<label class="shore-search-wrap" for="shore-search">Find a beach or town
+<input id="shore-search" type="search" maxlength="100" autocomplete="off" placeholder="Try Chicago, Sandbanks, or Lake Erie…" aria-controls="shore-list" aria-describedby="shore-search-help">
+</label>
+<p class="shore-search-help" id="shore-search-help">Search this region, or choose a lake below.</p>
 <h2 class="visually-hidden">Choose a lake</h2>
 <div class="lake-picker" role="group" aria-label="Great Lake">
-<button type="button" data-lake-filter="Superior" aria-pressed="true">Lake Superior</button>
+<button type="button" data-lake-filter="All" aria-pressed="true">All lakes</button>
+<button type="button" data-lake-filter="Superior" aria-pressed="false">Lake Superior</button>
 <button type="button" data-lake-filter="Michigan" aria-pressed="false">Lake Michigan</button>
 <button type="button" data-lake-filter="Huron" aria-pressed="false">Lake Huron</button>
 <button type="button" data-lake-filter="Erie" aria-pressed="false">Lake Erie</button>
 <button type="button" data-lake-filter="Ontario" aria-pressed="false">Lake Ontario</button>
 </div>
-<p id="lake-context" class="lake-context">Lake Superior stretches from the northern shore of Minnesota to the upper Great Lakes. Choose a public shoreline below.</p>
-<h3 class="list-heading">Choose a shoreline <span id="result-count">16 locations</span></h3>
+<p id="lake-context" class="lake-context">See all 16 shorelines or narrow your search by lake.</p>
+<h3 class="list-heading">Choose a shoreline <span id="result-count" role="status">16 locations</span></h3>
+<p id="shore-no-match" class="shore-no-match" role="status" hidden>No shorelines match. Try another town, lake, or <a href="/great-lakes-beaches/">Michigan beach</a>.</p>
 <ul id="shore-list" class="shore-list">
 <!-- shorefeel-us-list:start -->
 <li class="shore-stop" data-slug="park-point-beach-house" data-lake="Superior" data-lat="46.722" data-lon="-92.04" data-state="MN" data-city="Duluth" data-name="Park Point Beach House" data-story="At Park Point, the city gives way to a long ribbon of sand between Duluth Harbor and Lake Superior. Wind off the open lake can feel strikingly different from sheltered streets. Face the open lake, then turn toward the harbor. These neighboring waters have different exposure. Notice which direction the breeze comes from and how waves arrive before settling onto the sand." data-access-alert="" data-coordinate-note="Park Point Beach House shoreline reference, approximate; not a parking pin" data-safety-url="https://mnbeaches.org/" data-safety-name="Minnesota Lake Superior Beach Monitoring Program" data-park-url="https://duluthmn.gov/parks/parks-trails/parks-listing/park-point/"><button type="button" data-select="park-point-beach-house" aria-pressed="false"><span class="shore-stop-name">Park Point Beach House</span><span class="shore-stop-sub">Duluth, MN · Lake Superior</span></button><span class="shore-stop-links"><a href="/great-lakes-beaches/around-the-lakes/park-point-beach-house/">ShoreFeel</a><a href="https://duluthmn.gov/parks/parks-trails/parks-listing/park-point/" target="_blank" rel="noopener" aria-label="Park Point Beach House official park page">Park details</a></span></li>
