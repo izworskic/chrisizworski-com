@@ -76,3 +76,48 @@ The release evidence record stays in draft until deployed/live status can actual
 
 **Catalog verifier scope:** The generic Experience OS --check-site helper assumes a data-tool-id card in the main Tools ItemList and direct membership in the root sitemap.xml. This established Field Guide is instead a Field Guides section article in public/tools/index.html with canonical membership in public/sitemap-winter.xml; the root /sitemap.xml does not hold its URL. Moving it would change an unrelated search architecture. Run the Experience OS structural validator without --check-site and retain the owning tests for actual field-guide internal links and the winter sitemap. This is a known applicability limit, not a claim that the generic site integration check passed.
 
+
+
+## Completed Experience OS V1.2 reviewer scorecard (2026-11-22)
+
+This is a judged release-readiness score on the tested candidate, not an observed conversion rate or a park-conditions confidence score.
+
+| Dimension | Score | Weighted | Evidence and limitation |
+| --- | ---: | ---: | --- |
+| Useful visitor decision | 5/5 | 25/25 | First named trail within 844px phone viewport at both 360px and 390px; source-matched comparison, notes, manager and weather are available |
+| Distinct editorial/visual identity | 4/5 | 12/15 | Authored winter-activity source comparison and interpretive dossiers differ from Snow Depth and XC Ski tools; still uses the existing decision-desk aesthetic |
+| Causal interaction | 5/5 | 15/15 | Activity/region/effort change options; selected route ID opens the proper weather inspector; return focuses the same compared choice; empty selection resets |
+| Truth, provenance and access | 4/5 | 12/15 | Official links, source-age checks and modeled-snow versus route-access warnings preserved; actual lot plowing and trail opening remain unverified |
+| Visual execution and photography | 4/5 | 8/10 | Before/after screenshots manually inspected at 390px and 1280px; source-linked first photo and real map rendered on existing live page; not every archival photo was independently rechecked |
+| Mobile, keyboard and accessibility | 5/5 | 10/10 | Chromium at 360, 390, 768, 1280 and 1440px; no overflow, no-JS, reduced motion and focus return; zero axe WCAG violations in tested 390px and 1280px decision desk |
+| Performance and resilience | 4/5 | 4/5 | Uses existing on-demand API, map fallback and unknown/stale weather behavior; no comparable real-user Core Web Vitals collected |
+| Integration and site integrity | 4/5 | 4/5 | Full repository tests, emitted HTML audit, SERP protection and existing weather browser QA passed; live candidate ad placement cannot be verified before merge |
+| **Total** | | **90/100** | All eight categories meet 4/5; distinctiveness veto **PASS** for two real task/interaction differences |
+
+The score meets the Experience OS numerical release threshold on reviewed candidate evidence. It does **not** authorize automatic merging, certify an operator-open winter trail, validate all 18 media assets, measure AdSense behavior or replace post-deployment public smoke.
+
+## Completed Foundry and browser evidence (2026-11-22)
+
+- Genuine pre-change source baseline: Git commit 49bf85a36cb38c5b9b2f7f9d7cd433ca6cd1a74a.
+- Foundry 0.3 improve/assess/prove/assess: BEHAVIOR_DEMONSTRATED, **three GAIN** (first-phone hierarchy contract, matched comparison-to-weather, matched return-focus) and **three PRESERVED** (source inventory, canonical/ads, map/weather unknown fallbacks). Source proof is deliberately distinguished from visual acceptance.
+- Actual Chromium before/after test: https://github.com/izworskic/chrisizworski-com/actions/runs/45027677211
+- Before/after screenshots and proof: https://github.com/izworskic/chrisizworski-com/actions/runs/45027677211/artifacts/14755973708
+- Initial first-option position: 360px 1049px -> 731px (318px earlier); 390px 889px -> 654px (236px earlier); 768px 668px -> 532px (136px earlier). Desktop at 1280 and 1440px unchanged, no overflow at any tested width.
+- Source-matched trail -> NOAA/NWS fixture -> trail return, no-match reset, 15 source-linked no-JS dossiers and reduced motion passed.
+- Zero axe-core WCAG tagged violations in the tested decision desk at 390px and 1280px. This is a scoped scan, not a universal page accessibility certificate.
+- Owning full verify and emitted HTML audit: https://github.com/izworskic/chrisizworski-com/actions/runs/45027677239 (both passed on candidate SHA 7d98509e6bbb7beeafad0e522dd6c217a368a666).
+- Existing weather browser QA: https://github.com/izworskic/chrisizworski-com/actions/runs/45027677181 (passed).
+- Name SERP protection: https://github.com/izworskic/chrisizworski-com/actions/runs/45027677251 (passed).
+- Fresh independent live **prior production** screenshot showed real map tiles and a loaded exact-place Munising snowshoe photograph. The unmerged candidate itself cannot be independently live-smoked; its Playwright tests use controlled NOAA/NWS replies.
+- Experience OS v1.2 structural record passed without --check-site. Its generic --check-site currently expects a main-sitemap Tool card. This established seasonal guide is correctly recorded via the dedicated winter sitemap and Field Guides section instead, checked by its own owning tests.
+
+## Remaining release boundaries
+
+- PR #1847 is **open and not merged**; current branch changes should be rechecked against the newest main before merging.
+- Vercel preview status and final CI must be rechecked for the **latest documentation-only SHA**; earlier green results on source SHA do not automatically describe newer commits.
+- Production deployment and public interactive smoke on the new commit: NOT VERIFIED.
+- Live NOAA/NWS availability for a selected trail: NOT VERIFIED.
+- Dynamic Auto ads behavior for the candidate at production and comparable Core Web Vitals: NOT MEASURED.
+- Actual visitor conversion, GSC movement and AdSense results: NOT MEASURED.
+
+Next concrete action: confirm the latest PR head checks and inspect the Vercel preview in a mobile browser before the owner approves merge. After merge, independently confirm the exact production commit and perform a live map, imagery, weather/error and AdSense positioning smoke test.
