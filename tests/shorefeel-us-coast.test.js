@@ -150,7 +150,7 @@ test('curated list is crawlable and consistent across five lake choices',()=>{
  assert.match(page,/No beach is labeled safe, open or recently tested here/);
  for(const link of ['mnbeaches.org/','apps.dnr.wi.gov/beachhealth/','idph.illinois.gov/envhealth/ilbeaches/','portal.idem.in.gov/beachalert/','odh.ohio.gov/know-our-programs/','eriecountypa.gov/departments/health/','beachadvisory.health.ny.gov/'])assert.ok(page.includes(link),'static source fallback for '+link);
  assert.match(page,/rel="canonical" href="https:\/\/chrisizworski\.com\/great-lakes-beaches\/around-the-lakes\//);
- assert.match(page,/"dateModified":"2026-11-21"/);
+ assert.match(page,/"dateModified":"2026-11-22"/);
  assert.match(fs.readFileSync(path.join(root,'public/sitemap-beaches.xml'),'utf8'),/around-the-lakes\/</);
  assert.match(fs.readFileSync(path.join(root,'public/great-lakes-beaches/index.html'),'utf8'),/Explore Great Lakes ShoreFeel/);
 });

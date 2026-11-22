@@ -4,11 +4,11 @@
   const filters=[...document.querySelectorAll('[data-lake-filter]')];
   const bySlug=new Map(list.map(li=>[li.dataset.slug,li]));
   const lakeInfo={
-    Superior:'From Duluth's Park Point to the Apostle Islands, the open Lake Superior shore can feel very different from the forest behind it. Watch which way the breeze crosses the water before choosing your beach.',
-    Michigan:'Lake Michigan connects quiet dunes with Chicago's city beaches. Step out of shelter toward the open sand and notice whether the wind feels different from the forecast back in town.',
+    Superior:'From Duluth’s Park Point to the Apostle Islands, the open Lake Superior shore can feel very different from the forest behind it. Watch which way the breeze crosses the water before choosing your beach.',
+    Michigan:'Lake Michigan connects quiet dunes with Chicago’s city beaches. Step out of shelter toward the open sand and notice whether the wind feels different from the forecast back in town.',
     Huron:'The United States shore of Lake Huron is in Michigan. Open the existing Michigan Beach Report to explore its public beaches and official advisories.',
     Erie:'On Lake Erie, the marsh edges, sandy peninsulas and city beaches each meet the breeze differently. Watch the water, then check the local health authority for current algae and bacteria notices.',
-    Ontario:'Dunes, bluffs and long beaches reveal different faces of Lake Ontario. Compare the wind on an exposed shore with sheltered paths, and consult the park's own beach-health guidance.'
+    Ontario:'Dunes, bluffs and long beaches reveal different faces of Lake Ontario. Compare the wind on an exposed shore with sheltered paths, and consult the park’s own beach-health guidance.'
   };
   const $=id=>document.getElementById(id);
   let current=null,lake='Superior',request=null,map=null,markers=new Map(),mapLive=false,loadedTile=false,tileFails=0;
@@ -38,7 +38,7 @@
     put('report-place',d.city+', '+d.state+' · Lake '+d.lake);
     put('report-story',d.story);
     put('report-heading','Get to know this shore');
-    put('report-guide','Checking a nearby NWS air forecast. While it loads, look for the wind and waves described in this place's field note.');
+    put('report-guide','Checking a nearby NWS air forecast. While it loads, look for the wind and waves described in this place’s field note.');
     put('report-temp','Checking forecast');
     put('report-method','National Weather Service hourly forecast, not a sand thermometer');
     put('report-wind','Checking wind');

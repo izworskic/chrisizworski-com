@@ -7,10 +7,10 @@
  const tell=(id,v)=>{const x=$(id);if(x)x.textContent=v;};
  const link=(id,url,label)=>{const x=$(id);if(x){x.href=url;x.textContent=label;}};
  const notes={
-  Superior:'On Superior, the trees may shelter you until the forest gives way to a rocky point or sandy bay. Notice when the wind reaches you, and read the park's latest guidance.',
-  Huron:'Georgian Bay coves, Lake Huron points and long strands face the wind in different directions. Compare the water's surface with the air you feel behind trees or town buildings.',
-  Erie:'Across Lake Erie's sandy peninsulas, even a sunny afternoon can bring shifting wind and waves. Check the official park notices before choosing a place at the water.',
-  Ontario:'From Toronto's streets to Prince Edward County dunes, the Lake Ontario shoreline changes character. See whether the breeze comes across open water or from shelter on land.',
+  Superior:'On Superior, the trees may shelter you until the forest gives way to a rocky point or sandy bay. Notice when the wind reaches you, and read the park’s latest guidance.',
+  Huron:'Georgian Bay coves, Lake Huron points and long strands face the wind in different directions. Compare the water’s surface with the air you feel behind trees or town buildings.',
+  Erie:'Across Lake Erie’s sandy peninsulas, even a sunny afternoon can bring shifting wind and waves. Check the official park notices before choosing a place at the water.',
+  Ontario:'From Toronto’s streets to Prince Edward County dunes, the Lake Ontario shoreline changes character. See whether the breeze comes across open water or from shelter on land.',
   Michigan:'Lake Michigan lies entirely along the United States. Explore its beaches in the U.S. ShoreFeel guide.'
  };
  let current=null,lake='Superior',controller=null,map=null,mapReady=false,markers=new Map(),tilesLoaded=false,tileErrors=0;
