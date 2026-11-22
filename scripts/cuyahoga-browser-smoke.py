@@ -52,6 +52,8 @@ async def run():
                 raise AssertionError("Cargo vessel missing its source-category silhouette")
             if await page.locator(".cuyahoga-vessel-icon svg").count() != 1:
                 raise AssertionError("AIS vessel marker missing SVG source category shape")
+            if await page.locator(".pin-bridge").count() != 4 or await page.locator(".pin-work").count() != 1:
+                raise AssertionError("First map screen must show only four key bridges and one work notice")
             await page.screenshot(path=str(OUT / f"cuyahoga-{width}-live.png"), full_page=True, animations="disabled")
             await page.get_by_role("button", name="Scranton Flats Pier").click()
             await page.locator("#river-focus h3").get_by_text("Scranton Flats Pier").wait_for()
@@ -64,6 +66,12 @@ async def run():
             await page.locator(".bridge-picker summary").click()
             if await page.locator("#bridge-select option").count() != 20:
                 raise AssertionError("NOAA main-channel bridge options were not loaded")
+            await page.locator("#show-all-bridges").check()
+            if await page.locator(".pin-bridge").count() != 18:
+                raise AssertionError("Opt-in full NOAA bridge set does not render all 19 references")
+            await page.locator("#show-all-bridges").uncheck()
+            if await page.locator(".pin-bridge").count() != 4:
+                raise AssertionError("Default river view did not restore five key bridge landmarks")
             await page.locator("#bridge-select").select_option("eagle-280")
             await page.locator("#river-focus h3").get_by_text("Eagle Avenue bridge").wait_for()
             if await page.locator("#river-focus a[href*='navcen.uscg.gov']").count() != 1:
