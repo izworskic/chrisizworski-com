@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "asOf": "2026-11-22",
+  "usage": "OFFLINE_OBSERVATION_CHECKPOINTS_NOT_BRIDGE_CROSSINGS",
+  "regulatorySourceUrl": "https://www.ecfr.gov/current/title-33/chapter-I/subchapter-J/part-117/section-117.848",
+  "references": [
+    {
+      "id": "center-street-nearby-usgs",
+      "name": "Center Street Bridge area",
+      "riverMile": 1.28,
+      "latitude": 41.4942176270731,
+      "longitude": -81.7029090536718,
+      "coordinateRole": "USGS water-sampling monitoring location near bridge, not bridge span center",
+      "coordinateSource": "https://waterdata.usgs.gov/monitoring-location/USGS-04208510/",
+      "coordinateMethod": "USGS reports map-interpolated point, accuracy plus or minus one arcsecond",
+      "pointStatus": "NEARBY_REFERENCE_NOT_CROSSING",
+      "referenceRadiusMeters": 110
+    },
+    {
+      "id": "columbus-road-nearby-uscg",
+      "name": "Columbus Road Bridge area",
+      "riverMile": 1.93,
+      "latitude": 41.48855555555556,
+      "longitude": -81.70063888888889,
+      "coordinateRole": "US Coast Guard published east-bank reference point at Columbus Road bridge; not independently surveyed span center",
+      "coordinateSource": "https://www.law.cornell.edu/cfr/text/33/165.903",
+      "coordinateMethod": "USCG DMS east-bank reference, converted to decimal degrees",
+      "pointStatus": "NEARBY_REFERENCE_NOT_CROSSING",
+      "referenceRadiusMeters": 110
+    }
+  ],
+  "limitations": [
+    "These two locations are nearby references and not surveyed navigational bridge centerlines.",
+    "A vessel's proximity does not prove a bridge opening, clearance or passage, and is not a real-time prediction.",
+    "River miles describe legal bridge sequence but do not constitute a navigable route or pedestrian access.",
+    "A short observation interval around a reference point is not a validated bridge ETA."
+  ]
+}
