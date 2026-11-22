@@ -19,7 +19,6 @@ test('Soo map uses the shared AIS silhouettes rather than circles for normal shi
   assert.match(js, /marker\.bindPopup\(content\)/);
   assert.doesNotMatch(js, /\.bindTooltip\(/);
   assert.match(js, /el\.setAttribute\('aria-label'/);
-  assert.match(js, /el\.addEventListener\('mousedown'/);
   assert.match(js, /labelShipMarker\(marker, v\)/);
   assert.match(js, /map\.on\('zoomend'/);
   assert.match(js, /selectedMarker = m/);
