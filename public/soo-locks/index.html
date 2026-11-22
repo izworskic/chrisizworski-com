@@ -185,7 +185,7 @@ h3.subh{font-size:17px;font-weight:bold;color:#2c5f2d;margin:22px 0 10px}
 .lock-compare{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0 22px}
 .lock-card{background:#fff;border:1px solid #e0dbd2;border-radius:3px;padding:16px 18px}
 .lock-card.featured{border-color:#2c5f2d;border-width:2px}
-.lock-card h4{font-size:15px;font-weight:bold;color:#2c5f2d;margin-bottom:8px}
+.lock-card h3,.lock-card h4{font-size:15px;font-weight:bold;color:#2c5f2d;margin-bottom:8px}
 .lock-card .lc-spec{font-size:13px;color:#444;line-height:1.85}
 .lock-card .lc-spec b{color:#2c5f2d}
 @media(max-width:600px){.lock-compare{grid-template-columns:1fr}}
@@ -261,6 +261,7 @@ figure.fig.hero{margin:6px 0 28px}
 <meta property="og:site_name" content="Chris Izworski">
 <meta name="twitter:title" content="Soo Locks Schedule Today: Ships &amp; Map | Chris Izworski">
 <meta name="twitter:description" content="What ships are in the Soo Locks today: schedule sources, the boat hotline, a live AIS map, webcams, and Sault Ste. Marie locks visitor hours.">
+<style>/* WCAG AA contrast and link-identification fixes found by axe-core, 2026-11-22. */.breadcrumb,.breadcrumb a,.footer{color:#6b6b6b}.map-caption,figure.fig figcaption{color:#5f5f5f}.stat-box .lbl,.stat-box .extra{color:#666}.photo-credit,.field-camera .camera-out{opacity:1;color:#5f5f5f}p>a:not([class]),.footer a{text-decoration:underline;text-underline-offset:2px}</style>
 </head>
 <body data-analytics-page="soo-locks">
 <div class="header"><p class="site-title"><a href="/">Chris Izworski</a></p></div>
@@ -431,19 +432,19 @@ figure.fig.hero{margin:6px 0 28px}
 
 <div class="lock-compare">
   <div class="lock-card featured">
-    <h4>Poe Lock (1968)</h4>
+    <h3>Poe Lock (1968)</h3>
     <div class="lc-spec">Length: <b>1,200 ft</b><br>Width: <b>110 ft</b><br>Depth: <b>32 ft</b><br>Lift: 21 ft<br>Status: <b>Active</b><br>Handles: All vessels, including 1,000-footers</div>
   </div>
   <div class="lock-card featured">
-    <h4>MacArthur Lock (1943)</h4>
+    <h3>MacArthur Lock (1943)</h3>
     <div class="lc-spec">Length: <b>800 ft</b><br>Width: <b>80 ft</b><br>Depth: <b>31 ft</b><br>Lift: 21 ft<br>Status: <b>Active</b><br>Handles: Vessels up to 730 ft</div>
   </div>
   <div class="lock-card">
-    <h4>Davis Lock (1914)</h4>
+    <h3>Davis Lock (1914)</h3>
     <div class="lc-spec">Length: 1,350 ft<br>Width: 80 ft<br>Depth: 23 ft<br>Lift: 21 ft<br>Status: <b>Out of service</b><br>To be demolished for replacement lock</div>
   </div>
   <div class="lock-card">
-    <h4>Sabin Lock (1919)</h4>
+    <h3>Sabin Lock (1919)</h3>
     <div class="lc-spec">Length: 1,350 ft<br>Width: 80 ft<br>Depth: 23 ft<br>Lift: 21 ft<br>Status: <b>Out of service</b><br>Demolished for the replacement lock site</div>
   </div>
 </div>
@@ -473,7 +474,7 @@ figure.fig.hero{margin:6px 0 28px}
     <label><input type="radio" name="lock-ship" value="mackinaw"><b>USCGC Mackinaw</b><small>240 ft icebreaker</small></label>
   </fieldset>
   <p class="lock-live-note" data-lock-live hidden aria-live="polite"></p>
-  <div class="lock-stage"><svg data-lock-svg viewBox="0 0 1000 300" role="img" aria-label="Side view of a Soo lock chamber with the selected ship"></svg></div>
+  <div class="lock-stage" tabindex="0" role="region" aria-label="Lock side view; on narrow screens scroll sideways to see both gates"><svg data-lock-svg viewBox="0 0 1000 300" role="img" aria-label="Side view of a Soo lock chamber with the selected ship"></svg></div>
   <div class="lock-bar">
     <button type="button" class="lock-play" data-lock-play aria-pressed="false">Lock her through</button>
     <div class="lock-dir" role="radiogroup" aria-label="Direction">

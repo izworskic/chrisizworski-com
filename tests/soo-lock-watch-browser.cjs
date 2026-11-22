@@ -5,6 +5,9 @@
 // except for Leaflet, which is served from public/vendor so the real map path runs.
 const http = require('node:http'), fs = require('node:fs'), path = require('node:path'), assert = require('node:assert/strict');
 const { chromium } = require('playwright');
+// axe-core is installed ephemerally in CI (see soo-lock-watch-browser.yml), never as a site dependency.
+let AxeBuilder = null;
+try { AxeBuilder = require('@axe-core/playwright').default; } catch (e) { if (process.env.CI) throw e; console.warn('axe-core not installed: WCAG scan NOT VERIFIED locally'); }
 
 const root = path.resolve('public');
 const out = 'artifacts/soo-lock-watch';
@@ -159,6 +162,11 @@ let base;
       assert.match(await verdict(page), /^Best bet: BURNS HARBOR/);
       assert.equal(await page.locator('input[name="lw-start"]:checked').getAttribute('value'), '90');
       assert.equal(await page.locator('input[name="lw-stay"]:checked').getAttribute('value'), '180');
+      // web-quality-accessibility: axe-core WCAG 2.0 to 2.2 A/AA over the whole page, after interaction.
+      if (AxeBuilder && (width === 390 || width === 1280)) {
+        const scan = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']).analyze();
+        assert.deepEqual(scan.violations.map(v => `${v.id} (${v.impact}) x${v.nodes.length}: ${v.nodes[0].target.join(' ')}`), [], 'axe at ' + width);
+      }
       // No page-wide horizontal scroll.
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, 'overflow at ' + width);
       await page.locator('#soo-lock-watch').screenshot({ path: `${out}/lock-watch-${width}.png` });
