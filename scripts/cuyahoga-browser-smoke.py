@@ -33,7 +33,7 @@ async def run():
                 "checkedAt": iso(NOW - timedelta(seconds=15)),
                 "vessels": [
                     {"mmsi": "367123456", "name": "BROWSER TEST SHIP", "seen": now,
-                     "lat": 41.4945, "lon": -81.7033, "speedKnots": 2.4,
+                     "lat": 41.4945, "lon": -81.7033, "speedKnots": 2.4, "course": 90,
                      "lengthMeters": 180, "shipType": 70, "source": "mock AIS QA"},
                     {"mmsi": "367123457", "name": "STALE SHIP", "seen": iso(NOW - timedelta(minutes=42)),
                      "lat": 41.4945, "lon": -81.7033, "speedKnots": 0.2, "lengthMeters": 190,
@@ -48,6 +48,11 @@ async def run():
             marker_count = await page.locator(".pin-vessel").count()
             if marker_count != 1:
                 raise AssertionError(f"Expected one recent marker, found {marker_count}")
+            if await page.locator(".cuyahoga-ship-cargo").count() != 1:
+                raise AssertionError("Cargo vessel missing its source-category silhouette")
+            if await page.locator(".cuyahoga-vessel-icon svg").count() != 1:
+                raise AssertionError("AIS vessel marker missing SVG source category shape")
+            await page.screenshot(path=str(OUT / f"cuyahoga-{width}-live.png"), full_page=True, animations="disabled")
             await page.get_by_role("button", name="Scranton Flats Pier").click()
             await page.locator("#river-focus h3").get_by_text("Scranton Flats Pier").wait_for()
             if await page.locator("#river-focus a[href*='clevelandmetroparks']").count() != 1:
