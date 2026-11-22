@@ -88,6 +88,7 @@ let base;
         await marker('tug').hover();
         assert.equal(await page.locator('#sooVesselMap .leaflet-tooltip:visible').count(), 0, 'vessel hover must not open a separate card');
         await marker('tug').click();
+        await page.locator('#sooVesselMap .leaflet-popup-content:visible').first().waitFor({ timeout: 4000 });
         assert.equal(await page.locator('#sooVesselMap .leaflet-popup:visible').count(), 1, 'vessel click opens exactly one detail card');
         assert.equal(await page.locator('#sooVesselMap .leaflet-tooltip:visible').count(), 0, 'no duplicate tooltip after clicking');
         assert.equal(await marker('tug').getAttribute('aria-label'), 'TEST TUG · Tug / towing', 'ship remains keyboard accessible');
