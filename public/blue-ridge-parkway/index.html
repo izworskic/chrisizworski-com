@@ -42,7 +42,7 @@
     <div>
       <div class="eyebrow">BLUE RIDGE PARKWAY TRIP PLANNER · LIVE CONDITIONS</div>
       <h1>Which part of the Blue Ridge Parkway should you drive today?</h1>
-      <p class="lede">Start near Asheville, Boone, Roanoke, Cherokee or another Parkway entrance. This tool checks current NPS road status, mountain weather and the time you actually have, then recommends the Parkway section and stops that fit your day.</p>
+      <p class="lede">Start near Asheville, Boone, Roanoke, Cherokee or another Parkway entrance. This tool checks NPS road status, mountain weather and the hours you have, then suggests a drive that leaves time to step outside. Along the Parkway, a short climb can carry you from hardwood forest into cooler, cloud-wrapped ridges; the best day depends on which part of that landscape you can actually reach.</p>
       <div class="hero-actions"><a class="primary-link" href="#planner">Plan my drive</a><a class="hero-nps-link" href="https://www.nps.gov/blri/planyourvisit/roadclosures.htm" target="_blank" rel="noopener">Official NPS road status</a></div>
       <div class="hero-proof" aria-label="How this tool works"><span class="proof">1 · Pick where you’re starting</span><span class="proof">2 · See today’s best direction</span><span class="proof">3 · Build a drive that fits your time</span></div>
     </div>
@@ -53,7 +53,7 @@
   </section>
 
   <section class="planner" id="planner" aria-labelledby="planner-title">
-    <div class="planner-top"><div><div class="eyebrow">TELL US ABOUT YOUR DAY</div><h2 id="planner-title">Build your Parkway drive.</h2></div><p>Choose where you’re starting, when you’re leaving, how much time you have and what you care about. We’ll turn today’s conditions into a route and stop sequence that fits.</p></div>
+    <div class="planner-top"><div><div class="eyebrow">TELL US ABOUT YOUR DAY</div><h2 id="planner-title">Build your Parkway drive.</h2></div><p>Tell us where you’ll enter the mountains and how long you can stay. Then choose what you’d most like to experience: a ridge view, a forest walk, moving water or a story from the people who lived here. The planner checks the road and forecast before setting out the stops.</p></div>
     <form class="planner-form" id="plannerForm">
       <div class="form-grid">
         <div class="field"><label for="gateway">Starting near</label><select id="gateway"><option value="asheville">Asheville</option><option value="boone">Boone / Blowing Rock</option><option value="roanoke">Roanoke</option><option value="floyd">Floyd / Meadows of Dan</option><option value="afton">Afton / Waynesboro</option><option value="cherokee">Cherokee</option></select></div>
@@ -79,7 +79,7 @@
     </section>
 
     <section class="section" id="route-map">
-      <div class="section-head"><div><div class="eyebrow">ON THE ROAD</div><h2>Route shape and stop timing</h2></div><p>The map keeps the Parkway corridor visible; the itinerary tells you when each stop begins to consume the day.</p></div>
+      <div class="section-head"><div><div class="eyebrow">ON THE ROAD</div><h2>Follow your drive, stop by stop</h2></div><p>Start with the numbered stops, then follow their mileposts along the road. Choose any stop to learn what to look for and how much time to give it. Times are estimates; the mountain sets its own pace.</p></div>
       <nav id="stopRouteStrip" class="stop-route-strip" aria-label="Stops in this drive" hidden></nav><p id="stopSelectionStatus" class="brp-sr-only" aria-live="polite"></p>
       <div class="route-workspace">
         <article class="map-card"><div class="map-head"><strong>Selected Parkway section</strong><span>Mileposts + selected stops</span></div><div class="map-wrap"><div id="parkwayMap" role="region" aria-label="Interactive Blue Ridge Parkway map with numbered selected stops"></div></div><div class="map-fallback" id="parkwayMapFallback" hidden role="status"><span id="parkwayMapFailure">Interactive map unavailable.</span> The stop itinerary remains available. <a href="https://www.nps.gov/blri/planyourvisit/maps.htm" target="_blank" rel="noopener">Official NPS map</a>.</div><div class="map-caption">Numbered pins follow the selected stops. The Parkway line is for orientation, not a verified open or drivable route. <a href="https://www.nps.gov/blri/planyourvisit/maps.htm" target="_blank" rel="noopener">NPS milepost map</a>. <span id="parkwayCorridorNote"></span></div></article>
@@ -88,18 +88,18 @@
     </section>
 
     <section class="section" id="selected-stops">
-      <div class="section-head"><div><div class="eyebrow">YOUR STOPS</div><h2>Stops chosen for this drive</h2></div><p>These are the stops the planner selected from your interests and time budget. It also tells you which interests did not make the cut.</p></div>
+      <div class="section-head"><div><div class="eyebrow">YOUR STOPS</div><h2>Places worth leaving the car for</h2></div><p>A stop is more than a pin on a map. Read what makes each place different, from a short climb to a working mill, and see which of your interests fit the hours you have.</p></div>
       <div class="selected-stop-summary" id="selectedStopSummary"></div>
       <div class="selected-stop-grid" id="selectedStopDetails"></div>
     </section>
 
     <section class="section">
-      <div class="section-head"><div><div class="eyebrow">CONDITIONS</div><h2>What the mountain is likely to give you</h2></div><p>Weather and color are labeled differently from road status because they are forecasts or seasonal estimates—not gate facts.</p></div>
+      <div class="section-head"><div><div class="eyebrow">CONDITIONS</div><h2>Read the sky before you climb</h2></div><p>Cloud can settle against a ridge while the valley below stays sunny. Wind and temperature also change with elevation. These forecast clues can help you choose a better stop; only official road notices tell you whether a stretch is open.</p></div>
       <div class="condition-grid"><article class="condition-card" id="weatherCard"></article><article class="condition-card" id="viewCard"></article><article class="condition-card" id="foliageCard"></article></div>
     </section>
 
     <section class="section road-alert-section" id="roadAlertSection" hidden>
-      <div class="section-head"><div><div class="eyebrow">ROAD ALERT</div><h2>This can change your trip</h2></div><p>Only closures, construction cautions or a failed road-status check appear here.</p></div>
+      <div class="section-head"><div><div class="eyebrow">ROAD ALERT</div><h2>Before you head farther along the ridge</h2></div><p>A closed gate, construction warning or missing road update matters more than the most promising view. If one affects your plan, check the NPS notice before traveling.</p></div>
       <div class="road-list" id="roadAlert"></div>
     </section>
 
@@ -116,21 +116,21 @@
 
   <section class="today-intel" aria-labelledby="today-title">
     <div class="today-intel-head">
-      <div><div class="eyebrow">STARTING NEAR ONE OF THESE PLACES?</div><h2 id="today-title">Here’s what the Parkway looks like from there today.</h2></div>
-      <p class="now-summary" id="parkwayNowSummary">Each card is a live starting-point recommendation—not a ranking of destinations. Pick the place closest to where you expect to enter the Parkway.</p>
+      <div><div class="eyebrow">STARTING NEAR ONE OF THESE PLACES?</div><h2 id="today-title">Four ways into the mountains</h2></div>
+      <p class="now-summary" id="parkwayNowSummary">Each entrance reveals a different landscape. Choose the town closest to your starting point to compare what the road, weather and remaining hours may let you experience.</p>
     </div>
     <div class="snapshot-grid" id="gatewaySnapshots">
-      <article class="snapshot-card loading-shimmer"><div class="snapshot-kicker"><span>MP 384 · Asheville</span><span class="snapshot-state">CHECKING</span></div><h3>From Asheville: north or south?</h3><p class="snapshot-route">Craggy Gardens vs. Mount Pisgah</p><p>Asheville is a real fork in the road: weather and closures can make the better direction change by the day.</p><div class="snapshot-actions"><a href="/blue-ridge-parkway/asheville/">From Asheville →</a></div></article>
-      <article class="snapshot-card loading-shimmer"><div class="snapshot-kicker"><span>MP 291 · Boone</span><span class="snapshot-state">CHECKING</span></div><h3>From Boone: how much High Country fits?</h3><p class="snapshot-route">Rough Ridge · Linn Cove · Linville Falls</p><p>The payoff is concentrated here, so a short day can still work if the road and view window cooperate.</p><div class="snapshot-actions"><a href="/blue-ridge-parkway/boone/">From Boone →</a></div></article>
-      <article class="snapshot-card loading-shimmer"><div class="snapshot-kicker"><span>MP 121 · Roanoke</span><span class="snapshot-state">CHECKING</span></div><h3>From Roanoke: views or history?</h3><p class="snapshot-route">Peaks of Otter vs. Mabry Mill</p><p>Roanoke's choice is less about the famous stop and more about whether your time budget favors a compact or longer drive.</p><div class="snapshot-actions"><a href="/blue-ridge-parkway/roanoke/">From Roanoke →</a></div></article>
-      <article class="snapshot-card loading-shimmer"><div class="snapshot-kicker"><span>MP 469 · Cherokee</span><span class="snapshot-state">CHECKING</span></div><h3>From Cherokee: how far should you climb?</h3><p class="snapshot-route">Waterrock Knob · Richland Balsam</p><p>Cherokee gives you fast elevation gain, but cloud and wind can erase the reason to keep climbing.</p><div class="snapshot-actions"><a href="/blue-ridge-parkway/cherokee/">From Cherokee →</a></div></article>
+      <article class="snapshot-card loading-shimmer"><div class="snapshot-kicker"><span>MP 384 · Asheville</span><span class="snapshot-state">CHECKING</span></div><h3>From Asheville: north or south?</h3><p class="snapshot-route">Craggy Gardens vs. Mount Pisgah</p><p>North of Asheville, the road climbs toward Craggy’s rhododendron-covered heights; south, it winds toward Pisgah and the Balsams. Cloud and road access decide which journey makes sense.</p><div class="snapshot-actions"><a href="/blue-ridge-parkway/asheville/">From Asheville →</a></div></article>
+      <article class="snapshot-card loading-shimmer"><div class="snapshot-kicker"><span>MP 291 · Boone</span><span class="snapshot-state">CHECKING</span></div><h3>From Boone: how much High Country fits?</h3><p class="snapshot-route">Rough Ridge · Linn Cove · Linville Falls</p><p>Near Boone, carriage paths, bare rock and the Linn Cove Viaduct sit within a short reach. Choose whether you want to walk through the landscape or watch it unfold from the overlooks.</p><div class="snapshot-actions"><a href="/blue-ridge-parkway/boone/">From Boone →</a></div></article>
+      <article class="snapshot-card loading-shimmer"><div class="snapshot-kicker"><span>MP 121 · Roanoke</span><span class="snapshot-state">CHECKING</span></div><h3>From Roanoke: views or history?</h3><p class="snapshot-route">Peaks of Otter vs. Mabry Mill</p><p>From Roanoke, Peaks of Otter offers mountains reflected beside a lake. Farther south, Mabry Mill tells a working-life story worth slowing down for.</p><div class="snapshot-actions"><a href="/blue-ridge-parkway/roanoke/">From Roanoke →</a></div></article>
+      <article class="snapshot-card loading-shimmer"><div class="snapshot-kicker"><span>MP 469 · Cherokee</span><span class="snapshot-state">CHECKING</span></div><h3>From Cherokee: how far should you climb?</h3><p class="snapshot-route">Waterrock Knob · Richland Balsam</p><p>From Cherokee, the road climbs toward spruce and fir high country. A clear ridge can reveal layer after layer of mountains; fog may turn the same drive into a close-up of the forest.</p><div class="snapshot-actions"><a href="/blue-ridge-parkway/cherokee/">From Cherokee →</a></div></article>
     </div>
     <div class="intel-foot"><span>These are live route snapshots built from the same engine as the full planner. Official road restrictions remain hard constraints.</span><span id="deskFreshness">Checking current inputs…</span></div>
   </section>
 
 
   <section class="section">
-    <div class="section-head"><div><div class="eyebrow">PLAN THE PARKWAY</div><h2>Use the page that matches the question you actually have</h2></div><p>Each page owns a different search intent and leads back into the same live route engine.</p></div>
+    <div class="section-head"><div><div class="eyebrow">PLAN THE PARKWAY</div><h2>Find the next piece of your Parkway day</h2></div><p>Planning a mountain drive usually raises a second question. Check access, understand the weather, find a worthwhile walk or learn how the mileposts connect before choosing the next stretch.</p></div>
     <div class="gateway-grid">
       <a class="gateway-card" href="/blue-ridge-parkway/closures/"><span>ROAD STATUS</span><strong>Blue Ridge Parkway closures today</strong><p>See why “is the Parkway open?” must be answered section by section, then turn current closures into a usable route.</p></a>
       <a class="gateway-card" href="/blue-ridge-parkway/weather/"><span>MOUNTAIN CONDITIONS</span><strong>Blue Ridge Parkway weather</strong><p>Check cloud, wind, visibility and route-level conditions rather than relying only on a nearby valley forecast.</p></a>
@@ -142,7 +142,7 @@
   </section>
 
   <section class="section">
-    <div class="section-head"><div><div class="eyebrow">STARTING POINTS</div><h2>Start where the real search starts</h2></div><p>Each gateway page explains the useful route shapes before the live engine decides which one fits today.</p></div>
+    <div class="section-head"><div><div class="eyebrow">STARTING POINTS</div><h2>Every Parkway entrance has its own character</h2></div><p>Follow the road from the place you know. The stops near Boone, Roanoke, Asheville and Cherokee tell different stories; the planner helps you choose one that fits the daylight and the conditions.</p></div>
     <div class="gateway-grid">
       <a class="gateway-card" href="/blue-ridge-parkway/asheville/"><span>AROUND MP 384</span><strong>Blue Ridge Parkway from Asheville</strong><p>Compare Craggy Gardens and Mount Mitchell north with Mount Pisgah, Graveyard Fields and the Balsams south.</p></a>
       <a class="gateway-card" href="/blue-ridge-parkway/boone/"><span>AROUND MP 291</span><strong>Blue Ridge Parkway from Boone</strong><p>Rough Ridge, Linn Cove Viaduct, Moses Cone and Linville Falls sit close enough together for a high-payoff short day.</p></a>
@@ -171,7 +171,7 @@
 <footer class="footer">© 2026 <a href="/chris-izworski/">Chris Izworski</a> · <a href="/tools/">Tools</a> · Always verify current National Park Service notices before travel.</footer>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
 <script src="/assets/visitor-map-links.js" defer></script>
-<script src="/assets/blue-ridge-parkway.js?v=20261122-2" defer></script>
-<script src="/assets/blue-ridge-parkway-breakout.js?v=20260925-1" defer></script>
+<script src="/assets/blue-ridge-parkway.js?v=20261122-3" defer></script>
+<script src="/assets/blue-ridge-parkway-breakout.js?v=20261122-1" defer></script>
 </body>
 </html>

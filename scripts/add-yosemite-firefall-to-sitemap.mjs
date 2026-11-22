@@ -46,7 +46,7 @@ addCanonical({
 for (const gateway of ['asheville', 'boone', 'roanoke', 'cherokee']) {
   addCanonical({
     url: `https://chrisizworski.com/blue-ridge-parkway/${gateway}/`,
-    lastmod: '2026-09-25',
+    lastmod: '2026-11-22',
     changefreq: 'daily',
     priority: '0.8',
     label: `Blue Ridge Parkway from ${gateway}`
@@ -62,7 +62,7 @@ for (const intent of [
 ]) {
   addCanonical({
     url: `https://chrisizworski.com/blue-ridge-parkway/${intent.slug}/`,
-    lastmod: '2026-09-25',
+    lastmod: '2026-11-22',
     changefreq: intent.changefreq,
     priority: intent.priority,
     label: intent.label

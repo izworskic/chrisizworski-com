@@ -5,11 +5,12 @@ const http=require("node:http"),fs=require("node:fs"),path=require("node:path");
 const assert=require("node:assert/strict");
 const {chromium}=require("playwright");
 const root=path.resolve(__dirname,"../public");
+const {STOPS}=require("../lib/blue-ridge-parkway/catalog.js");
 const out=path.resolve(__dirname,"../artifacts/blue-ridge-roadbook");
 fs.mkdirSync(out,{recursive:true});
 const stops=[
- {id:"folk-art-center",name:"Folk Art Center",milepost:382,lat:35.5928,lon:-82.4817,dwellMinutes:35,elevationFt:2200,tags:["history"],practical:"See the Parkway craft traditions.",source:"https://www.nps.gov/blri/planyourvisit/folk-art-center.htm"},
- {id:"craggy-gardens",name:"Craggy Gardens",milepost:364,lat:35.7042,lon:-82.3737,dwellMinutes:45,elevationFt:5500,tags:["scenery","short-walk"],practical:"Take a short walk into the high country.",source:"https://www.nps.gov/blri/planyourvisit/craggy-gardens.htm"}
+ {id:"folk-art-center",name:"Folk Art Center",milepost:382,lat:35.5928,lon:-82.4817,dwellMinutes:35,elevationFt:2200,tags:["history"],practical:STOPS["folk-art-center"].practical,source:"https://www.nps.gov/blri/planyourvisit/folk-art-center.htm"},
+ {id:"craggy-gardens",name:"Craggy Gardens",milepost:364,lat:35.7042,lon:-82.3737,dwellMinutes:45,elevationFt:5500,tags:["scenery","short-walk"],practical:STOPS["craggy-gardens"].practical,source:"https://www.nps.gov/blri/planyourvisit/craggy-gardens.htm"}
 ];
 function fixture(url){
  const none=new URL(url,"http://localhost").searchParams.get("hours")==="2",chosen=none?[]:stops;
@@ -59,6 +60,7 @@ function routes(page,failedMap=false){
    assert.equal(await page.locator("#stopFocus h3").innerText(),"Folk Art Center");
    await page.locator(".route-step").nth(1).click();
    assert.equal(await page.locator("#stopFocus h3").innerText(),"Craggy Gardens");
+   assert.ok((await page.locator("#stopFocus .stop-interpretation").innerText()).length>=130,"Full interpretive field note is visible");
    await page.locator("#parkwayMap .number-pin").nth(1).click();
    assert.equal(await page.locator("#stopFocus h3").innerText(),"Folk Art Center","First map marker selects its own stop");
    await page.locator("#parkwayMap .number-pin").nth(2).click();
