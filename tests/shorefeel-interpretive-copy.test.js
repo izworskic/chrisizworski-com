@@ -28,7 +28,7 @@ test('Michigan beach stories are uniquely authored, source-controlled, and rende
   const hash=crypto.createHash('sha256').update(html).digest('hex');
   assert.ok(pins.includes('["/great-lakes-beaches/'+b.slug+'/", "'+hash+'"]'),b.slug+' source hash must be repinned');
  }
- assert.match(notes['wenonah-park'],/not a designated swimming beach/);
+ assert.match(notes['wenonah-park'],/not to a designated swimming beach/);
 });
 
 test('46 regional stories survive atlas and detail regeneration without changing weather source semantics',()=>{
