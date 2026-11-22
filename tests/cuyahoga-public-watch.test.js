@@ -200,3 +200,39 @@ test('live-park and archive-park controls are reversible and do not introduce a 
  assert.match(readFileSync('public/assets/cuyahoga-watch.css','utf8'),/\.park-signal/);
  assert.doesNotMatch(app,/estimated arrival|arrival in \d|time to bridge/i);
 });
+
+test('dated official Eagle Avenue removal notice stays a schedule, never an inferred current closure',()=>{
+ const source=JSON.parse(readFileSync('data/cuyahoga/official-bridge-notices.json','utf8'));
+ const publicCopy=JSON.parse(readFileSync('public/cuyahoga-freighter-watch/bridge-notices.json','utf8'));
+ assert.deepEqual(publicCopy,source);
+ assert.equal(source.notices.length,1);
+ const notice=source.notices[0];
+ assert.equal(notice.bridgeId,'eagle-280');
+ assert.equal(notice.currentOpenOrClosedVerified,false);
+ assert.equal(notice.actualCompletionVerified,false);
+ assert.ok(notice.sourceUrl.includes('navcen.uscg.gov'));
+ const before=core.bridgeNoticeContext(source,'eagle-280','2026-11-22');
+ assert.equal(before.phase,'PLANNED_FUTURE_WINDOW');
+ assert.match(before.message,/planned|schedules/i);
+ assert.equal(before.liveStateKnown,false);
+ assert.equal(before.visitorBridgeOpeningPredictionEnabled,false);
+ const during=core.bridgeNoticeContext(source,'eagle-280','2027-02-03');
+ assert.equal(during.phase,'WITHIN_PUBLISHED_WINDOW_NOT_LIVE_STATUS');
+ assert.match(during.message,/does not confirm/);
+ const after=core.bridgeNoticeContext(source,'eagle-280','2027-03-05');
+ assert.equal(after.phase,'PAST_PUBLISHED_WINDOW');
+ assert.match(after.message,/unverified/);
+ assert.equal(core.bridgeNoticeContext(source,'center-st-139','2026-11-22'),null);
+ assert.equal(core.bridgeNoticeContext(source,'eagle-280','not a date'),null);
+ assert.equal(core.bridgeNoticeContext({...source,notices:[{...notice,actualCompletionVerified:true}]},'eagle-280','2027-02-03'),null);
+});
+test('map distinguishes Eagle work notice from NOAA bridge reference and fixed spans',()=>{
+ assert.match(app,/bridgeNoticeContext\(state\.bridgeNotices/);
+ assert.match(app,/function clevelandCalendarDay\(/);
+ assert.match(app,/bridge-notices\.json/);
+ assert.match(app,/NOAA Coast Pilot does not establish current bridge opening availability/);
+ assert.match(app,/A fixed bridge does not lift for passing freighters/);
+ assert.match(app,/Ohio DOT removal project/);
+ assert.match(page,/Dated removal notice/);
+ assert.match(css,/\.pin-work/);
+});
