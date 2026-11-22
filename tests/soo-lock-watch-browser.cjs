@@ -87,6 +87,9 @@ let base;
         // Hover labels were being shown alongside the detail popup as a second card.
         await marker('tug').hover();
         assert.equal(await page.locator('#sooVesselMap .leaflet-tooltip:visible').count(), 0, 'vessel hover must not open a separate card');
+        // Pre-focus then bring the marker back into view, avoiding a focus scroll during mouse-down.
+        await marker('tug').focus();
+        await marker('tug').scrollIntoViewIfNeeded();
         const boxBeforeClick = await marker('tug').boundingBox();
         await marker('tug').evaluate(el => {
           window.__sooClickTrace = [];
