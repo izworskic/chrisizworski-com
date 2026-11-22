@@ -68,3 +68,41 @@ Technology fit: existing Node.js offline NOAA parsers and fixture tests remain p
 Source evidence and two checkpoint proximities: **OBSERVED**. Actual bridge-span axes, bridge operations, passage ETAs, visitor access, live receiver coverage and independent held-out forecast calibration: **NOT VALIDATED**. No public-facing tool has been deployed. Existing PR remains draft pending full main and PR gates.
 
 One next action: Inspect official NOAA/USACE Cuyahoga geometries, identify the matching charted bridge spans and channel feature, then compare time intervals against separate date held-out passages. Keep ETA disabled until accuracy and failure rates are demonstrated.
+
+
+## 2026-11-22 official GIS evidence investment: seven bridge inventory points and channel polygon
+
+One-time independent official GIS query: https://github.com/izworskic/chrisizworski-com/actions/runs/45026345099
+Artifact: cuyahoga-official-gis-research. The job completed successfully and four new bridge crosswalk tests passed.
+
+The spatial research envelope is 41.44 to 41.54 N and -81.75 to -81.65 W, a broad research bounding box rather than an approved navigation route. The downloaded ArcGIS GeoJSON was checked for required feature collections and identity fields. The data are attributed to their original public owners.
+
+- Ohio DOT Bridge Inventory MapServer/0: **247 point features** intersect the envelope. A seven-bridge manually selected, non-exhaustive research subset is in data/cuyahoga/odot-bridge-inventory-points.json. Every selected structure file number, name, crossed feature, raw operational-status code, and coordinate was checked against the original ODOT record. All seven matched.
+- USACE National Channel Framework MapServer/1: **two polygons** intersect the box: CLEVELAND HARBOR and the CUYAHOGA RIVER authorized channel area, with feature ID CELRB_LB_05_CUY and source dataset NCF_CELRB_DIS_OHIO_NORTH_20260420.ZIP. This polygon is an authorized channel *area*, **not** the actual course a ship must follow or an exact centerline.
+- NOAA ENC Direct Harbour Bridge_line/87: **one LineString**, categorized as a *footbridge* east of the major working river bridge sequence. Not suitable as the shipping bridge catalog.
+- NOAA ENC Direct Berthing Bridge_line/40, Approach Bridge_line/91 and USACE ChannelLine/0: **zero features** returned in the study envelope. These empty queries DO NOT establish an absence of physical bridges or channel.
+- Four of seven chosen ODOT bridge points lie inside the USACE Cuyahoga polygon: Columbus Road, Carter Road, West Third Street, Eagle Avenue. Three fall outside: Center Street, Main Avenue, River Road. This is a property of **ODOT inventory points vs USACE authorized channel polygon** and does not imply any bridge is absent, closed, inaccessible, or outside the physical river. Bridge geometry and agency feature origins differ.
+
+Verified ODOT points (WGS84 decimal degrees, official ODOT SFN identity; these are inventory point references, not span axes):
+
+| Bridge name | ODOT SFN | Latitude | Longitude | Coast Guard mile |
+|---|---|---:|---:|---:|
+| Center Street | 1869345 | 41.494323 | -81.703520 | 1.28 |
+| Columbus Road | 1833758 | 41.488369 | -81.700469 | 1.93 |
+| Carter Road | 1869264 | 41.494239 | -81.697850 | not yet reconciled |
+| West Third Street | 1869728 | 41.488089 | -81.685631 | not yet reconciled |
+| Eagle Avenue | 1869604 | 41.493381 | -81.692311 | not yet reconciled |
+| Main Avenue | 1800035 | 41.490256 | -81.711967 | not yet reconciled |
+| River Road | 1869981 | 41.497769 | -81.710619 | not yet reconciled |
+
+Official sources:
+- https://tims.dot.state.oh.us/ags/rest/services/Assets/Bridge_Inventory/MapServer/0
+- https://spatial.usace.army.mil/opjarcgis/rest/services/eHydroPub/National_Channel_Framework/MapServer/1
+- https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer/87
+- https://www.ecfr.gov/current/title-33/chapter-I/subchapter-J/part-117/section-117.848
+
+The offline research crosswalk at scripts/cuyahoga-official-bridge-audit.mjs and tests/cuyahoga-official-bridge-audit.test.js rejects missing/altered official feature identities, point drift, an absent/duplicate USACE Cuyahoga polygon, an invented verified visitor entrance, an invented open status or falsely claimed surveyed span coordinates. It verifies source matching; it cannot independently determine whether any bridge is operational or visitors may approach it.
+
+**Critical limit:** This milestone source-validates important *named bridge map reference points* and the extent of the federal *channel area*. It does NOT validate surveyed bridge-crossing axes or complete upriver channel centerlines, normal arrival windows, future movement, current lift activity, or public viewing access. Production bridge ETAs remain disabled. Multiple independent held-out transits and true span-axis crossings are still required. Do not label the 17.7 minute NOAA reference-to-reference observation interval as exact bridge-to-bridge travel time.
+
+**Exactly one next engineering action:** reconcile surveyed bridge span axes / channel passage lines using additional source-backed geometry, then replay multiple independent ordinary vessel passages with held-out calendar dates and quantify crossing-time bracket uncertainty before enabling future ETA predictions.
