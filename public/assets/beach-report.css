@@ -1585,3 +1585,8 @@ button {
   .shorefeel-intro > p:last-child { font-size: 16px; }
   .shorefeel-main strong { font-size: 38px; }
 }
+
+/* ShoreFeel is now the first-glance answer at each Michigan beach. */
+.shorefeel-card-label{display:block;color:#075e67;font-size:.82rem;font-weight:800;letter-spacing:.01em;margin:5px 0}
+.shorefeel-jump[data-status=forecast]{background:#e7f6f3;color:#074f5b;box-shadow:0 8px 22px #062f3a22}
+.shorefeel-jump[data-status=unavailable]{background:#f4eee0;color:#493b2d}
