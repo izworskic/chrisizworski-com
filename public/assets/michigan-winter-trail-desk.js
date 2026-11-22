@@ -82,6 +82,7 @@ function init() {
   function makeCard(route, position) {
     const article = document.createElement('article');
     article.className = 'trl-desk-option';
+    article.dataset.routeId = route.id;
     article.append(
       textNode('span','trl-desk-option-index', position === 0 ? 'OPTION A' : 'OPTION B'),
       textNode('h3','',route.title),
@@ -101,6 +102,14 @@ function init() {
     visit.type='button';
     visit.addEventListener('click',() => toTrail(route));
     actions.append(visit);
+    const weather = textNode('button','trl-desk-weather-action','Check area snow + forecast');
+    weather.type = 'button';
+    weather.dataset.weatherFor = route.id;
+    weather.setAttribute('aria-label','Check modeled snow and NWS forecast near '+route.title);
+    weather.addEventListener('click',() => {
+      document.dispatchEvent(new CustomEvent('winter-trails:check-weather',{detail:{id:route.id}}));
+    });
+    actions.append(weather);
     const source = sourceLink(route.source);
     if (source) {
       const official = textNode('a','','Official trail source');
