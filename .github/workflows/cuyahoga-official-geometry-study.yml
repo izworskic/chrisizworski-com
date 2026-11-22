@@ -111,6 +111,17 @@ jobs:
             --usace official-geometry/usace-national-channel-area.geojson \
             --curated data/cuyahoga/odot-bridge-inventory-points.json \
             --out official-geometry/odot-cuyahoga-crosswalk.json
+      - name: Cross-check official county road centerlines against channel polygon
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --test tests/cuyahoga-county-centerline-audit.test.js
+          node scripts/cuyahoga-county-centerline-audit.mjs \
+            --county official-geometry/cuyahoga-county-road-centerlines.geojson \
+            --usace official-geometry/usace-national-channel-area.geojson \
+            --coast-pilot data/cuyahoga/noaa-coast-pilot-bridge-references.json \
+            --out official-geometry/county-road-channel-crosswalk.json \
+            | tee official-geometry/county-road-channel-summary.json
       - uses: actions/upload-artifact@v4
         with:
           name: cuyahoga-official-gis-research
