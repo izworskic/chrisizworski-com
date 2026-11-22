@@ -6,6 +6,7 @@
  if(!core){$('vessel-status').textContent='Interactive data is unavailable. Use the official source links below.';return;}
  const state={mode:'live',parks:null,bridges:null,history:null,bridgeNotices:null,live:null,selectedParkId:null,selectedBridgeId:null,map:null,historyIndex:null,historyId:'barker-2025-07-07',selectedShip:null};
  const mapGroup={parks:null,bridges:null,ships:null,history:null,selected:null};
+ const featuredBridgeIds=new Set(['center-st-139','columbus-193','carter-243','west-third-369','eagle-280']);
  const locClock=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'});
  const escText=(tag,text,className)=>{const e=document.createElement(tag);e.textContent=String(text??'');if(className)e.className=className;return e};
  const el=(tag,attrs={})=>{const e=document.createElement(tag);for(const [k,v] of Object.entries(attrs))e.setAttribute(k,v);return e};
@@ -78,6 +79,7 @@
   if(!park)return;
   state.selectedParkId=id;state.selectedBridgeId=null;
   const chooser=$('bridge-select');if(chooser)chooser.value='';
+  renderBridgeMarkers();
   for(const btn of document.querySelectorAll('[data-park]'))btn.setAttribute('aria-current',String(btn.dataset.park===id));
   const official=[
    {label:'Official park details ↗',url:park.officialUrl},
@@ -129,6 +131,7 @@
   state.selectedBridgeId=bridge.id;state.selectedParkId=null;
   for(const btn of document.querySelectorAll('[data-park]'))btn.setAttribute('aria-current','false');
   const selector=$('bridge-select');if(selector)selector.value=bridge.id;
+  renderBridgeMarkers();
   const notice=core.bridgeNoticeContext(state.bridgeNotices,bridge.id,clevelandCalendarDay());
   const sourceConflict=state.bridges.knownConflicts?.find(c=>c.id===bridge.id);
   let context='The Coast Pilot identifies this '+bridge.structureType+
@@ -148,21 +151,17 @@
     'No live drawbridge state or future vessel crossing time is verified. Check current Coast Guard notices and the bridge owner before planning a visit.');
   if(move&&state.map)state.map.setView([bridge.latitude,bridge.longitude],15,{animate:false});
  }
- function plotBridges(){
+ function renderBridgeMarkers(){
   if(!state.bridges)return;
-  const select=$('bridge-select');
-  if(select){
-   select.replaceChildren(new Option('Select a bridge',''));
-  }
+  const showAll=$('show-all-bridges')?.checked===true;
+  if(mapGroup.bridges)mapGroup.bridges.clearLayers();
+  let visible=0;
   for(const bridge of state.bridges.bridges){
    if(bridge.channel!=='main')continue;
-   const notice=core.bridgeNoticeContext(state.bridgeNotices,bridge.id,clevelandCalendarDay());
-   if(select){
-     const label=bridge.name+' · mile '+bridge.riverMile+(notice?' · Coast Guard work notice':'');
-     const option=document.createElement('option');
-     option.value=bridge.id;option.textContent=label;select.append(option);
-   }
+   if(!showAll&&!featuredBridgeIds.has(bridge.id)&&state.selectedBridgeId!==bridge.id)continue;
+   visible++;
    if(!mapGroup.bridges)continue;
+   const notice=core.bridgeNoticeContext(state.bridgeNotices,bridge.id,clevelandCalendarDay());
    const marker=L.marker([bridge.latitude,bridge.longitude],{
     title:bridge.name+(notice?' · published removal notice':''),
     alt:bridge.name+' NOAA approximate bridge reference',
@@ -171,8 +170,26 @@
    marker.bindTooltip(bridge.name+' · river mile '+bridge.riverMile+(notice?' · planned removal work':''));
    marker.on('click',()=>chooseBridge(bridge.id,false));
   }
+  const status=$('bridge-layer-status');
+  if(status)status.textContent=showAll?'Showing all '+visible+' NOAA main-channel references. Dated chart points are not live bridge status.':
+    'Showing '+visible+' selected bridge landmarks. All 19 remain accessible through the selector.';
  }
-
+ function plotBridges(){
+  if(!state.bridges)return;
+  const select=$('bridge-select');
+  if(select)select.replaceChildren(new Option('Select a bridge',''));
+  for(const bridge of state.bridges.bridges){
+   if(bridge.channel!=='main')continue;
+   if(select){
+     const notice=core.bridgeNoticeContext(state.bridgeNotices,bridge.id,clevelandCalendarDay());
+     const option=document.createElement('option');
+     option.value=bridge.id;
+     option.textContent=bridge.name+' · mile '+bridge.riverMile+(notice?' · Coast Guard work notice':'');
+     select.append(option);
+   }
+  }
+  renderBridgeMarkers();
+ }
  function liveVesselIcon(v){
   const info=core.vesselVisual(v);
   const widths={large:70,medium:58,small:44,'not-reported':48};
@@ -343,6 +360,7 @@
   $('show-history').addEventListener('click',()=>changeMode('historic'));
   $('refresh-ais').addEventListener('click',getLive);
   $('bridge-select').addEventListener('change',e=>{if(e.target.value)chooseBridge(e.target.value,true);});
+  $('show-all-bridges').addEventListener('change',renderBridgeMarkers);
   $('voyage-select').addEventListener('change',e=>{state.historyId=e.target.value;state.historyIndex=core.firstRiverFixIndex(state.history,state.historyId);renderHistory();});
   $('history-scrubber').addEventListener('input',e=>{state.historyIndex=Number(e.target.value);renderHistory();});
   $('history-prev').addEventListener('click',()=>{state.historyIndex--;renderHistory();});
