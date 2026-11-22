@@ -54,7 +54,7 @@ export function createCollector({ name = '', imo = '', mmsi = '', from, to, bbox
   const start = from ? Date.parse(from) : -Infinity, end = to ? Date.parse(to) : Infinity;
   if (!((Number.isFinite(start) || start === -Infinity) && (Number.isFinite(end) || end === Infinity)) || start >= end) throw Error('Invalid UTC time window');
   const groups = new Map();
-  const stats = { lines: 0, matchedIdentity: 0, matchedTimeAndBox: 0, invalidTimestamp: 0, invalidPosition: 0, invalidIdentity: 0 };
+  const stats = { lines: 0, matchedIdentity: 0, matchedTimeAndBox: 0, invalidTimestamp: 0, invalidPosition: 0, outsideResearchBox: 0, invalidIdentity: 0 };
   const tokens = [focusName, focusImo, focusMmsi].filter(Boolean);
   function accept(line, columns) {
     stats.lines++;
@@ -74,7 +74,8 @@ export function createCollector({ name = '', imo = '', mmsi = '', from, to, bbox
     if (stamp < start || stamp >= end) return;
     const lonCell = get('longitude').trim(), latCell = get('latitude').trim();
     const lon = lonCell ? Number(lonCell) : NaN, lat = latCell ? Number(latCell) : NaN;
-    if (!Number.isFinite(lat) || !Number.isFinite(lon) || lat < bbox[0] || lat > bbox[2] || lon < bbox[1] || lon > bbox[3]) { stats.invalidPosition++; return; }
+    if (!Number.isFinite(lat) || !Number.isFinite(lon) || Math.abs(lat) > 90 || Math.abs(lon) > 180) { stats.invalidPosition++; return; }
+    if (lat < bbox[0] || lat > bbox[2] || lon < bbox[1] || lon > bbox[3]) { stats.outsideResearchBox++; return; }
     stats.matchedTimeAndBox++;
     let group = groups.get(recordMmsi);
     if (!group) { group = { mmsi: recordMmsi, names: new Set(), imos: new Set(), points: [] }; groups.set(recordMmsi, group); }
