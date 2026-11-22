@@ -170,3 +170,34 @@ a:focus-visible,button:focus-visible,select:focus-visible{outline:3px solid #be6
   }
   .destination-photo.card img{object-position:var(--photo-position,50% 50%)}
 }
+
+
+/* Adventure Finder local search: compact on phones, no extra hero/card/overlay. */
+.intent-search{grid-column:1/-1;min-width:0;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;column-gap:8px;padding-top:2px}
+.intent-search[hidden],.intent-clear[hidden],.intent-leading[hidden]{display:none!important}
+.intent-search label{grid-column:1;min-width:0;font-size:.74rem}
+.intent-search input{display:block;min-width:0;width:100%;height:42px;padding:0 12px;border:1px solid #a7b8a9;border-radius:8px;background:#fff;color:#18392f;font-size:1rem;font-family:inherit;box-sizing:border-box}
+.intent-search input::placeholder{color:#65786f;opacity:1;font-size:.79rem}
+.intent-search input:focus-visible{outline:3px solid #235a57;outline-offset:2px}
+.intent-search .intent-clear{grid-column:2;align-self:end;min-height:42px;padding:6px 10px;white-space:nowrap;font-size:.78rem}
+.intent-search .intent-help{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+.intent-leading{display:block;margin:7px 0 2px;color:#175547;text-decoration:underline;text-underline-offset:3px;font-size:.85rem;line-height:1.45;font-weight:650}
+.intent-leading:focus-visible{outline:3px solid #235a57;outline-offset:3px}
+.destination.intent-best{outline:2px solid #487668;outline-offset:1px}
+@media(max-width:610px){
+  .intent-search{column-gap:7px;padding-top:3px}
+  .intent-search label{min-width:0;font-size:.75rem}
+  .intent-search input{font-size:16px;min-height:44px}
+  .intent-search input::placeholder{font-size:.75rem}
+  .intent-search .intent-clear{min-height:44px}
+  .intent-leading{font-size:.82rem}
+}
+
+/* Override legacy direct-child mobile selector that also matches this
+   nested field label. Keep Clear and the search input in the same row. */
+@media(max-width:610px){
+  .finder-controls .intent-search label{grid-column:1;grid-row:1;font-size:.88rem}
+  .finder-controls .intent-search .intent-clear{grid-column:2;grid-row:1}
+  .result-bar .context{font-size:.9rem;line-height:1.5}
+  .intent-leading{font-size:.9rem}
+}

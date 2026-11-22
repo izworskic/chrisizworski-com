@@ -1,0 +1,206 @@
+[
+  {
+    "query": "A long weekend walking on an isolated island reached by a lake ferry",
+    "expected": [
+      "isle-royale"
+    ]
+  },
+  {
+    "query": "Leave my car on the mainland, ride a boat and explore an island",
+    "expected": [
+      "mackinac-island"
+    ]
+  },
+  {
+    "query": "Find restaurants after a walk on the rocky Superior waterfront",
+    "expected": [
+      "marquette"
+    ]
+  },
+  {
+    "query": "Taste wines and follow farm roads around a shoreline peninsula",
+    "expected": [
+      "traverse-city"
+    ]
+  },
+  {
+    "query": "Look for enormous commercial vessels from a city river walk",
+    "expected": [
+      "detroit-river"
+    ]
+  },
+  {
+    "query": "A broad amber colored cascade under tall trees",
+    "expected": [
+      "tahquamenon"
+    ]
+  },
+  {
+    "query": "Migrating birds and a historic lighthouse on a sandy spit",
+    "expected": [
+      "tawas-point"
+    ]
+  },
+  {
+    "query": "Watch freighters and wading birds by an eastern Michigan bay",
+    "expected": [
+      "saginaw-bay"
+    ]
+  },
+  {
+    "query": "Drift down a cold clear canoe river lined with cedar",
+    "expected": [
+      "au-sable"
+    ]
+  },
+  {
+    "query": "Paddle beneath sandstone cliffs and see coves on Superior",
+    "expected": [
+      "pictured-rocks"
+    ]
+  },
+  {
+    "query": "A slow winding woodland road near Lake Michigan in autumn",
+    "expected": [
+      "tunnel-of-trees"
+    ]
+  },
+  {
+    "query": "A clear blue inland lake with forest roads and paddling",
+    "expected": [
+      "torch-lake"
+    ]
+  },
+  {
+    "query": "Explore a northern peninsula with old copper mining towns",
+    "expected": [
+      "keweenaw"
+    ]
+  },
+  {
+    "query": "A quiet harbor town beside enormous dunes on the Superior shoreline",
+    "expected": [
+      "grand-marais"
+    ]
+  },
+  {
+    "query": "Walk long ridge trails through old forest toward Lake of the Clouds",
+    "expected": [
+      "porcupines"
+    ]
+  },
+  {
+    "query": "Photograph inland frozen curtains of ice in a snowy season",
+    "expected": [
+      "munising-winter"
+    ]
+  },
+  {
+    "query": "Climb huge dunes for a panoramic view over Lake Michigan",
+    "expected": [
+      "sleeping-bear"
+    ]
+  },
+  {
+    "query": "Maritime history and shipwreck stories beside Lake Huron",
+    "expected": [
+      "alpena"
+    ]
+  },
+  {
+    "query": "Spend the sunset at a lakeshore lighthouse and dunes",
+    "expected": [
+      "ludington"
+    ]
+  },
+  {
+    "query": "Hike above high river banks or paddle a wooded river",
+    "expected": [
+      "manistee"
+    ]
+  },
+  {
+    "query": "Belle Isle with freighters going past the downtown waterfront",
+    "expected": [
+      "detroit-river"
+    ]
+  },
+  {
+    "query": "A walkable city with dining after forest paths and cliff overlooks",
+    "expected": [
+      "marquette"
+    ]
+  },
+  {
+    "query": "Take a ferry to an island that has car free roads",
+    "expected": [
+      "mackinac-island"
+    ]
+  },
+  {
+    "query": "Waterfall walks in the woods near Paradise Michigan",
+    "expected": [
+      "tahquamenon"
+    ]
+  },
+  {
+    "query": "Walk in the dunes near an unhurried Grand Marais harbor",
+    "expected": [
+      "grand-marais"
+    ]
+  },
+  {
+    "query": "Watch autumn color unfold along M-119 near Harbor Springs",
+    "expected": [
+      "tunnel-of-trees"
+    ]
+  },
+  {
+    "query": "Find a wine tasting room around Grand Traverse Bay",
+    "expected": [
+      "traverse-city"
+    ]
+  },
+  {
+    "query": "Breathe in Lake Superior from trails and rock cliffs by Marquette",
+    "expected": [
+      "marquette"
+    ]
+  },
+  {
+    "query": "Go birdwatching next to a bay lighthouse at Tawas Point",
+    "expected": [
+      "tawas-point"
+    ]
+  },
+  {
+    "query": "Explore ship traffic in Bay City and birds in Saginaw Bay",
+    "expected": [
+      "saginaw-bay"
+    ]
+  },
+  {
+    "query": "Which beach has lifeguards supervising swimming today",
+    "expected": []
+  },
+  {
+    "query": "Where is the nearest airport car charging station",
+    "expected": []
+  },
+  {
+    "query": "Find a ski resort offering chairlift tickets this afternoon",
+    "expected": []
+  },
+  {
+    "query": "Show wheelchair accessible reserved parking and guarantees",
+    "expected": []
+  },
+  {
+    "query": "Where can we safely walk out on frozen lake ice right now",
+    "expected": []
+  },
+  {
+    "query": "Find an open state park with a guaranteed warm swimming beach",
+    "expected": []
+  }
+]

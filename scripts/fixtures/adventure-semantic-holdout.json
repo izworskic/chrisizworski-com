@@ -1,0 +1,122 @@
+[
+  {
+    "query": "wild sandstone walls beside bright blue freshwater, best seen by kayak or boat",
+    "expected": [
+      "pictured-rocks"
+    ]
+  },
+  {
+    "query": "a ferry journey to a secluded northern national park with days of hiking",
+    "expected": [
+      "isle-royale"
+    ]
+  },
+  {
+    "query": "a quiet winding road lined by fall leaves near charming small towns",
+    "expected": [
+      "tunnel-of-trees"
+    ]
+  },
+  {
+    "query": "paddle a clear cold river between cedar banks near Grayling",
+    "expected": [
+      "au-sable"
+    ]
+  },
+  {
+    "query": "frozen formations and striking winter ice near the southern shore of Lake Superior",
+    "expected": [
+      "munising-winter"
+    ]
+  },
+  {
+    "query": "learn the stories of vessels lost beneath Lake Huron",
+    "expected": [
+      "alpena"
+    ]
+  },
+  {
+    "query": "a huge tea-colored cascade and wooded walks in eastern Upper Michigan",
+    "expected": [
+      "tahquamenon"
+    ]
+  },
+  {
+    "query": "abandoned copper mines and empty Superior beaches on a northern peninsula",
+    "expected": [
+      "keweenaw"
+    ]
+  },
+  {
+    "query": "leave the car behind and explore by bicycle after a lake crossing",
+    "expected": [
+      "mackinac-island"
+    ]
+  },
+  {
+    "query": "watch migratory birds on a sandy spit by a historic lighthouse",
+    "expected": [
+      "tawas-point"
+    ]
+  },
+  {
+    "query": "climb high sandy hills above the blue expanse of Lake Michigan",
+    "expected": [
+      "sleeping-bear"
+    ]
+  },
+  {
+    "query": "an urban river walk with a nearby island and commercial ships",
+    "expected": [
+      "detroit-river"
+    ]
+  },
+  {
+    "query": "deep ancient forest on ridge trails overlooking a wilderness valley",
+    "expected": [
+      "porcupines"
+    ]
+  },
+  {
+    "query": "historic waterfront town beside giant dunes and a quiet harbor",
+    "expected": [
+      "grand-marais"
+    ]
+  },
+  {
+    "query": "a city base with good food and rocky lakeshore nature nearby",
+    "expected": [
+      "marquette"
+    ]
+  },
+  {
+    "query": "clear turquoise inland lake with paddling and wooded roads",
+    "expected": [
+      "torch-lake"
+    ]
+  },
+  {
+    "query": "an evening lighthouse and sunset beside a dune-country beach",
+    "expected": [
+      "ludington"
+    ]
+  },
+  {
+    "query": "high river banks with trails and a peaceful weekend on water",
+    "expected": [
+      "manistee"
+    ]
+  },
+  {
+    "query": "estuary birding and freighter watching from a broad bay",
+    "expected": [
+      "saginaw-bay"
+    ]
+  },
+  {
+    "query": "wine tasting on a peninsula with farms and Lake Michigan shoreline drives",
+    "expected": [
+      "traverse-city"
+    ]
+  }
+]

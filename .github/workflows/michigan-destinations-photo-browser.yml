@@ -5,6 +5,9 @@ on:
     paths:
       - 'public/michigan-destinations/**'
       - 'public/assets/michigan-destinations.*'
+      - 'public/assets/adventure-intent.js'
+      - 'scripts/verify-michigan-destinations-intent-browser.cjs'
+      - 'tests/adventure-intent.test.js'
       - 'scripts/verify-michigan-destinations-photo-browser.cjs'
       - 'scripts/web-quality-static-server.cjs'
       - '.github/workflows/michigan-destinations-photo-browser.yml'
@@ -28,6 +31,10 @@ jobs:
           npm install --prefix /tmp/michigan-destinations-playwright --no-save --ignore-scripts playwright@1.58.2
           echo "NODE_PATH=/tmp/michigan-destinations-playwright/node_modules" >> "$GITHUB_ENV"
           echo "CHROME_PATH=$(command -v google-chrome || command -v chromium-browser)" >> "$GITHUB_ENV"
+      - name: Verify deterministic intent matcher and source authority
+        run: |
+          node --test tests/adventure-intent.test.js
+          node scripts/benchmark-adventure-intent.cjs --check
       - name: Verify PR-local destinations, map groups and images in Chromium
         run: |
           node scripts/web-quality-static-server.cjs &
@@ -38,11 +45,14 @@ jobs:
             sleep 1
           done
           MICHIGAN_DESTINATIONS_URL=http://127.0.0.1:4179/michigan-destinations/ node scripts/verify-michigan-destinations-photo-browser.cjs
+          MICHIGAN_DESTINATIONS_URL=http://127.0.0.1:4179/michigan-destinations/ node scripts/verify-michigan-destinations-intent-browser.cjs
       - name: Retain mobile and desktop photographs, map state, and report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: michigan-destinations-photo-browser
-          path: artifacts/michigan-destinations-photo
+          path: |
+            artifacts/michigan-destinations-photo
+            artifacts/michigan-adventure-intent
           if-no-files-found: warn
           retention-days: 7

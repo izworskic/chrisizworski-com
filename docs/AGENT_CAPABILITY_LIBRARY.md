@@ -27,3 +27,27 @@ ChatGPT already has separate GitHub, Figma and Vercel capabilities in some conne
 ## Required review
 
 Preserve owning repo and extraction boundaries, science/source rights, original visual identity, canonical Person data, Auto ads and no-generated-evidence rule. Use the smallest capable frontend; do not default to React, PixiJS, WebGL or an external AI service. Run mobile/desktop browser acceptance and `npm run verify:all` for subsequent production builds. Report checks that did not run as NOT VERIFIED. Open a PR; do not auto-merge.
+
+
+## Hugging Face capability library (added 2026-11-22)
+
+Eight opt-in skills complement, not replace, the five existing specialist skills above.
+
+| Skill | When to use | What it actually does |
+| --- | --- | --- |
+| `hf-cli` | Investigating the Hugging Face ecosystem | Secure read-only Hub/account/model metadata discovery |
+| `huggingface-best` | Selecting a model | Baseline, rights, size and benchmark decision gate |
+| `huggingface-datasets` | Evaluating a candidate data corpus | Source/license/freshness/schema audits before data reuse |
+| `huggingface-tool-builder` | Repeated Hub research | Bounded, reproducible read-only offline scripts |
+| `transformers-js` | Considering JavaScript ML | Model/UX/mobile/download/fallback engineering review |
+| `hf-semantic-discovery` | Adventure Finder or similar catalogs | Offline source-card relevance evaluation first |
+| `hf-visual-evidence` | Photo-led Field Guide / Foundry work | Source-first offline image QA; no automatic content replacement |
+| `hf-forecast-benchmark` | Science/forecast improvements | Out-of-time baseline and model challenger under Python Intelligence OS |
+
+All mirrors are identical across three agent harnesses. Upstream source: [huggingface/skills](https://github.com/huggingface/skills). Study [the capability adoption report](HUGGING_FACE_CAPABILITY_ADOPTION_20261122.md) and the relevant SKILL.md before choosing a model. No Hugging Face runtime or paid service is installed. A draft GitHub PR is required; no production deployment or result improvement should be claimed from adding these skills.
+
+**Example requests:**
+- “Use huggingface-best and transformers-js to evaluate local semantic search.”
+- “Run hf-semantic-discovery on Adventure Finder, then show what beat our existing filters.”
+- “Use hf-visual-evidence to review confirmed photo assets, not invent destinations.”
+- “Use hf-forecast-benchmark against historical observed river-stage data.”

@@ -9,6 +9,17 @@
   const activityEl = document.getElementById('activity');
   const regionEl = document.getElementById('region');
   const cards = [...document.querySelectorAll('.destination')];
+  const intentInput = document.getElementById('intent-query');
+  const intentBox = document.getElementById('intent-search');
+  const intentClear = document.getElementById('clear-intent');
+  const intentLeading = document.getElementById('intent-leading');
+  const emptyReason = document.getElementById('empty-reason');
+  const intentEngine = window.AdventureIntent || null;
+  // The optional natural-language search is entirely on-device. It cannot send
+  // a user's description to the network or save it in a share URL.
+  const intentCatalog = intentEngine ? cards.map(card => intentEngine.fromCard(card)) : [];
+  const intentById = new Map(intentCatalog.map(place => [place.id, place]));
+  if (intentBox && intentEngine) intentBox.hidden = false;
   // The preferred Torch Lake Commons original occasionally fails at the CDN.
   // On failure use a second photograph by the same author (Hgjudd), also
   // CC BY-SA 3.0, and update attribution and alt text to match the new image.
@@ -275,20 +286,63 @@
     moodButtons.forEach(btn => btn.setAttribute('aria-pressed', String(btn.dataset.activity === activityEl.value)));
     const months = targetMonths(whenEl.value);
     const activity = activityEl.value, region = regionEl.value;
-    let count = 0;
-    cards.forEach(card => {
+    const description = intentEngine && intentInput ? intentInput.value.trim().slice(0, 120) : '';
+    const eligible = cards.filter(card => {
       const cardMonths = card.dataset.months.split(',').map(Number);
       const matchesSeason = !months || months.some(m => cardMonths.includes(m));
       const matchesActivity = activity === 'all' || card.dataset.tags.split(',').includes(activity);
       const matchesRegion = region === 'all' || card.dataset.region === region;
-      card.hidden = !(matchesSeason && matchesActivity && matchesRegion);
-      if (!card.hidden) count++;
+      return matchesSeason && matchesActivity && matchesRegion;
     });
+    // Existing visitor-selected controls remain hard filters. Only the
+    // source-supported eligible cards may appear in a text result.
+    const ranked = description
+      ? intentEngine.search(eligible.map(card => intentById.get(card.id)), description, {limit:8})
+      : [];
+    const visibleIds = description
+      ? new Set(ranked.map(hit => hit.id))
+      : new Set(eligible.map(card => card.id));
+    cards.forEach(card => {
+      card.hidden = !visibleIds.has(card.id);
+      card.classList.toggle('intent-best', !!description && ranked[0]?.id === card.id);
+    });
+    const count = visibleIds.size;
     resultTitle.textContent = count + ' Michigan ' + (count === 1 ? 'destination' : 'destinations') + ' to explore';
     const parts = [labelFor(whenEl.value)];
     if(activity !== 'all') parts.push(activityEl.options[activityEl.selectedIndex].textContent.toLowerCase());
     if(region !== 'all') parts.push(regionEl.options[regionEl.selectedIndex].textContent);
-    resultContext.textContent = count ? 'Showing places with typical seasonal fit for ' + parts.join(' · ') + '. Verify actual weather, access and conditions using the linked tools.' : 'No matching places in this curated set. Choose another season, region or activity.';
+    if (description && ranked.length) {
+      const first = ranked[0];
+      const top = intentById.get(first.id);
+      const evidence = first.why.length
+        ? ' Its field notes mention ' + first.why.slice(0, 2).join(' and ') + '.'
+        : ' Its destination name matches the description.';
+      intentLeading.href = '#' + first.id;
+      intentLeading.textContent = 'Start with ' + top.title + '.' + evidence + ' Read the visit details.';
+      intentLeading.hidden = false;
+    } else {
+      intentLeading.hidden = true;
+      intentLeading.removeAttribute('href');
+      intentLeading.textContent = '';
+    }
+    if (description) {
+      const unsupported = intentEngine.unsupportedReasons(description);
+      resultContext.textContent = count
+        ? 'Based on your description and typical seasonal fit for ' + parts.join(' · ') +
+          '. Check the official links for access, current conditions and permitted activities.'
+        : unsupported.length
+          ? 'These field notes do not verify ' + [...new Set(unsupported)].join(' or ') +
+            '. Try a different description or check the official destination resources.'
+          : 'No supported match for that description with your selected filters. Broaden the search or reset the filters.';
+      if (emptyReason) emptyReason.textContent = 'No field-note match. Try other words, another region, or clear the description.';
+    } else {
+      resultContext.textContent = count
+        ? 'Showing places with typical seasonal fit for ' + parts.join(' · ') +
+          '. Verify actual weather, access and conditions using the linked tools.'
+        : 'No matching places in this curated set. Choose another season, region or activity.';
+      if (emptyReason) emptyReason.textContent = 'No destinations match that combination. Try a different region or season.';
+    }
+    if(intentClear) intentClear.hidden = !description;
     empty.hidden = count !== 0;
     updateMap();
     if(updateUrl){
@@ -296,10 +350,13 @@
       if(whenEl.value !== 'any') params.set('when',whenEl.value);
       if(activity !== 'all') params.set('activity',activity);
       if(region !== 'all') params.set('region',region);
+      // Never place free text in query strings, history, analytics, or storage.
       const query = params.toString();
       window.history.replaceState(null,'',window.location.pathname + (query?'?'+query:'') + window.location.hash);
     }
-    if(focus) document.getElementById('result-title').scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+    if(focus) document.getElementById('result-title').scrollIntoView({
+      behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'
+    });
   }
   function restoreQuery() {
     const p = new URLSearchParams(window.location.search);
@@ -310,11 +367,22 @@
   }
   function reset() {
     whenEl.value='any';activityEl.value='all';regionEl.value='all';
+    if (intentInput) intentInput.value='';
     applyFilters({updateUrl:true});
   }
   moodButtons.forEach(btn => btn.addEventListener('click', () => {activityEl.value = btn.dataset.activity;applyFilters({updateUrl:true});}));
   form.addEventListener('submit',e=>{e.preventDefault();applyFilters({focus:true,updateUrl:true});});
   [whenEl,activityEl,regionEl].forEach(el=>el.addEventListener('change',()=>applyFilters({updateUrl:true})));
+  if (intentEngine && intentInput && intentClear) {
+    intentInput.addEventListener('input', () => {
+      intentClear.hidden = !intentInput.value.trim();
+    });
+    intentClear.addEventListener('click', () => {
+      intentInput.value = '';
+      applyFilters({updateUrl:true});
+      intentInput.focus();
+    });
+  }
   document.getElementById('reset').addEventListener('click',reset);
   document.getElementById('clear-empty').addEventListener('click',reset);
   // A location request is initiated only by an explicit button click, never on load.
