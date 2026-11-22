@@ -22,7 +22,7 @@ Each `SKILL.md` is copied identically to `.agents/skills`, `.claude/skills` and 
 
 ## Tool and account boundaries
 
-ChatGPT already has separate GitHub, Figma and Vercel capabilities in some connected environments. The optional Firecrawl connection can assist research **only after the user authorizes it**. Neither Firecrawl nor Stitch is automatically enabled for production use. Penpot and REA remain explicitly on-demand. Claude/Gemini terminal agents, n8n, Dify, OpenUI and MinerU are not introduced by this change.
+ChatGPT already has separate GitHub, Figma and Vercel capabilities in some connected environments. The optional Firecrawl connection can assist research **only after the user authorizes it**. Firecrawl and Stitch are not automatically enabled for production use. Penpot and REA remain explicitly on-demand. Claude/Gemini terminal agents, n8n, Dify, OpenUI and MinerU are not introduced by this change.
 
 ## Required review
 
