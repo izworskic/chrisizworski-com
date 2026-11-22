@@ -9,19 +9,19 @@ const read=rel=>fs.readFileSync(path.join(root,rel),'utf8');
 test('Blue Ridge main page makes the planner the first decision after the scenic introduction',()=>{
   const html=read('public/blue-ridge-parkway/index.html');
   assert.match(html,/Which part of the Blue Ridge Parkway should you drive today\?/i);
-  assert.match(html,/Start near Asheville, Boone, Roanoke, Cherokee or another Parkway entrance/i);
-  assert.match(html,/1 · Pick where you’re starting/);
-  assert.match(html,/2 · See today’s best direction/);
-  assert.match(html,/3 · Build a drive that fits your time/);
+  assert.match(html,/The Parkway has hundreds of miles of ridges, forest and mountain stories/i);
+  assert.match(html,/01<\/span> Start/);
+  assert.match(html,/02<\/span> Your kind of day/);
+  assert.match(html,/03<\/span> Your drive/);
   assert.match(html,/STARTING NEAR ONE OF THESE PLACES\?/);
   assert.match(html,/Four ways into the mountains/);
   assert.match(html,/id="gatewaySnapshots"/);
   assert.ok(html.indexOf('id="plannerForm"')<html.indexOf('id="results"')&&html.indexOf('id="results"')<html.indexOf('id="gatewaySnapshots"'),'planner and its answer must precede optional gateway comparisons');
-  assert.match(html,/href="#planner">Plan my drive/);
+  assert.match(html,/href="#planner">Find my Parkway drive/);
   assert.match(html,/Photo: Robert Stephens/);
   assert.match(html,/class="planner-noscript"/);
-  assert.match(html,/TELL US ABOUT YOUR DAY/);
-  assert.match(html,/Build my Parkway drive/);
+  assert.match(html,/YOUR PARKWAY DAY · STEP BY STEP/);
+  assert.match(html,/Show my Parkway drive/);
   assert.match(html,/blue-ridge-parkway-breakout\.js/);
 });
 
