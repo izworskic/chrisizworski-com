@@ -59,6 +59,10 @@ function routes(page,failedMap=false){
    assert.equal(await page.locator("#stopFocus h3").innerText(),"Folk Art Center");
    await page.locator(".route-step").nth(1).click();
    assert.equal(await page.locator("#stopFocus h3").innerText(),"Craggy Gardens");
+   await page.locator("#parkwayMap .number-pin").nth(1).click();
+   assert.equal(await page.locator("#stopFocus h3").innerText(),"Folk Art Center","First map marker selects its own stop");
+   await page.locator("#parkwayMap .number-pin").nth(2).click();
+   assert.equal(await page.locator("#stopFocus h3").innerText(),"Craggy Gardens","Second map marker selects its own stop");
    await page.locator(".timeline-stop-action").first().click();
    assert.equal(await page.locator("#stopFocus h3").innerText(),"Folk Art Center");
    await page.locator("#selectedStopDetails .stop-map-action").nth(1).click();
@@ -76,13 +80,20 @@ function routes(page,failedMap=false){
   await page.locator("#parkwayMapFallback").waitFor({state:"visible",timeout:25000});
   assert.equal(await page.locator("#parkwayMap").isVisible(),false);
   await page.close();
+  const blocked=await browser.newPage({viewport:{width:390,height:844}});routes(blocked);
+  await blocked.route("**/tile.openstreetmap.org/**",route=>route.abort());
+  await blocked.goto(base,{waitUntil:"domcontentloaded"});
+  await blocked.locator("#parkwayMapFallback").waitFor({state:"visible",timeout:25000});
+  assert.equal(await blocked.locator("#parkwayMap").isVisible(),false,"Blank basemap collapses");
+  assert.equal(await blocked.locator("#stopFocus h3").innerText(),"Folk Art Center","Map failure preserves stop field note");
+  await blocked.close();
   const noStops=await browser.newPage({viewport:{width:390,height:844}});routes(noStops);
   await noStops.goto(base+"?gateway=asheville&hours=2",{waitUntil:"domcontentloaded"});
   await noStops.locator("#stopFocus h3").waitFor({timeout:25000});
   assert.equal(await noStops.locator(".route-step").count(),0);
   assert.match(await noStops.locator("#stopFocus h3").innerText(),/No sightseeing stops/);
   await noStops.close();
-  fs.writeFileSync(path.join(out,"acceptance.json"),JSON.stringify({kind:"controlled browser fixture",views,failedLeaflet:true,zeroStops:true},null,2));
+  fs.writeFileSync(path.join(out,"acceptance.json"),JSON.stringify({kind:"controlled browser fixture",views,failedLeaflet:true,failedTiles:true,zeroStops:true},null,2));
   console.log("Blue Ridge roadbook browser QA PASS");
  }catch(error){console.error(error);process.exitCode=1;}
  finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}
