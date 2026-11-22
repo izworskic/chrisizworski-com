@@ -79,10 +79,10 @@ test("browser planner exposes Finish and sends it to the API",()=>{
 
 test("Finish is present in static planner markup and the asset is cache-busted",()=>{
   const html=fs.readFileSync(path.join(__dirname,"..","public","blue-ridge-parkway","index.html"),"utf8");
-  assert.match(html,/<label for="finish">Finish<\/label>/);
+  assert.match(html,/<label for="finish">Where do you want to finish\?<\/label>/);
   assert.match(html,/<select id="finish">/);
   assert.match(html,/Back where I started/);
-  assert.match(html,/blue-ridge-parkway\.js\?v=20261122-3/);
+  assert.match(html,/blue-ridge-parkway\.js\?v=20261122-flow1/);
 });
 
 
@@ -154,7 +154,7 @@ test("selected-stop summary uses returned interests with checked-box fallback",(
   assert.match(source,/checkedInterests=selectedInterests\(\)/);
   assert.match(source,/Serves \$\{servedIds\.length\} of \$\{chosen\.size\} selected interests/);
   const html=fs.readFileSync(path.join(__dirname,"..","public","blue-ridge-parkway","index.html"),"utf8");
-  assert.match(html,/blue-ridge-parkway\.js\?v=20261122-3/);
+  assert.match(html,/blue-ridge-parkway\.js\?v=20261122-flow1/);
 });
 
 
@@ -202,7 +202,7 @@ test("result UI reports served and unserved selections without claiming the user
   assert.match(source,/NPS stop information/);
   assert.match(html,/Places worth leaving the car for/);
   assert.doesNotMatch(html,/What you picked—and what to do there/);
-  assert.match(html,/blue-ridge-parkway\.js\?v=20261122-3/);
+  assert.match(html,/blue-ridge-parkway\.js\?v=20261122-flow1/);
 });
 
 

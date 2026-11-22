@@ -151,7 +151,7 @@ test("crawlable page preserves canonical entity, correct Leaflet SRI and first-d
   assert.match(html,/https:\/\/chrisizworski\.com\/blue-ridge-parkway\//);
   assert.match(html,/https:\/\/chrisizworski\.com\/#person/);
   assert.match(html,/Which part of the Blue Ridge Parkway should you drive today\?/);
-  assert.match(html,/suggests a drive that leaves time to step outside\./);
+  assert.match(html,/help you find the stretch worth driving/);
   assert.match(html,/sha256-p4NxAoJBhIIN\+hmNHrzRCf9tD\/miZyoHS5obTRR9BMY=/);
   assert.doesNotMatch(html,/sha256-p4NxAoJBhIINfQ3yn5MZJoer0n8ZCkG\/kvUp6v\+S0w=/);
   assert.doesNotMatch(html,/breathtaking|hidden gem|perfect day/i);

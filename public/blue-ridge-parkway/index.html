@@ -17,7 +17,7 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
-<link rel="stylesheet" href="/assets/blue-ridge-parkway-breakout.css?v=20261122-2">
+<link rel="stylesheet" href="/assets/blue-ridge-parkway-breakout.css?v=20261122-flow1">
 <script type="application/ld+json">
 {
   "@context":"https://schema.org",
@@ -42,9 +42,9 @@
     <div>
       <div class="eyebrow">BLUE RIDGE PARKWAY TRIP PLANNER · LIVE CONDITIONS</div>
       <h1>Which part of the Blue Ridge Parkway should you drive today?</h1>
-      <p class="lede">Start near Asheville, Boone, Roanoke, Cherokee or another Parkway entrance. This tool checks NPS road status, mountain weather and the hours you have, then suggests a drive that leaves time to step outside. Along the Parkway, a short climb can carry you from hardwood forest into cooler, cloud-wrapped ridges; the best day depends on which part of that landscape you can actually reach.</p>
-      <div class="hero-actions"><a class="primary-link" href="#planner">Plan my drive</a><a class="hero-nps-link" href="https://www.nps.gov/blri/planyourvisit/roadclosures.htm" target="_blank" rel="noopener">Official NPS road status</a></div>
-      <div class="hero-proof" aria-label="How this tool works"><span class="proof">1 · Pick where you’re starting</span><span class="proof">2 · See today’s best direction</span><span class="proof">3 · Build a drive that fits your time</span></div>
+      <p class="lede">The Parkway has hundreds of miles of ridges, forest and mountain stories. Tell us where you are and what you want from the day. We will help you find the stretch worth driving, with time to get out and explore.</p>
+      <div class="hero-actions"><a class="primary-link" href="#planner">Find my Parkway drive</a><a class="hero-nps-link" href="https://www.nps.gov/blri/planyourvisit/roadclosures.htm" target="_blank" rel="noopener">Official NPS road status</a></div>
+      
     </div>
     <aside class="hero-card">
       <img src="https://www.nps.gov/blri/learn/nature/images/Standing-Rock-Overlook-robert-Stephens-1200-web.jpg?autorotate=false&amp;format=webp&amp;maxheight=1300&amp;maxwidth=1300" alt="Autumn view from Standing Rock Overlook on the Blue Ridge Parkway" loading="eager">
@@ -53,33 +53,95 @@
   </section>
 
   <section class="planner" id="planner" aria-labelledby="planner-title">
-    <div class="planner-top"><div><div class="eyebrow">TELL US ABOUT YOUR DAY</div><h2 id="planner-title">Build your Parkway drive.</h2></div><p>Tell us where you’ll enter the mountains and how long you can stay. Then choose what you’d most like to experience: a ridge view, a forest walk, moving water or a story from the people who lived here. The planner checks the road and forecast before setting out the stops.</p></div>
+    <div class="planner-top">
+      <div><div class="eyebrow">YOUR PARKWAY DAY · STEP BY STEP</div><h2 id="planner-title">Make a drive you'll remember.</h2></div>
+      <p>First choose where you're starting. Next tell us what you'd like to experience. We'll check the road and mountain weather before suggesting your drive.</p>
+    </div>
+    <ol class="flow-progress" id="flowProgress" aria-label="Plan your visit" hidden>
+      <li data-progress="1" aria-current="step"><span>01</span> Start</li>
+      <li data-progress="2"><span>02</span> Your kind of day</li>
+      <li data-progress="3"><span>03</span> Your drive</li>
+    </ol>
     <form class="planner-form" id="plannerForm">
-      <div class="form-grid">
-        <div class="field"><label for="gateway">Starting near</label><select id="gateway"><option value="asheville">Asheville</option><option value="boone">Boone / Blowing Rock</option><option value="roanoke">Roanoke</option><option value="floyd">Floyd / Meadows of Dan</option><option value="afton">Afton / Waynesboro</option><option value="cherokee">Cherokee</option></select></div>
-        <div class="field"><label for="finish">Finish</label><select id="finish"><option value="return">Back where I started</option><option value="asheville">Asheville</option><option value="boone">Boone / Blowing Rock</option><option value="roanoke">Roanoke</option><option value="floyd">Floyd / Meadows of Dan</option><option value="afton">Afton / Waynesboro</option><option value="cherokee">Cherokee</option></select></div>
-        <div class="field"><label for="tripDate">Day</label><input id="tripDate" type="date"></div>
-        <div class="field"><label for="startTime">Leave about</label><input id="startTime" type="time" value="09:00"></div>
-        <div class="field"><label for="hours">Time available</label><select id="hours"><option value="2">2 hours</option><option value="3">3 hours</option><option value="4" selected>4 hours</option><option value="5">5 hours</option><option value="6">6 hours</option><option value="8">8 hours</option></select></div>
-      </div>
-      <div id="corridorBudget" class="planner-status" style="margin-top:8px" aria-live="polite"></div>
-      <div class="interests"><span class="interest-label">What should earn the stops?</span><div class="interest-row">
-        <label><input type="checkbox" name="interest" value="scenery" checked><span>Big views</span></label><label><input type="checkbox" name="interest" value="fall-color"><span>Fall color</span></label><label><input type="checkbox" name="interest" value="short-walk" checked><span>Short walks</span></label><label><input type="checkbox" name="interest" value="waterfall"><span>Waterfalls</span></label><label><input type="checkbox" name="interest" value="photography"><span>Photography</span></label><label><input type="checkbox" name="interest" value="history"><span>History</span></label><label><input type="checkbox" name="interest" value="picnic"><span>Picnic</span></label><label><input type="checkbox" name="interest" value="sunset"><span>Sunset</span></label>
-      </div></div>
-      <div class="planner-actions"><button class="primary-button" id="buildDrive" type="submit">Build my Parkway drive</button><span class="planner-status" id="plannerStatus" aria-live="polite"></span></div>
+      <section class="flow-step" data-flow-step="1" aria-labelledby="flow-start-title">
+        <div class="flow-step-heading"><h3 id="flow-start-title">Where will you join the Parkway?</h3><p>No need to know a milepost. Pick the town closest to where you'll begin.</p></div>
+        <div class="flow-gateway-choices" role="group" aria-label="Choose your starting area">
+          <button class="quick-gateway flow-gateway" type="button" data-gateway="asheville" aria-pressed="false"><strong>Asheville</strong><small>Craggy &amp; Pisgah</small></button>
+          <button class="quick-gateway flow-gateway" type="button" data-gateway="boone" aria-pressed="false"><strong>Boone / Blowing Rock</strong><small>Grandfather Mountain country</small></button>
+          <button class="quick-gateway flow-gateway" type="button" data-gateway="roanoke" aria-pressed="false"><strong>Roanoke</strong><small>Mountain views &amp; working history</small></button>
+          <button class="quick-gateway flow-gateway" type="button" data-gateway="cherokee" aria-pressed="false"><strong>Cherokee</strong><small>Waterrock &amp; the high Balsams</small></button>
+          <button class="quick-gateway flow-gateway" type="button" data-gateway="floyd" aria-pressed="false"><strong>Floyd / Meadows of Dan</strong><small>Mabry Mill &amp; Rocky Knob</small></button>
+          <button class="quick-gateway flow-gateway" type="button" data-gateway="afton" aria-pressed="false"><strong>Afton / Waynesboro</strong><small>The northern Parkway entrance</small></button>
+        </div>
+        <div class="flow-select-row">
+          <div class="field"><label for="gateway">Or choose from a list</label><select id="gateway">
+            <option value="" selected disabled>Select your starting area</option>
+            <option value="asheville">Asheville</option><option value="boone">Boone / Blowing Rock</option><option value="roanoke">Roanoke</option><option value="floyd">Floyd / Meadows of Dan</option><option value="afton">Afton / Waynesboro</option><option value="cherokee">Cherokee</option>
+          </select></div>
+          <button class="primary-button flow-only" id="flowStartNext" type="button">Continue to your day</button>
+        </div>
+        <p class="flow-error" id="flowStartError" role="status" hidden>Choose a starting area to continue.</p>
+      </section>
+      <section class="flow-step" data-flow-step="2" aria-labelledby="flow-day-title">
+        <div class="flow-step-heading"><span class="flow-picked" id="flowPicked">Your starting place</span><h3 id="flow-day-title">What would make this a good day?</h3><p>Choose what draws you outdoors and how much time you have. You can change your choices later.</p></div>
+        <div class="interests"><span class="interest-label">I want to experience…</span><div class="interest-row">
+          <label><input type="checkbox" name="interest" value="scenery" checked><span>Mountain views</span></label>
+          <label><input type="checkbox" name="interest" value="short-walk" checked><span>A short walk</span></label>
+          <label><input type="checkbox" name="interest" value="waterfall"><span>Waterfalls</span></label>
+          <label><input type="checkbox" name="interest" value="history"><span>History &amp; people</span></label>
+          <label><input type="checkbox" name="interest" value="photography"><span>Photography</span></label>
+          <label><input type="checkbox" name="interest" value="fall-color"><span>Fall color</span></label>
+          <label><input type="checkbox" name="interest" value="picnic"><span>A picnic</span></label>
+          <label><input type="checkbox" name="interest" value="sunset"><span>Sunset</span></label>
+        </div></div>
+        <div class="flow-time">
+          <label class="interest-label" for="hours">How much time can you spend?</label>
+          <div class="flow-time-choices" role="group" aria-label="Quick time choices">
+            <button type="button" class="flow-time-choice" data-hours="2" aria-pressed="false"><strong>2 hours</strong><small>Just a taste</small></button>
+            <button type="button" class="flow-time-choice" data-hours="4" aria-pressed="true"><strong>4 hours</strong><small>Half a day</small></button>
+            <button type="button" class="flow-time-choice" data-hours="6" aria-pressed="false"><strong>6 hours</strong><small>Time to wander</small></button>
+            <button type="button" class="flow-time-choice" data-hours="8" aria-pressed="false"><strong>8 hours</strong><small>A full day</small></button>
+          </div>
+          <div class="field flow-exact-time"><label for="hours">Or set exact hours</label><select id="hours"><option value="2">2 hours</option><option value="3">3 hours</option><option value="4" selected>4 hours</option><option value="5">5 hours</option><option value="6">6 hours</option><option value="8">8 hours</option></select></div>
+        </div>
+        <p class="flow-trip-context" id="flowTripContext" aria-live="polite"></p>
+        <details class="flow-options" id="flowOptions">
+          <summary>Travel date, departure time or a different finish <span>Optional</span></summary>
+          <p>The default is a round trip from your starting area, leaving about 9 AM today. Adjust that only if your plans are different.</p>
+          <div class="form-grid">
+            <div class="field"><label for="finish">Where do you want to finish?</label><select id="finish"><option value="return">Back where I started</option><option value="asheville">Asheville</option><option value="boone">Boone / Blowing Rock</option><option value="roanoke">Roanoke</option><option value="floyd">Floyd / Meadows of Dan</option><option value="afton">Afton / Waynesboro</option><option value="cherokee">Cherokee</option></select></div>
+            <div class="field"><label for="tripDate">Day</label><input id="tripDate" type="date"></div>
+            <div class="field"><label for="startTime">Leave about</label><input id="startTime" type="time" value="09:00"></div>
+          </div>
+          <div id="corridorBudget" class="planner-status" aria-live="polite"></div>
+        </details>
+        <div class="planner-actions">
+          <button class="flow-back flow-only" type="button" id="flowBack">Change starting place</button>
+          <button class="primary-button" id="buildDrive" type="submit">Show my Parkway drive</button>
+          <span class="planner-status" id="plannerStatus" role="status" aria-live="polite"></span>
+        </div>
+      </section>
     </form>
     <noscript><p class="planner-noscript">The live planner requires JavaScript. You can still <a href="/blue-ridge-parkway/best-stops/">compare Parkway stops</a> and <a href="https://www.nps.gov/blri/planyourvisit/roadclosures.htm">check the official NPS closure table</a> before you travel.</p></noscript>
-    <div class="quick-row"><span>Or start with:</span><button class="quick-gateway" type="button" data-gateway="asheville">Asheville</button><button class="quick-gateway" type="button" data-gateway="boone">Boone</button><button class="quick-gateway" type="button" data-gateway="roanoke">Roanoke</button><button class="quick-gateway" type="button" data-gateway="cherokee">Cherokee</button></div>
   </section>
 
   <div class="results" id="results" hidden>
+    <section class="flow-result-intro" aria-labelledby="flowResultTitle">
+      <div><div class="eyebrow">YOUR PARKWAY DRIVE</div><h2 id="flowResultTitle">Here's a drive for your day.</h2><p id="flowResultSummary">We checked road status and forecast context against your choices.</p></div>
+      <button type="button" class="flow-change" id="flowEdit">Change my answers</button>
+    </section>
     <section class="decision-layout" aria-live="polite">
       <article class="decision-card" id="decision"></article>
-      <div class="decision-side"><article class="reason-card" id="whyCard"></article><article class="reason-card watch" id="watchCard"></article><article class="planb-card" id="planB"></article></div>
+      <details class="flow-why"><summary>Why this route? What could change?</summary><div class="decision-side"><article class="reason-card" id="whyCard"></article><article class="reason-card watch" id="watchCard"></article><article class="planb-card" id="planB"></article></div></details>
+    </section>
+
+    <section class="section road-alert-section" id="roadAlertSection" hidden>
+      <div class="section-head"><div><div class="eyebrow">ROAD ALERT</div><h2>Before you head farther along the ridge</h2></div><p>A closed gate, construction warning or missing road update matters more than the most promising view. If one affects your plan, check the NPS notice before traveling.</p></div>
+      <div class="road-list" id="roadAlert"></div>
     </section>
 
     <section class="section" id="route-map">
-      <div class="section-head"><div><div class="eyebrow">ON THE ROAD</div><h2>Follow your drive, stop by stop</h2></div><p>Start with the numbered stops, then follow their mileposts along the road. Choose any stop to learn what to look for and how much time to give it. Times are estimates; the mountain sets its own pace.</p></div>
+      <div class="section-head"><div><div class="eyebrow">ON THE ROAD</div><h2>Explore your stops, one at a time</h2></div><p>Choose a numbered stop to see what makes it special. The map and itinerary follow the same selection; drive times are estimates, not promises.</p></div>
       <nav id="stopRouteStrip" class="stop-route-strip" aria-label="Stops in this drive" hidden></nav><p id="stopSelectionStatus" class="brp-sr-only" aria-live="polite"></p>
       <div class="route-workspace">
         <article class="map-card"><div class="map-head"><strong>Selected Parkway section</strong><span>Mileposts + selected stops</span></div><div class="map-wrap"><div id="parkwayMap" role="region" aria-label="Interactive Blue Ridge Parkway map with numbered selected stops"></div></div><div class="map-fallback" id="parkwayMapFallback" hidden role="status"><span id="parkwayMapFailure">Interactive map unavailable.</span> The stop itinerary remains available. <a href="https://www.nps.gov/blri/planyourvisit/maps.htm" target="_blank" rel="noopener">Official NPS map</a>.</div><div class="map-caption">Numbered pins follow the selected stops. The Parkway line is for orientation, not a verified open or drivable route. <a href="https://www.nps.gov/blri/planyourvisit/maps.htm" target="_blank" rel="noopener">NPS milepost map</a>. <span id="parkwayCorridorNote"></span></div></article>
@@ -87,20 +149,15 @@
       </div>
     </section>
 
-    <section class="section" id="selected-stops">
+    <section class="section" id="selected-stops"><details class="flow-all-stops" id="flowAllStops"><summary>Read the complete field notes for every stop</summary>
       <div class="section-head"><div><div class="eyebrow">YOUR STOPS</div><h2>Places worth leaving the car for</h2></div><p>A stop is more than a pin on a map. Read what makes each place different, from a short climb to a working mill, and see which of your interests fit the hours you have.</p></div>
       <div class="selected-stop-summary" id="selectedStopSummary"></div>
       <div class="selected-stop-grid" id="selectedStopDetails"></div>
-    </section>
+      </details></section>
 
     <section class="section">
       <div class="section-head"><div><div class="eyebrow">CONDITIONS</div><h2>Read the sky before you climb</h2></div><p>Cloud can settle against a ridge while the valley below stays sunny. Wind and temperature also change with elevation. These forecast clues can help you choose a better stop; only official road notices tell you whether a stretch is open.</p></div>
       <div class="condition-grid"><article class="condition-card" id="weatherCard"></article><article class="condition-card" id="viewCard"></article><article class="condition-card" id="foliageCard"></article></div>
-    </section>
-
-    <section class="section road-alert-section" id="roadAlertSection" hidden>
-      <div class="section-head"><div><div class="eyebrow">ROAD ALERT</div><h2>Before you head farther along the ridge</h2></div><p>A closed gate, construction warning or missing road update matters more than the most promising view. If one affects your plan, check the NPS notice before traveling.</p></div>
-      <div class="road-list" id="roadAlert"></div>
     </section>
 
     <details class="trip-technical">
@@ -114,6 +171,7 @@
     </details>
   </div>
 
+  <details class="flow-other-entrances" id="flowOtherEntrances"><summary>Compare other starting points and current route conditions</summary>
   <section class="today-intel" aria-labelledby="today-title">
     <div class="today-intel-head">
       <div><div class="eyebrow">STARTING NEAR ONE OF THESE PLACES?</div><h2 id="today-title">Four ways into the mountains</h2></div>
@@ -126,7 +184,7 @@
       <article class="snapshot-card loading-shimmer"><div class="snapshot-kicker"><span>MP 469 · Cherokee</span><span class="snapshot-state">CHECKING</span></div><h3>From Cherokee: how far should you climb?</h3><p class="snapshot-route">Waterrock Knob · Richland Balsam</p><p>From Cherokee, the road climbs toward spruce and fir high country. A clear ridge can reveal layer after layer of mountains; fog may turn the same drive into a close-up of the forest.</p><div class="snapshot-actions"><a href="/blue-ridge-parkway/cherokee/">From Cherokee →</a></div></article>
     </div>
     <div class="intel-foot"><span>These are live route snapshots built from the same engine as the full planner. Official road restrictions remain hard constraints.</span><span id="deskFreshness">Checking current inputs…</span></div>
-  </section>
+  </section></details>
 
 
   <section class="section">
@@ -171,7 +229,7 @@
 <footer class="footer">© 2026 <a href="/chris-izworski/">Chris Izworski</a> · <a href="/tools/">Tools</a> · Always verify current National Park Service notices before travel.</footer>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
 <script src="/assets/visitor-map-links.js" defer></script>
-<script src="/assets/blue-ridge-parkway.js?v=20261122-3" defer></script>
-<script src="/assets/blue-ridge-parkway-breakout.js?v=20261122-1" defer></script>
+<script src="/assets/blue-ridge-parkway.js?v=20261122-flow1" defer></script>
+<script src="/assets/blue-ridge-parkway-breakout.js?v=20261122-flow1" defer></script>
 </body>
 </html>

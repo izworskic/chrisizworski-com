@@ -31,11 +31,56 @@
   function renderCorridorBudget(){const note=$("corridorBudget"),finish=$("finish")?.value||"return";if(!note)return;if(finish==="return"){note.textContent="";return;}const drive=corridorDriveHours(),available=Number($("hours")?.value||0),stop=Math.max(0,available-drive);note.textContent=`Parkway drive alone: about ${drive.toFixed(1)} hr · sightseeing budget at ${available} hr: about ${stop.toFixed(1)} hr.`;}
   function syncHours(autoFit=false){const finish=$("finish")?.value||"return",hours=$("hours");if(!hours)return;const long=[7,9,10,11,12,13,14,15,16];for(const n of long){let option=[...hours.options].find(o=>o.value===String(n));if(finish!=="return"&&!option){option=document.createElement("option");option.value=String(n);option.textContent=`${n} hours`;hours.appendChild(option);}else if(finish==="return"&&option){if(hours.value===String(n))hours.value="8";option.remove();}}if(finish!=="return"&&autoFit){const required=corridorDriveHours(),choices=[...hours.options].map(o=>Number(o.value)).filter(Number.isFinite).sort((a,b)=>a-b),current=Number(hours.value);if(current<required){const fit=choices.find(n=>n>=required);hours.value=String(fit||choices[choices.length-1]||16);}}renderCorridorBudget();
   }
+  // The route engine remains authoritative. This layer only guides how people ask for and read its answer.
+  function syncFlowChoices(){
+    const gateway=$("gateway")?.value||"",hours=$("hours")?.value||"";
+    document.querySelectorAll(".flow-gateway").forEach(button=>{
+      const chosen=button.dataset.gateway===gateway;
+      button.classList.toggle("is-selected",chosen);button.setAttribute("aria-pressed",String(chosen));
+    });
+    document.querySelectorAll(".flow-time-choice").forEach(button=>{
+      const chosen=button.dataset.hours===hours;
+      button.classList.toggle("is-selected",chosen);button.setAttribute("aria-pressed",String(chosen));
+    });
+  }
+  function showFlowStep(step,{focus=false,scroll=false}={}){
+    const planner=$("planner");if(!planner)return;
+    planner.classList.add("flow-enhanced");planner.dataset.activeStep=String(step);
+    const progress=$("flowProgress");if(progress)progress.hidden=false;
+    document.querySelectorAll("[data-flow-step]").forEach(section=>{
+      const active=Number(section.dataset.flowStep)===step;
+      section.classList.toggle("is-active",active);
+      section.setAttribute("aria-hidden",String(!active));
+    });
+    document.querySelectorAll("[data-progress]").forEach(item=>{
+      const current=Number(item.dataset.progress)===step;
+      if(current)item.setAttribute("aria-current","step");else item.removeAttribute("aria-current");
+      item.classList.toggle("is-current",current);
+    });
+    const picked=$("flowPicked"),selected=$( "gateway" )?.selectedOptions?.[0]?.textContent||"";
+    if(picked)picked.textContent=selected?("Starting near "+selected):"Choose your starting area";
+    syncFlowChoices();
+    updateFlowTripContext();
+    if(scroll){const target=step===3?$("results"):planner;target?.scrollIntoView({block:"start",behavior:window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches?"auto":"smooth"});}
+    if(focus){const heading=step===1?$("flow-start-title"):step===2?$("flow-day-title"):$("flowResultTitle");if(heading){heading.tabIndex=-1;heading.focus({preventScroll:true});}}
+  }
+  function updateFlowTripContext(){
+    const out=$("flowTripContext");if(!out)return;
+    const date=$("tripDate")?.value||todayParkway(),time=$("startTime")?.value||"09:00";
+    const finish=$("finish")?.selectedOptions?.[0]?.textContent||"Back where I started";
+    out.textContent=`Trip settings: ${date} · leave about ${time} · ${finish.toLowerCase()}. You can change these below.`;
+  }
+  function continueFromStart(){
+    if(!$("gateway")?.value){if($("flowStartError"))$("flowStartError").hidden=false;return;}
+    if($("flowStartError"))$("flowStartError").hidden=true;
+    showFlowStep(2,{focus:true,scroll:true});
+    track("blue_ridge_flow_step",{step:2,gateway:$("gateway").value});
+  }
   function todayParkway(){return new Intl.DateTimeFormat("en-CA",{timeZone:"America/New_York",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date());}
   function setDefaults(){if($("tripDate")&&!$("tripDate").value)$("tripDate").value=todayParkway();}
   function selectedInterests(){return [...document.querySelectorAll('input[name="interest"]:checked')].map(el=>el.value);}
   function params(){return new URLSearchParams({gateway:$("gateway").value,finish:$("finish")?.value||"return",hours:$("hours").value,date:$("tripDate").value||todayParkway(),start:$("startTime").value||"09:00",interests:selectedInterests().join(",")||"scenery"});}
-  function setBusy(busy){const btn=$("buildDrive");if(btn){btn.disabled=busy;btn.textContent=busy?"Checking the Parkway…":"Build my drive";}$("plannerStatus").textContent=busy?"Reading current road status and mountain weather…":"";}
+  function setBusy(busy){const btn=$("buildDrive");if(btn){btn.disabled=busy;btn.textContent=busy?"Checking the Parkway…":"Show my Parkway drive";}if(busy)$("plannerStatus").textContent="Reading current road status and mountain weather…";}
   function weatherLine(weather){if(!weather?.ok)return"Mountain forecast unavailable.";const bits=[];if(Number.isFinite(Number(weather.tempMin))&&Number.isFinite(Number(weather.tempMax)))bits.push(`${weather.tempMin}–${weather.tempMax}°F`);if(Number.isFinite(Number(weather.precipMax)))bits.push(`precipitation up to ${weather.precipMax}%`);if(Number.isFinite(Number(weather.windMax)))bits.push(`wind up to ${weather.windMax} mph`);if(weather.forecast?.length)bits.push(weather.forecast.slice(0,2).join(" / "));return bits.join(" · ")||"NWS hourly forecast loaded.";}
   function roadBadge(payload,plan){if(!payload.road?.ok)return`<span class="state warn">Verify NPS road status</span>`;if(plan?.cautions?.length)return`<span class="state warn">Road note on this stretch</span>`;return`<span class="state good">No hard closure on route</span>`;}
   function renderTop(payload){const plan=payload.selected,strip=$("liveStrip");strip.classList.toggle("warn",!payload.road?.ok||plan?.cautions?.length>0);$("roadUpdate").textContent=payload.road?.ok?`NPS road table: ${payload.road.updatedLabel||"current update loaded"}`:"NPS road table unavailable — verify before leaving";$("generatedAt").textContent=`Checked ${new Date(payload.generatedAt).toLocaleTimeString([], {hour:"numeric",minute:"2-digit"})}`;}
@@ -91,7 +136,7 @@
     if(!Number.isInteger(index)||index<0||index>=stopItems().length)return;
     selectedStop=index;showRoadbook();updateStopSelection();const announcement=$("stopSelectionStatus");if(announcement&&origin!=="initial")announcement.textContent=`Stop ${index+1} of ${stopItems().length}: ${selectedItem(index).name}, ${fmtMile(selectedItem(index).milepost)}.`;
     if(origin!=="map"&&origin!=="initial"&&map&&stopPins[index])map.panTo(stopPins[index].getLatLng(),{animate:false});
-    if(origin==="detail"||(origin==="timeline"&&window.matchMedia?.("(max-width:900px)")?.matches))$("stopFocus")?.scrollIntoView({behavior:window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches?"auto":"smooth",block:"nearest"});
+    if(origin==="detail"||((origin==="timeline"||origin==="list")&&window.matchMedia?.("(max-width:900px)")?.matches))$("stopFocus")?.scrollIntoView({behavior:window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches?"auto":"smooth",block:"nearest"});
     if(origin!=="initial")track("blue_ridge_stop_explore",{route_id:lastPayload?.selected?.id||"",stop_index:index+1,origin});
   }
   function prepareStopControls(){
@@ -137,8 +182,49 @@
       corridorRequest=fetch(payload.parkwayGeoJsonUrl,{headers:{accept:"application/geo+json,application/json"}}).then(response=>{if(!response.ok)throw Error("No Parkway geometry");return response.json();}).then(geo=>{if(!map)return;corridorLayer=L.geoJSON(geo,{style:{weight:3,opacity:.42,color:"#1c5853",interactive:false}}).addTo(map);corridorLayer.bringToBack();}).catch(()=>{const note=$("parkwayCorridorNote");if(note)note.textContent="Corridor geometry unavailable; the numbered stops still work.";});
     }
   }
-  function render(payload){lastPayload=payload;mapInteractionTracked=false;renderTop(payload);renderDecision(payload);renderTimeline(payload);renderSelectedStopDetails(payload);renderConditions(payload);renderRoad(payload);renderAlternatives(payload);renderFieldNotes(payload);renderSources(payload);$("results").hidden=false;prepareStopControls();drawMap(payload);history.replaceState(null,"",`${location.pathname}?${params().toString()}`);track("blue_ridge_planner_complete",{gateway:payload.input?.gateway||"",finish:payload.input?.finish||"return",trip_mode:payload.input?.tripMode||"round-trip",route_id:payload.selected?.id||"",hours:payload.input?.hours||0,road_source:payload.road?.ok?"live":"unavailable",weather_source:payload.selected?.weather?.ok?"live":"unavailable",decision_mode:payload.decisionMeta?.mode||"deterministic"});}
-  async function build(){setBusy(true);try{const response=await fetch(`/api/blue-ridge-parkway?${params().toString()}`,{headers:{accept:"application/json"}}),payload=await response.json().catch(()=>null);if(!response.ok||!payload?.ok)throw new Error(payload?.detail||payload?.error||`HTTP ${response.status}`);render(payload);$("plannerStatus").textContent="";}catch(error){track("blue_ridge_planner_error",{message:String(error?.message||error).slice(0,120)});$("plannerStatus").innerHTML=`<span class="error">Live refresh failed: ${esc(error.message||error)}.</span>`;$("results").hidden=false;$("decision").innerHTML=`<div class="source-warning"><strong>The live planner could not refresh.</strong><p>No road or weather fact has been guessed. Use the official NPS road-status source before leaving.</p></div>`;}finally{setBusy(false);}}
+  function render(payload){lastPayload=payload;mapInteractionTracked=false;renderTop(payload);renderDecision(payload);renderTimeline(payload);renderSelectedStopDetails(payload);renderConditions(payload);renderRoad(payload);renderAlternatives(payload);renderFieldNotes(payload);renderSources(payload);$("results").hidden=false;prepareStopControls();drawMap(payload);showFlowStep(3);const intro=$("flowResultSummary"),plan=payload.selected;if(intro){const gateway=payload.gateway?.label||$("gateway")?.selectedOptions?.[0]?.textContent||"your starting area",stops=plan?.timeline?.items?.length||0,finish=plan?.tripMode==="point-to-point"?` · finish at ${plan.finishLabel||"your destination"}`:" · return to your start";intro.textContent=plan?`From ${gateway} · about ${plan.durationHours} hours · ${stops} planned stop${stops===1?"":"s"}${finish}. ${payload.road?.ok?"Road table checked; verify notices before you go.":"Official road status could not be verified. Check NPS before you go."}`:"No usable drive was returned. Check the NPS road table before traveling.";}$("results").scrollIntoView({block:"start",behavior:window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches?"auto":"smooth"});history.replaceState(null,"",`${location.pathname}?${params().toString()}`);track("blue_ridge_planner_complete",{gateway:payload.input?.gateway||"",finish:payload.input?.finish||"return",trip_mode:payload.input?.tripMode||"round-trip",route_id:payload.selected?.id||"",hours:payload.input?.hours||0,road_source:payload.road?.ok?"live":"unavailable",weather_source:payload.selected?.weather?.ok?"live":"unavailable",decision_mode:payload.decisionMeta?.mode||"deterministic"});}
+  async function build(){setBusy(true);try{const response=await fetch(`/api/blue-ridge-parkway?${params().toString()}`,{headers:{accept:"application/json"}}),payload=await response.json().catch(()=>null);if(!response.ok||!payload?.ok)throw new Error(payload?.detail||payload?.error||`HTTP ${response.status}`);render(payload);$("plannerStatus").textContent="";}catch(error){track("blue_ridge_planner_error",{message:String(error?.message||error).slice(0,120)});$("plannerStatus").innerHTML=`<span class="error">Live refresh failed: ${esc(error.message||error)}.</span>`;$("results").hidden=true;showFlowStep(2);}finally{setBusy(false);}}
   function applyQuery(){const q=new URLSearchParams(location.search);for(const [id,key] of [["gateway","gateway"],["hours","hours"],["tripDate","date"],["startTime","start"]])if(q.get(key)&&$(id))$(id).value=q.get(key);syncFinishOptions();if(q.get("finish")&&$("finish")){const allowed=[...$("finish").options].some(o=>o.value===q.get("finish")&&!o.disabled);$("finish").value=allowed?q.get("finish"):"return";}syncHours();if(q.get("hours")&&$("hours")&&[...$("hours").options].some(o=>o.value===q.get("hours")))$("hours").value=q.get("hours");if(q.get("interests")){const set=new Set(q.get("interests").split(","));document.querySelectorAll('input[name="interest"]').forEach(el=>el.checked=set.has(el.value));}}
-  document.addEventListener("DOMContentLoaded",()=>{ensureLeafletCss();installPlannerUpgrade();setDefaults();applyQuery();$("plannerForm")?.addEventListener("submit",e=>{e.preventDefault();build();});$("results")?.addEventListener("click",event=>{const button=event.target.closest("button[data-stop-index]");if(!button||button.disabled||!$("results").contains(button))return;selectStop(Number(button.dataset.stopIndex),button.closest("#selectedStopDetails")?"detail":button.closest("#timeline")?"timeline":"list");});$("gateway")?.addEventListener("change",()=>{syncFinishOptions();syncHours(true);track("blue_ridge_gateway_change",{gateway:$("gateway").value});});$("finish")?.addEventListener("change",()=>{syncHours(true);track("blue_ridge_finish_change",{gateway:$("gateway").value,finish:$("finish").value});});$("hours")?.addEventListener("change",renderCorridorBudget);document.querySelectorAll(".quick-gateway").forEach(btn=>btn.addEventListener("click",()=>{$("gateway").value=btn.dataset.gateway;syncFinishOptions();syncHours(true);track("blue_ridge_gateway_change",{gateway:btn.dataset.gateway,method:"quick"});build();}));$("sources")?.addEventListener("click",event=>{const link=event.target.closest("a[data-source-name]");if(link)track("blue_ridge_source_click",{source_name:link.dataset.sourceName||""});});build();});
+  document.addEventListener("DOMContentLoaded",()=>{
+    ensureLeafletCss();installPlannerUpgrade();setDefaults();applyQuery();
+    const q=new URLSearchParams(location.search);
+    showFlowStep(q.get("gateway")&&$("gateway")?.value?2:1);
+    $("plannerForm")?.addEventListener("submit",e=>{
+      e.preventDefault();
+      if(!$("gateway")?.value){showFlowStep(1,{focus:true,scroll:true});if($("flowStartError"))$("flowStartError").hidden=false;return;}
+      if(!selectedInterests().length){showFlowStep(2,{focus:true,scroll:true});$("plannerStatus").textContent="Choose at least one thing you want to experience.";return;}
+      build();
+    });
+    $("flowStartNext")?.addEventListener("click",continueFromStart);
+    $("plannerForm")?.addEventListener("blue-ridge:edit",()=>{if($("results"))$("results").hidden=true;showFlowStep(2);});
+    $("flowBack")?.addEventListener("click",()=>showFlowStep(1,{focus:true,scroll:true}));
+    $("flowEdit")?.addEventListener("click",()=>{if($("results"))$("results").hidden=true;showFlowStep(2,{focus:true,scroll:true});track("blue_ridge_flow_edit");});
+    $("results")?.addEventListener("click",event=>{
+      const button=event.target.closest("button[data-stop-index]");
+      if(!button||button.disabled||!$("results").contains(button))return;
+      if(button.closest("#selectedStopDetails")&&$("flowAllStops"))$("flowAllStops").open=true;
+      selectStop(Number(button.dataset.stopIndex),button.closest("#selectedStopDetails")?"detail":button.closest("#timeline")?"timeline":"list");
+    });
+    $("gateway")?.addEventListener("change",()=>{
+      syncFinishOptions();syncHours(true);syncFlowChoices();
+      if($("flowStartError"))$("flowStartError").hidden=true;
+      track("blue_ridge_gateway_change",{gateway:$("gateway").value});
+      if($("planner")?.dataset.activeStep==="1")continueFromStart();
+    });
+    $("finish")?.addEventListener("change",()=>{syncHours(true);syncFlowChoices();updateFlowTripContext();track("blue_ridge_finish_change",{gateway:$("gateway").value,finish:$("finish").value});});
+    $("hours")?.addEventListener("change",()=>{renderCorridorBudget();syncFlowChoices();});
+    for(const id of ["tripDate","startTime"])$(id)?.addEventListener("change",updateFlowTripContext);
+    document.querySelectorAll(".quick-gateway").forEach(button=>button.addEventListener("click",()=>{
+      $("gateway").value=button.dataset.gateway;
+      $("gateway").dispatchEvent(new Event("change",{bubbles:true}));
+      syncFlowChoices();
+      if($("planner")?.dataset.activeStep!=="2")showFlowStep(2,{focus:true,scroll:true});
+    }));
+    document.querySelectorAll(".flow-time-choice").forEach(button=>button.addEventListener("click",()=>{
+      const value=button.dataset.hours,select=$("hours");
+      if(select&&[...select.options].some(option=>option.value===value)){select.value=value;select.dispatchEvent(new Event("change",{bubbles:true}));}
+      syncFlowChoices();
+    }));
+    $("sources")?.addEventListener("click",event=>{const link=event.target.closest("a[data-source-name]");if(link)track("blue_ridge_source_click",{source_name:link.dataset.sourceName||""});});
+  });
 })();
