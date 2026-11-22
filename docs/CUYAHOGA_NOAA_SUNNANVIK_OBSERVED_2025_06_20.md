@@ -17,7 +17,7 @@ Event source: https://www.dvidshub.net/news/501106/coast-guard-responds-motor-ve
 - Maximum gap between the accepted consecutive observations: 4.3 minutes; no gaps longer than five minutes among this vessel's accepted data.
 - Earliest accepted observation: 2025-06-20 03:37:37 UTC; latest: 23:57:00 UTC.
 - Accepted latitude bounds: 41.49722 to 41.53935 degrees north; longitude bounds: -81.73501 to -81.70731 degrees.
-- The original first-run importer counted 150 identity-matching rows as rejected by a combined out-of-bounds/invalid-position check. Its follow-up implementation separates records outside the coarse study box from truly invalid coordinates; do not call all 150 invalid or out-of-box without rerunning.
+- A second processing of the same NOAA archive with separate spatial and validity checks confirmed **150 valid identity-matching observations outside the coarse study box and zero invalid coordinates, timestamps or vessel identities**. This second result is from https://github.com/izworskic/chrisizworski-com/actions/runs/45020488281. The first run's combined rejection category is superseded.
 
 ## Independent, time-separated evidence
 
@@ -42,6 +42,10 @@ The long initial position concentration is strong support that AIS can represent
 4. Recheck the first- and last-observed values, the cluster thresholds, and explicit false-ETA state. Don't publish private receiver details, raw national archives, or map directions to an AIS point.
 
 NOAA historical source data are public domain (CC0). Source observation time is not time of data retrieval or bridge operation. The reconstruction is an offline research result, not live tracking or vessel navigation guidance.
+
+## Verified tests and raw evidence integrity
+
+The corrected one-day workflow completed successfully. All 13 deterministic research-unit tests passed in its checkout. Its NOAA source-file SHA-256 matched the first run (the unchanged public date archive). A compact summary and dated position-cluster artifact are attached to the GitHub Actions run, with 3-day retention. The run is NOT a full repository gate, a bridge ETA acceptance test or a real-time AIS field test.
 
 ## Interpretation and next hurdle
 
