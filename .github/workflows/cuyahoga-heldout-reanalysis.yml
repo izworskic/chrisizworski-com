@@ -1,0 +1,66 @@
+name: Cuyahoga three-date independent historical reference reanalysis
+
+# Single use. Reuses existing compact NOAA artifact; no new nationwide data download.
+on:
+  push:
+    branches: [research/cuyahoga-ais-audit-20261122]
+    paths: [.github/workflows/cuyahoga-heldout-reanalysis.yml]
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  reanalyze-studies:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run conservative historical reference-date tests
+        run: node --test tests/cuyahoga-bridge-backtest.test.js
+      - name: Reuse existing official NOAA point-study artifacts
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p research-output
+          gh run download 45027320296 --repo izworskic/chrisizworski-com \
+            --name cuyahoga-noaa-normal-transit-2025-research --dir research-output
+          test -s research-output/MARK_W_BARKER-2025-07-07-coast-pilot-brackets.json
+          test -s research-output/SAM_LAUD-2025-08-15-coast-pilot-brackets.json
+          test -s research-output/MARK_W_BARKER-2025-08-21-coast-pilot-brackets.json
+      - name: Distinguish separate calendar-day vessel movements
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/cuyahoga-bridge-backtest.mjs \
+            --input '2025-07-07:research-output/MARK_W_BARKER-2025-07-07-coast-pilot-brackets.json' \
+            --input '2025-08-15:research-output/SAM_LAUD-2025-08-15-coast-pilot-brackets.json' \
+            --input '2025-08-21:research-output/MARK_W_BARKER-2025-08-21-coast-pilot-brackets.json' \
+            --out 'research-output/cuyahoga-separated-episodes-backtest.json' \
+            | tee 'research-output/cuyahoga-separated-episodes-backtest-summary.json'
+          node <<'NODE'
+          const fs=require('node:fs');
+          const j=JSON.parse(fs.readFileSync('research-output/cuyahoga-separated-episodes-backtest.json','utf8'));
+          const lines=['## Cuyahoga held-out NOAA reference-only backtest',
+            'Independently sampled dates: '+j.dates.join(', '),
+            'Number of different vessel MMSIs: '+j.criteria.observedDifferentVessels,
+            'Actual surveyed bridge axes: NO',
+            'Independent confirmed crossing times: NO',
+            'Future ETA model enabled: NO'
+          ];
+          for(const v of j.visits)lines.push(v.date+' '+v.mmsi+': '+v.direction+
+             ' | source-backed references '+v.observedReferenceCount+
+             ' | time-separated groups: '+JSON.stringify(v.observedEpisodes.map(e=>({direction:e.direction,from:e.observedFrom,to:e.observedThrough,count:e.referenceWindows}))));
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY,lines.join('\n')+'\n');
+          console.log(lines.join('\n'));
+          NODE
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cuyahoga-separated-historical-reference-episodes
+          path: |
+            research-output/cuyahoga-separated-episodes-backtest.json
+            research-output/cuyahoga-separated-episodes-backtest-summary.json
+          retention-days: 5
+          if-no-files-found: error
