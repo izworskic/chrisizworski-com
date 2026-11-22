@@ -4,6 +4,7 @@
   const filters=[...document.querySelectorAll('[data-lake-filter]')];
   const bySlug=new Map(list.map(li=>[li.dataset.slug,li]));
   const lakeInfo={
+    All:'Explore all 16 U.S. shorelines beyond Michigan. Search a beach or town, or choose a lake.',
     Superior:'From Duluth’s Park Point to the Apostle Islands, the open Lake Superior shore can feel very different from the forest behind it. Watch which way the breeze crosses the water before choosing your beach.',
     Michigan:'Lake Michigan connects quiet dunes with Chicago’s city beaches. Step out of shelter toward the open sand and notice whether the wind feels different from the forecast back in town.',
     Huron:'The United States shore of Lake Huron is in Michigan. Open the existing Michigan Beach Report to explore its public beaches and official advisories.',
@@ -11,7 +12,7 @@
     Ontario:'Dunes, bluffs and long beaches reveal different faces of Lake Ontario. Compare the wind on an exposed shore with sheltered paths, and consult the park’s own beach-health guidance.'
   };
   const $=id=>document.getElementById(id);
-  let current=null,lake='Superior',request=null,map=null,markers=new Map(),mapLive=false,loadedTile=false,tileFails=0;
+  let current=null,lake='All',query='',request=null,map=null,markers=new Map(),mapLive=false,loadedTile=false,tileFails=0;
   function put(id,text){const el=$(id);if(el)el.textContent=text;}
   function link(id,href,text){const el=$(id);if(!el)return;el.href=href;el.textContent=text;}
   function isoTime(value){
@@ -32,6 +33,7 @@
   function showPlace(li){
     if(!li)return;
     const d=li.dataset;
+    $('field-report').hidden=false;
     current=d.slug;
     for(const el of list)el.querySelector('button[data-select]').setAttribute('aria-pressed',String(el===li));
     put('report-name',d.name);
@@ -113,13 +115,19 @@
       $('lake-context').innerHTML=lakeInfo.Huron+' <a href="/great-lakes-beaches/">See Michigan’s Lake Huron beaches</a>.';
     }
     const visible=list.filter(li=>{
-      const yes=li.dataset.lake===next;li.hidden=!yes;return yes;
+      const d=li.dataset;
+      const byLake=next==='All'||d.lake===next;
+      const text=[d.name,d.city,d.state,d.lake,d.story].join(' ').toLowerCase();
+      const yes=byLake&&(!query||text.includes(query));
+      li.hidden=!yes;return yes;
     });
-    put('result-count',next==='Huron'?'Michigan guide available':visible.length+' locations');
+    const noMatch=$('shore-no-match');
+    if(noMatch)noMatch.hidden=visible.length>0||next==='Huron';
+    put('result-count',next==='Huron'?'Michigan guide available':visible.length+' of '+list.length+' locations');
     if(mapLive){
       for(const [slug,marker] of markers){
         const item=bySlug.get(slug);
-        if(item.dataset.lake===next)marker.addTo(map);
+        if(!item.hidden)marker.addTo(map);
         else map.removeLayer(marker);
       }
       if(visible.length>1){
@@ -129,8 +137,13 @@
         map.setView([Number(visible[0].dataset.lat),Number(visible[0].dataset.lon)],9,{animate:false});
       }else map.setView([44.2,-83.9],7,{animate:false});
     }
-    if(next==='Huron')handoffToMichigan();
-    else showPlace(desired&&visible.includes(desired)?desired:visible[0]);
+    if(next==='Huron'){$('field-report').hidden=false;handoffToMichigan();}
+    else if(visible.length)showPlace(desired&&visible.includes(desired)?desired:visible[0]);
+    else{
+      if(request)request.abort();
+      current=null;$('field-report').hidden=true;
+      try{const u=new URL(location.href);u.searchParams.delete('beach');history.replaceState(null,'',u);}catch{}
+    }
   }
   function initMap(){
     if(typeof window.L!=='object')return mapError();
@@ -160,10 +173,18 @@
     map=null;mapLive=false;$('map-fallback').hidden=false;
     $('shore-map').hidden=true;
   }
-  filters.forEach(b=>b.addEventListener('click',()=>setLake(b.dataset.lakeFilter)));
+  const search=$('shore-search');
+  if(search)search.addEventListener('input',()=>{
+    query=search.value.trim().toLowerCase();
+    setLake('All');
+  });
+  filters.forEach(b=>b.addEventListener('click',()=>{
+    query='';if(search)search.value='';
+    setLake(b.dataset.lakeFilter);
+  }));
   list.forEach(li=>li.querySelector('button[data-select]').addEventListener('click',()=>setLake(li.dataset.lake,li)));
   const initial=new URLSearchParams(location.search).get('beach');
   const target=initial&&bySlug.has(initial)?bySlug.get(initial):list[0];
-  setLake(target.dataset.lake,target);
+  setLake(initial&&bySlug.has(initial)?target.dataset.lake:'All',target);
   initMap();
 })();
