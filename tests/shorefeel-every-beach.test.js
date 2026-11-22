@@ -44,6 +44,13 @@ test('all 34 US and Ontario reports have individual canonical source-linked HTML
              html.includes('https://www.google.com/maps/search/?api=1&query='),b.slug+' public place map');
    assert.ok(html.includes('https://chrisizworski.com/#person'),b.slug+' creator identity');
    assert.match(html,/No measured beach cooling adjustment or current swimming-area water temperature/i);
+   if(region==='canada'){
+    assert.match(html,/licence\/readme_en\//,b.slug+' ECCC licence URL');
+    assert.match(html,/Data Server End-use Licence/,b.slug+' ECCC attribution');
+   }else if(b.accessAlert){
+    assert.ok(html.includes('Park access notice:'),b.slug+' access notice label');
+    assert.ok(html.includes(b.accessAlert.replaceAll('&','&amp;')),b.slug+' original park access alert');
+   }
    assert.doesNotMatch(html,/<script[^>]+(googlesyndication|adsbygoogle)/i,'No hand-added ad stack');
   }
  }
