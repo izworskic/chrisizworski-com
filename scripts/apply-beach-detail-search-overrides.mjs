@@ -68,7 +68,10 @@ export function applyBeachDetailSearchOverride(source, override) {
   html = html.replace(/("@type": "WebPage",[\s\S]*?"name": ")[^"]+("\s*,)/, `$1${escapeJson(override.h1)}$2`);
   html = html.replace(/("@type": "WebPage",[\s\S]*?"description": ")[^"]+("\s*,)/, `$1${escapeJson(override.description)}$2`);
   html = html.replace(/<h1 id="page-title">[^<]*<\/h1>/, `<h1 id="page-title">${escapeHtml(override.h1)}</h1>`);
-  html = html.replace(/<p class="hero-lede">[^<]*<\/p>/, `<p class="hero-lede">${escapeHtml(override.firstAnswer)}</p>`);
+  // Preserve approved search-first copy in both the historical photo hero and
+  // the new small named-beach header. Do not revert the ShoreFeel-first layout.
+  html = html.replace(/<p class="(hero-lede|shorefeel-place-summary)">[^<]*<\/p>/,
+    (_match, className) => `<p class="${className}">${escapeHtml(override.firstAnswer)}</p>`);
   // Keep the generator dateModified for the actual current content release.
   return html;
 }
