@@ -17,7 +17,7 @@ export async function fetchWithBoundedRetry(url,init,{
  for(let i=1;i<=attempts;i++){
   let response;
   try{
-   response=await fetchImpl(url,init);
+   response=await fetchImpl(url,typeof init==='function'?init():init);
   }catch(error){
    if(i===attempts||!transientNetworkError(error))throw error;
    warn('Manistee smoke transient request failure; retry '+i+'/'+attempts+' ('+String(error?.name||'network')+')');
