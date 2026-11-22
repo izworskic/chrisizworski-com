@@ -135,6 +135,10 @@
 
   function beachCardHtml(beach) {
     var beachFacts = facts(beach);
+    var shore = beach.shore_feel || {};
+    var shoreLabel = shore.status === "forecast-based" && finite(shore.apparentF)
+      ? "ShoreFeel " + Math.round(shore.apparentF) + "°F modeled"
+      : "ShoreFeel field note";
     var distance = finite(beach.distance_miles)
       ? '<span class="condition-chip">' + Math.round(beach.distance_miles) + " mi away</span>"
       : "";
@@ -142,6 +146,7 @@
       '<span class="beach-card-top"><span><span class="beach-card-title">' + escapeHtml(beach.name) + '</span><span class="beach-card-meta">' + escapeHtml(beach.region) + " · " + escapeHtml(beach.lake) + '</span></span>' +
       '<span class="mini-score" data-level="' + escapeHtml(level(beach)) + '" aria-label="Beach Day Score ' + escapeHtml(scoreText(beach)) + '">' + escapeHtml(scoreText(beach)) + '</span></span>' +
       '<span class="card-status">' + escapeHtml(beachStatus(beach)) + '</span>' +
+      '<span class="shorefeel-card-label">' + escapeHtml(shoreLabel) + '</span>' +
       '<span class="card-facts">' + beachFacts.map(function (fact) {
         return '<span class="card-fact"><span>' + escapeHtml(fact.label) + '</span><strong>' + escapeHtml(fact.value) + '</strong></span>';
       }).join("") + '</span>' +
@@ -463,7 +468,7 @@
       '<h3>Why this result</h3><ul class="reason-list">' + reasons.map(function (reason) { return '<li>' + escapeHtml(reason) + '</li>'; }).join("") + hazardMarkup + '</ul>' +
       (lake.station_id ? '<p><small>Lake observations: NOAA station ' + escapeHtml(lake.station_id) + (lake.distance_miles != null ? ", about " + escapeHtml(lake.distance_miles) + " miles away" : "") + (lake.observed_at ? ", observed " + escapeHtml(formatDate(lake.observed_at)) : "") + '.</small></p>' : "") +
       (swimRisk.issued_at ? '<p><small>NWS Surf Zone Forecast: ' + escapeHtml(swimRisk.office || "NWS") + " · " + escapeHtml(swimRisk.zone_name || swimRisk.zone_id || "matched zone") + " · issued " + escapeHtml(formatDate(swimRisk.issued_at)) + '. This forecast is not the posted flag.</small></p>' : "") +
-      '<div class="dialog-actions"><a class="button" href="' + escapeHtml(beach.url) + '">Full beach page</a><a class="button button-secondary" href="' + escapeHtml(quality.official_url || "https://mienviro.michigan.gov/nsite/beach/map/results") + '" target="_blank" rel="noopener">Check BeachGuard</a><a class="button button-secondary" href="' + escapeHtml(swimRisk.official_url || "https://www.weather.gov/greatlakes/beachhazards") + '" target="_blank" rel="noopener">Open NWS forecast</a><a class="button button-secondary" href="' + escapeHtml(postedFlag.official_url || "https://www.michigan.gov/dnr/education/safety-info/beach-safety") + '" target="_blank" rel="noopener">Flag safety guide</a></div></div>';
+      '<div class="dialog-actions"><a class="button" href="' + escapeHtml(beach.url) + '#at-the-beach">See ShoreFeel at this beach</a><a class="button button-secondary" href="' + escapeHtml(beach.url) + '">Full beach report</a><a class="button button-secondary" href="' + escapeHtml(quality.official_url || "https://mienviro.michigan.gov/nsite/beach/map/results") + '" target="_blank" rel="noopener">Check BeachGuard</a><a class="button button-secondary" href="' + escapeHtml(swimRisk.official_url || "https://www.weather.gov/greatlakes/beachhazards") + '" target="_blank" rel="noopener">Open NWS forecast</a><a class="button button-secondary" href="' + escapeHtml(postedFlag.official_url || "https://www.michigan.gov/dnr/education/safety-info/beach-safety") + '" target="_blank" rel="noopener">Flag safety guide</a></div></div>';
   }
 
   function safetyTruthMarkup(item, fallbackLabel) {
@@ -509,12 +514,20 @@
     set("time", current && feel.validAt ? "Open-Meteo forecast valid " +
       formatDate(feel.validAt) : "No verified recent weather-model timestamp");
     set("heading", feel.heading || "Beach conditions unavailable");
-    set("narrative", feel.narrative || "Check a recent official weather forecast before your visit.");
+    set("narrative", (feel.narrative || "Check a recent official weather forecast before your visit.") +
+      (current && feel.lakeContext ? " " + feel.lakeContext : ""));
     set("wind", current && finite(feel.windMph)
-      ? "Forecast wind near the beach: " + Math.round(feel.windMph) + " mph"
+      ? "Forecast wind near the beach: " + Math.round(feel.windMph) + " mph" + (feel.windFrom ? " from " + feel.windFrom : "")
       : "Forecast wind unavailable");
     set("water", feel.waterNote || "No current NOAA offshore water evidence is available.");
     set("limit", feel.limitation || "No measured beach-air temperature is available.");
+    var heroLink = document.querySelector(".shorefeel-jump");
+    if (heroLink) {
+      heroLink.textContent = value === null
+        ? "ShoreFeel · no recent forecast · Read the field note"
+        : "ShoreFeel here · " + Math.round(value) + "°F modeled · Read the field note";
+      heroLink.dataset.status = current ? "forecast" : "unavailable";
+    }
     host.dataset.status = current ? "forecast" : "unavailable";
   }
 
