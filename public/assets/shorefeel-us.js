@@ -165,8 +165,25 @@
         marker.on('click',()=>{const t=bySlug.get(d.slug);if(t)setLake(d.lake,t);});
         markers.set(d.slug,marker);
       }
+      // The selected report already requested its forecast before map creation.
+      // Sync only markers, avoiding a second API request and loading-state flicker.
       mapLive=true;
-      setLake(lake,bySlug.get(current));
+      const visible=list.filter(li=>!li.hidden);
+      for(const [slug,marker] of markers){
+        const entry=bySlug.get(slug);
+        if(entry&&!entry.hidden)marker.addTo(map);
+      }
+      if(visible.length>1){
+        const bounds=window.L.latLngBounds(visible.map(li=>[Number(li.dataset.lat),Number(li.dataset.lon)]));
+        map.fitBounds(bounds.pad(.26),{maxZoom:9,animate:false});
+      }else if(visible.length===1)map.setView([Number(visible[0].dataset.lat),Number(visible[0].dataset.lon)],9,{animate:false});
+      else map.setView([44.2,-83.9],7,{animate:false});
+      if(current&&markers.has(current)){
+        const selected=markers.get(current);
+        selected.openPopup();
+        const icon=selected.getElement()?.querySelector('.shore-marker');
+        if(icon)icon.classList.add('selected');
+      }
       setTimeout(()=>{if(!loadedTile&&mapLive)mapError();},8000);
     }catch{mapError();}
   }

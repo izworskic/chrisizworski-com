@@ -55,6 +55,7 @@ async function main(){
   await page.waitForFunction(()=>document.querySelector('#report-name')?.textContent?.includes('Agawa Bay'));
   assert.equal(await page.locator('.shore-stop:visible').count(),30);
   assert.match(await page.locator('#report-name').innerText(),/Agawa Bay/);
+  await page.waitForFunction(()=>document.querySelector('#report-scope')?.textContent?.includes('20 km'),{timeout:14000});
   assert.match(await page.locator('#report-scope').innerText(),/20 km/);
   assert.match(await page.locator('#report-advisory').getAttribute('href'),/ontarioparks.ca\/beachresults/);
   await page.locator('[data-select="batchawana-bay"]').click();

@@ -130,7 +130,23 @@
     const mark=window.L.marker([Number(d.lat),Number(d.lon)],{icon,title:d.name}).bindPopup('<strong>'+d.name.replaceAll('&','&amp;').replaceAll('<','&lt;')+'</strong><div>Ontario · Lake '+d.lake+'</div>');
     mark.on('click',()=>selectLake(d.lake,li));markers.set(d.slug,mark);
    }
-   mapReady=true;selectLake(lake,bySlug.get(current));
+   // Map initialization must not issue the selected beach forecast a second time.
+   mapReady=true;
+   const visible=list.filter(li=>!li.hidden);
+   for(const [slug,marker] of markers){
+    const entry=bySlug.get(slug);
+    if(entry&&!entry.hidden)marker.addTo(map);
+   }
+   if(visible.length){
+    const bounds=window.L.latLngBounds(visible.map(li=>[Number(li.dataset.lat),Number(li.dataset.lon)]));
+    map.fitBounds(bounds.pad(.15),{maxZoom:9,animate:false});
+   }else map.setView([44.5,-85.5],6,{animate:false});
+   if(current&&markers.has(current)){
+    const selected=markers.get(current);
+    selected.openPopup();
+    const icon=selected.getElement()?.querySelector('.shore-marker');
+    if(icon)icon.classList.add('selected');
+   }
    setTimeout(()=>{if(!tilesLoaded&&mapReady)mapFailed();},8000);
   }catch{mapFailed();}
  }
