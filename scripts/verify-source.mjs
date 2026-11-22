@@ -509,7 +509,7 @@ const committedDriftHashEntries = [
   // line that nothing but those date stamps moved. Re-crawl after deploy and
   // these pins can go back to the live snapshot.
   ["/great-lakes-beaches/bete-grise/", "0d640c7b98b6385ab0578a60564154a05b15f86d1a223334535320ba01a21d9a"],
-  ["/great-lakes-beaches/bird-creek-county-park/", "a9833d3b7e65ef2b65b675a8f75980d1d8f67ceacfdf68bea60dac64b779fd17"],
+  ["/great-lakes-beaches/bird-creek-county-park/", "8286aa346b13047791ac7cbbe70cc0accfa2f61befa0828000734fdb8ab0bbb1"],
   ["/great-lakes-beaches/black-river-harbor/", "071555b2faa2db832bfc43d8fd127fea572c2d9522024322edb2ec2a9588f939"],
   ["/great-lakes-beaches/caseville-county-park/", "dbd68b0a00bb03592cc9fe82eaa72939335a10a3ffaa679833e160b713da64dc"],
   ["/great-lakes-beaches/cheboygan-state-park/", "bf882cd86e8760de36db6b37a2abb72e5bfd9d2a496a05509b35e63399891204"],
@@ -535,7 +535,7 @@ const committedDriftHashEntries = [
   ["/great-lakes-beaches/pj-hoffmaster-state-park/", "e3e013033fa72588a309a206674e3c189ec0ab58d51c17a40a2f63f028650470"],
   ["/great-lakes-beaches/port-crescent-state-park/", "d27753d6d3475fde4a20a3f878dd71deb0f4e8d2de80f6ff0eb49619b0d2b582"],
   ["/great-lakes-beaches/presque-isle-marquette/", "a6e626c1c6e400282902153f9ca40655d7a9959b5864306849e08b3874490387"],
-  ["/great-lakes-beaches/rogers-city-lakeside-park/", "8a3dfb1d5abd9bbf1c0cbaf0a361520d192e75feae598263890cf66bb2e4fd7c"],
+  ["/great-lakes-beaches/rogers-city-lakeside-park/", "6e0739660f66e23ece7be4313bafe7ce3b3b3b805da180d7be106f7efe47fb67"],
   ["/great-lakes-beaches/sand-point-pictured-rocks/", "9cf60f034fcd1db5e6b2431ed1a45d5eadfd713b42e2beff2e343c9245892bd3"],
   ["/great-lakes-beaches/sand-point-saginaw-bay/", "d1fb7481cbf8bbe731ed5d60f8513daa3cdb04788ad02c91bcf36a0e8f5d11c4"],
   ["/great-lakes-beaches/saugatuck-dunes-state-park/", "06b4b74c3eeb43368a3423d1ebc6e18e7385b7e3a7e64d387f7d2aced6da64b4"],
