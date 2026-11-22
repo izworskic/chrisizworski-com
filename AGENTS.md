@@ -1,3 +1,7 @@
+## Web Quality skills and measured browser checks (2026-11-22)
+
+Six adapted skills (web-quality-audit, web-quality-performance, web-quality-core-web-vitals, web-quality-accessibility, web-quality-seo, web-quality-best-practices) provide scoped quality research for Codex, Claude Code and Copilot. Read `docs/WEB_QUALITY_PILOT.md`. For significant visitor-facing changes, use the relevant mode with existing Experience OS, Playwright and owning-repo tests; distinguish field metrics from Lighthouse lab and acknowledge missing checks. The path-scoped QA pilot is opt-in and does not add production dependencies, paid APIs, Redis, or change ads/SEO. Run `npm run verify:all` before release, and do not auto-merge.
+
 ## Opt-in specialist skills for diagrams, design and data (2026-11-22)
 
 Five complementary, narrowly scoped skills are available under `.agents/skills/`, `.claude/skills/` and `.github/skills/`: `editorial-diagrams`, `design-reconnaissance`, `interactive-2d-scenes`, `public-data-scout` and `stitch-concept-review`. See [the agent capability library](docs/AGENT_CAPABILITY_LIBRARY.md). Use only the relevant skill when the owner requests it or its specific method is needed inside an already authorized implementation. Stitch and third-party CLI/MCP integrations are always opt-in. These skills do not override Experience OS, Experience Investment, Foundry, source verification, owning-repository tests, SEO, Auto ads or CI. Loading them does not authorize installing dependencies, accessing private sites, publishing or merging.
