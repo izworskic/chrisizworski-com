@@ -66,3 +66,31 @@ test('regional explorer language guides observation while preserving uncertainty
  assert.match(read('scripts/generate-shorefeel-details.mjs'),/Meet this shoreline/);
  assert.match(read('public/assets/shorefeel-ca.js'),/Environment Canada/);
 });
+
+test('legacy beach region guides and seasonal ranking keep the same interpretive and source boundaries',()=>{
+ const guides=[
+  ['great-lakes-beaches/lake-michigan',19,'Buoys do not measure conditions at a swimming beach'],
+  ['great-lakes-beaches/saginaw-bay',5,'Wenonah Park gives you a riverfront view, not a swimming beach']
+ ];
+ const sitemap=read('public/sitemap.xml');
+ for(const [route,count,lesson] of guides){
+  const html=read('public/'+route+'/index.html');
+  assert.equal((html.match(/class="loc-notes"/g)||[]).length,count,route+' place field notes');
+  assert.ok(html.includes(lesson),route+' distinct shore/weather interpretation missing');
+  assert.ok(html.includes('"dateModified": "2026-11-22"'),route+' source stamp');
+  assert.ok(sitemap.includes('<loc>https://chrisizworski.com/'+route+'/</loc>\\n    <lastmod>2026-11-22</lastmod>'),route+' sitemap freshness');
+ }
+ const route='best-michigan-beaches-today';
+ const html=read('public/'+route+'/index.html');
+ assert.match(html,/Step onto a Lake Michigan dune/);
+ assert.match(html,/The Beach Day Score uses the same 100 available points/);
+ assert.match(html,/Only designated swim beaches/);
+ assert.match(html,/NWS low, moderate, and high swim risk/);
+ assert.ok(html.includes('"dateModified": "2026-11-22"'));
+ assert.ok(sitemap.includes('<loc>https://chrisizworski.com/'+route+'/</loc>\\n    <lastmod>2026-11-22</lastmod>'));
+ const beachMap=read('public/sitemap-beaches.xml');
+ assert.ok(beachMap.includes('<loc>https://chrisizworski.com/'+route+'/</loc>\\n    <lastmod>2026-11-22</lastmod>'));
+ assert.ok(read('scripts/generate-beach-pages.mjs').includes('changefreq: "daily", lastmod: "2026-11-22"'));
+ const pin=crypto.createHash('sha256').update(html).digest('hex');
+ assert.ok(read('scripts/verify-source.mjs').includes('["/'+route+'/", "'+pin+'"]'),'exact seasonal source pin');
+});
