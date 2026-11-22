@@ -6,12 +6,13 @@ const checks=[];
 
 async function fetchText(path,{expectNoindex=false}={}){
   const url=new URL(path,ORIGIN);
-  const options={redirect:'follow',headers:{'user-agent':'ChrisIzworskiManisteeProductionSmoke/5.1'},signal:AbortSignal.timeout(25000)};
+  // A fresh timeout per attempt prevents one slow response from poisoning retries.
+  const options=()=>({redirect:'follow',headers:{'user-agent':'ChrisIzworskiManisteeProductionSmoke/5.1'},signal:AbortSignal.timeout(25000)});
   // Gauge telemetry is external USGS data and can briefly fail even when the
   // deployment is healthy. Do not retry missing HTML, broken assets or 404s.
   const response=path==='/api/manistee-river-conditions'
     ?await fetchWithBoundedRetry(url,options)
-    :await fetch(url,options);
+    :await fetch(url,options());
   const text=await response.text();
   const robots=(response.headers.get('x-robots-tag')||'').toLowerCase();
   if(!response.ok){
