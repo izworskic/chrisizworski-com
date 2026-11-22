@@ -114,8 +114,30 @@
     }
     return best;
   }
+
+  function bridgeNoticeContext(catalog,bridgeId,day){
+    if(catalog?.schemaVersion!==1||!Array.isArray(catalog.notices)||typeof bridgeId!=='string')
+      return null;
+    const n=catalog.notices.find(x=>x.bridgeId===bridgeId);
+    if(!n||n.recordType!=='SCHEDULED_REMOVAL_NOT_CURRENT_LIVE_STATUS'||
+       !/^https:\/\/(?:www\.)?navcen\.uscg\.gov\//.test(n.sourceUrl||'')||
+       !/^\d{4}-\d{2}-\d{2}$/.test(day||''))return null;
+    if(n.actualCompletionVerified!==false||n.currentOpenOrClosedVerified!==false||
+       !/^\d{4}-\d{2}-\d{2}$/.test(n.plannedWorkStart||'')||
+       !/^\d{4}-\d{2}-\d{2}$/.test(n.plannedWorkEnd||''))return null;
+    const phase=day<n.plannedWorkStart?'PLANNED_FUTURE_WINDOW':
+      day>n.plannedWorkEnd?'PAST_PUBLISHED_WINDOW':'WITHIN_PUBLISHED_WINDOW_NOT_LIVE_STATUS';
+    const txt=phase==='PLANNED_FUTURE_WINDOW'
+      ?'The Coast Guard notice schedules bridge-removal work January 18 to March 4, 2027. This is an announced plan, not a live opening or closure.'
+      :phase==='WITHIN_PUBLISHED_WINDOW_NOT_LIVE_STATUS'
+        ?'This date falls in the published bridge-removal work window. The notice does not confirm that work or a closure is occurring now.'
+        :'The Coast Guard notice described a work window that has passed. Present bridge condition and completion remain unverified here.';
+    return {bridgeId,phase,message:txt,sourceUrl:n.sourceUrl,projectUrl:n.projectUrl,
+      sourcePublicationDate:n.sourcePublicationDate,liveStateKnown:false,
+      visitorBridgeOpeningPredictionEnabled:false};
+  }
   function safeMapsQuery(name){
     return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(String(name||'')+', Cleveland, Ohio');
   }
-  return Object.freeze({REGION,inArea,recent,classifyLive,validCatalog,historyDay,historicView,firstRiverFixIndex,straightLineMiles,reportedMotion,parkObservation,historicParkMatch,safeMapsQuery});
+  return Object.freeze({REGION,inArea,recent,classifyLive,validCatalog,historyDay,historicView,firstRiverFixIndex,straightLineMiles,reportedMotion,parkObservation,historicParkMatch,bridgeNoticeContext,safeMapsQuery});
 });
