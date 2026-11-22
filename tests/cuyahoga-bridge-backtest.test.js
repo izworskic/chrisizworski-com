@@ -1,8 +1,8 @@
 'use strict';
 const {test,before}=require('node:test');
 const assert=require('node:assert/strict');
-let evaluateHistoricalReferenceWindows;
-before(async()=>({evaluateHistoricalReferenceWindows}=await import('../scripts/cuyahoga-bridge-backtest.mjs')));
+let evaluateHistoricalReferenceWindows,segmentObservedWindows;
+before(async()=>({evaluateHistoricalReferenceWindows,segmentObservedWindows}=await import('../scripts/cuyahoga-bridge-backtest.mjs')));
 const ev=(id,mile,time)=>({
  id,riverMile:mile,status:'OBSERVED_NEAR_CHART_POINT_WITH_BRACKET',
  useForIndividualBridgeCalibration:true,crossAgency:{status:'TWO_AGENCY_PROXIMITY_AGREEMENT'},
@@ -45,4 +45,30 @@ test('no observations cannot be interpreted as calibrated accuracy',()=>{
  assert.equal(result.visits[0].direction,'UNRESOLVED');
  assert.equal(result.criteria.independentBridgeCrossingLabelsAvailable,false);
  assert.equal(result.visitorArrivalPredictionEnabled,false);
+});
+
+test('one date with separated river visits must not be mislabeled a single direction',()=>{
+ const r=report([
+   ev('csx',1.28,'03:57:51.000'),ev('center',1.39,'04:02:19.000'),
+   ev('innerbelt',3.42,'05:02:04.000'),ev('i490',4.79,'05:39:30.000'),
+   ev('flats',2.24,'14:02:07.000')
+ ]);
+ const result=evaluateHistoricalReferenceWindows([{date:'2025-07-07',report:r}]);
+ const visit=result.visits[0];
+ assert.equal(visit.direction,'MULTIPLE_TIME_SEPARATED_EPISODES');
+ assert.equal(visit.observedEpisodes.length,2);
+ assert.equal(visit.observedEpisodes[0].direction,'INCREASING_COAST_PILOT_MILES');
+ assert.equal(visit.observedEpisodes[1].direction,'UNRESOLVED');
+ assert.deepEqual(visit.observedEpisodes.map(e=>e.referenceWindows),[4,1]);
+ assert.equal(result.referenceCoverage.find(x=>x.id==='flats').byDirection.UNRESOLVED,1);
+ assert.equal(result.visitorArrivalPredictionEnabled,false);
+});
+test('source event gaps exactly at threshold are not artificially split',()=>{
+ const list=[
+   {id:'a',riverMile:1,observedNearAt:'2025-07-07T01:00:00Z'},
+   {id:'b',riverMile:2,observedNearAt:'2025-07-07T04:00:00Z'}
+ ];
+ assert.equal(segmentObservedWindows(list).length,1);
+ assert.equal(segmentObservedWindows([...list,{id:'c',riverMile:3,observedNearAt:'2025-07-07T07:00:01Z'}]).length,2);
+ assert.throws(()=>segmentObservedWindows([{id:'x',riverMile:1,observedNearAt:'not a time'}]),/Invalid/);
 });
