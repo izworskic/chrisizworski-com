@@ -83,6 +83,7 @@ function payload(place,mode){
       return {
         valueY:rect.top,
         numberPx:parseFloat(getComputedStyle(value).fontSize),
+        numberRules:{status:answer.dataset.status,host:document.querySelector('[data-shorefeel]')?.dataset.status,css:getComputedStyle(value).fontSize},
         answerTop:answer.getBoundingClientRect().top,
         introBottom:intro.getBoundingClientRect().bottom,
         primaryBeforeSecondary:!!(answer.compareDocumentPosition(secondary)&Node.DOCUMENT_POSITION_FOLLOWING),
@@ -97,7 +98,7 @@ function payload(place,mode){
     assert.ok(composition.noGenericHero,'The beach detail page must not lead with unrelated hero art');
     assert.equal(composition.photoImageCount,1,'The representative image should be a real lazy-loaded photo');
     assert.ok(composition.photoContainsNoDynamicReading);
-    assert.ok(composition.numberPx>=60,'Source-based numeric answer must be visibly large');
+    assert.ok(composition.numberPx>=60,'Source-based numeric answer must be visibly large: '+place.slug+' '+width+' '+JSON.stringify(composition));
     assert.ok(composition.valueY<750,'First phone screen must show the model number: '+JSON.stringify(composition));
 
     const info=await page.evaluate(()=>{
