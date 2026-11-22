@@ -57,7 +57,7 @@ function payload(place,mode){
  try{
   browser=await chromium.launch({headless:true,args:['--no-sandbox']});
   const report=[];
-  for(const width of [390,1366]){
+  for(const width of [360,390,768,1366,1440]){
    for(const place of locations){
     const context=await browser.newContext({viewport:{width,height:850},reducedMotion:'reduce'});
     await context.route('**/api/beaches?*',route=>route.fulfill({
@@ -73,8 +73,33 @@ function payload(place,mode){
     assert.match(await page.locator('[data-shorefeel-method]').innerText(),/Modeled apparent temperature/i);
     assert.match(await page.locator('[data-shorefeel-narrative]').innerText(),/wind|breeze/i);
     if(!place.swimming)assert.match(await page.locator('[data-shorefeel-water]').innerText(),/riverfront viewpoint/);
-    await page.locator('.shorefeel-jump').click();
-    assert.equal(new URL(page.url()).hash,'#at-the-beach');
+    const composition=await page.evaluate(()=>{
+      const answer=document.querySelector('.shorefeel-primary');
+      const value=document.querySelector('[data-shorefeel-value]');
+      const photo=document.querySelector('.shorefeel-landscape');
+      const secondary=document.querySelector('.beach-detail-layout');
+      const intro=document.querySelector('.shorefeel-place-head');
+      const rect=value.getBoundingClientRect();
+      return {
+        valueY:rect.top,
+        numberPx:parseFloat(getComputedStyle(value).fontSize),
+        answerTop:answer.getBoundingClientRect().top,
+        introBottom:intro.getBoundingClientRect().bottom,
+        primaryBeforeSecondary:!!(answer.compareDocumentPosition(secondary)&Node.DOCUMENT_POSITION_FOLLOWING),
+        primaryBeforePhoto:!!(answer.compareDocumentPosition(photo)&Node.DOCUMENT_POSITION_FOLLOWING),
+        photoImageCount:photo.querySelectorAll('img[loading="lazy"]').length,
+        noGenericHero:!document.querySelector('body[data-beach-report-page="detail"] .hero'),
+        photoContainsNoDynamicReading:!photo.querySelector('[data-shorefeel-value]')
+      };
+    });
+    assert.ok(composition.primaryBeforeSecondary,'ShoreFeel must precede generic beach metrics');
+    assert.ok(composition.primaryBeforePhoto,'The photo must not swallow the first answer');
+    assert.ok(composition.noGenericHero,'The beach detail page must not lead with unrelated hero art');
+    assert.equal(composition.photoImageCount,1,'The representative image should be a real lazy-loaded photo');
+    assert.ok(composition.photoContainsNoDynamicReading);
+    assert.ok(composition.numberPx>=60,'Source-based numeric answer must be visibly large');
+    assert.ok(composition.valueY<750,'First phone screen must show the model number: '+JSON.stringify(composition));
+
     const info=await page.evaluate(()=>{
      const el=document.querySelector('.shorefeel-interpretation p');
      return {viewport:document.documentElement.clientWidth,
@@ -99,6 +124,8 @@ function payload(place,mode){
   await page.waitForFunction(()=>document.querySelector('[data-shorefeel-value]')?.textContent==='No recent forecast',
    {timeout:15000});
   assert.match(await page.locator('[data-shorefeel-time]').innerText(),/No verified recent/);
+  assert.ok(parseFloat(await page.locator('[data-shorefeel-value]').evaluate(el=>getComputedStyle(el).fontSize))<45,
+    'The no-data sentence should not masquerade as a large numeric reading');
   await page.screenshot({path:path.join(out,'network-stale-390.png'),fullPage:true});
   await context.close();
   console.log(JSON.stringify({status:'passed',report,stale:'no fabricated air value'},null,2));
