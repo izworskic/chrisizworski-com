@@ -57,3 +57,34 @@ The Cuyahoga job differs from the Soo Locks lock-chamber prediction and Welland 
 Four local fixture tests passed on Node 22 on 2026-11-22. Repository full npm run verify:all, live AIS calls, historical NOAA extraction, receiver coverage assessment, rendered browser checks and PR CI: NOT VERIFIED at report creation. Nothing is deployed or indexed. Do not merge while the full gate is red or unknown.
 
 Exactly one next action: source and normalize a small, dated NOAA broadcast-point sample covering at least one documented complete Cuyahoga river transit, then run this offline audit and establish whether successive bridge-crossing timestamps are reconstructible.
+
+
+## Next priority implementation: NOAA broadcast-point event study (2026-11-22)
+
+The offline importer at scripts/cuyahoga-noaa-points.mjs accepts actual NOAA nationwide daily CSV or .csv.zst archives and emits the version-1 normalized historical format accepted by scripts/cuyahoga-ais-audit.mjs. It handles the **different 2018–2024 and 2025+ field names**, requires UTC dates, verifies identity/coordinates/time, preserves raw observed positions and groups by MMSI. A separate audit reports maximum time gaps, duplicate timestamps and incomplete samples. Every output remains BRIDGE_ETA_NOT_VALIDATED. No bridge coordinates, crossing times or opening events are fabricated.
+
+Authoritative NOAA 2025 data dictionary (two schema versions): https://coast.noaa.gov/data/marinecadastre/ais/data-dictionary.pdf
+Public source file catalog: https://noaaocm.blob.core.windows.net/ais/csv2/csv2025/index.html
+
+**Independent real event selected for receiver stress test, NOT ordinary transit calibration:** US Coast Guard report, *Sunnanvik* grounded at Cleveland's Cuyahoga entrance June 20, 2025. Watchstanders were first notified at **12:43 a.m. EDT (04:43 UTC)** and the vessel was refloated around **6 a.m. EDT (10:00 UTC)**. Those are Coast Guard incident/report times, NOT confirmed AIS timestamps or bridge crossings.
+Source: https://www.dvidshub.net/news/501106/coast-guard-responds-motor-vessel-aground-cuyahoga-river-cleveland
+Vessel IMO 7633375, which must be matched with the actual NOAA broadcast record. No fixed MMSI is assumed because publicly surfaced vessel registries disagree.
+
+Primary dated broadcast-point archive:
+https://noaaocm.blob.core.windows.net/ais/csv2/csv2025/ais-2025-06-20.csv.zst
+NOAA lists this file at 252.4 MB compressed. The nationwide file is intentionally NOT committed or published to the website.
+
+Once the NOAA source file is available locally (requires zstd for the compressed file), execute:
+
+    node scripts/cuyahoga-noaa-points.mjs \
+      --input ais-2025-06-20.csv.zst \
+      --name SUNNANVIK --imo 7633375 \
+      --from 2025-06-20T00:00:00Z --to 2025-06-21T00:00:00Z \
+      --out /tmp/sunnanvik-2025-06-20-observations.json
+    node scripts/cuyahoga-ais-audit.mjs --tracks /tmp/sunnanvik-2025-06-20-observations.json
+
+The --name / --imo match is an OR against NOAA's actual fields; each returned MMSI group is inspectable separately. The output is a date-scoped observational **candidate**, not proof the vessel followed a particular bridge sequence. Empty results mean NO OBSERVATIONS MATCHED, not no ship passage.
+
+A single-use GitHub Actions research run is defined in .github/workflows/cuyahoga-noaa-2025-study.yml, scoped to this branch only. It downloads the one exact NOAA day, runs the parser and test suite without credentials, and uploads only the small filtered study JSON for review. Retention is three days. It does not create a production feed, scheduled process, paid service or visitor page. The NOAA download/run is separate from the repo full npm run verify:all gate.
+
+**Next acceptance condition:** inspect real source data from that job. Identify actual point count, first/last observed time, reporting gaps, stationary periods and any inconsistent identity. Do not claim successful receiver coverage or bridge ETA validation if data are unavailable or if only an abnormal grounding is observed. The next independent calibration dataset should contain ordinary, complete, documented upriver and downriver passages with versioned bridge coordinates and leave-one-date-out testing.
