@@ -85,11 +85,11 @@ let base;
           assert.equal(Math.round(await marker(kind).evaluate(e => e.getBoundingClientRect().width)), w, kind + ' follows reported length');
         }
         await page.locator('#sooVesselList button').filter({ hasText: 'TEST TUG' }).click();
-        assert.ok((await page.locator('.leaflet-popup-content').innerText()).includes('Reported AIS type: Tug / towing'));
+        assert.ok((await page.locator('#sooVesselMap .leaflet-popup-content:visible').last().innerText()).includes('Reported AIS type: Tug / towing'));
         await page.locator('#sooVesselList button').filter({ hasText: 'TEST TANKER' }).click();
-        assert.ok((await page.locator('.leaflet-popup-content').innerText()).includes('Reported AIS type: Tanker'));
+        assert.ok((await page.locator('#sooVesselMap .leaflet-popup-content:visible').last().innerText()).includes('Reported AIS type: Tanker'));
         await page.locator('#sooVesselList button').filter({ hasText: 'TEST TUG' }).click();
-        assert.ok((await page.locator('.leaflet-popup-content').innerText()).includes('Reported AIS type: Tug / towing'));
+        assert.ok((await page.locator('#sooVesselMap .leaflet-popup-content:visible').last().innerText()).includes('Reported AIS type: Tug / towing'));
         await page.locator('#sooVesselMap').screenshot({ path: out + '/vessel-map-' + width + '.png' });
       }
       // 1. Default "Now, 1½ hr": the ship already in a chamber is the answer.
