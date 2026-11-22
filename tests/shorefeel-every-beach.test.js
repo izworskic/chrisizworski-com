@@ -9,12 +9,12 @@ const michigan=JSON.parse(read('data/beaches.json')).beaches;
 const us=JSON.parse(read('data/shorefeel-us-coast.json')).beaches;
 const ca=JSON.parse(read('data/shorefeel-canada-ontario.json')).locations;
 
-test('all 84 currently curated Great Lakes beaches have a ShoreFeel location experience',()=>{
+test('all 96 currently curated Great Lakes beaches have a ShoreFeel location experience',()=>{
  assert.equal(michigan.length,50);
  assert.equal(us.length,16);
- assert.equal(ca.length,18);
- assert.equal(michigan.length+us.length+ca.length,84);
- assert.equal(new Set([...michigan.map(x=>'mi/'+x.slug),...us.map(x=>'us/'+x.slug),...ca.map(x=>'ca/'+x.slug)]).size,84);
+ assert.equal(ca.length,30);
+ assert.equal(michigan.length+us.length+ca.length,96);
+ assert.equal(new Set([...michigan.map(x=>'mi/'+x.slug),...us.map(x=>'us/'+x.slug),...ca.map(x=>'ca/'+x.slug)]).size,96);
  for(const b of michigan){
   const html=read('public/great-lakes-beaches/'+b.slug+'/index.html');
   assert.match(html,/data-shorefeel/,b.slug);
@@ -86,11 +86,11 @@ test('beach regeneration retains protected CTR headings and Pictured Rocks plann
  }
 });
 
-test('all 34 US and Ontario reports have individual canonical source-linked HTML',()=>{
+test('all 46 US and Ontario reports have individual canonical source-linked HTML',()=>{
  const sitemap=read('public/sitemap-shorefeel-beaches.xml');
  const index=read('public/sitemap-index.xml');
  assert.match(index,/sitemap-shorefeel-beaches\.xml/);
- assert.equal((sitemap.match(/<url>/g)||[]).length,34);
+ assert.equal((sitemap.match(/<url>/g)||[]).length,46);
  for(const [region,list] of [['around-the-lakes',us],['canada',ca]]){
   const atlas=read('public/great-lakes-beaches/'+region+'/index.html');
   for(const b of list){

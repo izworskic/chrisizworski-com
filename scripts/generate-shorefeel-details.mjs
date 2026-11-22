@@ -93,7 +93,7 @@ ${!canada&&b.accessAlert?'<p class="shore-access-notice" role="note"><strong>Par
 }
 const us=JSON.parse(await readFile(path.join(root,'data/shorefeel-us-coast.json'),'utf8')).beaches;
 const ca=JSON.parse(await readFile(path.join(root,'data/shorefeel-canada-ontario.json'),'utf8')).locations;
-if(us.length!==16||ca.length!==18)throw Error('Unexpected vetted ShoreFeel catalog size');
+if(us.length!==16||ca.length!==30)throw Error('Unexpected vetted ShoreFeel catalog size');
 for(const [region,all] of [['us',us],['ca',ca]]){
  const area=region==='ca'?'canada':'around-the-lakes';
  const seen=new Set();

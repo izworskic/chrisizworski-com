@@ -348,6 +348,247 @@
         "authority": "City of Toronto"
       },
       "story": "City streets give way to open sand and Lake Ontario at Woodbine. The lakeshore can feel cooler than the nearby neighborhoods, but only a verified forecast belongs on the temperature card."
+    },
+    {
+      "slug": "batchawana-bay",
+      "name": "Batchawana Bay Provincial Park",
+      "lake": "Superior",
+      "province": "Ontario",
+      "country": "Canada",
+      "reference": {
+        "lat": 46.944168,
+        "lon": -84.551017,
+        "precision": "Approximate park or named beach vicinity; not verified parking, swim boundary, or thermometer placement",
+        "sourceUrl": "https://www.ontarioparks.ca/park/batchawanabay/maps"
+      },
+      "nearbyTown": "Batchawana Bay",
+      "officialUrl": "https://www.ontarioparks.ca/park/batchawanabay",
+      "advisory": {
+        "url": "https://www.ontarioparks.ca/beachresults",
+        "authority": "Ontario Parks beach monitoring"
+      },
+      "story": "At this broad Lake Superior bay, the sand and shallow water sit beneath a wooded shoreline. Look across the bay before you settle in: wind coming off the open lake can feel unlike the air under the trees."
+    },
+    {
+      "slug": "old-woman-bay",
+      "name": "Old Woman Bay, Lake Superior Provincial Park",
+      "lake": "Superior",
+      "province": "Ontario",
+      "country": "Canada",
+      "reference": {
+        "lat": 47.78535,
+        "lon": -84.910531,
+        "precision": "Approximate park or named beach vicinity; not verified parking, swim boundary, or thermometer placement",
+        "sourceUrl": "https://www.ridelakesuperior.com/listings/old-woman-bay/"
+      },
+      "nearbyTown": "Wawa",
+      "officialUrl": "https://www.ontarioparks.ca/park/lakesuperior",
+      "advisory": {
+        "url": "https://www.ontarioparks.ca/beachresults",
+        "authority": "Ontario Parks beach monitoring"
+      },
+      "story": "The beach bends below steep rock headlands at the mouth of the Old Woman River. When the bay is windy, you can hear surf on the stones even before you leave the highway-side forest."
+    },
+    {
+      "slug": "terrace-bay-beach",
+      "name": "Terrace Bay Beach",
+      "lake": "Superior",
+      "province": "Ontario",
+      "country": "Canada",
+      "reference": {
+        "lat": 48.771451,
+        "lon": -87.115845,
+        "precision": "Approximate park or named beach vicinity; not verified parking, swim boundary, or thermometer placement",
+        "sourceUrl": "https://www.ridelakesuperior.com/listings/terrace-bay-beach/"
+      },
+      "nearbyTown": "Terrace Bay",
+      "officialUrl": "https://visitterracebay.ca/attractions/terrace-bay-beach/",
+      "advisory": {
+        "url": "https://www.tbdhu.com/beaches",
+        "authority": "Thunder Bay District Health Unit"
+      },
+      "story": "Follow the mouth of the Aguasabon River toward the open Lake Superior horizon. From the sand you can look toward the Slate Islands; check the wind and the district beach notices before spending time at the waterline."
+    },
+    {
+      "slug": "awenda-georgian-bay",
+      "name": "Awenda Provincial Park, Georgian Bay Beaches",
+      "lake": "Huron",
+      "province": "Ontario",
+      "country": "Canada",
+      "reference": {
+        "lat": 44.843699,
+        "lon": -80.002699,
+        "precision": "Approximate park or named beach vicinity; not verified parking, swim boundary, or thermometer placement",
+        "sourceUrl": "https://www.ontarioparks.ca/park/awenda/maps"
+      },
+      "nearbyTown": "Penetanguishene",
+      "officialUrl": "https://www.ontarioparks.ca/park/awenda",
+      "advisory": {
+        "url": "https://www.ontarioparks.ca/beachresults",
+        "authority": "Ontario Parks beach monitoring"
+      },
+      "story": "Trails pass through forest before reaching a series of Georgian Bay beaches. The trees offer shelter on the way down, but the shoreline opens to wind, islands and broad water views."
+    },
+    {
+      "slug": "killbear-georgian-bay",
+      "name": "Killbear Provincial Park, Georgian Bay",
+      "lake": "Huron",
+      "province": "Ontario",
+      "country": "Canada",
+      "reference": {
+        "lat": 45.35886,
+        "lon": -80.21344,
+        "precision": "Approximate park or named beach vicinity; not verified parking, swim boundary, or thermometer placement",
+        "sourceUrl": "https://www.ontarioparks.ca/park/killbear/maps"
+      },
+      "nearbyTown": "Parry Sound",
+      "officialUrl": "https://www.ontarioparks.ca/park/killbear",
+      "advisory": {
+        "url": "https://www.ontarioparks.ca/beachresults",
+        "authority": "Ontario Parks beach monitoring"
+      },
+      "story": "Smooth rock, sandy coves and wind-shaped pines share this Georgian Bay peninsula. One small bay may feel sheltered while a nearby point faces the wind. Use the park map to choose your shore."
+    },
+    {
+      "slug": "kincardine-station-beach",
+      "name": "Station Beach, Kincardine",
+      "lake": "Huron",
+      "province": "Ontario",
+      "country": "Canada",
+      "reference": {
+        "lat": 44.17507,
+        "lon": -81.64042,
+        "precision": "Approximate park or named beach vicinity; not verified parking, swim boundary, or thermometer placement",
+        "sourceUrl": "https://mapcarta.com/W115940874"
+      },
+      "nearbyTown": "Kincardine",
+      "officialUrl": "https://www.kincardine.ca/be-active/beaches-parks-trails-and-facilities/beaches/",
+      "advisory": {
+        "url": "https://publichealthgreybruce.on.ca/Your-Environment/Safe-Water/Recreational-Water",
+        "authority": "Grey Bruce Public Health"
+      },
+      "story": "The sand lies below Kincardine's lighthouse and waterfront boardwalk. Onshore wind can make this reach feel much cooler than town; look for the municipality's Smart Beach Light information as well as health notices."
+    },
+    {
+      "slug": "bayfield-pier-beach",
+      "name": "Bayfield Pier Beach",
+      "lake": "Huron",
+      "province": "Ontario",
+      "country": "Canada",
+      "reference": {
+        "lat": 43.56831,
+        "lon": -81.70683,
+        "precision": "Approximate park or named beach vicinity; not verified parking, swim boundary, or thermometer placement",
+        "sourceUrl": "https://mapcarta.com/W614330563"
+      },
+      "nearbyTown": "Bayfield",
+      "officialUrl": "https://www.municipalityofbluewater.ca/parks-recreation-and-culture/beaches-and-marinas/beaches/",
+      "advisory": {
+        "url": "https://www.hpph.ca/inspections-reporting/beach-water-quality/",
+        "authority": "Huron Perth Public Health"
+      },
+      "story": "Just outside Bayfield's river mouth, the pier and beach face the westward sweep of Lake Huron. A breeze along the open waterfront can be different from the air among the village shops."
+    },
+    {
+      "slug": "rondeau-erie-beach",
+      "name": "Rondeau Provincial Park, Lake Erie Beach",
+      "lake": "Erie",
+      "province": "Ontario",
+      "country": "Canada",
+      "reference": {
+        "lat": 42.324071,
+        "lon": -81.84698,
+        "precision": "Approximate park or named beach vicinity; not verified parking, swim boundary, or thermometer placement",
+        "sourceUrl": "https://www.ontarioparks.ca/park/rondeau/maps"
+      },
+      "nearbyTown": "Blenheim",
+      "officialUrl": "https://www.ontarioparks.ca/park/rondeau",
+      "advisory": {
+        "url": "https://www.ontarioparks.ca/beachresults",
+        "authority": "Ontario Parks beach monitoring"
+      },
+      "story": "Along the Erie side of the Rondeau peninsula, stretches of sand border Carolinian forest. A wind that barely stirs the trees can build waves along the open beach."
+    },
+    {
+      "slug": "turkey-point-beach",
+      "name": "Turkey Point Beach",
+      "lake": "Erie",
+      "province": "Ontario",
+      "country": "Canada",
+      "reference": {
+        "lat": 42.700398,
+        "lon": -80.329666,
+        "precision": "Approximate park or named beach vicinity; not verified parking, swim boundary, or thermometer placement",
+        "sourceUrl": "https://www.ontarioparks.ca/park/turkeypoint/maps"
+      },
+      "nearbyTown": "Turkey Point",
+      "officialUrl": "https://www.ontarioparks.ca/park/turkeypoint",
+      "advisory": {
+        "url": "https://www.ontarioparks.ca/beachresults",
+        "authority": "Ontario Parks beach monitoring"
+      },
+      "story": "The village beach looks across a broad, shallow part of Lake Erie. Shallow water does not guarantee calm water: check the current signs and wind before choosing a swimming spot."
+    },
+    {
+      "slug": "darlington-lake-ontario",
+      "name": "Darlington Provincial Park, Lake Ontario Beach",
+      "lake": "Ontario",
+      "province": "Ontario",
+      "country": "Canada",
+      "reference": {
+        "lat": 43.8755,
+        "lon": -78.777834,
+        "precision": "Approximate park or named beach vicinity; not verified parking, swim boundary, or thermometer placement",
+        "sourceUrl": "https://www.ontarioparks.ca/park/darlington/maps"
+      },
+      "nearbyTown": "Oshawa",
+      "officialUrl": "https://www.ontarioparks.ca/park/darlington",
+      "advisory": {
+        "url": "https://www.ontarioparks.ca/beachresults",
+        "authority": "Ontario Parks beach monitoring"
+      },
+      "story": "Past the park's woods and meadows, a sandy Lake Ontario shore opens onto the horizon. The breeze across the lake may differ from the weather along nearby city streets."
+    },
+    {
+      "slug": "toronto-bluffers-beach",
+      "name": "Bluffer's Park Beach, Toronto",
+      "lake": "Ontario",
+      "province": "Ontario",
+      "country": "Canada",
+      "reference": {
+        "lat": 43.71623,
+        "lon": -79.22456,
+        "precision": "Approximate park or named beach vicinity; not verified parking, swim boundary, or thermometer placement",
+        "sourceUrl": "https://mapcarta.com/W43106675"
+      },
+      "nearbyTown": "Toronto",
+      "officialUrl": "https://www.toronto.ca/explore-enjoy/parks-recreation/places-spaces/parks-and-recreation-facilities/location/?id=2&title=Bluffer%27s-Park-and-Beach",
+      "advisory": {
+        "url": "https://www.toronto.ca/explore-enjoy/parks-recreation/places-spaces/beaches-gardens-attractions/beaches/",
+        "authority": "City of Toronto beach monitoring"
+      },
+      "story": "The great Scarborough bluffs rise behind this sandy Lake Ontario beach. At the foot of the cliffs, wind and waves can feel a world apart from the neighborhoods above."
+    },
+    {
+      "slug": "toronto-cherry-beach",
+      "name": "Cherry Beach, Toronto",
+      "lake": "Ontario",
+      "province": "Ontario",
+      "country": "Canada",
+      "reference": {
+        "lat": 43.635556,
+        "lon": -79.344167,
+        "precision": "Approximate park or named beach vicinity; not verified parking, swim boundary, or thermometer placement",
+        "sourceUrl": "https://geonames.nrcan.gc.ca/search-place-names/unique?id=FARWO"
+      },
+      "nearbyTown": "Toronto",
+      "officialUrl": "https://www.toronto.ca/explore-enjoy/parks-recreation/places-spaces/beaches-gardens-attractions/beaches/",
+      "advisory": {
+        "url": "https://www.toronto.ca/explore-enjoy/parks-recreation/places-spaces/beaches-gardens-attractions/beaches/",
+        "authority": "City of Toronto beach monitoring"
+      },
+      "story": "The sheltered city streets give way to a strip of sand along Toronto's Port Lands waterfront. Watch the wind across Lake Ontario and consult the city's beach program before entering the water."
     }
-  ]
+  ],
+  "expansionCheckedAt": "2026-11-21"
 }

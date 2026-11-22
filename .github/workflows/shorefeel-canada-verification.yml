@@ -44,7 +44,7 @@ jobs:
         run: npm run profile:build -- build-profile-shorefeel-canada.json
       - name: Confirm Canada canonical sitemap and generated catalog
         run: |
-          node -e "const fs=require('fs');const url='https://chrisizworski.com/great-lakes-beaches/canada/';const xml=fs.readFileSync('public/sitemap-beaches.xml','utf8');const page=fs.readFileSync('public/great-lakes-beaches/canada/index.html','utf8');if(!xml.includes('<loc>'+url+'</loc>')||!page.includes('rel=\"canonical\" href=\"'+url+'\"')||(page.match(/class=\"shore-stop\"/g)||[]).length!==18)process.exit(1);console.log('Canada canonical + 18 shores PASS')"
+          node -e "const fs=require('fs');const url='https://chrisizworski.com/great-lakes-beaches/canada/';const xml=fs.readFileSync('public/sitemap-beaches.xml','utf8');const page=fs.readFileSync('public/great-lakes-beaches/canada/index.html','utf8');if(!xml.includes('<loc>'+url+'</loc>')||!page.includes('rel=\"canonical\" href=\"'+url+'\"')||(page.match(/class=\"shore-stop\"/g)||[]).length!==JSON.parse(fs.readFileSync('data/shorefeel-canada-ontario.json','utf8')).locations.length)process.exit(1);console.log('Canada canonical + catalog shores PASS')"
       - name: Install isolated browser harness
         run: |
           npm install --prefix "$RUNNER_TEMP/shorefeel-canada-playwright" --ignore-scripts --no-package-lock playwright@1.56.1
