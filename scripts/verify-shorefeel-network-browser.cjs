@@ -86,7 +86,19 @@ function payload(place,mode){
       return {
         valueY:rect.top,
         numberPx:parseFloat(getComputedStyle(value).fontSize),
-        numberRules:{status:answer.dataset.status,host:document.querySelector('[data-shorefeel]')?.dataset.status,css:getComputedStyle(value).fontSize},
+        numberRules:{
+          status:answer.dataset.status,
+          host:document.querySelector('[data-shorefeel]')?.dataset.status,
+          css:getComputedStyle(value).fontSize,
+          selectorMatches:value.matches('body[data-beach-report-page="detail"] .shorefeel-primary[data-status="forecast"] .shorefeel-main strong[data-shorefeel-value]'),
+          parent:value.parentElement?.className,
+          inline:value.style.cssText,
+          stylesheets:[...document.styleSheets].map(x=>x.href||'inline').slice(0,8),
+          matchedRules:[...document.styleSheets].flatMap(sheet=>{
+            try{return [...sheet.cssRules].filter(rule=>rule.selectorText&&rule.selectorText.includes('shorefeel-primary')&&rule.selectorText.includes('strong')).map(rule=>({selector:rule.selectorText,css:rule.style?.fontSize||''}))}
+            catch{return[]}
+          }).slice(-12)
+        },
         answerTop:answer.getBoundingClientRect().top,
         introBottom:intro.getBoundingClientRect().bottom,
         primaryBeforeSecondary:!!(answer.compareDocumentPosition(secondary)&Node.DOCUMENT_POSITION_FOLLOWING),
