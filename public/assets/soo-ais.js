@@ -54,13 +54,23 @@
       iconAnchor: [w / 2, h / 2], popupAnchor: [0, -h / 2]
     });
   }
+  function labelShipMarker(marker, v) {
+    const el = marker.getElement();
+    if (!el) return;
+    el.setAttribute('aria-label', title(v) + ' · ' + typeLabel(v));
+    // Mouse focus can scroll a transformed Leaflet icon away before click finishes.
+    // Prevent only pointer-driven focus scrolling; Tab and Enter remain available.
+    el.addEventListener('mousedown', event => {
+      if (event.button === 0) event.preventDefault();
+    });
+  }
   function addShipMarker(v, into, selected = false) {
     const icon = shipIcon(v, selected);
     // If the optional symbol module fails, the map still retains clickable AIS observations.
     if (icon) {
       const marker = L.marker([v.lat, v.lon], { icon, keyboard: true }).addTo(into);
       // A single detail popup on click; an aria-label replaces the extra hover card.
-      marker.getElement()?.setAttribute('aria-label', title(v) + ' · ' + typeLabel(v));
+      labelShipMarker(marker, v);
       return marker;
     }
     return L.circleMarker([v.lat, v.lon], {
@@ -260,7 +270,7 @@
           const updated = shipIcon(v, marker === selectedMarker);
           if (updated && marker.setIcon) {
             marker.setIcon(updated);
-            marker.getElement()?.setAttribute('aria-label', title(v) + ' · ' + typeLabel(v));
+            labelShipMarker(marker, v);
           }
         }
       });
