@@ -56,6 +56,15 @@ async def run():
                 raise AssertionError("Missing source-labeled nearby report context on parks")
             await page.locator("#river-focus button.focus-action").get_by_text("Inspect this reported vessel").click()
             await page.locator("#river-focus h3").get_by_text("BROWSER TEST SHIP").wait_for()
+            await page.locator(".bridge-picker summary").click()
+            if await page.locator("#bridge-select option").count() != 20:
+                raise AssertionError("NOAA main-channel bridge options were not loaded")
+            await page.locator("#bridge-select").select_option("eagle-280")
+            await page.locator("#river-focus h3").get_by_text("Eagle Avenue bridge").wait_for()
+            if await page.locator("#river-focus a[href*='navcen.uscg.gov']").count() != 1:
+                raise AssertionError("Dated Coast Guard Eagle Avenue evidence link missing")
+            if "opening" not in (await page.locator("#river-focus").inner_text()).lower():
+                raise AssertionError("Bridge notice does not state opening limitations")
             await page.locator("#show-history").click()
             await page.locator("#history-controls").wait_for(state="visible")
             await page.get_by_text("NOAA fix 97 of 434").wait_for(timeout=15000)
