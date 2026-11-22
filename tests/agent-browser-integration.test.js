@@ -14,7 +14,7 @@ const run = (args) => spawnSync(process.execPath, [script, ...args], { encoding:
 test('Agent Browser skill is identically installed in three agent entrypoints', () => {
   const canonical = read('.agents/skills/agent-browser-qa/SKILL.md');
   assert.match(canonical, /^---\nname: agent-browser-qa\n/);
-  assert.match(canonical, /agent-browser skills get core/);
+  assert.match(canonical, /node scripts\/agent-browser\.mjs skills get core/);
   assert.match(canonical, /Playwright/);
   assert.match(canonical, /Do not auto-merge/);
   assert.equal(read('.claude/skills/agent-browser-qa/SKILL.md'), canonical);
