@@ -57,9 +57,13 @@
   function addShipMarker(v, into, selected = false) {
     const icon = shipIcon(v, selected);
     // If the optional symbol module fails, the map still retains clickable AIS observations.
-    return icon ? L.marker([v.lat, v.lon], {
-      icon, keyboard: true, title: title(v) + ' · ' + typeLabel(v)
-    }).addTo(into) : L.circleMarker([v.lat, v.lon], {
+    if (icon) {
+      const marker = L.marker([v.lat, v.lon], { icon, keyboard: true }).addTo(into);
+      // A single detail popup on click; an aria-label replaces the extra hover card.
+      marker.getElement()?.setAttribute('aria-label', title(v) + ' · ' + typeLabel(v));
+      return marker;
+    }
+    return L.circleMarker([v.lat, v.lon], {
       radius: radius(v), color: '#fff', weight: 2,
       fillColor: v.speedKnots === null ? '#64748b' : v.speedKnots > 0.5 ? '#146c86' : '#a6651e',
       fillOpacity: 0.95
@@ -196,7 +200,7 @@
       let marker;
       if (map) {
         marker = addShipMarker(v, layer);
-        marker.bindTooltip(text('span', title(v) + ' · ' + typeLabel(v)), { direction: 'top' }).bindPopup(content);
+        marker.bindPopup(content);
         visibleMarkers.set(String(v.mmsi), { marker, v });
         points.push([v.lat, v.lon]);
       }
@@ -254,7 +258,10 @@
       map.on('zoomend', () => {
         for (const { marker, v } of visibleMarkers.values()) {
           const updated = shipIcon(v, marker === selectedMarker);
-          if (updated && marker.setIcon) marker.setIcon(updated);
+          if (updated && marker.setIcon) {
+            marker.setIcon(updated);
+            marker.getElement()?.setAttribute('aria-label', title(v) + ' · ' + typeLabel(v));
+          }
         }
       });
     } else container.textContent = 'Map could not load. Recent vessel reports remain available in the list below.';
