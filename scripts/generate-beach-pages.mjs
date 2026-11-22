@@ -8,6 +8,7 @@ function escapeHtml(value) {
 }
 
 const catalog = JSON.parse(await readFile(path.join(root, "data", "beaches.json"), "utf8"));
+const fieldNotes = JSON.parse(await readFile(path.join(root, "data", "shorefeel-field-notes-mi.json"), "utf8")).notes;
 const publicRoot = path.join(root, "public");
 
 function html(value) {
@@ -63,12 +64,13 @@ function detailDescription(beach) {
 }
 
 function detailPage(beach) {
+  if (typeof fieldNotes[beach.slug] !== "string" || fieldNotes[beach.slug].length < 120) throw new Error("Missing ShoreFeel field note: "+beach.slug);
   const canonical = `https://chrisizworski.com/great-lakes-beaches/${beach.slug}/`;
   const description = detailDescription(beach);
   const title = detailTitle(beach.name);
   // ShoreFeel interpretive content was materially updated November 21, 2026.
   // Keep page and sitemap dates aligned; stamp-freshness owns later revisions.
-  const detailModified = "2026-11-21";
+  const detailModified = "2026-11-22";
   const nearby = nearbyBeaches(beach);
   const cameraStylesheet = beach.camera ? '  <link rel="stylesheet" href="/assets/field-camera.css">\n' : "";
   const cameraSection = beach.camera ? `    <section class="section" aria-labelledby="camera-heading">
@@ -187,7 +189,7 @@ ${cameraStylesheet}  <script type="application/ld+json">${json(schema)}</script>
         </div>
       </div>
       <div class="shorefeel-about-source">
-        <p>${html(beach.summary)} ${beach.swimming === false ? "Along this riverfront, open ground may feel breezier than sheltered city streets. This location is not a designated swim beach and the nearby lake water data is not river water." : "The open shore can feel different from the air behind dunes, trees or nearby buildings. A breeze off the lake is worth watching, but local wind direction has not been verified for a shoreline cooling estimate here."}</p>
+        <p>${html(fieldNotes[beach.slug])}</p>
       </div>
       <p class="shorefeel-water" data-shorefeel-water>Nearby NOAA lake temperature is being checked. It will not be mistaken for swimming-area water.</p>
       <details class="shorefeel-explain">
@@ -217,11 +219,11 @@ ${cameraSection}    <figure class="shorefeel-landscape" aria-label="Representati
     <section class="section content-grid" aria-labelledby="about-heading">
       <article class="content-section">
         <p class="section-kicker">${html(beach.region)}</p>
-        <h2 id="about-heading">About ${html(beach.name)}</h2>
+        <h2 id="about-heading">Along the shore at ${html(beach.name)}</h2>
         <p>${html(beach.summary)}</p>
-        <p>${html(beach.name)} is a ${html(beach.access.toLowerCase())} on ${html(beach.lake)} in ${html(beach.county)} County. Its report combines a local three-day weather forecast with the nearest relevant, recent NOAA lake observation, Michigan BeachGuard status, a matched NWS Surf Zone Forecast, and relevant NWS land or marine alerts.</p>
-        <h3>How to read this page</h3>
-        <p>The Beach Day Score compares day-trip potential, not whether entering the water is appropriate. It is N/A unless the required weather values and both water temperature and wave height are present, with the NOAA observation no more than six hours old. Daily ranking also requires explicit low NWS swim risk and no matched official alert. Open the named sources, judge the station distance, and reassess the posted flag and shoreline conditions when you arrive.</p>
+        <p>Read this shoreline in layers: a three-day weather forecast for the air, a recent NOAA observation for open-lake water at the station, and Michigan BeachGuard and NWS guidance for potential hazards. Each source tells a different part of the story. None replaces what you find at ${html(beach.name)} when you arrive.</p>
+        <h3>Reading the weather together</h3>
+        <p>Start with air comfort and the wind, then look at the waves, water observations and official notices. The Beach Day Score compares day-trip potential, not whether entering the water is appropriate. It is N/A unless the required weather values and both water temperature and wave height are present, with the NOAA observation no more than six hours old. Daily ranking also requires explicit low NWS swim risk and no matched official alert. Open the named sources, judge the station distance, and reassess the posted flag and shoreline conditions when you arrive.</p>
       </article>
       <aside><div class="method-card"><h3>Beach character</h3><div class="condition-chips">${(beach.traits || []).map((trait) => `<span class="trait-chip">${html(trait)}</span>`).join("")}</div><p><strong>Access:</strong> ${html(beach.access)}<br><strong>Lake:</strong> ${html(beach.lake)}<br><strong>County:</strong> ${html(beach.county)}</p></div></aside>
     </section>
@@ -268,7 +270,7 @@ const indexHtml = [
   '<section class="section" id="beachIndex" aria-labelledby="beach-index-heading">',
   '<div class="section-head"><div><p class="section-kicker">Every beach</p>',
   `<h2 id="beach-index-heading">All ${catalog.beaches.length} Michigan beaches by lake</h2>`,
-  '<p class="section-intro">The full list, grouped by lake. Each one has its own page with conditions, water temperature, and what the shoreline is like.</p>',
+  '<p class="section-intro">Explore the lake that draws you in. Every beach has its own field note about the landscape, the feel of the air, and which official conditions to check before you go.</p>',
   "</div></div>",
   ...[...byLake.entries()]
     .filter(([, list]) => list.length)
@@ -295,15 +297,15 @@ await writeFile(hubPath, hub);
 console.log(`Wrote crawlable index of ${catalog.beaches.length} beaches into the hub page.`);
 
 const urls = [
-  { loc: "https://chrisizworski.com/great-lakes-beaches/", priority: "0.9", changefreq: "daily", lastmod: "2026-11-21" },
-  { loc: "https://chrisizworski.com/great-lakes-beaches/around-the-lakes/", priority: "0.7", changefreq: "monthly", lastmod: "2026-11-21" },
-  { loc: "https://chrisizworski.com/great-lakes-beaches/canada/", priority: "0.7", changefreq: "monthly", lastmod: "2026-11-21" },
-  { loc: "https://chrisizworski.com/best-michigan-beaches-today/", priority: "0.9", changefreq: "daily", lastmod: "2026-08-10" },
+  { loc: "https://chrisizworski.com/great-lakes-beaches/", priority: "0.9", changefreq: "daily", lastmod: "2026-11-22" },
+  { loc: "https://chrisizworski.com/great-lakes-beaches/around-the-lakes/", priority: "0.7", changefreq: "monthly", lastmod: "2026-11-22" },
+  { loc: "https://chrisizworski.com/great-lakes-beaches/canada/", priority: "0.7", changefreq: "monthly", lastmod: "2026-11-22" },
+  { loc: "https://chrisizworski.com/best-michigan-beaches-today/", priority: "0.9", changefreq: "daily", lastmod: "2026-11-22" },
   ...catalog.beaches.map((beach) => ({
     loc: `https://chrisizworski.com/great-lakes-beaches/${beach.slug}/`,
     priority: "0.7",
     changefreq: "daily",
-    lastmod: "2026-11-21",
+    lastmod: "2026-11-22",
   })),
 ];
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>

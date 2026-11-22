@@ -7,10 +7,10 @@
  const tell=(id,v)=>{const x=$(id);if(x)x.textContent=v;};
  const link=(id,url,label)=>{const x=$(id);if(x){x.href=url;x.textContent=label;}};
  const notes={
-  Superior:'Lake Superior meets granite headlands, sandy bays and boreal forest. Check the park rules as well as the weather.',
-  Huron:'Lake Huron includes Georgian Bay. The water and wind can feel very different from the air behind dunes or town buildings.',
-  Erie:'Lake Erie opens into long beaches and low, sandy peninsulas. Wind and wave exposure matter as much as the sunny forecast.',
-  Ontario:'On Lake Ontario, sandbars, dunes and city shorelines meet a large, changeable lake.',
+  Superior:'On Superior, the trees may shelter you until the forest gives way to a rocky point or sandy bay. Notice when the wind reaches you, and read the park’s latest guidance.',
+  Huron:'Georgian Bay coves, Lake Huron points and long strands face the wind in different directions. Compare the water’s surface with the air you feel behind trees or town buildings.',
+  Erie:'Across Lake Erie’s sandy peninsulas, even a sunny afternoon can bring shifting wind and waves. Check the official park notices before choosing a place at the water.',
+  Ontario:'From Toronto’s streets to Prince Edward County dunes, the Lake Ontario shoreline changes character. See whether the breeze comes across open water or from shelter on land.',
   Michigan:'Lake Michigan lies entirely along the United States. Explore its beaches in the U.S. ShoreFeel guide.'
  };
  let current=null,lake='Superior',controller=null,map=null,mapReady=false,markers=new Map(),tilesLoaded=false,tileErrors=0;
@@ -22,7 +22,7 @@
   tell('report-wind','Wind unavailable');
   tell('report-time','Source timestamp unavailable');
   tell('report-heading','Check the official forecast');
-  tell('report-guide',reason||'ECCC hourly weather could not be verified for this shoreline. Check its current forecast before setting out.');
+  tell('report-guide',reason||'The nearby forecast is not available right now. Explore the shoreline notes, then check current Environment Canada and park guidance before leaving.');
   tell('report-scope','No nearest-town air value, lake temperature, wave safety or swimming status has been inferred. Read the official beach and park notices.');
  }
  function show(li){
@@ -30,8 +30,8 @@
   const d=li.dataset;current=d.slug;
   for(const x of list)x.querySelector('button[data-select]').setAttribute('aria-pressed',String(x===li));
   tell('report-name',d.name);tell('report-place','Ontario · Lake '+d.lake);
-  tell('report-story',d.story);tell('report-heading','Along the shore');
-  tell('report-guide','Consulting a recent Environment Canada city-area forecast.');
+  tell('report-story',d.story);tell('report-heading','Get to know this shore');
+  tell('report-guide','Checking the nearby Environment Canada forecast. While it loads, explore what makes this particular shore different.');
   tell('report-temp','Checking weather');tell('report-method','Nearby ECCC forecast, not a beach thermometer');
   tell('report-wind','Checking wind');tell('report-time','Checking official timestamp');
   tell('report-scope','Approximate park or beach vicinity pin, not a parking location. Forecasts and official beach advisories are separate.');
