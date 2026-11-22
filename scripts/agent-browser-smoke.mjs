@@ -7,6 +7,7 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const localBrowser = path.join(repoRoot, '.agent-tools', 'agent-browser', 'node_modules', '.bin', process.platform === 'win32' ? 'agent-browser.cmd' : 'agent-browser');
 const artifactRoot = path.join(repoRoot, 'artifacts', 'agent-browser-qa');
 const allowedHosts = new Set(['chrisizworski.com', 'www.chrisizworski.com', 'localhost', '127.0.0.1']);
 
@@ -80,8 +81,9 @@ function plan(url, out) {
 }
 
 function callBrowser(session, args) {
-  return spawnSync('agent-browser', ['--session', session, '--content-boundaries', '--max-output', '20000', ...args], {
+  return spawnSync(localBrowser, ['--session', session, '--content-boundaries', '--max-output', '20000', ...args], {
     cwd: repoRoot,
+    shell: process.platform === 'win32',
     encoding: 'utf8',
     timeout: 45000,
     maxBuffer: 2 * 1024 * 1024,
@@ -107,6 +109,8 @@ function main() {
     console.log(JSON.stringify({ mode: 'DRY RUN ONLY - no browser executed', url, output, steps }, null, 2));
     return 0;
   }
+
+  if (!fs.existsSync(localBrowser)) { console.error('Agent Browser CLI missing. Run node scripts/setup-agent-browser.mjs first.'); return 1; }
 
   const report = { mode: 'real browser attempted', url, output, startedAt: new Date().toISOString(), steps: [], success: false };
   fs.mkdirSync(output, { recursive: true });
