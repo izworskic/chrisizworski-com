@@ -95,7 +95,7 @@ test('missing, failed and empty feeds are explicit and never read as an empty ri
   const failed = core.plan({ data: null, failed: true, now: NOV });
   assert.equal(failed.status, 'unavailable');
   assert.match(failed.detail[0], /not a report of an empty river/);
-  assert.equal(failed.link.href, core.BOATNERD);
+  assert.equal(failed.link.href, '#soo-schedule-answer', 'the next step stays on this page');
   const broken = core.plan({ data: { ok: true, nextShip: { ok: false } }, now: NOV });
   assert.equal(broken.status, 'unavailable');
   const empty = core.plan({ data: data(NOV, { inLock: [], candidates: [], pick: null }), now: NOV });
@@ -138,4 +138,53 @@ test('the page wires the planner in after the next-ship answer without touching 
   assert.ok(html.indexOf('/assets/soo-ais.js') < html.indexOf('/assets/soo-lock-watch.js'), 'the AIS client loads first');
   assert.match(html, /November through April: 9 a\.m\. to 6 p\.m\./, 'posted hours are readable without JavaScript');
   assert.equal((html.match(/data-in-article-ad-break/g) || []).length, 1, 'the existing ad break marker is unchanged');
+});
+
+test('verdicts never send the visitor off-site; BoatNerd is only a collapsed cross-check', () => {
+  for (const p of [
+    core.plan({ data: null, failed: true, now: NOV }),
+    core.plan({ data: data(NOV, { inLock: [], candidates: [], pick: null }), now: NOV }),
+    core.plan({ data: data(NOV), now: NOV, startOffset: 30, stay: 45 })
+  ]) {
+    assert.ok(!p.link || p.link.href.startsWith('#'), JSON.stringify(p.link));
+    assert.doesNotMatch([p.headline, ...p.detail].join(' '), /boatnerd/i);
+  }
+  const html = fs.readFileSync(path.join(__dirname, '..', 'public/soo-locks/index.html'), 'utf8');
+  const watch = html.slice(html.indexOf('id="soo-lock-watch"'), html.indexOf('id="soo-schedule-answer"'));
+  const links = watch.match(/href="https:\/\/ais\.boatnerd\.com[^"]*"/g) || [];
+  assert.equal(links.length, 1);
+  assert.ok(watch.indexOf('boatnerd.com') > watch.indexOf('<details class="lw-hours">'), 'inside the collapsed sources note');
+  const card = html.slice(html.indexOf('id="soo-next-ship"'), html.indexOf('id="soo-lock-watch"'));
+  assert.doesNotMatch(card, /boatnerd/i);
+  const sources = html.slice(html.indexOf('class="schedule-source-grid"'), html.indexOf('class="schedule-crosscheck"'));
+  assert.match(sources, /^[^]*?<a href="#soo-lock-watch"/, 'the first schedule source is this page');
+  assert.doesNotMatch(sources, /boatnerd/i);
+});
+
+test('the lock simulator gets a same-size stand-in only when the reported size clearly matches', () => {
+  assert.equal(core.simShipFor({ sizeLabel: '1,000-footer', lengthFeet: 997 }), 'tregurtha');
+  assert.equal(core.simShipFor({ lengthFeet: 1004 }), 'tregurtha');
+  assert.equal(core.simShipFor({ sizeLabel: 'ocean-going saltie', lengthFeet: 656 }), 'saltie');
+  assert.equal(core.simShipFor({ sizeLabel: 'laker', lengthFeet: 740 }), 'anderson');
+  assert.equal(core.simShipFor({ lengthFeet: 730 }), null, 'MacArthur-size ships are not forced onto a historic or saltie hull');
+  assert.equal(core.simShipFor({}), null);
+});
+
+test('visit weather quotes only the NWS hourly periods that overlap the visit', () => {
+  const top = Date.parse('2026-11-21T14:00:00Z');
+  const props = { updateTime: '2026-11-21T13:45:00Z', periods: [0, 1, 2, 3, 4].map(i => ({
+    startTime: new Date(top + i * 3600000).toISOString(), endTime: new Date(top + (i + 1) * 3600000).toISOString(),
+    temperature: [30, 31, 33, 35, 36][i], windSpeed: ['5 mph', '10 mph', '10 to 15 mph', '20 mph', '5 mph'][i], windDirection: ['N', 'NW', 'NW', 'W', 'S'][i],
+    shortForecast: ['Cloudy', 'Cloudy', 'Chance Snow Showers', 'Snow Showers', 'Cloudy'][i], probabilityOfPrecipitation: { value: [5, 10, 30, 60, 10][i] }
+  })) };
+  // 9:45 to 11:15 a.m. EST overlaps the 9, 10 and 11 o'clock periods only.
+  const w = core.visitWeather(props, { start: NOV, end: NOV + 90 * 60000 }, NOV);
+  assert.deepEqual([w.lowF, w.highF, w.windMph, w.windDir, w.maxPop, w.hours, w.stale], [30, 33, 15, 'NW', 30, 3, false]);
+  assert.equal(core.weatherLine(w), '30\u201333\u00B0F, cloudy, then chance snow showers, wind NW up to 15 mph, precipitation chance up to 30%');
+  assert.equal(core.visitWeather(props, { start: top + 9 * 3600000, end: top + 10 * 3600000 }, NOV), null, 'outside the forecast range');
+  assert.equal(core.visitWeather(props, { start: NOV, end: NOV + 3600000 }, NOV + 13 * 3600000).stale, true);
+  assert.equal(core.visitWeather(null, { start: NOV, end: NOV + 1 }, NOV), null);
+  const html = fs.readFileSync(path.join(__dirname, '..', 'public/assets/soo-lock-watch.js'), 'utf8');
+  assert.match(html, /api\.weather\.gov\/gridpoints\/APX\/65,131\/forecast\/hourly/);
+  assert.match(html, /api\.weather\.gov\/points\/46\.4953,-84\.3453/, 'falls back to a fresh grid lookup');
 });

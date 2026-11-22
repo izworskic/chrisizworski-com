@@ -34,6 +34,43 @@ test('US catalog covers 16 verified destinations in seven non-Michigan states an
  assert.ok(data.beaches.find(b=>b.slug==='big-bay-state-park').accessAlert.includes('construction'));
 });
 
+
+test('four NWS shoreline references remain in vetted land locations, within the beach area',async()=>{
+ // Each location was checked against the live NWS /points endpoint on 2026-11-22.
+ // Prior references were classified "marine" and blanked an otherwise available forecast.
+ const corrected={
+  'park-point-beach-house':{lat:46.722,lon:-92.04},
+  'big-bay-state-park':{lat:46.814,lon:-90.677},
+  'presque-isle-beach-6':{lat:42.1453,lon:-80.1375},
+  'woodlawn-beach-state-park':{lat:42.7895,lon:-78.8524}
+ };
+ const distanceKm=(lat1,lon1,lat2,lon2)=>{
+  const rad=Math.PI/180;
+  const x=(lon2-lon1)*rad*Math.cos((lat1+lat2)*rad/2);
+  const y=(lat2-lat1)*rad;
+  return Math.hypot(x,y)*6371;
+ };
+ const saved=global.fetch;
+ try{
+  for(const [slug,expected] of Object.entries(corrected)){
+   const beach=bySlug.get(slug);
+   assert.ok(beach,slug);
+   assert.equal(beach.forecastReference.lat,expected.lat,slug+' verified NWS land latitude');
+   assert.equal(beach.forecastReference.lon,expected.lon,slug+' verified NWS land longitude');
+   assert.ok(distanceKm(beach.lat,beach.lon,expected.lat,expected.lon)<3,slug+' should use a nearby area forecast');
+   const called=[];
+   global.fetch=async url=>{
+    called.push(String(url));
+    return {ok:true,json:async()=>String(url).includes('/points/')?point:hourly};
+   };
+   const got=await handler.lookup(beach,now);
+   assert.equal(got.status,'forecast-based',slug);
+   assert.ok(called[0].endsWith('/points/'+expected.lat.toFixed(4)+','+expected.lon.toFixed(4)),slug+' uses its vetted point');
+   assert.equal(called.length,2,slug+' retrieves the source-authenticated hourly forecast');
+  }
+ }finally{global.fetch=saved;}
+});
+
 test('NWS endpoints are same-host official allowlist, not proxy redirects',()=>{
  assert.equal(officialNwsUrl('https://api.weather.gov/gridpoints/LOT/70,75/forecast/hourly'),
   'https://api.weather.gov/gridpoints/LOT/70,75/forecast/hourly');

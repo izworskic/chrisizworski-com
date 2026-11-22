@@ -1,4 +1,15 @@
 {
   "schemaVersion": 1,
-  "candidates": []
+  "candidates": [
+    {
+      "date": "2026-11-21",
+      "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxQTmtFV2JhYmVBWVdDdTY4cm1GQTh2bl9lYURqTGlZNm1va2dfVlZwZXNqRDRHNk1TVGxrZ1NzdUpvLXVpd3FYdThwdU81d1BjRXRCRzNId0ppbTllMjBiYngtcTYwMXJzTEFaVEc3QjJnRXVMVU80bzdPSDh6NEp6YjYzLVF3MDhlRlhaX1MwV2RtNTI4cndYd3ltNmxhVGlVdzZLZ1VR?oc=5",
+      "title": "What Gets Repaired On A Great Lakes Freighter During Winter Layup - WorldAtlas",
+      "publisher": "Regional discovery: Sarnia and St. Clair",
+      "sourceId": "news-sarnia-stclair",
+      "why": "identity_unresolved",
+      "priority": 60,
+      "mode": "review"
+    }
+  ]
 }

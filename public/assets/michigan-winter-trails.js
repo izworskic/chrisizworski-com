@@ -67,7 +67,16 @@ function refreshPins(initial){
    view.target='_blank';view.rel='noopener noreferrer';view.className='trl-popup-map-link';
    view.textContent='View geographic area · not parking ↗';
    view.title='Location only: verify official winter parking, trail uses and closures';
-   item.append(view);items.append(item);
+   item.append(view);
+   const weather=document.createElement('button');
+   weather.type='button';weather.className='trl-popup-weather-link';
+   weather.textContent='Snow + forecast at this area';
+   weather.addEventListener('click',event=>{
+    event.preventDefault();event.stopPropagation();
+    map.closePopup();
+    document.dispatchEvent(new CustomEvent('winter-trails:check-weather',{detail:{id:card.id}}));
+   });
+   item.append(weather);items.append(item);
   }
   root.append(items);
   const markerClass=multi?'wf-pin wf-pin-multi':'wf-pin';
@@ -104,6 +113,12 @@ function init(){
   mapNode.textContent='';
   map=window.L.map(mapNode,{scrollWheelZoom:false}).setView([44.8,-85.5],6);
   map.on('dragstart zoomstart',()=>{userZoomed=true});
+  document.addEventListener('winter-trails:fit-map',()=>{
+    const points=shown().map(card=>[Number(card.dataset.lat),Number(card.dataset.lng)])
+      .filter(point=>point.every(Number.isFinite));
+    if(points.length>1)map.fitBounds(points,{padding:[32,32],maxZoom:8});
+    else if(points.length===1)map.setView(points[0],9);
+  });
   refreshPins(true);
   if(typeof ResizeObserver!=='undefined')new ResizeObserver(()=>map?.invalidateSize({pan:false})).observe(mapNode);
   requestAnimationFrame(()=>map?.invalidateSize({pan:false}));

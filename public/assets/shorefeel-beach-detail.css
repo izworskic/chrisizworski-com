@@ -1,0 +1,77 @@
+/* One decisive shoreline answer. No cards added to the site's Auto ads stack. */
+:root{--shore-ink:#17383f;--shore-sea:#0b5062;--shore-soft:#e6f3f3;--shore-paper:#f8faf8;--shore-bright:#f2e5c6;--shore-border:#c9dadd}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;color:var(--shore-ink);background:var(--shore-paper);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.55}
+a{color:var(--shore-sea);text-underline-offset:3px}
+a:focus-visible,summary:focus-visible{outline:3px solid #be7419;outline-offset:4px}
+.skip{position:absolute;left:-9999px;top:auto}.skip:focus{left:10px;top:10px;z-index:20;padding:10px;background:#fff}
+.shore-site-head{display:flex;justify-content:space-between;align-items:center;gap:16px;background:#103f4c;color:#fff;padding:13px max(22px,calc((100vw - 1100px)/2))}
+.shore-site-head a{color:#fff}.shore-site-head .brand{font-weight:750;text-decoration:none;letter-spacing:-.02em}
+.shore-site-head nav{display:flex;flex-wrap:wrap;gap:20px;font-size:.92rem}
+main{max-width:1100px;margin:auto;padding:0 22px}
+.shore-lead{padding:29px 0 18px;max-width:880px}
+.eyebrow{font-size:.77rem;text-transform:uppercase;letter-spacing:.12em;font-weight:750;color:#356471;margin:0 0 11px}
+h1{font-size:clamp(2rem,5vw,3.8rem);letter-spacing:-.05em;line-height:1.1;margin:0 0 8px;max-width:900px}
+.shore-lede{font-size:1.04rem;color:#4c6669;margin:0}
+.shore-answer{margin-top:10px;background:#e5f2ef;color:#163f49;border-radius:13px;overflow:hidden;border-top:4px solid #186873;box-shadow:0 12px 29px #0a435511}
+.shore-answer-inner{padding:clamp(20px,3.5vw,32px);position:relative}
+/* No pseudo-element in the reading area. Decorative geometry obscured forecast text. */
+.shore-answer .eyebrow{color:#285c64;font-size:.77rem;margin-bottom:9px}
+.answer-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(210px,.8fr);gap:clamp(16px,3vw,30px);align-items:center}
+.shore-value{font-size:clamp(4.1rem,8.5vw,6.8rem);line-height:1.0;letter-spacing:-.065em;font-weight:780;font-variant-numeric:tabular-nums;display:block;overflow-wrap:anywhere;color:#0e4b57}
+.shore-answer[data-status="unavailable"] .shore-value,.shore-answer[data-status="loading"] .shore-value{font-size:clamp(1.55rem,4vw,2.35rem);line-height:1.25;letter-spacing:-.025em}
+.shore-secondary{color:#295d64;font-size:1rem;font-weight:630;margin:5px 0 6px}
+.shore-method{font-size:.86rem;margin:0;color:#3e6267}
+.shore-metrics{display:grid;gap:14px;border-left:1px solid #b1ccc6;padding-left:clamp(16px,2vw,24px);align-content:center;min-width:0}
+.shore-metric span{display:block;color:#37656c;font-size:.74rem;text-transform:uppercase;letter-spacing:.07em;font-weight:720}
+.shore-metric strong{font-size:1.05rem;font-weight:690;overflow-wrap:anywhere}
+.shore-guide{background:#f6f7f2;color:#244147;margin:0;padding:17px clamp(20px,3.5vw,32px);font-size:1rem;line-height:1.55;border-top:1px solid #ccded8}
+.shore-source{font-size:.84rem;line-height:1.5;margin:0;padding:13px clamp(20px,3.5vw,32px);background:#e9f3ef;color:#365d61}
+.shore-source strong{display:block;margin-bottom:5px}
+.shore-columns{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(250px,.8fr);gap:46px;padding:43px 0 36px}
+.shore-columns h2,.shore-nearby h2{letter-spacing:-.03em;font-size:1.55rem;line-height:1.3;margin:0 0 14px}
+.shore-story{font-size:1.14rem;margin:0 0 20px;max-width:64ch}
+.shore-interpret{max-width:65ch;color:#435d60}
+.shore-actions{display:grid;gap:9px;align-content:start}
+.shore-action{padding:13px 16px;border:1px solid var(--shore-border);border-radius:12px;text-decoration:none;font-weight:650;background:#fff;min-height:48px}
+.shore-action:hover{background:#e5f3f4}
+.shore-small{font-size:.86rem;color:#516668;line-height:1.55}
+.shore-nearby{border-top:1px solid var(--shore-border);padding:26px 0 44px}
+.shore-links{display:flex;flex-wrap:wrap;gap:12px}.shore-links a{padding:10px 14px;border:1px solid var(--shore-border);border-radius:20px;background:#fff;text-decoration:none}
+footer{background:#e8f0ee;padding:24px 22px;text-align:center;font-size:.87rem;color:#49686b}
+@media(max-width:680px){
+ .shore-site-head{padding:13px 17px}.shore-site-head nav{gap:12px;font-size:.8rem}
+ main{padding:0 16px}.shore-lead{padding:22px 0 11px}
+ .shore-answer{border-radius:11px}
+ .shore-answer-inner{padding:20px 18px}
+ .answer-grid{grid-template-columns:1fr;gap:15px}
+ .shore-metrics{grid-template-columns:1fr 1fr;gap:13px;border-left:0;border-top:1px solid #b1ccc6;padding:15px 0 0}
+ .shore-metric:last-child{grid-column:span 2}
+ .shore-guide,.shore-source{padding:14px 18px}
+ .shore-columns{grid-template-columns:1fr;gap:16px;padding:30px 0}
+ .shore-story{font-size:1.07rem}
+}
+/* Source-backed park closures and ECCC licensing, present without JavaScript. */
+.shore-access-notice{background:#fff2d9;border-left:4px solid #a6691e;color:#4d371e;border-radius:4px 10px 10px 4px;padding:13px 15px;margin:0 0 18px;line-height:1.5}
+.shore-access-notice strong{display:block;margin-bottom:4px}
+.shore-attribution{padding:9px clamp(24px,4vw,42px) 14px;margin:0;background:#e2f2f0;font-size:.79rem;color:#335b62}
+.shore-attribution a{font-weight:650}
+@media(max-width:680px){.shore-attribution{padding:8px 20px 14px}}
+
+/* Source legibility and honest fallback are more useful than decorative flourishes. */
+.shore-answer:focus-within{outline-offset:4px}
+.shore-lead{padding-top:clamp(16px,2.4vw,28px);padding-bottom:12px}
+.shore-lead h1{font-size:clamp(2rem,4.5vw,3.25rem);line-height:1.12}
+.shore-lede{margin:5px 0 0}
+.shore-source strong{font-weight:680}
+.shore-attribution{background:#e9f3ef}
+.shore-attribution a{text-decoration-thickness:1px}
+.shore-metric:last-child strong{font-size:.96rem;line-height:1.42;display:block;font-weight:580}
+.shore-action:focus-visible,.shore-links a:focus-visible{outline:3px solid #aa6b15;outline-offset:2px}
+@media(max-width:680px){
+ .shore-lead h1{font-size:clamp(1.95rem,7.8vw,2.55rem)}
+ .shore-value{font-size:clamp(4.25rem,17vw,5.2rem)}
+ .shore-metric:last-child{grid-column:span 2}
+ .shore-metric:last-child strong{font-size:.92rem}
+}

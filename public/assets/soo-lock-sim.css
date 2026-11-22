@@ -10,6 +10,7 @@
 .lock-ships label:has(input:checked){border-color:#16324a;background:#e3eef5;box-shadow:inset 0 0 0 1px #16324a}
 .lock-ships label:focus-within{outline:3px solid #f2a33a;outline-offset:1px}
 .lock-stage{background:#e9eef1}
+.lock-stage:focus-visible{outline:3px solid #f2a93b;outline-offset:2px}
 .lock-stage svg{display:block;width:100%;height:auto}
 .lock-stage .lsl{font:600 13px system-ui,sans-serif;fill:#16324a}
 .lock-stage .lsf{font:600 12px system-ui,sans-serif;fill:#fff}

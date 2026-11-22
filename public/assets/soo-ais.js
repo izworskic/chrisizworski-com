@@ -11,7 +11,11 @@
   const cardHeading = document.getElementById('soo-next-ship-heading');
   const cardBody = document.getElementById('sooNextBody');
   const cardNow = document.getElementById('sooNextNow');
-  let map, layer, focusLayer, fitted = false, busy = false, mapStarted = false, polling = false, previous;
+  let map, layer, focusLayer, detailPopup, fitted = false, busy = false, mapStarted = false, polling = false, previous;
+  let selectedMarker = null;
+  const visibleMarkers = new Map();
+  // Shared local SVG silhouettes, also used by the Seaway map.
+  const Icons = window.SeawayVesselIcons;
   const TZ = 'America/Detroit';
   const title = v => v.name || 'Vessel ' + v.mmsi;
   const age = v => Math.max(0, Math.round((Date.now() - Date.parse(v.seen)) / 60000));
@@ -35,10 +39,70 @@
     if (Number.isFinite(L)) return L >= 298 ? 11 : L >= 190 ? 9 : L >= 90 ? 7 : 5;
     return v.shipType >= 70 && v.shipType < 90 ? 9 : 6;
   }
+  function typeLabel(v) {
+    if (!Icons) return 'Type unknown';
+    const kind = Icons.classify(v);
+    return Icons.KINDS.find(item => item.kind === kind)?.label || 'Type unknown';
+  }
+  function shipIcon(v, selected = false) {
+    if (!Icons) return null;
+    const shape = Icons.icon(v, { zoom: map ? map.getZoom() : 13, selected });
+    const [w, h] = shape.size;
+    return L.divIcon({
+      className: shape.className + ' soo-ais-symbol',
+      html: shape.html, iconSize: shape.size,
+      iconAnchor: [w / 2, h / 2], popupAnchor: [0, -h / 2]
+    });
+  }
+  function labelShipMarker(marker, v) {
+    const el = marker.getElement();
+    if (!el) return;
+    el.setAttribute('aria-label', title(v) + ' · ' + typeLabel(v));
+  }
+  function addShipMarker(v, into, selected = false) {
+    const icon = shipIcon(v, selected);
+    // If the optional symbol module fails, the map still retains clickable AIS observations.
+    if (icon) {
+      const marker = L.marker([v.lat, v.lon], { icon, keyboard: true }).addTo(into);
+      // A single detail popup on click; an aria-label replaces the extra hover card.
+      labelShipMarker(marker, v);
+      return marker;
+    }
+    return L.circleMarker([v.lat, v.lon], {
+      radius: radius(v), color: '#fff', weight: 2,
+      fillColor: v.speedKnots === null ? '#64748b' : v.speedKnots > 0.5 ? '#146c86' : '#a6651e',
+      fillOpacity: 0.95
+    }).addTo(into);
+  }
+  // One Leaflet popup object is shared by every vessel, so selection cannot stack cards.
+  function openShipPopup(marker) {
+    if (!map || !marker.sooContent) return;
+    if (!detailPopup) detailPopup = L.popup({ autoClose: true, closeOnClick: true });
+    const anchor = marker.options.icon?.options?.popupAnchor || [0, -8];
+    detailPopup.options.offset = L.point(anchor[0], anchor[1]);
+    detailPopup.setLatLng(marker.getLatLng()).setContent(marker.sooContent).openOn(map);
+  }
+  function attachShipPopup(marker, content) {
+    marker.sooContent = content;
+    marker.on('click', () => openShipPopup(marker));
+  }
+  function renderLegend() {
+    const target = document.getElementById('sooVesselLegend');
+    if (!target || !Icons) return;
+    target.replaceChildren();
+    for (const kind of Icons.KINDS) {
+      const item = text('span', '', 'soo-vessel-legend-item type-' + kind.kind);
+      const glyph = text('span', '', 'soo-vessel-legend-glyph');
+      glyph.setAttribute('aria-hidden', 'true');
+      glyph.innerHTML = Icons.svg(kind.kind); // Authored, static SVG paths, never provider markup.
+      item.append(glyph, text('span', kind.label));
+      target.append(item);
+    }
+  }
   const directionText = d => d === 'upbound' ? 'Upbound from Lake Huron, heading up to Lake Superior' : d === 'downbound' ? 'Downbound from Lake Superior, heading to the lower lakes' : 'Direction not reported';
   // USACE maintains the boat-schedule hotline only while the Visitor Center is open, May 1 to October 31.
   const hotlineSeason = () => { const m = Number(new Date().toLocaleString('en-US', { month: 'numeric', timeZone: TZ })); return m >= 5 && m <= 10; };
-  const checkElsewhere = () => hotlineSeason() ? 'Call the hotline at 906-202-1333 or check the BoatNerd passage list below.' : 'Check the BoatNerd passage list below; the USACE boat hotline runs only May 1 to October 31.';
+  const checkElsewhere = () => hotlineSeason() ? 'Call the hotline at 906-202-1333, or see the other ways to check further down this page.' : 'See the other ways to check further down this page; the USACE boat hotline runs only May 1 to October 31.';
   const chamberWhere = chamber => chamber === 'poe' ? 'The Poe is the second chamber out from the viewing platform.' : 'The MacArthur is the chamber right below the viewing platform.';
 
   // ---- next-ship card ----
@@ -50,7 +114,7 @@
     if (failed && !n) {
       cardKicker.textContent = 'Next ship at the locks';
       cardHeading.textContent = 'Live ship reports are unavailable right now';
-      cardBody.append(text('p', hotlineSeason() ? 'Call the official boat hotline at 906-202-1333 while the Visitor Center is open, or check the BoatNerd passage list below.' : 'Check the BoatNerd passage list below. The USACE boat hotline is maintained only while the Visitor Center is open, May 1 to October 31.'));
+      cardBody.append(text('p', hotlineSeason() ? 'Call the official boat hotline at 906-202-1333 while the Visitor Center is open, or see the other ways to check further down this page.' : 'See the other ways to check further down this page. The USACE boat hotline is maintained only while the Visitor Center is open, May 1 to October 31.'));
       return;
     }
     if (!n || !n.ok) {
@@ -107,21 +171,28 @@
     show.addEventListener('click', () => focusShip(ship));
     let other;
     if (hotlineSeason()) { other = text('a', 'Boat hotline 906-202-1333'); other.href = 'tel:+19062021333'; }
-    else { other = text('a', 'BoatNerd passage list \u2197'); other.href = 'https://ais.boatnerd.com/passage/port/soo-locks'; other.target = '_blank'; other.rel = 'noopener'; }
+    // Off season, the next step stays in the tool: line this ship up against a visit.
+    else { other = text('a', 'Plan your platform time \u2193'); other.href = '#soo-lock-watch'; }
     box.append(show, other);
     return box;
   }
   function focusShip(ship) {
     startMap();
     container.scrollIntoView({ block: 'center', behavior: 'smooth' });
-    if (!map) return;
+    if (!map || !Number.isFinite(ship.lat) || !Number.isFinite(ship.lon)) return;
+    if (selectedMarker?.getElement()) selectedMarker.getElement()?.classList.remove('is-selected');
     focusLayer.clearLayers();
-    const m = L.circleMarker([ship.lat, ship.lon], { radius: 13, color: '#165d71', weight: 3, fillColor: '#fff', fillOpacity: 0.6 }).addTo(focusLayer);
-    m.bindPopup(text('strong', title(ship)));
+    const mmsi = String(ship.mmsi || ship.id || '');
+    const present = visibleMarkers.get(mmsi);
+    const observed = previous?.vessels?.find(v => String(v.mmsi) === mmsi);
+    const m = present?.marker || addShipMarker(observed || ship, focusLayer, true);
+    selectedMarker = m;
+    m.getElement()?.classList.add('is-selected');
+    if (!present) attachShipPopup(m, text('strong', title(ship)));
     const zoom = Number(ship.channelMilesToLocks) > 8 ? 11 : 14;
     map.setView([ship.lat, ship.lon], zoom);
-    // Re-centre once the smooth scroll settles, so the ship is not left at the map's edge.
-    setTimeout(() => { map.invalidateSize(); map.setView([ship.lat, ship.lon], zoom); m.openPopup(); }, 600);
+    // Re-centre once smooth scrolling settles.
+    setTimeout(() => { map.invalidateSize(); map.setView([ship.lat, ship.lon], zoom); openShipPopup(m); }, 600);
   }
 
   // ---- map and list ----
@@ -129,27 +200,34 @@
     const vessels = data.vessels.filter(v => Number.isFinite(Date.parse(v.seen)) && Date.now() - Date.parse(v.seen) <= 1800000);
     const inLock = new Map(((data.nextShip && data.nextShip.inLock) || []).map(s => [s.mmsi, s]));
     list.replaceChildren();
+    if (detailPopup && map?.hasLayer(detailPopup)) map.removeLayer(detailPopup);
     if (layer) layer.clearLayers();
+    if (focusLayer) focusLayer.clearLayers();
+    visibleMarkers.clear();
+    selectedMarker = null;
     const points = [];
     vessels.forEach(v => {
       const content = document.createElement('div'); content.append(text('strong', title(v)));
       const size = sizeTag(v);
+      content.append(text('p', 'Reported AIS type: ' + typeLabel(v)));
       if (size) content.append(text('p', size));
+      else if (Number.isFinite(v.lengthMeters)) content.append(text('p', 'Reported length: ' + feet(v.lengthMeters)));
       if (inLock.has(v.mmsi)) content.append(text('p', 'In the ' + inLock.get(v.mmsi).chamberName + ' now'));
       content.append(text('p', details(v)), text('p', 'MMSI ' + v.mmsi));
       if (v.course !== null) content.append(text('p', 'Course ' + Math.round(v.course) + '°'));
       if (v.destination) content.append(text('p', 'Reported destination: ' + v.destination));
       let marker;
       if (map) {
-        marker = L.circleMarker([v.lat, v.lon], { radius: radius(v), color: '#fff', weight: 2, fillColor: v.speedKnots === null ? '#64748b' : v.speedKnots > 0.5 ? '#146c86' : '#a6651e', fillOpacity: 0.95 }).addTo(layer);
-        marker.bindTooltip(text('span', title(v)), { direction: 'top' }).bindPopup(content);
+        marker = addShipMarker(v, layer);
+        attachShipPopup(marker, content);
+        visibleMarkers.set(String(v.mmsi), { marker, v });
         points.push([v.lat, v.lon]);
       }
       const item = document.createElement('li');
       if (marker) {
-        const button = text('button', title(v)); button.type = 'button'; button.addEventListener('click', () => { map.setView([v.lat, v.lon], 15); marker.openPopup(); container.scrollIntoView({ block: 'center', behavior: 'smooth' }); }); item.append(button);
+        const button = text('button', title(v)); button.type = 'button'; button.addEventListener('click', () => { map.setView([v.lat, v.lon], 15); openShipPopup(marker); container.scrollIntoView({ block: 'center', behavior: 'smooth' }); }); item.append(button);
       } else item.append(text('strong', title(v)));
-      const extra = [inLock.has(v.mmsi) ? 'in the ' + inLock.get(v.mmsi).chamberName + ' now' : null, size].filter(Boolean).join(' · ');
+      const extra = [typeLabel(v), inLock.has(v.mmsi) ? 'in the ' + inLock.get(v.mmsi).chamberName + ' now' : null, size || feet(v.lengthMeters)].filter(Boolean).join(' · ');
       item.append(text('span', (extra ? extra + ' · ' : '') + details(v))); list.append(item);
     });
     if (!vessels.length) list.append(text('li', 'No reports less than 30 minutes old were returned for this area. This does not mean there are no ships.'));
@@ -177,7 +255,7 @@
     } catch (_) {
       if (previous) render(previous, true);
       else {
-        status.textContent = 'Vessel reports are temporarily unavailable. Try again or use the BoatNerd passage list below.'; dot.className = 'vessel-map-status-dot offline';
+        status.textContent = 'Vessel reports are temporarily unavailable. Try again, or see the other ways to check above the map.'; dot.className = 'vessel-map-status-dot offline';
         list.replaceChildren(text('li', 'The feed did not return usable data. This is not a zero-traffic report.'));
         renderCard(null, true);
         share(null, true);
@@ -196,11 +274,21 @@
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' }).addTo(map);
       layer = L.layerGroup().addTo(map);
       focusLayer = L.layerGroup().addTo(map);
+      map.on('zoomend', () => {
+        for (const { marker, v } of visibleMarkers.values()) {
+          const updated = shipIcon(v, marker === selectedMarker);
+          if (updated && marker.setIcon) {
+            marker.setIcon(updated);
+            labelShipMarker(marker, v);
+          }
+        }
+      });
     } else container.textContent = 'Map could not load. Recent vessel reports remain available in the list below.';
     if (previous) render(previous, false);
   }
   window.SooAis = { focusShip, last: null };
   refresh.addEventListener('click', () => { startMap(); load(); });
+  renderLegend();
   startPolling();
   if ('IntersectionObserver' in window) {
     const observer = new IntersectionObserver(entries => { if (entries.some(e => e.isIntersecting)) { observer.disconnect(); startMap(); } }, { rootMargin: '300px' });

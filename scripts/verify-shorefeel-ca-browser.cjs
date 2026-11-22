@@ -44,15 +44,22 @@ async function main(){
   assert.match(await page.locator('#report-name').innerText(),/Agawa Bay/);
   assert.match(await page.locator('#report-scope').innerText(),/20 km/);
   assert.match(await page.locator('#report-advisory').getAttribute('href'),/ontarioparks.ca\/beachresults/);
+  await page.locator('[data-select="batchawana-bay"]').click();
+  await page.waitForFunction(()=>document.querySelector('#report-name')?.textContent?.includes('Batchawana Bay'));
   await page.getByRole('button',{name:'Erie',exact:true}).click();
   await page.waitForFunction(()=>document.querySelector('#report-name')?.textContent?.includes('Port Burwell')&&document.querySelector('#report-temp')?.textContent==='2°C');
   await page.locator('[data-select="bay-beach-crystal"]').click();
   await page.waitForFunction(()=>document.querySelector('#report-name')?.textContent?.includes('Crystal Beach'));
   assert.match(await page.locator('#report-advisory').getAttribute('href'),/niagararegion.ca/);
+  await page.getByRole('button',{name:'Huron',exact:true}).click();
+  await page.locator('[data-select="killbear-georgian-bay"]').click();
+  await page.waitForFunction(()=>document.querySelector('#report-name')?.textContent?.includes('Killbear'));
   await page.getByRole('button',{name:'Ontario',exact:true}).click();
   await page.locator('[data-select="toronto-woodbine"]').click();
   await page.waitForFunction(()=>document.querySelector('#report-name')?.textContent?.includes('Woodbine'));
   assert.match(await page.locator('#report-advisory').getAttribute('href'),/toronto.ca/);
+  await page.locator('[data-select="toronto-bluffers-beach"]').click();
+  await page.waitForFunction(()=>document.querySelector('#report-name')?.textContent?.includes('Bluffer'));
   await page.getByRole('button',{name:'Michigan',exact:true}).click();
   assert.equal(await page.locator('#report-temp').innerText(),'Explore the U.S.');
   assert.match(await page.locator('#report-park').getAttribute('href'),/around-the-lakes/);
@@ -85,9 +92,10 @@ async function main(){
  const plain=await noJs.newPage();await plain.goto(origin+'/great-lakes-beaches/canada/',{waitUntil:'domcontentloaded'});
  assert.equal(await plain.locator('.shore-stop').count(),30);
  assert.equal(await plain.locator('noscript').isVisible(),true);
- assert.equal(await plain.locator('.shore-stop>a[href^="https://"]').count(),30);
+ assert.equal(await plain.locator('.shore-stop .shore-stop-links > a[href^="https://"]').count(),30);
+  assert.equal(await plain.locator('.shore-stop .shore-stop-links > a[href^="/great-lakes-beaches/canada/"]').count(),30);
  await noJs.close();
- console.log(JSON.stringify({passed:true,screenSizes:output,staleData:'No fabricated temperature',noJs:'18 park links available'},null,2));
+ console.log(JSON.stringify({passed:true,screenSizes:output,staleData:'No fabricated temperature',noJs:'30 park links available'},null,2));
  }finally{if(browser)await browser.close();await new Promise(done=>server.close(done));}
 }
 main().catch(e=>{console.error(e);process.exitCode=1;});

@@ -1,0 +1,26 @@
+[
+  {
+    "TimeStamp": "2026/11/21 16:00:00",
+    "Value": -39.52245,
+    "ValueString": "",
+    "TimeStampMeasured": "2026/11/21 16:00:00"
+  },
+  {
+    "TimeStamp": "2026/11/21 16:15:00",
+    "Value": -39.247974,
+    "ValueString": "",
+    "TimeStampMeasured": "2026/11/21 16:15:00"
+  },
+  {
+    "TimeStamp": "2026/11/21 16:30:00",
+    "Value": -39.539005,
+    "ValueString": "",
+    "TimeStampMeasured": "2026/11/21 16:30:00"
+  },
+  {
+    "TimeStamp": "2026/11/21 16:45:00",
+    "Value": -39.208694,
+    "ValueString": "",
+    "TimeStampMeasured": "2026/11/21 16:45:00"
+  }
+]

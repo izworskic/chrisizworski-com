@@ -102,3 +102,11 @@
   .lock-watch .lw-row-btn{grid-template-columns:minmax(0,1fr)}
   .lock-watch .lw-when{white-space:normal}
 }
+.lock-watch .lw-weather{margin:0 18px 8px;padding:9px 12px;border-radius:4px;background:#eef4f7;font-size:13px;line-height:1.55;color:#263234}
+.lock-watch .lw-weather[hidden]{display:none}
+.lock-watch .lw-weather strong{color:#12384a}
+.lock-watch .lw-weather a{color:#165d71}
+.lock-sim .lock-live-note{margin:0 0 10px;padding:9px 12px;border-left:4px solid #165d71;background:#eef5f7;font-size:14px;line-height:1.55;color:#263234}
+.lock-sim .lock-live-note[hidden]{display:none}
+.schedule-answer .schedule-crosscheck{font-size:14px;color:#4a5557}
+@media(max-width:480px){.lock-watch .lw-weather{margin-left:14px;margin-right:14px}}

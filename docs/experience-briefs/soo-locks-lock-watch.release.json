@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.2",
-  "recordStatus": "draft",
+  "recordStatus": "released",
   "project": {
     "slug": "soo-locks",
     "ownerRepo": "izworskic/chrisizworski-com",
@@ -46,6 +46,16 @@
       "sourceUrl": "https://www.weather-us.com/en/michigan-usa/sault-ste-marie-weather-november",
       "checkedDate": "2026-11-21",
       "limitation": "Sunrise and sunset are computed in the browser with the NOAA sunrise equation for Sault Ste. Marie; this third-party table is only the test reference (within three minutes). Darkness flags ignore twilight and cloud."
+    },
+    {
+      "id": "nws-visit-weather",
+      "kind": "forecast",
+      "subject": "weather-context",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://api.weather.gov/gridpoints/APX/65,131/forecast/hourly",
+      "checkedDate": "2026-11-22",
+      "maxAgeMinutes": 720,
+      "limitation": "NWS Gaylord hourly forecast for the Soo Locks grid cell, quoted for the hours overlapping the visit with its update time; marked stale after 12 hours. A point forecast, not an observation; lake-effect conditions can differ within the cell."
     }
   ],
   "decisionState": {
@@ -118,7 +128,7 @@
       "https://github.com/izworskic/chrisizworski-com/actions/runs/44917688025/artifacts",
       "https://github.com/izworskic/chrisizworski-com/tree/soo-locks-lock-watch/artifacts/soo-lock-watch/evidence"
     ],
-    "scopeNote": "Fixture-based Chrome run with a pinned clock: 360/390/768/1280/1440, chips, A to B to A, Plan-around, keyboard, real Leaflet popup focus, feed 503, winter shutdown, summer hotline and no-JS. Also passed locally against npm run build:site output. Real map tiles and live AIS on production are NOT VERIFIED until after merge."
+    "scopeNote": "Fixture-based Chrome run with a pinned clock: 360/390/768/1280/1440, chips, A to B to A, Plan-around, keyboard, real Leaflet popup focus, feed 503, winter shutdown, summer hotline and no-JS. Also passed locally against npm run build:site output. Real map tiles and live AIS were then confirmed on production on 2026-11-21 (see release.live)."
   },
   "photos": [],
   "release": {
@@ -133,14 +143,23 @@
       "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/actions/runs/44917687933"
     },
     "deployed": {
-      "status": "NOT_VERIFIED"
+      "status": "CONFIRMED",
+      "checkedDate": "2026-11-21",
+      "commitSha": "5fba3ad0c70afaab64527f5b47cf33790e5e1f1e",
+      "evidenceUrl": "https://vercel.com/izworski-gmailcoms-projects/chrisizworski-com/8VJ2RQomSDqD2r3eFHha8zQHgH8a",
+      "note": "Production deployment dpl_8VJ2RQomSDqD2r3eFHha8zQHgH8a READY for the squash-merged PR #1825 commit, aliased to chrisizworski.com and www."
     },
     "live": {
-      "status": "NOT_VERIFIED"
+      "status": "CONFIRMED",
+      "checkedDate": "2026-11-21",
+      "publicUrl": "https://chrisizworski.com/soo-locks/",
+      "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/pull/1825",
+      "note": "Independent public check at 10:22 AM EST: page and soo-lock-watch.js/.css/soo-ais.js 200; exactly one Auto ads loader (ca-pub-8222782620788075); title, canonical, Person and dateModified 2026-11-21 intact. Live Chrome at 390 and 1280 with the real AIS feed: verdict named the next real window (BURNS HARBOR 12:09 to 1:41 PM) with G3 MARQUIS behind it, Show it on the live map loaded 6 and 12 real OpenStreetMap tiles, no page errors, no horizontal overflow."
     },
     "measured": {
-      "status": "NOT_MEASURED"
+      "status": "NOT_MEASURED",
+      "note": "No comparable post-release GSC, Vercel Analytics or AdSense window exists yet."
     }
   },
-  "note": "Draft until the PR's CI, an owner merge, a READY deployment for the merged SHA and an independent public check are each recorded."
+  "note": "Released 2026-11-21. 2026-11-22 increment (in-tool next steps, BoatNerd as a collapsed cross-check, NWS visit weather) is documented in the brief addendum and verified by its own PR."
 }
