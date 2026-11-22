@@ -84,9 +84,17 @@ let base;
           assert.equal(await marker(kind).count(), 1, kind + ' has a distinct ship shape');
           assert.equal(Math.round(await marker(kind).evaluate(e => e.getBoundingClientRect().width)), w, kind + ' follows reported length');
         }
+        // The ship-name hover card must not compete with the single AIS detail popup.
+        await marker('tug').hover();
+        assert.equal(await page.locator('#sooVesselMap .leaflet-tooltip:visible').count(), 0, 'hovering a vessel does not create a second card');
         await page.locator('#sooVesselList button').filter({ hasText: 'TEST TUG' }).click();
+        await page.locator('#sooVesselMap .leaflet-popup-content:visible').first().waitFor();
+        assert.equal(await page.locator('#sooVesselMap .leaflet-popup:visible').count(), 1, 'one vessel detail popup');
+        assert.equal(await page.locator('#sooVesselMap .leaflet-tooltip:visible').count(), 0, 'no hover tooltip beside the popup');
+        assert.equal(await marker('tug').getAttribute('aria-label'), 'TEST TUG · Tug / towing', 'ship remains keyboard accessible');
         assert.ok((await page.locator('#sooVesselMap .leaflet-popup-content:visible').last().innerText()).includes('Reported AIS type: Tug / towing'));
         await page.locator('#sooVesselList button').filter({ hasText: 'TEST TANKER' }).click();
+        assert.equal(await page.locator('#sooVesselMap .leaflet-popup:visible').count(), 1, 'switching vessels replaces the detail card');
         assert.ok((await page.locator('#sooVesselMap .leaflet-popup-content:visible').last().innerText()).includes('Reported AIS type: Tanker'));
         await page.locator('#sooVesselList button').filter({ hasText: 'TEST TUG' }).click();
         assert.ok((await page.locator('#sooVesselMap .leaflet-popup-content:visible').last().innerText()).includes('Reported AIS type: Tug / towing'));
