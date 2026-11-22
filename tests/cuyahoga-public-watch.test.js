@@ -141,3 +141,62 @@ test('upstream AIS source attribution is preserved and HTML injection remains te
  assert.match(app,/https:\/\/openwaters\.io\/ais\//);
  assert.equal(report.vessels[0].source,'same-site AIS');
 });
+
+test('near-park signal reports only actual recent AIS, with labeled straight-line distance',()=>{
+ const park=parks.spots.find(x=>x.id==='scranton');
+ const live=core.classifyLive({ok:true,checkedAt:'2026-11-22T13:59:59Z',vessels:[
+  {...v('2026-11-22T13:58:00Z',park.lat,park.lon),mmsi:'367111222',name:'AT PARK REFERENCE'},
+  {...v('2026-11-22T13:59:30Z',41.49,-81.697),mmsi:'367222333',name:'SECOND REPORT'},
+  {...v('2026-11-22T13:22:00Z',41.49,-81.697),mmsi:'367333444',name:'TOO OLD'}
+ ]},now);
+ const nearby=core.parkObservation(park,live,now);
+ assert.equal(nearby.status,'OBSERVED_NEAR_GENERAL_PARK_REFERENCE');
+ assert.equal(nearby.closest.vessel.name,'AT PARK REFERENCE');
+ assert.ok(nearby.closest.straightLineMiles<.01);
+ assert.equal(nearby.closest.reportedMotion,'MOVING_AT_REPORTED_SPEED');
+ assert.ok(nearby.nearby.length>=2);
+ assert.match(nearby.note,/cannot establish a ship is visible or approaching/);
+ assert.equal(core.reportedMotion({...live.vessels[0],speedKnots:.1}),'LOW_REPORTED_SPEED');
+ assert.equal(core.reportedMotion({...live.vessels[0],speedKnots:null}),'SPEED_NOT_REPORTED');
+ assert.equal(core.straightLineMiles(park,park),0);
+ assert.equal(core.straightLineMiles(park,{lat:0,lon:0}),null);
+});
+test('stale, empty and distant source must not become a sighting',()=>{
+ const park=parks.spots.find(x=>x.id==='rivergate');
+ const down=core.parkObservation(park,{state:'UNAVAILABLE',vessels:[]},now);
+ assert.equal(down.closest,null);
+ assert.equal(down.status,'UNAVAILABLE');
+ const far=core.classifyLive({ok:true,checkedAt:'2026-11-22T13:59:59Z',
+  vessels:[v('2026-11-22T13:59:00Z',41.53,-81.74)]},now);
+ const observation=core.parkObservation(park,far,now);
+ assert.equal(observation.status,'NO_FRESH_REPORT_NEAR_REFERENCE');
+ assert.equal(observation.closest,null);
+ assert.match(observation.note,/does not establish the river is empty/);
+ assert.equal(core.parkObservation({...park,officialUrl:'http://fake.example'},far,now).status,'INVALID_PARK_REFERENCE');
+});
+test('historic park match points only to existing NOAA archive fix at nearest source observation',()=>{
+ const data=JSON.parse(readFileSync('public/cuyahoga-freighter-watch/noaa-historical-2025.json','utf8'));
+ for(const park of parks.spots){
+  for(const voyage of data.voyages){
+   const nearby=core.historicParkMatch(data,voyage.id,park);
+   assert.ok(nearby.index>=0&&nearby.index<voyage.fixes.length);
+   assert.equal(nearby.observedAt,voyage.fixes[nearby.index].seen);
+   assert.equal(nearby.sourceKind,'NOAA_RECORDED_AIS_FIX_NOT_SIGHTLINE_OR_BRIDGE_PASSAGE');
+   const all=voyage.fixes.map(f=>core.straightLineMiles(park,f));
+   assert.ok(nearby.straightLineMiles<=Math.min(...all)+.0000001);
+  }
+ }
+ assert.equal(core.historicParkMatch(data,'missing',parks.spots[0]),null);
+ assert.equal(core.historicParkMatch(data,'barker-2025-07-07',{lat:0,lon:0}),null);
+});
+test('live-park and archive-park controls are reversible and do not introduce a predictive ETA',()=>{
+ assert.match(app,/function parkSignalLine\(/);
+ assert.match(app,/function renderParkSignals\(/);
+ assert.match(app,/core\.parkObservation\(/);
+ assert.match(app,/core\.historicParkMatch\(/);
+ assert.match(app,/Jump to this recorded NOAA fix/);
+ assert.match(app,/Inspect this reported vessel/);
+ assert.match(app,/if\(state\.selectedParkId\)choosePark/);
+ assert.match(readFileSync('public/assets/cuyahoga-watch.css','utf8'),/\.park-signal/);
+ assert.doesNotMatch(app,/estimated arrival|arrival in \d|time to bridge/i);
+});
