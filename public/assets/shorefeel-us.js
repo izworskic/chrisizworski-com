@@ -4,11 +4,11 @@
   const filters=[...document.querySelectorAll('[data-lake-filter]')];
   const bySlug=new Map(list.map(li=>[li.dataset.slug,li]));
   const lakeInfo={
-    Superior:'Lake Superior stretches from Minnesota across the Apostle Islands. Long, exposed shores need a close look at wind and the latest park conditions.',
-    Michigan:'Lake Michigan links forested dunes, city beaches and long park shorelines. A nearby city forecast may not describe every shift of wind at the sand.',
+    Superior:'From Duluth's Park Point to the Apostle Islands, the open Lake Superior shore can feel very different from the forest behind it. Watch which way the breeze crosses the water before choosing your beach.',
+    Michigan:'Lake Michigan connects quiet dunes with Chicago's city beaches. Step out of shelter toward the open sand and notice whether the wind feels different from the forecast back in town.',
     Huron:'The United States shore of Lake Huron is in Michigan. Open the existing Michigan Beach Report to explore its public beaches and official advisories.',
-    Erie:'Lake Erie meets marshes, cities and sandy peninsulas. Check current algae and bacteria notices with the state or local health authority.',
-    Ontario:'On Lake Ontario, a sheltered creek or blufftop can feel different from open sand. The official park and beach-health report provide the next check.'
+    Erie:'On Lake Erie, the marsh edges, sandy peninsulas and city beaches each meet the breeze differently. Watch the water, then check the local health authority for current algae and bacteria notices.',
+    Ontario:'Dunes, bluffs and long beaches reveal different faces of Lake Ontario. Compare the wind on an exposed shore with sheltered paths, and consult the park's own beach-health guidance.'
   };
   const $=id=>document.getElementById(id);
   let current=null,lake='Superior',request=null,map=null,markers=new Map(),mapLive=false,loadedTile=false,tileFails=0;
@@ -26,7 +26,7 @@
     put('report-wind','Wind unavailable');
     put('report-time','Source unavailable');
     put('report-heading','Check the official forecast');
-    put('report-guide',message||'The area forecast is unavailable. Weather can change quickly beside the lake.');
+    put('report-guide',message||'No recent local forecast could be confirmed. You can still explore the shore and open its official weather and beach notices.');
     put('report-scope','No temperature is being inferred from a distant weather station or offshore water buoy. Beach water quality and swimming flags have not been checked.');
   }
   function showPlace(li){
@@ -37,8 +37,8 @@
     put('report-name',d.name);
     put('report-place',d.city+', '+d.state+' · Lake '+d.lake);
     put('report-story',d.story);
-    put('report-heading','A field note from the shoreline');
-    put('report-guide','Weather is being checked against the nearest appropriate NWS land grid.');
+    put('report-heading','Get to know this shore');
+    put('report-guide','Checking a nearby NWS air forecast. While it loads, look for the wind and waves described in this place's field note.');
     put('report-temp','Checking forecast');
     put('report-method','National Weather Service hourly forecast, not a sand thermometer');
     put('report-wind','Checking wind');
