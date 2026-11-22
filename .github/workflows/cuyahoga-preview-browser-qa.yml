@@ -4,7 +4,10 @@ name: Cuyahoga noindex preview browser QA
 on:
   push:
     branches: [research/cuyahoga-ais-audit-20261122]
-    paths: [.github/workflows/cuyahoga-preview-browser-qa.yml]
+    paths:
+      - .github/workflows/cuyahoga-preview-browser-qa.yml
+      - tests/cuyahoga-public-watch.test.js
+      - scripts/cuyahoga-browser-smoke.py
 
 permissions:
   contents: read
