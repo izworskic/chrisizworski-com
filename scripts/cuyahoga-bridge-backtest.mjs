@@ -11,19 +11,44 @@ function requireHistoricalReport(report){
       throw Error('Only historical, unvalidated NOAA chart-proximity reports accepted');
 }
 const isDate=s=>/^\d{4}-\d{2}-\d{2}$/.test(s||'');
-function direction(events){
-  const rows=events.filter(e=>e.bracket && e.status==='OBSERVED_NEAR_CHART_POINT_WITH_BRACKET'&&e.useForIndividualBridgeCalibration!==false)
-    .sort((a,b)=>Date.parse(a.bracket.nearestObservedAt)-Date.parse(b.bracket.nearestObservedAt));
-  if(rows.length<2)return 'UNRESOLVED';
+const MAX_BETWEEN_EPISODE_REFERENCE_GAP_MINUTES = 180;
+// Time-separated visits must not be collapsed into a single travel-direction label.
+// This is deliberately a coarse grouping, not a confirmed distinct vessel transit.
+function directionOfOrderedEvents(events){
+  if(events.length<2)return 'UNRESOLVED';
   let rise=0,fall=0;
-  for(let i=1;i<rows.length;i++){
-    const delta=rows[i].riverMile-rows[i-1].riverMile;
+  for(let i=1;i<events.length;i++){
+    const delta=events[i].riverMile-events[i-1].riverMile;
     if(delta>.06)rise++;
     else if(delta<-.06)fall++;
   }
   if(rise && !fall)return 'INCREASING_COAST_PILOT_MILES';
   if(fall && !rise)return 'DECREASING_COAST_PILOT_MILES';
   return 'MIXED_OR_UNRESOLVED';
+}
+export function segmentObservedWindows(events){
+  if(!Array.isArray(events))throw Error('Observed reference windows must be an array');
+  const ordered=[...events].sort((a,b)=>Date.parse(a.observedNearAt)-Date.parse(b.observedNearAt));
+  for(const e of ordered)if(!Number.isFinite(Date.parse(e.observedNearAt))||
+    !Number.isFinite(e.riverMile)||!e.id)throw Error('Invalid historical reference-window record');
+  const groups=[];
+  for(const e of ordered){
+    let last=groups[groups.length-1];
+    const prior=last?.windows.at(-1);
+    if(!last || (Date.parse(e.observedNearAt)-Date.parse(prior.observedNearAt))/60000>MAX_BETWEEN_EPISODE_REFERENCE_GAP_MINUTES){
+      last={windows:[]};groups.push(last);
+    }
+    last.windows.push(e);
+  }
+  return groups.map((group,i)=>({
+    episodeId:'observed-reference-window-group-'+(i+1),
+    observedFrom:group.windows[0].observedNearAt,
+    observedThrough:group.windows.at(-1).observedNearAt,
+    referenceWindows:group.windows.length,
+    direction:directionOfOrderedEvents(group.windows),
+    windowIds:group.windows.map(e=>e.id),
+    claim:'TIME_SEPARATED_GROUP_NOT_CONFIRMED_COMPLETE_TRANSIT'
+  }));
 }
 export function evaluateHistoricalReferenceWindows(cases){
   if(!Array.isArray(cases)||!cases.length||cases.length>100)throw Error('Supply between one and 100 dated reference reports');
@@ -46,13 +71,16 @@ export function evaluateHistoricalReferenceWindows(cases){
         observedTimeBracketStart:e.bracket.observedBracketStart,observedTimeBracketEnd:e.bracket.observedBracketEnd,
         bracketMinutes:e.bracket.bracketDurationMinutes,sourceAgreement:e.crossAgency?.status||'UNVERIFIED'
       })).sort((a,b)=>Date.parse(a.observedNearAt)-Date.parse(b.observedNearAt));
+      const observedEpisodes=segmentObservedWindows(events);
+      const direction=observedEpisodes.length>1?'MULTIPLE_TIME_SEPARATED_EPISODES':observedEpisodes[0]?.direction||'UNRESOLVED';
+      const windows=events.map(e=>({...e,episodeDirection:observedEpisodes.find(group=>group.windowIds.includes(e.id))?.direction||'UNRESOLVED'}));
       visits.push({
         date:c.date,mmsi:vessel.mmsi,observedPositions:vessel.observedPositions,
-        direction:direction(ref),observedReferenceCount:accepted.length,
+        direction,observedEpisodes,observedReferenceCount:accepted.length,
         sourceConflicts:ref.filter(e=>e.status==='OFFICIAL_POSITION_CONFLICT').map(e=>e.id),
         insufficientRefs:ref.filter(e=>['NO_NEARBY_AIS_FIX','NEARBY_BUT_GAP_OR_MOVEMENT_INSUFFICIENT','AMBIGUOUS_REPEATED_REFERENCE_APPROACH'].includes(e.status)).length,
         withheldCollocated:ref.filter(e=>e.useForIndividualBridgeCalibration===false).map(e=>e.id),
-        observedWindows:events
+        observedWindows:windows
       });
     }
   }
@@ -60,7 +88,7 @@ export function evaluateHistoricalReferenceWindows(cases){
   const byReference=new Map();
   for(const v of visits)for(const event of v.observedWindows) {
     const list=byReference.get(event.id)||[];
-    list.push({date:v.date,mmsi:v.mmsi,direction:v.direction,observedNearAt:event.observedNearAt,bracketMinutes:event.bracketMinutes});
+    list.push({date:v.date,mmsi:v.mmsi,direction:event.episodeDirection,observedNearAt:event.observedNearAt,bracketMinutes:event.bracketMinutes});
     byReference.set(event.id,list);
   }
   const referenceCoverage=[...byReference.entries()].sort(([a],[b])=>sorted(a,b)).map(([id,rows])=>({
@@ -73,7 +101,8 @@ export function evaluateHistoricalReferenceWindows(cases){
     minimumIndependentCalendarDates:10,minimumDifferentVessels:3,
     actualSurveyedBridgeAxesRequired:true,independentBridgeCrossingLabelsRequired:true,
     observedIndependentCalendarDates:uniqueDates.length,observedDifferentVessels:uniqueVessels.size,
-    surveyedBridgeAxesAvailable:false,independentBridgeCrossingLabelsAvailable:false
+    surveyedBridgeAxesAvailable:false,independentBridgeCrossingLabelsAvailable:false,
+    timeSeparatedWindowGroupsAreNotConfirmedCompleteTransits:true
   };
   return {
     kind:'HISTORICAL_CHART_REFERENCE_COVERAGE_BACKTEST_NOT_ETA_ACCURACY',
@@ -102,7 +131,7 @@ async function main(args){
   const analysis=evaluateHistoricalReferenceWindows(cases);
   await writeFile(dest,JSON.stringify(analysis,null,2)+'\n',{flag:'wx',mode:0o600});
   console.log(JSON.stringify({status:analysis.status,days:analysis.dates,visits:analysis.visits.map(v=>({
-    date:v.date,mmsi:v.mmsi,direction:v.direction,bracketedReferenceCount:v.observedReferenceCount,
+    date:v.date,mmsi:v.mmsi,direction:v.direction,observedEpisodes:v.observedEpisodes,bracketedReferenceCount:v.observedReferenceCount,
     omittedBecauseOfGaps:v.insufficientRefs,withheldCollocated:v.withheldCollocated
   })),referenceCoverage:analysis.referenceCoverage,visitorArrivalPredictionEnabled:false},null,2));
 }
