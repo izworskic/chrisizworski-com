@@ -4,7 +4,7 @@
  const core=window.CuyahogaWatchCore;
  const $=id=>document.getElementById(id);
  if(!core){$('vessel-status').textContent='Interactive data is unavailable. Use the official source links below.';return;}
- const state={mode:'live',parks:null,bridges:null,history:null,live:null,selectedParkId:null,map:null,historyIndex:0,historyId:'barker-2025-07-07',selectedShip:null};
+ const state={mode:'live',parks:null,bridges:null,history:null,live:null,selectedParkId:null,map:null,historyIndex:null,historyId:'barker-2025-07-07',selectedShip:null};
  const mapGroup={parks:null,bridges:null,ships:null,history:null,selected:null};
  const locClock=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'});
  const escText=(tag,text,className)=>{const e=document.createElement(tag);e.textContent=String(text??'');if(className)e.className=className;return e};
@@ -142,6 +142,7 @@
  }
  function renderHistory(){
   const scrub=$('history-scrubber'),report=$('history-report');
+  if(state.historyIndex===null && state.history)state.historyIndex=core.firstRiverFixIndex(state.history,state.historyId);
   const result=core.historicView(state.history,state.historyId,state.historyIndex);
   if(mapGroup.history)mapGroup.history.clearLayers();
   if(mapGroup.selected)mapGroup.selected.clearLayers();
@@ -205,7 +206,7 @@
   $('show-live').addEventListener('click',()=>changeMode('live'));
   $('show-history').addEventListener('click',()=>changeMode('historic'));
   $('refresh-ais').addEventListener('click',getLive);
-  $('voyage-select').addEventListener('change',e=>{state.historyId=e.target.value;state.historyIndex=0;renderHistory();});
+  $('voyage-select').addEventListener('change',e=>{state.historyId=e.target.value;state.historyIndex=core.firstRiverFixIndex(state.history,state.historyId);renderHistory();});
   $('history-scrubber').addEventListener('input',e=>{state.historyIndex=Number(e.target.value);renderHistory();});
   $('history-prev').addEventListener('click',()=>{state.historyIndex--;renderHistory();});
   $('history-next').addEventListener('click',()=>{state.historyIndex++;renderHistory();});
