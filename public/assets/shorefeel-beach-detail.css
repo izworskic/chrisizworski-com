@@ -14,19 +14,20 @@ main{max-width:1100px;margin:auto;padding:0 22px}
 .eyebrow{font-size:.77rem;text-transform:uppercase;letter-spacing:.12em;font-weight:750;color:#356471;margin:0 0 11px}
 h1{font-size:clamp(2rem,5vw,3.8rem);letter-spacing:-.05em;line-height:1.1;margin:0 0 8px;max-width:900px}
 .shore-lede{font-size:1.04rem;color:#4c6669;margin:0}
-.shore-answer{margin-top:10px;background:linear-gradient(135deg,#0d4b5b 0%,#0b5d68 58%,#126c78 100%);color:#fff;border-radius:20px;overflow:hidden;box-shadow:0 16px 32px #0a435520}
-.shore-answer-inner{padding:clamp(24px,4vw,42px);position:relative}
-.shore-answer-inner:after{content:"";position:absolute;pointer-events:none;bottom:-36px;right:-60px;width:43%;height:130px;border:3px solid #b0e1dd55;border-radius:50%}
-.shore-answer .eyebrow{color:#ccedee}
-.answer-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(210px,.85fr);gap:32px}
-.shore-value{font-size:clamp(3.4rem,8vw,5.6rem);line-height:1.05;letter-spacing:-.07em;font-weight:750;font-variant-numeric:tabular-nums;display:block;overflow-wrap:anywhere}
-.shore-secondary{color:#d6eff0;font-size:1rem;margin:0 0 6px}
-.shore-method{font-size:.91rem;margin:0;opacity:.9}
-.shore-metrics{display:grid;gap:14px;border-left:1px solid #b9dfe555;padding-left:24px;align-content:center}
-.shore-metric span{display:block;color:#c8e6e7;font-size:.8rem;text-transform:uppercase;letter-spacing:.07em}
-.shore-metric strong{font-size:1.18rem;font-weight:650}
-.shore-guide{background:#fff8e8;color:#244147;margin:0;padding:21px clamp(24px,4vw,42px);font-size:1.05rem;border-left:5px solid #d3ae6e}
-.shore-source{font-size:.87rem;margin:0;padding:14px clamp(24px,4vw,42px);background:#e2f2f0;color:#264d52}
+.shore-answer{margin-top:10px;background:#e5f2ef;color:#163f49;border-radius:13px;overflow:hidden;border-top:4px solid #186873;box-shadow:0 12px 29px #0a435511}
+.shore-answer-inner{padding:clamp(20px,3.5vw,32px);position:relative}
+/* No pseudo-element in the reading area. Decorative geometry obscured forecast text. */
+.shore-answer .eyebrow{color:#285c64;font-size:.77rem;margin-bottom:9px}
+.answer-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(210px,.8fr);gap:clamp(16px,3vw,30px);align-items:center}
+.shore-value{font-size:clamp(4.1rem,8.5vw,6.8rem);line-height:1.0;letter-spacing:-.065em;font-weight:780;font-variant-numeric:tabular-nums;display:block;overflow-wrap:anywhere;color:#0e4b57}
+.shore-answer[data-status="unavailable"] .shore-value,.shore-answer[data-status="loading"] .shore-value{font-size:clamp(1.55rem,4vw,2.35rem);line-height:1.25;letter-spacing:-.025em}
+.shore-secondary{color:#295d64;font-size:1rem;font-weight:630;margin:5px 0 6px}
+.shore-method{font-size:.86rem;margin:0;color:#3e6267}
+.shore-metrics{display:grid;gap:14px;border-left:1px solid #b1ccc6;padding-left:clamp(16px,2vw,24px);align-content:center;min-width:0}
+.shore-metric span{display:block;color:#37656c;font-size:.74rem;text-transform:uppercase;letter-spacing:.07em;font-weight:720}
+.shore-metric strong{font-size:1.05rem;font-weight:690;overflow-wrap:anywhere}
+.shore-guide{background:#f6f7f2;color:#244147;margin:0;padding:17px clamp(20px,3.5vw,32px);font-size:1rem;line-height:1.55;border-top:1px solid #ccded8}
+.shore-source{font-size:.84rem;line-height:1.5;margin:0;padding:13px clamp(20px,3.5vw,32px);background:#e9f3ef;color:#365d61}
 .shore-source strong{display:block;margin-bottom:5px}
 .shore-columns{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(250px,.8fr);gap:46px;padding:43px 0 36px}
 .shore-columns h2,.shore-nearby h2{letter-spacing:-.03em;font-size:1.55rem;line-height:1.3;margin:0 0 14px}
@@ -42,12 +43,12 @@ footer{background:#e8f0ee;padding:24px 22px;text-align:center;font-size:.87rem;c
 @media(max-width:680px){
  .shore-site-head{padding:13px 17px}.shore-site-head nav{gap:12px;font-size:.8rem}
  main{padding:0 16px}.shore-lead{padding:22px 0 11px}
- .shore-answer{border-radius:14px}
- .shore-answer-inner{padding:22px 20px}
- .answer-grid{grid-template-columns:1fr;gap:19px}
- .shore-metrics{grid-template-columns:1fr 1fr;gap:13px;border-left:0;border-top:1px solid #b9dfe555;padding:16px 0 0}
+ .shore-answer{border-radius:11px}
+ .shore-answer-inner{padding:20px 18px}
+ .answer-grid{grid-template-columns:1fr;gap:15px}
+ .shore-metrics{grid-template-columns:1fr 1fr;gap:13px;border-left:0;border-top:1px solid #b1ccc6;padding:15px 0 0}
  .shore-metric:last-child{grid-column:span 2}
- .shore-guide,.shore-source{padding:17px 20px}
+ .shore-guide,.shore-source{padding:14px 18px}
  .shore-columns{grid-template-columns:1fr;gap:16px;padding:30px 0}
  .shore-story{font-size:1.07rem}
 }
@@ -57,3 +58,20 @@ footer{background:#e8f0ee;padding:24px 22px;text-align:center;font-size:.87rem;c
 .shore-attribution{padding:9px clamp(24px,4vw,42px) 14px;margin:0;background:#e2f2f0;font-size:.79rem;color:#335b62}
 .shore-attribution a{font-weight:650}
 @media(max-width:680px){.shore-attribution{padding:8px 20px 14px}}
+
+/* Source legibility and honest fallback are more useful than decorative flourishes. */
+.shore-answer:focus-within{outline-offset:4px}
+.shore-lead{padding-top:clamp(16px,2.4vw,28px);padding-bottom:12px}
+.shore-lead h1{font-size:clamp(2rem,4.5vw,3.25rem);line-height:1.12}
+.shore-lede{margin:5px 0 0}
+.shore-source strong{font-weight:680}
+.shore-attribution{background:#e9f3ef}
+.shore-attribution a{text-decoration-thickness:1px}
+.shore-metric:last-child strong{font-size:.96rem;line-height:1.42;display:block;font-weight:580}
+.shore-action:focus-visible,.shore-links a:focus-visible{outline:3px solid #aa6b15;outline-offset:2px}
+@media(max-width:680px){
+ .shore-lead h1{font-size:clamp(1.95rem,7.8vw,2.55rem)}
+ .shore-value{font-size:clamp(4.25rem,17vw,5.2rem)}
+ .shore-metric:last-child{grid-column:span 2}
+ .shore-metric:last-child strong{font-size:.92rem}
+}

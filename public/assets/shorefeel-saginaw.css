@@ -97,3 +97,26 @@
 .shore-physics summary:focus-visible{outline:2px solid #fff;outline-offset:3px;border-radius:8px}
 .shore-physics .shore-physics-source{font-size:12px;line-height:1.55;overflow-wrap:anywhere;color:#f3ffff;margin:7px 0}
 .shore-physics[open] .shore-physics-heading{margin-top:12px}
+
+/* The Saginaw Bay forecast, rather than introductory copy or buttons, leads the page. */
+.bay-hero>.wrap>h1{margin-bottom:12px}
+.bay-hero>.wrap>.temperature-answer{margin-top:3px}
+.bay-after-answer{
+  max-width:900px;
+  margin:24px 0 5px;
+  padding-top:20px;
+  border-top:1px solid rgba(255,255,255,.34);
+}
+.bay-after-answer .bay-hero-prompt{
+  margin:0 0 12px;
+  max-width:75ch;
+  font-size:15px;
+  line-height:1.55;
+}
+.bay-after-answer .bay-quick-actions{margin:9px 0 5px}
+@media(max-width:530px){
+ .bay-hero>.wrap>h1{font-size:clamp(24px,6.8vw,34px);line-height:1.15;margin-bottom:10px}
+ .bay-hero #lead-temp{font-size:clamp(66px,17vw,86px)}
+ .bay-hero[data-band=none] #lead-temp{font-size:30px}
+ .bay-after-answer{margin-top:20px;padding-top:15px}
+}

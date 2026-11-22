@@ -39,7 +39,7 @@
     "benchmark:manistee-ux": "node scripts/benchmark-manistee-ausable-ui.mjs --check",
     "freshness": "node scripts/stamp-freshness.mjs",
     "benchmark:citation": "node scripts/benchmark-citation.mjs",
-    "generate:beaches": "node scripts/generate-beach-pages.mjs && node scripts/apply-beach-detail-search-overrides.mjs",
+    "generate:beaches": "node scripts/generate-beach-pages.mjs",
     "prepare:source": "node scripts/prepare-source.mjs",
     "test": "node --test tests/*.test.js",
     "verify": "node scripts/verify-source.mjs",

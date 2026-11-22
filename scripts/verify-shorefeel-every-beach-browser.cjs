@@ -47,7 +47,7 @@ function mock(c){
  try{
   browser=await chromium.launch({headless:true,args:['--no-sandbox']});
   const results=[];
-  for(const width of [390,1280]){
+  for(const width of [360,390,768,1280,1440]){
    for(const item of cases){
     const context=await browser.newContext({viewport:{width,height:850},reducedMotion:'reduce'});
     const errors=[];
@@ -73,6 +73,30 @@ function mock(c){
       sections:[...document.querySelectorAll('main > section')].map(x=>x.className)}));
     assert.ok(dims.scroll<=dims.width+2,item.slug+' overflows viewport '+JSON.stringify(dims));
     assert.equal(dims.sections[1],'shore-answer','Weather must appear before long story');
+    const visual=await page.evaluate(()=>{
+      const card=document.querySelector('.shore-answer');
+      const value=document.getElementById('feel-value');
+      const oval=getComputedStyle(document.querySelector('.shore-answer-inner'),'::after').content;
+      return {
+        y:value.getBoundingClientRect().top,
+        font:parseFloat(getComputedStyle(value).fontSize),
+        oval,
+        background:getComputedStyle(card).backgroundColor,
+        hasPhotoBehindAnswer:!!card.querySelector('img'),
+        time:document.getElementById('feel-when').textContent
+      };
+    });
+    assert.ok(visual.y<750,item.slug+' temperature must be on first phone screen');
+    assert.ok(visual.oval==='none'||visual.oval==='normal',
+      item.slug+' decorative oval must not cover the readings: '+visual.oval);
+    assert.ok(!visual.hasPhotoBehindAnswer,'Photo and modeled answer should not overlap');
+    if(item.kind==='good'){
+      assert.ok(visual.font>=60,item.slug+' actual reading must be large');
+      assert.match(visual.time,/UTC/,'The source period needs an explicit timezone');
+      assert.doesNotMatch(visual.time,/NWS period|ECCC hour/,'Avoid long duplicated period phrasing');
+    }else{
+      assert.ok(visual.font<=45,item.slug+' no-data text should stay legible');
+    }
     assert.deepEqual(errors,[],item.slug+' JavaScript page errors');
     const screenshot=path.join(output,item.code+'-'+item.slug+'-'+width+'.png');
     await page.screenshot({path:screenshot,fullPage:true});

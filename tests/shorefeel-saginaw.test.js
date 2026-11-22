@@ -111,6 +111,14 @@ test('experience source paths and offline fallbacks are honest before JavaScript
  const html=read('public/lake-huron-water-temperature/saginaw-bay/index.html');
  const css=read('public/assets/shorefeel-saginaw.css');
  assert.match(html,/class="bay-quick-actions"/);
+ const headline=html.indexOf('<h1>');
+ const weather=html.indexOf('class="temperature-answer"');
+ const explanation=html.indexOf('class="bay-hero-prompt"');
+ const actions=html.indexOf('class="bay-quick-actions"');
+ assert.ok(headline>=0&&headline<weather&&weather<explanation&&explanation<actions,
+  'Saginaw Bay must show its model temperature before narrative and buttons');
+ assert.match(css,/\.bay-after-answer/);
+
  for(const id of ['bay-evidence','map-h','experience-h'])assert.ok(html.includes('href="#'+id+'"'));
  assert.match(html,/id="lead-temp"[^>]*>Checking beach feel/);
  assert.ok(html.includes('id="value-inner-bay">Not verified'));
