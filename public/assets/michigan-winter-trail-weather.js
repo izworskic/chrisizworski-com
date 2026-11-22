@@ -44,8 +44,9 @@ export function interpretAreaEvidence(data,trailId,date,now=Date.now()){
 function mount(){
  const $=id=>document.getElementById(id);
  const root=$('trl-weather-lens'),select=$('trl-weather-trail'),
-  date=$('trl-weather-date'),check=$('trl-weather-check'),report=$('trl-weather-report');
- if(!root||!select||!date||!check||!report)return;
+  date=$('trl-weather-date'),check=$('trl-weather-check'),report=$('trl-weather-report'),
+  back=$('trl-weather-return');
+ if(!root||!select||!date||!check||!report||!back)return;
  const cards=[...document.querySelectorAll('.wf-story')];
  const byId=new Map(cards.map(card=>[card.id,card]));
  let controller=null,sequence=0;
@@ -86,7 +87,7 @@ function mount(){
    links.append(b);
   }
  }
- select.disabled=false;date.disabled=false;check.hidden=false;
+ select.disabled=false;date.disabled=false;check.hidden=false;back.hidden=false;
 
  const alertPanel=(evidence)=>{
   const box=document.createElement('div');box.className='trl-weather-alerts';
@@ -172,7 +173,9 @@ function mount(){
  function openFor(id,load=false){
   if(!byId.has(id))return;
   select.value=id;root.open=true;
-  root.scrollIntoView({behavior:reduced()?'auto':'smooth',block:'nearest'});
+  root.scrollIntoView({behavior:reduced()?'auto':'smooth',block:'start'});
+  const summary=root.querySelector('summary');
+  if(summary)summary.focus({preventScroll:true});
   if(load)request();
   else select.focus({preventScroll:true});
  }
@@ -180,6 +183,14 @@ function mount(){
   openFor(event.detail?.id,true);
  });
  check.addEventListener('click',request);
+ back.addEventListener('click',()=>{
+  const choice=[...document.querySelectorAll('.trl-desk-option')].find(x=>x.dataset.routeId===select.value);
+  const target=choice?.querySelector('h3')||$('trl-desk-mode');
+  if(!target)return;
+  target.scrollIntoView({behavior:reduced()?'auto':'smooth',block:'start'});
+  if(choice)target.tabIndex=-1;
+  target.focus({preventScroll:true});
+ });
  select.addEventListener('change',()=>{
   if(controller)controller.abort();sequence++;controller=null;check.disabled=false;
   report.replaceChildren(p('Selected '+areaLabel(byId.get(select.value))+'. Check weather for the chosen date to see current source evidence.'));
