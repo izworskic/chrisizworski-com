@@ -6,7 +6,7 @@ const path=require('node:path');
 const root=path.join(__dirname,'..');
 const read=rel=>fs.readFileSync(path.join(root,rel),'utf8');
 
-test('Blue Ridge main page explains the product before exposing live gateway intelligence',()=>{
+test('Blue Ridge main page makes the planner the first decision after the scenic introduction',()=>{
   const html=read('public/blue-ridge-parkway/index.html');
   assert.match(html,/Which part of the Blue Ridge Parkway should you drive today\?/i);
   assert.match(html,/Start near Asheville, Boone, Roanoke, Cherokee or another Parkway entrance/i);
@@ -16,7 +16,10 @@ test('Blue Ridge main page explains the product before exposing live gateway int
   assert.match(html,/STARTING NEAR ONE OF THESE PLACES\?/);
   assert.match(html,/Here’s what the Parkway looks like from there today\./);
   assert.match(html,/id="gatewaySnapshots"/);
-  assert.ok(html.indexOf('id="gatewaySnapshots"')<html.indexOf('id="plannerForm"'),'live decision desk must render before the planner form');
+  assert.ok(html.indexOf('id="plannerForm"')<html.indexOf('id="results"')&&html.indexOf('id="results"')<html.indexOf('id="gatewaySnapshots"'),'planner and its answer must precede optional gateway comparisons');
+  assert.match(html,/href="#planner">Plan my drive/);
+  assert.match(html,/Photo: Robert Stephens/);
+  assert.match(html,/class="planner-noscript"/);
   assert.match(html,/TELL US ABOUT YOUR DAY/);
   assert.match(html,/Build my Parkway drive/);
   assert.match(html,/blue-ridge-parkway-breakout\.js/);

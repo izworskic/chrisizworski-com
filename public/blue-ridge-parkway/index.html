@@ -17,14 +17,14 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
-<link rel="stylesheet" href="/assets/blue-ridge-parkway-breakout.css?v=20260925-1">
+<link rel="stylesheet" href="/assets/blue-ridge-parkway-breakout.css?v=20261122-2">
 <script type="application/ld+json">
 {
   "@context":"https://schema.org",
   "@graph":[
     {"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski"},
     {"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},
-    {"@type":"WebPage","@id":"https://chrisizworski.com/blue-ridge-parkway/","url":"https://chrisizworski.com/blue-ridge-parkway/","name":"Blue Ridge Parkway Today: Closures, Weather & Best Drives","description":"A live Blue Ridge Parkway decision tool using official road status, mountain weather, time available and visitor interests to choose the section worth driving.","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"dateModified":"2026-09-25","inLanguage":"en-US"},
+    {"@type":"WebPage","@id":"https://chrisizworski.com/blue-ridge-parkway/","url":"https://chrisizworski.com/blue-ridge-parkway/","name":"Blue Ridge Parkway Today: Closures, Weather & Best Drives","description":"A live Blue Ridge Parkway decision tool using official road status, mountain weather, time available and visitor interests to choose the section worth driving.","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"dateModified":"2026-11-22","inLanguage":"en-US"},
     {"@type":"WebApplication","name":"Blue Ridge Parkway Today","url":"https://chrisizworski.com/blue-ridge-parkway/","applicationCategory":"TravelApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript for live route planning","author":{"@id":"https://chrisizworski.com/#person"}},
     {"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://chrisizworski.com/tools/"},{"@type":"ListItem","position":3,"name":"Blue Ridge Parkway Today","item":"https://chrisizworski.com/blue-ridge-parkway/"}]},
     {"@type":"ItemList","name":"Blue Ridge Parkway planning network","numberOfItems":9,"itemListElement":[{"@type":"ListItem","position":1,"name":"Blue Ridge Parkway Closures Today","url":"https://chrisizworski.com/blue-ridge-parkway/closures/"},{"@type":"ListItem","position":2,"name":"Blue Ridge Parkway Weather Today","url":"https://chrisizworski.com/blue-ridge-parkway/weather/"},{"@type":"ListItem","position":3,"name":"Best Blue Ridge Parkway Stops","url":"https://chrisizworski.com/blue-ridge-parkway/best-stops/"},{"@type":"ListItem","position":4,"name":"Blue Ridge Parkway Itinerary","url":"https://chrisizworski.com/blue-ridge-parkway/itinerary/"},{"@type":"ListItem","position":5,"name":"Blue Ridge Parkway Map and Mileposts","url":"https://chrisizworski.com/blue-ridge-parkway/map/"},{"@type":"ListItem","position":6,"name":"Blue Ridge Parkway from Asheville","url":"https://chrisizworski.com/blue-ridge-parkway/asheville/"},{"@type":"ListItem","position":7,"name":"Blue Ridge Parkway from Boone","url":"https://chrisizworski.com/blue-ridge-parkway/boone/"},{"@type":"ListItem","position":8,"name":"Blue Ridge Parkway from Roanoke","url":"https://chrisizworski.com/blue-ridge-parkway/roanoke/"},{"@type":"ListItem","position":9,"name":"Blue Ridge Parkway from Cherokee","url":"https://chrisizworski.com/blue-ridge-parkway/cherokee/"}]}
@@ -32,7 +32,7 @@
 }
 </script>
 </head>
-<body>
+<body class="brp-experience">
 <header class="site-head"><a class="brand" href="/">Chris Izworski</a><nav class="nav" aria-label="Primary"><a href="/">Home</a><a href="/tools/">Tools</a><a href="/national-tools/">National tools</a><a href="/chris-izworski/">About</a></nav></header>
 <div class="live-strip" id="liveStrip"><span class="live-dot"></span><strong id="roadUpdate">Checking the official Parkway road table…</strong><span id="generatedAt"></span></div>
 <main class="page">
@@ -43,26 +43,13 @@
       <div class="eyebrow">BLUE RIDGE PARKWAY TRIP PLANNER · LIVE CONDITIONS</div>
       <h1>Which part of the Blue Ridge Parkway should you drive today?</h1>
       <p class="lede">Start near Asheville, Boone, Roanoke, Cherokee or another Parkway entrance. This tool checks current NPS road status, mountain weather and the time you actually have, then recommends the Parkway section and stops that fit your day.</p>
+      <div class="hero-actions"><a class="primary-link" href="#planner">Plan my drive</a><a class="hero-nps-link" href="https://www.nps.gov/blri/planyourvisit/roadclosures.htm" target="_blank" rel="noopener">Official NPS road status</a></div>
       <div class="hero-proof" aria-label="How this tool works"><span class="proof">1 · Pick where you’re starting</span><span class="proof">2 · See today’s best direction</span><span class="proof">3 · Build a drive that fits your time</span></div>
     </div>
     <aside class="hero-card">
       <img src="https://www.nps.gov/blri/learn/nature/images/Standing-Rock-Overlook-robert-Stephens-1200-web.jpg?autorotate=false&amp;format=webp&amp;maxheight=1300&amp;maxwidth=1300" alt="Autumn view from Standing Rock Overlook on the Blue Ridge Parkway" loading="eager">
-      <div class="hero-card-copy"><span>WHAT THIS TOOL DOES</span><strong>It turns today’s Parkway conditions into a drive you can actually use.</strong><p>Road closures are hard gates. Weather and visibility shape the route. Your starting point, available time and interests decide what earns a stop.</p></div>
+      <div class="hero-card-copy"><span>FROM THE PARKWAY</span><strong>Standing Rock Overlook</strong><p>Photo: Robert Stephens, via <a href="https://www.nps.gov/blri/learn/nature/index.htm" target="_blank" rel="noopener">National Park Service</a></p></div>
     </aside>
-  </section>
-
-  <section class="today-intel" aria-labelledby="today-title">
-    <div class="today-intel-head">
-      <div><div class="eyebrow">STARTING NEAR ONE OF THESE PLACES?</div><h2 id="today-title">Here’s what the Parkway looks like from there today.</h2></div>
-      <p class="now-summary" id="parkwayNowSummary">Each card is a live starting-point recommendation—not a ranking of destinations. Pick the place closest to where you expect to enter the Parkway.</p>
-    </div>
-    <div class="snapshot-grid" id="gatewaySnapshots">
-      <article class="snapshot-card loading-shimmer"><div class="snapshot-kicker"><span>MP 384 · Asheville</span><span class="snapshot-state">CHECKING</span></div><h3>From Asheville: north or south?</h3><p class="snapshot-route">Craggy Gardens vs. Mount Pisgah</p><p>Asheville is a real fork in the road: weather and closures can make the better direction change by the day.</p><div class="snapshot-actions"><a href="/blue-ridge-parkway/asheville/">From Asheville →</a></div></article>
-      <article class="snapshot-card loading-shimmer"><div class="snapshot-kicker"><span>MP 291 · Boone</span><span class="snapshot-state">CHECKING</span></div><h3>From Boone: how much High Country fits?</h3><p class="snapshot-route">Rough Ridge · Linn Cove · Linville Falls</p><p>The payoff is concentrated here, so a short day can still work if the road and view window cooperate.</p><div class="snapshot-actions"><a href="/blue-ridge-parkway/boone/">From Boone →</a></div></article>
-      <article class="snapshot-card loading-shimmer"><div class="snapshot-kicker"><span>MP 121 · Roanoke</span><span class="snapshot-state">CHECKING</span></div><h3>From Roanoke: views or history?</h3><p class="snapshot-route">Peaks of Otter vs. Mabry Mill</p><p>Roanoke's choice is less about the famous stop and more about whether your time budget favors a compact or longer drive.</p><div class="snapshot-actions"><a href="/blue-ridge-parkway/roanoke/">From Roanoke →</a></div></article>
-      <article class="snapshot-card loading-shimmer"><div class="snapshot-kicker"><span>MP 469 · Cherokee</span><span class="snapshot-state">CHECKING</span></div><h3>From Cherokee: how far should you climb?</h3><p class="snapshot-route">Waterrock Knob · Richland Balsam</p><p>Cherokee gives you fast elevation gain, but cloud and wind can erase the reason to keep climbing.</p><div class="snapshot-actions"><a href="/blue-ridge-parkway/cherokee/">From Cherokee →</a></div></article>
-    </div>
-    <div class="intel-foot"><span>These are live route snapshots built from the same engine as the full planner. Official road restrictions remain hard constraints.</span><span id="deskFreshness">Checking current inputs…</span></div>
   </section>
 
   <section class="planner" id="planner" aria-labelledby="planner-title">
@@ -81,6 +68,7 @@
       </div></div>
       <div class="planner-actions"><button class="primary-button" id="buildDrive" type="submit">Build my Parkway drive</button><span class="planner-status" id="plannerStatus" aria-live="polite"></span></div>
     </form>
+    <noscript><p class="planner-noscript">The live planner requires JavaScript. You can still <a href="/blue-ridge-parkway/best-stops/">compare Parkway stops</a> and <a href="https://www.nps.gov/blri/planyourvisit/roadclosures.htm">check the official NPS closure table</a> before you travel.</p></noscript>
     <div class="quick-row"><span>Or start with:</span><button class="quick-gateway" type="button" data-gateway="asheville">Asheville</button><button class="quick-gateway" type="button" data-gateway="boone">Boone</button><button class="quick-gateway" type="button" data-gateway="roanoke">Roanoke</button><button class="quick-gateway" type="button" data-gateway="cherokee">Cherokee</button></div>
   </section>
 
@@ -92,9 +80,10 @@
 
     <section class="section" id="route-map">
       <div class="section-head"><div><div class="eyebrow">ON THE ROAD</div><h2>Route shape and stop timing</h2></div><p>The map keeps the Parkway corridor visible; the itinerary tells you when each stop begins to consume the day.</p></div>
+      <nav id="stopRouteStrip" class="stop-route-strip" aria-label="Stops in this drive" hidden></nav><p id="stopSelectionStatus" class="brp-sr-only" aria-live="polite"></p>
       <div class="route-workspace">
-        <article class="map-card"><div class="map-head"><strong>Selected Parkway section</strong><span>Mileposts + selected stops</span></div><div class="map-wrap"><div id="parkwayMap" role="img" aria-label="Blue Ridge Parkway map with selected route stops"></div><div class="map-legend">Parkway corridor · numbered selected stops</div></div><div class="map-caption">The corridor is for Parkway orientation, not turn-by-turn routing. Use posted road signs, mileposts and current NPS notices in the field.</div></article>
-        <article class="timeline-card"><div class="timeline-head"><strong>Your drive, in sequence</strong><span id="timelineWindow"></span></div><div class="timeline" id="timeline"></div><div class="timeline-return" id="timelineReturn"></div></article>
+        <article class="map-card"><div class="map-head"><strong>Selected Parkway section</strong><span>Mileposts + selected stops</span></div><div class="map-wrap"><div id="parkwayMap" role="region" aria-label="Interactive Blue Ridge Parkway map with numbered selected stops"></div></div><div class="map-fallback" id="parkwayMapFallback" hidden role="status"><span id="parkwayMapFailure">Interactive map unavailable.</span> The stop itinerary remains available. <a href="https://www.nps.gov/blri/planyourvisit/maps.htm" target="_blank" rel="noopener">Official NPS map</a>.</div><div class="map-caption">Numbered pins follow the selected stops. The Parkway line is for orientation, not a verified open or drivable route. <a href="https://www.nps.gov/blri/planyourvisit/maps.htm" target="_blank" rel="noopener">NPS milepost map</a>. <span id="parkwayCorridorNote"></span></div></article>
+        <div class="route-side"><article class="stop-focus" id="stopFocus" aria-label="Selected stop details"><p>Select a stop on the map or itinerary to see its field notes.</p></article><article class="timeline-card"><div class="timeline-head"><strong>Your drive, in sequence</strong><span id="timelineWindow"></span></div><div class="timeline" id="timeline"></div><div class="timeline-return" id="timelineReturn"></div></article></div>
       </div>
     </section>
 
@@ -124,6 +113,21 @@
       </div>
     </details>
   </div>
+
+  <section class="today-intel" aria-labelledby="today-title">
+    <div class="today-intel-head">
+      <div><div class="eyebrow">STARTING NEAR ONE OF THESE PLACES?</div><h2 id="today-title">Here’s what the Parkway looks like from there today.</h2></div>
+      <p class="now-summary" id="parkwayNowSummary">Each card is a live starting-point recommendation—not a ranking of destinations. Pick the place closest to where you expect to enter the Parkway.</p>
+    </div>
+    <div class="snapshot-grid" id="gatewaySnapshots">
+      <article class="snapshot-card loading-shimmer"><div class="snapshot-kicker"><span>MP 384 · Asheville</span><span class="snapshot-state">CHECKING</span></div><h3>From Asheville: north or south?</h3><p class="snapshot-route">Craggy Gardens vs. Mount Pisgah</p><p>Asheville is a real fork in the road: weather and closures can make the better direction change by the day.</p><div class="snapshot-actions"><a href="/blue-ridge-parkway/asheville/">From Asheville →</a></div></article>
+      <article class="snapshot-card loading-shimmer"><div class="snapshot-kicker"><span>MP 291 · Boone</span><span class="snapshot-state">CHECKING</span></div><h3>From Boone: how much High Country fits?</h3><p class="snapshot-route">Rough Ridge · Linn Cove · Linville Falls</p><p>The payoff is concentrated here, so a short day can still work if the road and view window cooperate.</p><div class="snapshot-actions"><a href="/blue-ridge-parkway/boone/">From Boone →</a></div></article>
+      <article class="snapshot-card loading-shimmer"><div class="snapshot-kicker"><span>MP 121 · Roanoke</span><span class="snapshot-state">CHECKING</span></div><h3>From Roanoke: views or history?</h3><p class="snapshot-route">Peaks of Otter vs. Mabry Mill</p><p>Roanoke's choice is less about the famous stop and more about whether your time budget favors a compact or longer drive.</p><div class="snapshot-actions"><a href="/blue-ridge-parkway/roanoke/">From Roanoke →</a></div></article>
+      <article class="snapshot-card loading-shimmer"><div class="snapshot-kicker"><span>MP 469 · Cherokee</span><span class="snapshot-state">CHECKING</span></div><h3>From Cherokee: how far should you climb?</h3><p class="snapshot-route">Waterrock Knob · Richland Balsam</p><p>Cherokee gives you fast elevation gain, but cloud and wind can erase the reason to keep climbing.</p><div class="snapshot-actions"><a href="/blue-ridge-parkway/cherokee/">From Cherokee →</a></div></article>
+    </div>
+    <div class="intel-foot"><span>These are live route snapshots built from the same engine as the full planner. Official road restrictions remain hard constraints.</span><span id="deskFreshness">Checking current inputs…</span></div>
+  </section>
+
 
   <section class="section">
     <div class="section-head"><div><div class="eyebrow">PLAN THE PARKWAY</div><h2>Use the page that matches the question you actually have</h2></div><p>Each page owns a different search intent and leads back into the same live route engine.</p></div>
@@ -166,7 +170,8 @@
 </main>
 <footer class="footer">© 2026 <a href="/chris-izworski/">Chris Izworski</a> · <a href="/tools/">Tools</a> · Always verify current National Park Service notices before travel.</footer>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
-<script src="/assets/blue-ridge-parkway.js?v=20260925-7" defer></script>
+<script src="/assets/visitor-map-links.js" defer></script>
+<script src="/assets/blue-ridge-parkway.js?v=20261122-2" defer></script>
 <script src="/assets/blue-ridge-parkway-breakout.js?v=20260925-1" defer></script>
 </body>
 </html>

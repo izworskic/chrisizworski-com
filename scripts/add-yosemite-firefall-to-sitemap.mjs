@@ -37,7 +37,7 @@ addCanonical({
 // the live planner or the dedicated seasonal fall-color canonical.
 addCanonical({
   url: 'https://chrisizworski.com/blue-ridge-parkway/',
-  lastmod: '2026-09-25',
+  lastmod: '2026-11-22',
   changefreq: 'daily',
   priority: '0.9',
   label: 'Blue Ridge Parkway Today'
