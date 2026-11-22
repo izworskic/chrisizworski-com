@@ -88,6 +88,19 @@ let base;
         await marker('tug').hover();
         assert.equal(await page.locator('#sooVesselMap .leaflet-tooltip:visible').count(), 0, 'vessel hover must not open a separate card');
         await marker('tug').click();
+        const popupDiagnostics = await page.evaluate(() => {
+          const e = document.querySelector('#sooVesselMap .soo-ais-symbol.type-tug');
+          const r = e?.getBoundingClientRect();
+          return {
+            aria: e?.getAttribute('aria-label'),
+            outer: e?.outerHTML.slice(0, 420),
+            topHit: r ? document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2)?.outerHTML.slice(0, 420) : null,
+            popupsInMap: document.querySelectorAll('#sooVesselMap .leaflet-popup').length,
+            popupsInDocument: document.querySelectorAll('.leaflet-popup').length,
+            tooltipsInMap: document.querySelectorAll('#sooVesselMap .leaflet-tooltip').length
+          };
+        });
+        console.log('VESSEL_CLICK_DIAG', JSON.stringify(popupDiagnostics));
         await page.locator('#sooVesselMap .leaflet-popup-content:visible').first().waitFor({ timeout: 4000 });
         assert.equal(await page.locator('#sooVesselMap .leaflet-popup:visible').count(), 1, 'vessel click opens exactly one detail card');
         assert.equal(await page.locator('#sooVesselMap .leaflet-tooltip:visible').count(), 0, 'no duplicate tooltip after clicking');
