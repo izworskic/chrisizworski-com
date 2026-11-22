@@ -1,0 +1,23 @@
+'use strict';
+const test=require('node:test');
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const path=require('node:path');
+const root=path.resolve(__dirname,'..');
+const read=p=>fs.readFileSync(path.join(root,p),'utf8');
+test('pilot browser audit is isolated, path-scoped and does not mutate ads',()=>{
+ const yml=read('.github/workflows/web-quality-pilot.yml');
+ const browser=read('scripts/verify-web-quality-browser.cjs');
+ const lhci=read('lighthouserc.web-quality.cjs');
+ assert.match(yml,/workflow_dispatch/);
+ assert.match(yml,/pull_request/);
+ assert.match(yml,/\/tmp\/web-quality-pilot/);
+ assert.match(yml,/retention-days: 7/);
+ assert.doesNotMatch(yml,/schedule:/);
+ assert.match(browser,/AxeBuilder/);
+ assert.match(browser,/critical/);
+ assert.match(browser,/michigan-destinations/);
+ assert.match(lhci,/is-crawlable/);
+ assert.match(lhci,/michigan-snow-totals/);
+ assert.doesNotMatch(browser,/fetch\([^)]*api/);
+});
