@@ -10,6 +10,9 @@
 .bridge-picker[open] summary{margin-bottom:8px}
 .bridge-picker label{margin-top:4px}
 .bridge-picker select{max-width:100%;font-size:.83rem}
+.bridge-toggle{display:flex!important;gap:8px;align-items:center;cursor:pointer;font-size:.81rem!important;line-height:1.3}
+.bridge-toggle input{width:18px;height:18px;accent-color:var(--river);flex-shrink:0}
+#bridge-layer-status{margin:5px 0 0}
 
 /* Evidence stays beside the visitor's park decision; no extra alert stack. */
 .place-button .park-signal{display:block;font-size:.73rem;font-weight:700;color:#186371;margin-top:4px}
