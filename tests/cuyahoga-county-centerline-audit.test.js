@@ -15,7 +15,7 @@ const sourceRoads={type:'FeatureCollection',features:[
  line(375668,'Main Avenue',[[-81.70672073216156,41.495992877118624],[-81.70707405093194,41.49523038955006]])
 ]};
 test('finite segment clipping detects actual overlap with polygon including exterior endpoint',()=>{
- const poly=[[{x:0,y:0},{x:20,y:0},{x:20,y:20},{x:0,y:20},{x:0,y:0}]];
+ const poly=[[[{x:0,y:0},{x:20,y:0},{x:20,y:20},{x:0,y:20},{x:0,y:0}]]];
  assert.ok(Math.abs(segmentOverlapMeters({x:-10,y:10},{x:30,y:10},poly)-20)<.00001);
  assert.equal(segmentOverlapMeters({x:-10,y:40},{x:30,y:40},poly),0);
 });
