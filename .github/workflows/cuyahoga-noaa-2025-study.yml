@@ -1,0 +1,86 @@
+name: Cuyahoga NOAA historical AIS one-day study
+
+# Research only. Runs once on creation in the dedicated branch; never on main.
+on:
+  push:
+    branches:
+      - research/cuyahoga-ais-audit-20261122
+    paths:
+      - .github/workflows/cuyahoga-noaa-2025-study.yml
+
+permissions:
+  contents: read
+
+jobs:
+  noaa-event-study:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify offline research tests
+        run: node --test tests/cuyahoga-ais-audit.test.js tests/cuyahoga-noaa-points.test.js
+      - name: Fetch one published NOAA CC0 research archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          command -v zstd
+          curl --fail --location --silent --show-error --retry 2 --connect-timeout 15 --max-time 700 \
+            'https://noaaocm.blob.core.windows.net/ais/csv2/csv2025/ais-2025-06-20.csv.zst' \
+            -o "$RUNNER_TEMP/ais-2025-06-20.csv.zst"
+          test -s "$RUNNER_TEMP/ais-2025-06-20.csv.zst"
+          sha256sum "$RUNNER_TEMP/ais-2025-06-20.csv.zst" | tee "$RUNNER_TEMP/noaa-source-sha256.txt"
+      - name: Extract observed Sunnanvik AIS points
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/cuyahoga-noaa-points.mjs \
+            --input "$RUNNER_TEMP/ais-2025-06-20.csv.zst" \
+            --name SUNNANVIK --imo 7633375 \
+            --from 2025-06-20T00:00:00Z --to 2025-06-21T00:00:00Z \
+            --out "$RUNNER_TEMP/sunnanvik-noaa-observations.json" \
+            | tee "$RUNNER_TEMP/noaa-audit-summary.json"
+          node scripts/cuyahoga-ais-audit.mjs \
+            --tracks "$RUNNER_TEMP/sunnanvik-noaa-observations.json" \
+            > "$RUNNER_TEMP/noaa-secondary-audit.json"
+      - name: Record evidence not an ETA
+        shell: bash
+        run: |
+          set -euo pipefail
+          node - "$RUNNER_TEMP/sunnanvik-noaa-observations.json" <<'NODE'
+          const fs = require('node:fs');
+          const report = JSON.parse(fs.readFileSync(process.argv[2], 'utf8'));
+          const summary = [
+            '## NOAA Cuyahoga one-day research',
+            '',
+            'Vessel: Sunnanvik, IMO 7633375. Independent Coast Guard grounding: June 20, 2025.',
+            '',
+            'Original dataset: NOAA 2025-06-20 nationwide AIS broadcast points (CC0).',
+            '',
+            'Matching identity rows: ' + report.stats.matchedIdentity,
+            '',
+            'Matching observed position rows in coarse research box: ' + report.stats.matchedTimeAndBox,
+            '',
+            'Unique MMSI groups: ' + report.tracks.length,
+            '',
+            'Per-group time-gap audit: ' + JSON.stringify(report.audit.tracks),
+            '',
+            '**Bridge arrival/receiver coverage validated: NO.**',
+            '',
+            'This was an abnormal grounding, and no bridge geometry or crossing event was verified.'
+          ].join('\n');
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, summary + '\n');
+          console.log(summary);
+          NODE
+      - name: Stage only compact research evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p research-output
+          cp "$RUNNER_TEMP/sunnanvik-noaa-observations.json" "$RUNNER_TEMP/noaa-audit-summary.json" \
+            "$RUNNER_TEMP/noaa-secondary-audit.json" "$RUNNER_TEMP/noaa-source-sha256.txt" research-output/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cuyahoga-noaa-observed-study
+          path: research-output/
+          if-no-files-found: error
+          retention-days: 3
