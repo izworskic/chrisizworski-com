@@ -58,11 +58,6 @@
     const el = marker.getElement();
     if (!el) return;
     el.setAttribute('aria-label', title(v) + ' · ' + typeLabel(v));
-    // Mouse focus can scroll a transformed Leaflet icon away before click finishes.
-    // Prevent only pointer-driven focus scrolling; Tab and Enter remain available.
-    el.addEventListener('mousedown', event => {
-      if (event.button === 0) event.preventDefault();
-    });
   }
   function addShipMarker(v, into, selected = false) {
     const icon = shipIcon(v, selected);
