@@ -10,7 +10,7 @@ function pageFor(b,region,all){
  const regionHub='/great-lakes-beaches/'+area+'/',rel='/great-lakes-beaches/'+area+'/'+slug+'/',canonical='https://chrisizworski.com'+rel;
  const park=canada?b.officialUrl:b.parkUrl,advisory=canada?b.advisory.url:b.safety.url,authority=canada?b.advisory.authority:b.safety.name;
  const sourceName=canada?'Environment Canada':'National Weather Service',forecastKind=canada?'nearby city forecast':'nearby NWS land forecast';
- const title=h((name+' ShoreFeel | Chris Izworski').length<=65?name+' ShoreFeel | Chris Izworski':name+' ShoreFeel');
+ const title=h((name+' ShoreFeel | Chris Izworski').length<=60?name+' ShoreFeel | Chris Izworski':name+' ShoreFeel');
  const description=h(('ShoreFeel at '+name+': '+sourceName+' air comfort and wind, an on-the-shore field note, and official local beach advisories.').slice(0,156));
  const maps='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(name+', '+place);
  const neighbors=all.filter(x=>x.lake===lake&&x.slug!==slug).slice(0,3).map(x=>{
