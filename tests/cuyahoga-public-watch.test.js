@@ -85,3 +85,32 @@ test('published preview is noindex, map first, source-first, accessible and has 
  assert.match(css,/prefers-reduced-motion/);
  assert.match(css,/focus-visible/);
 });
+
+test('all publicly displayed 2025 observations are actual NOAA fixes with retained source fingerprints',()=>{
+ const dataset=JSON.parse(readFileSync('public/cuyahoga-freighter-watch/noaa-historical-2025.json','utf8'));
+ assert.equal(dataset.observationKind,'NOAA_HISTORICAL_BROADCAST_FIXES');
+ assert.equal(dataset.timezone,'UTC');
+ assert.deepEqual(dataset.dates,['2025-07-07','2025-08-15','2025-08-21']);
+ assert.deepEqual(dataset.voyages.map(v=>v.fixes.length),[434,215,353]);
+ for(const v of dataset.voyages){
+  assert.match(v.originalArchiveSha256,/^[0-9a-f]{64}$/);
+  assert.equal(v.fixes[0].seen,v.firstObservedAt);
+  assert.equal(v.fixes.at(-1).seen,v.lastObservedAt);
+  assert.ok(v.fixes.every(p=>core.inArea(p)&&p.seen.startsWith(v.date)));
+  assert.equal(new Set(v.fixes.map(p=>p.seen)).size,v.fixes.length);
+  assert.equal(core.historicView(dataset,v.id,0).state,'HISTORICAL');
+ }
+ assert.deepEqual(dataset.voyages.map(v=>v.mmsi),['368251670','366938760','368251670']);
+ assert.ok(dataset.disclaimers.some(x=>/not live/i.test(x)));
+ assert.ok(dataset.disclaimers.some(x=>/bridge/.test(x)));
+});
+test('switching evidence type keeps source domains and future ETAs separated',()=>{
+ assert.match(app,/state\.mode==='live'/);
+ assert.match(app,/state\.mode='historic'/);
+ assert.match(app,/\/cuyahoga-freighter-watch\/noaa-historical-2025\.json/);
+ assert.match(app,/\/cuyahoga-freighter-watch\/viewpoints\.json/);
+ assert.match(app,/\/cuyahoga-freighter-watch\/bridges\.json/);
+ assert.match(page,/<noscript>/);
+ assert.match(page,/Park managers provide current access information/);
+ assert.doesNotMatch(page,/<iframe[^>]+src="https:\/\/.*(?:tracking|ais|maps)/i);
+});
