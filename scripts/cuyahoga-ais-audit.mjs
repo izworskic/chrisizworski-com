@@ -61,7 +61,7 @@ function summarizeTrack(track, bbox) {
   }
   const gaps = [];
   for (let i = 1; i < unique.length; i++) gaps.push((unique[i].seen - unique[i - 1].seen) / 60000);
-  const maxGapMinutes = gaps.length ? Math.max(...gaps) : null;
+  const maxGapMinutes = gaps.length ? gaps.reduce((max, value) => Math.max(max, value), 0) : null;
   return {
     mmsi: String(track.mmsi), status: unique.length < 2 ? 'INSUFFICIENT_SAMPLES' : track.truncated === true ? 'TRUNCATED_SAMPLE' : maxGapMinutes > 5 ? 'GAPS_OVER_5_MINUTES' : 'PASSAGE_CANDIDATE_ONLY',
     inputPoints: track.points.length, validUniquePoints: unique.length, excludedPoints: excluded, truncated: track.truncated === true,
