@@ -1757,3 +1757,22 @@ body[data-beach-report-page="detail"] .shorefeel-landscape figcaption{
   body[data-beach-report-page="detail"] .shorefeel-primary,
   body[data-beach-report-page="detail"] .shorefeel-landscape{scroll-behavior:auto;transition:none}
 }
+
+/* The previous photo-hero used a -70px card overlap. That offset must not
+   cover the newly first-position ShoreFeel report or widen narrow screens. */
+body[data-beach-report-page="detail"] .beach-detail-layout{
+  margin-top:24px;
+  grid-template-columns:minmax(0,1.3fr) minmax(0,.7fr);
+  max-width:100%;
+  min-width:0;
+}
+body[data-beach-report-page="detail"] .beach-detail-layout > *{
+  min-width:0;
+  max-width:100%;
+  overflow-wrap:anywhere;
+}
+@media(max-width:960px){
+  body[data-beach-report-page="detail"] .beach-detail-layout{
+    grid-template-columns:minmax(0,1fr);
+  }
+}
