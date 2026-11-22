@@ -14,7 +14,7 @@ test('Blue Ridge main page makes the planner the first decision after the scenic
   assert.match(html,/2 · See today’s best direction/);
   assert.match(html,/3 · Build a drive that fits your time/);
   assert.match(html,/STARTING NEAR ONE OF THESE PLACES\?/);
-  assert.match(html,/Here’s what the Parkway looks like from there today\./);
+  assert.match(html,/Four ways into the mountains\./);
   assert.match(html,/id="gatewaySnapshots"/);
   assert.ok(html.indexOf('id="plannerForm"')<html.indexOf('id="results"')&&html.indexOf('id="results"')<html.indexOf('id="gatewaySnapshots"'),'planner and its answer must precede optional gateway comparisons');
   assert.match(html,/href="#planner">Plan my drive/);

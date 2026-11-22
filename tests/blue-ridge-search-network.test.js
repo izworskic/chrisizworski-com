@@ -42,7 +42,7 @@ test('Every Blue Ridge search owner has complete crawl and social metadata',()=>
     assert.match(html,/<meta name="twitter:card" content="summary_large_image">/i,`${slug||'main'} twitter card`);
     assert.match(html,/"@type":"WebPage"/i,`${slug||'main'} WebPage schema`);
     assert.match(html,/"@type":"BreadcrumbList"/i,`${slug||'main'} breadcrumb schema`);
-    assert.match(html,new RegExp(`"dateModified":"${slug?'2026-09-25':'2026-11-22'}"`,'i'),`${slug||'main'} dateModified`);
+    assert.match(html,new RegExp(`"dateModified":"${slug?'2026-11-22':'2026-11-22'}"`,'i'),`${slug||'main'} dateModified`);
   }
 });
 
