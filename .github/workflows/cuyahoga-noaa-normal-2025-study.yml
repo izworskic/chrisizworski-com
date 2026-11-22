@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Verify existing NOAA normalization
-        run: node --test tests/cuyahoga-ais-audit.test.js tests/cuyahoga-noaa-points.test.js tests/cuyahoga-observation-clusters.test.js
+        run: node --test tests/cuyahoga-ais-audit.test.js tests/cuyahoga-noaa-points.test.js tests/cuyahoga-observation-clusters.test.js tests/cuyahoga-bridge-proximity.test.js
       - name: Analyze independently photographed ordinary ship visits
         shell: bash
         run: |
@@ -42,6 +42,11 @@ jobs:
               --input "$out" \
               --output "research-output/$ship-$day-clusters.json" \
               > "research-output/$ship-$day-clusters-summary.json"
+            node scripts/cuyahoga-bridge-proximity.mjs \
+              --input "$out" \
+              --references data/cuyahoga/bridge-observation-references.json \
+              --out "research-output/$ship-$day-reference-proximity.json" \
+              > "research-output/$ship-$day-reference-summary.json"
             rm -f "$archive"
             echo "::endgroup::"
           done
@@ -59,12 +64,14 @@ jobs:
           const summary = ['## Cuyahoga ordinary vessel AIS candidate study','', 'No bridge openings or ETA predictions are derived.'];
           for (const item of cases) {
             const d = JSON.parse(fs.readFileSync('research-output/'+item.ship+'-'+item.date+'-observations.json', 'utf8'));
-            result.cases.push({date:item.date,vessel:item.ship,sourceEvidence:item.independent,stats:d.stats,tracks:d.audit.tracks});
+            const e = JSON.parse(fs.readFileSync('research-output/'+item.ship+'-'+item.date+'-reference-proximity.json', 'utf8'));
+            result.cases.push({date:item.date,vessel:item.ship,sourceEvidence:item.independent,stats:d.stats,tracks:d.audit.tracks,referenceEvidence:e.analyses});
             summary.push('', '### '+item.ship+' ('+item.date+')',
               'Identity-matching NOAA records: '+d.stats.matchedIdentity,
               'Accepted study-area positions: '+d.stats.matchedTimeAndBox,
               'Outside study area: '+d.stats.outsideResearchBox,
               'Track gap assessment: '+JSON.stringify(d.audit.tracks),
+              'Bridge-area references only: '+JSON.stringify(e.analyses.map(x=>({mmsi:x.mmsi,checks:x.referenceChecks.map(y=>({id:y.referenceId,status:y.status,closestDistanceMeters:y.closestObservedDistanceMeters,episodes:y.episodes.map(z=>({at:z.nearestObservedAt,nearMeters:z.nearestObservedDistanceMeters}))})),observedOrder:x.observedOrder}))),
               'Independent visit evidence: '+item.independent);
           }
           fs.writeFileSync('research-output/normal-transit-inventory.json',JSON.stringify(result,null,2)+'\n');
