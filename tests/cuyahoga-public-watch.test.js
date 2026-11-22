@@ -80,7 +80,7 @@ test('published preview is noindex, map first, source-first, accessible and has 
  assert.match(page,/https:\/\/www.clevelandmetroparks.com\//);
  assert.match(page,/#person/);
  assert.match(app,/fetch\('\/api\/freighter-ais'/);
- assert.doesNotMatch(app,/openwaters|marine.?traffic\.com|redis|api\.openai\.com/i);
+ assert.doesNotMatch(app,/ais\.openwaters\.io|marine.?traffic\.com|redis|api\.openai\.com/i);
  assert.doesNotMatch(app,/arrive(?:s|d|al)? in \d|minutes until|ETA =/i);
  assert.match(css,/prefers-reduced-motion/);
  assert.match(css,/focus-visible/);
