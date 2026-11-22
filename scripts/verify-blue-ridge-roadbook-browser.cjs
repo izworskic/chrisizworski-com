@@ -83,6 +83,7 @@ function routes(page,failedMap=false){
    const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
    assert.ok(overflow<=2,"Horizontal overflow at width "+width+": "+overflow);
    assert.deepEqual(errors,[],"Browser JS errors at width "+width);
+   if(width===390||width===1280)await page.locator("#route-map").screenshot({path:path.join(out,"roadbook-"+width+".png"),animations:"disabled"});
    if(width===390){
      await page.locator("#flowEdit").click();
      assert.equal(await page.locator("#results").isVisible(),false,"Editing hides old results");
@@ -96,7 +97,6 @@ function routes(page,failedMap=false){
      await page.locator("#flowBack").click();
      assert.equal(await page.locator('[data-flow-step="1"]').isVisible(),true,"Back returns to starting choice");
    }
-   if(width===390||width===1280)await page.locator("#route-map").screenshot({path:path.join(out,"roadbook-"+width+".png"),animations:"disabled"});
    views.push({width,overflow,errors:errors.length});
    await page.close();
   }
