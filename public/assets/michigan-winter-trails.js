@@ -67,7 +67,16 @@ function refreshPins(initial){
    view.target='_blank';view.rel='noopener noreferrer';view.className='trl-popup-map-link';
    view.textContent='View geographic area · not parking ↗';
    view.title='Location only: verify official winter parking, trail uses and closures';
-   item.append(view);items.append(item);
+   item.append(view);
+   const weather=document.createElement('button');
+   weather.type='button';weather.className='trl-popup-weather-link';
+   weather.textContent='Snow + forecast at this area';
+   weather.addEventListener('click',event=>{
+    event.preventDefault();event.stopPropagation();
+    map.closePopup();
+    document.dispatchEvent(new CustomEvent('winter-trails:check-weather',{detail:{id:card.id}}));
+   });
+   item.append(weather);items.append(item);
   }
   root.append(items);
   const markerClass=multi?'wf-pin wf-pin-multi':'wf-pin';

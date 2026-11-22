@@ -13,7 +13,8 @@ const Parking=require('../lib/winter-hike-parking.cjs');
 const NpsAlerts=require('../lib/winter-hike-nps-alerts.cjs');
 const History=require('../lib/winter-hike-history.cjs');
 const Season=require('../lib/winter-hike-season.cjs');
-const ALLOWED=new Set(['catalog','access','preview','history','season']);
+const FieldWeather=require('../lib/winter-trail-field-weather.cjs');
+const ALLOWED=new Set(['catalog','access','preview','history','season','field-weather']);
 function compactRoute(r) {
  return {id:r.id,title:r.displayName,group:r.placeGroup,region:r.region,
   routeForm:r.routeForm,miles:r.lengthMiles,mileageStatus:r.lengthEvidence,
@@ -38,6 +39,18 @@ async function handler(req,res) {
  }
  const mode=String(req.query?.mode||'catalog');
  if(!ALLOWED.has(mode))return status(res,400,{error:'Invalid mode'});
+ if(mode==='field-weather'){
+  // Only the 15 source-checked guide IDs are valid. Do not accept client lat/lon,
+  // point-query URLs, location requests, arbitrary route IDs or navigation targets.
+  const id=String(req.query?.trail||''),date=String(req.query?.date||'');
+  const checked=FieldWeather.input(id,date);
+  if(checked.error)return status(res,400,{error:checked.error});
+  try{
+   return status(res,200,await FieldWeather.forTrail(id,date),300);
+  }catch{
+   return status(res,503,{error:'NOAA/NWS weather evidence unavailable for this trail area. Current trail and parking access remain unverified.'});
+  }
+ }
  if(mode==='catalog'){
   return status(res,200,{status:'research-only',compiledAt:Routes.catalog.compiledAt,
    warning:'Destination points are NOT winter parking. Named routes do not imply open roads, plowed lots, packed trails or safe travel.',
