@@ -165,3 +165,119 @@ body.brp-experience{--bg:#f3f3ee;--ink:#172b30;--muted:#536468;--green:#1c5853;-
 @media(max-width:600px){.brp-experience #parkwayMap{height:330px}.brp-experience .stop-focus{padding:18px 16px}.brp-experience .selected-stop-grid{grid-template-columns:minmax(0,1fr)}.brp-experience .stop-detail-card{padding:17px}.brp-experience .route-step{min-width:160px;max-width:195px}}
 
 .brp-experience .brp-sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+
+/* PARKWAY_GUIDED_FLOW_V1: one human decision at a time, not another page skin.
+   Layout stays local to the Parkway. Source results, map and Auto ads remain untouched. */
+.brp-experience #planner,.brp-experience #results{scroll-margin-top:18px}
+.brp-experience #planner .planner-top{align-items:start;padding:24px 25px 16px}
+.brp-experience #planner .planner-top h2{font-size:clamp(25px,3vw,33px);letter-spacing:-.025em}
+.brp-experience #planner .planner-top p{font-size:14px;line-height:1.6;max-width:410px}
+.brp-experience #planner .planner-form{padding:18px 25px 25px}
+.brp-experience .flow-progress{list-style:none;margin:0 25px;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;border-bottom:1px solid #dce5dd}
+.brp-experience .flow-progress[hidden]{display:none}
+.brp-experience .flow-progress li{display:flex;align-items:center;gap:8px;padding:11px 3px 13px;color:#66766b;font-weight:650;font-size:12px;border-bottom:3px solid transparent;margin-bottom:-1px}
+.brp-experience .flow-progress li span{font-variant-numeric:tabular-nums;font-size:12px;letter-spacing:.06em;color:#76877a}
+.brp-experience .flow-progress li.is-current{color:#164a37;border-bottom-color:#276a4d;font-weight:850}
+.brp-experience .flow-progress li.is-current span{color:#164a37}
+.brp-experience #planner.flow-enhanced .flow-step:not(.is-active){display:none}
+.brp-experience #planner .flow-only{display:none}
+.brp-experience #planner.flow-enhanced .flow-only{display:inline-flex}
+.brp-experience #planner.flow-enhanced[data-active-step="3"] .planner-top,.brp-experience #planner.flow-enhanced[data-active-step="3"] .planner-form{display:none}
+.brp-experience #planner.flow-enhanced[data-active-step="3"]{margin-bottom:10px;box-shadow:none}
+.brp-experience .flow-step-heading{margin:2px 0 18px}
+.brp-experience .flow-step-heading h3{font:700 clamp(23px,2.6vw,29px)/1.18 Georgia,serif;color:#174b38;letter-spacing:-.015em;margin:0 0 7px}
+.brp-experience .flow-step-heading p{font-size:15px;color:#586a5e;line-height:1.52;margin:0;max-width:650px}
+.brp-experience .flow-gateway-choices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:18px 0}
+.brp-experience .flow-gateway.quick-gateway{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:4px;min-width:0;min-height:87px;padding:15px 16px;background:#fcfdfa;border:1px solid #cdd9ce;border-radius:11px;text-decoration:none;color:#183f31;text-align:left;transition:background .15s ease,border-color .15s ease,box-shadow .15s ease}
+.brp-experience .flow-gateway strong{font-size:16px;line-height:1.25}
+.brp-experience .flow-gateway small{font-size:12px;font-weight:500;line-height:1.35;color:#657369}
+.brp-experience .flow-gateway:hover{background:#f1f7f1;border-color:#749f85}
+.brp-experience .flow-gateway.is-selected,.brp-experience .flow-gateway[aria-pressed="true"]{background:#e8f2eb;border:2px solid #2a7552;padding:14px 15px;box-shadow:0 0 0 2px rgba(42,117,82,.08)}
+.brp-experience .flow-select-row{display:flex;align-items:end;gap:12px;justify-content:space-between;border-top:1px solid #ebefea;padding-top:14px}
+.brp-experience .flow-select-row .field{max-width:355px;flex:1}
+.brp-experience #planner .field label,.brp-experience #planner .interest-label{font-size:12px;text-transform:none;letter-spacing:0;font-weight:750;margin:0 0 8px;color:#395645}
+.brp-experience #planner .field select,.brp-experience #planner .field input{height:47px;font-size:15px;border-radius:8px;border-color:#aebfb1}
+.brp-experience .flow-error{color:#9c3730;font-size:14px;font-weight:700;margin:10px 0 0}
+.brp-experience .flow-error[hidden]{display:none}
+.brp-experience #planner .interests{margin:8px 0 22px}
+.brp-experience #planner .interest-row{gap:10px}
+.brp-experience #planner .interest-row label span{font-size:14px;border-radius:9px;padding:10px 13px;line-height:1.35;color:#3f5849}
+.brp-experience #planner .interest-row input:checked+span{background:#e7f1e9;border-color:#5c9470;color:#174b35;box-shadow:inset 0 0 0 1px #5c9470}
+.brp-experience #planner .interest-row input:focus-visible+span{outline:3px solid #b47729;outline-offset:2px}
+.brp-experience .flow-time{border-top:1px solid #e8ede9;padding-top:18px}
+.brp-experience .flow-time-choices{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.brp-experience .flow-time-choice{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:3px;border:1px solid #c9d6cc;border-radius:9px;background:#fdfefd;color:#254b37;min-height:72px;padding:12px;cursor:pointer;text-align:left}
+.brp-experience .flow-time-choice strong{font-size:17px;line-height:1.2}
+.brp-experience .flow-time-choice small{font-size:12px;color:#657367}
+.brp-experience .flow-time-choice:hover{background:#f1f7f1;border-color:#6b9f7d}
+.brp-experience .flow-time-choice.is-selected,.brp-experience .flow-time-choice[aria-pressed="true"]{background:#e8f2eb;border:2px solid #2a7552;padding:11px}
+.brp-experience .flow-exact-time{margin-top:12px;max-width:215px}
+.brp-experience .flow-options{margin-top:20px;border-top:1px solid #e2e9e3;border-bottom:1px solid #e2e9e3;padding:14px 0}
+.brp-experience .flow-options summary{cursor:pointer;color:#285a42;font-size:14px;font-weight:750;list-style-position:outside;padding:3px 0}
+.brp-experience .flow-options summary span{color:#637268;font-size:12px;font-weight:500;margin-left:7px}
+.brp-experience .flow-options>p{font-size:13px;color:#5c6f63;line-height:1.55;max-width:690px}
+.brp-experience .flow-options .form-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.brp-experience .flow-options #corridorBudget{padding:8px 0;font-size:13px;line-height:1.4}
+.brp-experience #planner .planner-actions{margin-top:21px}
+.brp-experience #planner .planner-actions .primary-button{font-size:15px;min-height:48px;padding:11px 20px}
+.brp-experience .flow-back,.brp-experience .flow-change{min-height:44px;display:inline-flex;align-items:center;justify-content:center;border:1px solid #b6cebd;border-radius:8px;background:white;color:#285c41;padding:9px 15px;font-size:14px;font-weight:750;cursor:pointer}
+.brp-experience .flow-back:hover,.brp-experience .flow-change:hover{background:#f1f7f1}
+.brp-experience .flow-picked{display:inline-block;margin:0 0 10px;color:#376048;font-size:13px;font-weight:750}
+.brp-experience button:focus-visible,.brp-experience select:focus-visible,.brp-experience input:focus-visible,.brp-experience summary:focus-visible{outline:3px solid #b47729;outline-offset:3px}
+.brp-experience .flow-result-intro{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:23px 0 3px}
+.brp-experience .flow-result-intro h2{font:700 clamp(24px,3vw,32px)/1.16 Georgia,serif;letter-spacing:-.015em;margin:5px 0 5px;color:#163e30}
+.brp-experience .flow-result-intro p{color:#506156;font-size:14px;line-height:1.5;margin:0;max-width:720px}
+.brp-experience #results .decision-layout{display:block;margin:18px 0}
+.brp-experience #results .decision-card{border-top:4px solid #2c6d4c;padding:21px 24px}
+.brp-experience .flow-why{margin-top:12px;padding:0;border:1px solid #d5e2d8;border-radius:10px;background:#fff;overflow:hidden}
+.brp-experience .flow-why>summary{padding:14px 17px;font-size:14px;font-weight:750;color:#24563d;cursor:pointer}
+.brp-experience .flow-why .decision-side{padding:0 12px 12px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.brp-experience .flow-why .decision-side>*{min-width:0}
+.brp-experience .flow-all-stops{background:white;border:1px solid #d9e4dc;border-radius:10px;overflow:hidden}
+.brp-experience .flow-all-stops>summary{cursor:pointer;font-size:15px;font-weight:750;color:#27563d;padding:16px 18px}
+.brp-experience .flow-all-stops[open]>summary{border-bottom:1px solid #e3ebe5}
+.brp-experience .flow-all-stops>.section-head,.brp-experience .flow-all-stops>.selected-stop-summary,.brp-experience .flow-all-stops>.selected-stop-grid{margin-left:18px;margin-right:18px}
+.brp-experience .flow-all-stops>.section-head{margin-top:15px}
+@media(max-width:900px){
+  .brp-experience .flow-gateway-choices{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .brp-experience .flow-why .decision-side{grid-template-columns:1fr}
+  .brp-experience .route-workspace{display:flex;flex-direction:column}
+  .brp-experience .route-workspace .route-side{display:contents}
+  .brp-experience .route-workspace .stop-focus{order:1}
+  .brp-experience .route-workspace .map-card{order:2}
+  .brp-experience .route-workspace .timeline-card{order:3}
+}
+@media(max-width:620px){
+  .brp-experience .hero h1{font-size:36px;line-height:1.08;letter-spacing:-.8px}
+  .brp-experience .hero .lede{font-size:15px;line-height:1.54}
+  .brp-experience .hero .hero-proof{display:none}
+  .brp-experience .hero-card{min-height:132px}
+  .brp-experience .hero-card-copy strong{font-size:17px}
+  .brp-experience .hero-card-copy{bottom:10px}
+  .brp-experience #planner{margin:20px 0}
+  .brp-experience #planner .planner-top{padding:18px 16px 11px}
+  .brp-experience #planner .planner-top p{font-size:13px}
+  .brp-experience .flow-progress{margin:0 16px}
+  .brp-experience .flow-progress li{font-size:11px;gap:5px}
+  .brp-experience #planner .planner-form{padding:16px}
+  .brp-experience .flow-step-heading p{font-size:14px}
+  .brp-experience .flow-gateway-choices{gap:8px}
+  .brp-experience .flow-gateway.quick-gateway{padding:12px;min-height:89px;border-radius:9px}
+  .brp-experience .flow-gateway.is-selected,.brp-experience .flow-gateway[aria-pressed="true"]{padding:11px}
+  .brp-experience .flow-gateway strong{font-size:14px}
+  .brp-experience .flow-gateway small{font-size:11px}
+  .brp-experience .flow-select-row{align-items:stretch;flex-direction:column}
+  .brp-experience .flow-select-row .field{max-width:none;width:100%}
+  .brp-experience #planner .flow-select-row .primary-button{width:100%}
+  .brp-experience .flow-time-choices{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .brp-experience .flow-options .form-grid{grid-template-columns:1fr}
+  .brp-experience .flow-result-intro{align-items:flex-start;flex-direction:column;padding-top:17px}
+  .brp-experience .flow-result-intro .flow-change{min-height:40px}
+  .brp-experience #results .decision-card{padding:17px}
+  .brp-experience #planner .planner-actions{align-items:stretch;flex-direction:column}
+  .brp-experience #planner .planner-actions>*{max-width:none;width:100%}
+}
+@media(prefers-reduced-motion:reduce){
+  .brp-experience .flow-gateway.quick-gateway{transition:none}
+}
