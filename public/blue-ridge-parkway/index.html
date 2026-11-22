@@ -104,6 +104,7 @@
           </div>
           <div class="field flow-exact-time"><label for="hours">Or set exact hours</label><select id="hours"><option value="2">2 hours</option><option value="3">3 hours</option><option value="4" selected>4 hours</option><option value="5">5 hours</option><option value="6">6 hours</option><option value="8">8 hours</option></select></div>
         </div>
+        <p class="flow-trip-context" id="flowTripContext" aria-live="polite"></p>
         <details class="flow-options" id="flowOptions">
           <summary>Travel date, departure time or a different finish <span>Optional</span></summary>
           <p>The default is a round trip from your starting area, leaving about 9 AM today. Adjust that only if your plans are different.</p>
@@ -170,6 +171,7 @@
     </details>
   </div>
 
+  <details class="flow-other-entrances" id="flowOtherEntrances"><summary>Compare other starting points and current route conditions</summary>
   <section class="today-intel" aria-labelledby="today-title">
     <div class="today-intel-head">
       <div><div class="eyebrow">STARTING NEAR ONE OF THESE PLACES?</div><h2 id="today-title">Four ways into the mountains</h2></div>
@@ -182,7 +184,7 @@
       <article class="snapshot-card loading-shimmer"><div class="snapshot-kicker"><span>MP 469 · Cherokee</span><span class="snapshot-state">CHECKING</span></div><h3>From Cherokee: how far should you climb?</h3><p class="snapshot-route">Waterrock Knob · Richland Balsam</p><p>From Cherokee, the road climbs toward spruce and fir high country. A clear ridge can reveal layer after layer of mountains; fog may turn the same drive into a close-up of the forest.</p><div class="snapshot-actions"><a href="/blue-ridge-parkway/cherokee/">From Cherokee →</a></div></article>
     </div>
     <div class="intel-foot"><span>These are live route snapshots built from the same engine as the full planner. Official road restrictions remain hard constraints.</span><span id="deskFreshness">Checking current inputs…</span></div>
-  </section>
+  </section></details>
 
 
   <section class="section">

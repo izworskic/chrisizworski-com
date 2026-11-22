@@ -60,8 +60,15 @@
     const picked=$("flowPicked"),selected=$( "gateway" )?.selectedOptions?.[0]?.textContent||"";
     if(picked)picked.textContent=selected?("Starting near "+selected):"Choose your starting area";
     syncFlowChoices();
+    updateFlowTripContext();
     if(scroll){const target=step===3?$("results"):planner;target?.scrollIntoView({block:"start",behavior:window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches?"auto":"smooth"});}
     if(focus){const heading=step===1?$("flow-start-title"):step===2?$("flow-day-title"):$("flowResultTitle");if(heading){heading.tabIndex=-1;heading.focus({preventScroll:true});}}
+  }
+  function updateFlowTripContext(){
+    const out=$("flowTripContext");if(!out)return;
+    const date=$("tripDate")?.value||todayParkway(),time=$("startTime")?.value||"09:00";
+    const finish=$("finish")?.selectedOptions?.[0]?.textContent||"Back where I started";
+    out.textContent=`Trip settings: ${date} · leave about ${time} · ${finish.toLowerCase()}. You can change these below.`;
   }
   function continueFromStart(){
     if(!$("gateway")?.value){if($("flowStartError"))$("flowStartError").hidden=false;return;}
@@ -204,8 +211,9 @@
       track("blue_ridge_gateway_change",{gateway:$("gateway").value});
       if($("planner")?.dataset.activeStep==="1")continueFromStart();
     });
-    $("finish")?.addEventListener("change",()=>{syncHours(true);syncFlowChoices();track("blue_ridge_finish_change",{gateway:$("gateway").value,finish:$("finish").value});});
+    $("finish")?.addEventListener("change",()=>{syncHours(true);syncFlowChoices();updateFlowTripContext();track("blue_ridge_finish_change",{gateway:$("gateway").value,finish:$("finish").value});});
     $("hours")?.addEventListener("change",()=>{renderCorridorBudget();syncFlowChoices();});
+    for(const id of ["tripDate","startTime"])$(id)?.addEventListener("change",updateFlowTripContext);
     document.querySelectorAll(".quick-gateway").forEach(button=>button.addEventListener("click",()=>{
       $("gateway").value=button.dataset.gateway;
       $("gateway").dispatchEvent(new Event("change",{bubbles:true}));

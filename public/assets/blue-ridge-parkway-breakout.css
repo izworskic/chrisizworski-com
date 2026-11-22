@@ -281,3 +281,10 @@ body.brp-experience{--bg:#f3f3ee;--ink:#172b30;--muted:#536468;--green:#1c5853;-
 @media(prefers-reduced-motion:reduce){
   .brp-experience .flow-gateway.quick-gateway{transition:none}
 }
+
+/* Optional alternate-gateway comparison: preserve the tool without inserting another decision grid in the journey. */
+.brp-experience .flow-trip-context{font-size:13px;color:#576b5b;margin:15px 0 0;line-height:1.5}
+.brp-experience .flow-other-entrances{margin:32px 0 20px;border-top:1px solid #d3dfd5;border-bottom:1px solid #d3dfd5}
+.brp-experience .flow-other-entrances>summary{cursor:pointer;display:list-item;padding:18px 4px;color:#27563e;font-size:15px;font-weight:800}
+.brp-experience .flow-other-entrances .today-intel{margin:0 0 16px}
+.brp-experience .flow-other-entrances[open]>summary{margin-bottom:10px}

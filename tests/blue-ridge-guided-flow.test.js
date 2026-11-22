@@ -17,6 +17,8 @@ test("Parkway planner asks where first, then interests and time, then shows the 
   assert.match(html,/<details class="flow-options"/);
   assert.match(html,/<details class="flow-all-stops"/);
   assert.match(html,/<details class="flow-why"/);
+  assert.match(html,/<details class="flow-other-entrances" id="flowOtherEntrances"/);
+  assert.match(html,/id="flowTripContext"/);
   assert.ok(html.indexOf('id="roadAlertSection"')<html.indexOf('id="route-map"'),"road cautions precede sightseeing");
   assert.match(js,/showFlowStep\(3\)/);
   assert.match(js,/blue_ridge_flow_step/);
@@ -38,6 +40,7 @@ test("Gateway cards and time chips change original native controls instead of bu
  assert.match(js,/new URLSearchParams\(\{gateway:/);
  const snapshot=read("public/assets/blue-ridge-parkway-breakout.js");
  assert.match(snapshot,/blue-ridge:edit/);
+ assert.match(snapshot,/extra\.addEventListener\("toggle"/);
  assert.doesNotMatch(snapshot,/setTimeout\(\(\)=>\$\("buildDrive"\)\?\.click/);
 });
 test("Main page does not lose search identity, photo licensing, or road/status caveats",()=>{
