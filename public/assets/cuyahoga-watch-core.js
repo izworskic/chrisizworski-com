@@ -45,6 +45,14 @@
     const sorted=[...item.fixes].sort((a,b)=>a.seen.localeCompare(b.seen));
     return {...item,fixes:sorted};
   }
+  function firstRiverFixIndex(data,day){
+    const v=historyDay(data,day);
+    if(!v)return 0;
+    // The visitor begins at a recorded river fix near the central public viewpoints.
+    // Preserve every original NOAA fix in the slider, including distant harbor reports.
+    const first=v.fixes.findIndex(p=>p.lat>=41.485&&p.lat<=41.504&&p.lon>=-81.711&&p.lon<=-81.685);
+    return first>=0?first:0;
+  }
   function historicView(data,day,selectedIndex){
     const v=historyDay(data,day);
     if(!v)return {state:'HISTORY_UNAVAILABLE',fixes:[],reason:'Historical ship observations are unavailable. No route is inferred.'};
@@ -56,5 +64,5 @@
   function safeMapsQuery(name){
     return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(String(name||'')+', Cleveland, Ohio');
   }
-  return Object.freeze({REGION,inArea,recent,classifyLive,validCatalog,historyDay,historicView,safeMapsQuery});
+  return Object.freeze({REGION,inArea,recent,classifyLive,validCatalog,historyDay,historicView,firstRiverFixIndex,safeMapsQuery});
 });
