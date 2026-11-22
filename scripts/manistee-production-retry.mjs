@@ -26,7 +26,7 @@ export async function fetchWithBoundedRetry(url,init,{
   }
   if(!TRANSIENT.has(response.status)||i===attempts)return response;
   // Release the connection before trying again. Never reuse a stale response.
-  await response.body?.cancel?.().catch(()=>{});
+  try{await response.body?.cancel?.();}catch{}
   warn('Manistee smoke upstream HTTP '+response.status+'; retry '+i+'/'+attempts);
   await sleep(delayMs*i);
  }
