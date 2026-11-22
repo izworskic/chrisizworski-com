@@ -78,7 +78,7 @@ test('legacy beach region guides and seasonal ranking keep the same interpretive
   assert.equal((html.match(/class="loc-notes"/g)||[]).length,count,route+' place field notes');
   assert.ok(html.includes(lesson),route+' distinct shore/weather interpretation missing');
   assert.ok(html.includes('"dateModified": "2026-11-22"'),route+' source stamp');
-  assert.ok(sitemap.includes('<loc>https://chrisizworski.com/'+route+'/</loc>\\n    <lastmod>2026-11-22</lastmod>'),route+' sitemap freshness');
+  assert.ok(sitemap.includes('<loc>https://chrisizworski.com/'+route+'/</loc>\n    <lastmod>2026-11-22</lastmod>'),route+' sitemap freshness');
  }
  const route='best-michigan-beaches-today';
  const html=read('public/'+route+'/index.html');
@@ -87,9 +87,9 @@ test('legacy beach region guides and seasonal ranking keep the same interpretive
  assert.match(html,/Only designated swim beaches/);
  assert.match(html,/NWS low, moderate, and high swim risk/);
  assert.ok(html.includes('"dateModified": "2026-11-22"'));
- assert.ok(sitemap.includes('<loc>https://chrisizworski.com/'+route+'/</loc>\\n    <lastmod>2026-11-22</lastmod>'));
+ assert.ok(sitemap.includes('<loc>https://chrisizworski.com/'+route+'/</loc>\n    <lastmod>2026-11-22</lastmod>'));
  const beachMap=read('public/sitemap-beaches.xml');
- assert.ok(beachMap.includes('<loc>https://chrisizworski.com/'+route+'/</loc>\\n    <lastmod>2026-11-22</lastmod>'));
+ assert.ok(beachMap.includes('<loc>https://chrisizworski.com/'+route+'/</loc>\n    <lastmod>2026-11-22</lastmod>'));
  assert.ok(read('scripts/generate-beach-pages.mjs').includes('changefreq: "daily", lastmod: "2026-11-22"'));
  const pin=crypto.createHash('sha256').update(html).digest('hex');
  assert.ok(read('scripts/verify-source.mjs').includes('["/'+route+'/", "'+pin+'"]'),'exact seasonal source pin');
