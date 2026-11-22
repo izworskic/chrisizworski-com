@@ -54,7 +54,7 @@ function mock(c){
     await context.route('https://**/*',route=>route.abort());
     const page=await context.newPage();
     page.on('pageerror',err=>errors.push(String(err)));
-    await page.route('**/api/shorefeel-??beach=*',route=>route.fulfill({
+    await page.route(/\\/api\\/shorefeel-(us|ca)\\?beach=/,route=>route.fulfill({
       status:200,contentType:'application/json',body:JSON.stringify(mock(item))}));
     const url=origin+'/great-lakes-beaches/'+item.region+'/'+item.slug+'/';
     const resp=await page.goto(url,{waitUntil:'domcontentloaded'});
