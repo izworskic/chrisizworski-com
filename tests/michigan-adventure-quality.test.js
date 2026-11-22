@@ -8,7 +8,9 @@ test('adventure map keeps small visible pin with a larger touch hit target',()=>
  const js=read('public/assets/michigan-destinations.js');
  const css=read('public/assets/michigan-destinations.css');
  assert.match(js,/iconSize: \[40,40\], iconAnchor: \[20,20\]/);
- assert.match(js,/64 \* 64/);
+ assert.match(js,/56 \* 56/);
+ assert.match(js,/nearest\.members\.push\(item\)/);
+ assert.doesNotMatch(js,/parent\[root\(j\)\]/);
  assert.match(js,/zoomend', renderMarkers/);
  assert.match(js,/nearby destinations\. Open to choose/);
  assert.match(read('scripts/verify-michigan-destinations-photo-browser.cjs'),/coveredCount!==expected/);

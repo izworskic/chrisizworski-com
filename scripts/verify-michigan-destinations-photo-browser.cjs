@@ -68,6 +68,7 @@ async function runView(browser, viewport) {
   if(jsErrors.length)report.errors.push(name+': JS errors '+jsErrors.slice(0,3).join('; '));
   if(coveredCount!==expected)report.errors.push(name+': map groups cover '+coveredCount+' rather than '+expected+' destinations');
   if(viewport.width<600 && groupCount===0)report.errors.push(name+': no accessible broad-zoom map groups');
+  if(viewport.width<600 && markerCount<4)report.errors.push(name+': map grouping hides too many distinct geographic areas');
   if(groupCount) {
     // Verify the actual marker interaction opens named choices, not just a badge.
     const group=page.locator('.leaflet-marker-icon').filter({has:page.locator('.map-cluster')}).first();

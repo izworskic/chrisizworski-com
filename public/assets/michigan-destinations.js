@@ -82,28 +82,24 @@
       card, lat: Number(card.dataset.lat), lng: Number(card.dataset.lng)
     })).filter(item => Number.isFinite(item.lat) && Number.isFinite(item.lng));
     const pixels = items.map(item => map.project([item.lat, item.lng], map.getZoom()));
-    const parent = items.map((_, index) => index);
-    function root(index) {
-      while (parent[index] !== index) {
-        parent[index] = parent[parent[index]];
-        index = parent[index];
-      }
-      return index;
-    }
-    // 64px separation exceeds the 40px target diameter and prevents
-    // overlapping Leaflet controls even at state-wide zoom.
-    for (let i = 0; i < items.length; i++) {
-      for (let j = i + 1; j < items.length; j++) {
-        const dx = pixels[i].x - pixels[j].x;
-        const dy = pixels[i].y - pixels[j].y;
-        if (dx * dx + dy * dy < 64 * 64) parent[root(j)] = root(i);
-      }
-    }
-    const groups = new Map();
+    // Anchor groups to a real destination. Never chain neighboring points
+    // into one state-wide cluster at small zoom levels.
+    const groups = [];
     items.forEach((item, index) => {
-      const key = root(index);
-      if (!groups.has(key)) groups.set(key, []);
-      groups.get(key).push(item);
+      const pixel = pixels[index];
+      let nearest = null;
+      let distanceSq = 56 * 56;
+      for (const group of groups) {
+        const dx = pixel.x - group.anchor.x;
+        const dy = pixel.y - group.anchor.y;
+        const distance = dx * dx + dy * dy;
+        if (distance < distanceSq) {
+          nearest = group;
+          distanceSq = distance;
+        }
+      }
+      if (nearest) nearest.members.push(item);
+      else groups.push({anchor: pixel, members: [item]});
     });
 
     function storyLink(card, label) {
@@ -119,7 +115,7 @@
       return link;
     }
 
-    for (const group of groups.values()) {
+    for (const {members: group} of groups) {
       const first = group[0];
       const popup = document.createElement('div');
       popup.className = 'map-popup';
