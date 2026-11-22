@@ -3,10 +3,10 @@
   const $=id=>document.getElementById(id);
   const esc=value=>String(value==null?"":value).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
   const GATEWAYS={
-    asheville:{label:"Asheville",mile:"MP 384",page:"/blue-ridge-parkway/asheville/",fallback:"North toward Craggy Gardens or south toward Mount Pisgah — closures, visibility and the clock decide which one earns today."},
-    boone:{label:"Boone / Blowing Rock",mile:"MP 291",page:"/blue-ridge-parkway/boone/",fallback:"The High Country packs Rough Ridge, Linn Cove Viaduct, Moses Cone and Linville Falls into a compact band."},
-    roanoke:{label:"Roanoke",mile:"MP 121",page:"/blue-ridge-parkway/roanoke/",fallback:"Peaks of Otter is the clean northern play; Rocky Knob and Mabry Mill create a longer historic drive south."},
-    cherokee:{label:"Cherokee",mile:"MP 469",page:"/blue-ridge-parkway/cherokee/",fallback:"Waterrock Knob is the short target. More time opens the high Balsam country toward Richland Balsam and Mount Pisgah."}
+    asheville:{label:"Asheville",mile:"MP 384",page:"/blue-ridge-parkway/asheville/",fallback:"North climbs toward Craggy's rhododendrons; south follows the forest toward Pisgah. Check the mountain sky and open road before you choose."},
+    boone:{label:"Boone / Blowing Rock",mile:"MP 291",page:"/blue-ridge-parkway/boone/",fallback:"Follow old carriage roads, high rock and the sweep of Linn Cove Viaduct. Linville Falls deserves an extra stretch of walking time."},
+    roanoke:{label:"Roanoke",mile:"MP 121",page:"/blue-ridge-parkway/roanoke/",fallback:"North leads toward Sharp Top above Abbott Lake; south leads through Rocky Knob to the working history at Mabry Mill."},
+    cherokee:{label:"Cherokee",mile:"MP 469",page:"/blue-ridge-parkway/cherokee/",fallback:"Climb toward Waterrock Knob to watch the ridges unfold. Farther north, spruce and fir announce the cooler Balsam country."}
   };
   const track=(name,params={})=>{try{if(typeof window.gtag==="function")window.gtag("event",name,params);}catch{}};
   const parkwayDate=date=>new Intl.DateTimeFormat("en-CA",{timeZone:"America/New_York",year:"numeric",month:"2-digit",day:"2-digit"}).format(date);
