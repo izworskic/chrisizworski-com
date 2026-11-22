@@ -128,3 +128,16 @@ test('each public NOAA replay begins with an actual observed ship fix near the c
  }
  assert.equal(core.firstRiverFixIndex(null,'missing'),0);
 });
+
+test('upstream AIS source attribution is preserved and HTML injection remains text-only',()=>{
+ const report=core.classifyLive({
+  ok:true,checkedAt:'2026-11-22T13:59:59Z',
+  vessels:[v('2026-11-22T13:59:00Z')],
+  attribution:[{source:'test-source',credit:'Original receiver license and attribution'}]
+ },now);
+ assert.deepEqual(report.attributions,[{source:'test-source',credit:'Original receiver license and attribution'}]);
+ assert.match(page,/id="ais-source-credits"/);
+ assert.match(app,/escText\('span','AIS upstream source credits:/);
+ assert.match(app,/https:\/\/openwaters\.io\/ais\//);
+ assert.equal(report.vessels[0].source,'same-site AIS');
+});
