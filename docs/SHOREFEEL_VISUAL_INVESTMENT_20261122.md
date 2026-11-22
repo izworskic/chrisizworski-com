@@ -28,6 +28,11 @@ All source changes avoid explicit ad tags, altering the AdSense auto loader, hid
 
 Per `docs/AUTO_ADS_NETWORK.md` and official AdSense guidance (https://support.google.com/adsense/answer/12626543), the owner should verify **AdSense → Ads → site Edit → Excluded areas** on representative Michigan, U.S., and Canada beach pages and exclude the top forecast/photo sections as needed. Stable selectors: `body[data-beach-report-page="detail"] .shorefeel-primary`, `.shorefeel-landscape`, and `.shore-answer`. **Excluded areas control in-page Auto ads only**, not anchor/vignette overlay formats. Preserve Auto ads sitewide and user's preferred anchor/vignette formats, no global disable. Account-side confirmation and real filled-ad overlap testing remain UNVERIFIED until tested with actual ad delivery.
 
+## Additional page audit
+
+- **Original Bay City State Park / Saginaw Bay ShoreFeel research tool:** a real mobile screenshot showed its valid NWS apparent air temperature following a full paragraph and three stacked navigation buttons. That ordering has been reversed in the existing `/lake-huron-water-temperature/saginaw-bay/` source: headline, large model reading + NWS/source/wind/water, then interpretive story and actions. No changes to scientific model, experimental range, NWS station identity or public mapping.
+- **Narrow Michigan beach layouts:** new 360px Chromium QA found that the old negative 70px "card overlaps hero" geometry caused the subsequent safety and BeachGuard cards to overflow by 9px. The old photo-hero is gone, so `.beach-detail-layout` is now separated from the answer with positive spacing and minmax(0,1fr) sizing on narrow screens, instead of masking the error via body overflow hidden.
+
 ## Technology fit
 
 - HTML and CSS: **keep**. Fast, indexable, keyboard and no-JS source guidance with purposeful hierarchy.
