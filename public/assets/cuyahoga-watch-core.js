@@ -65,8 +65,57 @@
     return {state:'HISTORICAL',voyage:v,index,count:v.fixes.length,observed:seen,
       observedAt:seen.seen,disclaimer:'Each marker is a historical NOAA AIS report, not the continuous path sailed, a bridge opening, or an arrival prediction.'};
   }
+
+  const MILES_PER_METER=0.000621371;
+  const EARTH_RADIUS_METERS=6371000;
+  const REPORT_CONTEXT_MILES=1.25;
+  function straightLineMiles(a,b){
+    if(!inArea(a)||!inArea(b))return null;
+    const k=Math.PI/180,dLat=(b.lat-a.lat)*k,dLon=(b.lon-a.lon)*k;
+    const half=Math.sin(dLat/2)**2+Math.cos(a.lat*k)*Math.cos(b.lat*k)*Math.sin(dLon/2)**2;
+    return EARTH_RADIUS_METERS*2*Math.asin(Math.min(1,Math.sqrt(half)))*MILES_PER_METER;
+  }
+  function reportedMotion(v){
+    if(!v||v.speedKnots===null||!numberInRange(v.speedKnots,0,100))
+      return 'SPEED_NOT_REPORTED';
+    if(v.speedKnots<=0.5)return 'LOW_REPORTED_SPEED';
+    return 'MOVING_AT_REPORTED_SPEED';
+  }
+  function parkObservation(park,live,now=Date.now()){
+    if(!inArea(park)||!validCatalog({schemaVersion:1,spots:[park]}))
+      return {status:'INVALID_PARK_REFERENCE',nearby:[],closest:null};
+    if(live?.state!=='REPORTS_AVAILABLE'||!Array.isArray(live.vessels))
+      return {status:live?.state||'UNAVAILABLE',nearby:[],closest:null,
+        note:'No source-backed fresh position can be compared to this general park point.'};
+    const local=live.vessels
+      .filter(v=>recent(v,now)&&inArea(v))
+      .map(v=>({vessel:v,straightLineMiles:straightLineMiles(park,v),reportedMotion:reportedMotion(v),
+        ageMinutes:Math.max(0,Math.floor((now-Date.parse(v.seen))/60000))}))
+      .sort((a,b)=>a.straightLineMiles-b.straightLineMiles||a.vessel.mmsi.localeCompare(b.vessel.mmsi));
+    const nearby=local.filter(x=>x.straightLineMiles<=REPORT_CONTEXT_MILES).slice(0,3);
+    return {
+      status:nearby.length?'OBSERVED_NEAR_GENERAL_PARK_REFERENCE':'NO_FRESH_REPORT_NEAR_REFERENCE',
+      nearestReportWithinMiles:REPORT_CONTEXT_MILES,
+      nearby,closest:nearby[0]||null,
+      note:nearby.length
+        ?'Measured straight-line distance from a fresh AIS reported position to an approximate park point. This cannot establish a ship is visible or approaching.'
+        :'No fresh AIS report within 1.25 straight-line miles of the approximate park reference. This does not establish the river is empty.'};
+  }
+  function historicParkMatch(history,day,park){
+    if(!inArea(park))return null;
+    const visit=historyDay(history,day);
+    if(!visit)return null;
+    let best=null;
+    for(let i=0;i<visit.fixes.length;i++){
+      const fix=visit.fixes[i],miles=straightLineMiles(park,fix);
+      if(miles===null)continue;
+      if(!best||miles<best.straightLineMiles)best={index:i,observedAt:fix.seen,
+        straightLineMiles:miles,fix,sourceKind:'NOAA_RECORDED_AIS_FIX_NOT_SIGHTLINE_OR_BRIDGE_PASSAGE'};
+    }
+    return best;
+  }
   function safeMapsQuery(name){
     return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(String(name||'')+', Cleveland, Ohio');
   }
-  return Object.freeze({REGION,inArea,recent,classifyLive,validCatalog,historyDay,historicView,firstRiverFixIndex,safeMapsQuery});
+  return Object.freeze({REGION,inArea,recent,classifyLive,validCatalog,historyDay,historicView,firstRiverFixIndex,straightLineMiles,reportedMotion,parkObservation,historicParkMatch,safeMapsQuery});
 });
