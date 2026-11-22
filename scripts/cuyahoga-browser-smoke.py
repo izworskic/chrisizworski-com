@@ -52,6 +52,10 @@ async def run():
             await page.locator("#river-focus h3").get_by_text("Scranton Flats Pier").wait_for()
             if await page.locator("#river-focus a[href*='clevelandmetroparks']").count() != 1:
                 raise AssertionError("Missing park manager handoff")
+            if await page.locator(".park-signal").count() != 4:
+                raise AssertionError("Missing source-labeled nearby report context on parks")
+            await page.locator("#river-focus button.focus-action").get_by_text("Inspect this reported vessel").click()
+            await page.locator("#river-focus h3").get_by_text("BROWSER TEST SHIP").wait_for()
             await page.locator("#show-history").click()
             await page.locator("#history-controls").wait_for(state="visible")
             await page.get_by_text("NOAA fix 97 of 434").wait_for(timeout=15000)
@@ -61,13 +65,19 @@ async def run():
             await page.get_by_text("NOAA fix 98 of 434").wait_for()
             await page.locator("#voyage-select").select_option("laud-2025-08-15")
             await page.get_by_text("NOAA fix 37 of 215").wait_for()
+            await page.get_by_role("button", name="Scranton Flats Pier").click()
+            await page.locator("#river-focus button.focus-action").get_by_text("Jump to this recorded NOAA fix").click()
+            parked_history_report = await page.locator("#history-report").inner_text()
+            if "NOAA fix" not in parked_history_report or "Archived, not live" not in parked_history_report:
+                raise AssertionError("Park-specific archive jump failed")
             await page.locator("#show-live").click()
             await page.get_by_text("BROWSER TEST SHIP", exact=True).first.wait_for()
             if await page.locator(".pin-historic").count():
                 raise AssertionError("Historic marker leaked into recent mode")
             # A -> B -> A history must reset to same previously selected vessel/day state.
             await page.locator("#show-history").click()
-            await page.get_by_text("NOAA fix 37 of 215").wait_for()
+            if await page.locator("#history-report").inner_text() != parked_history_report:
+                raise AssertionError("Park-specific historic fix was lost on live → history return")
             overflow = await page.evaluate("document.documentElement.scrollWidth > window.innerWidth + 2")
             if overflow:
                 raise AssertionError(f"Horizontal page overflow at {width}px")
