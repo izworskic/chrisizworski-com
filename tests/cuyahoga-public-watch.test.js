@@ -275,7 +275,7 @@ test('AIS vessel illustrations reflect only reported category, size band and bou
  ]},now);
  assert.equal(live.vessels[0].course,190);
  assert.match(app,/function liveVesselIcon\(/);
- assert.match(app,/mapPointIcon\('ship'\)/);
+ assert.doesNotMatch(app,/icon:mapPointIcon\('ship'\)/);
  assert.match(app,/icon:liveVesselIcon\(v\)/);
  assert.match(css,/\.cuyahoga-ship-marker/);
  assert.match(page,/Vessel shapes use broad reported AIS categories/);
