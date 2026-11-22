@@ -27,7 +27,12 @@ function fixture(now) {
   const evening = ship({ id: '316001234', mmsi: '316001234', name: 'ALGOMA EQUINOX', lat: 46.8, lon: -84.97, speedKnots: 8, sizeLabel: 'laker', lengthFeet: 740, direction: 'downbound', lockCertain: false, lock: null, channelMilesToLocks: 48.1, window: { start: iso(now, 510), midpoint: iso(now, 560), end: iso(now, 610) } });
   return {
     ok: true, checkedAt: iso(now, 0), maxAgeMinutes: 30, bbox: [46.3, -84.6, 46.7, -84.1],
-    vessels: [{ mmsi: gott.mmsi, name: gott.name, lat: gott.lat, lon: gott.lon, seen: gott.seen, speedKnots: 0.3, course: 90, heading: 90, shipType: 70, source: 'fixture', lengthMeters: 305, destination: 'NANTICOKE' }],
+    vessels: [
+      { mmsi: gott.mmsi, name: gott.name, lat: gott.lat, lon: gott.lon, seen: gott.seen, speedKnots: 0.3, course: 90, heading: 90, shipType: 70, source: 'fixture', lengthMeters: 305, destination: 'NANTICOKE' },
+      { mmsi: '366009991', name: 'TEST TUG', lat: 46.501, lon: -84.368, seen: iso(now, -2), speedKnots: 4, course: 90, shipType: 31, source: 'fixture', lengthMeters: 27 },
+      { mmsi: '366009992', name: 'TEST TANKER', lat: 46.505, lon: -84.375, seen: iso(now, -3), speedKnots: 5, course: 90, shipType: 80, source: 'fixture', lengthMeters: 119 },
+      { mmsi: '366009993', name: 'TEST UNKNOWN', lat: 46.499, lon: -84.359, seen: iso(now, -4), speedKnots: null, course: null, shipType: null, source: 'fixture', lengthMeters: null }
+    ],
     attribution: [{ source: 'fixture', credit: 'Test fixture' }],
     nextShip: { ok: true, inLock: [gott], candidates: [burns, evening], pick: burns, selection: { mode: 'deterministic', confidence: 0.7 }, caveats: [] }
   };
@@ -70,6 +75,23 @@ let base;
     for (const width of [360, 390, 768, 1280, 1440]) {
       const { context, page, errors } = await open(browser, { width, time: NOV });
       await page.locator('.lw-row-btn').first().waitFor();
+      if (width === 390 || width === 1280) {
+        await page.locator('#sooVesselMap').scrollIntoViewIfNeeded();
+        await page.locator('#sooVesselMap .soo-ais-symbol').first().waitFor();
+        const marker = kind => page.locator('#sooVesselMap .soo-ais-symbol.type-' + kind);
+        assert.equal(await page.locator('#sooVesselMap .soo-ais-symbol').count(), 4, 'each recent AIS report has one ship symbol');
+        for (const [kind, w] of [['cargo', 63], ['tanker', 49], ['tug', 38], ['unknown', 46]]) {
+          assert.equal(await marker(kind).count(), 1, kind + ' has a distinct ship shape');
+          assert.equal(Math.round(await marker(kind).evaluate(e => e.getBoundingClientRect().width)), w, kind + ' follows reported length');
+        }
+        await page.locator('#sooVesselList button').filter({ hasText: 'TEST TUG' }).click();
+        assert.ok((await page.locator('#sooVesselMap .leaflet-popup-content:visible').last().innerText()).includes('Reported AIS type: Tug / towing'));
+        await page.locator('#sooVesselList button').filter({ hasText: 'TEST TANKER' }).click();
+        assert.ok((await page.locator('#sooVesselMap .leaflet-popup-content:visible').last().innerText()).includes('Reported AIS type: Tanker'));
+        await page.locator('#sooVesselList button').filter({ hasText: 'TEST TUG' }).click();
+        assert.ok((await page.locator('#sooVesselMap .leaflet-popup-content:visible').last().innerText()).includes('Reported AIS type: Tug / towing'));
+        await page.locator('#sooVesselMap').screenshot({ path: out + '/vessel-map-' + width + '.png' });
+      }
       // 1. Default "Now, 1½ hr": the ship already in a chamber is the answer.
       assert.match(await verdict(page), /EDWIN H\. GOTT is in the Poe Lock right now/);
       assert.match(await dossier(page), /EDWIN H\. GOTT[\s\S]*Poe Lock, now/);

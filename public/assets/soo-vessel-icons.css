@@ -1,0 +1,43 @@
+/* Soo Locks AIS ship symbols. Uses the shared SeawayVesselIcons SVG paths.
+   AIS type decides silhouette, validated length decides display band.
+   Width is a readable screen symbol, never true nautical/map scale. */
+/* Keep Leaflet's zoomed tile panes inside the map stage; list buttons remain clickable. */
+.vessel-map-stage{overflow:hidden;isolation:isolate}
+.soo-vessel-results{position:relative;z-index:1}
+.soo-ais-symbol.leaflet-marker-icon{background:transparent;border:0;filter:drop-shadow(0 1px 2px #153f4a99)}
+.soo-ais-symbol svg{display:block;width:100%;height:100%;overflow:visible}
+.soo-ais-symbol:focus-visible{outline:3px solid #bd812c;outline-offset:3px}
+.soo-ais-symbol,.soo-vessel-legend-item{--vessel-color:#18778e}
+.soo-ais-symbol.type-cargo,.soo-vessel-legend-item.type-cargo{--vessel-color:#19748d}
+.soo-ais-symbol.type-tanker,.soo-vessel-legend-item.type-tanker{--vessel-color:#806d96}
+.soo-ais-symbol.type-passenger,.soo-vessel-legend-item.type-passenger{--vessel-color:#357b67}
+.soo-ais-symbol.type-tug,.soo-vessel-legend-item.type-tug{--vessel-color:#a16a36}
+.soo-ais-symbol.type-pleasure,.soo-vessel-legend-item.type-pleasure{--vessel-color:#4d84ae}
+.soo-ais-symbol.type-sail,.soo-vessel-legend-item.type-sail{--vessel-color:#54828f}
+.soo-ais-symbol.type-fishing,.soo-vessel-legend-item.type-fishing{--vessel-color:#65835b}
+.soo-ais-symbol.type-service,.soo-vessel-legend-item.type-service{--vessel-color:#8f6e4f}
+.soo-ais-symbol.type-unknown,.soo-vessel-legend-item.type-unknown{--vessel-color:#74828a}
+.soo-ais-symbol .ship-hull,.soo-vessel-legend-item .ship-hull{fill:var(--vessel-color);stroke:#fff;stroke-width:1.8;stroke-linejoin:round}
+.soo-ais-symbol .ship-house,.soo-vessel-legend-item .ship-house{fill:#f6f8f4;stroke:var(--vessel-color);stroke-width:1}
+.soo-ais-symbol .ship-stack,.soo-vessel-legend-item .ship-stack{fill:#e4ebe5}
+.soo-ais-symbol .ship-window,.soo-vessel-legend-item .ship-window{fill:#244854}
+.soo-ais-symbol .ship-hatch,.soo-vessel-legend-item .ship-hatch{fill:#d3e5de;stroke:#fff;stroke-width:1}
+.soo-ais-symbol .ship-tank,.soo-vessel-legend-item .ship-tank{fill:#b7d1d7;stroke:var(--vessel-color);stroke-width:1}
+.soo-ais-symbol .ship-sail,.soo-vessel-legend-item .ship-sail{fill:#f5f3e6;stroke:var(--vessel-color);stroke-width:1.1;stroke-linejoin:round}
+.soo-ais-symbol .ship-mast,.soo-vessel-legend-item .ship-mast{fill:none;stroke:#274955;stroke-width:2;stroke-linecap:round}
+.soo-ais-symbol .ship-windows,.soo-vessel-legend-item .ship-windows{fill:none;stroke:#25515c;stroke-width:2.2;stroke-linecap:round}
+.soo-ais-symbol .ship-detail,.soo-vessel-legend-item .ship-detail{fill:none;stroke:#f1f5f1;stroke-width:1.7;stroke-linecap:round}
+.soo-ais-symbol.is-stopped .ship-hull{fill:#8c7350}
+.soo-ais-symbol.is-unknown .ship-hull{fill:#68797f}
+.soo-ais-symbol.is-selected{z-index:1500!important;filter:drop-shadow(0 0 4px #c77b3f)}
+.soo-ais-symbol.is-selected .ship-hull{fill:#ab543e;stroke:#fff;stroke-width:2.4}
+.soo-vessel-map-note{font-size:12px;line-height:1.5;margin:8px 12px 10px;color:#355765}
+.soo-vessel-legend{padding:0 12px 11px;color:#355765;font-size:12px}
+.soo-vessel-legend summary{font-weight:650;cursor:pointer;width:max-content;max-width:100%;padding:5px 0}
+.soo-vessel-legend summary:focus-visible{outline:3px solid #bd812c;outline-offset:2px}
+.soo-vessel-legend-items{display:flex;flex-wrap:wrap;gap:5px 16px;margin:9px 0}
+.soo-vessel-legend-item{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.soo-vessel-legend-glyph{display:inline-flex;width:45px;height:25px;align-items:center}
+.soo-vessel-legend-glyph svg{width:45px;height:25px}
+.soo-vessel-legend p{line-height:1.5;margin:7px 0}
+@media(max-width:640px){.soo-vessel-legend-items{gap:4px 10px}.soo-vessel-legend-item{flex:1 1 44%;white-space:normal}}
