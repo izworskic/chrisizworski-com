@@ -11,7 +11,7 @@
   const cardHeading = document.getElementById('soo-next-ship-heading');
   const cardBody = document.getElementById('sooNextBody');
   const cardNow = document.getElementById('sooNextNow');
-  let map, layer, focusLayer, fitted = false, busy = false, mapStarted = false, polling = false, previous;
+  let map, layer, focusLayer, detailPopup, fitted = false, busy = false, mapStarted = false, polling = false, previous;
   let selectedMarker = null;
   const visibleMarkers = new Map();
   // Shared local SVG silhouettes, also used by the Seaway map.
@@ -73,6 +73,18 @@
       fillColor: v.speedKnots === null ? '#64748b' : v.speedKnots > 0.5 ? '#146c86' : '#a6651e',
       fillOpacity: 0.95
     }).addTo(into);
+  }
+  // One Leaflet popup object is shared by every vessel, so selection cannot stack cards.
+  function openShipPopup(marker) {
+    if (!map || !marker.sooContent) return;
+    if (!detailPopup) detailPopup = L.popup({ autoClose: true, closeOnClick: true });
+    const anchor = marker.options.icon?.options?.popupAnchor || [0, -8];
+    detailPopup.options.offset = L.point(anchor[0], anchor[1]);
+    detailPopup.setLatLng(marker.getLatLng()).setContent(marker.sooContent).openOn(map);
+  }
+  function attachShipPopup(marker, content) {
+    marker.sooContent = content;
+    marker.on('click', () => openShipPopup(marker));
   }
   function renderLegend() {
     const target = document.getElementById('sooVesselLegend');
@@ -175,11 +187,11 @@
     const m = present?.marker || addShipMarker(observed || ship, focusLayer, true);
     selectedMarker = m;
     m.getElement()?.classList.add('is-selected');
-    if (!present) m.bindPopup(text('strong', title(ship)));
+    if (!present) attachShipPopup(m, text('strong', title(ship)));
     const zoom = Number(ship.channelMilesToLocks) > 8 ? 11 : 14;
     map.setView([ship.lat, ship.lon], zoom);
     // Re-centre once smooth scrolling settles.
-    setTimeout(() => { map.invalidateSize(); map.setView([ship.lat, ship.lon], zoom); map.closePopup(); m.openPopup(); }, 600);
+    setTimeout(() => { map.invalidateSize(); map.setView([ship.lat, ship.lon], zoom); openShipPopup(m); }, 600);
   }
 
   // ---- map and list ----
@@ -187,6 +199,7 @@
     const vessels = data.vessels.filter(v => Number.isFinite(Date.parse(v.seen)) && Date.now() - Date.parse(v.seen) <= 1800000);
     const inLock = new Map(((data.nextShip && data.nextShip.inLock) || []).map(s => [s.mmsi, s]));
     list.replaceChildren();
+    if (detailPopup && map?.hasLayer(detailPopup)) map.removeLayer(detailPopup);
     if (layer) layer.clearLayers();
     if (focusLayer) focusLayer.clearLayers();
     visibleMarkers.clear();
@@ -205,13 +218,13 @@
       let marker;
       if (map) {
         marker = addShipMarker(v, layer);
-        marker.bindPopup(content);
+        attachShipPopup(marker, content);
         visibleMarkers.set(String(v.mmsi), { marker, v });
         points.push([v.lat, v.lon]);
       }
       const item = document.createElement('li');
       if (marker) {
-        const button = text('button', title(v)); button.type = 'button'; button.addEventListener('click', () => { map.setView([v.lat, v.lon], 15); map.closePopup(); marker.openPopup(); container.scrollIntoView({ block: 'center', behavior: 'smooth' }); }); item.append(button);
+        const button = text('button', title(v)); button.type = 'button'; button.addEventListener('click', () => { map.setView([v.lat, v.lon], 15); openShipPopup(marker); container.scrollIntoView({ block: 'center', behavior: 'smooth' }); }); item.append(button);
       } else item.append(text('strong', title(v)));
       const extra = [typeLabel(v), inLock.has(v.mmsi) ? 'in the ' + inLock.get(v.mmsi).chamberName + ' now' : null, size || feet(v.lengthMeters)].filter(Boolean).join(' · ');
       item.append(text('span', (extra ? extra + ' · ' : '') + details(v))); list.append(item);
@@ -260,12 +273,6 @@
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' }).addTo(map);
       layer = L.layerGroup().addTo(map);
       focusLayer = L.layerGroup().addTo(map);
-      // Keep at most one vessel detail card even when a second selection races a prior popup.
-      map.on('popupopen', event => {
-        map.eachLayer(other => {
-          if (other instanceof L.Popup && other !== event.popup) map.removeLayer(other);
-        });
-      });
       map.on('zoomend', () => {
         for (const { marker, v } of visibleMarkers.values()) {
           const updated = shipIcon(v, marker === selectedMarker);
