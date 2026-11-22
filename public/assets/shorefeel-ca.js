@@ -7,13 +7,14 @@
  const tell=(id,v)=>{const x=$(id);if(x)x.textContent=v;};
  const link=(id,url,label)=>{const x=$(id);if(x){x.href=url;x.textContent=label;}};
  const notes={
+  All:'Explore all 30 Ontario shorelines from Lake Superior to Lake Ontario. Search by beach or town, or choose a lake.',
   Superior:'On Superior, the trees may shelter you until the forest gives way to a rocky point or sandy bay. Notice when the wind reaches you, and read the park’s latest guidance.',
   Huron:'Georgian Bay coves, Lake Huron points and long strands face the wind in different directions. Compare the water’s surface with the air you feel behind trees or town buildings.',
   Erie:'Across Lake Erie’s sandy peninsulas, even a sunny afternoon can bring shifting wind and waves. Check the official park notices before choosing a place at the water.',
   Ontario:'From Toronto’s streets to Prince Edward County dunes, the Lake Ontario shoreline changes character. See whether the breeze comes across open water or from shelter on land.',
   Michigan:'Lake Michigan lies entirely along the United States. Explore its beaches in the U.S. ShoreFeel guide.'
  };
- let current=null,lake='Superior',controller=null,map=null,mapReady=false,markers=new Map(),tilesLoaded=false,tileErrors=0;
+ let current=null,lake='All',query='',controller=null,map=null,mapReady=false,markers=new Map(),tilesLoaded=false,tileErrors=0;
  function time(s){const t=Date.parse(s||'');return Number.isFinite(t)?new Intl.DateTimeFormat('en-CA',
   {timeZone:'America/Toronto',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'}).format(new Date(t)):'Time unavailable';}
  function unavailable(reason){
@@ -28,6 +29,7 @@
  function show(li){
   if(!li)return;
   const d=li.dataset;current=d.slug;
+   $('field-report').hidden=false;
   for(const x of list)x.querySelector('button[data-select]').setAttribute('aria-pressed',String(x===li));
   tell('report-name',d.name);tell('report-place','Ontario · Lake '+d.lake);
   tell('report-story',d.story);tell('report-heading','Get to know this shore');
@@ -86,15 +88,27 @@
   for(const b of filters)b.setAttribute('aria-pressed',String(b.dataset.lakeFilter===lake));
   const p=$('lake-context');p.textContent=notes[lake];
   if(lake==='Michigan'){const a=document.createElement('a');a.href='/great-lakes-beaches/around-the-lakes/';a.textContent=' View the U.S. Lake Michigan beaches.';p.appendChild(a);}
-  const visible=list.filter(li=>{li.hidden=li.dataset.lake!==lake;return !li.hidden;});
-  tell('result-count',lake==='Michigan'?'U.S. guide available':visible.length+' locations');
+  const visible=list.filter(li=>{
+   const d=li.dataset,byLake=lake==='All'||d.lake===lake;
+   const haystack=[d.name,d.nearby,d.lake,d.story].join(' ').toLowerCase();
+   li.hidden=!(byLake&&(!query||haystack.includes(query)));
+   return !li.hidden;
+  });
+  const empty=$('shore-no-match');
+  if(empty)empty.hidden=visible.length>0||lake==='Michigan';
+  tell('result-count',lake==='Michigan'?'U.S. guide available':visible.length+' of '+list.length+' locations');
   if(mapReady){
-   for(const [slug,m]of markers){const li=bySlug.get(slug);if(li.dataset.lake===lake)m.addTo(map);else map.removeLayer(m);}
+   for(const [slug,m]of markers){const li=bySlug.get(slug);if(!li.hidden)m.addTo(map);else map.removeLayer(m);}
    if(visible.length){const bounds=window.L.latLngBounds(visible.map(li=>[Number(li.dataset.lat),Number(li.dataset.lon)]));map.fitBounds(bounds.pad(.15),{maxZoom:9,animate:false});}
    else map.setView([44.5,-85.5],6,{animate:false});
   }
-  if(lake==='Michigan')handoff();
-  else show(wanted&&visible.includes(wanted)?wanted:visible[0]);
+  if(lake==='Michigan'){$('field-report').hidden=false;handoff();}
+  else if(visible.length)show(wanted&&visible.includes(wanted)?wanted:visible[0]);
+  else{
+   if(controller)controller.abort();
+   current=null;$('field-report').hidden=true;
+   try{const u=new URL(location.href);u.searchParams.delete('beach');history.replaceState(null,'',u);}catch{}
+  }
  }
  function mapFailed(){
   if(map){try{map.remove();}catch{}}
@@ -118,8 +132,16 @@
    setTimeout(()=>{if(!tilesLoaded&&mapReady)mapFailed();},8000);
   }catch{mapFailed();}
  }
- filters.forEach(b=>b.addEventListener('click',()=>selectLake(b.dataset.lakeFilter)));
+ const search=$('shore-search');
+ if(search)search.addEventListener('input',()=>{
+  query=search.value.trim().toLowerCase();
+  selectLake('All');
+ });
+ filters.forEach(b=>b.addEventListener('click',()=>{
+  query='';if(search)search.value='';
+  selectLake(b.dataset.lakeFilter);
+ }));
  list.forEach(li=>li.querySelector('button[data-select]').addEventListener('click',()=>selectLake(li.dataset.lake,li)));
  const requested=new URLSearchParams(location.search).get('beach'),target=bySlug.get(requested)||list[0];
- selectLake(target.dataset.lake,target);startMap();
+ selectLake(bySlug.has(requested)?target.dataset.lake:'All',target);startMap();
 })();
