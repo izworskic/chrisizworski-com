@@ -15,6 +15,8 @@ jobs:
     timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
+      - name: Test official geometry source crosswalk
+        run: node --test tests/cuyahoga-official-bridge-audit.test.js
       - name: Request charted bridge lines and federal channel lines
         shell: bash
         run: |
@@ -96,6 +98,15 @@ jobs:
           fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY,lines.join('\n')+'\n');
           console.log(lines.join('\n'));
           NODE
+      - name: Cross-check selected ODOT bridge points against actual official GIS files
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/cuyahoga-official-bridge-audit.mjs \
+            --odot official-geometry/odot-state-bridge-inventory.geojson \
+            --usace official-geometry/usace-national-channel-area.geojson \
+            --curated data/cuyahoga/odot-bridge-inventory-points.json \
+            --out official-geometry/odot-cuyahoga-crosswalk.json
       - uses: actions/upload-artifact@v4
         with:
           name: cuyahoga-official-gis-research
