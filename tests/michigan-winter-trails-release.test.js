@@ -4,7 +4,7 @@ import {readFileSync,existsSync} from 'node:fs';
 const read=p=>readFileSync(p,'utf8'),html=read('public/michigan-winter-trails/index.html'),js=read('public/assets/michigan-winter-trails.js');
 
 test('crawlable statewide winter trail guide with 15 source-backed static trail systems and 50 named loops',()=>{
-  assert.match(html,/<h1>/);
+  assert.match(html,/<h1(?:\s[^>]*)?>/);
   assert.match(html,/rel="canonical" href="https:\/\/chrisizworski\.com\/michigan-winter-trails\/"/);
   assert.equal((html.match(/class="wf-story"/g)||[]).length,15);
   assert.equal((html.match(/data-evidence="https:\/\//g)||[]).length,15);
