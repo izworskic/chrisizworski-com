@@ -280,3 +280,19 @@ test('AIS vessel illustrations reflect only reported category, size band and bou
  assert.match(css,/\.cuyahoga-ship-marker/);
  assert.match(page,/Vessel shapes use broad reported AIS categories/);
 });
+
+test('first map screen favors four active reference landmarks plus Eagle work notice; full catalogue is opt-in',()=>{
+ const data=JSON.parse(readFileSync('public/cuyahoga-freighter-watch/bridges.json','utf8'));
+ const mainIds=new Set(data.bridges.filter(b=>b.channel==='main').map(b=>b.id));
+ const featured=['center-st-139','columbus-193','carter-243','west-third-369','eagle-280'];
+ assert.equal(new Set(featured).size,5);
+ assert.ok(featured.every(id=>mainIds.has(id)));
+ assert.equal(mainIds.size,19);
+ assert.match(app,/featuredBridgeIds=new Set\(\[/);
+ assert.match(app,/function renderBridgeMarkers\(/);
+ assert.match(app,/!showAll&&!featuredBridgeIds\.has\(bridge\.id\)/);
+ assert.match(app,/\$\('show-all-bridges'\)\.addEventListener\('change',renderBridgeMarkers\)/);
+ assert.match(page,/id="show-all-bridges"/);
+ assert.match(page,/Showing all 19 charted crossings|Show all 19 charted crossings/);
+ assert.match(css,/\.bridge-toggle/);
+});
