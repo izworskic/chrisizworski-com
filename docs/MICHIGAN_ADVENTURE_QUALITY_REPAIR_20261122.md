@@ -7,3 +7,5 @@ The root causes identified in the report were pale copper text on cream cards, s
 The path-scoped Web Quality GitHub Action now checks zero serious axe failures on Adventure Finder, 24px target-size rules and CLS no greater than 0.1 for the two pilot pages. Verify these checks and the full repository suite before merge.
 
 No new dependencies, map provider, images, data source, API, ads, SEO metadata or canonical page were introduced. This patch does not claim field Core Web Vitals improvement or verified production ad behavior.
+
+Broad-view marker grouping: nearby gauge-free destination pins are now grouped in Leaflet at zoom-dependent projected pixel separation. The group badge counts actual listed destinations; clicking shows named links to each original card. Group badges are anchored to a real member's coordinates, not a fabricated centroid. All cards and links remain in HTML when scripts or maps fail. The photo browser checks coverage of all twenty entries after grouping.

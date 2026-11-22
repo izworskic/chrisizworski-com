@@ -84,6 +84,8 @@ a:focus-visible,button:focus-visible,select:focus-visible{outline:3px solid #be6
 .leaflet-popup-content-wrapper{border-radius:7px!important}
 .leaflet-container a{color:var(--green)}
 .map-marker{display:block;position:absolute;left:11px;top:11px;width:18px;height:18px;border:3px solid white;border-radius:50%;background:#ce713f;box-shadow:0 1px 10px #193f3888;pointer-events:none}
+.map-cluster{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;border:2px solid #fff;border-radius:50%;background:#245547;color:#fff;font-size:.82rem;font-weight:800;box-shadow:0 1px 10px #193f3888;pointer-events:none}
+.map-popup-group{display:flex;flex-direction:column;gap:3px}.map-popup-group a{display:flex;align-items:center;min-height:32px;padding:4px 0}
 .map-popup h3{font-size:1.13rem;margin:0 0 6px}
 .map-popup p{font-size:.72rem;color:#52695f;margin:0 0 9px}
 .map-popup a{font-weight:800;font-size:.76rem}

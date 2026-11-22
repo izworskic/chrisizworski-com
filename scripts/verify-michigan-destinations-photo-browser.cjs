@@ -58,13 +58,14 @@ async function runView(browser, viewport) {
   }
   const mapStatus=await page.locator('#map-status').innerText();
   const markerCount=await page.locator('.leaflet-marker-icon').count();
+  const coveredCount=await page.locator('.leaflet-marker-icon').evaluateAll(nodes => nodes.reduce((sum,node)=>sum+(Number(node.querySelector('.map-cluster')?.textContent)||1),0));
   const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
-  const view={name,cardCount:count,photoCount:results.filter(x=>x.ok).length,markerCount,mapStatus,overflowPx:overflow,jsErrors};
+  const view={name,cardCount:count,photoCount:results.filter(x=>x.ok).length,markerCount,coveredCount,mapStatus,overflowPx:overflow,jsErrors};
   report.views.push(view);
   report.outcomes.push(...results.map(x=>({...x,viewport:name})));
   if(overflow>2)report.errors.push(name+': horizontal overflow '+overflow+'px');
   if(jsErrors.length)report.errors.push(name+': JS errors '+jsErrors.slice(0,3).join('; '));
-  if(markerCount<15)report.errors.push(name+': fewer than 15 location markers');
+  if(coveredCount!==expected)report.errors.push(name+': map groups cover '+coveredCount+' rather than '+expected+' destinations');
   if(!/^Map ready\. Choose a destination pin\b/.test(mapStatus))report.errors.push(name+': map did not report rendered tiles: '+mapStatus);
   await context.close();
 }
