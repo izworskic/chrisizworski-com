@@ -104,6 +104,12 @@ function init(){
   mapNode.textContent='';
   map=window.L.map(mapNode,{scrollWheelZoom:false}).setView([44.8,-85.5],6);
   map.on('dragstart zoomstart',()=>{userZoomed=true});
+  document.addEventListener('winter-trails:fit-map',()=>{
+    const points=shown().map(card=>[Number(card.dataset.lat),Number(card.dataset.lng)])
+      .filter(point=>point.every(Number.isFinite));
+    if(points.length>1)map.fitBounds(points,{padding:[32,32],maxZoom:8});
+    else if(points.length===1)map.setView(points[0],9);
+  });
   refreshPins(true);
   if(typeof ResizeObserver!=='undefined')new ResizeObserver(()=>map?.invalidateSize({pan:false})).observe(mapNode);
   requestAnimationFrame(()=>map?.invalidateSize({pan:false}));
