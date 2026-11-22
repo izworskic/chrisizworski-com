@@ -55,15 +55,65 @@
    }
   }
  }
+ function parkSignalLine(park){
+  if(state.mode==='historic')return 'Archive: find a nearby recorded fix';
+  const observed=core.parkObservation(park,state.live,Date.now());
+  if(observed.closest)return observed.closest.vessel.name+' · '+observed.closest.straightLineMiles.toFixed(1)+' mi direct';
+  return observed.status==='NO_FRESH_REPORT_NEAR_REFERENCE'
+    ?'No nearby fresh AIS report'
+    :'AIS reports not yet available';
+ }
+ function renderParkSignals(){
+  if(!state.parks)return;
+  for(const park of state.parks.spots){
+   const btn=document.querySelector('[data-park="'+park.id+'"]');
+   if(!btn)continue;
+   let signal=btn.querySelector('.park-signal');
+   if(!signal){signal=escText('small','','park-signal');btn.append(signal);}
+   signal.textContent=parkSignalLine(park);
+  }
+ }
  function choosePark(id,move){
   const park=state.parks?.spots.find(p=>p.id===id);
   if(!park)return;
   state.selectedParkId=id;
   for(const btn of document.querySelectorAll('[data-park]'))btn.setAttribute('aria-current',String(btn.dataset.park===id));
-  replaceFocus('PUBLIC SHORE WATCH / PARK MANAGER VERIFIED',park.name,park.experience,[
+  const official=[
    {label:'Official park details ↗',url:park.officialUrl},
    {label:'Find the park on a map ↗',url:core.safeMapsQuery(park.name)}
-  ],'Map marker indicates an approximate park area, not a verified entrance or a promised ship sighting. Check the park manager for current access.');
+  ];
+  const note='Distances use the general park reference, not a surveyed viewing deck. They cannot establish line of sight, vessel arrival, or a safe entrance. Confirm current park access.';
+  let description=park.experience,action=null;
+  if(state.mode==='historic'){
+   const closest=core.historicParkMatch(state.history,state.historyId,park);
+   if(closest){
+    const v=core.historyDay(state.history,state.historyId);
+    description+=' In the selected 2025 NOAA archive, the nearest recorded '+v.name+
+      ' fix is '+closest.straightLineMiles.toFixed(2)+' straight-line miles from the approximate park point at '+
+      locClock.format(new Date(closest.observedAt))+'. This is not a confirmed sighting from the park.';
+    action={label:'Jump to this recorded NOAA fix',callback:()=>{
+      state.historyIndex=closest.index;
+      renderHistory();
+    }};
+   }else description+=' Historical position data is unavailable for this selection.';
+  }else{
+   const observed=core.parkObservation(park,state.live,Date.now());
+   if(observed.closest){
+    const nearby=observed.closest;
+    description+=' A fresh reported position for '+nearby.vessel.name+' is '+
+      nearby.straightLineMiles.toFixed(2)+' straight-line miles from this approximate park location, '+
+      'last observed '+locClock.format(new Date(nearby.vessel.seen))+
+      '. '+(nearby.reportedMotion==='MOVING_AT_REPORTED_SPEED'?'Its AIS reports motion.':
+        nearby.reportedMotion==='LOW_REPORTED_SPEED'?'Its last AIS speed was low.':'Its AIS speed was not reported.');
+    action={label:'Inspect this reported vessel',callback:()=>selectShip(nearby.vessel)};
+   }else description+=' '+observed.note;
+  }
+  replaceFocus('PUBLIC SHORE WATCH / CLEVELAND METROPARKS',park.name,description,official,note);
+  if(action){
+   const button=escText('button',action.label,'focus-action');
+   button.type='button';button.addEventListener('click',action.callback);
+   $('river-focus').append(button);
+  }
   if(move&&state.map)state.map.setView([park.lat,park.lon],15,{animate:false});
  }
  function plotBridges(){
@@ -121,7 +171,10 @@
   }
   if(mapGroup.ships)mapGroup.ships.clearLayers();
   if(!result.vessels.length){
-   list.append(escText('li',result.reason));return;
+   list.append(escText('li',result.reason));
+   renderParkSignals();
+   if(state.selectedParkId&&state.mode==='live')choosePark(state.selectedParkId,false);
+   return;
   }
   for(const v of result.vessels){
    const item=escText('li',''),btn=escText('button','');
@@ -134,6 +187,8 @@
     marker.on('click',()=>selectShip(v));
    }
   }
+  renderParkSignals();
+  if(state.selectedParkId&&state.mode==='live')choosePark(state.selectedParkId,false);
  }
  async function getLive(){
   const refresh=$('refresh-ais');refresh.disabled=true;
@@ -185,6 +240,7 @@
   if(mapGroup.ships){if(historic)mapGroup.ships.clearLayers();else renderLive();}
   if(mapGroup.history)mapGroup.history.clearLayers();
   if(mapGroup.selected)mapGroup.selected.clearLayers();
+  renderParkSignals();
   if(historic){
    renderHistory();
    replaceFocus('NOAA 2025 / ARCHIVED BROADCAST FIXES','The voyage is not a timetable',
@@ -195,6 +251,7 @@
     'Select a vessel to read its latest reported timestamp, or choose a public park to plan a shore watch. No future arrival estimates are inferred.',
     [{label:'Open full Great Lakes ship tracker ↗',url:'/great-lakes-freighter-tracking/'}]);
   }
+  if(state.selectedParkId)choosePark(state.selectedParkId,false);
  }
  async function loadReferenceData(){
   const safeGet=async url=>{const r=await fetch(url,{cache:'force-cache',signal:AbortSignal.timeout(12000)});if(!r.ok)throw Error('No public resource');return r.json()};
@@ -203,7 +260,7 @@
     safeGet('/cuyahoga-freighter-watch/bridges.json'),
     safeGet('/cuyahoga-freighter-watch/noaa-historical-2025.json')]);
   const parks=results[0].status==='fulfilled'?results[0].value:null;
-  if(core.validCatalog(parks)){state.parks=parks;plotParks();}
+  if(core.validCatalog(parks)){state.parks=parks;plotParks();renderParkSignals();}
   else replaceFocus('PARK SOURCE UNAVAILABLE','Check Cleveland Metroparks','The park directory could not be verified. Use the official park manager links in the text below.');
   const bridges=results[1].status==='fulfilled'?results[1].value:null;
   if(bridges?.schemaVersion===1&&Array.isArray(bridges.bridges)){state.bridges=bridges;plotBridges();}
