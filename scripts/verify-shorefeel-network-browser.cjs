@@ -26,7 +26,10 @@ const server=http.createServer((req,res)=>{
 const locations=[
  {slug:'bay-city-state-park',name:'Bay City State Park',lake:'Lake Huron',swimming:true},
  {slug:'whitefish-point',name:'Whitefish Point',lake:'Lake Superior',swimming:true},
- {slug:'wenonah-park',name:'Wenonah Park',lake:'Lake Huron',swimming:false}
+ {slug:'wenonah-park',name:'Wenonah Park',lake:'Lake Huron',swimming:false},
+ {slug:'warren-dunes-state-park',name:'Warren Dunes State Park',lake:'Lake Michigan',swimming:true},
+ {slug:'luna-pier',name:'Luna Pier',lake:'Lake Erie',swimming:true},
+ {slug:'miners-beach',name:'Miners Beach',lake:'Lake Superior',swimming:true}
 ];
 const sources=Object.fromEntries(['beachguard','weather','buoys','hazards','swim_risk'].map(k=>[k,{
  label:k==='weather'?'Open-Meteo forecast':'Official source',status:k==='weather'?'live':'unavailable',
