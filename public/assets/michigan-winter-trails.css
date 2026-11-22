@@ -130,3 +130,72 @@
 .trl .wf-links .trl-google-map-link{font-size:.71rem;color:#36614d;font-weight:700}
 .trl .wf-map-popup .trl-popup-map-link{display:block;font-size:.7rem;margin-top:3px;color:#2f5e49;text-decoration:underline}
 @media(max-width:610px){.trl .wf-links .trl-google-map-link{font-size:.74rem;line-height:1.55}}
+
+
+/* Winter Trail Decision Desk: grounded comparison, not an opening-status dashboard. */
+.trl .trl-desk{background:linear-gradient(128deg,#1d3b31 0%,#2a5544 58%,#173c36 100%);color:#f5f6ee;padding:clamp(19px,3vw,35px) 0}
+.trl .trl-desk-layout{display:grid;grid-template-columns:minmax(0,.79fr) minmax(0,1.21fr);align-items:start;gap:clamp(18px,3.5vw,50px)}
+.trl .trl-desk-intro{padding:12px 0;max-width:520px}
+.trl .trl-desk-eyebrow{font-size:.72rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#d7bc94;margin-bottom:13px}
+.trl .trl-desk-intro h1{font:500 clamp(2.7rem,4.8vw,4.7rem)/1.02 var(--wf-display);letter-spacing:-.027em;color:#fff9ec;margin:0 0 19px}
+.trl .trl-desk-intro>p:not(.trl-desk-eyebrow){font-size:clamp(.96rem,1.5vw,1.08rem);line-height:1.65;color:#e5ede5;max-width:42ch}
+.trl .trl-desk-evidence{display:grid;gap:5px;margin-top:27px;padding:15px 0 15px 17px;border-left:3px solid #e4bb7f}
+.trl .trl-desk-evidence strong{font-size:.86rem;color:#fffaf0}
+.trl .trl-desk-evidence span{font-size:.8rem;line-height:1.55;color:#e1ebe2}
+.trl .trl-desk-console{min-width:0;background:#f7f8f2;color:#1d392f;border-radius:13px;padding:clamp(16px,2.5vw,26px);box-shadow:0 20px 50px #0c30284d}
+.trl .trl-desk-topline{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:14px}
+.trl .trl-desk-topline h2{font:500 clamp(1.5rem,2.4vw,1.95rem)/1.1 var(--wf-display);margin:0;color:#194332}
+.trl .trl-desk-topline>span{font-size:.68rem;text-transform:uppercase;letter-spacing:.075em;color:#5c7364;font-weight:750}
+.trl .trl-desk-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.trl .trl-desk-controls label{display:grid;gap:6px;min-width:0;color:#315447;font-size:.74rem;font-weight:750}
+.trl .trl-desk-controls select{width:100%;min-width:0;min-height:45px;padding:8px 27px 8px 9px;background:#fff;border:1px solid #b5c8bd;border-radius:6px;color:#15382b;font:600 .81rem/1.3 inherit}
+.trl .trl-desk-verify{display:flex;align-items:flex-start;gap:10px;margin-top:12px;font-size:.78rem;line-height:1.4;font-weight:700;cursor:pointer;color:#284537}
+.trl .trl-desk-verify input{width:18px;height:18px;accent-color:#27644a;flex-shrink:0;margin-top:2px}
+.trl .trl-desk-verify small{display:block;color:#65766b;font-size:.71rem;font-weight:500;margin-top:2px}
+.trl .trl-desk-result-label{margin:15px 0 10px;font-size:.77rem;color:#486558}
+.trl .trl-desk-results{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;align-items:stretch}
+.trl .trl-desk-option{min-width:0;display:flex;flex-direction:column;gap:8px;padding:15px 14px;background:#fff;border-radius:7px;border-top:4px solid #729885;box-shadow:0 3px 12px #1a4c3b13}
+.trl .trl-desk-option-index{font-size:.65rem;letter-spacing:.12em;font-weight:800;color:#8a6341}
+.trl .trl-desk-option h3{font:550 1.28rem/1.17 var(--wf-display);color:#214b38;margin:0}
+.trl .trl-desk-option p{font-size:.76rem;line-height:1.48;color:#475c50;margin:0}
+.trl .trl-desk-option .trl-desk-option-meta{font-weight:700;color:#415b4b}
+.trl .trl-desk-option .trl-desk-option-use{font-size:.78rem;color:#294e3e}
+.trl .trl-desk-option .trl-desk-option-access{padding-top:7px;border-top:1px solid #dfebe1}
+.trl .trl-desk-option details{font-size:.75rem;color:#435d4f}
+.trl .trl-desk-option summary{cursor:pointer;color:#2c604a;font-weight:750}
+.trl .trl-desk-option details p{margin-top:7px}
+.trl .trl-desk-option-actions{margin-top:auto;display:flex;align-items:start;flex-direction:column;gap:7px;padding-top:5px}
+.trl .trl-desk-option-actions button{font-size:.79rem;background:#1e5a41;color:white;padding:9px 12px;border:0;border-radius:5px;cursor:pointer;font-weight:750;min-height:41px;text-align:left}
+.trl .trl-desk-option-actions a{color:#285b45;text-decoration:underline;font-size:.76rem;font-weight:750}
+.trl .trl-desk-none{grid-column:1/-1;padding:22px;background:#fff;color:#465d51;border-radius:6px}
+.trl .trl-desk-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}
+.trl .trl-desk-actions button{border:1px solid #a7bfb0;background:transparent;color:#22543e;border-radius:5px;min-height:42px;padding:8px 12px;font-size:.79rem;font-weight:750;cursor:pointer}
+.trl .trl-desk-actions #trl-desk-map{background:#224d3d;color:#fff;border-color:#224d3d}
+.trl .trl-desk-actions button:disabled{opacity:.46;cursor:not-allowed}
+.trl .trl-desk-checks{margin-top:17px;padding-top:13px;border-top:1px solid #cedbd0}
+.trl .trl-desk-checks p{font-size:.76rem;color:#426052;line-height:1.45;margin:0 0 8px}
+.trl .trl-desk-checks>div{display:flex;flex-wrap:wrap;gap:7px 14px}
+.trl .trl-desk-checks a{font-size:.78rem;font-weight:800;text-decoration:underline;color:#205f45}
+.trl .trl-desk button:focus-visible,.trl .trl-desk select:focus-visible,.trl .trl-desk a:focus-visible,.trl .trl-desk input:focus-visible,.trl .trl-desk summary:focus-visible{outline:3px solid #cc8c35;outline-offset:3px}
+.trl .wf-intro h2{font:500 clamp(2.65rem,4.5vw,4.35rem)/1.07 var(--wf-display);max-width:610px;color:var(--wf-ink)}
+@media(max-width:980px){
+  .trl .trl-desk-layout{grid-template-columns:1fr;gap:14px}
+  .trl .trl-desk-intro{max-width:100%;padding:0}
+  .trl .trl-desk-intro h1{font-size:clamp(2.5rem,6vw,3.65rem);margin-bottom:10px}
+  .trl .trl-desk-evidence{margin-top:13px}
+}
+@media(max-width:610px){
+  .trl .trl-desk{padding:16px 0 20px}
+  .trl .trl-desk-intro h1{font-size:clamp(2.55rem,10vw,3.15rem)}
+  .trl .trl-desk-intro>p:not(.trl-desk-eyebrow){font-size:.9rem}
+  .trl .trl-desk-console{padding:15px;border-radius:9px}
+  .trl .trl-desk-controls{grid-template-columns:1fr 1fr}
+  .trl .trl-desk-controls label:first-child{grid-column:1/-1}
+  .trl .trl-desk-results{grid-template-columns:1fr}
+  .trl .trl-desk-option{gap:6px}
+  .trl .trl-desk-option h3{font-size:1.35rem}
+  .trl .trl-desk-actions button{flex:1 1 auto}
+  .trl .wf-intro h2{font-size:clamp(2.35rem,9vw,3.1rem)}
+}
+@media(max-width:360px){.trl .trl-desk-controls{grid-template-columns:1fr}.trl .trl-desk-controls label:first-child{grid-column:auto}}
+@media(prefers-reduced-motion:reduce){.trl .trl-desk *{scroll-behavior:auto}}
