@@ -119,7 +119,7 @@
    btn.type='button';
    btn.append(escText('strong',v.name),escText('small',speedCopy(v)+' · '+locClock.format(new Date(v.seen))));
    btn.addEventListener('click',()=>selectShip(v));item.append(btn);list.append(item);
-   if(mapGroup.ships){
+   if(mapGroup.ships && state.mode==='live'){
     const marker=L.marker([v.lat,v.lon],{title:v.name,alt:v.name+' recent AIS report',icon:mapPointIcon('ship')}).addTo(mapGroup.ships);
     marker.bindTooltip(v.name);
     marker.on('click',()=>selectShip(v));
