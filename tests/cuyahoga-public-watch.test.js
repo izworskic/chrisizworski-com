@@ -106,7 +106,7 @@ test('all publicly displayed 2025 observations are actual NOAA fixes with retain
 });
 test('switching evidence type keeps source domains and future ETAs separated',()=>{
  assert.match(app,/state\.mode==='live'/);
- assert.match(app,/state\.mode='historic'/);
+ assert.match(app,/const historic=mode==='historic'/);
  assert.match(app,/\/cuyahoga-freighter-watch\/noaa-historical-2025\.json/);
  assert.match(app,/\/cuyahoga-freighter-watch\/viewpoints\.json/);
  assert.match(app,/\/cuyahoga-freighter-watch\/bridges\.json/);
