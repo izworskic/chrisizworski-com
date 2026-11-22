@@ -4,7 +4,7 @@
  const core=window.CuyahogaWatchCore;
  const $=id=>document.getElementById(id);
  if(!core){$('vessel-status').textContent='Interactive data is unavailable. Use the official source links below.';return;}
- const state={mode:'live',parks:null,bridges:null,history:null,live:null,selectedParkId:null,map:null,historyIndex:null,historyId:'barker-2025-07-07',selectedShip:null};
+ const state={mode:'live',parks:null,bridges:null,history:null,bridgeNotices:null,live:null,selectedParkId:null,map:null,historyIndex:null,historyId:'barker-2025-07-07',selectedShip:null};
  const mapGroup={parks:null,bridges:null,ships:null,history:null,selected:null};
  const locClock=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'});
  const escText=(tag,text,className)=>{const e=document.createElement(tag);e.textContent=String(text??'');if(className)e.className=className;return e};
@@ -21,8 +21,8 @@
  }
  function mapPointIcon(kind,content){
   if(!window.L)return null;
-  const classes={park:'pin-park',bridge:'pin-bridge',ship:'pin-vessel',historic:'pin-historic'};
-  return L.divIcon({className:'',html:'<div class="map-pin '+(classes[kind]||classes.bridge)+'" style="width:30px;height:30px">'+(kind==='ship'?'&#9632;':kind==='historic'?'&#9679;':kind==='park'?'&#10003;': '&#9646;')+'</div>',iconSize:[30,30],iconAnchor:[15,15]});
+  const classes={park:'pin-park',bridge:'pin-bridge',work:'pin-work',ship:'pin-vessel',historic:'pin-historic'};
+  return L.divIcon({className:'',html:'<div class="map-pin '+(classes[kind]||classes.bridge)+'" style="width:30px;height:30px">'+(kind==='ship'?'&#9632;':kind==='historic'?'&#9679;':kind==='park'?'&#10003;':kind==='work'?'!': '&#9646;')+'</div>',iconSize:[30,30],iconAnchor:[15,15]});
  }
  function initMap(){
   if(!window.L){
@@ -116,19 +116,40 @@
   }
   if(move&&state.map)state.map.setView([park.lat,park.lon],15,{animate:false});
  }
+ function clevelandCalendarDay(){
+  const values=Object.fromEntries(new Intl.DateTimeFormat('en-US',{
+    timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit'
+  }).formatToParts(new Date()).filter(p=>['year','month','day'].includes(p.type)).map(p=>[p.type,p.value]));
+  return values.year+'-'+values.month+'-'+values.day;
+ }
  function plotBridges(){
   if(!state.bridges||!mapGroup.bridges)return;
   for(const bridge of state.bridges.bridges){
    if(bridge.channel!=='main')continue;
-   const marker=L.marker([bridge.latitude,bridge.longitude],{title:bridge.name,alt:bridge.name+' NOAA approximate bridge reference',icon:mapPointIcon('bridge')}).addTo(mapGroup.bridges);
-   marker.bindTooltip(bridge.name+' · river mile '+bridge.riverMile);
+   const notice=core.bridgeNoticeContext(state.bridgeNotices,bridge.id,clevelandCalendarDay());
+   const marker=L.marker([bridge.latitude,bridge.longitude],{
+    title:bridge.name+(notice?' · published removal notice':''),
+    alt:bridge.name+' NOAA approximate bridge reference',
+    icon:mapPointIcon(notice?'work':'bridge')
+   }).addTo(mapGroup.bridges);
+   marker.bindTooltip(bridge.name+' · river mile '+bridge.riverMile+(notice?' · planned removal work':''));
    marker.on('click',()=>{
-    const conflict=state.bridges.knownConflicts?.find(c=>c.id===bridge.id);
-    const caveat=conflict?' NOAA and federal bridge regulations list different mile positions for this bridge.':' No current lift, opening or exact vessel crossing time is verified.';
-    replaceFocus('NOAA COAST PILOT / REFERENCE ONLY',bridge.name,
-      'The Coast Pilot identifies this '+bridge.structureType+' structure at river mile '+bridge.riverMile+'. It provides a rounded geographic reference, not a measured span line.'+caveat,
-      [{label:'Open NOAA Coast Pilot ↗',url:state.bridges.sourceUrl}],
-      'The Coast Pilot describes bridge geography, not live bridge operation or a legal viewing entrance.');
+    const sourceConflict=state.bridges.knownConflicts?.find(c=>c.id===bridge.id);
+    let context='The Coast Pilot identifies this '+bridge.structureType+
+      ' crossing at river mile '+bridge.riverMile+'. This rounded point is not a measured bridge span.';
+    if(bridge.structureType==='fixed')context+=' A fixed bridge does not lift for passing freighters.';
+    else if(/permanently open/i.test(bridge.structureType))context+=' This draw is cataloged as permanently open, not an ordinary scheduled bridge opening.';
+    else context+=' The Coast Pilot does not establish current bridge opening availability.';
+    if(sourceConflict)context+=' Federal bridge regulations and the NOAA Coast Pilot disagree on its river-mile reference. Do not substitute one value silently.';
+    const actions=[{label:'NOAA Coast Pilot ↗',url:state.bridges.sourceUrl}];
+    if(notice){
+      context+=' '+notice.message;
+      actions.push({label:'Dated Coast Guard notice ↗',url:notice.sourceUrl});
+      if(notice.projectUrl)actions.push({label:'Ohio DOT removal project ↗',url:notice.projectUrl});
+    }
+    replaceFocus(notice?'OFFICIAL NOTICE / NOT LIVE BRIDGE STATUS':'NOAA COAST PILOT / REFERENCE ONLY',bridge.name,
+      context,actions,
+      'No live drawbridge state or future vessel crossing time is verified. Refer to current Coast Guard notices and the bridge owner before a trip.');
    });
   }
  }
@@ -258,10 +279,13 @@
   const results=await Promise.allSettled([
     safeGet('/cuyahoga-freighter-watch/viewpoints.json'),
     safeGet('/cuyahoga-freighter-watch/bridges.json'),
-    safeGet('/cuyahoga-freighter-watch/noaa-historical-2025.json')]);
+    safeGet('/cuyahoga-freighter-watch/noaa-historical-2025.json'),
+    safeGet('/cuyahoga-freighter-watch/bridge-notices.json')]);
   const parks=results[0].status==='fulfilled'?results[0].value:null;
   if(core.validCatalog(parks)){state.parks=parks;plotParks();renderParkSignals();}
   else replaceFocus('PARK SOURCE UNAVAILABLE','Check Cleveland Metroparks','The park directory could not be verified. Use the official park manager links in the text below.');
+  const notices=results[3].status==='fulfilled'?results[3].value:null;
+  if(notices?.schemaVersion===1&&Array.isArray(notices.notices))state.bridgeNotices=notices;
   const bridges=results[1].status==='fulfilled'?results[1].value:null;
   if(bridges?.schemaVersion===1&&Array.isArray(bridges.bridges)){state.bridges=bridges;plotBridges();}
   const history=results[2].status==='fulfilled'?results[2].value:null;
