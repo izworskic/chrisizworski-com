@@ -1,0 +1,88 @@
+name: Cuyahoga NOAA and USACE official GIS geometry research
+
+# Single-use, bounded and read-only, research branch only. No production map layer.
+on:
+  push:
+    branches: [research/cuyahoga-ais-audit-20261122]
+    paths: [.github/workflows/cuyahoga-official-geometry-study.yml]
+
+permissions:
+  contents: read
+
+jobs:
+  fetch-official-geometry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Request charted bridge lines and federal channel lines
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p official-geometry
+          fetch_layer() {
+            local url="$1" file="$2"
+            if curl --fail --silent --show-error --location --retry 1 --connect-timeout 10 --max-time 50 \
+              -G "$url" \
+              --data-urlencode 'where=1=1' \
+              --data-urlencode 'geometry=-81.75,41.44,-81.65,41.54' \
+              --data-urlencode 'geometryType=esriGeometryEnvelope' \
+              --data-urlencode 'inSR=4326' \
+              --data-urlencode 'spatialRel=esriSpatialRelIntersects' \
+              --data-urlencode 'outFields=*' \
+              --data-urlencode 'returnGeometry=true' \
+              --data-urlencode 'outSR=4326' \
+              --data-urlencode 'f=geojson' -o "official-geometry/$file"; then
+              echo "$file downloaded"
+            else
+              echo "$file unavailable" >&2
+              rm -f "official-geometry/$file"
+            fi
+          }
+          fetch_layer \
+            'https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer/87/query' \
+            'noaa-enc-harbour-bridge-lines.geojson'
+          fetch_layer \
+            'https://spatial.usace.army.mil/opjarcgis/rest/services/eHydroPub/National_Channel_Framework/MapServer/0/query' \
+            'usace-national-channel-lines.geojson'
+      - name: Reject unsupported coordinate certainty and summarize evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const fs=require('node:fs');
+          const cases=[
+            {owner:'NOAA Office of Coast Survey',service:'ENC Harbour Bridge_line 87',file:'noaa-enc-harbour-bridge-lines.geojson',url:'https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer/87'},
+            {owner:'US Army Corps of Engineers',service:'National Channel Framework ChannelLine 0',file:'usace-national-channel-lines.geojson',url:'https://spatial.usace.army.mil/opjarcgis/rest/services/eHydroPub/National_Channel_Framework/MapServer/0'}
+          ];
+          const summary={checkedAt:new Date().toISOString(),bbox:[41.44,-81.75,41.54,-81.65],bridgeCrossingTimeValidated:false,navigationalRouteCertified:false,sources:[]};
+          for(const item of cases) {
+            const path='official-geometry/'+item.file;
+            const output={owner:item.owner,service:item.service,url:item.url,status:'UNAVAILABLE',featureCount:0,geometryTypes:[]};
+            if(fs.existsSync(path)){
+              try{
+                const geo=JSON.parse(fs.readFileSync(path,'utf8'));
+                if(geo.type==='FeatureCollection'&&Array.isArray(geo.features)){
+                  output.status='RETRIEVED_SOURCE_GEOMETRY';
+                  output.featureCount=geo.features.length;
+                  output.geometryTypes=[...new Set(geo.features.map(f=>f.geometry?.type||'missing'))].sort();
+                  output.preview=geo.features.slice(0,10).map(f=>({properties:f.properties,geometryType:f.geometry?.type,positions:Array.isArray(f.geometry?.coordinates)?f.geometry.coordinates.length:null}));
+                }else {output.status='INVALID_SERVICE_RESPONSE';output.error=String(geo.error?.message||geo.type||'unknown').slice(0,200);}
+              }catch(e){output.status='INVALID_JSON';output.error=String(e.message).slice(0,200);}
+            }
+            summary.sources.push(output);
+          }
+          fs.writeFileSync('official-geometry/official-geometry-audit.json',JSON.stringify(summary,null,2)+'\n');
+          const lines=['## Bounded official Cuyahoga geometry study','',
+            ...summary.sources.map(s=>s.owner+' '+s.service+': '+s.status+', '+s.featureCount+' features, '+s.geometryTypes.join(', ')),
+            '', '**No bridge crossing time, surveyed centerline or ETA is certified.**',
+            'Raw ArcGIS responses are research evidence and must be reviewed for scale, projection, duplicate chart objects and feature names before reuse.'];
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY,lines.join('\n')+'\n');
+          console.log(lines.join('\n'));
+          NODE
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cuyahoga-official-gis-research
+          path: official-geometry/
+          retention-days: 5
+          if-no-files-found: error
