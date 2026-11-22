@@ -17,8 +17,8 @@
       "lat": 46.722,
       "lon": -92.04,
       "forecastReference": {
-        "lat": 46.719,
-        "lon": -92.05,
+        "lat": 46.722,
+        "lon": -92.04,
         "scope": "nearby NWS land-area grid"
       },
       "parkUrl": "https://duluthmn.gov/parks/parks-trails/parks-listing/park-point/",
@@ -41,8 +41,8 @@
       "lat": 46.812,
       "lon": -90.657,
       "forecastReference": {
-        "lat": 46.807,
-        "lon": -90.665,
+        "lat": 46.814,
+        "lon": -90.677,
         "scope": "nearby NWS land-area grid"
       },
       "parkUrl": "https://dnr.wisconsin.gov/topic/parks/bigbay",
@@ -257,8 +257,8 @@
       "lat": 42.14528,
       "lon": -80.1375,
       "forecastReference": {
-        "lat": 42.14,
-        "lon": -80.143,
+        "lat": 42.1453,
+        "lon": -80.1375,
         "scope": "nearby NWS land-area grid"
       },
       "parkUrl": "https://www.pa.gov/agencies/dcnr/recreation/where-to-go/state-parks/find-a-park/presque-isle-state-park/swimming",
@@ -305,8 +305,8 @@
       "lat": 42.7895,
       "lon": -78.8524,
       "forecastReference": {
-        "lat": 42.785,
-        "lon": -78.854,
+        "lat": 42.7895,
+        "lon": -78.8524,
         "scope": "nearby NWS land-area grid"
       },
       "parkUrl": "https://parks.ny.gov/parks/woodlawnbeach/amenities-activities.aspx",
