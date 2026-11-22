@@ -50,7 +50,7 @@
     if(!v)return 0;
     // The visitor begins at a recorded river fix near the central public viewpoints.
     // Preserve every original NOAA fix in the slider, including distant harbor reports.
-    const first=v.fixes.findIndex(p=>p.lat>=41.485&&p.lat<=41.504&&p.lon>=-81.711&&p.lon<=-81.685);
+    const first=v.fixes.findIndex(p=>p.lat>=41.488&&p.lat<=41.496&&p.lon>=-81.706&&p.lon<=-81.697);
     return first>=0?first:0;
   }
   function historicView(data,day,selectedIndex){
