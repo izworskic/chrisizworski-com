@@ -24,7 +24,7 @@ test('Michigan beach stories are uniquely authored, source-controlled, and rende
   assert.ok(html.indexOf('data-shorefeel-value')>=0&&html.indexOf('data-shorefeel-value')<html.indexOf(esc(note)),b.slug+' temperature must remain first');
   assert.match(html,/Reading the weather together/);
   assert.match(html,/rel="canonical"/);
-  assert.match(html,/chrisizworski.com\\/\\#person/);
+  assert.ok(html.includes('https://chrisizworski.com/#person'),b.slug+' creator identity');
   const hash=crypto.createHash('sha256').update(html).digest('hex');
   assert.ok(pins.includes('["/great-lakes-beaches/'+b.slug+'/", "'+hash+'"]'),b.slug+' source hash must be repinned');
  }
