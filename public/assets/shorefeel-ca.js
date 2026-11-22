@@ -40,6 +40,7 @@
   link('report-park',d.official,'Official park or town');
   link('report-advisory',d.advisory,'Check '+d.source);
   link('report-maps','https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(d.name+', '+d.nearby+', Ontario, Canada'),'View on Google Maps');
+  link('report-detail','/great-lakes-beaches/canada/'+d.slug+'/','Read the complete field note');
   if(controller)controller.abort();
   const signal=new AbortController();controller=signal;
   fetch('/api/shorefeel-ca?beach='+encodeURIComponent(d.slug),{signal:signal.signal,headers:{Accept:'application/json'}})
@@ -81,6 +82,7 @@
   link('report-park','/great-lakes-beaches/around-the-lakes/','U.S. shoreline explorer');
   link('report-advisory','/great-lakes-beaches/','Michigan Beach Report');
   link('report-maps','/great-lakes-beaches/around-the-lakes/','Explore Lake Michigan beaches');
+  link('report-detail','/great-lakes-beaches/around-the-lakes/','Explore U.S. Lake Michigan beaches');
   try{const u=new URL(location.href);u.searchParams.delete('beach');history.replaceState(null,'',u);}catch{}
  }
  function selectLake(next,wanted){

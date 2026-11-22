@@ -52,6 +52,7 @@
     link('report-safety',d.safetyUrl,'Check '+d.safetyName);
     link('report-park',d.parkUrl,'Official park page');
     link('report-maps','https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(d.name+', '+d.city+', '+d.state),'Find on Google Maps');
+    link('report-detail','/great-lakes-beaches/around-the-lakes/'+d.slug+'/','Read the complete field note');
     if(request)request.abort();
     const controller=new AbortController();request=controller;
     fetch('/api/shorefeel-us?beach='+encodeURIComponent(d.slug),{signal:controller.signal,headers:{Accept:'application/json'}})
@@ -103,6 +104,7 @@
     link('report-safety','/great-lakes-beaches/','Explore Michigan Beach Report');
     link('report-park','/lake-huron-water-temperature/saginaw-bay/','Saginaw Bay ShoreFeel');
     link('report-maps','/great-lakes-beaches/','Find Lake Huron beaches');
+    link('report-detail','/great-lakes-beaches/','Explore Michigan’s Lake Huron beaches');
     try{const u=new URL(location.href);u.searchParams.delete('beach');history.replaceState(null,'',u);}catch{}
   }
   function setLake(next,desired){
