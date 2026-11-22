@@ -7,7 +7,7 @@ const read=p=>fs.readFileSync(path.join(__dirname,"..",p),"utf8");
 
 test("ten Blue Ridge Parkway pages preserve search identity and give place-specific interpretation",()=>{
   const slugs=["","closures","weather","best-stops","itinerary","map","asheville","boone","roanoke","cherokee"];
-  const distinct=["cloud-wrapped ridges","Parkway gate","cloud","carriage road","mountain","mileposts","rhododendron","carriage roads","Sharp Top","Richland Balsam"];
+  const distinct=["ridges, forest and mountain stories","Parkway gate","cloud","carriage road","mountain","mileposts","rhododendron","carriage roads","Sharp Top","Richland Balsam"];
   slugs.forEach((slug,i)=>{
     const html=read("public/blue-ridge-parkway/"+(slug?slug+"/":"")+"index.html");
     assert.match(html,/"dateModified":"2026-11-22"/,slug||"main");
