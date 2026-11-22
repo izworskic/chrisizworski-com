@@ -4,7 +4,7 @@
  const core=window.CuyahogaWatchCore;
  const $=id=>document.getElementById(id);
  if(!core){$('vessel-status').textContent='Interactive data is unavailable. Use the official source links below.';return;}
- const state={mode:'live',parks:null,bridges:null,history:null,bridgeNotices:null,live:null,selectedParkId:null,map:null,historyIndex:null,historyId:'barker-2025-07-07',selectedShip:null};
+ const state={mode:'live',parks:null,bridges:null,history:null,bridgeNotices:null,live:null,selectedParkId:null,selectedBridgeId:null,map:null,historyIndex:null,historyId:'barker-2025-07-07',selectedShip:null};
  const mapGroup={parks:null,bridges:null,ships:null,history:null,selected:null};
  const locClock=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'});
  const escText=(tag,text,className)=>{const e=document.createElement(tag);e.textContent=String(text??'');if(className)e.className=className;return e};
@@ -76,7 +76,8 @@
  function choosePark(id,move){
   const park=state.parks?.spots.find(p=>p.id===id);
   if(!park)return;
-  state.selectedParkId=id;
+  state.selectedParkId=id;state.selectedBridgeId=null;
+  const chooser=$('bridge-select');if(chooser)chooser.value='';
   for(const btn of document.querySelectorAll('[data-park]'))btn.setAttribute('aria-current',String(btn.dataset.park===id));
   const official=[
    {label:'Official park details ↗',url:park.officialUrl},
@@ -122,35 +123,53 @@
   }).formatToParts(new Date()).filter(p=>['year','month','day'].includes(p.type)).map(p=>[p.type,p.value]));
   return values.year+'-'+values.month+'-'+values.day;
  }
+ function chooseBridge(bridgeId,move){
+  const bridge=state.bridges?.bridges.find(x=>x.channel==='main'&&x.id===bridgeId);
+  if(!bridge)return;
+  state.selectedBridgeId=bridge.id;state.selectedParkId=null;
+  for(const btn of document.querySelectorAll('[data-park]'))btn.setAttribute('aria-current','false');
+  const selector=$('bridge-select');if(selector)selector.value=bridge.id;
+  const notice=core.bridgeNoticeContext(state.bridgeNotices,bridge.id,clevelandCalendarDay());
+  const sourceConflict=state.bridges.knownConflicts?.find(c=>c.id===bridge.id);
+  let context='The Coast Pilot identifies this '+bridge.structureType+
+    ' crossing at river mile '+bridge.riverMile+'. This rounded point is not a measured bridge span.';
+  if(bridge.structureType==='fixed')context+=' A fixed bridge does not lift for passing freighters.';
+  else if(/permanently open/i.test(bridge.structureType))context+=' This draw is cataloged as permanently open, not an ordinary scheduled bridge opening.';
+  else context+=' The NOAA Coast Pilot does not establish current bridge opening availability.';
+  if(sourceConflict)context+=' Federal bridge regulations and the NOAA Coast Pilot disagree on its river-mile reference. Do not silently substitute one value.';
+  const actions=[{label:'NOAA Coast Pilot ↗',url:state.bridges.sourceUrl}];
+  if(notice){
+    context+=' '+notice.message;
+    actions.push({label:'Dated Coast Guard notice ↗',url:notice.sourceUrl});
+    if(notice.projectUrl)actions.push({label:'Ohio DOT removal project ↗',url:notice.projectUrl});
+  }
+  replaceFocus(notice?'OFFICIAL NOTICE / NOT LIVE BRIDGE STATUS':'NOAA COAST PILOT / REFERENCE ONLY',bridge.name,
+    context,actions,
+    'No live drawbridge state or future vessel crossing time is verified. Check current Coast Guard notices and the bridge owner before planning a visit.');
+  if(move&&state.map)state.map.setView([bridge.latitude,bridge.longitude],15,{animate:false});
+ }
  function plotBridges(){
-  if(!state.bridges||!mapGroup.bridges)return;
+  if(!state.bridges)return;
+  const select=$('bridge-select');
+  if(select){
+   select.replaceChildren(new Option('Select a bridge',''));
+  }
   for(const bridge of state.bridges.bridges){
    if(bridge.channel!=='main')continue;
    const notice=core.bridgeNoticeContext(state.bridgeNotices,bridge.id,clevelandCalendarDay());
+   if(select){
+     const label=bridge.name+' · mile '+bridge.riverMile+(notice?' · Coast Guard work notice':'');
+     const option=document.createElement('option');
+     option.value=bridge.id;option.textContent=label;select.append(option);
+   }
+   if(!mapGroup.bridges)continue;
    const marker=L.marker([bridge.latitude,bridge.longitude],{
     title:bridge.name+(notice?' · published removal notice':''),
     alt:bridge.name+' NOAA approximate bridge reference',
     icon:mapPointIcon(notice?'work':'bridge')
    }).addTo(mapGroup.bridges);
    marker.bindTooltip(bridge.name+' · river mile '+bridge.riverMile+(notice?' · planned removal work':''));
-   marker.on('click',()=>{
-    const sourceConflict=state.bridges.knownConflicts?.find(c=>c.id===bridge.id);
-    let context='The Coast Pilot identifies this '+bridge.structureType+
-      ' crossing at river mile '+bridge.riverMile+'. This rounded point is not a measured bridge span.';
-    if(bridge.structureType==='fixed')context+=' A fixed bridge does not lift for passing freighters.';
-    else if(/permanently open/i.test(bridge.structureType))context+=' This draw is cataloged as permanently open, not an ordinary scheduled bridge opening.';
-    else context+=' The Coast Pilot does not establish current bridge opening availability.';
-    if(sourceConflict)context+=' Federal bridge regulations and the NOAA Coast Pilot disagree on its river-mile reference. Do not substitute one value silently.';
-    const actions=[{label:'NOAA Coast Pilot ↗',url:state.bridges.sourceUrl}];
-    if(notice){
-      context+=' '+notice.message;
-      actions.push({label:'Dated Coast Guard notice ↗',url:notice.sourceUrl});
-      if(notice.projectUrl)actions.push({label:'Ohio DOT removal project ↗',url:notice.projectUrl});
-    }
-    replaceFocus(notice?'OFFICIAL NOTICE / NOT LIVE BRIDGE STATUS':'NOAA COAST PILOT / REFERENCE ONLY',bridge.name,
-      context,actions,
-      'No live drawbridge state or future vessel crossing time is verified. Refer to current Coast Guard notices and the bridge owner before a trip.');
-   });
+   marker.on('click',()=>chooseBridge(bridge.id,false));
   }
  }
  function speedCopy(v){
@@ -273,6 +292,7 @@
     [{label:'Open full Great Lakes ship tracker ↗',url:'/great-lakes-freighter-tracking/'}]);
   }
   if(state.selectedParkId)choosePark(state.selectedParkId,false);
+  else if(state.selectedBridgeId)chooseBridge(state.selectedBridgeId,false);
  }
  async function loadReferenceData(){
   const safeGet=async url=>{const r=await fetch(url,{cache:'force-cache',signal:AbortSignal.timeout(12000)});if(!r.ok)throw Error('No public resource');return r.json()};
@@ -296,6 +316,7 @@
   $('show-live').addEventListener('click',()=>changeMode('live'));
   $('show-history').addEventListener('click',()=>changeMode('historic'));
   $('refresh-ais').addEventListener('click',getLive);
+  $('bridge-select').addEventListener('change',e=>{if(e.target.value)chooseBridge(e.target.value,true);});
   $('voyage-select').addEventListener('change',e=>{state.historyId=e.target.value;state.historyIndex=core.firstRiverFixIndex(state.history,state.historyId);renderHistory();});
   $('history-scrubber').addEventListener('input',e=>{state.historyIndex=Number(e.target.value);renderHistory();});
   $('history-prev').addEventListener('click',()=>{state.historyIndex--;renderHistory();});
