@@ -114,3 +114,17 @@ test('switching evidence type keeps source domains and future ETAs separated',()
  assert.match(page,/Park managers provide current access information/);
  assert.doesNotMatch(page,/<iframe[^>]+src="https:\/\/.*(?:tracking|ais|maps)/i);
 });
+
+test('each public NOAA replay begins with an actual observed ship fix near the central Cuyahoga river bends',()=>{
+ const dataset=JSON.parse(readFileSync('public/cuyahoga-freighter-watch/noaa-historical-2025.json','utf8'));
+ const expected={'barker-2025-07-07':96,'laud-2025-08-15':36,'barker-2025-08-21':157};
+ for(const v of dataset.voyages){
+  const index=core.firstRiverFixIndex(dataset,v.id);
+  assert.equal(index,expected[v.id]);
+  const first=core.historicView(dataset,v.id,index);
+  assert.equal(first.observed.seen,v.fixes[index].seen);
+  assert.ok(first.observed.lat>=41.488&&first.observed.lat<=41.496);
+  assert.ok(first.observed.lon>=-81.706&&first.observed.lon<=-81.697);
+ }
+ assert.equal(core.firstRiverFixIndex(null,'missing'),0);
+});
