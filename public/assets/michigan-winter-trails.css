@@ -37,7 +37,7 @@
 .trl .wf-controls label{flex:1 1 180px}
 .trl .wf-chip{font-size:.75rem}
 .trl .wf-map{height:415px}
-.trl /* Access notices belong at the map decision, not above the trail choices. */
+/* Access notices belong at the map decision, not above the trail choices. */
 .trl .trl-access-disclosure{margin-top:10px;border-top:1px solid #d6e0d9;font-size:.76rem;line-height:1.5;color:#385445}
 .trl .trl-access-disclosure summary{display:flex;align-items:center;flex-wrap:wrap;column-gap:8px;row-gap:2px;cursor:pointer;min-height:42px;padding:9px 2px;color:#2b5841;list-style-position:inside}
 .trl .trl-access-disclosure summary::marker{color:#527c65}
