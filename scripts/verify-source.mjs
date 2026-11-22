@@ -562,7 +562,7 @@ const committedDriftHashEntries = [
   ["/great-lakes-beaches/south-haven-north/", "4b2e857db11161a1632bba8389db6c83122f9184fa50bbb1ddc2a386348f2bba"],
   ["/great-lakes-beaches/caseville-state-park/", "cac822e0d712abb49129d749d67c43602cff1ad7082e668e489154308a36099b"],
   ["/assets/beach-report.js", "9987e1708ce37a0bd1d567ad013fa7f92323a0808c45c93a94a75638282c6d88"],
-  ["/assets/beach-report.css", "2d8eee4ef4370cf01593e2bd8d98ea0202b0cbd0da1ef2e059b042e51e4d4092"],
+  ["/assets/beach-report.css", "e51827a64dac0684505bee7febe041cb9231ce1368106c050d8445bb695eff1c"],
 ];
 
 // A Map built from an array silently keeps the LAST value for a duplicate key, so a stale pin added
