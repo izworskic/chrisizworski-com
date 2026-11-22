@@ -34,6 +34,9 @@ function fixture(now) {
       { mmsi: gott.mmsi, name: gott.name, lat: gott.lat, lon: gott.lon, seen: gott.seen, speedKnots: 0.3, course: 90, heading: 90, shipType: 70, source: 'fixture', lengthMeters: 305, destination: 'NANTICOKE' },
       { mmsi: '366009991', name: 'TEST TUG', lat: 46.501, lon: -84.368, seen: iso(now, -2), speedKnots: 4, course: 90, shipType: 31, source: 'fixture', lengthMeters: 27 },
       { mmsi: '366009992', name: 'TEST TANKER', lat: 46.505, lon: -84.375, seen: iso(now, -3), speedKnots: 5, course: 90, shipType: 80, source: 'fixture', lengthMeters: 119 },
+      // Two more boats moored on top of TEST TUG, as at the Coast Guard dock on 2026-11-22.
+      { mmsi: '366009994', name: 'TEST FERRY', lat: 46.501, lon: -84.368, seen: iso(now, -2), speedKnots: 0, course: null, shipType: 60, source: 'fixture', lengthMeters: 30 },
+      { mmsi: '366009995', name: 'TEST SLOOP', lat: 46.501, lon: -84.368, seen: iso(now, -2), speedKnots: 0, course: null, shipType: 36, source: 'fixture', lengthMeters: 12 },
       { mmsi: '366009993', name: 'TEST UNKNOWN', lat: 46.499, lon: -84.359, seen: iso(now, -4), speedKnots: null, course: null, shipType: null, source: 'fixture', lengthMeters: null }
     ],
     attribution: [{ source: 'fixture', credit: 'Test fixture' }],
@@ -52,14 +55,20 @@ function weather(now) {
   })) } };
 }
 
-async function open(browser, { width, time, api = 'ok', js = true, wx = 'ok' }) {
+async function open(browser, { width, time, api = 'ok', js = true, wx = 'ok', pin = true }) {
   const context = await browser.newContext({ viewport: { width, height: 900 }, reducedMotion: 'reduce', javaScriptEnabled: js });
   const page = await context.newPage();
   const errors = [];
   page.on('pageerror', e => errors.push(e.message));
-  await page.clock.setFixedTime(new Date(time));
+  // Leaflet ignores pointer clicks on markers while the page clock is frozen, so the
+  // direct-tap scenario runs on the real clock with fixture times set to now.
+  if (pin) await page.clock.setFixedTime(new Date(time));
   await context.route('**/*', async route => {
     const u = new URL(route.request().url());
+    if (u.pathname === '/api/field-camera') {
+      if (u.searchParams.get('meta')) return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ available: true, fresh: true, label: 'St. Marys River at the Soo', age_minutes: 4, source: 'usgs', credit: 'USGS HIVIS', credit_url: 'https://apps.usgs.gov/hivis/', image_url: '/assets/soo-locks/hero.jpg', image_width: 720, image_height: 405 }) });
+      return route.fulfill({ status: 404, body: '' });
+    }
     if (u.pathname === '/api/soo-ais') {
       if (api === 'fail') return route.fulfill({ status: 503, contentType: 'application/json', body: '{"ok":false}' });
       return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(fixture(time)) });
@@ -69,7 +78,10 @@ async function open(browser, { width, time, api = 'ok', js = true, wx = 'ok' }) 
       return route.fulfill({ status: 200, contentType: 'application/geo+json', body: JSON.stringify(weather(time)) });
     }
     if (u.hostname === 'unpkg.com' && /\/leaflet\.(js|css)$/.test(u.pathname)) {
-      return route.fulfill({ status: 200, contentType: u.pathname.endsWith('.js') ? 'text/javascript' : 'text/css', body: fs.readFileSync(path.join(root, 'vendor/leaflet', path.basename(u.pathname))) });
+      // The page loads Leaflet cross-origin with SRI, so the stand-in must be byte-identical to
+      // unpkg 1.9.4 (public/assets/leaflet-1.9.4.*) and carry a CORS header, or the browser drops it.
+      const js = u.pathname.endsWith('.js');
+      return route.fulfill({ status: 200, contentType: js ? 'text/javascript' : 'text/css', headers: { 'access-control-allow-origin': '*' }, body: fs.readFileSync(path.join(root, 'assets', js ? 'leaflet-1.9.4.js' : 'leaflet-1.9.4.css')) });
     }
     if (u.hostname === '127.0.0.1') return route.continue();
     return route.abort();
@@ -97,13 +109,15 @@ let base;
         await page.locator('#sooVesselMap').scrollIntoViewIfNeeded();
         await page.locator('#sooVesselMap .soo-ais-symbol').first().waitFor();
         const marker = kind => page.locator('#sooVesselMap .soo-ais-symbol.type-' + kind);
-        assert.equal(await page.locator('#sooVesselMap .soo-ais-symbol').count(), 4, 'each recent AIS report has one ship symbol');
+        assert.equal(await page.locator('#sooVesselMap .soo-ais-symbol').count(), 6, 'each recent AIS report has one ship symbol');
+        // Equivalent control: every map symbol also has a full-size button in the vessel list.
+        assert.equal(await page.locator('#sooVesselList button').count(), 6);
         for (const [kind, w] of [['cargo', 63], ['tanker', 49], ['tug', 38], ['unknown', 46]]) {
           assert.equal(await marker(kind).count(), 1, kind + ' has a distinct ship shape');
           assert.equal(Math.round(await marker(kind).evaluate(e => e.getBoundingClientRect().width)), w, kind + ' follows reported length');
         }
         // The ship-name hover card must not compete with the single AIS detail popup.
-        await marker('tug').hover();
+        await marker('tanker').hover(); // the tug is under the moored ferry and sloop now
         assert.equal(await page.locator('#sooVesselMap .leaflet-tooltip:visible').count(), 0, 'hovering a vessel does not create a second card');
         await page.locator('#sooVesselList button').filter({ hasText: 'TEST TUG' }).click();
         await page.locator('#sooVesselMap .leaflet-popup-content:visible').first().waitFor();
@@ -164,8 +178,16 @@ let base;
       assert.equal(await page.locator('input[name="lw-stay"]:checked').getAttribute('value'), '180');
       // web-quality-accessibility: axe-core WCAG 2.0 to 2.2 A/AA over the whole page, after interaction.
       if (AxeBuilder && (width === 390 || width === 1280)) {
-        const scan = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']).analyze();
+        // The camera credit is part of the scan: wait for the fixture camera to render it.
+        await page.locator('.field-camera .camera-credit').waitFor();
+        const tags = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];
+        const scan = await new AxeBuilder({ page }).withTags(tags).disableRules(['target-size']).analyze();
         assert.deepEqual(scan.violations.map(v => `${v.id} (${v.impact}) x${v.nodes.length}: ${v.nodes[0].target.join(' ')}`), [], 'axe at ' + width);
+        // WCAG 2.5.8 target size: map symbols at the same dock overlap by nature (the position is
+        // essential) and each has an equivalent list button plus the overlap chooser asserted above,
+        // so map markers are excluded from this one rule; every other target on the page is held to it.
+        const targets = await new AxeBuilder({ page }).withRules(['target-size']).exclude('#sooVesselMap .leaflet-marker-icon').analyze();
+        assert.deepEqual(targets.violations.map(v => `${v.id} x${v.nodes.length}: ${v.nodes[0].target.join(' ')}`), [], 'target size at ' + width);
       }
       // No page-wide horizontal scroll.
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, 'overflow at ' + width);
@@ -229,6 +251,53 @@ let base;
       await page.locator('.lw-row-btn').first().waitFor();
       assert.equal(await page.locator('#soo-next-ship a[href^="tel:"]').count(), 1);
       assert.doesNotMatch(await page.locator('[data-lw-verdict]').innerText(), /hotline is not maintained/);
+      await context.close();
+    }
+    // 10. A crowded dock: overlapping symbols get a chooser on tap; keyboard opens one vessel directly.
+    {
+      const now = Date.now();
+      const { context, page, errors } = await open(browser, { width: 390, time: now, pin: false });
+      await page.locator('#sooVesselMap').scrollIntoViewIfNeeded();
+      await page.locator('#sooVesselMap .soo-ais-symbol').first().waitFor();
+      const marker = kind => page.locator('#sooVesselMap .soo-ais-symbol.type-' + kind);
+      // Overlapping moored boats: a tap at that spot offers every vessel there, in the one popup.
+      await marker('tug').scrollIntoViewIfNeeded();
+      await page.waitForTimeout(400);
+      const box = await marker('tug').boundingBox();
+      await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+      const crowd = page.locator('#sooVesselMap .soo-ais-crowd');
+      await crowd.waitFor();
+      assert.match(await crowd.innerText(), /^3 vessels are reported at this spot\. Choose one:/);
+      assert.deepEqual((await crowd.locator('button').allInnerTexts()).sort(), ['TEST FERRY · Passenger', 'TEST SLOOP · Sailboat', 'TEST TUG · Tug / towing']);
+      assert.equal(await page.evaluate(() => document.activeElement && document.activeElement.closest('.soo-ais-crowd') !== null), true, 'focus moves into the chooser');
+      // The chooser clears the zoom buttons (popup auto-pan padding; the pan animates briefly).
+      await page.waitForTimeout(700);
+      const zoom = await page.locator('#sooVesselMap .leaflet-control-zoom').boundingBox();
+      const pop = await page.locator('#sooVesselMap .leaflet-popup-content-wrapper').boundingBox();
+      assert.ok(pop.x >= zoom.x + zoom.width || pop.y >= zoom.y + zoom.height, 'popup not under the zoom control');
+      const mapBox = await page.locator('#sooVesselMap').boundingBox();
+      assert.ok(pop.x + pop.width <= mapBox.x + mapBox.width + 1, 'popup fits inside the map on a 390 px phone');
+      await page.locator('#sooVesselMap').screenshot({ path: out + '/vessel-crowd-390.png' });
+      await crowd.locator('button', { hasText: 'TEST SLOOP' }).click();
+      assert.equal(await page.locator('#sooVesselMap .leaflet-popup:visible').count(), 1, 'the chooser and the detail share one popup');
+      assert.ok((await page.locator('#sooVesselMap .leaflet-popup-content:visible').last().innerText()).includes('TEST SLOOP'));
+      // A keyboard user who focused one marker goes straight to that vessel, not the chooser.
+      await marker('tanker').focus();
+      await page.keyboard.press('Enter');
+      assert.ok((await page.locator('#sooVesselMap .leaflet-popup-content:visible').last().innerText()).includes('Reported AIS type: Tanker'));
+      assert.equal(await page.locator('#sooVesselMap .soo-ais-crowd').count(), 0);
+      // A list button opens the same detail, panned clear of the zoom buttons.
+      await page.locator('#sooVesselList button').filter({ hasText: 'TEST TUG' }).click();
+      await page.waitForTimeout(900);
+      const zoom2 = await page.locator('#sooVesselMap .leaflet-control-zoom').boundingBox();
+      const pop2 = await page.locator('#sooVesselMap .leaflet-popup-content-wrapper').boundingBox();
+      assert.ok(pop2.x >= zoom2.x + zoom2.width || pop2.y >= zoom2.y + zoom2.height, 'list-opened detail is not under the zoom control');
+      await page.locator('#sooVesselMap').screenshot({ path: out + '/vessel-detail-390.png' });
+      // Space works too, as for any role="button".
+      await marker('unknown').focus();
+      await page.keyboard.press(' ');
+      assert.ok((await page.locator('#sooVesselMap .leaflet-popup-content:visible').last().innerText()).includes('TEST UNKNOWN'));
+      assert.deepEqual(errors, []);
       await context.close();
     }
     // 9. No JavaScript: the static explanation, sources and posted hours remain; controls stay hidden.
