@@ -189,6 +189,7 @@
       build();
     });
     $("flowStartNext")?.addEventListener("click",continueFromStart);
+    $("plannerForm")?.addEventListener("blue-ridge:edit",()=>{if($("results"))$("results").hidden=true;showFlowStep(2);});
     $("flowBack")?.addEventListener("click",()=>showFlowStep(1,{focus:true,scroll:true}));
     $("flowEdit")?.addEventListener("click",()=>{if($("results"))$("results").hidden=true;showFlowStep(2,{focus:true,scroll:true});track("blue_ridge_flow_edit");});
     $("results")?.addEventListener("click",event=>{
