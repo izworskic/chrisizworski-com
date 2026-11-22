@@ -1,0 +1,6 @@
+---
+description: "Use optional Agent Browser for AI-led browser investigation; keep Playwright for reproducible regression tests"
+alwaysApply: false
+---
+
+When explicitly authorized for Agent Browser investigation, read `.agents/skills/agent-browser-qa/SKILL.md` and `docs/AGENT_BROWSER_WORKFLOW.md`. Confirm the owning repository, a real browser runtime and scope. Do not enable MCP, install dependencies or mutate live pages automatically.
