@@ -74,7 +74,7 @@ test('map selection and detailed notes stay synchronized and accessible',()=>{
  assert.match(map,/winter-trails:fit-map/);
  assert.match(controller,/scrollIntoView/);
  assert.match(controller,/prefers-reduced-motion/);
- assert.match(controller,/aria/);
+ assert.match(controller,/focus\(\{preventScroll:true\}\)/);
  assert.match(css,/\.trl \.trl-desk-controls/);
  assert.match(css,/:focus-visible/);
  assert.match(css,/@media\(max-width:610px\)/);
