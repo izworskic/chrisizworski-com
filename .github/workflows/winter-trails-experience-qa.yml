@@ -1,0 +1,64 @@
+name: Michigan Winter Trails Experience Investment QA
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - public/michigan-winter-trails/**
+      - public/assets/michigan-winter-trails.css
+      - public/assets/michigan-winter-trail-desk.js
+      - public/assets/michigan-winter-trail-weather.js
+      - tests/michigan-winter-trails-experience*
+      - scripts/run-michigan-winter-trails-foundry.mjs
+      - scripts/check-michigan-winter-trails-experience-browser.cjs
+      - docs/experience-briefs/michigan-winter-trails-experience-20261122*
+      - .github/workflows/winter-trails-experience-qa.yml
+permissions:
+  contents: read
+jobs:
+  experience:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Generate source-pinned Foundry improvement assignment
+        run: node scripts/run-michigan-winter-trails-foundry.mjs
+      - name: Validate Foundry opportunity, two concepts and six scenarios
+        run: node scripts/experience-foundry.mjs assess --run experience-foundry/drafts/michigan-winter-trails-first-decision-20261122/run.json
+      - name: Prove changed source behavior against genuine Git baseline
+        run: node scripts/experience-foundry.mjs prove --run experience-foundry/drafts/michigan-winter-trails-first-decision-20261122/run.json --out build/experience-foundry/michigan-winter-trails-first-decision-20261122
+      - name: Reject stale or incomplete Foundry proof
+        run: node scripts/experience-foundry.mjs assess --run experience-foundry/drafts/michigan-winter-trails-first-decision-20261122/run.json --proof build/experience-foundry/michigan-winter-trails-first-decision-20261122/proof.json
+      - name: Verify Experience OS V1.2 release record structure and owning site
+        run: node scripts/verify-experience-os-v1.2.mjs docs/experience-briefs/michigan-winter-trails-experience-20261122.release.json --check-site
+      - name: Regression tests for documented trail decisions and official sources
+        run: node --test tests/michigan-winter-trails-experience.test.js tests/michigan-winter-trail-desk.test.js tests/michigan-winter-trail-weather.test.js tests/michigan-winter-trails-release.test.js
+      - name: Install isolated pinned Playwright and axe-core for browser review
+        run: |
+          mkdir -p /tmp/winter-trails-experience-qa
+          npm install --prefix /tmp/winter-trails-experience-qa --no-save --ignore-scripts playwright@1.58.2 axe-core@4.10.3
+          echo "NODE_PATH=/tmp/winter-trails-experience-qa/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium-browser || command -v chromium)" >> "$GITHUB_ENV"
+      - name: Start static page server for before-after browser comparison
+        run: |
+          python3 -m http.server 4173 --directory public > /tmp/winter-trails-experience-server.log 2>&1 &
+          sleep 2
+      - name: Measure five phone-to-desktop viewports and weather return journey
+        run: node scripts/check-michigan-winter-trails-experience-browser.cjs
+      - name: Retain browser screenshots, numeric movement and Foundry proof
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: winter-trails-experience-before-after
+          path: |
+            artifacts/michigan-winter-trails-experience-20261122/
+            experience-foundry/drafts/michigan-winter-trails-first-decision-20261122/
+            build/experience-foundry/michigan-winter-trails-first-decision-20261122/
+          retention-days: 14
+          if-no-files-found: warn
