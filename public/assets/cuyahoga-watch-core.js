@@ -27,8 +27,12 @@
         shipType:Number.isInteger(v.shipType)?v.shipType:null,
         source:String(v.source||'AIS report').slice(0,90)}))
       .sort((a,b)=>b.seen.localeCompare(a.seen));
+    const attributions=Array.isArray(data.attribution)
+      ?data.attribution.filter(a=>a && typeof a.credit==='string').slice(0,20)
+        .map(a=>({source:String(a.source||'AIS').slice(0,90),credit:a.credit.slice(0,350)}))
+      :[];
     return {state:vessels.length?'REPORTS_AVAILABLE':'NO_FRESH_LOCAL_REPORTS',
-      count:vessels.length,checkedAt:data.checkedAt,vessels,
+      count:vessels.length,checkedAt:data.checkedAt,vessels,attributions,
       reason:vessels.length?'Fresh AIS positions are observations, not arrival predictions.':'No recent AIS positions appeared in this river box. Coverage gaps do not establish an empty river.'};
   }
   function validCatalog(data){
