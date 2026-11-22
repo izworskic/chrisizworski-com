@@ -62,6 +62,30 @@ test('shared US and Ontario ShoreFeel layout removes oval and displays source-ba
  }
 });
 
+test('beach regeneration retains protected CTR headings and Pictured Rocks planner links',()=>{
+ const generator=read('scripts/generate-beach-pages.mjs');
+ const pkg=JSON.parse(read('package.json'));
+ assert.match(generator,/await import\("\.\/apply-beach-detail-search-overrides\.mjs"\)/);
+ assert.equal(pkg.scripts['generate:beaches'],'node scripts/generate-beach-pages.mjs');
+ const overrides=read('scripts/apply-beach-detail-search-overrides.mjs');
+ assert.match(overrides,/shorefeel-place-summary/);
+ for(const slug of ['miners-beach','sand-point-pictured-rocks','twelvemile-beach']){
+  const h=read('public/great-lakes-beaches/'+slug+'/index.html');
+  assert.ok(h.includes('href="https://picturedrocks.chrisizworski.com/"'),slug);
+ }
+ for(const [slug,title,h1] of [
+  ['warren-dunes-state-park','Warren Dunes Beach Conditions Today: Waves &amp; Swim Risk','Warren Dunes Beach Conditions Today'],
+  ['luna-pier','Luna Pier Beach Water Quality &amp; Conditions Today','Luna Pier Beach Water Quality &amp; Conditions Today'],
+  ['new-buffalo-beach','New Buffalo Beach Conditions Today: Swim Risk &amp; Waves','New Buffalo Beach Conditions Today'],
+  ['pj-hoffmaster-state-park','P.J. Hoffmaster Beach Conditions Today: Waves &amp; Water','P.J. Hoffmaster Beach Conditions Today'],
+  ['oscoda-beach-park','Oscoda Beach Park Conditions Today: Waves &amp; Water','Oscoda Beach Park Conditions Today']
+ ]){
+  const h=read('public/great-lakes-beaches/'+slug+'/index.html');
+  assert.ok(h.includes('<title>'+title+'</title>'),slug);
+  assert.ok(h.includes('<h1 id="page-title">'+h1+'</h1>'),slug);
+ }
+});
+
 test('all 34 US and Ontario reports have individual canonical source-linked HTML',()=>{
  const sitemap=read('public/sitemap-shorefeel-beaches.xml');
  const index=read('public/sitemap-index.xml');
