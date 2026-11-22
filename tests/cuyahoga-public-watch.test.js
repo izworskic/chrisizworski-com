@@ -236,3 +236,18 @@ test('map distinguishes Eagle work notice from NOAA bridge reference and fixed s
  assert.match(page,/Dated removal notice/);
  assert.match(css,/\.pin-work/);
 });
+
+test('every main NOAA bridge is keyboard-accessible without tapping tightly clustered map pins',()=>{
+ const source=JSON.parse(readFileSync('public/cuyahoga-freighter-watch/bridges.json','utf8'));
+ assert.equal(source.bridges.filter(b=>b.channel==='main').length,19);
+ assert.match(page,/<details class="bridge-picker">/);
+ assert.match(page,/<label for="bridge-select">/);
+ assert.match(page,/<select id="bridge-select"/);
+ assert.match(app,/function chooseBridge\(/);
+ assert.match(app,/function plotBridges\(/);
+ assert.match(app,/\$\('bridge-select'\)\.addEventListener\('change'/);
+ assert.match(app,/state\.selectedBridgeId/);
+ assert.match(app,/else if\(state\.selectedBridgeId\)chooseBridge/);
+ assert.match(css,/\.bridge-picker/);
+ assert.doesNotMatch(app,/window\.open\(|alert\(/);
+});
