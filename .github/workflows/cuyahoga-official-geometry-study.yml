@@ -4,7 +4,9 @@ name: Cuyahoga NOAA and USACE official GIS geometry research
 on:
   push:
     branches: [research/cuyahoga-ais-audit-20261122]
-    paths: [.github/workflows/cuyahoga-official-geometry-study.yml]
+    paths:
+      - .github/workflows/cuyahoga-official-geometry-study.yml
+      - tests/cuyahoga-county-centerline-audit.test.js
 
 permissions:
   contents: read
