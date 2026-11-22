@@ -72,6 +72,13 @@ export function applyBeachDetailSearchOverride(source, override) {
   // the new small named-beach header. Do not revert the ShoreFeel-first layout.
   html = html.replace(/<p class="(hero-lede|shorefeel-place-summary)">[^<]*<\/p>/,
     (_match, className) => `<p class="${className}">${escapeHtml(override.firstAnswer)}</p>`);
+  // The original protected five pages explicitly distinguish NWS predictions
+  // from the posted on-site swimming flag. Keep that promise in the real
+  // source/safety card after moving the temperature to the top.
+  if (!html.includes('NWS swim risk is a forecast, not the posted flag')) {
+    html = html.replace('<h3>Before entering the water</h3>',
+      '<h3>Before entering the water</h3><p>NWS swim risk is a forecast, not the posted flag; live planning data is not a water-safety certification.</p>');
+  }
   // Keep the generator dateModified for the actual current content release.
   return html;
 }
