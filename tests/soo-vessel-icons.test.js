@@ -18,7 +18,9 @@ test('Soo map uses the shared AIS silhouettes rather than circles for normal shi
   assert.match(js, /visibleMarkers\.set\(String\(v\.mmsi\)/);
   assert.match(js, /marker\.bindPopup\(content\)/);
   assert.doesNotMatch(js, /\.bindTooltip\(/);
-  assert.match(js, /getElement\(\)\?\.setAttribute\('aria-label'/);
+  assert.match(js, /el\.setAttribute\('aria-label'/);
+  assert.match(js, /el\.addEventListener\('mousedown'/);
+  assert.match(js, /labelShipMarker\(marker, v\)/);
   assert.match(js, /map\.on\('zoomend'/);
   assert.match(js, /selectedMarker = m/);
   assert.doesNotMatch(js, /marker = L\.circleMarker\(\[v\.lat, v\.lon\]/);
@@ -54,7 +56,7 @@ test('reported AIS type and length drive distinct, proportionate outlines; unkno
 
 test('Soo page loads icon module before renderer; legend and accessible interactions remain', () => {
   const icon = page.indexOf('/assets/seaway-vessel-icons.js?v=20261108a');
-  const map = page.indexOf('/assets/soo-ais.js?v=20261122b');
+  const map = page.indexOf('/assets/soo-ais.js?v=20261122c');
   assert.ok(icon > -1 && map > icon);
   assert.match(page, /\/assets\/soo-vessel-icons\.css\?v=20261122/);
   assert.match(page, /id="sooVesselMap"/);
