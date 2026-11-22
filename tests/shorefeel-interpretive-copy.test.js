@@ -20,8 +20,8 @@ test('Michigan beach stories are uniquely authored, source-controlled, and rende
  for(const b of mi){
   const note=notes[b.slug],html=read('public/great-lakes-beaches/'+b.slug+'/index.html');
   assert.ok(typeof note==='string'&&note.length>=120,b.slug+' needs a developed field note');
-  assert.ok(html.includes('<p>'+esc(note)+'</p>'),b.slug+' generated note drift');
-  assert.ok(html.indexOf('data-shorefeel-value')>=0&&html.indexOf('data-shorefeel-value')<html.indexOf(esc(note)),b.slug+' temperature must remain first');
+  assert.ok(html.includes('<p>'+esc(note).replaceAll('&#39;','&#039;')+'</p>'),b.slug+' generated note drift');
+  assert.ok(html.indexOf('data-shorefeel-value')>=0&&html.indexOf('data-shorefeel-value')<html.indexOf(esc(note).replaceAll('&#39;','&#039;')),b.slug+' temperature must remain first');
   assert.match(html,/Reading the weather together/);
   assert.match(html,/rel="canonical"/);
   assert.ok(html.includes('https://chrisizworski.com/#person'),b.slug+' creator identity');
