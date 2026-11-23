@@ -139,6 +139,39 @@ async def run():
                 raise AssertionError("Verified historical Wikimedia photo failed to load")
             if await page.locator(".story-photo figcaption a[href*='creativecommons.org/licenses/by/2.0']").count() != 1:
                 raise AssertionError("Photo license credit is not visible")
+            # The separate river-bend lesson is illustrative, not the observed AIS map.
+            diagram = page.locator("#bend-diagram")
+            if await diagram.count() != 1:
+                raise AssertionError("River-bend vessel explanation missing")
+            approach = page.locator("[data-bend-step='0']")
+            middle = page.locator("[data-bend-step='1']")
+            exit_turn = page.locator("[data-bend-step='2']")
+            if await middle.is_disabled() or await page.locator("#bend-position").is_disabled():
+                raise AssertionError("River-bend explainer controls did not initialize")
+            original = await page.locator("#bend-ship").get_attribute("transform")
+            await middle.click()
+            if await middle.get_attribute("aria-pressed") != "true":
+                raise AssertionError("Middle bend moment not selected")
+            if "Mind both ends" not in await page.locator("#bend-stage-name").inner_text():
+                raise AssertionError("Missing bow-and-stern explanation")
+            mid_transform = await page.locator("#bend-ship").get_attribute("transform")
+            if original == mid_transform:
+                raise AssertionError("Illustration did not actually change")
+            await exit_turn.click()
+            if "stern" not in (await page.locator("#bend-stage-name").inner_text()).lower():
+                raise AssertionError("Third stage explanation not synchronized")
+            await approach.click()
+            if await page.locator("#bend-ship").get_attribute("transform") != original:
+                raise AssertionError("A → B → C → A did not restore the same scene")
+            await page.locator("#bend-position").fill("72")
+            if await page.locator("#bend-position").input_value() != "72":
+                raise AssertionError("Native keyboard-accessible slider failed")
+            if not await page.locator("#bend-play").is_disabled():
+                raise AssertionError("Reduced-motion viewport must not autoplay the diagram")
+            await page.locator("#bend-reset").click()
+            if await page.locator("#bend-position").input_value() != "12":
+                raise AssertionError("Bend reset did not return to the approach")
+            await diagram.screenshot(path=str(OUT / f"cuyahoga-{width}-bend-demo.png"))
             overflow = await page.evaluate("document.documentElement.scrollWidth > window.innerWidth + 2")
             if overflow:
                 raise AssertionError(f"Horizontal page overflow at {width}px")
