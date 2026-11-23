@@ -1,0 +1,10 @@
+/* Cuyahoga bridge-to-shore is attached only to the selected bridge dossier. */
+.bridge-shore-handoff{margin-top:16px;padding:16px 17px 14px;background:#edf5f1;border-radius:10px;border-left:4px solid #1e745c;color:#173a3f}
+.bridge-shore-handoff strong{display:block;font-size:.91rem;line-height:1.4;margin-bottom:5px}
+.bridge-shore-handoff p{font-size:.84rem;line-height:1.53;margin:0 0 11px;color:#315258}
+.bridge-shore-action{background:#164d55;border:1px solid #164d55;color:#fff;min-height:44px;border-radius:7px;font-weight:750;font-size:.81rem;padding:9px 12px;display:inline-block;margin-right:12px;margin-bottom:6px;text-align:left}
+.bridge-shore-action:hover{background:#0e3c43}
+.bridge-shore-handoff a{display:inline-block;font-weight:700;font-size:.8rem;line-height:1.6}
+.bridge-shore-action:focus-visible{outline:3px solid #db9e40;outline-offset:3px}
+@media(max-width:480px){.bridge-shore-handoff{padding:13px 12px}.bridge-shore-action{width:100%;text-align:center;margin-bottom:9px}.bridge-shore-handoff a{font-size:.79rem}}
+@media(prefers-reduced-motion:reduce){.bridge-shore-handoff *{transition:none!important;animation:none!important}}
