@@ -25,16 +25,18 @@
    const course=v?.course;
    return typeof course==='number'&&Number.isFinite(course)&&course>=0&&course<360?course:null;
  }
+ function heading(v){const h=v?.heading;return typeof h==='number'&&Number.isFinite(h)&&h>=0&&h<=359?h:null;}
  function glyphSvg(kind){return Icons.svg(byKind.has(kind)?kind:'unknown');}
  function marker(v,{zoom=13,selected=false}={}){
    const shape=Icons.icon(v,{zoom,selected});
-   const course=bearing(v);
-   const direction=course===null?'':'<span class="river-ship-course" style="--river-course:'+
-     course.toFixed(1)+'deg" aria-hidden="true"><span>↑</span></span>';
-   return {...shape,course,
-     className:'river-watch-marker '+shape.className+(course===null?' without-course':' with-course'),
+   const course=bearing(v),trueHeading=heading(v),point=course===null?trueHeading:course;
+   const basis=course!==null?'course':trueHeading!==null?'heading':'unknown';
+   const direction=point===null?'':'<span class="river-ship-course'+(basis==='heading'?' river-ship-heading':'')+'" style="--river-course:'+
+     point.toFixed(1)+'deg" aria-hidden="true"><span>↑</span></span>';
+   return {...shape,course,heading:trueHeading,basis,
+     className:'river-watch-marker '+shape.className+(basis==='unknown'?' without-course':basis==='heading'?' with-heading':' with-course'),
      html:'<span class="river-ship-art">'+shape.html+'</span>'+direction,
-     key:shape.key+':course-'+(course===null?'unknown':course.toFixed(1))
+     key:shape.key+':'+basis+'-'+(point===null?'unknown':point.toFixed(1))
    };
  }
  function summarize(report,now=Date.now()){
@@ -87,5 +89,5 @@
      container.append(button);
    }
  }
- return Object.freeze({KINDS:kinds,kindOf,typeName,bearing,glyphSvg,marker,summarize,match,renderTypeFilters});
+ return Object.freeze({KINDS:kinds,kindOf,typeName,bearing,heading,glyphSvg,marker,summarize,match,renderTypeFilters});
 });

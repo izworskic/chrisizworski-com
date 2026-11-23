@@ -81,6 +81,10 @@ async def run():
                 raise AssertionError("Cargo vessel missing its source-category silhouette")
             if await page.locator(".cuyahoga-vessel-icon svg").count() != 1:
                 raise AssertionError("AIS vessel marker missing SVG source category shape")
+            if await page.locator("#show-ships-on-map").inner_text() != "Show 1 ship":
+                raise AssertionError("Live ship map control must display a verified report count")
+            if await page.locator("#live-controls").count() != 1:
+                raise AssertionError("Current AIS report list missing")
             if await page.locator(".pin-bridge").count() or await page.locator(".pin-work").count():
                 raise AssertionError("Default river map should prioritize public parks and observed ships, not bridge pins")
             if await page.locator(".pin-park").count() != 4:
@@ -199,27 +203,29 @@ async def run():
                 orientation_feed = {"ok": True, "scope": "cuyahoga-regional-openwaters", "checkedAt": iso(NOW - timedelta(seconds=5)), "vessels": [
                     {"mmsi":"367123456","name":"EASTBOUND TEST","seen":now,"lat":41.4945,"lon":-81.7033,"speedKnots":4.0,"course":90,"lengthMeters":190,"shipType":70},
                     {"mmsi":"367123458","name":"NORTHBOUND TEST","seen":now,"lat":41.492,"lon":-81.698,"speedKnots":5.0,"course":0,"lengthMeters":120,"shipType":80},
-                    {"mmsi":"367123459","name":"STOPPED TEST","seen":now,"lat":41.491,"lon":-81.705,"speedKnots":0.1,"course":180,"lengthMeters":38,"shipType":31}
+                    {"mmsi":"367123459","name":"STOPPED TEST","seen":now,"lat":41.491,"lon":-81.705,"speedKnots":0.1,"course":180,"lengthMeters":38,"shipType":31},
+                    {"mmsi":"367123460","name":"HEADING AT BERTH","seen":now,"lat":41.490,"lon":-81.708,"speedKnots":0.0,"course":190,"heading":265,"lengthMeters":155,"shipType":70}
                 ]}
                 await glyphs.route("**/api/freighter-ais?region=cuyahoga", lambda route: route.fulfill(status=200, content_type="application/json", body=json.dumps(orientation_feed)))
                 await glyphs.goto(URL, wait_until="domcontentloaded")
                 await glyphs.get_by_text("EASTBOUND TEST", exact=True).first.wait_for(timeout=15000)
                 if await glyphs.locator(".river-watch-marker.with-course").count() != 2:
-                    raise AssertionError("Two moving vessels must have valid AIS course arrows")
+                    raise AssertionError("Two moving vessels must have course arrows")
+                if await glyphs.locator(".river-watch-marker.with-heading").count() != 1:
+                    raise AssertionError("AIS true heading at berth must be shown independently")
                 if await glyphs.locator(".river-watch-marker.without-course").count() != 1:
-                    raise AssertionError("Stopped vessel should retain an upright hull with no directional arrow")
-                arrows = await glyphs.locator(".river-ship-course").evaluate_all(
-                    "(els) => els.map(x => x.getAttribute('style'))")
-                if not any("--river-course:90.0deg" in x for x in arrows) or not any("--river-course:0.0deg" in x for x in arrows):
-                    raise AssertionError("Reported east/north courses are not represented by independent arrows: "+str(arrows))
+                    raise AssertionError("Unknown bearing must not be assigned a bow direction")
+                arrows = await glyphs.locator(".river-ship-course").evaluate_all("(els)=>els.map(x=>x.getAttribute('style'))")
+                if not all(any("--river-course:"+course+"deg" in v for v in arrows) for course in ("90.0","0.0","265.0")):
+                    raise AssertionError("Missing reported course or heading arrow: "+str(arrows))
                 if await glyphs.locator(".river-watch-marker.without-course .river-ship-course").count():
-                    raise AssertionError("Unknown/stopped vessel must not invent course")
-                if await glyphs.locator(".river-watch-marker.without-course svg .ship-hull").count() != 1:
-                    raise AssertionError("Stopped vessel must remain visibly ship-shaped")
-                if await glyphs.locator(".river-watch-marker.with-course svg .ship-hull").count() != 2:
-                    raise AssertionError("Moving vessel silhouettes missing")
+                    raise AssertionError("Unoriented ship must not invent a heading arrow")
+                if await glyphs.locator(".river-watch-marker .ship-hull").count() != 4:
+                    raise AssertionError("All AIS reports must remain ship-shaped")
+                if await glyphs.locator(".ship-neutral-ring").count():
+                    raise AssertionError("No ship should revert to a generic circle")
                 await glyphs.screenshot(path=str(OUT / "cuyahoga-390-real-direction-glyphs.png"), full_page=False, animations="disabled")
-                cases.append({"viewport":390,"vesselOrientation":"ship hulls upright, independent E-90/N-0 course arrows, stopped non-directional","status":"PASS"})
+                cases.append({"viewport":390,"vesselOrientation":"upright hulls, course-90/course-0, heading-265, unoriented hull","status":"PASS"})
                 await glyphs.close()
             if width == 390:
                 failed = await context.new_page()

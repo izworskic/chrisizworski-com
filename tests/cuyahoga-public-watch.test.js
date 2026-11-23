@@ -114,7 +114,7 @@ test('preserved NOAA archive data remains authentic without appearing in the cur
 test('live visitor map does not fetch or present archived 2025 vessel observations',()=>{
  assert.doesNotMatch(app,/state\.mode|renderHistory|history-scrubber|noaa-historical-2025\.json/);
  assert.doesNotMatch(page,/2025 ship replay|Choose a 2025 vessel day/);
- assert.match(page,/Recent AIS vessels/);
+ assert.match(page,/Reported vessels/);
  assert.match(app,/\/cuyahoga-freighter-watch\/viewpoints\.json/);
  assert.match(app,/\/cuyahoga-freighter-watch\/bridges\.json/);
  assert.match(page,/<noscript>/);
@@ -278,21 +278,33 @@ test('AIS vessel illustrations reflect only reported category, size band and bou
  }
  assert.equal(core.vesselVisual({shipType:70,course:360}).reportedCourseDegrees,null);
  assert.equal(core.vesselVisual({shipType:70,course:'90'}).reportedCourseDegrees,null);
+ assert.equal(core.vesselVisual({shipType:70,heading:265}).reportedHeadingDegrees,265);
+ assert.equal(core.vesselVisual({shipType:70,heading:511}).reportedHeadingDegrees,null);
+ assert.equal(core.vesselVisual({shipType:70,heading:0}).reportedHeadingDegrees,0);
  const live=core.classifyLive({ok:true,checkedAt:'2026-11-22T13:59:59Z',vessels:[
-  {...v('2026-11-22T13:59:00Z'),course:190}
+  {...v('2026-11-22T13:59:00Z'),course:190,heading:205}
  ]},now);
  assert.equal(live.vessels[0].course,190);
+ assert.equal(live.vessels[0].heading,205);
  assert.match(app,/function liveVesselIcon\(/);
  assert.doesNotMatch(app,/icon:mapPointIcon\('ship'\)/);
  assert.match(app,/icon:liveVesselIcon\(v\)/);
  assert.match(css,/\.cuyahoga-ship-marker/);
- assert.match(page,/Vessel shapes use broad reported AIS categories/);
+ assert.match(page,/Hull shapes illustrate reported AIS type/);
+ assert.ok(page.indexOf('id="live-controls"')<page.indexOf('class="panel places"'),'Reported vessels must appear before park directory');
+ assert.match(page,/id="show-ships-on-map"/);
+ assert.match(page,/id="show-parks-on-map"/);
  assert.match(app,/function revealMobileFocus\(/);
- assert.match(page,/Direction unknown/);
+ assert.match(page,/Unoriented vessel outline/);
  assert.match(app,/function markerHasTravelCourse\(/);
  assert.match(app,/v\.speedKnots>0\.5/);
- assert.match(app,/info\.reportedCourseDegrees-90/);
- assert.match(app,/ship-neutral-ring/);
+ assert.match(app,/function markerBearing\(/);
+ assert.match(app,/reportedHeadingDegrees/);
+ assert.match(app,/const symmetric='M10 7Q3 16 10 25L62 25Q69 16 62 7Z'/);
+ assert.doesNotMatch(app,/ship-neutral-ring/);
+ assert.match(app,/frameMap\('all'\)/);
+ assert.match(app,/frameMap\('ships'\)/);
+ assert.match(app,/bindTooltip\(escText\('span'/);
  assert.match(app,/M6 9L50 4Q61 4 69 16Q61 28 50 28L6 23Q3 16 6 9Z/);
  assert.doesNotMatch(app,/M3 17H59L69 12/);
  assert.match(css,/\.is-active-vessel \.ship-hull/);
@@ -314,13 +326,13 @@ test('first map screen favors four active reference landmarks plus Eagle work no
  assert.match(css,/\.bridge-toggle/);
 });
 
-test('river desk redesign puts public shore decisions and map before expanded technical evidence',()=>{
+test('river desk puts the map and current ship evidence before parks, with deeper source material later',()=>{
  const mapAt=page.indexOf('id="cuyahoga-map"');
  const parksAt=page.indexOf('id="place-buttons"');
  const reportAt=page.indexOf('id="live-vessels"');
  const storyAt=page.indexOf('class="story"');
  const sourceAt=page.indexOf('class="sources"');
- assert.ok(mapAt>0&&parksAt>mapAt&&reportAt>parksAt&&storyAt>reportAt&&sourceAt>storyAt);
+ assert.ok(mapAt>0&&reportAt>mapAt&&parksAt>reportAt&&storyAt>parksAt&&sourceAt>storyAt);
  assert.match(page,/<section class="workbench" id="river-workbench"/);
  assert.match(page,/data-park="scranton"/);
  assert.match(page,/data-park="rivergate"/);
