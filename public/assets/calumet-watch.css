@@ -117,3 +117,7 @@ a{color:#0b5b6a;text-underline-offset:3px}button,select,input{font:inherit}butto
  content:"";position:absolute;top:13px;right:27px;width:43px;
  border-top:2px dashed currentColor;opacity:.8;pointer-events:none;
 }
+
+/* Leaflet zoom chrome otherwise covers the first letters of an open
+   ship/bridge title on narrow maps. Put the information popup on top. */
+#calumet-map .leaflet-popup-pane{z-index:1100}
