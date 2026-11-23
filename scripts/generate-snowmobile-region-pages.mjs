@@ -3,6 +3,7 @@ import path from 'node:path';
 import { REGIONS } from '../lib/snowmobile/regions.mjs';
 import { metadataFor, imageFor, socialExtras, discoveryGraph, discoverySections } from '../lib/snowmobile/discovery.mjs';
 import { planningFor } from '../lib/snowmobile/planning.mjs';
+import { townSectionsFor } from '../lib/snowmobile/town-discovery.mjs';
 
 const root = process.cwd();
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -27,7 +28,7 @@ function pageFor(region) {
     '@context': 'https://schema.org',
     '@graph': [
       { '@type': 'Person', '@id': 'https://chrisizworski.com/#person', name: 'Chris Izworski', url: 'https://chrisizworski.com/' },
-      { '@type': 'WebPage', '@id': `${canonical}#page`, url: canonical, name: `${region.label} Snowmobile Trail Conditions`, description, inLanguage: 'en-US', primaryImageOfPage: {'@id':`${canonical}#primaryimage`}, mainEntity: {'@id':`${canonical}#planner`}, isPartOf: {'@id':'https://chrisizworski.com/snowmobile/#page'}, relatedLink: REGIONS.filter(r=>r.key!==region.key).map(r=>`https://chrisizworski.com/snowmobile/regions/${r.key}.html`), dateModified: '2026-11-11', author: {'@id':'https://chrisizworski.com/#person'}, publisher: {'@id':'https://chrisizworski.com/#person'} },
+      { '@type': 'WebPage', '@id': `${canonical}#page`, url: canonical, name: `${region.label} Snowmobile Trail Conditions`, description, inLanguage: 'en-US', primaryImageOfPage: {'@id':`${canonical}#primaryimage`}, mainEntity: {'@id':`${canonical}#planner`}, isPartOf: {'@id':'https://chrisizworski.com/snowmobile/#page'}, relatedLink: REGIONS.filter(r=>r.key!==region.key).map(r=>`https://chrisizworski.com/snowmobile/regions/${r.key}.html`), dateModified: '2026-11-23', author: {'@id':'https://chrisizworski.com/#person'}, publisher: {'@id':'https://chrisizworski.com/#person'} },
       ...discoveryGraph(region),
       { '@type': 'BreadcrumbList', itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://chrisizworski.com/' },
@@ -90,6 +91,7 @@ function pageFor(region) {
   </article>
 ${corridorBlock}
 ${reportBlock}
+${townSectionsFor(region)}
   <section id="seasonNote" class="panel" hidden><strong>Pre-season mode.</strong> Michigan state-designated snowmobile trails are generally open Dec. 1–Mar. 31. The product remains indexable and source-connected now, but it will not manufacture an in-season ride score outside the riding season.</section>
   <section class="panel outlook-panel" id="outlook72"><div class="section-headline"><div><div class="eyebrow">Next 72 hours</div><h2>When the weather window is most favorable</h2></div><span class="small">Weather timing only — it can downgrade or time a verified trail, but cannot create a trail-condition verdict</span></div><div id="outlookCards" class="outlook-cards"><div class="outlook-card">Loading NWS forecast periods…</div></div></section>
   <section class="grid">
@@ -114,7 +116,7 @@ ${region.key==='eastern-up'?'<section class="panel"><h2>Munising winter ice view
 ${stagingScript}<script src="/assets/snowmobile-route-export.js?v=20261113-gpx-1"></script>
 <script src="/assets/snowmobile-loop-finder.js?v=20261115-loop-finder-1"></script>
 <script src="/assets/snowmobile-region.js?v=20261115-loop-finder-1"></script>
-${localDeskScript}${cameraScript}
+<script src="/assets/snowmobile-town-evidence.js?v=20261123-town-1"></script>\n${localDeskScript}${cameraScript}
 </body></html>`;
 }
 
