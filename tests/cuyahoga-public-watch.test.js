@@ -319,7 +319,8 @@ test('river desk redesign puts public shore decisions and map before expanded te
 });
 test('historic Sam Laud photo is verified exact-subject and properly attributed',()=>{
  assert.match(page,/class="story-photo"/);
- assert.match(page,/The_Cuyahoga_River_and_Cleveland_OH\.jpg/);
+ assert.match(page,/src="\/assets\/cuyahoga-sam-laud-roy-luck\.jpg"/);
+ assert.match(page,/https:\/\/commons\.wikimedia\.org\/wiki\/File:The_Cuyahoga_River_and_Cleveland_OH\.jpg/);
  assert.match(page,/alt="The freighter Sam Laud passing downtown Cleveland/);
  assert.match(page,/Roy Luck/);
  assert.match(page,/https:\/\/creativecommons\.org\/licenses\/by\/2\.0\//);
