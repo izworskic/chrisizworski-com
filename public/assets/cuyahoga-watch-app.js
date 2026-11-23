@@ -53,7 +53,7 @@
   // A center chosen for desktop clipped Wendy Park at narrow widths.
   if(state.map&&state.parks.spots.length){
    state.map.fitBounds(state.parks.spots.map(p=>[p.lat,p.lon]),{
-    paddingTopLeft:[44,52],paddingBottomRight:[44,46],maxZoom:14,animate:false
+    paddingTopLeft:[44,52],paddingBottomRight:[44,46],maxZoom:13,animate:false
    });
   }
   for(const park of state.parks.spots){
@@ -251,7 +251,7 @@
   const points=mode==='parks'?parks:mode==='ships'?ships:[...parks,...ships];
   if(!points.length)return;
   if(points.length===1)state.map.setView(points[0],14,{animate:false});
-  else state.map.fitBounds(points,{paddingTopLeft:[52,54],paddingBottomRight:[52,54],maxZoom:14,animate:false});
+  else state.map.fitBounds(points,{paddingTopLeft:[52,54],paddingBottomRight:[52,54],maxZoom:13,animate:false});
  }
  function syncShipSelection(){
   for(const btn of document.querySelectorAll('[data-ship]')){
