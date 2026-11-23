@@ -104,6 +104,14 @@ async function main(){
  await zoomCtx.route('https://tile.openstreetmap.org/**',route=>route.fulfill({
   status:200,contentType:'image/png',body:tile
  }));
+ // Expose the exact local Leaflet instance to this isolated test only.
+ await zoomCtx.route('**/assets/shorefeel-ca.js',route=>{
+  const script=fs.readFileSync(path.join(ROOT,'assets/shorefeel-ca.js'),'utf8');
+  const needle='map=window.L.map(';
+  assert.ok(script.includes(needle),'Map initialization source unchanged');
+  return route.fulfill({status:200,contentType:'application/javascript',
+   body:script.replace(needle,'map=window.__shoreTestMap=window.L.map(')});
+ });
  await zoomCtx.route('**/api/shorefeel-ca?*',route=>{
   const slug=new URL(route.request().url()).searchParams.get('beach');
   return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(fixture(slug))});
@@ -176,6 +184,17 @@ async function main(){
  assert.ok(rect&&rect.width>150&&rect.height>150,'Visible map gesture surface');
  const cx=rect.x+rect.width/2,cy=rect.y+rect.height/2;
  const zoomBeforePinch=await readTileZoom();
+ await zoomPage.evaluate(()=>{
+  window.__shoreZoomLog=[];
+  const m=window.__shoreTestMap;
+  m.on('zoomstart zoom zoomend',e=>window.__shoreZoomLog.push({
+   type:e.type,zoom:m.getZoom()}));
+ });
+ const mapBeforePinch=await zoomPage.evaluate(()=>({
+  zoom:window.__shoreTestMap.getZoom(),
+  handler:window.__shoreTestMap.touchZoom.enabled(),
+  animating:!!window.__shoreTestMap._animatingZoom
+ }));
  const cdp=await zoomCtx.newCDPSession(zoomPage);
  const finger=(id,x,y)=>({id,x,y,force:1});
  await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[
@@ -197,10 +216,19 @@ async function main(){
   tileLevels:[...document.querySelectorAll('#shore-map img.leaflet-tile-loaded')]
    .map(img=>Number(new URL(img.src).pathname.split('/')[1])),
   trace:window.__shorePinchTrace,
-  viewportScale:window.visualViewport?.scale
+  viewportScale:window.visualViewport?.scale,
+  mapZoom:window.__shoreTestMap.getZoom(),
+  gesture:{
+   started:!!window.__shoreTestMap.touchZoom._zooming,
+   moved:!!window.__shoreTestMap.touchZoom._moved,
+   startDist:window.__shoreTestMap.touchZoom._startDist,
+   startZoom:window.__shoreTestMap.touchZoom._startZoom,
+   targetZoom:window.__shoreTestMap.touchZoom._zoom
+  },
+  zoomLog:window.__shoreZoomLog
  }));
  console.log('ShoreFeel real pinch evidence: '+JSON.stringify({
-  zoomBeforePinch,...pinchEvidence
+  zoomBeforePinch,mapBeforePinch,...pinchEvidence
  }));
  await zoomPage.waitForFunction(before=>{
   const imgs=[...document.querySelectorAll('#shore-map img.leaflet-tile-loaded')];
