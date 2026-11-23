@@ -24,7 +24,7 @@ function pageFor(region) {
   const localDeskBlock=region.legacyCorridor?'':`<section class="local-club-desk ui" id="localClubDesk" aria-labelledby="localClubTitle"><h3 id="localClubTitle">From the local groomer clubs</h3><p>Read the last dated postings from clubs in different parts of this region. Old reports stay labeled old. No one club speaks for the whole region; its condition report does not override DNR closures.</p><p class="small" id="localClubStatus" role="status" aria-live="polite">Checking source dates with Michigan's snowmobile clubs…</p><div class="local-club-reports" id="localClubReports" aria-label="Dated local club reports"></div></section>`;
   const localDeskScript=region.legacyCorridor?'':'<script src="/assets/snowmobile-local-reports.js?v=20261113-source-date-audit-3"></script>\n';
 
-  return `<!doctype html><html lang="en-US"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><meta name="description" content="${esc(description)}"><link rel="canonical" href="${canonical}"><meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1"><meta name="google-adsense-account" content="ca-pub-8222782620788075"><meta name="theme-color" content="#123246"><meta property="og:type" content="website"><meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(description)}"><meta property="og:url" content="${canonical}"><meta property="og:image" content="${imageFor(region)}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${esc(title)}"><meta name="twitter:description" content="${esc(description)}"><meta name="twitter:image" content="${imageFor(region)}">${socialExtras(region)}<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"><link rel="stylesheet" href="/assets/snowmobile.css?v=${'20261123-town-1'}">${cameraCss}<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5D2V2W7HN"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-Y5D2V2W7HN');</script><script async crossorigin="anonymous" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075"></script><script type="application/ld+json">${JSON.stringify({
+  return `<!doctype html><html lang="en-US"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><meta name="description" content="${esc(description)}"><link rel="canonical" href="${canonical}"><meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1"><meta name="google-adsense-account" content="ca-pub-8222782620788075"><meta name="theme-color" content="#123246"><meta property="og:type" content="website"><meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(description)}"><meta property="og:url" content="${canonical}"><meta property="og:image" content="${imageFor(region)}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${esc(title)}"><meta name="twitter:description" content="${esc(description)}"><meta name="twitter:image" content="${imageFor(region)}">${socialExtras(region)}<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"><link rel="stylesheet" href="/assets/snowmobile.css?v=${'20261123-name-1'}">${cameraCss}<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5D2V2W7HN"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-Y5D2V2W7HN');</script><script async crossorigin="anonymous" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075"></script><script type="application/ld+json">${JSON.stringify({
     '@context': 'https://schema.org',
     '@graph': [
       { '@type': 'Person', '@id': 'https://chrisizworski.com/#person', name: 'Chris Izworski', url: 'https://chrisizworski.com/' },
@@ -73,15 +73,7 @@ function pageFor(region) {
     <div class="origin-check">
       <div class="origin-head"><div><span>Personalize the trip</span><strong>Worth the drive from where you are?</strong></div><span class="small ui">Routes to ${esc(region.hubTown)}; trailhead travel is additional.</span></div>
       <div class="origin-controls">
-        <label><span>From</span><select id="originPreset">
-          <option value="43.5945,-83.8889" selected>Bay City</option>
-          <option value="43.4195,-83.9508">Saginaw</option>
-          <option value="43.6156,-84.2472">Midland</option>
-          <option value="42.7325,-84.5555">Lansing</option>
-          <option value="42.9634,-85.6681">Grand Rapids</option>
-          <option value="42.3314,-83.0458">Detroit</option>
-          <option value="44.7631,-85.6206">Traverse City</option>
-        </select></label>
+        <label for="originPreset"><span>Starting city or community</span><span class="snow-city-search-wrap"><input id="originPreset" type="search" autocomplete="off" placeholder="Type a town and choose a result" aria-controls="originPresetResults"><span id="originPresetResults" class="snow-city-search-results"></span></span></label>
         <label><span>My max drive</span><select id="maxDrive"><option value="2">2 hours</option><option value="3" selected>3 hours</option><option value="4">4 hours</option><option value="6">6 hours</option><option value="10">10 hours</option></select></label>
         <button type="button" id="checkDrive">Check trip</button>
         <button type="button" id="useMyLocation" class="secondary-btn">Use my location</button>
@@ -115,6 +107,7 @@ ${region.key==='eastern-up'?'<section class="panel"><h2>Munising winter ice view
 <script src="/assets/snowmobile-access-evidence.js?v=20261113-staging-2"></script>
 ${stagingScript}<script src="/assets/snowmobile-route-export.js?v=20261113-gpx-1"></script>
 <script src="/assets/snowmobile-loop-finder.js?v=20261115-loop-finder-1"></script>
+<script src="/assets/snowmobile-city-search.js?v=20261123-name-1"></script>
 <script src="/assets/snowmobile-region.js?v=20261115-loop-finder-1"></script>
 <script src="/assets/snowmobile-town-evidence.js?v=20261123-town-1"></script>\n${localDeskScript}${cameraScript}
 </body></html>`;

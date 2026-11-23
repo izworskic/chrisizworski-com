@@ -1,5 +1,18 @@
 # Snowmobile winter discovery release — October 5, 2026
 
+## 2026-11-23 — Type a riding town or an origin, never choose from a city dropdown
+
+The statewide planner's **Find a Michigan riding town** field resolves only the 27 existing, Google-autocomplete-backed towns with verified DNR trail geometry within 5 km. It links to the original generated regional page's exact town-specific `#trail-conditions-near-...` anchor; it does not invent a new URL or local grooming verdict. A missing town explicitly has no matched answer rather than inheriting a neighbor's condition.
+
+For **Starting city or community**, both the statewide trip-comparison page and all seven regional trip checks now use the same keyboard-accessible typed search. `public/data/snowmobile-origin-places.json` is a checked-in 2025 U.S. Census Bureau Gazetteer place snapshot spanning **MI, WI, OH, IN, IL, MN, PA, NY**, with 9,465 unique Census GEOIDs and geographic reference points. `public/data/snowmobile-trail-towns.json` provides 27 DNR-verified riding town names and anchors; communities missing from the Census place inventory (e.g. Frederic, MI) can still be selected using their source-backed reference point, explicitly distinct from a road entrance.
+
+Search ranking is deterministic, case/accent/punctuation tolerant, with conservative typo suggestions. Similar names in different states stay distinct. A typed string is **not** an origin until an exact unambiguous record is resolved or a suggestion is selected. A route is computed only from the validated record coordinates by the existing `/api/snowmobile-drive` hub-limited OSRM provider. Browser/device coordinates are not shared via generated links; named Census GEOIDs or verified riding-town IDs may be shared between statewide and regional pages. The existing seven origin-ID URLs remain accepted for backwards compatibility.
+
+The `.agents/skills/huggingface-best` and `hf-semantic-discovery` decision guides were applied: a browser-hosted embedding model adds unsupported download/latency and no geographic ground truth to this exact-name navigation task. The selected architecture is **precomputed static official data + browser JavaScript**. No paid HF inference, model download, Redis, new Vercel API/function, new region URL, production Python runtime or ad change. `scripts/verify-snowmobile-city-index.py` is an offline Python Intelligence OS check of Census coverage, uniqueness, coordinate validity, full alphabet coverage and independent DNR 5 km geometry; `--write` can rebuild the reviewed 27-town artifact. Source failure withholds suggestions, road-routing failure withholds a drive-time estimate, and neither snow nor an open trail is promoted to a riding score.
+
+The data source is limited to these eight U.S. states and Census places plus the verified trail towns. It is **not a general worldwide geocoder**, a street address, a verified public parking entrance or a live trail condition reading.
+
+
 The statewide canonical remains `/snowmobile/`. Seven existing regional pages own local maps and route-planning decisions. No new indexable content URLs were created.
 
 ## Shipped coverage

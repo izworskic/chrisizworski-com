@@ -8,7 +8,7 @@ function context(){return {active:!!BUNDLE?.season?.active,fresh:comparison.bund
 function maxHours(){return Number($('compare-max-drive')?.value||3);}
 function detailUrl(region){return comparison.detailUrl(region.key,ORIGIN?.id,maxHours());}
 function driveLine(region){
-  if(!ORIGIN)return'Choose a starting city to compare road times.';
+  if(!ORIGIN)return'Enter a starting place to compare road times.';
   const d=DRIVES[region.key];
   if(!d)return'Road time: waiting for comparison';
   if(d.pending)return'Road time: checking…';
@@ -29,7 +29,7 @@ function renderComparison(){
   const summary=$('trip-summary');
   if(summary){
     summary.classList.toggle('candidate-summary',candidates.length>0);
-    summary.textContent=!ctx.fresh?'Current evidence is unavailable or too old. No riding recommendation.':!ctx.active?'Pre-season planning: compare travel and explore local reports. Riding verdicts begin Dec. 1.':!ctx.closuresVerified?'Official closure verification is incomplete. No riding recommendation.':pending?'Comparing road times. Trail evidence stays separate from travel distance.':!ORIGIN?'Choose your starting city and drive limit. A short drive does not establish rideable trails.':candidates.length?`${candidates.length} stronger trip candidate${candidates.length===1?'':'s'} within your drive limit: ${candidates.map(x=>x.region.shortLabel).join(', ')}. Verify the local report and exact route before leaving.`:'No verified stronger trip candidate within your drive limit. Check borderline areas or current local reports before committing to the drive.';
+    summary.textContent=!ctx.fresh?'Current evidence is unavailable or too old. No riding recommendation.':!ctx.active?'Pre-season planning: compare travel and explore local reports. Riding verdicts begin Dec. 1.':!ctx.closuresVerified?'Official closure verification is incomplete. No riding recommendation.':pending?'Comparing road times. Trail evidence stays separate from travel distance.':!ORIGIN?'Enter your starting place and drive limit. A short drive does not establish rideable trails.':candidates.length?`${candidates.length} stronger trip candidate${candidates.length===1?'':'s'} within your drive limit: ${candidates.map(x=>x.region.shortLabel).join(', ')}. Verify the local report and exact route before leaving.`:'No verified stronger trip candidate within your drive limit. Check borderline areas or current local reports before committing to the drive.';
   }
 }
 async function compareFrom(origin){
@@ -54,16 +54,33 @@ async function compareFrom(origin){
   if(run===requestId)track('snowmobile_compare_complete',{origin:origin.id||'browser-location',routes_available:Object.values(DRIVES).filter(d=>Number.isFinite(d.driveMinutes)).length});
 }
 function setupComparison(){
-  $('compare-origin').innerHTML='<option value="">Choose starting city</option>'+comparison.ORIGINS.map(o=>`<option value="${o.id}">${o.label}</option>`).join('');
-  $('compare-form').addEventListener('submit',e=>{e.preventDefault();const origin=comparison.ORIGINS.find(o=>o.id===$('compare-origin').value);if(origin)compareFrom(origin);else $('trip-summary').textContent='Choose a starting city or use your location.';});
-  $('compare-origin').addEventListener('change',()=>{++requestId;ORIGIN=null;DRIVES={};renderComparison();});
-  $('compare-max-drive').addEventListener('change',renderComparison);
+  const search=window.SnowmobileCitySearch;
+  if(!search){$('trip-summary').textContent='Place search did not load. Use your device location or the regional links.';return;}
+  const city=search.attach($('compare-origin'),$('compare-origin-results'),{
+    mode:'places',
+    onSelect:()=>{++requestId;ORIGIN=null;DRIVES={};renderComparison();},
+    onClear:()=>{++requestId;ORIGIN=null;DRIVES={};renderComparison();},
+    onInvalid:message=>{$('trip-summary').textContent=message;}
+  });
+  search.attach($('snow-town-query'),$('snow-town-query-results'),{
+    mode:'towns',
+    onSelect:town=>{track('snowmobile_town_lookup',{region:town.region});window.location.assign(town.url);}
+  });
+  $('compare-form').addEventListener('submit',e=>{
+    e.preventDefault();
+    const origin=city.getSelected();
+    if(origin)compareFrom(origin);
+    else{$('trip-summary').textContent='Type a starting place, then select the correct town and state from the results.';$('compare-origin').focus();}
+  });
+  $('compare-max-drive').addEventListener('change',()=>{if(ORIGIN)renderComparison();});
   $('compare-sort').addEventListener('change',renderComparison);
   $('compare-location').addEventListener('click',()=>{
-    if(!navigator.geolocation){$('trip-summary').textContent='Browser location is unavailable. Choose a city instead.';return;}
+    if(!navigator.geolocation){$('trip-summary').textContent='Browser location is unavailable. Type a starting town instead.';return;}
     const locationRequest=++requestId;
     $('trip-summary').textContent='Requesting your location…';
-    navigator.geolocation.getCurrentPosition(pos=>{if(locationRequest!==requestId)return;compareFrom({label:'Your location',point:`${pos.coords.latitude.toFixed(5)},${pos.coords.longitude.toFixed(5)}`});},()=>{if(locationRequest!==requestId)return;$('trip-summary').textContent='Location was not shared. Choose a city instead.';},{enableHighAccuracy:false,timeout:10000,maximumAge:300000});
+    navigator.geolocation.getCurrentPosition(pos=>{if(locationRequest!==requestId)return;compareFrom({label:'Your location',point:pos.coords.latitude.toFixed(5)+','+pos.coords.longitude.toFixed(5)});},()=>{
+      if(locationRequest!==requestId)return;$('trip-summary').textContent='Location was not shared. Type your starting town instead.';
+    },{enableHighAccuracy:false,timeout:10000,maximumAge:300000});
   });
   $('region-list').addEventListener('click',e=>{const link=e.target.closest('[data-region-open]');if(link)track('snowmobile_region_open',{region:link.dataset.regionOpen,placement:'statewide-comparison'});const source=e.target.closest('[data-source-name]');if(source)track('snowmobile_source_verify',{source:source.dataset.sourceName,placement:'statewide-comparison'});});
   setInterval(()=>{if(BUNDLE&&!comparison.bundleFresh(BUNDLE))renderComparison();},60000);

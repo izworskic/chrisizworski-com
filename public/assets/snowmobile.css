@@ -367,3 +367,24 @@ button:focus-visible,select:focus-visible,a:focus-visible,summary:focus-visible{
 .snow-town-live{border-left:3px solid #527589;background:#eef5f7;padding:10px 12px;margin-top:12px;color:#153b4c;font-size:.94rem}
 .snow-town-links a:focus-visible{outline:3px solid #e19c28;outline-offset:3px}
 @media(max-width:670px){.snow-town-card{padding:15px}.snow-town-grid{grid-template-columns:1fr}.snow-town-links{flex-direction:column;align-items:stretch}.snow-town-links a{min-height:44px}}
+
+
+/* Source-backed snowmobile place and riding-town search, keyboard and phone accessible. */
+.snow-town-find{border-top:4px solid #245b74;margin-top:18px}
+.snow-town-find h2{font-size:clamp(21px,3vw,29px);margin:4px 0 12px}
+.snow-town-find>label{display:block;font:700 15px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;margin:0 0 6px}
+.snow-town-find .small{margin:8px 0 0;max-width:80ch;line-height:1.55}
+.snow-city-search-wrap{display:block;position:relative;min-width:min(100%,260px);width:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.origin-controls label .snow-city-search-wrap{display:block;margin:0;color:var(--ink);font-size:16px}
+.origin-controls label:has(.snow-city-search-wrap){flex:1 1 245px;min-width:0;max-width:390px}
+.snow-city-search-wrap input[type=search],.origin-controls input[type=search]{display:block;width:100%;min-width:0;min-height:48px;padding:11px 14px;border:1.5px solid #718b99;border-radius:8px;background:#fff;color:#132c3a;font:16px/1.35 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.snow-city-search-wrap input[type=search]::placeholder{color:#586b75;opacity:1}
+.snow-city-search-wrap input[type=search]:focus-visible{outline:3px solid #247bad;outline-offset:2px}
+.snow-city-search-results:not(:empty){display:block;position:absolute;z-index:1201;top:calc(100% + 4px);left:0;right:0;max-height:min(44vh,315px);overflow:auto;border:1px solid #71909d;border-radius:9px;background:#fff;box-shadow:0 12px 27px rgba(17,47,60,.2);padding:3px}
+.snow-city-option{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid #e7eeee;background:#fff;color:#123246;font:500 16px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding:12px 14px;min-height:46px;cursor:pointer}
+.snow-city-option:last-child{border-bottom:0}
+.snow-city-option:hover,.snow-city-option[aria-selected=true]{background:#e3eff4;color:#082b40;font-weight:700}
+.snow-city-option:focus-visible{outline:3px solid #247bad;outline-offset:-3px}
+.snow-city-search-note{padding:13px;color:#26485a;font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.trip-intake .origin-controls input[type=search]{font-size:16px;min-height:48px}
+@media(max-width:640px){.origin-controls label:has(.snow-city-search-wrap){max-width:none}.snow-city-search-results:not(:empty){max-height:min(38vh,260px)}.snow-town-find h2{font-size:24px}}

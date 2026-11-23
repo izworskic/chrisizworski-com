@@ -51,7 +51,7 @@
   function detailUrl(key,originId,maxHours){
     const base='/snowmobile/regions/'+encodeURIComponent(key)+'.html';
     // Share named cities only. Browser-location coordinates never enter page URLs.
-    return ORIGINS.some(o=>o.id===originId)?base+'?origin='+encodeURIComponent(originId)+'&maxDrive='+encodeURIComponent(maxHours):base;
+    return (ORIGINS.some(o=>o.id===originId)||/^(?:mi|wi|oh|in|il|mn|pa|ny)-\d{7}$/.test(originId||'')||/^mi-trail-[a-z0-9-]+$/.test(originId||''))?base+'?origin='+encodeURIComponent(originId)+'&maxDrive='+encodeURIComponent(maxHours):base;
   }
   return {ORIGINS,bundleFresh,evaluate,compare,detailUrl};
 });
