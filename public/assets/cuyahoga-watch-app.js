@@ -78,6 +78,7 @@
   const park=state.parks?.spots.find(p=>p.id===id);
   if(!park)return;
   state.selectedParkId=id;state.selectedBridgeId=null;state.selectedShip=null;
+  syncShipSelection();
   const chooser=$('bridge-select');if(chooser)chooser.value='';
   renderBridgeMarkers();
   for(const btn of document.querySelectorAll('[data-park]'))btn.setAttribute('aria-current',String(btn.dataset.park===id));
@@ -87,7 +88,7 @@
   ];
   const note='Distances use the general park reference, not a surveyed viewing deck. They cannot establish line of sight, vessel arrival, or a safe entrance. Confirm current park access.';
   let description=park.experience,action=null;
-     const observed=core.parkObservation(park,state.live,Date.now());
+   const observed=core.parkObservation(park,state.live,Date.now());
    if(observed.closest){
     const nearby=observed.closest;
     description+=' A fresh reported position for '+nearby.vessel.name+' is '+
@@ -115,6 +116,7 @@
   const bridge=state.bridges?.bridges.find(x=>x.channel==='main'&&x.id===bridgeId);
   if(!bridge)return;
   state.selectedBridgeId=bridge.id;state.selectedParkId=null;state.selectedShip=null;
+  syncShipSelection();
   for(const btn of document.querySelectorAll('[data-park]'))btn.setAttribute('aria-current','false');
   const selector=$('bridge-select');if(selector)selector.value=bridge.id;
   renderBridgeMarkers();
@@ -230,6 +232,8 @@
   return v.speedKnots===null?'Speed not reported':v.speedKnots.toFixed(1)+' kn reported';
  }
  function selectShip(v){
+  state.selectedParkId=null;state.selectedBridgeId=null;
+  for(const btn of document.querySelectorAll('[data-park]'))btn.setAttribute('aria-current','false');
   state.selectedShip=String(v.mmsi);
   syncShipSelection();
   const visual=core.vesselVisual(v);
@@ -270,7 +274,13 @@
    status.textContent=result.reason;
   }
   if(mapGroup.ships)mapGroup.ships.clearLayers();
-  if(state.selectedShip&&!result.vessels.some(v=>String(v.mmsi)===state.selectedShip))state.selectedShip=null;
+  if(state.selectedShip&&!result.vessels.some(v=>String(v.mmsi)===state.selectedShip)){
+   state.selectedShip=null;
+   if(!state.selectedParkId&&!state.selectedBridgeId)replaceFocus('RECENT AIS / REPORT EXPIRED',
+    'That vessel is no longer in recent reports',
+    'The previous AIS position no longer meets this tool’s freshness limit. Choose a public park or refresh the reports to plan a river watch.',
+    [{label:'Check the full Great Lakes tracker ↗',url:'/great-lakes-freighter-tracking/'}]);
+  }
   if(!result.vessels.length){
    list.append(escText('li',result.reason));
    renderParkSignals();
@@ -292,6 +302,10 @@
   syncShipSelection();
   renderParkSignals();
   if(state.selectedParkId)choosePark(state.selectedParkId,false);
+  else if(state.selectedShip){
+   const selected=result.vessels.find(v=>String(v.mmsi)===state.selectedShip);
+   if(selected)selectShip(selected);
+  }
  }
  async function getLive(){
   const refresh=$('refresh-ais');refresh.disabled=true;
