@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Cuyahoga Freighter Watch | Cleveland Ship Map</title>
-<meta name="description" content="Watch Cleveland freighters from public riverfront parks. Check recent AIS reports and explore real historical NOAA ship positions on a Cuyahoga River map.">
+<meta name="description" content="Find Cleveland riverfront places to watch freighters. View recent Cuyahoga AIS positions, public parks, and how ships navigate the bends.">
 <meta name="robots" content="noindex,follow">
 <meta name="theme-color" content="#f3f2ea">
 <link rel="canonical" href="https://chrisizworski.com/cuyahoga-freighter-watch/">
@@ -29,7 +29,7 @@
  <div class="lead-copy">
   <p class="kicker">CLEVELAND / THE CUYAHOGA RIVER</p>
   <h1 id="main-title">Watch the ships <em>make the bend.</em></h1>
-  <p>Find a public place to watch Cleveland freighters. Check recent AIS reports or follow an archived ship passage through the Flats.</p>
+  <p>Find a public place to watch the freighters. The map shows recent AIS reports when available, and four riverfront parks where you can plan a visit.</p>
  </div>
  <div class="lead-status" aria-label="Recently received AIS signal">
   <span class="signal-label"><span class="dot" aria-hidden="true"></span> RIVER REPORT</span>
@@ -40,10 +40,7 @@
 <section class="workbench" id="river-workbench" aria-labelledby="map-heading">
  <div class="map-header">
   <div class="map-intro"><p class="kicker">THE RIVER AT A GLANCE</p><h2 id="map-heading">Find your view of the river.</h2></div>
-  <div class="modes" role="group" aria-label="Map evidence type">
-   <button id="show-live" class="mode active" type="button" aria-pressed="true">Recent reports</button>
-   <button id="show-history" class="mode" type="button" aria-pressed="false">2025 ship replay</button>
-  </div>
+   <p class="map-wayfinding"><strong>Green pins:</strong> public parks. <strong>Blue marks:</strong> recent AIS reports. <a href="#places-heading">Choose where to watch ↓</a></p>
  </div>
  <noscript><p class="js-fallback">Interactive vessel markers require JavaScript. You can still use the <a href="/great-lakes-freighter-tracking/">current Great Lakes ship tracker</a>, or choose a park below: <a href="https://www.clevelandmetroparks.com/parks/visit/parks/lakefront-reservation/scranton-flats-pier">Scranton Flats Pier</a>, <a href="https://www.clevelandmetroparks.com/parks/visit/parks/lakefront-reservation/rivergate-park">Rivergate Park</a>, <a href="https://www.clevelandmetroparks.com/parks/visit/parks/lakefront-reservation/heritage-park">Heritage Park</a>, <a href="https://www.clevelandmetroparks.com/parks/visit/parks/lakefront-reservation/wendy-park">Wendy Park</a>. Park managers provide current access information.</p></noscript>
  <div class="map-layout">
@@ -54,7 +51,7 @@
    </div>
    <div class="map-underbar">
     <div class="map-key" aria-label="Map legend">
-     <span><i class="key-spot"></i>Public parks</span><span><i class="key-ship"></i>Reported ships</span><span data-bridge-legend hidden><i class="key-bridge"></i>Bridge landmarks</span><span data-bridge-legend hidden><i class="key-work"></i>Dated removal notice</span>
+     <span><i class="key-spot"></i>Public parks</span><span><i class="key-ship"></i>Recent AIS vessels</span><span><i class="key-unknown"></i>Direction unknown</span><span data-bridge-legend hidden><i class="key-bridge"></i>Bridge landmarks</span><span data-bridge-legend hidden><i class="key-work"></i>Dated removal notice</span>
     </div>
     <details class="map-caveat">
      <summary>What do these pins mean?</summary>
@@ -89,23 +86,13 @@
     <p>At the bend below Hope Memorial Bridge, Cleveland Metroparks provides a public river observation deck. Choose a place to see its description, last reported nearby AIS evidence, and official access link.</p>
     <a href="https://www.clevelandmetroparks.com/parks/visit/parks/lakefront-reservation/scranton-flats-pier">Scranton Flats park information ↗</a>
    </section>
-   <section id="history-controls" class="panel history-panel" hidden>
-    <div class="panel-header"><div><p class="side-eyebrow">NOAA / ARCHIVED FIXES</p><h3>Follow a recorded ship</h3></div></div>
-    <label for="voyage-select">Choose a 2025 vessel day</label>
-    <select id="voyage-select"><option value="barker-2025-07-07">Mark W. Barker · July 7, 2025</option><option value="laud-2025-08-15">Sam Laud · August 15, 2025</option><option value="barker-2025-08-21">Mark W. Barker · August 21, 2025</option></select>
-    <label for="history-scrubber">Move between actual AIS reports</label>
-    <input id="history-scrubber" type="range" min="0" max="0" value="0" step="1" disabled>
-    <div class="timeline-buttons"><button id="history-prev" type="button" disabled>Previous fix</button><button id="history-next" type="button" disabled>Next fix</button></div>
-    <p class="history-fix" id="history-report" aria-live="polite">Loading published historical AIS points…</p>
-    <p class="source-note">Every dot is a real <strong>NOAA historical AIS report</strong>, not a continuous route, verified bridge crossing or scheduled ship. <a href="https://coast.noaa.gov/accessais/">Inspect NOAA's original source ↗</a></p>
-   </section>
    <section id="live-controls" class="panel reports-panel">
-    <div class="panel-header"><div><p class="side-eyebrow">STEP 02 / CHECK THE REPORTS</p><h3>Ships recently reported</h3></div><button id="refresh-ais" type="button" class="small-button">Refresh</button></div>
+    <div class="panel-header"><div><p class="side-eyebrow">OBSERVED / NOT A FORECAST</p><h3>Recent ship reports</h3></div><button id="refresh-ais" type="button" class="small-button">Refresh</button></div>
     <p id="vessel-status" aria-live="polite">Checking the existing Great Lakes AIS feed…</p>
     <ul id="live-vessels" class="vessel-list" aria-label="Fresh river vessel positions"><li>A missing report does not mean the river is empty.</li></ul>
     <details class="report-method">
      <summary>Source, accuracy and limitations</summary>
-     <p class="source-note">From the existing <a href="/great-lakes-freighter-tracking/">Great Lakes AIS tracker</a>. Reports can be delayed, sparse or unavailable. Vessel shapes use broad reported AIS categories and length bands, not true hull scale. Course rotation is used only when reported. No bridge arrival times are calculated.</p>
+     <p class="source-note">From the existing <a href="/great-lakes-freighter-tracking/">Great Lakes AIS tracker</a>. Reports can be delayed, sparse or unavailable. Vessel shapes use broad reported AIS categories and length bands, not true hull scale. Directional ship shapes appear only when usable course over ground and reported motion are present; slow or unknown motion is shown as a neutral marker. Course over ground is travel direction, not confirmed bow heading. No bridge arrival times are calculated.</p>
      <p id="ais-source-credits" class="source-note" aria-label="AIS source attributions">Individual upstream source credits appear when the AIS report includes them. <a href="https://openwaters.io/ais/">Provider and licensing information ↗</a></p>
     </details>
    </section>
@@ -172,13 +159,13 @@
 <details class="sources">
  <summary id="source-heading"><span>HOW TO READ THIS TOOL</span><strong>The evidence behind the river map</strong><span class="sources-symbol" aria-hidden="true">+</span></summary>
  <div class="source-grid">
-  <div><h3>Observed positions</h3><p>A dated AIS report is one position, not a guaranteed ship sighting or a forecast. Coverage can miss ships. <a href="https://coast.noaa.gov/accessais/">NOAA historical AIS ↗</a></p></div>
+  <div><h3>Recent AIS observations</h3><p>The map uses the existing <a href="/great-lakes-freighter-tracking/">Great Lakes AIS tracker</a>, not NOAA historical replays. Each point has a reported time; absent or expired reports do not prove an empty river. <a href="https://openwaters.io/ais/">AIS provider information ↗</a></p></div>
   <div><h3>Bridge landmarks</h3><p><a href="https://www.nauticalcharts.noaa.gov/publications/coast-pilot/files/cp6/CPB6_WEB.pdf">NOAA Coast Pilot 6 ↗</a> provides published bridge references, not current operations or exact span crossings.</p></div>
   <div><h3>Public viewing places</h3><p>Visit descriptions come from <a href="https://www.clevelandmetroparks.com/parks/visit/parks/lakefront-reservation">Cleveland Metroparks ↗</a>. Confirm parking, closures and designated public access with the park manager.</p></div>
  </div>
 </details>
 </main>
-<footer class="footer"><a href="/">Chris Izworski</a><span>For public shore watching, not marine navigation. Current reports and 2025 history are always separate.</span><a href="/freighters/">All freighter tools ↗</a></footer>
+<footer class="footer"><a href="/">Chris Izworski</a><span>For public shore watching, not marine navigation. AIS reports are observations, never promised ship arrivals.</span><a href="/freighters/">All freighter tools ↗</a></footer>
 <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script defer src="/assets/cuyahoga-watch-core.js"></script>
 <script defer src="/assets/cuyahoga-watch-app.js"></script>

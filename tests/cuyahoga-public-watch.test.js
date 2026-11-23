@@ -74,9 +74,11 @@ test('published preview is noindex, map first, source-first, accessible and has 
  assert.match(page,/rel="canonical" href="https:\/\/chrisizworski.com\/cuyahoga-freighter-watch\/"/);
  assert.match(page,/aria-pressed="true"/);
  assert.match(page,/id="cuyahoga-map"/);
- assert.match(page,/id="history-scrubber"/);
+ assert.doesNotMatch(page,/id="history-scrubber"|id="show-history"|2025 ship replay/);
+ assert.match(page,/Choose where to watch/);
  assert.match(page,/id="live-vessels"/);
- assert.match(page,/https:\/\/coast.noaa.gov\/accessais\//);
+ assert.match(page,/https:\/\/openwaters.io\/ais\//);
+ assert.doesNotMatch(page,/NOAA historical AIS ↗/);
  assert.match(page,/https:\/\/www.clevelandmetroparks.com\//);
  assert.match(page,/#person/);
  assert.match(app,/fetch\('\/api\/freighter-ais'/);
@@ -86,7 +88,7 @@ test('published preview is noindex, map first, source-first, accessible and has 
  assert.match(css,/focus-visible/);
 });
 
-test('all publicly displayed 2025 observations are actual NOAA fixes with retained source fingerprints',()=>{
+test('preserved NOAA archive data remains authentic without appearing in the current watch UI',()=>{
  const dataset=JSON.parse(readFileSync('public/cuyahoga-freighter-watch/noaa-historical-2025.json','utf8'));
  assert.equal(dataset.observationKind,'NOAA_HISTORICAL_BROADCAST_FIXES');
  assert.equal(dataset.timezone,'UTC');
@@ -104,10 +106,10 @@ test('all publicly displayed 2025 observations are actual NOAA fixes with retain
  assert.ok(dataset.disclaimers.some(x=>/not live/i.test(x)));
  assert.ok(dataset.disclaimers.some(x=>/bridge/.test(x)));
 });
-test('switching evidence type keeps source domains and future ETAs separated',()=>{
- assert.match(app,/state\.mode==='live'/);
- assert.match(app,/const historic=mode==='historic'/);
- assert.match(app,/\/cuyahoga-freighter-watch\/noaa-historical-2025\.json/);
+test('live visitor map does not fetch or present archived 2025 vessel observations',()=>{
+ assert.doesNotMatch(app,/state\.mode|renderHistory|history-scrubber|noaa-historical-2025\.json/);
+ assert.doesNotMatch(page,/2025 ship replay|Choose a 2025 vessel day/);
+ assert.match(page,/Recent AIS vessels/);
  assert.match(app,/\/cuyahoga-freighter-watch\/viewpoints\.json/);
  assert.match(app,/\/cuyahoga-freighter-watch\/bridges\.json/);
  assert.match(page,/<noscript>/);
@@ -189,12 +191,12 @@ test('historic park match points only to existing NOAA archive fix at nearest so
  assert.equal(core.historicParkMatch(data,'missing',parks.spots[0]),null);
  assert.equal(core.historicParkMatch(data,'barker-2025-07-07',{lat:0,lon:0}),null);
 });
-test('live-park and archive-park controls are reversible and do not introduce a predictive ETA',()=>{
+test('live vessel to public shore controls remain synchronized without predictive ETAs',()=>{
  assert.match(app,/function parkSignalLine\(/);
  assert.match(app,/function renderParkSignals\(/);
  assert.match(app,/core\.parkObservation\(/);
- assert.match(app,/core\.historicParkMatch\(/);
- assert.match(app,/Jump to this recorded NOAA fix/);
+ assert.doesNotMatch(app,/core\.historicParkMatch\(|Jump to this recorded NOAA fix/);
+ assert.match(app,/syncShipSelection\(/);
  assert.match(app,/Inspect this reported vessel/);
  assert.match(app,/if\(state\.selectedParkId\)choosePark/);
  assert.match(readFileSync('public/assets/cuyahoga-watch.css','utf8'),/\.park-signal/);
@@ -247,7 +249,8 @@ test('every main NOAA bridge is keyboard-accessible without tapping tightly clus
  assert.match(app,/function plotBridges\(/);
  assert.match(app,/\$\('bridge-select'\)\.addEventListener\('change'/);
  assert.match(app,/state\.selectedBridgeId/);
- assert.match(app,/else if\(state\.selectedBridgeId\)chooseBridge/);
+ assert.match(app,/state\.selectedBridgeId=bridge\.id/);
+ assert.match(app,/\$\('bridge-select'\)\.addEventListener/);
  assert.match(css,/\.bridge-picker/);
  assert.doesNotMatch(app,/window\.open\(|alert\(/);
 });
@@ -279,6 +282,15 @@ test('AIS vessel illustrations reflect only reported category, size band and bou
  assert.match(app,/icon:liveVesselIcon\(v\)/);
  assert.match(css,/\.cuyahoga-ship-marker/);
  assert.match(page,/Vessel shapes use broad reported AIS categories/);
+ assert.match(app,/function revealMobileFocus\(/);
+ assert.match(page,/Direction unknown/);
+ assert.match(app,/function markerHasTravelCourse\(/);
+ assert.match(app,/v\.speedKnots>0\.5/);
+ assert.match(app,/info\.reportedCourseDegrees-90/);
+ assert.match(app,/ship-neutral-ring/);
+ assert.match(app,/M6 9L50 4Q61 4 69 16Q61 28 50 28L6 23Q3 16 6 9Z/);
+ assert.doesNotMatch(app,/M3 17H59L69 12/);
+ assert.match(css,/\.is-active-vessel \.ship-hull/);
 });
 
 test('first map screen favors four active reference landmarks plus Eagle work notice; full catalogue is opt-in',()=>{

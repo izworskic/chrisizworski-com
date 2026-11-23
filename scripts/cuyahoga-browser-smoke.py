@@ -85,6 +85,14 @@ async def run():
                 raise AssertionError("Default river map should prioritize public parks and observed ships, not bridge pins")
             if await page.locator(".pin-park").count() != 4:
                 raise AssertionError("Default river map missing four public viewing points")
+            frame = await page.locator("#cuyahoga-map").bounding_box()
+            for pin in await page.locator(".pin-park").all():
+                location = await pin.bounding_box()
+                if not frame or not location or (location["x"] < frame["x"] + 4 or
+                    location["x"] + location["width"] > frame["x"] + frame["width"] - 4 or
+                    location["y"] < frame["y"] + 4 or
+                    location["y"] + location["height"] > frame["y"] + frame["height"] - 4):
+                    raise AssertionError(f"Public park map marker clipped at {width}px: {location}")
             await page.screenshot(path=str(OUT / f"cuyahoga-{width}-live.png"), full_page=True, animations="disabled")
             await page.get_by_role("button", name="Scranton Flats Pier").click()
             await page.locator("#river-focus h3").get_by_text("Scranton Flats Pier").wait_for()
@@ -108,28 +116,25 @@ async def run():
                 raise AssertionError("Dated Coast Guard Eagle Avenue evidence link missing")
             if "opening" not in (await page.locator("#river-focus").inner_text()).lower():
                 raise AssertionError("Bridge notice does not state opening limitations")
-            await page.locator("#show-history").click()
-            await page.locator("#history-controls").wait_for(state="visible")
-            await page.get_by_text("NOAA fix 97 of 434").wait_for(timeout=15000)
-            if await page.locator(".pin-vessel").count() != 0:
-                raise AssertionError("Live markers leaked into historical mode")
-            await page.locator("#history-next").click()
-            await page.get_by_text("NOAA fix 98 of 434").wait_for()
-            await page.locator("#voyage-select").select_option("laud-2025-08-15")
-            await page.get_by_text("NOAA fix 37 of 215").wait_for()
+            # Return from a bridge's chart reference to a verified public park.
+            await page.get_by_role("button", name="Rivergate Park").click()
+            await page.locator("#river-focus h3").get_by_text("Rivergate Park").wait_for()
+            if await page.locator(".place-button[aria-current=true][data-park=rivergate]").count() != 1:
+                raise AssertionError("Bridge-to-park selection did not synchronize")
+            if await page.locator("#river-focus a[href*='clevelandmetroparks']").count() != 1:
+                raise AssertionError("Selected public park lost its official access link")
+            if await page.locator("#show-history").count() or await page.locator("#history-controls").count():
+                raise AssertionError("Outdated 2025 replay is still advertised on current map")
             await page.get_by_role("button", name="Scranton Flats Pier").click()
-            await page.locator("#river-focus button.focus-action").get_by_text("Jump to this recorded NOAA fix").click()
-            parked_history_report = await page.locator("#history-report").inner_text()
-            if "NOAA fix" not in parked_history_report or "Archived, not live" not in parked_history_report:
-                raise AssertionError("Park-specific archive jump failed")
-            await page.locator("#show-live").click()
-            await page.get_by_text("BROWSER TEST SHIP", exact=True).first.wait_for()
-            if await page.locator(".pin-historic").count():
-                raise AssertionError("Historic marker leaked into recent mode")
-            # A -> B -> A history must reset to same previously selected vessel/day state.
-            await page.locator("#show-history").click()
-            if await page.locator("#history-report").inner_text() != parked_history_report:
-                raise AssertionError("Park-specific historic fix was lost on live → history return")
+            await page.locator("#river-focus button.focus-action").get_by_text("Inspect this reported vessel").click()
+            await page.locator("#river-focus h3").get_by_text("BROWSER TEST SHIP").wait_for()
+            if await page.locator(".vessel-list button[aria-current=true]").count() != 1:
+                raise AssertionError("Selected ship not reflected in vessel list")
+            if await page.locator(".leaflet-marker-icon.is-active-vessel").count() != 1:
+                raise AssertionError("Selected ship not reflected on map")
+            await page.get_by_role("button", name="Scranton Flats Pier").click()
+            if await page.locator(".leaflet-marker-icon.is-active-vessel").count():
+                raise AssertionError("Returning to a park left the previous ship selected")
             photo = page.locator(".story-photo img")
             if await photo.count() != 1:
                 raise AssertionError("Exact-subject licensed historical freighter photo missing")
@@ -184,10 +189,33 @@ async def run():
             tiles = await page.locator(".leaflet-tile-loaded").count()
             if not tiles:
                 raise AssertionError("Map tiles not loaded; browser acceptance blocked")
-            filename = OUT / f"cuyahoga-{width}-history.png"
+            filename = OUT / f"cuyahoga-{width}-final-live.png"
             await page.screenshot(path=str(filename), full_page=True, animations="disabled")
             cases.append({"viewport":width,"status":"PASS","firstScreenMapY":round(river["y"]),"firstScreenMapWidth":round(river["width"]),"tilesLoaded":tiles,"liveShipMarkers":marker_count,
-                          "archiveSelected":"laud-2025-08-15","screenshots":filename.name,"jsErrors":errors})
+                          "visitorJourney":"ship-to-park-to-bridge-to-park","screenshots":filename.name,"jsErrors":errors})
+            if width == 390:
+                glyphs = await context.new_page()
+                now = iso(NOW - timedelta(seconds=60))
+                orientation_feed = {"ok": True, "checkedAt": iso(NOW - timedelta(seconds=5)), "vessels": [
+                    {"mmsi":"367123456","name":"EASTBOUND TEST","seen":now,"lat":41.4945,"lon":-81.7033,"speedKnots":4.0,"course":90,"lengthMeters":190,"shipType":70},
+                    {"mmsi":"367123458","name":"NORTHBOUND TEST","seen":now,"lat":41.492,"lon":-81.698,"speedKnots":5.0,"course":0,"lengthMeters":120,"shipType":80},
+                    {"mmsi":"367123459","name":"STOPPED TEST","seen":now,"lat":41.491,"lon":-81.705,"speedKnots":0.1,"course":180,"lengthMeters":38,"shipType":31}
+                ]}
+                await glyphs.route("**/api/freighter-ais", lambda route: route.fulfill(status=200, content_type="application/json", body=json.dumps(orientation_feed)))
+                await glyphs.goto(URL, wait_until="domcontentloaded")
+                await glyphs.get_by_text("EASTBOUND TEST", exact=True).first.wait_for(timeout=15000)
+                if await glyphs.locator(".cuyahoga-vessel-with-course").count() != 2:
+                    raise AssertionError("Moving vessel direction glyphs missing")
+                if await glyphs.locator(".cuyahoga-vessel-without-course").count() != 1:
+                    raise AssertionError("Stopped vessel depicted with invented bow orientation")
+                turns = await glyphs.locator(".ship-bearing").evaluate_all("(els) => els.map(x => x.getAttribute('transform'))")
+                if "rotate(0.0 36 16)" not in turns or "rotate(-90.0 36 16)" not in turns:
+                    raise AssertionError("East/north AIS travel courses not rendered in correct directions: "+str(turns))
+                if await glyphs.locator(".ship-neutral-ring").count() != 1:
+                    raise AssertionError("Stopped marker lacks explicit neutral shape")
+                await glyphs.screenshot(path=str(OUT / "cuyahoga-390-real-direction-glyphs.png"), full_page=False, animations="disabled")
+                cases.append({"viewport":390,"vesselOrientation":"E-90,N-0,stopped-neutral","status":"PASS"})
+                await glyphs.close()
             if width == 390:
                 failed = await context.new_page()
                 await failed.route("**/api/freighter-ais", lambda route: route.fulfill(status=503, content_type="application/json", body='{"ok":false}'))
