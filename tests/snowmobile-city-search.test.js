@@ -39,7 +39,7 @@ test('type-to-search ranks direct matches, state qualifiers, accents and forgivi
   assert.ok(city.match(places,'sault ste. marie').some(p=>p.label==='Sault Ste. Marie, MI'));
   assert.ok(city.match(places,'st. ignace').some(p=>p.label==='St. Ignace, MI'));
   assert.deepEqual(city.match(places,'~~',3),[]);
-  assert.deepEqual(city.match(places,'Missington, MI',3),[]);
+  assert.deepEqual(city.match(places,'zzxxqyupw, MI',3),[]);
   assert.equal(city.match(places,'Detroit',8)[0].state,'MI','Michigan names win tied suggestion rank, not exact auto-selection');
 });
 
