@@ -54,6 +54,17 @@
 @media(max-width:500px){.airport-weather{padding:16px 12px}.aw-table .aw-airport{min-width:145px;max-width:160px}.aw-table td{min-width:47px}}
 
 
+
+/* Airport search uses source-backed BTS codes, not remote geocoding or client ML. */
+.airport-combobox{position:relative;min-width:0}
+.airport-combobox input[type=search]{width:100%;min-width:0}
+.airport-combobox [hidden]{display:none!important}
+.airport-search-results{position:absolute;top:calc(100% + 3px);left:0;right:0;z-index:40;max-height:270px;overflow-y:auto;background:#fff;border:1px solid #87a9a6;border-radius:10px;box-shadow:0 10px 22px rgba(6,47,52,.15)}
+.airport-search-results[hidden]{display:none!important}
+.airport-search-results button{display:block;width:100%;border:0;border-bottom:1px solid var(--line);border-radius:0;text-align:left;padding:11px 12px;background:#fff;color:var(--ink);font:inherit}
+.airport-search-results button:hover,.airport-search-results button[aria-selected=true]{background:#dbf2eb;color:#104a42}
+.airport-search-results button:last-child{border-bottom:0}
+.airport-search-note{min-height:1.2em;margin:4px 0 0;font-size:.78rem}
 </style>
 </head>
 <body>
@@ -77,8 +88,8 @@
 </div>
 <div class="trip-inputs" style="margin-top:18px">
 <div class="field" id="dir-field"><span class="small-label">3 · Which leg?</span><div class="seg" role="group" aria-label="Trip direction"><button type="button" id="dir-there" aria-pressed="true">Getting there</button><button type="button" id="dir-home" aria-pressed="false">Getting home</button></div></div>
-<div class="field" id="home-field"><label for="home" id="home-label">Your home airport</label><select id="home"><option value="DTW">Detroit, MI (DTW)</option></select></div>
-<div class="field" id="away-field"><label for="away" id="away-label">Flying to</label><select id="away"><option value="MCO">Orlando, FL (MCO)</option></select></div>
+<div class="field" id="home-field"><label for="home" id="home-label">Your home airport</label><div class="airport-combobox"><select id="home"><option value="DTW">Detroit, MI (DTW)</option></select><input id="home-search" type="search" role="combobox" aria-autocomplete="list" aria-haspopup="listbox" aria-controls="home-search-results" aria-expanded="false" placeholder="Type city or airport code" autocomplete="off" maxlength="80" hidden disabled><div class="airport-search-results" id="home-search-results" role="listbox" aria-label="Your home airport matches" hidden></div></div><p class="fine airport-search-note" id="home-search-note" role="status" aria-live="polite"></p></div>
+<div class="field" id="away-field"><label for="away" id="away-label">Flying to</label><div class="airport-combobox"><select id="away"><option value="MCO">Orlando, FL (MCO)</option></select><input id="away-search" type="search" role="combobox" aria-autocomplete="list" aria-haspopup="listbox" aria-controls="away-search-results" aria-expanded="false" placeholder="Type city or airport code" autocomplete="off" maxlength="80" hidden disabled><div class="airport-search-results" id="away-search-results" role="listbox" aria-label="Flying to matches" hidden></div></div><p class="fine airport-search-note" id="away-search-note" role="status" aria-live="polite"></p></div>
 <div class="field" id="routing-field"><label for="routing">Routing</label><select id="routing"><option value="nonstop">Nonstop</option></select><p class="fine">Connections are listed only where both legs had enough holiday flights to measure.</p></div>
 <div class="field hidden" id="layover-field"><label for="layover">Layover</label><select id="layover"><option value="45">45 minutes</option><option value="60" selected>1 hour</option><option value="75">1 hr 15 min</option><option value="90">1 hr 30 min</option><option value="120">2 hours</option><option value="180">3 hours</option></select></div>
 <div class="field" id="dep-field"><span class="small-label">Your flight leaves</span><div class="pair"><select id="dep-day" aria-label="Departure day"></select><select id="dep-time" aria-label="Scheduled departure time"></select></div></div>
@@ -161,6 +172,7 @@
 <footer class="footer"><span>Independent research tool · <a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></span><span>Built by <a href="/chris-izworski/">Chris Izworski</a> · <a href="/tools/">More decision tools</a></span></footer>
 </main>
 <script src="/assets/holiday-travel-engine.js"></script>
+<script src="/assets/holiday-airport-search.js"></script>
 <script>
 (function(){
 'use strict';
@@ -442,6 +454,7 @@ function render(){
 function fillAirports(){
  var opts=eng.airports.slice().sort(function(a,b){return a.city<b.city?-1:a.city>b.city?1:0}).map(function(a){return '<option value="'+a.code+'">'+esc(a.city)+' ('+a.code+')</option>'}).join('');
  doc('home').innerHTML=opts;doc('away').innerHTML=opts;doc('home').value=trip.home;doc('away').value=trip.away;
+  if(window.HolidayAirportSearch){window.HolidayAirportSearch.enhance('home',eng.airports);window.HolidayAirportSearch.enhance('away',eng.airports);}
 }
 function switchOption(group,value){
  if(group==='holiday')holiday=value;else if(group==='mode')mode=value;else dir=value;
