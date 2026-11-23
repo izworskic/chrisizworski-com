@@ -1,7 +1,7 @@
 'use strict';
 const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 const {RESORTS}=require('../lib/michigan-ski/resorts');
-const {SOURCES,parse,classifyParsed,fetchOfficial,MAX_REPORT_AGE_MS}=require('../lib/michigan-ski/official-reports');
+const {SOURCES,parse,reportDate,classifyParsed,fetchOfficial,MAX_REPORT_AGE_MS}=require('../lib/michigan-ski/official-reports');
 const {hubTitle,titleCanClaimOpen}=require('../lib/michigan-ski/title-gate');
 const root=path.join(__dirname,'..'),at=Date.parse('2026-11-23T13:00:00Z');
 test('16 approved operator reports, each parser has real HTML evidence fixture',()=>{
@@ -71,4 +71,12 @@ test('static 2026-27 opening table is grounded and labels unknowns',()=>{
  for(const s of ['Not announced','Nov 23, 2026','ski-opening-evidence','openingEvidence','Projected daily skiing','Target'])assert.ok(generator.includes(s),s);
  assert.equal([...generator.matchAll(/Dec 5, 2026|Nov 26, 2026|Dec 17, 2026/g)].length,3);
  assert.doesNotMatch(generator,/OnTheSnow|Skiresort\.info/i);
+});
+
+test('date-only operator report stays date-only; no fictitious published hour',()=>{
+ assert.equal(reportDate('Today’s Date: NOVEMBER 20,2026','caberfae-peaks'),'2026-11-20');
+ assert.equal(reportDate('UPDATE: November 17th, 2026 | Ski Brule','ski-brule'),'2026-11-17');
+ assert.equal(classifyParsed({reportUpdatedAt:'2026-11-23',lifts:{open:2,total:5},trails:{open:3,total:27}},at).status,'OPEN_PER_OPERATOR');
+ const client=fs.readFileSync(path.join(root,'public/assets/michigan-ski.js'),'utf8');
+ assert.ok(client.includes('(date only; time not published)'));
 });

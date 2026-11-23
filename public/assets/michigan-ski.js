@@ -16,6 +16,7 @@ function score(r){if(r.kind==='nordic')return null;
  const s=r.ranking?.score;
  return Number.isFinite(s)?Math.max(0,Math.min(100,s-old+newTravel)):null;}
 function reportStamp(x){
+ if(/^\d{4}-\d{2}-\d{2}$/.test(x||''))return new Date(x+'T12:00:00Z').toLocaleDateString('en-US',{timeZone:'America/Detroit',month:'short',day:'numeric',year:'numeric'})+' (date only; time not published)';
  const time=Date.parse(x||'');
  return Number.isFinite(time)?new Date(time).toLocaleString('en-US',{timeZone:'America/Detroit',month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'}):'Date not published';
 }
