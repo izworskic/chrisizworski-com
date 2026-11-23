@@ -6,7 +6,7 @@ const el=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className
 const put=(p,...children)=>{children.forEach(c=>{if(c)p.append(c);});return p;};
 const fmt=x=>Number.isFinite(x)?Number(x).toFixed(1).replace(/\.0$/,''):'–';
 const money=x=>'$'+x.toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:2});
-const published=r=>r.official?.status==='PUBLISHED_OFFICIAL_REPORT';
+const published=r=>['OPEN_PER_OPERATOR','CLOSED_PER_OPERATOR'].includes(r.official?.status);
 function activeRisk(r){return (r.weather?.alerts||[]).some(a=>/Warning/i.test(a.event));}
 function dayInfo(r){return r.weather?.skiDays?.[S.day]||{};}
 function chosenDayDate(){return S.data?.resorts?.[0]?.weather?.skiDays?.[S.day]?.date||null;}
@@ -98,7 +98,7 @@ function recap(){
    for(const reason of explain(r))put(item,el('p','small',reason));
    const risk=sessionRisk(r);
    if(risk.length)put(item,el('p','risk-summary',risk.slice(0,2).join(' · ')));
-   put(item,el('p','small',published(r)?'Operator page at last check: '+r.official.lifts.open+' of '+r.official.lifts.total+' lifts shown. Original report update time is unverified; weekend operation must be confirmed.':'No independently parsed resort operating report is available. Check the operator before buying tickets or driving.'));
+   put(item,el('p','small',published(r)?'Operator page at last check: '+r.official.lifts.open+' of '+r.official.lifts.total+' lifts shown. Operator report dated '+new Date(r.official.reportUpdatedAt).toLocaleDateString('en-US')+'; weekend operation must still be confirmed.':'No independently parsed resort operating report is available. Check the operator before buying tickets or driving.'));
    const row=el('div','source-links'),btn=el('button','outline-button','Compare trip cost');
    btn.type='button';btn.addEventListener('click',()=>{S.compare=[r.slug,...S.compare.filter(s=>s!==r.slug)].slice(0,2);cost();$('ski-trip-cost')?.scrollIntoView({behavior:'smooth',block:'nearest'});});
    put(row,btn,sourceLink('Official hill / lift report ↗',r.official?.url||r.snow),
