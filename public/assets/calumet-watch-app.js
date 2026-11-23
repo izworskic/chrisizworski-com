@@ -5,6 +5,7 @@ const core=window.CalumetWatchCore,links=window.VisitorMapLinks,shipUI=window.Ri
 const $=id=>document.getElementById(id);
 const state={guide:null,map:null,live:null,selected:null,places:null,bridges:null,railBridges:null,ships:null,shipKindFilter:'all'};
 let vesselPopup=null;
+const placeMarkers=new Map();
 const timeFmt=new Intl.DateTimeFormat('en-US',{timeZone:'America/Chicago',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'});
 const node=(tag,text,cls)=>{const e=document.createElement(tag);e.textContent=String(text??'');if(cls)e.className=cls;return e;};
 const ext=(label,url)=>{const a=node('a',label);a.href=url;a.target='_blank';a.rel='noopener noreferrer';return a;};
@@ -73,10 +74,10 @@ function findShipMarker(mmsi){
  state.ships?.eachLayer(m=>{if(m.options.shipMmsi===String(mmsi))found=m;});
  return found;
 }
-function placePin(p){
+function placePin(p,offset=false){
  const id=p.id==='calumetpark'?'calumetpark':'bridge95';
- const html='<span class="calumet-place-pin calumet-place-pin--'+id+'" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><use href="#cal-place-'+id+'"></use></svg></span>';
- return L.divIcon({className:'calumet-viewpoint-icon',html,iconSize:[36,40],iconAnchor:[18,37],popupAnchor:[0,-34]});
+ const html='<span class="calumet-place-pin calumet-place-pin--'+id+(offset?' is-offset':'')+'" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><use href="#cal-place-'+id+'"></use></svg></span>';
+ return L.divIcon({className:'calumet-viewpoint-icon',html,iconSize:[36,40],iconAnchor:[18,offset?77:37],popupAnchor:[0,offset?-85:-34]});
 }
 function bridgePin(b){
  const kind=b.group==='rail'?'rail':'road';
@@ -131,6 +132,9 @@ function boatPin(v){
   iconAnchor:[glyph.size[0]/2,glyph.size[1]/2],popupAnchor:[0,-glyph.size[1]/2]});
 }
 function syncShipHighlight(){
+ for(const btn of document.querySelectorAll('#reported-ships [data-ship]')){
+  btn.setAttribute('aria-current',String(state.selected?.kind==='ship'&&btn.dataset.ship===state.selected.id));
+ }
  state.ships?.eachLayer(marker=>{
   const selected=marker.options.shipMmsi===state.selected?.id&&state.selected?.kind==='ship';
   if(Icons&&marker.options.shipReport){
@@ -145,6 +149,22 @@ function refreshShipIconSize(){
  if(!shipUI||!state.ships)return;
  state.ships.eachLayer(marker=>{if(marker.options.shipReport)marker.setIcon(boatPin(marker.options.shipReport));});
  syncShipHighlight();
+ separatePlaceAndShipPins();
+}
+function separatePlaceAndShipPins(){
+ if(!state.map||!state.guide)return;
+ for(const p of state.guide.viewpoints){
+  const marker=placeMarkers.get(p.id);if(!marker)continue;
+  const point=state.map.latLngToLayerPoint([p.lat,p.lon]);
+  const overlaps=visibleShips().some(v=>{
+   const shipPoint=state.map.latLngToLayerPoint([v.lat,v.lon]);
+   return Math.abs(point.x-shipPoint.x)<54&&Math.abs(point.y-shipPoint.y)<38;
+  });
+  if(marker.options.placeOffset!==overlaps){
+   marker.options.placeOffset=overlaps;
+   marker.setIcon(placePin(p,overlaps));
+  }
+ }
 }
 function initMap(){
  if(!window.L){$('calumet-map').querySelector('.map-loading').textContent='Map service unavailable. Use the official public-place links and ship reports.';return;}
@@ -210,11 +230,12 @@ function chooseShip(mmsi,pan=true){
 }
 function plotGuide(){
  if(!state.guide)return;
- state.places?.clearLayers();state.bridges?.clearLayers();state.railBridges?.clearLayers();
+ state.places?.clearLayers();state.bridges?.clearLayers();state.railBridges?.clearLayers();placeMarkers.clear();
  for(const p of state.guide.viewpoints){
   if(!state.places)continue;
   const m=L.marker([p.lat,p.lon],{title:p.name+' · public area (verify access)',
-   alt:p.name+' approximate public viewing area',placeId:p.id,icon:placePin(p),zIndexOffset:1000}).addTo(state.places);
+   alt:p.name+' approximate public viewing area',placeId:p.id,placeOffset:false,icon:placePin(p),zIndexOffset:1000}).addTo(state.places);
+  placeMarkers.set(p.id,m);
   m.bindPopup(placePopupContent(p),{maxWidth:295,autoPan:true,closeButton:true});
   m.on('click',()=>{choosePlace(p.id,false);m.openPopup();});
  }
@@ -230,6 +251,7 @@ function plotGuide(){
  for(const b of state.guide.bridges){const option=node('option',b.name+' · '+b.type+(b.group==='rail'?' / railroad':''));option.value=b.id;select.append(option);}
  for(const btn of document.querySelectorAll('[data-place]'))btn.addEventListener('click',()=>choosePlace(btn.dataset.place));
  choosePlace('bridge95',false);
+ separatePlaceAndShipPins();
 }
 function showShips(){
  const r=state.live,list=$('reported-ships');list.replaceChildren();state.map?.closePopup();state.ships?.clearLayers();
@@ -281,6 +303,7 @@ function showShips(){
   else if(state.guide)choosePlace('bridge95',false);
  }
  syncShipHighlight();
+ separatePlaceAndShipPins();
 }
 async function loadGuide(){
  try{
