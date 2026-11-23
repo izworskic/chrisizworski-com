@@ -259,11 +259,12 @@
   state.selectedShip=String(v.mmsi);
   syncShipSelection();
   const visual=core.vesselVisual(v);
+  const bearing=markerBearing(v);
   replaceFocus('LATEST RECEIVED AIS / OBSERVATION',v.name,
    'AIS position reported '+locClock.format(new Date(v.seen))+'. '+speedCopy(v)+'. '+visual.label+' (AIS type, if reported). '+
    (visual.reportedLengthMeters===null?'Length not reported.':'Reported length '+Math.round(visual.reportedLengthMeters*3.28084)+' feet. ')+
-   (markerHasTravelCourse(v)?'AIS travel course '+Math.round(visual.reportedCourseDegrees)+' degrees (course over ground, not verified bow heading). ':
-    'Travel direction is not shown because course or usable motion is unavailable. ')+
+   (bearing?(bearing.basis==='course over ground'?'Reported travel course ':'Reported bow heading ')+Math.round(bearing.degrees)+' degrees ('+bearing.basis+'). ':
+    'This symmetrical ship symbol has no reported bow direction. ')+
    'The ship symbol is illustrative; this is not a bridge arrival estimate.',
    [{label:'Open the full ship tracker ↗',url:'/great-lakes-freighter-tracking/'}],
    'MMSI '+v.mmsi+' · '+v.source+' · coordinates '+v.lat.toFixed(4)+', '+v.lon.toFixed(4)+'. Do not navigate by a public AIS map.');
@@ -289,12 +290,15 @@
    credits.append(document.createTextNode(' · '),link);
   }
   if(result.state==='REPORTS_AVAILABLE'){
-   readout.textContent=result.count+' recent AIS '+(result.count===1?'position':'positions')+' in the greater Cleveland riverfront area';
+   const names=result.vessels.slice(0,2).map(v=>v.name).join(' · ');
+   readout.textContent=result.count+' recent AIS '+(result.count===1?'report':'reports')+' · '+names+(result.count>2?' +'+(result.count-2):'');
    status.textContent=result.reason;
   }else{
    readout.textContent=result.state==='UNAVAILABLE'?'AIS reporting unavailable':'No fresh AIS positions in this map area';
    status.textContent=result.reason;
   }
+  const showShips=$('show-ships-on-map');
+  if(showShips){showShips.disabled=!result.vessels.length;showShips.textContent='Show '+result.vessels.length+' ships';}
   if(mapGroup.ships)mapGroup.ships.clearLayers();
   if(state.selectedShip&&!result.vessels.some(v=>String(v.mmsi)===state.selectedShip)){
    state.selectedShip=null;
@@ -315,9 +319,10 @@
    btn.append(escText('strong',v.name),escText('small',core.vesselVisual(v).label+' · '+speedCopy(v)+' · '+locClock.format(new Date(v.seen))));
    btn.addEventListener('click',()=>{selectShip(v);revealMobileFocus();});item.append(btn);list.append(item);
    if(mapGroup.ships){
-    const hasTravelCourse=markerHasTravelCourse(v);
+    const bearing=markerBearing(v);
     const marker=L.marker([v.lat,v.lon],{title:v.name,alt:v.name+' recent AIS report',shipMmsi:String(v.mmsi),icon:liveVesselIcon(v),zIndexOffset:1000}).addTo(mapGroup.ships);
-    marker.bindTooltip(v.name+' · '+speedCopy(v)+(hasTravelCourse?' · AIS travel course '+Math.round(v.course)+'°':' · direction not shown'));
+    // AIS vessel names are untrusted. Leaflet tooltip content must be a text node.
+    marker.bindTooltip(escText('span',v.name+' · '+speedCopy(v)+(bearing?' · '+bearing.basis+' '+Math.round(bearing.degrees)+'°':' · bow direction not reported')));
     marker.on('click',()=>{selectShip(v);revealMobileFocus();});
    }
   }
@@ -365,12 +370,14 @@
  function wire(){
 
   $('refresh-ais').addEventListener('click',getLive);
+  $('show-ships-on-map').addEventListener('click',()=>frameMap('ships'));
+  $('show-parks-on-map').addEventListener('click',()=>frameMap('parks'));
   $('bridge-select').addEventListener('change',e=>{if(e.target.value){chooseBridge(e.target.value,true);revealMobileFocus();}});
   $('show-all-bridges').addEventListener('change',renderBridgeMarkers);
   document.querySelector('.bridge-picker')?.addEventListener('toggle',renderBridgeMarkers);
 
  }
- initMap();wire();loadReferenceData();getLive();
+ initMap();wire();Promise.allSettled([loadReferenceData(),getLive()]).then(()=>frameMap('all'));
  // Match Duluth and Soo Locks: refresh every minute only while a visitor is present.
  setInterval(()=>{if(!document.hidden)getLive();},60000);
  document.addEventListener('visibilitychange',()=>{if(!document.hidden)getLive();});
