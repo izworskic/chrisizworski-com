@@ -202,33 +202,45 @@
   return typeof v.speedKnots==='number'&&v.speedKnots>0.5&&
    core.vesselVisual(v).reportedCourseDegrees!==null;
  }
+ // Travel course only indicates motion; true heading can orient a docked hull.
+ // Without either, draw a symmetrical recognizable ship without an inferred bow.
+ function markerBearing(v){
+  const visual=core.vesselVisual(v);
+  if(markerHasTravelCourse(v))return {degrees:visual.reportedCourseDegrees,basis:'course over ground'};
+  if(visual.reportedHeadingDegrees!==null)return {degrees:visual.reportedHeadingDegrees,basis:'true heading'};
+  return null;
+ }
  function liveVesselIcon(v){
-  const info=core.vesselVisual(v);
-  if(!markerHasTravelCourse(v)){
-   const html='<span class="cuyahoga-ship-marker cuyahoga-ship-neutral pin-vessel" title="Reported position; direction unverified">'+
-    '<svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">'+
-    '<circle class="ship-neutral-ring" cx="16" cy="16" r="13"/>'+
-    '<circle class="ship-neutral-center" cx="16" cy="16" r="5"/></svg></span>';
-   return L.divIcon({className:'cuyahoga-vessel-icon cuyahoga-vessel-without-course',html,iconSize:[32,32],iconAnchor:[16,16]});
-  }
-  const widths={large:58,medium:48,small:38,'not-reported':42};
-  const width=widths[info.widthClass]||42;
-  const deck={
+  const info=core.vesselVisual(v),bearing=markerBearing(v),oriented=!!bearing;
+  const widths={large:60,medium:50,small:40,'not-reported':44};
+  const width=widths[info.widthClass]||44;
+  const decks={
    cargo:'<rect x="22" y="10" width="9" height="12" rx="1" class="ship-deck"/><rect x="34" y="10" width="9" height="12" rx="1" class="ship-deck"/><rect x="46" y="10" width="8" height="12" rx="1" class="ship-deck"/>',
    tanker:'<circle cx="28" cy="16" r="4" class="ship-deck"/><circle cx="40" cy="16" r="4" class="ship-deck"/><circle cx="52" cy="16" r="4" class="ship-deck"/>',
    tug:'<rect x="21" y="10" width="16" height="12" rx="3" class="ship-deck"/><path d="M39 12H53M39 20H53" class="ship-deck"/>',
    passenger:'<rect x="20" y="10" width="38" height="12" rx="4" class="ship-deck"/><path d="M24 16H53" class="ship-deck"/>',
    unknown:'<path d="M24 11H48M24 21H48" class="ship-deck"/>'
-  }[info.kind];
-  // In the drawing the bow points right (90°). A 0° northbound course rotates it -90°.
-  const angle=info.reportedCourseDegrees-90;
-  const html='<span class="cuyahoga-ship-marker pin-vessel cuyahoga-ship-'+info.kind+' cuyahoga-ship-'+info.widthClass+
-   '"><svg viewBox="0 0 72 32" aria-hidden="true" focusable="false">'+
-   '<g class="ship-bearing" transform="rotate('+angle.toFixed(1)+' 36 16)">'+
-   '<path d="M6 9L50 4Q61 4 69 16Q61 28 50 28L6 23Q3 16 6 9Z" class="ship-hull"/>'+
-   '<rect x="11" y="11" width="7" height="10" rx="1.2" class="ship-deck"/>'+deck+'</g></svg></span>';
-  return L.divIcon({className:'cuyahoga-vessel-icon cuyahoga-vessel-with-course',
-   html,iconSize:[width,36],iconAnchor:[width/2,18]});
+  };
+  const pointed='M6 9L50 4Q61 4 69 16Q61 28 50 28L6 23Q3 16 6 9Z';
+  const symmetric='M10 7Q3 16 10 25L62 25Q69 16 62 7Z';
+  const transform=oriented?' transform="rotate('+(bearing.degrees-90).toFixed(1)+' 36 16)"':'';
+  const html='<span class="cuyahoga-ship-marker pin-vessel cuyahoga-ship-'+info.kind+
+   ' cuyahoga-ship-'+info.widthClass+(oriented?' is-oriented':' is-unoriented')+'">'+
+   '<svg viewBox="0 0 72 32" aria-hidden="true" focusable="false"><g class="ship-bearing"'+transform+'>'+
+   '<path d="'+(oriented?pointed:symmetric)+'" class="ship-hull"/>'+
+   '<rect x="11" y="11" width="7" height="10" rx="1.2" class="ship-deck"/>'+
+   decks[info.kind]+'</g></svg></span>';
+  return L.divIcon({className:'cuyahoga-vessel-icon '+(oriented?'cuyahoga-vessel-with-course':'cuyahoga-vessel-without-course'),
+   html,iconSize:[width,38],iconAnchor:[width/2,19]});
+ }
+ function frameMap(mode='all'){
+  if(!state.map)return;
+  const parks=(state.parks?.spots||[]).map(p=>[p.lat,p.lon]);
+  const ships=(state.live?.vessels||[]).map(v=>[v.lat,v.lon]);
+  const points=mode==='parks'?parks:mode==='ships'?ships:[...parks,...ships];
+  if(!points.length)return;
+  if(points.length===1)state.map.setView(points[0],14,{animate:false});
+  else state.map.fitBounds(points,{paddingTopLeft:[52,54],paddingBottomRight:[52,54],maxZoom:14,animate:false});
  }
  function syncShipSelection(){
   for(const btn of document.querySelectorAll('[data-ship]')){
