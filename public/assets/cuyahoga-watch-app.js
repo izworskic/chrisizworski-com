@@ -155,6 +155,7 @@
   if(!state.bridges)return;
   const showAll=$('show-all-bridges')?.checked===true;
   const bridgePickerOpen=document.querySelector('.bridge-picker')?.open===true;
+  for(const item of document.querySelectorAll('[data-bridge-legend]'))item.hidden=!bridgePickerOpen&&!state.selectedBridgeId;
   if(mapGroup.bridges)mapGroup.bridges.clearLayers();
   if(!bridgePickerOpen&&!state.selectedBridgeId){
    const status=$('bridge-layer-status');
@@ -271,7 +272,7 @@
    btn.append(escText('strong',v.name),escText('small',core.vesselVisual(v).label+' · '+speedCopy(v)+' · '+locClock.format(new Date(v.seen))));
    btn.addEventListener('click',()=>selectShip(v));item.append(btn);list.append(item);
    if(mapGroup.ships && state.mode==='live'){
-    const marker=L.marker([v.lat,v.lon],{title:v.name,alt:v.name+' recent AIS report',icon:liveVesselIcon(v)}).addTo(mapGroup.ships);
+    const marker=L.marker([v.lat,v.lon],{title:v.name,alt:v.name+' recent AIS report',icon:liveVesselIcon(v),zIndexOffset:1000}).addTo(mapGroup.ships);
     marker.bindTooltip(v.name);
     marker.on('click',()=>selectShip(v));
    }
