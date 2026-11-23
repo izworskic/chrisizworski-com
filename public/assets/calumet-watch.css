@@ -109,3 +109,11 @@ a{color:#0b5b6a;text-underline-offset:3px}button,select,input{font:inherit}butto
  content:"";position:absolute;top:33px;left:15px;height:43px;
  border-left:2px dashed var(--place-ink);opacity:.8;pointer-events:none;
 }
+
+/* Where NOAA's 95th Street chart point and the public viewing-area marker
+   coincide, move only the bridge drawing, with a short leader to its point. */
+.calumet-bridge-pin.is-offset{position:relative}
+.calumet-bridge-pin.is-offset::before{
+ content:"";position:absolute;top:13px;right:27px;width:43px;
+ border-top:2px dashed currentColor;opacity:.8;pointer-events:none;
+}
