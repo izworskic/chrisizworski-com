@@ -17,6 +17,15 @@ NOW = datetime.now(timezone.utc)
 def iso(dt):
     return dt.isoformat(timespec="seconds").replace("+00:00", "Z")
 
+async def assert_popup_visible(page,tag):
+    # Popups must be legible within the real browser viewport after selection,
+    # not merely exist in Leaflet's off-screen map pane.
+    await page.wait_for_timeout(400)
+    geometry=await page.locator("#calumet-map .leaflet-popup").evaluate(
+        "(el)=>{const r=el.getBoundingClientRect();return {top:r.top,bottom:r.bottom,screen:window.innerHeight};}")
+    if geometry["top"] < -1 or geometry["bottom"] > geometry["screen"]+1:
+        raise AssertionError(f"{tag} map popup is clipped in the browser viewport: {geometry}")
+
 def report():
     recent=iso(NOW-timedelta(seconds=80))
     def vessel(mmsi,name,lat,lon,type_,speed,course,length):
@@ -108,6 +117,7 @@ async def run():
                     raise AssertionError("Ship popup missing Cuyahoga-parity data: "+required+" / "+ship_text)
             if await page.locator("#calumet-map .leaflet-popup").count()!=1:
                 raise AssertionError("Only one ship detail bubble is permitted")
+            await assert_popup_visible(page,"AIS vessel")
             if width in (390,1280):
                 await page.screenshot(path=str(OUT/f"calumet-{width}-ship-popup.png"),animations="disabled")
             # Leaflet popups can cover nearby pins, as on Cuyahoga.
@@ -137,6 +147,7 @@ async def run():
                     raise AssertionError("Published bridge bubble missing: "+required+" / "+bridge)
             if await page.locator("#calumet-map .leaflet-popup").count()!=1:
                 raise AssertionError("A bridge click must replace the prior public-place popup")
+            await assert_popup_visible(page,"charted bridge")
             if width in (390,1280):
                 await page.screenshot(path=str(OUT/f"calumet-{width}-bridge-popup.png"),animations="disabled")
             await page.locator("[data-place='calumetpark']").click()
