@@ -74,7 +74,7 @@ async def run():
 
             if await page.get_by_text("STALE SHIP", exact=True).count():
                 raise AssertionError("Stale AIS still visible")
-            marker_count = await page.locator(".pin-vessel").count()
+            marker_count = await page.locator(".river-watch-marker").count()
             if marker_count != 1:
                 raise AssertionError(f"Expected one recent marker, found {marker_count}")
             if await page.locator(".cuyahoga-ship-cargo").count() != 1:
@@ -209,21 +209,23 @@ async def run():
                 await glyphs.route("**/api/freighter-ais?region=cuyahoga", lambda route: route.fulfill(status=200, content_type="application/json", body=json.dumps(orientation_feed)))
                 await glyphs.goto(URL, wait_until="domcontentloaded")
                 await glyphs.get_by_text("EASTBOUND TEST", exact=True).first.wait_for(timeout=15000)
-                if await glyphs.locator(".cuyahoga-vessel-with-course").count() != 3:
-                    raise AssertionError("Two moving courses and reported stationary true heading must orient hulls")
-                if await glyphs.locator(".cuyahoga-vessel-without-course").count() != 1:
-                    raise AssertionError("Stopped vessel depicted with invented bow orientation")
-                turns = await glyphs.locator(".ship-bearing").evaluate_all("(els) => els.map(x => x.getAttribute('transform'))")
-                if "rotate(0.0 36 16)" not in turns or "rotate(-90.0 36 16)" not in turns:
-                    raise AssertionError("East/north AIS travel courses not rendered in correct directions: "+str(turns))
-                if await glyphs.locator(".cuyahoga-vessel-without-course .ship-hull").count() != 1:
-                    raise AssertionError("Stopped vessel without heading must have a recognizable but unoriented hull")
+                if await glyphs.locator(".river-watch-marker.with-course").count() != 2:
+                    raise AssertionError("Two moving vessels must have course arrows")
+                if await glyphs.locator(".river-watch-marker.with-heading").count() != 1:
+                    raise AssertionError("AIS true heading at berth must be shown independently")
+                if await glyphs.locator(".river-watch-marker.without-course").count() != 1:
+                    raise AssertionError("Unknown bearing must not be assigned a bow direction")
+                arrows = await glyphs.locator(".river-ship-course").evaluate_all("(els)=>els.map(x=>x.getAttribute('style'))")
+                if not all(any("--river-course:"+course+"deg" in v for v in arrows) for course in ("90.0","0.0","265.0")):
+                    raise AssertionError("Missing reported course or heading arrow: "+str(arrows))
+                if await glyphs.locator(".river-watch-marker.without-course .river-ship-course").count():
+                    raise AssertionError("Unoriented ship must not invent a heading arrow")
+                if await glyphs.locator(".river-watch-marker .ship-hull").count() != 4:
+                    raise AssertionError("All AIS reports must remain ship-shaped")
                 if await glyphs.locator(".ship-neutral-ring").count():
-                    raise AssertionError("No ship may revert to an anonymous circle")
-                if "rotate(175.0 36 16)" not in turns:
-                    raise AssertionError("Stopped vessel with AIS true heading did not use the reported bow bearing")
+                    raise AssertionError("No ship should revert to a generic circle")
                 await glyphs.screenshot(path=str(OUT / "cuyahoga-390-real-direction-glyphs.png"), full_page=False, animations="disabled")
-                cases.append({"viewport":390,"vesselOrientation":"E-90,N-0,berth-heading-265,unoriented-hull","status":"PASS"})
+                cases.append({"viewport":390,"vesselOrientation":"upright hulls, course-90/course-0, heading-265, unoriented hull","status":"PASS"})
                 await glyphs.close()
             if width == 390:
                 failed = await context.new_page()
