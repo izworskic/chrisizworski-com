@@ -289,25 +289,30 @@ test('AIS vessel illustrations reflect only reported category, size band and bou
  assert.match(app,/function liveVesselIcon\(/);
  assert.doesNotMatch(app,/icon:mapPointIcon\('ship'\)/);
  assert.match(app,/icon:liveVesselIcon\(v\)/);
- assert.match(css,/\.cuyahoga-ship-marker/);
+ assert.match(page,/\/assets\/soo-vessel-icons\.css/);
+ assert.match(app,/Icons\.icon\(v,/);
+ assert.match(app,/soo-ais-symbol/);
  assert.match(page,/Hull shapes illustrate reported AIS type/);
  assert.ok(page.indexOf('id="live-controls"')<page.indexOf('class="panel places"'),'Reported vessels must appear before park directory');
  assert.match(page,/id="show-ships-on-map"/);
  assert.match(page,/id="show-parks-on-map"/);
  assert.match(app,/function revealMobileFocus\(/);
- assert.match(page,/Unoriented vessel outline/);
+ assert.match(page,/Ship types and counts/);
+ assert.ok(page.indexOf('class="river-type-strip"') > page.indexOf('id="cuyahoga-map"'),'type filters must not overwhelm the ship map');
  assert.match(app,/function markerHasTravelCourse\(/);
  assert.match(app,/v\.speedKnots>0\.5/);
  assert.match(app,/function markerBearing\(/);
  assert.match(app,/reportedHeadingDegrees/);
- assert.match(app,/const symmetric='M10 7Q3 16 10 25L62 25Q69 16 62 7Z'/);
+ assert.doesNotMatch(app,/shipUI\.marker\(/);
+ assert.doesNotMatch(app,/river-ship-course/);
  assert.doesNotMatch(app,/ship-neutral-ring/);
  assert.match(app,/frameMap\('all'\)/);
  assert.match(app,/frameMap\('ships'\)/);
- assert.match(app,/bindTooltip\(escText\('span'/);
- assert.match(app,/M6 9L50 4Q61 4 69 16Q61 28 50 28L6 23Q3 16 6 9Z/);
- assert.doesNotMatch(app,/M3 17H59L69 12/);
- assert.match(css,/\.is-active-vessel \.ship-hull/);
+ assert.match(app,/function openShipPopup\(/);
+ assert.match(app,/L\.popup\(\{autoClose:true,closeOnClick:true\}\)/);
+ assert.match(app,/openShipPopup\(marker,v\)/);
+ assert.doesNotMatch(app,/marker\.bindTooltip\(/);
+ assert.match(page,/id="cuyahoga-type-counts"/);
 });
 
 test('first map screen favors four active reference landmarks plus Eagle work notice; full catalogue is opt-in',()=>{
