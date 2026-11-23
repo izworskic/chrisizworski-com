@@ -37,10 +37,15 @@ jobs:
           else
             "$RUNNER_TEMP/cuyahoga-browser-env/bin/python" -m playwright install chromium
           fi
+      - name: Install ephemeral axe accessibility auditor
+        shell: bash
+        run: |
+          npm install --prefix "$RUNNER_TEMP/cuyahoga-axe" --ignore-scripts --no-save --package-lock=false 'axe-core@4.10.3'
       - name: Exercise real map, public places, fresh AIS, history and no-JS
         shell: bash
         env:
           CUYAHOGA_QA_OUTPUT: ${{ runner.temp }}/cuyahoga-preview-qa
+          CUYAHOGA_AXE_PATH: ${{ runner.temp }}/cuyahoga-axe/node_modules/axe-core/axe.min.js
         run: |
           set -euo pipefail
           python3 -m http.server 8765 --bind 127.0.0.1 --directory public > "$RUNNER_TEMP/cuyahoga-http.log" 2>&1 &
