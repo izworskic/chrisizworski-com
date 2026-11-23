@@ -97,7 +97,7 @@ function renderWindTurn(){
  if(value.phase==='onshore-now'){
   put('wind-turn-answer','Wind from the bay is forecast now');
  }else if(value.phase==='forecast-turn'){
-  put('wind-turn-answer','Forecast winds turn toward the bay around '+date(value.at));
+  put('wind-turn-answer','NWS winds turn from the bay toward the beach around '+date(value.at));
  }else{
   put('wind-turn-answer','No sustained turn toward the bay shown in the available forecast');
  }
