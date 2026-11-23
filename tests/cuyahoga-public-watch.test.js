@@ -77,7 +77,8 @@ test('published preview is noindex, map first, source-first, accessible and has 
  assert.doesNotMatch(page,/id="history-scrubber"|id="show-history"|2025 ship replay/);
  assert.match(page,/Choose where to watch/);
  assert.match(page,/id="live-vessels"/);
- assert.match(page,/https:\/\/coast.noaa.gov\/accessais\//);
+ assert.match(page,/https:\/\/openwaters.io\/ais\//);
+ assert.doesNotMatch(page,/NOAA historical AIS ↗/);
  assert.match(page,/https:\/\/www.clevelandmetroparks.com\//);
  assert.match(page,/#person/);
  assert.match(app,/fetch\('\/api\/freighter-ais'/);
@@ -281,6 +282,8 @@ test('AIS vessel illustrations reflect only reported category, size band and bou
  assert.match(app,/icon:liveVesselIcon\(v\)/);
  assert.match(css,/\.cuyahoga-ship-marker/);
  assert.match(page,/Vessel shapes use broad reported AIS categories/);
+ assert.match(app,/function revealMobileFocus\(/);
+ assert.match(page,/Direction unknown/);
  assert.match(app,/function markerHasTravelCourse\(/);
  assert.match(app,/v\.speedKnots>0\.5/);
  assert.match(app,/info\.reportedCourseDegrees-90/);
