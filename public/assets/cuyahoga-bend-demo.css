@@ -1,0 +1,64 @@
+/* Purpose-built river-bend interpretation. Isolated from AIS/map/ads. */
+.bend-lab{grid-column:1;grid-row:2;min-width:0;margin:22px 0 10px;padding:22px 24px 20px;border-radius:16px;background:#e4ebe5;color:#18383d;box-shadow:0 4px 18px rgba(22,50,56,.07)}
+.bend-intro{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:17px}
+.bend-intro .kicker{margin-bottom:5px}
+.bend-intro h2{font-family:Georgia,"Times New Roman",serif;font-size:clamp(1.55rem,2.2vw,2.25rem);font-weight:500;margin:0 0 7px;letter-spacing:-.03em}
+.bend-intro p:last-child{font-size:.89rem;line-height:1.45;color:#3c595e;margin:0;max-width:65ch}
+.bend-kind{flex:none;font-size:.66rem;line-height:1.3;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:#365a60;border-left:2px solid #b88f4f;padding-left:10px;max-width:138px}
+.bend-workspace{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(245px,.8fr);gap:20px;align-items:center}
+.bend-chart{min-width:0}
+#bend-diagram{display:block;width:100%;height:auto;border-radius:10px;overflow:hidden;background:#e8eee7;box-shadow:inset 0 0 0 1px #aabebb;aspect-ratio:760 / 365}
+.bend-map-label{font-size:19px;fill:#426166;font-weight:800;letter-spacing:1.7px}
+.bend-map-caption{font-size:13px;fill:#526d70}
+.bend-chart-key{display:flex;gap:10px 15px;flex-wrap:wrap;font-size:.69rem;color:#47626a;margin-top:7px}
+.bend-chart-key span{display:flex;align-items:center;gap:5px}
+.bend-chart-key i{width:13px;height:8px;border-radius:3px;display:inline-block;background:#153f4e}
+.bend-chart-key .bend-key-bow{background:#f4bd65;border:1px solid #163942}
+.bend-chart-key .bend-key-river{background:#bad8d9;border:1px solid #769f9f}
+.bend-notes{padding:2px 0 0}
+.bend-notes .side-eyebrow{margin-bottom:9px}
+.bend-steps{display:flex;gap:5px;margin:0 0 15px}
+.bend-steps button{background:#f4f7f2;border:1px solid #c8d9d3;color:#385c64;padding:7px 8px;line-height:1.25;flex:1;border-radius:8px;font-size:.73rem;min-height:47px;font-weight:720;cursor:pointer}
+.bend-steps button span{display:block;color:#637b7b;font-size:.63rem}
+.bend-steps button[aria-pressed=true]{background:#173c48;color:white;border-color:#173c48}
+.bend-steps button[aria-pressed=true] span{color:#f8d49e}
+.bend-steps button:disabled{cursor:default;opacity:1}
+.bend-notes h3{font-family:Georgia,serif;font-weight:600;font-size:1.28rem;letter-spacing:-.02em;line-height:1.2;margin:0 0 8px}
+#bend-stage-explanation{font-size:.85rem;line-height:1.52;min-height:4em;margin-bottom:10px;color:#3c5960}
+.bend-notes label{display:block;font-size:.72rem;font-weight:740;color:#345860;margin:10px 0 3px}
+#bend-position{display:block;width:100%;height:30px;accent-color:#205c6c;touch-action:pan-x;margin:0 0 8px;cursor:pointer}
+#bend-position:disabled{opacity:.6}
+.bend-actions{display:flex;gap:9px;margin:0 0 8px}
+.bend-actions button{background:#174d5b;color:#fff;border:0;border-radius:8px;padding:8px 13px;font-size:.75rem;font-weight:780;min-height:40px}
+.bend-actions button:last-child{color:#24535e;background:#d5e2dd}
+.bend-actions button:disabled{opacity:.55;cursor:not-allowed}
+.bend-qualifier{font-size:.71rem;line-height:1.45;color:#3f6065;margin:7px 0}
+.bend-source{font-size:.72rem;line-height:1.5;color:#3f6065;margin:10px 0 0}
+.bend-source a{font-weight:700}
+.story{grid-row:3}
+@media(max-width:1250px){
+ .bend-workspace{grid-template-columns:1fr;gap:12px}
+ .bend-intro{align-items:flex-start}
+ .bend-notes{display:block}
+ #bend-stage-explanation{min-height:0}
+}
+@media(max-width:830px){
+ .bend-lab{grid-column:1;grid-row:3;margin:14px 0 4px}
+ .story{grid-row:4}
+ .bend-workspace{grid-template-columns: minmax(0,1.2fr) minmax(0,1fr);gap:16px}
+}
+@media(max-width:680px){
+ .bend-lab{padding:15px 12px 14px}
+ .bend-intro{display:block;margin-bottom:10px}
+ .bend-kind{display:block;max-width:none;margin-top:8px;font-size:.61rem}
+ .bend-workspace{grid-template-columns:1fr;gap:13px}
+ .bend-intro h2{font-size:1.62rem}
+ .bend-intro p:last-child{font-size:.8rem}
+ .bend-steps button{font-size:.71rem;padding:7px 4px}
+ .bend-notes h3{font-size:1.2rem}
+ #bend-stage-explanation{font-size:.8rem}
+ .bend-chart-key{font-size:.63rem}
+}
+@media(prefers-reduced-motion:reduce){
+ #bend-ship{transition:none!important}
+}
