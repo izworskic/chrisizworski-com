@@ -47,8 +47,9 @@ async def run():
                 url=f"{ROOT}/{city}-freighter-watch/"
                 feed=fixture(city)
                 request="**/api/freighter-ais?region=cuyahoga" if city=="cuyahoga" else "**/api/freighter-ais"
-                await page.route(request,lambda route,payload=feed:route.fulfill(
-                  status=200,content_type="application/json",body=json.dumps(payload)))
+                async def mock_ais(route):
+                    await route.fulfill(status=200,content_type="application/json",body=json.dumps(feed))
+                await page.route(request,mock_ais)
                 await page.goto(url,wait_until="domcontentloaded",timeout=40000)
                 map_id="calumet-map" if city=="calumet" else "cuyahoga-map"
                 ship_btn="calumet-show-ships" if city=="calumet" else "show-ships-on-map"
