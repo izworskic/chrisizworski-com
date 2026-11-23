@@ -30,7 +30,7 @@ test('two distinct shore pins and charted bridge types retain source truth',()=>
  assert.equal((page.match(/<symbol id="cal-place-/g)||[]).length,2);
  assert.equal((page.match(/<symbol id="cal-bridge-/g)||[]).length,2);
  assert.match(app,/function placePin\(p,offset=false\)/);
- assert.match(app,/function bridgePin\(b\)/);
+ assert.match(app,/function bridgePin\(b,offset=false\)/);
  assert.match(app,/calumet-place-pin--/);
  assert.match(app,/calumet-bridge-pin--/);
  assert.match(css,/\.calumet-place-pin--bridge95/);
