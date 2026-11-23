@@ -121,6 +121,8 @@ async function main(){
  await zoomPage.waitForFunction(()=>document.querySelector('#report-temp')?.textContent==='2°C');
  await zoomPage.waitForFunction(()=>document.querySelector('#shore-map .leaflet-tile-loaded')!==null,{timeout:14000});
  assert.equal(await zoomPage.locator('#map-fallback').isVisible(),false,'working tile layer must remain available');
+ assert.equal(await zoomPage.locator('#shore-map .leaflet-popup').count(),0,
+  'Map must not auto-open a popup that blocks phone gestures');
  const mapSurface=zoomPage.locator('#shore-map');
  assert.equal(await mapSurface.evaluate(el=>el.classList.contains('leaflet-touch-zoom')),true,
   'mobile map must register Leaflet two-finger touch zoom');
@@ -218,6 +220,9 @@ async function main(){
   trace:window.__shorePinchTrace,
   viewportScale:window.visualViewport?.scale,
   mapZoom:window.__shoreTestMap.getZoom(),
+  hitTarget:(()=>{const box=document.getElementById('shore-map').getBoundingClientRect();
+   const e=document.elementFromPoint(box.left+box.width/2,box.top+box.height/2);
+   return e?.className||e?.tagName;})(),
   gesture:{
    started:!!window.__shoreTestMap.touchZoom._zooming,
    moved:!!window.__shoreTestMap.touchZoom._moved,

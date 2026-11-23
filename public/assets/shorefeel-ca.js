@@ -61,7 +61,8 @@
    .catch(e=>{if(e.name!=='AbortError'&&current===d.slug)unavailable('ECCC weather could not be reached. Use the official park and beach health links.');});
   if(mapReady&&markers.has(d.slug)){
     for(const [slug,p]of markers){const e=p.getElement()?.querySelector('.shore-marker');if(e)e.classList.toggle('selected',slug===d.slug);}
-    markers.get(d.slug).openPopup();
+    // Do not open a popup from the beach list: it obscures mobile pinch gestures.
+    // Leaflet's bound popup still opens when a visitor taps its marker.
   }
   try{const u=new URL(location.href);u.searchParams.set('beach',d.slug);history.replaceState(null,'',u);}catch{}
   if(window.va)window.va('event',{name:'ShoreFeel Canada Beach Select',data:{beach:d.slug,lake:d.lake}});
@@ -147,7 +148,8 @@
    }else map.setView([44.5,-85.5],6,{animate:false});
    if(current&&markers.has(current)){
     const selected=markers.get(current);
-    selected.openPopup();
+    // The field note already describes the selected beach. Keep the initial
+    // map unobstructed rather than centering a popup over touch gestures.
     const icon=selected.getElement()?.querySelector('.shore-marker');
     if(icon)icon.classList.add('selected');
    }
