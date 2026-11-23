@@ -64,8 +64,10 @@ async def run():
                 raise AssertionError("Cargo vessel missing its source-category silhouette")
             if await page.locator(".cuyahoga-vessel-icon svg").count() != 1:
                 raise AssertionError("AIS vessel marker missing SVG source category shape")
-            if await page.locator(".pin-bridge").count() != 4 or await page.locator(".pin-work").count() != 1:
-                raise AssertionError("First map screen must show only four key bridges and one work notice")
+            if await page.locator(".pin-bridge").count() or await page.locator(".pin-work").count():
+                raise AssertionError("Default river map should prioritize public parks and observed ships, not bridge pins")
+            if await page.locator(".pin-park").count() != 4:
+                raise AssertionError("Default river map missing four public viewing points")
             await page.screenshot(path=str(OUT / f"cuyahoga-{width}-live.png"), full_page=True, animations="disabled")
             await page.get_by_role("button", name="Scranton Flats Pier").click()
             await page.locator("#river-focus h3").get_by_text("Scranton Flats Pier").wait_for()
@@ -76,6 +78,8 @@ async def run():
             await page.locator("#river-focus button.focus-action").get_by_text("Inspect this reported vessel").click()
             await page.locator("#river-focus h3").get_by_text("BROWSER TEST SHIP").wait_for()
             await page.locator(".bridge-picker summary").click()
+            if await page.locator(".pin-bridge").count() != 4 or await page.locator(".pin-work").count() != 1:
+                raise AssertionError("Opening bridge explorer must reveal five source-labeled landmarks")
             if await page.locator("#bridge-select option").count() != 20:
                 raise AssertionError("NOAA main-channel bridge options were not loaded")
             await page.locator("#show-all-bridges").check()
@@ -112,6 +116,15 @@ async def run():
             await page.locator("#show-history").click()
             if await page.locator("#history-report").inner_text() != parked_history_report:
                 raise AssertionError("Park-specific historic fix was lost on live → history return")
+            photo = page.locator(".story-photo img")
+            if await photo.count() != 1:
+                raise AssertionError("Exact-subject licensed historical freighter photo missing")
+            await photo.scroll_into_view_if_needed()
+            await page.wait_for_timeout(1200)
+            if not await photo.evaluate("(el) => el.complete && el.naturalWidth > 0"):
+                raise AssertionError("Verified historical Wikimedia photo failed to load")
+            if await page.locator(".story-photo figcaption a[href*='creativecommons.org/licenses/by/2.0']").count() != 1:
+                raise AssertionError("Photo license credit is not visible")
             overflow = await page.evaluate("document.documentElement.scrollWidth > window.innerWidth + 2")
             if overflow:
                 raise AssertionError(f"Horizontal page overflow at {width}px")
@@ -124,6 +137,18 @@ async def run():
             await page.screenshot(path=str(filename), full_page=True, animations="disabled")
             cases.append({"viewport":width,"status":"PASS","firstScreenMapY":round(river["y"]),"firstScreenMapWidth":round(river["width"]),"tilesLoaded":tiles,"liveShipMarkers":marker_count,
                           "archiveSelected":"laud-2025-08-15","screenshots":filename.name,"jsErrors":errors})
+            if width == 390:
+                failed = await context.new_page()
+                await failed.route("**/api/freighter-ais", lambda route: route.fulfill(status=503, content_type="application/json", body='{"ok":false}'))
+                await failed.goto(URL, wait_until="domcontentloaded")
+                await failed.get_by_text("AIS reporting unavailable").wait_for(timeout=15000)
+                await failed.get_by_role("button", name="Rivergate Park").click()
+                await failed.locator("#river-focus h3").get_by_text("Rivergate Park").wait_for()
+                if await failed.locator("#river-focus a[href*='clevelandmetroparks']").count() != 1:
+                    raise AssertionError("Official park guidance disappeared when AIS was unavailable")
+                await failed.screenshot(path=str(OUT / "cuyahoga-390-ais-unavailable.png"), full_page=True, animations="disabled")
+                cases.append({"viewport":390,"ais":"unavailable","status":"PASS","parkFallback":"Rivergate Park"})
+                await failed.close()
             await context.close()
         nojs = await browser.new_context(viewport={"width":390,"height":844}, java_script_enabled=False)
         page = await nojs.new_page()
