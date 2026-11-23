@@ -62,7 +62,7 @@
    const marker=parkMarkers.get(park.id);
    if(!marker)continue;
    const point=state.map.latLngToLayerPoint([park.lat,park.lon]);
-   const overlap=state.live?.vessels?.some(v=>{
+   const overlap=state.live?.vessels?.filter(v=>!shipUI||shipUI.match(v,state.shipKindFilter)).some(v=>{
     const shipPoint=state.map.latLngToLayerPoint([v.lat,v.lon]);
     return Math.abs(point.x-shipPoint.x)<54&&Math.abs(point.y-shipPoint.y)<38;
    })||false;
