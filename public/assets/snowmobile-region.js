@@ -1,5 +1,5 @@
 const $=s=>document.querySelector(s);
-const ORIGIN_NAMES={'43.5945,-83.8889':'Bay City','43.4195,-83.9508':'Saginaw','43.6156,-84.2472':'Midland','42.7325,-84.5555':'Lansing','42.9634,-85.6681':'Grand Rapids','42.3314,-83.0458':'Detroit','44.7631,-85.6206':'Traverse City'};
+let ORIGIN_SEARCH=null;
 let DATA=null,MAP=null,LAYER=null,CLOSURE_LAYER=null,SNOW_LAYER=null,CLOSURES=null,JUNCTION_LAYER=null;
 let ROUTE_MODE=false,ROUTE_POINTS=[],ROUTE_MARKERS=[],ROUTE_LINE=null;
 let JUNCTIONS_BY_ID=new Map();
@@ -576,26 +576,39 @@ document.addEventListener('click',e=>{
   if(e.target?.id==='closeRouteLoop'&&ROUTE_MODE&&!ROUTE_BUSY&&ROUTE_POINTS.length>=2&&ROUTE_POINTS.length<12){const first=ROUTE_POINTS[0];if(first?.junctionId!==ROUTE_POINTS.at(-1)?.junctionId)onMapClick({junction:{id:first.junctionId,component:first.component,label:first.label},latlng:{lat:first.lat,lng:first.lng}});}
   const choice=e.target?.closest?.('[data-junction-choice]');if(choice){selectSearchedJunction(choice.getAttribute('data-junction-choice'));return;}
   if(e.target?.id==='toggleSnowDepth')toggleSnowDepth();if(e.target?.id==='routeModeToggle')toggleRouteMode();if(e.target?.id==='clearRoute')clearRoute();if(e.target?.id==='buildRoute')computeRoute();if(e.target?.id==='undoRoute')undoRoute();if(e.target?.id==='editRoute')editRoute();
-  if(e.target?.id==='checkDrive'){const v=$('#originPreset')?.value;if(v)checkOrigin(v,ORIGIN_NAMES[v]||'Selected origin')}
+  if(e.target?.id==='checkDrive'){const origin=ORIGIN_SEARCH?.getSelected();if(origin)checkOrigin(origin.point,origin.label);else{const host=$('#personalDrive');if(host)host.textContent='Type a starting town and choose the correct result before checking the trip.';$('#originPreset')?.focus?.();}}
   if(e.target?.id==='useMyLocation'){
     const host=$('#personalDrive');if(!navigator.geolocation){if(host)host.textContent='Browser location is unavailable.'}
-    else{if(host)host.textContent='Requesting your location…';navigator.geolocation.getCurrentPosition(pos=>checkOrigin(`${pos.coords.latitude.toFixed(5)},${pos.coords.longitude.toFixed(5)}`,'Your location'),()=>{if(host)host.textContent='Location was not shared. Choose a city instead.'},{enableHighAccuracy:false,timeout:10000,maximumAge:300000})}
+    else{if(host)host.textContent='Requesting your location…';navigator.geolocation.getCurrentPosition(pos=>checkOrigin(`${pos.coords.latitude.toFixed(5)},${pos.coords.longitude.toFixed(5)}`,'Your location'),()=>{if(host)host.textContent='Location was not shared. Type a starting town instead.'},{enableHighAccuracy:false,timeout:10000,maximumAge:300000})}
   }
   const a=e.target?.closest?.('[data-source-name]');if(a)track('snowmobile_source_verify',{source:a.getAttribute('data-source-name')||'unknown'});
 });
 function inheritTrip(){
-  const params=new URLSearchParams(window.location.search),origin=window.SnowmobileComparison.ORIGINS.find(o=>o.id===params.get('origin'));
+  const params=new URLSearchParams(window.location.search),id=params.get('origin');
   const max=params.get('maxDrive'),allowed=['2','3','4','6','10'];
-  if(!origin)return;
-  $('#originPreset').value=origin.point;
   if(allowed.includes(max))$('#maxDrive').value=max;
-  checkOrigin(origin.point,origin.label);
+  if(!id||!ORIGIN_SEARCH)return;
+  const legacy=window.SnowmobileComparison.ORIGINS.find(o=>o.id===id);
+  if(legacy){
+    // Keep existing outbound links operational after removing the seven-city dropdown.
+    window.SnowmobileCitySearch.load().then(data=>{
+      const named=data.places.find(p=>p.state==='MI'&&window.SnowmobileCitySearch.norm(p.name)===window.SnowmobileCitySearch.norm(legacy.label));
+      if(named)return ORIGIN_SEARCH.selectById(named.id).then(()=>checkOrigin(named.point,named.label));
+      $('#originPreset').value=legacy.label+', MI';
+      checkOrigin(legacy.point,legacy.label);
+    }).catch(()=>{const host=$('#personalDrive');if(host)host.textContent='Place index is unavailable; select a verified origin to check this trip.';});
+    return;
+  }
+  if(!/^(?:mi|wi|oh|in|il|mn|pa|ny)-\d{7}$/.test(id)&&!/^mi-trail-[a-z0-9-]+$/.test(id))return;
+  ORIGIN_SEARCH.selectById(id).then(origin=>{if(origin)checkOrigin(origin.point,origin.label);})
+    .catch(()=>{const host=$('#personalDrive');if(host)host.textContent='Named starting place could not be verified. Type a town to choose again.';});
 }
 async function load(){
   const key=window.SNOWMOBILE_REGION;
   try{const r=await fetch(`/api/snowmobile?region=${encodeURIComponent(key)}&v=20261005-junction-dots-5`);const payload=await r.json();if(!r.ok)throw new Error(payload.detail||payload.error||r.status);const d={...payload.region,season:payload.season,sources:payload.sources,generatedAt:payload.generatedAt,truthBoundary:payload.truthBoundary,operational:payload.operational};render(d);inheritTrip();}
   catch(e){$('#status').textContent='DATA UNAVAILABLE';$('#drive').innerHTML='<strong>No ride recommendation.</strong> Live source verification failed, so the page is not substituting guessed conditions.';updateRouteAvailability();setRouteHint('Trail route planning is unavailable while the source data cannot be loaded. Use the official DNR trail maps below.');const segHead=$('#segments'); if(segHead)segHead.innerHTML='<p>'+esc(e.message)+'</p>';}
 }
+if(window.SnowmobileCitySearch)ORIGIN_SEARCH=window.SnowmobileCitySearch.attach($('#originPreset'),$('#originPresetResults'),{mode:'places',onClear:()=>{const host=$('#personalDrive');if(host)host.textContent='Choose a matching town, then check the drive.';},onInvalid:message=>{const host=$('#personalDrive');if(host)host.textContent=message;}});
 const clubHost=$('#clubStaging');
 if(clubHost&&window.SnowmobileClubStaging)window.SnowmobileClubStaging.render(clubHost);
 load();
