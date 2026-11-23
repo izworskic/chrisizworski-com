@@ -1,3 +1,10 @@
+### 2026-11-23 | Michigan ski official operating evidence, PR review only
+- Visitor job: Which of 17 Michigan downhill hills have actually reported operating lifts today? The NWS weather ranking cannot certify an opening.
+- Implementation: Sixteen operator report URLs (previously three), one captured HTML fixture/parser test each, dated 36-hour operating verdicts, a source-linked opening-date table, source-aware hub and Open now filter, plus a ten-operator-source SEO title gate. No new route, function, database, paid service or cron. +13 outbound source fetches per cache miss, same API invocation count, 15-minute edge caching.
+- Safety: Alpine Valley stays NOT_CONNECTED, Garland Nordic excluded; undated/stale sources and source failures never imply open or closed. Existing canonical, Person schema, Auto ads, rankings and PROVISIONAL policy retained.
+- Verification: Baseline main Agent branch verification on completed run 45173503152 passed; latest main/PR runs must be separately checked. Full-history npm run verify:all, 360px and 1440px browser QA and all-sources-down are release gates. Not merged or deployed. GSC, CTR, visitor engagement and AdSense unmeasured.
+- Exactly one next action: Review the PR CI plus browser evidence and repair any failures before considering a separate merge.
+
 ### 2026-11-23 | Great Lakes ice cover today, canonical NOAA comparison, PR #1877
 - **Search owner:** Reused `/michigan-ice/ice-cover-history.html` for national daily basin and five-lake coverage; kept `/michigan-ice/` focused on Michigan water and accumulated-cold decisions. No new URL, function, cron, database, ad changes or safety rating.
 - **Visitor value:** Six-lake daily board and reversible NOAA observed-vs-54-year season chart with a matching table; current and previous ice-year context, individual source failure and NA-versus-measured-zero integrity. A pinned original NOAA GLERL basin file computes the 1973–2026 daily-climatology average peak (February 18–19, about 41.3%). Safety banner/DNR guidance remain.
