@@ -97,6 +97,8 @@ test('integration uses only already fetched NWS periods; preserves forecast-firs
  assert.match(api,/windTurn:shoreWindTurn/);
  assert.match(html,/id="bay-wind-window"/);
  assert.match(js,/payload\?\.windTurn/);
+ assert.match(js,/sourceRecent/);
+ assert.match(js,/currentHour/);
  assert.ok(html.indexOf('id="lead-temp"')<html.indexOf('id="bay-wind-window"'));
  assert.doesNotThrow(()=>new Function(js));
 });
