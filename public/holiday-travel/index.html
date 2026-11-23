@@ -57,7 +57,7 @@
 
 /* The source selects remain functional when scripting fails. Type-to-find replaces their visible UI only after initialization. */
 .holiday-choice{position:relative;min-width:0}
-.field .holiday-choice .holiday-native-select{position:absolute!important;width:1px!important;height:1px!important;min-height:0!important;padding:0!important;margin:0!important;opacity:0!important;clip-path:inset(50%);pointer-events:none}
+.field .holiday-choice .holiday-native-select{display:none!important}
 .field .holiday-choice input[role=combobox]{width:100%;padding-right:26px;min-width:0}
 .holiday-choice input[aria-expanded=true]{border-color:#137b76;box-shadow:0 0 0 2px #137b7626}
 .holiday-choice-list{position:absolute;z-index:30;left:0;right:0;top:calc(100% + 4px);overflow:auto;max-height:240px;border:1px solid #8fb9b2;border-radius:10px;background:#fff;box-shadow:0 14px 28px #142d3730}
@@ -429,6 +429,7 @@ function renderLive(p,my){
 }
 
 function render(){
+ if(window.HolidayTravelChoices)window.HolidayTravelChoices.sync();
  var d=data[holiday];var h=dateFor(0);var year=h.getUTCFullYear();doc('holiday-stat').textContent=d.name+' '+year;doc('date-stat').textContent=fullDate(h);
  doc('planning-banner').textContent=d.name+' '+year+' travel planning · dates recalculate automatically; flight odds come from six past holiday seasons of BTS records, with a live NWS check in the final week.';
  doc('yearly-source-note').textContent='Travel days are generated for '+year+'. Flight odds use observed 2018, 2019, 2022–2025 holiday windows; driving figures are AAA/INRIX 2025 and EIA Oct 12, 2026.';
