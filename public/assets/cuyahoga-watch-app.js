@@ -24,11 +24,34 @@
  function revealMobileFocus(){
   if(window.matchMedia('(max-width:830px)').matches) $('river-focus').scrollIntoView({block:'start',behavior:'auto'});
  }
- function mapPointIcon(kind){
+ const supportedParks=new Set(['scranton','rivergate','heritage','wendy']);
+ function parkMapsUrl(park){
+  const value=String(park?.googleMapsUrl||'');
+  // Checked-in official Metroparks map points only; reject arbitrary source URLs.
+  return /^https:\/\/www\.google\.com\/maps\?q=41\.\d+,-81\.\d+$/.test(value)
+   ?value:core.safeMapsQuery(park?.name);
+ }
+ function parkPopupContent(park){
+  const wrap=escText('div','','park-popup-content');
+  wrap.append(escText('strong',park.name,'park-popup-title'));
+  wrap.append(escText('p',park.watchFor||park.experience,'park-popup-description'));
+  const actions=escText('div','','park-popup-actions');
+  const maps=escText('a','Google Maps ↗');maps.href=parkMapsUrl(park);maps.target='_blank';maps.rel='noopener noreferrer';
+  const official=escText('a','Official park details ↗');official.href=park.officialUrl;official.target='_blank';official.rel='noopener noreferrer';
+  actions.append(maps,official);wrap.append(actions);
+  wrap.append(escText('small','Official park-area map point, not a verified viewing entrance. Check access before visiting.','park-popup-note'));
+  return wrap;
+ }
+ function mapPointIcon(kind,parkId){
   if(!window.L)return null;
-  const classes={park:'pin-park',bridge:'pin-bridge',work:'pin-work'};
-  const width=kind==='park'?18:30,glyph=kind==='park'?'':kind==='work'?'!':'&#9646;';
-  return L.divIcon({className:'',html:'<div class="map-pin '+(classes[kind]||classes.bridge)+'" style="width:'+width+'px;height:'+width+'px">'+glyph+'</div>',iconSize:[width,width],iconAnchor:[width/2,width/2]});
+  if(kind==='park'){
+   const id=supportedParks.has(parkId)?parkId:'scranton';
+   const html='<span class="park-map-pin pin-park park-map-pin--'+id+'" aria-hidden="true">'+
+    '<svg viewBox="0 0 24 24" focusable="false"><use href="#cuy-park-'+id+'"></use></svg></span>';
+   return L.divIcon({className:'cuyahoga-viewpoint-icon',html,iconSize:[36,40],iconAnchor:[18,37],popupAnchor:[0,-34]});
+  }
+  const classes={bridge:'pin-bridge',work:'pin-work'};
+  return L.divIcon({className:'',html:'<div class="map-pin '+(classes[kind]||classes.bridge)+'" style="width:30px;height:30px">'+(kind==='work'?'!':'&#9646;')+'</div>',iconSize:[30,30],iconAnchor:[15,15]});
  }
  function initMap(){
   if(!window.L){
@@ -63,9 +86,9 @@
     btn.title=park.suitability;
    }
    if(mapGroup.parks){
-    const marker=L.marker([park.lat,park.lon],{title:park.name,alt:park.name+' approximate park area',icon:mapPointIcon('park')}).addTo(mapGroup.parks);
-    marker.bindTooltip(park.name,{direction:'top'});
-    marker.on('click',()=>{choosePark(park.id,false);revealMobileFocus();});
+    const marker=L.marker([park.lat,park.lon],{title:park.name+' · public viewing area',alt:park.name+' approximate park area',icon:mapPointIcon('park',park.id)}).addTo(mapGroup.parks);
+    marker.bindPopup(parkPopupContent(park),{maxWidth:290,autoPan:true,closeButton:true});
+    marker.on('click',()=>{choosePark(park.id,false);marker.openPopup();});
    }
   }
  }
@@ -98,10 +121,10 @@
   for(const btn of document.querySelectorAll('[data-park]'))btn.setAttribute('aria-current',String(btn.dataset.park===id));
   const official=[
    {label:'Official park details ↗',url:park.officialUrl},
-   {label:'Find the park on a map ↗',url:core.safeMapsQuery(park.name)}
+   {label:'Google Maps · park location ↗',url:parkMapsUrl(park)}
   ];
   const note='Distances use the general park reference, not a surveyed viewing deck. They cannot establish line of sight, vessel arrival, or a safe entrance. Confirm current park access.';
-  let description=park.experience,action=null;
+  let description=park.experience+' '+(park.visitTip||''),action=null;
    const observed=core.parkObservation(park,state.live,Date.now());
    if(observed.closest){
     const nearby=observed.closest;
