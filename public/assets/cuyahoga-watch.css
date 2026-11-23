@@ -81,6 +81,7 @@ h3{font-weight:750}
 .map-key i{width:9px;height:9px;display:inline-block;flex-shrink:0;border-radius:50%}
 .key-spot{background:#236d51}
 .key-ship{background:#156275}
+.key-unknown{background:#eef7f7;border:2px solid #155e70}
 .key-bridge{background:#c48735}
 .key-work{background:#756286}
 .map-caveat{max-width:100%;flex:0 1 auto}
@@ -190,6 +191,7 @@ h3{font-weight:750}
 .is-active-vessel .ship-hull{fill:#b96e30!important}
 .is-active-vessel .ship-neutral-ring{stroke:#b96e30}
 .is-active-vessel .ship-neutral-center{fill:#b96e30}
+.focus-panel{scroll-margin-top:14px}
 .vessel-list button[aria-current=true]{border-left:3px solid #175c69;padding-left:9px;background:#e9f2ee}
 .vessel-list button:focus-visible{outline-offset:-2px}
 .cuyahoga-ship-marker .ship-hull{fill:#155a6b;stroke:#effcff;stroke-width:1.7;stroke-linejoin:round}
