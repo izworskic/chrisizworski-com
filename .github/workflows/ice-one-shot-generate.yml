@@ -63,10 +63,10 @@ jobs:
               const end = content.indexOf('</url>', i);
               if(end < 0) throw Error('Unclosed sitemap entry: '+route);
               const section = content.slice(i, end);
-              if(!/<lastmod>\\d{4}-\\d{2}-\\d{2}<\\/lastmod>/.test(section))
+              if(!new RegExp('<lastmod>[0-9]{4}-[0-9]{2}-[0-9]{2}</lastmod>').test(section))
                 throw Error('Missing lastmod for '+route);
               content = content.slice(0, i) +
-                section.replace(/<lastmod>\\d{4}-\\d{2}-\\d{2}<\\/lastmod>/,
+                section.replace(new RegExp('<lastmod>[0-9]{4}-[0-9]{2}-[0-9]{2}</lastmod>'),
                   '<lastmod>2026-11-23</lastmod>') + content.slice(end);
             }
             writeFileSync(path, content);
