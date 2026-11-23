@@ -337,3 +337,15 @@ test('optional bridge geography cannot obscure the default current AIS and publi
  assert.match(page,/Show all 19 charted crossings/);
  assert.match(css,/\[hidden\]\{display:none!important\}/);
 });
+
+test('licensed historical photo contains a complete JPEG frame, not a truncated CDN fragment',()=>{
+ const image=readFileSync('public/assets/cuyahoga-sam-laud-roy-luck.jpg');
+ assert.ok(image.length>30000&&image.length<250000,'Reasonable self-hosted historical photo size');
+ assert.equal(image[0],0xff);
+ assert.equal(image[1],0xd8);
+ assert.equal(image[image.length-2],0xff);
+ assert.equal(image[image.length-1],0xd9);
+ assert.match(page,/src="\/assets\/cuyahoga-sam-laud-roy-luck\.jpg"/);
+ assert.match(page,/Roy Luck/);
+ assert.match(page,/creativecommons\.org\/licenses\/by\/2\.0/);
+});
