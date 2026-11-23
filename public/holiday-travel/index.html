@@ -454,7 +454,7 @@ function render(){
 function fillAirports(){
  var opts=eng.airports.slice().sort(function(a,b){return a.city<b.city?-1:a.city>b.city?1:0}).map(function(a){return '<option value="'+a.code+'">'+esc(a.city)+' ('+a.code+')</option>'}).join('');
  doc('home').innerHTML=opts;doc('away').innerHTML=opts;doc('home').value=trip.home;doc('away').value=trip.away;
-  if(window.HolidayAirportSearch){window.HolidayAirportSearch.enhance('home',eng.airports);window.HolidayAirportSearch.enhance('away',eng.airports);}
+  if(typeof HolidayAirportSearch!=='undefined'){HolidayAirportSearch.enhance('home',eng.airports);HolidayAirportSearch.enhance('away',eng.airports);}
 }
 function switchOption(group,value){
  if(group==='holiday')holiday=value;else if(group==='mode')mode=value;else dir=value;
