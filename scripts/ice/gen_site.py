@@ -431,8 +431,8 @@ def build_index():
     )
     (OUT / "index.html").write_text(head(
         "Michigan Ice Report: Ice Cover Today | Chris Izworski",
-        "Michigan ice conditions for six waters: accumulated freezing degree days, NOAA satellite ice cover, "
-        "and a 54 year Great Lakes climatology baseline.",
+        "Michigan ice report today for Saginaw Bay, Houghton Lake, Lake St. Clair and three more waters: "
+        "season cold vs normal, NOAA ice cover and live wind.",
         url, ld) + body)
 
 
@@ -718,6 +718,15 @@ def build_history():
         url, ld) + body)
 
 
+def _access_label(r):
+    # First named access point; skip a generic "town accesses" label in favor of the next named place.
+    parts = [p.strip() for p in r['access'].split(',') if p.strip()]
+    for p in parts:
+        if 'accesses' not in p:
+            return p
+    return parts[0]
+
+
 def build_region(r):
     url = f"{SITE}/regions/{r['slug']}.html"
     ld = {"@context": "https://schema.org", "@graph": [
@@ -828,8 +837,8 @@ def build_region(r):
     )
     (OUT / "regions" / f"{r['slug']}.html").write_text(head(
         f"{r['name']} Ice Conditions Today | Chris Izworski",
-        f"Accumulated freezing degree days, current temperature and wind, and ice context for {r['name']}, "
-        f"plus access at {r['access'].split(',')[0]}.",
+        f"{r['name']} ice report today: is ice forming yet? Season cold vs a 10-year normal, live air temp "
+        f"and wind, and access notes for {_access_label(r)}.",
         url, ld) + body)
 
 
