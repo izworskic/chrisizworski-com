@@ -5,10 +5,12 @@ on:
       - 'api/holiday-airport-weather.js'
       - 'lib/holiday-travel/**'
       - 'public/assets/holiday-airport-weather-board.js'
+      - 'public/assets/holiday-airport-search.js'
       - 'public/assets/holiday-travel-engine.js'
       - 'public/holiday-travel/index.html'
       - 'scripts/holiday-travel/**'
       - 'tests/holiday-airport-weather.test.js'
+      - 'tests/holiday-airport-search.test.js'
       - '.github/workflows/holiday-airport-weather-qa.yml'
   workflow_dispatch:
 permissions:
@@ -28,6 +30,13 @@ jobs:
           cache: npm
       - name: Install pinned repository dependencies
         run: npm ci
+      - name: Check BTS airport data independently with Python and Rust
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/holiday-travel/verify_airport_catalog.py
+          rustc --edition=2021 -O scripts/holiday-travel/verify_airport_catalog.rs -o "$RUNNER_TEMP/holiday-airport-rust-check"
+          python3 scripts/holiday-travel/verify_airport_catalog.py --tsv | "$RUNNER_TEMP/holiday-airport-rust-check"
       - name: Run complete repository gate
         run: npm run verify:all
       - name: Install browser-only Playwright
