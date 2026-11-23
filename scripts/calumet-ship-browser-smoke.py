@@ -25,6 +25,15 @@ async def assert_popup_visible(page,tag):
         "(el)=>{const r=el.getBoundingClientRect();return {top:r.top,bottom:r.bottom,screen:window.innerHeight};}")
     if geometry["top"] < -1 or geometry["bottom"] > geometry["screen"]+1:
         raise AssertionError(f"{tag} map popup is clipped in the browser viewport: {geometry}")
+    title_readable=await page.locator("#calumet-map .leaflet-popup .park-popup-title").evaluate(
+        """(el)=>{
+          const r=el.getBoundingClientRect();
+          const top=document.elementFromPoint(r.left+Math.min(8,r.width/2),r.top+r.height/2);
+          return !!top&&(el===top||el.contains(top));
+        }""")
+    if not title_readable:
+        raise AssertionError(f"{tag} popup title is obstructed by Leaflet map controls")
+
 
 def report():
     recent=iso(NOW-timedelta(seconds=80))
